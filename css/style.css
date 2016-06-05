@@ -84,6 +84,7 @@ li:hover .app-navigation-entry-utils-counter {
 	margin: 0;
 	font-size:12pt;
 	font-weight:700;
+	overflow:hidden;
 }
 .stack h2 input {
 	padding: 0px;
@@ -94,16 +95,22 @@ li:hover .app-navigation-entry-utils-counter {
 	font-weight:700;
 	border: 0;
 	background-color: transparent;
+	float:left;
 }
 .stack h2 button,
 .stack .stack-actions{
 	float:right;
 }
+.stack h2 span {
+	float: left;
+	margin-bottom:3px;
+}
 .stack h2 .stack-actions {
 	display: none;
 }
 .stack h2:hover .stack-actions {
-	display: block;
+	display: inline-block;
+	float:right;
 }
 .card {
 	background-color:#fff;

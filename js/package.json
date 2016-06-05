@@ -1,0 +1,34 @@
+{
+  "name": "deck",
+  "description": "Deck owncloud app",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://github.com/juliushaertl/deck",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:juliushaertl/deck.git"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "bower": "*",
+    "grunt": "*",
+    "grunt-cli": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-karma": "*",
+    "grunt-ng-annotate": "^1.0.1",
+    "grunt-phpunit": "*",
+    "grunt-wrap": "*",
+    "jasmine-core": "*",
+    "jshint-stylish": "^2.1.0",
+    "karma": "*",
+    "karma-chrome-launcher": "*",
+    "karma-coverage": "*",
+    "karma-firefox-launcher": "*",
+    "karma-jasmine": "*",
+    "karma-phantomjs-launcher": "*",
+    "phantomjs": "*"
+  },
+  "engine": "node >= 0.8"
+}

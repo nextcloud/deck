@@ -1,11 +1,9 @@
 <ul class="with-icon">
 	<li><a href="#" class="">All Boards</a></li>
-	<li>{{stackservice.once}}</li>
 	<!--<li><a href="#" class="icon-starred">Starred Boards</a></li>
 	<li><a href="#" class="icon-share">Shared Boards</a></li>
 	<li><a href="#" class="icon-public">Public Boards</a></li> //-->
-
-	<li class="with-menu" data-ng-repeat="b in boards">
+	<li class="with-menu" data-ng-repeat="b in boardservice.data">
 		<span class="board-bullet"  style="background-color:#{{b.color}};" ng-if="!b.status.edit"> </span>
 		<a href="#/board/{{b.id}}" ng-if="!b.status.edit">{{ b.title }}</a>
 		<div class="app-navigation-entry-utils" ng-show="!b.status.edit">
@@ -26,7 +24,7 @@
 		</div>
 
 		<div class="app-navigation-entry-edit" ng-show="b.status.edit">
-			<form ng-disabled="isAddingList" class="ng-pristine ng-valid"  ng-submit="updateBoard(b)">
+			<form ng-disabled="isAddingList" class="ng-pristine ng-valid"  ng-submit="boardservice.update(b)">
 				<input id="newTitle" class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title">
 				<input type="submit" value="" class="action icon-checkmark svg">
 				<div class="colorselect">

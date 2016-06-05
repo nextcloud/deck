@@ -39,11 +39,11 @@ class StackService  {
     }
 
     public function delete($userId, $id) {
-        return $this->stackMapper->delete($this->find($userId, $id));
+        return $this->stackMapper->delete($this->stackMapper->find($id));
     }
 
     public function update($id, $title, $boardId, $order) {
-        $stack = $this->find($id);
+        $stack = $this->stackMapper->find($id);
         $stack->setTitle($title);
         $stack->setBoardId($boardId);
         $stack->setOrder($order);

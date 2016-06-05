@@ -41,13 +41,13 @@ class StackController extends Controller {
     /**
      * @NoAdminRequired
      */
-    public function update($id, $title, $color) {
-        return $this->stackService->update($id, $title, $this->userId, $color);
+    public function update($id, $title, $boardId, $order) {
+        return $this->stackService->update($id, $title, $boardId, $order);
     }
     /**
      * @NoAdminRequired
      */
-    public function delete($boardId) {
-        return $this->stackService->delete($this->userId, $boardId);
+    public function delete($stackId) {
+        return $this->stackService->delete($this->userId, $stackId);
     }
 }

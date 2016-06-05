@@ -1,16 +1,40 @@
 
-app.controller('BoardController', function ($rootScope, $scope, $location, $http, $route, $stateParams, boardFactory, stackFactory, StackService) {
+app.controller('BoardController', function ($rootScope, $scope, $location, $http, $route, $stateParams, BoardService, StackService) {
 
+  
   $scope.sidebar = $rootScope.sidebar;
-  $scope.newCard = {};
-  $scope.stackservice = StackService;
   $scope.id = $stateParams.boardId;
 
+  $scope.stackservice = StackService;
+  $scope.boardservice = BoardService;
+
+  // fetch data
+  StackService.clear();
+
+  StackService.fetchAll($scope.id).then(function(data) {
+    console.log($scope.stackservice.data)
+    $scope.releaseWaiting();
+  }, function(error) {
+    $scope.setError('Error occured', error);
+  });
+
+  BoardService.fetchOne($scope.id).then(function(data) {
+    $scope.releaseWaiting();
+  }, function(error) {
+    $scope.setError('Error occured', error);
+  });
+
+  $scope.newStack = { 'boardId': $scope.id};
+  $scope.newCard = {};
+
+
+  // Status Helper
   $scope.status = {
     'active': true,
     'icon': 'loading',
     'title': 'Bitte warten',
-    'text': 'Es dauert noch einen kleinen Moment'
+    'text': 'Es dauert noch einen kleinen Moment',
+    'counter': 2,
   };
 
   $scope.setStatus = function($icon, $title, $text='') {
@@ -20,45 +44,38 @@ app.controller('BoardController', function ($rootScope, $scope, $location, $http
     $scope.status.text = $text;
   }
 
+  $scope.setError = function($title, $text) {
+    $scope.status.active = true;
+    $scope.status.icon = 'error';
+    $scope.status.title = $title;
+    $scope.status.text = $text;
+    $scope.status.counter = 0;
+  }
+
+  $scope.releaseWaiting = function() {
+    if($scope.status.counter>0)
+        $scope.status.counter--;
+    if($scope.status.counter==0) {
+      $scope.status = {
+        'active': false
+      }
+    }
+  }
+
   $scope.unsetStatus = function() {
     $scope.status = {
       'active': false
     }
   }
 
-  $scope.getBoard = function() {
-    boardFactory.getBoard($scope.id)
-        .then(function (response) {
-          $scope.board = response.data;
-          $scope.unsetStatus();
-        }, function (error) {
-          $scope.setStatus('error','Unable to load board data', error);
-        });
-  }
-
-  $scope.getStacks = function() {
-    stackFactory.getStacks($scope.id)
-        .then(function (response) {
-
-          $scope.stacks = response.data;
-          $scope.unsetStatus();
-        }, function (error) {
-          $scope.setStatus('error','Unable to load board data', error);
-        });
-  }
-
+  // Create a new Stack
   $scope.createStack = function () {
-    $scope.newStack.boardId = $scope.id;
-    stackFactory.createStack($scope.newStack)
-        .then(function (response) {
-          $scope.stacks.push(response.data);
-          $scope.newStack = {};
-          $scope.status.addStack=false;
-        }, function(error) {
-          $scope.status.createBoard = 'Unable to insert board: ' + error.message;
-        });
+    StackService.create($scope.newStack).then(function (data) {
+      $scope.newStack.title="";
+    });
   };
 
+  // Lighten Color of the board for background usage
   $scope.rgblight = function (hex) {
       var result = /^([A-Fa-f\d]{2})([A-Fa-f\d]{2})([A-Fa-f\d]{2})$/i.exec(hex);
       var color = result ? {
@@ -106,41 +123,5 @@ app.controller('BoardController', function ($rootScope, $scope, $location, $http
       }
     }
   };
-
-  $scope.sortStackOptions = {
-    itemMoved: function (event) {
-      event.source.itemScope.modelValue.status = event.dest.sortableScope.$parent.column;
-      console.log(event.dest.sortableScope.$parent);
-    },
-    orderChanged: function (event) {
-    },
-    scrollableContainer: '#board',
-    containerPositioning: 'relative',
-    containment: '#board',
-    // auto scroll on drag
-    dragMove: function (itemPosition, containment, eventObj) {
-      if (eventObj) {
-        var container = $("#board");
-        var offset = container.offset();
-        targetX = eventObj.pageX - (offset.left || container.scrollLeft());
-        targetY = eventObj.pageY - (offset.top || container.scrollTop());
-        if (targetX < offset.left) {
-          container.scrollLeft(container.scrollLeft() - 50);
-        } else if (targetX > container.width()) {
-          container.scrollLeft(container.scrollLeft() + 50);
-        }
-        if (targetY < offset.top) {
-          container.scrollTop(container.scrollTop() - 50);
-        } else if (targetY > container.height()) {
-          container.scrollTop(container.scrollTop() + 50);
-        }
-      }
-    }
-  };
-
-
-  $scope.getBoard();
-  $scope.getStacks();
-
 
 });

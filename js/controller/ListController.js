@@ -1,10 +1,17 @@
 
-app.controller('ListController', function ($scope, $location, boardFactory, StackService) {
+app.controller('ListController', function ($scope, $location, boardFactory, BoardService) {
     $scope.boards = null;
     $scope.newBoard = {};
     $scope.status = {};
     $scope.colors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
-    $scope.stackservice = StackService;
+
+    $scope.boardservice = BoardService;
+    BoardService.fetchAll().then(function(data) {
+        console.log($scope.boardservice);
+        console.log(data);
+    }, function(error) {
+        //$scope.setStatus('error','Error occured', error);
+    });
 
     $scope.getBoards = function() {
         boardFactory.getBoards()

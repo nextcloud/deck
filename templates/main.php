@@ -12,15 +12,7 @@ Util::addScript('deck', 'vendor/angular-sanitize/angular-sanitize.min');
 Util::addScript('deck', 'vendor/angular-animate/angular-animate.min');
 Util::addScript('deck', 'vendor/angular-ui-router/release/angular-ui-router.min');
 Util::addScript('deck', 'vendor/ng-sortable/dist/ng-sortable.min');
-Util::addScript('deck', 'app/App');
-Util::addScript('deck', 'controller/AppController');
-Util::addScript('deck', 'controller/CardController');
-Util::addScript('deck', 'controller/BoardController');
-Util::addScript('deck', 'controller/ListController');
-Util::addScript('deck', 'service/factory.board');
-Util::addScript('deck', 'service/factory.stack');
-
-
+Util::addScript('deck', 'public/app');
 
 ?>
 
