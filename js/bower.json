@@ -1,0 +1,27 @@
+{
+  "name": "ownCloud Deck",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular": "~1.5.*",
+    "angular-route": "~1.5.*",
+    "angular-mocks": "~1.5.*",
+    "angular-sanitize": "~1.5.*",
+    "angular-animate": "~1.5.*",
+    "angular-ui-bootstrap": "~1.*.*", 
+    "ng-sortable": "~1.*.*", 
+    "jquery": "~2.*",
+    "momentjs": "~2.11.*",
+    "es6-shim": "~0.*",
+    "js-url": "~2.*",
+    "masonry": "~4.0.0"
+  },
+  "license": "AGPL-3.0",
+  "private": true,
+  "ignore": [
+    "'**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

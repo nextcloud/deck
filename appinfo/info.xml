@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<info>
+    <id>deck</id>
+    <name>Deck</name>
+    <description>My first ownCloud app</description>
+    <licence>AGPL</licence>
+    <author>Julius Härtl</author>
+    <version>0.0.1.7</version>
+    <namespace>Deck</namespace>
+    <category>other</category>
+    <dependencies>
+        <owncloud min-version="9.0" />
+    </dependencies>
+</info>
