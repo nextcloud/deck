@@ -1,5 +1,6 @@
 <?php
 
+// TODO: Implement LATER
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Service\BoardService;
@@ -13,11 +14,11 @@ class BoardApiController extends BaseApiController {
     private $userId;
     public function __construct($appName,
                                 IRequest $request,
-                                BoardService $stackService,
+                                BoardService $cardService,
                                 $userId){
         parent::__construct($appName, $request);
         $this->userId = $userId;
-        $this->boardService = $stackService;
+        $this->boardService = $cardService;
     }
     /**
      * @NoAdminRequired

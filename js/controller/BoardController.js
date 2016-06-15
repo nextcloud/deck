@@ -1,72 +1,33 @@
 
-app.controller('BoardController', function ($rootScope, $scope, $location, $http, $route, $stateParams, BoardService, StackService) {
+app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService) {
 
-  
   $scope.sidebar = $rootScope.sidebar;
+
   $scope.id = $stateParams.boardId;
 
   $scope.stackservice = StackService;
   $scope.boardservice = BoardService;
+  $scope.statusservice = StatusService;
 
   // fetch data
   StackService.clear();
-
+  console.log("foo");
   StackService.fetchAll($scope.id).then(function(data) {
-    console.log($scope.stackservice.data)
-    $scope.releaseWaiting();
+    $scope.statusservice.releaseWaiting();
   }, function(error) {
-    $scope.setError('Error occured', error);
+    $scope.statusservice.setError('Error occured', error);
   });
 
   BoardService.fetchOne($scope.id).then(function(data) {
-    $scope.releaseWaiting();
+    $scope.statusservice.releaseWaiting();
   }, function(error) {
-    $scope.setError('Error occured', error);
+    $scope.statusservice.setError('Error occured', error);
   });
 
   $scope.newStack = { 'boardId': $scope.id};
   $scope.newCard = {};
 
 
-  // Status Helper
-  $scope.status = {
-    'active': true,
-    'icon': 'loading',
-    'title': 'Bitte warten',
-    'text': 'Es dauert noch einen kleinen Moment',
-    'counter': 2,
-  };
-
-  $scope.setStatus = function($icon, $title, $text='') {
-    $scope.status.active = true;
-    $scope.status.icon = $icon;
-    $scope.status.title = $title;
-    $scope.status.text = $text;
-  }
-
-  $scope.setError = function($title, $text) {
-    $scope.status.active = true;
-    $scope.status.icon = 'error';
-    $scope.status.title = $title;
-    $scope.status.text = $text;
-    $scope.status.counter = 0;
-  }
-
-  $scope.releaseWaiting = function() {
-    if($scope.status.counter>0)
-        $scope.status.counter--;
-    if($scope.status.counter==0) {
-      $scope.status = {
-        'active': false
-      }
-    }
-  }
-
-  $scope.unsetStatus = function() {
-    $scope.status = {
-      'active': false
-    }
-  }
 
   // Create a new Stack
   $scope.createStack = function () {
@@ -74,6 +35,18 @@ app.controller('BoardController', function ($rootScope, $scope, $location, $http
       $scope.newStack.title="";
     });
   };
+
+  $scope.createCard = function(stack, title) {
+    var newCard = {
+      'title': title,
+      'stackId': stack,
+      'type': 'plain',
+    };
+    CardService.create(newCard).then(function (data) {
+      $scope.stackservice.addCard(data);
+      $scope.newCard.title = "";
+    });
+  }
 
   // Lighten Color of the board for background usage
   $scope.rgblight = function (hex) {
@@ -95,10 +68,23 @@ app.controller('BoardController', function ($rootScope, $scope, $location, $http
   // settings for card sorting
   $scope.sortOptions = {
     itemMoved: function (event) {
+      // TODO: Implement reodering here
       event.source.itemScope.modelValue.status = event.dest.sortableScope.$parent.column;
-      console.log(event.dest.sortableScope.$parent);
+      var order = event.dest.index;
+      var card = event.source.itemScope.c;
+      var newStack = event.dest.sortableScope.$parent.s.id;
+      card.stackId = newStack;
+      CardService.update(card);
+
+      CardService.reorder(card, order).then(function(data) {
+        StackService.data[newStack].cards = data;
+      });
     },
     orderChanged: function (event) {
+      // TODO: Implement ordering here
+      var order = event.dest.index;
+      var card = event.source.itemScope.c;
+      CardService.reorder(card, order);
     },
     scrollableContainer: '#board',
     containerPositioning: 'relative',

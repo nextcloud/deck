@@ -1,9 +1,12 @@
 
 var app = angular.module('Deck', ['ngRoute', 'ngSanitize', 'ui.router', 'as.sortable']);
 
-app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider) {
+
+app.config(["$provide", "$routeProvider", "$interpolateProvider", "$httpProvider", "$urlRouterProvider", "$stateProvider", "$compileProvider", function ($provide, $routeProvider, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider, $compileProvider) {
     'use strict';
     $httpProvider.defaults.headers.common.requesttoken = oc_requesttoken;
+
+    $compileProvider.debugInfoEnabled(true);
 
     $urlRouterProvider.otherwise("/");
 
@@ -27,42 +30,14 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
                 }
             }
         })
-        .state('board.settings', {})
-        .state('board.sharing', {});
-});
+        .state('board.settings', {
 
-// OwnCloud Click Handling
-// https://doc.owncloud.org/server/8.0/developer_manual/app/css.html
-app.directive('appNavigationEntryUtils', function () {
-    'use strict';
-    return {
-        restrict: 'C',
-        link: function (scope, elm) {
-
-            var menu = elm.siblings('.app-navigation-entry-menu');
-            var button = $(elm)
-                .find('.app-navigation-entry-utils-menu-button button');
-
-            button.click(function () {
-                menu.toggleClass('open');
-            });
-            scope.$on('documentClicked', function (scope, event) {
-                if (event.target !== button[0]) {
-                    menu.removeClass('open');
-                }
-            });
-        }
-    };
-});
-
-app.directive('autofocusOnInsert', function () {
-    'use strict';
-    return function (scope, elm) {
-        elm.focus();
-    };
-});
-
-app.run(function ($document, $rootScope, $transitions) {
+        })
+        .state('board.sharing', {
+            
+        });
+}]);
+app.run(["$document", "$rootScope", "$transitions", function ($document, $rootScope, $transitions) {
     'use strict';
     $document.click(function (event) {
         $rootScope.$broadcast('documentClicked', event);
@@ -76,83 +51,45 @@ app.run(function ($document, $rootScope, $transitions) {
     $transitions.onExit({from: 'board.card'}, function ($state) {
         $rootScope.sidebar.show = false;
     });
-});
+}]);
 
-app.controller('AppController', function ($scope, $location, $http, $route, $log, $rootScope, $stateParams) {
+
+app.controller('AppController', ["$scope", "$location", "$http", "$route", "$log", "$rootScope", "$stateParams", function ($scope, $location, $http, $route, $log, $rootScope, $stateParams) {
     $rootScope.sidebar = {
         show: false
     };
     $scope.sidebar = $rootScope.sidebar;
-});
+}]);
 
-app.controller('BoardController', function ($rootScope, $scope, $location, $http, $route, $stateParams, BoardService, StackService) {
+app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "StatusService", "BoardService", "StackService", "CardService", function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService) {
 
-  
   $scope.sidebar = $rootScope.sidebar;
+
   $scope.id = $stateParams.boardId;
 
   $scope.stackservice = StackService;
   $scope.boardservice = BoardService;
+  $scope.statusservice = StatusService;
 
   // fetch data
   StackService.clear();
-
+  console.log("foo");
   StackService.fetchAll($scope.id).then(function(data) {
-    console.log($scope.stackservice.data)
-    $scope.releaseWaiting();
+    $scope.statusservice.releaseWaiting();
   }, function(error) {
-    $scope.setError('Error occured', error);
+    $scope.statusservice.setError('Error occured', error);
   });
 
   BoardService.fetchOne($scope.id).then(function(data) {
-    $scope.releaseWaiting();
+    $scope.statusservice.releaseWaiting();
   }, function(error) {
-    $scope.setError('Error occured', error);
+    $scope.statusservice.setError('Error occured', error);
   });
 
   $scope.newStack = { 'boardId': $scope.id};
   $scope.newCard = {};
 
 
-  // Status Helper
-  $scope.status = {
-    'active': true,
-    'icon': 'loading',
-    'title': 'Bitte warten',
-    'text': 'Es dauert noch einen kleinen Moment',
-    'counter': 2,
-  };
-
-  $scope.setStatus = function($icon, $title, $text='') {
-    $scope.status.active = true;
-    $scope.status.icon = $icon;
-    $scope.status.title = $title;
-    $scope.status.text = $text;
-  }
-
-  $scope.setError = function($title, $text) {
-    $scope.status.active = true;
-    $scope.status.icon = 'error';
-    $scope.status.title = $title;
-    $scope.status.text = $text;
-    $scope.status.counter = 0;
-  }
-
-  $scope.releaseWaiting = function() {
-    if($scope.status.counter>0)
-        $scope.status.counter--;
-    if($scope.status.counter==0) {
-      $scope.status = {
-        'active': false
-      }
-    }
-  }
-
-  $scope.unsetStatus = function() {
-    $scope.status = {
-      'active': false
-    }
-  }
 
   // Create a new Stack
   $scope.createStack = function () {
@@ -160,6 +97,18 @@ app.controller('BoardController', function ($rootScope, $scope, $location, $http
       $scope.newStack.title="";
     });
   };
+
+  $scope.createCard = function(stack, title) {
+    var newCard = {
+      'title': title,
+      'stackId': stack,
+      'type': 'plain',
+    };
+    CardService.create(newCard).then(function (data) {
+      $scope.stackservice.addCard(data);
+      $scope.newCard.title = "";
+    });
+  }
 
   // Lighten Color of the board for background usage
   $scope.rgblight = function (hex) {
@@ -181,10 +130,23 @@ app.controller('BoardController', function ($rootScope, $scope, $location, $http
   // settings for card sorting
   $scope.sortOptions = {
     itemMoved: function (event) {
+      // TODO: Implement reodering here
       event.source.itemScope.modelValue.status = event.dest.sortableScope.$parent.column;
-      console.log(event.dest.sortableScope.$parent);
+      var order = event.dest.index;
+      var card = event.source.itemScope.c;
+      var newStack = event.dest.sortableScope.$parent.s.id;
+      card.stackId = newStack;
+      CardService.update(card);
+
+      CardService.reorder(card, order).then(function(data) {
+        StackService.data[newStack].cards = data;
+      });
     },
     orderChanged: function (event) {
+      // TODO: Implement ordering here
+      var order = event.dest.index;
+      var card = event.source.itemScope.c;
+      CardService.reorder(card, order);
     },
     scrollableContainer: '#board',
     containerPositioning: 'relative',
@@ -210,21 +172,21 @@ app.controller('BoardController', function ($rootScope, $scope, $location, $http
     }
   };
 
-});
+}]);
 
 
 
-app.controller('CardController', function ($scope, $rootScope, $routeParams, $location, $stateParams) {
+app.controller('CardController', ["$scope", "$rootScope", "$routeParams", "$location", "$stateParams", "CardService", function ($scope, $rootScope, $routeParams, $location, $stateParams, CardService) {
     $scope.sidebar = $rootScope.sidebar;
 
-    $scope.location = $location;
-    $scope.card = {'id': 1, 'title': 'We should implement all the useful things, that a kanban like project managemnt system needs for having success', 'description': 'Non et quibusdam officiis expedita excepturi. Tenetur ea et dignissimos qui. Rerum quis commodi aperiam amet dolorum suscipit asperiores. Enim dolorem ea nisi voluptate. \
-                Consequatur enim iste dolore autem est unde voluptatum. Aut sit et iure. Suscipit deserunt nisi repellat in officiis alias. Nihil beatae ea ut laudantium at.\
-                Doloribus nihil ipsa consequatur laudantium qui enim eveniet quo. Voluptatum tenetur sunt quis sint aliquam et molestias. Quae voluptatem tempora qui eaque qui esse possimus magni. Animi dolorem maiores iste.\
-                Totam ut tempora officiis ipsam dolorem modi. Dolores hic aut itaque. Earum in est voluptas voluptatum. Cumque pariatur qui omnis placeat. Eius sed sunt corrupti dolorem quo.'};
+    $scope.cardservice = CardService;
     $scope.cardId = $stateParams.cardId;
 
-    console.log($stateParams);
+    CardService.fetchOne($scope.cardId).then(function(data) {
+        console.log(data);
+    }, function(error) {
+    });
+
 
 
 
@@ -234,81 +196,81 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
      $scope.$apply();
 
      });*/
-});
+}]);
 
 
-app.controller('ListController', function ($scope, $location, boardFactory, BoardService) {
+app.controller('ListController', ["$scope", "$location", "BoardService", function ($scope, $location, BoardService) {
     $scope.boards = null;
     $scope.newBoard = {};
     $scope.status = {};
     $scope.colors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
 
     $scope.boardservice = BoardService;
-    BoardService.fetchAll().then(function(data) {
-        console.log($scope.boardservice);
-        console.log(data);
-    }, function(error) {
-        //$scope.setStatus('error','Error occured', error);
-    });
 
-    $scope.getBoards = function() {
-        boardFactory.getBoards()
-            .then(function (response) {
-                $scope.boards = response.data;
-                for (var i = 0; i < $scope.boards.length; i++) {
-                    $scope.boards[i].status = {
-                        'edit': false,
-                    }
-                }
-            }, function (error) {
-                $scope.status.getBoards = 'Unable to load customer data: ' + error.message;
-            });
-    }
+    BoardService.fetchAll(); // TODO: show error when loading fails
+
+    $scope.selectColor = function(color) {
+        $scope.newBoard.color = color;
+    };
 
     $scope.createBoard = function () {
-        boardFactory.createBoard($scope.newBoard)
+        BoardService.create($scope.newBoard)
             .then(function (response) {
-                $scope.boards.push(response.data);
                 $scope.newBoard = {};
                 $scope.status.addBoard=false;
             }, function(error) {
                 $scope.status.createBoard = 'Unable to insert board: ' + error.message;
             });
     };
-
     $scope.updateBoard = function(board) {
-        boardFactory.updateBoard(board)
-            .then(function (response) {
-                board = response.data;
-            }, function(error) {
-                $scope.status.createBoard = 'Unable to insert board: ' + error.message;
-            });
+        BoardService.update(board);
         board.status.edit = false;
-        $scope.$apply();
+    };
+    $scope.deleteBoard = function(board) {
+        // TODO: Ask for confirmation
+        //if (confirm('Are you sure you want to delete this?')) {
+            BoardService.delete(board.id);
+        //}
     };
 
-    $scope.selectColor = function(color) {
-        $scope.newBoard.color = color;
-    };
 
-    $scope.deleteBoard = function (index) {
-        var board = $scope.boards[index];
-        boardFactory.deleteBoard(board.id)
-            .then(function (response) {
-                $scope.status.deleteBoard = 'Deleted Board';
-                $scope.boards.splice( index, 1 );
 
-            }, function(error) {
-                $scope.status.deleteBoard = 'Unable to insert board: ' + error.message;
+
+}]);
+
+
+// OwnCloud Click Handling
+// https://doc.owncloud.org/server/8.0/developer_manual/app/css.html
+app.directive('appNavigationEntryUtils', function () {
+    'use strict';
+    return {
+        restrict: 'C',
+        link: function (scope, elm) {
+
+            var menu = elm.siblings('.app-navigation-entry-menu');
+            var button = $(elm)
+                .find('.app-navigation-entry-utils-menu-button button');
+
+            button.click(function () {
+                menu.toggleClass('open');
             });
+            scope.$on('documentClicked', function (scope, event) {
+                if (event.target !== button[0]) {
+                    menu.removeClass('open');
+                }
+            });
+        }
     };
-    $scope.getBoards();
-
-
 });
 
 
-app.factory('ApiService', function($http, $q){
+app.directive('autofocusOnInsert', function () {
+    'use strict';
+    return function (scope, elm) {
+        elm.focus();
+    };
+});
+app.factory('ApiService', ["$http", "$q", function($http, $q){
     var ApiService = function(http, endpoint) {
         this.endpoint = endpoint;
         this.baseUrl = OC.generateUrl('/apps/deck/' + endpoint);
@@ -433,46 +395,37 @@ app.factory('ApiService', function($http, $q){
 
     return ApiService;
 
-});
+}]);
 
-app.factory('boardFactory', function($http){
-    var service = {};
-    var baseUrl = OC.generateUrl('/apps/deck/boards');
-
-    service.getBoards = function(){
-        return $http.get(baseUrl);
-    }
-
-    service.getBoard = function (id) {
-        board = $http.get(baseUrl + '/' + id);
-        return board;
-    };
-
-    service.createBoard = function (board) {
-
-        return $http.post(baseUrl, board);
-    };
-
-    service.updateBoard = function (board) {
-        return $http.put(baseUrl, board)
-    };
-
-    service.deleteBoard = function (id) {
-        return $http.delete(baseUrl + '/' + id);
-    };
-
-    return service;
-});
-
-app.factory('BoardService', function(ApiService, $http, $q){
+app.factory('BoardService', ["ApiService", "$http", "$q", function(ApiService, $http, $q){
     var BoardService = function($http, ep, $q) {
         ApiService.call(this, $http, ep, $q);
     };
     BoardService.prototype = angular.copy(ApiService.prototype);
     service = new BoardService($http, 'boards', $q)
     return service;
-});
-app.factory('StackService', function(ApiService, $http, $q){
+}]);
+app.factory('CardService', ["ApiService", "$http", "$q", function(ApiService, $http, $q){
+    var CardService = function($http, ep, $q) {
+        ApiService.call(this, $http, ep, $q);
+    };
+    CardService.prototype = angular.copy(ApiService.prototype);
+
+    CardService.prototype.reorder = function(card, order) {
+        var deferred = $q.defer();
+        var self = this;
+        $http.put(this.baseUrl + '/reorder', {cardId: card.id, order: order, stackId: card.stackId}).then(function (response) {
+            card.order = order;
+            deferred.resolve(response.data);
+        }, function (error) {
+            deferred.reject('Error while update ' + self.endpoint);
+        });
+        return deferred.promise;
+    }
+    service = new CardService($http, 'cards', $q)
+    return service;
+}]);
+app.factory('StackService', ["ApiService", "$http", "$q", function(ApiService, $http, $q){
     var StackService = function($http, ep, $q) {
         ApiService.call(this, $http, ep, $q);
     };
@@ -489,8 +442,52 @@ app.factory('StackService', function(ApiService, $http, $q){
         return deferred.promise;
 
     }
+
+    StackService.prototype.addCard = function(entity) {
+        console.log(this.data[entity.stackId]);
+        this.data[entity.stackId].cards.push(entity);
+    }
     service = new StackService($http, 'stacks', $q)
     return service;
+}]);
+
+
+app.service('StatusService', function(){
+    // Status Helper
+    this.active = true;
+    this.icon = 'loading';
+    this.title = 'Please wait';
+    this.text = 'Es dauert noch einen kleinen Moment';
+    this.counter = 2;
+
+    this.setStatus = function($icon, $title, $text) {
+        this.active = true;
+        this.icon = $icon;
+        this.title = $title;
+        this.text = $text;
+    }
+
+    this.setError = function($title, $text) {
+        this.active = true;
+        this.icon = 'error';
+        this.title = $title;
+        this.text = $text;
+        this.counter = 0;
+    }
+
+    this.releaseWaiting = function() {
+        if(this.counter>0)
+            this.counter--;
+        if(this.counter<=0) {
+            this.active = false;
+            this.counter = 0;
+        }
+    }
+
+    this.unsetStatus = function() {
+        this.active = false;
+    }
+
 });
 
 

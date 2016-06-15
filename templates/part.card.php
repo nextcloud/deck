@@ -1,6 +1,8 @@
 <div id="card-header">
 
-<h2>{{ cardId }} {{ card.title }}<a class="icon-close" ng-click="sidebar.show=!sidebar.show"> &nbsp;</a></h2>
+<h2>{{ cardservice.getCurrent().title }}<a class="icon-close" ng-click="sidebar.show=!sidebar.show"> &nbsp;</a></h2>
+    Modified: {{ cardservice.getCurrent().modifiedAt }}
+    Created: {{ cardservice.getCurrent().createdAt }}
     <ul class="labels">
         <li style="color:#a00; border-color:#aa0000;">important</li>
         <li style="color:#0a0; border-color:#00aa00;">action-needed</li>

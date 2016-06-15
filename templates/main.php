@@ -5,7 +5,7 @@ use OCP\Util;
 Util::addStyle('deck', 'font-awesome');
 Util::addStyle('deck', 'style');
 Util::addStyle('deck', '../js/vendor/ng-sortable/dist/ng-sortable.min');
-Util::addStyle('deck', '../js/vendor/ng-sortable/dist/ng-sortable.style.min');
+//Util::addStyle('deck', '../js/vendor/ng-sortable/dist/ng-sortable.style.min');
 Util::addScript('deck', 'vendor/angular/angular.min');
 Util::addScript('deck', 'vendor/angular-route/angular-route.min');
 Util::addScript('deck', 'vendor/angular-sanitize/angular-sanitize.min');

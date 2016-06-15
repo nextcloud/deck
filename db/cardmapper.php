@@ -7,13 +7,11 @@ use OCP\IDb;
 use OCP\AppFramework\Db\Mapper;
 
 
-class StackMapper extends Mapper {
 
-    private $cardMapper;
+class CardMapper extends Mapper {
 
-    public function __construct(IDb $db, CardMapper $cardMapper) {
-        parent::__construct($db, 'deck_stacks', '\OCA\Deck\Db\Stack');
-        $this->cardMapper = $cardMapper;
+    public function __construct(IDb $db) {
+        parent::__construct($db, 'deck_cards', '\OCA\Deck\Db\Card');
     }
 
 
@@ -22,19 +20,20 @@ class StackMapper extends Mapper {
      * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
      */
     public function find($id) {
-        $sql = 'SELECT * FROM `*PREFIX*deck_stacks` ' .
+        $sql = 'SELECT * FROM `*PREFIX*deck_cards` ' .
             'WHERE `id` = ?';
         return $this->findEntity($sql, [$id]);
     }
 
 
-    public function findAll($boardId, $limit=null, $offset=null) {
-        $sql = 'SELECT * FROM `*PREFIX*deck_stacks` WHERE `board_id` = ?  ORDER BY `order`';
-        return $this->findEntities($sql, [$boardId], $limit, $offset);
+    public function findAll($stackId, $limit=null, $offset=null) {
+        $sql = 'SELECT * FROM `*PREFIX*deck_cards` WHERE `stack_id` = ?  ORDER BY `order`';
+        return $this->findEntities($sql, [$stackId], $limit, $offset);
     }
 
     public function delete(Entity $entity) {
         // FIXME: delete linked elements, because owncloud doesn't support foreign keys for apps
         return parent::delete($entity);
     }
+
 }

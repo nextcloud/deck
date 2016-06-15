@@ -10,7 +10,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr data-ng-repeat="b in boards" ui-sref="board({boardId: b.id})">
+        <tr data-ng-repeat="b in boardservice.data" ui-sref="board({boardId: b.id})">
             <td>
                 <span class="board-bullet"  style="background-color:#{{b.color}};"> </span>
             </td>

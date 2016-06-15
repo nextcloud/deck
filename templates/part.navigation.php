@@ -1,8 +1,12 @@
 <ul class="with-icon">
+
 	<li><a href="#" class="">All Boards</a></li>
-	<!--<li><a href="#" class="icon-starred">Starred Boards</a></li>
+	<!--
+	<li><a href="#" class="icon-starred">Starred Boards</a></li>
 	<li><a href="#" class="icon-share">Shared Boards</a></li>
-	<li><a href="#" class="icon-public">Public Boards</a></li> //-->
+	<li><a href="#" class="icon-public">Public Boards</a></li>
+	//-->
+
 	<li class="with-menu" data-ng-repeat="b in boardservice.data">
 		<span class="board-bullet"  style="background-color:#{{b.color}};" ng-if="!b.status.edit"> </span>
 		<a href="#/board/{{b.id}}" ng-if="!b.status.edit">{{ b.title }}</a>
@@ -15,7 +19,7 @@
 			<ul>
 				<li><button class="icon-share svg" title="share"></button></li>
 				<li><button class="icon-rename svg" title="rename" ng-click="b.status.edit=true"></button></li>
-				<li><button class="icon-delete svg" title="delete" ng-click="deleteBoard($index)"></button></li>
+				<li><button class="icon-delete svg" title="delete" ng-click="deleteBoard(b)"></button></li>
 			</ul>
 		</div>
 		<div class="app-navigation-entry-deleted" ng-show="false">
@@ -24,7 +28,7 @@
 		</div>
 
 		<div class="app-navigation-entry-edit" ng-show="b.status.edit">
-			<form ng-disabled="isAddingList" class="ng-pristine ng-valid"  ng-submit="boardservice.update(b)">
+			<form ng-disabled="isAddingList" class="ng-pristine ng-valid"  ng-submit="updateBoard(b)">
 				<input id="newTitle" class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title">
 				<input type="submit" value="" class="action icon-checkmark svg">
 				<div class="colorselect">
@@ -33,7 +37,6 @@
 			</form>
 		</div>
 	</li>
-
 
 	<!-- Add new Board //-->
 	<li>

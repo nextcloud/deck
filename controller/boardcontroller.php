@@ -14,11 +14,11 @@ class BoardController extends Controller {
     private $boardService;
     public function __construct($appName,
                                 IRequest $request,
-                                BoardService $stackService,
+                                BoardService $cardService,
                                 $userId){
         parent::__construct($appName, $request);
         $this->userId = $userId;
-        $this->boardService = $stackService;
+        $this->boardService = $cardService;
     }
     /**
      * @NoAdminRequired
@@ -32,7 +32,7 @@ class BoardController extends Controller {
      */
     public function read($boardId) {
         // FIXME: Remove as this is just for testing if loading animation works out nicely
-        usleep(500000);
+        usleep(200000);
         return $this->boardService->find($this->userId, $boardId);
     }
     /**

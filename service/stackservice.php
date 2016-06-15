@@ -2,6 +2,7 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\Db\CardMapper;
 use OCP\ILogger;
 use OCP\IL10N;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -14,19 +15,25 @@ use \OCA\Deck\Db\StackMapper;
 class StackService  {
 
     private $stackMapper;
+    private $cardMapper;
     private $logger;
     private $l10n;
     private $timeFactory;
 
-    public function __construct(StackMapper $stackMapper, ILogger $logger,
+    public function __construct(StackMapper $stackMapper, CardMapper $cardMapper,ILogger $logger,
                                 IL10N $l10n,
                                 ITimeFactory $timeFactory) {
         $this->stackMapper = $stackMapper;
+        $this->cardMapper = $cardMapper;
         $this->logger = $logger;
     }
 
     public function findAll($boardId) {
-        return $this->stackMapper->findAll($boardId);
+        $stacks = $this->stackMapper->findAll($boardId);
+        foreach ($stacks as $idx => $s) {
+            $stacks[$idx]->setCards($this->cardMapper->findAll($s->id));
+        }
+        return $stacks;
     }
 
     public function create($title, $boardId, $order) {

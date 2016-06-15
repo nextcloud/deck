@@ -15,6 +15,11 @@ app.factory('StackService', function(ApiService, $http, $q){
         return deferred.promise;
 
     }
+
+    StackService.prototype.addCard = function(entity) {
+        console.log(this.data[entity.stackId]);
+        this.data[entity.stackId].cards.push(entity);
+    }
     service = new StackService($http, 'stacks', $q)
     return service;
 });

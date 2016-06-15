@@ -14,11 +14,11 @@ class StackController extends Controller {
     private $stackService;
     public function __construct($appName,
                                 IRequest $request,
-                                StackService $stackService,
+                                StackService $cardService,
                                 $userId){
         parent::__construct($appName, $request);
         $this->userId = $userId;
-        $this->stackService = $stackService;
+        $this->stackService = $cardService;
     }
     /**
      * @NoAdminRequired

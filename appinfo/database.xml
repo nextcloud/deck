@@ -99,6 +99,7 @@
                 <type>text</type>
                 <notnull>true</notnull>
                 <length>64</length>
+                <default>plain</default>
             </field>
             <field>
                 <name>last_modified</name>
