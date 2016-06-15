@@ -39,32 +39,39 @@
      inkscape:window-height="1038"
      id="namedview6"
      showgrid="false"
-     inkscape:zoom="10.429825"
-     inkscape:cx="-23.141805"
-     inkscape:cy="28.527136"
+     inkscape:zoom="59"
+     inkscape:cx="11.86676"
+     inkscape:cy="24.013007"
      inkscape:window-x="0"
      inkscape:window-y="18"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg2" />
+     inkscape:current-layer="svg2"
+     showguides="true"
+     inkscape:guide-bbox="true">
+    <sodipodi:guide
+       position="14.381833,30.201849"
+       orientation="0,1"
+       id="guide4217" />
+  </sodipodi:namedview>
   <rect
      style="fill:#ffffff;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none"
      id="rect4185"
-     width="8.9167366"
+     width="8.0941048"
      height="28.188393"
      x="1.5340621"
-     y="1.9899089" />
+     y="1.7921587" />
   <rect
      style="fill:#ffffff;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none"
      id="rect4185-0"
-     width="8.9167366"
+     width="8.0941048"
      height="19.655172"
-     x="11.582002"
-     y="2.031961" />
+     x="12.130231"
+     y="1.8042486" />
   <rect
      style="fill:#ffffff;stroke-width:5;stroke-miterlimit:4;stroke-dasharray:none"
      id="rect4185-0-1"
-     width="8.9167366"
+     width="8.0941048"
      height="24.065601"
-     x="21.716568"
-     y="1.9899085" />
+     x="22.525743"
+     y="1.7981508" />
 </svg>
