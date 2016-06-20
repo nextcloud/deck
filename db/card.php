@@ -9,10 +9,12 @@ class Card extends Entity implements JsonSerializable {
 
     public $id;
     protected $title;
+    protected $description;
     protected $stackId;
     protected $type;
     protected $lastModified;
     protected $createdAt;
+    protected $labels;
     protected $owner;
     protected $order;
     public function __construct() {
@@ -25,12 +27,14 @@ class Card extends Entity implements JsonSerializable {
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'description' => $this->description,
             'type' => $this->type,
             'lastModified' => $this->lastModified,
             'createdAt' => $this->createdAt,
             'owner' => $this->owner,
             'order' => $this->order,
             'stackId' => $this->stackId,
+            'labels' => $this->labels,
         ];
     }
 }

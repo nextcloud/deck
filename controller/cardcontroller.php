@@ -36,6 +36,12 @@ class CardController extends Controller {
     public function reorder($cardId, $stackId, $order) {
         return $this->cardService->reorder($cardId, $stackId, $order);
     }
+    /**
+     * @NoAdminRequired
+     */
+    public function rename($cardId, $title) {
+        return $this->cardService->rename($cardId, $title);
+    }
         /**
      * @NoAdminRequired
      */
@@ -54,4 +60,6 @@ class CardController extends Controller {
     public function delete($cardId) {
         return $this->cardService->delete($this->userId, $cardId);
     }
+
+
 }

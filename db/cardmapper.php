@@ -13,6 +13,21 @@ class CardMapper extends Mapper {
     public function __construct(IDb $db) {
         parent::__construct($db, 'deck_cards', '\OCA\Deck\Db\Card');
     }
+    
+    public function insert(Entity $entity) {
+        $entity->setCreatedAt(time());
+        $entity->setLastModified(time());
+        return parent::insert($entity);
+    }
+
+    /**
+     * @param Entity $entity
+     * @return Entity
+     */
+    public function update(Entity $entity) {
+        $entity->setLastModified(time());
+        return parent::update($entity);
+    }
 
 
     /**
@@ -25,10 +40,14 @@ class CardMapper extends Mapper {
         return $this->findEntity($sql, [$id]);
     }
 
+    public function findAllByBoard($boardId, $limit=null, $offset=null) {
+
+    }
 
     public function findAll($stackId, $limit=null, $offset=null) {
         $sql = 'SELECT * FROM `*PREFIX*deck_cards` WHERE `stack_id` = ?  ORDER BY `order`';
-        return $this->findEntities($sql, [$stackId], $limit, $offset);
+        $entities = $this->findEntities($sql, [$stackId], $limit, $offset);
+        return $entities;
     }
 
     public function delete(Entity $entity) {

@@ -7,18 +7,25 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 
   $scope.stackservice = StackService;
   $scope.boardservice = BoardService;
-  $scope.statusservice = StatusService;
+  $scope.statusservice = StatusService.getInstance();
+
 
   // fetch data
   StackService.clear();
+  $scope.statusservice.retainWaiting();
+  $scope.statusservice.retainWaiting();
+
   console.log("foo");
   StackService.fetchAll($scope.id).then(function(data) {
+    console.log(data);
+
     $scope.statusservice.releaseWaiting();
   }, function(error) {
     $scope.statusservice.setError('Error occured', error);
   });
 
   BoardService.fetchOne($scope.id).then(function(data) {
+
     $scope.statusservice.releaseWaiting();
   }, function(error) {
     $scope.statusservice.setError('Error occured', error);
@@ -46,6 +53,12 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
       $scope.stackservice.addCard(data);
       $scope.newCard.title = "";
     });
+  }
+
+  $scope.cardDelete = function(card) {
+    CardService.delete(card.id);
+    StackService.deleteCard(card);
+
   }
 
   // Lighten Color of the board for background usage

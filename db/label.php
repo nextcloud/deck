@@ -5,14 +5,13 @@ namespace OCA\Deck\Db;
 use JsonSerializable;
 use OCP\AppFramework\Db\Entity;
 
-class Board extends Entity implements JsonSerializable {
+class Label extends Entity implements JsonSerializable {
 
     public $id;
     protected $title;
-    protected $owner;
     protected $color;
-    protected $archived;
-    protected $labels;
+    protected $boardId;
+    protected $cardId;
     public function __construct() {
         $this->addType('id','integer');
     }
@@ -20,9 +19,9 @@ class Board extends Entity implements JsonSerializable {
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'owner' => $this->owner,
+            'boardId' => $this->boardId,
+            'cardId' => $this->cardId,
             'color' => $this->color,
-            'labels' => $this->labels,
         ];
     }
 }

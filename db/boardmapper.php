@@ -9,8 +9,11 @@ use OCP\AppFramework\Db\Mapper;
 
 class BoardMapper extends Mapper {
 
-    public function __construct(IDb $db) {
+    private $labelMapper;
+
+    public function __construct(IDb $db, LabelMapper $labelMapper) {
         parent::__construct($db, 'deck_boards', '\OCA\Deck\Db\Board');
+        $this->labelMapper = $labelMapper;
     }
 
 
@@ -21,7 +24,10 @@ class BoardMapper extends Mapper {
     public function find($id) {
         $sql = 'SELECT * FROM `*PREFIX*deck_boards` ' .
             'WHERE `id` = ?';
-        return $this->findEntity($sql, [$id]);
+        $board = $this->findEntity($sql, [$id]);
+        $labels = $this->labelMapper->findAll($id);
+        $board->setLabels($labels);
+        return $board;
     }
 
 

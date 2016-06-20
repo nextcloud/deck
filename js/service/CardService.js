@@ -15,6 +15,19 @@ app.factory('CardService', function(ApiService, $http, $q){
         });
         return deferred.promise;
     }
+
+    CardService.prototype.rename = function(card) {
+        var deferred = $q.defer();
+        var self = this;
+        $http.put(this.baseUrl + '/rename', {cardId: card.id, title: card.title}).then(function (response) {
+            self.data[card.id].title = card.title;
+            deferred.resolve(response.data);
+        }, function (error) {
+            deferred.reject('Error while renaming ' + self.endpoint);
+        });
+        return deferred.promise;
+    }
+
     service = new CardService($http, 'cards', $q)
     return service;
 });

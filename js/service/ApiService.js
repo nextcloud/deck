@@ -26,8 +26,14 @@ app.factory('ApiService', function($http, $q){
     }
 
     ApiService.prototype.fetchOne = function (id) {
+
         this.id = id;
         var deferred = $q.defer();
+
+        if(id===undefined) {
+            return deferred.promise;
+        }
+
         var self = this;
         $http.get(this.baseUrl + '/' + id).then(function (response) {
             data = response.data;

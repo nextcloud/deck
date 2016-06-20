@@ -49,6 +49,11 @@ class CardService  {
         return $this->cardMapper->update($card);
     }
 
+    public function rename($id, $title) {
+        $card = $this->cardMapper->find($id);
+        $card->setTitle($title);
+        return $this->cardMapper->update($card);
+    }
     public function reorder($id, $stackId, $order) {
         $cards = $this->cardMapper->findAll($stackId);
         $i = 0;

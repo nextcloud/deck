@@ -89,6 +89,12 @@
                 <length>64</length>
             </field>
             <field>
+                <name>description</name>
+                <type>text</type>
+                <notnull>false</notnull>
+                <length>4096</length>
+            </field>
+            <field>
                 <name>stack_id</name>
                 <type>integer</type>
                 <length>8</length>
@@ -207,10 +213,10 @@
                 <notnull>false</notnull>
             </field>
             <field>
-                <name>owner</name>
-                <type>text</type>
+                <name>board_id</name>
+                <type>integer</type>
                 <notnull>true</notnull>
-                <length>64</length>
+                <length>8</length>
             </field>
         </declaration>
     </table>

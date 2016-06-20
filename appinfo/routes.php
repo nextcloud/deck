@@ -37,6 +37,7 @@ return [
         ['name' => 'card#read', 'url' => '/cards/{cardId}/', 'verb' => 'GET'],
         ['name' => 'card#create', 'url' => '/cards/', 'verb' => 'POST'],
         ['name' => 'card#update', 'url' => '/cards/', 'verb' => 'PUT'],
+        ['name' => 'card#rename', 'url' => '/cards/rename/', 'verb' => 'PUT'],
         ['name' => 'card#reorder', 'url' => '/cards/reorder/', 'verb' => 'PUT'],
         ['name' => 'card#delete', 'url' => '/cards/{cardId}/', 'verb' => 'DELETE'],
 

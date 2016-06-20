@@ -53,4 +53,8 @@ class BoardController extends Controller {
     public function delete($boardId) {
         return $this->boardService->delete($this->userId, $boardId);
     }
+
+    public function labels($boardId) {
+        return $this->boardService->labels($this->boardId);
+    }
 }

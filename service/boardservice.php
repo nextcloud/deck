@@ -59,4 +59,8 @@ class BoardService  {
         $board->setColor($color);
         return $this->boardMapper->update($board);
     }
+
+    public function labels($boardId) {
+        
+    }
 }
