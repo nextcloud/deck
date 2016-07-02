@@ -51,8 +51,8 @@ class CardController extends Controller {
     /**
      * @NoAdminRequired
      */
-    public function update($id, $title, $stackId, $type, $order) {
-            return $this->cardService->update($id, $title, $stackId, $type, $order, $this->userId);
+    public function update($id, $title, $stackId, $type, $order, $description) {
+            return $this->cardService->update($id, $title, $stackId, $type, $order, $description, $this->userId);
     }
     /**
      * @NoAdminRequired
@@ -60,6 +60,17 @@ class CardController extends Controller {
     public function delete($cardId) {
         return $this->cardService->delete($this->userId, $cardId);
     }
-
+    /**
+     * @NoAdminRequired
+     */
+    public function assignLabel($cardId, $labelId) {
+        return $this->cardService->assignLabel($this->userId, $cardId, $labelId);
+    }
+    /**
+     * @NoAdminRequired
+     */
+    public function removeLabel($cardId, $labelId) {
+        return $this->cardService->removeLabel($this->userId, $cardId, $labelId);
+    }
 
 }

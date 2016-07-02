@@ -7,13 +7,15 @@
     "angular-mocks": "~1.5.*",
     "angular-sanitize": "~1.5.*",
     "angular-animate": "~1.5.*",
-    "angular-ui-bootstrap": "~1.*.*", 
-    "ng-sortable": "~1.*.*", 
+    "angular-ui-bootstrap": "~1.*.*",
+    "ng-sortable": "~1.*.*",
     "jquery": "~2.*",
     "momentjs": "~2.11.*",
     "es6-shim": "~0.*",
     "js-url": "~2.*",
-    "masonry": "~4.0.0"
+    "masonry": "~4.0.0",
+    "showdown": "~1.4.2",
+    "angular-ui-select": "~0.18.0"
   },
   "license": "AGPL-3.0",
   "private": true,

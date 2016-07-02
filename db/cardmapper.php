@@ -10,8 +10,11 @@ use OCP\AppFramework\Db\Mapper;
 
 class CardMapper extends Mapper {
 
-    public function __construct(IDb $db) {
+    private $labelMapper;
+
+    public function __construct(IDb $db, LabelMapper $labelMapper) {
         parent::__construct($db, 'deck_cards', '\OCA\Deck\Db\Card');
+        $this->labelMapper = $labelMapper;
     }
     
     public function insert(Entity $entity) {
@@ -37,7 +40,10 @@ class CardMapper extends Mapper {
     public function find($id) {
         $sql = 'SELECT * FROM `*PREFIX*deck_cards` ' .
             'WHERE `id` = ?';
-        return $this->findEntity($sql, [$id]);
+        $card = $this->findEntity($sql, [$id]);
+        $labels = $this->labelMapper->findAssignedLabelsForCard($card->id);
+        $card->setLabels($labels);
+        return $card;
     }
 
     public function findAllByBoard($boardId, $limit=null, $offset=null) {
@@ -53,6 +59,22 @@ class CardMapper extends Mapper {
     public function delete(Entity $entity) {
         // FIXME: delete linked elements, because owncloud doesn't support foreign keys for apps
         return parent::delete($entity);
+    }
+
+    public function assignLabel($card, $label) {
+        $sql = 'INSERT INTO `*PREFIX*deck_assigned_labels` (`label_id`,`card_id`) VALUES (?,?)';
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(1, $label,  \PDO::PARAM_INT);
+        $stmt->bindParam(2, $card,  \PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    public function removeLabel($card, $label) {
+        $sql = 'DELETE FROM `*PREFIX*deck_assigned_labels` WHERE card_id = ? AND label_id = ?';
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(1, $card,  \PDO::PARAM_INT);
+        $stmt->bindParam(2, $label,  \PDO::PARAM_INT);
+        $stmt->execute();
     }
 
 }

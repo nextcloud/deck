@@ -2,6 +2,7 @@
 
 app.controller('CardController', function ($scope, $rootScope, $routeParams, $location, $stateParams, BoardService, CardService, StackService, StatusService) {
     $scope.sidebar = $rootScope.sidebar;
+    $scope.status = {};
 
     $scope.cardservice = CardService;
     $scope.cardId = $stateParams.cardId;
@@ -27,6 +28,22 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
         });
     };
 
+    $scope.updateCard = function(card) {
+        CardService.update(CardService.getCurrent());
+        $scope.status.description = false;
+    }
+
+    $scope.editDescription = function() {
+        $scope.status.description = true;
+    }
+
+    $scope.labelAssign = function(element, model) {
+        CardService.assignLabel($scope.cardId, element.id)
+
+    }
+    $scope.labelRemove = function(element, model) {
+        CardService.removeLabel($scope.cardId, element.id)
+    }
 
     /*var menu = $('#app-content');
      menu.click(function(event){

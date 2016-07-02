@@ -40,6 +40,14 @@ return [
         ['name' => 'card#rename', 'url' => '/cards/rename/', 'verb' => 'PUT'],
         ['name' => 'card#reorder', 'url' => '/cards/reorder/', 'verb' => 'PUT'],
         ['name' => 'card#delete', 'url' => '/cards/{cardId}/', 'verb' => 'DELETE'],
+        // card - assign labels
+        ['name' => 'card#assignLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'POST'],
+        ['name' => 'card#removeLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
+
+        // labels
+        ['name' => 'label#create', 'url' => '/labels/', 'verb' => 'POST'],
+        ['name' => 'label#update', 'url' => '/labels/', 'verb' => 'PUT'],
+        ['name' => 'label#delete', 'url' => '/labels/{labelId}/', 'verb' => 'DELETE'],
 
         // TODO: Implement public board sharing
         ['name' => 'public#index', 'url' => '/public/board/:hash', 'verb' => 'GET'],

@@ -203,7 +203,7 @@
             <field>
                 <name>title</name>
                 <type>text</type>
-                <notnull>true</notnull>
+                <notnull>false</notnull>
                 <length>64</length>
             </field>
             <field>

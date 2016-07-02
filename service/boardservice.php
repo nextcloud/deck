@@ -2,6 +2,7 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\Db\Label;
 use OCP\ILogger;
 use OCP\IL10N;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -9,19 +10,23 @@ use OCP\AppFramework\Utility\ITimeFactory;
 
 use \OCA\Deck\Db\Board;
 use \OCA\Deck\Db\BoardMapper;
+use \OCA\Deck\Db\LabelMapper;
 
 
 class BoardService  {
 
     private $boardMapper;
+    private $labelMapper;
     private $logger;
     private $l10n;
     private $timeFactory;
 
     public function __construct(BoardMapper $boardMapper, ILogger $logger,
                                 IL10N $l10n,
-                                ITimeFactory $timeFactory) {
+                                ITimeFactory $timeFactory,
+                                LabelMapper $labelMapper) {
         $this->boardMapper = $boardMapper;
+        $this->labelMapper = $labelMapper;
         $this->logger = $logger;
     }
 
@@ -45,7 +50,19 @@ class BoardService  {
         $board->setTitle($title);
         $board->setOwner($userId);
         $board->setColor($color);
-        return $this->boardMapper->insert($board);
+        $new_board = $this->boardMapper->insert($board);
+
+        // create new labels
+        $default_labels = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
+        $labels = [];
+        foreach ($default_labels as $color) {
+            $label = new Label();
+            $label->setColor($color);
+            $label->setBoardId($new_board->getId());
+            $labels[] = $this->labelMapper->insert($label);
+        }
+        $new_board->setLabels($labels);
+        return $new_board;
 
     }
 

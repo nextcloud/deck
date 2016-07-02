@@ -39,13 +39,14 @@ class CardService  {
         return $this->cardMapper->delete($this->cardMapper->find($id));
     }
 
-    public function update($id, $title, $stackId, $type, $order, $owner) {
+    public function update($id, $title, $stackId, $type, $order, $description, $owner) {
         $card = $this->cardMapper->find($id);
         $card->setTitle($title);
         $card->setStackId($stackId);
         $card->setType($type);
         $card->setOrder($order);
         $card->setOwner($owner);
+        $card->setDescription($description);
         return $this->cardMapper->update($card);
     }
 
@@ -74,5 +75,14 @@ class CardService  {
         // FIXME: return reordered cards without an additional db query
         $cards = $this->cardMapper->findAll($stackId);
         return $cards;
+    }
+
+
+    public function assignLabel($userId, $cardId, $labelId) {
+        $this->cardMapper->assignLabel($cardId, $labelId);
+    }
+
+    public function removeLabel($userId, $cardId, $labelId) {
+        $this->cardMapper->removeLabel($cardId, $labelId);
     }
 }

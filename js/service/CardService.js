@@ -28,6 +28,31 @@ app.factory('CardService', function(ApiService, $http, $q){
         return deferred.promise;
     }
 
+    CardService.prototype.assignLabel = function(card, label) {
+        //['name' => 'card#assignLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'POST'],
+        var url = this.baseUrl + '/' + card + '/label/' + label;
+        var deferred = $q.defer();
+        var self = this;
+        $http.post(url).then(function (response) {
+            deferred.resolve(response.data);
+        }, function (error) {
+            deferred.reject('Error while update ' + self.endpoint);
+        });
+        return deferred.promise;
+    }
+    CardService.prototype.removeLabel = function(card, label) {
+       // ['name' => 'card#removeLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
+        var url = this.baseUrl + '/' + card + '/label/' + label;
+        var deferred = $q.defer();
+        var self = this;
+        $http.delete(url).then(function (response) {
+            deferred.resolve(response.data);
+        }, function (error) {
+            deferred.reject('Error while update ' + self.endpoint);
+        });
+        return deferred.promise;
+    }
+
     service = new CardService($http, 'cards', $q)
     return service;
 });

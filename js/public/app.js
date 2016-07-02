@@ -1,5 +1,31 @@
 
-var app = angular.module('Deck', ['ngRoute', 'ngSanitize', 'ui.router', 'as.sortable']);
+angular.module('markdown', [])
+	.provider('markdown', [function () {
+		var opts = {};
+		return {
+			config: function (newOpts) {
+				opts = newOpts;
+			},
+			$get: function () {
+				return new window.showdown.Converter(opts);
+			}
+		};
+	}])
+	.filter('markdown', ['markdown', function (markdown) {
+		return function (text) {
+			return markdown.makeHtml(text || '');
+		};
+	}]);
+
+var app = angular.module('Deck', [
+	'ngRoute',
+	'ngSanitize',
+	'ui.router',
+	'ui.select',
+	'as.sortable',
+	'markdown',
+	'ngAnimate'
+]);
 
 
 app.config(["$provide", "$routeProvider", "$interpolateProvider", "$httpProvider", "$urlRouterProvider", "$stateProvider", "$compileProvider", function ($provide, $routeProvider, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider, $compileProvider) {
@@ -20,6 +46,14 @@ app.config(["$provide", "$routeProvider", "$interpolateProvider", "$httpProvider
             url: "/board/:boardId",
             templateUrl: "/board.html",
             controller: 'BoardController'
+        })
+        .state('board.detail', {
+            url: "/detail/",
+            views: {
+                "sidebarView": {
+                    templateUrl: "/board.sidebarView.html",
+                }
+            }
         })
         .state('board.card', {
             url: "/card/:cardId",
@@ -45,10 +79,16 @@ app.run(["$document", "$rootScope", "$transitions", function ($document, $rootSc
     $transitions.onEnter({to: 'board.card'}, function ($state, $transition$) {
         $rootScope.sidebar.show = true;
     });
+    $transitions.onEnter({to: 'board.detail'}, function ($state, $transition$) {
+        $rootScope.sidebar.show = true;
+    });
     $transitions.onEnter({to: 'board'}, function ($state) {
         $rootScope.sidebar.show = false;
     });
     $transitions.onExit({from: 'board.card'}, function ($state) {
+        $rootScope.sidebar.show = false;
+    });
+    $transitions.onExit({from: 'board.detail'}, function ($state) {
         $rootScope.sidebar.show = false;
     });
 }]);
@@ -61,15 +101,20 @@ app.controller('AppController', ["$scope", "$location", "$http", "$route", "$log
     $scope.sidebar = $rootScope.sidebar;
 }]);
 
-app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "StatusService", "BoardService", "StackService", "CardService", function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService) {
+app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "StatusService", "BoardService", "StackService", "CardService", "LabelService", function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService) {
 
   $scope.sidebar = $rootScope.sidebar;
 
   $scope.id = $stateParams.boardId;
+  $scope.status={},
+      $scope.newLabel={};
+  $scope.status.boardtab = $stateParams.detailTab;
 
   $scope.stackservice = StackService;
   $scope.boardservice = BoardService;
   $scope.statusservice = StatusService.getInstance();
+  $scope.labelservice = LabelService;
+  $scope.defaultColors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
 
 
   // fetch data
@@ -77,7 +122,6 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
   $scope.statusservice.retainWaiting();
   $scope.statusservice.retainWaiting();
 
-  console.log("foo");
   StackService.fetchAll($scope.id).then(function(data) {
     console.log(data);
 
@@ -123,6 +167,26 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 
   }
 
+  $scope.labelDelete = function(label) {
+    LabelService.delete(label.id);
+    // remove from board data
+    var i = BoardService.getCurrent().labels.indexOf(label);
+    BoardService.getCurrent().labels.splice(i, 1);
+    // TODO: remove from cards
+  }
+  $scope.labelCreate = function(label) {
+    label.boardId = $scope.id;
+    LabelService.create(label);
+    BoardService.getCurrent().labels.push(label);
+    $scope.status.createLabel = false;
+    $scope.newLabel = {};
+  }
+  $scope.labelUpdate = function(label) {
+    label.edit = false;
+    LabelService.update(label);
+  }
+
+  // TODO: move to filter?
   // Lighten Color of the board for background usage
   $scope.rgblight = function (hex) {
       var result = /^([A-Fa-f\d]{2})([A-Fa-f\d]{2})([A-Fa-f\d]{2})$/i.exec(hex);
@@ -138,6 +202,49 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
         return "#"+hex;
     }
   };
+
+  // TODO: move to filter?
+  // RGB2HLS by Garry Tan
+  // http://axonflux.com/handy-rgb-to-hsl-and-rgb-to-hsv-color-model-c
+  $scope.textColor = function (hex) {
+    var result = /^([A-Fa-f\d]{2})([A-Fa-f\d]{2})([A-Fa-f\d]{2})$/i.exec(hex);
+    var color = result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+    if(result !== null) {
+      r = color.r/255;
+      g = color.g/255;
+      b = color.b/255;
+      var max = Math.max(r, g, b), min = Math.min(r, g, b);
+      var h, s, l = (max + min) / 2;
+
+      if(max == min){
+        h = s = 0; // achromatic
+      }else{
+        var d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch(max){
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+      }
+      // TODO: Maybe just darken/lighten the color
+      if(l<0.5) {
+        return "#ffffff";
+      } else {
+        return "#000000";
+      }
+      //var rgba = "rgba(" + color.r + "," + color.g + "," + color.b + ",0.7)";
+      //return rgba;
+    } else {
+      return "#aa0000";
+    }
+  };
+
 
 
   // settings for card sorting
@@ -191,6 +298,7 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 
 app.controller('CardController', ["$scope", "$rootScope", "$routeParams", "$location", "$stateParams", "BoardService", "CardService", "StackService", "StatusService", function ($scope, $rootScope, $routeParams, $location, $stateParams, BoardService, CardService, StackService, StatusService) {
     $scope.sidebar = $rootScope.sidebar;
+    $scope.status = {};
 
     $scope.cardservice = CardService;
     $scope.cardId = $stateParams.cardId;
@@ -216,6 +324,22 @@ app.controller('CardController', ["$scope", "$rootScope", "$routeParams", "$loca
         });
     };
 
+    $scope.updateCard = function(card) {
+        CardService.update(CardService.getCurrent());
+        $scope.status.description = false;
+    }
+
+    $scope.editDescription = function() {
+        $scope.status.description = true;
+    }
+
+    $scope.labelAssign = function(element, model) {
+        CardService.assignLabel($scope.cardId, element.id)
+
+    }
+    $scope.labelRemove = function(element, model) {
+        CardService.removeLabel($scope.cardId, element.id)
+    }
 
     /*var menu = $('#app-content');
      menu.click(function(event){
@@ -432,6 +556,7 @@ app.factory('ApiService', ["$http", "$q", function($http, $q){
         return deferred.promise;
 
     };
+    
 
     // methods for managing data
     ApiService.prototype.clear = function() {
@@ -444,7 +569,8 @@ app.factory('ApiService', ["$http", "$q", function($http, $q){
         } else {
             Object.keys(entity).forEach(function (key) {
                 element[key] = entity[key];
-                element[key].status = {};
+                if(element[key]!==null)
+                    element[key].status = {};
             });
         }
     };
@@ -516,7 +642,40 @@ app.factory('CardService', ["ApiService", "$http", "$q", function(ApiService, $h
         return deferred.promise;
     }
 
+    CardService.prototype.assignLabel = function(card, label) {
+        //['name' => 'card#assignLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'POST'],
+        var url = this.baseUrl + '/' + card + '/label/' + label;
+        var deferred = $q.defer();
+        var self = this;
+        $http.post(url).then(function (response) {
+            deferred.resolve(response.data);
+        }, function (error) {
+            deferred.reject('Error while update ' + self.endpoint);
+        });
+        return deferred.promise;
+    }
+    CardService.prototype.removeLabel = function(card, label) {
+       // ['name' => 'card#removeLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
+        var url = this.baseUrl + '/' + card + '/label/' + label;
+        var deferred = $q.defer();
+        var self = this;
+        $http.delete(url).then(function (response) {
+            deferred.resolve(response.data);
+        }, function (error) {
+            deferred.reject('Error while update ' + self.endpoint);
+        });
+        return deferred.promise;
+    }
+
     service = new CardService($http, 'cards', $q)
+    return service;
+}]);
+app.factory('LabelService', ["ApiService", "$http", "$q", function(ApiService, $http, $q){
+    var LabelService = function($http, ep, $q) {
+        ApiService.call(this, $http, ep, $q);
+    };
+    LabelService.prototype = angular.copy(ApiService.prototype);
+    service = new LabelService($http, 'labels', $q)
     return service;
 }]);
 app.factory('StackService', ["ApiService", "$http", "$q", function(ApiService, $http, $q){

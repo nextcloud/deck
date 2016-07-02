@@ -3,7 +3,6 @@
 namespace OCA\Deck\Db;
 
 use JsonSerializable;
-use OCP\AppFramework\Db\Entity;
 
 class Label extends Entity implements JsonSerializable {
 

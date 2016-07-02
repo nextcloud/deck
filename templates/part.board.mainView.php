@@ -4,26 +4,30 @@
         <h2>{{ statusservice.title }}</h2>
         <p>{{ statusservice.text }}</p></div>
 </div>
-<div id="board" class="scroll-container" >
-    <h1>
-        {{ boardservice.data[id].title }}
-    </h1>
+<div id="board-header">
+<h1>
+    {{ boardservice.data[id].title }}
     <div id="board-actions">
-
         <div><i class="fa fa-filter"> </i> Filter</div>
-        <div class="filter">by label <i class="fa  fa-caret-down"> </i>
-            <ul class="filter-select bubble">
-                <li ng-repeat="label in boardservice.data[id].labels"><span style="background-color:#{{ label.color }};"> </span> {{ label.title }}</li>
-            </ul>
-        </div>
-        <div class="filter">by creator <i class="fa  fa-caret-down"> </i></div>
-        <div class="filter">by members <i class="fa  fa-caret-down"> </i></div>
+        <div class="filter"><span class="filter-button" ng-click="status.filter.label=!status.filter.label">by label <i class="fa  fa-caret-down"> </i></span></div>
+        <ul class="filter-select bubble" ng-if="status.filter.label">
+            <li ng-repeat="label in boardservice.data[id].labels"><span style="background-color:#{{ label.color }};"> </span> {{ label.title }}</li>
+        </ul>
+        <div class="filter"><span class="filter-button" ng-click="status.filter.assignee=!status.filter.assignee">by assignee<i class="fa  fa-caret-down"> </i></span></div>
+        <ul class="filter-select bubble" ng-if="status.filter.assignee">
+            <li ng-repeat="label in boardservice.data[id].labels"><span style="background-color:#{{ label.color }};"> </span> {{ label.title }}</li>
+        </ul>
 
-        <div><i class="fa fa-share-alt"> </i></div>
-        <div><i class="fa fa-users"> </i></div>
-        <div><i class="fa fa-ellipsis-h"> </i></div>
+        <div class="board-action-button"><a class="fa fa-share-alt" ui-sref="board.detail({ id: id })"> </a></div>
+        <div class="board-action-button"><a class="fa fa-users" ui-sref="board.detail({ id: id })"> </a></div>
+        <div class="board-action-button"><a class="fa fa-ellipsis-h" ui-sref="board.detail({ id: id })"> </a></div>
 
-        </div>
+    </div>
+</h1>
+    </div>
+<div id="board" class="scroll-container" >
+
+
 
 
     <div id="innerBoard" data-ng-model="stacks">
@@ -44,7 +48,8 @@
         <div class="card-upper">
 			<h3>{{ c.title }}</h3>
             <ul class="labels">
-                <li ng-repeat="label in c.labels" style="background-color: #{{ label.color }};"><span>{{ label.title }}</span></li>
+                <li ng-repeat="label in c.labels" style="background-color: #{{ label.color }};"><span>{{ label.title }}</span>
+                </li>
             </ul>
 
         </div>

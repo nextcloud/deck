@@ -5,7 +5,7 @@
     <description>My first ownCloud app</description>
     <licence>AGPL</licence>
     <author>Julius Härtl</author>
-    <version>0.0.1.9</version>
+    <version>0.0.1.10</version>
     <namespace>Deck</namespace>
     <category>other</category>
     <dependencies>

@@ -85,6 +85,7 @@ app.factory('ApiService', function($http, $q){
         return deferred.promise;
 
     };
+    
 
     // methods for managing data
     ApiService.prototype.clear = function() {
@@ -97,7 +98,8 @@ app.factory('ApiService', function($http, $q){
         } else {
             Object.keys(entity).forEach(function (key) {
                 element[key] = entity[key];
-                element[key].status = {};
+                if(element[key]!==null)
+                    element[key].status = {};
             });
         }
     };

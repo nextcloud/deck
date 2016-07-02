@@ -5,6 +5,7 @@ use OCP\Util;
 Util::addStyle('deck', 'font-awesome');
 Util::addStyle('deck', 'style');
 Util::addStyle('deck', '../js/vendor/ng-sortable/dist/ng-sortable.min');
+Util::addStyle('deck', '../js/vendor/angular-ui-select/dist/select.min');
 //Util::addStyle('deck', '../js/vendor/ng-sortable/dist/ng-sortable.style.min');
 Util::addScript('deck', 'vendor/angular/angular.min');
 Util::addScript('deck', 'vendor/angular-route/angular-route.min');
@@ -12,6 +13,8 @@ Util::addScript('deck', 'vendor/angular-sanitize/angular-sanitize.min');
 Util::addScript('deck', 'vendor/angular-animate/angular-animate.min');
 Util::addScript('deck', 'vendor/angular-ui-router/release/angular-ui-router.min');
 Util::addScript('deck', 'vendor/ng-sortable/dist/ng-sortable.min');
+Util::addScript('deck', 'vendor/angular-ui-select/dist/select.min');
+Util::addScript('deck', 'vendor/showdown/dist/showdown.min');
 Util::addScript('deck', 'public/app');
 
 ?>
@@ -33,14 +36,14 @@ Util::addScript('deck', 'public/app');
 	<script type="text/ng-template" id="/boardlist.sidebarView.html">
 		<?php print_unescaped($this->inc('part.empty')); ?>
 	</script>
+	<script type="text/ng-template" id="/board.sidebarView.html">
+		<?php print_unescaped($this->inc('part.board.sidebarView')); ?>
+	</script>
 	<script type="text/ng-template" id="/board.mainView.html">
 		<?php print_unescaped($this->inc('part.board.mainView')); ?>
 	</script>
 	<script type="text/ng-template" id="/board.html">
 		<?php print_unescaped($this->inc('part.board')); ?>
-	</script>
-	<script type="text/ng-template" id="/board.sidebarView.html">
-		<?php print_unescaped($this->inc('part.empty')); ?>
 	</script>
 	<script type="text/ng-template" id="/card.sidebarView.html">
 		<?php print_unescaped($this->inc('part.card')); ?>

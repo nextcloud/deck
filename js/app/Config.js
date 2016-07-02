@@ -17,6 +17,14 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
             templateUrl: "/board.html",
             controller: 'BoardController'
         })
+        .state('board.detail', {
+            url: "/detail/",
+            views: {
+                "sidebarView": {
+                    templateUrl: "/board.sidebarView.html",
+                }
+            }
+        })
         .state('board.card', {
             url: "/card/:cardId",
             views: {

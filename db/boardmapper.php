@@ -2,7 +2,6 @@
 
 namespace OCA\Deck\Db;
 
-use OCP\AppFramework\Db\Entity;
 use OCP\IDb;
 use OCP\AppFramework\Db\Mapper;
 
@@ -10,6 +9,11 @@ use OCP\AppFramework\Db\Mapper;
 class BoardMapper extends Mapper {
 
     private $labelMapper;
+    private $_relationMappers = array();
+
+    public function addRelationMapper($name, $mapper) {
+        $this->_relationMappers[$name] = $mapper;
+    }
 
     public function __construct(IDb $db, LabelMapper $labelMapper) {
         parent::__construct($db, 'deck_boards', '\OCA\Deck\Db\Board');
@@ -36,8 +40,9 @@ class BoardMapper extends Mapper {
         return $this->findEntities($sql, [$userId], $limit, $offset);
     }
 
-    public function delete(Entity $entity) {
-        // FIXME: delete linked elements, because owncloud doesn't support foreign keys for apps
+    public function delete(\OCP\AppFramework\Db\Entity $entity) {
+        //$this->deleteRelationalEntities('label', $entity);
         return parent::delete($entity);
     }
+
 }
