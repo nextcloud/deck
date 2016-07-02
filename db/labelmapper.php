@@ -29,7 +29,7 @@ class LabelMapper extends DeckMapper {
     }
     public function findAssignedLabelsForBoard($boardId, $limit=null, $offset=null) {
         $sql = "SELECT c.id as card_id, l.id as id, l.title as title, l.color as color FROM oc_deck_cards as c " .
-            " INNER JOIN oc_deck_assigned_labels as al, oc_deck_labels as l ON al.card_id = c.id AND al.label_id = l.id WHERE board_id=?";
+            " INNER JOIN oc_deck_assigned_labels as al ON al.card_id = c.id INNER JOIN oc_deck_labels as l ON  al.label_id = l.id WHERE board_id=?";
         $entities = $this->findEntities($sql, [$boardId], $limit, $offset);
         return $entities;
     }
