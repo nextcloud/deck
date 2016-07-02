@@ -20,6 +20,7 @@ class Card extends Entity implements JsonSerializable {
         $this->addType('id','integer');
         $this->addType('stackId','integer');
         $this->addType('order','integer');
+        $this->addRelation('labels');
     }
 
     public function jsonSerialize() {
