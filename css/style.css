@@ -4,7 +4,16 @@
 #app-navigation .app-navigation-entry-edit {
 	height: auto;
 }
-.board-bullet {
+#app-navigation .active,
+#app-navigation .active a,
+#app-navigation li:hover > a,
+#app-navigation li:focus > a,
+#app-navigation a:focus,
+#app-navigation .selected,
+#app-navigation .selected a {
+	background-color:#fafafa;
+}
+#app-navigation .board-bullet {
     position: absolute;
     margin-left: 17px;
     margin-top: 16px;
@@ -31,6 +40,7 @@
 	top:-40px;
 	padding-top:40px;
 	z-index:100;
+	width:100%;
 }
 #board #innerBoard {
 	padding:10px;
@@ -419,12 +429,19 @@
 }
 
 #boardlist {
+	width:100%;
+	height: 100%;
+	overflow: scroll;
 
 }
 #boardlist td .board-bullet {
 	width:30px;
 	height:30px;
-	margin-top: -15px;
+	border: none;
+	border-radius: 50%;
+	position: relative;
+	cursor: pointer;
+	display: block;
 }
 #boardlist td {
 	padding:10px;
@@ -571,4 +588,12 @@ margin-bottom:2px; width:100%;
 	padding-left: 10px;
 	padding-right:10px;
 	width:100%;
+}
+
+
+@media (max-width: 480px) {
+	/* hide board actions on mobile */
+	#board-actions {
+		display:none !important;
+	}
 }

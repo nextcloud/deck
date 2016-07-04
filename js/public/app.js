@@ -259,7 +259,7 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
       CardService.update(card);
 
       CardService.reorder(card, order).then(function(data) {
-        StackService.data[newStack].cards = data;
+        StackService.data[newStack].addCard(card);
       });
     },
     orderChanged: function (event) {
@@ -334,8 +334,9 @@ app.controller('CardController', ["$scope", "$rootScope", "$routeParams", "$loca
     }
 
     $scope.labelAssign = function(element, model) {
-        CardService.assignLabel($scope.cardId, element.id)
-
+        CardService.assignLabel($scope.cardId, element.id);
+        var card = CardService.getCurrent();
+        StackService.updateCard(card);
     }
     $scope.labelRemove = function(element, model) {
         CardService.removeLabel($scope.cardId, element.id)

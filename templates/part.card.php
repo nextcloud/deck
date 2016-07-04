@@ -22,7 +22,7 @@
             by <span>{{ cardservice.getCurrent().owner }}</span>
         </div>
 
-        <ui-select multiple tagging tagging-label="(custom 'new' label)" ng-model="card.labels" theme="bootstrap" style="width:100%;" title="Choose a label" placeholder="Add a label"
+        <ui-select multiple tagging="" ng-model="card.labels" theme="bootstrap" style="width:100%;" title="Choose a label" placeholder="Add a label"
                    on-select="labelAssign($item, $model)" on-remove="labelRemove($item, $model)">
             <ui-select-match placeholder="Select labels..."><span class="select-label" style="background-color:#{{$item.color}}">{{$item.title}}</span></ui-select-match>
             <ui-select-choices repeat="label in boardservice.getCurrent().labels | filter:$select.search">

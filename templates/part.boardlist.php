@@ -17,11 +17,7 @@
             <td>		<a href="#/board/{{b.id}}">{{ b.title }}</a></td>
             <td>
                 <div id="assigned-users">
-                    <div class="avatardiv" style="height: 30px; width: 30px; color: rgb(255, 255, 255); font-weight: normal; text-align: center; line-height: 30px; font-size: 17px; background-color: rgb(213, 231, 116);">D</div>
-                    <div class="avatardiv" style="height: 30px; width: 30px; color: rgb(255, 255, 255); font-weight: normal; text-align: center; line-height: 30px; font-size: 17px; background-color: rgb(213, 120, 220);">E</div>
-                    <div class="avatardiv" style="height: 30px; width: 30px; color: rgb(255, 255, 255); font-weight: normal; text-align: center; line-height: 30px; font-size: 17px; background-color: rgb(120, 120, 220);">C</div>
-                    <div class="avatardiv" style="height: 30px; width: 30px; color: rgb(255, 255, 255); font-weight: normal; text-align: center; line-height: 30px; font-size: 17px; background-color: rgb(120, 220, 220);">K</div>
-                    <div class="avatardiv" style="height: 30px; width: 30px; color: rgb(255, 255, 255); font-weight: normal; text-align: center; line-height: 30px; font-size: 17px; background-color: rgb(220, 220, 220);">+</div>
+                    <!--<div class="avatardiv" style="height: 30px; width: 30px; color: rgb(255, 255, 255); font-weight: normal; text-align: center; line-height: 30px; font-size: 17px; background-color: rgb(213, 231, 116);">D</div>//-->
                 </div>
 
             </td>

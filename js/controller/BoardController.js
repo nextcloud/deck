@@ -157,7 +157,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
       CardService.update(card);
 
       CardService.reorder(card, order).then(function(data) {
-        StackService.data[newStack].cards = data;
+        StackService.data[newStack].addCard(card);
       });
     },
     orderChanged: function (event) {

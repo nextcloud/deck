@@ -38,8 +38,9 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
     }
 
     $scope.labelAssign = function(element, model) {
-        CardService.assignLabel($scope.cardId, element.id)
-
+        CardService.assignLabel($scope.cardId, element.id);
+        var card = CardService.getCurrent();
+        StackService.updateCard(card);
     }
     $scope.labelRemove = function(element, model) {
         CardService.removeLabel($scope.cardId, element.id)
