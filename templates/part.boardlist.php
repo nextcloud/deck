@@ -1,5 +1,5 @@
 <div id="boardlist">
-<table id="boardlist" width="100%">
+<table width="100%">
     <thead>
         <tr>
             <td class="cell-board-bullet"></td>

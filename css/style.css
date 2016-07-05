@@ -352,14 +352,20 @@
 }
 
 
-#card-attachments,
 #sidebar-header,
 .card-block {
-	padding:10px;
+	padding:15px;
+}
+#card-attachments ul {
+	margin:5px;
 }
 #card-attachments .details {
 	font-size:8pt;
 	padding-left:15px;
+}
+#attachment-add button {
+	background-color:#eeeeee;
+	font-size:9pt;
 }
 #app-sidebar
 {
@@ -401,8 +407,8 @@
 
 }
 #assigned-users {
-	padding:10px;
-	padding-top:0;
+	margin-top:15px;
+
 }
 .avatardiv {
 	float:left;
@@ -532,6 +538,7 @@ button:hover {
 .tabHeaders {
 	clear: both;
 	overflow:hidden;
+	margin-bottom:0;
 }
 
 #shareWithList .avatar {
@@ -570,7 +577,7 @@ button:hover {
 	padding-right:23px;
 }
 .ui-select-container {
-	background-color:#eeeeee !important;
+	background-color:#fafafa !important;
 }
 .ui-select-container.open {
 	border: 1px solid #aaaaaa;

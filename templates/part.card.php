@@ -9,6 +9,7 @@
     <a class="icon-close" ui-sref="board" ng-click="sidebar.show=!sidebar.show"> &nbsp;</a>
     <h2>
         <form ng-submit="renameCard(cardservice.getCurrent())">
+            <!-- TODO: change to textarea elastic //-->
             <input class="input-inline" type="text" ng-if="status.renameCard" ng-model="cardservice.getCurrent().title" ng-blur="renameCard(cardservice.getCurrent())" autofocus-on-insert required>
         </form>
         <div ng-click="status.renameCard=true" ng-show="!status.renameCard">{{ cardservice.getCurrent().title }}</div>
@@ -30,44 +31,73 @@
             </ui-select-choices>
         </ui-select>
 
-        <br style="clear:both;"/>
-        <br style="clear:both;"/>
-
     <div id="assigned-users">
-        <ui-select multiple tagging tagging-label="(custom 'new' label)" ng-model="card.assignees" theme="bootstrap" style="width:100%;" title="Choose a label">
-            <ui-select-match placeholder="Select labels..."><span style="background-color:#{{$item.color}}">{{$item.title}}</span></ui-select-match>
+        <ui-select multiple tagging="" ng-model="card.assignees" theme="bootstrap" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..."
+                   on-select="userAssign($item, $model)" on-remove="userRemove($item, $model)">
+            <ui-select-match placeholder="Select users...">{{$item.title}}</ui-select-match>
             <ui-select-choices repeat="label in boardservice.getCurrent().labels | filter:$select.search">
-                <div class="avatardiv" style="height: 30px; width: 30px; color: rgb(255, 255, 255); font-weight: normal; text-align: center; line-height: 30px; font-size: 17px; background-color: rgb(213, 231, 116);">D</div>
+                <span style="background-color:#{{label.color}}">{{label.title}}</span>
             </ui-select-choices>
         </ui-select>
     </div>
 
 <div id="card-description">
     <h3>Description</h3>
-    <textarea ng-if="status.description" placeholder="Enter your description here ..." ng-blur="updateCard(cardservice.getCurrent())" ng-model="cardservice.getCurrent().description" autofocus-on-insert> </textarea>
+    <textarea elastic ng-if="status.description" placeholder="Enter your description here ..." ng-blur="updateCard(cardservice.getCurrent())" ng-model="cardservice.getCurrent().description" autofocus-on-insert> </textarea>
     <div class="container" ng-click="editDescription()" ng-show="!status.description" ng-animate><div ng-bind-html="cardservice.getCurrent().description | markdown"></div><div class="placeholder" ng-if="!cardservice.getCurrent().description">Add a card description ...</div></div>
 
 </div>
 
 
 </div>
-<ul class="tabHeaders">				<li class="tabHeader selected" data-tabid="commentsTabView" data-tabindex="0">			<a href="#">Kommentare</a>		</li>				<li class="tabHeader" data-tabid="shareTabView" data-tabindex="1">			<a href="#">Anhänge</a>		</li>				<li class="tabHeader" data-tabid="versionsTabView" data-tabindex="2">			<a href="#">Beschreibung</a>		</li>			</ul>
+
+
+<ul class="tabHeaders">
+    <li class="tabHeader" ng-class="{'selected': (status.boardtab==0 || !status.boardtab)}" ng-click="status.boardtab=0"><a>Attachments</a></li>
+    <li class="tabHeader" ng-class="{'selected': (status.boardtab==1)}" ng-click="status.boardtab=1"><a>Comments</a></li>
+    <li class="tabHeader" ng-class="{'selected': (status.boardtab==2)}" ng-click="status.boardtab=2"><a>History</a></li>
+</ul>
+<div class="tabsContainer">
+    <div id="commentsTabView" class="tab commentsTabView" ng-if="status.boardtab==0 || !status.boardtab">
+
+        <div id="card-attachments">
+            <button ng-click="status.addAttachment=true"><i class="fa fa-plus"></i> Add an attachment</button>
+            <div ng-if="status.addAttachment" id="attachment-add">
+            <button><i class="fa fa-file"></i> Attach a File</button>
+            <button><i class="fa fa-link"></i> Attach a URL</button>
+            <button><i class="fa fa-calendar"></i> Attach an Event</button>
+            <button><i class="fa fa-user"></i> Attach an Contact</button>
+            <button><i class="fa fa-image"></i> Attach an Image</button>
+            </div>
+            <ul>
+                <li>
+                    <a href="#">
+                        <span class="fa fa-file"></span> clienta_webdesign_darft_032.pdf
+                        <div class="details">
+                            <span class="user">Added by John Doe at</span>
+                            <span class="added">1.3.2014 14:13</span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+
+
+    </div>
+    <div id="board-detail-labels" class="tab commentsTabView" ng-if="status.boardtab==1">
+
+
+
+    </div>
+    <div id="commentsTabView" class="tab commentsTabView" ng-if="status.boardtab==2">
+
+    </div>
+</div>
+
 
 <!--
-<div id="card-attachments">
-    <h3>Attachments</h3>
-    <ul>
-        <li>
-            <a href="#">
-                <span class="fa fa-file"></span> clienta_webdesign_darft_032.pdf
-                <div class="details">
-                <span class="user">Added by John Doe at</span>
-                <span class="added">1.3.2014 14:13</span>
-                </div>
-            </a>
-        </li>
-    </ul>
-</div>
+
 <div class="card-block">
 
 <h3>Comments</h3>
