@@ -27,10 +27,6 @@ var app = angular.module('Deck', [
 	'ngAnimate'
 ]);
 
-$('link[rel="shortcut icon"]').attr(
-	'href',
-	OC.filePath('deck', 'img', 'app-512.png')
-);
 
 app.config(["$provide", "$routeProvider", "$interpolateProvider", "$httpProvider", "$urlRouterProvider", "$stateProvider", "$compileProvider", function ($provide, $routeProvider, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider, $compileProvider) {
     'use strict';
@@ -95,6 +91,12 @@ app.run(["$document", "$rootScope", "$transitions", function ($document, $rootSc
     $transitions.onExit({from: 'board.detail'}, function ($state) {
         $rootScope.sidebar.show = false;
     });
+
+    $('link[rel="shortcut icon"]').attr(
+        'href',
+        OC.filePath('deck', 'img', 'app-512.png')
+    );
+
 }]);
 
 

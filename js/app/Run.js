@@ -18,4 +18,10 @@ app.run(function ($document, $rootScope, $transitions) {
     $transitions.onExit({from: 'board.detail'}, function ($state) {
         $rootScope.sidebar.show = false;
     });
+
+    $('link[rel="shortcut icon"]').attr(
+        'href',
+        OC.filePath('deck', 'img', 'app-512.png')
+    );
+
 });
