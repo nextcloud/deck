@@ -29,17 +29,17 @@ class ShareController extends Controller {
     public function searchUser($search) {
         $limit = null;
         $offset = null;
+        $result = [];
         $groups = [];
         foreach ($this->groupManager->search($search, $limit, $offset) as $group) {
             $groups[] = $group->getGID();
+            $result[] = array('type'=>'group', 'id'=>$group->getGID());
         }
         $users = [];
         foreach ($this->userManager->searchDisplayName($search, $limit, $offset) as $user) {
             $users[] = $user->getDisplayName();
+            $result[] = array('type'=>'group', 'id'=>$user->getUID(), 'displayName'=>$user->getDisplayName());
         }
-        return array(
-            'users' => $users,
-            'groups' => $groups
-        );
+        return $result;
     }
 }

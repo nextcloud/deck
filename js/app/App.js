@@ -26,3 +26,7 @@ var app = angular.module('Deck', [
 	'ngAnimate'
 ]);
 
+$('link[rel="shortcut icon"]').attr(
+	'href',
+	OC.filePath('deck', 'img', 'app-512.png')
+);

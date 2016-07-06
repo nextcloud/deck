@@ -27,6 +27,10 @@ var app = angular.module('Deck', [
 	'ngAnimate'
 ]);
 
+$('link[rel="shortcut icon"]').attr(
+	'href',
+	OC.filePath('deck', 'img', 'app-512.png')
+);
 
 app.config(["$provide", "$routeProvider", "$interpolateProvider", "$httpProvider", "$urlRouterProvider", "$stateProvider", "$compileProvider", function ($provide, $routeProvider, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider, $compileProvider) {
     'use strict';
@@ -130,6 +134,8 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
     $scope.statusservice.setError('Error occured', error);
   });
 
+  BoardService.searchUsers();
+  console.log(BoardService.sharees);
   BoardService.fetchOne($scope.id).then(function(data) {
 
     $scope.statusservice.releaseWaiting();
@@ -628,6 +634,22 @@ app.factory('BoardService', ["ApiService", "$http", "$q", function(ApiService, $
         ApiService.call(this, $http, ep, $q);
     };
     BoardService.prototype = angular.copy(ApiService.prototype);
+
+    BoardService.prototype.searchUsers = function() {
+        var url = OC.generateUrl('/apps/deck/share/search/%');
+        var deferred = $q.defer();
+        var self = this;
+        this.sharees = [];
+        $http.get(url).then(function (response) {
+            self.sharees = response.data.users;
+            console.log(this.sharees);
+            deferred.resolve(response.data);
+        }, function (error) {
+            deferred.reject('Error while update ' + self.endpoint);
+        });
+        return deferred.promise;
+    }
+
     service = new BoardService($http, 'boards', $q)
     return service;
 }]);

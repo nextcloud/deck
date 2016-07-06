@@ -17,7 +17,15 @@
 </ul>
 <div class="tabsContainer">
     <div id="commentsTabView" class="tab commentsTabView" ng-if="status.boardtab==0 || !status.boardtab">
-        <input class="shareWithField ui-autocomplete-input" type="text" placeholder="Mit Benutzern, Gruppen oder entfernten Benutzern teilen…" autocomplete="off">
+
+        <ui-select multiple tagging="" ng-model="board.sharees" theme="bootstrap" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..."
+                   on-select="userAssign($item, $model)" on-remove="userRemove($item, $model)">
+            <ui-select-match placeholder="Select users...">{{$item.id}}</ui-select-match>
+            <ui-select-choices repeat="sharee in boardservice.sharees | filter: $select.search track by $index">
+                <span><i class="fa fa-{{sharee.type}}"></i> {{ sharee.id }}</span>
+            </ui-select-choices>
+        </ui-select>
+
         <ul id="shareWithList" class="shareWithList">
             <li data-share-id="57" data-share-type="0" data-share-with="directmenu">
                 <a href="#" class="unshare"><span class="icon-loading-small"></span><span class="icon icon-delete"><br /></span><span class="hidden-visually">Freigabe aufheben</span></a>

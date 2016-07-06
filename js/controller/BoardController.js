@@ -28,6 +28,8 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
     $scope.statusservice.setError('Error occured', error);
   });
 
+  BoardService.searchUsers();
+  console.log(BoardService.sharees);
   BoardService.fetchOne($scope.id).then(function(data) {
 
     $scope.statusservice.releaseWaiting();
