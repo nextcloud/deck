@@ -12,21 +12,24 @@ use OCP\AppFramework\Db\DoesNotExistException;
 class BoardController extends Controller {
     private $userId;
     private $boardService;
+
     public function __construct($appName,
                                 IRequest $request,
                                 BoardService $cardService,
-                                $userId){
+                                $userId) {
         parent::__construct($appName, $request);
         $this->userId = $userId;
         $this->boardService = $cardService;
     }
+
     /**
      * @NoAdminRequired
      */
     public function index() {
 
-            return $this->boardService->findAll($this->userId);
+        return $this->boardService->findAll($this->userId);
     }
+
     /**
      * @NoAdminRequired
      */
@@ -35,18 +38,21 @@ class BoardController extends Controller {
         usleep(200000);
         return $this->boardService->find($this->userId, $boardId);
     }
+
     /**
      * @NoAdminRequired
      */
     public function create($title, $color) {
         return $this->boardService->create($title, $this->userId, $color);
     }
+
     /**
      * @NoAdminRequired
      */
     public function update($id, $title, $color) {
         return $this->boardService->update($id, $title, $this->userId, $color);
     }
+
     /**
      * @NoAdminRequired
      */
@@ -56,5 +62,9 @@ class BoardController extends Controller {
 
     public function labels($boardId) {
         return $this->boardService->labels($this->boardId);
+    }
+
+    public function addSharee($boardId, $type, $participant, $write, $invite, $manage) {
+        return $this->boardService->addParticipant($boardId, $type, $participant, $write, $invite, $manage);
     }
 }

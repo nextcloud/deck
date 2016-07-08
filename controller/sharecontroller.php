@@ -2,6 +2,7 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\Acl;
 use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\AppFramework\ApiController as BaseApiController;
@@ -30,15 +31,23 @@ class ShareController extends Controller {
         $limit = null;
         $offset = null;
         $result = [];
-        $groups = [];
-        foreach ($this->groupManager->search($search, $limit, $offset) as $group) {
-            $groups[] = $group->getGID();
-            $result[] = array('type'=>'group', 'id'=>$group->getGID());
+        foreach ($this->groupManager->search($search, $limit, $offset) as $idx => $group) {
+            $acl = new Acl();
+            $acl->setType('group');
+            $acl->setParticipant($group->getGID());
+            $acl->setPermissionWrite(true);
+            $acl->setPermissionInvite(true);
+            $acl->setPermissionManage(true);
+            $result[] = $acl;
         }
-        $users = [];
-        foreach ($this->userManager->searchDisplayName($search, $limit, $offset) as $user) {
-            $users[] = $user->getDisplayName();
-            $result[] = array('type'=>'group', 'id'=>$user->getUID(), 'displayName'=>$user->getDisplayName());
+        foreach ($this->userManager->searchDisplayName($search, $limit, $offset) as $idx => $user) {
+            $acl = new Acl();
+            $acl->setType('user');
+            $acl->setParticipant($user->getDisplayName());
+            $acl->setPermissionWrite(true);
+            $acl->setPermissionInvite(true);
+            $acl->setPermissionManage(true);
+            $result[] = $acl;
         }
         return $result;
     }
