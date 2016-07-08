@@ -50,7 +50,7 @@
                     <input type="checkbox" name="edit" class="permissions checkbox" checked="checked" id=checkbox-permission-{{ $index }}">
                     <label for="checkbox-permission-{{ $index }}">verwalten</label>
                 </span>
-                <a href="#"><span class="icon icon-delete"> </span></a>
+                <a ng-click="removeAcl(sharee)"><span class="icon icon-delete">&nbsp;</span></a>
             </li>
         </ul>
 

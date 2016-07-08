@@ -372,6 +372,22 @@
                 <type>boolean</type>
                 <default>false</default>
             </field>
+            <index>
+                <unique>true</unique>
+                <field>
+                    <name>board_id</name>
+                    <sorting>ascending</sorting>
+                </field>
+                <field>
+                    <name>type</name>
+                    <sorting>ascending</sorting>
+                </field>
+                <field>
+                    <name>participant</name>
+                    <sorting>ascending</sorting>
+                </field>
+            </index>
         </declaration>
+
     </table>
 </database>
