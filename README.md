@@ -2,6 +2,7 @@
 
 Deck is a kanban style project and personal management tool integrated with OwnCloud.
 
+![Deck - Board Overview](https://bitgrid.net/~jus/deck.png)
 
 ## Installation/Update
 
