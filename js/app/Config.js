@@ -7,7 +7,7 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
         simplifiedAutoLink: true,
         strikethrough: true,
         tables: true,
-        tasklists: true,
+        tasklists: true
 
     });
 
