@@ -608,7 +608,9 @@ margin-bottom:2px; width:100%;
 #markdown p {
 	margin-bottom:15px;
 }
-#markdown ol,
+#markdown ol {
+	margin-left:20px;
+}
 #markdown ul {
 	margin-left:20px;
 	list-style-type: disc;
