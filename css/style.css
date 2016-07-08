@@ -604,3 +604,32 @@ margin-bottom:2px; width:100%;
 		display:none !important;
 	}
 }
+
+#markdown p {
+	margin-bottom:15px;
+}
+#markdown ol,
+#markdown ul {
+	margin-left:20px;
+	list-style-type: disc;
+}
+#markdown h1 {
+	font-size:18px;
+	margin-bottom:5px;
+}
+#markdown h2 {
+	font-size:16px;
+}
+#markdown h3 {
+	font-size:14px;
+}
+#markdown h4 {
+	font-size:13px;
+}
+#markdown h6 {
+	font-size:12px;
+}
+#markdown pre {
+	background-color:#eeeeee;
+	padding:3px;
+}

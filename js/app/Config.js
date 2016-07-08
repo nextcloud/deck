@@ -1,6 +1,15 @@
-app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider, $compileProvider) {
+app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider, $compileProvider, markdownProvider) {
     'use strict';
     $httpProvider.defaults.headers.common.requesttoken = oc_requesttoken;
+
+
+    markdownProvider.config({
+        simplifiedAutoLink: true,
+        strikethrough: true,
+        tables: true,
+        tasklists: true,
+
+    });
 
     $compileProvider.debugInfoEnabled(true);
 

@@ -44,7 +44,7 @@
 <div id="card-description">
     <h3>Description</h3>
     <textarea elastic ng-if="status.description" placeholder="Enter your description here ..." ng-blur="updateCard(cardservice.getCurrent())" ng-model="cardservice.getCurrent().description" autofocus-on-insert> </textarea>
-    <div class="container" ng-click="editDescription()" ng-show="!status.description" ng-animate><div ng-bind-html="cardservice.getCurrent().description | markdown"></div><div class="placeholder" ng-if="!cardservice.getCurrent().description">Add a card description ...</div></div>
+    <div class="container" ng-click="editDescription()" ng-show="!status.description" ng-animate><div ng-bind-html="cardservice.getCurrent().description | markdown" id="markdown"></div><div class="placeholder" ng-if="!cardservice.getCurrent().description">Add a card description ...</div></div>
 
 </div>
 
