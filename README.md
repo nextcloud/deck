@@ -8,12 +8,26 @@ Deck is a kanban style project and personal management tool integrated with OwnC
 
 ### Install from git 
 
-  git clone https://github.com/juliushaertl/deck.git
-  cd deck
-  make
+If you want to run the latest development version from git source, you need to clone the repo to your apps folder:
+
+```
+git clone https://github.com/juliushaertl/deck.git
+cd deck
+make
+```
+
+Please make sure you have installed the following dependencies: 
+* make
+* which
+* tar: for building the archive
+* curl: used if phpunit and composer are not installed to fetch them from the web
+* npm: for building and testing everything JS, only required if a package.json is placed inside the **js/** folder
 
 ## Developing
 
+### PHP
+
+### JavaScript
 Run javascript watch ```make watch```
 
 
