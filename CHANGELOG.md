@@ -1,4 +1,10 @@
-owncloud-deck (0.0.1)
+owncloud-deck (0.1.0)
+* **Enhancement**: First public release
+
+-------------------
+Template:
+
+owncloud-deck (0.1.0)
 * **Security**: Security description here
 * **Backwards incompatible change**: Changes in the API
 * **New dependency**: New dependencies such as a new ownCloud or PHP version
