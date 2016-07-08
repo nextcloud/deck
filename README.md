@@ -2,7 +2,21 @@
 
 Deck is a kanban style project and personal management tool integrated with OwnCloud.
 
-- 
+
+## Installation/Update
+
+### Install from git 
+
+  git clone https://github.com/juliushaertl/deck.git
+  cd deck
+  make
+
+## Developing
+
+Run javascript watch ```make watch```
+
+
+
 ## Building the app
 
 The app can be built by using the provided Makefile by running:
@@ -26,15 +40,6 @@ The make command will install or update Composer dependencies if a composer.json
     "build": "node node_modules/gulp-cli/bin/gulp.js"
 }
 ```
-
-
-## Publish to App Store
-
-First get an account for the [App Store](http://apps.owncloud.com/) then run:
-
-    make appstore
-
-The archive is located in build/artifacts/appstore and can then be uploaded to the App Store.
 
 ## Running tests
 You can use the provided Makefile to run all tests by using:
