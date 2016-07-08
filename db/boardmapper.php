@@ -15,9 +15,10 @@ class BoardMapper extends Mapper {
         $this->_relationMappers[$name] = $mapper;
     }
 
-    public function __construct(IDb $db, LabelMapper $labelMapper) {
+    public function __construct(IDb $db, LabelMapper $labelMapper, AclMapper $aclMapper) {
         parent::__construct($db, 'deck_boards', '\OCA\Deck\Db\Board');
         $this->labelMapper = $labelMapper;
+        $this->aclMapper = $aclMapper;
     }
 
 
@@ -29,12 +30,22 @@ class BoardMapper extends Mapper {
         $sql = 'SELECT * FROM `*PREFIX*deck_boards` ' .
             'WHERE `id` = ?';
         $board = $this->findEntity($sql, [$id]);
+        // Add labels
         $labels = $this->labelMapper->findAll($id);
         $board->setLabels($labels);
+        // Add sharees
+        $acl = $this->aclMapper->findAll($id);
+        $board->setAcl($acl);
         return $board;
     }
 
-
+    /**
+     * Find all boards for a given user
+     * @param $userId
+     * @param null $limit
+     * @param null $offset
+     * @return array
+     */
     public function findAll($userId, $limit=null, $offset=null) {
         $sql = 'SELECT * FROM `*PREFIX*deck_boards` WHERE `owner` = ?  ORDER BY `title`';
         return $this->findEntities($sql, [$userId], $limit, $offset);

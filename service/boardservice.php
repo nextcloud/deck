@@ -2,6 +2,8 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Label;
 use OCP\ILogger;
 use OCP\IL10N;
@@ -13,9 +15,10 @@ use \OCA\Deck\Db\BoardMapper;
 use \OCA\Deck\Db\LabelMapper;
 
 
-class BoardService  {
+class BoardService {
 
     private $boardMapper;
+    private $aclMapper;
     private $labelMapper;
     private $logger;
     private $l10n;
@@ -24,9 +27,11 @@ class BoardService  {
     public function __construct(BoardMapper $boardMapper, ILogger $logger,
                                 IL10N $l10n,
                                 ITimeFactory $timeFactory,
-                                LabelMapper $labelMapper) {
+                                LabelMapper $labelMapper,
+                                AclMapper $aclMapper) {
         $this->boardMapper = $boardMapper;
         $this->labelMapper = $labelMapper;
+        $this->aclMapper = $aclMapper;
         $this->logger = $logger;
     }
 
@@ -36,7 +41,7 @@ class BoardService  {
 
     public function find($userId, $boardId) {
         $board = $this->boardMapper->find($boardId);
-        if($board->getOwner() === $userId)
+        if ($board->getOwner() === $userId)
             return $board;
         else
             return null;
@@ -78,6 +83,17 @@ class BoardService  {
     }
 
     public function labels($boardId) {
-        
+
+    }
+
+    public function addParticipant($boardId, $type, $participant, $write, $invite, $manage) {
+        $acl = new Acl();
+        $acl->setBoardId($boardId);
+        $acl->setType($type);
+        $acl->setParticipant($participant);
+        $acl->setPermissionWrite($write);
+        $acl->setPermissionInvite($invite);
+        $acl->setPermissionManage($manage);
+        return $this-$this->aclMapper->insert($acl);
     }
 }

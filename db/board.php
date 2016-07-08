@@ -11,11 +11,13 @@ class Board extends \OCA\Deck\Db\Entity implements JsonSerializable {
     protected $owner;
     protected $color;
     protected $archived;
+    public $acl = array();
     protected $labels;
 
     public function __construct() {
         $this->addType('id','integer');
         $this->addRelation('labels');
+        $this->addRelation('acl');
     }
 
     public function jsonSerialize() {
@@ -25,6 +27,7 @@ class Board extends \OCA\Deck\Db\Entity implements JsonSerializable {
             'owner' => $this->owner,
             'color' => $this->color,
             'labels' => $this->labels,
+            'acl' => $this->acl,
         ];
     }
 }

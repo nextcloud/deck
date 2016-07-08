@@ -18,26 +18,39 @@
 <div class="tabsContainer">
     <div id="commentsTabView" class="tab commentsTabView" ng-if="status.boardtab==0 || !status.boardtab">
 
-        <ui-select multiple tagging="" ng-model="board.sharees" theme="bootstrap" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..."
-                   on-select="userAssign($item, $model)" on-remove="userRemove($item, $model)">
-            <ui-select-match placeholder="Select users...">{{$item.id}}</ui-select-match>
-            <ui-select-choices repeat="sharee in boardservice.sharees | filter: $select.search track by $index">
-                <span><i class="fa fa-{{sharee.type}}"></i> {{ sharee.id }}</span>
+        <ui-select ng-model="status.addSharee" theme="bootstrap" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..." on-select="addSharee(status.addSharee)">
+            <ui-select-match placeholder="Select users...">
+                <span><i class="fa fa-{{$item.type}}"></i> {{ $item.participant }}</span>
+            </ui-select-match>
+            <!-- FIXME: filter by selected or add multiple //-->
+            <ui-select-choices repeat="sharee in boardservice.sharees | filter: board.sharees | filter: $select.search track by $index">
+                <span><i class="fa fa-{{sharee.type}}"></i> {{ sharee.participant }}</span>
             </ui-select-choices>
+            <ui-select-no-choice>
+                Dang!  We couldn't find any choices...
+            </ui-select-no-choice>
         </ui-select>
 
         <ul id="shareWithList" class="shareWithList">
-            <li data-share-id="57" data-share-type="0" data-share-with="directmenu">
-                <a href="#" class="unshare"><span class="icon-loading-small"></span><span class="icon icon-delete"><br /></span><span class="hidden-visually">Freigabe aufheben</span></a>
+            <li ng-repeat="sharee in boardservice.getCurrent().acl track by $index">
+                <span class="icon-loading-small" style="display:none;"></span>
                 <div class="avatar " data-username="directmenu" style="height: 32px; width: 32px; color: rgb(255, 255, 255); font-weight: normal; text-align: center; line-height: 32px; font-size: 17.6px; background-color: rgb(195, 222, 124);">D</div>
-                <span class="has-tooltip username" title="" data-original-title="directmenu" aria-describedby="tooltip777914">directmenu</span>
+                <span class="has-tooltip username">
+                    <i class="fa fa-{{sharee.type}}"></i>
+                    {{ sharee.participant }}</span>
                 <span class="shareOption">
-                    <input id="canShare-view17-directmenu" type="checkbox" name="share" class="permissions checkbox" checked="checked" data-permissions="16">
-                    <label for="canShare-view17-directmenu">kann teilen</label>
+                    <input type="checkbox" name="edit" class="permissions checkbox" checked="checked" id=checkbox-permission-{{ $index }}">
+                    <label for="checkbox-permission-{{ $index }}">teilen</label>
                 </span>
-                <span class="shareOption"><input id="canEdit-view17-directmenu" type="checkbox" name="edit" class="permissions checkbox" checked="checked">
-                    <label for="canEdit-view17-directmenu">kann bearbeiten</label>
+                <span class="shareOption">
+                    <input type="checkbox" name="edit" class="permissions checkbox" checked="checked" id=checkbox-permission-{{ $index }}">
+                    <label for="checkbox-permission-{{ $index }}">bearbeiten</label>
                 </span>
+                <span class="shareOption">
+                    <input type="checkbox" name="edit" class="permissions checkbox" checked="checked" id=checkbox-permission-{{ $index }}">
+                    <label for="checkbox-permission-{{ $index }}">verwalten</label>
+                </span>
+                <a href="#"><span class="icon icon-delete"> </span></a>
             </li>
         </ul>
 
@@ -46,8 +59,8 @@
 
             <ul class="labels">
                 <li ng-repeat="label in boardservice.getCurrent().labels">
-                <span class="label-title" style="background-color:#{{label.color}}; color:{{ textColor(label.color) }};" ng-if="!label.edit">
-                    {{ label.title }}
+                <span class="label-title" style="background-color:#{{label.color}}; color:{{ textColor(label.color) }};" ng-if="!label.edit" ng-click="label.edit=true">
+                    <span ng-if="label.title">{{ label.title }}</span><i ng-if="!label.title"><br /></i>
                 </span>
                 <span class="label-title" style="background-color:#{{label.color}}; color:{{ textColor(label.color) }}; width:188px;" ng-if="label.edit">
                     <input type="text" placeholder="" ng-model="label.title" class="input-inline" style="background-color:#{{label.color}}; color:{{ textColor(label.color) }};" />

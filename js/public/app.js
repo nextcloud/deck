@@ -137,9 +137,9 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
   });
 
   BoardService.searchUsers();
-  console.log(BoardService.sharees);
-  BoardService.fetchOne($scope.id).then(function(data) {
 
+  BoardService.fetchOne($scope.id).then(function(data) {
+    console.log(BoardService.getCurrent());
     $scope.statusservice.releaseWaiting();
   }, function(error) {
     $scope.statusservice.setError('Error occured', error);
@@ -194,6 +194,11 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
     LabelService.update(label);
   }
 
+  $scope.addSharee = function(sharee) {
+    sharee.boardId = $scope.id;
+    BoardService.addSharee(sharee);
+    $scope.status.addSharee = null;
+  }
   // TODO: move to filter?
   // Lighten Color of the board for background usage
   $scope.rgblight = function (hex) {
@@ -643,8 +648,8 @@ app.factory('BoardService', ["ApiService", "$http", "$q", function(ApiService, $
         var self = this;
         this.sharees = [];
         $http.get(url).then(function (response) {
-            self.sharees = response.data.users;
-            console.log(this.sharees);
+            self.sharees = response.data;
+            console.log(self.sharees);
             deferred.resolve(response.data);
         }, function (error) {
             deferred.reject('Error while update ' + self.endpoint);
@@ -652,8 +657,24 @@ app.factory('BoardService', ["ApiService", "$http", "$q", function(ApiService, $
         return deferred.promise;
     }
 
+    BoardService.prototype.addSharee = function(sharee) {
+        var board = this.getCurrent();
+        board.acl.push(sharee);
+        var deferred = $q.defer();
+        var self = this;
+        $http.post(this.baseUrl + '/sharee', sharee).then(function (response) {
+            console.log("Add sharee " + response);
+            deferred.resolve(response.data);
+        }, function (error) {
+            deferred.reject('Error while insert ' + self.endpoint);
+        });
+        sharee = null;
+        return deferred.promise;
+    }
+
     service = new BoardService($http, 'boards', $q)
     return service;
+    
 }]);
 app.factory('CardService', ["ApiService", "$http", "$q", function(ApiService, $http, $q){
     var CardService = function($http, ep, $q) {

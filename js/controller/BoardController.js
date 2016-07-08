@@ -29,9 +29,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
   });
 
   BoardService.searchUsers();
-  console.log(BoardService.sharees);
-  BoardService.fetchOne($scope.id).then(function(data) {
 
+  BoardService.fetchOne($scope.id).then(function(data) {
+    console.log(BoardService.getCurrent());
     $scope.statusservice.releaseWaiting();
   }, function(error) {
     $scope.statusservice.setError('Error occured', error);
@@ -86,6 +86,11 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
     LabelService.update(label);
   }
 
+  $scope.addSharee = function(sharee) {
+    sharee.boardId = $scope.id;
+    BoardService.addSharee(sharee);
+    $scope.status.addSharee = null;
+  }
   // TODO: move to filter?
   // Lighten Color of the board for background usage
   $scope.rgblight = function (hex) {

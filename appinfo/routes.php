@@ -22,6 +22,10 @@ return [
         ['name' => 'board#read', 'url' => '/boards/{boardId}/', 'verb' => 'GET'],
         ['name' => 'board#update', 'url' => '/boards/', 'verb' => 'PUT'],
         ['name' => 'board#delete', 'url' => '/boards/{boardId}/', 'verb' => 'DELETE'],
+        // boards - sharees
+        ['name' => 'board#addSharee', 'url' => '/boards/sharee', 'verb' => 'POST'],
+        ['name' => 'board#removeSharee', 'url' => '/boards/sharee', 'verb' => 'DELETE'],
+        ['name' => 'board#updateSharee', 'url' => '/boards/sharee', 'verb' => 'PUT'],
 
         // stacks
         ['name' => 'stack#index', 'url' => '/stacks/{boardId}/', 'verb' => 'GET'],
