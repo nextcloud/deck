@@ -51,7 +51,16 @@ class CardMapper extends Mapper {
     }
 
     public function findAll($stackId, $limit=null, $offset=null) {
-        $sql = 'SELECT * FROM `*PREFIX*deck_cards` WHERE `stack_id` = ?  ORDER BY `order`';
+        $sql = 'SELECT * FROM `*PREFIX*deck_cards` 
+          WHERE `stack_id` = ? AND NOT archived ORDER BY `order`';
+        $entities = $this->findEntities($sql, [$stackId], $limit, $offset);
+        return $entities;
+    }
+
+    // TODO: test
+    public function findAllArchived($boardId, $limit=null, $offset=null) {
+        $sql = 'SELECT * FROM `*PREFIX*deck_cards` as c, `*PREFIX*deck_stacks` as s 
+          WHERE `s.board_id` = ? AND c.stack_id = s.id AND archived ORDER BY `last_modified`';
         $entities = $this->findEntities($sql, [$stackId], $limit, $offset);
         return $entities;
     }

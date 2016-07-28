@@ -64,7 +64,14 @@ class BoardController extends Controller {
         return $this->boardService->labels($this->boardId);
     }
 
-    public function addSharee($boardId, $type, $participant, $write, $invite, $manage) {
-        return $this->boardService->addParticipant($boardId, $type, $participant, $write, $invite, $manage);
+    public function addAcl($boardId, $type, $participant, $write, $invite, $manage) {
+        return $this->boardService->addAcl($boardId, $type, $participant, $write, $invite, $manage);
     }
+    public function updateAcl($id, $permissionWrite, $permissionInvite, $permissionManage) {
+        return $this->boardService->updateAcl($id, $permissionWrite, $permissionInvite, $permissionManage);
+    }
+    public function deleteAcl($id) {
+        return $this->boardService->deleteAcl($id);
+    }
+
 }

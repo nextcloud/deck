@@ -81,12 +81,9 @@ class BoardService {
         $board->setColor($color);
         return $this->boardMapper->update($board);
     }
+    
 
-    public function labels($boardId) {
-
-    }
-
-    public function addParticipant($boardId, $type, $participant, $write, $invite, $manage) {
+    public function addAcl($boardId, $type, $participant, $write, $invite, $manage) {
         $acl = new Acl();
         $acl->setBoardId($boardId);
         $acl->setType($type);
@@ -94,6 +91,19 @@ class BoardService {
         $acl->setPermissionWrite($write);
         $acl->setPermissionInvite($invite);
         $acl->setPermissionManage($manage);
-        return $this-$this->aclMapper->insert($acl);
+        return $this->aclMapper->insert($acl);
+    }
+
+    public function updateAcl($id, $write, $invite, $manage) {
+        $acl = $this->aclMapper->find($id);
+        $acl->setPermissionWrite($write);
+        $acl->setPermissionInvite($invite);
+        $acl->setPermissionManage($manage);
+        return $this->aclMapper->update($acl);
+    }
+
+    public function deleteAcl($id) {
+        $acl = $this->aclMapper->find($id);
+        return $this->aclMapper->delete($acl);
     }
 }

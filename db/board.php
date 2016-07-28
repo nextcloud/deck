@@ -11,8 +11,8 @@ class Board extends \OCA\Deck\Db\Entity implements JsonSerializable {
     protected $owner;
     protected $color;
     protected $archived;
-    public $acl = array();
     protected $labels;
+    protected $acl;
 
     public function __construct() {
         $this->addType('id','integer');
@@ -29,5 +29,17 @@ class Board extends \OCA\Deck\Db\Entity implements JsonSerializable {
             'labels' => $this->labels,
             'acl' => $this->acl,
         ];
+    }
+
+    public function setLabels($labels) {
+        foreach ($labels as $l) {
+            $this->labels[$l->id] = $l;
+        }
+    }
+
+    public function setAcl($acl) {
+        foreach ($acl as $a) {
+            $this->acl[$a->id] = $a;
+        }
     }
 }

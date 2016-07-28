@@ -30,12 +30,15 @@ class BoardMapper extends Mapper {
         $sql = 'SELECT * FROM `*PREFIX*deck_boards` ' .
             'WHERE `id` = ?';
         $board = $this->findEntity($sql, [$id]);
+
         // Add labels
         $labels = $this->labelMapper->findAll($id);
         $board->setLabels($labels);
-        // Add sharees
+
+        // Add acl
         $acl = $this->aclMapper->findAll($id);
         $board->setAcl($acl);
+        
         return $board;
     }
 

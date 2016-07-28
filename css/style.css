@@ -635,3 +635,21 @@ margin-bottom:2px; width:100%;
 	background-color:#eeeeee;
 	padding:3px;
 }
+
+
+.shareWithList .icon {
+	display: inline-block;
+	background-size: 16px 16px;
+	width:16px;
+	height:16px;
+}
+
+.shareWithList .fa {
+	font-size:12pt;
+	width:16px;
+	text-align:center;
+}
+
+.shareOption {
+	margin-top:4px;
+}

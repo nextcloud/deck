@@ -8,7 +8,9 @@
     "type": "git",
     "url": "git@github.com:juliushaertl/deck.git"
   },
-  "dependencies": {},
+  "dependencies": {
+    "karma": "^1.1.1"
+  },
   "devDependencies": {
     "bower": "*",
     "grunt": "*",

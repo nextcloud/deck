@@ -11,28 +11,59 @@ app.factory('BoardService', function(ApiService, $http, $q){
         this.sharees = [];
         $http.get(url).then(function (response) {
             self.sharees = response.data;
-            console.log(self.sharees);
             deferred.resolve(response.data);
         }, function (error) {
             deferred.reject('Error while update ' + self.endpoint);
         });
         return deferred.promise;
-    }
+    };
 
-    BoardService.prototype.addSharee = function(sharee) {
+    BoardService.prototype.addAcl = function(acl) {
         var board = this.getCurrent();
-        board.acl.push(sharee);
         var deferred = $q.defer();
         var self = this;
-        $http.post(this.baseUrl + '/sharee', sharee).then(function (response) {
-            console.log("Add sharee " + response);
+        var _acl = acl;
+        $http.post(this.baseUrl + '/acl', _acl).then(function (response) {
+            if(!board.acl) {
+                board.acl = {};
+            }
+            board.acl[response.data.id] = response.data;
             deferred.resolve(response.data);
         }, function (error) {
-            deferred.reject('Error while insert ' + self.endpoint);
+            deferred.reject('Error creating ACL ' + _acl);
         });
-        sharee = null;
+        acl = null;
         return deferred.promise;
-    }
+    };
+
+    BoardService.prototype.deleteAcl = function(id) {
+        var board = this.getCurrent();
+        var deferred = $q.defer();
+        var self = this;
+        $http.delete(this.baseUrl + '/acl/' + id).then(function (response) {
+            delete board.acl[response.data.id];
+            deferred.resolve(response.data);
+        }, function (error) {
+            deferred.reject('Error deleting ACL ' + id);
+        });
+        acl = null;
+        return deferred.promise;
+    };
+
+    BoardService.prototype.updateAcl = function(acl) {
+        var board = this.getCurrent();
+        var deferred = $q.defer();
+        var self = this;
+        var _acl = acl;
+        $http.put(this.baseUrl + '/acl', _acl).then(function (response) {
+            board.acl[_acl.id] = response.data;
+            deferred.resolve(response.data);
+        }, function (error) {
+            deferred.reject('Error updating ACL ' + _acl);
+        });
+        acl = null;
+        return deferred.promise;
+    };
 
     service = new BoardService($http, 'boards', $q)
     return service;

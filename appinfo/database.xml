@@ -135,6 +135,11 @@
                 <length>8</length>
                 <notnull>false</notnull>
             </field>
+            <field>
+                <name>archived</name>
+                <type>boolean</type>
+                <default>false</default>
+            </field>
         </declaration>
     </table>
     <table>

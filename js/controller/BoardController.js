@@ -86,14 +86,16 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
     LabelService.update(label);
   }
 
-  $scope.addSharee = function(sharee) {
+  $scope.addAcl = function(sharee) {
     sharee.boardId = $scope.id;
-    BoardService.addSharee(sharee);
+    BoardService.addAcl(sharee);
     $scope.status.addSharee = null;
   }
   $scope.deleteAcl = function(acl) {
-    acl.boardId = $scope.id;
-    BoardService.removeAcl(acl);
+    BoardService.deleteAcl(acl.id);
+  }
+  $scope.updateAcl = function(acl) {
+    BoardService.updateAcl(acl);
   }
   // TODO: move to filter?
   // Lighten Color of the board for background usage

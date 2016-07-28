@@ -49,4 +49,6 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
         .state('board.sharing', {
             
         });
+
+
 });

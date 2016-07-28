@@ -16,6 +16,8 @@ class Card extends Entity implements JsonSerializable {
     protected $labels;
     protected $owner;
     protected $order;
+    protected $archived;
+
     public function __construct() {
         $this->addType('id','integer');
         $this->addType('stackId','integer');
@@ -35,6 +37,7 @@ class Card extends Entity implements JsonSerializable {
             'order' => $this->order,
             'stackId' => $this->stackId,
             'labels' => $this->labels,
+            'archived' => $this->archived,
         ];
     }
 }

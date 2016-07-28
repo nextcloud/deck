@@ -5,7 +5,7 @@ namespace OCA\Deck\Controller;
 use OCP\IRequest;
 use OCP\AppFramework\ApiController as BaseApiController;
 
-class ApiController extends BaseApiController {
+class StyleController extends Controller {
     private $defaults;
     public function __construct($appName,
                                 IRequest $request, OC_Defaults $defaults){
@@ -15,9 +15,11 @@ class ApiController extends BaseApiController {
     /**
      * @PublicPage
      * @NoCSRFRequired
-     * @CORS
      */
     public function generateCss() {
-        return 
+
+        $color = $this->config->getAppValue($this->appName, 'color');
+        $responseCss .= '';
+        $response = new Http\DataDownloadResponse($responseCss, 'style', 'text/css');
     }
 }

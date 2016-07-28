@@ -17,6 +17,9 @@ class Acl extends Entity implements JsonSerializable {
     public function __construct() {
         $this->addType('id','integer');
         $this->addType('boardId','integer');
+        $this->addType('permissionWrite', 'boolean');
+        $this->addType('permissionInvite', 'boolean');
+        $this->addType('permissionManage', 'boolean');
     }
     public function jsonSerialize() {
         return [

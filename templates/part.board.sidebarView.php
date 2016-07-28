@@ -18,7 +18,7 @@
 <div class="tabsContainer">
     <div id="commentsTabView" class="tab commentsTabView" ng-if="status.boardtab==0 || !status.boardtab">
 
-        <ui-select ng-model="status.addSharee" theme="bootstrap" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..." on-select="addSharee(status.addSharee)">
+        <ui-select ng-model="status.addSharee" theme="bootstrap" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..." on-select="addAcl(status.addSharee)">
             <ui-select-match placeholder="Select users...">
                 <span><i class="fa fa-{{$item.type}}"></i> {{ $item.participant }}</span>
             </ui-select-match>
@@ -32,25 +32,25 @@
         </ui-select>
 
         <ul id="shareWithList" class="shareWithList">
-            <li ng-repeat="sharee in boardservice.getCurrent().acl track by $index">
+            <li ng-repeat="acl in boardservice.getCurrent().acl track by $index">
                 <span class="icon-loading-small" style="display:none;"></span>
                 <div class="avatar " data-username="directmenu" style="height: 32px; width: 32px; color: rgb(255, 255, 255); font-weight: normal; text-align: center; line-height: 32px; font-size: 17.6px; background-color: rgb(195, 222, 124);">D</div>
                 <span class="has-tooltip username">
-                    <i class="fa fa-{{sharee.type}}"></i>
-                    {{ sharee.participant }}</span>
+                    <i class="fa fa-{{acl.type}}"></i>
+                    {{ acl.participant }}</span>
                 <span class="shareOption">
-                    <input type="checkbox" name="edit" class="permissions checkbox" checked="checked" id=checkbox-permission-{{ $index }}">
-                    <label for="checkbox-permission-{{ $index }}">teilen</label>
+                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-share" ng-model="acl.permissionInvite" ng-change="updateAcl(acl)" />
+                    <label for="checkbox-permission-{{ acl.id }}-share">teilen</label>
                 </span>
                 <span class="shareOption">
-                    <input type="checkbox" name="edit" class="permissions checkbox" checked="checked" id=checkbox-permission-{{ $index }}">
-                    <label for="checkbox-permission-{{ $index }}">bearbeiten</label>
+                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-edit" ng-model="acl.permissionWrite" ng-change="updateAcl(acl)" />
+                    <label for="checkbox-permission-{{ acl.id }}-edit">bearbeiten</label>
                 </span>
                 <span class="shareOption">
-                    <input type="checkbox" name="edit" class="permissions checkbox" checked="checked" id=checkbox-permission-{{ $index }}">
-                    <label for="checkbox-permission-{{ $index }}">verwalten</label>
+                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-manage" ng-model="acl.permissionManage" ng-change="updateAcl(acl)" />
+                    <label for="checkbox-permission-{{ acl.id }}-manage">verwalten</label>
                 </span>
-                <a ng-click="removeAcl(sharee)"><span class="icon icon-delete">&nbsp;</span></a>
+                <a class="unshare" ng-click="deleteAcl(acl)"><span class="icon-loading-small hidden"></span><span class="icon icon-delete"></span><span class="hidden-visually">Freigabe aufheben</span></a>
             </li>
         </ul>
 
