@@ -4,4 +4,16 @@ app.controller('AppController', function ($scope, $location, $http, $route, $log
         show: false
     };
     $scope.sidebar = $rootScope.sidebar;
+
+    $scope.search = function (value) {
+        if (value === '') {
+            $location.search('search', null);
+        } else {
+            $location.search('search', value);
+        }
+        $scope.searchText = value;
+    };
+    
+    $scope.searchText = $location.search().search;
+
 });

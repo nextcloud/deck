@@ -40,6 +40,7 @@ module.exports = function(grunt) {
       buildJS: [
 					'app/**/*.js',
 					'controller/**/*.js',
+					'filters/**/*.js',
 					'directive/**/*.js',
 					'service/**/*.js'
       ],

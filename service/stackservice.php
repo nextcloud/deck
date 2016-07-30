@@ -46,6 +46,19 @@ class StackService  {
         return $stacks;
     }
 
+    public function findAllArchived($boardId) {
+        $stacks = $this->stackMapper->findAll($boardId);
+        $labels = $this->labelMapper->getAssignedLabelsForBoard($boardId);
+        foreach ($stacks as $idx => $s) {
+            $cards = $this->cardMapper->findAllArchived($s->id);
+            foreach ($cards as $idxc => $card) {
+                $cards[$idxc]->setLabels($labels[$card->id]);
+            }
+            $stacks[$idx]->setCards($cards);
+        }
+        return $stacks;
+    }
+
     public function create($title, $boardId, $order) {
         $stack = new Stack();
         $stack->setTitle($title);

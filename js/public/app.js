@@ -54,7 +54,7 @@ app.config(["$provide", "$routeProvider", "$interpolateProvider", "$httpProvider
         .state('board', {
             url: "/board/:boardId",
             templateUrl: "/board.html",
-            controller: 'BoardController'
+            controller: 'BoardController',
         })
         .state('board.detail', {
             url: "/detail/",
@@ -62,7 +62,12 @@ app.config(["$provide", "$routeProvider", "$interpolateProvider", "$httpProvider
                 "sidebarView": {
                     templateUrl: "/board.sidebarView.html",
                 }
-            }
+            },
+        })
+        .state('board.archive', {
+            url: "/archive/",
+            templateUrl: "/board.html",
+            controller: 'BoardController',
         })
         .state('board.card', {
             url: "/card/:cardId",
@@ -102,6 +107,10 @@ app.run(["$document", "$rootScope", "$transitions", function ($document, $rootSc
     $transitions.onExit({from: 'board.detail'}, function ($state) {
         $rootScope.sidebar.show = false;
     });
+    $transitions.onEnter({to: 'board.archive'}, function ($state) {
+        //BoardController.update();
+        console.log($state.$current.parent)
+    });
 
     $('link[rel="shortcut icon"]').attr(
         'href',
@@ -116,22 +125,40 @@ app.controller('AppController', ["$scope", "$location", "$http", "$route", "$log
         show: false
     };
     $scope.sidebar = $rootScope.sidebar;
+
+    $scope.search = function (value) {
+        if (value === '') {
+            $location.search('search', null);
+        } else {
+            $location.search('search', value);
+        }
+        $scope.searchText = value;
+    };
+    
+    $scope.searchText = $location.search().search;
+
 }]);
 
-app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "StatusService", "BoardService", "StackService", "CardService", "LabelService", function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService) {
+app.controller('ArchiveController', ["$rootScope", "$scope", "$stateParams", "StatusService", "BoardService", "StackService", "CardService", "LabelService", "$state", "$transitions", function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions) {
 
   $scope.sidebar = $rootScope.sidebar;
 
   $scope.id = $stateParams.boardId;
   $scope.status={},
-      $scope.newLabel={};
+  $scope.newLabel={};
   $scope.status.boardtab = $stateParams.detailTab;
+  $scope.state = $state.current;
 
+  console.log($scope.state);
   $scope.stackservice = StackService;
   $scope.boardservice = BoardService;
+  $scope.cardservice = CardService;
   $scope.statusservice = StatusService.getInstance();
   $scope.labelservice = LabelService;
-  $scope.defaultColors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
+
+  $scope.foo = function(state) {
+    console.log(state);
+  }
 
 
   // fetch data
@@ -139,46 +166,28 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
   $scope.statusservice.retainWaiting();
   $scope.statusservice.retainWaiting();
 
-  StackService.fetchAll($scope.id).then(function(data) {
-    console.log(data);
-
+  BoardService.fetchOne($scope.id).then(function(data) {
     $scope.statusservice.releaseWaiting();
   }, function(error) {
     $scope.statusservice.setError('Error occured', error);
   });
+
+  console.log($scope);
+    StackService.fetchArchived($scope.id).then(function(data) {
+      console.log(data);
+      $scope.statusservice.releaseWaiting();
+    }, function(error) {
+      $scope.statusservice.setError('Error occured', error);
+    });
+
+
+
+
 
   BoardService.searchUsers();
 
-  BoardService.fetchOne($scope.id).then(function(data) {
-    console.log(BoardService.getCurrent());
-    $scope.statusservice.releaseWaiting();
-  }, function(error) {
-    $scope.statusservice.setError('Error occured', error);
-  });
-
-  $scope.newStack = { 'boardId': $scope.id};
-  $scope.newCard = {};
 
 
-
-  // Create a new Stack
-  $scope.createStack = function () {
-    StackService.create($scope.newStack).then(function (data) {
-      $scope.newStack.title="";
-    });
-  };
-
-  $scope.createCard = function(stack, title) {
-    var newCard = {
-      'title': title,
-      'stackId': stack,
-      'type': 'plain',
-    };
-    CardService.create(newCard).then(function (data) {
-      $scope.stackservice.addCard(data);
-      $scope.newCard.title = "";
-    });
-  }
 
   $scope.cardDelete = function(card) {
     CardService.delete(card.id);
@@ -186,36 +195,7 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 
   }
 
-  $scope.labelDelete = function(label) {
-    LabelService.delete(label.id);
-    // remove from board data
-    var i = BoardService.getCurrent().labels.indexOf(label);
-    BoardService.getCurrent().labels.splice(i, 1);
-    // TODO: remove from cards
-  }
-  $scope.labelCreate = function(label) {
-    label.boardId = $scope.id;
-    LabelService.create(label);
-    BoardService.getCurrent().labels.push(label);
-    $scope.status.createLabel = false;
-    $scope.newLabel = {};
-  }
-  $scope.labelUpdate = function(label) {
-    label.edit = false;
-    LabelService.update(label);
-  }
 
-  $scope.addAcl = function(sharee) {
-    sharee.boardId = $scope.id;
-    BoardService.addAcl(sharee);
-    $scope.status.addSharee = null;
-  }
-  $scope.deleteAcl = function(acl) {
-    BoardService.deleteAcl(acl.id);
-  }
-  $scope.updateAcl = function(acl) {
-    BoardService.updateAcl(acl);
-  }
   // TODO: move to filter?
   // Lighten Color of the board for background usage
   $scope.rgblight = function (hex) {
@@ -274,6 +254,159 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
       return "#aa0000";
     }
   };
+
+
+
+  // settings for card sorting
+  $scope.sortOptions = {
+    itemMoved: function (event) {
+      // TODO: Implement reodering here
+      event.source.itemScope.modelValue.status = event.dest.sortableScope.$parent.column;
+      var order = event.dest.index;
+      var card = event.source.itemScope.c;
+      var newStack = event.dest.sortableScope.$parent.s.id;
+      card.stackId = newStack;
+      CardService.update(card);
+
+      CardService.reorder(card, order).then(function(data) {
+        StackService.data[newStack].addCard(card);
+      });
+    },
+    orderChanged: function (event) {
+      // TODO: Implement ordering here
+      var order = event.dest.index;
+      var card = event.source.itemScope.c;
+      CardService.reorder(card, order);
+    },
+    scrollableContainer: '#board',
+    containerPositioning: 'relative',
+    containment: '#board',
+    // auto scroll on drag
+    dragMove: function (itemPosition, containment, eventObj) {
+      if (eventObj) {
+        var container = $("#board");
+        var offset = container.offset();
+        targetX = eventObj.pageX - (offset.left || container.scrollLeft());
+        targetY = eventObj.pageY - (offset.top || container.scrollTop());
+        if (targetX < offset.left) {
+          container.scrollLeft(container.scrollLeft() - 50);
+        } else if (targetX > container.width()) {
+          container.scrollLeft(container.scrollLeft() + 50);
+        }
+        if (targetY < offset.top) {
+          container.scrollTop(container.scrollTop() - 50);
+        } else if (targetY > container.height()) {
+          container.scrollTop(container.scrollTop() + 50);
+        }
+      }
+    }
+  };
+
+}]);
+
+app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "StatusService", "BoardService", "StackService", "CardService", "LabelService", "$state", "$transitions", function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions) {
+
+  $scope.sidebar = $rootScope.sidebar;
+
+  $scope.id = $stateParams.boardId;
+  $scope.status={},
+  $scope.newLabel={};
+  $scope.status.boardtab = $stateParams.detailTab;
+  $scope.state = $state.current;
+
+
+
+
+  $scope.stackservice = StackService;
+  $scope.boardservice = BoardService;
+  $scope.cardservice = CardService;
+  $scope.statusservice = StatusService.getInstance();
+  $scope.labelservice = LabelService;
+  $scope.defaultColors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
+
+  // fetch data
+  StackService.clear();
+  $scope.statusservice.retainWaiting();
+  $scope.statusservice.retainWaiting();
+
+  BoardService.fetchOne($scope.id).then(function(data) {
+    $scope.statusservice.releaseWaiting();
+  }, function(error) {
+    $scope.statusservice.setError('Error occured', error);
+  });
+
+  console.log($scope.state);
+
+    StackService.fetchAll($scope.id).then(function(data) {
+      $scope.statusservice.releaseWaiting();
+    }, function(error) {
+      $scope.statusservice.setError('Error occured', error);
+    });
+
+
+
+
+
+  BoardService.searchUsers();
+
+  $scope.newStack = { 'boardId': $scope.id};
+  $scope.newCard = {};
+
+  // Create a new Stack
+  $scope.createStack = function () {
+    StackService.create($scope.newStack).then(function (data) {
+      $scope.newStack.title="";
+    });
+  };
+
+  $scope.createCard = function(stack, title) {
+    var newCard = {
+      'title': title,
+      'stackId': stack,
+      'type': 'plain',
+    };
+    CardService.create(newCard).then(function (data) {
+      $scope.stackservice.addCard(data);
+      $scope.newCard.title = "";
+    });
+  }
+
+  $scope.cardDelete = function(card) {
+    CardService.delete(card.id);
+    StackService.deleteCard(card);
+
+  }
+
+  $scope.labelDelete = function(label) {
+    LabelService.delete(label.id);
+    // remove from board data
+    var i = BoardService.getCurrent().labels.indexOf(label);
+    BoardService.getCurrent().labels.splice(i, 1);
+    // TODO: remove from cards
+  }
+  $scope.labelCreate = function(label) {
+    label.boardId = $scope.id;
+    LabelService.create(label);
+    BoardService.getCurrent().labels.push(label);
+    $scope.status.createLabel = false;
+    $scope.newLabel = {};
+  }
+  $scope.labelUpdate = function(label) {
+    label.edit = false;
+    LabelService.update(label);
+  }
+
+  $scope.addAcl = function(sharee) {
+    sharee.boardId = $scope.id;
+    BoardService.addAcl(sharee);
+    $scope.status.addSharee = null;
+  }
+  $scope.deleteAcl = function(acl) {
+    BoardService.deleteAcl(acl.id);
+  }
+  $scope.updateAcl = function(acl) {
+    BoardService.updateAcl(acl);
+  }
 
 
 
@@ -421,6 +554,117 @@ app.controller('ListController', ["$scope", "$location", "BoardService", functio
 }]);
 
 
+// usage | cardFilter({ member: 'admin'})
+
+app.filter('cardFilter', function() {
+    return function(cards, rules) {
+		var _result = {};
+		angular.forEach(cards, function(card){
+			var _card = card;
+			angular.some(rules, function(rule, condition) {
+				if(_card[rule]===condition) {
+					_result.push(_card);
+				}
+			});
+		});
+		return result;
+    };
+});
+// usage | cardFilter({ member: 'admin'})
+
+app.filter('cardSearchFilter', function() {
+	return function(cards, searchString) {
+		var _result = {};
+		var rules = {
+			title: searchString,
+			owner: searchString,
+		};
+		angular.forEach(cards, function(card){
+			var _card = card;
+			Object.keys(rules).some(function(rule) {
+				if(_card[rule].search(rules[rule])>=0) {
+					_result[_card.id] = _card;
+				}
+			});
+		});
+		return _result;
+	};
+});
+app.filter('lightenColorFilter', function() {
+	return function (hex) {
+		var result = /^([A-Fa-f\d]{2})([A-Fa-f\d]{2})([A-Fa-f\d]{2})$/i.exec(hex);
+		var color = result ? {
+			r: parseInt(result[1], 16),
+			g: parseInt(result[2], 16),
+			b: parseInt(result[3], 16)
+		} : null;
+		if (result !== null) {
+			var rgba = "rgba(" + color.r + "," + color.g + "," + color.b + ",0.7)";
+			return rgba;
+		} else {
+			return "#" + hex;
+		}
+	}
+});
+app.filter('orderObjectBy', function(){
+	return function(input, attribute) {
+		if (!angular.isObject(input)) return input;
+		var array = [];
+		for(var objectKey in input) {
+			array.push(input[objectKey]);
+		}
+
+		array.sort(function(a, b){
+			a = parseInt(a[attribute]);
+			b = parseInt(b[attribute]);
+			return a - b;
+		});
+		return array;
+	}
+});
+app.filter('lightenColorFilter', function() {
+	return function (hex) {
+		// RGB2HLS by Garry Tan
+		// http://axonflux.com/handy-rgb-to-hsl-and-rgb-to-hsv-color-model-c
+		var result = /^([A-Fa-f\d]{2})([A-Fa-f\d]{2})([A-Fa-f\d]{2})$/i.exec(hex);
+		var color = result ? {
+			r: parseInt(result[1], 16),
+			g: parseInt(result[2], 16),
+			b: parseInt(result[3], 16)
+		} : null;
+		if(result !== null) {
+			r = color.r/255;
+			g = color.g/255;
+			b = color.b/255;
+			var max = Math.max(r, g, b), min = Math.min(r, g, b);
+			var h, s, l = (max + min) / 2;
+
+			if(max == min){
+				h = s = 0; // achromatic
+			}else{
+				var d = max - min;
+				s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+				switch(max){
+					case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+					case g: h = (b - r) / d + 2; break;
+					case b: h = (r - g) / d + 4; break;
+				}
+				h /= 6;
+			}
+			// TODO: Maybe just darken/lighten the color
+			if(l<0.5) {
+				return "#ffffff";
+			} else {
+				return "#000000";
+			}
+			//var rgba = "rgba(" + color.r + "," + color.g + "," + color.b + ",0.7)";
+			//return rgba;
+		} else {
+			return "#aa0000";
+		}
+
+	}
+});
 // OwnCloud Click Handling
 // https://doc.owncloud.org/server/8.0/developer_manual/app/css.html
 app.directive('appNavigationEntryUtils', function () {
@@ -531,6 +775,35 @@ app.directive('markdownChecklist', function () {
 });
 
 
+app.directive('search', ["$document", "$location", function ($document, $location) {
+	'use strict';
+
+	return {
+		restrict: 'E',
+		scope: {
+			'onSearch': '='
+		},
+		link: function (scope) {
+			var box = $('#searchbox');
+			box.val($location.search().search);
+
+			var doSearch = function() {
+				var value = box.val();
+				scope.$apply(function () {
+					scope.onSearch(value);
+				});
+			}
+
+			box.on('search keyup', function (event) {
+				if (event.type === 'search' || event.keyCode === 13 ) {
+					doSearch();
+				}
+			});
+
+		}
+	};
+}]);
+
 app.factory('ApiService', ["$http", "$q", function($http, $q){
     var ApiService = function(http, endpoint) {
         this.endpoint = endpoint;
@@ -594,7 +867,7 @@ app.factory('ApiService', ["$http", "$q", function($http, $q){
     ApiService.prototype.update = function (entity) {
         var deferred = $q.defer();
         var self = this;
-        $http.put(this.baseUrl, entity).then(function (response) {
+        $http.put(this.baseUrl + '/' + entity.id, entity).then(function (response) {
             self.add(response.data);
             deferred.resolve(response.data);
         }, function (error) {
@@ -691,7 +964,7 @@ app.factory('BoardService', ["ApiService", "$http", "$q", function(ApiService, $
         var deferred = $q.defer();
         var self = this;
         var _acl = acl;
-        $http.post(this.baseUrl + '/acl', _acl).then(function (response) {
+        $http.post(this.baseUrl + '/' + acl.boardId + '/acl', _acl).then(function (response) {
             if(!board.acl) {
                 board.acl = {};
             }
@@ -704,11 +977,11 @@ app.factory('BoardService', ["ApiService", "$http", "$q", function(ApiService, $
         return deferred.promise;
     };
 
-    BoardService.prototype.deleteAcl = function(id) {
+    BoardService.prototype.deleteAcl = function(acl) {
         var board = this.getCurrent();
         var deferred = $q.defer();
         var self = this;
-        $http.delete(this.baseUrl + '/acl/' + id).then(function (response) {
+        $http.delete(this.baseUrl + '/' + acl.boardId + '/acl/' + acl.id).then(function (response) {
             delete board.acl[response.data.id];
             deferred.resolve(response.data);
         }, function (error) {
@@ -723,7 +996,7 @@ app.factory('BoardService', ["ApiService", "$http", "$q", function(ApiService, $
         var deferred = $q.defer();
         var self = this;
         var _acl = acl;
-        $http.put(this.baseUrl + '/acl', _acl).then(function (response) {
+        $http.put(this.baseUrl + '/' + acl.boardId + '/acl', _acl).then(function (response) {
             board.acl[_acl.id] = response.data;
             deferred.resolve(response.data);
         }, function (error) {
@@ -746,7 +1019,7 @@ app.factory('CardService', ["ApiService", "$http", "$q", function(ApiService, $h
     CardService.prototype.reorder = function(card, order) {
         var deferred = $q.defer();
         var self = this;
-        $http.put(this.baseUrl + '/reorder', {cardId: card.id, order: order, stackId: card.stackId}).then(function (response) {
+        $http.put(this.baseUrl + '/' + card.id + '/reorder', {cardId: card.id, order: order, stackId: card.stackId}).then(function (response) {
             card.order = order;
             deferred.resolve(response.data);
         }, function (error) {
@@ -758,7 +1031,7 @@ app.factory('CardService', ["ApiService", "$http", "$q", function(ApiService, $h
     CardService.prototype.rename = function(card) {
         var deferred = $q.defer();
         var self = this;
-        $http.put(this.baseUrl + '/rename', {cardId: card.id, title: card.title}).then(function (response) {
+        $http.put(this.baseUrl + '/' + card.id + '/rename', {cardId: card.id, title: card.title}).then(function (response) {
             self.data[card.id].title = card.title;
             deferred.resolve(response.data);
         }, function (error) {
@@ -768,7 +1041,6 @@ app.factory('CardService', ["ApiService", "$http", "$q", function(ApiService, $h
     }
 
     CardService.prototype.assignLabel = function(card, label) {
-        //['name' => 'card#assignLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'POST'],
         var url = this.baseUrl + '/' + card + '/label/' + label;
         var deferred = $q.defer();
         var self = this;
@@ -780,7 +1052,6 @@ app.factory('CardService', ["ApiService", "$http", "$q", function(ApiService, $h
         return deferred.promise;
     }
     CardService.prototype.removeLabel = function(card, label) {
-       // ['name' => 'card#removeLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
         var url = this.baseUrl + '/' + card + '/label/' + label;
         var deferred = $q.defer();
         var self = this;
@@ -791,6 +1062,18 @@ app.factory('CardService', ["ApiService", "$http", "$q", function(ApiService, $h
         });
         return deferred.promise;
     }
+
+    CardService.prototype.archive = function (card) {
+        var deferred = $q.defer();
+        var self = this;
+        $http.put(this.baseUrl + '/' + card.id + '/archive').then(function (response) {
+            deferred.resolve(response.data);
+        }, function (error) {
+            deferred.reject('Error while update ' + self.endpoint);
+        });
+        return deferred.promise;
+
+    };
 
     service = new CardService($http, 'cards', $q)
     return service;
@@ -812,18 +1095,31 @@ app.factory('StackService', ["ApiService", "$http", "$q", function(ApiService, $
         var deferred = $q.defer();
         var self=this;
         $http.get(this.baseUrl +'/'+boardId).then(function (response) {
+            self.clear();
             self.addAll(response.data);
             deferred.resolve(self.data);
         }, function (error) {
             deferred.reject('Error while loading stacks');
         });
         return deferred.promise;
+    };
 
-    }
+    StackService.prototype.fetchArchived = function(boardId) {
+        var deferred = $q.defer();
+        var self=this;
+        $http.get(this.baseUrl +'/'+boardId+'/archived').then(function (response) {
+            self.clear();
+            self.addAll(response.data);
+            deferred.resolve(self.data);
+        }, function (error) {
+            deferred.reject('Error while loading stacks');
+        });
+        return deferred.promise;
+    };
 
     StackService.prototype.addCard = function(entity) {
         this.data[entity.stackId].cards.push(entity);
-    }
+    };
     StackService.prototype.updateCard = function(entity) {
         var self = this;
         var cards = this.data[entity.stackId].cards;
@@ -832,7 +1128,7 @@ app.factory('StackService', ["ApiService", "$http", "$q", function(ApiService, $
                 cards[i] = entity;
             }
         }
-    }
+    };
     StackService.prototype.deleteCard = function(entity) {
         var self = this;
         var cards = this.data[entity.stackId].cards;
@@ -841,7 +1137,7 @@ app.factory('StackService', ["ApiService", "$http", "$q", function(ApiService, $
                 cards.splice(i, 1);
             }
         }
-    }
+    };
     service = new StackService($http, 'stacks', $q);
     return service;
 }]);

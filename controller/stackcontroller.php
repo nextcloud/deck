@@ -29,6 +29,12 @@ class StackController extends Controller {
     /**
      * @NoAdminRequired
      */
+    public function archived($boardId) {
+            return $this->stackService->findAllArchived($boardId);
+    }
+    /**
+     * @NoAdminRequired
+     */
     public function read($boardId) {
         return $this->stackService->find($this->userId, $boardId);
     }

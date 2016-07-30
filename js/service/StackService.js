@@ -7,18 +7,31 @@ app.factory('StackService', function(ApiService, $http, $q){
         var deferred = $q.defer();
         var self=this;
         $http.get(this.baseUrl +'/'+boardId).then(function (response) {
+            self.clear();
             self.addAll(response.data);
             deferred.resolve(self.data);
         }, function (error) {
             deferred.reject('Error while loading stacks');
         });
         return deferred.promise;
+    };
 
-    }
+    StackService.prototype.fetchArchived = function(boardId) {
+        var deferred = $q.defer();
+        var self=this;
+        $http.get(this.baseUrl +'/'+boardId+'/archived').then(function (response) {
+            self.clear();
+            self.addAll(response.data);
+            deferred.resolve(self.data);
+        }, function (error) {
+            deferred.reject('Error while loading stacks');
+        });
+        return deferred.promise;
+    };
 
     StackService.prototype.addCard = function(entity) {
         this.data[entity.stackId].cards.push(entity);
-    }
+    };
     StackService.prototype.updateCard = function(entity) {
         var self = this;
         var cards = this.data[entity.stackId].cards;
@@ -27,7 +40,7 @@ app.factory('StackService', function(ApiService, $http, $q){
                 cards[i] = entity;
             }
         }
-    }
+    };
     StackService.prototype.deleteCard = function(entity) {
         var self = this;
         var cards = this.data[entity.stackId].cards;
@@ -36,7 +49,7 @@ app.factory('StackService', function(ApiService, $http, $q){
                 cards.splice(i, 1);
             }
         }
-    }
+    };
     service = new StackService($http, 'stacks', $q);
     return service;
 });

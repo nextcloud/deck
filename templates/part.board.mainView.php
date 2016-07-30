@@ -9,6 +9,7 @@
     {{ boardservice.data[id].title }}
     <div id="board-actions">
         <div><i class="fa fa-filter"> </i> Filter</div>
+        <div><i class="icon icon-search"> </i> {{ searchText }}</div>
         <div class="filter"><span class="filter-button" ng-click="status.filter.label=!status.filter.label">by label <i class="fa  fa-caret-down"> </i></span></div>
         <ul class="filter-select bubble" ng-if="status.filter.label">
             <li ng-repeat="label in boardservice.data[id].labels"><span style="background-color:#{{ label.color }};"> </span> {{ label.title }}</li>
@@ -18,8 +19,7 @@
             <li ng-repeat="label in boardservice.data[id].labels"><span style="background-color:#{{ label.color }};"> </span> {{ label.title }}</li>
         </ul>
 
-        <div class="board-action-button"><a class="fa fa-share-alt" ui-sref="board.detail({ id: id })"> </a></div>
-        <div class="board-action-button"><a class="fa fa-users" ui-sref="board.detail({ id: id })"> </a></div>
+        <div class="board-action-button"><a class="fa fa-archive" ui-sref="board.archive({ id: id })"> </a></div>
         <div class="board-action-button"><a class="fa fa-ellipsis-h" ui-sref="board.detail({ id: id })"> </a></div>
 
     </div>
@@ -27,6 +27,8 @@
     </div>
 <div id="board" class="scroll-container" >
 
+
+    <search on-search="search" class="ng-hide"></search>
 
 
 
@@ -43,7 +45,7 @@
           </div>
       </h2>
         <ul data-as-sortable="sortOptions" data-ng-model="s.cards"  style="min-height: 40px;">
-      <li class="card as-sortable-item" ng-repeat="c in s.cards" data-as-sortable-item  ui-sref="board.card({boardId: id, cardId: c.id})">
+      <li class="card as-sortable-item" ng-repeat="c in s.cards | cardSearchFilter: searchText | orderObjectBy:'order'" data-as-sortable-item  ui-sref="board.card({boardId: id, cardId: c.id})" ng-class="{'archived': c.archived }">
           <div data-as-sortable-item-handle>
         <div class="card-upper">
 			<h3>{{ c.title }}</h3>
@@ -56,7 +58,7 @@
 			  <button class="card-options icon-more" ng-click="c.status.showMenu=!c.status.showMenu; $event.stopPropagation();" ng-model="card"></button>
 			  <div class="popovermenu bubble" ng-show="c.status.showMenu"><ul>
 					  <li><a class="menuitem action action-rename permanent" data-action="Rename"><span class="icon icon-rename"></span><span>Umbenennen</span></a></li>
-					  <li><a class="menuitem action action-rename permanent" data-action="Rename"><span class="icon icon-rename"></span><span>Archive</span></a></li>
+					  <li><a class="menuitem action action-rename permanent" data-action="Rename" ng-click="cardservice.archive(c); $event.stopPropagation();"><span class="fa fa-archive"></span><span>Archive</span></a></li>
 					  <li><a class="menuitem action action-delete permanent" data-action="Delete" ng-click="cardDelete(c)"><span class="icon icon-delete"></span><span>Löschen</span></a></li></ul>
 			  </div>
 		<div class="card-assignees">
@@ -69,7 +71,20 @@
 
 
           </div>
-      </li>
+      </li></ul>
+        <ul>
+            <li class="card archived" ng-repeat="card in s.cards | cardSearchFilter: searchText | orderObjectBy:'lastModified'" ui-sref="board.card({boardId: id, cardId: c.id})">
+                <div>
+                    <div class="card-upper">
+                        <h3>{{ card.title }}</h3>
+                        <ul class="labels">
+                            <li ng-repeat="label in c.labels" style="background-color: #{{ label.color }};"><span>{{ label.title }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="card-options fa fa-archive"></button>
+                </div>
+            </li>
       </ul>
         <!-- CREATE CARD //-->
       <div class="card create" style="background-color:#{{ boardservice.getCurrent().color }};">

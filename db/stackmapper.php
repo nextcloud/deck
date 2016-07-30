@@ -32,6 +32,7 @@ class StackMapper extends Mapper {
         $sql = 'SELECT * FROM `*PREFIX*deck_stacks` WHERE `board_id` = ?  ORDER BY `order`';
         return $this->findEntities($sql, [$boardId], $limit, $offset);
     }
+    
 
     public function delete(Entity $entity) {
         // FIXME: delete linked elements, because owncloud doesn't support foreign keys for apps

@@ -33,7 +33,7 @@ class Board extends \OCA\Deck\Db\Entity implements JsonSerializable {
 
     public function setLabels($labels) {
         foreach ($labels as $l) {
-            $this->labels[$l->id] = $l;
+            $this->labels[] = $l;
         }
     }
 

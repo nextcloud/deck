@@ -61,7 +61,7 @@ app.factory('ApiService', function($http, $q){
     ApiService.prototype.update = function (entity) {
         var deferred = $q.defer();
         var self = this;
-        $http.put(this.baseUrl, entity).then(function (response) {
+        $http.put(this.baseUrl + '/' + entity.id, entity).then(function (response) {
             self.add(response.data);
             deferred.resolve(response.data);
         }, function (error) {

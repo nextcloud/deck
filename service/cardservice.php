@@ -69,7 +69,7 @@ class CardService  {
             if($card->id !== $id) {
                 $card->setOrder($i++);
             }
-
+            $card->setLastModified(time());
             $this->cardMapper->update($card);
         }
         // FIXME: return reordered cards without an additional db query
@@ -77,6 +77,17 @@ class CardService  {
         return $cards;
     }
 
+    public function archive($id) {
+        $card = $this->cardMapper->find($id);
+        $card->setArchived(true);
+        return $this->cardMapper->update($card);
+    }
+    
+    public function unarchive($id) {
+        $card = $this->cardMapper->find($id);
+        $card->setArchived(false);
+        return $this->cardMapper->update($card);
+    }
 
     public function assignLabel($userId, $cardId, $labelId) {
         $this->cardMapper->assignLabel($cardId, $labelId);

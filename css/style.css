@@ -1,3 +1,8 @@
+#searchbox {
+	display:block !important;
+}
+
+
 .app-navigation-entry-utils-menu-button {
 	display: block !important;
 }
@@ -154,12 +159,16 @@
 	float:right;
 }
 .card {
-	background-color:#f6f6f6;
+	background-color:#f0f0f0;
 	margin:5px;
 	white-space: normal;
 	padding-bottom:4px;
 	position: relative;
 	opacity: 1.0;
+	border:1px solid #aaaaaa;
+}
+.card.archived {
+	opacity:0.5;
 }
 .card-upper {
 	overflow: hidden;

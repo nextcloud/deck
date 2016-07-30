@@ -24,7 +24,7 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
         .state('board', {
             url: "/board/:boardId",
             templateUrl: "/board.html",
-            controller: 'BoardController'
+            controller: 'BoardController',
         })
         .state('board.detail', {
             url: "/detail/",
@@ -32,7 +32,12 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
                 "sidebarView": {
                     templateUrl: "/board.sidebarView.html",
                 }
-            }
+            },
+        })
+        .state('board.archive', {
+            url: "/archive/",
+            templateUrl: "/board.html",
+            controller: 'BoardController',
         })
         .state('board.card', {
             url: "/card/:cardId",

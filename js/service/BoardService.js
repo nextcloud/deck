@@ -23,7 +23,7 @@ app.factory('BoardService', function(ApiService, $http, $q){
         var deferred = $q.defer();
         var self = this;
         var _acl = acl;
-        $http.post(this.baseUrl + '/acl', _acl).then(function (response) {
+        $http.post(this.baseUrl + '/' + acl.boardId + '/acl', _acl).then(function (response) {
             if(!board.acl) {
                 board.acl = {};
             }
@@ -36,11 +36,11 @@ app.factory('BoardService', function(ApiService, $http, $q){
         return deferred.promise;
     };
 
-    BoardService.prototype.deleteAcl = function(id) {
+    BoardService.prototype.deleteAcl = function(acl) {
         var board = this.getCurrent();
         var deferred = $q.defer();
         var self = this;
-        $http.delete(this.baseUrl + '/acl/' + id).then(function (response) {
+        $http.delete(this.baseUrl + '/' + acl.boardId + '/acl/' + acl.id).then(function (response) {
             delete board.acl[response.data.id];
             deferred.resolve(response.data);
         }, function (error) {
@@ -55,7 +55,7 @@ app.factory('BoardService', function(ApiService, $http, $q){
         var deferred = $q.defer();
         var self = this;
         var _acl = acl;
-        $http.put(this.baseUrl + '/acl', _acl).then(function (response) {
+        $http.put(this.baseUrl + '/' + acl.boardId + '/acl', _acl).then(function (response) {
             board.acl[_acl.id] = response.data;
             deferred.resolve(response.data);
         }, function (error) {

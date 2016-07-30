@@ -60,6 +60,19 @@ class CardController extends Controller {
     public function delete($cardId) {
         return $this->cardService->delete($this->userId, $cardId);
     }
+
+    /**
+     * @NoAdminRequired
+     */
+    public function archive($id) {
+        return $this->cardService->archive($id);
+    }
+    /**
+     * @NoAdminRequired
+     */
+    public function unarchive($id) {
+        return $this->cardService->unarchive($id);
+    }
     /**
      * @NoAdminRequired
      */

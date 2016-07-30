@@ -7,7 +7,7 @@ app.factory('CardService', function(ApiService, $http, $q){
     CardService.prototype.reorder = function(card, order) {
         var deferred = $q.defer();
         var self = this;
-        $http.put(this.baseUrl + '/reorder', {cardId: card.id, order: order, stackId: card.stackId}).then(function (response) {
+        $http.put(this.baseUrl + '/' + card.id + '/reorder', {cardId: card.id, order: order, stackId: card.stackId}).then(function (response) {
             card.order = order;
             deferred.resolve(response.data);
         }, function (error) {
@@ -19,7 +19,7 @@ app.factory('CardService', function(ApiService, $http, $q){
     CardService.prototype.rename = function(card) {
         var deferred = $q.defer();
         var self = this;
-        $http.put(this.baseUrl + '/rename', {cardId: card.id, title: card.title}).then(function (response) {
+        $http.put(this.baseUrl + '/' + card.id + '/rename', {cardId: card.id, title: card.title}).then(function (response) {
             self.data[card.id].title = card.title;
             deferred.resolve(response.data);
         }, function (error) {
@@ -29,7 +29,6 @@ app.factory('CardService', function(ApiService, $http, $q){
     }
 
     CardService.prototype.assignLabel = function(card, label) {
-        //['name' => 'card#assignLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'POST'],
         var url = this.baseUrl + '/' + card + '/label/' + label;
         var deferred = $q.defer();
         var self = this;
@@ -41,7 +40,6 @@ app.factory('CardService', function(ApiService, $http, $q){
         return deferred.promise;
     }
     CardService.prototype.removeLabel = function(card, label) {
-       // ['name' => 'card#removeLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
         var url = this.baseUrl + '/' + card + '/label/' + label;
         var deferred = $q.defer();
         var self = this;
@@ -52,6 +50,18 @@ app.factory('CardService', function(ApiService, $http, $q){
         });
         return deferred.promise;
     }
+
+    CardService.prototype.archive = function (card) {
+        var deferred = $q.defer();
+        var self = this;
+        $http.put(this.baseUrl + '/' + card.id + '/archive').then(function (response) {
+            deferred.resolve(response.data);
+        }, function (error) {
+            deferred.reject('Error while update ' + self.endpoint);
+        });
+        return deferred.promise;
+
+    };
 
     service = new CardService($http, 'cards', $q)
     return service;

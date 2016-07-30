@@ -18,6 +18,10 @@ app.run(function ($document, $rootScope, $transitions) {
     $transitions.onExit({from: 'board.detail'}, function ($state) {
         $rootScope.sidebar.show = false;
     });
+    $transitions.onEnter({to: 'board.archive'}, function ($state) {
+        //BoardController.update();
+        console.log($state.$current.parent)
+    });
 
     $('link[rel="shortcut icon"]').attr(
         'href',

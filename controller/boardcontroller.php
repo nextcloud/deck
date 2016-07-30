@@ -35,7 +35,7 @@ class BoardController extends Controller {
      */
     public function read($boardId) {
         // FIXME: Remove as this is just for testing if loading animation works out nicely
-        usleep(200000);
+        //usleep(2000);
         return $this->boardService->find($this->userId, $boardId);
     }
 
