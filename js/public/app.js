@@ -622,7 +622,7 @@ app.filter('orderObjectBy', function(){
 		return array;
 	}
 });
-app.filter('lightenColorFilter', function() {
+app.filter('textColorFilter', function() {
 	return function (hex) {
 		// RGB2HLS by Garry Tan
 		// http://axonflux.com/handy-rgb-to-hsl-and-rgb-to-hsv-color-model-c
@@ -665,6 +665,7 @@ app.filter('lightenColorFilter', function() {
 
 	}
 });
+
 // OwnCloud Click Handling
 // https://doc.owncloud.org/server/8.0/developer_manual/app/css.html
 app.directive('appNavigationEntryUtils', function () {

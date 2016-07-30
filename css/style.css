@@ -29,6 +29,16 @@
     cursor: pointer;
 }
 
+#app-view {
+    position: relative;
+    height: 100%;
+    white-space: nowrap;
+    overflow: none;
+    padding: 0;
+    z-index: 100;
+    width: 100%;
+}
+
 #board-status {
 	position:absolute;
 	z-index:999;
@@ -54,13 +64,15 @@
 	width: inherit;
 	color: #333333;
 	position:relative;
-	z-index:200;
-	background-color:#f7f7f7;
+	z-index:120;
+  height: 44px;
+  background-color: #eee;
 }
 #board-header h1 {
 	font-size:14pt;
 	margin: 0;
-	padding:10px;
+	padding:12px;
+  padding-left:50px;
 
 }
 #board-actions {

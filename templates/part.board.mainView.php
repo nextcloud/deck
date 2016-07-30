@@ -4,10 +4,11 @@
         <h2>{{ statusservice.title }}</h2>
         <p>{{ statusservice.text }}</p></div>
 </div>
-<div id="board-header">
+<div id="board-header" style="background-color: {{boardservice.getCurrent().color | lightenColorFilter}}; color: {{boardservice.getCurrent().color | textColorFilter }};">
 <h1>
     {{ boardservice.data[id].title }}
     <div id="board-actions">
+        <!--
         <div><i class="fa fa-filter"> </i> Filter</div>
         <div><i class="icon icon-search"> </i> {{ searchText }}</div>
         <div class="filter"><span class="filter-button" ng-click="status.filter.label=!status.filter.label">by label <i class="fa  fa-caret-down"> </i></span></div>
@@ -18,9 +19,10 @@
         <ul class="filter-select bubble" ng-if="status.filter.assignee">
             <li ng-repeat="label in boardservice.data[id].labels"><span style="background-color:#{{ label.color }};"> </span> {{ label.title }}</li>
         </ul>
+        //-->
 
         <div class="board-action-button"><a class="fa fa-archive" ui-sref="board.archive({ id: id })"> </a></div>
-        <div class="board-action-button"><a class="fa fa-ellipsis-h" ui-sref="board.detail({ id: id })"> </a></div>
+        <div class="board-action-button"><a class="fa fa-info" ui-sref="board.detail({ id: id })"> </a></div>
 
     </div>
 </h1>

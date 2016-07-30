@@ -1,4 +1,4 @@
-app.filter('lightenColorFilter', function() {
+app.filter('textColorFilter', function() {
 	return function (hex) {
 		// RGB2HLS by Garry Tan
 		// http://axonflux.com/handy-rgb-to-hsl-and-rgb-to-hsv-color-model-c
