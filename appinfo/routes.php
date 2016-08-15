@@ -50,7 +50,7 @@ return [
 
         // labels
         ['name' => 'label#create', 'url' => '/labels', 'verb' => 'POST'],
-        ['name' => 'label#update', 'url' => '/labels({labelId}', 'verb' => 'PUT'],
+        ['name' => 'label#update', 'url' => '/labels/{labelId}', 'verb' => 'PUT'],
         ['name' => 'label#delete', 'url' => '/labels/{labelId}', 'verb' => 'DELETE'],
 
         // TODO: Implement public board sharing
