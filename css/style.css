@@ -446,9 +446,10 @@
 	height:32px;
 	margin-right: 3px;
 }
-.avatardiv .fa-group {
-	padding: 7px;
+.avatardiv .icon-group {
+	margin: 7px;
 	opacity: 0.5;
+	display:block !important;
 }
 
 /* color selector */
@@ -538,8 +539,6 @@ button:hover {
 /* board detail */
 #board-detail-labels {
 	padding: 10px;
-
-
 }
 #board-detail-labels ul li {
 	display: block;
@@ -555,15 +554,21 @@ button:hover {
 }
 #board-detail-labels ul li .label-title {
 	float:left;
-	width:90%;
+	width:88%;
 	font-size:10pt;
 	padding:5px;
 	border:none;
 	margin-right:2px;
 }
-#board-detail-labels ul li .fa {
+#board-detail-labels ul li a.icon {
 	float:right;
 	padding:5px;
+}
+.label-create {
+	width:88%;
+}
+.label-create .icon {
+	margin-bottom:-3px;
 }
 
 #board-detail-labels .color {
@@ -704,4 +709,16 @@ margin-bottom:2px; width:100%;
 
 .shareOption {
 	margin-top:4px;
+}
+
+
+.app-deck .icon {
+	display: inline-block;
+}
+
+.icon-group {
+	background-image: url('../../../settings/img/users.svg');
+}
+.icon-archive {
+	background-image: url('../img/archive.svg');
 }

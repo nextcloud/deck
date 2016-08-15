@@ -19,11 +19,11 @@
 
         <ui-select ng-model="status.addSharee" theme="bootstrap" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..." on-select="aclAdd(status.addSharee)">
             <ui-select-match placeholder="<?php p($l->t('Select users...')); ?>">
-                <span><i class="fa fa-{{$item.type}}"></i> {{ $item.participant }}</span>
+                <span><i class="icon icon-{{$item.type}}"></i> {{ $item.participant }}</span>
             </ui-select-match>
             <!-- FIXME: filter by selected or add multiple //-->
             <ui-select-choices repeat="sharee in boardservice.sharees | filter: board.sharees | filter: $select.search track by $index">
-                <span><i class="fa fa-{{sharee.type}}"></i> {{ sharee.participant }}</span>
+                <span><i class="icon icon-{{sharee.type}}"></i> {{ sharee.participant }}</span>
             </ui-select-choices>
             <ui-select-no-choice>
             <?php p($l->t('Dang!  We couldn\'t find any choices...')); ?>
@@ -41,7 +41,7 @@
             <li ng-repeat="acl in boardservice.getCurrent().acl track by $index">
                 <span class="icon-loading-small" style="display:none;"></span>
                 <div class="avatardiv" avatar displayname="{{ acl.participant }}" ng-if="acl.type=='user'"></div>
-                <div class="avatardiv" ng-if="acl.type=='group'"><i class="fa fa-{{acl.type}}"></i></div>
+                <div class="avatardiv" ng-if="acl.type=='group'"><i class="icon icon-{{acl.type}}"></i></div>
 
                 <span class="has-tooltip username">
                     {{ acl.participant }}</span>
@@ -66,33 +66,37 @@
 
             <ul class="labels">
                 <li ng-repeat="label in boardservice.getCurrent().labels">
-                <span class="label-title" style="background-color:#{{label.color}}; color:{{ textColor(label.color) }};" ng-if="!label.edit" ng-click="label.edit=true">
+                <span class="label-title" style="background-color:#{{label.color}}; color:{{ label.color|textColorFilter }};" ng-if="!label.edit" ng-click="label.edit=true">
                     <span ng-if="label.title">{{ label.title }}</span><i ng-if="!label.title"><br /></i>
                 </span>
-                <span class="label-title" style="background-color:#{{label.color}}; color:{{ textColor(label.color) }}; width:188px;" ng-if="label.edit">
-                    <input type="text" placeholder="" ng-model="label.title" class="input-inline" style="background-color:#{{label.color}}; color:{{ textColor(label.color) }};" />
+                <span class="label-title" style="background-color:#{{label.color}}; color:{{ textColor(label.color) }}; width:178px;" ng-if="label.edit">
+                    <form ng-submit="labelUpdate(label)">
+                      <input type="text" ng-model="label.title" class="input-inline" style="background-color:#{{label.color}}; color:{{ label.color|textColorFilter }};" autofocus-on-insert />
+                    </form>
                 </span>
                     <div class="colorselect" ng-if="label.edit">
                         <div class="color" ng-repeat="c in defaultColors" style="background-color:#{{ c }};" ng-click="label.color=c" ng-class="{'selected': (c == label.color) }"><br /></div>
                     </div>
-                    <a class="fa fa-save" ng-click="labelUpdate(label)" ng-if="label.edit"> </a>
-                    <a class="fa fa-edit" ng-click="label.edit=true" ng-if="!label.edit"> </a>
-                    <a class="fa fa-remove" ng-click="labelDelete(label)"> </a>
+                    <a ng-click="labelDelete(label)" class="icon"><i class="icon icon-delete" ></i></a>
+                    <a ng-click="labelUpdate(label)" ng-if="label.edit" class="icon"><i class="icon icon-checkmark" ></i></a>
+                    <a ng-click="label.edit=true" ng-if="!label.edit" class="icon"><i class="icon icon-rename" ></i></a>
+
                 </li>
                 <li ng-if="status.createLabel">
                     <form ng-submit="labelCreate(newLabel)">
-                <span class="label-title" style="background-color:#{{newLabel.color}}; color:{{ textColor(newLabel.color) }}; width:188px;">
-                    <input type="text" class="input-inline" ng-model="newLabel.title" style="color:{{ textColor(newLabel.color) }};" autofocus-on-insert />
+                <span class="label-title" style="background-color:#{{newLabel.color}}; color:{{ textColor(newLabel.color) }}; width:178px;">
+                    <input type="text" class="input-inline" ng-model="newLabel.title" style="color:{{ newLabel.color|textColorFilter }};" autofocus-on-insert />
                 </span>
                         <div class="colorselect">
                             <div class="color" ng-repeat="c in defaultColors" style="background-color:#{{ c }};" ng-click="newLabel.color=c" ng-class="{'selected': (c == newLabel.color) }"><br /></div>
                         </div>
-                        <a class="fa fa-save" ng-click="labelCreate(newLabel)"> </a>
+                        <a ng-click="labelCreate(newLabel)" class="icon"><i class="icon icon-checkmark" ></i></a>
+                        <a ng-click="status.createLabel=false" class="icon icon-close"></a>
 
                     </form>
                 </li>
-                <li ng-if="!status.createLabel">
-                    <a ng-click="status.createLabel=true"><span class="fa fa-plus"> </span> <?php p($l->t('Create a new label')); ?></a>
+                <li ng-if="!status.createLabel" class="label-create">
+                    <a ng-click="status.createLabel=true"><span class="icon icon-add"> </span> <?php p($l->t('Create a new label')); ?></a>
                 </li>
             </ul>
 

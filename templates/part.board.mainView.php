@@ -68,13 +68,13 @@
 									<a class="menuitem action action-rename permanent"
 									   data-action="Archive"
 									   ng-click="cardArchive(c); $event.stopPropagation();"><span
-											class="fa fa-archive"></span><span><?php p($l->t('Archive')); ?></span></a>
+											class="icon icon-archive"></span><span><?php p($l->t('Archive')); ?></span></a>
 								</li>
 								<li ng-if="filter==='archive'">
 									<a class="menuitem action action-rename permanent"
 									   data-action="Unarchive"
 									   ng-click="cardUnarchive(c); $event.stopPropagation();"><span
-											class="fa fa-archive"></span><span><?php p($l->t('Unarchive')); ?></span></a>
+											class="icon icon-archive"></span><span><?php p($l->t('Unarchive')); ?></span></a>
 								</li>
 								<li>
 									<a class="menuitem action action-delete permanent"
@@ -105,7 +105,7 @@
 							   ng-blur="s.status.addCard=false" required/>
 					</h3>
 				</form>
-				<div class="fa fa-plus" ng-if="!s.status.addCard"
+				<div class="icon icon-add" ng-if="!s.status.addCard"
 					 ng-click="s.status.addCard=!s.status.addCard"></div>
 			</div>
 		</div>
