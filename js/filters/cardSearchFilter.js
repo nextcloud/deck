@@ -1,11 +1,9 @@
-// usage | cardFilter({ member: 'admin'})
-
 app.filter('cardSearchFilter', function() {
 	return function(cards, searchString) {
 		var _result = {};
 		var rules = {
 			title: searchString,
-			owner: searchString,
+			//owner: searchString,
 		};
 		angular.forEach(cards, function(card){
 			var _card = card;
@@ -15,6 +13,11 @@ app.filter('cardSearchFilter', function() {
 				}
 			});
 		});
-		return _result;
+
+		var arrayResult = $.map(_result, function(value, index) {
+			return [value];
+		});
+
+		return arrayResult;
 	};
 });

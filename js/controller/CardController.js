@@ -14,11 +14,10 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 
     CardService.fetchOne($scope.cardId).then(function(data) {
         $scope.statusservice.releaseWaiting();
-
+        $scope.archived = CardService.getCurrent().archived;
         console.log(data);
     }, function(error) {
     });
-
 
     // handle rename to update information on the board as well
     $scope.renameCard = function(card) {
@@ -42,14 +41,9 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
         var card = CardService.getCurrent();
         StackService.updateCard(card);
     }
+    
     $scope.labelRemove = function(element, model) {
         CardService.removeLabel($scope.cardId, element.id)
     }
 
-    /*var menu = $('#app-content');
-     menu.click(function(event){
-     $scope.location.path('/board/'+$scope.boardId);
-     $scope.$apply();
-
-     });*/
 });

@@ -64,14 +64,14 @@ class CardController extends Controller {
     /**
      * @NoAdminRequired
      */
-    public function archive($id) {
-        return $this->cardService->archive($id);
+    public function archive($cardId) {
+        return $this->cardService->archive($cardId);
     }
     /**
      * @NoAdminRequired
      */
-    public function unarchive($id) {
-        return $this->cardService->unarchive($id);
+    public function unarchive($cardId) {
+        return $this->cardService->unarchive($cardId);
     }
     /**
      * @NoAdminRequired

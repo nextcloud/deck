@@ -15,15 +15,18 @@ use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Controller;
+use OCP\IL10N;
 
 class PageController extends Controller {
 
 
 	private $userId;
+  private $l10n;
 
-	public function __construct($AppName, IRequest $request, $UserId){
+	public function __construct($AppName, IRequest $request,IL10N $l10n, $UserId){
 		parent::__construct($AppName, $request);
 		$this->userId = $UserId;
+    $this->l10n = $l10n;
 	}
 
 	/**

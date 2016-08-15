@@ -14,7 +14,7 @@ class LabelMapper extends DeckMapper {
     }
 
     public function findAll($boardId, $limit=null, $offset=null) {
-        $sql = 'SELECT * FROM `*PREFIX*deck_labels` WHERE `board_id` = ?';
+        $sql = 'SELECT * FROM `*PREFIX*deck_labels` WHERE `board_id` = ? ORDER BY `id`';
         return $this->findEntities($sql, [$boardId], $limit, $offset);
     }
 

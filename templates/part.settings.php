@@ -5,11 +5,7 @@
 		></button>
 	</div>
 	<div id="app-settings-content">
-		We will provide some options here!
+		<?php p($l->t('We will provide some options here!')); ?>
 		<br />
-		<input type="checkbox" /> Show labels on cards<br />
-		<input type="checkbox" /> Show summary on cards<br />
-		<input type="checkbox" /> Show members on cards<br />
-		<input type="checkbox" /> Show archived cards
 	</div>
 </div>

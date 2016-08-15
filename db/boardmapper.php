@@ -51,7 +51,13 @@ class BoardMapper extends Mapper {
      */
     public function findAll($userId, $limit=null, $offset=null) {
         $sql = 'SELECT * FROM `*PREFIX*deck_boards` WHERE `owner` = ?  ORDER BY `title`';
-        return $this->findEntities($sql, [$userId], $limit, $offset);
+        $entries = $this->findEntities($sql, [$userId], $limit, $offset);
+        /* @var Board $entry */
+        foreach ($entries as $entry) {
+            $acl = $this->aclMapper->findAll($entry->id);
+            $entry->setAcl($acl);
+        }
+        return $entries;
     }
 
     public function delete(\OCP\AppFramework\Db\Entity $entity) {

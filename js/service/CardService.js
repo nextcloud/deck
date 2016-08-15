@@ -54,7 +54,19 @@ app.factory('CardService', function(ApiService, $http, $q){
     CardService.prototype.archive = function (card) {
         var deferred = $q.defer();
         var self = this;
-        $http.put(this.baseUrl + '/' + card.id + '/archive').then(function (response) {
+        $http.put(this.baseUrl + '/' + card.id + '/archive', {}).then(function (response) {
+            deferred.resolve(response.data);
+        }, function (error) {
+            deferred.reject('Error while update ' + self.endpoint);
+        });
+        return deferred.promise;
+
+    };
+
+    CardService.prototype.unarchive = function (card) {
+        var deferred = $q.defer();
+        var self = this;
+        $http.put(this.baseUrl + '/' + card.id + '/unarchive', {}).then(function (response) {
             deferred.resolve(response.data);
         }, function (error) {
             deferred.reject('Error while update ' + self.endpoint);

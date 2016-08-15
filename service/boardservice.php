@@ -33,6 +33,7 @@ class BoardService {
         $this->labelMapper = $labelMapper;
         $this->aclMapper = $aclMapper;
         $this->logger = $logger;
+        $this->l10n = $l10n;
     }
 
     public function findAll($userId) {
@@ -58,11 +59,16 @@ class BoardService {
         $new_board = $this->boardMapper->insert($board);
 
         // create new labels
-        $default_labels = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
+        $default_labels = [
+            '31CC7C' => $this->l10n->t('Finished'),
+            '317CCC' => $this->l10n->t('To review'),
+            'FF7A66' => $this->l10n->t('Action needed'),
+            'F1DB50' => $this->l10n->t('Maybe')];
         $labels = [];
-        foreach ($default_labels as $color) {
+        foreach ($default_labels as $color=>$title) {
             $label = new Label();
             $label->setColor($color);
+            $label->setTitle($title);
             $label->setBoardId($new_board->getId());
             $labels[] = $this->labelMapper->insert($label);
         }

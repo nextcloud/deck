@@ -3,6 +3,7 @@ app.factory('StackService', function(ApiService, $http, $q){
         ApiService.call(this, $http, ep, $q);
     };
     StackService.prototype = angular.copy(ApiService.prototype);
+    StackService.prototype.dataFiltered = {};
     StackService.prototype.fetchAll = function(boardId) {
         var deferred = $q.defer();
         var self=this;
@@ -50,6 +51,7 @@ app.factory('StackService', function(ApiService, $http, $q){
             }
         }
     };
+    
     service = new StackService($http, 'stacks', $q);
     return service;
 });

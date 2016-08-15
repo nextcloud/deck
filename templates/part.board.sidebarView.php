@@ -11,15 +11,14 @@
 
 
 <ul class="tabHeaders">
-    <li class="tabHeader" ng-class="{'selected': (status.boardtab==0 || !status.boardtab)}" ng-click="status.boardtab=0"><a>Sharing</a></li>
-    <li class="tabHeader" ng-class="{'selected': (status.boardtab==1)}" ng-click="status.boardtab=1"><a>Labels</a></li>
-    <li class="tabHeader" ng-class="{'selected': (status.boardtab==2)}" ng-click="status.boardtab=2"><a>Settings</a></li>
+    <li class="tabHeader" ng-class="{'selected': (status.boardtab==0 || !status.boardtab)}" ng-click="status.boardtab=0"><a><?php p($l->t('Sharing')); ?></a></li>
+    <li class="tabHeader" ng-class="{'selected': (status.boardtab==1)}" ng-click="status.boardtab=1"><a><?php p($l->t('Labels')); ?></a></li>
 </ul>
 <div class="tabsContainer">
     <div id="commentsTabView" class="tab commentsTabView" ng-if="status.boardtab==0 || !status.boardtab">
 
         <ui-select ng-model="status.addSharee" theme="bootstrap" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..." on-select="addAcl(status.addSharee)">
-            <ui-select-match placeholder="Select users...">
+            <ui-select-match placeholder="<?php p($l->t('Select users...')); ?>">
                 <span><i class="fa fa-{{$item.type}}"></i> {{ $item.participant }}</span>
             </ui-select-match>
             <!-- FIXME: filter by selected or add multiple //-->
@@ -27,30 +26,38 @@
                 <span><i class="fa fa-{{sharee.type}}"></i> {{ sharee.participant }}</span>
             </ui-select-choices>
             <ui-select-no-choice>
-                Dang!  We couldn't find any choices...
+            <?php p($l->t('Dang!  We couldn\'t find any choices...')); ?>
             </ui-select-no-choice>
         </ui-select>
 
         <ul id="shareWithList" class="shareWithList">
+            <li>
+                <span class="icon-loading-small" style="display:none;"></span>
+                <div class="avatardiv" avatar ng-attr-displayname="{{ boardservice.getCurrent().owner }}" ng-if="boardservice.id"></div>
+                <span class="has-tooltip username">
+                    {{ boardservice.getCurrent().owner }}</span>
+                <span class="shareOption"><?php p($l->t('Board owner')); ?></span>
+            </li>
             <li ng-repeat="acl in boardservice.getCurrent().acl track by $index">
                 <span class="icon-loading-small" style="display:none;"></span>
-                <div class="avatar " data-username="directmenu" style="height: 32px; width: 32px; color: rgb(255, 255, 255); font-weight: normal; text-align: center; line-height: 32px; font-size: 17.6px; background-color: rgb(195, 222, 124);">D</div>
+                <div class="avatardiv" avatar displayname="{{ acl.participant }}" ng-if="acl.type=='user'"></div>
+                <div class="avatardiv" ng-if="acl.type=='group'"><i class="fa fa-{{acl.type}}"></i></div>
+
                 <span class="has-tooltip username">
-                    <i class="fa fa-{{acl.type}}"></i>
                     {{ acl.participant }}</span>
                 <span class="shareOption">
                     <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-share" ng-model="acl.permissionInvite" ng-change="updateAcl(acl)" />
-                    <label for="checkbox-permission-{{ acl.id }}-share">teilen</label>
+                    <label for="checkbox-permission-{{ acl.id }}-share"><?php p($l->t('Share')); ?></label>
                 </span>
                 <span class="shareOption">
                     <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-edit" ng-model="acl.permissionWrite" ng-change="updateAcl(acl)" />
-                    <label for="checkbox-permission-{{ acl.id }}-edit">bearbeiten</label>
+                    <label for="checkbox-permission-{{ acl.id }}-edit"><?php p($l->t('Edit')); ?></label>
                 </span>
                 <span class="shareOption">
                     <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-manage" ng-model="acl.permissionManage" ng-change="updateAcl(acl)" />
-                    <label for="checkbox-permission-{{ acl.id }}-manage">verwalten</label>
+                    <label for="checkbox-permission-{{ acl.id }}-manage"><?php p($l->t('Manage')); ?></label>
                 </span>
-                <a class="unshare" ng-click="deleteAcl(acl)"><span class="icon-loading-small hidden"></span><span class="icon icon-delete"></span><span class="hidden-visually">Freigabe aufheben</span></a>
+                <a class="unshare" ng-click="deleteAcl(acl)"><span class="icon-loading-small hidden"></span><span class="icon icon-delete"></span><span class="hidden-visually"><?php p($l->t('Discard share')); ?></span></a>
             </li>
         </ul>
 
@@ -85,16 +92,9 @@
                     </form>
                 </li>
                 <li ng-if="!status.createLabel">
-                    <a ng-click="status.createLabel=true"><span class="fa fa-plus"> </span> Create a new Label</a>
+                    <a ng-click="status.createLabel=true"><span class="fa fa-plus"> </span> <?php p($l->t('Create a new label')); ?></a>
                 </li>
             </ul>
-
-    </div>
-    <div id="commentsTabView" class="tab commentsTabView" ng-if="status.boardtab==2">
-        <p><input type="checkbox" class="checkbox" id="allowInvite" /> <label for="allowInvite">Allow members to invite other users</label></p>
-        <p><input type="checkbox" class="checkbox" id="allowInvite" /> <label for="allowInvite">Allow members to make board public</label></p>
-        <p><input type="checkbox" class="checkbox" id="allowInvite" /> <label for="allowInvite">Allow members to change labels</label></p>
-        <p><input type="checkbox" class="checkbox" id="allowInvite" /> <label for="allowInvite">Allow members to create new stacks</label></p>
 
     </div>
 </div>

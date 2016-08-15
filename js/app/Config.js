@@ -22,22 +22,21 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
             controller: 'ListController',
         })
         .state('board', {
-            url: "/board/:boardId",
+            url: "/board/:boardId/:filter",
             templateUrl: "/board.html",
             controller: 'BoardController',
+            params: {
+                filter: { value: '', dynamic: true }
+            }
         })
         .state('board.detail', {
             url: "/detail/",
+            reloadOnSearch : false,
             views: {
                 "sidebarView": {
                     templateUrl: "/board.sidebarView.html",
                 }
             },
-        })
-        .state('board.archive', {
-            url: "/archive/",
-            templateUrl: "/board.html",
-            controller: 'BoardController',
         })
         .state('board.card', {
             url: "/card/:cardId",
@@ -47,12 +46,6 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
                     controller: 'CardController'
                 }
             }
-        })
-        .state('board.settings', {
-
-        })
-        .state('board.sharing', {
-            
         });
 
 

@@ -52,22 +52,21 @@ app.config(["$provide", "$routeProvider", "$interpolateProvider", "$httpProvider
             controller: 'ListController',
         })
         .state('board', {
-            url: "/board/:boardId",
+            url: "/board/:boardId/:filter",
             templateUrl: "/board.html",
             controller: 'BoardController',
+            params: {
+                filter: { value: '', dynamic: true }
+            }
         })
         .state('board.detail', {
             url: "/detail/",
+            reloadOnSearch : false,
             views: {
                 "sidebarView": {
                     templateUrl: "/board.sidebarView.html",
                 }
             },
-        })
-        .state('board.archive', {
-            url: "/archive/",
-            templateUrl: "/board.html",
-            controller: 'BoardController',
         })
         .state('board.card', {
             url: "/card/:cardId",
@@ -77,12 +76,6 @@ app.config(["$provide", "$routeProvider", "$interpolateProvider", "$httpProvider
                     controller: 'CardController'
                 }
             }
-        })
-        .state('board.settings', {
-
-        })
-        .state('board.sharing', {
-            
         });
 
 
@@ -108,8 +101,7 @@ app.run(["$document", "$rootScope", "$transitions", function ($document, $rootSc
         $rootScope.sidebar.show = false;
     });
     $transitions.onEnter({to: 'board.archive'}, function ($state) {
-        //BoardController.update();
-        console.log($state.$current.parent)
+        //BoardController.loadArchived();
     });
 
     $('link[rel="shortcut icon"]').attr(
@@ -135,7 +127,7 @@ app.controller('AppController', ["$scope", "$location", "$http", "$route", "$log
         $scope.searchText = value;
     };
     
-    $scope.searchText = $location.search().search;
+    $rootScope.searchText = $location.search().search;
 
 }]);
 
@@ -304,7 +296,7 @@ app.controller('ArchiveController', ["$rootScope", "$scope", "$stateParams", "St
 
 }]);
 
-app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "StatusService", "BoardService", "StackService", "CardService", "LabelService", "$state", "$transitions", function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions) {
+app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "StatusService", "BoardService", "StackService", "CardService", "LabelService", "$state", "$transitions", "$filter", function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter) {
 
   $scope.sidebar = $rootScope.sidebar;
 
@@ -312,10 +304,6 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
   $scope.status={},
   $scope.newLabel={};
   $scope.status.boardtab = $stateParams.detailTab;
-  $scope.state = $state.current;
-
-
-
 
   $scope.stackservice = StackService;
   $scope.boardservice = BoardService;
@@ -324,26 +312,87 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
   $scope.labelservice = LabelService;
   $scope.defaultColors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
 
-  // fetch data
-  StackService.clear();
+  $scope.search = function (searchText) {
+    $scope.searchText = searchText;
+    $scope.refreshData();
+  };
+
+  $scope.board = BoardService.getCurrent();
+  StackService.clear(); //FIXME: Is this still needed?
   $scope.statusservice.retainWaiting();
   $scope.statusservice.retainWaiting();
 
-  BoardService.fetchOne($scope.id).then(function(data) {
-    $scope.statusservice.releaseWaiting();
-  }, function(error) {
-    $scope.statusservice.setError('Error occured', error);
+  // FIXME: ugly solution for archive
+  $scope.$state = $stateParams;
+  $scope.filter = $stateParams.filter;
+  $scope.$watch('$state.filter', function (name) {
+    console.log("statewatch" + name);
+    $scope.filter = name;
+  });
+  $scope.switchFilter = function(filter) {
+    console.log("switch filter click  " + name);
+    $state.go('.', {filter: filter}, {notify: false});
+    $scope.filter = filter;
+  };
+  $scope.$watch('filter', function(name) {
+    if(name==="archive") {
+      $scope.loadArchived();
+    } else {
+      $scope.loadDefault();
+    }
   });
 
-  console.log($scope.state);
 
+  $scope.stacksData = StackService;
+  $scope.stacks = {};
+  $scope.$watch('stacksData', function(value) {
+    $scope.refreshData();
+  }, true);
+  $scope.refreshData = function () {
+    if($scope.filter === "archive") {
+      $scope.filterData('-lastModified', $scope.searchText);
+    } else {
+      $scope.filterData('order', $scope.searchText);
+    }
+  };
+
+  // filter cards here, as ng-sortable will not work nicely with html-inline filters
+  $scope.filterData = function (order, text) {
+    if ($scope.stacks === undefined)
+      return;
+    angular.copy($scope.stackservice.data, $scope.stacks);
+    angular.forEach($scope.stacks, function (value, key) {
+      var cards = [];
+      cards = $filter('cardSearchFilter')(value.cards, text);
+      cards = $filter('orderBy')(cards, order);
+      $scope.stacks[key].cards = cards;
+    });
+  };
+
+  $scope.loadDefault = function() {
+    console.log("Load default");
     StackService.fetchAll($scope.id).then(function(data) {
       $scope.statusservice.releaseWaiting();
     }, function(error) {
       $scope.statusservice.setError('Error occured', error);
     });
+  };
 
+  $scope.loadArchived = function() {
+    console.log("Load archived!");
+    StackService.fetchArchived($scope.id).then(function(data) {
+      $scope.statusservice.releaseWaiting();
+    }, function(error) {
+      $scope.statusservice.setError('Error occured', error);
+    });
+  };
 
+  // Handle initial Loading
+  BoardService.fetchOne($scope.id).then(function(data) {
+    $scope.statusservice.releaseWaiting();
+  }, function(error) {
+    $scope.statusservice.setError('Error occured', error);
+  });
 
 
 
@@ -374,7 +423,14 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
   $scope.cardDelete = function(card) {
     CardService.delete(card.id);
     StackService.deleteCard(card);
-
+  }
+  $scope.cardArchive = function(card) {
+    CardService.archive(card);
+    StackService.deleteCard(card);
+  };
+  $scope.cardUnarchive = function(card){
+    CardService.unarchive(card);
+    StackService.deleteCard(card);
   }
 
   $scope.labelDelete = function(label) {
@@ -408,27 +464,33 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
     BoardService.updateAcl(acl);
   }
 
-
+  $scope.checkCanEdit = function() {
+    if($scope.archived) {
+      return false;
+    }
+    return true;
+  }
 
   // settings for card sorting
   $scope.sortOptions = {
     itemMoved: function (event) {
-      // TODO: Implement reodering here
+      // TODO: Implement reodering here (set new order of all cards in stack)
       event.source.itemScope.modelValue.status = event.dest.sortableScope.$parent.column;
       var order = event.dest.index;
       var card = event.source.itemScope.c;
       var newStack = event.dest.sortableScope.$parent.s.id;
       card.stackId = newStack;
       CardService.update(card);
-
       CardService.reorder(card, order).then(function(data) {
         StackService.data[newStack].addCard(card);
       });
     },
     orderChanged: function (event) {
-      // TODO: Implement ordering here
+      // TODO: Implement ordering here (set new order of all cards in stack)
+      // then maybe also call $scope.filterData('order')?
       var order = event.dest.index;
       var card = event.source.itemScope.c;
+      var stack = event.dest.sortableScope.$parent.s.id;
       CardService.reorder(card, order);
     },
     scrollableContainer: '#board',
@@ -473,11 +535,10 @@ app.controller('CardController', ["$scope", "$rootScope", "$routeParams", "$loca
 
     CardService.fetchOne($scope.cardId).then(function(data) {
         $scope.statusservice.releaseWaiting();
-
+        $scope.archived = CardService.getCurrent().archived;
         console.log(data);
     }, function(error) {
     });
-
 
     // handle rename to update information on the board as well
     $scope.renameCard = function(card) {
@@ -501,16 +562,11 @@ app.controller('CardController', ["$scope", "$rootScope", "$routeParams", "$loca
         var card = CardService.getCurrent();
         StackService.updateCard(card);
     }
+    
     $scope.labelRemove = function(element, model) {
         CardService.removeLabel($scope.cardId, element.id)
     }
 
-    /*var menu = $('#app-content');
-     menu.click(function(event){
-     $scope.location.path('/board/'+$scope.boardId);
-     $scope.$apply();
-
-     });*/
 }]);
 
 
@@ -570,14 +626,12 @@ app.filter('cardFilter', function() {
 		return result;
     };
 });
-// usage | cardFilter({ member: 'admin'})
-
 app.filter('cardSearchFilter', function() {
 	return function(cards, searchString) {
 		var _result = {};
 		var rules = {
 			title: searchString,
-			owner: searchString,
+			//owner: searchString,
 		};
 		angular.forEach(cards, function(card){
 			var _card = card;
@@ -587,7 +641,12 @@ app.filter('cardSearchFilter', function() {
 				}
 			});
 		});
-		return _result;
+
+		var arrayResult = $.map(_result, function(value, index) {
+			return [value];
+		});
+
+		return arrayResult;
 	};
 });
 app.filter('lightenColorFilter', function() {
@@ -701,17 +760,15 @@ app.directive('avatar', function() {
 	'use strict';
 	return {
 		restrict: 'A',
-		scope: false,
-		link: function(scope, elm, attr) {
-			return attr.$observe('user', function() {
-				if (attr.user) {
-					var url = OC.generateUrl('/avatar/{user}/{size}',
-						{user: attr.user, size: Math.ceil(attr.size * window.devicePixelRatio)});
-					var inner = '<img src="'+url+'" />';
-					elm.html(inner);
-					//elm.avatar(attr.user, attr.size);
+		scope: true,
+		link: function(scope, element, attr){
+			attr.$observe('displayname', function(value){
+				console.log(value);
+				if(value!==undefined) {
+					$(element).avatar(value, 32);
 				}
 			});
+
 		}
 	};
 });
@@ -1067,7 +1124,19 @@ app.factory('CardService', ["ApiService", "$http", "$q", function(ApiService, $h
     CardService.prototype.archive = function (card) {
         var deferred = $q.defer();
         var self = this;
-        $http.put(this.baseUrl + '/' + card.id + '/archive').then(function (response) {
+        $http.put(this.baseUrl + '/' + card.id + '/archive', {}).then(function (response) {
+            deferred.resolve(response.data);
+        }, function (error) {
+            deferred.reject('Error while update ' + self.endpoint);
+        });
+        return deferred.promise;
+
+    };
+
+    CardService.prototype.unarchive = function (card) {
+        var deferred = $q.defer();
+        var self = this;
+        $http.put(this.baseUrl + '/' + card.id + '/unarchive', {}).then(function (response) {
             deferred.resolve(response.data);
         }, function (error) {
             deferred.reject('Error while update ' + self.endpoint);
@@ -1092,6 +1161,7 @@ app.factory('StackService', ["ApiService", "$http", "$q", function(ApiService, $
         ApiService.call(this, $http, ep, $q);
     };
     StackService.prototype = angular.copy(ApiService.prototype);
+    StackService.prototype.dataFiltered = {};
     StackService.prototype.fetchAll = function(boardId) {
         var deferred = $q.defer();
         var self=this;
@@ -1139,6 +1209,7 @@ app.factory('StackService', ["ApiService", "$http", "$q", function(ApiService, $
             }
         }
     };
+    
     service = new StackService($http, 'stacks', $q);
     return service;
 }]);
@@ -1149,8 +1220,8 @@ app.factory('StatusService', function(){
     var StatusService = function() {
         this.active = true;
         this.icon = 'loading';
-        this.title = 'Please wait';
-        this.text = 'Es dauert noch einen kleinen Moment';
+        this.title = '';
+        this.text = '';
         this.counter = 0;
     }
 
@@ -1182,8 +1253,8 @@ app.factory('StatusService', function(){
     StatusService.prototype.retainWaiting = function() {
         this.active = true;
         this.icon = 'loading';
-        this.title = 'Please wait';
-        this.text = 'Es dauert noch einen kleinen Moment';
+        this.title = '';
+        this.text = '';
         this.counter++;
     }
 

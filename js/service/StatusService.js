@@ -3,8 +3,8 @@ app.factory('StatusService', function(){
     var StatusService = function() {
         this.active = true;
         this.icon = 'loading';
-        this.title = 'Please wait';
-        this.text = 'Es dauert noch einen kleinen Moment';
+        this.title = '';
+        this.text = '';
         this.counter = 0;
     }
 
@@ -36,8 +36,8 @@ app.factory('StatusService', function(){
     StatusService.prototype.retainWaiting = function() {
         this.active = true;
         this.icon = 'loading';
-        this.title = 'Please wait';
-        this.text = 'Es dauert noch einen kleinen Moment';
+        this.title = '';
+        this.text = '';
         this.counter++;
     }
 

@@ -14,6 +14,6 @@ app.controller('AppController', function ($scope, $location, $http, $route, $log
         $scope.searchText = value;
     };
     
-    $scope.searchText = $location.search().search;
+    $rootScope.searchText = $location.search().search;
 
 });

@@ -41,6 +41,7 @@ return [
         ['name' => 'card#rename', 'url' => '/cards/{cardId}/rename', 'verb' => 'PUT'],
         ['name' => 'card#reorder', 'url' => '/cards/{cardId}/reorder', 'verb' => 'PUT'],
         ['name' => 'card#archive', 'url' => '/cards/{cardId}/archive', 'verb' => 'PUT'],
+        ['name' => 'card#unarchive', 'url' => '/cards/{cardId}/unarchive', 'verb' => 'PUT'],
         ['name' => 'card#assignLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'POST'],
         ['name' => 'card#removeLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
         // TODO: card - assign user

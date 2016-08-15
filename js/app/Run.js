@@ -19,8 +19,7 @@ app.run(function ($document, $rootScope, $transitions) {
         $rootScope.sidebar.show = false;
     });
     $transitions.onEnter({to: 'board.archive'}, function ($state) {
-        //BoardController.update();
-        console.log($state.$current.parent)
+        //BoardController.loadArchived();
     });
 
     $('link[rel="shortcut icon"]').attr(
