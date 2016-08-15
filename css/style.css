@@ -134,7 +134,7 @@
 	margin-right:10px;
 	vertical-align: top;
   	display:inline-block !important;
-	background-color: #fafafa;
+	background-color: #f8f8f8;
 }
 .stack h2 {
 	padding: 10px;
@@ -230,7 +230,7 @@
 .card .labels {
 	position: absolute;
 	top:-5px;
-	left:5px;
+	left:10px;
 
 }
 .card .labels li {
@@ -592,7 +592,7 @@ button:hover {
 	position: static;
 	width: 100%;
 	z-index: auto;
-	padding: 16px;
+	padding: 3px;
 }
 .ui-select-match-close {
 	float:right;
@@ -618,9 +618,14 @@ button:hover {
 .ui-select-container.open {
 	border: 1px solid #aaaaaa;
 }
-.ui-select-search {
+.ui-select-container input.ui-select-search {
 	padding:0px !important;
 	margin:2px !important;
+	background-color: transparent;
+	border: none;
+}
+.ui-select-bootstrap .ui-select-choices-row>a {
+	padding: 3px !important;
 }
 .ui-select-choices-row-inner {
 margin-bottom:2px; width:100%;
