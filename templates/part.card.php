@@ -8,15 +8,15 @@
 <div id="card-header">
 	<a class="icon-close" ui-sref="board" ng-click="sidebar.show=!sidebar.show">&nbsp;</a>
 	<h2>
+		<!-- TODO: change to textarea elastic //-->
 		<form ng-submit="cardRename(cardservice.getCurrent())">
-			<!-- TODO: change to textarea elastic //-->
 			<input class="input-inline" type="text" ng-if="status.cardRename"
 				   ng-model="cardservice.getCurrent().title"
 				   ng-blur="cardRename(cardservice.getCurrent())"
 				   autofocus-on-insert required>
 		</form>
-		<div ng-click="status.cardRename=true" ng-show="!status.cardRename">{{
-			cardservice.getCurrent().title }}
+		<div ng-click="cardRenameShow()" ng-show="!status.cardRename">
+			{{ cardservice.getCurrent().title }}
 		</div>
 	</h2>
 </div>
@@ -34,7 +34,7 @@
 				   style="width:100%;" title="Choose a label"
 				   placeholder="Add a label"
 				   on-select="labelAssign($item, $model)"
-				   on-remove="labelRemove($item, $model)">
+				   on-remove="labelRemove($item, $model)" ng-disabled="archived">
 			<ui-select-match placeholder="Select labels..."><span
 					class="select-label"
 					style="background-color:#{{$item.color}}">{{$item.title}}</span>
@@ -53,7 +53,7 @@
 				   title="Choose a user to assign"
 				   placeholder="Assign users ..."
 				   on-select="userAssign($item, $model)"
-				   on-remove="userRemove($item, $model)">
+				   on-remove="userRemove($item, $model)" ng-disabled="archived">
 			<ui-select-match placeholder="Select users...">{{$item.title}}
 			</ui-select-match>
 			<ui-select-choices
@@ -71,7 +71,7 @@
 				  ng-blur="cardUpdate(cardservice.getCurrent())"
 				  ng-model="cardservice.getCurrent().description"
 				  autofocus-on-insert> </textarea>
-		<div class="container" ng-click="cardEditDescription()"
+		<div class="container" ng-click="cardEditDescriptionShow()"
 			 ng-show="!status.cardEditDescription" ng-animate>
 			<div ng-bind-html="cardservice.getCurrent().description | markdown"
 				 id="markdown"></div>

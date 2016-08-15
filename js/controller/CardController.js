@@ -19,6 +19,20 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
     }, function(error) {
     });
 
+    $scope.cardRenameShow = function() {
+        if($scope.archived)
+            return false;
+        else {
+            $scope.status.cardRename=true;
+        }
+    };
+    $scope.cardEditDescriptionShow = function() {
+        if($scope.archived)
+            return false;
+        else {
+            $scope.status.cardEditDescription=true;
+        }
+    };
     // handle rename to update information on the board as well
     $scope.cardRename = function(card) {
         CardService.rename(card).then(function(data) {
@@ -29,10 +43,6 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
     $scope.cardUpdate = function(card) {
         CardService.update(CardService.getCurrent());
         $scope.status.description = false;
-    }
-
-    $scope.cardEditDescription = function() {
-        $scope.status.cardEditDescription = true;
     }
 
     $scope.labelAssign = function(element, model) {
