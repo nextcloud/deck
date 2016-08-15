@@ -9,9 +9,9 @@
 	<h1>
 		{{ boardservice.data[id].title }}
 		<div id="board-actions">
-			<div class="board-action-button" ng-if="filter!='archive'"><a class="fa fa-archive" ng-click="switchFilter('archive')" style="opacity:0.5;"> </a></div>
-			<div class="board-action-button" ng-if="filter=='archive'"><a class="fa fa-archive" ng-click="switchFilter('')"> </a></div>
-			<div class="board-action-button"><a class="fa fa-info"	ui-sref="board.detail({ id: id })"> </a>
+			<div class="board-action-button" ng-if="filter!='archive'"><a ng-click="switchFilter('archive')" style="opacity:0.5;"><img src="/apps/deck/img/archive-white.svg" /></a></div>
+			<div class="board-action-button" ng-if="filter=='archive'"><a ng-click="switchFilter('')"><img src="/apps/deck/img/archive-white.svg" /></a></a></div>
+			<div class="board-action-button"><a ui-sref="board.detail({ id: id })"><img src="/apps/deck/img/details-white.svg" /></a>
 			</div>
 		</div>
 	</h1>
