@@ -19,7 +19,7 @@
 			<ul>
 				<li><button class="icon-share svg" title="share"></button></li>
 				<li><button class="icon-rename svg" title="rename" ng-click="b.status.edit=true"></button></li>
-				<li><button class="icon-delete svg" title="delete" ng-click="deleteBoard(b)"></button></li>
+				<li><button class="icon-delete svg" title="delete" ng-click="boardDelete(b)"></button></li>
 			</ul>
 		</div>
 		<div class="app-navigation-entry-deleted" ng-show="false">
@@ -28,7 +28,7 @@
 		</div>
 
 		<div class="app-navigation-entry-edit" ng-show="b.status.edit">
-			<form ng-disabled="isAddingList" class="ng-pristine ng-valid"  ng-submit="updateBoard(b)">
+			<form ng-disabled="isAddingList" class="ng-pristine ng-valid"  ng-submit="boardUpdate(b)">
 				<input id="newTitle" class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title">
 				<input type="submit" value="" class="action icon-checkmark svg">
 				<div class="colorselect">
@@ -44,12 +44,11 @@
 			<?php p($l->t('Create a new board')); ?>
 		</a>
 		<div class="app-navigation-entry-edit" ng-if="status.addBoard">
-			<form ng-disabled="isAddingList" class="ng-pristine ng-valid"  ng-submit="createBoard()">
+			<form ng-disabled="isAddingList" class="ng-pristine ng-valid"  ng-submit="boardCreate()">
 				<input id="newTitle" class="edit ng-valid ng-empty" type="text" placeholder="<?php p($l->t('Board title')); ?>" autofocus-on-insert ng-model="newBoard.title">
 				<input type="submit" value="" class="action icon-checkmark svg">
 				<div class="colorselect">
-					<div class="color" ng-repeat="c in colors" style="background-color:#{{ c }};" ng-click="selectColor(c)" n:w
-          g-class="{'selected': (c == newBoard.color) }"><br /></div>
+					<div class="color" ng-repeat="c in colors" style="background-color:#{{ c }};" ng-click="selectColor(c)" ng-class="{'selected': (c == newBoard.color) }"><br /></div>
 				</div>
 			</form>
 		</div>

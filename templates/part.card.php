@@ -8,14 +8,14 @@
 <div id="card-header">
 	<a class="icon-close" ui-sref="board" ng-click="sidebar.show=!sidebar.show">&nbsp;</a>
 	<h2>
-		<form ng-submit="renameCard(cardservice.getCurrent())">
+		<form ng-submit="cardRename(cardservice.getCurrent())">
 			<!-- TODO: change to textarea elastic //-->
-			<input class="input-inline" type="text" ng-if="status.renameCard"
+			<input class="input-inline" type="text" ng-if="status.cardRename"
 				   ng-model="cardservice.getCurrent().title"
-				   ng-blur="renameCard(cardservice.getCurrent())"
+				   ng-blur="cardRename(cardservice.getCurrent())"
 				   autofocus-on-insert required>
 		</form>
-		<div ng-click="status.renameCard=true" ng-show="!status.renameCard">{{
+		<div ng-click="status.cardRename=true" ng-show="!status.cardRename">{{
 			cardservice.getCurrent().title }}
 		</div>
 	</h2>
@@ -66,13 +66,13 @@
 
 	<div id="card-description">
 		<h3>Description</h3>
-		<textarea elastic ng-if="status.description"
+		<textarea elastic ng-if="status.cardEditDescription"
 				  placeholder="Enter your description here ..."
-				  ng-blur="updateCard(cardservice.getCurrent())"
+				  ng-blur="cardUpdate(cardservice.getCurrent())"
 				  ng-model="cardservice.getCurrent().description"
 				  autofocus-on-insert> </textarea>
-		<div class="container" ng-click="editDescription()"
-			 ng-show="!status.description" ng-animate>
+		<div class="container" ng-click="cardEditDescription()"
+			 ng-show="!status.cardEditDescription" ng-animate>
 			<div ng-bind-html="cardservice.getCurrent().description | markdown"
 				 id="markdown"></div>
 			<div class="placeholder"

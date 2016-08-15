@@ -57,6 +57,12 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
       $scope.filterData('order', $scope.searchText);
     }
   };
+  $scope.checkCanEdit = function() {
+    if($scope.archived) {
+      return false;
+    }
+    return true;
+  }
 
   // filter cards here, as ng-sortable will not work nicely with html-inline filters
   $scope.filterData = function (order, text) {
@@ -154,24 +160,19 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
     LabelService.update(label);
   }
 
-  $scope.addAcl = function(sharee) {
+  $scope.aclAdd = function(sharee) {
     sharee.boardId = $scope.id;
     BoardService.addAcl(sharee);
     $scope.status.addSharee = null;
   }
-  $scope.deleteAcl = function(acl) {
+  $scope.aclDelete = function(acl) {
     BoardService.deleteAcl(acl.id);
   }
-  $scope.updateAcl = function(acl) {
+  $scope.aclUpdate = function(acl) {
     BoardService.updateAcl(acl);
   }
 
-  $scope.checkCanEdit = function() {
-    if($scope.archived) {
-      return false;
-    }
-    return true;
-  }
+
 
   // settings for card sorting
   $scope.sortOptions = {
@@ -188,7 +189,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
       });
     },
     orderChanged: function (event) {
-      // TODO: Implement ordering here (set new order of all cards in stack)
+      // TODO: Implement reordering here (set new order of all cards in stack)
       // then maybe also call $scope.filterData('order')?
       var order = event.dest.index;
       var card = event.source.itemScope.c;

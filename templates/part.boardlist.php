@@ -33,7 +33,7 @@
 					<?php p($l->t('Create new board')); ?>
 				</a>
 				<form ng-show="status.addBoard" ng-disabled="isAddingList"
-					  class="ng-pristine ng-valid" ng-submit="createBoard()">
+					  class="ng-pristine ng-valid" ng-submit="boardCreate()">
 					<input id="newTitle" class="edit ng-valid ng-empty"
 						   type="text" placeholder="<?php p($l->t('New board title')); ?>"
 						   autofocus-on-insert ng-model="newBoard.title">

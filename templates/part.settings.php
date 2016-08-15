@@ -4,8 +4,8 @@
 				data-apps-slide-toggle="#app-settings-content"
 		></button>
 	</div>
-	<div id="app-settings-content">
-		<?php p($l->t('We will provide some options here!')); ?>
+	<!--<div id="app-settings-content">
+		<?php p($l->t('There will be some options here!')); ?>
 		<br />
-	</div>
+	</div>//-->
 </div>

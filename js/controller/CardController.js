@@ -20,20 +20,19 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
     });
 
     // handle rename to update information on the board as well
-    $scope.renameCard = function(card) {
+    $scope.cardRename = function(card) {
         CardService.rename(card).then(function(data) {
             StackService.updateCard(card);
             $scope.status.renameCard = false;
         });
     };
-
-    $scope.updateCard = function(card) {
+    $scope.cardUpdate = function(card) {
         CardService.update(CardService.getCurrent());
         $scope.status.description = false;
     }
 
-    $scope.editDescription = function() {
-        $scope.status.description = true;
+    $scope.cardEditDescription = function() {
+        $scope.status.cardEditDescription = true;
     }
 
     $scope.labelAssign = function(element, model) {

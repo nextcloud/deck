@@ -17,7 +17,7 @@
 <div class="tabsContainer">
     <div id="commentsTabView" class="tab commentsTabView" ng-if="status.boardtab==0 || !status.boardtab">
 
-        <ui-select ng-model="status.addSharee" theme="bootstrap" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..." on-select="addAcl(status.addSharee)">
+        <ui-select ng-model="status.addSharee" theme="bootstrap" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..." on-select="aclAdd(status.addSharee)">
             <ui-select-match placeholder="<?php p($l->t('Select users...')); ?>">
                 <span><i class="fa fa-{{$item.type}}"></i> {{ $item.participant }}</span>
             </ui-select-match>
@@ -46,18 +46,18 @@
                 <span class="has-tooltip username">
                     {{ acl.participant }}</span>
                 <span class="shareOption">
-                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-share" ng-model="acl.permissionInvite" ng-change="updateAcl(acl)" />
+                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-share" ng-model="acl.permissionInvite" ng-change="aclUpdate(acl)" />
                     <label for="checkbox-permission-{{ acl.id }}-share"><?php p($l->t('Share')); ?></label>
                 </span>
                 <span class="shareOption">
-                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-edit" ng-model="acl.permissionWrite" ng-change="updateAcl(acl)" />
+                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-edit" ng-model="acl.permissionWrite" ng-change="aclUpdate(acl)" />
                     <label for="checkbox-permission-{{ acl.id }}-edit"><?php p($l->t('Edit')); ?></label>
                 </span>
                 <span class="shareOption">
-                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-manage" ng-model="acl.permissionManage" ng-change="updateAcl(acl)" />
+                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-manage" ng-model="acl.permissionManage" ng-change="aclUpdate(acl)" />
                     <label for="checkbox-permission-{{ acl.id }}-manage"><?php p($l->t('Manage')); ?></label>
                 </span>
-                <a class="unshare" ng-click="deleteAcl(acl)"><span class="icon-loading-small hidden"></span><span class="icon icon-delete"></span><span class="hidden-visually"><?php p($l->t('Discard share')); ?></span></a>
+                <a class="unshare" ng-click="aclDelete(acl)"><span class="icon-loading-small hidden"></span><span class="icon icon-delete"></span><span class="hidden-visually"><?php p($l->t('Discard share')); ?></span></a>
             </li>
         </ul>
 

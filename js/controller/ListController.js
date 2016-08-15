@@ -13,7 +13,7 @@ app.controller('ListController', function ($scope, $location, BoardService) {
         $scope.newBoard.color = color;
     };
 
-    $scope.createBoard = function () {
+    $scope.boardCreate = function () {
         BoardService.create($scope.newBoard)
             .then(function (response) {
                 $scope.newBoard = {};
@@ -22,11 +22,11 @@ app.controller('ListController', function ($scope, $location, BoardService) {
                 $scope.status.createBoard = 'Unable to insert board: ' + error.message;
             });
     };
-    $scope.updateBoard = function(board) {
+    $scope.boardUpdate = function(board) {
         BoardService.update(board);
         board.status.edit = false;
     };
-    $scope.deleteBoard = function(board) {
+    $scope.boardDelete = function(board) {
         // TODO: Ask for confirmation
         //if (confirm('Are you sure you want to delete this?')) {
             BoardService.delete(board.id);
