@@ -6,6 +6,14 @@
 .app-navigation-entry-utils-menu-button {
 	display: block !important;
 }
+.app-navigation-entry-utils-menu-share {
+	display: block !important;
+	text-align:right;
+	padding-top:3px;
+	padding-right:5px;
+	opacity:0.4;
+}
+
 #app-navigation .app-navigation-entry-edit {
 	height: auto;
 }

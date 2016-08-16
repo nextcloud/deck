@@ -24,7 +24,8 @@ class BoardService {
     private $l10n;
     private $timeFactory;
 
-    public function __construct(BoardMapper $boardMapper, ILogger $logger,
+    public function __construct(BoardMapper $boardMapper,
+                                ILogger $logger,
                                 IL10N $l10n,
                                 ITimeFactory $timeFactory,
                                 LabelMapper $labelMapper,
@@ -36,8 +37,10 @@ class BoardService {
         $this->l10n = $l10n;
     }
 
-    public function findAll($userId) {
-        return $this->boardMapper->findAll($userId);
+    public function findAll($userInfo) {
+        $userBoards = $this->boardMapper->findAllByUser($userInfo['user']);
+        $groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups']);
+        return array_merge($userBoards, $groupBoards);
     }
 
     public function find($userId, $boardId) {

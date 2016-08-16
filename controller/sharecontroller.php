@@ -12,14 +12,17 @@ class ShareController extends Controller {
 
     protected $userManager;
     protected $groupManager;
+    private $userId;
     public function __construct($appName,
                                 IRequest $request,
                                 IUserManager $userManager,
-                                IGroupManager $groupManager
+                                IGroupManager $groupManager,
+                                $userId
     ){
         parent::__construct($appName, $request);
         $this->userManager = $userManager;
         $this->groupManager = $groupManager;
+        $this->userId = $userId;
 
     }
     /**
@@ -41,9 +44,11 @@ class ShareController extends Controller {
             $result[] = $acl;
         }
         foreach ($this->userManager->searchDisplayName($search, $limit, $offset) as $idx => $user) {
+            if($user->getUID() === $this->userId)
+                continue;
             $acl = new Acl();
             $acl->setType('user');
-            $acl->setParticipant($user->getDisplayName());
+            $acl->setParticipant($user->getUID());
             $acl->setPermissionWrite(true);
             $acl->setPermissionInvite(true);
             $acl->setPermissionManage(true);

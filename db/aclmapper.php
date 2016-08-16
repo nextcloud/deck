@@ -14,8 +14,8 @@ class AclMapper extends DeckMapper {
     }
 
     public function findAll($boardId, $limit=null, $offset=null) {
-        $sql = 'SELECT * FROM `*PREFIX*deck_board_acl` WHERE `board_id` = ?';
-        return $this->findEntities($sql, [$boardId], $limit, $offset);
+        $sql = 'SELECT id, board_id, type, participant, permission_write, permission_invite, permission_manage, 0 as owner FROM `*PREFIX*deck_board_acl` WHERE `board_id` = ? UNION SELECT 0, id, \'user\', owner, 1, 1, 1, 1 FROM `*PREFIX*deck_boards` WHERE `id` = ? ';
+        return $this->findEntities($sql, [$boardId, $boardId], $limit, $offset);
     }
     
 }

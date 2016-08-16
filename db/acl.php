@@ -13,6 +13,7 @@ class Acl extends Entity implements JsonSerializable {
     protected $permissionWrite;
     protected $permissionInvite;
     protected $permissionManage;
+    protected $owner;
 
     public function __construct() {
         $this->addType('id','integer');
@@ -20,6 +21,8 @@ class Acl extends Entity implements JsonSerializable {
         $this->addType('permissionWrite', 'boolean');
         $this->addType('permissionInvite', 'boolean');
         $this->addType('permissionManage', 'boolean');
+        $this->addType('owner', 'boolean');
+        $this->addRelation('owner');
     }
     public function jsonSerialize() {
         return [
@@ -30,6 +33,7 @@ class Acl extends Entity implements JsonSerializable {
             'permissionWrite' => $this->permissionWrite,
             'permissionInvite' => $this->permissionInvite,
             'permissionManage' => $this->permissionManage,
+            'owner' => $this->owner
         ];
     }
 }

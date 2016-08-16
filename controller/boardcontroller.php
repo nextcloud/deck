@@ -8,18 +8,34 @@ use OCP\IRequest;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IUserManager;
+use OCP\IGroupManager;
 
 class BoardController extends Controller {
     private $userId;
     private $boardService;
-
+    protected $userManager;
+    protected $groupManager;
     public function __construct($appName,
                                 IRequest $request,
+                                IUserManager $userManager,
+                                IGroupManager $groupManager,
                                 BoardService $cardService,
                                 $userId) {
         parent::__construct($appName, $request);
         $this->userId = $userId;
+        $this->userManager = $userManager;
+        $this->groupManager = $groupManager;
         $this->boardService = $cardService;
+        $this->userInfo = $this->getBoardPrequisites();
+    }
+
+    private function getBoardPrequisites() {
+        $groups = $this->groupManager->getUserGroupIds($this->userManager->get($this->userId));
+        return [
+            'user' => $this->userId,
+            'groups' => $groups
+        ];
     }
 
     /**
@@ -27,7 +43,7 @@ class BoardController extends Controller {
      */
     public function index() {
 
-        return $this->boardService->findAll($this->userId);
+        return $this->boardService->findAll($this->userInfo);
     }
 
     /**

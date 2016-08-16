@@ -13,15 +13,19 @@ class Board extends \OCA\Deck\Db\Entity implements JsonSerializable {
     protected $archived;
     protected $labels;
     protected $acl;
+    protected $shared;
 
     public function __construct() {
         $this->addType('id','integer');
+        $this->addType('shared','integer');
         $this->addRelation('labels');
         $this->addRelation('acl');
+        $this->addRelation('shared');
+        $this->shared = -1;
     }
 
     public function jsonSerialize() {
-        return [
+        $result = [
             'id' => $this->id,
             'title' => $this->title,
             'owner' => $this->owner,
@@ -29,6 +33,10 @@ class Board extends \OCA\Deck\Db\Entity implements JsonSerializable {
             'labels' => $this->labels,
             'acl' => $this->acl,
         ];
+        if($this->shared!==-1) {
+            $result['shared'] = $this->shared;
+        }
+        return $result;
     }
 
     public function setLabels($labels) {
