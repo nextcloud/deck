@@ -58,8 +58,6 @@ return [
         ['name' => 'public#board', 'url' => '/public/board/ajax/:hash', 'verb' => 'GET'],
 
         // TODO: API for external access
-        //['name' => 'api#index', 'url' => '/api/', 'verb' => 'GET'],
-        // ['name' => 'note_api#preflighted_cors', 'url' => '/api/v1/{path}/', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']]
 
     ]
 ];

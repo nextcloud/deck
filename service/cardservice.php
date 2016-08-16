@@ -2,6 +2,7 @@
 
 namespace OCA\Deck\Service;
 
+use OC\OCS\Exception;
 use OCP\ILogger;
 use OCP\IL10N;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -41,6 +42,9 @@ class CardService  {
 
     public function update($id, $title, $stackId, $type, $order, $description, $owner) {
         $card = $this->cardMapper->find($id);
+        if($card->getArchived()) {
+            throw new CardArchivedException();
+        }
         $card->setTitle($title);
         $card->setStackId($stackId);
         $card->setType($type);
@@ -52,6 +56,9 @@ class CardService  {
 
     public function rename($id, $title) {
         $card = $this->cardMapper->find($id);
+        if($card->getArchived()) {
+            throw new CardArchivedException();
+        }
         $card->setTitle($title);
         return $this->cardMapper->update($card);
     }
@@ -59,6 +66,9 @@ class CardService  {
         $cards = $this->cardMapper->findAll($stackId);
         $i = 0;
         foreach ($cards as $card) {
+            if($card->getArchived()) {
+                throw new CardArchivedException();
+            }
             if($card->id === $id) {
                 $card->setOrder($order);
             }
@@ -90,10 +100,18 @@ class CardService  {
     }
 
     public function assignLabel($userId, $cardId, $labelId) {
+        $card = $this->cardMapper->find($cardId);
+        if($card->getArchived()) {
+            throw new CardArchivedException();
+        }
         $this->cardMapper->assignLabel($cardId, $labelId);
     }
 
     public function removeLabel($userId, $cardId, $labelId) {
+        $card = $this->cardMapper->find($cardId);
+        if($card->getArchived()) {
+            throw new CardArchivedException();
+        }
         $this->cardMapper->removeLabel($cardId, $labelId);
     }
 }
