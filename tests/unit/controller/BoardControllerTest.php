@@ -21,35 +21,37 @@
  *  
  */
 
-// db/author.php
-namespace OCA\Deck\Db;
+namespace OCA\Deck\Controller;
 
-use JsonSerializable;
+use PHPUnit_Framework_TestCase;
+
+class BoardControllerTest extends \PHPUnit_Framework_TestCase {
+
+	private $controller;
+	private $request;
+	private $l10n;
+	private $userId = 'john';
+
+	public function setUp() {
+		$this->l10n = $this->request = $this->getMockBuilder(
+			'\OCP\IL10n')
+			->disableOriginalConstructor()
+			->getMock();
+		$this->request = $this->getMockBuilder(
+			'\OCP\IRequest')
+			->disableOriginalConstructor()
+			->getMock();
+
+		$this->controller = new PageController(
+			'deck', $this->request, $this->l10n, $this->userId
+		);
+	}
 
 
-class Stack extends Entity implements JsonSerializable {
+	public function testIndex() {
+		$response = $this->controller->index();
+		$this->assertEquals('main', $response->getTemplateName());
+	}
 
-    public $id;
-    protected $title;
-    protected $boardId;
-    protected $cards = array();
-    protected $order;
-    public function __construct() {
-        $this->addType('id','integer');
-        $this->addType('boardId','integer');
-        $this->addType('order','integer');
 
-    }
-    public function setCards($cards) {
-        $this->cards = $cards;
-    }
-    public function jsonSerialize() {
-        return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'order' => $this->order,
-            'boardId' => $this->boardId,
-            'cards' => $this->cards,
-        ];
-    }
 }

@@ -21,35 +21,40 @@
  *  
  */
 
-// db/author.php
 namespace OCA\Deck\Db;
 
-use JsonSerializable;
+class LabelTest extends \PHPUnit_Framework_TestCase {
+	private function createLabel() {
+		$label = new Label();
+		$label->setId(1);
+		$label->setTitle("My Label");
+		$label->setColor("000000");
+		return $label;
+	}
+	public function testJsonSerializeBoard() {
+		$label = $this->createLabel();
+		$label->setBoardId(123);
+		$this->assertEquals([
+				'id' => 1,
+				'title' => 'My Label',
+				'boardId' => 123,
+				'cardId' => null,
+				'color' => '000000'
+			], $label->jsonSerialize());
+
+	}
+	public function testJsonSerializeCard() {
+		$label = $this->createLabel();
+		$label->setCardId(123);
+		$this->assertEquals([
+			'id' => 1,
+			'title' => 'My Label',
+			'boardId' => null,
+			'cardId' => 123,
+			'color' => '000000'
+		], $label->jsonSerialize());
+
+	}
 
 
-class Stack extends Entity implements JsonSerializable {
-
-    public $id;
-    protected $title;
-    protected $boardId;
-    protected $cards = array();
-    protected $order;
-    public function __construct() {
-        $this->addType('id','integer');
-        $this->addType('boardId','integer');
-        $this->addType('order','integer');
-
-    }
-    public function setCards($cards) {
-        $this->cards = $cards;
-    }
-    public function jsonSerialize() {
-        return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'order' => $this->order,
-            'boardId' => $this->boardId,
-            'cards' => $this->cards,
-        ];
-    }
 }
