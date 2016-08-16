@@ -45,16 +45,5 @@ class Application extends App {
 		$container->registerMiddleware('SharingMiddleware');
 
 
-		$container->query('OCP\INavigationManager')->add(function () use ($container) {
-			$urlGenerator = $container->query('OCP\IURLGenerator');
-			$l10n = $container->query('OCP\IL10N');
-			return [
-				'id' => 'deck',
-				'order' => 10,
-				'href' => $urlGenerator->linkToRoute('deck.page.index'),
-				'icon' => $urlGenerator->imagePath('deck', 'app.svg'),
-				'name' => $l10n->t('Deck'),
-			];
-		});
 	}
 }
