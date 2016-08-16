@@ -59,11 +59,11 @@ class CardService  {
         $cards = $this->cardMapper->findAll($stackId);
         $i = 0;
         foreach ($cards as $card) {
-            if($card->id == $id) {
+            if($card->id === $id) {
                 $card->setOrder($order);
             }
 
-            if($i == $order)
+            if($i === $order)
                 $i++;
 
             if($card->id !== $id) {
