@@ -508,7 +508,7 @@ app.filter('orderObjectBy', function(){
 		array.sort(function(a, b){
 			a = parseInt(a[attribute]);
 			b = parseInt(b[attribute]);
-			return a - b;
+			return a < b;
 		});
 		return array;
 	}
@@ -733,7 +733,12 @@ app.factory('ApiService', ["$http", "$q", function($http, $q){
         var self = this;
         $http.get(this.baseUrl + '/' + id).then(function (response) {
             data = response.data;
-            self.data[data.id] = response.data;
+            if(self.data[data.id]===undefined) {
+                self.data[data.id] = response.data;
+            }
+            $.each(response.data, function(key, value) {
+                self.data[data.id][key] = value;
+            });
             deferred.resolve(response.data);
 
         }, function (error) {
@@ -814,6 +819,12 @@ app.factory('ApiService', ["$http", "$q", function($http, $q){
     ApiService.prototype.getCurrent = function () {
         return this.data[this.id];
     }
+
+    ApiService.prototype.getData = function() {
+        return $.map(this.data, function(value, index) {
+            return [value];
+        });
+    };
 
     ApiService.prototype.getAll = function () {
         return this.data;

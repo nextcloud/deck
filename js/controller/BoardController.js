@@ -158,6 +158,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
   $scope.labelUpdate = function(label) {
     label.edit = false;
     LabelService.update(label);
+    console.log(label);
   }
 
   $scope.aclAdd = function(sharee) {

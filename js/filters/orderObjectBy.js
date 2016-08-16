@@ -9,7 +9,7 @@ app.filter('orderObjectBy', function(){
 		array.sort(function(a, b){
 			a = parseInt(a[attribute]);
 			b = parseInt(b[attribute]);
-			return a - b;
+			return a < b;
 		});
 		return array;
 	}

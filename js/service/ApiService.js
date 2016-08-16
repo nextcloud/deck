@@ -37,7 +37,12 @@ app.factory('ApiService', function($http, $q){
         var self = this;
         $http.get(this.baseUrl + '/' + id).then(function (response) {
             data = response.data;
-            self.data[data.id] = response.data;
+            if(self.data[data.id]===undefined) {
+                self.data[data.id] = response.data;
+            }
+            $.each(response.data, function(key, value) {
+                self.data[data.id][key] = value;
+            });
             deferred.resolve(response.data);
 
         }, function (error) {
@@ -118,6 +123,12 @@ app.factory('ApiService', function($http, $q){
     ApiService.prototype.getCurrent = function () {
         return this.data[this.id];
     }
+
+    ApiService.prototype.getData = function() {
+        return $.map(this.data, function(value, index) {
+            return [value];
+        });
+    };
 
     ApiService.prototype.getAll = function () {
         return this.data;
