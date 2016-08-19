@@ -39,7 +39,7 @@ class Application extends App {
 				$server->getUserManager(),
 				$server->getGroupManager(),
 				$server->getDatabaseConnection(),
-				$server->getUserSession()->getUser()->getUID()
+				$server->getUserSession()->getUser()->getUID() // FIXME: ERROR when logged out!!!
 			);
 		});
 		$container->registerMiddleware('SharingMiddleware');
