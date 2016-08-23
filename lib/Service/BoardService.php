@@ -66,13 +66,7 @@ class BoardService {
 
     public function find($userId, $boardId) {
         $board = $this->boardMapper->find($boardId);
-        if ($board->getOwner() === $userId)
-            return $board;
-        else
-            return null;
-
-        // FIXME: [share] Check for user permissions
-
+        return $board;
     }
 
     public function create($title, $userId, $color) {

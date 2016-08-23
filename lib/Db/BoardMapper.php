@@ -28,7 +28,7 @@ use OCP\AppFramework\Db\Mapper;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 
-class BoardMapper extends Mapper {
+class BoardMapper extends Mapper implements IPermissionMapper {
 
     private $labelMapper;
     private $_relationMappers = array();
@@ -135,5 +135,15 @@ class BoardMapper extends Mapper {
         }
 
     }
+
+    public function isOwner($userId, $boardId) {
+        $board = $this->find($boardId);
+        return ($board->getOwner() === $userId);
+    }
+
+    public function findBoardId($id) {
+        return $id;
+    }
+
 
 }

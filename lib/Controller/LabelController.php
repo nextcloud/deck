@@ -44,18 +44,21 @@ class LabelController extends Controller {
 
     /**
      * @NoAdminRequired
+     * @RequireManagePermission
      */
     public function create($title, $color, $boardId) {
         return $this->labelService->create($title, $this->userId, $color, $boardId);
     }
     /**
      * @NoAdminRequired
+     * @RequireManagePermission
      */
     public function update($id, $title, $color) {
         return $this->labelService->update($id, $title, $this->userId, $color);
     }
     /**
      * @NoAdminRequired
+     * @RequireManagePermission
      */
     public function delete($labelId) {
         return $this->labelService->delete($this->userId, $labelId);

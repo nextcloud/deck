@@ -41,42 +41,42 @@ class CardController extends Controller {
     }
     /**
      * @NoAdminRequired
-     */
-    public function index($cardId) {
-            return $this->cardService->findAll($boardId);
-    }
-    /**
-     * @NoAdminRequired
+     * @RequireReadPermission
      */
     public function read($cardId) {
         return $this->cardService->find($this->userId, $cardId);
     }
     /**
      * @NoAdminRequired
+     * @RequireEditPermission
      */
     public function reorder($cardId, $stackId, $order) {
         return $this->cardService->reorder($cardId, $stackId, $order);
     }
     /**
      * @NoAdminRequired
+     * @RequireEditPermission
      */
     public function rename($cardId, $title) {
         return $this->cardService->rename($cardId, $title);
     }
-        /**
+    /**
      * @NoAdminRequired
+     * @RequireEditPermission
      */
     public function create($title, $stackId, $type, $order=999) {
         return $this->cardService->create($title, $stackId, $type, $order, $this->userId);
     }
     /**
      * @NoAdminRequired
+     * @RequireEditPermission
      */
     public function update($id, $title, $stackId, $type, $order, $description) {
             return $this->cardService->update($id, $title, $stackId, $type, $order, $description, $this->userId);
     }
     /**
      * @NoAdminRequired
+     * @RequireEditPermission
      */
     public function delete($cardId) {
         return $this->cardService->delete($this->userId, $cardId);
@@ -84,24 +84,28 @@ class CardController extends Controller {
 
     /**
      * @NoAdminRequired
+     * @RequireEditPermission
      */
     public function archive($cardId) {
         return $this->cardService->archive($cardId);
     }
     /**
      * @NoAdminRequired
+     * @RequireEditPermission
      */
     public function unarchive($cardId) {
         return $this->cardService->unarchive($cardId);
     }
     /**
      * @NoAdminRequired
+     * @RequireEditPermission
      */
     public function assignLabel($cardId, $labelId) {
         return $this->cardService->assignLabel($this->userId, $cardId, $labelId);
     }
     /**
      * @NoAdminRequired
+     * @RequireEditPermission
      */
     public function removeLabel($cardId, $labelId) {
         return $this->cardService->removeLabel($this->userId, $cardId, $labelId);

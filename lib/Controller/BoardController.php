@@ -63,16 +63,14 @@ class BoardController extends Controller {
      * @NoAdminRequired
      */
     public function index() {
-
         return $this->boardService->findAll($this->userInfo);
     }
 
     /**
      * @NoAdminRequired
+     * @RequireReadPermission
      */
     public function read($boardId) {
-        // FIXME: Remove as this is just for testing if loading animation works out nicely
-        //usleep(2000);
         return $this->boardService->find($this->userId, $boardId);
     }
 
@@ -85,6 +83,7 @@ class BoardController extends Controller {
 
     /**
      * @NoAdminRequired
+     * @RequireManagePermission
      */
     public function update($id, $title, $color) {
         return $this->boardService->update($id, $title, $this->userId, $color);
@@ -92,21 +91,40 @@ class BoardController extends Controller {
 
     /**
      * @NoAdminRequired
+     * @RequireManagePermission
      */
     public function delete($boardId) {
         return $this->boardService->delete($this->userId, $boardId);
     }
 
+    /**
+     * @NoAdminRequired
+     * @RequireReadPermission
+     */
     public function labels($boardId) {
         return $this->boardService->labels($this->boardId);
     }
 
+    /**
+     * @NoAdminRequired
+     * @RequireManagePermission
+     */
     public function addAcl($boardId, $type, $participant, $write, $invite, $manage) {
         return $this->boardService->addAcl($boardId, $type, $participant, $write, $invite, $manage);
     }
+
+    /**
+     * @NoAdminRequired
+     * @RequireManagePermission
+     */
     public function updateAcl($id, $permissionWrite, $permissionInvite, $permissionManage) {
         return $this->boardService->updateAcl($id, $permissionWrite, $permissionInvite, $permissionManage);
     }
+    
+    /**
+     * @NoAdminRequired
+     * @RequireManagePermission
+     */
     public function deleteAcl($id) {
         return $this->boardService->deleteAcl($id);
     }

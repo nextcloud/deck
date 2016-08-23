@@ -862,3 +862,9 @@ button:hover {
 .icon-archive {
 	background-image: url('../img/archive.svg');
 }
+.icon-archive-white {
+	background-image: url('../img/archive-white.svg');
+}
+.icon-details {
+	background-image: url('../img/details-white.svg');
+}

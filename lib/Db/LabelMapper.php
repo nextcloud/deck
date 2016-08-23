@@ -28,7 +28,7 @@ use OCP\IDb;
 use OCP\AppFramework\Db\Mapper;
 
 
-class LabelMapper extends DeckMapper {
+class LabelMapper extends DeckMapper implements IPermissionMapper {
 
     public function __construct(IDb $db) {
         parent::__construct($db, 'deck_labels', '\OCA\Deck\Db\Label');
@@ -65,5 +65,17 @@ class LabelMapper extends DeckMapper {
             $result[$label->getCardId()][] = $label;
         }
         return $result;
+    }
+
+    public function isOwner($userId, $labelId) {
+        $sql = 'SELECT * FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_labels` WHERE id = ?)';
+        $stmt = $this->execute($sql, [$labelId]);
+        $row = $stmt->fetch();
+        return ($row['owner'] === $userId);
+    }
+
+    public function findBoardId($labelId) {
+        $entity = $this->find($labelId);
+        return $entity->getBoardId();
     }
 }

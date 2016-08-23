@@ -43,36 +43,42 @@ class StackController extends Controller {
     }
     /**
      * @NoAdminRequired
+     * @RequireReadPermission
      */
     public function index($boardId) {
             return $this->stackService->findAll($boardId);
     }
     /**
      * @NoAdminRequired
+     * @RequireReadPermission
      */
     public function archived($boardId) {
             return $this->stackService->findAllArchived($boardId);
     }
     /**
      * @NoAdminRequired
+     * @RequireReadPermission
      */
     public function read($boardId) {
         return $this->stackService->find($this->userId, $boardId);
     }
     /**
      * @NoAdminRequired
+     * @RequireManagePermission
      */
     public function create($title, $boardId, $order=999) {
         return $this->stackService->create($title, $boardId, $order);
     }
     /**
      * @NoAdminRequired
+     * @RequireManagePermission
      */
     public function update($id, $title, $boardId, $order) {
         return $this->stackService->update($id, $title, $boardId, $order);
     }
     /**
      * @NoAdminRequired
+     * @RequireManagePermission
      */
     public function delete($stackId) {
         return $this->stackService->delete($this->userId, $stackId);

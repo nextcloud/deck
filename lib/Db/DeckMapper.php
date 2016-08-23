@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Db;
 
-use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\Mapper;
 
 abstract class DeckMapper extends Mapper {

@@ -29,7 +29,7 @@ use OCP\AppFramework\Db\Mapper;
 
 
 
-class CardMapper extends Mapper {
+class CardMapper extends Mapper implements IPermissionMapper {
 
     private $labelMapper;
 
@@ -79,7 +79,6 @@ class CardMapper extends Mapper {
         return $entities;
     }
 
-    // TODO: test
     public function findAllArchived($stackId, $limit=null, $offset=null) {
         $sql = 'SELECT * FROM `*PREFIX*deck_cards` WHERE `stack_id`=? AND archived ORDER BY `last_modified`';
         $entities = $this->findEntities($sql, [$stackId], $limit, $offset);
@@ -105,6 +104,20 @@ class CardMapper extends Mapper {
         $stmt->bindParam(1, $card,  \PDO::PARAM_INT);
         $stmt->bindParam(2, $label,  \PDO::PARAM_INT);
         $stmt->execute();
+    }
+
+    public function isOwner($userId, $cardId) {
+        $sql = 'SELECT * FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_stacks` WHERE id IN (SELECT stack_id FROM `*PREFIX*deck_cards` WHERE id = ?))';
+        $stmt = $this->execute($sql, [$cardId]);
+        $row = $stmt->fetch();
+        return ($row['owner'] === $userId);
+    }
+
+    public function findBoardId($cardId) {
+        $sql = 'SELECT * FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_stacks` WHERE id IN (SELECT stack_id FROM `*PREFIX*deck_cards` WHERE id = ?))';
+        $stmt = $this->execute($sql, [$cardId]);
+        $row = $stmt->fetch();
+        return $row['id'];
     }
 
 

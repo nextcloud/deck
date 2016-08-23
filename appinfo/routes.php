@@ -56,9 +56,6 @@ return [
         ['name' => 'card#unarchive', 'url' => '/cards/{cardId}/unarchive', 'verb' => 'PUT'],
         ['name' => 'card#assignLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'POST'],
         ['name' => 'card#removeLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
-        // TODO: card - assign user
-        ['name' => 'card#assignUser', 'url' => '/cards/{cardId}/user/{labelId}', 'verb' => 'POST'],
-        ['name' => 'card#removeUser', 'url' => '/cards/{cardId}/user/{labelId}', 'verb' => 'DELETE'],
 
         // labels
         ['name' => 'label#create', 'url' => '/labels', 'verb' => 'POST'],
@@ -66,9 +63,6 @@ return [
         ['name' => 'label#delete', 'url' => '/labels/{labelId}', 'verb' => 'DELETE'],
 
         // TODO: Implement public board sharing
-        ['name' => 'public#index', 'url' => '/public/board/:hash', 'verb' => 'GET'],
-        ['name' => 'public#board', 'url' => '/public/board/ajax/:hash', 'verb' => 'GET'],
-
         // TODO: API for external access
 
     ]

@@ -47,8 +47,6 @@ class ShareController extends Controller {
 
     }
     /**
-     * FIXME: REMOVE, just for testing
-     * @NoCSRFRequired
      * @NoAdminRequired
      */
     public function searchUser($search) {

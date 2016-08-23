@@ -51,7 +51,6 @@ class LabelService  {
 
     public function find($userId, $labelId) {
         $label = $this->labelMapper->find($labelId);
-        // FIXME: [share] Check for user permissions
         return $label;
     }
 

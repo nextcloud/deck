@@ -28,7 +28,7 @@ use OCP\IDb;
 use OCP\AppFramework\Db\Mapper;
 
 
-class StackMapper extends Mapper {
+class StackMapper extends Mapper implements IPermissionMapper {
 
     private $cardMapper;
 
@@ -58,5 +58,17 @@ class StackMapper extends Mapper {
     public function delete(Entity $entity) {
         // FIXME: delete linked elements, because owncloud doesn't support foreign keys for apps
         return parent::delete($entity);
+    }
+
+    public function isOwner($userId, $stackId) {
+        $sql = 'SELECT * FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_stacks` WHERE id = ?)';
+        $stmt = $this->execute($sql, [$stackId]);
+        $row = $stmt->fetch();
+        return ($row['owner'] === $userId);
+    }
+
+    public function findBoardId($stackId) {
+        $entity = $this->find($stackId);
+        return $entity->getBoardId();
     }
 }
