@@ -21,15 +21,19 @@
  *  
  */
 
-app.controller('ListController', function ($scope, $location, BoardService) {
-    $scope.boards = null;
+app.controller('ListController', function ($scope, $location, $filter, BoardService) {
+    $scope.boards = [];
     $scope.newBoard = {};
     $scope.status = {};
     $scope.colors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
 
     $scope.boardservice = BoardService;
 
-    BoardService.fetchAll(); // TODO: show error when loading fails
+    BoardService.fetchAll().then(function(data) {
+        $scope.filterData();
+    }, function (error) {
+        
+    }); // TODO: show error when loading fails
 
     $scope.selectColor = function(color) {
         $scope.newBoard.color = color;
@@ -40,19 +44,31 @@ app.controller('ListController', function ($scope, $location, BoardService) {
             .then(function (response) {
                 $scope.newBoard = {};
                 $scope.status.addBoard=false;
+                $scope.filterData();
             }, function(error) {
                 $scope.status.createBoard = 'Unable to insert board: ' + error.message;
             });
     };
     $scope.boardUpdate = function(board) {
-        BoardService.update(board);
+        BoardService.update(board).then(function(data) {
+            $scope.filterData();
+        });
         board.status.edit = false;
     };
     $scope.boardDelete = function(board) {
         // TODO: Ask for confirmation
         //if (confirm('Are you sure you want to delete this?')) {
-            BoardService.delete(board.id);
+            BoardService.delete(board.id).then(function (data) {
+                $scope.filterData();
+            });
         //}
+    };
+
+    $scope.filterData = function () {
+        console.log("filter");
+        angular.copy($scope.boardservice.getData(), $scope.boards);
+        $scope.boards = $filter('orderBy')($scope.boards, 'title');
+        console.log($scope.boards);
     };
 
 

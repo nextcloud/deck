@@ -7,7 +7,7 @@
 	<li><a href="#" class="icon-public">Public Boards</a></li>
 	//-->
 
-	<li class="with-icon with-menu" data-ng-repeat="b in boardservice.getData() | orderBy: ['shared', 'title']">
+	<li class="with-icon with-menu" data-ng-repeat="b in boards">
 		<span class="board-bullet"  style="background-color:#{{b.color}};" ng-if="!b.status.edit"> </span>
 		<a href="#/board/{{b.id}}/" ng-if="!b.status.edit">{{ b.title }}</a>
 		<div class="app-navigation-entry-utils" ng-show="!b.status.edit" style="position:absolute;">

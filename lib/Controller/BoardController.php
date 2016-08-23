@@ -125,8 +125,8 @@ class BoardController extends Controller {
      * @NoAdminRequired
      * @RequireManagePermission
      */
-    public function deleteAcl($id) {
-        return $this->boardService->deleteAcl($id);
+    public function deleteAcl($aclId) {
+        return $this->boardService->deleteAcl($aclId);
     }
 
 }

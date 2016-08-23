@@ -1,26 +1,4 @@
 
-/*
- * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
- *
- * @author Julius Härtl <jus@bitgrid.net>
- *
- * @license GNU AGPL version 3 or any later version
- *  
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Affero General Public License as
- *  published by the Free Software Foundation, either version 3 of the
- *  License, or (at your option) any later version.
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Affero General Public License for more details.
- *  
- *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *  
- */
-
 angular.module('markdown', [])
 	.provider('markdown', [function () {
 		var opts = {};
@@ -308,7 +286,7 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
     $scope.status.addSharee = null;
   }
   $scope.aclDelete = function(acl) {
-    BoardService.deleteAcl(acl.id);
+    BoardService.deleteAcl(acl);
   }
   $scope.aclUpdate = function(acl) {
     BoardService.updateAcl(acl);
@@ -363,8 +341,6 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
   };
 
 }]);
-
-
 
 app.controller('CardController', ["$scope", "$rootScope", "$routeParams", "$location", "$stateParams", "BoardService", "CardService", "StackService", "StatusService", function ($scope, $rootScope, $routeParams, $location, $stateParams, BoardService, CardService, StackService, StatusService) {
     $scope.sidebar = $rootScope.sidebar;
@@ -423,16 +399,19 @@ app.controller('CardController', ["$scope", "$rootScope", "$routeParams", "$loca
 
 }]);
 
-
-app.controller('ListController', ["$scope", "$location", "BoardService", function ($scope, $location, BoardService) {
-    $scope.boards = null;
+app.controller('ListController', ["$scope", "$location", "$filter", "BoardService", function ($scope, $location, $filter, BoardService) {
+    $scope.boards = [];
     $scope.newBoard = {};
     $scope.status = {};
     $scope.colors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
 
     $scope.boardservice = BoardService;
 
-    BoardService.fetchAll(); // TODO: show error when loading fails
+    BoardService.fetchAll().then(function(data) {
+        $scope.filterData();
+    }, function (error) {
+        
+    }); // TODO: show error when loading fails
 
     $scope.selectColor = function(color) {
         $scope.newBoard.color = color;
@@ -443,19 +422,31 @@ app.controller('ListController', ["$scope", "$location", "BoardService", functio
             .then(function (response) {
                 $scope.newBoard = {};
                 $scope.status.addBoard=false;
+                $scope.filterData();
             }, function(error) {
                 $scope.status.createBoard = 'Unable to insert board: ' + error.message;
             });
     };
     $scope.boardUpdate = function(board) {
-        BoardService.update(board);
+        BoardService.update(board).then(function(data) {
+            $scope.filterData();
+        });
         board.status.edit = false;
     };
     $scope.boardDelete = function(board) {
         // TODO: Ask for confirmation
         //if (confirm('Are you sure you want to delete this?')) {
-            BoardService.delete(board.id);
+            BoardService.delete(board.id).then(function (data) {
+                $scope.filterData();
+            });
         //}
+    };
+
+    $scope.filterData = function () {
+        console.log("filter");
+        angular.copy($scope.boardservice.getData(), $scope.boards);
+        $scope.boards = $filter('orderBy')($scope.boards, 'title');
+        console.log($scope.boards);
     };
 
 
@@ -908,7 +899,7 @@ app.factory('BoardService', ["ApiService", "$http", "$q", function(ApiService, $
             delete board.acl[response.data.id];
             deferred.resolve(response.data);
         }, function (error) {
-            deferred.reject('Error deleting ACL ' + id);
+            deferred.reject('Error deleting ACL ' + acl.id);
         });
         acl = null;
         return deferred.promise;

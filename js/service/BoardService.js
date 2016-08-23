@@ -66,7 +66,7 @@ app.factory('BoardService', function(ApiService, $http, $q){
             delete board.acl[response.data.id];
             deferred.resolve(response.data);
         }, function (error) {
-            deferred.reject('Error deleting ACL ' + id);
+            deferred.reject('Error deleting ACL ' + acl.id);
         });
         acl = null;
         return deferred.promise;
