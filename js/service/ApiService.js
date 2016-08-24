@@ -28,6 +28,7 @@ app.factory('ApiService', function($http, $q){
         this.q = $q;
         this.data = {};
         this.id = null;
+        this.sorted = [];
     };
 
     // TODO: Unify error messages

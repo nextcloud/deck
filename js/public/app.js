@@ -444,9 +444,8 @@ app.controller('ListController', ["$scope", "$location", "$filter", "BoardServic
 
     $scope.filterData = function () {
         console.log("filter");
-        angular.copy($scope.boardservice.getData(), $scope.boards);
-        $scope.boards = $filter('orderBy')($scope.boards, 'title');
-        console.log($scope.boards);
+        angular.copy($scope.boardservice.getData(), $scope.boardservice.sorted);
+        $scope.boardservice.sorted = $filter('orderBy')($scope.boardservice.sorted, 'title');
     };
 
 
@@ -715,6 +714,7 @@ app.factory('ApiService', ["$http", "$q", function($http, $q){
         this.q = $q;
         this.data = {};
         this.id = null;
+        this.sorted = [];
     };
 
     // TODO: Unify error messages

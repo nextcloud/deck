@@ -1,5 +1,5 @@
 <div id="boardlist">
-	<!--<table width="100%">
+	<table width="100%">
 		<thead>
 		<tr>
 			<td class="cell-board-bullet"></td>
@@ -8,7 +8,7 @@
 		</tr>
 		</thead>
 		<tbody>
-		<tr data-ng-repeat="b in boards"
+		<tr data-ng-repeat="b in boardservice.sorted"
 			ui-sref="board({boardId: b.id})">
 			<td>
 				<span class="board-bullet"
@@ -50,5 +50,5 @@
 			<td></td>
 		</tr>
 		</tbody>
-	</table>//-->
+	</table>
 </div>
