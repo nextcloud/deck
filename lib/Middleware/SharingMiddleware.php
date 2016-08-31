@@ -123,13 +123,8 @@ class SharingMiddleware extends Middleware {
 
 		}
 		if($controller instanceof CardController) {
-			if($method==="GET" || $method === "POST") {
-				$mapper = $this->container->query('OCA\Deck\Db\StackMapper');
-				$id = $params['stackId'];
-			} else {
 				$mapper = $this->container->query('OCA\Deck\Db\CardMapper');
 				$id = $params['cardId'];
-			}
 
 		}
 		if($controller instanceof LabelController) {
@@ -146,23 +141,23 @@ class SharingMiddleware extends Middleware {
 
 		if($this->reflector->hasAnnotation('RequireReadPermission')) {
 			if(!$this->checkReadPermission($userId, $mapper, $id)) {
-				throw new NoPermissionException("User ". $userId . " has no permission to read.");
+				throw new NoPermissionException("User ". $userId . " has no permission to read.", $controller, $method);
 			}
 		}
 		if($this->reflector->hasAnnotation('RequireEditPermission')) {
 			if(!$this->checkEditPermission($userId, $mapper, $id)) {
-				throw new NoPermissionException("User ". $userId . " has no permission to edit.");
+				throw new NoPermissionException("User ". $userId . " has no permission to edit.", $controller, $method);
 			}
 
 		}
 		if($this->reflector->hasAnnotation('RequireSharePermission')) {
 			if(!$this->checkSharePermission($userId, $mapper, $id)) {
-				throw new NoPermissionException("User ". $userId . " has no permission to share.");
+				throw new NoPermissionException("User ". $userId . " has no permission to share.", $controller, $method);
 			}
 		}
 		if($this->reflector->hasAnnotation('RequireManagePermission')) {
 			if(!$this->checkManagePermission($userId, $mapper, $id)) {
-				throw new NoPermissionException("User ". $userId . " has no permission to manage.");
+				throw new NoPermissionException("User ". $userId . " has no permission to manage.", $controller, $method);
 			}
 		}
 
