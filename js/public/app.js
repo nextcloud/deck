@@ -384,7 +384,7 @@ app.controller('CardController', ["$scope", "$rootScope", "$routeParams", "$loca
     };
     $scope.cardUpdate = function(card) {
         CardService.update(CardService.getCurrent());
-        $scope.status.description = false;
+        $scope.status.cardEditDescription = false;
     }
 
     $scope.labelAssign = function(element, model) {

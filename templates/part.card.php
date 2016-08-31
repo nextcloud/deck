@@ -72,7 +72,7 @@
 				  ng-model="cardservice.getCurrent().description"
 				  autofocus-on-insert> </textarea>
 		<div class="container" ng-click="cardEditDescriptionShow()"
-			 ng-show="!status.cardEditDescription" ng-animate>
+			 ng-if="!status.cardEditDescription" ng-animate>
 			<div ng-bind-html="cardservice.getCurrent().description | markdown"
 				 id="markdown"></div>
 			<div class="placeholder"
