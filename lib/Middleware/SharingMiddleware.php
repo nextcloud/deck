@@ -123,7 +123,7 @@ class SharingMiddleware extends Middleware {
 
 		}
 		if($controller instanceof CardController) {
-			if($method === "POST") {
+			if($method === "POST" && !preg_match('/Label/', $method)) {
 				$mapper = $this->container->query('OCA\Deck\Db\StackMapper');
 				$id = $params['stackId'];
 			} else {
