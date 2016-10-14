@@ -40,7 +40,7 @@ class Entity extends \OCP\AppFramework\Db\Entity {
 	 * Mark a property as relation so it will not get updated using Mapper::update
 	 * @param string $property Name of the property
 	 */
-	public function addRelation(string $property) {
+	public function addRelation($property) {
 		if (!in_array($property, $this->_relations)) {
 			$this->_relations[] = $property;
 		}
