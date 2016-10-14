@@ -34,3 +34,6 @@ script:
 
 after_failure:
     - cat ../../data/nextcloud.log
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -t 49bdd1ee-6ef5-47b9-b80f-825b51515ce9
