@@ -28,7 +28,7 @@ use OCP\AppFramework\Db\Mapper;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 
-class BoardMapper extends Mapper implements IPermissionMapper {
+class BoardMapper extends DeckMapper implements IPermissionMapper {
 
     private $labelMapper;
     private $_relationMappers = array();

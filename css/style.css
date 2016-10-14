@@ -191,11 +191,12 @@
 	font-size: 12pt;
 	font-weight: 700;
 	overflow: hidden;
+	height: 40px;
 }
 
 .stack h2 input {
 	padding: 0px;
-	width: 90%;
+	width: 80%;
 	padding-bottom: 3px;
 	margin: 0;
 	font-size: 12pt;
@@ -212,7 +213,6 @@
 
 .stack h2 span {
 	float: left;
-	margin-bottom: 3px;
 }
 
 .stack h2 .stack-actions {

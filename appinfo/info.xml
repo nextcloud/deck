@@ -1,14 +1,17 @@
 <?xml version="1.0"?>
-<info>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
     <id>deck</id>
     <name>Deck</name>
     <description>My first ownCloud app</description>
-    <licence>AGPL</licence>
+    <licence>agpl</licence>
     <author>Julius Härtl</author>
     <version>0.0.1.14</version>
     <namespace>Deck</namespace>
-    <category>other</category>
+    <category>Other
+    </category>
     <dependencies>
-        <owncloud min-version="9.0" max-version="9.2" />
+        <owncloud min-version="9.1" max-version="9.2" />
+        <nextcloud min-version="10" max-version="11" />
     </dependencies>
 </info>

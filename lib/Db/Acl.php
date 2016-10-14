@@ -28,6 +28,11 @@ use JsonSerializable;
 
 class Acl extends Entity implements JsonSerializable {
 
+	const PERMISSION_READ = 0;
+	const PERMISSION_EDIT = 1;
+	const PERMISSION_SHARE = 2;
+	const PERMISSION_MANAGE = 3;
+
     public $id;
     protected $participant;
     protected $type;
@@ -46,6 +51,21 @@ class Acl extends Entity implements JsonSerializable {
         $this->addType('owner', 'boolean');
         $this->addRelation('owner');
     }
+
+    public function getPermission($permission) {
+    	switch ($permission) {
+			case Acl::PERMISSION_READ:
+				return true;
+			case Acl::PERMISSION_EDIT:
+				return $this->getPermissionWrite();
+			case Acl::PERMISSION_SHARE:
+				return $this->getPermissionInvite();
+			case Acl::PERMISSION_MANAGE:
+				return $this->getPermissionManage();
+		}
+		return false;
+	}
+
     public function jsonSerialize() {
         return [
             'id' => $this->id,

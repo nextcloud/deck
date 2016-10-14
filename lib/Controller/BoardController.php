@@ -61,6 +61,7 @@ class BoardController extends Controller {
 
     /**
      * @NoAdminRequired
+	 * @RequireNoPermission
      */
     public function index() {
         return $this->boardService->findAll($this->userInfo);
@@ -76,6 +77,7 @@ class BoardController extends Controller {
 
     /**
      * @NoAdminRequired
+	 * @RequireNoPermission
      */
     public function create($title, $color) {
         return $this->boardService->create($title, $this->userId, $color);
@@ -102,7 +104,7 @@ class BoardController extends Controller {
      * @RequireReadPermission
      */
     public function labels($boardId) {
-        return $this->boardService->labels($this->boardId);
+        return $this->boardService->labels($boardId);
     }
 
     /**

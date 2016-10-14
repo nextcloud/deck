@@ -5,7 +5,7 @@
 		<p>{{ statusservice.text }}</p></div>
 </div>
 <div id="board-header"
-	 style="background-color: {{boardservice.getCurrent().color | lightenColorFilter }}; color: {{boardservice.getCurrent().color | textColorFilter }};">
+	 style="background-color: #{{boardservice.getCurrent().color }}; color: {{boardservice.getCurrent().color | textColorFilter }};">
 	<h1>
 		{{ boardservice.data[id].title }}
 		<div id="board-actions">
@@ -30,11 +30,12 @@
 						   ng-blur="s.status.editStack=false" ng-model="s.title"
 						   ng-if="s.status.editStack" autofocus-on-insert
 						   required/>
-					<button class="icon icon-save" ng-if="s.status.editStack"
-							type="submit"></button>
+
 				</form>
 				<div class="stack-actions">
-					<button class="icon-rename"
+					<button class="icon icon-confirm" ng-if="s.status.editStack"
+							type="submit"></button>
+					<button class="icon-rename" ng-if="!s.status.editStack"
 							ng-click="s.status.editStack=true"></button>
 					<button class="icon-delete"
 							ng-click="stackservice.delete(s.id)"></button>
@@ -105,8 +106,9 @@
 							   ng-blur="s.status.addCard=false" required/>
 					</h3>
 				</form>
-				<div class="icon icon-add" ng-if="!s.status.addCard"
-					 ng-click="s.status.addCard=!s.status.addCard"></div>
+				<div ng-if="!s.status.addCard" ng-click="s.status.addCard=!s.status.addCard">
+					<i class="icon icon-add"></i>
+				</div>
 			</div>
 		</div>
 		<div class="stack" style="display: inline-block;" ng-if="checkCanEdit()">

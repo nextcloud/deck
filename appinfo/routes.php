@@ -62,8 +62,5 @@ return [
         ['name' => 'label#update', 'url' => '/labels/{labelId}', 'verb' => 'PUT'],
         ['name' => 'label#delete', 'url' => '/labels/{labelId}', 'verb' => 'DELETE'],
 
-        // TODO: Implement public board sharing
-        // TODO: API for external access
-
     ]
 ];
