@@ -858,7 +858,9 @@ button:hover {
 .icon-group {
 	background-image: url('../../../settings/img/users.svg');
 }
-
+.icon-add-white {
+	background-image: url('../img/add-white.svg');
+}
 .icon-archive {
 	background-image: url('../img/archive.svg');
 }
@@ -866,5 +868,8 @@ button:hover {
 	background-image: url('../img/archive-white.svg');
 }
 .icon-details {
+	background-image: url('../img/details.svg');
+}
+.icon-details-white {
 	background-image: url('../img/details-white.svg');
 }

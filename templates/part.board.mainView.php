@@ -9,9 +9,9 @@
 	<h1>
 		{{ boardservice.data[id].title }}
 		<div id="board-actions">
-			<div class="board-action-button" ng-if="filter!='archive'"><a ng-click="switchFilter('archive')" style="opacity:0.5;"><i class="icon icon-archive-white"></i></a></div>
-			<div class="board-action-button" ng-if="filter=='archive'"><a ng-click="switchFilter('')"><i class="icon icon-archive-white"></i></a></div>
-			<div class="board-action-button"><a ui-sref="board.detail({ id: id })"><i class="icon icon-details"></i></a>
+			<div class="board-action-button" ng-if="filter!='archive'"><a ng-click="switchFilter('archive')" style="opacity:0.5;"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
+			<div class="board-action-button" ng-if="filter=='archive'"><a ng-click="switchFilter('')"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
+			<div class="board-action-button"><a ui-sref="board.detail({ id: id })"><i class="icon icon-details{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a>
 			</div>
 		</div>
 	</h1>
@@ -107,7 +107,7 @@
 					</h3>
 				</form>
 				<div ng-if="!s.status.addCard" ng-click="s.status.addCard=!s.status.addCard">
-					<i class="icon icon-add"></i>
+					<i class="icon icon-add{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i>
 				</div>
 			</div>
 		</div>

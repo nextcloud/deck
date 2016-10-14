@@ -20,7 +20,7 @@
  *  
  */
 
-app.filter('textColorFilter', function() {
+app.filter('iconWhiteFilter', function() {
 	return function (hex) {
 		// RGB2HLS by Garry Tan
 		// http://axonflux.com/handy-rgb-to-hsl-and-rgb-to-hsv-color-model-c
@@ -51,14 +51,14 @@ app.filter('textColorFilter', function() {
 			}
 			// TODO: Maybe just darken/lighten the color
 			if(l<0.5) {
-				return "#ffffff";
+				return "-white";
 			} else {
-				return "#000000";
+				return "";
 			}
 			//var rgba = "rgba(" + color.r + "," + color.g + "," + color.b + ",0.7)";
 			//return rgba;
 		} else {
-			return "#000000";
+			return "";
 		}
 
 	}
