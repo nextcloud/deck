@@ -133,7 +133,7 @@ class SharingMiddleware extends Middleware {
 
 		}
 		if ($controller instanceof CardController) {
-			if ($method === "POST" && !preg_match('/Label/', $method)) {
+			if ($method === "POST" && !preg_match('/Label/', $methodName)) {
 				$mapper = $this->container->query('OCA\Deck\Db\StackMapper');
 				$id = $params['stackId'];
 			} else {
@@ -192,6 +192,8 @@ class SharingMiddleware extends Middleware {
 	 * @return bool
 	 */
 	public function checkMapperPermission($permission, $userId, $mapper, $id) {
+		// FIXME: This fails with no permission if $id doesn't exist
+		// We need some fallback to doesn't exist here
 
 		// is owner
 		if ($mapper->isOwner($userId, $id)) {
