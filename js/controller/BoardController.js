@@ -126,7 +126,14 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 
 
 
-  BoardService.searchUsers();
+  BoardService.searchUsers('%25');
+
+  $scope.searchForUser = function(search) {
+    if(search=="") {
+      search = "%25";
+    }
+    BoardService.searchUsers(search);
+  }
 
   $scope.newStack = { 'boardId': $scope.id};
   $scope.newCard = {};

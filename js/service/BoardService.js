@@ -26,13 +26,26 @@ app.factory('BoardService', function(ApiService, $http, $q){
     };
     BoardService.prototype = angular.copy(ApiService.prototype);
 
-    BoardService.prototype.searchUsers = function() {
-        var url = OC.generateUrl('/apps/deck/share/search/%');
+    BoardService.prototype.searchUsers = function(search) {
+        var url = OC.generateUrl('/apps/deck/share/search/'+search);
         var deferred = $q.defer();
         var self = this;
-        this.sharees = [];
         $http.get(url).then(function (response) {
-            self.sharees = response.data;
+
+            self.sharees = [];
+            // filter out everyone who is already in the share list
+            angular.forEach(response.data, function(item) {
+                var exists = false;
+                angular.forEach(self.getCurrent().acl, function(acl) {
+                    if (acl.participant === item.participant) {
+                        exists = true;
+                    }
+                });
+                if(!exists) {
+                    self.sharees.push(item);
+                }
+            });
+
             deferred.resolve(response.data);
         }, function (error) {
             deferred.reject('Error while update ' + self.endpoint);

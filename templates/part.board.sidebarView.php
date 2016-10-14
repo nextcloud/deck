@@ -21,8 +21,8 @@
             <ui-select-match placeholder="<?php p($l->t('Select users...')); ?>">
                 <span><i class="icon icon-{{$item.type}}"></i> {{ $item.participant }}</span>
             </ui-select-match>
-            <!-- FIXME: filter by selected or add multiple //-->
-            <ui-select-choices repeat="sharee in boardservice.sharees | filter: board.sharees | filter: $select.search track by $index">
+            <ui-select-choices refresh="searchForUser($select.search)"
+                               refresh-delay="0" repeat="sharee in boardservice.sharees">
                 <span><i class="icon icon-{{sharee.type}}"></i> {{ sharee.participant }}</span>
             </ui-select-choices>
             <ui-select-no-choice>

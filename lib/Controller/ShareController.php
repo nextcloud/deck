@@ -26,14 +26,15 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\Db\Acl;
 use OCP\IGroupManager;
 use OCP\IRequest;
-use OCP\AppFramework\ApiController as BaseApiController;
 use OCP\AppFramework\Controller;
 use OCP\IUserManager;
+
 class ShareController extends Controller {
 
     protected $userManager;
     protected $groupManager;
     private $userId;
+
     public function __construct($appName,
                                 IRequest $request,
                                 IUserManager $userManager,
@@ -48,9 +49,10 @@ class ShareController extends Controller {
     }
     /**
      * @NoAdminRequired
+	 * @RequireNoPermission
      */
     public function searchUser($search) {
-        $limit = null;
+        $limit = 3;
         $offset = null;
         $result = [];
         foreach ($this->groupManager->search($search, $limit, $offset) as $idx => $group) {
@@ -62,6 +64,7 @@ class ShareController extends Controller {
             $acl->setPermissionManage(true);
             $result[] = $acl;
         }
+        $limit = 10;
         foreach ($this->userManager->searchDisplayName($search, $limit, $offset) as $idx => $user) {
             if($user->getUID() === $this->userId)
                 continue;
