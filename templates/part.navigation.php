@@ -1,11 +1,6 @@
 <ul class="with-icon">
 
 	<li><a href="#" class=""><?php p($l->t('All Boards')); ?></a></li>
-	<!--
-	<li><a href="#" class="icon-starred">Starred Boards</a></li>
-	<li><a href="#" class="icon-share">Shared Boards</a></li>
-	<li><a href="#" class="icon-public">Public Boards</a></li>
-	//-->
 
 	<li class="with-icon with-menu" data-ng-repeat="b in boardservice.sorted">
 		<span class="board-bullet"  style="background-color:#{{b.color}};" ng-if="!b.status.edit"> </span>
@@ -18,7 +13,10 @@
 		</div>
 		<div class="app-navigation-entry-menu app-navigation-noclose" ng-show="!b.status.edit">
 			<ul>
-				<li><button class="icon-share svg" title="share"></button></li>
+				<!--
+					TODO: Link to board sharing details
+					<li><button class="icon-share svg" title="share"></button></li>
+				//-->
 				<li><button class="icon-rename svg" title="rename" ng-click="b.status.edit=true"></button></li>
 				<li><button class="icon-delete svg" title="delete" ng-click="boardDelete(b)"></button></li>
 			</ul>
@@ -53,4 +51,5 @@
 			</form>
 		</div>
 	</li>
+
 </ul>

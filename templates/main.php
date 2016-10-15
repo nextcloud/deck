@@ -42,7 +42,7 @@ Util::addScript('deck', 'public/app');
 
 	<div id="app-navigation" data-ng-controller="ListController">
 		<?php print_unescaped($this->inc('part.navigation')); ?>
-		<?php /* print_unescaped($this->inc('part.settings'));*/ ?>
+		<?php /* print_unescaped($this->inc('part.settings')); */ ?>
 	</div>
 	<div id="app-content" ng-class="{ 'details-visible': sidebar.show }">
 		<div id="app-view" ui-view></div>
@@ -53,7 +53,6 @@ Util::addScript('deck', 'public/app');
 	<script type="text/ng-template" id="/boardlist.mainView.html">
 		<?php print_unescaped($this->inc('part.boardlist')); ?>
 	</script>
-	<script type="text/ng-template" id="/boardlist.sidebarView.html"></script>
 	<script type="text/ng-template" id="/board.sidebarView.html">
 		<?php print_unescaped($this->inc('part.board.sidebarView')); ?>
 	</script>
