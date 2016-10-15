@@ -67,10 +67,6 @@ class CardMapper extends Mapper implements IPermissionMapper {
         return $card;
     }
 
-    public function findAllByBoard($boardId, $limit=null, $offset=null) {
-
-    }
-
     public function findAll($stackId, $limit=null, $offset=null) {
         // TODO: Exclude fields like text
         $sql = 'SELECT * FROM `*PREFIX*deck_cards` 
@@ -85,10 +81,27 @@ class CardMapper extends Mapper implements IPermissionMapper {
         return $entities;
     }
 
+	public function findAllByStack($stackId, $limit=null, $offset=null) {
+		$sql = 'SELECT id FROM `*PREFIX*deck_cards` 
+          WHERE `stack_id` = ?';
+		$entities = $this->findEntities($sql, [$stackId], $limit, $offset);
+		return $entities;
+	}
+
     public function delete(Entity $entity) {
-        // FIXME: delete linked elements, because owncloud doesn't support foreign keys for apps
+		// delete assigned labels
+		$this->labelMapper->deleteLabelAssignmentsForCard($entity->getId());
+		// delete card
         return parent::delete($entity);
     }
+
+    public function deleteByStack($stackId) {
+    	$cards = $this->findAllByStack($stackId);
+		foreach ($cards as $card) {
+			$this->delete($card);
+		}
+
+	}
 
     public function assignLabel($card, $label) {
         $sql = 'INSERT INTO `*PREFIX*deck_assigned_labels` (`label_id`,`card_id`) VALUES (?,?)';

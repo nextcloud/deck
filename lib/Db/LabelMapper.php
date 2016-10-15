@@ -40,11 +40,13 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
     }
 
     public function delete(Entity $entity) {
-        // FIXME: delete linked elements, because owncloud doesn't support foreign keys for apps
+		// delete assigned labels
+		$this->deleteLabelAssignments($entity->getId());
+		// delete label
         return parent::delete($entity);
     }
 
-    public function findAssignedLabelsForCard($cardId) {
+    public function findAssignedLabelsForCard($cardId, $limit=null, $offset=null) {
         $sql = 'SELECT l.* FROM `*PREFIX*deck_assigned_labels` as al INNER JOIN *PREFIX*deck_labels as l ON l.id = al.label_id WHERE `card_id` = ? ORDER BY l.id';
         return $this->findEntities($sql, [$cardId], $limit, $offset);
     }
@@ -66,6 +68,20 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
         }
         return $result;
     }
+
+	public function deleteLabelAssignments($labelId, $limit=null, $offset=null) {
+		$sql = 'DELETE FROM `*PREFIX*deck_assigned_labels` WHERE label_id = ?';
+		$stmt = $this->db->prepare($sql);
+		$stmt->bindParam(1, $labelId,  \PDO::PARAM_INT);
+		$stmt->execute();
+	}
+
+	public function deleteLabelAssignmentsForCard($cardId, $limit=null, $offset=null) {
+		$sql = 'DELETE FROM `*PREFIX*deck_assigned_labels` WHERE card_id = ?';
+		$stmt = $this->db->prepare($sql);
+		$stmt->bindParam(1, $cardId,  \PDO::PARAM_INT);
+		$stmt->execute();
+	}
 
     public function isOwner($userId, $labelId) {
         $sql = 'SELECT * FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_labels` WHERE id = ?)';

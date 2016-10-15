@@ -31,16 +31,14 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 class BoardMapper extends DeckMapper implements IPermissionMapper {
 
     private $labelMapper;
-    private $_relationMappers = array();
+	private $aclMapper;
+	private $stackMapper;
 
-    public function addRelationMapper($name, $mapper) {
-        $this->_relationMappers[$name] = $mapper;
-    }
-
-    public function __construct(IDb $db, LabelMapper $labelMapper, AclMapper $aclMapper) {
+    public function __construct(IDb $db, LabelMapper $labelMapper, AclMapper $aclMapper, StackMapper $stackMapper) {
         parent::__construct($db, 'deck_boards', '\OCA\Deck\Db\Board');
         $this->labelMapper = $labelMapper;
         $this->aclMapper = $aclMapper;
+		$this->stackMapper = $stackMapper;
     }
 
 
@@ -113,7 +111,23 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
     }
 
     public function delete(\OCP\AppFramework\Db\Entity $entity) {
-        //$this->deleteRelationalEntities('label', $entity);
+    	// delete acl
+		$acl = $this->aclMapper->findAll($entity->getId());
+		foreach ($acl as $item) {
+			$this->aclMapper->delete($item);
+		}
+
+		// delete stacks ( includes cards, assigned labels)
+		$stacks = $this->stackMapper->findAll($entity->getId());
+		foreach ($stacks as $stack) {
+			$this->stackMapper->delete($stack);
+		}
+		// delete labels
+		$labels = $this->labelMapper->findAll($entity->getId());
+		foreach ($labels as $label) {
+			$this->labelMapper->delete($label);
+		}
+
         return parent::delete($entity);
     }
 

@@ -56,7 +56,8 @@ class StackMapper extends Mapper implements IPermissionMapper {
     
 
     public function delete(Entity $entity) {
-        // FIXME: delete linked elements, because owncloud doesn't support foreign keys for apps
+        // delete cards on stack
+		$this->cardMapper->deleteByStack($entity->getId());
         return parent::delete($entity);
     }
 
