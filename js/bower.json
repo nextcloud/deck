@@ -14,8 +14,8 @@
     "es6-shim": "~0.*",
     "js-url": "~2.*",
     "masonry": "~4.0.0",
-    "showdown": "~1.4.2",
-    "angular-ui-select": "~0.18.0"
+    "angular-ui-select": "~0.18.0",
+    "angular-markdown-it": "~0.6.1"
   },
   "license": "AGPL-3.0",
   "private": true,

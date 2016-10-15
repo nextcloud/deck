@@ -44,7 +44,7 @@ var app = angular.module('Deck', [
 	'ui.router',
 	'ui.select',
 	'as.sortable',
-	'markdown',
+	'mdMarkdownIt',
 	'ngAnimate'
 ]);
 

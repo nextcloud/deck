@@ -23,25 +23,22 @@ var app = angular.module('Deck', [
 	'ui.router',
 	'ui.select',
 	'as.sortable',
-	'markdown',
+	'mdMarkdownIt',
 	'ngAnimate'
 ]);
 
 
-app.config(["$provide", "$routeProvider", "$interpolateProvider", "$httpProvider", "$urlRouterProvider", "$stateProvider", "$compileProvider", "markdownProvider", function ($provide, $routeProvider, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider, $compileProvider, markdownProvider) {
+app.config(["$provide", "$routeProvider", "$interpolateProvider", "$httpProvider", "$urlRouterProvider", "$stateProvider", "$compileProvider", "markdownItConverterProvider", function ($provide, $routeProvider, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider, $compileProvider, markdownItConverterProvider) {
     'use strict';
     $httpProvider.defaults.headers.common.requesttoken = oc_requesttoken;
 
-
-    markdownProvider.config({
-        simplifiedAutoLink: true,
-        strikethrough: true,
-        tables: true,
-        tasklists: true
-
-    });
-
     $compileProvider.debugInfoEnabled(true);
+
+    markdownItConverterProvider.config({
+        breaks: true,
+        linkify: true,
+        xhtmlOut: true
+    });
 
     $urlRouterProvider.otherwise("/");
 

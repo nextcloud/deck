@@ -73,7 +73,7 @@
 				  autofocus-on-insert> </textarea>
 		<div class="container" ng-click="cardEditDescriptionShow()"
 			 ng-if="!status.cardEditDescription" ng-animate>
-			<div ng-bind-html="cardservice.getCurrent().description | markdown"
+			<div markdown-it="cardservice.getCurrent().description"
 				 id="markdown"></div>
 			<div class="placeholder"
 				 ng-if="!cardservice.getCurrent().description"><?php p($l->t('Add a card description ...')); ?></div>

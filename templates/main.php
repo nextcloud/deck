@@ -33,7 +33,8 @@ Util::addScript('deck', 'vendor/angular-animate/angular-animate.min');
 Util::addScript('deck', 'vendor/angular-ui-router/release/angular-ui-router.min');
 Util::addScript('deck', 'vendor/ng-sortable/dist/ng-sortable.min');
 Util::addScript('deck', 'vendor/angular-ui-select/dist/select.min');
-Util::addScript('deck', 'vendor/showdown/dist/showdown.min');
+Util::addScript('deck', 'vendor/markdown-it/dist/markdown-it.min');
+Util::addScript('deck', 'vendor/angular-markdown-it/dist/ng-markdownit.min');
 Util::addScript('deck', 'public/app');
 
 ?>
