@@ -65,6 +65,4 @@ class Entity extends \OCP\AppFramework\Db\Entity {
 		return $this->_updatedFields;
 	}
 
-
-
 }

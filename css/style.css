@@ -185,7 +185,7 @@
 }
 
 .stack h2 {
-	padding: 10px;
+	padding:10px;
 	padding-bottom: 8px;
 	margin: 0;
 	font-size: 12pt;
@@ -197,7 +197,6 @@
 .stack h2 input {
 	padding: 0px;
 	width: 80%;
-	padding-bottom: 3px;
 	margin: 0;
 	font-size: 12pt;
 	font-weight: 700;

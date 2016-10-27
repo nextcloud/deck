@@ -40,6 +40,10 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
     };
 
     $scope.boardCreate = function () {
+        if(!$scope.newBoard.title || !$scope.newBoard.color) {
+            $scope.status.addBoard=false;
+            return;
+        }
         BoardService.create($scope.newBoard)
             .then(function (response) {
                 $scope.newBoard = {};
@@ -65,7 +69,6 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
     };
 
     $scope.filterData = function () {
-        console.log("filter");
         angular.copy($scope.boardservice.getData(), $scope.boardservice.sorted);
         $scope.boardservice.sorted = $filter('orderBy')($scope.boardservice.sorted, 'title');
     };

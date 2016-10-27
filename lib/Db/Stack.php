@@ -34,22 +34,34 @@ class Stack extends Entity implements JsonSerializable {
     protected $boardId;
     protected $cards = array();
     protected $order;
+
     public function __construct() {
         $this->addType('id','integer');
         $this->addType('boardId','integer');
         $this->addType('order','integer');
-
     }
+
     public function setCards($cards) {
         $this->cards = $cards;
     }
+
     public function jsonSerialize() {
-        return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'order' => $this->order,
-            'boardId' => $this->boardId,
-            'cards' => $this->cards,
-        ];
+    	if(!empty($this->cards)) {
+			return [
+				'id' => $this->id,
+				'title' => $this->title,
+				'order' => $this->order,
+				'boardId' => $this->boardId,
+				'cards' => $this->cards
+			];
+		} else {
+			return [
+				'id' => $this->id,
+				'title' => $this->title,
+				'order' => $this->order,
+				'boardId' => $this->boardId
+			];
+		}
+
     }
 }

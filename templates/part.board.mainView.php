@@ -30,7 +30,6 @@
 						   ng-blur="s.status.editStack=false" ng-model="s.title"
 						   ng-if="s.status.editStack" autofocus-on-insert
 						   required/>
-
 				</form>
 				<div class="stack-actions">
 					<button class="icon icon-confirm" ng-if="s.status.editStack"
@@ -99,7 +98,7 @@
 			</ul>
 			<!-- CREATE CARD //-->
 			<div class="card create"
-				 style="background-color:#{{ boardservice.getCurrent().color }};" ng-if="checkCanEdit()">
+				 style="background-color:#{{ boardservice.getCurrent().color }};" ng-if="checkCanEdit() && filter!=='archive'">
 				<form ng-submit="createCard(s.id, newCard.title)">
 					<h3 ng-if="s.status.addCard">
 						<input type="text" autofocus-on-insert
