@@ -119,7 +119,7 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
   $scope.sidebar = $rootScope.sidebar;
 
   $scope.id = $stateParams.boardId;
-  $scope.status={};
+  $scope.status={},
   $scope.newLabel={};
   $scope.status.boardtab = $stateParams.detailTab;
 
@@ -636,6 +636,32 @@ app.directive('appNavigationEntryUtils', function () {
                 if (event.target !== button[0]) {
                     menu.removeClass('open');
                 }
+            });
+        }
+    };
+});
+
+
+app.directive('appPopoverMenuUtils', function () {
+    'use strict';
+    return {
+        restrict: 'C',
+        link: function (scope, elm) {
+            var menu = elm.find('.popovermenu');
+            var button = elm.find('button');
+            button.click(function () {
+                menu.toggleClass('hidden');
+                if(!menu.hasClass('hidden')) {
+                    button.css('display','block');
+                } else {
+                    button.css('display','');
+                }
+            });
+            scope.$on('documentClicked', function (scope, event) {
+                if (event.target !== button) {
+                    menu.addClass('hidden');
+                }
+                button.css('display','');
             });
         }
     };

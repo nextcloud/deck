@@ -59,11 +59,11 @@
 							</ul>
 
 						</div>
+						<div class="app-popover-menu-utils">
 						<button class="card-options icon-more"
 								ng-click="c.status.showMenu=!c.status.showMenu; $event.stopPropagation();"
 								ng-model="card"></button>
-						<div class="popovermenu bubble"
-							 ng-show="c.status.showMenu">
+						<div class="popovermenu bubble hidden">
 							<ul>
 								<li ng-if="filter!=='archive'">
 									<a class="menuitem action action-rename permanent"
@@ -85,6 +85,7 @@
 								</li>
 							</ul>
 						</div>
+							</div>
 						<div class="card-assignees" ng-if="c.assignees">
 							<!--   <div class="avatar" avatar user="{{c.owner}}" size="24"></div>//-->
 						</div>
