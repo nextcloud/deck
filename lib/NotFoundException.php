@@ -24,12 +24,9 @@
 namespace OCA\Deck;
 
 
-class NoPermissionException extends \Exception {
+class NotFoundException extends \Exception {
 
-	public function __construct($message, $controller=null, $method=null) {
+	public function __construct($message) {
 		parent::__construct($message);
-		if($controller && $method) {
-			$this->message = get_class($controller) . "#" . $method . ": " . $message;
-		}
 	}
 }

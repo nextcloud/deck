@@ -42,7 +42,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
     }
 
     public function isOwner($userId, $aclId) {
-        $sql = 'SELECT * FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_board_acl` WHERE id = ?)';
+        $sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_board_acl` WHERE id = ?)';
         $stmt = $this->execute($sql, [$aclId]);
         $row = $stmt->fetch();
         return ($row['owner'] === $userId);

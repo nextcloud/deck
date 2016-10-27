@@ -131,25 +131,6 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
         return parent::delete($entity);
     }
 
-    public function userCanView($boardId, $userInfo) {
-        $board = $this->find($boardId);
-        if($board->getOwner()===$userInfo['user']) {
-            return true;
-        }
-        try {
-            $sql = 'SELECT acl.* FROM oc_deck_boards as boards ' .
-                'JOIN oc_deck_board_acl as acl ON boards.id=acl.board_id WHERE acl.participant=? AND acl.type=\'user\' AND boards.id = ? AND boards.owner != ?';
-            $acl = $this->find($sql, [$userInfo['user'], $boardId, $userInfo['user']], $limit, $offset);
-            return true;
-        } catch (Exception $e) { }
-        try {
-            $acl = $this->find($sql, [$userInfo['user'], $boardId, $userInfo['user']], $limit, $offset);
-            return true;
-        } catch (Exception $e) {
-        }
-
-    }
-
     public function isOwner($userId, $boardId) {
         $board = $this->find($boardId);
         return ($board->getOwner() === $userId);

@@ -29,6 +29,7 @@ use OCA\Deck\Controller\LabelController;
 use OCA\Deck\Controller\PageController;
 use OCA\Deck\Controller\ShareController;
 use OCA\Deck\NoPermissionException;
+use OCA\Deck\NotFoundException;
 use \OCP\AppFramework\Middleware;
 use OCP\IContainer;
 use OCP\IRequest;
@@ -192,15 +193,18 @@ class SharingMiddleware extends Middleware {
 	 * @return bool
 	 */
 	public function checkMapperPermission($permission, $userId, $mapper, $id) {
-		// FIXME: This fails with no permission if $id doesn't exist
-		// We need some fallback to doesn't exist here
-
-		// is owner
+		// check if current user is owner
 		if ($mapper->isOwner($userId, $id)) {
 			return true;
 		}
-		// check if is in acl
+		
+		// find related board
 		$boardId = $mapper->findBoardId($id);
+		if(!$boardId) {
+			throw new NotFoundException("Entity not found");
+		}
+		// check if is in acl
+
 		$acls = $this->aclMapper->findAll($boardId);
 		// check for users
 		foreach ($acls as $acl) {
@@ -233,6 +237,12 @@ class SharingMiddleware extends Middleware {
 				"status" => 401,
 				"message" => $exception->getMessage()
 			], 401);
+		}
+		if (is_a($exception, '\OCA\Deck\NotFoundException')) {
+			return new JSONResponse([
+				"status" => 404,
+				"message" => $exception->getMessage()
+			], 404);
 		}
 		throw $exception;
 	}

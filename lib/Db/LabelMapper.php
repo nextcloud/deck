@@ -25,7 +25,6 @@ namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\Entity;
 use OCP\IDb;
-use OCP\AppFramework\Db\Mapper;
 
 
 class LabelMapper extends DeckMapper implements IPermissionMapper {
@@ -84,7 +83,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
     public function isOwner($userId, $labelId) {
-        $sql = 'SELECT * FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_labels` WHERE id = ?)';
+        $sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_labels` WHERE id = ?)';
         $stmt = $this->execute($sql, [$labelId]);
         $row = $stmt->fetch();
         return ($row['owner'] === $userId);

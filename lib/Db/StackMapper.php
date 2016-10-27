@@ -62,7 +62,7 @@ class StackMapper extends Mapper implements IPermissionMapper {
     }
 
     public function isOwner($userId, $stackId) {
-        $sql = 'SELECT * FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_stacks` WHERE id = ?)';
+        $sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_stacks` WHERE id = ?)';
         $stmt = $this->execute($sql, [$stackId]);
         $row = $stmt->fetch();
         return ($row['owner'] === $userId);
