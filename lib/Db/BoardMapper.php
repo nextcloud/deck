@@ -24,8 +24,6 @@
 namespace OCA\Deck\Db;
 
 use OCP\IDb;
-use OCP\AppFramework\Db\Mapper;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 
 class BoardMapper extends DeckMapper implements IPermissionMapper {

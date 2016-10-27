@@ -28,7 +28,7 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Label;
 use OCP\ILogger;
 use OCP\IL10N;
-use OCP\AppFramework\Db\DoesNotExistException;
+
 use OCP\AppFramework\Utility\ITimeFactory;
 
 use \OCA\Deck\Db\Board;
@@ -43,12 +43,10 @@ class BoardService {
     private $labelMapper;
     private $logger;
     private $l10n;
-    private $timeFactory;
 
     public function __construct(BoardMapper $boardMapper,
                                 ILogger $logger,
                                 IL10N $l10n,
-                                ITimeFactory $timeFactory,
                                 LabelMapper $labelMapper,
                                 AclMapper $aclMapper) {
         $this->boardMapper = $boardMapper;

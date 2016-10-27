@@ -21,7 +21,6 @@
  *  
  */
 
-// db/author.php
 namespace OCA\Deck\Db;
 
 use JsonSerializable;

@@ -29,6 +29,11 @@ use OCA\Deck\Middleware\SharingMiddleware;
 
 class Application extends App {
 
+	/**
+	 * Application constructor.
+	 *
+	 * @param array $urlParams
+	 */
 	public function __construct(array $urlParams = array()) {
 		parent::__construct('deck', $urlParams);
 

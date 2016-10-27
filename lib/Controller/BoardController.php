@@ -26,9 +26,9 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\Service\BoardService;
 
 use OCP\IRequest;
-use OCP\AppFramework\Http\DataResponse;
+
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Db\DoesNotExistException;
+
 use OCP\IUserManager;
 use OCP\IGroupManager;
 
@@ -37,6 +37,7 @@ class BoardController extends Controller {
     private $boardService;
     protected $userManager;
     protected $groupManager;
+	private $userInfo;
     public function __construct($appName,
                                 IRequest $request,
                                 IUserManager $userManager,

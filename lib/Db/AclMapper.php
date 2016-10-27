@@ -23,10 +23,9 @@
 
 namespace OCA\Deck\Db;
 
-use OCA\Deck\NoPermissionException;
-use OCP\AppFramework\Db\Entity;
+
+
 use OCP\IDb;
-use OCP\AppFramework\Db\Mapper;
 
 
 class AclMapper extends DeckMapper implements IPermissionMapper {

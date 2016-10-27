@@ -27,7 +27,7 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCP\ILogger;
 use OCP\IL10N;
-use OCP\AppFramework\Db\DoesNotExistException;
+
 use OCP\AppFramework\Utility\ITimeFactory;
 
 use \OCA\Deck\Db\Stack;
@@ -40,8 +40,6 @@ class StackService  {
     private $stackMapper;
     private $cardMapper;
     private $logger;
-    private $l10n;
-    private $timeFactory;
     private $labelMapper;
 
     public function __construct(StackMapper $stackMapper, CardMapper $cardMapper, LabelMapper $labelMapper, ILogger $logger,

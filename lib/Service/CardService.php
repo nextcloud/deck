@@ -23,11 +23,8 @@
 
 namespace OCA\Deck\Service;
 
-use OC\OCS\Exception;
-use OCP\ILogger;
-use OCP\IL10N;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Utility\ITimeFactory;
+
+
 
 use \OCA\Deck\Db\Card;
 use \OCA\Deck\Db\CardMapper;
@@ -36,7 +33,6 @@ use \OCA\Deck\Db\CardMapper;
 class CardService  {
 
     private $cardMapper;
-    private $logger;
 
 
     public function __construct(CardMapper $cardMapper) {

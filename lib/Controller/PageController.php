@@ -25,7 +25,7 @@ namespace OCA\Deck\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
-use OCP\AppFramework\Http\DataResponse;
+
 use OCP\AppFramework\Controller;
 use OCP\IL10N;
 

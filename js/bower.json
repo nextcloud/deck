@@ -10,7 +10,7 @@
     "angular-ui-bootstrap": "~1.*.*",
     "ng-sortable": "~1.*.*",
     "jquery": "~2.*",
-    "momentjs": "~2.11.*",
+    "momentjs": "~2.*",
     "es6-shim": "~0.*",
     "js-url": "~2.*",
     "masonry": "~4.0.0",

@@ -26,9 +26,9 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\Service\LabelService;
 
 use OCP\IRequest;
-use OCP\AppFramework\Http\DataResponse;
+
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Db\DoesNotExistException;
+
 
 class LabelController extends Controller {
     private $userId;

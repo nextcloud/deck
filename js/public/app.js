@@ -119,7 +119,7 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
   $scope.sidebar = $rootScope.sidebar;
 
   $scope.id = $stateParams.boardId;
-  $scope.status={},
+  $scope.status={};
   $scope.newLabel={};
   $scope.status.boardtab = $stateParams.detailTab;
 

@@ -26,9 +26,9 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\Service\StackService;
 
 use OCP\IRequest;
-use OCP\AppFramework\Http\DataResponse;
+
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Db\DoesNotExistException;
+
 
 class StackController extends Controller {
     private $userId;
