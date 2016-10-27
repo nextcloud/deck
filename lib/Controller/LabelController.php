@@ -42,24 +42,36 @@ class LabelController extends Controller {
         $this->labelService = $labelService;
     }
 
-    /**
-     * @NoAdminRequired
-     * @RequireManagePermission
-     */
+	/**
+	 * @NoAdminRequired
+	 * @RequireManagePermission
+	 * @param $title
+	 * @param $color
+	 * @param $boardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function create($title, $color, $boardId) {
         return $this->labelService->create($title, $this->userId, $color, $boardId);
     }
-    /**
-     * @NoAdminRequired
-     * @RequireManagePermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireManagePermission
+	 * @param $id
+	 * @param $title
+	 * @param $color
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function update($id, $title, $color) {
         return $this->labelService->update($id, $title, $this->userId, $color);
     }
-    /**
-     * @NoAdminRequired
-     * @RequireManagePermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireManagePermission
+	 * @param $labelId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function delete($labelId) {
         return $this->labelService->delete($this->userId, $labelId);
     }

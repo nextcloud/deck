@@ -54,10 +54,10 @@ class CardMapper extends Mapper implements IPermissionMapper {
     }
 
 
-    /**
-     * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-     * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-     */
+	/**
+	 * @param $id
+	 * @return Entity if not found
+	 */
     public function find($id) {
         $sql = 'SELECT * FROM `*PREFIX*deck_cards` ' .
             'WHERE `id` = ?';
@@ -68,7 +68,6 @@ class CardMapper extends Mapper implements IPermissionMapper {
     }
 
     public function findAll($stackId, $limit=null, $offset=null) {
-        // TODO: Exclude fields like text
         $sql = 'SELECT * FROM `*PREFIX*deck_cards` 
           WHERE `stack_id` = ? AND NOT archived ORDER BY `order`';
         $entities = $this->findEntities($sql, [$stackId], $limit, $offset);

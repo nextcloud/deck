@@ -191,6 +191,7 @@ class SharingMiddleware extends Middleware {
 	 * @param $mapper
 	 * @param $id
 	 * @return bool
+	 * @throws NotFoundException
 	 */
 	public function checkMapperPermission($permission, $userId, $mapper, $id) {
 		// check if current user is owner

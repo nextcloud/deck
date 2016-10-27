@@ -60,7 +60,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
         $labels = $this->findAssignedLabelsForBoard($boardId);
         $result = array();
         foreach ($labels as $label) {
-            if(!is_array($result[$label->getCardId()])) {
+            if(!array_key_exists($label->getCardId(), $result)) {
                 $result[$label->getCardId()] = array();
             }
             $result[$label->getCardId()][] = $label;

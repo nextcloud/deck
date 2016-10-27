@@ -47,10 +47,13 @@ class ShareController extends Controller {
         $this->userId = $userId;
 
     }
-    /**
-     * @NoAdminRequired
+
+	/**
+	 * @NoAdminRequired
 	 * @RequireNoPermission
-     */
+	 * @param $search
+	 * @return array
+	 */
     public function searchUser($search) {
         $limit = 3;
         $offset = null;

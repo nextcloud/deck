@@ -39,74 +39,114 @@ class CardController extends Controller {
         $this->userId = $userId;
         $this->cardService = $cardService;
     }
-    /**
-     * @NoAdminRequired
-     * @RequireReadPermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireReadPermission
+	 * @param $cardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function read($cardId) {
         return $this->cardService->find($this->userId, $cardId);
     }
-    /**
-     * @NoAdminRequired
-     * @RequireEditPermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireEditPermission
+	 * @param $cardId
+	 * @param $stackId
+	 * @param $order
+	 * @return array
+	 */
     public function reorder($cardId, $stackId, $order) {
         return $this->cardService->reorder($cardId, $stackId, $order);
     }
-    /**
-     * @NoAdminRequired
-     * @RequireEditPermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireEditPermission
+	 * @param $cardId
+	 * @param $title
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function rename($cardId, $title) {
         return $this->cardService->rename($cardId, $title);
     }
-    /**
-     * @NoAdminRequired
-     * @RequireEditPermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireEditPermission
+	 * @param $title
+	 * @param $stackId
+	 * @param $type
+	 * @param int $order
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function create($title, $stackId, $type, $order=999) {
         return $this->cardService->create($title, $stackId, $type, $order, $this->userId);
     }
-    /**
-     * @NoAdminRequired
-     * @RequireEditPermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireEditPermission
+	 * @param $id
+	 * @param $title
+	 * @param $stackId
+	 * @param $type
+	 * @param $order
+	 * @param $description
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function update($id, $title, $stackId, $type, $order, $description) {
             return $this->cardService->update($id, $title, $stackId, $type, $order, $description, $this->userId);
     }
-    /**
-     * @NoAdminRequired
-     * @RequireEditPermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireEditPermission
+	 * @param $cardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function delete($cardId) {
         return $this->cardService->delete($this->userId, $cardId);
     }
 
-    /**
-     * @NoAdminRequired
-     * @RequireEditPermission
-     */
+	/**
+	 * @NoAdminRequired
+	 * @RequireEditPermission
+	 * @param $cardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function archive($cardId) {
         return $this->cardService->archive($cardId);
     }
-    /**
-     * @NoAdminRequired
-     * @RequireEditPermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireEditPermission
+	 * @param $cardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function unarchive($cardId) {
         return $this->cardService->unarchive($cardId);
     }
-    /**
-     * @NoAdminRequired
-     * @RequireEditPermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireEditPermission
+	 * @param $cardId
+	 * @param $labelId
+	 */
     public function assignLabel($cardId, $labelId) {
         return $this->cardService->assignLabel($this->userId, $cardId, $labelId);
     }
-    /**
-     * @NoAdminRequired
-     * @RequireEditPermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireEditPermission
+	 * @param $cardId
+	 * @param $labelId
+	 */
     public function removeLabel($cardId, $labelId) {
         return $this->cardService->removeLabel($this->userId, $cardId, $labelId);
     }

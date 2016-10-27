@@ -41,45 +41,68 @@ class StackController extends Controller {
         $this->userId = $userId;
         $this->stackService = $cardService;
     }
-    /**
-     * @NoAdminRequired
-     * @RequireReadPermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireReadPermission
+	 * @param $boardId
+	 * @return array
+	 */
     public function index($boardId) {
             return $this->stackService->findAll($boardId);
     }
-    /**
-     * @NoAdminRequired
-     * @RequireReadPermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireReadPermission
+	 * @param $boardId
+	 * @return array
+	 */
     public function archived($boardId) {
             return $this->stackService->findAllArchived($boardId);
     }
-    /**
-     * @NoAdminRequired
-     * @RequireReadPermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireReadPermission
+	 * @param $boardId
+	 * @return
+	 */
     public function read($boardId) {
         return $this->stackService->find($this->userId, $boardId);
     }
-    /**
-     * @NoAdminRequired
-     * @RequireManagePermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireManagePermission
+	 * @param $title
+	 * @param $boardId
+	 * @param int $order
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function create($title, $boardId, $order=999) {
         return $this->stackService->create($title, $boardId, $order);
     }
-    /**
-     * @NoAdminRequired
-     * @RequireManagePermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireManagePermission
+	 * @param $id
+	 * @param $title
+	 * @param $boardId
+	 * @param $order
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function update($id, $title, $boardId, $order) {
         return $this->stackService->update($id, $title, $boardId, $order);
     }
-    /**
-     * @NoAdminRequired
-     * @RequireManagePermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireManagePermission
+	 * @param $stackId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function delete($stackId) {
         return $this->stackService->delete($this->userId, $stackId);
     }

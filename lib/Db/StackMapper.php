@@ -38,10 +38,10 @@ class StackMapper extends Mapper implements IPermissionMapper {
     }
 
 
-    /**
-     * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-     * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-     */
+	/**
+	 * @param $id
+	 * @return Entity if not found
+	 */
     public function find($id) {
         $sql = 'SELECT * FROM `*PREFIX*deck_stacks` ' .
             'WHERE `id` = ?';

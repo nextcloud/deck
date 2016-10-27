@@ -27,8 +27,6 @@ namespace OCA\Deck\Db;
 
 interface IPermissionMapper {
 
-	// FIXME: Optimize implementations as e.g. BoardMapper::isOwner doesn't need to select all fields
-
 	/**
 	 * Check if $userId is owner of Entity with $id
 	 *

@@ -25,7 +25,7 @@ namespace OCA\Deck\Db;
 
 use JsonSerializable;
 
-class Board extends \OCA\Deck\Db\Entity implements JsonSerializable {
+class Board extends Entity implements JsonSerializable {
 
     public $id;
     protected $title;

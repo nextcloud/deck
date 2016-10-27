@@ -54,13 +54,14 @@ class StackService  {
     public function findAll($boardId) {
         $stacks = $this->stackMapper->findAll($boardId);
         $labels = $this->labelMapper->getAssignedLabelsForBoard($boardId);
-
-        foreach ($stacks as $idx => $s) {
-            $cards = $this->cardMapper->findAll($s->id);
-            foreach ($cards as $idxc => $card) {
-                $cards[$idxc]->setLabels($labels[$card->id]);
+        foreach ($stacks as $stackIndex => $stack) {
+            $cards = $this->cardMapper->findAll($stack->id);
+            foreach ($cards as $cardIndex => $card) {
+            	if(array_key_exists($card->id, $labels)) {
+                	$cards[$cardIndex]->setLabels($labels[$card->id]);
+				}
             }
-            $stacks[$idx]->setCards($cards);
+            $stacks[$stackIndex]->setCards($cards);
         }
         return $stacks;
     }
@@ -68,12 +69,14 @@ class StackService  {
     public function findAllArchived($boardId) {
         $stacks = $this->stackMapper->findAll($boardId);
         $labels = $this->labelMapper->getAssignedLabelsForBoard($boardId);
-        foreach ($stacks as $idx => $s) {
-            $cards = $this->cardMapper->findAllArchived($s->id);
-            foreach ($cards as $idxc => $card) {
-                $cards[$idxc]->setLabels($labels[$card->id]);
+        foreach ($stacks as $stackIndex => $stack) {
+            $cards = $this->cardMapper->findAllArchived($stack->id);
+            foreach ($cards as $cardIndex => $card) {
+            	if(array_key_exists($card->id, $labels)) {
+					$cards[$cardIndex]->setLabels($labels[$card->id]);
+				}
             }
-            $stacks[$idx]->setCards($cards);
+            $stacks[$stackIndex]->setCards($cards);
         }
         return $stacks;
     }

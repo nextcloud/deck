@@ -49,10 +49,10 @@ class BoardController extends Controller {
         $this->userManager = $userManager;
         $this->groupManager = $groupManager;
         $this->boardService = $cardService;
-        $this->userInfo = $this->getBoardPrequisites();
+        $this->userInfo = $this->getBoardPrerequisites();
     }
 
-    private function getBoardPrequisites() {
+    private function getBoardPrerequisites() {
         $groups = $this->groupManager->getUserGroupIds($this->userManager->get($this->userId));
         return [
             'user' => $this->userId,
@@ -68,66 +68,93 @@ class BoardController extends Controller {
         return $this->boardService->findAll($this->userInfo);
     }
 
-    /**
-     * @NoAdminRequired
-     * @RequireReadPermission
-     */
+	/**
+	 * @NoAdminRequired
+	 * @RequireReadPermission
+	 * @param $boardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function read($boardId) {
         return $this->boardService->find($this->userId, $boardId);
     }
 
-    /**
-     * @NoAdminRequired
+	/**
+	 * @NoAdminRequired
 	 * @RequireNoPermission
-     */
+	 * @param $title
+	 * @param $color
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function create($title, $color) {
         return $this->boardService->create($title, $this->userId, $color);
     }
 
-    /**
-     * @NoAdminRequired
-     * @RequireManagePermission
-     */
+	/**
+	 * @NoAdminRequired
+	 * @RequireManagePermission
+	 * @param $id
+	 * @param $title
+	 * @param $color
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function update($id, $title, $color) {
         return $this->boardService->update($id, $title, $this->userId, $color);
     }
 
-    /**
-     * @NoAdminRequired
-     * @RequireManagePermission
-     */
+	/**
+	 * @NoAdminRequired
+	 * @RequireManagePermission
+	 * @param $boardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function delete($boardId) {
         return $this->boardService->delete($this->userId, $boardId);
     }
 
-    /**
-     * @NoAdminRequired
-     * @RequireReadPermission
-     */
+	/**
+	 * @NoAdminRequired
+	 * @RequireReadPermission
+	 * @param $boardId
+	 * @return
+	 */
     public function labels($boardId) {
         return $this->boardService->labels($boardId);
     }
 
-    /**
-     * @NoAdminRequired
-     * @RequireManagePermission
-     */
+	/**
+	 * @NoAdminRequired
+	 * @RequireManagePermission
+	 * @param $boardId
+	 * @param $type
+	 * @param $participant
+	 * @param $write
+	 * @param $invite
+	 * @param $manage
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function addAcl($boardId, $type, $participant, $write, $invite, $manage) {
         return $this->boardService->addAcl($boardId, $type, $participant, $write, $invite, $manage);
     }
 
-    /**
-     * @NoAdminRequired
-     * @RequireManagePermission
-     */
+	/**
+	 * @NoAdminRequired
+	 * @RequireManagePermission
+	 * @param $id
+	 * @param $permissionWrite
+	 * @param $permissionInvite
+	 * @param $permissionManage
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function updateAcl($id, $permissionWrite, $permissionInvite, $permissionManage) {
         return $this->boardService->updateAcl($id, $permissionWrite, $permissionInvite, $permissionManage);
     }
-    
-    /**
-     * @NoAdminRequired
-     * @RequireManagePermission
-     */
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireManagePermission
+	 * @param $aclId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
     public function deleteAcl($aclId) {
         return $this->boardService->deleteAcl($aclId);
     }

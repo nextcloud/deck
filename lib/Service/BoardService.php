@@ -29,7 +29,6 @@ use OCA\Deck\Db\Label;
 use OCP\ILogger;
 use OCP\IL10N;
 
-use OCP\AppFramework\Utility\ITimeFactory;
 
 use \OCA\Deck\Db\Board;
 use \OCA\Deck\Db\BoardMapper;

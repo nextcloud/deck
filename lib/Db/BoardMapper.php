@@ -40,10 +40,10 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
     }
 
 
-    /**
-     * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-     * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-     */
+	/**
+	 * @param $id
+	 * @return \OCP\AppFramework\Db\Entity if not found
+	 */
     public function find($id) {
         $sql = 'SELECT id, title, owner, color, archived FROM `*PREFIX*deck_boards` ' .
             'WHERE `id` = ?';
@@ -79,13 +79,16 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
         }
         return $entries;
     }
-    /**
-     * Find all boards for a given user
-     * @param $groups
-     * @param null $limit
-     * @param null $offset
-     * @return array
-     */
+
+	/**
+	 * Find all boards for a given user
+	 *
+	 * @param $userId
+	 * @param $groups
+	 * @param null $limit
+	 * @param null $offset
+	 * @return array
+	 */
     public function findAllByGroups($userId, $groups, $limit=null, $offset=null) {
         if(count($groups)<=0) {
             return [];

@@ -28,8 +28,8 @@ use OCP\AppFramework\Db\Mapper;
 abstract class DeckMapper extends Mapper {
 
 	/**
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
+	 * @param $id
+	 * @return \OCP\AppFramework\Db\Entity if not found
 	 */
 	public function find($id) {
 		$sql = 'SELECT * FROM `' . $this->tableName . '` ' . 'WHERE `id` = ?';
