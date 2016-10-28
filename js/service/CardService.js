@@ -30,7 +30,6 @@ app.factory('CardService', function(ApiService, $http, $q){
         var deferred = $q.defer();
         var self = this;
         $http.put(this.baseUrl + '/' + card.id + '/reorder', {cardId: card.id, order: order, stackId: card.stackId}).then(function (response) {
-            card.order = order;
             deferred.resolve(response.data);
         }, function (error) {
             deferred.reject('Error while update ' + self.endpoint);

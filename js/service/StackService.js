@@ -53,8 +53,38 @@ app.factory('StackService', function(ApiService, $http, $q){
     };
 
     StackService.prototype.addCard = function(entity) {
+        console.log(this.data);
+        if(!this.data[entity.stackId].cards) {
+            this.data[entity.stackId].cards = [];
+        }
         this.data[entity.stackId].cards.push(entity);
+        console.log(this.data);
     };
+
+    StackService.prototype.reorder = function(entity, order) {
+        // assign new order
+        for(var i=0, j=0;i<this.data[entity.stackId].cards.length;i++) {
+            if(this.data[entity.stackId].cards[i].id === entity.id) {
+                console.log(this.data[entity.stackId].cards[i].title + " " + order);
+                this.data[entity.stackId].cards[i].order = order;
+            }
+            if(j === order) {
+                j++;
+            }
+            if(this.data[entity.stackId].cards[i].id !== entity.id) {
+                this.data[entity.stackId].cards[i].order = j++;
+            }
+        }
+        // sort array by order
+        this.data[entity.stackId].cards.sort(function(a,b) {
+            if (a.order < b.order)
+                return -1;
+            if (a.order > b.order)
+                return 1;
+            return 0;
+        });
+    };
+
     StackService.prototype.updateCard = function(entity) {
         var self = this;
         var cards = this.data[entity.stackId].cards;
