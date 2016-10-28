@@ -404,7 +404,7 @@ app.controller('ListController', ["$scope", "$location", "$filter", "BoardServic
     $scope.boards = [];
     $scope.newBoard = {};
     $scope.status = {};
-    $scope.colors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
+    $scope.colors = ['0082c9', '00c9c6','00c906', 'c92b00', 'F1DB50', '7C31CC', '3A3B3D', 'CACBCD'];
     $scope.boardservice = BoardService;
 
     // FIXME: not nice, but we want to load this only once
