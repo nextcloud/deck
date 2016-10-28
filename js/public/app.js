@@ -144,11 +144,9 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 	$scope.$state = $stateParams;
 	$scope.filter = $stateParams.filter;
 	$scope.$watch('$state.filter', function (name) {
-		console.log("statewatch" + name);
 		$scope.filter = name;
 	});
 	$scope.switchFilter = function (filter) {
-		console.log("switch filter click  " + name);
 		$state.go('.', {filter: filter}, {notify: false});
 		$scope.filter = filter;
 	};
@@ -182,7 +180,6 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 
 	// filter cards here, as ng-sortable will not work nicely with html-inline filters
 	$scope.filterData = function (order, text) {
-		console.log("filter data");
 		if ($scope.stacks === undefined)
 			return;
 		angular.copy(StackService.getAll(), $scope.stacks);
@@ -195,7 +192,6 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 	};
 
 	$scope.loadDefault = function () {
-		console.log("Load default");
 		StackService.fetchAll($scope.id).then(function (data) {
 			$scope.statusservice.releaseWaiting();
 		}, function (error) {
@@ -204,7 +200,6 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 	};
 
 	$scope.loadArchived = function () {
-		console.log("Load archived!");
 		StackService.fetchArchived($scope.id).then(function (data) {
 			$scope.statusservice.releaseWaiting();
 		}, function (error) {
@@ -282,7 +277,6 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 	$scope.labelUpdate = function (label) {
 		label.edit = false;
 		LabelService.update(label);
-		console.log(label);
 	}
 
 	$scope.aclAdd = function (sharee) {
@@ -301,8 +295,6 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 	// settings for card sorting
 	$scope.sortOptions = {
 		itemMoved: function (event) {
-			console.log('itemMoved');
-			// TODO: Implement reodering here (set new order of all cards in stack)
 			event.source.itemScope.modelValue.status = event.dest.sortableScope.$parent.column;
 			var order = event.dest.index;
 			var card = event.source.itemScope.c;
@@ -369,7 +361,6 @@ app.controller('CardController', ["$scope", "$rootScope", "$routeParams", "$loca
     CardService.fetchOne($scope.cardId).then(function(data) {
         $scope.statusservice.releaseWaiting();
         $scope.archived = CardService.getCurrent().archived;
-        console.log(data);
     }, function(error) {
     });
 
@@ -586,6 +577,12 @@ app.filter('orderObjectBy', function(){
 		return array;
 	}
 });
+app.filter('relativeDateFilter', function() {
+	return function (timestamp) {
+		return OC.Util.relativeModifiedDate(timestamp*1000);
+	}
+});
+
 app.filter('textColorFilter', function() {
 	return function (hex) {
 		// RGB2HLS by Garry Tan
@@ -1144,19 +1141,16 @@ app.factory('StackService', ["ApiService", "$http", "$q", function(ApiService, $
     };
 
     StackService.prototype.addCard = function(entity) {
-        console.log(this.data);
         if(!this.data[entity.stackId].cards) {
             this.data[entity.stackId].cards = [];
         }
         this.data[entity.stackId].cards.push(entity);
-        console.log(this.data);
     };
 
     StackService.prototype.reorder = function(entity, order) {
         // assign new order
         for(var i=0, j=0;i<this.data[entity.stackId].cards.length;i++) {
             if(this.data[entity.stackId].cards[i].id === entity.id) {
-                console.log(this.data[entity.stackId].cards[i].title + " " + order);
                 this.data[entity.stackId].cards[i].order = order;
             }
             if(j === order) {

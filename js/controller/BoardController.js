@@ -50,11 +50,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.$state = $stateParams;
 	$scope.filter = $stateParams.filter;
 	$scope.$watch('$state.filter', function (name) {
-		console.log("statewatch" + name);
 		$scope.filter = name;
 	});
 	$scope.switchFilter = function (filter) {
-		console.log("switch filter click  " + name);
 		$state.go('.', {filter: filter}, {notify: false});
 		$scope.filter = filter;
 	};
@@ -88,7 +86,6 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 
 	// filter cards here, as ng-sortable will not work nicely with html-inline filters
 	$scope.filterData = function (order, text) {
-		console.log("filter data");
 		if ($scope.stacks === undefined)
 			return;
 		angular.copy(StackService.getAll(), $scope.stacks);
@@ -101,7 +98,6 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 
 	$scope.loadDefault = function () {
-		console.log("Load default");
 		StackService.fetchAll($scope.id).then(function (data) {
 			$scope.statusservice.releaseWaiting();
 		}, function (error) {
@@ -110,7 +106,6 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 
 	$scope.loadArchived = function () {
-		console.log("Load archived!");
 		StackService.fetchArchived($scope.id).then(function (data) {
 			$scope.statusservice.releaseWaiting();
 		}, function (error) {
@@ -188,7 +183,6 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.labelUpdate = function (label) {
 		label.edit = false;
 		LabelService.update(label);
-		console.log(label);
 	}
 
 	$scope.aclAdd = function (sharee) {
@@ -207,8 +201,6 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	// settings for card sorting
 	$scope.sortOptions = {
 		itemMoved: function (event) {
-			console.log('itemMoved');
-			// TODO: Implement reodering here (set new order of all cards in stack)
 			event.source.itemScope.modelValue.status = event.dest.sortableScope.$parent.column;
 			var order = event.dest.index;
 			var card = event.source.itemScope.c;

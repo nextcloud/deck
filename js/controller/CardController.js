@@ -37,7 +37,6 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
     CardService.fetchOne($scope.cardId).then(function(data) {
         $scope.statusservice.releaseWaiting();
         $scope.archived = CardService.getCurrent().archived;
-        console.log(data);
     }, function(error) {
     });
 
