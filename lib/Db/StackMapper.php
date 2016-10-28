@@ -28,7 +28,7 @@ use OCP\IDb;
 use OCP\AppFramework\Db\Mapper;
 
 
-class StackMapper extends Mapper implements IPermissionMapper {
+class StackMapper extends DeckMapper implements IPermissionMapper {
 
     private $cardMapper;
 

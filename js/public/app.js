@@ -400,25 +400,32 @@ app.controller('CardController', ["$scope", "$rootScope", "$routeParams", "$loca
 
 }]);
 
-app.controller('ListController', ["$scope", "$location", "$filter", "BoardService", function ($scope, $location, $filter, BoardService) {
+app.controller('ListController', ["$scope", "$location", "$filter", "BoardService", "$element", function ($scope, $location, $filter, BoardService, $element) {
     $scope.boards = [];
     $scope.newBoard = {};
     $scope.status = {};
     $scope.colors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
-
     $scope.boardservice = BoardService;
 
-    BoardService.fetchAll().then(function(data) {
-        $scope.filterData();
-    }, function (error) {
-        
-    }); // TODO: show error when loading fails
+    // FIXME: not nice, but we want to load this only once
+    if($element.attr('id') === 'app-navigation') {
+        BoardService.fetchAll().then(function(data) {
+            $scope.filterData();
+        }, function (error) {
+            // TODO: show error when loading fails
+        });
+    }
+
+    $scope.filterData = function () {
+        angular.copy($scope.boardservice.getData(), $scope.boardservice.sorted);
+        $scope.boardservice.sorted = $filter('orderBy')($scope.boardservice.sorted, 'title');
+    };
 
     $scope.selectColor = function(color) {
         $scope.newBoard.color = color;
     };
 
-    $scope.boardCreate = function () {
+    $scope.boardCreate = function() {
         if(!$scope.newBoard.title || !$scope.newBoard.color) {
             $scope.status.addBoard=false;
             return;
@@ -432,28 +439,19 @@ app.controller('ListController', ["$scope", "$location", "$filter", "BoardServic
                 $scope.status.createBoard = 'Unable to insert board: ' + error.message;
             });
     };
+
     $scope.boardUpdate = function(board) {
         BoardService.update(board).then(function(data) {
             $scope.filterData();
         });
         board.status.edit = false;
     };
+
     $scope.boardDelete = function(board) {
-        // TODO: Ask for confirmation
-        //if (confirm('Are you sure you want to delete this?')) {
             BoardService.delete(board.id).then(function (data) {
                 $scope.filterData();
             });
-        //}
     };
-
-    $scope.filterData = function () {
-        angular.copy($scope.boardservice.getData(), $scope.boardservice.sorted);
-        $scope.boardservice.sorted = $filter('orderBy')($scope.boardservice.sorted, 'title');
-    };
-
-
-
 
 }]);
 

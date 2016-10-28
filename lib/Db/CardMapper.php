@@ -29,7 +29,7 @@ use OCP\AppFramework\Db\Mapper;
 
 
 
-class CardMapper extends Mapper implements IPermissionMapper {
+class CardMapper extends DeckMapper implements IPermissionMapper {
 
     private $labelMapper;
 
