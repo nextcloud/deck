@@ -34,7 +34,6 @@ namespace OCA\Deck\Db;
 class Entity extends \OCP\AppFramework\Db\Entity {
 
 	private $_relations = array();
-	private $_updatedFields = array();
 
 	/**
 	 * Mark a property as relation so it will not get updated using Mapper::update
@@ -53,16 +52,8 @@ class Entity extends \OCP\AppFramework\Db\Entity {
 	 */
 	protected function markFieldUpdated($attribute){
 		if(!in_array($attribute, $this->_relations)) {
-			$this->_updatedFields[$attribute] = true;
+			parent::markFieldUpdated($attribute);
 		}
-	}
-
-	/**
-	 * overwritten from \OCP\AppFramework\Db\Entity to avoid writing relational attributes
-	 * @return array Array of field's update status
-	 */
-	public function getUpdatedFields(){
-		return $this->_updatedFields;
 	}
 
 }

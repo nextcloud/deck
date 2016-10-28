@@ -44,15 +44,10 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
         return parent::insert($entity);
     }
 
-    /**
-     * @param Entity $entity
-     * @return Entity
-     */
     public function update(Entity $entity) {
         $entity->setLastModified(time());
         return parent::update($entity);
     }
-
 
 	/**
 	 * @param $id
