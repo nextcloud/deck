@@ -25,8 +25,8 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.sidebar = $rootScope.sidebar;
 
 	$scope.id = $stateParams.boardId;
-	$scope.status = {},
-		$scope.newLabel = {};
+	$scope.status = {};
+	$scope.newLabel = {};
 	$scope.status.boardtab = $stateParams.detailTab;
 
 	$scope.stackservice = StackService;
@@ -78,11 +78,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		}
 	};
 	$scope.checkCanEdit = function () {
-		if ($scope.archived) {
-			return false;
-		}
-		return true;
-	}
+		return !$scope.archived;
+
+	};
 
 	// filter cards here, as ng-sortable will not work nicely with html-inline filters
 	$scope.filterData = function (order, text) {
@@ -90,8 +88,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			return;
 		angular.copy(StackService.getAll(), $scope.stacks);
 		angular.forEach($scope.stacks, function (value, key) {
-			var cards = [];
-			cards = $filter('cardSearchFilter')(value.cards, text);
+			var cards = $filter('cardSearchFilter')(value.cards, text);
 			cards = $filter('orderBy')(cards, order);
 			$scope.stacks[key].cards = cards;
 		});
@@ -128,7 +125,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			search = "%25";
 		}
 		BoardService.searchUsers(search);
-	}
+	};
 
 	$scope.newStack = {'boardId': $scope.id};
 	$scope.newCard = {};
@@ -144,19 +141,19 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		var newCard = {
 			'title': title,
 			'stackId': stack,
-			'type': 'plain',
+			'type': 'plain'
 		};
 		CardService.create(newCard).then(function (data) {
 			// FIXME: called here reorders
 			$scope.stackservice.addCard(data);
 			$scope.newCard.title = "";
 		});
-	}
+	};
 
 	$scope.cardDelete = function (card) {
 		CardService.delete(card.id);
 		StackService.deleteCard(card);
-	}
+	};
 	$scope.cardArchive = function (card) {
 		CardService.archive(card);
 		StackService.deleteCard(card);
@@ -164,7 +161,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.cardUnarchive = function (card) {
 		CardService.unarchive(card);
 		StackService.deleteCard(card);
-	}
+	};
 
 	$scope.labelDelete = function (label) {
 		LabelService.delete(label.id);
@@ -172,30 +169,30 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		var i = BoardService.getCurrent().labels.indexOf(label);
 		BoardService.getCurrent().labels.splice(i, 1);
 		// TODO: remove from cards
-	}
+	};
 	$scope.labelCreate = function (label) {
 		label.boardId = $scope.id;
 		LabelService.create(label);
 		BoardService.getCurrent().labels.push(label);
 		$scope.status.createLabel = false;
 		$scope.newLabel = {};
-	}
+	};
 	$scope.labelUpdate = function (label) {
 		label.edit = false;
 		LabelService.update(label);
-	}
+	};
 
 	$scope.aclAdd = function (sharee) {
 		sharee.boardId = $scope.id;
 		BoardService.addAcl(sharee);
 		$scope.status.addSharee = null;
-	}
+	};
 	$scope.aclDelete = function (acl) {
 		BoardService.deleteAcl(acl);
-	}
+	};
 	$scope.aclUpdate = function (acl) {
 		BoardService.updateAcl(acl);
-	}
+	};
 
 
 	// settings for card sorting
@@ -234,8 +231,8 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			if (eventObj) {
 				var container = $("#board");
 				var offset = container.offset();
-				targetX = eventObj.pageX - (offset.left || container.scrollLeft());
-				targetY = eventObj.pageY - (offset.top || container.scrollTop());
+				var targetX = eventObj.pageX - (offset.left || container.scrollLeft());
+				var targetY = eventObj.pageY - (offset.top || container.scrollTop());
 				if (targetX < offset.left) {
 					container.scrollLeft(container.scrollLeft() - 50);
 				} else if (targetX > container.width()) {

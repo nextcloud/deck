@@ -100,7 +100,7 @@ app.factory('BoardService', function(ApiService, $http, $q){
         return deferred.promise;
     };
 
-    service = new BoardService($http, 'boards', $q)
+    service = new BoardService($http, 'boards', $q);
     return service;
     
 });

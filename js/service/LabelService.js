@@ -25,6 +25,6 @@ app.factory('LabelService', function(ApiService, $http, $q){
         ApiService.call(this, $http, ep, $q);
     };
     LabelService.prototype = angular.copy(ApiService.prototype);
-    service = new LabelService($http, 'labels', $q)
+    service = new LabelService($http, 'labels', $q);
     return service;
 });

@@ -46,8 +46,8 @@ app.config(["$provide", "$routeProvider", "$interpolateProvider", "$httpProvider
         .state('list', {
             url: "/",
             templateUrl: "/boardlist.mainView.html",
-            controller: 'ListController',
-        })
+            controller: 'ListController'
+		})
         .state('board', {
             url: "/board/:boardId/:filter",
             templateUrl: "/board.html",
@@ -61,10 +61,10 @@ app.config(["$provide", "$routeProvider", "$interpolateProvider", "$httpProvider
             reloadOnSearch : false,
             views: {
                 "sidebarView": {
-                    templateUrl: "/board.sidebarView.html",
-                }
-            },
-        })
+                    templateUrl: "/board.sidebarView.html"
+				}
+            }
+		})
         .state('board.card', {
             url: "/card/:cardId",
             views: {
@@ -119,8 +119,8 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 	$scope.sidebar = $rootScope.sidebar;
 
 	$scope.id = $stateParams.boardId;
-	$scope.status = {},
-		$scope.newLabel = {};
+	$scope.status = {};
+	$scope.newLabel = {};
 	$scope.status.boardtab = $stateParams.detailTab;
 
 	$scope.stackservice = StackService;
@@ -172,11 +172,9 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 		}
 	};
 	$scope.checkCanEdit = function () {
-		if ($scope.archived) {
-			return false;
-		}
-		return true;
-	}
+		return !$scope.archived;
+
+	};
 
 	// filter cards here, as ng-sortable will not work nicely with html-inline filters
 	$scope.filterData = function (order, text) {
@@ -184,8 +182,7 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 			return;
 		angular.copy(StackService.getAll(), $scope.stacks);
 		angular.forEach($scope.stacks, function (value, key) {
-			var cards = [];
-			cards = $filter('cardSearchFilter')(value.cards, text);
+			var cards = $filter('cardSearchFilter')(value.cards, text);
 			cards = $filter('orderBy')(cards, order);
 			$scope.stacks[key].cards = cards;
 		});
@@ -222,7 +219,7 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 			search = "%25";
 		}
 		BoardService.searchUsers(search);
-	}
+	};
 
 	$scope.newStack = {'boardId': $scope.id};
 	$scope.newCard = {};
@@ -238,19 +235,19 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 		var newCard = {
 			'title': title,
 			'stackId': stack,
-			'type': 'plain',
+			'type': 'plain'
 		};
 		CardService.create(newCard).then(function (data) {
 			// FIXME: called here reorders
 			$scope.stackservice.addCard(data);
 			$scope.newCard.title = "";
 		});
-	}
+	};
 
 	$scope.cardDelete = function (card) {
 		CardService.delete(card.id);
 		StackService.deleteCard(card);
-	}
+	};
 	$scope.cardArchive = function (card) {
 		CardService.archive(card);
 		StackService.deleteCard(card);
@@ -258,7 +255,7 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 	$scope.cardUnarchive = function (card) {
 		CardService.unarchive(card);
 		StackService.deleteCard(card);
-	}
+	};
 
 	$scope.labelDelete = function (label) {
 		LabelService.delete(label.id);
@@ -266,30 +263,30 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 		var i = BoardService.getCurrent().labels.indexOf(label);
 		BoardService.getCurrent().labels.splice(i, 1);
 		// TODO: remove from cards
-	}
+	};
 	$scope.labelCreate = function (label) {
 		label.boardId = $scope.id;
 		LabelService.create(label);
 		BoardService.getCurrent().labels.push(label);
 		$scope.status.createLabel = false;
 		$scope.newLabel = {};
-	}
+	};
 	$scope.labelUpdate = function (label) {
 		label.edit = false;
 		LabelService.update(label);
-	}
+	};
 
 	$scope.aclAdd = function (sharee) {
 		sharee.boardId = $scope.id;
 		BoardService.addAcl(sharee);
 		$scope.status.addSharee = null;
-	}
+	};
 	$scope.aclDelete = function (acl) {
 		BoardService.deleteAcl(acl);
-	}
+	};
 	$scope.aclUpdate = function (acl) {
 		BoardService.updateAcl(acl);
-	}
+	};
 
 
 	// settings for card sorting
@@ -328,8 +325,8 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 			if (eventObj) {
 				var container = $("#board");
 				var offset = container.offset();
-				targetX = eventObj.pageX - (offset.left || container.scrollLeft());
-				targetY = eventObj.pageY - (offset.top || container.scrollTop());
+				var targetX = eventObj.pageX - (offset.left || container.scrollLeft());
+				var targetY = eventObj.pageY - (offset.top || container.scrollTop());
 				if (targetX < offset.left) {
 					container.scrollLeft(container.scrollLeft() - 50);
 				} else if (targetX > container.width()) {
@@ -388,15 +385,15 @@ app.controller('CardController', ["$scope", "$rootScope", "$routeParams", "$loca
     $scope.cardUpdate = function(card) {
         CardService.update(CardService.getCurrent()).then(function(data) {
             $scope.status.cardEditDescription = false;
-            $('#card-description .save-indicator').fadeIn(500).fadeOut(1000);
+            $('#card-description').find('.save-indicator').fadeIn(500).fadeOut(1000);
         });
-    }
+    };
 
     $scope.labelAssign = function(element, model) {
         CardService.assignLabel($scope.cardId, element.id);
         var card = CardService.getCurrent();
         StackService.updateCard(card);
-    }
+    };
     
     $scope.labelRemove = function(element, model) {
         CardService.removeLabel($scope.cardId, element.id)
@@ -494,11 +491,9 @@ app.filter('cardSearchFilter', function() {
 			});
 		});
 
-		var arrayResult = $.map(_result, function(value, index) {
+		return $.map(_result, function(value, index) {
 			return [value];
 		});
-
-		return arrayResult;
 	};
 });
 app.filter('iconWhiteFilter', function() {
@@ -512,9 +507,9 @@ app.filter('iconWhiteFilter', function() {
 			b: parseInt(result[3], 16)
 		} : null;
 		if(result !== null) {
-			r = color.r/255;
-			g = color.g/255;
-			b = color.b/255;
+			var r = color.r/255;
+			var g = color.g/255;
+			var b = color.b/255;
 			var max = Math.max(r, g, b), min = Math.min(r, g, b);
 			var h, s, l = (max + min) / 2;
 
@@ -554,8 +549,7 @@ app.filter('lightenColorFilter', function() {
 			b: parseInt(result[3], 16)
 		} : null;
 		if (result !== null) {
-			var rgba = "rgba(" + color.r + "," + color.g + "," + color.b + ",0.7)";
-			return rgba;
+			return "rgba(" + color.r + "," + color.g + "," + color.b + ",0.7)";
 		} else {
 			return "#" + hex;
 		}
@@ -594,9 +588,9 @@ app.filter('textColorFilter', function() {
 			b: parseInt(result[3], 16)
 		} : null;
 		if(result !== null) {
-			r = color.r/255;
-			g = color.g/255;
-			b = color.b/255;
+			var r = color.r/255;
+			var g = color.g/255;
+			var b = color.b/255;
 			var max = Math.max(r, g, b), min = Math.min(r, g, b);
 			var h, s, l = (max + min) / 2;
 
@@ -700,36 +694,6 @@ app.directive('avatar', function() {
 		}
 	};
 });
-// OwnCloud Click Handling
-// https://doc.owncloud.org/server/8.0/developer_manual/app/css.html
-app.directive('cardActionUtils', function () {
-    'use strict';
-    return {
-        restrict: 'C',
-        scope: {
-            ngModel : '=',
-        },
-        link: function (scope, elm) {
-            console.log(scope);
-/*
-            var menu = elm.siblings('.popovermenu');
-            var button = $(elm)
-                .find('li a');
-
-            button.click(function () {
-                menu.toggleClass('open');
-            });
-            scope.$on('documentClicked', function (scope, event) {
-                if (event.target !== button[0]) {
-                    menu.removeClass('open');
-                }
-            });
-            */
-        }
-    };
-});
-
-
 // original idea from blockloop: http://stackoverflow.com/a/24090733
 app.directive('elastic', [
 	'$timeout',
@@ -778,7 +742,7 @@ app.directive('search', ["$document", "$location", function ($document, $locatio
 				scope.$apply(function () {
 					scope.onSearch(value);
 				});
-			}
+			};
 
 			box.on('search keyup', function (event) {
 				if (event.type === 'search' || event.keyCode === 13 ) {
@@ -816,7 +780,7 @@ app.factory('ApiService', ["$http", "$q", function($http, $q){
 
         });
         return deferred.promise;
-    }
+    };
 
     ApiService.prototype.fetchOne = function (id) {
 
@@ -888,7 +852,7 @@ app.factory('ApiService', ["$http", "$q", function($http, $q){
     // methods for managing data
     ApiService.prototype.clear = function() {
         this.data = {};
-    }
+    };
     ApiService.prototype.add = function (entity) {
         var element = this.data[entity.id];
         if(element===undefined) {
@@ -915,7 +879,7 @@ app.factory('ApiService', ["$http", "$q", function($http, $q){
 
     ApiService.prototype.getCurrent = function () {
         return this.data[this.id];
-    }
+    };
 
     ApiService.prototype.getData = function() {
         return $.map(this.data, function(value, index) {
@@ -925,7 +889,7 @@ app.factory('ApiService', ["$http", "$q", function($http, $q){
 
     ApiService.prototype.getAll = function () {
         return this.data;
-    }
+    };
 
     ApiService.prototype.getName = function() {
         var funcNameRegex = /function (.{1,})\(/;
@@ -1017,7 +981,7 @@ app.factory('BoardService', ["ApiService", "$http", "$q", function(ApiService, $
         return deferred.promise;
     };
 
-    service = new BoardService($http, 'boards', $q)
+    service = new BoardService($http, 'boards', $q);
     return service;
     
 }]);
@@ -1036,7 +1000,7 @@ app.factory('CardService', ["ApiService", "$http", "$q", function(ApiService, $h
             deferred.reject('Error while update ' + self.endpoint);
         });
         return deferred.promise;
-    }
+    };
 
     CardService.prototype.rename = function(card) {
         var deferred = $q.defer();
@@ -1048,7 +1012,7 @@ app.factory('CardService', ["ApiService", "$http", "$q", function(ApiService, $h
             deferred.reject('Error while renaming ' + self.endpoint);
         });
         return deferred.promise;
-    }
+    };
 
     CardService.prototype.assignLabel = function(card, label) {
         var url = this.baseUrl + '/' + card + '/label/' + label;
@@ -1060,7 +1024,7 @@ app.factory('CardService', ["ApiService", "$http", "$q", function(ApiService, $h
             deferred.reject('Error while update ' + self.endpoint);
         });
         return deferred.promise;
-    }
+    };
     CardService.prototype.removeLabel = function(card, label) {
         var url = this.baseUrl + '/' + card + '/label/' + label;
         var deferred = $q.defer();
@@ -1071,7 +1035,7 @@ app.factory('CardService', ["ApiService", "$http", "$q", function(ApiService, $h
             deferred.reject('Error while update ' + self.endpoint);
         });
         return deferred.promise;
-    }
+    };
 
     CardService.prototype.archive = function (card) {
         var deferred = $q.defer();
@@ -1097,7 +1061,7 @@ app.factory('CardService', ["ApiService", "$http", "$q", function(ApiService, $h
 
     };
 
-    service = new CardService($http, 'cards', $q)
+    service = new CardService($http, 'cards', $q);
     return service;
 }]);
 app.factory('LabelService', ["ApiService", "$http", "$q", function(ApiService, $http, $q){
@@ -1105,7 +1069,7 @@ app.factory('LabelService', ["ApiService", "$http", "$q", function(ApiService, $
         ApiService.call(this, $http, ep, $q);
     };
     LabelService.prototype = angular.copy(ApiService.prototype);
-    service = new LabelService($http, 'labels', $q)
+    service = new LabelService($http, 'labels', $q);
     return service;
 }]);
 app.factory('StackService', ["ApiService", "$http", "$q", function(ApiService, $http, $q){
@@ -1113,7 +1077,6 @@ app.factory('StackService', ["ApiService", "$http", "$q", function(ApiService, $
         ApiService.call(this, $http, ep, $q);
     };
     StackService.prototype = angular.copy(ApiService.prototype);
-    StackService.prototype.dataFiltered = {};
     StackService.prototype.fetchAll = function(boardId) {
         var deferred = $q.defer();
         var self=this;
@@ -1202,7 +1165,7 @@ app.factory('StatusService', function(){
         this.title = '';
         this.text = '';
         this.counter = 0;
-    }
+    };
 
 
     StatusService.prototype.setStatus = function($icon, $title, $text) {
@@ -1210,7 +1173,7 @@ app.factory('StatusService', function(){
         this.icon = $icon;
         this.title = $title;
         this.text = $text;
-    }
+    };
 
     StatusService.prototype.setError = function($title, $text) {
         this.active = true;
@@ -1218,7 +1181,7 @@ app.factory('StatusService', function(){
         this.title = $title;
         this.text = $text;
         this.counter = 0;
-    }
+    };
 
     StatusService.prototype.releaseWaiting = function() {
         if(this.counter>0)
@@ -1227,7 +1190,7 @@ app.factory('StatusService', function(){
             this.active = false;
             this.counter = 0;
         }
-    }
+    };
 
     StatusService.prototype.retainWaiting = function() {
         this.active = true;
@@ -1235,11 +1198,11 @@ app.factory('StatusService', function(){
         this.title = '';
         this.text = '';
         this.counter++;
-    }
+    };
 
     StatusService.prototype.unsetStatus = function() {
         this.active = false;
-    }
+    };
 
     return {
         getInstance: function() {

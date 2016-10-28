@@ -37,7 +37,7 @@ app.directive('search', function ($document, $location) {
 				scope.$apply(function () {
 					scope.onSearch(value);
 				});
-			}
+			};
 
 			box.on('search keyup', function (event) {
 				if (event.type === 'search' || event.keyCode === 13 ) {

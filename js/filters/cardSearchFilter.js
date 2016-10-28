@@ -36,10 +36,8 @@ app.filter('cardSearchFilter', function() {
 			});
 		});
 
-		var arrayResult = $.map(_result, function(value, index) {
+		return $.map(_result, function(value, index) {
 			return [value];
 		});
-
-		return arrayResult;
 	};
 });

@@ -35,7 +35,7 @@ app.factory('CardService', function(ApiService, $http, $q){
             deferred.reject('Error while update ' + self.endpoint);
         });
         return deferred.promise;
-    }
+    };
 
     CardService.prototype.rename = function(card) {
         var deferred = $q.defer();
@@ -47,7 +47,7 @@ app.factory('CardService', function(ApiService, $http, $q){
             deferred.reject('Error while renaming ' + self.endpoint);
         });
         return deferred.promise;
-    }
+    };
 
     CardService.prototype.assignLabel = function(card, label) {
         var url = this.baseUrl + '/' + card + '/label/' + label;
@@ -59,7 +59,7 @@ app.factory('CardService', function(ApiService, $http, $q){
             deferred.reject('Error while update ' + self.endpoint);
         });
         return deferred.promise;
-    }
+    };
     CardService.prototype.removeLabel = function(card, label) {
         var url = this.baseUrl + '/' + card + '/label/' + label;
         var deferred = $q.defer();
@@ -70,7 +70,7 @@ app.factory('CardService', function(ApiService, $http, $q){
             deferred.reject('Error while update ' + self.endpoint);
         });
         return deferred.promise;
-    }
+    };
 
     CardService.prototype.archive = function (card) {
         var deferred = $q.defer();
@@ -96,6 +96,6 @@ app.factory('CardService', function(ApiService, $http, $q){
 
     };
 
-    service = new CardService($http, 'cards', $q)
+    service = new CardService($http, 'cards', $q);
     return service;
 });

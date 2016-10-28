@@ -28,7 +28,7 @@ app.factory('StatusService', function(){
         this.title = '';
         this.text = '';
         this.counter = 0;
-    }
+    };
 
 
     StatusService.prototype.setStatus = function($icon, $title, $text) {
@@ -36,7 +36,7 @@ app.factory('StatusService', function(){
         this.icon = $icon;
         this.title = $title;
         this.text = $text;
-    }
+    };
 
     StatusService.prototype.setError = function($title, $text) {
         this.active = true;
@@ -44,7 +44,7 @@ app.factory('StatusService', function(){
         this.title = $title;
         this.text = $text;
         this.counter = 0;
-    }
+    };
 
     StatusService.prototype.releaseWaiting = function() {
         if(this.counter>0)
@@ -53,7 +53,7 @@ app.factory('StatusService', function(){
             this.active = false;
             this.counter = 0;
         }
-    }
+    };
 
     StatusService.prototype.retainWaiting = function() {
         this.active = true;
@@ -61,11 +61,11 @@ app.factory('StatusService', function(){
         this.title = '';
         this.text = '';
         this.counter++;
-    }
+    };
 
     StatusService.prototype.unsetStatus = function() {
         this.active = false;
-    }
+    };
 
     return {
         getInstance: function() {

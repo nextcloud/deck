@@ -46,7 +46,7 @@ app.factory('ApiService', function($http, $q){
 
         });
         return deferred.promise;
-    }
+    };
 
     ApiService.prototype.fetchOne = function (id) {
 
@@ -118,7 +118,7 @@ app.factory('ApiService', function($http, $q){
     // methods for managing data
     ApiService.prototype.clear = function() {
         this.data = {};
-    }
+    };
     ApiService.prototype.add = function (entity) {
         var element = this.data[entity.id];
         if(element===undefined) {
@@ -145,7 +145,7 @@ app.factory('ApiService', function($http, $q){
 
     ApiService.prototype.getCurrent = function () {
         return this.data[this.id];
-    }
+    };
 
     ApiService.prototype.getData = function() {
         return $.map(this.data, function(value, index) {
@@ -155,7 +155,7 @@ app.factory('ApiService', function($http, $q){
 
     ApiService.prototype.getAll = function () {
         return this.data;
-    }
+    };
 
     ApiService.prototype.getName = function() {
         var funcNameRegex = /function (.{1,})\(/;

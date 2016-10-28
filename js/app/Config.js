@@ -38,8 +38,8 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
         .state('list', {
             url: "/",
             templateUrl: "/boardlist.mainView.html",
-            controller: 'ListController',
-        })
+            controller: 'ListController'
+		})
         .state('board', {
             url: "/board/:boardId/:filter",
             templateUrl: "/board.html",
@@ -53,10 +53,10 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
             reloadOnSearch : false,
             views: {
                 "sidebarView": {
-                    templateUrl: "/board.sidebarView.html",
-                }
-            },
-        })
+                    templateUrl: "/board.sidebarView.html"
+				}
+            }
+		})
         .state('board.card', {
             url: "/card/:cardId",
             views: {

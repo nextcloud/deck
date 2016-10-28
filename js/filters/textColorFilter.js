@@ -31,9 +31,9 @@ app.filter('textColorFilter', function() {
 			b: parseInt(result[3], 16)
 		} : null;
 		if(result !== null) {
-			r = color.r/255;
-			g = color.g/255;
-			b = color.b/255;
+			var r = color.r/255;
+			var g = color.g/255;
+			var b = color.b/255;
 			var max = Math.max(r, g, b), min = Math.min(r, g, b);
 			var h, s, l = (max + min) / 2;
 
