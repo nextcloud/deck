@@ -65,7 +65,7 @@
 	</div>//-->
 
 	<div id="card-description">
-		<h3>Description</h3>
+		<h3>Description<div class="save-indicator"><?php p($l->t('Saved')); ?></div></h3>
 		<textarea elastic ng-if="status.cardEditDescription"
 				  placeholder="Enter your description here ..."
 				  ng-blur="cardUpdate(cardservice.getCurrent())"

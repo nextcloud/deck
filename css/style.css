@@ -436,11 +436,21 @@
 #card-dates span {
 }
 
-#card-description h3 {
+#card-description > h3 {
 	border-bottom: 1px solid #333333;
 	font-weight: 600;
 	font-size: 10pt;
 	padding: 5px;
+}
+
+.save-indicator {
+	background-color: #009900;
+	color: #ffffff;
+	border-radius: 3px;
+	float:right;
+	padding:1px 10px;
+	font-size: 8pt !important;
+	display:none;
 }
 
 #card-description textarea {
@@ -549,10 +559,16 @@
 
 /* color selector */
 
+.colorselect {
+	overflow: hidden;
+	clear:both;
+	padding-top:4px;
+	padding-left: 4px;
+}
 .colorselect .color {
 	opacity: 0.7;
-	width: 26px;
-	height: 26px;
+	width: 27px;
+	height: 27px;
 	float: left;
 	margin-right: 2px;
 	border: none;
@@ -561,16 +577,14 @@
 .colorselect .selected {
 	opacity: 1.0;
 	border: 1px solid #333333;
-	width: 26px;
-	height: 26px;
-
+	width: 27px;
+	height: 27px;
 }
 
 #boardlist {
 	width: 100%;
 	height: 100%;
 	overflow: scroll;
-
 }
 
 #boardlist td .board-bullet {
@@ -731,6 +745,8 @@ button:hover {
 
 .ui-select-container {
 	background-color: #fafafa !important;
+	border: 1px solid #fafafa;
+
 }
 
 .ui-select-container.open {
@@ -790,38 +806,57 @@ button:hover {
 	}
 }
 
+#markdown {
+	width:100% !important;
+}
 #markdown p {
 	margin-bottom: 15px;
 }
+#markdown * {
+	white-space: normal;
+	word-wrap:break-word;
+	word-wrap: break-word;         /* All browsers since IE 5.5+ */
+	overflow-wrap: break-word;     /* Renamed property in CSS3 draft spec */
+}
 
-#markdown ol {
+#markdown a {
+	color: #666666;
+	text-decoration: underline;
+}
+
+#markdown ol, #markdown ul {
 	margin-left: 20px;
+	margin-bottom: 10px;
 }
 
 #markdown ul {
-	margin-left: 20px;
 	list-style-type: disc;
 }
 
 #markdown h1 {
 	font-size: 18px;
+	font-weight: 600;
 	margin-bottom: 5px;
 }
 
 #markdown h2 {
 	font-size: 16px;
+	font-weight: 600;
 }
 
 #markdown h3 {
 	font-size: 14px;
+	font-weight: 600;
 }
 
 #markdown h4 {
 	font-size: 13px;
+	font-weight: 600;
 }
 
 #markdown h6 {
 	font-size: 12px;
+	font-weight: 600;
 }
 
 #markdown pre {

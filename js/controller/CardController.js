@@ -63,8 +63,10 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
         });
     };
     $scope.cardUpdate = function(card) {
-        CardService.update(CardService.getCurrent());
-        $scope.status.cardEditDescription = false;
+        CardService.update(CardService.getCurrent()).then(function(data) {
+            $scope.status.cardEditDescription = false;
+            $('#card-description .save-indicator').fadeIn(500).fadeOut(1000);
+        });
     }
 
     $scope.labelAssign = function(element, model) {
