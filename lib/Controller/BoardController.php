@@ -75,7 +75,7 @@ class BoardController extends Controller {
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
     public function read($boardId) {
-        return $this->boardService->find($this->userId, $boardId);
+        return $this->boardService->find($boardId);
     }
 
 	/**
@@ -98,7 +98,7 @@ class BoardController extends Controller {
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
     public function update($id, $title, $color) {
-        return $this->boardService->update($id, $title, $this->userId, $color);
+        return $this->boardService->update($id, $title, $color);
     }
 
 	/**
@@ -108,7 +108,7 @@ class BoardController extends Controller {
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
     public function delete($boardId) {
-        return $this->boardService->delete($this->userId, $boardId);
+        return $this->boardService->delete($boardId);
     }
 
 	/**

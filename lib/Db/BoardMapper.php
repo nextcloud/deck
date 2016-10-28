@@ -96,6 +96,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
         $sql = 'SELECT boards.id, title, owner, color, archived, 2 as shared FROM oc_deck_boards as boards ' .
             'INNER JOIN oc_deck_board_acl as acl ON boards.id=acl.board_id WHERE owner != ? AND type=\'group\' AND (';
         $countGroups = 0;
+		// FIXME: group unused?
         foreach ($groups as $group) {
             $sql .= 'acl.participant = ? ';
             if(count($groups)>1 && $countGroups++<count($groups)-1)

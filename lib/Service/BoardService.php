@@ -61,7 +61,7 @@ class BoardService {
         return array_merge($userBoards, $groupBoards);
     }
 
-    public function find($userId, $boardId) {
+    public function find($boardId) {
         $board = $this->boardMapper->find($boardId);
         return $board;
     }
@@ -92,12 +92,12 @@ class BoardService {
 
     }
 
-    public function delete($userId, $id) {
-        return $this->boardMapper->delete($this->find($userId, $id));
+    public function delete($id) {
+        return $this->boardMapper->delete($this->find($id));
     }
 
-    public function update($id, $title, $userId, $color) {
-        $board = $this->find($userId, $id);
+    public function update($id, $title, $color) {
+        $board = $this->find($id);
         $board->setTitle($title);
         $board->setColor($color);
         return $this->boardMapper->update($board);

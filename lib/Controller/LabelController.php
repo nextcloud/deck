@@ -51,7 +51,7 @@ class LabelController extends Controller {
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
     public function create($title, $color, $boardId) {
-        return $this->labelService->create($title, $this->userId, $color, $boardId);
+        return $this->labelService->create($title, $color, $boardId);
     }
 
 	/**
@@ -63,7 +63,7 @@ class LabelController extends Controller {
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
     public function update($id, $title, $color) {
-        return $this->labelService->update($id, $title, $this->userId, $color);
+        return $this->labelService->update($id, $title, $color);
     }
 
 	/**
@@ -73,7 +73,7 @@ class LabelController extends Controller {
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
     public function delete($labelId) {
-        return $this->labelService->delete($this->userId, $labelId);
+        return $this->labelService->delete($labelId);
     }
 
 }

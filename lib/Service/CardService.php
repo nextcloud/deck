@@ -23,9 +23,6 @@
 
 namespace OCA\Deck\Service;
 
-
-
-
 use \OCA\Deck\Db\Card;
 use \OCA\Deck\Db\CardMapper;
 use \OCA\Deck\CardArchivedException;
@@ -35,12 +32,11 @@ class CardService  {
 
     private $cardMapper;
 
-
     public function __construct(CardMapper $cardMapper) {
         $this->cardMapper = $cardMapper;
     }
 
-    public function find($userId, $cardId) {
+    public function find($cardId) {
         return $this->cardMapper->find($cardId);
     }
     public function create($title, $stackId, $type, $order, $owner) {
@@ -54,7 +50,7 @@ class CardService  {
 
     }
 
-    public function delete($userId, $id) {
+    public function delete($id) {
         return $this->cardMapper->delete($this->cardMapper->find($id));
     }
 
@@ -117,7 +113,7 @@ class CardService  {
         return $this->cardMapper->update($card);
     }
 
-    public function assignLabel($userId, $cardId, $labelId) {
+    public function assignLabel($cardId, $labelId) {
         $card = $this->cardMapper->find($cardId);
         if($card->getArchived()) {
             throw new CardArchivedException();
@@ -125,7 +121,7 @@ class CardService  {
         $this->cardMapper->assignLabel($cardId, $labelId);
     }
 
-    public function removeLabel($userId, $cardId, $labelId) {
+    public function removeLabel($cardId, $labelId) {
         $card = $this->cardMapper->find($cardId);
         if($card->getArchived()) {
             throw new CardArchivedException();

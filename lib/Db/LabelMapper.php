@@ -68,14 +68,14 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
         return $result;
     }
 
-	public function deleteLabelAssignments($labelId, $limit=null, $offset=null) {
+	public function deleteLabelAssignments($labelId) {
 		$sql = 'DELETE FROM `*PREFIX*deck_assigned_labels` WHERE label_id = ?';
 		$stmt = $this->db->prepare($sql);
 		$stmt->bindParam(1, $labelId,  \PDO::PARAM_INT);
 		$stmt->execute();
 	}
 
-	public function deleteLabelAssignmentsForCard($cardId, $limit=null, $offset=null) {
+	public function deleteLabelAssignmentsForCard($cardId) {
 		$sql = 'DELETE FROM `*PREFIX*deck_assigned_labels` WHERE card_id = ?';
 		$stmt = $this->db->prepare($sql);
 		$stmt->bindParam(1, $cardId,  \PDO::PARAM_INT);

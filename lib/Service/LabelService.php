@@ -43,12 +43,12 @@ class LabelService  {
         $this->logger = $logger;
     }
 
-    public function find($userId, $labelId) {
+    public function find($labelId) {
         $label = $this->labelMapper->find($labelId);
         return $label;
     }
 
-    public function create($title, $userId, $color, $boardId) {
+    public function create($title, $color, $boardId) {
         $label = new Label();
         $label->setTitle($title);
         $label->setColor($color);
@@ -56,12 +56,12 @@ class LabelService  {
         return $this->labelMapper->insert($label);
     }
 
-    public function delete($userId, $id) {
-        return $this->labelMapper->delete($this->find($userId, $id));
+    public function delete($id) {
+        return $this->labelMapper->delete($this->find($id));
     }
 
-    public function update($id, $title, $userId, $color) {
-        $label = $this->find($userId, $id);
+    public function update($id, $title, $color) {
+        $label = $this->find($id);
         $label->setTitle($title);
         $label->setColor($color);
         return $this->labelMapper->update($label);

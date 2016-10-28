@@ -90,7 +90,7 @@ class StackService  {
 
     }
 
-    public function delete($userId, $id) {
+    public function delete($id) {
         return $this->stackMapper->delete($this->stackMapper->find($id));
     }
 

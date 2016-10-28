@@ -47,7 +47,7 @@ class CardController extends Controller {
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
     public function read($cardId) {
-        return $this->cardService->find($this->userId, $cardId);
+        return $this->cardService->find($cardId);
     }
 
 	/**
@@ -108,7 +108,7 @@ class CardController extends Controller {
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
     public function delete($cardId) {
-        return $this->cardService->delete($this->userId, $cardId);
+        return $this->cardService->delete($cardId);
     }
 
 	/**
@@ -138,7 +138,7 @@ class CardController extends Controller {
 	 * @param $labelId
 	 */
     public function assignLabel($cardId, $labelId) {
-        return $this->cardService->assignLabel($this->userId, $cardId, $labelId);
+        return $this->cardService->assignLabel($cardId, $labelId);
     }
 
 	/**
@@ -148,7 +148,7 @@ class CardController extends Controller {
 	 * @param $labelId
 	 */
     public function removeLabel($cardId, $labelId) {
-        return $this->cardService->removeLabel($this->userId, $cardId, $labelId);
+        return $this->cardService->removeLabel($cardId, $labelId);
     }
 
 }

@@ -104,6 +104,6 @@ class StackController extends Controller {
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
     public function delete($stackId) {
-        return $this->stackService->delete($this->userId, $stackId);
+        return $this->stackService->delete($stackId);
     }
 }
