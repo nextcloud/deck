@@ -88,7 +88,8 @@ class CardService  {
             }
             if($card->id === $id) {
                 $card->setOrder($order);
-            }
+				$card->setLastModified(time());
+			}
 
             if($i === $order)
                 $i++;
@@ -96,11 +97,10 @@ class CardService  {
             if($card->id !== $id) {
                 $card->setOrder($i++);
             }
-            $card->setLastModified(time());
             $this->cardMapper->update($card);
         }
         // FIXME: return reordered cards without an additional db query
-        $cards = $this->cardMapper->findAll($stackId);
+        //$cards = $this->cardMapper->findAll($stackId);
         return $cards;
     }
 
