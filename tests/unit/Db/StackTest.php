@@ -39,7 +39,6 @@ class StackTest extends \PHPUnit_Framework_TestCase {
 			'title' => "My Stack",
 			'order' => 1,
 			'boardId' => 1,
-			'cards' => array(),
 		], $board->jsonSerialize());
 	}
 	public function testJsonSerializeWithCards() {
