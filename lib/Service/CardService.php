@@ -28,6 +28,7 @@ namespace OCA\Deck\Service;
 
 use \OCA\Deck\Db\Card;
 use \OCA\Deck\Db\CardMapper;
+use \OCA\Deck\CardArchivedException;
 
 
 class CardService  {

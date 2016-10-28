@@ -577,8 +577,16 @@
 .colorselect .selected {
 	opacity: 1.0;
 	border: 1px solid #333333;
-	width: 27px;
-	height: 27px;
+}
+
+.labels .colorselect {
+	padding: 0;
+	clear: none;
+	overflow: visible;
+}
+.labels .colorselect .color {
+	width:26px;
+	height:26px;
 }
 
 #boardlist {

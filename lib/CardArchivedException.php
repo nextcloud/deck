@@ -21,7 +21,7 @@
  *  
  */
 
-namespace OCA\Deck\Service;
+namespace OCA\Deck;
 
 class CardArchivedException extends \Exception {
 	/**

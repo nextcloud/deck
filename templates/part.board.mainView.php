@@ -100,13 +100,14 @@
 			<div class="card create"
 				 style="background-color:#{{ boardservice.getCurrent().color }};" ng-if="checkCanEdit() && filter!=='archive'">
 				<form ng-submit="createCard(s.id, newCard.title)">
-					<h3 ng-if="s.status.addCard">
+					<h3 ng-if="status.addCard[s.id]">
 						<input type="text" autofocus-on-insert
 							   ng-model="newCard.title"
-							   ng-blur="s.status.addCard=false" required/>
+							   ng-blur="status.addCard[s.id]=false"
+							    required/>
 					</h3>
 				</form>
-				<div ng-if="!s.status.addCard" ng-click="s.status.addCard=!s.status.addCard">
+				<div ng-if="!status.addCard[s.id]" ng-click="status.addCard[s.id]=true">
 					<i class="icon icon-add{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i>
 				</div>
 			</div>

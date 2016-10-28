@@ -25,7 +25,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.sidebar = $rootScope.sidebar;
 
 	$scope.id = $stateParams.boardId;
-	$scope.status = {};
+	$scope.status = {
+		addCard: [],
+	};
 	$scope.newLabel = {};
 	$scope.status.boardtab = $stateParams.detailTab;
 
@@ -79,7 +81,6 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 	$scope.checkCanEdit = function () {
 		return !$scope.archived;
-
 	};
 
 	// filter cards here, as ng-sortable will not work nicely with html-inline filters
@@ -117,7 +118,6 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		$scope.statusservice.setError('Error occured', error);
 	});
 
-
 	BoardService.searchUsers('%25');
 
 	$scope.searchForUser = function (search) {
@@ -144,7 +144,6 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			'type': 'plain'
 		};
 		CardService.create(newCard).then(function (data) {
-			// FIXME: called here reorders
 			$scope.stackservice.addCard(data);
 			$scope.newCard.title = "";
 		});
