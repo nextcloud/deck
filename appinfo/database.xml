@@ -69,6 +69,18 @@
                 <length>8</length>
                 <notnull>false</notnull>
             </field>
+            <index>
+                <name>deck_stacks_board_id_index</name>
+                <field>
+                    <name>board_id</name>
+                </field>
+            </index>
+            <index>
+                <name>deck_stacks_order_index</name>
+                <field>
+                    <name>order</name>
+                </field>
+            </index>
         </declaration>
     </table>
     <table>
@@ -140,6 +152,24 @@
                 <type>boolean</type>
                 <default>false</default>
             </field>
+            <index>
+                <name>deck_cards_stack_id_index</name>
+                <field>
+                    <name>stack_id</name>
+                </field>
+            </index>
+            <index>
+                <name>deck_cards_order_index</name>
+                <field>
+                    <name>order</name>
+                </field>
+            </index>
+            <index>
+                <name>deck_cards_archived_index</name>
+                <field>
+                    <name>archived</name>
+                </field>
+            </index>
         </declaration>
     </table>
     <table>
@@ -223,6 +253,12 @@
                 <notnull>true</notnull>
                 <length>8</length>
             </field>
+            <index>
+                <name>deck_labels_board_id_index</name>
+                <field>
+                    <name>board_id</name>
+                </field>
+            </index>
         </declaration>
     </table>
 
@@ -251,6 +287,18 @@
                 <notnull>true</notnull>
                 <length>4</length>
             </field>
+            <index>
+                <name>deck_assigned_labels_label_id_index</name>
+                <field>
+                    <name>label_id</name>
+                </field>
+            </index>
+            <index>
+                <name>deck_assigned_labels_card_id_index</name>
+                <field>
+                    <name>card_id</name>
+                </field>
+            </index>
         </declaration>
     </table>
     <table>
@@ -310,6 +358,12 @@
                 <field>
                     <name>participant</name>
                     <sorting>ascending</sorting>
+                </field>
+            </index>
+            <index>
+                <name>deck_board_acl_board_id_index</name>
+                <field>
+                    <name>board_id</name>
                 </field>
             </index>
         </declaration>
