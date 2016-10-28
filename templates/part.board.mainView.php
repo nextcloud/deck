@@ -23,7 +23,7 @@
 	<div id="innerBoard" data-ng-model="stacks">
 		<div class="stack" ng-repeat="s in stacks"
 			 data-columnindex="{{$index}}" id="column{{$index}}"
-			 data-ng-model="stackservice.data" style="">
+			 style="">
 			<h2><span ng-show="!s.status.editStack">{{ s.title }}</span>
 				<form ng-submit="stackservice.update(s)">
 					<input type="text" placeholder="Add a new stack"
@@ -46,7 +46,7 @@
 					ng-repeat="c in s.cards"
 					data-as-sortable-item
 					ui-sref="board.card({boardId: id, cardId: c.id})"
-					ng-class="{'archived': c.archived, 'has-labels': c.labels }">
+					ng-class="{'archived': c.archived, 'has-labels': c.labels.length>0 }">
 					<div data-as-sortable-item-handle>
 						<div class="card-upper">
 							<h3>{{ c.title }}</h3>
