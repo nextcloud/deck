@@ -85,4 +85,20 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 		], $acl->jsonSerialize());
 	}
 
+
+	public function testGetPermission() {
+		$acl = $this->createAclUser();
+		$this->assertEquals(true, $acl->getPermission(Acl::PERMISSION_READ));
+		$this->assertEquals(true, $acl->getPermission(Acl::PERMISSION_EDIT));
+		$this->assertEquals(true, $acl->getPermission(Acl::PERMISSION_MANAGE));
+		$this->assertEquals(true, $acl->getPermission(Acl::PERMISSION_SHARE));
+		$acl->setPermissionWrite(0);
+		$acl->setPermissionInvite(0);
+		$acl->setPermissionManage(0);
+		$this->assertEquals(true, $acl->getPermission(Acl::PERMISSION_READ));
+		$this->assertEquals(false, $acl->getPermission(Acl::PERMISSION_EDIT));
+		$this->assertEquals(false, $acl->getPermission(Acl::PERMISSION_MANAGE));
+		$this->assertEquals(false, $acl->getPermission(Acl::PERMISSION_SHARE));
+
+	}
 }
