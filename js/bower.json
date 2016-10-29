@@ -15,7 +15,8 @@
     "js-url": "~2.*",
     "masonry": "~4.0.0",
     "angular-ui-select": "~0.18.0",
-    "angular-markdown-it": "~0.6.1"
+    "angular-markdown-it": "~0.6.1",
+    "angular-ui-router": "~1.0.0"
   },
   "license": "AGPL-3.0",
   "private": true,
