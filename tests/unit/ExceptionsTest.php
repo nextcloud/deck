@@ -23,15 +23,27 @@
 
 namespace OCA\Deck\Db;
 
+use OCA\Deck\CardArchivedException;
 use OCA\Deck\Controller\PageController;
 use OCA\Deck\NoPermissionException;
+use OCA\Deck\NotFoundException;
 
-class NoPermissionExceptionTest extends \PHPUnit_Framework_TestCase {
+class ExceptionsTest extends \PHPUnit_Framework_TestCase {
 
 	public function testNoPermissionException() {
 		$c = new \stdClass();
 		$e = new NoPermissionException('not allowed', $c, 'mymethod');
 		$this->assertEquals('stdClass#mymethod: not allowed', $e->getMessage());
+	}
+
+	public function testNotFoundException() {
+		$e = new NotFoundException('foo');
+		$this->assertEquals('foo', $e->getMessage());
+	}
+
+	public function testCardArchivedException() {
+		$e = new CardArchivedException('foo');
+		$this->assertEquals('foo', $e->getMessage());
 	}
 
 }
