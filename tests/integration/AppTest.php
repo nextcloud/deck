@@ -33,16 +33,21 @@ use Test\TestCase;
 class AppTest extends TestCase {
 
     private $container;
+	private $app;
 
     public function setUp() {
         parent::setUp();
-        $app = new App('deck');
-        $this->container = $app->getContainer();
+        $this->app = new \OCA\Deck\AppInfo\Application();
+        $this->container = $this->app->getContainer();
     }
 
     public function testAppInstalled() {
         $appManager = $this->container->query('OCP\App\IAppManager');
         $this->assertTrue($appManager->isInstalled('deck'));
     }
+
+    public function testNavigationEntry() {
+    	$this->app->registerNavigationEntry();
+	}
 
 }

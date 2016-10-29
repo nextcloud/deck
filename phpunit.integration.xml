@@ -1,7 +1,12 @@
 <phpunit bootstrap="tests/bootstrap.php" colors="true">
-<testsuites>
-    <testsuite name="integration">
-        <directory>./tests/integration</directory>
-    </testsuite>
-</testsuites>
+	<testsuites>
+		<testsuite name="integration">
+			<directory>./tests/integration</directory>
+		</testsuite>
+	</testsuites>
+	<filter>
+		<whitelist>
+			<directory suffix=".php">./lib</directory>
+		</whitelist>
+	</filter>
 </phpunit>

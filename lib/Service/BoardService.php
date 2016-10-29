@@ -134,6 +134,12 @@ class BoardService {
         return $this->aclMapper->delete($acl);
     }
 
+	/**
+	 * @param $boardId
+	 * @param $user
+	 * @param $permission
+	 * @return bool
+	 */
 	public function getPermission($boardId, $user, $permission) {
 		$acls = $this->aclMapper->findAll($boardId);
 		// check for users
