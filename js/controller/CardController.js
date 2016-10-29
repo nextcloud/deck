@@ -41,14 +41,14 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
     });
 
     $scope.cardRenameShow = function() {
-        if($scope.archived)
+        if($scope.archived || !BoardService.canEdit())
             return false;
         else {
             $scope.status.cardRename=true;
         }
     };
     $scope.cardEditDescriptionShow = function() {
-        if($scope.archived)
+        if($scope.archived || !BoardService.canEdit())
             return false;
         else {
             $scope.status.cardEditDescription=true;

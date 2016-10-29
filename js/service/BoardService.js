@@ -100,6 +100,46 @@ app.factory('BoardService', function(ApiService, $http, $q){
         return deferred.promise;
     };
 
+    BoardService.prototype.getPermissions = function() {
+        var board = this.getCurrent();
+        var deferred = $q.defer();
+        $http.get(this.baseUrl + '/' + board.id + '/permissions').then(function (response) {
+            board.permissions = response.data;
+            console.log(board.permissions);
+            deferred.resolve(response.data);
+        }, function (error) {
+            deferred.reject('Error fetching board permissions ' + board);
+        });
+    };
+
+    BoardService.prototype.canRead = function() {
+        if(!this.getCurrent() || !this.getCurrent().permissions) {
+            return false;
+        }
+        return this.getCurrent().permissions['PERMISSION_READ'];
+    }
+
+    BoardService.prototype.canEdit = function() {
+        if(!this.getCurrent() || !this.getCurrent().permissions) {
+            return false;
+        }
+        return this.getCurrent().permissions['PERMISSION_EDIT'];
+    }
+
+    BoardService.prototype.canManage = function() {
+        if(!this.getCurrent() || !this.getCurrent().permissions) {
+            return false;
+        }
+        return this.getCurrent().permissions['PERMISSION_MANAGE'];
+    }
+
+    BoardService.prototype.canShare = function() {
+        if(!this.getCurrent() || !this.getCurrent().permissions) {
+            return false;
+        }
+        return this.getCurrent().permissions['PERMISSION_SHARE'];
+    }
+
     service = new BoardService($http, 'boards', $q);
     return service;
     

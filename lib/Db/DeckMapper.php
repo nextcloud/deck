@@ -51,6 +51,8 @@ abstract class DeckMapper extends Mapper {
 
 	protected function execute($sql, array $params = [], $limit = null, $offset = null) {
 		// FIXME: remove on release
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
 		\OCP\Util::writeLog('deck', "DeckMapper SQL: " . $sql . " with " . implode("|", $params), \OCP\Util::DEBUG);
 		return parent::execute($sql, $params, $limit, $offset);
 	}

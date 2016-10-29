@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\Acl;
 use OCA\Deck\Service\BoardService;
 
 use OCP\IRequest;
@@ -120,6 +121,33 @@ class BoardController extends Controller {
     public function labels($boardId) {
         return $this->boardService->labels($boardId);
     }
+
+	/**
+	 * @NoAdminRequired
+	 * @RequireReadPermission
+	 * @param $boardId
+	 * @return array|bool
+	 * @internal param $userId
+	 */
+	public function getUserPermissions($boardId) {
+		$board = $this->boardService->find($boardId);
+		if($this->userId === $board->getOwner()) {
+			return [
+				'PERMISSION_READ' => true,
+				'PERMISSION_EDIT' => true,
+				'PERMISSION_MANAGE' => true,
+				'PERMISSION_SHARE' => true,
+			];
+		}
+
+		return [
+			'PERMISSION_READ' => $this->boardService->getPermission($boardId, $this->userId, Acl::PERMISSION_READ),
+			'PERMISSION_EDIT' => $this->boardService->getPermission($boardId, $this->userId, Acl::PERMISSION_EDIT),
+			'PERMISSION_MANAGE' => $this->boardService->getPermission($boardId, $this->userId, Acl::PERMISSION_MANAGE),
+			'PERMISSION_SHARE' => $this->boardService->getPermission($boardId, $this->userId, Acl::PERMISSION_SHARE),
+		];
+
+	}
 
 	/**
 	 * @NoAdminRequired

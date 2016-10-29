@@ -26,6 +26,7 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Label;
+use OCP\IGroupManager;
 use OCP\ILogger;
 use OCP\IL10N;
 
@@ -33,6 +34,7 @@ use OCP\IL10N;
 use \OCA\Deck\Db\Board;
 use \OCA\Deck\Db\BoardMapper;
 use \OCA\Deck\Db\LabelMapper;
+use OCP\IUserManager;
 
 
 class BoardService {
@@ -47,12 +49,16 @@ class BoardService {
                                 ILogger $logger,
                                 IL10N $l10n,
                                 LabelMapper $labelMapper,
-                                AclMapper $aclMapper) {
+                                AclMapper $aclMapper,
+								IUserManager $userManager,
+								IGroupManager $groupManager) {
         $this->boardMapper = $boardMapper;
         $this->labelMapper = $labelMapper;
         $this->aclMapper = $aclMapper;
         $this->logger = $logger;
         $this->l10n = $l10n;
+		$this->userManager = $userManager;
+		$this->groupManager = $groupManager;
     }
 
     public function findAll($userInfo) {
@@ -127,4 +133,22 @@ class BoardService {
         $acl = $this->aclMapper->find($id);
         return $this->aclMapper->delete($acl);
     }
+
+	public function getPermission($boardId, $user, $permission) {
+		$acls = $this->aclMapper->findAll($boardId);
+		// check for users
+		foreach ($acls as $acl) {
+			if ($acl->getType() === "user" && $acl->getParticipant() === $user) {
+				return $acl->getPermission($permission);
+			}
+		}
+		// check for groups
+		$hasGroupPermission = false;
+		foreach ($acls as $acl) {
+			if (!$hasGroupPermission && $acl->getType() === "group" && $this->groupManager->isInGroup($user, $acl->getParticipant())) {
+				$hasGroupPermission = $acl->getPermission($permission);
+			}
+		}
+		return $hasGroupPermission;
+	}
 }

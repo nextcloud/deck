@@ -25,7 +25,6 @@ namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\Entity;
 use OCP\IDb;
-use OCP\AppFramework\Db\Mapper;
 
 
 class StackMapper extends DeckMapper implements IPermissionMapper {

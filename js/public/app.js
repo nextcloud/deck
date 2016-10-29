@@ -113,6 +113,7 @@ app.controller('AppController', ["$scope", "$location", "$http", "$route", "$log
         show: false
     };
     $scope.sidebar = $rootScope.sidebar;
+    $scope.user = oc_current_user;
 }]);
 app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "StatusService", "BoardService", "StackService", "CardService", "LabelService", "$state", "$transitions", "$filter", function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter) {
 
@@ -207,6 +208,7 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 
 	// Handle initial Loading
 	BoardService.fetchOne($scope.id).then(function (data) {
+		BoardService.getPermissions();
 		$scope.statusservice.releaseWaiting();
 	}, function (error) {
 		$scope.statusservice.setError('Error occured', error);
@@ -361,14 +363,14 @@ app.controller('CardController', ["$scope", "$rootScope", "$routeParams", "$loca
     });
 
     $scope.cardRenameShow = function() {
-        if($scope.archived)
+        if($scope.archived || !BoardService.canEdit())
             return false;
         else {
             $scope.status.cardRename=true;
         }
     };
     $scope.cardEditDescriptionShow = function() {
-        if($scope.archived)
+        if($scope.archived || !BoardService.canEdit())
             return false;
         else {
             $scope.status.cardEditDescription=true;
@@ -977,6 +979,46 @@ app.factory('BoardService', ["ApiService", "$http", "$q", function(ApiService, $
         acl = null;
         return deferred.promise;
     };
+
+    BoardService.prototype.getPermissions = function() {
+        var board = this.getCurrent();
+        var deferred = $q.defer();
+        $http.get(this.baseUrl + '/' + board.id + '/permissions').then(function (response) {
+            board.permissions = response.data;
+            console.log(board.permissions);
+            deferred.resolve(response.data);
+        }, function (error) {
+            deferred.reject('Error fetching board permissions ' + board);
+        });
+    };
+
+    BoardService.prototype.canRead = function() {
+        if(!this.getCurrent() || !this.getCurrent().permissions) {
+            return false;
+        }
+        return this.getCurrent().permissions['PERMISSION_READ'];
+    }
+
+    BoardService.prototype.canEdit = function() {
+        if(!this.getCurrent() || !this.getCurrent().permissions) {
+            return false;
+        }
+        return this.getCurrent().permissions['PERMISSION_EDIT'];
+    }
+
+    BoardService.prototype.canManage = function() {
+        if(!this.getCurrent() || !this.getCurrent().permissions) {
+            return false;
+        }
+        return this.getCurrent().permissions['PERMISSION_MANAGE'];
+    }
+
+    BoardService.prototype.canShare = function() {
+        if(!this.getCurrent() || !this.getCurrent().permissions) {
+            return false;
+        }
+        return this.getCurrent().permissions['PERMISSION_SHARE'];
+    }
 
     service = new BoardService($http, 'boards', $q);
     return service;

@@ -34,7 +34,7 @@
 				   style="width:100%;" title="Choose a label"
 				   placeholder="Add a label"
 				   on-select="labelAssign($item, $model)"
-				   on-remove="labelRemove($item, $model)" ng-disabled="archived">
+				   on-remove="labelRemove($item, $model)" ng-disabled="!boardservice.canEdit() || archived">
 			<ui-select-match placeholder="Select labels..."><span
 					class="select-label"
 					style="background-color:#{{$item.color}}">{{$item.title}}&nbsp;</span>

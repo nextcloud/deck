@@ -25,4 +25,5 @@ app.controller('AppController', function ($scope, $location, $http, $route, $log
         show: false
     };
     $scope.sidebar = $rootScope.sidebar;
+    $scope.user = oc_current_user;
 });

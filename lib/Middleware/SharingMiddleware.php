@@ -27,9 +27,11 @@ use OCA\Deck\Controller\BoardController;
 use OCA\Deck\Controller\CardController;
 use OCA\Deck\Controller\LabelController;
 use OCA\Deck\Controller\PageController;
-use OCA\Deck\Controller\ShareController;
+
+
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
+
 use \OCP\AppFramework\Middleware;
 use OCP\IContainer;
 use OCP\IRequest;
@@ -47,6 +49,7 @@ class SharingMiddleware extends Middleware {
 	private $reflector;
 	private $groupManager;
 	private $aclMapper;
+	private $boardService;
 
 
 	public function __construct(
@@ -61,6 +64,7 @@ class SharingMiddleware extends Middleware {
 		$this->reflector = $reflector;
 		$this->aclMapper = $this->container->query('OCA\Deck\Db\AclMapper');
 		$this->groupManager = $this->container->query('\OCP\IGroupManager');
+		$this->boardService = $this->container->query('OCA\Deck\Service\BoardService');
 	}
 
 	/**
@@ -117,8 +121,7 @@ class SharingMiddleware extends Middleware {
 		$mapper = null;
 		$id = null;
 
-		// FIXME: ShareController#search should be limited to board users/groups
-		if ($controller instanceof BoardController or $controller instanceof ShareController) {
+		if ($controller instanceof BoardController) {
 			$mapper = $this->container->query('OCA\Deck\Db\BoardMapper');
 			$id = $params['boardId'];
 		}
@@ -198,29 +201,12 @@ class SharingMiddleware extends Middleware {
 		if ($mapper->isOwner($userId, $id)) {
 			return true;
 		}
-		
 		// find related board
 		$boardId = $mapper->findBoardId($id);
 		if(!$boardId) {
 			throw new NotFoundException("Entity not found");
 		}
-		// check if is in acl
-
-		$acls = $this->aclMapper->findAll($boardId);
-		// check for users
-		foreach ($acls as $acl) {
-			if ($acl->getType() === "user" && $acl->getParticipant() === $userId) {
-				return $acl->getPermission($permission);
-			}
-		}
-		// check for groups
-		$hasGroupPermission = false;
-		foreach ($acls as $acl) {
-			if (!$hasGroupPermission && $acl->getType() === "group" && $this->groupManager->isInGroup($userId, $acl->getParticipant())) {
-				$hasGroupPermission = $acl->getPermission($permission);
-			}
-		}
-		return $hasGroupPermission;
+		return $this->boardService->getPermission($boardId, $userId, $permission);
 	}
 
 	/**

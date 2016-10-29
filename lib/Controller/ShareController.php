@@ -24,6 +24,8 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Acl;
+
+use OCA\Deck\Service\BoardService;
 use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
@@ -31,20 +33,23 @@ use OCP\IUserManager;
 
 class ShareController extends Controller {
 
-    protected $userManager;
-    protected $groupManager;
+    private $userManager;
+    private $groupManager;
+	private $boardService;
     private $userId;
 
     public function __construct($appName,
                                 IRequest $request,
                                 IUserManager $userManager,
                                 IGroupManager $groupManager,
+								BoardService $boardService,
                                 $userId
     ){
         parent::__construct($appName, $request);
         $this->userManager = $userManager;
         $this->groupManager = $groupManager;
         $this->userId = $userId;
+		$this->boardService = $boardService;
 
     }
 
@@ -81,4 +86,8 @@ class ShareController extends Controller {
         }
         return $result;
     }
+
+
+
+
 }

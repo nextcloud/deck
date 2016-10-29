@@ -49,6 +49,7 @@ class Application extends App {
 				$container->query('ControllerMethodReflector')
 			);
 		});
+		/** @noinspection PhpMethodOrClassCallIsNotCaseSensitiveInspection */
 		$container->registerMiddleware('SharingMiddleware');
 
 	}

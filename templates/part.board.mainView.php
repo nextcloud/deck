@@ -7,11 +7,11 @@
 <div id="board-header"
 	 style="background-color: #{{boardservice.getCurrent().color }}; color: {{boardservice.getCurrent().color | textColorFilter }};">
 	<h1>
-		{{ boardservice.data[id].title }}
+		{{ boardservice.getCurrent().title }}
 		<div id="board-actions">
-			<div class="board-action-button" ng-if="filter!='archive'"><a ng-click="switchFilter('archive')" style="opacity:0.5;"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
-			<div class="board-action-button" ng-if="filter=='archive'"><a ng-click="switchFilter('')"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
-			<div class="board-action-button"><a ui-sref="board.detail({ id: id })"><i class="icon icon-details{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a>
+			<div class="board-action-button" ng-if="filter!='archive'"><a ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
+			<div class="board-action-button" ng-if="filter=='archive'"><a ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
+			<div class="board-action-button"><a ui-sref="board.detail({ id: id })" title="<?php p($l->t('Board details')); ?>"><i class="icon icon-details{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a>
 			</div>
 		</div>
 	</h1>
@@ -40,7 +40,7 @@
 							ng-click="stackservice.delete(s.id)"></button>
 				</div>
 			</h2>
-			<ul data-as-sortable="sortOptions" is-disabled="filter==='archive'" data-ng-model="s.cards"
+			<ul data-as-sortable="sortOptions" is-disabled="!boardservice.canEdit() || filter==='archive'" data-ng-model="s.cards"
 				style="min-height: 40px;">
 				<li class="card as-sortable-item"
 					ng-repeat="c in s.cards"
@@ -61,7 +61,7 @@
 						<div class="app-popover-menu-utils">
 						<button class="card-options icon-more"
 								ng-click="c.status.showMenu=!c.status.showMenu; $event.stopPropagation();"
-								ng-model="card"></button>
+								ng-model="card" ng-if="boardservice.canEdit()"></button>
 						<div class="popovermenu bubble hidden">
 							<ul>
 								<li ng-if="filter!=='archive'">
@@ -98,7 +98,7 @@
 			</ul>
 			<!-- CREATE CARD //-->
 			<div class="card create"
-				 style="background-color:#{{ boardservice.getCurrent().color }};" ng-if="checkCanEdit() && filter!=='archive'">
+				 style="background-color:#{{ boardservice.getCurrent().color }};" ng-if="boardservice.canEdit() && checkCanEdit() && filter!=='archive'">
 				<form ng-submit="createCard(s.id, newCard.title)">
 					<h3 ng-if="status.addCard[s.id]">
 						<input type="text" autofocus-on-insert
@@ -112,7 +112,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="stack" style="display: inline-block;" ng-if="checkCanEdit()">
+		<div class="stack" style="display: inline-block;" ng-if="boardservice.canEdit() && checkCanEdit()">
 			<form class="ng-pristine ng-valid" ng-submit="createStack()">
 				<h2>
 					<input type="text" placeholder="Add a new stack"

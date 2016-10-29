@@ -42,9 +42,11 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 
 	/**
 	 * @param $id
+	 * @param bool $withLabels
+	 * @param bool $withAcl
 	 * @return \OCP\AppFramework\Db\Entity if not found
 	 */
-    public function find($id) {
+    public function find($id, $withLabels=false, $withAcl=false) {
         $sql = 'SELECT id, title, owner, color, archived FROM `*PREFIX*deck_boards` ' .
             'WHERE `id` = ?';
         $board = $this->findEntity($sql, [$id]);
@@ -95,13 +97,12 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
         }
         $sql = 'SELECT boards.id, title, owner, color, archived, 2 as shared FROM oc_deck_boards as boards ' .
             'INNER JOIN oc_deck_board_acl as acl ON boards.id=acl.board_id WHERE owner != ? AND type=\'group\' AND (';
-        $countGroups = 0;
-		// FIXME: group unused?
-        foreach ($groups as $group) {
-            $sql .= 'acl.participant = ? ';
-            if(count($groups)>1 && $countGroups++<count($groups)-1)
-                $sql .= ' OR ';
-        }
+		for($i=0;$i<count($groups);$i++) {
+			$sql .= 'acl.participant = ? ';
+			if(count($groups)>1 && $i<count($groups)-1) {
+				$sql .= ' OR ';
+			}
+		}
         $sql .= ');';
         $entries = $this->findEntities($sql,  array_merge([$userId], $groups), $limit, $offset);
         /* @var Board $entry */
@@ -112,7 +113,8 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
         return $entries;
     }
 
-    public function delete(\OCP\AppFramework\Db\Entity $entity) {
+    public function delete(/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+		\OCP\AppFramework\Db\Entity $entity) {
     	// delete acl
 		$acl = $this->aclMapper->findAll($entity->getId());
 		foreach ($acl as $item) {
