@@ -46,7 +46,10 @@ class Application extends App {
 				$container,
 				$server->getRequest(),
 				$server->getUserSession(),
-				$container->query('ControllerMethodReflector')
+				$container->query('ControllerMethodReflector'),
+				$container->query('OCP\IGroupManager'),
+				$container->query('OCA\Deck\Db\AclMapper'),
+				$container->query('OCA\Deck\Service\BoardService')
 			);
 		});
 		/** @noinspection PhpMethodOrClassCallIsNotCaseSensitiveInspection */

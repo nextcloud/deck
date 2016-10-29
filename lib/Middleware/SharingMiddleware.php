@@ -29,11 +29,14 @@ use OCA\Deck\Controller\LabelController;
 use OCA\Deck\Controller\PageController;
 
 
+use OCA\Deck\Db\AclMapper;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 
+use OCA\Deck\Service\BoardService;
 use \OCP\AppFramework\Middleware;
 use OCP\IContainer;
+use OCP\IGroupManager;
 use OCP\IRequest;
 use OCA\Deck\Controller\StackController;
 use OCP\IUserSession;
@@ -56,15 +59,18 @@ class SharingMiddleware extends Middleware {
 		IContainer $container,
 		IRequest $request,
 		IUserSession $userSession,
-		ControllerMethodReflector $reflector
+		ControllerMethodReflector $reflector,
+		IGroupManager $groupManager,
+		AclMapper $aclMapper,
+		BoardService $boardService
 	) {
 		$this->container = $container;
 		$this->request = $request;
 		$this->userSession = $userSession;
 		$this->reflector = $reflector;
-		$this->aclMapper = $this->container->query('OCA\Deck\Db\AclMapper');
-		$this->groupManager = $this->container->query('\OCP\IGroupManager');
-		$this->boardService = $this->container->query('OCA\Deck\Service\BoardService');
+		$this->aclMapper = $aclMapper;
+		$this->groupManager = $groupManager;
+		$this->boardService = $boardService;
 	}
 
 	/**
