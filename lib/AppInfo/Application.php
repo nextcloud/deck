@@ -40,19 +40,15 @@ class Application extends App {
 		$container = $this->getContainer();
 		$server = $container->getServer();
 
-		// This is currently unused
 		$container->registerService('SharingMiddleware', function ($container) use ($server) {
 			return new SharingMiddleware(
 				$container,
 				$server->getRequest(),
 				$server->getUserSession(),
 				$container->query('ControllerMethodReflector'),
-				$container->query('OCP\IGroupManager'),
-				$container->query('OCA\Deck\Db\AclMapper'),
-				$container->query('OCA\Deck\Service\BoardService')
+				$container->query('OCA\Deck\Service\PermissionService')
 			);
 		});
-		/** @noinspection PhpMethodOrClassCallIsNotCaseSensitiveInspection */
 		$container->registerMiddleware('SharingMiddleware');
 
 	}

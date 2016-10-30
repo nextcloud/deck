@@ -24,13 +24,13 @@
 namespace OCA\Deck;
 
 
-class NotFoundException extends StatusException {
+abstract class StatusException extends \Exception {
 
-	public function __construct($message="") {
+	public function __construct($message) {
 		parent::__construct($message);
 	}
 
 	public function getStatus() {
-		return 404;
+		return 500;
 	}
 }

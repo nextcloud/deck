@@ -32,6 +32,7 @@ class BoardControllerTest extends \PHPUnit_Framework_TestCase {
 	private $userManager;
 	private $groupManager;
 	private $boardService;
+	private $permissionService;
 	private $userId = 'user';
 
 	public function setUp() {
@@ -55,6 +56,10 @@ class BoardControllerTest extends \PHPUnit_Framework_TestCase {
 			'\OCA\Deck\Service\BoardService')
 			->disableOriginalConstructor()
 			->getMock();
+		$this->permissionService = $this->getMockBuilder(
+			'\OCA\Deck\Service\PermissionService')
+			->disableOriginalConstructor()
+			->getMock();
 
 		$this->groupManager->method('getUserGroupIds')
 			->willReturn(['admin', 'group1', 'group2']);
@@ -68,6 +73,7 @@ class BoardControllerTest extends \PHPUnit_Framework_TestCase {
 			$this->userManager,
 			$this->groupManager,
 			$this->boardService,
+			$this->permissionService,
 			$this->userId
 		);
 	}

@@ -97,7 +97,7 @@ class CardService  {
             $this->cardMapper->update($card);
         }
         // FIXME: return reordered cards without an additional db query
-        //$cards = $this->cardMapper->findAll($stackId);
+        $cards = $this->cardMapper->findAll($stackId);
         return $cards;
     }
 
