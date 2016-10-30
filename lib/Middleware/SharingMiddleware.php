@@ -128,8 +128,7 @@ class SharingMiddleware extends Middleware {
 	private function checkPermissions($userId, $controller, $method, $params, $methodName) {
 
 		// no permission checks needed for plain html page or RequireNoPermission
-		if (
-			$controller instanceof PageController ||
+		if ($controller instanceof PageController ||
 			$this->reflector->hasAnnotation('RequireNoPermission')
 		) {
 			return true;
