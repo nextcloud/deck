@@ -50,6 +50,9 @@ class Acl extends Entity implements JsonSerializable {
         $this->addType('permissionManage', 'boolean');
         $this->addType('owner', 'boolean');
         $this->addRelation('owner');
+		$this->setPermissionWrite(false);
+		$this->setPermissionInvite(false);
+		$this->setPermissionManage(false);
     }
 
     public function getPermission($permission) {

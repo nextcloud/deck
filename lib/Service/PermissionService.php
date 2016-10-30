@@ -36,6 +36,7 @@ class PermissionService {
 	private $boardMapper;
 	private $aclMapper;
 	private $logger;
+	private $userId;
 
 	public function __construct(
 		ILogger $logger,
@@ -89,7 +90,7 @@ class PermissionService {
 	 */
 	public function userIsBoardOwner($boardId) {
 		$board = $this->boardMapper->find($boardId);
-		if ($this->userId === $board->getOwner()) {
+		if ($board && $this->userId === $board->getOwner()) {
 			return true;
 		} else {
 			return false;
@@ -99,11 +100,11 @@ class PermissionService {
 	/**
 	 * Check if permission matches the acl rules for current user and groups
 	 *
-	 * @param $acls
+	 * @param Acl[] $acls
 	 * @param $permission
 	 * @return bool
 	 */
-	private function userCan($acls, $permission) {
+	public function userCan($acls, $permission) {
 		// check for users
 		foreach ($acls as $acl) {
 			if ($acl->getType() === "user" && $acl->getParticipant() === $this->userId) {
