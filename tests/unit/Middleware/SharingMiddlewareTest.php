@@ -29,6 +29,7 @@ use OC\AppFramework\Utility\SimpleContainer;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IContainer;
@@ -44,9 +45,7 @@ class SharingMiddlewareTest extends \PHPUnit_Framework_TestCase {
 	private $request;
 	private $userSession;
 	private $reflector;
-	private $groupManager;
-	private $aclMapper;
-	private $boardService;
+	private $permissionService;
 
 	public function setUp() {
 		$this->container = new SimpleContainer();
@@ -56,20 +55,14 @@ class SharingMiddlewareTest extends \PHPUnit_Framework_TestCase {
 			->disableOriginalConstructor()->getMock();
 		$this->reflector = $this->getMockBuilder(ControllerMethodReflector::class)
 			->disableOriginalConstructor()->getMock();
-		$this->groupManager = $this->getMockBuilder(IGroupManager::class)
-			->disableOriginalConstructor()->getMock();
-		$this->aclMapper = $this->getMockBuilder(AclMapper::class)
-			->disableOriginalConstructor()->getMock();
-		$this->boardService = $this->getMockBuilder(BoardService::class)
+		$this->permissionService = $this->getMockBuilder(PermissionService::class)
 			->disableOriginalConstructor()->getMock();
 		$this->sharingMiddleware = new SharingMiddleware(
 			$this->container,
 			$this->request,
 			$this->userSession,
 			$this->reflector,
-			$this->groupManager,
-			$this->aclMapper,
-			$this->boardService
+			$this->permissionService
 		);
 	}
 
@@ -82,7 +75,7 @@ class SharingMiddlewareTest extends \PHPUnit_Framework_TestCase {
 
 	public function dataAfterException() {
 		return [
-			[new NoPermissionException('No permission'), 401, 'No permission'],
+			[new NoPermissionException('No permission'), 403, 'No permission'],
 			[new NotFoundException('Not found'), 404, 'Not found']
 		];
 	}
@@ -96,7 +89,6 @@ class SharingMiddlewareTest extends \PHPUnit_Framework_TestCase {
 			"message" => $message
 		], $status);
 		$this->assertEquals($expected, $result);
-
 	}
 
 }
