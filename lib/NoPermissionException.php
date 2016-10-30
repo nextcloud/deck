@@ -32,4 +32,8 @@ class NoPermissionException extends \Exception {
 			$this->message = get_class($controller) . "#" . $method . ": " . $message;
 		}
 	}
+
+	public function getStatus() {
+		return 403;
+	}
 }

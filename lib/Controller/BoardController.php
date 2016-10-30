@@ -26,6 +26,7 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Service\BoardService;
 
+use OCA\Deck\Service\PermissionService;
 use OCP\IRequest;
 
 use OCP\AppFramework\Controller;
@@ -38,6 +39,7 @@ class BoardController extends Controller {
 	private $boardService;
 	private $userManager;
 	private $groupManager;
+	private $permissionService;
 	private $userInfo;
 
 	public function __construct($appName,
@@ -45,12 +47,14 @@ class BoardController extends Controller {
 								IUserManager $userManager,
 								IGroupManager $groupManager,
 								BoardService $boardService,
+								PermissionService $permissionService,
 								$userId) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->boardService = $boardService;
+		$this->permissionService = $permissionService;
 		$this->userInfo = $this->getBoardPrerequisites();
 	}
 
@@ -123,6 +127,7 @@ class BoardController extends Controller {
 	 * @internal param $userId
 	 */
 	public function getUserPermissions($boardId) {
+		$this->permissionService->getPermissions($boardId);
 		$board = $this->boardService->find($boardId);
 		if ($this->userId === $board->getOwner()) {
 			return [

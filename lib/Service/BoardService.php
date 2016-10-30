@@ -68,7 +68,7 @@ class BoardService {
     }
 
     public function find($boardId) {
-        $board = $this->boardMapper->find($boardId);
+        $board = $this->boardMapper->find($boardId, true, true);
         return $board;
     }
 

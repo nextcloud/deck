@@ -33,7 +33,8 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 
-use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\PermissionService;
+use OCA\Deck\StatusException;
 use \OCP\AppFramework\Middleware;
 use OCP\IContainer;
 use OCP\IGroupManager;
@@ -50,9 +51,7 @@ class SharingMiddleware extends Middleware {
 	private $request;
 	private $userSession;
 	private $reflector;
-	private $groupManager;
-	private $aclMapper;
-	private $boardService;
+	private $permissionService;
 
 
 	public function __construct(
@@ -60,17 +59,12 @@ class SharingMiddleware extends Middleware {
 		IRequest $request,
 		IUserSession $userSession,
 		ControllerMethodReflector $reflector,
-		IGroupManager $groupManager,
-		AclMapper $aclMapper,
-		BoardService $boardService
-	) {
+		PermissionService $permissionService) {
 		$this->container = $container;
 		$this->request = $request;
 		$this->userSession = $userSession;
 		$this->reflector = $reflector;
-		$this->aclMapper = $aclMapper;
-		$this->groupManager = $groupManager;
-		$this->boardService = $boardService;
+		$this->permissionService = $permissionService;
 	}
 
 	/**
@@ -91,7 +85,6 @@ class SharingMiddleware extends Middleware {
 	 * @throws NoPermissionException
 	 */
 	public function beforeController($controller, $methodName) {
-
 		$userId = null;
 		if ($this->userSession->getUser()) {
 			$userId = $this->userSession->getUser()->getUID();
@@ -99,7 +92,25 @@ class SharingMiddleware extends Middleware {
 		$method = $this->request->getMethod();
 		$params = $this->request->getParams();
 		$this->checkPermissions($userId, $controller, $method, $params, $methodName);
+	}
 
+	/**
+	 * Return JSON error response if the user has no sufficient permission
+	 *
+	 * @param \OCP\AppFramework\Controller $controller
+	 * @param string $methodName
+	 * @param \Exception $exception
+	 * @return JSONResponse
+	 * @throws \Exception
+	 */
+	public function afterException($controller, $methodName, \Exception $exception) {
+		if ($exception instanceof StatusException) {
+			return new JSONResponse([
+				"status" => $exception->getStatus(),
+				"message" => $exception->getMessage()
+			], $exception->getStatus());
+		}
+		throw $exception;
 	}
 
 	/**
@@ -167,23 +178,28 @@ class SharingMiddleware extends Middleware {
 			throw new \Exception("No mappers specified for permission checks");
 		}
 
+		$boardId = $mapper->findBoardId($id);
+		if(!$boardId) {
+			throw new NotFoundException("Entity not found");
+		}
+
 		if ($this->reflector->hasAnnotation('RequireReadPermission')) {
-			if (!$this->checkMapperPermission(Acl::PERMISSION_READ, $userId, $mapper, $id)) {
+			if (!$this->permissionService->getPermission($boardId, Acl::PERMISSION_READ)) {
 				throw new NoPermissionException("User " . $userId . " has no permission to read.", $controller, $methodName);
 			}
 		}
 		if ($this->reflector->hasAnnotation('RequireEditPermission')) {
-			if (!$this->checkMapperPermission(Acl::PERMISSION_EDIT, $userId, $mapper, $id)) {
+			if (!$this->permissionService->getPermission($boardId, Acl::PERMISSION_EDIT)) {
 				throw new NoPermissionException("User " . $userId . " has no permission to edit.", $controller, $methodName);
 			}
 		}
 		if ($this->reflector->hasAnnotation('RequireSharePermission')) {
-			if (!$this->checkMapperPermission(Acl::PERMISSION_SHARE, $userId, $mapper, $id)) {
+			if (!$this->permissionService->getPermission($boardId, Acl::PERMISSION_SHARE)) {
 				throw new NoPermissionException("User " . $userId . " has no permission to share.", $controller, $methodName);
 			}
 		}
 		if ($this->reflector->hasAnnotation('RequireManagePermission')) {
-			if (!$this->checkMapperPermission(Acl::PERMISSION_MANAGE, $userId, $mapper, $id)) {
+			if (!$this->permissionService->getPermission($boardId, Acl::PERMISSION_MANAGE)) {
 				throw new NoPermissionException("User " . $userId . " has no permission to manage.", $controller, $methodName);
 			}
 		}
@@ -191,54 +207,5 @@ class SharingMiddleware extends Middleware {
 		return true;
 
 	}
-
-	/**
-	 * Check if $userId is authorized for $permission on board related to $mapper with $id
-	 *
-	 * @param $permission
-	 * @param $userId
-	 * @param $mapper
-	 * @param $id
-	 * @return bool
-	 * @throws NotFoundException
-	 */
-	public function checkMapperPermission($permission, $userId, $mapper, $id) {
-		// check if current user is owner
-		if ($mapper->isOwner($userId, $id)) {
-			return true;
-		}
-		// find related board
-		$boardId = $mapper->findBoardId($id);
-		if(!$boardId) {
-			throw new NotFoundException("Entity not found");
-		}
-		return $this->boardService->getPermission($boardId, $userId, $permission);
-	}
-
-	/**
-	 * Return JSON error response if the user has no sufficient permission
-	 *
-	 * @param \OCP\AppFramework\Controller $controller
-	 * @param string $methodName
-	 * @param \Exception $exception
-	 * @return JSONResponse
-	 * @throws \Exception
-	 */
-	public function afterException($controller, $methodName, \Exception $exception) {
-		if (is_a($exception, '\OCA\Deck\NoPermissionException')) {
-			return new JSONResponse([
-				"status" => 401,
-				"message" => $exception->getMessage()
-			], 401);
-		}
-		if (is_a($exception, '\OCA\Deck\NotFoundException')) {
-			return new JSONResponse([
-				"status" => 404,
-				"message" => $exception->getMessage()
-			], 404);
-		}
-		throw $exception;
-	}
-
 
 }
