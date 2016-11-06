@@ -31,6 +31,7 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
         linkify: true,
         xhtmlOut: true
     });
+    markdownItConverterProvider.use(markdownitLinkTarget);
 
     $urlRouterProvider.otherwise("/");
 

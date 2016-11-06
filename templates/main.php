@@ -35,6 +35,7 @@ Util::addScript('deck', 'vendor/ng-sortable/dist/ng-sortable.min');
 Util::addScript('deck', 'vendor/angular-ui-select/dist/select.min');
 Util::addScript('deck', 'vendor/markdown-it/dist/markdown-it.min');
 Util::addScript('deck', 'vendor/angular-markdown-it/dist/ng-markdownit.min');
+Util::addScript('deck', 'vendor/markdown-it-link-target/dist/markdown-it-link-target.min');
 Util::addScript('deck', 'public/app');
 
 ?>
