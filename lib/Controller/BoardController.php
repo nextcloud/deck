@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\Acl;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\PermissionService;
 use OCP\IRequest;
@@ -123,7 +124,13 @@ class BoardController extends Controller {
 	 * @internal param $userId
 	 */
 	public function getUserPermissions($boardId) {
-		return $this->permissionService->getPermissions($boardId);
+		$permissions = $this->permissionService->getPermissions($boardId);
+		return [
+			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ],
+			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT],
+			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE],
+			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
+		];
 	}
 
 	/**

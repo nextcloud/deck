@@ -121,6 +121,12 @@ class BoardControllerTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGetUserPermissions() {
+		$acl = [
+			Acl::PERMISSION_READ => true,
+			Acl::PERMISSION_EDIT => true,
+			Acl::PERMISSION_MANAGE => true,
+			Acl::PERMISSION_SHARE => true,
+		];
 		$expected = [
 			'PERMISSION_READ' => true,
 			'PERMISSION_EDIT' => true,
@@ -130,7 +136,7 @@ class BoardControllerTest extends \PHPUnit_Framework_TestCase {
 		$this->permissionService->expects($this->once())
 			->method('getPermissions')
 			->with(123)
-			->willReturn($expected);
+			->willReturn($acl);
 		$this->assertEquals($expected, $this->controller->getUserPermissions(123));
 	}
 

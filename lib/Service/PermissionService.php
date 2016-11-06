@@ -63,7 +63,7 @@ class PermissionService {
 		$acls = $this->aclMapper->findAll($boardId);
 		return [
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
-			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
+			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
 			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE),
 			Acl::PERMISSION_SHARE => $owner || $this->userCan($acls, Acl::PERMISSION_SHARE),
 		];
