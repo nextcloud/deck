@@ -24,7 +24,7 @@
 namespace OCA\Deck;
 
 
-abstract class StatusException extends \Exception {
+class StatusException extends \Exception {
 
 	public function __construct($message) {
 		parent::__construct($message);

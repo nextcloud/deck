@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Db;
 
-use OCP\AppFramework\Db\Entity;
 use OCP\IDb;
 
 
@@ -38,7 +37,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
         return $this->findEntities($sql, [$boardId], $limit, $offset);
     }
 
-    public function delete(Entity $entity) {
+    public function delete(\OCP\AppFramework\Db\Entity $entity) {
 		// delete assigned labels
 		$this->deleteLabelAssignments($entity->getId());
 		// delete label

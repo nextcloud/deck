@@ -30,11 +30,9 @@ use OCP\IGroupManager;
 use OCP\ILogger;
 use OCP\IL10N;
 
-
 use \OCA\Deck\Db\Board;
 use \OCA\Deck\Db\BoardMapper;
 use \OCA\Deck\Db\LabelMapper;
-use OCP\IUserManager;
 
 
 class BoardService {
@@ -50,26 +48,23 @@ class BoardService {
                                 IL10N $l10n,
                                 LabelMapper $labelMapper,
                                 AclMapper $aclMapper,
-								IUserManager $userManager,
 								IGroupManager $groupManager) {
         $this->boardMapper = $boardMapper;
         $this->labelMapper = $labelMapper;
         $this->aclMapper = $aclMapper;
         $this->logger = $logger;
         $this->l10n = $l10n;
-		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
     }
 
     public function findAll($userInfo) {
         $userBoards = $this->boardMapper->findAllByUser($userInfo['user']);
         $groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups']);
-        return array_merge($userBoards, $groupBoards);
+        return array_unique(array_merge($userBoards, $groupBoards));
     }
 
     public function find($boardId) {
-        $board = $this->boardMapper->find($boardId, true, true);
-        return $board;
+        return $this->boardMapper->find($boardId, true, true);
     }
 
     public function create($title, $userId, $color) {
@@ -84,7 +79,7 @@ class BoardService {
             '31CC7C' => $this->l10n->t('Finished'),
             '317CCC' => $this->l10n->t('To review'),
             'FF7A66' => $this->l10n->t('Action needed'),
-            'F1DB50' => $this->l10n->t('Maybe')];
+            'F1DB50' => $this->l10n->t('Later')];
         $labels = [];
         foreach ($default_labels as $color=>$title) {
             $label = new Label();
@@ -134,27 +129,4 @@ class BoardService {
         return $this->aclMapper->delete($acl);
     }
 
-	/**
-	 * @param $boardId
-	 * @param $user
-	 * @param $permission
-	 * @return bool
-	 */
-	public function getPermission($boardId, $user, $permission) {
-		$acls = $this->aclMapper->findAll($boardId);
-		// check for users
-		foreach ($acls as $acl) {
-			if ($acl->getType() === "user" && $acl->getParticipant() === $user) {
-				return $acl->getPermission($permission);
-			}
-		}
-		// check for groups
-		$hasGroupPermission = false;
-		foreach ($acls as $acl) {
-			if (!$hasGroupPermission && $acl->getType() === "group" && $this->groupManager->isInGroup($user, $acl->getParticipant())) {
-				$hasGroupPermission = $acl->getPermission($permission);
-			}
-		}
-		return $hasGroupPermission;
-	}
 }

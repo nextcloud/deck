@@ -6,9 +6,10 @@
     <description>My first ownCloud app</description>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
-    <version>0.0.1.15</version>
+    <version>0.1.0-beta1</version>
     <namespace>Deck</namespace>
-    <category>Other</category>
+    <category>organization</category>
+    <category>office</category>
     <dependencies>
         <owncloud min-version="9.1" max-version="9.2" />
         <nextcloud min-version="10" max-version="11" />

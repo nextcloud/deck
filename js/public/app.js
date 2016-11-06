@@ -369,12 +369,17 @@ app.controller('CardController', ["$scope", "$rootScope", "$routeParams", "$loca
             $scope.status.cardRename=true;
         }
     };
-    $scope.cardEditDescriptionShow = function() {
-        if($scope.archived || !BoardService.canEdit())
-            return false;
-        else {
+    $scope.cardEditDescriptionShow = function($event) {
+        var node = $event.target.nodeName;
+        console.log($event);
+        console.log(BoardService);
+        if($scope.card.archived || !$scope.boardservice.canEdit()) {
+            console.log(node);
+        } else {
+            console.log("edit");
             $scope.status.cardEditDescription=true;
         }
+        console.log($scope.status.canEditDescription);
     };
     // handle rename to update information on the board as well
     $scope.cardRename = function(card) {

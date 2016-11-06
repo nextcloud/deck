@@ -59,7 +59,8 @@ class SharingMiddleware extends Middleware {
 		IRequest $request,
 		IUserSession $userSession,
 		ControllerMethodReflector $reflector,
-		PermissionService $permissionService) {
+		PermissionService $permissionService
+	) {
 		$this->container = $container;
 		$this->request = $request;
 		$this->userSession = $userSession;
@@ -178,7 +179,7 @@ class SharingMiddleware extends Middleware {
 		}
 
 		$boardId = $mapper->findBoardId($id);
-		if(!$boardId) {
+		if (!$boardId) {
 			throw new NotFoundException("Entity not found");
 		}
 
