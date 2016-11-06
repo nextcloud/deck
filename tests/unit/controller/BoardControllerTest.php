@@ -121,48 +121,16 @@ class BoardControllerTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testGetUserPermissions() {
-		$board = $this->getMockBuilder(\OCA\Deck\Db\Board::class)
-			->disableOriginalConstructor()
-			->setMethods(['getOwner'])
-			->getMock();
-		$this->boardService->expects($this->once())
-			->method('find')
-			->with(123)
-			->willReturn($board);
-		$board->expects($this->once())
-			->method('getOwner')
-			->willReturn('user');
 		$expected = [
 			'PERMISSION_READ' => true,
 			'PERMISSION_EDIT' => true,
 			'PERMISSION_MANAGE' => true,
 			'PERMISSION_SHARE' => true,
 		];
-		$this->assertEquals($expected, $this->controller->getUserPermissions(123));
-	}
-
-	public function testGetUserPermissionsNotOwner() {
-		$board = $this->getMockBuilder(\OCA\Deck\Db\Board::class)
-			->disableOriginalConstructor()
-			->setMethods(['getOwner'])
-			->getMock();
-		$this->boardService->expects($this->once())
-			->method('find')
+		$this->permissionService->expects($this->once())
+			->method('getPermissions')
 			->with(123)
-			->willReturn($board);
-		$board->expects($this->once())
-			->method('getOwner')
-			->willReturn('someoneelse');
-		$this->boardService->expects($this->exactly(4))
-			->method('getPermission')
-			->withConsecutive([123, 'user', Acl::PERMISSION_READ])
-			->will($this->onConsecutiveCalls(1, 2, 3, 4));
-		$expected = [
-			'PERMISSION_READ' => 1,
-			'PERMISSION_EDIT' => 2,
-			'PERMISSION_MANAGE' => 3,
-			'PERMISSION_SHARE' => 4,
-		];
+			->willReturn($expected);
 		$this->assertEquals($expected, $this->controller->getUserPermissions(123));
 	}
 

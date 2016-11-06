@@ -27,6 +27,7 @@ use OCA\Deck\CardArchivedException;
 use OCA\Deck\Controller\PageController;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
+use OCA\Deck\StatusException;
 
 class ExceptionsTest extends \PHPUnit_Framework_TestCase {
 
@@ -34,16 +35,24 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase {
 		$c = new \stdClass();
 		$e = new NoPermissionException('not allowed', $c, 'mymethod');
 		$this->assertEquals('stdClass#mymethod: not allowed', $e->getMessage());
+		$this->assertEquals(403, $e->getStatus());
 	}
 
 	public function testNotFoundException() {
 		$e = new NotFoundException('foo');
 		$this->assertEquals('foo', $e->getMessage());
+		$this->assertEquals(404, $e->getStatus());
 	}
 
 	public function testCardArchivedException() {
 		$e = new CardArchivedException('foo');
 		$this->assertEquals('foo', $e->getMessage());
+	}
+
+	public function testStatusException() {
+		$e = new StatusException('foo');
+		$this->assertEquals('foo', $e->getMessage());
+		$this->assertEquals(500, $e->getStatus());
 	}
 
 }
