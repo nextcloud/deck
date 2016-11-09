@@ -24,7 +24,9 @@
 namespace OCA\Deck\Service;
 
 use OC\L10N\L10N;
+use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
+use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCP\IGroupManager;
@@ -94,4 +96,93 @@ class BoardServiceTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(1, $this->service->find(123));
 	}
 
+	public function testCreate() {
+		$board = new Board();
+        $board->setTitle('MyBoard');
+        $board->setOwner('admin');
+        $board->setColor('00ff00');
+		$this->boardMapper->expects($this->once())
+			->method('insert')
+			->willReturn($board);
+		$b = $this->service->create('MyBoard', 'admin', '00ff00');
+
+		$this->assertEquals($b->getTitle(), 'MyBoard');
+		$this->assertEquals($b->getOwner(), 'admin');
+		$this->assertEquals($b->getColor(), '00ff00');
+		$this->assertCount(4, $b->getLabels());
+	}
+
+	public function testDelete() {
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->willReturn(new Board());
+		$this->boardMapper->expects($this->once())
+			->method('delete')
+			->willReturn(1);
+		$this->assertEquals(1, $this->service->delete(123));
+	}
+
+	public function testAddAcl() {
+		$acl = new Acl();
+		$acl->setBoardId(123);
+		$acl->setType('user');
+		$acl->setParticipant('admin');
+		$acl->setPermissionWrite(true);
+		$acl->setPermissionInvite(true);
+		$acl->setPermissionManage(true);
+		$this->aclMapper->expects($this->once())
+			->method('insert')
+			->with($acl)
+			->willReturn($acl);
+		$this->assertEquals($acl, $this->service->addAcl(
+			123, 'user', 'admin', true, true, true
+		));
+	}
+
+	public function testUpdateAcl() {
+		$acl = new Acl();
+		$acl->setBoardId(123);
+		$acl->setType('user');
+		$acl->setParticipant('admin');
+		$acl->setPermissionWrite(true);
+		$acl->setPermissionInvite(true);
+		$acl->setPermissionManage(true);
+
+		$this->aclMapper->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($acl);
+		$this->aclMapper->expects($this->once())
+			->method('update')
+			->with($acl)
+			->willReturn($acl);
+
+		$result = $this->service->updateAcl(
+			123, false, false, false
+		);
+
+		$this->assertFalse($result->getPermissionWrite());
+		$this->assertFalse($result->getPermissionInvite());
+		$this->assertFalse($result->getPermissionManage());
+
+	}
+
+	public function testDeleteAcl() {
+		$acl = new Acl();
+		$acl->setBoardId(123);
+		$acl->setType('user');
+		$acl->setParticipant('admin');
+		$acl->setPermissionWrite(true);
+		$acl->setPermissionInvite(true);
+		$acl->setPermissionManage(true);
+		$this->aclMapper->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($acl);
+		$this->aclMapper->expects($this->once())
+			->method('delete')
+			->with($acl)
+			->willReturn(true);
+		$this->assertTrue($this->service->deleteAcl(123));
+	}
 }
