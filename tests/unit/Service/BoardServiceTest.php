@@ -112,6 +112,26 @@ class BoardServiceTest extends \PHPUnit_Framework_TestCase {
 		$this->assertCount(4, $b->getLabels());
 	}
 
+	public function testUpdate() {
+		$board = new Board();
+		$board->setTitle('MyBoard');
+		$board->setOwner('admin');
+		$board->setColor('00ff00');
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($board);
+		$this->boardMapper->expects($this->once())
+			->method('update')
+			->with($board)
+			->willReturn($board);
+		$b = $this->service->update(123, 'MyNewNameBoard', 'ffffff');
+
+		$this->assertEquals($b->getTitle(), 'MyNewNameBoard');
+		$this->assertEquals($b->getOwner(), 'admin');
+		$this->assertEquals($b->getColor(), 'ffffff');
+	}
+
 	public function testDelete() {
 		$this->boardMapper->expects($this->once())
 			->method('find')
