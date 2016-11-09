@@ -90,7 +90,7 @@ app.factory('StackService', function(ApiService, $http, $q){
             }
         }
     };
-    StackService.prototype.deleteCard = function(entity) {
+    StackService.prototype.removeCard = function(entity) {
         var self = this;
         var cards = this.data[entity.stackId].cards;
         for(var i=0;i<cards.length;i++) {

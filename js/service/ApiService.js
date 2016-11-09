@@ -31,7 +31,6 @@ app.factory('ApiService', function($http, $q){
         this.sorted = [];
     };
 
-    // TODO: Unify error messages
     ApiService.prototype.fetchAll = function(){
         var deferred = $q.defer();
         var self = this;
@@ -42,8 +41,7 @@ app.factory('ApiService', function($http, $q){
             });
             deferred.resolve(self.data);
         }, function (error) {
-            deferred.reject('Error while ' + self.getName() + '.fetchAll() ');
-
+            deferred.reject('Fetching ' + self.endpoint + ' failed');
         });
         return deferred.promise;
     };
@@ -69,7 +67,7 @@ app.factory('ApiService', function($http, $q){
             deferred.resolve(response.data);
 
         }, function (error) {
-            deferred.reject('Error in ' + self.endpoint + ' fetchAll() ');
+            deferred.reject('Fetching ' + self.endpoint + ' failed');
         });
         return deferred.promise;
     };
@@ -81,7 +79,7 @@ app.factory('ApiService', function($http, $q){
             self.add(response.data);
             deferred.resolve(response.data);
         }, function (error) {
-            deferred.reject('Error in ' + self.endpoint + ' create() ');
+            deferred.reject('Fetching' + self.endpoint + ' failed');
         });
         return deferred.promise;
     };
@@ -93,7 +91,7 @@ app.factory('ApiService', function($http, $q){
             self.add(response.data);
             deferred.resolve(response.data);
         }, function (error) {
-            deferred.reject('Error while update ' + self.endpoint);
+            deferred.reject('Updating ' + self.endpoint + ' failed');
         });
         return deferred.promise;
 
@@ -108,7 +106,7 @@ app.factory('ApiService', function($http, $q){
             deferred.resolve(response.data);
 
         }, function (error) {
-            deferred.reject('Error while delete ' + self.endpoint);
+            deferred.reject('Deleting ' + self.endpoint + ' failed');
         });
         return deferred.promise;
 

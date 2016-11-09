@@ -248,15 +248,15 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 
 	$scope.cardDelete = function (card) {
 		CardService.delete(card.id);
-		StackService.deleteCard(card);
+		StackService.removeCard(card);
 	};
 	$scope.cardArchive = function (card) {
 		CardService.archive(card);
-		StackService.deleteCard(card);
+		StackService.removeCard(card);
 	};
 	$scope.cardUnarchive = function (card) {
 		CardService.unarchive(card);
-		StackService.deleteCard(card);
+		StackService.removeCard(card);
 	};
 
 	$scope.labelDelete = function (label) {
@@ -304,7 +304,7 @@ app.controller('BoardController', ["$rootScope", "$scope", "$stateParams", "Stat
 			CardService.reorder(card, order).then(function (data) {
 				StackService.addCard(card);
 				StackService.reorder(card, order);
-				StackService.deleteCard({
+				StackService.removeCard({
 					id: card.id,
 					stackId: oldStack
 				});
@@ -611,14 +611,11 @@ app.filter('textColorFilter', function() {
 				}
 				h /= 6;
 			}
-			// TODO: Maybe just darken/lighten the color
 			if(l<0.5) {
 				return "#ffffff";
 			} else {
 				return "#000000";
 			}
-			//var rgba = "rgba(" + color.r + "," + color.g + "," + color.b + ",0.7)";
-			//return rgba;
 		} else {
 			return "#000000";
 		}
@@ -715,19 +712,6 @@ app.directive('elastic', [
 		};
 	}
 ]);
-// OwnCloud Click Handling
-// https://doc.owncloud.org/server/8.0/developer_manual/app/css.html
-app.directive('markdownChecklist', function () {
-    'use strict';
-    return {
-        restrict: 'C',
-        link: function (scope, elm) {
-            
-        }
-    };
-});
-
-
 app.directive('search', ["$document", "$location", function ($document, $location) {
 	'use strict';
 
@@ -768,7 +752,6 @@ app.factory('ApiService', ["$http", "$q", function($http, $q){
         this.sorted = [];
     };
 
-    // TODO: Unify error messages
     ApiService.prototype.fetchAll = function(){
         var deferred = $q.defer();
         var self = this;
@@ -779,8 +762,7 @@ app.factory('ApiService', ["$http", "$q", function($http, $q){
             });
             deferred.resolve(self.data);
         }, function (error) {
-            deferred.reject('Error while ' + self.getName() + '.fetchAll() ');
-
+            deferred.reject('Fetching ' + self.endpoint + ' failed');
         });
         return deferred.promise;
     };
@@ -806,7 +788,7 @@ app.factory('ApiService', ["$http", "$q", function($http, $q){
             deferred.resolve(response.data);
 
         }, function (error) {
-            deferred.reject('Error in ' + self.endpoint + ' fetchAll() ');
+            deferred.reject('Fetching ' + self.endpoint + ' failed');
         });
         return deferred.promise;
     };
@@ -818,7 +800,7 @@ app.factory('ApiService', ["$http", "$q", function($http, $q){
             self.add(response.data);
             deferred.resolve(response.data);
         }, function (error) {
-            deferred.reject('Error in ' + self.endpoint + ' create() ');
+            deferred.reject('Fetching' + self.endpoint + ' failed');
         });
         return deferred.promise;
     };
@@ -830,7 +812,7 @@ app.factory('ApiService', ["$http", "$q", function($http, $q){
             self.add(response.data);
             deferred.resolve(response.data);
         }, function (error) {
-            deferred.reject('Error while update ' + self.endpoint);
+            deferred.reject('Updating ' + self.endpoint + ' failed');
         });
         return deferred.promise;
 
@@ -845,7 +827,7 @@ app.factory('ApiService', ["$http", "$q", function($http, $q){
             deferred.resolve(response.data);
 
         }, function (error) {
-            deferred.reject('Error while delete ' + self.endpoint);
+            deferred.reject('Deleting ' + self.endpoint + ' failed');
         });
         return deferred.promise;
 
@@ -1185,7 +1167,7 @@ app.factory('StackService', ["ApiService", "$http", "$q", function(ApiService, $
             }
         }
     };
-    StackService.prototype.deleteCard = function(entity) {
+    StackService.prototype.removeCard = function(entity) {
         var self = this;
         var cards = this.data[entity.stackId].cards;
         for(var i=0;i<cards.length;i++) {

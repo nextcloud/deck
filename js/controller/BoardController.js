@@ -152,15 +152,15 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 
 	$scope.cardDelete = function (card) {
 		CardService.delete(card.id);
-		StackService.deleteCard(card);
+		StackService.removeCard(card);
 	};
 	$scope.cardArchive = function (card) {
 		CardService.archive(card);
-		StackService.deleteCard(card);
+		StackService.removeCard(card);
 	};
 	$scope.cardUnarchive = function (card) {
 		CardService.unarchive(card);
-		StackService.deleteCard(card);
+		StackService.removeCard(card);
 	};
 
 	$scope.labelDelete = function (label) {
@@ -208,7 +208,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			CardService.reorder(card, order).then(function (data) {
 				StackService.addCard(card);
 				StackService.reorder(card, order);
-				StackService.deleteCard({
+				StackService.removeCard({
 					id: card.id,
 					stackId: oldStack
 				});

@@ -49,14 +49,11 @@ app.filter('textColorFilter', function() {
 				}
 				h /= 6;
 			}
-			// TODO: Maybe just darken/lighten the color
 			if(l<0.5) {
 				return "#ffffff";
 			} else {
 				return "#000000";
 			}
-			//var rgba = "rgba(" + color.r + "," + color.g + "," + color.b + ",0.7)";
-			//return rgba;
 		} else {
 			return "#000000";
 		}
