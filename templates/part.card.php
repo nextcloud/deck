@@ -71,7 +71,7 @@
 				  ng-blur="cardUpdate(cardservice.getCurrent())"
 				  ng-model="cardservice.getCurrent().description"
 				  autofocus-on-insert> </textarea>
-		<div class="container" ng-click="cardEditDescriptionShow()"
+		<div class="container" ng-click="cardEditDescriptionShow($event)"
 			 ng-if="!status.cardEditDescription" ng-animate>
 			<div markdown-it="cardservice.getCurrent().description"
 				 id="markdown"></div>
