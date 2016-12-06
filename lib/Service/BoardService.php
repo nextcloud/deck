@@ -62,7 +62,8 @@ class BoardService {
 	public function findAll($userInfo) {
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user']);
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups']);
-		return array_unique(array_merge($userBoards, $groupBoards));
+		$complete = array_merge($userBoards, $groupBoards);
+		return array_map("unserialize", array_unique(array_map("serialize", $complete)));
 	}
 
 	public function find($boardId) {
