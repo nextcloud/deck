@@ -37,7 +37,6 @@ app.directive('appPopoverMenuUtils', function () {
 				e.stopPropagation();
 			});
             scope.$on('documentClicked', function (scope, event) {
-                e.stopPropagation();
                 if (event.target !== button) {
                     menu.addClass('hidden');
                 }
