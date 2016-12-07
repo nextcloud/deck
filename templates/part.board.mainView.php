@@ -59,9 +59,7 @@
 
 						</div>
 						<div class="app-popover-menu-utils">
-						<button class="card-options icon-more"
-								ng-click="c.status.showMenu=!c.status.showMenu; $event.stopPropagation();"
-								ng-model="card" ng-if="boardservice.canEdit()"></button>
+						<button class="card-options icon-more" ng-model="card"></button>
 						<div class="popovermenu bubble hidden">
 							<ul>
 								<li ng-if="filter!=='archive'">

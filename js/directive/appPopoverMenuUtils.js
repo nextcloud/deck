@@ -27,15 +27,17 @@ app.directive('appPopoverMenuUtils', function () {
         link: function (scope, elm) {
             var menu = elm.find('.popovermenu');
             var button = elm.find('button');
-            button.click(function () {
+            button.click(function (e) {
                 menu.toggleClass('hidden');
                 if(!menu.hasClass('hidden')) {
                     button.css('display','block');
                 } else {
                     button.css('display','');
                 }
-            });
+				e.stopPropagation();
+			});
             scope.$on('documentClicked', function (scope, event) {
+                e.stopPropagation();
                 if (event.target !== button) {
                     menu.addClass('hidden');
                 }
