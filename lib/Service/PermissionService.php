@@ -25,7 +25,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
-use \OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\BoardMapper;
 use OCP\IGroupManager;
 use OCP\ILogger;
 

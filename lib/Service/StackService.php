@@ -30,9 +30,9 @@ use OCP\IL10N;
 
 use OCP\AppFramework\Utility\ITimeFactory;
 
-use \OCA\Deck\Db\Stack;
+use OCA\Deck\Db\Stack;
 
-use \OCA\Deck\Db\StackMapper;
+use OCA\Deck\Db\StackMapper;
 
 
 class StackService  {

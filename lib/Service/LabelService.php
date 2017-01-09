@@ -26,9 +26,7 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Db\Label;
 use OCP\ILogger;
 use OCP\IL10N;
-
-
-use \OCA\Deck\Db\LabelMapper;
+use OCA\Deck\Db\LabelMapper;
 
 
 class LabelService  {

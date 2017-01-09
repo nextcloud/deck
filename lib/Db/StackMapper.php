@@ -24,14 +24,14 @@
 namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\Entity;
-use OCP\IDb;
+use OCP\IDBConnection;
 
 
 class StackMapper extends DeckMapper implements IPermissionMapper {
 
     private $cardMapper;
 
-    public function __construct(IDb $db, CardMapper $cardMapper) {
+    public function __construct(IDBConnection $db, CardMapper $cardMapper) {
         parent::__construct($db, 'deck_stacks', '\OCA\Deck\Db\Stack');
         $this->cardMapper = $cardMapper;
     }

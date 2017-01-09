@@ -30,9 +30,9 @@ use OCP\IGroupManager;
 use OCP\ILogger;
 use OCP\IL10N;
 
-use \OCA\Deck\Db\Board;
-use \OCA\Deck\Db\BoardMapper;
-use \OCA\Deck\Db\LabelMapper;
+use OCA\Deck\Db\Board;
+use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\LabelMapper;
 
 
 class BoardService {

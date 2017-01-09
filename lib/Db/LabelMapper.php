@@ -23,12 +23,12 @@
 
 namespace OCA\Deck\Db;
 
-use OCP\IDb;
+use OCP\IDBConnection;
 
 
 class LabelMapper extends DeckMapper implements IPermissionMapper {
 
-    public function __construct(IDb $db) {
+    public function __construct(IDBConnection $db) {
         parent::__construct($db, 'deck_labels', '\OCA\Deck\Db\Label');
     }
 

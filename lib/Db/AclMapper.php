@@ -23,9 +23,6 @@
 
 namespace OCA\Deck\Db;
 
-
-
-use OCP\IDb;
 use OCP\IDBConnection;
 
 

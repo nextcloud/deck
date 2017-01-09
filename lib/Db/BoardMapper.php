@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\Db;
 
-use OCP\IDb;
+use OCP\IDBConnection;
 
 
 class BoardMapper extends DeckMapper implements IPermissionMapper {
@@ -32,7 +32,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	private $aclMapper;
 	private $stackMapper;
 
-	public function __construct(IDb $db, LabelMapper $labelMapper, AclMapper $aclMapper, StackMapper $stackMapper) {
+	public function __construct(IDBConnection $db, LabelMapper $labelMapper, AclMapper $aclMapper, StackMapper $stackMapper) {
 		parent::__construct($db, 'deck_boards', '\OCA\Deck\Db\Board');
 		$this->labelMapper = $labelMapper;
 		$this->aclMapper = $aclMapper;
