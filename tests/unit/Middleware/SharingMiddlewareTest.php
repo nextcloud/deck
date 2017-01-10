@@ -73,12 +73,15 @@ class SharingMiddlewareTest extends \PHPUnit_Framework_TestCase {
 
 	public function dataBeforeController() {
 		return [
-			['GET', '\OCA\Deck\Controller\PageController', 'index', null, true],
-			['GET', '\OCA\Deck\Controller\BoardController', 'index', null, true],
-			['GET', '\OCA\Deck\Controller\BoardController', 'read', true, true],
-			['GET', '\OCA\Deck\Controller\BoardController', 'read', false, true, NoPermissionException::class],
-			['GET', '\OCA\Deck\Controller\CardController', 'read', false, true, NoPermissionException::class],
-			['POST', '\OCA\Deck\Controller\CardController', 'reorder', false, true, NoPermissionException::class],
+			['GET', '\OCA\Deck\Controller\PageController', 'index', false, true, 123],
+			['GET', '\OCA\Deck\Controller\BoardController', 'index', false, true, 123],
+			['GET', '\OCA\Deck\Controller\BoardController', 'read', true, true, 123],
+			['GET', '\OCA\Deck\Controller\BoardController', 'read', true, true, 123, NoPermissionException::class],
+			['GET', '\OCA\Deck\Controller\BoardController', 'read', false, false, null, NotFoundException::class],
+			['GET', '\OCA\Deck\Controller\CardController', 'read', true, true, 123, NoPermissionException::class],
+			['POST', '\OCA\Deck\Controller\CardController', 'reorder', true, true, 123, NoPermissionException::class],
+			['PUT', '\OCA\Deck\Controller\BoardController', 'update', true, false, 123, NoPermissionException::class],
+
 		];
 	}
 
@@ -87,24 +90,28 @@ class SharingMiddlewareTest extends \PHPUnit_Framework_TestCase {
 	 * @param $controllerClass
 	 * @param $methodName
 	 */
-	public function testBeforeController($method, $controllerClass, $methodName, $getPermission, $success, $exception=null) {
+	public function testBeforeController($method, $controllerClass, $methodName, $getPermission, $success, $boardId, $exception=null) {
 		$controller = $this->getMockBuilder($controllerClass)
 			->disableOriginalConstructor()->getMock();
 		$mapper = $this->getMockBuilder(IPermissionMapper::class)
 			->disableOriginalConstructor()->getMock();
-		$mapper->expects($this->any())->method('findBoardId')->willReturn(123);
+		$mapper->expects($this->any())->method('findBoardId')->willReturn($boardId);
 		$mapper->expects($this->any())->method('isOwner')->willReturn(false);
 		$user = $this->getMockBuilder(IUser::class)
 			->disableOriginalConstructor()->getMock();
 		$user->expects($this->once())->method('getUID')->willReturn('user1');
-		$this->reflector->reflect($controller, $methodName);
+		$controllerInstance = \OC::$server->query($controllerClass);
+		$this->reflector->reflect($controllerInstance, $methodName);
 
 		$this->container->expects($this->any())
 			->method('query')->willReturn($mapper);
 		$this->userSession->expects($this->exactly(2))->method('getUser')->willReturn($user);
 		$this->request->expects($this->once())->method('getMethod')->willReturn($method);
-		if($getPermission) {
-			$this->permissionService->expects($this->any())->method('getPermission')->willReturn($getPermission);
+		if($getPermission === true) {
+			$this->permissionService
+				->expects($this->once())
+				->method('getPermission')
+				->willReturn($getPermission);
 		}
 
 		if($success) {
