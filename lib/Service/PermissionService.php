@@ -26,6 +26,11 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\Entity;
+use OCA\Deck\Db\IPermissionMapper;
+use OCA\Deck\NoPermissionException;
+use OCA\Deck\NotFoundException;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IGroupManager;
 use OCP\ILogger;
 
@@ -82,6 +87,36 @@ class PermissionService {
 		}
 		$acls = $this->aclMapper->findAll($boardId);
 		return $this->userCan($acls, $permission);
+	}
+
+	/**
+	 * check permissions for replacing dark magic middleware
+	 *
+	 * @param $mapper IPermissionMapper|null null if $id is a boardId
+	 * @param $id int unique identifier of the Entity
+	 * @param $permission int
+	 * @return bool
+	 * @throws NoPermissionException|NotFoundException
+	 */
+	public function checkPermission($mapper, $id, $permission) {
+		try {
+		    if($mapper instanceof IPermissionMapper) {
+                $boardId = $mapper->findBoardId($id);
+            } else {
+		        $boardId = $id;
+            }
+            if($boardId === null) {
+                throw new NotFoundException('No entity found');
+            }
+            if (!$this->getPermission($boardId, $permission)) {
+                $class = new \ReflectionClass($mapper);
+                $constants = array_flip($class->getConstants());
+                throw new NoPermissionException('Permission ' . $constants[$permission] . ' not granted.');
+            }
+        } catch (DoesNotExistException $exception) {
+		    throw new NotFoundException('Permission denied');
+        }
+		return true;
 	}
 
 	/**

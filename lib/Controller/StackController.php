@@ -44,7 +44,6 @@ class StackController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireReadPermission
 	 * @param $boardId
 	 * @return array
 	 */
@@ -54,7 +53,6 @@ class StackController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireReadPermission
 	 * @param $boardId
 	 * @return array
 	 */
@@ -64,7 +62,6 @@ class StackController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireReadPermission
 	 * @param $boardId
 	 * @return
 	 */
@@ -74,7 +71,6 @@ class StackController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireManagePermission
 	 * @param $title
 	 * @param $boardId
 	 * @param int $order
@@ -86,7 +82,6 @@ class StackController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireManagePermission
 	 * @param $id
 	 * @param $title
 	 * @param $boardId
@@ -99,7 +94,6 @@ class StackController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireManagePermission
 	 * @param $stackId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */

@@ -25,21 +25,31 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\Acl;
 use OCA\Deck\CardArchivedException;
+use OCA\Deck\Db\StackMapper;
 
 
 class CardService  {
 
     private $cardMapper;
 
-    public function __construct(CardMapper $cardMapper) {
+    public function __construct(
+        CardMapper $cardMapper,
+        StackMapper $stackMapper,
+        PermissionService $permissionService
+    ) {
         $this->cardMapper = $cardMapper;
+        $this->stackMapper = $stackMapper;
+        $this->permissionService = $permissionService;
     }
 
     public function find($cardId) {
+        $this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
         return $this->cardMapper->find($cardId);
     }
     public function create($title, $stackId, $type, $order, $owner) {
+        $this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
         $card = new Card();
         $card->setTitle($title);
         $card->setStackId($stackId);
@@ -51,10 +61,12 @@ class CardService  {
     }
 
     public function delete($id) {
+        $this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
         return $this->cardMapper->delete($this->cardMapper->find($id));
     }
 
     public function update($id, $title, $stackId, $type, $order, $description, $owner) {
+        $this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
         $card = $this->cardMapper->find($id);
         if($card->getArchived()) {
             throw new CardArchivedException();
@@ -69,6 +81,7 @@ class CardService  {
     }
 
     public function rename($id, $title) {
+        $this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
         $card = $this->cardMapper->find($id);
         if($card->getArchived()) {
             throw new CardArchivedException();
@@ -77,6 +90,7 @@ class CardService  {
         return $this->cardMapper->update($card);
     }
     public function reorder($id, $stackId, $order) {
+        $this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
         $cards = $this->cardMapper->findAll($stackId);
         $i = 0;
         foreach ($cards as $card) {
@@ -102,18 +116,21 @@ class CardService  {
     }
 
     public function archive($id) {
+        $this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
         $card = $this->cardMapper->find($id);
         $card->setArchived(true);
         return $this->cardMapper->update($card);
     }
     
     public function unarchive($id) {
+        $this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
         $card = $this->cardMapper->find($id);
         $card->setArchived(false);
         return $this->cardMapper->update($card);
     }
 
     public function assignLabel($cardId, $labelId) {
+        $this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
         $card = $this->cardMapper->find($cardId);
         if($card->getArchived()) {
             throw new CardArchivedException();
@@ -122,6 +139,7 @@ class CardService  {
     }
 
     public function removeLabel($cardId, $labelId) {
+        $this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
         $card = $this->cardMapper->find($cardId);
         if($card->getArchived()) {
             throw new CardArchivedException();

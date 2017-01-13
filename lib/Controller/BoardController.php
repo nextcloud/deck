@@ -55,6 +55,10 @@ class BoardController extends Controller {
 		$this->userInfo = $this->getBoardPrerequisites();
 	}
 
+    /**
+     * TODO: move to boardservice
+     * @return array
+     */
 	private function getBoardPrerequisites() {
 		$groups = $this->groupManager->getUserGroupIds(
 			$this->userManager->get($this->userId)
@@ -67,7 +71,6 @@ class BoardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireNoPermission
 	 */
 	public function index() {
 		return $this->boardService->findAll($this->userInfo);
@@ -75,7 +78,6 @@ class BoardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireReadPermission
 	 * @param $boardId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
@@ -85,7 +87,6 @@ class BoardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireNoPermission
 	 * @param $title
 	 * @param $color
 	 * @return \OCP\AppFramework\Db\Entity
@@ -96,7 +97,6 @@ class BoardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireManagePermission
 	 * @param $id
 	 * @param $title
 	 * @param $color
@@ -108,7 +108,6 @@ class BoardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireManagePermission
 	 * @param $boardId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
@@ -118,7 +117,6 @@ class BoardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireReadPermission
 	 * @param $boardId
 	 * @return array|bool
 	 * @internal param $userId
@@ -135,7 +133,6 @@ class BoardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireManagePermission
 	 * @param $boardId
 	 * @param $type
 	 * @param $participant
@@ -150,7 +147,6 @@ class BoardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireManagePermission
 	 * @param $id
 	 * @param $permissionWrite
 	 * @param $permissionInvite
@@ -163,7 +159,6 @@ class BoardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireManagePermission
 	 * @param $aclId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */

@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCP\ILogger;
@@ -41,17 +42,20 @@ class StackService  {
     private $cardMapper;
     private $logger;
     private $labelMapper;
+    private $permissionService;
 
     public function __construct(StackMapper $stackMapper, CardMapper $cardMapper, LabelMapper $labelMapper, ILogger $logger,
                                 IL10N $l10n,
-                                ITimeFactory $timeFactory) {
+                                ITimeFactory $timeFactory, PermissionService $permissionService) {
         $this->stackMapper = $stackMapper;
         $this->cardMapper = $cardMapper;
         $this->labelMapper = $labelMapper;
         $this->logger = $logger;
+        $this->permissionService = $permissionService;
     }
 
     public function findAll($boardId) {
+        $this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
         $stacks = $this->stackMapper->findAll($boardId);
         $labels = $this->labelMapper->getAssignedLabelsForBoard($boardId);
         foreach ($stacks as $stackIndex => $stack) {
@@ -67,6 +71,7 @@ class StackService  {
     }
 
     public function findAllArchived($boardId) {
+        $this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
         $stacks = $this->stackMapper->findAll($boardId);
         $labels = $this->labelMapper->getAssignedLabelsForBoard($boardId);
         foreach ($stacks as $stackIndex => $stack) {
@@ -82,6 +87,7 @@ class StackService  {
     }
 
     public function create($title, $boardId, $order) {
+        $this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
         $stack = new Stack();
         $stack->setTitle($title);
         $stack->setBoardId($boardId);
@@ -91,10 +97,12 @@ class StackService  {
     }
 
     public function delete($id) {
+        $this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
         return $this->stackMapper->delete($this->stackMapper->find($id));
     }
 
     public function update($id, $title, $boardId, $order) {
+        $this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
         $stack = $this->stackMapper->find($id);
         $stack->setTitle($title);
         $stack->setBoardId($boardId);

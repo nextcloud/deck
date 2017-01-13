@@ -55,7 +55,6 @@ class ShareController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireNoPermission
 	 * @param $search
 	 * @return array
 	 */

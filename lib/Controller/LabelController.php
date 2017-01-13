@@ -44,7 +44,6 @@ class LabelController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireManagePermission
 	 * @param $title
 	 * @param $color
 	 * @param $boardId
@@ -56,7 +55,6 @@ class LabelController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireManagePermission
 	 * @param $id
 	 * @param $title
 	 * @param $color
@@ -68,7 +66,6 @@ class LabelController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireManagePermission
 	 * @param $labelId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */

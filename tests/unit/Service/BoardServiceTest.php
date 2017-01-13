@@ -57,7 +57,7 @@ class BoardServiceTest extends \PHPUnit_Framework_TestCase {
 			->disableOriginalConstructor()->getMock();
 		$this->labelMapper = $this->getMockBuilder(LabelMapper::class)
 			->disableOriginalConstructor()->getMock();
-		$this->groupManager = $this->getMockBuilder(IGroupManager::class)
+		$this->permissionService = $this->getMockBuilder(PermissionService::class)
 			->disableOriginalConstructor()->getMock();
 
 		$this->service = new BoardService(
@@ -66,7 +66,7 @@ class BoardServiceTest extends \PHPUnit_Framework_TestCase {
 			$this->l10n,
 			$this->labelMapper,
 			$this->aclMapper,
-			$this->groupManager
+			$this->permissionService
 		);
 	}
 

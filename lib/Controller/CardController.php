@@ -42,7 +42,6 @@ class CardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireReadPermission
 	 * @param $cardId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
@@ -52,7 +51,6 @@ class CardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireEditPermission
 	 * @param $cardId
 	 * @param $stackId
 	 * @param $order
@@ -64,7 +62,6 @@ class CardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireEditPermission
 	 * @param $cardId
 	 * @param $title
 	 * @return \OCP\AppFramework\Db\Entity
@@ -75,7 +72,6 @@ class CardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireEditPermission
 	 * @param $title
 	 * @param $stackId
 	 * @param $type
@@ -88,7 +84,6 @@ class CardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireEditPermission
 	 * @param $id
 	 * @param $title
 	 * @param $stackId
@@ -103,7 +98,6 @@ class CardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireEditPermission
 	 * @param $cardId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
@@ -113,7 +107,6 @@ class CardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireEditPermission
 	 * @param $cardId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
@@ -123,7 +116,6 @@ class CardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireEditPermission
 	 * @param $cardId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
@@ -133,7 +125,6 @@ class CardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireEditPermission
 	 * @param $cardId
 	 * @param $labelId
 	 */
@@ -143,7 +134,6 @@ class CardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @RequireEditPermission
 	 * @param $cardId
 	 * @param $labelId
 	 */
