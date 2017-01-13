@@ -23,50 +23,17 @@
 
 namespace OCA\Deck\Middleware;
 
-use OCA\Deck\Controller\BoardController;
-use OCA\Deck\Controller\CardController;
-use OCA\Deck\Controller\LabelController;
-use OCA\Deck\Controller\PageController;
 
 
-use OCA\Deck\Db\AclMapper;
-use OCA\Deck\NoPermissionException;
-use OCA\Deck\NotFoundException;
 
-use OCA\Deck\Service\PermissionService;
 use OCA\Deck\StatusException;
 use \OCP\AppFramework\Middleware;
-use OCP\IContainer;
-use OCP\IGroupManager;
-use OCP\IRequest;
-use OCA\Deck\Controller\StackController;
-use OCP\IUserSession;
+
+
 use OCP\AppFramework\Http\JSONResponse;
-use OC\AppFramework\Utility\ControllerMethodReflector;
-use OCA\Deck\Db\Acl;
+
 
 class SharingMiddleware extends Middleware {
-
-	private $container;
-	private $request;
-	private $userSession;
-	private $reflector;
-	private $permissionService;
-
-
-	public function __construct(
-		IContainer $container,
-		IRequest $request,
-		IUserSession $userSession,
-		ControllerMethodReflector $reflector,
-		PermissionService $permissionService
-	) {
-		$this->container = $container;
-		$this->request = $request;
-		$this->userSession = $userSession;
-		$this->reflector = $reflector;
-		$this->permissionService = $permissionService;
-	}
 
 	/**
 	 * Return JSON error response if the user has no sufficient permission

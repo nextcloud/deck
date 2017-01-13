@@ -44,31 +44,9 @@ use OCA\Deck\Db\AclMapper;
 class SharingMiddlewareTest extends \PHPUnit_Framework_TestCase {
 
 	private $sharingMiddleware;
-	private $container;
-	private $request;
-	private $userSession;
-	private $reflector;
-	private $permissionService;
 
 	public function setUp() {
-		$this->container = $this->getMockBuilder(IContainer::class)
-			->disableOriginalConstructor()->getMock();
-		$this->request = $this->getMockBuilder(IRequest::class)
-			->disableOriginalConstructor()->getMock();
-		$this->userSession = $this->getMockBuilder(IUserSession::class)
-			->disableOriginalConstructor()->getMock();
-		$this->reflector = new ControllerMethodReflector();
-		//$this->getMockBuilder(ControllerMethodReflector::class)
-		//	->disableOriginalConstructor()->getMock();
-		$this->permissionService = $this->getMockBuilder(PermissionService::class)
-			->disableOriginalConstructor()->getMock();
-		$this->sharingMiddleware = new SharingMiddleware(
-			$this->container,
-			$this->request,
-			$this->userSession,
-			$this->reflector,
-			$this->permissionService
-		);
+		$this->sharingMiddleware = new SharingMiddleware();
 	}
 
 
