@@ -21,12 +21,9 @@
  *  
  */
 
-// db/author.php
 namespace OCA\Deck\Db;
 
-use JsonSerializable;
-
-class Acl extends Entity implements JsonSerializable {
+class Acl extends Entity implements \JsonSerializable {
 
 	const PERMISSION_READ = 0;
 	const PERMISSION_EDIT = 1;

@@ -31,7 +31,6 @@ use OCA\Deck\Db\LabelMapper;
 class LabelService  {
 
     private $labelMapper;
-    private $logger;
 
     public function __construct(
         LabelMapper $labelMapper,
