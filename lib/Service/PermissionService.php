@@ -43,13 +43,12 @@ class PermissionService {
 	private $logger;
 	private $userId;
 
-	public function __construct(
-		ILogger $logger,
-		AclMapper $aclMapper,
-		BoardMapper $boardMapper,
-		IGroupManager $groupManager,
-		$userId
-	) {
+	public function __construct(ILogger $logger,
+                                AclMapper $aclMapper,
+                                BoardMapper $boardMapper,
+                                IGroupManager $groupManager,
+                                $userId
+    ) {
 		$this->aclMapper = $aclMapper;
 		$this->boardMapper = $boardMapper;
 		$this->logger = $logger;
@@ -75,28 +74,13 @@ class PermissionService {
 	}
 
 	/**
-	 * Check if the current user has specified permissions on a board
-	 *
-	 * @param $boardId
-	 * @param $permission
-	 * @return bool
-	 */
-	public function getPermission($boardId, $permission) {
-		if ($this->userIsBoardOwner($boardId)) {
-			return true;
-		}
-		$acls = $this->aclMapper->findAll($boardId);
-		return $this->userCan($acls, $permission);
-	}
-
-	/**
 	 * check permissions for replacing dark magic middleware
 	 *
 	 * @param $mapper IPermissionMapper|null null if $id is a boardId
 	 * @param $id int unique identifier of the Entity
 	 * @param $permission int
 	 * @return bool
-	 * @throws NoPermissionException|NotFoundException
+	 * @throws NoPermissionException
 	 */
 	public function checkPermission($mapper, $id, $permission) {
 		try {
@@ -106,18 +90,27 @@ class PermissionService {
 		        $boardId = $id;
             }
             if($boardId === null) {
-                throw new NotFoundException('No entity found');
+                // Throw NoPermission to not leak information about existing entries
+                throw new NoPermissionException('Permission denied');
             }
-            if (!$this->getPermission($boardId, $permission)) {
-                $class = new \ReflectionClass($mapper);
-                $constants = array_flip($class->getConstants());
-                throw new NoPermissionException('Permission ' . $constants[$permission] . ' not granted.');
+
+            if ($this->userIsBoardOwner($boardId)) {
+                return true;
             }
+            $acls = $this->aclMapper->findAll($boardId);
+            $result = $this->userCan($acls, $permission);
+            if ($result) {
+                return true;
+            }
+
         } catch (DoesNotExistException $exception) {
-		    throw new NotFoundException('Permission denied');
+		    // Throw NoPermission to not leak information about existing entries
+		    throw new NoPermissionException('Permission denied');
         }
-		return true;
-	}
+
+        throw new NoPermissionException('Permission denied.');
+
+    }
 
 	/**
 	 * @param $boardId
@@ -139,7 +132,7 @@ class PermissionService {
 	 * @param $permission
 	 * @return bool
 	 */
-	public function userCan($acls, $permission) {
+	public function userCan(array $acls, $permission) {
 		// check for users
 		foreach ($acls as $acl) {
 			if ($acl->getType() === "user" && $acl->getParticipant() === $this->userId) {
