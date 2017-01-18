@@ -43,12 +43,7 @@ class PermissionService {
 	private $logger;
 	private $userId;
 
-	public function __construct(ILogger $logger,
-                                AclMapper $aclMapper,
-                                BoardMapper $boardMapper,
-                                IGroupManager $groupManager,
-                                $userId
-    ) {
+	public function __construct(ILogger $logger, AclMapper $aclMapper, BoardMapper $boardMapper, IGroupManager $groupManager, $userId) {
 		$this->aclMapper = $aclMapper;
 		$this->boardMapper = $boardMapper;
 		$this->logger = $logger;
@@ -82,14 +77,14 @@ class PermissionService {
 	 * @return bool
 	 * @throws NoPermissionException
 	 */
-	public function checkPermission($mapper, $id, $permission) {
-		try {
-		    if($mapper instanceof IPermissionMapper) {
+    public function checkPermission($mapper, $id, $permission) {
+        try {
+            if ($mapper instanceof IPermissionMapper) {
                 $boardId = $mapper->findBoardId($id);
             } else {
-		        $boardId = $id;
+                $boardId = $id;
             }
-            if($boardId === null) {
+            if ($boardId === null) {
                 // Throw NoPermission to not leak information about existing entries
                 throw new NoPermissionException('Permission denied');
             }
@@ -104,8 +99,8 @@ class PermissionService {
             }
 
         } catch (DoesNotExistException $exception) {
-		    // Throw NoPermission to not leak information about existing entries
-		    throw new NoPermissionException('Permission denied');
+            // Throw NoPermission to not leak information about existing entries
+            throw new NoPermissionException('Permission denied');
         }
 
         throw new NoPermissionException('Permission denied.');

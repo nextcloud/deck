@@ -43,13 +43,7 @@ class BoardService {
 	private $l10n;
 	private $permissionService;
 
-	public function __construct(
-		BoardMapper $boardMapper,
-		IL10N $l10n,
-		LabelMapper $labelMapper,
-		AclMapper $aclMapper,
-        PermissionService $permissionService
-	) {
+	public function __construct(BoardMapper $boardMapper, IL10N $l10n, LabelMapper $labelMapper, AclMapper $aclMapper, PermissionService $permissionService) {
 		$this->boardMapper = $boardMapper;
 		$this->labelMapper = $labelMapper;
 		$this->aclMapper = $aclMapper;
@@ -78,10 +72,11 @@ class BoardService {
 
 		// create new labels
 		$default_labels = [
-			'31CC7C' => $this->l10n->t('Finished'),
-			'317CCC' => $this->l10n->t('To review'),
+		    '31CC7C' => $this->l10n->t('Finished'),
+            '317CCC' => $this->l10n->t('To review'),
 			'FF7A66' => $this->l10n->t('Action needed'),
-			'F1DB50' => $this->l10n->t('Later')];
+			'F1DB50' => $this->l10n->t('Later')
+        ];
 		$labels = [];
 		foreach ($default_labels as $color => $title) {
 			$label = new Label();

@@ -32,10 +32,7 @@ class LabelService  {
 
     private $labelMapper;
 
-    public function __construct(
-        LabelMapper $labelMapper,
-        PermissionService $permissionService
-    ) {
+    public function __construct(LabelMapper $labelMapper, PermissionService $permissionService) {
         $this->labelMapper = $labelMapper;
         $this->permissionService = $permissionService;
     }
