@@ -29,6 +29,7 @@ use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\NoPermissionException;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IGroupManager;
 use OCP\ILogger;
 
@@ -39,7 +40,8 @@ class PermissionServiceTest extends \PHPUnit_Framework_TestCase {
     /** @var \PHPUnit_Framework_MockObject_MockObject|ILogger */
 	private $logger;
 	private $aclMapper;
-	private $boardMapper;
+    /** @var \PHPUnit_Framework_MockObject_MockObject|BoardMapper */
+    private $boardMapper;
 	private $groupManager;
 	private $userId = 'admin';
 
@@ -230,7 +232,11 @@ class PermissionServiceTest extends \PHPUnit_Framework_TestCase {
         $board = new Board();
         $board->setId($boardId);
         $board->setOwner($owner);
-        $this->boardMapper->expects($this->any())->method('find')->willReturn($board);
+        if($boardId === null) {
+            $this->boardMapper->expects($this->any())->method('find')->willThrowException(new DoesNotExistException('not found'));
+        } else {
+            $this->boardMapper->expects($this->any())->method('find')->willReturn($board);
+        }
         $acls = $this->getAcls($boardId);
         $this->aclMapper->expects($this->any())->method('findAll')->willReturn($acls);
 

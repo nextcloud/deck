@@ -99,6 +99,7 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false, $acl->getPermission(Acl::PERMISSION_EDIT));
 		$this->assertEquals(false, $acl->getPermission(Acl::PERMISSION_MANAGE));
 		$this->assertEquals(false, $acl->getPermission(Acl::PERMISSION_SHARE));
+        $this->assertEquals(false, $acl->getPermission(5));
 
 	}
 }

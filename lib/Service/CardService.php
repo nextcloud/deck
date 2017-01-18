@@ -92,6 +92,7 @@ class CardService  {
     public function reorder($id, $stackId, $order) {
         $this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
         $cards = $this->cardMapper->findAll($stackId);
+        $result = [];
         $i = 0;
         foreach ($cards as $card) {
             if($card->getArchived()) {
@@ -109,10 +110,10 @@ class CardService  {
                 $card->setOrder($i++);
             }
             $this->cardMapper->update($card);
+            $result[$card->getOrder()] = $card;
         }
-        // FIXME: return reordered cards without an additional db query
-        $cards = $this->cardMapper->findAll($stackId);
-        return $cards;
+
+        return $result;
     }
 
     public function archive($id) {

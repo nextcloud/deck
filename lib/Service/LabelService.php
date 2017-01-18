@@ -42,8 +42,7 @@ class LabelService  {
 
     public function find($labelId) {
         $this->permissionService->checkPermission($this->labelMapper, $labelId, Acl::PERMISSION_READ);
-        $label = $this->labelMapper->find($labelId);
-        return $label;
+        return $this->labelMapper->find($labelId);
     }
 
     public function create($title, $color, $boardId) {

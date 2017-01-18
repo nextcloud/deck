@@ -25,6 +25,11 @@ namespace OCA\Deck\Db;
 
 use Test\AppFramework\Db\MapperTestUtility;
 
+/**
+ * Class AclMapperTest
+ * @package OCA\Deck\Db
+ * @group DB
+ */
 class AclMapperTest extends MapperTestUtility  {
 
 	private $mapper;
@@ -32,7 +37,13 @@ class AclMapperTest extends MapperTestUtility  {
 
 	public function setup(){
 		parent::setUp();
+
+		$this->dbConnection = \OC::$server->getDatabaseConnection();
 		$this->mapper = new AclMapper($this->db);
+        $this->mapperDatabase = new AclMapper($this->dbConnection);
+
+        //$acl = $this->getAcl('user','user1');
+		//$this->mapperDatabase->insert($acl);
 	}
 	/** @return Acl */
 	public function getAcl($type='user', $participant='admin', $write=false, $invite=false, $manage=false, $boardId=123) {

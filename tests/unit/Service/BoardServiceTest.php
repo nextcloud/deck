@@ -41,14 +41,12 @@ class BoardServiceTest extends \PHPUnit_Framework_TestCase {
 	private $aclMapper;
 	private $boardMapper;
 	private $groupManager;
+	private $permissionService;
 
 	private $userId = 'admin';
 
 	public function setUp() {
-		$this->logger = $this->request = $this->getMockBuilder(ILogger::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$this->l10n = $this->request = $this->getMockBuilder(L10N::class)
+		$this->l10n = $this->getMockBuilder(L10N::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$this->aclMapper = $this->getMockBuilder(AclMapper::class)
@@ -62,7 +60,6 @@ class BoardServiceTest extends \PHPUnit_Framework_TestCase {
 
 		$this->service = new BoardService(
 			$this->boardMapper,
-			$this->logger,
 			$this->l10n,
 			$this->labelMapper,
 			$this->aclMapper,

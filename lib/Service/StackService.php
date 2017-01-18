@@ -40,17 +40,13 @@ class StackService  {
 
     private $stackMapper;
     private $cardMapper;
-    private $logger;
     private $labelMapper;
     private $permissionService;
 
-    public function __construct(StackMapper $stackMapper, CardMapper $cardMapper, LabelMapper $labelMapper, ILogger $logger,
-                                IL10N $l10n,
-                                ITimeFactory $timeFactory, PermissionService $permissionService) {
+    public function __construct(StackMapper $stackMapper, CardMapper $cardMapper, LabelMapper $labelMapper, PermissionService $permissionService) {
         $this->stackMapper = $stackMapper;
         $this->cardMapper = $cardMapper;
         $this->labelMapper = $labelMapper;
-        $this->logger = $logger;
         $this->permissionService = $permissionService;
     }
 

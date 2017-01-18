@@ -45,7 +45,6 @@ class BoardService {
 
 	public function __construct(
 		BoardMapper $boardMapper,
-		ILogger $logger,
 		IL10N $l10n,
 		LabelMapper $labelMapper,
 		AclMapper $aclMapper,
