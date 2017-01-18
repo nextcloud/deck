@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Controller;
 
-use OCA\Deck\Db\Acl;
 use OCA\Deck\Service\CardService;
 use OCP\AppFramework\Controller;
 use OCP\IRequest;
@@ -89,20 +88,30 @@ class CardControllerTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testArchive() {
-	    $this->cardService->expects($this->once())->method('archive');
-	    $this->cardService->archive(1);
+	    $this->cardService->expects($this->once())->method('archive')->willReturn(true);
+	    $this->controller->archive(1);
     }
     public function testUnarchive() {
         $this->cardService->expects($this->once())->method('unarchive');
-        $this->cardService->unarchive(1);
+        $this->controller->unarchive(1);
     }
     public function testAssignLabel() {
         $this->cardService->expects($this->once())->method('assignLabel');
-        $this->cardService->assignLabel(1,2);
+        $this->controller->assignLabel(1,2);
     }
     public function testRemoveLabel() {
         $this->cardService->expects($this->once())->method('removeLabel');
-        $this->cardService->removeLabel(1,2);
+        $this->controller->removeLabel(1,2);
+    }
+
+    public function testReorder() {
+        $this->cardService->expects($this->once())->method('reorder');
+        $this->controller->reorder(1, 2, 3);
+    }
+    
+    public function testRename() {
+        $this->cardService->expects($this->once())->method('rename');
+        $this->controller->rename(1, 'test');
     }
 
 }
