@@ -59,15 +59,6 @@ class StackController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @param $boardId
-	 * @return
-	 */
-    public function read($boardId) {
-        return $this->stackService->find($this->userId, $boardId);
-    }
-
-	/**
-	 * @NoAdminRequired
 	 * @param $title
 	 * @param $boardId
 	 * @param int $order

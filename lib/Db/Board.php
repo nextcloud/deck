@@ -31,7 +31,7 @@ class Board extends Entity implements JsonSerializable {
     protected $title;
     protected $owner;
     protected $color;
-    protected $archived;
+    protected $archived = false;
     protected $labels;
     protected $acl;
     protected $shared;
@@ -39,6 +39,7 @@ class Board extends Entity implements JsonSerializable {
     public function __construct() {
         $this->addType('id','integer');
         $this->addType('shared','integer');
+        $this->addType('archived','boolean');
         $this->addRelation('labels');
         $this->addRelation('acl');
         $this->addRelation('shared');

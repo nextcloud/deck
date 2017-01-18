@@ -68,10 +68,6 @@ class StackControllerTest extends \PHPUnit_Framework_TestCase {
         $this->controller->archived(1);
     }
 
-    public function testRead() {
-        $this->stackService->expects($this->once())->method('find');
-        $this->controller->read(1);
-    }
 	public function testCreate() {
 		$this->stackService->expects($this->once())
 			->method('create')
