@@ -24,13 +24,14 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Service\CardService;
-
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
 
 class CardController extends Controller {
+
     private $userId;
     private $cardService;
+
     public function __construct($appName, IRequest $request, CardService $cardService, $userId){
         parent::__construct($appName, $request);
         $this->userId = $userId;
@@ -126,7 +127,7 @@ class CardController extends Controller {
 	 * @param $labelId
 	 */
     public function assignLabel($cardId, $labelId) {
-        return $this->cardService->assignLabel($cardId, $labelId);
+        $this->cardService->assignLabel($cardId, $labelId);
     }
 
 	/**
@@ -135,7 +136,7 @@ class CardController extends Controller {
 	 * @param $labelId
 	 */
     public function removeLabel($cardId, $labelId) {
-        return $this->cardService->removeLabel($cardId, $labelId);
+        $this->cardService->removeLabel($cardId, $labelId);
     }
 
 }
