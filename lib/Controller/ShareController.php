@@ -38,13 +38,7 @@ class ShareController extends Controller {
 	private $boardService;
 	private $userId;
 
-	public function __construct($appName,
-								IRequest $request,
-								IUserManager $userManager,
-								IGroupManager $groupManager,
-								BoardService $boardService,
-								$userId
-	) {
+	public function __construct($appName, IRequest $request, IUserManager $userManager, IGroupManager $groupManager, BoardService $boardService, $userId) {
 		parent::__construct($appName, $request);
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;

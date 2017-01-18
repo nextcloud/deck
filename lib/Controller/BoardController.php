@@ -39,13 +39,7 @@ class BoardController extends Controller {
 	private $permissionService;
 	private $userInfo;
 
-	public function __construct($appName,
-								IRequest $request,
-								IUserManager $userManager,
-								IGroupManager $groupManager,
-								BoardService $boardService,
-								PermissionService $permissionService,
-								$userId) {
+	public function __construct($appName, IRequest $request, IUserManager $userManager, IGroupManager $groupManager, BoardService $boardService, PermissionService $permissionService, $userId) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
 		$this->userManager = $userManager;

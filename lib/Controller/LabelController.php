@@ -24,21 +24,16 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Service\LabelService;
-
 use OCP\IRequest;
-
 use OCP\AppFramework\Controller;
 
 
 class LabelController extends Controller {
-    private $userId;
+
     private $labelService;
-    public function __construct($appName,
-                                IRequest $request,
-                                LabelService $labelService,
-                                $userId){
+
+    public function __construct($appName, IRequest $request, LabelService $labelService){
         parent::__construct($appName, $request);
-        $this->userId = $userId;
         $this->labelService = $labelService;
     }
 

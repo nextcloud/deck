@@ -31,10 +31,7 @@ use OCP\AppFramework\Controller;
 class CardController extends Controller {
     private $userId;
     private $cardService;
-    public function __construct($appName,
-                                IRequest $request,
-                                CardService $cardService,
-                                $userId){
+    public function __construct($appName, IRequest $request, CardService $cardService, $userId){
         parent::__construct($appName, $request);
         $this->userId = $userId;
         $this->cardService = $cardService;
