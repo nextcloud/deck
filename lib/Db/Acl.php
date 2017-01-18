@@ -53,18 +53,18 @@ class Acl extends Entity implements \JsonSerializable {
     }
 
     public function getPermission($permission) {
-    	switch ($permission) {
-			case Acl::PERMISSION_READ:
-				return true;
-			case Acl::PERMISSION_EDIT:
-				return $this->getPermissionWrite();
-			case Acl::PERMISSION_SHARE:
-				return $this->getPermissionInvite();
-			case Acl::PERMISSION_MANAGE:
-				return $this->getPermissionManage();
-		}
-		return false;
-	}
+        switch ($permission) {
+            case Acl::PERMISSION_READ:
+                return true;
+            case Acl::PERMISSION_EDIT:
+                return $this->getPermissionWrite();
+            case Acl::PERMISSION_SHARE:
+                return $this->getPermissionInvite();
+            case Acl::PERMISSION_MANAGE:
+                return $this->getPermissionManage();
+        }
+        return false;
+    }
 
     public function jsonSerialize() {
         return [

@@ -115,9 +115,8 @@ class PermissionService {
 		$board = $this->boardMapper->find($boardId);
 		if ($board && $this->userId === $board->getOwner()) {
 			return true;
-		} else {
-			return false;
 		}
+        return false;
 	}
 
 	/**
