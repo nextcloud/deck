@@ -1,12 +1,13 @@
 sudo: false
 language: php
+services:
+    - mysql
 php:
     - 7
 env:
-    global:
-        - DB=sqlite
     matrix:
-        - CORE_BRANCH=master
+        - CORE_BRANCH=master DB=sqlite 
+        - CORE_BRANCH=stable11 DB=sqlite 
 
 matrix:
     fast_finish: true
