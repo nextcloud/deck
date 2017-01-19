@@ -37,12 +37,12 @@
 				   on-remove="labelRemove($item, $model)" ng-disabled="!boardservice.canEdit() || archived">
 			<ui-select-match placeholder="Select labels..."><span
 					class="select-label"
-					style="background-color:#{{$item.color}}">{{$item.title}}&nbsp;</span>
+					style="background-color:#{{$item.color}}; color:{{ $item.color|textColorFilter }};">{{$item.title}}&nbsp;</span>
 			</ui-select-match>
 			<ui-select-choices
 				repeat="label in boardservice.getCurrent().labels | filter:$select.search">
 				<span
-					style="background-color:#{{label.color}}">{{label.title}}</span>
+					style="background-color:#{{label.color}}; color:{{ label.color|textColorFilter }};">{{label.title}}</span>
 			</ui-select-choices>
 		</ui-select>
 	</div>
