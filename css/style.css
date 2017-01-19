@@ -108,19 +108,15 @@
 	font-size: 14pt;
 	margin: 0;
 	padding: 12px;
-
+  float: left;
 }
 
 #board-actions {
 	font-size: 10pt;
-	/*position:absolute;
-	right:5px;
-	top:5px;
-	z-index:999;*/
 	float: right;
 	position: relative;
-	margin-top: -5px;
 	color: #888;
+  margin:8px;
 
 }
 

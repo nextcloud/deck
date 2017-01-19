@@ -8,13 +8,13 @@
 	 style="background-color: #{{boardservice.getCurrent().color }}; color: {{boardservice.getCurrent().color | textColorFilter }};">
 	<h1>
 		{{ boardservice.getCurrent().title }}
-		<div id="board-actions">
-			<div class="board-action-button" ng-if="filter!='archive'"><a ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
-			<div class="board-action-button" ng-if="filter=='archive'"><a ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
-			<div class="board-action-button"><a ui-sref="board.detail({ id: id })" title="<?php p($l->t('Board details')); ?>"><i class="icon icon-details{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a>
-			</div>
-		</div>
 	</h1>
+  <div id="board-actions">
+    <div class="board-action-button" ng-if="filter!='archive'"><a ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
+    <div class="board-action-button" ng-if="filter=='archive'"><a ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
+    <div class="board-action-button"><a ui-sref="board.detail({ id: id })" title="<?php p($l->t('Board details')); ?>"><i class="icon icon-details{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a>
+    </div>
+  </div>
 </div>
 <div id="board" class="scroll-container">
 
