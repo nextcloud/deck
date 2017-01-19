@@ -30,9 +30,9 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 		$acl->setParticipant("admin");
 		$acl->setType("user");
 		$acl->setBoardId(1);
-		$acl->setPermissionEdit(1);
-		$acl->setPermissionShare(1);
-		$acl->setPermissionManage(1);
+		$acl->setPermissionEdit(true);
+		$acl->setPermissionShare(true);
+		$acl->setPermissionManage(true);
 		return $acl;
 	}
 	private function createAclGroup() {
@@ -41,9 +41,9 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 		$acl->setParticipant("administrators");
 		$acl->setType("group");
 		$acl->setBoardId(1);
-		$acl->setPermissionEdit(1);
-		$acl->setPermissionShare(1);
-		$acl->setPermissionManage(1);
+		$acl->setPermissionEdit(true);
+		$acl->setPermissionShare(true);
+		$acl->setPermissionManage(true);
 		return $acl;
 	}
 	public function testJsonSerialize() {
@@ -53,10 +53,10 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 			'participant' => 'admin',
 			'type' => 'user',
 			'boardId' => 1,
-			'permissionEdit' => 1,
-			'permissionShare' => 1,
-			'permissionManage' => 1,
-			'owner' => 0
+			'permissionEdit' => true,
+			'permissionShare' => true,
+			'permissionManage' => true,
+			'owner' => false
 		], $acl->jsonSerialize());
 		$acl = $this->createAclGroup();
 		$this->assertEquals([
@@ -64,10 +64,10 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 			'participant' => 'administrators',
 			'type' => 'group',
 			'boardId' => 1,
-			'permissionEdit' => 1,
-			'permissionShare' => 1,
-			'permissionManage' => 1,
-			'owner' => 0
+			'permissionEdit' => true,
+			'permissionShare' => true,
+			'permissionManage' => true,
+			'owner' => false
 		], $acl->jsonSerialize());
 	}
 	public function testSetOwner() {
@@ -78,10 +78,10 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 			'participant' => 'admin',
 			'type' => 'user',
 			'boardId' => 1,
-			'permissionEdit' => 1,
-			'permissionShare' => 1,
-			'permissionManage' => 1,
-			'owner' => 1
+			'permissionEdit' => true,
+			'permissionShare' => true,
+			'permissionManage' => true,
+			'owner' => true
 		], $acl->jsonSerialize());
 	}
 
@@ -92,9 +92,9 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(true, $acl->getPermission(Acl::PERMISSION_EDIT));
 		$this->assertEquals(true, $acl->getPermission(Acl::PERMISSION_MANAGE));
 		$this->assertEquals(true, $acl->getPermission(Acl::PERMISSION_SHARE));
-		$acl->setPermissionEdit(0);
-		$acl->setPermissionShare(0);
-		$acl->setPermissionManage(0);
+		$acl->setPermissionEdit(false);
+		$acl->setPermissionShare(false);
+		$acl->setPermissionManage(false);
 		$this->assertEquals(true, $acl->getPermission(Acl::PERMISSION_READ));
 		$this->assertEquals(false, $acl->getPermission(Acl::PERMISSION_EDIT));
 		$this->assertEquals(false, $acl->getPermission(Acl::PERMISSION_MANAGE));
