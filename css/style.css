@@ -253,6 +253,11 @@
 	z-index: 999;
 	opacity: 1;
 	margin-left: 10px;
+	display: block;
+}
+
+.card .popovermenu.hidden {
+	display: none;
 }
 
 .card .card-assignees {

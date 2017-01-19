@@ -102,7 +102,8 @@
 						<input type="text" autofocus-on-insert
 							   ng-model="newCard.title"
 							   ng-blur="status.addCard[s.id]=false"
-							    required/>
+							   style="color:{{ boardservice.getCurrent().color | textColorFilter }}; border-color:{{ boardservice.getCurrent().color | textColorFilter }};"
+							   required placeholder="<?php p($l->t('Enter a card title')); ?>"/>
 					</h3>
 				</form>
 				<div ng-if="!status.addCard[s.id]" ng-click="status.addCard[s.id]=true">
