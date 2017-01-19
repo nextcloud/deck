@@ -108,7 +108,7 @@ class CardControllerTest extends \PHPUnit_Framework_TestCase {
         $this->cardService->expects($this->once())->method('reorder');
         $this->controller->reorder(1, 2, 3);
     }
-    
+
     public function testRename() {
         $this->cardService->expects($this->once())->method('rename');
         $this->controller->rename(1, 'test');

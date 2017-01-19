@@ -331,12 +331,12 @@
                 <length>64</length>
             </field>
             <field>
-                <name>permission_write</name>
+                <name>permission_edit</name>
                 <type>boolean</type>
                 <default>false</default>
             </field>
             <field>
-                <name>permission_invite</name>
+                <name>permission_share</name>
                 <type>boolean</type>
                 <default>false</default>
             </field>

@@ -46,11 +46,11 @@
                 <span class="has-tooltip username">
                     {{ acl.participant }}</span>
                 <span class="shareOption" ng-if="boardservice.canManage()">
-                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-share" ng-model="acl.permissionInvite" ng-change="aclUpdate(acl)" />
+                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-share" ng-model="acl.permissionShare" ng-change="aclUpdate(acl)" />
                     <label for="checkbox-permission-{{ acl.id }}-share"><?php p($l->t('Share')); ?></label>
                 </span>
                 <span class="shareOption"ng-if="boardservice.canManage()">
-                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-edit" ng-model="acl.permissionWrite" ng-change="aclUpdate(acl)" />
+                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-edit" ng-model="acl.permissionEdit" ng-change="aclUpdate(acl)" />
                     <label for="checkbox-permission-{{ acl.id }}-edit"><?php p($l->t('Edit')); ?></label>
                 </span>
                 <span class="shareOption"ng-if="boardservice.canManage()">

@@ -96,8 +96,8 @@ class ShareControllerTest extends \PHPUnit_Framework_TestCase {
 		$acl = new Acl();
 		$acl->setType('group');
 		$acl->setParticipant('foo');
-		$acl->setPermissionWrite(true);
-		$acl->setPermissionInvite(true);
+		$acl->setPermissionEdit(true);
+		$acl->setPermissionShare(true);
 		$acl->setPermissionManage(true);
 		$this->assertEquals([$acl], $actual);
 	}
@@ -122,8 +122,8 @@ class ShareControllerTest extends \PHPUnit_Framework_TestCase {
 		$acl = new Acl();
 		$acl->setType('user');
 		$acl->setParticipant('foo');
-		$acl->setPermissionWrite(true);
-		$acl->setPermissionInvite(true);
+		$acl->setPermissionEdit(true);
+		$acl->setPermissionShare(true);
 		$acl->setPermissionManage(true);
 		$this->assertEquals([$acl], $actual);
 	}

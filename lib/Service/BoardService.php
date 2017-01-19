@@ -104,23 +104,23 @@ class BoardService {
 	}
 
 
-	public function addAcl($boardId, $type, $participant, $write, $invite, $manage) {
+	public function addAcl($boardId, $type, $participant, $edit, $share, $manage) {
         $this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_SHARE);
 		$acl = new Acl();
 		$acl->setBoardId($boardId);
 		$acl->setType($type);
 		$acl->setParticipant($participant);
-		$acl->setPermissionWrite($write);
-		$acl->setPermissionInvite($invite);
+		$acl->setPermissionEdit($edit);
+		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
 		return $this->aclMapper->insert($acl);
 	}
 
-	public function updateAcl($id, $write, $invite, $manage) {
+	public function updateAcl($id, $edit, $share, $manage) {
         $this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_SHARE);
 		$acl = $this->aclMapper->find($id);
-		$acl->setPermissionWrite($write);
-		$acl->setPermissionInvite($invite);
+		$acl->setPermissionEdit($edit);
+		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
 		return $this->aclMapper->update($acl);
 	}

@@ -71,12 +71,12 @@ class BoardMapperTest extends MapperTestUtility  {
         }
 	}
 	/** @return Acl */
-	public function getAcl($type='user', $participant='admin', $write=false, $invite=false, $manage=false, $boardId=123) {
+	public function getAcl($type='user', $participant='admin', $edit=false, $share=false, $manage=false, $boardId=123) {
 		$acl = new Acl();
 		$acl->setParticipant($participant);
 		$acl->setType('user');
-		$acl->setPermissionWrite($write);
-		$acl->setPermissionInvite($invite);
+		$acl->setPermissionEdit($edit);
+		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
 		$acl->setBoardId($boardId);
 		return $acl;

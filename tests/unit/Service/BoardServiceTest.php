@@ -144,8 +144,8 @@ class BoardServiceTest extends \PHPUnit_Framework_TestCase {
 		$acl->setBoardId(123);
 		$acl->setType('user');
 		$acl->setParticipant('admin');
-		$acl->setPermissionWrite(true);
-		$acl->setPermissionInvite(true);
+		$acl->setPermissionEdit(true);
+		$acl->setPermissionShare(true);
 		$acl->setPermissionManage(true);
 		$this->aclMapper->expects($this->once())
 			->method('insert')
@@ -161,8 +161,8 @@ class BoardServiceTest extends \PHPUnit_Framework_TestCase {
 		$acl->setBoardId(123);
 		$acl->setType('user');
 		$acl->setParticipant('admin');
-		$acl->setPermissionWrite(true);
-		$acl->setPermissionInvite(true);
+		$acl->setPermissionEdit(true);
+		$acl->setPermissionShare(true);
 		$acl->setPermissionManage(true);
 
 		$this->aclMapper->expects($this->once())
@@ -178,8 +178,8 @@ class BoardServiceTest extends \PHPUnit_Framework_TestCase {
 			123, false, false, false
 		);
 
-		$this->assertFalse($result->getPermissionWrite());
-		$this->assertFalse($result->getPermissionInvite());
+		$this->assertFalse($result->getPermissionEdit());
+		$this->assertFalse($result->getPermissionShare());
 		$this->assertFalse($result->getPermissionManage());
 
 	}
@@ -189,8 +189,8 @@ class BoardServiceTest extends \PHPUnit_Framework_TestCase {
 		$acl->setBoardId(123);
 		$acl->setType('user');
 		$acl->setParticipant('admin');
-		$acl->setPermissionWrite(true);
-		$acl->setPermissionInvite(true);
+		$acl->setPermissionEdit(true);
+		$acl->setPermissionShare(true);
 		$acl->setPermissionManage(true);
 		$this->aclMapper->expects($this->once())
 			->method('find')

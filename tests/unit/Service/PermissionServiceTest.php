@@ -88,8 +88,8 @@ class PermissionServiceTest extends \PHPUnit_Framework_TestCase {
 		$aclUser = new Acl();
 		$aclUser->setType('user');
 		$aclUser->setParticipant('admin');
-		$aclUser->setPermissionWrite(true);
-		$aclUser->setPermissionInvite(true);
+		$aclUser->setPermissionEdit(true);
+		$aclUser->setPermissionShare(true);
 		$aclUser->setPermissionManage(true);
 		$this->aclMapper->expects($this->once())
 			->method('findAll')
@@ -150,8 +150,8 @@ class PermissionServiceTest extends \PHPUnit_Framework_TestCase {
 		$aclUser = new Acl();
 		$aclUser->setType($type);
 		$aclUser->setParticipant($participant);
-		$aclUser->setPermissionWrite($edit);
-		$aclUser->setPermissionInvite($share);
+		$aclUser->setPermissionEdit($edit);
+		$aclUser->setPermissionShare($share);
 		$aclUser->setPermissionManage($manage);
 		$acls = [
 			$aclUser
@@ -257,13 +257,13 @@ class PermissionServiceTest extends \PHPUnit_Framework_TestCase {
         $this->service->checkPermission($mapper, 1234, Acl::PERMISSION_READ);
     }
 
-    private function generateAcl($boardId, $type, $participant, $write, $manage, $share) {
+    private function generateAcl($boardId, $type, $participant, $edit, $manage, $share) {
 	    $acl = new Acl();
         $acl->setParticipant($participant);
         $acl->setBoardId($boardId);
 	    $acl->setType($type);
-        $acl->setPermissionWrite($write);
-        $acl->setPermissionInvite($share);
+        $acl->setPermissionEdit($edit);
+        $acl->setPermissionShare($share);
         $acl->setPermissionManage($manage);
         return $acl;
     }

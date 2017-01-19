@@ -34,21 +34,21 @@ class Acl extends Entity implements \JsonSerializable {
     protected $participant;
     protected $type;
     protected $boardId;
-    protected $permissionWrite;
-    protected $permissionInvite;
+    protected $permissionEdit;
+    protected $permissionShare;
     protected $permissionManage;
     protected $owner;
 
     public function __construct() {
         $this->addType('id','integer');
         $this->addType('boardId','integer');
-        $this->addType('permissionWrite', 'boolean');
-        $this->addType('permissionInvite', 'boolean');
+        $this->addType('permissionEdit', 'boolean');
+        $this->addType('permissionShare', 'boolean');
         $this->addType('permissionManage', 'boolean');
         $this->addType('owner', 'boolean');
         $this->addRelation('owner');
-		$this->setPermissionWrite(false);
-		$this->setPermissionInvite(false);
+		$this->setPermissionEdit(false);
+		$this->setPermissionShare(false);
 		$this->setPermissionManage(false);
     }
 
@@ -57,9 +57,9 @@ class Acl extends Entity implements \JsonSerializable {
             case Acl::PERMISSION_READ:
                 return true;
             case Acl::PERMISSION_EDIT:
-                return $this->getPermissionWrite();
+                return $this->getPermissionEdit();
             case Acl::PERMISSION_SHARE:
-                return $this->getPermissionInvite();
+                return $this->getPermissionShare();
             case Acl::PERMISSION_MANAGE:
                 return $this->getPermissionManage();
         }
@@ -72,8 +72,8 @@ class Acl extends Entity implements \JsonSerializable {
             'participant' => $this->participant,
             'type' => $this->type,
             'boardId' => $this->boardId,
-            'permissionWrite' => $this->permissionWrite,
-            'permissionInvite' => $this->permissionInvite,
+            'permissionEdit' => $this->permissionEdit,
+            'permissionShare' => $this->permissionShare,
             'permissionManage' => $this->permissionManage,
             'owner' => $this->owner
         ];

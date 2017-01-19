@@ -60,8 +60,8 @@ class ShareController extends Controller {
 			$acl = new Acl();
 			$acl->setType('group');
 			$acl->setParticipant($group->getGID());
-			$acl->setPermissionWrite(true);
-			$acl->setPermissionInvite(true);
+			$acl->setPermissionEdit(true);
+			$acl->setPermissionShare(true);
 			$acl->setPermissionManage(true);
 			$result[] = $acl;
 		}
@@ -72,8 +72,8 @@ class ShareController extends Controller {
 			$acl = new Acl();
 			$acl->setType('user');
 			$acl->setParticipant($user->getUID());
-			$acl->setPermissionWrite(true);
-			$acl->setPermissionInvite(true);
+			$acl->setPermissionEdit(true);
+			$acl->setPermissionShare(true);
 			$acl->setPermissionManage(true);
 			$result[] = $acl;
 		}

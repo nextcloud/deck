@@ -30,8 +30,8 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 		$acl->setParticipant("admin");
 		$acl->setType("user");
 		$acl->setBoardId(1);
-		$acl->setPermissionWrite(1);
-		$acl->setPermissionInvite(1);
+		$acl->setPermissionEdit(1);
+		$acl->setPermissionShare(1);
 		$acl->setPermissionManage(1);
 		return $acl;
 	}
@@ -41,8 +41,8 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 		$acl->setParticipant("administrators");
 		$acl->setType("group");
 		$acl->setBoardId(1);
-		$acl->setPermissionWrite(1);
-		$acl->setPermissionInvite(1);
+		$acl->setPermissionEdit(1);
+		$acl->setPermissionShare(1);
 		$acl->setPermissionManage(1);
 		return $acl;
 	}
@@ -53,8 +53,8 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 			'participant' => 'admin',
 			'type' => 'user',
 			'boardId' => 1,
-			'permissionWrite' => 1,
-			'permissionInvite' => 1,
+			'permissionEdit' => 1,
+			'permissionShare' => 1,
 			'permissionManage' => 1,
 			'owner' => 0
 		], $acl->jsonSerialize());
@@ -64,8 +64,8 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 			'participant' => 'administrators',
 			'type' => 'group',
 			'boardId' => 1,
-			'permissionWrite' => 1,
-			'permissionInvite' => 1,
+			'permissionEdit' => 1,
+			'permissionShare' => 1,
 			'permissionManage' => 1,
 			'owner' => 0
 		], $acl->jsonSerialize());
@@ -78,8 +78,8 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 			'participant' => 'admin',
 			'type' => 'user',
 			'boardId' => 1,
-			'permissionWrite' => 1,
-			'permissionInvite' => 1,
+			'permissionEdit' => 1,
+			'permissionShare' => 1,
 			'permissionManage' => 1,
 			'owner' => 1
 		], $acl->jsonSerialize());
@@ -92,8 +92,8 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(true, $acl->getPermission(Acl::PERMISSION_EDIT));
 		$this->assertEquals(true, $acl->getPermission(Acl::PERMISSION_MANAGE));
 		$this->assertEquals(true, $acl->getPermission(Acl::PERMISSION_SHARE));
-		$acl->setPermissionWrite(0);
-		$acl->setPermissionInvite(0);
+		$acl->setPermissionEdit(0);
+		$acl->setPermissionShare(0);
 		$acl->setPermissionManage(0);
 		$this->assertEquals(true, $acl->getPermission(Acl::PERMISSION_READ));
 		$this->assertEquals(false, $acl->getPermission(Acl::PERMISSION_EDIT));
