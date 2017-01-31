@@ -1,4 +1,4 @@
-default:
+build:
 	grunt build
 
 watch:

@@ -9,11 +9,11 @@
     "url": "git@github.com:juliushaertl/deck.git"
   },
   "dependencies": {
-    "karma": "^1.1.1"
+    "karma": "^1.1.1",
+    "bower": "*",
+    "grunt": "*"
   },
   "devDependencies": {
-    "bower": "*",
-    "grunt": "*",
     "grunt-cli": "*",
     "grunt-contrib-concat": "*",
     "grunt-contrib-jshint": "*",
