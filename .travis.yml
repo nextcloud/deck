@@ -24,6 +24,8 @@ before_script:
     - make install-npm-deps-dev
 
 script:
+    - node --version
+    - npm --version
     - make build-js
     - make test
 
