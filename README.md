@@ -1,6 +1,6 @@
 # Deck
 
-[![Build Status](https://travis-ci.com/juliushaertl/deck.svg?token=6auunhHMRyx7p3n8fzxZ&branch=master)](https://travis-ci.com/juliushaertl/deck) [![CodeCov](https://codecov.io/github/juliushaertl/deck/coverage.svg?branch=master)](https://codecov.io/github/juliushaertl/deck) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/juliushaertl/deck/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/juliushaertl/deck/?branch=master) [![GitHub license](https://img.shields.io/badge/license-AGPLv3-blue.svg)](https://raw.githubusercontent.com/juliushaertl/deck/master/LICENSE)
+[![Build Status](https://travis-ci.org/juliushaertl/deck.svg?token=6auunhHMRyx7p3n8fzxZ&branch=master)](https://travis-ci.org/juliushaertl/deck) [![CodeCov](https://codecov.io/github/juliushaertl/deck/coverage.svg?branch=master)](https://codecov.io/github/juliushaertl/deck) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/juliushaertl/deck/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/juliushaertl/deck/?branch=master) [![GitHub license](https://img.shields.io/badge/license-AGPLv3-blue.svg)](https://raw.githubusercontent.com/juliushaertl/deck/master/LICENSE)
 
 Deck is a kanban style project and personal management tool integrated with Nextcloud.
 
