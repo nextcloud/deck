@@ -1,35 +1,21 @@
 {
   "name": "deck",
-  "description": "Deck owncloud app",
-  "version": "0.1.0",
-  "private": true,
-  "homepage": "https://github.com/juliushaertl/deck",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:juliushaertl/deck.git"
+  "version": "1.0.0",
+  "main": "Gruntfile.js",
+  "directories": {
+    "test": "tests"
   },
-  "dependencies": {
-    "karma": "*",
-    "bower": "*",
-    "grunt": "*"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "grunt-cli": "*",
-    "grunt-contrib-concat": "*",
-    "grunt-contrib-jshint": "*",
-    "grunt-contrib-watch": "*",
-    "grunt-karma": "*",
-    "grunt-ng-annotate": "*",
-    "grunt-phpunit": "*",
-    "grunt-wrap": "*",
-    "jasmine-core": "*",
-    "jshint-stylish": "*",
-    "karma": "*",
-    "karma-chrome-launcher": "*",
-    "karma-coverage": "*",
-    "karma-firefox-launcher": "*",
-    "karma-jasmine": "*",
-    "karma-phantomjs-launcher": "*"
+    "bower": "^1.8.0",
+    "grunt": "^1.0.1",
+    "karma": "^1.4.1"
   },
-  "engine": "node >= 0.8"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "AGPL-3.0",
+  "keywords": [],
+  "description": ""
 }
