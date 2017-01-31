@@ -22,13 +22,12 @@
 
 
 module.exports = function(grunt) {
-	'use strict';
+  'use strict';
 
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-wrap');
-	grunt.loadNpmTasks('grunt-ng-annotate');
 	grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-phpunit');
 
@@ -115,18 +114,10 @@ module.exports = function(grunt) {
 				reporters: ['progress']
 			}
 		},
-
-		ngAnnotate: {
-			app: {
-				src: ['<%= meta.productionJS %>app.js'],
-				dest: '<%= meta.productionJS %>app.js'
-			}
-		}
-
 	});
 
 	// make tasks available under simpler commands
-	grunt.registerTask('build', ['jshint', 'concat', 'wrap', 'ngAnnotate']);
+	grunt.registerTask('build', ['jshint', 'concat', 'wrap']);
 	grunt.registerTask('js-unit', ['karma:continuous']);
 
 };

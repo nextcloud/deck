@@ -1,36 +1,28 @@
 {
   "name": "deck",
-  "description": "Deck owncloud app",
-  "version": "0.1.0",
-  "private": true,
-  "homepage": "https://github.com/juliushaertl/deck",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:juliushaertl/deck.git"
+  "version": "1.0.0",
+  "main": "Gruntfile.js",
+  "directories": {
+    "test": "tests"
   },
-  "dependencies": {
-    "karma": "^1.1.1",
-    "bower": "*",
-    "grunt": "*"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "grunt-cli": "*",
-    "grunt-contrib-concat": "*",
-    "grunt-contrib-jshint": "*",
-    "grunt-contrib-watch": "*",
-    "grunt-karma": "*",
-    "grunt-ng-annotate": "^1.0.1",
-    "grunt-phpunit": "*",
-    "grunt-wrap": "*",
-    "jasmine-core": "*",
-    "jshint-stylish": "^2.1.0",
-    "karma": "*",
-    "karma-chrome-launcher": "*",
-    "karma-coverage": "*",
-    "karma-firefox-launcher": "*",
-    "karma-jasmine": "*",
-    "karma-phantomjs-launcher": "*",
-    "phantomjs": "*"
+    "bower": "^1.8.0",
+    "grunt": "^1.0.1",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-karma": "^2.0.0",
+    "grunt-phpunit": "^0.3.6",
+    "grunt-wrap": "^0.3.0",
+    "jshint-stylish": "^2.2.1",
+    "karma": "^1.4.1"
   },
-  "engine": "node >= 0.8"
+  "scripts": {
+    "test": "echo \"Warning: no test specified\" && exit 0"
+  },
+  "author": "",
+  "license": "AGPL-3.0",
+  "keywords": [],
+  "description": ""
 }
