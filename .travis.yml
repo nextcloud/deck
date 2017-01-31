@@ -35,4 +35,4 @@ after_failure:
     - cat ../../data/nextcloud.log
 
 after_success:
-  - cd build && bash <(curl -s https://codecov.io/bash) -t f6375299-4832-487e-b831-091772ab0384
+  - bash <(curl -s https://codecov.io/bash)
