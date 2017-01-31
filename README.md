@@ -1,6 +1,6 @@
 # Deck
 
-[![Build Status](https://travis-ci.org/juliushaertl/deck.svg?branch=master)](https://travis-ci.org/juliushaertl/deck) [![CodeCov](https://codecov.io/github/juliushaertl/deck/coverage.svg?branch=master)](https://codecov.io/github/juliushaertl/deck) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/juliushaertl/deck/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/juliushaertl/deck/?branch=master) [![GitHub license](https://img.shields.io/badge/license-AGPLv3-blue.svg)](https://raw.githubusercontent.com/juliushaertl/deck/master/LICENSE)
+[![Build Status](https://travis-ci.org/juliushaertl/deck.svg?branch=master)](https://travis-ci.org/juliushaertl/deck) [![CodeCov](https://codecov.io/github/juliushaertl/deck/coverage.svg?branch=master)](https://codecov.io/github/juliushaertl/deck) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/juliushaertl/deck/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/juliushaertl/deck/?branch=master) [![GitHub license](https://img.shields.io/badge/license-AGPLv3-blue.svg?style=plastic)](https://raw.githubusercontent.com/juliushaertl/deck/master/LICENSE) [![Dependency Status](https://www.versioneye.com/user/projects/58908fc0a23e810038c34e0a/badge.svg)](https://www.versioneye.com/user/projects/58908fc0a23e810038c34e0a)
 
 Deck is a kanban style project and personal management tool integrated with Nextcloud.
 
