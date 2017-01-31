@@ -9,7 +9,7 @@
     "url": "git@github.com:juliushaertl/deck.git"
   },
   "dependencies": {
-    "karma": "^1.1.1",
+    "karma": "*",
     "bower": "*",
     "grunt": "*"
   },
@@ -19,18 +19,17 @@
     "grunt-contrib-jshint": "*",
     "grunt-contrib-watch": "*",
     "grunt-karma": "*",
-    "grunt-ng-annotate": "^1.0.1",
+    "grunt-ng-annotate": "*",
     "grunt-phpunit": "*",
     "grunt-wrap": "*",
     "jasmine-core": "*",
-    "jshint-stylish": "^2.1.0",
+    "jshint-stylish": "*",
     "karma": "*",
     "karma-chrome-launcher": "*",
     "karma-coverage": "*",
     "karma-firefox-launcher": "*",
     "karma-jasmine": "*",
-    "karma-phantomjs-launcher": "*",
-    "phantomjs": "*"
+    "karma-phantomjs-launcher": "*"
   },
   "engine": "node >= 0.8"
 }
