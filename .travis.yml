@@ -21,8 +21,10 @@ before_install:
 
 before_script:
     - cd apps/deck
+    - make install-npm-deps-dev
 
 script:
+    - make build-js
     - make test
 
 after_failure:
