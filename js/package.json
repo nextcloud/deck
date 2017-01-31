@@ -13,14 +13,13 @@
     "grunt-contrib-jshint": "^1.1.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-karma": "^2.0.0",
-    "grunt-ng-annotate": "^3.0.0",
     "grunt-phpunit": "^0.3.6",
     "grunt-wrap": "^0.3.0",
     "jshint-stylish": "^2.2.1",
     "karma": "^1.4.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Warning: no test specified\" && exit 0"
   },
   "author": "",
   "license": "AGPL-3.0",
