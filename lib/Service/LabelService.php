@@ -28,7 +28,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\LabelMapper;
 
 
-class LabelService  {
+class LabelService {
 
     private $labelMapper;
 

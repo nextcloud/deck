@@ -33,7 +33,7 @@ use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 
 
-class StackService  {
+class StackService {
 
     private $stackMapper;
     private $cardMapper;
@@ -54,7 +54,7 @@ class StackService  {
         foreach ($stacks as $stackIndex => $stack) {
             $cards = $this->cardMapper->findAll($stack->id);
             foreach ($cards as $cardIndex => $card) {
-            	if(array_key_exists($card->id, $labels)) {
+            	if (array_key_exists($card->id, $labels)) {
                 	$cards[$cardIndex]->setLabels($labels[$card->id]);
 				}
             }
@@ -70,7 +70,7 @@ class StackService  {
         foreach ($stacks as $stackIndex => $stack) {
             $cards = $this->cardMapper->findAllArchived($stack->id);
             foreach ($cards as $cardIndex => $card) {
-            	if(array_key_exists($card->id, $labels)) {
+            	if (array_key_exists($card->id, $labels)) {
 					$cards[$cardIndex]->setLabels($labels[$card->id]);
 				}
             }

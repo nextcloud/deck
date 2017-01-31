@@ -33,7 +33,7 @@ use OCP\AppFramework\Controller;
 class StackController extends Controller {
     private $userId;
     private $stackService;
-    public function __construct($appName, IRequest $request, StackService $cardService, $userId){
+    public function __construct($appName, IRequest $request, StackService $cardService, $userId) {
         parent::__construct($appName, $request);
         $this->userId = $userId;
         $this->stackService = $cardService;
@@ -64,7 +64,7 @@ class StackController extends Controller {
 	 * @param int $order
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-    public function create($title, $boardId, $order=999) {
+    public function create($title, $boardId, $order = 999) {
         return $this->stackService->create($title, $boardId, $order);
     }
 

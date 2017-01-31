@@ -26,10 +26,8 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\BoardMapper;
-
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\NoPermissionException;
-
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IGroupManager;
 use OCP\ILogger;

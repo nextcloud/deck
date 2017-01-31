@@ -48,7 +48,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
     }
 
 
-    public function findAll($boardId, $limit=null, $offset=null) {
+    public function findAll($boardId, $limit = null, $offset = null) {
         $sql = 'SELECT * FROM `*PREFIX*deck_stacks` WHERE `board_id` = ?  ORDER BY `order`';
         return $this->findEntities($sql, [$boardId], $limit, $offset);
     }

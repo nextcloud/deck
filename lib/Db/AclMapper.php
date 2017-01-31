@@ -32,7 +32,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
         parent::__construct($db, 'deck_board_acl', '\OCA\Deck\Db\Acl');
     }
 
-    public function findAll($boardId, $limit=null, $offset=null) {
+    public function findAll($boardId, $limit = null, $offset = null) {
         $sql = 'SELECT id, board_id, type, participant, permission_edit, permission_share, permission_manage FROM `*PREFIX*deck_board_acl` WHERE `board_id` = ? ';
         return $this->findEntities($sql, [$boardId], $limit, $offset);
     }

@@ -41,12 +41,12 @@ class Card extends Entity implements JsonSerializable {
     protected $archived = false;
 
     public function __construct() {
-        $this->addType('id','integer');
-        $this->addType('stackId','integer');
-        $this->addType('order','integer');
+        $this->addType('id', 'integer');
+        $this->addType('stackId', 'integer');
+        $this->addType('order', 'integer');
         $this->addType('lastModified', 'integer');
         $this->addType('createdAt', 'integer');
-        $this->addType('archived','boolean');
+        $this->addType('archived', 'boolean');
         $this->addRelation('labels');
     }
 

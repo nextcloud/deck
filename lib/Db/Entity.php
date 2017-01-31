@@ -50,8 +50,8 @@ class Entity extends \OCP\AppFramework\Db\Entity {
 	 * @param string $attribute the name of the attribute
 	 * @since 7.0.0
 	 */
-	protected function markFieldUpdated($attribute){
-		if(!in_array($attribute, $this->_relations)) {
+	protected function markFieldUpdated($attribute) {
+		if (!in_array($attribute, $this->_relations)) {
 			parent::markFieldUpdated($attribute);
 		}
 	}
