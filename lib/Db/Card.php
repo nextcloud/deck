@@ -26,7 +26,7 @@ namespace OCA\Deck\Db;
 
 use JsonSerializable;
 
-class Card extends Entity implements JsonSerializable {
+class Card extends RelationalEntity implements JsonSerializable {
 
     public $id;
     protected $title;

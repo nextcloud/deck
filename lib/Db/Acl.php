@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\Db;
 
-class Acl extends Entity implements \JsonSerializable {
+class Acl extends RelationalEntity implements \JsonSerializable {
 
 	const PERMISSION_READ = 0;
 	const PERMISSION_EDIT = 1;

@@ -39,7 +39,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 
 	/**
 	 * @param $id
-	 * @return Entity if not found
+	 * @return \OCP\AppFramework\Db\Entity if not found
 	 */
     public function find($id) {
         $sql = 'SELECT * FROM `*PREFIX*deck_stacks` ' .

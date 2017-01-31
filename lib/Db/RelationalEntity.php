@@ -31,7 +31,7 @@
 namespace OCA\Deck\Db;
 
 
-class Entity extends \OCP\AppFramework\Db\Entity {
+class RelationalEntity extends \OCP\AppFramework\Db\Entity {
 
 	private $_relations = array();
 

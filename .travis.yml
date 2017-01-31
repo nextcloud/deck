@@ -2,26 +2,24 @@ language: php
 services:
     - mysql
 php:
+    - 5.6
     - 7
 env:
     matrix:
         - CORE_BRANCH=master DB=sqlite 
+        - CORE_BRANCH=master DB=mysql
         - CORE_BRANCH=stable11 DB=sqlite 
+        - CORE_BRANCH=stable11 DB=mysql 
 
 before_install:
-    # install core
-    - cd ../
-    - git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b $CORE_BRANCH
-    - mv deck server/apps/deck
-
-before_script:
-    # fill owncloud with default configs and enable deck
-    - cd server 
-    - mkdir data
-    - ./occ maintenance:install --database-name oc_autotest --database-user oc_autotest --admin-user admin --admin-pass admin --database $DB --database-pass=''
+    - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+    - bash ./before_install.sh deck $CORE_BRANCH $DB
+    - cd ../server
     - ./occ app:enable deck
     - ./occ app:check-code deck
     - php -S localhost:8080 &
+
+before_script:
     - cd apps/deck
 
 script:
