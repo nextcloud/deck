@@ -16,7 +16,7 @@ before_install:
     # install core
     - cd ../
     - git clone https://github.com/nextcloud/server.git --recursive --depth 1 -b $CORE_BRANCH
-    - mv deck-dev server/apps/deck
+    - mv deck server/apps/deck
 
 before_script:
     # fill owncloud with default configs and enable deck
