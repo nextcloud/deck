@@ -34,7 +34,7 @@ class Label extends Entity implements JsonSerializable {
     protected $boardId;
     protected $cardId;
     public function __construct() {
-        $this->addType('id','integer');
+        $this->addType('id', 'integer');
     }
     public function jsonSerialize() {
         return [

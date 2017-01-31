@@ -67,8 +67,9 @@ class ShareController extends Controller {
 		}
 		$limit = 10;
 		foreach ($this->userManager->searchDisplayName($search, $limit, $offset) as $idx => $user) {
-			if ($user->getUID() === $this->userId)
-				continue;
+			if ($user->getUID() === $this->userId) {
+							continue;
+			}
 			$acl = new Acl();
 			$acl->setType('user');
 			$acl->setParticipant($user->getUID());

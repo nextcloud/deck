@@ -32,7 +32,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
         parent::__construct($db, 'deck_labels', '\OCA\Deck\Db\Label');
     }
 
-    public function findAll($boardId, $limit=null, $offset=null) {
+    public function findAll($boardId, $limit = null, $offset = null) {
         $sql = 'SELECT * FROM `*PREFIX*deck_labels` WHERE `board_id` = ? ORDER BY `id`';
         return $this->findEntities($sql, [$boardId], $limit, $offset);
     }
@@ -44,11 +44,11 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
         return parent::delete($entity);
     }
 
-    public function findAssignedLabelsForCard($cardId, $limit=null, $offset=null) {
+    public function findAssignedLabelsForCard($cardId, $limit = null, $offset = null) {
         $sql = 'SELECT l.* FROM `*PREFIX*deck_assigned_labels` as al INNER JOIN *PREFIX*deck_labels as l ON l.id = al.label_id WHERE `card_id` = ? ORDER BY l.id';
         return $this->findEntities($sql, [$cardId], $limit, $offset);
     }
-    public function findAssignedLabelsForBoard($boardId, $limit=null, $offset=null) {
+    public function findAssignedLabelsForBoard($boardId, $limit = null, $offset = null) {
         $sql = "SELECT c.id as card_id, l.id as id, l.title as title, l.color as color FROM oc_deck_cards as c " .
             " INNER JOIN oc_deck_assigned_labels as al ON al.card_id = c.id INNER JOIN oc_deck_labels as l ON  al.label_id = l.id WHERE board_id=? ORDER BY l.id";
         $entities = $this->findEntities($sql, [$boardId], $limit, $offset);
@@ -59,7 +59,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
         $labels = $this->findAssignedLabelsForBoard($boardId);
         $result = array();
         foreach ($labels as $label) {
-            if(!array_key_exists($label->getCardId(), $result)) {
+            if (!array_key_exists($label->getCardId(), $result)) {
                 $result[$label->getCardId()] = array();
             }
             $result[$label->getCardId()][] = $label;
@@ -70,14 +70,14 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	public function deleteLabelAssignments($labelId) {
 		$sql = 'DELETE FROM `*PREFIX*deck_assigned_labels` WHERE label_id = ?';
 		$stmt = $this->db->prepare($sql);
-		$stmt->bindParam(1, $labelId,  \PDO::PARAM_INT);
+		$stmt->bindParam(1, $labelId, \PDO::PARAM_INT);
 		$stmt->execute();
 	}
 
 	public function deleteLabelAssignmentsForCard($cardId) {
 		$sql = 'DELETE FROM `*PREFIX*deck_assigned_labels` WHERE card_id = ?';
 		$stmt = $this->db->prepare($sql);
-		$stmt->bindParam(1, $cardId,  \PDO::PARAM_INT);
+		$stmt->bindParam(1, $cardId, \PDO::PARAM_INT);
 		$stmt->execute();
 	}
 

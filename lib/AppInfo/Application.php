@@ -40,7 +40,7 @@ class Application extends App {
 		$container = $this->getContainer();
 		$server = $container->getServer();
 
-		$container->registerService('SharingMiddleware', function ($container) use ($server) {
+		$container->registerService('SharingMiddleware', function($container) use ($server) {
 			return new SharingMiddleware(
 				$container,
 				$server->getRequest(),
@@ -55,7 +55,7 @@ class Application extends App {
 
 	public function registerNavigationEntry() {
 		$container = $this->getContainer();
-		$container->query('OCP\INavigationManager')->add(function () use ($container) {
+		$container->query('OCP\INavigationManager')->add(function() use ($container) {
 			$urlGenerator = $container->query('OCP\IURLGenerator');
 			$l10n = $container->query('OCP\IL10N');
 			return [

@@ -101,8 +101,9 @@ class CardService {
                 $card->setLastModified(time());
             }
 
-            if ($i === $order)
-                $i++;
+            if ($i === $order) {
+                            $i++;
+            }
 
             if ($card->id !== $id) {
                 $card->setOrder($i++);

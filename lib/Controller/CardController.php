@@ -32,7 +32,7 @@ class CardController extends Controller {
     private $userId;
     private $cardService;
 
-    public function __construct($appName, IRequest $request, CardService $cardService, $userId){
+    public function __construct($appName, IRequest $request, CardService $cardService, $userId) {
         parent::__construct($appName, $request);
         $this->userId = $userId;
         $this->cardService = $cardService;
@@ -76,7 +76,7 @@ class CardController extends Controller {
 	 * @param int $order
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-    public function create($title, $stackId, $type, $order=999) {
+    public function create($title, $stackId, $type, $order = 999) {
         return $this->cardService->create($title, $stackId, $type, $order, $this->userId);
     }
 
