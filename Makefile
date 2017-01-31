@@ -12,7 +12,7 @@ sign_dir=$(build_dir)/sign
 cert_dir=$(HOME)/.nextcloud/certificates
 
 
-all: appstore
+default: build
 
 clean-build:
 	rm -rf $(build_dir)
@@ -20,10 +20,6 @@ clean-build:
 clean-dist:
 	rm -rf js/node_modules
 	rm -rf js/vendor
-
-install-npm-deps-dev:
-	cd js && npm install --deps
-	cd js && bower install
 
 install-deps:
 	cd js && npm install --deps
@@ -33,6 +29,9 @@ build: build-js
 
 build-js:
 	$(MAKE) -C js build
+
+watch:
+	$(make) -C js watch
 
 # appstore: clean install-deps
 appstore: clean-build build
