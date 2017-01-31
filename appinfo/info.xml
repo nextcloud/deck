@@ -3,14 +3,17 @@
       xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
     <id>deck</id>
     <name>Deck</name>
-    <description>My first ownCloud app</description>
+    <summary>A kanban style project and personal management tool for Nextcloud</summary>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
-    <version>0.1.0-beta1</version>
+    <version>0.1.0</version>
     <namespace>Deck</namespace>
     <category>organization</category>
     <category>office</category>
     <dependencies>
         <nextcloud min-version="11" max-version="12" />
     </dependencies>
+    <repository type="git">https://github.com/juliushaertl/deck.git</repository>
+    <bugs>https://github.com/juliushaertl/deck/issues</bugs>
+    <screenshot>https://bitgrid.net/~jus/deck.png</screenshot>
 </info>
