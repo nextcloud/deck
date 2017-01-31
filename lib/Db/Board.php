@@ -27,49 +27,49 @@ use JsonSerializable;
 
 class Board extends RelationalEntity implements JsonSerializable {
 
-    public $id;
-    protected $title;
-    protected $owner;
-    protected $color;
-    protected $archived = false;
-    protected $labels;
-    protected $acl;
-    protected $shared;
+	public $id;
+	protected $title;
+	protected $owner;
+	protected $color;
+	protected $archived = false;
+	protected $labels;
+	protected $acl;
+	protected $shared;
 
-    public function __construct() {
-        $this->addType('id', 'integer');
-        $this->addType('shared', 'integer');
-        $this->addType('archived', 'boolean');
-        $this->addRelation('labels');
-        $this->addRelation('acl');
-        $this->addRelation('shared');
-        $this->shared = -1;
-    }
+	public function __construct() {
+		$this->addType('id', 'integer');
+		$this->addType('shared', 'integer');
+		$this->addType('archived', 'boolean');
+		$this->addRelation('labels');
+		$this->addRelation('acl');
+		$this->addRelation('shared');
+		$this->shared = -1;
+	}
 
-    public function jsonSerialize() {
-        $result = [
-            'id' => $this->id,
-            'title' => $this->title,
-            'owner' => $this->owner,
-            'color' => $this->color,
-            'labels' => $this->labels,
-            'acl' => $this->acl,
-        ];
-        if ($this->shared !== -1) {
-            $result['shared'] = $this->shared;
-        }
-        return $result;
-    }
+	public function jsonSerialize() {
+		$result = [
+			'id' => $this->id,
+			'title' => $this->title,
+			'owner' => $this->owner,
+			'color' => $this->color,
+			'labels' => $this->labels,
+			'acl' => $this->acl,
+		];
+		if ($this->shared !== -1) {
+			$result['shared'] = $this->shared;
+		}
+		return $result;
+	}
 
-    public function setLabels($labels) {
-        foreach ($labels as $l) {
-            $this->labels[] = $l;
-        }
-    }
+	public function setLabels($labels) {
+		foreach ($labels as $l) {
+			$this->labels[] = $l;
+		}
+	}
 
-    public function setAcl($acl) {
-        foreach ($acl as $a) {
-            $this->acl[$a->id] = $a;
-        }
-    }
+	public function setAcl($acl) {
+		foreach ($acl as $a) {
+			$this->acl[$a->id] = $a;
+		}
+	}
 }

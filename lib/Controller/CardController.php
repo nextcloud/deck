@@ -29,23 +29,23 @@ use OCP\AppFramework\Controller;
 
 class CardController extends Controller {
 
-    private $userId;
-    private $cardService;
+	private $userId;
+	private $cardService;
 
-    public function __construct($appName, IRequest $request, CardService $cardService, $userId) {
-        parent::__construct($appName, $request);
-        $this->userId = $userId;
-        $this->cardService = $cardService;
-    }
+	public function __construct($appName, IRequest $request, CardService $cardService, $userId) {
+		parent::__construct($appName, $request);
+		$this->userId = $userId;
+		$this->cardService = $cardService;
+	}
 
 	/**
 	 * @NoAdminRequired
 	 * @param $cardId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-    public function read($cardId) {
-        return $this->cardService->find($cardId);
-    }
+	public function read($cardId) {
+		return $this->cardService->find($cardId);
+	}
 
 	/**
 	 * @NoAdminRequired
@@ -54,9 +54,9 @@ class CardController extends Controller {
 	 * @param $order
 	 * @return array
 	 */
-    public function reorder($cardId, $stackId, $order) {
-        return $this->cardService->reorder($cardId, $stackId, $order);
-    }
+	public function reorder($cardId, $stackId, $order) {
+		return $this->cardService->reorder($cardId, $stackId, $order);
+	}
 
 	/**
 	 * @NoAdminRequired
@@ -64,9 +64,9 @@ class CardController extends Controller {
 	 * @param $title
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-    public function rename($cardId, $title) {
-        return $this->cardService->rename($cardId, $title);
-    }
+	public function rename($cardId, $title) {
+		return $this->cardService->rename($cardId, $title);
+	}
 
 	/**
 	 * @NoAdminRequired
@@ -76,9 +76,9 @@ class CardController extends Controller {
 	 * @param int $order
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-    public function create($title, $stackId, $type, $order = 999) {
-        return $this->cardService->create($title, $stackId, $type, $order, $this->userId);
-    }
+	public function create($title, $stackId, $type, $order = 999) {
+		return $this->cardService->create($title, $stackId, $type, $order, $this->userId);
+	}
 
 	/**
 	 * @NoAdminRequired
@@ -90,53 +90,53 @@ class CardController extends Controller {
 	 * @param $description
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-    public function update($id, $title, $stackId, $type, $order, $description) {
-            return $this->cardService->update($id, $title, $stackId, $type, $order, $description, $this->userId);
-    }
+	public function update($id, $title, $stackId, $type, $order, $description) {
+			return $this->cardService->update($id, $title, $stackId, $type, $order, $description, $this->userId);
+	}
 
 	/**
 	 * @NoAdminRequired
 	 * @param $cardId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-    public function delete($cardId) {
-        return $this->cardService->delete($cardId);
-    }
+	public function delete($cardId) {
+		return $this->cardService->delete($cardId);
+	}
 
 	/**
 	 * @NoAdminRequired
 	 * @param $cardId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-    public function archive($cardId) {
-        return $this->cardService->archive($cardId);
-    }
+	public function archive($cardId) {
+		return $this->cardService->archive($cardId);
+	}
 
 	/**
 	 * @NoAdminRequired
 	 * @param $cardId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-    public function unarchive($cardId) {
-        return $this->cardService->unarchive($cardId);
-    }
+	public function unarchive($cardId) {
+		return $this->cardService->unarchive($cardId);
+	}
 
 	/**
 	 * @NoAdminRequired
 	 * @param $cardId
 	 * @param $labelId
 	 */
-    public function assignLabel($cardId, $labelId) {
-        $this->cardService->assignLabel($cardId, $labelId);
-    }
+	public function assignLabel($cardId, $labelId) {
+		$this->cardService->assignLabel($cardId, $labelId);
+	}
 
 	/**
 	 * @NoAdminRequired
 	 * @param $cardId
 	 * @param $labelId
 	 */
-    public function removeLabel($cardId, $labelId) {
-        $this->cardService->removeLabel($cardId, $labelId);
-    }
+	public function removeLabel($cardId, $labelId) {
+		$this->cardService->removeLabel($cardId, $labelId);
+	}
 
 }

@@ -28,21 +28,21 @@ use JsonSerializable;
 
 class Label extends RelationalEntity implements JsonSerializable {
 
-    public $id;
-    protected $title;
-    protected $color;
-    protected $boardId;
-    protected $cardId;
-    public function __construct() {
-        $this->addType('id', 'integer');
-    }
-    public function jsonSerialize() {
-        return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'boardId' => $this->boardId,
-            'cardId' => $this->cardId,
-            'color' => $this->color,
-        ];
-    }
+	public $id;
+	protected $title;
+	protected $color;
+	protected $boardId;
+	protected $cardId;
+	public function __construct() {
+		$this->addType('id', 'integer');
+	}
+	public function jsonSerialize() {
+		return [
+			'id' => $this->id,
+			'title' => $this->title,
+			'boardId' => $this->boardId,
+			'cardId' => $this->cardId,
+			'color' => $this->color,
+		];
+	}
 }

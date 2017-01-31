@@ -30,12 +30,12 @@ use OCP\AppFramework\Controller;
 
 class LabelController extends Controller {
 
-    private $labelService;
+	private $labelService;
 
-    public function __construct($appName, IRequest $request, LabelService $labelService) {
-        parent::__construct($appName, $request);
-        $this->labelService = $labelService;
-    }
+	public function __construct($appName, IRequest $request, LabelService $labelService) {
+		parent::__construct($appName, $request);
+		$this->labelService = $labelService;
+	}
 
 	/**
 	 * @NoAdminRequired
@@ -44,9 +44,9 @@ class LabelController extends Controller {
 	 * @param $boardId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-    public function create($title, $color, $boardId) {
-        return $this->labelService->create($title, $color, $boardId);
-    }
+	public function create($title, $color, $boardId) {
+		return $this->labelService->create($title, $color, $boardId);
+	}
 
 	/**
 	 * @NoAdminRequired
@@ -55,17 +55,17 @@ class LabelController extends Controller {
 	 * @param $color
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-    public function update($id, $title, $color) {
-        return $this->labelService->update($id, $title, $color);
-    }
+	public function update($id, $title, $color) {
+		return $this->labelService->update($id, $title, $color);
+	}
 
 	/**
 	 * @NoAdminRequired
 	 * @param $labelId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-    public function delete($labelId) {
-        return $this->labelService->delete($labelId);
-    }
+	public function delete($labelId) {
+		return $this->labelService->delete($labelId);
+	}
 
 }

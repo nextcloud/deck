@@ -75,35 +75,35 @@ class PermissionService {
 	 * @return bool
 	 * @throws NoPermissionException
 	 */
-    public function checkPermission($mapper, $id, $permission) {
-        try {
-            if ($mapper instanceof IPermissionMapper) {
-                $boardId = $mapper->findBoardId($id);
-            } else {
-                $boardId = $id;
-            }
-            if ($boardId === null) {
-                // Throw NoPermission to not leak information about existing entries
-                throw new NoPermissionException('Permission denied');
-            }
+	public function checkPermission($mapper, $id, $permission) {
+		try {
+			if ($mapper instanceof IPermissionMapper) {
+				$boardId = $mapper->findBoardId($id);
+			} else {
+				$boardId = $id;
+			}
+			if ($boardId === null) {
+				// Throw NoPermission to not leak information about existing entries
+				throw new NoPermissionException('Permission denied');
+			}
 
-            if ($this->userIsBoardOwner($boardId)) {
-                return true;
-            }
-            $acls = $this->aclMapper->findAll($boardId);
-            $result = $this->userCan($acls, $permission);
-            if ($result) {
-                return true;
-            }
+			if ($this->userIsBoardOwner($boardId)) {
+				return true;
+			}
+			$acls = $this->aclMapper->findAll($boardId);
+			$result = $this->userCan($acls, $permission);
+			if ($result) {
+				return true;
+			}
 
-        } catch (DoesNotExistException $exception) {
-            // Throw NoPermission to not leak information about existing entries
-            throw new NoPermissionException('Permission denied');
-        }
+		} catch (DoesNotExistException $exception) {
+			// Throw NoPermission to not leak information about existing entries
+			throw new NoPermissionException('Permission denied');
+		}
 
-        throw new NoPermissionException('Permission denied.');
+		throw new NoPermissionException('Permission denied.');
 
-    }
+	}
 
 	/**
 	 * @param $boardId
@@ -114,7 +114,7 @@ class PermissionService {
 		if ($board && $this->userId === $board->getOwner()) {
 			return true;
 		}
-        return false;
+		return false;
 	}
 
 	/**

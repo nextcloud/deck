@@ -39,7 +39,7 @@ class BoardService {
 
 	private $boardMapper;
 	private $labelMapper;
-    private $aclMapper;
+	private $aclMapper;
 	private $l10n;
 	private $permissionService;
 
@@ -59,7 +59,7 @@ class BoardService {
 	}
 
 	public function find($boardId) {
-	    $this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		return $this->boardMapper->find($boardId, true, true);
 	}
 
@@ -72,11 +72,11 @@ class BoardService {
 
 		// create new labels
 		$default_labels = [
-		    '31CC7C' => $this->l10n->t('Finished'),
-            '317CCC' => $this->l10n->t('To review'),
+			'31CC7C' => $this->l10n->t('Finished'),
+			'317CCC' => $this->l10n->t('To review'),
 			'FF7A66' => $this->l10n->t('Action needed'),
 			'F1DB50' => $this->l10n->t('Later')
-        ];
+		];
 		$labels = [];
 		foreach ($default_labels as $color => $title) {
 			$label = new Label();
@@ -91,12 +91,12 @@ class BoardService {
 	}
 
 	public function delete($id) {
-        $this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		return $this->boardMapper->delete($this->find($id));
 	}
 
 	public function update($id, $title, $color) {
-        $this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
 		$board->setTitle($title);
 		$board->setColor($color);
@@ -105,7 +105,7 @@ class BoardService {
 
 
 	public function addAcl($boardId, $type, $participant, $edit, $share, $manage) {
-        $this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_SHARE);
+		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_SHARE);
 		$acl = new Acl();
 		$acl->setBoardId($boardId);
 		$acl->setType($type);
@@ -117,7 +117,7 @@ class BoardService {
 	}
 
 	public function updateAcl($id, $edit, $share, $manage) {
-        $this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_SHARE);
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_SHARE);
 		$acl = $this->aclMapper->find($id);
 		$acl->setPermissionEdit($edit);
 		$acl->setPermissionShare($share);
@@ -126,7 +126,7 @@ class BoardService {
 	}
 
 	public function deleteAcl($id) {
-        $this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_SHARE);
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_SHARE);
 		$acl = $this->aclMapper->find($id);
 		return $this->aclMapper->delete($acl);
 	}

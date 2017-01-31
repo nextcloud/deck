@@ -35,71 +35,71 @@ use OCA\Deck\Db\StackMapper;
 
 class StackService {
 
-    private $stackMapper;
-    private $cardMapper;
-    private $labelMapper;
-    private $permissionService;
+	private $stackMapper;
+	private $cardMapper;
+	private $labelMapper;
+	private $permissionService;
 
-    public function __construct(StackMapper $stackMapper, CardMapper $cardMapper, LabelMapper $labelMapper, PermissionService $permissionService) {
-        $this->stackMapper = $stackMapper;
-        $this->cardMapper = $cardMapper;
-        $this->labelMapper = $labelMapper;
-        $this->permissionService = $permissionService;
-    }
+	public function __construct(StackMapper $stackMapper, CardMapper $cardMapper, LabelMapper $labelMapper, PermissionService $permissionService) {
+		$this->stackMapper = $stackMapper;
+		$this->cardMapper = $cardMapper;
+		$this->labelMapper = $labelMapper;
+		$this->permissionService = $permissionService;
+	}
 
-    public function findAll($boardId) {
-        $this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
-        $stacks = $this->stackMapper->findAll($boardId);
-        $labels = $this->labelMapper->getAssignedLabelsForBoard($boardId);
-        foreach ($stacks as $stackIndex => $stack) {
-            $cards = $this->cardMapper->findAll($stack->id);
-            foreach ($cards as $cardIndex => $card) {
-            	if (array_key_exists($card->id, $labels)) {
-                	$cards[$cardIndex]->setLabels($labels[$card->id]);
-				}
-            }
-            $stacks[$stackIndex]->setCards($cards);
-        }
-        return $stacks;
-    }
-
-    public function findAllArchived($boardId) {
-        $this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
-        $stacks = $this->stackMapper->findAll($boardId);
-        $labels = $this->labelMapper->getAssignedLabelsForBoard($boardId);
-        foreach ($stacks as $stackIndex => $stack) {
-            $cards = $this->cardMapper->findAllArchived($stack->id);
-            foreach ($cards as $cardIndex => $card) {
-            	if (array_key_exists($card->id, $labels)) {
+	public function findAll($boardId) {
+		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
+		$stacks = $this->stackMapper->findAll($boardId);
+		$labels = $this->labelMapper->getAssignedLabelsForBoard($boardId);
+		foreach ($stacks as $stackIndex => $stack) {
+			$cards = $this->cardMapper->findAll($stack->id);
+			foreach ($cards as $cardIndex => $card) {
+				if (array_key_exists($card->id, $labels)) {
 					$cards[$cardIndex]->setLabels($labels[$card->id]);
 				}
-            }
-            $stacks[$stackIndex]->setCards($cards);
-        }
-        return $stacks;
-    }
+			}
+			$stacks[$stackIndex]->setCards($cards);
+		}
+		return $stacks;
+	}
 
-    public function create($title, $boardId, $order) {
-        $this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
-        $stack = new Stack();
-        $stack->setTitle($title);
-        $stack->setBoardId($boardId);
-        $stack->setOrder($order);
-        return $this->stackMapper->insert($stack);
+	public function findAllArchived($boardId) {
+		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
+		$stacks = $this->stackMapper->findAll($boardId);
+		$labels = $this->labelMapper->getAssignedLabelsForBoard($boardId);
+		foreach ($stacks as $stackIndex => $stack) {
+			$cards = $this->cardMapper->findAllArchived($stack->id);
+			foreach ($cards as $cardIndex => $card) {
+				if (array_key_exists($card->id, $labels)) {
+					$cards[$cardIndex]->setLabels($labels[$card->id]);
+				}
+			}
+			$stacks[$stackIndex]->setCards($cards);
+		}
+		return $stacks;
+	}
 
-    }
+	public function create($title, $boardId, $order) {
+		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
+		$stack = new Stack();
+		$stack->setTitle($title);
+		$stack->setBoardId($boardId);
+		$stack->setOrder($order);
+		return $this->stackMapper->insert($stack);
 
-    public function delete($id) {
-        $this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
-        return $this->stackMapper->delete($this->stackMapper->find($id));
-    }
+	}
 
-    public function update($id, $title, $boardId, $order) {
-        $this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
-        $stack = $this->stackMapper->find($id);
-        $stack->setTitle($title);
-        $stack->setBoardId($boardId);
-        $stack->setOrder($order);
-        return $this->stackMapper->update($stack);
-    }
+	public function delete($id) {
+		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
+		return $this->stackMapper->delete($this->stackMapper->find($id));
+	}
+
+	public function update($id, $title, $boardId, $order) {
+		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
+		$stack = $this->stackMapper->find($id);
+		$stack->setTitle($title);
+		$stack->setBoardId($boardId);
+		$stack->setOrder($order);
+		return $this->stackMapper->update($stack);
+	}
 }

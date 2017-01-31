@@ -29,46 +29,46 @@ use OCP\IDBConnection;
 
 class StackMapper extends DeckMapper implements IPermissionMapper {
 
-    private $cardMapper;
+	private $cardMapper;
 
-    public function __construct(IDBConnection $db, CardMapper $cardMapper) {
-        parent::__construct($db, 'deck_stacks', '\OCA\Deck\Db\Stack');
-        $this->cardMapper = $cardMapper;
-    }
+	public function __construct(IDBConnection $db, CardMapper $cardMapper) {
+		parent::__construct($db, 'deck_stacks', '\OCA\Deck\Db\Stack');
+		$this->cardMapper = $cardMapper;
+	}
 
 
 	/**
 	 * @param $id
 	 * @return \OCP\AppFramework\Db\Entity if not found
 	 */
-    public function find($id) {
-        $sql = 'SELECT * FROM `*PREFIX*deck_stacks` ' .
-            'WHERE `id` = ?';
-        return $this->findEntity($sql, [$id]);
-    }
+	public function find($id) {
+		$sql = 'SELECT * FROM `*PREFIX*deck_stacks` ' .
+			'WHERE `id` = ?';
+		return $this->findEntity($sql, [$id]);
+	}
 
 
-    public function findAll($boardId, $limit = null, $offset = null) {
-        $sql = 'SELECT * FROM `*PREFIX*deck_stacks` WHERE `board_id` = ?  ORDER BY `order`';
-        return $this->findEntities($sql, [$boardId], $limit, $offset);
-    }
+	public function findAll($boardId, $limit = null, $offset = null) {
+		$sql = 'SELECT * FROM `*PREFIX*deck_stacks` WHERE `board_id` = ?  ORDER BY `order`';
+		return $this->findEntities($sql, [$boardId], $limit, $offset);
+	}
     
 
-    public function delete(Entity $entity) {
-        // delete cards on stack
+	public function delete(Entity $entity) {
+		// delete cards on stack
 		$this->cardMapper->deleteByStack($entity->getId());
-        return parent::delete($entity);
-    }
+		return parent::delete($entity);
+	}
 
-    public function isOwner($userId, $stackId) {
-        $sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_stacks` WHERE id = ?)';
-        $stmt = $this->execute($sql, [$stackId]);
-        $row = $stmt->fetch();
-        return ($row['owner'] === $userId);
-    }
+	public function isOwner($userId, $stackId) {
+		$sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_stacks` WHERE id = ?)';
+		$stmt = $this->execute($sql, [$stackId]);
+		$row = $stmt->fetch();
+		return ($row['owner'] === $userId);
+	}
 
-    public function findBoardId($stackId) {
-        $entity = $this->find($stackId);
-        return $entity->getBoardId();
-    }
+	public function findBoardId($stackId) {
+		$entity = $this->find($stackId);
+		return $entity->getBoardId();
+	}
 }

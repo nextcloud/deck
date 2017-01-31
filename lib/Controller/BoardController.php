@@ -49,10 +49,10 @@ class BoardController extends Controller {
 		$this->userInfo = $this->getBoardPrerequisites();
 	}
 
-    /**
-     * TODO: move to boardservice
-     * @return array
-     */
+	/**
+	 * TODO: move to boardservice
+	 * @return array
+	 */
 	private function getBoardPrerequisites() {
 		$groups = $this->groupManager->getUserGroupIds(
 			$this->userManager->get($this->userId)

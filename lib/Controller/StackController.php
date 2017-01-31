@@ -31,31 +31,31 @@ use OCP\AppFramework\Controller;
 
 
 class StackController extends Controller {
-    private $userId;
-    private $stackService;
-    public function __construct($appName, IRequest $request, StackService $cardService, $userId) {
-        parent::__construct($appName, $request);
-        $this->userId = $userId;
-        $this->stackService = $cardService;
-    }
+	private $userId;
+	private $stackService;
+	public function __construct($appName, IRequest $request, StackService $cardService, $userId) {
+		parent::__construct($appName, $request);
+		$this->userId = $userId;
+		$this->stackService = $cardService;
+	}
 
 	/**
 	 * @NoAdminRequired
 	 * @param $boardId
 	 * @return array
 	 */
-    public function index($boardId) {
-            return $this->stackService->findAll($boardId);
-    }
+	public function index($boardId) {
+			return $this->stackService->findAll($boardId);
+	}
 
 	/**
 	 * @NoAdminRequired
 	 * @param $boardId
 	 * @return array
 	 */
-    public function archived($boardId) {
-            return $this->stackService->findAllArchived($boardId);
-    }
+	public function archived($boardId) {
+			return $this->stackService->findAllArchived($boardId);
+	}
 
 	/**
 	 * @NoAdminRequired
@@ -64,9 +64,9 @@ class StackController extends Controller {
 	 * @param int $order
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-    public function create($title, $boardId, $order = 999) {
-        return $this->stackService->create($title, $boardId, $order);
-    }
+	public function create($title, $boardId, $order = 999) {
+		return $this->stackService->create($title, $boardId, $order);
+	}
 
 	/**
 	 * @NoAdminRequired
@@ -76,16 +76,16 @@ class StackController extends Controller {
 	 * @param $order
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-    public function update($id, $title, $boardId, $order) {
-        return $this->stackService->update($id, $title, $boardId, $order);
-    }
+	public function update($id, $title, $boardId, $order) {
+		return $this->stackService->update($id, $title, $boardId, $order);
+	}
 
 	/**
 	 * @NoAdminRequired
 	 * @param $stackId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-    public function delete($stackId) {
-        return $this->stackService->delete($stackId);
-    }
+	public function delete($stackId) {
+		return $this->stackService->delete($stackId);
+	}
 }
