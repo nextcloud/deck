@@ -1,4 +1,3 @@
-sudo: false
 language: php
 services:
     - mysql
@@ -8,9 +7,6 @@ env:
     matrix:
         - CORE_BRANCH=master DB=sqlite 
         - CORE_BRANCH=stable11 DB=sqlite 
-
-matrix:
-    fast_finish: true
 
 before_install:
     # install core
@@ -35,4 +31,4 @@ after_failure:
     - cat ../../data/nextcloud.log
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+    - bash <(curl -s https://codecov.io/bash)
