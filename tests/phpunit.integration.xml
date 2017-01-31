@@ -1,7 +1,7 @@
-<phpunit bootstrap="tests/bootstrap.php" colors="true">
+<phpunit bootstrap="bootstrap.php" colors="true">
 	<testsuites>
 		<testsuite name="integration">
-			<directory>./tests/integration</directory>
+			<directory>./integration</directory>
 		</testsuite>
 	</testsuites>
 	<filter>
