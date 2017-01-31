@@ -30,38 +30,38 @@ use OCA\Deck\Db\LabelMapper;
 
 class LabelService {
 
-    private $labelMapper;
+	private $labelMapper;
 
-    public function __construct(LabelMapper $labelMapper, PermissionService $permissionService) {
-        $this->labelMapper = $labelMapper;
-        $this->permissionService = $permissionService;
-    }
+	public function __construct(LabelMapper $labelMapper, PermissionService $permissionService) {
+		$this->labelMapper = $labelMapper;
+		$this->permissionService = $permissionService;
+	}
 
-    public function find($labelId) {
-        $this->permissionService->checkPermission($this->labelMapper, $labelId, Acl::PERMISSION_READ);
-        return $this->labelMapper->find($labelId);
-    }
+	public function find($labelId) {
+		$this->permissionService->checkPermission($this->labelMapper, $labelId, Acl::PERMISSION_READ);
+		return $this->labelMapper->find($labelId);
+	}
 
-    public function create($title, $color, $boardId) {
-        $this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
-        $label = new Label();
-        $label->setTitle($title);
-        $label->setColor($color);
-        $label->setBoardId($boardId);
-        return $this->labelMapper->insert($label);
-    }
+	public function create($title, $color, $boardId) {
+		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
+		$label = new Label();
+		$label->setTitle($title);
+		$label->setColor($color);
+		$label->setBoardId($boardId);
+		return $this->labelMapper->insert($label);
+	}
 
-    public function delete($id) {
-        $this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
-        return $this->labelMapper->delete($this->find($id));
-    }
+	public function delete($id) {
+		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
+		return $this->labelMapper->delete($this->find($id));
+	}
 
-    public function update($id, $title, $color) {
-        $this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
-        $label = $this->find($id);
-        $label->setTitle($title);
-        $label->setColor($color);
-        return $this->labelMapper->update($label);
-    }
+	public function update($id, $title, $color) {
+		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
+		$label = $this->find($id);
+		$label->setTitle($title);
+		$label->setColor($color);
+		return $this->labelMapper->update($label);
+	}
 
 }

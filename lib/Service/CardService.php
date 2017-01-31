@@ -45,6 +45,9 @@ class CardService {
         return $this->cardMapper->find($cardId);
     }
 
+    /**
+     * @param integer $order
+     */
     public function create($title, $stackId, $type, $order, $owner) {
         $this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
         $card = new Card();

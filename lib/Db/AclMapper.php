@@ -28,25 +28,25 @@ use OCP\IDBConnection;
 
 class AclMapper extends DeckMapper implements IPermissionMapper {
 
-    public function __construct(IDBConnection $db) {
-        parent::__construct($db, 'deck_board_acl', '\OCA\Deck\Db\Acl');
-    }
+	public function __construct(IDBConnection $db) {
+		parent::__construct($db, 'deck_board_acl', '\OCA\Deck\Db\Acl');
+	}
 
-    public function findAll($boardId, $limit = null, $offset = null) {
-        $sql = 'SELECT id, board_id, type, participant, permission_edit, permission_share, permission_manage FROM `*PREFIX*deck_board_acl` WHERE `board_id` = ? ';
-        return $this->findEntities($sql, [$boardId], $limit, $offset);
-    }
+	public function findAll($boardId, $limit = null, $offset = null) {
+		$sql = 'SELECT id, board_id, type, participant, permission_edit, permission_share, permission_manage FROM `*PREFIX*deck_board_acl` WHERE `board_id` = ? ';
+		return $this->findEntities($sql, [$boardId], $limit, $offset);
+	}
 
-    public function isOwner($userId, $aclId) {
-        $sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_board_acl` WHERE id = ?)';
-        $stmt = $this->execute($sql, [$aclId]);
-        $row = $stmt->fetch();
-        return ($row['owner'] === $userId);
-    }
+	public function isOwner($userId, $aclId) {
+		$sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_board_acl` WHERE id = ?)';
+		$stmt = $this->execute($sql, [$aclId]);
+		$row = $stmt->fetch();
+		return ($row['owner'] === $userId);
+	}
 
-    public function findBoardId($aclId) {
-        $entity = $this->find($aclId);
-        return $entity->getBoardId();
-    }
+	public function findBoardId($aclId) {
+		$entity = $this->find($aclId);
+		return $entity->getBoardId();
+	}
 
 }

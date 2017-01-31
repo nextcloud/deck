@@ -22,46 +22,46 @@
  */
 
 return [
-    'routes' => [
-        ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+	'routes' => [
+		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 
-        // share
-        ['name' => 'share#searchUser', 'url' => '/share/search/{search}', 'verb' => 'GET'],
+		// share
+		['name' => 'share#searchUser', 'url' => '/share/search/{search}', 'verb' => 'GET'],
 
-        // boards
-        ['name' => 'board#index', 'url' => '/boards', 'verb' => 'GET'],
-        ['name' => 'board#create', 'url' => '/boards', 'verb' => 'POST'],
-        ['name' => 'board#read', 'url' => '/boards/{boardId}', 'verb' => 'GET'],
-        ['name' => 'board#update', 'url' => '/boards/{boardId}', 'verb' => 'PUT'],
-        ['name' => 'board#delete', 'url' => '/boards/{boardId}', 'verb' => 'DELETE'],
+		// boards
+		['name' => 'board#index', 'url' => '/boards', 'verb' => 'GET'],
+		['name' => 'board#create', 'url' => '/boards', 'verb' => 'POST'],
+		['name' => 'board#read', 'url' => '/boards/{boardId}', 'verb' => 'GET'],
+		['name' => 'board#update', 'url' => '/boards/{boardId}', 'verb' => 'PUT'],
+		['name' => 'board#delete', 'url' => '/boards/{boardId}', 'verb' => 'DELETE'],
 		['name' => 'board#getUserPermissions', 'url' => '/boards/{boardId}/permissions', 'verb' => 'GET'],
-        ['name' => 'board#addAcl', 'url' => '/boards/{boardId}/acl', 'verb' => 'POST'],
-        ['name' => 'board#updateAcl', 'url' => '/boards/{boardId}/acl', 'verb' => 'PUT'],
-        ['name' => 'board#deleteAcl', 'url' => '/boards/{boardId}/acl/{aclId}', 'verb' => 'DELETE'],
+		['name' => 'board#addAcl', 'url' => '/boards/{boardId}/acl', 'verb' => 'POST'],
+		['name' => 'board#updateAcl', 'url' => '/boards/{boardId}/acl', 'verb' => 'PUT'],
+		['name' => 'board#deleteAcl', 'url' => '/boards/{boardId}/acl/{aclId}', 'verb' => 'DELETE'],
 
-        // stacks
-        ['name' => 'stack#index', 'url' => '/stacks/{boardId}', 'verb' => 'GET'],
-        ['name' => 'stack#create', 'url' => '/stacks', 'verb' => 'POST'],
-        ['name' => 'stack#update', 'url' => '/stacks/{stackId}', 'verb' => 'PUT'],
-        ['name' => 'stack#delete', 'url' => '/stacks/{stackId}', 'verb' => 'DELETE'],
-        ['name' => 'stack#archived', 'url' => '/stacks/{boardId}/archived', 'verb' => 'GET'],
+		// stacks
+		['name' => 'stack#index', 'url' => '/stacks/{boardId}', 'verb' => 'GET'],
+		['name' => 'stack#create', 'url' => '/stacks', 'verb' => 'POST'],
+		['name' => 'stack#update', 'url' => '/stacks/{stackId}', 'verb' => 'PUT'],
+		['name' => 'stack#delete', 'url' => '/stacks/{stackId}', 'verb' => 'DELETE'],
+		['name' => 'stack#archived', 'url' => '/stacks/{boardId}/archived', 'verb' => 'GET'],
 
-        // cards
-        ['name' => 'card#read', 'url' => '/cards/{cardId}', 'verb' => 'GET'],
-        ['name' => 'card#create', 'url' => '/cards', 'verb' => 'POST'],
-        ['name' => 'card#update', 'url' => '/cards/{cardId}', 'verb' => 'PUT'],
-        ['name' => 'card#delete', 'url' => '/cards/{cardId}', 'verb' => 'DELETE'],
-        ['name' => 'card#rename', 'url' => '/cards/{cardId}/rename', 'verb' => 'PUT'],
-        ['name' => 'card#reorder', 'url' => '/cards/{cardId}/reorder', 'verb' => 'PUT'],
-        ['name' => 'card#archive', 'url' => '/cards/{cardId}/archive', 'verb' => 'PUT'],
-        ['name' => 'card#unarchive', 'url' => '/cards/{cardId}/unarchive', 'verb' => 'PUT'],
-        ['name' => 'card#assignLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'POST'],
-        ['name' => 'card#removeLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
+		// cards
+		['name' => 'card#read', 'url' => '/cards/{cardId}', 'verb' => 'GET'],
+		['name' => 'card#create', 'url' => '/cards', 'verb' => 'POST'],
+		['name' => 'card#update', 'url' => '/cards/{cardId}', 'verb' => 'PUT'],
+		['name' => 'card#delete', 'url' => '/cards/{cardId}', 'verb' => 'DELETE'],
+		['name' => 'card#rename', 'url' => '/cards/{cardId}/rename', 'verb' => 'PUT'],
+		['name' => 'card#reorder', 'url' => '/cards/{cardId}/reorder', 'verb' => 'PUT'],
+		['name' => 'card#archive', 'url' => '/cards/{cardId}/archive', 'verb' => 'PUT'],
+		['name' => 'card#unarchive', 'url' => '/cards/{cardId}/unarchive', 'verb' => 'PUT'],
+		['name' => 'card#assignLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'POST'],
+		['name' => 'card#removeLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
 
-        // labels
-        ['name' => 'label#create', 'url' => '/labels', 'verb' => 'POST'],
-        ['name' => 'label#update', 'url' => '/labels/{labelId}', 'verb' => 'PUT'],
-        ['name' => 'label#delete', 'url' => '/labels/{labelId}', 'verb' => 'DELETE'],
+		// labels
+		['name' => 'label#create', 'url' => '/labels', 'verb' => 'POST'],
+		['name' => 'label#update', 'url' => '/labels/{labelId}', 'verb' => 'PUT'],
+		['name' => 'label#delete', 'url' => '/labels/{labelId}', 'verb' => 'DELETE'],
 
-    ]
+	]
 ];
