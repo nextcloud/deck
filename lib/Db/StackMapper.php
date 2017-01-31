@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Db;
 
+use OCP\AppFramework\Db\Entity;
 use OCP\IDBConnection;
 
 
@@ -53,7 +54,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
     }
     
 
-    public function delete(\OCP\AppFramework\Db\Entity $entity) {
+    public function delete(Entity $entity) {
         // delete cards on stack
 		$this->cardMapper->deleteByStack($entity->getId());
         return parent::delete($entity);

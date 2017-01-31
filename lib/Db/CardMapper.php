@@ -49,7 +49,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 
 	/**
 	 * @param $id
-	 * @return Entity if not found
+	 * @return RelationalEntity if not found
 	 */
 	public function find($id) {
 		$sql = 'SELECT * FROM `*PREFIX*deck_cards` ' .

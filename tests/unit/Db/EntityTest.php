@@ -26,7 +26,7 @@ namespace OCA\Deck\Db;
 class EntityTest extends \PHPUnit_Framework_TestCase {
 
 	public function testRelation() {
-		$entity = new Entity();
+		$entity = new RelationalEntity();
 		$entity->foo = null;
 		$entity->addRelation('foo');
 		$entity->setFoo('test');
@@ -34,7 +34,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	public function testWithoutRelation() {
-		$entity = new Entity();
+		$entity = new RelationalEntity();
 		$entity->foo = null;
 		$entity->setFoo('test');
 		$this->assertEquals(['foo'=>true], $entity->getUpdatedFields());
