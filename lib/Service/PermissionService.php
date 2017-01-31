@@ -29,7 +29,7 @@ use OCA\Deck\Db\BoardMapper;
 
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\NoPermissionException;
-use OCA\Deck\NotFoundException;
+
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IGroupManager;
 use OCP\ILogger;

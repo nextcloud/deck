@@ -27,7 +27,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Label;
 
-use OCP\ILogger;
+
 use OCP\IL10N;
 
 use OCA\Deck\Db\Board;

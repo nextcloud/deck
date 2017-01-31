@@ -26,10 +26,7 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\LabelMapper;
-use OCP\ILogger;
-use OCP\IL10N;
 
-use OCP\AppFramework\Utility\ITimeFactory;
 
 use OCA\Deck\Db\Stack;
 
