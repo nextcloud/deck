@@ -1,6 +1,6 @@
 # Deck
 
-[![Build Status](https://travis-ci.org/juliushaertl/deck.svg?branch=master)](https://travis-ci.org/juliushaertl/deck) [![CodeCov](https://codecov.io/github/juliushaertl/deck/coverage.svg?branch=master)](https://codecov.io/github/juliushaertl/deck) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/juliushaertl/deck/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/juliushaertl/deck/?branch=master) [![GitHub license](https://img.shields.io/badge/license-AGPLv3-blue.svg?style=plastic)](https://raw.githubusercontent.com/juliushaertl/deck/master/LICENSE) [![Dependency Status](https://www.versioneye.com/user/projects/58908fc0a23e810038c34e0a/badge.svg)](https://www.versioneye.com/user/projects/58908fc0a23e810038c34e0a)
+[![Build Status](https://travis-ci.org/juliushaertl/deck.svg?branch=master)](https://travis-ci.org/juliushaertl/deck) [![CodeCov](https://codecov.io/github/juliushaertl/deck/coverage.svg?branch=master)](https://codecov.io/github/juliushaertl/deck) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/juliushaertl/deck/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/juliushaertl/deck/?branch=master) (https://raw.githubusercontent.com/juliushaertl/deck/master/LICENSE) [![Dependency Status](https://www.versioneye.com/user/projects/58908fc0a23e810038c34e0a/badge.svg)](https://www.versioneye.com/user/projects/58908fc0a23e810038c34e0a)
 
 Deck is a kanban style project and personal management tool integrated with Nextcloud.
 
@@ -36,6 +36,7 @@ If you want to run the latest development version from git source, you need to c
 ```
 git clone https://github.com/juliushaertl/deck.git
 cd deck
+make install-deps
 make
 ```
 
@@ -49,30 +50,9 @@ Nothing to prepare, just dig into the code.
 
 ### JavaScript
 
-Install dependencies with ```make dev-setup```
+Make sure you have installed the dependencies with ```make install-deps```. After that you can run ```make``` to build the javascript code once or run ```make watch``` to run in on every file change.
 
-Run javascript watch ```make watch```
-
-## Building the app
-
-The app can be built by using the provided Makefile by running:
-
-    make
-
-
-## Running tests
+### Running tests
 You can use the provided Makefile to run all tests by using:
 
     make test
-
-This will run the PHP unit and integration tests and if a package.json is present in the **js/** folder will execute **npm run test**
-
-Of course you can also install [PHPUnit](http://phpunit.de/getting-started.html) and use the configurations directly:
-
-    phpunit -c phpunit.xml
-
-or:
-
-    phpunit -c phpunit.integration.xml
-
-for integration tests
