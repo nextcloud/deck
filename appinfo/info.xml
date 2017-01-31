@@ -4,6 +4,7 @@
     <id>deck</id>
     <name>Deck</name>
     <summary>A kanban style project and personal management tool for Nextcloud</summary>
+    <description>A kanban style project and personal management tool for Nextcloud</description>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <version>0.1.0</version>
