@@ -1,3 +1,4 @@
 js/node_modules/*
 js/vendor/
 build/
+js/public/
