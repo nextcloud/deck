@@ -21,7 +21,7 @@ before_install:
 
 before_script:
     - cd apps/deck
-    - make install-npm-deps-dev
+    - make install-deps 
 
 script:
     - node --version
