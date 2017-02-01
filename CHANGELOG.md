@@ -5,4 +5,5 @@
 - Sort cards on stacks by drag-and-drop
 - Assign labels
 - Markdown notes for each card
+- Archive cards 
 
