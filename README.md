@@ -2,12 +2,14 @@
 
 [![Build Status](https://travis-ci.org/juliushaertl/deck.svg?branch=master)](https://travis-ci.org/juliushaertl/deck) [![CodeCov](https://codecov.io/github/juliushaertl/deck/coverage.svg?branch=master)](https://codecov.io/github/juliushaertl/deck) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/juliushaertl/deck/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/juliushaertl/deck/?branch=master) [![Dependency Status](https://www.versioneye.com/user/projects/58908fc0a23e810038c34e0a/badge.svg?style=flat)](https://www.versioneye.com/user/projects/58908fc0a23e810038c34e0a)
 
-Deck is a kanban style project and personal management tool integrated with Nextcloud.
+Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.
 
 - :inbox_tray: Add your tasks to cards and put them in order
 - :page_facing_up: Write down additional notes in markdown
+- :bookmark: Assign labels for even better organization
 - :busts_in_silhouette: Share with your team, friends or family
 - :rocket: Get your project organized
+
 
 ![Deck - Manage cards on your board](https://bitgrid.net/~jus/deck.png)
 
