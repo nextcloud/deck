@@ -17,16 +17,15 @@
 <div class="tabsContainer">
     <div id="commentsTabView" class="tab commentsTabView" ng-if="status.boardtab==0 || !status.boardtab">
 
-        <ui-select ng-if="boardservice.canShare()" ng-model="status.addSharee" theme="bootstrap" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..." on-select="aclAdd(status.addSharee)">
+        <ui-select ng-if="boardservice.canShare()" ng-model="status.addSharee" theme="select2" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..." on-select="aclAdd(status.addSharee)">
             <ui-select-match placeholder="<?php p($l->t('Select users...')); ?>">
                 <span><i class="icon icon-{{$item.type}}"></i> {{ $item.participant }}</span>
             </ui-select-match>
-            <ui-select-choices refresh="searchForUser($select.search)"
-                               refresh-delay="0" repeat="sharee in boardservice.sharees">
+            <ui-select-choices refresh="searchForUser($select.search)" refresh-delay="0" repeat="sharee in boardservice.sharees">
                 <span><i class="icon icon-{{sharee.type}}"></i> {{ sharee.participant }}</span>
             </ui-select-choices>
             <ui-select-no-choice>
-            <?php p($l->t('Dang!  We couldn\'t find any choices...')); ?>
+            <?php p($l->t('No users found.')); ?>
             </ui-select-no-choice>
         </ui-select>
 
