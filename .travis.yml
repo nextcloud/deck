@@ -6,7 +6,7 @@ php:
     - 7
 env:
     matrix:
-        - CORE_BRANCH=master DB=sqlite 
+        - CORE_BRANCH=master DB=sqlite TEST_JS=1 
         - CORE_BRANCH=master DB=mysql
         - CORE_BRANCH=stable11 DB=sqlite 
         - CORE_BRANCH=stable11 DB=mysql 
@@ -24,9 +24,7 @@ before_script:
     - make install-deps 
 
 script:
-    - node --version
-    - npm --version
-    - make build-js
+    - sh -c "if [ '$TRAVIS_PHP_VERSION' = '7.0' ] && [ '$TEST_JS' = '1' ]; then make build-js; fi;"
     - make test
 
 after_failure:
