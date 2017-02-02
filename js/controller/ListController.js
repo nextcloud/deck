@@ -22,57 +22,59 @@
  */
 
 app.controller('ListController', function ($scope, $location, $filter, BoardService, $element) {
-    $scope.boards = [];
-    $scope.newBoard = {};
-    $scope.status = {};
-    $scope.colors = ['0082c9', '00c9c6','00c906', 'c92b00', 'F1DB50', '7C31CC', '3A3B3D', 'CACBCD'];
-    $scope.boardservice = BoardService;
+	$scope.boards = [];
+	$scope.newBoard = {};
+	$scope.status = {};
+	$scope.colors = ['0082c9', '00c9c6','00c906', 'c92b00', 'F1DB50', '7C31CC', '3A3B3D', 'CACBCD'];
+	$scope.boardservice = BoardService;
+	$scope.newBoard.color = $scope.colors[0];
 
-    // FIXME: not nice, but we want to load this only once
-    if($element.attr('id') === 'app-navigation') {
-        BoardService.fetchAll().then(function(data) {
-            $scope.filterData();
-        }, function (error) {
-            // TODO: show error when loading fails
-        });
-    }
+	// FIXME: not nice, but we want to load this only once
+	if($element.attr('id') === 'app-navigation') {
+		BoardService.fetchAll().then(function(data) {
+			$scope.filterData();
+		}, function (error) {
+			// TODO: show error when loading fails
+		});
+	}
 
-    $scope.filterData = function () {
-        angular.copy($scope.boardservice.getData(), $scope.boardservice.sorted);
-        $scope.boardservice.sorted = $filter('orderBy')($scope.boardservice.sorted, 'title');
-    };
+	$scope.filterData = function () {
+		angular.copy($scope.boardservice.getData(), $scope.boardservice.sorted);
+		$scope.boardservice.sorted = $filter('orderBy')($scope.boardservice.sorted, 'title');
+	};
 
-    $scope.selectColor = function(color) {
-        $scope.newBoard.color = color;
-    };
+	$scope.selectColor = function(color) {
+		$scope.newBoard.color = color;
+	};
 
-    $scope.boardCreate = function() {
-        if(!$scope.newBoard.title || !$scope.newBoard.color) {
-            $scope.status.addBoard=false;
-            return;
-        }
-        BoardService.create($scope.newBoard)
-            .then(function (response) {
-                $scope.newBoard = {};
-                $scope.status.addBoard=false;
-                $scope.filterData();
-            }, function(error) {
-                $scope.status.createBoard = 'Unable to insert board: ' + error.message;
-            });
-    };
+	$scope.boardCreate = function() {
+		if(!$scope.newBoard.title || !$scope.newBoard.color) {
+			$scope.status.addBoard=false;
+			return;
+		}
+		BoardService.create($scope.newBoard)
+			.then(function (response) {
+				$scope.newBoard = {};
+				$scope.newBoard.color = $scope.colors[0];
+				$scope.status.addBoard=false;
+				$scope.filterData();
+			}, function(error) {
+				$scope.status.createBoard = 'Unable to insert board: ' + error.message;
+			});
+	};
 
-    $scope.boardUpdate = function(board) {
-        BoardService.update(board).then(function(data) {
-            $scope.filterData();
-        });
-        board.status.edit = false;
-    };
+	$scope.boardUpdate = function(board) {
+		BoardService.update(board).then(function(data) {
+			$scope.filterData();
+		});
+		board.status.edit = false;
+	};
 
-    $scope.boardDelete = function(board) {
-            BoardService.delete(board.id).then(function (data) {
-                $scope.filterData();
-            });
-    };
+	$scope.boardDelete = function(board) {
+		BoardService.delete(board.id).then(function (data) {
+			$scope.filterData();
+		});
+	};
 
 });
 
