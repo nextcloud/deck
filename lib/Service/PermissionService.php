@@ -127,14 +127,14 @@ class PermissionService {
 	public function userCan(array $acls, $permission) {
 		// check for users
 		foreach ($acls as $acl) {
-			if ($acl->getType() === "user" && $acl->getParticipant() === $this->userId) {
+			if ($acl->getType() === Acl::PERMISSION_TYPE_USER && $acl->getParticipant() === $this->userId) {
 				return $acl->getPermission($permission);
 			}
 		}
 		// check for groups
 		$hasGroupPermission = false;
 		foreach ($acls as $acl) {
-			if (!$hasGroupPermission && $acl->getType() === "group" && $this->groupManager->isInGroup($this->userId, $acl->getParticipant())) {
+			if (!$hasGroupPermission && $acl->getType() === Acl::PERMISSION_TYPE_GROUP && $this->groupManager->isInGroup($this->userId, $acl->getParticipant())) {
 				$hasGroupPermission = $acl->getPermission($permission);
 			}
 		}
