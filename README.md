@@ -11,7 +11,7 @@ Deck is a kanban style organization tool aimed at personal planning and project 
 - :rocket: Get your project organized
 
 
-![Deck - Manage cards on your board](https://bitgrid.net/~jus/deck.png)
+![Deck - Manage cards on your board](https://bitgrid.net/~jus/deck_1.png)
 
 :boom: This is still alpha software: it may not be stable enough for production 
 
@@ -29,7 +29,7 @@ This app is supposed to work on Nextcloud version 11 or later.
 
 ### Install latest release
 
-Grab the latest release over here, extract it to your Nextcloud apps folder and enable the app.
+You can download and install the latest release from the [Nextcloud app store](https://apps.nextcloud.com/apps/deck)
 
 ### Install from git 
 
