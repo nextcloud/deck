@@ -40,16 +40,6 @@
 	height: auto;
 }
 
-#app-navigation .active,
-#app-navigation .active a,
-#app-navigation li:hover > a,
-#app-navigation li:focus > a,
-#app-navigation a:focus,
-#app-navigation .selected,
-#app-navigation .selected a {
-	background-color: #fafafa;
-}
-
 #app-navigation .board-bullet {
 	position: absolute;
 	margin-left: 17px;
@@ -65,7 +55,7 @@
 	position: relative;
 	height: 100%;
 	white-space: nowrap;
-	overflow: none;
+	overflow: hidden;
 	padding: 0;
 	z-index: 100;
 	width: 100%;
@@ -82,11 +72,10 @@
 #board {
 	position: relative;
 	height: 100%;
-	white-space: nowrap; /* important */
+	white-space: nowrap;
 	overflow: auto;
-	padding: 0;
 	top: -40px;
-	padding-top: 40px;
+	padding: 40px 0 0;
 	z-index: 100;
 	width: 100%;
 }
@@ -108,7 +97,7 @@
 	font-size: 14pt;
 	margin: 0;
 	padding: 12px;
-  float: left;
+	float: left;
 }
 
 #board-actions {
@@ -116,7 +105,7 @@
 	float: right;
 	position: relative;
 	color: #888;
-  margin:8px;
+	margin: 8px;
 
 }
 
@@ -128,9 +117,6 @@
 #board-actions .filter:hover {
 	color: #333333;
 	cursor: pointer;
-}
-
-.filter {
 }
 
 .filter-select {
@@ -181,8 +167,7 @@
 }
 
 .stack h2 {
-	padding:10px;
-	padding-bottom: 8px;
+	padding: 10px 10px 8px;
 	margin: 0;
 	font-size: 12pt;
 	font-weight: 700;
@@ -191,7 +176,7 @@
 }
 
 .stack h2 input {
-	padding: 0px;
+	padding: 0;
 	width: 80%;
 	margin: 0;
 	font-size: 12pt;
@@ -225,7 +210,7 @@
 	white-space: normal;
 	position: relative;
 	opacity: 1.0;
-	-webkit-box-shadow: 0px 0px 5px #bbb;
+	-webkit-box-shadow: 0 0 5px #bbb;
 }
 
 .card.archived .card-upper {
@@ -275,7 +260,6 @@
 .card h3 {
 	font-weight: bold;
 	font-size: 10pt;
-	margin: 0;
 	padding: 0;
 	margin: 5px;
 	display: inline-block;
@@ -300,13 +284,12 @@
 }
 
 .card .labels li {
-	padding: 0px;
+	padding: 0;
 	width: 15px;
 	height: 20px;
 	-webkit-border-radius: 3px;
 	font-size: 80%;
-	border-color: transparent;
-	border: none;
+	border: none transparent;
 	float: left;
 }
 
@@ -346,12 +329,10 @@
 
 .card.create {
 	text-align: center;
-	margin: 0;
-	padding: 0;
 	padding: 10px;
+	margin: 10px;
 	border: none;
 	overflow: hidden;
-	margin: 10px;
 	-webkit-box-shadow: none;
 }
 
@@ -368,15 +349,13 @@
 
 .card.create h3 input {
 	width: 100%;
-	border: 0px;
-	padding: 0px;
-	margin: 0px;
+	border: 0;
 	font-weight: bold;
 	font-size: 10pt;
 	margin: 0;
 	padding: 0;
 	border-bottom: 1px solid #ffffff;
-	border-radius: 0px;
+	border-radius: 0;
 	color: #ffffff;
 	background-color: transparent !important;
 }
@@ -394,9 +373,7 @@
 .due {
 	background-color: #eee;
 	color: #aaa;
-	padding: 1px;
-	padding-left: 3px;
-	padding-right: 3px;
+	padding: 1px 3px;
 	border-radius: 4px;
 	margin-right: 2px;
 }
@@ -407,10 +384,9 @@
 
 #card-header h2 {
 	font-size: 14pt;
-	padding: 10px;
-	padding-bottom: 9px;
+	padding: 10px 10px 9px;
 	overflow: hidden;
-	margin-bottom: 0px;
+	margin-bottom: 0;
 	background-color: #f0f0f0;
 }
 
@@ -421,7 +397,7 @@
 }
 
 #card-meta {
-	padding-top: 0px;
+	padding-top: 0;
 }
 
 #card-dates {
@@ -448,18 +424,18 @@
 	background-color: #009900;
 	color: #ffffff;
 	border-radius: 3px;
-	float:right;
-	padding:1px 10px;
+	float: right;
+	padding: 1px 10px;
 	font-size: 8pt !important;
-	display:none;
+	display: none;
 }
 
 #card-description textarea {
 	width: 100%;
 	height: 200px;
 	border: none;
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 }
 
 #card-description .container {
@@ -504,13 +480,11 @@
 	max-width: 100%;
 	border-left: none;
 	width: 500px;
-	/*box-shadow: 0px 0px 5px 0px #aaa;*/
 	border-left: 1px solid #eeeeee;
-
 }
 
 #app-sidebar.details-visible {
-	right: 0px;
+	right: 0;
 }
 
 #app-content {
@@ -539,10 +513,6 @@
 	text-align: center;
 }
 
-.labels li span {
-
-}
-
 .avatardiv {
 	float: left;
 	background-color: #eee;
@@ -562,10 +532,11 @@
 
 .colorselect {
 	overflow: hidden;
-	clear:both;
-	padding-top:4px;
+	clear: both;
+	padding-top: 4px;
 	padding-left: 4px;
 }
+
 .colorselect .color {
 	opacity: 0.7;
 	width: 27px;
@@ -585,9 +556,10 @@
 	clear: none;
 	overflow: visible;
 }
+
 .labels .colorselect .color {
-	width:26px;
-	height:26px;
+	width: 26px;
+	height: 26px;
 }
 
 #boardlist {
@@ -640,15 +612,12 @@ input.input-inline {
 	font-weight: inherit;
 	background-color: transparent;
 	padding: 0;
-	margin: 0;
 	border: none;
 	width: 100%;
 	border-bottom: 1px solid #333333;
 	-webkit-border-radius: 0;
-	margin-top: -4px;
 	line-height: 100%;
-	margin-bottom: -4px;
-
+	margin: -4px 0;
 }
 
 button {
@@ -719,87 +688,8 @@ button:hover {
 	margin-right: 10px;
 }
 
-.ui-select-container.dropdown {
-	background: #ffffff;
-	border-radius: 0px;
-	box-shadow: none;
-	display: block;
-	margin-right: 0;
-	position: static;
-	width: 100%;
-	z-index: auto;
-	padding: 3px;
-}
-
-.ui-select-match-close {
-	float: right;
-	left: -20px;
-	margin-top: 3px;
-	z-index: 100;
-	position: relative;
-}
-
-.ui-select-match-item {
-	padding: 2px;
-	float: left;
-	display: block;
-	margin-right: -17px !important;
-}
-
-.ui-select-match-item .select-label {
-	padding: 4px;
-	color: #fff;
-	padding-right: 23px;
-}
-
-.ui-select-container {
-	background-color: #fafafa !important;
-	border: 1px solid #fafafa;
-
-}
-
-.ui-select-container.open {
-	border: 1px solid #aaaaaa;
-}
-
-.ui-select-container input.ui-select-search {
-	padding: 0px !important;
-	margin: 2px !important;
-	background-color: transparent;
-	border: none;
-}
-
-.ui-select-bootstrap .ui-select-choices-row > a {
-	padding: 3px !important;
-}
-
-.ui-select-choices-row-inner {
-	margin-bottom: 2px;
-	width: 100%;
-	padding: 0;
-}
-
-.ui-select-choices-row-inner span {
-	padding: 3px;
-	padding-left: 10px;
-	padding-right: 10px;
-	width: 100%;
-}
-
-/* ui-select disabled */
-.ui-select-container[disabled] {
-	overflow: hidden;
-}
-
-.ui-select-container[disabled] .ui-select-match-item .select-label {
-	padding: 4px;
-	min-width: 26px !important;
-	height: 100%;
-	display: inline-block;
-}
-
-.ui-select-container[disabled] .ui-select-match-item {
-	margin-right: 0px !important;
+.ui-select-offscreen {
+	display: none;
 }
 
 @media (max-width: 480px) {
@@ -816,16 +706,17 @@ button:hover {
 }
 
 #markdown {
-	width:100% !important;
+	width: 100% !important;
 }
+
 #markdown p {
 	margin-bottom: 15px;
 }
+
 #markdown * {
 	white-space: normal;
-	word-wrap:break-word;
-	word-wrap: break-word;         /* All browsers since IE 5.5+ */
-	overflow-wrap: break-word;     /* Renamed property in CSS3 draft spec */
+	word-wrap: break-word;
+	overflow-wrap: break-word;
 }
 
 #markdown a {
@@ -901,18 +792,23 @@ button:hover {
 .icon-group {
 	background-image: url('../../../settings/img/users.svg');
 }
+
 .icon-add-white {
 	background-image: url('../img/add-white.svg');
 }
+
 .icon-archive {
 	background-image: url('../img/archive.svg');
 }
+
 .icon-archive-white {
 	background-image: url('../img/archive-white.svg');
 }
+
 .icon-details {
 	background-image: url('../img/details.svg');
 }
+
 .icon-details-white {
 	background-image: url('../img/details-white.svg');
 }

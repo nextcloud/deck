@@ -2,7 +2,7 @@
 
 	<li><a href="#" class=""><?php p($l->t('All Boards')); ?></a></li>
 
-	<li class="with-icon with-menu" data-ng-repeat="b in boardservice.sorted">
+	<li class="with-icon with-menu" ng-class="{active: b.id === boardservice.getCurrent().id}" data-ng-repeat="b in boardservice.sorted">
 		<span class="board-bullet"  style="background-color:#{{b.color}};" ng-if="!b.status.edit"> </span>
 		<a href="#!/board/{{b.id}}/" ng-if="!b.status.edit">{{ b.title }}</a>
 		<div class="app-navigation-entry-utils" ng-show="!b.status.edit" style="position:absolute;">
