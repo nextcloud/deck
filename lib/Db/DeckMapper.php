@@ -36,24 +36,7 @@ abstract class DeckMapper extends Mapper {
 		return $this->findEntity($sql, [$id]);
 	}
 
-	/**
-	 * Add relational data to an Entity by calling the related Mapper
-	 * @param $entities
-	 * @param $entityType
-	 * @param $property
-	 * addRelation($cards, $labels, function($one, $many) {
-	 *   if($one->id == $many->cardId)
-	 * }
-	 */
-	public function addRelation($entities, $entityType, $property) {
-
-	}
-
 	protected function execute($sql, array $params = [], $limit = null, $offset = null) {
-		// FIXME: remove on release
-		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-		/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-		\OCP\Util::writeLog('deck', "DeckMapper SQL: " . $sql . " with " . implode("|", $params), \OCP\Util::DEBUG);
 		return parent::execute($sql, $params, $limit, $offset);
 	}
 
