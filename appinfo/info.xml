@@ -16,16 +16,18 @@
 :boom: This is still alpha software: it may not be stable enough for production!
 
 </description>
+    <version>0.1.0</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
-    <version>0.1.0</version>
     <namespace>Deck</namespace>
     <category>organization</category>
     <category>office</category>
+    <bugs>https://github.com/juliushaertl/deck/issues</bugs>
+    <repository type="git">https://github.com/juliushaertl/deck.git</repository>
+    <screenshot>https://bitgrid.net/~jus/deck_1.png</screenshot>
+    <screenshot>https://bitgrid.net/~jus/deck_2.png</screenshot>
+    <screenshot>https://bitgrid.net/~jus/deck_3.png</screenshot>
     <dependencies>
         <nextcloud min-version="11" max-version="12" />
     </dependencies>
-    <repository type="git">https://github.com/juliushaertl/deck.git</repository>
-    <bugs>https://github.com/juliushaertl/deck/issues</bugs>
-    <screenshot>https://bitgrid.net/~jus/deck.png</screenshot>
 </info>
