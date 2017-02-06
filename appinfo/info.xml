@@ -16,7 +16,7 @@
 :boom: This is still alpha software: it may not be stable enough for production!
 
 </description>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
