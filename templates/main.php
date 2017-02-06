@@ -23,7 +23,7 @@
 
 use OCP\Util;
 
-Util::addStyle('deck', 'vendor/ng-sortable/dist/ng-sortable.min');
+Util::addStyle('deck', '../js/vendor/ng-sortable/dist/ng-sortable.min');
 Util::addStyle('deck', 'style');
 
 Util::addScript('deck', 'vendor/angular/angular.min');
