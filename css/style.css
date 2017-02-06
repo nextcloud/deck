@@ -184,6 +184,7 @@
 	border: 0;
 	background-color: transparent;
 	float: left;
+	min-height: initial;
 }
 
 .stack h2 button,
@@ -692,6 +693,45 @@ button:hover {
 	display: none;
 }
 
+.ui-select-match-close {
+	float: right;
+	z-index: 100;
+	position: relative;
+	display: inline-block !important;
+	margin-right: 7px;
+}
+
+.ui-select-match-item {
+	padding: 0;
+	float: left !important;
+	display: block;
+}
+
+.ui-select-match-item .select-label {
+	color: #fff;
+	padding: 6px;
+	padding-right: 23px;
+	margin-right: -23px !important;
+}
+
+.select2-container-multi .select2-choices .select2-search-choice {
+	padding: 3px 0 !important;
+	border: 0 !important;
+	overflow: hidden;
+	bo
+}
+
+.ui-select-container[disabled] .ui-select-match-item .select-label {
+	padding: 4px;
+	min-width: 26px !important;
+	height: 100%;
+	display: inline-block;
+}
+
+.ui-select-container[disabled] .ui-select-match-item {
+	margin-right: 0 !important;
+}
+
 @media (max-width: 480px) {
 	/* hide board actions on mobile */
 	#board-actions {
@@ -764,15 +804,37 @@ button:hover {
 	padding: 3px;
 }
 
-.shareWithList .username {
-	min-width: 100px;
+#shareWithList {
+	list-style-type: none;
+	padding: 0 0 16px;
 }
 
-.shareWithList .icon {
+#shareWithList li {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	font-weight: bold;
+	white-space: normal;
+	display: flex;
+	align-items: center;
+}
+
+#shareWithList .username {
+	padding-right: 8px;
+	padding-left: 8px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	display: inline-block;
+	overflow: hidden;
+	vertical-align: middle;
+}
+
+.shareWithList .icon-delete {
 	display: inline-block;
 	background-size: 16px 16px;
 	width: 16px;
 	height: 16px;
+	padding: 0;
+	margin-top: 5px;
 }
 
 .shareWithList .fa {
@@ -784,6 +846,10 @@ button:hover {
 .shareOption {
 	margin-top: 4px;
 }
+
+/**
+ * Custom icons
+ */
 
 .app-deck .icon {
 	display: inline-block;
