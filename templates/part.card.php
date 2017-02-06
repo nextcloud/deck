@@ -30,14 +30,13 @@
 	</div>
 
 	<div id="labels">
-		<ui-select multiple tagging="" ng-model="card.labels" theme="bootstrap"
+		<ui-select multiple tagging="" ng-model="card.labels" theme="select2"
 				   style="width:100%;" title="Choose a label"
 				   placeholder="Add a label"
 				   on-select="labelAssign($item, $model)"
 				   on-remove="labelRemove($item, $model)" ng-disabled="!boardservice.canEdit() || archived">
-			<ui-select-match placeholder="Select labels..."><span
-					class="select-label"
-					style="background-color:#{{$item.color}}; color:{{ $item.color|textColorFilter }};">{{$item.title}}&nbsp;</span>
+			<ui-select-match placeholder="Select labels...">
+				<span class="select-label" style="background-color:#{{$item.color}}; color:{{ $item.color|textColorFilter }};">{{$item.title}}&nbsp;</span>
 			</ui-select-match>
 			<ui-select-choices
 				repeat="label in boardservice.getCurrent().labels | filter:$select.search">
