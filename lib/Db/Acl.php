@@ -74,7 +74,7 @@ class Acl extends RelationalEntity implements \JsonSerializable {
 		return [
 			'id' => $this->id,
 			'participant' => $this->participant,
-			'type' => $this->getType(),
+			'type' => $this->getTypeString(),
 			'boardId' => $this->boardId,
 			'permissionEdit' => $this->getPermissionEdit(),
 			'permissionShare' => $this->getPermissionShare(),
@@ -82,12 +82,8 @@ class Acl extends RelationalEntity implements \JsonSerializable {
 			'owner' => $this->getOwner()
 		];
 	}
-
-	/*
-	 * FIXME: migrate other code to const PERMISSION_TYPE_ instead of strings
-	 * iirc js uses those strings as well
-	 */
-	public function getType() {
+	
+	public function getTypeString() {
 		if ($this->type === Acl::PERMISSION_TYPE_GROUP) {
 			return 'group';
 		}

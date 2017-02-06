@@ -77,8 +77,8 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	public function findAllByUser($userId, $limit = null, $offset = null) {
 		$sql = 'SELECT id, title, owner, color, archived, 0 as shared FROM oc_deck_boards WHERE owner = ? UNION ' .
 			'SELECT boards.id, title, owner, color, archived, 1 as shared FROM oc_deck_boards as boards ' .
-			'JOIN oc_deck_board_acl as acl ON boards.id=acl.board_id WHERE acl.participant=? AND acl.type=\'user\' AND boards.owner != ?';
-		$entries = $this->findEntities($sql, [$userId, $userId, $userId], $limit, $offset);
+			'JOIN oc_deck_board_acl as acl ON boards.id=acl.board_id WHERE acl.participant=? AND acl.type=? AND boards.owner != ?';
+		$entries = $this->findEntities($sql, [$userId, $userId, Acl::PERMISSION_TYPE_USER, $userId], $limit, $offset);
 		/* @var Board $entry */
 		foreach ($entries as $entry) {
 			$acl = $this->aclMapper->findAll($entry->id);
@@ -101,7 +101,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 			return [];
 		}
 		$sql = 'SELECT boards.id, title, owner, color, archived, 2 as shared FROM oc_deck_boards as boards ' .
-			'INNER JOIN oc_deck_board_acl as acl ON boards.id=acl.board_id WHERE owner != ? AND type=\'group\' AND (';
+			'INNER JOIN oc_deck_board_acl as acl ON boards.id=acl.board_id WHERE owner != ? AND type=? AND (';
 		for ($i = 0; $i < count($groups); $i++) {
 			$sql .= 'acl.participant = ? ';
 			if (count($groups) > 1 && $i < count($groups) - 1) {
@@ -109,7 +109,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 			}
 		}
 		$sql .= ');';
-		$entries = $this->findEntities($sql, array_merge([$userId], $groups), $limit, $offset);
+		$entries = $this->findEntities($sql, array_merge([$userId, Acl::PERMISSION_TYPE_GROUP], $groups), $limit, $offset);
 		/* @var Board $entry */
 		foreach ($entries as $entry) {
 			$acl = $this->aclMapper->findAll($entry->id);
