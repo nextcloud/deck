@@ -20,10 +20,44 @@
  *
  */
 
+/**
+ * General styles
+ */
+
+.app-deck .icon {
+	display: inline-block;
+}
+
+input.input-inline {
+	font-size: inherit !important;
+	font-weight: inherit;
+	background-color: transparent;
+	padding: 0;
+	border: none;
+	width: 100%;
+	border-bottom: 1px solid #333333;
+	-webkit-border-radius: 0;
+	line-height: 100%;
+	margin: -4px 0;
+}
+
+button {
+	border: 0;
+	background-color: transparent;
+}
+
+button:hover {
+	border: 0;
+	background-color: transparent;
+}
+
 #searchbox {
 	display: block !important;
 }
 
+/**
+ * Navigation sidebar
+ */
 .app-navigation-entry-utils-menu-button {
 	display: block !important;
 }
@@ -51,6 +85,9 @@
 	cursor: pointer;
 }
 
+/**
+ * Board view
+ */
 #app-view {
 	position: relative;
 	height: 100%;
@@ -271,12 +308,6 @@
 	margin-top: 15px;
 }
 
-.card h3 .fa {
-	font-size: 18pt;
-	line-height: 10pt;
-	vertical-align: middle;
-}
-
 .card .labels {
 	position: absolute;
 	top: -5px;
@@ -343,9 +374,9 @@
 }
 
 .card.create h3 {
-	margin: 0;
-	padding: 0;
 	width: 100%;
+	padding: 0;
+	margin: 0 0 1px;
 }
 
 .card.create h3 input {
@@ -359,16 +390,7 @@
 	border-radius: 0;
 	color: #ffffff;
 	background-color: transparent !important;
-}
-
-.card.create .fa {
-	color: #ffffff;
-	width: 100%;
-}
-
-.card.create .fa:hover {
-	opacity: 0.5;
-	cursor: pointer;
+	min-height: initial;
 }
 
 .due {
@@ -378,6 +400,10 @@
 	border-radius: 4px;
 	margin-right: 2px;
 }
+
+/**
+ * Card view right sidebar
+ */
 
 #card-header {
 	height: 44px;
@@ -441,20 +467,6 @@
 
 #card-description .container {
 	background-color: white;
-}
-
-#card-description .container.ng-hide-remove {
-	animation: fade 1s forwards;
-	background-color: rgba(255, 255, 100, 1);
-}
-
-@keyframes fade {
-	from {
-		background-color: rgba(255, 255, 100, 1);
-	}
-	to {
-		background-color: rgba(255, 255, 255, 0);
-	}
 }
 
 #sidebar-header,
@@ -529,7 +541,9 @@
 	display: block !important;
 }
 
-/* color selector */
+/**
+ * Color selection
+ */
 
 .colorselect {
 	overflow: hidden;
@@ -563,6 +577,9 @@
 	height: 26px;
 }
 
+/**
+ * Board list main screen area
+ */
 #boardlist {
 	width: 100%;
 	height: 100%;
@@ -608,30 +625,47 @@
 	margin-top: 5px;
 }
 
-input.input-inline {
-	font-size: inherit !important;
-	font-weight: inherit;
-	background-color: transparent;
+/**
+ * Board details
+ */
+
+#shareWithList {
+	list-style-type: none;
+	padding: 0 0 16px;
+}
+
+#shareWithList li {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	font-weight: bold;
+	white-space: normal;
+	display: flex;
+	align-items: center;
+}
+
+#shareWithList .username {
+	padding-right: 8px;
+	padding-left: 8px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	display: inline-block;
+	overflow: hidden;
+	vertical-align: middle;
+}
+
+.shareWithList .icon-delete {
+	display: inline-block;
+	background-size: 16px 16px;
+	width: 16px;
+	height: 16px;
 	padding: 0;
-	border: none;
-	width: 100%;
-	border-bottom: 1px solid #333333;
-	-webkit-border-radius: 0;
-	line-height: 100%;
-	margin: -4px 0;
+	margin-top: 5px;
 }
 
-button {
-	border: 0;
-	background-color: transparent;
+.shareOption {
+	margin-top: 4px;
 }
 
-button:hover {
-	border: 0;
-	background-color: transparent;
-}
-
-/* board detail */
 #board-detail-labels {
 	padding: 10px;
 }
@@ -709,8 +743,7 @@ button:hover {
 
 .ui-select-match-item .select-label {
 	color: #fff;
-	padding: 6px;
-	padding-right: 23px;
+	padding: 6px 23px 6px 6px;
 	margin-right: -23px !important;
 }
 
@@ -718,7 +751,6 @@ button:hover {
 	padding: 3px 0 !important;
 	border: 0 !important;
 	overflow: hidden;
-	bo
 }
 
 .ui-select-container[disabled] .ui-select-match-item .select-label {
@@ -732,6 +764,14 @@ button:hover {
 	margin-right: 0 !important;
 }
 
+.select2-search input {
+	width:100% !important;
+}
+
+/**
+ * Mobile optimizations
+ */
+
 @media (max-width: 480px) {
 	/* hide board actions on mobile */
 	#board-actions {
@@ -744,6 +784,10 @@ button:hover {
 		margin-left: 50px;
 	}
 }
+
+/**
+ * Markdown rendering
+ */
 
 #markdown {
 	width: 100% !important;
@@ -804,56 +848,9 @@ button:hover {
 	padding: 3px;
 }
 
-#shareWithList {
-	list-style-type: none;
-	padding: 0 0 16px;
-}
-
-#shareWithList li {
-	padding-top: 5px;
-	padding-bottom: 5px;
-	font-weight: bold;
-	white-space: normal;
-	display: flex;
-	align-items: center;
-}
-
-#shareWithList .username {
-	padding-right: 8px;
-	padding-left: 8px;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	display: inline-block;
-	overflow: hidden;
-	vertical-align: middle;
-}
-
-.shareWithList .icon-delete {
-	display: inline-block;
-	background-size: 16px 16px;
-	width: 16px;
-	height: 16px;
-	padding: 0;
-	margin-top: 5px;
-}
-
-.shareWithList .fa {
-	font-size: 12pt;
-	width: 16px;
-	text-align: center;
-}
-
-.shareOption {
-	margin-top: 4px;
-}
-
 /**
  * Custom icons
  */
-
-.app-deck .icon {
-	display: inline-block;
-}
 
 .icon-group {
 	background-image: url('../../../settings/img/users.svg');
