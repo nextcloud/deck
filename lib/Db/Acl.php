@@ -48,12 +48,10 @@ class Acl extends RelationalEntity implements \JsonSerializable {
 		$this->addType('permissionEdit', 'boolean');
 		$this->addType('permissionShare', 'boolean');
 		$this->addType('permissionManage', 'boolean');
-		$this->addType('owner', 'boolean');
 		$this->addType('type', 'integer');
+		$this->addType('owner', 'boolean');
 		$this->addRelation('owner');
-		$this->setPermissionEdit(false);
-		$this->setPermissionShare(false);
-		$this->setPermissionManage(false);
+		$this->addResolvable('participant');
 	}
 
 	public function getPermission($permission) {
@@ -93,4 +91,5 @@ class Acl extends RelationalEntity implements \JsonSerializable {
 		$this->markFieldUpdated('type');
 		$this->type = $typeInt;
 	}
+
 }

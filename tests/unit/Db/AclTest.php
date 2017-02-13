@@ -23,7 +23,8 @@
 
 namespace OCA\Deck\Db;
 
-class AclTest extends \PHPUnit_Framework_TestCase {
+class AclTest extends \Test\TestCase {
+
 	private function createAclUser() {
 		$acl = new Acl();
 		$acl->setId(1);
@@ -35,6 +36,7 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 		$acl->setPermissionManage(true);
 		return $acl;
 	}
+
 	private function createAclGroup() {
 		$acl = new Acl();
 		$acl->setId(1);
@@ -46,6 +48,7 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 		$acl->setPermissionManage(true);
 		return $acl;
 	}
+
 	public function testJsonSerialize() {
 		$acl = $this->createAclUser();
 		$this->assertEquals([
@@ -70,6 +73,7 @@ class AclTest extends \PHPUnit_Framework_TestCase {
 			'owner' => false
 		], $acl->jsonSerialize());
 	}
+
 	public function testSetOwner() {
 		$acl = $this->createAclUser();
 		$acl->setOwner(1);

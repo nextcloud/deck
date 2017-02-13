@@ -55,6 +55,7 @@ app.factory('BoardService', function(ApiService, $http, $q){
 
 				// filter out everyone who is already in the share list
 				angular.forEach(users, function (item) {
+					var acl = self.generateAcl('user', item);
 					var exists = false;
 					angular.forEach(self.getCurrent().acl, function (acl) {
 						if (acl.participant.primaryKey === item.value.shareWith || OC.getCurrentUser() === item.value.shareWith) {
@@ -62,19 +63,11 @@ app.factory('BoardService', function(ApiService, $http, $q){
 						}
 					});
 					if (!exists) {
-						self.sharees.push({
-							boardId: null,
-							id: null,
-							owner: false,
-							participant: item.value.shareWith,
-							permissionEdit: true,
-							permissionManage: true,
-							permissionShare: true,
-							type: 'user'
-						});
+						self.sharees.push(acl);
 					}
 				});
 				angular.forEach(groups, function (item) {
+					var acl = self.generateAcl('group', item);
 					var exists = false;
 					angular.forEach(self.getCurrent().acl, function (acl) {
 						if (acl.participant.primaryKey === item.value.shareWith) {
@@ -82,16 +75,7 @@ app.factory('BoardService', function(ApiService, $http, $q){
 						}
 					});
 					if (!exists) {
-						self.sharees.push({
-							boardId: null,
-							id: null,
-							owner: false,
-							participant: item.value.shareWith,
-							permissionEdit: true,
-							permissionManage: true,
-							permissionShare: true,
-							type: 'group'
-						});
+						self.sharees.push(acl);
 					}
 				});
 
@@ -103,13 +87,30 @@ app.factory('BoardService', function(ApiService, $http, $q){
 		return deferred.promise;
 	};
 
+	BoardService.prototype.generateAcl = function(type, ocsItem) {
+		return {
+			boardId: null,
+			id: null,
+			owner: false,
+			participant: {
+				primaryKey: ocsItem.value.shareWith,
+				uid: ocsItem.value.shareWith,
+				displayname: ocsItem.label
+			},
+			permissionEdit: true,
+			permissionManage: true,
+			permissionShare: true,
+			type: type
+		}
+	};
+
     BoardService.prototype.addAcl = function(acl) {
         var board = this.getCurrent();
         var deferred = $q.defer();
         var self = this;
         var _acl = acl;
         $http.post(this.baseUrl + '/' + acl.boardId + '/acl', _acl).then(function (response) {
-            if(!board.acl) {
+            if(!board.acl || board.acl.length === 0) {
                 board.acl = {};
             }
             board.acl[response.data.id] = response.data;

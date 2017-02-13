@@ -25,7 +25,6 @@ namespace OCA\Deck\Db;
 
 use OCP\IDBConnection;
 
-
 class AclMapper extends DeckMapper implements IPermissionMapper {
 
 	public function __construct(IDBConnection $db) {

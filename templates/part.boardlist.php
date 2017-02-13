@@ -18,9 +18,9 @@
 			<td>
 				<div id="assigned-users">
 					<div class="avatardiv" avatar
-						 displayname="{{ b.owner }}"></div>
+						 displayname="{{ b.owner.uid }}" title="{{ b.owner.displayname }}"></div>
 					<div class="avatardiv" avatar
-						 displayname="{{ acl.participant }}"
+						 displayname="{{ acl.participant.uid }}" title="{{ acl.participant.uid }}"
 						 ng-repeat="acl in b.acl | limitTo: 7"></div>
 				</div>
 			</td>

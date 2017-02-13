@@ -19,10 +19,10 @@
 
         <ui-select ng-if="boardservice.canShare()" ng-model="status.addSharee" theme="select2" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..." on-select="aclAdd(status.addSharee)" search-enabled="true">
             <ui-select-match placeholder="<?php p($l->t('Select users or groups to share with')); ?>">
-                <span><i class="icon icon-{{$item.type}}"></i> {{ $item.participant }}</span>
+                <span><i class="icon icon-{{$item.type}}"></i> {{ $item.participant.displayname }}</span>
             </ui-select-match>
             <ui-select-choices refresh="searchForUser($select.search)" refresh-delay="0" repeat="sharee in boardservice.sharees">
-                <span><i class="icon icon-{{sharee.type}}"></i> {{ sharee.participant }}</span>
+                <span><i class="icon icon-{{sharee.type}}"></i> {{ sharee.participant.displayname }}</span>
             </ui-select-choices>
             <ui-select-no-choice>
             <?php p($l->t('No matching user or group found.')); ?>
@@ -32,18 +32,18 @@
         <ul id="shareWithList" class="shareWithList">
             <li>
                 <span class="icon-loading-small" style="display:none;"></span>
-                <div class="avatardiv" avatar ng-attr-displayname="{{ boardservice.getCurrent().owner }}" ng-if="boardservice.id"></div>
+                <div class="avatardiv" avatar ng-attr-displayname="{{ boardservice.getCurrent().owner.uid }}" ng-if="boardservice.id"></div>
                 <span class="has-tooltip username">
-                    {{ boardservice.getCurrent().owner }}
+                    {{ boardservice.getCurrent().owner.displayname }}
 				</span>
             </li>
             <li ng-repeat="acl in boardservice.getCurrent().acl track by $index">
                 <span class="icon-loading-small" style="display:none;"></span>
-                <div class="avatardiv" avatar displayname="{{ acl.participant }}" ng-if="acl.type=='user'"></div>
+                <div class="avatardiv" avatar displayname="{{ acl.participant.uid }}" ng-if="acl.type=='user'"></div>
                 <div class="avatardiv" ng-if="acl.type=='group'"><i class="icon icon-{{acl.type}}"></i></div>
 
                 <span class="has-tooltip username">
-                    {{ acl.participant }}
+                    {{ acl.participant.displayname }}
 				</span>
 				<span class="sharingOptionsGroup">
                 <span class="shareOption" ng-if="boardservice.canManage()">

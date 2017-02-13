@@ -32,8 +32,8 @@ class Board extends RelationalEntity implements JsonSerializable {
 	protected $owner;
 	protected $color;
 	protected $archived = false;
-	protected $labels;
-	protected $acl;
+	protected $labels = [];
+	protected $acl = [];
 	protected $shared;
 
 	public function __construct() {
@@ -43,6 +43,7 @@ class Board extends RelationalEntity implements JsonSerializable {
 		$this->addRelation('labels');
 		$this->addRelation('acl');
 		$this->addRelation('shared');
+		$this->addResolvable('owner');
 		$this->shared = -1;
 	}
 
