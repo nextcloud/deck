@@ -88,15 +88,6 @@ button:hover {
 /**
  * Board view
  */
-#app-view {
-	position: relative;
-	height: 100%;
-	white-space: nowrap;
-	overflow: hidden;
-	padding: 0;
-	z-index: 100;
-	width: 100%;
-}
 
 #board-status {
 	position: absolute;

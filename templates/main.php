@@ -46,10 +46,10 @@ Util::addScript('deck', 'public/app');
 		<?php print_unescaped($this->inc('part.navigation')); ?>
 		<?php /* print_unescaped($this->inc('part.settings')); */ ?>
 	</div>
-	<div id="app-content" ng-class="{ 'details-visible': sidebar.show }">
-		<div id="app-view" ui-view></div>
+	<div id="app-content" ng-class="{ 'details-visible': sidebar.show }" ui-view>
 	</div>
 	<route-loading-indicator></route-loading-indicator>
+
 
 
 	<script type="text/ng-template" id="/boardlist.mainView.html">
