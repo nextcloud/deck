@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+lang_map = ja_JP: ja
+
+[nextcloud.deck]
+file_filter = <lang>/deck.po
+source_file = templates/deck.pot
+source_lang = en
+type = PO
