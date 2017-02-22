@@ -1,6 +1,6 @@
 # Deck
 
-[![Build Status](https://travis-ci.org/juliushaertl/deck.svg?branch=master)](https://travis-ci.org/juliushaertl/deck) [![CodeCov](https://codecov.io/github/juliushaertl/deck/coverage.svg?branch=master)](https://codecov.io/github/juliushaertl/deck) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/juliushaertl/deck/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/juliushaertl/deck/?branch=master) [![Dependency Status](https://www.versioneye.com/user/projects/58908fc0a23e810038c34e0a/badge.svg?style=flat)](https://www.versioneye.com/user/projects/58908fc0a23e810038c34e0a)
+[![Build Status](https://travis-ci.org/nextcloud/deck.svg?branch=master)](https://travis-ci.org/nextcloud/deck) [![CodeCov](https://codecov.io/github/nextcloud/deck/coverage.svg?branch=master)](https://codecov.io/github/nextcloud/deck) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nextcloud/deck/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/nextcloud/deck/?branch=master) [![Dependency Status](https://www.versioneye.com/user/projects/58ad558f4ca76f004ed475b3/badge.svg?style=flat)](https://www.versioneye.com/user/projects/58ad558f4ca76f004ed475b3)
 
 Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.
 
@@ -36,7 +36,7 @@ You can download and install the latest release from the [Nextcloud app store](h
 If you want to run the latest development version from git source, you need to clone the repo to your apps folder:
 
 ```
-git clone https://github.com/juliushaertl/deck.git
+git clone https://github.com/nextcloud/deck.git
 cd deck
 make install-deps
 make
