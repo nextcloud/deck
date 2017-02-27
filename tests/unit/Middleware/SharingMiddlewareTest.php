@@ -23,30 +23,28 @@
 
 namespace OCA\Deck\Middleware;
 
-use OC\AppFramework\DependencyInjection\DIContainer;
-use OC\AppFramework\Utility\ControllerMethodReflector;
-use OC\AppFramework\Utility\SimpleContainer;
-use OCA\Deck\Db\DeckMapper;
-use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
-use OCA\Deck\Service\BoardService;
-use OCA\Deck\Service\PermissionService;
-use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
-use OCP\IContainer;
-use OCP\IGroupManager;
-use OCP\IRequest;
-use OCP\IUser;
-use OCP\IUserSession;
-use OCA\Deck\Db\AclMapper;
+use OCP\ILogger;
+use OCP\IConfig;
 
-class SharingMiddlewareTest extends \PHPUnit_Framework_TestCase {
 
+class SharingMiddlewareTest extends \Test\TestCase {
+
+	/** @var ILogger */
+	private $logger;
+	/** @var IConfig */
+	private $config;
 	private $sharingMiddleware;
 
 	public function setUp() {
-		$this->sharingMiddleware = new SharingMiddleware();
+		$this->logger = $this->createMock(ILogger::class);
+		$this->config = $this->createMock(IConfig::class);
+		$this->sharingMiddleware = new SharingMiddleware(
+			$this->logger,
+			$this->config
+		);
 	}
 
 
