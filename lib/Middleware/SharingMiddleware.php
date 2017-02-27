@@ -23,17 +23,31 @@
 
 namespace OCA\Deck\Middleware;
 
-
-
-
 use OCA\Deck\StatusException;
-use \OCP\AppFramework\Middleware;
-
-
+use OCP\AppFramework\Middleware;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\ILogger;
+use OCP\Util;
+use OCP\IConfig;
 
 
 class SharingMiddleware extends Middleware {
+
+	/** @var ILogger */
+	private $logger;
+	/** @var IConfig */
+	private $config;
+
+	/**
+	 * SharingMiddleware constructor.
+	 *
+	 * @param ILogger $logger
+	 * @param IConfig $config
+	 */
+	public function __construct(ILogger $logger, IConfig $config) {
+		$this->logger = $logger;
+		$this->config = $config;
+	}
 
 	/**
 	 * Return JSON error response if the user has no sufficient permission
@@ -46,6 +60,9 @@ class SharingMiddleware extends Middleware {
 	 */
 	public function afterException($controller, $methodName, \Exception $exception) {
 		if ($exception instanceof StatusException) {
+			if($this->config->getSystemValue('loglevel', Util::WARN) === Util::DEBUG) {
+				$this->logger->logException($exception);
+			}
 			return new JSONResponse([
 				"status" => $exception->getStatus(),
 				"message" => $exception->getMessage()

@@ -42,11 +42,8 @@ class Application extends App {
 
 		$container->registerService('SharingMiddleware', function($container) use ($server) {
 			return new SharingMiddleware(
-				$container,
-				$server->getRequest(),
-				$server->getUserSession(),
-				$container->query('ControllerMethodReflector'),
-				$container->query('OCA\Deck\Service\PermissionService')
+				$server->getLogger(),
+				$server->getConfig()
 			);
 		});
 		$container->registerMiddleware('SharingMiddleware');
