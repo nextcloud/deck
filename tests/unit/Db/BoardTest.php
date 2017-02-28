@@ -20,8 +20,8 @@ class BoardTest extends \PHPUnit_Framework_TestCase {
 			'title' => "My Board",
 			'owner' => "admin",
 			'color' => "000000",
-			'labels' => null,
-			'acl' => null,
+			'labels' => array(),
+			'acl' => array(),
 			'archived' => false
 		], $board->jsonSerialize());
 	}
@@ -35,7 +35,7 @@ class BoardTest extends \PHPUnit_Framework_TestCase {
 			'owner' => "admin",
 			'color' => "000000",
 			'labels' => array("foo", "bar"),
-			'acl' => null,
+			'acl' => array(),
 			'archived' => false
 		], $board->jsonSerialize());
 	}
@@ -55,8 +55,8 @@ class BoardTest extends \PHPUnit_Framework_TestCase {
 			'title' => "My Board",
 			'owner' => "admin",
 			'color' => "000000",
-			'labels' => null,
-			'acl' => null,
+			'labels' => array(),
+			'acl' => array(),
 			'archived' => false,
 			'shared' => 1,
 		], $board->jsonSerialize());

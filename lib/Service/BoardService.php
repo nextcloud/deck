@@ -91,12 +91,12 @@ class BoardService {
 	private function mapAcl(Acl &$acl) {
 		$userManager = $this->userManager;
 		$groupManager = $this->groupManager;
-		$acl->resolveRelation('participant', function($value) use (&$acl, &$userManager, &$groupManager) {
+		$acl->resolveRelation('participant', function($participant) use (&$acl, &$userManager, &$groupManager) {
 			if($acl->getType() === Acl::PERMISSION_TYPE_USER) {
-				return new User($userManager->get($acl->getParticipant($value)));
+				return new User($userManager->get($acl->getParticipant($participant)));
 			}
 			if($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
-				return new Group($groupManager->get($acl->getParticipant($value)));
+				return new Group($groupManager->get($acl->getParticipant($participant)));
 			}
 		});
 		return $acl;
@@ -104,8 +104,8 @@ class BoardService {
 
 	private function mapOwner(Board $board) {
 		$userManager = $this->userManager;
-		$board->resolveRelation('owner', function($value) use (&$userManager) {
-			return new User($userManager->get($value));
+		$board->resolveRelation('owner', function($owner) use (&$userManager) {
+			return new User($userManager->get($owner));
 		});
 		return $board;
 	}

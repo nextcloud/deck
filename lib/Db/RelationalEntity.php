@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
+ * @copyright Copyright (c) 2017 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
  *
@@ -23,16 +23,14 @@
 
 namespace OCA\Deck\Db;
 
-
 class RelationalEntity extends \OCP\AppFramework\Db\Entity implements \JsonSerializable {
 
-	private $primaryKey;
 	private $_relations = array();
 	private $_resolvedProperties = [];
 
 	/**
 	 * Mark a property as relation so it will not get updated using Mapper::update
-	 * @param string $property Name of the property
+	 * @param $property string Name of the property
 	 */
 	public function addRelation($property) {
 		if (!in_array($property, $this->_relations)) {
@@ -40,6 +38,10 @@ class RelationalEntity extends \OCP\AppFramework\Db\Entity implements \JsonSeria
 		}
 	}
 
+	/**
+	 * Mark a property as resolvable via resolveRelation()
+	 * @param $property string Name of the property
+	 */
 	public function addResolvable($property) {
 		$this->_resolvedProperties[$property] = null;
 	}
@@ -63,21 +65,43 @@ class RelationalEntity extends \OCP\AppFramework\Db\Entity implements \JsonSeria
 		$properties = get_object_vars($this);
 		$reflection = new \ReflectionClass($this);
 		$json = [];
-		foreach($properties as $property=>$value) {
-			if(substr($property, 0, 1) !== '_' && $reflection->hasProperty($property)) {
+		foreach ($properties as $property => $value) {
+			if (substr($property, 0, 1) !== '_' && $reflection->hasProperty($property)) {
 				$propertyReflection = $reflection->getProperty($property);
-				if(!$propertyReflection->isPrivate()) {
+				if (!$propertyReflection->isPrivate()) {
 					$json[$property] = $this->getter($property);
 				}
 			}
 		}
 		return $json;
-
+	}
+		/*
+	 * Resolve relational data from external methods
+	 *
+	 * example usage:
+	 *
+	 * in Board::__construct()
+	 * 		$this->addResolvable('owner')
+	 *
+	 * in BoardService
+	 * 		$board->resolveRelation('owner', function($owner) use (&$userManager) {
+	 * 			return new \OCA\Deck\Db\User($userManager->get($owner));
+	 * 		});
+	 *
+	 * resolved values can be obtained by calling resolveProperty
+	 * e.g. $board->resolveOwner()
+	 *
+	 * TODO: Maybe move from callable to a custom Resolver class that can be reused and use DI?
+	 *
+	 * @param string $property name of the property
+	 * @param callable $resolver anonymous function to resolve relational
+	 * data defined by $property as unique identifier
+	 * @throws \Exception
+	 */
 	public function resolveRelation($property, $resolver) {
+		$result = null;
 		if($property !== null && $this->$property !== null) {
 			$result = $resolver($this->$property);
-		} else {
-			$result = null;
 		}
 
 		if($result instanceof RelationalObject || $result === null) {
@@ -93,7 +117,7 @@ class RelationalEntity extends \OCP\AppFramework\Db\Entity implements \JsonSeria
 			if($this->_resolvedProperties[$attr] !== null) {
 				return $this->_resolvedProperties[$attr];
 			} else {
-				return $this->getter($attr, $args);
+				return $this->getter($attr);
 			}
 		}
 
@@ -101,9 +125,8 @@ class RelationalEntity extends \OCP\AppFramework\Db\Entity implements \JsonSeria
 		if(strpos($methodName, 'set') === 0 && array_key_exists($attr, $this->_resolvedProperties)) {
 			if(!is_scalar($args[0])) {
 				$args[0] = $args[0]['primaryKey'];
-				parent::setter($attr, $args);
 			}
-			parent::setter($attr, $args);
+			return parent::setter($attr, $args);
 		}
 		return parent::__call($methodName, $args);
 	}

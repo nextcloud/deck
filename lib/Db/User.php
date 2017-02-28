@@ -23,12 +23,11 @@
 
 namespace OCA\Deck\Db;
 
-use OCP\IGroup;
 use OCP\IUser;
 
 class User extends RelationalObject {
 
-	public function __construct(IUser $user = null) {
+	public function __construct(IUser $user) {
 		$primaryKey = $user->getUID();
 		parent::__construct($primaryKey, $user);
 	}

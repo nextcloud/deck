@@ -172,7 +172,7 @@ class BoardServiceTest extends \Test\TestCase {
 		$acl->setPermissionEdit(true);
 		$acl->setPermissionShare(true);
 		$acl->setPermissionManage(true);
-		$acl->resolveRelation('participant', function($value) use (&$user) {
+		$acl->resolveRelation('participant', function($participant) use (&$user) {
 			return new User($user);
 		});
 		$this->aclMapper->expects($this->once())

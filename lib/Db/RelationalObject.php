@@ -21,17 +21,11 @@
  *
  */
 
-/**
- * Created by PhpStorm.
- * User: jus
- * Date: 27.02.17
- * Time: 14:05
- */
-
 namespace OCA\Deck\Db;
 
+class RelationalObject implements \JsonSerializable {
 
-abstract class RelationalObject implements \JsonSerializable {
+	private $primaryKey;
 
 	/**
 	 * RelationalObject constructor.
@@ -51,11 +45,15 @@ abstract class RelationalObject implements \JsonSerializable {
 		);
 	}
 
+	/**
+	 * This method should be overwritten if object doesn't implement \JsonSerializable
+	 */
 	public function getObjectSerialization() {
-		$this->object->jsonSerialize();
+		if($this->object instanceof \JsonSerializable) {
+			$this->object->jsonSerialize();
+		} else {
+			throw new \Exception('jsonSerialize is not implemented on ' . get_class($this));
+		}
 	}
 
-	public function getPrimaryKey() {
-		return $this->getPrimaryKey();
-	}
 }

@@ -24,7 +24,6 @@
 namespace OCA\Deck\Db;
 
 use OCP\IGroup;
-use OCP\IUser;
 
 class Group extends RelationalObject {
 
