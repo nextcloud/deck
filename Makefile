@@ -72,7 +72,6 @@ appstore: clean-build build
 
 test:
 	mkdir -p build/
-	cd js && $(npm) run test
 ifeq (, $(shell which phpunit 2> /dev/null))
 	@echo "No phpunit command available, downloading a copy from the web"
 	mkdir -p $(build_tools_directory)
@@ -83,3 +82,7 @@ else
 	phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
 	phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
 endif
+
+test-js:
+	cd js &&  run test
+
