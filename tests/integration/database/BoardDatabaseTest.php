@@ -58,7 +58,7 @@ class BoardDatabaseTest extends \PHPUnit_Framework_TestCase
         $groupBackend->addToGroup(self::TEST_USER3, 'group2');
         $groupBackend->addToGroup(self::TEST_USER4, 'group3');
         $groupBackend->addToGroup(self::TEST_USER2, self::TEST_GROUP1);
-        \OC_Group::useBackend($groupBackend);
+        \OC::$server->getGroupManager()->addBackend($groupBackend);
     }
     public function setUp() {
         \OC::$server->getUserSession()->login(self::TEST_USER1, self::TEST_USER1);
