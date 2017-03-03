@@ -1,0 +1,151 @@
+pipeline:
+  clone:
+    image: plugins/git
+    depth: 1
+  check-app-compatbility:
+    image: nextcloudci/php5.6:php5.6-3
+    environment:
+      - APP_NAME=deck
+      - CORE_BRANCH=master
+      - DB=sqlite
+    commands:
+      # Pre-setup steps
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server
+      # Code checker
+      - ./occ app:check-code $APP_NAME -c strong-comparison
+      - ./occ app:check-code $APP_NAME -c deprecation
+      - cd apps/$APP_NAME/
+    when:
+      matrix:
+        TESTS: check-app-compatbility
+  signed-off-check:
+    image: nextcloudci/php7.0:php7.0-2
+    environment:
+      - APP_NAME=deck
+      - CORE_BRANCH=master
+      - DB=sqlite
+    commands:
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server
+      - php ./build/signed-off-checker.php
+    when:
+      matrix:
+        TESTS: signed-off-check
+  syntax-php5.6:
+    image: nextcloudci/php5.6:php5.6-3
+    environment:
+      - APP_NAME=deck
+      - CORE_BRANCH=master
+      - DB=sqlite
+    commands:
+      # Pre-setup steps
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server
+      - composer install
+      - ./lib/composer/bin/parallel-lint --exclude lib/composer/jakub-onderka/ --exclude 3rdparty/symfony/polyfill-php70/Resources/stubs/ --exclude 3rdparty/patchwork/utf8/src/Patchwork/Utf8/Bootup/ --exclude 3rdparty/paragonie/random_compat/lib/ --exclude lib/composer/composer/autoload_static.php --exclude 3rdparty/composer/autoload_static.php .
+    when:
+      matrix:
+        TESTS: syntax-php5.6
+  syntax-php7.0:
+    image: nextcloudci/php7.0:php7.0-2
+    environment:
+      - APP_NAME=deck
+      - CORE_BRANCH=master
+      - DB=sqlite
+    commands:
+      # Pre-setup steps
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server
+      - composer install
+      - ./lib/composer/bin/parallel-lint --exclude lib/composer/jakub-onderka/ --exclude 3rdparty/symfony/polyfill-php70/Resources/stubs/ --exclude 3rdparty/patchwork/utf8/src/Patchwork/Utf8/Bootup/ --exclude 3rdparty/paragonie/random_compat/lib/ --exclude lib/composer/composer/autoload_static.php --exclude 3rdparty/composer/autoload_static.php .
+    when:
+      matrix:
+        TESTS: syntax-php7.0
+  php5.6:
+    image: nextcloudci/php5.6:php5.6-3
+    environment:
+      - APP_NAME=deck
+      - CORE_BRANCH=master
+      - DB=sqlite
+    commands:
+      - apt update && apt-get -y install php5-xdebug
+
+      # Pre-setup steps
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server/
+      - ./occ app:enable $APP_NAME
+      - cd apps/$APP_NAME
+
+      - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
+      - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
+
+      # Create coverage report
+      - wget https://codecov.io/bash -O codecov.sh
+      - sh -c "if [ '$DRONE_BUILD_EVENT' = 'pull_request' ]; then bash codecov.sh -B $DRONE_BRANCH -C $DRONE_COMMIT -P $DRONE_PULL_REQUEST -t f6375299-4832-487e-b831-091772ab0384; fi"
+      - sh -c "if [ '$DRONE_BUILD_EVENT' != 'pull_request' ]; then bash codecov.sh -B $DRONE_BRANCH -C $DRONE_COMMIT -t f6375299-4832-487e-b831-091772ab0384; fi"
+    when:
+      matrix:
+        TESTS: php5.6
+  php7.0:
+    image: nextcloudci/php7.0:php7.0-7
+    environment:
+      - APP_NAME=deck
+      - CORE_BRANCH=master
+      - DB=sqlite
+    commands:
+      # Pre-setup steps
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server/
+      - php occ app:enable deck
+      - cd apps/$APP_NAME
+      # Run phpunit tests
+      - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
+      - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
+    when:
+      matrix:
+        TESTS: php7.0
+  php7.1:
+    image: nextcloudci/php7.1:php7.1-11
+    environment:
+      - APP_NAME=deck
+      - CORE_BRANCH=master
+      - DB=sqlite
+    commands:
+      # Pre-setup steps
+      - yum -y install wget
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server/
+      - php occ app:enable deck
+      - cd apps/$APP_NAME
+      - make test 
+    when:
+      matrix:
+        TESTS: php7.1
+  jsbuild:
+    image: mhart/alpine-node:6.8.0
+    commands:
+      - apk add --no-cache git
+      - cd js
+      - npm install --deps
+      - ./node_modules/.bin/bower --allow-root install
+    when:
+      matrix:
+        TESTS: jsbuild
+matrix:
+  include:
+    - TESTS: check-app-compatbility
+    - TESTS: signed-off-check
+    - TESTS: syntax-php5.6
+    - TESTS: syntax-php7.0
+    - TESTS: php5.6
+    - TESTS: php7.0
+    - TESTS: php7.1
+    - TESTS: jsbuild
