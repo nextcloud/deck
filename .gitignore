@@ -2,3 +2,5 @@ js/node_modules/*
 js/vendor/
 build/
 js/public/
+tests/integration/vendor/
+tests/integration/composer.lock

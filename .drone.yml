@@ -129,6 +129,24 @@ pipeline:
     when:
       matrix:
         TESTS: php7.1
+  integration:
+    image: nextcloudci/integration-php7.0:integration-php7.0-3
+    environment:
+      - APP_NAME=deck
+      - CORE_BRANCH=master
+      - DB=sqlite
+    commands:
+      # Pre-setup steps
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server/
+      - php occ app:enable deck
+      - cd apps/$APP_NAME
+      - cd tests/integration
+      - ./run.sh
+    when:
+      matrix:
+        TESTS: integration
   jsbuild:
     image: mhart/alpine-node:6.8.0
     commands:
@@ -149,5 +167,6 @@ matrix:
     - TESTS: php7.0
     - TESTS: php7.1
     - TESTS: jsbuild
+    - TESTS: integration
 
 branches: [ master, stable* ]
