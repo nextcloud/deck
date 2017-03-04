@@ -5,6 +5,11 @@ OCC=${OC_PATH}occ
 SCENARIO_TO_RUN=$1
 HIDE_OC_LOGS=$2
 
+# Nextcloud integration tests composer
+(
+    cd ${OC_PATH}build/integration
+    composer install
+)
 INSTALLED=$($OCC status | grep installed: | cut -d " " -f 5)
 
 if [ "$INSTALLED" == "true" ]; then
@@ -35,10 +40,6 @@ vendor/bin/behat
 RESULT=$?
 
 kill $PHPPID
-
-if [ -z $HIDE_OC_LOGS ]; then
-	tail "${OC_PATH}/data/nextcloud.log"
-fi
 
 echo "runsh: Exit code: $RESULT"
 exit $RESULT

@@ -19,6 +19,11 @@ class FeatureContext implements Context {
 	private $lastInsertIds = array();
 
 	/**
+	 * @BeforeSuite
+	 */
+	public static function addFilesToSkeleton() {
+	}
+	/**
 	 * @When :user requests the deck list
 	 */
 	/**
