@@ -1,0 +1,12 @@
+default:
+  suites:
+    test:
+      paths:
+        - %paths.base%/../features/
+      contexts:
+        - FeatureContext:
+            baseUrl:  http://localhost:8080/index.php/ocs/
+            admin:
+              - admin
+              - admin
+            regular_user_password: 123456
