@@ -71,16 +71,9 @@ class Acl extends RelationalEntity implements \JsonSerializable {
 	}
 
 	public function jsonSerialize() {
-		return [
-			'id' => $this->id,
-			'participant' => $this->participant,
-			'type' => $this->getTypeString(),
-			'boardId' => $this->boardId,
-			'permissionEdit' => $this->getPermissionEdit(),
-			'permissionShare' => $this->getPermissionShare(),
-			'permissionManage' => $this->getPermissionManage(),
-			'owner' => $this->getOwner()
-		];
+		$json = parent::jsonSerialize();
+		$json['type'] = $this->getTypeString();
+		return $json;
 	}
 	
 	public function getTypeString() {

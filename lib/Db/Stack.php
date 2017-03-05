@@ -45,20 +45,10 @@ class Stack extends RelationalEntity implements JsonSerializable {
 	}
 
 	public function jsonSerialize() {
-		if (!empty($this->cards)) {
-			return [
-				'id' => $this->id,
-				'title' => $this->title,
-				'order' => $this->order,
-				'boardId' => $this->boardId,
-				'cards' => $this->cards
-			];
+		$json = parent::jsonSerialize();
+		if (empty($this->cards)) {
+			unset($json['cards']);
 		}
-		return [
-			'id' => $this->id,
-			'title' => $this->title,
-			'order' => $this->order,
-			'boardId' => $this->boardId
-		];
+		return $json;
 	}
 }

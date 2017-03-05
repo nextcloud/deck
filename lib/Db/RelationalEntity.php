@@ -21,17 +21,10 @@
  *  
  */
 
-/**
- * Created by PhpStorm.
- * User: jus
- * Date: 22.06.16
- * Time: 13:32
- */
-
 namespace OCA\Deck\Db;
 
 
-class RelationalEntity extends \OCP\AppFramework\Db\Entity {
+class RelationalEntity extends \OCP\AppFramework\Db\Entity implements \JsonSerializable {
 
 	private $_relations = array();
 
@@ -56,4 +49,21 @@ class RelationalEntity extends \OCP\AppFramework\Db\Entity {
 		}
 	}
 
+	/**
+	 * @return array serialized data
+	 */
+	public function jsonSerialize() {
+		$properties = get_object_vars($this);
+		$reflection = new \ReflectionClass($this);
+		$json = [];
+		foreach($properties as $property=>$value) {
+			if(substr($property, 0, 1) !== '_' && $reflection->hasProperty($property)) {
+				$propertyReflection = $reflection->getProperty($property);
+				if(!$propertyReflection->isPrivate()) {
+					$json[$property] = $this->getter($property);
+				}
+			}
+		}
+		return $json;
+	}
 }
