@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\Db;
 
-class EntityTest extends \PHPUnit_Framework_TestCase {
+class RelationalEntityTest extends \Test\TestCase {
 
 	public function testRelation() {
 		$entity = new RelationalEntity();
@@ -38,6 +38,15 @@ class EntityTest extends \PHPUnit_Framework_TestCase {
 		$entity->foo = null;
 		$entity->setFoo('test');
 		$this->assertEquals(['foo'=>true], $entity->getUpdatedFields());
+	}
+
+	public function testJsonSerialize() {
+		$entity = new RelationalEntity();
+		$entity->setId(123);
+		$json = [
+			'id' => 123,
+		];
+		$this->assertEquals($json, $entity->jsonSerialize());
 	}
 
 }

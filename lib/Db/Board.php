@@ -47,18 +47,11 @@ class Board extends RelationalEntity implements JsonSerializable {
 	}
 
 	public function jsonSerialize() {
-		$result = [
-			'id' => $this->id,
-			'title' => $this->title,
-			'owner' => $this->owner,
-			'color' => $this->color,
-			'labels' => $this->labels,
-			'acl' => $this->acl,
-		];
-		if ($this->shared !== -1) {
-			$result['shared'] = $this->shared;
+		$json = parent::jsonSerialize();
+		if ($this->shared === -1) {
+			unset($json['shared']);
 		}
-		return $result;
+		return $json;
 	}
 
 	public function setLabels($labels) {

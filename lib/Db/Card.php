@@ -50,19 +50,4 @@ class Card extends RelationalEntity implements JsonSerializable {
 		$this->addRelation('labels');
 	}
 
-	public function jsonSerialize() {
-		return [
-			'id' => $this->id,
-			'title' => $this->title,
-			'description' => $this->description,
-			'type' => $this->type,
-			'lastModified' => $this->lastModified,
-			'createdAt' => $this->createdAt,
-			'owner' => $this->owner,
-			'order' => $this->order,
-			'stackId' => $this->stackId,
-			'labels' => $this->labels,
-			'archived' => $this->archived,
-		];
-	}
 }
