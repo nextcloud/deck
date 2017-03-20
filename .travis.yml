@@ -24,7 +24,6 @@ before_install:
 
 before_script:
     - cd apps/deck
-    - make install-deps 
 
 script:
     - make test
