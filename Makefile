@@ -75,7 +75,7 @@ test:
 ifeq (, $(shell which phpunit 2> /dev/null))
 	@echo "No phpunit command available, downloading a copy from the web"
 	mkdir -p $(build_tools_directory)
-	curl -sSL https://phar.phpunit.de/phpunit.phar -o $(build_tools_directory)/phpunit.phar
+	curl -sSL https://phar.phpunit.de/phpunit-5.7.phar -o $(build_tools_directory)/phpunit.phar
 	php $(build_tools_directory)/phpunit.phar -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
 	php $(build_tools_directory)/phpunit.phar -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
 else
