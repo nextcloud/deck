@@ -7,13 +7,13 @@
     <description>Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.
 
 
-- :inbox_tray: Add your tasks to cards and put them in order
-- :page_facing_up: Write down additional notes in markdown
-- :bookmark: Assign labels for even better organization
-- :busts_in_silhouette: Share with your team, friends or family
-- :rocket: Get your project organized
+- 📥 Add your tasks to cards and put them in order
+- 📄 Write down additional notes in markdown
+- 🔖 Assign labels for even better organization
+- 👥 Share with your team, friends or family
+- 🚀 Get your project organized
 
-:boom: This is still alpha software: it may not be stable enough for production!
+💥 This is still alpha software: it may not be stable enough for production!
 
 </description>
     <version>0.1.1</version>
