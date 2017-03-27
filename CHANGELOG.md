@@ -1,3 +1,17 @@
+## 0.1.2
+### Added
+- Add translations
+
+### Fixed
+- Fix issues with Acl checks
+- Always select first color fixes
+- Add active class to appmenu
+- Use server select2 styles
+- Remove debug logging and unused function
+- Fix issue while sorting cards
+- Improve logging of exceptions
+- Fixed SQL statements without prefixes
+
 ## 0.1.1
 ### Fixed
 - Various styling improvements
