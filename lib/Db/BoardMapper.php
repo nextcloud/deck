@@ -24,19 +24,31 @@
 namespace OCA\Deck\Db;
 
 use OCP\IDBConnection;
-
+use OCP\IUserManager;
+use OCP\IGroupManager;
 
 class BoardMapper extends DeckMapper implements IPermissionMapper {
 
 	private $labelMapper;
 	private $aclMapper;
 	private $stackMapper;
+	private $userManager;
+	private $groupManager;
 
-	public function __construct(IDBConnection $db, LabelMapper $labelMapper, AclMapper $aclMapper, StackMapper $stackMapper) {
+	public function __construct(
+		IDBConnection $db,
+		LabelMapper $labelMapper,
+		AclMapper $aclMapper,
+		StackMapper $stackMapper,
+		IUserManager $userManager,
+		IGroupManager $groupManager
+	) {
 		parent::__construct($db, 'deck_boards', '\OCA\Deck\Db\Board');
 		$this->labelMapper = $labelMapper;
 		$this->aclMapper = $aclMapper;
 		$this->stackMapper = $stackMapper;
+		$this->userManager = $userManager;
+		$this->groupManager = $groupManager;
 	}
 
 
@@ -147,6 +159,30 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 
 	public function findBoardId($id) {
 		return $id;
+	}
+
+	public function mapAcl(Acl &$acl) {
+		$userManager = $this->userManager;
+		$groupManager = $this->groupManager;
+		$acl->resolveRelation('participant', function($participant) use (&$acl, &$userManager, &$groupManager) {
+			if($acl->getType() === Acl::PERMISSION_TYPE_USER) {
+				return new User($userManager->get($acl->getParticipant($participant)));
+			}
+			if($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
+				return new Group($groupManager->get($acl->getParticipant($participant)));
+			}
+			throw new \Exception('Unknown permission type for mapping Acl');
+		});
+	}
+
+	/**
+	 * @param Board $board
+	 */
+	public function mapOwner(Board &$board) {
+		$userManager = $this->userManager;
+		$board->resolveRelation('owner', function($owner) use (&$userManager) {
+			return new User($userManager->get($owner));
+		});
 	}
 
 

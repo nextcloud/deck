@@ -42,7 +42,8 @@ class CardService {
 
 	public function find($cardId) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
-		return $this->cardMapper->find($cardId);
+		$card = $this->cardMapper->find($cardId);
+		return $card;
 	}
 
 	/**

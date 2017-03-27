@@ -25,15 +25,17 @@ namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\Entity;
 use OCP\IDBConnection;
+use OCP\IUserManager;
 
 
 class CardMapper extends DeckMapper implements IPermissionMapper {
 
 	private $labelMapper;
 
-	public function __construct(IDBConnection $db, LabelMapper $labelMapper) {
+	public function __construct(IDBConnection $db, LabelMapper $labelMapper, IUserManager $userManager) {
 		parent::__construct($db, 'deck_cards', '\OCA\Deck\Db\Card');
 		$this->labelMapper = $labelMapper;
+		$this->userManager = $userManager;
 	}
 
 	public function insert(Entity $entity) {
@@ -57,6 +59,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		$card = $this->findEntity($sql, [$id]);
 		$labels = $this->labelMapper->findAssignedLabelsForCard($card->id);
 		$card->setLabels($labels);
+		$this->mapOwner($card);
 		return $card;
 	}
 
@@ -123,6 +126,13 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		$stmt = $this->execute($sql, [$cardId]);
 		$row = $stmt->fetch();
 		return $row['id'];
+	}
+
+	public function mapOwner(Card &$card) {
+		$userManager = $this->userManager;
+		$card->resolveRelation('owner', function($owner) use (&$userManager) {
+			return new User($userManager->get($owner));
+		});
 	}
 
 

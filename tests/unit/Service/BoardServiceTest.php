@@ -47,10 +47,6 @@ class BoardServiceTest extends \Test\TestCase {
 	private $aclMapper;
 	/** @var BoardMapper */
 	private $boardMapper;
-	/** @var IUserManager */
-	private $userManager;
-	/** @var IGroupManager */
-	private $groupManager;
 	/** @var PermissionService */
 	private $permissionService;
 
@@ -62,22 +58,17 @@ class BoardServiceTest extends \Test\TestCase {
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->labelMapper = $this->createMock(LabelMapper::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
-		$this->userManager = $this->createMock(IUserManager::class);
-		$this->groupManager = $this->createMock(IGroupManager::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
 			$this->l10n,
 			$this->labelMapper,
 			$this->aclMapper,
-			$this->permissionService,
-			$this->userManager,
-			$this->groupManager
+			$this->permissionService
 		);
 
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')->willReturn('admin');
-		$this->userManager->expects($this->any())->method('get')->with('admin')->willReturn($user);
 	}
 
 	public function testFindAll() {
@@ -173,7 +164,7 @@ class BoardServiceTest extends \Test\TestCase {
 		$acl->setPermissionShare(true);
 		$acl->setPermissionManage(true);
 		$acl->resolveRelation('participant', function($participant) use (&$user) {
-			return new User($user);
+			return null;
 		});
 		$this->aclMapper->expects($this->once())
 			->method('insert')

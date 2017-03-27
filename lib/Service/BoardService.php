@@ -25,18 +25,11 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
-use OCA\Deck\Db\Group;
 use OCA\Deck\Db\Label;
-
-
-use OCA\Deck\Db\User;
-use OCP\IGroupManager;
 use OCP\IL10N;
-
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
-use OCP\IUserManager;
 
 
 class BoardService {
@@ -47,14 +40,12 @@ class BoardService {
 	private $l10n;
 	private $permissionService;
 
-	public function __construct(BoardMapper $boardMapper, IL10N $l10n, LabelMapper $labelMapper, AclMapper $aclMapper, PermissionService $permissionService, IUserManager $userManager, IGroupManager $groupManager) {
+	public function __construct(BoardMapper $boardMapper, IL10N $l10n, LabelMapper $labelMapper, AclMapper $aclMapper, PermissionService $permissionService) {
 		$this->boardMapper = $boardMapper;
 		$this->labelMapper = $labelMapper;
 		$this->aclMapper = $aclMapper;
 		$this->l10n = $l10n;
 		$this->permissionService = $permissionService;
-		$this->userManager = $userManager;
-		$this->groupManager = $groupManager;
 	}
 
 	public function findAll($userInfo) {
@@ -64,10 +55,10 @@ class BoardService {
 		$result = [];
 		foreach($complete as &$item) {
 			if(!array_key_exists($item->getId(), $result)) {
-				$item = $this->mapOwner($item);
+				$this->boardMapper->mapOwner($item);
 				if($item->getAcl() !== null) {
 					foreach ($item->getAcl() as &$acl) {
-						$acl = $this->mapAcl($acl);
+						$this->boardMapper->mapAcl($acl);
 					}
 				}
 				$result[$item->getId()] = $item;
@@ -78,37 +69,18 @@ class BoardService {
 
 	public function find($boardId) {
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
+		/** @var Board $board */
 		$board = $this->boardMapper->find($boardId, true, true);
-		$board = $this->mapOwner($board);
+		$this->boardMapper->mapOwner($board);
 		foreach ($board->getAcl() as &$acl) {
 			if($acl !== null) {
-				$this->mapAcl($acl);
+				$this->boardMapper->mapAcl($acl);
 			}
 		}
 		return $board;
 	}
 
-	private function mapAcl(Acl &$acl) {
-		$userManager = $this->userManager;
-		$groupManager = $this->groupManager;
-		$acl->resolveRelation('participant', function($participant) use (&$acl, &$userManager, &$groupManager) {
-			if($acl->getType() === Acl::PERMISSION_TYPE_USER) {
-				return new User($userManager->get($acl->getParticipant($participant)));
-			}
-			if($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
-				return new Group($groupManager->get($acl->getParticipant($participant)));
-			}
-		});
-		return $acl;
-	}
 
-	private function mapOwner(Board $board) {
-		$userManager = $this->userManager;
-		$board->resolveRelation('owner', function($owner) use (&$userManager) {
-			return new User($userManager->get($owner));
-		});
-		return $board;
-	}
 
 	public function create($title, $userId, $color) {
 		$board = new Board();
@@ -133,6 +105,7 @@ class BoardService {
 			$labels[] = $this->labelMapper->insert($label);
 		}
 		$new_board->setLabels($labels);
+		$this->boardMapper->mapOwner($new_board);
 		return $new_board;
 
 	}
@@ -147,6 +120,7 @@ class BoardService {
 		$board = $this->find($id);
 		$board->setTitle($title);
 		$board->setColor($color);
+		$this->boardMapper->mapOwner($board);
 		return $this->boardMapper->update($board);
 	}
 
@@ -160,24 +134,27 @@ class BoardService {
 		$acl->setPermissionEdit($edit);
 		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
-		$this->mapAcl($acl);
-		return $this->aclMapper->insert($acl);
+		$newAcl = $this->aclMapper->insert($acl);
+		$this->boardMapper->mapAcl($newAcl);
+		return $newAcl;
 	}
 
 	public function updateAcl($id, $edit, $share, $manage) {
 		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_SHARE);
+		/** @var Acl $acl */
 		$acl = $this->aclMapper->find($id);
 		$acl->setPermissionEdit($edit);
 		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
-		$this->mapAcl($acl);
+		$this->boardMapper->mapAcl($acl);
 		return $this->aclMapper->update($acl);
 	}
 
 	public function deleteAcl($id) {
 		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_SHARE);
+		/** @var Acl $acl */
 		$acl = $this->aclMapper->find($id);
-		$this->mapAcl($acl);
+		$this->boardMapper->mapAcl($acl);
 		return $this->aclMapper->delete($acl);
 	}
 

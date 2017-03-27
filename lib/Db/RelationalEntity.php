@@ -23,7 +23,9 @@
 
 namespace OCA\Deck\Db;
 
-class RelationalEntity extends \OCP\AppFramework\Db\Entity implements \JsonSerializable {
+use OCP\AppFramework\Db\Entity;
+
+class RelationalEntity extends Entity implements \JsonSerializable {
 
 	private $_relations = array();
 	private $_resolvedProperties = [];
@@ -73,9 +75,15 @@ class RelationalEntity extends \OCP\AppFramework\Db\Entity implements \JsonSeria
 				}
 			}
 		}
+		foreach ($this->_resolvedProperties as $property => $value) {
+			if($value !== null) {
+				$json[$property] = $value;
+			}
+		}
 		return $json;
 	}
-		/*
+
+	/*
 	 * Resolve relational data from external methods
 	 *
 	 * example usage:
@@ -83,15 +91,13 @@ class RelationalEntity extends \OCP\AppFramework\Db\Entity implements \JsonSeria
 	 * in Board::__construct()
 	 * 		$this->addResolvable('owner')
 	 *
-	 * in BoardService
+	 * in BoardMapper
 	 * 		$board->resolveRelation('owner', function($owner) use (&$userManager) {
 	 * 			return new \OCA\Deck\Db\User($userManager->get($owner));
 	 * 		});
 	 *
 	 * resolved values can be obtained by calling resolveProperty
 	 * e.g. $board->resolveOwner()
-	 *
-	 * TODO: Maybe move from callable to a custom Resolver class that can be reused and use DI?
 	 *
 	 * @param string $property name of the property
 	 * @param callable $resolver anonymous function to resolve relational
@@ -126,7 +132,8 @@ class RelationalEntity extends \OCP\AppFramework\Db\Entity implements \JsonSeria
 			if(!is_scalar($args[0])) {
 				$args[0] = $args[0]['primaryKey'];
 			}
-			return parent::setter($attr, $args);
+			parent::setter($attr, $args);
+			return null;
 		}
 		return parent::__call($methodName, $args);
 	}

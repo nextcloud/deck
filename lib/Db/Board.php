@@ -52,6 +52,7 @@ class Board extends RelationalEntity implements JsonSerializable {
 		if ($this->shared === -1) {
 			unset($json['shared']);
 		}
+		$json['owner'] = $this->resolveOwner();
 		return $json;
 	}
 
