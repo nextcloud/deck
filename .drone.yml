@@ -149,3 +149,5 @@ matrix:
     - TESTS: php7.0
     - TESTS: php7.1
     - TESTS: jsbuild
+
+branches: [ master, stable* ]
