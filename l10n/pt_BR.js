@@ -15,7 +15,7 @@ OC.L10N.register(
     "Enter a card title" : "Digite um título do cartão",
     "Sharing" : "Compartilhar",
     "Labels" : "Etiquetas",
-    "Select users or groups to share with" : "Selecionar usuários ou grupos para compartilhar com",
+    "Select users or groups to share with" : "Selecionar usuários ou grupos para compartilhar",
     "No matching user or group found." : "Uusuário ou grupo não encontrado.",
     "Share" : "Compartilhar",
     "Edit" : "Editar",
