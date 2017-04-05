@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Deck" : "Deck",
     "Finished" : "Terminado",
     "To review" : "Para revisar",
     "Action needed" : "Acción requerida",
@@ -19,6 +20,7 @@ OC.L10N.register(
     "Share" : "Compartir",
     "Edit" : "Editar",
     "Manage" : "Administrar",
+    "Discard share" : "Descartar elemento compartido",
     "Create a new label" : "Crear nueva etiqueta",
     "Board title" : "Título del tablero",
     "Members" : "Miembros",
@@ -28,6 +30,7 @@ OC.L10N.register(
     "Created:" : "Creado:",
     "by" : "por",
     "Saved" : "Guardado",
+    "Add a card description ..." : "Agregar una descripción de la tarjeta ...",
     "Attachments" : "Adjuntos",
     "Comments" : "Comentarios",
     "History" : "Histórico",
@@ -35,6 +38,7 @@ OC.L10N.register(
     "Shared with you" : "Compartido con usted",
     "edit" : "editar",
     "delete" : "borrar",
+    "remove share" : "eliminar elemento compartido",
     "Create a new board" : "Crear nuevo tablero"
 },
 "nplurals=2; plural=(n != 1);");
