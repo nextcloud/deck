@@ -2,7 +2,9 @@ OC.L10N.register(
     "deck",
     {
     "Finished" : "Acabat",
+    "To review" : "Per revisar",
     "Action needed" : "Acció necessaria",
+    "Later" : "Més tard",
     "Archive" : "Arxiu",
     "Delete" : "Esborra",
     "Sharing" : "Compartir",
