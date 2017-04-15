@@ -12,7 +12,7 @@ OC.L10N.register(
     "Archive" : "Arquivar",
     "Unarchive" : "Desarquivar",
     "Delete" : "Excluir",
-    "Enter a card title" : "Digite um título do cartão",
+    "Enter a card title" : "Digite um título de cartão",
     "Sharing" : "Compartilhar",
     "Labels" : "Etiquetas",
     "Select users or groups to share with" : "Selecionar usuários ou grupos para compartilhar",
@@ -30,7 +30,7 @@ OC.L10N.register(
     "Created:" : "Criado:",
     "by" : "por",
     "Saved" : "Salvo",
-    "Add a card description ..." : "Adicionar uma descrição de cartão",
+    "Add a card description ..." : "Adicionar uma descrição de cartão ...",
     "Attachments" : "Anexos",
     "Comments" : "Comentários",
     "History" : "Histórico",
@@ -38,7 +38,7 @@ OC.L10N.register(
     "Shared with you" : "Compartilhado com você",
     "edit" : "editar",
     "delete" : "excluir",
-    "remove share" : "remover compartilhamento",
+    "remove share" : "excluir compartilhamento",
     "Create a new board" : "Criar um novo quadro"
 },
 "nplurals=2; plural=(n > 1);");
