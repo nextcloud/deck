@@ -104,23 +104,23 @@ app.factory('BoardService', function(ApiService, $http, $q){
 		}
 	};
 
-    BoardService.prototype.addAcl = function(acl) {
-        var board = this.getCurrent();
-        var deferred = $q.defer();
-        var self = this;
-        var _acl = acl;
-        $http.post(this.baseUrl + '/' + acl.boardId + '/acl', _acl).then(function (response) {
-            if(!board.acl || board.acl.length === 0) {
-                board.acl = {};
-            }
-            board.acl[response.data.id] = response.data;
-            deferred.resolve(response.data);
-        }, function (error) {
-            deferred.reject('Error creating ACL ' + _acl);
-        });
-        acl = null;
-        return deferred.promise;
-    };
+	BoardService.prototype.addAcl = function (acl) {
+		var board = this.getCurrent();
+		var deferred = $q.defer();
+		var self = this;
+		var _acl = acl;
+		$http.post(this.baseUrl + '/' + acl.boardId + '/acl', _acl).then(function (response) {
+			if (!board.acl || board.acl.length === 0) {
+				board.acl = {};
+			}
+			board.acl[response.data.id] = response.data;
+			deferred.resolve(response.data);
+		}, function (error) {
+			deferred.reject('Error creating ACL ' + _acl);
+		});
+		acl = null;
+		return deferred.promise;
+	};
 
     BoardService.prototype.deleteAcl = function(acl) {
         var board = this.getCurrent();
