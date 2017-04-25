@@ -2,6 +2,7 @@
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
+ * @author Artem Anufrij <artem.anufrij@live.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -134,7 +135,6 @@ button:hover {
 	position: relative;
 	color: #888;
 	margin: 8px;
-
 }
 
 #board-actions .filter .filter-button {
@@ -176,7 +176,6 @@ button:hover {
 .board-actions button {
 	border: none;
 	background-color: transparent;
-	color: #fff;
 }
 
 .board-action-button {
@@ -184,6 +183,24 @@ button:hover {
 	font-weight: 100;
 	border: none;
 	margin-left: 10px;
+}
+
+#stack-add {
+	float: right;
+	margin: 8px;
+	background-color: #ffffff;
+	border: 1px solid #bbb;
+	border-radius: 4px;
+}
+
+#stack-add input {
+	padding: 4px 5px;
+	margin: 0px;
+	border: 0px none transparent;
+}
+
+#stack-add button {
+	padding: 3px;
 }
 
 .stack {
