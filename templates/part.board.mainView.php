@@ -1,3 +1,25 @@
+<!--
+ @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
+
+ @author 	Julius Härtl <jus@bitgrid.net>
+ 			Artem Anufrij <artem.anufrij@live.de>
+
+ @license GNU AGPL version 3 or any later version
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Affero General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
 <div id="board-status" ng-if="statusservice.active">
 	<div id="emptycontent">
 		<div class="icon-{{ statusservice.icon }}"></div>
@@ -9,12 +31,23 @@
 	<h1>
 		{{ boardservice.getCurrent().title }}
 	</h1>
-  <div id="board-actions">
-    <div class="board-action-button" ng-if="filter!='archive'"><a ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
-    <div class="board-action-button" ng-if="filter=='archive'"><a ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
-    <div class="board-action-button"><a ui-sref="board.detail({ id: id })" title="<?php p($l->t('Board details')); ?>"><i class="icon icon-details{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a>
+  	<div id="board-actions">
+		<div class="board-action-button" ng-if="filter!='archive'"><a ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
+		<div class="board-action-button" ng-if="filter=='archive'"><a ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
+		<div class="board-action-button"><a ui-sref="board.detail({ id: id })" title="<?php p($l->t('Board details')); ?>"><i class="icon icon-details{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a>
     </div>
-  </div>
+</div>
+
+<div id="stack-add" ng-if="boardservice.canEdit() && checkCanEdit()">
+	<form class="ng-pristine ng-valid" ng-submit="createStack()">
+		<input type="text" placeholder="Add a new stack"
+				ng-focus="status.addStack=true"
+				ng-blur="status.addStack=false"
+				ng-model="newStack.title" required/>
+		<button class="icon icon-add" style="opacity: {{status.addStack ? 1: 0.5}};"
+				type="submit"></button>
+	</form>
+	</div>
 </div>
 <div id="board" class="scroll-container">
 
@@ -111,18 +144,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="stack" style="display: inline-block;" ng-if="boardservice.canEdit() && checkCanEdit()">
-			<form class="ng-pristine ng-valid" ng-submit="createStack()">
-				<h2>
-					<input type="text" placeholder="Add a new stack"
-						   ng-focus="status.addStack=true"
-						   ng-blur="status.addStack=false"
-						   ng-model="newStack.title" required/>
-					<button class="icon icon-add" ng-show="status.addStack"
-							type="submit"></button>
-				</h2>
-			</form>
-		</div>
+		
 	</div>
 
 </div>
