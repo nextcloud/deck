@@ -1,8 +1,8 @@
 /*
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
- * @author 	Julius Härtl <jus@bitgrid.net>
- * 			Artem Anufrij <artem.anufrij@live.de>
+ * @author Julius Härtl <jus@bitgrid.net>
+ * @author Artem Anufrij <artem.anufrij@live.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -186,7 +186,7 @@ button:hover {
 }
 
 #stack-add {
-	float: right; 
+	float: right;
 	margin: 8px;
 	background-color: #ffffff;
 	border: 1px solid #bbb;
