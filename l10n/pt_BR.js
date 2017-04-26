@@ -30,7 +30,7 @@ OC.L10N.register(
     "Created:" : "Criado:",
     "by" : "por",
     "Saved" : "Salvo",
-    "Add a card description ..." : "Adicionar uma descrição de cartão ...",
+    "Add a card description ..." : "Adicionar uma descrição de cartão...",
     "Attachments" : "Anexos",
     "Comments" : "Comentários",
     "History" : "Histórico",
