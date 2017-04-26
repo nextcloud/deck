@@ -25,9 +25,6 @@ return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 
-		// share
-		['name' => 'share#searchUser', 'url' => '/share/search/{search}', 'verb' => 'GET'],
-
 		// boards
 		['name' => 'board#index', 'url' => '/boards', 'verb' => 'GET'],
 		['name' => 'board#create', 'url' => '/boards', 'verb' => 'POST'],
