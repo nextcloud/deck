@@ -197,10 +197,13 @@ button:hover {
 	padding: 4px 5px;
 	margin: 0px;
 	border: 0px none transparent;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 #stack-add button {
-	padding: 3px;
+	display: table-cell;
+    vertical-align: middle;
 }
 
 .stack {
