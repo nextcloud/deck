@@ -130,13 +130,13 @@ class BoardController extends Controller {
 	 * @param $boardId
 	 * @param $type
 	 * @param $participant
-	 * @param $edit
-	 * @param $share
-	 * @param $manage
+	 * @param $permissionEdit
+	 * @param $permissionShare
+	 * @param $permissionManage
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function addAcl($boardId, $type, $participant, $edit, $share, $manage) {
-		return $this->boardService->addAcl($boardId, $type, $participant, $edit, $share, $manage);
+	public function addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage) {
+		return $this->boardService->addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage);
 	}
 
 	/**

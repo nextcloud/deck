@@ -26,32 +26,82 @@ app.factory('BoardService', function(ApiService, $http, $q){
     };
     BoardService.prototype = angular.copy(ApiService.prototype);
 
-    BoardService.prototype.searchUsers = function(search) {
-        var url = OC.generateUrl('/apps/deck/share/search/'+search);
-        var deferred = $q.defer();
-        var self = this;
-        $http.get(url).then(function (response) {
+	BoardService.prototype.searchUsers = function (search) {
+		var deferred = $q.defer();
+		var self = this;
+		var searchData = {
+			format: 'json',
+			perPage: 4,
+			itemType: [0, 1]
+		};
+		if (search !== "") {
+			searchData.search = search;
+		}
+		$http({
+			method: 'GET',
+			url: OC.linkToOCS('apps/files_sharing/api/v1') + 'sharees',
+			params: searchData
+		})
+			.then(function (result) {
+				var response = result.data;
+				if (response.ocs.meta.statuscode !== 100) {
+					deferred.reject('Error while searching for sharees');
+					return;
+				}
+				self.sharees = [];
 
-            self.sharees = [];
-            // filter out everyone who is already in the share list
-            angular.forEach(response.data, function(item) {
-                var exists = false;
-                angular.forEach(self.getCurrent().acl, function(acl) {
-                    if (acl.participant === item.participant) {
-                        exists = true;
-                    }
-                });
-                if(!exists) {
-                    self.sharees.push(item);
-                }
-            });
+				var users = response.ocs.data.exact.users.concat(response.ocs.data.users);
+				var groups = response.ocs.data.exact.groups.concat(response.ocs.data.groups);
 
-            deferred.resolve(response.data);
-        }, function (error) {
-            deferred.reject('Error while update ' + self.endpoint);
-        });
-        return deferred.promise;
-    };
+				// filter out everyone who is already in the share list
+				angular.forEach(users, function (item) {
+					var exists = false;
+					angular.forEach(self.getCurrent().acl, function (acl) {
+						if (acl.participant.primaryKey === item.value.shareWith || OC.getCurrentUser() === item.value.shareWith) {
+							exists = true;
+						}
+					});
+					if (!exists) {
+						self.sharees.push({
+							boardId: null,
+							id: null,
+							owner: false,
+							participant: item.value.shareWith,
+							permissionEdit: true,
+							permissionManage: true,
+							permissionShare: true,
+							type: 'user'
+						});
+					}
+				});
+				angular.forEach(groups, function (item) {
+					var exists = false;
+					angular.forEach(self.getCurrent().acl, function (acl) {
+						if (acl.participant.primaryKey === item.value.shareWith) {
+							exists = true;
+						}
+					});
+					if (!exists) {
+						self.sharees.push({
+							boardId: null,
+							id: null,
+							owner: false,
+							participant: item.value.shareWith,
+							permissionEdit: true,
+							permissionManage: true,
+							permissionShare: true,
+							type: 'group'
+						});
+					}
+				});
+
+				deferred.resolve(self.sharees);
+			}, function () {
+				deferred.reject('Error while searching for sharees');
+			});
+
+		return deferred.promise;
+	};
 
     BoardService.prototype.addAcl = function(acl) {
         var board = this.getCurrent();
