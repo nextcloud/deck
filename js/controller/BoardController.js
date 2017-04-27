@@ -119,12 +119,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		$scope.statusservice.setError('Error occured', error);
 	});
 
-	BoardService.searchUsers('%25');
-
 	$scope.searchForUser = function (search) {
-		if (search == "") {
-			search = "%25";
-		}
 		BoardService.searchUsers(search);
 	};
 
