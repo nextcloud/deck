@@ -9,12 +9,23 @@
 	<h1>
 		{{ boardservice.getCurrent().title }}
 	</h1>
-  <div id="board-actions">
-    <div class="board-action-button" ng-if="filter!='archive'"><a ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
-    <div class="board-action-button" ng-if="filter=='archive'"><a ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
-    <div class="board-action-button"><a ui-sref="board.detail({ id: id })" title="<?php p($l->t('Board details')); ?>"><i class="icon icon-details{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a>
+  	<div id="board-actions">
+		<div class="board-action-button" ng-if="filter!='archive'"><a ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
+		<div class="board-action-button" ng-if="filter=='archive'"><a ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>"><i class="icon icon-archive{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a></div>
+		<div class="board-action-button"><a ui-sref="board.detail({ id: id })" title="<?php p($l->t('Board details')); ?>"><i class="icon icon-details{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i></a>
     </div>
-  </div>
+</div>
+
+<div id="stack-add" ng-if="boardservice.canEdit() && checkCanEdit()">
+	<form class="ng-pristine ng-valid" ng-submit="createStack()">
+		<input type="text" placeholder="Add a new stack"
+				ng-focus="status.addStack=true"
+				ng-blur="status.addStack=false"
+				ng-model="newStack.title" required/>
+		<button class="icon icon-add" style="opacity: {{status.addStack ? 1: 0.5}};"
+				type="submit"></button>
+	</form>
+	</div>
 </div>
 <div id="board" class="scroll-container">
 
@@ -111,18 +122,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="stack" style="display: inline-block;" ng-if="boardservice.canEdit() && checkCanEdit()">
-			<form class="ng-pristine ng-valid" ng-submit="createStack()">
-				<h2>
-					<input type="text" placeholder="Add a new stack"
-						   ng-focus="status.addStack=true"
-						   ng-blur="status.addStack=false"
-						   ng-model="newStack.title" required/>
-					<button class="icon icon-add" ng-show="status.addStack"
-							type="submit"></button>
-				</h2>
-			</form>
-		</div>
+		
 	</div>
 
 </div>
