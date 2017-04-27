@@ -19,7 +19,7 @@
                 <name>title</name>
                 <type>text</type>
                 <notnull>true</notnull>
-                <length>64</length>
+                <length>100</length>
             </field>
             <field>
                 <name>owner</name>
@@ -55,7 +55,7 @@
                 <name>title</name>
                 <type>text</type>
                 <notnull>true</notnull>
-                <length>64</length>
+                <length>100</length>
             </field>
             <field>
                 <name>board_id</name>
@@ -97,14 +97,13 @@
             <field>
                 <name>title</name>
                 <type>text</type>
+                <length>100</length>
                 <notnull>true</notnull>
-                <length>64</length>
             </field>
             <field>
                 <name>description</name>
-                <type>text</type>
+                <type>clob</type>
                 <notnull>false</notnull>
-                <length>4096</length>
             </field>
             <field>
                 <name>stack_id</name>
@@ -187,7 +186,7 @@
                 <name>title</name>
                 <type>text</type>
                 <notnull>true</notnull>
-                <length>64</length>
+                <length>100</length>
             </field>
             <field>
                 <name>card_id</name>
@@ -239,7 +238,7 @@
                 <name>title</name>
                 <type>text</type>
                 <notnull>false</notnull>
-                <length>64</length>
+                <length>100</length>
             </field>
             <field>
                 <name>color</name>
