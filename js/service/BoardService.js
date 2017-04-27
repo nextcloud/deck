@@ -58,11 +58,11 @@ app.factory('BoardService', function(ApiService, $http, $q){
 					var acl = self.generateAcl('user', item);
 					var exists = false;
 					angular.forEach(self.getCurrent().acl, function (acl) {
-						if (acl.participant.primaryKey === item.value.shareWith || OC.getCurrentUser() === item.value.shareWith) {
+						if (acl.participant.primaryKey === item.value.shareWith) {
 							exists = true;
 						}
 					});
-					if (!exists) {
+					if (!exists && OC.getCurrentUser().uid !== item.value.shareWith) {
 						self.sharees.push(acl);
 					}
 				});
@@ -156,7 +156,6 @@ app.factory('BoardService', function(ApiService, $http, $q){
         var deferred = $q.defer();
         $http.get(this.baseUrl + '/' + board.id + '/permissions').then(function (response) {
             board.permissions = response.data;
-            console.log(board.permissions);
             deferred.resolve(response.data);
         }, function (error) {
             deferred.reject('Error fetching board permissions ' + board);
