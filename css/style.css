@@ -197,8 +197,9 @@ button:hover {
 	padding: 4px 5px;
 	margin: 0px;
 	border: 0px none transparent;
-    display: table-cell;
-    vertical-align: middle;
+	display: table-cell;
+	vertical-align: middle;
+	min-height: initial;
 }
 
 #stack-add button {
