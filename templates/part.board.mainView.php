@@ -60,6 +60,7 @@
 					ng-class="{'archived': c.archived, 'has-labels': c.labels.length>0 }">
 					<div data-as-sortable-item-handle>
 						<div class="card-upper">
+							<i class="icon icon-description-marker" ng-if="c.description" title="{{ c.description }}"></i>
 							<h3>{{ c.title }}</h3>
 							<ul class="labels">
 								<li ng-repeat="label in c.labels"
