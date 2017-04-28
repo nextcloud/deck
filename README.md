@@ -13,7 +13,7 @@ Deck is a kanban style organization tool aimed at personal planning and project 
 
 ![Deck - Manage cards on your board](https://bitgrid.net/~jus/deck_1.png)
 
-:boom: This is still alpha software: it may not be stable enough for production 
+:boom: This is still alpha software: it may not be stable enough for production
 
 ### Planned features
 
@@ -31,7 +31,7 @@ This app is supposed to work on Nextcloud version 11 or later.
 
 You can download and install the latest release from the [Nextcloud app store](https://apps.nextcloud.com/apps/deck)
 
-### Install from git 
+### Install from git
 
 If you want to run the latest development version from git source, you need to clone the repo to your apps folder:
 
@@ -59,9 +59,9 @@ Make sure you have installed the dependencies with ```make install-deps```.
 You can use the provided Makefile to run all tests by using:
 
     make test
-    
-    
-    
+
+
+
 ## Contribution Guidelines
 
 Please read the [Code of Conduct](https://nextcloud.com/community/code-of-conduct/). This document offers some guidance to ensure Nextcloud participants can cooperate effectively in a positive and inspiring atmosphere, and to explain how together we can strengthen and support each other.
@@ -73,7 +73,7 @@ For more information please review the [guidelines for contributing](https://git
 All contributions to this repository are considered to be licensed under
 the GNU AGPLv3 or any later version.
 
-Contributors to the Spreed app retain their copyright. Therefore we recommend
+Contributors to the Deck app retain their copyright. Therefore we recommend
 to add following line to the header of a file, if you changed it substantially:
 
 ```
