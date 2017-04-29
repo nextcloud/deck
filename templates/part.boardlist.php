@@ -17,11 +17,8 @@
 			<td><a href="#/board/{{b.id}}">{{ b.title }}</a></td>
 			<td>
 				<div id="assigned-users">
-					<div class="avatardiv" avatar
-						 displayname="{{ b.owner }}"></div>
-					<div class="avatardiv" avatar
-						 displayname="{{ acl.participant }}"
-						 ng-repeat="acl in b.acl | limitTo: 7"></div>
+					<div class="avatardiv" avatar displayname="{{ b.owner.uid }}" title="{{ b.owner.displayname }}"></div>
+					<div class="avatardiv" avatar displayname="{{ acl.participant.uid }}" title="{{ acl.participant.uid }}" ng-repeat="acl in b.acl | limitTo: 7"></div>
 				</div>
 			</td>
 		</tr>

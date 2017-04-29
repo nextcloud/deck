@@ -23,6 +23,8 @@
 
 namespace OCA\Deck\Db;
 
+use OCP\IGroupManager;
+use OCP\IUserManager;
 use Test\AppFramework\Db\MapperTestUtility;
 
 /**
@@ -33,6 +35,8 @@ class AclMapperTest extends MapperTestUtility  {
     private $dbConnection;
 	private $aclMapper;
 	private $boardMapper;
+	private $userManager;
+	private $groupManager;
 
 	// Data
 	private $acls;
@@ -43,11 +47,16 @@ class AclMapperTest extends MapperTestUtility  {
 
 		$this->dbConnection = \OC::$server->getDatabaseConnection();
         $this->aclMapper = new AclMapper($this->dbConnection);
+        $this->userManager = $this->createMock(IUserManager::class);
+        $this->groupManager = $this->createMock(IGroupManager::class);
         $this->boardMapper = new BoardMapper(
             $this->dbConnection,
             \OC::$server->query(LabelMapper::class),
             $this->aclMapper,
-            \OC::$server->query(StackMapper::class));
+            \OC::$server->query(StackMapper::class),
+			$this->userManager,
+			$this->groupManager
+		);
 
         $this->boards = [
             $this->boardMapper->insert($this->getBoard('MyBoard 1', 'user1')),

@@ -29,34 +29,35 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
+use OCA\Deck\Db\User;
 use OCP\IGroupManager;
 use OCP\ILogger;
+use OCP\IUser;
+use OCP\IUserManager;
 
-class BoardServiceTest extends \PHPUnit_Framework_TestCase {
+class BoardServiceTest extends \Test\TestCase {
 
+	/** @var BoardService */
 	private $service;
-	private $logger;
+	/** @var L10N */
 	private $l10n;
+	/** @var LabelMapper */
 	private $labelMapper;
+	/** @var AclMapper */
 	private $aclMapper;
+	/** @var BoardMapper */
 	private $boardMapper;
-	private $groupManager;
+	/** @var PermissionService */
 	private $permissionService;
 
 	private $userId = 'admin';
 
 	public function setUp() {
-		$this->l10n = $this->getMockBuilder(L10N::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$this->aclMapper = $this->getMockBuilder(AclMapper::class)
-			->disableOriginalConstructor()->getMock();
-		$this->boardMapper = $this->getMockBuilder(BoardMapper::class)
-			->disableOriginalConstructor()->getMock();
-		$this->labelMapper = $this->getMockBuilder(LabelMapper::class)
-			->disableOriginalConstructor()->getMock();
-		$this->permissionService = $this->getMockBuilder(PermissionService::class)
-			->disableOriginalConstructor()->getMock();
+		$this->l10n = $this->createMock(L10N::class);
+		$this->aclMapper = $this->createMock(AclMapper::class);
+		$this->boardMapper = $this->createMock(BoardMapper::class);
+		$this->labelMapper = $this->createMock(LabelMapper::class);
+		$this->permissionService = $this->createMock(PermissionService::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -65,32 +66,43 @@ class BoardServiceTest extends \PHPUnit_Framework_TestCase {
 			$this->aclMapper,
 			$this->permissionService
 		);
+
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('admin');
 	}
 
 	public function testFindAll() {
+		$b1 = new Board();
+		$b1->setId(1);
+		$b2 = new Board();
+		$b2->setId(2);
+		$b3 = new Board();
+		$b3->setId(3);
 		$this->boardMapper->expects($this->once())
 			->method('findAllByUser')
 			->with('admin')
-			->willReturn([1,2,3,6,7]);
+			->willReturn([$b1, $b2]);
 		$this->boardMapper->expects($this->once())
 			->method('findAllByGroups')
 			->with('admin', ['a', 'b', 'c'])
-			->willReturn([4,5,6,7,8]);
+			->willReturn([$b2, $b3]);
 		$userinfo = [
 			'user' => 'admin',
 			'groups' => ['a', 'b', 'c']
 		];
 		$result = $this->service->findAll($userinfo);
 		sort($result);
-		$this->assertEquals([1,2,3,4,5,6,7,8], $result);
+		$this->assertEquals([$b1, $b2, $b3], $result);
 	}
 
 	public function testFind() {
+		$b1 = new Board();
+		$b1->setId(1);
 		$this->boardMapper->expects($this->once())
 			->method('find')
-			->with(123)
-			->willReturn(1);
-		$this->assertEquals(1, $this->service->find(123));
+			->with(1)
+			->willReturn($b1);
+		$this->assertEquals($b1, $this->service->find(1));
 	}
 
 	public function testCreate() {
@@ -130,9 +142,11 @@ class BoardServiceTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testDelete() {
+		$board = new Board();
+		$board->setOwner('admin');
 		$this->boardMapper->expects($this->once())
 			->method('find')
-			->willReturn(new Board());
+			->willReturn($board);
 		$this->boardMapper->expects($this->once())
 			->method('delete')
 			->willReturn(1);
@@ -140,6 +154,8 @@ class BoardServiceTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testAddAcl() {
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('admin');
 		$acl = new Acl();
 		$acl->setBoardId(123);
 		$acl->setType('user');
@@ -147,6 +163,9 @@ class BoardServiceTest extends \PHPUnit_Framework_TestCase {
 		$acl->setPermissionEdit(true);
 		$acl->setPermissionShare(true);
 		$acl->setPermissionManage(true);
+		$acl->resolveRelation('participant', function($participant) use (&$user) {
+			return null;
+		});
 		$this->aclMapper->expects($this->once())
 			->method('insert')
 			->with($acl)

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
+ * @copyright Copyright (c) 2017 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
  *
@@ -23,20 +23,31 @@
 
 namespace OCA\Deck\Db;
 
+use OCP\AppFramework\Db\Entity;
 
-class RelationalEntity extends \OCP\AppFramework\Db\Entity implements \JsonSerializable {
+class RelationalEntity extends Entity implements \JsonSerializable {
 
 	private $_relations = array();
+	private $_resolvedProperties = [];
 
 	/**
 	 * Mark a property as relation so it will not get updated using Mapper::update
-	 * @param string $property Name of the property
+	 * @param $property string Name of the property
 	 */
 	public function addRelation($property) {
 		if (!in_array($property, $this->_relations)) {
 			$this->_relations[] = $property;
 		}
 	}
+
+	/**
+	 * Mark a property as resolvable via resolveRelation()
+	 * @param $property string Name of the property
+	 */
+	public function addResolvable($property) {
+		$this->_resolvedProperties[$property] = null;
+	}
+
 	/**
 	 * Mark am attribute as updated
 	 * overwritten from \OCP\AppFramework\Db\Entity to avoid writing relational attributes
@@ -56,14 +67,75 @@ class RelationalEntity extends \OCP\AppFramework\Db\Entity implements \JsonSeria
 		$properties = get_object_vars($this);
 		$reflection = new \ReflectionClass($this);
 		$json = [];
-		foreach($properties as $property=>$value) {
-			if(substr($property, 0, 1) !== '_' && $reflection->hasProperty($property)) {
+		foreach ($properties as $property => $value) {
+			if (substr($property, 0, 1) !== '_' && $reflection->hasProperty($property)) {
 				$propertyReflection = $reflection->getProperty($property);
-				if(!$propertyReflection->isPrivate()) {
+				if (!$propertyReflection->isPrivate()) {
 					$json[$property] = $this->getter($property);
 				}
 			}
 		}
+		foreach ($this->_resolvedProperties as $property => $value) {
+			if($value !== null) {
+				$json[$property] = $value;
+			}
+		}
 		return $json;
 	}
+
+	/*
+	 * Resolve relational data from external methods
+	 *
+	 * example usage:
+	 *
+	 * in Board::__construct()
+	 * 		$this->addResolvable('owner')
+	 *
+	 * in BoardMapper
+	 * 		$board->resolveRelation('owner', function($owner) use (&$userManager) {
+	 * 			return new \OCA\Deck\Db\User($userManager->get($owner));
+	 * 		});
+	 *
+	 * resolved values can be obtained by calling resolveProperty
+	 * e.g. $board->resolveOwner()
+	 *
+	 * @param string $property name of the property
+	 * @param callable $resolver anonymous function to resolve relational
+	 * data defined by $property as unique identifier
+	 * @throws \Exception
+	 */
+	public function resolveRelation($property, $resolver) {
+		$result = null;
+		if($property !== null && $this->$property !== null) {
+			$result = $resolver($this->$property);
+		}
+
+		if($result instanceof RelationalObject || $result === null) {
+			$this->_resolvedProperties[$property] = $result;
+		} else {
+			throw new \Exception('resolver must return an instance of RelationalObject');
+		}
+	}
+
+	public function __call($methodName, $args){
+		$attr = lcfirst( substr($methodName, 7) );
+		if(strpos($methodName, 'resolve') === 0 && array_key_exists($attr, $this->_resolvedProperties)) {
+			if($this->_resolvedProperties[$attr] !== null) {
+				return $this->_resolvedProperties[$attr];
+			} else {
+				return $this->getter($attr);
+			}
+		}
+
+		$attr = lcfirst( substr($methodName, 3) );
+		if(strpos($methodName, 'set') === 0 && array_key_exists($attr, $this->_resolvedProperties)) {
+			if(!is_scalar($args[0])) {
+				$args[0] = $args[0]['primaryKey'];
+			}
+			parent::setter($attr, $args);
+			return null;
+		}
+		return parent::__call($methodName, $args);
+	}
+
 }

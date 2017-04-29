@@ -26,10 +26,7 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Label;
-
-
 use OCP\IL10N;
-
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
@@ -55,13 +52,35 @@ class BoardService {
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user']);
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups']);
 		$complete = array_merge($userBoards, $groupBoards);
-		return array_map("unserialize", array_unique(array_map("serialize", $complete)));
+		$result = [];
+		foreach($complete as &$item) {
+			if(!array_key_exists($item->getId(), $result)) {
+				$this->boardMapper->mapOwner($item);
+				if($item->getAcl() !== null) {
+					foreach ($item->getAcl() as &$acl) {
+						$this->boardMapper->mapAcl($acl);
+					}
+				}
+				$result[$item->getId()] = $item;
+			}
+		}
+		return array_values($result);
 	}
 
 	public function find($boardId) {
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
-		return $this->boardMapper->find($boardId, true, true);
+		/** @var Board $board */
+		$board = $this->boardMapper->find($boardId, true, true);
+		$this->boardMapper->mapOwner($board);
+		foreach ($board->getAcl() as &$acl) {
+			if($acl !== null) {
+				$this->boardMapper->mapAcl($acl);
+			}
+		}
+		return $board;
 	}
+
+
 
 	public function create($title, $userId, $color) {
 		$board = new Board();
@@ -86,6 +105,7 @@ class BoardService {
 			$labels[] = $this->labelMapper->insert($label);
 		}
 		$new_board->setLabels($labels);
+		$this->boardMapper->mapOwner($new_board);
 		return $new_board;
 
 	}
@@ -100,6 +120,7 @@ class BoardService {
 		$board = $this->find($id);
 		$board->setTitle($title);
 		$board->setColor($color);
+		$this->boardMapper->mapOwner($board);
 		return $this->boardMapper->update($board);
 	}
 
@@ -113,21 +134,27 @@ class BoardService {
 		$acl->setPermissionEdit($edit);
 		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
-		return $this->aclMapper->insert($acl);
+		$newAcl = $this->aclMapper->insert($acl);
+		$this->boardMapper->mapAcl($newAcl);
+		return $newAcl;
 	}
 
 	public function updateAcl($id, $edit, $share, $manage) {
 		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_SHARE);
+		/** @var Acl $acl */
 		$acl = $this->aclMapper->find($id);
 		$acl->setPermissionEdit($edit);
 		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
+		$this->boardMapper->mapAcl($acl);
 		return $this->aclMapper->update($acl);
 	}
 
 	public function deleteAcl($id) {
 		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_SHARE);
+		/** @var Acl $acl */
 		$acl = $this->aclMapper->find($id);
+		$this->boardMapper->mapAcl($acl);
 		return $this->aclMapper->delete($acl);
 	}
 
