@@ -69,8 +69,9 @@ appstore: clean-build build
 
 	echo $(appstore_package_name).tar.gz
 
+test: test-unit test-integration
 
-test:
+test-unit:
 	mkdir -p build/
 ifeq (, $(shell which phpunit 2> /dev/null))
 	@echo "No phpunit command available, downloading a copy from the web"
@@ -83,6 +84,9 @@ else
 	phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
 endif
 
-test-js:
-	cd js &&  run test
+test-integration:
+	cd tests/integration && ./run.sh
+
+test-js: install-deps
+	cd js && run test
 
