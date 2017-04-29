@@ -3,6 +3,9 @@
 		<testsuite name="integration-database">
 			<directory>./integration/database</directory>
 		</testsuite>
+		<testsuite name="integration-app">
+			<directory>./integration/app</directory>
+		</testsuite>
 	</testsuites>
 	<filter>
 		<whitelist>
