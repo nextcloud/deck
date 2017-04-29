@@ -33,7 +33,7 @@
 					  class="ng-pristine ng-valid" ng-submit="boardCreate()">
 					<input id="newTitle" class="edit ng-valid ng-empty"
 						   type="text" placeholder="<?php p($l->t('New board title')); ?>"
-						   autofocus-on-insert ng-model="newBoard.title">
+						   autofocus-on-insert ng-model="newBoard.title" maxlength="100">
 					<div class="colorselect">
 						<div class="color" ng-repeat="c in colors"
 							 style="background-color:#{{ c }};"

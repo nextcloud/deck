@@ -21,7 +21,8 @@
 		<input type="text" placeholder="Add a new stack"
 				ng-focus="status.addStack=true"
 				ng-blur="status.addStack=false"
-				ng-model="newStack.title" required/>
+				ng-model="newStack.title" required
+				maxlength="100" />
 		<button class="icon icon-add" style="opacity: {{status.addStack ? 1: 0.5}};"
 				type="submit"></button>
 	</form>
@@ -40,7 +41,7 @@
 					<input type="text" placeholder="Add a new stack"
 						   ng-blur="s.status.editStack=false" ng-model="s.title"
 						   ng-if="s.status.editStack" autofocus-on-insert
-						   required/>
+						   required maxlength="100"/>
 				</form>
 				<div class="stack-actions">
 					<button class="icon icon-confirm" ng-if="s.status.editStack"
@@ -115,6 +116,7 @@
 							   ng-model="newCard.title"
 							   ng-blur="status.addCard[s.id]=false"
 							   style="color:{{ boardservice.getCurrent().color | textColorFilter }}; border-color:{{ boardservice.getCurrent().color | textColorFilter }};"
+							   maxlength="100"
 							   required placeholder="<?php p($l->t('Enter a card title')); ?>"/>
 					</h3>
 				</form>

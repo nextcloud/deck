@@ -73,7 +73,7 @@
                 </span>
                 <span class="label-title" style="background-color:#{{label.color}}; color:{{ textColor(label.color) }}; width:178px;" ng-if="label.edit">
                     <form ng-submit="labelUpdate(label)">
-                      <input type="text" ng-model="label.title" class="input-inline" style="background-color:#{{label.color}}; color:{{ label.color|textColorFilter }};" autofocus-on-insert />
+                      <input type="text" ng-model="label.title" class="input-inline" style="background-color:#{{label.color}}; color:{{ label.color|textColorFilter }};" autofocus-on-insert maxlength="100"/>
                     </form>
                 </span>
                     <div class="colorselect" ng-if="label.edit">
@@ -87,7 +87,7 @@
                 <li ng-if="status.createLabel">
                     <form ng-submit="labelCreate(newLabel)">
                 <span class="label-title" style="background-color:#{{newLabel.color}}; color:{{ textColor(newLabel.color) }}; width:178px;">
-                    <input type="text" class="input-inline" ng-model="newLabel.title" style="color:{{ newLabel.color|textColorFilter }};" autofocus-on-insert />
+                    <input type="text" class="input-inline" ng-model="newLabel.title" style="color:{{ newLabel.color|textColorFilter }};" autofocus-on-insert maxlength="100" />
                 </span>
                         <div class="colorselect">
                             <div class="color" ng-repeat="c in defaultColors" style="background-color:#{{ c }};" ng-click="newLabel.color=c" ng-class="{'selected': (c == newLabel.color) }"><br /></div>
