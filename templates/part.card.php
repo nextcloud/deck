@@ -13,7 +13,7 @@
 			<input class="input-inline" type="text" ng-if="status.cardRename"
 				   ng-model="cardservice.getCurrent().title"
 				   ng-blur="cardRename(cardservice.getCurrent())"
-				   autofocus-on-insert required>
+				   autofocus-on-insert required maxlength="100">
 		</form>
 		<div ng-click="cardRenameShow()" ng-show="!status.cardRename">
 			{{ cardservice.getCurrent().title }}

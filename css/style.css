@@ -418,7 +418,7 @@ button:hover {
  */
 
 #card-header {
-	height: 44px;
+	min-height: 44px;
 }
 
 #card-header h2 {

@@ -24,7 +24,7 @@
 		</div>
 		<div class="app-navigation-entry-edit" ng-show="b.status.edit">
 			<form ng-disabled="isAddingList" class="ng-pristine ng-valid"  ng-submit="boardUpdate(b)">
-				<input id="newTitle" class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title">
+				<input id="newTitle" class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100">
 				<input type="submit" value="" class="action icon-checkmark svg">
 				<div class="colorselect">
 					<div class="color" ng-repeat="c in colors" style="background-color:#{{ c }};" ng-click="b.color=c" ng-class="{'selected': (c == b.color) }"><br /></div>
@@ -39,7 +39,7 @@
 		</a>
 		<div class="app-navigation-entry-edit" ng-if="status.addBoard">
 			<form ng-disabled="isAddingList" class="ng-pristine ng-valid"  ng-submit="boardCreate()">
-				<input id="newTitle" class="edit ng-valid ng-empty" type="text" placeholder="<?php p($l->t('Board title')); ?>" autofocus-on-insert ng-model="newBoard.title">
+				<input id="newTitle" class="edit ng-valid ng-empty" type="text" placeholder="<?php p($l->t('Board title')); ?>" autofocus-on-insert ng-model="newBoard.title" maxlength="100">
 				<input type="submit" value="" class="action icon-checkmark svg">
 				<div class="colorselect">
 					<div class="color" ng-repeat="c in colors" style="background-color:#{{ c }};" ng-click="selectColor(c)" ng-class="{'selected': (c == newBoard.color) }"><br /></div>
