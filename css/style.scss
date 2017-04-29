@@ -1197,6 +1197,17 @@ input.input-inline {
 			white-space: pre;
 		}
 	}
+
+	input[type=checkbox] {
+		margin: 0px 10px 0px 0px;
+		line-height: 10px;
+		font-size: 10px;
+		display: inline-block;
+		min-height: 12px;
+	}
+	li input[type=checkbox] {
+		margin: 0px 10px 0px -20px;
+	}
 }
 
 /**

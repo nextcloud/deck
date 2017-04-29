@@ -98,14 +98,13 @@
 				  placeholder="<?php p($l->t('Add a card description…')); ?>"
 				  ng-blur="cardUpdate(status.edit)"
 				  ng-model="status.edit.description"
-				  ng-change="cardEditDescriptionChanged()"
+				  ng-change="cardEditDescriptionChanged(); updateMarkdown(status.edit.description)"
 				  autofocus-on-insert> </textarea>
-		<div class="container" ng-click="cardEditDescriptionShow($event)"
+		<div class="container" ng-click="clickCardDescription($event)"
 			 ng-if="!status.cardEditDescription" ng-animate>
-			<div markdown-it="cardservice.getCurrent().description"
-				 id="markdown"></div>
+			<div id="markdown" ng-bind-html="description()">{{ description() }}</div>
 			<div class="placeholder"
-				 ng-if="!cardservice.getCurrent().description"><?php p($l->t('Add a card description…')); ?></div>
+				 ng-if="!description()"><?php p($l->t('Add a card description…')); ?></div>
 		</div>
 	</div>
 </div>
