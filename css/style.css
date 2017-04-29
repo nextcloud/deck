@@ -889,10 +889,9 @@ button:hover {
 }
 
 .icon-description-marker {
-	background-image: url('../img/description-marker.svg');
 	position: absolute;
-	top: 0px;
-	right: 0px;
+	top: 2px;
+	right: 2px;
 }
 
 /**
