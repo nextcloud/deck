@@ -888,6 +888,12 @@ button:hover {
 	background-image: url('../img/details-white.svg');
 }
 
+.icon-description-marker {
+	position: absolute;
+	top: 2px;
+	right: 2px;
+}
+
 /**
  * Hotfix for https://github.com/angular-ui/ui-select/issues/1652
  */
