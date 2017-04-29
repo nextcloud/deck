@@ -28,7 +28,7 @@
 	</form>
 	</div>
 </div>
-<div id="board" class="scroll-container">
+<div id="board" class="scroll-container" ng-click="sidebar.show=false">
 
 	<search on-search="search" class="ng-hide"></search>
 
