@@ -28,7 +28,7 @@
 	</form>
 	</div>
 </div>
-<div id="board" class="scroll-container" ng-click="sidebar.show=false">
+<div id="board" class="scroll-container" ng-click="sidebar.show=false" ui-sref="board">
 
 	<search on-search="search" class="ng-hide"></search>
 
@@ -57,6 +57,7 @@
 				<li class="card as-sortable-item"
 					ng-repeat="c in s.cards"
 					data-as-sortable-item
+					ng-click="$event.stopPropagation()"
 					ui-sref="board.card({boardId: id, cardId: c.id})"
 					ng-class="{'archived': c.archived, 'has-labels': c.labels.length>0 }">
 					<div data-as-sortable-item-handle>
