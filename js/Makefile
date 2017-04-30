@@ -1,10 +1,10 @@
 build:
-	grunt build
+	./node_modules/.bin/grunt build
 
 watch:
-	grunt watch
+	./node_modules/.bin/grunt watch
 
 install:
 	npm install
-	bower install
+	./node_modules/.bin/bower install
 
