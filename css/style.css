@@ -436,7 +436,7 @@ button:hover {
 }
 
 #card-meta {
-	padding-top: 0;
+	height: 100%;
 }
 
 #card-dates {
@@ -452,6 +452,10 @@ button:hover {
 #card-dates span {
 }
 
+#card-description {
+	height: 100%;
+}
+
 #card-description > h3 {
 	border-bottom: 1px solid #333333;
 	font-weight: 600;
@@ -459,14 +463,8 @@ button:hover {
 	padding: 5px;
 }
 
-.save-indicator {
-	background-color: #009900;
-	color: #ffffff;
-	border-radius: 3px;
-	float: right;
-	padding: 1px 10px;
-	font-size: 8pt !important;
-	display: none;
+#card-description > div {
+	height: 100%;
 }
 
 #card-description textarea {
@@ -479,6 +477,16 @@ button:hover {
 
 #card-description .container {
 	background-color: white;
+}
+
+.save-indicator {
+	background-color: #009900;
+	color: #ffffff;
+	border-radius: 3px;
+	float: right;
+	padding: 1px 10px;
+	font-size: 8pt !important;
+	display: none;
 }
 
 #sidebar-header,
@@ -506,6 +514,8 @@ button:hover {
 	border-left: none;
 	width: 500px;
 	border-left: 1px solid #eeeeee;
+	display:flex;
+	flex-direction: column;
 }
 
 #app-sidebar.details-visible {
@@ -803,6 +813,7 @@ button:hover {
 
 #markdown {
 	width: 100% !important;
+	height: 100%;
 }
 
 #markdown p {
