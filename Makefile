@@ -23,7 +23,7 @@ clean-dist:
 
 install-deps:
 	cd js && npm install --deps
-	cd js && bower install
+	cd js && ./node_modules/.bin/bower install
 
 build: build-js
 
