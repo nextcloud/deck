@@ -418,7 +418,6 @@ button:hover {
  */
 
 #card-header {
-	min-height: 44px;
 }
 
 #card-header h2 {
@@ -437,6 +436,8 @@ button:hover {
 
 #card-meta {
 	height: 100%;
+	display: flex;
+	flex-direction: column;
 }
 
 #card-dates {
@@ -454,6 +455,8 @@ button:hover {
 
 #card-description {
 	height: 100%;
+	display: flex;
+	flex-direction: column;
 }
 
 #card-description > h3 {
@@ -813,7 +816,6 @@ button:hover {
 
 #markdown {
 	width: 100% !important;
-	height: 100%;
 }
 
 #markdown p {
