@@ -1,6 +1,7 @@
 # Deck
 
-[![Build Status](https://travis-ci.org/nextcloud/deck.svg?branch=master)](https://travis-ci.org/nextcloud/deck) [![CodeCov](https://codecov.io/github/nextcloud/deck/coverage.svg?branch=master)](https://codecov.io/github/nextcloud/deck) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nextcloud/deck/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/nextcloud/deck/?branch=master) [![Dependency Status](https://www.versioneye.com/user/projects/58ad558f4ca76f004ed475b3/badge.svg?style=flat)](https://www.versioneye.com/user/projects/58ad558f4ca76f004ed475b3)
+[![Build Status](https://travis-ci.org/nextcloud/deck.svg?branch=master)](https://travis-ci.org/nextcloud/deck) [![CodeCov](https://codecov.io/github/nextcloud/deck/coverage.svg?branch=master)](https://codecov.io/github/nextcloud/deck) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nextcloud/deck/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/nextcloud/deck/?branch=master) [![Dependency Status](https://www.versioneye.com/user/projects/58ad558f4ca76f004ed475b3/badge.svg?style=flat)](https://www.versioneye.com/user/projects/58ad558f4ca76f004ed475b3) [![#nextcloud-deck](https://img.shields.io/badge/IRC-%23nextcloud--deck%20on%20freenode-blue.svg)](https://webchat.freenode.net/?channels=nextcloud-deck)
+
 
 Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.
 
