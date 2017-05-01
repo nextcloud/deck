@@ -1,3 +1,19 @@
+## 0.1.3 - 2017-05-01
+
+### Added
+
+- Icon to show if a card has a description
+
+### Changed
+
+- Use OCS API to get users/groups for sharing
+- Various UI improvements
+- Show display name instead of uid
+- Fix bugs with limited field length
+- Automatically hide sidebar when clicking the board view
+- Start editing from everywhere in the description section
+
+
 ## 0.1.2
 ### Added
 - Add translations
