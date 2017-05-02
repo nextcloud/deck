@@ -21,10 +21,12 @@
  *  
  */
 
-app.controller('ListController', function ($scope, $location, $filter, BoardService, $element) {
+app.controller('ListController', function ($scope, $location, $filter, BoardService, $element, $timeout) {
 	$scope.boards = [];
 	$scope.newBoard = {};
-	$scope.status = {};
+	$scope.status = {
+		deleteUndo: []
+	};
 	$scope.colors = ['0082c9', '00c9c6','00c906', 'c92b00', 'F1DB50', '7C31CC', '3A3B3D', 'CACBCD'];
 	$scope.boardservice = BoardService;
 	$scope.newBoard.color = $scope.colors[0];
@@ -71,9 +73,25 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 	};
 
 	$scope.boardDelete = function(board) {
-		BoardService.delete(board.id).then(function (data) {
-			$scope.filterData();
-		});
+		var boardId = board.id;
+		$scope.status.deleteUndo[boardId] = 10;
+		$scope.boardDeleteCountdown = function () {
+			console.log($scope.status);
+			if($scope.status.deleteUndo[boardId] > 0) {
+				$scope.status.deleteUndo[boardId]--;
+				$timeout($scope.boardDeleteCountdown, 1000);
+			}
+			if($scope.status.deleteUndo[boardId] === 0) {
+				BoardService.delete(board.id).then(function (data) {
+					$scope.filterData();
+				});
+			}
+		};
+		$timeout($scope.boardDeleteCountdown, 1000);
+	};
+
+	$scope.boardDeleteUndo = function (board) {
+		delete $scope.status.deleteUndo[board.id];
 	};
 
 });

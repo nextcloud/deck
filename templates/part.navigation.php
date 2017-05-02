@@ -7,15 +7,16 @@
 		<a href="#!/board/{{b.id}}/" ng-if="!b.status.edit">{{ b.title }}</a>
 		<div class="app-navigation-entry-utils" ng-show="!b.status.edit" style="position:absolute;">
 			<ul>
+				<li class="app-navigation-entry-utils-counter board-delete-undo" ng-show="status.deleteUndo[b.id]" ng-click="boardDeleteUndo(b)" title="Click to undo">Deleting in {{ status.deleteUndo[b.id] }}s &nbsp; X</li>
 				<li class="app-navigation-entry-utils-menu-share svg" ng-show="b.shared>0"><i class="icon icon-share" title="<?php p($l->t('Shared with you')); ?>"> </i></li>
-				<li class="app-navigation-entry-utils-menu-button svg"><button class="icon-more"></button></li>
+				<li class="app-navigation-entry-utils-menu-button svg" ng-show="!status.deleteUndo[b.id]"><button class="icon-more"></button></li>
 			</ul>
 		</div>
 		<div class="app-navigation-entry-menu app-navigation-noclose" ng-show="!b.status.edit">
 			<ul>
-				<li ng-show="b.owner===user"><button class="icon-rename svg" title="<?php p($l->t('edit')); ?>" ng-click="b.status.edit=true"></button></li>
-				<li ng-show="b.owner===user"><button class="icon-delete svg" title="<?php p($l->t('delete')); ?>" ng-click="boardDelete(b)"></button></li>
-				<li ng-show="b.owner!==user"><button class="icon-delete svg" title="<?php p($l->t('remove share')); ?>" ng-click="boardRemoveShare(b)"></button></li>
+				<li ng-show="b.owner.uid===user"><button class="icon-rename svg" title="<?php p($l->t('edit')); ?>" ng-click="b.status.edit=true"></button></li>
+				<li ng-show="b.owner.uid===user"><button class="icon-delete svg" title="<?php p($l->t('delete')); ?>" ng-click="boardDelete(b)"></button></li>
+				<li ng-show="b.owner.uid!==user && false"><button class="icon-delete svg" title="<?php p($l->t('remove share')); ?>" ng-click="boardRemoveShare(b)"></button></li>
 			</ul>
 		</div>
 		<div class="app-navigation-entry-deleted" ng-show="false">
