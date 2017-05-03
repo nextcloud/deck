@@ -48,4 +48,9 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 		return $entity->getBoardId();
 	}
 
+	public function findByParticipant($type, $participant) {
+		$sql = 'SELECT * from *PREFIX*deck_board_acl WHERE type = ? AND participant = ?';
+		return $this->findEntities($sql, [$type, $participant]);
+	}
+
 }
