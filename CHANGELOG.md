@@ -1,3 +1,15 @@
+# Changelog
+All notable changes to this project will be documented in this file.
+
+## 0.1.4
+
+### Fixed
+
+- Avoid red shadow on input in firefox
+- Fix broken delete function for boards
+- Fix broken board loading when groups were used for sharing
+- Fix bug when users/groups got deleted
+
 ## 0.1.3 - 2017-05-01
 
 ### Added
