@@ -86,6 +86,13 @@ button:hover {
 	cursor: pointer;
 }
 
+#app-navigation .app-navigation-entry-utils li.board-delete-undo {
+	background-color: #aa0000;
+	color: #fff;
+	cursor: pointer;
+	width: auto !important;
+}
+
 /**
  * Board view
  */
