@@ -23,9 +23,14 @@
 
 namespace OCA\Deck\AppInfo;
 
+use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\AclMapper;
 use OCP\AppFramework\App;
 use OCA\Deck\Middleware\SharingMiddleware;
-
+use OCP\IGroup;
+use OCP\IGroupManager;
+use OCP\IUser;
+use OCP\IUserManager;
 
 class Application extends App {
 
@@ -47,6 +52,30 @@ class Application extends App {
 			);
 		});
 		$container->registerMiddleware('SharingMiddleware');
+
+		// Delete user/group acl entries when they get deleted
+		/** @var IUserManager $userManager */
+		$userManager = $server->getUserManager();
+		$userManager->listen('\OC\User', 'postDelete', function(IUser $user) use ($container) {
+			/** @var AclMapper $aclMapper */
+			$aclMapper = $container->query(AclMapper::class);
+			$acls = $aclMapper->findByParticipant(Acl::PERMISSION_TYPE_USER, $user->getUID());
+			foreach ($acls as $acl) {
+				$aclMapper->delete($acl);
+			}
+		});
+
+		/** @var IUserManager $userManager */
+		$groupManager = $server->getGroupManager();
+		$groupManager->listen('\OC\Group', 'postDelete', function(IGroup $group) use ($container) {
+			/** @var AclMapper $aclMapper */
+			$aclMapper = $container->query(AclMapper::class);
+			$aclMapper->findByParticipant(Acl::PERMISSION_TYPE_GROUP, $group->getGID());
+			$acls = $aclMapper->findByParticipant(Acl::PERMISSION_TYPE_GROUP, $group->getGID());
+			foreach ($acls as $acl) {
+				$aclMapper->delete($acl);
+			}
+		});
 
 	}
 

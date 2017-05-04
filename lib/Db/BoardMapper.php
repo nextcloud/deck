@@ -130,6 +130,11 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		return $entries;
 	}
 
+	public function findAll() {
+		$sql = 'SELECT id from *PREFIX*deck_boards;';
+		return $this->findEntities($sql, []);
+	}
+
 	public function delete(/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
 		\OCP\AppFramework\Db\Entity $entity) {
 		// delete acl
@@ -166,10 +171,22 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		$groupManager = $this->groupManager;
 		$acl->resolveRelation('participant', function($participant) use (&$acl, &$userManager, &$groupManager) {
 			if($acl->getType() === Acl::PERMISSION_TYPE_USER) {
-				return new User($userManager->get($acl->getParticipant($participant)));
+				$user = $userManager->get($participant);
+				if($user !== null) {
+					return new User($user);
+				} else {
+					\OC::$server->getLogger()->debug('User ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
+					return null;
+				}
 			}
 			if($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
-				return new Group($groupManager->get($acl->getParticipant($participant)));
+				$group = $groupManager->get($participant);
+				if($group !== null) {
+					return new Group($group);
+				} else {
+					\OC::$server->getLogger()->debug('Group ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
+					return null;
+				}
 			}
 			throw new \Exception('Unknown permission type for mapping Acl');
 		});
@@ -181,7 +198,11 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	public function mapOwner(Board &$board) {
 		$userManager = $this->userManager;
 		$board->resolveRelation('owner', function($owner) use (&$userManager) {
-			return new User($userManager->get($owner));
+			$user = $userManager->get($owner);
+			if($user !== null) {
+				return new User($user);
+			}
+			return null;
 		});
 	}
 

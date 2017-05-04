@@ -25,7 +25,8 @@ namespace OCA\Deck\Db;
 
 class RelationalObject implements \JsonSerializable {
 
-	private $primaryKey;
+	protected $primaryKey;
+	protected $object;
 
 	/**
 	 * RelationalObject constructor.

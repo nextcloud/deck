@@ -31,6 +31,7 @@ use OCP\IUserManager;
 class CardMapper extends DeckMapper implements IPermissionMapper {
 
 	private $labelMapper;
+	private $userManager;
 
 	public function __construct(IDBConnection $db, LabelMapper $labelMapper, IUserManager $userManager) {
 		parent::__construct($db, 'deck_cards', '\OCA\Deck\Db\Card');
@@ -131,7 +132,11 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 	public function mapOwner(Card &$card) {
 		$userManager = $this->userManager;
 		$card->resolveRelation('owner', function($owner) use (&$userManager) {
-			return new User($userManager->get($owner));
+			$user = $userManager->get($owner);
+			if($user !== null) {
+				return new User($user);
+			}
+			return null;
 		});
 	}
 
