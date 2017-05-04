@@ -96,8 +96,8 @@ class BoardController extends Controller {
 	 * @param $color
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function update($id, $title, $color) {
-		return $this->boardService->update($id, $title, $color);
+	public function update($id, $title, $color, $archived) {
+		return $this->boardService->update($id, $title, $color, $archived);
 	}
 
 	/**

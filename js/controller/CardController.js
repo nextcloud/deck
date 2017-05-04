@@ -48,9 +48,10 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
         }
     };
     $scope.cardEditDescriptionShow = function($event) {
+        if(BoardService.isArchived() || CardService.getCurrent().archived) {
+            return false;
+        }
         var node = $event.target.nodeName;
-        console.log($event);
-        console.log(BoardService);
         if($scope.card.archived || !$scope.boardservice.canEdit()) {
             console.log(node);
         } else {

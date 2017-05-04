@@ -39,7 +39,10 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
         .state('list', {
             url: "/",
             templateUrl: "/boardlist.mainView.html",
-            controller: 'ListController'
+            controller: 'ListController',
+			params: {
+				filter: { value: '' }
+            }
 		})
         .state('board', {
             url: "/board/:boardId/:filter",

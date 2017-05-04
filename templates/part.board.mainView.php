@@ -70,40 +70,37 @@
 						</div>
 						<div class="card-controls">
 							<i class="icon icon-filetype-text" ng-if="c.description" title="{{ c.description }}"></i>
-							<div class="app-popover-menu-utils">
+							<div class="app-popover-menu-utils" ng-if="!boardservice.isArchived>
 								<button class="button-inline card-options icon-more" ng-model="card"></button>
 								<div class="popovermenu hidden">
 									<ul>
 										<li ng-if="filter!=='archive'">
 											<a class="menuitem action action-rename permanent"
-											data-action="Archive"
-											ng-click="cardArchive(c); $event.stopPropagation();"><span
-													class="icon icon-archive"></span><span><?php p($l->t('Archive')); ?></span></a>
+											   data-action="Archive"
+											   ng-click="cardArchive(c); $event.stopPropagation();"><span
+														class="icon icon-archive"></span><span><?php p($l->t('Archive')); ?></span></a>
 										</li>
 										<li ng-if="filter==='archive'">
 											<a class="menuitem action action-rename permanent"
-											data-action="Unarchive"
-											ng-click="cardUnarchive(c); $event.stopPropagation();"><span
-													class="icon icon-archive"></span><span><?php p($l->t('Unarchive')); ?></span></a>
+											   data-action="Unarchive"
+											   ng-click="cardUnarchive(c); $event.stopPropagation();"><span
+														class="icon icon-archive"></span><span><?php p($l->t('Unarchive')); ?></span></a>
 										</li>
 										<li>
 											<a class="menuitem action action-delete permanent"
-											data-action="Delete"
-											ng-click="cardDelete(c)"><span
-													class="icon icon-delete"></span><span><?php p($l->t('Delete')); ?></span></a>
+											   data-action="Delete"
+											   ng-click="cardDelete(c)"><span
+														class="icon icon-delete"></span><span><?php p($l->t('Delete')); ?></span></a>
 										</li>
 									</ul>
 								</div>
 							</div>
 						</div>
-						<!--<span class="info due"><i class="fa fa-clock-o" aria-hidden="true"></i> <span>Today</span></span>
-						<span class="info tasks"><i class="fa fa-list" aria-hidden="true"></i> <span>3/12</span></span>
-						//-->
-
 
 					</div>
 				</li>
 			</ul>
+
 			<!-- CREATE CARD //-->
 			<div class="card create"
 				 style="background-color:#{{ boardservice.getCurrent().color }};" ng-if="boardservice.canEdit() && checkCanEdit() && filter!=='archive'">

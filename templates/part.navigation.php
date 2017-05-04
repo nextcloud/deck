@@ -1,8 +1,10 @@
 <ul class="with-icon">
 
-	<li><a href="#" class=""><?php p($l->t('All Boards')); ?></a></li>
+	<li><a ui-sref="list({ filter: ''})" class="icon-deck"><?php p($l->t('All Boards')); ?></a></li>
+	<li><a ui-sref="list({ filter: 'archived' })" class="icon-archive"><?php p($l->t('Archived boards')); ?></a></li>
+	<li><a ui-sref="list({ filter: 'shared' })" class="icon-share"><?php p($l->t('Shared boards')); ?></a></li>
 
-	<li class="with-icon with-menu" ng-class="{active: b.id === boardservice.getCurrent().id}" data-ng-repeat="b in boardservice.sorted">
+	<li class="with-icon with-menu" ng-class="{active: b.id === boardservice.getCurrent().id}" data-ng-repeat="b in boardservice.sidebar">
 		<span class="board-bullet"  style="background-color:#{{b.color}};" ng-if="!b.status.edit"> </span>
 		<a href="#!/board/{{b.id}}/" ng-if="!b.status.edit">{{ b.title }}</a>
 		<div class="app-navigation-entry-utils" ng-show="!b.status.edit" style="position:absolute;">
@@ -16,7 +18,7 @@
 			<ul>
 				<li ng-show="b.owner.uid===user"><button class="icon-rename svg" title="<?php p($l->t('edit')); ?>" ng-click="b.status.edit=true"></button></li>
 				<li ng-show="b.owner.uid===user"><button class="icon-delete svg" title="<?php p($l->t('delete')); ?>" ng-click="boardDelete(b)"></button></li>
-				<li ng-show="b.owner.uid!==user && false"><button class="icon-delete svg" title="<?php p($l->t('remove share')); ?>" ng-click="boardRemoveShare(b)"></button></li>
+				<li ng-show="b.owner.uid===user"><button class="icon-archive svg" title="<?php p($l->t('Move board to archive')); ?>" ng-click="boardArchive(b)"></button></li>
 			</ul>
 		</div>
 		<div class="app-navigation-entry-deleted" ng-show="false">

@@ -31,6 +31,7 @@
 
 	<div id="labels">
 		<ui-select multiple tagging="" ng-model="card.labels" theme="select2"
+				   ng-disabled="boardservice.isArchived() || card.archived"
 				   style="width:100%;" title="Choose a label"
 				   placeholder="Add a label"
 				   on-select="labelAssign($item, $model)"

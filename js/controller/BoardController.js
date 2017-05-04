@@ -80,7 +80,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		}
 	};
 	$scope.checkCanEdit = function () {
-		return !$scope.archived;
+		return !BoardService.getCurrent().archived;
 	};
 
 	// filter cards here, as ng-sortable will not work nicely with html-inline filters

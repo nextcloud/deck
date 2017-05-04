@@ -23,9 +23,12 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\ArchivedItemException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
+use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IL10N;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
@@ -80,6 +83,23 @@ class BoardService {
 		return $board;
 	}
 
+	public function isArchived($mapper, $id) {
+		try {
+			if ($mapper instanceof IPermissionMapper) {
+				$boardId = $mapper->findBoardId($id);
+			} else {
+				$boardId = $id;
+			}
+			if ($boardId === null) {
+				return false;
+			}
+		} catch (DoesNotExistException $exception) {
+			return false;
+		}
+		$board = $this->find($boardId);
+		return $board->getArchived();
+	}
+
 
 
 	public function create($title, $userId, $color) {
@@ -115,11 +135,12 @@ class BoardService {
 		return $this->boardMapper->delete($this->find($id));
 	}
 
-	public function update($id, $title, $color) {
+	public function update($id, $title, $color, $archived) {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
 		$board->setTitle($title);
 		$board->setColor($color);
+		$board->setArchived($archived);
 		$this->boardMapper->mapOwner($board);
 		return $this->boardMapper->update($board);
 	}

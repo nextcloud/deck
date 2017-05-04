@@ -23,12 +23,12 @@
 
 namespace OCA\Deck;
 
-class CardArchivedException extends \Exception {
+class ArchivedItemException extends \Exception {
 	/**
 	 * Constructor
 	 * @param string $msg the error message
 	 */
-	public function __construct($msg = "") {
+	public function __construct($msg = "Operation not allowed. Item is archived.") {
 		parent::__construct($msg);
 	}
 }

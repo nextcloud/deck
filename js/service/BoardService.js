@@ -190,6 +190,13 @@ app.factory('BoardService', function(ApiService, $http, $q){
         return this.getCurrent().permissions['PERMISSION_SHARE'];
     }
 
+    BoardService.prototype.isArchived = function () {
+		if(!this.getCurrent() || this.getCurrent().archived) {
+			return true;
+		}
+		return false;
+	};
+
     service = new BoardService($http, 'boards', $q);
     return service;
     
