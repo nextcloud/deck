@@ -176,7 +176,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 					return new User($user);
 				} else {
 					\OC::$server->getLogger()->debug('User ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
-					return $participant;
+					return null;
 				}
 			}
 			if($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
@@ -185,7 +185,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 					return new Group($group);
 				} else {
 					\OC::$server->getLogger()->debug('Group ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
-					return $participant;
+					return null;
 				}
 			}
 			throw new \Exception('Unknown permission type for mapping Acl');
@@ -198,7 +198,11 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	public function mapOwner(Board &$board) {
 		$userManager = $this->userManager;
 		$board->resolveRelation('owner', function($owner) use (&$userManager) {
-			return new User($userManager->get($owner));
+			$user = $userManager->get($owner);
+			if($user !== null) {
+				return new User($user);
+			}
+			return null;
 		});
 	}
 
