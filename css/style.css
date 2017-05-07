@@ -126,14 +126,21 @@ button:hover {
 	position: relative;
 	z-index: 120;
 	height: 44px;
-	background-color: #eee;
 }
 
-#board-header h1 {
+#board-header > * {
 	font-size: 14pt;
-	margin: 0;
-	padding: 12px;
+	padding: 7px;
+	margin: 7px;
 	float: left;
+}
+
+#board-header > a {
+	background: url('/core/img/breadcrumb.svg?v=1');
+	background-repeat: no-repeat;
+	background-position: right center;
+	background-size: auto 24px;
+	padding-right: 24px;
 }
 
 #board-actions {
@@ -185,19 +192,13 @@ button:hover {
 	background-color: transparent;
 }
 
-.board-action-button {
-	font-size: 12pt;
-	font-weight: 100;
-	border: none;
-	margin-left: 10px;
+#board-header > .board-action-button {
+	float: right;
 }
 
 #stack-add {
-	float: right;
-	margin: 8px;
-	background-color: #ffffff;
-	border: 1px solid #bbb;
-	border-radius: 4px;
+	background-color: rgba(240,240,240,.9);
+	border-radius: 3px;
 }
 
 #stack-add input {
@@ -207,6 +208,7 @@ button:hover {
 	display: table-cell;
 	vertical-align: middle;
 	min-height: initial;
+	background-color: rgba(240,240,240,.9);
 }
 
 #stack-add input:invalid {
@@ -924,6 +926,10 @@ button:hover {
 	position: absolute;
 	top: 2px;
 	right: 2px;
+}
+
+.icon-home {
+	background-image: url('/core/img/places/home.svg');
 }
 
 /**
