@@ -240,28 +240,30 @@ button:hover {
 	font-size: 12pt;
 	font-weight: 700;
 	overflow: hidden;
-	height: 40px;
+	display: flex;
+	min-height: 40px;
 }
 
 .stack h2 input {
 	padding: 0;
-	width: 80%;
+	width: 100%;
 	margin: 0;
 	font-size: 12pt;
 	font-weight: 700;
 	border: 0;
 	background-color: transparent;
-	float: left;
 	min-height: initial;
 }
 
 .stack h2 button,
 .stack .stack-actions {
 	float: right;
+	margin: 0px 0px 0px 20px;
 }
 
 .stack h2 span {
-	float: left;
+	width: 100%;
+	white-space: normal;
 }
 
 .stack h2 .stack-actions {
@@ -269,7 +271,7 @@ button:hover {
 }
 
 .stack h2:hover .stack-actions {
-	display: inline-block;
+	display: flex;
 	float: right;
 }
 
@@ -922,8 +924,8 @@ button:hover {
 
 .icon-description-marker {
 	position: absolute;
-	top: 2px;
-	right: 2px;
+	top: 0px;
+	right: 0px;
 }
 
 /**
