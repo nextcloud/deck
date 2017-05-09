@@ -1,7 +1,7 @@
 OC.L10N.register(
     "deck",
     {
-    "Deck" : "Τράπουλα",
+    "Deck" : "Κάρτα",
     "Finished" : "Ολοκληρώθηκε",
     "To review" : "Προς επισκόπηση",
     "Action needed" : "Απαιτείται ενέργεια",
@@ -16,11 +16,16 @@ OC.L10N.register(
     "Sharing" : "Διαμοιρασμός",
     "Labels" : "Ετικέτες",
     "Select users or groups to share with" : "Επιλέξτε χρήστες ή ομάδες με τις οποίες θα μοιραστείτε",
+    "No matching user or group found." : "Δεν βρέθηκε χρήστης ή ομάδα να ταιριάζει.",
     "Share" : "Διαμοιρασμός",
     "Edit" : "Επεξεργασία",
     "Manage" : "Διαχείριση",
+    "Discard share" : "Απόρριψη διαμοιρασμού",
     "Create a new label" : "Δημιουργία νέας ετικέτας",
+    "Board title" : "Τίτλος πίνακα",
     "Members" : "Μέλη",
+    "Create new board" : "Δημιουργία νέου πίνακα",
+    "New board title" : "Νέος τίτλος πίνακα",
     "Modified:" : "Τροποποιήθηκε:",
     "Created:" : "Δημιουργήθηκε:",
     "by" : "από",
@@ -29,7 +34,11 @@ OC.L10N.register(
     "Attachments" : "Συνημμένα",
     "Comments" : "Σχόλια",
     "History" : "Ιστορικό",
+    "All Boards" : "Όλοι οι πίνακες",
+    "Shared with you" : "Διαμοιρασμένα με εσάς",
     "edit" : "επεξεργασία",
-    "delete" : "διαγραφή"
+    "delete" : "διαγραφή",
+    "remove share" : "αφαίρεση διαμοιρασμού",
+    "Create a new board" : "Δημιουργία νέου πίνακα"
 },
 "nplurals=2; plural=(n != 1);");
