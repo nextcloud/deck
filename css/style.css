@@ -199,10 +199,11 @@ button:hover {
 #stack-add {
 	background-color: rgba(240,240,240,.9);
 	border-radius: 3px;
+	padding: 0;
 }
 
 #stack-add input {
-	padding: 4px 5px;
+	padding: 7px;
 	margin: 0px;
 	border: 0px none transparent;
 	display: table-cell;
@@ -928,10 +929,6 @@ button:hover {
 	position: absolute;
 	top: 0px;
 	right: 0px;
-}
-
-.icon-home {
-	background-image: url('/core/img/places/home.svg');
 }
 
 .icon-home {
