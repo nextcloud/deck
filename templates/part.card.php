@@ -64,7 +64,11 @@
 	</div>//-->
 
 	<div id="card-description">
-		<h3>Description<div class="save-indicator"><?php p($l->t('Saved')); ?></div></h3>
+		<h3>
+			<?php p($l->t('Description')); ?>
+			<a href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon-help" title="<?php p($l->t('Formating help')); ?>"></a>
+			<span class="save-indicator"><?php p($l->t('Saved')); ?></span>
+		</h3>
 		<textarea elastic ng-if="status.cardEditDescription"
 				  placeholder="Enter your description here ..."
 				  ng-blur="cardUpdate(cardservice.getCurrent())"

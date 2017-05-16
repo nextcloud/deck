@@ -506,7 +506,7 @@ button:hover {
 	background-color: white;
 }
 
-.save-indicator {
+#card-description .save-indicator {
 	background-color: #009900;
 	color: #ffffff;
 	border-radius: 3px;
@@ -514,6 +514,9 @@ button:hover {
 	padding: 1px 10px;
 	font-size: 8pt !important;
 	display: none;
+}
+#card-description .icon-help {
+	float: right;
 }
 
 #sidebar-header,
@@ -903,6 +906,12 @@ button:hover {
 
 .icon-group {
 	background-image: url('../../../settings/img/users.svg');
+}
+
+.icon-help {
+	background-image: url('../../../settings/img/help.svg');
+	padding: 11px 20px;
+	vertical-align: text-bottom;
 }
 
 .icon-add-white {
