@@ -37,9 +37,10 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
 
     $stateProvider
         .state('list', {
-            url: "/",
+            url: "/:filter",
             templateUrl: "/boardlist.mainView.html",
             controller: 'ListController',
+			reloadOnSearch: false,
 			params: {
 				filter: { value: '', dynamic: true }
             }

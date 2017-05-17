@@ -16,7 +16,7 @@
 💥 This is still alpha software: it may not be stable enough for production!
 
 </description>
-    <version>0.1.4.1</version>
+    <version>0.1.4.2</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
@@ -30,6 +30,9 @@
     <dependencies>
         <nextcloud min-version="11" max-version="13" />
     </dependencies>
+    <background-jobs>
+        <job>OCA\Deck\Cron\DeleteCron</job>
+    </background-jobs>
     <repair-steps>
         <post-migration>
             <step>OCA\Deck\Migration\UnknownUsers</step>

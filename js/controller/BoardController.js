@@ -114,7 +114,6 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 
 	// Handle initial Loading
 	BoardService.fetchOne($scope.id).then(function (data) {
-		BoardService.getPermissions();
 		$scope.statusservice.releaseWaiting();
 	}, function (error) {
 		$scope.statusservice.setError('Error occured', error);

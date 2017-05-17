@@ -21,7 +21,7 @@
  *  
  */
 
-app.controller('ListController', function ($scope, $location, $filter, BoardService, $element, $timeout, $stateParams) {
+app.controller('ListController', function ($scope, $location, $filter, BoardService, $element, $timeout, $stateParams, $state) {
 	$scope.boards = [];
 	$scope.newBoard = {};
 	$scope.status = {
@@ -58,7 +58,7 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 		} else {
 			$scope.boardservice.sorted = $filter('cardFilter')($scope.boardservice.sorted, {archived: false});
 		}
-		$scope.boardservice.sorted = $filter('orderBy')($scope.boardservice.sorted, 'title');
+		$scope.boardservice.sorted = $filter('orderBy')($scope.boardservice.sorted, ['deletedAt', 'title']);
 	};
 
 	$scope.$state = $stateParams;
@@ -69,6 +69,13 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 
 	$scope.selectColor = function(color) {
 		$scope.newBoard.color = color;
+	};
+
+	$scope.gotoBoard = function(board) {
+		if(board.deletedAt > 0) {
+			return false;
+		}
+		return $state.go('board', {boardId: board.id});
 	};
 
 	$scope.boardCreate = function() {
@@ -109,24 +116,15 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 	};
 
 	$scope.boardDelete = function(board) {
-		var boardId = board.id;
-		$scope.status.deleteUndo[boardId] = 10;
-		$scope.boardDeleteCountdown = function () {
-			if($scope.status.deleteUndo[boardId] > 0) {
-				$scope.status.deleteUndo[boardId]--;
-				$timeout($scope.boardDeleteCountdown, 1000);
-			}
-			if($scope.status.deleteUndo[boardId] === 0) {
-				BoardService.delete(board.id).then(function (data) {
-					$scope.filterData();
-				});
-			}
-		};
-		$timeout($scope.boardDeleteCountdown, 1000);
+		BoardService.delete(board.id).then(function (data) {
+			$scope.filterData();
+		});
 	};
 
 	$scope.boardDeleteUndo = function (board) {
-		delete $scope.status.deleteUndo[board.id];
+		BoardService.deleteUndo(board.id).then(function (data) {
+			$scope.filterData();
+		})
 	};
 
 });

@@ -108,6 +108,14 @@ class BoardController extends Controller {
 	public function delete($boardId) {
 		return $this->boardService->delete($boardId);
 	}
+	/**
+	 * @NoAdminRequired
+	 * @param $boardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
+	public function deleteUndo($boardId) {
+		return $this->boardService->deleteUndo($boardId);
+	}
 
 	/**
 	 * @NoAdminRequired

@@ -705,6 +705,10 @@ button.button-inline:hover {
 	width: 50%;
 }
 
+#boardlist tr.deleted td * {
+	opacity: 0.5;
+}
+
 #boardlist td form {
 	display: flex;
 	width: 100%;
@@ -722,10 +726,16 @@ button.button-inline:hover {
 	width: 32px;
 }
 
-#boardlist .popovermenu {
-	top: 9px;
-		right: -36px;
+#boardlist td .app-popover-menu-utils {
+	float: right;
 }
+
+#boardlist .popovermenu {
+	top: 33px;
+	right: -5px;
+}
+
+
 
 /**
  * Board details

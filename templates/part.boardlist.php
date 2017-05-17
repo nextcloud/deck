@@ -9,12 +9,12 @@
 		</tr>
 		</thead>
 		<tbody>
-		<tr data-ng-repeat="b in boardservice.sorted">
-			<td ui-sref="board({boardId: b.id})">
+		<tr data-ng-repeat="b in boardservice.sorted" ng-class="{deleted: b.deletedAt > 0}">
+			<td ng-click="gotoBoard(b)">
 				<span class="board-bullet"
 					  style="background-color:#{{b.color}};"> </span>
 			</td>
-			<td ui-sref="board({boardId: b.id})"><a href="#/board/{{b.id}}">{{ b.title }}</a></td>
+			<td ng-click="gotoBoard(b)">{{ b.title }}</td>
 			<td>
 				<div id="assigned-users">
 					<div class="avatardiv" avatar displayname="{{ b.owner.uid }}" title="{{ b.owner.displayname }}"></div>
@@ -22,8 +22,9 @@
 				</div>
 			</td>
 			<td>
-				<div class="app-popover-menu-utils">
-					<button class="icon icon-more"></button>
+				<div class="hint"></div>
+				<div class="app-popover-menu-utils" ng-if="b.archived && b.deletedAt == 0">
+					<button class="icon icon-more" title="More actions"></button>
 					<div class="popovermenu bubble hidden">
 						<ul>
 							<li ng-if="boardservice.canManage(b) && !b.archived" ng-click="boardArchive(b)">
@@ -44,6 +45,9 @@
 							</li>
 						</ul>
 					</div>
+				</div>
+				<div class="app-popover-menu-utils" ng-if="b.archived && b.deletedAt > 0">
+					<button class="icon icon-history" ng-click="boardDeleteUndo(b)" title="Undo board deletion - Otherwise the board will be deleted during the next cronjob run."></button>
 				</div>
 			</td>
 		</tr>

@@ -26,6 +26,33 @@ app.factory('BoardService', function(ApiService, $http, $q){
     };
     BoardService.prototype = angular.copy(ApiService.prototype);
 
+	BoardService.prototype.delete = function (id) {
+		var deferred = $q.defer();
+		var self = this;
+
+		$http.delete(this.baseUrl + '/' + id).then(function (response) {
+			self.data[id].deletedAt = response.data.deletedAt;
+			deferred.resolve(response.data);
+		}, function (error) {
+			deferred.reject('Deleting ' + self.endpoint + ' failed');
+		});
+		return deferred.promise;
+	};
+
+	BoardService.prototype.deleteUndo = function (id) {
+		var deferred = $q.defer();
+		var self = this;
+		var _id = id;
+		$http.post(this.baseUrl + '/' + id + '/deleteUndo').then(function (response) {
+			self.data[_id].deletedAt = 0;
+			console.log(self.data[_id]);
+			deferred.resolve(response.data);
+		}, function (error) {
+			deferred.reject('Deleting ' + self.endpoint + ' failed');
+		});
+		return deferred.promise;
+	};
+
 	BoardService.prototype.searchUsers = function (search) {
 		var deferred = $q.defer();
 		var self = this;
@@ -149,17 +176,6 @@ app.factory('BoardService', function(ApiService, $http, $q){
         });
         acl = null;
         return deferred.promise;
-    };
-
-    BoardService.prototype.getPermissions = function() {
-        var board = this.getCurrent();
-        var deferred = $q.defer();
-        $http.get(this.baseUrl + '/' + board.id + '/permissions').then(function (response) {
-            board.permissions = response.data;
-            deferred.resolve(response.data);
-        }, function (error) {
-            deferred.reject('Error fetching board permissions ' + board);
-        });
     };
 
     BoardService.prototype.canRead = function() {

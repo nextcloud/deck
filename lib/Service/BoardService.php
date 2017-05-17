@@ -107,6 +107,23 @@ class BoardService {
 		return $board->getArchived();
 	}
 
+	public function isDeleted($mapper, $id) {
+		try {
+			if ($mapper instanceof IPermissionMapper) {
+				$boardId = $mapper->findBoardId($id);
+			} else {
+				$boardId = $id;
+			}
+			if ($boardId === null) {
+				return false;
+			}
+		} catch (DoesNotExistException $exception) {
+			return false;
+		}
+		$board = $this->find($boardId);
+		return $board->getDeletedAt() > 0;
+	}
+
 
 
 	public function create($title, $userId, $color) {
@@ -139,7 +156,17 @@ class BoardService {
 
 	public function delete($id) {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
-		return $this->boardMapper->delete($this->find($id));
+		$board = $this->find($id);
+		$board->setDeletedAt(time());
+		$this->boardMapper->update($board);
+		return $board;
+	}
+
+	public function deleteUndo($id) {
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
+		$board = $this->find($id);
+		$board->setDeletedAt(0);
+		$this->boardMapper->update($board);
 	}
 
 	public function update($id, $title, $color, $archived) {
