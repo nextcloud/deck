@@ -41,7 +41,7 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
             templateUrl: "/boardlist.mainView.html",
             controller: 'ListController',
 			params: {
-				filter: { value: '' }
+				filter: { value: '', dynamic: true }
             }
 		})
         .state('board', {

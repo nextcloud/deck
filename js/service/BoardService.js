@@ -167,28 +167,31 @@ app.factory('BoardService', function(ApiService, $http, $q){
             return false;
         }
         return this.getCurrent().permissions['PERMISSION_READ'];
-    }
+    };
 
     BoardService.prototype.canEdit = function() {
         if(!this.getCurrent() || !this.getCurrent().permissions) {
             return false;
         }
         return this.getCurrent().permissions['PERMISSION_EDIT'];
-    }
+    };
 
-    BoardService.prototype.canManage = function() {
+    BoardService.prototype.canManage = function(board = null) {
+    	if(board !== null) {
+			return board.permissions['PERMISSION_MANAGE'];
+		}
         if(!this.getCurrent() || !this.getCurrent().permissions) {
             return false;
         }
         return this.getCurrent().permissions['PERMISSION_MANAGE'];
-    }
+    };
 
     BoardService.prototype.canShare = function() {
         if(!this.getCurrent() || !this.getCurrent().permissions) {
             return false;
         }
         return this.getCurrent().permissions['PERMISSION_SHARE'];
-    }
+    };
 
     BoardService.prototype.isArchived = function () {
 		if(!this.getCurrent() || this.getCurrent().archived) {

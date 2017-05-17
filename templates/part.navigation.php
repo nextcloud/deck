@@ -1,8 +1,8 @@
 <ul class="with-icon">
 
-	<li><a ui-sref="list({ filter: ''})" class="icon-deck"><?php p($l->t('All Boards')); ?></a></li>
-	<li><a ui-sref="list({ filter: 'archived' })" class="icon-archive"><?php p($l->t('Archived boards')); ?></a></li>
-	<li><a ui-sref="list({ filter: 'shared' })" class="icon-share"><?php p($l->t('Shared boards')); ?></a></li>
+	<li ng-class="{active: status.filter === '' && !boardservice.getCurrent()}"><a ui-sref="list({ filter: ''})" class="icon-deck"><?php p($l->t('All Boards')); ?></a></li>
+	<li ng-class="{active: status.filter === 'archived'}"><a ui-sref="list({ filter: 'archived' })" class="icon-archive"><?php p($l->t('Archived boards')); ?></a></li>
+	<li ng-class="{active: status.filter === 'shared'}"><a ui-sref="list({ filter: 'shared' })" class="icon-share"><?php p($l->t('Shared boards')); ?></a></li>
 
 	<li class="with-icon with-menu" ng-class="{active: b.id === boardservice.getCurrent().id}" data-ng-repeat="b in boardservice.sidebar">
 		<span class="board-bullet"  style="background-color:#{{b.color}};" ng-if="!b.status.edit"> </span>

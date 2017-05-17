@@ -26,20 +26,20 @@
 					<button class="icon icon-more"></button>
 					<div class="popovermenu bubble hidden">
 						<ul>
-							<li ng-if="boardservice.canManage() && !b.archived" ng-click="boardArchive(b)">
+							<li ng-if="boardservice.canManage(b) && !b.archived" ng-click="boardArchive(b)">
 								<a class="menuitem"><span class="icon-archive"></span> <?php p($l->t('Archive board')); ?>
 								</a>
 							</li>
-							<li ng-if="boardservice.canManage() && b.archived" ng-click="boardUnarchive(b)">
+							<li ng-if="boardservice.canManage(b) && b.archived" ng-click="boardUnarchive(b)">
 								<a class="menuitem"><span class="icon-archive"></span> <?php p($l->t('Unarchive board')); ?>
 								</a>
 							</li>
-							<li ng-if="boardservice.canManage() && b.archived" ng-click="boardDelete(b)">
+							<li ng-if="boardservice.canManage(b) && b.archived" ng-click="boardDelete(b)">
 								<a class="menuitem"><span class="icon-delete"></span> <?php p($l->t('Delete board')); ?>
 								</a>
 							</li>
 							<li ui-sref="board.detail({boardId: b.id})">
-								<a class="menuitem"><span class="icon-settings-dark"></span> <?php p($l->t('Board settings')); ?>
+								<a class="menuitem"><span class="icon-info"></span> <?php p($l->t('Board details')); ?>
 								</a>
 							</li>
 						</ul>

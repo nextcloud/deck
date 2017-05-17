@@ -44,7 +44,9 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 
 	$scope.filterData = function () {
 		angular.copy($scope.boardservice.getData(), $scope.boardservice.sorted);
-		$scope.boardservice.sidebar = $filter('orderBy')($scope.boardservice.sorted, 'title');
+		angular.copy($scope.boardservice.sorted, $scope.boardservice.sidebar);
+		$scope.boardservice.sidebar = $filter('orderBy')($scope.boardservice.sidebar, 'title');
+		$scope.boardservice.sidebar = $filter('cardFilter')($scope.boardservice.sidebar, {archived: false});
 
 		if ($scope.status.filter === 'archived') {
 			var filter = {};
