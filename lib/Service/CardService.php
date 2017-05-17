@@ -172,7 +172,7 @@ class CardService {
 
 	public function removeLabel($cardId, $labelId) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
-		if($this->boardService->isArchived($this->cardMapper, $id)) {
+		if($this->boardService->isArchived($this->cardMapper, $cardId)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		$card = $this->cardMapper->find($cardId);

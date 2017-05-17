@@ -134,11 +134,12 @@ class BoardServiceTest extends \Test\TestCase {
 			->method('update')
 			->with($board)
 			->willReturn($board);
-		$b = $this->service->update(123, 'MyNewNameBoard', 'ffffff');
+		$b = $this->service->update(123, 'MyNewNameBoard', 'ffffff', false);
 
 		$this->assertEquals($b->getTitle(), 'MyNewNameBoard');
 		$this->assertEquals($b->getOwner(), 'admin');
 		$this->assertEquals($b->getColor(), 'ffffff');
+		$this->assertEquals($b->getArchived(), false);
 	}
 
 	public function testDelete() {

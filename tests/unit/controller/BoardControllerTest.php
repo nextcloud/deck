@@ -107,9 +107,9 @@ class BoardControllerTest extends \PHPUnit_Framework_TestCase {
 	public function testUpdate() {
 		$this->boardService->expects($this->once())
 			->method('update')
-			->with(1, 2, 3)
+			->with(1, 2, 3, false)
 			->willReturn(1);
-		$this->assertEquals(1, $this->controller->update(1, 2, 3));
+		$this->assertEquals(1, $this->controller->update(1, 2, 3, false));
 	}
 
 	public function testDelete() {
