@@ -47,16 +47,14 @@
 			 data-columnindex="{{$index}}" id="column{{$index}}"
 			 style="">
 			<h2><span ng-show="!s.status.editStack">{{ s.title }}</span>
-				<form ng-submit="stackservice.update(s)">
+				<form ng-if="s.status.editStack" ng-submit="stackservice.update(s)">
 					<input type="text" placeholder="Add a new stack"
-						   ng-blur="s.status.editStack=false" ng-model="s.title"
+						   ng-blur="stackservice.update(s)" ng-model="s.title"
 						   ng-if="s.status.editStack" autofocus-on-insert
 						   required maxlength="100"/>
 				</form>
-				<div class="stack-actions">
-					<button class="icon icon-confirm" ng-if="s.status.editStack"
-							type="submit"></button>
-					<button class="icon-rename" ng-if="!s.status.editStack"
+				<div ng-if="!s.status.editStack" class="stack-actions">
+					<button class="icon-rename"
 							ng-click="s.status.editStack=true"></button>
 					<button class="icon-delete"
 							ng-click="stackservice.delete(s.id)"></button>

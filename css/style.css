@@ -254,8 +254,12 @@ button:hover {
 	font-size: 12pt;
 	font-weight: 700;
 	border: 0;
-	background-color: transparent;
+	background-color: white;
 	min-height: initial;
+}
+
+.stack form {
+	width: 100%;
 }
 
 .stack h2 button,
