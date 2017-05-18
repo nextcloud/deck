@@ -192,8 +192,8 @@ app.factory('BoardService', function(ApiService, $http, $q){
         return this.getCurrent().permissions['PERMISSION_EDIT'];
     };
 
-    BoardService.prototype.canManage = function(board = null) {
-    	if(board !== null) {
+    BoardService.prototype.canManage = function(board) {
+    	if(board !== null && board !== undefined) {
 			return board.permissions['PERMISSION_MANAGE'];
 		}
         if(!this.getCurrent() || !this.getCurrent().permissions) {

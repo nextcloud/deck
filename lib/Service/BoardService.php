@@ -87,6 +87,13 @@ class BoardService {
 				$this->boardMapper->mapAcl($acl);
 			}
 		}
+		$permissions = $this->permissionService->matchPermissions($board);
+		$board->setPermissions([
+			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ],
+			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT],
+			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE],
+			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
+		]);
 		return $board;
 	}
 

@@ -64,10 +64,7 @@
 							</ul>
 
 						</div>
-
-						<div class="card-assignees" ng-if="c.assignees">
-							<!--   <div class="avatar" avatar user="{{c.owner}}" size="24"></div>//-->
-						</div>
+						
 						<div class="card-controls">
 							<i class="icon icon-filetype-text" ng-if="c.description" title="{{ c.description }}"></i>
 							<div class="app-popover-menu-utils" ng-if="!boardservice.isArchived>

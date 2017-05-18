@@ -148,10 +148,7 @@ class BoardServiceTest extends \Test\TestCase {
 		$this->boardMapper->expects($this->once())
 			->method('find')
 			->willReturn($board);
-		$this->boardMapper->expects($this->once())
-			->method('delete')
-			->willReturn(1);
-		$this->assertEquals(1, $this->service->delete(123));
+		$this->assertEquals($board, $this->service->delete(123));
 	}
 
 	public function testAddAcl() {

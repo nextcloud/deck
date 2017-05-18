@@ -14,7 +14,7 @@
 				<span class="board-bullet"
 					  style="background-color:#{{b.color}};"> </span>
 			</td>
-			<td ng-click="gotoBoard(b)">{{ b.title }}</td>
+			<td ng-click="gotoBoard(b)">{{ b.title }}</a></td>
 			<td>
 				<div id="assigned-users">
 					<div class="avatardiv" avatar displayname="{{ b.owner.uid }}" title="{{ b.owner.displayname }}"></div>
@@ -23,7 +23,7 @@
 			</td>
 			<td>
 				<div class="hint"></div>
-				<div class="app-popover-menu-utils" ng-if="b.archived && b.deletedAt == 0">
+				<div class="app-popover-menu-utils" ng-if="b.deletedAt == 0">
 					<button class="icon icon-more" title="More actions"></button>
 					<div class="popovermenu bubble hidden">
 						<ul>
@@ -60,6 +60,7 @@
 				</a>
 			</td>
 		</tr>
+
 		<tr ng-if="status.filter === '' && status.addBoard">
 			<td><span class="icon icon-add"></span></td>
 			<td>
