@@ -30,6 +30,8 @@ OC.L10N.register(
     "Modified:" : "Geändert:",
     "Created:" : "Erstellt:",
     "by" : "von",
+    "Description" : "Beschreibung",
+    "Formating help" : "Formatierungshilfe",
     "Saved" : "Gespeichert",
     "Add a card description ..." : "Der Karte eine Beschreibung hinzufügen…",
     "Attachments" : "Anhänge",

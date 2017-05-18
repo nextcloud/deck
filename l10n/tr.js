@@ -30,6 +30,8 @@ OC.L10N.register(
     "Modified:" : "Değiştirilme:",
     "Created:" : "Oluşturulma:",
     "by" : "Kişi:",
+    "Description" : "Açıklama",
+    "Formating help" : "Biçimlendirme yardımı",
     "Saved" : "Kaydedildi",
     "Add a card description ..." : "Bir kart açıklaması ekle...",
     "Attachments" : "Ek dosyalar",

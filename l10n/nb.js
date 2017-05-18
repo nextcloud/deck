@@ -26,7 +26,6 @@ OC.L10N.register(
     "Board title" : "Bordtittel",
     "Members" : "Medlemmer",
     "Create new board" : "Opprett et nytt bord",
-    "New board title" : "Ny bord tittel",
     "Modified:" : "Endret:",
     "Created:" : "Opprettet:",
     "by" : "av",
