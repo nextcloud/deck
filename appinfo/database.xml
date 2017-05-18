@@ -287,13 +287,13 @@
                 <length>4</length>
             </field>
             <index>
-                <name>deck_assigned_labels_label_id_index</name>
+                <name>deck_assigned_labels_idx_i</name>
                 <field>
                     <name>label_id</name>
                 </field>
             </index>
             <index>
-                <name>deck_assigned_labels_card_id_index</name>
+                <name>deck_assigned_labels_idx_c</name>
                 <field>
                     <name>card_id</name>
                 </field>
@@ -360,7 +360,7 @@
                 </field>
             </index>
             <index>
-                <name>deck_board_acl_board_id_index</name>
+                <name>deck_board_acl_idx_i</name>
                 <field>
                     <name>board_id</name>
                 </field>
