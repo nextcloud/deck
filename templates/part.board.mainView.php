@@ -70,7 +70,6 @@
 					ng-class="{'archived': c.archived, 'has-labels': c.labels.length>0 }">
 					<div data-as-sortable-item-handle>
 						<div class="card-upper">
-							<i class="icon icon-filetype-text icon-description-marker" ng-if="c.description" title="{{ c.description }}"></i>
 							<h3>{{ c.title }}</h3>
 							<ul class="labels">
 								<li ng-repeat="label in c.labels"
@@ -80,33 +79,38 @@
 							</ul>
 
 						</div>
-						<div class="app-popover-menu-utils">
-						<button class="card-options icon-more" ng-model="card"></button>
-						<div class="popovermenu bubble hidden">
-							<ul>
-								<li ng-if="filter!=='archive'">
-									<a class="menuitem action action-rename permanent"
-									   data-action="Archive"
-									   ng-click="cardArchive(c); $event.stopPropagation();"><span
-											class="icon icon-archive"></span><span><?php p($l->t('Archive')); ?></span></a>
-								</li>
-								<li ng-if="filter==='archive'">
-									<a class="menuitem action action-rename permanent"
-									   data-action="Unarchive"
-									   ng-click="cardUnarchive(c); $event.stopPropagation();"><span
-											class="icon icon-archive"></span><span><?php p($l->t('Unarchive')); ?></span></a>
-								</li>
-								<li>
-									<a class="menuitem action action-delete permanent"
-									   data-action="Delete"
-									   ng-click="cardDelete(c)"><span
-											class="icon icon-delete"></span><span><?php p($l->t('Delete')); ?></span></a>
-								</li>
-							</ul>
-						</div>
-							</div>
+						
 						<div class="card-assignees" ng-if="c.assignees">
 							<!--   <div class="avatar" avatar user="{{c.owner}}" size="24"></div>//-->
+						</div>
+						<div class="card-controls">
+							<i class="icon icon-filetype-text" ng-if="c.description" title="{{ c.description }}"></i>
+							<div class="space"></div>
+							<div class="app-popover-menu-utils">
+								<button class="card-options icon-more" ng-model="card"></button>
+								<div class="popovermenu hidden">
+									<ul>
+										<li ng-if="filter!=='archive'">
+											<a class="menuitem action action-rename permanent"
+											data-action="Archive"
+											ng-click="cardArchive(c); $event.stopPropagation();"><span
+													class="icon icon-archive"></span><span><?php p($l->t('Archive')); ?></span></a>
+										</li>
+										<li ng-if="filter==='archive'">
+											<a class="menuitem action action-rename permanent"
+											data-action="Unarchive"
+											ng-click="cardUnarchive(c); $event.stopPropagation();"><span
+													class="icon icon-archive"></span><span><?php p($l->t('Unarchive')); ?></span></a>
+										</li>
+										<li>
+											<a class="menuitem action action-delete permanent"
+											data-action="Delete"
+											ng-click="cardDelete(c)"><span
+													class="icon icon-delete"></span><span><?php p($l->t('Delete')); ?></span></a>
+										</li>
+									</ul>
+								</div>
+							</div>
 						</div>
 						<!--<span class="info due"><i class="fa fa-clock-o" aria-hidden="true"></i> <span>Today</span></span>
 						<span class="info tasks"><i class="fa fa-list" aria-hidden="true"></i> <span>3/12</span></span>

@@ -303,21 +303,34 @@ button:hover {
 	padding: 5px;
 }
 
-.card .card-options {
-	position: absolute;
-	bottom: 10px;
-	right: 10px;
-	display: none;
+.card .card-controls {
+	padding: 10px;
+	background: #f8f8f8;
+	display: flex;
+	position: relative;
 }
 
-.card:hover .card-options {
-	display: block;
+.card .card-controls .card-options {
+	opacity: 0.25;
+	position: absolute;
+	right: 10px;
+	top: 8px;
+}
+
+.card .card-controls:hover .card-options {
+	opacity: 1;
+}
+
+.card .card-controls .space {
+	width: 100%;
+	min-height: 16px;
 }
 
 .card .popovermenu {
 	z-index: 999;
 	opacity: 1;
-	margin-left: 10px;
+	margin-top: 25px;
+	margin-right: 3px;
 	display: block;
 }
 
@@ -938,12 +951,6 @@ button:hover {
 
 .icon-details-white {
 	background-image: url('../img/details-white.svg');
-}
-
-.icon-description-marker {
-	position: absolute;
-	top: 0px;
-	right: 0px;
 }
 
 .icon-home {
