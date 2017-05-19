@@ -53,14 +53,14 @@
 						   ng-if="s.status.editStack" autofocus-on-insert
 						   required maxlength="100"/>
 				</form>
-				<div class="stack-actions">
+				<span class="stack-actions">
 					<button class="icon icon-confirm" ng-if="s.status.editStack"
 							type="submit"></button>
 					<button class="icon-rename" ng-if="!s.status.editStack"
 							ng-click="s.status.editStack=true"></button>
 					<button class="icon-delete"
 							ng-click="stackservice.delete(s.id)"></button>
-				</div>
+				</span>
 			</h2>
 			<ul data-as-sortable="sortOptions" is-disabled="!boardservice.canEdit() || filter==='archive'" data-ng-model="s.cards"
 				style="min-height: 40px;">
