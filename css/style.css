@@ -244,7 +244,7 @@ button:hover {
 	font-weight: 700;
 	overflow: hidden;
 	display: flex;
-	min-height: 40px;
+	min-height: 42px;
 }
 
 .stack h2 input {
@@ -261,21 +261,30 @@ button:hover {
 .stack h2 button,
 .stack .stack-actions {
 	float: right;
-	margin: 0px 0px 0px 20px;
+	margin: 0px 0px 0px 5px;
 }
 
 .stack h2 span {
-	width: 100%;
+	max-width: 100%;
 	white-space: normal;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	flex-grow: 1;
+}
+.stack h2 form {
+	flex-grow: 1;
 }
 
 .stack h2 .stack-actions {
 	display: none;
+	flex-grow: 0;
+	height: 24px;
 }
 
 .stack h2:hover .stack-actions {
 	display: flex;
 	float: right;
+	min-width: 58px;
 }
 
 .card {
@@ -297,10 +306,13 @@ button:hover {
 	padding: 5px;
 }
 
-.card .card-options {
+.app-popover-menu-utils {
 	position: absolute;
-	bottom: 10px;
-	right: 10px;
+	top: 0;
+	right: 0;
+	margin-top: 10px;
+}
+.card .card-options {
 	display: none;
 }
 
@@ -311,7 +323,7 @@ button:hover {
 .card .popovermenu {
 	z-index: 999;
 	opacity: 1;
-	margin-left: 10px;
+	margin: 10px 5px;
 	display: block;
 }
 
@@ -334,10 +346,10 @@ button:hover {
 .card h3 {
 	font-weight: bold;
 	font-size: 10pt;
-	padding: 0;
 	margin: 5px;
-	display: inline-block;
-	float: left;
+	max-width: 250px;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .card.has-labels h3 {
