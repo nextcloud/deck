@@ -355,8 +355,8 @@ button:hover {
 	font-size: 10pt;
 	padding: 0;
 	margin: 5px;
-	display: inline-block;
-	float: left;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .card.has-labels h3 {
