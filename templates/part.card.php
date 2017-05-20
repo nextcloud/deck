@@ -35,7 +35,7 @@
 				   placeholder="Add a label"
 				   on-select="labelAssign($item, $model)"
 				   on-remove="labelRemove($item, $model)" ng-disabled="!boardservice.canEdit() || archived">
-			<ui-select-match placeholder="Select labels...">
+			<ui-select-match placeholder="Select labels…">
 				<span class="select-label" style="background-color:#{{$item.color}}; color:{{ $item.color|textColorFilter }};">{{$item.title}}&nbsp;</span>
 			</ui-select-match>
 			<ui-select-choices
@@ -50,10 +50,10 @@
 		<ui-select multiple tagging="" ng-model="card.assignees"
 				   theme="bootstrap" style="width:100%;"
 				   title="Choose a user to assign"
-				   placeholder="Assign users ..."
+				   placeholder="Assign users…"
 				   on-select="userAssign($item, $model)"
 				   on-remove="userRemove($item, $model)" ng-disabled="archived">
-			<ui-select-match placeholder="Select users...">{{$item.title}}
+			<ui-select-match placeholder="Select users…">{{$item.title}}
 			</ui-select-match>
 			<ui-select-choices
 				repeat="label in boardservice.getCurrent().labels | filter:$select.search">
@@ -70,7 +70,7 @@
 			<span class="save-indicator"><?php p($l->t('Saved')); ?></span>
 		</h3>
 		<textarea elastic ng-if="status.cardEditDescription"
-				  placeholder="Enter your description here ..."
+				  placeholder="Enter your description here…"
 				  ng-blur="cardUpdate(cardservice.getCurrent())"
 				  ng-model="cardservice.getCurrent().description"
 				  autofocus-on-insert> </textarea>
@@ -79,7 +79,7 @@
 			<div markdown-it="cardservice.getCurrent().description"
 				 id="markdown"></div>
 			<div class="placeholder"
-				 ng-if="!cardservice.getCurrent().description"><?php p($l->t('Add a card description ...')); ?></div>
+				 ng-if="!cardservice.getCurrent().description"><?php p($l->t('Add a card description…')); ?></div>
 		</div>
 
 	</div>
