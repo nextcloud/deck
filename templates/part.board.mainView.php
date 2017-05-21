@@ -5,36 +5,39 @@
 		<p>{{ statusservice.text }}</p></div>
 </div>
 <div id="board-header">
-	<a href="#" title="<?php p($l->t('All Boards')); ?>">
-		<i class="icon icon-home"></i>
-	</a>
+	<div id="home" class="crumb svg last">
+		<a href="#" title="<?php p($l->t('All Boards')); ?>">
+			<img class="svg" src="../../../core/img/places/home.svg" alt="Home">
+		</a>
+	</div>
 	<h1 class="title" style="border-bottom: 2px solid #{{boardservice.getCurrent().color }};">
 		{{ boardservice.getCurrent().title }}
 	</h1>
-	<div class="board-action-button">
-		<a ui-sref="board.detail({ id: id })" title="<?php p($l->t('Board details')); ?>">
-			<i class="icon icon-details"></i>
-		</a>
-	</div>
-	<div class="board-action-button" ng-if="filter!='archive'">
-		<a ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>">
-			<i class="icon icon-archive"></i>
-		</a>
-	</div>
-	<div class="board-action-button" ng-if="filter=='archive'">
-		<a ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>">
-			<i class="icon icon-archive"></i>
-		</a>
-	</div>
-	<div id="stack-add" class="board-action-button" ng-if="boardservice.canEdit() && checkCanEdit()">
-		<form class="ng-pristine ng-valid" ng-submit="createStack()">
-			<input type="text" placeholder="Add a new stack"
-				ng-focus="status.addStack=true"
-				ng-blur="status.addStack=false"
-				ng-model="newStack.title" required
-				maxlength="100" />
-			<button class="icon icon-add" style="opacity: {{status.addStack ? 1: 0.5}};" type="submit"></button>
-		</form>
+	<div class="space"></div>
+	<div id="board-header-controls">
+		<div id="stack-add" ng-if="boardservice.canEdit() && checkCanEdit()">
+			<form class="ng-pristine ng-valid" ng-submit="createStack()">
+				<input type="text" placeholder="Add a new stack"
+					ng-focus="status.addStack=true"
+					ng-blur="status.addStack=false"
+					ng-model="newStack.title" required
+					maxlength="100" />
+				<button class="icon icon-add" style="opacity: {{status.addStack ? 1: 0.5}};" type="submit"></button>
+			</form>
+		</div>
+		<div class="board-action-button button" ng-if="filter!='archive'">
+			<a ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>"><span class="icon icon-archive"></span></a>
+		</div>
+		<div class="board-action-button button" ng-if="filter=='archive'">
+			<a ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>">
+				<i class="icon icon-archive"></i>
+			</a>
+		</div>
+		<div class="board-action-button button">
+			<a ui-sref="board.detail({ id: id })"  title="<?php p($l->t('Board details')); ?>">
+				<i class="icon icon-details"></i>
+			</a>
+		</div>
 	</div>
 </div>
 

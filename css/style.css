@@ -126,21 +126,26 @@ button:hover {
 	position: relative;
 	z-index: 120;
 	height: 44px;
+	display: flex;
+	align-items: center;
 }
 
 #board-header > * {
 	font-size: 14pt;
-	padding: 7px;
-	margin: 7px;
-	float: left;
 }
 
-#board-header > a {
-	background: url('/core/img/breadcrumb.svg?v=1');
-	background-repeat: no-repeat;
-	background-position: right center;
-	background-size: auto 24px;
-	padding-right: 24px;
+#board-header > h1 {
+	white-space: nowrap;
+}
+
+#board-header #home {
+	position: relative;
+	padding: 0px 12px;
+}
+
+#board-header #home a{
+	position: relative;
+	padding: 0px;
 }
 
 #board-actions {
@@ -159,6 +164,18 @@ button:hover {
 #board-actions .filter:hover {
 	color: #333333;
 	cursor: pointer;
+}
+
+#board-header-controls {
+	display: flex;
+	align-items: center;
+	position: relative;
+}
+
+#board-header-controls .board-action-button,
+#board-header-controls .board-action-button * {
+	display: flex;
+	align-items: center;
 }
 
 .filter-select {
@@ -192,22 +209,19 @@ button:hover {
 	background-color: transparent;
 }
 
-#board-header > .board-action-button {
-	float: right;
-}
-
 #stack-add {
 	background-color: rgba(240,240,240,.9);
 	border-radius: 3px;
-	padding: 0;
+	margin-right: 12px;
+}
+
+#stack-add > form {
+	display: flex;
 }
 
 #stack-add input {
-	padding: 7px;
-	margin: 0px;
+	padding: 4px 5px;
 	border: 0px none transparent;
-	display: table-cell;
-	vertical-align: middle;
 	min-height: initial;
 	background-color: rgba(240,240,240,.9);
 }
@@ -222,11 +236,6 @@ button:hover {
 
 #stack-add input:-moz-ui-invalid {
 	box-shadow:none;
-}
-
-#stack-add button {
-	display: table-cell;
-    vertical-align: middle;
 }
 
 .stack {
@@ -321,7 +330,7 @@ button:hover {
 	opacity: 1;
 }
 
-.card .card-controls .space {
+.space {
 	width: 100%;
 	min-height: 16px;
 }
@@ -845,14 +854,8 @@ button:hover {
 
 @media (max-width: 480px) {
 	/* hide board actions on mobile */
-	#board-actions {
+	#board-header-controls {
 		display: none !important;
-	}
-}
-
-@media only screen and (max-width: 768px) {
-	#board-header h1 {
-		margin-left: 50px;
 	}
 }
 
