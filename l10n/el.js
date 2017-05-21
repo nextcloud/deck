@@ -31,7 +31,6 @@ OC.L10N.register(
     "Created:" : "Δημιουργήθηκε:",
     "by" : "από",
     "Saved" : "Αποθηκεύτηκε",
-    "Add a card description ..." : "Προσθήκη περιγραφής καρτέλας ...",
     "Attachments" : "Συνημμένα",
     "Comments" : "Σχόλια",
     "History" : "Ιστορικό",

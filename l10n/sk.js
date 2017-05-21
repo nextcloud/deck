@@ -31,7 +31,6 @@ OC.L10N.register(
     "Created:" : "Vytvorené:",
     "by" : "-",
     "Saved" : "Uložené",
-    "Add a card description ..." : "Pridať popis karty ...",
     "Attachments" : "Prílohy",
     "Comments" : "Komentáre",
     "History" : "História",

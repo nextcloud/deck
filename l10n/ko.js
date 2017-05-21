@@ -31,7 +31,6 @@ OC.L10N.register(
     "Created:" : "만든 날짜:",
     "by" : "by",
     "Saved" : "저장됨",
-    "Add a card description ..." : "카드 설명 추가 ...",
     "Attachments" : "첨부",
     "Comments" : "댓글",
     "History" : "과거 기록",

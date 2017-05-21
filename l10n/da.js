@@ -31,7 +31,6 @@ OC.L10N.register(
     "Created:" : "Oprettet:",
     "by" : "af",
     "Saved" : "Gemt",
-    "Add a card description ..." : "Tilføj en kort beskrivelse",
     "Attachments" : "Vedhæftede filer",
     "Comments" : "Kommentarer",
     "History" : "Hostorik",

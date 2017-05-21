@@ -31,7 +31,6 @@ OC.L10N.register(
     "Created:" : "Creato:",
     "by" : "da",
     "Saved" : "Salvato",
-    "Add a card description ..." : "Aggiungi descrizione della scheda...",
     "Attachments" : "Allegati",
     "Comments" : "Commenti",
     "History" : "Cronologia",

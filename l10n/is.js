@@ -33,7 +33,6 @@ OC.L10N.register(
     "Description" : "Lýsing",
     "Formating help" : "Hjálp við að sníða",
     "Saved" : "Vistað",
-    "Add a card description ..." : "Settu inn lýsingu á spjaldi ...",
     "Attachments" : "Viðhengi",
     "Comments" : "Athugasemdir",
     "History" : "Ferill",

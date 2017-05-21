@@ -33,7 +33,6 @@ OC.L10N.register(
     "Description" : "描述",
     "Formating help" : "格式化帮助",
     "Saved" : "已保存",
-    "Add a card description ..." : "添加卡片说明...",
     "Attachments" : "附件",
     "Comments" : "评论",
     "History" : "历史",

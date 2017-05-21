@@ -31,7 +31,6 @@ OC.L10N.register(
     "Created:" : "Luotu:",
     "by" : " Kirjoittaja:",
     "Saved" : "Tallennettu",
-    "Add a card description ..." : "Lisää kortille kuvaus",
     "Attachments" : "Liitteet",
     "Comments" : "Kommentit",
     "History" : "Historia",
