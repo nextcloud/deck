@@ -28,7 +28,7 @@
     <screenshot>https://bitgrid.net/~jus/deck_2.png</screenshot>
     <screenshot>https://bitgrid.net/~jus/deck_3.png</screenshot>
     <dependencies>
-        <nextcloud min-version="11" max-version="12" />
+        <nextcloud min-version="11" max-version="13" />
     </dependencies>
     <repair-steps>
         <post-migration>
