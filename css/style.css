@@ -165,12 +165,6 @@ button:hover {
 	margin-left: auto;
 }
 
-#board-header-controls .board-action-button,
-#board-header-controls .board-action-button * {
-	display: flex;
-	align-items: center;
-}
-
 #board-header-controls-menu {
 	display: none;
 	padding: 5px 6px 5px 7px;
@@ -185,6 +179,12 @@ button:hover {
 #board-header-controls-menu .popovermenu{
 	margin-top: 35px;
 	margin-right: 6px;
+}
+
+.board-action-button,
+.board-action-button * {
+	display: flex;
+	align-items: center;
 }
 
 .filter-select {
