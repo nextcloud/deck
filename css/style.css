@@ -221,7 +221,7 @@ button:hover {
 #stack-add {
 	background-color: rgba(240,240,240,.9);
 	border-radius: 3px;
-	margin-right: 12px;
+	margin-right: 3px;
 }
 
 #stack-add > form {
