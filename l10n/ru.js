@@ -33,6 +33,7 @@ OC.L10N.register(
     "Description" : "Описание",
     "Formating help" : "Справка форматируется",
     "Saved" : "Сохранено",
+    "Add a card description…" : "Добавить описание карточки…",
     "Attachments" : "Вложения",
     "Comments" : "Комментарии",
     "History" : "История",
