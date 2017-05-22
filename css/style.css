@@ -957,6 +957,10 @@ button:hover {
 	background-image: url('/core/img/places/home.svg');
 }
 
+.icon-home {
+	background-image: url('/core/img/places/home.svg');
+}
+
 /**
  * Hotfix for https://github.com/angular-ui/ui-select/issues/1652
  */
