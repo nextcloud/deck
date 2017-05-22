@@ -140,11 +140,6 @@ button:hover {
 	padding: 0px 12px;
 }
 
-#board-header #home a{
-	position: relative;
-	padding: 0px;
-}
-
 #board-actions {
 	font-size: 10pt;
 	float: right;
@@ -174,6 +169,22 @@ button:hover {
 #board-header-controls .board-action-button * {
 	display: flex;
 	align-items: center;
+}
+
+#board-header-controls-menu {
+	display: none;
+	padding: 5px 6px 5px 7px;
+}
+
+#board-header-controls-menu  #popover-controls {
+	display: flex;
+	align-items: center;
+	padding-left: 3px;
+}
+
+#board-header-controls-menu .popovermenu{
+	margin-top: 35px;
+	margin-right: 6px;
 }
 
 .filter-select {
@@ -333,7 +344,7 @@ button:hover {
 	min-height: 16px;
 }
 
-.card .popovermenu {
+.popovermenu {
 	z-index: 999;
 	opacity: 1;
 	margin-top: 25px;
@@ -341,7 +352,7 @@ button:hover {
 	display: block;
 }
 
-.card .popovermenu.hidden {
+.popovermenu.hidden {
 	display: none;
 }
 
@@ -854,6 +865,10 @@ button:hover {
 	/* hide board actions on mobile */
 	#board-header-controls {
 		display: none !important;
+	}
+
+	#board-header-controls-menu {
+		display: flex;
 	}
 }
 
