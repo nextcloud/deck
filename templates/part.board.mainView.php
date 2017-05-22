@@ -13,7 +13,6 @@
 	<h1 class="title" style="border-bottom: 2px solid #{{boardservice.getCurrent().color }};">
 		{{ boardservice.getCurrent().title }}
 	</h1>
-	<div class="space"></div>
 	<div id="board-header-controls">
 		<div id="stack-add" ng-if="boardservice.canEdit() && checkCanEdit()">
 			<form class="ng-pristine ng-valid" ng-submit="createStack()">

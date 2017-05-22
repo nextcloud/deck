@@ -128,9 +128,6 @@ button:hover {
 	height: 44px;
 	display: flex;
 	align-items: center;
-}
-
-#board-header > * {
 	font-size: 14pt;
 }
 
@@ -170,6 +167,7 @@ button:hover {
 	display: flex;
 	align-items: center;
 	position: relative;
+	margin-left: auto;
 }
 
 #board-header-controls .board-action-button,
@@ -330,8 +328,8 @@ button:hover {
 	opacity: 1;
 }
 
-.space {
-	width: 100%;
+.app-popover-menu-utils {
+	margin-left: auto;
 	min-height: 16px;
 }
 
