@@ -339,6 +339,11 @@ button:hover {
 	opacity: 1;
 }
 
+.card .card-controls button {
+	padding: 0px;
+	margin-right: 0px;
+}
+
 .app-popover-menu-utils {
 	margin-left: auto;
 	min-height: 16px;
