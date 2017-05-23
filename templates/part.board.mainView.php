@@ -5,9 +5,10 @@
 		<p>{{ statusservice.text }}</p></div>
 </div>
 <div id="board-header">
-	<div id="home" class="crumb svg last">
+	<div class="crumb last">
 		<a href="#" title="<?php p($l->t('All Boards')); ?>">
-			<img class="svg" src="../../../core/img/places/home.svg" alt="Home">
+			<i class="icon icon-home"></i>
+			<span class="hidden-visually"><?php p($l->t('All Boards')); ?></span>
 		</a>
 	</div>
 	<h1 class="title" style="border-bottom: 2px solid #{{boardservice.getCurrent().color }};">
