@@ -68,7 +68,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 
 
 	$scope.stacksData = StackService;
-	$scope.stacks = {};
+	$scope.stacks = [];
 	$scope.$watch('stacksData', function (value) {
 		$scope.refreshData();
 	}, true);
@@ -87,7 +87,8 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.filterData = function (order, text) {
 		if ($scope.stacks === undefined)
 			return;
-		angular.copy(StackService.getAll(), $scope.stacks);
+		angular.copy(StackService.getData(), $scope.stacks);
+		$scope.stacks = $filter('orderBy')($scope.stacks, order);
 		angular.forEach($scope.stacks, function (value, key) {
 			var cards = $filter('cardSearchFilter')(value.cards, text);
 			cards = $filter('orderBy')(cards, order);
@@ -192,6 +193,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 
 	// settings for card sorting
 	$scope.sortOptions = {
+		id: 'card',
 		itemMoved: function (event) {
 			event.source.itemScope.modelValue.status = event.dest.sortableScope.$parent.column;
 			var order = event.dest.index;
@@ -202,7 +204,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			CardService.update(card);
 			CardService.reorder(card, order).then(function (data) {
 				StackService.addCard(card);
-				StackService.reorder(card, order);
+				StackService.reorderCard(card, order);
 				StackService.removeCard({
 					id: card.id,
 					stackId: oldStack
@@ -214,13 +216,14 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			var card = event.source.itemScope.c;
 			var stack = event.dest.sortableScope.$parent.s.id;
 			CardService.reorder(card, order).then(function (data) {
-				StackService.reorder(card, order);
+				StackService.reorderCard(card, order);
 				$scope.refreshData();
 			});
 		},
 		scrollableContainer: '#board',
 		containerPositioning: 'relative',
 		containment: '#board',
+		longTouch: true,
 		// auto scroll on drag
 		dragMove: function (itemPosition, containment, eventObj) {
 			if (eventObj) {
@@ -239,6 +242,44 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 					container.scrollTop(container.scrollTop() + 50);
 				}
 			}
+		},
+		accept: function (sourceItemHandleScope, destSortableScope, destItemScope) {
+			return sourceItemHandleScope.sortableScope.options.id === 'card';
+		}
+	};
+
+	$scope.sortOptionsStack = {
+		id: 'stack',
+		orderChanged: function (event) {
+			var order = event.dest.index;
+			var stack = event.source.itemScope.s;
+			StackService.reorder(stack, order).then(function (data) {
+				$scope.refreshData();
+			});
+		},
+		scrollableContainer: '#board',
+		containerPositioning: 'relative',
+		containment: '#board',
+		dragMove: function (itemPosition, containment, eventObj) {
+			if (eventObj) {
+				var container = $("#board");
+				var offset = container.offset();
+				var targetX = eventObj.pageX - (offset.left || container.scrollLeft());
+				var targetY = eventObj.pageY - (offset.top || container.scrollTop());
+				if (targetX < offset.left) {
+					container.scrollLeft(container.scrollLeft() - 50);
+				} else if (targetX > container.width()) {
+					container.scrollLeft(container.scrollLeft() + 50);
+				}
+				if (targetY < offset.top) {
+					container.scrollTop(container.scrollTop() - 50);
+				} else if (targetY > container.height()) {
+					container.scrollTop(container.scrollTop() + 50);
+				}
+			}
+		},
+		accept: function (sourceItemHandleScope, destSortableScope, destItemScope) {
+			return sourceItemHandleScope.sortableScope.options.id === 'stack';
 		}
 	};
 

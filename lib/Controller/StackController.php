@@ -83,6 +83,16 @@ class StackController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 * @param $stackId
+	 * @param $order
+	 * @return array
+	 */
+	public function reorder($stackId, $order) {
+		return $this->stackService->reorder($stackId, $order);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @param $stackId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
 	public function delete($stackId) {

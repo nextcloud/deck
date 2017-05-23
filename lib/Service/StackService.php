@@ -102,4 +102,29 @@ class StackService {
 		$stack->setOrder($order);
 		return $this->stackMapper->update($stack);
 	}
+
+	public function reorder($id, $order) {
+		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_EDIT);
+		$stackToSort = $this->stackMapper->find($id);
+		$stacks = $this->stackMapper->findAll($stackToSort->getBoardId());
+		$result = [];
+		$i = 0;
+		foreach ($stacks as $stack) {
+			if ($stack->id === $id) {
+				$stack->setOrder($order);
+			}
+
+			if ($i === $order) {
+				$i++;
+			}
+
+			if ($stack->id !== $id) {
+				$stack->setOrder($i++);
+			}
+			$this->stackMapper->update($stack);
+			$result[$stack->getOrder()] = $stack;
+		}
+
+		return $result;
+	}
 }

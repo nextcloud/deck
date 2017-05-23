@@ -42,11 +42,11 @@
 
 	<search on-search="search" class="ng-hide"></search>
 
-	<div id="innerBoard" data-ng-model="stacks">
-		<div class="stack" ng-repeat="s in stacks"
+	<div id="innerBoard" data-ng-model="stacks" data-as-sortable="sortOptionsStack">
+		<div class="stack" ng-repeat="s in stacks" data-as-sortable-item
 			 data-columnindex="{{$index}}" id="column{{$index}}"
 			 style="">
-			<h2><span ng-show="!s.status.editStack">{{ s.title }}</span>
+			<h2 data-as-sortable-item-handle><span ng-show="!s.status.editStack">{{ s.title }}</span>
 				<form ng-if="s.status.editStack" ng-submit="stackservice.update(s)">
 					<input type="text" placeholder="Add a new stack"
 						   ng-blur="stackservice.update(s); s.status.editStack=false" ng-model="s.title"

@@ -58,7 +58,22 @@ app.factory('StackService', function(ApiService, $http, $q){
         this.data[entity.stackId].cards.push(entity);
     };
 
-    StackService.prototype.reorder = function(entity, order) {
+	StackService.prototype.reorder = function(stack, order) {
+		var deferred = $q.defer();
+		var self = this;
+		$http.put(this.baseUrl + '/' + stack.id + '/reorder', {stackId: stack.id, order: order}).then(function (response) {
+			angular.forEach(response.data, function (value, key) {
+				var id = value.id;
+				self.data[id].order = value.order;
+			});
+			deferred.resolve(response.data);
+		}, function (error) {
+			deferred.reject('Error while update ' + self.endpoint);
+		});
+		return deferred.promise;
+	};
+
+    StackService.prototype.reorderCard = function(entity, order) {
         // assign new order
         for(var i=0, j=0;i<this.data[entity.stackId].cards.length;i++) {
             if(this.data[entity.stackId].cards[i].id === entity.id) {

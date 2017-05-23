@@ -84,6 +84,14 @@ class StackControllerTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(1, $this->controller->update(1, 2, 3, 4));
 	}
 
+	public function testReorder() {
+		$this->stackService->expects($this->once())
+			->method('reorder')
+			->with(1, 2)
+			->willReturn(1);
+		$this->assertEquals(1, $this->controller->reorder(1, 2));
+	}
+
 	public function testDelete() {
 		$this->stackService->expects($this->once())
 			->method('delete')
