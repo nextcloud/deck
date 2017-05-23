@@ -38,7 +38,7 @@
 		</div>
 	</div>
 	<div id="board-header-controls-menu" class="app-popover-menu-utils button">
-		<button class="card-options icon-more" ng-model="card"></button>
+		<button class="icon-more"></button>
 		<div class="popovermenu hidden">
 			<div id="popover-controls">
 				<div id="stack-add" ng-if="boardservice.canEdit() && checkCanEdit()">
