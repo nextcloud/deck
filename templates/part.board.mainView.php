@@ -5,12 +5,10 @@
 		<p>{{ statusservice.text }}</p></div>
 </div>
 <div id="board-header">
-	<div class="crumb last">
-		<a href="#" title="<?php p($l->t('All Boards')); ?>">
-			<i class="icon icon-home"></i>
-			<span class="hidden-visually"><?php p($l->t('All Boards')); ?></span>
-		</a>
-	</div>
+	<a class="crumb" href="#" title="<?php p($l->t('All Boards')); ?>">
+		<i class="icon icon-home"></i>
+		<span class="hidden-visually"><?php p($l->t('All Boards')); ?></span>
+	</a>
 	<h1 class="title" style="border-bottom: 2px solid #{{boardservice.getCurrent().color }};">
 		{{ boardservice.getCurrent().title }}
 	</h1>
@@ -114,7 +112,7 @@
 							</ul>
 
 						</div>
-						
+
 						<div class="card-assignees" ng-if="c.assignees">
 							<!--   <div class="avatar" avatar user="{{c.owner}}" size="24"></div>//-->
 						</div>

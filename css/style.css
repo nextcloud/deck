@@ -131,8 +131,17 @@ button:hover {
 	font-size: 14pt;
 }
 
+#board-header .crumb {
+	background-image: url(/core/img/breadcrumb.svg?v=1);
+	background-size: auto 24px;
+	background-position: right center;
+	background-repeat: no-repeat;
+	padding: 7px 14px;
+}
+
 #board-header > h1 {
 	white-space: nowrap;
+	padding: 7px;
 }
 
 #board-header #home {
