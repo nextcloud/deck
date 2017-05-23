@@ -398,6 +398,11 @@ button:hover {
 	margin: 10px;
 	border: 1px dashed #aaa;
 }
+#innerBoard > .as-sortable-placeholder {
+	display: inline-block !important;
+	margin-top: 0;
+	margin-left: 0;
+}
 
 .info {
 	padding-left: 5px;

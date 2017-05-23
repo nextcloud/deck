@@ -158,7 +158,34 @@ class StackServiceTest extends \PHPUnit_Framework_TestCase {
         $stack->setOrder(1);
         $result = $this->stackService->update(123, 'Foo', 2, 1);
         $this->assertEquals($stack, $result);
-
     }
+
+    public function testReorder() {
+		$this->permissionService->expects($this->once())->method('checkPermission');
+		$a = $this->createStack(1, 0);
+		$b = $this->createStack(2, 1);
+		$c = $this->createStack(3, 2);
+		$stacks = [$a, $b, $c];
+		$this->stackMapper->expects($this->once())
+			->method('find')
+			->with(1)
+			->willReturn($a);
+		$this->stackMapper->expects($this->once())
+			->method('findAll')
+			->willReturn($stacks);
+		$actual = $this->stackService->reorder(1, 2);
+		$a = $this->createStack(1, 2);
+		$b = $this->createStack(2, 0);
+		$c = $this->createStack(3, 1);
+		$expected = [$b, $c, $a];
+		$this->assertEquals($expected, $actual);
+	}
+
+	private function createStack($id, $order) {
+		$stack = new Stack();
+		$stack->setId($id);
+		$stack->setOrder($order);
+		return $stack;
+	}
 
 }
