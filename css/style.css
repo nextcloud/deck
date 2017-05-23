@@ -132,7 +132,7 @@ button:hover {
 }
 
 #board-header .crumb {
-	background-image: url(/core/img/breadcrumb.svg?v=1);
+	background-image: url('../../../core/img/breadcrumb.svg?v=1');
 	background-size: auto 24px;
 	background-position: right center;
 	background-repeat: no-repeat;
@@ -984,7 +984,7 @@ button:hover {
 }
 
 .icon-home {
-	background-image: url('/core/img/places/home.svg');
+	background-image: url('../../../core/img/places/home.svg');
 }
 
 /**
