@@ -33,6 +33,7 @@ OC.L10N.register(
     "Description" : "Beskrivelse",
     "Formating help" : "Formateringshjelp",
     "Saved" : "Lagret",
+    "Add a card description…" : "Legg til en kortbeskrivelse…",
     "Attachments" : "Vedlegg",
     "Comments" : "Kommentarer",
     "History" : "Historikk",
