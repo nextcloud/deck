@@ -297,7 +297,7 @@ button.button-inline:hover {
 .stack h2 button,
 .stack .stack-actions {
 	float: right;
-	margin: 0px 0px 0px 20px;
+	margin: 0px 0px 0px 10px;
 }
 
 .stack h2 span {
@@ -900,6 +900,11 @@ button.button-inline:hover {
 	.stack {
 		width: 100%;
 		display: block;
+	}
+
+	.stack h2 .stack-actions {
+		display: flex;
+		opacity: 0.25;
 	}
 }
 
