@@ -43,7 +43,7 @@
 			<div id="popover-controls">
 				<div id="stack-add" ng-if="boardservice.canEdit() && checkCanEdit()">
 					<form class="ng-pristine ng-valid" ng-submit="createStack()">
-						<input type="text" placeholder="Add a new stack"
+						<input type="text" class="no-close" placeholder="Add a new stack"
 							ng-focus="status.addStack=true"
 							ng-blur="status.addStack=false"
 							ng-model="newStack.title" required
