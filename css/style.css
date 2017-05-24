@@ -42,12 +42,12 @@ input.input-inline {
 	margin: -4px 0;
 }
 
-button {
+button.button-inline {
 	border: 0;
 	background-color: transparent;
 }
 
-button:hover {
+button.button-inline:hover {
 	border: 0;
 	background-color: transparent;
 }
@@ -175,11 +175,14 @@ button:hover {
 }
 
 #board-header-controls-menu {
-	display: none;
-	padding: 5px 6px 5px 7px;
+  display: none;
 }
 
-#board-header-controls-menu  #popover-controls {
+#board-header-controls-menu button {
+	padding: 15px 20px 15px 20px;
+}
+
+#board-header-controls-menu #popover-controls {
 	display: flex;
 	align-items: center;
 	padding-left: 3px;

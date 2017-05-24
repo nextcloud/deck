@@ -20,25 +20,21 @@
 					ng-blur="status.addStack=false"
 					ng-model="newStack.title" required
 					maxlength="100" />
-				<button class="icon icon-add" style="opacity: {{status.addStack ? 1: 0.5}};" type="submit"></button>
+				<button class="button-inline icon icon-add" style="opacity: {{status.addStack ? 1: 0.5}};" type="submit"></button>
 			</form>
 		</div>
-		<div class="board-action-button button" ng-if="filter!='archive'">
-			<a ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>"><span class="icon icon-archive"></span></a>
-		</div>
-		<div class="board-action-button button" ng-if="filter=='archive'">
-			<a ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>">
-				<i class="icon icon-archive"></i>
-			</a>
-		</div>
-		<div class="board-action-button button">
-			<a ui-sref="board.detail({ id: id })"  title="<?php p($l->t('Board details')); ?>">
-				<i class="icon icon-details"></i>
-			</a>
-		</div>
+		<a class="board-action-button button" ng-if="filter!='archive'" ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>">
+			<i class="icon icon-archive"></i>
+		</a>
+		<a class="board-action-button button" ng-if="filter=='archive'" ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>">
+			<i class="icon icon-archive"></i>
+		</a>
+		<a class="board-action-button button" ui-sref="board.detail({ id: id })"  title="<?php p($l->t('Board details')); ?>">
+			<i class="icon icon-details"></i>
+		</a>
 	</div>
-	<div id="board-header-controls-menu" class="app-popover-menu-utils button">
-		<button class="icon-more"></button>
+	<div id="board-header-controls-menu" class="app-popover-menu-utils">
+		<button class="icon-more button board-action-button"></button>
 		<div class="popovermenu hidden">
 			<div id="popover-controls">
 				<div id="stack-add" ng-if="boardservice.canEdit() && checkCanEdit()">
@@ -48,24 +44,18 @@
 							ng-blur="status.addStack=false"
 							ng-model="newStack.title" required
 							maxlength="100" />
-						<button class="icon icon-add" style="opacity: {{status.addStack ? 1: 0.5}};" type="submit"></button>
+						<button class="button-inline icon icon-add" style="opacity: {{status.addStack ? 1: 0.5}};" type="submit"></button>
 					</form>
 				</div>
-				<div class="board-action-button button" ng-if="filter!='archive'">
-					<a ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>">
-						<i class="icon icon-archive"></i>
-					</a>
-				</div>
-				<div class="board-action-button button" ng-if="filter=='archive'">
-					<a ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>">
-						<i class="icon icon-archive"></i>
-					</a>
-				</div>
-				<div class="board-action-button button">
-					<a ui-sref="board.detail({ id: id })"  title="<?php p($l->t('Board details')); ?>">
-						<i class="icon icon-details"></i>
-					</a>
-				</div>
+				<a class="board-action-button button" ng-if="filter!='archive'" ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>">
+					<i class="icon icon-archive"></i>
+				</a>
+				<a class="board-action-button button" ng-if="filter=='archive'" ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>">
+					<i class="icon icon-archive"></i>
+				</a>
+				<a class="board-action-button button" ui-sref="board.detail({ id: id })"  title="<?php p($l->t('Board details')); ?>">
+					<i class="icon icon-details"></i>
+				</a>
 			</div>
 		</div>
 	</div>
@@ -87,9 +77,9 @@
 						   required maxlength="100"/>
 				</form>
 				<div ng-if="!s.status.editStack" class="stack-actions">
-					<button class="icon-rename"
+					<button class="icon-rename button-inline"
 							ng-click="s.status.editStack=true"></button>
-					<button class="icon-delete"
+					<button class="icon-delete button-inline"
 							ng-click="stackservice.delete(s.id)"></button>
 				</div>
 			</h2>
@@ -119,7 +109,7 @@
 						<div class="card-controls">
 							<i class="icon icon-filetype-text" ng-if="c.description" title="{{ c.description }}"></i>
 							<div class="app-popover-menu-utils">
-								<button class="card-options icon-more" ng-model="card"></button>
+								<button class="button-inline card-options icon-more" ng-model="card"></button>
 								<div class="popovermenu hidden">
 									<ul>
 										<li ng-if="filter!=='archive'">
