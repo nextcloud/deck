@@ -114,8 +114,6 @@ button.button-inline:hover {
 	height: 100%;
 	white-space: nowrap;
 	overflow: auto;
-	top: -40px;
-	padding: 40px 0 0;
 	z-index: 100;
 	width: 100%;
 }
@@ -267,7 +265,7 @@ button.button-inline:hover {
 	width: 320px;
 	margin-right: 10px;
 	vertical-align: top;
-	display: inline-block !important;
+	display: inline-block;
 	background-color: #f8f8f8;
 }
 
@@ -617,6 +615,8 @@ button.button-inline:hover {
 
 #app-content {
 	overflow: hidden;
+	display: flex;
+	flex-direction: column;
 }
 
 #app-content.details-visible {
@@ -895,6 +895,11 @@ button.button-inline:hover {
 
 	#board-header-controls-menu {
 		display: flex;
+	}
+
+	.stack {
+		width: 100%;
+		display: block;
 	}
 }
 
