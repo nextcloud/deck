@@ -1,11 +1,11 @@
 OC.L10N.register(
     "deck",
     {
-    "Deck" : "Deck",
     "Finished" : "Afgerond",
     "To review" : "Beoordelen",
     "Action needed" : "Actie benodigd",
     "Later" : "Later",
+    "Deck" : "Deck",
     "All Boards" : "Alle borden",
     "Board details" : "Bord details",
     "Show archived cards" : "Gearchiveerde kaarten weergeven",
@@ -33,6 +33,7 @@ OC.L10N.register(
     "Description" : "Beschrijving",
     "Formating help" : "Hulp bij het opmaken",
     "Saved" : "Opgeslagen",
+    "Add a card description…" : "Voeg een kaartbeschrijving toe...",
     "Attachments" : "Bijlage",
     "Comments" : "Opmerkingen",
     "History" : "Geschiedenis",

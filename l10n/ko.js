@@ -1,11 +1,11 @@
 OC.L10N.register(
     "deck",
     {
-    "Deck" : "덱",
     "Finished" : "완료됨",
     "To review" : "리뷰할 항목",
     "Action needed" : "동작 필요",
     "Later" : "나중에",
+    "Deck" : "덱",
     "All Boards" : "모든 게시판",
     "Board details" : "게시판 정보",
     "Show archived cards" : "보관된 카드 보기",

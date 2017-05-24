@@ -1,11 +1,11 @@
 OC.L10N.register(
     "deck",
     {
-    "Deck" : "Kansi",
     "Finished" : "Valmistunut",
     "To review" : "Arvostella",
     "Action needed" : "Toimia vaaditaan",
     "Later" : "Myöhemmin",
+    "Deck" : "Kansi",
     "All Boards" : "Kaikki Taulut",
     "Board details" : "Taulun tiedot",
     "Show archived cards" : "Näytä arkistoidut kortit",

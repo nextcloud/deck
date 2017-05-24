@@ -1,11 +1,11 @@
 OC.L10N.register(
     "deck",
     {
-    "Deck" : "Tahta",
     "Finished" : "Tamamlandı",
     "To review" : "İncelenecek",
     "Action needed" : "İşlem yapılması gerekiyor",
     "Later" : "Sonra",
+    "Deck" : "Tahta",
     "All Boards" : "Tüm Panolar",
     "Board details" : "Pano ayrıntıları",
     "Show archived cards" : "Arşivlenmiş kartları görüntüle",

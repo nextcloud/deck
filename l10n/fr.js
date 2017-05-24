@@ -1,11 +1,11 @@
 OC.L10N.register(
     "deck",
     {
-    "Deck" : "Deck",
     "Finished" : "Terminé",
     "To review" : "A réviser",
     "Action needed" : "Action requise",
     "Later" : "Plus tard",
+    "Deck" : "Deck",
     "All Boards" : "Tous les tableaux",
     "Board details" : "Détails du tableau",
     "Show archived cards" : "Afficher les cartes archivées",

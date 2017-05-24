@@ -1,9 +1,9 @@
 OC.L10N.register(
     "deck",
     {
-    "Deck" : "Deck",
     "Finished" : "Finó",
     "Later" : "Más sero",
+    "Deck" : "Deck",
     "Show archived cards" : "Amosar tarxetes archivaes",
     "Delete" : "Desaniciar",
     "Labels" : "Etiquetes",

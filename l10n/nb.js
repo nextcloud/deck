@@ -1,11 +1,11 @@
 OC.L10N.register(
     "deck",
     {
-    "Deck" : "Stokk",
     "Finished" : "Fullført",
     "To review" : "Til gjennomlesning",
     "Action needed" : "Handling påkrevd",
     "Later" : "Senere",
+    "Deck" : "Stokk",
     "All Boards" : "Alle bord",
     "Board details" : "Bordetaljer",
     "Show archived cards" : "Vis arkiverkte kort",

@@ -1,11 +1,11 @@
 OC.L10N.register(
     "deck",
     {
-    "Deck" : "Dekk",
     "Finished" : "Lokið",
     "To review" : "Til að yfirfara",
     "Action needed" : "Aðgerðar krafist",
     "Later" : "Seinna",
+    "Deck" : "Dekk",
     "All Boards" : "Öll borð",
     "Board details" : "Nánar um bretti",
     "Show archived cards" : "Sýna spjöld í geymslu",

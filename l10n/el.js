@@ -1,11 +1,11 @@
 OC.L10N.register(
     "deck",
     {
-    "Deck" : "Κάρτα",
     "Finished" : "Ολοκληρώθηκε",
     "To review" : "Προς επισκόπηση",
     "Action needed" : "Απαιτείται ενέργεια",
     "Later" : "Αργότερα",
+    "Deck" : "Κάρτα",
     "All Boards" : "Όλοι οι πίνακες",
     "Board details" : "Λεπτομέριες πίνακα",
     "Show archived cards" : "Εμφάνιση καρτελών που αρχειοθετήθηκαν",
@@ -30,7 +30,9 @@ OC.L10N.register(
     "Modified:" : "Τροποποιήθηκε:",
     "Created:" : "Δημιουργήθηκε:",
     "by" : "από",
+    "Description" : "Περιγραφή",
     "Saved" : "Αποθηκεύτηκε",
+    "Add a card description…" : "Προσθήκη περιγραφής κάρτας...",
     "Attachments" : "Συνημμένα",
     "Comments" : "Σχόλια",
     "History" : "Ιστορικό",

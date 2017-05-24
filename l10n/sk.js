@@ -1,11 +1,11 @@
 OC.L10N.register(
     "deck",
     {
-    "Deck" : "Tabuľa",
     "Finished" : "Ukončené",
     "To review" : "Na posúdenie",
     "Action needed" : "Potrebná akcia",
     "Later" : "Neskôr",
+    "Deck" : "Tabuľa",
     "All Boards" : "Všetky Tabule",
     "Board details" : "Podrobnosti tabule",
     "Show archived cards" : "Zobraziť archivované karty",

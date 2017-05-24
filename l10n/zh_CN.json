@@ -1,9 +1,9 @@
 { "translations": {
-    "Deck" : "面板",
     "Finished" : "完成",
     "To review" : "回顾",
     "Action needed" : "需要操作",
     "Later" : "稍后",
+    "Deck" : "面板",
     "All Boards" : "全部面板",
     "Board details" : "面板详情",
     "Show archived cards" : "显示已存档的卡片",
