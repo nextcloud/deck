@@ -93,6 +93,10 @@ button.button-inline:hover {
 	width: auto !important;
 }
 
+#app-navigation .app-navigation-entry-menu ul {
+	flex-direction: row;
+}
+
 /**
  * Board view
  */
