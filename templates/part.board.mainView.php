@@ -5,36 +5,59 @@
 		<p>{{ statusservice.text }}</p></div>
 </div>
 <div id="board-header">
-	<a href="#" title="<?php p($l->t('All Boards')); ?>">
+	<a class="crumb" href="#" title="<?php p($l->t('All Boards')); ?>">
 		<i class="icon icon-home"></i>
+		<span class="hidden-visually"><?php p($l->t('All Boards')); ?></span>
 	</a>
 	<h1 class="title" style="border-bottom: 2px solid #{{boardservice.getCurrent().color }};">
 		{{ boardservice.getCurrent().title }}
 	</h1>
-	<div class="board-action-button">
-		<a ui-sref="board.detail({ id: id })" title="<?php p($l->t('Board details')); ?>">
+	<div id="board-header-controls">
+		<div id="stack-add" ng-if="boardservice.canEdit() && checkCanEdit()">
+			<form class="ng-pristine ng-valid" ng-submit="createStack()">
+				<input type="text" placeholder="Add a new stack"
+					ng-focus="status.addStack=true"
+					ng-blur="status.addStack=false"
+					ng-model="newStack.title" required
+					maxlength="100" />
+				<button class="button-inline icon icon-add" style="opacity: {{status.addStack ? 1: 0.5}};" type="submit"></button>
+			</form>
+		</div>
+		<a class="board-action-button button" ng-if="filter!='archive'" ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>">
+			<i class="icon icon-archive"></i>
+		</a>
+		<a class="board-action-button button" ng-if="filter=='archive'" ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>">
+			<i class="icon icon-archive"></i>
+		</a>
+		<a class="board-action-button button" ui-sref="board.detail({ id: id })"  title="<?php p($l->t('Board details')); ?>">
 			<i class="icon icon-details"></i>
 		</a>
 	</div>
-	<div class="board-action-button" ng-if="filter!='archive'">
-		<a ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>">
-			<i class="icon icon-archive"></i>
-		</a>
-	</div>
-	<div class="board-action-button" ng-if="filter=='archive'">
-		<a ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>">
-			<i class="icon icon-archive"></i>
-		</a>
-	</div>
-	<div id="stack-add" class="board-action-button" ng-if="boardservice.canEdit() && checkCanEdit()">
-		<form class="ng-pristine ng-valid" ng-submit="createStack()">
-			<input type="text" placeholder="Add a new stack"
-				ng-focus="status.addStack=true"
-				ng-blur="status.addStack=false"
-				ng-model="newStack.title" required
-				maxlength="100" />
-			<button class="icon icon-add" style="opacity: {{status.addStack ? 1: 0.5}};" type="submit"></button>
-		</form>
+	<div id="board-header-controls-menu" class="app-popover-menu-utils">
+		<button class="icon-more button board-action-button"></button>
+		<div class="popovermenu hidden">
+			<div id="popover-controls">
+				<div id="stack-add" ng-if="boardservice.canEdit() && checkCanEdit()">
+					<form class="ng-pristine ng-valid" ng-submit="createStack()">
+						<input type="text" class="no-close" placeholder="Add a new stack"
+							ng-focus="status.addStack=true"
+							ng-blur="status.addStack=false"
+							ng-model="newStack.title" required
+							maxlength="100" />
+						<button class="button-inline icon icon-add" style="opacity: {{status.addStack ? 1: 0.5}};" type="submit"></button>
+					</form>
+				</div>
+				<a class="board-action-button button" ng-if="filter!='archive'" ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>">
+					<i class="icon icon-archive"></i>
+				</a>
+				<a class="board-action-button button" ng-if="filter=='archive'" ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>">
+					<i class="icon icon-archive"></i>
+				</a>
+				<a class="board-action-button button" ui-sref="board.detail({ id: id })"  title="<?php p($l->t('Board details')); ?>">
+					<i class="icon icon-details"></i>
+				</a>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -54,9 +77,9 @@
 						   required maxlength="100"/>
 				</form>
 				<div ng-if="!s.status.editStack" class="stack-actions">
-					<button class="icon-rename"
+					<button class="icon-rename button-inline"
 							ng-click="s.status.editStack=true"></button>
-					<button class="icon-delete"
+					<button class="icon-delete button-inline"
 							ng-click="stackservice.delete(s.id)"></button>
 				</div>
 			</h2>
@@ -79,15 +102,14 @@
 							</ul>
 
 						</div>
-						
+
 						<div class="card-assignees" ng-if="c.assignees">
 							<!--   <div class="avatar" avatar user="{{c.owner}}" size="24"></div>//-->
 						</div>
 						<div class="card-controls">
 							<i class="icon icon-filetype-text" ng-if="c.description" title="{{ c.description }}"></i>
-							<div class="space"></div>
 							<div class="app-popover-menu-utils">
-								<button class="card-options icon-more" ng-model="card"></button>
+								<button class="button-inline card-options icon-more" ng-model="card"></button>
 								<div class="popovermenu hidden">
 									<ul>
 										<li ng-if="filter!=='archive'">

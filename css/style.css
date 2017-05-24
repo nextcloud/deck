@@ -42,12 +42,12 @@ input.input-inline {
 	margin: -4px 0;
 }
 
-button {
+button.button-inline {
 	border: 0;
 	background-color: transparent;
 }
 
-button:hover {
+button.button-inline:hover {
 	border: 0;
 	background-color: transparent;
 }
@@ -126,21 +126,27 @@ button:hover {
 	position: relative;
 	z-index: 120;
 	height: 44px;
-}
-
-#board-header > * {
+	display: flex;
+	align-items: center;
 	font-size: 14pt;
-	padding: 7px;
-	margin: 7px;
-	float: left;
 }
 
-#board-header > a {
-	background: url('/core/img/breadcrumb.svg?v=1');
-	background-repeat: no-repeat;
-	background-position: right center;
+#board-header .crumb {
+	background-image: url('../../../core/img/breadcrumb.svg?v=1');
 	background-size: auto 24px;
-	padding-right: 24px;
+	background-position: right center;
+	background-repeat: no-repeat;
+	padding: 7px 14px;
+}
+
+#board-header > h1 {
+	white-space: nowrap;
+	padding: 7px;
+}
+
+#board-header #home {
+	position: relative;
+	padding: 0px;
 }
 
 #board-actions {
@@ -159,6 +165,38 @@ button:hover {
 #board-actions .filter:hover {
 	color: #333333;
 	cursor: pointer;
+}
+
+#board-header-controls {
+	display: flex;
+	align-items: center;
+	position: relative;
+	margin-left: auto;
+}
+
+#board-header-controls-menu {
+  display: none;
+}
+
+#board-header-controls-menu button {
+	padding: 15px 20px 15px 20px;
+}
+
+#board-header-controls-menu #popover-controls {
+	display: flex;
+	align-items: center;
+	padding-left: 3px;
+}
+
+#board-header-controls-menu .popovermenu{
+	margin-top: 35px;
+	margin-right: 6px;
+}
+
+.board-action-button,
+.board-action-button * {
+	display: flex;
+	align-items: center;
 }
 
 .filter-select {
@@ -192,22 +230,19 @@ button:hover {
 	background-color: transparent;
 }
 
-#board-header > .board-action-button {
-	float: right;
-}
-
 #stack-add {
 	background-color: rgba(240,240,240,.9);
 	border-radius: 3px;
-	padding: 0;
+	margin-right: 3px;
+}
+
+#stack-add > form {
+	display: flex;
 }
 
 #stack-add input {
-	padding: 7px;
-	margin: 0px;
+	padding: 4px 5px;
 	border: 0px none transparent;
-	display: table-cell;
-	vertical-align: middle;
 	min-height: initial;
 	background-color: rgba(240,240,240,.9);
 }
@@ -222,11 +257,6 @@ button:hover {
 
 #stack-add input:-moz-ui-invalid {
 	box-shadow:none;
-}
-
-#stack-add button {
-	display: table-cell;
-    vertical-align: middle;
 }
 
 .stack {
@@ -321,12 +351,17 @@ button:hover {
 	opacity: 1;
 }
 
-.card .card-controls .space {
-	width: 100%;
+.card .card-controls button {
+	padding: 0px;
+	margin-right: 0px;
+}
+
+.app-popover-menu-utils {
+	margin-left: auto;
 	min-height: 16px;
 }
 
-.card .popovermenu {
+.popovermenu {
 	z-index: 999;
 	opacity: 1;
 	margin-top: 25px;
@@ -334,7 +369,7 @@ button:hover {
 	display: block;
 }
 
-.card .popovermenu.hidden {
+.popovermenu.hidden {
 	display: none;
 }
 
@@ -850,14 +885,12 @@ button:hover {
 
 @media (max-width: 480px) {
 	/* hide board actions on mobile */
-	#board-actions {
+	#board-header-controls {
 		display: none !important;
 	}
-}
 
-@media only screen and (max-width: 768px) {
-	#board-header h1 {
-		margin-left: 50px;
+	#board-header-controls-menu {
+		display: flex;
 	}
 }
 
@@ -959,7 +992,7 @@ button:hover {
 }
 
 .icon-home {
-	background-image: url('/core/img/places/home.svg');
+	background-image: url('../../../core/img/places/home.svg');
 }
 
 /**
