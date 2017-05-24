@@ -88,7 +88,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		if ($scope.stacks === undefined)
 			return;
 		angular.copy(StackService.getData(), $scope.stacks);
-		$scope.stacks = $filter('orderBy')($scope.stacks, order);
+		$scope.stacks = $filter('orderBy')($scope.stacks, 'order');
 		angular.forEach($scope.stacks, function (value, key) {
 			var cards = $filter('cardSearchFilter')(value.cards, text);
 			cards = $filter('orderBy')(cards, order);
