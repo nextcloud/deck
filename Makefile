@@ -27,11 +27,11 @@ install-deps:
 
 build: build-js
 
-build-js:
-	$(MAKE) -C js build
+build-js: install-deps
+	cd js && ./node_modules/.bin/grunt build
 
 watch:
-	$(make) -C js watch
+	cd js && ./node_modules/.bin/grunt watch
 
 # appstore: clean install-deps
 appstore: clean-build build
