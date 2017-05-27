@@ -25,8 +25,10 @@
  * General styles
  */
 
+button,
+.button,
 .app-deck .icon {
-	display: inline-block;
+	display: flex;
 }
 
 input.input-inline {
@@ -150,6 +152,7 @@ button.button-inline:hover {
 
 .board-header-controls {
 	margin-left: auto;
+	align-items: center;
 }
 
 .board-header-controls.app-popover-menu-utils {
