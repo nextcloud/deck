@@ -31,7 +31,6 @@ OC.L10N.register(
     "Created:" : "Opprettet:",
     "by" : "av",
     "Description" : "Beskrivelse",
-    "Formating help" : "Formateringshjelp",
     "Saved" : "Lagret",
     "Add a card description…" : "Legg til en kortbeskrivelse…",
     "Attachments" : "Vedlegg",

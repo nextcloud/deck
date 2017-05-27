@@ -31,7 +31,6 @@ OC.L10N.register(
     "Created:" : "Stvorena:",
     "by" : "od",
     "Description" : "Opis",
-    "Formating help" : "Pomoć pri oblikovanju teksta",
     "Saved" : "Spremljeno",
     "Add a card description…" : "Dodaj opis...",
     "Attachments" : "Prilozi",

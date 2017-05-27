@@ -31,7 +31,6 @@ OC.L10N.register(
     "Created:" : "Búið til:",
     "by" : "af",
     "Description" : "Lýsing",
-    "Formating help" : "Hjálp við að sníða",
     "Saved" : "Vistað",
     "Add a card description…" : "Settu inn lýsingu á spjaldi ...",
     "Attachments" : "Viðhengi",

@@ -31,7 +31,6 @@ OC.L10N.register(
     "Created:" : "Создан:",
     "by" : "автор",
     "Description" : "Описание",
-    "Formating help" : "Справка форматируется",
     "Saved" : "Сохранено",
     "Add a card description…" : "Добавить описание карточки…",
     "Attachments" : "Вложения",

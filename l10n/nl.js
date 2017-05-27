@@ -31,7 +31,6 @@ OC.L10N.register(
     "Created:" : "Gemaakt:",
     "by" : "door",
     "Description" : "Beschrijving",
-    "Formating help" : "Hulp bij het opmaken",
     "Saved" : "Opgeslagen",
     "Add a card description…" : "Voeg een kaartbeschrijving toe...",
     "Attachments" : "Bijlage",

@@ -31,7 +31,6 @@ OC.L10N.register(
     "Created:" : "Vytvořeno:",
     "by" : "od",
     "Description" : "Popis",
-    "Formating help" : "Nápověda k formátování",
     "Saved" : "Uloženo",
     "Add a card description…" : "Přidat popis karty...",
     "Attachments" : "Přílohy",
