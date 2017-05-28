@@ -120,6 +120,14 @@ class BoardControllerTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(1, $this->controller->delete(123));
 	}
 
+	public function testDeleteUndo() {
+		$this->boardService->expects($this->once())
+			->method('deleteUndo')
+			->with(123)
+			->willReturn(1);
+		$this->assertEquals(1, $this->controller->deleteUndo(123));
+	}
+
 	public function testGetUserPermissions() {
 		$acl = [
 			Acl::PERMISSION_READ => true,

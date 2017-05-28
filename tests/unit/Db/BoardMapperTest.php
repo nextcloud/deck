@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Db;
 
+use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
 use Test\AppFramework\Db\MapperTestUtility;
@@ -32,10 +33,15 @@ use Test\AppFramework\Db\MapperTestUtility;
  */
 class BoardMapperTest extends MapperTestUtility  {
 
+	/** @var IDBConnection */
     private $dbConnection;
+    /** @var AclMapper|\PHPUnit_Framework_MockObject_MockObject */
 	private $aclMapper;
+	/** @var BoardMapper */
 	private $boardMapper;
+	/** @var IUserManager|\PHPUnit_Framework_MockObject_MockObject */
 	private $userManager;
+	/** @var IGroupManager|\PHPUnit_Framework_MockObject_MockObject */
 	private $groupManager;
 
 	// Data
@@ -96,7 +102,6 @@ class BoardMapperTest extends MapperTestUtility  {
 	    $board = new Board();
 	    $board->setTitle($title);
 	    $board->setOwner($owner);
-	    $board->setShared(1);
 	    return $board;
     }
 
@@ -122,11 +127,31 @@ class BoardMapperTest extends MapperTestUtility  {
 		}
 	}
 
+	public function testFindAll() {
+		$actual = $this->boardMapper->findAll();
+		$this->assertAttributeEquals($this->boards[0]->getId(), 'id', $actual[0]);
+		$this->assertAttributeEquals($this->boards[1]->getId(), 'id', $actual[1]);
+		$this->assertAttributeEquals($this->boards[2]->getId(), 'id', $actual[2]);
+	}
+
+	public function testFindAllToDelete() {
+		$this->boards[0]->setDeletedAt(1);
+		$this->boards[0] = $this->boardMapper->update($this->boards[0]);
+
+		$actual = $this->boardMapper->findToDelete();
+		$this->boards[0]->resetUpdatedFields();
+		$this->assertEquals([$this->boards[0]], $actual);
+
+		$this->boards[0]->setDeletedAt(0);
+		$this->boardMapper->update($this->boards[0]);
+	}
+
     public function testFindWithLabels() {
         $actual = $this->boardMapper->find($this->boards[0]->getId(), true, false);
         $expected = $this->boards[0];
         $this->assertEquals($expected, $actual);
     }
+
     public function testFindWithAcl() {
         $actual = $this->boardMapper->find($this->boards[0]->getId(), false, true);
         $expected = [

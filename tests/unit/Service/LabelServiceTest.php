@@ -40,6 +40,7 @@ class LabelServiceTest extends TestCase {
 	private $boardService;
 
     public function setUp() {
+		parent::setUp();
         $this->labelMapper = $this->getMockBuilder(LabelMapper::class)
             ->disableOriginalConstructor()->getMock();
         $this->permissionService = $this->getMockBuilder(PermissionService::class)

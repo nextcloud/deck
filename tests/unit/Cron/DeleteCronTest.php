@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Cron;
 
+use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 
 class DeleteCronTest extends \Test\TestCase {
@@ -33,26 +34,39 @@ class DeleteCronTest extends \Test\TestCase {
 	protected $deleteCron;
 
 	public function setUp() {
+		parent::setUp();
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->deleteCron = new DeleteCron($this->boardMapper);
 	}
 
+	protected function getBoard($id) {
+		$board = new Board();
+		$board->setId($id);
+		return $board;
+	}
+
 	public function testDeleteCron() {
+		$boards = [
+			$this->getBoard(1),
+			$this->getBoard(2),
+			$this->getBoard(3),
+			$this->getBoard(4),
+		];
 		$this->boardMapper->expects($this->once())
 			->method('findToDelete')
-			->willReturn([1, 2, 3, 4]);
-		$this->boardMapper->expects($this->at(0))
-			->method('delete')
-			->with(1);
+			->willReturn($boards);
 		$this->boardMapper->expects($this->at(1))
 			->method('delete')
-			->with(2);
+			->with($boards[0]);
 		$this->boardMapper->expects($this->at(2))
 			->method('delete')
-			->with(3);
+			->with($boards[1]);
 		$this->boardMapper->expects($this->at(3))
 			->method('delete')
-			->with(4);
-		$this->invokePrivate($this->deleteCron, 'run', null);
+			->with($boards[2]);
+		$this->boardMapper->expects($this->at(4))
+			->method('delete')
+			->with($boards[3]);
+		$this->invokePrivate($this->deleteCron, 'run', [null]);
 	}
 }

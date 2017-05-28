@@ -46,6 +46,7 @@ class PermissionServiceTest extends \PHPUnit_Framework_TestCase {
 	private $userId = 'admin';
 
 	public function setUp() {
+		parent::setUp();
 		$this->logger = $this->request = $this->getMockBuilder(ILogger::class)
 			->disableOriginalConstructor()
 			->getMock();

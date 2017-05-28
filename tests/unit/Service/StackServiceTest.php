@@ -49,6 +49,7 @@ class StackServiceTest extends TestCase {
 	private $boardService;
 
 	public function setUp() {
+		parent::setUp();
 		$this->stackMapper = $this->getMockBuilder(StackMapper::class)
 			->disableOriginalConstructor()->getMock();
 		$this->cardMapper = $this->getMockBuilder(CardMapper::class)
@@ -165,6 +166,9 @@ class StackServiceTest extends TestCase {
         $this->assertEquals($stack, $result);
     }
 
+	/**
+	 * @group DB
+	 */
     public function testReorder() {
 		$this->permissionService->expects($this->once())->method('checkPermission');
 		$a = $this->createStack(1, 0);

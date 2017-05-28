@@ -2,7 +2,9 @@
 
 namespace OCA\Deck\Db;
 
-class BoardTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class BoardTest extends TestCase {
 	private function createBoard() {
 		$board = new Board();
 		$board->setId(1);

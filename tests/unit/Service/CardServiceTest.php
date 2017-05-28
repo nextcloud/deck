@@ -44,6 +44,7 @@ class CardServiceTest extends TestCase {
 	private $boardService;
 
     public function setUp() {
+		parent::setUp();
         $this->cardMapper = $this->getMockBuilder(CardMapper::class)
             ->disableOriginalConstructor()->getMock();
         $this->stackMapper = $this->getMockBuilder(StackMapper::class)

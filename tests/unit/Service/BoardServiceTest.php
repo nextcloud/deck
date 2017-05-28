@@ -53,6 +53,7 @@ class BoardServiceTest extends \Test\TestCase {
 	private $userId = 'admin';
 
 	public function setUp() {
+		parent::setUp();
 		$this->l10n = $this->createMock(L10N::class);
 		$this->aclMapper = $this->createMock(AclMapper::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
