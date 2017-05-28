@@ -55,21 +55,16 @@ button.button-inline:hover {
 }
 
 #searchbox {
-	display: block !important;
+	display: flex !important;
 }
 
 /**
  * Navigation sidebar
  */
-.app-navigation-entry-utils-menu-button {
-	display: block !important;
-}
 
 .app-navigation-entry-utils-menu-share {
-	display: block !important;
-	text-align: right;
-	padding-top: 3px;
-	padding-right: 5px;
+	display: flex !important;
+	padding: 14px;
 	opacity: 0.4;
 }
 
@@ -222,10 +217,9 @@ button.button-inline:hover {
 }
 
 .stack {
-	width: 320px;
+	width: 100%;
 	margin-right: 10px;
 	vertical-align: top;
-	display: inline-block;
 	background-color: #f8f8f8;
 }
 
@@ -268,7 +262,8 @@ button.button-inline:hover {
 }
 
 .stack h2 .stack-actions {
-	display: none;
+	display: flex;
+	opacity: 0.25;
 }
 
 .stack h2:hover .stack-actions {
@@ -860,12 +855,11 @@ button.button-inline:hover {
 
 @media (max-width: 480px) {
 	.stack {
-		width: 100%;
-		display: block;
+		width: 320px;
+		display: inline-block;
 	}
 	.stack h2 .stack-actions {
-		display: flex;
-		opacity: 0.25;
+		display: none;
 	}
 }
 
