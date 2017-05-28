@@ -72,7 +72,7 @@ class BoardMapperTest extends MapperTestUtility  {
             $this->aclMapper->insert($this->getAcl('user','user1', false, false, false, $this->boards[2]->getId()))
         ];
 
-        foreach ($this->acls as $acl) {
+		foreach ($this->acls as $acl) {
             $acl->resetUpdatedFields();
         }
         foreach ($this->boards as $board) {
@@ -96,6 +96,7 @@ class BoardMapperTest extends MapperTestUtility  {
 	    $board = new Board();
 	    $board->setTitle($title);
 	    $board->setOwner($owner);
+	    $board->setShared(1);
 	    return $board;
     }
 
@@ -104,6 +105,23 @@ class BoardMapperTest extends MapperTestUtility  {
         $expected = $this->boards[0];
         $this->assertEquals($expected, $actual);
     }
+
+	public function testFindAllByUser() {
+		$actual = $this->boardMapper->findAllByUser('user1');
+		$expected = [
+			$this->boards[0],
+			$this->boards[1],
+			$this->boards[2]
+		];
+		foreach ($expected as $e) {
+			foreach ($actual as $a) {
+				if($e->getId() === $a->getId()) {
+					$this->assertEquals($e->getTitle(), $a->getTitle());
+				}
+			}
+		}
+	}
+
     public function testFindWithLabels() {
         $actual = $this->boardMapper->find($this->boards[0]->getId(), true, false);
         $expected = $this->boards[0];

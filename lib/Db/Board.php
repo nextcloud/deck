@@ -36,7 +36,7 @@ class Board extends RelationalEntity implements JsonSerializable {
 	protected $acl = [];
 	protected $permissions = [];
 	protected $shared;
-	protected $deletedAt;
+	protected $deletedAt = 0;
 
 	public function __construct() {
 		$this->addType('id', 'integer');
