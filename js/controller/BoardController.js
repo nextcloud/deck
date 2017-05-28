@@ -260,6 +260,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		scrollableContainer: '#board',
 		containerPositioning: 'relative',
 		containment: '#board',
+		longTouch: true,
 		dragMove: function (itemPosition, containment, eventObj) {
 			if (eventObj) {
 				var container = $("#board");
