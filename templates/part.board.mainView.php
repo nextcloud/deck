@@ -67,7 +67,7 @@
 						
 						<div class="card-controls">
 							<i class="icon icon-filetype-text" ng-if="c.description" title="{{ c.description }}"></i>
-							<div class="app-popover-menu-utils" ng-if="!boardservice.isArchived>
+							<div class="app-popover-menu-utils" ng-if="!boardservice.isArchived()">
 								<button class="button-inline card-options icon-more" ng-model="card"></button>
 								<div class="popovermenu hidden">
 									<ul>
