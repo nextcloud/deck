@@ -33,12 +33,12 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
     });
     markdownItConverterProvider.use(markdownitLinkTarget);
 
-    $urlRouterProvider.otherwise("/");
+    $urlRouterProvider.otherwise('/');
 
     $stateProvider
         .state('list', {
-            url: "/:filter",
-            templateUrl: "/boardlist.mainView.html",
+            url: '/:filter',
+            templateUrl: '/boardlist.mainView.html',
             controller: 'ListController',
 			reloadOnSearch: false,
 			params: {
@@ -46,27 +46,27 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
             }
 		})
         .state('board', {
-            url: "/board/:boardId/:filter",
-            templateUrl: "/board.html",
+            url: '/board/:boardId/:filter',
+            templateUrl: '/board.html',
             controller: 'BoardController',
             params: {
                 filter: { value: '', dynamic: true }
             }
         })
         .state('board.detail', {
-            url: "/detail/",
+            url: '/detail/',
             reloadOnSearch : false,
             views: {
-                "sidebarView": {
-                    templateUrl: "/board.sidebarView.html"
+                'sidebarView': {
+                    templateUrl: '/board.sidebarView.html'
 				}
             }
 		})
         .state('board.card', {
-            url: "/card/:cardId",
+            url: '/card/:cardId',
             views: {
-                "sidebarView": {
-                    templateUrl: "/card.sidebarView.html",
+                'sidebarView': {
+                    templateUrl: '/card.sidebarView.html',
                     controller: 'CardController'
                 }
             }

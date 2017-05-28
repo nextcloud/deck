@@ -1,4 +1,3 @@
-
 /*
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -20,6 +19,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *  
  */
+
+/* global app angular */
 
 app.controller('ListController', function ($scope, $location, $filter, BoardService, $element, $timeout, $stateParams, $state) {
 	$scope.boards = [];
@@ -126,7 +127,7 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 	$scope.boardDeleteUndo = function (board) {
 		BoardService.deleteUndo(board.id).then(function (data) {
 			$scope.filterData();
-		})
+		});
 	};
 
 });

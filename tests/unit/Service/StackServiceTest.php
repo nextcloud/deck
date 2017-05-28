@@ -31,8 +31,14 @@ use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
-use Test\TestCase;
+use \Test\TestCase;
 
+/**
+ * Class StackServiceTest
+ *
+ * @package OCA\Deck\Service
+ * @group DB
+ */
 class StackServiceTest extends TestCase {
 
     /** @var StackService */

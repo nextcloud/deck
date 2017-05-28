@@ -107,7 +107,10 @@ class BoardMapperTest extends MapperTestUtility  {
 
 	public function testFind() {
         $actual = $this->boardMapper->find($this->boards[0]->getId());
-        $expected = $this->boards[0];
+        /** @var Board $expected */
+        $expected = clone $this->boards[0];
+        $expected->setShared(-1);
+        $expected->resetUpdatedFields();
         $this->assertEquals($expected, $actual);
     }
 
@@ -129,9 +132,9 @@ class BoardMapperTest extends MapperTestUtility  {
 
 	public function testFindAll() {
 		$actual = $this->boardMapper->findAll();
-		$this->assertAttributeEquals($this->boards[0]->getId(), 'id', $actual[0]);
-		$this->assertAttributeEquals($this->boards[1]->getId(), 'id', $actual[1]);
-		$this->assertAttributeEquals($this->boards[2]->getId(), 'id', $actual[2]);
+		$this->assertEquals($this->boards[0]->getId(), $actual[0]->getId());
+		$this->assertEquals($this->boards[1]->getId(), $actual[1]->getId());
+		$this->assertEquals($this->boards[2]->getId(), $actual[2]->getId());
 	}
 
 	public function testFindAllToDelete() {
@@ -148,8 +151,9 @@ class BoardMapperTest extends MapperTestUtility  {
 
     public function testFindWithLabels() {
         $actual = $this->boardMapper->find($this->boards[0]->getId(), true, false);
-        $expected = $this->boards[0];
-        $this->assertEquals($expected, $actual);
+		/** @var Board $expected */
+		$expected = $this->boards[0];
+        $this->assertEquals($expected->getLabels(), $actual->getLabels());
     }
 
     public function testFindWithAcl() {

@@ -24,7 +24,7 @@
 /**
  * @group DB
  */
-class BoardDatabaseTest extends \PHPUnit_Framework_TestCase
+class BoardDatabaseTest extends \Test\TestCase
 {
     const TEST_USER1 = "test-share-user1";
     const TEST_USER2 = "test-share-user2";
@@ -61,6 +61,7 @@ class BoardDatabaseTest extends \PHPUnit_Framework_TestCase
         \OC::$server->getGroupManager()->addBackend($groupBackend);
     }
     public function setUp() {
+    	parent::setUp();
         \OC::$server->getUserSession()->login(self::TEST_USER1, self::TEST_USER1);
         $this->boardService = \OC::$server->query("\OCA\Deck\Service\BoardService");
     }
@@ -80,5 +81,6 @@ class BoardDatabaseTest extends \PHPUnit_Framework_TestCase
     }
 
     public function tearDown() {
+    	parent::tearDown();
     }
 }
