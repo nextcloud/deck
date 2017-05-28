@@ -61,11 +61,13 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 		$scope.boardservice.sorted = $filter('orderBy')($scope.boardservice.sorted, ['deletedAt', 'title']);
 	};
 
-	$scope.$state = $stateParams;
-	$scope.$watch('$state.filter', function (name) {
-		$scope.status.filter = name;
+	$scope.$watchCollection(function(){
+		return $state.params;
+	}, function(){
+		$scope.status.filter = $state.params.filter;
 		$scope.filterData();
 	});
+
 
 	$scope.selectColor = function(color) {
 		$scope.newBoard.color = color;
