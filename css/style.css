@@ -851,9 +851,7 @@ button.button-inline:hover {
 	.board-header-controls.app-popover-menu-utils {
 		display: none;
 	}
-}
 
-@media (max-width: 480px) {
 	.stack {
 		width: 320px;
 		display: inline-block;
