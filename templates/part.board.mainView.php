@@ -4,6 +4,7 @@
 		<h2>{{ statusservice.title }}</h2>
 		<p>{{ statusservice.text }}</p></div>
 </div>
+
 <div id="board-header">
 	<a class="crumb" href="#" title="<?php p($l->t('All Boards')); ?>">
 		<i class="icon icon-home"></i>
@@ -12,50 +13,14 @@
 	<h1 class="title" style="border-bottom: 2px solid #{{boardservice.getCurrent().color }};">
 		{{ boardservice.getCurrent().title }}
 	</h1>
-	<div id="board-header-controls">
-		<div id="stack-add" ng-if="boardservice.canEdit() && checkCanEdit()">
-			<form class="ng-pristine ng-valid" ng-submit="createStack()">
-				<input type="text" placeholder="Add a new stack"
-					ng-focus="status.addStack=true"
-					ng-blur="status.addStack=false"
-					ng-model="newStack.title" required
-					maxlength="100" />
-				<button class="button-inline icon icon-add" style="opacity: {{status.addStack ? 1: 0.5}};" type="submit"></button>
-			</form>
-		</div>
-		<a class="board-action-button button" ng-if="filter!='archive'" ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>">
-			<i class="icon icon-archive"></i>
-		</a>
-		<a class="board-action-button button" ng-if="filter=='archive'" ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>">
-			<i class="icon icon-archive"></i>
-		</a>
-		<a class="board-action-button button" ui-sref="board.detail({ id: id })"  title="<?php p($l->t('Board details')); ?>">
-			<i class="icon icon-details"></i>
-		</a>
+	<div class="board-header-controls hidden">
+		<?php print_unescaped($this->inc('part.board.headerControls')); ?>
 	</div>
-	<div id="board-header-controls-menu" class="app-popover-menu-utils">
-		<button class="icon-more button board-action-button"></button>
+	<div class="board-header-controls app-popover-menu-utils">
+		<button class="icon-more button"></button>
 		<div class="popovermenu hidden">
 			<div id="popover-controls">
-				<div id="stack-add" ng-if="boardservice.canEdit() && checkCanEdit()">
-					<form class="ng-pristine ng-valid" ng-submit="createStack()">
-						<input type="text" class="no-close" placeholder="Add a new stack"
-							ng-focus="status.addStack=true"
-							ng-blur="status.addStack=false"
-							ng-model="newStack.title" required
-							maxlength="100" />
-						<button class="button-inline icon icon-add" style="opacity: {{status.addStack ? 1: 0.5}};" type="submit"></button>
-					</form>
-				</div>
-				<a class="board-action-button button" ng-if="filter!='archive'" ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>">
-					<i class="icon icon-archive"></i>
-				</a>
-				<a class="board-action-button button" ng-if="filter=='archive'" ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>">
-					<i class="icon icon-archive"></i>
-				</a>
-				<a class="board-action-button button" ui-sref="board.detail({ id: id })"  title="<?php p($l->t('Board details')); ?>">
-					<i class="icon icon-details"></i>
-				</a>
+				<?php print_unescaped($this->inc('part.board.headerControls')); ?>
 			</div>
 		</div>
 	</div>

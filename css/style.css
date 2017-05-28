@@ -25,8 +25,10 @@
  * General styles
  */
 
+button,
+.button,
 .app-deck .icon {
-	display: inline-block;
+	display: flex;
 }
 
 input.input-inline {
@@ -146,59 +148,27 @@ button.button-inline:hover {
 	padding: 7px;
 }
 
-#board-header #home {
-	position: relative;
-	padding: 0px;
-}
-
-#board-actions {
-	font-size: 10pt;
-	float: right;
-	position: relative;
-	color: #888;
-	margin: 8px;
-}
-
-#board-actions .filter .filter-button {
-	margin-left: 10px;
-	margin-right: 10px;
-}
-
-#board-actions .filter:hover {
-	color: #333333;
-	cursor: pointer;
-}
-
-#board-header-controls {
-	display: flex;
-	align-items: center;
-	position: relative;
+.board-header-controls {
 	margin-left: auto;
+	align-items: center;
 }
 
-#board-header-controls-menu {
-  display: none;
+.board-header-controls.app-popover-menu-utils {
+	display: flex;
 }
 
-#board-header-controls-menu button {
-	padding: 15px 20px 15px 20px;
+.board-header-controls > button {
+	padding: 16px 20px;
 }
 
-#board-header-controls-menu #popover-controls {
+.board-header-controls.app-popover-menu-utils #popover-controls {
 	display: flex;
 	align-items: center;
-	padding-left: 3px;
 }
 
-#board-header-controls-menu .popovermenu{
+.board-header-controls.app-popover-menu-utils .popovermenu {
 	margin-top: 35px;
 	margin-right: 6px;
-}
-
-.board-action-button,
-.board-action-button * {
-	display: flex;
-	align-items: center;
 }
 
 .filter-select {
@@ -222,20 +192,10 @@ button.button-inline:hover {
 	margin-right: 5px;
 }
 
-#board-actions div {
-	padding: 5px;
-	float: left;
-}
-
-.board-actions button {
-	border: none;
-	background-color: transparent;
-}
-
 #stack-add {
 	background-color: rgba(240,240,240,.9);
 	border-radius: 3px;
-	margin-right: 3px;
+	margin: 3px;
 }
 
 #stack-add > form {
@@ -246,7 +206,7 @@ button.button-inline:hover {
 	padding: 4px 5px;
 	border: 0px none transparent;
 	min-height: initial;
-	background-color: rgba(240,240,240,.9);
+	background-color: transparent;
 }
 
 #stack-add input:invalid {
@@ -887,14 +847,14 @@ button.button-inline:hover {
  * Mobile optimizations
  */
 
-@media (max-width: 480px) {
+@media (min-width: 481px) {
 	/* hide board actions on mobile */
-	#board-header-controls {
-		display: none !important;
+	.board-header-controls {
+		display: flex;
 	}
 
-	#board-header-controls-menu {
-		display: flex;
+	.board-header-controls.app-popover-menu-utils {
+		display: none;
 	}
 
 	.stack {
