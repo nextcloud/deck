@@ -39,7 +39,7 @@
 				<input id="newTitle" class="edit ng-valid ng-empty" type="text" placeholder="<?php p($l->t('New board title')); ?>" autofocus-on-insert ng-model="newBoard.title" maxlength="100">
 				<input type="submit" value="" class="action icon-checkmark svg">
 				<div class="colorselect">
-					<div class="color" ng-repeat="c in colors" style="background-color:#{{ c }};" ng-click="selectColor(c)" ng-class="{'selected': (c == newBoard.color)', dark': (newBoard.color | textColorFilter) === '#ffffff' }"><br /></div>
+					<div class="color" ng-repeat="c in colors" style="background-color:#{{ c }};" ng-click="selectColor(c)" ng-class="{'selected': (c == newBoard.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"><br /></div>
 				</div>
 			</form>
 		</div>
