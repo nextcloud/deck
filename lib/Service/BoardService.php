@@ -176,6 +176,12 @@ class BoardService {
 		$this->boardMapper->update($board);
 	}
 
+	public function deleteForce($id) {
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
+		$board = $this->find($id);
+		return $this->boardMapper->delete($board);
+	}
+
 	public function update($id, $title, $color, $archived) {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);

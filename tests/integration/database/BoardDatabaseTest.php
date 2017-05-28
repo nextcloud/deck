@@ -77,7 +77,7 @@ class BoardDatabaseTest extends \Test\TestCase
         $this->assertEquals($actual->getTitle(), $board->getTitle());
         $this->assertEquals($actual->getColor(), $board->getColor());
         $this->assertEquals($actual->getOwner(), $board->getOwner());
-        $this->boardService->delete($id);
+        $this->boardService->deleteForce($id);
     }
 
     public function tearDown() {

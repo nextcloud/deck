@@ -170,4 +170,4 @@ matrix:
     - TESTS: jsbuild
     - TESTS: integration
 
-branches: [ master, stable* ]
+
