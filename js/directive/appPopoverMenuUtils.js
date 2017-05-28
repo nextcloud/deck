@@ -28,6 +28,7 @@ app.directive('appPopoverMenuUtils', function () {
             var menu = elm.find('.popovermenu');
             var button = elm.find('button');
             button.click(function (e) {
+                $('.popovermenu').addClass('hidden');
                 menu.toggleClass('hidden');
                 if(!menu.hasClass('hidden')) {
                     button.css('display','block');
