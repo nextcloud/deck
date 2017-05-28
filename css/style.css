@@ -856,12 +856,13 @@ button.button-inline:hover {
 	.board-header-controls.app-popover-menu-utils {
 		display: none;
 	}
+}
 
+@media (max-width: 480px) {
 	.stack {
 		width: 100%;
 		display: block;
 	}
-
 	.stack h2 .stack-actions {
 		display: flex;
 		opacity: 0.25;
