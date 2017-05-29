@@ -35,7 +35,7 @@
 								<a class="menuitem"><span class="icon-archive"></span> <?php p($l->t('Unarchive board')); ?>
 								</a>
 							</li>
-							<li ng-if="boardservice.canManage(b) && b.archived" ng-click="boardDelete(b)">
+							<li ng-if="boardservice.canManage(b)" ng-click="boardDelete(b)">
 								<a class="menuitem"><span class="icon-delete"></span> <?php p($l->t('Delete board')); ?>
 								</a>
 							</li>
