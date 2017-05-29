@@ -327,6 +327,8 @@ button.button-inline:hover {
 	z-index: 999;
 	opacity: 1;
 	display: block;
+	margin-top: 25px;
+	margin-right: 0px;
 }
 
 .popovermenu.hidden {
@@ -731,11 +733,8 @@ button.button-inline:hover {
 }
 
 #boardlist .popovermenu {
-	top: 33px;
-	right: -5px;
+	margin-top: 5px;
 }
-
-
 
 /**
  * Board details
