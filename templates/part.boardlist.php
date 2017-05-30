@@ -3,7 +3,7 @@
 		<thead>
 		<tr>
 			<td class="cell-board-bullet"></td>
-			<td class="cell-board-title" width="90%"><?php p($l->t('Board title')); ?></td>
+			<td class="cell-board-title" width="90%"><?php p($l->t('Boards')); ?></td>
 			<td class="cell-board-members"><?php p($l->t('Members')); ?></td>
 		</tr>
 		</thead>
