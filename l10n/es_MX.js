@@ -31,6 +31,7 @@ OC.L10N.register(
     "Created:" : "Creado:",
     "by" : "por",
     "Description" : "Descripción",
+    "Formatting help" : "Ayuda de formato",
     "Saved" : "Guardado",
     "Add a card description…" : "Agregar una descripción de tarjeta...",
     "Attachments" : "Adjuntos",
