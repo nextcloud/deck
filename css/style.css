@@ -261,6 +261,7 @@ button.button-inline:hover {
 	margin-left: auto;
 	display: flex;
 	opacity: 0.25;
+	padding-right: 0;
 }
 
 .stack h2:hover button {
@@ -852,7 +853,7 @@ button.button-inline:hover {
 		width: 320px;
 		display: inline-block;
 	}
-	.stack h2 .stack-actions {
+	.stack h2 button {
 		display: none;
 	}
 }
