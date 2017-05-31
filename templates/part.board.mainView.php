@@ -34,20 +34,33 @@
 		<div class="stack" ng-repeat="s in stacks" data-as-sortable-item
 			 data-columnindex="{{$index}}" id="column{{$index}}"
 			 style="">
-			<h2 data-as-sortable-item-handle><span ng-show="!s.status.editStack">{{ s.title }}</span>
-				<form ng-if="s.status.editStack" ng-submit="stackservice.update(s)">
-					<input type="text" placeholder="Add a new stack"
-						   ng-blur="stackservice.update(s); s.status.editStack=false" ng-model="s.title"
-						   ng-if="s.status.editStack" autofocus-on-insert
-						   required maxlength="100"/>
-				</form>
-				<div ng-if="!s.status.editStack" class="stack-actions">
-					<button class="icon-rename button-inline"
-							ng-click="s.status.editStack=true"></button>
-					<button class="icon-delete button-inline"
-							ng-click="stackservice.delete(s.id)"></button>
+			 <div class="stack-header">
+				<h2 data-as-sortable-item-handle><span ng-show="!s.status.editStack">{{ s.title }}</span>
+					<form ng-if="s.status.editStack" ng-submit="stackservice.update(s)">
+						<input type="text" placeholder="<?php p($l->t('Add a new stack')); ?>"
+							ng-blur="stackservice.update(s); s.status.editStack=false" ng-model="s.title"
+							ng-if="s.status.editStack" autofocus-on-insert
+							required maxlength="100"/>
+					</form>
+				</h2>
+				<div ng-if="!s.status.editStack" class="app-popover-menu-utils">
+					<button class="button-inline card-options icon-more"></button>
+					<div class="popovermenu hidden">
+						<ul>
+							<li>
+								<a class="menuitem action action-rename permanent" ng-click="s.status.editStack=true">
+									<span class="icon icon-rename"></span><span><?php p($l->t('Edit')); ?></span>
+								</a>
+							</li>
+							<li>
+								<a class="menuitem action action-delete permanent" ng-click="stackservice.delete(s.id)">
+									<span class="icon icon-delete"></span><span><?php p($l->t('Delete')); ?></span>
+								</a>
+							</li>
+						</ul>
+					</div>
 				</div>
-			</h2>
+			</div>
 			<ul data-as-sortable="sortOptions" is-disabled="!boardservice.canEdit() || filter==='archive'" data-ng-model="s.cards"
 				style="min-height: 40px;">
 				<li class="card as-sortable-item"
