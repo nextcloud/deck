@@ -250,7 +250,7 @@ button.button-inline:hover {
 
 .stack h2 button {
 	margin-left: auto;
-    display: flex;
+	display: flex;
 	opacity: 0.25;
 }
 
@@ -258,7 +258,7 @@ button.button-inline:hover {
 	white-space: normal;
 	overflow: hidden;
 	text-overflow: ellipsis;
-    cursor: text;
+	cursor: text;
 }
 
 .stack h2:hover .stack-actions {
