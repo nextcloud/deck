@@ -309,7 +309,7 @@ button.button-inline:hover {
 }
 
 .card .card-controls .card-options, .stack-header .card-options {
-	opacity: 0;
+	opacity: 0.25;
 }
 
 .card .card-controls:hover .card-options, .stack-header:hover .card-options {
@@ -870,6 +870,10 @@ button.button-inline:hover {
 	}
 	.stack h2 .stack-actions {
 		display: none;
+	}
+
+	.card .card-controls .card-options, .stack-header .card-options {
+		opacity: 0;
 	}
 }
 
