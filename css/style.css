@@ -58,6 +58,9 @@ button.button-inline:hover {
 	display: flex !important;
 }
 
+.editable-inline {
+	cursor: text;
+}
 /**
  * Navigation sidebar
  */
@@ -248,20 +251,19 @@ button.button-inline:hover {
 	width: 100%;
 }
 
+.stack h2 span {
+	white-space: normal;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 .stack h2 button {
 	margin-left: auto;
 	display: flex;
 	opacity: 0.25;
 }
 
-.stack h2 span {
-	white-space: normal;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	cursor: text;
-}
-
-.stack h2:hover .stack-actions {
+.stack h2:hover button {
 	display: flex;
 }
 

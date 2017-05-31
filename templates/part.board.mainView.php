@@ -35,12 +35,11 @@
 			 data-columnindex="{{$index}}" id="column{{$index}}"
 			 style="">
 			<h2 data-as-sortable-item-handle>
-				<span ng-show="!s.status.editStack" ng-click="s.status.editStack=true">{{ s.title }}</span>
+				<span class="editable-inline" ng-show="!s.status.editStack" ng-click="s.status.editStack=true">{{ s.title }}</span>
 				<form ng-if="s.status.editStack" ng-submit="stackservice.update(s)">
 					<input type="text" placeholder="Add a new stack"
 						   ng-blur="stackservice.update(s); s.status.editStack=false" ng-model="s.title"
-						   ng-if="s.status.editStack" autofocus-on-insert
-						   required maxlength="100"/>
+						   autofocus-on-insert required maxlength="100" />
 				</form>
 				<button class="icon-delete button-inline stack-actions"
 						ng-if="!s.status.editStack"
