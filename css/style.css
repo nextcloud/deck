@@ -226,11 +226,13 @@ button.button-inline:hover {
 .stack h2 {
 	padding: 10px 10px 8px;
 	margin: 0;
+	width: 100%;
 	font-size: 12pt;
 	font-weight: 700;
 	overflow: hidden;
 	display: flex;
 	min-height: 40px;
+	cursor: pointer;
 }
 
 .stack h2 input {
@@ -271,6 +273,15 @@ button.button-inline:hover {
 	float: right;
 }
 
+.stack-header {
+	display: flex;
+	align-items: center;
+}
+
+.stack-header .popovermenu {
+	margin-right: -3px;
+}
+
 .card {
 	background-color: #ffffff;
 	margin: 10px;
@@ -297,32 +308,33 @@ button.button-inline:hover {
 	position: relative;
 }
 
-.card .card-controls .card-options {
+.card .card-controls .card-options, .stack-header .card-options {
 	opacity: 0.25;
-	position: absolute;
-	right: 10px;
-	top: 8px;
 }
 
-.card .card-controls:hover .card-options {
+.card .card-controls:hover .card-options, .stack-header:hover .card-options {
 	opacity: 1;
 }
 
 .card .card-controls button {
 	padding: 0px;
-	margin-right: 0px;
+	margin: 0px;
+}
+
+.card .card-controls .popovermenu {
+	margin-top: 3px;
+	margin-right: -10px;
 }
 
 .app-popover-menu-utils {
 	margin-left: auto;
-	min-height: 16px;
+	position: relative;
 }
 
 .popovermenu {
 	z-index: 999;
 	opacity: 1;
-	margin-top: 25px;
-	margin-right: 3px;
+	margin: 0px;
 	display: block;
 }
 
@@ -858,6 +870,10 @@ button.button-inline:hover {
 	}
 	.stack h2 .stack-actions {
 		display: none;
+	}
+
+	.card .card-controls .card-options, .stack-header .card-options {
+		opacity: 0;
 	}
 }
 
