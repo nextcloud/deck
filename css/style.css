@@ -248,27 +248,21 @@ button.button-inline:hover {
 	width: 100%;
 }
 
-.stack h2 button,
-.stack .stack-actions {
-	float: right;
-	margin: 0px 0px 0px 10px;
+.stack h2 button {
+	margin-left: auto;
+    display: flex;
+	opacity: 0.25;
 }
 
 .stack h2 span {
-	width: 100%;
 	white-space: normal;
 	overflow: hidden;
 	text-overflow: ellipsis;
-}
-
-.stack h2 .stack-actions {
-	display: flex;
-	opacity: 0.25;
+    cursor: text;
 }
 
 .stack h2:hover .stack-actions {
 	display: flex;
-	float: right;
 }
 
 .card {
