@@ -31,6 +31,7 @@ OC.L10N.register(
     "Created:" : "Created:",
     "by" : "by",
     "Description" : "Description",
+    "Formatting help" : "Formatting help",
     "Saved" : "Saved",
     "Add a card description…" : "Add a card description…",
     "Attachments" : "Attachments",
