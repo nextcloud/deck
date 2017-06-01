@@ -12,7 +12,7 @@
 
 <ul class="tabHeaders">
     <li class="tabHeader" ng-class="{'selected': (status.boardtab==0 || !status.boardtab)}" ng-click="status.boardtab=0"><a><?php p($l->t('Sharing')); ?></a></li>
-    <li class="tabHeader" ng-class="{'selected': (status.boardtab==1)}" ng-click="status.boardtab=1"><a><?php p($l->t('Labels')); ?></a></li>
+    <li class="tabHeader" ng-class="{'selected': (status.boardtab==1)}" ng-click="status.boardtab=1"><a><?php p($l->t('Tags')); ?></a></li>
 </ul>
 <div class="tabsContainer">
     <div id="commentsTabView" class="tab commentsTabView" ng-if="status.boardtab==0 || !status.boardtab">
@@ -98,7 +98,7 @@
                     </form>
                 </li>
                 <li ng-if="boardservice.canManage() && !status.createLabel" class="label-create">
-                    <a ng-click="status.createLabel=true"><span class="icon icon-add"> </span> <?php p($l->t('Create a new label')); ?></a>
+                    <a ng-click="status.createLabel=true"><span class="icon icon-add"> </span> <?php p($l->t('Create a new tag')); ?></a>
                 </li>
             </ul>
 
