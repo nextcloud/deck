@@ -34,6 +34,7 @@
 		<div class="stack" ng-repeat="s in stacks" data-as-sortable-item
 			 data-columnindex="{{$index}}" id="column{{$index}}"
 			 style="">
+			 <h2 data-as-sortable-item-handle>
 				<span class="editable-inline" ng-show="!s.status.editStack" ng-click="s.status.editStack=true">{{ s.title }}</span>
 				<form ng-if="s.status.editStack" ng-submit="stackservice.update(s); s.status.editStack=false">
 					<input type="text" placeholder="<?php p($l->t('Add a new stack')); ?>"
