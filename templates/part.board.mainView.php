@@ -34,19 +34,15 @@
 		<div class="stack" ng-repeat="s in stacks" data-as-sortable-item
 			 data-columnindex="{{$index}}" id="column{{$index}}"
 			 style="">
-			<h2 data-as-sortable-item-handle><span ng-show="!s.status.editStack">{{ s.title }}</span>
-				<form ng-if="s.status.editStack" ng-submit="stackservice.update(s)">
+				<span class="editable-inline" ng-show="!s.status.editStack" ng-click="s.status.editStack=true">{{ s.title }}</span>
+				<form ng-if="s.status.editStack" ng-submit="stackservice.update(s); s.status.editStack=false">
 					<input type="text" placeholder="<?php p($l->t('Add a new stack')); ?>"
 						   ng-blur="stackservice.update(s); s.status.editStack=false" ng-model="s.title"
-						   ng-if="s.status.editStack" autofocus-on-insert
-						   required maxlength="100"/>
+						   autofocus-on-insert required maxlength="100" />
 				</form>
-				<div ng-if="!s.status.editStack" class="stack-actions">
-					<button class="icon-rename button-inline"
-							ng-click="s.status.editStack=true"></button>
-					<button class="icon-delete button-inline"
-							ng-click="stackservice.delete(s.id)"></button>
-				</div>
+				<button class="icon-delete button-inline stack-actions"
+						ng-if="!s.status.editStack"
+                        ng-click="stackservice.delete(s.id)"></button>
 			</h2>
 			<ul data-as-sortable="sortOptions" is-disabled="!boardservice.canEdit() || filter==='archive'" data-ng-model="s.cards"
 				style="min-height: 40px;">
