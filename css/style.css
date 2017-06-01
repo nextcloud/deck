@@ -58,6 +58,9 @@ button.button-inline:hover {
 	display: flex !important;
 }
 
+.editable-inline {
+	cursor: text;
+}
 /**
  * Navigation sidebar
  */
@@ -248,27 +251,21 @@ button.button-inline:hover {
 	width: 100%;
 }
 
-.stack h2 button,
-.stack .stack-actions {
-	float: right;
-	margin: 0px 0px 0px 10px;
-}
-
 .stack h2 span {
-	width: 100%;
 	white-space: normal;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-.stack h2 .stack-actions {
+.stack h2 button {
+	margin-left: auto;
 	display: flex;
 	opacity: 0.25;
+	padding-right: 0;
 }
 
-.stack h2:hover .stack-actions {
+.stack h2:hover button {
 	display: flex;
-	float: right;
 }
 
 .card {
@@ -856,7 +853,7 @@ button.button-inline:hover {
 		width: 320px;
 		display: inline-block;
 	}
-	.stack h2 .stack-actions {
+	.stack h2 button {
 		display: none;
 	}
 }
