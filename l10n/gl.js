@@ -13,7 +13,7 @@ OC.L10N.register(
     "Archive" : "Aquivar",
     "Unarchive" : "Desarquivar",
     "Delete" : "Eliminar",
-    "Enter a card title" : "Introducir o título da tarxeta",
+    "Enter a card title" : "Insira o título da tarxeta",
     "Sharing" : "Compartindo",
     "Labels" : "Etiquetas",
     "Select users or groups to share with" : "Seleccionar usuarios ou grupos cos que compartir",
