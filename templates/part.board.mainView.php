@@ -37,7 +37,7 @@
 			<h2 data-as-sortable-item-handle>
 				<span class="editable-inline" ng-show="!s.status.editStack" ng-click="s.status.editStack=true">{{ s.title }}</span>
 				<form ng-if="s.status.editStack" ng-submit="stackservice.update(s); s.status.editStack=false">
-					<input type="text" placeholder="Add a new stack"
+					<input type="text" placeholder="<?php p($l->t('Add a new stack')); ?>"
 						   ng-blur="stackservice.update(s); s.status.editStack=false" ng-model="s.title"
 						   autofocus-on-insert required maxlength="100" />
 				</form>
