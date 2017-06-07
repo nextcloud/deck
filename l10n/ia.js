@@ -6,7 +6,6 @@ OC.L10N.register(
     "Action needed" : "Action necessari",
     "Later" : "Depost",
     "Delete" : "Deler",
-    "Labels" : "Etiquettas",
     "Select users or groups to share with" : "Selectiona usatores o gruppos pro compartir",
     "No matching user or group found." : "Nulle usator o gruppo correspondente trovate.",
     "Share" : "Compartir",

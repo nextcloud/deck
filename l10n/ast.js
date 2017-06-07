@@ -6,7 +6,6 @@ OC.L10N.register(
     "Deck" : "Deck",
     "Show archived cards" : "Amosar tarxetes archivaes",
     "Delete" : "Desaniciar",
-    "Labels" : "Etiquetes",
     "No matching user or group found." : "Nun s'alcontró dengún usuariu o grupu que concasara.",
     "Share" : "Compartir",
     "Edit" : "Editar",

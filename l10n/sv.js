@@ -13,7 +13,6 @@ OC.L10N.register(
     "Share" : "Dela",
     "Edit" : "Redigera",
     "Manage" : "Hantera",
-    "Create a new label" : "Skapa en ny etikett",
     "Members" : "Medlemmar",
     "Modified:" : "Ändrad:",
     "Created:" : "Skapad:",

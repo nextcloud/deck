@@ -6,7 +6,6 @@ OC.L10N.register(
     "Later" : "Később",
     "Delete" : "Törlés",
     "Sharing" : "Megosztás",
-    "Labels" : "Címkék",
     "Share" : "Megosztás",
     "Edit" : "Szerkesztés",
     "Manage" : "Kezelés",
