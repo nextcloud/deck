@@ -24,6 +24,7 @@
 // db/author.php
 namespace OCA\Deck\Db;
 
+use DateTime;
 use JsonSerializable;
 
 class Card extends RelationalEntity implements JsonSerializable {
@@ -39,6 +40,12 @@ class Card extends RelationalEntity implements JsonSerializable {
 	protected $owner;
 	protected $order;
 	protected $archived = false;
+	protected $duedate = null;
+
+	const DUEDATE_FUTURE = 0;
+	const DUEDATE_NEXT = 1;
+	const DUEDATE_NOW = 2;
+	const DUEDATE_OVERDUE = 3;
 
 	public function __construct() {
 		$this->addType('id', 'integer');
@@ -49,6 +56,35 @@ class Card extends RelationalEntity implements JsonSerializable {
 		$this->addType('archived', 'boolean');
 		$this->addRelation('labels');
 		$this->addResolvable('owner');
+	}
+
+	public function jsonSerialize() {
+		$json = parent::jsonSerialize();
+		$json['overdue'] = self::DUEDATE_FUTURE;
+		$due = strtotime($this->duedate);
+
+		$today = new DateTime();
+		$today->setTime( 0, 0, 0 );
+
+		$match_date = new DateTime($this->duedate);
+
+		$match_date->setTime( 0, 0, 0 );
+
+		$diff = $today->diff( $match_date );
+		$diffDays = (integer)$diff->format( "%R%a" ); // Extract days count in interval
+
+		if($due !== false) {
+			if ($diffDays === 1) {
+				$json['overdue'] = self::DUEDATE_NEXT;
+			}
+			if ($diffDays === 0) {
+				$json['overdue'] = self::DUEDATE_NOW;
+			}
+			if ($diffDays < 0) {
+				$json['overdue'] = self::DUEDATE_OVERDUE;
+			}
+		}
+		return $json;
 	}
 
 }

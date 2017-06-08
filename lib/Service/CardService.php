@@ -50,9 +50,6 @@ class CardService {
 		return $card;
 	}
 
-	/**
-	 * @param integer $order
-	 */
 	public function create($title, $stackId, $type, $order, $owner) {
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
 		if($this->boardService->isArchived($this->stackMapper, $stackId)) {
@@ -76,7 +73,7 @@ class CardService {
 		return $this->cardMapper->delete($this->cardMapper->find($id));
 	}
 
-	public function update($id, $title, $stackId, $type, $order, $description, $owner) {
+	public function update($id, $title, $stackId, $type, $order, $description, $owner, $duedate) {
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
 		if($this->boardService->isArchived($this->cardMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
@@ -91,6 +88,7 @@ class CardService {
 		$card->setOrder($order);
 		$card->setOwner($owner);
 		$card->setDescription($description);
+		$card->setDuedate($duedate);
 		return $this->cardMapper->update($card);
 	}
 

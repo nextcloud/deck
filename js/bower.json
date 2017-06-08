@@ -14,7 +14,8 @@
     "angular-ui-select": "~0.19.6",
     "angular-markdown-it": "~0.6.1",
     "angular-ui-router": "~1.0.0",
-    "markdown-it-link-target": "~1.0.1"
+    "markdown-it-link-target": "~1.0.1",
+    "jquery-timepicker": "883bb2cd94"
   },
   "license": "AGPL-3.0",
   "private": true,

@@ -45,6 +45,13 @@
 					style="background-color:#{{label.color}}; color:{{ label.color|textColorFilter }};">{{label.title}}</span>
 			</ui-select-choices>
 		</ui-select>
+
+		<div id="duedate">
+			<input class="datepicker-input medium focus" type="text" placeholder="Set a due date" value="{{ cardservice.getCurrent().duedate | parseDate }}" datepicker="due" />
+			<input class="timepicker-input medium focus" type="text" placeholder="00:00:00" ng-if="cardservice.getCurrent().duedate" value="{{ cardservice.getCurrent().duedate | parseTime }}" timepicker="due" />
+			<button class="icon icon-delete button-inline" title="Remove duedate" ng-if="cardservice.getCurrent().duedate" ng-click="resetDuedate()"></button>
+		</div>
+
 	</div>
 
 	<!--<div id="assigned-users">

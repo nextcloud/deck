@@ -140,7 +140,6 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		$timeLimit = time()-(60*5);
 		$sql = 'SELECT id, title, owner, color, archived, deleted_at FROM `*PREFIX*deck_boards` ' .
 			'WHERE `deleted_at` > 0 AND `deleted_at` < ?';
-		\OC::$server->getLogger()->error($sql);
 		return $this->findEntities($sql, [$timeLimit]);
 	}
 

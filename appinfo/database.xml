@@ -130,7 +130,6 @@
                 <name>last_modified</name>
                 <type>integer</type>
                 <default></default>
-                <length>8</length>
                 <notnull>false</notnull>
                 <unsigned>true</unsigned>
             </field>
@@ -138,7 +137,6 @@
                 <name>created_at</name>
                 <type>integer</type>
                 <default></default>
-                <length>8</length>
                 <notnull>false</notnull>
                 <unsigned>true</unsigned>
             </field>
@@ -158,6 +156,11 @@
                 <name>archived</name>
                 <type>boolean</type>
                 <default>false</default>
+            </field>
+            <field>
+                <name>duedate</name>
+                <type>timestamp</type>
+                <default>0</default>
             </field>
             <index>
                 <name>deck_cards_stack_id_index</name>
