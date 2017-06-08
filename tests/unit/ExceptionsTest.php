@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\Db;
 
-use OCA\Deck\CardArchivedException;
+use OCA\Deck\ArchivedItemException;
 use OCA\Deck\Controller\PageController;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
@@ -45,7 +45,7 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testCardArchivedException() {
-		$e = new CardArchivedException('foo');
+		$e = new ArchivedItemException('foo');
 		$this->assertEquals('foo', $e->getMessage());
 	}
 

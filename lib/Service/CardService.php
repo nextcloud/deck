@@ -26,18 +26,22 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Acl;
-use OCA\Deck\CardArchivedException;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\StatusException;
 
 
 class CardService {
 
 	private $cardMapper;
+	private $stackMapper;
+	private $permissionService;
+	private $boardService;
 
-	public function __construct(CardMapper $cardMapper, StackMapper $stackMapper, PermissionService $permissionService) {
+	public function __construct(CardMapper $cardMapper, StackMapper $stackMapper, PermissionService $permissionService, BoardService $boardService) {
 		$this->cardMapper = $cardMapper;
 		$this->stackMapper = $stackMapper;
 		$this->permissionService = $permissionService;
+		$this->boardService = $boardService;
 	}
 
 	public function find($cardId) {
@@ -51,6 +55,9 @@ class CardService {
 	 */
 	public function create($title, $stackId, $type, $order, $owner) {
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
+		if($this->boardService->isArchived($this->stackMapper, $stackId)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
 		$card = new Card();
 		$card->setTitle($title);
 		$card->setStackId($stackId);
@@ -63,14 +70,20 @@ class CardService {
 
 	public function delete($id) {
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
+		if($this->boardService->isArchived($this->cardMapper, $id)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
 		return $this->cardMapper->delete($this->cardMapper->find($id));
 	}
 
 	public function update($id, $title, $stackId, $type, $order, $description, $owner) {
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
+		if($this->boardService->isArchived($this->cardMapper, $id)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
 		$card = $this->cardMapper->find($id);
 		if ($card->getArchived()) {
-			throw new CardArchivedException();
+			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$card->setTitle($title);
 		$card->setStackId($stackId);
@@ -83,9 +96,12 @@ class CardService {
 
 	public function rename($id, $title) {
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
+		if($this->boardService->isArchived($this->cardMapper, $id)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
 		$card = $this->cardMapper->find($id);
 		if ($card->getArchived()) {
-			throw new CardArchivedException();
+			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$card->setTitle($title);
 		return $this->cardMapper->update($card);
@@ -93,12 +109,15 @@ class CardService {
 
 	public function reorder($id, $stackId, $order) {
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
+		if($this->boardService->isArchived($this->cardMapper, $id)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
 		$cards = $this->cardMapper->findAll($stackId);
 		$result = [];
 		$i = 0;
 		foreach ($cards as $card) {
 			if ($card->getArchived()) {
-				throw new CardArchivedException();
+				throw new StatusException('Operation not allowed. This card is archived.');
 			}
 			if ($card->id === $id) {
 				$card->setOrder($order);
@@ -121,6 +140,9 @@ class CardService {
 
 	public function archive($id) {
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
+		if($this->boardService->isArchived($this->cardMapper, $id)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
 		$card = $this->cardMapper->find($id);
 		$card->setArchived(true);
 		return $this->cardMapper->update($card);
@@ -128,6 +150,9 @@ class CardService {
 
 	public function unarchive($id) {
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
+		if($this->boardService->isArchived($this->cardMapper, $id)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
 		$card = $this->cardMapper->find($id);
 		$card->setArchived(false);
 		return $this->cardMapper->update($card);
@@ -135,18 +160,24 @@ class CardService {
 
 	public function assignLabel($cardId, $labelId) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+		if($this->boardService->isArchived($this->cardMapper, $cardId)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
 		$card = $this->cardMapper->find($cardId);
 		if ($card->getArchived()) {
-			throw new CardArchivedException();
+			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$this->cardMapper->assignLabel($cardId, $labelId);
 	}
 
 	public function removeLabel($cardId, $labelId) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+		if($this->boardService->isArchived($this->cardMapper, $cardId)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
 		$card = $this->cardMapper->find($cardId);
 		if ($card->getArchived()) {
-			throw new CardArchivedException();
+			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$this->cardMapper->removeLabel($cardId, $labelId);
 	}

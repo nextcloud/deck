@@ -26,8 +26,9 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
+use Test\TestCase;
 
-class LabelServiceTest extends \PHPUnit_Framework_TestCase {
+class LabelServiceTest extends TestCase {
 
     /** @var  LabelMapper|\PHPUnit_Framework_MockObject_MockObject */
     private $labelMapper;
@@ -35,15 +36,20 @@ class LabelServiceTest extends \PHPUnit_Framework_TestCase {
     private $permissionService;
     /** @var  LabelService */
     private $labelService;
+	/** @var BoardService|\PHPUnit_Framework_MockObject_MockObject */
+	private $boardService;
 
     public function setUp() {
+		parent::setUp();
         $this->labelMapper = $this->getMockBuilder(LabelMapper::class)
             ->disableOriginalConstructor()->getMock();
         $this->permissionService = $this->getMockBuilder(PermissionService::class)
             ->disableOriginalConstructor()->getMock();
+        $this->boardService = $this->createMock(BoardService::class);
         $this->labelService = new LabelService(
             $this->labelMapper,
-            $this->permissionService
+            $this->permissionService,
+			$this->boardService
         );
     }
 

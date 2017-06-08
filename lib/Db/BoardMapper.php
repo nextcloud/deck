@@ -59,7 +59,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	 * @return \OCP\AppFramework\Db\Entity if not found
 	 */
 	public function find($id, $withLabels = false, $withAcl = false) {
-		$sql = 'SELECT id, title, owner, color, archived FROM `*PREFIX*deck_boards` ' .
+		$sql = 'SELECT id, title, owner, color, archived, deleted_at FROM `*PREFIX*deck_boards` ' .
 			'WHERE `id` = ?';
 		$board = $this->findEntity($sql, [$id]);
 
@@ -87,8 +87,8 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	 * @return array
 	 */
 	public function findAllByUser($userId, $limit = null, $offset = null) {
-		$sql = 'SELECT id, title, owner, color, archived, 0 as shared FROM `*PREFIX*deck_boards` WHERE owner = ? UNION ' .
-			'SELECT boards.id, title, owner, color, archived, 1 as shared FROM `*PREFIX*deck_boards` as boards ' .
+		$sql = 'SELECT id, title, owner, color, archived, deleted_at, 0 as shared FROM `*PREFIX*deck_boards` WHERE owner = ? UNION ' .
+			'SELECT boards.id, title, owner, color, archived, deleted_at, 1 as shared FROM `*PREFIX*deck_boards` as boards ' .
 			'JOIN `*PREFIX*deck_board_acl` as acl ON boards.id=acl.board_id WHERE acl.participant=? AND acl.type=? AND boards.owner != ?';
 		$entries = $this->findEntities($sql, [$userId, $userId, Acl::PERMISSION_TYPE_USER, $userId], $limit, $offset);
 		/* @var Board $entry */
@@ -112,7 +112,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		if (count($groups) <= 0) {
 			return [];
 		}
-		$sql = 'SELECT boards.id, title, owner, color, archived, 2 as shared FROM `*PREFIX*deck_boards` as boards ' .
+		$sql = 'SELECT boards.id, title, owner, color, archived, deleted_at, 2 as shared FROM `*PREFIX*deck_boards` as boards ' .
 			'INNER JOIN `*PREFIX*deck_board_acl` as acl ON boards.id=acl.board_id WHERE owner != ? AND type=? AND (';
 		for ($i = 0; $i < count($groups); $i++) {
 			$sql .= 'acl.participant = ? ';
@@ -133,6 +133,15 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	public function findAll() {
 		$sql = 'SELECT id from *PREFIX*deck_boards;';
 		return $this->findEntities($sql, []);
+	}
+
+	public function findToDelete() {
+		// add buffer of 5 min
+		$timeLimit = time()-(60*5);
+		$sql = 'SELECT id, title, owner, color, archived, deleted_at FROM `*PREFIX*deck_boards` ' .
+			'WHERE `deleted_at` > 0 AND `deleted_at` < ?';
+		\OC::$server->getLogger()->error($sql);
+		return $this->findEntities($sql, [$timeLimit]);
 	}
 
 	public function delete(/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */

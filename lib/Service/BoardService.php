@@ -23,9 +23,12 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\ArchivedItemException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
+use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IL10N;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
@@ -61,6 +64,13 @@ class BoardService {
 						$this->boardMapper->mapAcl($acl);
 					}
 				}
+				$permissions = $this->permissionService->matchPermissions($item);
+				$item->setPermissions([
+					'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ],
+					'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT],
+					'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE],
+					'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
+				]);
 				$result[$item->getId()] = $item;
 			}
 		}
@@ -77,7 +87,48 @@ class BoardService {
 				$this->boardMapper->mapAcl($acl);
 			}
 		}
+		$permissions = $this->permissionService->matchPermissions($board);
+		$board->setPermissions([
+			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ],
+			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT],
+			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE],
+			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
+		]);
 		return $board;
+	}
+
+	public function isArchived($mapper, $id) {
+		try {
+			if ($mapper instanceof IPermissionMapper) {
+				$boardId = $mapper->findBoardId($id);
+			} else {
+				$boardId = $id;
+			}
+			if ($boardId === null) {
+				return false;
+			}
+		} catch (DoesNotExistException $exception) {
+			return false;
+		}
+		$board = $this->find($boardId);
+		return $board->getArchived();
+	}
+
+	public function isDeleted($mapper, $id) {
+		try {
+			if ($mapper instanceof IPermissionMapper) {
+				$boardId = $mapper->findBoardId($id);
+			} else {
+				$boardId = $id;
+			}
+			if ($boardId === null) {
+				return false;
+			}
+		} catch (DoesNotExistException $exception) {
+			return false;
+		}
+		$board = $this->find($boardId);
+		return $board->getDeletedAt() > 0;
 	}
 
 
@@ -106,20 +157,44 @@ class BoardService {
 		}
 		$new_board->setLabels($labels);
 		$this->boardMapper->mapOwner($new_board);
+		$permissions = $this->permissionService->matchPermissions($new_board);
+		$new_board->setPermissions([
+			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ],
+			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT],
+			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE],
+			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
+		]);
 		return $new_board;
 
 	}
 
 	public function delete($id) {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
-		return $this->boardMapper->delete($this->find($id));
+		$board = $this->find($id);
+		$board->setDeletedAt(time());
+		$this->boardMapper->update($board);
+		return $board;
 	}
 
-	public function update($id, $title, $color) {
+	public function deleteUndo($id) {
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
+		$board = $this->find($id);
+		$board->setDeletedAt(0);
+		$this->boardMapper->update($board);
+	}
+
+	public function deleteForce($id) {
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
+		$board = $this->find($id);
+		return $this->boardMapper->delete($board);
+	}
+
+	public function update($id, $title, $color, $archived) {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
 		$board->setTitle($title);
 		$board->setColor($color);
+		$board->setArchived($archived);
 		$this->boardMapper->mapOwner($board);
 		return $this->boardMapper->update($board);
 	}

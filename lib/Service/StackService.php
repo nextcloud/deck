@@ -31,6 +31,7 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\StatusException;
 
 
 class StackService {
@@ -39,12 +40,14 @@ class StackService {
 	private $cardMapper;
 	private $labelMapper;
 	private $permissionService;
+	private $boardService;
 
-	public function __construct(StackMapper $stackMapper, CardMapper $cardMapper, LabelMapper $labelMapper, PermissionService $permissionService) {
+	public function __construct(StackMapper $stackMapper, CardMapper $cardMapper, LabelMapper $labelMapper, PermissionService $permissionService, BoardService $boardService) {
 		$this->stackMapper = $stackMapper;
 		$this->cardMapper = $cardMapper;
 		$this->labelMapper = $labelMapper;
 		$this->permissionService = $permissionService;
+		$this->boardService = $boardService;
 	}
 
 	public function findAll($boardId) {
@@ -81,6 +84,9 @@ class StackService {
 
 	public function create($title, $boardId, $order) {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
+		if($this->boardService->isArchived(null, $boardId)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
 		$stack = new Stack();
 		$stack->setTitle($title);
 		$stack->setBoardId($boardId);
@@ -96,6 +102,9 @@ class StackService {
 
 	public function update($id, $title, $boardId, $order) {
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
+		if($this->boardService->isArchived($this->stackMapper, $id)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
 		$stack = $this->stackMapper->find($id);
 		$stack->setTitle($title);
 		$stack->setBoardId($boardId);

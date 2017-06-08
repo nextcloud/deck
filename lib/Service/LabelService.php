@@ -26,15 +26,22 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\LabelMapper;
+use OCA\Deck\StatusException;
 
 
 class LabelService {
 
+	/** @var LabelMapper */
 	private $labelMapper;
+	/** @var PermissionService */
+	private $permissionService;
+	/** @var BoardService */
+	private $boardService;
 
-	public function __construct(LabelMapper $labelMapper, PermissionService $permissionService) {
+	public function __construct(LabelMapper $labelMapper, PermissionService $permissionService, BoardService $boardService) {
 		$this->labelMapper = $labelMapper;
 		$this->permissionService = $permissionService;
+		$this->boardService = $boardService;
 	}
 
 	public function find($labelId) {
@@ -44,6 +51,9 @@ class LabelService {
 
 	public function create($title, $color, $boardId) {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
+		if($this->boardService->isArchived(null, $boardId)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
 		$label = new Label();
 		$label->setTitle($title);
 		$label->setColor($color);
@@ -53,11 +63,17 @@ class LabelService {
 
 	public function delete($id) {
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
+		if($this->boardService->isArchived($this->labelMapper, $id)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
 		return $this->labelMapper->delete($this->find($id));
 	}
 
 	public function update($id, $title, $color) {
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
+		if($this->boardService->isArchived($this->labelMapper, $id)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
 		$label = $this->find($id);
 		$label->setTitle($title);
 		$label->setColor($color);

@@ -53,6 +53,7 @@ class BoardServiceTest extends \Test\TestCase {
 	private $userId = 'admin';
 
 	public function setUp() {
+		parent::setUp();
 		$this->l10n = $this->createMock(L10N::class);
 		$this->aclMapper = $this->createMock(AclMapper::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
@@ -134,11 +135,12 @@ class BoardServiceTest extends \Test\TestCase {
 			->method('update')
 			->with($board)
 			->willReturn($board);
-		$b = $this->service->update(123, 'MyNewNameBoard', 'ffffff');
+		$b = $this->service->update(123, 'MyNewNameBoard', 'ffffff', false);
 
 		$this->assertEquals($b->getTitle(), 'MyNewNameBoard');
 		$this->assertEquals($b->getOwner(), 'admin');
 		$this->assertEquals($b->getColor(), 'ffffff');
+		$this->assertEquals($b->getArchived(), false);
 	}
 
 	public function testDelete() {
@@ -147,10 +149,7 @@ class BoardServiceTest extends \Test\TestCase {
 		$this->boardMapper->expects($this->once())
 			->method('find')
 			->willReturn($board);
-		$this->boardMapper->expects($this->once())
-			->method('delete')
-			->willReturn(1);
-		$this->assertEquals(1, $this->service->delete(123));
+		$this->assertEquals($board, $this->service->delete(123));
 	}
 
 	public function testAddAcl() {

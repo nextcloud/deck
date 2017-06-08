@@ -27,9 +27,10 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\StackMapper;
-use OCA\Deck\CardArchivedException;
+use OCA\Deck\StatusException;
+use Test\TestCase;
 
-class CardServiceTest extends \PHPUnit_Framework_TestCase {
+class CardServiceTest extends TestCase {
 
     /** @var CardService|\PHPUnit_Framework_MockObject_MockObject */
     private $cardService;
@@ -39,16 +40,19 @@ class CardServiceTest extends \PHPUnit_Framework_TestCase {
     private $stackMapper;
     /** @var PermissionService|\PHPUnit_Framework_MockObject_MockObject */
     private $permissionService;
-
+	/** @var BoardService|\PHPUnit_Framework_MockObject_MockObject */
+	private $boardService;
 
     public function setUp() {
+		parent::setUp();
         $this->cardMapper = $this->getMockBuilder(CardMapper::class)
             ->disableOriginalConstructor()->getMock();
         $this->stackMapper = $this->getMockBuilder(StackMapper::class)
             ->disableOriginalConstructor()->getMock();
         $this->permissionService = $this->getMockBuilder(PermissionService::class)
             ->disableOriginalConstructor()->getMock();
-        $this->cardService = new CardService($this->cardMapper, $this->stackMapper, $this->permissionService);
+        $this->boardService = $this->createMock(BoardService::class);
+        $this->cardService = new CardService($this->cardMapper, $this->stackMapper, $this->permissionService, $this->boardService);
     }
 
     public function testFind() {
@@ -108,7 +112,7 @@ class CardServiceTest extends \PHPUnit_Framework_TestCase {
         $card->setArchived(true);
         $this->cardMapper->expects($this->once())->method('find')->willReturn($card);
         $this->cardMapper->expects($this->never())->method('update');
-        $this->setExpectedException(CardArchivedException::class);
+        $this->setExpectedException(StatusException::class);
         $this->cardService->update(123, 'newtitle', 234, 'text', 999, 'foo', 'admin');
     }
 
@@ -128,7 +132,7 @@ class CardServiceTest extends \PHPUnit_Framework_TestCase {
         $card->setArchived(true);
         $this->cardMapper->expects($this->once())->method('find')->willReturn($card);
         $this->cardMapper->expects($this->never())->method('update');
-        $this->setExpectedException(CardArchivedException::class);
+        $this->setExpectedException(StatusException::class);
         $this->cardService->rename(123, 'newtitle');
     }
 
@@ -168,7 +172,7 @@ class CardServiceTest extends \PHPUnit_Framework_TestCase {
         $card->setArchived(true);
         $this->cardMapper->expects($this->once())->method('findAll')->willReturn([$card]);
         $this->cardMapper->expects($this->never())->method('update')->willReturnCallback(function($c) { return $c; });
-        $this->setExpectedException(CardArchivedException::class);
+        $this->setExpectedException(StatusException::class);
         $actual = $this->cardService->reorder(123, 234, 1);
     }
     public function testArchive() {
@@ -204,7 +208,7 @@ class CardServiceTest extends \PHPUnit_Framework_TestCase {
         $card->setArchived(true);
         $this->cardMapper->expects($this->once())->method('find')->willReturn($card);
         $this->cardMapper->expects($this->never())->method('assignLabel');
-        $this->setExpectedException(CardArchivedException::class);
+        $this->setExpectedException(StatusException::class);
         $this->cardService->assignLabel(123, 999);
     }
 
@@ -221,7 +225,7 @@ class CardServiceTest extends \PHPUnit_Framework_TestCase {
         $card->setArchived(true);
         $this->cardMapper->expects($this->once())->method('find')->willReturn($card);
         $this->cardMapper->expects($this->never())->method('removeLabel');
-        $this->setExpectedException(CardArchivedException::class);
+        $this->setExpectedException(StatusException::class);
         $this->cardService->removeLabel(123, 999);
     }
 

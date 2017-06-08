@@ -2,7 +2,9 @@
 
 namespace OCA\Deck\Db;
 
-class BoardTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class BoardTest extends TestCase {
 	private function createBoard() {
 		$board = new Board();
 		$board->setId(1);
@@ -21,6 +23,8 @@ class BoardTest extends \PHPUnit_Framework_TestCase {
 			'owner' => "admin",
 			'color' => "000000",
 			'labels' => array(),
+			'permissions' => [],
+			'deletedAt' => 0,
 			'acl' => array(),
 			'archived' => false
 		], $board->jsonSerialize());
@@ -35,6 +39,8 @@ class BoardTest extends \PHPUnit_Framework_TestCase {
 			'owner' => "admin",
 			'color' => "000000",
 			'labels' => array("foo", "bar"),
+			'permissions' => [],
+			'deletedAt' => 0,
 			'acl' => array(),
 			'archived' => false
 		], $board->jsonSerialize());
@@ -56,6 +62,8 @@ class BoardTest extends \PHPUnit_Framework_TestCase {
 			'owner' => "admin",
 			'color' => "000000",
 			'labels' => array(),
+			'permissions' => [],
+			'deletedAt' => 0,
 			'acl' => array(),
 			'archived' => false,
 			'shared' => 1,

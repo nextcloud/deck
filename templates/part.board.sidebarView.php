@@ -9,6 +9,7 @@
     <h2>{{ boardservice.getCurrent().title }}</h2>
 </div>
 
+{{board=boardservice.getCurrent();""}}
 
 <ul class="tabHeaders">
     <li class="tabHeader" ng-class="{'selected': (status.boardtab==0 || !status.boardtab)}" ng-click="status.boardtab=0"><a><?php p($l->t('Sharing')); ?></a></li>
@@ -90,7 +91,7 @@
                     <input type="text" class="input-inline" ng-model="newLabel.title" style="color:{{ newLabel.color|textColorFilter }};" autofocus-on-insert maxlength="100" />
                 </span>
                         <div class="colorselect">
-                            <div class="color" ng-repeat="c in defaultColors" style="background-color:#{{ c }};" ng-click="newLabel.color=c" ng-class="{'selected': (c == newLabel.color) }"><br /></div>
+                            <div class="color" ng-repeat="c in defaultColors" style="background-color:#{{ c }};" ng-click="newLabel.color=c" ng-class="{'selected': (c == newLabel.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"><br /></div>
                         </div>
                         <a ng-click="labelCreate(newLabel)" class="icon"><i class="icon icon-checkmark" ></i></a>
                         <a ng-click="status.createLabel=false" class="icon icon-close"></a>

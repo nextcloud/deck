@@ -24,7 +24,7 @@ app.filter('textColorFilter', function() {
 	return function (hex) {
 		// RGB2HLS by Garry Tan
 		// http://axonflux.com/handy-rgb-to-hsl-and-rgb-to-hsv-color-model-c
-		var result = /^([A-Fa-f\d]{2})([A-Fa-f\d]{2})([A-Fa-f\d]{2})$/i.exec(hex);
+		var result = /^#?([A-Fa-f\d]{2})([A-Fa-f\d]{2})([A-Fa-f\d]{2})$/i.exec(hex);
 		var color = result ? {
 			r: parseInt(result[1], 16),
 			g: parseInt(result[2], 16),

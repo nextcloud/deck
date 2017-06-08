@@ -1,39 +1,49 @@
-/*
- * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
+<?php
+/**
+ * @copyright Copyright (c) 2017 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *  
+ *  along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-// usage | cardFilter({ member: 'admin'})
+/**
+ * Created by PhpStorm.
+ * User: jus
+ * Date: 16.05.17
+ * Time: 12:34
+ */
 
-app.filter('cardFilter', function() {
-    return function(cards, rules) {
-		var _result = [];
-		angular.forEach(cards, function(card){
-			var _card = card;
-			var keys = Object.keys(rules);
-			keys.some(function(key, condition) {
-				if(_card[key]===rules[key]) {
-					_result.push(_card);
-				}
-			});
-		});
-		return _result;
-    };
-});
+namespace OCA\Deck\Cron;
+
+use OC\BackgroundJob\Job;
+use OCA\Deck\Db\BoardMapper;
+
+class DeleteCron extends Job {
+
+	public function __construct(BoardMapper $boardMapper) {
+		$this->boardMapper = $boardMapper;
+	}
+
+	protected function run($argument) {
+		$boards = $this->boardMapper->findToDelete();
+		foreach ($boards as $board) {
+			$this->boardMapper->delete($board);
+		}
+	}
+
+}

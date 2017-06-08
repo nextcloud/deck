@@ -65,6 +65,14 @@ button.button-inline:hover {
  * Navigation sidebar
  */
 
+.app-navigation-entry-menu ul {
+	flex-direction: row;
+}
+
+.app-navigation-entry-utils-menu-button {
+	display: block !important;
+}
+
 .app-navigation-entry-utils-menu-share {
 	display: flex !important;
 	padding: 14px;
@@ -318,9 +326,9 @@ button.button-inline:hover {
 .popovermenu {
 	z-index: 999;
 	opacity: 1;
-	margin-top: 25px;
-	margin-right: 3px;
 	display: block;
+	margin-top: 25px;
+	margin-right: 0px;
 }
 
 .popovermenu.hidden {
@@ -614,23 +622,30 @@ button.button-inline:hover {
 
 .colorselect {
 	overflow: hidden;
-	clear: both;
-	padding-top: 4px;
-	padding-left: 4px;
+	border-radius:3px;
+	flex-direction: row;
+	min-width: 240px;
+	height: 34px;
+	display: flex;
+	margin: 3px 3px 3px 0;
 }
 
 .colorselect .color {
 	opacity: 0.7;
-	width: 27px;
-	height: 27px;
-	float: left;
-	margin-right: 2px;
+	height: 100%;
+	flex-grow: 1;
 	border: none;
 }
 
 .colorselect .selected {
+	background-image: url(../../../core/img/actions/checkmark.svg);
+	background-position: center center;
+	background-repeat: no-repeat;
 	opacity: 1.0;
-	border: 1px solid #333333;
+}
+
+.colorselect .dark.selected {
+	background-image: url(../../../core/img/actions/checkmark-white.svg);
 }
 
 .labels .colorselect {
@@ -662,6 +677,16 @@ button.button-inline:hover {
 	cursor: pointer;
 	display: block;
 }
+#boardlist .app-popover-menu-utils {
+	width: 30px;
+	display: inline;
+	position: relative;
+}
+
+.popovermenu ul {
+	display: flex !important;
+	flex-direction: column;
+}
 
 #boardlist td {
 	padding: 10px;
@@ -680,15 +705,34 @@ button.button-inline:hover {
 
 .cell-board-title {
 	width: 50%;
-
 }
 
-#boardlist .colorselect,
-#boardlist input {
-	float: left;
+#boardlist tr.deleted td * {
+	opacity: 0.5;
 }
 
-#boardlist .colorselect {
+#boardlist td form {
+	display: flex;
+	width: 100%;
+}
+
+#boardlist td .colorselect {
+	flex-grow: 1;
+}
+
+#boardlist td input[type=text] {
+	flex-grow: 2;
+}
+
+#boardlist td input[type=submit] {
+	width: 32px;
+}
+
+#boardlist td .app-popover-menu-utils {
+	float: right;
+}
+
+#boardlist .popovermenu {
 	margin-top: 5px;
 }
 
@@ -924,6 +968,10 @@ button.button-inline:hover {
 /**
  * Custom icons
  */
+
+.icon-deck {
+	background-image: url(../img/deck.svg);
+}
 
 .icon-group {
 	background-image: url('../../../settings/img/users.svg');

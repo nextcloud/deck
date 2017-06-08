@@ -20,11 +20,17 @@
  *  
  */
 
-app.run(function ($document, $rootScope, $transitions) {
+app.run(function ($document, $rootScope, $transitions, BoardService) {
     'use strict';
     $document.click(function (event) {
         $rootScope.$broadcast('documentClicked', event);
     });
+    $transitions.onEnter({from: 'list'}, function($state, $transition$) {
+        BoardService.unsetCurrrent();
+    });
+	$transitions.onEnter({to: 'list'}, function($state, $transition$) {
+		BoardService.unsetCurrrent();
+	});
     $transitions.onEnter({to: 'board.card'}, function ($state, $transition$) {
         $rootScope.sidebar.show = true;
     });
@@ -39,9 +45,6 @@ app.run(function ($document, $rootScope, $transitions) {
     });
     $transitions.onExit({from: 'board.detail'}, function ($state) {
         $rootScope.sidebar.show = false;
-    });
-    $transitions.onEnter({to: 'board.archive'}, function ($state) {
-        //BoardController.loadArchived();
     });
 
     $('link[rel="shortcut icon"]').attr(

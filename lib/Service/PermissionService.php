@@ -25,6 +25,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
+use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\NoPermissionException;
@@ -50,7 +51,7 @@ class PermissionService {
 	}
 
 	/**
-	 * Get current user permissions for a board
+	 * Get current user permissions for a board by id
 	 *
 	 * @param $boardId
 	 * @return bool|array
@@ -58,6 +59,24 @@ class PermissionService {
 	public function getPermissions($boardId) {
 		$owner = $this->userIsBoardOwner($boardId);
 		$acls = $this->aclMapper->findAll($boardId);
+		return [
+			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
+			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
+			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE),
+			Acl::PERMISSION_SHARE => $owner || $this->userCan($acls, Acl::PERMISSION_SHARE),
+		];
+	}
+
+	/**
+	 * Get current user permissions for a board
+	 *
+	 * @param Board $board
+	 * @return array|bool
+	 * @internal param $boardId
+	 */
+	public function matchPermissions(Board $board) {
+		$owner = $this->userIsBoardOwner($board->getId());
+		$acls = $board->getAcl();
 		return [
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),

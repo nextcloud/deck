@@ -1,4 +1,3 @@
-
 /*
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -21,11 +20,15 @@
  *  
  */
 
-app.controller('ListController', function ($scope, $location, $filter, BoardService, $element, $timeout) {
+/* global app angular */
+
+app.controller('ListController', function ($scope, $location, $filter, BoardService, $element, $timeout, $stateParams, $state) {
 	$scope.boards = [];
 	$scope.newBoard = {};
 	$scope.status = {
-		deleteUndo: []
+		deleteUndo: [],
+		filter: $stateParams.filter ? $stateParams.filter : '',
+		sidebar: false
 	};
 	$scope.colors = ['0082c9', '00c9c6','00c906', 'c92b00', 'F1DB50', '7C31CC', '3A3B3D', 'CACBCD'];
 	$scope.boardservice = BoardService;
@@ -42,11 +45,40 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 
 	$scope.filterData = function () {
 		angular.copy($scope.boardservice.getData(), $scope.boardservice.sorted);
-		$scope.boardservice.sorted = $filter('orderBy')($scope.boardservice.sorted, 'title');
+		angular.copy($scope.boardservice.sorted, $scope.boardservice.sidebar);
+		$scope.boardservice.sidebar = $filter('orderBy')($scope.boardservice.sidebar, 'title');
+		$scope.boardservice.sidebar = $filter('cardFilter')($scope.boardservice.sidebar, {archived: false});
+
+		if ($scope.status.filter === 'archived') {
+			var filter = {};
+			filter[$scope.status.filter] = true;
+			$scope.boardservice.sorted = $filter('cardFilter')($scope.boardservice.sorted, filter);
+		} else if ($scope.status.filter === 'shared') {
+			$scope.boardservice.sorted = $filter('cardFilter')($scope.boardservice.sorted, {archived: false});
+			$scope.boardservice.sorted = $filter('boardFilterAcl')($scope.boardservice.sorted);
+		} else {
+			$scope.boardservice.sorted = $filter('cardFilter')($scope.boardservice.sorted, {archived: false});
+		}
+		$scope.boardservice.sorted = $filter('orderBy')($scope.boardservice.sorted, ['deletedAt', 'title']);
 	};
+
+	$scope.$watchCollection(function(){
+		return $state.params;
+	}, function(){
+		$scope.status.filter = $state.params.filter;
+		$scope.filterData();
+	});
+
 
 	$scope.selectColor = function(color) {
 		$scope.newBoard.color = color;
+	};
+
+	$scope.gotoBoard = function(board) {
+		if(board.deletedAt > 0) {
+			return false;
+		}
+		return $state.go('board', {boardId: board.id});
 	};
 
 	$scope.boardCreate = function() {
@@ -72,26 +104,30 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 		board.status.edit = false;
 	};
 
+	$scope.boardArchive = function (board) {
+		board.archived = true;
+		BoardService.update(board).then(function(data) {
+			$scope.filterData();
+		});
+	};
+
+	$scope.boardUnarchive = function (board) {
+		board.archived = false;
+		BoardService.update(board).then(function(data) {
+			$scope.filterData();
+		});
+	};
+
 	$scope.boardDelete = function(board) {
-		var boardId = board.id;
-		$scope.status.deleteUndo[boardId] = 10;
-		$scope.boardDeleteCountdown = function () {
-			console.log($scope.status);
-			if($scope.status.deleteUndo[boardId] > 0) {
-				$scope.status.deleteUndo[boardId]--;
-				$timeout($scope.boardDeleteCountdown, 1000);
-			}
-			if($scope.status.deleteUndo[boardId] === 0) {
-				BoardService.delete(board.id).then(function (data) {
-					$scope.filterData();
-				});
-			}
-		};
-		$timeout($scope.boardDeleteCountdown, 1000);
+		BoardService.delete(board.id).then(function (data) {
+			$scope.filterData();
+		});
 	};
 
 	$scope.boardDeleteUndo = function (board) {
-		delete $scope.status.deleteUndo[board.id];
+		BoardService.deleteUndo(board.id).then(function (data) {
+			$scope.filterData();
+		});
 	};
 
 });

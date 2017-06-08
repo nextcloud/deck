@@ -107,9 +107,9 @@ class BoardControllerTest extends \PHPUnit_Framework_TestCase {
 	public function testUpdate() {
 		$this->boardService->expects($this->once())
 			->method('update')
-			->with(1, 2, 3)
+			->with(1, 2, 3, false)
 			->willReturn(1);
-		$this->assertEquals(1, $this->controller->update(1, 2, 3));
+		$this->assertEquals(1, $this->controller->update(1, 2, 3, false));
 	}
 
 	public function testDelete() {
@@ -118,6 +118,14 @@ class BoardControllerTest extends \PHPUnit_Framework_TestCase {
 			->with(123)
 			->willReturn(1);
 		$this->assertEquals(1, $this->controller->delete(123));
+	}
+
+	public function testDeleteUndo() {
+		$this->boardService->expects($this->once())
+			->method('deleteUndo')
+			->with(123)
+			->willReturn(1);
+		$this->assertEquals(1, $this->controller->deleteUndo(123));
 	}
 
 	public function testGetUserPermissions() {

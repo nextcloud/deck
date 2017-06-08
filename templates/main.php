@@ -45,7 +45,7 @@ if(!\OC::$server->getConfig()->getSystemValue('debug', false)) {
 		'app' => ['App', 'Config', 'Run'],
 		'controller' => ['AppController', 'BoardController', 'CardController', 'ListController'],
 		'directive' => ['appnavigationentryutils', 'appPopoverMenuUtils', 'autofocusoninsert', 'avatar', 'elastic', 'search'],
-		'filters' => ['cardFilter', 'cardSearchFilter', 'iconWhiteFilter', 'lightenColorFilter', 'orderObjectBy', 'relativeDateFilter', 'textColorFilter'],
+		'filters' => ['boardFilterAcl', 'cardFilter', 'cardSearchFilter', 'iconWhiteFilter', 'lightenColorFilter', 'orderObjectBy', 'relativeDateFilter', 'textColorFilter'],
 		'service' => ['ApiService', 'BoardService', 'CardService', 'LabelService', 'StackService', 'StatusService'],
 	];
 	foreach($js as $folder=>$files) {
@@ -58,7 +58,7 @@ if(!\OC::$server->getConfig()->getSystemValue('debug', false)) {
 
 <div id="app" class="app-deck" data-ng-app="Deck" ng-controller="AppController" ng-cloak>
 
-	<div id="app-navigation" data-ng-controller="ListController">
+	<div id="app-navigation" data-ng-controller="ListController" ng-init="initSidebar()">
 		<?php print_unescaped($this->inc('part.navigation')); ?>
 		<?php /* print_unescaped($this->inc('part.settings')); */ ?>
 	</div>

@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Db;
 
+use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
 use Test\AppFramework\Db\MapperTestUtility;
@@ -32,10 +33,15 @@ use Test\AppFramework\Db\MapperTestUtility;
  */
 class BoardMapperTest extends MapperTestUtility  {
 
+	/** @var IDBConnection */
     private $dbConnection;
+    /** @var AclMapper|\PHPUnit_Framework_MockObject_MockObject */
 	private $aclMapper;
+	/** @var BoardMapper */
 	private $boardMapper;
+	/** @var IUserManager|\PHPUnit_Framework_MockObject_MockObject */
 	private $userManager;
+	/** @var IGroupManager|\PHPUnit_Framework_MockObject_MockObject */
 	private $groupManager;
 
 	// Data
@@ -72,7 +78,7 @@ class BoardMapperTest extends MapperTestUtility  {
             $this->aclMapper->insert($this->getAcl('user','user1', false, false, false, $this->boards[2]->getId()))
         ];
 
-        foreach ($this->acls as $acl) {
+		foreach ($this->acls as $acl) {
             $acl->resetUpdatedFields();
         }
         foreach ($this->boards as $board) {
@@ -101,14 +107,55 @@ class BoardMapperTest extends MapperTestUtility  {
 
 	public function testFind() {
         $actual = $this->boardMapper->find($this->boards[0]->getId());
-        $expected = $this->boards[0];
+        /** @var Board $expected */
+        $expected = clone $this->boards[0];
+        $expected->setShared(-1);
+        $expected->resetUpdatedFields();
         $this->assertEquals($expected, $actual);
     }
+
+	public function testFindAllByUser() {
+		$actual = $this->boardMapper->findAllByUser('user1');
+		$expected = [
+			$this->boards[0],
+			$this->boards[1],
+			$this->boards[2]
+		];
+		foreach ($expected as $e) {
+			foreach ($actual as $a) {
+				if($e->getId() === $a->getId()) {
+					$this->assertEquals($e->getTitle(), $a->getTitle());
+				}
+			}
+		}
+	}
+
+	public function testFindAll() {
+		$actual = $this->boardMapper->findAll();
+		$this->assertEquals($this->boards[0]->getId(), $actual[0]->getId());
+		$this->assertEquals($this->boards[1]->getId(), $actual[1]->getId());
+		$this->assertEquals($this->boards[2]->getId(), $actual[2]->getId());
+	}
+
+	public function testFindAllToDelete() {
+		$this->boards[0]->setDeletedAt(1);
+		$this->boards[0] = $this->boardMapper->update($this->boards[0]);
+
+		$actual = $this->boardMapper->findToDelete();
+		$this->boards[0]->resetUpdatedFields();
+		$this->assertEquals([$this->boards[0]], $actual);
+
+		$this->boards[0]->setDeletedAt(0);
+		$this->boardMapper->update($this->boards[0]);
+	}
+
     public function testFindWithLabels() {
         $actual = $this->boardMapper->find($this->boards[0]->getId(), true, false);
-        $expected = $this->boards[0];
-        $this->assertEquals($expected, $actual);
+		/** @var Board $expected */
+		$expected = $this->boards[0];
+        $this->assertEquals($expected->getLabels(), $actual->getLabels());
     }
+
     public function testFindWithAcl() {
         $actual = $this->boardMapper->find($this->boards[0]->getId(), false, true);
         $expected = [

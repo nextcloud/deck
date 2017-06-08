@@ -145,7 +145,13 @@ app.factory('ApiService', function($http, $q){
         return this.data[this.id];
     };
 
-    ApiService.prototype.getData = function() {
+	ApiService.prototype.unsetCurrrent = function () {
+		this.id = null;
+	};
+
+
+
+	ApiService.prototype.getData = function() {
         return $.map(this.data, function(value, index) {
             return [value];
         });

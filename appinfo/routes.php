@@ -31,6 +31,7 @@ return [
 		['name' => 'board#read', 'url' => '/boards/{boardId}', 'verb' => 'GET'],
 		['name' => 'board#update', 'url' => '/boards/{boardId}', 'verb' => 'PUT'],
 		['name' => 'board#delete', 'url' => '/boards/{boardId}', 'verb' => 'DELETE'],
+		['name' => 'board#deleteUndo', 'url' => '/boards/{boardId}/deleteUndo', 'verb' => 'POST'],
 		['name' => 'board#getUserPermissions', 'url' => '/boards/{boardId}/permissions', 'verb' => 'GET'],
 		['name' => 'board#addAcl', 'url' => '/boards/{boardId}/acl', 'verb' => 'POST'],
 		['name' => 'board#updateAcl', 'url' => '/boards/{boardId}/acl', 'verb' => 'PUT'],

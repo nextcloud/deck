@@ -96,8 +96,8 @@ class BoardController extends Controller {
 	 * @param $color
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function update($id, $title, $color) {
-		return $this->boardService->update($id, $title, $color);
+	public function update($id, $title, $color, $archived) {
+		return $this->boardService->update($id, $title, $color, $archived);
 	}
 
 	/**
@@ -107,6 +107,14 @@ class BoardController extends Controller {
 	 */
 	public function delete($boardId) {
 		return $this->boardService->delete($boardId);
+	}
+	/**
+	 * @NoAdminRequired
+	 * @param $boardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
+	public function deleteUndo($boardId) {
+		return $this->boardService->deleteUndo($boardId);
 	}
 
 	/**
