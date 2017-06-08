@@ -36,16 +36,17 @@ Util::addScript('deck', 'vendor/angular-ui-select/dist/select.min');
 Util::addScript('deck', 'vendor/markdown-it/dist/markdown-it.min');
 Util::addScript('deck', 'vendor/angular-markdown-it/dist/ng-markdownit.min');
 Util::addScript('deck', 'vendor/markdown-it-link-target/dist/markdown-it-link-target.min');
+Util::addScript('deck', 'vendor/jquery-timepicker/jquery.ui.timepicker');
 
-if(!\OC::$server->getConfig()->getSystemValue('debug', false)) {
+if(true && !\OC::$server->getConfig()->getSystemValue('debug', false)) {
 	Util::addScript('deck', 'public/app');
 } else {
 	// Load seperate JS files when debug mode is enabled
 	$js = [
 		'app' => ['App', 'Config', 'Run'],
 		'controller' => ['AppController', 'BoardController', 'CardController', 'ListController'],
-		'directive' => ['appnavigationentryutils', 'appPopoverMenuUtils', 'autofocusoninsert', 'avatar', 'elastic', 'search'],
-		'filters' => ['boardFilterAcl', 'cardFilter', 'cardSearchFilter', 'iconWhiteFilter', 'lightenColorFilter', 'orderObjectBy', 'relativeDateFilter', 'textColorFilter'],
+		'directive' => ['appnavigationentryutils', 'appPopoverMenuUtils', 'autofocusoninsert', 'avatar', 'elastic', 'search', 'datepicker', 'timepicker'],
+		'filters' => ['boardFilterAcl', 'cardFilter', 'cardSearchFilter', 'iconWhiteFilter', 'lightenColorFilter', 'orderObjectBy', 'dateFilters', 'textColorFilter'],
 		'service' => ['ApiService', 'BoardService', 'CardService', 'LabelService', 'StackService', 'StatusService'],
 	];
 	foreach($js as $folder=>$files) {
