@@ -157,6 +157,13 @@ class BoardService {
 		}
 		$new_board->setLabels($labels);
 		$this->boardMapper->mapOwner($new_board);
+		$permissions = $this->permissionService->matchPermissions($new_board);
+		$new_board->setPermissions([
+			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ],
+			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT],
+			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE],
+			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
+		]);
 		return $new_board;
 
 	}

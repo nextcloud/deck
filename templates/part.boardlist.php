@@ -46,8 +46,8 @@
 						</ul>
 					</div>
 				</div>
-				<div class="app-popover-menu-utils" ng-if="b.archived && b.deletedAt > 0">
-					<button class="icon icon-history" ng-click="boardDeleteUndo(b)" title="Undo board deletion - Otherwise the board will be deleted during the next cronjob run."></button>
+				<div class="app-popover-menu-utils" ng-if="b.deletedAt > 0">
+					<button class="icon icon-history button-inline" ng-click="boardDeleteUndo(b)" title="Undo board deletion - Otherwise the board will be deleted during the next cronjob run."></button>
 				</div>
 			</td>
 		</tr>
