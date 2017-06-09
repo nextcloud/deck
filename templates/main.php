@@ -58,7 +58,7 @@ if(!\OC::$server->getConfig()->getSystemValue('debug', false)) {
 
 <div id="app" class="app-deck" data-ng-app="Deck" ng-controller="AppController" ng-cloak>
 
-	<div id="app-navigation" data-ng-controller="ListController" ng-init="initSidebar()">
+	<div id="app-navigation" data-ng-controller="ListController" ng-init="initSidebar()" ng-if="navibar.show">
 		<?php print_unescaped($this->inc('part.navigation')); ?>
 		<?php /* print_unescaped($this->inc('part.settings')); */ ?>
 	</div>
