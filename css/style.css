@@ -910,6 +910,12 @@ button.button-inline:hover {
 	}
 }
 
+@media (max-width: 768px) {
+	#app-navigation-toggle {
+		display: none !important;
+	}
+}
+
 /**
  * Markdown rendering
  */
