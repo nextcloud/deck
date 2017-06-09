@@ -24,6 +24,10 @@ app.controller('AppController', function ($scope, $location, $http, $route, $log
     $rootScope.sidebar = {
         show: false
     };
+    $rootScope.navibar = {
+        show: true
+    };
     $scope.sidebar = $rootScope.sidebar;
+    $scope.navibar = $rootScope.navibar;
     $scope.user = oc_current_user;
 });

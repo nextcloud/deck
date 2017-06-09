@@ -135,7 +135,7 @@ button.button-inline:hover {
 	color: #333333;
 	position: relative;
 	z-index: 120;
-	height: 44px;
+	min-height: 44px;
 	display: flex;
 	align-items: center;
 	font-size: 14pt;
@@ -152,6 +152,14 @@ button.button-inline:hover {
 #board-header > h1 {
 	white-space: nowrap;
 	padding: 7px;
+}
+
+#app-navigation-toggle {
+	position: relative;
+	top: 0px;
+	width: 44px;
+	height: 44px;
+	cursor: pointer;
 }
 
 .board-header-controls {
@@ -899,6 +907,12 @@ button.button-inline:hover {
 	}
 	.stack h2 button {
 		display: none;
+	}
+}
+
+@media (max-width: 768px) {
+	#app-navigation-toggle {
+		display: none !important;
 	}
 }
 

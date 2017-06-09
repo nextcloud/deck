@@ -6,6 +6,7 @@
 </div>
 
 <div id="board-header">
+	<div id="app-navigation-toggle" class="icon-menu" ng-click="navibar.show=!navibar.show"></div>
 	<a class="crumb" href="#" title="<?php p($l->t('All Boards')); ?>">
 		<i class="icon icon-home"></i>
 		<span class="hidden-visually"><?php p($l->t('All Boards')); ?></span>
