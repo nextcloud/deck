@@ -28,9 +28,6 @@ OC.L10N.register(
     "Attachments" : "Хавсралт",
     "Comments" : "Сэтгэгдлүүд",
     "History" : "Түүх",
-    "Shared with you" : "Танд түгээсэн",
-    "edit" : "Засварлах",
-    "delete" : "устгах",
-    "remove share" : "Түгээлтийг арилгах"
+    "Shared with you" : "Танд түгээсэн"
 },
 "nplurals=2; plural=(n != 1);");

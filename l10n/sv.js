@@ -21,9 +21,6 @@ OC.L10N.register(
     "Attachments" : "Bifogade filer",
     "Comments" : "Kommentarer",
     "History" : "Historik",
-    "Shared with you" : "Delade med dig",
-    "edit" : "redigera",
-    "delete" : "radera",
-    "remove share" : "ta bort delning"
+    "Shared with you" : "Delade med dig"
 },
 "nplurals=2; plural=(n != 1);");

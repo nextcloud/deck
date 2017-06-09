@@ -20,9 +20,6 @@ OC.L10N.register(
     "Attachments" : "Pielikumi",
     "Comments" : "Komentāri",
     "History" : "Vēsture",
-    "Shared with you" : "Koplietots ar tevi",
-    "edit" : "rediģēt",
-    "delete" : "dzēst",
-    "remove share" : "noņemt koplietojumu"
+    "Shared with you" : "Koplietots ar tevi"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

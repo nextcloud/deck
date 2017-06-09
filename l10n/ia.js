@@ -19,8 +19,6 @@ OC.L10N.register(
     "Attachments" : "Attachamentos",
     "Comments" : "Commentarios",
     "History" : "Historia",
-    "Shared with you" : "Compartite con te",
-    "edit" : "modificar",
-    "delete" : "deler"
+    "Shared with you" : "Compartite con te"
 },
 "nplurals=2; plural=(n != 1);");

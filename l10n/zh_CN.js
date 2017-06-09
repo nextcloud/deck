@@ -34,9 +34,6 @@ OC.L10N.register(
     "Comments" : "评论",
     "History" : "历史",
     "Shared with you" : "共享给您的",
-    "edit" : "编辑",
-    "delete" : "删除",
-    "remove share" : "移除共享",
     "Create a new board" : "创建一个新面板"
 },
 "nplurals=1; plural=0;");

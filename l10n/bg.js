@@ -23,9 +23,6 @@ OC.L10N.register(
     "Attachments" : "Прикачени файлове",
     "Comments" : "Коментари",
     "History" : "История",
-    "Shared with you" : "Споделено с Вас",
-    "edit" : "редакция",
-    "delete" : "изтриване",
-    "remove share" : "премахване на споделяне"
+    "Shared with you" : "Споделено с Вас"
 },
 "nplurals=2; plural=(n != 1);");

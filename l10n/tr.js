@@ -39,9 +39,6 @@ OC.L10N.register(
     "Comments" : "Yorumlar",
     "History" : "Geçmiş",
     "Shared with you" : "Sizinle paylaşılan",
-    "edit" : "düzenle",
-    "delete" : "sil",
-    "remove share" : "paylaşımı kaldır",
     "Create a new board" : "Yeni bir pano ekle"
 },
 "nplurals=2; plural=(n > 1);");

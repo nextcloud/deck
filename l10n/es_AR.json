@@ -33,9 +33,6 @@
     "Comments" : "Comentarios",
     "History" : "Histórico",
     "Shared with you" : "Compartido con usted",
-    "edit" : "editar",
-    "delete" : "borrar",
-    "remove share" : "eliminar elemento compartido",
     "Create a new board" : "Crear nuevo tablero"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

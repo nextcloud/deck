@@ -15,8 +15,6 @@ OC.L10N.register(
     "Saved" : "Elmentve",
     "Comments" : "Hozzászólások",
     "History" : "Előzmények",
-    "Shared with you" : "Megosztva veled",
-    "edit" : "szerkesztés",
-    "delete" : "törlés"
+    "Shared with you" : "Megosztva veled"
 },
 "nplurals=2; plural=(n != 1);");

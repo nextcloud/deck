@@ -21,9 +21,6 @@
     "Attachments" : "Прикачени файлове",
     "Comments" : "Коментари",
     "History" : "История",
-    "Shared with you" : "Споделено с Вас",
-    "edit" : "редакция",
-    "delete" : "изтриване",
-    "remove share" : "премахване на споделяне"
+    "Shared with you" : "Споделено с Вас"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

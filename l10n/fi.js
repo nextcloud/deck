@@ -32,9 +32,6 @@ OC.L10N.register(
     "Comments" : "Kommentit",
     "History" : "Historia",
     "Shared with you" : "Jaetu kanssasi",
-    "edit" : "muokkaa",
-    "delete" : "poista",
-    "remove share" : "poista jako",
     "Create a new board" : "Luo uusi taulu"
 },
 "nplurals=2; plural=(n != 1);");

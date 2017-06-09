@@ -34,9 +34,6 @@ OC.L10N.register(
     "Comments" : "Σχόλια",
     "History" : "Ιστορικό",
     "Shared with you" : "Διαμοιρασμένα με εσάς",
-    "edit" : "επεξεργασία",
-    "delete" : "διαγραφή",
-    "remove share" : "αφαίρεση διαμοιρασμού",
     "Create a new board" : "Δημιουργία νέου πίνακα"
 },
 "nplurals=2; plural=(n != 1);");

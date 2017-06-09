@@ -32,9 +32,6 @@ OC.L10N.register(
     "Comments" : "댓글",
     "History" : "과거 기록",
     "Shared with you" : "내게 공유됨",
-    "edit" : "편집",
-    "delete" : "삭제",
-    "remove share" : "공유 삭제",
     "Create a new board" : "새 게시판 만들기"
 },
 "nplurals=1; plural=0;");

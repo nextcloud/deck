@@ -32,9 +32,6 @@ OC.L10N.register(
     "Comments" : "Kommentarer",
     "History" : "Hostorik",
     "Shared with you" : "Delt med dig",
-    "edit" : "redigér",
-    "delete" : "slet",
-    "remove share" : "Fjern deling",
     "Create a new board" : "Opret ny liste"
 },
 "nplurals=2; plural=(n != 1);");

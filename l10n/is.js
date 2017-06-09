@@ -35,9 +35,6 @@ OC.L10N.register(
     "Comments" : "Athugasemdir",
     "History" : "Ferill",
     "Shared with you" : "Deilt með þér",
-    "edit" : "breyta",
-    "delete" : "eyða",
-    "remove share" : "fjarlægja sameign...",
     "Create a new board" : "Búa til nýtt borð"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

@@ -32,9 +32,6 @@ OC.L10N.register(
     "Comments" : "Komentáre",
     "History" : "História",
     "Shared with you" : "Sprístupnené vám",
-    "edit" : "upraviť",
-    "delete" : "zmazať",
-    "remove share" : "zrušiť sprístupnenie",
     "Create a new board" : "Vytvoriť novú tabuľu"
 },
 "nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;");

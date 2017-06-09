@@ -39,9 +39,6 @@ OC.L10N.register(
     "Comments" : "Commentaires",
     "History" : "Journal",
     "Shared with you" : "Partagé avec vous",
-    "edit" : "modifier",
-    "delete" : "suppression",
-    "remove share" : "suppression du partage",
     "Create a new board" : "Créer un nouveau tableau"
 },
 "nplurals=2; plural=(n > 1);");

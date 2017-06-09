@@ -39,9 +39,6 @@ OC.L10N.register(
     "Comments" : "Opmerkingen",
     "History" : "Geschiedenis",
     "Shared with you" : "Deel met jou",
-    "edit" : "Bewerk",
-    "delete" : "verwijder",
-    "remove share" : "verwijder gedeelde",
     "Create a new board" : "Een nieuw bord maken"
 },
 "nplurals=2; plural=(n != 1);");
