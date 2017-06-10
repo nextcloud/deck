@@ -609,15 +609,16 @@ button.button-inline:hover {
 	text-align: center;
 }
 
-.avatardiv {
+#assigned-users .avatardiv {
 	float: left;
 	background-color: #eee;
 	border-radius: 16px;
 	width: 32px;
 	height: 32px;
+	margin-right: 3px;
 }
 
-.avatardiv .icon-group {
+#assigned-users .avatardiv .icon-group {
 	margin: 7px;
 	opacity: 0.5;
 	display: block !important;
