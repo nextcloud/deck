@@ -676,6 +676,10 @@ button.button-inline:hover {
 	overflow: scroll;
 }
 
+#boardlist thead td {
+	color: #999;
+}
+
 #boardlist td .board-bullet {
 	width: 30px;
 	height: 30px;
@@ -684,11 +688,6 @@ button.button-inline:hover {
 	position: relative;
 	cursor: pointer;
 	display: block;
-}
-#boardlist .app-popover-menu-utils {
-	width: 30px;
-	display: inline;
-	position: relative;
 }
 
 .popovermenu ul {
@@ -708,7 +707,7 @@ button.button-inline:hover {
 }
 
 .cell-board-bullet {
-	width: 60px;
+	width: 50px;
 }
 
 .cell-board-title {
@@ -716,6 +715,10 @@ button.button-inline:hover {
 }
 
 #boardlist tr.deleted td * {
+	opacity: 0.5;
+}
+
+#boardlist tr:last-child td {
 	opacity: 0.5;
 }
 
@@ -738,7 +741,19 @@ button.button-inline:hover {
 
 #boardlist td .app-popover-menu-utils {
 	float: right;
+	width: 30px;
+	display: inline;
+	position: relative;
 }
+
+#boardlist td .app-popover-menu-utils button {
+	opacity: 0.3;
+}
+
+#boardlist td .app-popover-menu-utils:hover button {
+	opacity: 0.7;
+}
+
 
 #boardlist .popovermenu {
 	margin-top: 5px;

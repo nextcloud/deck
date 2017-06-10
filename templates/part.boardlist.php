@@ -31,7 +31,7 @@
 			<td>
 				<div class="hint"></div>
 				<div class="app-popover-menu-utils" ng-if="b.deletedAt == 0">
-					<button class="icon icon-more button-inline" title="More actions"></button>
+					<button class="icon icon-more button-inline" title="<?php p($l->t('More actions')); ?>"></button>
 					<div class="popovermenu bubble hidden">
 						<ul>
 							<li ng-if="boardservice.canManage(b) && !b.archived" ng-click="boardArchive(b)">
