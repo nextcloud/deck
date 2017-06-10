@@ -26,6 +26,9 @@ OC.L10N.register(
     "Create a new tag" : "Neuen Tag erstellen",
     "Title" : "Titel",
     "Members" : "Mitglieder",
+    "Archive board" : "Board archivieren",
+    "Unarchive board" : "Board dearchivieren",
+    "Delete board" : "Board löschen",
     "Create new board" : "Neues Board erstellen",
     "New board title" : "Neuer Board-Titel",
     "Modified:" : "Geändert:",
@@ -38,7 +41,11 @@ OC.L10N.register(
     "Attachments" : "Anhänge",
     "Comments" : "Kommentare",
     "History" : "Verlauf",
+    "Archived boards" : "Archivierte Boards",
+    "Shared boards" : "Geteilte Boards",
     "Shared with you" : "Mit Ihnen geteilt",
+    "Edit board" : "Board bearbeiten",
+    "Move board to archive" : "Board ins Archiv verschieben",
     "Create a new board" : "Neues Board erstellen"
 },
 "nplurals=2; plural=(n != 1);");
