@@ -26,6 +26,9 @@ OC.L10N.register(
     "Create a new tag" : "Utwórz nowy tag",
     "Title" : "Tytuł",
     "Members" : "Członkowie",
+    "Archive board" : "Zarchiwizuj tablicę",
+    "Unarchive board" : "Przywróć tablicę",
+    "Delete board" : "Usuń tablicę",
     "Create new board" : "Utwórz nową tablicę",
     "New board title" : "Tytuł nowej tablicy",
     "Modified:" : "Zmodyfikowano:",
@@ -38,7 +41,11 @@ OC.L10N.register(
     "Attachments" : "Załączniki",
     "Comments" : "Komentarze",
     "History" : "Historia",
+    "Archived boards" : "Zarchiwizowane tablice",
+    "Shared boards" : "Tablice współdzielone",
     "Shared with you" : "Współdzielone z tobą",
+    "Edit board" : "Edytuj tablicę",
+    "Move board to archive" : "Przesuń tablicę do archiwum",
     "Create a new board" : "Utwórz nową tablicę"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>=14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");
