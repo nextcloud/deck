@@ -26,6 +26,7 @@ OC.L10N.register(
     "Create a new tag" : "Criar um novo rótulo",
     "Title" : "Título",
     "Members" : "Membros",
+    "More actions" : "Mais ações",
     "Archive board" : "Arquivar painel",
     "Unarchive board" : "Desarquivar painel",
     "Delete board" : "Excluir painel",

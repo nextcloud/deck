@@ -26,6 +26,7 @@ OC.L10N.register(
     "Create a new tag" : "Create a new tag",
     "Title" : "Title",
     "Members" : "Members",
+    "More actions" : "More actions",
     "Archive board" : "Archive board",
     "Unarchive board" : "Unarchive board",
     "Delete board" : "Delete board",

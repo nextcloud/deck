@@ -26,6 +26,7 @@ OC.L10N.register(
     "Create a new tag" : "Yeni bir etiket ekle",
     "Title" : "Başlık",
     "Members" : "Üyeler",
+    "More actions" : "Diğer işlemler",
     "Archive board" : "Panoyu arşivle",
     "Unarchive board" : "Panoyu arşivden çıkar",
     "Delete board" : "Panoyu sil",

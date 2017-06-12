@@ -26,6 +26,7 @@ OC.L10N.register(
     "Create a new tag" : "Créer une nouvelle étiquette",
     "Title" : "Titre",
     "Members" : "Membres",
+    "More actions" : "Plus d'actions",
     "Archive board" : "Archiver le tableau",
     "Unarchive board" : "Ne plus archiver le tableau",
     "Delete board" : "Supprimer le tableau",
