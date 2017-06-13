@@ -26,6 +26,7 @@ OC.L10N.register(
     "Create a new tag" : "Utwórz nowy tag",
     "Title" : "Tytuł",
     "Members" : "Członkowie",
+    "More actions" : "Więcej akcji",
     "Archive board" : "Zarchiwizuj tablicę",
     "Unarchive board" : "Przywróć tablicę",
     "Delete board" : "Usuń tablicę",

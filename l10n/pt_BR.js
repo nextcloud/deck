@@ -18,7 +18,7 @@ OC.L10N.register(
     "Sharing" : "Compartilhar",
     "Tags" : "Rótulos",
     "Select users or groups to share with" : "Selecionar usuários ou grupos para compartilhar",
-    "No matching user or group found." : "Uusuário ou grupo não encontrado.",
+    "No matching user or group found." : "Usuário ou grupo não encontrado.",
     "Share" : "Compartilhar",
     "Edit" : "Editar",
     "Manage" : "Gerenciar",
