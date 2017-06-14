@@ -26,6 +26,7 @@ OC.L10N.register(
     "Create a new tag" : "Lag en ny merkelapp",
     "Title" : "Tittel",
     "Members" : "Medlemmer",
+    "More actions" : "Flere handlinger",
     "Create new board" : "Opprett et nytt bord",
     "New board title" : "Ny seksjonstittel",
     "Modified:" : "Endret:",
