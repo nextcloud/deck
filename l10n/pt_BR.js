@@ -5,7 +5,7 @@ OC.L10N.register(
     "To review" : "Para revisão",
     "Action needed" : "Ação necessária",
     "Later" : "Depois",
-    "Deck" : "Mesa",
+    "Deck" : "Deck",
     "Add a new stack" : "Adicionar uma nova pilha",
     "Show archived cards" : "Mostrar cartões arquivados",
     "Hide archived cards" : "Ocultar cartões arquivados",
