@@ -458,12 +458,15 @@ button.button-inline:hover {
 	min-height: initial;
 }
 
+.card-controls .icon-filetype-text {
+	margin-right: 5px;
+}
+
 .due {
 	padding: 1px 3px;
 	border-radius: 4px;
-	margin-right: 2px;
+	margin-right: 4px;
 	font-size: 90%;
-	margin-left: 5px;
 	opacity: .7;
 }
 .due .icon {

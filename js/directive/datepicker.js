@@ -20,12 +20,16 @@
  *
  */
 
+/* global app */
+/* gloabl t */
+/* global moment */
+
 app.directive('datepicker', function () {
 	'use strict';
 	return {
 		link: function (scope, elm, attr) {
 			return elm.datepicker({
-				dateFormat: "yy-mm-dd",
+				dateFormat: 'yy-mm-dd',
 				onSelect: function(date, inst) {
 					scope.setDuedate(moment(date));
 					scope.$apply();
@@ -37,7 +41,7 @@ app.directive('datepicker', function () {
 					dp.css({
 						'margin-left': marginLeft
 					});
-					$("div.ui-datepicker:before").css({
+					$('div.ui-datepicker:before').css({
 						'left': 100 + 'px'
 					});
 					return $('.hasDatepicker').datepicker();
@@ -45,6 +49,5 @@ app.directive('datepicker', function () {
 				minDate: null
 			});
 		}
-
-	}
+	};
 });

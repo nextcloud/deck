@@ -20,6 +20,10 @@
  *
  */
 
+/* global app */
+/* global t */
+/* global moment */
+
 app.directive('timepicker', function() {
 	'use strict';
 	return {
@@ -27,7 +31,7 @@ app.directive('timepicker', function() {
 		link: function(scope, elm, attr) {
 			return elm.timepicker({
 				onSelect: function(date, inst) {
-					scope.setDuedateTime(moment("2000-01-01 " + date));
+					scope.setDuedateTime(moment('2000-01-01 ' + date));
 					scope.$apply();
 				},
 				myPosition: 'center top',
