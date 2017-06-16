@@ -52,6 +52,8 @@ class CardTest extends \PHPUnit_Framework_TestCase {
 			'order' => 12,
 			'stackId' => 1,
 			'labels' => null,
+			'duedate' => null,
+			'overdue' => 0,
 			'archived' => false,
 		], $card->jsonSerialize());
 	}
@@ -69,6 +71,8 @@ class CardTest extends \PHPUnit_Framework_TestCase {
 			'order' => 12,
 			'stackId' => 1,
 			'labels' => array(),
+			'duedate' => null,
+			'overdue' => 0,
 			'archived' => false,
 		], $card->jsonSerialize());
 	}

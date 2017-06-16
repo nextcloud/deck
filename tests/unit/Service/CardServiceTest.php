@@ -98,12 +98,13 @@ class CardServiceTest extends TestCase {
         $card->setArchived(false);
         $this->cardMapper->expects($this->once())->method('find')->willReturn($card);
         $this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function($c) { return $c; });
-        $actual = $this->cardService->update(123, 'newtitle', 234, 'text', 999, 'foo', 'admin');
+        $actual = $this->cardService->update(123, 'newtitle', 234, 'text', 999, 'foo', 'admin', '2017-01-01 00:00:00');
         $this->assertEquals('newtitle', $actual->getTitle());
         $this->assertEquals(234, $actual->getStackId());
         $this->assertEquals('text', $actual->getType());
         $this->assertEquals(999, $actual->getOrder());
         $this->assertEquals('foo', $actual->getDescription());
+        $this->assertEquals('2017-01-01 00:00:00', $actual->getDuedate());
     }
 
     public function testUpdateArchived() {
@@ -113,7 +114,7 @@ class CardServiceTest extends TestCase {
         $this->cardMapper->expects($this->once())->method('find')->willReturn($card);
         $this->cardMapper->expects($this->never())->method('update');
         $this->setExpectedException(StatusException::class);
-        $this->cardService->update(123, 'newtitle', 234, 'text', 999, 'foo', 'admin');
+        $this->cardService->update(123, 'newtitle', 234, 'text', 999, 'foo', 'admin', '2017-01-01 00:00:00');
     }
 
     public function testRename() {
