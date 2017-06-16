@@ -60,11 +60,12 @@ if(!\OC::$server->getConfig()->getSystemValue('debug', false)) {
 
 <div id="app" class="app-deck" data-ng-app="Deck" ng-controller="AppController" ng-cloak>
 
-	<div id="app-navigation" data-ng-controller="ListController" ng-init="initSidebar()" ng-if="navibar.show">
+	<div id="app-navigation" data-ng-controller="ListController" ng-init="initSidebar()">
 		<?php print_unescaped($this->inc('part.navigation')); ?>
 		<?php /* print_unescaped($this->inc('part.settings')); */ ?>
 	</div>
-	<div id="app-content" ng-class="{ 'details-visible': sidebar.show }" ui-view>
+	<div id="app-content" ng-class="{ 'details-visible': sidebar.show }">
+		<div ui-view></div>
 	</div>
 	<route-loading-indicator></route-loading-indicator>
 
