@@ -20,6 +20,10 @@
  *  
  */
 
+/* global app */
+/* global OC */
+/* global moment */
+
 app.filter('relativeDateFilter', function() {
 	return function (timestamp) {
 		return OC.Util.relativeModifiedDate(timestamp*1000);
@@ -43,7 +47,7 @@ app.filter('parseDate', function() {
 		if(moment(date).isValid()) {
 			return moment(date).format('YYYY-MM-DD');
 		}
-		return "";
+		return '';
 	}
 });
 
@@ -52,6 +56,6 @@ app.filter('parseTime', function() {
 		if(moment(date).isValid()) {
 			return moment(date).format('HH:mm');
 		}
-		return "";
+		return '';
 	}
 });
