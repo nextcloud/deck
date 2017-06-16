@@ -74,9 +74,9 @@ class CardControllerTest extends \PHPUnit_Framework_TestCase {
 	public function testUpdate() {
 		$this->cardService->expects($this->once())
 			->method('update')
-			->with(1, 'title', 3, 'text', 5, 'foo', $this->userId)
+			->with(1, 'title', 3, 'text', 5, 'foo', $this->userId, '2017-01-01 00:00:00')
 			->willReturn(1);
-		$this->assertEquals(1, $this->controller->update(1, 'title', 3, 'text', 5, 'foo'));
+		$this->assertEquals(1, $this->controller->update(1, 'title', 3, 'text', 5, 'foo', '2017-01-01 00:00:00'));
 	}
 
 	public function testDelete() {
