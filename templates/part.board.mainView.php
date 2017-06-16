@@ -5,12 +5,11 @@
 		<p>{{ statusservice.text }}</p></div>
 </div>
 
-<div id="board-header">
-	<div id="app-navigation-toggle" class="icon-menu" ng-click="navibar.show=!navibar.show"></div>
-	<a class="crumb" href="#" title="<?php p($l->t('All Boards')); ?>">
-		<i class="icon icon-home"></i>
-		<span class="hidden-visually"><?php p($l->t('All Boards')); ?></span>
-	</a>
+<div id="controls">
+	<div class="crumb svg last">
+		<a href="#" id="button-home" title="<?php p($l->t('All Boards')); ?>">
+		</a>
+	</div>
 	<h1 class="title" style="border-bottom: 2px solid #{{boardservice.getCurrent().color }};">
 		{{ boardservice.getCurrent().title }}
 	</h1>

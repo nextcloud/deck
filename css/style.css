@@ -118,48 +118,66 @@ button.button-inline:hover {
 }
 
 #board {
-	position: relative;
-	height: 100%;
+	position: absolute;
 	white-space: nowrap;
 	overflow: auto;
 	z-index: 100;
 	width: 100%;
+	bottom: 0px;
+	top: 44px;
 }
 
 #board #innerBoard {
 	padding: 10px;
 }
 
-#board-header {
+#controls {
 	width: inherit;
-	color: #333333;
-	position: relative;
 	z-index: 120;
-	min-height: 44px;
 	display: flex;
 	align-items: center;
 	font-size: 14pt;
+	position: inherit;
+	width: 100% !important;
+    padding-left: 44px;
 }
 
-#board-header .crumb {
-	background-image: url('../../../core/img/breadcrumb.svg?v=1');
-	background-size: auto 24px;
-	background-position: right center;
-	background-repeat: no-repeat;
-	padding: 7px 14px;
+#controls .crumb, #controls a {
+	top: 12px;
 }
 
-#board-header > h1 {
+#controls > h1 {
 	white-space: nowrap;
 	padding: 7px;
 }
 
+#controls button {
+	height: inherit;
+}
+
+#controls input[type='text'] {
+	padding: 4px 5px;
+	margin: 3px 3px 3px 0px;
+	border: 0px none transparent;
+	min-height: initial;
+	background-color: transparent;
+	height: inherit;
+}
+
+#controls #button-home {
+	background-image: url(../../../core/img/places/home.svg);
+	background-position: 8px center;
+	background-repeat: no-repeat;
+	padding: 10px 24px 10px 14px;
+}
+
 #app-navigation-toggle {
-	position: relative;
-	top: 0px;
-	width: 44px;
-	height: 44px;
+	width: 45px;
+	height: 40px;
 	cursor: pointer;
+	opacity: 1;
+	display: inline-block !important;
+	position: fixed;
 }
 
 .board-header-controls {
@@ -210,17 +228,13 @@ button.button-inline:hover {
 	background-color: rgba(240,240,240,.9);
 	border-radius: 3px;
 	margin: 3px;
+	display: flex;
+	align-content: center;
 }
 
 #stack-add > form {
 	display: flex;
-}
-
-#stack-add input {
-	padding: 4px 5px;
-	border: 0px none transparent;
-	min-height: initial;
-	background-color: transparent;
+	align-content: center;
 }
 
 #stack-add input:invalid {
@@ -707,9 +721,11 @@ button.button-inline:hover {
  * Board list main screen area
  */
 #boardlist {
+	position: absolute;
+	overflow: auto;
 	width: 100%;
-	height: 100%;
-	overflow: scroll;
+	bottom: 0px;
+	top: 44px;
 }
 
 #boardlist thead td {
@@ -962,12 +978,6 @@ button.button-inline:hover {
 	}
 	.stack h2 button {
 		display: none;
-	}
-}
-
-@media (max-width: 768px) {
-	#app-navigation-toggle {
-		display: none !important;
 	}
 }
 
