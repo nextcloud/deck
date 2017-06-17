@@ -463,7 +463,7 @@ button.button-inline:hover {
 }
 
 .due {
-	padding: 1px 3px;
+	padding: 1px 0px;
 	border-radius: 4px;
 	margin-right: 4px;
 	font-size: 90%;
@@ -480,12 +480,15 @@ button.button-inline:hover {
 .overdue {
 	background-color: #e12419;
 	color: #fff;
+	padding: 1px 3px;
 }
 .due.now {
 	background-color: #fbd850;
+	padding: 1px 3px;
 }
 .due.next {
 	background-color: #fbf790;
+	padding: 1px 3px;
 }
 
 .due .badge-icon {
