@@ -38,7 +38,7 @@ Util::addScript('deck', 'vendor/angular-markdown-it/dist/ng-markdownit.min');
 Util::addScript('deck', 'vendor/markdown-it-link-target/dist/markdown-it-link-target.min');
 Util::addScript('deck', 'vendor/jquery-timepicker/jquery.ui.timepicker');
 
-if(true && !\OC::$server->getConfig()->getSystemValue('debug', false)) {
+if(!\OC::$server->getConfig()->getSystemValue('debug', false)) {
 	Util::addScript('deck', 'public/app');
 } else {
 	// Load seperate JS files when debug mode is enabled

@@ -481,24 +481,23 @@ button.button-inline:hover {
 }
 .due.now {
 	background-color: #fbd850;
-	color: #000;
 }
 .due.next {
 	background-color: #22ac2a;
 	color: #fff;
 }
 
-.due .icon-calendar {
-	background-image: url(../img/calendar.svg);
+.due .badge-icon {
+	background-image: url(../../../core/img/places/calendar-dark.svg);
 	margin-right: 2px;
 }
-.overdue .icon-calendar {
+.overdue .badge-icon {
 	background-image: url(../img/calendar-white.svg);
 }
-.now .icon-calendar {
-	background-image: url(../img/calendar.svg);
+.now .badge-icon {
+	background-image: url(../../../core/img/places/calendar-dark.svg);
 }
-.next .icon-calendar {
+.next .badge-icon {
 	background-image: url(../img/calendar-white.svg);
 }
 /**
@@ -538,7 +537,7 @@ button.button-inline:hover {
 	margin-bottom: 10px;
 }
 
-#card-meta #duedate {
+#card-meta .duedate {
 	display: flex;
 }
 #card-description {

@@ -46,10 +46,10 @@
 			</ui-select-choices>
 		</ui-select>
 
-		<div id="duedate">
+		<div class="duedate">
 			<input class="datepicker-input medium focus" type="text" placeholder="Set a due date" value="{{ cardservice.getCurrent().duedate | parseDate }}" datepicker="due" />
 			<input class="timepicker-input medium focus" type="text" placeholder="00:00:00" ng-if="cardservice.getCurrent().duedate" value="{{ cardservice.getCurrent().duedate | parseTime }}" timepicker="due" />
-			<button class="icon icon-delete button-inline" title="Remove duedate" ng-if="cardservice.getCurrent().duedate" ng-click="resetDuedate()"></button>
+			<button class="icon icon-delete button-inline" title="<?php p($l->t('Remove due date')); ?>" ng-if="cardservice.getCurrent().duedate" ng-click="resetDuedate()"></button>
 		</div>
 
 	</div>
