@@ -23,6 +23,9 @@
 
 namespace OCA\Deck\Db;
 
+use DateInterval;
+use DateTime;
+
 class CardTest extends \PHPUnit_Framework_TestCase {
 	private function createCard() {
 		$card = new Card();
@@ -39,6 +42,25 @@ class CardTest extends \PHPUnit_Framework_TestCase {
 		// TODO: relation shared labels acl
 		return $card;
 	}
+
+	public function dataDuedate() {
+		return [
+			[(new DateTime()), Card::DUEDATE_NOW],
+			[(new DateTime())->sub(new DateInterval('P1D')), Card::DUEDATE_OVERDUE],
+			[(new DateTime())->add(new DateInterval('P1D')), Card::DUEDATE_NEXT],
+			[(new DateTime())->add(new DateInterval('P2D')), Card::DUEDATE_FUTURE]
+		];
+	}
+
+	/**
+	 * @dataProvider dataDuedate
+	 */
+	public function testDuedate(DateTime $duedate, $state) {
+		$card = $this->createCard();
+		$card->setDuedate($duedate->format('Y-m-d H:i:s'));
+		$this->assertEquals($state, $card->jsonSerialize()['overdue']);
+	}
+
 	public function testJsonSerialize() {
 		$card = $this->createCard();
 		$this->assertEquals([
