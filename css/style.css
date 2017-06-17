@@ -473,6 +473,8 @@ button.button-inline:hover {
 	background-size: contain;
 	float:left;
 	opacity: 0.7;
+	width: 16px;
+	height: 16px;
 	margin-top:2px;
 }
 .overdue {
@@ -483,8 +485,7 @@ button.button-inline:hover {
 	background-color: #fbd850;
 }
 .due.next {
-	background-color: #22ac2a;
-	color: #fff;
+	background-color: #fbf790;
 }
 
 .due .badge-icon {
@@ -498,7 +499,7 @@ button.button-inline:hover {
 	background-image: url(../../../core/img/places/calendar-dark.svg);
 }
 .next .badge-icon {
-	background-image: url(../img/calendar-white.svg);
+	background-image: url(../../../core/img/places/calendar-dark.svg);
 }
 /**
  * Card view right sidebar
