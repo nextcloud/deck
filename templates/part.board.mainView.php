@@ -69,7 +69,7 @@
 						<div class="card-controls">
 							<i class="icon icon-filetype-text" ng-if="c.description" title="{{ c.description }}"></i>
 							<span class="due" ng-if="c.duedate" ng-class="{'overdue': c.overdue == 3, 'now': c.overdue == 2, 'next': c.overdue == 1  }">
-								<i class="icon icon-calendar"></i>
+								<i class="icon badge-icon"></i>
 								<span data-timestamp="{{ c.duedate | dateToTimestamp }}" class="live-relative-timestamp">{{ c.duedate | relativeDateFilterString }}</span>
 							</span>
 							<div class="app-popover-menu-utils" ng-if="!boardservice.isArchived()">
