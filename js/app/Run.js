@@ -30,6 +30,7 @@ app.run(function ($document, $rootScope, $transitions, BoardService) {
     });
 	$transitions.onEnter({to: 'list'}, function($state, $transition$) {
 		BoardService.unsetCurrrent();
+		document.title = "Deck - " + oc_defaults.name;
 	});
     $transitions.onEnter({to: 'board.card'}, function ($state, $transition$) {
         $rootScope.sidebar.show = true;
