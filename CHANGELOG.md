@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.2.0
+
+### Added
+- Due dates for cards
+- Archive boards
+- Filter board list for archived/shared boards
+- Rearange stack order
+- Improved card overview with description indicator
+- Navigation sidebar visibility can be toggled
+
+### Fixed
+- Undo on delete for boards
+- Various fixes for mobile devices
+- UI improvements to fit the Nextcloud design
+
 ## 0.1.4
 
 ### Fixed
