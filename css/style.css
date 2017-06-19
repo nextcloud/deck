@@ -938,6 +938,10 @@ button.button-inline:hover {
 	width:100% !important;
 }
 
+.select2-result-label span {
+	display: flex;
+}
+
 /**
  * Mobile optimizations
  */

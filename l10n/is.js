@@ -22,6 +22,7 @@ OC.L10N.register(
     "Manage" : "Skipuleggja",
     "Discard share" : "Henda sameign",
     "Members" : "Meðlimir",
+    "More actions" : "Fleiri aðgerðir",
     "Create new board" : "Búa til nýtt borð",
     "New board title" : "Nýr titill á borð",
     "Modified:" : "Breytt þann:",

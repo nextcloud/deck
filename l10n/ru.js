@@ -26,6 +26,7 @@ OC.L10N.register(
     "Create a new tag" : "Создать новую метку",
     "Title" : "Заголовок",
     "Members" : "Участники",
+    "More actions" : "Ещё действия",
     "Archive board" : "Архивировать  доску",
     "Unarchive board" : "Разархивировать доску",
     "Delete board" : "Удалить доску",

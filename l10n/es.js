@@ -26,6 +26,10 @@ OC.L10N.register(
     "Create a new tag" : "Crear una etiqueta nueva",
     "Title" : "Título",
     "Members" : "Miembros",
+    "More actions" : "Más acciones",
+    "Archive board" : "Archivar tablero",
+    "Unarchive board" : "Desarchivar tablero",
+    "Delete board" : "Eliminar tablero",
     "Create new board" : "Crear nuevo tablero",
     "New board title" : "Nuevo título de tablero",
     "Modified:" : "Modificado: ",
@@ -38,7 +42,11 @@ OC.L10N.register(
     "Attachments" : "Adjuntos",
     "Comments" : "Comentario",
     "History" : "Historia",
+    "Archived boards" : "Tableros archivados",
+    "Shared boards" : "Tableros compartidos",
     "Shared with you" : "Compartido contigo",
+    "Edit board" : "Editar tablero",
+    "Move board to archive" : "Mover tablero al archivo",
     "Create a new board" : "Crear un tablero nuevo"
 },
 "nplurals=2; plural=(n != 1);");

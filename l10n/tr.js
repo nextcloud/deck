@@ -26,6 +26,10 @@ OC.L10N.register(
     "Create a new tag" : "Yeni bir etiket ekle",
     "Title" : "Başlık",
     "Members" : "Üyeler",
+    "More actions" : "Diğer işlemler",
+    "Archive board" : "Panoyu arşivle",
+    "Unarchive board" : "Panoyu arşivden çıkar",
+    "Delete board" : "Panoyu sil",
     "Create new board" : "Yeni pano ekle",
     "New board title" : "Yeni pano başlığı",
     "Modified:" : "Değiştirilme:",
@@ -38,7 +42,11 @@ OC.L10N.register(
     "Attachments" : "Ek dosyalar",
     "Comments" : "Yorumlar",
     "History" : "Geçmiş",
+    "Archived boards" : "Arşivlenmiş panolar",
+    "Shared boards" : "Paylaşılmış panolar",
     "Shared with you" : "Sizinle paylaşılan",
+    "Edit board" : "Panoyu sil",
+    "Move board to archive" : "Panoyu arşive taşı",
     "Create a new board" : "Yeni bir pano ekle"
 },
 "nplurals=2; plural=(n > 1);");

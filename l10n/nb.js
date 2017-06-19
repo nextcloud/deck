@@ -26,6 +26,10 @@ OC.L10N.register(
     "Create a new tag" : "Lag en ny merkelapp",
     "Title" : "Tittel",
     "Members" : "Medlemmer",
+    "More actions" : "Flere handlinger",
+    "Archive board" : "Arkiver bord",
+    "Unarchive board" : "Avarkiver bord",
+    "Delete board" : "Slett bord",
     "Create new board" : "Opprett et nytt bord",
     "New board title" : "Ny seksjonstittel",
     "Modified:" : "Endret:",
@@ -38,7 +42,11 @@ OC.L10N.register(
     "Attachments" : "Vedlegg",
     "Comments" : "Kommentarer",
     "History" : "Historikk",
+    "Archived boards" : "Akriverte bord",
+    "Shared boards" : "Delte bord",
     "Shared with you" : "Delt med deg",
+    "Edit board" : "Rediger bord",
+    "Move board to archive" : "Flytt bord til arkiv",
     "Create a new board" : "Opprett et nytt bord"
 },
 "nplurals=2; plural=(n != 1);");
