@@ -172,8 +172,8 @@ button.button-inline:hover {
 }
 
 #app-navigation-toggle {
-	width: 45px;
-	height: 40px;
+	width: 44px;
+	height: 44px;
 	cursor: pointer;
 	opacity: 1;
 	display: inline-block !important;
