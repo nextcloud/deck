@@ -45,6 +45,13 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 
 	$scope.board = BoardService.getCurrent();
 	StackService.clear(); //FIXME: Is this still needed?
+	$scope.setPageTitle = function() {
+		if(BoardService.getCurrent()) {
+			document.title = BoardService.getCurrent().title + " | Deck - " + oc_defaults.name;
+		} else {
+			document.title = "Deck - " + oc_defaults.name;
+		}
+	};
 	$scope.statusservice.retainWaiting();
 	$scope.statusservice.retainWaiting();
 
@@ -115,6 +122,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	// Handle initial Loading
 	BoardService.fetchOne($scope.id).then(function (data) {
 		$scope.statusservice.releaseWaiting();
+		$scope.setPageTitle();
 	}, function (error) {
 		$scope.statusservice.setError('Error occured', error);
 	});
