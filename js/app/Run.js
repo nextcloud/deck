@@ -64,9 +64,9 @@ app.run(function ($document, $rootScope, $transitions, BoardService) {
 
     $('#app-navigation-toggle').click(function(){
         if($(window).width() > 768) {
-            $('#app-navigation').toggle('hidde');
+            $('#app-navigation').toggle('hidden');
         } else {
-            if(snapper.state().state == 'left'){
+            if(snapper.state().state === 'left'){
                 snapper.close();
             } else {
                 snapper.open('left');
