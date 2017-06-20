@@ -30,8 +30,8 @@ OC.L10N.register(
     "Archive board" : "Arquivar painel",
     "Unarchive board" : "Desarquivar painel",
     "Delete board" : "Excluir painel",
-    "Create new board" : "Criar novo quadro",
-    "New board title" : "Título do novo quadro",
+    "Create new board" : "Criar novo painel",
+    "New board title" : "Título do novo painel",
     "Modified:" : "Modificado:",
     "Created:" : "Criado:",
     "by" : "por",
@@ -47,6 +47,6 @@ OC.L10N.register(
     "Shared with you" : "Compartilhado com você",
     "Edit board" : "Editar painel",
     "Move board to archive" : "Mover painel para o arquivo",
-    "Create a new board" : "Criar um novo quadro"
+    "Create a new board" : "Criar um novo painel"
 },
 "nplurals=2; plural=(n > 1);");

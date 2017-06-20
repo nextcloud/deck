@@ -22,6 +22,7 @@ OC.L10N.register(
     "Manage" : "Διαχείριση",
     "Discard share" : "Απόρριψη διαμοιρασμού",
     "Members" : "Μέλη",
+    "More actions" : "Περισσότερες ενέργειες",
     "Create new board" : "Δημιουργία νέου πίνακα",
     "New board title" : "Νέος τίτλος πίνακα",
     "Modified:" : "Τροποποιήθηκε:",
