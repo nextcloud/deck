@@ -25,7 +25,7 @@
     <bugs>https://github.com/nextcloud/deck/issues</bugs>
     <repository type="git">https://github.com/nextcloud/deck.git</repository>
     <screenshot>https://download.bitgrid.net/nextcloud/deck/screenshots/Deck_Board.png</screenshot>
-    <screenshot>https://download.bitgrid.net/nextcloud/deck/screenshots/Deck_Board.png</screenshot>
+    <screenshot>https://download.bitgrid.net/nextcloud/deck/screenshots/Deck_Details.png</screenshot>
     <dependencies>
         <nextcloud min-version="11" max-version="13" />
     </dependencies>
