@@ -23,7 +23,18 @@
 				<span class="board-bullet"
 					  style="background-color:#{{b.color}};"> </span>
 			</td>
-			<td ng-click="gotoBoard(b)">{{ b.title }}</a></td>
+			<td>
+				<div ng-click="gotoBoard(b)" ng-show="!b.status.edit">{{ b.title }}</div>
+				<div class="app-navigation-entry-edit" ng-show="b.status.edit">
+					<form ng-disabled="isAddingList" class="ng-pristine ng-valid" ng-submit="boardUpdate(b)">
+						<input id="newTitle" class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100">
+						<input type="submit" value="" class="icon-checkmark svg">
+						<div class="colorselect">
+							<div class="color" ng-repeat="c in colors" style="background-color:#{{ c }};" ng-click="b.color=c" ng-class="{'selected': (c == b.color) }"><br /></div>
+						</div>
+					</form>
+				</div>
+			</td>
 			<td>
 				<div id="assigned-users">
 					<div class="avatardiv" avatar displayname="{{ b.owner.uid }}" title="{{ b.owner.displayname }}"></div>
@@ -36,6 +47,14 @@
 					<button class="icon icon-more button-inline" title="<?php p($l->t('More actions')); ?>"></button>
 					<div class="popovermenu bubble hidden">
 						<ul>
+							<li ng-click="b.status.edit=true" ng-show="!b.status.edit">
+								<a class="menuitem"><span class="icon-rename"></span> <?php p($l->t('Edit board')); ?>
+								</a>
+							</li>
+							<li ng-click="boardUpdate(b)" ng-show="b.status.edit">
+								<a class="menuitem"><span class="icon-checkmark"></span> <?php p($l->t('Save changes')); ?>
+								</a>
+							</li>
 							<li ng-if="boardservice.canManage(b) && !b.archived" ng-click="boardArchive(b)">
 								<a class="menuitem"><span class="icon-archive"></span> <?php p($l->t('Archive board')); ?>
 								</a>
