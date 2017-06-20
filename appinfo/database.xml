@@ -356,6 +356,7 @@
                 <default>false</default>
             </field>
             <index>
+                <name>deck_board_acl_uq_i</name>
                 <unique>true</unique>
                 <field>
                     <name>board_id</name>
