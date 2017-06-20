@@ -14,8 +14,6 @@ Deck is a kanban style organization tool aimed at personal planning and project 
 
 ![Deck - Manage cards on your board](https://download.bitgrid.net/nextcloud/deck/screenshots/Deck_Board.png)
 
-:boom: This is still alpha software: it may not be stable enough for production
-
 ### Planned features
 
 - :file_folder: Attach files directly from your Nextcloud
