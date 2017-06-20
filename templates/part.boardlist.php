@@ -28,7 +28,6 @@
 				<div class="app-navigation-entry-edit" ng-show="b.status.edit">
 					<form ng-disabled="isAddingList" class="ng-pristine ng-valid" ng-submit="boardUpdate(b)">
 						<input id="newTitle" class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100">
-						<input type="submit" value="" class="icon-checkmark svg">
 						<div class="colorselect">
 							<div class="color" ng-repeat="c in colors" style="background-color:#{{ c }};" ng-click="b.color=c" ng-class="{'selected': (c == b.color) }"><br /></div>
 						</div>
@@ -43,16 +42,12 @@
 			</td>
 			<td>
 				<div class="hint"></div>
-				<div class="app-popover-menu-utils" ng-if="b.deletedAt == 0">
+				<div class="app-popover-menu-utils" ng-if="b.deletedAt == 0" ng-show="!b.status.edit">
 					<button class="icon icon-more button-inline" title="<?php p($l->t('More actions')); ?>"></button>
 					<div class="popovermenu bubble hidden">
 						<ul>
-							<li ng-click="b.status.edit=true" ng-show="!b.status.edit">
+							<li ng-click="boardUpdateBegin(b); b.status.edit = true">
 								<a class="menuitem"><span class="icon-rename"></span> <?php p($l->t('Edit board')); ?>
-								</a>
-							</li>
-							<li ng-click="boardUpdate(b)" ng-show="b.status.edit">
-								<a class="menuitem"><span class="icon-checkmark"></span> <?php p($l->t('Save changes')); ?>
 								</a>
 							</li>
 							<li ng-if="boardservice.canManage(b) && !b.archived" ng-click="boardArchive(b)">
@@ -73,6 +68,10 @@
 							</li>
 						</ul>
 					</div>
+				</div>
+				<div class="board-edit-controls" ng-show="b.status.edit">
+					<span class="icon icon-checkmark" ng-click="boardUpdate(b)"></span>
+					<span class="icon icon-close" ng-click="boardUpdateReset(b)"></span>
 				</div>
 				<div class="app-popover-menu-utils" ng-if="b.deletedAt > 0">
 					<button class="icon icon-history button-inline" ng-click="boardDeleteUndo(b)" title="Undo board deletion - Otherwise the board will be deleted during the next cronjob run."></button>

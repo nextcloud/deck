@@ -33,6 +33,7 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 	$scope.colors = ['0082c9', '00c9c6','00c906', 'c92b00', 'F1DB50', '7C31CC', '3A3B3D', 'CACBCD'];
 	$scope.boardservice = BoardService;
 	$scope.newBoard.color = $scope.colors[0];
+	$scope.updatingBoard = null;
 
 	// FIXME: not nice, but we want to load this only once
 	if($element.attr('id') === 'app-navigation') {
@@ -101,6 +102,17 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 		BoardService.update(board).then(function(data) {
 			$scope.filterData();
 		});
+		board.status.edit = false;
+	};
+
+	$scope.boardUpdateBegin = function(board) {
+		$scope.updatingBoard = board;
+	};
+
+	$scope.boardUpdateReset = function(board) {
+		board.title = $scope.updatingBoard.title;
+		board.color = $scope.updatingBoard.color;
+		$scope.filterData();
 		board.status.edit = false;
 	};
 
