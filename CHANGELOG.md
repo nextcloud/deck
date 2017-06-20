@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.2.0
+## 0.2.0 - 2017-06-20
 
 ### Added
 - Due dates for cards
@@ -16,10 +16,9 @@ All notable changes to this project will be documented in this file.
 - Various fixes for mobile devices
 - UI improvements to fit the Nextcloud design
 
-## 0.1.4
+## 0.1.4 - 2017-05-04
 
 ### Fixed
-
 - Avoid red shadow on input in firefox
 - Fix broken delete function for boards
 - Fix broken board loading when groups were used for sharing
@@ -28,11 +27,9 @@ All notable changes to this project will be documented in this file.
 ## 0.1.3 - 2017-05-01
 
 ### Added
-
 - Icon to show if a card has a description
 
 ### Changed
-
 - Use OCS API to get users/groups for sharing
 - Various UI improvements
 - Show display name instead of uid
@@ -42,6 +39,7 @@ All notable changes to this project will be documented in this file.
 
 
 ## 0.1.2
+
 ### Added
 - Add translations
 
@@ -56,6 +54,7 @@ All notable changes to this project will be documented in this file.
 - Fixed SQL statements without prefixes
 
 ## 0.1.1
+
 ### Fixed
 - Various styling improvements
 - Fix problems with MySQL and PostgreSQL 
@@ -63,6 +62,7 @@ All notable changes to this project will be documented in this file.
 - Fix error when changing board permissions
 
 ## 0.1.0
+
 ### Added
 - Sharing boards with other users
 - Create and manage boards 
