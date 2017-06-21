@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "Hours" : "Horas",
+    "Minutes" : "Minutos",
     "Finished" : "Terminado",
     "To review" : "Para revisar",
     "Action needed" : "Acción requerida",
@@ -35,6 +37,7 @@ OC.L10N.register(
     "Modified:" : "Modificado:",
     "Created:" : "Creado:",
     "by" : "por",
+    "Remove due date" : "Eliminar fecha de expiración",
     "Description" : "Descripción",
     "Formatting help" : "Ayuda de formato",
     "Saved" : "Guardado",

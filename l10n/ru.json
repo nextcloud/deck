@@ -1,4 +1,6 @@
 { "translations": {
+    "Hours" : "Часы",
+    "Minutes" : "Минуты",
     "Finished" : "Завершено",
     "To review" : "Просмотреть",
     "Action needed" : "Требуется действие",
@@ -33,6 +35,7 @@
     "Modified:" : "Изменён:",
     "Created:" : "Создан:",
     "by" : "автор",
+    "Remove due date" : "Удалить срок исполнения",
     "Description" : "Описание",
     "Formatting help" : "Справка по форматированию",
     "Saved" : "Сохранено",
