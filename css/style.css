@@ -685,7 +685,6 @@ button.button-inline:hover {
 	min-width: 240px;
 	height: 34px;
 	display: flex;
-	margin: 3px 3px 3px 0;
 }
 
 .colorselect .color {
@@ -740,6 +739,7 @@ button.button-inline:hover {
 	position: relative;
 	cursor: pointer;
 	display: block;
+	margin: 2px 0px;
 }
 
 .popovermenu ul {
@@ -813,6 +813,11 @@ button.button-inline:hover {
 
 #boardlist .board-edit-controls {
 	float: right;
+	display: flex;
+}
+
+#boardlist .app-navigation-entry-edit input {
+	margin: 0px;
 }
 
 /**
