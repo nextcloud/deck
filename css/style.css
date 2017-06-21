@@ -755,7 +755,7 @@ button.button-inline:hover {
 #boardlist span.icon {
 	width: 30px;
 	height: 30px;
-	display: inline-block;
+	margin: 2px 0px;
 }
 
 .cell-board-bullet {
@@ -816,7 +816,7 @@ button.button-inline:hover {
 	display: flex;
 }
 
-#boardlist .app-navigation-entry-edit input {
+#boardlist input {
 	margin: 0px;
 }
 

@@ -102,11 +102,15 @@
 							 ng-click="selectColor(c)"
 							 ng-class="{'selected': (c == newBoard.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"></div>
 					</div>
-					<input type="submit" value="" class="icon-checkmark svg" />
 				</form>
 			</td>
 			<td></td>
-			<td></td>
+			<td>
+				<div class="board-edit-controls">
+					<span class="icon icon-checkmark" ng-click="boardCreate()"></span>
+					<span class="icon icon-close" ng-click="status.addBoard=!status.addBoard"></span>
+				</div>
+			</td>
 		</tr>
 		</tbody>
 	</table>
