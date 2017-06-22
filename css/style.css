@@ -774,7 +774,7 @@ button.button-inline:hover {
 	opacity: 0.5;
 }
 
-#boardlist tbody tr:last-child td {
+#boardlist tbody .board-create td {
 	opacity: 0.5;
 }
 
