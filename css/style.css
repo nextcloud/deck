@@ -531,7 +531,7 @@ button.button-inline:hover {
 	background-color: #f0f0f0;
 }
 
-.icon-close {
+#app-sidebar .icon-close {
 	position: absolute;
 	top: 5px;
 	right: 5px;
@@ -685,7 +685,6 @@ button.button-inline:hover {
 	min-width: 240px;
 	height: 34px;
 	display: flex;
-	margin: 3px 3px 3px 0;
 }
 
 .colorselect .color {
@@ -740,6 +739,7 @@ button.button-inline:hover {
 	position: relative;
 	cursor: pointer;
 	display: block;
+	margin: 2px 0px;
 }
 
 .popovermenu ul {
@@ -755,7 +755,7 @@ button.button-inline:hover {
 #boardlist span.icon {
 	width: 30px;
 	height: 30px;
-	display: inline-block;
+	margin: 2px 0px;
 }
 
 .cell-board-bullet {
@@ -809,6 +809,15 @@ button.button-inline:hover {
 
 #boardlist .popovermenu {
 	margin-top: 5px;
+}
+
+#boardlist .board-edit-controls {
+	float: right;
+	display: flex;
+}
+
+#boardlist input {
+	margin: 0px;
 }
 
 /**

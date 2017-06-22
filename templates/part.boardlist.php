@@ -23,7 +23,17 @@
 				<span class="board-bullet"
 					  style="background-color:#{{b.color}};"> </span>
 			</td>
-			<td ng-click="gotoBoard(b)">{{ b.title }}</a></td>
+			<td>
+				<div ng-click="gotoBoard(b)" ng-show="!b.status.edit">{{ b.title }}</div>
+				<div class="app-navigation-entry-edit" ng-show="b.status.edit">
+					<form ng-disabled="isAddingList" class="ng-pristine ng-valid" ng-submit="boardUpdate(b)">
+						<input id="newTitle" class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100">
+						<div class="colorselect">
+							<div class="color" ng-repeat="c in colors" style="background-color:#{{ c }};" ng-click="b.color=c" ng-class="{'selected': (c == b.color) }"><br /></div>
+						</div>
+					</form>
+				</div>
+			</td>
 			<td>
 				<div id="assigned-users">
 					<div class="avatardiv" avatar displayname="{{ b.owner.uid }}" title="{{ b.owner.displayname }}"></div>
@@ -32,10 +42,14 @@
 			</td>
 			<td>
 				<div class="hint"></div>
-				<div class="app-popover-menu-utils" ng-if="b.deletedAt == 0">
+				<div class="app-popover-menu-utils" ng-if="b.deletedAt == 0" ng-show="!b.status.edit">
 					<button class="icon icon-more button-inline" title="<?php p($l->t('More actions')); ?>"></button>
 					<div class="popovermenu bubble hidden">
 						<ul>
+							<li ng-click="boardUpdateBegin(b); b.status.edit = true">
+								<a class="menuitem"><span class="icon-rename"></span> <?php p($l->t('Edit board')); ?>
+								</a>
+							</li>
 							<li ng-if="boardservice.canManage(b) && !b.archived" ng-click="boardArchive(b)">
 								<a class="menuitem"><span class="icon-archive"></span> <?php p($l->t('Archive board')); ?>
 								</a>
@@ -54,6 +68,10 @@
 							</li>
 						</ul>
 					</div>
+				</div>
+				<div class="board-edit-controls" ng-show="b.status.edit">
+					<span class="icon icon-checkmark" ng-click="boardUpdate(b)"></span>
+					<span class="icon icon-close" ng-click="boardUpdateReset(b)"></span>
 				</div>
 				<div class="app-popover-menu-utils" ng-if="b.deletedAt > 0">
 					<button class="icon icon-history button-inline" ng-click="boardDeleteUndo(b)" title="Undo board deletion - Otherwise the board will be deleted during the next cronjob run."></button>
@@ -84,11 +102,15 @@
 							 ng-click="selectColor(c)"
 							 ng-class="{'selected': (c == newBoard.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"></div>
 					</div>
-					<input type="submit" value="" class="icon-checkmark svg" />
 				</form>
 			</td>
 			<td></td>
-			<td></td>
+			<td>
+				<div class="board-edit-controls">
+					<span class="icon icon-checkmark" ng-click="boardCreate()"></span>
+					<span class="icon icon-close" ng-click="status.addBoard=!status.addBoard"></span>
+				</div>
+			</td>
 		</tr>
 		</tbody>
 	</table>
