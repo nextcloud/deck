@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "Hours" : "Heures",
+    "Minutes" : "Minutes",
     "Finished" : "Terminé",
     "To review" : "A réviser",
     "Action needed" : "Action requise",

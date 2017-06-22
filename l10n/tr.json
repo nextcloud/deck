@@ -1,4 +1,6 @@
 { "translations": {
+    "Hours" : "Saat",
+    "Minutes" : "Dakika",
     "Finished" : "Tamamlandı",
     "To review" : "İncelenecek",
     "Action needed" : "İşlem yapılması gerekiyor",
@@ -33,6 +35,7 @@
     "Modified:" : "Değiştirilme:",
     "Created:" : "Oluşturulma:",
     "by" : "Kişi:",
+    "Remove due date" : "Bitiş tarihini kaldır",
     "Description" : "Açıklama",
     "Formatting help" : "Biçimlendirme yardımı",
     "Saved" : "Kaydedildi",

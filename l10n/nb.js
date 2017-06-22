@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "Hours" : "Timer",
+    "Minutes" : "Minutter",
     "Finished" : "Fullført",
     "To review" : "Til gjennomlesning",
     "Action needed" : "Handling påkrevd",
@@ -35,6 +37,7 @@ OC.L10N.register(
     "Modified:" : "Endret:",
     "Created:" : "Opprettet:",
     "by" : "av",
+    "Remove due date" : "Fjern forfallsdato",
     "Description" : "Beskrivelse",
     "Formatting help" : "Formateringshjelp",
     "Saved" : "Lagret",

@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "Hours" : "Uur",
+    "Minutes" : "Minutes",
     "Finished" : "Afgerond",
     "To review" : "Beoordelen",
     "Action needed" : "Actie benodigd",
@@ -26,6 +28,10 @@ OC.L10N.register(
     "Create a new tag" : "Nieuwe label maken",
     "Title" : "Titel",
     "Members" : "Leden",
+    "More actions" : "Meer acties",
+    "Archive board" : "Archiveer plank",
+    "Unarchive board" : "De-archiveer plank",
+    "Delete board" : "Verwijder plank",
     "Create new board" : "Nieuw bord maken",
     "New board title" : "Nieuwe bord titel",
     "Modified:" : "Bewerkt:",
@@ -38,7 +44,11 @@ OC.L10N.register(
     "Attachments" : "Bijlage",
     "Comments" : "Opmerkingen",
     "History" : "Geschiedenis",
+    "Archived boards" : "Gearchiveerde planken",
+    "Shared boards" : "Gedeelde borden",
     "Shared with you" : "Deel met jou",
+    "Edit board" : "Bewerk plank",
+    "Move board to archive" : "Verplaats plank naar archief",
     "Create a new board" : "Een nieuw bord maken"
 },
 "nplurals=2; plural=(n != 1);");

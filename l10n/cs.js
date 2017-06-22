@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "Hours" : "Hodiny",
+    "Minutes" : "Minuty",
     "Finished" : "Dokončeno",
     "To review" : "K revizi",
     "Action needed" : "Nutná akce",
@@ -26,6 +28,8 @@ OC.L10N.register(
     "Create a new tag" : "Vytvořit novou značku",
     "Title" : "Název",
     "Members" : "Členové",
+    "More actions" : "Více akcí",
+    "Archive board" : "Archivovaná deska",
     "Create new board" : "VYtvořit ovou desku",
     "New board title" : "Nadpis nové desky",
     "Modified:" : "Upraveno:",

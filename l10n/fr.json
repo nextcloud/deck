@@ -1,4 +1,6 @@
 { "translations": {
+    "Hours" : "Heures",
+    "Minutes" : "Minutes",
     "Finished" : "Terminé",
     "To review" : "A réviser",
     "Action needed" : "Action requise",
