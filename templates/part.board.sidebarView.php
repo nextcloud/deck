@@ -69,37 +69,39 @@
 
             <ul class="labels">
                 <li ng-repeat="label in boardservice.getCurrent().labels">
-                <span class="label-title" style="background-color:#{{label.color}}; color:{{ label.color|textColorFilter }};" ng-if="!label.edit">
-                    <span ng-if="label.title">{{ label.title }}</span><i ng-if="!label.title"><br /></i>
-                </span>
-                <span class="label-title" style="background-color:#{{label.color}}; color:{{ textColor(label.color) }}; width:178px;" ng-if="label.edit">
-                    <form ng-submit="labelUpdate(label)">
-                      <input type="text" ng-model="label.title" class="input-inline" style="background-color:#{{label.color}}; color:{{ label.color|textColorFilter }};" autofocus-on-insert maxlength="100"/>
-                    </form>
-                </span>
-                    <div class="colorselect" ng-if="label.edit">
-                        <div class="color" ng-repeat="c in defaultColors" style="background-color:#{{ c }};" ng-click="label.color=c" ng-class="{'selected': (c == label.color) }"><br /></div>
+                    <span class="label-title" style="background-color:#{{label.color}}; color:{{ label.color|textColorFilter }};" ng-if="!label.edit">
+                        <span ng-if="label.title">{{ label.title }}</span><i ng-if="!label.title"><br /></i>
+                    </span>
+                    <div class="label-edit" ng-if="label.edit">
+                        <div style="background-color:#{{label.color}}; color:{{ textColor(label.color) }}; width: 100%">
+                            <form ng-submit="labelUpdate(label)">
+                                <input type="text" ng-model="label.title" class="input-inline" style="background-color:#{{label.color}}; color:{{ label.color|textColorFilter }};" autofocus-on-insert maxlength="100"/>
+                            </form>
+                        </div>
+                        <div class="colorselect">
+                            <div class="color" ng-repeat="c in defaultColors" style="background-color:#{{ c }};" ng-click="label.color=c" ng-class="{'selected': (c == label.color) }"><br /></div>
+                        </div>
                     </div>
-                    <a ng-if="boardservice.canManage()" ng-click="labelDelete(label)" class="icon"><i class="icon icon-delete" ></i></a>
                     <a ng-if="boardservice.canManage() && label.edit" ng-click="labelUpdate(label)" class="icon"><i class="icon icon-checkmark" ></i></a>
                     <a ng-if="boardservice.canManage() && !label.edit" ng-click="label.edit=true" class="icon"><i class="icon icon-rename" ></i></a>
-
+                    <a ng-if="boardservice.canManage()" ng-click="labelDelete(label)" class="icon"><i class="icon icon-delete" ></i></a>
                 </li>
                 <li ng-if="status.createLabel">
-                    <form ng-submit="labelCreate(newLabel)">
-                <span class="label-title" style="background-color:#{{newLabel.color}}; color:{{ textColor(newLabel.color) }}; width:178px;">
-                    <input type="text" class="input-inline" ng-model="newLabel.title" style="color:{{ newLabel.color|textColorFilter }};" autofocus-on-insert maxlength="100" />
-                </span>
+                    <div class="label-edit">
+                        <div style="background-color:#{{newLabel.color}}; color:{{ textColor(newLabel.color) }}; width:100%;">
+                            <form ng-submit="labelCreate(newLabel)">
+                                <input type="text" class="input-inline" ng-model="newLabel.title" style="color:{{ newLabel.color|textColorFilter }};" autofocus-on-insert maxlength="100" />
+                            </form>
+                        </div>
                         <div class="colorselect">
                             <div class="color" ng-repeat="c in defaultColors" style="background-color:#{{ c }};" ng-click="newLabel.color=c" ng-class="{'selected': (c == newLabel.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"><br /></div>
                         </div>
-                        <a ng-click="labelCreate(newLabel)" class="icon"><i class="icon icon-checkmark" ></i></a>
-                        <a ng-click="status.createLabel=false" class="icon icon-close"></a>
-
-                    </form>
+                    </div>
+                    <a ng-click="labelCreate(newLabel)" class="icon"><i class="icon icon-checkmark" ></i></a>
+                    <a ng-click="status.createLabel=false" class="icon"><i class="icon icon-close" ></i></a>
                 </li>
                 <li ng-if="boardservice.canManage() && !status.createLabel" class="label-create">
-                    <a ng-click="status.createLabel=true"><span class="icon icon-add"> </span> <?php p($l->t('Create a new tag')); ?></a>
+                    <a ng-click="status.createLabel=true" class="button"><span class="icon icon-add"></span><br /><span><?php p($l->t('Create a new tag')); ?></span></a>
                 </li>
             </ul>
 

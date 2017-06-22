@@ -38,10 +38,7 @@ input.input-inline {
 	padding: 0;
 	border: none;
 	width: 100%;
-	border-bottom: 1px solid #333333;
 	-webkit-border-radius: 0;
-	line-height: 100%;
-	margin: -4px 0;
 }
 
 button.button-inline {
@@ -531,7 +528,7 @@ button.button-inline:hover {
 	background-color: #f0f0f0;
 }
 
-#app-sidebar .icon-close {
+#sidebar-header .icon-close, #card-header .icon-close {
 	position: absolute;
 	top: 5px;
 	right: 5px;
@@ -647,15 +644,13 @@ button.button-inline:hover {
 }
 
 .labels li {
-	padding: 1px;
+	padding: 0px 0px 5px 0px;
 	-webkit-border-radius: 3px;
 	margin: 1px;
-	float: left;
 	color: #ffffff;
-	font-size: 80%;
-	font-weight: 900;
 	min-width: 20px;
-	display: inline-block;
+	display: flex;
+	align-content: center;
 	text-align: center;
 }
 
@@ -682,9 +677,8 @@ button.button-inline:hover {
 	overflow: hidden;
 	border-radius:3px;
 	flex-direction: row;
-	min-width: 240px;
-	height: 34px;
 	display: flex;
+	margin: 0px 0px 0px 3px;
 }
 
 .colorselect .color {
@@ -714,6 +708,16 @@ button.button-inline:hover {
 .labels .colorselect .color {
 	width: 26px;
 	height: 26px;
+}
+
+.labels .label-edit {
+	display: flex;
+	width: 100%;
+}
+
+.labels .label-edit input {
+	border-bottom: 1px solid #333333;
+	padding: 5px 5px 4px 5px !important;
 }
 
 /**
@@ -865,45 +869,44 @@ button.button-inline:hover {
 	padding: 10px;
 }
 
-#board-detail-labels ul li {
-	display: block;
-	font-size: 10pt;
-	float: none;
-	margin-bottom: 1px;
-	overflow: hidden;
-}
-
 #board-detail-labels ul li input {
-	float: left;
-	font-size: 10pt;
+	margin: 0px;
 	padding: 5px;
+	min-height: 0px;
 }
 
 #board-detail-labels ul li .label-title {
-	float: left;
-	width: 88%;
-	font-size: 10pt;
-	padding: 5px;
+	width: 100%;
+	padding: 4px;
 	border: none;
-	margin-right: 2px;
+	border-radius: 0px 0px 3px 3px;
 }
 
 #board-detail-labels ul li a.icon {
-	float: right;
 	padding: 5px;
+	opacity: 0.3;
+}
+
+#board-detail-labels ul li a.icon:hover {
+	opacity: 0.7;
 }
 
 .label-create {
-	width: 88%;
+	width: 100%;
+	padding: 0px 56px 0px 0px !important;
+	justify-content: center;
 }
 
-.label-create .icon {
-	margin-bottom: -3px;
+
+
+.label-create a {
+	display: block;
+	margin: 0px;
 }
 
 #board-detail-labels .color {
 	width: 28px;
-	height: 31px;
+	height: 100%;
 }
 
 .tabHeaders {
