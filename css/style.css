@@ -80,6 +80,14 @@ button.button-inline:hover {
 	height: auto;
 }
 
+#app-navigation .app-navigation-entry-edit .colorselect div{
+	height: 32px;
+}
+
+#app-navigation .app-navigation-entry-edit form {
+	display: flex;
+}
+
 #app-navigation .board-bullet {
 	position: absolute;
 	margin-left: 17px;
@@ -678,7 +686,6 @@ button.button-inline:hover {
 	border-radius:3px;
 	flex-direction: row;
 	display: flex;
-	margin: 0px 0px 0px 3px;
 }
 
 .colorselect .color {
@@ -713,6 +720,10 @@ button.button-inline:hover {
 .labels .label-edit {
 	display: flex;
 	width: 100%;
+}
+
+.labels .label-edit .colorselect{
+	margin: 0px 0px 0px 3px;
 }
 
 .labels .label-edit input {
@@ -785,6 +796,10 @@ button.button-inline:hover {
 
 #boardlist td .colorselect {
 	flex-grow: 1;
+}
+
+#boardlist td .colorselect div {
+	min-width: 32px;
 }
 
 #boardlist td input[type=text] {

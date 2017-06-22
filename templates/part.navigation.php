@@ -23,10 +23,10 @@
 			<form ng-disabled="isAddingList" class="ng-pristine ng-valid"  ng-submit="boardUpdate(b)">
 				<input id="newTitle" class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100">
 				<input type="submit" value="" class="action icon-checkmark svg">
-				<div class="colorselect">
-					<div class="color" ng-repeat="c in colors" style="background-color:#{{ c }};" ng-click="b.color=c" ng-class="{'selected': (c == b.color) }"><br /></div>
-				</div>
 			</form>
+			<div class="colorselect">
+				<div class="color" ng-repeat="c in colors" style="background-color:#{{ c }};" ng-click="b.color=c" ng-class="{'selected': (c == b.color) }"></div>
+			</div>
 		</div>
 	</li>
 
