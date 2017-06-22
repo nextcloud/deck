@@ -101,8 +101,8 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 	$scope.boardUpdate = function(board) {
 		BoardService.update(board).then(function(data) {
 			$scope.filterData();
+			board.status.edit = false;
 		});
-		board.status.edit = false;
 	};
 
 	$scope.boardUpdateBegin = function(board) {

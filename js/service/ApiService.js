@@ -124,9 +124,8 @@ app.factory('ApiService', function($http, $q){
         } else {
             Object.keys(entity).forEach(function (key) {
                 element[key] = entity[key];
-                if(element[key]!==null)
-                    element[key].status = {};
             });
+            element.status = {};
         }
     };
     ApiService.prototype.remove = function(id) {
