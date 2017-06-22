@@ -78,7 +78,7 @@
 				</div>
 			</td>
 		</tr>
-		<tr ng-if="status.filter === '' && !status.addBoard" ng-click="status.addBoard=!status.addBoard">
+		<tr ng-if="status.filter === '' && !status.addBoard" ng-click="status.addBoard=!status.addBoard" class="board-create">
 			<td><span class="icon icon-add"></span></td>
 			<td colspan="3">
 				<a ng-click="status.addBoard=!status.addBoard"
