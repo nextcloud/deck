@@ -29,6 +29,7 @@ OC.L10N.register(
     "Title" : "Заголовок",
     "Members" : "Участники",
     "More actions" : "Ещё действия",
+    "Edit board" : "Править доску",
     "Archive board" : "Архивировать  доску",
     "Unarchive board" : "Разархивировать доску",
     "Delete board" : "Удалить доску",
@@ -48,7 +49,6 @@ OC.L10N.register(
     "Archived boards" : "Архив досок",
     "Shared boards" : "Общие доски",
     "Shared with you" : "Поделились с вами",
-    "Edit board" : "Править доску",
     "Move board to archive" : "Переместить доску в архив",
     "Create a new board" : "Создать новую доску"
 },

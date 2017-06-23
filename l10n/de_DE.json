@@ -27,6 +27,7 @@
     "Title" : "Titel",
     "Members" : "Mitglieder",
     "More actions" : "Weitere Aktionen",
+    "Edit board" : "Board bearbeiten",
     "Archive board" : "Board archivieren",
     "Unarchive board" : "Board dearchivieren",
     "Delete board" : "Board löschen",
@@ -46,7 +47,6 @@
     "Archived boards" : "Archivierte Boards",
     "Shared boards" : "Geteilte Boards",
     "Shared with you" : "Mit Ihnen geteilt",
-    "Edit board" : "Board bearbeiten",
     "Move board to archive" : "Board ins Archiv verschieben",
     "Create a new board" : "Neues Board erstellen"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

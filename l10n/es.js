@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "Hours" : "Horas",
+    "Minutes" : "Minutos",
     "Finished" : "Finalizado",
     "To review" : "Para revisar",
     "Action needed" : "Se necesita una acción",
@@ -27,6 +29,7 @@ OC.L10N.register(
     "Title" : "Título",
     "Members" : "Miembros",
     "More actions" : "Más acciones",
+    "Edit board" : "Editar tablero",
     "Archive board" : "Archivar tablero",
     "Unarchive board" : "Desarchivar tablero",
     "Delete board" : "Eliminar tablero",
@@ -35,6 +38,7 @@ OC.L10N.register(
     "Modified:" : "Modificado: ",
     "Created:" : "Creado: ",
     "by" : "por",
+    "Remove due date" : "Eliminar fecha límite",
     "Description" : "Descripción",
     "Formatting help" : "Ayuda de formato",
     "Saved" : "Guardado",
@@ -45,7 +49,6 @@ OC.L10N.register(
     "Archived boards" : "Tableros archivados",
     "Shared boards" : "Tableros compartidos",
     "Shared with you" : "Compartido contigo",
-    "Edit board" : "Editar tablero",
     "Move board to archive" : "Mover tablero al archivo",
     "Create a new board" : "Crear un tablero nuevo"
 },

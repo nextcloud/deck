@@ -29,6 +29,7 @@ OC.L10N.register(
     "Title" : "Title",
     "Members" : "Members",
     "More actions" : "More actions",
+    "Edit board" : "Edit board",
     "Archive board" : "Archive board",
     "Unarchive board" : "Unarchive board",
     "Delete board" : "Delete board",
@@ -48,7 +49,6 @@ OC.L10N.register(
     "Archived boards" : "Archived boards",
     "Shared boards" : "Shared boards",
     "Shared with you" : "Shared with you",
-    "Edit board" : "Edit board",
     "Move board to archive" : "Move board to archive",
     "Create a new board" : "Create a new board"
 },

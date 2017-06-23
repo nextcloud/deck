@@ -29,6 +29,7 @@ OC.L10N.register(
     "Title" : "Título",
     "Members" : "Membros",
     "More actions" : "Mais ações",
+    "Edit board" : "Editar painel",
     "Archive board" : "Arquivar painel",
     "Unarchive board" : "Desarquivar painel",
     "Delete board" : "Excluir painel",
@@ -48,7 +49,6 @@ OC.L10N.register(
     "Archived boards" : "Painéis arquivados",
     "Shared boards" : "Painéis compartilhados",
     "Shared with you" : "Compartilhado com você",
-    "Edit board" : "Editar painel",
     "Move board to archive" : "Mover painel para o arquivo",
     "Create a new board" : "Criar um novo painel"
 },

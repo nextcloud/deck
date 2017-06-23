@@ -29,6 +29,7 @@ OC.L10N.register(
     "Title" : "Tittel",
     "Members" : "Medlemmer",
     "More actions" : "Flere handlinger",
+    "Edit board" : "Rediger bord",
     "Archive board" : "Arkiver bord",
     "Unarchive board" : "Avarkiver bord",
     "Delete board" : "Slett bord",
@@ -48,7 +49,6 @@ OC.L10N.register(
     "Archived boards" : "Akriverte bord",
     "Shared boards" : "Delte bord",
     "Shared with you" : "Delt med deg",
-    "Edit board" : "Rediger bord",
     "Move board to archive" : "Flytt bord til arkiv",
     "Create a new board" : "Opprett et nytt bord"
 },

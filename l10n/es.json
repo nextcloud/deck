@@ -1,4 +1,6 @@
 { "translations": {
+    "Hours" : "Horas",
+    "Minutes" : "Minutos",
     "Finished" : "Finalizado",
     "To review" : "Para revisar",
     "Action needed" : "Se necesita una acción",
@@ -25,6 +27,7 @@
     "Title" : "Título",
     "Members" : "Miembros",
     "More actions" : "Más acciones",
+    "Edit board" : "Editar tablero",
     "Archive board" : "Archivar tablero",
     "Unarchive board" : "Desarchivar tablero",
     "Delete board" : "Eliminar tablero",
@@ -33,6 +36,7 @@
     "Modified:" : "Modificado: ",
     "Created:" : "Creado: ",
     "by" : "por",
+    "Remove due date" : "Eliminar fecha límite",
     "Description" : "Descripción",
     "Formatting help" : "Ayuda de formato",
     "Saved" : "Guardado",
@@ -43,7 +47,6 @@
     "Archived boards" : "Tableros archivados",
     "Shared boards" : "Tableros compartidos",
     "Shared with you" : "Compartido contigo",
-    "Edit board" : "Editar tablero",
     "Move board to archive" : "Mover tablero al archivo",
     "Create a new board" : "Crear un tablero nuevo"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

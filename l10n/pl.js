@@ -29,6 +29,7 @@ OC.L10N.register(
     "Title" : "Tytuł",
     "Members" : "Członkowie",
     "More actions" : "Więcej akcji",
+    "Edit board" : "Edytuj tablicę",
     "Archive board" : "Zarchiwizuj tablicę",
     "Unarchive board" : "Przywróć tablicę",
     "Delete board" : "Usuń tablicę",
@@ -47,7 +48,6 @@ OC.L10N.register(
     "Archived boards" : "Zarchiwizowane tablice",
     "Shared boards" : "Tablice współdzielone",
     "Shared with you" : "Współdzielone z tobą",
-    "Edit board" : "Edytuj tablicę",
     "Move board to archive" : "Przesuń tablicę do archiwum",
     "Create a new board" : "Utwórz nową tablicę"
 },

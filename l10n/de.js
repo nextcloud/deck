@@ -29,6 +29,7 @@ OC.L10N.register(
     "Title" : "Titel",
     "Members" : "Mitglieder",
     "More actions" : "Weitere Aktionen",
+    "Edit board" : "Board bearbeiten",
     "Archive board" : "Board archivieren",
     "Unarchive board" : "Board dearchivieren",
     "Delete board" : "Board löschen",
@@ -48,7 +49,6 @@ OC.L10N.register(
     "Archived boards" : "Archivierte Boards",
     "Shared boards" : "Geteilte Boards",
     "Shared with you" : "Mit Dir geteilt",
-    "Edit board" : "Board bearbeiten",
     "Move board to archive" : "Board ins Archiv verschieben",
     "Create a new board" : "Neues Board erstellen"
 },
