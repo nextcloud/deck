@@ -658,8 +658,6 @@ button.button-inline:hover {
 	color: #ffffff;
 	min-width: 20px;
 	display: flex;
-	align-content: center;
-	text-align: center;
 }
 
 #assigned-users .avatardiv {
@@ -909,14 +907,14 @@ button.button-inline:hover {
 .label-create {
 	width: 100%;
 	padding: 0px 56px 0px 0px !important;
-	justify-content: center;
 }
 
-
-
 .label-create a {
-	display: block;
 	margin: 0px;
+}
+
+.label-create .icon {
+	margin-right: 10px;
 }
 
 #board-detail-labels .color {
