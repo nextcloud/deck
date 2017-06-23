@@ -29,6 +29,7 @@ OC.L10N.register(
     "Title" : "Başlık",
     "Members" : "Üyeler",
     "More actions" : "Diğer işlemler",
+    "Edit board" : "Panoyu sil",
     "Archive board" : "Panoyu arşivle",
     "Unarchive board" : "Panoyu arşivden çıkar",
     "Delete board" : "Panoyu sil",
@@ -48,7 +49,6 @@ OC.L10N.register(
     "Archived boards" : "Arşivlenmiş panolar",
     "Shared boards" : "Paylaşılmış panolar",
     "Shared with you" : "Sizinle paylaşılan",
-    "Edit board" : "Panoyu sil",
     "Move board to archive" : "Panoyu arşive taşı",
     "Create a new board" : "Yeni bir pano ekle"
 },

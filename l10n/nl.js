@@ -29,6 +29,7 @@ OC.L10N.register(
     "Title" : "Titel",
     "Members" : "Leden",
     "More actions" : "Meer acties",
+    "Edit board" : "Bewerk plank",
     "Archive board" : "Archiveer plank",
     "Unarchive board" : "De-archiveer plank",
     "Delete board" : "Verwijder plank",
@@ -37,6 +38,7 @@ OC.L10N.register(
     "Modified:" : "Bewerkt:",
     "Created:" : "Gemaakt:",
     "by" : "door",
+    "Remove due date" : "Verwijder vervaldatum",
     "Description" : "Beschrijving",
     "Formatting help" : "formatteringshulp",
     "Saved" : "Opgeslagen",
@@ -47,7 +49,6 @@ OC.L10N.register(
     "Archived boards" : "Gearchiveerde planken",
     "Shared boards" : "Gedeelde borden",
     "Shared with you" : "Deel met jou",
-    "Edit board" : "Bewerk plank",
     "Move board to archive" : "Verplaats plank naar archief",
     "Create a new board" : "Een nieuw bord maken"
 },
