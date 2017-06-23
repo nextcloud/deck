@@ -88,7 +88,7 @@ class Application extends App {
 				'id' => 'deck',
 				'order' => 10,
 				'href' => $urlGenerator->linkToRoute('deck.page.index'),
-				'icon' => $urlGenerator->imagePath('deck', 'app.svg'),
+				'icon' => $urlGenerator->imagePath('deck', 'deck.svg'),
 				'name' => 'Deck',
 			];
 		});
