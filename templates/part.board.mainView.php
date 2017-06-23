@@ -45,8 +45,7 @@
 						ng-if="!s.status.editStack"
                         ng-click="stackservice.delete(s.id)"></button>
 			</h2>
-			<ul data-as-sortable="sortOptions" is-disabled="!boardservice.canEdit() || filter==='archive'" data-ng-model="s.cards"
-				style="min-height: 40px;">
+			<ul data-as-sortable="sortOptions" is-disabled="!boardservice.canEdit() || filter==='archive'" data-ng-model="s.cards" class="card-list">
 				<li class="card as-sortable-item"
 					ng-repeat="c in s.cards"
 					data-as-sortable-item
