@@ -579,6 +579,10 @@ button.button-inline:hover {
 	opacity: 0.7;
 }
 
+#card-meta .select2-container {
+	margin: 0px;
+}
+
 #card-description {
 	height: 100%;
 	display: flex;
