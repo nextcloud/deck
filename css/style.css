@@ -528,10 +528,15 @@ button.button-inline:hover {
 
 #card-header h2 {
 	font-size: 14pt;
-	padding: 10px 10px 9px;
+	padding: 9px 10px;
 	overflow: hidden;
 	margin-bottom: 0;
 	background-color: #f0f0f0;
+}
+
+#card-header h2 input {
+	min-height: 0px;
+	margin: 0px;
 }
 
 #sidebar-header .icon-close, #card-header .icon-close {
@@ -549,27 +554,46 @@ button.button-inline:hover {
 #card-dates {
 	font-size: 80%;
 	color: #aaaaaa;
-	margin-bottom: 3px;
-}
-
-#card-meta #labels {
-	margin-bottom: 10px;
 }
 
 #card-meta .duedate {
 	display: flex;
+	align-content: center;
+	min-height: 38px;
 }
+
+#card-meta .duedate .timepicker-input {
+	width: 50px;
+	margin: 3px;
+}
+
+#card-meta .duedate .datepicker-input {
+	width: 85px;
+}
+
+#card-meta .duedate .icon {
+	opacity: 0.3;
+}
+
+#card-meta .duedate .icon:hover {
+	opacity: 0.7;
+}
+
 #card-description {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
 }
 
-#card-description > h3 {
-	border-bottom: 1px solid #333333;
-	font-weight: 600;
-	font-size: 10pt;
-	padding: 5px;
+#card-meta h3 {
+	border-bottom: 1px solid #dbdbdb;
+	padding: 15px 0px 5px 0px;
+}
+
+#card-meta h3 > div {
+	display: flex;
+	align-content: center;
+	justify-content: space-between;
 }
 
 #card-description > div {
@@ -588,17 +612,18 @@ button.button-inline:hover {
 	background-color: white;
 }
 
-#card-description .save-indicator {
+#card-meta .save-indicator {
 	background-color: #009900;
 	color: #ffffff;
 	border-radius: 3px;
 	float: right;
-	padding: 1px 10px;
+	padding: 0px 10px;
 	font-size: 8pt !important;
 	display: none;
+	align-self: flex-end;
 }
-#card-description .icon-help {
-	float: right;
+#card-meta .icon-help {
+	opacity: 0.5;
 }
 
 #sidebar-header,
@@ -956,6 +981,10 @@ button.button-inline:hover {
 	margin-right: -23px !important;
 }
 
+.ui-select-choices-group .choose-label {
+	padding: 6px;
+}
+
 .select2-container-multi .select2-choices .select2-search-choice {
 	padding: 3px 0 !important;
 	border: 0 !important;
@@ -975,6 +1004,10 @@ button.button-inline:hover {
 
 .select2-search input {
 	width:100% !important;
+}
+
+.select2-result-label {
+	padding: 0px !important;
 }
 
 .select2-result-label span {
