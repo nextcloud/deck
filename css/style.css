@@ -132,7 +132,7 @@ button.button-inline:hover {
 	top: 44px;
 }
 
-#board #innerBoard {
+#innerBoard {
 	padding: 10px;
 }
 
@@ -256,9 +256,7 @@ button.button-inline:hover {
 
 .stack {
 	width: 100%;
-	margin-right: 10px;
 	vertical-align: top;
-	background-color: #f8f8f8;
 }
 
 .stack h2 {
@@ -997,10 +995,22 @@ button.button-inline:hover {
 		display: none;
 	}
 
+	#innerBoard {
+		display: flex;
+	}
 	.stack {
 		width: 320px;
+		min-width: 320px;
 		display: inline-block;
+		border-right: 1px solid #eee;
+		margin-right: 10px;
+		padding-right: 10px;
 	}
+
+	.stack:last-child {
+		border-right: 1px solid transparent;
+	}
+
 	.stack h2 button {
 		display: none;
 	}
