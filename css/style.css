@@ -979,6 +979,7 @@ button.button-inline:hover {
 	padding: 0;
 	float: left !important;
 	display: block;
+	border-radius: 0px 0px 3px 3px !important;
 }
 
 .ui-select-match-item .select-label {
