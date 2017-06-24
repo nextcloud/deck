@@ -73,7 +73,7 @@ button.button-inline:hover {
 .app-navigation-entry-utils-menu-share {
 	display: flex !important;
 	padding: 14px;
-	opacity: 0.4;
+	opacity: 0.3;
 }
 
 #app-navigation .app-navigation-entry-edit {
@@ -293,7 +293,7 @@ button.button-inline:hover {
 .stack h2 button {
 	margin-left: auto;
 	display: flex;
-	opacity: 0.25;
+	opacity: 0.3;
 	padding-right: 0;
 }
 
@@ -328,7 +328,7 @@ button.button-inline:hover {
 }
 
 .card .card-controls .card-options {
-	opacity: 0.25;
+	opacity: 0.3;
 	position: absolute;
 	right: 10px;
 	top: 8px;
@@ -484,7 +484,7 @@ button.button-inline:hover {
 	margin: -4px 4px -4px -4px;
 	padding: 0px 4px;
 	font-size: 90%;
-	opacity: .7;
+	opacity: 0.7;
 	display: flex;
 	align-items: center;
 }
@@ -727,7 +727,7 @@ button.button-inline:hover {
 	background-image: url(../../../core/img/actions/checkmark.svg);
 	background-position: center center;
 	background-repeat: no-repeat;
-	opacity: 1.0;
+	opacity: 1;
 }
 
 .colorselect .dark.selected {
