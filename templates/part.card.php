@@ -28,7 +28,7 @@
 		<?php p($l->t('by')); ?>
 		<span>{{ cardservice.getCurrent().owner.displayname }}</span>
 	</div>
-	<h3>
+	<h3 style="padding-top: 0px; margin-top: 0px;">
 		<?php p($l->t('Tags')); ?>
 	</h3>
 	<div id="labels">

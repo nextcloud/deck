@@ -526,7 +526,7 @@ button.button-inline:hover {
 #card-header {
 }
 
-#card-header h2 {
+#card-header h2, #sidebar-header h2 {
 	font-size: 14pt;
 	padding: 9px 10px;
 	overflow: hidden;
@@ -541,8 +541,11 @@ button.button-inline:hover {
 
 #sidebar-header .icon-close, #card-header .icon-close {
 	position: absolute;
-	top: 5px;
-	right: 5px;
+	top: 0px;
+	right: 0px;
+	padding: 14px;
+	height: 44px;
+	width: 44px;
 }
 
 #card-meta {
@@ -554,6 +557,7 @@ button.button-inline:hover {
 #card-dates {
 	font-size: 80%;
 	color: #aaaaaa;
+	text-align: right;
 }
 
 #card-meta .duedate {
@@ -630,7 +634,6 @@ button.button-inline:hover {
 	opacity: 0.5;
 }
 
-#sidebar-header,
 .card-block {
 	padding: 15px;
 }
@@ -905,10 +908,6 @@ button.button-inline:hover {
 	margin-top: 4px;
 }
 
-#board-detail-labels {
-	padding: 10px;
-}
-
 #board-detail-labels ul li input {
 	margin: 0px;
 	padding: 5px;
@@ -955,6 +954,9 @@ button.button-inline:hover {
 	margin-bottom: 0;
 }
 
+.tabsContainer {
+	margin-top: 15px;
+}
 #shareWithList .avatar {
 	float: left;
 	margin-top: -5px;
