@@ -38,6 +38,7 @@ OC.L10N.register(
     "Modified:" : "Modifié le :",
     "Created:" : "Créé le :",
     "by" : "par",
+    "Remove due date" : "Supprimer la date d'échéance",
     "Description" : "Description",
     "Formatting help" : "Aide sur la mise en forme",
     "Saved" : "Enregistré",
