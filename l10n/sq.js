@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "Hours" : "Orët",
+    "Minutes" : "Minutat",
     "Finished" : "I përfunduar",
     "To review" : "Për rishikim",
     "Action needed" : "Nevoitet veprim",
@@ -18,6 +20,9 @@ OC.L10N.register(
     "Tags" : "Etiketë ",
     "Select users or groups to share with" : "Shpërndajeni duke zgjedhur përdorues ose grupe ",
     "Share" : "Ndaj ",
-    "Manage" : "Menaxho"
+    "Manage" : "Menaxho",
+    "Create a new tag" : "Krijo një etiketë të re",
+    "Title" : "Titull",
+    "Members" : "Anëtar"
 },
 "nplurals=2; plural=(n != 1);");
