@@ -66,7 +66,7 @@
 						
 						<div class="card-controls">
 							<i class="icon icon-filetype-text" ng-if="c.description" title="{{ c.description }}"></i>
-							<span class="due" ng-if="c.duedate" ng-class="{'overdue': c.overdue == 3, 'now': c.overdue == 2, 'next': c.overdue == 1  }">
+							<span class="due" ng-if="c.duedate" ng-class="{'overdue': c.overdue == 3, 'now': c.overdue == 2, 'next': c.overdue == 1  }" title="{{ c.duedate }}">
 								<i class="icon badge-icon"></i>
 								<span data-timestamp="{{ c.duedate | dateToTimestamp }}" class="live-relative-timestamp">{{ c.duedate | relativeDateFilterString }}</span>
 							</span>
