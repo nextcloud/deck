@@ -918,7 +918,7 @@ button.button-inline:hover {
 	width: 100%;
 	padding: 4px;
 	border: none;
-	border-radius: 0px 0px 3px 3px;
+	border-radius: 0px 0px 5px 5px;
 }
 
 #board-detail-labels ul li a.icon {
@@ -979,7 +979,7 @@ button.button-inline:hover {
 	padding: 0;
 	float: left !important;
 	display: block;
-	border-radius: 0px 0px 3px 3px !important;
+	border-radius: 0px 0px 5px 5px !important;
 }
 
 .ui-select-match-item .select-label {
