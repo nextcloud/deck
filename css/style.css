@@ -73,7 +73,7 @@ button.button-inline:hover {
 .app-navigation-entry-utils-menu-share {
 	display: flex !important;
 	padding: 14px;
-	opacity: 0.4;
+	opacity: 0.3;
 }
 
 #app-navigation .app-navigation-entry-edit {
@@ -293,7 +293,7 @@ button.button-inline:hover {
 .stack h2 button {
 	margin-left: auto;
 	display: flex;
-	opacity: 0.25;
+	opacity: 0.3;
 	padding-right: 0;
 }
 
@@ -328,7 +328,7 @@ button.button-inline:hover {
 }
 
 .card .card-controls .card-options {
-	opacity: 0.25;
+	opacity: 0.3;
 	position: absolute;
 	right: 10px;
 	top: 8px;
@@ -484,7 +484,7 @@ button.button-inline:hover {
 	margin: -4px 4px -4px -4px;
 	padding: 0px 4px;
 	font-size: 90%;
-	opacity: .7;
+	opacity: 0.7;
 	display: flex;
 	align-items: center;
 }
@@ -526,18 +526,26 @@ button.button-inline:hover {
 #card-header {
 }
 
-#card-header h2 {
+#card-header h2, #sidebar-header h2 {
 	font-size: 14pt;
-	padding: 10px 10px 9px;
+	padding: 9px 10px;
 	overflow: hidden;
 	margin-bottom: 0;
 	background-color: #f0f0f0;
 }
 
+#card-header h2 input {
+	min-height: 0px;
+	margin: 0px;
+}
+
 #sidebar-header .icon-close, #card-header .icon-close {
 	position: absolute;
-	top: 5px;
-	right: 5px;
+	top: 0px;
+	right: 0px;
+	padding: 14px;
+	height: 44px;
+	width: 44px;
 }
 
 #card-meta {
@@ -549,27 +557,59 @@ button.button-inline:hover {
 #card-dates {
 	font-size: 80%;
 	color: #aaaaaa;
-	margin-bottom: 3px;
+	text-align: right;
 }
 
-#card-meta #labels {
-	margin-bottom: 10px;
+#card-tag-label {
+	padding-top: 0px !important;
+	margin-top: 0px;
 }
 
 #card-meta .duedate {
 	display: flex;
+	align-content: center;
+	min-height: 38px;
 }
+
+#card-meta .duedate .timepicker-input {
+	width: 50px;
+	border-radius: 0px 3px 3px 0px;
+}
+
+#card-meta .duedate .datepicker-input {
+	width: 85px;
+	margin: 3px 0px;
+	border-right: 0;
+	border-radius: 3px 0px 0px 3px;
+}
+
+#card-meta .duedate .icon {
+	opacity: 0.5;
+}
+
+#card-meta .duedate .icon:hover {
+	opacity: 0.7;
+}
+
+#card-meta .select2-container {
+	margin: 0px;
+}
+
 #card-description {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
 }
 
-#card-description > h3 {
-	border-bottom: 1px solid #333333;
-	font-weight: 600;
-	font-size: 10pt;
-	padding: 5px;
+#card-meta h3 {
+	border-bottom: 1px solid #dbdbdb;
+	padding: 15px 0px 5px 0px;
+}
+
+#card-meta h3 > div {
+	display: flex;
+	align-content: center;
+	justify-content: space-between;
 }
 
 #card-description > div {
@@ -588,20 +628,20 @@ button.button-inline:hover {
 	background-color: white;
 }
 
-#card-description .save-indicator {
+#card-meta .save-indicator {
 	background-color: #009900;
 	color: #ffffff;
 	border-radius: 3px;
 	float: right;
-	padding: 1px 10px;
+	padding: 0px 10px;
 	font-size: 8pt !important;
 	display: none;
+	align-self: flex-end;
 }
-#card-description .icon-help {
-	float: right;
+#card-meta .icon-help {
+	opacity: 0.5;
 }
 
-#sidebar-header,
 .card-block {
 	padding: 15px;
 }
@@ -695,7 +735,7 @@ button.button-inline:hover {
 	background-image: url(../../../core/img/actions/checkmark.svg);
 	background-position: center center;
 	background-repeat: no-repeat;
-	opacity: 1.0;
+	opacity: 1;
 }
 
 .colorselect .dark.selected {
@@ -876,10 +916,6 @@ button.button-inline:hover {
 	margin-top: 4px;
 }
 
-#board-detail-labels {
-	padding: 10px;
-}
-
 #board-detail-labels ul li input {
 	margin: 0px;
 	padding: 5px;
@@ -890,7 +926,7 @@ button.button-inline:hover {
 	width: 100%;
 	padding: 4px;
 	border: none;
-	border-radius: 0px 0px 3px 3px;
+	border-radius: 0px 0px 5px 5px;
 }
 
 #board-detail-labels ul li a.icon {
@@ -926,6 +962,10 @@ button.button-inline:hover {
 	margin-bottom: 0;
 }
 
+.tabsContainer {
+	margin-top: 15px;
+}
+
 #shareWithList .avatar {
 	float: left;
 	margin-top: -5px;
@@ -948,12 +988,17 @@ button.button-inline:hover {
 	padding: 0;
 	float: left !important;
 	display: block;
+	border-radius: 0px 0px 5px 5px !important;
 }
 
 .ui-select-match-item .select-label {
 	color: #fff;
 	padding: 6px 23px 6px 6px;
 	margin-right: -23px !important;
+}
+
+.ui-select-choices-group .choose-label {
+	padding: 6px;
 }
 
 .select2-container-multi .select2-choices .select2-search-choice {
@@ -975,6 +1020,10 @@ button.button-inline:hover {
 
 .select2-search input {
 	width:100% !important;
+}
+
+.select2-result-label {
+	padding: 0px !important;
 }
 
 .select2-result-label span {

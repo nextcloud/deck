@@ -28,54 +28,45 @@
 		<?php p($l->t('by')); ?>
 		<span>{{ cardservice.getCurrent().owner.displayname }}</span>
 	</div>
-
+	<h3 id='card-tag-label'>
+		<?php p($l->t('Tags')); ?>
+	</h3>
 	<div id="labels">
 		<ui-select multiple tagging="" ng-model="card.labels" theme="select2"
 				   ng-disabled="boardservice.isArchived() || card.archived"
-				   style="width:100%;" title="Choose a label"
-				   placeholder="Add a label"
+				   style="width:100%;" title="<?php p($l->t('Choose a label')); ?>"
+				   placeholder="<?php p($l->t('Add a label')); ?>"
 				   on-select="labelAssign($item, $model)"
 				   on-remove="labelRemove($item, $model)" ng-disabled="!boardservice.canEdit() || archived">
-			<ui-select-match placeholder="Select labels…">
+			<ui-select-match placeholder="<?php p($l->t('Select labels…')); ?>">
 				<span class="select-label" style="background-color:#{{$item.color}}; color:{{ $item.color|textColorFilter }};">{{$item.title}}&nbsp;</span>
 			</ui-select-match>
 			<ui-select-choices
 				repeat="label in boardservice.getCurrent().labels | filter:$select.search">
-				<span
-					style="background-color:#{{label.color}}; color:{{ label.color|textColorFilter }};">{{label.title}}</span>
+				<span class="choose-label" style="background-color:#{{label.color}}; color:{{ label.color|textColorFilter }};">{{label.title}}</span>
 			</ui-select-choices>
 		</ui-select>
-
-		<div class="duedate">
-			<input class="datepicker-input medium focus" type="text" placeholder="Set a due date" value="{{ cardservice.getCurrent().duedate | parseDate }}" datepicker="due" />
-			<input class="timepicker-input medium focus" type="text" placeholder="00:00:00" ng-if="cardservice.getCurrent().duedate" value="{{ cardservice.getCurrent().duedate | parseTime }}" timepicker="due" />
-			<button class="icon icon-delete button-inline" title="<?php p($l->t('Remove due date')); ?>" ng-if="cardservice.getCurrent().duedate" ng-click="resetDuedate()"></button>
-		</div>
-
+	</div>
+	<h3>
+		<?php p($l->t('Due date')); ?>
+	</h3>
+	<div class="duedate">
+		<input class="datepicker-input medium focus" type="text" placeholder="<?php p($l->t('Click to set')); ?>" value="{{ cardservice.getCurrent().duedate | parseDate }}" datepicker="due" />
+		<input class="timepicker-input medium focus" type="text" placeholder="00:00:00" ng-if="cardservice.getCurrent().duedate" value="{{ cardservice.getCurrent().duedate | parseTime }}" timepicker="due" />
+		<button class="icon icon-delete button-inline" title="<?php p($l->t('Remove due date')); ?>" ng-if="cardservice.getCurrent().duedate" ng-click="resetDuedate()"></button>
 	</div>
 
-	<!--<div id="assigned-users">
-		<ui-select multiple tagging="" ng-model="card.assignees"
-				   theme="bootstrap" style="width:100%;"
-				   title="Choose a user to assign"
-				   placeholder="Assign users…"
-				   on-select="userAssign($item, $model)"
-				   on-remove="userRemove($item, $model)" ng-disabled="archived">
-			<ui-select-match placeholder="Select users…">{{$item.title}}
-			</ui-select-match>
-			<ui-select-choices
-				repeat="label in boardservice.getCurrent().labels | filter:$select.search">
-				<span
-					style="background-color:#{{label.color}}">{{label.title}}</span>
-			</ui-select-choices>
-		</ui-select>
-	</div>//-->
-
+	
 	<div id="card-description">
 		<h3>
-			<?php p($l->t('Description')); ?>
-			<a href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon-help" title="<?php p($l->t('Formatting help')); ?>"></a>
-			<span class="save-indicator"><?php p($l->t('Saved')); ?></span>
+			<div>
+				<div>
+					<?php p($l->t('Description')); ?>
+					<a href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon-help" title="<?php p($l->t('Formatting help')); ?>"></a>
+				</div>
+				<span class="save-indicator"><?php p($l->t('Saved')); ?></span>
+			</div>
+			
 		</h3>
 		<textarea elastic ng-if="status.cardEditDescription"
 				  placeholder="Enter your description here…"
@@ -89,43 +80,5 @@
 			<div class="placeholder"
 				 ng-if="!cardservice.getCurrent().description"><?php p($l->t('Add a card description…')); ?></div>
 		</div>
-
 	</div>
-
-
 </div>
-
-<!--
-<ul class="tabHeaders">
-    <li class="tabHeader" ng-class="{'selected': (status.boardtab==0 || !status.boardtab)}" ng-click="status.boardtab=0"><a><?php p($l->t('Attachments')); ?></a></li>
-    <li class="tabHeader" ng-class="{'selected': (status.boardtab==1)}" ng-click="status.boardtab=1"><a><?php p($l->t('Comments')); ?></a></li>
-    <li class="tabHeader" ng-class="{'selected': (status.boardtab==2)}" ng-click="status.boardtab=2"><a><?php p($l->t('History')); ?></a></li>
-</ul>
-<div class="tabsContainer">
-    <div id="commentsTabView" class="tab commentsTabView" ng-if="status.boardtab==0 || !status.boardtab">
-        <div id="card-attachments">
-            <button ng-click="status.addAttachment=true"><i class="fa fa-plus"></i> Add an attachment</button>
-            <div ng-if="status.addAttachment" id="attachment-add">
-            <button><i class="fa fa-file"></i> Attach a File</button>
-            <button><i class="fa fa-link"></i> Attach a URL</button>
-            </div>
-            <ul>
-                <li>
-                    <a href="#">
-                        <span class="fa fa-file"></span> myfilename.pdf
-                        <div class="details">
-                            <span class="user">Added by John Doe at</span>
-                            <span class="added">1.3.2014 14:13</span>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div id="board-detail-labels" class="tab commentsTabView" ng-if="status.boardtab==1">
-    </div>
-    <div id="commentsTabView" class="tab commentsTabView" ng-if="status.boardtab==2">
-    </div>
-</div>
-
-//-->
