@@ -560,6 +560,11 @@ button.button-inline:hover {
 	text-align: right;
 }
 
+#card-tag-label {
+	padding-top: 0px !important;
+	margin-top: 0px;
+}
+
 #card-meta .duedate {
 	display: flex;
 	align-content: center;
@@ -568,15 +573,18 @@ button.button-inline:hover {
 
 #card-meta .duedate .timepicker-input {
 	width: 50px;
-	margin: 3px;
+	border-radius: 0px 3px 3px 0px;
 }
 
 #card-meta .duedate .datepicker-input {
 	width: 85px;
+	margin: 3px 0px;
+	border-right: 0;
+	border-radius: 3px 0px 0px 3px;
 }
 
 #card-meta .duedate .icon {
-	opacity: 0.3;
+	opacity: 0.5;
 }
 
 #card-meta .duedate .icon:hover {
@@ -957,6 +965,7 @@ button.button-inline:hover {
 .tabsContainer {
 	margin-top: 15px;
 }
+
 #shareWithList .avatar {
 	float: left;
 	margin-top: -5px;
