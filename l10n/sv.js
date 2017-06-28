@@ -18,9 +18,6 @@ OC.L10N.register(
     "Created:" : "Skapad:",
     "by" : "av",
     "Saved" : "Sparad",
-    "Attachments" : "Bifogade filer",
-    "Comments" : "Kommentarer",
-    "History" : "Historik",
     "Shared with you" : "Delade med dig"
 },
 "nplurals=2; plural=(n != 1);");

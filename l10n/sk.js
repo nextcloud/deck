@@ -28,9 +28,6 @@ OC.L10N.register(
     "Created:" : "Vytvorené:",
     "by" : "-",
     "Saved" : "Uložené",
-    "Attachments" : "Prílohy",
-    "Comments" : "Komentáre",
-    "History" : "História",
     "Shared with you" : "Sprístupnené vám",
     "Create a new board" : "Vytvoriť novú tabuľu"
 },

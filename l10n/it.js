@@ -35,9 +35,6 @@ OC.L10N.register(
     "Formatting help" : "Guida di formattazione",
     "Saved" : "Salvato",
     "Add a card description…" : "Aggiungi descrizione della scheda...",
-    "Attachments" : "Allegati",
-    "Comments" : "Commenti",
-    "History" : "Cronologia",
     "Shared with you" : "Condiviso con te",
     "Create a new board" : "Crea una nuova lavagna"
 },

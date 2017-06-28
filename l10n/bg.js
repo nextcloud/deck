@@ -20,9 +20,6 @@ OC.L10N.register(
     "Created:" : "Създаден на:",
     "by" : "от",
     "Saved" : "Запазено",
-    "Attachments" : "Прикачени файлове",
-    "Comments" : "Коментари",
-    "History" : "История",
     "Shared with you" : "Споделено с Вас"
 },
 "nplurals=2; plural=(n != 1);");

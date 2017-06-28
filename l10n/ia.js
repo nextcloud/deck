@@ -16,9 +16,6 @@ OC.L10N.register(
     "Created:" : "Create:",
     "by" : "per",
     "Saved" : "Salveguardate",
-    "Attachments" : "Attachamentos",
-    "Comments" : "Commentarios",
-    "History" : "Historia",
     "Shared with you" : "Compartite con te"
 },
 "nplurals=2; plural=(n != 1);");

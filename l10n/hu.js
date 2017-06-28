@@ -13,8 +13,6 @@ OC.L10N.register(
     "Modified:" : "Módosítva:",
     "Created:" : "Létrehozva:",
     "Saved" : "Elmentve",
-    "Comments" : "Hozzászólások",
-    "History" : "Előzmények",
     "Shared with you" : "Megosztva veled"
 },
 "nplurals=2; plural=(n != 1);");

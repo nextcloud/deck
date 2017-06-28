@@ -25,9 +25,6 @@ OC.L10N.register(
     "Description" : "Тайлбар",
     "Saved" : "Хадгалсан",
     "Add a card description…" : "Картын тайлбар...",
-    "Attachments" : "Хавсралт",
-    "Comments" : "Сэтгэгдлүүд",
-    "History" : "Түүх",
     "Shared with you" : "Танд түгээсэн"
 },
 "nplurals=2; plural=(n != 1);");

@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "Hours" : "Ώρες",
+    "Minutes" : "Λεπτά",
     "Finished" : "Ολοκληρώθηκε",
     "To review" : "Προς επισκόπηση",
     "Action needed" : "Απαιτείται ενέργεια",
@@ -31,9 +33,6 @@ OC.L10N.register(
     "Description" : "Περιγραφή",
     "Saved" : "Αποθηκεύτηκε",
     "Add a card description…" : "Προσθήκη περιγραφής κάρτας...",
-    "Attachments" : "Συνημμένα",
-    "Comments" : "Σχόλια",
-    "History" : "Ιστορικό",
     "Shared with you" : "Διαμοιρασμένα με εσάς",
     "Create a new board" : "Δημιουργία νέου πίνακα"
 },

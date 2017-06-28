@@ -31,9 +31,6 @@ OC.L10N.register(
     "Formatting help" : "Ayuda de formato",
     "Saved" : "Guardado",
     "Add a card description…" : "Agregar una descripción de tarjeta...",
-    "Attachments" : "Adjuntos",
-    "Comments" : "Comentarios",
-    "History" : "Histórico",
     "Shared with you" : "Compartido con usted",
     "Create a new board" : "Crear nuevo tablero"
 },
