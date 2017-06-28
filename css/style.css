@@ -170,7 +170,7 @@ button.button-inline:hover {
 }
 
 #controls #button-home {
-	background-image: url(../../../core/img/places/home.svg);
+	background-image: url('../../../core/img/places/home.svg');
 	background-position: 8px center;
 	background-repeat: no-repeat;
 	padding: 10px 24px 10px 14px;
@@ -507,17 +507,17 @@ button.button-inline:hover {
 }
 
 .due .badge-icon {
-	background-image: url(../../../core/img/places/calendar-dark.svg);
+	background-image: url('../../../core/img/places/calendar-dark.svg');
 	margin-right: 3px;
 }
 .overdue .badge-icon {
-	background-image: url(../img/calendar-white.svg);
+	background-image: url('../img/calendar-white.svg');
 }
 .now .badge-icon {
-	background-image: url(../../../core/img/places/calendar-dark.svg);
+	background-image: url('../../../core/img/places/calendar-dark.svg');
 }
 .next .badge-icon {
-	background-image: url(../../../core/img/places/calendar-dark.svg);
+	background-image: url('../../../core/img/places/calendar-dark.svg');
 }
 /**
  * Card view right sidebar
@@ -732,14 +732,14 @@ button.button-inline:hover {
 }
 
 .colorselect .selected {
-	background-image: url(../../../core/img/actions/checkmark.svg);
+	background-image: url('../../../core/img/actions/checkmark.svg');
 	background-position: center center;
 	background-repeat: no-repeat;
 	opacity: 1;
 }
 
 .colorselect .dark.selected {
-	background-image: url(../../../core/img/actions/checkmark-white.svg);
+	background-image: url('../../../core/img/actions/checkmark-white.svg');
 }
 
 .labels .colorselect {
@@ -1133,7 +1133,7 @@ button.button-inline:hover {
  */
 
 .icon-deck {
-	background-image: url(../img/deck-dark.svg);
+	background-image: url('../img/deck-dark.svg');
 }
 
 .icon-group {
