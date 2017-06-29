@@ -1,7 +1,7 @@
 <div id="controls">
 	<div class="breadcrumb">
 		<div class="crumb svg last">
-			<a href="#" id="button-home" title="<?php p($l->t('All Boards')); ?>">
+			<a href="#" class="icon-home" title="<?php p($l->t('All Boards')); ?>">
 			</a>
 			<span style="display: none;"></span>
 		</div>
