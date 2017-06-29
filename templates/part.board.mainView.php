@@ -7,7 +7,7 @@
 
 <div id="controls">
 	<div class="crumb svg last">
-		<a href="#" id="button-home" title="<?php p($l->t('All Boards')); ?>">
+		<a href="#" class="icon-home" title="<?php p($l->t('All Boards')); ?>">
 		</a>
 	</div>
 	<h1 class="title" style="border-bottom: 2px solid #{{boardservice.getCurrent().color }};">
@@ -63,11 +63,11 @@
 							</ul>
 
 						</div>
-						
+
 						<div class="card-controls">
 							<i class="icon icon-filetype-text" ng-if="c.description" title="{{ c.description }}"></i>
 							<span class="due" ng-if="c.duedate" ng-class="{'overdue': c.overdue == 3, 'now': c.overdue == 2, 'next': c.overdue == 1  }" title="{{ c.duedate }}">
-								<i class="icon badge-icon"></i>
+								<i class="icon icon-badge"></i>
 								<span data-timestamp="{{ c.duedate | dateToTimestamp }}" class="live-relative-timestamp">{{ c.duedate | relativeDateFilterString }}</span>
 							</span>
 							<div class="app-popover-menu-utils" ng-if="!boardservice.isArchived()">

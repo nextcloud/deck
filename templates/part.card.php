@@ -5,7 +5,7 @@
 		<p>{{ statusservice.text }}</p></div>
 </div>
 {{card=cardservice.getCurrent();""}}
-<div id="card-header">
+<div id="sidebar-header">
 	<a class="icon-close" ui-sref="board" ng-click="sidebar.show=!sidebar.show">&nbsp;</a>
 	<h2>
 		<!-- TODO: change to textarea elastic //-->
@@ -56,17 +56,17 @@
 		<button class="icon icon-delete button-inline" title="<?php p($l->t('Remove due date')); ?>" ng-if="cardservice.getCurrent().duedate" ng-click="resetDuedate()"></button>
 	</div>
 
-	
+
 	<div id="card-description">
 		<h3>
 			<div>
 				<div>
 					<?php p($l->t('Description')); ?>
-					<a href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon-help" title="<?php p($l->t('Formatting help')); ?>"></a>
+					<a href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" title="<?php p($l->t('Formatting help')); ?>"></a>
 				</div>
 				<span class="save-indicator"><?php p($l->t('Saved')); ?></span>
 			</div>
-			
+
 		</h3>
 		<textarea elastic ng-if="status.cardEditDescription"
 				  placeholder="Enter your description here…"
