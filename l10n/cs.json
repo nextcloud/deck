@@ -37,9 +37,6 @@
     "Formatting help" : "Nápověda k formátování",
     "Saved" : "Uloženo",
     "Add a card description…" : "Přidat popis karty...",
-    "Attachments" : "Přílohy",
-    "Comments" : "Komentáře",
-    "History" : "Historie",
     "Shared with you" : "Sdíleno s vámi",
     "Create a new board" : "Vytvořit novou desku"
 },"pluralForm" :"nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;"

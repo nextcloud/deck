@@ -28,9 +28,6 @@ OC.L10N.register(
     "Created:" : "Luotu:",
     "by" : " Kirjoittaja:",
     "Saved" : "Tallennettu",
-    "Attachments" : "Liitteet",
-    "Comments" : "Kommentit",
-    "History" : "Historia",
     "Shared with you" : "Jaetu kanssasi",
     "Create a new board" : "Luo uusi taulu"
 },

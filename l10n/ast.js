@@ -13,9 +13,6 @@ OC.L10N.register(
     "Discard share" : "Escartar compartición",
     "Members" : "Miembros",
     "by" : "por",
-    "Saved" : "Guardóse",
-    "Attachments" : "Axuntos",
-    "Comments" : "Comentarios",
-    "History" : "Historial"
+    "Saved" : "Guardóse"
 },
 "nplurals=2; plural=(n != 1);");

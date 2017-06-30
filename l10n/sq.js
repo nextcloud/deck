@@ -23,6 +23,9 @@ OC.L10N.register(
     "Manage" : "Menaxho",
     "Create a new tag" : "Krijo një etiketë të re",
     "Title" : "Titull",
-    "Members" : "Anëtar"
+    "Members" : "Anëtar",
+    "Select labels…" : "Selekto etiketat...",
+    "Due date" : "Data e vendosur",
+    "Click to set" : "Kliko për të vendosur"
 },
 "nplurals=2; plural=(n != 1);");

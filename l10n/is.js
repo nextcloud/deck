@@ -32,9 +32,6 @@ OC.L10N.register(
     "Formatting help" : "Hjálp við að sníða",
     "Saved" : "Vistað",
     "Add a card description…" : "Settu inn lýsingu á spjaldi ...",
-    "Attachments" : "Viðhengi",
-    "Comments" : "Athugasemdir",
-    "History" : "Ferill",
     "Shared with you" : "Deilt með þér",
     "Create a new board" : "Búa til nýtt borð"
 },

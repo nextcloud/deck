@@ -15,8 +15,6 @@ OC.L10N.register(
     "Created:" : "Creat:",
     "by" : "per",
     "Saved" : "Desat",
-    "Comments" : "Comentaris",
-    "History" : "Història",
     "Shared with you" : "Us han compartit"
 },
 "nplurals=2; plural=(n != 1);");

@@ -30,9 +30,6 @@ OC.L10N.register(
     "Description" : "Opis",
     "Saved" : "Spremljeno",
     "Add a card description…" : "Dodaj opis...",
-    "Attachments" : "Prilozi",
-    "Comments" : "Komentari",
-    "History" : "Povijest",
     "Shared with you" : "Primljena ploča",
     "Create a new board" : "Izradi novu ploču"
 },

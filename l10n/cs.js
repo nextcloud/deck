@@ -39,9 +39,6 @@ OC.L10N.register(
     "Formatting help" : "Nápověda k formátování",
     "Saved" : "Uloženo",
     "Add a card description…" : "Přidat popis karty...",
-    "Attachments" : "Přílohy",
-    "Comments" : "Komentáře",
-    "History" : "Historie",
     "Shared with you" : "Sdíleno s vámi",
     "Create a new board" : "Vytvořit novou desku"
 },
