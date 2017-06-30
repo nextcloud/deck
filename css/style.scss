@@ -755,11 +755,12 @@ input.input-inline {
 
 	thead td {
 		opacity: .5;
+		padding: 15px;
 	}
 
 	td {
 		padding: 0 10px;
-		border-bottom: 1px solid $color-lightgrey;
+		border-bottom: 1px solid $color-grey;
 
 		.board-bullet {
 			width: 32px;
@@ -804,7 +805,7 @@ input.input-inline {
 	}
 
 	.icon {
-		padding: 22px;
+		padding: 25px;
 		margin: 0 0 0 auto;
 	}
 
