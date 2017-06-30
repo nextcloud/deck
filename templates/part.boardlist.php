@@ -20,8 +20,8 @@
 		<tbody>
 		<tr data-ng-repeat="b in boardservice.sorted" ng-class="{deleted: b.deletedAt > 0}">
 			<td ng-click="gotoBoard(b)">
-				<span class="board-bullet"
-					  style="background-color:#{{b.color}};"> </span>
+				<div class="board-bullet"
+					  style="background-color:#{{b.color}};"> </div>
 			</td>
 			<td>
 				<div ng-click="gotoBoard(b)" ng-show="!b.status.edit">{{ b.title }}</div>
