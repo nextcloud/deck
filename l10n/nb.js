@@ -38,6 +38,7 @@ OC.L10N.register(
     "Modified:" : "Endret:",
     "Created:" : "Opprettet:",
     "by" : "av",
+    "Due date" : "Forfallsdato",
     "Remove due date" : "Fjern forfallsdato",
     "Description" : "Beskrivelse",
     "Formatting help" : "Formateringshjelp",
