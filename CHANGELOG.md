@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.2.1 - 2017-07-04
+
+### Added
+- Editing board details in board list
+- Due date on mouse over
+
+### Changed
+- Polished label editor
+- Polished sidebar
+- UI improvements in board view
+- Moved to SCSS
+
+### Fixed
+- Fix opacity of last entry in board list
+
 ## 0.2.0 - 2017-06-20
 
 ### Added
