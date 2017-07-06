@@ -312,7 +312,7 @@ input.input-inline {
 
 .card {
 	background-color: $color-main-background;
-	margin: 10px;
+	margin: 10px 10px 20px 10px;
 	white-space: normal;
 	position: relative;
 	opacity: 1.0;
@@ -465,7 +465,7 @@ input.input-inline {
 }
 
 .as-sortable-placeholder {
-	margin: 10px;
+	margin: 10px 10px 20px 10px;
 	border: 1px dashed $color-darkgrey;
 }
 
@@ -569,13 +569,13 @@ input.input-inline {
 
 		.timepicker-input {
 			width: 50px;
+			border-left: 0;
 			border-radius: 0px 3px 3px 0px;
 		}
 
 		.datepicker-input {
 			width: 85px;
 			margin: 3px 0px;
-			border-right: 0;
 			border-radius: 3px 0px 0px 3px;
 		}
 
