@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Hours" : "小时",
     "Minutes" : "分",
     "Finished" : "完成",
     "To review" : "回顾",
@@ -24,6 +25,7 @@ OC.L10N.register(
     "Manage" : "管理",
     "Discard share" : "取消分享",
     "Create a new tag" : "创建新标签",
+    "Title" : "标题",
     "Members" : "会员",
     "Create new board" : "创建新面板",
     "New board title" : "新面板标题",
