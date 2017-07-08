@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "Hours" : "Stundas",
+    "Minutes" : "Minūtes",
     "Finished" : "Pabeigts",
     "Later" : "Vēlāk",
     "Show archived cards" : "Rādīt arhivētās kartes",
