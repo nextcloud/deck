@@ -22,8 +22,15 @@
     "Create a new tag" : "Krijo një etiketë të re",
     "Title" : "Titull",
     "Members" : "Anëtar",
+    "More actions" : "Më tepër veprime ",
+    "Edit board" : "Tabela e editimeve",
+    "Created:" : "Krijuar:",
+    "Choose a label" : "Zgjidh një emërtim",
+    "Add a label" : "Shto një emërtim",
     "Select labels…" : "Selekto etiketat...",
     "Due date" : "Data e vendosur",
-    "Click to set" : "Kliko për të vendosur"
+    "Click to set" : "Kliko për të vendosur",
+    "Shared with you" : "Ndarë me ju",
+    "Move board to archive" : "Lëviz tabelen në arkivë"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
