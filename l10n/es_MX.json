@@ -32,11 +32,11 @@
     "Unarchive board" : "Desarchivar tablero",
     "Delete board" : "Borrar tableros",
     "Create new board" : "Crear un nuevo tablero",
-    "New board title" : "Nuevo título de tablero",
+    "New board title" : "Nuevo título del tablero",
     "Modified:" : "Modificado:",
     "Created:" : "Creado:",
     "by" : "por",
-    "Choose a label" : "Elegir una etiqueta",
+    "Choose a label" : "Selecciona una etiqueta",
     "Add a label" : "Agregar una etiqueta",
     "Select labels…" : "Seleccionar etiquetas...",
     "Due date" : "Fecha de vencimiento",
@@ -48,8 +48,8 @@
     "Add a card description…" : "Agregar una descripción de tarjeta...",
     "Archived boards" : "Tableros archivados",
     "Shared boards" : "Tableros compartidos",
-    "Shared with you" : "Compartido con usted",
+    "Shared with you" : "Compartido contigo",
     "Move board to archive" : "Mover el tablero al archivo",
-    "Create a new board" : "Crear nuevo tablero"
+    "Create a new board" : "Crear un nuevo tablero"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
