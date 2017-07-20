@@ -1,0 +1,42 @@
+{
+    "indentation": {
+        "value": 2
+    },
+    "line_endings": {
+        "level": "error",
+        "value": "unix"
+    },
+    "colon_assignment_spacing": {
+        "name": "colon_assignment_spacing",
+        "level": "error",
+        "spacing": {
+            "left": 0,
+            "right": 1
+        }
+    },
+    "space_operators": {
+        "level": "error"
+    },
+    "newlines_after_classes": {
+        "value": 3,
+        "level": "error"
+    },
+    "no_stand_alone_at": {
+        "level": "error"
+    },
+    "arrow_spacing": {
+        "level": "error"
+    },
+    "cyclomatic_complexity": {
+        "level": "error"
+    },
+    "empty_constructor_needs_parens": {
+        "level": "error"
+    },
+    "no_empty_param_list": {
+        "level": "error"
+    },
+    "no_unnecessary_fat_arrows": {
+        "level": "error"
+    }
+}

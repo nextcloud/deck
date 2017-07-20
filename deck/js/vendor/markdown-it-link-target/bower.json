@@ -1,0 +1,24 @@
+{
+  "name": "markdown-it-link-target",
+  "description": "A markdown-it plugin to add links to images",
+  "main": "dist/markdown-it-link-target.js",
+  "authors": [
+    "Blade Barringer <blade@crookedneighbor.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "markdown-it",
+    "markdown-it-plugin",
+    "markdown",
+    "commonmark"
+  ],
+  "homepage": "https://github.com/crookedneighbor/markdown-it-link-target",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "tasks",
+    "examples",
+    "test"
+  ],
+  "version": "1.0.1"
+}
