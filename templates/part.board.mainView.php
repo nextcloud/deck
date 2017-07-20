@@ -10,7 +10,7 @@
 		<a href="#" class="icon-home" title="<?php p($l->t('All Boards')); ?>">
 		</a>
 	</div>
-	<h1 class="title" style="border-bottom: 2px solid #{{boardservice.getCurrent().color }};">
+	<h1 class="title" ng-style="{'border-bottom':'2px solid #{{boardservice.getCurrent().color }}'}">
 		{{ boardservice.getCurrent().title }}
 	</h1>
 	<div class="board-header-controls hidden">
@@ -57,7 +57,7 @@
 							<h3>{{ c.title }}</h3>
 							<ul class="labels">
 								<li ng-repeat="label in c.labels"
-									style="background-color: #{{ label.color }};" title="{{ label.title }}">
+									ng-style="{'background-color':'#{{ label.color }}'}" title="{{ label.title }}">
 									<span>{{ label.title }}</span>
 								</li>
 							</ul>
@@ -103,13 +103,13 @@
 
 			<!-- CREATE CARD //-->
 			<div class="card create"
-				 style="background-color:#{{ boardservice.getCurrent().color }};" ng-if="boardservice.canEdit() && checkCanEdit() && filter!=='archive'">
+				 ng-style="{'background-color':'#{{ boardservice.getCurrent().color }}'}" ng-if="boardservice.canEdit() && checkCanEdit() && filter!=='archive'">
 				<form ng-submit="createCard(s.id, newCard.title)">
 					<h3 ng-if="status.addCard[s.id]">
 						<input type="text" autofocus-on-insert
 							   ng-model="newCard.title"
 							   ng-blur="status.addCard[s.id]=false"
-							   style="color:{{ boardservice.getCurrent().color | textColorFilter }}; border-color:{{ boardservice.getCurrent().color | textColorFilter }};"
+							   ng-style="{'color':'{{ boardservice.getCurrent().color | textColorFilter }}','border-color':'{{ boardservice.getCurrent().color | textColorFilter }}'}"
 							   maxlength="100"
 							   required placeholder="<?php p($l->t('Enter a card title')); ?>"/>
 					</h3>
