@@ -32,7 +32,11 @@ OC.L10N.register(
     "Select labels…" : "Selekto etiketat...",
     "Due date" : "Data e vendosur",
     "Click to set" : "Kliko për të vendosur",
+    "Saved" : "I/E ruajtur",
+    "Add a card description…" : "Shto një përshkrim të kartës...",
+    "Shared boards" : "Tabela të shpërndara",
     "Shared with you" : "Ndarë me ju",
-    "Move board to archive" : "Lëviz tabelen në arkivë"
+    "Move board to archive" : "Lëviz tabelen në arkivë",
+    "Create a new board" : "Krijo një tablë të re"
 },
 "nplurals=2; plural=(n != 1);");
