@@ -62,5 +62,11 @@ return [
 		['name' => 'label#update', 'url' => '/labels/{labelId}', 'verb' => 'PUT'],
 		['name' => 'label#delete', 'url' => '/labels/{labelId}', 'verb' => 'DELETE'],
 
+        // api
+        ['name' => 'board_api#index', 'url' => '/api/v0.1/boards', 'verb' => 'GET'],
+        ['name' => 'board_api#get', 'url' => '/api/v0.1/board/{id}', 'verb' => 'GET'],
+
+        ['name' => 'board_api#preflighted_cors', 'url' => '/api/0.1/{path}',
+         'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
 	]
 ];
