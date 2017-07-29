@@ -73,6 +73,19 @@ class BoardApiController extends ApiController {
     public function get($id) {
         $board = $this->service->find($id);
 
+        // FIXME: this should probably 404 if the board has been deleted
+
+        return (new DataResponse($board));
+    }
+
+    /**
+     * @NoAdminRequired
+     * @CORS
+     * @NoCSRFRequired
+     */
+    public function delete($id) {
+        $board = $this->service->delete($id);
+
         return (new DataResponse($board));
     }
 
