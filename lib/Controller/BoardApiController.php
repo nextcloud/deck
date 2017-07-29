@@ -44,7 +44,10 @@ class BoardApiController extends ApiController {
     /**
      * @param string $appName
      * @param IRequest $request
+     * @param IUserManager $userManager
+     * @param IGroupManager $groupManager
      * @param BoardService $service
+     * @param $userId
      */
     public function __construct($appName, IRequest $request, IUserManager $userManager, IGroupManager $groupManager, BoardService $service, $userId) {
         parent::__construct($appName, $request);
@@ -58,6 +61,8 @@ class BoardApiController extends ApiController {
      * @NoAdminRequired
      * @CORS
      * @NoCSRFRequired
+     *
+     * Return all of the boards that the current user has access to.
      */
     public function index() {
         $boards = $this->service->findAll($this->getUserInfo());
@@ -69,6 +74,10 @@ class BoardApiController extends ApiController {
      * @NoAdminRequired
      * @CORS
      * @NoCSRFRequired
+     *
+     * @params $id
+     *
+     * Return the board specified by $id.
      */
     public function get($id) {
         $board = $this->service->find($id);
@@ -82,6 +91,10 @@ class BoardApiController extends ApiController {
      * @NoAdminRequired
      * @CORS
      * @NoCSRFRequired
+     *
+     * @params $id
+     *
+     * Delete the board specified by $id.  Return the board that was deleted.
      */
     public function delete($id) {
         $board = $this->service->delete($id);
@@ -93,6 +106,10 @@ class BoardApiController extends ApiController {
      * @NoAdminRequired
      * @CORS
      * @NoCSRFRequired
+     *
+     * @params $id
+     *
+     * Undo the deletion of the board specified by $id.
      */
     public function undoDelete($id) {
         $board = $this->service->find($id);
