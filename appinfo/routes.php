@@ -66,6 +66,7 @@ return [
         ['name' => 'board_api#index', 'url' => '/api/v0.1/boards', 'verb' => 'GET'],
         ['name' => 'board_api#get', 'url' => '/api/v0.1/board/{id}', 'verb' => 'GET'],
         ['name' => 'board_api#delete', 'url' => '/api/v0.1/board/{id}', 'verb' => 'DELETE'],
+        ['name' => 'board_api#undo_delete', 'url' => '/api/v0.1/board/{id}/undo_delete', 'verb' => 'POST'],
 
         ['name' => 'board_api#preflighted_cors', 'url' => '/api/0.1/{path}',
          'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
