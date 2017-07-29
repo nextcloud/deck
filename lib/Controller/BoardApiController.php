@@ -67,7 +67,7 @@ class BoardApiController extends ApiController {
     public function index() {
         $boards = $this->service->findAll($this->getUserInfo());
 
-        return (new DataResponse($boards));
+        return new DataResponse($boards);
     }
 
     /**
@@ -84,7 +84,7 @@ class BoardApiController extends ApiController {
 
         // FIXME: this should probably 404 if the board has been deleted
 
-        return (new DataResponse($board));
+        return new DataResponse($board);
     }
 
     /**
@@ -99,7 +99,7 @@ class BoardApiController extends ApiController {
     public function delete($id) {
         $board = $this->service->delete($id);
 
-        return (new DataResponse($board));
+        return new DataResponse($board);
     }
 
     /**
@@ -115,7 +115,7 @@ class BoardApiController extends ApiController {
         $board = $this->service->find($id);
         $this->service->deleteUndo($id);
 
-        return (new DataResponse($board));
+        return new DataResponse($board);
     }
 
     // this is taken from BoardController, but it's not ideal
