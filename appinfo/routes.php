@@ -83,7 +83,7 @@ return [
         ['name' => 'board_api#delete', 'url' => '/api/v1.0/board/{id}', 'verb' => 'DELETE'],
         ['name' => 'board_api#undo_delete', 'url' => '/api/v1.0/board/{id}/undo_delete', 'verb' => 'POST'],
 
-        ['name' => 'stack_api#index', 'url' => '/api/v1.0/boards/{boardId}/stacks', 'verb' => 'GET'],
+        ['name' => 'stack_api#index', 'url' => '/api/v1.0/board/{boardId}/stacks', 'verb' => 'GET'],
         ['name' => 'stack_api#create', 'url' => '/api/v1.0/board/{boardId}/stack', 'verb' => 'POST'],
         ['name' => 'stack_api#delete', 'url' => '/api/v1.0/board/{boardId}/stack/{id}', 'verb' => 'DELETE'],
 
