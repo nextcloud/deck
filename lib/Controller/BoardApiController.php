@@ -89,6 +89,18 @@ class BoardApiController extends ApiController {
         return (new DataResponse($board));
     }
 
+    /**
+     * @NoAdminRequired
+     * @CORS
+     * @NoCSRFRequired
+     */
+    public function undoDelete($id) {
+        $board = $this->service->find($id);
+        $this->service->deleteUndo($id);
+
+        return (new DataResponse($board));
+    }
+
     // this is taken from BoardController, but it's not ideal
     private function getUserInfo() {
         $groups = $this->groupManager->getUserGroupIds(
