@@ -92,6 +92,22 @@ class BoardApiController extends ApiController {
      * @CORS
      * @NoCSRFRequired
      *
+     * @params $title
+     * @params $color
+     *
+     * Create a board with the specified title and color.
+     */
+    public function create($title, $color) {
+        $board = $this->service->create($title, $this->userId, $color);
+
+        return new DataResponse($board);
+    }
+
+    /**
+     * @NoAdminRequired
+     * @CORS
+     * @NoCSRFRequired
+     *
      * @params $id
      *
      * Delete the board specified by $id.  Return the board that was deleted.
