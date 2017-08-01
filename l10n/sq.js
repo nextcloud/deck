@@ -3,7 +3,7 @@ OC.L10N.register(
     {
     "Hours" : "Orët",
     "Minutes" : "Minutat",
-    "Finished" : "I përfunduar",
+    "Finished" : "Përfunduar",
     "To review" : "Për rishikim",
     "Action needed" : "Nevoitet veprim",
     "Later" : "Më vonë",
@@ -18,7 +18,7 @@ OC.L10N.register(
     "Delete" : "Fshij",
     "Enter a card title" : "Fusni një titull karte",
     "Sharing" : "Shpërndaj ",
-    "Tags" : "Etiketë ",
+    "Tags" : "Etiketa",
     "Select users or groups to share with" : "Shpërndajeni duke zgjedhur përdorues ose grupe ",
     "No matching user or group found." : "Nuk u gjet asnjë përdorues ose grup i përputhshëm.",
     "Share" : "Ndaj ",
