@@ -21,7 +21,7 @@
 		<tr data-ng-repeat="b in boardservice.sorted" ng-class="{deleted: b.deletedAt > 0}">
 			<td ng-click="gotoBoard(b)">
 				<div class="board-bullet"
-					  style="background-color:#{{b.color}};"> </div>
+					  ng-style="{'background-color':'#{{b.color}}'};"> </div>
 			</td>
 			<td>
 				<div ng-click="gotoBoard(b)" ng-show="!b.status.edit">{{ b.title }}</div>
@@ -29,7 +29,7 @@
 					<form ng-disabled="isAddingList" class="ng-pristine ng-valid" ng-submit="boardUpdate(b)">
 						<input id="newTitle" class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100">
 						<div class="colorselect">
-							<div class="color" ng-repeat="c in colors" style="background-color:#{{ c }};" ng-click="b.color=c" ng-class="{'selected': (c == b.color) }"><br /></div>
+							<div class="color" ng-repeat="c in colors" ng-style="{'background-color':'#{{ c }}'}" ng-click="b.color=c" ng-class="{'selected': (c == b.color) }"><br /></div>
 						</div>
 					</form>
 				</div>
@@ -98,7 +98,7 @@
 						   autofocus-on-insert ng-model="newBoard.title" maxlength="100">
 					<div class="colorselect">
 						<div class="color" ng-repeat="c in colors"
-							 style="background-color:#{{ c }};"
+							 ng-style="{'background-color':'#{{ c }}'}"
 							 ng-click="selectColor(c)"
 							 ng-class="{'selected': (c == newBoard.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"></div>
 					</div>

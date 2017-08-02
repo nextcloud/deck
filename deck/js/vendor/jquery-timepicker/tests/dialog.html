@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../include/jquery-1.5.1.min.js"></script>
+    <script src="../include/jquery.ui.core.min.js"></script>
+    <script src="../include/jquery.ui.widget.min.js"></script>
+    <script src="jquery.ui.dialog.min.js"></script>
+    <script src="../jquery.ui.timepicker.js?v=0.2.9"></script>
+    
+    <link rel="stylesheet" href="../include/jquery-ui-1.8.14.custom.css">
+    <link rel="stylesheet" href="../jquery.ui.timepicker.css">
+
+    <script>
+
+        $(document).ready(function() {
+
+            $('#for_timepicker').timepicker();
+            $('#for_dialog').dialog();
+        });
+    </script>
+
+</head>
+<body>
+
+<h1>Testing the timepicker within a jQuery Dialog</h1>
+
+<div id="for_dialog">
+    
+    <p style="margin: 40px 20px">
+        The timepicker :
+        <br>
+        <input type="text" id="for_timepicker">
+    </p>
+
+    
+</div>
+
+</body>
+</html>

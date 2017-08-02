@@ -5,7 +5,7 @@
 	<li ng-class="{active: status.filter === 'shared'}"><a ui-sref="list({ filter: 'shared' })" class="icon-share"><?php p($l->t('Shared boards')); ?></a></li>
 
 	<li class="with-icon with-menu" ng-class="{active: b.id === boardservice.getCurrent().id}" data-ng-repeat="b in boardservice.sidebar" ng-if="b.deletedAt == 0">
-		<span class="board-bullet"  style="background-color:#{{b.color}};" ng-if="!b.status.edit"> </span>
+		<span class="board-bullet"  ng-style="{'background-color':'#{{b.color}}'}" ng-if="!b.status.edit"> </span>
 		<a href="#!/board/{{b.id}}/" ng-if="!b.status.edit">{{ b.title }}</a>
 		<div class="app-navigation-entry-utils" ng-show="!b.status.edit" style="position:absolute;">
 			<ul>
@@ -25,7 +25,7 @@
 				<input type="submit" value="" class="action icon-checkmark svg">
 			</form>
 			<div class="colorselect">
-				<div class="color" ng-repeat="c in colors" style="background-color:#{{ c }};" ng-click="b.color=c" ng-class="{'selected': (c == b.color) }"></div>
+				<div class="color" ng-repeat="c in colors" ng-style="{'background-color':'#{{ c }}'}" ng-click="b.color=c" ng-class="{'selected': (c == b.color) }"></div>
 			</div>
 		</div>
 	</li>
@@ -39,7 +39,7 @@
 				<input id="newTitle" class="edit ng-valid ng-empty" type="text" placeholder="<?php p($l->t('New board title')); ?>" autofocus-on-insert ng-model="newBoard.title" maxlength="100">
 				<input type="submit" value="" class="action icon-checkmark svg">
 				<div class="colorselect">
-					<div class="color" ng-repeat="c in colors" style="background-color:#{{ c }};" ng-click="selectColor(c)" ng-class="{'selected': (c == newBoard.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"><br /></div>
+					<div class="color" ng-repeat="c in colors" ng-style="{'background-color':'#{{ c }}'}" ng-click="selectColor(c)" ng-class="{'selected': (c == newBoard.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"><br /></div>
 				</div>
 			</form>
 		</div>
