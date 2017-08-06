@@ -24,6 +24,7 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Acl;
+use OCP\IUser;
 
 class BoardControllerTest extends \PHPUnit_Framework_TestCase {
 
@@ -61,11 +62,12 @@ class BoardControllerTest extends \PHPUnit_Framework_TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$user = $this->createMock(IUser::class);
 		$this->groupManager->method('getUserGroupIds')
 			->willReturn(['admin', 'group1', 'group2']);
 		$this->userManager->method('get')
 			->with($this->userId)
-			->willReturn('user');
+			->willReturn($user);
 
 		$this->controller = new BoardController(
 			'deck',
