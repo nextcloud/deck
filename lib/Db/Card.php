@@ -58,6 +58,13 @@ class Card extends RelationalEntity implements JsonSerializable {
 		$this->addResolvable('owner');
 	}
 
+	public function getDuedate() {
+		if($this->duedate === null)
+			return null;
+		$dt = new DateTime($this->duedate);
+		return $dt->format('c');
+	}
+
 	public function jsonSerialize() {
 		$json = parent::jsonSerialize();
 		$json['overdue'] = self::DUEDATE_FUTURE;
@@ -84,6 +91,7 @@ class Card extends RelationalEntity implements JsonSerializable {
 				$json['overdue'] = self::DUEDATE_OVERDUE;
 			}
 		}
+		$json['duedate'] = $this->getDuedate();
 		return $json;
 	}
 
