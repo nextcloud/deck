@@ -9,7 +9,7 @@
 		<a href="#!/board/{{b.id}}/" ng-if="!b.status.edit">{{ b.title }}</a>
 		<div class="app-navigation-entry-utils" ng-show="!b.status.edit" style="position:absolute;">
 			<ul>
-				<li class="app-navigation-entry-utils-menu-share svg" ng-show="b.shared>0"><i class="icon icon-share" title="<?php p($l->t('Shared with you')); ?>"> </i></li>
+				<li class="app-navigation-entry-utils-menu-share svg" ng-if="b.shared>0"><i class="icon icon-share" title="<?php p($l->t('Shared with you')); ?>"> </i></li>
 				<li class="app-navigation-entry-utils-menu-button svg" ng-show="!status.deleteUndo[b.id]"><button class="icon-more"></button></li>
 			</ul>
 		</div>
