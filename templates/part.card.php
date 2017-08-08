@@ -69,7 +69,7 @@
 
 		</h3>
 		<textarea elastic ng-if="status.cardEditDescription"
-				  placeholder="Enter your description here…"
+				  placeholder="<?php p($l->t('Add a card description…')); ?>"
 				  ng-blur="cardUpdate(cardservice.getCurrent())"
 				  ng-model="cardservice.getCurrent().description"
 				  autofocus-on-insert> </textarea>
