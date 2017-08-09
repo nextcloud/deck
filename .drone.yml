@@ -1,7 +1,9 @@
-pipeline:
-  clone:
+clone:
+  git:
     image: plugins/git
     depth: 1
+
+pipeline:
   check-app-compatbility:
     image: nextcloudci/php5.6:php5.6-3
     environment:
