@@ -94,7 +94,7 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 		newDate.date(duedate.date());
 		newDate.month(duedate.month());
 		newDate.year(duedate.year());
-		element.duedate = newDate.format('YYYY-MM-DD HH:mm:ss');
+		element.duedate = newDate.toISOString();
 		CardService.update(element);
 		StackService.updateCard(element);
 	};
@@ -106,7 +106,7 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 		}
 		newDate.hour(time.hour());
 		newDate.minute(time.minute());
-		element.duedate = newDate.format('YYYY-MM-DD HH:mm:ss');
+		element.duedate = newDate.toISOString();
 		CardService.update(element);
 		StackService.updateCard(element);
 	};

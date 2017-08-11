@@ -310,7 +310,9 @@ input.input-inline {
 	}
 
 	.card-list {
-		min-height: 40px;
+		padding-bottom: 100px;
+		padding-top: 40px;
+		margin-top:-40px;
 	}
 }
 
@@ -406,6 +408,7 @@ input.input-inline {
 		text-align: center;
 		padding: 10px;
 		margin: 10px;
+		margin-top: -90px;
 		border: none;
 		overflow: hidden;
 		-webkit-box-shadow: none;

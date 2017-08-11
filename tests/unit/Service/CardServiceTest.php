@@ -104,7 +104,7 @@ class CardServiceTest extends TestCase {
         $this->assertEquals('text', $actual->getType());
         $this->assertEquals(999, $actual->getOrder());
         $this->assertEquals('foo', $actual->getDescription());
-        $this->assertEquals('2017-01-01 00:00:00', $actual->getDuedate());
+        $this->assertEquals('2017-01-01T00:00:00+00:00', $actual->getDuedate());
     }
 
     public function testUpdateArchived() {

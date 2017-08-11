@@ -5,7 +5,7 @@
             ng-blur="status.addStack=false"
             ng-model="newStack.title" required
             maxlength="100" />
-        <button class="button-inline icon icon-add" style="opacity: {{status.addStack ? 1: 0.5}};" type="submit"></button>
+        <button class="button-inline icon icon-add" ng-style="{'opacity':'{{status.addStack ? 1: 0.5}}'}" type="submit"></button>
     </form>
 </div>
 

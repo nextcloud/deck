@@ -39,11 +39,11 @@
 				   on-select="labelAssign($item, $model)"
 				   on-remove="labelRemove($item, $model)" ng-disabled="!boardservice.canEdit() || archived">
 			<ui-select-match placeholder="<?php p($l->t('Select labels…')); ?>">
-				<span class="select-label" style="background-color:#{{$item.color}}; color:{{ $item.color|textColorFilter }};">{{$item.title}}&nbsp;</span>
+				<span class="select-label" ng-style="{'background-color':'#{{$item.color}}','color':'{{ $item.color|textColorFilter }}'}">{{$item.title}}&nbsp;</span>
 			</ui-select-match>
 			<ui-select-choices
 				repeat="label in boardservice.getCurrent().labels | filter:$select.search">
-				<span class="choose-label" style="background-color:#{{label.color}}; color:{{ label.color|textColorFilter }};">{{label.title}}</span>
+				<span class="choose-label" ng-style="{'background-color':'#{{label.color}}','color':'{{ label.color|textColorFilter }}'}">{{label.title}}</span>
 			</ui-select-choices>
 		</ui-select>
 	</div>
@@ -52,7 +52,7 @@
 	</h3>
 	<div class="duedate">
 		<input class="datepicker-input medium focus" type="text" placeholder="<?php p($l->t('Click to set')); ?>" value="{{ cardservice.getCurrent().duedate | parseDate }}" datepicker="due" />
-		<input class="timepicker-input medium focus" type="text" placeholder="00:00" ng-disabled="!cardservice.getCurrent().duedate" value="{{ cardservice.getCurrent().duedate | parseTime }}" timepicker="due" />
+		<input class="timepicker-input medium focus" type="text" placeholder="00:00:00" ng-if="cardservice.getCurrent().duedate" value="{{ cardservice.getCurrent().duedate | parseTime }}" timepicker="due" />
 		<button class="icon icon-delete button-inline" title="<?php p($l->t('Remove due date')); ?>" ng-if="cardservice.getCurrent().duedate" ng-click="resetDuedate()"></button>
 	</div>
 
@@ -69,7 +69,7 @@
 
 		</h3>
 		<textarea elastic ng-if="status.cardEditDescription"
-				  placeholder="Enter your description here…"
+				  placeholder="<?php p($l->t('Add a card description…')); ?>"
 				  ng-blur="cardUpdate(cardservice.getCurrent())"
 				  ng-model="cardservice.getCurrent().description"
 				  autofocus-on-insert> </textarea>
