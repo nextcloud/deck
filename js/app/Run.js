@@ -59,7 +59,7 @@ app.run(function ($document, $rootScope, $transitions, BoardService) {
         element: document.getElementById('app-content'),
         disable: 'right',
         maxPosition: 250,
-        minDragDistance: 100
+        touchToDrag: false
     });
 
     $('#app-navigation-toggle').click(function(){
