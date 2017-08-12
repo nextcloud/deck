@@ -29,6 +29,10 @@ OC.L10N.register(
     "Title" : "Titolo",
     "Members" : "Membri",
     "More actions" : "Altre azioni",
+    "Edit board" : "Modifica lavagna",
+    "Archive board" : "Archivia lavagna",
+    "Unarchive board" : "Recupera lavagna dall'archivio",
+    "Delete board" : "Elimina lavagna",
     "Create new board" : "Crea una nuova lavagna",
     "New board title" : "Titolo nuova lavagna",
     "Modified:" : "Modificato:",
@@ -44,7 +48,10 @@ OC.L10N.register(
     "Formatting help" : "Guida di formattazione",
     "Saved" : "Salvato",
     "Add a card description…" : "Aggiungi descrizione della scheda...",
+    "Archived boards" : "Lavagne archiviate",
+    "Shared boards" : "Lavagne condivise",
     "Shared with you" : "Condiviso con te",
+    "Move board to archive" : "Sposta lavagna nell'archivio",
     "Create a new board" : "Crea una nuova lavagna"
 },
 "nplurals=2; plural=(n != 1);");
