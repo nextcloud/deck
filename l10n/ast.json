@@ -1,9 +1,14 @@
 { "translations": {
+    "Hours" : "Hores",
+    "Minutes" : "Minutos",
     "Finished" : "Finó",
+    "Action needed" : "Precísase aición",
     "Later" : "Más sero",
     "Deck" : "Deck",
     "Show archived cards" : "Amosar tarxetes archivaes",
     "Delete" : "Desaniciar",
+    "Tags" : "Etiquetes",
+    "Select users or groups to share with" : "Esbilla usuarios o grupos colos que compartir",
     "No matching user or group found." : "Nun s'alcontró dengún usuariu o grupu que concasara.",
     "Share" : "Compartir",
     "Edit" : "Editar",
@@ -11,6 +16,8 @@
     "Discard share" : "Escartar compartición",
     "Members" : "Miembros",
     "by" : "por",
+    "Click to set" : "Primi p'afitar",
+    "Description" : "Descripción",
     "Saved" : "Guardóse"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

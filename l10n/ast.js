@@ -1,11 +1,16 @@
 OC.L10N.register(
     "deck",
     {
+    "Hours" : "Hores",
+    "Minutes" : "Minutos",
     "Finished" : "Finó",
+    "Action needed" : "Precísase aición",
     "Later" : "Más sero",
     "Deck" : "Deck",
     "Show archived cards" : "Amosar tarxetes archivaes",
     "Delete" : "Desaniciar",
+    "Tags" : "Etiquetes",
+    "Select users or groups to share with" : "Esbilla usuarios o grupos colos que compartir",
     "No matching user or group found." : "Nun s'alcontró dengún usuariu o grupu que concasara.",
     "Share" : "Compartir",
     "Edit" : "Editar",
@@ -13,6 +18,8 @@ OC.L10N.register(
     "Discard share" : "Escartar compartición",
     "Members" : "Miembros",
     "by" : "por",
+    "Click to set" : "Primi p'afitar",
+    "Description" : "Descripción",
     "Saved" : "Guardóse"
 },
 "nplurals=2; plural=(n != 1);");
