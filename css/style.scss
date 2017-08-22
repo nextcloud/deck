@@ -1053,6 +1053,10 @@ input.input-inline {
 	pre {
 		background-color: $color-lightgrey;
 		padding: 3px;
+		
+		code {
+			white-space: pre;
+		}
 	}
 }
 
