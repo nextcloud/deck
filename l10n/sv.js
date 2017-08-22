@@ -7,6 +7,7 @@ OC.L10N.register(
     "To review" : "Att granska",
     "Action needed" : "Åtgärd behövs",
     "Later" : "Senare",
+    "Deck" : "Kort",
     "Add a new stack" : "Lägg till en ny hög",
     "Show archived cards" : "Visa arkiverade kort",
     "Hide archived cards" : "Göm arkiverade kort",
