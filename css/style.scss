@@ -1053,7 +1053,8 @@ input.input-inline {
 	pre {
 		background-color: $color-lightgrey;
 		padding: 3px;
-		
+		overflow: auto;
+
 		code {
 			white-space: pre;
 		}
