@@ -28,10 +28,10 @@
 		<?php p($l->t('by')); ?>
 		<span>{{ cardservice.getCurrent().owner.displayname }}</span>
 	</div>
-	<h3 id='card-tag-label'>
+	<h3 id="card-tag-label" ng-show="!(boardservice.isArchived() || card.archived) && card.labels">
 		<?php p($l->t('Tags')); ?>
 	</h3>
-	<div id="labels">
+	<div id="labels" ng-show="!(boardservice.isArchived() || card.archived) && card.labels">
 		<ui-select multiple tagging="" ng-model="card.labels" theme="select2"
 				   ng-disabled="boardservice.isArchived() || card.archived"
 				   style="width:100%;" title="<?php p($l->t('Choose a label')); ?>"
@@ -51,8 +51,8 @@
 		<?php p($l->t('Due date')); ?>
 	</h3>
 	<div class="duedate">
-		<input class="datepicker-input medium focus" type="text" placeholder="<?php p($l->t('Click to set')); ?>" value="{{ cardservice.getCurrent().duedate | parseDate }}" datepicker="due" />
-		<input class="timepicker-input medium focus" type="text" placeholder="00:00" ng-disabled="!cardservice.getCurrent().duedate" value="{{ cardservice.getCurrent().duedate | parseTime }}" timepicker="due" />
+		<input class="datepicker-input medium focus" type="text" placeholder="<?php p($l->t('Click to set')); ?>" value="{{ cardservice.getCurrent().duedate | parseDate }}" datepicker="due" ng-disabled="(boardservice.isArchived() || card.archived)" />
+		<input class="timepicker-input medium focus" type="text" placeholder="00:00" ng-disabled="!cardservice.getCurrent().duedate || (boardservice.isArchived() || card.archived)" value="{{ cardservice.getCurrent().duedate | parseTime }}" timepicker="due" />
 		<button class="icon icon-delete button-inline" title="<?php p($l->t('Remove due date')); ?>" ng-if="cardservice.getCurrent().duedate" ng-click="resetDuedate()"></button>
 	</div>
 
