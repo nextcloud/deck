@@ -82,6 +82,9 @@ class Acl extends RelationalEntity implements \JsonSerializable {
 	}
 
 	public function setType($type) {
+		if(is_numeric($type)) {
+			return parent::setType($type);
+		}
 		// FIXME: Remove when all javascript uses numeric types
 		if ($type === 'group' || $type === '1') {
 			$typeInt = Acl::PERMISSION_TYPE_GROUP;
