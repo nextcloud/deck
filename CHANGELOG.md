@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.2.2 - 2017-09-07
+
+## Fixed
+- Various frontend fixes
+- Fix sidebar drag issues
+- Improvements for IE11 
+- Fix bug when draging a card to an empty stack
+
 ## 0.2.1 - 2017-07-04
 
 ### Added
