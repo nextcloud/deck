@@ -139,6 +139,12 @@ input.input-inline {
 	width: 100%;
 	bottom: 0px;
 	top: 44px;
+
+	&.as-sortable-un-selectable {
+		.card-list {
+			min-height: 96px;
+		}
+	}
 }
 
 #innerBoard {
@@ -309,12 +315,21 @@ input.input-inline {
 		width: 100%;
 	}
 
-	.card-list {
-		padding-bottom: 100px;
-		padding-top: 40px;
-		margin-top:-40px;
+	ul {
+		overflow: hidden;
 	}
+
+	.as-sortable-placeholder {
+		margin: 10px 10px 20px 10px;
+		border: 1px dashed $color-darkgrey;
+
+		&:last-child {
+			margin: 10px;
+		}
+	}
+
 }
+
 
 .card {
 	background-color: $color-main-background;
@@ -322,7 +337,12 @@ input.input-inline {
 	white-space: normal;
 	position: relative;
 	opacity: 1.0;
+	overflow: auto;
 	-webkit-box-shadow: 0 0 5px $color-darkgrey;
+
+	&:last-child {
+		margin: 10px;
+	}
 
 	&.archived .card-upper {
 		opacity: 0.5;
@@ -408,7 +428,6 @@ input.input-inline {
 		text-align: center;
 		padding: 10px;
 		margin: 10px;
-		margin-top: -90px;
 		border: none;
 		overflow: hidden;
 		-webkit-box-shadow: none;
@@ -460,11 +479,6 @@ input.input-inline {
 		display: flex !important;
 		flex-direction: column;
 	}
-}
-
-.as-sortable-placeholder {
-	margin: 10px 10px 20px 10px;
-	border: 1px dashed $color-darkgrey;
 }
 
 .info {
@@ -1092,6 +1106,9 @@ input.input-inline {
 
 		h2 button {
 			display: none;
+		}
+		h2:hover button {
+			display: inline-flex;
 		}
 	}
 }
