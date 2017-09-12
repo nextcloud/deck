@@ -49,7 +49,7 @@ OC.L10N.register(
     "Saved" : "Enregistré",
     "Add a card description…" : "Ajouter une description pour la carte",
     "Archived boards" : "Tableaux archivés",
-    "Shared boards" : "Tableaux archivés",
+    "Shared boards" : "Tableaux partagés",
     "Shared with you" : "Partagé avec vous",
     "Move board to archive" : "Déplacer le tableau vers l'archive",
     "Create a new board" : "Créer un nouveau tableau"
