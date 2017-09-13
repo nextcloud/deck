@@ -7,7 +7,7 @@
 {{card=cardservice.getCurrent();""}}
 <div id="sidebar-header">
 	<a class="icon-close" ui-sref="board" ng-click="sidebar.show=!sidebar.show">&nbsp;</a>
-	<h2>
+	<h3>
 		<!-- TODO: change to textarea elastic //-->
 		<form ng-submit="cardRename(cardservice.getCurrent())">
 			<input class="input-inline" type="text" ng-if="status.cardRename"
@@ -18,7 +18,7 @@
 		<div ng-click="cardRenameShow()" ng-show="!status.cardRename">
 			{{ cardservice.getCurrent().title }}
 		</div>
-	</h2>
+	</h3>
 </div>
 
 <div id="card-meta" class="card-block">
@@ -28,9 +28,9 @@
 		<?php p($l->t('by')); ?>
 		<span>{{ cardservice.getCurrent().owner.displayname }}</span>
 	</div>
-	<h3 id="card-tag-label" ng-show="!(boardservice.isArchived() || card.archived) && card.labels">
+	<h4 id="card-tag-label" ng-show="!(boardservice.isArchived() || card.archived) && card.labels">
 		<?php p($l->t('Tags')); ?>
-	</h3>
+	</h4>
 	<div id="labels" ng-show="!(boardservice.isArchived() || card.archived) && card.labels">
 		<ui-select multiple tagging="" ng-model="card.labels" theme="select2"
 				   ng-disabled="boardservice.isArchived() || card.archived"
@@ -47,9 +47,9 @@
 			</ui-select-choices>
 		</ui-select>
 	</div>
-	<h3>
+	<h4>
 		<?php p($l->t('Due date')); ?>
-	</h3>
+	</h4>
 	<div class="duedate">
 		<input class="datepicker-input medium focus" type="text" placeholder="<?php p($l->t('Click to set')); ?>" value="{{ cardservice.getCurrent().duedate | parseDate }}" datepicker="due" ng-disabled="(boardservice.isArchived() || card.archived)" />
 		<input class="timepicker-input medium focus" type="text" placeholder="00:00" ng-disabled="!cardservice.getCurrent().duedate || (boardservice.isArchived() || card.archived)" value="{{ cardservice.getCurrent().duedate | parseTime }}" timepicker="due" />
@@ -58,7 +58,7 @@
 
 
 	<div id="card-description">
-		<h3>
+		<h4>
 			<div>
 				<div>
 					<?php p($l->t('Description')); ?>
@@ -67,7 +67,7 @@
 				<span class="save-indicator"><?php p($l->t('Saved')); ?></span>
 			</div>
 
-		</h3>
+		</h4>
 		<textarea elastic ng-if="status.cardEditDescription"
 				  placeholder="<?php p($l->t('Add a card description…')); ?>"
 				  ng-blur="cardUpdate(cardservice.getCurrent())"
