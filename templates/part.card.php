@@ -60,13 +60,10 @@
 	<div id="card-description">
 		<h4>
 			<div>
-				<div>
-					<?php p($l->t('Description')); ?>
-					<a href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" title="<?php p($l->t('Formatting help')); ?>"></a>
-				</div>
-				<span class="save-indicator"><?php p($l->t('Saved')); ?></span>
+				<?php p($l->t('Description')); ?>
+				<a href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" title="<?php p($l->t('Formatting help')); ?>"></a>
 			</div>
-
+			<span class="save-indicator"><?php p($l->t('Saved')); ?></span>
 		</h4>
 		<textarea elastic ng-if="status.cardEditDescription"
 				  placeholder="<?php p($l->t('Add a card description…')); ?>"
