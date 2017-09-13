@@ -610,7 +610,7 @@ input.input-inline {
 		font-size: 15px;
 
 		> div {
-			display: flex;
+			display: inline-flex;
 			align-content: center;
 			justify-content: space-between;
 		}
