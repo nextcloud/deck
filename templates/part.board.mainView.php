@@ -10,9 +10,9 @@
 		<a href="#" class="icon-home" title="<?php p($l->t('All Boards')); ?>">
 		</a>
 	</div>
-	<h1 class="title" ng-style="{'border-bottom':'2px solid #{{boardservice.getCurrent().color }}'}">
+	<h2 class="title" ng-style="{'border-bottom':'2px solid #{{boardservice.getCurrent().color }}'}">
 		{{ boardservice.getCurrent().title }}
-	</h1>
+	</h2>
 	<div class="board-header-controls hidden">
 		<?php print_unescaped($this->inc('part.board.headerControls')); ?>
 	</div>
@@ -34,7 +34,7 @@
 		<div class="stack" ng-repeat="s in stacks" data-as-sortable-item
 			 data-columnindex="{{$index}}" id="column{{$index}}"
 			 style="">
-			<h2 data-as-sortable-item-handle>
+			<h3 data-as-sortable-item-handle>
 				<span class="editable-inline" ng-show="!s.status.editStack" ng-click="s.status.editStack=true">{{ s.title }}</span>
 				<form ng-if="s.status.editStack" ng-submit="stackservice.update(s); s.status.editStack=false">
 					<input type="text" placeholder="<?php p($l->t('Add a new stack')); ?>"
@@ -44,7 +44,7 @@
 				<button class="icon-delete button-inline stack-actions"
 						ng-if="!s.status.editStack"
                         ng-click="stackservice.delete(s.id)"></button>
-			</h2>
+			</h3>
 			<ul data-as-sortable="sortOptions" is-disabled="!boardservice.canEdit() || filter==='archive'" data-ng-model="s.cards" class="card-list">
 				<li class="card as-sortable-item"
 					ng-repeat="c in s.cards"
@@ -54,7 +54,7 @@
 					ng-class="{'archived': c.archived, 'has-labels': c.labels.length>0 }">
 					<div data-as-sortable-item-handle>
 						<div class="card-upper">
-							<h3>{{ c.title }}</h3>
+							<h4>{{ c.title }}</h4>
 							<ul class="labels">
 								<li ng-repeat="label in c.labels"
 									ng-style="{'background-color':'#{{ label.color }}'}" title="{{ label.title }}">

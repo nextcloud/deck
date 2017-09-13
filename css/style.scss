@@ -166,7 +166,7 @@ input.input-inline {
 		top: 12px;
 	}
 
-	> h1 {
+	> h2 {
 		white-space: nowrap;
 		padding: 7px;
 	}
@@ -267,11 +267,11 @@ input.input-inline {
 	width: 100%;
 	vertical-align: top;
 
-	h2 {
+	h3 {
 		padding: 10px 10px 8px;
 		margin: 0;
 		font-size: 12pt;
-		font-weight: 700;
+		font-weight: normal;
 		overflow: hidden;
 		display: flex;
 		min-height: 40px;
@@ -365,8 +365,8 @@ input.input-inline {
 		display: block;
 	}
 
-	h3 {
-		font-weight: bold;
+	h4 {
+		font-weight: normal;
 		font-size: 10pt;
 		padding: 0;
 		margin: 5px;
@@ -531,11 +531,11 @@ input.input-inline {
 }
 
 #sidebar-header {
-	h2 {
+	h3 {
 		font-size: 14pt;
 		padding: 9px 10px;
+		margin: 0;
 		overflow: hidden;
-		margin-bottom: 0;
 		background-color: $color-lightgrey;
 
 		input {
@@ -589,9 +589,11 @@ input.input-inline {
 		margin: 0px;
 	}
 
-	h3 {
+	h4 {
 		border-bottom: 1px solid $color-lightgrey;
 		padding: 15px 0px 5px 0px;
+		margin: 0 0 10px 0;
+		font-size: 15px;
 
 		> div {
 			display: flex;
@@ -1090,7 +1092,7 @@ input.input-inline {
 			border-right: 1px solid transparent;
 		}
 
-		h2 button {
+		h3 button {
 			display: none;
 		}
 	}

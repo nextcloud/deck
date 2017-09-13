@@ -6,7 +6,7 @@
 </div>
 <div id="sidebar-header">
     <a class="icon-close" ui-sref="board" ng-click="sidebar.show=!sidebar.show"> &nbsp;</a>
-    <h2>{{ boardservice.getCurrent().title }}</h2>
+    <h3>{{ boardservice.getCurrent().title }}</h3>
 </div>
 
 {{board=boardservice.getCurrent();""}}
