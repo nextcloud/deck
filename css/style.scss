@@ -601,14 +601,27 @@ input.input-inline {
 
 	h4 {
 		border-bottom: 1px solid $color-lightgrey;
-		padding: 15px 0px 5px 0px;
-		margin: 0 0 10px 0;
-		font-size: 15px;
+		display: flex;
+		flex-direction: row;
+		height: 30px;
+		div:first-child {
+			flex-grow: 1;
+			padding: 15px 0 5px 0;
+			display: inline-block;
 
-		> div {
-			display: inline-flex;
-			align-content: center;
-			justify-content: space-between;
+		}
+	}
+	.section-header {
+		border-bottom: 1px solid $color-lightgrey;
+		display: flex;
+		flex-direction: row;
+		padding: 15px 0 5px 0;
+		margin: 10px 0 10px 0;
+
+		h4 {
+			margin: 0;
+			border: none;
+			margin: 15px 0 5px 0;
 		}
 	}
 

@@ -24,6 +24,7 @@
 namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\Entity;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IUserManager;
 use OCP\Notification\IManager;
@@ -103,6 +104,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		$card = $this->findEntity($sql, [$id]);
 		$labels = $this->labelMapper->findAssignedLabelsForCard($card->id);
 		$card->setLabels($labels);
+
 		$this->mapOwner($card);
 		return $card;
 	}

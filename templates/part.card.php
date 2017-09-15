@@ -47,17 +47,35 @@
 			</ui-select-choices>
 		</ui-select>
 	</div>
-	<h4>
-		<?php p($l->t('Due date')); ?>
-	</h4>
+	<div class="section-header">
+		<h4><?php p($l->t('Assign users')); ?></h4>
+		<button class="button icon-add"></button>
+	</div>
+	<ui-select ng-model="status.addSharee" theme="select2" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..." on-select="aclAdd(status.addSharee)" search-enabled="true">
+		<ui-select-match placeholder="<?php p($l->t('Assign this card to a user')); ?>">
+			<span><i class="icon icon-{{$item.type}}"></i> {{ $item.participant.displayname }}</span>
+		</ui-select-match>
+		<ui-select-choices refresh="searchForUser($select.search)" refresh-delay="0" repeat="sharee in boardservice.sharees">
+			<span><i class="icon icon-{{sharee.type}}"></i> {{ sharee.participant.displayname }}</span>
+		</ui-select-choices>
+		<ui-select-no-choice>
+			<?php p($l->t('No matching user or group found.')); ?>
+		</ui-select-no-choice>
+	</ui-select>
+	<div class="avatardiv" avatar ng-attr-displayname="{{ boardservice.getCurrent().owner.uid }}" ng-if="boardservice.id"></div>
+
+	<div class="section-header">
+		<h4>
+			<?php p($l->t('Due date')); ?>
+		</h4>
+	</div>
 	<div class="duedate">
 		<input class="datepicker-input medium focus" type="text" placeholder="<?php p($l->t('Click to set')); ?>" value="{{ cardservice.getCurrent().duedate | parseDate }}" datepicker="due" ng-disabled="(boardservice.isArchived() || card.archived)" />
 		<input class="timepicker-input medium focus" type="text" placeholder="00:00" ng-disabled="!cardservice.getCurrent().duedate || (boardservice.isArchived() || card.archived)" value="{{ cardservice.getCurrent().duedate | parseTime }}" timepicker="due" />
 		<button class="icon icon-delete button-inline" title="<?php p($l->t('Remove due date')); ?>" ng-if="cardservice.getCurrent().duedate" ng-click="resetDuedate()"></button>
 	</div>
 
-
-	<div id="card-description">
+	<div class="section-header">
 		<h4>
 			<div>
 				<?php p($l->t('Description')); ?>
@@ -65,8 +83,9 @@
 			</div>
 			<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
 			<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>
-
 		</h4>
+	</div>
+	<div id="card-description">
 		<textarea elastic ng-if="status.cardEditDescription"
 				  placeholder="<?php p($l->t('Add a card description…')); ?>"
 				  ng-blur="cardUpdate(cardservice.getCurrent())"

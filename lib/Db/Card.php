@@ -56,6 +56,7 @@ class Card extends RelationalEntity {
 		$this->addType('archived', 'boolean');
 		$this->addType('notified', 'boolean');
 		$this->addRelation('labels');
+		$this->addRelation('participants');
 		$this->addResolvable('owner');
 	}
 

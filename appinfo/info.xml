@@ -16,7 +16,7 @@
 💥 This is still alpha software: it may not be stable enough for production!
 
 </description>
-    <version>0.3.0-dev1</version>
+    <version>0.3.0-dev2</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
