@@ -25,6 +25,7 @@ namespace OCA\Deck\AppInfo;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
+use OCA\Deck\Notification\Notifier;
 use OCP\AppFramework\App;
 use OCA\Deck\Middleware\SharingMiddleware;
 use OCP\IGroup;
@@ -92,5 +93,16 @@ class Application extends App {
 				'name' => 'Deck',
 			];
 		});
+	}
+
+	public function registerNotifications() {
+		$notificationManager = \OC::$server->getNotificationManager();
+		$self = &$this;
+		$notificationManager->registerNotifier(function() use (&$self) {
+			return $self->getContainer()->query(Notifier::class);
+		}, function () {
+			return ['id' => 'deck', 'name' => 'Deck'];
+		});
+
 	}
 }
