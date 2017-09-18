@@ -29,13 +29,11 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
-use OCA\Deck\Db\User;
-use OCP\IGroupManager;
-use OCP\ILogger;
+use OCA\Deck\Notification\NotificationHelper;
 use OCP\IUser;
-use OCP\IUserManager;
+use \Test\TestCase;
 
-class BoardServiceTest extends \Test\TestCase {
+class BoardServiceTest extends TestCase {
 
 	/** @var BoardService */
 	private $service;
@@ -49,6 +47,8 @@ class BoardServiceTest extends \Test\TestCase {
 	private $boardMapper;
 	/** @var PermissionService */
 	private $permissionService;
+	/** @var NotificationHelper */
+	private $notificationHelper;
 
 	private $userId = 'admin';
 
@@ -59,13 +59,15 @@ class BoardServiceTest extends \Test\TestCase {
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->labelMapper = $this->createMock(LabelMapper::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
+		$this->notificationHelper = $this->createMock(NotificationHelper::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
 			$this->l10n,
 			$this->labelMapper,
 			$this->aclMapper,
-			$this->permissionService
+			$this->permissionService,
+			$this->notificationHelper
 		);
 
 		$user = $this->createMock(IUser::class);
@@ -165,6 +167,8 @@ class BoardServiceTest extends \Test\TestCase {
 		$acl->resolveRelation('participant', function($participant) use (&$user) {
 			return null;
 		});
+		$this->notificationHelper->expects($this->once())
+			->method('sendBoardShared');
 		$this->aclMapper->expects($this->once())
 			->method('insert')
 			->with($acl)

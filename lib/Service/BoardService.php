@@ -23,12 +23,11 @@
 
 namespace OCA\Deck\Service;
 
-use DateTime;
-use OCA\Deck\ArchivedItemException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
+use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IL10N;
 use OCA\Deck\Db\Board;
@@ -43,15 +42,22 @@ class BoardService {
 	private $aclMapper;
 	private $l10n;
 	private $permissionService;
-	private $userId;
+	private $notificationHelper;
 
-	public function __construct(BoardMapper $boardMapper, IL10N $l10n, LabelMapper $labelMapper, AclMapper $aclMapper, PermissionService $permissionService, $userId) {
+	public function __construct(
+		BoardMapper $boardMapper,
+		IL10N $l10n,
+		LabelMapper $labelMapper,
+		AclMapper $aclMapper,
+		PermissionService $permissionService,
+		NotificationHelper $notificationHelper
+	) {
 		$this->boardMapper = $boardMapper;
 		$this->labelMapper = $labelMapper;
 		$this->aclMapper = $aclMapper;
 		$this->l10n = $l10n;
 		$this->permissionService = $permissionService;
-		$this->userId = $userId;
+		$this->notificationHelper = $notificationHelper;
 	}
 
 	public function findAll($userInfo) {
@@ -212,20 +218,10 @@ class BoardService {
 		$acl->setPermissionEdit($edit);
 		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
+
 		/* Notify users about the shared board */
-		if($acl->getType() === Acl::PERMISSION_TYPE_USER) {
-			$board = $this->boardMapper->find($boardId);
-			$initiator = \OC::$server->getUserManager()->get($this->userId);
-			$manager = \OC::$server->getNotificationManager();
-			$notification = $manager->createNotification();
-			$notification
-				->setApp('deck')
-				->setUser($participant['uid'])
-				->setDateTime(new DateTime())
-				->setObject('board', $boardId)// $type and $id
-				->setSubject('board-shared', [$board->getTitle(), $initiator->getUID()]);
-			$manager->notify($notification);
-		}
+		$this->notificationHelper->sendBoardShared($boardId, $acl);
+
 		$newAcl = $this->aclMapper->insert($acl);
 		$this->boardMapper->mapAcl($newAcl);
 		return $newAcl;

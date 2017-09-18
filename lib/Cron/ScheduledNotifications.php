@@ -21,106 +21,35 @@
  *
  */
 
-/**
- * Created by PhpStorm.
- * User: jus
- * Date: 16.05.17
- * Time: 12:34
- */
-
 namespace OCA\Deck\Cron;
 
-use DateTime;
 use OC\BackgroundJob\Job;
-use OCA\Deck\Db\Acl;
-use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
-use OCP\IUser;
-use OCP\Notification\IManager;
+use OCA\Deck\Notification\NotificationHelper;
 
 class ScheduledNotifications extends Job {
 
 	/** @var CardMapper */
 	protected $cardMapper;
-	/** @var BoardMapper */
-	protected $boardMapper;
-	/** @var IManager */
-	protected $notificationManager;
-	/** @var array */
-	private $users = [];
-	/** @var array */
-	private $boards = [];
+	/** @var NotificationHelper */
+	protected $notificationHelper;
 
 	public function __construct(
 		CardMapper $cardMapper,
-		BoardMapper $boardMapper,
-		IManager $notificationManager
+		NotificationHelper $notificationHelper
 	) {
 		$this->cardMapper = $cardMapper;
-		$this->boardMapper = $boardMapper;
-		$this->notificationManager = $notificationManager;
+		$this->notificationHelper = $notificationHelper;
 	}
 
 	public function run($argument) {
 		// Notify board owner and card creator about overdue cards
-		// TODO: Once assigning users is possible, those should be notified instead of all users of the board
 		$cards = $this->cardMapper->findOverdue();
 		/** @var Card $card */
 		foreach ($cards as $card) {
-			// check if notification has already been sent
-			// ideally notifications should not be deleted once seen by the user so we can
-			// also deliver due date notifications for users who have been added later to a board
-			// this should maybe be addressed in nextcloud/server
-			if ($card->getNotified()) {
-				continue;
-			}
-			$boardId = $this->cardMapper->findBoardId($card->getId());
-			/** @var IUser $user */
-			foreach ($this->getUsers($boardId) as $user) {
-				$this->sendNotification($user, $card, $boardId);
-			}
-			$this->cardMapper->markNotified($card);
+			$this->notificationHelper->sendCardDuedate($card);
 		}
-	}
-
-	private function getUsers($boardId) {
-		// cache users of a board so we don't query them for every cards
-		if (array_key_exists((string)$boardId, $this->users)) {
-			return $this->users[(string)$boardId];
-		}
-		$this->boards[(string)$boardId] = $this->boardMapper->find($boardId, false, true);
-		$users = [$this->boards[(string)$boardId]->getOwner()];
-		/** @var Acl $acl */
-		foreach ($this->boards[(string)$boardId]->getAcl() as $acl) {
-			if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
-				$users[] = $acl->getParticipant();
-			}
-			if ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
-				$group = \OC::$server->getGroupManager()->get($acl->getParticipant());
-				/** @var IUser $user */
-				foreach ($group->getUsers() as $user) {
-					$users[] = $user->getUID();
-				}
-			}
-		}
-		$this->users[(string)$boardId] = array_unique($users);
-		return $this->users[(string)$boardId];
-	}
-
-	private function sendNotification($user, $card, $boardId) {
-		$notification = $this->notificationManager->createNotification();
-		$notification
-			->setApp('deck')
-			->setUser($user)
-			->setObject('card', $card->getId())
-			->setSubject('card-overdue', [$card->getTitle(), $this->boards[(string)$boardId]->getTitle()]);
-		// this is only needed, if a notification exists for a user and the notified attribute is not set on the card
-		// if ($this->notificationManager->getCount($notification) > 0)
-		//	return;
-		$notification
-			->setDateTime(new DateTime($card->getDuedate()));
-		$this->notificationManager->notify($notification);
 	}
 
 }
