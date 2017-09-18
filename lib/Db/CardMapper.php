@@ -45,11 +45,28 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		return parent::insert($entity);
 	}
 
-	public function update(Entity $entity) {
-		$entity->setLastModified(time());
+	public function update(Entity $entity, $updateModified = true) {
+		if ($updateModified)
+			$entity->setLastModified(time());
+
+		// make sure we only reset the notification flag if the duedate changes
+		if (in_array('duedate', $entity->getUpdatedFields())) {
+			$existing = $this->find($entity->getId());
+			if ($existing->getDuedate() !== $entity->getDuedate())
+				$entity->setNotified(false);
+		}
+
+		// TODO: also remove pending notifications
+
 		return parent::update($entity);
 	}
 
+	public function markNotified(Card $card) {
+		$cardUpdate = new Card();
+		$cardUpdate->setId($card->getId());
+		$cardUpdate->setNotified(true);
+		return parent::update($cardUpdate);
+	}
 	/**
 	 * @param $id
 	 * @return RelationalEntity if not found
@@ -81,6 +98,12 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		$sql = 'SELECT id FROM `*PREFIX*deck_cards` 
           WHERE `stack_id` = ?';
 		$entities = $this->findEntities($sql, [$stackId], $limit, $offset);
+		return $entities;
+	}
+
+	public function findOverdue() {
+		$sql = 'SELECT id,title,duedate,notified from `*PREFIX*deck_cards` WHERE duedate < NOW()';
+		$entities = $this->findEntities($sql);
 		return $entities;
 	}
 

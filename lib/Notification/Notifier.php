@@ -85,11 +85,35 @@ class Notifier implements INotifier {
 		}
 		$l = $this->l10nFactory->get('deck', $languageCode);
 		$notification->setIcon($this->url->getAbsoluteURL($this->url->imagePath('deck', 'deck-dark.svg')));
+		$params = $notification->getSubjectParameters();
 
 		switch($notification->getSubject()) {
+			case 'card-overdue':
+				$cardId = $notification->getObjectId();
+				$boardId = $this->cardMapper->findBoardId($cardId);
+				$notification->setParsedSubject(
+					(string) $l->t('The card "%s" on "%s" has reached its due date.', $notification->getSubjectParameters())
+				);
+				// FIXME: Use type that is provided by NC / if custom type is supported
+				$notification->setRichSubject(
+					(string) $l->t('The card {card} on {board} has reached its due date.'),
+					[
+						'card' => [
+							'id' => null,
+							'type' => 'announcement',
+							'name' => $params[0],
+						],
+						'board' => [
+							'id' => null,
+							'type' => 'announcement',
+							'name' => $params[1],
+						],
+					]
+				);
+				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#!/board/'.$boardId.'//card/'.$cardId.'');
+				break;
 			case 'board-shared':
 				$boardId = $notification->getObjectId();
-				$params = $notification->getSubjectParameters();
 				$initiator = \OC::$server->getUserManager()->get($params[1]);
 				if($initiator !== null) {
 					$dn = $initiator->getDisplayName();

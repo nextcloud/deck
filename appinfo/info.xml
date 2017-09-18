@@ -31,6 +31,7 @@
     </dependencies>
     <background-jobs>
         <job>OCA\Deck\Cron\DeleteCron</job>
+        <job>OCA\Deck\Cron\ScheduledNotifications</job>
     </background-jobs>
     <repair-steps>
         <post-migration>

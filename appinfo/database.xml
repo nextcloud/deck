@@ -162,6 +162,11 @@
                 <type>timestamp</type>
                 <default>0</default>
             </field>
+            <field>
+                <name>notified</name>
+                <type>boolean</type>
+                <default>false</default>
+            </field>
             <index>
                 <name>deck_cards_stack_id_index</name>
                 <field>

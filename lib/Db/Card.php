@@ -41,6 +41,7 @@ class Card extends RelationalEntity implements JsonSerializable {
 	protected $order;
 	protected $archived = false;
 	protected $duedate = null;
+	protected $notified = false;
 
 	const DUEDATE_FUTURE = 0;
 	const DUEDATE_NEXT = 1;
@@ -54,6 +55,7 @@ class Card extends RelationalEntity implements JsonSerializable {
 		$this->addType('lastModified', 'integer');
 		$this->addType('createdAt', 'integer');
 		$this->addType('archived', 'boolean');
+		$this->addType('notified', 'boolean');
 		$this->addRelation('labels');
 		$this->addResolvable('owner');
 	}
@@ -92,6 +94,7 @@ class Card extends RelationalEntity implements JsonSerializable {
 			}
 		}
 		$json['duedate'] = $this->getDuedate();
+		unset($json['notified']);
 		return $json;
 	}
 
