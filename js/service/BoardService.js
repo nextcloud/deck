@@ -45,7 +45,6 @@ app.factory('BoardService', function(ApiService, $http, $q){
 		var _id = id;
 		$http.post(this.baseUrl + '/' + id + '/deleteUndo').then(function (response) {
 			self.data[_id].deletedAt = 0;
-			console.log(self.data[_id]);
 			deferred.resolve(response.data);
 		}, function (error) {
 			deferred.reject('Deleting ' + self.endpoint + ' failed');

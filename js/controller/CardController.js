@@ -52,14 +52,11 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 		if (BoardService.isArchived() || CardService.getCurrent().archived) {
 			return false;
 		}
-		var node = $event.target.nodeName;
 		if ($scope.card.archived || !$scope.boardservice.canEdit()) {
-			console.log(node);
-		} else {
-			console.log("edit");
-			$scope.status.cardEditDescription = true;
+			return false;
 		}
-		console.log($scope.status.canEditDescription);
+		$scope.status.cardEditDescription = true;
+		return true;
 	};
 	// handle rename to update information on the board as well
 	$scope.cardRename = function (card) {
