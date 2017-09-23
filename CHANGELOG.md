@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.2.3 - 2017-09-23
+
+## Fixed
+- Fix delete stack button being not available
+- Fix acl issues with PostgreSQL
+
 ## 0.2.2 - 2017-09-07
 
 ## Fixed
