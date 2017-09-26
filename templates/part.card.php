@@ -38,7 +38,7 @@
 				   placeholder="<?php p($l->t('Add a label')); ?>"
 				   on-select="labelAssign($item, $model)"
 				   on-remove="labelRemove($item, $model)" ng-disabled="!boardservice.canEdit() || archived">
-			<ui-select-match placeholder="<?php p($l->t('Select labels…')); ?>">
+			<ui-select-match placeholder="<?php p($l->t('Select tags')); ?>">
 				<span class="select-label" ng-style="{'background-color':'#{{$item.color}}','color':'{{ $item.color|textColorFilter }}'}">{{$item.title}}&nbsp;</span>
 			</ui-select-match>
 			<ui-select-choices
