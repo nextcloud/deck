@@ -34,8 +34,8 @@
 	<div id="labels" ng-show="!(boardservice.isArchived() || card.archived) && card.labels">
 		<ui-select multiple tagging="" ng-model="card.labels" theme="select2"
 				   ng-disabled="boardservice.isArchived() || card.archived"
-				   style="width:100%;" title="<?php p($l->t('Choose a label')); ?>"
-				   placeholder="<?php p($l->t('Add a label')); ?>"
+				   style="width:100%;" title="<?php p($l->t('Choose a tag')); ?>"
+				   placeholder="<?php p($l->t('Add a tag')); ?>"
 				   on-select="labelAssign($item, $model)"
 				   on-remove="labelRemove($item, $model)" ng-disabled="!boardservice.canEdit() || archived">
 			<ui-select-match placeholder="<?php p($l->t('Select tags')); ?>">
