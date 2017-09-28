@@ -57,19 +57,6 @@ class Notifier implements INotifier {
 		$this->userManager = $userManager;
 		$this->cardMapper = $cardMapper;
 		$this->boardMapper = $boardMapper;
-		$definitions->addDefinition('highlight', [
-			'author' => 'Deck',
-			'app' => 'deck',
-			'since' => '12.0.0',
-			'parameters' => [
-				'name' => [
-					'since' => '12.0.0',
-					'required' => true,
-					'description' => 'The text that should be highlighted.',
-					'example' => 'Foobar',
-				]
-			],
-		]);
 	}
 
 	/**
@@ -94,7 +81,6 @@ class Notifier implements INotifier {
 				$notification->setParsedSubject(
 					(string) $l->t('The card "%s" on "%s" has reached its due date.', $notification->getSubjectParameters())
 				);
-				// FIXME: Use type that is provided by NC / if custom type is supported
 				$notification->setRichSubject(
 					(string) $l->t('The card {card} on {board} has reached its due date.'),
 					[
@@ -131,7 +117,8 @@ class Notifier implements INotifier {
 							'name' => $dn,
 						],
 						'board' => [
-							'type' => 'highlight',
+							'id' => null,
+							'type' => 'announcement',
 							'name' => $params[0],
 						],
 					]
