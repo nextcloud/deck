@@ -334,7 +334,8 @@ input.input-inline {
 	white-space: normal;
 	position: relative;
 	opacity: 1.0;
-	-webkit-box-shadow: 0 0 5px $color-darkgrey;
+	box-shadow: 0 0 3px $color-darkgrey;
+	border-radius: 3px;
 
 	&:last-child {
 		margin: 10px;
@@ -463,34 +464,38 @@ input.input-inline {
 
 	&.create {
 		text-align: center;
-		padding: 10px;
-		margin: 10px;
-		border: none;
+		margin: 20px 10px 10px;
+		border: 1px solid;
+		border-radius: 3px;
+		background-color: transparent;
 		overflow: hidden;
-		-webkit-box-shadow: none;
+		box-shadow: none;
+		cursor: pointer;
+
+		&.emptyStack {
+			margin-top: 10px;
+		}
 
 		&:hover {
 			text-align: center;
 			opacity: 1;
 		}
 
+		.icon-add {
+			padding: 20px;
+		}
+
 		h4 {
 			width: 100%;
 			padding: 0;
-			margin: 0 0 1px;
+			margin: 0;
 
 			input {
 				width: 100%;
 				border: 0;
-				font-weight: bold;
 				font-size: 10pt;
 				margin: 0;
-				padding: 0;
-				border-bottom: 1px solid $color-primary-text;
-				border-radius: 0;
-				color: $color-primary-text;
-				background-color: transparent !important;
-				min-height: initial;
+				padding: 10px;
 			}
 		}
 	}
