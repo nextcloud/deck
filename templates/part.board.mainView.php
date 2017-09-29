@@ -107,20 +107,20 @@
 			</ul>
 
 			<!-- CREATE CARD //-->
-			<div class="card create"
-				 ng-style="{'background-color':'#{{ boardservice.getCurrent().color }}'}" ng-if="boardservice.canEdit() && checkCanEdit() && filter!=='archive'">
+			<div class="card create" ng-class="{emptyStack: !s.cards.length}"
+				 ng-style="{'border-color':'#{{ boardservice.getCurrent().color }}'}" ng-if="boardservice.canEdit() && checkCanEdit() && filter!=='archive'">
 				<form ng-submit="createCard(s.id, newCard.title)">
 					<h4 ng-if="status.addCard[s.id]">
 						<input type="text" autofocus-on-insert
 							   ng-model="newCard.title"
 							   ng-blur="status.addCard[s.id]=false"
-							   ng-style="{'color':'{{ boardservice.getCurrent().color | textColorFilter }}','border-color':'{{ boardservice.getCurrent().color | textColorFilter }}'}"
+							   ng-style="{'border-color':'{{ boardservice.getCurrent().color | textColorFilter }}'}"
 							   maxlength="100"
 							   required placeholder="<?php p($l->t('Enter a card title')); ?>"/>
 					</h4>
 				</form>
 				<div ng-if="!status.addCard[s.id]" ng-click="status.addCard[s.id]=true" title="<?php p($l->t('Add card')); ?>">
-					<i class="icon icon-add{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i>
+					<i class="icon icon-add"></i>
 					<span class="hidden-visually"><?php p($l->t('Add card')); ?></span>
 				</div>
 			</div>
