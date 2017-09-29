@@ -315,10 +315,6 @@ input.input-inline {
 		width: 100%;
 	}
 
-	ul {
-		overflow: hidden;
-	}
-
 	.as-sortable-placeholder {
 		margin: 10px 10px 20px 10px;
 		border: 1px dashed $color-darkgrey;
@@ -337,7 +333,6 @@ input.input-inline {
 	white-space: normal;
 	position: relative;
 	opacity: 1.0;
-	overflow: auto;
 	-webkit-box-shadow: 0 0 5px $color-darkgrey;
 
 	&:last-child {
