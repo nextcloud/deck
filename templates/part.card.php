@@ -28,9 +28,11 @@
 		<?php p($l->t('by')); ?>
 		<span>{{ cardservice.getCurrent().owner.displayname }}</span>
 	</div>
-	<h4 id="card-tag-label" ng-show="!(boardservice.isArchived() || card.archived) && card.labels">
-		<?php p($l->t('Tags')); ?>
-	</h4>
+	<div class="section-header">
+		<h4 id="card-tag-label" ng-show="!(boardservice.isArchived() || card.archived) && card.labels">
+			<?php p($l->t('Tags')); ?>
+		</h4>
+	</div>
 	<div id="labels" ng-show="!(boardservice.isArchived() || card.archived) && card.labels">
 		<ui-select multiple tagging="" ng-model="card.labels" theme="select2"
 				   ng-disabled="boardservice.isArchived() || card.archived"

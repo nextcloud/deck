@@ -598,31 +598,20 @@ input.input-inline {
 	.select2-container {
 		margin: 0px;
 	}
-
-	h4 {
-		border-bottom: 1px solid $color-lightgrey;
-		display: flex;
-		flex-direction: row;
-		height: 30px;
-		div:first-child {
-			flex-grow: 1;
-			padding: 15px 0 5px 0;
-			display: inline-block;
-
-		}
-	}
 	.section-header {
 		border-bottom: 1px solid $color-lightgrey;
 		display: flex;
-		flex-direction: row;
-		padding: 15px 0 5px 0;
-		margin: 10px 0 10px 0;
-
+		margin-bottom: 5px;
+		margin-top: 20px;
+		min-height: 30px;
 		h4 {
-			margin: 0;
+			padding-top: 5px;
+			padding-bottom: 5px;
 			border: none;
-			margin: 15px 0 5px 0;
+			flex: 1;
 		}
+
+
 	}
 
 	.save-indicator {
@@ -653,11 +642,6 @@ input.input-inline {
 		font-size: 80%;
 		opacity: 0.5;
 		text-align: right;
-	}
-
-	#card-tag-label {
-		padding-top: 0px !important;
-		margin-top: 0px;
 	}
 
 	#card-description {
@@ -996,6 +980,10 @@ input.input-inline {
 		margin-right: 7px;
 		vertical-align: top;
 	}
+}
+
+.select2-container-multi .select2-choices {
+	padding: 0 !important;
 }
 
 .select2-container-multi .select2-choices .select2-search-choice {
