@@ -139,21 +139,20 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 		CardService.update(element);
 		StackService.updateCard(element);
 	};
-
-	/**
-	 * Assigning users to cards
-	 */
-
+	
 	/**
 	 * Show ui-select field when clicking the add button
 	 */
 	$scope.showAssignUser = function() {
 		$scope.status.showAssignUser = true;
 		$timeout(function() {
-			$("#assignUserSelect").find('a')[0].click();
+			$("#assignUserSelect").find('a').click();
 		});
 	};
 
+	/**
+	 * Hide ui-select when select list is closed
+	 */
 	$scope.assingUserOpenClose = function(isOpen) {
 		if (!isOpen) {
 			$scope.status.showAssignUser = false;
@@ -161,12 +160,12 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 	};
 
 	$scope.addAssignedUser = function(item) {
+		CardService.assignUser(CardService.getCurrent(), item.uid);
 		$scope.status.showAssignUser = false;
-		$('assignUserSelect').hide();
-		console.log(a);
 	};
 
-	$scope.removeAssignedUser = function() {
-
+	$scope.removeAssignedUser = function(item) {
+		CardService.unassignUser(CardService.getCurrent(), item.participant.uid);
 	};
+
 });

@@ -98,7 +98,8 @@ app.factory('CardService', function(ApiService, $http, $q){
 	CardService.prototype.assignUser = function (card, user) {
 		var deferred = $q.defer();
 		var self = this;
-		$http.post(this.baseUrl + '/' + card.id + '/assign', {'user': user}).then(function (response) {
+		$http.post(this.baseUrl + '/' + card.id + '/assign', {'userId': user}).then(function (response) {
+			self.getCurrent().assignedUsers.push(response.data);
 			deferred.resolve(response.data);
 		}, function (error) {
 			deferred.reject('Error while update ' + self.endpoint);
@@ -110,7 +111,10 @@ app.factory('CardService', function(ApiService, $http, $q){
 	CardService.prototype.unassignUser = function (card, user) {
 		var deferred = $q.defer();
 		var self = this;
-		$http.delete(this.baseUrl + '/' + card.id + '/assign', {'user': user}).then(function (response) {
+		$http.delete(this.baseUrl + '/' + card.id + '/assign/' + user, {}).then(function (response) {
+			self.getCurrent().assignedUsers = self.getCurrent().assignedUsers.filter(function( obj ) {
+				return obj.participant.uid !== user;
+			});
 			deferred.resolve(response.data);
 		}, function (error) {
 			deferred.reject('Error while update ' + self.endpoint);
