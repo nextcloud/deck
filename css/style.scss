@@ -174,7 +174,8 @@ input.input-inline {
 
 	> h2 {
 		white-space: nowrap;
-		padding: 7px;
+		padding: 8px 7px 5px;
+		margin: 0;
 	}
 
 	button {
@@ -389,7 +390,7 @@ input.input-inline {
 		text-overflow: ellipsis;
 	}
 
-	&.has-labels h3 {
+	&.has-labels h4 {
 		margin-top: 15px;
 	}
 
@@ -432,7 +433,7 @@ input.input-inline {
 			opacity: 1;
 		}
 
-		h3 {
+		h4 {
 			width: 100%;
 			padding: 0;
 			margin: 0 0 1px;
@@ -876,11 +877,14 @@ input.input-inline {
 		width: 16px;
 		height: 16px;
 		padding: 0;
-		margin-top: 5px;
+		margin-top: 10px;
 	}
 
+	.sharingOptionsGroup {
+		margin-right:10px;
+	}
 	.shareOption {
-		margin-top: 4px;
+		margin-top: 5px;
 	}
 
 	.avatardiv {
