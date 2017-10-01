@@ -350,6 +350,20 @@ input.input-inline {
 		padding: 5px;
 	}
 
+	.card-assigned-users {
+		display: flex;
+		justify-content: flex-end;
+		flex-grow: 1;
+		.assigned-user {
+			margin-right: 5px;
+			z-index: 4;
+		}
+		.avatardiv, .avatardiv img {
+			width: 26px !important;
+			height: 26px !important;
+		}
+	}
+
 	.card-controls {
 		padding: 10px;
 		background: $color-lightgrey;
@@ -357,10 +371,7 @@ input.input-inline {
 		position: relative;
 
 		.card-options {
-			opacity: 0.3;
-			position: absolute;
-			right: 10px;
-			top: 8px;
+			justify-content: flex-end;
 		}
 
 		&:hover .card-options {
@@ -374,6 +385,8 @@ input.input-inline {
 		button {
 			padding: 0px;
 			margin-right: 0px;
+			margin-top: 5px;
+			margin-left: 5px;
 		}
 	}
 

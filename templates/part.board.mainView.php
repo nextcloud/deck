@@ -70,6 +70,11 @@
 								<i class="icon icon-badge"></i>
 								<span data-timestamp="{{ c.duedate | dateToTimestamp }}" class="live-relative-timestamp">{{ c.duedate | relativeDateFilterString }}</span>
 							</span>
+							<div class="card-assigned-users">
+								<div class="assigned-user" ng-repeat="user in c.assignedUsers | limitTo: 3">
+									<div class="avatardiv" avatar ng-attr-displayname="{{ user.participant.uid }}"></div>
+								</div>
+							</div>
 							<div class="app-popover-menu-utils" ng-if="!boardservice.isArchived()">
 								<button class="button-inline card-options icon-more" ng-model="card"></button>
 								<div class="popovermenu hidden">

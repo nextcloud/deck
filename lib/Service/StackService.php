@@ -26,7 +26,7 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\LabelMapper;
-
+use OCA\Deck\Db\AssignedUsersMapper;
 
 use OCA\Deck\Db\Stack;
 
@@ -42,12 +42,13 @@ class StackService {
 	private $permissionService;
 	private $boardService;
 
-	public function __construct(StackMapper $stackMapper, CardMapper $cardMapper, LabelMapper $labelMapper, PermissionService $permissionService, BoardService $boardService) {
+	public function __construct(StackMapper $stackMapper, CardMapper $cardMapper, LabelMapper $labelMapper, PermissionService $permissionService, BoardService $boardService, AssignedUsersMapper $assignedUsersMapper) {
 		$this->stackMapper = $stackMapper;
 		$this->cardMapper = $cardMapper;
 		$this->labelMapper = $labelMapper;
 		$this->permissionService = $permissionService;
 		$this->boardService = $boardService;
+		$this->assignedUsersMapper = $assignedUsersMapper;
 	}
 
 	public function findAll($boardId) {
@@ -57,6 +58,8 @@ class StackService {
 		foreach ($stacks as $stackIndex => $stack) {
 			$cards = $this->cardMapper->findAll($stack->id);
 			foreach ($cards as $cardIndex => $card) {
+				$assignedUsers = $this->assignedUsersMapper->find($card->getId());
+				$card->setAssignedUsers($assignedUsers);
 				if (array_key_exists($card->id, $labels)) {
 					$cards[$cardIndex]->setLabels($labels[$card->id]);
 				}
