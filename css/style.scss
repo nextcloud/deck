@@ -644,6 +644,31 @@ input.input-inline {
 		text-align: right;
 	}
 
+	.card-details-assigned-users {
+		display: flex;
+
+		.assigned-user {
+			position: relative;
+
+			.avatardiv {
+				margin-right:5px;
+			}
+			.icon-delete {
+				display: none;
+				position: absolute;
+				top: 8px;
+				left: 8px;
+			}
+			&:hover .icon-delete {
+				display: inline-block;
+				cursor: pointer;
+			}
+			&:hover .avatardiv {
+				opacity: .7;
+			}
+		}
+	}
+
 	#card-description {
 		height: 100%;
 		display: flex;
@@ -982,11 +1007,11 @@ input.input-inline {
 	}
 }
 
-.select2-container-multi .select2-choices {
+.select2-container .select2-choices {
 	padding: 0 !important;
 }
 
-.select2-container-multi .select2-choices .select2-search-choice {
+.select2-container .select2-choices .select2-search-choice {
 	padding: 3px 0 !important;
 	border: 0 !important;
 	overflow: hidden;

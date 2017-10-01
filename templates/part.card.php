@@ -53,17 +53,23 @@
 		<h4><?php p($l->t('Assign users')); ?></h4>
 		<button class="button icon-add" ng-click="showAssignUser()"></button>
 	</div>
-	<ui-select id="assignUserSelect" theme="select2" style="width:100%;"
+	<ui-select id="assignUserSelect" ng-model="status.assignedUser" ng-show="status.showAssignUser" uis-open-close="assingUserOpenClose(isOpen)"
+			   theme="select2" style="width:100%;"
 			   title="Choose a user to assign" placeholder="Choose a user to assign"
-			   on-select="addAssignedUser($item)" search-enabled="true" ng-show="status.showAssignUser" uis-open-close="assingUserOpenClose(isOpen)">
+			   on-select="addAssignedUser($item)">
 		<ui-select-match placeholder="<?php p($l->t('Assign this card to a user')); ?>">
 			<span><i class="icon icon-{{$item.type}}"></i> {{ $item.participant.displayname }}</span>
 		</ui-select-match>
-		<ui-select-choices refresh="searchUsers($select.search)" refresh-delay="0" repeat="user in boardservice.getCurrent().users">
+		<ui-select-choices repeat="user in boardservice.getCurrent().users| filter: $select.search track by user.uid">
 			<div class="avatardiv" avatar ng-attr-displayname="{{ user.uid }}" ng-if="boardservice.id"></div><span>{{ user.displayname }}</span>
 		</ui-select-choices>
 	</ui-select>
-	<div class="avatardiv" avatar ng-attr-displayname="{{ boardservice.getCurrent().owner.uid }}" ng-if="boardservice.id"></div>
+	<div class="section-content card-details-assigned-users">
+		<div class="assigned-user" ng-repeat="user in cardservice.getCurrent().assignedUsers">
+			<div class="avatardiv" avatar ng-attr-displayname="{{ user.participant.uid }}"></div>
+			<div class="icon icon-delete" ng-click="removeAssignedUser(user)"></div>
+		</div>
+	</div>
 
 	<div class="section-header">
 		<h4>
