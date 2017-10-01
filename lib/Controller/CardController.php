@@ -144,14 +144,14 @@ class CardController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function assignUser($cardId, $userId) {
-		//$this->cardService->removeLabel($cardId, $labelId);
+		return $this->cardService->assignUser($cardId, $userId);
 	}
 
 	/**
 	 * @NoAdminRequired
 	 */
 	public function unassignUser($cardId, $userId) {
-		//$this->cardService->removeLabel($cardId, $labelId);
+		return $this->cardService->unassignUser($cardId, $userId);
 	}
 
 

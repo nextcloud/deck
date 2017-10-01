@@ -25,7 +25,6 @@
 namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\Entity;
-use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IUserManager;
 
@@ -58,7 +57,24 @@ class AssignedUsersMapper extends DeckMapper implements IPermissionMapper {
 
 	public function findBoardId($cardId) {
 		return $this->cardMapper->findBoardId($cardId);
+	}
 
+	/**
+	 * Check if user exists before assigning it to a card
+	 *
+	 * @param Entity $entity
+	 * @return null|Entity
+	 */
+	public function insert(Entity $entity) {
+		$user = $this->userManager->get($entity->getParticipant());
+		if ($user !== null) {
+			/** @var AssignedUsers $assignment */
+			$assignment = parent::insert($entity);
+			$this->mapParticipant($assignment);
+			return $assignment;
+		} else {
+			return null;
+		}
 	}
 
 	public function mapParticipant(AssignedUsers &$assignment) {
