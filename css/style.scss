@@ -644,27 +644,34 @@ input.input-inline {
 		text-align: right;
 	}
 
-	.card-details-assigned-users {
-		display: flex;
+	.card-details-assign-users {
 
-		.assigned-user {
-			position: relative;
+		.select2 .ui-select-choices-row-inner {
+			display: flex;
+			padding: 5px !important;
+		}
 
-			.avatardiv {
-				margin-right:5px;
-			}
-			.icon-delete {
-				display: none;
-				position: absolute;
-				top: 8px;
-				left: 8px;
-			}
-			&:hover .icon-delete {
-				display: inline-block;
-				cursor: pointer;
-			}
-			&:hover .avatardiv {
-				opacity: .7;
+		.card-details-assign-users-list {
+			display: flex;
+			.assigned-user {
+				position: relative;
+
+				.avatardiv {
+					margin-right: 5px;
+				}
+				.icon-delete {
+					display: none;
+					position: absolute;
+					top: 8px;
+					left: 8px;
+				}
+				&:hover .icon-delete {
+					display: inline-block;
+					cursor: pointer;
+				}
+				&:hover .avatardiv {
+					opacity: .7;
+				}
 			}
 		}
 	}
