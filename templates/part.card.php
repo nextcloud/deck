@@ -51,18 +51,17 @@
 	</div>
 	<div class="section-header">
 		<h4><?php p($l->t('Assign users')); ?></h4>
-		<button class="button icon-add"></button>
+		<button class="button icon-add" ng-click="showAssignUser()"></button>
 	</div>
-	<ui-select ng-model="status.addSharee" theme="select2" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..." on-select="aclAdd(status.addSharee)" search-enabled="true">
+	<ui-select id="assignUserSelect" theme="select2" style="width:100%;"
+			   title="Choose a user to assign" placeholder="Choose a user to assign"
+			   on-select="addAssignedUser($item)" search-enabled="true" ng-show="status.showAssignUser" uis-open-close="assingUserOpenClose(isOpen)">
 		<ui-select-match placeholder="<?php p($l->t('Assign this card to a user')); ?>">
 			<span><i class="icon icon-{{$item.type}}"></i> {{ $item.participant.displayname }}</span>
 		</ui-select-match>
-		<ui-select-choices refresh="searchForUser($select.search)" refresh-delay="0" repeat="sharee in boardservice.sharees">
-			<span><i class="icon icon-{{sharee.type}}"></i> {{ sharee.participant.displayname }}</span>
+		<ui-select-choices refresh="searchUsers($select.search)" refresh-delay="0" repeat="user in boardservice.getCurrent().users">
+			<div class="avatardiv" avatar ng-attr-displayname="{{ user.uid }}" ng-if="boardservice.id"></div><span>{{ user.displayname }}</span>
 		</ui-select-choices>
-		<ui-select-no-choice>
-			<?php p($l->t('No matching user or group found.')); ?>
-		</ui-select-no-choice>
 	</ui-select>
 	<div class="avatardiv" avatar ng-attr-displayname="{{ boardservice.getCurrent().owner.uid }}" ng-if="boardservice.id"></div>
 

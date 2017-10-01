@@ -18,7 +18,9 @@
 <div class="tabsContainer">
     <div id="commentsTabView" class="tab commentsTabView" ng-if="status.boardtab==0 || !status.boardtab">
 
-        <ui-select ng-if="boardservice.canShare()" ng-model="status.addSharee" theme="select2" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..." on-select="aclAdd(status.addSharee)" search-enabled="true">
+        <ui-select ng-if="boardservice.canShare()" ng-model="status.addSharee" theme="select2" style="width:100%;"
+				   title="Choose a user to assign" placeholder="Assign users ..."
+				   on-select="aclAdd(status.addSharee)" search-enabled="true">
             <ui-select-match placeholder="<?php p($l->t('Select users or groups to share with')); ?>">
                 <span><i class="icon icon-{{$item.type}}"></i> {{ $item.participant.displayname }}</span>
             </ui-select-match>
