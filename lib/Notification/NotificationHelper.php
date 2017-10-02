@@ -52,11 +52,13 @@ class NotificationHelper {
 		CardMapper $cardMapper,
 		BoardMapper $boardMapper,
 		IManager $notificationManager,
+		IGroupManager $groupManager,
 		$userId
 	) {
 		$this->cardMapper = $cardMapper;
 		$this->boardMapper = $boardMapper;
 		$this->notificationManager = $notificationManager;
+		$this->groupManager = $groupManager;
 		$this->currentUser = $userId;
 	}
 
@@ -100,7 +102,6 @@ class NotificationHelper {
 			$this->notificationManager->notify($notification);
 		}
 		if ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
-			$this->groupManager = \OC::$server->getGroupManager();
 			$group = $this->groupManager->get($acl->getParticipant());
 			foreach ($group->getUsers() as $user) {
 				$notification = $this->generateBoardShared($board, $user->getUID());
@@ -139,7 +140,7 @@ class NotificationHelper {
 				$users[] = $acl->getParticipant();
 			}
 			if ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
-				$group = \OC::$server->getGroupManager()->get($acl->getParticipant());
+				$group = $this->groupManager->get($acl->getParticipant());
 				/** @var IUser $user */
 				foreach ($group->getUsers() as $user) {
 					$users[] = $user->getUID();

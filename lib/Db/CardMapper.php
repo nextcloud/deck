@@ -23,21 +23,31 @@
 
 namespace OCA\Deck\Db;
 
-use OC\Notification\Notification;
 use OCP\AppFramework\Db\Entity;
 use OCP\IDBConnection;
 use OCP\IUserManager;
+use OCP\Notification\IManager;
 
 
 class CardMapper extends DeckMapper implements IPermissionMapper {
 
+	/** @var LabelMapper */
 	private $labelMapper;
+	/** @var IUserManager */
 	private $userManager;
+	/** @var Manager */
+	private $notificationManager;
 
-	public function __construct(IDBConnection $db, LabelMapper $labelMapper, IUserManager $userManager) {
+	public function __construct(
+		IDBConnection $db,
+		LabelMapper $labelMapper,
+		IUserManager $userManager,
+		IManager $notificationManager
+	) {
 		parent::__construct($db, 'deck_cards', '\OCA\Deck\Db\Card');
 		$this->labelMapper = $labelMapper;
 		$this->userManager = $userManager;
+		$this->notificationManager = $notificationManager;
 	}
 
 	public function insert(Entity $entity) {
@@ -55,10 +65,13 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 			$existing = $this->find($entity->getId());
 			if ($existing->getDuedate() !== $entity->getDuedate())
 				$entity->setNotified(false);
+			// remove pending notifications
+			$notification = $this->notificationManager->createNotification();
+			$notification
+				->setApp('deck')
+				->setObject('card', $entity->getId());
+			$this->notificationManager->markProcessed($notification);
 		}
-
-		// TODO: also remove pending notifications
-
 		return parent::update($entity);
 	}
 
@@ -75,6 +88,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 	public function find($id) {
 		$sql = 'SELECT * FROM `*PREFIX*deck_cards` ' .
 			'WHERE `id` = ?';
+		/** @var Card $card */
 		$card = $this->findEntity($sql, [$id]);
 		$labels = $this->labelMapper->findAssignedLabelsForCard($card->id);
 		$card->setLabels($labels);
