@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Db;
 
+use OC\Notification\Notification;
 use OCP\AppFramework\Db\Entity;
 use OCP\IDBConnection;
 use OCP\IUserManager;
