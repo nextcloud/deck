@@ -35,10 +35,17 @@ use OCA\Deck\Db\BoardMapper;
 
 class DeleteCron extends Job {
 
+	/** @var BoardMapper */
+	private $boardMapper;
+
 	public function __construct(BoardMapper $boardMapper) {
 		$this->boardMapper = $boardMapper;
 	}
 
+	/**
+	 * @param $argument
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
 	protected function run($argument) {
 		$boards = $this->boardMapper->findToDelete();
 		foreach ($boards as $board) {
