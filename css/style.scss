@@ -82,6 +82,21 @@ input.input-inline {
 }
 
 #app-navigation {
+	/** menu */
+	.board-bullet {
+		position: absolute;
+		margin-left: 17px;
+		margin-top: 16px;
+		width: 12px;
+		height: 12px;
+		border: none;
+		border-radius: 50%;
+		cursor: pointer;
+	}
+	.app-navigation-entry-utils-menu-share i {
+		height: 100%;
+		width: 100%;
+	}
 	.app-navigation-entry-edit {
 		height: auto;
 
@@ -93,31 +108,6 @@ input.input-inline {
 		}
 	}
 
-	.board-bullet {
-		position: absolute;
-		margin-left: 17px;
-		margin-top: 16px;
-		width: 12px;
-		height: 12px;
-		border: none;
-		border-radius: 50%;
-		cursor: pointer;
-	}
-
-	.app-navigation-entry-utils {
-		.app-navigation-entry-utils-menu-button {
-			display: block !important; // TODO: is this needed?
-		}
-
-		.app-navigation-entry-utils-menu-share {
-			display: flex !important;
-			padding: 14px;
-			opacity: 0.5;
-		}
-	}
-	.app-navigation-entry-menu ul {
-		flex-direction: row;
-	}
 }
 
 /**
