@@ -24,6 +24,7 @@
 namespace OCA\Deck\Service;
 
 
+use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\StackMapper;
@@ -40,27 +41,36 @@ class CardServiceTest extends TestCase {
     private $stackMapper;
     /** @var PermissionService|\PHPUnit_Framework_MockObject_MockObject */
     private $permissionService;
+    /** @var AssignedUsersMapper|\PHPUnit_Framework_MockObject_MockObject */
+    private $assignedUsersMapper;
 	/** @var BoardService|\PHPUnit_Framework_MockObject_MockObject */
 	private $boardService;
 
     public function setUp() {
 		parent::setUp();
-        $this->cardMapper = $this->getMockBuilder(CardMapper::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->stackMapper = $this->getMockBuilder(StackMapper::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->permissionService = $this->getMockBuilder(PermissionService::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->cardMapper = $this->createMock(CardMapper::class);
+        $this->stackMapper = $this->createMock(StackMapper::class);
+        $this->permissionService = $this->createMock(PermissionService::class);
         $this->boardService = $this->createMock(BoardService::class);
-        $this->cardService = new CardService($this->cardMapper, $this->stackMapper, $this->permissionService, $this->boardService);
+        $this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
+        $this->cardService = new CardService($this->cardMapper, $this->stackMapper, $this->permissionService, $this->boardService, $this->assignedUsersMapper);
     }
 
     public function testFind() {
+    	$card = new Card();
+    	$card->setId(1337);
         $this->cardMapper->expects($this->once())
             ->method('find')
             ->with(123)
-            ->willReturn(1);
-        $this->assertEquals(1, $this->cardService->find(123));
+            ->willReturn($card);
+        $this->assignedUsersMapper->expects($this->once())
+			->method('find')
+			->with(1337)
+			->willReturn(['user1', 'user2']);
+		$cardExpected = new Card();
+		$cardExpected->setId(1337);
+		$cardExpected->setAssignedUsers(['user1', 'user2']);
+        $this->assertEquals($cardExpected, $this->cardService->find(123));
     }
 
     public function testCreate() {
