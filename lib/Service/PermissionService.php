@@ -51,7 +51,7 @@ class PermissionService {
 	/** @var string */
 	private $userId;
 	/** @var array */
-	private $users;
+	private $users = [];
 
 	public function __construct(
 		ILogger $logger,
@@ -196,24 +196,24 @@ class PermissionService {
 		} catch (DoesNotExistException $e) {
 			return [];
 		}
-		$users = [
-			new User($this->userManager->get($board->getOwner()))
-		];
+		$owner = $this->userManager->get($board->getOwner());
+		$users = [];
+		$users[$owner->getUID()] = new User($owner);
 		$acls = $this->aclMapper->findAll($boardId);
 		/** @var Acl $acl */
 		foreach ($acls as $acl) {
 			if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
 				$user = $this->userManager->get($acl->getParticipant());
-				$users[] = new User($user);
+				$users[$user->getUID()] = new User($user);
 			}
 			if($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
 				$group = $this->groupManager->get($acl->getParticipant());
 				foreach ($group->getUsers() as $user) {
-					$users[] = new User($user);
+					$users[$user->getUID()] = new User($user);
 				}
 			}
 		}
-		$this->users[(string)$boardId] = array_unique($users);
-		return $this->users;
+		$this->users[(string)$boardId] = $users;
+		return $this->users[(string)$boardId];
 	}
 }

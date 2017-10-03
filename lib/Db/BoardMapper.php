@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Db;
 
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IDBConnection;
 use OCP\IUserManager;
 use OCP\IGroupManager;
@@ -56,7 +57,8 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	 * @param $id
 	 * @param bool $withLabels
 	 * @param bool $withAcl
-	 * @return \OCP\AppFramework\Db\Entity if not found
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws DoesNotExistException
 	 */
 	public function find($id, $withLabels = false, $withAcl = false) {
 		$sql = 'SELECT id, title, owner, color, archived, deleted_at FROM `*PREFIX*deck_boards` ' .
