@@ -32,17 +32,23 @@ use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IGroupManager;
 use OCP\ILogger;
+use OCP\IUserManager;
 
 class PermissionServiceTest extends \PHPUnit_Framework_TestCase {
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|PermissionService */
+	/** @var PermissionService*/
 	private $service;
-    /** @var \PHPUnit_Framework_MockObject_MockObject|ILogger */
+    /** @var ILogger */
 	private $logger;
+	/** @var AclMapper */
 	private $aclMapper;
-    /** @var \PHPUnit_Framework_MockObject_MockObject|BoardMapper */
+    /** @var BoardMapper */
     private $boardMapper;
+    /** @var IUserManager */
+    private $userManager;
+    /** @var IGroupManager */
 	private $groupManager;
+	/** @var string */
 	private $userId = 'admin';
 
 	public function setUp() {
@@ -54,6 +60,7 @@ class PermissionServiceTest extends \PHPUnit_Framework_TestCase {
 			->disableOriginalConstructor()->getMock();
 		$this->boardMapper = $this->getMockBuilder(BoardMapper::class)
 			->disableOriginalConstructor()->getMock();
+		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->getMockBuilder(IGroupManager::class)
 			->disableOriginalConstructor()->getMock();
 
@@ -61,6 +68,7 @@ class PermissionServiceTest extends \PHPUnit_Framework_TestCase {
 			$this->logger,
 			$this->aclMapper,
 			$this->boardMapper,
+			$this->userManager,
 			$this->groupManager,
 			'admin'
 		);
