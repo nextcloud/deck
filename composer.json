@@ -1,0 +1,15 @@
+{
+    "name": "nextcloud/deck",
+    "type": "project",
+    "license": "AGPLv3",
+    "authors": [
+        {
+            "name": "Julius Härtl",
+            "email": "jus@bitgrid.net"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "christophwurst/nextcloud": "^12.0"
+    }
+}
