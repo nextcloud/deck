@@ -184,14 +184,18 @@ class PermissionService {
 	 * Required to allow assigning them to cards
 	 *
 	 * @param $boardId
-	 * @return array|null
+	 * @return array
 	 */
 	public function findUsers($boardId) {
 		// cache users of a board so we don't query them for every cards
 		if (array_key_exists((string)$boardId, $this->users)) {
 			return $this->users[(string)$boardId];
 		}
-		$board = $this->boardMapper->find($boardId);
+		try {
+			$board = $this->boardMapper->find($boardId);
+		} catch (DoesNotExistException $e) {
+			return [];
+		}
 		$users = [
 			new User($this->userManager->get($board->getOwner()))
 		];
