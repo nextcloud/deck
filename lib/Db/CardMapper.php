@@ -35,7 +35,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 	private $labelMapper;
 	/** @var IUserManager */
 	private $userManager;
-	/** @var Manager */
+	/** @var IManager */
 	private $notificationManager;
 
 	public function __construct(
