@@ -24,13 +24,16 @@
 namespace OCA\Deck\Notification;
 
 
+use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\User;
 use OCA\Deck\Service\PermissionService;
+use OCP\IGroup;
 use OCP\IGroupManager;
+use OCP\IUser;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 
@@ -179,9 +182,74 @@ class NotificationHelperTest extends \Test\TestCase {
 			->with($card);
 
 		$this->notificationHelper->sendCardDuedate($card);
-
 	}
 
+	public function testSendBoardSharedUser() {
+		$board = new Board();
+		$board->setId(123);
+		$board->setTitle('MyBoardTitle');
+		$acl = new Acl();
+		$acl->setParticipant('userA');
+		$acl->setType(Acl::PERMISSION_TYPE_USER);
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($board);
+		$notification = $this->createMock(INotification::class);
+		$notification->expects($this->once())->method('setApp')->with('deck')->willReturn($notification);
+		$notification->expects($this->once())->method('setUser')->with('userA')->willReturn($notification);
+		$notification->expects($this->once())->method('setObject')->with('board', 123)->willReturn($notification);
+		$notification->expects($this->once())->method('setSubject')->with('board-shared', ['MyBoardTitle', 'admin'])->willReturn($notification);
+		$notification->expects($this->once())->method('setDateTime')->willReturn($notification);
+
+		$this->notificationManager->expects($this->at(0))
+			->method('createNotification')
+			->willReturn($notification);
+		$this->notificationManager->expects($this->at(1))
+			->method('notify')
+			->with($notification);
+
+		$this->notificationHelper->sendBoardShared(123, $acl);
+	}
+
+	public function testSendBoardSharedGroup() {
+		$board = new Board();
+		$board->setId(123);
+		$board->setTitle('MyBoardTitle');
+		$acl = new Acl();
+		$acl->setParticipant('groupA');
+		$acl->setType(Acl::PERMISSION_TYPE_GROUP);
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($board);
+		$user = $this->createMock(IUser::class);
+		$user->expects($this->once())
+			->method('getUID')
+			->willReturn('userA');
+		$group = $this->createMock(IGroup::class);
+		$group->expects($this->once())
+			->method('getUsers')
+			->willReturn([$user]);
+		$this->groupManager->expects($this->once())
+			->method('get')
+			->willReturn($group);
+		$notification = $this->createMock(INotification::class);
+		$notification->expects($this->once())->method('setApp')->with('deck')->willReturn($notification);
+		$notification->expects($this->once())->method('setUser')->with('userA')->willReturn($notification);
+		$notification->expects($this->once())->method('setObject')->with('board', 123)->willReturn($notification);
+		$notification->expects($this->once())->method('setSubject')->with('board-shared', ['MyBoardTitle', 'admin'])->willReturn($notification);
+		$notification->expects($this->once())->method('setDateTime')->willReturn($notification);
+
+		$this->notificationManager->expects($this->at(0))
+			->method('createNotification')
+			->willReturn($notification);
+		$this->notificationManager->expects($this->at(1))
+			->method('notify')
+			->with($notification);
+
+		$this->notificationHelper->sendBoardShared(123, $acl);
+	}
 
 
 }
