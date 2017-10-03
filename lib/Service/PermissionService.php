@@ -28,24 +28,43 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\IPermissionMapper;
+use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IGroupManager;
 use OCP\ILogger;
-
+use OCP\IUserManager;
 
 
 class PermissionService {
 
+	/** @var BoardMapper */
 	private $boardMapper;
+	/** @var AclMapper */
 	private $aclMapper;
+	/** @var ILogger */
 	private $logger;
+	/** @var IUserManager */
+	private $userManager;
+	/** @var IGroupManager */
+	private $groupManager;
+	/** @var string */
 	private $userId;
+	/** @var array */
+	private $users;
 
-	public function __construct(ILogger $logger, AclMapper $aclMapper, BoardMapper $boardMapper, IGroupManager $groupManager, $userId) {
+	public function __construct(
+		ILogger $logger,
+		AclMapper $aclMapper,
+		BoardMapper $boardMapper,
+		IUserManager $userManager,
+		IGroupManager $groupManager,
+		$userId
+	) {
 		$this->aclMapper = $aclMapper;
 		$this->boardMapper = $boardMapper;
 		$this->logger = $logger;
+		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->userId = $userId;
 	}
@@ -158,5 +177,39 @@ class PermissionService {
 			}
 		}
 		return $hasGroupPermission;
+	}
+
+	/**
+	 * Find a list of all users (including the ones from groups)
+	 * Required to allow assigning them to cards
+	 *
+	 * @param $boardId
+	 * @return array|null
+	 */
+	public function findUsers($boardId) {
+		// cache users of a board so we don't query them for every cards
+		if (array_key_exists((string)$boardId, $this->users)) {
+			return $this->users[(string)$boardId];
+		}
+		$board = $this->boardMapper->find($boardId);
+		$users = [
+			new User($this->userManager->get($board->getOwner()))
+		];
+		$acls = $this->aclMapper->findAll($boardId);
+		/** @var Acl $acl */
+		foreach ($acls as $acl) {
+			if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
+				$user = $this->userManager->get($acl->getParticipant());
+				$users[] = new User($user);
+			}
+			if($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
+				$group = $this->groupManager->get($acl->getParticipant());
+				foreach ($group->getUsers() as $user) {
+					$users[] = new User($user);
+				}
+			}
+		}
+		$this->users[(string)$boardId] = array_unique($users);
+		return $this->users;
 	}
 }

@@ -25,8 +25,10 @@ namespace OCA\Deck\Notification;
 
 use DateTime;
 use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Service\PermissionService;
 use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\Notification\IManager;
@@ -37,6 +39,8 @@ class NotificationHelper {
 	protected $cardMapper;
 	/** @var BoardMapper */
 	protected $boardMapper;
+	/** @var PermissionService */
+	protected $permissionService;
 	/** @var IManager */
 	protected $notificationManager;
 	/** @var IGroupManager */
@@ -44,19 +48,19 @@ class NotificationHelper {
 	/** @var string */
 	protected $currentUser;
 	/** @var array */
-	private $users = [];
-	/** @var array */
 	private $boards = [];
 
 	public function __construct(
 		CardMapper $cardMapper,
 		BoardMapper $boardMapper,
+		PermissionService $permissionService,
 		IManager $notificationManager,
 		IGroupManager $groupManager,
 		$userId
 	) {
 		$this->cardMapper = $cardMapper;
 		$this->boardMapper = $boardMapper;
+		$this->permissionService = $permissionService;
 		$this->notificationManager = $notificationManager;
 		$this->groupManager = $groupManager;
 		$this->currentUser = $userId;
@@ -73,15 +77,16 @@ class NotificationHelper {
 
 		// TODO: Once assigning users is possible, those should be notified instead of all users of the board
 		$boardId = $this->cardMapper->findBoardId($card->getId());
+		$board = $this->getBoard($boardId);
 		/** @var IUser $user */
-		foreach ($this->getUsers($boardId) as $user) {
+		foreach ($this->permissionService->findUsers($boardId) as $user) {
 			$notification = $this->notificationManager->createNotification();
 			$notification
 				->setApp('deck')
-				->setUser($user)
+				->setUser($user->getUID())
 				->setObject('card', $card->getId())
 				->setSubject('card-overdue', [
-					$card->getTitle(), $this->boards[(string)$boardId]->getTitle()
+					$card->getTitle(), $board->getTitle()
 				])
 				->setDateTime(new DateTime($card->getDuedate()));
 			$this->notificationManager->notify($notification);
@@ -96,7 +101,7 @@ class NotificationHelper {
 	 * @param $acl
 	 */
 	public function sendBoardShared($boardId, $acl) {
-		$board = $this->boardMapper->find($boardId);
+		$board = $this->getBoard($boardId);
 		if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
 			$notification = $this->generateBoardShared($board, $acl->getParticipant());
 			$this->notificationManager->notify($notification);
@@ -110,6 +115,17 @@ class NotificationHelper {
 		}
 	}
 
+	/**
+	 * @param $boardId
+	 * @return Board
+	 */
+	private function getBoard($boardId) {
+		if (!array_key_exists($boardId, $this->boards)) {
+			$this->boards[$boardId] = $this->boardMapper->find($boardId);
+		}
+		return $this->boards[$boardId];
+	}
+
 	private function generateBoardShared($board, $userId) {
 		$notification = $this->notificationManager->createNotification();
 		$notification
@@ -119,36 +135,6 @@ class NotificationHelper {
 			->setObject('board', $board->getId())
 			->setSubject('board-shared', [$board->getTitle(), $this->currentUser]);
 		return $notification;
-	}
-
-	/**
-	 * Get users that have access to a board
-	 *
-	 * @param $boardId
-	 * @return mixed
-	 */
-	private function getUsers($boardId) {
-		// cache users of a board so we don't query them for every cards
-		if (array_key_exists((string)$boardId, $this->users)) {
-			return $this->users[(string)$boardId];
-		}
-		$this->boards[(string)$boardId] = $this->boardMapper->find($boardId, false, true);
-		$users = [$this->boards[(string)$boardId]->getOwner()];
-		/** @var Acl $acl */
-		foreach ($this->boards[(string)$boardId]->getAcl() as $acl) {
-			if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
-				$users[] = $acl->getParticipant();
-			}
-			if ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
-				$group = $this->groupManager->get($acl->getParticipant());
-				/** @var IUser $user */
-				foreach ($group->getUsers() as $user) {
-					$users[] = $user->getUID();
-				}
-			}
-		}
-		$this->users[(string)$boardId] = array_unique($users);
-		return $this->users[(string)$boardId];
 	}
 
 }
