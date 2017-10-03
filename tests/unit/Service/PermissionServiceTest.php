@@ -28,10 +28,13 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\IPermissionMapper;
+use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\ILogger;
+use OCP\IUser;
 use OCP\IUserManager;
 
 class PermissionServiceTest extends \PHPUnit_Framework_TestCase {
@@ -73,7 +76,6 @@ class PermissionServiceTest extends \PHPUnit_Framework_TestCase {
 			'admin'
 		);
 	}
-
 
 	public function testGetPermissionsOwner() {
 		$board = new Board();
@@ -295,5 +297,73 @@ class PermissionServiceTest extends \PHPUnit_Framework_TestCase {
         return $result;
     }
 
+	public function testFindUsersFail() {
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(123)
+			->will($this->throwException(new DoesNotExistException('')));
+		$users = $this->service->findUsers(123);
+		$this->assertEquals([], $users);
+	}
+
+	/**
+	 * @param $uid
+	 * @return IUser
+	 */
+	private function mockUser($uid) {
+		$user = $this->createMock(IUser::class);
+		$user->expects($this->any())
+			->method('getUID')
+			->willReturn($uid);
+		return $user;
+	}
+
+	public function testFindUsers() {
+		$user1 = $this->mockUser('user1');
+		$user2 = $this->mockUser('user2');
+		$user3 = $this->mockUser('user3');
+		$aclUser = new Acl();
+		$aclUser->setType(Acl::PERMISSION_TYPE_USER);
+		$aclUser->setParticipant('user2');
+		$aclGroup = new Acl();
+		$aclGroup->setType(Acl::PERMISSION_TYPE_GROUP);
+		$aclGroup->setParticipant('group1');
+
+		$board = $this->createMock(Board::class);
+		$board->expects($this->at(0))
+			->method('__call')
+			->with('getOwner', [])
+			->willReturn('user1');
+		$this->aclMapper->expects($this->once())
+			->method('findAll')
+			->with(123)
+			->willReturn([$aclUser, $aclGroup]);
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($board);
+		$this->userManager->expects($this->at(0))
+			->method('get')
+			->with('user1')
+			->willReturn($user1);
+		$this->userManager->expects($this->at(1))
+			->method('get')
+			->with('user2')
+			->willReturn($user2);
+		$group = $this->createMock(IGroup::class);
+		$group->expects($this->once())
+			->method('getUsers')
+			->willReturn([$user3]);
+		$this->groupManager->expects($this->once())
+			->method('get')
+			->with('group1')
+			->willReturn($group);
+		$users = $this->service->findUsers(123);
+		$this->assertEquals([
+			'user1' => new User($user1),
+			'user2' => new User($user2),
+			'user3' => new User($user3),
+		], $users);
+	}
 
 }
