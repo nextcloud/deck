@@ -5,9 +5,10 @@
 	<li ng-class="{active: status.filter === 'shared'}"><a ui-sref="list({ filter: 'shared' })" class="icon-share"><?php p($l->t('Shared boards')); ?></a></li>
 
 	<li class="with-icon with-menu" ng-class="{active: b.id === boardservice.getCurrent().id}" data-ng-repeat="b in boardservice.sidebar" ng-if="b.deletedAt == 0">
+
 		<span class="board-bullet"  ng-style="{'background-color':'#{{b.color}}'}" ng-if="!b.status.edit"> </span>
 		<a href="#!/board/{{b.id}}/" ng-if="!b.status.edit">{{ b.title }}</a>
-		<div class="app-navigation-entry-utils" ng-show="!b.status.edit" style="position:absolute;">
+		<div class="app-navigation-entry-utils" ng-show="!b.status.edit">
 			<ul>
 				<li class="app-navigation-entry-utils-menu-share svg" ng-if="b.shared>0"><i class="icon icon-share" title="<?php p($l->t('Shared with you')); ?>"><span class="hidden-visually"><?php p($l->t('Shared with you')); ?></span></i></li>
 				<li class="app-navigation-entry-utils-menu-button svg" ng-show="!status.deleteUndo[b.id]"><button class="icon-more" title="<?php p($l->t('View more')); ?>"><span class="hidden-visually"><?php p($l->t('View more')); ?></span></button></li>
@@ -15,10 +16,15 @@
 		</div>
 		<div class="app-navigation-entry-menu app-navigation-noclose" ng-show="!b.status.edit">
 			<ul>
-				<li ng-show="boardservice.canManage(b)"><button class="icon-rename svg" title="<?php p($l->t('Edit board')); ?>" ng-click="b.status.edit=true"></button></li>
-				<li ng-show="boardservice.canManage(b)"><button class="icon-archive svg" title="<?php p($l->t('Move board to archive')); ?>" ng-click="boardArchive(b)"></button></li>
+				<li ng-show="boardservice.canManage(b)">
+					<button class="icon-rename svg" title="<?php p($l->t('Edit board')); ?>" ng-click="b.status.edit=true"></button>
+				</li>
+				<li ng-show="boardservice.canManage(b)">
+					<button class="icon-archive svg" title="<?php p($l->t('Move board to archive')); ?>" ng-click="boardArchive(b)"></button>
+				</li>
 			</ul>
 		</div>
+
 		<div class="app-navigation-entry-edit" ng-show="b.status.edit">
 			<form ng-disabled="isAddingList" class="ng-pristine ng-valid"  ng-submit="boardUpdate(b)">
 				<input id="newTitle" class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100">
