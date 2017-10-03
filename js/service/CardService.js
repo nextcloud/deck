@@ -98,8 +98,9 @@ app.factory('CardService', function(ApiService, $http, $q){
 	CardService.prototype.assignUser = function (card, user) {
 		var deferred = $q.defer();
 		var self = this;
-		if (self.getCurrent().assignedUsers === null)
+		if (self.getCurrent().assignedUsers === null) {
 			self.getCurrent().assignedUsers = [];
+		}
 		$http.post(this.baseUrl + '/' + card.id + '/assign', {'userId': user}).then(function (response) {
 			self.getCurrent().assignedUsers.push(response.data);
 			deferred.resolve(response.data);

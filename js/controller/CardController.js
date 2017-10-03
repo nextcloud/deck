@@ -146,7 +146,7 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 	$scope.showAssignUser = function() {
 		$scope.status.showAssignUser = true;
 		$timeout(function() {
-			$("#assignUserSelect").find('a').click();
+			$('#assignUserSelect').find('a').click();
 		});
 	};
 
