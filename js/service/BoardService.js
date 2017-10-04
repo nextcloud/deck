@@ -20,11 +20,12 @@
  *  
  */
 
-app.factory('BoardService', function(ApiService, $http, $q){
-    var BoardService = function($http, ep, $q) {
-        ApiService.call(this, $http, ep, $q);
-    };
-    BoardService.prototype = angular.copy(ApiService.prototype);
+/** global: OC */
+app.factory('BoardService', function (ApiService, $http, $q) {
+	var BoardService = function ($http, ep, $q) {
+		ApiService.call(this, $http, ep, $q);
+	};
+	BoardService.prototype = angular.copy(ApiService.prototype);
 
 	BoardService.prototype.delete = function (id) {
 		var deferred = $q.defer();
@@ -113,7 +114,7 @@ app.factory('BoardService', function(ApiService, $http, $q){
 		return deferred.promise;
 	};
 
-	BoardService.prototype.generateAcl = function(type, ocsItem) {
+	BoardService.prototype.generateAcl = function (type, ocsItem) {
 		return {
 			boardId: null,
 			id: null,
@@ -148,74 +149,73 @@ app.factory('BoardService', function(ApiService, $http, $q){
 		return deferred.promise;
 	};
 
-    BoardService.prototype.deleteAcl = function(acl) {
-        var board = this.getCurrent();
-        var deferred = $q.defer();
-        var self = this;
-        $http.delete(this.baseUrl + '/' + acl.boardId + '/acl/' + acl.id).then(function (response) {
-            delete board.acl[response.data.id];
-            deferred.resolve(response.data);
-        }, function (error) {
-            deferred.reject('Error deleting ACL ' + acl.id);
-        });
-        acl = null;
-        return deferred.promise;
-    };
+	BoardService.prototype.deleteAcl = function (acl) {
+		var board = this.getCurrent();
+		var deferred = $q.defer();
+		var self = this;
+		$http.delete(this.baseUrl + '/' + acl.boardId + '/acl/' + acl.id).then(function (response) {
+			delete board.acl[response.data.id];
+			deferred.resolve(response.data);
+		}, function (error) {
+			deferred.reject('Error deleting ACL ' + acl.id);
+		});
+		acl = null;
+		return deferred.promise;
+	};
 
-    BoardService.prototype.updateAcl = function(acl) {
-        var board = this.getCurrent();
-        var deferred = $q.defer();
-        var self = this;
-        var _acl = acl;
-        $http.put(this.baseUrl + '/' + acl.boardId + '/acl', _acl).then(function (response) {
-            board.acl[_acl.id] = response.data;
-            deferred.resolve(response.data);
-        }, function (error) {
-            deferred.reject('Error updating ACL ' + _acl);
-        });
-        acl = null;
-        return deferred.promise;
-    };
+	BoardService.prototype.updateAcl = function (acl) {
+		var board = this.getCurrent();
+		var deferred = $q.defer();
+		var self = this;
+		var _acl = acl;
+		$http.put(this.baseUrl + '/' + acl.boardId + '/acl', _acl).then(function (response) {
+			board.acl[_acl.id] = response.data;
+			deferred.resolve(response.data);
+		}, function (error) {
+			deferred.reject('Error updating ACL ' + _acl);
+		});
+		acl = null;
+		return deferred.promise;
+	};
 
-    BoardService.prototype.canRead = function() {
-        if(!this.getCurrent() || !this.getCurrent().permissions) {
-            return false;
-        }
-        return this.getCurrent().permissions['PERMISSION_READ'];
-    };
+	BoardService.prototype.canRead = function () {
+		if (!this.getCurrent() || !this.getCurrent().permissions) {
+			return false;
+		}
+		return this.getCurrent().permissions['PERMISSION_READ'];
+	};
 
-    BoardService.prototype.canEdit = function() {
-        if(!this.getCurrent() || !this.getCurrent().permissions) {
-            return false;
-        }
-        return this.getCurrent().permissions['PERMISSION_EDIT'];
-    };
+	BoardService.prototype.canEdit = function () {
+		if (!this.getCurrent() || !this.getCurrent().permissions) {
+			return false;
+		}
+		return this.getCurrent().permissions['PERMISSION_EDIT'];
+	};
 
-    BoardService.prototype.canManage = function(board) {
-    	if(board !== null && board !== undefined) {
+	BoardService.prototype.canManage = function (board) {
+		if (board !== null && board !== undefined) {
 			return board.permissions['PERMISSION_MANAGE'];
 		}
-        if(!this.getCurrent() || !this.getCurrent().permissions) {
-            return false;
-        }
-        return this.getCurrent().permissions['PERMISSION_MANAGE'];
-    };
+		if (!this.getCurrent() || !this.getCurrent().permissions) {
+			return false;
+		}
+		return this.getCurrent().permissions['PERMISSION_MANAGE'];
+	};
 
-    BoardService.prototype.canShare = function() {
-        if(!this.getCurrent() || !this.getCurrent().permissions) {
-            return false;
-        }
-        return this.getCurrent().permissions['PERMISSION_SHARE'];
-    };
+	BoardService.prototype.canShare = function () {
+		if (!this.getCurrent() || !this.getCurrent().permissions) {
+			return false;
+		}
+		return this.getCurrent().permissions['PERMISSION_SHARE'];
+	};
 
-    BoardService.prototype.isArchived = function () {
-		if(!this.getCurrent() || this.getCurrent().archived) {
+	BoardService.prototype.isArchived = function () {
+		if (!this.getCurrent() || this.getCurrent().archived) {
 			return true;
 		}
 		return false;
 	};
 
-    service = new BoardService($http, 'boards', $q);
-    return service;
-    
+	return new BoardService($http, 'boards', $q);
+
 });
