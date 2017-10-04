@@ -20,57 +20,58 @@
  *  
  */
 
+/** global: oc_requesttoken, markdownitLinkTarget */
+
 app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider, $compileProvider, markdownItConverterProvider) {
-    'use strict';
-    $httpProvider.defaults.headers.common.requesttoken = oc_requesttoken;
+	'use strict';
+	$httpProvider.defaults.headers.common.requesttoken = oc_requesttoken;
 
-    $compileProvider.debugInfoEnabled(true);
+	$compileProvider.debugInfoEnabled(true);
 
-    markdownItConverterProvider.config({
-        breaks: true,
-        linkify: true,
-        xhtmlOut: true
-    });
-    markdownItConverterProvider.use(markdownitLinkTarget);
+	markdownItConverterProvider.config({
+		breaks: true,
+		linkify: true,
+		xhtmlOut: true
+	});
+	markdownItConverterProvider.use(markdownitLinkTarget);
 
-    $urlRouterProvider.otherwise('/');
+	$urlRouterProvider.otherwise('/');
 
-    $stateProvider
-        .state('list', {
-            url: '/:filter',
-            templateUrl: '/boardlist.mainView.html',
-            controller: 'ListController',
+	$stateProvider
+		.state('list', {
+			url: '/:filter',
+			templateUrl: '/boardlist.mainView.html',
+			controller: 'ListController',
 			reloadOnSearch: false,
 			params: {
-				filter: { value: '', dynamic: true }
-            }
+				filter: {value: '', dynamic: true}
+			}
 		})
-        .state('board', {
-            url: '/board/:boardId/:filter',
-            templateUrl: '/board.html',
-            controller: 'BoardController',
-            params: {
-                filter: { value: '', dynamic: true }
-            }
-        })
-        .state('board.detail', {
-            url: '/detail/',
-            reloadOnSearch : false,
-            views: {
-                'sidebarView': {
-                    templateUrl: '/board.sidebarView.html'
+		.state('board', {
+			url: '/board/:boardId/:filter',
+			templateUrl: '/board.html',
+			controller: 'BoardController',
+			params: {
+				filter: {value: '', dynamic: true}
+			}
+		})
+		.state('board.detail', {
+			url: '/detail/',
+			reloadOnSearch: false,
+			views: {
+				'sidebarView': {
+					templateUrl: '/board.sidebarView.html'
 				}
-            }
+			}
 		})
-        .state('board.card', {
-            url: '/card/:cardId',
-            views: {
-                'sidebarView': {
-                    templateUrl: '/card.sidebarView.html',
-                    controller: 'CardController'
-                }
-            }
-        });
-
+		.state('board.card', {
+			url: '/card/:cardId',
+			views: {
+				'sidebarView': {
+					templateUrl: '/card.sidebarView.html',
+					controller: 'CardController'
+				}
+			}
+		});
 
 });
