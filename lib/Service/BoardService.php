@@ -103,7 +103,7 @@ class BoardService {
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE],
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
 		]);
-		$board->setUsers($this->permissionService->findUsers($boardId));
+		$board->setUsers(array_values($this->permissionService->findUsers($boardId)));
 		return $board;
 	}
 
