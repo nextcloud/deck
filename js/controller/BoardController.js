@@ -20,6 +20,7 @@
  *  
  */
 
+/** global: oc_defaults */
 app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter) {
 
 	$scope.sidebar = $rootScope.sidebar;
@@ -45,8 +46,8 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 
 	$scope.board = BoardService.getCurrent();
 	StackService.clear(); //FIXME: Is this still needed?
-	$scope.setPageTitle = function() {
-		if(BoardService.getCurrent()) {
+	$scope.setPageTitle = function () {
+		if (BoardService.getCurrent()) {
 			document.title = BoardService.getCurrent().title + " | Deck - " + oc_defaults.name;
 		} else {
 			document.title = "Deck - " + oc_defaults.name;
