@@ -3,6 +3,9 @@ OC.L10N.register(
     {
     "Hours" : "Saat",
     "Minutes" : "Dakika",
+    "The card \"%s\" on \"%s\" has reached its due date." : "\"%s\" kartı \"%s\" zamanında son kullanma tarihine  ulaştı.",
+    "The board \"%s\" has been shared with you by %s." : "\"%s\" panosu %s tarafından sizinle paylaşıldı.",
+    "{user} has shared the board %s with you." : "{user} sizinle %s panosunu paylaştı.",
     "Finished" : "Tamamlandı",
     "To review" : "İncelenecek",
     "Action needed" : "İşlem yapılması gerekiyor",
