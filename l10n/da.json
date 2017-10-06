@@ -1,6 +1,9 @@
 { "translations": {
     "Hours" : "Timer",
     "Minutes" : "Minutter",
+    "The card \"%s\" on \"%s\" has reached its due date." : "Kortet \"%s\" på \"%s\" har nået sin udløbsdato.",
+    "The board \"%s\" has been shared with you by %s." : "Brættet \"%s\" er blevet delt med dig af %s.",
+    "{user} has shared the board %s with you." : "{user} har delt brættet %s med dig.",
     "Finished" : "Færdiggjort",
     "To review" : "Efterse",
     "Action needed" : "Handling påkrævet",

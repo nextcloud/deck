@@ -1,9 +1,12 @@
 { "translations": {
     "Hours" : "Godzin",
     "Minutes" : "Minut",
+    "The card \"%s\" on \"%s\" has reached its due date." : "Karta \"%s\" na \"%s\" wygasła.",
+    "The board \"%s\" has been shared with you by %s." : "Tablica \"%s\" została współdzielona Tobie przez %s.",
+    "{user} has shared the board %s with you." : "{user} rozpoczął współdzielenie tablicy %s z Tobą.",
     "Finished" : "Ukończone",
     "To review" : "Do sprawdzenia",
-    "Action needed" : "Wymagające akcji",
+    "Action needed" : "Wymagana akcja",
     "Later" : "Później",
     "Deck" : "Deck",
     "Add a new stack" : "Dodaj nowy stos",
