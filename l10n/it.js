@@ -3,6 +3,9 @@ OC.L10N.register(
     {
     "Hours" : "Ore",
     "Minutes" : "Minuti",
+    "The card \"%s\" on \"%s\" has reached its due date." : "La scheda \"%s\" in \"%s\" ha raggiunto la sua data di scadenza.",
+    "The board \"%s\" has been shared with you by %s." : "La lavagna \"%s\" è stata condivisa con te da %s.",
+    "{user} has shared the board %s with you." : "{user} ha condiviso la lavagna %s con te.",
     "Finished" : "Finito",
     "To review" : "Da revisionare",
     "Action needed" : "Azione necessaria",
