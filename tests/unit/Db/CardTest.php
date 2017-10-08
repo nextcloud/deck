@@ -99,4 +99,11 @@ class CardTest extends \PHPUnit_Framework_TestCase {
 		], $card->jsonSerialize());
 	}
 
+	public function testMysqlDateFallback() {
+		$date = new DateTime();
+		$card = new Card();
+		$card->setDuedate($date->format('c'));
+		$card->setDatabaseType('mysql');
+		$this->assertEquals($date->format('Y-m-d H:i:s'), $card->getDuedate(false));
+	}
 }

@@ -42,6 +42,8 @@ class Card extends RelationalEntity implements JsonSerializable {
 	protected $archived = false;
 	protected $duedate = null;
 
+	private $databaseType = 'sqlite';
+
 	const DUEDATE_FUTURE = 0;
 	const DUEDATE_NEXT = 1;
 	const DUEDATE_NOW = 2;
@@ -58,10 +60,17 @@ class Card extends RelationalEntity implements JsonSerializable {
 		$this->addResolvable('owner');
 	}
 
-	public function getDuedate() {
+	public function setDatabaseType($type) {
+		$this->databaseType = $type;
+	}
+
+	public function getDuedate($isoFormat = false) {
 		if($this->duedate === null)
 			return null;
 		$dt = new DateTime($this->duedate);
+		if (!$isoFormat && $this->databaseType === 'mysql') {
+			return $dt->format('Y-m-d H:i:s');
+		}
 		return $dt->format('c');
 	}
 
@@ -91,7 +100,7 @@ class Card extends RelationalEntity implements JsonSerializable {
 				$json['overdue'] = self::DUEDATE_OVERDUE;
 			}
 		}
-		$json['duedate'] = $this->getDuedate();
+		$json['duedate'] = $this->getDuedate(true);
 		return $json;
 	}
 
