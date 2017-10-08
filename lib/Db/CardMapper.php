@@ -37,26 +37,32 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 	private $userManager;
 	/** @var IManager */
 	private $notificationManager;
+	private $databaseType;
 
 	public function __construct(
 		IDBConnection $db,
 		LabelMapper $labelMapper,
 		IUserManager $userManager,
-		IManager $notificationManager
+		IManager $notificationManager,
+		$databaseType
 	) {
 		parent::__construct($db, 'deck_cards', '\OCA\Deck\Db\Card');
 		$this->labelMapper = $labelMapper;
 		$this->userManager = $userManager;
 		$this->notificationManager = $notificationManager;
+		$this->databaseType = $databaseType;
 	}
 
 	public function insert(Entity $entity) {
+		$entity->setDatabaseType($this->databaseType);
 		$entity->setCreatedAt(time());
 		$entity->setLastModified(time());
 		return parent::insert($entity);
 	}
 
 	public function update(Entity $entity, $updateModified = true) {
+		$entity->setDatabaseType($this->databaseType);
+
 		if ($updateModified)
 			$entity->setLastModified(time());
 
