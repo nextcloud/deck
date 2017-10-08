@@ -85,11 +85,16 @@ input.input-inline {
 	.app-navigation-entry-edit {
 		height: auto;
 
-		.colorselect div{
-			height: 32px;
-		}
 		form {
 			display: flex;
+			flex-wrap: wrap;
+		}
+
+		.colorselect {
+			width: 100%;
+			div{
+				height: 32px;
+			}
 		}
 	}
 
