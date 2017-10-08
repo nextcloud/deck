@@ -54,6 +54,10 @@ class Application extends App {
 		});
 		$container->registerMiddleware('SharingMiddleware');
 
+		$container->registerService('databaseType', function($container) {
+			return $container->getServer()->getConfig()->getSystemValue('dbtype', 'sqlite');
+		});
+
 		// Delete user/group acl entries when they get deleted
 		/** @var IUserManager $userManager */
 		$userManager = $server->getUserManager();
