@@ -176,10 +176,12 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 	$scope.labelCreate = function (label) {
 		label.boardId = $scope.id;
-		LabelService.create(label);
-		BoardService.getCurrent().labels.push(label);
-		$scope.status.createLabel = false;
-		$scope.newLabel = {};
+		LabelService.create(label).then(function (data) {
+			$scope.newStack.title = "";
+			BoardService.getCurrent().labels.push(data);
+			$scope.status.createLabel = false;
+			$scope.newLabel = {};
+		});
 	};
 	$scope.labelUpdate = function (label) {
 		label.edit = false;
