@@ -51,6 +51,7 @@ appstore: clean-build build
 	--exclude="../$(app_name)/js/tests" \
 	--exclude="../$(app_name)/js/test" \
 	--exclude="../$(app_name)/js/*.log" \
+	--exclude="../$(app_name)/js/package-lock.json" \
 	--exclude="../$(app_name)/js/package.json" \
 	--exclude="../$(app_name)/js/bower.json" \
 	--exclude="../$(app_name)/js/karma.*" \
@@ -60,7 +61,9 @@ appstore: clean-build build
 	--exclude="../$(app_name)/karma.*" \
 	--exclude="../$(app_name)/protractor\.*" \
 	--exclude="../$(app_name)/.*" \
+	--exclude="../$(app_name)/*.lock" \
 	--exclude="../$(app_name)/js/.*" \
+	--exclude="../$(app_name)/vendor" \
 	--exclude-vcs \
 	 ../$(app_name)
 
