@@ -23,9 +23,12 @@
 /* global app */
 /* global moment */
 
-app.controller('CardController', function ($scope, $rootScope, $routeParams, $location, $stateParams, BoardService, CardService, StackService, StatusService) {
+app.controller('CardController', function ($scope, $rootScope, $routeParams, $location, $stateParams, $interval, BoardService, CardService, StackService, StatusService) {
 	$scope.sidebar = $rootScope.sidebar;
-	$scope.status = {};
+	$scope.status = {
+		lastEdit: 0,
+		lastSave: Date.now()
+	};
 
 	$scope.cardservice = CardService;
 	$scope.cardId = $stateParams.cardId;
@@ -58,6 +61,27 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 		$scope.status.cardEditDescription = true;
 		return true;
 	};
+	$scope.cardEditDescriptionChanged = function ($event) {
+		$scope.status.lastEdit = Date.now();
+		$('#card-description').find('.save-indicator.unsaved').show();
+		$('#card-description').find('.save-indicator.saved').hide();
+	};
+
+	$scope.cardEditDescriptionAutosave = function() {
+		var currentTime = Date.now();
+		var timeSinceEdit = currentTime-$scope.status.lastEdit;
+		if (timeSinceEdit > 1000 && $scope.status.lastEdit > $scope.status.lastSave) {
+			$scope.status.lastSave = currentTime;
+			$('#card-description').find('.save-indicator.unsaved').fadeIn(500);
+			CardService.update(CardService.getCurrent()).then(function (data) {
+				$('#card-description').find('.save-indicator.unsaved').hide();
+				$('#card-description').find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
+			});
+		}
+	};
+
+	$interval( function(){ $scope.cardEditDescriptionAutosave(); }, 500);
+
 	// handle rename to update information on the board as well
 	$scope.cardRename = function (card) {
 		CardService.rename(card).then(function (data) {
@@ -68,7 +92,8 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 	$scope.cardUpdate = function (card) {
 		CardService.update(CardService.getCurrent()).then(function (data) {
 			$scope.status.cardEditDescription = false;
-			$('#card-description').find('.save-indicator').fadeIn(500).fadeOut(1000);
+			$('#card-description').find('.save-indicator.unsaved').hide();
+			$('#card-description').find('.save-indicator.saved').fadeIn(500).fadeOut(1000);
 		});
 	};
 
