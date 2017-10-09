@@ -613,14 +613,21 @@ input.input-inline {
 	}
 
 	.save-indicator {
-		background-color: $color-success;
-		color: $color-primary-text;
 		border-radius: 3px;
 		float: right;
-		padding: 0px 10px;
-		font-size: 8pt !important;
+		padding: 0 10px;
+		font-size: 8pt;
 		display: none;
 		align-self: flex-end;
+		text-align: center;
+		&.saved {
+			background-color: $color-success;
+			color: $color-primary-text;
+		}
+		&.unsaved {
+			background-color: $color-lightgrey;
+			color: $color-darkgrey;
+		}
 	}
 
 	.icon-help {
