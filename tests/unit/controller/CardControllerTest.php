@@ -29,7 +29,7 @@ use OCP\IRequest;
 
 class CardControllerTest extends \PHPUnit_Framework_TestCase {
 
-    /** @var Controller|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CardController|\PHPUnit_Framework_MockObject_MockObject */
 	private $controller;
     /** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
     private $request;
@@ -113,5 +113,15 @@ class CardControllerTest extends \PHPUnit_Framework_TestCase {
         $this->cardService->expects($this->once())->method('rename');
         $this->controller->rename(1, 'test');
     }
+
+	public function testAssignUser() {
+		$this->cardService->expects($this->once())->method('assignUser');
+		$this->controller->assignUser(1, 'admin');
+	}
+
+	public function testUnssignUser() {
+		$this->cardService->expects($this->once())->method('unassignUser');
+		$this->controller->unassignUser(1, 'admin');
+	}
 
 }

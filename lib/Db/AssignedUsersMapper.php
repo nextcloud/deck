@@ -35,7 +35,7 @@ class AssignedUsersMapper extends DeckMapper implements IPermissionMapper {
 	private $userManager;
 
 	public function __construct(IDBConnection $db, CardMapper $cardMapper, IUserManager $userManager) {
-		parent::__construct($db, 'deck_assigned_users', '\OCA\Deck\Db\AssignedUsers');
+		parent::__construct($db, 'deck_assigned_users', AssignedUsers::class);
 		$this->cardMapper = $cardMapper;
 		$this->userManager = $userManager;
 	}
@@ -72,9 +72,8 @@ class AssignedUsersMapper extends DeckMapper implements IPermissionMapper {
 			$assignment = parent::insert($entity);
 			$this->mapParticipant($assignment);
 			return $assignment;
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	public function mapParticipant(AssignedUsers &$assignment) {
