@@ -61,7 +61,7 @@
 			<ui-select-match placeholder="<?php p($l->t('Assign this card to a user')); ?>">
 				<span><i class="icon icon-{{$item.type}}"></i> {{ $item.participant.displayname }}</span>
 			</ui-select-match>
-			<ui-select-choices repeat="user in boardservice.getCurrent().users| filter: $select.search track by user.uid">
+			<ui-select-choices repeat="user in boardservice.getCurrent().users | filter: $select.search | withoutAssignedUsers: cardservice.getCurrent().assignedUsers track by user.uid">
 				<div class="avatardiv" avatar ng-attr-displayname="{{ user.uid }}" ng-if="boardservice.id"></div><span>{{ user.displayname }}</span>
 			</ui-select-choices>
 	</ui-select>
