@@ -105,6 +105,11 @@ class BoardServiceTest extends TestCase {
 			->method('find')
 			->with(1)
 			->willReturn($b1);
+		$this->permissionService->expects($this->once())
+			->method('findUsers')
+			->willReturn([
+				'admin' => 'admin',
+			]);
 		$this->assertEquals($b1, $this->service->find(1));
 	}
 
@@ -137,6 +142,11 @@ class BoardServiceTest extends TestCase {
 			->method('update')
 			->with($board)
 			->willReturn($board);
+		$this->permissionService->expects($this->once())
+			->method('findUsers')
+			->willReturn([
+				'admin' => 'admin',
+			]);
 		$b = $this->service->update(123, 'MyNewNameBoard', 'ffffff', false);
 
 		$this->assertEquals($b->getTitle(), 'MyNewNameBoard');
@@ -151,6 +161,11 @@ class BoardServiceTest extends TestCase {
 		$this->boardMapper->expects($this->once())
 			->method('find')
 			->willReturn($board);
+		$this->permissionService->expects($this->once())
+			->method('findUsers')
+			->willReturn([
+				'admin' => 'admin',
+			]);
 		$this->assertEquals($board, $this->service->delete(123));
 	}
 
