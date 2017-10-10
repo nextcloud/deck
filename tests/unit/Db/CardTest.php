@@ -97,6 +97,7 @@ class CardTest extends \PHPUnit_Framework_TestCase {
 			'duedate' => null,
 			'overdue' => 0,
 			'archived' => false,
+			'assignedUsers' => null,
 		], $card->jsonSerialize());
 	}
 
