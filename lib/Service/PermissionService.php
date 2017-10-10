@@ -89,7 +89,7 @@ class PermissionService {
 	/**
 	 * Get current user permissions for a board
 	 *
-	 * @param Board $board
+	 * @param Board|Entity $board
 	 * @return array|bool
 	 * @internal param $boardId
 	 */

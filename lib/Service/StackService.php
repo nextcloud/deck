@@ -41,8 +41,16 @@ class StackService {
 	private $labelMapper;
 	private $permissionService;
 	private $boardService;
+	private $assignedUsersMapper;
 
-	public function __construct(StackMapper $stackMapper, CardMapper $cardMapper, LabelMapper $labelMapper, PermissionService $permissionService, BoardService $boardService, AssignedUsersMapper $assignedUsersMapper) {
+	public function __construct(
+		StackMapper $stackMapper,
+		CardMapper $cardMapper,
+		LabelMapper $labelMapper,
+		PermissionService $permissionService,
+		BoardService $boardService,
+		AssignedUsersMapper $assignedUsersMapper
+	) {
 		$this->stackMapper = $stackMapper;
 		$this->cardMapper = $cardMapper;
 		$this->labelMapper = $labelMapper;
