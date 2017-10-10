@@ -35,7 +35,6 @@ class AssignedUsers extends RelationalEntity implements JsonSerializable {
 		$this->addType('id', 'integer');
 		$this->addType('card_id', 'integer');
 		$this->addResolvable('participant');
-
 	}
 
 }
