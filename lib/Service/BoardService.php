@@ -157,10 +157,10 @@ class BoardService {
 			'F1DB50' => $this->l10n->t('Later')
 		];
 		$labels = [];
-		foreach ($default_labels as $color => $title) {
+		foreach ($default_labels as $labelColor => $labelTitle) {
 			$label = new Label();
-			$label->setColor($color);
-			$label->setTitle($title);
+			$label->setColor($labelColor);
+			$label->setTitle($labelTitle);
 			$label->setBoardId($new_board->getId());
 			$labels[] = $this->labelMapper->insert($label);
 		}
