@@ -24,10 +24,12 @@
 namespace OCA\Deck\Service;
 
 
+use OCA\Deck\Db\AssignedUsers;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\NotFoundException;
 use OCA\Deck\StatusException;
 use Test\TestCase;
 
@@ -239,6 +241,75 @@ class CardServiceTest extends TestCase {
         $this->setExpectedException(StatusException::class);
         $this->cardService->removeLabel(123, 999);
     }
+
+    public function testAssignUser() {
+    	$assignments = [];
+    	$this->assignedUsersMapper->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($assignments);
+    	$assignment = new AssignedUsers();
+    	$assignment->setCardId(123);
+    	$assignment->setParticipant('admin');
+    	$this->assignedUsersMapper->expects($this->once())
+			->method('insert')
+			->with($assignment)
+			->willReturn($assignment);
+    	$actual = $this->cardService->assignUser(123, 'admin');
+    	$this->assertEquals($assignment, $actual);
+	}
+
+	public function testAssignUserExisting() {
+		$assignment = new AssignedUsers();
+		$assignment->setCardId(123);
+		$assignment->setParticipant('admin');
+		$assignments = [
+			$assignment
+		];
+		$this->assignedUsersMapper->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($assignments);
+		$actual = $this->cardService->assignUser(123, 'admin');
+		$this->assertFalse($actual);
+	}
+
+	public function testUnassignUserExisting() {
+		$assignment = new AssignedUsers();
+		$assignment->setCardId(123);
+		$assignment->setParticipant('admin');
+		$assignments = [
+			$assignment
+		];
+		$this->assignedUsersMapper->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($assignments);
+		$this->assignedUsersMapper->expects($this->once())
+			->method('delete')
+			->with($assignment)
+			->willReturn($assignment);
+		$actual = $this->cardService->unassignUser(123, 'admin');
+		$this->assertEquals($assignment, $actual);
+	}
+
+	/**
+	 * @expectedException \OCA\Deck\NotFoundException
+	 */
+	public function testUnassignUserNotExisting() {
+		$assignment = new AssignedUsers();
+		$assignment->setCardId(123);
+		$assignment->setParticipant('admin');
+		$assignments = [
+			$assignment
+		];
+		$this->assignedUsersMapper->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($assignments);
+		$actual = $this->cardService->unassignUser(123, 'user');
+		$this->assertEquals($assignment, $actual);
+	}
 
 
 }

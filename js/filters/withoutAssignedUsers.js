@@ -20,10 +20,13 @@
  *  
  */
 
-/**
+/* global app */
+/* global angular */
+
+/*
  * Remove all assignedUsers from users list
  */
-app.filter('withoutAssignedUsers', function ($filter) {
+app.filter('withoutAssignedUsers', function () {
 	return function (users, assignedUsers) {
 		var _result = [];
 		angular.forEach(users, function (user) {
@@ -33,8 +36,9 @@ app.filter('withoutAssignedUsers', function ($filter) {
 					_found = true;
 				}
 			});
-			if (_found === false)
+			if (_found === false) {
 				_result.push(user);
+			}
 		});
 		return _result;
 	};
