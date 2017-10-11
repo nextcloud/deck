@@ -102,6 +102,9 @@ class AssignedUsersMapperTest extends \Test\TestCase {
 		$this->stacks = $stacks;
 	}
 
+	/**
+	 * @covers ::__construct
+	 */
 	public function testConstructor() {
 		$this->assertAttributeInstanceOf(IDBConnection::class, 'db', $this->assignedUsersMapper);
 		$this->assertAttributeEquals(AssignedUsers::class, 'entityClass', $this->assignedUsersMapper);
