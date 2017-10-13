@@ -354,14 +354,13 @@ input.input-inline {
 		display: flex;
 		justify-content: flex-end;
 		flex-grow: 1;
+		padding: 6px;
 		.assigned-user {
-			margin-right: 5px;
 			z-index: 4;
 		}
 	}
 
 	.card-controls {
-		padding: 6px 10px;
 		background: $color-lightgrey;
 		display: flex;
 		position: relative;
@@ -375,14 +374,12 @@ input.input-inline {
 		}
 
 		.icon-filetype-text {
-			margin-right: 10px;
+			margin: 10px;
 		}
 
 		button {
-			padding: 0px;
-			margin-right: 0px;
-			margin-top: 5px;
-			margin-left: 5px;
+			padding: 22px;
+			margin: 0;
 		}
 	}
 
@@ -503,7 +500,7 @@ input.input-inline {
 
 .due {
 	border-radius: 3px;
-	margin: 0 4px 0 -4px;
+	margin: 6px 4px 6px -4px;
 	padding: 0 4px;
 	font-size: 90%;
 	opacity: 0.5;
