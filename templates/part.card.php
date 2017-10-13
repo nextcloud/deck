@@ -1,6 +1,6 @@
 <div id="board-status" ng-if="statusservice.active">
 	<div id="emptycontent">
-		<div class="icon-{{ statusservice.icon }}"></div>
+		<div class="icon-{{ statusservice.icon }}" title="<?php p($l->t('Status')); ?>"><span class="hidden-visually"><?php p($l->t('Status')); ?></span></div>
 		<h2>{{ statusservice.title }}</h2>
 		<p>{{ statusservice.text }}</p></div>
 </div>
@@ -81,14 +81,14 @@
 	<div class="duedate">
 		<input class="datepicker-input medium focus" type="text" placeholder="<?php p($l->t('Click to set')); ?>" value="{{ cardservice.getCurrent().duedate | parseDate }}" datepicker="due" ng-disabled="(boardservice.isArchived() || card.archived)" />
 		<input class="timepicker-input medium focus" type="text" placeholder="00:00" ng-disabled="!cardservice.getCurrent().duedate || (boardservice.isArchived() || card.archived)" value="{{ cardservice.getCurrent().duedate | parseTime }}" timepicker="due" />
-		<button class="icon icon-delete button-inline" title="<?php p($l->t('Remove due date')); ?>" ng-if="cardservice.getCurrent().duedate" ng-click="resetDuedate()"></button>
+		<button class="icon icon-delete button-inline" title="<?php p($l->t('Remove due date')); ?>" ng-if="cardservice.getCurrent().duedate" ng-click="resetDuedate()"><span class="hidden-visually"><?php p($l->t('Remove due date')); ?></span></button>
 	</div>
 
 	<div class="section-header">
 		<h4>
 			<div>
 				<?php p($l->t('Description')); ?>
-				<a href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" title="<?php p($l->t('Formatting help')); ?>"></a>
+				<a href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
 			</div>
 			<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
 			<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>

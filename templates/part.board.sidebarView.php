@@ -5,7 +5,9 @@
         <p>{{ statusservice.text }}</p></div>
 </div>
 <div id="sidebar-header">
-    <a class="icon-close" ui-sref="board" ng-click="sidebar.show=!sidebar.show"> &nbsp;</a>
+    <a class="icon-close" ui-sref="board" ng-click="sidebar.show=!sidebar.show" title="<?php p($l->t('Close')); ?>"> &nbsp;<?php 
+    	?><span class="hidden-visually"><?php p($l->t('Close')); ?></span><?php 
+    ?></a>
     <h3>{{ boardservice.getCurrent().title }}</h3>
 </div>
 
@@ -42,9 +44,9 @@
 				</span>
             </li>
             <li ng-repeat="acl in boardservice.getCurrent().acl track by $index">
-                <span class="icon-loading-small" style="display:none;"></span>
+                <span class="icon-loading-small" style="display:none;" title="<?php p($l->t('Loading')); ?>"></span>
                 <div class="avatardiv" avatar displayname="{{ acl.participant.uid }}" ng-if="acl.type=='user'"></div>
-                <div class="avatardiv" ng-if="acl.type=='group'"><i class="icon icon-{{acl.type}}"></i></div>
+                <div class="avatardiv" ng-if="acl.type=='group'"><i class="icon icon-{{acl.type}}" title="<?php p($l->t('Access for')); ?> {{acl.type}}"></i></div>
 
                 <span class="has-tooltip username">
                     {{ acl.participant.displayname }}
@@ -85,9 +87,9 @@
                             <div class="color" ng-repeat="c in defaultColors" ng-style="{'background-color':'#{{ c }}'}" ng-click="label.color=c" ng-class="{'selected': (c == label.color) }"><br /></div>
                         </div>
                     </div>
-                    <a ng-if="boardservice.canManage() && label.edit" ng-click="labelUpdate(label)" class="icon"><i class="icon icon-checkmark" ></i></a>
-                    <a ng-if="boardservice.canManage() && !label.edit" ng-click="label.edit=true" class="icon"><i class="icon icon-rename" ></i></a>
-                    <a ng-if="boardservice.canManage()" ng-click="labelDelete(label)" class="icon"><i class="icon icon-delete" ></i></a>
+                    <a ng-if="boardservice.canManage() && label.edit" ng-click="labelUpdate(label)" class="icon" title="<?php p($l->t('Update')); ?>"><i class="icon icon-checkmark" ></i><span class="hidden-visually"><?php p($l->t('Update')); ?></span></a>
+                    <a ng-if="boardservice.canManage() && !label.edit" ng-click="label.edit=true" class="icon" title="<?php p($l->t('Edit')); ?>"><i class="icon icon-rename"></i><span class="hidden-visually"><?php p($l->t('Edit')); ?></span></a>
+                    <a ng-if="boardservice.canManage()" ng-click="labelDelete(label)" class="icon" title="<?php p($l->t('Delete')); ?>"><i class="icon icon-delete" ></i><span class="hidden-visually"><?php p($l->t('Delete')); ?></span></a>
                 </li>
                 <li ng-if="status.createLabel">
                     <div class="label-edit">
@@ -100,8 +102,8 @@
                             <div class="color" ng-repeat="c in defaultColors" ng-style="{'background-color':'#{{ c }}'}" ng-click="newLabel.color=c" ng-class="{'selected': (c == newLabel.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"><br /></div>
                         </div>
                     </div>
-                    <a ng-click="labelCreate(newLabel)" class="icon"><i class="icon icon-checkmark" ></i></a>
-                    <a ng-click="status.createLabel=false" class="icon"><i class="icon icon-close" ></i></a>
+                    <a ng-click="labelCreate(newLabel)" class="icon" title="<?php p($l->t('Create')); ?>"><i class="icon icon-checkmark" ></i><span class="hidden-visually"><?php p($l->t('Create')); ?></span></a>
+                    <a ng-click="status.createLabel=false" class="icon" title="<?php p($l->t('Close')); ?>"><i class="icon icon-close" ></i><span class="hidden-visually"><?php p($l->t('Close')); ?></span></a>
                 </li>
                 <li ng-if="boardservice.canManage() && !status.createLabel" class="label-create">
                     <a ng-click="status.createLabel=true" class="button"><span class="icon icon-add"></span><br /><span><?php p($l->t('Create a new tag')); ?></span></a>
