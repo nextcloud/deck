@@ -354,9 +354,9 @@ input.input-inline {
 		display: flex;
 		justify-content: flex-end;
 		flex-grow: 1;
-		padding: 6px;
 		.assigned-user {
 			z-index: 4;
+			margin: 6px 0 6px 6px;
 		}
 	}
 
