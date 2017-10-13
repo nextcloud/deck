@@ -1,8 +1,9 @@
 <div id="controls">
 	<div class="breadcrumb">
 		<div class="crumb svg last">
-			<a href="#" class="icon-home" title="<?php p($l->t('All Boards')); ?>">
-			</a>
+			<a href="#" class="icon-home" title="<?php p($l->t('All Boards')); ?>"><?php 
+				?><span class="hidden-visually"><?php p($l->t('All Boards')); ?></span><?php 
+			?></a>
 			<span style="display: none;"></span>
 		</div>
 	</div>
@@ -43,7 +44,7 @@
 			<td>
 				<div class="hint"></div>
 				<div class="app-popover-menu-utils" ng-if="b.deletedAt == 0" ng-show="!b.status.edit">
-					<button class="icon icon-more button-inline" title="<?php p($l->t('More actions')); ?>"></button>
+					<button class="icon icon-more button-inline" title="<?php p($l->t('More actions')); ?>"><span class="hidden-visually"><?php p($l->t('More actions')); ?></span></button>
 					<div class="popovermenu bubble hidden">
 						<ul>
 							<li ng-click="boardUpdateBegin(b); b.status.edit = true">
@@ -70,16 +71,16 @@
 					</div>
 				</div>
 				<div class="board-edit-controls" ng-show="b.status.edit">
-					<span class="icon icon-checkmark" ng-click="boardUpdate(b)"></span>
-					<span class="icon icon-close" ng-click="boardUpdateReset(b)"></span>
+					<span class="icon icon-checkmark" ng-click="boardUpdate(b)" title="<?php p($l->t('Update')); ?>"><span class="hidden-visually"><?php p($l->t('Update')); ?></span></span>
+					<span class="icon icon-close" ng-click="boardUpdateReset(b)" title="<?php p($l->t('Reset')); ?>"><span class="hidden-visually"><?php p($l->t('Reset')); ?></span></span>
 				</div>
 				<div class="app-popover-menu-utils" ng-if="b.deletedAt > 0">
-					<button class="icon icon-history button-inline" ng-click="boardDeleteUndo(b)" title="Undo board deletion - Otherwise the board will be deleted during the next cronjob run."></button>
+					<button class="icon icon-history button-inline" ng-click="boardDeleteUndo(b)" title="Undo board deletion - Otherwise the board will be deleted during the next cronjob run."><span class="hidden-visually"><?php p($l->t('Undo board deletion - Otherwise the board will be deleted during the next cronjob run.')); ?></span></button>
 				</div>
 			</td>
 		</tr>
 		<tr ng-if="status.filter === '' && !status.addBoard" ng-click="status.addBoard=!status.addBoard" class="board-create">
-			<td><span class="icon icon-add"></span></td>
+			<td><span class="icon icon-add" title=""></span></td>
 			<td colspan="3">
 				<a ng-click="status.addBoard=!status.addBoard"
 				   ng-show="!status.addBoard">
@@ -89,7 +90,7 @@
 		</tr>
 
 		<tr ng-if="status.filter === '' && status.addBoard">
-			<td><span class="icon icon-add"></span></td>
+			<td><span class="icon icon-add" title="<?php p($l->t('Add')); ?>"><span class="hidden-visually"><?php p($l->t('Add')); ?></span></span></td>
 			<td>
 				<form ng-disabled="isAddingList"
 					  class="ng-pristine ng-valid" ng-submit="boardCreate()">
@@ -107,8 +108,8 @@
 			<td></td>
 			<td>
 				<div class="board-edit-controls">
-					<span class="icon icon-checkmark" ng-click="boardCreate()"></span>
-					<span class="icon icon-close" ng-click="status.addBoard=!status.addBoard"></span>
+					<span class="icon icon-checkmark" ng-click="boardCreate()" title="<?php p($l->t('Create')); ?>"><span class="hidden-visually"><?php p($l->t('Create')); ?></span></span>
+					<span class="icon icon-close" ng-click="status.addBoard=!status.addBoard" title="<?php p($l->t('Close')); ?>"><span class="hidden-visually"><?php p($l->t('Close')); ?></span></span>
 				</div>
 			</td>
 		</tr>
