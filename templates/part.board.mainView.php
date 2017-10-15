@@ -121,6 +121,7 @@
 				</form>
 				<div ng-if="!status.addCard[s.id]" ng-click="status.addCard[s.id]=true" title="<?php p($l->t('Add card')); ?>">
 					<i class="icon icon-add{{ boardservice.getCurrent().color | iconWhiteFilter }}"></i>
+					<span class="hidden-visually"><?php p($l->t('Add card')); ?></span>
 				</div>
 			</div>
 		</div>
