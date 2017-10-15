@@ -1,9 +1,9 @@
 <div id="controls">
 	<div class="breadcrumb">
 		<div class="crumb svg last">
-			<a href="#" class="icon-home" title="<?php p($l->t('All Boards')); ?>"><?php 
-				?><span class="hidden-visually"><?php p($l->t('All Boards')); ?></span><?php 
-			?></a>
+			<a href="#" class="icon-home" title="<?php p($l->t('All Boards')); ?>">
+				<span class="hidden-visually"><?php p($l->t('All Boards')); ?></span>
+			</a>
 			<span style="display: none;"></span>
 		</div>
 	</div>
@@ -90,7 +90,7 @@
 		</tr>
 
 		<tr ng-if="status.filter === '' && status.addBoard">
-			<td><span class="icon icon-add" title="<?php p($l->t('Add')); ?>"><span class="hidden-visually"><?php p($l->t('Add')); ?></span></span></td>
+			<td><span class="icon icon-add" title=""></span></td>
 			<td>
 				<form ng-disabled="isAddingList"
 					  class="ng-pristine ng-valid" ng-submit="boardCreate()">
