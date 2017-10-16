@@ -80,7 +80,7 @@
 			</td>
 		</tr>
 		<tr ng-if="status.filter === '' && !status.addBoard" ng-click="status.addBoard=!status.addBoard" class="board-create">
-			<td><span class="icon icon-add" title=""></span></td>
+			<td><span class="icon icon-add"></span></td>
 			<td colspan="3">
 				<a ng-click="status.addBoard=!status.addBoard"
 				   ng-show="!status.addBoard">
@@ -90,7 +90,7 @@
 		</tr>
 
 		<tr ng-if="status.filter === '' && status.addBoard">
-			<td><span class="icon icon-add" title=""></span></td>
+			<td><span class="icon icon-add"></span></td>
 			<td>
 				<form ng-disabled="isAddingList"
 					  class="ng-pristine ng-valid" ng-submit="boardCreate()">
