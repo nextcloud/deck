@@ -29,7 +29,7 @@ use OCP\IDBConnection;
 class LabelMapper extends DeckMapper implements IPermissionMapper {
 
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'deck_labels', '\OCA\Deck\Db\Label');
+		parent::__construct($db, 'deck_labels', Label::class);
 	}
 
 	public function findAll($boardId, $limit = null, $offset = null) {

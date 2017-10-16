@@ -32,6 +32,8 @@ use OCP\IGroup;
 
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\IURLGenerator;
+use OCP\INavigationManager;
 
 class Application extends App {
 
@@ -87,8 +89,8 @@ class Application extends App {
 
 	public function registerNavigationEntry() {
 		$container = $this->getContainer();
-		$container->query('OCP\INavigationManager')->add(function() use ($container) {
-			$urlGenerator = $container->query('OCP\IURLGenerator');
+		$container->query(INavigationManager::class)->add(function() use ($container) {
+			$urlGenerator = $container->query(IURLGenerator::class);
 			return [
 				'id' => 'deck',
 				'order' => 10,

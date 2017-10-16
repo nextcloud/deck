@@ -44,7 +44,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		IUserManager $userManager,
 		IGroupManager $groupManager
 	) {
-		parent::__construct($db, 'deck_boards', '\OCA\Deck\Db\Board');
+		parent::__construct($db, 'deck_boards', Board::class);
 		$this->labelMapper = $labelMapper;
 		$this->aclMapper = $aclMapper;
 		$this->stackMapper = $stackMapper;
