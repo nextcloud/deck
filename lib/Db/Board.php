@@ -56,12 +56,18 @@ class Board extends RelationalEntity {
 		return $json;
 	}
 
+	/**
+	 * @param Label[] $labels
+	 */
 	public function setLabels($labels) {
 		foreach ($labels as $l) {
 			$this->labels[] = $l;
 		}
 	}
 
+	/**
+	 * @param Acl[] $acl
+	 */
 	public function setAcl($acl) {
 		foreach ($acl as $a) {
 			$this->acl[$a->id] = $a;

@@ -28,7 +28,7 @@ use OCP\IDBConnection;
 class AclMapper extends DeckMapper implements IPermissionMapper {
 
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'deck_board_acl', '\OCA\Deck\Db\Acl');
+		parent::__construct($db, 'deck_board_acl', Acl::class);
 	}
 
 	public function findAll($boardId, $limit = null, $offset = null) {

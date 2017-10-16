@@ -46,7 +46,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		IManager $notificationManager,
 		$databaseType
 	) {
-		parent::__construct($db, 'deck_cards', '\OCA\Deck\Db\Card');
+		parent::__construct($db, 'deck_cards', Card::class);
 		$this->labelMapper = $labelMapper;
 		$this->userManager = $userManager;
 		$this->notificationManager = $notificationManager;

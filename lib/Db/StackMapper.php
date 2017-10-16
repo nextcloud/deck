@@ -32,7 +32,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	private $cardMapper;
 
 	public function __construct(IDBConnection $db, CardMapper $cardMapper) {
-		parent::__construct($db, 'deck_stacks', '\OCA\Deck\Db\Stack');
+		parent::__construct($db, 'deck_stacks', Stack::class);
 		$this->cardMapper = $cardMapper;
 	}
 
