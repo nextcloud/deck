@@ -88,6 +88,7 @@ class CardController extends Controller {
 	 * @param $type
 	 * @param $order
 	 * @param $description
+	 * @param $duedate
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
 	public function update($id, $title, $stackId, $type, $order, $description, $duedate) {

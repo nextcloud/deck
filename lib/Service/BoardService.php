@@ -108,10 +108,9 @@ class BoardService {
 
 	public function isArchived($mapper, $id) {
 		try {
+			$boardId = $id;
 			if ($mapper instanceof IPermissionMapper) {
 				$boardId = $mapper->findBoardId($id);
-			} else {
-				$boardId = $id;
 			}
 			if ($boardId === null) {
 				return false;
@@ -125,10 +124,9 @@ class BoardService {
 
 	public function isDeleted($mapper, $id) {
 		try {
+			$boardId = $id;
 			if ($mapper instanceof IPermissionMapper) {
 				$boardId = $mapper->findBoardId($id);
-			} else {
-				$boardId = $id;
 			}
 			if ($boardId === null) {
 				return false;
@@ -189,7 +187,7 @@ class BoardService {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
 		$board->setDeletedAt(0);
-		$this->boardMapper->update($board);
+		return $this->boardMapper->update($board);
 	}
 
 	public function deleteForce($id) {

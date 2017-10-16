@@ -21,14 +21,10 @@
  *  
  */
 
-// db/author.php
 namespace OCA\Deck\Db;
 
-use JsonSerializable;
+class Label extends RelationalEntity {
 
-class Label extends RelationalEntity implements JsonSerializable {
-
-	public $id;
 	protected $title;
 	protected $color;
 	protected $boardId;

@@ -35,7 +35,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 	 * @param $property string Name of the property
 	 */
 	public function addRelation($property) {
-		if (!in_array($property, $this->_relations)) {
+		if (!in_array($property, $this->_relations, true)) {
 			$this->_relations[] = $property;
 		}
 	}
@@ -55,20 +55,21 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 	 * @since 7.0.0
 	 */
 	protected function markFieldUpdated($attribute) {
-		if (!in_array($attribute, $this->_relations)) {
+		if (!in_array($attribute, $this->_relations, true)) {
 			parent::markFieldUpdated($attribute);
 		}
 	}
 
 	/**
 	 * @return array serialized data
+	 * @throws \ReflectionException
 	 */
 	public function jsonSerialize() {
 		$properties = get_object_vars($this);
 		$reflection = new \ReflectionClass($this);
 		$json = [];
 		foreach ($properties as $property => $value) {
-			if (substr($property, 0, 1) !== '_' && $reflection->hasProperty($property)) {
+			if (strpos($property, '_') !== 0 && $reflection->hasProperty($property)) {
 				$propertyReflection = $reflection->getProperty($property);
 				if (!$propertyReflection->isPrivate()) {
 					$json[$property] = $this->getter($property);
@@ -119,16 +120,15 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 
 	public function __call($methodName, $args){
 		$attr = lcfirst( substr($methodName, 7) );
-		if(strpos($methodName, 'resolve') === 0 && array_key_exists($attr, $this->_resolvedProperties)) {
+		if(array_key_exists($attr, $this->_resolvedProperties) && strpos($methodName, 'resolve') === 0) {
 			if($this->_resolvedProperties[$attr] !== null) {
 				return $this->_resolvedProperties[$attr];
-			} else {
-				return $this->getter($attr);
 			}
+			return $this->getter($attr);
 		}
 
 		$attr = lcfirst( substr($methodName, 3) );
-		if(strpos($methodName, 'set') === 0 && array_key_exists($attr, $this->_resolvedProperties)) {
+		if(array_key_exists($attr, $this->_resolvedProperties) && strpos($methodName, 'set') === 0) {
 			if(!is_scalar($args[0])) {
 				$args[0] = $args[0]['primaryKey'];
 			}

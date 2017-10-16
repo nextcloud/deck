@@ -21,15 +21,12 @@
  *  
  */
 
-// db/author.php
 namespace OCA\Deck\Db;
 
 use DateTime;
-use JsonSerializable;
 
-class Card extends RelationalEntity implements JsonSerializable {
+class Card extends RelationalEntity {
 
-	public $id;
 	protected $title;
 	protected $description;
 	protected $stackId;
@@ -40,7 +37,7 @@ class Card extends RelationalEntity implements JsonSerializable {
 	protected $owner;
 	protected $order;
 	protected $archived = false;
-	protected $duedate = null;
+	protected $duedate;
 	protected $notified = false;
 
 	private $databaseType = 'sqlite';
@@ -67,8 +64,9 @@ class Card extends RelationalEntity implements JsonSerializable {
 	}
 
 	public function getDuedate($isoFormat = false) {
-		if($this->duedate === null)
+		if($this->duedate === null) {
 			return null;
+		}
 		$dt = new DateTime($this->duedate);
 		if (!$isoFormat && $this->databaseType === 'mysql') {
 			return $dt->format('Y-m-d H:i:s');
@@ -82,14 +80,14 @@ class Card extends RelationalEntity implements JsonSerializable {
 		$due = strtotime($this->duedate);
 
 		$today = new DateTime();
-		$today->setTime( 0, 0, 0 );
+		$today->setTime( 0, 0);
 
 		$match_date = new DateTime($this->duedate);
 
-		$match_date->setTime( 0, 0, 0 );
+		$match_date->setTime( 0, 0);
 
 		$diff = $today->diff( $match_date );
-		$diffDays = (integer)$diff->format( "%R%a" ); // Extract days count in interval
+		$diffDays = (integer)$diff->format('%R%a'); // Extract days count in interval
 
 		if($due !== false) {
 			if ($diffDays === 1) {

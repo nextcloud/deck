@@ -115,10 +115,9 @@ class PermissionService {
 	 */
 	public function checkPermission($mapper, $id, $permission) {
 		try {
+			$boardId = $id;
 			if ($mapper instanceof IPermissionMapper) {
 				$boardId = $mapper->findBoardId($id);
-			} else {
-				$boardId = $id;
 			}
 			if ($boardId === null) {
 				// Throw NoPermission to not leak information about existing entries
@@ -146,13 +145,11 @@ class PermissionService {
 	/**
 	 * @param $boardId
 	 * @return bool
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function userIsBoardOwner($boardId) {
 		$board = $this->boardMapper->find($boardId);
-		if ($board && $this->userId === $board->getOwner()) {
-			return true;
-		}
-		return false;
+		return $board && $this->userId === $board->getOwner();
 	}
 
 	/**
