@@ -28,7 +28,7 @@ class ArchivedItemException extends \Exception {
 	 * Constructor
 	 * @param string $msg the error message
 	 */
-	public function __construct($msg = "Operation not allowed. Item is archived.") {
+	public function __construct($msg = 'Operation not allowed. Item is archived.') {
 		parent::__construct($msg);
 	}
 }

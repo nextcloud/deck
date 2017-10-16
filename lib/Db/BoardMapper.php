@@ -58,6 +58,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	 * @param bool $withLabels
 	 * @param bool $withAcl
 	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws DoesNotExistException
 	 */
 	public function find($id, $withLabels = false, $withAcl = false) {
@@ -116,7 +117,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		}
 		$sql = 'SELECT boards.id, title, owner, color, archived, deleted_at, 2 as shared FROM `*PREFIX*deck_boards` as boards ' .
 			'INNER JOIN `*PREFIX*deck_board_acl` as acl ON boards.id=acl.board_id WHERE owner != ? AND type=? AND (';
-		for ($i = 0; $i < count($groups); $i++) {
+		for ($i = 0, $iMax = count($groups); $i < $iMax; $i++) {
 			$sql .= 'acl.participant = ? ';
 			if (count($groups) > 1 && $i < count($groups) - 1) {
 				$sql .= ' OR ';
@@ -134,7 +135,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 
 	public function findAll() {
 		$sql = 'SELECT id from *PREFIX*deck_boards;';
-		return $this->findEntities($sql, []);
+		return $this->findEntities($sql);
 	}
 
 	public function findToDelete() {
@@ -184,19 +185,17 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 				$user = $userManager->get($participant);
 				if($user !== null) {
 					return new User($user);
-				} else {
-					\OC::$server->getLogger()->debug('User ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
-					return null;
 				}
+				\OC::$server->getLogger()->debug('User ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
+				return null;
 			}
 			if($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
 				$group = $groupManager->get($participant);
 				if($group !== null) {
 					return new Group($group);
-				} else {
-					\OC::$server->getLogger()->debug('Group ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
-					return null;
 				}
+				\OC::$server->getLogger()->debug('Group ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
+				return null;
 			}
 			throw new \Exception('Unknown permission type for mapping Acl');
 		});

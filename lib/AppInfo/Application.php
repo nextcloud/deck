@@ -29,7 +29,7 @@ use OCA\Deck\Notification\Notifier;
 use OCP\AppFramework\App;
 use OCA\Deck\Middleware\SharingMiddleware;
 use OCP\IGroup;
-use OCP\IGroupManager;
+
 use OCP\IUser;
 use OCP\IUserManager;
 
@@ -39,6 +39,7 @@ class Application extends App {
 	 * Application constructor.
 	 *
 	 * @param array $urlParams
+	 * @throws \OCP\AppFramework\QueryException
 	 */
 	public function __construct(array $urlParams = array()) {
 		parent::__construct('deck', $urlParams);
@@ -46,13 +47,13 @@ class Application extends App {
 		$container = $this->getContainer();
 		$server = $container->getServer();
 
-		$container->registerService('SharingMiddleware', function($container) use ($server) {
+		$container->registerService('SharingMiddleware', function() use ($server) {
 			return new SharingMiddleware(
 				$server->getLogger(),
 				$server->getConfig()
 			);
 		});
-		$container->registerMiddleware('SharingMiddleware');
+		$container->registerMiddleWare('SharingMiddleware');
 
 		$container->registerService('databaseType', function($container) {
 			return $container->getServer()->getConfig()->getSystemValue('dbtype', 'sqlite');
@@ -88,7 +89,6 @@ class Application extends App {
 		$container = $this->getContainer();
 		$container->query('OCP\INavigationManager')->add(function() use ($container) {
 			$urlGenerator = $container->query('OCP\IURLGenerator');
-			$l10n = $container->query('OCP\IL10N');
 			return [
 				'id' => 'deck',
 				'order' => 10,

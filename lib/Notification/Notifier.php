@@ -30,7 +30,6 @@ use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
-use OCP\RichObjectStrings\Definitions;
 
 class Notifier implements INotifier {
 	/** @var IFactory */

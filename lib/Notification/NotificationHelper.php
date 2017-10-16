@@ -99,6 +99,7 @@ class NotificationHelper {
 	 *
 	 * @param $boardId
 	 * @param $acl
+	 * @throws \InvalidArgumentException
 	 */
 	public function sendBoardShared($boardId, $acl) {
 		$board = $this->getBoard($boardId);
@@ -118,6 +119,7 @@ class NotificationHelper {
 	/**
 	 * @param $boardId
 	 * @return Board
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	private function getBoard($boardId) {
 		if (!array_key_exists($boardId, $this->boards)) {

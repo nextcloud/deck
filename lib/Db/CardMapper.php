@@ -63,14 +63,16 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 	public function update(Entity $entity, $updateModified = true) {
 		$entity->setDatabaseType($this->databaseType);
 
-		if ($updateModified)
+		if ($updateModified) {
 			$entity->setLastModified(time());
+		}
 
 		// make sure we only reset the notification flag if the duedate changes
-		if (in_array('duedate', $entity->getUpdatedFields())) {
+		if (in_array('duedate', $entity->getUpdatedFields(), true)) {
 			$existing = $this->find($entity->getId());
-			if ($existing->getDuedate() !== $entity->getDuedate())
+			if ($existing->getDuedate() !== $entity->getDuedate()) {
 				$entity->setNotified(false);
+			}
 			// remove pending notifications
 			$notification = $this->notificationManager->createNotification();
 			$notification
@@ -87,9 +89,12 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		$cardUpdate->setNotified(true);
 		return parent::update($cardUpdate);
 	}
+
 	/**
 	 * @param $id
 	 * @return RelationalEntity if not found
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function find($id) {
 		$sql = 'SELECT * FROM `*PREFIX*deck_cards` ' .
@@ -105,27 +110,23 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 	public function findAll($stackId, $limit = null, $offset = null) {
 		$sql = 'SELECT * FROM `*PREFIX*deck_cards` 
           WHERE `stack_id` = ? AND NOT archived ORDER BY `order`';
-		$entities = $this->findEntities($sql, [$stackId], $limit, $offset);
-		return $entities;
+		return $this->findEntities($sql, [$stackId], $limit, $offset);
 	}
 
 	public function findAllArchived($stackId, $limit = null, $offset = null) {
 		$sql = 'SELECT * FROM `*PREFIX*deck_cards` WHERE `stack_id`=? AND archived ORDER BY `last_modified`';
-		$entities = $this->findEntities($sql, [$stackId], $limit, $offset);
-		return $entities;
+		return $this->findEntities($sql, [$stackId], $limit, $offset);
 	}
 
 	public function findAllByStack($stackId, $limit = null, $offset = null) {
 		$sql = 'SELECT id FROM `*PREFIX*deck_cards` 
           WHERE `stack_id` = ?';
-		$entities = $this->findEntities($sql, [$stackId], $limit, $offset);
-		return $entities;
+		return $this->findEntities($sql, [$stackId], $limit, $offset);
 	}
 
 	public function findOverdue() {
 		$sql = 'SELECT id,title,duedate,notified from `*PREFIX*deck_cards` WHERE duedate < NOW()';
-		$entities = $this->findEntities($sql);
-		return $entities;
+		return $this->findEntities($sql);
 	}
 
 	public function delete(Entity $entity) {

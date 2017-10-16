@@ -23,11 +23,8 @@
 
 namespace OCA\Deck\Db;
 
-use JsonSerializable;
+class Board extends RelationalEntity {
 
-class Board extends RelationalEntity implements JsonSerializable {
-
-	public $id;
 	protected $title;
 	protected $owner;
 	protected $color;
