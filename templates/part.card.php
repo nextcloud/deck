@@ -36,7 +36,7 @@
 	<div id="labels" ng-show="!(boardservice.isArchived() || card.archived) && card.labels">
 		<ui-select multiple tagging="" ng-model="card.labels" theme="select2"
 				   ng-disabled="boardservice.isArchived() || card.archived"
-				   style="width:100%;" title="<?php p($l->t('Choose a tag')); ?>"
+				   title="<?php p($l->t('Choose a tag')); ?>"
 				   placeholder="<?php p($l->t('Add a tag')); ?>"
 				   on-select="labelAssign($item, $model)"
 				   on-remove="labelRemove($item, $model)" ng-disabled="!boardservice.canEdit() || archived">
@@ -55,7 +55,7 @@
 	</div>
 	<div class="section-content card-details-assign-users">
 		<ui-select id="assignUserSelect" class="card-details-assign-user" ng-model="status.assignedUser" ng-show="status.showAssignUser" uis-open-close="assingUserOpenClose(isOpen)"
-				   theme="select2" style="width:100%;"
+				   theme="select2"
 				   title="Choose a user to assign" placeholder="Choose a user to assign"
 				   on-select="addAssignedUser($item)">
 			<ui-select-match placeholder="<?php p($l->t('Assign this card to a user')); ?>">
