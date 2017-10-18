@@ -364,6 +364,7 @@ input.input-inline {
 		background: $color-lightgrey;
 		display: flex;
 		position: relative;
+		padding-left: 10px;
 
 		.card-options {
 			justify-content: flex-end;
@@ -375,6 +376,40 @@ input.input-inline {
 
 		.icon-filetype-text {
 			margin: 10px;
+			margin-left: 0px;
+		}
+
+		.due {
+			border-radius: 3px;
+			margin: 6px 4px 6px 0px;
+			padding: 0 4px;
+			font-size: 90%;
+			opacity: 0.5;
+			display: flex;
+			align-items: center;
+
+			.icon {
+				background-size: contain;
+			}
+
+			&.overdue {
+				background-color: $color-error;
+				color: $color-primary-text;
+
+				.icon-badge {
+					background-image: url('../img/calendar-white.svg');
+				}
+			}
+			&.now {
+				background-color: $color-warning;
+			}
+			&.next {
+				background-color: $color-warning-light;
+			}
+
+			span {
+				margin-left: 3px;
+			}
 		}
 
 		button {
@@ -495,39 +530,6 @@ input.input-inline {
 
 	span {
 		margin-right: 2px;
-	}
-}
-
-.due {
-	border-radius: 3px;
-	margin: 6px 4px 6px -4px;
-	padding: 0 4px;
-	font-size: 90%;
-	opacity: 0.5;
-	display: flex;
-	align-items: center;
-
-	.icon {
-		background-size: contain;
-	}
-
-	&.overdue {
-		background-color: $color-error;
-		color: $color-primary-text;
-
-		.icon-badge {
-			background-image: url('../img/calendar-white.svg');
-		}
-	}
-	&.now {
-		background-color: $color-warning;
-	}
-	&.next {
-		background-color: $color-warning-light;
-	}
-
-	span {
-		margin-left: 3px;
 	}
 }
 
