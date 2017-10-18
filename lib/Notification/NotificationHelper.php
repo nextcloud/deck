@@ -83,7 +83,7 @@ class NotificationHelper {
 			$notification = $this->notificationManager->createNotification();
 			$notification
 				->setApp('deck')
-				->setUser($user->getUID())
+				->setUser((string)$user->getUID())
 				->setObject('card', $card->getId())
 				->setSubject('card-overdue', [
 					$card->getTitle(), $board->getTitle()
@@ -132,7 +132,7 @@ class NotificationHelper {
 		$notification = $this->notificationManager->createNotification();
 		$notification
 			->setApp('deck')
-			->setUser($userId)
+			->setUser((string)$userId)
 			->setDateTime(new DateTime())
 			->setObject('board', $board->getId())
 			->setSubject('board-shared', [$board->getTitle(), $this->currentUser]);
