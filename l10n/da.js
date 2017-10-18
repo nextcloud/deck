@@ -50,6 +50,7 @@ OC.L10N.register(
     "Description" : "Beskrivelse",
     "Formatting help" : "Hjælp til formatering",
     "Saved" : "Gemt",
+    "Unsaved changes" : "Ikke gemte ændringer",
     "Add a card description…" : "Tilføj en beskrivelse...",
     "Archived boards" : "Arkiverede lister",
     "Shared boards" : "Delte lister",
