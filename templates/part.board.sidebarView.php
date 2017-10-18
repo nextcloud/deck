@@ -73,9 +73,9 @@
                         <span ng-if="label.title">{{ label.title }}</span><i ng-if="!label.title"><br /></i>
                     </span>
                     <div class="label-edit" ng-if="label.edit">
-                        <div ng-style="{'background-color':'#{{label.color}}','color':'{{ textColor(label.color) }}','width':'100%'}>
+                        <div ng-style="{'background-color':'#{{label.color}}','color':'{{ textColor(label.color) }}','width':'100%'}">
                             <form ng-submit="labelUpdate(label)">
-                                <input type="text" ng-model="label.title" ng-keyup="$event.keyCode === 13 && labelUpdate(label)" class="input-inline" ng-style="{'background-color':'#{{label.color}}','color':'{{ label.color|textColorFilter }}'}" autofocus-on-insert maxlength="100"/>
+                                <input type="text" ng-model="label.title" class="input-inline" ng-style="{'background-color':'#{{label.color}}','color':'{{ label.color|textColorFilter }}'}" autofocus-on-insert maxlength="100"/>
                             </form>
                         </div>
                         <div class="colorselect">
