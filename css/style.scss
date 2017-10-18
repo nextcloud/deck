@@ -603,23 +603,16 @@ input.input-inline {
 		}
 	}
 
-	.select2-container {
-		margin: 0px;
-	}
 	.section-header {
 		border-bottom: 1px solid $color-lightgrey;
 		display: flex;
 		margin-bottom: 5px;
 		margin-top: 20px;
-		min-height: 30px;
 		h4 {
 			padding-top: 5px;
 			padding-bottom: 5px;
-			border: none;
 			flex: 1;
 		}
-
-
 	}
 
 	.save-indicator {
@@ -1022,14 +1015,19 @@ input.input-inline {
 	}
 }
 
-.select2-container .select2-choices {
-	padding: 0 !important;
-}
+.select2-container {
+	width: 100%;
+	margin: 0;
 
-.select2-container .select2-choices .select2-search-choice {
-	padding: 3px 0 !important;
-	border: 0 !important;
-	overflow: hidden;
+	.select2-choices {
+		padding: 0 !important;
+
+		.select2-search-choice {
+			padding: 3px 0 !important;
+			border: 0 !important;
+			overflow: hidden;
+		}
+	}
 }
 
 .ui-select-container[disabled] .ui-select-match-item {
