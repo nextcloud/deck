@@ -3,6 +3,9 @@ OC.L10N.register(
     {
     "Hours" : "Horas",
     "Minutes" : "Minutos",
+    "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
+    "The board \"%s\" has been shared with you by %s." : "El tablero \"%s\" ha sido compartido contigo por %s.",
+    "{user} has shared the board %s with you." : "{user} ha compartido el tablero %s contigo. ",
     "Finished" : "Terminado",
     "To review" : "Para revisar",
     "Action needed" : "Acción requerida",
@@ -47,6 +50,7 @@ OC.L10N.register(
     "Description" : "Descripción",
     "Formatting help" : "Ayuda de formato",
     "Saved" : "Guardado",
+    "Unsaved changes" : "Cambios no guardados",
     "Add a card description…" : "Agregar una descripción de tarjeta...",
     "Archived boards" : "Tableros archivados",
     "Shared boards" : "Tableros compartidos",

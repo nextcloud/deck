@@ -50,6 +50,7 @@ OC.L10N.register(
     "Description" : "Açıklama",
     "Formatting help" : "Biçimlendirme yardımı",
     "Saved" : "Kaydedildi",
+    "Unsaved changes" : "Kaydedilmemiş değişiklikler",
     "Add a card description…" : "Bir kart açıklaması ekle...",
     "Archived boards" : "Arşivlenmiş panolar",
     "Shared boards" : "Paylaşılmış panolar",
