@@ -50,6 +50,7 @@ OC.L10N.register(
     "Description" : "Opis",
     "Formatting help" : "Pomoc przy formatowaniu",
     "Saved" : "Zapisano",
+    "Unsaved changes" : "Niezapisane zmiany",
     "Add a card description…" : "Dodaj opis karty",
     "Archived boards" : "Zarchiwizowane tablice",
     "Shared boards" : "Tablice współdzielone",

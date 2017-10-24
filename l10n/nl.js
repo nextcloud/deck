@@ -3,6 +3,9 @@ OC.L10N.register(
     {
     "Hours" : "Uur",
     "Minutes" : "Minutes",
+    "The card \"%s\" on \"%s\" has reached its due date." : "De kaart \"%s\" bij \"%s\" heeft bereikte zijn vervaldatum.",
+    "The board \"%s\" has been shared with you by %s." : "Het bord \"%s\" is door %s met je gedeeld.",
+    "{user} has shared the board %s with you." : "{user} heeft het bord %s met jou gedeeld.",
     "Finished" : "Afgerond",
     "To review" : "Beoordelen",
     "Action needed" : "Actie benodigd",
@@ -47,6 +50,7 @@ OC.L10N.register(
     "Description" : "Beschrijving",
     "Formatting help" : "formatteringshulp",
     "Saved" : "Opgeslagen",
+    "Unsaved changes" : "Niet bewaarde wijzigingen",
     "Add a card description…" : "Voeg een kaartbeschrijving toe...",
     "Archived boards" : "Gearchiveerde planken",
     "Shared boards" : "Gedeelde borden",
