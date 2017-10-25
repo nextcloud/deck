@@ -44,6 +44,8 @@ OC.L10N.register(
     "Choose a tag" : "Vælg et tag",
     "Add a tag" : "Tilføj et tag",
     "Select tags" : "Vælg tags",
+    "Assign users" : "Tildel brugere",
+    "Assign this card to a user" : "Tildel dette kort til en bruger",
     "Due date" : "Forfaldsdato",
     "Click to set" : "Klik for at sætte",
     "Remove due date" : "Fjern forfaldsdato",

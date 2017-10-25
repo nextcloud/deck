@@ -44,6 +44,8 @@ OC.L10N.register(
     "Choose a tag" : "Schlagwort auswählen",
     "Add a tag" : "Schlagwort hinzufügen",
     "Select tags" : "Schlagwörter auswählen",
+    "Assign users" : "Nutzer zuweisen",
+    "Assign this card to a user" : "Diese Karte einem Nutzer zuweisen",
     "Due date" : "Fälligkeitsdatum",
     "Click to set" : "Klicken zum Übernehmen",
     "Remove due date" : "Ablaufdatum löschen",

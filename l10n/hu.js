@@ -44,6 +44,8 @@ OC.L10N.register(
     "Choose a tag" : "Válassz címkét",
     "Add a tag" : "Címke hozzáadása",
     "Select tags" : "Címkék kiválasztása",
+    "Assign users" : "Felhasználók kijelölése",
+    "Assign this card to a user" : "Ezen kártya felhasználóhoz rendelése",
     "Due date" : "Határidő",
     "Click to set" : "Kattints a beállításhoz",
     "Remove due date" : "Határidő eltávolítása",
