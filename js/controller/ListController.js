@@ -23,6 +23,29 @@
 /* global app angular */
 
 app.controller('ListController', function ($scope, $location, $filter, BoardService, $element, $timeout, $stateParams, $state) {
+    function calculateNewColor() {
+        var boards = BoardService.getAll();
+        var boardKeys = Object.keys(boards);
+        var colorOccurrences = [];
+
+        for (var i =0; i < boardKeys.length; i++) {
+            var key = boardKeys[i];
+            var board = boards[key];
+
+            if (board && $scope.colors.indexOf(board.color) !== -1) {
+                colorOccurrences.push(board.color);
+            }
+        }
+
+        colorOccurrences = colorOccurrences
+            .reduce(function (result, value) {
+                result[$scope.colors.indexOf(value)] = result[$scope.colors.indexOf(value)] + 1;
+                return result;
+            }, [0, 0, 0, 0, 0, 0]);
+
+        return $scope.colors[colorOccurrences.indexOf(Math.min.apply(Math, colorOccurrences))];
+    }
+
 	$scope.boards = [];
 	$scope.newBoard = {};
 	$scope.status = {
@@ -32,7 +55,7 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 	};
 	$scope.colors = ['0082c9', '00c9c6','00c906', 'c92b00', 'F1DB50', '7C31CC', '3A3B3D', 'CACBCD'];
 	$scope.boardservice = BoardService;
-	$scope.newBoard.color = $scope.colors[0];
+	$scope.newBoard.color = calculateNewColor();
 	$scope.updatingBoard = null;
 
 	// FIXME: not nice, but we want to load this only once
@@ -90,7 +113,7 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 		BoardService.create($scope.newBoard)
 			.then(function (response) {
 				$scope.newBoard = {};
-				$scope.newBoard.color = $scope.colors[0];
+				$scope.newBoard.color = calculateNewColor();
 				$scope.status.addBoard=false;
 				$scope.filterData();
 			}, function(error) {
