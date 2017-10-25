@@ -97,9 +97,14 @@ input.input-inline {
 		height: 100%;
 		width: 100%;
 	}
-	.app-navigation-entry-edit {
-		height: auto;
 
+	li {
+		transition: height 250ms ease-in-out, opacity 250ms ease-in-out, z-index 250ms ease-in-out;
+	}
+	.editing {
+		height: 82px;
+	}
+	.app-navigation-entry-edit {
 		.colorselect div{
 			height: 32px;
 		}
