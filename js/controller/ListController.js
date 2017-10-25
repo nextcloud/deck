@@ -28,20 +28,18 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
         var boardKeys = Object.keys(boards);
         var colorOccurrences = [];
 
-        for (var i =0; i < boardKeys.length; i++) {
-            var key = boardKeys[i];
+        for (var i = 0; i < $scope.colors.length; i++) {
+            colorOccurrences.push(0);
+        }
+
+        for (var j = 0; j < boardKeys.length; j++) {
+            var key = boardKeys[j];
             var board = boards[key];
 
             if (board && $scope.colors.indexOf(board.color) !== -1) {
-                colorOccurrences.push(board.color);
+                colorOccurrences[$scope.colors.indexOf(board.color)]++;
             }
         }
-
-        colorOccurrences = colorOccurrences
-            .reduce(function (result, value) {
-                result[$scope.colors.indexOf(value)] = result[$scope.colors.indexOf(value)] + 1;
-                return result;
-            }, [0, 0, 0, 0, 0, 0]);
 
         return $scope.colors[colorOccurrences.indexOf(Math.min.apply(Math, colorOccurrences))];
     }
