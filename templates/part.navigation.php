@@ -4,11 +4,11 @@
 	<li ng-class="{active: status.filter === 'archived' || (boardservice.getCurrent() && boardservice.getCurrent().archived)}"><a ui-sref="list({ filter: 'archived' })" class="icon-archive"><?php p($l->t('Archived boards')); ?></a></li>
 	<li ng-class="{active: status.filter === 'shared'}"><a ui-sref="list({ filter: 'shared' })" class="icon-share"><?php p($l->t('Shared boards')); ?></a></li>
 
-	<li class="with-icon with-menu" ng-class="{active: b.id === boardservice.getCurrent().id}" data-ng-repeat="b in boardservice.sidebar" ng-if="b.deletedAt == 0">
+	<li class="with-icon with-menu" ng-class="{active: b.id === boardservice.getCurrent().id, editing: b.status.edit}" data-ng-repeat="b in boardservice.sidebar" ng-if="b.deletedAt == 0">
 
-		<span class="board-bullet"  ng-style="{'background-color':'#{{b.color}}'}" ng-if="!b.status.edit"> </span>
-		<a href="#!/board/{{b.id}}/" ng-if="!b.status.edit">{{ b.title }}</a>
-		<div class="app-navigation-entry-utils" ng-show="!b.status.edit">
+		<span class="board-bullet"  ng-style="{'background-color':'#{{b.color}}'}"> </span>
+		<a href="#!/board/{{b.id}}/">{{ b.title }}</a>
+		<div class="app-navigation-entry-utils">
 			<ul>
 				<li class="app-navigation-entry-utils-menu-share svg" ng-if="b.shared>0"><i class="icon icon-share" title="<?php p($l->t('Shared with you')); ?>"><span class="hidden-visually"><?php p($l->t('Shared with you')); ?></span></i></li>
 				<li class="app-navigation-entry-utils-menu-button svg" ng-show="!status.deleteUndo[b.id]"><button class="icon-more" title="<?php p($l->t('View more')); ?>"><span class="hidden-visually"><?php p($l->t('View more')); ?></span></button></li>
@@ -25,7 +25,7 @@
 			</ul>
 		</div>
 
-		<div class="app-navigation-entry-edit" ng-show="b.status.edit">
+		<div class="app-navigation-entry-edit">
 			<form ng-disabled="isAddingList" class="ng-pristine ng-valid"  ng-submit="boardUpdate(b)">
 				<input id="newTitle" class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100">
 				<input type="submit" value="" class="action icon-checkmark svg">
