@@ -56,12 +56,6 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 	$scope.boardservice = BoardService;
 	$scope.updatingBoard = null;
 
-
-	var finishedLoading = function() {
-		filterData();
-		$scope.newBoard.color = calculateNewColor();
-	};
-
 	var filterData = function () {
 		if($element.attr('id') === 'app-navigation') {
 			$scope.boardservice.sidebar = $scope.boardservice.getData();
@@ -81,6 +75,11 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 			}
 			$scope.boardservice.sorted = $filter('orderBy')($scope.boardservice.sorted, ['deletedAt', 'title']);
 		}
+	};
+
+	var finishedLoading = function() {
+		filterData();
+		$scope.newBoard.color = calculateNewColor();
 	};
 
 	var initialize = function () {
@@ -151,13 +150,12 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 	};
 
 	$scope.boardUpdateBegin = function(board) {
-		$scope.updatingBoard = board;
+		$scope.updatingBoard = angular.copy(board);
 	};
 
 	$scope.boardUpdateReset = function(board) {
 		board.title = $scope.updatingBoard.title;
 		board.color = $scope.updatingBoard.color;
-		console.log(board);
 		filterData();
 		board.status.edit = false;
 	};
