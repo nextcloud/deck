@@ -46,6 +46,13 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 
 	$scope.board = BoardService.getCurrent();
 	StackService.clear(); //FIXME: Is this still needed?
+
+	$scope.$watch(function () {
+   		return BoardService.getCurrent().title;
+	}, function() {
+   		$scope.setPageTitle();
+	});
+
 	$scope.setPageTitle = function () {
 		if (BoardService.getCurrent()) {
 			document.title = BoardService.getCurrent().title + " | Deck - " + oc_defaults.name;
