@@ -1,10 +1,15 @@
+<div id="board-status" ng-if="statusservice.active">
+	<div id="emptycontent">
+		<div class="icon-{{ statusservice.icon }}" title="<?php p($l->t('Status')); ?>"><span class="hidden-visually"><?php p($l->t('Status')); ?></span></div>
+		<h2>{{ statusservice.title }}</h2>
+		<p>{{ statusservice.text }}</p></div>
+</div>
 <div id="controls">
 	<div class="breadcrumb">
 		<div class="crumb svg last">
 			<a href="#" class="icon-home" title="<?php p($l->t('All Boards')); ?>">
 				<span class="hidden-visually"><?php p($l->t('All Boards')); ?></span>
 			</a>
-			<span style="display: none;"></span>
 		</div>
 	</div>
 </div>

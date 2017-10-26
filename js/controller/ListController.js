@@ -22,7 +22,8 @@
 
 /* global app angular */
 
-app.controller('ListController', function ($scope, $location, $filter, BoardService, $element, $timeout, $stateParams, $state) {
+app.controller('ListController', function ($scope, $location, $filter, BoardService, $element, $timeout, $stateParams, $state, StatusService) {
+
 	function calculateNewColor() {
 		var boards = BoardService.getAll();
 		var boardKeys = Object.keys(boards);
@@ -53,44 +54,67 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 	};
 	$scope.colors = ['0082c9', '00c9c6','00c906', 'c92b00', 'F1DB50', '7C31CC', '3A3B3D', 'CACBCD'];
 	$scope.boardservice = BoardService;
-	$scope.newBoard.color = calculateNewColor();
 	$scope.updatingBoard = null;
 
-	// FIXME: not nice, but we want to load this only once
-	if($element.attr('id') === 'app-navigation') {
-		BoardService.fetchAll().then(function(data) {
-			$scope.filterData();
-		}, function (error) {
-			// TODO: show error when loading fails
-		});
-	}
 
-	$scope.filterData = function () {
-		angular.copy($scope.boardservice.getData(), $scope.boardservice.sorted);
-		angular.copy($scope.boardservice.sorted, $scope.boardservice.sidebar);
-		$scope.boardservice.sidebar = $filter('orderBy')($scope.boardservice.sidebar, 'title');
-		$scope.boardservice.sidebar = $filter('cardFilter')($scope.boardservice.sidebar, {archived: false});
-
-		if ($scope.status.filter === 'archived') {
-			var filter = {};
-			filter[$scope.status.filter] = true;
-			$scope.boardservice.sorted = $filter('cardFilter')($scope.boardservice.sorted, filter);
-		} else if ($scope.status.filter === 'shared') {
-			$scope.boardservice.sorted = $filter('cardFilter')($scope.boardservice.sorted, {archived: false});
-			$scope.boardservice.sorted = $filter('boardFilterAcl')($scope.boardservice.sorted);
-		} else {
-			$scope.boardservice.sorted = $filter('cardFilter')($scope.boardservice.sorted, {archived: false});
-		}
-		$scope.boardservice.sorted = $filter('orderBy')($scope.boardservice.sorted, ['deletedAt', 'title']);
+	var finishedLoading = function() {
+		filterData();
+		$scope.newBoard.color = calculateNewColor();
 	};
 
-	$scope.$watchCollection(function(){
-		return $state.params;
-	}, function(){
-		$scope.status.filter = $state.params.filter;
-		$scope.filterData();
-	});
+	var filterData = function () {
+		if($element.attr('id') === 'app-navigation') {
+			$scope.boardservice.sidebar = $scope.boardservice.getData();
+			$scope.boardservice.sidebar = $filter('orderBy')($scope.boardservice.sidebar, 'title');
+			$scope.boardservice.sidebar = $filter('cardFilter')($scope.boardservice.sidebar, {archived: false});
+		} else {
+			$scope.boardservice.sorted = $scope.boardservice.getData();
+			if ($scope.status.filter === 'archived') {
+				var filter = {};
+				filter[$scope.status.filter] = true;
+				$scope.boardservice.sorted = $filter('cardFilter')($scope.boardservice.sorted, filter);
+			} else if ($scope.status.filter === 'shared') {
+				$scope.boardservice.sorted = $filter('cardFilter')($scope.boardservice.sorted, {archived: false});
+				$scope.boardservice.sorted = $filter('boardFilterAcl')($scope.boardservice.sorted);
+			} else {
+				$scope.boardservice.sorted = $filter('cardFilter')($scope.boardservice.sorted, {archived: false});
+			}
+			$scope.boardservice.sorted = $filter('orderBy')($scope.boardservice.sorted, ['deletedAt', 'title']);
+		}
+	};
 
+	var initialize = function () {
+		$scope.statusservice = StatusService.listStatus;
+
+		if($element.attr('id') === 'app-navigation') {
+			$scope.statusservice.retainWaiting();
+			BoardService.fetchAll().then(function(data) {
+				finishedLoading();
+				$scope.statusservice.releaseWaiting();
+				BoardService.loaded = true;
+			}, function (error) {
+				$scope.statusservice.setError('Error occured', error);
+			});
+		} else {
+			/* Watch for data change of boardservice when boards are fetched */
+			var boardDataWatch = $scope.$watch(function () {
+				return $scope.boardservice.data;
+			}, function () {
+				if (BoardService.loaded === true) {
+					boardDataWatch();
+					finishedLoading();
+				}
+			}, true);
+		}
+		/* Watch for board filter change */
+		$scope.$watchCollection(function(){
+			return $state.params;
+		}, function(){
+			$scope.status.filter = $state.params.filter;
+			filterData();
+		});
+	};
+	initialize();
 
 	$scope.selectColor = function(color) {
 		$scope.newBoard.color = color;
@@ -113,7 +137,7 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 				$scope.newBoard = {};
 				$scope.newBoard.color = calculateNewColor();
 				$scope.status.addBoard=false;
-				$scope.filterData();
+				filterData();
 			}, function(error) {
 				$scope.status.createBoard = 'Unable to insert board: ' + error.message;
 			});
@@ -121,8 +145,8 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 
 	$scope.boardUpdate = function(board) {
 		BoardService.update(board).then(function(data) {
-			$scope.filterData();
 			board.status.edit = false;
+			filterData();
 		});
 	};
 
@@ -133,33 +157,34 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 	$scope.boardUpdateReset = function(board) {
 		board.title = $scope.updatingBoard.title;
 		board.color = $scope.updatingBoard.color;
-		$scope.filterData();
+		console.log(board);
+		filterData();
 		board.status.edit = false;
 	};
 
 	$scope.boardArchive = function (board) {
 		board.archived = true;
 		BoardService.update(board).then(function(data) {
-			$scope.filterData();
+			filterData();
 		});
 	};
 
 	$scope.boardUnarchive = function (board) {
 		board.archived = false;
 		BoardService.update(board).then(function(data) {
-			$scope.filterData();
+			filterData();
 		});
 	};
 
 	$scope.boardDelete = function(board) {
 		BoardService.delete(board.id).then(function (data) {
-			$scope.filterData();
+			filterData();
 		});
 	};
 
 	$scope.boardDeleteUndo = function (board) {
 		BoardService.deleteUndo(board.id).then(function (data) {
-			$scope.filterData();
+			filterData();
 		});
 	};
 
