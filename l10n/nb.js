@@ -62,6 +62,7 @@ OC.L10N.register(
     "Archived boards" : "Akriverte bord",
     "Shared boards" : "Delte bord",
     "Shared with you" : "Delt med deg",
+    "View more" : "Vis mer",
     "Move board to archive" : "Flytt bord til arkiv",
     "Create a new board" : "Opprett et nytt bord"
 },
