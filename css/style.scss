@@ -496,8 +496,6 @@ input.input-inline {
 	z-index: 999;
 	opacity: 1;
 	display: block;
-	margin-top: 25px;
-	margin-right: 0px;
 
 	&.hidden {
 		display: none;
@@ -834,6 +832,7 @@ input.input-inline {
 
 			button {
 				opacity: 0.5;
+				padding: 22px;
 			}
 
 			&:hover button {
@@ -850,10 +849,6 @@ input.input-inline {
 	tr.deleted td *,
 	tbody .board-create td {
 		opacity: 0.5;
-	}
-
-	.popovermenu {
-		margin-top: 5px;
 	}
 
 	.board-edit-controls {
