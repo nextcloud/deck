@@ -46,9 +46,10 @@
 				</div>
 			</td>
 			<td>
-				<div class="hint"></div>
 				<div class="app-popover-menu-utils" ng-if="b.deletedAt == 0" ng-show="!b.status.edit">
-					<button class="icon icon-more button-inline" title="<?php p($l->t('More actions')); ?>"><span class="hidden-visually"><?php p($l->t('More actions')); ?></span></button>
+					<button class="icon icon-more button-inline" title="<?php p($l->t('More actions')); ?>">
+						<span class="hidden-visually"><?php p($l->t('More actions')); ?></span>
+					</button>
 					<div class="popovermenu bubble hidden">
 						<ul>
 							<li ng-click="boardUpdateBegin(b); b.status.edit = true">

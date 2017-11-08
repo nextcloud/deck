@@ -28,13 +28,7 @@ app.directive('appPopoverMenuUtils', function () {
 			var menu = elm.find('.popovermenu');
 			var button = elm.find('button');
 			button.click(function (e) {
-				$('.popovermenu').addClass('hidden');
 				menu.toggleClass('hidden');
-				if(!menu.hasClass('hidden')) {
-					button.css('display','block');
-				} else {
-					button.css('display','');
-				}
 				e.stopPropagation();
 			});
 			scope.$on('documentClicked', function (scope, event) {
@@ -42,7 +36,6 @@ app.directive('appPopoverMenuUtils', function () {
 				if (event.target !== button && !$(event.target).hasClass('no-close')) {
 					menu.addClass('hidden');
 				}
-				button.css('display','');
 			});
 		}
 	};
