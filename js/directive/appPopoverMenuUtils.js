@@ -28,7 +28,12 @@ app.directive('appPopoverMenuUtils', function () {
 			var menu = elm.find('.popovermenu');
 			var button = elm.find('button');
 			button.click(function (e) {
-				menu.toggleClass('hidden');
+				var popovermenus = $('.popovermenu');
+				var shouldShow = menu.hasClass('hidden');
+				popovermenus.addClass('hidden');
+				if (shouldShow) {
+					menu.toggleClass('hidden');
+				}
 				e.stopPropagation();
 			});
 			scope.$on('documentClicked', function (scope, event) {
