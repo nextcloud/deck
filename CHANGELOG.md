@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.2.5 - 2017-11-08
+
+### Fixed
+- Fix duedates not being saved with MySQL databases
+
 ## 0.2.4 - 2017-10-08
 
 ### Fixed
