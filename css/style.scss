@@ -75,11 +75,6 @@ input.input-inline {
 /**
  * Navigation sidebar
  */
-.app-navigation-entry-menu {
-	ul {
-		flex-direction: row;
-	}
-}
 
 #app-navigation {
 	/** menu */
@@ -103,6 +98,10 @@ input.input-inline {
 	}
 	.editing {
 		height: 82px;
+
+		.icon-add {
+			background-position: 14px 14px;
+		}
 	}
 	.app-navigation-entry-edit {
 		.colorselect div{
