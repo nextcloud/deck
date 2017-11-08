@@ -1147,48 +1147,6 @@ input.input-inline {
 	}
 }
 
-/**
- * Custom icons
- */
-.icon-deck {
-	background-image: url('../img/deck-dark.svg');
-}
-
-.icon-group {
-	background-image: url('../../../settings/img/users.svg');
-}
-
-.icon-help {
-	background-image: url('../../../settings/img/help.svg');
-}
-
-.icon-add-white {
-	background-image: url('../img/add-white.svg');
-}
-
-.icon-archive {
-	background-image: url('../img/archive.svg');
-}
-
-.icon-archive-white {
-	background-image: url('../img/archive-white.svg');
-}
-
-.icon-details {
-	background-image: url('../img/details.svg');
-}
-
-.icon-details-white {
-	background-image: url('../img/details-white.svg');
-}
-
-.icon-home {
-	background-image: url('../../../core/img/places/home.svg');
-}
-
-.icon-badge {
-	background-image: url('../../../core/img/places/calendar-dark.svg');
-}
 
 /**
  * Hotfix for https://github.com/angular-ui/ui-select/issues/1652
@@ -1198,3 +1156,4 @@ input.input-inline {
 }
 
 @import 'comp-appnav.scss';
+@import 'icons.scss';
