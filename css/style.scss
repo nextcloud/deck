@@ -22,6 +22,11 @@
  *
  */
 
+$color-warning-light: nc-lighten($color-warning, 15%);
+$color-lightgrey: nc-darken($color-main-background, 4%);
+$color-grey: nc-darken($color-main-background, 7%);
+$color-darkgrey: nc-darken($color-main-background, 32%);
+
 /**
  * General styles
  */
