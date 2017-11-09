@@ -54,6 +54,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	public function update(Entity $entity) {
+		$entity->setDatabaseType($this->databaseType);
 		$entity->setLastModified(time());
 		return parent::update($entity);
 	}
