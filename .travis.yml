@@ -10,7 +10,6 @@ env:
     matrix:
         - CORE_BRANCH=master DB=mysql
         - CORE_BRANCH=stable12 DB=mysql 
-        - CORE_BRANCH=stable11 DB=mysql 
 
 before_install:
     - wget https://phar.phpunit.de/phpunit-5.7.phar
