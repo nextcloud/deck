@@ -38,7 +38,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		IDBConnection $db,
 		LabelMapper $labelMapper,
 		IUserManager $userManager,
-		$databaseType
+		$databaseType = 'sqlite'
 	) {
 		parent::__construct($db, 'deck_cards', '\OCA\Deck\Db\Card');
 		$this->labelMapper = $labelMapper;
