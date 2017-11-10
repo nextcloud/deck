@@ -44,7 +44,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		LabelMapper $labelMapper,
 		IUserManager $userManager,
 		IManager $notificationManager,
-		$databaseType
+		$databaseType = 'sqlite'
 	) {
 		parent::__construct($db, 'deck_cards', Card::class);
 		$this->labelMapper = $labelMapper;
