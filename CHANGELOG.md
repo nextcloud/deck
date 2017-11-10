@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.2.7 - 2017-11-10
+
+### Fixed
+- Fix bug that caused update to fail
+
 ## 0.2.6 - 2017-11-10
 
 ### Fixed
