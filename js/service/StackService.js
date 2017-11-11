@@ -103,7 +103,7 @@ app.factory('StackService', function (ApiService, $http, $q) {
 		var self = this;
 		var cards = this.data[entity.stackId].cards;
 		for (var i = 0; i < cards.length; i++) {
-			if (cards[i].id == entity.id) {
+			if (cards[i].id === entity.id) {
 				cards[i] = entity;
 			}
 		}
@@ -112,13 +112,13 @@ app.factory('StackService', function (ApiService, $http, $q) {
 		var self = this;
 		var cards = this.data[entity.stackId].cards;
 		for (var i = 0; i < cards.length; i++) {
-			if (cards[i].id == entity.id) {
+			if (cards[i].id === entity.id) {
 				cards.splice(i, 1);
 			}
 		}
 	};
 
-	service = new StackService($http, 'stacks', $q);
+	var service = new StackService($http, 'stacks', $q);
 	return service;
 });
 

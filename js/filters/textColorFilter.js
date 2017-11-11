@@ -37,7 +37,7 @@ app.filter('textColorFilter', function () {
 			var max = Math.max(r, g, b), min = Math.min(r, g, b);
 			var h, s, l = (max + min) / 2;
 
-			if (max == min) {
+			if (max === min) {
 				h = s = 0; // achromatic
 			} else {
 				var d = max - min;
