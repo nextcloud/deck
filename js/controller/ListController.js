@@ -23,26 +23,26 @@
 /* global app angular */
 
 app.controller('ListController', function ($scope, $location, $filter, BoardService, $element, $timeout, $stateParams, $state) {
-    function calculateNewColor() {
-        var boards = BoardService.getAll();
-        var boardKeys = Object.keys(boards);
-        var colorOccurrences = [];
+	function calculateNewColor() {
+		var boards = BoardService.getAll();
+		var boardKeys = Object.keys(boards);
+		var colorOccurrences = [];
 
-        for (var i = 0; i < $scope.colors.length; i++) {
-            colorOccurrences.push(0);
-        }
+		for (var i = 0; i < $scope.colors.length; i++) {
+			colorOccurrences.push(0);
+		}
 
-        for (var j = 0; j < boardKeys.length; j++) {
-            var key = boardKeys[j];
-            var board = boards[key];
+		for (var j = 0; j < boardKeys.length; j++) {
+			var key = boardKeys[j];
+			var board = boards[key];
 
-            if (board && $scope.colors.indexOf(board.color) !== -1) {
-                colorOccurrences[$scope.colors.indexOf(board.color)]++;
-            }
-        }
+			if (board && $scope.colors.indexOf(board.color) !== -1) {
+				colorOccurrences[$scope.colors.indexOf(board.color)]++;
+			}
+		}
 
-        return $scope.colors[colorOccurrences.indexOf(Math.min.apply(Math, colorOccurrences))];
-    }
+		return $scope.colors[colorOccurrences.indexOf(Math.min.apply(Math, colorOccurrences))];
+	}
 
 	$scope.boards = [];
 	$scope.newBoard = {};

@@ -128,7 +128,7 @@ app.factory('BoardService', function (ApiService, $http, $q) {
 			permissionManage: true,
 			permissionShare: true,
 			type: type
-		}
+		};
 	};
 
 	BoardService.prototype.addAcl = function (acl) {

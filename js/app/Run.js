@@ -20,7 +20,7 @@
  *  
  */
 
-/** global: OC, oc_defaults, Snap */
+/* global Snap */
 app.run(function ($document, $rootScope, $transitions, BoardService) {
 	'use strict';
 	$document.click(function (event) {

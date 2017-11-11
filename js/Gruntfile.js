@@ -22,7 +22,7 @@
 
 
 module.exports = function(grunt) {
-  'use strict';
+	'use strict';
 
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-watch');
@@ -37,13 +37,13 @@ module.exports = function(grunt) {
 			pkg: grunt.file.readJSON('package.json'),
 			version: '<%= meta.pkg.version %>',
 			configJS: 'config/',
-      buildJS: [
-					'app/**/*.js',
-					'controller/**/*.js',
-					'filters/**/*.js',
-					'directive/**/*.js',
-					'service/**/*.js'
-      ],
+			buildJS: [
+				'app/**/*.js',
+				'controller/**/*.js',
+				'filters/**/*.js',
+				'directive/**/*.js',
+				'service/**/*.js'
+			],
 			productionJS: 'public/',
 			testsJS: '../tests/js/'
 		},

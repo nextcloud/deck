@@ -22,7 +22,7 @@
 
 app.filter('orderObjectBy', function(){
 	return function(input, attribute) {
-		if (!angular.isObject(input)) return input;
+		if (!angular.isObject(input)) {return input;}
 		var array = [];
 		for(var objectKey in input) {
 			array.push(input[objectKey]);
@@ -34,5 +34,5 @@ app.filter('orderObjectBy', function(){
 			return a < b;
 		});
 		return array;
-	}
+	};
 });
