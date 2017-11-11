@@ -21,7 +21,7 @@
  */
 
 app.filter('boardFilterAcl', function() {
-    return function(boards) {
+	return function(boards) {
 		var _result = [];
 		angular.forEach(boards, function(board){
 			if(board.acl !== null && Object.keys(board.acl).length > 0) {
@@ -29,5 +29,5 @@ app.filter('boardFilterAcl', function() {
 			}
 		});
 		return _result;
-    };
+	};
 });

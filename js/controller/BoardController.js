@@ -101,7 +101,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	// filter cards here, as ng-sortable will not work nicely with html-inline filters
 	$scope.filterData = function (order, text) {
 		if ($scope.stacks === undefined)
-			return;
+		{return;}
 		angular.copy(StackService.getData(), $scope.stacks);
 		$scope.stacks = $filter('orderBy')($scope.stacks, 'order');
 		angular.forEach($scope.stacks, function (value, key) {

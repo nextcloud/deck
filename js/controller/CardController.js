@@ -46,7 +46,7 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 
 	$scope.cardRenameShow = function () {
 		if ($scope.archived || !BoardService.canEdit())
-			return false;
+		{return false;}
 		else {
 			$scope.status.cardRename = true;
 		}
@@ -104,7 +104,7 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 	};
 
 	$scope.labelRemove = function (element, model) {
-		CardService.removeLabel($scope.cardId, element.id)
+		CardService.removeLabel($scope.cardId, element.id);
 	};
 
 	$scope.setDuedate = function (duedate) {

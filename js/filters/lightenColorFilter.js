@@ -33,5 +33,5 @@ app.filter('lightenColorFilter', function() {
 		} else {
 			return "#" + hex;
 		}
-	}
+	};
 });
