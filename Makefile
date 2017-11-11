@@ -62,6 +62,7 @@ appstore: clean-build build
 	--exclude="../$(app_name)/protractor\.*" \
 	--exclude="../$(app_name)/.*" \
 	--exclude="../$(app_name)/*.lock" \
+	--exclude="../$(app_name)/run-eslint.sh" \
 	--exclude="../$(app_name)/js/.*" \
 	--exclude="../$(app_name)/vendor" \
 	--exclude-vcs \
