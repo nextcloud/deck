@@ -1,0 +1,6 @@
+/js/tests/*
+/js/vendor/*
+/js/node_modules/*
+/karma.conf.js
+/tests/*
+/l10n/*

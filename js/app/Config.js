@@ -20,7 +20,7 @@
  *  
  */
 
-/** global: oc_requesttoken, markdownitLinkTarget */
+/* global app oc_requesttoken markdownitLinkTarget */
 
 app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider, $compileProvider, markdownItConverterProvider) {
 	'use strict';
