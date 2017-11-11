@@ -12,4 +12,5 @@ find -name "*.js" -not -path '*js/node_modules*' \
     -not -path '*l10n/*' \
     -not -path '*js/vendor*' \
     -not -path '*js/tests*' \
-    -print0 | xargs -0 $ESLINT --quiet
+    -not -path '*js/public*' \
+    -print0 | xargs -0 $ESLINT

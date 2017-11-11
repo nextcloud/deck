@@ -132,6 +132,6 @@ app.factory('CardService', function (ApiService, $http, $q) {
 		return deferred.promise;
 	};
 
-	service = new CardService($http, 'cards', $q);
+	var service = new CardService($http, 'cards', $q);
 	return service;
 });

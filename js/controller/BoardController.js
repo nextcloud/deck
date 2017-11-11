@@ -48,9 +48,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	StackService.clear(); //FIXME: Is this still needed?
 
 	$scope.$watch(function () {
-   		return BoardService.getCurrent().title;
-	}, function() {
-   		$scope.setPageTitle();
+		return BoardService.getCurrent().title;
+	}, function () {
+		$scope.setPageTitle();
 	});
 
 	$scope.setPageTitle = function () {
@@ -100,8 +100,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 
 	// filter cards here, as ng-sortable will not work nicely with html-inline filters
 	$scope.filterData = function (order, text) {
-		if ($scope.stacks === undefined)
-		{return;}
+		if ($scope.stacks === undefined) {
+			return;
+		}
 		angular.copy(StackService.getData(), $scope.stacks);
 		$scope.stacks = $filter('orderBy')($scope.stacks, 'order');
 		angular.forEach($scope.stacks, function (value, key) {
