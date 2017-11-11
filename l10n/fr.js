@@ -28,6 +28,7 @@ OC.L10N.register(
     "Select users or groups to share with" : "Sélectionnez des utilisateurs ou des groupes avec qui partager",
     "No matching user or group found." : "Aucun utilisateur ou groupe correspondant trouvé",
     "Loading" : "Chargement",
+    "Access for" : "Accès pour ",
     "Share" : "Partager",
     "Edit" : "Modifier",
     "Manage" : "Gérer",
