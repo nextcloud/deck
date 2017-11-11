@@ -150,6 +150,13 @@ pipeline:
     when:
       matrix:
         TESTS: integration
+  eslint:
+    image: nextcloudci/eslint:eslint-1
+    commands:
+      - ./run-eslint.sh
+    when:
+      matrix:
+        TESTS: eslint
   jsbuild:
     image: mhart/alpine-node:6.8.0
     commands:
@@ -169,6 +176,7 @@ matrix:
     - TESTS: php5.6
     - TESTS: php7.0
     - TESTS: php7.1
+    - TESTS: eslint
     - TESTS: jsbuild
     - TESTS: integration
 
