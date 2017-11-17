@@ -47,12 +47,9 @@ app.factory('StatusService', function () {
 	};
 
 	StatusService.prototype.releaseWaiting = function () {
-		if (this.counter > 0)
-<<<<<<< HEAD
-		{this.counter--;}
-=======
+		if (this.counter > 0) {
 			this.counter--;
->>>>>>> Refactor boardlist loading process
+		}
 		if (this.counter <= 0) {
 			this.active = false;
 			this.counter = 0;
