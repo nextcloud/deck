@@ -27,7 +27,7 @@
     <screenshot>https://download.bitgrid.net/nextcloud/deck/screenshots/Deck_Board.png</screenshot>
     <screenshot>https://download.bitgrid.net/nextcloud/deck/screenshots/Deck_Details.png</screenshot>
     <dependencies>
-        <nextcloud min-version="11" max-version="13" />
+        <nextcloud min-version="11" max-version="12" />
     </dependencies>
     <background-jobs>
         <job>OCA\Deck\Cron\DeleteCron</job>
