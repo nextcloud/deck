@@ -44,6 +44,7 @@ OC.L10N.register(
     "Unarchive board" : "De-archiveer plank",
     "Delete board" : "Verwijder plank",
     "Reset" : "Hrstellen",
+    "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Bord verwijdering ongedaan maken - Anders zal het bord worden verwijderd tijdens de volgende cronjob run.",
     "Create new board" : "Nieuw bord maken",
     "New board title" : "Nieuwe bord titel",
     "Status" : "Status",
