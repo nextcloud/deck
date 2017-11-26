@@ -25,13 +25,10 @@ install-deps:
 	cd js && npm install --deps
 	cd js && ./node_modules/.bin/bower install
 
-build: build-js build-css
+build: build-js
 
 build-js: install-deps
 	cd js && ./node_modules/.bin/grunt build
-
-build-css: install-deps
-	./js/node_modules/node-sass/bin/node-sass --output-style compressed css/legacy.scss css/style.css
 
 watch:
 	cd js && ./node_modules/.bin/grunt watch

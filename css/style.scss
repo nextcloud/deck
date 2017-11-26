@@ -27,6 +27,9 @@ $color-lightgrey: nc-darken($color-main-background, 4%);
 $color-grey: nc-darken($color-main-background, 7%);
 $color-darkgrey: nc-darken($color-main-background, 32%);
 
+@import 'comp-appnav.scss';
+@import 'icons.scss';
+
 /**
  * General styles
  */
@@ -1154,6 +1157,3 @@ input.input-inline {
 .ui-select-dropdown.select2-drop-active {
 	opacity: 1 !important;
 }
-
-@import 'comp-appnav.scss';
-@import 'icons.scss';
