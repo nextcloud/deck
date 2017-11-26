@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.2.8 - 2017-11-26
+
+### Fixed
+- Drop support for NC 13, since that will only be supported by the next version of Deck
+
 ## 0.2.7 - 2017-11-10
 
 ### Fixed
