@@ -8,7 +8,7 @@ pipeline:
     image: nextcloudci/php5.6:php5.6-3
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable12
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -26,7 +26,7 @@ pipeline:
     image: nextcloudci/php7.0:php7.0-2
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable12
       - DB=sqlite
     commands:
       - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
@@ -40,7 +40,7 @@ pipeline:
     image: nextcloudci/php5.6:php5.6-3
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable12
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -56,7 +56,7 @@ pipeline:
     image: nextcloudci/php7.0:php7.0-2
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable12
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -72,7 +72,7 @@ pipeline:
     image: nextcloudci/php5.6:php5.6-7
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable12
       - DB=sqlite
     commands:
       - apt update && apt-get -y install php5-xdebug
@@ -98,7 +98,7 @@ pipeline:
     image: nextcloudci/php7.0:php7.0-8
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable12
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -117,7 +117,7 @@ pipeline:
     image: nextcloudci/php7.1:php7.1-11
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable12
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -136,7 +136,7 @@ pipeline:
     image: nextcloudci/integration-php7.0:integration-php7.0-3
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable12
       - DB=sqlite
     commands:
       # Pre-setup steps
