@@ -95,6 +95,7 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 			$('#card-description').find('.save-indicator.unsaved').hide();
 			$('#card-description').find('.save-indicator.saved').fadeIn(500).fadeOut(1000);
 		});
+		StackService.updateCard(card);
 	};
 
 	$scope.labelAssign = function (element, model) {
