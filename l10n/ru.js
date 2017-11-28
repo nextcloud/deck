@@ -36,6 +36,7 @@ OC.L10N.register(
     "Update" : "Обновить",
     "Create" : "Создать",
     "Create a new tag" : "Создать новую метку",
+    "Status" : "Статус",
     "Title" : "Заголовок",
     "Members" : "Участники",
     "More actions" : "Ещё действия",
@@ -47,7 +48,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Отменить удаление доски, иначе она будет автоматически удалена при следующей обработке cronjob.",
     "Create new board" : "Создать новую доску",
     "New board title" : "Заголовок новой доски",
-    "Status" : "Статус",
     "Modified:" : "Изменён:",
     "Created:" : "Создан:",
     "by" : "автор",
@@ -66,7 +66,6 @@ OC.L10N.register(
     "Add a card description…" : "Добавить описание карточки…",
     "Archived boards" : "Архив досок",
     "Shared boards" : "Общие доски",
-    "Shared with you" : "Поделились с вами",
     "View more" : "Просмотреть дальше",
     "Move board to archive" : "Переместить доску в архив",
     "Create a new board" : "Создать новую доску"

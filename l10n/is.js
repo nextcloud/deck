@@ -36,6 +36,7 @@ OC.L10N.register(
     "Update" : "Uppfæra",
     "Create" : "Búa til",
     "Create a new tag" : "Búa til nýtt merki",
+    "Status" : "Staða",
     "Title" : "Titill",
     "Members" : "Meðlimir",
     "More actions" : "Fleiri aðgerðir",
@@ -47,7 +48,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Afturkalla eyðingu borðs - annars verður því eytt við næstu keyrslu cron-verks.",
     "Create new board" : "Búa til nýtt borð",
     "New board title" : "Nýr titill á borð",
-    "Status" : "Staða",
     "Modified:" : "Breytt þann:",
     "Created:" : "Búið til:",
     "by" : "af",
@@ -66,7 +66,6 @@ OC.L10N.register(
     "Add a card description…" : "Settu inn lýsingu á spjaldi ...",
     "Archived boards" : "Borð í geymslu",
     "Shared boards" : "Deild borð",
-    "Shared with you" : "Deilt með þér",
     "View more" : "Skoða meira",
     "Move board to archive" : "Færa borð í geymslu",
     "Create a new board" : "Búa til nýtt borð"

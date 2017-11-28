@@ -45,7 +45,6 @@ OC.L10N.register(
     "Add a card description…" : "Dodaj opis kartice...",
     "Archived boards" : "Arhivirane table",
     "Shared boards" : "Deljene table",
-    "Shared with you" : "Deljene s teboj",
     "Move board to archive" : "Premakni tablo v arhiv",
     "Create a new board" : "Ustvari novo tablo"
 },

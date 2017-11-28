@@ -47,7 +47,6 @@ OC.L10N.register(
     "Add a card description…" : "Shto një përshkrim të kartës...",
     "Archived boards" : "Borde të arkivuara",
     "Shared boards" : "Tabela të shpërndara",
-    "Shared with you" : "Ndarë me ju",
     "Move board to archive" : "Lëviz tabelen në arkivë",
     "Create a new board" : "Krijo një tablë të re"
 },

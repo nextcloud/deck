@@ -50,7 +50,6 @@ OC.L10N.register(
     "Add a card description…" : "Lisää kortin kuvaus…",
     "Archived boards" : "Arkistoidut taulut",
     "Shared boards" : "Jaetut taulut",
-    "Shared with you" : "Jaetu kanssasi",
     "Move board to archive" : "Siirrä taulu arkistoon",
     "Create a new board" : "Luo uusi taulu"
 },

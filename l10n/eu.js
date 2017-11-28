@@ -36,6 +36,7 @@ OC.L10N.register(
     "Update" : "Eguneratu",
     "Create" : "Sortu",
     "Create a new tag" : "Etiketa berria sortu",
+    "Status" : "Egoera",
     "Title" : "Izenburua",
     "Members" : "Partaideak",
     "More actions" : "Ekintza gehiago",
@@ -47,7 +48,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Mahaiagainaren borratzea ezeztatu - Bestela cron lanaren hurrengo aktibazioan borratuko da.",
     "Create new board" : "Mahaigain berria sortzen du",
     "New board title" : "Mahaigainaren izenburu berria",
-    "Status" : "Egoera",
     "Modified:" : "Aldatua:",
     "Created:" : "Sortua:",
     "by" : "-engatik",
@@ -66,7 +66,6 @@ OC.L10N.register(
     "Add a card description…" : "Txartelaren deskribapena gehitu...",
     "Archived boards" : "Artxibatutako txartelak",
     "Shared boards" : "Partekatutako txartelak",
-    "Shared with you" : "Zurekin partekatua",
     "View more" : "Gehiago ikusi",
     "Move board to archive" : "Txartela artxibora mugitu",
     "Create a new board" : "Mahaigain berria sortu"

@@ -34,6 +34,7 @@
     "Update" : "Aktualisieren",
     "Create" : "Erstellen",
     "Create a new tag" : "Tag erstellen",
+    "Status" : "Status",
     "Title" : "Titel",
     "Members" : "Mitglieder",
     "More actions" : "Weitere Aktionen",
@@ -45,7 +46,6 @@
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Löschen des Boards rückgängig machen - Andernfalls wird das Board beim nächsten CronJob-Lauf gelöscht.",
     "Create new board" : "Neues Board erstellen",
     "New board title" : "Neuer Board-Titel",
-    "Status" : "Status",
     "Modified:" : "Geändert:",
     "Created:" : "Erstellt:",
     "by" : "von",
@@ -64,7 +64,6 @@
     "Add a card description…" : "Beschreibung hinzufügen…",
     "Archived boards" : "Archivierte Boards",
     "Shared boards" : "Geteilte Boards",
-    "Shared with you" : "Mit Ihnen geteilt",
     "View more" : "Mehr anzeigen",
     "Move board to archive" : "Board ins Archiv verschieben",
     "Create a new board" : "Neues Board erstellen"

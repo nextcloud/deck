@@ -32,6 +32,7 @@ OC.L10N.register(
     "Update" : "Aktualizovat",
     "Create" : "Vytvořit",
     "Create a new tag" : "Vytvořit novou značku",
+    "Status" : "Stav",
     "Title" : "Název",
     "Members" : "Členové",
     "More actions" : "Více akcí",
@@ -42,7 +43,6 @@ OC.L10N.register(
     "Reset" : "Obnovit",
     "Create new board" : "VYtvořit ovou desku",
     "New board title" : "Nadpis nové desky",
-    "Status" : "Stav",
     "Modified:" : "Upraveno:",
     "Created:" : "Vytvořeno:",
     "by" : "od",
@@ -59,7 +59,6 @@ OC.L10N.register(
     "Add a card description…" : "Přidat popis karty...",
     "Archived boards" : "Archivované desky",
     "Shared boards" : "Sdílené desky",
-    "Shared with you" : "Sdíleno s vámi",
     "View more" : "Ukázat více",
     "Move board to archive" : "Přesunout desku do archivu",
     "Create a new board" : "Vytvořit novou desku"

@@ -36,6 +36,7 @@ OC.L10N.register(
     "Update" : "Opdatér",
     "Create" : "Opret",
     "Create a new tag" : "Opret et nyt mærkat",
+    "Status" : "Status",
     "Title" : "Titel",
     "Members" : "Medlemmer",
     "More actions" : "Flere handlinger",
@@ -47,7 +48,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Fortryd sletning af board - Ellers vil boardet blive slettet ved næste cronjob kørsel.",
     "Create new board" : "Opret ny liste",
     "New board title" : "Ny titel på liste",
-    "Status" : "Status",
     "Modified:" : "Ændret:",
     "Created:" : "Oprettet:",
     "by" : "af",
@@ -66,7 +66,6 @@ OC.L10N.register(
     "Add a card description…" : "Tilføj en beskrivelse...",
     "Archived boards" : "Arkiverede lister",
     "Shared boards" : "Delte lister",
-    "Shared with you" : "Delt med dig",
     "View more" : "Vis mere",
     "Move board to archive" : "Flyt liste til arkiv",
     "Create a new board" : "Opret ny liste"

@@ -36,6 +36,7 @@ OC.L10N.register(
     "Update" : "განახლება",
     "Create" : "შექმნა",
     "Create a new tag" : "ახალი ტეგის შექმნა",
+    "Status" : "სტატუსი",
     "Title" : "სათაური",
     "Members" : "წევრები",
     "More actions" : "მეტი ქმედება",
@@ -47,7 +48,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "დაფის გაუქმების უკუგდება - სხვა შემთხვევაში დაფა შემდეგი conjob-ის გაშვებისას წაიშლება.",
     "Create new board" : "ახალი დაფის შექმნა",
     "New board title" : "ახალი დაფის სახელი",
-    "Status" : "სტატუსი",
     "Modified:" : "შეცვლილია:",
     "Created:" : "შექმნილია:",
     "by" : "შემქმნელი",
@@ -66,7 +66,6 @@ OC.L10N.register(
     "Add a card description…" : "დაამატეთ ბარათის აღწერილობა...",
     "Archived boards" : "არქივირებული დაფები",
     "Shared boards" : "გაზიარებული დაფები",
-    "Shared with you" : "გაზიარებული თქვენთან",
     "View more" : "მეტის ჩვენება",
     "Move board to archive" : "დაფის არქვიში გადატანა",
     "Create a new board" : "ახალი დაფის შექმნა"

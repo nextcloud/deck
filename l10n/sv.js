@@ -53,7 +53,6 @@ OC.L10N.register(
     "Add a card description…" : "Lägg till en kortbeskrivning...",
     "Archived boards" : "Arkiverade tavlor",
     "Shared boards" : "Delade tavlor",
-    "Shared with you" : "Delade med dig",
     "Move board to archive" : "Flytta tavla till arkiv",
     "Create a new board" : "Skapa en ny tavla"
 },

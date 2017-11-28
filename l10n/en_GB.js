@@ -36,6 +36,7 @@ OC.L10N.register(
     "Update" : "Update",
     "Create" : "Create",
     "Create a new tag" : "Create a new tag",
+    "Status" : "Status",
     "Title" : "Title",
     "Members" : "Members",
     "More actions" : "More actions",
@@ -47,7 +48,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Undo board deletion - Otherwise the board will be deleted during the next cronjob run.",
     "Create new board" : "Create new board",
     "New board title" : "New board title",
-    "Status" : "Status",
     "Modified:" : "Modified:",
     "Created:" : "Created:",
     "by" : "by",
@@ -66,7 +66,6 @@ OC.L10N.register(
     "Add a card description…" : "Add a card description…",
     "Archived boards" : "Archived boards",
     "Shared boards" : "Shared boards",
-    "Shared with you" : "Shared with you",
     "View more" : "View more",
     "Move board to archive" : "Move board to archive",
     "Create a new board" : "Create a new board"

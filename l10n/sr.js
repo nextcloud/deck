@@ -36,6 +36,7 @@ OC.L10N.register(
     "Update" : "Ажурирај",
     "Create" : "Направи",
     "Create a new tag" : "Направи нову ознаку",
+    "Status" : "Статус",
     "Title" : "Назив",
     "Members" : "Чланови",
     "More actions" : "Још акција",
@@ -47,7 +48,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Врати брисање табле - у супротном ће табла бити обрисана за време следећег крон посла.",
     "Create new board" : "Направи нову таблу",
     "New board title" : "Назив нове табле",
-    "Status" : "Статус",
     "Modified:" : "Измењена:",
     "Created:" : "Направљена:",
     "by" : "од",
@@ -66,7 +66,6 @@ OC.L10N.register(
     "Add a card description…" : "Додај опис картице…",
     "Archived boards" : "Архивиране табле",
     "Shared boards" : "Дељене табле",
-    "Shared with you" : "Дељено са Вама",
     "View more" : "Види још",
     "Move board to archive" : "Помери таблу у архиву",
     "Create a new board" : "Направи нову таблу"

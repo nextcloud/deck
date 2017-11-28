@@ -36,6 +36,7 @@ OC.L10N.register(
     "Update" : "Oppdater",
     "Create" : "Opprett her",
     "Create a new tag" : "Lag en ny merkelapp",
+    "Status" : "Status",
     "Title" : "Tittel",
     "Members" : "Medlemmer",
     "More actions" : "Flere handlinger",
@@ -47,7 +48,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Angre sletting av forumseksjon - Ellers vil forumseksjonen bli slettet under neste cronjob-kjøring.",
     "Create new board" : "Opprett et nytt bord",
     "New board title" : "Ny seksjonstittel",
-    "Status" : "Status",
     "Modified:" : "Endret:",
     "Created:" : "Opprettet:",
     "by" : "av",
@@ -66,7 +66,6 @@ OC.L10N.register(
     "Add a card description…" : "Legg til en kortbeskrivelse…",
     "Archived boards" : "Akriverte bord",
     "Shared boards" : "Delte bord",
-    "Shared with you" : "Delt med deg",
     "View more" : "Vis mer",
     "Move board to archive" : "Flytt bord til arkiv",
     "Create a new board" : "Opprett et nytt bord"

@@ -47,7 +47,6 @@ OC.L10N.register(
     "Add a card description…" : "Προσθήκη περιγραφής κάρτας...",
     "Archived boards" : "Αρχειοθέτηση πινάκων ",
     "Shared boards" : "Διαμοιρασμένοι πίνακες",
-    "Shared with you" : "Διαμοιρασμένα με εσάς",
     "Move board to archive" : "Μετακίνηση πίνακα στην αρχειοθήκη",
     "Create a new board" : "Δημιουργία νέου πίνακα"
 },

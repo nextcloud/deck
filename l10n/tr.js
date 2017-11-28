@@ -36,6 +36,7 @@ OC.L10N.register(
     "Update" : "Güncelle",
     "Create" : "Ekle",
     "Create a new tag" : "Yeni bir etiket ekle",
+    "Status" : "Durum",
     "Title" : "Başlık",
     "Members" : "Üyeler",
     "More actions" : "Diğer işlemler",
@@ -47,7 +48,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Pano silme işlemini geri alır. Yoksa pano zamanlanmış görevin bir sonraki çalışmasında silinir.",
     "Create new board" : "Yeni pano ekle",
     "New board title" : "Yeni pano başlığı",
-    "Status" : "Durum",
     "Modified:" : "Değiştirilme:",
     "Created:" : "Oluşturulma:",
     "by" : "Kişi:",
@@ -66,7 +66,6 @@ OC.L10N.register(
     "Add a card description…" : "Bir kart açıklaması ekle...",
     "Archived boards" : "Arşivlenmiş panolar",
     "Shared boards" : "Paylaşılmış panolar",
-    "Shared with you" : "Sizinle paylaşılan",
     "View more" : "Diğerlerini görüntüle",
     "Move board to archive" : "Panoyu arşive taşı",
     "Create a new board" : "Yeni bir pano ekle"

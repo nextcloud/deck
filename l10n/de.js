@@ -36,6 +36,7 @@ OC.L10N.register(
     "Update" : "Aktualisieren",
     "Create" : "Erstellen",
     "Create a new tag" : "Neues Etikett erstellen",
+    "Status" : "Status",
     "Title" : "Titel",
     "Members" : "Mitglieder",
     "More actions" : "Weitere Aktionen",
@@ -47,7 +48,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Löschen des Boards rückgängig machen - Andernfalls wird das Board beim nächsten CronJob-Lauf gelöscht.",
     "Create new board" : "Neues Board erstellen",
     "New board title" : "Neuer Board-Titel",
-    "Status" : "Status",
     "Modified:" : "Geändert:",
     "Created:" : "Erstellt:",
     "by" : "von",
@@ -66,7 +66,6 @@ OC.L10N.register(
     "Add a card description…" : "Eine Kartenbeschreibung hinzufügen…",
     "Archived boards" : "Archivierte Boards",
     "Shared boards" : "Geteilte Boards",
-    "Shared with you" : "Mit Dir geteilt",
     "View more" : "Mehr anzeigen",
     "Move board to archive" : "Board ins Archiv verschieben",
     "Create a new board" : "Neues Board erstellen"

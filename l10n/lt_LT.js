@@ -47,7 +47,6 @@ OC.L10N.register(
     "Add a card description…" : "Pridėti elemento apibūdinimą...",
     "Archived boards" : "Archyvuoti sąrašai",
     "Shared boards" : "Bendrinami sąrašai",
-    "Shared with you" : "Bendrinama su jumis",
     "Move board to archive" : "Perkelti sąrašą į archyvą",
     "Create a new board" : "Sukurti naują sąrašą"
 },

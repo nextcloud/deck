@@ -47,7 +47,6 @@ OC.L10N.register(
     "Add a card description…" : "Afegeix una descripció de la targeta ...",
     "Archived boards" : "Taulers arxivats",
     "Shared boards" : "Taulers compartits",
-    "Shared with you" : "Us han compartit",
     "Move board to archive" : "Mou la placa a l'arxiu",
     "Create a new board" : "Crear nova"
 },

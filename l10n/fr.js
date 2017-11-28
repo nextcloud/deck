@@ -36,6 +36,7 @@ OC.L10N.register(
     "Update" : "Mettre à jour",
     "Create" : "Créer",
     "Create a new tag" : "Créer une nouvelle étiquette",
+    "Status" : "Statut",
     "Title" : "Titre",
     "Members" : "Membres",
     "More actions" : "Plus d'actions",
@@ -47,7 +48,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Annuler la suppression du tableau - Autrement le tableau sera supprimé lors du prochain lancement de la tâche cron.",
     "Create new board" : "Créer un nouveau tableau",
     "New board title" : "Nouveau titre pour le tableau",
-    "Status" : "Statut",
     "Modified:" : "Modifié le :",
     "Created:" : "Créé le :",
     "by" : "par",
@@ -66,7 +66,6 @@ OC.L10N.register(
     "Add a card description…" : "Ajouter une description pour la carte",
     "Archived boards" : "Tableaux archivés",
     "Shared boards" : "Tableaux partagés",
-    "Shared with you" : "Partagé avec vous",
     "View more" : "Voir plus",
     "Move board to archive" : "Déplacer le tableau vers l'archive",
     "Create a new board" : "Créer un nouveau tableau"

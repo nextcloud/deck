@@ -31,7 +31,6 @@ OC.L10N.register(
     "Formatting help" : "Ayuda de formato",
     "Saved" : "Guardado",
     "Add a card description…" : "Agregar una descripción de tarjeta...",
-    "Shared with you" : "Compartido con usted",
     "Create a new board" : "Crear nuevo tablero"
 },
 "nplurals=2; plural=(n != 1);");

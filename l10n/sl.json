@@ -43,7 +43,6 @@
     "Add a card description…" : "Dodaj opis kartice...",
     "Archived boards" : "Arhivirane table",
     "Shared boards" : "Deljene table",
-    "Shared with you" : "Deljene s teboj",
     "Move board to archive" : "Premakni tablo v arhiv",
     "Create a new board" : "Ustvari novo tablo"
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"

@@ -36,6 +36,7 @@ OC.L10N.register(
     "Update" : "Aggiorna",
     "Create" : "Crea",
     "Create a new tag" : "Crea una nuova etichetta",
+    "Status" : "Stato",
     "Title" : "Titolo",
     "Members" : "Membri",
     "More actions" : "Altre azioni",
@@ -47,7 +48,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Annulla eliminazione della lavagna - Altrimenti la lavagna sarà eliminata durante la prossima esecuzione del job di cron.",
     "Create new board" : "Crea una nuova lavagna",
     "New board title" : "Titolo nuova lavagna",
-    "Status" : "Stato",
     "Modified:" : "Modificato:",
     "Created:" : "Creato:",
     "by" : "da",
@@ -66,7 +66,6 @@ OC.L10N.register(
     "Add a card description…" : "Aggiungi descrizione della scheda...",
     "Archived boards" : "Lavagne archiviate",
     "Shared boards" : "Lavagne condivise",
-    "Shared with you" : "Condiviso con te",
     "View more" : "Visualizza altro",
     "Move board to archive" : "Sposta lavagna nell'archivio",
     "Create a new board" : "Crea una nuova lavagna"

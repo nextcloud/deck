@@ -36,6 +36,7 @@ OC.L10N.register(
     "Update" : "Módosítás",
     "Create" : "Létrehozás",
     "Create a new tag" : "Új címke létrehozása",
+    "Status" : "Állapot",
     "Title" : "Cím",
     "Members" : "Tagok",
     "More actions" : "További műveletek",
@@ -47,7 +48,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Táblatörlés visszavonása - Egyébként a tábla a következő időzített folyamatfutáskor törlődik.",
     "Create new board" : "Új tábla",
     "New board title" : "Új tábla címe",
-    "Status" : "Állapot",
     "Modified:" : "Módosítva:",
     "Created:" : "Létrehozva:",
     "by" : "tőle: ",
@@ -66,7 +66,6 @@ OC.L10N.register(
     "Add a card description…" : "Adj hozzá kártya leírást...",
     "Archived boards" : "Archív táblák",
     "Shared boards" : "Megosztott táblák",
-    "Shared with you" : "Megosztva veled",
     "View more" : "Több megtekintése",
     "Move board to archive" : "Tábla mozgatása archívumba",
     "Create a new board" : "Új tábla létrehozása"

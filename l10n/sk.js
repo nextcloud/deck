@@ -36,6 +36,7 @@ OC.L10N.register(
     "Update" : "Aktualizovať",
     "Create" : "Vytvoriť",
     "Create a new tag" : "Vytvoriť nový štítok",
+    "Status" : "Stav",
     "Title" : "Názov",
     "Members" : "Členovia",
     "More actions" : "Viac akcií",
@@ -47,7 +48,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Vrátiť späť vymazanie tabule - v opačnom prípade bude tabuľa vymazaná počas ďalšieho behu úlohy cronjob.",
     "Create new board" : "Vytvoriť novú tabuľu",
     "New board title" : "Názov novej tabule",
-    "Status" : "Stav",
     "Modified:" : "Upravené:",
     "Created:" : "Vytvorené:",
     "by" : "-",
@@ -66,7 +66,6 @@ OC.L10N.register(
     "Add a card description…" : "Pridať popis karty...",
     "Archived boards" : "Archivované tabule",
     "Shared boards" : "Sprístupnené tabule",
-    "Shared with you" : "Sprístupnené vám",
     "View more" : "Pozrieť viac",
     "Move board to archive" : "Presunúť tabuľu do archívu",
     "Create a new board" : "Vytvoriť novú tabuľu"

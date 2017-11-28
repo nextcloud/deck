@@ -28,7 +28,6 @@ OC.L10N.register(
     "Created:" : "만든 날짜:",
     "by" : "by",
     "Saved" : "저장됨",
-    "Shared with you" : "내게 공유됨",
     "Create a new board" : "새 게시판 만들기"
 },
 "nplurals=1; plural=0;");

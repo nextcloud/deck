@@ -36,6 +36,7 @@ OC.L10N.register(
     "Update" : "Bijwerken",
     "Create" : "Aanmaken",
     "Create a new tag" : "Nieuwe label maken",
+    "Status" : "Status",
     "Title" : "Titel",
     "Members" : "Leden",
     "More actions" : "Meer acties",
@@ -47,7 +48,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Bord verwijdering ongedaan maken - Anders zal het bord worden verwijderd tijdens de volgende cronjob run.",
     "Create new board" : "Nieuw bord maken",
     "New board title" : "Nieuwe bord titel",
-    "Status" : "Status",
     "Modified:" : "Bewerkt:",
     "Created:" : "Gemaakt:",
     "by" : "door",
@@ -66,7 +66,6 @@ OC.L10N.register(
     "Add a card description…" : "Voeg een kaartbeschrijving toe...",
     "Archived boards" : "Gearchiveerde planken",
     "Shared boards" : "Gedeelde borden",
-    "Shared with you" : "Deel met jou",
     "View more" : "Bekijk meer",
     "Move board to archive" : "Verplaats plank naar archief",
     "Create a new board" : "Een nieuw bord maken"

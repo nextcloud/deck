@@ -47,7 +47,6 @@ OC.L10N.register(
     "Add a card description…" : "Додати опис дошки",
     "Archived boards" : "Архівовані дошки",
     "Shared boards" : "Спільні дошки",
-    "Shared with you" : "Поділились з вами",
     "Move board to archive" : "Перемістити до архіву",
     "Create a new board" : "Створити нову дошку"
 },

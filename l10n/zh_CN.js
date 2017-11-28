@@ -53,7 +53,6 @@ OC.L10N.register(
     "Add a card description…" : " 添加卡片描述…",
     "Archived boards" : "已归档面板",
     "Shared boards" : "已分享面板",
-    "Shared with you" : "共享给您的",
     "Move board to archive" : "移动面板到归档",
     "Create a new board" : "创建一个新面板"
 },
