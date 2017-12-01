@@ -105,6 +105,13 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 				}
 			}, true);
 		}
+
+		$scope.$watch(function () {
+			return $scope.boardservice.data;
+		}, function () {
+			filterData();
+		}, true);
+
 		/* Watch for board filter change */
 		$scope.$watchCollection(function(){
 			return $state.params;
