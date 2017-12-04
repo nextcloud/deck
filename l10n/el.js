@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Hours" : "Ώρες",
     "Minutes" : "Λεπτά",
+    "The card \"%s\" on \"%s\" has reached its due date." : "Η κάρτα \"1%s\" στο \"1%s\" έχει λήξει.",
     "Finished" : "Ολοκληρώθηκε",
     "To review" : "Προς επισκόπηση",
     "Action needed" : "Απαιτείται ενέργεια",
