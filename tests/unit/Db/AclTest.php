@@ -29,7 +29,7 @@ class AclTest extends \Test\TestCase {
 		$acl = new Acl();
 		$acl->setId(1);
 		$acl->setParticipant("admin");
-		$acl->setType("user");
+		$acl->setType(Acl::PERMISSION_TYPE_USER);
 		$acl->setBoardId(1);
 		$acl->setPermissionEdit(true);
 		$acl->setPermissionShare(true);
@@ -41,7 +41,7 @@ class AclTest extends \Test\TestCase {
 		$acl = new Acl();
 		$acl->setId(1);
 		$acl->setParticipant("administrators");
-		$acl->setType("group");
+		$acl->setType(Acl::PERMISSION_TYPE_GROUP);
 		$acl->setBoardId(1);
 		$acl->setPermissionEdit(true);
 		$acl->setPermissionShare(true);
@@ -54,7 +54,7 @@ class AclTest extends \Test\TestCase {
 		$this->assertEquals([
 			'id' => 1,
 			'participant' => 'admin',
-			'type' => 'user',
+			'type' => Acl::PERMISSION_TYPE_USER,
 			'boardId' => 1,
 			'permissionEdit' => true,
 			'permissionShare' => true,
@@ -65,7 +65,7 @@ class AclTest extends \Test\TestCase {
 		$this->assertEquals([
 			'id' => 1,
 			'participant' => 'administrators',
-			'type' => 'group',
+			'type' => Acl::PERMISSION_TYPE_GROUP,
 			'boardId' => 1,
 			'permissionEdit' => true,
 			'permissionShare' => true,
@@ -80,7 +80,7 @@ class AclTest extends \Test\TestCase {
 		$this->assertEquals([
 			'id' => 1,
 			'participant' => 'admin',
-			'type' => 'user',
+			'type' => Acl::PERMISSION_TYPE_USER,
 			'boardId' => 1,
 			'permissionEdit' => true,
 			'permissionShare' => true,
