@@ -874,6 +874,12 @@ input.input-inline {
 /**
  * Board details
  */
+
+#tabBoardShare .select2 .ui-select-choices-row-inner {
+	display: flex;
+	padding: 5px !important;
+}
+
 #shareWithList {
 	list-style-type: none;
 	padding: 0 0 16px;
@@ -912,17 +918,17 @@ input.input-inline {
 	.shareOption {
 		margin-top: 5px;
 	}
+}
 
-	.avatardiv {
-		background-color: $color-lightgrey;
-		border-radius: 16px;
-		width: 32px;
-		height: 32px;
+.avatardiv {
+	background-color: $color-lightgrey;
+	border-radius: 16px;
+	width: 32px;
+	height: 32px;
 
-		.icon-group {
-			padding: 16px;
-			opacity: 0.5;
-		}
+	.icon-group {
+		padding: 16px;
+		opacity: 0.5;
 	}
 }
 
@@ -1017,6 +1023,9 @@ input.input-inline {
 			overflow: hidden;
 		}
 	}
+	.select2-choice {
+		height: auto;
+	}
 }
 
 .ui-select-container[disabled] .ui-select-match-item {
@@ -1036,9 +1045,9 @@ input.input-inline {
 
 .select2-result-label {
 	padding: 0px !important;
-
+	display: flex;
 	span {
-		display: flex;
+		flex-grow: 1;
 		padding: 6px;
 	}
 }
