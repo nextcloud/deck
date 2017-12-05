@@ -25,10 +25,10 @@
 				   placeholder="<?php p($l->t('Select users or groups to share with')); ?>"
 				   on-select="aclAdd(status.addSharee)" search-enabled="true">
             <ui-select-match placeholder="<?php p($l->t('Select users or groups to share with')); ?>">
-                <span><i class="icon icon-{{$item.type}}"></i> {{ $item.participant.displayname }}</span>
+                <span><i class="icon icon-{{aclTypeString($item)}}"></i> {{ $item.participant.displayname }}</span>
             </ui-select-match>
             <ui-select-choices refresh="searchForUser($select.search)" refresh-delay="0" repeat="sharee in boardservice.sharees">
-                <span><i class="icon icon-{{sharee.type}}"></i> {{ sharee.participant.displayname }}</span>
+                <span><i class="icon icon-{{aclTypeString(sharee)}}"></i> {{ sharee.participant.displayname }}</span>
             </ui-select-choices>
             <ui-select-no-choice>
             <?php p($l->t('No matching user or group found.')); ?>
@@ -45,8 +45,8 @@
             </li>
             <li ng-repeat="acl in boardservice.getCurrent().acl track by $index">
                 <span class="icon-loading-small" style="display:none;" title="<?php p($l->t('Loading')); ?>"></span>
-                <div class="avatardiv" avatar displayname="{{ acl.participant.uid }}" ng-if="acl.type=='user'"></div>
-                <div class="avatardiv" ng-if="acl.type=='group'"><i class="icon icon-{{acl.type}}" title="<?php p($l->t('Access for')); ?> {{acl.type}}"></i></div>
+                <div class="avatardiv" avatar displayname="{{ acl.participant.uid }}" ng-if="acl.type==OC.Share.SHARE_TYPE_USER"></div>
+                <div class="avatardiv" ng-if="acl.type==OC.Share.SHARE_TYPE_GROUP"><i class="icon icon-{{aclTypeString(acl)}}" title="<?php p($l->t('Access for')); ?> {{aclTypeString(acl)}}"></i></div>
 
                 <span class="has-tooltip username">
                     {{ acl.participant.displayname }}

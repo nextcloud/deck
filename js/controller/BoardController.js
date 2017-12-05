@@ -20,7 +20,7 @@
  *  
  */
 
-/** global: oc_defaults */
+/** global: oc_defaults, OC */
 app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter) {
 
 	$scope.sidebar = $rootScope.sidebar;
@@ -32,6 +32,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.newLabel = {};
 	$scope.status.boardtab = $stateParams.detailTab;
 
+	$scope.OC = OC;
 	$scope.stackservice = StackService;
 	$scope.boardservice = BoardService;
 	$scope.cardservice = CardService;
@@ -208,6 +209,16 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		BoardService.updateAcl(acl);
 	};
 
+	$scope.aclTypeString = function (acl) {
+		switch (acl.type) {
+			case OC.Share.SHARE_TYPE_USER:
+				return 'user';
+			case OC.Share.SHARE_TYPE_GROUP:
+				return 'group';
+			default:
+				return '';
+		}
+	};
 
 	// settings for card sorting
 	$scope.sortOptions = {

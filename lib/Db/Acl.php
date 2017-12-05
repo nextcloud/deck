@@ -67,32 +67,4 @@ class Acl extends RelationalEntity {
 		return false;
 	}
 
-	public function jsonSerialize() {
-		$json = parent::jsonSerialize();
-		$json['type'] = $this->getTypeString();
-		return $json;
-	}
-	
-	public function getTypeString() {
-		if ($this->type === self::PERMISSION_TYPE_GROUP) {
-			return 'group';
-		}
-		return 'user';
-	}
-
-	public function setType($type) {
-		if (is_numeric($type)) {
-			parent::setType($type);
-			return;
-		}
-		// FIXME: Remove when all javascript uses numeric types
-		if ($type === 'group' || $type === '1') {
-			$typeInt = self::PERMISSION_TYPE_GROUP;
-		} else {
-			$typeInt = self::PERMISSION_TYPE_USER;
-		}
-		$this->markFieldUpdated('type');
-		$this->type = $typeInt;
-	}
-
 }

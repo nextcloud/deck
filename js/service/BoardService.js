@@ -82,7 +82,7 @@ app.factory('BoardService', function (ApiService, $http, $q) {
 
 				// filter out everyone who is already in the share list
 				angular.forEach(users, function (item) {
-					var acl = self.generateAcl('user', item);
+					var acl = self.generateAcl(OC.Share.SHARE_TYPE_USER, item);
 					var exists = false;
 					angular.forEach(self.getCurrent().acl, function (acl) {
 						if (acl.participant.primaryKey === item.value.shareWith) {
@@ -94,7 +94,7 @@ app.factory('BoardService', function (ApiService, $http, $q) {
 					}
 				});
 				angular.forEach(groups, function (item) {
-					var acl = self.generateAcl('group', item);
+					var acl = self.generateAcl(OC.Share.SHARE_TYPE_GROUP, item);
 					var exists = false;
 					angular.forEach(self.getCurrent().acl, function (acl) {
 						if (acl.participant.primaryKey === item.value.shareWith) {
