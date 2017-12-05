@@ -18,7 +18,7 @@
     <li class="tabHeader" ng-class="{'selected': (status.boardtab==1)}" ng-click="status.boardtab=1"><a><?php p($l->t('Tags')); ?></a></li>
 </ul>
 <div class="tabsContainer">
-    <div id="commentsTabView" class="tab commentsTabView" ng-if="status.boardtab==0 || !status.boardtab">
+    <div id="tabBoardShare" class="tab" ng-if="status.boardtab==0 || !status.boardtab">
 
         <ui-select ng-if="boardservice.canShare()" ng-model="status.addSharee" theme="select2"
 				   title="<?php p($l->t('Select users or groups to share with')); ?>"
@@ -28,7 +28,11 @@
                 <span><i class="icon icon-{{aclTypeString($item)}}"></i> {{ $item.participant.displayname }}</span>
             </ui-select-match>
             <ui-select-choices refresh="searchForUser($select.search)" refresh-delay="0" repeat="sharee in boardservice.sharees">
-                <span><i class="icon icon-{{aclTypeString(sharee)}}"></i> {{ sharee.participant.displayname }}</span>
+				<div class="avatardiv" avatar displayname="{{ sharee.participant.uid }}" ng-if="sharee.type==OC.Share.SHARE_TYPE_USER"></div>
+				<div class="avatardiv" ng-if="sharee.type==OC.Share.SHARE_TYPE_GROUP"><i class="icon icon-{{aclTypeString(sharee)}}" title="<?php p($l->t('Access for')); ?> {{aclTypeString(sharee)}}"></i></div>
+				<span class="has-tooltip username">
+					{{ sharee.participant.displayname }}
+				</span>
             </ui-select-choices>
             <ui-select-no-choice>
             <?php p($l->t('No matching user or group found.')); ?>
