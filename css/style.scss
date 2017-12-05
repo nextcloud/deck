@@ -151,20 +151,24 @@ input.input-inline {
 	z-index: 120;
 	display: flex;
 	align-items: center;
-	font-size: 14pt;
 	position: inherit;
-	width: 100% !important;
     padding-left: 44px;
 
-	.crumb,
-	#controls a {
-		top: 12px;
-	}
+	.crumb {
+		order: 0;
 
-	> h2 {
-		white-space: nowrap;
-		padding: 8px 7px 5px;
-		margin: 0;
+		a:nth-child(2) {
+			padding-left: 0;
+			margin-left: -5px;
+		}
+
+		.board-bullet {
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			border: none;
+			border-radius: 50%;
+		}
 	}
 
 	button {
@@ -173,7 +177,7 @@ input.input-inline {
 
 	input[type='text'] {
 		padding: 6px;
-		border: 0px none transparent;
+		border: 0 none transparent;
 		min-height: initial;
 		background-color: transparent;
 		height: inherit;

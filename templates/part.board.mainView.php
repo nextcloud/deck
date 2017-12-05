@@ -6,13 +6,17 @@
 </div>
 
 <div id="controls">
-	<div class="crumb svg last">
-		<a href="#" class="icon-home" title="<?php p($l->t('All Boards')); ?>">
-		</a>
+	<div class="crumb">
+		<a href="#" class="icon-home" title="<?php p($l->t('All Boards')); ?>"></a>
 	</div>
-	<h2 class="title" ng-style="{'border-bottom':'2px solid #{{boardservice.getCurrent().color }}'}">
-		{{ boardservice.getCurrent().title }}
-	</h2>
+	<div class="crumb" ng-if="boardservice.getCurrent().archived">
+		<a class="icon-archive"></a>
+		<a ui-sref="list({ filter: 'archived' })"><?php p($l->t('Archived boards')); ?></a>
+	</div>
+	<div class="crumb last title">
+		<a><span class="board-bullet" ng-style="{'background-color':'#{{boardservice.getCurrent().color }}'}"></span></a>
+		<a>{{ boardservice.getCurrent().title }}</a>
+	</div>
 	<div class="board-header-controls hidden">
 		<?php print_unescaped($this->inc('part.board.headerControls')); ?>
 	</div>
