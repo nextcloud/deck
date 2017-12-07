@@ -58,6 +58,9 @@ app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvid
 		.state('board.detail', {
 			url: '/detail/',
 			reloadOnSearch: false,
+			params: {
+				tab: {value: 0, dynamic: true},
+			},
 			views: {
 				'sidebarView': {
 					templateUrl: '/board.sidebarView.html'

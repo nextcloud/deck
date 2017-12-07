@@ -14,12 +14,11 @@
 {{board=boardservice.getCurrent();""}}
 
 <ul class="tabHeaders">
-    <li class="tabHeader" ng-class="{'selected': (status.boardtab==0 || !status.boardtab)}" ng-click="status.boardtab=0"><a><?php p($l->t('Sharing')); ?></a></li>
-    <li class="tabHeader" ng-class="{'selected': (status.boardtab==1)}" ng-click="status.boardtab=1"><a><?php p($l->t('Tags')); ?></a></li>
+    <li class="tabHeader" ng-class="{'selected': (params.tab==0 || !params.tab)}" ui-sref="{tab: 0}"><a><?php p($l->t('Sharing')); ?></a></li>
+    <li class="tabHeader" ng-class="{'selected': (params.tab==1)}" ui-sref="{tab: 1}"><a><?php p($l->t('Tags')); ?></a></li>
 </ul>
 <div class="tabsContainer">
-    <div id="tabBoardShare" class="tab" ng-if="status.boardtab==0 || !status.boardtab">
-
+    <div id="tabBoardShare" class="tab" ng-if="params.tab==0 || !params.tab">
         <ui-select ng-if="boardservice.canShare()" ng-model="status.addSharee" theme="select2"
 				   title="<?php p($l->t('Select users or groups to share with')); ?>"
 				   placeholder="<?php p($l->t('Select users or groups to share with')); ?>"
@@ -74,7 +73,7 @@
         </ul>
 
     </div>
-    <div id="board-detail-labels" class="tab commentsTabView" ng-if="status.boardtab==1">
+    <div id="board-detail-labels" class="tab commentsTabView" ng-if="params.tab==1">
 
             <ul class="labels">
                 <li ng-repeat="label in boardservice.getCurrent().labels">
