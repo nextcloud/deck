@@ -173,9 +173,14 @@ input.input-inline {
 	.crumb {
 		order: 0;
 
-		a:nth-child(2) {
+		a:nth-child(2),
+		a:nth-child(3) {
 			padding-left: 0;
 			margin-left: -5px;
+		}
+
+		a .icon {
+			margin-top: 2px;
 		}
 
 		.board-bullet {
