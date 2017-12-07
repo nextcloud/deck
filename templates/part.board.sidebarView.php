@@ -11,8 +11,6 @@
     <h3>{{ boardservice.getCurrent().title }}</h3>
 </div>
 
-{{board=boardservice.getCurrent();""}}
-
 <ul class="tabHeaders">
     <li class="tabHeader" ng-class="{'selected': (params.tab==0 || !params.tab)}" ui-sref="{tab: 0}"><a><?php p($l->t('Sharing')); ?></a></li>
     <li class="tabHeader" ng-class="{'selected': (params.tab==1)}" ui-sref="{tab: 1}"><a><?php p($l->t('Tags')); ?></a></li>
