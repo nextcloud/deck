@@ -30,8 +30,8 @@
 	</div>
 </div>
 
-<div id="board" class="scroll-container" ng-click="sidebar.show=false" ui-sref="board">
-
+<div id="board" class="scroll-container" ng-click="sidebar.show=false" ui-sref="board" ng-class="{'card-selected': params.cardId}">
+ {{ cardOpen }}
 	<search on-search="search" class="ng-hide"></search>
 
 	<div id="innerBoard" data-ng-model="stacks" data-as-sortable="sortOptionsStack">
@@ -49,13 +49,13 @@
 						ng-if="!s.status.editStack"
                         ng-click="stackservice.delete(s.id)"></button>
 			</h3>
-			<ul data-as-sortable="sortOptions" is-disabled="!boardservice.canEdit() || filter==='archive'" data-ng-model="s.cards" class="card-list">
+			<ul data-as-sortable="sortOptions" is-disabled="!boardservice.canEdit() || params.filter==='archive'" data-ng-model="s.cards" class="card-list">
 				<li class="card as-sortable-item"
 					ng-repeat="c in s.cards"
 					data-as-sortable-item
 					ng-click="$event.stopPropagation()"
 					ui-sref="board.card({boardId: id, cardId: c.id})"
-					ng-class="{'archived': c.archived, 'has-labels': c.labels.length>0 }">
+					ng-class="{'archived': c.archived, 'has-labels': c.labels.length>0, 'current': c.id == params.cardId }">
 					<div data-as-sortable-item-handle>
 						<div class="card-upper">
 							<h4>{{ c.title }}</h4>
@@ -83,13 +83,13 @@
 								<button class="button-inline card-options icon-more" ng-model="card"></button>
 								<div class="popovermenu hidden">
 									<ul>
-										<li ng-if="filter!=='archive'">
+										<li ng-if="params.filter!=='archive'">
 											<a class="menuitem action action-rename permanent"
 											   data-action="Archive"
 											   ng-click="cardArchive(c); $event.stopPropagation();"><span
 														class="icon icon-archive"></span><span><?php p($l->t('Archive')); ?></span></a>
 										</li>
-										<li ng-if="filter==='archive'">
+										<li ng-if="params.filter==='archive'">
 											<a class="menuitem action action-rename permanent"
 											   data-action="Unarchive"
 											   ng-click="cardUnarchive(c); $event.stopPropagation();"><span
@@ -112,7 +112,7 @@
 
 			<!-- CREATE CARD //-->
 			<div class="card create" ng-class="{emptyStack: !s.cards.length}"
-				 ng-style="{'border-color':'#{{ boardservice.getCurrent().color }}'}" ng-if="boardservice.canEdit() && checkCanEdit() && filter!=='archive'">
+				 ng-style="{'border-color':'#{{ boardservice.getCurrent().color }}'}" ng-if="boardservice.canEdit() && checkCanEdit() && params.filter!=='archive'">
 				<form ng-submit="createCard(s.id, newCard.title)">
 					<h4 ng-if="status.addCard[s.id]">
 						<input type="text" autofocus-on-insert

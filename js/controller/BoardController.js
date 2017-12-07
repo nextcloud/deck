@@ -30,7 +30,6 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		addCard: [],
 	};
 	$scope.newLabel = {};
-	$scope.status.boardtab = $stateParams.detailTab;
 
 	$scope.OC = OC;
 	$scope.stackservice = StackService;
@@ -39,21 +38,28 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.statusservice = StatusService.getInstance();
 	$scope.labelservice = LabelService;
 	$scope.defaultColors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
+	$scope.board = BoardService.getCurrent();
+
+	// workaround for $stateParams changes not being propagated
+	$scope.$watch(function() {
+		return $state.params;
+	}, function (params) {
+		$scope.params = params;
+		console.log(params);
+	}, true);
+	$scope.params = $state;
+
 
 	$scope.search = function (searchText) {
 		$scope.searchText = searchText;
 		$scope.refreshData();
 	};
 
-	$scope.board = BoardService.getCurrent();
-	StackService.clear(); //FIXME: Is this still needed?
-
 	$scope.$watch(function () {
 		return BoardService.getCurrent().title;
 	}, function () {
 		$scope.setPageTitle();
 	});
-
 	$scope.setPageTitle = function () {
 		if (BoardService.getCurrent()) {
 			document.title = BoardService.getCurrent().title + " | Deck - " + oc_defaults.name;
@@ -61,27 +67,23 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			document.title = "Deck - " + oc_defaults.name;
 		}
 	};
+
 	$scope.statusservice.retainWaiting();
 	$scope.statusservice.retainWaiting();
 
-	// FIXME: ugly solution for archive
-	$scope.$state = $stateParams;
-	$scope.filter = $stateParams.filter;
-	$scope.$watch('$state.filter', function (name) {
-		$scope.filter = name;
-	});
+	// handle filter parameter for switching between archived/unarchived cards
 	$scope.switchFilter = function (filter) {
-		$state.go('.', {filter: filter}, {notify: false});
-		$scope.filter = filter;
+		$state.go('.', {filter: filter});
 	};
-	$scope.$watch('filter', function (name) {
-		if (name === "archive") {
+	$scope.$watch(function() {
+		return $scope.params.filter;
+	}, function (filter) {
+		if (filter === "archive") {
 			$scope.loadArchived();
 		} else {
 			$scope.loadDefault();
 		}
 	});
-
 
 	$scope.stacksData = StackService;
 	$scope.stacks = [];
@@ -89,7 +91,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		$scope.refreshData();
 	}, true);
 	$scope.refreshData = function () {
-		if ($scope.filter === "archive") {
+		if ($scope.params.filter === "archive") {
 			$scope.filterData('-lastModified', $scope.searchText);
 		} else {
 			$scope.filterData('order', $scope.searchText);
