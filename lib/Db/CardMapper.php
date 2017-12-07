@@ -125,7 +125,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	public function findOverdue() {
-		$sql = 'SELECT id,title,duedate,notified from `*PREFIX*deck_cards` WHERE duedate < NOW()';
+		$sql = 'SELECT id,title,duedate,notified from `*PREFIX*deck_cards` WHERE duedate < NOW() AND NOT archived';
 		return $this->findEntities($sql);
 	}
 
