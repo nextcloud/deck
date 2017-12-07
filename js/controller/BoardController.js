@@ -45,7 +45,6 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		return $state.params;
 	}, function (params) {
 		$scope.params = params;
-		console.log(params);
 	}, true);
 	$scope.params = $state;
 
@@ -87,7 +86,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 
 	$scope.stacksData = StackService;
 	$scope.stacks = [];
-	$scope.$watch('stacksData', function (value) {
+	$scope.$watch('stacksData', function () {
 		$scope.refreshData();
 	}, true);
 	$scope.refreshData = function () {

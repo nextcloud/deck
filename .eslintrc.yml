@@ -31,4 +31,7 @@ rules:
   no-unused-vars: warn
   no-use-before-define: error
   semi: ["error", "always"]
-  indent: ["error", "tab"]
+  indent:
+    - error
+    - tab
+    - SwitchCase: 1
