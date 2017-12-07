@@ -69,7 +69,7 @@
 								</a>
 							</li>
 							<li ui-sref="board.detail({boardId: b.id})">
-								<a class="menuitem"><span class="icon-info"></span> <?php p($l->t('Board details')); ?>
+								<a class="menuitem"><span class="icon-settings-dark"></span> <?php p($l->t('Board details')); ?>
 								</a>
 							</li>
 						</ul>
