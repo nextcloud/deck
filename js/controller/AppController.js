@@ -21,7 +21,7 @@
  */
 
 /** global: OC */
-app.controller('AppController', function ($scope, $location, $http, $route, $log, $rootScope, $stateParams) {
+app.controller('AppController', function ($scope, $location, $http, $route, $log, $rootScope) {
 	$rootScope.sidebar = {
 		show: false
 	};
