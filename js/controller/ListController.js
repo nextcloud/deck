@@ -95,15 +95,15 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 				$scope.statusservice.setError('Error occured', error);
 			});
 		} else {
-			/* Watch for data change of boardservice when boards are fetched */
+			/* initialize main list controller when board list is loaded */
 			var boardDataWatch = $scope.$watch(function () {
-				return $scope.boardservice.data;
+				return $scope.boardservice.loaded;
 			}, function () {
 				if (BoardService.loaded === true) {
 					boardDataWatch();
 					finishedLoading();
 				}
-			}, true);
+			});
 		}
 
 		$scope.$watch(function () {
