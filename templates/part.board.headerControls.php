@@ -19,7 +19,7 @@
     <i class="icon icon-archive"></i>
     <span class="hidden-visually"><?php p($l->t('Hide archived cards')); ?></span>
 </a>
-<a class="button" ui-sref="board.detail({ id: id, tab: 1})"  title="<?php p($l->t('Board details')); ?>">
+<a class="button" ui-sref="board.detail({ id: id, tab: 0})"  title="<?php p($l->t('Board details')); ?>">
     <i class="icon icon-details"></i>
     <span class="hidden-visually"><?php p($l->t('Board details')); ?></span>
 </a>
