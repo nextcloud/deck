@@ -11,15 +11,15 @@
     </form>
 </div>
 
-<a class="button" ng-if="params.filter!='archive'" ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>">
+<button ng-if="params.filter!='archive'" ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>">
     <i class="icon icon-archive"></i>
     <span class="hidden-visually"><?php p($l->t('Show archived cards')); ?></span>
-</a>
-<a class="button" ng-if="params.filter=='archive'" ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>">
+</button>
+<button ng-if="params.filter=='archive'" ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>">
     <i class="icon icon-archive"></i>
     <span class="hidden-visually"><?php p($l->t('Hide archived cards')); ?></span>
-</a>
-<a class="button" ui-sref="board.detail({ id: id, tab: 0})"  title="<?php p($l->t('Board details')); ?>">
-    <i class="icon icon-details"></i>
+</button>
+<button ui-sref="board.detail({ id: id, tab: 0})"  title="<?php p($l->t('Board details')); ?>">
+    <i class="icon icon-settings"></i>
     <span class="hidden-visually"><?php p($l->t('Board details')); ?></span>
-</a>
+</button>
