@@ -250,9 +250,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 				$scope.refreshData();
 			});
 		},
-		scrollableContainer: '#board',
+		scrollableContainer: '#innerBoard',
 		containerPositioning: 'relative',
-		containment: '#board',
+		containment: '#innerBoard',
 		longTouch: true,
 		// auto scroll on drag
 		dragMove: function (itemPosition, containment, eventObj) {
@@ -262,14 +262,14 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 				var targetX = eventObj.pageX - (offset.left || container.scrollLeft());
 				var targetY = eventObj.pageY - (offset.top || container.scrollTop());
 				if (targetX < offset.left) {
-					container.scrollLeft(container.scrollLeft() - 50);
+					container.scrollLeft(container.scrollLeft() - 25);
 				} else if (targetX > container.width()) {
-					container.scrollLeft(container.scrollLeft() + 50);
+					container.scrollLeft(container.scrollLeft() + 25);
 				}
 				if (targetY < offset.top) {
-					container.scrollTop(container.scrollTop() - 50);
+					container.scrollTop(container.scrollTop() - 25);
 				} else if (targetY > container.height()) {
-					container.scrollTop(container.scrollTop() + 50);
+					container.scrollTop(container.scrollTop() + 25);
 				}
 			}
 		},
@@ -289,8 +289,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		},
 		scrollableContainer: '#board',
 		containerPositioning: 'relative',
-		containment: '#board',
-		longTouch: true,
+		containment: '#innerBoard',
 		dragMove: function (itemPosition, containment, eventObj) {
 			if (eventObj) {
 				var container = $("#board");

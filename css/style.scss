@@ -150,8 +150,15 @@ input.input-inline {
 			}
 		}
 	}
+
 }
 
+// styles to provide a drop zone in empty stacks
+.as-sortable-un-selectable {
+	.card-list {
+		min-height: 96px;
+	}
+}
 #innerBoard {
 	padding: 10px;
 
