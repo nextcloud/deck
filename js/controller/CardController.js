@@ -20,8 +20,7 @@
  *  
  */
 
-/* global app */
-/* global moment */
+/* global app moment */
 
 app.controller('CardController', function ($scope, $rootScope, $routeParams, $location, $stateParams, $interval, $timeout, BoardService, CardService, StackService, StatusService) {
 	$scope.sidebar = $rootScope.sidebar;

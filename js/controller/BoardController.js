@@ -20,7 +20,7 @@
  *  
  */
 
-/** global: oc_defaults, OC */
+/* global oc_defaults OC */
 app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter) {
 
 	$scope.sidebar = $rootScope.sidebar;
@@ -61,9 +61,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	});
 	$scope.setPageTitle = function () {
 		if (BoardService.getCurrent()) {
-			document.title = BoardService.getCurrent().title + " | Deck - " + oc_defaults.name;
+			document.title = BoardService.getCurrent().title + ' | Deck - ' + oc_defaults.name;
 		} else {
-			document.title = "Deck - " + oc_defaults.name;
+			document.title = 'Deck - ' + oc_defaults.name;
 		}
 	};
 
@@ -77,7 +77,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.$watch(function() {
 		return $scope.params.filter;
 	}, function (filter) {
-		if (filter === "archive") {
+		if (filter === 'archive') {
 			$scope.loadArchived();
 		} else {
 			$scope.loadDefault();
@@ -90,7 +90,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		$scope.refreshData();
 	}, true);
 	$scope.refreshData = function () {
-		if ($scope.params.filter === "archive") {
+		if ($scope.params.filter === 'archive') {
 			$scope.filterData('-lastModified', $scope.searchText);
 		} else {
 			$scope.filterData('order', $scope.searchText);

@@ -20,7 +20,7 @@
  *  
  */
 
-/** global: OC */
+/* global app OC */
 app.factory('BoardService', function (ApiService, $http, $q) {
 	var BoardService = function ($http, ep, $q) {
 		ApiService.call(this, $http, ep, $q);
