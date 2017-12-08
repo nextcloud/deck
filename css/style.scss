@@ -157,8 +157,16 @@ input.input-inline {
 .as-sortable-un-selectable {
 	.card-list {
 		min-height: 96px;
+		flex-grow: 1;
+	}
+
+	// empty stack placeholders and last placeholders should fill the space
+	.emptyStack .as-sortable-placeholder,
+	li:last-child.as-sortable-placeholder {
+		height: 100% !important;
 	}
 }
+
 #innerBoard {
 	padding: 10px;
 
@@ -295,6 +303,8 @@ input.input-inline {
 .stack {
 	width: 100%;
 	vertical-align: top;
+	display: flex;
+	flex-direction: column;
 
 	h3 {
 		padding: 10px 10px 8px;
@@ -345,6 +355,12 @@ input.input-inline {
 		&:last-child {
 			margin: 10px;
 		}
+	}
+
+
+	ul {
+		display: flex;
+		flex-direction: column;
 	}
 
 }
@@ -1183,13 +1199,11 @@ input.input-inline {
 
 	#innerBoard {
 		display: flex;
-		align-items: flex-start;
 	}
 
 	.stack {
 		width: 320px;
 		min-width: 320px;
-		display: inline-block;
 		border-right: 1px solid $color-lightgrey;
 		margin-right: 10px;
 		padding-right: 10px;
