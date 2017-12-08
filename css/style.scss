@@ -515,6 +515,22 @@ input.input-inline {
 	}
 }
 
+/* ng-sortable: Fix mobile touch scrolling */
+.as-sortable-item,
+.as-sortable-item-handle {
+	-ms-touch-action: auto !important;
+	touch-action: auto !important;
+	-webkit-touch-callout: inherit !important;
+}
+/* disable scrolling only when a card is dragged */
+.as-sortable-un-selectable .as-sortable-item,
+.as-sortable-un-selectable .as-sortable-item-handle {
+	-ms-touch-action: none !important;
+	touch-action: none !important;
+	-webkit-touch-callout: inherit !important;
+}
+
+
 .app-popover-menu-utils {
 	margin-left: auto;
 	min-height: 16px;
