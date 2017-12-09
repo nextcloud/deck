@@ -13,6 +13,7 @@ OC.L10N.register(
     "Hide archived cards" : "Piilota arkistoidut kortit",
     "Board details" : "Taulun tiedot",
     "All Boards" : "Kaikki taulut",
+    "Archived boards" : "Arkistoidut taulut",
     "Archive" : "Arkisto",
     "Unarchive" : "Pois arkistosta",
     "Delete" : "Poista",
@@ -48,7 +49,6 @@ OC.L10N.register(
     "Saved" : "Tallennettu",
     "Unsaved changes" : "Tallentamattomia muutoksia",
     "Add a card description…" : "Lisää kortin kuvaus…",
-    "Archived boards" : "Arkistoidut taulut",
     "Shared boards" : "Jaetut taulut",
     "Move board to archive" : "Siirrä taulu arkistoon",
     "Create a new board" : "Luo uusi taulu"

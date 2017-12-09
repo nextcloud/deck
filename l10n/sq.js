@@ -13,6 +13,7 @@ OC.L10N.register(
     "Hide archived cards" : "Fsheh kartat e arkivuara ",
     "Board details" : "Detajet e Tabeles ",
     "All Boards" : "Të gjitha Tabelat ",
+    "Archived boards" : "Borde të arkivuara",
     "Archive" : "Arkiva",
     "Unarchive" : "Hiq nga arkivi",
     "Delete" : "Fshij",
@@ -45,7 +46,6 @@ OC.L10N.register(
     "Formatting help" : "Ndihmë formatimi",
     "Saved" : "I/E ruajtur",
     "Add a card description…" : "Shto një përshkrim të kartës...",
-    "Archived boards" : "Borde të arkivuara",
     "Shared boards" : "Tabela të shpërndara",
     "Move board to archive" : "Lëviz tabelen në arkivë",
     "Create a new board" : "Krijo një tablë të re"

@@ -16,6 +16,7 @@ OC.L10N.register(
     "Hide archived cards" : "Göm arkiverade kort",
     "Board details" : "Taveldetaljer",
     "All Boards" : "Alla tavlor",
+    "Archived boards" : "Arkiverade tavlor",
     "Archive" : "Arkivera",
     "Unarchive" : "Ta bort ur arkivet",
     "Delete" : "Radera",
@@ -51,7 +52,6 @@ OC.L10N.register(
     "Formatting help" : "Formatteringshjälp",
     "Saved" : "Sparad",
     "Add a card description…" : "Lägg till en kortbeskrivning...",
-    "Archived boards" : "Arkiverade tavlor",
     "Shared boards" : "Delade tavlor",
     "Move board to archive" : "Flytta tavla till arkiv",
     "Create a new board" : "Skapa en ny tavla"

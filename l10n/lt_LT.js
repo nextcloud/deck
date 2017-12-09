@@ -13,6 +13,7 @@ OC.L10N.register(
     "Hide archived cards" : "Paslėpti archyvuotus elementus",
     "Board details" : "Detalesnė informacija",
     "All Boards" : "Visi užduočių sąrašai",
+    "Archived boards" : "Archyvuoti sąrašai",
     "Archive" : "Archyvuoti",
     "Unarchive" : "Išskleisti",
     "Delete" : "Ištrinti",
@@ -45,7 +46,6 @@ OC.L10N.register(
     "Formatting help" : "Formatavimo pagalba",
     "Saved" : "Įrašyta",
     "Add a card description…" : "Pridėti elemento apibūdinimą...",
-    "Archived boards" : "Archyvuoti sąrašai",
     "Shared boards" : "Bendrinami sąrašai",
     "Move board to archive" : "Perkelti sąrašą į archyvą",
     "Create a new board" : "Sukurti naują sąrašą"

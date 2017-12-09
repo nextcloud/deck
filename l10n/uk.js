@@ -13,6 +13,7 @@ OC.L10N.register(
     "Hide archived cards" : "Приховати архівні картки",
     "Board details" : "Деталі дошки",
     "All Boards" : "Всі дошки",
+    "Archived boards" : "Архівовані дошки",
     "Archive" : "Архів",
     "Unarchive" : "Розархівувати",
     "Delete" : "Видалені",
@@ -45,7 +46,6 @@ OC.L10N.register(
     "Formatting help" : "Форматування довідки",
     "Saved" : "Збережено",
     "Add a card description…" : "Додати опис дошки",
-    "Archived boards" : "Архівовані дошки",
     "Shared boards" : "Спільні дошки",
     "Move board to archive" : "Перемістити до архіву",
     "Create a new board" : "Створити нову дошку"

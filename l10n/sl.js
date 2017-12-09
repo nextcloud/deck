@@ -11,6 +11,7 @@ OC.L10N.register(
     "Hide archived cards" : "Skrij arhivirane kartice",
     "Board details" : "Podrobnosti table",
     "All Boards" : "Vse table",
+    "Archived boards" : "Arhivirane table",
     "Archive" : "Arhiviraj",
     "Unarchive" : "Odarhiviraj",
     "Delete" : "Izbriši",
@@ -43,7 +44,6 @@ OC.L10N.register(
     "Formatting help" : "Pomoč pri oblikovanju",
     "Saved" : "Shranjeno",
     "Add a card description…" : "Dodaj opis kartice...",
-    "Archived boards" : "Arhivirane table",
     "Shared boards" : "Deljene table",
     "Move board to archive" : "Premakni tablo v arhiv",
     "Create a new board" : "Ustvari novo tablo"

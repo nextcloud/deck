@@ -14,6 +14,7 @@ OC.L10N.register(
     "Hide archived cards" : "Απόκρυψη καρτελών που αρχειοθετήθηκαν",
     "Board details" : "Λεπτομέριες πίνακα",
     "All Boards" : "Όλοι οι πίνακες",
+    "Archived boards" : "Αρχειοθέτηση πινάκων ",
     "Archive" : "Αρχειοθέτηση",
     "Unarchive" : "Αναίρεση αρχειοθέτησης",
     "Delete" : "Διαγραφή",
@@ -46,7 +47,6 @@ OC.L10N.register(
     "Formatting help" : "Βοήθεια μορφοποίησης",
     "Saved" : "Αποθηκεύτηκε",
     "Add a card description…" : "Προσθήκη περιγραφής κάρτας...",
-    "Archived boards" : "Αρχειοθέτηση πινάκων ",
     "Shared boards" : "Διαμοιρασμένοι πίνακες",
     "Move board to archive" : "Μετακίνηση πίνακα στην αρχειοθήκη",
     "Create a new board" : "Δημιουργία νέου πίνακα"

@@ -14,6 +14,7 @@
     "Hide archived cards" : "隐藏已存档的卡片",
     "Board details" : "面板详情",
     "All Boards" : "全部面板",
+    "Archived boards" : "已归档面板",
     "Archive" : "归档",
     "Unarchive" : "取消归档",
     "Delete" : "删除",
@@ -49,7 +50,6 @@
     "Formatting help" : "格式化帮助",
     "Saved" : "已保存",
     "Add a card description…" : " 添加卡片描述…",
-    "Archived boards" : "已归档面板",
     "Shared boards" : "已分享面板",
     "Move board to archive" : "移动面板到归档",
     "Create a new board" : "创建一个新面板"

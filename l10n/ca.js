@@ -13,6 +13,7 @@ OC.L10N.register(
     "Hide archived cards" : "Amaga les targetes arxivades",
     "Board details" : "Detalls de la junta",
     "All Boards" : "Totes les juntes",
+    "Archived boards" : "Taulers arxivats",
     "Archive" : "Arxiu",
     "Unarchive" : "Desbloquejar",
     "Delete" : "Esborra",
@@ -45,7 +46,6 @@ OC.L10N.register(
     "Formatting help" : "Format d'ajuda",
     "Saved" : "Desat",
     "Add a card description…" : "Afegeix una descripció de la targeta ...",
-    "Archived boards" : "Taulers arxivats",
     "Shared boards" : "Taulers compartits",
     "Move board to archive" : "Mou la placa a l'arxiu",
     "Create a new board" : "Crear nova"
