@@ -25,7 +25,7 @@
                 <span><i class="icon icon-{{aclTypeString($item)}}"></i> {{ $item.participant.displayname }}</span>
             </ui-select-match>
             <ui-select-choices refresh="searchForUser($select.search)" refresh-delay="0" repeat="sharee in boardservice.sharees">
-				<div class="avatardiv" avatar displayname="{{ sharee.participant.uid }}" ng-if="sharee.type==OC.Share.SHARE_TYPE_USER"></div>
+				<div class="avatardiv" avatar data-user="{{ sharee.participant.uid }}" data-displayname="{{ sharee.participant.displayname }}" ng-if="sharee.type==OC.Share.SHARE_TYPE_USER"></div>
 				<div class="avatardiv" ng-if="sharee.type==OC.Share.SHARE_TYPE_GROUP"><i class="icon icon-{{aclTypeString(sharee)}}" title="<?php p($l->t('Access for')); ?> {{aclTypeString(sharee)}}"></i></div>
 				<span class="has-tooltip username">
 					{{ sharee.participant.displayname }}
@@ -39,14 +39,14 @@
         <ul id="shareWithList" class="shareWithList">
             <li>
                 <span class="icon-loading-small" style="display:none;"></span>
-                <div class="avatardiv" avatar ng-attr-displayname="{{ boardservice.getCurrent().owner.uid }}" ng-if="boardservice.id"></div>
+				<div class="avatardiv" avatar data-user="{{ boardservice.getCurrent().owner.uid }}" data-displayname="{{ boardservice.getCurrent().owner.displayname }}" ng-if="boardservice.id"></div>
                 <span class="has-tooltip username">
                     {{ boardservice.getCurrent().owner.displayname }}
 				</span>
             </li>
             <li ng-repeat="acl in boardservice.getCurrent().acl track by $index">
                 <span class="icon-loading-small" style="display:none;" title="<?php p($l->t('Loading')); ?>"></span>
-                <div class="avatardiv" avatar displayname="{{ acl.participant.uid }}" ng-if="acl.type==OC.Share.SHARE_TYPE_USER"></div>
+                <div class="avatardiv" avatar data-contactsmenu="true" data-user="{{ acl.participant.uid }}" data-displayname="{{ acl.participant.displayname }}" ng-if="acl.type==OC.Share.SHARE_TYPE_USER"></div>
                 <div class="avatardiv" ng-if="acl.type==OC.Share.SHARE_TYPE_GROUP"><i class="icon icon-{{aclTypeString(acl)}}" title="<?php p($l->t('Access for')); ?> {{aclTypeString(acl)}}"></i></div>
 
                 <span class="has-tooltip username">

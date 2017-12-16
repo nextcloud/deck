@@ -57,7 +57,9 @@ input.input-inline {
 	border-radius: 0;
 }
 
-
+#app img {
+	box-sizing: content-box;
+}
 
 #searchbox {
 	display: flex !important;
@@ -713,7 +715,7 @@ input.input-inline {
 			.assigned-user {
 				position: relative;
 
-				.avatardiv {
+				.avatardiv-container {
 					margin-right: 5px;
 				}
 				.icon-delete {
@@ -929,7 +931,7 @@ input.input-inline {
 	#assigned-users {
 		display: flex;
 
-		.avatardiv {
+		.avatardiv-container {
 			margin: 6px;
 		}
 	}
@@ -994,6 +996,10 @@ input.input-inline {
 		padding: 16px;
 		opacity: 0.5;
 	}
+}
+
+.avatardiv-container {
+	position: relative;
 }
 
 #board-detail-labels {
