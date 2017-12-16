@@ -66,7 +66,8 @@
 			</ui-select-choices>
 	</ui-select>
 		<div class="card-details-assign-users-list">
-			<div class="assigned-user" ng-repeat="user in cardservice.getCurrent().assignedUsers">
+			<div class="assigned-user" ng-repeat="user in cardservice.getCurrent().assignedUsers"
+				data-toggle="tooltip" data-placement="bottom" title="{{ user.participant.displayname }}">
 				<div class="avatardiv" avatar ng-attr-displayname="{{ user.participant.uid }}"></div>
 				<div class="icon icon-delete" ng-click="removeAssignedUser(user)"></div>
 			</div>
@@ -88,7 +89,7 @@
 		<h4>
 			<div>
 				<?php p($l->t('Description')); ?>
-				<a href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
+				<a href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" data-toggle="tooltip" data-placement="right" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
 			</div>
 			<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
 			<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>
