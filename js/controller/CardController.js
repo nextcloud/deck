@@ -62,24 +62,25 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 	};
 	$scope.cardEditDescriptionChanged = function ($event) {
 		$scope.status.lastEdit = Date.now();
-		$('#card-description').find('.save-indicator.unsaved').show();
-		$('#card-description').find('.save-indicator.saved').hide();
+		var header = $('.section-header.card-description');
+		header.find('.save-indicator.unsaved').show();
+		header.find('.save-indicator.saved').hide();
 	};
-
-	$scope.cardEditDescriptionAutosave = function() {
-		var currentTime = Date.now();
-		var timeSinceEdit = currentTime-$scope.status.lastEdit;
-		if (timeSinceEdit > 1000 && $scope.status.lastEdit > $scope.status.lastSave) {
-			$scope.status.lastSave = currentTime;
-			$('#card-description').find('.save-indicator.unsaved').fadeIn(500);
-			CardService.update(CardService.getCurrent()).then(function (data) {
-				$('#card-description').find('.save-indicator.unsaved').hide();
-				$('#card-description').find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
-			});
-		}
-	};
-
-	$interval( function(){ $scope.cardEditDescriptionAutosave(); }, 500);
+	$interval(function() {
+		$scope.cardEditDescriptionAutosave = function() {
+			var currentTime = Date.now();
+			var timeSinceEdit = currentTime-$scope.status.lastEdit;
+			if (timeSinceEdit > 1000 && $scope.status.lastEdit > $scope.status.lastSave) {
+				$scope.status.lastSave = currentTime;
+				var header = $('.section-content.card-description');
+				header.find('.save-indicator.unsaved').fadeIn(500);
+				CardService.update(CardService.getCurrent()).then(function (data) {
+					header.find('.save-indicator.unsaved').hide();
+					header.find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
+				});
+			}
+		};
+	}, 500);
 
 	// handle rename to update information on the board as well
 	$scope.cardRename = function (card) {
@@ -91,8 +92,9 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 	$scope.cardUpdate = function (card) {
 		CardService.update(CardService.getCurrent()).then(function (data) {
 			$scope.status.cardEditDescription = false;
-			$('#card-description').find('.save-indicator.unsaved').hide();
-			$('#card-description').find('.save-indicator.saved').fadeIn(500).fadeOut(1000);
+			var header = $('.section-content.card-description');
+			header.find('.save-indicator.unsaved').hide();
+			header.find('.save-indicator.saved').fadeIn(500).fadeOut(1000);
 		});
 		StackService.updateCard(card);
 	};

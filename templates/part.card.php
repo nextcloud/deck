@@ -84,17 +84,17 @@
 		<button class="icon icon-delete button-inline" title="<?php p($l->t('Remove due date')); ?>" ng-if="cardservice.getCurrent().duedate" ng-click="resetDuedate()"><span class="hidden-visually"><?php p($l->t('Remove due date')); ?></span></button>
 	</div>
 
-	<div class="section-header">
+	<div class="section-header card-description">
 		<h4>
 			<div>
 				<?php p($l->t('Description')); ?>
 				<a href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
 			</div>
-			<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
-			<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>
 		</h4>
+		<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
+		<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>
 	</div>
-	<div id="card-description">
+	<div class="section-content card-description">
 		<textarea elastic ng-if="status.cardEditDescription"
 				  placeholder="<?php p($l->t('Add a card description…')); ?>"
 				  ng-blur="cardUpdate(cardservice.getCurrent())"
