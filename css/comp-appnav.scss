@@ -1,5 +1,6 @@
 /*
  * @copyright Copyright (c) 2017 Julius Härtl <jus@bitgrid.net>
+ * @copyright Copyright (c) 2016, John Molakvoæ <skjnldsv@protonmail.com>
  *
  * @author Julius Härtl <jus@bitgrid.net>
  *
@@ -40,6 +41,73 @@
       background: $color-main-background;
       height: auto;
       z-index: 250;
+    }
+  }
+}
+
+
+/**
+ * copied styles from core/css/styles.scss
+ * to have the same breadcrumb styling in NC12
+ */
+.breadcrumb {
+  display: inline-flex;
+}
+div.crumb {
+  display: inline-flex;
+  background-repeat: no-repeat;
+  background-position: right center;
+  height: 44px;
+  background-size: auto 24px;
+  flex: 0 0 auto;
+  order: 1;
+  padding-right: 7px;
+  &.crumbmenu {
+    order: 2;
+    position: relative;
+    a {
+      opacity: 0.5
+    }
+  }
+  &.hidden {
+    display: none;
+    ~ .crumb {
+      order: 3;
+    }
+  }
+  > a,
+  > span {
+    position: relative;
+    padding: 12px;
+    opacity: 0.5;
+    top: 0 !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    flex: 0 0 auto;
+    &.icon-home {
+      // Hide home text
+      text-indent: -9999px;
+    }
+  }
+  > a[class^='icon-'] {
+    padding: 0;
+    width: 44px;
+  }
+  &:not(:first-child) a {
+  }
+  &:last-child {
+    font-weight: 600;
+    margin-right: 10px;
+    // Allow multiple span next to the main 'a'
+    a ~ span {
+      padding-left: 0;
+    }
+  }
+  &:hover, &:focus, a:focus, &:active {
+    > a,
+    > span {
+      opacity: .7;
     }
   }
 }
