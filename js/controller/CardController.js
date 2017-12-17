@@ -100,13 +100,15 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 	};
 
 	$scope.labelAssign = function (element, model) {
-		CardService.assignLabel($scope.cardId, element.id);
-		var card = CardService.getCurrent();
-		StackService.updateCard(card);
+		CardService.assignLabel($scope.cardId, element.id).then(function (data) {
+			StackService.updateCard(CardService.getCurrent());
+		});
 	};
 
 	$scope.labelRemove = function (element, model) {
-		CardService.removeLabel($scope.cardId, element.id);
+		CardService.removeLabel($scope.cardId, element.id).then(function (data) {
+			StackService.updateCard(CardService.getCurrent());
+		});
 	};
 
 	$scope.setDuedate = function (duedate) {
