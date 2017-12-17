@@ -74,4 +74,9 @@ app.run(function ($document, $rootScope, $transitions, BoardService) {
 			}
 		}
 	});
+	// Select all elements with data-toggle="tooltips" in the document
+	$('body').tooltip({
+		selector: '[data-toggle="tooltip"]'
+	});
+
 });

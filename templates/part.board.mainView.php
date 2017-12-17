@@ -82,7 +82,7 @@
 							</span>
 							<div class="card-assigned-users">
 								<div class="assigned-user" ng-repeat="user in c.assignedUsers | limitTo: 3">
-									<div class="avatardiv" avatar ng-attr-displayname="{{ user.participant.uid }}"></div>
+									<div class="avatardiv" avatar ng-attr-user="{{ user.participant.uid }}" ng-attr-displayname="{{ user.participant.displayname }}" data-toggle="tooltip" data-placement="bottom" title="{{ user.participant.displayname }}"></div>
 								</div>
 							</div>
 							<div class="app-popover-menu-utils" ng-if="!boardservice.isArchived()">

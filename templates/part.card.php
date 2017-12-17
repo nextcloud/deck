@@ -62,12 +62,13 @@
 				<span><i class="icon icon-{{$item.type}}"></i> {{ $item.participant.displayname }}</span>
 			</ui-select-match>
 			<ui-select-choices repeat="user in boardservice.getCurrent().users | filter: $select.search | withoutAssignedUsers: cardservice.getCurrent().assignedUsers track by user.uid">
-				<div class="avatardiv" avatar ng-attr-displayname="{{ user.uid }}" ng-if="boardservice.id"></div><span>{{ user.displayname }}</span>
+				<div class="avatardiv" avatar ng-attr-user="{{ user.uid }}" ng-attr-displayname="{{ user.displayname }}" ng-if="boardservice.id"></div><span>{{ user.displayname }}</span>
 			</ui-select-choices>
 	</ui-select>
 		<div class="card-details-assign-users-list">
-			<div class="assigned-user" ng-repeat="user in cardservice.getCurrent().assignedUsers">
-				<div class="avatardiv" avatar ng-attr-displayname="{{ user.participant.uid }}"></div>
+			<div class="assigned-user" ng-repeat="user in cardservice.getCurrent().assignedUsers"
+				data-toggle="tooltip" data-placement="bottom" title="{{ user.participant.displayname }}">
+				<div class="avatardiv" avatar data-contactsmenu="true" ng-attr-user="{{ user.participant.uid }}" ng-attr-displayname="{{ user.participant.uid }}"></div>
 				<div class="icon icon-delete" ng-click="removeAssignedUser(user)"></div>
 			</div>
 		</div>
@@ -88,7 +89,7 @@
 		<h4>
 			<div>
 				<?php p($l->t('Description')); ?>
-				<a href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
+				<a href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" data-toggle="tooltip" data-placement="right" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
 			</div>
 		</h4>
 		<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>

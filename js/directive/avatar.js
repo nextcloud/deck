@@ -26,11 +26,12 @@ app.directive('avatar', function() {
 		restrict: 'A',
 		scope: true,
 		link: function(scope, element, attr){
-			attr.$observe('displayname', function(value){
-				if(value!==undefined) {
-					$(element).avatar(value, 32);
-				}
-			});
+			var value = attr.user;
+			$(element).wrap('<div class="avatardiv-container"></div>');
+			if(attr.contactsmenu && oc_current_user !== value) {
+				$(element).contactsMenu(value, 0, $(element).parent());
+			}
+			$(element).avatar(value, 32, false, false, false, attr.displayname);
 		}
 	};
 });
