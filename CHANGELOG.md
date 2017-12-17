@@ -1,9 +1,64 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.3.0 - unreleased
+
+### Added
+- Allow to assign users to cards
+- Emit notifications for overdue cards
+- Emit notifications if boards gets shared to a user
+- Add support for Nextcloud 13
+- Simplify layout for cleaner user experience
+- Add contacts menu to avatars
+- Automatically save card description on inactivity
+
+
+### Fixed
+- Fix card dragging behaviour
+- Fix scrolling and dragging on mobile
+- Various fixes when data is not syncronized between different views
+- Improved performance
+- Update document title when renaming a board
+- Automatically chose the least used color
+- Improve accessibility
+- Fix issue when assigning labels after creating them
+- Allow to save tag changes with enter
+
+
+## 0.2.8 - 2017-11-26
+
+### Fixed
+- Drop support for NC 13, since that will only be supported by the next version of Deck
+
+## 0.2.7 - 2017-11-10
+
+### Fixed
+- Fix bug that caused update to fail
+
+## 0.2.6 - 2017-11-10
+
+### Fixed
+- Fix duedates not being updated with MySQL databases
+
+## 0.2.5 - 2017-11-08
+
+### Fixed
+- Fix duedates not being saved with MySQL databases
+
+## 0.2.4 - 2017-10-08
+
+### Fixed
+- Fix card action menu not being accessible
+
+## 0.2.3 - 2017-09-23
+
+### Fixed
+- Fix delete stack button being not available
+- Fix acl issues with PostgreSQL
+
 ## 0.2.2 - 2017-09-07
 
-## Fixed
+### Fixed
 - Various frontend fixes
 - Fix sidebar drag issues
 - Improvements for IE11 

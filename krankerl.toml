@@ -2,8 +2,12 @@
 exclude = [
     "build/",
     ".git",
-    "js/tests",
     "js/node_modules",
+    "js/tests",
+    "js/bower.json",
+    "js/Gruntfile.js",
+    "js/package.json",
+    "js/package-lock.json",
     "tests",
     ".codecov.yml",
     "composer.json",
