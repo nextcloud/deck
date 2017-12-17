@@ -67,19 +67,18 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 		header.find('.save-indicator.saved').hide();
 	};
 	$interval(function() {
-		$scope.cardEditDescriptionAutosave = function() {
-			var currentTime = Date.now();
-			var timeSinceEdit = currentTime-$scope.status.lastEdit;
-			if (timeSinceEdit > 1000 && $scope.status.lastEdit > $scope.status.lastSave) {
-				$scope.status.lastSave = currentTime;
-				var header = $('.section-content.card-description');
-				header.find('.save-indicator.unsaved').fadeIn(500);
-				CardService.update(CardService.getCurrent()).then(function (data) {
-					header.find('.save-indicator.unsaved').hide();
-					header.find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
-				});
-			}
-		};
+		var currentTime = Date.now();
+		var timeSinceEdit = currentTime-$scope.status.lastEdit;
+		if (timeSinceEdit > 1000 && $scope.status.lastEdit > $scope.status.lastSave) {
+			$scope.status.lastSave = currentTime;
+			var header = $('.section-header.card-description');
+			header.find('.save-indicator.unsaved').fadeIn(500);
+			CardService.update(CardService.getCurrent()).then(function (data) {
+				var header = $('.section-header.card-description');
+				header.find('.save-indicator.unsaved').hide();
+				header.find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
+			});
+		}
 	}, 500);
 
 	// handle rename to update information on the board as well
@@ -95,8 +94,8 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 			var header = $('.section-content.card-description');
 			header.find('.save-indicator.unsaved').hide();
 			header.find('.save-indicator.saved').fadeIn(500).fadeOut(1000);
+			StackService.updateCard(card);
 		});
-		StackService.updateCard(card);
 	};
 
 	$scope.labelAssign = function (element, model) {
