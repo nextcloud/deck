@@ -665,8 +665,9 @@ input.input-inline {
 	.section-header {
 		border-bottom: 1px solid $color-lightgrey;
 		display: flex;
+		flex-shrink: 0;
 		margin-bottom: 5px;
-		margin-top: 20px;
+		margin-top: 10px;
 		h4 {
 			padding-top: 5px;
 			padding-bottom: 5px;
