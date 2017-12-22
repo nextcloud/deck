@@ -55,7 +55,11 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 
 	$scope.$watch(function () {
-		return BoardService.getCurrent().title;
+		if (typeof BoardService.getCurrent() !== 'undefined') {
+			return BoardService.getCurrent().title;
+		} else {
+			return null;
+		}
 	}, function () {
 		$scope.setPageTitle();
 	});
