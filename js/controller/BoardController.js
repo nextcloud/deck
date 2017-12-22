@@ -215,6 +215,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 
 	$scope.aclTypeString = function (acl) {
+		if (typeof acl === 'undefined') {
+			return '';
+		}
 		switch (acl.type) {
 			case OC.Share.SHARE_TYPE_USER:
 				return 'user';
