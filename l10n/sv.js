@@ -27,6 +27,7 @@ OC.L10N.register(
     "Sharing" : "Delning",
     "Tags" : "Taggar",
     "Select users or groups to share with" : "Välj användare och grupper att dela med",
+    "Access for" : "Tillgång till",
     "No matching user or group found." : "Ingen matchande användare eller grupp hittades.",
     "Loading" : "Laddar",
     "Share" : "Dela",
