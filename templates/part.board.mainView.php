@@ -67,7 +67,7 @@
 							<h4>{{ c.title }}</h4>
 							<ul class="labels">
 								<li ng-repeat="label in c.labels"
-									ng-style="{'background-color':'#{{ label.color }}'}" title="{{ label.title }}">
+									ng-style="labelStyle(label.color)" title="{{ label.title }}">
 									<span>{{ label.title }}</span>
 								</li>
 							</ul>
