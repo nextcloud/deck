@@ -320,4 +320,11 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		}
 	};
 
+	$scope.labelStyle = function (color) {
+		return {
+			'background-color': '#' + color,
+			'color': $filter('textColorFilter')(color)
+		};
+	};
+
 });

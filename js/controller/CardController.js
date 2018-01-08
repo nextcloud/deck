@@ -22,7 +22,7 @@
 
 /* global app moment */
 
-app.controller('CardController', function ($scope, $rootScope, $routeParams, $location, $stateParams, $interval, $timeout, BoardService, CardService, StackService, StatusService) {
+app.controller('CardController', function ($scope, $rootScope, $routeParams, $location, $stateParams, $interval, $timeout, $filter, BoardService, CardService, StackService, StatusService) {
 	$scope.sidebar = $rootScope.sidebar;
 	$scope.status = {
 		lastEdit: 0,
@@ -174,6 +174,13 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 		CardService.unassignUser(CardService.getCurrent(), item.participant.uid).then(function (data) {
 			StackService.updateCard(CardService.getCurrent());
 		});
+	};
+
+	$scope.labelStyle = function (color) {
+		return {
+			'background-color': '#' + color,
+			'color': $filter('textColorFilter')(color)
+		};
 	};
 
 });

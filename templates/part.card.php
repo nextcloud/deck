@@ -41,11 +41,11 @@
 				   on-select="labelAssign($item, $model)"
 				   on-remove="labelRemove($item, $model)" ng-disabled="!boardservice.canEdit() || archived">
 			<ui-select-match placeholder="<?php p($l->t('Select tags')); ?>">
-				<span class="select-label" ng-style="{'background-color':'#{{$item.color}}','color':'{{ $item.color|textColorFilter }}'}">{{$item.title}}&nbsp;</span>
+				<span class="select-label" ng-style="labelStyle($item.color)">{{$item.title}}&nbsp;</span>
 			</ui-select-match>
 			<ui-select-choices
 				repeat="label in boardservice.getCurrent().labels | filter:$select.search">
-				<span class="choose-label" ng-style="{'background-color':'#{{label.color}}','color':'{{ label.color|textColorFilter }}'}">{{label.title}}</span>
+				<span class="choose-label" ng-style="labelStyle(label.color)">{{label.title}}</span>
 			</ui-select-choices>
 		</ui-select>
 	</div>
