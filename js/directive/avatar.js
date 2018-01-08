@@ -23,15 +23,27 @@
 app.directive('avatar', function() {
 	'use strict';
 	return {
-		restrict: 'A',
-		scope: true,
+		restrict: 'AEC',
+		transclude: true,
+		replace: true,
+		template: '<div class="avatardiv-container"><div class="avatardiv" data-toggle="tooltip" ng-transclude></div></div>',
+		scope: { attr: '=' },
 		link: function(scope, element, attr){
+			scope.uid = attr.displayname;
+			scope.displayname = attr.displayname;
 			var value = attr.user;
-			$(element).wrap('<div class="avatardiv-container"></div>');
-			if(attr.contactsmenu && oc_current_user !== value) {
-				$(element).contactsMenu(value, 0, $(element).parent());
+			var avatardiv = $(element).find('.avatardiv');
+			if(typeof attr.contactsmenu !== 'undefined' && attr.contactsmenu !== 'false' && oc_current_user !== value) {
+				avatardiv.contactsMenu(value, 0, $(element));
+				avatardiv.addClass('has-contactsmenu');
 			}
-			$(element).avatar(value, 32, false, false, false, attr.displayname);
+			if(typeof attr.tooltip !== 'undefined' && attr.tooltip !== 'false') {
+				$(element).tooltip({
+					title: scope.displayname,
+					placement: 'top'
+				});
+			}
+			avatardiv.avatar(value, 32, false, false, false, attr.displayname);
 		},
 		controller: function () {}
 	};

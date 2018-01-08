@@ -25,15 +25,14 @@ app.directive('contactsmenudelete', function() {
 	return {
 		restrict: 'A',
 		priority: 1,
-		scope: true,
 		link: function(scope, element, attr){
 			var user = attr.user;
 			var menu = $(element).parent().find('.contactsmenu-popover');
-			var menuentry = $('<li><a><span class="icon icon-delete"></span><span>' + t('deck', 'Remove user from card') + '</span></a></li>');
-			menuentry.on('click', function () {
+			var menuEntry = $('<li><a><span class="icon icon-delete"></span><span>' + t('deck', 'Remove user from card') + '</span></a></li>');
+			menuEntry.on('click', function () {
 				scope.removeAssignedUser(user);
 			});
-			$(menu).append(menuentry);
+			$(menu).append(menuEntry);
 		}
 	};
 });

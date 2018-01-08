@@ -41,8 +41,8 @@
 			</td>
 			<td>
 				<div id="assigned-users">
-					<div class="avatardiv" avatar data-user="{{ b.owner.uid }}" data-displayname="{{ b.owner.displayname }}" data-toggle="tooltip" title="{{ b.owner.displayname }}"></div>
-					<div class="avatardiv" avatar data-contactsmenu="true" data-user="{{ acl.participant.uid }}" data-displayname="{{ acl.participant.displayname }}" data-toggle="tooltip" title="{{ acl.participant.displayname }}" ng-repeat="acl in b.acl | limitTo: 7"></div>
+					<avatar data-user="{{ b.owner.uid }}" data-displayname="{{ b.owner.displayname }}"></avatar>
+					<avatar data-contactsmenu data-tooltip data-user="{{ acl.participant.uid }}" data-displayname="{{ acl.participant.displayname }}" ng-repeat="acl in b.acl | limitTo: 7"></avatar>
 				</div>
 			</td>
 			<td>
