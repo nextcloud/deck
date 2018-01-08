@@ -169,8 +169,8 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 		$scope.status.showAssignUser = false;
 	};
 
-	$scope.removeAssignedUser = function(item) {
-		CardService.unassignUser(CardService.getCurrent(), item.participant.uid).then(function (data) {
+	$scope.removeAssignedUser = function(uid) {
+		CardService.unassignUser(CardService.getCurrent(), uid).then(function (data) {
 			StackService.updateCard(CardService.getCurrent());
 		});
 	};

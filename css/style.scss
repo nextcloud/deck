@@ -720,19 +720,9 @@ input.input-inline {
 				.avatardiv-container {
 					margin-right: 5px;
 				}
-				.icon-delete {
-					display: none;
-					position: absolute;
-					top: 8px;
-					left: 8px;
-				}
-				&:hover .icon-delete {
-					display: inline-block;
-					cursor: pointer;
-				}
-				&:hover .avatardiv {
-					opacity: .7;
-				}
+			}
+			.tooltip {
+				z-index: 998;
 			}
 		}
 	}
