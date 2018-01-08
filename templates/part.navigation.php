@@ -35,7 +35,7 @@
 
 		<div class="app-navigation-entry-edit">
 			<form ng-disabled="isAddingList" class="ng-pristine ng-valid"  ng-submit="boardUpdate(b)">
-				<input id="newTitle" class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100" ng-model-options="{ debounce: 250 }">
+				<input class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100" ng-model-options="{ debounce: 250 }">
 				<input type="submit" value="" class="action icon-checkmark svg">
 			</form>
 			<div class="colorselect">
@@ -50,7 +50,7 @@
 		</a>
 		<div class="app-navigation-entry-edit" ng-if="status.addBoard">
 			<form ng-disabled="isAddingList" class="ng-pristine ng-valid"  ng-submit="boardCreate()">
-				<input id="newTitle" class="edit ng-valid ng-empty" type="text" placeholder="<?php p($l->t('New board title')); ?>" autofocus-on-insert ng-model="newBoard.title" maxlength="100" ng-model-options="{ debounce: 250 }">
+				<input class="edit ng-valid ng-empty" type="text" placeholder="<?php p($l->t('New board title')); ?>" autofocus-on-insert ng-model="newBoard.title" maxlength="100" ng-model-options="{ debounce: 250 }">
 				<input type="submit" value="" class="action icon-checkmark svg">
 			</form>
 			<div class="colorselect">

@@ -58,6 +58,7 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 			return false;
 		}
 		$scope.status.cardEditDescription = true;
+		$scope.status.edit = angular.copy(CardService.getCurrent());
 		return true;
 	};
 	$scope.cardEditDescriptionChanged = function ($event) {
@@ -73,7 +74,7 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 			$scope.status.lastSave = currentTime;
 			var header = $('.section-header.card-description');
 			header.find('.save-indicator.unsaved').fadeIn(500);
-			CardService.update(CardService.getCurrent()).then(function (data) {
+			CardService.update($scope.status.edit).then(function (data) {
 				var header = $('.section-header.card-description');
 				header.find('.save-indicator.unsaved').hide();
 				header.find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
@@ -89,7 +90,7 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 		});
 	};
 	$scope.cardUpdate = function (card) {
-		CardService.update(CardService.getCurrent()).then(function (data) {
+		CardService.update(card).then(function (data) {
 			$scope.status.cardEditDescription = false;
 			var header = $('.section-content.card-description');
 			header.find('.save-indicator.unsaved').hide();

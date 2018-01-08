@@ -32,7 +32,7 @@
 				<div ng-click="gotoBoard(b)" ng-show="!b.status.edit">{{ b.title }}</div>
 				<div class="app-navigation-entry-edit" ng-show="b.status.edit">
 					<form ng-disabled="isAddingList" class="ng-pristine ng-valid" ng-submit="boardUpdate(b)">
-						<input id="newTitle" class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100" ng-model-options="{ debounce: 250 }">
+						<input class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100" ng-model-options="{ debounce: 250 }">
 						<div class="colorselect">
 							<div class="color" ng-repeat="c in ::colors" ng-style="{'background-color':'#{{ c }}'}" ng-click="b.color=c" ng-class="{'selected': (c == b.color) }"><br /></div>
 						</div>
@@ -99,7 +99,7 @@
 			<td>
 				<form ng-disabled="isAddingList"
 					  class="ng-pristine ng-valid" ng-submit="boardCreate()">
-					<input id="newTitle" class="edit ng-valid ng-empty"
+					<input class="edit ng-valid ng-empty"
 						   type="text" placeholder="<?php p($l->t('New board title')); ?>"
 						   autofocus-on-insert ng-model="newBoard.title" maxlength="100" ng-model-options="{ debounce: 250 }">
 					<div class="colorselect">

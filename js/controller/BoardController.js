@@ -55,7 +55,11 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 
 	$scope.$watch(function () {
-		return BoardService.getCurrent().title;
+		if (typeof BoardService.getCurrent() !== 'undefined') {
+			return BoardService.getCurrent().title;
+		} else {
+			return null;
+		}
 	}, function () {
 		$scope.setPageTitle();
 	});
@@ -211,6 +215,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 
 	$scope.aclTypeString = function (acl) {
+		if (typeof acl === 'undefined') {
+			return '';
+		}
 		switch (acl.type) {
 			case OC.Share.SHARE_TYPE_USER:
 				return 'user';

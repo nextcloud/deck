@@ -14,7 +14,7 @@
 		<a ui-sref="list({ filter: 'archived' })"><?php p($l->t('Archived boards')); ?></a>
 	</div>
 	<div class="crumb title">
-		<a><span class="board-bullet" ng-style="{'background-color':'#' + boardservice.getCurrent().color}"></span></a>
+		<a class="bullet"><span class="board-bullet" ng-style="{'background-color':'#' + boardservice.getCurrent().color}"></span></a>
 		<a ui-sref=".({filter: ''})">{{ boardservice.getCurrent().title }}</a>
 		<a ui-sref=".detail({ tab: 0 })"><span class="icon icon-share"></span></a>
 	</div>
