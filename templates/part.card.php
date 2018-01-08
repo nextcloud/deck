@@ -66,10 +66,8 @@
 			</ui-select-choices>
 	</ui-select>
 		<div class="card-details-assign-users-list">
-			<div class="assigned-user" ng-repeat="user in cardservice.getCurrent().assignedUsers"
-				data-toggle="tooltip" data-placement="bottom" title="{{ user.participant.displayname }}">
-				<div class="avatardiv" avatar data-contactsmenu="true" ng-attr-user="{{ user.participant.uid }}" ng-attr-displayname="{{ user.participant.uid }}"></div>
-				<div class="icon icon-delete" ng-click="removeAssignedUser(user)"></div>
+			<div class="assigned-user" ng-repeat="user in cardservice.getCurrent().assignedUsers">
+				<avatar ng-attr-contactsmenu ng-attr-tooltip ng-attr-user="{{ user.participant.uid }}" ng-attr-displayname="{{ user.participant.displayname }}" contactsmenudelete ></avatar>
 			</div>
 		</div>
 	</div>
