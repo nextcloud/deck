@@ -33,7 +33,7 @@ app.directive('avatar', function() {
 			scope.displayname = attr.displayname;
 			var value = attr.user;
 			var avatardiv = $(element).find('.avatardiv');
-			if(typeof attr.contactsmenu !== 'undefined' && attr.contactsmenu !== 'false' && oc_current_user !== value) {
+			if(typeof attr.contactsmenu !== 'undefined' && attr.contactsmenu !== 'false') {
 				avatardiv.contactsMenu(value, 0, $(element));
 				avatardiv.addClass('has-contactsmenu');
 			}

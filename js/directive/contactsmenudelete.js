@@ -28,6 +28,9 @@ app.directive('contactsmenudelete', function() {
 		link: function(scope, element, attr){
 			var user = attr.user;
 			var menu = $(element).parent().find('.contactsmenu-popover');
+			if (oc_current_user === user) {
+				menu.children(':first').remove();
+			}
 			var menuEntry = $('<li><a><span class="icon icon-delete"></span><span>' + t('deck', 'Remove user from card') + '</span></a></li>');
 			menuEntry.on('click', function () {
 				scope.removeAssignedUser(user);
