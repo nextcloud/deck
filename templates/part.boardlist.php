@@ -80,7 +80,7 @@
 					<span class="icon icon-close" ng-click="boardUpdateReset(b)" title="<?php p($l->t('Reset')); ?>"><span class="hidden-visually"><?php p($l->t('Reset')); ?></span></span>
 				</div>
 				<div class="app-popover-menu-utils" ng-if="b.deletedAt > 0">
-					<button class="icon icon-history button-inline" ng-click="boardDeleteUndo(b)" title="Undo board deletion - Otherwise the board will be deleted during the next cronjob run."><span class="hidden-visually"><?php p($l->t('Undo board deletion - Otherwise the board will be deleted during the next cronjob run.')); ?></span></button>
+					<button class="icon icon-history button-inline" ng-click="boardDeleteUndo(b)" title="<?php p($l->t('Undo board deletion - Otherwise the board will be deleted during the next cronjob run.')); ?>"><span class="hidden-visually"><?php p($l->t('Undo board deletion - Otherwise the board will be deleted during the next cronjob run.')); ?></span></button>
 				</div>
 			</td>
 		</tr>
