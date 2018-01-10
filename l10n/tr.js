@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Remove user from card" : "Kullanıcıyı karttan kaldır",
     "Hours" : "Saat",
     "Minutes" : "Dakika",
     "The card \"%s\" on \"%s\" has reached its due date." : "\"%s\" kartı \"%s\" zamanında son kullanma tarihine  ulaştı.",

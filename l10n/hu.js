@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Remove user from card" : "Felhasználó eltávolítása a kártyáról",
     "Hours" : "Óra",
     "Minutes" : "Perc",
     "The card \"%s\" on \"%s\" has reached its due date." : "A(z) \"%s\" kártya a(z) \"%s\" táblán a határidejéhez ért.",
