@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Remove user from card" : "Убрать пользователя из карточки",
     "Hours" : "Часы",
     "Minutes" : "Минуты",
     "The card \"%s\" on \"%s\" has reached its due date." : "Настал срок карточки «%s» в «%s» .",
