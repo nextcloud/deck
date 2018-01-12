@@ -10,7 +10,7 @@ exclude = [
     "js/Gruntfile.js",
     "js/package.json",
     "js/package-lock.json",
-    "js/vendor/jquery/",
+    "js/vendor/jquery",
     "tests",
     ".codecov.yml",
     "composer.json",
