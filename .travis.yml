@@ -10,6 +10,7 @@ php:
     - 7.2
 env:
     - CORE_BRANCH=master DB=mysql
+    - CORE_BRANCH=stable13 DB=mysql
     - CORE_BRANCH=stable12 DB=mysql 
 
 matrix:
