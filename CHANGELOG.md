@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.3.0 - unreleased
+## 0.3.0 - 2018-01-12
 
 ### Added
 - Allow to assign users to cards
@@ -23,6 +23,8 @@ All notable changes to this project will be documented in this file.
 - Improve accessibility
 - Fix issue when assigning labels after creating them
 - Allow to save tag changes with enter
+- Fix bug when removing labels changed the color of the remaining ones
+- Fix issues with auto saving of card descriptions
 
 
 ## 0.2.8 - 2017-11-26
