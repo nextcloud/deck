@@ -56,7 +56,7 @@
 	<div class="section-content card-details-assign-users">
 		<ui-select id="assignUserSelect" class="card-details-assign-user" ng-model="status.assignedUser" ng-show="status.showAssignUser" uis-open-close="assingUserOpenClose(isOpen)"
 				   theme="select2"
-				   title="Choose a user to assign" placeholder="Choose a user to assign"
+				   title="<?php p($l->t('Choose a user to assign')); ?>" placeholder="<?php p($l->t('Choose a user to assign')); ?>"
 				   on-select="addAssignedUser($item)">
 			<ui-select-match placeholder="<?php p($l->t('Assign this card to a user')); ?>">
 				<span><i class="icon icon-{{$item.type}}"></i> {{ $item.participant.displayname }}</span>
