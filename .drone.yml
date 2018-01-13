@@ -97,14 +97,8 @@ pipeline:
       - cd ../server/
       - ./occ app:enable $APP_NAME
       - cd apps/$APP_NAME
-
       - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
       - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
-
-      # Create coverage report
-      - wget https://codecov.io/bash -O codecov.sh
-      - sh -c "if [ '$DRONE_BUILD_EVENT' = 'pull_request' ]; then bash codecov.sh -B $DRONE_BRANCH -C $DRONE_COMMIT -P $DRONE_PULL_REQUEST -t f6375299-4832-487e-b831-091772ab0384; fi"
-      - sh -c "if [ '$DRONE_BUILD_EVENT' != 'pull_request' ]; then bash codecov.sh -B $DRONE_BRANCH -C $DRONE_COMMIT -t f6375299-4832-487e-b831-091772ab0384; fi"
     when:
       matrix:
         TESTS: php5.6
