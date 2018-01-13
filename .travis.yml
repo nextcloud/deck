@@ -2,21 +2,11 @@ language: php
 services:
     - mysql
 php:
-    - 5.6
     - 7.0
     - 7.1
     - 7.2
 env:
     - CORE_BRANCH=master DB=mysql
-    - CORE_BRANCH=stable13 DB=mysql
-    - CORE_BRANCH=stable12 DB=mysql 
-
-matrix:
-    exclude:
-        - php: 7.2
-          env: CORE_BRANCH=stable12 DB=mysql
-        - php: 5.6
-          env: CORE_BRANCH=master DB=mysql
 
 before_install:
     - wget https://phar.phpunit.de/phpunit-5.7.phar
