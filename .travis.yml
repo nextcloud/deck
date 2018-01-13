@@ -1,41 +1,33 @@
 language: php
-dist: trusty
-sudo: required
 services:
     - mysql
 php:
-    - 5.6
     - 7.0
     - 7.1
     - 7.2
 env:
     - CORE_BRANCH=master DB=mysql
-    - CORE_BRANCH=stable13 DB=mysql
-    - CORE_BRANCH=stable12 DB=mysql 
-
-matrix:
-    exclude:
-        - php: 7.2
-          env: CORE_BRANCH=stable12 DB=mysql
 
 before_install:
     - wget https://phar.phpunit.de/phpunit-5.7.phar
     - chmod +x phpunit-5.7.phar
     - mkdir bin
-    - sudo mv phpunit-5.7.phar bin/phpunit
+    - mv phpunit-5.7.phar bin/phpunit
     - export PATH="$PWD/bin:$PATH"
     - phpunit --version
     - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
     - bash ./before_install.sh deck $CORE_BRANCH $DB
     - cd ../server
     - ./occ app:enable deck
-    - php -S localhost:8080 &
 
 before_script:
     - cd apps/deck
 
 script:
     - make test-unit
+
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
 
 after_failure:
     - cat ../../data/nextcloud.log
