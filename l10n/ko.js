@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Remove user from card" : "카드에서 사용자 삭제",
     "Hours" : "시간",
     "Minutes" : "분",
     "The card \"%s\" on \"%s\" has reached its due date." : "카드 \"%s\"(\"%s\"에 있음)의 만료 날짜가 다가왔습니다.",
