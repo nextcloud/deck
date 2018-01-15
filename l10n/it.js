@@ -57,6 +57,7 @@ OC.L10N.register(
     "Add a tag" : "Aggiungi un'etichetta",
     "Select tags" : "Seleziona etichette",
     "Assign users" : "Assegna utenti",
+    "Choose a user to assign" : "Scegli un utente da assegnare",
     "Assign this card to a user" : "Assegna questa scheda a un utente",
     "Due date" : "Data di scadenza",
     "Click to set" : "Clic per impostare",

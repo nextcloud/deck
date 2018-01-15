@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Remove user from card" : "Αφαίρεση χρήστη από την κάρτα",
     "Hours" : "Ώρες",
     "Minutes" : "Λεπτά",
     "The card \"%s\" on \"%s\" has reached its due date." : "Η κάρτα \"1%s\" στο \"1%s\" έχει λήξει.",

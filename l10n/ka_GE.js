@@ -57,6 +57,7 @@ OC.L10N.register(
     "Add a tag" : "დაამატეთ ტეგი",
     "Select tags" : "აირჩიეთ ტეგები",
     "Assign users" : "დანიშნეთ მოხმარებლები",
+    "Choose a user to assign" : "აირჩიეთ მომხმარებელი",
     "Assign this card to a user" : "დაუნიშნეთ ეს ბარათი მომხმარებელს",
     "Due date" : "დროისთვის",
     "Click to set" : "დააწკაპუნეთ დასაყენებლად",
