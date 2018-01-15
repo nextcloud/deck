@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Remove user from card" : "Poista käyttäjä kortilta",
     "Hours" : "Tunnit",
     "Minutes" : "Minuutit",
     "{user} has shared the board %s with you." : "{user} on jakanut taulun %s kanssasi.",
@@ -18,6 +19,8 @@ OC.L10N.register(
     "Unarchive" : "Pois arkistosta",
     "Delete" : "Poista",
     "Enter a card title" : "Anna otsikko",
+    "Add card" : "Lisää kortti",
+    "Close" : "Sulje",
     "Sharing" : "Jakaminen",
     "Tags" : "Tunnisteet",
     "Select users or groups to share with" : "Valitse käyttäjiä tai ryhmiä joille haluat jakaa",
@@ -26,7 +29,10 @@ OC.L10N.register(
     "Edit" : "Muokkaa",
     "Manage" : "Hallitse",
     "Discard share" : "Peru jakaminen",
+    "Update" : "Päivitä",
+    "Create" : "Luo",
     "Create a new tag" : "Luo uusi tunniste",
+    "Status" : "Tila",
     "Title" : "Otsikko",
     "Members" : "Jäsenet",
     "More actions" : "Lisää toimintoja",
@@ -50,6 +56,7 @@ OC.L10N.register(
     "Unsaved changes" : "Tallentamattomia muutoksia",
     "Add a card description…" : "Lisää kortin kuvaus…",
     "Shared boards" : "Jaetut taulut",
+    "View more" : "Näytä lisää",
     "Move board to archive" : "Siirrä taulu arkistoon",
     "Create a new board" : "Luo uusi taulu"
 },
