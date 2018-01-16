@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Remove user from card" : "Eliminar usuario de la tarjeta",
     "Hours" : "Horas",
     "Minutes" : "Minutos",
     "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
@@ -56,6 +57,7 @@ OC.L10N.register(
     "Add a tag" : "Agrega una etiqueta",
     "Select tags" : "Selecciona las etiquetas",
     "Assign users" : "Asingar usuarios",
+    "Choose a user to assign" : "Elige un usuario a asignar",
     "Assign this card to a user" : "Asignar esta tarjeta al usuario",
     "Due date" : "Fecha de vencimiento",
     "Click to set" : "Da click aquí para establecer",

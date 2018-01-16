@@ -57,6 +57,7 @@ OC.L10N.register(
     "Add a tag" : "Schlagwort hinzufügen",
     "Select tags" : "Schlagwörter auswählen",
     "Assign users" : "Benutzer zuordnen",
+    "Choose a user to assign" : "Wählen Sie einen Benutzer zum Zuweisen",
     "Assign this card to a user" : "Diese Karte einem Benutzer zuordnen",
     "Due date" : "Zieltermin",
     "Click to set" : "Setzen",

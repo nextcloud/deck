@@ -57,6 +57,7 @@ OC.L10N.register(
     "Add a tag" : "Добавить метку",
     "Select tags" : "Выбор меток",
     "Assign users" : "Назначить пользователей",
+    "Choose a user to assign" : "Назначьте пользователя",
     "Assign this card to a user" : "Назначить эту карточку пользователю",
     "Due date" : "По дату",
     "Click to set" : "Нажмите для установки",
