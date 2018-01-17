@@ -57,6 +57,7 @@ OC.L10N.register(
     "Add a tag" : "Etiket ekle",
     "Select tags" : "Etiketleri seçin",
     "Assign users" : "Kullanıcı ata",
+    "Choose a user to assign" : "Atanacak bir kullanıcı seçin",
     "Assign this card to a user" : "Bu kartı bir kullanıcıya ata",
     "Due date" : "Bitiş tarihi",
     "Click to set" : "Ayarlamak için tıklayın",
