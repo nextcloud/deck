@@ -4,6 +4,7 @@
  * @author Julius Härtl <jus@bitgrid.net>
  * @author Artem Anufrij <artem.anufrij@live.de>
  * @author Marin Treselj <marin@pixelipo.com>
+ * @author Oskar Kurz <oskar.kurz@gmail.com>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -101,8 +102,10 @@ input.input-inline {
 		}
 	}
 	.app-navigation-entry-edit {
-		.colorselect div{
-			height: 32px;
+		.colorselect {
+			div, label {
+				height: 32px;
+			}
 		}
 		form {
 			display: flex;
@@ -814,6 +817,10 @@ input.input-inline {
 		border: none;
 	}
 
+	label.color {
+		flex-grow: 0.5;
+	}
+
 	.selected {
 		background-image: url('../../../core/img/actions/checkmark.svg');
 		background-position: center center;
@@ -821,6 +828,16 @@ input.input-inline {
 		opacity: 1;
 		&.selected {
 			background-image: url('../../../core/img/actions/checkmark-white.svg');
+		}
+	}
+
+	.colorselect-label {
+		background-image: url('../img/color_picker.svg');
+		background-position: center center;
+		background-repeat: no-repeat;
+		opacity: 1;
+		input {
+			visibility: hidden;
 		}
 	}
 }

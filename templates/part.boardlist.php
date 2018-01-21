@@ -33,9 +33,12 @@
 				<div class="app-navigation-entry-edit" ng-show="b.status.edit">
 					<form ng-disabled="isAddingList" class="ng-pristine ng-valid" ng-submit="boardUpdate(b)">
 						<input class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100" ng-model-options="{ debounce: 250 }">
-						<div class="colorselect">
-							<div class="color" ng-repeat="c in ::colors" ng-style="{'background-color':'#{{ c }}'}" ng-click="b.color=c" ng-class="{'selected': (c == b.color) }"><br /></div>
-						</div>
+						<div class="colorselect" ng-controller="ColorPickerController">
+                            <div class="color" ng-repeat="c in ::colors" ng-style="{'background-color':'#{{ c }}'}" ng-click="b=setColor(b,c)" ng-class="{'selected': (c == b.color) }"></div>
+                            <label class="colorselect-label color" ng-style="getCustomBackground(b.hashedColor)" ng-init="b.hashedColor='#' + b.color">
+                                <input class="color" type="color" ng-model="b.hashedColor" value="#{{b.color}}" ng-change="b=setHashedColor(b)"/>
+                            </label>
+                        </div>
 					</form>
 				</div>
 			</td>
@@ -102,12 +105,12 @@
 					<input class="edit ng-valid ng-empty"
 						   type="text" placeholder="<?php p($l->t('New board title')); ?>"
 						   autofocus-on-insert ng-model="newBoard.title" maxlength="100" ng-model-options="{ debounce: 250 }">
-					<div class="colorselect">
-						<div class="color" ng-repeat="c in ::colors"
-							 ng-style="{'background-color':'#{{ c }}'}"
-							 ng-click="selectColor(c)"
-							 ng-class="{'selected': (c == newBoard.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"></div>
-					</div>
+                    <div class="colorselect" ng-controller="ColorPickerController">
+                        <div class="color" ng-repeat="c in ::colors" ng-style="{'background-color':'#{{ c }}'}" ng-click="selectColor(c);b=setColor(b,c);"ng-class="{'selected': (c == newBoard.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"></div>
+                        <label class="colorselect-label color" ng-style="getCustomBackground(newBoard.hashedColor)" ng-init="newBoard.hashedColor='#' + newBoard.color">
+                            <input class="color" type="color" ng-model="newBoard.hashedColor" value="#{{newBoard.color}}" ng-change="newBoard=setHashedColor(newBoard)"/>
+                        </label>
+                    </div>
 				</form>
 			</td>
 			<td></td>
