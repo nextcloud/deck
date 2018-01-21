@@ -45,7 +45,7 @@ if(!\OC::$server->getConfig()->getSystemValue('debug', false)) {
 	// Load seperate JS files when debug mode is enabled
 	$js = [
 		'app' => ['App', 'Config', 'Run'],
-		'controller' => ['AppController', 'BoardController', 'CardController', 'ListController'],
+		'controller' => ['AppController', 'BoardController', 'CardController', 'ListController', 'ColorPickerController'],
 		'directive' => ['appnavigationentryutils', 'appPopoverMenuUtils', 'autofocusoninsert', 'avatar', 'contactsmenudelete', 'elastic', 'search', 'datepicker', 'timepicker'],
 		'filters' => ['boardFilterAcl', 'cardFilter', 'cardSearchFilter', 'iconWhiteFilter', 'lightenColorFilter', 'orderObjectBy', 'dateFilters', 'textColorFilter', 'withoutAssignedUsers'],
 		'service' => ['ApiService', 'BoardService', 'CardService', 'LabelService', 'StackService', 'StatusService'],
