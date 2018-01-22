@@ -19,6 +19,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *  
  */
+import app from '../app/App.js';
 
 // usage | cardFilter({ member: 'admin'})
 

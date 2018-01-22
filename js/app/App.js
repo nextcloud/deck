@@ -41,13 +41,18 @@ angular.module('markdown', [])
 		};
 	}]);
 
+import uirouter from '@uirouter/angularjs';
+import ngsanitize from 'angular-sanitize';
+import angularuiselect from 'ui-select';
+import ngsortable from 'ng-sortable';
+import md from 'angular-markdown-it';
+import nganimate from 'angular-animate';
+
 var app = angular.module('Deck', [
-	'ngRoute',
-	'ngSanitize',
-	'ui.router',
-	'ui.select',
-	'as.sortable',
-	'mdMarkdownIt',
-	'ngAnimate'
+  ngsanitize,
+  uirouter,
+  angularuiselect,
+  ngsortable, md, nganimate
 ]);
 
+export default app;

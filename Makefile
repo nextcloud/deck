@@ -19,19 +19,17 @@ clean-build:
 
 clean-dist:
 	rm -rf js/node_modules
-	rm -rf js/vendor
 
 install-deps:
-	cd js && npm install --deps
-	cd js && ./node_modules/.bin/bower install
+	cd js && npm install
 
 build: build-js
 
 build-js: install-deps
-	cd js && ./node_modules/.bin/grunt build
+	cd js && ./node_modules/.bin/webpack --config webpack.prod.config.js
 
 watch:
-	cd js && ./node_modules/.bin/grunt watch
+	cd js && ./node_modules/.bin/webpack --config webpack.dev.config.js --watch
 
 # appstore: clean install-deps
 appstore: clean-build build

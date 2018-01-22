@@ -22,18 +22,21 @@
 
 /* global app oc_requesttoken markdownitLinkTarget */
 
-app.config(function ($provide, $routeProvider, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider, $compileProvider, markdownItConverterProvider) {
+import app from './App.js';
+import md from 'angular-markdown-it';
+import markdownitLinkTarget from 'markdown-it-link-target';
+
+app.config(function ($provide, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider, $compileProvider, markdownItConverterProvider) {
 	'use strict';
 	$httpProvider.defaults.headers.common.requesttoken = oc_requesttoken;
 
 	$compileProvider.debugInfoEnabled(true);
 
-	markdownItConverterProvider.config({
+	markdownItConverterProvider.use(markdownitLinkTarget, {
 		breaks: true,
 		linkify: true,
 		xhtmlOut: true
 	});
-	markdownItConverterProvider.use(markdownitLinkTarget);
 
 	$urlRouterProvider.otherwise('/');
 

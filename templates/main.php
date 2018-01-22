@@ -23,39 +23,11 @@
 
 use OCP\Util;
 
-Util::addStyle('deck', '../js/vendor/ng-sortable/dist/ng-sortable.min');
-Util::addStyle('deck', '../js/vendor/jquery-timepicker/jquery.ui.timepicker');
+Util::addStyle('deck', 'vendor');
 Util::addStyle('deck', 'style');
 
-Util::addScript('deck', 'vendor/angular/angular.min');
-Util::addScript('deck', 'vendor/angular-route/angular-route.min');
-Util::addScript('deck', 'vendor/angular-sanitize/angular-sanitize.min');
-Util::addScript('deck', 'vendor/angular-animate/angular-animate.min');
-Util::addScript('deck', 'vendor/angular-ui-router/release/angular-ui-router.min');
-Util::addScript('deck', 'vendor/ng-sortable/dist/ng-sortable.min');
-Util::addScript('deck', 'vendor/angular-ui-select/dist/select.min');
-Util::addScript('deck', 'vendor/markdown-it/dist/markdown-it.min');
-Util::addScript('deck', 'vendor/angular-markdown-it/dist/ng-markdownit.min');
-Util::addScript('deck', 'vendor/markdown-it-link-target/dist/markdown-it-link-target.min');
-Util::addScript('deck', 'vendor/jquery-timepicker/jquery.ui.timepicker');
-
-if(!\OC::$server->getConfig()->getSystemValue('debug', false)) {
-	Util::addScript('deck', 'public/app');
-} else {
-	// Load seperate JS files when debug mode is enabled
-	$js = [
-		'app' => ['App', 'Config', 'Run'],
-		'controller' => ['AppController', 'BoardController', 'CardController', 'ListController'],
-		'directive' => ['appnavigationentryutils', 'appPopoverMenuUtils', 'autofocusoninsert', 'avatar', 'contactsmenudelete', 'elastic', 'search', 'datepicker', 'timepicker'],
-		'filters' => ['boardFilterAcl', 'cardFilter', 'cardSearchFilter', 'iconWhiteFilter', 'lightenColorFilter', 'orderObjectBy', 'dateFilters', 'textColorFilter', 'withoutAssignedUsers'],
-		'service' => ['ApiService', 'BoardService', 'CardService', 'LabelService', 'StackService', 'StatusService'],
-	];
-	foreach($js as $folder=>$files) {
-		foreach ($files as $file) {
-			Util::addScript('deck', $folder.'/'.$file);
-		}
-	}
-}
+Util::addScript('deck', 'build/vendor');
+Util::addScript('deck', 'build/deck');
 ?>
 
 <div id="app" class="app-deck" data-ng-app="Deck" ng-controller="AppController" ng-cloak>

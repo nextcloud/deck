@@ -19,7 +19,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *  
  */
-
+import app from '../app/App.js';
 /* global app OC */
 app.factory('BoardService', function (ApiService, $http, $q) {
 	var BoardService = function ($http, ep, $q) {
