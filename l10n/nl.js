@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Remove user from card" : "Verwijder gebruiker van kaart",
     "Hours" : "Uur",
     "Minutes" : "Minutes",
     "The card \"%s\" on \"%s\" has reached its due date." : "De kaart \"%s\" bij \"%s\" heeft bereikte zijn vervaldatum.",
@@ -56,6 +57,7 @@ OC.L10N.register(
     "Add a tag" : "Tag toevoegen",
     "Select tags" : "Kies tags",
     "Assign users" : "Toewijzen gebruikers",
+    "Choose a user to assign" : "Kies een gebruiker om te koppelen",
     "Assign this card to a user" : "Wijs deze kaart toe aan een gebruiker",
     "Due date" : "Vervaldatum",
     "Click to set" : "Klik om in te stellen",
