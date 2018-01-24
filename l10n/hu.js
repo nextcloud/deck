@@ -57,6 +57,7 @@ OC.L10N.register(
     "Add a tag" : "Címke hozzáadása",
     "Select tags" : "Címkék kiválasztása",
     "Assign users" : "Felhasználók kijelölése",
+    "Choose a user to assign" : "Válassz felhasználót a hozzárendeléshez",
     "Assign this card to a user" : "Ezen kártya felhasználóhoz rendelése",
     "Due date" : "Határidő",
     "Click to set" : "Kattints a beállításhoz",
