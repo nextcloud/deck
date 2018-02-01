@@ -20,6 +20,7 @@
     <namespace>Deck</namespace>
     <category>organization</category>
     <category>office</category>
+    <website>https://github.com/nextcloud/deck</website>
     <bugs>https://github.com/nextcloud/deck/issues</bugs>
     <repository type="git">https://github.com/nextcloud/deck.git</repository>
     <screenshot>https://download.bitgrid.net/nextcloud/deck/screenshots/Deck_Board.png</screenshot>
