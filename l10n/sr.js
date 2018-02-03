@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Remove user from card" : "Уклони корисника са картице",
     "Hours" : "Сати",
     "Minutes" : "Минути",
     "The card \"%s\" on \"%s\" has reached its due date." : "Картици \"%s\" на табли \"%s\" је истекао рок.",
@@ -56,6 +57,7 @@ OC.L10N.register(
     "Add a tag" : "Додај ознаку",
     "Select tags" : "Одабери ознаку",
     "Assign users" : "Додели кориснику",
+    "Choose a user to assign" : "Одаберите корисника коме треба доделити картицу",
     "Assign this card to a user" : "Додели ову картицу кориснику",
     "Due date" : "Рок",
     "Click to set" : "Кликните да поставите",
