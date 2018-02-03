@@ -817,7 +817,7 @@ input.input-inline {
 	}
 
 	label.color {
-		flex-grow: 0.5;
+		flex-grow: 1;
 	}
 
 	.selected {
@@ -836,7 +836,10 @@ input.input-inline {
 		background-repeat: no-repeat;
 		opacity: 1;
 		input {
+			position: absolute;
 			visibility: hidden;
+			height: 32px;
+			width: 40px;
 		}
 	}
 }
@@ -904,7 +907,8 @@ input.input-inline {
 		.colorselect {
 			flex-grow: 1;
 
-			div {
+			div,
+			label {
 				min-width: 32px;
 			}
 		}
