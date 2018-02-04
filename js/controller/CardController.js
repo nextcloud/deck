@@ -78,9 +78,11 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 				var header = $('.section-header.card-description');
 				header.find('.save-indicator.unsaved').hide();
 				header.find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
+				StackService.updateCard($scope.status.edit);
+				BoardService.$scope.$digest();
 			});
 		}
-	}, 500);
+	}, 500, 0, false);
 
 	// handle rename to update information on the board as well
 	$scope.cardRename = function (card) {

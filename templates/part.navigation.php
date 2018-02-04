@@ -4,7 +4,7 @@
 	<li ng-class="{active: status.filter === 'archived' || (boardservice.getCurrent() && boardservice.getCurrent().archived)}"><a ui-sref="list({ filter: 'archived' })" class="icon-archive"><?php p($l->t('Archived boards')); ?></a></li>
 	<li ng-class="{active: status.filter === 'shared'}"><a ui-sref="list({ filter: 'shared' })" class="icon-share"><?php p($l->t('Shared boards')); ?></a></li>
 
-	<li class="with-icon with-menu" ng-class="{active: b.id === boardservice.getCurrent().id, editing: b.status.editNavigation}" data-ng-repeat="b in boardservice.sidebar" ng-if="b.deletedAt == 0">
+	<li class="with-icon with-menu" ng-class="{active: b.id === boardservice.getCurrent().id, editing: b.status.editNavigation}" data-ng-repeat="b in boardservice.sidebar track by b.id" ng-if="b.deletedAt == 0">
 
 		<span class="board-bullet"  ng-style="{'background-color': '#' + b.color}"> </span>
 		<a href="#!/board/{{b.id}}/">{{ b.title }}</a>
