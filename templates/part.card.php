@@ -15,7 +15,7 @@
 				   ng-blur="cardRename(cardservice.getCurrent())"
 				   autofocus-on-insert required maxlength="100">
 		</form>
-		<div ng-click="cardRenameShow()" ng-show="!status.cardRename">
+		<div ng-click="cardRenameShow()" ng-if="!status.cardRename">
 			{{ cardservice.getCurrent().title }}
 		</div>
 	</h3>
@@ -29,11 +29,11 @@
 		<span>{{ cardservice.getCurrent().owner.displayname }}</span>
 	</div>
 	<div class="section-header">
-		<h4 id="card-tag-label" ng-show="!(boardservice.isArchived() || card.archived) && card.labels">
+		<h4 id="card-tag-label" ng-if="!(boardservice.isArchived() || card.archived) && card.labels">
 			<?php p($l->t('Tags')); ?>
 		</h4>
 	</div>
-	<div id="labels" ng-show="!(boardservice.isArchived() || card.archived) && card.labels">
+	<div id="labels" ng-if="!(boardservice.isArchived() || card.archived) && card.labels">
 		<ui-select multiple tagging="" ng-model="card.labels" theme="select2"
 				   ng-disabled="boardservice.isArchived() || card.archived"
 				   title="<?php p($l->t('Choose a tag')); ?>"
@@ -44,7 +44,7 @@
 				<span class="select-label" ng-style="labelStyle($item.color)">{{$item.title}}&nbsp;</span>
 			</ui-select-match>
 			<ui-select-choices
-				repeat="label in boardservice.getCurrent().labels | filter:$select.search">
+				repeat="label in boardservice.getCurrent().labels | filter:$select.search track by label.id">
 				<span class="choose-label" ng-style="labelStyle(label.color)">{{label.title}}</span>
 			</ui-select-choices>
 		</ui-select>
@@ -66,7 +66,7 @@
 			</ui-select-choices>
 	</ui-select>
 		<div class="card-details-assign-users-list">
-			<div class="assigned-user" ng-repeat="user in cardservice.getCurrent().assignedUsers">
+			<div class="assigned-user" ng-repeat="user in cardservice.getCurrent().assignedUsers track by user.uid">
 				<avatar ng-attr-contactsmenu ng-attr-tooltip ng-attr-user="{{ user.participant.uid }}" ng-attr-displayname="{{ user.participant.displayname }}" contactsmenudelete ></avatar>
 			</div>
 		</div>
