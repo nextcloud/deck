@@ -149,20 +149,20 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 	/**
 	 * Show ui-select field when clicking the add button
 	 */
-	$scope.showAssignUser = function() {
-		$scope.status.showAssignUser = true;
-		$timeout(function() {
-			$('#assignUserSelect').find('a').click();
-		});
+	$scope.toggleAssignUser = function() {
+		$scope.status.showAssignUser = !$scope.status.showAssignUser;
+		if ($scope.status.showAssignUser === true) {
+			$timeout(function () {
+				$('#assignUserSelect').find('a').click();
+			});
+		}
 	};
 
 	/**
 	 * Hide ui-select when select list is closed
 	 */
 	$scope.assingUserOpenClose = function(isOpen) {
-		if (!isOpen) {
-			$scope.status.showAssignUser = false;
-		}
+		$scope.status.showAssignUser = isOpen;
 	};
 
 	$scope.addAssignedUser = function(item) {
