@@ -141,6 +141,7 @@ app.factory('BoardService', function (ApiService, $http, $q) {
 				board.acl = {};
 			}
 			board.acl[response.data.id] = response.data;
+			self._updateUsers();
 			deferred.resolve(response.data);
 		}, function (error) {
 			deferred.reject('Error creating ACL ' + _acl);
@@ -155,6 +156,7 @@ app.factory('BoardService', function (ApiService, $http, $q) {
 		var self = this;
 		$http.delete(this.baseUrl + '/' + acl.boardId + '/acl/' + acl.id).then(function (response) {
 			delete board.acl[response.data.id];
+			self._updateUsers();
 			deferred.resolve(response.data);
 		}, function (error) {
 			deferred.reject('Error deleting ACL ' + acl.id);
@@ -170,12 +172,33 @@ app.factory('BoardService', function (ApiService, $http, $q) {
 		var _acl = acl;
 		$http.put(this.baseUrl + '/' + acl.boardId + '/acl', _acl).then(function (response) {
 			board.acl[_acl.id] = response.data;
+			self._updateUsers();
 			deferred.resolve(response.data);
 		}, function (error) {
 			deferred.reject('Error updating ACL ' + _acl);
 		});
 		acl = null;
 		return deferred.promise;
+	};
+
+	BoardService.prototype._updateUsers = function () {
+		if (!this.getCurrent() || !this.getCurrent().acl) {
+			return [];
+		}
+		var result = [this.getCurrent().owner];
+		angular.forEach(this.getCurrent().acl, function(value, key) {
+			if (value.type === OC.Share.SHARE_TYPE_USER) {
+				result.push(value.participant);
+			}
+		});
+		this.getCurrent()._users = result;
+	};
+
+	BoardService.prototype.getUsers = function () {
+		if (this.getCurrent() && !this.getCurrent()._users) {
+			this._updateUsers();
+		}
+		return this.getCurrent()._users;
 	};
 
 	BoardService.prototype.canRead = function () {
