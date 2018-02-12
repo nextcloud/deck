@@ -47,21 +47,7 @@ class BoardController extends ApiController {
 		$this->groupManager = $groupManager;
 		$this->boardService = $boardService;
 		$this->permissionService = $permissionService;
-		$this->userInfo = $this->getBoardPrerequisites();
-	}
-
-	/**
-	 * TODO: move to boardservice
-	 * @return array
-	 */
-	private function getBoardPrerequisites() {
-		$groups = $this->groupManager->getUserGroupIds(
-			$this->userManager->get($this->userId)
-		);
-		return [
-			'user' => $this->userId,
-			'groups' => $groups
-		];
+		$this->userInfo = $this->boardSerivce->getBoardPrerequisites();
 	}
 
 	/**
