@@ -3,7 +3,7 @@ host = https://www.transifex.com
 lang_map = bg_BG: bg, cs_CZ: cs, fi_FI: fi, hu_HU: hu, nb_NO: nb, sk_SK: sk, th_TH: th, ja_JP: ja
 
 [nextcloud.deck]
-file_filter = <lang>/deck.po
+file_filter = translationfiles/<lang>/deck.po
 source_file = translationfiles/templates/deck.pot
 source_lang = en
 type = PO
