@@ -55,6 +55,7 @@ class BoardApiController extends ApiController {
 		$this->userId = $userId;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
+		$this->userInfo = $this->service->getBoardPrerequisites();
 	}
 
 	/**
@@ -65,7 +66,7 @@ class BoardApiController extends ApiController {
 	 * Return all of the boards that the current user has access to.
 	 */
 	public function index() {
-		$boards = $this->service->findAll($this->getUserInfo());
+		$boards = $this->service->findAll($this->userInfo);
 
 		return new DataResponse($boards);
 	}
@@ -130,15 +131,6 @@ class BoardApiController extends ApiController {
 		$this->service->deleteUndo($id);
 
 		return new DataResponse($board);
-	}
-
-	// this is taken from BoardController, but it's not ideal
-	private function getUserInfo() {
-		$groups = $this->groupManager->getUserGroupIds(
-			$this->userManager->get($this->userId)
-		);
-		return ['user' => $this->userId,
-			'groups' => $groups];
 	}
 
 }

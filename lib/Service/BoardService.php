@@ -97,6 +97,16 @@ class BoardService {
 		return $board;
 	}
 
+	public function getBoardPrerequisites() {
+		$groups = $this->groupManager->getUserGroupIds(
+			$this->userManager->get($this->userId)
+		);
+		return [
+			'user' => $this->userId,
+			'groups' => $groups
+		];
+	}
+
 	public function isArchived($mapper, $id) {
 		try {
 			if ($mapper instanceof IPermissionMapper) {
