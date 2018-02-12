@@ -23,12 +23,8 @@
 
 namespace OCA\Deck\Db;
 
-use JsonSerializable;
+class Stack extends RelationalEntity {
 
-
-class Stack extends RelationalEntity implements JsonSerializable {
-
-	public $id;
 	protected $title;
 	protected $boardId;
 	protected $cards = array();

@@ -1,7 +1,10 @@
 js/node_modules/*
 js/vendor/
-build/
 js/public/
+js/package-lock.json
+build/
 css/style.css
 tests/integration/vendor/
 tests/integration/composer.lock
+vendor/
+*.lock

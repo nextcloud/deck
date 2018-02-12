@@ -20,57 +20,63 @@
  *  
  */
 
+/* global Snap */
 app.run(function ($document, $rootScope, $transitions, BoardService) {
-    'use strict';
-    $document.click(function (event) {
-        $rootScope.$broadcast('documentClicked', event);
-    });
-    $transitions.onEnter({from: 'list'}, function($state, $transition$) {
-        BoardService.unsetCurrrent();
-    });
-	$transitions.onEnter({to: 'list'}, function($state, $transition$) {
+	'use strict';
+	$document.click(function (event) {
+		$rootScope.$broadcast('documentClicked', event);
+	});
+	$transitions.onEnter({from: 'list'}, function ($state, $transition$) {
+		BoardService.unsetCurrrent();
+	});
+	$transitions.onEnter({to: 'list'}, function ($state, $transition$) {
 		BoardService.unsetCurrrent();
 		document.title = "Deck - " + oc_defaults.name;
 	});
-    $transitions.onEnter({to: 'board.card'}, function ($state, $transition$) {
-        $rootScope.sidebar.show = true;
-    });
-    $transitions.onEnter({to: 'board.detail'}, function ($state, $transition$) {
-        $rootScope.sidebar.show = true;
-    });
-    $transitions.onEnter({to: 'board'}, function ($state) {
-        $rootScope.sidebar.show = false;
-    });
-    $transitions.onExit({from: 'board.card'}, function ($state) {
-        $rootScope.sidebar.show = false;
-    });
-    $transitions.onExit({from: 'board.detail'}, function ($state) {
-        $rootScope.sidebar.show = false;
-    });
+	$transitions.onEnter({to: 'board.card'}, function ($state, $transition$) {
+		$rootScope.sidebar.show = true;
+	});
+	$transitions.onEnter({to: 'board.detail'}, function ($state, $transition$) {
+		$rootScope.sidebar.show = true;
+	});
+	$transitions.onEnter({to: 'board'}, function ($state) {
+		$rootScope.sidebar.show = false;
+	});
+	$transitions.onExit({from: 'board.card'}, function ($state) {
+		$rootScope.sidebar.show = false;
+	});
+	$transitions.onExit({from: 'board.detail'}, function ($state) {
+		$rootScope.sidebar.show = false;
+	});
 
-    $('link[rel="shortcut icon"]').attr(
-        'href',
-        OC.filePath('deck', 'img', 'app-512.png')
-    );
+	$('link[rel="shortcut icon"]').attr(
+		'href',
+		OC.filePath('deck', 'img', 'app-512.png')
+	);
 
-    $('#app-navigation-toggle').off('click');
-    // App sidebar on mobile
-    var snapper = new Snap({
-        element: document.getElementById('app-content'),
-        disable: 'right',
-        maxPosition: 250,
-        touchToDrag: false
-    });
+	$('#app-navigation-toggle').off('click');
+	// App sidebar on mobile
+	var snapper = new Snap({
+		element: document.getElementById('app-content'),
+		disable: 'right',
+		maxPosition: 250,
+		touchToDrag: false
+	});
 
-    $('#app-navigation-toggle').click(function(){
-        if($(window).width() > 768) {
-            $('#app-navigation').toggle('hidden');
-        } else {
-            if(snapper.state().state === 'left'){
-                snapper.close();
-            } else {
-                snapper.open('left');
-            }
-        }
-    });
+	$('#app-navigation-toggle').click(function () {
+		if ($(window).width() > 768) {
+			$('#app-navigation').toggle('hidden');
+		} else {
+			if (snapper.state().state === 'left') {
+				snapper.close();
+			} else {
+				snapper.open('left');
+			}
+		}
+	});
+	// Select all elements with data-toggle="tooltips" in the document
+	$('body').tooltip({
+		selector: '[data-toggle="tooltip"]'
+	});
+
 });

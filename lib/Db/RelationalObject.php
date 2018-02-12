@@ -48,6 +48,8 @@ class RelationalObject implements \JsonSerializable {
 
 	/**
 	 * This method should be overwritten if object doesn't implement \JsonSerializable
+	 *
+	 * @throws \Exception
 	 */
 	public function getObjectSerialization() {
 		if($this->object instanceof \JsonSerializable) {

@@ -23,3 +23,4 @@
 
 $app = new \OCA\Deck\AppInfo\Application();
 $app->registerNavigationEntry();
+$app->registerNotifications();

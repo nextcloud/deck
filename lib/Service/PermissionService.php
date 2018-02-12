@@ -28,24 +28,43 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\IPermissionMapper;
+use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IGroupManager;
 use OCP\ILogger;
-
+use OCP\IUserManager;
 
 
 class PermissionService {
 
+	/** @var BoardMapper */
 	private $boardMapper;
+	/** @var AclMapper */
 	private $aclMapper;
+	/** @var ILogger */
 	private $logger;
+	/** @var IUserManager */
+	private $userManager;
+	/** @var IGroupManager */
+	private $groupManager;
+	/** @var string */
 	private $userId;
+	/** @var array */
+	private $users = [];
 
-	public function __construct(ILogger $logger, AclMapper $aclMapper, BoardMapper $boardMapper, IGroupManager $groupManager, $userId) {
+	public function __construct(
+		ILogger $logger,
+		AclMapper $aclMapper,
+		BoardMapper $boardMapper,
+		IUserManager $userManager,
+		IGroupManager $groupManager,
+		$userId
+	) {
 		$this->aclMapper = $aclMapper;
 		$this->boardMapper = $boardMapper;
 		$this->logger = $logger;
+		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->userId = $userId;
 	}
@@ -70,7 +89,7 @@ class PermissionService {
 	/**
 	 * Get current user permissions for a board
 	 *
-	 * @param Board $board
+	 * @param Board|Entity $board
 	 * @return array|bool
 	 * @internal param $boardId
 	 */
@@ -96,10 +115,9 @@ class PermissionService {
 	 */
 	public function checkPermission($mapper, $id, $permission) {
 		try {
+			$boardId = $id;
 			if ($mapper instanceof IPermissionMapper) {
 				$boardId = $mapper->findBoardId($id);
-			} else {
-				$boardId = $id;
 			}
 			if ($boardId === null) {
 				// Throw NoPermission to not leak information about existing entries
@@ -127,13 +145,11 @@ class PermissionService {
 	/**
 	 * @param $boardId
 	 * @return bool
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function userIsBoardOwner($boardId) {
 		$board = $this->boardMapper->find($boardId);
-		if ($board && $this->userId === $board->getOwner()) {
-			return true;
-		}
-		return false;
+		return $board && $this->userId === $board->getOwner();
 	}
 
 	/**
@@ -158,5 +174,43 @@ class PermissionService {
 			}
 		}
 		return $hasGroupPermission;
+	}
+
+	/**
+	 * Find a list of all users (including the ones from groups)
+	 * Required to allow assigning them to cards
+	 *
+	 * @param $boardId
+	 * @return array
+	 */
+	public function findUsers($boardId) {
+		// cache users of a board so we don't query them for every cards
+		if (array_key_exists((string)$boardId, $this->users)) {
+			return $this->users[(string)$boardId];
+		}
+		try {
+			$board = $this->boardMapper->find($boardId);
+		} catch (DoesNotExistException $e) {
+			return [];
+		}
+		$owner = $this->userManager->get($board->getOwner());
+		$users = [];
+		$users[$owner->getUID()] = new User($owner);
+		$acls = $this->aclMapper->findAll($boardId);
+		/** @var Acl $acl */
+		foreach ($acls as $acl) {
+			if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
+				$user = $this->userManager->get($acl->getParticipant());
+				$users[$user->getUID()] = new User($user);
+			}
+			if($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
+				$group = $this->groupManager->get($acl->getParticipant());
+				foreach ($group->getUsers() as $user) {
+					$users[$user->getUID()] = new User($user);
+				}
+			}
+		}
+		$this->users[(string)$boardId] = $users;
+		return $this->users[(string)$boardId];
 	}
 }

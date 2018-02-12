@@ -33,10 +33,10 @@ use OCP\AppFramework\Controller;
 class StackController extends Controller {
 	private $userId;
 	private $stackService;
-	public function __construct($appName, IRequest $request, StackService $cardService, $userId) {
+	public function __construct($appName, IRequest $request, StackService $stackService, $userId) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
-		$this->stackService = $cardService;
+		$this->stackService = $stackService;
 	}
 
 	/**

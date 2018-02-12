@@ -66,10 +66,10 @@ class UnknownUserTest extends \Test\TestCase {
 			$this->getBoard(1,'Test', 'admin'),
 		];
 		$acl = [
-			$this->getAcl('user', 'existing', 1),
-			$this->getAcl('user', 'not existing', 1),
-			$this->getAcl('group', 'existing', 1),
-			$this->getAcl('group', 'not existing', 1),
+			$this->getAcl(Acl::PERMISSION_TYPE_USER, 'existing', 1),
+			$this->getAcl(Acl::PERMISSION_TYPE_USER, 'not existing', 1),
+			$this->getAcl(Acl::PERMISSION_TYPE_GROUP, 'existing', 1),
+			$this->getAcl(Acl::PERMISSION_TYPE_GROUP, 'not existing', 1),
 		];
 		$this->aclMapper->expects($this->at(0))
 			->method('findAll')
@@ -109,7 +109,7 @@ class UnknownUserTest extends \Test\TestCase {
 
 
 	/** @return Acl */
-	public function getAcl($type='user', $participant='admin', $boardId=123) {
+	public function getAcl($type=Acl::PERMISSION_TYPE_USER, $participant='admin', $boardId=123) {
 		$acl = new Acl();
 		$acl->setParticipant($participant);
 		$acl->setType($type);

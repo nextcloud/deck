@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\Db;
 
-class Acl extends RelationalEntity implements \JsonSerializable {
+class Acl extends RelationalEntity {
 
 	const PERMISSION_READ = 0;
 	const PERMISSION_EDIT = 1;
@@ -33,7 +33,6 @@ class Acl extends RelationalEntity implements \JsonSerializable {
 	const PERMISSION_TYPE_USER = 0;
 	const PERMISSION_TYPE_GROUP = 1;
 
-	public $id;
 	protected $participant;
 	protected $type;
 	protected $boardId;
@@ -56,40 +55,16 @@ class Acl extends RelationalEntity implements \JsonSerializable {
 
 	public function getPermission($permission) {
 		switch ($permission) {
-			case Acl::PERMISSION_READ:
+			case self::PERMISSION_READ:
 				return true;
-			case Acl::PERMISSION_EDIT:
+			case self::PERMISSION_EDIT:
 				return $this->getPermissionEdit();
-			case Acl::PERMISSION_SHARE:
+			case self::PERMISSION_SHARE:
 				return $this->getPermissionShare();
-			case Acl::PERMISSION_MANAGE:
+			case self::PERMISSION_MANAGE:
 				return $this->getPermissionManage();
 		}
 		return false;
-	}
-
-	public function jsonSerialize() {
-		$json = parent::jsonSerialize();
-		$json['type'] = $this->getTypeString();
-		return $json;
-	}
-	
-	public function getTypeString() {
-		if ($this->type === Acl::PERMISSION_TYPE_GROUP) {
-			return 'group';
-		}
-		return 'user';
-	}
-
-	public function setType($type) {
-		// FIXME: Remove when all javascript uses numeric types
-		if ($type === 'group' || $type === '1') {
-			$typeInt = Acl::PERMISSION_TYPE_GROUP;
-		} else {
-			$typeInt = Acl::PERMISSION_TYPE_USER;
-		}
-		$this->markFieldUpdated('type');
-		$this->type = $typeInt;
 	}
 
 }

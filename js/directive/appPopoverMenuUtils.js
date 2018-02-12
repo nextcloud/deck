@@ -21,29 +21,27 @@
  */
 
 app.directive('appPopoverMenuUtils', function () {
-    'use strict';
-    return {
-        restrict: 'C',
-        link: function (scope, elm) {
-            var menu = elm.find('.popovermenu');
-            var button = elm.find('button');
-            button.click(function (e) {
-                $('.popovermenu').addClass('hidden');
-                menu.toggleClass('hidden');
-                if(!menu.hasClass('hidden')) {
-                    button.css('display','block');
-                } else {
-                    button.css('display','');
-                }
+	'use strict';
+	return {
+		restrict: 'C',
+		link: function (scope, elm) {
+			var menu = elm.find('.popovermenu');
+			var button = elm.find('button');
+			button.click(function (e) {
+				var popovermenus = $('.popovermenu');
+				var shouldShow = menu.hasClass('hidden');
+				popovermenus.addClass('hidden');
+				if (shouldShow) {
+					menu.toggleClass('hidden');
+				}
 				e.stopPropagation();
 			});
-            scope.$on('documentClicked', function (scope, event) {
-                /* prevent closing popover if target has no-close class */
-                if (event.target !== button && !$(event.target).hasClass('no-close')) {
-                    menu.addClass('hidden');
-                }
-                button.css('display','');
-            });
-        }
-    };
+			scope.$on('documentClicked', function (scope, event) {
+				/* prevent closing popover if target has no-close class */
+				if (event.target !== button && !$(event.target).hasClass('no-close')) {
+					menu.addClass('hidden');
+				}
+			});
+		}
+	};
 });

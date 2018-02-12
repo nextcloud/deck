@@ -27,19 +27,19 @@
 app.filter('relativeDateFilter', function() {
 	return function (timestamp) {
 		return OC.Util.relativeModifiedDate(timestamp*1000);
-	}
+	};
 });
 
 app.filter('relativeDateFilterString', function() {
 	return function (date) {
 		return OC.Util.relativeModifiedDate(Date.parse(date));
-	}
+	};
 });
 
 app.filter('dateToTimestamp', function() {
 	return function (date) {
 		return Date.parse(date);
-	}
+	};
 });
 
 app.filter('parseDate', function() {
@@ -48,7 +48,7 @@ app.filter('parseDate', function() {
 			return moment(date).format('YYYY-MM-DD');
 		}
 		return '';
-	}
+	};
 });
 
 app.filter('parseTime', function() {
@@ -57,5 +57,5 @@ app.filter('parseTime', function() {
 			return moment(date).format('HH:mm');
 		}
 		return '';
-	}
+	};
 });

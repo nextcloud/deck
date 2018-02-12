@@ -23,11 +23,8 @@
 
 namespace OCA\Deck\Db;
 
-use JsonSerializable;
+class Board extends RelationalEntity {
 
-class Board extends RelationalEntity implements JsonSerializable {
-
-	public $id;
 	protected $title;
 	protected $owner;
 	protected $color;
@@ -35,6 +32,7 @@ class Board extends RelationalEntity implements JsonSerializable {
 	protected $labels = [];
 	protected $acl = [];
 	protected $permissions = [];
+	protected $users = [];
 	protected $shared;
 	protected $deletedAt = 0;
 
@@ -46,6 +44,7 @@ class Board extends RelationalEntity implements JsonSerializable {
 		$this->addRelation('labels');
 		$this->addRelation('acl');
 		$this->addRelation('shared');
+		$this->addRelation('users');
 		$this->addRelation('permissions');
 		$this->addResolvable('owner');
 		$this->shared = -1;
@@ -59,12 +58,18 @@ class Board extends RelationalEntity implements JsonSerializable {
 		return $json;
 	}
 
+	/**
+	 * @param Label[] $labels
+	 */
 	public function setLabels($labels) {
 		foreach ($labels as $l) {
 			$this->labels[] = $l;
 		}
 	}
 
+	/**
+	 * @param Acl[] $acl
+	 */
 	public function setAcl($acl) {
 		foreach ($acl as $a) {
 			$this->acl[$a->id] = $a;

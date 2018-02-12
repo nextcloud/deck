@@ -20,10 +20,11 @@
  *  
  */
 
-app.controller('AppController', function ($scope, $location, $http, $route, $log, $rootScope, $stateParams) {
-    $rootScope.sidebar = {
-        show: false
-    };
-    $scope.sidebar = $rootScope.sidebar;
-    $scope.user = oc_current_user;
+/** global: OC */
+app.controller('AppController', function ($scope, $location, $http, $route, $log, $rootScope) {
+	$rootScope.sidebar = {
+		show: false
+	};
+	$scope.sidebar = $rootScope.sidebar;
+	$scope.user = oc_current_user;
 });

@@ -5,25 +5,31 @@
         <p>{{ statusservice.text }}</p></div>
 </div>
 <div id="sidebar-header">
-    <a class="icon-close" ui-sref="board" ng-click="sidebar.show=!sidebar.show"> &nbsp;</a>
-    <h2>{{ boardservice.getCurrent().title }}</h2>
+    <a class="icon-close" ui-sref="board" ng-click="sidebar.show=!sidebar.show" title="<?php p($l->t('Close')); ?>"> &nbsp;<?php 
+    	?><span class="hidden-visually"><?php p($l->t('Close')); ?></span><?php 
+    ?></a>
+    <h3>{{ boardservice.getCurrent().title }}</h3>
 </div>
 
-{{board=boardservice.getCurrent();""}}
-
 <ul class="tabHeaders">
-    <li class="tabHeader" ng-class="{'selected': (status.boardtab==0 || !status.boardtab)}" ng-click="status.boardtab=0"><a><?php p($l->t('Sharing')); ?></a></li>
-    <li class="tabHeader" ng-class="{'selected': (status.boardtab==1)}" ng-click="status.boardtab=1"><a><?php p($l->t('Tags')); ?></a></li>
+    <li class="tabHeader" ng-class="{'selected': (params.tab==0 || !params.tab)}" ui-sref="{tab: 0}"><a><?php p($l->t('Sharing')); ?></a></li>
+    <li class="tabHeader" ng-class="{'selected': (params.tab==1)}" ui-sref="{tab: 1}"><a><?php p($l->t('Tags')); ?></a></li>
 </ul>
 <div class="tabsContainer">
-    <div id="commentsTabView" class="tab commentsTabView" ng-if="status.boardtab==0 || !status.boardtab">
-
-        <ui-select ng-if="boardservice.canShare()" ng-model="status.addSharee" theme="select2" style="width:100%;" title="Choose a user to assign" placeholder="Assign users ..." on-select="aclAdd(status.addSharee)" search-enabled="true">
+    <div id="tabBoardShare" class="tab" ng-if="params.tab==0 || !params.tab">
+        <ui-select ng-if="boardservice.canShare()" ng-model="status.addSharee" theme="select2"
+				   title="<?php p($l->t('Select users or groups to share with')); ?>"
+				   placeholder="<?php p($l->t('Select users or groups to share with')); ?>"
+				   on-select="aclAdd(status.addSharee)" search-enabled="true">
             <ui-select-match placeholder="<?php p($l->t('Select users or groups to share with')); ?>">
-                <span><i class="icon icon-{{$item.type}}"></i> {{ $item.participant.displayname }}</span>
+                <span><i class="icon icon-{{aclTypeString($item)}}"></i> {{ $item.participant.displayname }}</span>
             </ui-select-match>
             <ui-select-choices refresh="searchForUser($select.search)" refresh-delay="0" repeat="sharee in boardservice.sharees">
-                <span><i class="icon icon-{{sharee.type}}"></i> {{ sharee.participant.displayname }}</span>
+				<div class="avatardiv" avatar data-user="{{ sharee.participant.uid }}" data-displayname="{{ sharee.participant.displayname }}" ng-if="sharee.type==OC.Share.SHARE_TYPE_USER"></div>
+				<div class="avatardiv" ng-if="sharee.type==OC.Share.SHARE_TYPE_GROUP"><i class="icon icon-{{aclTypeString(sharee)}}" title="<?php p($l->t('Access for')); ?> {{aclTypeString(sharee)}}"></i></div>
+				<span class="has-tooltip username">
+					{{ sharee.participant.displayname }}
+				</span>
             </ui-select-choices>
             <ui-select-no-choice>
             <?php p($l->t('No matching user or group found.')); ?>
@@ -33,15 +39,15 @@
         <ul id="shareWithList" class="shareWithList">
             <li>
                 <span class="icon-loading-small" style="display:none;"></span>
-                <div class="avatardiv" avatar ng-attr-displayname="{{ boardservice.getCurrent().owner.uid }}" ng-if="boardservice.id"></div>
+				<div class="avatardiv" avatar data-user="{{ boardservice.getCurrent().owner.uid }}" data-displayname="{{ boardservice.getCurrent().owner.displayname }}" ng-if="boardservice.id"></div>
                 <span class="has-tooltip username">
                     {{ boardservice.getCurrent().owner.displayname }}
 				</span>
             </li>
             <li ng-repeat="acl in boardservice.getCurrent().acl track by $index">
-                <span class="icon-loading-small" style="display:none;"></span>
-                <div class="avatardiv" avatar displayname="{{ acl.participant.uid }}" ng-if="acl.type=='user'"></div>
-                <div class="avatardiv" ng-if="acl.type=='group'"><i class="icon icon-{{acl.type}}"></i></div>
+                <span class="icon-loading-small" style="display:none;" title="<?php p($l->t('Loading')); ?>"></span>
+                <div class="avatardiv" avatar data-contactsmenu="true" data-user="{{ acl.participant.uid }}" data-displayname="{{ acl.participant.displayname }}" ng-if="acl.type==OC.Share.SHARE_TYPE_USER"></div>
+                <div class="avatardiv" ng-if="acl.type==OC.Share.SHARE_TYPE_GROUP"><i class="icon icon-{{aclTypeString(acl)}}" title="<?php p($l->t('Access for')); ?> {{aclTypeString(acl)}}"></i></div>
 
                 <span class="has-tooltip username">
                     {{ acl.participant.displayname }}
@@ -65,7 +71,7 @@
         </ul>
 
     </div>
-    <div id="board-detail-labels" class="tab commentsTabView" ng-if="status.boardtab==1">
+    <div id="board-detail-labels" class="tab commentsTabView" ng-if="params.tab==1">
 
             <ul class="labels">
                 <li ng-repeat="label in boardservice.getCurrent().labels">
@@ -73,7 +79,7 @@
                         <span ng-if="label.title">{{ label.title }}</span><i ng-if="!label.title"><br /></i>
                     </span>
                     <div class="label-edit" ng-if="label.edit">
-                        <div ng-style="{'background-color':'#{{label.color}}','color':'{{ textColor(label.color) }}','width':'100%'}>
+                        <div ng-style="{'background-color':'#{{label.color}}','color':'{{ textColor(label.color) }}','width':'100%'}">
                             <form ng-submit="labelUpdate(label)">
                                 <input type="text" ng-model="label.title" class="input-inline" ng-style="{'background-color':'#{{label.color}}','color':'{{ label.color|textColorFilter }}'}" autofocus-on-insert maxlength="100"/>
                             </form>
@@ -82,9 +88,9 @@
                             <div class="color" ng-repeat="c in defaultColors" ng-style="{'background-color':'#{{ c }}'}" ng-click="label.color=c" ng-class="{'selected': (c == label.color) }"><br /></div>
                         </div>
                     </div>
-                    <a ng-if="boardservice.canManage() && label.edit" ng-click="labelUpdate(label)" class="icon"><i class="icon icon-checkmark" ></i></a>
-                    <a ng-if="boardservice.canManage() && !label.edit" ng-click="label.edit=true" class="icon"><i class="icon icon-rename" ></i></a>
-                    <a ng-if="boardservice.canManage()" ng-click="labelDelete(label)" class="icon"><i class="icon icon-delete" ></i></a>
+                    <a ng-if="boardservice.canManage() && label.edit" ng-click="labelUpdate(label)" class="icon" title="<?php p($l->t('Update')); ?>"><i class="icon icon-checkmark" ></i><span class="hidden-visually"><?php p($l->t('Update')); ?></span></a>
+                    <a ng-if="boardservice.canManage() && !label.edit" ng-click="label.edit=true" class="icon" title="<?php p($l->t('Edit')); ?>"><i class="icon icon-rename"></i><span class="hidden-visually"><?php p($l->t('Edit')); ?></span></a>
+                    <a ng-if="boardservice.canManage()" ng-click="labelDelete(label)" class="icon" title="<?php p($l->t('Delete')); ?>"><i class="icon icon-delete" ></i><span class="hidden-visually"><?php p($l->t('Delete')); ?></span></a>
                 </li>
                 <li ng-if="status.createLabel">
                     <div class="label-edit">
@@ -97,8 +103,8 @@
                             <div class="color" ng-repeat="c in defaultColors" ng-style="{'background-color':'#{{ c }}'}" ng-click="newLabel.color=c" ng-class="{'selected': (c == newLabel.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"><br /></div>
                         </div>
                     </div>
-                    <a ng-click="labelCreate(newLabel)" class="icon"><i class="icon icon-checkmark" ></i></a>
-                    <a ng-click="status.createLabel=false" class="icon"><i class="icon icon-close" ></i></a>
+                    <a ng-click="labelCreate(newLabel)" class="icon" title="<?php p($l->t('Create')); ?>"><i class="icon icon-checkmark" ></i><span class="hidden-visually"><?php p($l->t('Create')); ?></span></a>
+                    <a ng-click="status.createLabel=false" class="icon" title="<?php p($l->t('Close')); ?>"><i class="icon icon-close" ></i><span class="hidden-visually"><?php p($l->t('Close')); ?></span></a>
                 </li>
                 <li ng-if="boardservice.canManage() && !status.createLabel" class="label-create">
                     <a ng-click="status.createLabel=true" class="button"><span class="icon icon-add"></span><br /><span><?php p($l->t('Create a new tag')); ?></span></a>

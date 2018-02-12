@@ -20,48 +20,51 @@
  *  
  */
 
-app.factory('StackService', function(ApiService, $http, $q){
-    var StackService = function($http, ep, $q) {
-        ApiService.call(this, $http, ep, $q);
-    };
-    StackService.prototype = angular.copy(ApiService.prototype);
-    StackService.prototype.fetchAll = function(boardId) {
-        var deferred = $q.defer();
-        var self=this;
-        $http.get(this.baseUrl +'/'+boardId).then(function (response) {
-            self.clear();
-            self.addAll(response.data);
-            deferred.resolve(self.data);
-        }, function (error) {
-            deferred.reject('Error while loading stacks');
-        });
-        return deferred.promise;
-    };
-
-    StackService.prototype.fetchArchived = function(boardId) {
-        var deferred = $q.defer();
-        var self=this;
-        $http.get(this.baseUrl +'/'+boardId+'/archived').then(function (response) {
-            self.clear();
-            self.addAll(response.data);
-            deferred.resolve(self.data);
-        }, function (error) {
-            deferred.reject('Error while loading stacks');
-        });
-        return deferred.promise;
-    };
-
-    StackService.prototype.addCard = function(entity) {
-        if(!this.data[entity.stackId].cards) {
-            this.data[entity.stackId].cards = [];
-        }
-        this.data[entity.stackId].cards.push(entity);
-    };
-
-	StackService.prototype.reorder = function(stack, order) {
+app.factory('StackService', function (ApiService, $http, $q) {
+	var StackService = function ($http, ep, $q) {
+		ApiService.call(this, $http, ep, $q);
+	};
+	StackService.prototype = angular.copy(ApiService.prototype);
+	StackService.prototype.fetchAll = function (boardId) {
 		var deferred = $q.defer();
 		var self = this;
-		$http.put(this.baseUrl + '/' + stack.id + '/reorder', {stackId: stack.id, order: order}).then(function (response) {
+		$http.get(this.baseUrl + '/' + boardId).then(function (response) {
+			self.clear();
+			self.addAll(response.data);
+			deferred.resolve(self.data);
+		}, function (error) {
+			deferred.reject('Error while loading stacks');
+		});
+		return deferred.promise;
+	};
+
+	StackService.prototype.fetchArchived = function (boardId) {
+		var deferred = $q.defer();
+		var self = this;
+		$http.get(this.baseUrl + '/' + boardId + '/archived').then(function (response) {
+			self.clear();
+			self.addAll(response.data);
+			deferred.resolve(self.data);
+		}, function (error) {
+			deferred.reject('Error while loading stacks');
+		});
+		return deferred.promise;
+	};
+
+	StackService.prototype.addCard = function (entity) {
+		if (!this.data[entity.stackId].cards) {
+			this.data[entity.stackId].cards = [];
+		}
+		this.data[entity.stackId].cards.push(entity);
+	};
+
+	StackService.prototype.reorder = function (stack, order) {
+		var deferred = $q.defer();
+		var self = this;
+		$http.put(this.baseUrl + '/' + stack.id + '/reorder', {
+			stackId: stack.id,
+			order: order
+		}).then(function (response) {
 			angular.forEach(response.data, function (value, key) {
 				var id = value.id;
 				self.data[id].order = value.order;
@@ -73,49 +76,49 @@ app.factory('StackService', function(ApiService, $http, $q){
 		return deferred.promise;
 	};
 
-    StackService.prototype.reorderCard = function(entity, order) {
-        // assign new order
-        for(var i=0, j=0;i<this.data[entity.stackId].cards.length;i++) {
-            if(this.data[entity.stackId].cards[i].id === entity.id) {
-                this.data[entity.stackId].cards[i].order = order;
-            }
-            if(j === order) {
-                j++;
-            }
-            if(this.data[entity.stackId].cards[i].id !== entity.id) {
-                this.data[entity.stackId].cards[i].order = j++;
-            }
-        }
-        // sort array by order
-        this.data[entity.stackId].cards.sort(function(a,b) {
-            if (a.order < b.order)
-                return -1;
-            if (a.order > b.order)
-                return 1;
-            return 0;
-        });
-    };
+	StackService.prototype.reorderCard = function (entity, order) {
+		// assign new order
+		for (var i = 0, j = 0; i < this.data[entity.stackId].cards.length; i++) {
+			if (this.data[entity.stackId].cards[i].id === entity.id) {
+				this.data[entity.stackId].cards[i].order = order;
+			}
+			if (j === order) {
+				j++;
+			}
+			if (this.data[entity.stackId].cards[i].id !== entity.id) {
+				this.data[entity.stackId].cards[i].order = j++;
+			}
+		}
+		// sort array by order
+		this.data[entity.stackId].cards.sort(function (a, b) {
+			if (a.order < b.order)
+			{return -1;}
+			if (a.order > b.order)
+			{return 1;}
+			return 0;
+		});
+	};
 
-    StackService.prototype.updateCard = function(entity) {
-        var self = this;
-        var cards = this.data[entity.stackId].cards;
-        for(var i=0;i<cards.length;i++) {
-            if(cards[i].id == entity.id) {
-                cards[i] = entity;
-            }
-        }
-    };
-    StackService.prototype.removeCard = function(entity) {
-        var self = this;
-        var cards = this.data[entity.stackId].cards;
-        for(var i=0;i<cards.length;i++) {
-            if(cards[i].id == entity.id) {
-                cards.splice(i, 1);
-            }
-        }
-    };
-    
-    service = new StackService($http, 'stacks', $q);
-    return service;
+	StackService.prototype.updateCard = function (entity) {
+		var self = this;
+		var cards = this.data[entity.stackId].cards;
+		for (var i = 0; i < cards.length; i++) {
+			if (cards[i].id === entity.id) {
+				cards[i] = entity;
+			}
+		}
+	};
+	StackService.prototype.removeCard = function (entity) {
+		var self = this;
+		var cards = this.data[entity.stackId].cards;
+		for (var i = 0; i < cards.length; i++) {
+			if (cards[i].id === entity.id) {
+				cards.splice(i, 1);
+			}
+		}
+	};
+
+	var service = new StackService($http, 'stacks', $q);
+	return service;
 });
 

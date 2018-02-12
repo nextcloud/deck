@@ -26,37 +26,80 @@ namespace OCA\Deck\Db;
 use OCP\AppFramework\Db\Entity;
 use OCP\IDBConnection;
 use OCP\IUserManager;
+use OCP\Notification\IManager;
 
 
 class CardMapper extends DeckMapper implements IPermissionMapper {
 
+	/** @var LabelMapper */
 	private $labelMapper;
+	/** @var IUserManager */
 	private $userManager;
+	/** @var IManager */
+	private $notificationManager;
+	private $databaseType;
 
-	public function __construct(IDBConnection $db, LabelMapper $labelMapper, IUserManager $userManager) {
-		parent::__construct($db, 'deck_cards', '\OCA\Deck\Db\Card');
+	public function __construct(
+		IDBConnection $db,
+		LabelMapper $labelMapper,
+		IUserManager $userManager,
+		IManager $notificationManager,
+		$databaseType = 'sqlite'
+	) {
+		parent::__construct($db, 'deck_cards', Card::class);
 		$this->labelMapper = $labelMapper;
 		$this->userManager = $userManager;
+		$this->notificationManager = $notificationManager;
+		$this->databaseType = $databaseType;
 	}
 
 	public function insert(Entity $entity) {
+		$entity->setDatabaseType($this->databaseType);
 		$entity->setCreatedAt(time());
 		$entity->setLastModified(time());
 		return parent::insert($entity);
 	}
 
-	public function update(Entity $entity) {
-		$entity->setLastModified(time());
+	public function update(Entity $entity, $updateModified = true) {
+		$entity->setDatabaseType($this->databaseType);
+
+		if ($updateModified) {
+			$entity->setLastModified(time());
+		}
+
+		// make sure we only reset the notification flag if the duedate changes
+		if (in_array('duedate', $entity->getUpdatedFields(), true)) {
+			$existing = $this->find($entity->getId());
+			if ($existing->getDuedate() !== $entity->getDuedate()) {
+				$entity->setNotified(false);
+			}
+			// remove pending notifications
+			$notification = $this->notificationManager->createNotification();
+			$notification
+				->setApp('deck')
+				->setObject('card', $entity->getId());
+			$this->notificationManager->markProcessed($notification);
+		}
 		return parent::update($entity);
+	}
+
+	public function markNotified(Card $card) {
+		$cardUpdate = new Card();
+		$cardUpdate->setId($card->getId());
+		$cardUpdate->setNotified(true);
+		return parent::update($cardUpdate);
 	}
 
 	/**
 	 * @param $id
 	 * @return RelationalEntity if not found
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function find($id) {
 		$sql = 'SELECT * FROM `*PREFIX*deck_cards` ' .
 			'WHERE `id` = ?';
+		/** @var Card $card */
 		$card = $this->findEntity($sql, [$id]);
 		$labels = $this->labelMapper->findAssignedLabelsForCard($card->id);
 		$card->setLabels($labels);
@@ -67,21 +110,23 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 	public function findAll($stackId, $limit = null, $offset = null) {
 		$sql = 'SELECT * FROM `*PREFIX*deck_cards` 
           WHERE `stack_id` = ? AND NOT archived ORDER BY `order`';
-		$entities = $this->findEntities($sql, [$stackId], $limit, $offset);
-		return $entities;
+		return $this->findEntities($sql, [$stackId], $limit, $offset);
 	}
 
 	public function findAllArchived($stackId, $limit = null, $offset = null) {
 		$sql = 'SELECT * FROM `*PREFIX*deck_cards` WHERE `stack_id`=? AND archived ORDER BY `last_modified`';
-		$entities = $this->findEntities($sql, [$stackId], $limit, $offset);
-		return $entities;
+		return $this->findEntities($sql, [$stackId], $limit, $offset);
 	}
 
 	public function findAllByStack($stackId, $limit = null, $offset = null) {
 		$sql = 'SELECT id FROM `*PREFIX*deck_cards` 
           WHERE `stack_id` = ?';
-		$entities = $this->findEntities($sql, [$stackId], $limit, $offset);
-		return $entities;
+		return $this->findEntities($sql, [$stackId], $limit, $offset);
+	}
+
+	public function findOverdue() {
+		$sql = 'SELECT id,title,duedate,notified from `*PREFIX*deck_cards` WHERE duedate < NOW() AND NOT archived';
+		return $this->findEntities($sql);
 	}
 
 	public function delete(Entity $entity) {

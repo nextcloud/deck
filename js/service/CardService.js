@@ -20,82 +20,118 @@
  *  
  */
 
-app.factory('CardService', function(ApiService, $http, $q){
-    var CardService = function($http, ep, $q) {
-        ApiService.call(this, $http, ep, $q);
-    };
-    CardService.prototype = angular.copy(ApiService.prototype);
+app.factory('CardService', function (ApiService, $http, $q) {
+	var CardService = function ($http, ep, $q) {
+		ApiService.call(this, $http, ep, $q);
+	};
+	CardService.prototype = angular.copy(ApiService.prototype);
 
-    CardService.prototype.reorder = function(card, order) {
-        var deferred = $q.defer();
-        var self = this;
-        $http.put(this.baseUrl + '/' + card.id + '/reorder', {cardId: card.id, order: order, stackId: card.stackId}).then(function (response) {
-            deferred.resolve(response.data);
-        }, function (error) {
-            deferred.reject('Error while update ' + self.endpoint);
-        });
-        return deferred.promise;
-    };
+	CardService.prototype.reorder = function (card, order) {
+		var deferred = $q.defer();
+		var self = this;
+		$http.put(this.baseUrl + '/' + card.id + '/reorder', {
+			cardId: card.id,
+			order: order,
+			stackId: card.stackId
+		}).then(function (response) {
+			deferred.resolve(response.data);
+		}, function (error) {
+			deferred.reject('Error while update ' + self.endpoint);
+		});
+		return deferred.promise;
+	};
 
-    CardService.prototype.rename = function(card) {
-        var deferred = $q.defer();
-        var self = this;
-        $http.put(this.baseUrl + '/' + card.id + '/rename', {cardId: card.id, title: card.title}).then(function (response) {
-            self.data[card.id].title = card.title;
-            deferred.resolve(response.data);
-        }, function (error) {
-            deferred.reject('Error while renaming ' + self.endpoint);
-        });
-        return deferred.promise;
-    };
+	CardService.prototype.rename = function (card) {
+		var deferred = $q.defer();
+		var self = this;
+		$http.put(this.baseUrl + '/' + card.id + '/rename', {
+			cardId: card.id,
+			title: card.title
+		}).then(function (response) {
+			self.data[card.id].title = card.title;
+			deferred.resolve(response.data);
+		}, function (error) {
+			deferred.reject('Error while renaming ' + self.endpoint);
+		});
+		return deferred.promise;
+	};
 
-    CardService.prototype.assignLabel = function(card, label) {
-        var url = this.baseUrl + '/' + card + '/label/' + label;
-        var deferred = $q.defer();
-        var self = this;
-        $http.post(url).then(function (response) {
-            deferred.resolve(response.data);
-        }, function (error) {
-            deferred.reject('Error while update ' + self.endpoint);
-        });
-        return deferred.promise;
-    };
-    CardService.prototype.removeLabel = function(card, label) {
-        var url = this.baseUrl + '/' + card + '/label/' + label;
-        var deferred = $q.defer();
-        var self = this;
-        $http.delete(url).then(function (response) {
-            deferred.resolve(response.data);
-        }, function (error) {
-            deferred.reject('Error while update ' + self.endpoint);
-        });
-        return deferred.promise;
-    };
+	CardService.prototype.assignLabel = function (card, label) {
+		var url = this.baseUrl + '/' + card + '/label/' + label;
+		var deferred = $q.defer();
+		var self = this;
+		$http.post(url).then(function (response) {
+			deferred.resolve(response.data);
+		}, function (error) {
+			deferred.reject('Error while update ' + self.endpoint);
+		});
+		return deferred.promise;
+	};
+	CardService.prototype.removeLabel = function (card, label) {
+		var url = this.baseUrl + '/' + card + '/label/' + label;
+		var deferred = $q.defer();
+		var self = this;
+		$http.delete(url).then(function (response) {
+			deferred.resolve(response.data);
+		}, function (error) {
+			deferred.reject('Error while update ' + self.endpoint);
+		});
+		return deferred.promise;
+	};
 
-    CardService.prototype.archive = function (card) {
-        var deferred = $q.defer();
-        var self = this;
-        $http.put(this.baseUrl + '/' + card.id + '/archive', {}).then(function (response) {
-            deferred.resolve(response.data);
-        }, function (error) {
-            deferred.reject('Error while update ' + self.endpoint);
-        });
-        return deferred.promise;
+	CardService.prototype.archive = function (card) {
+		var deferred = $q.defer();
+		var self = this;
+		$http.put(this.baseUrl + '/' + card.id + '/archive', {}).then(function (response) {
+			deferred.resolve(response.data);
+		}, function (error) {
+			deferred.reject('Error while update ' + self.endpoint);
+		});
+		return deferred.promise;
 
-    };
+	};
 
-    CardService.prototype.unarchive = function (card) {
-        var deferred = $q.defer();
-        var self = this;
-        $http.put(this.baseUrl + '/' + card.id + '/unarchive', {}).then(function (response) {
-            deferred.resolve(response.data);
-        }, function (error) {
-            deferred.reject('Error while update ' + self.endpoint);
-        });
-        return deferred.promise;
+	CardService.prototype.unarchive = function (card) {
+		var deferred = $q.defer();
+		var self = this;
+		$http.put(this.baseUrl + '/' + card.id + '/unarchive', {}).then(function (response) {
+			deferred.resolve(response.data);
+		}, function (error) {
+			deferred.reject('Error while update ' + self.endpoint);
+		});
+		return deferred.promise;
+	};
 
-    };
+	CardService.prototype.assignUser = function (card, user) {
+		var deferred = $q.defer();
+		var self = this;
+		if (self.getCurrent().assignedUsers === null) {
+			self.getCurrent().assignedUsers = [];
+		}
+		$http.post(this.baseUrl + '/' + card.id + '/assign', {'userId': user}).then(function (response) {
+			self.getCurrent().assignedUsers.push(response.data);
+			deferred.resolve(response.data);
+		}, function (error) {
+			deferred.reject('Error while update ' + self.endpoint);
+		});
+		return deferred.promise;
 
-    service = new CardService($http, 'cards', $q);
-    return service;
+	};
+
+	CardService.prototype.unassignUser = function (card, user) {
+		var deferred = $q.defer();
+		var self = this;
+		$http.delete(this.baseUrl + '/' + card.id + '/assign/' + user, {}).then(function (response) {
+			self.getCurrent().assignedUsers = self.getCurrent().assignedUsers.filter(function (obj) {
+				return obj.participant.uid !== user;
+			});
+			deferred.resolve(response.data);
+		}, function (error) {
+			deferred.reject('Error while update ' + self.endpoint);
+		});
+		return deferred.promise;
+	};
+
+	var service = new CardService($http, 'cards', $q);
+	return service;
 });

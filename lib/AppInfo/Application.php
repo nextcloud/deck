@@ -25,12 +25,15 @@ namespace OCA\Deck\AppInfo;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
+use OCA\Deck\Notification\Notifier;
 use OCP\AppFramework\App;
 use OCA\Deck\Middleware\SharingMiddleware;
 use OCP\IGroup;
-use OCP\IGroupManager;
+
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\IURLGenerator;
+use OCP\INavigationManager;
 
 class Application extends App {
 
@@ -38,6 +41,7 @@ class Application extends App {
 	 * Application constructor.
 	 *
 	 * @param array $urlParams
+	 * @throws \OCP\AppFramework\QueryException
 	 */
 	public function __construct(array $urlParams = array()) {
 		parent::__construct('deck', $urlParams);
@@ -45,13 +49,17 @@ class Application extends App {
 		$container = $this->getContainer();
 		$server = $container->getServer();
 
-		$container->registerService('SharingMiddleware', function($container) use ($server) {
+		$container->registerService('SharingMiddleware', function() use ($server) {
 			return new SharingMiddleware(
 				$server->getLogger(),
 				$server->getConfig()
 			);
 		});
-		$container->registerMiddleware('SharingMiddleware');
+		$container->registerMiddleWare('SharingMiddleware');
+
+		$container->registerService('databaseType', function($container) {
+			return $container->getServer()->getConfig()->getSystemValue('dbtype', 'sqlite');
+		});
 
 		// Delete user/group acl entries when they get deleted
 		/** @var IUserManager $userManager */
@@ -81,9 +89,8 @@ class Application extends App {
 
 	public function registerNavigationEntry() {
 		$container = $this->getContainer();
-		$container->query('OCP\INavigationManager')->add(function() use ($container) {
-			$urlGenerator = $container->query('OCP\IURLGenerator');
-			$l10n = $container->query('OCP\IL10N');
+		$container->query(INavigationManager::class)->add(function() use ($container) {
+			$urlGenerator = $container->query(IURLGenerator::class);
 			return [
 				'id' => 'deck',
 				'order' => 10,
@@ -92,5 +99,16 @@ class Application extends App {
 				'name' => 'Deck',
 			];
 		});
+	}
+
+	public function registerNotifications() {
+		$notificationManager = \OC::$server->getNotificationManager();
+		$self = &$this;
+		$notificationManager->registerNotifier(function() use (&$self) {
+			return $self->getContainer()->query(Notifier::class);
+		}, function () {
+			return ['id' => 'deck', 'name' => 'Deck'];
+		});
+
 	}
 }

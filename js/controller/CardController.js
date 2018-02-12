@@ -20,12 +20,14 @@
  *  
  */
 
-/* global app */
-/* global moment */
+/* global app moment */
 
-app.controller('CardController', function ($scope, $rootScope, $routeParams, $location, $stateParams, BoardService, CardService, StackService, StatusService) {
+app.controller('CardController', function ($scope, $rootScope, $routeParams, $location, $stateParams, $interval, $timeout, $filter, BoardService, CardService, StackService, StatusService) {
 	$scope.sidebar = $rootScope.sidebar;
-	$scope.status = {};
+	$scope.status = {
+		lastEdit: 0,
+		lastSave: Date.now()
+	};
 
 	$scope.cardservice = CardService;
 	$scope.cardId = $stateParams.cardId;
@@ -43,7 +45,7 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 
 	$scope.cardRenameShow = function () {
 		if ($scope.archived || !BoardService.canEdit())
-			return false;
+		{return false;}
 		else {
 			$scope.status.cardRename = true;
 		}
@@ -52,15 +54,36 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 		if (BoardService.isArchived() || CardService.getCurrent().archived) {
 			return false;
 		}
-		var node = $event.target.nodeName;
 		if ($scope.card.archived || !$scope.boardservice.canEdit()) {
-			console.log(node);
-		} else {
-			console.log("edit");
-			$scope.status.cardEditDescription = true;
+			return false;
 		}
-		console.log($scope.status.canEditDescription);
+		$scope.status.cardEditDescription = true;
+		$scope.status.edit = angular.copy(CardService.getCurrent());
+		return true;
 	};
+	$scope.cardEditDescriptionChanged = function ($event) {
+		$scope.status.lastEdit = Date.now();
+		var header = $('.section-header.card-description');
+		header.find('.save-indicator.unsaved').show();
+		header.find('.save-indicator.saved').hide();
+	};
+	$interval(function() {
+		var currentTime = Date.now();
+		var timeSinceEdit = currentTime-$scope.status.lastEdit;
+		if (timeSinceEdit > 1000 && $scope.status.lastEdit > $scope.status.lastSave) {
+			$scope.status.lastSave = currentTime;
+			var header = $('.section-header.card-description');
+			header.find('.save-indicator.unsaved').fadeIn(500);
+			CardService.update($scope.status.edit).then(function (data) {
+				var header = $('.section-header.card-description');
+				header.find('.save-indicator.unsaved').hide();
+				header.find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
+				StackService.updateCard($scope.status.edit);
+				BoardService.$scope.$digest();
+			});
+		}
+	}, 500, 0, false);
+
 	// handle rename to update information on the board as well
 	$scope.cardRename = function (card) {
 		CardService.rename(card).then(function (data) {
@@ -69,20 +92,25 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 		});
 	};
 	$scope.cardUpdate = function (card) {
-		CardService.update(CardService.getCurrent()).then(function (data) {
+		CardService.update(card).then(function (data) {
 			$scope.status.cardEditDescription = false;
-			$('#card-description').find('.save-indicator').fadeIn(500).fadeOut(1000);
+			var header = $('.section-content.card-description');
+			header.find('.save-indicator.unsaved').hide();
+			header.find('.save-indicator.saved').fadeIn(500).fadeOut(1000);
+			StackService.updateCard(card);
 		});
 	};
 
 	$scope.labelAssign = function (element, model) {
-		CardService.assignLabel($scope.cardId, element.id);
-		var card = CardService.getCurrent();
-		StackService.updateCard(card);
+		CardService.assignLabel($scope.cardId, element.id).then(function (data) {
+			StackService.updateCard(CardService.getCurrent());
+		});
 	};
 
 	$scope.labelRemove = function (element, model) {
-		CardService.removeLabel($scope.cardId, element.id)
+		CardService.removeLabel($scope.cardId, element.id).then(function (data) {
+			StackService.updateCard(CardService.getCurrent());
+		});
 	};
 
 	$scope.setDuedate = function (duedate) {
@@ -117,4 +145,44 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 		CardService.update(element);
 		StackService.updateCard(element);
 	};
+	
+	/**
+	 * Show ui-select field when clicking the add button
+	 */
+	$scope.toggleAssignUser = function() {
+		$scope.status.showAssignUser = !$scope.status.showAssignUser;
+		if ($scope.status.showAssignUser === true) {
+			$timeout(function () {
+				$('#assignUserSelect').find('a').click();
+			});
+		}
+	};
+
+	/**
+	 * Hide ui-select when select list is closed
+	 */
+	$scope.assingUserOpenClose = function(isOpen) {
+		$scope.status.showAssignUser = isOpen;
+	};
+
+	$scope.addAssignedUser = function(item) {
+		CardService.assignUser(CardService.getCurrent(), item.uid).then(function (data) {
+			StackService.updateCard(CardService.getCurrent());
+		});
+		$scope.status.showAssignUser = false;
+	};
+
+	$scope.removeAssignedUser = function(uid) {
+		CardService.unassignUser(CardService.getCurrent(), uid).then(function (data) {
+			StackService.updateCard(CardService.getCurrent());
+		});
+	};
+
+	$scope.labelStyle = function (color) {
+		return {
+			'background-color': '#' + color,
+			'color': $filter('textColorFilter')(color)
+		};
+	};
+
 });

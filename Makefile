@@ -25,13 +25,10 @@ install-deps:
 	cd js && npm install --deps
 	cd js && ./node_modules/.bin/bower install
 
-build: build-js build-css
+build: build-js
 
 build-js: install-deps
 	cd js && ./node_modules/.bin/grunt build
-
-build-css: install-deps
-	./js/node_modules/node-sass/bin/node-sass --output-style compressed css/legacy.scss css/style.css
 
 watch:
 	cd js && ./node_modules/.bin/grunt watch
@@ -51,6 +48,7 @@ appstore: clean-build build
 	--exclude="../$(app_name)/js/tests" \
 	--exclude="../$(app_name)/js/test" \
 	--exclude="../$(app_name)/js/*.log" \
+	--exclude="../$(app_name)/js/package-lock.json" \
 	--exclude="../$(app_name)/js/package.json" \
 	--exclude="../$(app_name)/js/bower.json" \
 	--exclude="../$(app_name)/js/karma.*" \
@@ -60,7 +58,10 @@ appstore: clean-build build
 	--exclude="../$(app_name)/karma.*" \
 	--exclude="../$(app_name)/protractor\.*" \
 	--exclude="../$(app_name)/.*" \
+	--exclude="../$(app_name)/*.lock" \
+	--exclude="../$(app_name)/run-eslint.sh" \
 	--exclude="../$(app_name)/js/.*" \
+	--exclude="../$(app_name)/vendor" \
 	--exclude-vcs \
 	 ../$(app_name)
 
