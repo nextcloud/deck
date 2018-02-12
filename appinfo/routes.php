@@ -76,18 +76,18 @@ return [
 		['name' => 'label#update', 'url' => '/labels/{labelId}', 'verb' => 'PUT'],
 		['name' => 'label#delete', 'url' => '/labels/{labelId}', 'verb' => 'DELETE'],
 
-        // api
-        ['name' => 'board_api#index', 'url' => '/api/v1.0/boards', 'verb' => 'GET'],
-        ['name' => 'board_api#get', 'url' => '/api/v1.0/board/{id}', 'verb' => 'GET'],
-        ['name' => 'board_api#create', 'url' => '/api/v1.0/board', 'verb' => 'POST'],
-        ['name' => 'board_api#delete', 'url' => '/api/v1.0/board/{id}', 'verb' => 'DELETE'],
-        ['name' => 'board_api#undo_delete', 'url' => '/api/v1.0/board/{id}/undo_delete', 'verb' => 'POST'],
+		// api
+		['name' => 'board_api#index', 'url' => '/api/v1.0/boards', 'verb' => 'GET'],
+		['name' => 'board_api#get', 'url' => '/api/v1.0/board/{id}', 'verb' => 'GET'],
+		['name' => 'board_api#create', 'url' => '/api/v1.0/board', 'verb' => 'POST'],
+		['name' => 'board_api#delete', 'url' => '/api/v1.0/board/{id}', 'verb' => 'DELETE'],
+		['name' => 'board_api#undo_delete', 'url' => '/api/v1.0/board/{id}/undo_delete', 'verb' => 'POST'],
 
-        ['name' => 'stack_api#index', 'url' => '/api/v1.0/board/{boardId}/stacks', 'verb' => 'GET'],
-        ['name' => 'stack_api#create', 'url' => '/api/v1.0/board/{boardId}/stack', 'verb' => 'POST'],
-        ['name' => 'stack_api#delete', 'url' => '/api/v1.0/board/{boardId}/stack/{id}', 'verb' => 'DELETE'],
+		['name' => 'stack_api#index', 'url' => '/api/v1.0/board/{boardId}/stacks', 'verb' => 'GET'],
+		['name' => 'stack_api#create', 'url' => '/api/v1.0/board/{boardId}/stack', 'verb' => 'POST'],
+		['name' => 'stack_api#delete', 'url' => '/api/v1.0/board/{boardId}/stack/{id}', 'verb' => 'DELETE'],
 
-        ['name' => 'board_api#preflighted_cors', 'url' => '/api/v1.0/{path}',
-         'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
+		['name' => 'board_api#preflighted_cors', 'url' => '/api/v1.0/{path}',
+			'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
 	]
 ];
