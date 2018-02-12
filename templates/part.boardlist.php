@@ -1,9 +1,15 @@
+<div id="board-status" ng-if="statusservice.active">
+	<div id="emptycontent">
+		<div class="icon-{{ statusservice.icon }}" title="<?php p($l->t('Status')); ?>"><span class="hidden-visually"><?php p($l->t('Status')); ?></span></div>
+		<h2>{{ statusservice.title }}</h2>
+		<p>{{ statusservice.text }}</p></div>
+</div>
 <div id="controls">
 	<div class="breadcrumb">
 		<div class="crumb svg last">
 			<a href="#" class="icon-home" title="<?php p($l->t('All Boards')); ?>">
+				<span class="hidden-visually"><?php p($l->t('All Boards')); ?></span>
 			</a>
-			<span style="display: none;"></span>
 		</div>
 	</div>
 </div>
@@ -18,32 +24,32 @@
 		</tr>
 		</thead>
 		<tbody>
-		<tr data-ng-repeat="b in boardservice.sorted" ng-class="{deleted: b.deletedAt > 0}">
+		<tr data-ng-repeat="b in boardservice.sorted track by b.id" ng-class="{deleted: b.deletedAt > 0}">
 			<td ng-click="gotoBoard(b)">
-				<div class="board-bullet"
-					  ng-style="{'background-color':'#{{b.color}}'};"> </div>
+				<div class="board-bullet" ng-style="{'background-color':'#'+b.color}"> </div>
 			</td>
 			<td>
 				<div ng-click="gotoBoard(b)" ng-show="!b.status.edit">{{ b.title }}</div>
 				<div class="app-navigation-entry-edit" ng-show="b.status.edit">
 					<form ng-disabled="isAddingList" class="ng-pristine ng-valid" ng-submit="boardUpdate(b)">
-						<input id="newTitle" class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100">
+						<input class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100" ng-model-options="{ debounce: 250 }">
 						<div class="colorselect">
-							<div class="color" ng-repeat="c in colors" ng-style="{'background-color':'#{{ c }}'}" ng-click="b.color=c" ng-class="{'selected': (c == b.color) }"><br /></div>
+							<div class="color" ng-repeat="c in ::colors" ng-style="{'background-color':'#{{ c }}'}" ng-click="b.color=c" ng-class="{'selected': (c == b.color) }"><br /></div>
 						</div>
 					</form>
 				</div>
 			</td>
 			<td>
 				<div id="assigned-users">
-					<div class="avatardiv" avatar displayname="{{ b.owner.uid }}" title="{{ b.owner.displayname }}"></div>
-					<div class="avatardiv" avatar displayname="{{ acl.participant.uid }}" title="{{ acl.participant.uid }}" ng-repeat="acl in b.acl | limitTo: 7"></div>
+					<avatar data-contactsmenu data-tooltip data-user="{{ b.owner.uid }}" data-displayname="{{ b.owner.displayname }}"></avatar>
+					<avatar data-contactsmenu data-tooltip data-user="{{ acl.participant.uid }}" data-displayname="{{ acl.participant.displayname }}" ng-repeat="acl in b.acl | limitTo: 7 track by acl.i"></avatar>
 				</div>
 			</td>
 			<td>
-				<div class="hint"></div>
 				<div class="app-popover-menu-utils" ng-if="b.deletedAt == 0" ng-show="!b.status.edit">
-					<button class="icon icon-more button-inline" title="<?php p($l->t('More actions')); ?>"></button>
+					<button class="icon icon-more button-inline" title="<?php p($l->t('More actions')); ?>">
+						<span class="hidden-visually"><?php p($l->t('More actions')); ?></span>
+					</button>
 					<div class="popovermenu bubble hidden">
 						<ul>
 							<li ng-click="boardUpdateBegin(b); b.status.edit = true">
@@ -63,18 +69,18 @@
 								</a>
 							</li>
 							<li ui-sref="board.detail({boardId: b.id})">
-								<a class="menuitem"><span class="icon-info"></span> <?php p($l->t('Board details')); ?>
+								<a class="menuitem"><span class="icon-settings-dark"></span> <?php p($l->t('Board details')); ?>
 								</a>
 							</li>
 						</ul>
 					</div>
 				</div>
 				<div class="board-edit-controls" ng-show="b.status.edit">
-					<span class="icon icon-checkmark" ng-click="boardUpdate(b)"></span>
-					<span class="icon icon-close" ng-click="boardUpdateReset(b)"></span>
+					<span class="icon icon-checkmark" ng-click="boardUpdate(b)" title="<?php p($l->t('Update')); ?>"><span class="hidden-visually"><?php p($l->t('Update')); ?></span></span>
+					<span class="icon icon-close" ng-click="boardUpdateReset(b)" title="<?php p($l->t('Reset')); ?>"><span class="hidden-visually"><?php p($l->t('Reset')); ?></span></span>
 				</div>
 				<div class="app-popover-menu-utils" ng-if="b.deletedAt > 0">
-					<button class="icon icon-history button-inline" ng-click="boardDeleteUndo(b)" title="Undo board deletion - Otherwise the board will be deleted during the next cronjob run."></button>
+					<button class="icon icon-history button-inline" ng-click="boardDeleteUndo(b)" title="<?php p($l->t('Undo board deletion - Otherwise the board will be deleted during the next cronjob run.')); ?>"><span class="hidden-visually"><?php p($l->t('Undo board deletion - Otherwise the board will be deleted during the next cronjob run.')); ?></span></button>
 				</div>
 			</td>
 		</tr>
@@ -93,11 +99,11 @@
 			<td>
 				<form ng-disabled="isAddingList"
 					  class="ng-pristine ng-valid" ng-submit="boardCreate()">
-					<input id="newTitle" class="edit ng-valid ng-empty"
+					<input class="edit ng-valid ng-empty"
 						   type="text" placeholder="<?php p($l->t('New board title')); ?>"
-						   autofocus-on-insert ng-model="newBoard.title" maxlength="100">
+						   autofocus-on-insert ng-model="newBoard.title" maxlength="100" ng-model-options="{ debounce: 250 }">
 					<div class="colorselect">
-						<div class="color" ng-repeat="c in colors"
+						<div class="color" ng-repeat="c in ::colors"
 							 ng-style="{'background-color':'#{{ c }}'}"
 							 ng-click="selectColor(c)"
 							 ng-class="{'selected': (c == newBoard.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"></div>
@@ -107,8 +113,8 @@
 			<td></td>
 			<td>
 				<div class="board-edit-controls">
-					<span class="icon icon-checkmark" ng-click="boardCreate()"></span>
-					<span class="icon icon-close" ng-click="status.addBoard=!status.addBoard"></span>
+					<span class="icon icon-checkmark" ng-click="boardCreate()" title="<?php p($l->t('Create')); ?>"><span class="hidden-visually"><?php p($l->t('Create')); ?></span></span>
+					<span class="icon icon-close" ng-click="status.addBoard=!status.addBoard" title="<?php p($l->t('Close')); ?>"><span class="hidden-visually"><?php p($l->t('Close')); ?></span></span>
 				</div>
 			</td>
 		</tr>

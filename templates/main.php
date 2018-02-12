@@ -46,8 +46,8 @@ if(!\OC::$server->getConfig()->getSystemValue('debug', false)) {
 	$js = [
 		'app' => ['App', 'Config', 'Run'],
 		'controller' => ['AppController', 'BoardController', 'CardController', 'ListController'],
-		'directive' => ['appnavigationentryutils', 'appPopoverMenuUtils', 'autofocusoninsert', 'avatar', 'elastic', 'search', 'datepicker', 'timepicker'],
-		'filters' => ['boardFilterAcl', 'cardFilter', 'cardSearchFilter', 'iconWhiteFilter', 'lightenColorFilter', 'orderObjectBy', 'dateFilters', 'textColorFilter'],
+		'directive' => ['appnavigationentryutils', 'appPopoverMenuUtils', 'autofocusoninsert', 'avatar', 'contactsmenudelete', 'elastic', 'search', 'datepicker', 'timepicker'],
+		'filters' => ['boardFilterAcl', 'cardFilter', 'cardSearchFilter', 'iconWhiteFilter', 'lightenColorFilter', 'orderObjectBy', 'dateFilters', 'textColorFilter', 'withoutAssignedUsers'],
 		'service' => ['ApiService', 'BoardService', 'CardService', 'LabelService', 'StackService', 'StatusService'],
 	];
 	foreach($js as $folder=>$files) {

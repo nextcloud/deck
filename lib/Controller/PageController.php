@@ -25,20 +25,15 @@ namespace OCA\Deck\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
-
 use OCP\AppFramework\Controller;
-use OCP\IL10N;
 
 class PageController extends Controller {
 
-
 	private $userId;
-	private $l10n;
 
-	public function __construct($AppName, IRequest $request, IL10N $l10n, $userId) {
+	public function __construct($AppName, IRequest $request, $userId) {
 		parent::__construct($AppName, $request);
 		$this->userId = $userId;
-		$this->l10n = $l10n;
 	}
 
 	/**

@@ -64,8 +64,8 @@ class SharingMiddleware extends Middleware {
 				$this->logger->logException($exception);
 			}
 			return new JSONResponse([
-				"status" => $exception->getStatus(),
-				"message" => $exception->getMessage()
+				'status' => $exception->getStatus(),
+				'message' => $exception->getMessage()
 			], $exception->getStatus());
 		}
 		throw $exception;

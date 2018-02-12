@@ -25,6 +25,7 @@ namespace OCA\Deck\Service;
 
 
 
+use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Label;
@@ -51,32 +52,31 @@ class StackServiceTest extends TestCase {
 	private $labelMapper;
     /** @var \PHPUnit_Framework_MockObject_MockObject|PermissionService */
 	private $permissionService;
+	/** @var AssignedUsersMapper|\PHPUnit_Framework_MockObject_MockObject */
+	private $assignedUsersMapper;
 	/** @var BoardService|\PHPUnit_Framework_MockObject_MockObject */
 	private $boardService;
 
 	public function setUp() {
 		parent::setUp();
-		$this->stackMapper = $this->getMockBuilder(StackMapper::class)
-			->disableOriginalConstructor()->getMock();
-		$this->cardMapper = $this->getMockBuilder(CardMapper::class)
-			->disableOriginalConstructor()->getMock();
-		$this->labelMapper = $this->getMockBuilder(LabelMapper::class)
-			->disableOriginalConstructor()->getMock();
-		$this->permissionService = $this->getMockBuilder(PermissionService::class)
-			->disableOriginalConstructor()->getMock();
+		$this->stackMapper = $this->createMock(StackMapper::class);
+		$this->cardMapper = $this->createMock(CardMapper::class);
+		$this->labelMapper = $this->createMock(LabelMapper::class);
+		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->boardService = $this->createMock(BoardService::class);
+		$this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
 
 		$this->stackService = new StackService(
 			$this->stackMapper,
             $this->cardMapper,
             $this->labelMapper,
 			$this->permissionService,
-			$this->boardService
+			$this->boardService,
+			$this->assignedUsersMapper
 		);
 	}
 
 	public function testFindAll() {
-	    // FIXME: FIX ME !!!
         $this->permissionService->expects($this->once())->method('checkPermission');
         $this->stackMapper->expects($this->once())->method('findAll')->willReturn($this->getStacks());
         $this->labelMapper->expects($this->once())->method('getAssignedLabelsForBoard')->willReturn($this->getLabels());

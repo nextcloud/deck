@@ -80,6 +80,7 @@ class BoardController extends Controller {
 	 * @param $id
 	 * @param $title
 	 * @param $color
+	 * @param $archived
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
 	public function update($id, $title, $color, $archived) {

@@ -9,6 +9,7 @@
     "Hide archived cards" : "Skrij arhivirane kartice",
     "Board details" : "Podrobnosti table",
     "All Boards" : "Vse table",
+    "Archived boards" : "Arhivirane table",
     "Archive" : "Arhiviraj",
     "Unarchive" : "Odarhiviraj",
     "Delete" : "Izbriši",
@@ -34,9 +35,6 @@
     "Modified:" : "Spremenjeno:",
     "Created:" : "Ustvarjeno:",
     "by" : "s strani",
-    "Choose a label" : "Izberi oznako",
-    "Add a label" : "Dodaj oznako",
-    "Select labels…" : "Izberi oznake...",
     "Due date" : "Datum poteka",
     "Click to set" : "Klikni za nastaviti",
     "Remove due date" : "Odstrani datum poteka",
@@ -44,9 +42,7 @@
     "Formatting help" : "Pomoč pri oblikovanju",
     "Saved" : "Shranjeno",
     "Add a card description…" : "Dodaj opis kartice...",
-    "Archived boards" : "Arhivirane table",
     "Shared boards" : "Deljene table",
-    "Shared with you" : "Deljene s teboj",
     "Move board to archive" : "Premakni tablo v arhiv",
     "Create a new board" : "Ustvari novo tablo"
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"

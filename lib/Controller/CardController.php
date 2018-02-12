@@ -88,6 +88,7 @@ class CardController extends Controller {
 	 * @param $type
 	 * @param $order
 	 * @param $description
+	 * @param $duedate
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
 	public function update($id, $title, $stackId, $type, $order, $description, $duedate) {
@@ -138,5 +139,21 @@ class CardController extends Controller {
 	public function removeLabel($cardId, $labelId) {
 		$this->cardService->removeLabel($cardId, $labelId);
 	}
+
+	/**
+	 * @NoAdminRequired
+	 */
+	public function assignUser($cardId, $userId) {
+		return $this->cardService->assignUser($cardId, $userId);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 */
+	public function unassignUser($cardId, $userId) {
+		return $this->cardService->unassignUser($cardId, $userId);
+	}
+
+
 
 }

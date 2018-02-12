@@ -162,6 +162,11 @@
                 <type>timestamp</type>
                 <default>0</default>
             </field>
+            <field>
+                <name>notified</name>
+                <type>boolean</type>
+                <default>false</default>
+            </field>
             <index>
                 <name>deck_cards_stack_id_index</name>
                 <field>
@@ -305,6 +310,44 @@
             </index>
             <index>
                 <name>deck_assigned_labels_idx_c</name>
+                <field>
+                    <name>card_id</name>
+                </field>
+            </index>
+        </declaration>
+    </table>
+    <table>
+        <name>*dbprefix*deck_assigned_users</name>
+        <declaration>
+            <field>
+                <name>id</name>
+                <type>integer</type>
+                <default>0</default>
+                <notnull>true</notnull>
+                <autoincrement>1</autoincrement>
+                <length>4</length>
+            </field>
+            <field>
+                <name>participant</name>
+                <type>text</type>
+                <notnull>true</notnull>
+                <length>64</length>
+            </field>
+            <field>
+                <name>card_id</name>
+                <type>integer</type>
+                <default>0</default>
+                <notnull>true</notnull>
+                <length>4</length>
+            </field>
+            <index>
+                <name>deck_assigned_users_idx_p</name>
+                <field>
+                    <name>participant</name>
+                </field>
+            </index>
+            <index>
+                <name>deck_assigned_users_idx_c</name>
                 <field>
                     <name>card_id</name>
                 </field>

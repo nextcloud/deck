@@ -1,5 +1,6 @@
-/*
- * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
+<?php
+/**
+ * @copyright Copyright (c) 2017 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
  *
@@ -16,9 +17,24 @@
  *  GNU Affero General Public License for more details.
  *
  *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-@import '../../../core/css/variables.scss';
-@import 'style.scss';
+namespace OCA\Deck\Db;
+
+use JsonSerializable;
+
+class AssignedUsers extends RelationalEntity implements JsonSerializable {
+
+	public $id;
+	protected $participant;
+	protected $cardId;
+
+	public function __construct() {
+		$this->addType('id', 'integer');
+		$this->addType('card_id', 'integer');
+		$this->addResolvable('participant');
+	}
+
+}

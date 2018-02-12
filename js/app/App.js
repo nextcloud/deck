@@ -20,6 +20,9 @@
  *  
  */
 
+/* global angular */
+
+
 angular.module('markdown', [])
 	.provider('markdown', [function () {
 		var opts = {};

@@ -22,18 +22,13 @@
  *
  */
 
-/**
- * Variables
- */
-$color-main-background: #fff;
-$color-primary-text: #fff;
-$color-error: #e9322d;
-$color-warning: #fbd850;
 $color-warning-light: nc-lighten($color-warning, 15%);
-$color-success: #46ba61;
 $color-lightgrey: nc-darken($color-main-background, 4%);
 $color-grey: nc-darken($color-main-background, 7%);
 $color-darkgrey: nc-darken($color-main-background, 32%);
+
+@import 'comp-appnav.scss';
+@import 'icons.scss';
 
 /**
  * General styles
@@ -59,10 +54,12 @@ input.input-inline {
 	padding: 0;
 	border: none;
 	width: 100%;
-	-webkit-border-radius: 0;
+	border-radius: 0;
 }
 
-
+#app img {
+	box-sizing: content-box;
+}
 
 #searchbox {
 	display: flex !important;
@@ -75,24 +72,9 @@ input.input-inline {
 /**
  * Navigation sidebar
  */
-.app-navigation-entry-menu {
-	ul {
-		flex-direction: row;
-	}
-}
 
 #app-navigation {
-	.app-navigation-entry-edit {
-		height: auto;
-
-		.colorselect div{
-			height: 32px;
-		}
-		form {
-			display: flex;
-		}
-	}
-
+	/** menu */
 	.board-bullet {
 		position: absolute;
 		margin-left: 17px;
@@ -103,21 +85,30 @@ input.input-inline {
 		border-radius: 50%;
 		cursor: pointer;
 	}
+	.app-navigation-entry-utils-menu-share i {
+		height: 100%;
+		width: 100%;
+	}
 
-	.app-navigation-entry-utils {
-		.app-navigation-entry-utils-menu-button {
-			display: block !important; // TODO: is this needed?
-		}
+	li {
+		transition: height 250ms ease-in-out, opacity 250ms ease-in-out, z-index 250ms ease-in-out;
+	}
+	.editing {
+		height: 82px;
 
-		.app-navigation-entry-utils-menu-share {
-			display: flex !important;
-			padding: 14px;
-			opacity: 0.5;
+		.icon-add {
+			background-position: 14px 14px;
 		}
 	}
-	.app-navigation-entry-menu ul {
-		flex-direction: row;
+	.app-navigation-entry-edit {
+		.colorselect div{
+			height: 32px;
+		}
+		form {
+			display: flex;
+		}
 	}
+
 }
 
 /**
@@ -139,6 +130,43 @@ input.input-inline {
 	width: 100%;
 	bottom: 0px;
 	top: 44px;
+
+	&.as-sortable-un-selectable {
+		.card-list {
+			min-height: 96px;
+		}
+	}
+
+	.card {
+		opacity: 1;
+	}
+
+	&.card-selected {
+
+		.card {
+			opacity: 0.7;
+
+			&.current {
+				opacity: 1.0;
+				box-shadow: 0px 0px 7px 0px $color-darkgrey;
+			}
+		}
+	}
+
+}
+
+// styles to provide a drop zone in empty stacks
+.as-sortable-un-selectable {
+	.card-list {
+		min-height: 96px;
+		flex-grow: 1;
+	}
+
+	// empty stack placeholders and last placeholders should fill the space
+	.emptyStack .as-sortable-placeholder,
+	li:last-child.as-sortable-placeholder {
+		height: 100% !important;
+	}
 }
 
 #innerBoard {
@@ -156,19 +184,33 @@ input.input-inline {
 	z-index: 120;
 	display: flex;
 	align-items: center;
-	font-size: 14pt;
 	position: inherit;
-	width: 100% !important;
     padding-left: 44px;
 
-	.crumb,
-	#controls a {
-		top: 12px;
-	}
+	.crumb {
+		order: 0;
 
-	> h1 {
-		white-space: nowrap;
-		padding: 7px;
+		.bullet {
+			opacity: 1;
+		}
+
+		a:nth-child(2),
+		a:nth-child(3) {
+			padding-left: 0;
+			margin-left: -5px;
+		}
+
+		a .icon {
+			margin-top: 2px;
+		}
+
+		.board-bullet {
+			display: inline-block;
+			width: 20px;
+			height: 20px;
+			border: none;
+			border-radius: 50%;
+		}
 	}
 
 	button {
@@ -177,7 +219,7 @@ input.input-inline {
 
 	input[type='text'] {
 		padding: 6px;
-		border: 0px none transparent;
+		border: 0 none transparent;
 		min-height: initial;
 		background-color: transparent;
 		height: inherit;
@@ -248,6 +290,7 @@ input.input-inline {
 	margin: 3px;
 	display: flex;
 	align-content: center;
+	height: 34px;
 
 	> form {
 		display: flex;
@@ -266,12 +309,14 @@ input.input-inline {
 .stack {
 	width: 100%;
 	vertical-align: top;
+	display: flex;
+	flex-direction: column;
 
-	h2 {
+	h3 {
 		padding: 10px 10px 8px;
 		margin: 0;
 		font-size: 12pt;
-		font-weight: 700;
+		font-weight: normal;
 		overflow: hidden;
 		display: flex;
 		min-height: 40px;
@@ -309,20 +354,36 @@ input.input-inline {
 		width: 100%;
 	}
 
-	.card-list {
-		padding-bottom: 100px;
-		padding-top: 40px;
-		margin-top:-40px;
+	.as-sortable-placeholder {
+		margin: 10px 10px 20px 10px;
+		border: 1px dashed $color-darkgrey;
+		min-height: 96px;
+
+		&:last-child {
+			margin: 10px;
+		}
 	}
+
+
+	> ul {
+		display: flex;
+		flex-direction: column;
+	}
+
 }
+
 
 .card {
 	background-color: $color-main-background;
 	margin: 10px 10px 20px 10px;
 	white-space: normal;
 	position: relative;
-	opacity: 1.0;
-	-webkit-box-shadow: 0 0 5px $color-darkgrey;
+	box-shadow: 0 0 3px $color-darkgrey;
+	border-radius: 3px;
+
+	&:last-child {
+		margin: 10px;
+	}
 
 	&.archived .card-upper {
 		opacity: 0.5;
@@ -334,17 +395,24 @@ input.input-inline {
 		padding: 5px;
 	}
 
+	.card-assigned-users {
+		display: flex;
+		justify-content: flex-end;
+		flex-grow: 1;
+		.assigned-user {
+			z-index: 4;
+			margin: 6px 0 6px 6px;
+		}
+	}
+
 	.card-controls {
-		padding: 10px;
 		background: $color-lightgrey;
 		display: flex;
 		position: relative;
+		padding-left: 10px;
 
 		.card-options {
-			opacity: 0.3;
-			position: absolute;
-			right: 10px;
-			top: 8px;
+			justify-content: flex-end;
 		}
 
 		&:hover .card-options {
@@ -352,12 +420,46 @@ input.input-inline {
 		}
 
 		.icon-filetype-text {
-			margin-right: 10px;
+			margin: 10px;
+			margin-left: 0px;
+		}
+
+		.due {
+			border-radius: 3px;
+			margin: 6px 4px 6px 0px;
+			padding: 0 4px;
+			font-size: 90%;
+			opacity: 0.5;
+			display: flex;
+			align-items: center;
+
+			.icon {
+				background-size: contain;
+			}
+
+			&.overdue {
+				background-color: $color-error;
+				color: $color-primary-text;
+
+				.icon-badge {
+					background-image: url('../img/calendar-white.svg');
+				}
+			}
+			&.now {
+				background-color: $color-warning;
+			}
+			&.next {
+				background-color: $color-warning-light;
+			}
+
+			span {
+				margin-left: 3px;
+			}
 		}
 
 		button {
-			padding: 0px;
-			margin-right: 0px;
+			padding: 22px;
+			margin: 0;
 		}
 	}
 
@@ -365,8 +467,8 @@ input.input-inline {
 		display: block;
 	}
 
-	h3 {
-		font-weight: bold;
+	h4 {
+		font-weight: normal;
 		font-size: 10pt;
 		padding: 0;
 		margin: 5px;
@@ -374,7 +476,7 @@ input.input-inline {
 		text-overflow: ellipsis;
 	}
 
-	&.has-labels h3 {
+	&.has-labels h4 {
 		margin-top: 15px;
 	}
 
@@ -387,7 +489,7 @@ input.input-inline {
 			padding: 0;
 			width: 15px;
 			height: 20px;
-			-webkit-border-radius: 3px;
+			border-radius: 3px;
 			font-size: 80%;
 			border: none transparent;
 			float: left;
@@ -406,39 +508,58 @@ input.input-inline {
 
 	&.create {
 		text-align: center;
-		padding: 10px;
-		margin: 10px;
-		margin-top: -90px;
-		border: none;
+		margin: 20px 10px 10px;
+		border: 1px solid;
+		border-radius: 3px;
+		background-color: transparent;
 		overflow: hidden;
-		-webkit-box-shadow: none;
+		box-shadow: none;
+		cursor: pointer;
+
+		&.emptyStack {
+			margin-top: 10px;
+		}
 
 		&:hover {
 			text-align: center;
 			opacity: 1;
 		}
 
-		h3 {
+		.icon-add {
+			padding: 20px;
+		}
+
+		h4 {
 			width: 100%;
 			padding: 0;
-			margin: 0 0 1px;
+			margin: 0;
 
 			input {
 				width: 100%;
 				border: 0;
-				font-weight: bold;
 				font-size: 10pt;
 				margin: 0;
-				padding: 0;
-				border-bottom: 1px solid $color-primary-text;
-				border-radius: 0;
-				color: $color-primary-text;
-				background-color: transparent !important;
-				min-height: initial;
+				padding: 10px;
 			}
 		}
 	}
 }
+
+/* ng-sortable: Fix mobile touch scrolling */
+.as-sortable-item,
+.as-sortable-item-handle {
+	-ms-touch-action: auto !important;
+	touch-action: auto !important;
+	-webkit-touch-callout: inherit !important;
+}
+/* disable scrolling only when a card is dragged */
+.as-sortable-un-selectable .as-sortable-item,
+.as-sortable-un-selectable .as-sortable-item-handle {
+	-ms-touch-action: none !important;
+	touch-action: none !important;
+	-webkit-touch-callout: inherit !important;
+}
+
 
 .app-popover-menu-utils {
 	margin-left: auto;
@@ -449,8 +570,6 @@ input.input-inline {
 	z-index: 999;
 	opacity: 1;
 	display: block;
-	margin-top: 25px;
-	margin-right: 0px;
 
 	&.hidden {
 		display: none;
@@ -460,11 +579,6 @@ input.input-inline {
 		display: flex !important;
 		flex-direction: column;
 	}
-}
-
-.as-sortable-placeholder {
-	margin: 10px 10px 20px 10px;
-	border: 1px dashed $color-darkgrey;
 }
 
 .info {
@@ -479,39 +593,6 @@ input.input-inline {
 
 	span {
 		margin-right: 2px;
-	}
-}
-
-.due {
-	border-radius: 3px;
-	margin: -4px 4px -4px -4px;
-	padding: 0px 4px;
-	font-size: 90%;
-	opacity: 0.5;
-	display: flex;
-	align-items: center;
-
-	.icon {
-		background-size: contain;
-	}
-
-	&.overdue {
-		background-color: $color-error;
-		color: $color-primary-text;
-
-		.icon-badge {
-			background-image: url('../img/calendar-white.svg');
-		}
-	}
-	&.now {
-		background-color: $color-warning;
-	}
-	&.next {
-		background-color: $color-warning-light;
-	}
-
-	span {
-		margin-left: 3px;
 	}
 }
 
@@ -531,11 +612,11 @@ input.input-inline {
 }
 
 #sidebar-header {
-	h2 {
+	h3 {
 		font-size: 14pt;
 		padding: 9px 10px;
+		margin: 0;
 		overflow: hidden;
-		margin-bottom: 0;
 		background-color: $color-lightgrey;
 
 		input {
@@ -585,30 +666,35 @@ input.input-inline {
 		}
 	}
 
-	.select2-container {
-		margin: 0px;
-	}
-
-	h3 {
+	.section-header {
 		border-bottom: 1px solid $color-lightgrey;
-		padding: 15px 0px 5px 0px;
-
-		> div {
-			display: flex;
-			align-content: center;
-			justify-content: space-between;
+		display: flex;
+		flex-shrink: 0;
+		margin-bottom: 5px;
+		margin-top: 10px;
+		h4 {
+			padding-top: 5px;
+			padding-bottom: 5px;
+			flex: 1;
 		}
 	}
 
 	.save-indicator {
-		background-color: $color-success;
-		color: $color-primary-text;
 		border-radius: 3px;
 		float: right;
-		padding: 0px 10px;
-		font-size: 8pt !important;
+		padding: 0 10px;
+		font-size: 8pt;
 		display: none;
 		align-self: flex-end;
+		text-align: center;
+		&.saved {
+			background-color: $color-success;
+			color: $color-primary-text;
+		}
+		&.unsaved {
+			background-color: $color-lightgrey;
+			color: $color-darkgrey;
+		}
 	}
 
 	.icon-help {
@@ -623,30 +709,55 @@ input.input-inline {
 		text-align: right;
 	}
 
-	#card-tag-label {
-		padding-top: 0px !important;
-		margin-top: 0px;
+	.card-details-assign-users {
+
+		.select2 .ui-select-choices-row-inner {
+			display: flex;
+			padding: 5px !important;
+		}
+
+		.card-details-assign-users-list {
+			display: flex;
+			.assigned-user {
+				position: relative;
+
+				.avatardiv-container {
+					margin-right: 5px;
+				}
+			}
+			.tooltip {
+				z-index: 998;
+			}
+		}
 	}
 
-	#card-description {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-
-		> div {
+	.card-description {
+		&.section-header {
+			.save-indicator {
+				margin-bottom: 5px;
+				margin-top: 5px;
+			}
+		}
+		&.section-content {
 			height: 100%;
-		}
+			display: flex;
+			flex-direction: column;
 
-		textarea {
-			width: 100%;
-			height: 200px;
-			border: none;
-			margin: 0;
-			padding: 0;
-		}
+			> div {
+				height: 100%;
+			}
 
-		.container {
-			background-color: $color-main-background;
+			textarea {
+				width: 100%;
+				height: 200px;
+				border: none;
+				margin: 0;
+				padding: 0;
+			}
+
+			.container {
+				background-color: $color-main-background;
+			}
 		}
 	}
 }
@@ -678,7 +789,7 @@ input.input-inline {
 
 	li {
 		padding: 0px 0px 5px 0px;
-		-webkit-border-radius: 3px;
+		border-radius: 3px;
 		margin: 1px;
 		color: $color-primary-text;
 		min-width: 20px;
@@ -794,6 +905,7 @@ input.input-inline {
 
 			button {
 				opacity: 0.5;
+				padding: 22px;
 			}
 
 			&:hover button {
@@ -812,10 +924,6 @@ input.input-inline {
 		opacity: 0.5;
 	}
 
-	.popovermenu {
-		margin-top: 5px;
-	}
-
 	.board-edit-controls {
 		display: flex;
 	}
@@ -827,7 +935,7 @@ input.input-inline {
 	#assigned-users {
 		display: flex;
 
-		.avatardiv {
+		.avatardiv-container {
 			margin: 6px;
 		}
 	}
@@ -836,6 +944,12 @@ input.input-inline {
 /**
  * Board details
  */
+
+#tabBoardShare .select2 .ui-select-choices-row-inner {
+	display: flex;
+	padding: 5px !important;
+}
+
 #shareWithList {
 	list-style-type: none;
 	padding: 0 0 16px;
@@ -865,24 +979,35 @@ input.input-inline {
 		width: 16px;
 		height: 16px;
 		padding: 0;
+		margin-top: 10px;
+	}
+
+	.sharingOptionsGroup {
+		margin-right:10px;
+	}
+	.shareOption {
 		margin-top: 5px;
 	}
+}
 
-	.shareOption {
-		margin-top: 4px;
+.avatardiv {
+	background-color: $color-lightgrey;
+	border-radius: 16px;
+	width: 32px;
+	height: 32px;
+
+	.icon-group {
+		padding: 16px;
+		opacity: 0.5;
 	}
 
-	.avatardiv {
-		background-color: $color-lightgrey;
-		border-radius: 16px;
-		width: 32px;
-		height: 32px;
-
-		.icon-group {
-			padding: 16px;
-			opacity: 0.5;
-		}
+	&.has-contactsmenu img {
+		cursor: pointer;
 	}
+}
+
+.avatardiv-container {
+	position: relative;
 }
 
 #board-detail-labels {
@@ -963,10 +1088,22 @@ input.input-inline {
 	}
 }
 
-.select2-container-multi .select2-choices .select2-search-choice {
-	padding: 3px 0 !important;
-	border: 0 !important;
-	overflow: hidden;
+.select2-container {
+	width: 100%;
+	margin: 0;
+
+	.select2-choices {
+		padding: 0 !important;
+
+		.select2-search-choice {
+			padding: 3px 0 !important;
+			border: 0 !important;
+			overflow: hidden;
+		}
+	}
+	.select2-choice {
+		height: auto;
+	}
 }
 
 .ui-select-container[disabled] .ui-select-match-item {
@@ -986,9 +1123,9 @@ input.input-inline {
 
 .select2-result-label {
 	padding: 0px !important;
-
+	display: flex;
 	span {
-		display: flex;
+		flex-grow: 1;
 		padding: 6px;
 	}
 }
@@ -1081,7 +1218,6 @@ input.input-inline {
 	.stack {
 		width: 320px;
 		min-width: 320px;
-		display: inline-block;
 		border-right: 1px solid $color-lightgrey;
 		margin-right: 10px;
 		padding-right: 10px;
@@ -1090,54 +1226,15 @@ input.input-inline {
 			border-right: 1px solid transparent;
 		}
 
-		h2 button {
+		h3 button {
 			display: none;
+		}
+		h2:hover button {
+			display: inline-flex;
 		}
 	}
 }
 
-/**
- * Custom icons
- */
-.icon-deck {
-	background-image: url('../img/deck-dark.svg');
-}
-
-.icon-group {
-	background-image: url('../../../settings/img/users.svg');
-}
-
-.icon-help {
-	background-image: url('../../../settings/img/help.svg');
-}
-
-.icon-add-white {
-	background-image: url('../img/add-white.svg');
-}
-
-.icon-archive {
-	background-image: url('../img/archive.svg');
-}
-
-.icon-archive-white {
-	background-image: url('../img/archive-white.svg');
-}
-
-.icon-details {
-	background-image: url('../img/details.svg');
-}
-
-.icon-details-white {
-	background-image: url('../img/details-white.svg');
-}
-
-.icon-home {
-	background-image: url('../../../core/img/places/home.svg');
-}
-
-.icon-badge {
-	background-image: url('../../../core/img/places/calendar-dark.svg');
-}
 
 /**
  * Hotfix for https://github.com/angular-ui/ui-select/issues/1652

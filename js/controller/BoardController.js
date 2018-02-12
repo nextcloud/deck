@@ -20,6 +20,7 @@
  *  
  */
 
+/* global oc_defaults OC */
 app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter) {
 
 	$scope.sidebar = $rootScope.sidebar;
@@ -29,58 +30,71 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		addCard: [],
 	};
 	$scope.newLabel = {};
-	$scope.status.boardtab = $stateParams.detailTab;
 
+	$scope.OC = OC;
 	$scope.stackservice = StackService;
 	$scope.boardservice = BoardService;
 	$scope.cardservice = CardService;
 	$scope.statusservice = StatusService.getInstance();
 	$scope.labelservice = LabelService;
 	$scope.defaultColors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
+	$scope.board = BoardService.getCurrent();
+
+	// workaround for $stateParams changes not being propagated
+	$scope.$watch(function() {
+		return $state.params;
+	}, function (params) {
+		$scope.params = params;
+	}, true);
+	$scope.params = $state;
+
 
 	$scope.search = function (searchText) {
 		$scope.searchText = searchText;
 		$scope.refreshData();
 	};
 
-	$scope.board = BoardService.getCurrent();
-	StackService.clear(); //FIXME: Is this still needed?
-	$scope.setPageTitle = function() {
-		if(BoardService.getCurrent()) {
-			document.title = BoardService.getCurrent().title + " | Deck - " + oc_defaults.name;
+	$scope.$watch(function () {
+		if (typeof BoardService.getCurrent() !== 'undefined') {
+			return BoardService.getCurrent().title;
 		} else {
-			document.title = "Deck - " + oc_defaults.name;
+			return null;
+		}
+	}, function () {
+		$scope.setPageTitle();
+	});
+	$scope.setPageTitle = function () {
+		if (BoardService.getCurrent()) {
+			document.title = BoardService.getCurrent().title + ' | Deck - ' + oc_defaults.name;
+		} else {
+			document.title = 'Deck - ' + oc_defaults.name;
 		}
 	};
+
 	$scope.statusservice.retainWaiting();
 	$scope.statusservice.retainWaiting();
 
-	// FIXME: ugly solution for archive
-	$scope.$state = $stateParams;
-	$scope.filter = $stateParams.filter;
-	$scope.$watch('$state.filter', function (name) {
-		$scope.filter = name;
-	});
+	// handle filter parameter for switching between archived/unarchived cards
 	$scope.switchFilter = function (filter) {
-		$state.go('.', {filter: filter}, {notify: false});
-		$scope.filter = filter;
+		$state.go('.', {filter: filter});
 	};
-	$scope.$watch('filter', function (name) {
-		if (name === "archive") {
+	$scope.$watch(function() {
+		return $scope.params.filter;
+	}, function (filter) {
+		if (filter === 'archive') {
 			$scope.loadArchived();
 		} else {
 			$scope.loadDefault();
 		}
 	});
 
-
 	$scope.stacksData = StackService;
 	$scope.stacks = [];
-	$scope.$watch('stacksData', function (value) {
+	$scope.$watch('stacksData', function () {
 		$scope.refreshData();
 	}, true);
 	$scope.refreshData = function () {
-		if ($scope.filter === "archive") {
+		if ($scope.params.filter === 'archive') {
 			$scope.filterData('-lastModified', $scope.searchText);
 		} else {
 			$scope.filterData('order', $scope.searchText);
@@ -92,8 +106,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 
 	// filter cards here, as ng-sortable will not work nicely with html-inline filters
 	$scope.filterData = function (order, text) {
-		if ($scope.stacks === undefined)
+		if ($scope.stacks === undefined) {
 			return;
+		}
 		angular.copy(StackService.getData(), $scope.stacks);
 		$scope.stacks = $filter('orderBy')($scope.stacks, 'order');
 		angular.forEach($scope.stacks, function (value, key) {
@@ -175,10 +190,12 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 	$scope.labelCreate = function (label) {
 		label.boardId = $scope.id;
-		LabelService.create(label);
-		BoardService.getCurrent().labels.push(label);
-		$scope.status.createLabel = false;
-		$scope.newLabel = {};
+		LabelService.create(label).then(function (data) {
+			$scope.newStack.title = "";
+			BoardService.getCurrent().labels.push(data);
+			$scope.status.createLabel = false;
+			$scope.newLabel = {};
+		});
 	};
 	$scope.labelUpdate = function (label) {
 		label.edit = false;
@@ -197,6 +214,19 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		BoardService.updateAcl(acl);
 	};
 
+	$scope.aclTypeString = function (acl) {
+		if (typeof acl === 'undefined') {
+			return '';
+		}
+		switch (acl.type) {
+			case OC.Share.SHARE_TYPE_USER:
+				return 'user';
+			case OC.Share.SHARE_TYPE_GROUP:
+				return 'group';
+			default:
+				return '';
+		}
+	};
 
 	// settings for card sorting
 	$scope.sortOptions = {
@@ -227,9 +257,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 				$scope.refreshData();
 			});
 		},
-		scrollableContainer: '#board',
+		scrollableContainer: '#innerBoard',
 		containerPositioning: 'relative',
-		containment: '#board',
+		containment: '#innerBoard',
 		longTouch: true,
 		// auto scroll on drag
 		dragMove: function (itemPosition, containment, eventObj) {
@@ -239,14 +269,14 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 				var targetX = eventObj.pageX - (offset.left || container.scrollLeft());
 				var targetY = eventObj.pageY - (offset.top || container.scrollTop());
 				if (targetX < offset.left) {
-					container.scrollLeft(container.scrollLeft() - 50);
+					container.scrollLeft(container.scrollLeft() - 25);
 				} else if (targetX > container.width()) {
-					container.scrollLeft(container.scrollLeft() + 50);
+					container.scrollLeft(container.scrollLeft() + 25);
 				}
 				if (targetY < offset.top) {
-					container.scrollTop(container.scrollTop() - 50);
+					container.scrollTop(container.scrollTop() - 25);
 				} else if (targetY > container.height()) {
-					container.scrollTop(container.scrollTop() + 50);
+					container.scrollTop(container.scrollTop() + 25);
 				}
 			}
 		},
@@ -266,8 +296,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		},
 		scrollableContainer: '#board',
 		containerPositioning: 'relative',
-		containment: '#board',
-		longTouch: true,
+		containment: '#innerBoard',
 		dragMove: function (itemPosition, containment, eventObj) {
 			if (eventObj) {
 				var container = $("#board");
@@ -289,6 +318,13 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		accept: function (sourceItemHandleScope, destSortableScope, destItemScope) {
 			return sourceItemHandleScope.sortableScope.options.id === 'stack';
 		}
+	};
+
+	$scope.labelStyle = function (color) {
+		return {
+			'background-color': '#' + color,
+			'color': $filter('textColorFilter')(color)
+		};
 	};
 
 });

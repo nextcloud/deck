@@ -17,6 +17,7 @@ class BoardTest extends TestCase {
 	}
 	public function testJsonSerialize() {
 		$board = $this->createBoard();
+		$board->setUsers(['user1', 'user2']);
 		$this->assertEquals([
 			'id' => 1,
 			'title' => "My Board",
@@ -26,7 +27,8 @@ class BoardTest extends TestCase {
 			'permissions' => [],
 			'deletedAt' => 0,
 			'acl' => array(),
-			'archived' => false
+			'archived' => false,
+			'users' => ['user1', 'user2'],
 		], $board->jsonSerialize());
 	}
 
@@ -42,7 +44,8 @@ class BoardTest extends TestCase {
 			'permissions' => [],
 			'deletedAt' => 0,
 			'acl' => array(),
-			'archived' => false
+			'archived' => false,
+			'users' => [],
 		], $board->jsonSerialize());
 	}
 	public function testSetAcl() {
@@ -67,6 +70,7 @@ class BoardTest extends TestCase {
 			'acl' => array(),
 			'archived' => false,
 			'shared' => 1,
+			'users' => [],
 		], $board->jsonSerialize());
 	}
 }

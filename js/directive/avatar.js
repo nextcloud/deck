@@ -23,14 +23,28 @@
 app.directive('avatar', function() {
 	'use strict';
 	return {
-		restrict: 'A',
-		scope: true,
+		restrict: 'AEC',
+		transclude: true,
+		replace: true,
+		template: '<div class="avatardiv-container"><div class="avatardiv" data-toggle="tooltip" ng-transclude></div></div>',
+		scope: { attr: '=' },
 		link: function(scope, element, attr){
-			attr.$observe('displayname', function(value){
-				if(value!==undefined) {
-					$(element).avatar(value, 32);
-				}
-			});
-		}
+			scope.uid = attr.displayname;
+			scope.displayname = attr.displayname;
+			var value = attr.user;
+			var avatardiv = $(element).find('.avatardiv');
+			if(typeof attr.contactsmenu !== 'undefined' && attr.contactsmenu !== 'false') {
+				avatardiv.contactsMenu(value, 0, $(element));
+				avatardiv.addClass('has-contactsmenu');
+			}
+			if(typeof attr.tooltip !== 'undefined' && attr.tooltip !== 'false') {
+				$(element).tooltip({
+					title: scope.displayname,
+					placement: 'top'
+				});
+			}
+			avatardiv.avatar(value, 32, false, false, false, attr.displayname);
+		},
+		controller: function () {}
 	};
 });

@@ -23,11 +23,11 @@
 
 namespace OCA\Deck\Service;
 
-use OCA\Deck\ArchivedItemException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
+use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IL10N;
 use OCA\Deck\Db\Board;
@@ -42,13 +42,22 @@ class BoardService {
 	private $aclMapper;
 	private $l10n;
 	private $permissionService;
+	private $notificationHelper;
 
-	public function __construct(BoardMapper $boardMapper, IL10N $l10n, LabelMapper $labelMapper, AclMapper $aclMapper, PermissionService $permissionService) {
+	public function __construct(
+		BoardMapper $boardMapper,
+		IL10N $l10n,
+		LabelMapper $labelMapper,
+		AclMapper $aclMapper,
+		PermissionService $permissionService,
+		NotificationHelper $notificationHelper
+	) {
 		$this->boardMapper = $boardMapper;
 		$this->labelMapper = $labelMapper;
 		$this->aclMapper = $aclMapper;
 		$this->l10n = $l10n;
 		$this->permissionService = $permissionService;
+		$this->notificationHelper = $notificationHelper;
 	}
 
 	public function findAll($userInfo) {
@@ -94,6 +103,8 @@ class BoardService {
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE],
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
 		]);
+		$boardUsers = $this->permissionService->findUsers($boardId);
+		$board->setUsers(array_values($boardUsers));
 		return $board;
 	}
 
@@ -109,10 +120,9 @@ class BoardService {
 
 	public function isArchived($mapper, $id) {
 		try {
+			$boardId = $id;
 			if ($mapper instanceof IPermissionMapper) {
 				$boardId = $mapper->findBoardId($id);
-			} else {
-				$boardId = $id;
 			}
 			if ($boardId === null) {
 				return false;
@@ -126,10 +136,9 @@ class BoardService {
 
 	public function isDeleted($mapper, $id) {
 		try {
+			$boardId = $id;
 			if ($mapper instanceof IPermissionMapper) {
 				$boardId = $mapper->findBoardId($id);
-			} else {
-				$boardId = $id;
 			}
 			if ($boardId === null) {
 				return false;
@@ -158,10 +167,10 @@ class BoardService {
 			'F1DB50' => $this->l10n->t('Later')
 		];
 		$labels = [];
-		foreach ($default_labels as $color => $title) {
+		foreach ($default_labels as $labelColor => $labelTitle) {
 			$label = new Label();
-			$label->setColor($color);
-			$label->setTitle($title);
+			$label->setColor($labelColor);
+			$label->setTitle($labelTitle);
 			$label->setBoardId($new_board->getId());
 			$labels[] = $this->labelMapper->insert($label);
 		}
@@ -190,7 +199,7 @@ class BoardService {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
 		$board->setDeletedAt(0);
-		$this->boardMapper->update($board);
+		return $this->boardMapper->update($board);
 	}
 
 	public function deleteForce($id) {
@@ -219,6 +228,10 @@ class BoardService {
 		$acl->setPermissionEdit($edit);
 		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
+
+		/* Notify users about the shared board */
+		$this->notificationHelper->sendBoardShared($boardId, $acl);
+
 		$newAcl = $this->aclMapper->insert($acl);
 		$this->boardMapper->mapAcl($newAcl);
 		return $newAcl;

@@ -38,4 +38,12 @@ class User extends RelationalObject {
 			'displayname' => $this->object->getDisplayName()
 		];
 	}
+
+	public function getUID() {
+		return $this->object->getUID();
+	}
+
+	public function getDisplayName() {
+		return $this->object->getDisplayName();
+	}
 }

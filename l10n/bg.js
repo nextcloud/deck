@@ -19,7 +19,6 @@ OC.L10N.register(
     "Modified:" : "Променен на:",
     "Created:" : "Създаден на:",
     "by" : "от",
-    "Saved" : "Запазено",
-    "Shared with you" : "Споделено с Вас"
+    "Saved" : "Запазено"
 },
 "nplurals=2; plural=(n != 1);");

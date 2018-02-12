@@ -23,10 +23,13 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\Db\AssignedUsers;
+use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\NotFoundException;
 use OCA\Deck\StatusException;
 
 
@@ -36,17 +39,21 @@ class CardService {
 	private $stackMapper;
 	private $permissionService;
 	private $boardService;
+	private $assignedUsersMapper;
 
-	public function __construct(CardMapper $cardMapper, StackMapper $stackMapper, PermissionService $permissionService, BoardService $boardService) {
+	public function __construct(CardMapper $cardMapper, StackMapper $stackMapper, PermissionService $permissionService, BoardService $boardService, AssignedUsersMapper $assignedUsersMapper) {
 		$this->cardMapper = $cardMapper;
 		$this->stackMapper = $stackMapper;
 		$this->permissionService = $permissionService;
 		$this->boardService = $boardService;
+		$this->assignedUsersMapper = $assignedUsersMapper;
 	}
 
 	public function find($cardId) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		$card = $this->cardMapper->find($cardId);
+		$assignedUsers = $this->assignedUsersMapper->find($card->getId());
+		$card->setAssignedUsers($assignedUsers);
 		return $card;
 	}
 
@@ -178,5 +185,28 @@ class CardService {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$this->cardMapper->removeLabel($cardId, $labelId);
+	}
+
+	public function assignUser($cardId, $userId) {
+		$assignments = $this->assignedUsersMapper->find($cardId);
+		foreach ($assignments as $assignment) {
+			if ($assignment->getParticipant() === $userId) {
+				return false;
+			}
+		}
+		$assignment  = new AssignedUsers();
+		$assignment->setCardId($cardId);
+		$assignment->setParticipant($userId);
+		return $this->assignedUsersMapper->insert($assignment);
+	}
+
+	public function unassignUser($cardId, $userId) {
+		$assignments = $this->assignedUsersMapper->find($cardId);
+		foreach ($assignments as $assignment) {
+			if ($assignment->getParticipant() === $userId) {
+				return $this->assignedUsersMapper->delete($assignment);
+			}
+		}
+		throw new NotFoundException('No assignment for ' . $userId . 'found.');
 	}
 }
