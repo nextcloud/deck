@@ -36,62 +36,62 @@ use OCA\Deck\Service\StackService;
  */
 class StackApiController extends ApiController {
 
-    private $service;
-    private $userInfo;
+	private $service;
+	private $userInfo;
 
-    /**
-     * @param string $appName
-     * @param IRequest $request
-     * @param StackService $service
-     */
-    public function __construct($appName, IRequest $request, StackService $service) {
-        parent::__construct($appName, $request);
-        $this->service = $service;
-    }
+	/**
+	 * @param string $appName
+	 * @param IRequest $request
+	 * @param StackService $service
+	 */
+	public function __construct($appName, IRequest $request, StackService $service) {
+		parent::__construct($appName, $request);
+		$this->service = $service;
+	}
 
-    /**
-     * @NoAdminRequired
-     * @CORS
-     * @NoCSRFRequired
-     *
-     * Return all of the stacks in the specified board.
-     */
-    public function index($boardId) {
-        $stacks = $this->service->findAll($boardId);
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * Return all of the stacks in the specified board.
+	 */
+	public function index($boardId) {
+		$stacks = $this->service->findAll($boardId);
 
-        return new DataResponse($stacks);
-    }
+		return new DataResponse($stacks);
+	}
 
-    /**
-     * @NoAdminRequired
-     * @CORS
-     * @NoCSRFRequired
-     *
-     * @params $title
-     * @params $order
-     *
-     * Create a stack with the specified title and order.
-     */
-    public function create($boardId, $title, $order) {
-        // this throws a StatusException that needs to be caught and handled
-        $stack = $this->service->create($title, $boardId, $order);
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * @params $title
+	 * @params $order
+	 *
+	 * Create a stack with the specified title and order.
+	 */
+	public function create($boardId, $title, $order) {
+		// this throws a StatusException that needs to be caught and handled
+		$stack = $this->service->create($title, $boardId, $order);
 
-        return new DataResponse($stack);
-    }
+		return new DataResponse($stack);
+	}
 
-    /**
-     * @NoAdminRequired
-     * @CORS
-     * @NoCSRFRequired
-     *
-     * @params $id
-     *
-     * Delete the stack specified by $id.  Return the board that was deleted.
-     */
-    public function delete($boardId, $id) {
-        $stack = $this->service->delete($id);
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * @params $id
+	 *
+	 * Delete the stack specified by $id.  Return the board that was deleted.
+	 */
+	public function delete($boardId, $id) {
+		$stack = $this->service->delete($id);
 
-        return new DataResponse($stack);
-    }
+		return new DataResponse($stack);
+	}
 
 }

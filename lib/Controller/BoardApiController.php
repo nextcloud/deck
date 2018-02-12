@@ -38,109 +38,109 @@ use OCA\Deck\Service\BoardService;
  */
 class BoardApiController extends ApiController {
 
-    private $service;
-    private $userInfo;
+	private $service;
+	private $userInfo;
 
-    /**
-     * @param string $appName
-     * @param IRequest $request
-     * @param IUserManager $userManager
-     * @param IGroupManager $groupManager
-     * @param BoardService $service
-     * @param $userId
-     */
-    public function __construct($appName, IRequest $request, IUserManager $userManager, IGroupManager $groupManager, BoardService $service, $userId) {
-        parent::__construct($appName, $request);
-        $this->service = $service;
-        $this->userId = $userId;
-        $this->userManager = $userManager;
-        $this->groupManager = $groupManager;
-    }
+	/**
+	 * @param string $appName
+	 * @param IRequest $request
+	 * @param IUserManager $userManager
+	 * @param IGroupManager $groupManager
+	 * @param BoardService $service
+	 * @param $userId
+	 */
+	public function __construct($appName, IRequest $request, IUserManager $userManager, IGroupManager $groupManager, BoardService $service, $userId) {
+		parent::__construct($appName, $request);
+		$this->service = $service;
+		$this->userId = $userId;
+		$this->userManager = $userManager;
+		$this->groupManager = $groupManager;
+	}
 
-    /**
-     * @NoAdminRequired
-     * @CORS
-     * @NoCSRFRequired
-     *
-     * Return all of the boards that the current user has access to.
-     */
-    public function index() {
-        $boards = $this->service->findAll($this->getUserInfo());
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * Return all of the boards that the current user has access to.
+	 */
+	public function index() {
+		$boards = $this->service->findAll($this->getUserInfo());
 
-        return new DataResponse($boards);
-    }
+		return new DataResponse($boards);
+	}
 
-    /**
-     * @NoAdminRequired
-     * @CORS
-     * @NoCSRFRequired
-     *
-     * @params $id
-     *
-     * Return the board specified by $id.
-     */
-    public function get($id) {
-        $board = $this->service->find($id);
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * @params $id
+	 *
+	 * Return the board specified by $id.
+	 */
+	public function get($id) {
+		$board = $this->service->find($id);
 
-        // FIXME: this should probably 404 if the board has been deleted
+		// FIXME: this should probably 404 if the board has been deleted
 
-        return new DataResponse($board);
-    }
+		return new DataResponse($board);
+	}
 
-    /**
-     * @NoAdminRequired
-     * @CORS
-     * @NoCSRFRequired
-     *
-     * @params $title
-     * @params $color
-     *
-     * Create a board with the specified title and color.
-     */
-    public function create($title, $color) {
-        $board = $this->service->create($title, $this->userId, $color);
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * @params $title
+	 * @params $color
+	 *
+	 * Create a board with the specified title and color.
+	 */
+	public function create($title, $color) {
+		$board = $this->service->create($title, $this->userId, $color);
 
-        return new DataResponse($board);
-    }
+		return new DataResponse($board);
+	}
 
-    /**
-     * @NoAdminRequired
-     * @CORS
-     * @NoCSRFRequired
-     *
-     * @params $id
-     *
-     * Delete the board specified by $id.  Return the board that was deleted.
-     */
-    public function delete($id) {
-        $board = $this->service->delete($id);
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * @params $id
+	 *
+	 * Delete the board specified by $id.  Return the board that was deleted.
+	 */
+	public function delete($id) {
+		$board = $this->service->delete($id);
 
-        return new DataResponse($board);
-    }
+		return new DataResponse($board);
+	}
 
-    /**
-     * @NoAdminRequired
-     * @CORS
-     * @NoCSRFRequired
-     *
-     * @params $id
-     *
-     * Undo the deletion of the board specified by $id.
-     */
-    public function undoDelete($id) {
-        $board = $this->service->find($id);
-        $this->service->deleteUndo($id);
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * @params $id
+	 *
+	 * Undo the deletion of the board specified by $id.
+	 */
+	public function undoDelete($id) {
+		$board = $this->service->find($id);
+		$this->service->deleteUndo($id);
 
-        return new DataResponse($board);
-    }
+		return new DataResponse($board);
+	}
 
-    // this is taken from BoardController, but it's not ideal
-    private function getUserInfo() {
-        $groups = $this->groupManager->getUserGroupIds(
+	// this is taken from BoardController, but it's not ideal
+	private function getUserInfo() {
+		$groups = $this->groupManager->getUserGroupIds(
 			$this->userManager->get($this->userId)
 		);
-        return ['user' => $this->userId,
-                'groups' => $groups];
-    }
+		return ['user' => $this->userId,
+			'groups' => $groups];
+	}
 
 }
