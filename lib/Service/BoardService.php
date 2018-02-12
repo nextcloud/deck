@@ -60,7 +60,8 @@ class BoardService {
 		$this->notificationHelper = $notificationHelper;
 	}
 
-	public function findAll($userInfo) {
+	public function findAll() {
+		$userInfo = $this->getBoardPrerequisites();
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user']);
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups']);
 		$complete = array_merge($userBoards, $groupBoards);
@@ -108,7 +109,7 @@ class BoardService {
 		return $board;
 	}
 
-	public function getBoardPrerequisites() {
+	private function getBoardPrerequisites() {
 		$groups = $this->groupManager->getUserGroupIds(
 			$this->userManager->get($this->userId)
 		);

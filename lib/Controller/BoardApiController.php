@@ -39,23 +39,17 @@ use OCA\Deck\Service\BoardService;
 class BoardApiController extends ApiController {
 
 	private $service;
-	private $userInfo;
 
 	/**
 	 * @param string $appName
 	 * @param IRequest $request
-	 * @param IUserManager $userManager
-	 * @param IGroupManager $groupManager
 	 * @param BoardService $service
 	 * @param $userId
 	 */
-	public function __construct($appName, IRequest $request, IUserManager $userManager, IGroupManager $groupManager, BoardService $service, $userId) {
+	public function __construct($appName, IRequest $request, BoardService $service, $userId) {
 		parent::__construct($appName, $request);
 		$this->service = $service;
 		$this->userId = $userId;
-		$this->userManager = $userManager;
-		$this->groupManager = $groupManager;
-		$this->userInfo = $this->service->getBoardPrerequisites();
 	}
 
 	/**
@@ -66,7 +60,7 @@ class BoardApiController extends ApiController {
 	 * Return all of the boards that the current user has access to.
 	 */
 	public function index() {
-		$boards = $this->service->findAll($this->userInfo);
+		$boards = $this->service->findAll();
 
 		return new DataResponse($boards);
 	}
