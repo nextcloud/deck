@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Remove user from card" : "Fjarlægja notanda af spjaldi",
     "Hours" : "klukkustundir",
     "Minutes" : "mínútur",
     "The card \"%s\" on \"%s\" has reached its due date." : "Spjaldið \"%s\" á \"%s\" er komið fram yfir lokadagsetningu.",
@@ -56,6 +57,7 @@ OC.L10N.register(
     "Add a tag" : "Bæta við merki",
     "Select tags" : "Veldu merki",
     "Assign users" : "Tilnefna notendur",
+    "Choose a user to assign" : "Veldu notanda til að úthluta",
     "Assign this card to a user" : "Úthluta þessu spjaldi til notanda",
     "Due date" : "Skiladagur",
     "Click to set" : "Smelltu til að setja",

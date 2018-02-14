@@ -25,6 +25,7 @@ OC.L10N.register(
     "Tags" : "Tunnisteet",
     "Select users or groups to share with" : "Valitse käyttäjiä tai ryhmiä joille haluat jakaa",
     "No matching user or group found." : "Käyttäjää tai ryhmää ei löytynyt.",
+    "Loading" : "Ladataan",
     "Share" : "Jaa",
     "Edit" : "Muokkaa",
     "Manage" : "Hallitse",
