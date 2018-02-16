@@ -57,6 +57,7 @@ OC.L10N.register(
     "Add a tag" : "Legg til en merkelapp",
     "Select tags" : "Velg merkelapper",
     "Assign users" : "Tildel brukere",
+    "Choose a user to assign" : "Velg en bruker å tildele",
     "Assign this card to a user" : "Tildel dette kortet til en bruker",
     "Due date" : "Forfallsdato",
     "Click to set" : "Klikk for å sette",
