@@ -77,8 +77,8 @@ app.factory('BoardService', function (ApiService, $http, $q) {
 				}
 				self.sharees = [];
 
-				var users = response.ocs.data.exact.users.concat(response.ocs.data.users);
-				var groups = response.ocs.data.exact.groups.concat(response.ocs.data.groups);
+				var users = response.ocs.data.exact.users.concat(response.ocs.data.users.slice(0, 4));
+				var groups = response.ocs.data.exact.groups.concat(response.ocs.data.groups.slice(0, 4));
 
 				// filter out everyone who is already in the share list
 				angular.forEach(users, function (item) {
