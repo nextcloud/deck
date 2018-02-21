@@ -56,6 +56,7 @@ OC.L10N.register(
     "Add a tag" : "Lägg till en tagg",
     "Select tags" : "Välj taggar",
     "Assign users" : "Tilldela användare",
+    "Choose a user to assign" : "Välj en användare att tilldela",
     "Assign this card to a user" : "Tilldela detta kort till en användare",
     "Due date" : "Slutdatum",
     "Click to set" : "Klicka för att sätta",
