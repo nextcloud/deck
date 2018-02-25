@@ -6,7 +6,7 @@ php:
     - 7.1
     - 7.2
 env:
-    - CORE_BRANCH=stable13 DB=mysql
+    - CORE_BRANCH=master DB=mysql
 
 before_install:
     - wget https://phar.phpunit.de/phpunit-5.7.phar

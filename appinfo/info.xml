@@ -14,7 +14,7 @@
 - 🚀 Get your project organized
 
 </description>
-    <version>0.3.0</version>
+    <version>0.4.0-alpha1</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
@@ -25,7 +25,7 @@
     <screenshot>https://download.bitgrid.net/nextcloud/deck/screenshots/Deck_Board.png</screenshot>
     <screenshot>https://download.bitgrid.net/nextcloud/deck/screenshots/Deck_Details.png</screenshot>
     <dependencies>
-        <nextcloud min-version="12" max-version="13" />
+        <nextcloud min-version="12" max-version="14" />
     </dependencies>
     <background-jobs>
         <job>OCA\Deck\Cron\DeleteCron</job>
