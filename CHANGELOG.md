@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.3.1 - unreleased
+
+### Fixed
+- Fix performance issue with large LDAP instances
+- Fix assigning users to newly created boards
+- Various performance improvements 
+- Fix some untranslated strings (@cloud2018)
+
+
 ## 0.3.0 - 2018-01-12
 
 ### Added
