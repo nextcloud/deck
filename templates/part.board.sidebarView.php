@@ -44,7 +44,7 @@
                     {{ boardservice.getCurrent().owner.displayname }}
 				</span>
             </li>
-            <li ng-repeat="acl in boardservice.getCurrent().acl track by $index">
+            <li ng-repeat="acl in boardservice.getCurrent().acl track by acl.participant.primaryKey">
                 <span class="icon-loading-small" style="display:none;" title="<?php p($l->t('Loading')); ?>"></span>
                 <div class="avatardiv" avatar data-contactsmenu="true" data-user="{{ acl.participant.uid }}" data-displayname="{{ acl.participant.displayname }}" ng-if="acl.type==OC.Share.SHARE_TYPE_USER"></div>
                 <div class="avatardiv" ng-if="acl.type==OC.Share.SHARE_TYPE_GROUP"><i class="icon icon-{{aclTypeString(acl)}}" title="<?php p($l->t('Access for')); ?> {{aclTypeString(acl)}}"></i></div>

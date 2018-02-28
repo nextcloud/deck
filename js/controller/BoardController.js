@@ -214,7 +214,10 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		$scope.status.addSharee = null;
 	};
 	$scope.aclDelete = function (acl) {
-		BoardService.deleteAcl(acl);
+		BoardService.deleteAcl(acl).then(function(data) {
+			$scope.loadDefault();
+			$scope.refreshData();
+		});
 	};
 	$scope.aclUpdate = function (acl) {
 		BoardService.updateAcl(acl);
