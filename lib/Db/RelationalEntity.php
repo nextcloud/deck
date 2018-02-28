@@ -71,7 +71,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 		foreach ($properties as $property => $value) {
 			if (strpos($property, '_') !== 0 && $reflection->hasProperty($property)) {
 				$propertyReflection = $reflection->getProperty($property);
-				if (!$propertyReflection->isPrivate()) {
+				if (!$propertyReflection->isPrivate() && !in_array($property, $this->_resolvedProperties, true)) {
 					$json[$property] = $this->getter($property);
 				}
 			}
