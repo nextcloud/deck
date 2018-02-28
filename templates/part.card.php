@@ -66,7 +66,7 @@
 			</ui-select-choices>
 		</ui-select>
 		<div class="card-details-assign-users-list">
-			<div class="assigned-user" ng-repeat="user in cardservice.getCurrent().assignedUsers track by user.uid">
+			<div class="assigned-user" ng-repeat="user in cardservice.getCurrent().assignedUsers track by user.participant.uid">
 				<avatar ng-attr-contactsmenu ng-attr-tooltip ng-attr-user="{{ user.participant.uid }}" ng-attr-displayname="{{ user.participant.displayname }}" contactsmenudelete ></avatar>
 			</div>
 		</div>
