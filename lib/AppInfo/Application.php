@@ -25,6 +25,7 @@ namespace OCA\Deck\AppInfo;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
+use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Notification\Notifier;
 use OCP\AppFramework\App;
 use OCA\Deck\Middleware\SharingMiddleware;
@@ -65,11 +66,18 @@ class Application extends App {
 		/** @var IUserManager $userManager */
 		$userManager = $server->getUserManager();
 		$userManager->listen('\OC\User', 'postDelete', function(IUser $user) use ($container) {
+			// delete existing acl entries for deleted user
 			/** @var AclMapper $aclMapper */
 			$aclMapper = $container->query(AclMapper::class);
 			$acls = $aclMapper->findByParticipant(Acl::PERMISSION_TYPE_USER, $user->getUID());
 			foreach ($acls as $acl) {
 				$aclMapper->delete($acl);
+			}
+			// delete existing user assignments
+			$assignmentMapper = $container->query(AssignedUsersMapper::class);
+			$assignments = $assignmentMapper->findByUserId($user->getUID());
+			foreach ($assignments as $assignment) {
+				$assignmentMapper->delete($assignment);
 			}
 		});
 
