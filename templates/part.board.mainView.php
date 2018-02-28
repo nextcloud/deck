@@ -104,7 +104,7 @@
 										<li>
 											<a class="menuitem action action-delete permanent"
 											   data-action="Delete"
-											   ng-click="cardDelete(c)"><span
+											   ng-click="cardDelete(c); $event.stopPropagation();"><span
 														class="icon icon-delete"></span><span><?php p($l->t('Delete')); ?></span></a>
 										</li>
 									</ul>
