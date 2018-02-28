@@ -79,7 +79,6 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 				header.find('.save-indicator.unsaved').hide();
 				header.find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
 				StackService.updateCard($scope.status.edit);
-				BoardService.$scope.$digest();
 			});
 		}
 	}, 500, 0, false);
