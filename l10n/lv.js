@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "Dzēst",
     "Hours" : "Stundas",
     "Minutes" : "Minūtes",
     "Finished" : "Pabeigts",
@@ -8,7 +9,6 @@ OC.L10N.register(
     "Show archived cards" : "Rādīt arhivētās kartes",
     "Hide archived cards" : "Slēpt arhivētās kartes",
     "Archive" : "Arhīvi",
-    "Delete" : "Dzēst",
     "Enter a card title" : "Ievadiet kartes nosaukumu",
     "Sharing" : "Koplietošana",
     "Select users or groups to share with" : "Atlasiet lietotājus vai grupas ar kuriem koplietot",

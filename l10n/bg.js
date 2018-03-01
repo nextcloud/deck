@@ -1,13 +1,13 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "Изтриване",
     "Finished" : "Завършен",
     "To review" : "За преглед",
     "Action needed" : "Необходимо е действие",
     "Later" : "По-късно",
     "Archive" : "Архивиране",
     "Unarchive" : "Разархивиране",
-    "Delete" : "Изтриване",
     "Sharing" : "Споделяне",
     "Select users or groups to share with" : "Избор на потребители и групи за споделяне",
     "No matching user or group found." : "Не са намерени съвпадащи потребители или групи",

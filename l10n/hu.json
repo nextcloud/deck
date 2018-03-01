@@ -1,4 +1,5 @@
 { "translations": {
+    "Delete" : "Törlés",
     "Remove user from card" : "Felhasználó eltávolítása a kártyáról",
     "Hours" : "Óra",
     "Minutes" : "Perc",
@@ -19,7 +20,6 @@
     "Archived boards" : "Archív táblák",
     "Archive" : "Archívum",
     "Unarchive" : "Archiválás visszavonása",
-    "Delete" : "Törlés",
     "Enter a card title" : "Adj meg egy kártya címet",
     "Add card" : "Kártya hozzáadása",
     "Close" : "Bezárás",

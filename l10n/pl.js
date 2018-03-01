@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "Usuń",
     "Hours" : "Godzin",
     "Minutes" : "Minut",
     "The card \"%s\" on \"%s\" has reached its due date." : "Karta \"%s\" na \"%s\" wygasła.",
@@ -20,7 +21,6 @@ OC.L10N.register(
     "Archived boards" : "Zarchiwizowane tablice",
     "Archive" : "Archiwizuj",
     "Unarchive" : "Nie archiwizuj",
-    "Delete" : "Usuń",
     "Enter a card title" : "Wprowadź tytuł karty",
     "Add card" : "Dodaj kartę",
     "Close" : "Zamknij",

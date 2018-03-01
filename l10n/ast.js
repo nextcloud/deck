@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "Desaniciar",
     "Hours" : "Hores",
     "Minutes" : "Minutos",
     "Finished" : "Finó",
@@ -9,7 +10,6 @@ OC.L10N.register(
     "Deck" : "Deck",
     "Submit" : "Unviar",
     "Show archived cards" : "Amosar tarxetes archivaes",
-    "Delete" : "Desaniciar",
     "Close" : "Zarrar",
     "Tags" : "Etiquetes",
     "Select users or groups to share with" : "Esbilla usuarios o grupos colos que compartir",

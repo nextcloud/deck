@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "Poista",
     "Remove user from card" : "Poista käyttäjä kortilta",
     "Hours" : "Tunnit",
     "Minutes" : "Minuutit",
@@ -17,7 +18,6 @@ OC.L10N.register(
     "Archived boards" : "Arkistoidut taulut",
     "Archive" : "Arkisto",
     "Unarchive" : "Pois arkistosta",
-    "Delete" : "Poista",
     "Enter a card title" : "Anna otsikko",
     "Add card" : "Lisää kortti",
     "Close" : "Sulje",

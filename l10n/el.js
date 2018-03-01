@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "Διαγραφή",
     "Remove user from card" : "Αφαίρεση χρήστη από την κάρτα",
     "Hours" : "Ώρες",
     "Minutes" : "Λεπτά",
@@ -19,7 +20,6 @@ OC.L10N.register(
     "Archived boards" : "Αρχειοθέτηση πινάκων ",
     "Archive" : "Αρχειοθέτηση",
     "Unarchive" : "Αναίρεση αρχειοθέτησης",
-    "Delete" : "Διαγραφή",
     "Enter a card title" : "Καταχωρίστε έναν τίτλο κάρτας",
     "Add card" : "Προσθήκη κάρτας",
     "Sharing" : "Διαμοιρασμός",

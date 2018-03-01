@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "Törlés",
     "Remove user from card" : "Felhasználó eltávolítása a kártyáról",
     "Hours" : "Óra",
     "Minutes" : "Perc",
@@ -21,7 +22,6 @@ OC.L10N.register(
     "Archived boards" : "Archív táblák",
     "Archive" : "Archívum",
     "Unarchive" : "Archiválás visszavonása",
-    "Delete" : "Törlés",
     "Enter a card title" : "Adj meg egy kártya címet",
     "Add card" : "Kártya hozzáadása",
     "Close" : "Bezárás",

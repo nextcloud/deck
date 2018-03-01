@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "გაუქმება",
     "Remove user from card" : "მომხმარებლის ბარათიდან ამოშლა",
     "Hours" : "საათი",
     "Minutes" : "წუთი",
@@ -21,7 +22,6 @@ OC.L10N.register(
     "Archived boards" : "არქივირებული დაფები",
     "Archive" : "არქივირება",
     "Unarchive" : "ამოღება",
-    "Delete" : "გაუქმება",
     "Enter a card title" : "შეიყვანეთ ბარათის სახელწოდება",
     "Add card" : "ბარათის დამატება",
     "Close" : "დახურვა",

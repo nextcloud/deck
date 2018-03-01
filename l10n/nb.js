@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "Slett",
     "Remove user from card" : "Fjern bruker fra kort",
     "Hours" : "Timer",
     "Minutes" : "Minutter",
@@ -21,7 +22,6 @@ OC.L10N.register(
     "Archived boards" : "Akriverte bord",
     "Archive" : "Arkiv",
     "Unarchive" : "Dearkivere",
-    "Delete" : "Slett",
     "Enter a card title" : "Skriv inn en kort tittel",
     "Add card" : "Legg til kort",
     "Close" : "Lukk",

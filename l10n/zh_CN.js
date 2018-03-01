@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "删除",
     "Remove user from card" : "把用户从卡片删除",
     "Hours" : "小时",
     "Minutes" : "分",
@@ -21,7 +22,6 @@ OC.L10N.register(
     "Archived boards" : "已归档面板",
     "Archive" : "归档",
     "Unarchive" : "取消归档",
-    "Delete" : "删除",
     "Enter a card title" : "输入卡片标题",
     "Add card" : "添加卡片",
     "Close" : "关闭",

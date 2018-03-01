@@ -1,4 +1,5 @@
 { "translations": {
+    "Delete" : "გაუქმება",
     "Remove user from card" : "მომხმარებლის ბარათიდან ამოშლა",
     "Hours" : "საათი",
     "Minutes" : "წუთი",
@@ -19,7 +20,6 @@
     "Archived boards" : "არქივირებული დაფები",
     "Archive" : "არქივირება",
     "Unarchive" : "ამოღება",
-    "Delete" : "გაუქმება",
     "Enter a card title" : "შეიყვანეთ ბარათის სახელწოდება",
     "Add card" : "ბარათის დამატება",
     "Close" : "დახურვა",

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "Fshij",
     "Hours" : "Orët",
     "Minutes" : "Minutat",
     "Finished" : "Përfunduar",
@@ -16,7 +17,6 @@ OC.L10N.register(
     "Archived boards" : "Borde të arkivuara",
     "Archive" : "Arkiva",
     "Unarchive" : "Hiq nga arkivi",
-    "Delete" : "Fshij",
     "Enter a card title" : "Fusni një titull karte",
     "Add card" : "Shto kartë",
     "Sharing" : "Shpërndaj ",
