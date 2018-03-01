@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "Radera",
     "Remove user from card" : "Ta bort användare från kort",
     "Hours" : "Timmar",
     "Minutes" : "Minuter",
@@ -21,7 +22,6 @@ OC.L10N.register(
     "Archived boards" : "Arkiverade tavlor",
     "Archive" : "Arkivera",
     "Unarchive" : "Ta bort ur arkivet",
-    "Delete" : "Radera",
     "Enter a card title" : "Ange en korttitel",
     "Add card" : "Lägg till kort",
     "Close" : "Stäng",

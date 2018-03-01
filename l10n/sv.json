@@ -1,4 +1,5 @@
 { "translations": {
+    "Delete" : "Radera",
     "Remove user from card" : "Ta bort användare från kort",
     "Hours" : "Timmar",
     "Minutes" : "Minuter",
@@ -19,7 +20,6 @@
     "Archived boards" : "Arkiverade tavlor",
     "Archive" : "Arkivera",
     "Unarchive" : "Ta bort ur arkivet",
-    "Delete" : "Radera",
     "Enter a card title" : "Ange en korttitel",
     "Add card" : "Lägg till kort",
     "Close" : "Stäng",

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "Ištrinti",
     "Hours" : "Valandos",
     "Minutes" : "Minutės",
     "Finished" : "Baigta",
@@ -17,7 +18,6 @@ OC.L10N.register(
     "Archived boards" : "Archyvuoti sąrašai",
     "Archive" : "Archyvuoti",
     "Unarchive" : "Išskleisti",
-    "Delete" : "Ištrinti",
     "Enter a card title" : "Įveskite kortelės vardą",
     "Close" : "Užverti",
     "Sharing" : "Bendrinimas",

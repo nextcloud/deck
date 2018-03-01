@@ -1,4 +1,5 @@
 { "translations": {
+    "Delete" : "Poista",
     "Remove user from card" : "Poista käyttäjä kortilta",
     "Hours" : "Tunnit",
     "Minutes" : "Minuutit",
@@ -15,7 +16,6 @@
     "Archived boards" : "Arkistoidut taulut",
     "Archive" : "Arkisto",
     "Unarchive" : "Pois arkistosta",
-    "Delete" : "Poista",
     "Enter a card title" : "Anna otsikko",
     "Add card" : "Lisää kortti",
     "Close" : "Sulje",

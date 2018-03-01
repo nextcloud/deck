@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "Slet",
     "Hours" : "Timer",
     "Minutes" : "Minutter",
     "The card \"%s\" on \"%s\" has reached its due date." : "Kortet \"%s\" på \"%s\" har nået sin udløbsdato.",
@@ -20,7 +21,6 @@ OC.L10N.register(
     "Archived boards" : "Arkiverede lister",
     "Archive" : "Arkivér",
     "Unarchive" : "Annuller arkivering",
-    "Delete" : "Slet",
     "Enter a card title" : "Angiv titel på kort",
     "Add card" : "Tilføj kort",
     "Close" : "Luk",

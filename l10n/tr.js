@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "Sil",
     "Remove user from card" : "Kullanıcıyı karttan kaldır",
     "Hours" : "Saat",
     "Minutes" : "Dakika",
@@ -21,7 +22,6 @@ OC.L10N.register(
     "Archived boards" : "Arşivlenmiş panolar",
     "Archive" : "Arşivle",
     "Unarchive" : "Arşivden Çıkar",
-    "Delete" : "Sil",
     "Enter a card title" : "Bir kart başlığı yazın",
     "Add card" : "Kart ekle",
     "Close" : "Kapat",

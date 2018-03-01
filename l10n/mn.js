@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "Устгах",
     "Finished" : "Дуусгасан",
     "To review" : "Дахин хянах",
     "Action needed" : "Үйлдэл шаардлагатай",
@@ -10,7 +11,6 @@ OC.L10N.register(
     "Hide archived cards" : "Архивлагдсан картуудыг нуух",
     "Archive" : "Архивлах",
     "Unarchive" : "Архиваас гаргах",
-    "Delete" : "Устгах",
     "Enter a card title" : "Картын нэр оруулах",
     "Sharing" : "Түгээх",
     "Select users or groups to share with" : "Түгээх хэрэглэгч, бүлэг сонгоно уу",

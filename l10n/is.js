@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "Eyða",
     "Remove user from card" : "Fjarlægja notanda af spjaldi",
     "Hours" : "klukkustundir",
     "Minutes" : "mínútur",
@@ -21,7 +22,6 @@ OC.L10N.register(
     "Archived boards" : "Borð í geymslu",
     "Archive" : "Setja í safnskrá",
     "Unarchive" : "Taka úr geymslu",
-    "Delete" : "Eyða",
     "Enter a card title" : "Sláðu inn titil á spjald",
     "Add card" : "Bæta við spjaldi",
     "Close" : "Loka",

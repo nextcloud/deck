@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "刪除",
     "Hours" : "小時",
     "Minutes" : "分鐘",
     "Finished" : "已完成",
@@ -8,7 +9,6 @@ OC.L10N.register(
     "Submit" : "送出",
     "Archive" : "封存",
     "Unarchive" : "取消封存",
-    "Delete" : "刪除",
     "Close" : "關閉",
     "Sharing" : "分享",
     "Tags" : "標籤",

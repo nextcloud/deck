@@ -1,4 +1,5 @@
 { "translations": {
+    "Delete" : "Löschen",
     "Remove user from card" : "Benutzer von Karte entfernen",
     "Hours" : "Stunden",
     "Minutes" : "Minuten",
@@ -19,7 +20,6 @@
     "Archived boards" : "Archivierte Boards",
     "Archive" : "Archivieren",
     "Unarchive" : "Dearchivieren",
-    "Delete" : "Löschen",
     "Enter a card title" : "Kartentitel eingeben",
     "Add card" : "Karte hinzufügen",
     "Close" : "Schließen",

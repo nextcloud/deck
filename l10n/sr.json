@@ -1,4 +1,5 @@
 { "translations": {
+    "Delete" : "Избриши",
     "Remove user from card" : "Уклони корисника са картице",
     "Hours" : "Сати",
     "Minutes" : "Минути",
@@ -19,7 +20,6 @@
     "Archived boards" : "Архивиране табле",
     "Archive" : "Архива",
     "Unarchive" : "Врати из архиве",
-    "Delete" : "Избриши",
     "Enter a card title" : "Унесите назив картице",
     "Add card" : "Додај картицу",
     "Close" : "Затвори",

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Delete" : "Izbriši",
     "Hours" : "Ure",
     "Minutes" : "Minute",
     "Finished" : "Zaključeno",
@@ -14,7 +15,6 @@ OC.L10N.register(
     "Archived boards" : "Arhivirane table",
     "Archive" : "Arhiviraj",
     "Unarchive" : "Odarhiviraj",
-    "Delete" : "Izbriši",
     "Enter a card title" : "Vpiši naslov kartice",
     "Sharing" : "Deli",
     "Tags" : "Oznake",
