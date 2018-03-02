@@ -25,6 +25,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
+use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Notification\NotificationHelper;
@@ -43,6 +44,7 @@ class BoardService {
 	private $l10n;
 	private $permissionService;
 	private $notificationHelper;
+	private $assignedUsersMapper;
 
 	public function __construct(
 		BoardMapper $boardMapper,
@@ -50,7 +52,8 @@ class BoardService {
 		LabelMapper $labelMapper,
 		AclMapper $aclMapper,
 		PermissionService $permissionService,
-		NotificationHelper $notificationHelper
+		NotificationHelper $notificationHelper,
+		AssignedUsersMapper $assignedUsersMapper
 	) {
 		$this->boardMapper = $boardMapper;
 		$this->labelMapper = $labelMapper;
@@ -58,6 +61,7 @@ class BoardService {
 		$this->l10n = $l10n;
 		$this->permissionService = $permissionService;
 		$this->notificationHelper = $notificationHelper;
+		$this->assignedUsersMapper = $assignedUsersMapper;
 	}
 
 	public function findAll($userInfo) {
@@ -243,6 +247,12 @@ class BoardService {
 		/** @var Acl $acl */
 		$acl = $this->aclMapper->find($id);
 		$this->boardMapper->mapAcl($acl);
+		if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
+			$assignements = $this->assignedUsersMapper->findByUserId($acl->getParticipant());
+			foreach($assignements as $assignement) {
+				$this->assignedUsersMapper->delete($assignement);
+			}
+		}
 		return $this->aclMapper->delete($acl);
 	}
 
