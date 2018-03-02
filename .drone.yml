@@ -206,7 +206,7 @@ matrix:
     - TESTS: php7.2
     - TESTS: eslint
     - TESTS: jsbuild
-    - TESTS: integration
+    #- TESTS: integration
 
 branches: [ master, stable* ]
 
