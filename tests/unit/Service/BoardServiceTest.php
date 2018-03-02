@@ -26,6 +26,8 @@ namespace OCA\Deck\Service;
 use OC\L10N\L10N;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
+use OCA\Deck\Db\AssignedUsers;
+use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
@@ -49,6 +51,8 @@ class BoardServiceTest extends TestCase {
 	private $permissionService;
 	/** @var NotificationHelper */
 	private $notificationHelper;
+	/** @var AssignedUsersMapper */
+	private $assignedUsersMapper;
 
 	private $userId = 'admin';
 
@@ -60,6 +64,7 @@ class BoardServiceTest extends TestCase {
 		$this->labelMapper = $this->createMock(LabelMapper::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
+		$this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -67,7 +72,8 @@ class BoardServiceTest extends TestCase {
 			$this->labelMapper,
 			$this->aclMapper,
 			$this->permissionService,
-			$this->notificationHelper
+			$this->notificationHelper,
+			$this->assignedUsersMapper
 		);
 
 		$user = $this->createMock(IUser::class);
@@ -224,7 +230,7 @@ class BoardServiceTest extends TestCase {
 	public function testDeleteAcl() {
 		$acl = new Acl();
 		$acl->setBoardId(123);
-		$acl->setType('user');
+		$acl->setType(Acl::PERMISSION_TYPE_USER);
 		$acl->setParticipant('admin');
 		$acl->setPermissionEdit(true);
 		$acl->setPermissionShare(true);
@@ -233,6 +239,15 @@ class BoardServiceTest extends TestCase {
 			->method('find')
 			->with(123)
 			->willReturn($acl);
+		$assignment = new AssignedUsers();
+		$assignment->setParticipant('admin');
+		$this->assignedUsersMapper->expects($this->once())
+			->method('findByUserId')
+			->with('admin')
+			->willReturn([$assignment]);
+		$this->assignedUsersMapper->expects($this->once())
+			->method('delete')
+			->with($assignment);
 		$this->aclMapper->expects($this->once())
 			->method('delete')
 			->with($acl)
