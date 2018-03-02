@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file.
 - Fix assigning users to newly created boards
 - Various performance improvements 
 - Fix some untranslated strings (@cloud2018)
+- Add confirmation dialog to delete options
+- Fix issues with assigned users list when saving a card
+- Delete assignments if users get removed
 
 
 ## 0.3.0 - 2018-01-12
