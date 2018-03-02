@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Are you sure you want to delete this card with all of its data?" : "Sei sicuro di voler eliminare questa scheda con tutti i suoi dati?",
     "Delete" : "Elimina",
     "Remove user from card" : "Rimuovi utente dalla scheda",
     "Hours" : "Ore",

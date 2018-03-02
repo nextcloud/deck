@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Are you sure you want to delete this card with all of its data?" : "Ertu viss um að þú viljir eyða þessu spjaldi ásamt öllum gögnum þess?",
     "Delete" : "Eyða",
     "Remove user from card" : "Fjarlægja notanda af spjaldi",
     "Hours" : "klukkustundir",
