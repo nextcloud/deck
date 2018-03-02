@@ -50,7 +50,7 @@ class AssignedUsersMapper extends DeckMapper implements IPermissionMapper {
 		return $users;
 	}
 
-	public function findByUserId(string $uid): array {
+	public function findByUserId($uid) {
 		$sql = 'SELECT * FROM `*PREFIX*deck_assigned_users` ' .
 			'WHERE `participant` = ?';
 		return $this->findEntities($sql, [$uid]);
