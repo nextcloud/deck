@@ -123,7 +123,7 @@ app.factory('StackService', function (ApiService, $http, $q) {
 		var deferred = $q.defer();
 		var self = this;
 
-		OC.dialogs.confirm('Are you sure you want to delete the stack with all of its data?', t('deck', 'Delete'), function(state) {
+		OC.dialogs.confirm(t('deck', 'Are you sure you want to delete the stack with all of its data?'), t('deck', 'Delete'), function(state) {
 			if (!state) {
 				return;
 			}
