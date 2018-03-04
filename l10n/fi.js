@@ -1,10 +1,13 @@
 OC.L10N.register(
     "deck",
     {
+    "Are you sure you want to delete this card with all of its data?" : "Haluatko varmasti poistaa tämän kortin ja kaikki sen tiedot?",
     "Delete" : "Poista",
     "Remove user from card" : "Poista käyttäjä kortilta",
     "Hours" : "Tunnit",
     "Minutes" : "Minuutit",
+    "The card \"%s\" on \"%s\" has reached its due date." : "Kortin \"%s\" on \"%s\" eräpäivä on tullut vastaan.",
+    "The board \"%s\" has been shared with you by %s." : "Taulu \"%s\" on jaettu kanssasi käyttäjän %s toimesta.",
     "{user} has shared the board %s with you." : "{user} on jakanut taulun %s kanssasi.",
     "Finished" : "Valmistunut",
     "To review" : "Arvostella",
@@ -48,6 +51,9 @@ OC.L10N.register(
     "Choose a tag" : "Valitse tunniste",
     "Add a tag" : "Lisää tunniste",
     "Select tags" : "Valitse tunnisteet",
+    "Assign users" : "Määritä käyttäjät",
+    "Choose a user to assign" : "Valitse määritettävä käyttäjä",
+    "Assign this card to a user" : "Määritä tämä kortti käyttäjälle",
     "Due date" : "Eräpäivä",
     "Click to set" : "Napsauta asettaaksesi",
     "Remove due date" : "Poista eräpäivä",
