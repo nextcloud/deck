@@ -6,6 +6,7 @@ OC.L10N.register(
     "Remove user from card" : "Eliminar usuario de la tarjeta",
     "Hours" : "Horas",
     "Minutes" : "Minutos",
+    "Are you sure you want to delete the stack with all of its data?" : "¿Estás seguro que deseas borrar la pila con todos sus datos?",
     "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
     "The board \"%s\" has been shared with you by %s." : "El tablero \"%s\" ha sido compartido contigo por %s.",
     "{user} has shared the board %s with you." : "{user} ha compartido el tablero %s contigo. ",
