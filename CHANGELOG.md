@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.3.1 - unreleased
+## 0.3.1 - 2018-03-07
 
 ### Fixed
 - Fix performance issue with large LDAP instances
