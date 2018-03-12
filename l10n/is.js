@@ -6,6 +6,7 @@ OC.L10N.register(
     "Remove user from card" : "Fjarlægja notanda af spjaldi",
     "Hours" : "klukkustundir",
     "Minutes" : "mínútur",
+    "Are you sure you want to delete the stack with all of its data?" : "Ertu viss um að þú viljir eyða þessum stafla ásamt öllum gögnum hans?",
     "The card \"%s\" on \"%s\" has reached its due date." : "Spjaldið \"%s\" á \"%s\" er komið fram yfir lokadagsetningu.",
     "The board \"%s\" has been shared with you by %s." : "Borðinu \"%s\" hefur verið deilt með þér af %s.",
     "{user} has shared the board %s with you." : "{user} deildi borðinu %s með þér.",
