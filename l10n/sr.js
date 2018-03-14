@@ -1,10 +1,12 @@
 OC.L10N.register(
     "deck",
     {
+    "Are you sure you want to delete this card with all of its data?" : "Да ли стварно желите да обришете ову картицу са свим подацима на њој?",
     "Delete" : "Избриши",
     "Remove user from card" : "Уклони корисника са картице",
     "Hours" : "Сати",
     "Minutes" : "Минути",
+    "Are you sure you want to delete the stack with all of its data?" : "Да ли стварно желите да обришете ову гомилу са свим подацима на њој?",
     "The card \"%s\" on \"%s\" has reached its due date." : "Картици \"%s\" на табли \"%s\" је истекао рок.",
     "The board \"%s\" has been shared with you by %s." : "Таблу \"%s\" је поделио \"%s\" са Вама. ",
     "{user} has shared the board %s with you." : "{user} је поделио таблу %s са Вама.",
