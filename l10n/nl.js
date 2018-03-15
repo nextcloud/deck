@@ -1,13 +1,13 @@
 OC.L10N.register(
     "deck",
     {
-    "Are you sure you want to delete this card with all of its data?" : "Weert je zeker dat je deze kaart met gegevens wilt verwijderen? ",
+    "Are you sure you want to delete this card with all of its data?" : "Weet je zeker dat je deze kaart met gegevens wilt verwijderen?",
     "Delete" : "Verwijderen",
     "Remove user from card" : "Verwijder gebruiker van kaart",
     "Hours" : "Uur",
     "Minutes" : "Minuten",
     "Are you sure you want to delete the stack with all of its data?" : "Weet je zeker dat je deze stapel met alle gegevens wilt verwijderen ? ",
-    "The card \"%s\" on \"%s\" has reached its due date." : "De kaart \"%s\" bij \"%s\" heeft zijn vervaldatum bereikt.",
+    "The card \"%s\" on \"%s\" has reached its due date." : "De kaart \"%s\" in \"%s\" heeft zijn vervaldatum bereikt.",
     "The board \"%s\" has been shared with you by %s." : "Het bord \"%s\" is door %s met je gedeeld.",
     "{user} has shared the board %s with you." : "{user} heeft het bord %s met je gedeeld.",
     "Finished" : "Afgerond",
