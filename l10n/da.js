@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Are you sure you want to delete this card with all of its data?" : "Er du sikker på, at du vil slette dette kort med alle dets data?",
     "Delete" : "Slet",
     "Hours" : "Timer",
     "Minutes" : "Minutter",
