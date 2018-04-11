@@ -49,10 +49,10 @@ import md from 'angular-markdown-it';
 import nganimate from 'angular-animate';
 
 var app = angular.module('Deck', [
-  ngsanitize,
-  uirouter,
-  angularuiselect,
-  ngsortable, md, nganimate
+	ngsanitize,
+	uirouter,
+	angularuiselect,
+	ngsortable, md, nganimate
 ]);
 
 export default app;

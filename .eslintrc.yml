@@ -22,6 +22,7 @@ globals:
 
 parserOptions:
   ecmaVersion: 6
+  sourceType: "module"
 
 rules:
   curly: error

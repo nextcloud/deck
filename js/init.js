@@ -13,13 +13,13 @@ import './app/Run.js';
 
 
 import ListController from 'controller/ListController.js';
-app.controller('ListController', ListController)
+app.controller('ListController', ListController);
 
 
 // require all the js files from subdirectories
 var context = require.context(".", true, /(controller|service|filters|directive)\/(.*)\.js$/);
 
 context.keys().forEach(function (key) {
-    context(key);
+	context(key);
 });
 

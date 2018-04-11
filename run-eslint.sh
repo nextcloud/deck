@@ -12,6 +12,7 @@ find -name "*.js" -path '*js/*' -not -path '*js/node_modules*' \
     -not -path '*l10n/*' \
     -not -path '*js/vendor*' \
     -not -path '*js/tests*' \
+    -not -path '*js/webpack*' \
     -not -path '*js/public*' \
     -not -path '*build/*' \
     -not -path '*tests/*' \
