@@ -1,6 +1,5 @@
 root: true
 
-
 extends:
   - eslint:recommended
 
@@ -20,6 +19,9 @@ globals:
   oc_requesttoken: false
   Clipboard: false
   oc_defaults: false
+
+parserOptions:
+  ecmaVersion: 6
 
 rules:
   curly: error

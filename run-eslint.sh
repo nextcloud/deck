@@ -8,9 +8,11 @@ if [ -z "$ESLINT" ]; then
 fi
 
 echo Checking scripts with $ESLINT ...
-find -name "*.js" -not -path '*js/node_modules*' \
+find -name "*.js" -path '*js/*' -not -path '*js/node_modules*' \
     -not -path '*l10n/*' \
     -not -path '*js/vendor*' \
     -not -path '*js/tests*' \
     -not -path '*js/public*' \
+    -not -path '*build/*' \
+    -not -path '*tests/*' \
     -print0 | xargs -0 $ESLINT
