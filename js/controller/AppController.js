@@ -20,8 +20,10 @@
  *  
  */
 
+import app from '../app/App.js';
+
 /** global: OC */
-app.controller('AppController', function ($scope, $location, $http, $route, $log, $rootScope) {
+app.controller('AppController', function ($scope, $location, $http, $log, $rootScope) {
 	$rootScope.sidebar = {
 		show: false
 	};

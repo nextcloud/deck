@@ -20,6 +20,7 @@
  *
  */
 
+import app from '../app/App.js';
 // OwnCloud Click Handling
 // https://doc.owncloud.org/server/8.0/developer_manual/app/css.html
 app.directive('appNavigationEntryUtils', function () {

@@ -19,6 +19,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *  
  */
+import app from './App.js';
 
 /* global Snap */
 app.run(function ($document, $rootScope, $transitions, BoardService) {

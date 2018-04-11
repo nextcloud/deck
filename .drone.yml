@@ -185,10 +185,8 @@ pipeline:
   jsbuild:
     image: mhart/alpine-node:6.8.0
     commands:
-      - apk add --no-cache git
-      - cd js
-      - npm install --deps
-      - ./node_modules/.bin/bower --allow-root install
+      - apk add --no-cache make
+      - make build-js
     when:
       matrix:
         TESTS: jsbuild

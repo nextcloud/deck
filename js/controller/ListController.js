@@ -22,7 +22,7 @@
 
 /* global app angular */
 
-app.controller('ListController', function ($scope, $location, $filter, BoardService, $element, $timeout, $stateParams, $state, StatusService) {
+var ListController = function ($scope, $location, $filter, BoardService, $element, $timeout, $stateParams, $state, StatusService) {
 
 	function calculateNewColor() {
 		var boards = BoardService.getAll();
@@ -193,5 +193,6 @@ app.controller('ListController', function ($scope, $location, $filter, BoardServ
 		});
 	};
 
-});
+};
 
+export default ListController;

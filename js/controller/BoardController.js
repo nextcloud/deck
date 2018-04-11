@@ -20,6 +20,7 @@
  *  
  */
 
+import app from '../app/App.js';
 /* global oc_defaults OC */
 app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter) {
 

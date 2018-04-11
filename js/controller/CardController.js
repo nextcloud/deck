@@ -21,6 +21,7 @@
  */
 
 /* global app moment */
+import app from '../app/App.js';
 
 app.controller('CardController', function ($scope, $rootScope, $routeParams, $location, $stateParams, $interval, $timeout, $filter, BoardService, CardService, StackService, StatusService) {
 	$scope.sidebar = $rootScope.sidebar;
