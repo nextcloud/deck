@@ -185,7 +185,7 @@ pipeline:
   jsbuild:
     image: mhart/alpine-node:6.8.0
     commands:
-      - apk add --no-cache git
+      - apk add --no-cache make
       - make build-js
     when:
       matrix:
