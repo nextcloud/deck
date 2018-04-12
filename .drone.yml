@@ -31,6 +31,7 @@ pipeline:
     commands:
       - wget https://raw.githubusercontent.com/nextcloud/server/master/build/signed-off-checker.php
       - php ./signed-off-checker.php
+    secrets: [ github_token ]
     when:
       matrix:
         TESTS: signed-off-check
