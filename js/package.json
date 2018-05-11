@@ -27,7 +27,7 @@
     "karma": "^1.4.1",
     "node-sass": "^4.5.3",
     "style-loader": "^0.19.1",
-    "webpack": "^3.10.0",
+    "webpack": "^4.8.1",
     "webpack-merge": "^4.1.1"
   },
   "scripts": {
