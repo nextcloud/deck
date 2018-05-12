@@ -26,10 +26,13 @@ install-deps:
 build: build-js
 
 build-js: install-deps
-	cd js && ./node_modules/.bin/webpack --config webpack.prod.config.js
+	cd js && npm run build 
+
+build-js-dev: install-deps
+	cd js && npm run dev
 
 watch:
-	cd js && ./node_modules/.bin/webpack --config webpack.dev.config.js --watch
+	cd js && npm run watch
 
 # appstore: clean install-deps
 appstore: clean-build build
