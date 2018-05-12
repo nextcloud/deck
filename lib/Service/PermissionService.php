@@ -185,8 +185,8 @@ class PermissionService {
 	 */
 	public function findUsers($boardId) {
 		// cache users of a board so we don't query them for every cards
-		if (array_key_exists((string)$boardId, $this->users)) {
-			return $this->users[(string)$boardId];
+		if (array_key_exists((string) $boardId, $this->users)) {
+			return $this->users[(string) $boardId];
 		}
 		try {
 			$board = $this->boardMapper->find($boardId);
@@ -203,14 +203,14 @@ class PermissionService {
 				$user = $this->userManager->get($acl->getParticipant());
 				$users[$user->getUID()] = new User($user);
 			}
-			if($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
+			if ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
 				$group = $this->groupManager->get($acl->getParticipant());
 				foreach ($group->getUsers() as $user) {
 					$users[$user->getUID()] = new User($user);
 				}
 			}
 		}
-		$this->users[(string)$boardId] = $users;
-		return $this->users[(string)$boardId];
+		$this->users[(string) $boardId] = $users;
+		return $this->users[(string) $boardId];
 	}
 }

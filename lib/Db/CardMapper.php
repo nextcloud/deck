@@ -178,7 +178,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		$userManager = $this->userManager;
 		$card->resolveRelation('owner', function($owner) use (&$userManager) {
 			$user = $userManager->get($owner);
-			if($user !== null) {
+			if ($user !== null) {
 				return new User($user);
 			}
 			return null;
