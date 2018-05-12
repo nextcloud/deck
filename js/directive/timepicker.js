@@ -20,6 +20,8 @@
  *
  */
 import app from '../app/App.js';
+import '../legacy/jquery.ui.timepicker.js';
+import 'legacy/jquery.ui.timepicker.css';
 
 /* global app */
 /* global t */
@@ -30,7 +32,7 @@ app.directive('timepicker', function() {
 	return {
 		restrict: 'A',
 		link: function(scope, elm, attr) {
-			return elm.timepicker({
+			return $(elm).timepicker({
 				onSelect: function(date, inst) {
 					scope.setDuedateTime(moment('2000-01-01 ' + date));
 					scope.$apply();

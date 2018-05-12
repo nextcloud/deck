@@ -1,11 +1,11 @@
 'use strict';
 
 // used for building a vendor stylesheet
-import 'jquery-timepicker/jquery.timepicker.css';
 import 'ng-sortable/dist/ng-sortable.css';
 
-
 import angular from 'angular';
+import markdownit from 'markdown-it';
+global.markdownit = markdownit;
 
 import app from './app/App.js';
 import './app/Config.js';

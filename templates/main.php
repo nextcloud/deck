@@ -23,10 +23,10 @@
 
 use OCP\Util;
 
-Util::addStyle('deck', 'vendor');
-Util::addStyle('deck', 'style');
-
+Util::addStyle('deck', '../js/build/vendor');
 Util::addScript('deck', 'build/vendor');
+
+Util::addStyle('deck', 'style');
 Util::addScript('deck', 'build/deck');
 ?>
 
