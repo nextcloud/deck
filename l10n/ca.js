@@ -2,6 +2,7 @@ OC.L10N.register(
     "deck",
     {
     "Delete" : "Esborra",
+    "Remove user from card" : "Esborra usuari de la targeta",
     "Hours" : "Hores",
     "Minutes" : "Minuts",
     "Finished" : "Acabat",
