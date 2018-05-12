@@ -17,7 +17,7 @@ app.controller('ListController', ListController);
 
 
 // require all the js files from subdirectories
-var context = require.context(".", true, /(controller|service|filters|directive)\/(.*)\.js$/);
+var context = require.context('.', true, /(controller|service|filters|directive)\/(.*)\.js$/);
 
 context.keys().forEach(function (key) {
 	context(key);

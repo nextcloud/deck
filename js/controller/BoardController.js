@@ -153,7 +153,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	// Create a new Stack
 	$scope.createStack = function () {
 		StackService.create($scope.newStack).then(function (data) {
-			$scope.newStack.title = "";
+			$scope.newStack.title = '';
 		});
 	};
 
@@ -165,7 +165,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		};
 		CardService.create(newCard).then(function (data) {
 			$scope.stackservice.addCard(data);
-			$scope.newCard.title = "";
+			$scope.newCard.title = '';
 		});
 	};
 
@@ -198,7 +198,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.labelCreate = function (label) {
 		label.boardId = $scope.id;
 		LabelService.create(label).then(function (data) {
-			$scope.newStack.title = "";
+			$scope.newStack.title = '';
 			BoardService.getCurrent().labels.push(data);
 			$scope.status.createLabel = false;
 			$scope.newLabel = {};
@@ -274,7 +274,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		// auto scroll on drag
 		dragMove: function (itemPosition, containment, eventObj) {
 			if (eventObj) {
-				var container = $("#board");
+				var container = $('#board');
 				var offset = container.offset();
 				var targetX = eventObj.pageX - (offset.left || container.scrollLeft());
 				var targetY = eventObj.pageY - (offset.top || container.scrollTop());
@@ -309,7 +309,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		containment: '#innerBoard',
 		dragMove: function (itemPosition, containment, eventObj) {
 			if (eventObj) {
-				var container = $("#board");
+				var container = $('#board');
 				var offset = container.offset();
 				var targetX = eventObj.pageX - (offset.left || container.scrollLeft());
 				var targetY = eventObj.pageY - (offset.top || container.scrollTop());

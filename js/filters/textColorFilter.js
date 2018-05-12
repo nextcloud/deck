@@ -57,12 +57,12 @@ app.filter('textColorFilter', function () {
 				h /= 6;
 			}
 			if (l < 0.5) {
-				return "#ffffff";
+				return '#ffffff';
 			} else {
-				return "#000000";
+				return '#000000';
 			}
 		} else {
-			return "#000000";
+			return '#000000';
 		}
 
 	};
