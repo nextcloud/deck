@@ -1,5 +1,6 @@
 /js/tests/*
 /js/vendor/*
+/js/legacy/*
 /js/node_modules/*
 /js/public/*
 /karma.conf.js
