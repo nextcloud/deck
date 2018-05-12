@@ -83,7 +83,7 @@ class NotificationHelper {
 			$notification = $this->notificationManager->createNotification();
 			$notification
 				->setApp('deck')
-				->setUser((string)$user->getUID())
+				->setUser((string) $user->getUID())
 				->setObject('card', $card->getId())
 				->setSubject('card-overdue', [
 					$card->getTitle(), $board->getTitle()
@@ -98,7 +98,7 @@ class NotificationHelper {
 	 * Send notifications that a board was shared with a user/group
 	 *
 	 * @param $boardId
-	 * @param $acl
+	 * @param Acl $acl
 	 * @throws \InvalidArgumentException
 	 */
 	public function sendBoardShared($boardId, $acl) {
@@ -128,11 +128,14 @@ class NotificationHelper {
 		return $this->boards[$boardId];
 	}
 
+	/**
+	 * @param Board $board
+	 */
 	private function generateBoardShared($board, $userId) {
 		$notification = $this->notificationManager->createNotification();
 		$notification
 			->setApp('deck')
-			->setUser((string)$userId)
+			->setUser((string) $userId)
 			->setDateTime(new DateTime())
 			->setObject('board', $board->getId())
 			->setSubject('board-shared', [$board->getTitle(), $this->currentUser]);

@@ -32,7 +32,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 
 	/**
 	 * Mark a property as relation so it will not get updated using Mapper::update
-	 * @param $property string Name of the property
+	 * @param string $property string Name of the property
 	 */
 	public function addRelation($property) {
 		if (!in_array($property, $this->_relations, true)) {
@@ -42,7 +42,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 
 	/**
 	 * Mark a property as resolvable via resolveRelation()
-	 * @param $property string Name of the property
+	 * @param string $property string Name of the property
 	 */
 	public function addResolvable($property) {
 		$this->_resolvedProperties[$property] = null;
@@ -77,7 +77,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 			}
 		}
 		foreach ($this->_resolvedProperties as $property => $value) {
-			if($value !== null) {
+			if ($value !== null) {
 				$json[$property] = $value;
 			}
 		}
@@ -107,29 +107,29 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 	 */
 	public function resolveRelation($property, $resolver) {
 		$result = null;
-		if($property !== null && $this->$property !== null) {
+		if ($property !== null && $this->$property !== null) {
 			$result = $resolver($this->$property);
 		}
 
-		if($result instanceof RelationalObject || $result === null) {
+		if ($result instanceof RelationalObject || $result === null) {
 			$this->_resolvedProperties[$property] = $result;
 		} else {
 			throw new \Exception('resolver must return an instance of RelationalObject');
 		}
 	}
 
-	public function __call($methodName, $args){
-		$attr = lcfirst( substr($methodName, 7) );
-		if(array_key_exists($attr, $this->_resolvedProperties) && strpos($methodName, 'resolve') === 0) {
-			if($this->_resolvedProperties[$attr] !== null) {
+	public function __call($methodName, $args) {
+		$attr = lcfirst(substr($methodName, 7));
+		if (array_key_exists($attr, $this->_resolvedProperties) && strpos($methodName, 'resolve') === 0) {
+			if ($this->_resolvedProperties[$attr] !== null) {
 				return $this->_resolvedProperties[$attr];
 			}
 			return $this->getter($attr);
 		}
 
-		$attr = lcfirst( substr($methodName, 3) );
-		if(array_key_exists($attr, $this->_resolvedProperties) && strpos($methodName, 'set') === 0) {
-			if(!is_scalar($args[0])) {
+		$attr = lcfirst(substr($methodName, 3));
+		if (array_key_exists($attr, $this->_resolvedProperties) && strpos($methodName, 'set') === 0) {
+			if (!is_scalar($args[0])) {
 				$args[0] = $args[0]['primaryKey'];
 			}
 			parent::setter($attr, $args);

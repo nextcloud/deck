@@ -140,7 +140,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 
 	public function findToDelete() {
 		// add buffer of 5 min
-		$timeLimit = time()-(60*5);
+		$timeLimit = time() - (60 * 5);
 		$sql = 'SELECT id, title, owner, color, archived, deleted_at FROM `*PREFIX*deck_boards` ' .
 			'WHERE `deleted_at` > 0 AND `deleted_at` < ?';
 		return $this->findEntities($sql, [$timeLimit]);
@@ -181,17 +181,17 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		$userManager = $this->userManager;
 		$groupManager = $this->groupManager;
 		$acl->resolveRelation('participant', function($participant) use (&$acl, &$userManager, &$groupManager) {
-			if($acl->getType() === Acl::PERMISSION_TYPE_USER) {
+			if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
 				$user = $userManager->get($participant);
-				if($user !== null) {
+				if ($user !== null) {
 					return new User($user);
 				}
 				\OC::$server->getLogger()->debug('User ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
 				return null;
 			}
-			if($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
+			if ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
 				$group = $groupManager->get($participant);
-				if($group !== null) {
+				if ($group !== null) {
 					return new Group($group);
 				}
 				\OC::$server->getLogger()->debug('Group ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
@@ -208,7 +208,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		$userManager = $this->userManager;
 		$board->resolveRelation('owner', function($owner) use (&$userManager) {
 			$user = $userManager->get($owner);
-			if($user !== null) {
+			if ($user !== null) {
 				return new User($user);
 			}
 			return null;

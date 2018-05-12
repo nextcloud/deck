@@ -66,25 +66,25 @@ class Notifier implements INotifier {
 	 */
 	public function prepare(INotification $notification, $languageCode) {
 		$l = $this->l10nFactory->get('deck', $languageCode);
-		if($notification->getApp() !== 'deck') {
+		if ($notification->getApp() !== 'deck') {
 			throw new \InvalidArgumentException();
 		}
 		$notification->setIcon($this->url->getAbsoluteURL($this->url->imagePath('deck', 'deck-dark.svg')));
 		$params = $notification->getSubjectParameters();
 
-		switch($notification->getSubject()) {
+		switch ($notification->getSubject()) {
 			case 'card-overdue':
 				$cardId = $notification->getObjectId();
 				$boardId = $this->cardMapper->findBoardId($cardId);
 				$notification->setParsedSubject(
 					(string) $l->t('The card "%s" on "%s" has reached its due date.', $params)
 				);
-				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#!/board/'.$boardId.'//card/'.$cardId.'');
+				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#!/board/' . $boardId . '//card/' . $cardId . '');
 				break;
 			case 'board-shared':
 				$boardId = $notification->getObjectId();
 				$initiator = $this->userManager->get($params[1]);
-				if($initiator !== null) {
+				if ($initiator !== null) {
 					$dn = $initiator->getDisplayName();
 				} else {
 					$dn = $params[1];
@@ -102,7 +102,7 @@ class Notifier implements INotifier {
 						]
 					]
 				);
-				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#!/board/'.$boardId.'/');
+				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#!/board/' . $boardId . '/');
 				break;
 		}
 		return $notification;

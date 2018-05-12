@@ -6,8 +6,8 @@
 </div>
 <div id="sidebar-header">
     <a class="icon-close" ui-sref="board" ng-click="sidebar.show=!sidebar.show" title="<?php p($l->t('Close')); ?>"> &nbsp;<?php 
-    	?><span class="hidden-visually"><?php p($l->t('Close')); ?></span><?php 
-    ?></a>
+		?><span class="hidden-visually"><?php p($l->t('Close')); ?></span><?php 
+	?></a>
     <h3>{{ boardservice.getCurrent().title }}</h3>
 </div>
 

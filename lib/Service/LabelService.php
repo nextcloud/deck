@@ -51,7 +51,7 @@ class LabelService {
 
 	public function create($title, $color, $boardId) {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
-		if($this->boardService->isArchived(null, $boardId)) {
+		if ($this->boardService->isArchived(null, $boardId)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		$label = new Label();
@@ -63,7 +63,7 @@ class LabelService {
 
 	public function delete($id) {
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
-		if($this->boardService->isArchived($this->labelMapper, $id)) {
+		if ($this->boardService->isArchived($this->labelMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		return $this->labelMapper->delete($this->find($id));
@@ -71,7 +71,7 @@ class LabelService {
 
 	public function update($id, $title, $color) {
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
-		if($this->boardService->isArchived($this->labelMapper, $id)) {
+		if ($this->boardService->isArchived($this->labelMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		$label = $this->find($id);

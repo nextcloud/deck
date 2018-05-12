@@ -27,9 +27,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
-
 use OCA\Deck\Db\Stack;
-
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\StatusException;
 
@@ -93,9 +91,12 @@ class StackService {
 		return $stacks;
 	}
 
+	/**
+	 * @param integer $order
+	 */
 	public function create($title, $boardId, $order) {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
-		if($this->boardService->isArchived(null, $boardId)) {
+		if ($this->boardService->isArchived(null, $boardId)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		$stack = new Stack();
@@ -113,7 +114,7 @@ class StackService {
 
 	public function update($id, $title, $boardId, $order) {
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
-		if($this->boardService->isArchived($this->stackMapper, $id)) {
+		if ($this->boardService->isArchived($this->stackMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		$stack = $this->stackMapper->find($id);

@@ -67,7 +67,7 @@ class Card extends RelationalEntity {
 	}
 
 	public function getDuedate($isoFormat = false) {
-		if($this->duedate === null) {
+		if ($this->duedate === null) {
 			return null;
 		}
 		$dt = new DateTime($this->duedate);
@@ -83,16 +83,16 @@ class Card extends RelationalEntity {
 		$due = strtotime($this->duedate);
 
 		$today = new DateTime();
-		$today->setTime( 0, 0);
+		$today->setTime(0, 0);
 
 		$match_date = new DateTime($this->duedate);
 
-		$match_date->setTime( 0, 0);
+		$match_date->setTime(0, 0);
 
-		$diff = $today->diff( $match_date );
-		$diffDays = (integer)$diff->format('%R%a'); // Extract days count in interval
+		$diff = $today->diff($match_date);
+		$diffDays = (integer) $diff->format('%R%a'); // Extract days count in interval
 
-		if($due !== false) {
+		if ($due !== false) {
 			if ($diffDays === 1) {
 				$json['overdue'] = self::DUEDATE_NEXT;
 			}
