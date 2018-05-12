@@ -8,6 +8,7 @@ env:
   amd: true
 
 globals:
+  global: false
   app: false
   angular: false
   $: false
