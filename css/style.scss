@@ -457,6 +457,20 @@ input.input-inline {
 			}
 		}
 
+		.card-tasks {
+			border-radius: 3px;
+			margin: 4px 4px 4px 0px;
+			padding: 0 2px;
+			font-size: 90%;
+			opacity: 0.5;
+			display: flex;
+			align-items: center;
+
+			.icon {
+				background-size: contain;
+			}
+		}
+
 		button {
 			padding: 22px;
 			margin: 0;

@@ -80,6 +80,10 @@
 								<i class="icon icon-badge"></i>
 								<span data-timestamp="{{ c.duedate | dateToTimestamp }}" class="live-relative-timestamp">{{ c.duedate | relativeDateFilterString }}</span>
 							</span>
+							<div class="card-tasks" ng-if="getCheckboxes(c.description)[1] > 0">
+								<i class="icon icon-checkmark"></i>
+								<span>{{ getCheckboxes(c.description)[0] }}/{{ getCheckboxes(c.description)[1] }}</span>
+							</div>
 							<div class="card-assigned-users">
 								<div class="assigned-user" ng-repeat="user in c.assignedUsers | limitTo: 3">
 									<avatar data-user="{{ user.participant.uid }}" data-displayname="{{ user.participant.displayname }}" data-tooltip></avatar>

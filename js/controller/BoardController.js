@@ -49,6 +49,22 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	}, true);
 	$scope.params = $state;
 
+	/**
+	 * Check for markdown checkboxes in description to render the counter
+	 *
+	 * This should probably be moved to the backend at some point
+	 *
+	 * @param text
+	 * @returns array of [finished, total] checkboxes
+	 */
+	$scope.getCheckboxes = function(text) {
+		const regTotal = /\[(X|\s|\_|\-)\]\s(.*)/ig;
+		const regFinished = /\[(X|\_|\-)\]\s(.*)/ig;
+		return [
+			((text || '').match(regFinished) || []).length,
+			((text || '').match(regTotal) || []).length
+		];
+	};
 
 	$scope.search = function (searchText) {
 		$scope.searchText = searchText;
