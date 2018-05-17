@@ -73,4 +73,4 @@ OC.L10N.register(
     "Move board to archive" : "დაფის არქვიში გადატანა",
     "Create a new board" : "ახალი დაფის შექმნა"
 },
-"nplurals=1; plural=0;");
+"nplurals=2; plural=(n==1);");
