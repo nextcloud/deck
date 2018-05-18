@@ -70,4 +70,4 @@ OC.L10N.register(
     "Move board to archive" : "Presunúť tabuľu do archívu",
     "Create a new board" : "Vytvoriť novú tabuľu"
 },
-"nplurals=4; plural=(n % 1 == 0 ? 4: n==1 ? 1: n % 1 == 0 && n>=2 && n<=4 ? 3);");
+"nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");
