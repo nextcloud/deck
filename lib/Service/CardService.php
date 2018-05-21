@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
+ * @author Maxence Lange <maxence@artificial-owl.com>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -31,6 +32,8 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\StatusException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 
 class CardService {
@@ -41,12 +44,16 @@ class CardService {
 	private $boardService;
 	private $assignedUsersMapper;
 
-	public function __construct(CardMapper $cardMapper, StackMapper $stackMapper, PermissionService $permissionService, BoardService $boardService, AssignedUsersMapper $assignedUsersMapper) {
+	/** @var EventDispatcherInterface */
+	private $eventDispatcher;
+
+	public function __construct(CardMapper $cardMapper, StackMapper $stackMapper, PermissionService $permissionService, BoardService $boardService, AssignedUsersMapper $assignedUsersMapper, EventDispatcherInterface $eventDispatcher) {
 		$this->cardMapper = $cardMapper;
 		$this->stackMapper = $stackMapper;
 		$this->permissionService = $permissionService;
 		$this->boardService = $boardService;
 		$this->assignedUsersMapper = $assignedUsersMapper;
+		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	public function find($cardId) {
@@ -71,7 +78,15 @@ class CardService {
 		$card->setType($type);
 		$card->setOrder($order);
 		$card->setOwner($owner);
-		return $this->cardMapper->insert($card);
+		$insert = $this->cardMapper->insert($card);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onCardCreate', new GenericEvent(
+			null, ['id' => $insert->getId(), 'userId' => $owner]
+		)
+		);
+
+		return $insert;
 
 	}
 
@@ -80,7 +95,13 @@ class CardService {
 		if ($this->boardService->isArchived($this->cardMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
-		return $this->cardMapper->delete($this->cardMapper->find($id));
+		$delete = $this->cardMapper->delete($this->cardMapper->find($id));
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onCardDelete', new GenericEvent(null, ['id' => $id])
+		);
+
+		return $delete;
 	}
 
 	public function update($id, $title, $stackId, $type, $order, $description, $owner, $duedate) {
@@ -99,7 +120,13 @@ class CardService {
 		$card->setOwner($owner);
 		$card->setDescription($description);
 		$card->setDuedate($duedate);
-		return $this->cardMapper->update($card);
+		$update = $this->cardMapper->update($card);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onCardUpdate', new GenericEvent(null, ['id' => $id])
+		);
+
+		return $update;
 	}
 
 	public function rename($id, $title) {
@@ -112,7 +139,13 @@ class CardService {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$card->setTitle($title);
-		return $this->cardMapper->update($card);
+		$update = $this->cardMapper->update($card);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onCardUpdate', new GenericEvent(null, ['id' => $id])
+		);
+
+		return $update;
 	}
 
 	public function reorder($id, $stackId, $order) {
@@ -153,7 +186,13 @@ class CardService {
 		}
 		$card = $this->cardMapper->find($id);
 		$card->setArchived(true);
-		return $this->cardMapper->update($card);
+		$update = $this->cardMapper->update($card);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onCardUpdate', new GenericEvent(null, ['id' => $id])
+		);
+
+		return $update;
 	}
 
 	public function unarchive($id) {
@@ -163,7 +202,13 @@ class CardService {
 		}
 		$card = $this->cardMapper->find($id);
 		$card->setArchived(false);
-		return $this->cardMapper->update($card);
+		$update = $this->cardMapper->update($card);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onCardUpdate', new GenericEvent(null, ['id' => $id])
+		);
+
+		return $update;
 	}
 
 	public function assignLabel($cardId, $labelId) {
@@ -176,6 +221,11 @@ class CardService {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$this->cardMapper->assignLabel($cardId, $labelId);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onCardUpdate', new GenericEvent(null, ['id' => $cardId])
+		);
+
 	}
 
 	public function removeLabel($cardId, $labelId) {
@@ -188,6 +238,10 @@ class CardService {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$this->cardMapper->removeLabel($cardId, $labelId);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onCardUpdate', new GenericEvent(null, ['id' => $cardId])
+		);
 	}
 
 	public function assignUser($cardId, $userId) {
@@ -200,14 +254,26 @@ class CardService {
 		$assignment = new AssignedUsers();
 		$assignment->setCardId($cardId);
 		$assignment->setParticipant($userId);
-		return $this->assignedUsersMapper->insert($assignment);
+		$insert = $this->assignedUsersMapper->insert($assignment);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onCardUpdate', new GenericEvent(null, ['id' => $cardId])
+		);
+
+		return $insert;
 	}
 
 	public function unassignUser($cardId, $userId) {
 		$assignments = $this->assignedUsersMapper->find($cardId);
 		foreach ($assignments as $assignment) {
 			if ($assignment->getParticipant() === $userId) {
-				return $this->assignedUsersMapper->delete($assignment);
+				$delete = $this->assignedUsersMapper->delete($assignment);
+
+				$this->eventDispatcher->dispatch(
+					'\OCA\Deck::onCardUpdate', new GenericEvent(null, ['id' => $cardId])
+				);
+
+				return $delete;
 			}
 		}
 		throw new NotFoundException('No assignment for ' . $userId . 'found.');

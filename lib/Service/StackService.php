@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
+ * @author Maxence Lange <maxence@artificial-owl.com>
  *
  * @license GNU AGPL version 3 or any later version
  *  
@@ -30,6 +31,8 @@ use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\StatusException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 
 class StackService {
@@ -41,13 +44,17 @@ class StackService {
 	private $boardService;
 	private $assignedUsersMapper;
 
+	/** @var EventDispatcherInterface */
+	private $eventDispatcher;
+
 	public function __construct(
 		StackMapper $stackMapper,
 		CardMapper $cardMapper,
 		LabelMapper $labelMapper,
 		PermissionService $permissionService,
 		BoardService $boardService,
-		AssignedUsersMapper $assignedUsersMapper
+		AssignedUsersMapper $assignedUsersMapper,
+		EventDispatcherInterface $eventDispatcher
 	) {
 		$this->stackMapper = $stackMapper;
 		$this->cardMapper = $cardMapper;
@@ -55,6 +62,7 @@ class StackService {
 		$this->permissionService = $permissionService;
 		$this->boardService = $boardService;
 		$this->assignedUsersMapper = $assignedUsersMapper;
+		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	public function findAll($boardId) {
@@ -103,13 +111,24 @@ class StackService {
 		$stack->setTitle($title);
 		$stack->setBoardId($boardId);
 		$stack->setOrder($order);
-		return $this->stackMapper->insert($stack);
+		$insert = $this->stackMapper->insert($stack);
 
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onStackCreate', new GenericEvent(null, ['id' => $insert->getId()])
+		);
+
+		return $insert;
 	}
 
 	public function delete($id) {
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
-		return $this->stackMapper->delete($this->stackMapper->find($id));
+		$delete = $this->stackMapper->delete($this->stackMapper->find($id));
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onStackDelete', new GenericEvent(null, ['id' => $id])
+		);
+
+		return $delete;
 	}
 
 	public function update($id, $title, $boardId, $order) {
@@ -121,7 +140,13 @@ class StackService {
 		$stack->setTitle($title);
 		$stack->setBoardId($boardId);
 		$stack->setOrder($order);
-		return $this->stackMapper->update($stack);
+		$update = $this->stackMapper->update($stack);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onStackUpdate', new GenericEvent(null, ['id' => $id])
+		);
+
+		return $update;
 	}
 
 	public function reorder($id, $order) {

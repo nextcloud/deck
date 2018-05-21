@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
+ * @author Maxence Lange <maxence@artificial-owl.com>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -34,6 +35,8 @@ use OCP\IL10N;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 
 class BoardService {
@@ -46,6 +49,9 @@ class BoardService {
 	private $notificationHelper;
 	private $assignedUsersMapper;
 
+	/** @var EventDispatcherInterface */
+	private $eventDispatcher;
+
 	public function __construct(
 		BoardMapper $boardMapper,
 		IL10N $l10n,
@@ -53,7 +59,8 @@ class BoardService {
 		AclMapper $aclMapper,
 		PermissionService $permissionService,
 		NotificationHelper $notificationHelper,
-		AssignedUsersMapper $assignedUsersMapper
+		AssignedUsersMapper $assignedUsersMapper,
+		EventDispatcherInterface $eventDispatcher
 	) {
 		$this->boardMapper = $boardMapper;
 		$this->labelMapper = $labelMapper;
@@ -62,6 +69,7 @@ class BoardService {
 		$this->permissionService = $permissionService;
 		$this->notificationHelper = $notificationHelper;
 		$this->assignedUsersMapper = $assignedUsersMapper;
+		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	public function findAll($userInfo) {
@@ -177,8 +185,14 @@ class BoardService {
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE],
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
 		]);
-		return $new_board;
 
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onBoardCreate', new GenericEvent(
+			null, ['id' => $new_board->getId(), 'userId' => $userId]
+		)
+		);
+
+		return $new_board;
 	}
 
 	public function delete($id) {
@@ -186,6 +200,11 @@ class BoardService {
 		$board = $this->find($id);
 		$board->setDeletedAt(time());
 		$this->boardMapper->update($board);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onBoardDelete', new GenericEvent(null, ['id' => $id])
+		);
+
 		return $board;
 	}
 
@@ -193,13 +212,25 @@ class BoardService {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
 		$board->setDeletedAt(0);
-		return $this->boardMapper->update($board);
+		$update =  $this->boardMapper->update($board);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onBoardUpdate', new GenericEvent(null, ['id' => $id])
+		);
+
+		return $update;
 	}
 
 	public function deleteForce($id) {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
-		return $this->boardMapper->delete($board);
+		$delete = $this->boardMapper->delete($board);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onBoardDelete', new GenericEvent(null, ['id' => $id])
+		);
+
+		return $delete;
 	}
 
 	public function update($id, $title, $color, $archived) {
@@ -209,7 +240,13 @@ class BoardService {
 		$board->setColor($color);
 		$board->setArchived($archived);
 		$this->boardMapper->mapOwner($board);
-		return $this->boardMapper->update($board);
+		$update = $this->boardMapper->update($board);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onBoardUpdate', new GenericEvent(null, ['id' => $id])
+		);
+
+		return $update;
 	}
 
 
@@ -228,6 +265,11 @@ class BoardService {
 
 		$newAcl = $this->aclMapper->insert($acl);
 		$this->boardMapper->mapAcl($newAcl);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onBoardUpdate', new GenericEvent(null, ['id' => $boardId])
+		);
+
 		return $newAcl;
 	}
 
@@ -239,7 +281,13 @@ class BoardService {
 		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
 		$this->boardMapper->mapAcl($acl);
-		return $this->aclMapper->update($acl);
+		$update = $this->aclMapper->update($acl);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onBoardUpdate', new GenericEvent(null, ['id' => $id])
+		);
+
+		return $update;
 	}
 
 	public function deleteAcl($id) {
@@ -253,7 +301,13 @@ class BoardService {
 				$this->assignedUsersMapper->delete($assignement);
 			}
 		}
-		return $this->aclMapper->delete($acl);
+		$delete = $this->aclMapper->delete($acl);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck::onBoardUpdate', new GenericEvent(null, ['id' => $id])
+		);
+
+		return $delete;
 	}
 
 }
