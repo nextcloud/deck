@@ -22,7 +22,7 @@
 
 import app from '../app/App.js';
 /* global oc_defaults OC */
-app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter) {
+app.controller('BoardController', function ($rootScope, $scope, $timeout, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter) {
 
 	$scope.sidebar = $rootScope.sidebar;
 
@@ -337,4 +337,111 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		};
 	};
 
+	// make sure esc is also triggered on inputs
+
+	/* keycode: A archive current card */
+	$scope.$on('keypress:a', function() {
+		if ($scope.selectedCard()) {
+			if ($scope.params.filter === 'archived') {
+				$scope.cardUnarchive($scope.selectedCard());
+			} else {
+				$scope.cardArchive($scope.selectedCard());
+			}
+			$scope.resetSelectedCard();
+		}
+	});
+	$scope.$on('keypress:c', function(e) {
+		e.preventDefault();
+		// use timeout to prevent input being visible when keypress event is handed to the browser
+		$timeout(function() {
+			$scope.status.addCard[$scope.selectedCard().stackId]=true;
+			$scope.$apply();
+		});
+		return false;
+	});
+	/* keycode: Enter - open current card */
+	$scope.$on('keypress:Enter', function() {
+		$state.go('board.card', {boardId: $scope.id, cardId: $scope.selectedCard().id});
+	});
+
+	const Arrow = {
+		KEY_DOWN: 'ArrowDown',
+		KEY_UP: 'ArrowUp',
+		KEY_LEFT: 'ArrowLeft',
+		KEY_RIGHT: 'ArrowRight',
+	};
+
+	$scope.resetSelectedCard = function() {
+		$scope.status.selectedCard = null;
+	};
+	$scope.selectedCard = function() {
+		if (!$scope.status.selectedCard) {
+			$scope.status.selectedCard = $scope.status.hoverCard;
+		}
+		if (!$scope.status.selectedCard) {
+			$scope.status.selectedCard = $scope.stacks[0].cards[0];
+			$scope.$apply();
+		}
+		return $scope.status.selectedCard;
+	};
+	$scope.selectCard = function(key) {
+		if (!$scope.status.selectedCard) {
+			$scope.status.selectedCard = $scope.status.hoverCard;
+		}
+		if (!$scope.status.selectedCard) {
+			$scope.status.selectedCard = $scope.stacks[0].cards[0];
+			$scope.$apply();
+			return;
+		}
+		let stackId = $scope.status.selectedCard.stackId;
+		let cardId = $scope.status.selectedCard.id;
+		let currentStack = $filter('filter')($scope.stacks, {id: stackId}, true)[0];
+		let currentCard = $filter('filter')(currentStack.cards, {id: cardId}, true)[0];
+		let currentCardIndex = currentStack.cards.map((e) => e.id).indexOf(currentCard.id);
+		let currentStackIndex = $scope.stacks.map((e) => e.id).indexOf(currentStack.id);
+
+		let nextCard = null;
+		// TODO: handle empty stacks
+		switch (key) {
+			case Arrow.KEY_DOWN:
+				currentCardIndex++;
+				break;
+			case Arrow.KEY_UP:
+				currentCardIndex--;
+				break;
+			case Arrow.KEY_LEFT:
+				currentStackIndex--;
+				break;
+			case Arrow.KEY_RIGHT:
+				currentStackIndex++;
+				break;
+		}
+		currentStackIndex = (currentStackIndex < 0) ? 0 : currentStackIndex;
+		currentStackIndex = (currentStackIndex >= $scope.stacks.length) ? $scope.stacks.length-1 : currentStackIndex;
+		currentCardIndex = (currentCardIndex < 0) ? 0 : currentCardIndex;
+		currentCardIndex = (currentCardIndex >= $scope.stacks[currentStackIndex].cards.length) ? $scope.stacks[currentStackIndex].cards.length-1 : currentCardIndex;
+		nextCard = $scope.stacks[currentStackIndex].cards[currentCardIndex];
+		if (nextCard !== null) {
+			$scope.status.selectedCard = nextCard;
+			console.log($scope.status.selectedCard);
+		}
+		$scope.$apply();
+	};
+	/* keycode: Arrow - open current card */
+	$scope.$on('keydown:' + Arrow.KEY_DOWN, function() {
+		$scope.selectCard( Arrow.KEY_DOWN);
+	});
+	$scope.$on('keydown:' + Arrow.KEY_UP, function() {
+		$scope.selectCard( Arrow.KEY_UP);
+	});
+	$scope.$on('keydown:' + Arrow.KEY_LEFT, function() {
+		$scope.selectCard( Arrow.KEY_LEFT);
+	});
+	$scope.$on('keydown:' + Arrow.KEY_RIGHT, function() {
+		$scope.selectCard( Arrow.KEY_RIGHT);
+	});
+	$scope.$on('keydown:Escape', function() {
+		$scope.status.addCard[$scope.selectedCard().stackId] = false;
+		$scope.status.selectedCard = null;
+	});
 });

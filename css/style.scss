@@ -378,7 +378,7 @@ input.input-inline {
 	margin: 10px 10px 20px 10px;
 	white-space: normal;
 	position: relative;
-	box-shadow: 0 0 3px $color-darkgrey;
+	box-shadow: 0 0 3px $color-grey;
 	border-radius: 3px;
 
 	&:last-child {
@@ -387,6 +387,9 @@ input.input-inline {
 
 	&.archived .card-upper {
 		opacity: 0.5;
+	}
+	&.highlighted {
+		box-shadow: 0 0 3px $color-darkgrey;
 	}
 
 	.card-upper {
@@ -1196,6 +1199,30 @@ input.input-inline {
 		code {
 			white-space: pre;
 		}
+	}
+}
+
+#shortcuts {
+	width: calc(100% - 160px);
+	min-height: calc(100% - 160px);
+	position: absolute;
+	background-color: $color-main-background;
+	z-index: 200;
+	padding: 30px;
+	margin: 80px;
+	box-shadow: 0px 0px 3px $color-darkgrey;
+	dl {
+		width: 50%;
+		float:left;
+	}
+	dt {
+		width: 200px;
+		margin-top: 0;
+	}
+	kbd {
+		min-width: 35px;
+		text-align: center;
+		margin-bottom: 3px;
 	}
 }
 

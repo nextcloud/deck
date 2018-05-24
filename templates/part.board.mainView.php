@@ -37,7 +37,7 @@
 </div>
 
 <div id="board" class="scroll-container" ng-click="sidebar.show=false" ui-sref="board" ng-class="{'card-selected': params.cardId}">
- {{ cardOpen }}
+
 	<search on-search="search" class="ng-hide"></search>
 
 	<div id="innerBoard" data-ng-model="stacks" data-as-sortable="sortOptionsStack">
@@ -60,8 +60,9 @@
 					ng-repeat="c in s.cards"
 					data-as-sortable-item
 					ng-click="$event.stopPropagation()"
+					ng-mouseenter="status.hoverCard = c"
 					ui-sref="board.card({boardId: id, cardId: c.id})"
-					ng-class="{'archived': c.archived, 'has-labels': c.labels.length>0, 'current': c.id == params.cardId }">
+					ng-class="{'archived': c.archived, 'has-labels': c.labels.length>0, 'current': c.id == params.cardId, 'highlighted': status.selectedCard.id === c.id || (!status.selectedCard.id && status.hoverCard.id == c.id)}">
 					<div data-as-sortable-item-handle>
 						<div class="card-upper">
 							<h4>{{ c.title }}</h4>

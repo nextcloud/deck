@@ -31,12 +31,68 @@ Util::addScript('deck', 'build/deck');
 ?>
 
 <div id="app" class="app-deck" data-ng-app="Deck" ng-controller="AppController" ng-cloak>
-
+	<keyboard-events></keyboard-events>
 	<div id="app-navigation" data-ng-controller="ListController" ng-init="initSidebar()">
 		<?php print_unescaped($this->inc('part.navigation')); ?>
 		<?php /* print_unescaped($this->inc('part.settings')); */ ?>
 	</div>
 	<div id="app-content" ng-class="{ 'details-visible': sidebar.show }">
+		<div id="shortcuts" style="display: none;">
+			<h2>Shortcuts</h2>
+			<dl>
+				<h3>Board</h3>
+				<div>
+					<dt><kbd>A</kbd></dt>
+					<dd>Mark as archived / unarchived</dd>
+				</div>
+				<div>
+					<dt><kbd>E</kbd></dt>
+					<dd>Edit title of a card</dd>
+				</div>
+				<div>
+					<dt><kbd>D</kbd></dt>
+					<dd>Edit description of a card</dd>
+				</div>
+				<div>
+					<dt><kbd>L</kbd></dt>
+					<dd>Apply labels to a card</dd>
+				</div>
+				<div>
+					<dt><kbd>U</kbd></dt>
+					<dd>Assign users to a card</dd>
+				</div>
+				<div>
+					<dt><kbd>D</kbd></dt>
+					<dd>Set a due date</dd>
+				</div>
+				<div>
+					<dt>
+						<kbd>←</kbd> <kbd>←</kbd> <kbd>←</kbd> <kbd>←</kbd><br />
+						<kbd>h</kbd> <kbd>j</kbd> <kbd>k</kbd> <kbd>l</kbd>
+					</dt>
+					<dd>Mark as archived / unarchived</dd>
+				</div>
+			</dl>
+			<dl>
+				<h3>Global</h3>
+				<div>
+					<dt><kbd>Ctrl</kbd> + <kbd>F</kbd></dt>
+					<dd>Search</dd>
+				</div>
+				<div>
+					<dt><kbd>P</kbd></dt>
+					<dd>Go to board preferences</dd>
+				</div>
+				<div>
+					<dt><kbd>C</kbd></dt>
+					<dd>Create a new card in the current / first stack</dd>
+				</div>
+				<div>
+					<dt><kbd>S</kbd></dt>
+					<dd>Create a new stack</dd>
+				</div>
+			</dl>
+		</div>
 		<div ui-view></div>
 	</div>
 	<route-loading-indicator></route-loading-indicator>
