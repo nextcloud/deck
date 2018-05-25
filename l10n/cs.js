@@ -2,6 +2,7 @@ OC.L10N.register(
     "deck",
     {
     "Delete" : "Smazat",
+    "Remove user from card" : "Odebrat uživatele z karty",
     "Hours" : "Hodiny",
     "Minutes" : "Minuty",
     "The card \"%s\" on \"%s\" has reached its due date." : "U karty \"%s\" z tabule \"%s\" nastalo plánované datum dokončení.",
