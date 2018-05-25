@@ -37,4 +37,7 @@
             <step>OCA\Deck\Migration\UnknownUsers</step>
         </post-migration>
     </repair-steps>
+    <commands>
+        <command>OCA\Deck\Command\UserExport</command>
+    </commands>
 </info>
