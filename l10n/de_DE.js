@@ -15,6 +15,7 @@ OC.L10N.register(
     "Action needed" : "Handlung erforderlich",
     "Later" : "Später",
     "Deck" : "Deck",
+    "A kanban style project and personal management tool for Nextcloud" : "Ein Kanban Werzeug für Nextcloud",
     "Add a new stack" : "Neuen Stapel hinzufügen",
     "Submit" : "Übermitteln",
     "Show archived cards" : "Archivierte Karten anzeigen",
