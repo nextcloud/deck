@@ -15,6 +15,8 @@ OC.L10N.register(
     "Action needed" : "İşlem yapılması gerekiyor",
     "Later" : "Sonra",
     "Deck" : "Tahta",
+    "A kanban style project and personal management tool for Nextcloud" : "Nextcloud için Kanban tarzında bir proje ve kişisel yönetim uygulaması",
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 🚀 Get your project organized" : "Deste, Nextcloud ile bütünleştirilmiş takımlar için Kanban tarzında bir kişisel planlama ve proje yönetimi uygulamasıdır.\n\n\n- 📥 Görevleri kartlara ekleyerek sıralayabilirsiniz\n- 📄 Vurgulanmış notlar ekleyebilirsiniz\n- 🔖 Daha iyi düzenleme için etiketler atayabilirsiniz\n- 👥 Takımınız, arkadaşlarınız ya da aileniz ile paylaşabilirsiniz\n- 🚀 Projelerinizi düzenli tutarak izleyebilirsiniz",
     "Add a new stack" : "Yeni bir yığın ekle",
     "Submit" : "Gönder",
     "Show archived cards" : "Arşivlenmiş kartları görüntüle",
