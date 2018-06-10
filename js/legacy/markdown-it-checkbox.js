@@ -1,3 +1,9 @@
+/**
+ * Original source code from https://github.com/mcecot/markdown-it-checkbox
+ * © 2015 Markus Cecot
+ * licenced under MIT
+ * https://github.com/mcecot/markdown-it-checkbox/blob/master/LICENSE
+ */
 var checkboxReplace;
 
 checkboxReplace = function(md, options, Token) {
