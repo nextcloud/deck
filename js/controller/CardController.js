@@ -70,10 +70,12 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 		$scope.status.edit.description = $scope.status.edit.description.replace(reg, function (match, i, original) {
 			if (nth++ === id) {
 				var result;
-				if (match.match(/^\[\s\]/i))
+				if (match.match(/^\[\s\]/i)) {
 					result = match.replace(/\[\s\]/i, '[x]');
-				if (match.match(/^\[x\]/i))
+				}
+				if (match.match(/^\[x\]/i)) {
 					result = match.replace(/\[x\]/i, '[ ]');
+				}
 				return result;
 			}
 			return match;
