@@ -23,7 +23,7 @@
 /* global app moment */
 import app from '../app/App.js';
 
-app.controller('CardController', function ($scope, $rootScope, $location, $stateParams, $interval, $timeout, $filter, BoardService, CardService, StackService, StatusService) {
+app.controller('CardController', function ($scope, $rootScope, $sce, $location, $stateParams, $interval, $timeout, $filter, BoardService, CardService, StackService, StatusService, markdownItConverter) {
 	$scope.sidebar = $rootScope.sidebar;
 	$scope.status = {
 		lastEdit: 0,
@@ -38,9 +38,19 @@ app.controller('CardController', function ($scope, $rootScope, $location, $state
 
 	$scope.statusservice.retainWaiting();
 
+	$scope.description = function() {
+		return $scope.rendered;
+	};
+
+	$scope.updateMarkdown = function(content) {
+		// only trust the html from markdown-it-checkbox
+		$scope.rendered = $sce.trustAsHtml(markdownItConverter.render(content || ''));
+	};
+
 	CardService.fetchOne($scope.cardId).then(function (data) {
 		$scope.statusservice.releaseWaiting();
 		$scope.archived = CardService.getCurrent().archived;
+		$scope.updateMarkdown(CardService.getCurrent().description);
 	}, function (error) {
 	});
 
@@ -51,7 +61,44 @@ app.controller('CardController', function ($scope, $rootScope, $location, $state
 			$scope.status.cardRename = true;
 		}
 	};
-	$scope.cardEditDescriptionShow = function ($event) {
+
+	$scope.toggleCheckbox = function (id) {
+		$('#markdown input[type=checkbox]').attr('disabled', true);
+		$scope.status.edit = angular.copy(CardService.getCurrent());
+		var reg = /\[(X|\s|\_|\-)\]\s(.*)/ig;
+		var nth = 0;
+		$scope.status.edit.description = $scope.status.edit.description.replace(reg, function (match, i, original) {
+			if (nth++ === id) {
+				var result;
+				if (match.match(/^\[\s\]/i)) {
+					result = match.replace(/\[\s\]/i, '[x]');
+				}
+				if (match.match(/^\[x\]/i)) {
+					result = match.replace(/\[x\]/i, '[ ]');
+				}
+				return result;
+			}
+			return match;
+		});
+		CardService.update($scope.status.edit).then(function (data) {
+			var header = $('.section-header.card-description');
+			header.find('.save-indicator.unsaved').hide();
+			header.find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
+			StackService.updateCard($scope.status.edit);
+		});
+		$('#markdown input[type=checkbox]').removeAttr('disabled');
+
+	};
+	$scope.clickCardDescription = function ($event) {
+		var checkboxId = $($event.target).data('id');
+		if ($event.target.tagName === 'LABEL') {
+			$scope.toggleCheckbox(checkboxId);
+			return;
+		}
+		if ($event.target.tagName === 'INPUT') {
+			$scope.toggleCheckbox(checkboxId);
+			return;
+		}
 		if (BoardService.isArchived() || CardService.getCurrent().archived) {
 			return false;
 		}
@@ -71,8 +118,9 @@ app.controller('CardController', function ($scope, $rootScope, $location, $state
 	$interval(function() {
 		var currentTime = Date.now();
 		var timeSinceEdit = currentTime-$scope.status.lastEdit;
-		if (timeSinceEdit > 1000 && $scope.status.lastEdit > $scope.status.lastSave) {
+		if (timeSinceEdit > 1000 && $scope.status.lastEdit > $scope.status.lastSave && !$scope.status.saving) {
 			$scope.status.lastSave = currentTime;
+			$scope.status.saving = true;
 			var header = $('.section-header.card-description');
 			header.find('.save-indicator.unsaved').fadeIn(500);
 			CardService.update($scope.status.edit).then(function (data) {
@@ -80,6 +128,7 @@ app.controller('CardController', function ($scope, $rootScope, $location, $state
 				header.find('.save-indicator.unsaved').hide();
 				header.find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
 				StackService.updateCard($scope.status.edit);
+				$scope.status.saving = false;
 			});
 		}
 	}, 500, 0, false);

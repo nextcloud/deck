@@ -461,6 +461,20 @@ input.input-inline {
 			}
 		}
 
+		.card-tasks {
+			border-radius: 3px;
+			margin: 4px 4px 4px 0px;
+			padding: 0 2px;
+			font-size: 90%;
+			opacity: 0.5;
+			display: flex;
+			align-items: center;
+
+			.icon {
+				background-size: contain;
+			}
+		}
+
 		button {
 			padding: 22px;
 			margin: 0;
@@ -1218,6 +1232,17 @@ input.input-inline {
 		code {
 			white-space: pre;
 		}
+	}
+
+	input[type=checkbox] {
+		margin: 0px 10px 0px 0px;
+		line-height: 10px;
+		font-size: 10px;
+		display: inline-block;
+		min-height: 12px;
+	}
+	li input[type=checkbox] {
+		margin: 0px 10px 0px -20px;
 	}
 }
 
