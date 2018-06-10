@@ -126,13 +126,18 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		if ($scope.stacks === undefined) {
 			return;
 		}
-		angular.copy(StackService.getData(), $scope.stacks);
-		$scope.stacks = $filter('orderBy')($scope.stacks, 'order');
-		angular.forEach($scope.stacks, function (value, key) {
-			var cards = $filter('cardSearchFilter')(value.cards, text);
-			cards = $filter('orderBy')(cards, order);
-			$scope.stacks[key].cards = cards;
-		});
+		$scope.stacks = StackService.getData();
+		$scope.stacks = $filter('orderBy')($scope.stacks, order);
+		/* only copy the whole stacks to local scope for filtering them while searching */
+		console.log(text);
+		if (text !== '') {
+			angular.copy(StackService.getData(), $scope.stacks);
+			angular.forEach($scope.stacks, function (value, key) {
+				var cards = $filter('cardSearchFilter')(value.cards, text);
+				cards = $filter('orderBy')(cards, order);
+				$scope.stacks[key].cards = cards;
+			});
+		}
 	};
 
 	$scope.loadDefault = function () {
@@ -266,12 +271,20 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			card.stackId = newStack;
 			CardService.update(card);
 			CardService.reorder(card, order).then(function (data) {
-				StackService.addCard(card);
-				StackService.reorderCard(card, order);
+				// not working ? https://www.aaron-gray.com/delaying-the-digest-cycle-in-angularjs/
+				// we want the digest to happen after all sorting operations are complete
+				var watchers = $scope.$$watchers;
+				StackService.$$watchers = [];
 				StackService.removeCard({
 					id: card.id,
 					stackId: oldStack
 				});
+				StackService.addCard(card);
+				StackService.reorderCard(card, order);
+				// restore watchers and run digest now
+				if (watchers)
+					StackService.$$watchers = watchers;
+				$scope.$digest();
 			});
 		},
 		orderChanged: function (event) {

@@ -142,10 +142,15 @@ app.factory('ApiService', function ($http, $q) {
 		angular.forEach(entities, function (entity) {
 			self.add(entity);
 		});
+		console.log(self);
 	};
 
 	ApiService.prototype.getCurrent = function () {
 		return this.data[this.id];
+	};
+
+	ApiService.prototype.get = function (id) {
+		return this.data[id];
 	};
 
 	ApiService.prototype.unsetCurrrent = function () {
