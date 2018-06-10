@@ -30,9 +30,9 @@
     "karma": "^2.0.2"
   },
   "scripts": {
-    "build": "./node_modules/webpack-cli/bin/webpack.js --mode production --config webpack.prod.config.js",
-    "dev": "./node_modules/webpack-cli/bin/webpack.js --mode development --config webpack.dev.config.js",
-    "watch": "./node_modules/webpack-cli/bin/webpack.js --mode development --config webpack.dev.config.js --watch",
+    "build": "./node_modules/webpack-cli/bin/cli.js --mode production --config webpack.prod.config.js",
+    "dev": "./node_modules/webpack-cli/bin/cli.js --mode development --config webpack.dev.config.js",
+    "watch": "./node_modules/webpack-cli/bin/cli.js --mode development --config webpack.dev.config.js --watch",
     "test": "echo \"Warning: no test specified\" && exit 0"
   },
   "author": "",
