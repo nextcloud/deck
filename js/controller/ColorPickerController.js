@@ -20,6 +20,8 @@
  *
  */
 
+import app from '../app/App.js';
+
 /* global oc_defaults OC */
 app.controller('ColorPickerController', ['$scope', function($scope) {
     $scope.hashedColor = '';
