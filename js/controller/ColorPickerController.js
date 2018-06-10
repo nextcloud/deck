@@ -23,22 +23,22 @@
 import app from '../app/App.js';
 
 /* global oc_defaults OC */
-app.controller('ColorPickerController', ['$scope', function($scope) {
-    $scope.hashedColor = '';
+app.controller('ColorPickerController', ['$scope', function ($scope) {
+	$scope.hashedColor = '';
 
-    $scope.setColor = function(object,color) {
-        object.color = color;
-        object.hashedColor = '#' + color;
+	$scope.setColor = function (object, color) {
+		object.color = color;
+		object.hashedColor = '#' + color;
 
-        return object;
-    }
+		return object;
+	};
 
-    $scope.setHashedColor = function(object) {
-        object.color = object.hashedColor.substr(1);
-        return object;
-    }
+	$scope.setHashedColor = function (object) {
+		object.color = object.hashedColor.substr(1);
+		return object;
+	};
 
-    $scope.getCustomBackground = function(color) {
-        return { 'background-color': color };
-    };
+	$scope.getCustomBackground = function (color) {
+		return {'background-color': color};
+	};
 }]);
