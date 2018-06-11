@@ -47,12 +47,14 @@ import angularuiselect from 'ui-select';
 import ngsortable from 'ng-sortable';
 import md from 'angular-markdown-it';
 import nganimate from 'angular-animate';
+import 'angular-file-upload';
 
 var app = angular.module('Deck', [
 	ngsanitize,
 	uirouter,
 	angularuiselect,
-	ngsortable, md, nganimate
+	ngsortable, md, nganimate,
+	'angularFileUpload'
 ]);
 
 export default app;
