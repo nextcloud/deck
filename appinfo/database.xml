@@ -199,12 +199,6 @@
                 <length>4</length>
             </field>
             <field>
-                <name>title</name>
-                <type>text</type>
-                <notnull>true</notnull>
-                <length>100</length>
-            </field>
-            <field>
                 <name>card_id</name>
                 <type>integer</type>
                 <length>8</length>
@@ -218,7 +212,7 @@
             </field>
             <field>
                 <name>data</name>
-                <type>clob</type>
+                <type>text</type>
             </field>
             <field>
                 <name>last_modified</name>
@@ -241,6 +235,14 @@
                 <type>text</type>
                 <notnull>true</notnull>
                 <length>64</length>
+            </field>
+            <field>
+                <name>deleted_at</name>
+                <type>integer</type>
+                <default>0</default>
+                <length>8</length>
+                <notnull>false</notnull>
+                <unsigned>true</unsigned>
             </field>
         </declaration>
     </table>
