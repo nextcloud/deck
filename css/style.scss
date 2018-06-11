@@ -653,6 +653,31 @@ input.input-inline {
 	}
 }
 
+.drop-indicator {
+	display: none;
+}
+.file-drop .drop-indicator {
+	display: block;
+	position: absolute;
+	width: 100%;
+	height: calc(100% - 40px);
+	background-color: #fff;
+	z-index: 100;
+	opacity: 0.9;
+	text-align: center;
+	margin-top: 40px;
+
+	p {
+		width: calc(100% - 20px);
+		height: calc(100% - 20px);
+		position: absolute;
+		padding: 20px;
+		border: 1px dashed #AAA;
+		margin: 10px;
+		border-radius: 5px;
+	}
+}
+
 #card-meta { // TODO: use .card-block instead?
 	height: 100%;
 	display: flex;
@@ -748,6 +773,54 @@ input.input-inline {
 				position: fixed;
 			}
 		}
+	}
+
+	.card-attachments {
+		ul {
+			li.attachment {
+				display: flex;
+
+				.fileicon {
+					display: inline-block;
+					min-width: 32px;
+					width: 32px;
+					height: 32px;
+					background-size: contain;
+				}
+				.details {
+					flex-grow: 1;
+					flex-shrink: 1;
+					min-width: 0;
+					flex-basis: 50%;
+					line-height: 110%;
+					padding: 2px;
+				}
+				.filename {
+					width: 70%;
+					display: flex;
+					.basename {
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+					}
+					.extension {
+						opacity: 0.7;
+					}
+				}
+				.filesize, .filedate {
+					font-size: 90%;
+					color: $color-darkgrey;
+				}
+				.app-popover-menu-utils {
+					position: relative;
+					button {
+						height: 32px;
+						width: 40px;
+					}
+				}
+			}
+		}
+
 	}
 
 	.card-description {

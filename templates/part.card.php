@@ -1,4 +1,8 @@
-<div id="board-status" ng-if="statusservice.active">
+<div nv-file-drop="" uploader="uploader" nv-file-over over-class="file-drop" class="drop-zone">
+	<div class="drop-indicator">
+		<p><?php p($l->t('Drop your files here to upload it to the card')); ?></p>
+	</div>
+	<div id="board-status" ng-if="statusservice.active">
 	<div id="emptycontent">
 		<div class="icon-{{ statusservice.icon }}" title="<?php p($l->t('Status')); ?>"><span class="hidden-visually"><?php p($l->t('Status')); ?></span></div>
 		<h2>{{ statusservice.title }}</h2>
@@ -82,6 +86,43 @@
 		<input class="timepicker-input medium focus" type="text" placeholder="00:00" ng-disabled="!cardservice.getCurrent().duedate || (boardservice.isArchived() || card.archived)" value="{{ cardservice.getCurrent().duedate | parseTime }}" timepicker="due" />
 		<button class="icon icon-delete button-inline" title="<?php p($l->t('Remove due date')); ?>" ng-if="cardservice.getCurrent().duedate" ng-click="resetDuedate()"><span class="hidden-visually"><?php p($l->t('Remove due date')); ?></span></button>
 	</div>
+
+	<div class="section-header">
+		<h4><?php p($l->t('Attachments')); ?></h4>
+		<label for="attachment-upload" class="button icon-upload"></label>
+		<input id="attachment-upload" type="file" nv-file-select="" uploader="uploader" class="hidden" />
+	</div>
+	<div class="section-content card-attachments" v-if="cardservice.getCurrent().attachments">
+		<ul>
+			<li class="attachment" ng-repeat="attachment in cardservice.getCurrent().attachments | orderBy: '-lastModified'">
+					<a class="fileicon" ng-style="mimetypeForAttachment(attachment)" ng-href="{{ attachmentUrl(attachment) }}"></a>
+					<div class="details">
+						<a ng-href="{{ attachmentUrl(attachment) }}" target="_blank">
+						<div class="filename">
+							<span class="basename">{{ attachment.extendedData.info.filename}}</span>
+							<span class="extension">.{{ attachment.extendedData.info.extension}}</span>
+						</div>
+						<span class="filesize">{{ attachment.extendedData.filesize | bytes }}</span>
+						<span class="filedate">{{ attachment.createdAt|relativeDateFilter }}</span>
+						</a>
+					</div>
+					<div class="app-popover-menu-utils">
+						<button class="button-inline icon icon-more" ng-model="attachment"></button>
+						<div class="popovermenu hidden">
+							<ul>
+								<li>
+									<a class="menuitem action action-delete permanent"
+									   ng-click="cardservice.attachmentRemove(attachment); $event.stopPropagation();"><span
+												class="icon icon-delete"></span><span><?php p($l->t('Delete')); ?></span></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</a>
+			</li>
+		</ul>
+	</div>
+
 
 	<div class="section-header card-description">
 		<h4>

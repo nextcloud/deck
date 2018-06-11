@@ -133,6 +133,20 @@ app.factory('CardService', function (ApiService, $http, $q) {
 		return deferred.promise;
 	};
 
+	CardService.prototype.attachmentRemove = function (attachment) {
+		var deferred = $q.defer();
+		var self = this;
+		$http.delete(this.baseUrl + '/' + this.getCurrent().id + '/attachment/' + attachment.id, {}).then(function (response) {
+			self.getCurrent().attachments = self.getCurrent().attachments.filter(function (obj) {
+				return obj.id !== attachment.id;
+			});
+			deferred.resolve(response.data);
+		}, function (error) {
+			deferred.reject('Error when removing the attachment');
+		});
+		return deferred.promise;
+	};
+
 	var service = new CardService($http, 'cards', $q);
 	return service;
 });
