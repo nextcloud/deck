@@ -35,6 +35,7 @@ class Card extends RelationalEntity {
 	protected $createdAt;
 	protected $labels;
 	protected $assignedUsers;
+	protected $attachments;
 	protected $owner;
 	protected $order;
 	protected $archived = false;
@@ -58,6 +59,7 @@ class Card extends RelationalEntity {
 		$this->addType('notified', 'boolean');
 		$this->addRelation('labels');
 		$this->addRelation('assignedUsers');
+		$this->addRelation('attachments');
 		$this->addRelation('participants');
 		$this->addResolvable('owner');
 	}

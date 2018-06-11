@@ -223,7 +223,7 @@
             <field>
                 <name>last_modified</name>
                 <type>integer</type>
-                <default></default>
+                <default/>
                 <length>8</length>
                 <notnull>false</notnull>
                 <unsigned>true</unsigned>
@@ -231,10 +231,16 @@
             <field>
                 <name>created_at</name>
                 <type>integer</type>
-                <default></default>
+                <default/>
                 <length>8</length>
                 <notnull>false</notnull>
                 <unsigned>true</unsigned>
+            </field>
+            <field>
+                <name>created_by</name>
+                <type>text</type>
+                <notnull>true</notnull>
+                <length>64</length>
             </field>
         </declaration>
     </table>

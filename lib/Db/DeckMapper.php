@@ -25,6 +25,13 @@ namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\Mapper;
 
+/**
+ * Class DeckMapper
+ *
+ * @package OCA\Deck\Db
+ *
+ * TODO: Move to QBMapper once Nextcloud 14 is a minimum requirement
+ */
 abstract class DeckMapper extends Mapper {
 
 	/**
