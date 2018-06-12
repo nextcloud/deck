@@ -163,6 +163,10 @@ app.factory('ApiService', function ($http, $q) {
 		return this.data;
 	};
 
+	ApiService.prototype.get = function (id) {
+		return this.data[id];
+	};
+
 	ApiService.prototype.getName = function () {
 		var funcNameRegex = /function (.{1,})\(/;
 		var results = (funcNameRegex).exec((this).constructor.toString());

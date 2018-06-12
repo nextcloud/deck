@@ -135,7 +135,6 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 			var header = $('.section-header.card-description');
 			header.find('.save-indicator.unsaved').hide();
 			header.find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
-			StackService.updateCard($scope.status.edit);
 		});
 		$('#markdown input[type=checkbox]').removeAttr('disabled');
 
@@ -178,7 +177,6 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 				var header = $('.section-header.card-description');
 				header.find('.save-indicator.unsaved').hide();
 				header.find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
-				StackService.updateCard($scope.status.edit);
 				$scope.status.saving = false;
 			});
 		}
@@ -187,7 +185,6 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 	// handle rename to update information on the board as well
 	$scope.cardRename = function (card) {
 		CardService.rename(card).then(function (data) {
-			StackService.updateCard(card);
 			$scope.status.renameCard = false;
 		});
 	};
@@ -197,19 +194,16 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 			var header = $('.section-content.card-description');
 			header.find('.save-indicator.unsaved').hide();
 			header.find('.save-indicator.saved').fadeIn(500).fadeOut(1000);
-			StackService.updateCard(card);
 		});
 	};
 
 	$scope.labelAssign = function (element, model) {
 		CardService.assignLabel($scope.cardId, element.id).then(function (data) {
-			StackService.updateCard(CardService.getCurrent());
 		});
 	};
 
 	$scope.labelRemove = function (element, model) {
 		CardService.removeLabel($scope.cardId, element.id).then(function (data) {
-			StackService.updateCard(CardService.getCurrent());
 		});
 	};
 
@@ -224,7 +218,6 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 		newDate.year(duedate.year());
 		element.duedate = newDate.toISOString();
 		CardService.update(element);
-		StackService.updateCard(element);
 	};
 	$scope.setDuedateTime = function (time) {
 		var element = CardService.getCurrent();
@@ -236,14 +229,12 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 		newDate.minute(time.minute());
 		element.duedate = newDate.toISOString();
 		CardService.update(element);
-		StackService.updateCard(element);
 	};
 
 	$scope.resetDuedate = function () {
 		var element = CardService.getCurrent();
 		element.duedate = null;
 		CardService.update(element);
-		StackService.updateCard(element);
 	};
 	
 	/**
@@ -267,14 +258,12 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 
 	$scope.addAssignedUser = function(item) {
 		CardService.assignUser(CardService.getCurrent(), item.uid).then(function (data) {
-			StackService.updateCard(CardService.getCurrent());
 		});
 		$scope.status.showAssignUser = false;
 	};
 
 	$scope.removeAssignedUser = function(uid) {
 		CardService.unassignUser(CardService.getCurrent(), uid).then(function (data) {
-			StackService.updateCard(CardService.getCurrent());
 		});
 	};
 

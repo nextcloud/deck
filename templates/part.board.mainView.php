@@ -61,12 +61,12 @@
 					data-as-sortable-item
 					ng-click="$event.stopPropagation()"
 					ui-sref="board.card({boardId: id, cardId: c.id})"
-					ng-class="{'archived': c.archived, 'has-labels': c.labels.length>0, 'current': c.id == params.cardId }">
+					ng-class="{'archived': cardservice.get(c.id).archived, 'has-labels': cardservice.get(c.id).labels.length>0, 'current': cardservice.get(c.id).id == params.cardId }">
 					<div data-as-sortable-item-handle>
 						<div class="card-upper">
-							<h4>{{ c.title }}</h4>
+							<h4>{{ cardservice.get(c.id).title }}</h4>
 							<ul class="labels">
-								<li ng-repeat="label in c.labels"
+								<li ng-repeat="label in cardservice.get(c.id).labels"
 									ng-style="labelStyle(label.color)" title="{{ label.title }}">
 									<span>{{ label.title }}</span>
 								</li>
@@ -75,17 +75,21 @@
 						</div>
 
 						<div class="card-controls">
-							<i class="icon icon-filetype-text" ng-if="c.description" title="{{ c.description }}"></i>
-							<span class="due" ng-if="c.duedate" ng-class="{'overdue': c.overdue == 3, 'now': c.overdue == 2, 'next': c.overdue == 1  }" title="{{ c.duedate }}">
+							<i class="icon icon-filetype-text" ng-if="cardservice.get(c.id).description" title="{{ cardservice.get(c.id).description }}"></i>
+							<span class="due" ng-if="cardservice.get(c.id).duedate" ng-class="{'overdue': cardservice.get(c.id).overdue == 3, 'now': cardservice.get(c.id).overdue == 2, 'next': cardservice.get(c.id).overdue == 1  }" title="{{ cardservice.get(c.id).duedate }}">
 								<i class="icon icon-badge"></i>
-								<span data-timestamp="{{ c.duedate | dateToTimestamp }}" class="live-relative-timestamp">{{ c.duedate | relativeDateFilterString }}</span>
+								<span data-timestamp="{{ cardservice.get(c.id).duedate | dateToTimestamp }}" class="live-relative-timestamp">{{ cardservice.get(c.id).duedate | relativeDateFilterString }}</span>
 							</span>
-							<div class="card-tasks" ng-if="getCheckboxes(c.description)[1] > 0">
+							<div class="card-tasks" ng-if="getCheckboxes(cardservice.get(c.id).description)[1] > 0">
 								<i class="icon icon-checkmark"></i>
-								<span>{{ getCheckboxes(c.description)[0] }}/{{ getCheckboxes(c.description)[1] }}</span>
+								<span>{{ getCheckboxes(cardservice.get(c.id).description)[0] }}/{{ getCheckboxes(cardservice.get(c.id).description)[1] }}</span>
+							</div>
+							<div class="card-files" ng-if="attachmentCount(cardservice.get(c.id).attachments) > 0">
+								<i class="icon icon-files-dark"></i>
+								<span>{{ attachmentCount(cardservice.get(c.id).attachments) }}</span>
 							</div>
 							<div class="card-assigned-users">
-								<div class="assigned-user" ng-repeat="user in c.assignedUsers | limitTo: 3">
+								<div class="assigned-user" ng-repeat="user in cardservice.get(c.id).assignedUsers | limitTo: 3">
 									<avatar data-user="{{ user.participant.uid }}" data-displayname="{{ user.participant.displayname }}" data-tooltip></avatar>
 								</div>
 							</div>

@@ -21,7 +21,7 @@
  */
 import app from '../app/App.js';
 
-app.factory('StackService', function (ApiService, $http, $q) {
+app.factory('StackService', function (ApiService, CardService, $http, $q) {
 	var StackService = function ($http, ep, $q) {
 		ApiService.call(this, $http, ep, $q);
 	};
@@ -32,6 +32,12 @@ app.factory('StackService', function (ApiService, $http, $q) {
 		$http.get(this.baseUrl + '/' + boardId).then(function (response) {
 			self.clear();
 			self.addAll(response.data);
+			// When loading a stack add cards to the CardService so we can fetch
+			// information from there. That way we don't need to refresh the whole
+			// stack data during digest if some value changes
+			angular.forEach(response.data, function (entity) {
+				CardService.addAll(entity.cards);
+			});
 			deferred.resolve(self.data);
 		}, function (error) {
 			deferred.reject('Error while loading stacks');
@@ -45,6 +51,9 @@ app.factory('StackService', function (ApiService, $http, $q) {
 		$http.get(this.baseUrl + '/' + boardId + '/archived').then(function (response) {
 			self.clear();
 			self.addAll(response.data);
+			angular.forEach(response.data, function (entity) {
+				CardService.addAll(entity.cards);
+			});
 			deferred.resolve(self.data);
 		}, function (error) {
 			deferred.reject('Error while loading stacks');
@@ -119,7 +128,7 @@ app.factory('StackService', function (ApiService, $http, $q) {
 		}
 	};
 
-	// FIXME: Should not sure popup but proper undo mechanism
+	// FIXME: Should not show popup but proper undo mechanism
 	StackService.prototype.delete = function (id) {
 		var deferred = $q.defer();
 		var self = this;
