@@ -461,7 +461,7 @@ input.input-inline {
 			}
 		}
 
-		.card-tasks {
+		.card-tasks, .card-files {
 			border-radius: 3px;
 			margin: 4px 4px 4px 0px;
 			padding: 0 2px;
@@ -472,6 +472,7 @@ input.input-inline {
 
 			.icon {
 				background-size: contain;
+				margin-right: 2px;
 			}
 		}
 
@@ -819,8 +820,11 @@ input.input-inline {
 					position: relative;
 					button {
 						height: 32px;
-						width: 40px;
+						width: 42px;
 					}
+				}
+				button.icon-history {
+					width: 44px;
 				}
 			}
 		}

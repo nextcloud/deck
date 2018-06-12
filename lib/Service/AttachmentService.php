@@ -33,6 +33,8 @@ use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCP\AppFramework\Http\Response;
+use OCP\ICache;
+use OCP\ICacheFactory;
 
 class AttachmentService {
 
@@ -44,6 +46,8 @@ class AttachmentService {
 	/** @var IAttachmentService[] */
 	private $services = [];
 	private $application;
+	/** @var ICache */
+	private $cache;
 
 	/**
 	 * AttachmentService constructor.
@@ -54,12 +58,14 @@ class AttachmentService {
 	 * @param $userId
 	 * @throws \OCP\AppFramework\QueryException
 	 */
-	public function __construct(AttachmentMapper $attachmentMapper, CardMapper $cardMapper, PermissionService $permissionService, Application $application, $userId) {
+	public function __construct(AttachmentMapper $attachmentMapper, CardMapper $cardMapper, PermissionService $permissionService, Application $application, ICacheFactory $cacheFactory, $userId) {
 		$this->attachmentMapper = $attachmentMapper;
 		$this->cardMapper = $cardMapper;
 		$this->permissionService = $permissionService;
 		$this->userId = $userId;
 		$this->application = $application;
+		$this->cache = $cacheFactory->createDistributed('deck-card-attachments-');
+
 
 		// Register shipped attachment services
 		// TODO: move this to a plugin based approach once we have different types of attachments
@@ -92,10 +98,13 @@ class AttachmentService {
 	 * @return array
 	 * @throws \OCA\Deck\NoPermissionException
 	 */
-	public function findAll($cardId) {
+	public function findAll($cardId, $withDeleted = false) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 
 		$attachments = $this->attachmentMapper->findAll($cardId);
+		if ($withDeleted) {
+			$attachments = array_merge($attachments, $this->attachmentMapper->findToDelete($cardId, false));
+		}
 		foreach ($attachments as &$attachment) {
 			try {
 				$service = $this->getService($attachment->getType());
@@ -107,9 +116,19 @@ class AttachmentService {
 		return $attachments;
 	}
 
+	public function count($cardId) {
+		$count = $this->cache->get('card-' . $cardId);
+		if (!$count) {
+			$count = count($this->attachmentMapper->findAll($cardId));
+			$this->cache->set('card-' . $cardId, $count);
+		}
+		return $count;
+	}
+
 	public function create($cardId, $type, $data) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 
+		$this->cache->clear('card-' . $cardId);
 		$attachment = new Attachment();
 		$attachment->setCardId($cardId);
 		$attachment->setType($type);
@@ -171,6 +190,9 @@ class AttachmentService {
 	 */
 	public function update($cardId, $attachmentId, $data) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+
+		$this->cache->clear('card-' . $cardId);
+
 		$attachment = $this->attachmentMapper->find($attachmentId);
 		$attachment->setData($data);
 		try {
@@ -196,6 +218,8 @@ class AttachmentService {
 	public function delete($cardId, $attachmentId) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 
+		$this->cache->clear('card-' . $cardId);
+
 		$attachment = $this->attachmentMapper->find($attachmentId);
 		try {
 			$service = $this->getService($attachment->getType());
@@ -212,6 +236,8 @@ class AttachmentService {
 
 	public function restore($cardId, $attachmentId) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+
+		$this->cache->clear('card-' . $cardId);
 
 		$attachment = $this->attachmentMapper->find($attachmentId);
 		try {

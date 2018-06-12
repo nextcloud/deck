@@ -30,6 +30,8 @@ use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\StatusException;
+use OCP\ICache;
+use OCP\ICacheFactory;
 
 
 class StackService {
@@ -40,6 +42,7 @@ class StackService {
 	private $permissionService;
 	private $boardService;
 	private $assignedUsersMapper;
+	private $attachmentService;
 
 	public function __construct(
 		StackMapper $stackMapper,
@@ -47,7 +50,8 @@ class StackService {
 		LabelMapper $labelMapper,
 		PermissionService $permissionService,
 		BoardService $boardService,
-		AssignedUsersMapper $assignedUsersMapper
+		AssignedUsersMapper $assignedUsersMapper,
+		AttachmentService $attachmentService
 	) {
 		$this->stackMapper = $stackMapper;
 		$this->cardMapper = $cardMapper;
@@ -55,6 +59,7 @@ class StackService {
 		$this->permissionService = $permissionService;
 		$this->boardService = $boardService;
 		$this->assignedUsersMapper = $assignedUsersMapper;
+		$this->attachmentService = $attachmentService;
 	}
 
 	public function findAll($boardId) {
@@ -69,6 +74,7 @@ class StackService {
 				if (array_key_exists($card->id, $labels)) {
 					$cards[$cardIndex]->setLabels($labels[$card->id]);
 				}
+				$card->setAttachments($this->attachmentService->count($card->getId()));
 			}
 			$stacks[$stackIndex]->setCards($cards);
 		}

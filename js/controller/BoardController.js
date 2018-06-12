@@ -353,4 +353,11 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		};
 	};
 
+	$scope.attachmentCount = function(attachments) {
+		if (Array.isArray(attachments)) {
+			return attachments.filter((obj) => obj.deletedAt === 0).length;
+		}
+		return attachments;
+	};
+
 });

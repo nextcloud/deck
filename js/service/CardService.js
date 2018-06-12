@@ -137,7 +137,7 @@ app.factory('CardService', function (ApiService, $http, $q) {
 		var deferred = $q.defer();
 		var self = this;
 		$http.delete(this.baseUrl + '/' + this.getCurrent().id + '/attachment/' + attachment.id, {}).then(function (response) {
-			if (response.data.de#letedAt > 0) {
+			if (response.data.deletedAt > 0) {
 				let currentAttachment = self.getCurrent().attachments.find(function (obj) {
 					if (obj.id === attachment.id) {
 						obj.deletedAt = response.data.deletedAt;

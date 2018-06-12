@@ -54,7 +54,7 @@ class CardService {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		$card = $this->cardMapper->find($cardId);
 		$assignedUsers = $this->assignedUsersMapper->find($card->getId());
-		$attachments = $this->attachmentService->findAll($cardId);
+		$attachments = $this->attachmentService->findAll($cardId, true);
 		$card->setAssignedUsers($assignedUsers);
 		$card->setAttachments($attachments);
 		return $card;
