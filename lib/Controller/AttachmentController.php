@@ -38,7 +38,7 @@ class AttachmentController extends Controller {
 		$this->attachmentService = $attachmentService;
 	}
 
-	public function list($cardId) {
+	public function getAll($cardId) {
 		return $this->attachmentService->getAll($cardId);
 	}
 

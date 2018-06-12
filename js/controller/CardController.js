@@ -59,15 +59,16 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 				'File already exists',
 				function(result) {
 					if (result) {
-						$scope.runUpload(fileItem)
+						$scope.runUpload(fileItem);
 					} else {
 						// TODO: check for proper number and append it before the file extension
+						// TODO: iterate over attachments (check if matches "file.name (n)") increase n
 						fileItem.file.name = fileItem.file.name + '.1';
 					}
 				}
 			);
 		} else {
-			$scope.runUpload(fileItem)
+			$scope.runUpload(fileItem);
 		}
 	};
 	$scope.uploader.onSuccessItem = function(item, response) {
