@@ -23,20 +23,28 @@
 
 namespace OCA\Deck\Cron;
 
+use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Service\AttachmentService;
 
 class DeleteCronTest extends \Test\TestCase {
 
 	/** @var BoardMapper|\PHPUnit_Framework_MockObject_MockObject */
 	protected $boardMapper;
+	/** @var AttachmentService|\PHPUnit_Framework_MockObject_MockObject */
+	private $attachmentService;
+	/** @var AttachmentMapper|\PHPUnit_Framework_MockObject_MockObject */
+	private $attachmentMapper;
 	/** @var DeleteCron */
 	protected $deleteCron;
 
 	public function setUp() {
 		parent::setUp();
 		$this->boardMapper = $this->createMock(BoardMapper::class);
-		$this->deleteCron = new DeleteCron($this->boardMapper);
+		$this->attachmentService = $this->createMock(AttachmentService::class);
+		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
+		$this->deleteCron = new DeleteCron($this->boardMapper, $this->attachmentService, $this->attachmentMapper);
 	}
 
 	protected function getBoard($id) {

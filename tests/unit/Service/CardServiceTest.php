@@ -55,7 +55,8 @@ class CardServiceTest extends TestCase {
         $this->permissionService = $this->createMock(PermissionService::class);
         $this->boardService = $this->createMock(BoardService::class);
         $this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
-        $this->cardService = new CardService($this->cardMapper, $this->stackMapper, $this->permissionService, $this->boardService, $this->assignedUsersMapper);
+		$this->attachmentService = $this->createMock(AttachmentService::class);
+        $this->cardService = new CardService($this->cardMapper, $this->stackMapper, $this->permissionService, $this->boardService, $this->assignedUsersMapper, $this->attachmentService);
     }
 
     public function testFind() {

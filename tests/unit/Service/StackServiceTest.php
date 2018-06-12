@@ -54,6 +54,8 @@ class StackServiceTest extends TestCase {
 	private $permissionService;
 	/** @var AssignedUsersMapper|\PHPUnit_Framework_MockObject_MockObject */
 	private $assignedUsersMapper;
+	/** @var AttachmentService|\PHPUnit_Framework_MockObject_MockObject */
+	private $attachmentService;
 	/** @var BoardService|\PHPUnit_Framework_MockObject_MockObject */
 	private $boardService;
 
@@ -65,6 +67,7 @@ class StackServiceTest extends TestCase {
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->boardService = $this->createMock(BoardService::class);
 		$this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
+		$this->attachmentService = $this->createMock(AttachmentService::class);
 
 		$this->stackService = new StackService(
 			$this->stackMapper,
@@ -72,7 +75,8 @@ class StackServiceTest extends TestCase {
             $this->labelMapper,
 			$this->permissionService,
 			$this->boardService,
-			$this->assignedUsersMapper
+			$this->assignedUsersMapper,
+			$this->attachmentService
 		);
 	}
 
