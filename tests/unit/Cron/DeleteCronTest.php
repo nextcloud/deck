@@ -23,10 +23,12 @@
 
 namespace OCA\Deck\Cron;
 
+use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Service\AttachmentService;
+use OCA\Deck\Service\IAttachmentService;
 
 class DeleteCronTest extends \Test\TestCase {
 
@@ -75,6 +77,24 @@ class DeleteCronTest extends \Test\TestCase {
 		$this->boardMapper->expects($this->at(4))
 			->method('delete')
 			->with($boards[3]);
+
+		$attachment = new Attachment();
+		$attachment->setType('deck_file');
+		$this->attachmentMapper->expects($this->once())
+			->method('findToDelete')
+			->willReturn([
+				$attachment
+			]);
+		$service = $this->createMock(IAttachmentService::class);
+		$service->expects($this->once())
+			->method('delete')
+			->with($attachment);
+		$this->attachmentService->expects($this->once())
+			->method('getService')
+			->willReturn($service);
+		$this->attachmentMapper->expects($this->once())
+			->method('delete')
+			->with($attachment);
 		$this->invokePrivate($this->deleteCron, 'run', [null]);
 	}
 }
