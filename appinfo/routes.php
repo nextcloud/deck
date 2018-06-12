@@ -64,6 +64,8 @@ return [
 		['name' => 'attachment#create', 'url' => '/cards/{cardId}/attachment', 'verb' => 'POST'],
 		['name' => 'attachment#update', 'url' => '/cards/{cardId}/attachment/{attachmentId}', 'verb' => 'UPDATE'],
 		['name' => 'attachment#delete', 'url' => '/cards/{cardId}/attachment/{attachmentId}', 'verb' => 'DELETE'],
+		['name' => 'attachment#restore', 'url' => '/cards/{cardId}/attachment/{attachmentId}/restore', 'verb' => 'GET'],
+
 
 		// labels
 		['name' => 'label#create', 'url' => '/labels', 'verb' => 'POST'],

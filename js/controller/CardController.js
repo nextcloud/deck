@@ -50,11 +50,9 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 		$scope.uploader.uploadItem(fileItem);
 	};
 	$scope.uploader.onAfterAddingFile = function(fileItem) {
-		console.log(fileItem);
 		let existingFile = $scope.cardservice.getCurrent().attachments.find((attachment) => {
 			return attachment.data === fileItem.file.name;
 		});
-		console.log(existingFile);
 		if (typeof existingFile !== 'undefined') {
 			OC.dialogs.confirm(
 				`A file with the name ${fileItem.file.name} already exists. Do you want to overwrite it?`,

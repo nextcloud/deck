@@ -28,10 +28,10 @@ class Attachment extends RelationalEntity {
 	protected $cardId;
 	protected $type;
 	protected $data;
-	protected $lastModified;
-	protected $createdAt;
+	protected $lastModified = 0;
+	protected $createdAt = 0;
 	protected $createdBy;
-	protected $deletedAt;
+	protected $deletedAt = 0;
 	protected $extendedData = [];
 
 	public function __construct() {

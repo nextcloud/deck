@@ -780,6 +780,10 @@ input.input-inline {
 			li.attachment {
 				display: flex;
 
+				&.deleted {
+					opacity: .5;
+				}
+
 				.fileicon {
 					display: inline-block;
 					min-width: 32px;

@@ -149,4 +149,22 @@ class FileService implements IAttachmentService {
 		$response->addHeader('Content-Type', $file->getMimeType());
 		return $response;
 	}
+
+	/**
+	 * Should undo be allowed and the delete action be done by a background job
+	 *
+	 * @return bool
+	 */
+	public function allowUndo() {
+		return true;
+	}
+
+	/**
+	 * Mark an attachment as deleted
+	 *
+	 * @param Attachment $attachment
+	 */
+	public function markAsDeleted(Attachment $attachment) {
+		$attachment->setDeletedAt(time());
+	}
 }

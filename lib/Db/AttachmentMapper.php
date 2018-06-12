@@ -82,6 +82,24 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 		return $entities;
 	}
 
+	public function findToDelete() {
+		// add buffer of 5 min
+		$timeLimit = time() - (60 * 5);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_attachment')
+			->where($qb->expr()->gt('deleted_at', '0', IQueryBuilder::PARAM_INT))
+			->andWhere($qb->expr()->lt('deleted_at', (string)$timeLimit, IQueryBuilder::PARAM_INT));
+
+		$entities = [];
+		$cursor = $qb->execute();
+		while($row = $cursor->fetch()){
+			$entities[] = $this->mapRowToEntity($row);
+		}
+		$cursor->closeCursor();
+		return $entities;
+	}
+
 	/**
 	 * @param Attachment $attachment
 	 * @throws \Exception

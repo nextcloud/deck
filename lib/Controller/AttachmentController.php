@@ -68,4 +68,8 @@ class AttachmentController extends Controller {
 	public function delete($cardId, $attachmentId) {
 		return $this->attachmentService->delete($cardId, $attachmentId);
 	}
+
+	public function restore($cardId, $attachmentId) {
+		return $this->attachmentService->restore($cardId, $attachmentId);
+	}
 }

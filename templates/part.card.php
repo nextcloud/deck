@@ -94,7 +94,7 @@
 	</div>
 	<div class="section-content card-attachments" v-if="cardservice.getCurrent().attachments">
 		<ul>
-			<li class="attachment" ng-repeat="attachment in cardservice.getCurrent().attachments | orderBy: '-lastModified'">
+			<li class="attachment" ng-repeat="attachment in cardservice.getCurrent().attachments | orderBy: ['deletedAt', '-lastModified']" ng-class="{deleted: attachment.deletedAt > 0}">
 					<a class="fileicon" ng-style="mimetypeForAttachment(attachment)" ng-href="{{ attachmentUrl(attachment) }}"></a>
 					<div class="details">
 						<a ng-href="{{ attachmentUrl(attachment) }}" target="_blank">
@@ -106,12 +106,15 @@
 						<span class="filedate">{{ attachment.createdAt|relativeDateFilter }}</span>
 						</a>
 					</div>
-					<div class="app-popover-menu-utils">
+					<button class="icon icon-history button-inline" ng-click="cardservice.attachmentRemoveUndo(attachment)" ng-if="attachment.deletedAt > 0" title="<?php p($l->t('Undo file deletion - Otherwise the file will be deleted during the next cronjob run.')); ?>">
+						<span class="hidden-visually"><?php p($l->t('Undo file deletion')); ?></span>
+					</button>
+					<div class="app-popover-menu-utils" ng-if="attachment.deletedAt == 0">
 						<button class="button-inline icon icon-more" ng-model="attachment"></button>
 						<div class="popovermenu hidden">
 							<ul>
 								<li>
-									<a class="menuitem action action-delete permanent"
+									<a class="menuitem action action-delete"
 									   ng-click="cardservice.attachmentRemove(attachment); $event.stopPropagation();"><span
 												class="icon icon-delete"></span><span><?php p($l->t('Delete')); ?></span></a>
 								</li>

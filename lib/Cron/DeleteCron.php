@@ -21,25 +21,28 @@
  *
  */
 
-/**
- * Created by PhpStorm.
- * User: jus
- * Date: 16.05.17
- * Time: 12:34
- */
 
 namespace OCA\Deck\Cron;
 
 use OC\BackgroundJob\Job;
+use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\InvalidAttachmentType;
+use OCA\Deck\Service\AttachmentService;
 
 class DeleteCron extends Job {
 
 	/** @var BoardMapper */
 	private $boardMapper;
+	/** @var AttachmentService */
+	private $attachmentService;
+	/** @var AttachmentMapper */
+	private $attachmentMapper;
 
-	public function __construct(BoardMapper $boardMapper) {
+	public function __construct(BoardMapper $boardMapper, AttachmentService $attachmentService, AttachmentMapper $attachmentMapper) {
 		$this->boardMapper = $boardMapper;
+		$this->attachmentService = $attachmentService;
+		$this->attachmentMapper = $attachmentMapper;
 	}
 
 	/**
@@ -51,6 +54,18 @@ class DeleteCron extends Job {
 		foreach ($boards as $board) {
 			$this->boardMapper->delete($board);
 		}
+
+		$attachments = $this->attachmentMapper->findToDelete();
+		foreach ($attachments as $attachment) {
+			try {
+				$service = $this->attachmentService->getService($attachment->getType());
+				$service->delete($attachment);
+			} catch (InvalidAttachmentType $e) {
+				// Just delete the attachment if no service is available
+			}
+			$this->attachmentMapper->delete($attachment);
+		}
+
 	}
 
 }

@@ -30,6 +30,7 @@ use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\InvalidAttachmentType;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCP\AppFramework\Http\Response;
 
@@ -181,17 +182,46 @@ class AttachmentService {
 		return $attachment;
 	}
 
+	/**
+	 * Either mark an attachment as deleted for later removal or just remove it depending
+	 * on the IAttachmentService implementation
+	 *
+	 * @param $cardId
+	 * @param $attachmentId
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function delete($cardId, $attachmentId) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 
 		$attachment = $this->attachmentMapper->find($attachmentId);
 		try {
 			$service = $this->getService($attachment->getType());
+			if ($service->allowUndo()) {
+				$service->markAsDeleted($attachment);
+				return $this->attachmentMapper->update($attachment);
+			}
 			$service->delete($attachment);
 		} catch (InvalidAttachmentType $e) {
 			// just delete without further action
 		}
-		$this->attachmentMapper->delete($attachment);
-		return $attachment;
+		return $this->attachmentMapper->delete($attachment);
+	}
+
+	public function restore($cardId, $attachmentId) {
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+
+		$attachment = $this->attachmentMapper->find($attachmentId);
+		try {
+			$service = $this->getService($attachment->getType());
+			if ($service->allowUndo()) {
+				$attachment->setDeletedAt(0);
+				return $this->attachmentMapper->update($attachment);
+			}
+		} catch (InvalidAttachmentType $e) {
+		}
+		throw new NoPermissionException();
 	}
 }

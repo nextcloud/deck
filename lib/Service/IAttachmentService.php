@@ -81,4 +81,19 @@ interface IAttachmentService {
 	 * @param Attachment $attachment
 	 */
 	public function delete(Attachment $attachment);
+
+	/**
+	 * Should undo be allowed and the delete action be done by a background job
+	 *
+	 * @return bool
+	 */
+	public function allowUndo();
+
+	/**
+	 * Mark an attachment as deleted
+	 *
+	 * @param Attachment $attachment
+	 */
+	public function markAsDeleted(Attachment $attachment);
+
 }

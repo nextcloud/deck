@@ -137,12 +137,37 @@ app.factory('CardService', function (ApiService, $http, $q) {
 		var deferred = $q.defer();
 		var self = this;
 		$http.delete(this.baseUrl + '/' + this.getCurrent().id + '/attachment/' + attachment.id, {}).then(function (response) {
-			self.getCurrent().attachments = self.getCurrent().attachments.filter(function (obj) {
-				return obj.id !== attachment.id;
-			});
+			if (response.data.de#letedAt > 0) {
+				let currentAttachment = self.getCurrent().attachments.find(function (obj) {
+					if (obj.id === attachment.id) {
+						obj.deletedAt = response.data.deletedAt;
+					}
+				});
+
+			} else {
+				self.getCurrent().attachments = self.getCurrent().attachments.filter(function (obj) {
+					return obj.id !== attachment.id;
+				});
+			}
 			deferred.resolve(response.data);
 		}, function (error) {
 			deferred.reject('Error when removing the attachment');
+		});
+		return deferred.promise;
+	};
+
+	CardService.prototype.attachmentRemoveUndo = function (attachment) {
+		var deferred = $q.defer();
+		var self = this;
+		$http.get(this.baseUrl + '/' + this.getCurrent().id + '/attachment/' + attachment.id + '/restore', {}).then(function (response) {
+			let currentAttachment = self.getCurrent().attachments.find(function (obj) {
+				if (obj.id === attachment.id) {
+					obj.deletedAt = response.data.deletedAt;
+				}
+			});
+			deferred.resolve(response.data);
+		}, function (error) {
+			deferred.reject('Error when restoring the attachment');
 		});
 		return deferred.promise;
 	};
