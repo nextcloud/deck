@@ -1,5 +1,5 @@
-<div nv-file-drop="" uploader="uploader" nv-file-over over-class="file-drop" class="drop-zone">
-	<div class="drop-indicator">
+<div nv-file-drop="" uploader="uploader"  class="drop-zone" options="{cardId: cardservice.getCurrent().id}">
+	<div class="drop-indicator" nv-file-over uploader="uploader">
 		<p><?php p($l->t('Drop your files here to upload it to the card')); ?></p>
 	</div>
 	<div id="board-status" ng-if="statusservice.active">
@@ -90,11 +90,11 @@
 	<div class="section-header">
 		<h4><?php p($l->t('Attachments')); ?></h4>
 		<label for="attachment-upload" class="button icon-upload"></label>
-		<input id="attachment-upload" type="file" nv-file-select="" uploader="uploader" class="hidden" />
+		<input id="attachment-upload" type="file" nv-file-select="" uploader="uploader" class="hidden" options="{cardId: cardservice.getCurrent().id}" />
 	</div>
-	<div class="section-content card-attachments" v-if="cardservice.getCurrent().attachments">
+	<div class="section-content card-attachments" ng-if="cardservice.getCurrent() && isArray(cardservice.getCurrent().attachments)">
 		<ul>
-			<li class="attachment" ng-repeat="attachment in cardservice.getCurrent().attachments | orderBy: ['deletedAt', '-lastModified']" ng-class="{deleted: attachment.deletedAt > 0}">
+			<li class="attachment" ng-repeat="attachment in cardservice.getCurrent().attachments | filter: {type: 'deck_file'} | orderBy: ['deletedAt', '-lastModified']" ng-class="{deleted: attachment.deletedAt > 0}">
 					<a class="fileicon" ng-style="mimetypeForAttachment(attachment)" ng-href="{{ attachmentUrl(attachment) }}"></a>
 					<div class="details">
 						<a ng-href="{{ attachmentUrl(attachment) }}" target="_blank">

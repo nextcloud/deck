@@ -23,7 +23,7 @@
 /* global app moment */
 import app from '../app/App.js';
 
-app.controller('CardController', function ($scope, $rootScope, $sce, $location, $stateParams, $interval, $timeout, $filter, BoardService, CardService, StackService, StatusService, markdownItConverter, FileUploader) {
+app.controller('CardController', function ($scope, $rootScope, $sce, $location, $stateParams, $interval, $timeout, $filter, BoardService, CardService, StackService, StatusService, markdownItConverter, FileService) {
 	$scope.sidebar = $rootScope.sidebar;
 	$scope.status = {
 		lastEdit: 0,
@@ -31,49 +31,13 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 	};
 
 	$scope.cardservice = CardService;
+	$scope.fileservice = FileService;
 	$scope.cardId = $stateParams.cardId;
 
 	$scope.statusservice = StatusService.getInstance();
 	$scope.boardservice = BoardService;
 
-	$scope.uploader = new FileUploader();
-
-	$scope.runUpload = function(fileItem) {
-		fileItem.url = OC.generateUrl('/apps/deck/cards/' + $scope.cardId + '/attachment');
-		fileItem.formData = [
-			{
-				requesttoken: oc_requesttoken,
-				type: 'deck_file',
-
-			}
-		];
-		$scope.uploader.uploadItem(fileItem);
-	};
-	$scope.uploader.onAfterAddingFile = function(fileItem) {
-		let existingFile = $scope.cardservice.getCurrent().attachments.find((attachment) => {
-			return attachment.data === fileItem.file.name;
-		});
-		if (typeof existingFile !== 'undefined') {
-			OC.dialogs.confirm(
-				`A file with the name ${fileItem.file.name} already exists. Do you want to overwrite it?`,
-				'File already exists',
-				function(result) {
-					if (result) {
-						$scope.runUpload(fileItem);
-					} else {
-						// TODO: check for proper number and append it before the file extension
-						// TODO: iterate over attachments (check if matches "file.name (n)") increase n
-						fileItem.file.name = fileItem.file.name + '.1';
-					}
-				}
-			);
-		} else {
-			$scope.runUpload(fileItem);
-		}
-	};
-	$scope.uploader.onSuccessItem = function(item, response) {
-		$scope.cardservice.getCurrent().attachments.push(response);
-	};
+	$scope.isArray = angular.isArray;
 
 	$scope.mimetypeForAttachment = function(attachment) {
 		let url = OC.MimeType.getIconUrl(attachment.extendedData.mimetype);

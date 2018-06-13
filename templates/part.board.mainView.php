@@ -61,7 +61,11 @@
 					data-as-sortable-item
 					ng-click="$event.stopPropagation()"
 					ui-sref="board.card({boardId: id, cardId: c.id})"
-					ng-class="{'archived': cardservice.get(c.id).archived, 'has-labels': cardservice.get(c.id).labels.length>0, 'current': cardservice.get(c.id).id == params.cardId }">
+					ng-class="{'archived': cardservice.get(c.id).archived, 'has-labels': cardservice.get(c.id).labels.length>0, 'current': cardservice.get(c.id).id == params.cardId }"
+					nv-file-drop="" uploader="uploader" options="{cardId: c.id}">
+					<div class="drop-indicator" uploader="uploader" nv-file-over>
+						<p><?php p($l->t('Drop your files here to upload it to the card')); ?></p>
+					</div>
 					<div data-as-sortable-item-handle>
 						<div class="card-upper">
 							<h4>{{ cardservice.get(c.id).title }}</h4>
@@ -84,9 +88,9 @@
 								<i class="icon icon-checkmark"></i>
 								<span>{{ getCheckboxes(cardservice.get(c.id).description)[0] }}/{{ getCheckboxes(cardservice.get(c.id).description)[1] }}</span>
 							</div>
-							<div class="card-files" ng-if="attachmentCount(cardservice.get(c.id).attachments) > 0">
+							<div class="card-files" ng-if="attachmentCount(cardservice.get(c.id)) > 0">
 								<i class="icon icon-files-dark"></i>
-								<span>{{ attachmentCount(cardservice.get(c.id).attachments) }}</span>
+								<span>{{ attachmentCount(cardservice.get(c.id)) }}</span>
 							</div>
 							<div class="card-assigned-users">
 								<div class="assigned-user" ng-repeat="user in cardservice.get(c.id).assignedUsers | limitTo: 3">

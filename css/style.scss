@@ -143,6 +143,10 @@ input.input-inline {
 
 	.card {
 		opacity: 1;
+
+		&.file-drop {
+
+		}
 	}
 
 	&.card-selected {
@@ -657,16 +661,16 @@ input.input-inline {
 .drop-indicator {
 	display: none;
 }
-.file-drop .drop-indicator {
+.card .nv-file-over,
+.drop-indicator.nv-file-over {
 	display: block;
 	position: absolute;
 	width: 100%;
-	height: calc(100% - 40px);
+	height: 100%;
 	background-color: #fff;
 	z-index: 100;
 	opacity: 0.9;
 	text-align: center;
-	margin-top: 40px;
 
 	p {
 		width: calc(100% - 20px);
@@ -678,6 +682,7 @@ input.input-inline {
 		border-radius: 5px;
 	}
 }
+
 
 #card-meta { // TODO: use .card-block instead?
 	height: 100%;
