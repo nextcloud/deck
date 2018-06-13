@@ -90,9 +90,15 @@ app.config(function ($provide, $interpolateProvider, $httpProvider, $urlRouterPr
 			return function (scope, element, attrs) {
 				var overClass = attrs.overClass || 'nv-file-over';
 				link.apply(this, arguments);
+				let counter = 0;
+				element.on('dragenter', function (event) {
+					counter++;
+				});
 				element.on('dragleave', function (event) {
-					element.removeClass(overClass);
-					event.stopPropagation();
+					counter--;
+					if (counter <= 0) {
+						$('.' + overClass).removeClass(overClass);
+					}
 				});
 			};
 		};
