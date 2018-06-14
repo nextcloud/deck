@@ -24,7 +24,10 @@
 namespace OCA\Deck\Service;
 
 
+use OC\Security\CSP\ContentSecurityPolicyManager;
 use OCA\Deck\Db\Attachment;
+use OCP\AppFramework\Http\ContentSecurityPolicy;
+use OCP\AppFramework\Http\EmptyContentSecurityPolicy;
 use OCP\AppFramework\Http\FileDisplayResponse;
 use OCP\Files\IAppData;
 use OCP\Files\NotFoundException;
@@ -158,6 +161,14 @@ class FileService implements IAttachmentService {
 	public function display(Attachment $attachment) {
 		$file = $this->getFileForAttachment($attachment);
 		$response = new FileDisplayResponse($file);
+		if ($file->getMimeType() === 'application/pdf') {
+			// We need those since otherwise chrome won't show the PDF file with CSP rule object-src 'none'
+			// https://bugs.chromium.org/p/chromium/issues/detail?id=271452
+			$policy = new ContentSecurityPolicy();
+			$policy->addAllowedObjectDomain('\'self\'');
+			$policy->addAllowedObjectDomain('blob:');
+			$response->setContentSecurityPolicy($policy);
+		}
 		$response->addHeader('Content-Type', $file->getMimeType());
 		return $response;
 	}
