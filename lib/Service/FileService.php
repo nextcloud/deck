@@ -94,23 +94,22 @@ class FileService implements IAttachmentService {
 		return $attachment;
 	}
 
-	public function create(Attachment $attachment) {
+	private function getUploadedFile () {
 		$file = $this->request->getUploadedFile('file');
-		$cardId = $attachment->getCardId();
 		$error = null;
 		$phpFileUploadErrors = [
-			UPLOAD_ERR_OK => $this->l10n->t('The file was uploaded'),
-			UPLOAD_ERR_INI_SIZE => $this->l10n->t('The uploaded file exceeds the upload_max_filesize directive in php.ini'),
-			UPLOAD_ERR_FORM_SIZE => $this->l10n->t('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form'),
-			UPLOAD_ERR_PARTIAL => $this->l10n->t('The file was only partially uploaded'),
-			UPLOAD_ERR_NO_FILE => $this->l10n->t('No file was uploaded'),
-			UPLOAD_ERR_NO_TMP_DIR => $this->l10n->t('Missing a temporary folder'),
-			UPLOAD_ERR_CANT_WRITE => $this->l10n->t('Could not write file to disk'),
-			UPLOAD_ERR_EXTENSION => $this->l10n->t('A PHP extension stopped the file upload'),
+		UPLOAD_ERR_OK => $this->l10n->t('The file was uploaded'),
+		UPLOAD_ERR_INI_SIZE => $this->l10n->t('The uploaded file exceeds the upload_max_filesize directive in php.ini'),
+		UPLOAD_ERR_FORM_SIZE => $this->l10n->t('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form'),
+		UPLOAD_ERR_PARTIAL => $this->l10n->t('The file was only partially uploaded'),
+		UPLOAD_ERR_NO_FILE => $this->l10n->t('No file was uploaded'),
+		UPLOAD_ERR_NO_TMP_DIR => $this->l10n->t('Missing a temporary folder'),
+		UPLOAD_ERR_CANT_WRITE => $this->l10n->t('Could not write file to disk'),
+		UPLOAD_ERR_EXTENSION => $this->l10n->t('A PHP extension stopped the file upload'),
 		];
 
 		if (empty($file)) {
-			$error = $this->l10n->t('No file uploaded');
+		$error = $this->l10n->t('No file uploaded');
 		}
 		if (!empty($file) && array_key_exists('error', $file) && $file['error'] !== UPLOAD_ERR_OK) {
 			$error = $phpFileUploadErrors[$file['error']];
@@ -118,7 +117,11 @@ class FileService implements IAttachmentService {
 		if ($error !== null) {
 			throw new \RuntimeException($error);
 		}
+		return $file;
+	}
 
+	public function create(Attachment $attachment) {
+		$file = $this->getUploadedFile();
 		$folder = $this->getFolder($attachment);
 		$fileName = $file['name'];
 		if ($folder->fileExists($fileName)) {
@@ -130,9 +133,18 @@ class FileService implements IAttachmentService {
 		$attachment->setData($fileName);
 	}
 
+	/**
+	 * This method requires to be used with POST so we can properly get the form data
+	 */
 	public function update(Attachment $attachment) {
-		$file = $this->getFileForAttachment($attachment);
+		$file = $this->getUploadedFile();
+		$fileName = $file['name'];
+		$attachment->setData($fileName);
 
+		$target = $this->getFileForAttachment($attachment);
+		$target->putContent(file_get_contents($file['tmp_name'], 'r'));
+
+		$attachment->setLastModified(time());
 	}
 
 	public function delete(Attachment $attachment) {

@@ -35,28 +35,21 @@ export default class FileService {
 	runUpload (fileItem, attachmentId) {
 		fileItem.url = OC.generateUrl('/apps/deck/cards/' + fileItem.cardId + '/attachment');
 		if (typeof attachmentId !== 'undefined') {
-			fileItem.method = 'UPDATE';
 			fileItem.url = OC.generateUrl('/apps/deck/cards/' + fileItem.cardId + '/attachment/' + attachmentId);
+		} else {
+			fileItem.formData = [
+				{
+					requesttoken: oc_requesttoken,
+					type: 'deck_file',
+
+				}
+			];
 		}
-		fileItem.formData = [
+		fileItem.headers =
 			{
 				requesttoken: oc_requesttoken,
-				type: 'deck_file',
+			};
 
-			}
-		];
-		this.uploader.uploadItem(fileItem);
-	};
-
-	runUpdate (fileItem) {
-		fileItem.url = OC.generateUrl('/apps/deck/cards/' + fileItem.cardId + '/attachment');
-		fileItem.formData = [
-			{
-				requesttoken: oc_requesttoken,
-				type: 'deck_file',
-
-			}
-		];
 		this.uploader.uploadItem(fileItem);
 	};
 
@@ -97,6 +90,11 @@ export default class FileService {
 	};
 
 	onSuccessItem(item, response) {
+		let attachments = this.cardservice.get(item.cardId).attachments;
+		let index = attachments.indexOf(attachments.find(attachment => attachment.id === response.id));
+		if (~index) {
+			attachments = attachments.splice(index, 1);
+		}
 		this.cardservice.get(item.cardId).attachments.push(response);
 	};
 

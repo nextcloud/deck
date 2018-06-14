@@ -201,6 +201,15 @@ class AttachmentService {
 		} catch (InvalidAttachmentType $e) {
 			// just update without further action
 		}
+		$attachment->setLastModified(time());
+		$this->attachmentMapper->update($attachment);
+		// extend data so the frontend can use it properly after creating
+		try {
+			$service = $this->getService($attachment->getType());
+			$service->extendData($attachment);
+		} catch (InvalidAttachmentType $e) {
+			// just store the data
+		}
 		return $attachment;
 	}
 
