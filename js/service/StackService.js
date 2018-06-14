@@ -21,6 +21,7 @@
  */
 import app from '../app/App.js';
 
+/* global app angular */
 app.factory('StackService', function (ApiService, CardService, $http, $q) {
 	var StackService = function ($http, ep, $q) {
 		ApiService.call(this, $http, ep, $q);

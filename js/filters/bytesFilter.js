@@ -27,7 +27,7 @@ app.filter('bytes', function () {
 		if (isNaN(parseFloat(bytes, 10)) || !isFinite(bytes)) {
 			return '-';
 		}
-		if (precision === undefined) {
+		if (typeof precision === 'undefined') {
 			precision = 2;
 		}
 		var units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'],

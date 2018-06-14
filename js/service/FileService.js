@@ -22,6 +22,7 @@
 
 import app from '../app/App.js';
 
+/* global OC oc_requesttoken */
 export default class FileService {
 
 	constructor ($http, FileUploader, CardService) {
@@ -51,7 +52,7 @@ export default class FileService {
 			};
 
 		this.uploader.uploadItem(fileItem);
-	};
+	}
 
 	onAfterAddingFile (fileItem) {
 		// Fetch card details before trying to upload so we can detect filename collisions properly
@@ -87,11 +88,11 @@ export default class FileService {
 
 		});
 
-	};
+	}
 
 	onSuccessItem(item, response) {
 		let attachments = this.cardservice.get(item.cardId).attachments;
-		let index = attachments.indexOf(attachments.find(attachment => attachment.id === response.id));
+		let index = attachments.indexOf(attachments.find((attachment) => attachment.id === response.id));
 		if (~index) {
 			attachments = attachments.splice(index, 1);
 		}

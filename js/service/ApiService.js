@@ -125,7 +125,7 @@ app.factory('ApiService', function ($http, $q) {
 			this.data[entity.id] = entity;
 		} else {
 			Object.keys(entity).forEach(function (key) {
-				if (entity[key] !== null) {
+				if (entity[key] !== null && element[key] !== entity[key]) {
 					element[key] = entity[key];
 				}
 			});
