@@ -727,10 +727,23 @@ input.input-inline {
 			flex: 1;
 		}
 	}
+	.section-header-tabbed {
+		margin-top: 10px;
+		margin-bottom: 5px;
+		flex-shrink: 0;
+		display: flex;
+		.tabHeaders {
+			margin: 0;
+			flex-grow: 1;
+		}
+		.tabDetails {
+			display: flex;
+		}
+	}
 
 	.save-indicator {
 		border-radius: 3px;
-		float: right;
+		margin: 5px;
 		padding: 0 10px;
 		font-size: 8pt;
 		display: none;

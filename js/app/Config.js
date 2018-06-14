@@ -74,6 +74,9 @@ app.config(function ($provide, $interpolateProvider, $httpProvider, $urlRouterPr
 		})
 		.state('board.card', {
 			url: '/card/:cardId',
+			params: {
+				tab: {value: 0, dynamic: true},
+			},
 			views: {
 				'sidebarView': {
 					templateUrl: '/card.sidebarView.html',

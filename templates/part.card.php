@@ -87,12 +87,21 @@
 		<button class="icon icon-delete button-inline" title="<?php p($l->t('Remove due date')); ?>" ng-if="cardservice.getCurrent().duedate" ng-click="resetDuedate()"><span class="hidden-visually"><?php p($l->t('Remove due date')); ?></span></button>
 	</div>
 
-	<div class="section-header">
-		<h4><?php p($l->t('Attachments')); ?></h4>
-		<label for="attachment-upload" class="button icon-upload" ng-class="{'icon-loading-small': uploader.isUploading}"></label>
-		<input id="attachment-upload" type="file" nv-file-select="" uploader="uploader" class="hidden" options="{cardId: cardservice.getCurrent().id}" />
+
+	<div class="section-header-tabbed">
+		<ul class="tabHeaders ng-scope">
+			<li class="tabHeader selected" ng-class="{'selected': (params.tab==0 || !params.tab)}" ui-sref="{tab: 0}"><a><?php p($l->t('Description')); ?></a></li>
+			<li class="tabHeader" ng-class="{'selected': (params.tab==1)}" ui-sref="{tab: 1}"><a><?php p($l->t('Attachments')); ?></a></li>
+		</ul>
+		<div class="tabDetails">
+			<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
+			<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>
+			<a ng-if="params.tab === 0" href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
+			<label for="attachment-upload" class="button icon-upload" ng-class="{'icon-loading-small': uploader.isUploading}"></label>
+			<input id="attachment-upload" type="file" nv-file-select="" uploader="uploader" class="hidden" options="{cardId: cardservice.getCurrent().id}" />
+		</div>
 	</div>
-	<div class="section-content card-attachments" ng-if="cardservice.getCurrent() && isArray(cardservice.getCurrent().attachments)">
+	<div class="section-content card-attachments" ng-if="params.tab === 1 && cardservice.getCurrent() && isArray(cardservice.getCurrent().attachments)">
 		<ul>
 			<li class="attachment" ng-repeat="attachment in cardservice.getCurrent().attachments | filter: {type: 'deck_file'} | orderBy: ['deletedAt', '-lastModified']" ng-class="{deleted: attachment.deletedAt > 0}">
 					<a class="fileicon" ng-style="mimetypeForAttachment(attachment)" ng-href="{{ attachmentUrl(attachment) }}"></a>
@@ -128,18 +137,7 @@
 		</ul>
 	</div>
 
-
-	<div class="section-header card-description">
-		<h4>
-			<div>
-				<?php p($l->t('Description')); ?>
-				<a href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" data-toggle="tooltip" data-placement="right" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
-			</div>
-		</h4>
-		<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
-		<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>
-	</div>
-	<div class="section-content card-description">
+	<div class="section-content card-description" ng-if="params.tab === 0">
 		<textarea elastic ng-if="status.cardEditDescription"
 				  placeholder="<?php p($l->t('Add a card description…')); ?>"
 				  ng-blur="cardUpdate(status.edit)"

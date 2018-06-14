@@ -23,7 +23,7 @@
 /* global app moment */
 import app from '../app/App.js';
 
-app.controller('CardController', function ($scope, $rootScope, $sce, $location, $stateParams, $interval, $timeout, $filter, BoardService, CardService, StackService, StatusService, markdownItConverter, FileService) {
+app.controller('CardController', function ($scope, $rootScope, $sce, $location, $stateParams, $state, $interval, $timeout, $filter, BoardService, CardService, StackService, StatusService, markdownItConverter, FileService) {
 	$scope.sidebar = $rootScope.sidebar;
 	$scope.status = {
 		lastEdit: 0,
@@ -38,7 +38,13 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 	$scope.boardservice = BoardService;
 
 	$scope.isArray = angular.isArray;
-
+	// workaround for $stateParams changes not being propagated
+	$scope.$watch(function() {
+		return $state.params;
+	}, function (params) {
+		$scope.params = params;
+	}, true);
+	$scope.params = $state.params;
 	$scope.mimetypeForAttachment = function(attachment) {
 		let url = OC.MimeType.getIconUrl(attachment.extendedData.mimetype);
 		let style = {
@@ -97,7 +103,7 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 			return match;
 		});
 		CardService.update($scope.status.edit).then(function (data) {
-			var header = $('.section-header.card-description');
+			var header = $('.section-header-tabbed .tabDetails');
 			header.find('.save-indicator.unsaved').hide();
 			header.find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
 		});
@@ -126,7 +132,7 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 	};
 	$scope.cardEditDescriptionChanged = function ($event) {
 		$scope.status.lastEdit = Date.now();
-		var header = $('.section-header.card-description');
+		var header = $('.section-header-tabbed .tabDetails');
 		header.find('.save-indicator.unsaved').show();
 		header.find('.save-indicator.saved').hide();
 	};
@@ -136,10 +142,10 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 		if (timeSinceEdit > 1000 && $scope.status.lastEdit > $scope.status.lastSave && !$scope.status.saving) {
 			$scope.status.lastSave = currentTime;
 			$scope.status.saving = true;
-			var header = $('.section-header.card-description');
+			var header = $('.section-header-tabbed .tabDetails');
 			header.find('.save-indicator.unsaved').fadeIn(500);
 			CardService.update($scope.status.edit).then(function (data) {
-				var header = $('.section-header.card-description');
+				var header = $('.section-header-tabbed .tabDetails');
 				header.find('.save-indicator.unsaved').hide();
 				header.find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
 				$scope.status.saving = false;
@@ -156,7 +162,7 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 	$scope.cardUpdate = function (card) {
 		CardService.update(card).then(function (data) {
 			$scope.status.cardEditDescription = false;
-			var header = $('.section-content.card-description');
+			var header = $('.section-header-tabbed .tabDetails');
 			header.find('.save-indicator.unsaved').hide();
 			header.find('.save-indicator.saved').fadeIn(500).fadeOut(1000);
 		});

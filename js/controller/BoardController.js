@@ -48,7 +48,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	}, function (params) {
 		$scope.params = params;
 	}, true);
-	$scope.params = $state;
+	$scope.params = $state.params;
 
 	/**
 	 * Check for markdown checkboxes in description to render the counter
