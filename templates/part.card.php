@@ -89,7 +89,7 @@
 
 	<div class="section-header">
 		<h4><?php p($l->t('Attachments')); ?></h4>
-		<label for="attachment-upload" class="button icon-upload"></label>
+		<label for="attachment-upload" class="button icon-upload" ng-class="{'icon-loading-small': uploader.isUploading}"></label>
 		<input id="attachment-upload" type="file" nv-file-select="" uploader="uploader" class="hidden" options="{cardId: cardservice.getCurrent().id}" />
 	</div>
 	<div class="section-content card-attachments" ng-if="cardservice.getCurrent() && isArray(cardservice.getCurrent().attachments)">
@@ -102,8 +102,10 @@
 							<span class="basename">{{ attachment.extendedData.info.filename}}</span>
 							<span class="extension">.{{ attachment.extendedData.info.extension}}</span>
 						</div>
-						<span class="filesize">{{ attachment.extendedData.filesize | bytes }}</span>
-						<span class="filedate">{{ attachment.createdAt|relativeDateFilter }}</span>
+							<span class="filesize">{{ attachment.extendedData.filesize | bytes }}</span>
+							<span class="filedate">{{ attachment.createdAt|relativeDateFilter }}</span>
+							<span class="filedate">{{ attachment.lastModified|relativeDateFilter }}</span>
+							<span class="filedate">{{ attachment.createdBy }}</span>
 						</a>
 					</div>
 					<button class="icon icon-history button-inline" ng-click="cardservice.attachmentRemoveUndo(attachment)" ng-if="attachment.deletedAt > 0" title="<?php p($l->t('Undo file deletion - Otherwise the file will be deleted during the next cronjob run.')); ?>">
