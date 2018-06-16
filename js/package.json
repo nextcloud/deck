@@ -24,6 +24,7 @@
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
+    "cypress": "^3.0.1",
     "css-loader": "^1.0.0",
     "karma": "^3.0.0",
     "mini-css-extract-plugin": "^0.4.1",
