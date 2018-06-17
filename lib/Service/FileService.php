@@ -118,7 +118,7 @@ class FileService implements IAttachmentService {
 			$error = $phpFileUploadErrors[$file['error']];
 		}
 		if ($error !== null) {
-			throw new \RuntimeException($error);
+			throw new \Exception($error);
 		}
 		return $file;
 	}

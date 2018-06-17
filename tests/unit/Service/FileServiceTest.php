@@ -103,7 +103,7 @@ class FileServiceTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \RuntimeException
+	 * @expectedException \Exception
 	 */
 	public function testCreateEmpty() {
 		$attachment = $this->getAttachment();
@@ -112,7 +112,7 @@ class FileServiceTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \RuntimeException
+	 * @expectedException \Exception
 	 */
 	public function testCreateError() {
 		$attachment = $this->getAttachment();
