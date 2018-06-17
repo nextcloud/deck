@@ -45,17 +45,28 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 		$scope.params = params;
 	}, true);
 	$scope.params = $state.params;
-	$scope.mimetypeForAttachment = function(attachment) {
-		let url = OC.MimeType.getIconUrl(attachment.extendedData.mimetype);
-		let style = {
-			'background-image': `url("${url}")`,
-		};
-		return style;
+
+	$scope.addAttachmentToDescription = function(insertText) {
+		let el = document.querySelectorAll('textarea')[0];
+		let start = el.selectionStart;
+		let end = el.selectionEnd;
+		let text = $scope.status.edit.description || '';
+		let before = text.substring(0, start);
+		let after = text.substring(end, text.length);
+		let newText = before + "\n" + insertText + "\n" + after;
+		$scope.status.edit.description = newText;
+		el.selectionStart = el.selectionEnd = start + newText.length;
+		el.focus();
+		$scope.status.continueEdit = false;
+		$scope.cardEditDescriptionChanged();
+		$scope.status.selectAttachment = false;
 	};
-	$scope.attachmentUrl = function(attachment) {
-		let cardId = $scope.cardservice.getCurrent().id;
-		let attachmentId = attachment.id;
-		return OC.generateUrl(`/apps/deck/cards/${cardId}/attachment/${attachmentId}`);
+
+	$scope.abortAttachmentSelection = function() {
+		$scope.status.continueEdit = false;
+		$scope.status.selectAttachment = false;
+		let el = document.querySelectorAll('textarea')[0];
+		el.focus();
 	};
 
 	$scope.statusservice.retainWaiting();
@@ -162,6 +173,7 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 	$scope.cardUpdate = function (card) {
 		CardService.update(card).then(function (data) {
 			$scope.status.cardEditDescription = false;
+			$scope.updateMarkdown($scope.status.edit.description);
 			var header = $('.section-header-tabbed .tabDetails');
 			header.find('.save-indicator.unsaved').hide();
 			header.find('.save-indicator.saved').fadeIn(500).fadeOut(1000);

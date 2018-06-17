@@ -58,5 +58,8 @@ Util::addScript('deck', 'build/deck');
 	<script type="text/ng-template" id="/card.sidebarView.html">
 		<?php print_unescaped($this->inc('part.card')); ?>
 	</script>
+	<script type="text/ng-template" id="/card.attachments.html">
+		<?php print_unescaped($this->inc('part.card.attachments')); ?>
+	</script>
 
 </div>

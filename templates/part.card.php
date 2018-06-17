@@ -1,4 +1,4 @@
-<div nv-file-drop="" uploader="uploader"  class="drop-zone" options="{cardId: cardservice.getCurrent().id}">
+<div nv-file-drop="" uploader="uploader" class="drop-zone" options="{cardId: cardservice.getCurrent().id}">
 	<div class="drop-indicator" nv-file-over uploader="uploader">
 		<p><?php p($l->t('Drop your files here to upload it to the card')); ?></p>
 	</div>
@@ -97,50 +97,26 @@
 			<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
 			<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>
 			<a ng-if="params.tab === 0" href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
-			<label for="attachment-upload" class="button icon-upload" ng-class="{'icon-loading-small': uploader.isUploading}"></label>
-			<input id="attachment-upload" type="file" nv-file-select="" uploader="uploader" class="hidden" options="{cardId: cardservice.getCurrent().id}" />
+			<label ng-if="params.tab === 1" for="attachment-upload" class="button icon-upload" ng-class="{'icon-loading-small': uploader.isUploading}" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Upload attachment')); ?>"></label>
+			<input id="attachment-upload" type="file" nv-file-select="" uploader="uploader" class="hidden" options="{cardId: cardservice.getCurrent().id}"/>
+			<input ng-if="status.cardEditDescription" type="button" ng-mousedown="status.continueEdit = true; status.selectAttachment = true;" class="icon-files-dark" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Insert attachment')); ?>"/>
+
 		</div>
 	</div>
-	<div class="section-content card-attachments" ng-if="params.tab === 1 && cardservice.getCurrent() && isArray(cardservice.getCurrent().attachments)">
-		<ul>
-			<li class="attachment" ng-repeat="attachment in cardservice.getCurrent().attachments | filter: {type: 'deck_file'} | orderBy: ['deletedAt', '-lastModified']" ng-class="{deleted: attachment.deletedAt > 0}">
-					<a class="fileicon" ng-style="mimetypeForAttachment(attachment)" ng-href="{{ attachmentUrl(attachment) }}"></a>
-					<div class="details">
-						<a ng-href="{{ attachmentUrl(attachment) }}" target="_blank">
-						<div class="filename">
-							<span class="basename">{{ attachment.extendedData.info.filename}}</span>
-							<span class="extension">.{{ attachment.extendedData.info.extension}}</span>
-						</div>
-							<span class="filesize">{{ attachment.extendedData.filesize | bytes }}</span>
-							<span class="filedate">{{ attachment.createdAt|relativeDateFilter }}</span>
-							<span class="filedate">{{ attachment.lastModified|relativeDateFilter }}</span>
-							<span class="filedate">{{ attachment.createdBy }}</span>
-						</a>
-					</div>
-					<button class="icon icon-history button-inline" ng-click="cardservice.attachmentRemoveUndo(attachment)" ng-if="attachment.deletedAt > 0" title="<?php p($l->t('Undo file deletion - Otherwise the file will be deleted during the next cronjob run.')); ?>">
-						<span class="hidden-visually"><?php p($l->t('Undo file deletion')); ?></span>
-					</button>
-					<div class="app-popover-menu-utils" ng-if="attachment.deletedAt == 0">
-						<button class="button-inline icon icon-more" ng-model="attachment"></button>
-						<div class="popovermenu hidden">
-							<ul>
-								<li>
-									<a class="menuitem action action-delete"
-									   ng-click="cardservice.attachmentRemove(attachment); $event.stopPropagation();"><span
-												class="icon icon-delete"></span><span><?php p($l->t('Delete')); ?></span></a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</a>
-			</li>
-		</ul>
+	<div class="section-content card-attachments">
+		<attachment-list-component ng-if="params.tab === 1 && cardservice.getCurrent() && isArray(cardservice.getCurrent().attachments)" attachments="cardservice.getCurrent().attachments"></attachment-list-component>
 	</div>
 
 	<div class="section-content card-description" ng-if="params.tab === 0">
+		<attachment-list-component
+				ng-if="status.selectAttachment"
+				attachments="cardservice.getCurrent().attachments"
+				is-file-selector="true"
+				on-select="addAttachmentToDescription(attachment)" on-abort="abortAttachmentSelection()">
+		</attachment-list-component>
 		<textarea elastic ng-if="status.cardEditDescription"
 				  placeholder="<?php p($l->t('Add a card description…')); ?>"
-				  ng-blur="cardUpdate(status.edit)"
+				  ng-blur="!status.continueEdit && cardUpdate(status.edit)"
 				  ng-model="status.edit.description"
 				  ng-change="cardEditDescriptionChanged(); updateMarkdown(status.edit.description)"
 				  autofocus-on-insert> </textarea>
