@@ -53,7 +53,7 @@ class AttachmentListController {
 			insertText = `![📎 ${filename}](${url})`;
 		}
 		return insertText;
-	};
+	}
 
 	select(attachment) {
 		this.onSelect({attachment: this.getAttachmentMarkdown(attachment)});

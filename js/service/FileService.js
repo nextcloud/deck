@@ -42,14 +42,10 @@ export default class FileService {
 				{
 					requesttoken: oc_requesttoken,
 					type: 'deck_file',
-
 				}
 			];
 		}
-		fileItem.headers =
-			{
-				requesttoken: oc_requesttoken,
-			};
+		fileItem.headers = {requesttoken: oc_requesttoken};
 
 		this.uploader.uploadItem(fileItem);
 	}
@@ -75,7 +71,7 @@ export default class FileService {
 								return attachment.extendedData.info.extension === existingFile.extendedData.info.extension
 									&& attachment.extendedData.info.filename.startsWith(fileName);
 							});
-							let nextIndex = foundFilesMatching.length+1;
+							let nextIndex = foundFilesMatching.length + 1;
 							fileItem.file.name = fileName + ' (' + nextIndex + ').' + existingFile.extendedData.info.extension;
 							self.runUpload(fileItem);
 						}
@@ -90,14 +86,14 @@ export default class FileService {
 
 	}
 
-	onSuccessItem(item, response) {
+	onSuccessItem (item, response) {
 		let attachments = this.cardservice.get(item.cardId).attachments;
 		let index = attachments.indexOf(attachments.find((attachment) => attachment.id === response.id));
 		if (~index) {
 			attachments = attachments.splice(index, 1);
 		}
 		this.cardservice.get(item.cardId).attachments.push(response);
-	};
+	}
 
 }
 

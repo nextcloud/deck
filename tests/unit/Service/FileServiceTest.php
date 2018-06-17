@@ -86,7 +86,7 @@ class FileServiceTest extends TestCase {
 	private function mockGetUploadedFileEmpty() {
 		$this->request->expects($this->once())
 			->method('getUploadedFile')
-			->willReturn(null);
+			->willReturn([]);
 	}
 	private function mockGetUploadedFileError($error) {
 		$this->request->expects($this->once())
@@ -107,6 +107,9 @@ class FileServiceTest extends TestCase {
 	 */
 	public function testCreateEmpty() {
 		$attachment = $this->getAttachment();
+		$this->l10n->expects($this->any())
+			->method('t')
+			->willReturn('Error');
 		$this->mockGetUploadedFileEmpty();
 		$this->fileService->create($attachment);
 	}
@@ -117,6 +120,9 @@ class FileServiceTest extends TestCase {
 	public function testCreateError() {
 		$attachment = $this->getAttachment();
 		$this->mockGetUploadedFileError(UPLOAD_ERR_INI_SIZE);
+		$this->l10n->expects($this->any())
+			->method('t')
+			->willReturn('Error');
 		$this->fileService->create($attachment);
 	}
 

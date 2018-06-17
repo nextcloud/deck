@@ -112,7 +112,7 @@ class FileService implements IAttachmentService {
 		];
 
 		if (empty($file)) {
-		$error = $this->l10n->t('No file uploaded');
+			$error = $this->l10n->t('No file uploaded');
 		}
 		if (!empty($file) && array_key_exists('error', $file) && $file['error'] !== UPLOAD_ERR_OK) {
 			$error = $phpFileUploadErrors[$file['error']];
