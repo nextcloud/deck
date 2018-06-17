@@ -30,13 +30,13 @@ use OCA\Deck\Service\StackService;
 use OCP\AppFramework\Controller;
 use OCP\IRequest;
 
-class StackControllerTest extends \PHPUnit_Framework_TestCase {
+class StackControllerTest extends \Test\TestCase {
 
-    /** @var Controller|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Controller|\PHPUnit\Framework\MockObject\MockObject */
 	private $controller;
-    /** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var IRequest|\PHPUnit\Framework\MockObject\MockObject */
     private $request;
-    /** @var StackService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StackService|\PHPUnit\Framework\MockObject\MockObject */
 	private $stackService;
 	/** @var string */
 	private $userId = 'user';

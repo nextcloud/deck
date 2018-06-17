@@ -44,19 +44,19 @@ class StackServiceTest extends TestCase {
 
     /** @var StackService */
 	private $stackService;
-    /** @var \PHPUnit_Framework_MockObject_MockObject|StackMapper */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|StackMapper */
 	private $stackMapper;
-    /** @var \PHPUnit_Framework_MockObject_MockObject|CardMapper */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|CardMapper */
 	private $cardMapper;
-    /** @var \PHPUnit_Framework_MockObject_MockObject|LabelMapper */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|LabelMapper */
 	private $labelMapper;
-    /** @var \PHPUnit_Framework_MockObject_MockObject|PermissionService */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|PermissionService */
 	private $permissionService;
-	/** @var AssignedUsersMapper|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var AssignedUsersMapper|\PHPUnit\Framework\MockObject\MockObject */
 	private $assignedUsersMapper;
-	/** @var AttachmentService|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var AttachmentService|\PHPUnit\Framework\MockObject\MockObject */
 	private $attachmentService;
-	/** @var BoardService|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var BoardService|\PHPUnit\Framework\MockObject\MockObject */
 	private $boardService;
 
 	public function setUp() {

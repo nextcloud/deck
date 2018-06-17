@@ -27,13 +27,13 @@ use OCA\Deck\Service\CardService;
 use OCP\AppFramework\Controller;
 use OCP\IRequest;
 
-class CardControllerTest extends \PHPUnit_Framework_TestCase {
+class CardControllerTest extends \Test\TestCase {
 
-    /** @var CardController|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CardController|\PHPUnit\Framework\MockObject\MockObject */
 	private $controller;
-    /** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var IRequest|\PHPUnit\Framework\MockObject\MockObject */
     private $request;
-    /** @var CardService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CardService|\PHPUnit\Framework\MockObject\MockObject */
 	private $cardService;
 	/** @var string */
 	private $userId = 'user';

@@ -35,17 +35,17 @@ use Test\TestCase;
 
 class CardServiceTest extends TestCase {
 
-    /** @var CardService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CardService|\PHPUnit\Framework\MockObject\MockObject */
     private $cardService;
-    /** @var CardMapper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CardMapper|\PHPUnit\Framework\MockObject\MockObject */
     private $cardMapper;
-    /** @var StackMapper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StackMapper|\PHPUnit\Framework\MockObject\MockObject */
     private $stackMapper;
-    /** @var PermissionService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PermissionService|\PHPUnit\Framework\MockObject\MockObject */
     private $permissionService;
-    /** @var AssignedUsersMapper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AssignedUsersMapper|\PHPUnit\Framework\MockObject\MockObject */
     private $assignedUsersMapper;
-	/** @var BoardService|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var BoardService|\PHPUnit\Framework\MockObject\MockObject */
 	private $boardService;
 
     public function setUp() {

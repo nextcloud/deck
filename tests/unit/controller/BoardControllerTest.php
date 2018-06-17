@@ -26,7 +26,7 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\Db\Acl;
 use OCP\IUser;
 
-class BoardControllerTest extends \PHPUnit_Framework_TestCase {
+class BoardControllerTest extends \Test\TestCase {
 
 	private $controller;
 	private $request;

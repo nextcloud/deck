@@ -25,11 +25,12 @@ namespace OCA\Deck\Db;
 
 use OCA\Deck\ArchivedItemException;
 use OCA\Deck\Controller\PageController;
+use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\StatusException;
 
-class ExceptionsTest extends \PHPUnit_Framework_TestCase {
+class ExceptionsTest extends \Test\TestCase {
 
 	public function testNoPermissionException() {
 		$c = new \stdClass();
@@ -47,6 +48,11 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase {
 	public function testCardArchivedException() {
 		$e = new ArchivedItemException('foo');
 		$this->assertEquals('foo', $e->getMessage());
+	}
+
+	public function testInvalidAttachmentType() {
+		$e = new InvalidAttachmentType('foo');
+		$this->assertEquals('No matching IAttachmentService implementation found for type foo', $e->getMessage());
 	}
 
 	public function testStatusException() {

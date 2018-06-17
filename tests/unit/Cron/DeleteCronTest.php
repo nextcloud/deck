@@ -32,11 +32,11 @@ use OCA\Deck\Service\IAttachmentService;
 
 class DeleteCronTest extends \Test\TestCase {
 
-	/** @var BoardMapper|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var BoardMapper|\PHPUnit\Framework\MockObject\MockObject */
 	protected $boardMapper;
-	/** @var AttachmentService|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var AttachmentService|\PHPUnit\Framework\MockObject\MockObject */
 	private $attachmentService;
-	/** @var AttachmentMapper|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var AttachmentMapper|\PHPUnit\Framework\MockObject\MockObject */
 	private $attachmentMapper;
 	/** @var DeleteCron */
 	protected $deleteCron;

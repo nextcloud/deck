@@ -55,6 +55,8 @@ class AttachmentService {
 	 * @param AttachmentMapper $attachmentMapper
 	 * @param CardMapper $cardMapper
 	 * @param PermissionService $permissionService
+	 * @param Application $application
+	 * @param ICacheFactory $cacheFactory
 	 * @param $userId
 	 * @throws \OCP\AppFramework\QueryException
 	 */
@@ -257,6 +259,6 @@ class AttachmentService {
 			}
 		} catch (InvalidAttachmentType $e) {
 		}
-		throw new NoPermissionException();
+		throw new NoPermissionException('Restore is not allowed.');
 	}
 }
