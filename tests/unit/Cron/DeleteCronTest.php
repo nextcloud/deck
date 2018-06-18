@@ -27,6 +27,7 @@ use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\Service\AttachmentService;
 use OCA\Deck\Service\IAttachmentService;
 
@@ -92,6 +93,26 @@ class DeleteCronTest extends \Test\TestCase {
 		$this->attachmentService->expects($this->once())
 			->method('getService')
 			->willReturn($service);
+		$this->attachmentMapper->expects($this->once())
+			->method('delete')
+			->with($attachment);
+		$this->invokePrivate($this->deleteCron, 'run', [null]);
+	}
+
+	public function testDeleteCronInvalidAttachment() {
+		$boards = [];
+		$this->boardMapper->expects($this->once())
+			->method('findToDelete')
+			->willReturn($boards);
+
+		$attachment = new Attachment();
+		$attachment->setType('deck_file_invalid');
+		$this->attachmentMapper->expects($this->once())
+			->method('findToDelete')
+			->willReturn([$attachment]);
+		$this->attachmentService->expects($this->once())
+			->method('getService')
+			->will($this->throwException(new InvalidAttachmentType('deck_file_invalid')));
 		$this->attachmentMapper->expects($this->once())
 			->method('delete')
 			->with($attachment);

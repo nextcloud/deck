@@ -160,6 +160,36 @@ class AttachmentServiceTest extends TestCase {
 		$this->assertEquals($attachments, $this->attachmentService->findAll(123, false));
 	}
 
+	public function testFindAllWithDeleted() {
+		$this->mockPermission(Acl::PERMISSION_READ);
+		$attachments = [
+			$this->createAttachment('deck_file','file1'),
+			$this->createAttachment('deck_file','file2'),
+			$this->createAttachment('deck_file_invalid','file3'),
+		];
+		$attachmentsDeleted = [
+			$this->createAttachment('deck_file','file4'),
+			$this->createAttachment('deck_file','file5'),
+			$this->createAttachment('deck_file_invalid','file6'),
+		];
+		$this->attachmentMapper->expects($this->once())
+			->method('findAll')
+			->with(123)
+			->willReturn($attachments);
+		$this->attachmentMapper->expects($this->once())
+			->method('findToDelete')
+			->with(123, false)
+			->willReturn($attachmentsDeleted);
+
+		$this->attachmentServiceImpl->expects($this->at(0))
+			->method('extendData')
+			->with($attachments[0]);
+		$this->attachmentServiceImpl->expects($this->at(1))
+			->method('extendData')
+			->with($attachments[1]);
+		$this->assertEquals(array_merge($attachments, $attachmentsDeleted), $this->attachmentService->findAll(123, true));
+	}
+
 	public function testCount() {
 		$this->cache->expects($this->once())->method('get')->with('card-123')->willReturn(null);
 		$this->attachmentMapper->expects($this->once())->method('findAll')->willReturn([1,2,3,4]);

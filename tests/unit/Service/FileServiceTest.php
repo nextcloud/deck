@@ -44,6 +44,7 @@ use OCP\Files\SimpleFS\ISimpleFile;
 use OCP\Files\SimpleFS\ISimpleFolder;
 use OCP\ICacheFactory;
 use OCP\IL10N;
+use OCP\ILogger;
 use OCP\IRequest;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
@@ -56,6 +57,8 @@ class FileServiceTest extends TestCase {
 	private $appData;
 	/** @var IRequest|MockObject */
 	private $request;
+	/** @var ILogger|MockObject */
+	private $logger;
 	/** @var FileService */
 	private $fileService;
 
@@ -64,13 +67,26 @@ class FileServiceTest extends TestCase {
 		$this->request = $this->createMock(IRequest::class);
 		$this->appData = $this->createMock(IAppData::class);
 		$this->l10n = $this->createMock(IL10N::class);
-		$this->fileService = new FileService($this->l10n, $this->appData, $this->request);
+		$this->logger = $this->createMock(ILogger::class);
+		$this->fileService = new FileService($this->l10n, $this->appData, $this->request, $this->logger);
     }
 
     public function mockGetFolder($cardId) {
 		$folder = $this->createMock(ISimpleFolder::class);
 		$this->appData->expects($this->once())
 			->method('getFolder')
+			->with('file-card-' . $cardId)
+			->willReturn($folder);
+		return $folder;
+	}
+	public function mockGetFolderFailure($cardId) {
+		$folder = $this->createMock(ISimpleFolder::class);
+		$this->appData->expects($this->once())
+			->method('getFolder')
+			->with('file-card-' . $cardId)
+			->will($this->throwException(new \OCP\Files\NotFoundException()));
+		$this->appData->expects($this->once())
+			->method('newFolder')
 			->with('file-card-' . $cardId)
 			->willReturn($folder);
 		return $folder;
@@ -102,6 +118,39 @@ class FileServiceTest extends TestCase {
 			]);
 	}
 
+	public function testExtendDataNotFound() {
+		$attachment = $this->getAttachment();
+		$folder = $this->mockGetFolder(123);
+		$folder->expects($this->once())->method('getFile')->will($this->throwException(new \OCP\Files\NotFoundException()));
+		$this->assertEquals($attachment, $this->fileService->extendData($attachment));
+	}
+
+	public function testExtendDataNotPermitted() {
+		$attachment = $this->getAttachment();
+		$folder = $this->mockGetFolder(123);
+		$folder->expects($this->once())->method('getFile')->will($this->throwException(new \OCP\Files\NotPermittedException()));
+		$this->assertEquals($attachment, $this->fileService->extendData($attachment));
+	}
+
+	public function testExtendData() {
+		$attachment = $this->getAttachment();
+		$expected = $this->getAttachment();
+		$expected->setExtendedData([
+			'filesize' => 100,
+			'mimetype' => 'image/jpeg',
+			'info' => pathinfo(__FILE__)
+		]);
+
+		$file = $this->createMock(ISimpleFile::class);
+		$file->expects($this->once())->method('getSize')->willReturn(100);
+		$file->expects($this->once())->method('getMimeType')->willReturn('image/jpeg');
+		$file->expects($this->once())->method('getName')->willReturn(__FILE__);
+
+		$folder = $this->mockGetFolder(123);
+		$folder->expects($this->once())->method('getFile')->willReturn($file);
+		$this->assertEquals($expected, $this->fileService->extendData($attachment));
+	}
+
 	/**
 	 * @expectedException \Exception
 	 */
@@ -130,6 +179,24 @@ class FileServiceTest extends TestCase {
 		$attachment = $this->getAttachment();
 		$this->mockGetUploadedFile();
 		$folder = $this->mockGetFolder(123);
+		$folder->expects($this->once())
+			->method('fileExists')
+			->willReturn(false);
+		$file = $this->createMock(ISimpleFile::class);
+		$file->expects($this->once())
+			->method('putContent')
+			->with(file_get_contents(__FILE__, 'r'));
+		$folder->expects($this->once())
+			->method('newFile')
+			->willReturn($file);
+
+		$this->fileService->create($attachment);
+	}
+
+	public function testCreateNoFolder() {
+		$attachment = $this->getAttachment();
+		$this->mockGetUploadedFile();
+		$folder = $this->mockGetFolderFailure(123);
 		$folder->expects($this->once())
 			->method('fileExists')
 			->willReturn(false);
