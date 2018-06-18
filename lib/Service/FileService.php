@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Service;
 
-
 use OC\Security\CSP\ContentSecurityPolicyManager;
 use OCA\Deck\Db\Attachment;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
@@ -35,23 +34,26 @@ use OCP\Files\NotPermittedException;
 use OCP\Files\SimpleFS\ISimpleFile;
 use OCP\Files\SimpleFS\ISimpleFolder;
 use OCP\IL10N;
+use OCP\ILogger;
 use OCP\IRequest;
-
 
 class FileService implements IAttachmentService {
 
 	private $l10n;
 	private $appData;
 	private $request;
+	private $logger;
 
 	public function __construct(
 		IL10N $l10n,
 		IAppData $appData,
-		IRequest $request
+		IRequest $request,
+		ILogger $logger
 	) {
 		$this->l10n = $l10n;
 		$this->appData = $appData;
 		$this->request = $request;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -84,9 +86,10 @@ class FileService implements IAttachmentService {
 		try {
 			$file = $this->getFileForAttachment($attachment);
 		} catch (NotFoundException $e) {
-			// TODO: log error
+			$this->logger->info('Extending data for file attachment failed');
 			return $attachment;
 		} catch (NotPermittedException $e) {
+			$this->logger->info('Extending data for file attachment failed');
 			return $attachment;
 		}
 		$attachment->setExtendedData([
