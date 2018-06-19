@@ -27,11 +27,9 @@ import md from 'angular-markdown-it';
 import markdownitLinkTarget from 'markdown-it-link-target';
 import markdownitCheckbox from 'legacy/markdown-it-checkbox.js';
 
-app.config(function ($provide, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider, $compileProvider, markdownItConverterProvider) {
+app.config(function ($provide, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider, $compileProvider, markdownItConverterProvider, $logProvider) {
 	'use strict';
 	$httpProvider.defaults.headers.common.requesttoken = oc_requesttoken;
-
-
 	$compileProvider.debugInfoEnabled(true);
 
 	markdownItConverterProvider.use(markdownitLinkTarget, {

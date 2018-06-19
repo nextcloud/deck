@@ -96,7 +96,7 @@
 	<div class="section-content card-description">
 		<textarea elastic ng-if="status.cardEditDescription"
 				  placeholder="<?php p($l->t('Add a card description…')); ?>"
-				  ng-blur="cardUpdate(status.edit)"
+				  ng-blur="cardUpdate(status.edit); updateMarkdown(status.edit.description)"
 				  ng-model="status.edit.description"
 				  ng-change="cardEditDescriptionChanged(); updateMarkdown(status.edit.description)"
 				  autofocus-on-insert> </textarea>

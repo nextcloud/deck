@@ -119,7 +119,7 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 		var currentTime = Date.now();
 		var timeSinceEdit = currentTime-$scope.status.lastEdit;
 		if (timeSinceEdit > 1000 && $scope.status.lastEdit > $scope.status.lastSave && !$scope.status.saving) {
-			$scope.status.lastSave = currentTime;
+			$scope.status.lastSave = $scope.status.lastEdit = currentTime;
 			$scope.status.saving = true;
 			var header = $('.section-header.card-description');
 			header.find('.save-indicator.unsaved').fadeIn(500);
@@ -127,7 +127,7 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 				var header = $('.section-header.card-description');
 				header.find('.save-indicator.unsaved').hide();
 				header.find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
-				StackService.updateCard($scope.status.edit);
+				//StackService.updateCard($scope.status.edit);
 				$scope.status.saving = false;
 			});
 		}
@@ -216,14 +216,14 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 
 	$scope.addAssignedUser = function(item) {
 		CardService.assignUser(CardService.getCurrent(), item.uid).then(function (data) {
-			StackService.updateCard(CardService.getCurrent());
+			//StackService.updateCard(CardService.getCurrent());
 		});
 		$scope.status.showAssignUser = false;
 	};
 
 	$scope.removeAssignedUser = function(uid) {
 		CardService.unassignUser(CardService.getCurrent(), uid).then(function (data) {
-			StackService.updateCard(CardService.getCurrent());
+			//StackService.updateCard(CardService.getCurrent());
 		});
 	};
 

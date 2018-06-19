@@ -57,7 +57,7 @@
 			</h3>
 			<ul data-as-sortable="sortOptions" is-disabled="!boardservice.canEdit() || filter==='archive'" data-ng-model="s.cards" class="card-list" ng-class="{emptyStack: !s.cards.length}">
 				<li class="card as-sortable-item"
-					ng-repeat="c in s.cards"
+					ng-repeat="c in s.cards track by c.id"
 					data-as-sortable-item
 					ng-click="$event.stopPropagation()"
 					ui-sref="board.card({boardId: id, cardId: c.id})"
@@ -75,7 +75,7 @@
 						</div>
 
 						<div class="card-controls">
-							<i class="icon icon-filetype-text" ng-if="c.description" title="{{ c.description }}"></i>
+							<i class="icon icon-filetype-text" ng-if="cardservice.get(c.id).description" title="{{ cardservice.get(c.id).description }}"></i>
 							<span class="due" ng-if="c.duedate" ng-class="{'overdue': c.overdue == 3, 'now': c.overdue == 2, 'next': c.overdue == 1  }" title="{{ c.duedate }}">
 								<i class="icon icon-badge"></i>
 								<span data-timestamp="{{ c.duedate | dateToTimestamp }}" class="live-relative-timestamp">{{ c.duedate | relativeDateFilterString }}</span>
@@ -85,7 +85,7 @@
 								<span>{{ getCheckboxes(c.description)[0] }}/{{ getCheckboxes(c.description)[1] }}</span>
 							</div>
 							<div class="card-assigned-users">
-								<div class="assigned-user" ng-repeat="user in c.assignedUsers | limitTo: 3">
+								<div class="assigned-user" ng-repeat="user in cardservice.get(c.id).assignedUsers | limitTo: 3">
 									<avatar data-user="{{ user.participant.uid }}" data-displayname="{{ user.participant.displayname }}" data-tooltip></avatar>
 								</div>
 							</div>
