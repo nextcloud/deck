@@ -56,7 +56,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_attachment')
-			->where($qb->expr()->eq('id', (string)$id));
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
 		$cursor = $qb->execute();
 		$row = $cursor->fetch(PDO::FETCH_ASSOC);
@@ -74,8 +74,8 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_attachment')
-			->where($qb->expr()->eq('card_id', (string)$cardId, IQueryBuilder::PARAM_INT))
-			->andWhere($qb->expr()->eq('deleted_at', (string)0, IQueryBuilder::PARAM_INT));
+			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 
 
 		$entities = [];
@@ -93,14 +93,14 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_attachment')
-			->where($qb->expr()->gt('deleted_at', '0', IQueryBuilder::PARAM_INT));
+			->where($qb->expr()->gt('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		if ($withOffset) {
 			$qb
-				->andWhere($qb->expr()->lt('deleted_at', (string)$timeLimit, IQueryBuilder::PARAM_INT));
+				->andWhere($qb->expr()->lt('deleted_at', $qb->createNamedParameter($timeLimit, IQueryBuilder::PARAM_INT)));
 		}
 		if ($cardId !== null) {
 			$qb
-				->andWhere($qb->expr()->eq('card_id', (string)$cardId, IQueryBuilder::PARAM_INT));
+				->andWhere($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)));
 		}
 
 		$entities = [];
