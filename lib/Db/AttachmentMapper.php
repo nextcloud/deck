@@ -24,7 +24,9 @@
 
 namespace OCA\Deck\Db;
 
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IUserManager;
@@ -133,7 +135,13 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	 * @return boolean
 	 */
 	public function isOwner($userId, $id) {
-		// TODO: Implement isOwner() method.
+		try {
+			$attachment = $this->find($id);
+			return $this->cardMapper->isOwner($userId, $attachment->getCardId());
+		} catch (DoesNotExistException $e) {
+		} catch (MultipleObjectsReturnedException $e) {
+		}
+		return false;
 	}
 
 	/**
@@ -148,6 +156,6 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 		} catch (\Exception $e) {
 			return null;
 		}
-		$this->cardMapper->findBoardId($attachment->getCardId());
+		return $this->cardMapper->findBoardId($attachment->getCardId());
 	}
 }
