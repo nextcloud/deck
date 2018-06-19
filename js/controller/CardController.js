@@ -53,7 +53,7 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 		let text = $scope.status.edit.description || '';
 		let before = text.substring(0, start);
 		let after = text.substring(end, text.length);
-		let newText = before + "\n" + insertText + "\n" + after;
+		let newText = before + '\n' + insertText + '\n' + after;
 		$scope.status.edit.description = newText;
 		el.selectionStart = el.selectionEnd = start + newText.length;
 		el.focus();
