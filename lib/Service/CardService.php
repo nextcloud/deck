@@ -40,6 +40,7 @@ class CardService {
 	private $permissionService;
 	private $boardService;
 	private $assignedUsersMapper;
+	private $attachmentService;
 
 	public function __construct(CardMapper $cardMapper, StackMapper $stackMapper, PermissionService $permissionService, BoardService $boardService, AssignedUsersMapper $assignedUsersMapper, AttachmentService $attachmentService) {
 		$this->cardMapper = $cardMapper;

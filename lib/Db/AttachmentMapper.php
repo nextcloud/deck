@@ -37,6 +37,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 
 	private $cardMapper;
 	private $userManager;
+	private $qb;
 
 	public function __construct(IDBConnection $db, CardMapper $cardMapper, IUserManager $userManager) {
 		parent::__construct($db, 'deck_attachment', Attachment::class);
@@ -109,21 +110,6 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 		}
 		$cursor->closeCursor();
 		return $entities;
-	}
-
-	/**
-	 * @param Attachment $attachment
-	 * @throws \Exception
-	 */
-	public function mapParticipant(Attachment $attachment) {
-		$userManager = $this->userManager;
-		$attachment->resolveRelation('participant', function() use (&$userManager, &$attachment) {
-			$user = $userManager->get($attachment->getParticipant());
-			if ($user !== null) {
-				return new User($user);
-			}
-			return null;
-		});
 	}
 
 

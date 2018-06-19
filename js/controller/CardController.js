@@ -101,8 +101,8 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 		var reg = /\[(X|\s|\_|\-)\]\s(.*)/ig;
 		var nth = 0;
 		$scope.status.edit.description = $scope.status.edit.description.replace(reg, function (match, i, original) {
+			var result = match;
 			if (nth++ === id) {
-				var result;
 				if (match.match(/^\[\s\]/i)) {
 					result = match.replace(/\[\s\]/i, '[x]');
 				}
