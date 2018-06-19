@@ -1371,6 +1371,9 @@ input.input-inline {
 
 	img {
 		max-width: 100%;
+		max-height: 50vh;
+		margin: auto;
+		display: block;
 	}
 
 	input[type=checkbox] {
