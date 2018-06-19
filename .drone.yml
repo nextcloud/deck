@@ -194,6 +194,53 @@ pipeline:
     when:
       matrix:
         TESTS: integration
+  frontend-jsbuild:
+      image: mhart/alpine-node:6.8.0
+      commands:
+        - apk add --no-cache make
+        - make build-js
+      when:
+        matrix:
+          TESTS: frontend
+  frontend:
+      image: cypress/browsers:chrome67
+      group: frontend
+      environment:
+        - APP_NAME=deck
+        - CORE_BRANCH=master
+        - DB=sqlite
+      commands:
+        - cd js/
+        - npm install
+        - ./node_modules/.bin/cypress install
+        - bash -c "until curl -s http://frontend-server:8080/ > /dev/null; do sleep 2; done"
+        - ./node_modules/.bin/cypress run --record --key $CYPRESS_RECORD_TOKEN
+      secrets: [ cypress_record_token ]
+      when:
+        matrix:
+          TESTS: frontend
+  frontend-server:
+      image: nextcloudci/acceptance-php7.1:acceptance-php7.1-2
+      group: frontend
+      detach: true
+      environment:
+        - APP_NAME=deck
+        - CORE_BRANCH=master
+        - DB=sqlite
+      commands:
+        # Pre-setup steps
+        - cd /drone/src
+        - git clone --depth 1 -b master https://github.com/nextcloud/server ../server
+        - cp -R . ../server/apps/deck
+        - cd ../server
+        - git submodule update --init
+        - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/core_install.sh && bash core_install.sh sqlite
+        - php occ app:enable deck
+        - php occ config:system:set trusted_domains 2 --value=frontend-server
+        - php -S 0.0.0.0:8080
+      when:
+        matrix:
+          TESTS: frontend
   eslint:
     image: nextcloudci/eslint:eslint-1
     commands:
@@ -209,6 +256,7 @@ pipeline:
     when:
       matrix:
         TESTS: jsbuild
+services:
 matrix:
   include:
     - TESTS: check-app-compatbility
@@ -224,6 +272,7 @@ matrix:
     - TESTS: php7.2
     - TESTS: eslint
     - TESTS: jsbuild
+    - TESTS: frontend
     #- TESTS: integration
 
 branches: [ master, stable* ]

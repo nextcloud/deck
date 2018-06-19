@@ -1,4 +1,4 @@
-const server = 'http://localhost:8140/index.php/apps/deck';
+const server = 'index.php/apps/deck';
 
 describe('Deck basic features', function() {
 
@@ -33,8 +33,8 @@ describe('Deck basic features', function() {
     cy.route('POST', '/index.php/apps/deck/boards',).as('createBoard')
     cy.visit(server);
     cy.wait('@getBoards');
-    cy.get('#app-navigation ul').contains('Create a new board').parent().within(function() {
-      cy.scrollTo('center');
+	cy.get('#app-navigation ul').children().last().scrollIntoView();
+	cy.get('#app-navigation ul').contains('Create a new board').parent().within(function() {
       cy.get('a').should('be.visible').click();
       cy.get('input[type=text]').type('Board A');
       cy.get('input[type=submit].icon-checkmark').click().wait('@createBoard');

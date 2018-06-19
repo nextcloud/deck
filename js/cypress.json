@@ -1,1 +1,4 @@
-{}
+{
+  "baseUrl": "http://frontend-server:8080/",
+  "projectId": "1s7wkc"
+}
