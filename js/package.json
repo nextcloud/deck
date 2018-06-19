@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "angular": "^1.7.1",
-    "angular-animate": "^1.7.1",
+    "angular-animate": "^1.7.2",
     "angular-markdown-it": "^0.6.1",
     "angular-sanitize": "^1.7.1",
     "markdown-it": "^8.4.1",
