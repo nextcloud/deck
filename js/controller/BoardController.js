@@ -22,7 +22,7 @@
 
 import app from '../app/App.js';
 /* global oc_defaults OC */
-app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter) {
+app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter, FileService) {
 
 	$scope.sidebar = $rootScope.sidebar;
 
@@ -40,6 +40,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.labelservice = LabelService;
 	$scope.defaultColors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
 	$scope.board = BoardService.getCurrent();
+	$scope.uploader = FileService.uploader;
 
 	// workaround for $stateParams changes not being propagated
 	$scope.$watch(function() {
@@ -47,7 +48,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	}, function (params) {
 		$scope.params = params;
 	}, true);
-	$scope.params = $state;
+	$scope.params = $state.params;
 
 	/**
 	 * Check for markdown checkboxes in description to render the counter
@@ -351,6 +352,13 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			'background-color': '#' + color,
 			'color': $filter('textColorFilter')(color)
 		};
+	};
+
+	$scope.attachmentCount = function(card) {
+		if (Array.isArray(card.attachments)) {
+			return card.attachments.filter((obj) => obj.deletedAt === 0).length;
+		}
+		return card.attachmentCount;
 	};
 
 });

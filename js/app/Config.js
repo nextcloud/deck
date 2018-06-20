@@ -74,6 +74,9 @@ app.config(function ($provide, $interpolateProvider, $httpProvider, $urlRouterPr
 		})
 		.state('board.card', {
 			url: '/card/:cardId',
+			params: {
+				tab: {value: 0, dynamic: true},
+			},
 			views: {
 				'sidebarView': {
 					templateUrl: '/card.sidebarView.html',
@@ -81,5 +84,29 @@ app.config(function ($provide, $interpolateProvider, $httpProvider, $urlRouterPr
 				}
 			}
 		});
+
+	$provide.decorator('nvFileOverDirective', function ($delegate) {
+		var directive = $delegate[0],
+			link = directive.link;
+
+		directive.compile = function () {
+			return function (scope, element, attrs) {
+				var overClass = attrs.overClass || 'nv-file-over';
+				link.apply(this, arguments);
+				let counter = 0;
+				element.on('dragenter', function (event) {
+					counter++;
+				});
+				element.on('dragleave', function (event) {
+					counter--;
+					if (counter <= 0) {
+						$('.' + overClass).removeClass(overClass);
+					}
+				});
+			};
+		};
+
+		return $delegate;
+	});
 
 });

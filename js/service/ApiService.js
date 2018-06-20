@@ -125,7 +125,7 @@ app.factory('ApiService', function ($http, $q) {
 			this.data[entity.id] = entity;
 		} else {
 			Object.keys(entity).forEach(function (key) {
-				if (entity[key] !== null) {
+				if (entity[key] !== null && element[key] !== entity[key]) {
 					element[key] = entity[key];
 				}
 			});
@@ -161,6 +161,10 @@ app.factory('ApiService', function ($http, $q) {
 
 	ApiService.prototype.getAll = function () {
 		return this.data;
+	};
+
+	ApiService.prototype.get = function (id) {
+		return this.data[id];
 	};
 
 	ApiService.prototype.getName = function () {

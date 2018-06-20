@@ -198,13 +198,13 @@ app.factory('BoardService', function (ApiService, $http, $q) {
 			return [];
 		}
 
-		var result = [this.getCurrent().owner];
+		this.getCurrent().users = [this.getCurrent().owner];
+		let self = this;
 		angular.forEach(this.getCurrent().acl, function(value, key) {
 			if (value.type === OC.Share.SHARE_TYPE_USER) {
-				result.push(value.participant);
+				self.getCurrent().users.push(value.participant);
 			}
 		});
-		this.getCurrent().users = result;
 	};
 
 	BoardService.prototype.getUsers = function () {

@@ -40,20 +40,24 @@ class CardService {
 	private $permissionService;
 	private $boardService;
 	private $assignedUsersMapper;
+	private $attachmentService;
 
-	public function __construct(CardMapper $cardMapper, StackMapper $stackMapper, PermissionService $permissionService, BoardService $boardService, AssignedUsersMapper $assignedUsersMapper) {
+	public function __construct(CardMapper $cardMapper, StackMapper $stackMapper, PermissionService $permissionService, BoardService $boardService, AssignedUsersMapper $assignedUsersMapper, AttachmentService $attachmentService) {
 		$this->cardMapper = $cardMapper;
 		$this->stackMapper = $stackMapper;
 		$this->permissionService = $permissionService;
 		$this->boardService = $boardService;
 		$this->assignedUsersMapper = $assignedUsersMapper;
+		$this->attachmentService = $attachmentService;
 	}
 
 	public function find($cardId) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		$card = $this->cardMapper->find($cardId);
 		$assignedUsers = $this->assignedUsersMapper->find($card->getId());
+		$attachments = $this->attachmentService->findAll($cardId, true);
 		$card->setAssignedUsers($assignedUsers);
+		$card->setAttachments($attachments);
 		return $card;
 	}
 

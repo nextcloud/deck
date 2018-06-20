@@ -26,12 +26,13 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\PermissionService;
+use OCP\AppFramework\ApiController;
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
 use OCP\IUserManager;
 use OCP\IGroupManager;
 
-class BoardController extends Controller {
+class BoardController extends ApiController {
 	private $userId;
 	private $boardService;
 	private $userManager;

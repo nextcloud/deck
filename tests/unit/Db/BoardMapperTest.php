@@ -35,13 +35,13 @@ class BoardMapperTest extends MapperTestUtility  {
 
 	/** @var IDBConnection */
     private $dbConnection;
-    /** @var AclMapper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AclMapper|\PHPUnit\Framework\MockObject\MockObject */
 	private $aclMapper;
 	/** @var BoardMapper */
 	private $boardMapper;
-	/** @var IUserManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IUserManager|\PHPUnit\Framework\MockObject\MockObject */
 	private $userManager;
-	/** @var IGroupManager|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var IGroupManager|\PHPUnit\Framework\MockObject\MockObject */
 	private $groupManager;
 
 	// Data

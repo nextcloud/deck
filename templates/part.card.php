@@ -1,4 +1,8 @@
-<div id="board-status" ng-if="statusservice.active">
+<div nv-file-drop="" uploader="uploader" class="drop-zone" options="{cardId: cardservice.getCurrent().id}">
+	<div class="drop-indicator" nv-file-over uploader="uploader">
+		<p><?php p($l->t('Drop your files here to upload it to the card')); ?></p>
+	</div>
+	<div id="board-status" ng-if="statusservice.active">
 	<div id="emptycontent">
 		<div class="icon-{{ statusservice.icon }}" title="<?php p($l->t('Status')); ?>"><span class="hidden-visually"><?php p($l->t('Status')); ?></span></div>
 		<h2>{{ statusservice.title }}</h2>
@@ -83,20 +87,36 @@
 		<button class="icon icon-delete button-inline" title="<?php p($l->t('Remove due date')); ?>" ng-if="cardservice.getCurrent().duedate" ng-click="resetDuedate()"><span class="hidden-visually"><?php p($l->t('Remove due date')); ?></span></button>
 	</div>
 
-	<div class="section-header card-description">
-		<h4>
-			<div>
-				<?php p($l->t('Description')); ?>
-				<a href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" data-toggle="tooltip" data-placement="right" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
-			</div>
-		</h4>
-		<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
-		<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>
+
+	<div class="section-header-tabbed">
+		<ul class="tabHeaders ng-scope">
+			<li class="tabHeader selected" ng-class="{'selected': (params.tab==0 || !params.tab)}" ui-sref="{tab: 0}"><a><?php p($l->t('Description')); ?></a></li>
+			<li class="tabHeader" ng-class="{'selected': (params.tab==1)}" ui-sref="{tab: 1}"><a><?php p($l->t('Attachments')); ?></a></li>
+		</ul>
+		<div class="tabDetails">
+			<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
+			<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>
+			<a ng-if="params.tab === 0" href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
+			<label ng-if="params.tab === 1" for="attachment-upload" class="button icon-upload" ng-class="{'icon-loading-small': uploader.isUploading}" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Upload attachment')); ?>"></label>
+			<input id="attachment-upload" type="file" nv-file-select="" uploader="uploader" class="hidden" options="{cardId: cardservice.getCurrent().id}"/>
+			<input ng-if="status.cardEditDescription" type="button" ng-mousedown="status.continueEdit = true; status.selectAttachment = true;" class="icon-files-dark" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Insert attachment')); ?>"/>
+
+		</div>
 	</div>
-	<div class="section-content card-description">
+	<div class="section-content card-attachments">
+		<attachment-list-component ng-if="params.tab === 1 && cardservice.getCurrent() && isArray(cardservice.getCurrent().attachments)" attachments="cardservice.getCurrent().attachments"></attachment-list-component>
+	</div>
+
+	<div class="section-content card-description" ng-if="params.tab === 0">
+		<attachment-list-component
+				ng-if="status.selectAttachment"
+				attachments="cardservice.getCurrent().attachments"
+				is-file-selector="true"
+				on-select="addAttachmentToDescription(attachment)" on-abort="abortAttachmentSelection()">
+		</attachment-list-component>
 		<textarea elastic ng-if="status.cardEditDescription"
 				  placeholder="<?php p($l->t('Add a card description…')); ?>"
-				  ng-blur="cardUpdate(status.edit)"
+				  ng-blur="!status.continueEdit && cardUpdate(status.edit)"
 				  ng-model="status.edit.description"
 				  ng-change="cardEditDescriptionChanged(); updateMarkdown(status.edit.description)"
 				  autofocus-on-insert> </textarea>

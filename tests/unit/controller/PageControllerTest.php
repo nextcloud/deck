@@ -25,7 +25,7 @@ namespace OCA\Deck\Controller;
 
 use PHPUnit_Framework_TestCase;
 
-class PageControllerTest extends \PHPUnit_Framework_TestCase {
+class PageControllerTest extends \Test\TestCase {
 
 	private $controller;
 	private $request;

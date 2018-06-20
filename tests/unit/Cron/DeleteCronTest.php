@@ -23,20 +23,31 @@
 
 namespace OCA\Deck\Cron;
 
+use OCA\Deck\Db\Attachment;
+use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\InvalidAttachmentType;
+use OCA\Deck\Service\AttachmentService;
+use OCA\Deck\Service\IAttachmentService;
 
 class DeleteCronTest extends \Test\TestCase {
 
-	/** @var BoardMapper|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var BoardMapper|\PHPUnit\Framework\MockObject\MockObject */
 	protected $boardMapper;
+	/** @var AttachmentService|\PHPUnit\Framework\MockObject\MockObject */
+	private $attachmentService;
+	/** @var AttachmentMapper|\PHPUnit\Framework\MockObject\MockObject */
+	private $attachmentMapper;
 	/** @var DeleteCron */
 	protected $deleteCron;
 
 	public function setUp() {
 		parent::setUp();
 		$this->boardMapper = $this->createMock(BoardMapper::class);
-		$this->deleteCron = new DeleteCron($this->boardMapper);
+		$this->attachmentService = $this->createMock(AttachmentService::class);
+		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
+		$this->deleteCron = new DeleteCron($this->boardMapper, $this->attachmentService, $this->attachmentMapper);
 	}
 
 	protected function getBoard($id) {
@@ -67,6 +78,44 @@ class DeleteCronTest extends \Test\TestCase {
 		$this->boardMapper->expects($this->at(4))
 			->method('delete')
 			->with($boards[3]);
+
+		$attachment = new Attachment();
+		$attachment->setType('deck_file');
+		$this->attachmentMapper->expects($this->once())
+			->method('findToDelete')
+			->willReturn([
+				$attachment
+			]);
+		$service = $this->createMock(IAttachmentService::class);
+		$service->expects($this->once())
+			->method('delete')
+			->with($attachment);
+		$this->attachmentService->expects($this->once())
+			->method('getService')
+			->willReturn($service);
+		$this->attachmentMapper->expects($this->once())
+			->method('delete')
+			->with($attachment);
+		$this->invokePrivate($this->deleteCron, 'run', [null]);
+	}
+
+	public function testDeleteCronInvalidAttachment() {
+		$boards = [];
+		$this->boardMapper->expects($this->once())
+			->method('findToDelete')
+			->willReturn($boards);
+
+		$attachment = new Attachment();
+		$attachment->setType('deck_file_invalid');
+		$this->attachmentMapper->expects($this->once())
+			->method('findToDelete')
+			->willReturn([$attachment]);
+		$this->attachmentService->expects($this->once())
+			->method('getService')
+			->will($this->throwException(new InvalidAttachmentType('deck_file_invalid')));
+		$this->attachmentMapper->expects($this->once())
+			->method('delete')
+			->with($attachment);
 		$this->invokePrivate($this->deleteCron, 'run', [null]);
 	}
 }

@@ -25,8 +25,9 @@ namespace OCA\Deck\Db;
 
 use DateInterval;
 use DateTime;
+use Test\TestCase;
 
-class CardTest extends \PHPUnit_Framework_TestCase {
+class CardTest extends TestCase {
 	private function createCard() {
 		$card = new Card();
 		$card->setId(1);
@@ -77,6 +78,8 @@ class CardTest extends \PHPUnit_Framework_TestCase {
 			'duedate' => null,
 			'overdue' => 0,
 			'archived' => false,
+			'attachments' => null,
+			'attachmentCount' => null,
 			'assignedUsers' => null,
 		], $card->jsonSerialize());
 	}
@@ -97,6 +100,8 @@ class CardTest extends \PHPUnit_Framework_TestCase {
 			'duedate' => null,
 			'overdue' => 0,
 			'archived' => false,
+			'attachments' => null,
+			'attachmentCount' => null,
 			'assignedUsers' => null,
 		], $card->jsonSerialize());
 	}
@@ -127,6 +132,8 @@ class CardTest extends \PHPUnit_Framework_TestCase {
 			'duedate' => null,
 			'overdue' => 0,
 			'archived' => false,
+			'attachments' => null,
+			'attachmentCount' => null,
 			'assignedUsers' => ['user1'],
 		], $card->jsonSerialize());
 	}
