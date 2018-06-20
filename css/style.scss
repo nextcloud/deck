@@ -152,10 +152,9 @@ input.input-inline {
 	&.card-selected {
 
 		.card {
-			opacity: 0.7;
+			box-shadow: 0px 0px 7px 0px $color-grey;
 
 			&.current {
-				opacity: 1.0;
 				box-shadow: 0px 0px 7px 0px $color-darkgrey;
 			}
 		}
