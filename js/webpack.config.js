@@ -2,12 +2,14 @@ const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+require('babel-polyfill');
+
 module.exports = {
   node: {
     fs: 'empty',
   },
   entry: {
-    deck: './init.js',
+    deck: ['babel-polyfill', './init.js'],
   },
   output: {
     filename: '[name].js',
