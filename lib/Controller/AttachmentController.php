@@ -38,6 +38,9 @@ class AttachmentController extends Controller {
 		$this->attachmentService = $attachmentService;
 	}
 
+	/**
+	 * @NoAdminRequired
+	 */
 	public function getAll($cardId) {
 		return $this->attachmentService->findAll($cardId);
 	}
@@ -46,6 +49,7 @@ class AttachmentController extends Controller {
 	 * @param $cardId
 	 * @param $attachmentId
 	 * @NoCSRFRequired
+	 * @NoAdminRequired
 	 * @return \OCP\AppFramework\Http\Response
 	 * @throws \OCA\Deck\NotFoundException
 	 */
@@ -53,6 +57,9 @@ class AttachmentController extends Controller {
 		return $this->attachmentService->display($cardId, $attachmentId);
 	}
 
+	/**
+	 * @NoAdminRequired
+	 */
 	public function create($cardId) {
 		return $this->attachmentService->create(
 			$cardId,
@@ -61,14 +68,23 @@ class AttachmentController extends Controller {
 		);
 	}
 
+	/**
+	 * @NoAdminRequired
+	 */
 	public function update($cardId, $attachmentId) {
 		return $this->attachmentService->update($cardId, $attachmentId, $this->request->getParam('data'));
 	}
 
+	/**
+	 * @NoAdminRequired
+	 */
 	public function delete($cardId, $attachmentId) {
 		return $this->attachmentService->delete($cardId, $attachmentId);
 	}
 
+	/**
+	 * @NoAdminRequired
+	 */
 	public function restore($cardId, $attachmentId) {
 		return $this->attachmentService->restore($cardId, $attachmentId);
 	}
