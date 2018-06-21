@@ -22,12 +22,12 @@
     "Members" : "Miembros",
     "Create new board" : "Crear un nuevo tablero",
     "New board title" : "Nuevo título de tablero",
+    "by" : "por",
     "Modified:" : "Modificado:",
     "Created:" : "Creado:",
-    "by" : "por",
     "Description" : "Descripción",
-    "Formatting help" : "Ayuda de formato",
     "Saved" : "Guardado",
+    "Formatting help" : "Ayuda de formato",
     "Add a card description…" : "Agregar una descripción de tarjeta...",
     "Create a new board" : "Crear nuevo tablero"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
