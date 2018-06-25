@@ -34,6 +34,7 @@ use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\IAppContainer;
 use OCP\ICache;
 use OCP\ICacheFactory;
+use OCP\IL10N;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -67,6 +68,8 @@ class AttachmentServiceTest extends TestCase {
 	private $appContainer;
 	/** ICache */
 	private $cache;
+	/** @var IL10N */
+	private $l10n;
 
 	/**
 	 * @throws \OCP\AppFramework\QueryException
@@ -91,7 +94,9 @@ class AttachmentServiceTest extends TestCase {
 			->method('getContainer')
 			->willReturn($this->appContainer);
 
-        $this->attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->permissionService, $this->application, $this->cacheFactory, $this->userId);
+		$this->l10n = $this->createMock(IL10N::class);
+
+        $this->attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->permissionService, $this->application, $this->cacheFactory, $this->userId, $this->l10n);
     }
 
     public function testRegisterAttachmentService() {
@@ -103,7 +108,7 @@ class AttachmentServiceTest extends TestCase {
 		$application->expects($this->any())
 			->method('getContainer')
 			->willReturn($appContainer);
-		$attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->permissionService, $application, $this->cacheFactory, $this->userId);
+		$attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->permissionService, $application, $this->cacheFactory, $this->userId, $this->l10n);
 		$attachmentService->registerAttachmentService('custom', MyAttachmentService::class);
 		$this->assertEquals($fileServiceMock, $attachmentService->getService('deck_file'));
 		$this->assertEquals(MyAttachmentService::class, get_class($attachmentService->getService('custom')));
@@ -121,7 +126,7 @@ class AttachmentServiceTest extends TestCase {
 		$application->expects($this->any())
 			->method('getContainer')
 			->willReturn($appContainer);
-		$attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->permissionService, $application, $this->cacheFactory, $this->userId);
+		$attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->permissionService, $application, $this->cacheFactory, $this->userId, $this->l10n);
 		$attachmentService->registerAttachmentService('custom', MyAttachmentService::class);
 		$attachmentService->getService('deck_file_invalid');
 	}
