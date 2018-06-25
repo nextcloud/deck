@@ -25,9 +25,11 @@ namespace OCA\Deck\Service;
 
 use OC\Security\CSP\ContentSecurityPolicyManager;
 use OCA\Deck\Db\Attachment;
+use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\EmptyContentSecurityPolicy;
 use OCP\AppFramework\Http\FileDisplayResponse;
+use OCP\Files\Cache\IScanner;
 use OCP\Files\IAppData;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
@@ -100,6 +102,10 @@ class FileService implements IAttachmentService {
 		return $attachment;
 	}
 
+	/**
+	 * @return array
+	 * @throws StatusException
+	 */
 	private function getUploadedFile () {
 		$file = $this->request->getUploadedFile('file');
 		$error = null;
@@ -115,13 +121,13 @@ class FileService implements IAttachmentService {
 		];
 
 		if (empty($file)) {
-			$error = $this->l10n->t('No file uploaded');
+			$error = $this->l10n->t('No file uploaded or file size exceeds maximum of %s', [\OCP\Util::humanFileSize(\OCP\Util::uploadLimit())]);
 		}
 		if (!empty($file) && array_key_exists('error', $file) && $file['error'] !== UPLOAD_ERR_OK) {
 			$error = $phpFileUploadErrors[$file['error']];
 		}
 		if ($error !== null) {
-			throw new \Exception($error);
+			throw new StatusException($error);
 		}
 		return $file;
 	}
@@ -131,7 +137,7 @@ class FileService implements IAttachmentService {
 		$folder = $this->getFolder($attachment);
 		$fileName = $file['name'];
 		if ($folder->fileExists($fileName)) {
-			throw new \Exception('File already exists.');
+			throw new StatusException('File already exists.');
 		}
 		$target = $folder->newFile($fileName);
 		$target->putContent(file_get_contents($file['tmp_name'], 'r'));
@@ -141,6 +147,8 @@ class FileService implements IAttachmentService {
 
 	/**
 	 * This method requires to be used with POST so we can properly get the form data
+	 *
+	 * @throws \Exception
 	 */
 	public function update(Attachment $attachment) {
 		$file = $this->getUploadedFile();
