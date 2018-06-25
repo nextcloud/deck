@@ -139,8 +139,11 @@ class FileService implements IAttachmentService {
 		if ($folder->fileExists($fileName)) {
 			throw new StatusException('File already exists.');
 		}
+
 		$target = $folder->newFile($fileName);
-		$target->putContent(file_get_contents($file['tmp_name'], 'r'));
+		$content = fopen($file['tmp_name'], 'rb');
+		$target->putContent($content);
+		fclose($content);
 
 		$attachment->setData($fileName);
 	}
@@ -156,7 +159,9 @@ class FileService implements IAttachmentService {
 		$attachment->setData($fileName);
 
 		$target = $this->getFileForAttachment($attachment);
-		$target->putContent(file_get_contents($file['tmp_name'], 'r'));
+		$content = fopen($file['tmp_name'], 'rb');
+		$target->putContent($content);
+		fclose($content);
 
 		$attachment->setLastModified(time());
 	}
