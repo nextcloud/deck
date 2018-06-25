@@ -31,6 +31,7 @@ OC.L10N.register(
     "Board details" : "Détails du tableau",
     "All Boards" : "Tous les tableaux",
     "Archived boards" : "Tableaux archivés",
+    "Drop your files here to upload it to the card" : "Déposez vos fichiers ici pour les téléverser sur la carte",
     "Archive" : "Archiver",
     "Unarchive" : "Ne plus archiver",
     "Enter a card title" : "Saisissez un titre de carte",
