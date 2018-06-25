@@ -30,13 +30,17 @@ export default class FileService {
 		this.cardservice = CardService;
 		this.uploader.onAfterAddingFile = this.onAfterAddingFile.bind(this);
 		this.uploader.onSuccessItem = this.onSuccessItem.bind(this);
+		this.uploader.onErrorItem = this.onErrorItem.bind(this);
+
+		this.status = null;
 	}
 
 
 	runUpload (fileItem, attachmentId) {
-		fileItem.url = OC.generateUrl('/apps/deck/cards/' + fileItem.cardId + '/attachment');
+		this.status = null;
+		fileItem.url = OC.generateUrl('/apps/deck/cards/' + fileItem.cardId + '/attachment?type=deck_file');
 		if (typeof attachmentId !== 'undefined') {
-			fileItem.url = OC.generateUrl('/apps/deck/cards/' + fileItem.cardId + '/attachment/' + attachmentId);
+			fileItem.url = OC.generateUrl('/apps/deck/cards/' + fileItem.cardId + '/attachment/' + attachmentId + '?type=deck_file');
 		} else {
 			fileItem.formData = [
 				{
@@ -93,6 +97,13 @@ export default class FileService {
 			attachments = attachments.splice(index, 1);
 		}
 		this.cardservice.get(item.cardId).attachments.push(response);
+	}
+
+	onErrorItem (item, response) {
+		this.status = {
+			error: t('deck', `Failed to upload:`) + ' ' + item.file.name,
+			message: response.message
+		};
 	}
 
 }
