@@ -32,9 +32,11 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
+use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\Response;
 use OCP\ICache;
 use OCP\ICacheFactory;
+use OCP\IL10N;
 
 class AttachmentService {
 
@@ -48,6 +50,8 @@ class AttachmentService {
 	private $application;
 	/** @var ICache */
 	private $cache;
+	/** @var IL10N */
+	private $l10n;
 
 	/**
 	 * AttachmentService constructor.
@@ -58,16 +62,17 @@ class AttachmentService {
 	 * @param Application $application
 	 * @param ICacheFactory $cacheFactory
 	 * @param $userId
+	 * @param IL10N $l10n
 	 * @throws \OCP\AppFramework\QueryException
 	 */
-	public function __construct(AttachmentMapper $attachmentMapper, CardMapper $cardMapper, PermissionService $permissionService, Application $application, ICacheFactory $cacheFactory, $userId) {
+	public function __construct(AttachmentMapper $attachmentMapper, CardMapper $cardMapper, PermissionService $permissionService, Application $application, ICacheFactory $cacheFactory, $userId, IL10N $l10n) {
 		$this->attachmentMapper = $attachmentMapper;
 		$this->cardMapper = $cardMapper;
 		$this->permissionService = $permissionService;
 		$this->userId = $userId;
 		$this->application = $application;
 		$this->cache = $cacheFactory->createDistributed('deck-card-attachments-');
-
+		$this->l10n = $l10n;
 
 		// Register shipped attachment services
 		// TODO: move this to a plugin based approach once we have different types of attachments
@@ -144,6 +149,9 @@ class AttachmentService {
 			$service->create($attachment);
 		} catch (InvalidAttachmentType $e) {
 			// just store the data
+		}
+		if ($attachment->getData() === null) {
+			throw new StatusException($this->l10n->t('No data was provided to create an attachment.'));
 		}
 		$attachment = $this->attachmentMapper->insert($attachment);
 

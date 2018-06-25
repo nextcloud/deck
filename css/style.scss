@@ -911,14 +911,11 @@ input.input-inline {
 	}
 }
 
-#card-attachments {
-	ul {
-		margin: 5px;
-	}
-
-	.details {
-		font-size: 8pt;
-		padding-left: 15px;
+.card-attachments {
+	.error {
+		padding-left: 38px;
+		margin-bottom: 5px;
+		background-position: 10px;
 	}
 }
 

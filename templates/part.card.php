@@ -104,6 +104,7 @@
 		</div>
 	</div>
 	<div class="section-content card-attachments">
+		<div class="error icon-error" ng-if="fileservice.status"><strong>{{ fileservice.status.error }}</strong><br />{{ fileservice.status.message }}</div>
 		<attachment-list-component ng-if="params.tab === 1 && cardservice.getCurrent() && isArray(cardservice.getCurrent().attachments)" attachments="cardservice.getCurrent().attachments"></attachment-list-component>
 	</div>
 
