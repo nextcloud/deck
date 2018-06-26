@@ -22,7 +22,6 @@ OC.L10N.register(
     "Missing a temporary folder" : "Geçici bir klasör eksik",
     "Could not write file to disk" : "Dosya diske yazılamadı",
     "A PHP extension stopped the file upload" : "Bir PHP eklentisi dosyanın yüklenmesini engelledi",
-    "No file uploaded" : "Herhangi bir dosya yüklenmemiş",
     "Deck" : "Tahta",
     "A kanban style project and personal management tool for Nextcloud" : "Nextcloud için Kanban tarzında bir proje ve kişisel yönetim uygulaması",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 🚀 Get your project organized" : "Deste, Nextcloud ile bütünleştirilmiş takımlar için Kanban tarzında bir kişisel planlama ve proje yönetimi uygulamasıdır.\n\n\n- 📥 Görevleri kartlara ekleyerek sıralayabilirsiniz\n- 📄 Markdown ile biçimlendirilmiş notlar ekleyebilirsiniz\n- 🔖 Daha iyi düzenleme için etiketler atayabilirsiniz\n- 👥 Takımınız, arkadaşlarınız ya da aileniz ile paylaşabilirsiniz\n- 🚀 Projelerinizi düzenli tutarak izleyebilirsiniz",

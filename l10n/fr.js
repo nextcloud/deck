@@ -22,7 +22,6 @@ OC.L10N.register(
     "Missing a temporary folder" : "Absence de dossier temporaire",
     "Could not write file to disk" : "Impossible d'écrire le fichier sur le disque.",
     "A PHP extension stopped the file upload" : "Une extension PHP a arrêté le téléversement du fichier",
-    "No file uploaded" : "Aucun fichier téléversé",
     "Deck" : "Deck",
     "Add a new stack" : "Ajouter une nouvelle pile",
     "Submit" : "Envoyer",
