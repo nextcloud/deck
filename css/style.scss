@@ -973,8 +973,8 @@ input.input-inline {
 		}
 	}
 
-	.colorselect-label {
-		background-image: url('../img/color_picker.svg');
+	.colorselect-label, .colorselect-label-white {
+		background-image: url('../img/color_picker-dark.svg');
 		background-position: center center;
 		background-repeat: no-repeat;
 		opacity: 1;
@@ -985,6 +985,9 @@ input.input-inline {
 			width: 40px;
 		}
 	}
+	.colorselect-label-white {
+		background-image: url('../img/color_picker.svg');
+  }
 }
 
 .labels {

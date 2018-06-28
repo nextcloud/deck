@@ -35,7 +35,7 @@
 						<input class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100" ng-model-options="{ debounce: 250 }">
 						<div class="colorselect" ng-controller="ColorPickerController">
                             <div class="color" ng-repeat="c in ::colors" ng-style="{'background-color':'#{{ c }}'}" ng-click="b=setColor(b,c)" ng-class="{'selected': (c == b.color) }"></div>
-                            <label class="colorselect-label color" ng-style="getCustomBackground(b.hashedColor)" ng-init="b.hashedColor='#' + b.color">
+                            <label class="colorselect-label{{ b.color | iconWhiteFilter }} color" ng-style="getCustomBackground(b.hashedColor)" ng-init="b.hashedColor='#' + b.color">
                                 <input class="color" type="color" ng-model="b.hashedColor" value="#{{b.color}}" ng-change="b=setHashedColor(b)"/>
                             </label>
                         </div>
@@ -107,7 +107,7 @@
 						   autofocus-on-insert ng-model="newBoard.title" maxlength="100" ng-model-options="{ debounce: 250 }">
                     <div class="colorselect" ng-controller="ColorPickerController">
                         <div class="color" ng-repeat="c in ::colors" ng-style="{'background-color':'#{{ c }}'}" ng-click="selectColor(c);b=setColor(b,c);"ng-class="{'selected': (c == newBoard.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"></div>
-                        <label class="colorselect-label color" ng-style="getCustomBackground(newBoard.hashedColor)" ng-init="newBoard.hashedColor='#' + newBoard.color">
+                        <label class="colorselect-label{{ newBoard.color | iconWhiteFilter }} color" ng-style="getCustomBackground(newBoard.hashedColor)" ng-init="newBoard.hashedColor='#' + newBoard.color">
                             <input class="color" type="color" ng-model="newBoard.hashedColor" value="#{{newBoard.color}}" ng-change="newBoard=setHashedColor(newBoard)"/>
                         </label>
                     </div>
