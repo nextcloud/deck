@@ -34,11 +34,12 @@ app.config(function ($provide, $interpolateProvider, $httpProvider, $urlRouterPr
 
 	$compileProvider.debugInfoEnabled(true);
 
-	markdownItConverterProvider.use(markdownitLinkTarget, {
+	markdownItConverterProvider.config({
 		breaks: true,
 		linkify: true,
 		xhtmlOut: true
-	}).use(markdownitCheckbox);
+	});
+	markdownItConverterProvider.use(markdownitLinkTarget).use(markdownitCheckbox);
 
 	$urlRouterProvider.otherwise('/');
 
