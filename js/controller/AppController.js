@@ -23,10 +23,11 @@
 import app from '../app/App.js';
 
 /** global: OC */
-app.controller('AppController', function ($scope, $location, $http, $log, $rootScope) {
+app.controller('AppController', function ($scope, $location, $http, $log, $rootScope, $attrs) {
 	$rootScope.sidebar = {
 		show: false
 	};
 	$scope.sidebar = $rootScope.sidebar;
 	$scope.user = oc_current_user;
+	$rootScope.config = JSON.parse($attrs.config);
 });
