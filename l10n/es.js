@@ -22,7 +22,6 @@ OC.L10N.register(
     "Missing a temporary folder" : "Falta una carpeta temporal",
     "Could not write file to disk" : "No se ha podido escribir el archivo al disco",
     "A PHP extension stopped the file upload" : "Una extensión de PHP ha detenido la subida del archivo",
-    "No file uploaded" : "No se ha subido ningún archivo",
     "Deck" : "Deck",
     "A kanban style project and personal management tool for Nextcloud" : "Una herramienta de manejo de proyectos y personal al estilo kanban para Nextcloud.",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 🚀 Get your project organized" : "Deckes una herramienta de organización al estilo kanban enfocada en la planificación personal y en la organización de proyectos para equipos, integrada en Nextcloud.\n\n\n- 📥 Añade tus tareas a tarjetas y ordénalas\n- 📄 Escribe notas adicionales en markdown\n- 🔖 Asigna etiquetas para una organización aún mejor\n- 👥 Comparte con tu equipo, amigos o familia\n- 🚀 Organiza tu proyecto",

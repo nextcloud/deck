@@ -86,7 +86,7 @@
                         </div>
                         <div class="colorselect" ng-controller="ColorPickerController">
                             <div class="color" ng-repeat="c in defaultColors" ng-style="{'background-color':'#{{ c }}'}" ng-click="label=setColor(label,c);" ng-class="{'selected': (c == label.color) }"><br /></div>
-                            <label class="colorselect-label color" ng-style="getCustomBackground(label.hashedColor)" ng-init="label.hashedColor='#' + label.color">
+                            <label class="colorselect-label{{ label.color | iconWhiteFilter }} color" ng-style="getCustomBackground(label.hashedColor)" ng-init="label.hashedColor='#' + label.color">
                                 <input class="color" type="color" ng-model="label.hashedColor" value="#{{label.color}}" ng-change="label=setHashedColor(label)"/>
                             </label>
                         </div>
@@ -104,7 +104,7 @@
                         </div>
                         <div class="colorselect" ng-controller="ColorPickerController">
                             <div class="color" ng-repeat="c in defaultColors" ng-style="{'background-color':'#{{ c }}'}" ng-click="newLabel=setColor(newLabel,c)" ng-class="{'selected': (c == newLabel.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"><br /></div>
-                            <label class="colorselect-label color" ng-style="getCustomBackground(newLabel.hashedColor)" ng-init="newLabel.hashedColor='#' + newLabel.color">
+                            <label class="colorselect-label{{ newLabel.color | iconWhiteFilter }} color" ng-style="getCustomBackground(newLabel.hashedColor)" ng-init="newLabel.hashedColor='#' + newLabel.color">
                                 <input class="color" type="color" ng-model="newLabel.hashedColor" value="#{{newLabel.color}}" ng-change="newLabel=setHashedColor(newLabel)"/>
                             </label>
                         </div>

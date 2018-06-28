@@ -33,6 +33,9 @@ app.config(function ($provide, $interpolateProvider, $httpProvider, $urlRouterPr
 
 
 	$compileProvider.debugInfoEnabled(true);
+	// This should fix adding "unsafe:" prefix to ui-select href links containing javascript
+	// inline JS is blocked by CSP anyway and filtered out by our markdown renderer as well
+	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|javascript):/);
 
 	markdownItConverterProvider.config({
 		breaks: true,
