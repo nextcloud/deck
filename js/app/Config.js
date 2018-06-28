@@ -37,11 +37,12 @@ app.config(function ($provide, $interpolateProvider, $httpProvider, $urlRouterPr
 	// inline JS is blocked by CSP anyway and filtered out by our markdown renderer as well
 	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|javascript):/);
 
-	markdownItConverterProvider.use(markdownitLinkTarget, {
+	markdownItConverterProvider.config({
 		breaks: true,
 		linkify: true,
 		xhtmlOut: true
-	}).use(markdownitCheckbox);
+	});
+	markdownItConverterProvider.use(markdownitLinkTarget).use(markdownitCheckbox);
 
 	$urlRouterProvider.otherwise('/');
 
