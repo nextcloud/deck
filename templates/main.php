@@ -30,7 +30,7 @@ Util::addStyle('deck', 'style');
 Util::addScript('deck', 'build/deck');
 ?>
 
-<div id="app" class="app-deck" data-ng-app="Deck" ng-controller="AppController" ng-cloak>
+<div id="app" class="app-deck" data-ng-app="Deck" ng-controller="AppController" ng-cloak config="<?php p(json_encode($_)); ?>">
 
 	<div id="app-navigation" data-ng-controller="ListController" ng-init="initSidebar()">
 		<?php print_unescaped($this->inc('part.navigation')); ?>

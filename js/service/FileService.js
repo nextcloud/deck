@@ -25,16 +25,17 @@ import app from '../app/App.js';
 /* global OC oc_requesttoken */
 export default class FileService {
 
-	constructor ($http, FileUploader, CardService) {
+	constructor (FileUploader, CardService, $rootScope, $filter) {
+		this.$filter = $filter;
 		this.uploader = new FileUploader();
 		this.cardservice = CardService;
 		this.uploader.onAfterAddingFile = this.onAfterAddingFile.bind(this);
 		this.uploader.onSuccessItem = this.onSuccessItem.bind(this);
 		this.uploader.onErrorItem = this.onErrorItem.bind(this);
-
+		
+		this.maxUploadSize = $rootScope.config.maxUploadSize;
 		this.status = null;
 	}
-
 
 	runUpload (fileItem, attachmentId) {
 		this.status = null;
@@ -55,6 +56,14 @@ export default class FileService {
 	}
 
 	onAfterAddingFile (fileItem) {
+		if (this.maxUploadSize > 0 && fileItem.file.size > this.maxUploadSize) {
+			this.status = {
+				error: t('deck', `Failed to upload {name}`, {name: fileItem.file.name}),
+				message: t('deck', 'Maximum file size of {size} exceeded', {size: this.$filter('bytes')(this.maxUploadSize)})
+			};
+			return;
+		}
+
 		// Fetch card details before trying to upload so we can detect filename collisions properly
 		let self = this;
 		this.cardservice.fetchOne(fileItem.cardId).then(function (data) {
