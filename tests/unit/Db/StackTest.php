@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\Db;
 
-class StackTest extends \PHPUnit_Framework_TestCase {
+class StackTest extends \Test\TestCase {
 	private function createStack() {
 		$board = new Stack();
 		$board->setId(1);

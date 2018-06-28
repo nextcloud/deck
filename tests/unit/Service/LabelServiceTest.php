@@ -30,13 +30,13 @@ use Test\TestCase;
 
 class LabelServiceTest extends TestCase {
 
-    /** @var  LabelMapper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  LabelMapper|\PHPUnit\Framework\MockObject\MockObject */
     private $labelMapper;
-    /** @var  PermissionService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  PermissionService|\PHPUnit\Framework\MockObject\MockObject */
     private $permissionService;
     /** @var  LabelService */
     private $labelService;
-	/** @var BoardService|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var BoardService|\PHPUnit\Framework\MockObject\MockObject */
 	private $boardService;
 
     public function setUp() {

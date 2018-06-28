@@ -37,7 +37,7 @@ use OCP\ILogger;
 use OCP\IUser;
 use OCP\IUserManager;
 
-class PermissionServiceTest extends \PHPUnit_Framework_TestCase {
+class PermissionServiceTest extends \Test\TestCase {
 
 	/** @var PermissionService*/
 	private $service;

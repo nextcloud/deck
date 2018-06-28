@@ -22,7 +22,7 @@
 
 import app from '../app/App.js';
 /* global oc_defaults OC */
-app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter) {
+app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter, FileService) {
 
 	$scope.sidebar = $rootScope.sidebar;
 
@@ -40,6 +40,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.labelservice = LabelService;
 	$scope.defaultColors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
 	$scope.board = BoardService.getCurrent();
+	$scope.uploader = FileService.uploader;
 
 	// workaround for $stateParams changes not being propagated
 	$scope.$watch(function() {
@@ -47,8 +48,24 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	}, function (params) {
 		$scope.params = params;
 	}, true);
-	$scope.params = $state;
+	$scope.params = $state.params;
 
+	/**
+	 * Check for markdown checkboxes in description to render the counter
+	 *
+	 * This should probably be moved to the backend at some point
+	 *
+	 * @param text
+	 * @returns array of [finished, total] checkboxes
+	 */
+	$scope.getCheckboxes = function(text) {
+		const regTotal = /\[(X|\s|\_|\-)\]\s(.*)/ig;
+		const regFinished = /\[(X|\_|\-)\]\s(.*)/ig;
+		return [
+			((text || '').match(regFinished) || []).length,
+			((text || '').match(regTotal) || []).length
+		];
+	};
 
 	$scope.search = function (searchText) {
 		$scope.searchText = searchText;
@@ -153,7 +170,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	// Create a new Stack
 	$scope.createStack = function () {
 		StackService.create($scope.newStack).then(function (data) {
-			$scope.newStack.title = "";
+			$scope.newStack.title = '';
 		});
 	};
 
@@ -165,7 +182,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		};
 		CardService.create(newCard).then(function (data) {
 			$scope.stackservice.addCard(data);
-			$scope.newCard.title = "";
+			$scope.newCard.title = '';
 		});
 	};
 
@@ -198,7 +215,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.labelCreate = function (label) {
 		label.boardId = $scope.id;
 		LabelService.create(label).then(function (data) {
-			$scope.newStack.title = "";
+			$scope.newStack.title = '';
 			BoardService.getCurrent().labels.push(data);
 			$scope.status.createLabel = false;
 			$scope.newLabel = {};
@@ -274,7 +291,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		// auto scroll on drag
 		dragMove: function (itemPosition, containment, eventObj) {
 			if (eventObj) {
-				var container = $("#board");
+				var container = $('#board');
 				var offset = container.offset();
 				var targetX = eventObj.pageX - (offset.left || container.scrollLeft());
 				var targetY = eventObj.pageY - (offset.top || container.scrollTop());
@@ -309,7 +326,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		containment: '#innerBoard',
 		dragMove: function (itemPosition, containment, eventObj) {
 			if (eventObj) {
-				var container = $("#board");
+				var container = $('#board');
 				var offset = container.offset();
 				var targetX = eventObj.pageX - (offset.left || container.scrollLeft());
 				var targetY = eventObj.pageY - (offset.top || container.scrollTop());
@@ -335,6 +352,13 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			'background-color': '#' + color,
 			'color': $filter('textColorFilter')(color)
 		};
+	};
+
+	$scope.attachmentCount = function(card) {
+		if (Array.isArray(card.attachments)) {
+			return card.attachments.filter((obj) => obj.deletedAt === 0).length;
+		}
+		return card.attachmentCount;
 	};
 
 });

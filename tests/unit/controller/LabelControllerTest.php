@@ -29,13 +29,13 @@ use OCA\Deck\Service\LabelService;
 use OCP\AppFramework\Controller;
 use OCP\IRequest;
 
-class LabelControllerTest extends \PHPUnit_Framework_TestCase {
+class LabelControllerTest extends \Test\TestCase {
 
-    /** @var Controller|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Controller|\PHPUnit\Framework\MockObject\MockObject */
 	private $controller;
-    /** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var IRequest|\PHPUnit\Framework\MockObject\MockObject */
     private $request;
-    /** @var LabelService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var LabelService|\PHPUnit\Framework\MockObject\MockObject */
 	private $labelService;
 	/** @var string */
 	private $userId = 'user';

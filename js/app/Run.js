@@ -24,6 +24,7 @@ import app from './App.js';
 /* global Snap */
 app.run(function ($document, $rootScope, $transitions, BoardService) {
 	'use strict';
+
 	$document.click(function (event) {
 		$rootScope.$broadcast('documentClicked', event);
 	});

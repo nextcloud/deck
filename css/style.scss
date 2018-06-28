@@ -4,6 +4,7 @@
  * @author Julius Härtl <jus@bitgrid.net>
  * @author Artem Anufrij <artem.anufrij@live.de>
  * @author Marin Treselj <marin@pixelipo.com>
+ * @author Oskar Kurz <oskar.kurz@gmail.com>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -101,8 +102,11 @@ input.input-inline {
 		}
 	}
 	.app-navigation-entry-edit {
-		.colorselect div{
-			height: 32px;
+		.colorselect {
+			div, label {
+				height: 32px;
+				width: auto;
+			}
 		}
 		form {
 			display: flex;
@@ -139,15 +143,18 @@ input.input-inline {
 
 	.card {
 		opacity: 1;
+
+		&.file-drop {
+
+		}
 	}
 
 	&.card-selected {
 
 		.card {
-			opacity: 0.7;
+			box-shadow: 0px 0px 7px 0px $color-grey;
 
 			&.current {
-				opacity: 1.0;
 				box-shadow: 0px 0px 7px 0px $color-darkgrey;
 			}
 		}
@@ -256,10 +263,6 @@ input.input-inline {
 			margin-top: 35px;
 			margin-right: 6px;
 		}
-	}
-
-	> button {
-		padding: 16px 20px;
 	}
 }
 
@@ -457,6 +460,21 @@ input.input-inline {
 			}
 		}
 
+		.card-tasks, .card-files {
+			border-radius: 3px;
+			margin: 4px 4px 4px 0px;
+			padding: 0 2px;
+			font-size: 90%;
+			opacity: 0.5;
+			display: flex;
+			align-items: center;
+
+			.icon {
+				background-size: contain;
+				margin-right: 2px;
+			}
+		}
+
 		button {
 			padding: 22px;
 			margin: 0;
@@ -635,6 +653,32 @@ input.input-inline {
 	}
 }
 
+.drop-indicator {
+	display: none;
+}
+.card .nv-file-over,
+.drop-indicator.nv-file-over {
+	display: block;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+	z-index: 100;
+	opacity: 0.9;
+	text-align: center;
+
+	p {
+		width: calc(100% - 20px);
+		height: calc(100% - 20px);
+		position: absolute;
+		padding: 20px;
+		border: 1px dashed #AAA;
+		margin: 10px;
+		border-radius: 5px;
+	}
+}
+
+
 #card-meta { // TODO: use .card-block instead?
 	height: 100%;
 	display: flex;
@@ -678,10 +722,23 @@ input.input-inline {
 			flex: 1;
 		}
 	}
+	.section-header-tabbed {
+		margin-top: 10px;
+		margin-bottom: 5px;
+		flex-shrink: 0;
+		display: flex;
+		.tabHeaders {
+			margin: 0;
+			flex-grow: 1;
+		}
+		.tabDetails {
+			display: flex;
+		}
+	}
 
 	.save-indicator {
 		border-radius: 3px;
-		float: right;
+		margin: 5px;
 		padding: 0 10px;
 		font-size: 8pt;
 		display: none;
@@ -732,6 +789,97 @@ input.input-inline {
 		}
 	}
 
+	.icon-upload.icon-loading-small {
+		background-image: none;
+	}
+	.attachment-list-wrapper {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background-color: rgba($color-darkgrey, 0.5);
+		left: 0;
+		top: 0;
+	}
+	.attachment-list {
+		&.selector {
+			padding: 10px;
+			position: absolute;
+			width: 30%;
+			max-width: 500px;
+			min-width: 200px;
+			max-height: 50%;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background-color: $color-main-background;
+			z-index: 2;
+			border-radius: 3px;
+			box-shadow: 0 0 3px $color-darkgrey;
+			overflow: scroll;
+		}
+		h3.attachment-selector {
+			margin: 0 0 10px;
+			padding: 0;
+			.icon-close {
+				display: inline-block;
+				float: right;
+			}
+		}
+
+		li.attachment {
+			display: flex;
+			padding: 3px;
+
+			&.deleted {
+				opacity: .5;
+			}
+
+			.fileicon {
+				display: inline-block;
+				min-width: 32px;
+				width: 32px;
+				height: 32px;
+				background-size: contain;
+			}
+			.details {
+				flex-grow: 1;
+				flex-shrink: 1;
+				min-width: 0;
+				flex-basis: 50%;
+				line-height: 110%;
+				padding: 2px;
+			}
+			.filename {
+				width: 70%;
+				display: flex;
+				.basename {
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					padding-bottom: 2px;
+				}
+				.extension {
+					opacity: 0.7;
+				}
+			}
+			.filesize, .filedate {
+				font-size: 90%;
+				color: $color-darkgrey;
+			}
+			.app-popover-menu-utils {
+				position: relative;
+				right: -10px;
+				button {
+					height: 32px;
+					width: 42px;
+				}
+			}
+			button.icon-history {
+				width: 44px;
+			}
+		}
+	}
+
 	.card-description {
 		&.section-header {
 			.save-indicator {
@@ -763,14 +911,11 @@ input.input-inline {
 	}
 }
 
-#card-attachments {
-	ul {
-		margin: 5px;
-	}
-
-	.details {
-		font-size: 8pt;
-		padding-left: 15px;
+.card-attachments {
+	.error {
+		padding-left: 38px;
+		margin-bottom: 5px;
+		background-position: 10px;
 	}
 }
 
@@ -814,6 +959,10 @@ input.input-inline {
 		border: none;
 	}
 
+	label.color {
+		flex-grow: 1;
+	}
+
 	.selected {
 		background-image: url('../../../core/img/actions/checkmark.svg');
 		background-position: center center;
@@ -823,6 +972,22 @@ input.input-inline {
 			background-image: url('../../../core/img/actions/checkmark-white.svg');
 		}
 	}
+
+	.colorselect-label, .colorselect-label-white {
+		background-image: url('../img/color_picker-dark.svg');
+		background-position: center center;
+		background-repeat: no-repeat;
+		opacity: 1;
+		input {
+			position: absolute;
+			visibility: hidden;
+			height: 32px;
+			width: 40px;
+		}
+	}
+	.colorselect-label-white {
+		background-image: url('../img/color_picker.svg');
+  }
 }
 
 .labels {
@@ -888,7 +1053,8 @@ input.input-inline {
 		.colorselect {
 			flex-grow: 1;
 
-			div {
+			div,
+			label {
 				min-width: 32px;
 			}
 		}
@@ -1101,7 +1267,11 @@ input.input-inline {
 			border: 0 !important;
 			overflow: hidden;
 		}
+		.select2-search-field {
+			margin-right: -10px;
+		}
 	}
+
 	.select2-choice {
 		height: auto;
 	}
@@ -1196,6 +1366,24 @@ input.input-inline {
 		code {
 			white-space: pre;
 		}
+	}
+
+	img {
+		max-width: 100%;
+		max-height: 50vh;
+		margin: auto;
+		display: block;
+	}
+
+	input[type=checkbox] {
+		margin: 0px 10px 0px 0px;
+		line-height: 10px;
+		font-size: 10px;
+		display: inline-block;
+		min-height: 12px;
+	}
+	li input[type=checkbox] {
+		margin: 0px 10px 0px -20px;
 	}
 }
 

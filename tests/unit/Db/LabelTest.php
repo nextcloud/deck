@@ -23,7 +23,9 @@
 
 namespace OCA\Deck\Db;
 
-class LabelTest extends \PHPUnit_Framework_TestCase {
+use Test\TestCase;
+
+class LabelTest extends TestCase {
 	private function createLabel() {
 		$label = new Label();
 		$label->setId(1);

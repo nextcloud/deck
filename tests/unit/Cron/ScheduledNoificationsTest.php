@@ -31,9 +31,9 @@ use OCA\Deck\Notification\NotificationHelper;
 
 class ScheduledNoificationsTest extends \Test\TestCase {
 
-	/** @var CardMapper|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var CardMapper|\PHPUnit\Framework\MockObject\MockObject */
 	protected $cardMapper;
-	/** @var NotificationHelper|\PHPUnit_Framework_MockObject_MockObject */
+	/** @var NotificationHelper|\PHPUnit\Framework\MockObject\MockObject */
 	protected $notificationHelper;
 	/** @var ScheduledNotifications */
 	protected $scheduledNotifications;

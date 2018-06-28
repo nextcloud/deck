@@ -23,14 +23,14 @@
 
 use OCP\Util;
 
-Util::addStyle('deck', 'vendor');
-Util::addStyle('deck', 'style');
-
+Util::addStyle('deck', '../js/build/vendor');
 Util::addScript('deck', 'build/vendor');
+
+Util::addStyle('deck', 'style');
 Util::addScript('deck', 'build/deck');
 ?>
 
-<div id="app" class="app-deck" data-ng-app="Deck" ng-controller="AppController" ng-cloak>
+<div id="app" class="app-deck" data-ng-app="Deck" ng-controller="AppController" ng-cloak config="<?php p(json_encode($_)); ?>">
 
 	<div id="app-navigation" data-ng-controller="ListController" ng-init="initSidebar()">
 		<?php print_unescaped($this->inc('part.navigation')); ?>
@@ -57,6 +57,9 @@ Util::addScript('deck', 'build/deck');
 	</script>
 	<script type="text/ng-template" id="/card.sidebarView.html">
 		<?php print_unescaped($this->inc('part.card')); ?>
+	</script>
+	<script type="text/ng-template" id="/card.attachments.html">
+		<?php print_unescaped($this->inc('part.card.attachments')); ?>
 	</script>
 
 </div>

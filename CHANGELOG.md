@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.4.0 - unreleased
+
+### Added
+
+- Attach files to cards
+- Embed attachments into the card description
+- Color picker to use any color value for board and labels
+- Support for checkboxes inside the description
+
+### Fixed
+
+- Improve frontend data management
+- Fix bug the user list being empty on some occasions
+
 ## 0.3.0 - 2018-01-12
 
 ### Added

@@ -6,8 +6,8 @@
 </div>
 <div id="sidebar-header">
     <a class="icon-close" ui-sref="board" ng-click="sidebar.show=!sidebar.show" title="<?php p($l->t('Close')); ?>"> &nbsp;<?php 
-    	?><span class="hidden-visually"><?php p($l->t('Close')); ?></span><?php 
-    ?></a>
+		?><span class="hidden-visually"><?php p($l->t('Close')); ?></span><?php 
+	?></a>
     <h3>{{ boardservice.getCurrent().title }}</h3>
 </div>
 
@@ -84,8 +84,11 @@
                                 <input type="text" ng-model="label.title" class="input-inline" ng-style="{'background-color':'#{{label.color}}','color':'{{ label.color|textColorFilter }}'}" autofocus-on-insert maxlength="100"/>
                             </form>
                         </div>
-                        <div class="colorselect">
-                            <div class="color" ng-repeat="c in defaultColors" ng-style="{'background-color':'#{{ c }}'}" ng-click="label.color=c" ng-class="{'selected': (c == label.color) }"><br /></div>
+                        <div class="colorselect" ng-controller="ColorPickerController">
+                            <div class="color" ng-repeat="c in defaultColors" ng-style="{'background-color':'#{{ c }}'}" ng-click="label=setColor(label,c);" ng-class="{'selected': (c == label.color) }"><br /></div>
+                            <label class="colorselect-label{{ label.color | iconWhiteFilter }} color" ng-style="getCustomBackground(label.hashedColor)" ng-init="label.hashedColor='#' + label.color">
+                                <input class="color" type="color" ng-model="label.hashedColor" value="#{{label.color}}" ng-change="label=setHashedColor(label)"/>
+                            </label>
                         </div>
                     </div>
                     <a ng-if="boardservice.canManage() && label.edit" ng-click="labelUpdate(label)" class="icon" title="<?php p($l->t('Update')); ?>"><i class="icon icon-checkmark" ></i><span class="hidden-visually"><?php p($l->t('Update')); ?></span></a>
@@ -99,8 +102,11 @@
                                 <input type="text" class="input-inline" ng-model="newLabel.title" ng-style="{'color':'{{ newLabel.color|textColorFilter }}'};" autofocus-on-insert maxlength="100" />
                             </form>
                         </div>
-                        <div class="colorselect">
-                            <div class="color" ng-repeat="c in defaultColors" ng-style="{'background-color':'#{{ c }}'}" ng-click="newLabel.color=c" ng-class="{'selected': (c == newLabel.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"><br /></div>
+                        <div class="colorselect" ng-controller="ColorPickerController">
+                            <div class="color" ng-repeat="c in defaultColors" ng-style="{'background-color':'#{{ c }}'}" ng-click="newLabel=setColor(newLabel,c)" ng-class="{'selected': (c == newLabel.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"><br /></div>
+                            <label class="colorselect-label{{ newLabel.color | iconWhiteFilter }} color" ng-style="getCustomBackground(newLabel.hashedColor)" ng-init="newLabel.hashedColor='#' + newLabel.color">
+                                <input class="color" type="color" ng-model="newLabel.hashedColor" value="#{{newLabel.color}}" ng-change="newLabel=setHashedColor(newLabel)"/>
+                            </label>
                         </div>
                     </div>
                     <a ng-click="labelCreate(newLabel)" class="icon" title="<?php p($l->t('Create')); ?>"><i class="icon icon-checkmark" ></i><span class="hidden-visually"><?php p($l->t('Create')); ?></span></a>

@@ -32,7 +32,7 @@ app.filter('iconWhiteFilter', function () {
 			b: parseInt(result[3], 16)
 		} : null;
 		if (result === null) {
-			return "";
+			return '';
 		}
 		var r = color.r / 255;
 		var g = color.g / 255;
@@ -59,9 +59,9 @@ app.filter('iconWhiteFilter', function () {
 			h /= 6;
 		}
 		if (l < 0.5) {
-			return "-white";
+			return '-white';
 		} else {
-			return "";
+			return '';
 		}
 	};
 });

@@ -30,9 +30,9 @@ app.filter('lightenColorFilter', function() {
 			b: parseInt(result[3], 16)
 		} : null;
 		if (result !== null) {
-			return "rgba(" + color.r + "," + color.g + "," + color.b + ",0.7)";
+			return 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',0.7)';
 		} else {
-			return "#" + hex;
+			return '#' + hex;
 		}
 	};
 });

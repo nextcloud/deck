@@ -64,15 +64,15 @@ class UnknownUsers implements IRepairStep {
 			$acls = $this->aclMapper->findAll($board->getId());
 			/** @var Acl $acl */
 			foreach ($acls as $acl) {
-				if($acl->getType() === Acl::PERMISSION_TYPE_USER) {
+				if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
 					$user = $this->userManager->get($acl->getParticipant());
-					if($user === null) {
+					if ($user === null) {
 						$this->aclMapper->delete($acl);
 					}
 				}
-				if($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
+				if ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
 					$group = $this->groupManager->get($acl->getParticipant());
-					if($group === null) {
+					if ($group === null) {
 						$this->aclMapper->delete($acl);
 					}
 				}

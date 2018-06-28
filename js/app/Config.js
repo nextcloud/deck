@@ -25,18 +25,24 @@
 import app from './App.js';
 import md from 'angular-markdown-it';
 import markdownitLinkTarget from 'markdown-it-link-target';
+import markdownitCheckbox from 'legacy/markdown-it-checkbox.js';
 
 app.config(function ($provide, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider, $compileProvider, markdownItConverterProvider) {
 	'use strict';
 	$httpProvider.defaults.headers.common.requesttoken = oc_requesttoken;
 
-	$compileProvider.debugInfoEnabled(true);
 
-	markdownItConverterProvider.use(markdownitLinkTarget, {
+	$compileProvider.debugInfoEnabled(true);
+	// This should fix adding "unsafe:" prefix to ui-select href links containing javascript
+	// inline JS is blocked by CSP anyway and filtered out by our markdown renderer as well
+	$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|javascript):/);
+
+	markdownItConverterProvider.config({
 		breaks: true,
 		linkify: true,
 		xhtmlOut: true
 	});
+	markdownItConverterProvider.use(markdownitLinkTarget).use(markdownitCheckbox);
 
 	$urlRouterProvider.otherwise('/');
 
@@ -72,6 +78,9 @@ app.config(function ($provide, $interpolateProvider, $httpProvider, $urlRouterPr
 		})
 		.state('board.card', {
 			url: '/card/:cardId',
+			params: {
+				tab: {value: 0, dynamic: true},
+			},
 			views: {
 				'sidebarView': {
 					templateUrl: '/card.sidebarView.html',
@@ -79,5 +88,29 @@ app.config(function ($provide, $interpolateProvider, $httpProvider, $urlRouterPr
 				}
 			}
 		});
+
+	$provide.decorator('nvFileOverDirective', function ($delegate) {
+		var directive = $delegate[0],
+			link = directive.link;
+
+		directive.compile = function () {
+			return function (scope, element, attrs) {
+				var overClass = attrs.overClass || 'nv-file-over';
+				link.apply(this, arguments);
+				let counter = 0;
+				element.on('dragenter', function (event) {
+					counter++;
+				});
+				element.on('dragleave', function (event) {
+					counter--;
+					if (counter <= 0) {
+						$('.' + overClass).removeClass(overClass);
+					}
+				});
+			};
+		};
+
+		return $delegate;
+	});
 
 });

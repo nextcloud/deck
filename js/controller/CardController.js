@@ -20,10 +20,10 @@
  *  
  */
 
-/* global app moment */
+/* global app moment angular OC */
 import app from '../app/App.js';
 
-app.controller('CardController', function ($scope, $rootScope, $routeParams, $location, $stateParams, $interval, $timeout, $filter, BoardService, CardService, StackService, StatusService) {
+app.controller('CardController', function ($scope, $rootScope, $sce, $location, $stateParams, $state, $interval, $timeout, $filter, BoardService, CardService, StackService, StatusService, markdownItConverter, FileService) {
 	$scope.sidebar = $rootScope.sidebar;
 	$scope.status = {
 		lastEdit: 0,
@@ -31,16 +31,59 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 	};
 
 	$scope.cardservice = CardService;
+	$scope.fileservice = FileService;
 	$scope.cardId = $stateParams.cardId;
 
 	$scope.statusservice = StatusService.getInstance();
 	$scope.boardservice = BoardService;
 
+	$scope.isArray = angular.isArray;
+	// workaround for $stateParams changes not being propagated
+	$scope.$watch(function() {
+		return $state.params;
+	}, function (params) {
+		$scope.params = params;
+	}, true);
+	$scope.params = $state.params;
+
+	$scope.addAttachmentToDescription = function(insertText) {
+		let el = document.querySelectorAll('textarea')[0];
+		let start = el.selectionStart;
+		let end = el.selectionEnd;
+		let text = $scope.status.edit.description || '';
+		let before = text.substring(0, start);
+		let after = text.substring(end, text.length);
+		let newText = before + '\n' + insertText + '\n' + after;
+		$scope.status.edit.description = newText;
+		el.selectionStart = el.selectionEnd = start + newText.length;
+		el.focus();
+		$scope.status.continueEdit = false;
+		$scope.cardEditDescriptionChanged();
+		$scope.status.selectAttachment = false;
+	};
+
+	$scope.abortAttachmentSelection = function() {
+		$scope.status.continueEdit = false;
+		$scope.status.selectAttachment = false;
+		let el = document.querySelectorAll('textarea')[0];
+		el.focus();
+	};
+
 	$scope.statusservice.retainWaiting();
+
+	$scope.description = function() {
+		return $scope.rendered;
+	};
+
+	$scope.updateMarkdown = function(content) {
+		// only trust the html from markdown-it-checkbox
+		$scope.rendered = $sce.trustAsHtml(markdownItConverter.render(content || ''));
+	};
 
 	CardService.fetchOne($scope.cardId).then(function (data) {
 		$scope.statusservice.releaseWaiting();
 		$scope.archived = CardService.getCurrent().archived;
+		$scope.updateMarkdown(CardService.getCurrent().description);
 	}, function (error) {
 	});
 
@@ -51,7 +94,43 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 			$scope.status.cardRename = true;
 		}
 	};
-	$scope.cardEditDescriptionShow = function ($event) {
+
+	$scope.toggleCheckbox = function (id) {
+		$('#markdown input[type=checkbox]').attr('disabled', true);
+		$scope.status.edit = angular.copy(CardService.getCurrent());
+		var reg = /\[(X|\s|\_|\-)\]\s(.*)/ig;
+		var nth = 0;
+		$scope.status.edit.description = $scope.status.edit.description.replace(reg, function (match, i, original) {
+			var result = match;
+			if (nth++ === id) {
+				if (match.match(/^\[\s\]/i)) {
+					result = match.replace(/\[\s\]/i, '[x]');
+				}
+				if (match.match(/^\[x\]/i)) {
+					result = match.replace(/\[x\]/i, '[ ]');
+				}
+				return result;
+			}
+			return match;
+		});
+		CardService.update($scope.status.edit).then(function (data) {
+			var header = $('.section-header-tabbed .tabDetails');
+			header.find('.save-indicator.unsaved').hide();
+			header.find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
+		});
+		$('#markdown input[type=checkbox]').removeAttr('disabled');
+
+	};
+	$scope.clickCardDescription = function ($event) {
+		var checkboxId = $($event.target).data('id');
+		if ($event.target.tagName === 'LABEL') {
+			$scope.toggleCheckbox(checkboxId);
+			return;
+		}
+		if ($event.target.tagName === 'INPUT') {
+			$scope.toggleCheckbox(checkboxId);
+			return;
+		}
 		if (BoardService.isArchived() || CardService.getCurrent().archived) {
 			return false;
 		}
@@ -64,22 +143,23 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 	};
 	$scope.cardEditDescriptionChanged = function ($event) {
 		$scope.status.lastEdit = Date.now();
-		var header = $('.section-header.card-description');
+		var header = $('.section-header-tabbed .tabDetails');
 		header.find('.save-indicator.unsaved').show();
 		header.find('.save-indicator.saved').hide();
 	};
 	$interval(function() {
 		var currentTime = Date.now();
 		var timeSinceEdit = currentTime-$scope.status.lastEdit;
-		if (timeSinceEdit > 1000 && $scope.status.lastEdit > $scope.status.lastSave) {
+		if (timeSinceEdit > 1000 && $scope.status.lastEdit > $scope.status.lastSave && !$scope.status.saving) {
 			$scope.status.lastSave = currentTime;
-			var header = $('.section-header.card-description');
+			$scope.status.saving = true;
+			var header = $('.section-header-tabbed .tabDetails');
 			header.find('.save-indicator.unsaved').fadeIn(500);
 			CardService.update($scope.status.edit).then(function (data) {
-				var header = $('.section-header.card-description');
+				var header = $('.section-header-tabbed .tabDetails');
 				header.find('.save-indicator.unsaved').hide();
 				header.find('.save-indicator.saved').fadeIn(250).fadeOut(1000);
-				StackService.updateCard($scope.status.edit);
+				$scope.status.saving = false;
 			});
 		}
 	}, 500, 0, false);
@@ -87,29 +167,26 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 	// handle rename to update information on the board as well
 	$scope.cardRename = function (card) {
 		CardService.rename(card).then(function (data) {
-			StackService.updateCard(card);
 			$scope.status.renameCard = false;
 		});
 	};
 	$scope.cardUpdate = function (card) {
 		CardService.update(card).then(function (data) {
 			$scope.status.cardEditDescription = false;
-			var header = $('.section-content.card-description');
+			$scope.updateMarkdown($scope.status.edit.description);
+			var header = $('.section-header-tabbed .tabDetails');
 			header.find('.save-indicator.unsaved').hide();
 			header.find('.save-indicator.saved').fadeIn(500).fadeOut(1000);
-			StackService.updateCard(card);
 		});
 	};
 
 	$scope.labelAssign = function (element, model) {
 		CardService.assignLabel($scope.cardId, element.id).then(function (data) {
-			StackService.updateCard(CardService.getCurrent());
 		});
 	};
 
 	$scope.labelRemove = function (element, model) {
 		CardService.removeLabel($scope.cardId, element.id).then(function (data) {
-			StackService.updateCard(CardService.getCurrent());
 		});
 	};
 
@@ -124,7 +201,6 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 		newDate.year(duedate.year());
 		element.duedate = newDate.toISOString();
 		CardService.update(element);
-		StackService.updateCard(element);
 	};
 	$scope.setDuedateTime = function (time) {
 		var element = CardService.getCurrent();
@@ -136,14 +212,12 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 		newDate.minute(time.minute());
 		element.duedate = newDate.toISOString();
 		CardService.update(element);
-		StackService.updateCard(element);
 	};
 
 	$scope.resetDuedate = function () {
 		var element = CardService.getCurrent();
 		element.duedate = null;
 		CardService.update(element);
-		StackService.updateCard(element);
 	};
 	
 	/**
@@ -167,14 +241,12 @@ app.controller('CardController', function ($scope, $rootScope, $routeParams, $lo
 
 	$scope.addAssignedUser = function(item) {
 		CardService.assignUser(CardService.getCurrent(), item.uid).then(function (data) {
-			StackService.updateCard(CardService.getCurrent());
 		});
 		$scope.status.showAssignUser = false;
 	};
 
 	$scope.removeAssignedUser = function(uid) {
 		CardService.unassignUser(CardService.getCurrent(), uid).then(function (data) {
-			StackService.updateCard(CardService.getCurrent());
 		});
 	};
 

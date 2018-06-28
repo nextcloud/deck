@@ -30,7 +30,6 @@ use OCA\Deck\Notification\Notifier;
 use OCP\AppFramework\App;
 use OCA\Deck\Middleware\SharingMiddleware;
 use OCP\IGroup;
-
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IURLGenerator;
@@ -114,7 +113,7 @@ class Application extends App {
 		$self = &$this;
 		$notificationManager->registerNotifier(function() use (&$self) {
 			return $self->getContainer()->query(Notifier::class);
-		}, function () {
+		}, function() {
 			return ['id' => 'deck', 'name' => 'Deck'];
 		});
 

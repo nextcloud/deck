@@ -69,10 +69,10 @@ class BoardService {
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups']);
 		$complete = array_merge($userBoards, $groupBoards);
 		$result = [];
-		foreach($complete as &$item) {
-			if(!array_key_exists($item->getId(), $result)) {
+		foreach ($complete as &$item) {
+			if (!array_key_exists($item->getId(), $result)) {
 				$this->boardMapper->mapOwner($item);
-				if($item->getAcl() !== null) {
+				if ($item->getAcl() !== null) {
 					foreach ($item->getAcl() as &$acl) {
 						$this->boardMapper->mapAcl($acl);
 					}
@@ -96,7 +96,7 @@ class BoardService {
 		$board = $this->boardMapper->find($boardId, true, true);
 		$this->boardMapper->mapOwner($board);
 		foreach ($board->getAcl() as &$acl) {
-			if($acl !== null) {
+			if ($acl !== null) {
 				$this->boardMapper->mapAcl($acl);
 			}
 		}
@@ -249,7 +249,7 @@ class BoardService {
 		$this->boardMapper->mapAcl($acl);
 		if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
 			$assignements = $this->assignedUsersMapper->findByUserId($acl->getParticipant());
-			foreach($assignements as $assignement) {
+			foreach ($assignements as $assignement) {
 				$this->assignedUsersMapper->delete($assignement);
 			}
 		}

@@ -86,7 +86,7 @@ class AssignedUsersMapper extends DeckMapper implements IPermissionMapper {
 		$userManager = $this->userManager;
 		$assignment->resolveRelation('participant', function() use (&$userManager, &$assignment) {
 			$user = $userManager->get($assignment->getParticipant());
-			if($user !== null) {
+			if ($user !== null) {
 				return new User($user);
 			}
 			return null;

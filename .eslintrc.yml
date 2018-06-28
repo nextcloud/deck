@@ -8,6 +8,7 @@ env:
   amd: true
 
 globals:
+  global: false
   app: false
   angular: false
   $: false
@@ -32,6 +33,7 @@ rules:
   no-fallthrough: error
   no-mixed-spaces-and-tabs: error
   no-unused-vars: warn
+  no-useless-escape: warn
   no-use-before-define: error
   semi: ["error", "always"]
   indent:

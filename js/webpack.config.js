@@ -1,54 +1,68 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+require('babel-polyfill');
 
 module.exports = {
-	entry: {
-		deck: './init.js',
-	},
-	output: {
-		filename: '[name].js',
-		path: __dirname + '/build'
-	},
-	resolve: {
-		modules: [path.resolve(__dirname), 'node_modules'],
-	},
-	module: {
-		loaders: [
-			{
-				test: /\.js$/,
-				exclude: /node_modules/,
-				loader: 'babel-loader',
-			},
-			{
-				test: /\.css$/,
-				use: ExtractTextPlugin.extract({
-					use: {
-						loader: 'css-loader',
-						options: {
-							minimize: true,
-						}
-					},
-				})
-			}
-		]
-	},
-	plugins: [
-		new webpack.optimize.UglifyJsPlugin({
-			test: /(vendor\.js)+/i,
-		}),
-		// we do not uglify deck.js since there are no proper dependency annotations
-		new webpack.optimize.CommonsChunkPlugin({
-			name: 'vendor',
-			filename: 'vendor.js',
-			minChunks(module, count) {
-				var context = module.context;
-				return context && context.indexOf('node_modules') >= 0;
-			},
-		}),
-		new ExtractTextPlugin({
-			filename: "../../css/vendor.css",
-			allChunks: true
-		}),
-	]
+  node: {
+    fs: 'empty',
+  },
+  entry: {
+    deck: ['babel-polyfill', './init.js'],
+  },
+  output: {
+    filename: '[name].js',
+    path: __dirname + '/build'
+  },
+  resolve: {
+    modules: [path.resolve(__dirname), 'node_modules'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['env'],
+        }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader'
+        ]
+      }
+    ]
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        /* separate vendor chunk for node_modules and legacy scripts */
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendor',
+          chunks: 'all'
+        },
+        legacy: {
+          test: /[\\/]legacy[\\/]/,
+          name: 'vendor',
+          chunks: 'all'
+        }
+      }
+    }
+  },
+  /* use external jQuery from server */
+  externals: {
+    'jquery': 'jQuery'
+  },
+  plugins: [
+    new MiniCssExtractPlugin('[name].css'),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery'
+    })
+  ]
 };

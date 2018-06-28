@@ -49,9 +49,9 @@
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "დაფის გაუქმების უკუგდება - სხვა შემთხვევაში დაფა შემდეგი conjob-ის გაშვებისას წაიშლება.",
     "Create new board" : "ახალი დაფის შექმნა",
     "New board title" : "ახალი დაფის სახელი",
+    "by" : "შემქმნელი",
     "Modified:" : "შეცვლილია:",
     "Created:" : "შექმნილია:",
-    "by" : "შემქმნელი",
     "Choose a tag" : "აირჩიეთ ტეგი",
     "Add a tag" : "დაამატეთ ტეგი",
     "Select tags" : "აირჩიეთ ტეგები",
@@ -62,13 +62,13 @@
     "Click to set" : "დააწკაპუნეთ დასაყენებლად",
     "Remove due date" : "მოაშორეთ დანიშნულების დრო",
     "Description" : "აღწერა",
-    "Formatting help" : "დახმარება ფორმატირებაზე",
     "Saved" : "შენახულია",
     "Unsaved changes" : "შეუნახავი ცვლილებები",
+    "Formatting help" : "დახმარება ფორმატირებაზე",
     "Add a card description…" : "დაამატეთ ბარათის აღწერილობა...",
     "Shared boards" : "გაზიარებული დაფები",
     "View more" : "მეტის ჩვენება",
     "Move board to archive" : "დაფის არქვიში გადატანა",
     "Create a new board" : "ახალი დაფის შექმნა"
-},"pluralForm" :"nplurals=1; plural=0;"
+},"pluralForm" :"nplurals=2; plural=(n!=1);"
 }
