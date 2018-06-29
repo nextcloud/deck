@@ -1481,3 +1481,8 @@ body:not(.snapjs-left) {
 		display: none;
 	}
 }
+
+/**
+ * Print settings, better leave them at the eof
+ */
+@import 'print.scss';
