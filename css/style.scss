@@ -1431,3 +1431,8 @@ input.input-inline {
 .ui-select-dropdown.select2-drop-active {
 	opacity: 1 !important;
 }
+
+/**
+ * Print settings, better leave them at the eof
+ */
+@import 'print.scss';
