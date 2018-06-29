@@ -1,5 +1,5 @@
 /*
- * @copyright Copyright (c) 2018 Julius Härtl <jus@bitgrid.net>
+* @copyright Copyright (c) 2018 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
  *
@@ -34,6 +34,10 @@ export default class FileService {
 		this.uploader.onErrorItem = this.onErrorItem.bind(this);
 		
 		this.maxUploadSize = $rootScope.config.maxUploadSize;
+		this.status = null;
+	}
+
+	reset () {
 		this.status = null;
 	}
 
