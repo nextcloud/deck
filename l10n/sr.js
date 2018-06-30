@@ -6,6 +6,7 @@ OC.L10N.register(
     "Remove user from card" : "Уклони корисника са картице",
     "Hours" : "Сати",
     "Minutes" : "Минути",
+    "Maximum file size of {size} exceeded" : "Премашена максимална величина фајла од {size}",
     "Are you sure you want to delete the stack with all of its data?" : "Да ли стварно желите да обришете ову гомилу са свим подацима на њој?",
     "The card \"%s\" on \"%s\" has reached its due date." : "Картици \"%s\" на табли \"%s\" је истекао рок.",
     "The board \"%s\" has been shared with you by %s." : "Таблу \"%s\" је поделио \"%s\" са Вама. ",
