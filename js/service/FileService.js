@@ -32,8 +32,10 @@ export default class FileService {
 		this.uploader.onAfterAddingFile = this.onAfterAddingFile.bind(this);
 		this.uploader.onSuccessItem = this.onSuccessItem.bind(this);
 		this.uploader.onErrorItem = this.onErrorItem.bind(this);
-		
+		this.uploader.onCancelItem = this.onCancelItem.bind(this);
+
 		this.maxUploadSize = $rootScope.config.maxUploadSize;
+		this.progress = [];
 		this.status = null;
 	}
 
@@ -70,6 +72,7 @@ export default class FileService {
 
 		// Fetch card details before trying to upload so we can detect filename collisions properly
 		let self = this;
+		this.progress.push(fileItem);
 		this.cardservice.fetchOne(fileItem.cardId).then(function (data) {
 			let attachments = self.cardservice.get(fileItem.cardId).attachments;
 			let existingFile = attachments.find((attachment) => {
@@ -98,7 +101,7 @@ export default class FileService {
 				self.runUpload(fileItem);
 			}
 		}, function (error) {
-
+			this.progress = this.progress.filter((item) => (fileItem.file.name !== item.file.name));
 		});
 
 	}
@@ -110,13 +113,23 @@ export default class FileService {
 			attachments = attachments.splice(index, 1);
 		}
 		this.cardservice.get(item.cardId).attachments.push(response);
+		this.progress = this.progress.filter((fileItem) => (fileItem.file.name !== item.file.name));
 	}
 
 	onErrorItem (item, response) {
+		this.progress = this.progress.filter((fileItem) => (fileItem.file.name !== item.file.name));
 		this.status = {
 			error: t('deck', `Failed to upload:`) + ' ' + item.file.name,
 			message: response.message
 		};
+	}
+
+	onCancelItem (item) {
+		this.progress = this.progress.filter((fileItem) => (fileItem.file.name !== item.file.name));
+	}
+
+	getProgressItemsForCard (cardId) {
+		return this.progress.filter((fileItem) => (fileItem.cardId === cardId));
 	}
 
 }
