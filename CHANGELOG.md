@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Embed attachments into the card description
 - Color picker to use any color value for board and labels
 - Support for checkboxes inside the description
+- occ command to export user data as JSON
 
 ### Fixed
 
