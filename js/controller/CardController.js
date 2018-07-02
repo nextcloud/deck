@@ -43,6 +43,7 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 		return $state.params;
 	}, function (params) {
 		$scope.params = params;
+		$scope.fileservice.reset();
 	}, true);
 	$scope.params = $state.params;
 

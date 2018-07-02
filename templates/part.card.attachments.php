@@ -3,6 +3,19 @@
 	<h3 class="attachment-selector" ng-if="$ctrl.isFileSelector"><?php p($l->t('Select an attachment')); ?>	<a class="icon-close" ng-click="$ctrl.abort()"></a></h3>
 <ul>
 	<li class="attachment"
+		ng-repeat="attachment in $ctrl.fileservice.getProgressItemsForCard($ctrl.cardservice.getCurrent().id)">
+		<a class="fileicon icon-file"></a>
+		<div class="details">
+			<div class="filename">
+				<span class="basename">{{ attachment.file.name }}</span>
+			</div>
+			<progress value="{{ attachment.progress }}" max="100"></progress>
+		</div>
+		<button class="icon icon-close button-inline" ng-click="attachment.cancel()">
+			<span class="hidden-visually"><?php p($l->t('Cancel upload')); ?></span>
+		</button>
+	</li>
+	<li class="attachment"
 		ng-repeat="attachment in $ctrl.cardservice.getCurrent().attachments | filter: {type: 'deck_file'} | orderBy: ['deletedAt', '-lastModified']"
 		ng-class="{deleted: attachment.deletedAt > 0, selector: $ctrl.isFileSelector}"
 		ng-if="!$ctrl.isFileSelector || attachment.deletedAt == 0">
