@@ -6,6 +6,7 @@ OC.L10N.register(
     "Remove user from card" : "Rimuovi utente dalla scheda",
     "Hours" : "Ore",
     "Minutes" : "Minuti",
+    "Maximum file size of {size} exceeded" : "Dimensione massima dei file di {size} superata",
     "Are you sure you want to delete the stack with all of its data?" : "Sei sicuro di voler eliminare questa pila con tutti i suoi dati?",
     "The card \"%s\" on \"%s\" has reached its due date." : "La scheda \"%s\" in \"%s\" ha raggiunto la sua data di scadenza.",
     "The board \"%s\" has been shared with you by %s." : "La lavagna \"%s\" è stata condivisa con te da %s.",
