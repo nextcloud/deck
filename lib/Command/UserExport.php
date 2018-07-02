@@ -108,7 +108,7 @@ class UserExport extends Command {
 					$fullCard = $this->cardMapper->find($card->getId());
 					$assignedUsers = $this->assignedUsersMapper->find($card->getId());
 					$fullCard->setAssignedUsers($assignedUsers);
-					$data[$board->getId()]['stacks'][$stack->getId()]['cards'] = (array)$fullCard->jsonSerialize();
+					$data[$board->getId()]['stacks'][$stack->getId()]['cards'][] = (array)$fullCard->jsonSerialize();
 				}
 			}
 		}
