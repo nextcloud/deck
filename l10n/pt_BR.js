@@ -67,6 +67,7 @@ OC.L10N.register(
     "Create new board" : "Criar novo painel",
     "New board title" : "Título do novo painel",
     "Select an attachment" : "Selecionar um anexo",
+    "Cancel upload" : "Cancelar envio",
     "by" : "por",
     "Undo file deletion - Otherwise the file will be deleted during the next cronjob run." : "Desfazer exclusão de arquivo - Caso contrário será excluído na próxima execução do cronjob.",
     "Undo file deletion" : "Desfazer exclusão de arquivo",

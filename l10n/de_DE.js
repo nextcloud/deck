@@ -67,6 +67,7 @@ OC.L10N.register(
     "Create new board" : "Neues Board erstellen",
     "New board title" : "Neuer Board-Titel",
     "Select an attachment" : "Wählen Sie einen Anhang",
+    "Cancel upload" : "Hochladen abbrechen",
     "by" : "von",
     "Undo file deletion - Otherwise the file will be deleted during the next cronjob run." : "Dateilöschung rückgängig machen - Andernfalls wird die Datei beim nächsten CronJob-Lauf gelöscht.",
     "Undo file deletion" : "Dateilöschung rückgängig machen",

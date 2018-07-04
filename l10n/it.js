@@ -67,6 +67,7 @@ OC.L10N.register(
     "Create new board" : "Crea una nuova lavagna",
     "New board title" : "Titolo nuova lavagna",
     "Select an attachment" : "Scegli un allegato",
+    "Cancel upload" : "Annulla caricamento",
     "by" : "da",
     "Undo file deletion - Otherwise the file will be deleted during the next cronjob run." : "Annulla eliminazione del file - Altrimenti il file sarà eliminato durante la prossima esecuzione del job di cron.",
     "Undo file deletion" : "Annulla l'eliminazione della file",
