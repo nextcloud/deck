@@ -38,11 +38,15 @@ use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\FileDisplayResponse;
 use OCP\AppFramework\Http\Response;
+use OCP\AppFramework\Http\StreamResponse;
 use OCP\AppFramework\IAppContainer;
+use OCP\Files\Folder;
 use OCP\Files\IAppData;
+use OCP\Files\IRootFolder;
 use OCP\Files\SimpleFS\ISimpleFile;
 use OCP\Files\SimpleFS\ISimpleFolder;
 use OCP\ICacheFactory;
+use OCP\IConfig;
 use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
@@ -61,6 +65,10 @@ class FileServiceTest extends TestCase {
 	private $logger;
 	/** @var FileService */
 	private $fileService;
+	/** @var IRootFolder */
+	private $rootFolder;
+	/** @var IConfig */
+	private $config;
 
 	public function setUp() {
 		parent::setUp();
@@ -68,7 +76,9 @@ class FileServiceTest extends TestCase {
 		$this->appData = $this->createMock(IAppData::class);
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->logger = $this->createMock(ILogger::class);
-		$this->fileService = new FileService($this->l10n, $this->appData, $this->request, $this->logger);
+		$this->rootFolder = $this->createMock(IRootFolder::class);
+		$this->config = $this->createMock(IConfig::class);
+		$this->fileService = new FileService($this->l10n, $this->appData, $this->request, $this->logger, $this->rootFolder, $this->config);
     }
 
     public function mockGetFolder($cardId) {
@@ -253,33 +263,60 @@ class FileServiceTest extends TestCase {
 	}
 
 	public function testDisplay() {
+		$this->config->expects($this->once())
+			->method('getSystemValue')
+			->willReturn('123');
+		$appDataFolder = $this->createMock(Folder::class);
+		$deckAppDataFolder = $this->createMock(Folder::class);
+		$cardFolder = $this->createMock(Folder::class);
+		$this->rootFolder->expects($this->once())->method('get')->willReturn($appDataFolder);
+		$appDataFolder->expects($this->once())->method('get')->willReturn($deckAppDataFolder);
+		$deckAppDataFolder->expects($this->once())->method('get')->willReturn($cardFolder);
 		$attachment = $this->getAttachment();
-		$file = $this->createMock(ISimpleFile::class);
-		$folder = $this->mockGetFolder('123');
-		$folder->expects($this->once())
-			->method('getFile')
-			->willReturn($file);
-		$file->expects($this->exactly(2))
+		$file = $this->createMock(\OCP\Files\File::class);
+		$cardFolder->expects($this->once())->method('get')->willReturn($file);
+		$file->expects($this->any())
 			->method('getMimeType')
 			->willReturn('image/jpeg');
+		$file->expects($this->any())
+			->method('getName')
+			->willReturn('file1');
+		$file->expects($this->any())
+			->method('fopen')
+			->willReturn('fileresource');
 		$actual = $this->fileService->display($attachment);
-		$expected = new FileDisplayResponse($file);
+		$expected = new StreamResponse('fileresource');
 		$expected->addHeader('Content-Type', 'image/jpeg');
+		$expected->addHeader('Content-Disposition', 'inline; filename="' . rawurldecode($file->getName()) . '"');
+
 		$this->assertEquals($expected, $actual);
 	}
 
 	public function testDisplayPdf() {
+		$this->config->expects($this->once())
+			->method('getSystemValue')
+			->willReturn('123');
+		$appDataFolder = $this->createMock(Folder::class);
+		$deckAppDataFolder = $this->createMock(Folder::class);
+		$cardFolder = $this->createMock(Folder::class);
+		$this->rootFolder->expects($this->once())->method('get')->willReturn($appDataFolder);
+		$appDataFolder->expects($this->once())->method('get')->willReturn($deckAppDataFolder);
+		$deckAppDataFolder->expects($this->once())->method('get')->willReturn($cardFolder);
 		$attachment = $this->getAttachment();
-		$file = $this->createMock(ISimpleFile::class);
-		$folder = $this->mockGetFolder('123');
-		$folder->expects($this->once())
-			->method('getFile')
-			->willReturn($file);
-		$file->expects($this->exactly(2))
+		$file = $this->createMock(\OCP\Files\File::class);
+		$cardFolder->expects($this->once())->method('get')->willReturn($file);
+		$file->expects($this->any())
 			->method('getMimeType')
 			->willReturn('application/pdf');
+		$file->expects($this->any())
+			->method('getName')
+			->willReturn('file1');
+		$file->expects($this->any())
+			->method('fopen')
+			->willReturn('fileresource');
 		$actual = $this->fileService->display($attachment);
-		$expected = new FileDisplayResponse($file);
+		$expected = new StreamResponse('fileresource');
+		$expected->addHeader('Content-Disposition', 'inline; filename="' . rawurldecode($file->getName()) . '"');
 		$expected->addHeader('Content-Type', 'application/pdf');
 		$policy = new ContentSecurityPolicy();
 		$policy->addAllowedObjectDomain('\'self\'');
