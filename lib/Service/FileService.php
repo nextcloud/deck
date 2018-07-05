@@ -29,12 +29,16 @@ use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\EmptyContentSecurityPolicy;
 use OCP\AppFramework\Http\FileDisplayResponse;
+use OCP\AppFramework\Http\StreamResponse;
 use OCP\Files\Cache\IScanner;
+use OCP\Files\Folder;
 use OCP\Files\IAppData;
+use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Files\SimpleFS\ISimpleFile;
 use OCP\Files\SimpleFS\ISimpleFolder;
+use OCP\IConfig;
 use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
@@ -45,17 +49,23 @@ class FileService implements IAttachmentService {
 	private $appData;
 	private $request;
 	private $logger;
+	private $rootFolder;
+	private $config;
 
 	public function __construct(
 		IL10N $l10n,
 		IAppData $appData,
 		IRequest $request,
-		ILogger $logger
+		ILogger $logger,
+		IRootFolder $rootFolder,
+		IConfig $config
 	) {
 		$this->l10n = $l10n;
 		$this->appData = $appData;
 		$this->request = $request;
 		$this->logger = $logger;
+		$this->rootFolder = $rootFolder;
+		$this->config = $config;
 	}
 
 	/**
@@ -174,9 +184,32 @@ class FileService implements IAttachmentService {
 		}
 	}
 
+	/**
+	 * Workaround until ISimpleFile can be fetched as a resource
+	 *
+	 * @throws \Exception
+	 */
+	private function getFileFromRootFolder(Attachment $attachment) {
+		$folderName = 'file-card-' . (int)$attachment->getCardId();
+		$instanceId = $this->config->getSystemValue('instanceid', null);
+		if ($instanceId === null) {
+			throw new \Exception('no instance id!');
+		}
+		$name = 'appdata_' . $instanceId;
+		$appDataFolder = $this->rootFolder->get($name);
+		$appDataFolder = $appDataFolder->get('deck');
+		$cardFolder = $appDataFolder->get($folderName);
+		return $cardFolder->get($attachment->getData());
+	}
+
 	public function display(Attachment $attachment) {
-		$file = $this->getFileForAttachment($attachment);
-		$response = new FileDisplayResponse($file);
+		$file = $this->getFileFromRootFolder($attachment);
+		if (method_exists($file, 'fopen')) {
+			$response = new StreamResponse($file->fopen('r'));
+			$response->addHeader('Content-Disposition', 'inline; filename="' . rawurldecode($file->getName()) . '"');
+		} else {
+			$response = new FileDisplayResponse($file);
+		}
 		if ($file->getMimeType() === 'application/pdf') {
 			// We need those since otherwise chrome won't show the PDF file with CSP rule object-src 'none'
 			// https://bugs.chromium.org/p/chromium/issues/detail?id=271452
