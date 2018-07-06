@@ -9,7 +9,7 @@
 			<div class="filename">
 				<span class="basename">{{ attachment.file.name }}</span>
 			</div>
-			<progress value="{{ attachment.progress }}" max="100"></progress>
+			<progress ng-attr-value="{{ attachment.progress }}" max="100"></progress>
 		</div>
 		<button class="icon icon-close button-inline" ng-click="attachment.cancel()">
 			<span class="hidden-visually"><?php p($l->t('Cancel upload')); ?></span>
