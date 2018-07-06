@@ -28,7 +28,7 @@ OC.L10N.register(
     "Add card" : "Dodaj kartę",
     "Close" : "Zamknij",
     "Sharing" : "Współdzielenie",
-    "Tags" : "Tagi",
+    "Tags" : "Etykiety",
     "Select users or groups to share with" : "Wybierz użytkowników lub grupy, żeby współdzielić z nimi",
     "Access for" : "Dostęp dla",
     "No matching user or group found." : "Nie znaleziono pasujących użytkowników lub grup",

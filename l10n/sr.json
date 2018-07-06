@@ -65,6 +65,7 @@
     "Create new board" : "Направи нову таблу",
     "New board title" : "Назив нове табле",
     "Select an attachment" : "Одаберите прилог",
+    "Cancel upload" : "Откажи отпремање",
     "by" : "од",
     "Undo file deletion - Otherwise the file will be deleted during the next cronjob run." : "Поништи брисање фајла - у супротном, фајл ће бити обрисан на следеће покретање крон посла.",
     "Undo file deletion" : "Поништи брисање фајла",

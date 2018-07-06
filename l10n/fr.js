@@ -67,6 +67,7 @@ OC.L10N.register(
     "Create new board" : "Créer un nouveau tableau",
     "New board title" : "Nouveau titre pour le tableau",
     "Select an attachment" : "Sélectionner une pièce jointe",
+    "Cancel upload" : "Annuler le téléversement",
     "by" : "par",
     "Undo file deletion - Otherwise the file will be deleted during the next cronjob run." : "Annuler la suppression du fichier - Autrement le fichier sera supprimé lors du prochain lancement de la tâche cron.",
     "Undo file deletion" : "Annuler la suppression du fichier",
