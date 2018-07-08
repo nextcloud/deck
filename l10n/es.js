@@ -67,6 +67,7 @@ OC.L10N.register(
     "Create new board" : "Crear nuevo tablero",
     "New board title" : "Nuevo título de tablero",
     "Select an attachment" : "Selecciona un adjunto",
+    "Cancel upload" : "Cancelar la subida",
     "by" : "por",
     "Undo file deletion - Otherwise the file will be deleted during the next cronjob run." : "Deshacer eliminación del archivo. De otra forma el archivo se borrará durante la próxima ejecución del trabajo cron.",
     "Undo file deletion" : "Deshacer eliminación del archivo",
