@@ -84,7 +84,10 @@ class CardService {
 		if ($this->boardService->isArchived($this->cardMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
-		return $this->cardMapper->delete($this->cardMapper->find($id));
+		$card = $this->cardMapper->find($id);
+		$card-setDeletedAt(time());
+		$this->cardMapper->update($card);
+		return $card;
 	}
 
 	public function update($id, $title, $stackId, $type, $order, $description, $owner, $duedate) {

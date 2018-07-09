@@ -58,6 +58,7 @@ class Card extends RelationalEntity {
 		$this->addType('createdAt', 'integer');
 		$this->addType('archived', 'boolean');
 		$this->addType('notified', 'boolean');
+		$this->addType('deletedAt', 'integer');
 		$this->addRelation('labels');
 		$this->addRelation('assignedUsers');
 		$this->addRelation('attachments');
