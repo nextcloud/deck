@@ -42,6 +42,8 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.board = BoardService.getCurrent();
 	$scope.uploader = FileService.uploader;
 
+	$scope.deletedCards = [];
+
 	// workaround for $stateParams changes not being propagated
 	$scope.$watch(function() {
 		return $state.params;
@@ -136,6 +138,14 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		});
 	};
 
+	$scope.loadDeletedCards = function() {
+		CardService.fetchDeleted($scope.id).then(function (data) {
+			$scope.deletedCards = data;
+		}, function (error) {
+			$scope.statusservice.setError('Error occured', error);
+		});
+	}
+
 	$scope.loadDefault = function () {
 		StackService.fetchAll($scope.id).then(function (data) {
 			$scope.statusservice.releaseWaiting();
@@ -193,6 +203,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			}
 			CardService.delete(card.id).then(function () {
 				StackService.removeCard(card);
+				$scope.loadDeletedCards();
 			});
 		});
 	};
@@ -384,4 +395,5 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		return card.attachmentCount;
 	};
 
+	$scope.loadDeletedCards();
 });

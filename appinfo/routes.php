@@ -50,6 +50,7 @@ return [
 		['name' => 'card#create', 'url' => '/cards', 'verb' => 'POST'],
 		['name' => 'card#update', 'url' => '/cards/{cardId}', 'verb' => 'PUT'],
 		['name' => 'card#delete', 'url' => '/cards/{cardId}', 'verb' => 'DELETE'],
+		['name' => 'card#deleted', 'url' => '/cards/deleted/{boardId}', 'verb' => 'GET'],
 		['name' => 'card#rename', 'url' => '/cards/{cardId}/rename', 'verb' => 'PUT'],
 		['name' => 'card#reorder', 'url' => '/cards/{cardId}/reorder', 'verb' => 'PUT'],
 		['name' => 'card#archive', 'url' => '/cards/{cardId}/archive', 'verb' => 'PUT'],

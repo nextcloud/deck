@@ -106,6 +106,15 @@ class CardController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 * @param $boardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
+	public function deleted($boardId) {
+		return $this->cardService->fetchDeleted($boardId);
+	}
+
+	/**
+	 * @NoAdminRequired
 	 * @param $cardId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
