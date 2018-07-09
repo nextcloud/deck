@@ -121,7 +121,10 @@
     </div>
 
     <div id="board-detail-deleted-cards" class="tab deletedCardsTabView" ng-if="params.tab==2">
-	<h2>Hello world!</h2>
-
+	<ul>
+	   <li ng-repeat="deletedCard in boardservice.getCurrent().deletedCards">
+     	     {{deletedCard}}
+	   </li>
+	</ul>
     </div>
 </div>

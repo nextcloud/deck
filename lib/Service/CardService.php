@@ -85,7 +85,7 @@ class CardService {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		$card = $this->cardMapper->find($id);
-		$card-setDeletedAt(time());
+		$card->setDeletedAt(time());
 		$this->cardMapper->update($card);
 		return $card;
 	}

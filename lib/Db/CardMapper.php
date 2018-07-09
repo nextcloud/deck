@@ -109,8 +109,14 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 
 	public function findAll($stackId, $limit = null, $offset = null) {
 		$sql = 'SELECT * FROM `*PREFIX*deck_cards` 
-          WHERE `stack_id` = ? AND NOT archived ORDER BY `order`';
-		return $this->findEntities($sql, [$stackId], $limit, $offset);
+          WHERE `stack_id` = ? AND NOT archived AND deleted_at = 0 OR deleted_at > ? ORDER BY `order`';
+		return $this->findEntities($sql, [$stackId, time()], $limit, $offset);
+	}
+
+	public function findDeleted($stackId, $limit = null, $offset = null) {
+		$sql = 'SELECT * FROM `*PREFIX*deck_cards` 
+          WHERE `stack_id` = ? AND NOT archived AND NOT deleted_at = 0 AND deleted_at <= ? ORDER BY `order`';
+		return $this->findEntities($sql, [$stackId, time()], $limit, $offset);
 	}
 
 	public function findAllArchived($stackId, $limit = null, $offset = null) {

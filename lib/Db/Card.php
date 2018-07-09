@@ -42,6 +42,7 @@ class Card extends RelationalEntity {
 	protected $archived = false;
 	protected $duedate;
 	protected $notified = false;
+	protected $deletedAt;
 
 	private $databaseType = 'sqlite';
 
