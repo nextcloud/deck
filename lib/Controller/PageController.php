@@ -23,17 +23,25 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Service\DefaultBoardService;
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Controller;
 
 class PageController extends Controller {
 
+	protected $defaultBoardService;
 	private $userId;
 
-	public function __construct($AppName, IRequest $request, $userId) {
+	public function __construct(
+		$AppName, 
+		IRequest $request, 
+		$userId,
+		DefaultBoardService $defaultBoardService) {
 		parent::__construct($AppName, $request);
+
 		$this->userId = $userId;
+		$this->boardService = $boardService;
 	}
 
 	/**
@@ -48,6 +56,14 @@ class PageController extends Controller {
 			'user' => $this->userId,
 			'maxUploadSize' => \OCP\Util::uploadLimit(),
 		];
+
+		// run the checkFirstRun() method from OCA\Deck\Service\DefaultBoardService here
+		// if the board is not created, then run createDefaultBoard() from the defaultBoardService here.
+		if ($this->defaultBoardService->checkFirstRun($this->userId)) {
+			$this->defaultBoardService->createDefaultBoard();
+		}
+
+
 		return new TemplateResponse('deck', 'main', $params);
 	}
 
