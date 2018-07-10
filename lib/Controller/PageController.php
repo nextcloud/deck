@@ -30,18 +30,19 @@ use OCP\AppFramework\Controller;
 
 class PageController extends Controller {
 
-	protected $defaultBoardService;
+	private $defaultBoardService;
 	private $userId;
 
 	public function __construct(
 		$AppName, 
 		IRequest $request, 
-		$userId,
-		DefaultBoardService $defaultBoardService) {
+		DefaultBoardService $defaultBoardService,
+		$userId
+		) {
 		parent::__construct($AppName, $request);
 
 		$this->userId = $userId;
-		$this->boardService = $boardService;
+		$this->defaultBoardService = $defaultBoardService;
 	}
 
 	/**
@@ -60,7 +61,7 @@ class PageController extends Controller {
 		// run the checkFirstRun() method from OCA\Deck\Service\DefaultBoardService here
 		// if the board is not created, then run createDefaultBoard() from the defaultBoardService here.
 		if ($this->defaultBoardService->checkFirstRun($this->userId)) {
-			$this->defaultBoardService->createDefaultBoard();
+			$this->defaultBoardService->createDefaultBoard('Personal', $this->userId, '000000');
 		}
 
 

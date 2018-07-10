@@ -33,9 +33,14 @@ class DefaultBoardService {
     protected $stackService;
     protected $cardService;
 
-    public function __construct(BoardService $boardService, StackService $stackService, CardService $cardService) {
+    public function __construct(
+            BoardService $boardService, 
+            StackService $stackService, 
+            CardService $cardService) {
+
         $this->boardService = $boardService;
         $this->stackService = $stackService;
+        $this->cardService = $cardService;
     }
 
     
@@ -44,7 +49,7 @@ class DefaultBoardService {
         // has already been created for the user
 
         // TODO: Remove hardcode once I figure out how to do the config value.
-        return true;
+        return false;
     }
 
     public function createDefaultBoard($title, $userId, $color) {
@@ -58,8 +63,8 @@ class DefaultBoardService {
         $defaultStacks[] = $this->stackService->create('Doing', $boardId, 1);
         $defaultStacks[] = $this->stackService->create('Done', $boardId, 1);
         
-        $defaultCards[] = $this->cardService->create('Example Task 3', $stacks[0]->getId(), 'text', 0, $userId);
-        $defaultCards[] = $this->cardService->create('Example Task 2', $stacks[1]->getId(), 'text', 0, $userId);
-        $defaultCards[] = $this->cardService->create('Example Task 1', $stacks[2]->getId(), 'text', 0, $userId);
+        $defaultCards[] = $this->cardService->create('Example Task 3', $defaultStacks[0]->getId(), 'text', 0, $userId);
+        $defaultCards[] = $this->cardService->create('Example Task 2', $defaultStacks[1]->getId(), 'text', 0, $userId);
+        $defaultCards[] = $this->cardService->create('Example Task 1', $defaultStacks[2]->getId(), 'text', 0, $userId);
     }
 }
