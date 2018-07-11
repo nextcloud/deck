@@ -32,6 +32,7 @@ use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\StackService;
 use OCA\Deck\Service\CardService;
 use OCP\IConfig;
+use OCP\IL10N;
 use \Test\TestCase;
 
 class DefaultBoardServiceTest extends TestCase {
@@ -53,6 +54,8 @@ class DefaultBoardServiceTest extends TestCase {
 
 	/** @var IConfig */
 	private $config;
+
+	private $l10n;
 	
 	private $userId = 'admin';	
 
@@ -63,8 +66,14 @@ class DefaultBoardServiceTest extends TestCase {
 		$this->stackService = $this->createMock(StackService::class);
 		$this->cardService = $this->createMock(CardService::class);
 		$this->config = $this->createMock(IConfig::class);
+		
+		$this->l10n = $this->request = $this->getMockBuilder(
+			'\OCP\IL10n')
+			->disableOriginalConstructor()
+			->getMock();
 
 		$this->service = new DefaultBoardService(
+			$this->l10n,
 			$this->boardMapper,
 			$this->boardService,
 			$this->stackService,

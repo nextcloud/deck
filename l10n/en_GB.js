@@ -74,6 +74,8 @@ OC.L10N.register(
     "Shared boards" : "Shared boards",
     "View more" : "View more",
     "Move board to archive" : "Move board to archive",
-    "Create a new board" : "Create a new board"
+	"Create a new board" : "Create a new board",
+	"Personal": "Personal",
+	"To do": "To do"
 },
 "nplurals=2; plural=(n != 1);");
