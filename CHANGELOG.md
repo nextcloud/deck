@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.4.0 - unreleased
+## 0.4.0 - 2018-07-11
 
 ### Added
 
