@@ -175,18 +175,15 @@ app.factory('CardService', function (ApiService, $http, $q) {
 	};
 
 	CardService.prototype.fetchDeleted = function (boardId) {
-
                 var deferred = $q.defer();
                 var self = this;
                 $http.get(this.baseUrl + '/deleted/' + boardId).then(function (response) {
                         var objects = response.data;
-			return objects;
-                        deferred.resolve(self.data);
+                        deferred.resolve(objects);
                 }, function (error) {
                         deferred.reject('Fetching ' + self.endpoint + ' failed');
                 });
                 return deferred.promise;
-
 	};
 
 

@@ -203,7 +203,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			}
 			CardService.delete(card.id).then(function () {
 				StackService.removeCard(card);
-				$scope.loadDeletedCards();
+				$scope.deletedCards.push(card);
 			});
 		});
 	};
