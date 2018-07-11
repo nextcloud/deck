@@ -24,6 +24,7 @@
 namespace OCA\Deck\Controller;
 
 use PHPUnit_Framework_TestCase;
+use OCA\Deck\Service\DefaultBoardService;
 
 class PageControllerTest extends \Test\TestCase {
 
@@ -31,6 +32,7 @@ class PageControllerTest extends \Test\TestCase {
 	private $request;
 	private $l10n;
 	private $userId = 'john';
+	private $defaultBoardService;
 
 	public function setUp() {
 		$this->l10n = $this->request = $this->getMockBuilder(
@@ -42,8 +44,10 @@ class PageControllerTest extends \Test\TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$this->defaultBoardService = $this->createMock(DefaultBoardService::class);
+
 		$this->controller = new PageController(
-			'deck', $this->request, $this->l10n, $this->userId
+			'deck', $this->request, $this->defaultBoardService, $this->l10n, $this->userId
 		);
 	}
 
