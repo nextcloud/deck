@@ -123,8 +123,13 @@
     <div id="board-detail-deleted-cards" class="tab deletedCardsTabView" ng-if="params.tab==2">
 	<ul>
 	   <li ng-repeat="deletedCard in deletedCards">
-{{123}}
-{{deletedCard}}
+			<dl>
+			  <dt>Title</dt>
+			  <dd>{{deletedCard.title}}<dd>
+			  <dt>Stack</dt>
+			  <dd>{{stackservice.data[deletedCard.stackId].title}}</dd>
+			</dl>
+                	<a ng-click="cardUndoDelete(deletedCard)"><span class="icon icon-undo"></span><br /><span><?php p($l->t('Undo delete')); ?></span></a>
 	   </li>
 	</ul>
     </div>

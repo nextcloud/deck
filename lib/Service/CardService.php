@@ -30,6 +30,7 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Notification\NotificationHelper;
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\StatusException;
 
@@ -38,6 +39,7 @@ class CardService {
 
 	private $cardMapper;
 	private $stackMapper;
+	private $boardMapper;
 	private $permissionService;
 	private $boardService;
 	private $notificationHelper;
@@ -45,9 +47,17 @@ class CardService {
 	private $attachmentService;
 	private $currentUser;
 
-	public function __construct(CardMapper $cardMapper, StackMapper $stackMapper, PermissionService $permissionService, BoardService $boardService, NotificationHelper $notificationHelper, AssignedUsersMapper $assignedUsersMapper, AttachmentService $attachmentService, $userId) {
+	public function __construct(
+		CardMapper $cardMapper,
+		StackMapper $stackMapper, 
+		BoardMapper $boardMapper, 
+		PermissionService $permissionService, 
+		BoardService $boardService, 
+		AssignedUsersMapper $assignedUsersMapper, 
+		AttachmentService $attachmentService) {
 		$this->cardMapper = $cardMapper;
 		$this->stackMapper = $stackMapper;
+		$this->boardMapper = $boardMapper;
 		$this->permissionService = $permissionService;
 		$this->boardService = $boardService;
 		$this->notificationHelper = $notificationHelper;
@@ -57,6 +67,7 @@ class CardService {
 	}
 
 	public function fetchDeleted($boardId) {
+		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		return $this->cardMapper->findDeleted($boardId);
 	}
 
@@ -99,7 +110,7 @@ class CardService {
 		return $card;
 	}
 
-	public function update($id, $title, $stackId, $type, $order, $description, $owner, $duedate) {
+	public function update($id, $title, $stackId, $type, $order, $description, $owner, $duedate, $deletedAt) {
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
 		if ($this->boardService->isArchived($this->cardMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
@@ -115,6 +126,7 @@ class CardService {
 		$card->setOwner($owner);
 		$card->setDescription($description);
 		$card->setDuedate($duedate);
+		$card->setDeletedAt($deletedAt);
 		return $this->cardMapper->update($card);
 	}
 
