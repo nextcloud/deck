@@ -26,29 +26,36 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\StackService;
 use OCA\Deck\Service\CardService;
+use OCP\IConfig;
 
 class DefaultBoardService {
 
-    protected $boardService;
-    protected $stackService;
-    protected $cardService;
+    private $boardService;
+    private $stackService;
+    private $cardService;
+    private $config;
 
     public function __construct(
             BoardService $boardService, 
             StackService $stackService, 
-            CardService $cardService) {
+            CardService $cardService,
+            IConfig $config
+            ) {
 
         $this->boardService = $boardService;
         $this->stackService = $stackService;
         $this->cardService = $cardService;
+        $this->config = $config;
     }
-
     
-    public function checkFirstRun($userId) {
-        // Add a user config value like 'firstrun' to check if the default board 
-        // has already been created for the user
+    public function checkFirstRun($userId, $appName) {        
+        $firstRun = $this->config->getUserValue($userId,$appName,'firstRun','yes');        
 
-        // TODO: Remove hardcode once I figure out how to do the config value.
+        if ($firstRun == 'yes') {
+            $this->config->setUserValue($userId,$appName,'firstRun','no');
+            return true;
+        }
+
         return false;
     }
 
@@ -66,5 +73,5 @@ class DefaultBoardService {
         $defaultCards[] = $this->cardService->create('Example Task 3', $defaultStacks[0]->getId(), 'text', 0, $userId);
         $defaultCards[] = $this->cardService->create('Example Task 2', $defaultStacks[1]->getId(), 'text', 0, $userId);
         $defaultCards[] = $this->cardService->create('Example Task 1', $defaultStacks[2]->getId(), 'text', 0, $userId);
-    }
+    }    
 }

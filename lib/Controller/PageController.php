@@ -57,13 +57,10 @@ class PageController extends Controller {
 			'user' => $this->userId,
 			'maxUploadSize' => \OCP\Util::uploadLimit(),
 		];
-
-		// run the checkFirstRun() method from OCA\Deck\Service\DefaultBoardService here
-		// if the board is not created, then run createDefaultBoard() from the defaultBoardService here.
-		if ($this->defaultBoardService->checkFirstRun($this->userId)) {
+		
+		if ($this->defaultBoardService->checkFirstRun($this->userId, $AppName)) {
 			$this->defaultBoardService->createDefaultBoard('Personal', $this->userId, '000000');
 		}
-
 
 		return new TemplateResponse('deck', 'main', $params);
 	}
