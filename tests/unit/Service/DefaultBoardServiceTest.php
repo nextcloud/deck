@@ -70,58 +70,51 @@ class DefaultBoardServiceTest extends TestCase {
 			$this->stackService,
 			$this->cardService,
 			$this->config
-		);
-
-		$user = $this->createMock(IUser::class);
-		$user->method('getUID')->willReturn('admin');
+		);		
 	}
 
 	public function testCreateDefaultBoard() {	
 		$title = 'Personal';		
 		$color = '000000';
-		$boardId = 123;
+		$boardId = 5;
 		
 		$board = new Board();
-		$board->setBoardId($boardId);
+		$board->setId($boardId);
 		$board->setTitle($title);
-		$board->setOwner($admin);
+		$board->setOwner($this->userId);
 		$board->setColor($color);
-		$this->boardMapper->expects($this->once())
-			 ->method('insert')
+		$this->boardService->expects($this->once())
+			 ->method('create')
 			 ->willReturn($board);
 
 		$stackToDoId = '123';		
-		$stackToDo = $this->assembleTestStack('To do', $stackToDoId, $boardId);
-		$this->stackService->expects($this->once())
-			->method('create')
-			->willReturn($stackToDo);		
+		$stackToDo = $this->assembleTestStack('To do', $stackToDoId, $boardId);		
 		
 		$stackDoingId = '124';		
-		$stackDone = $this.assembleTestStack('Done', $stackDoingId, $boardId);
-		$this->stackService->expects($this->once())
-			->method('create')
-			->willReturn($stackDoing);
+		$stackDoing = $this->assembleTestStack('Doing', $stackDoingId, $boardId);		
 		
 		$stackDoneId = '125';
-		$stackDone = $this.assembleTestStack('Done', $stackDoneId, $boardId);
-		$this->stackService->expects($this->once())
+		$stackDone = $this->assembleTestStack('Done', $stackDoneId, $boardId);
+		$this->stackService->expects($this->exactly(3))
 			->method('create')
-			->willReturn($stackDone);
+			->withConsecutive(
+				['To do', $boardId, 1],
+				['Doing', $boardId, 1],
+				['Done',  $boardId, 1]
+			)
+			->willReturnOnConsecutiveCalls($stackToDo, $stackDoing, $stackDone);
 		
-		$cardExampleTask3 = $this.assembleTestCard('Example Task 3', $stackToDoId, $this->userId);
-		$this->cardService->expects($this->once())
+		$cardExampleTask3 = $this->assembleTestCard('Example Task 3', $stackToDoId, $this->userId);
+		$cardExampleTask2 = $this->assembleTestCard('Example Task 2', $stackDoingId, $this->userId);
+		$cardExampleTask1 = $this->assembleTestCard('Example Task 1', $stackDoneId, $this->userId);
+		$this->cardService->expects($this->exactly(3))
 			->method('create')
-			->willReturn($cardExampleTask3);		
-
-		$cardExampleTask2 = $this.assembleTestCard('Example Task 2', $stackDoingId, $this->userId);
-		$this->cardService->expects($this->once())
-			->method('create')
-			->willReturn($cardExampleTask2);
-
-		$cardExampleTask1 = $this.assembleTestCard('Example Task 1', $stackDoneId, $this->userId);
-		$this->cardService->expects($this->once())
-			->method('create')
-			->willReturn($cardExampleTask1);
+			->withConsecutive(
+				['Example Task 3', $stackToDoId, 'text', 0, $this->userId],
+				['Example Task 2', $stackDoingId, 'text', 0, $this->userId],
+				['Example Task 1', $stackDoneId, 'text', 0, $this->userId]
+			)
+			->willReturnonConsecutiveCalls($cardExampleTask3, $cardExampleTask2, $cardExampleTask1);
 
 		$result = $this->service->createDefaultBoard($title, $this->userId, $color);
 
@@ -146,7 +139,7 @@ class DefaultBoardServiceTest extends TestCase {
 		$card->setStackId($stackId);
 		$card->setType('text');
 		$card->setOrder(0);
-		$card->setUserId($userId);
+		$card->setOwner($userId);
 
 		return $card;
 	}
