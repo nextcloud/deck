@@ -51,7 +51,8 @@ class PageControllerTest extends \Test\TestCase {
 		);
 	}
 
-
+	// TODO-ryan: update this test to ensure that checkFirstRun is bieng called, if it is then
+	// test that the createDefaultBoard is also being called.
 	public function testIndex() {
 		$response = $this->controller->index();
 		$this->assertEquals('main', $response->getTemplateName());

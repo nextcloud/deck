@@ -73,6 +73,46 @@ class DefaultBoardServiceTest extends TestCase {
 		);		
 	}
 
+	public function testCheckFirstRunCaseTrue() {
+		$appName = "Deck";
+		$userBoards = [];
+
+		$this->config->expects($this->once())
+			->method('getUserValue')
+			->willReturn('yes');
+		
+		$this->boardMapper->expects($this->once())
+			->method('findAllByUser')
+			->willReturn($userBoards);
+
+		$this->config->expects($this->once())
+			->method('setUserValue');			
+
+		$result = $this->service->checkFirstRun($this->userId, $appName);
+		$this->assertEquals($result, true);
+	}
+
+	public function testCheckFirstRunCaseFalse() {
+		$appName = "deck";
+		$board = new Board();
+		$board->setTitle('Personal');
+		$board->setOwner($this->userId);
+		$board->setColor('000000');
+
+		$userBoards = [$board];
+
+		$this->config->expects($this->once())
+			->method('getUserValue')
+			->willReturn('no');
+
+		$this->boardMapper->expects($this->once())
+			->method('findAllByUser')
+			->willReturn($userBoards);
+
+		$result = $this->service->checkFirstRun($this->userId, $appName);
+		$this->assertEquals($result, false);
+	}
+
 	public function testCreateDefaultBoard() {	
 		$title = 'Personal';		
 		$color = '000000';
@@ -84,8 +124,8 @@ class DefaultBoardServiceTest extends TestCase {
 		$board->setOwner($this->userId);
 		$board->setColor($color);
 		$this->boardService->expects($this->once())
-			 ->method('create')
-			 ->willReturn($board);
+			->method('create')
+			->willReturn($board);
 
 		$stackToDoId = '123';		
 		$stackToDo = $this->assembleTestStack('To do', $stackToDoId, $boardId);		
