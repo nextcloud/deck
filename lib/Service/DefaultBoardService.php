@@ -39,8 +39,8 @@ class DefaultBoardService {
 
     public function __construct(
 			BoardMapper $boardMapper,
-			BoardService $boardService, 
-			StackService $stackService, 
+			BoardService $boardService,
+			StackService $stackService,
 			CardService $cardService,
 			IConfig $config
 			) {
@@ -78,5 +78,7 @@ class DefaultBoardService {
 		$defaultCards[] = $this->cardService->create('Example Task 3', $defaultStacks[0]->getId(), 'text', 0, $userId);
 		$defaultCards[] = $this->cardService->create('Example Task 2', $defaultStacks[1]->getId(), 'text', 0, $userId);
 		$defaultCards[] = $this->cardService->create('Example Task 1', $defaultStacks[2]->getId(), 'text', 0, $userId);
+
+		return $defaultBoard;
     }    
 }
