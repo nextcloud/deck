@@ -58,7 +58,7 @@ class PageController extends Controller {
 			'maxUploadSize' => \OCP\Util::uploadLimit(),
 		];
 		
-		if ($this->defaultBoardService->checkFirstRun($this->userId, $AppName)) {
+		if ($this->defaultBoardService->checkFirstRun($this->userId, $this->appName)) {
 			$this->defaultBoardService->createDefaultBoard('Personal', $this->userId, '000000');
 		}
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
+ * @copyright Copyright (c) 2018 Ryan Fletcher <ryan.fletcher@codepassion.ca>
  *
  * @author Ryan Fletcher <ryan.fletcher@codepassion.ca>
  *
@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\StackService;
 use OCA\Deck\Service\CardService;
@@ -30,48 +31,52 @@ use OCP\IConfig;
 
 class DefaultBoardService {
 
-    private $boardService;
-    private $stackService;
-    private $cardService;
-    private $config;
+	private $boardMapper;
+	private $boardService;
+	private $stackService;
+	private $cardService;
+	private $config;
 
     public function __construct(
-            BoardService $boardService, 
-            StackService $stackService, 
-            CardService $cardService,
-            IConfig $config
-            ) {
+			BoardMapper $boardMapper,
+			BoardService $boardService, 
+			StackService $stackService, 
+			CardService $cardService,
+			IConfig $config
+			) {
 
-        $this->boardService = $boardService;
-        $this->stackService = $stackService;
-        $this->cardService = $cardService;
-        $this->config = $config;
+		$this->boardService = $boardService;
+		$this->stackService = $stackService;
+		$this->cardService = $cardService;
+		$this->config = $config;
+		$this->boardMapper = $boardMapper;
     }
     
     public function checkFirstRun($userId, $appName) {        
-        $firstRun = $this->config->getUserValue($userId,$appName,'firstRun','yes');        
+		$firstRun = $this->config->getUserValue($userId,$appName,'firstRun','yes');
+		$userBoards = $this->boardMapper->findAllByUser($userId);
+		
+		if ($firstRun === 'yes' && count($userBoards) === 0) {
+			$this->config->setUserValue($userId,$appName,'firstRun','no');
+			return true;
+		}
 
-        if ($firstRun == 'yes') {
-            $this->config->setUserValue($userId,$appName,'firstRun','no');
-            return true;
-        }
-
-        return false;
+		return false;
     }
 
     public function createDefaultBoard($title, $userId, $color) {
         $defaultBoard = $this->boardService->create($title, $userId, $color);
         $defaultStacks = [];
         $defaultCards = [];
+
+		$boardId = $defaultBoard->getId();
+                
+		$defaultStacks[] = $this->stackService->create('To do', $boardId, 1);
+		$defaultStacks[] = $this->stackService->create('Doing', $boardId, 1);
+		$defaultStacks[] = $this->stackService->create('Done', $boardId, 1);
         
-        $boardId = $defaultBoard->getId();
-                        
-        $defaultStacks[] = $this->stackService->create('To do', $boardId, 1);
-        $defaultStacks[] = $this->stackService->create('Doing', $boardId, 1);
-        $defaultStacks[] = $this->stackService->create('Done', $boardId, 1);
-        
-        $defaultCards[] = $this->cardService->create('Example Task 3', $defaultStacks[0]->getId(), 'text', 0, $userId);
-        $defaultCards[] = $this->cardService->create('Example Task 2', $defaultStacks[1]->getId(), 'text', 0, $userId);
-        $defaultCards[] = $this->cardService->create('Example Task 1', $defaultStacks[2]->getId(), 'text', 0, $userId);
+		$defaultCards[] = $this->cardService->create('Example Task 3', $defaultStacks[0]->getId(), 'text', 0, $userId);
+		$defaultCards[] = $this->cardService->create('Example Task 2', $defaultStacks[1]->getId(), 'text', 0, $userId);
+		$defaultCards[] = $this->cardService->create('Example Task 1', $defaultStacks[2]->getId(), 'text', 0, $userId);
     }    
 }
