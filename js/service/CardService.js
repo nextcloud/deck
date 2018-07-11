@@ -27,6 +27,8 @@ app.factory('CardService', function (ApiService, $http, $q) {
 	};
 	CardService.prototype = angular.copy(ApiService.prototype);
 
+        CardService.prototype.delete = CardService.prototype.softDelete;
+
 	CardService.prototype.reorder = function (card, order) {
 		var deferred = $q.defer();
 		var self = this;
@@ -171,6 +173,22 @@ app.factory('CardService', function (ApiService, $http, $q) {
 		});
 		return deferred.promise;
 	};
+
+	CardService.prototype.fetchDeleted = function (boardId) {
+
+                var deferred = $q.defer();
+                var self = this;
+                $http.get(this.baseUrl + '/deleted/' + boardId).then(function (response) {
+                        var objects = response.data;
+			return objects;
+                        deferred.resolve(self.data);
+                }, function (error) {
+                        deferred.reject('Fetching ' + self.endpoint + ' failed');
+                });
+                return deferred.promise;
+
+	};
+
 
 	var service = new CardService($http, 'cards', $q);
 	return service;

@@ -51,6 +51,10 @@ class CardService {
 		$this->attachmentService = $attachmentService;
 	}
 
+	public function fetchDeleted($boardId) {
+		return $this->cardMapper->findDeleted($boardId);
+	}
+
 	public function find($cardId) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		$card = $this->cardMapper->find($cardId);
