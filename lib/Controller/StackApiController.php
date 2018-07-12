@@ -28,6 +28,7 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
+use OCA\Deck\StatusException;
 use OCA\Deck\Service\StackService;
 
 /**
@@ -59,7 +60,6 @@ class StackApiController extends ApiController {
 	 */
 	public function index($boardId) {
 		$stacks = $this->service->findAll($boardId);
-
 		return new DataResponse($stacks);
 	}
 
@@ -73,19 +73,17 @@ class StackApiController extends ApiController {
 	 *
 	 * Create a stack with the specified title and order.
 	 */
-	public function create($boardId, $title, $order) {
-		$errorMessage['params']['boardId'] = $boardId;
-		$errorMessage['params']['title'] = $title;
-		$errorMessage['params']['order'] = $order;
+	public function create($boardId, $title, $order) {		
+
+		try {			
+			// this throws a StatusException that needs to be caught and handled
+			$stack = $this->service->create($title, $boardId, $order);			
+		} catch (StatusException $e) {
+			$errorMessage['error'] = $e->getMessage();
+			return new DataResponse($errorMessage, Http::STATUS_INTERNAL_SERVER_ERROR);
+		}
 		
-		// try {
-		// 	// this throws a StatusException that needs to be caught and handled
-		// 	$stack = $this->service->create($title, $boardId, $order);
-		// } catch (StatusException $e) {
-		// 	return new DataResponse(null, Http::STATUS_OK);
-		// }
-		
-		return new DataResponse($errorMessage, HTTP::STATUS_NOT_IMPLEMENTED);
+		return new DataResponse($stack, HTTP::STATUS_OK);
 	}
 
 	/**
