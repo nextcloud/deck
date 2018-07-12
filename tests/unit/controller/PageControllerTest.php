@@ -59,7 +59,7 @@ class PageControllerTest extends \Test\TestCase {
 	public function testIndexOnFirstRun() {
 
 		$board = new Board();
-		$board->setTitle("Personal");
+		$board->setTitle('Personal');
 		$board->setOwner($this->userId);
 		$board->setColor('000000');
 
@@ -77,7 +77,7 @@ class PageControllerTest extends \Test\TestCase {
 
 	public function testIndexOnSecondRun() {
 
-		$this->config->setUserValue($this->userId,'deck','firstRun','no');
+		$this->config->setUserValue($this->userId, 'deck', 'firstRun', 'no');
 
 		$this->defaultBoardService->expects($this->once())
 			->method('checkFirstRun')

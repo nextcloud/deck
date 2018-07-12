@@ -57,11 +57,11 @@ class DefaultBoardService {
     }
     
     public function checkFirstRun($userId, $appName) {        
-		$firstRun = $this->config->getUserValue($userId,$appName,'firstRun','yes');
+		$firstRun = $this->config->getUserValue($userId, $appName, 'firstRun', 'yes');
 		$userBoards = $this->boardMapper->findAllByUser($userId);
 		
 		if ($firstRun === 'yes' && count($userBoards) === 0) {
-			$this->config->setUserValue($userId,$appName,'firstRun','no');
+			$this->config->setUserValue($userId, $appName, 'firstRun', 'no');
 			return true;
 		}
 

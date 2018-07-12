@@ -66,11 +66,7 @@ class DefaultBoardServiceTest extends TestCase {
 		$this->stackService = $this->createMock(StackService::class);
 		$this->cardService = $this->createMock(CardService::class);
 		$this->config = $this->createMock(IConfig::class);
-		
-		$this->l10n = $this->request = $this->getMockBuilder(
-			'\OCP\IL10n')
-			->disableOriginalConstructor()
-			->getMock();
+		$this->l10n = $this->createMock(IL10N::class);		
 
 		$this->service = new DefaultBoardService(
 			$this->l10n,
@@ -83,7 +79,7 @@ class DefaultBoardServiceTest extends TestCase {
 	}
 
 	public function testCheckFirstRunCaseTrue() {
-		$appName = "Deck";
+		$appName = 'deck';
 		$userBoards = [];
 
 		$this->config->expects($this->once())
@@ -102,7 +98,7 @@ class DefaultBoardServiceTest extends TestCase {
 	}
 
 	public function testCheckFirstRunCaseFalse() {
-		$appName = "deck";
+		$appName = 'deck';
 		$board = new Board();
 		$board->setTitle('Personal');
 		$board->setOwner($this->userId);
