@@ -114,7 +114,8 @@ class BoardApiController extends ApiController {
 	 *
 	 * Create a board with the specified title and color.
 	 */
-	public function update($boardId, $title, $color, $archived) {
+	public function update($boardId, $title, $color, $archived) {		
+
 		$board = $this->service->update($boardId, $title, $color, $archived);
 
 		if ($board === false || $board === null) {
