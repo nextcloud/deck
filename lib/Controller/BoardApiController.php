@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2017 Steven R. Baker <steven@stevenrbaker.com>
  *
  * @author Steven R. Baker <steven@stevenrbaker.com>
+ * @author Ryan Fletcher <ryan.fletcher@codepassion.ca>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -106,6 +107,28 @@ class BoardApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 *
+	 * @params $boardId
+	 * @params $title
+	 * @params $color	
+	 * @params $archived 
+	 *
+	 * Create a board with the specified title and color.
+	 */
+	public function update($boardId, $title, $color, $archived) {
+		$board = $this->service->update($boardId, $title, $color, $archived);
+
+		if ($board === false || $board === null) {
+			return new DataResponse('Board not found', HTTP::STATUS_NOT_FOUND);
+		}
+
+		return new DataResponse($board, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
 	 * @params $id
 	 *
 	 * Delete the board specified by $id.  Return the board that was deleted.
@@ -131,9 +154,14 @@ class BoardApiController extends ApiController {
 	 */
 	public function undoDelete($id) {
 		$board = $this->service->find($id);
-		$this->service->deleteUndo($id);
 
-		return new DataResponse($board);
+		if ($board === false || $board === null) {
+			return new DataResponse('Board not found', HTTP::STATUS_NOT_FOUND);
+		} else {
+			$board = $this->service->deleteUndo($id);
+		}
+
+		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
 }
