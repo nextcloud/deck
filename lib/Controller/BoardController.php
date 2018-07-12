@@ -35,15 +35,11 @@ use OCP\IGroupManager;
 class BoardController extends ApiController {
 	private $userId;
 	private $boardService;
-	private $userManager;
-	private $groupManager;
 	private $permissionService;
 
-	public function __construct($appName, IRequest $request, IUserManager $userManager, IGroupManager $groupManager, BoardService $boardService, PermissionService $permissionService, $userId) {
+	public function __construct($appName, IRequest $request, BoardService $boardService, PermissionService $permissionService, $userId) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
-		$this->userManager = $userManager;
-		$this->groupManager = $groupManager;
 		$this->boardService = $boardService;
 		$this->permissionService = $permissionService;
 	}

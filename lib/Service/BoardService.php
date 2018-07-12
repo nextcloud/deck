@@ -30,10 +30,12 @@ use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IGroupManager;
 use OCP\IL10N;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
+use OCP\IUserManager;
 
 
 class BoardService {
@@ -45,6 +47,9 @@ class BoardService {
 	private $permissionService;
 	private $notificationHelper;
 	private $assignedUsersMapper;
+	private $userManager;
+	private $groupManager;
+	private $userId;
 
 	public function __construct(
 		BoardMapper $boardMapper,
@@ -53,7 +58,10 @@ class BoardService {
 		AclMapper $aclMapper,
 		PermissionService $permissionService,
 		NotificationHelper $notificationHelper,
-		AssignedUsersMapper $assignedUsersMapper
+		AssignedUsersMapper $assignedUsersMapper,
+		IUserManager $userManager,
+		IGroupManager $groupManager,
+		$userId
 	) {
 		$this->boardMapper = $boardMapper;
 		$this->labelMapper = $labelMapper;
@@ -62,6 +70,9 @@ class BoardService {
 		$this->permissionService = $permissionService;
 		$this->notificationHelper = $notificationHelper;
 		$this->assignedUsersMapper = $assignedUsersMapper;
+		$this->userManager = $userManager;
+		$this->groupManager = $groupManager;
+		$this->userId = $userId;
 	}
 
 	public function findAll() {
