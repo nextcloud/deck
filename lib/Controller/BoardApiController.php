@@ -24,6 +24,7 @@
 namespace OCA\Deck\Controller;
 
 use OCP\AppFramework\ApiController;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use OCP\IUserManager;
@@ -74,10 +75,14 @@ class BoardApiController extends ApiController {
 	 *
 	 * Return the board specified by $id.
 	 */
-	public function get($id) {
+	public function get($id) {		
 		$board = $this->service->find($id);
+		
+		if ($board === false || $board === null) {
+			return new DataResponse('Board not found', HTTP::STATUS_NOT_FOUND);
+		}
 
-		return new DataResponse($board);
+		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
 	/**
