@@ -113,7 +113,11 @@ class BoardApiController extends ApiController {
 	public function delete($id) {
 		$board = $this->service->delete($id);
 
-		return new DataResponse($board);
+		if ($board === false || $board === null) {
+			return new DataResponse('Board not found', HTTP::STATUS_NOT_FOUND);
+		}
+
+		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
 	/**
