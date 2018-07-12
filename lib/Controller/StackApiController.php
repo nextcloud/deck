@@ -24,6 +24,7 @@
 namespace OCA\Deck\Controller;
 
 use OCP\AppFramework\ApiController;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
@@ -73,10 +74,18 @@ class StackApiController extends ApiController {
 	 * Create a stack with the specified title and order.
 	 */
 	public function create($boardId, $title, $order) {
-		// this throws a StatusException that needs to be caught and handled
-		$stack = $this->service->create($title, $boardId, $order);
-
-		return new DataResponse($stack);
+		$errorMessage['params']['boardId'] = $boardId;
+		$errorMessage['params']['title'] = $title;
+		$errorMessage['params']['order'] = $order;
+		
+		// try {
+		// 	// this throws a StatusException that needs to be caught and handled
+		// 	$stack = $this->service->create($title, $boardId, $order);
+		// } catch (StatusException $e) {
+		// 	return new DataResponse(null, Http::STATUS_OK);
+		// }
+		
+		return new DataResponse($errorMessage, HTTP::STATUS_NOT_IMPLEMENTED);
 	}
 
 	/**
