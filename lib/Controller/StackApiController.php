@@ -123,10 +123,14 @@ class StackApiController extends ApiController {
 	 *
 	 * Delete the stack specified by $id.  Return the board that was deleted.
 	 */
-	public function delete($boardId, $id) {
-		$stack = $this->service->delete($id);
+	public function delete($boardId, $stackId) {
+		$stack = $this->service->delete($stackId);
 
-		return new DataResponse($stack);
+		if ($stack == false || $stack == null) {
+			return new DataResponse("Stack Not Found", HTTP::STATUS_NOT_FOUND);
+		}
+
+		return new DataResponse($stack, HTTP::STATUS_OK);
 	}
 
 }
