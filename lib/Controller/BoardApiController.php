@@ -112,7 +112,7 @@ class BoardApiController extends ApiController {
 	 * @params $color	
 	 * @params $archived 
 	 *
-	 * Create a board with the specified title and color.
+	 * Update a board with the specified boardId, title and color, and archived state.
 	 */
 	public function update($boardId, $title, $color, $archived) {		
 
