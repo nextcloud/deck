@@ -80,12 +80,35 @@ class StackApiController extends ApiController {
 	 */
 	public function create($boardId, $title, $order) {		
 
-		try {			
-			// this throws a StatusException that needs to be caught and handled
+		try {						
 			$stack = $this->service->create($title, $boardId, $order);			
 		} catch (StatusException $e) {
 			$errorMessage['error'] = $e->getMessage();
-			return new DataResponse($errorMessage, Http::STATUS_INTERNAL_SERVER_ERROR);
+			return new DataResponse($errorMessage, HTTP::STATUS_INTERNAL_SERVER_ERROR);
+		}
+		
+		return new DataResponse($stack, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * @params $stackId
+	 * @params $title
+	 * @params $boardId
+	 * @params $order
+	 *
+	 * Create a stack with the specified title and order.
+	 */
+	public function update($stackId, $title, $boardId, $order) {
+		
+		try {
+			$stack = $this->service->update($stackId, $title, $boardId, $order);
+		} catch (StatusException $e) {
+			$errorMessage['error'] = $e->getMessage();
+			return new DataResponse($errorMessage, HTTP::STATUS_INTERNAL_SERVER_ERROR);
 		}
 		
 		return new DataResponse($stack, HTTP::STATUS_OK);
