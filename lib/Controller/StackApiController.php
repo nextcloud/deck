@@ -39,6 +39,7 @@ use OCA\Deck\Service\StackService;
  */
 class StackApiController extends ApiController {
 
+	private $boardService;
 	private $service;
 	private $userInfo;
 
@@ -47,9 +48,10 @@ class StackApiController extends ApiController {
 	 * @param IRequest $request
 	 * @param StackService $service
 	 */
-	public function __construct($appName, IRequest $request, StackService $service) {
+	public function __construct($appName, IRequest $request, StackService $service, BoardService $boardService) {
 		parent::__construct($appName, $request);
 		$this->service = $service;
+		$this->boardService = $boardService;
 	}
 
 	/**
@@ -59,17 +61,17 @@ class StackApiController extends ApiController {
 	 *
 	 * Return all of the stacks in the specified board.
 	 */
-	public function index() {
+	public function index() {		
+		$boardError = boardHasError($this->request->params['boardId']);
 
-		// validation check against the id.
-		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+		if ($boardError) {
+			return new DataResponse($boardError['message'], $boardError['status']);
 		}
-
-		$stacks = $this->service->findAll($this->request->params['boardId']);
 		
+		$stacks = $this->service->findAll($this->request->params['boardId']);
+
 		if ($stacks === false || $stacks === null) {
-			return new DataResponse("No Stacks Found", HTTP::STATUS_NOT_FOUND);
+			return new DataResponse('No Stacks Found', HTTP::STATUS_NOT_FOUND);
 		}
 
 		return new DataResponse($stacks, HTTP::STATUS_OK);
@@ -87,13 +89,14 @@ class StackApiController extends ApiController {
 	 */
 	public function create($title, $order) {		
 
-		// validation check against the id.
-		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+		$boardError = boardHasError($this->request->params['boardId']);
+
+		if ($boardError) {
+			return new DataResponse($boardError['message'], $boardError['status']);
 		}
 
 		if (is_numeric($order) === false) {
-			return new DataResponse("order must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('order must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		try {
@@ -118,52 +121,77 @@ class StackApiController extends ApiController {
 	 */
 	public function update($title, $order) {
 		
-		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+		$boardError = boardHasError($this->request->params['boardId']);
+
+		if ($boardError) {
+			return new DataResponse($boardError['message'], $boardError['status']);
 		}
 		
 		if (is_numeric($this->request->params['stackId']) === false) {
-			return new DataResponse("stack id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_numeric($order) === false) {
-			return new DataResponse("order must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('order must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		try {
-			$stack = $this->service->update(
-				$this->request->params['stackId'],
-				$title,
-				$this->request->params['boardId'],
-				$order);
-		} catch (StatusException $e) {
-			$errorMessage['error'] = $e->getMessage();
-			return new DataResponse($errorMessage, HTTP::STATUS_INTERNAL_SERVER_ERROR);
+			$stack = $this->service->update($this->request->params['stackId'], $title, $this->request->params['boardId'], $order);
+
+			if ($stack === false || $stack === null) {
+				return new DataResponse('Stack not found', HTTP::STATUS_NOT_FOUND);
+			}
+	
+			return new DataResponse($stack, HTTP::STATUS_OK);
+		} catch (StatusException $e) {			
+			return new DataResponse($e->getMessage(), HTTP::STATUS_INTERNAL_SERVER_ERROR);
 		}
-		
-		return new DataResponse($stack, HTTP::STATUS_OK);
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * @CORS
-	 * @NoCSRFRequired	 
+	 * @NoCSRFRequired
 	 *
-	 * Delete the stack specified by $this->request->params['stackId'].  Return the board that was deleted.
+	 * Delete the stack specified by $this->request->params['stackId'].
 	 */
 	public function delete() {
 
+		$boardError = boardHasError($this->request->params['boardId']);
+
+		if ($boardError) {
+			return new DataResponse($boardError['message'], $boardError['status']);
+		}
+
 		if (is_numeric($this->request->params['stackId']) === false) {
-			return new DataResponse("stack id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		$stack = $this->service->delete($this->request->params['stackId']);		
 		
 		if ($stack == false || $stack == null) {
-			return new DataResponse("Stack Not Found", HTTP::STATUS_NOT_FOUND);
+			return new DataResponse('Stack Not Found', HTTP::STATUS_NOT_FOUND);
 		}
 
 		return new DataResponse($stack, HTTP::STATUS_OK);
+	}
+	
+	private function boardHasError($boardId) {				
+		if (is_numeric($boardId) === false) {
+			$error['message'] = 'Board id must be a number';
+			$error['status'] = HTTP::STATUS_BAD_REQUEST;
+			return $error;
+		}
+
+		$board = $this->boardService->find($boardId);
+
+		if ($board === false || $board === null) {
+			$error['message'] = 'Board does not exist';
+			$error['status'] = HTTP::STATUS_NOT_FOUND;
+			return $error;
+		}
+
+		return false;
 	}
 
 }
