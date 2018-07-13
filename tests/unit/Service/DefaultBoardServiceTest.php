@@ -132,14 +132,18 @@ class DefaultBoardServiceTest extends TestCase {
 			->method('create')
 			->willReturn($board);
 
+		$this->l10n->expects($this->any())
+			->method('t')
+			->willReturnCallback(function($text) { return $text; });
+
 		$stackToDoId = '123';		
-		$stackToDo = $this->assembleTestStack($this->l10n->t('To do'), $stackToDoId, $boardId);		
+		$stackToDo = $this->assembleTestStack('To do', $stackToDoId, $boardId);
 		
 		$stackDoingId = '124';		
-		$stackDoing = $this->assembleTestStack($this->l10n->t('Doing'), $stackDoingId, $boardId);		
+		$stackDoing = $this->assembleTestStack('Doing', $stackDoingId, $boardId);
 		
 		$stackDoneId = '125';
-		$stackDone = $this->assembleTestStack($this->l10n->t('Done'), $stackDoneId, $boardId);
+		$stackDone = $this->assembleTestStack('Done', $stackDoneId, $boardId);
 		$this->stackService->expects($this->exactly(3))
 			->method('create')
 			->withConsecutive(
@@ -149,15 +153,15 @@ class DefaultBoardServiceTest extends TestCase {
 			)
 			->willReturnOnConsecutiveCalls($stackToDo, $stackDoing, $stackDone);
 		
-		$cardExampleTask3 = $this->assembleTestCard($this->l10n->t('Example Task 3'), $stackToDoId, $this->userId);
-		$cardExampleTask2 = $this->assembleTestCard($this->l10n->t('Example Task 2'), $stackDoingId, $this->userId);
-		$cardExampleTask1 = $this->assembleTestCard($this->l10n->t('Example Task 1'), $stackDoneId, $this->userId);
+		$cardExampleTask3 = $this->assembleTestCard('Example Task 3', $stackToDoId, $this->userId);
+		$cardExampleTask2 = $this->assembleTestCard('Example Task 2', $stackDoingId, $this->userId);
+		$cardExampleTask1 = $this->assembleTestCard('Example Task 1', $stackDoneId, $this->userId);
 		$this->cardService->expects($this->exactly(3))
 			->method('create')
 			->withConsecutive(
-				[$this->l10n->t('Example Task 3'), $stackToDoId, 'text', 0, $this->userId],
-				[$this->l10n->t('Example Task 2'), $stackDoingId, 'text', 0, $this->userId],
-				[$this->l10n->t('Example Task 1'), $stackDoneId, 'text', 0, $this->userId]
+				['Example Task 3', $stackToDoId, 'text', 0, $this->userId],
+				['Example Task 2', $stackDoingId, 'text', 0, $this->userId],
+				['Example Task 1', $stackDoneId, 'text', 0, $this->userId]
 			)
 			->willReturnonConsecutiveCalls($cardExampleTask3, $cardExampleTask2, $cardExampleTask1);
 
