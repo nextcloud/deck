@@ -60,6 +60,12 @@ class StackApiController extends ApiController {
 	 * Return all of the stacks in the specified board.
 	 */
 	public function index() {
+
+		// validation check against the id.
+		if (is_numeric($this->request->params['boardId']) === false) {
+			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
 		$stacks = $this->service->findAll($this->request->params['boardId']);
 		
 		if ($stacks === false || $stacks === null) {
@@ -80,6 +86,15 @@ class StackApiController extends ApiController {
 	 * Create a stack with the specified title and order.
 	 */
 	public function create($title, $order) {		
+
+		// validation check against the id.
+		if (is_numeric($this->request->params['boardId']) === false) {
+			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		if (is_numeric($order) === false) {
+			return new DataResponse("order must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
 
 		try {
 			$stack = $this->service->create($title, $this->request->params['boardId'], $order);
@@ -102,6 +117,19 @@ class StackApiController extends ApiController {
 	 * Update a stack by the specified stackId and boardId with the values that were put.
 	 */
 	public function update($title, $order) {
+		
+		if (is_numeric($this->request->params['boardId']) === false) {
+			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+		
+		if (is_numeric($this->request->params['stackId']) === false) {
+			return new DataResponse("stack id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		if (is_numeric($order) === false) {
+			return new DataResponse("order must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
 		try {
 			$stack = $this->service->update(
 				$this->request->params['stackId'],
@@ -121,9 +149,14 @@ class StackApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired	 
 	 *
-	 * Delete the stack specified by $this->request->params['id'].  Return the board that was deleted.
+	 * Delete the stack specified by $this->request->params['stackId'].  Return the board that was deleted.
 	 */
 	public function delete() {
+
+		if (is_numeric($this->request->params['stackId']) === false) {
+			return new DataResponse("stack id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
 		$stack = $this->service->delete($this->request->params['stackId']);		
 		
 		if ($stack == false || $stack == null) {
