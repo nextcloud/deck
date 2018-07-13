@@ -40,17 +40,17 @@ use OCA\Deck\Service\StackService;
 class StackApiController extends ApiController {
 
 	private $boardService;
-	private $service;
+	private $stackService;
 	private $userInfo;
 
 	/**
 	 * @param string $appName
 	 * @param IRequest $request
-	 * @param StackService $service
+	 * @param StackService $stackService
 	 */
-	public function __construct($appName, IRequest $request, StackService $service, BoardService $boardService) {
+	public function __construct($appName, IRequest $request, StackService $stackService, BoardService $boardService) {
 		parent::__construct($appName, $request);
-		$this->service = $service;
+		$this->service = $stackService;
 		$this->boardService = $boardService;
 	}
 
