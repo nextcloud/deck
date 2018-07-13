@@ -66,7 +66,7 @@ class StackApiController extends ApiController {
 	 * Return all of the stacks in the specified board.
 	 */
 	public function index() {		
-		$boardError = $this->apiHelper->boardHasError( $this->request->params['boardId'], $this->boardService );		
+		$boardError = $this->apiHelper->entityHasError( $this->request->params['boardId'], 'board', $this->boardService );		
 
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
@@ -95,7 +95,7 @@ class StackApiController extends ApiController {
 	 */
 	public function create($title, $order) {		
 
-		$boardError = $this->apiHelper->boardHasError( $this->request->params['boardId'], $this->boardService );
+		$boardError = $this->apiHelper->entityHasError( $this->request->params['boardId'], 'board', $this->boardService );
 
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
@@ -127,7 +127,7 @@ class StackApiController extends ApiController {
 	 */
 	public function update($title, $order) {
 		
-		$boardError = $this->apiHelper->boardHasError( $this->request->params['boardId'], $this->boardService );
+		$boardError = $this->apiHelper->entityHasError( $this->request->params['boardId'], 'board', $this->boardService );
 
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
@@ -163,7 +163,7 @@ class StackApiController extends ApiController {
 	 */
 	public function delete() {
 
-		$boardError = $this->apiHelper->boardHasError( $this->request->params['boardId'], $this->boardService );
+		$boardError = $this->apiHelper->entityHasError( $this->request->params['boardId'], 'board', $this->boardService );
 
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);

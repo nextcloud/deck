@@ -27,8 +27,9 @@ use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
-
 use OCA\Deck\Service\LabelService;
+use OCA\Deck\Service\BoardService;
+use OCA\Deck\Controller\Helper\ApiHelper;
 
  /**
  * Class BoardApiController
@@ -46,10 +47,12 @@ class LabelApiController extends ApiController {
 	 * @param LabelService $service
 	 * @param $userId
 	 */
-	public function __construct($appName, IRequest $request, LabelService $labelService, $userId) {
+	public function __construct($appName, IRequest $request, LabelService $labelService, BoardService $boardService, $userId) {
 		parent::__construct($appName, $request);
 		$this->labelService = $labelService;
+		$this->boardService = $boardService;
 		$this->userId = $userId;
+		$this->apiHelper = new ApiHelper();
 	}
 	
 	/**
@@ -61,9 +64,10 @@ class LabelApiController extends ApiController {
 	 */
 	public function get() {
 
-		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}		
+		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
+		if ($boardError) {
+			return new DataResponse($boardError['message'], $boardError['status']);
+		}
 
 		if (is_numeric($this->request->params['labelId']) === false) {
 			return new DataResponse('label id must be a number', HTTP::STATUS_BAD_REQUEST);
@@ -89,8 +93,9 @@ class LabelApiController extends ApiController {
 	 */
 	public function create($title, $color) {
 
-		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
+		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
+		if ($boardError) {
+			return new DataResponse($boardError['message'], $boardError['status']);
 		}
 
 		if ($title === false || $title === null) {
@@ -121,8 +126,9 @@ class LabelApiController extends ApiController {
 	 */
 	public function update($title, $color) {
 
-		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
+		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
+		if ($boardError) {
+			return new DataResponse($boardError['message'], $boardError['status']);
 		}
 
 		if (is_numeric($this->request->params['labelId']) === false) {
@@ -155,8 +161,9 @@ class LabelApiController extends ApiController {
 	 */
 	public function delete() {
 
-		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
+		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
+		if ($boardError) {
+			return new DataResponse($boardError['message'], $boardError['status']);
 		}
 
 		if (is_numeric($this->request->params['labelId']) === false) {

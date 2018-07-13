@@ -68,7 +68,7 @@ class CardApiController extends ApiController {
 	 * Get a specific card.
 	 */
 	public function get() {
-		$boardError = $this->apiHelper->boardHasError($this->request->params['boardId'], $this->boardService);
+		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
 		}
@@ -104,7 +104,7 @@ class CardApiController extends ApiController {
 	 */
 	public function create($title, $type = 'plain', $order = 999) {
 
-		$boardError = $this->apiHelper->boardHasError($this->request->params['boardId'], 'board', $this->boardService);
+		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
 		}
@@ -148,7 +148,7 @@ class CardApiController extends ApiController {
 	 */
 	public function update($title, $type, $order, $description = null, $duedate = null, $archive = false, $assignedUserId = 0) {
 
-		$boardError = $this->apiHelper->boardHasError($this->request->params['boardId'], 'board', $this->boardService);
+		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
 		}
@@ -217,7 +217,7 @@ class CardApiController extends ApiController {
 	 */
 	public function delete() {
 
-		$boardError = $this->apiHelper->boardHasError($this->request->params['boardId'], 'board', $this->boardService);
+		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
 		}
