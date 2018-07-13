@@ -64,7 +64,7 @@ class BoardApiController extends ApiController {
 	public function index() {
 		$boards = $this->service->findAll();
 
-		return new DataResponse($boards);
+		return new DataResponse($boards, HTTP::STATUS_OK);
 	}
 
 	/**
@@ -72,13 +72,17 @@ class BoardApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 *
-	 * @params $id
 	 *
-	 * Return the board specified by $id.
+	 * Return the board specified by $this->request->params['boardId'].
 	 */
-	public function get($id) {		
-		$board = $this->service->find($id);
-		
+	public function get() {
+
+		if (is_numeric($this->request->params['boardId']) === false) {
+			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		$board = $this->service->find($this->request->params['boardId']);
+
 		if ($board === false || $board === null) {
 			return new DataResponse('Board not found', HTTP::STATUS_NOT_FOUND);
 		}
@@ -97,26 +101,54 @@ class BoardApiController extends ApiController {
 	 * Create a board with the specified title and color.
 	 */
 	public function create($title, $color) {
+
+		if ($title === false) {
+			return new DataResponse("title must be provided", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		if ($color === false) {
+			return new DataResponse("color must be provided", HTTP::STATUS_BAD_REQUEST);
+		}
+
 		$board = $this->service->create($title, $this->userId, $color);
 
-		return new DataResponse($board);
+		if ($board === false || $board === null) {
+			return new DataResponse('Internal Server Error', HTTP::STATUS_INTERNAL_SERVER_ERROR);
+		}
+
+		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 *
-	 * @params $boardId
+	 *	 
 	 * @params $title
 	 * @params $color	
 	 * @params $archived 
 	 *
 	 * Update a board with the specified boardId, title and color, and archived state.
 	 */
-	public function update($boardId, $title, $color, $archived) {		
+	public function update($title, $color, $archived = false) {		
 
-		$board = $this->service->update($boardId, $title, $color, $archived);
+		if (is_numeric($this->request->params['boardId']) === false) {
+			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		if (is_bool($archived) === false) {
+			return new DataResponse("archived must be a boolean", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		if ($title === false) {
+			return new DataResponse("title must be provided", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		if ($color === false) {
+			return new DataResponse("color must be provided", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		$board = $this->service->update($this->request->params['boardId'], $title, $color, $archived);
 
 		if ($board === false || $board === null) {
 			return new DataResponse('Board not found', HTTP::STATUS_NOT_FOUND);
@@ -129,13 +161,17 @@ class BoardApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
+	 *	 
 	 *
-	 * @params $id
-	 *
-	 * Delete the board specified by $id.  Return the board that was deleted.
+	 * Delete the board specified by $boardId.  Return the board that was deleted.
 	 */
-	public function delete($id) {
-		$board = $this->service->delete($id);
+	public function delete() {
+
+		if (is_numeric($this->request->params['boardId']) === false) {
+			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		$board = $this->service->delete($this->request->params['boardId']);
 
 		if ($board === false || $board === null) {
 			return new DataResponse('Board not found', HTTP::STATUS_NOT_FOUND);
@@ -148,13 +184,17 @@ class BoardApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
+	 *	 
 	 *
-	 * @params $id
-	 *
-	 * Undo the deletion of the board specified by $id.
+	 * Undo the deletion of the board specified by $boardId.
 	 */
-	public function undoDelete($id) {
-		$board = $this->service->find($id);
+	public function undoDelete() {
+
+		if (is_numeric($this->request->params['boardId']) === false) {
+			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		$board = $this->service->find($this->request->params['boardId']);
 
 		if ($board === false || $board === null) {
 			return new DataResponse('Board not found', HTTP::STATUS_NOT_FOUND);
