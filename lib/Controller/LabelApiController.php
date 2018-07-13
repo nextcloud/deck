@@ -62,11 +62,11 @@ class LabelApiController extends ApiController {
 	public function get() {
 
 		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}		
 
 		if (is_numeric($this->request->params['labelId']) === false) {
-			return new DataResponse("label id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('label id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		$label = $this->labelService->find($this->request->params['labelId']);
@@ -90,15 +90,15 @@ class LabelApiController extends ApiController {
 	public function create($title, $color) {
 
 		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if ($title === false || $title === null) {
-			return new DataResponse("title must be provided", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if ($color === false || $color === null) {
-			return new DataResponse("color must be provided", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('color must be provided', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		try {
@@ -122,19 +122,19 @@ class LabelApiController extends ApiController {
 	public function update($title, $color) {
 
 		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_numeric($this->request->params['labelId']) === false) {
-			return new DataResponse("label id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('label id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if ($title === false || $title === null) {
-			return new DataResponse("title must be provided", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if ($color === false || $color === null) {
-			return new DataResponse("color must be provided", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('color must be provided', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		try {
@@ -156,11 +156,11 @@ class LabelApiController extends ApiController {
 	public function delete() {
 
 		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_numeric($this->request->params['labelId']) === false) {
-			return new DataResponse("label id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('label id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		try {

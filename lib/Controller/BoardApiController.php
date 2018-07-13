@@ -78,7 +78,7 @@ class BoardApiController extends ApiController {
 	public function get() {
 
 		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		$board = $this->service->find($this->request->params['boardId']);
@@ -103,11 +103,11 @@ class BoardApiController extends ApiController {
 	public function create($title, $color) {
 
 		if ($title === false) {
-			return new DataResponse("title must be provided", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if ($color === false) {
-			return new DataResponse("color must be provided", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('color must be provided', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		$board = $this->service->create($title, $this->userId, $color);
@@ -133,19 +133,19 @@ class BoardApiController extends ApiController {
 	public function update($title, $color, $archived = false) {		
 
 		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_bool($archived) === false) {
-			return new DataResponse("archived must be a boolean", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('archived must be a boolean', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if ($title === false) {
-			return new DataResponse("title must be provided", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if ($color === false) {
-			return new DataResponse("color must be provided", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('color must be provided', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		$board = $this->service->update($this->request->params['boardId'], $title, $color, $archived);
@@ -168,7 +168,7 @@ class BoardApiController extends ApiController {
 	public function delete() {
 
 		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		$board = $this->service->delete($this->request->params['boardId']);
@@ -191,7 +191,7 @@ class BoardApiController extends ApiController {
 	public function undoDelete() {
 
 		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		$board = $this->service->find($this->request->params['boardId']);

@@ -61,15 +61,15 @@ class CardApiController extends ApiController {
 	public function get() {		
 
 		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_numeric($this->request->params['stackId']) === false) {
-			return new DataResponse("stack id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_numeric($this->request->params['cardId']) === false) {
-			return new DataResponse("card id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('card id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		$card = $this->cardService->find($this->request->params['cardId']);
@@ -95,19 +95,19 @@ class CardApiController extends ApiController {
 	public function create($title, $type = 'plain', $order = 999) {
 
 		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_numeric($this->request->params['stackId']) === false) {
-			return new DataResponse("stack id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if ($title === false || $title === null) {
-			return new DataResponse("title must be provided", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_numeric($order) === false) {
-			return new DataResponse("order must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('order must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		try {
@@ -137,31 +137,31 @@ class CardApiController extends ApiController {
 	public function update($title, $type, $order, $description = null, $duedate = null, $archive = false, $assignedUserId = 0) {
 
 		if (is_numeric($this->request->params['cardId']) === false) {
-			return new DataResponse("card id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('card id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_numeric($this->request->params['stackId']) === false) {
-			return new DataResponse("stack id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if ($title === false || $title === null) {
-			return new DataResponse("title must be provided", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_numeric($order) === false) {
-			return new DataResponse("order must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('order must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_bool($order) === false) {
-			return new DataResponse("archive must be a boolean", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('archive must be a boolean', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_numeric($assignedUserId) === false) {
-			return new DataResponse("user id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('user id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		try {
@@ -204,15 +204,15 @@ class CardApiController extends ApiController {
 	public function delete() {
 
 		if (is_numeric($this->request->params['cardId']) === false) {
-			return new DataResponse("card id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('card id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_numeric($this->request->params['stackId']) === false) {
-			return new DataResponse("stack id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		try {
