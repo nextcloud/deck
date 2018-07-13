@@ -60,7 +60,12 @@ class StackApiController extends ApiController {
 	 */
 	public function index($boardId) {
 		$stacks = $this->service->findAll($boardId);
-		return new DataResponse($stacks);
+		
+		if ($stacks === false || $stacks === null) {
+			return new DataResponse("No Stacks Found", HTTP::STATUS_NOT_FOUND);
+		}
+
+		return new DataResponse($stacks, HTTP::STATUS_OK);
 	}
 
 	/**
