@@ -85,10 +85,14 @@ return [
 		['name' => 'board_api#update', 'url' => '/api/v1.0/boards/{boardId}', 'verb' => 'PUT'],
 		['name' => 'board_api#undo_delete', 'url' => '/api/v1.0/boards/{boardId}/undo_delete', 'verb' => 'POST'],
 
+		// TODO: Add in a get for the stack_api
 		['name' => 'stack_api#index', 'url' => '/api/v1.0/boards/{boardId}/stacks', 'verb' => 'GET'],
 		['name' => 'stack_api#create', 'url' => '/api/v1.0/boards/{boardId}/stacks', 'verb' => 'POST'],
 		['name' => 'stack_api#update', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}', 'verb' => 'PUT'],
 		['name' => 'stack_api#delete', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}', 'verb' => 'DELETE'],
+
+		['name' => 'card_api#get', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'GET'],
+		['name' => 'card_api#create', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards', 'verb' => 'POST'],
 
 		['name' => 'board_api#preflighted_cors', 'url' => '/api/v1.0/{path}','verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
 	]
