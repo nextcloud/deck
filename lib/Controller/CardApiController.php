@@ -102,12 +102,8 @@ class CardApiController extends ApiController {
 			return new DataResponse("stack id must be a number", HTTP::STATUS_BAD_REQUEST);
 		}
 
-		if ($title === false) {
+		if ($title === false || $title === null) {
 			return new DataResponse("title must be provided", HTTP::STATUS_BAD_REQUEST);
-		}
-
-		if ($type === false) {
-			return new DataResponse("type must be provided", HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_numeric($order) === false) {
@@ -116,10 +112,58 @@ class CardApiController extends ApiController {
 
 		try {
 			$card = $this->cardService->create($title, $this->request->params['stackId'], $type, $order, $this->userId);
-		} catch (StatusException $e) {
+		} catch (Exception $e) {
 			return new DataResponse($e->getMessage(), HTTP::STATUS_INTERNAL_SERVER_ERROR);
 		}
 		
+		return new DataResponse($card, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * @params $title
+	 * @params $type
+	 * @params $order
+	 * @params $description
+	 * @params $duedate
+	 * 
+	 * Get a specific card.
+	 */
+	public function update($title, $type, $order, $description = null, $duedate = null) {
+
+		if (is_numeric($this->request->params['cardId']) === false) {
+			return new DataResponse("card id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		if (is_numeric($this->request->params['stackId']) === false) {
+			return new DataResponse("stack id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		if ($title === false || $title === null) {
+			return new DataResponse("title must be provided", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		if (is_numeric($order) === false) {
+			return new DataResponse("order must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		try {
+			$card = $this->cardService->update(
+				$this->request->params['cardId'],
+				$title,
+				$this->request->params['stackId'],
+				$type,
+				$order,
+				$description,
+				$this->userId,
+				$duedate);
+		} catch(Exception $e) {
+			return new DataResponse($e->getMessage(), HTTP::STATUS_INTERNAL_SERVER_ERROR);
+		}
+
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 }
