@@ -66,7 +66,7 @@ class StackApiController extends ApiController {
 	 * Return all of the stacks in the specified board.
 	 */
 	public function index() {		
-		$boardError = $this->apiHelper->entityHasError( $this->request->params['boardId'], 'board', $this->boardService );		
+		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
 
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
@@ -81,8 +81,29 @@ class StackApiController extends ApiController {
 		return new DataResponse($stacks, HTTP::STATUS_OK);
 	}
 
-	
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * Return all of the stacks in the specified board.
+	 */
+	public function get() {
+		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
 
+		if ($boardError) {
+			return new DataResponse($boardError['message'], $boardError['status']);
+		}
+		
+		$stack = $this->service->find($this->request->params['stackId']);
+
+		if ($stack == false || $stack == null) {
+			return new DataResponse("Stack not found", HTTP::STATUS_NOT_FOUND);
+		}
+
+		return new DataResponse($stack, HTTP::STATUS_OK);
+	}
+	
 	/**
 	 * @NoAdminRequired
 	 * @CORS

@@ -89,9 +89,19 @@ class StackService {
 		}
 	}
 
-	//TODO: Write this function so we can look up one stack id.
 	public function find($stackId) {
-		throw new \Exception('Not yet implemented');
+		$stack = $this->stackMapper->find($stackId);
+		$cards = $this->cardMapper->findAll($stackId);
+		foreach ($cards as $cardIndex => $card) {
+			$assignedUsers = $this->assignedUsersMapper->find($card->getId());
+			$card->setAssignedUsers($assignedUsers);
+			if (array_key_exists($card->id, $labels)) {
+				$cards[$cardIndex]->setLabels($labels[$card->id]);
+			}
+			$card->setAttachmentCount($this->attachmentService->count($card->getId()));
+		}
+		$stack->setCards($cards);
+		return $stack;
 	}
 
 	public function findAll($boardId) {
