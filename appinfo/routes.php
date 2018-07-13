@@ -94,6 +94,7 @@ return [
 		['name' => 'card_api#get', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'GET'],
 		['name' => 'card_api#create', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards', 'verb' => 'POST'],
 		['name' => 'card_api#update', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'PUT'],
+		['name' => 'card_api#delete', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'DELETE'],
 
 		['name' => 'board_api#preflighted_cors', 'url' => '/api/v1.0/{path}','verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
 	]

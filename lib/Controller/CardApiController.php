@@ -142,6 +142,10 @@ class CardApiController extends ApiController {
 			return new DataResponse("stack id must be a number", HTTP::STATUS_BAD_REQUEST);
 		}
 
+		if (is_numeric($this->request->params['boardId']) === false) {
+			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
 		if ($title === false || $title === null) {
 			return new DataResponse("title must be provided", HTTP::STATUS_BAD_REQUEST);
 		}
@@ -163,6 +167,36 @@ class CardApiController extends ApiController {
 		} catch(Exception $e) {
 			return new DataResponse($e->getMessage(), HTTP::STATUS_INTERNAL_SERVER_ERROR);
 		}
+
+		return new DataResponse($card, HTTP::STATUS_OK);
+	}	
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired	 	 
+	 * 
+	 * Delete a specific card.
+	 */
+	public function delete() {
+
+		if (is_numeric($this->request->params['cardId']) === false) {
+			return new DataResponse("card id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		if (is_numeric($this->request->params['stackId']) === false) {
+			return new DataResponse("stack id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		if (is_numeric($this->request->params['boardId']) === false) {
+			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		try {
+			$card = $this->cardService->delete($this->request->params['cardId']);
+		} catch (Exception $e) {
+			return new DataResponse($e.getMessage(), HTTP::STATUS_INTERNAL_SERVER_ERROR);
+		}		
 
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
