@@ -129,10 +129,12 @@ class CardApiController extends ApiController {
 	 * @params $order
 	 * @params $description
 	 * @params $duedate
+	 * @params $archive
+	 * @params $assignedUserId
 	 * 
 	 * Get a specific card.
 	 */
-	public function update($title, $type, $order, $description = null, $duedate = null) {
+	public function update($title, $type, $order, $description = null, $duedate = null, $archive = false, $assignedUserId = 0) {
 
 		if (is_numeric($this->request->params['cardId']) === false) {
 			return new DataResponse("card id must be a number", HTTP::STATUS_BAD_REQUEST);
@@ -154,6 +156,14 @@ class CardApiController extends ApiController {
 			return new DataResponse("order must be a number", HTTP::STATUS_BAD_REQUEST);
 		}
 
+		if (is_bool($order) === false) {
+			return new DataResponse("archive must be a boolean", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		if (is_numeric($assignedUserId) === false) {
+			return new DataResponse("user id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
 		try {
 			$card = $this->cardService->update(
 				$this->request->params['cardId'],
@@ -164,12 +174,25 @@ class CardApiController extends ApiController {
 				$description,
 				$this->userId,
 				$duedate);
+
+			if ($archive) {
+				$card = $this->cardService->archive($this->request->params['cardId']);
+			} else {
+				$card = $this->cardService->unarchive($this->request->params['cardId']);
+			}
+
+			if ($assignedUserId > 0) {
+				$card = $this->cardService->assignUser($this->request->params['cardId'], $assignedUserId);
+			} else {
+				$card = $this->cardService->assignUser($this->request->params['cardId'], $assignedUserId);
+			}
+
 		} catch(Exception $e) {
 			return new DataResponse($e->getMessage(), HTTP::STATUS_INTERNAL_SERVER_ERROR);
 		}
 
 		return new DataResponse($card, HTTP::STATUS_OK);
-	}	
+	}
 
 	/**
 	 * @NoAdminRequired
