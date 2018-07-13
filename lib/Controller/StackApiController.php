@@ -31,6 +31,8 @@ use OCP\IRequest;
 
 use OCA\Deck\StatusException;
 use OCA\Deck\Service\StackService;
+use OCA\Deck\Service\BoardService;
+use OCA\Deck\Controller\Helper\ApiHelper;
 
 /**
  * Class StackApiController
@@ -42,6 +44,7 @@ class StackApiController extends ApiController {
 	private $boardService;
 	private $stackService;
 	private $userInfo;
+	private $apiHelper;
 
 	/**
 	 * @param string $appName
@@ -52,6 +55,7 @@ class StackApiController extends ApiController {
 		parent::__construct($appName, $request);
 		$this->service = $stackService;
 		$this->boardService = $boardService;
+		$this->apiHelper = new ApiHelper();
 	}
 
 	/**
@@ -62,7 +66,7 @@ class StackApiController extends ApiController {
 	 * Return all of the stacks in the specified board.
 	 */
 	public function index() {		
-		$boardError = boardHasError($this->request->params['boardId']);
+		$boardError = $this->apiHelper->entityHasError( $this->request->params['boardId'], 'board', $this->boardService );		
 
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
@@ -77,6 +81,8 @@ class StackApiController extends ApiController {
 		return new DataResponse($stacks, HTTP::STATUS_OK);
 	}
 
+	
+
 	/**
 	 * @NoAdminRequired
 	 * @CORS
@@ -89,7 +95,7 @@ class StackApiController extends ApiController {
 	 */
 	public function create($title, $order) {		
 
-		$boardError = boardHasError($this->request->params['boardId']);
+		$boardError = $this->apiHelper->entityHasError( $this->request->params['boardId'], 'board', $this->boardService );
 
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
@@ -121,7 +127,7 @@ class StackApiController extends ApiController {
 	 */
 	public function update($title, $order) {
 		
-		$boardError = boardHasError($this->request->params['boardId']);
+		$boardError = $this->apiHelper->entityHasError( $this->request->params['boardId'], 'board', $this->boardService );
 
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
@@ -157,7 +163,7 @@ class StackApiController extends ApiController {
 	 */
 	public function delete() {
 
-		$boardError = boardHasError($this->request->params['boardId']);
+		$boardError = $this->apiHelper->entityHasError( $this->request->params['boardId'], 'board', $this->boardService );
 
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
@@ -175,23 +181,4 @@ class StackApiController extends ApiController {
 
 		return new DataResponse($stack, HTTP::STATUS_OK);
 	}
-	
-	private function boardHasError($boardId) {				
-		if (is_numeric($boardId) === false) {
-			$error['message'] = 'Board id must be a number';
-			$error['status'] = HTTP::STATUS_BAD_REQUEST;
-			return $error;
-		}
-
-		$board = $this->boardService->find($boardId);
-
-		if ($board === false || $board === null) {
-			$error['message'] = 'Board does not exist';
-			$error['status'] = HTTP::STATUS_NOT_FOUND;
-			return $error;
-		}
-
-		return false;
-	}
-
 }
