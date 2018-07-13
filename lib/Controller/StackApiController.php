@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2017 Steven R. Baker <steven@stevenrbaker.com>
  *
  * @author Steven R. Baker <steven@stevenrbaker.com>
+ * @author Ryan Fletcher <ryan.fletcher@codepassion.ca>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -58,8 +59,8 @@ class StackApiController extends ApiController {
 	 *
 	 * Return all of the stacks in the specified board.
 	 */
-	public function index($boardId) {
-		$stacks = $this->service->findAll($boardId);
+	public function index() {
+		$stacks = $this->service->findAll($this->request->params['boardId']);
 		
 		if ($stacks === false || $stacks === null) {
 			return new DataResponse("No Stacks Found", HTTP::STATUS_NOT_FOUND);
@@ -78,10 +79,10 @@ class StackApiController extends ApiController {
 	 *
 	 * Create a stack with the specified title and order.
 	 */
-	public function create($boardId, $title, $order) {		
+	public function create($title, $order) {		
 
-		try {						
-			$stack = $this->service->create($title, $boardId, $order);			
+		try {
+			$stack = $this->service->create($title, $this->request->params['boardId'], $order);
 		} catch (StatusException $e) {
 			$errorMessage['error'] = $e->getMessage();
 			return new DataResponse($errorMessage, HTTP::STATUS_INTERNAL_SERVER_ERROR);
@@ -94,18 +95,19 @@ class StackApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 *
-	 * @params $stackId
-	 * @params $title
-	 * @params $boardId
+	 *	 
+	 * @params $title	 
 	 * @params $order
 	 *
-	 * Create a stack with the specified title and order.
+	 * Update a stack by the specified stackId and boardId with the values that were put.
 	 */
-	public function update($stackId, $title, $boardId, $order) {
-		
+	public function update($title, $order) {
 		try {
-			$stack = $this->service->update($stackId, $title, $boardId, $order);
+			$stack = $this->service->update(
+				$this->request->params['stackId'],
+				$title,
+				$this->request->params['boardId'],
+				$order);
 		} catch (StatusException $e) {
 			$errorMessage['error'] = $e->getMessage();
 			return new DataResponse($errorMessage, HTTP::STATUS_INTERNAL_SERVER_ERROR);
@@ -117,15 +119,13 @@ class StackApiController extends ApiController {
 	/**
 	 * @NoAdminRequired
 	 * @CORS
-	 * @NoCSRFRequired
+	 * @NoCSRFRequired	 
 	 *
-	 * @params $id
-	 *
-	 * Delete the stack specified by $id.  Return the board that was deleted.
+	 * Delete the stack specified by $this->request->params['id'].  Return the board that was deleted.
 	 */
-	public function delete($boardId, $stackId) {
-		$stack = $this->service->delete($stackId);
-
+	public function delete() {
+		$stack = $this->service->delete($this->request->params['stackId']);		
+		
 		if ($stack == false || $stack == null) {
 			return new DataResponse("Stack Not Found", HTTP::STATUS_NOT_FOUND);
 		}

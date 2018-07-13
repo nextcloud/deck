@@ -84,10 +84,10 @@ return [
 		['name' => 'board_api#update', 'url' => '/api/v1.0/boards/{id}', 'verb' => 'PUT'],
 		['name' => 'board_api#undo_delete', 'url' => '/api/v1.0/boards/{id}/undo_delete', 'verb' => 'POST'],
 
-		['name' => 'stack_api#index', 'url' => '/api/v1.0/board/{boardId}/stacks', 'verb' => 'GET'],
-		['name' => 'stack_api#create', 'url' => '/api/v1.0/board/{boardId}/stacks', 'verb' => 'POST'],
-		['name' => 'stack_api#update', 'url' => '/api/v1.0/board/{boardId}/stacks/{id}', 'verb' => 'PUT'],
-		['name' => 'stack_api#delete', 'url' => '/api/v1.0/board/{boardId}/stacks/{id}', 'verb' => 'DELETE'],
+		['name' => 'stack_api#index', 'url' => '/api/v1.0/boards/{boardId}/stacks', 'verb' => 'GET'],
+		['name' => 'stack_api#create', 'url' => '/api/v1.0/boards/{boardId}/stacks', 'verb' => 'POST'],
+		['name' => 'stack_api#update', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}', 'verb' => 'PUT'],
+		['name' => 'stack_api#delete', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}', 'verb' => 'DELETE'],
 
 		['name' => 'board_api#preflighted_cors', 'url' => '/api/v1.0/{path}',
 			'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
