@@ -85,6 +85,38 @@ class LabelApiController extends ApiController {
 	 *
 	 * @params $title
 	 * @params $color
+	 * Create a new label
+	 */
+	public function create($title, $color) {
+
+		if (is_numeric($this->request->params['boardId']) === false) {
+			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		if ($title === false || $title === null) {
+			return new DataResponse("title must be provided", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		if ($color === false || $color === null) {
+			return new DataResponse("color must be provided", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		try {
+			$label = $this->labelService->create($title, $color, $this->request->params['boardId']);
+		} catch (Exception $e) {
+			return new DataResponse($e->getMessage(), HTTP::STATUS_INTERNAL_SERVER_ERROR);
+		}
+		
+		return new DataResponse($label, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * @params $title
+	 * @params $color
 	 * Update a specific label
 	 */
 	public function update($title, $color) {
@@ -114,4 +146,30 @@ class LabelApiController extends ApiController {
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}
 
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *	 
+	 * Delete a specific label
+	 */
+	public function delete() {
+
+		if (is_numeric($this->request->params['boardId']) === false) {
+			return new DataResponse("board id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		if (is_numeric($this->request->params['labelId']) === false) {
+			return new DataResponse("label id must be a number", HTTP::STATUS_BAD_REQUEST);
+		}
+
+		try {
+			$label = $this->labelService->delete($this->request->params['labelId']);
+		} catch (Exception $e) {
+			return new DataResponse($e->getMessage(), HTTP::STATUS_INTERNAL_SERVER_ERROR);
+		}		
+
+		return new DataResponse($label, HTTP::STATUS_OK);
+	}
+	
 }

@@ -97,7 +97,9 @@ return [
 		['name' => 'card_api#delete', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'DELETE'],
 
 		['name' => 'label_api#get', 'url' => '/api/v1.0/boards/{boardId}/labels/{labelId}', 'verb' => 'GET'],
+		['name' => 'label_api#create', 'url' => '/api/v1.0/boards/{boardId}/labels', 'verb' => 'POST'],
 		['name' => 'label_api#update', 'url' => '/api/v1.0/boards/{boardId}/labels/{labelId}', 'verb' => 'PUT'],
+		['name' => 'label_api#delete', 'url' => '/api/v1.0/boards/{boardId}/labels/{labelId}', 'verb' => 'DELETE'],
 
 		['name' => 'board_api#preflighted_cors', 'url' => '/api/v1.0/{path}','verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
 	]
