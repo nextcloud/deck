@@ -42,7 +42,7 @@ class CardApiController extends ApiController {
 	/**
 	 * @param string $appName
 	 * @param IRequest $request
-	 * @param BoardService $service
+	 * @param CardService $service
 	 * @param $userId
 	 */
 	public function __construct($appName, IRequest $request, CardService $cardService, $userId) {
@@ -70,7 +70,7 @@ class CardApiController extends ApiController {
 
 		if (is_numeric($this->request->params['cardId']) === false) {
 			return new DataResponse("card id must be a number", HTTP::STATUS_BAD_REQUEST);
-		}		
+		}
 
 		$card = $this->cardService->find($this->request->params['cardId']);
 
