@@ -28,6 +28,9 @@
  use OCP\AppFramework\Http\DataResponse;
  use OCP\IRequest;
 
+ use OCA\Deck\Controller\Helper\ApiHelper;
+ use OCA\Deck\Service\BoardService;
+ use OCA\Deck\Service\StackService;
  use OCA\Deck\Service\CardService;
 
  /**
@@ -37,7 +40,10 @@
  */
 class CardApiController extends ApiController {
 	private $cardService;
+	private $boardService;
+	private $stackService;
 	private $userId;
+	private $apiHelper;
 
 	/**
 	 * @param string $appName
@@ -45,10 +51,13 @@ class CardApiController extends ApiController {
 	 * @param CardService $service
 	 * @param $userId
 	 */
-	public function __construct($appName, IRequest $request, CardService $cardService, $userId) {
+	public function __construct($appName, IRequest $request, CardService $cardService, BoardService $boardService, StackService $stackService, $userId) {
 		parent::__construct($appName, $request);
+		$this->boardService = $boardService;
 		$this->cardService = $cardService;
+		$this->stackService = $stackService;
 		$this->userId = $userId;
+		$this->apiHelper = new ApiHelper();
 	}
 
 	/**
@@ -58,14 +67,15 @@ class CardApiController extends ApiController {
 	 *
 	 * Get a specific card.
 	 */
-	public function get() {		
-
-		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
+	public function get() {
+		$boardError = $this->apiHelper->boardHasError($this->request->params['boardId'], $this->boardService);
+		if ($boardError) {
+			return new DataResponse($boardError['message'], $boardError['status']);
 		}
 
-		if (is_numeric($this->request->params['stackId']) === false) {
-			return new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
+		$stackError = $this->apiHelper->entityHasError($this->request->params['stackId'], 'stack', $this->stackService);		
+		if ($stackError) {
+			return new DataResponse($stackError['message'], $stackError['status']);
 		}
 
 		if (is_numeric($this->request->params['cardId']) === false) {
@@ -94,12 +104,14 @@ class CardApiController extends ApiController {
 	 */
 	public function create($title, $type = 'plain', $order = 999) {
 
-		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
+		$boardError = $this->apiHelper->boardHasError($this->request->params['boardId'], 'board', $this->boardService);
+		if ($boardError) {
+			return new DataResponse($boardError['message'], $boardError['status']);
 		}
 
-		if (is_numeric($this->request->params['stackId']) === false) {
-			return new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
+		$stackError = $this->apiHelper->entityHasError($this->request->params['stackId'], 'stack', $this->stackService);		
+		if ($stackError) {
+			return new DataResponse($stackError['message'], $stackError['status']);
 		}
 
 		if ($title === false || $title === null) {
@@ -136,17 +148,19 @@ class CardApiController extends ApiController {
 	 */
 	public function update($title, $type, $order, $description = null, $duedate = null, $archive = false, $assignedUserId = 0) {
 
+		$boardError = $this->apiHelper->boardHasError($this->request->params['boardId'], 'board', $this->boardService);
+		if ($boardError) {
+			return new DataResponse($boardError['message'], $boardError['status']);
+		}
+
+		$stackError = $this->apiHelper->entityHasError($this->request->params['stackId'], 'stack', $this->stackService);		
+		if ($stackError) {
+			return new DataResponse($stackError['message'], $stackError['status']);
+		}
+
 		if (is_numeric($this->request->params['cardId']) === false) {
 			return new DataResponse('card id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		if (is_numeric($this->request->params['stackId']) === false) {
-			return new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
+		}		
 
 		if ($title === false || $title === null) {
 			return new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
@@ -203,17 +217,19 @@ class CardApiController extends ApiController {
 	 */
 	public function delete() {
 
+		$boardError = $this->apiHelper->boardHasError($this->request->params['boardId'], 'board', $this->boardService);
+		if ($boardError) {
+			return new DataResponse($boardError['message'], $boardError['status']);
+		}
+
+		$stackError = $this->apiHelper->entityHasError($this->request->params['stackId'], 'stack', $this->stackService);		
+		if ($stackError) {
+			return new DataResponse($stackError['message'], $stackError['status']);
+		}
+
 		if (is_numeric($this->request->params['cardId']) === false) {
 			return new DataResponse('card id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		if (is_numeric($this->request->params['stackId']) === false) {
-			return new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		if (is_numeric($this->request->params['boardId']) === false) {
-			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
+		}		
 
 		try {
 			$card = $this->cardService->delete($this->request->params['cardId']);

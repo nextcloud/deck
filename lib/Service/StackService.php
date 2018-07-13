@@ -89,6 +89,10 @@ class StackService {
 		}
 	}
 
+	public function find($stackId) {
+		throw new \Exception('Not yet implemented');
+	}
+
 	public function findAll($boardId) {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
 		$stacks = $this->stackMapper->findAll($boardId);

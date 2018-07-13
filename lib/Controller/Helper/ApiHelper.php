@@ -28,17 +28,35 @@ use OCP\AppFramework\Http;
 
 class ApiHelper {
 
-	public static function entityHasError($entityId, $entityName, $service) {				
-		if (is_numeric($entityId) === false) {
-			$error['message'] = $entityName . ' id must be a number';
+	public static function boardHasError($boardId, $boardService) {				
+		if (is_numeric($boardId) === false) {
+			$error['message'] = 'board id must be a number';
 			$error['status'] = HTTP::STATUS_BAD_REQUEST;
 			return $error;
 		}
 
-		$entity = $service->find($entityId);
+		$board = $boardService->find($boardId);
 
-		if ($entity === false || $entity === null) {
-			$error['message'] = 'Board does not exist';
+		if ($board === false || $board === null) {
+			$error['message'] = 'board does not exist';
+			$error['status'] = HTTP::STATUS_NOT_FOUND;
+			return $error;
+		}
+
+		return false;
+	}
+
+	public static function stackHasError($stackId, $stackService) {
+		if (is_numeric($stackId) === false) {
+			$error['message'] = 'board id must be a number';
+			$error['status'] = HTTP::STATUS_BAD_REQUEST;
+			return $error;
+		}
+
+		$stack = $stackService->find($stackId);
+
+		if ($stack === false || $stack === null) {
+			$error['message'] = 'stack does not exist';
 			$error['status'] = HTTP::STATUS_NOT_FOUND;
 			return $error;
 		}
