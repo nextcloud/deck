@@ -12,7 +12,7 @@ sign_dir=$(build_dir)/sign
 cert_dir=$(HOME)/.nextcloud/certificates
 
 
-default: build
+default: package 
 
 clean-build:
 	rm -rf $(build_dir)
@@ -95,3 +95,5 @@ test-integration:
 test-js: install-deps
 	cd js && run test
 
+package:
+	krankerl package
