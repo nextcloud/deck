@@ -336,8 +336,8 @@ class CardServiceTest extends TestCase {
 			->method('find')
 			->with(123)
 			->willReturn($assignments);
-		$actual = $this->cardService->unassignUser(123, 'user');
-		$this->assertEquals($assignment, $actual);
+		$this->expectException(NotFoundException::class);
+		$actual = $this->cardService->unassignUser(123, 'user');		
 	}
 
 
