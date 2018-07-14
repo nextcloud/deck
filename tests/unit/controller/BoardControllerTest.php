@@ -71,9 +71,7 @@ class BoardControllerTest extends \Test\TestCase {
 
 		$this->controller = new BoardController(
 			'deck',
-			$this->request,
-			$this->userManager,
-			$this->groupManager,
+			$this->request,			
 			$this->boardService,
 			$this->permissionService,
 			$this->userId
