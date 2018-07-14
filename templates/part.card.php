@@ -53,9 +53,9 @@
 			</ui-select-choices>
 		</ui-select>
 	</div>
-	<div class="section-header">
+	<div class="section-header" ng-click="toggleAssignUser()">
 		<h4><?php p($l->t('Assign users')); ?></h4>
-		<button class="button icon-add" ng-click="toggleAssignUser()"></button>
+		<button class="button icon-add"></button>
 	</div>
 	<div class="section-content card-details-assign-users" ng-if="cardservice.getCurrent()">
 		<ui-select id="assignUserSelect" class="card-details-assign-user" ng-model="status.assignedUser" ng-show="status.showAssignUser" uis-open-close="assingUserOpenClose(isOpen)"
