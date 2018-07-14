@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
+ * @author Ryan Fletcher <ryan.fletcher@codepassion.ca>
  *
  * @license GNU AGPL version 3 or any later version
  *  
@@ -24,6 +25,9 @@
 namespace OCA\Deck\Controller;
 
 use PHPUnit_Framework_TestCase;
+use OCA\Deck\Service\DefaultBoardService;
+use OCA\Deck\Db\Board;
+use OCP\IConfig;
 
 class PageControllerTest extends \Test\TestCase {
 
@@ -31,6 +35,8 @@ class PageControllerTest extends \Test\TestCase {
 	private $request;
 	private $l10n;
 	private $userId = 'john';
+	private $defaultBoardService;
+	private $config;
 
 	public function setUp() {
 		$this->l10n = $this->request = $this->getMockBuilder(
@@ -42,16 +48,43 @@ class PageControllerTest extends \Test\TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$this->defaultBoardService = $this->createMock(DefaultBoardService::class);
+		$this->config = $this->createMock(IConfig::class);
+
 		$this->controller = new PageController(
-			'deck', $this->request, $this->l10n, $this->userId
+			'deck', $this->request, $this->defaultBoardService, $this->l10n, $this->userId
 		);
 	}
+	
+	public function testIndexOnFirstRun() {
 
+		$board = new Board();
+		$board->setTitle('Personal');
+		$board->setOwner($this->userId);
+		$board->setColor('000000');
 
-	public function testIndex() {
+		$this->defaultBoardService->expects($this->once())
+			->method('checkFirstRun')
+			->willReturn(true);
+
+		$this->defaultBoardService->expects($this->once())
+			->method('createDefaultBoard')
+			->willReturn($board);
+
+		$response = $this->controller->index();
+		$this->assertEquals('main', $response->getTemplateName());		
+	}
+
+	public function testIndexOnSecondRun() {
+
+		$this->config->setUserValue($this->userId, 'deck', 'firstRun', 'no');
+
+		$this->defaultBoardService->expects($this->once())
+			->method('checkFirstRun')
+			->willReturn(false);
+
 		$response = $this->controller->index();
 		$this->assertEquals('main', $response->getTemplateName());
 	}
-
 
 }

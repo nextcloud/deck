@@ -23,17 +23,30 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Service\DefaultBoardService;
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Controller;
+use OCP\IL10N;
 
 class PageController extends Controller {
 
+	private $defaultBoardService;
 	private $userId;
+	private $l10n;
 
-	public function __construct($AppName, IRequest $request, $userId) {
+	public function __construct(
+		$AppName, 
+		IRequest $request,		
+		DefaultBoardService $defaultBoardService,
+		IL10N $l10n,
+		$userId
+		) {
 		parent::__construct($AppName, $request);
+
 		$this->userId = $userId;
+		$this->defaultBoardService = $defaultBoardService;
+		$this->l10n = $l10n;
 	}
 
 	/**
@@ -48,6 +61,11 @@ class PageController extends Controller {
 			'user' => $this->userId,
 			'maxUploadSize' => (int)\OCP\Util::uploadLimit(),
 		];
+			
+		if ($this->defaultBoardService->checkFirstRun($this->userId, $this->appName)) {
+			$this->defaultBoardService->createDefaultBoard($this->l10n->t('Personal'), $this->userId, '000000');
+		}
+
 		return new TemplateResponse('deck', 'main', $params);
 	}
 
