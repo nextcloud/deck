@@ -102,11 +102,11 @@ class BoardApiController extends ApiController {
 	 */
 	public function create($title, $color) {
 
-		if ($title === false) {
+		if ($title === false || $title === null) {
 			return new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
 		}
 
-		if ($color === false) {
+		if ($color === false || $color === null) {
 			return new DataResponse('color must be provided', HTTP::STATUS_BAD_REQUEST);
 		}
 

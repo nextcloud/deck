@@ -20,7 +20,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 namespace OCA\Deck\Controller;
 
 use OCP\AppFramework\Http;
@@ -36,6 +35,7 @@ class BoardApiControllerTest extends \Test\TestCase {
 	private $userId = 'admin';
 	private $controller;
 	private $boardService;
+	private $exampleBoard;
 
 	public function setUp() {
 		parent::setUp();					
@@ -49,6 +49,9 @@ class BoardApiControllerTest extends \Test\TestCase {
 			$this->userId
 		);
 
+		$this->exampleBoard['id'] = 1;
+		$this->exampleBoard['title'] = 'titled';
+		$this->exampleBoard['color'] = '000000';		
 	}
 
 	public function testIndex() {
@@ -110,10 +113,31 @@ class BoardApiControllerTest extends \Test\TestCase {
 
 		$this->assertEquals($expected, $actual);
 	}
-
-	// TODO: Write testCreate()
+	
 	public function testCreate() {
-		$this->assertEquals(false, true);
+		$board = new Board();
+		$board->setId($this->exampleBoard['id']);
+		$board->setTitle($this->exampleBoard['title']);
+		$board->setColor($this->exampleBoard['color']);
+		$this->boardService->expects($this->once())
+			->method('create')
+			->willReturn($board);
+		
+		$expected = new DataResponse($board, HTTP::STATUS_OK);
+		$actual = $this->controller->create($this->exampleBoard['title'], $this->exampleBoard['color']);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testCreateBadTitle() {		
+		$expected = new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
+		$actual = $this->controller->create(null, $this->exampleBoard['color']);
+		$this->assertEquals($expected, $actual);
+	}
+	
+	public function testCreateBadColor() {		
+		$expected = new DataResponse('color must be provided', HTTP::STATUS_BAD_REQUEST);
+		$actual = $this->controller->create($this->exampleBoard['title'], null);
+		$this->assertEquals($expected, $actual);
 	}
 
 	// TODO: Write testUpdate()
