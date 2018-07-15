@@ -139,10 +139,74 @@ class BoardApiControllerTest extends \Test\TestCase {
 		$actual = $this->controller->create($this->exampleBoard['title'], null);
 		$this->assertEquals($expected, $actual);
 	}
-
-	// TODO: Write testUpdate()
+	
 	public function testUpdate() {
-		$this->assertEquals(false, true);
+		$board = new Board();
+		$board->setId($this->exampleBoard['id']);
+		$board->setTitle($this->exampleBoard['title']);
+		$board->setColor($this->exampleBoard['color']);
+		$this->boardService->expects($this->once())
+			->method('update')
+			->willReturn($board);
+
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue($this->exampleBoard['id']));
+
+		$expected = new DataResponse($board, HTTP::STATUS_OK);
+		$actual = $this->controller->update($this->exampleBoard['title'], $this->exampleBoard['color']);
+		$this->assertEquals($expected, $actual);		
+	}
+
+	public function testUpdateBadId() {		
+		$expected = new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
+		$actual = $this->controller->update($this->exampleBoard['title'], $this->exampleBoard['color']);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testUpdateBadArchived() {
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue($this->exampleBoard['id']));			
+
+		$expected = new DataResponse('archived must be a boolean', HTTP::STATUS_BAD_REQUEST);
+		$actual = $this->controller->update($this->exampleBoard['title'], $this->exampleBoard['color'], 'Not a boolean value');
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testUpdateBadTitle() {
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue($this->exampleBoard['id']));			
+
+		$expected = new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
+		$actual = $this->controller->update(null, $this->exampleBoard['color']);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testUpdateBadColor() {
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue($this->exampleBoard['id']));			
+
+		$expected = new DataResponse('color must be provided', HTTP::STATUS_BAD_REQUEST);
+		$actual = $this->controller->update($this->exampleBoard['title'], null);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testUpdateBoardNotFound() {
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue($this->exampleBoard['id']));			
+
+		$expected = new DataResponse('Board not found', HTTP::STATUS_NOT_FOUND);
+		$actual = $this->controller->update($this->exampleBoard['title'], $this->exampleBoard['color']);
+		$this->assertEquals($expected, $actual);
 	}
 
 	// TODO: Write testDelete()

@@ -132,7 +132,7 @@ class BoardApiController extends ApiController {
 	 */
 	public function update($title, $color, $archived = false) {		
 
-		if (is_numeric($this->request->params['boardId']) === false) {
+		if (is_numeric($this->request->getParam('boardId')) === false) {
 			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
@@ -140,15 +140,15 @@ class BoardApiController extends ApiController {
 			return new DataResponse('archived must be a boolean', HTTP::STATUS_BAD_REQUEST);
 		}
 
-		if ($title === false) {
+		if ($title === false || $title === null) {
 			return new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
 		}
 
-		if ($color === false) {
+		if ($color === false || $color === null) {
 			return new DataResponse('color must be provided', HTTP::STATUS_BAD_REQUEST);
 		}
 
-		$board = $this->service->update($this->request->params['boardId'], $title, $color, $archived);
+		$board = $this->service->update($this->request->getParam('boardId'), $title, $color, $archived);
 
 		if ($board === false || $board === null) {
 			return new DataResponse('Board not found', HTTP::STATUS_NOT_FOUND);
