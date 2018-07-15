@@ -27,10 +27,9 @@ app.factory('CardService', function (ApiService, $http, $q) {
 	};
 	CardService.prototype = angular.copy(ApiService.prototype);
 
-        CardService.prototype.delete = CardService.prototype.softDelete;
-
 	CardService.prototype.undoDelete = function(card) {
 		card.deletedAt = 0;
+		this.data[card.id] = card;
 		this.update(card);
 	};
 

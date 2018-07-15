@@ -197,14 +197,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 
 	$scope.cardDelete = function (card) {
-		OC.dialogs.confirm(t('deck', 'Are you sure you want to delete this card with all of its data?'), t('deck', 'Delete'), function(state) {
-			if (!state) {
-				return;
-			}
-			CardService.delete(card.id).then(function () {
-				StackService.removeCard(card);
-				$scope.deletedCards.push(card);
-			});
+		CardService.delete(card.id).then(function () {
+			StackService.removeCard(card);
+			$scope.deletedCards.push(card);
 		});
 	};
 

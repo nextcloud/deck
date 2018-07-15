@@ -129,26 +129,6 @@ app.factory('StackService', function (ApiService, CardService, $http, $q) {
 		}
 	};
 
-	// FIXME: Should not show popup but proper undo mechanism
-	StackService.prototype.delete = function (id) {
-		var deferred = $q.defer();
-		var self = this;
-
-		OC.dialogs.confirm(t('deck', 'Are you sure you want to delete the stack with all of its data?'), t('deck', 'Delete'), function(state) {
-			if (!state) {
-				return;
-			}
-			$http.delete(self.baseUrl + '/' + id).then(function (response) {
-				self.remove(id);
-				deferred.resolve(response.data);
-
-			}, function (error) {
-				deferred.reject('Deleting ' + self.endpoint + ' failed');
-			});
-		});
-		return deferred.promise;
-	};
-
 	var service = new StackService($http, 'stacks', $q);
 	return service;
 });

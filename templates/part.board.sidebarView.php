@@ -14,7 +14,8 @@
 <ul class="tabHeaders">
     <li class="tabHeader" ng-class="{'selected': (params.tab==0 || !params.tab)}" ui-sref="{tab: 0}"><a><?php p($l->t('Sharing')); ?></a></li>
     <li class="tabHeader" ng-class="{'selected': (params.tab==1)}" ui-sref="{tab: 1}"><a><?php p($l->t('Tags')); ?></a></li>
-    <li class="tabHeader" ng-class="{'selected': (params.tab==2)}" ui-sref="{tab: 2}"><a><?php p($l->t('Deleted Cards')); ?></a></li>
+    <li class="tabHeader" ng-class="{'selected': (params.tab==2)}" ui-sref="{tab: 2}"><a><?php p($l->t('Deleted Stacks')); ?></a></li>
+    <li class="tabHeader" ng-class="{'selected': (params.tab==3)}" ui-sref="{tab: 3}"><a><?php p($l->t('Deleted Cards')); ?></a></li>
 </ul>
 <div class="tabsContainer">
     <div id="tabBoardShare" class="tab" ng-if="params.tab==0 || !params.tab">
@@ -120,7 +121,19 @@
 
     </div>
 
-    <div id="board-detail-deleted-cards" class="tab deletedCardsTabView" ng-if="params.tab==2">
+    <div id="board-detail-deleted-stacks" class="tab deletedStacksTabView" ng-if="params.tab==2">
+	<ul>
+	   <li ng-repeat="deletedStack in deletedStacks">
+			<dl>
+			  <dt>Title</dt>
+			  <dd>{{deletedStack.title}}<dd>
+			</dl>
+                	<a ng-click="stackUndoDelete(deletedStack)"><span class="icon icon-undo"></span><br /><span><?php p($l->t('Undo delete')); ?></span></a>
+	   </li>
+	</ul>
+    </div>
+
+    <div id="board-detail-deleted-cards" class="tab deletedCardsTabView" ng-if="params.tab==3">
 	<ul>
 	   <li ng-repeat="deletedCard in deletedCards">
 			<dl>
