@@ -29,6 +29,11 @@ app.factory('CardService', function (ApiService, $http, $q) {
 
         CardService.prototype.delete = CardService.prototype.softDelete;
 
+	CardService.prototype.undoDelete = function(card) {
+		card.deletedAt = 0;
+		this.update(card);
+	}
+
 	CardService.prototype.reorder = function (card, order) {
 		var deferred = $q.defer();
 		var self = this;

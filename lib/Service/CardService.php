@@ -52,6 +52,7 @@ class CardService {
 	}
 
 	public function fetchDeleted($boardId) {
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		return $this->cardMapper->findDeleted($boardId);
 	}
 
@@ -94,7 +95,7 @@ class CardService {
 		return $card;
 	}
 
-	public function update($id, $title, $stackId, $type, $order, $description, $owner, $duedate) {
+	public function update($id, $title, $stackId, $type, $order, $description, $owner, $duedate, $deletedAt) {
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
 		if ($this->boardService->isArchived($this->cardMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
@@ -110,6 +111,7 @@ class CardService {
 		$card->setOwner($owner);
 		$card->setDescription($description);
 		$card->setDuedate($duedate);
+		$card->setDeletedAt($deletedAt);
 		return $this->cardMapper->update($card);
 	}
 

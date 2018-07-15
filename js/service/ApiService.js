@@ -114,18 +114,18 @@ app.factory('ApiService', function ($http, $q) {
 
 	};
 
-        ApiService.prototype.softDelete = function (id) {
-                var deferred = $q.defer();
-                var self = this;
-
-                $http.delete(this.baseUrl + '/' + id).then(function (response) {
-                        self.data[id].deletedAt = response.data.deletedAt;
-                        deferred.resolve(response.data);
-                }, function (error) {
-                        deferred.reject('Deleting ' + self.endpoint + ' failed');
-                });
-                return deferred.promise;
-        };
+	ApiService.prototype.softDelete = function (id) {
+		var deferred = $q.defer();
+		var self = this;
+		
+		$http.delete(this.baseUrl + '/' + id).then(function (response) {
+		        self.data[id].deletedAt = response.data.deletedAt;
+		        deferred.resolve(response.data);
+		}, function (error) {
+		        deferred.reject('Deleting ' + self.endpoint + ' failed');
+		});
+		return deferred.promise;
+	};
 
 	// methods for managing data
 	ApiService.prototype.clear = function () {

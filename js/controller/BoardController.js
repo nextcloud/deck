@@ -207,6 +207,21 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			});
 		});
 	};
+
+	$scope.cardUndoDelete = function (deletedCard) {
+		CardService.undoDelete(deletedCard);
+		StackService.addCard(deletedCard);
+		$scope.removeFromDeletedCards(deletedCard);
+	};
+
+	$scope.removeFromDeletedCards = function(deletedCard) {
+		for(i=0;i<$scope.deletedCards.length;i++) {
+			if($scope.deletedCards[i].id === deletedCard.id) {
+				$scope.deletedCards.splice(i, 1);
+			}
+		}
+	};
+
 	$scope.cardArchive = function (card) {
 		CardService.archive(card);
 		StackService.removeCard(card);
@@ -224,6 +239,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		// TODO: remove from cards
 	};
 	$scope.labelCreate = function (label) {
+		alert(label);
 		label.boardId = $scope.id;
 		LabelService.create(label).then(function (data) {
 			$scope.newStack.title = '';
