@@ -55,8 +55,14 @@ class DefaultBoardService {
 		$this->boardMapper = $boardMapper;
 		$this->l10n = $l10n;
     }
-    
-    public function checkFirstRun($userId, $appName) {        
+
+	/**
+	 * @param $userId
+	 * @param $appName
+	 * @return bool
+	 * @throws \OCP\PreConditionNotMetException
+	 */
+	public function checkFirstRun($userId, $appName) {
 		$firstRun = $this->config->getUserValue($userId, $appName, 'firstRun', 'yes');
 		$userBoards = $this->boardMapper->findAllByUser($userId);
 		
@@ -68,7 +74,17 @@ class DefaultBoardService {
 		return false;
     }
 
-    public function createDefaultBoard($title, $userId, $color) {
+	/**
+	 * @param $title
+	 * @param $userId
+	 * @param $color
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCA\Deck\StatusException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
+	public function createDefaultBoard($title, $userId, $color) {
         $defaultBoard = $this->boardService->create($title, $userId, $color);
         $defaultStacks = [];
         $defaultCards = [];

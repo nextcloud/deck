@@ -40,6 +40,12 @@ class AssignedUsersMapper extends DeckMapper implements IPermissionMapper {
 		$this->userManager = $userManager;
 	}
 
+	/**
+	 * FIXME: rename this since it returns multiple entities otherwise the naming is confusing with Entity::find
+	 *
+	 * @param $cardId
+	 * @return array|Entity
+	 */
 	public function find($cardId) {
 		$sql = 'SELECT * FROM `*PREFIX*deck_assigned_users` ' .
 			'WHERE `card_id` = ?';

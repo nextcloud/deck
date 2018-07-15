@@ -89,21 +89,29 @@ class StackService {
 		}
 	}
 
+	/**
+	 * @param $stackId
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function find($stackId) {
 		$stack = $this->stackMapper->find($stackId);
 		$cards = $this->cardMapper->findAll($stackId);
 		foreach ($cards as $cardIndex => $card) {
 			$assignedUsers = $this->assignedUsersMapper->find($card->getId());
 			$card->setAssignedUsers($assignedUsers);
-			if (array_key_exists($card->id, $labels)) {
-				$cards[$cardIndex]->setLabels($labels[$card->id]);
-			}
 			$card->setAttachmentCount($this->attachmentService->count($card->getId()));
 		}
 		$stack->setCards($cards);
 		return $stack;
 	}
 
+	/**
+	 * @param $boardId
+	 * @return array
+	 * @throws \OCA\Deck\NoPermissionException
+	 */
 	public function findAll($boardId) {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
 		$stacks = $this->stackMapper->findAll($boardId);
@@ -118,6 +126,11 @@ class StackService {
 		return $stacks;
 	}
 
+	/**
+	 * @param $boardId
+	 * @return array
+	 * @throws \OCA\Deck\NoPermissionException
+	 */
 	public function findAllArchived($boardId) {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
 		$stacks = $this->stackMapper->findAll($boardId);
@@ -135,7 +148,14 @@ class StackService {
 	}
 
 	/**
+	 * @param $title
+	 * @param $boardId
 	 * @param integer $order
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function create($title, $boardId, $order) {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
@@ -150,6 +170,13 @@ class StackService {
 
 	}
 
+	/**
+	 * @param $id
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function delete($id) {
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
 
@@ -162,7 +189,18 @@ class StackService {
 		return $stack;
 	}
 
-
+	/**
+	 * @param $id
+	 * @param $title
+	 * @param $boardId
+	 * @param $order
+	 * @param $deletedAt
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function update($id, $title, $boardId, $order, $deletedAt) {
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
 		if ($this->boardService->isArchived($this->stackMapper, $id)) {
@@ -176,6 +214,14 @@ class StackService {
 		return $this->stackMapper->update($stack);
 	}
 
+	/**
+	 * @param $id
+	 * @param $order
+	 * @return array
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function reorder($id, $order) {
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_EDIT);
 		$stackToSort = $this->stackMapper->find($id);

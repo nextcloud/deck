@@ -142,6 +142,11 @@ class FileService implements IAttachmentService {
 		return $file;
 	}
 
+	/**
+	 * @param Attachment $attachment
+	 * @throws NotPermittedException
+	 * @throws StatusException
+	 */
 	public function create(Attachment $attachment) {
 		$file = $this->getUploadedFile();
 		$folder = $this->getFolder($attachment);
@@ -176,6 +181,10 @@ class FileService implements IAttachmentService {
 		$attachment->setLastModified(time());
 	}
 
+	/**
+	 * @param Attachment $attachment
+	 * @throws NotPermittedException
+	 */
 	public function delete(Attachment $attachment) {
 		try {
 			$file = $this->getFileForAttachment($attachment);
@@ -202,6 +211,11 @@ class FileService implements IAttachmentService {
 		return $cardFolder->get($attachment->getData());
 	}
 
+	/**
+	 * @param Attachment $attachment
+	 * @return FileDisplayResponse|\OCP\AppFramework\Http\Response|StreamResponse
+	 * @throws \Exception
+	 */
 	public function display(Attachment $attachment) {
 		$file = $this->getFileFromRootFolder($attachment);
 		if (method_exists($file, 'fopen')) {

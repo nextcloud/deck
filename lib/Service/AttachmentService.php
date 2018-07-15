@@ -123,6 +123,10 @@ class AttachmentService {
 		return $attachments;
 	}
 
+	/**
+	 * @param $cardId
+	 * @return int|mixed
+	 */
 	public function count($cardId) {
 		$count = $this->cache->get('card-' . $cardId);
 		if (!$count) {
@@ -132,6 +136,14 @@ class AttachmentService {
 		return $count;
 	}
 
+	/**
+	 * @param $cardId
+	 * @param $type
+	 * @param $data
+	 * @return Attachment|\OCP\AppFramework\Db\Entity
+	 * @throws NoPermissionException
+	 * @throws StatusException
+	 */
 	public function create($cardId, $type, $data) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 
@@ -172,7 +184,11 @@ class AttachmentService {
 	 * @param $cardId
 	 * @param $attachmentId
 	 * @return Response
+	 * @throws \OCA\Deck\NotFoundException
+	 * @throws NoPermissionException
 	 * @throws NotFoundException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function display($cardId, $attachmentId) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);

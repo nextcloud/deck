@@ -75,6 +75,9 @@ class BoardService {
 		$this->userId = $userId;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function findAll() {
 		$userInfo = $this->getBoardPrerequisites();
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user']);
@@ -102,6 +105,13 @@ class BoardService {
 		return array_values($result);
 	}
 
+	/**
+	 * @param $boardId
+	 * @return Board
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function find($boardId) {
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		/** @var Board $board */
@@ -124,6 +134,9 @@ class BoardService {
 		return $board;
 	}
 
+	/**
+	 * @return array
+	 */
 	private function getBoardPrerequisites() {
 		$groups = $this->groupManager->getUserGroupIds(
 			$this->userManager->get($this->userId)
@@ -134,6 +147,14 @@ class BoardService {
 		];
 	}
 
+	/**
+	 * @param $mapper
+	 * @param $id
+	 * @return bool
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function isArchived($mapper, $id) {
 		try {
 			$boardId = $id;
@@ -150,6 +171,14 @@ class BoardService {
 		return $board->getArchived();
 	}
 
+	/**
+	 * @param $mapper
+	 * @param $id
+	 * @return bool
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function isDeleted($mapper, $id) {
 		try {
 			$boardId = $id;
@@ -167,7 +196,12 @@ class BoardService {
 	}
 
 
-
+	/**
+	 * @param $title
+	 * @param $userId
+	 * @param $color
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
 	public function create($title, $userId, $color) {
 		$board = new Board();
 		$board->setTitle($title);
@@ -203,6 +237,13 @@ class BoardService {
 
 	}
 
+	/**
+	 * @param $id
+	 * @return Board
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function delete($id) {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
@@ -211,6 +252,13 @@ class BoardService {
 		return $board;
 	}
 
+	/**
+	 * @param $id
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function deleteUndo($id) {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
@@ -218,12 +266,29 @@ class BoardService {
 		return $this->boardMapper->update($board);
 	}
 
+	/**
+	 * @param $id
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function deleteForce($id) {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
 		return $this->boardMapper->delete($board);
 	}
 
+	/**
+	 * @param $id
+	 * @param $title
+	 * @param $color
+	 * @param $archived
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function update($id, $title, $color, $archived) {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
@@ -235,6 +300,16 @@ class BoardService {
 	}
 
 
+	/**
+	 * @param $boardId
+	 * @param $type
+	 * @param $participant
+	 * @param $edit
+	 * @param $share
+	 * @param $manage
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws \OCA\Deck\NoPermissionException
+	 */
 	public function addAcl($boardId, $type, $participant, $edit, $share, $manage) {
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_SHARE);
 		$acl = new Acl();
@@ -253,6 +328,16 @@ class BoardService {
 		return $newAcl;
 	}
 
+	/**
+	 * @param $id
+	 * @param $edit
+	 * @param $share
+	 * @param $manage
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function updateAcl($id, $edit, $share, $manage) {
 		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_SHARE);
 		/** @var Acl $acl */
@@ -264,6 +349,13 @@ class BoardService {
 		return $this->aclMapper->update($acl);
 	}
 
+	/**
+	 * @param $id
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function deleteAcl($id) {
 		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_SHARE);
 		/** @var Acl $acl */

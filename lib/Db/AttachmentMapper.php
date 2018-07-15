@@ -39,6 +39,13 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	private $userManager;
 	private $qb;
 
+	/**
+	 * AttachmentMapper constructor.
+	 *
+	 * @param IDBConnection $db
+	 * @param CardMapper $cardMapper
+	 * @param IUserManager $userManager
+	 */
 	public function __construct(IDBConnection $db, CardMapper $cardMapper, IUserManager $userManager) {
 		parent::__construct($db, 'deck_attachment', Attachment::class);
 		$this->cardMapper = $cardMapper;
@@ -60,7 +67,17 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 
 		$cursor = $qb->execute();
 		$row = $cursor->fetch(PDO::FETCH_ASSOC);
+		if($row === false) {
+			$cursor->closeCursor();
+			throw new DoesNotExistException('Did expect one result but found none when executing' . $qb);
+		}
+
+		$row2 = $cursor->fetch();
 		$cursor->closeCursor();
+		if($row2 !== false ) {
+			throw new MultipleObjectsReturnedException('Did not expect more than one result when executing' . $query);
+		}
+
 		return $this->mapRowToEntity($row);
 	}
 
@@ -87,6 +104,11 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 		return $entities;
 	}
 
+	/**
+	 * @param null $cardId
+	 * @param bool $withOffset
+	 * @return array
+	 */
 	public function findToDelete($cardId = null, $withOffset = true) {
 		// add buffer of 5 min
 		$timeLimit = time() - (60 * 5);

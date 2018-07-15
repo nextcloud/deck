@@ -44,11 +44,28 @@ class LabelService {
 		$this->boardService = $boardService;
 	}
 
+	/**
+	 * @param $labelId
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function find($labelId) {
 		$this->permissionService->checkPermission($this->labelMapper, $labelId, Acl::PERMISSION_READ);
 		return $this->labelMapper->find($labelId);
 	}
 
+	/**
+	 * @param $title
+	 * @param $color
+	 * @param $boardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function create($title, $color, $boardId) {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
 		if ($this->boardService->isArchived(null, $boardId)) {
@@ -61,6 +78,14 @@ class LabelService {
 		return $this->labelMapper->insert($label);
 	}
 
+	/**
+	 * @param $id
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function delete($id) {
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
 		if ($this->boardService->isArchived($this->labelMapper, $id)) {
@@ -69,6 +94,16 @@ class LabelService {
 		return $this->labelMapper->delete($this->find($id));
 	}
 
+	/**
+	 * @param $id
+	 * @param $title
+	 * @param $color
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function update($id, $title, $color) {
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
 		if ($this->boardService->isArchived($this->labelMapper, $id)) {
