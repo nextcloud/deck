@@ -36,6 +36,7 @@ class BoardApiControllerTest extends \Test\TestCase {
 	private $controller;
 	private $boardService;
 	private $exampleBoard;
+	private $deniedBoard;
 
 	public function setUp() {
 		parent::setUp();					
@@ -51,7 +52,12 @@ class BoardApiControllerTest extends \Test\TestCase {
 
 		$this->exampleBoard['id'] = 1;
 		$this->exampleBoard['title'] = 'titled';
-		$this->exampleBoard['color'] = '000000';		
+		$this->exampleBoard['color'] = '000000';
+
+		$this->deniedBoard['id'] = 2;
+		$this->deniedBoard['owner'] = 'someone else';
+		$this->deniedBoard['title'] = 'titled';
+		$this->deniedBoard['color'] = '000000';
 	}
 
 	public function testIndex() {
@@ -111,6 +117,32 @@ class BoardApiControllerTest extends \Test\TestCase {
 		$expected = new DataResponse('board not found', HTTP::STATUS_NOT_FOUND);
 		$actual = $this->controller->get();
 
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testGetNoPermission() {
+
+		$board = new Board();
+		$board->setId($this->deniedBoard['id']);
+		$board->setOwner($this->deniedBoard['owner']);
+		$this->boardService->expects($this->once())
+			->method('find')
+			->willReturn($board);
+
+		// permission service check.
+		// ------ there be dragons here -----
+		// $this->permissionsService->expect($this->once())
+		// 	->method('matchPermissions')
+		// 	->with($board)
+		// 	->will($this->)
+
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue('999'));
+
+		$expected = new DataResponse("Access Denied: User has no access rights to board", HTTP::STATUS_FORBIDDEN);
+		$actual = $this->controller->get();
 		$this->assertEquals($expected, $actual);
 	}
 	

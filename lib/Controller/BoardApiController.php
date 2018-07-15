@@ -75,7 +75,7 @@ class BoardApiController extends ApiController {
 	 *
 	 * Return the board specified by $this->request->getParam('boardId').
 	 */
-	public function get() {				
+	public function get() {
 
 		if (is_numeric($this->request->getParam('boardId')) === false) {
 			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
