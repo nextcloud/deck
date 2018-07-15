@@ -146,11 +146,11 @@ class PermissionService {
 	public function userIsBoardOwner($boardId) {
 		try {
 			$board = $this->boardMapper->find($boardId);
+			return $board && $this->userId === $board->getOwner();
 		} catch (DoesNotExistException $e) {
 		} catch (MultipleObjectsReturnedException $e) {
 			return false;
-		}
-		return $board && $this->userId === $board->getOwner();
+		}		
 	}
 
 	/**

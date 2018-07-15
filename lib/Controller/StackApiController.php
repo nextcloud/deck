@@ -66,17 +66,13 @@ class StackApiController extends ApiController {
 	 * Return all of the stacks in the specified board.
 	 */
 	public function index() {		
-		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
+		$boardError = $this->apiHelper->entityHasError($this->request->getParam('boardId'), 'board', $this->boardService);
 
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
 		}
-		
-		$stacks = $this->service->findAll($this->request->params['boardId']);
 
-		if ($stacks === false || $stacks === null) {
-			return new DataResponse('No Stacks Found', HTTP::STATUS_NOT_FOUND);
-		}
+		$stacks = $this->service->findAll($this->request->getParam('boardId'));
 
 		return new DataResponse($stacks, HTTP::STATUS_OK);
 	}
@@ -88,8 +84,8 @@ class StackApiController extends ApiController {
 	 *
 	 * Return all of the stacks in the specified board.
 	 */
-	public function get() {
-		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
+	public function get() {		
+		$boardError = $this->apiHelper->entityHasError($this->request->getParam('boardId'), 'board', $this->boardService);
 
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
@@ -116,7 +112,7 @@ class StackApiController extends ApiController {
 	 */
 	public function create($title, $order) {		
 
-		$boardError = $this->apiHelper->entityHasError( $this->request->params['boardId'], 'board', $this->boardService );
+		$boardError = $this->apiHelper->entityHasError( $this->request->getParam('boardId'), 'board', $this->boardService );
 
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
@@ -127,7 +123,7 @@ class StackApiController extends ApiController {
 		}
 
 		try {
-			$stack = $this->service->create($title, $this->request->params['boardId'], $order);
+			$stack = $this->service->create($title, $this->request->getParam('boardId'), $order);
 		} catch (StatusException $e) {
 			$errorMessage['error'] = $e->getMessage();
 			return new DataResponse($errorMessage, HTTP::STATUS_INTERNAL_SERVER_ERROR);
@@ -148,7 +144,7 @@ class StackApiController extends ApiController {
 	 */
 	public function update($title, $order) {
 		
-		$boardError = $this->apiHelper->entityHasError( $this->request->params['boardId'], 'board', $this->boardService );
+		$boardError = $this->apiHelper->entityHasError( $this->request->getParam('boardId'), 'board', $this->boardService );
 
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
@@ -163,7 +159,7 @@ class StackApiController extends ApiController {
 		}
 
 		try {
-			$stack = $this->service->update($this->request->params['stackId'], $title, $this->request->params['boardId'], $order);
+			$stack = $this->service->update($this->request->params['stackId'], $title, $this->request->getParam('boardId'), $order);
 
 			if ($stack === false || $stack === null) {
 				return new DataResponse('Stack not found', HTTP::STATUS_NOT_FOUND);
@@ -184,7 +180,7 @@ class StackApiController extends ApiController {
 	 */
 	public function delete() {
 
-		$boardError = $this->apiHelper->entityHasError( $this->request->params['boardId'], 'board', $this->boardService );
+		$boardError = $this->apiHelper->entityHasError( $this->request->getParam('boardId'), 'board', $this->boardService );
 
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);

@@ -119,32 +119,6 @@ class BoardApiControllerTest extends \Test\TestCase {
 
 		$this->assertEquals($expected, $actual);
 	}
-
-	public function testGetNoPermission() {
-
-		$board = new Board();
-		$board->setId($this->deniedBoard['id']);
-		$board->setOwner($this->deniedBoard['owner']);
-		$this->boardService->expects($this->once())
-			->method('find')
-			->willReturn($board);
-
-		// permission service check.
-		// ------ there be dragons here -----
-		// $this->permissionsService->expect($this->once())
-		// 	->method('matchPermissions')
-		// 	->with($board)
-		// 	->will($this->)
-
-		$this->request->expects($this->any())
-			->method('getParam')
-			->with('boardId')
-			->will($this->returnValue('999'));
-
-		$expected = new DataResponse("Access Denied: User has no access rights to board", HTTP::STATUS_FORBIDDEN);
-		$actual = $this->controller->get();
-		$this->assertEquals($expected, $actual);
-	}
 	
 	public function testCreate() {
 		$board = new Board();

@@ -38,7 +38,7 @@ class ApiHelper {
 		$entity = $service->find($entityId);
 
 		if ($entity === false || $entity === null) {
-			$error['message'] = $entityName . ' does not exist';
+			$error['message'] = $entityName . ' not found';
 			$error['status'] = HTTP::STATUS_NOT_FOUND;
 			return $error;
 		}
