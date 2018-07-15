@@ -204,18 +204,99 @@ class BoardApiControllerTest extends \Test\TestCase {
 			->with('boardId')
 			->will($this->returnValue($this->exampleBoard['id']));			
 
-		$expected = new DataResponse('Board not found', HTTP::STATUS_NOT_FOUND);
+		$expected = new DataResponse('board not found', HTTP::STATUS_NOT_FOUND);
 		$actual = $this->controller->update($this->exampleBoard['title'], $this->exampleBoard['color']);
 		$this->assertEquals($expected, $actual);
 	}
 
 	// TODO: Write testDelete()
-	public function testDelete() {
-		$this->assertEquals(false, true);
+	public function testDelete() {		
+
+		$board = new Board();
+		$board->setId($this->exampleBoard['id']);
+		$board->setTitle($this->exampleBoard['title']);
+		$board->setColor($this->exampleBoard['color']);
+		$this->boardService->expects($this->once())
+			->method('delete')
+			->willReturn($board);
+		
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue($this->exampleBoard['id']));
+
+		$expected = new DataResponse($board, HTTP::STATUS_OK);
+		$actual = $this->controller->delete();
+
+		$this->assertEquals($expected, $actual);
 	}
 
-	// TODO: Write testUndoDelete()
+	public function testDeleteBadId() {
+
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue('bad id'));
+
+		$expected = new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
+		$actual = $this->controller->delete();
+
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testDeleteNotFound() {
+		
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue('85'));
+		
+		$expected = new DataResponse('board not found', HTTP::STATUS_NOT_FOUND);
+		$actual = $this->controller->delete();
+
+		$this->assertEquals($expected, $actual);
+	}	
+	
 	public function testUndoDelete() {
-		$this->assertEquals(false, true);
+		$board = new board();
+		$board->setId($this->exampleBoard['id']);
+		$board->setTitle($this->exampleBoard['title']);
+		$board->setColor($this->exampleBoard['color']);
+		$this->boardService->expects($this->once())
+			->method('deleteUndo')
+			->willReturn($board);
+
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue($this->exampleBoard['id']));
+
+		$expected = new DataResponse($board, HTTP::STATUS_OK);
+		$actual = $this->controller->undoDelete();
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testUndoDeleteBadId() {		
+
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue('bad id'));
+
+		$expected = new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
+		$actual = $this->controller->undoDelete();
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testUndoDeleteNotFound() {
+
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue(189));
+
+		$expected = new DataResponse('board not found', HTTP::STATUS_NOT_FOUND);
+		$actual = $this->controller->undoDelete();
+		$this->assertEquals($expected, $actual);
 	}
 }

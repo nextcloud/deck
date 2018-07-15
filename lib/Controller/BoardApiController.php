@@ -73,7 +73,7 @@ class BoardApiController extends ApiController {
 	 * @NoCSRFRequired
 	 *
 	 *
-	 * Return the board specified by $this->request->params['boardId'].
+	 * Return the board specified by $this->request->getParam('boardId').
 	 */
 	public function get() {				
 
@@ -151,7 +151,7 @@ class BoardApiController extends ApiController {
 		$board = $this->service->update($this->request->getParam('boardId'), $title, $color, $archived);
 
 		if ($board === false || $board === null) {
-			return new DataResponse('Board not found', HTTP::STATUS_NOT_FOUND);
+			return new DataResponse('board not found', HTTP::STATUS_NOT_FOUND);
 		}
 
 		return new DataResponse($board, HTTP::STATUS_OK);
@@ -167,14 +167,14 @@ class BoardApiController extends ApiController {
 	 */
 	public function delete() {
 
-		if (is_numeric($this->request->params['boardId']) === false) {
+		if (is_numeric($this->request->getParam('boardId')) === false) {
 			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
+		}		
 
-		$board = $this->service->delete($this->request->params['boardId']);
+		$board = $this->service->delete($this->request->getParam('boardId'));		
 
 		if ($board === false || $board === null) {
-			return new DataResponse('Board not found', HTTP::STATUS_NOT_FOUND);
+			return new DataResponse('board not found', HTTP::STATUS_NOT_FOUND);
 		}
 
 		return new DataResponse($board, HTTP::STATUS_OK);
@@ -190,16 +190,14 @@ class BoardApiController extends ApiController {
 	 */
 	public function undoDelete() {
 
-		if (is_numeric($this->request->params['boardId']) === false) {
+		if (is_numeric($this->request->getParam('boardId')) === false) {
 			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
+		}		
 
-		$board = $this->service->find($this->request->params['boardId']);
+		$board = $this->service->deleteUndo($this->request->getParam('boardId'));
 
 		if ($board === false || $board === null) {
-			return new DataResponse('Board not found', HTTP::STATUS_NOT_FOUND);
-		} else {
-			$board = $this->service->deleteUndo($id);
+			return new DataResponse('board not found', HTTP::STATUS_NOT_FOUND);
 		}
 
 		return new DataResponse($board, HTTP::STATUS_OK);
