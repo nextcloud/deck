@@ -119,10 +119,10 @@ app.factory('ApiService', function ($http, $q) {
 		var self = this;
 		
 		$http.delete(this.baseUrl + '/' + id).then(function (response) {
-		        self.data[id].deletedAt = response.data.deletedAt;
-		        deferred.resolve(response.data);
+			self.data[id].deletedAt = response.data.deletedAt;
+			deferred.resolve(response.data);
 		}, function (error) {
-		        deferred.reject('Deleting ' + self.endpoint + ' failed');
+			deferred.reject('Deleting ' + self.endpoint + ' failed');
 		});
 		return deferred.promise;
 	};

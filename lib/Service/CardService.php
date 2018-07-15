@@ -29,6 +29,7 @@ use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\StatusException;
 
@@ -37,14 +38,24 @@ class CardService {
 
 	private $cardMapper;
 	private $stackMapper;
+	private $boardMapper;
 	private $permissionService;
 	private $boardService;
 	private $assignedUsersMapper;
 	private $attachmentService;
 
-	public function __construct(CardMapper $cardMapper, StackMapper $stackMapper, PermissionService $permissionService, BoardService $boardService, AssignedUsersMapper $assignedUsersMapper, AttachmentService $attachmentService) {
+	public function __construct(
+		CardMapper $cardMapper,
+		StackMapper $stackMapper, 
+		BoardMapper $boardMapper, 
+		PermissionService $permissionService, 
+		BoardService $boardService, 
+		AssignedUsersMapper $assignedUsersMapper, 
+		AttachmentService $attachmentService) {
+
 		$this->cardMapper = $cardMapper;
 		$this->stackMapper = $stackMapper;
+		$this->boardMapper = $boardMapper;
 		$this->permissionService = $permissionService;
 		$this->boardService = $boardService;
 		$this->assignedUsersMapper = $assignedUsersMapper;
@@ -52,7 +63,7 @@ class CardService {
 	}
 
 	public function fetchDeleted($boardId) {
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		return $this->cardMapper->findDeleted($boardId);
 	}
 

@@ -144,7 +144,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		}, function (error) {
 			$scope.statusservice.setError('Error occured', error);
 		});
-	}
+	};
 
 	$scope.loadDefault = function () {
 		StackService.fetchAll($scope.id).then(function (data) {
@@ -215,7 +215,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 
 	$scope.removeFromDeletedCards = function(deletedCard) {
-		for(i=0;i<$scope.deletedCards.length;i++) {
+		for(var i=0;i<$scope.deletedCards.length;i++) {
 			if($scope.deletedCards[i].id === deletedCard.id) {
 				$scope.deletedCards.splice(i, 1);
 			}

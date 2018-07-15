@@ -32,7 +32,7 @@ app.factory('CardService', function (ApiService, $http, $q) {
 	CardService.prototype.undoDelete = function(card) {
 		card.deletedAt = 0;
 		this.update(card);
-	}
+	};
 
 	CardService.prototype.reorder = function (card, order) {
 		var deferred = $q.defer();
