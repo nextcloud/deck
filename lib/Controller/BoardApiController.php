@@ -75,16 +75,16 @@ class BoardApiController extends ApiController {
 	 *
 	 * Return the board specified by $this->request->params['boardId'].
 	 */
-	public function get() {
+	public function get() {				
 
-		if (is_numeric($this->request->params['boardId']) === false) {
+		if (is_numeric($this->request->getParam('boardId')) === false) {
 			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
-		$board = $this->service->find($this->request->params['boardId']);
+		$board = $this->service->find($this->request->getParam('boardId'));
 
 		if ($board === false || $board === null) {
-			return new DataResponse('Board not found', HTTP::STATUS_NOT_FOUND);
+			return new DataResponse('board not found', HTTP::STATUS_NOT_FOUND);
 		}
 
 		return new DataResponse($board, HTTP::STATUS_OK);

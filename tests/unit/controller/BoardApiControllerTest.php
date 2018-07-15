@@ -51,7 +51,6 @@ class BoardApiControllerTest extends \Test\TestCase {
 
 	}
 
-	// Test to pass
 	public function testIndex() {
 		$board = new Board();
 		$board->setId('1');
@@ -68,18 +67,48 @@ class BoardApiControllerTest extends \Test\TestCase {
 
 		$this->assertEquals($expected, $actual);
 	}
+	
+	public function testGet() {
+		$boardId = 25;
+		$board = new Board();
+		$board->setId($boardId);
+		$this->boardService->expects($this->once())
+			->method('find')
+			->willReturn($board);
 
-	// test for the bad request path
-	public function testIndexBadRequest() {		
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue($boardId));
+
+		$expected = new DataResponse($board, HTTP::STATUS_OK);
+		$actual = $this->controller->get();
+		$this->assertEquals($expected, $actual);
+	}	
+
+	public function testGetBadRequest() {
+
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue('hello'));
+
 		$expected = new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
-		$actual = $this->controller->index();
+		$actual = $this->controller->get();
 
 		$this->assertEquals($expected, $actual);
 	}
 
-	// TODO: Write testGet()
-	public function testGet() {
-		$this->assertEquals(false, true);
+	public function testGetNotFound() {
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue('999'));
+
+		$expected = new DataResponse('board not found', HTTP::STATUS_NOT_FOUND);
+		$actual = $this->controller->get();
+
+		$this->assertEquals($expected, $actual);
 	}
 
 	// TODO: Write testCreate()
