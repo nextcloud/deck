@@ -52,7 +52,7 @@
 				</form>
 				<button class="icon-delete button-inline stack-actions"
 						ng-if="!s.status.editStack"
-						ng-click="stackservice.delete(s.id)"></button>
+						ng-click="stackDelete(s)"></button>
 			</h3>
 			<ul data-as-sortable="sortOptions" is-disabled="!boardservice.canEdit() || filter==='archive'" data-ng-model="s.cards" class="card-list" ng-class="{emptyStack: !s.cards.length}">
 				<li class="card as-sortable-item"

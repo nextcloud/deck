@@ -4,20 +4,20 @@
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *  
+ *
  */
 import app from '../app/App.js';
 
@@ -47,6 +47,19 @@ app.factory('ApiService', function ($http, $q) {
 		});
 		return deferred.promise;
 	};
+
+	ApiService.prototype.fetchDeleted = function (scopeId) {
+		var deferred = $q.defer();
+		var self = this;
+		$http.get(this.baseUrl + '/deleted/' + scopeId).then(function (response) {
+	        	var objects = response.data;
+	        	deferred.resolve(objects);
+		}, function (error) {
+	        	deferred.reject('Fetching ' + self.endpoint + ' failed');
+		});
+		return deferred.promise;
+	};
+
 
 	ApiService.prototype.fetchOne = function (id) {
 
@@ -111,20 +124,19 @@ app.factory('ApiService', function ($http, $q) {
 			deferred.reject('Deleting ' + self.endpoint + ' failed');
 		});
 		return deferred.promise;
-
 	};
 
-	ApiService.prototype.softDelete = function (id) {
-		var deferred = $q.defer();
+	ApiService.prototype.undoDelete = function(entity) {
 		var self = this;
-		
-		$http.delete(this.baseUrl + '/' + id).then(function (response) {
-			self.data[id].deletedAt = response.data.deletedAt;
-			deferred.resolve(response.data);
-		}, function (error) {
-			deferred.reject('Deleting ' + self.endpoint + ' failed');
+		entity.deletedAt = 0;
+
+		var promise = this.update(entity);
+
+		promise.then(function() {
+			self.data[entity.id] = entity;
 		});
-		return deferred.promise;
+
+		return promise;
 	};
 
 	// methods for managing data

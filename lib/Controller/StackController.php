@@ -74,10 +74,11 @@ class StackController extends Controller {
 	 * @param $title
 	 * @param $boardId
 	 * @param $order
+	 * @param $deletedAt
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function update($id, $title, $boardId, $order) {
-		return $this->stackService->update($id, $title, $boardId, $order);
+	public function update($id, $title, $boardId, $order, $deletedAt) {
+		return $this->stackService->update($id, $title, $boardId, $order, $deletedAt);
 	}
 
 	/**
@@ -98,4 +99,14 @@ class StackController extends Controller {
 	public function delete($stackId) {
 		return $this->stackService->delete($stackId);
 	}
+
+	/**
+	 * @NoAdminRequired
+	 * @param $boardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
+	public function deleted($boardId) {
+		return $this->stackService->fetchDeleted($boardId);
+	}
+
 }
