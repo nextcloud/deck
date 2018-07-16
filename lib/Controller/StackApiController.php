@@ -32,7 +32,6 @@ use OCP\IRequest;
 use OCA\Deck\StatusException;
 use OCA\Deck\Service\StackService;
 use OCA\Deck\Service\BoardService;
-use OCA\Deck\Controller\Helper\ApiHelper;
 
 /**
  * Class StackApiController
@@ -42,8 +41,7 @@ use OCA\Deck\Controller\Helper\ApiHelper;
 class StackApiController extends ApiController {
 
 	private $boardService;
-	private $stackService;	
-	private $apiHelper;
+	private $stackService;
 
 	/**
 	 * @param string $appName
@@ -53,8 +51,7 @@ class StackApiController extends ApiController {
 	public function __construct($appName, IRequest $request, StackService $stackService, BoardService $boardService) {
 		parent::__construct($appName, $request);
 		$this->stackService = $stackService;
-		$this->boardService = $boardService;
-		$this->apiHelper = new ApiHelper();
+		$this->boardService = $boardService;		
 	}
 
 	/**

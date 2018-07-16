@@ -42,8 +42,7 @@ class CardApiController extends ApiController {
 	private $cardService;
 	private $boardService;
 	private $stackService;
-	private $userId;
-	private $apiHelper;
+	private $userId;	
 
 	/**
 	 * @param string $appName
@@ -51,13 +50,10 @@ class CardApiController extends ApiController {
 	 * @param CardService $service
 	 * @param $userId
 	 */
-	public function __construct($appName, IRequest $request, CardService $cardService, BoardService $boardService, StackService $stackService, $userId) {
-		parent::__construct($appName, $request);
-		$this->boardService = $boardService;
-		$this->cardService = $cardService;
-		$this->stackService = $stackService;
-		$this->userId = $userId;
-		$this->apiHelper = new ApiHelper();
+	public function __construct($appName, IRequest $request, CardService $cardService, $userId) {
+		parent::__construct($appName, $request);		
+		$this->cardService = $cardService;		
+		$this->userId = $userId;		
 	}
 
 	/**
@@ -67,8 +63,8 @@ class CardApiController extends ApiController {
 	 *
 	 * Get a specific card.
 	 */
-	public function get() {		
-		$card = $this->cardService->find($this->request->params['cardId']);		
+	public function get() {
+		$card = $this->cardService->find($this->request->getParam('cardId'));
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
@@ -83,8 +79,8 @@ class CardApiController extends ApiController {
 	 * 
 	 * Get a specific card.
 	 */
-	public function create($title, $type = 'plain', $order = 999) {				
-		$card = $this->cardService->create($title, $this->request->params['stackId'], $type, $order, $this->userId);
+	public function create($title, $type = 'plain', $order = 999) {
+		$card = $this->cardService->create($title, $this->request->getParam('stackId'), $type, $order, $this->userId);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
@@ -96,19 +92,10 @@ class CardApiController extends ApiController {
 	 * 
 	 * Update a card
 	 */
-	public function update($cardId, $title, $stackId, $type, $order = 0, $description = '', $owner, $duedate = null) {
+	public function update($title, $type, $order = 0, $description = '', $owner, $duedate = null) {
 		$card = $this->cardService->update($this->request->getParam('cardId'), $title, $this->request->getParam('stackId'), $type, $order, $description, $owner, $duedate);
 		return new DataResponse($card, HTTP::STATUS_OK);
-	}
-
-	
-	public function assignUser() {
-		throw new Exception('Not Implemented');
-	}
-
-	public function unassignUser() {
-		throw new Exception('Not Implemented');
-	}
+	}		
 
 	/**
 	 * @NoAdminRequired
@@ -118,7 +105,7 @@ class CardApiController extends ApiController {
 	 * Delete a specific card.
 	 */
 	public function delete() {
-		$card = $this->cardService->delete($this->request->params['cardId']);
+		$card = $this->cardService->delete($this->request->getParam('cardId'));
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 }
