@@ -42,8 +42,7 @@ use OCA\Deck\Controller\Helper\ApiHelper;
 class StackApiController extends ApiController {
 
 	private $boardService;
-	private $stackService;
-	private $userInfo;
+	private $stackService;	
 	private $apiHelper;
 
 	/**
@@ -53,7 +52,7 @@ class StackApiController extends ApiController {
 	 */
 	public function __construct($appName, IRequest $request, StackService $stackService, BoardService $boardService) {
 		parent::__construct($appName, $request);
-		$this->service = $stackService;
+		$this->stackService = $stackService;
 		$this->boardService = $boardService;
 		$this->apiHelper = new ApiHelper();
 	}
@@ -72,7 +71,7 @@ class StackApiController extends ApiController {
 			return new DataResponse($boardError['message'], $boardError['status']);
 		}
 
-		$stacks = $this->service->findAll($this->request->getParam('boardId'));
+		$stacks = $this->stackService->findAll($this->request->getParam('boardId'));
 
 		return new DataResponse($stacks, HTTP::STATUS_OK);
 	}
@@ -95,7 +94,7 @@ class StackApiController extends ApiController {
 			return new DataResponse($boardError['message'], $boardError['status']);
 		}		
 
-		$stack = $this->service->find($this->request->getParam('stackId'));
+		$stack = $this->stackService->find($this->request->getParam('stackId'));
 
 		if ($stack === false || $stack === null) {
 			return new DataResponse('stack not found', HTTP::STATUS_NOT_FOUND);
@@ -130,7 +129,7 @@ class StackApiController extends ApiController {
 			return new DataResponse($boardError['message'], $boardError['status']);
 		}		
 		
-		$stack = $this->service->create($title, $this->request->getParam('boardId'), $order);		
+		$stack = $this->stackService->create($title, $this->request->getParam('boardId'), $order);		
 		
 		return new DataResponse($stack, HTTP::STATUS_OK);
 	}
@@ -162,7 +161,7 @@ class StackApiController extends ApiController {
 		}
 
 		try {
-			$stack = $this->service->update($this->request->getParam('stackId'), $title, $this->request->getParam('boardId'), $order);
+			$stack = $this->stackService->update($this->request->getParam('stackId'), $title, $this->request->getParam('boardId'), $order);
 
 			if ($stack === false || $stack === null) {
 				return new DataResponse('stack not found', HTTP::STATUS_NOT_FOUND);
@@ -193,7 +192,7 @@ class StackApiController extends ApiController {
 			return new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
-		$stack = $this->service->delete($this->request->getParam('stackId'));		
+		$stack = $this->stackService->delete($this->request->getParam('stackId'));		
 		
 		if ($stack == false || $stack == null) {
 			return new DataResponse('Stack Not Found', HTTP::STATUS_NOT_FOUND);
