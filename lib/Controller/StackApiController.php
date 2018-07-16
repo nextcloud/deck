@@ -90,11 +90,15 @@ class StackApiController extends ApiController {
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
 		}
-		
-		$stack = $this->service->find($this->request->params['stackId']);
 
-		if ($stack == false || $stack == null) {
-			return new DataResponse("Stack not found", HTTP::STATUS_NOT_FOUND);
+		if (is_numeric($this->request->getParam('stackId')) === false) {
+			return new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
+		}
+
+		$stack = $this->service->find($this->request->getParam('stackId'));
+
+		if ($stack === false || $stack === null) {
+			return new DataResponse('stack not found', HTTP::STATUS_NOT_FOUND);
 		}
 
 		return new DataResponse($stack, HTTP::STATUS_OK);
@@ -150,7 +154,7 @@ class StackApiController extends ApiController {
 			return new DataResponse($boardError['message'], $boardError['status']);
 		}
 		
-		if (is_numeric($this->request->params['stackId']) === false) {
+		if (is_numeric($this->request->getParam('stackId')) === false) {
 			return new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
@@ -159,10 +163,10 @@ class StackApiController extends ApiController {
 		}
 
 		try {
-			$stack = $this->service->update($this->request->params['stackId'], $title, $this->request->getParam('boardId'), $order);
+			$stack = $this->service->update($this->request->getParam('stackId'), $title, $this->request->getParam('boardId'), $order);
 
 			if ($stack === false || $stack === null) {
-				return new DataResponse('Stack not found', HTTP::STATUS_NOT_FOUND);
+				return new DataResponse('stack not found', HTTP::STATUS_NOT_FOUND);
 			}
 	
 			return new DataResponse($stack, HTTP::STATUS_OK);
@@ -176,7 +180,7 @@ class StackApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 *
-	 * Delete the stack specified by $this->request->params['stackId'].
+	 * Delete the stack specified by $this->request->getParam('stackId').
 	 */
 	public function delete() {
 
@@ -186,11 +190,11 @@ class StackApiController extends ApiController {
 			return new DataResponse($boardError['message'], $boardError['status']);
 		}
 
-		if (is_numeric($this->request->params['stackId']) === false) {
+		if (is_numeric($this->request->getParam('stackId')) === false) {
 			return new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
-		$stack = $this->service->delete($this->request->params['stackId']);		
+		$stack = $this->service->delete($this->request->getParam('stackId'));		
 		
 		if ($stack == false || $stack == null) {
 			return new DataResponse('Stack Not Found', HTTP::STATUS_NOT_FOUND);

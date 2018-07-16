@@ -48,7 +48,7 @@ class StackApiControllerTest extends \Test\TestCase {
 		$this->stackService = $this->createMock(StackService::class);		
 
 		$this->exampleStack['id'] = 345;
-		$this->exampleStack['boardId'] = 245;
+		$this->exampleStack['boardId'] = $this->exampleBoard['boardId'];
 		$this->exampleStack['order'] = 0;		
 
 		$this->exampleBoard['boardId'] = '89';
@@ -65,7 +65,7 @@ class StackApiControllerTest extends \Test\TestCase {
 		$stack = new Stack();
 		$stack->setId($this->exampleStack['id']);
 		$stack->setBoardId($this->exampleStack['boardId']);
-		$stack->setOrder($this->exampleStack['order']);		
+		$stack->setOrder($this->exampleStack['order']);
 		$stacks = [$stack];
 
 		$board = new Board();
@@ -107,6 +107,111 @@ class StackApiControllerTest extends \Test\TestCase {
 
 		$expected = new DataResponse('board not found', HTTP::STATUS_NOT_FOUND);
 		$actual = $this->controller->index();
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testGet() {
+		$stack = new Stack();
+		$stack->setId($this->exampleStack['id']);
+		$stack->setBoardId($this->exampleStack['boardId']);
+		$stack->setOrder($this->exampleStack['order']);
+
+		$board = new Board();
+		$board->setId($this->exampleBoard['boardId']);
+		$this->boardService->expects($this->once())
+			->method('find')
+			->willReturn($board);
+
+		$this->stackService->expects($this->once())
+			->method('find')
+			->willReturn($stack);
+
+		$this->request->expects($this->exactly(3))
+			->method('getParam')
+			->withConsecutive(
+				['boardId'],
+				['stackId'],
+				['stackId']
+			)
+			->willReturnOnConsecutiveCalls(
+				$this->returnValue($this->exampleBoard['boardId']), 
+				$this->returnValue($this->exampleStack['id']),
+				$this->returnValue($this->exampleStack['id']));		
+
+		$expected = new DataResponse($stack, HTTP::STATUS_OK);
+		$actual = $this->controller->get();
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testGetBadBoardId() {
+
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue('NOT A BOARD ID'));
+
+		$expected = new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
+		$actual = $this->controller->get();
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testGetBoardNotFound() {
+		$this->request->expects($this->any())
+			->method('getParam')
+			->with('boardId')
+			->will($this->returnValue(9251));
+
+		$expected = new DataResponse('board not found', HTTP::STATUS_NOT_FOUND);
+		$actual = $this->controller->get();
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testGetStackBadStackId() {
+
+		$board = new Board();
+		$board->setId($this->exampleBoard['boardId']);
+		$this->boardService->expects($this->once())
+			->method('find')
+			->willReturn($board);
+
+			$this->request->expects($this->exactly(2))
+			->method('getParam')
+			->withConsecutive(
+				['boardId'],
+				['stackId']				
+			)
+			->willReturnOnConsecutiveCalls(
+				$this->returnValue($this->exampleBoard['boardId']), 
+				$this->returnValue('not a stack id'),
+				$this->returnValue('not a stack id'));
+
+		$expected = new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
+		$actual = $this->controller->get();
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testGetStackNotFound() {
+
+		$board = new Board();
+		$board->setId($this->exampleBoard['boardId']);
+		$this->boardService->expects($this->once())
+			->method('find')
+			->willReturn($board);
+
+		$this->request->expects($this->exactly(3))
+			->method('getParam')
+			->withConsecutive(
+				['boardId'],
+				['stackId'],
+				['stackId']
+			)
+			->willReturnOnConsecutiveCalls(
+				$this->returnValue($this->exampleBoard['boardId']), 
+				$this->returnValue(5),
+				$this->returnValue(5));
+
+		$expected = new DataResponse('stack not found', HTTP::STATUS_NOT_FOUND);
+		$actual = $this->controller->get();
 		$this->assertEquals($expected, $actual);
 	}
 
