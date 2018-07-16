@@ -123,5 +123,52 @@ class StackApiControllerTest extends \Test\TestCase {
 		$expected = new DataResponse($stack, HTTP::STATUS_OK);
 		$actual = $this->controller->create($this->exampleStack['title'], $this->exampleStack['order']);
 		$this->assertEquals($expected, $actual);
-	}			
+	}
+
+	public function testUpdate() {
+		
+		$this->request->expects($this->exactly(2))		
+			->method('getParam')
+			->withConsecutive(
+				['stackId'],
+				['boardId']
+			)
+			->willReturnonConsecutiveCalls($this->exampleStack['id'], $this->exampleBoard['boardId']);
+
+		$stack = new Stack();
+		$stack->setId($this->exampleStack['id']);
+		$stack->setBoardId($this->exampleStack['boardId']);
+		$stack->setOrder($this->exampleStack['order']);
+		$stack->setTitle($this->exampleStack['title']);
+
+		$this->stackService->expects($this->once())
+			->method('update')
+			->willReturn($stack);
+
+		$expected = new DataResponse($stack, HTTP::STATUS_OK);
+		$actual = $this->controller->update($this->exampleStack['title'], $this->exampleStack['order']);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testDelete() {
+
+		$stack = new Stack();
+		$stack->setId($this->exampleStack['id']);
+		$stack->setBoardId($this->exampleStack['boardId']);
+		$stack->setOrder($this->exampleStack['order']);
+		$stack->setTitle($this->exampleStack['title']);
+
+		$this->request->expects($this->once())
+			->method('getParam')
+			->with('stackId')
+			->will($this->returnValue($this->exampleStack['id']));
+
+		$this->stackService->expects($this->once())
+			->method('delete')
+			->willReturn($stack);
+
+		$expected = new DataResponse($stack, HTTP::STATUS_OK);
+		$actual = $this->controller->delete();
+		$this->assertEquals($expected, $actual);
+	}
 }
