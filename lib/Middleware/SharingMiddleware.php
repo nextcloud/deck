@@ -24,6 +24,7 @@
 namespace OCA\Deck\Middleware;
 
 use OCA\Deck\StatusException;
+use OCA\Deck\BadRequestException;
 use OCP\AppFramework\Middleware;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\ILogger;
@@ -59,7 +60,7 @@ class SharingMiddleware extends Middleware {
 	 * @throws \Exception
 	 */
 	public function afterException($controller, $methodName, \Exception $exception) {
-		if ($exception instanceof StatusException) {
+		if ($exception instanceof StatusException || $exception instanceof BadRequestException) {
 			if ($this->config->getSystemValue('loglevel', Util::WARN) === Util::DEBUG) {
 				$this->logger->logException($exception);
 			}

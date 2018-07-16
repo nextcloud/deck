@@ -36,6 +36,7 @@ use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCP\IUserManager;
+use OCA\Deck\BadRequestException;
 
 
 class BoardService {
@@ -111,8 +112,14 @@ class BoardService {
 	 * @throws DoesNotExistException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
 	 */
 	public function find($boardId) {
+
+		if ( is_numeric($boardId) === false ) {
+			throw new BadRequestException('board id must be a number');
+		}
+
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		/** @var Board $board */
 		$board = $this->boardMapper->find($boardId, true, true);
@@ -201,13 +208,27 @@ class BoardService {
 	 * @param $userId
 	 * @param $color
 	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws BadRequestException
 	 */
 	public function create($title, $userId, $color) {
+
+		if ($title === false || $title === null) {
+			throw new BadRequestException('title must be provided');
+		}
+
+		if ($userId === false || $userId === null) {
+			throw new BadRequestException('userId must be provided');
+		}
+
+		if ($color === false || $color === null) {
+			throw new BadRequestException('color must be provided');
+		}
+
 		$board = new Board();
 		$board->setTitle($title);
 		$board->setOwner($userId);
 		$board->setColor($color);
-		$new_board = $this->boardMapper->insert($board);
+		$new_board = $this->boardMapper->insert($board);		
 
 		// create new labels
 		$default_labels = [
@@ -243,8 +264,14 @@ class BoardService {
 	 * @throws DoesNotExistException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
 	 */
 	public function delete($id) {
+
+		if (is_numeric($id) === false) {
+			throw new BadRequestException('board id must be a number');
+		}
+
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
 		$board->setDeletedAt(time());
@@ -260,6 +287,11 @@ class BoardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function deleteUndo($id) {
+
+		if (is_numeric($id) === false) {
+			throw new BadRequestException('board id must be a number');
+		}
+
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
 		$board->setDeletedAt(0);
@@ -288,8 +320,26 @@ class BoardService {
 	 * @throws DoesNotExistException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
 	 */
 	public function update($id, $title, $color, $archived) {
+
+		if (is_numeric($id) === false) {
+			throw new BadRequestException('board id must be a number');
+		}
+
+		if ($title === false || $title === null) {
+			throw new BadRequestException('color must be provided');
+		}
+
+		if ($color === false || $color === null) {
+			throw new BadRequestException('color must be provided');
+		}
+
+		if ( is_bool($archived) === false ) {
+			throw new BadRequestException('archived must be a boolean');
+		}
+
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
 		$board->setTitle($title);

@@ -63,7 +63,6 @@ class BoardApiController extends ApiController {
 	 */
 	public function index() {
 		$boards = $this->service->findAll();
-
 		return new DataResponse($boards, HTTP::STATUS_OK);
 	}
 
@@ -75,18 +74,8 @@ class BoardApiController extends ApiController {
 	 *
 	 * Return the board specified by $this->request->getParam('boardId').
 	 */
-	public function get() {
-
-		if (is_numeric($this->request->getParam('boardId')) === false) {
-			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
-
+	public function get() {		
 		$board = $this->service->find($this->request->getParam('boardId'));
-
-		if ($board === false || $board === null) {
-			return new DataResponse('board not found', HTTP::STATUS_NOT_FOUND);
-		}
-
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
@@ -100,22 +89,8 @@ class BoardApiController extends ApiController {
 	 *
 	 * Create a board with the specified title and color.
 	 */
-	public function create($title, $color) {
-
-		if ($title === false || $title === null) {
-			return new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		if ($color === false || $color === null) {
-			return new DataResponse('color must be provided', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		$board = $this->service->create($title, $this->userId, $color);
-
-		if ($board === false || $board === null) {
-			return new DataResponse('Internal Server Error', HTTP::STATUS_INTERNAL_SERVER_ERROR);
-		}
-
+	public function create($title, $color) {		
+		$board = $this->service->create($title, $this->userId, $color);		
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
@@ -131,29 +106,7 @@ class BoardApiController extends ApiController {
 	 * Update a board with the specified boardId, title and color, and archived state.
 	 */
 	public function update($title, $color, $archived = false) {		
-
-		if (is_numeric($this->request->getParam('boardId')) === false) {
-			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		if (is_bool($archived) === false) {
-			return new DataResponse('archived must be a boolean', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		if ($title === false || $title === null) {
-			return new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		if ($color === false || $color === null) {
-			return new DataResponse('color must be provided', HTTP::STATUS_BAD_REQUEST);
-		}
-
 		$board = $this->service->update($this->request->getParam('boardId'), $title, $color, $archived);
-
-		if ($board === false || $board === null) {
-			return new DataResponse('board not found', HTTP::STATUS_NOT_FOUND);
-		}
-
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
@@ -166,17 +119,7 @@ class BoardApiController extends ApiController {
 	 * Delete the board specified by $boardId.  Return the board that was deleted.
 	 */
 	public function delete() {
-
-		if (is_numeric($this->request->getParam('boardId')) === false) {
-			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}		
-
-		$board = $this->service->delete($this->request->getParam('boardId'));		
-
-		if ($board === false || $board === null) {
-			return new DataResponse('board not found', HTTP::STATUS_NOT_FOUND);
-		}
-
+		$board = $this->service->delete($this->request->getParam('boardId'));
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
@@ -188,18 +131,8 @@ class BoardApiController extends ApiController {
 	 *
 	 * Undo the deletion of the board specified by $boardId.
 	 */
-	public function undoDelete() {
-
-		if (is_numeric($this->request->getParam('boardId')) === false) {
-			return new DataResponse('board id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}		
-
-		$board = $this->service->deleteUndo($this->request->getParam('boardId'));
-
-		if ($board === false || $board === null) {
-			return new DataResponse('board not found', HTTP::STATUS_NOT_FOUND);
-		}
-
+	public function undoDelete() {		
+		$board = $this->service->deleteUndo($this->request->getParam('boardId'));		
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
