@@ -85,15 +85,15 @@ class StackApiController extends ApiController {
 	 * Return all of the stacks in the specified board.
 	 */
 	public function get() {		
+		if (is_numeric($this->request->getParam('stackId')) === false) {
+			return new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
+		}
+		
 		$boardError = $this->apiHelper->entityHasError($this->request->getParam('boardId'), 'board', $this->boardService);
 
 		if ($boardError) {
 			return new DataResponse($boardError['message'], $boardError['status']);
-		}
-
-		if (is_numeric($this->request->getParam('stackId')) === false) {
-			return new DataResponse('stack id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
+		}		
 
 		$stack = $this->service->find($this->request->getParam('stackId'));
 
@@ -116,22 +116,21 @@ class StackApiController extends ApiController {
 	 */
 	public function create($title, $order) {		
 
-		$boardError = $this->apiHelper->entityHasError( $this->request->getParam('boardId'), 'board', $this->boardService );
-
-		if ($boardError) {
-			return new DataResponse($boardError['message'], $boardError['status']);
+		if ($title === false || $title === null) {
+			return new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
 		}
 
 		if (is_numeric($order) === false) {
 			return new DataResponse('order must be a number', HTTP::STATUS_BAD_REQUEST);
 		}
 
-		try {
-			$stack = $this->service->create($title, $this->request->getParam('boardId'), $order);
-		} catch (StatusException $e) {
-			$errorMessage['error'] = $e->getMessage();
-			return new DataResponse($errorMessage, HTTP::STATUS_INTERNAL_SERVER_ERROR);
-		}
+		$boardError = $this->apiHelper->entityHasError( $this->request->getParam('boardId'), 'board', $this->boardService );
+
+		if ($boardError) {
+			return new DataResponse($boardError['message'], $boardError['status']);
+		}		
+		
+		$stack = $this->service->create($title, $this->request->getParam('boardId'), $order);		
 		
 		return new DataResponse($stack, HTTP::STATUS_OK);
 	}
