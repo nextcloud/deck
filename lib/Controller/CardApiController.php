@@ -67,27 +67,8 @@ class CardApiController extends ApiController {
 	 *
 	 * Get a specific card.
 	 */
-	public function get() {
-		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
-		if ($boardError) {
-			return new DataResponse($boardError['message'], $boardError['status']);
-		}
-
-		$stackError = $this->apiHelper->entityHasError($this->request->params['stackId'], 'stack', $this->stackService);		
-		if ($stackError) {
-			return new DataResponse($stackError['message'], $stackError['status']);
-		}
-
-		if (is_numeric($this->request->params['cardId']) === false) {
-			return new DataResponse('card id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		$card = $this->cardService->find($this->request->params['cardId']);
-
-		if ($card === false || $card === null) {
-			return new DataResponse('Card not found', HTTP::STATUS_NOT_FOUND);
-		}
-
+	public function get() {		
+		$card = $this->cardService->find($this->request->params['cardId']);		
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
@@ -102,32 +83,8 @@ class CardApiController extends ApiController {
 	 * 
 	 * Get a specific card.
 	 */
-	public function create($title, $type = 'plain', $order = 999) {
-
-		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
-		if ($boardError) {
-			return new DataResponse($boardError['message'], $boardError['status']);
-		}
-
-		$stackError = $this->apiHelper->entityHasError($this->request->params['stackId'], 'stack', $this->stackService);		
-		if ($stackError) {
-			return new DataResponse($stackError['message'], $stackError['status']);
-		}
-
-		if ($title === false || $title === null) {
-			return new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		if (is_numeric($order) === false) {
-			return new DataResponse('order must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		try {
-			$card = $this->cardService->create($title, $this->request->params['stackId'], $type, $order, $this->userId);
-		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), HTTP::STATUS_INTERNAL_SERVER_ERROR);
-		}
-		
+	public function create($title, $type = 'plain', $order = 999) {				
+		$card = $this->cardService->create($title, $this->request->params['stackId'], $type, $order, $this->userId);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
@@ -135,77 +92,22 @@ class CardApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 *
-	 * @params $title
-	 * @params $type
-	 * @params $order
-	 * @params $description
-	 * @params $duedate
-	 * @params $archive
-	 * @params $assignedUserId
+	 *	 
 	 * 
-	 * Get a specific card.
+	 * Update a card
 	 */
-	public function update($title, $type, $order, $description = null, $duedate = null, $archive = false, $assignedUserId = 0) {
-
-		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
-		if ($boardError) {
-			return new DataResponse($boardError['message'], $boardError['status']);
-		}
-
-		$stackError = $this->apiHelper->entityHasError($this->request->params['stackId'], 'stack', $this->stackService);		
-		if ($stackError) {
-			return new DataResponse($stackError['message'], $stackError['status']);
-		}
-
-		if (is_numeric($this->request->params['cardId']) === false) {
-			return new DataResponse('card id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}		
-
-		if ($title === false || $title === null) {
-			return new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		if (is_numeric($order) === false) {
-			return new DataResponse('order must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		if (is_bool($order) === false) {
-			return new DataResponse('archive must be a boolean', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		if (is_numeric($assignedUserId) === false) {
-			return new DataResponse('user id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		try {
-			$card = $this->cardService->update(
-				$this->request->params['cardId'],
-				$title,
-				$this->request->params['stackId'],
-				$type,
-				$order,
-				$description,
-				$this->userId,
-				$duedate);
-
-			if ($archive) {
-				$card = $this->cardService->archive($this->request->params['cardId']);
-			} else {
-				$card = $this->cardService->unarchive($this->request->params['cardId']);
-			}
-
-			if ($assignedUserId > 0) {
-				$card = $this->cardService->assignUser($this->request->params['cardId'], $assignedUserId);
-			} else {
-				$card = $this->cardService->assignUser($this->request->params['cardId'], $assignedUserId);
-			}
-
-		} catch(Exception $e) {
-			return new DataResponse($e->getMessage(), HTTP::STATUS_INTERNAL_SERVER_ERROR);
-		}
-
+	public function update($cardId, $title, $stackId, $type, $order = 0, $description = '', $owner, $duedate = null) {
+		$card = $this->cardService->update($this->request->getParam('cardId'), $title, $this->request->getParam('stackId'), $type, $order, $description, $owner, $duedate);
 		return new DataResponse($card, HTTP::STATUS_OK);
+	}
+
+	
+	public function assignUser() {
+		throw new Exception('Not Implemented');
+	}
+
+	public function unassignUser() {
+		throw new Exception('Not Implemented');
 	}
 
 	/**
@@ -216,27 +118,7 @@ class CardApiController extends ApiController {
 	 * Delete a specific card.
 	 */
 	public function delete() {
-
-		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
-		if ($boardError) {
-			return new DataResponse($boardError['message'], $boardError['status']);
-		}
-
-		$stackError = $this->apiHelper->entityHasError($this->request->params['stackId'], 'stack', $this->stackService);		
-		if ($stackError) {
-			return new DataResponse($stackError['message'], $stackError['status']);
-		}
-
-		if (is_numeric($this->request->params['cardId']) === false) {
-			return new DataResponse('card id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}		
-
-		try {
-			$card = $this->cardService->delete($this->request->params['cardId']);
-		} catch (Exception $e) {
-			return new DataResponse($e.getMessage(), HTTP::STATUS_INTERNAL_SERVER_ERROR);
-		}		
-
+		$card = $this->cardService->delete($this->request->params['cardId']);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 }
