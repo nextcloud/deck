@@ -27,8 +27,7 @@
  use OCP\AppFramework\Http;
  use OCP\AppFramework\Http\DataResponse;
  use OCP\IRequest;
-
- use OCA\Deck\Controller\Helper\ApiHelper;
+ 
  use OCA\Deck\Service\BoardService;
  use OCA\Deck\Service\StackService;
  use OCA\Deck\Service\CardService;
@@ -39,15 +38,13 @@
  * @package OCA\Deck\Controller
  */
 class CardApiController extends ApiController {
-	private $cardService;
-	private $boardService;
-	private $stackService;
+	private $cardService;		
 	private $userId;	
 
 	/**
 	 * @param string $appName
 	 * @param IRequest $request
-	 * @param CardService $service
+	 * @param CardService $cardService
 	 * @param $userId
 	 */
 	public function __construct($appName, IRequest $request, CardService $cardService, $userId) {

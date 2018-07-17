@@ -44,7 +44,7 @@ class LabelApiController extends ApiController {
 	/**
 	 * @param string $appName
 	 * @param IRequest $request
-	 * @param LabelService $service
+	 * @param LabelService $labelService
 	 * @param $userId
 	 */
 	public function __construct($appName, IRequest $request, LabelService $labelService, $userId) {
