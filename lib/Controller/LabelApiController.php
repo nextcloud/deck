@@ -47,12 +47,10 @@ class LabelApiController extends ApiController {
 	 * @param LabelService $service
 	 * @param $userId
 	 */
-	public function __construct($appName, IRequest $request, LabelService $labelService, BoardService $boardService, $userId) {
+	public function __construct($appName, IRequest $request, LabelService $labelService, $userId) {
 		parent::__construct($appName, $request);
-		$this->labelService = $labelService;
-		$this->boardService = $boardService;
-		$this->userId = $userId;
-		$this->apiHelper = new ApiHelper();
+		$this->labelService = $labelService;		
+		$this->userId = $userId;		
 	}
 	
 	/**
@@ -63,22 +61,7 @@ class LabelApiController extends ApiController {
 	 * Get a specific label.
 	 */
 	public function get() {
-
-		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
-		if ($boardError) {
-			return new DataResponse($boardError['message'], $boardError['status']);
-		}
-
-		if (is_numeric($this->request->params['labelId']) === false) {
-			return new DataResponse('label id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		$label = $this->labelService->find($this->request->params['labelId']);
-
-		if ($label === false || $label === null) {
-			return new DataResponse('Label not found', HTTP::STATUS_NOT_FOUND);
-		}
-
+		$label = $this->labelService->find($this->request->getParam('labelId'));		
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}
 
@@ -92,26 +75,7 @@ class LabelApiController extends ApiController {
 	 * Create a new label
 	 */
 	public function create($title, $color) {
-
-		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
-		if ($boardError) {
-			return new DataResponse($boardError['message'], $boardError['status']);
-		}
-
-		if ($title === false || $title === null) {
-			return new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		if ($color === false || $color === null) {
-			return new DataResponse('color must be provided', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		try {
-			$label = $this->labelService->create($title, $color, $this->request->params['boardId']);
-		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), HTTP::STATUS_INTERNAL_SERVER_ERROR);
-		}
-		
+		$label = $this->labelService->create($title, $color, $this->request->getParam('boardId'));
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}
 
@@ -124,31 +88,8 @@ class LabelApiController extends ApiController {
 	 * @params $color
 	 * Update a specific label
 	 */
-	public function update($title, $color) {
-
-		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
-		if ($boardError) {
-			return new DataResponse($boardError['message'], $boardError['status']);
-		}
-
-		if (is_numeric($this->request->params['labelId']) === false) {
-			return new DataResponse('label id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		if ($title === false || $title === null) {
-			return new DataResponse('title must be provided', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		if ($color === false || $color === null) {
-			return new DataResponse('color must be provided', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		try {
-			$label = $this->labelService->update($this->request->params['labelId'], $title, $color);
-		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), HTTP::STATUS_INTERNAL_SERVER_ERROR);
-		}
-		
+	public function update($title, $color) {				
+		$label = $this->labelService->update($this->request->getParam('labelId'), $title, $color);
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}
 
@@ -160,22 +101,7 @@ class LabelApiController extends ApiController {
 	 * Delete a specific label
 	 */
 	public function delete() {
-
-		$boardError = $this->apiHelper->entityHasError($this->request->params['boardId'], 'board', $this->boardService);
-		if ($boardError) {
-			return new DataResponse($boardError['message'], $boardError['status']);
-		}
-
-		if (is_numeric($this->request->params['labelId']) === false) {
-			return new DataResponse('label id must be a number', HTTP::STATUS_BAD_REQUEST);
-		}
-
-		try {
-			$label = $this->labelService->delete($this->request->params['labelId']);
-		} catch (Exception $e) {
-			return new DataResponse($e->getMessage(), HTTP::STATUS_INTERNAL_SERVER_ERROR);
-		}		
-
+		$label = $this->labelService->delete($this->request->getParam('labelId'));
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}
 	
