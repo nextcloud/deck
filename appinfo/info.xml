@@ -40,4 +40,8 @@
     <commands>
         <command>OCA\Deck\Command\UserExport</command>
     </commands>
+	<dashboard>
+		<widget>OCA\Deck\Widgets\DueCardsWidget</widget>
+		<widget>OCA\Deck\Widgets\ActivityWidget</widget>
+	</dashboard>
 </info>
