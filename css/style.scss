@@ -1170,6 +1170,16 @@ input.input-inline {
 	position: relative;
 }
 
+.board-detail__deleted-list__item {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+
+	* {
+		flex-basis: 20%;
+	}
+}
+
 #board-detail-labels {
 	ul li {
 		input {

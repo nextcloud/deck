@@ -27,7 +27,7 @@ class Stack extends RelationalEntity {
 
 	protected $title;
 	protected $boardId;
-	protected $deletedAt;
+	protected $deletedAt = 0;
 	protected $cards = array();
 	protected $order;
 

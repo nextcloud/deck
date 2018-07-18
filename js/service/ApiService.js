@@ -24,13 +24,25 @@ import app from '../app/App.js';
 /** global: oc_defaults */
 app.factory('ApiService', function ($http, $q) {
 	var ApiService = function (http, endpoint) {
+		// Consider renaming endpoint to resource
 		this.endpoint = endpoint;
-		this.baseUrl = OC.generateUrl('/apps/deck/' + endpoint);
+		this.baseUrl = this.generateUrl(this.endpoint);
 		this.http = http;
 		this.q = $q;
 		this.data = {};
+		this.deleted = {};
 		this.id = null;
 		this.sorted = [];
+	};
+
+	ApiService.prototype.generateUrl = function(path) {
+		return OC.generateUrl('/apps/deck/' + path);
+	};
+
+	ApiService.prototype.tryAllThenDeleted = function(id) {
+		let object = this.data[id];
+		if (object === undefined) object = this.deleted[id];
+		return object;
 	};
 
 	ApiService.prototype.fetchAll = function () {
@@ -51,11 +63,18 @@ app.factory('ApiService', function ($http, $q) {
 	ApiService.prototype.fetchDeleted = function (scopeId) {
 		var deferred = $q.defer();
 		var self = this;
-		$http.get(this.baseUrl + '/deleted/' + scopeId).then(function (response) {
-	        	var objects = response.data;
-	        	deferred.resolve(objects);
+		$http.get(this.generateUrl(scopeId + '/' + this.endpoint + '/deleted')).then(function (response) {
+			var objects = response.data;
+			objects.forEach(function (obj) {
+				self.deleted[obj.id] = obj;
+
+				if(self.afterFetch !== undefined) {
+					self.afterFetch(obj);
+				}
+			});
+			deferred.resolve(objects);
 		}, function (error) {
-	        	deferred.reject('Fetching ' + self.endpoint + ' failed');
+			deferred.reject('Fetching ' + self.endpoint + ' failed');
 		});
 		return deferred.promise;
 	};
@@ -117,6 +136,7 @@ app.factory('ApiService', function ($http, $q) {
 		var self = this;
 
 		$http.delete(this.baseUrl + '/' + id).then(function (response) {
+			self.deleted[id] = self.data[id];
 			self.remove(id);
 			deferred.resolve(response.data);
 
@@ -134,6 +154,7 @@ app.factory('ApiService', function ($http, $q) {
 
 		promise.then(function() {
 			self.data[entity.id] = entity;
+			self.remove(entity.id, 'deleted');
 		});
 
 		return promise;
@@ -156,9 +177,9 @@ app.factory('ApiService', function ($http, $q) {
 			element.status = {};
 		}
 	};
-	ApiService.prototype.remove = function (id) {
-		if (this.data[id] !== undefined) {
-			delete this.data[id];
+	ApiService.prototype.remove = function (id, collection = 'data') {
+		if (this[collection][id] !== undefined) {
+			delete this[collection][id];
 		}
 	};
 	ApiService.prototype.addAll = function (entities) {

@@ -122,28 +122,28 @@
     </div>
 
     <div id="board-detail-deleted-stacks" class="tab deletedStacksTabView" ng-if="params.tab==2">
-    	<ul>
-    	   <li ng-repeat="deletedStack in deletedStacks">
-    			<dl>
-    			  <dt>Title</dt>
-    			  <dd>{{deletedStack.title}}<dd>
-    			</dl>
-        	<a ng-click="stackUndoDelete(deletedStack)"><span class="icon icon-undo"></span><br /><span><?php p($l->t('Undo delete')); ?></span></a>
+    	<ul class='board-detail__deleted-list'>
+    	   <li class='board-detail__deleted-list__item' ng-repeat="deletedStack in stackservice.deleted">
+           <span class="icon icon-deck"></span>
+           <span>{{deletedStack.title}}</span>
+    			 <span>{{deletedStack.deletedAt}}</span>
+           <a ng-click="stackUndoDelete(deletedStack)">
+             <span class="icon icon-history"></span>
+           </a>
     	   </li>
     	</ul>
     </div>
 
     <div id="board-detail-deleted-cards" class="tab deletedCardsTabView" ng-if="params.tab==3">
-    	<ul>
-    	   <li ng-repeat="deletedCard in deletedCards">
-    			<dl>
-    			  <dt>Title</dt>
-    			  <dd>{{deletedCard.title}}<dd>
-    			  <dt>Stack</dt>
-    			  <dd>{{stackservice.data[deletedCard.stackId].title}}</dd>
-    			</dl>
-
-        	<a ng-click="cardUndoDelete(deletedCard)"><span class="icon icon-undo"></span><br /><span><?php p($l->t('Undo delete')); ?></span></a>
+    	<ul class='board-detail__deleted-list'>
+    	   <li class='board-detail__deleted-list__item' ng-repeat="deletedCard in cardservice.deleted">
+            <span class="icon icon-deck"></span>
+    			  <span>{{deletedCard.title}}</span>
+    			  <span>{{stackservice.tryAllThenDeleted(deletedCard.stackId).title}}</span>
+    			  <span>{{deletedCard.deletedAt}}</span>
+        	  <a ng-click="cardUndoDelete(deletedCard)">
+              <span class="icon icon-history"></span>
+            </a>
     	   </li>
     	</ul>
     </div>

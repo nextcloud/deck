@@ -5,20 +5,20 @@
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *  
+ *
  */
 
 return [
@@ -43,7 +43,7 @@ return [
 		['name' => 'stack#update', 'url' => '/stacks/{stackId}', 'verb' => 'PUT'],
 		['name' => 'stack#reorder', 'url' => '/stacks/{stackId}/reorder', 'verb' => 'PUT'],
 		['name' => 'stack#delete', 'url' => '/stacks/{stackId}', 'verb' => 'DELETE'],
-		['name' => 'stack#deleted', 'url' => '/stacks/deleted/{boardId}', 'verb' => 'GET'],
+		['name' => 'stack#deleted', 'url' => '/{boardId}/stacks/deleted', 'verb' => 'GET'],
 		['name' => 'stack#archived', 'url' => '/stacks/{boardId}/archived', 'verb' => 'GET'],
 
 		// cards
@@ -51,7 +51,7 @@ return [
 		['name' => 'card#create', 'url' => '/cards', 'verb' => 'POST'],
 		['name' => 'card#update', 'url' => '/cards/{cardId}', 'verb' => 'PUT'],
 		['name' => 'card#delete', 'url' => '/cards/{cardId}', 'verb' => 'DELETE'],
-		['name' => 'card#deleted', 'url' => '/cards/deleted/{boardId}', 'verb' => 'GET'],
+		['name' => 'card#deleted', 'url' => '/{boardId}/cards/deleted', 'verb' => 'GET'],
 		['name' => 'card#rename', 'url' => '/cards/{cardId}/rename', 'verb' => 'PUT'],
 		['name' => 'card#reorder', 'url' => '/cards/{cardId}/reorder', 'verb' => 'PUT'],
 		['name' => 'card#archive', 'url' => '/cards/{cardId}/archive', 'verb' => 'PUT'],
