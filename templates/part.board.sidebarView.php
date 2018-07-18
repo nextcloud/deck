@@ -5,8 +5,8 @@
         <p>{{ statusservice.text }}</p></div>
 </div>
 <div id="sidebar-header">
-    <a class="icon-close" ui-sref="board" ng-click="sidebar.show=!sidebar.show" title="<?php p($l->t('Close')); ?>"> &nbsp;<?php 
-		?><span class="hidden-visually"><?php p($l->t('Close')); ?></span><?php 
+    <a class="icon-close" ui-sref="board" ng-click="sidebar.show=!sidebar.show" title="<?php p($l->t('Close')); ?>"> &nbsp;<?php
+		?><span class="hidden-visually"><?php p($l->t('Close')); ?></span><?php
 	?></a>
     <h3>{{ boardservice.getCurrent().title }}</h3>
 </div>
@@ -122,28 +122,29 @@
     </div>
 
     <div id="board-detail-deleted-stacks" class="tab deletedStacksTabView" ng-if="params.tab==2">
-	<ul>
-	   <li ng-repeat="deletedStack in deletedStacks">
-			<dl>
-			  <dt>Title</dt>
-			  <dd>{{deletedStack.title}}<dd>
-			</dl>
-                	<a ng-click="stackUndoDelete(deletedStack)"><span class="icon icon-undo"></span><br /><span><?php p($l->t('Undo delete')); ?></span></a>
-	   </li>
-	</ul>
+    	<ul>
+    	   <li ng-repeat="deletedStack in deletedStacks">
+    			<dl>
+    			  <dt>Title</dt>
+    			  <dd>{{deletedStack.title}}<dd>
+    			</dl>
+        	<a ng-click="stackUndoDelete(deletedStack)"><span class="icon icon-undo"></span><br /><span><?php p($l->t('Undo delete')); ?></span></a>
+    	   </li>
+    	</ul>
     </div>
 
     <div id="board-detail-deleted-cards" class="tab deletedCardsTabView" ng-if="params.tab==3">
-	<ul>
-	   <li ng-repeat="deletedCard in deletedCards">
-			<dl>
-			  <dt>Title</dt>
-			  <dd>{{deletedCard.title}}<dd>
-			  <dt>Stack</dt>
-			  <dd>{{stackservice.data[deletedCard.stackId].title}}</dd>
-			</dl>
-                	<a ng-click="cardUndoDelete(deletedCard)"><span class="icon icon-undo"></span><br /><span><?php p($l->t('Undo delete')); ?></span></a>
-	   </li>
-	</ul>
+    	<ul>
+    	   <li ng-repeat="deletedCard in deletedCards">
+    			<dl>
+    			  <dt>Title</dt>
+    			  <dd>{{deletedCard.title}}<dd>
+    			  <dt>Stack</dt>
+    			  <dd>{{stackservice.data[deletedCard.stackId].title}}</dd>
+    			</dl>
+
+        	<a ng-click="cardUndoDelete(deletedCard)"><span class="icon icon-undo"></span><br /><span><?php p($l->t('Undo delete')); ?></span></a>
+    	   </li>
+    	</ul>
     </div>
 </div>

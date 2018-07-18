@@ -4,20 +4,20 @@
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *  
+ *
  */
 
 import app from '../app/App.js';
@@ -42,8 +42,8 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.board = BoardService.getCurrent();
 	$scope.uploader = FileService.uploader;
 
-	$scope.deletedCards = [];
-	$scope.deletedStacks = [];
+	$scope.deletedCards = {};
+	$scope.deletedStacks = {};
 
 	// workaround for $stateParams changes not being propagated
 	$scope.$watch(function() {
@@ -141,7 +141,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 
 	$scope.loadDeletedEntity = function(service, scopeKey) {
 		service.fetchDeleted($scope.id).then(function (data) {
-			$scope[scopeKey] = data;
+			for(i=0;i<data.length;i++) {
+				$scope[scopeKey][data[i].id] = data[i];
+			}
 		}, function (error) {
 			$scope.statusservice.setError('Error occured', error);
 		});
@@ -197,25 +199,30 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		});
 	};
 
+	$scope.stackDelete = function (stack) {
+		$scope.stackservice.delete(stack.id).then(function() {
+			$scope.deletedStacks[stack.id] = stack;
+		});
+	}
+
+	$scope.stackUndoDelete = function (deletedStack) {
+		StackService.undoDelete(deletedStack).then(function() {
+			delete $scope.deletedStacks[deletedStack.id];
+		});
+	}
+
 	$scope.cardDelete = function (card) {
 		CardService.delete(card.id).then(function () {
 			StackService.removeCard(card);
-			$scope.deletedCards.push(card);
+			$scope.deletedCards[card.id] = card;
 		});
 	};
 
 	$scope.cardUndoDelete = function (deletedCard) {
-		CardService.undoDelete(deletedCard);
-		StackService.addCard(deletedCard);
-		$scope.removeFromDeletedCards(deletedCard);
-	};
-
-	$scope.removeFromDeletedCards = function(deletedCard) {
-		for(var i=0;i<$scope.deletedCards.length;i++) {
-			if($scope.deletedCards[i].id === deletedCard.id) {
-				$scope.deletedCards.splice(i, 1);
-			}
-		}
+		CardService.undoDelete(deletedCard).then(function() {
+			StackService.addCard(deletedCard);
+			delete $scope.deletedCards[deletedCard.id];
+		});
 	};
 
 	$scope.cardArchive = function (card) {
