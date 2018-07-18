@@ -85,11 +85,10 @@ class StackService {
 		return $stacks;
 	}
 
-		public function fetchDeleted($boardId) {
+	public function fetchDeleted($boardId) {
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
-			return $this->stackMapper->findDeleted($boardId);
-		}
-
+		return $this->stackMapper->findDeleted($boardId);
+	}
 
 	public function findAllArchived($boardId) {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
@@ -134,7 +133,7 @@ class StackService {
 	}
 
 
-	public function update($id, $title, $boardId, $order) {
+	public function update($id, $title, $boardId, $order, $deletedAt) {
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
 		if ($this->boardService->isArchived($this->stackMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
@@ -143,6 +142,7 @@ class StackService {
 		$stack->setTitle($title);
 		$stack->setBoardId($boardId);
 		$stack->setOrder($order);
+		$stack->setDeletedAt($deletedAt);
 		return $this->stackMapper->update($stack);
 	}
 
