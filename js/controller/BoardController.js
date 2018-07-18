@@ -215,7 +215,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	}
 
 	$scope.stackUndoDelete = function (deletedStack) {
-		StackService.undoDelete(deletedStack).then(function() {
+		return StackService.undoDelete(deletedStack).then(function() {
 			delete $scope.deletedStacks[deletedStack.id];
 		});
 	}
@@ -229,8 +229,24 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 
 	$scope.cardUndoDelete = function (deletedCard) {
 		CardService.undoDelete(deletedCard).then(function() {
-			StackService.addCard(deletedCard);
 			delete $scope.deletedCards[deletedCard.id];
+
+			var associatedDeletedStack = $scope.deletedStacks[deletedCard.stackId];
+			if(associatedDeletedStack !== undefined) {
+				OC.dialogs.confirm(
+					t('deck', 'The associated stack is deleted as well, do you want to restore it as well?'),
+					t('deck', 'Yes'),
+					function(state) {
+
+					if (state) {
+						$scope.stackUndoDelete(associatedDeletedStack).then(function() {
+							StackService.addCard(deletedCard);
+						});
+					}
+				});
+			} else {
+				StackService.addCard(deletedCard);
+			}
 		});
 	};
 
