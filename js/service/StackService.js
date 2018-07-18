@@ -28,6 +28,10 @@ app.factory('StackService', function (ApiService, CardService, $http, $q) {
 	};
 	StackService.prototype = angular.copy(ApiService.prototype);
 
+	StackService.prototype.afterFetch = function(stack) {
+		CardService.addAll(stack.cards);
+	}
+
 	StackService.prototype.fetchAll = function (boardId) {
 		var deferred = $q.defer();
 		var self = this;

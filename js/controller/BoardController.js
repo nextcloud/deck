@@ -200,10 +200,8 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 
 	$scope.stackUndoDelete = function (deletedStack) {
-		return StackService.undoDelete(deletedStack).then(function() {
-			console.log(deletedStack);
-		});
-	};
+		return StackService.undoDelete(deletedStack);
+	}
 
 	$scope.cardDelete = function (card) {
 		CardService.delete(card.id).then(function () {

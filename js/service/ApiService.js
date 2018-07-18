@@ -56,6 +56,10 @@ app.factory('ApiService', function ($http, $q) {
 	        	var objects = response.data;
 						objects.forEach(function (obj) {
 							self.deleted[obj.id] = obj;
+
+							if(self.afterFetch !== undefined) {
+								self.afterFetch(obj);
+							}
 						});
 	        	deferred.resolve(objects);
 		}, function (error) {

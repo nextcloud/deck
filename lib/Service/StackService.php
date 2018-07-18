@@ -5,20 +5,20 @@
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *  
+ *
  */
 
 namespace OCA\Deck\Service;
@@ -66,28 +66,38 @@ class StackService {
 		$this->attachmentService = $attachmentService;
 	}
 
+	private function enrichStackWithCards($stack) {
+		$cards = $this->cardMapper->findAll($stack->id);
+		foreach ($cards as $cardIndex => $card) {
+			$assignedUsers = $this->assignedUsersMapper->find($card->getId());
+			$card->setAssignedUsers($assignedUsers);
+			if (array_key_exists($card->id, $labels)) {
+				$cards[$cardIndex]->setLabels($labels[$card->id]);
+			}
+			$card->setAttachmentCount($this->attachmentService->count($card->getId()));
+		}
+		$stack->setCards($cards);
+	}
+
+	private function enrichStacksWithCards($stacks) {
+		foreach ($stacks as $stackIndex => $stack) {
+			$this->enrichStackWithCards($stack);
+		}
+	}
+
 	public function findAll($boardId) {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
 		$stacks = $this->stackMapper->findAll($boardId);
 		$labels = $this->labelMapper->getAssignedLabelsForBoard($boardId);
-		foreach ($stacks as $stackIndex => $stack) {
-			$cards = $this->cardMapper->findAll($stack->id);
-			foreach ($cards as $cardIndex => $card) {
-				$assignedUsers = $this->assignedUsersMapper->find($card->getId());
-				$card->setAssignedUsers($assignedUsers);
-				if (array_key_exists($card->id, $labels)) {
-					$cards[$cardIndex]->setLabels($labels[$card->id]);
-				}
-				$card->setAttachmentCount($this->attachmentService->count($card->getId()));
-			}
-			$stacks[$stackIndex]->setCards($cards);
-		}
+		$this->enrichStacksWithCards($stacks);
 		return $stacks;
 	}
 
 	public function fetchDeleted($boardId) {
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
-		return $this->stackMapper->findDeleted($boardId);
+		$stacks = $this->stackMapper->findDeleted($boardId);
+		$this->enrichStacksWithCards($stacks);
+		return $stacks;
 	}
 
 	public function findAllArchived($boardId) {
@@ -129,6 +139,8 @@ class StackService {
 		$stack->setDeletedAt(time());
 		$this->stackMapper->update($stack);
 
+		$this->enrichStackWithCards($stack);
+		
 		return $stack;
 	}
 
