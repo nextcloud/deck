@@ -123,7 +123,7 @@
 
     <div id="board-detail-deleted-stacks" class="tab deletedStacksTabView" ng-if="params.tab==2">
     	<ul>
-    	   <li ng-repeat="deletedStack in deletedStacks">
+    	   <li ng-repeat="deletedStack in stackservice.deleted">
     			<dl>
     			  <dt>Title</dt>
     			  <dd>{{deletedStack.title}}<dd>
@@ -135,7 +135,7 @@
 
     <div id="board-detail-deleted-cards" class="tab deletedCardsTabView" ng-if="params.tab==3">
     	<ul>
-    	   <li ng-repeat="deletedCard in deletedCards">
+    	   <li ng-repeat="deletedCard in cardservice.deleted">
     			<dl>
     			  <dt>Title</dt>
     			  <dd>{{deletedCard.title}}<dd>

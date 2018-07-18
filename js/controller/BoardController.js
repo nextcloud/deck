@@ -42,15 +42,12 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.board = BoardService.getCurrent();
 	$scope.uploader = FileService.uploader;
 
-	$scope.deletedCards = {};
-	$scope.deletedStacks = {};
-
 	$scope.$watch(function() {
 		return $state.current;
 	}, function(currentState) {
 		if(currentState.name === 'board.detail') {
-			$scope.loadDeletedEntity(CardService, 'deletedCards');
-			$scope.loadDeletedEntity(StackService, 'deletedStacks');
+			CardService.fetchDeleted($scope.id);
+			StackService.fetchDeleted($scope.id);
 		}
 	});
 
@@ -148,16 +145,6 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		});
 	};
 
-	$scope.loadDeletedEntity = function(service, scopeKey) {
-		service.fetchDeleted($scope.id).then(function (data) {
-			for(i=0;i<data.length;i++) {
-				$scope[scopeKey][data[i].id] = data[i];
-			}
-		}, function (error) {
-			$scope.statusservice.setError('Error occured', error);
-		});
-	};
-
 	$scope.loadDefault = function () {
 		StackService.fetchAll($scope.id).then(function (data) {
 			$scope.statusservice.releaseWaiting();
@@ -209,29 +196,24 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 
 	$scope.stackDelete = function (stack) {
-		$scope.stackservice.delete(stack.id).then(function() {
-			$scope.deletedStacks[stack.id] = stack;
-		});
-	}
+		$scope.stackservice.delete(stack.id);
+	};
 
 	$scope.stackUndoDelete = function (deletedStack) {
 		return StackService.undoDelete(deletedStack).then(function() {
-			delete $scope.deletedStacks[deletedStack.id];
+			console.log(deletedStack);
 		});
-	}
+	};
 
 	$scope.cardDelete = function (card) {
 		CardService.delete(card.id).then(function () {
 			StackService.removeCard(card);
-			$scope.deletedCards[card.id] = card;
 		});
 	};
 
 	$scope.cardUndoDelete = function (deletedCard) {
 		CardService.undoDelete(deletedCard).then(function() {
-			delete $scope.deletedCards[deletedCard.id];
-
-			var associatedDeletedStack = $scope.deletedStacks[deletedCard.stackId];
+			var associatedDeletedStack = $scope.stackservice.deleted[deletedCard.stackId];
 			if(associatedDeletedStack !== undefined) {
 				OC.dialogs.confirm(
 					t('deck', 'The associated stack is deleted as well, do you want to restore it as well?'),

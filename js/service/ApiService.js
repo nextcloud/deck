@@ -29,6 +29,7 @@ app.factory('ApiService', function ($http, $q) {
 		this.http = http;
 		this.q = $q;
 		this.data = {};
+		this.deleted = {};
 		this.id = null;
 		this.sorted = [];
 	};
@@ -53,6 +54,9 @@ app.factory('ApiService', function ($http, $q) {
 		var self = this;
 		$http.get(this.baseUrl + '/deleted/' + scopeId).then(function (response) {
 	        	var objects = response.data;
+						objects.forEach(function (obj) {
+							self.deleted[obj.id] = obj;
+						});
 	        	deferred.resolve(objects);
 		}, function (error) {
 	        	deferred.reject('Fetching ' + self.endpoint + ' failed');
@@ -117,6 +121,7 @@ app.factory('ApiService', function ($http, $q) {
 		var self = this;
 
 		$http.delete(this.baseUrl + '/' + id).then(function (response) {
+			self.deleted[id] = self.data[id];
 			self.remove(id);
 			deferred.resolve(response.data);
 
@@ -134,6 +139,7 @@ app.factory('ApiService', function ($http, $q) {
 
 		promise.then(function() {
 			self.data[entity.id] = entity;
+			self.remove(entity.id, 'deleted');
 		});
 
 		return promise;
@@ -156,9 +162,9 @@ app.factory('ApiService', function ($http, $q) {
 			element.status = {};
 		}
 	};
-	ApiService.prototype.remove = function (id) {
-		if (this.data[id] !== undefined) {
-			delete this.data[id];
+	ApiService.prototype.remove = function (id, collection = 'data') {
+		if (this[collection][id] !== undefined) {
+			delete this[collection][id];
 		}
 	};
 	ApiService.prototype.addAll = function (entities) {
