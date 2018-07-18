@@ -48,6 +48,19 @@ app.factory('ApiService', function ($http, $q) {
 		return deferred.promise;
 	};
 
+	ApiService.prototype.fetchDeleted = function (scopeId) {
+		var deferred = $q.defer();
+		var self = this;
+		$http.get(this.baseUrl + '/deleted/' + scopeId).then(function (response) {
+	        	var objects = response.data;
+	        	deferred.resolve(objects);
+		}, function (error) {
+	        	deferred.reject('Fetching ' + self.endpoint + ' failed');
+		});
+		return deferred.promise;
+	};
+
+
 	ApiService.prototype.fetchOne = function (id) {
 
 		this.id = id;

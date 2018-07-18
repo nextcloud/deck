@@ -43,6 +43,7 @@ return [
 		['name' => 'stack#update', 'url' => '/stacks/{stackId}', 'verb' => 'PUT'],
 		['name' => 'stack#reorder', 'url' => '/stacks/{stackId}/reorder', 'verb' => 'PUT'],
 		['name' => 'stack#delete', 'url' => '/stacks/{stackId}', 'verb' => 'DELETE'],
+		['name' => 'stack#deleted', 'url' => '/stacks/deleted/{boardId}', 'verb' => 'GET'],
 		['name' => 'stack#archived', 'url' => '/stacks/{boardId}/archived', 'verb' => 'GET'],
 
 		// cards

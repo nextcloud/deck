@@ -98,4 +98,14 @@ class StackController extends Controller {
 	public function delete($stackId) {
 		return $this->stackService->delete($stackId);
 	}
+
+	/**
+	 * @NoAdminRequired
+	 * @param $boardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
+	public function deleted($boardId) {
+		return $this->stackService->fetchDeleted($boardId);
+	}
+
 }

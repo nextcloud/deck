@@ -25,6 +25,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Stack;
@@ -38,6 +39,7 @@ class StackService {
 
 	private $stackMapper;
 	private $cardMapper;
+	private $boardMapper;
 	private $labelMapper;
 	private $permissionService;
 	private $boardService;
@@ -46,6 +48,7 @@ class StackService {
 
 	public function __construct(
 		StackMapper $stackMapper,
+		BoardMapper $boardMapper,
 		CardMapper $cardMapper,
 		LabelMapper $labelMapper,
 		PermissionService $permissionService,
@@ -54,6 +57,7 @@ class StackService {
 		AttachmentService $attachmentService
 	) {
 		$this->stackMapper = $stackMapper;
+		$this->boardMapper = $boardMapper;
 		$this->cardMapper = $cardMapper;
 		$this->labelMapper = $labelMapper;
 		$this->permissionService = $permissionService;
@@ -80,6 +84,12 @@ class StackService {
 		}
 		return $stacks;
 	}
+
+		public function fetchDeleted($boardId) {
+		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
+			return $this->stackMapper->findDeleted($boardId);
+		}
+
 
 	public function findAllArchived($boardId) {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
@@ -115,8 +125,14 @@ class StackService {
 
 	public function delete($id) {
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
-		return $this->stackMapper->delete($this->stackMapper->find($id));
+
+		$stack = $this->stackMapper->find($id);
+		$stack->setDeletedAt(time());
+		$this->stackMapper->update($stack);
+
+		return $stack;
 	}
+
 
 	public function update($id, $title, $boardId, $order) {
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);

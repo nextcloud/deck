@@ -20,6 +20,7 @@
  *  
  */
 import app from '../app/App.js';
+import {fetchDeleted} from './fetchDeleted.js';
 
 /* global app angular */
 app.factory('StackService', function (ApiService, CardService, $http, $q) {
@@ -27,6 +28,7 @@ app.factory('StackService', function (ApiService, CardService, $http, $q) {
 		ApiService.call(this, $http, ep, $q);
 	};
 	StackService.prototype = angular.copy(ApiService.prototype);
+
 	StackService.prototype.fetchAll = function (boardId) {
 		var deferred = $q.defer();
 		var self = this;
