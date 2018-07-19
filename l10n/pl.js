@@ -52,6 +52,7 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Cofnij usunięcie tablicy - w innym przypadku tablica zostanie usunięta przy kolejnym wykonaniu zadania cron.",
     "Create new board" : "Utwórz nową tablicę",
     "New board title" : "Tytuł nowej tablicy",
+    "Cancel upload" : "Anuluj wysyłanie",
     "by" : "przez",
     "Modified:" : "Zmodyfikowano:",
     "Created:" : "Utworzono:",
