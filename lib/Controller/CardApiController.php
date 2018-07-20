@@ -105,4 +105,57 @@ class CardApiController extends ApiController {
 		$card = $this->cardService->delete($this->request->getParam('cardId'));
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired	 	 
+	 * 
+	 * Assign a label to a card.
+	 */
+	public function assignLabel($labelId) {
+		$card = $this->cardService->assignLabel($this->request->getParam('cardId'), $labelId);
+		return new DataResponse($card, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired	 	 
+	 * 
+	 * Assign a label to a card.
+	 */
+	public function removeLabel($labelId) {
+		$card = $this->cardService->removeLabel($this->request->getParam('cardId'), $labelId);
+		return new DataResponse($card, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired	 	 
+	 * 
+	 * Unassign a label to a card.
+	 */
+	public function unassignUser($userId) {
+		$card = $this->cardService->unassignUser($this->request->getParam('cardId'), $userId);
+		return new DataResponse($card, HTTP::STATUS_OK);
+	}
+
+	public function assignUser($userId) {
+		$card = $this->cardService->assignUser($this->request->getParam('cardId'), $userId);;
+		return new DataResponse($card, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired	 	 
+	 * 
+	 * Unassign a label to a card.
+	 */
+	public function reorder($stackId, $order) {
+		$card = $this->cardService->reorder($this->request->getParam('cardId'), $stackId, $order);
+		return new DataResponse($card, HTTP::STATUS_OK);
+	}
 }
