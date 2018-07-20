@@ -60,7 +60,7 @@ class SharingMiddleware extends Middleware {
 	 * @throws \Exception
 	 */
 	public function afterException($controller, $methodName, \Exception $exception) {
-		if ($exception instanceof StatusException || $exception instanceof BadRequestException) {
+		if ($exception instanceof StatusException) {
 			if ($this->config->getSystemValue('loglevel', Util::WARN) === Util::DEBUG) {
 				$this->logger->logException($exception);
 			}

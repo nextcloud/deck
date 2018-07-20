@@ -24,7 +24,7 @@
 namespace OCA\Deck;
 
 use OCP\AppFramework\Http;
-class BadRequestException extends \Exception {
+class BadRequestException extends StatusException {
 
 	public function __construct($message) {
 		parent::__construct($message);

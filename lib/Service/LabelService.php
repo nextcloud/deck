@@ -27,6 +27,7 @@ use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\StatusException;
+use OCA\Deck\BadRequestException;
 
 
 class LabelService {
@@ -50,8 +51,12 @@ class LabelService {
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
 	 */
 	public function find($labelId) {
+		if (is_numeric($labelId) === false) {
+			throw new BadRequestException('label id must be a number');
+		}
 		$this->permissionService->checkPermission($this->labelMapper, $labelId, Acl::PERMISSION_READ);
 		return $this->labelMapper->find($labelId);
 	}
@@ -67,6 +72,19 @@ class LabelService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function create($title, $color, $boardId) {
+
+		if ($title === false || $title === null) {
+			throw new BadRequestException('title must be provided');
+		}
+
+		if ($color === false || $color === null) {
+			throw new BadRequestException('color must be provided');
+		}
+
+		if (is_numeric($boardId) === false) {
+			throw new BadRequestException('board id must be a number');
+		}
+
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
 		if ($this->boardService->isArchived(null, $boardId)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
@@ -87,6 +105,11 @@ class LabelService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function delete($id) {
+
+		if (is_numeric($id) === false) {
+			throw new BadRequestException('label id must be a number');
+		}
+
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
 		if ($this->boardService->isArchived($this->labelMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
@@ -105,6 +128,19 @@ class LabelService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function update($id, $title, $color) {
+
+		if (is_numeric($id) === false) {
+			throw new BadRequestException('label id must be a number');
+		}
+
+		if ($title === false || $title === null) {
+			throw new BadRequestException('title must be provided');
+		}
+
+		if ($color === false || $color === null) {
+			throw new BadRequestException('color must be provided');
+		}
+
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
 		if ($this->boardService->isArchived($this->labelMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
