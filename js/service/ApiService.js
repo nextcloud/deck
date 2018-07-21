@@ -53,17 +53,17 @@ app.factory('ApiService', function ($http, $q) {
 		var deferred = $q.defer();
 		var self = this;
 		$http.get(this.baseUrl + '/deleted/' + scopeId).then(function (response) {
-	        	var objects = response.data;
-						objects.forEach(function (obj) {
-							self.deleted[obj.id] = obj;
+			var objects = response.data;
+			objects.forEach(function (obj) {
+				self.deleted[obj.id] = obj;
 
-							if(self.afterFetch !== undefined) {
-								self.afterFetch(obj);
-							}
-						});
-	        	deferred.resolve(objects);
+				if(self.afterFetch !== undefined) {
+					self.afterFetch(obj);
+				}
+			});
+			deferred.resolve(objects);
 		}, function (error) {
-	        	deferred.reject('Fetching ' + self.endpoint + ' failed');
+			deferred.reject('Fetching ' + self.endpoint + ' failed');
 		});
 		return deferred.promise;
 	};
