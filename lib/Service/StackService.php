@@ -141,8 +141,14 @@ class StackService {
 	 * @param $boardId
 	 * @return array
 	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws BadRequestException
 	 */
 	public function findAllArchived($boardId) {
+
+		if (is_numeric($boardId) === false) {
+			throw new BadRequestException('board id must be a number');
+		}
+
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
 		$stacks = $this->stackMapper->findAll($boardId);
 		$labels = $this->labelMapper->getAssignedLabelsForBoard($boardId);

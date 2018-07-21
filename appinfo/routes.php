@@ -86,6 +86,7 @@ return [
 		['name' => 'board_api#undo_delete', 'url' => '/api/v1.0/boards/{boardId}/undo_delete', 'verb' => 'POST'],
 		
 		['name' => 'stack_api#index', 'url' => '/api/v1.0/boards/{boardId}/stacks', 'verb' => 'GET'],
+		['name' => 'stack_api#getArchived', 'url' => '/api/v1.0/boards/{boardId}/stacks/archived', 'verb' => 'GET'],
 		['name' => 'stack_api#get', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}', 'verb' => 'GET'],
 		['name' => 'stack_api#create', 'url' => '/api/v1.0/boards/{boardId}/stacks', 'verb' => 'POST'],
 		['name' => 'stack_api#update', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}', 'verb' => 'PUT'],
@@ -94,6 +95,11 @@ return [
 		['name' => 'card_api#get', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'GET'],
 		['name' => 'card_api#create', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards', 'verb' => 'POST'],
 		['name' => 'card_api#update', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'PUT'],
+		['name' => 'card_api#assignLabel', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignLabel', 'verb' => 'PUT'],
+		['name' => 'card_api#removeLabel', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/removeLabel', 'verb' => 'PUT'],
+		['name' => 'card_api#assignUser', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser', 'verb' => 'PUT'],
+		['name' => 'card_api#unassignUser', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser', 'verb' => 'PUT'],
+		['name' => 'card_api#reorder', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder', 'verb' => 'PUT'],
 		['name' => 'card_api#delete', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'DELETE'],
 
 		['name' => 'label_api#get', 'url' => '/api/v1.0/boards/{boardId}/labels/{labelId}', 'verb' => 'GET'],

@@ -119,4 +119,16 @@ class StackApiController extends ApiController {
 		$stack = $this->stackService->delete($this->request->getParam('stackId'));
 		return new DataResponse($stack, HTTP::STATUS_OK);
 	}
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * get the stacks that have been archived.
+	 */
+	public function getArchived() {
+		$stacks = $this->stackService->findAllArchived($this->request->getParam('boardId'));
+		return new DataResponse($stacks, HTTP::STATUS_OK);
+	}
 }
