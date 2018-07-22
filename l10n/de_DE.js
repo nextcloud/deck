@@ -10,6 +10,7 @@ OC.L10N.register(
     "Are you sure you want to delete the stack with all of its data?" : "Möchten Sie diesen Stapel mit allen Daten wirklich löschen?",
     "Personal" : "Persönlich",
     "The card \"%s\" on \"%s\" has reached its due date." : "Die Karte \"%s\" auf \"%s\" ist überfällig.",
+    "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Die Karte \"%s\" wurde Ihnen auf \"%s\" von %s zugewiesen.",
     "The board \"%s\" has been shared with you by %s." : "Das Board \"%s\" wurde von %s mit Ihnen geteilt.",
     "{user} has shared the board %s with you." : "{user} hat das Board %s mit Ihnen geteilt.",
     "No data was provided to create an attachment." : "Es wurde keine Daten zum Erstellen eines Anhangs bereitgestellt.",
