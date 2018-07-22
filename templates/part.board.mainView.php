@@ -53,7 +53,7 @@
 				</form>
 				<button class="icon-delete button-inline stack-actions"
 						ng-if="!s.status.editStack"
-                        ng-click="stackservice.delete(s.id)"></button>
+						ng-click="stackservice.delete(s.id)"></button>
 			</h3>
 			<ul data-as-sortable="sortOptions" is-disabled="!boardservice.canEdit() || filter==='archive'" data-ng-model="s.cards" class="card-list" ng-class="{emptyStack: !s.cards.length}">
 				<li class="card as-sortable-item"
@@ -101,6 +101,18 @@
 								<button class="button-inline card-options icon-more" ng-model="card"></button>
 								<div class="popovermenu hidden">
 									<ul>
+										<li ng-if="!isCurrentUserAssigned(c)">
+											<a class="menuitem action action-rename permanent"
+											   data-action="AssignToMe"
+											   ng-click="cardAssignToMe(c); $event.stopPropagation();"><span
+														class="icon icon-user"></span><span><?php p($l->t('Assign to me')); ?></span></a>
+										</li>
+										<li ng-if="isCurrentUserAssigned(c)">
+											<a class="menuitem action action-rename permanent"
+											   data-action="UnassignFromMe"
+											   ng-click="cardUnassignFromMe(c); $event.stopPropagation();"><span
+														class="icon icon-user"></span><span><?php p($l->t('Unassign from me')); ?></span></a>
+										</li>
 										<li ng-if="params.filter!=='archive'">
 											<a class="menuitem action action-rename permanent"
 											   data-action="Archive"
