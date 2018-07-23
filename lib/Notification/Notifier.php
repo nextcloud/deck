@@ -78,10 +78,22 @@ class Notifier implements INotifier {
 				$boardId = $this->cardMapper->findBoardId($cardId);
 				$initiator = $this->userManager->get($params[2]);
 				if ($initiator !== null) {
-					$params[2] = $initiator->getDisplayName();
+					$dn = $initiator->getDisplayName();
+				} else {
+					$dn = $params[2];
 				}
 				$notification->setParsedSubject(
-					(string) $l->t('The card "%s" on "%s" has been assigned to you by %s.', $params)
+					(string) $l->t('The card "%s" on "%s" has been assigned to you by %s.', [$params[0], $params[1], $dn])
+				);
+				$notification->setRichSubject(
+					(string) $l->t('{user} has assigned the card "%s" on "%s" to you.', [$params[0], $params[1]]),
+					[
+						'user' => [
+							'type' => 'user',
+							'id' => $params[2],
+							'name' => $dn,
+						]
+					]
 				);
 				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#!/board/' . $boardId . '//card/' . $cardId . '');
 				break;
