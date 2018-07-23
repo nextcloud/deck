@@ -9,7 +9,6 @@
     "Personal" : "Persönlich",
     "The card \"%s\" on \"%s\" has reached its due date." : "Die Karte \"%s\" auf \"%s\" ist überfällig.",
     "The board \"%s\" has been shared with you by %s." : "Das Board \"%s\" wurde von %s mit Ihnen geteilt.",
-    "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Die Karte \"%s\" wurde Ihnen auf \"%s\" von %s zugewiesen.",
     "{user} has shared the board %s with you." : "{user} hat das Board %s mit Ihnen geteilt.",
     "No data was provided to create an attachment." : "Es wurde keine Daten zum Erstellen eines Anhangs bereitgestellt.",
     "Finished" : "Abgeschlossen",
