@@ -47,7 +47,8 @@ class AttachmentApiControllerTest extends \Test\TestCase {
         $this->attachmentService = $this->createMock(AttachmentService::class);
         $this->controller = new AttachmentApiController(
             $this->appName,
-            $this->request
+            $this->request,
+            $this->attachmentService
         );
     }
 
@@ -64,7 +65,7 @@ class AttachmentApiControllerTest extends \Test\TestCase {
             ->with('cardId')
             ->willReturn($allAttachments);
 
-        $expected = new DataResponse($this->attachmentExample, HTTP::STATUS_OK);
+        $expected = new DataResponse($allAttachments, HTTP::STATUS_OK);
         $actual = $this->controller->getAll();
         $this->assertEquals($expected, $actual);
     }
@@ -91,6 +92,9 @@ class AttachmentApiControllerTest extends \Test\TestCase {
 
     public function testCreate() {
 
+        $type = 'not null';
+        $data = ['not null'];
+
         $this->attachmentService->expects($this->once())
             ->method('create')
             ->willReturn($this->attachmentExample);
@@ -101,11 +105,14 @@ class AttachmentApiControllerTest extends \Test\TestCase {
             ->willReturn($this->cardId);
 
         $expected = new DataResponse($this->attachmentExample, HTTP::STATUS_OK);
-        $actual = $this->controller->create();
+        $actual = $this->controller->create($type, $data);
         $this->assertEquals($expected, $actual);
     }
 
     public function testUpdate() {
+
+        // FIXME: what is data supposed to be in this context?        
+        $data = ['not empty data'];
 
         $this->attachmentService->expects($this->once())
             ->method('update')
@@ -121,7 +128,7 @@ class AttachmentApiControllerTest extends \Test\TestCase {
                 $this->attachmentExample->getId());
 
         $expected = new DataResponse($this->attachmentExample, HTTP::STATUS_OK);
-        $actual = $this->controller->update();
+        $actual = $this->controller->update($data);
         $this->assertEquals($expected, $actual);
     }
 

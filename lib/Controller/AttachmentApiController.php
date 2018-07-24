@@ -27,20 +27,80 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
+use OCA\Deck\Service\AttachmentService;
+
 class AttachmentApiController extends ApiController {
-    public function __construct($appName, IRequest $request) {
+
+    private $attachmentService;
+
+    public function __construct($appName, IRequest $request, AttachmentService $attachmentService) {
         parent::__construct($appName, $request);
+        $this->attachmentService = $attachmentService;
     }
 
-    public function getAll() {}
+    /**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 */
+    public function getAll() {
+        $attachment = $this->attachmentService->findAll($this->request->getParam('cardId'));
+        return new DataResponse($attachment, HTTP::STATUS_OK);
+    }
 
-    public function display() {}
+    /**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 */
+    public function display() {
+        $attachment = $this->attachmentService->display($this->request->getParam('cardId'), $this->request->getParam('attachmentId'));
+        return new DataResponse($attachment, HTTP::STATUS_OK);
+    }
 
-    public function create() {}
+    /**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 */
+    public function create($type, $data) {
+        $attachment = $this->attachmentService->create($this->request->getParam('cardId'), $type, $data);
+        return new DataResponse($attachment, HTTP::STATUS_OK);
+    }
 
-    public function update() {}
+    /**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 */
+    public function update($data) {
+        $attachment = $this->attachmentService->update($this->request->getParam('cardId'), $this->request->getParam('attachmentId'), $data);
+        return new DataResponse($attachment, HTTP::STATUS_OK);
+    }
 
-    public function delete() {}
+    /**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 */
+    public function delete() {
+        $attachment = $this->attachmentService->delete($this->request->getParam('cardId'), $this->request->getParam('attachmentId'));
+        return new DataResponse($attachment, HTTP::STATUS_OK);
+    }
 
-    public function restore() {}
+    /**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 */
+    public function restore() {
+        $attachment = $this->attachmentService->restore($this->request->getParam('cardId'), $this->request->getParam('attachmentId'));
+        return new DataResponse($attachment, HTTP::STATUS_OK);
+    }
 }

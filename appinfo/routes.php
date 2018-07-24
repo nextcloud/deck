@@ -107,6 +107,13 @@ return [
 		['name' => 'label_api#update', 'url' => '/api/v1.0/boards/{boardId}/labels/{labelId}', 'verb' => 'PUT'],
 		['name' => 'label_api#delete', 'url' => '/api/v1.0/boards/{boardId}/labels/{labelId}', 'verb' => 'DELETE'],
 
+		['name' => 'attachment_api#getAll', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments', 'verb' => 'GET'],
+		['name' => 'attachment_api#display', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'GET'],
+		['name' => 'attachment_api#create', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments', 'verb' => 'POST'],
+		['name' => 'attachment_api#update', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'PUT'],
+		['name' => 'attachment_api#delete', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'DELETE'],
+		['name' => 'attachment_api#restore', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore', 'verb' => 'PUT'],
+
 		['name' => 'board_api#preflighted_cors', 'url' => '/api/v1.0/{path}','verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
 	]
 ];
