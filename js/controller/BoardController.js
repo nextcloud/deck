@@ -210,30 +210,43 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 
 	$scope.cardUndoDelete = function (deletedCard) {
-		CardService.undoDelete(deletedCard).then(function() {
-			var associatedDeletedStack = $scope.stackservice.deleted[deletedCard.stackId];
-			if(associatedDeletedStack !== undefined) {
-				OC.dialogs.confirm(
-					t('deck', 'The associated stack is deleted as well, do you want to restore it as well?'),
-					t('deck', 'Yes'),
-					function(state) {
-
-					if (state) {
-						$scope.stackUndoDelete(associatedDeletedStack).then(function() {
-							StackService.addCard(deletedCard);
-						});
-					}
-				});
-			} else {
-				StackService.addCard(deletedCard);
-			}
-		});
+		var associatedDeletedStack = $scope.stackservice.deleted[deletedCard.stackId];
+		if(associatedDeletedStack !== undefined) {
+			$scope.cardAndStackUndoDelete(deletedCard, associatedDeletedStack);
+		} else {
+			$scope._cardUndoDelete(deletedCard);
+		}
 	};
+
+	$scope.cardAndStackUndoDelete = function(deletedCard, associatedDeletedStack) {
+		OC.dialogs.confirm(
+			t('deck', 'The associated stack is deleted as well, it will be restored as well.'),
+			t('deck', 'Restore associated stack'),
+			function(state) {
+				if (state) {
+					$scope._cardAndStackUndoDelete(deletedCard, associatedDeletedStack);
+				}
+			}
+		);
+	}
+
+	$scope._cardAndStackUndoDelete = function(deletedCard, associatedDeletedStack) {
+		$scope.stackUndoDelete(associatedDeletedStack).then(function() {
+			$scope._cardUndoDelete(deletedCard);
+		});
+	}
+
+	$scope._cardUndoDelete = function(deletedCard) {
+		CardService.undoDelete(deletedCard).then(function() {
+			StackService.addCard(deletedCard);
+		});
+	}
 
 	$scope.cardArchive = function (card) {
 		CardService.archive(card);
 		StackService.removeCard(card);
 	};
+
 	$scope.cardUnarchive = function (card) {
 		CardService.unarchive(card);
 		StackService.removeCard(card);
