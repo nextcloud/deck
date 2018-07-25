@@ -1,0 +1,29 @@
+#content-wrapper #content {
+	height: 100%;
+}
+#app-content {
+	flex-grow: 1;
+	height: 100%;
+}
+
+#app-sidebar {
+	right: -500px;
+	max-width: 100%;
+	width: 500px;
+	display:flex;
+	flex-direction: column;
+
+	&.details-visible {
+		right: 0;
+	}
+}
+
+#app-content {
+	&.details-visible {
+		margin-right: 500px;
+	}
+}
+
+#content[class*='app-'] * {
+	box-sizing: border-box;
+}
