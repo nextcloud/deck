@@ -38,29 +38,40 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 	/** @var IManager */
 	private $notificationManager;
 	private $databaseType;
+	private $database4ByteSupport;
 
 	public function __construct(
 		IDBConnection $db,
 		LabelMapper $labelMapper,
 		IUserManager $userManager,
 		IManager $notificationManager,
-		$databaseType = 'sqlite'
+		$databaseType = 'sqlite',
+		$database4ByteSupport = true
 	) {
 		parent::__construct($db, 'deck_cards', Card::class);
 		$this->labelMapper = $labelMapper;
 		$this->userManager = $userManager;
 		$this->notificationManager = $notificationManager;
 		$this->databaseType = $databaseType;
+		$this->database4ByteSupport = $database4ByteSupport;
 	}
 
 	public function insert(Entity $entity) {
 		$entity->setDatabaseType($this->databaseType);
 		$entity->setCreatedAt(time());
 		$entity->setLastModified(time());
+		if (!$this->database4ByteSupport) {
+			$description = preg_replace('/[\x{10000}-\x{10FFFF}]/u', "\xEF\xBF\xBD", $entity->getDescription());
+			$entity->setDescription($description);
+		}
 		return parent::insert($entity);
 	}
 
 	public function update(Entity $entity, $updateModified = true) {
+		if (!$this->database4ByteSupport) {
+			$description = preg_replace('/[\x{10000}-\x{10FFFF}]/u', "\xEF\xBF\xBD", $entity->getDescription());
+			$entity->setDescription($description);
+		}
 		$entity->setDatabaseType($this->databaseType);
 
 		if ($updateModified) {

@@ -61,6 +61,10 @@ class Application extends App {
 			return $container->getServer()->getConfig()->getSystemValue('dbtype', 'sqlite');
 		});
 
+		$container->registerService('database4ByteSupport', function($container) {
+			return $container->getServer()->getDatabaseConnection()->supports4ByteText();
+		});
+
 		// Delete user/group acl entries when they get deleted
 		/** @var IUserManager $userManager */
 		$userManager = $server->getUserManager();
