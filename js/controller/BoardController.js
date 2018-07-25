@@ -200,6 +200,29 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		CardService.archive(card);
 		StackService.removeCard(card);
 	};
+	$scope.isCurrentUserAssigned = function (card) {
+		if (! CardService.get(card.id).assignedUsers) {
+			return false;
+		}
+		var userList = CardService.get(card.id).assignedUsers.filter(function (obj) {
+			return obj.participant.uid === OC.getCurrentUser().uid;
+		});
+		return userList.length === 1;
+	};
+	$scope.cardAssignToMe = function (card) {
+		CardService.assignUser(card, OC.getCurrentUser().uid)
+			.then(
+				function() {StackService.updateCard(card);}
+			);
+		// TODO: remove this jquery call. Fix and use appPopoverMenuUtils instead
+		$('.popovermenu').addClass('hidden');
+	};
+	$scope.cardUnassignFromMe = function (card) {
+		CardService.unassignUser(card, OC.getCurrentUser().uid);
+		StackService.updateCard(card);
+		// TODO: remove this jquery call.Fix and use appPopoverMenuUtils instead
+		$('.popovermenu').addClass('hidden');
+	};
 	$scope.cardUnarchive = function (card) {
 		CardService.unarchive(card);
 		StackService.removeCard(card);
