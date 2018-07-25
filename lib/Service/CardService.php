@@ -195,6 +195,7 @@ class CardService {
 	}
 
 	public function assignUser($cardId, $userId) {
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 		$assignments = $this->assignedUsersMapper->find($cardId);
 		foreach ($assignments as $assignment) {
 			if ($assignment->getParticipant() === $userId) {
@@ -208,6 +209,7 @@ class CardService {
 	}
 
 	public function unassignUser($cardId, $userId) {
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 		$assignments = $this->assignedUsersMapper->find($cardId);
 		foreach ($assignments as $assignment) {
 			if ($assignment->getParticipant() === $userId) {
