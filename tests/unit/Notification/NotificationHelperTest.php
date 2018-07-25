@@ -184,6 +184,39 @@ class NotificationHelperTest extends \Test\TestCase {
 		$this->notificationHelper->sendCardDuedate($card);
 	}
 
+	public function testSendCardAssignedUser() {
+		$board = new Board();
+		$board->setId(123);
+		$board->setTitle('MyBoardTitle');
+		$acl = new Acl();
+		$acl->setParticipant('admin');
+		$acl->setType(Acl::PERMISSION_TYPE_USER);
+		$card = new Card();
+		$card->setTitle('MyCardTitle');
+        $card->setOwner('admin');
+        $card->setStackId(123);
+        $card->setOrder(999);
+        $card->setType('text');
+        $card->setId(1337);
+        $card->setAssignedUsers(['userA']);
+
+		$notification = $this->createMock(INotification::class);
+		$notification->expects($this->once())->method('setApp')->with('deck')->willReturn($notification);
+		$notification->expects($this->once())->method('setUser')->with('userA')->willReturn($notification);
+		$notification->expects($this->once())->method('setObject')->with('card', 1337)->willReturn($notification);
+		$notification->expects($this->once())->method('setSubject')->with('card-assigned', ['MyCardTitle', 'userA', 'admin'])->willReturn($notification);
+		$notification->expects($this->once())->method('setDateTime')->willReturn($notification);
+
+		$this->notificationManager->expects($this->at(0))
+			->method('createNotification')
+			->willReturn($notification);
+		$this->notificationManager->expects($this->at(1))
+			->method('notify')
+			->with($notification);
+
+		$this->notificationHelper->sendCardAssigned($card, 'userA');
+	}
+
 	public function testSendBoardSharedUser() {
 		$board = new Board();
 		$board->setId(123);
