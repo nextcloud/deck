@@ -1,5 +1,5 @@
-<div nv-file-drop="" uploader="uploader" class="drop-zone" options="{cardId: cardservice.getCurrent().id}">
-	<div class="drop-indicator" nv-file-over uploader="uploader">
+<div nv-file-drop="" uploader="fileservice.uploader" class="drop-zone" options="{cardId: cardservice.getCurrent().id}">
+	<div class="drop-indicator" nv-file-over uploader="fileservice.uploader">
 		<p><?php p($l->t('Drop your files here to upload it to the card')); ?></p>
 	</div>
 	<div id="board-status" ng-if="statusservice.active">
@@ -97,8 +97,8 @@
 			<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
 			<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>
 			<a ng-if="params.tab === 0" href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
-			<label ng-if="params.tab === 1" for="attachment-upload" class="button icon-upload" ng-class="{'icon-loading-small': uploader.isUploading}" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Upload attachment')); ?>"></label>
-			<input id="attachment-upload" type="file" nv-file-select="" uploader="uploader" class="hidden" options="{cardId: cardservice.getCurrent().id}"/>
+			<label ng-if="params.tab === 1" for="attachment-upload" class="button icon-upload" ng-class="{'icon-loading-small': fileservice.uploader.isUploading}" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Upload attachment')); ?>"></label>
+			<input id="attachment-upload" type="file" nv-file-select="" uploader="fileservice.uploader" class="hidden" options="{cardId: cardservice.getCurrent().id}"/>
 			<input ng-if="status.cardEditDescription" type="button" ng-mousedown="status.continueEdit = true; status.selectAttachment = true;" class="icon-files-dark" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Insert attachment')); ?>"/>
 
 		</div>
