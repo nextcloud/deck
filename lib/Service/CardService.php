@@ -43,8 +43,9 @@ class CardService {
 	private $notificationHelper;
 	private $assignedUsersMapper;
 	private $attachmentService;
+	private $currentUser;
 
-	public function __construct(CardMapper $cardMapper, StackMapper $stackMapper, PermissionService $permissionService, BoardService $boardService, NotificationHelper $notificationHelper, AssignedUsersMapper $assignedUsersMapper, AttachmentService $attachmentService) {
+	public function __construct(CardMapper $cardMapper, StackMapper $stackMapper, PermissionService $permissionService, BoardService $boardService, NotificationHelper $notificationHelper, AssignedUsersMapper $assignedUsersMapper, AttachmentService $attachmentService, $userId) {
 		$this->cardMapper = $cardMapper;
 		$this->stackMapper = $stackMapper;
 		$this->permissionService = $permissionService;
@@ -52,6 +53,7 @@ class CardService {
 		$this->notificationHelper = $notificationHelper;
 		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->attachmentService = $attachmentService;
+		$this->currentUser = $userId;
 	}
 
 	public function find($cardId) {
@@ -206,9 +208,11 @@ class CardService {
 			}
 		}
 
-		/* Notify user about the card assignment */
-		$card = $this->cardMapper->find($cardId);
-		$this->notificationHelper->sendCardAssigned($card, $userId);
+		if ($userId !== $this->currentUser) {
+			/* Notifyuser about the card assignment */
+			$card = $this->cardMapper->find($cardId);
+			$this->notificationHelper->sendCardAssigned($card, $userId);
+		}
 
 		$assignment = new AssignedUsers();
 		$assignment->setCardId($cardId);
