@@ -37,7 +37,6 @@
 </div>
 
 <div id="board" class="scroll-container" ng-click="sidebar.show=false" ui-sref="board" ng-class="{'card-selected': params.cardId}">
- {{ cardOpen }}
 	<search on-search="search" class="ng-hide"></search>
 
 	<div id="innerBoard" data-ng-model="stacks" data-as-sortable="sortOptionsStack">
