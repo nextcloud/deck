@@ -214,11 +214,13 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			.then(
 				function() {StackService.updateCard(card);}
 			);
+		// TODO: remove this jquery call. Fix and use appPopoverMenuUtils instead
 		$('.popovermenu').addClass('hidden');
 	};
 	$scope.cardUnassignFromMe = function (card) {
 		CardService.unassignUser(card, OC.getCurrentUser().uid);
 		StackService.updateCard(card);
+		// TODO: remove this jquery call.Fix and use appPopoverMenuUtils instead
 		$('.popovermenu').addClass('hidden');
 	};
 	$scope.cardUnarchive = function (card) {
