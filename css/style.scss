@@ -264,7 +264,7 @@ input.input-inline {
 	}
 }
 
-#app-navigation-toggle {
+#app-navigation-toggle-custom {
 	width: 44px;
 	height: 44px;
 	cursor: pointer;
@@ -1438,4 +1438,23 @@ input.input-inline {
  */
 .ui-select-dropdown.select2-drop-active {
 	opacity: 1 !important;
+}
+
+/**
+ * Custom app sidebar handling
+ */
+body:not(.snapjs-left) {
+	.app-navigation-hide {
+		#app-content {
+			margin-left: 0 !important; /* overwrite margin since we want the translateX to handle it*/
+		}
+		#app-navigation {
+			transform: translateX(-300px);
+		}
+	}
+}
+@media only screen and (max-width: 768px) {
+	#app-navigation-toggle-custom {
+		display: none;
+	}
 }

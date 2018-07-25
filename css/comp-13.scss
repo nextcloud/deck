@@ -27,3 +27,15 @@
 #content[class*='app-'] * {
 	box-sizing: border-box;
 }
+
+
+body:not(.snapjs-left) {
+	.app-navigation-hide {
+		#app-content {
+			margin-left: 0 !important; /* overwrite margin since we want the translateX to handle it*/
+		}
+		#app-navigation {
+			display: none;
+		}
+	}
+}
