@@ -71,8 +71,9 @@ app.config(function ($provide, $interpolateProvider, $httpProvider, $urlRouterPr
 				tab: {value: 0, dynamic: true},
 			},
 			views: {
-				'sidebarView': {
-					templateUrl: '/board.sidebarView.html'
+				'sidebarView@': {
+					templateUrl: '/board.sidebarView.html',
+					controller: 'BoardController'
 				}
 			}
 		})
@@ -82,7 +83,7 @@ app.config(function ($provide, $interpolateProvider, $httpProvider, $urlRouterPr
 				tab: {value: 0, dynamic: true},
 			},
 			views: {
-				'sidebarView': {
+				'sidebarView@': {
 					templateUrl: '/card.sidebarView.html',
 					controller: 'CardController'
 				}

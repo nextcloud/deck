@@ -71,6 +71,32 @@ input.input-inline {
 }
 
 /**
+ * Generic app layout
+ */
+#content-wrapper {
+	overflow: hidden;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+
+	#content {
+		height: calc(100% - 50px);
+		min-height: initial;
+	}
+
+	.app.app-deck {
+		width: 100%;
+		height: 100%;
+		display: flex;
+	}
+
+	#app-content {
+		display: flex;
+		flex-direction: column;
+	}
+}
+
+/**
  * Navigation sidebar
  */
 
@@ -238,7 +264,7 @@ input.input-inline {
 	}
 }
 
-#app-navigation-toggle {
+#app-navigation-toggle-custom {
 	width: 44px;
 	height: 44px;
 	cursor: pointer;
@@ -617,17 +643,6 @@ input.input-inline {
 /**
  * App sidebar
  */
-#app-sidebar {
- 	right: -500px;
- 	max-width: 100%;
- 	width: 500px;
- 	display:flex;
- 	flex-direction: column;
-
-	&.details-visible {
-	 	right: 0;
-	}
-}
 
 #sidebar-header {
 	h3 {
@@ -919,16 +934,6 @@ input.input-inline {
 		padding-left: 38px;
 		margin-bottom: 5px;
 		background-position: 10px;
-	}
-}
-
-#app-content {
-	overflow: hidden;
-	display: flex;
-	flex-direction: column;
-
-	&.details-visible {
-		margin-right: 500px;
 	}
 }
 
@@ -1433,4 +1438,23 @@ input.input-inline {
  */
 .ui-select-dropdown.select2-drop-active {
 	opacity: 1 !important;
+}
+
+/**
+ * Custom app sidebar handling
+ */
+body:not(.snapjs-left) {
+	.app-navigation-hide {
+		#app-content {
+			margin-left: 0 !important; /* overwrite margin since we want the translateX to handle it*/
+		}
+		#app-navigation {
+			transform: translateX(-300px);
+		}
+	}
+}
+@media only screen and (max-width: 768px) {
+	#app-navigation-toggle-custom {
+		display: none;
+	}
 }
