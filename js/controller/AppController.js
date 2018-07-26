@@ -38,5 +38,5 @@ app.controller('AppController', function ($scope, $location, $http, $log, $rootS
 			$scope.appNavigationHide = !$scope.appNavigationHide;
 			console.log($scope.appNavigationHide);
 		}
-	}
+	};
 });
