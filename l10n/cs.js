@@ -43,6 +43,8 @@ OC.L10N.register(
     "All Boards" : "Všechny desky",
     "Archived boards" : "Archivované desky",
     "Drop your files here to upload it to the card" : "Přetáhněte soubor sem, pokud jej chcete připojit ke kartě.",
+    "Assign to me" : "Přiřadit mě",
+    "Unassign from me" : "Zrušit přiřazení mě",
     "Archive" : "Archiv",
     "Unarchive" : "Zrušit archivování",
     "Enter a card title" : "Zadejte nadpis karty",

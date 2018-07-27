@@ -43,6 +43,8 @@ OC.L10N.register(
     "All Boards" : "Todos os paineis",
     "Archived boards" : "Painéis arquivados",
     "Drop your files here to upload it to the card" : "Solte seus arquivos aqui para enviá-los para o cartão",
+    "Assign to me" : "Atribuir a mim",
+    "Unassign from me" : "Desatribuir de mim",
     "Archive" : "Arquivar",
     "Unarchive" : "Desarquivar",
     "Enter a card title" : "Digite um título de cartão",
