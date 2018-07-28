@@ -94,6 +94,24 @@ class NotificationHelper {
 		$this->cardMapper->markNotified($card);
 	}
 
+	public function sendCardAssigned($card, $userId) {
+		$boardId = $this->cardMapper->findBoardId($card->getId());
+		$board = $this->getBoard($boardId);
+
+		$notification = $this->notificationManager->createNotification();
+		$notification
+			->setApp('deck')
+			->setUser((string) $userId)
+			->setDateTime(new DateTime())
+			->setObject('card', $card->getId())
+				->setSubject('card-assigned', [
+					$card->getTitle(),
+					$board->getTitle(),
+					$this->currentUser
+				]);
+		$this->notificationManager->notify($notification);
+	}
+
 	/**
 	 * Send notifications that a board was shared with a user/group
 	 *

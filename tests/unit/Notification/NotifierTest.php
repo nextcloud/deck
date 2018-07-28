@@ -129,11 +129,82 @@ class UnknownUserTest extends \Test\TestCase {
 
 	}
 
+	public function dataPrepareCardAssigned() {
+		return [
+			[true], [false]
+		];
+	}
+
+	/** @dataProvider dataPrepareCardAssigned */
+	public function testPrepareCardAssigned($withUserFound = true) {
+		/** @var INotification $notification */
+		$notification = $this->createMock(INotification::class);
+		$notification->expects($this->once())
+			->method('getApp')
+			->willReturn('deck');
+
+		$notification->expects($this->once())
+			->method('getSubjectParameters')
+			->willReturn(['Card title','Board title', 'otheruser']);
+
+		$notification->expects($this->once())
+			->method('getSubject')
+			->willReturn('card-assigned');
+		$notification->expects($this->once())
+			->method('getObjectId')
+			->willReturn('123');
+		if ($withUserFound) {
+			$user = $this->createMock(IUser::class);
+			$user->expects($this->any())
+				->method('getDisplayName')
+				->willReturn('Other User');
+			$dn = 'Other User';
+		} else {
+			$user = null;
+			$dn = 'otheruser';
+		}
+		$this->userManager->expects($this->once())
+			->method('get')
+			->with('otheruser')
+			->willReturn($user);
+
+		$expectedMessage = 'The card "Card title" on "Board title" has been assigned to you by '.$dn.'.';
+		$notification->expects($this->once())
+			->method('setParsedSubject')
+			->with($expectedMessage);
+		$notification->expects($this->once())
+			->method('setRichSubject')
+			->with('{user} has assigned the card "Card title" on "Board title" to you.', [
+				'user' => [
+					'type' => 'user',
+					'id' => 'otheruser',
+					'name' => $dn,
+				]
+			]);
+
+		$this->url->expects($this->once())
+			->method('imagePath')
+			->with('deck', 'deck-dark.svg')
+			->willReturn('deck-dark.svg');
+		$this->url->expects($this->once())
+			->method('getAbsoluteURL')
+			->with('deck-dark.svg')
+			->willReturn('/absolute/deck-dark.svg');
+		$notification->expects($this->once())
+			->method('setIcon')
+			->with('/absolute/deck-dark.svg');
+
+		$actualNotification = $this->notifier->prepare($notification, 'en_US');
+
+		$this->assertEquals($notification, $actualNotification);
+	}
+
 	public function dataPrepareBoardShared() {
 		return [
 			[true], [false]
 		];
 	}
+
 	/** @dataProvider dataPrepareBoardShared */
 	public function testPrepareBoardShared($withUserFound = true) {
 		/** @var INotification $notification */

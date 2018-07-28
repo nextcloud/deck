@@ -30,6 +30,7 @@ use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\NotFoundException;
+use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
 use Test\TestCase;
 
@@ -43,6 +44,8 @@ class CardServiceTest extends TestCase {
     private $stackMapper;
     /** @var PermissionService|\PHPUnit\Framework\MockObject\MockObject */
     private $permissionService;
+    /** @var NotificationHelper */
+    private $notificationHelper;
     /** @var AssignedUsersMapper|\PHPUnit\Framework\MockObject\MockObject */
     private $assignedUsersMapper;
 	/** @var BoardService|\PHPUnit\Framework\MockObject\MockObject */
@@ -54,9 +57,10 @@ class CardServiceTest extends TestCase {
         $this->stackMapper = $this->createMock(StackMapper::class);
         $this->permissionService = $this->createMock(PermissionService::class);
         $this->boardService = $this->createMock(BoardService::class);
+        $this->notificationHelper = $this->createMock(NotificationHelper::class);
         $this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
 		$this->attachmentService = $this->createMock(AttachmentService::class);
-        $this->cardService = new CardService($this->cardMapper, $this->stackMapper, $this->permissionService, $this->boardService, $this->assignedUsersMapper, $this->attachmentService);
+        $this->cardService = new CardService($this->cardMapper, $this->stackMapper, $this->permissionService, $this->boardService, $this->notificationHelper, $this->assignedUsersMapper, $this->attachmentService, 'userXY');
     }
 
     public function testFind() {
