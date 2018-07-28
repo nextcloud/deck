@@ -46,7 +46,7 @@ class PageController extends Controller {
 	public function index() {
 		$params = [
 			'user' => $this->userId,
-			'maxUploadSize' => \OCP\Util::uploadLimit(),
+			'maxUploadSize' => (int)\OCP\Util::uploadLimit(),
 		];
 		return new TemplateResponse('deck', 'main', $params);
 	}

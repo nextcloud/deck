@@ -30,4 +30,13 @@ app.controller('AppController', function ($scope, $location, $http, $log, $rootS
 	$scope.sidebar = $rootScope.sidebar;
 	$scope.user = oc_current_user;
 	$rootScope.config = JSON.parse($attrs.config);
+
+	$scope.appNavigationHide = false;
+
+	$scope.toggleSidebar = function() {
+		if ($(window).width() > 768) {
+			$scope.appNavigationHide = !$scope.appNavigationHide;
+			console.log($scope.appNavigationHide);
+		}
+	};
 });

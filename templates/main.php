@@ -28,20 +28,21 @@ Util::addScript('deck', 'build/vendor');
 
 Util::addStyle('deck', 'style');
 Util::addScript('deck', 'build/deck');
+
+if (\OC_Util::getVersion()[0] < 14) {
+	Util::addStyle('deck', 'comp-13');
+}
 ?>
 
-<div id="app" class="app-deck" data-ng-app="Deck" ng-controller="AppController" ng-cloak config="<?php p(json_encode($_)); ?>">
+<div class="app app-deck" data-ng-app="Deck" ng-controller="AppController" ng-cloak config="<?php p(json_encode($_)); ?>" ng-class="{'app-navigation-hide': appNavigationHide}">
 
 	<div id="app-navigation" data-ng-controller="ListController" ng-init="initSidebar()">
 		<?php print_unescaped($this->inc('part.navigation')); ?>
 		<?php /* print_unescaped($this->inc('part.settings')); */ ?>
 	</div>
-	<div id="app-content" ng-class="{ 'details-visible': sidebar.show }">
-		<div ui-view></div>
-	</div>
+	<div id="app-content" ng-class="{ 'details-visible': sidebar.show }"><div id="app-navigation-toggle-custom" class="icon-menu" ng-click="toggleSidebar()"></div><div ui-view></div></div>
+	<div id="app-sidebar" ng-class="{ 'details-visible': sidebar.show }" ng-if="sidebar.show" class="details-view scroll-container" ui-view="sidebarView"></div>
 	<route-loading-indicator></route-loading-indicator>
-
-
 
 	<script type="text/ng-template" id="/boardlist.mainView.html">
 		<?php print_unescaped($this->inc('part.boardlist')); ?>
@@ -49,11 +50,8 @@ Util::addScript('deck', 'build/deck');
 	<script type="text/ng-template" id="/board.sidebarView.html">
 		<?php print_unescaped($this->inc('part.board.sidebarView')); ?>
 	</script>
-	<script type="text/ng-template" id="/board.mainView.html">
-		<?php print_unescaped($this->inc('part.board.mainView')); ?>
-	</script>
 	<script type="text/ng-template" id="/board.html">
-		<?php print_unescaped($this->inc('part.board')); ?>
+		<?php print_unescaped($this->inc('part.board.mainView')); ?>
 	</script>
 	<script type="text/ng-template" id="/card.sidebarView.html">
 		<?php print_unescaped($this->inc('part.card')); ?>

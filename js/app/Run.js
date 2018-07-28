@@ -56,26 +56,6 @@ app.run(function ($document, $rootScope, $transitions, BoardService) {
 		OC.filePath('deck', 'img', 'app-512.png')
 	);
 
-	$('#app-navigation-toggle').off('click');
-	// App sidebar on mobile
-	var snapper = new Snap({
-		element: document.getElementById('app-content'),
-		disable: 'right',
-		maxPosition: 250,
-		touchToDrag: false
-	});
-
-	$('#app-navigation-toggle').click(function () {
-		if ($(window).width() > 768) {
-			$('#app-navigation').toggle('hidden');
-		} else {
-			if (snapper.state().state === 'left') {
-				snapper.close();
-			} else {
-				snapper.open('left');
-			}
-		}
-	});
 	// Select all elements with data-toggle="tooltips" in the document
 	$('body').tooltip({
 		selector: '[data-toggle="tooltip"]'

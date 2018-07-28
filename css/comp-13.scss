@@ -1,0 +1,38 @@
+#content-wrapper #content {
+	height: 100%;
+}
+#app-content {
+	flex-grow: 1;
+	height: 100%;
+
+	&.details-visible {
+		margin-right: 500px;
+	}
+}
+
+#app-sidebar {
+	right: -500px;
+	max-width: 100%;
+	width: 500px;
+	display:flex;
+	flex-direction: column;
+
+	&.details-visible {
+		right: 0;
+	}
+}
+
+#content[class*='app-'] * {
+	box-sizing: border-box;
+}
+
+body:not(.snapjs-left) {
+	.app-navigation-hide {
+		#app-content {
+			margin-left: 0 !important;
+		}
+		#app-navigation {
+			display: none;
+		}
+	}
+}
