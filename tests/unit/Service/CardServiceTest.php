@@ -30,6 +30,7 @@ use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\NotFoundException;
+use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
 use Test\TestCase;
 
