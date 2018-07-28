@@ -81,7 +81,7 @@ class StackControllerTest extends \Test\TestCase {
 			->method('update')
 			->with(1, 2, 3, 4)
 			->willReturn(1);
-		$this->assertEquals(1, $this->controller->update(1, 2, 3, 4));
+		$this->assertEquals(1, $this->controller->update(1, 2, 3, 4, null));
 	}
 
 	public function testReorder() {

@@ -5,20 +5,20 @@
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *  
+ *
  */
 
 namespace OCA\Deck\Db;
@@ -52,6 +52,22 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 		$sql = 'SELECT c.id as card_id, l.id as id, l.title as title, l.color as color FROM `*PREFIX*deck_cards` as c ' .
 			' INNER JOIN `*PREFIX*deck_assigned_labels` as al ON al.card_id = c.id INNER JOIN `*PREFIX*deck_labels` as l ON  al.label_id = l.id WHERE board_id=? ORDER BY l.id';
 		return $this->findEntities($sql, [$boardId], $limit, $offset);
+	}
+
+	public function liveOrMemoizedLabelsForBoardId($boardId) {
+		if(is_null($boardId)) {
+			return array();
+		}
+
+		if(!isset($this->memoizedLabelsByBoardId)) {
+			$this->memoizedLabelsByBoardId = array();
+		}
+
+		if(!array_key_exists($boardId, $this->memoizedLabelsByBoardId)) {
+			$this->memoizedLabelsByBoardId[$boardId] = $this->getAssignedLabelsForBoard($boardId);
+		}
+
+		return $this->memoizedLabelsByBoardId[$boardId];
 	}
 
 	public function getAssignedLabelsForBoard($boardId) {

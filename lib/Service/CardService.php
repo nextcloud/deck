@@ -52,9 +52,12 @@ class CardService {
 		StackMapper $stackMapper, 
 		BoardMapper $boardMapper, 
 		PermissionService $permissionService, 
-		BoardService $boardService, 
+		BoardService $boardService,
+		NotificationHelper $notificationHelper,
 		AssignedUsersMapper $assignedUsersMapper, 
-		AttachmentService $attachmentService) {
+		AttachmentService $attachmentService,
+		$userId
+	) {
 		$this->cardMapper = $cardMapper;
 		$this->stackMapper = $stackMapper;
 		$this->boardMapper = $boardMapper;

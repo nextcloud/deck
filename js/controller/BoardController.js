@@ -228,7 +228,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 				}
 			}
 		);
-	}
+	};
 
 	$scope._cardAndStackUndoDelete = function(deletedCard, associatedDeletedStack) {
 		$scope.stackUndoDelete(associatedDeletedStack).then(function() {

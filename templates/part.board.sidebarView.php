@@ -126,7 +126,7 @@
     	   <li class='board-detail__deleted-list__item' ng-repeat="deletedStack in stackservice.deleted">
            <span class="icon icon-deck"></span>
            <span>{{deletedStack.title}}</span>
-    			 <span>{{deletedStack.deletedAt}}</span>
+    			 <span>{{deletedStack.deletedAt | relativeDateFilter }}</span>
            <a ng-click="stackUndoDelete(deletedStack)">
              <span class="icon icon-history"></span>
            </a>
@@ -140,7 +140,7 @@
             <span class="icon icon-deck"></span>
     			  <span>{{deletedCard.title}}</span>
     			  <span>{{stackservice.tryAllThenDeleted(deletedCard.stackId).title}}</span>
-    			  <span>{{deletedCard.deletedAt}}</span>
+    			  <span>{{deletedCard.deletedAt | relativeDateFilter }}</span>
         	  <a ng-click="cardUndoDelete(deletedCard)">
               <span class="icon icon-history"></span>
             </a>

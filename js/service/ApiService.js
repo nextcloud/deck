@@ -41,7 +41,9 @@ app.factory('ApiService', function ($http, $q) {
 
 	ApiService.prototype.tryAllThenDeleted = function(id) {
 		let object = this.data[id];
-		if (object === undefined) object = this.deleted[id];
+		if (object === undefined) {
+			object = this.deleted[id];
+		} 
 		return object;
 	};
 

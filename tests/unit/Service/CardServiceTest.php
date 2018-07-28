@@ -29,6 +29,7 @@ use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
@@ -55,12 +56,13 @@ class CardServiceTest extends TestCase {
 		parent::setUp();
         $this->cardMapper = $this->createMock(CardMapper::class);
         $this->stackMapper = $this->createMock(StackMapper::class);
+        $this->boardMapper = $this->createMock(BoardMapper::class);
         $this->permissionService = $this->createMock(PermissionService::class);
         $this->boardService = $this->createMock(BoardService::class);
         $this->notificationHelper = $this->createMock(NotificationHelper::class);
         $this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
 		$this->attachmentService = $this->createMock(AttachmentService::class);
-        $this->cardService = new CardService($this->cardMapper, $this->stackMapper, $this->permissionService, $this->boardService, $this->notificationHelper, $this->assignedUsersMapper, $this->attachmentService, 'userXY');
+        $this->cardService = new CardService($this->cardMapper, $this->stackMapper, $this->boardMapper, $this->permissionService, $this->boardService, $this->notificationHelper, $this->assignedUsersMapper, $this->attachmentService, 'userXY');
     }
 
     public function testFind() {
@@ -100,13 +102,15 @@ class CardServiceTest extends TestCase {
     }
 
     public function testDelete() {
+        $cardToBeDeleted = new Card();
         $this->cardMapper->expects($this->once())
             ->method('find')
-            ->willReturn(new Card());
+            ->willReturn($cardToBeDeleted);
         $this->cardMapper->expects($this->once())
-            ->method('delete')
-            ->willReturn(1);
-        $this->assertEquals(1, $this->cardService->delete(123));
+            ->method('update')
+            ->willReturn($cardToBeDeleted);
+        $this->cardService->delete(123);
+        $this->assertTrue($cardToBeDeleted->getDeletedAt() <= time(), 'deletedAt is in the past');
     }
 
     public function testUpdate() {
@@ -115,7 +119,7 @@ class CardServiceTest extends TestCase {
         $card->setArchived(false);
         $this->cardMapper->expects($this->once())->method('find')->willReturn($card);
         $this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function($c) { return $c; });
-        $actual = $this->cardService->update(123, 'newtitle', 234, 'text', 999, 'foo', 'admin', '2017-01-01 00:00:00');
+        $actual = $this->cardService->update(123, 'newtitle', 234, 'text', 999, 'foo', 'admin', '2017-01-01 00:00:00', null);
         $this->assertEquals('newtitle', $actual->getTitle());
         $this->assertEquals(234, $actual->getStackId());
         $this->assertEquals('text', $actual->getType());
@@ -131,7 +135,7 @@ class CardServiceTest extends TestCase {
         $this->cardMapper->expects($this->once())->method('find')->willReturn($card);
         $this->cardMapper->expects($this->never())->method('update');
         $this->setExpectedException(StatusException::class);
-        $this->cardService->update(123, 'newtitle', 234, 'text', 999, 'foo', 'admin', '2017-01-01 00:00:00');
+        $this->cardService->update(123, 'newtitle', 234, 'text', 999, 'foo', 'admin', '2017-01-01 00:00:00', null);
     }
 
     public function testRename() {

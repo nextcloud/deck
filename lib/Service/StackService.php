@@ -68,6 +68,12 @@ class StackService {
 
 	private function enrichStackWithCards($stack) {
 		$cards = $this->cardMapper->findAll($stack->id);
+
+		if(is_null($cards)) {
+			return;
+		}
+
+		$labels = $this->labelMapper->liveOrMemoizedLabelsForBoardId($stack->getBoardId());
 		foreach ($cards as $cardIndex => $card) {
 			$assignedUsers = $this->assignedUsersMapper->find($card->getId());
 			$card->setAssignedUsers($assignedUsers);
@@ -76,11 +82,12 @@ class StackService {
 			}
 			$card->setAttachmentCount($this->attachmentService->count($card->getId()));
 		}
+
 		$stack->setCards($cards);
 	}
 
 	private function enrichStacksWithCards($stacks) {
-		foreach ($stacks as $stackIndex => $stack) {
+		foreach ($stacks as $stack) {
 			$this->enrichStackWithCards($stack);
 		}
 	}
@@ -88,7 +95,6 @@ class StackService {
 	public function findAll($boardId) {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
 		$stacks = $this->stackMapper->findAll($boardId);
-		$labels = $this->labelMapper->getAssignedLabelsForBoard($boardId);
 		$this->enrichStacksWithCards($stacks);
 		return $stacks;
 	}
@@ -140,7 +146,7 @@ class StackService {
 		$this->stackMapper->update($stack);
 
 		$this->enrichStackWithCards($stack);
-		
+
 		return $stack;
 	}
 

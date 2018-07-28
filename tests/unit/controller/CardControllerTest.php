@@ -76,7 +76,7 @@ class CardControllerTest extends \Test\TestCase {
 			->method('update')
 			->with(1, 'title', 3, 'text', 5, 'foo', $this->userId, '2017-01-01 00:00:00')
 			->willReturn(1);
-		$this->assertEquals(1, $this->controller->update(1, 'title', 3, 'text', 5, 'foo', '2017-01-01 00:00:00'));
+		$this->assertEquals(1, $this->controller->update(1, 'title', 3, 'text', 5, 'foo', '2017-01-01 00:00:00', null));
 	}
 
 	public function testDelete() {

@@ -28,6 +28,7 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
@@ -48,6 +49,8 @@ class StackServiceTest extends TestCase {
 	private $stackMapper;
     /** @var \PHPUnit\Framework\MockObject\MockObject|CardMapper */
 	private $cardMapper;
+    /** @var \PHPUnit\Framework\MockObject\MockObject|BoardMapper */
+	private $boardMapper;
     /** @var \PHPUnit\Framework\MockObject\MockObject|LabelMapper */
 	private $labelMapper;
     /** @var \PHPUnit\Framework\MockObject\MockObject|PermissionService */
@@ -63,16 +66,23 @@ class StackServiceTest extends TestCase {
 		parent::setUp();
 		$this->stackMapper = $this->createMock(StackMapper::class);
 		$this->cardMapper = $this->createMock(CardMapper::class);
-		$this->labelMapper = $this->createMock(LabelMapper::class);
+		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->boardService = $this->createMock(BoardService::class);
 		$this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
 		$this->attachmentService = $this->createMock(AttachmentService::class);
 
+		$this->labelMapper = $this->getMockBuilder(LabelMapper::class)
+															->setMethodsExcept(['liveOrMemoizedLabelsForBoardId'])
+															->disableOriginalConstructor()
+															->getMock();
+
 		$this->stackService = new StackService(
 			$this->stackMapper,
-            $this->cardMapper,
-            $this->labelMapper,
+      $this->boardMapper,
+      $this->cardMapper,
+      $this->labelMapper,
+
 			$this->permissionService,
 			$this->boardService,
 			$this->assignedUsersMapper,
@@ -130,8 +140,10 @@ class StackServiceTest extends TestCase {
     private function getStacks() {
 	    $s1 = new Stack();
 	    $s1->setId(222);
+			$s1->setBoardId(1);
 	    $s2 = new Stack();
 	    $s2->setId(223);
+			$s1->setBoardId(1);
 	    return [$s1, $s2];
     }
     private function getCards($stackId=0) {
@@ -158,9 +170,12 @@ class StackServiceTest extends TestCase {
 
 	public function testDelete() {
 	    $this->permissionService->expects($this->once())->method('checkPermission');
-        $this->stackMapper->expects($this->once())->method('find')->willReturn(new Stack());
-	    $this->stackMapper->expects($this->once())->method('delete');
+			$stackToBeDeleted = new Stack();
+			$stackToBeDeleted->setId(1);
+      $this->stackMapper->expects($this->once())->method('find')->willReturn($stackToBeDeleted);
+	    $this->stackMapper->expects($this->once())->method('update');
 	    $this->stackService->delete(123);
+			$this->assertTrue($stackToBeDeleted->getDeletedAt() <= time(), "deletedAt is in the past");
     }
 
     public function testUpdate() {
@@ -172,7 +187,7 @@ class StackServiceTest extends TestCase {
         $stack->setTitle('Foo');
         $stack->setBoardId(2);
         $stack->setOrder(1);
-        $result = $this->stackService->update(123, 'Foo', 2, 1);
+        $result = $this->stackService->update(123, 'Foo', 2, 1, null);
         $this->assertEquals($stack, $result);
     }
 
