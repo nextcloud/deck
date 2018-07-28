@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.4.1 - 2018-07-28
+
+### Added
+
+- Make app compatible with Nextcloud 14
+
+### Fixed
+
+- Fix bug with file upload on unlimited quota
+- Fix issue on MySQL databases that don't support 4-byte characters
+- Fix check when assigning users
+
 ## 0.4.0 - 2018-07-11
 
 ### Added
