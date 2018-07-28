@@ -43,6 +43,8 @@ OC.L10N.register(
     "All Boards" : "Alle Boards",
     "Archived boards" : "Archivierte Boards",
     "Drop your files here to upload it to the card" : "Lege Deine Dateien hier ab, um sie auf die Karte hochzuladen",
+    "Assign to me" : "Mir zuweisen",
+    "Unassign from me" : "Nicht mir zuweisen",
     "Archive" : "Archivieren",
     "Unarchive" : "Dearchivieren",
     "Enter a card title" : "Kartentitel eingeben",

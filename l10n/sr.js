@@ -43,6 +43,8 @@ OC.L10N.register(
     "All Boards" : "Све табле",
     "Archived boards" : "Архивиране табле",
     "Drop your files here to upload it to the card" : "Превуците Ваше фајлове овде да их отпремите у картицу",
+    "Assign to me" : "Додели мени",
+    "Unassign from me" : "Склони са мене",
     "Archive" : "Архива",
     "Unarchive" : "Врати из архиве",
     "Enter a card title" : "Унесите назив картице",
