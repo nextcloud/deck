@@ -7,6 +7,8 @@
     "Maximum file size of {size} exceeded" : "{size} olan en büyük dosya boyutu sınırı aşıldı",
     "Are you sure you want to delete the stack with all of its data?" : "Bu yığını tüm bilgileri ile silmek istediğinize emin misiniz?",
     "Personal" : "Kişisel",
+    "The card \"%s\" on \"%s\" has been assigned to you by %s." : "\"%s\" kartı \"%s\" zamanında %s tarafından size atandı.",
+    "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user} size \"%s\" kartını \"%s\" zamanında atadı.",
     "The card \"%s\" on \"%s\" has reached its due date." : "\"%s\" kartı \"%s\" zamanında son kullanma tarihine  ulaştı.",
     "The board \"%s\" has been shared with you by %s." : "\"%s\" panosu %s tarafından sizinle paylaşıldı.",
     "{user} has shared the board %s with you." : "{user} sizinle %s panosunu paylaştı.",

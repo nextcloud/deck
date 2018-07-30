@@ -9,6 +9,8 @@ OC.L10N.register(
     "Maximum file size of {size} exceeded" : "Maximale Dateigröße von {size} überschritten",
     "Are you sure you want to delete the stack with all of its data?" : "Möchten Sie diesen Stapel mit allen Daten wirklich löschen?",
     "Personal" : "Persönlich",
+    "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Die Karte \"%s\" auf \"%s\" wurde Ihnen von %s zugewiesen.",
+    "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user} hat Ihnen die Karte \"%s\" auf \"%s\" zugewiesen.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Die Karte \"%s\" auf \"%s\" ist überfällig.",
     "The board \"%s\" has been shared with you by %s." : "Das Board \"%s\" wurde von %s mit Ihnen geteilt.",
     "{user} has shared the board %s with you." : "{user} hat das Board %s mit Ihnen geteilt.",
