@@ -509,37 +509,28 @@ input.input-inline {
 		font-weight: normal;
 		font-size: 10pt;
 		padding: 0;
-		margin: 5px;
+		margin: 0 5px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
 
-	&.has-labels h4 {
-		margin-top: 15px;
-	}
-
 	.labels {
-		position: absolute;
-		top: -5px;
-		left: 10px;
+		position: relative;
+		margin-left: 5px;
 
 		li {
-			padding: 0;
-			width: 15px;
-			height: 20px;
+			padding: 0 4px;
+			margin: 0 2px 1px 0;
 			border-radius: 3px;
-			font-size: 80%;
+			font-size: 75%;
 			border: none transparent;
 			float: left;
 
 			span {
-				display: none;
-			}
-
-			&:hover span {
-				position: absolute;
-				padding: 3px;
+				display: inline-block;
+				font-weight: bold;
 				background-color: inherit;
+				line-height: normal;
 			}
 		}
 	}
