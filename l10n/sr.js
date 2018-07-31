@@ -9,6 +9,8 @@ OC.L10N.register(
     "Maximum file size of {size} exceeded" : "Премашена максимална величина фајла од {size}",
     "Are you sure you want to delete the stack with all of its data?" : "Да ли стварно желите да обришете ову гомилу са свим подацима на њој?",
     "Personal" : "Лично",
+    "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Корисник %s Вам је доделио картицу \"%s\" са табле \"%s\".",
+    "{user} has assigned the card \"%s\" on \"%s\" to you." : "Корисник {user} Вам је доделио картицу \"%s\" са табле \"%s\".",
     "The card \"%s\" on \"%s\" has reached its due date." : "Картици \"%s\" на табли \"%s\" је истекао рок.",
     "The board \"%s\" has been shared with you by %s." : "Таблу \"%s\" је поделио \"%s\" са Вама. ",
     "{user} has shared the board %s with you." : "{user} је поделио таблу %s са Вама.",
