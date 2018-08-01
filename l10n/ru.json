@@ -7,6 +7,8 @@
     "Maximum file size of {size} exceeded" : "Максимальный размер файла {size} превышен",
     "Are you sure you want to delete the stack with all of its data?" : "Вы действительно хотите удалить стек со всеми его данными?",
     "Personal" : "Личное",
+    "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Карта \"%s\" на \"%s\" была назначена Вам %s.",
+    "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user} присвоил Вам карту \"%s\" на \"%s\".",
     "The card \"%s\" on \"%s\" has reached its due date." : "Настал срок карточки «%s» в «%s» .",
     "The board \"%s\" has been shared with you by %s." : "%s предоставил(а) Вам доступ к доске «%s».",
     "{user} has shared the board %s with you." : "{user} предоставил(а) Вам доступ к доске «%s».",
