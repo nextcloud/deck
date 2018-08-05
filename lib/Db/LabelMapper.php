@@ -54,22 +54,6 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($sql, [$boardId], $limit, $offset);
 	}
 
-	public function liveOrMemoizedLabelsForBoardId($boardId) {
-		if(is_null($boardId)) {
-			return array();
-		}
-
-		if(!isset($this->memoizedLabelsByBoardId)) {
-			$this->memoizedLabelsByBoardId = array();
-		}
-
-		if(!array_key_exists($boardId, $this->memoizedLabelsByBoardId)) {
-			$this->memoizedLabelsByBoardId[$boardId] = $this->getAssignedLabelsForBoard($boardId);
-		}
-
-		return $this->memoizedLabelsByBoardId[$boardId];
-	}
-
 	public function getAssignedLabelsForBoard($boardId) {
 		$labels = $this->findAssignedLabelsForBoard($boardId);
 		$result = array();

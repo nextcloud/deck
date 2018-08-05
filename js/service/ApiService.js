@@ -20,7 +20,6 @@
  *
  */
 import app from '../app/App.js';
-
 /** global: oc_defaults */
 app.factory('ApiService', function ($http, $q) {
 	var ApiService = function (http, endpoint) {
@@ -43,7 +42,7 @@ app.factory('ApiService', function ($http, $q) {
 		let object = this.data[id];
 		if (object === undefined) {
 			object = this.deleted[id];
-		} 
+		}
 		return object;
 	};
 
@@ -68,6 +67,10 @@ app.factory('ApiService', function ($http, $q) {
 		$http.get(this.generateUrl(scopeId + '/' + this.endpoint + '/deleted')).then(function (response) {
 			var objects = response.data;
 			objects.forEach(function (obj) {
+				if(self.deleted[obj.id] !== undefined) {
+					return;
+				}
+
 				self.deleted[obj.id] = obj;
 
 				if(self.afterFetch !== undefined) {
@@ -139,7 +142,13 @@ app.factory('ApiService', function ($http, $q) {
 
 		$http.delete(this.baseUrl + '/' + id).then(function (response) {
 			self.deleted[id] = self.data[id];
-			self.remove(id);
+			delete self.data[id];
+
+			let deletedAt = response.data.deletedAt
+			if (deletedAt !== undefined) {
+				self.deleted[id].deletedAt = deletedAt;
+			}
+
 			deferred.resolve(response.data);
 
 		}, function (error) {
@@ -154,9 +163,9 @@ app.factory('ApiService', function ($http, $q) {
 
 		var promise = this.update(entity);
 
-		promise.then(function() {
+		promise.then(() => {
 			self.data[entity.id] = entity;
-			self.remove(entity.id, 'deleted');
+			delete this.deleted[entity.id];
 		});
 
 		return promise;
@@ -166,6 +175,7 @@ app.factory('ApiService', function ($http, $q) {
 	ApiService.prototype.clear = function () {
 		this.data = {};
 	};
+
 	ApiService.prototype.add = function (entity) {
 		var element = this.data[entity.id];
 		if (element === undefined) {
@@ -179,11 +189,7 @@ app.factory('ApiService', function ($http, $q) {
 			element.status = {};
 		}
 	};
-	ApiService.prototype.remove = function (id, collection = 'data') {
-		if (this[collection][id] !== undefined) {
-			delete this[collection][id];
-		}
-	};
+
 	ApiService.prototype.addAll = function (entities) {
 		var self = this;
 		angular.forEach(entities, function (entity) {

@@ -311,7 +311,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			$scope.refreshData();
 		});
 	};
-	
+
 	$scope.aclUpdate = function (acl) {
 		BoardService.updateAcl(acl);
 	};

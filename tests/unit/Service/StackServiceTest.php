@@ -61,6 +61,8 @@ class StackServiceTest extends TestCase {
 	private $attachmentService;
 	/** @var BoardService|\PHPUnit\Framework\MockObject\MockObject */
 	private $boardService;
+	/** @var CardService|\PHPUnit\Framework\MockObject\MockObject */
+	private $cardService;
 
 	public function setUp() {
 		parent::setUp();
@@ -69,13 +71,10 @@ class StackServiceTest extends TestCase {
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->boardService = $this->createMock(BoardService::class);
+		$this->cardService = $this->createMock(CardService::class);
 		$this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
 		$this->attachmentService = $this->createMock(AttachmentService::class);
-
-		$this->labelMapper = $this->getMockBuilder(LabelMapper::class)
-															->setMethodsExcept(['liveOrMemoizedLabelsForBoardId'])
-															->disableOriginalConstructor()
-															->getMock();
+		$this->labelMapper = $this->createMock(LabelMapper::class);
 
 		$this->stackService = new StackService(
 			$this->stackMapper,
@@ -85,6 +84,7 @@ class StackServiceTest extends TestCase {
 
 			$this->permissionService,
 			$this->boardService,
+			$this->cardService,
 			$this->assignedUsersMapper,
 			$this->attachmentService
 		);
@@ -93,8 +93,15 @@ class StackServiceTest extends TestCase {
 	public function testFindAll() {
         $this->permissionService->expects($this->once())->method('checkPermission');
         $this->stackMapper->expects($this->once())->method('findAll')->willReturn($this->getStacks());
-        $this->labelMapper->expects($this->once())->method('getAssignedLabelsForBoard')->willReturn($this->getLabels());
+    		$this->cardService->expects($this->atLeastOnce())->method('enrich')->will(
+					$this->returnCallback(
+						function($card) {
+							$card->setLabels($this->getLabels()[$card->getId()]);
+						}
+					)
+				);
         $this->cardMapper->expects($this->any())->method('findAll')->willReturn($this->getCards(222));
+
 
         $actual = $this->stackService->findAll(123);
         for($stackId=0; $stackId<3; $stackId++) {

@@ -30,6 +30,7 @@ use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
@@ -49,20 +50,36 @@ class CardServiceTest extends TestCase {
     private $notificationHelper;
     /** @var AssignedUsersMapper|\PHPUnit\Framework\MockObject\MockObject */
     private $assignedUsersMapper;
-	/** @var BoardService|\PHPUnit\Framework\MockObject\MockObject */
-	private $boardService;
+  	/** @var BoardService|\PHPUnit\Framework\MockObject\MockObject */
+  	private $boardService;
+  	/** @var LabelMapper|\PHPUnit\Framework\MockObject\MockObject */
+  	private $labelMapper;
+	private $boardMapper;
+	private $attachmentService;
 
-    public function setUp() {
-		parent::setUp();
+	public function setUp() {
+		    parent::setUp();
         $this->cardMapper = $this->createMock(CardMapper::class);
         $this->stackMapper = $this->createMock(StackMapper::class);
         $this->boardMapper = $this->createMock(BoardMapper::class);
+        $this->labelMapper = $this->createMock(LabelMapper::class);
         $this->permissionService = $this->createMock(PermissionService::class);
         $this->boardService = $this->createMock(BoardService::class);
         $this->notificationHelper = $this->createMock(NotificationHelper::class);
         $this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
 		$this->attachmentService = $this->createMock(AttachmentService::class);
-        $this->cardService = new CardService($this->cardMapper, $this->stackMapper, $this->boardMapper, $this->permissionService, $this->boardService, $this->notificationHelper, $this->assignedUsersMapper, $this->attachmentService, 'userXY');
+        $this->cardService = new CardService(
+			$this->cardMapper,
+			$this->stackMapper,
+			$this->boardMapper,
+			$this->labelMapper,
+			$this->permissionService,
+			$this->boardService,
+			$this->notificationHelper,
+			$this->assignedUsersMapper,
+			$this->attachmentService,
+			'user1'
+        );
     }
 
     public function testFind() {

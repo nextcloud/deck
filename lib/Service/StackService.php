@@ -43,6 +43,7 @@ class StackService {
 	private $labelMapper;
 	private $permissionService;
 	private $boardService;
+	private $cardService;
 	private $assignedUsersMapper;
 	private $attachmentService;
 
@@ -53,6 +54,7 @@ class StackService {
 		LabelMapper $labelMapper,
 		PermissionService $permissionService,
 		BoardService $boardService,
+		CardService $cardService,
 		AssignedUsersMapper $assignedUsersMapper,
 		AttachmentService $attachmentService
 	) {
@@ -62,6 +64,7 @@ class StackService {
 		$this->labelMapper = $labelMapper;
 		$this->permissionService = $permissionService;
 		$this->boardService = $boardService;
+		$this->cardService = $cardService;
 		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->attachmentService = $attachmentService;
 	}
@@ -73,14 +76,8 @@ class StackService {
 			return;
 		}
 
-		$labels = $this->labelMapper->liveOrMemoizedLabelsForBoardId($stack->getBoardId());
-		foreach ($cards as $cardIndex => $card) {
-			$assignedUsers = $this->assignedUsersMapper->find($card->getId());
-			$card->setAssignedUsers($assignedUsers);
-			if (array_key_exists($card->id, $labels)) {
-				$cards[$cardIndex]->setLabels($labels[$card->id]);
-			}
-			$card->setAttachmentCount($this->attachmentService->count($card->getId()));
+		foreach ($cards as $card) {
+			$this->cardService->enrich($card);
 		}
 
 		$stack->setCards($cards);

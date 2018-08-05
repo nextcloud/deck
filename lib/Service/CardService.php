@@ -31,6 +31,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\StatusException;
 
@@ -40,6 +41,7 @@ class CardService {
 	private $cardMapper;
 	private $stackMapper;
 	private $boardMapper;
+	private $labelMapper;
 	private $permissionService;
 	private $boardService;
 	private $notificationHelper;
@@ -49,8 +51,9 @@ class CardService {
 
 	public function __construct(
 		CardMapper $cardMapper,
-		StackMapper $stackMapper, 
-		BoardMapper $boardMapper, 
+		StackMapper $stackMapper,
+		BoardMapper $boardMapper,
+		LabelMapper $labelMapper,
 		PermissionService $permissionService, 
 		BoardService $boardService,
 		NotificationHelper $notificationHelper,
@@ -61,6 +64,7 @@ class CardService {
 		$this->cardMapper = $cardMapper;
 		$this->stackMapper = $stackMapper;
 		$this->boardMapper = $boardMapper;
+		$this->labelMapper = $labelMapper;
 		$this->permissionService = $permissionService;
 		$this->boardService = $boardService;
 		$this->notificationHelper = $notificationHelper;
@@ -69,9 +73,20 @@ class CardService {
 		$this->currentUser = $userId;
 	}
 
+	public function enrich($card) {
+		$cardId = $card->getId();
+		$card->setAssignedUsers($this->assignedUsersMapper->find($cardId));
+		$card->setLabels($this->labelMapper->findAssignedLabelsForCard($cardId));
+		$card->setAttachmentCount($this->attachmentService->count($cardId));
+	}
+
 	public function fetchDeleted($boardId) {
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
-		return $this->cardMapper->findDeleted($boardId);
+		$cards = $this->cardMapper->findDeleted($boardId);
+		foreach ($cards as $card) {
+			$this->enrich($card);
+		}
+		return $cards;
 	}
 
 	public function find($cardId) {
