@@ -144,7 +144,7 @@ app.factory('ApiService', function ($http, $q) {
 			self.deleted[id] = self.data[id];
 			delete self.data[id];
 
-			let deletedAt = response.data.deletedAt
+			let deletedAt = response.data.deletedAt;
 			if (deletedAt !== undefined) {
 				self.deleted[id].deletedAt = deletedAt;
 			}
