@@ -209,43 +209,44 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		});
 	};
 
-	$scope.cardUndoDelete = function (deletedCard) {
+	$scope.cardOrCardAndStackUndoDelete = function (deletedCard) {
 		var associatedDeletedStack = $scope.stackservice.deleted[deletedCard.stackId];
 		if(associatedDeletedStack !== undefined) {
-			$scope.cardAndStackUndoDelete(deletedCard, associatedDeletedStack);
+			$scope.cardAndStackUndoDeleteAskForConfirmation(deletedCard, associatedDeletedStack);
 		} else {
-			$scope._cardUndoDelete(deletedCard);
+			$scope.cardUndoDelete(deletedCard);
 		}
 	};
 
-	$scope.cardAndStackUndoDelete = function(deletedCard, associatedDeletedStack) {
+	$scope.cardAndStackUndoDeleteAskForConfirmation = function(deletedCard, associatedDeletedStack) {
 		OC.dialogs.confirm(
 			t('deck', 'The associated stack is deleted as well, it will be restored as well.'),
 			t('deck', 'Restore associated stack'),
 			function(state) {
 				if (state) {
-					$scope._cardAndStackUndoDelete(deletedCard, associatedDeletedStack);
+					$scope.cardAndStackUndoDelete(deletedCard, associatedDeletedStack);
 				}
 			}
 		);
 	};
 
-	$scope._cardAndStackUndoDelete = function(deletedCard, associatedDeletedStack) {
+	$scope.cardAndStackUndoDelete = function(deletedCard, associatedDeletedStack) {
 		$scope.stackUndoDelete(associatedDeletedStack).then(function() {
-			$scope._cardUndoDelete(deletedCard);
+			$scope.cardUndoDelete(deletedCard);
 		});
-	}
+	};
 
-	$scope._cardUndoDelete = function(deletedCard) {
+	$scope.cardUndoDelete = function(deletedCard) {
 		CardService.undoDelete(deletedCard).then(function() {
 			StackService.addCard(deletedCard);
 		});
-	}
+	};
 
 	$scope.cardArchive = function (card) {
 		CardService.archive(card);
 		StackService.removeCard(card);
 	};
+
 	$scope.isCurrentUserAssigned = function (card) {
 		if (! CardService.get(card.id).assignedUsers) {
 			return false;
@@ -255,6 +256,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		});
 		return userList.length === 1;
 	};
+
 	$scope.cardAssignToMe = function (card) {
 		CardService.assignUser(card, OC.getCurrentUser().uid)
 			.then(
@@ -263,6 +265,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		// TODO: remove this jquery call. Fix and use appPopoverMenuUtils instead
 		$('.popovermenu').addClass('hidden');
 	};
+
 	$scope.cardUnassignFromMe = function (card) {
 		CardService.unassignUser(card, OC.getCurrentUser().uid);
 		StackService.updateCard(card);
@@ -281,6 +284,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		BoardService.getCurrent().labels.splice(i, 1);
 		// TODO: remove from cards
 	};
+
 	$scope.labelCreate = function (label) {
 		label.boardId = $scope.id;
 		LabelService.create(label).then(function (data) {
@@ -300,12 +304,14 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		BoardService.addAcl(sharee);
 		$scope.status.addSharee = null;
 	};
+
 	$scope.aclDelete = function (acl) {
 		BoardService.deleteAcl(acl).then(function(data) {
 			$scope.loadDefault();
 			$scope.refreshData();
 		});
 	};
+	
 	$scope.aclUpdate = function (acl) {
 		BoardService.updateAcl(acl);
 	};

@@ -141,7 +141,7 @@
     			  <span>{{deletedCard.title}}</span>
     			  <span>{{stackservice.tryAllThenDeleted(deletedCard.stackId).title}}</span>
     			  <span>{{deletedCard.deletedAt | relativeDateFilter }}</span>
-        	  <a ng-click="cardUndoDelete(deletedCard)">
+        	  <a ng-click="cardOrCardAndStackUndoDelete(deletedCard)">
               <span class="icon icon-history"></span>
             </a>
     	   </li>
