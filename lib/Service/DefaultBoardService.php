@@ -29,6 +29,7 @@ use OCA\Deck\Service\StackService;
 use OCA\Deck\Service\CardService;
 use OCP\IConfig;
 use OCP\IL10N;
+use OCA\Deck\BadRequestException;
 
 class DefaultBoardService {
 
@@ -83,8 +84,22 @@ class DefaultBoardService {
 	 * @throws \OCA\Deck\StatusException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
 	 */
 	public function createDefaultBoard($title, $userId, $color) {
+
+		if ($title === false || $title === null) {
+			throw new BadRequestException('title must be provided');
+		}
+
+		if ($userId === false || $userId == null) {
+			throw new BadRequestException('userId must be provided');
+		}
+
+		if ($color === false || $color === null) {
+			throw new BadRequestException('color must be provided');
+		}
+
         $defaultBoard = $this->boardService->create($title, $userId, $color);
         $defaultStacks = [];
         $defaultCards = [];
