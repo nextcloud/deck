@@ -161,8 +161,18 @@ class BoardService {
 	 * @throws DoesNotExistException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
 	 */
 	public function isArchived($mapper, $id) {
+
+		if ($mapper === false || $mapper === null) {
+			throw new BadRequestException('mapper must be provided');
+		}
+
+		if (is_numeric($id) === false)  {
+			throw new BadRequestException('id must be a number');
+		}
+
 		try {
 			$boardId = $id;
 			if ($mapper instanceof IPermissionMapper) {
@@ -185,8 +195,18 @@ class BoardService {
 	 * @throws DoesNotExistException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
 	 */
 	public function isDeleted($mapper, $id) {
+
+		if ($mapper === false || $mapper === null) {
+			throw new BadRequestException('mapper must be provided');
+		}
+
+		if (is_numeric($id) === false)  {
+			throw new BadRequestException('id must be a number');
+		}
+
 		try {
 			$boardId = $id;
 			if ($mapper instanceof IPermissionMapper) {
@@ -304,8 +324,13 @@ class BoardService {
 	 * @throws DoesNotExistException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
 	 */
-	public function deleteForce($id) {
+	public function deleteForce($id) {		
+		if (is_numeric($id) === false)  {
+			throw new BadRequestException('id must be a number');
+		}
+
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
 		return $this->boardMapper->delete($board);
@@ -358,9 +383,35 @@ class BoardService {
 	 * @param $share
 	 * @param $manage
 	 * @return \OCP\AppFramework\Db\Entity
-	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCA\Deck\
+	 * @throws BadRequestException
 	 */
 	public function addAcl($boardId, $type, $participant, $edit, $share, $manage) {
+
+		if (is_numeric($boardId) === false) {
+			throw new BadRequestException('board id must be a number');
+		}
+
+		if ($type === false || $type === null) {
+			throw new BadRequestException('type must be provided');
+		}
+
+		if ($participant === false || $participant === null) {
+			throw new BadRequestException('participant must be provided');
+		}
+
+		if ($edit === false || $edit === null) {
+			throw new BadRequestException('edit must be provided');
+		}
+
+		if ($share === false || $share === null) {
+			throw new BadRequestException('share must be provided');
+		}
+
+		if ($manage === false || $manage === null) {
+			throw new BadRequestException('manage must be provided');
+		}
+
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_SHARE);
 		$acl = new Acl();
 		$acl->setBoardId($boardId);
@@ -387,8 +438,26 @@ class BoardService {
 	 * @throws DoesNotExistException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
 	 */
 	public function updateAcl($id, $edit, $share, $manage) {
+
+		if (is_numeric($id) === false) {
+			throw new BadRequestException('id must be a number');
+		}
+
+		if ($edit === false || $edit === null) {
+			throw new BadRequestException('edit must be provided');
+		}
+
+		if ($share === false || $share === null) {
+			throw new BadRequestException('share must be provided');
+		}
+
+		if ($manage === false || $manage === null) {
+			throw new BadRequestException('manage must be provided');
+		}
+
 		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_SHARE);
 		/** @var Acl $acl */
 		$acl = $this->aclMapper->find($id);
@@ -405,8 +474,14 @@ class BoardService {
 	 * @throws DoesNotExistException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
 	 */
 	public function deleteAcl($id) {
+
+		if (is_numeric($id) === false) {
+			throw new BadRequestException('id must be a number');
+		}
+
 		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_SHARE);
 		/** @var Acl $acl */
 		$acl = $this->aclMapper->find($id);
