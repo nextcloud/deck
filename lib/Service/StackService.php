@@ -276,8 +276,18 @@ class StackService {
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
 	 */
 	public function reorder($id, $order) {
+
+		if (is_numeric($id) === false) {
+			throw new BadRquestException('id must be a number');
+		}
+
+		if ($order === false || $order === null) {
+			throw new BadRequestException('order must be provided');
+		}
+
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_EDIT);
 		$stackToSort = $this->stackMapper->find($id);
 		$stacks = $this->stackMapper->findAll($stackToSort->getBoardId());
