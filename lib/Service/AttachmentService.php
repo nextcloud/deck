@@ -104,8 +104,14 @@ class AttachmentService {
 	 * @param $cardId
 	 * @return array
 	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws BadRequestException
 	 */
 	public function findAll($cardId, $withDeleted = false) {
+
+		if (is_numeric($cardId) === false) {
+			throw new BadRequestException('card id must be a number');
+		}
+
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 
 		$attachments = $this->attachmentMapper->findAll($cardId);
@@ -126,8 +132,14 @@ class AttachmentService {
 	/**
 	 * @param $cardId
 	 * @return int|mixed
+	 * @throws BadRequestException
 	 */
 	public function count($cardId) {
+
+		if (is_numeric($cardId) === false) {
+			throw new BadRequestException('card id must be a number');
+		}
+
 		$count = $this->cache->get('card-' . $cardId);
 		if (!$count) {
 			$count = count($this->attachmentMapper->findAll($cardId));
@@ -143,8 +155,22 @@ class AttachmentService {
 	 * @return Attachment|\OCP\AppFramework\Db\Entity
 	 * @throws NoPermissionException
 	 * @throws StatusException
+	 * @throws BadRequestException
 	 */
 	public function create($cardId, $type, $data) {
+
+		if (is_numeric($cardId) === false) {
+			throw new BadRequestException('card id must be a number');
+		}
+
+		if ($type === false || $type === null) {
+			throw new BadRequestException('type must be provided');
+		}
+
+		if ($data === false || $data === null) {
+			throw new BadRequestException('data must be provided');
+		}
+
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 
 		$this->cache->clear('card-' . $cardId);
@@ -188,11 +214,20 @@ class AttachmentService {
 	 * @throws NoPermissionException
 	 * @throws NotFoundException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws \OCP\AppFramework\Db\
+	 * @throws BadRequestException
 	 */
 	public function display($cardId, $attachmentId) {
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 
+		if (is_numeric($cardId) === false) {
+			throw new BadRequestException('card id must be a number');
+		}
+
+		if (is_numeric($attachmentId) === false) {
+			throw new BadRequestException('attachment id must be a number');
+		}
+
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		$attachment = $this->attachmentMapper->find($attachmentId);
 
 		try {
@@ -213,10 +248,23 @@ class AttachmentService {
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
 	 */
 	public function update($cardId, $attachmentId, $data) {
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 
+		if (is_numeric($cardId) === false) {
+			throw new BadRequestException('card id must be a number');
+		}
+
+		if (is_numeric($attachmentId) === false) {
+			throw new BadRequestException('attachment id must be a number');
+		}
+
+		if ($data === false || $data === null) {
+			throw new BadRequestException('data must be provided');
+		}
+
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 		$this->cache->clear('card-' . $cardId);
 
 		$attachment = $this->attachmentMapper->find($attachmentId);
@@ -249,10 +297,19 @@ class AttachmentService {
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
 	 */
 	public function delete($cardId, $attachmentId) {
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 
+		if (is_numeric($cardId) === false) {
+			throw new BadRequestException('card id must be a number');
+		}
+
+		if (is_numeric($attachmentId) === false) {
+			throw new BadRequestException('attachment id must be a number');
+		}
+
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 		$this->cache->clear('card-' . $cardId);
 
 		$attachment = $this->attachmentMapper->find($attachmentId);
@@ -270,8 +327,16 @@ class AttachmentService {
 	}
 
 	public function restore($cardId, $attachmentId) {
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 
+		if (is_numeric($cardId) === false) {
+			throw new BadRequestException('card id must be a number');
+		}
+
+		if (is_numeric($attachmentId) === false) {
+			throw new BadRequestException('attachment id must be a number');
+		}
+
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 		$this->cache->clear('card-' . $cardId);
 
 		$attachment = $this->attachmentMapper->find($attachmentId);
