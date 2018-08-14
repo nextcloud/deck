@@ -25,6 +25,7 @@ namespace OCA\Deck\Middleware;
 
 use OCA\Deck\StatusException;
 use OCA\Deck\BadRequestException;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Middleware;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\ILogger;
@@ -69,6 +70,17 @@ class SharingMiddleware extends Middleware {
 				'message' => $exception->getMessage()
 			], $exception->getStatus());
 		}
+
+		// uncatched DoesNotExistExceptions will be thrown when the main entity is not found
+		// we return a 403 so we don't leak information over existing entries
+		// TODO: At some point those should properly be catched in the service classes
+		if ($exception instanceof DoesNotExistException) {
+			return new JSONResponse([
+				'status' => 403,
+				'message' => 'Permission denied'
+			], 403);
+		}
+
 		throw $exception;
 	}
 
