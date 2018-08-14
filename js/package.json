@@ -10,7 +10,7 @@
   "dependencies": {
     "@uirouter/angularjs": "^1.0.20",
     "angular": "^1.7.2",
-    "angular-animate": "^1.7.2",
+    "angular-animate": "^1.7.3",
     "angular-file-upload": "^2.5.0",
     "angular-markdown-it": "^0.6.1",
     "angular-sanitize": "^1.7.2",
