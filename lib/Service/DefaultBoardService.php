@@ -92,7 +92,7 @@ class DefaultBoardService {
 			throw new BadRequestException('title must be provided');
 		}
 
-		if ($userId === false || $userId == null) {
+		if ($userId === false || $userId === null) {
 			throw new BadRequestException('userId must be provided');
 		}
 
