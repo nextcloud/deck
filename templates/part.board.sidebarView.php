@@ -5,8 +5,8 @@
         <p>{{ statusservice.text }}</p></div>
 </div>
 <div id="sidebar-header">
-    <a class="icon-close" ui-sref="board" ng-click="sidebar.show=!sidebar.show" title="<?php p($l->t('Close')); ?>"> &nbsp;<?php 
-		?><span class="hidden-visually"><?php p($l->t('Close')); ?></span><?php 
+    <a class="icon-close" ui-sref="board" ng-click="sidebar.show=!sidebar.show" title="<?php p($l->t('Close')); ?>"> &nbsp;<?php
+		?><span class="hidden-visually"><?php p($l->t('Close')); ?></span><?php
 	?></a>
     <h3>{{ boardservice.getCurrent().title }}</h3>
 </div>
@@ -14,6 +14,8 @@
 <ul class="tabHeaders">
     <li class="tabHeader" ng-class="{'selected': (params.tab==0 || !params.tab)}" ui-sref="{tab: 0}"><a><?php p($l->t('Sharing')); ?></a></li>
     <li class="tabHeader" ng-class="{'selected': (params.tab==1)}" ui-sref="{tab: 1}"><a><?php p($l->t('Tags')); ?></a></li>
+    <li class="tabHeader" ng-class="{'selected': (params.tab==2)}" ui-sref="{tab: 2}"><a><?php p($l->t('Deleted Stacks')); ?></a></li>
+    <li class="tabHeader" ng-class="{'selected': (params.tab==3)}" ui-sref="{tab: 3}"><a><?php p($l->t('Deleted Cards')); ?></a></li>
 </ul>
 <div class="tabsContainer">
     <div id="tabBoardShare" class="tab" ng-if="params.tab==0 || !params.tab">
@@ -117,5 +119,32 @@
                 </li>
             </ul>
 
+    </div>
+
+    <div id="board-detail-deleted-stacks" class="tab deletedStacksTabView" ng-if="params.tab==2">
+    	<ul class='board-detail__deleted-list'>
+    	   <li class='board-detail__deleted-list__item' ng-repeat="deletedStack in stackservice.deleted">
+           <span class="icon icon-deck"></span>
+           <span>{{deletedStack.title}}</span>
+    			 <span>{{deletedStack.deletedAt | relativeDateFilter }}</span>
+           <a ng-click="stackUndoDelete(deletedStack)">
+             <span class="icon icon-history"></span>
+           </a>
+    	   </li>
+    	</ul>
+    </div>
+
+    <div id="board-detail-deleted-cards" class="tab deletedCardsTabView" ng-if="params.tab==3">
+    	<ul class='board-detail__deleted-list'>
+    	   <li class='board-detail__deleted-list__item' ng-repeat="deletedCard in cardservice.deleted">
+            <span class="icon icon-deck"></span>
+    			  <span>{{deletedCard.title}}</span>
+    			  <span>{{stackservice.tryAllThenDeleted(deletedCard.stackId).title}}</span>
+    			  <span>{{deletedCard.deletedAt | relativeDateFilter }}</span>
+        	  <a ng-click="cardOrCardAndStackUndoDelete(deletedCard)">
+              <span class="icon icon-history"></span>
+            </a>
+    	   </li>
+    	</ul>
     </div>
 </div>

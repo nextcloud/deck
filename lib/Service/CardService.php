@@ -30,6 +30,8 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Notification\NotificationHelper;
+use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\StatusException;
 
@@ -38,6 +40,8 @@ class CardService {
 
 	private $cardMapper;
 	private $stackMapper;
+	private $boardMapper;
+	private $labelMapper;
 	private $permissionService;
 	private $boardService;
 	private $notificationHelper;
@@ -45,15 +49,44 @@ class CardService {
 	private $attachmentService;
 	private $currentUser;
 
-	public function __construct(CardMapper $cardMapper, StackMapper $stackMapper, PermissionService $permissionService, BoardService $boardService, NotificationHelper $notificationHelper, AssignedUsersMapper $assignedUsersMapper, AttachmentService $attachmentService, $userId) {
+	public function __construct(
+		CardMapper $cardMapper,
+		StackMapper $stackMapper,
+		BoardMapper $boardMapper,
+		LabelMapper $labelMapper,
+		PermissionService $permissionService, 
+		BoardService $boardService,
+		NotificationHelper $notificationHelper,
+		AssignedUsersMapper $assignedUsersMapper, 
+		AttachmentService $attachmentService,
+		$userId
+	) {
 		$this->cardMapper = $cardMapper;
 		$this->stackMapper = $stackMapper;
+		$this->boardMapper = $boardMapper;
+		$this->labelMapper = $labelMapper;
 		$this->permissionService = $permissionService;
 		$this->boardService = $boardService;
 		$this->notificationHelper = $notificationHelper;
 		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->attachmentService = $attachmentService;
 		$this->currentUser = $userId;
+	}
+
+	public function enrich($card) {
+		$cardId = $card->getId();
+		$card->setAssignedUsers($this->assignedUsersMapper->find($cardId));
+		$card->setLabels($this->labelMapper->findAssignedLabelsForCard($cardId));
+		$card->setAttachmentCount($this->attachmentService->count($cardId));
+	}
+
+	public function fetchDeleted($boardId) {
+		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
+		$cards = $this->cardMapper->findDeleted($boardId);
+		foreach ($cards as $card) {
+			$this->enrich($card);
+		}
+		return $cards;
 	}
 
 	public function find($cardId) {
@@ -89,10 +122,13 @@ class CardService {
 		if ($this->boardService->isArchived($this->cardMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
-		return $this->cardMapper->delete($this->cardMapper->find($id));
+		$card = $this->cardMapper->find($id);
+		$card->setDeletedAt(time());
+		$this->cardMapper->update($card);
+		return $card;
 	}
 
-	public function update($id, $title, $stackId, $type, $order, $description, $owner, $duedate) {
+	public function update($id, $title, $stackId, $type, $order, $description, $owner, $duedate, $deletedAt) {
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
 		if ($this->boardService->isArchived($this->cardMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
@@ -108,6 +144,7 @@ class CardService {
 		$card->setOwner($owner);
 		$card->setDescription($description);
 		$card->setDuedate($duedate);
+		$card->setDeletedAt($deletedAt);
 		return $this->cardMapper->update($card);
 	}
 

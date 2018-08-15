@@ -4,20 +4,20 @@
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *  
+ *
  */
 
 import app from '../app/App.js';
@@ -41,6 +41,15 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.defaultColors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
 	$scope.board = BoardService.getCurrent();
 	$scope.uploader = FileService.uploader;
+
+	$scope.$watch(function() {
+		return $state.current;
+	}, function(currentState) {
+		if(currentState.name === 'board.detail') {
+			CardService.fetchDeleted($scope.id);
+			StackService.fetchDeleted($scope.id);
+		}
+	});
 
 	// workaround for $stateParams changes not being propagated
 	$scope.$watch(function() {
@@ -186,20 +195,58 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		});
 	};
 
+	$scope.stackDelete = function (stack) {
+		$scope.stackservice.delete(stack.id);
+	};
+
+	$scope.stackUndoDelete = function (deletedStack) {
+		return StackService.undoDelete(deletedStack);
+	};
+
 	$scope.cardDelete = function (card) {
-		OC.dialogs.confirm(t('deck', 'Are you sure you want to delete this card with all of its data?'), t('deck', 'Delete'), function(state) {
-			if (!state) {
-				return;
-			}
-			CardService.delete(card.id).then(function () {
-				StackService.removeCard(card);
-			});
+		CardService.delete(card.id).then(function () {
+			StackService.removeCard(card);
 		});
 	};
+
+	$scope.cardOrCardAndStackUndoDelete = function (deletedCard) {
+		var associatedDeletedStack = $scope.stackservice.deleted[deletedCard.stackId];
+		if(associatedDeletedStack !== undefined) {
+			$scope.cardAndStackUndoDeleteAskForConfirmation(deletedCard, associatedDeletedStack);
+		} else {
+			$scope.cardUndoDelete(deletedCard);
+		}
+	};
+
+	$scope.cardAndStackUndoDeleteAskForConfirmation = function(deletedCard, associatedDeletedStack) {
+		OC.dialogs.confirm(
+			t('deck', 'The associated stack is deleted as well, it will be restored as well.'),
+			t('deck', 'Restore associated stack'),
+			function(state) {
+				if (state) {
+					$scope.cardAndStackUndoDelete(deletedCard, associatedDeletedStack);
+				}
+			}
+		);
+	};
+
+	$scope.cardAndStackUndoDelete = function(deletedCard, associatedDeletedStack) {
+		$scope.stackUndoDelete(associatedDeletedStack).then(function() {
+			$scope.cardUndoDelete(deletedCard);
+		});
+	};
+
+	$scope.cardUndoDelete = function(deletedCard) {
+		CardService.undoDelete(deletedCard).then(function() {
+			StackService.addCard(deletedCard);
+		});
+	};
+
 	$scope.cardArchive = function (card) {
 		CardService.archive(card);
 		StackService.removeCard(card);
 	};
+
 	$scope.isCurrentUserAssigned = function (card) {
 		if (! CardService.get(card.id).assignedUsers) {
 			return false;
@@ -209,6 +256,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		});
 		return userList.length === 1;
 	};
+
 	$scope.cardAssignToMe = function (card) {
 		CardService.assignUser(card, OC.getCurrentUser().uid)
 			.then(
@@ -217,6 +265,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		// TODO: remove this jquery call. Fix and use appPopoverMenuUtils instead
 		$('.popovermenu').addClass('hidden');
 	};
+
 	$scope.cardUnassignFromMe = function (card) {
 		CardService.unassignUser(card, OC.getCurrentUser().uid);
 		StackService.updateCard(card);
@@ -235,6 +284,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		BoardService.getCurrent().labels.splice(i, 1);
 		// TODO: remove from cards
 	};
+
 	$scope.labelCreate = function (label) {
 		label.boardId = $scope.id;
 		LabelService.create(label).then(function (data) {
@@ -254,12 +304,14 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		BoardService.addAcl(sharee);
 		$scope.status.addSharee = null;
 	};
+
 	$scope.aclDelete = function (acl) {
 		BoardService.deleteAcl(acl).then(function(data) {
 			$scope.loadDefault();
 			$scope.refreshData();
 		});
 	};
+
 	$scope.aclUpdate = function (acl) {
 		BoardService.updateAcl(acl);
 	};
@@ -383,5 +435,4 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		}
 		return card.attachmentCount;
 	};
-
 });

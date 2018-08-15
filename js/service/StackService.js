@@ -4,20 +4,20 @@
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *  
+ *
  */
 import app from '../app/App.js';
 
@@ -27,6 +27,11 @@ app.factory('StackService', function (ApiService, CardService, $http, $q) {
 		ApiService.call(this, $http, ep, $q);
 	};
 	StackService.prototype = angular.copy(ApiService.prototype);
+
+	StackService.prototype.afterFetch = function(stack) {
+		CardService.addAll(stack.cards);
+	};
+
 	StackService.prototype.fetchAll = function (boardId) {
 		var deferred = $q.defer();
 		var self = this;
@@ -129,27 +134,6 @@ app.factory('StackService', function (ApiService, CardService, $http, $q) {
 		}
 	};
 
-	// FIXME: Should not show popup but proper undo mechanism
-	StackService.prototype.delete = function (id) {
-		var deferred = $q.defer();
-		var self = this;
-
-		OC.dialogs.confirm(t('deck', 'Are you sure you want to delete the stack with all of its data?'), t('deck', 'Delete'), function(state) {
-			if (!state) {
-				return;
-			}
-			$http.delete(self.baseUrl + '/' + id).then(function (response) {
-				self.remove(id);
-				deferred.resolve(response.data);
-
-			}, function (error) {
-				deferred.reject('Deleting ' + self.endpoint + ' failed');
-			});
-		});
-		return deferred.promise;
-	};
-
 	var service = new StackService($http, 'stacks', $q);
 	return service;
 });
-

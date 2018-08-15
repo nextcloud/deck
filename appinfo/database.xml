@@ -77,6 +77,14 @@
                 <length>8</length>
                 <notnull>false</notnull>
             </field>
+            <field>
+                <name>deleted_at</name>
+                <type>integer</type>
+                <default>0</default>
+                <length>8</length>
+                <notnull>false</notnull>
+                <unsigned>true</unsigned>
+            </field>
             <index>
                 <name>deck_stacks_board_id_index</name>
                 <field>
@@ -166,6 +174,14 @@
                 <name>notified</name>
                 <type>boolean</type>
                 <default>false</default>
+            </field>
+            <field>
+                <name>deleted_at</name>
+                <type>integer</type>
+                <default>0</default>
+                <length>8</length>
+                <notnull>false</notnull>
+                <unsigned>true</unsigned>
             </field>
             <index>
                 <name>deck_cards_stack_id_index</name>

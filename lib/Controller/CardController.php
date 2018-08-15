@@ -89,10 +89,11 @@ class CardController extends Controller {
 	 * @param $order
 	 * @param $description
 	 * @param $duedate
+	 * @param $deletedAt
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function update($id, $title, $stackId, $type, $order, $description, $duedate) {
-			return $this->cardService->update($id, $title, $stackId, $type, $order, $description, $this->userId, $duedate);
+	public function update($id, $title, $stackId, $type, $order, $description, $duedate, $deletedAt) {
+			return $this->cardService->update($id, $title, $stackId, $type, $order, $description, $this->userId, $duedate, $deletedAt);
 	}
 
 	/**
@@ -102,6 +103,15 @@ class CardController extends Controller {
 	 */
 	public function delete($cardId) {
 		return $this->cardService->delete($cardId);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @param $boardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
+	public function deleted($boardId) {
+		return $this->cardService->fetchDeleted($boardId);
 	}
 
 	/**

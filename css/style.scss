@@ -1170,6 +1170,16 @@ input.input-inline {
 	position: relative;
 }
 
+.board-detail__deleted-list__item {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+
+	* {
+		flex-basis: 20%;
+	}
+}
+
 #board-detail-labels {
 	ul li {
 		input {
@@ -1215,12 +1225,18 @@ input.input-inline {
 
 .tabHeaders {
 	clear: both;
-	overflow: hidden;
+	overflow: initial;
 	margin-bottom: 0;
 }
 
 .tabsContainer {
 	margin-top: 15px;
+	height: 100%;
+
+	.tab {
+		height: 100%;
+		overflow: scroll;
+	}
 }
 
 .ui-select-offscreen {
