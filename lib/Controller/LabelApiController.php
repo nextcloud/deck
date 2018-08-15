@@ -28,7 +28,6 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use OCA\Deck\Service\LabelService;
-use OCA\Deck\Service\BoardService;
 use OCA\Deck\Controller\Helper\ApiHelper;
 
  /**

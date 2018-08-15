@@ -32,8 +32,6 @@ use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\StatusException;
 use OCA\Deck\BadRequestException;
-use OCP\ICache;
-use OCP\ICacheFactory;
 
 
 class StackService {

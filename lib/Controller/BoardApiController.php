@@ -28,8 +28,6 @@ use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
-use OCP\IUserManager;
-use OCP\IGroupManager;
 
 use OCA\Deck\Service\BoardService;
 

@@ -26,7 +26,6 @@ use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
-
 use OCA\Deck\Service\AttachmentService;
 
 class AttachmentApiController extends ApiController {
