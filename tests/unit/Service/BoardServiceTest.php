@@ -33,6 +33,8 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\IUser;
+use OCP\IUserManager;
+use OCP\IGroupManager;
 use \Test\TestCase;
 
 class BoardServiceTest extends TestCase {
@@ -53,8 +55,12 @@ class BoardServiceTest extends TestCase {
 	private $notificationHelper;
 	/** @var AssignedUsersMapper */
 	private $assignedUsersMapper;
+	/** @var IUserManager */
+	private $userManager;
+	/** @var IUserManager */
+	private $groupManager;
 
-	private $userId = 'admin';
+	private $userId = 'admin';	
 
 	public function setUp() {
 		parent::setUp();
@@ -65,6 +71,8 @@ class BoardServiceTest extends TestCase {
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
 		$this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
+		$this->userManager = $this->createMock(IUserManager::class);
+		$this->groupManager = $this->createMock(IGroupManager::class);				
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -73,11 +81,14 @@ class BoardServiceTest extends TestCase {
 			$this->aclMapper,
 			$this->permissionService,
 			$this->notificationHelper,
-			$this->assignedUsersMapper
+			$this->assignedUsersMapper,
+			$this->userManager,
+			$this->groupManager,
+			$this->userId
 		);
 
 		$user = $this->createMock(IUser::class);
-		$user->method('getUID')->willReturn('admin');
+		$user->method('getUID')->willReturn('admin');		
 	}
 
 	public function testFindAll() {
@@ -95,11 +106,14 @@ class BoardServiceTest extends TestCase {
 			->method('findAllByGroups')
 			->with('admin', ['a', 'b', 'c'])
 			->willReturn([$b2, $b3]);
-		$userinfo = [
-			'user' => 'admin',
-			'groups' => ['a', 'b', 'c']
-		];
-		$result = $this->service->findAll($userinfo);
+		$user = $this->createMock(IUser::class);
+		$this->groupManager->method('getUserGroupIds')
+			->willReturn(['a', 'b', 'c']);
+		$this->userManager->method('get')
+			->with($this->userId)
+			->willReturn($user);
+
+		$result = $this->service->findAll();
 		sort($result);
 		$this->assertEquals([$b1, $b2, $b3], $result);
 	}

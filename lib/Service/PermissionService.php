@@ -31,6 +31,8 @@ use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\IGroupManager;
 use OCP\ILogger;
 use OCP\IUserManager;
@@ -114,42 +116,41 @@ class PermissionService {
 	 * @throws NoPermissionException
 	 */
 	public function checkPermission($mapper, $id, $permission) {
-		try {
-			$boardId = $id;
-			if ($mapper instanceof IPermissionMapper) {
-				$boardId = $mapper->findBoardId($id);
-			}
-			if ($boardId === null) {
-				// Throw NoPermission to not leak information about existing entries
-				throw new NoPermissionException('Permission denied');
-			}
-
-			if ($this->userIsBoardOwner($boardId)) {
-				return true;
-			}
-			$acls = $this->aclMapper->findAll($boardId);
-			$result = $this->userCan($acls, $permission);
-			if ($result) {
-				return true;
-			}
-
-		} catch (DoesNotExistException $exception) {
+		$boardId = $id;
+		if ($mapper instanceof IPermissionMapper) {
+			$boardId = $mapper->findBoardId($id);
+		}
+		if ($boardId === null) {
 			// Throw NoPermission to not leak information about existing entries
 			throw new NoPermissionException('Permission denied');
 		}
 
-		throw new NoPermissionException('Permission denied.');
+		if ($this->userIsBoardOwner($boardId)) {
+			return true;
+		}
 
+		$acls = $this->aclMapper->findAll($boardId);
+		$result = $this->userCan($acls, $permission);
+		if ($result) {
+			return true;
+		}
+
+		// Throw NoPermission to not leak information about existing entries
+		throw new NoPermissionException('Permission denied');
 	}
 
 	/**
 	 * @param $boardId
 	 * @return bool
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function userIsBoardOwner($boardId) {
-		$board = $this->boardMapper->find($boardId);
-		return $board && $this->userId === $board->getOwner();
+		try {
+			$board = $this->boardMapper->find($boardId);
+			return $board && $this->userId === $board->getOwner();
+		} catch (DoesNotExistException $e) {
+		} catch (MultipleObjectsReturnedException $e) {
+			return false;
+		}		
 	}
 
 	/**
@@ -192,19 +193,34 @@ class PermissionService {
 			$board = $this->boardMapper->find($boardId);
 		} catch (DoesNotExistException $e) {
 			return [];
+		} catch (MultipleObjectsReturnedException $e) {
+			return [];
 		}
+
 		$owner = $this->userManager->get($board->getOwner());
-		$users = [];
-		$users[$owner->getUID()] = new User($owner);
+		if ($owner === null) {
+			$this->logger->info('No owner found for board ' . $board->getId());
+		} else {
+			$users = [];
+			$users[$owner->getUID()] = new User($owner);
+		}
 		$acls = $this->aclMapper->findAll($boardId);
 		/** @var Acl $acl */
 		foreach ($acls as $acl) {
 			if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
 				$user = $this->userManager->get($acl->getParticipant());
+				if ($user === null) {
+					$this->logger->info('No user found for acl rule ' . $acl->getId());
+					continue;
+				}
 				$users[$user->getUID()] = new User($user);
 			}
 			if ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
 				$group = $this->groupManager->get($acl->getParticipant());
+				if ($group === null) {
+					$this->logger->info('No group found for acl rule ' . $acl->getId());
+					continue;
+				}
 				foreach ($group->getUsers() as $user) {
 					$users[$user->getUID()] = new User($user);
 				}

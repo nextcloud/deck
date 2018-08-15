@@ -231,7 +231,7 @@ class PermissionServiceTest extends \Test\TestCase {
             $actual = $this->service->checkPermission($mapper, 1234, $permission);
             $this->assertTrue($actual);
         } else {
-            $this->setExpectedException(NoPermissionException::class);
+            $this->expectException(NoPermissionException::class);
             $this->service->checkPermission($mapper, 1234, $permission);
         }
 
@@ -255,7 +255,7 @@ class PermissionServiceTest extends \Test\TestCase {
             $actual = $this->service->checkPermission($mapper, 1234, $permission);
             $this->assertTrue($actual);
         } else {
-            $this->setExpectedException(NoPermissionException::class);
+            $this->expectException(NoPermissionException::class);
             $this->service->checkPermission($mapper, 1234, $permission);
         }
 
@@ -263,8 +263,8 @@ class PermissionServiceTest extends \Test\TestCase {
 
     public function testCheckPermissionNotFound() {
         $mapper = $this->getMockBuilder(IPermissionMapper::class)->getMock();
-        $mapper->expects($this->once())->method('findBoardId')->willThrowException(new NoPermissionException(null));
-        $this->setExpectedException(NoPermissionException::class);
+        $mapper->expects($this->once())->method('findBoardId')->willThrowException(new NoPermissionException(null));		
+		$this->expectException(NoPermissionException::class);
         $this->service->checkPermission($mapper, 1234, Acl::PERMISSION_READ);
     }
 

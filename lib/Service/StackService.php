@@ -31,8 +31,7 @@ use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\StatusException;
-use OCP\ICache;
-use OCP\ICacheFactory;
+use OCA\Deck\BadRequestException;
 
 
 class StackService {
@@ -89,7 +88,40 @@ class StackService {
 		}
 	}
 
+	/**
+	 * @param $stackId
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
+	public function find($stackId) {
+		if (is_numeric($stackId) === false) {
+			throw new BadRequestException('stack id must be a number');
+		}
+
+		$stack = $this->stackMapper->find($stackId);
+		$cards = $this->cardMapper->findAll($stackId);
+		foreach ($cards as $cardIndex => $card) {
+			$assignedUsers = $this->assignedUsersMapper->find($card->getId());
+			$card->setAssignedUsers($assignedUsers);
+			$card->setAttachmentCount($this->attachmentService->count($card->getId()));
+		}
+		$stack->setCards($cards);
+		return $stack;
+	}
+
+	/**
+	 * @param $boardId
+	 * @return array
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws BadRequestException
+	 */
 	public function findAll($boardId) {
+		if (is_numeric($boardId) === false) {
+			throw new BadRequestException('boardId must be a number');
+		}
+
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
 		$stacks = $this->stackMapper->findAll($boardId);
 		$this->enrichStacksWithCards($stacks);
@@ -103,7 +135,18 @@ class StackService {
 		return $stacks;
 	}
 
+	/**
+	 * @param $boardId
+	 * @return array
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws BadRequestException
+	 */
 	public function findAllArchived($boardId) {
+
+		if (is_numeric($boardId) === false) {
+			throw new BadRequestException('board id must be a number');
+		}
+
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
 		$stacks = $this->stackMapper->findAll($boardId);
 		$labels = $this->labelMapper->getAssignedLabelsForBoard($boardId);
@@ -120,9 +163,30 @@ class StackService {
 	}
 
 	/**
+	 * @param $title
+	 * @param $boardId
 	 * @param integer $order
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
 	 */
 	public function create($title, $boardId, $order) {
+
+		if ($title === false || $title === null) {
+			throw new BadRequestException('title must be provided');
+		}
+
+		if (is_numeric($order) === false) {
+			throw new BadRequestException('order must be a number');
+		}
+
+		if (is_numeric($boardId) === false) {
+			throw new BadRequestException('board id must be a number');
+		}
+
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
 		if ($this->boardService->isArchived(null, $boardId)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
@@ -135,7 +199,20 @@ class StackService {
 
 	}
 
+	/**
+	 * @param $id
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
 	public function delete($id) {
+
+		if ( is_numeric($id) === false ) {
+			throw new BadRequestException('stack id must be a number');
+		}
+
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
 
 		$stack = $this->stackMapper->find($id);
@@ -147,8 +224,37 @@ class StackService {
 		return $stack;
 	}
 
-
+	/**
+	 * @param $id
+	 * @param $title
+	 * @param $boardId
+	 * @param $order
+	 * @param $deletedAt
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
 	public function update($id, $title, $boardId, $order, $deletedAt) {
+
+		if (is_numeric($id) === false) {
+			throw new BadRequestException('stack id must be a number');
+		}
+
+		if ($title === false || $title === null) {
+			throw new BadRequestException('title must be provided');
+		}
+
+		if (is_numeric($boardId) === false) {
+			throw new BadRequestException('board id must be a number');
+		}
+
+		if (is_numeric($order) === false) {
+			throw new BadRequestException('order must be a number');
+		}
+
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
 		if ($this->boardService->isArchived($this->stackMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
@@ -161,7 +267,25 @@ class StackService {
 		return $this->stackMapper->update($stack);
 	}
 
+	/**
+	 * @param $id
+	 * @param $order
+	 * @return array
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
 	public function reorder($id, $order) {
+
+		if (is_numeric($id) === false) {
+			throw new BadRquestException('id must be a number');
+		}
+
+		if ($order === false || $order === null) {
+			throw new BadRequestException('order must be provided');
+		}
+
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_EDIT);
 		$stackToSort = $this->stackMapper->find($id);
 		$stacks = $this->stackMapper->findAll($stackToSort->getBoardId());

@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
+ * @author Ryan Fletcher <ryan.fletcher@codepassion.ca>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -76,5 +77,43 @@ return [
 		['name' => 'label#update', 'url' => '/labels/{labelId}', 'verb' => 'PUT'],
 		['name' => 'label#delete', 'url' => '/labels/{labelId}', 'verb' => 'DELETE'],
 
+		// api
+		['name' => 'board_api#index', 'url' => '/api/v1.0/boards', 'verb' => 'GET'],
+		['name' => 'board_api#get', 'url' => '/api/v1.0/boards/{boardId}', 'verb' => 'GET'],
+		['name' => 'board_api#create', 'url' => '/api/v1.0/boards', 'verb' => 'POST'],
+		['name' => 'board_api#delete', 'url' => '/api/v1.0/boards/{boardId}', 'verb' => 'DELETE'],
+		['name' => 'board_api#update', 'url' => '/api/v1.0/boards/{boardId}', 'verb' => 'PUT'],
+		['name' => 'board_api#undo_delete', 'url' => '/api/v1.0/boards/{boardId}/undo_delete', 'verb' => 'POST'],
+		
+		['name' => 'stack_api#index', 'url' => '/api/v1.0/boards/{boardId}/stacks', 'verb' => 'GET'],
+		['name' => 'stack_api#getArchived', 'url' => '/api/v1.0/boards/{boardId}/stacks/archived', 'verb' => 'GET'],
+		['name' => 'stack_api#get', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}', 'verb' => 'GET'],
+		['name' => 'stack_api#create', 'url' => '/api/v1.0/boards/{boardId}/stacks', 'verb' => 'POST'],
+		['name' => 'stack_api#update', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}', 'verb' => 'PUT'],
+		['name' => 'stack_api#delete', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}', 'verb' => 'DELETE'],
+
+		['name' => 'card_api#get', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'GET'],
+		['name' => 'card_api#create', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards', 'verb' => 'POST'],
+		['name' => 'card_api#update', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'PUT'],
+		['name' => 'card_api#assignLabel', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignLabel', 'verb' => 'PUT'],
+		['name' => 'card_api#removeLabel', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/removeLabel', 'verb' => 'PUT'],
+		['name' => 'card_api#assignUser', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser', 'verb' => 'PUT'],
+		['name' => 'card_api#unassignUser', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser', 'verb' => 'PUT'],
+		['name' => 'card_api#reorder', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder', 'verb' => 'PUT'],
+		['name' => 'card_api#delete', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'DELETE'],
+
+		['name' => 'label_api#get', 'url' => '/api/v1.0/boards/{boardId}/labels/{labelId}', 'verb' => 'GET'],
+		['name' => 'label_api#create', 'url' => '/api/v1.0/boards/{boardId}/labels', 'verb' => 'POST'],
+		['name' => 'label_api#update', 'url' => '/api/v1.0/boards/{boardId}/labels/{labelId}', 'verb' => 'PUT'],
+		['name' => 'label_api#delete', 'url' => '/api/v1.0/boards/{boardId}/labels/{labelId}', 'verb' => 'DELETE'],
+
+		['name' => 'attachment_api#getAll', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments', 'verb' => 'GET'],
+		['name' => 'attachment_api#display', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'GET'],
+		['name' => 'attachment_api#create', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments', 'verb' => 'POST'],
+		['name' => 'attachment_api#update', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'PUT'],
+		['name' => 'attachment_api#delete', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'DELETE'],
+		['name' => 'attachment_api#restore', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore', 'verb' => 'PUT'],
+
+		['name' => 'board_api#preflighted_cors', 'url' => '/api/v1.0/{path}','verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
 	]
 ];

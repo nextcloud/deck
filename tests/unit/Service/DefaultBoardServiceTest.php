@@ -66,7 +66,8 @@ class DefaultBoardServiceTest extends TestCase {
 		$this->stackService = $this->createMock(StackService::class);
 		$this->cardService = $this->createMock(CardService::class);
 		$this->config = $this->createMock(IConfig::class);
-		$this->l10n = $this->createMock(IL10N::class);		
+		$this->l10n = $this->createMock(IL10N::class);
+		$this->userId = 'admin';
 
 		$this->service = new DefaultBoardService(
 			$this->l10n,

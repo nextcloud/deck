@@ -30,10 +30,13 @@ use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IGroupManager;
 use OCP\IL10N;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
+use OCP\IUserManager;
+use OCA\Deck\BadRequestException;
 
 
 class BoardService {
@@ -45,6 +48,9 @@ class BoardService {
 	private $permissionService;
 	private $notificationHelper;
 	private $assignedUsersMapper;
+	private $userManager;
+	private $groupManager;
+	private $userId;
 
 	public function __construct(
 		BoardMapper $boardMapper,
@@ -53,7 +59,10 @@ class BoardService {
 		AclMapper $aclMapper,
 		PermissionService $permissionService,
 		NotificationHelper $notificationHelper,
-		AssignedUsersMapper $assignedUsersMapper
+		AssignedUsersMapper $assignedUsersMapper,
+		IUserManager $userManager,
+		IGroupManager $groupManager,
+		$userId
 	) {
 		$this->boardMapper = $boardMapper;
 		$this->labelMapper = $labelMapper;
@@ -62,9 +71,16 @@ class BoardService {
 		$this->permissionService = $permissionService;
 		$this->notificationHelper = $notificationHelper;
 		$this->assignedUsersMapper = $assignedUsersMapper;
+		$this->userManager = $userManager;
+		$this->groupManager = $groupManager;
+		$this->userId = $userId;
 	}
 
-	public function findAll($userInfo) {
+	/**
+	 * @return array
+	 */
+	public function findAll() {
+		$userInfo = $this->getBoardPrerequisites();
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user']);
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups']);
 		$complete = array_merge($userBoards, $groupBoards);
@@ -90,7 +106,20 @@ class BoardService {
 		return array_values($result);
 	}
 
+	/**
+	 * @param $boardId
+	 * @return Board
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
 	public function find($boardId) {
+
+		if ( is_numeric($boardId) === false ) {
+			throw new BadRequestException('board id must be a number');
+		}
+
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		/** @var Board $board */
 		$board = $this->boardMapper->find($boardId, true, true);
@@ -112,7 +141,34 @@ class BoardService {
 		return $board;
 	}
 
+	/**
+	 * @return array
+	 */
+	private function getBoardPrerequisites() {
+		$groups = $this->groupManager->getUserGroupIds(
+			$this->userManager->get($this->userId)
+		);
+		return [
+			'user' => $this->userId,
+			'groups' => $groups
+		];
+	}
+
+	/**
+	 * @param $mapper
+	 * @param $id
+	 * @return bool
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
 	public function isArchived($mapper, $id) {
+
+		if (is_numeric($id) === false)  {
+			throw new BadRequestException('id must be a number');
+		}
+
 		try {
 			$boardId = $id;
 			if ($mapper instanceof IPermissionMapper) {
@@ -128,7 +184,25 @@ class BoardService {
 		return $board->getArchived();
 	}
 
+	/**
+	 * @param $mapper
+	 * @param $id
+	 * @return bool
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
 	public function isDeleted($mapper, $id) {
+
+		if ($mapper === false || $mapper === null) {
+			throw new BadRequestException('mapper must be provided');
+		}
+
+		if (is_numeric($id) === false)  {
+			throw new BadRequestException('id must be a number');
+		}
+
 		try {
 			$boardId = $id;
 			if ($mapper instanceof IPermissionMapper) {
@@ -145,13 +219,32 @@ class BoardService {
 	}
 
 
-
+	/**
+	 * @param $title
+	 * @param $userId
+	 * @param $color
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws BadRequestException
+	 */
 	public function create($title, $userId, $color) {
+
+		if ($title === false || $title === null) {
+			throw new BadRequestException('title must be provided');
+		}
+
+		if ($userId === false || $userId === null) {
+			throw new BadRequestException('userId must be provided');
+		}
+
+		if ($color === false || $color === null) {
+			throw new BadRequestException('color must be provided');
+		}
+
 		$board = new Board();
 		$board->setTitle($title);
 		$board->setOwner($userId);
 		$board->setColor($color);
-		$new_board = $this->boardMapper->insert($board);
+		$new_board = $this->boardMapper->insert($board);		
 
 		// create new labels
 		$default_labels = [
@@ -181,7 +274,20 @@ class BoardService {
 
 	}
 
+	/**
+	 * @param $id
+	 * @return Board
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
 	public function delete($id) {
+
+		if (is_numeric($id) === false) {
+			throw new BadRequestException('board id must be a number');
+		}
+
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
 		$board->setDeletedAt(time());
@@ -189,20 +295,72 @@ class BoardService {
 		return $board;
 	}
 
+	/**
+	 * @param $id
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	public function deleteUndo($id) {
+
+		if (is_numeric($id) === false) {
+			throw new BadRequestException('board id must be a number');
+		}
+
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
 		$board->setDeletedAt(0);
 		return $this->boardMapper->update($board);
 	}
 
-	public function deleteForce($id) {
+	/**
+	 * @param $id
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
+	public function deleteForce($id) {		
+		if (is_numeric($id) === false)  {
+			throw new BadRequestException('id must be a number');
+		}
+
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
 		return $this->boardMapper->delete($board);
 	}
 
+	/**
+	 * @param $id
+	 * @param $title
+	 * @param $color
+	 * @param $archived
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
 	public function update($id, $title, $color, $archived) {
+
+		if (is_numeric($id) === false) {
+			throw new BadRequestException('board id must be a number');
+		}
+
+		if ($title === false || $title === null) {
+			throw new BadRequestException('color must be provided');
+		}
+
+		if ($color === false || $color === null) {
+			throw new BadRequestException('color must be provided');
+		}
+
+		if ( is_bool($archived) === false ) {
+			throw new BadRequestException('archived must be a boolean');
+		}
+
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
 		$board->setTitle($title);
@@ -213,7 +371,43 @@ class BoardService {
 	}
 
 
+	/**
+	 * @param $boardId
+	 * @param $type
+	 * @param $participant
+	 * @param $edit
+	 * @param $share
+	 * @param $manage
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws \OCA\Deck\
+	 * @throws BadRequestException
+	 */
 	public function addAcl($boardId, $type, $participant, $edit, $share, $manage) {
+
+		if (is_numeric($boardId) === false) {
+			throw new BadRequestException('board id must be a number');
+		}
+
+		if ($type === false || $type === null) {
+			throw new BadRequestException('type must be provided');
+		}
+
+		if ($participant === false || $participant === null) {
+			throw new BadRequestException('participant must be provided');
+		}
+
+		if ($edit === false || $edit === null) {
+			throw new BadRequestException('edit must be provided');
+		}
+
+		if ($share === false || $share === null) {
+			throw new BadRequestException('share must be provided');
+		}
+
+		if ($manage === false || $manage === null) {
+			throw new BadRequestException('manage must be provided');
+		}
+
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_SHARE);
 		$acl = new Acl();
 		$acl->setBoardId($boardId);
@@ -231,7 +425,35 @@ class BoardService {
 		return $newAcl;
 	}
 
+	/**
+	 * @param $id
+	 * @param $edit
+	 * @param $share
+	 * @param $manage
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
 	public function updateAcl($id, $edit, $share, $manage) {
+
+		if (is_numeric($id) === false) {
+			throw new BadRequestException('id must be a number');
+		}
+
+		if ($edit === null) {
+			throw new BadRequestException('edit must be provided');
+		}
+
+		if ($share === null) {
+			throw new BadRequestException('share must be provided');
+		}
+
+		if ($manage === null) {
+			throw new BadRequestException('manage must be provided');
+		}
+
 		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_SHARE);
 		/** @var Acl $acl */
 		$acl = $this->aclMapper->find($id);
@@ -242,7 +464,20 @@ class BoardService {
 		return $this->aclMapper->update($acl);
 	}
 
+	/**
+	 * @param $id
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
 	public function deleteAcl($id) {
+
+		if (is_numeric($id) === false) {
+			throw new BadRequestException('id must be a number');
+		}
+
 		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_SHARE);
 		/** @var Acl $acl */
 		$acl = $this->aclMapper->find($id);

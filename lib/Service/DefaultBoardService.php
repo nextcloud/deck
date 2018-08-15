@@ -29,6 +29,7 @@ use OCA\Deck\Service\StackService;
 use OCA\Deck\Service\CardService;
 use OCP\IConfig;
 use OCP\IL10N;
+use OCA\Deck\BadRequestException;
 
 class DefaultBoardService {
 
@@ -55,8 +56,14 @@ class DefaultBoardService {
 		$this->boardMapper = $boardMapper;
 		$this->l10n = $l10n;
     }
-    
-    public function checkFirstRun($userId, $appName) {        
+
+	/**
+	 * @param $userId
+	 * @param $appName
+	 * @return bool
+	 * @throws \OCP\PreConditionNotMetException
+	 */
+	public function checkFirstRun($userId, $appName) {
 		$firstRun = $this->config->getUserValue($userId, $appName, 'firstRun', 'yes');
 		$userBoards = $this->boardMapper->findAllByUser($userId);
 		
@@ -68,7 +75,31 @@ class DefaultBoardService {
 		return false;
     }
 
-    public function createDefaultBoard($title, $userId, $color) {
+	/**
+	 * @param $title
+	 * @param $userId
+	 * @param $color
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCA\Deck\StatusException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
+	public function createDefaultBoard($title, $userId, $color) {
+
+		if ($title === false || $title === null) {
+			throw new BadRequestException('title must be provided');
+		}
+
+		if ($userId === false || $userId === null) {
+			throw new BadRequestException('userId must be provided');
+		}
+
+		if ($color === false || $color === null) {
+			throw new BadRequestException('color must be provided');
+		}
+
         $defaultBoard = $this->boardService->create($title, $userId, $color);
         $defaultStacks = [];
         $defaultCards = [];
