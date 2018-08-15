@@ -233,6 +233,8 @@ pipeline:
         - git clone --depth 1 -b master https://github.com/nextcloud/server ../server
         - cp -R . ../server/apps/deck
         - cd ../server
+        - ls -la .
+        - ls -la ./apps
         - git submodule update --init
         - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/core_install.sh && bash core_install.sh sqlite
         - php occ app:enable deck
