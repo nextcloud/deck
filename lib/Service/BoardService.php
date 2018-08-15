@@ -64,7 +64,8 @@ class BoardService {
 		$this->assignedUsersMapper = $assignedUsersMapper;
 	}
 
-	public function findAll($userInfo) {
+	public function findAll() {
+		$userInfo = $this->getBoardPrerequisites();
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user']);
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups']);
 		$complete = array_merge($userBoards, $groupBoards);
@@ -110,6 +111,16 @@ class BoardService {
 		$boardUsers = $this->permissionService->findUsers($boardId);
 		$board->setUsers(array_values($boardUsers));
 		return $board;
+	}
+
+	private function getBoardPrerequisites() {
+		$groups = $this->groupManager->getUserGroupIds(
+			$this->userManager->get($this->userId)
+		);
+		return [
+			'user' => $this->userId,
+			'groups' => $groups
+		];
 	}
 
 	public function isArchived($mapper, $id) {
