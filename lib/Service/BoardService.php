@@ -165,10 +165,6 @@ class BoardService {
 	 */
 	public function isArchived($mapper, $id) {
 
-		if ($mapper === false || $mapper === null) {
-			throw new BadRequestException('mapper must be provided');
-		}
-
 		if (is_numeric($id) === false)  {
 			throw new BadRequestException('id must be a number');
 		}
