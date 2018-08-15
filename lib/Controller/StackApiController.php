@@ -102,7 +102,7 @@ class StackApiController extends ApiController {
 	 * Update a stack by the specified stackId and boardId with the values that were put.
 	 */
 	public function update($title, $order) {		
-		$stack = $this->stackService->update($this->request->getParam('stackId'), $title, $this->request->getParam('boardId'), $order);
+		$stack = $this->stackService->update($this->request->getParam('stackId'), $title, $this->request->getParam('boardId'), $order, 0);
 		return new DataResponse($stack, HTTP::STATUS_OK);
 	}
 
