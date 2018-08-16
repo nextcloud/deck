@@ -1,12 +1,9 @@
 OC.L10N.register(
     "deck",
     {
-    "Are you sure you want to delete this card with all of its data?" : "Czy na pewno chcesz usunąć tę kartę ze wszystkimi swoimi danymi?",
-    "Delete" : "Usuń",
     "Remove user from card" : "Usuń użytkownika z karty",
     "Hours" : "Godzin",
     "Minutes" : "Minut",
-    "Are you sure you want to delete the stack with all of its data?" : "Czy na pewno chcesz usunąć stos ze wszystkimi jego danymi?",
     "The card \"%s\" on \"%s\" has reached its due date." : "Karta \"%s\" na \"%s\" wygasła.",
     "The board \"%s\" has been shared with you by %s." : "Tablica \"%s\" została współdzielona Tobie przez %s.",
     "{user} has shared the board %s with you." : "{user} rozpoczął współdzielenie tablicy %s z Tobą.",
@@ -24,6 +21,7 @@ OC.L10N.register(
     "Archived boards" : "Zarchiwizowane tablice",
     "Archive" : "Archiwizuj",
     "Unarchive" : "Nie archiwizuj",
+    "Delete" : "Usuń",
     "Enter a card title" : "Wprowadź tytuł karty",
     "Add card" : "Dodaj kartę",
     "Close" : "Zamknij",

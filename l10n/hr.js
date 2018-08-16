@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Delete" : "Izbriši",
     "Finished" : "Završeno",
     "To review" : "Provjeriti",
     "Action needed" : "Potrebna radnja",
@@ -13,6 +12,7 @@ OC.L10N.register(
     "All Boards" : "Sve ploče",
     "Archive" : "Arhiviraj",
     "Unarchive" : "Dearhiviraj",
+    "Delete" : "Izbriši",
     "Enter a card title" : "Naslov kartice",
     "Sharing" : "Dijeljenje",
     "Select users or groups to share with" : "Podijeli s korisnicima ili grupama",

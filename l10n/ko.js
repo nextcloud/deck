@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Delete" : "삭제",
     "Remove user from card" : "카드에서 사용자 삭제",
     "Hours" : "시간",
     "Minutes" : "분",
@@ -22,6 +21,7 @@ OC.L10N.register(
     "Archived boards" : "보관된 게시판",
     "Archive" : "보관",
     "Unarchive" : "보관 해제",
+    "Delete" : "삭제",
     "Enter a card title" : "카드 제목 입력",
     "Add card" : "카드 추가",
     "Close" : "닫기",

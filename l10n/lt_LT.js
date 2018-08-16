@@ -1,8 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Are you sure you want to delete this card with all of its data?" : "Ar tikrai norite ištrinti šią kortelę ir visus jos duomenis?",
-    "Delete" : "Ištrinti",
     "Remove user from card" : "Šalinti naudotoją iš kortelės",
     "Hours" : "Valandos",
     "Minutes" : "Minutės",
@@ -32,6 +30,7 @@ OC.L10N.register(
     "Drop your files here to upload it to the card" : "Vilkite savo failus čia, norėdami įkelti juos į kortelę",
     "Archive" : "Archyvuoti",
     "Unarchive" : "Išskleisti",
+    "Delete" : "Ištrinti",
     "Enter a card title" : "Įveskite kortelės vardą",
     "Add card" : "Pridėti kortelę",
     "Close" : "Užverti",

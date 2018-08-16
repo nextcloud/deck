@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Delete" : "Видалені",
     "Hours" : "Годин",
     "Minutes" : "Хвилин",
     "Finished" : "Завершено",
@@ -17,6 +16,7 @@ OC.L10N.register(
     "Archived boards" : "Архівовані дошки",
     "Archive" : "Архів",
     "Unarchive" : "Розархівувати",
+    "Delete" : "Видалені",
     "Enter a card title" : "Введіть заголовок картки",
     "Sharing" : "Поділитись",
     "Tags" : "Теги",

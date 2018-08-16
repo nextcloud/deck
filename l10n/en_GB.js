@@ -1,12 +1,9 @@
 OC.L10N.register(
     "deck",
     {
-    "Are you sure you want to delete this card with all of its data?" : "Are you sure you want to delete this card with all of its data?",
-    "Delete" : "Delete",
     "Remove user from card" : "Remove user from card",
     "Hours" : "Hours",
     "Minutes" : "Minutes",
-    "Are you sure you want to delete the stack with all of its data?" : "Are you sure you want to delete the stack with all of its data?",
     "The card \"%s\" on \"%s\" has reached its due date." : "The card \"%s\" on \"%s\" has reached its due date.",
     "The board \"%s\" has been shared with you by %s." : "The board \"%s\" has been shared with you by %s.",
     "{user} has shared the board %s with you." : "{user} has shared the board %s with you.",
@@ -26,6 +23,7 @@ OC.L10N.register(
     "Archived boards" : "Archived boards",
     "Archive" : "Archive",
     "Unarchive" : "Unarchive",
+    "Delete" : "Delete",
     "Enter a card title" : "Enter a card title",
     "Add card" : "Add card",
     "Close" : "Close",

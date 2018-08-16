@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Delete" : "Zmazať",
     "Hours" : "Hodín",
     "Minutes" : "Minút",
     "The card \"%s\" on \"%s\" has reached its due date." : "Karta \"%s\" na \"%s\" dosiahla dátum platnosti",
@@ -22,6 +21,7 @@ OC.L10N.register(
     "Archived boards" : "Archivované tabule",
     "Archive" : "Archivovať",
     "Unarchive" : "Vybrať z archívu",
+    "Delete" : "Zmazať",
     "Enter a card title" : "Zmeniť názov karty",
     "Add card" : "Pridať kartu",
     "Close" : "Zavrieť",

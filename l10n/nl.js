@@ -1,13 +1,10 @@
 OC.L10N.register(
     "deck",
     {
-    "Are you sure you want to delete this card with all of its data?" : "Weet je zeker dat je deze kaart met gegevens wilt verwijderen?",
-    "Delete" : "Verwijderen",
     "Remove user from card" : "Verwijder gebruiker van kaart",
     "Hours" : "Uur",
     "Minutes" : "Minuten",
     "Maximum file size of {size} exceeded" : "Maximale bestandsomvang van {size} overschreden",
-    "Are you sure you want to delete the stack with all of its data?" : "Weet je zeker dat je deze stapel met alle gegevens wilt verwijderen ? ",
     "Personal" : "Persoonlijk",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "De kaart \"%s\" op \"%s\" is aan jou toegewezen door %s.",
     "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user} heeft kaart \"%s\" op \"%s\" aan jou toegewezen.",
@@ -39,6 +36,7 @@ OC.L10N.register(
     "Archived boards" : "Gearchiveerde borden",
     "Archive" : "Archiveer",
     "Unarchive" : "Terugzetten uit archief",
+    "Delete" : "Verwijderen",
     "Enter a card title" : "Kaart titel toevoegen",
     "Add card" : "Toevoegen kaart",
     "Close" : "Sluiten",

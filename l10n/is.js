@@ -1,13 +1,10 @@
 OC.L10N.register(
     "deck",
     {
-    "Are you sure you want to delete this card with all of its data?" : "Ertu viss um að þú viljir eyða þessu spjaldi ásamt öllum gögnum þess?",
-    "Delete" : "Eyða",
     "Remove user from card" : "Fjarlægja notanda af spjaldi",
     "Hours" : "klukkustundir",
     "Minutes" : "mínútur",
     "Maximum file size of {size} exceeded" : "Fór yfir hámarks skráarstærð {size}",
-    "Are you sure you want to delete the stack with all of its data?" : "Ertu viss um að þú viljir eyða þessum stafla ásamt öllum gögnum hans?",
     "Personal" : "Einka",
     "The card \"%s\" on \"%s\" has reached its due date." : "Spjaldið \"%s\" á \"%s\" er komið fram yfir lokadagsetningu.",
     "The board \"%s\" has been shared with you by %s." : "Borðinu \"%s\" hefur verið deilt með þér af %s.",
@@ -41,6 +38,7 @@ OC.L10N.register(
     "Unassign from me" : "Aftengja úthlutun til mín",
     "Archive" : "Setja í safnskrá",
     "Unarchive" : "Taka úr geymslu",
+    "Delete" : "Eyða",
     "Enter a card title" : "Sláðu inn titil á spjald",
     "Add card" : "Bæta við spjaldi",
     "Close" : "Loka",

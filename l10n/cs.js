@@ -1,13 +1,10 @@
 OC.L10N.register(
     "deck",
     {
-    "Are you sure you want to delete this card with all of its data?" : "Opravdu chcete smazat tuto kartu a všechna její data?",
-    "Delete" : "Smazat",
     "Remove user from card" : "Odebrat uživatele z karty",
     "Hours" : "Hodiny",
     "Minutes" : "Minuty",
     "Maximum file size of {size} exceeded" : "U souboru {size} překročena nejvyšší umožněná velikost",
-    "Are you sure you want to delete the stack with all of its data?" : "Opravdu chcete smazat stack a všechna data v něm?",
     "Personal" : "Osobní",
     "The card \"%s\" on \"%s\" has reached its due date." : "U karty \"%s\" z tabule \"%s\" nastalo plánované datum dokončení.",
     "The board \"%s\" has been shared with you by %s." : "Tabule \"%s\" s vámi byla nasdílena uživatelem %s.",
@@ -47,6 +44,7 @@ OC.L10N.register(
     "Unassign from me" : "Zrušit přiřazení mě",
     "Archive" : "Archiv",
     "Unarchive" : "Zrušit archivování",
+    "Delete" : "Smazat",
     "Enter a card title" : "Zadejte nadpis karty",
     "Add card" : "Přidat kartu",
     "Close" : "Zavřít",

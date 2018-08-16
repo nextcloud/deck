@@ -1,12 +1,9 @@
 OC.L10N.register(
     "deck",
     {
-    "Are you sure you want to delete this card with all of its data?" : "Er du sikker på, at du vil slette dette kort med alle dets data?",
-    "Delete" : "Slet",
     "Remove user from card" : "Fjern bruger fra kort",
     "Hours" : "Timer",
     "Minutes" : "Minutter",
-    "Are you sure you want to delete the stack with all of its data?" : "Er du sikker på, at du ønsker at slette denne stak med alle data?",
     "The card \"%s\" on \"%s\" has reached its due date." : "Kortet \"%s\" på \"%s\" har nået sin udløbsdato.",
     "The board \"%s\" has been shared with you by %s." : "Brættet \"%s\" er blevet delt med dig af %s.",
     "{user} has shared the board %s with you." : "{user} har delt brættet %s med dig.",
@@ -26,6 +23,7 @@ OC.L10N.register(
     "Archived boards" : "Arkiverede lister",
     "Archive" : "Arkivér",
     "Unarchive" : "Annuller arkivering",
+    "Delete" : "Slet",
     "Enter a card title" : "Angiv titel på kort",
     "Add card" : "Tilføj kort",
     "Close" : "Luk",

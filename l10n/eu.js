@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Delete" : "Borratu",
     "Hours" : "Orduak",
     "Minutes" : "Minutuak",
     "The card \"%s\" on \"%s\" has reached its due date." : " \"%s\" txartela,  \"%s\" -n dagoena, epe-mugara ailegatu da.",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "Archived boards" : "Artxibatutako txartelak",
     "Archive" : "Artxibatu",
     "Unarchive" : "Ez artxibatu",
+    "Delete" : "Borratu",
     "Enter a card title" : "Txartelaren titulua sartu",
     "Add card" : "Txartela gehitu",
     "Close" : "Itxi",

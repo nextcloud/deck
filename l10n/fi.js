@@ -1,13 +1,10 @@
 OC.L10N.register(
     "deck",
     {
-    "Are you sure you want to delete this card with all of its data?" : "Haluatko varmasti poistaa tämän kortin ja kaikki sen tiedot?",
-    "Delete" : "Poista",
     "Remove user from card" : "Poista käyttäjä kortilta",
     "Hours" : "Tunnit",
     "Minutes" : "Minuutit",
     "Maximum file size of {size} exceeded" : "Tiedoston enimmäiskoko {size} ylitetty",
-    "Are you sure you want to delete the stack with all of its data?" : "Haluatko varmasti poistaa pinon ja kaikki siinä olevat tiedot?",
     "The card \"%s\" on \"%s\" has reached its due date." : "Kortin \"%s\" on \"%s\" eräpäivä on tullut vastaan.",
     "The board \"%s\" has been shared with you by %s." : "Taulu \"%s\" on jaettu kanssasi käyttäjän %s toimesta.",
     "{user} has shared the board %s with you." : "{user} on jakanut taulun %s kanssasi.",
@@ -30,6 +27,7 @@ OC.L10N.register(
     "Drop your files here to upload it to the card" : "Pudota tiedostot tähän lähettääksesi ne kortille",
     "Archive" : "Arkisto",
     "Unarchive" : "Pois arkistosta",
+    "Delete" : "Poista",
     "Enter a card title" : "Anna otsikko",
     "Add card" : "Lisää kortti",
     "Close" : "Sulje",

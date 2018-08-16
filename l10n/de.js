@@ -1,13 +1,10 @@
 OC.L10N.register(
     "deck",
     {
-    "Are you sure you want to delete this card with all of its data?" : "Möchtest Du wirklich diese Karte mit all ihren Daten löschen?",
-    "Delete" : "Löschen",
     "Remove user from card" : "Benutzer von Karte entfernen",
     "Hours" : "Stunden",
     "Minutes" : "Minuten",
     "Maximum file size of {size} exceeded" : "Maximale Dateigröße von {size} überschritten",
-    "Are you sure you want to delete the stack with all of its data?" : "Möchtest du diesen Stapel mit allen Daten wirklich löschen?",
     "Personal" : "Persönlich",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Die Karte \"%s\" auf \"%s\" wurde Dir von %s zugewiesen.",
     "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user} hat Dir die Karte \"%s\" auf \"%s\" zugewiesen.",
@@ -49,6 +46,7 @@ OC.L10N.register(
     "Unassign from me" : "Nicht mir zuweisen",
     "Archive" : "Archivieren",
     "Unarchive" : "Dearchivieren",
+    "Delete" : "Löschen",
     "Enter a card title" : "Kartentitel eingeben",
     "Add card" : "Karte hinzufügen",
     "Close" : "Schließen",

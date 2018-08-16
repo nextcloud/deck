@@ -1,12 +1,9 @@
 OC.L10N.register(
     "deck",
     {
-    "Are you sure you want to delete this card with all of its data?" : "Biztosan törlöd ezt a kártyát adataival együtt?",
-    "Delete" : "Törlés",
     "Remove user from card" : "Felhasználó eltávolítása a kártyáról",
     "Hours" : "Óra",
     "Minutes" : "Perc",
-    "Are you sure you want to delete the stack with all of its data?" : "Biztosan törlöd ezt a köteget az adatival együtt?",
     "The card \"%s\" on \"%s\" has reached its due date." : "A(z) \"%s\" kártya a(z) \"%s\" táblán a határidejéhez ért.",
     "The board \"%s\" has been shared with you by %s." : "A(z) \"%s\" táblát %s osztotta meg veled.",
     "{user} has shared the board %s with you." : "{user} felhasználó megosztotta veled a(z) %s táblát.",
@@ -24,6 +21,7 @@ OC.L10N.register(
     "Archived boards" : "Archív táblák",
     "Archive" : "Archívum",
     "Unarchive" : "Archiválás visszavonása",
+    "Delete" : "Törlés",
     "Enter a card title" : "Adj meg egy kártya címet",
     "Add card" : "Kártya hozzáadása",
     "Close" : "Bezárás",

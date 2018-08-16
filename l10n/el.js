@@ -1,8 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Are you sure you want to delete this card with all of its data?" : "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτήν την κάρτα με όλα τα δεδομένα της;",
-    "Delete" : "Διαγραφή",
     "Remove user from card" : "Αφαίρεση χρήστη από την κάρτα",
     "Hours" : "Ώρες",
     "Minutes" : "Λεπτά",
@@ -21,6 +19,7 @@ OC.L10N.register(
     "Archived boards" : "Αρχειοθέτηση πινάκων ",
     "Archive" : "Αρχειοθέτηση",
     "Unarchive" : "Αναίρεση αρχειοθέτησης",
+    "Delete" : "Διαγραφή",
     "Enter a card title" : "Καταχωρίστε έναν τίτλο κάρτας",
     "Add card" : "Προσθήκη κάρτας",
     "Close" : "Κλείσιμο",

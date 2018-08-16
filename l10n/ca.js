@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Delete" : "Esborra",
     "Remove user from card" : "Esborra usuari de la targeta",
     "Hours" : "Hores",
     "Minutes" : "Minuts",
@@ -18,6 +17,7 @@ OC.L10N.register(
     "Archived boards" : "Taulers arxivats",
     "Archive" : "Arxiu",
     "Unarchive" : "Desbloquejar",
+    "Delete" : "Esborra",
     "Enter a card title" : "Introduïu un títol de la targeta",
     "Sharing" : "Compartir",
     "Tags" : "Etiquetes",

@@ -1,13 +1,10 @@
 OC.L10N.register(
     "deck",
     {
-    "Are you sure you want to delete this card with all of its data?" : "למחוק את הכרטיס הזה ואת כל הנתונים שלו?",
-    "Delete" : "מחיקה",
     "Remove user from card" : "הסרת משתמש מכרטיס",
     "Hours" : "שעות",
     "Minutes" : "דקות",
     "Maximum file size of {size} exceeded" : "גודל הקבצים המרבי {size} הושג",
-    "Are you sure you want to delete the stack with all of its data?" : "למחוק את הערימה הזאת עם כל הנתונים שלה?",
     "The card \"%s\" on \"%s\" has reached its due date." : "הכרטיס „%s” שתחת „%s” הגיע למועד התפוגה שלו.",
     "The board \"%s\" has been shared with you by %s." : "הלוח „%s” שותף אתך על ידי %s.",
     "{user} has shared the board %s with you." : "הלוח %s שותף אתך על ידי {user}",
@@ -38,6 +35,7 @@ OC.L10N.register(
     "Drop your files here to upload it to the card" : "ניתן להשליך את הקבצים שלך כאן כדי להעלות אותם לכרטיס",
     "Archive" : "לארכיון",
     "Unarchive" : "הוצאה מהארכיון",
+    "Delete" : "מחיקה",
     "Enter a card title" : "נא להקליד כותרת לכרטיס",
     "Add card" : "הוספת כרטיס",
     "Close" : "סגירה",

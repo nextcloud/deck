@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Delete" : "Borrar",
     "Finished" : "Terminado",
     "To review" : "Para revisar",
     "Action needed" : "Acción requerida",
@@ -13,6 +12,7 @@ OC.L10N.register(
     "All Boards" : "Todos los Tablero",
     "Archive" : "Archivar",
     "Unarchive" : "Desarchivar",
+    "Delete" : "Borrar",
     "Enter a card title" : "Ingrese el títilo de la tarjeta",
     "Sharing" : "Compartiendo",
     "Select users or groups to share with" : "Seleccione los usuarios o grupos con los cuales compartir",
