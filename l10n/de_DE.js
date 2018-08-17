@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "The associated stack is deleted as well, it will be restored as well." : "Der dazugehörige Stapel wurde auch gelöscht, er wird ebenfalls wiederhergestellt.",
+    "Restore associated stack" : "Dazugehörigen Stapel wiederherstellen",
     "Remove user from card" : "Benutzer von Karte entfernen",
     "Hours" : "Stunden",
     "Minutes" : "Minuten",
@@ -52,6 +54,8 @@ OC.L10N.register(
     "Close" : "Schließen",
     "Sharing" : "Teilen",
     "Tags" : "Schlagworte",
+    "Deleted Stacks" : "Gelöschte Stapel",
+    "Deleted Cards" : "Gelöschte Karten",
     "Select users or groups to share with" : "Benutzer oder Gruppen auswählen, mit denen das Board geteilt werden soll",
     "Access for" : "Zugriff für",
     "No matching user or group found." : "Keine passenden Benutzer oder Gruppen gefunden.",

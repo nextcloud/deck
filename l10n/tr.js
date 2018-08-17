@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "The associated stack is deleted as well, it will be restored as well." : "İlgili yığında silinecek ya da geri yüklenecek",
+    "Restore associated stack" : "İlgili yığını geri yükle",
     "Remove user from card" : "Kullanıcıyı karttan kaldır",
     "Hours" : "Saat",
     "Minutes" : "Dakika",
@@ -52,6 +54,8 @@ OC.L10N.register(
     "Close" : "Kapat",
     "Sharing" : "Paylaşım",
     "Tags" : "Etiketler",
+    "Deleted Stacks" : "Silinmiş Yığınlar",
+    "Deleted Cards" : "Silinmiş Kartlar",
     "Select users or groups to share with" : "Paylaşılacak kullanıcı ya da grupları seçin",
     "Access for" : "Şuraya erişim",
     "No matching user or group found." : "Eşleşen bir kullanıcı ya da grup bulunamadı.",

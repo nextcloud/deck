@@ -1,4 +1,6 @@
 { "translations": {
+    "The associated stack is deleted as well, it will be restored as well." : "A pilha associada excluída também será restaurada.",
+    "Restore associated stack" : "Restaurar a pilha associada",
     "Remove user from card" : "Remover usuário do cartão",
     "Hours" : "Horas",
     "Minutes" : "Minutos",
@@ -50,6 +52,8 @@
     "Close" : "Fechar",
     "Sharing" : "Compartilhar",
     "Tags" : "Etiquetas",
+    "Deleted Stacks" : "Pilhas excluídas",
+    "Deleted Cards" : "Cartões excluídos",
     "Select users or groups to share with" : "Selecionar usuários ou grupos para compartilhar",
     "Access for" : "Acesso para",
     "No matching user or group found." : "Usuário ou grupo não encontrado.",
