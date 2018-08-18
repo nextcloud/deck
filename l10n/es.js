@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "The associated stack is deleted as well, it will be restored as well." : "Se había eliminado también la pila asociada. También será restaurada.",
+    "Restore associated stack" : "Restaurar la pila asociada",
     "Remove user from card" : "Eliminar usuario de la tarjeta",
     "Hours" : "Horas",
     "Minutes" : "Minutos",
@@ -52,6 +54,8 @@ OC.L10N.register(
     "Close" : "Cerrar",
     "Sharing" : "Compartir",
     "Tags" : "Etiquetas",
+    "Deleted Stacks" : "Pilas eliminadas",
+    "Deleted Cards" : "Tarjetas eliminadas",
     "Select users or groups to share with" : "Seleccionar usuarios o grupos con los que compartir",
     "Access for" : "Acceso para",
     "No matching user or group found." : "No se encontraron usuarios o grupos coincidentes.",

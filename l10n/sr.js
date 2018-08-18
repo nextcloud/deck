@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "The associated stack is deleted as well, it will be restored as well." : "И придружена гомила је обрисана, и она ће бити враћена",
+    "Restore associated stack" : "Поврати придружену гомилу",
     "Remove user from card" : "Уклони корисника са картице",
     "Hours" : "Сати",
     "Minutes" : "Минути",
@@ -52,6 +54,8 @@ OC.L10N.register(
     "Close" : "Затвори",
     "Sharing" : "Дељење",
     "Tags" : "Ознаке",
+    "Deleted Stacks" : "Обрисане гомиле",
+    "Deleted Cards" : "Обрисане картице",
     "Select users or groups to share with" : "Одаберите кориснике или групе за дељење",
     "Access for" : "Приступ за",
     "No matching user or group found." : "Нема корисника ни група који одговарају претрази.",
