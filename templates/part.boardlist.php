@@ -13,7 +13,15 @@
 		</div>
 	</div>
 </div>
-<div id="boardlist">
+<div id="emptycontent" ng-if="boardservice.sorted.length == 0 && status.filter == 'archived'">
+	<div class="icon-archive"></div>
+	<h2>No archived boards to display</h2>
+</div>
+<div id="emptycontent" ng-if="boardservice.sorted.length == 0 && status.filter == 'shared'">
+	<div class="icon-share"></div>
+	<h2>No shared boards to display</h2>
+</div>
+<div id="boardlist" ng-if="boardservice.sorted.length > 0 || !status.filter">
 	<table width="100%">
 		<thead>
 		<tr>
@@ -23,13 +31,8 @@
 			<td></td>
 		</tr>
 		</thead>
-		<tbody>
-		<tr ng-if="boardservice.sorted.length == 0">
-			<td class="center-text" colspan="4">
-				<?php p($l->t('There are no boards in this category to display')); ?>
-			</td>
-		</tr>
-		<tr ng-if="boardservice.sorted.length > 0" data-ng-repeat="b in boardservice.sorted track by b.id" ng-class="{deleted: b.deletedAt > 0}">
+		<tbody>		
+		<tr data-ng-repeat="b in boardservice.sorted track by b.id" ng-class="{deleted: b.deletedAt > 0}">
 			<td ng-click="gotoBoard(b)">
 				<div class="board-bullet" ng-style="{'background-color':'#'+b.color}"> </div>
 			</td>
