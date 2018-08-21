@@ -43,13 +43,16 @@
 		<div class="stack" ng-repeat="s in stacks" data-as-sortable-item
 			 data-columnindex="{{$index}}" id="column{{$index}}"
 			 style="">
-			<h3 data-as-sortable-item-handle>
-				<span class="editable-inline" ng-show="!s.status.editStack" ng-click="s.status.editStack=true">{{ s.title }}</span>
+			<h3 data-as-sortable-item-handle>								
+				<span class="editable-inline"
+				 ng-show="!s.status.editStack" 
+				 ng-click="s.status.editStack=true">{{ s.title }}</span>				
+
 				<form ng-if="s.status.editStack" ng-submit="stackservice.update(s); s.status.editStack=false">
 					<input type="text" placeholder="<?php p($l->t('Add a new stack')); ?>"
 						   ng-blur="stackservice.update(s); s.status.editStack=false" ng-model="s.title"
 						   autofocus-on-insert required maxlength="100" />
-				</form>
+				</form>				
 				<button class="icon-delete button-inline stack-actions"
 						ng-if="!s.status.editStack"
 						ng-click="stackDelete(s)"></button>
@@ -66,8 +69,18 @@
 						<p><?php p($l->t('Drop your files here to upload it to the card')); ?></p>
 					</div>
 					<div data-as-sortable-item-handle>
-						<div class="card-upper">
-							<h4>{{ cardservice.get(c.id).title }}</h4>
+						<div class="card-upper">						 
+							<h4>
+								<span class="editable-inline"
+									ng-show="!c.status.editCard"
+									ng-click="c.status.editCard=true">{{cardservice.get(c.id).title}}</span>
+
+								<form ng-if="c.status.editCard" ng-submit="cardservice.update(c); c.status.editCard=false">
+									<input type="text" placeholder="<?php p($l->t('Add a new card')); ?>"
+										ng-blue="cardservice.update(c); c.status.editCard=false" ng-model="c.title"
+										autofocus-on-insert required maxlength="100" />
+								</form>
+							</h4>							
 							<ul class="labels">
 								<li ng-repeat="label in cardservice.get(c.id).labels"
 									ng-style="labelStyle(label.color)" title="{{ label.title }}">
