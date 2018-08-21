@@ -24,7 +24,12 @@
 		</tr>
 		</thead>
 		<tbody>
-		<tr data-ng-repeat="b in boardservice.sorted track by b.id" ng-class="{deleted: b.deletedAt > 0}">
+		<tr ng-if="boardservice.sorted.length == 0">
+			<td class="center-text" colspan="4">
+				<?php p($l->t('There are no boards in this category to display')); ?>
+			</td>
+		</tr>
+		<tr ng-if="boardservice.sorted.length > 0" data-ng-repeat="b in boardservice.sorted track by b.id" ng-class="{deleted: b.deletedAt > 0}">
 			<td ng-click="gotoBoard(b)">
 				<div class="board-bullet" ng-style="{'background-color':'#'+b.color}"> </div>
 			</td>
