@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "The associated stack is deleted as well, it will be restored as well." : "Ассоциированный стек также удаляется, он также будет восстановлен.",
+    "Restore associated stack" : "Восстановить ассоциированные стеки",
     "Remove user from card" : "Убрать пользователя из карточки",
     "Hours" : "Часы",
     "Minutes" : "Минуты",
@@ -52,6 +54,8 @@ OC.L10N.register(
     "Close" : "Закрыть",
     "Sharing" : "Общий доступ",
     "Tags" : "Метки",
+    "Deleted Stacks" : "Удаленные стеки",
+    "Deleted Cards" : "Удаленные Карточки",
     "Select users or groups to share with" : "Поделиться с пользователями или группами",
     "Access for" : "Доступ для",
     "No matching user or group found." : "Соответствующей группы или пользователей не найдено",
