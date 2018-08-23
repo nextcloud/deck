@@ -13,7 +13,15 @@
 		</div>
 	</div>
 </div>
-<div id="boardlist">
+<div id="emptycontent" ng-if="boardservice.sorted.length == 0 && status.filter == 'archived'">
+	<div class="icon-archive"></div>
+	<h2><?php p($l->t('No archived boards to display')); ?></h2>
+</div>
+<div id="emptycontent" ng-if="boardservice.sorted.length == 0 && status.filter == 'shared'">
+	<div class="icon-share"></div>
+	<h2> <?php p($l->t('No shared boards to display')); ?> </h2>
+</div>
+<div id="boardlist" ng-if="boardservice.sorted.length > 0 || !status.filter">
 	<table width="100%">
 		<thead>
 		<tr>
