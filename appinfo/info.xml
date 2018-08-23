@@ -14,7 +14,7 @@
 - 🚀 Get your project organized
 
 </description>
-    <version>0.5.0-dev2</version>
+    <version>0.5.0-dev3</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
@@ -40,4 +40,15 @@
     <commands>
         <command>OCA\Deck\Command\UserExport</command>
     </commands>
+    <activity>
+        <providers>
+            <provider>OCA\Deck\Activity\DeckProvider</provider>
+        </providers>
+        <settings>
+            <setting>OCA\Deck\Activity\Setting</setting>
+        </settings>
+        <filters>
+            <filter>OCA\Deck\Activity\Filter</filter>
+        </filters>
+    </activity>
 </info>

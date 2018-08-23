@@ -32,6 +32,7 @@ use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\StatusException;
 use OCA\Deck\BadRequestException;
+use OCP\Activity\IManager;
 
 
 class StackService {
@@ -45,6 +46,7 @@ class StackService {
 	private $cardService;
 	private $assignedUsersMapper;
 	private $attachmentService;
+	private $activityManager;
 
 	public function __construct(
 		StackMapper $stackMapper,
@@ -55,7 +57,8 @@ class StackService {
 		BoardService $boardService,
 		CardService $cardService,
 		AssignedUsersMapper $assignedUsersMapper,
-		AttachmentService $attachmentService
+		AttachmentService $attachmentService,
+		IManager $activityManager
 	) {
 		$this->stackMapper = $stackMapper;
 		$this->boardMapper = $boardMapper;
@@ -66,6 +69,7 @@ class StackService {
 		$this->cardService = $cardService;
 		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->attachmentService = $attachmentService;
+		$this->activityManager = $activityManager;
 	}
 
 	private function enrichStackWithCards($stack) {
@@ -195,8 +199,33 @@ class StackService {
 		$stack->setTitle($title);
 		$stack->setBoardId($boardId);
 		$stack->setOrder($order);
-		return $this->stackMapper->insert($stack);
+		$result = $this->stackMapper->insert($stack);
 
+		$board = $this->boardMapper->find($boardId);
+		$event = $this->activityManager->generateEvent();
+		$event->setApp('deck')
+			->setType('deck_own_boards')
+			->setAffectedUser($board->getOwner())
+			->setAuthor($board->getOwner())
+			->setObject('stack', $result->getId())
+			->setSubject('foo')
+			->setTimestamp(time());
+			/*->setSubject('{actor} created a new stack {stack} on {board}',
+				[
+					'actor' => $event->getAuthor(),
+					'stack' => [
+						'id' => (int) $result->getId(),
+						//'uri' => $calendarData['uri'],
+						'name' => $stack->getTitle(),
+					],
+					'board' => [
+						'id' => (int) $boardId,
+						'name' => $board->getTitle(),
+					],
+				]);*/
+
+		$this->activityManager->publish($event);
+		return $result;
 	}
 
 	/**
