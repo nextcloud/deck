@@ -76,7 +76,7 @@
 									ng-click="c.status.editCard=true">{{cardservice.get(c.id).title}}</span>
 
 								<form ng-if="c.status.editCard" ng-submit="cardservice.update(c); c.status.editCard=false">
-									<input type="text" placeholder="<?php p($l->t('Add a new card')); ?>"
+									<input class="input-inline" type="text" placeholder="<?php p($l->t('Add a new card')); ?>"
 										ng-blue="cardservice.update(c); c.status.editCard=false" ng-model="c.title"
 										autofocus-on-insert required maxlength="100" />
 								</form>
