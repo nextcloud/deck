@@ -31,7 +31,7 @@
 			<td></td>
 		</tr>
 		</thead>
-		<tbody>		
+		<tbody>
 		<tr data-ng-repeat="b in boardservice.sorted track by b.id" ng-class="{deleted: b.deletedAt > 0}">
 			<td ng-click="gotoBoard(b)">
 				<div class="board-bullet" ng-style="{'background-color':'#'+b.color}"> </div>

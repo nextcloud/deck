@@ -56,7 +56,7 @@ var ListController = function ($scope, $location, $filter, BoardService, $elemen
 	$scope.boardservice = BoardService;
 	$scope.updatingBoard = null;
 
-	var filterData = function () {		
+	var filterData = function () {
 		if($element.attr('id') === 'app-navigation') {
 			$scope.boardservice.sidebar = $scope.boardservice.getData();
 			$scope.boardservice.sidebar = $filter('orderBy')($scope.boardservice.sidebar, 'title');
