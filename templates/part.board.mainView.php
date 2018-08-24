@@ -44,7 +44,10 @@
 			 data-columnindex="{{$index}}" id="column{{$index}}"
 			 style="">
 			<h3 data-as-sortable-item-handle>
-				<span class="editable-inline" ng-show="!s.status.editStack" ng-click="s.status.editStack=true">{{ s.title }}</span>
+				<span class="editable-inline"
+				 ng-show="!s.status.editStack"
+				 ng-click="s.status.editStack=true">{{ s.title }}</span>
+
 				<form ng-if="s.status.editStack" ng-submit="stackservice.update(s); s.status.editStack=false">
 					<input type="text" placeholder="<?php p($l->t('Add a new stack')); ?>"
 						   ng-blur="stackservice.update(s); s.status.editStack=false" ng-model="s.title"
@@ -67,7 +70,17 @@
 					</div>
 					<div data-as-sortable-item-handle>
 						<div class="card-upper">
-							<h4>{{ cardservice.get(c.id).title }}</h4>
+							<h4>
+								<span class="editable-inline"
+									ng-show="!c.status.editCard"
+									ng-click="c.status.editCard=true">{{cardservice.get(c.id).title}}</span>
+
+								<form ng-if="c.status.editCard" ng-submit="cardservice.update(c); c.status.editCard=false">
+									<input class="input-inline" type="text" placeholder="<?php p($l->t('Add a new card')); ?>"
+										ng-blur="cardservice.update(c); c.status.editCard=false" ng-model="c.title"
+										autofocus-on-insert required maxlength="100" />
+								</form>
+							</h4>
 							<ul class="labels">
 								<li ng-repeat="label in cardservice.get(c.id).labels"
 									ng-style="labelStyle(label.color)" title="{{ label.title }}">

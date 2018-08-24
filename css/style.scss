@@ -5,6 +5,7 @@
  * @author Artem Anufrij <artem.anufrij@live.de>
  * @author Marin Treselj <marin@pixelipo.com>
  * @author Oskar Kurz <oskar.kurz@gmail.com>
+ * @author Ryan Fletcher <ryan.fletcher@codepassion.ca>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -513,6 +514,17 @@ input.input-inline {
 		margin: 0 5px;
 		overflow: hidden;
 		text-overflow: ellipsis;
+
+		span {
+			padding: 6px 0;
+			padding-top: 7px;
+			display: block;
+		}
+
+		input {
+			width: 100%;
+			margin: 0;
+		}
 	}
 
 	.labels {
