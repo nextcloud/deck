@@ -46,7 +46,8 @@ app.filter('dateToTimestamp', function() {
 app.filter('parseDate', function() {
 	return function (date) {
 		if(moment(date).isValid()) {
-			return moment(date).format('YYYY-MM-DD');
+		  var dateFormat = moment.localeData().longDateFormat('L');
+			return moment(date).format(dateFormat);
 		}
 		return '';
 	};
