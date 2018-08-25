@@ -68,6 +68,8 @@ OC.L10N.register(
     "Create" : "Ekle",
     "Create a new tag" : "Etiket ekle",
     "Status" : "Durum",
+    "No archived boards to display" : "Görüntülenebilecek arşivlenmiş bir pano yok",
+    "No shared boards to display" : "Görüntülenebilecek paylaşılmış bir pano yok",
     "Title" : "Başlık",
     "Members" : "Üyeler",
     "More actions" : "Diğer işlemler",

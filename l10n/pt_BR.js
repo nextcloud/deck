@@ -68,6 +68,8 @@ OC.L10N.register(
     "Create" : "Criar",
     "Create a new tag" : "Criar uma nova etiqueta",
     "Status" : "Status",
+    "No archived boards to display" : "Nenhuma placa arquivada para exibir",
+    "No shared boards to display" : "Nenhuma placa compartilhada para exibir",
     "Title" : "Título",
     "Members" : "Membros",
     "More actions" : "Mais ações",

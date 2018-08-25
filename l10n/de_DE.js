@@ -68,6 +68,8 @@ OC.L10N.register(
     "Create" : "Erstellen",
     "Create a new tag" : "Schlagwort erstellen",
     "Status" : "Status",
+    "No archived boards to display" : "Keine archivierten Boards zum Anzeigen",
+    "No shared boards to display" : "Keine geteilten Boards zum Anzeigen",
     "Title" : "Titel",
     "Members" : "Mitglieder",
     "More actions" : "Weitere Aktionen",

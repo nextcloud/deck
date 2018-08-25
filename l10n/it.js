@@ -68,6 +68,8 @@ OC.L10N.register(
     "Create" : "Crea",
     "Create a new tag" : "Crea una nuova etichetta",
     "Status" : "Stato",
+    "No archived boards to display" : "Nessuna lavagna archiviata da visualizzare",
+    "No shared boards to display" : "Nessuna lavagna condivisa da visualizzare",
     "Title" : "Titolo",
     "Members" : "Membri",
     "More actions" : "Altre azioni",
