@@ -1,9 +1,11 @@
 <div id="stack-add" ng-if="boardservice.canEdit() && checkCanEdit()">
     <form class="ng-pristine ng-valid" ng-submit="createStack()">
+        <label for="new-stack-input" class="hidden-visually"><?php p($l->t('Add a new stack')); ?></label>
         <input type="text" class="no-close" placeholder="<?php p($l->t('Add a new stack')); ?>"
             ng-focus="status.addStack=true"
             ng-blur="status.addStack=false"
             ng-model="newStack.title" required
+            id="new-stack-input"
             maxlength="100" />
         <button class="button-inline icon icon-add" ng-style="{'opacity':'{{status.addStack ? 1: 0.5}}'}" type="submit" title="<?php p($l->t('Submit')); ?>">
         	<span class="hidden-visually"><?php p($l->t('Submit')); ?></span>
