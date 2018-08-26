@@ -16,7 +16,7 @@
 	<div class="crumb title">
 		<a class="bullet"><span class="board-bullet" ng-style="{'background-color':'#' + boardservice.getCurrent().color}"></span></a>
 		<a ui-sref=".({filter: ''})">{{ boardservice.getCurrent().title }}</a>
-		<a ui-sref=".detail({ tab: 0 })"><span class="icon icon-share"></span></a>
+		<a ui-sref=".detail({ tab: 0 })" title="<?php p($l->t('Share board')); ?>"><span class="icon icon-share"></span></a>
 	</div>
 	<div class="crumb title" ng-if="params.filter=='archive'">
 		<a><span class="icon icon-archive"></span></a>
@@ -110,7 +110,7 @@
 								</div>
 							</div>
 							<div class="app-popover-menu-utils" ng-if="!boardservice.isArchived()">
-								<button class="button-inline card-options icon-more" ng-model="card"></button>
+								<button class="button-inline card-options icon-more" ng-model="card" aria-label="<?php p($l->t('Actions')) ?>"></button>
 								<div class="popovermenu hidden">
 									<ul>
 										<li ng-if="!isCurrentUserAssigned(c)">
