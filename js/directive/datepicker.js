@@ -30,9 +30,10 @@ app.directive('datepicker', function () {
 	return {
 		link: function (scope, elm, attr) {
 			return elm.datepicker({
-				dateFormat: 'yy-mm-dd',
+				dateFormat: moment.localeData().longDateFormat('L').replace('YYYY', 'YY').toLowerCase(),
 				onSelect: function(date, inst) {
-					scope.setDuedate(moment(date));
+					var selectedDate = $(this).datepicker('getDate');
+					scope.setDuedate(moment(selectedDate));
 					scope.$apply();
 				},
 				beforeShow: function(input, inst) {
