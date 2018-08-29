@@ -115,6 +115,10 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		}
 	});
 
+	$scope.toggleCompactMode = function() {
+		$rootScope.compactMode = !$rootScope.compactMode;
+	};
+
 	$scope.stacksData = StackService;
 	$scope.stacks = [];
 	$scope.$watch('stacksData', function () {

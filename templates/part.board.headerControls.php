@@ -21,6 +21,10 @@
     <i class="icon icon-archive"></i>
     <span class="hidden-visually"><?php p($l->t('Hide archived cards')); ?></span>
 </button>
+<button ng-click="toggleCompactMode()" title="<?php p($l->t('Toggle compact mode')); ?>">
+	<i class="icon" ng-class="{ 'icon-toggle-compact-collapsed': compactMode, 'icon-toggle-compact-expanded': !compactMode }"></i>
+	<span class="hidden-visually"><?php p($l->t('Toggle compact mode')); ?></span>
+</button>
 <button ui-sref="board.detail({ id: id, tab: 0})"  title="<?php p($l->t('Board details')); ?>">
     <i class="icon icon-settings"></i>
     <span class="hidden-visually"><?php p($l->t('Board details')); ?></span>

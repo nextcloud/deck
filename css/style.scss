@@ -24,13 +24,23 @@
  *
  */
 
+// colors
 $color-warning-light: nc-lighten($color-warning, 15%);
 $color-lightgrey: nc-darken($color-main-background, 4%);
 $color-grey: nc-darken($color-main-background, 7%);
 $color-darkgrey: nc-darken($color-main-background, 32%);
 
-@import 'comp-appnav.scss';
-@import 'icons.scss';
+// margins/paddings
+$board-item-margin: 10px 10px 20px 10px;
+$board-last-item-margin: 10px;
+
+$compact-board-item-margin: 5px 10px 10px 10px;
+$compact-board-last-item-margin: 5px 10px 10px;
+
+@import 'comp-appnav';
+@import 'icons';
+@import 'animations';
+@import 'compact-mode';
 
 /**
  * General styles
@@ -338,7 +348,7 @@ input.input-inline {
 	flex-direction: column;
 
 	h3 {
-		padding: 10px 10px 8px;
+		padding: 10px 10px 8px;;
 		margin: 0;
 		font-size: 12pt;
 		font-weight: normal;
@@ -380,15 +390,15 @@ input.input-inline {
 	}
 
 	.as-sortable-placeholder {
-		margin: 10px 10px 20px 10px;
+		margin: $board-item-margin;
 		border: 1px dashed $color-darkgrey;
 		min-height: 96px;
+		transition: margin 250ms linear;
 
 		&:last-child {
-			margin: 10px;
+			margin: $board-last-item-margin;
 		}
 	}
-
 
 	> ul {
 		display: flex;
@@ -397,17 +407,17 @@ input.input-inline {
 
 }
 
-
 .card {
 	background-color: $color-main-background;
-	margin: 10px 10px 20px 10px;
+	margin: $board-item-margin;
 	white-space: normal;
 	position: relative;
 	box-shadow: 0 0 3px $color-darkgrey;
 	border-radius: 3px;
+	transition: margin 250ms linear;
 
 	&:last-child {
-		margin: 10px;
+		margin: $board-last-item-margin;
 	}
 
 	&.archived .card-upper {

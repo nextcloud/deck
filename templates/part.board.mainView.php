@@ -81,16 +81,15 @@
 										autofocus-on-insert required maxlength="100" />
 								</form>
 							</h4>
-							<ul class="labels">
+							<ul class="labels compact-item" ng-if="!compactMode">
 								<li ng-repeat="label in cardservice.get(c.id).labels"
 									ng-style="labelStyle(label.color)" title="{{ label.title }}">
 									<span>{{ label.title }}</span>
 								</li>
 							</ul>
-
 						</div>
 
-						<div class="card-controls">
+						<div class="card-controls compact-item" ng-if="!compactMode">
 							<i class="icon icon-filetype-text" ng-if="cardservice.get(c.id).description" title="{{ cardservice.get(c.id).description }}"></i>
 							<span class="due" ng-if="cardservice.get(c.id).duedate" ng-class="{'overdue': cardservice.get(c.id).overdue == 3, 'now': cardservice.get(c.id).overdue == 2, 'next': cardservice.get(c.id).overdue == 1  }" title="{{ cardservice.get(c.id).duedate }}">
 								<i class="icon icon-badge"></i>
