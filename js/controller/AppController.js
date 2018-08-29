@@ -30,7 +30,8 @@ app.controller('AppController', function ($scope, $location, $http, $log, $rootS
 	$scope.sidebar = $rootScope.sidebar;
 	$scope.user = oc_current_user;
 	$rootScope.config = JSON.parse($attrs.config);
-	$rootScope.compactMode = false;
+
+	$rootScope.compactMode = localStorage.getItem('deck.compactMode') === 'true';
 
 	$scope.appNavigationHide = false;
 
