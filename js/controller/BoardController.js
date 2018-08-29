@@ -189,15 +189,17 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 
 	$scope.createCard = function (stack, title) {
-		var newCard = {
-			'title': title,
-			'stackId': stack,
-			'type': 'plain'
-		};
-		CardService.create(newCard).then(function (data) {
-			$scope.stackservice.addCard(data);
-			$scope.newCard.title = '';
-		});
+		if (this['addCardForm' + stack].$valid) {
+			var newCard = {
+				'title': title,
+				'stackId': stack,
+				'type': 'plain'
+			};
+			CardService.create(newCard).then(function (data) {
+				$scope.stackservice.addCard(data);
+				$scope.newCard.title = '';
+			});
+		}
 	};
 
 	$scope.stackDelete = function (stack) {

@@ -152,9 +152,12 @@
 			</ul>
 
 			<!-- CREATE CARD //-->
-			<div class="card create" ng-class="{emptyStack: !s.cards.length}"
-				 ng-style="{'border-color':'#{{ boardservice.getCurrent().color }}'}" ng-if="boardservice.canEdit() && checkCanEdit() && params.filter!=='archive'">
-				<form ng-submit="createCard(s.id, newCard.title)">
+			<div
+					class="card create"
+					ng-class="{emptyStack: !s.cards.length}"
+				 	ng-style="{'border-color':'#{{ boardservice.getCurrent().color }}'}"
+					ng-if="boardservice.canEdit() && checkCanEdit() && params.filter !== 'archive'">
+				<form name="addCardForm{{ s.id }}" ng-submit="createCard(s.id, newCard.title)">
 					<h4 ng-if="status.addCard[s.id]">
 						<input type="text" autofocus-on-insert
 							   ng-model="newCard.title"
