@@ -34,7 +34,13 @@ if (\OC_Util::getVersion()[0] < 14) {
 }
 ?>
 
-<div class="app app-deck" data-ng-app="Deck" ng-controller="AppController" ng-cloak config="<?php p(json_encode($_)); ?>" ng-class="{'app-navigation-hide': appNavigationHide}">
+<div
+		class="app app-deck"
+		data-ng-app="Deck"
+		ng-controller="AppController"
+		ng-cloak
+		config="<?php p(json_encode($_)); ?>"
+		ng-class="{'app-navigation-hide': appNavigationHide, 'compact-mode': compactMode}">
 
 	<div id="app-navigation" data-ng-controller="ListController" ng-init="initSidebar()">
 		<?php print_unescaped($this->inc('part.navigation')); ?>

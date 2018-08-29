@@ -1,7 +1,7 @@
 /*
- * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
+ * @copyright Copyright (c) 2018 Michael Weimann <mail@michael-weimann.eu>
  *
- * @author Julius Härtl <jus@bitgrid.net>
+ * @author 2018 Michael Weimann <mail@michael-weimann.eu>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -20,25 +20,22 @@
  *
  */
 
-import app from '../app/App.js';
+.compact-mode {
+  .card {
+    margin: $compact-board-item-margin;
 
-/** global: OC */
-app.controller('AppController', function ($scope, $location, $http, $log, $rootScope, $attrs) {
-	$rootScope.sidebar = {
-		show: false
-	};
-	$scope.sidebar = $rootScope.sidebar;
-	$scope.user = oc_current_user;
-	$rootScope.config = JSON.parse($attrs.config);
+    &:last-child {
+      margin: $compact-board-last-item-margin;
+    }
+  }
 
-	$rootScope.compactMode = localStorage.getItem('deck.compactMode') === 'true';
+  .stack {
+    .as-sortable-placeholder {
+      margin: $compact-board-item-margin;
 
-	$scope.appNavigationHide = false;
-
-	$scope.toggleSidebar = function() {
-		if ($(window).width() > 768) {
-			$scope.appNavigationHide = !$scope.appNavigationHide;
-			console.log($scope.appNavigationHide);
-		}
-	};
-});
+      &:last-child {
+        margin: $compact-board-last-item-margin;
+      }
+    }
+  }
+}
