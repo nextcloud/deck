@@ -40,6 +40,7 @@ OC.L10N.register(
     "Submit" : "Gönder",
     "Show archived cards" : "Arşivlenmiş kartları görüntüle",
     "Hide archived cards" : "Arşivlenmiş kartları gizle",
+    "Toggle compact mode" : "Sıkışık kipi değiştir",
     "Board details" : "Pano ayrıntıları",
     "All Boards" : "Tüm Panolar",
     "Archived boards" : "Arşivlenmiş panolar",

@@ -40,6 +40,7 @@ OC.L10N.register(
     "Submit" : "Enviar",
     "Show archived cards" : "Mostrar cartões arquivados",
     "Hide archived cards" : "Ocultar cartões arquivados",
+    "Toggle compact mode" : "Alternar para modo compacto",
     "Board details" : "Detalhes do painel",
     "All Boards" : "Todos os paineis",
     "Archived boards" : "Painéis arquivados",
