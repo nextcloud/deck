@@ -23,6 +23,8 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\Activity\ActivityManager;
+use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\BoardMapper;
@@ -32,7 +34,6 @@ use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\StatusException;
 use OCA\Deck\BadRequestException;
-use OCP\Activity\IManager;
 
 
 class StackService {
@@ -58,7 +59,7 @@ class StackService {
 		CardService $cardService,
 		AssignedUsersMapper $assignedUsersMapper,
 		AttachmentService $attachmentService,
-		IManager $activityManager
+		ActivityManager $activityManager
 	) {
 		$this->stackMapper = $stackMapper;
 		$this->boardMapper = $boardMapper;
@@ -199,33 +200,10 @@ class StackService {
 		$stack->setTitle($title);
 		$stack->setBoardId($boardId);
 		$stack->setOrder($order);
-		$result = $this->stackMapper->insert($stack);
-
-		$board = $this->boardMapper->find($boardId);
-		$event = $this->activityManager->generateEvent();
-		$event->setApp('deck')
-			->setType('deck_own_boards')
-			->setAffectedUser($board->getOwner())
-			->setAuthor($board->getOwner())
-			->setObject('stack', $result->getId())
-			->setSubject('foo')
-			->setTimestamp(time());
-			/*->setSubject('{actor} created a new stack {stack} on {board}',
-				[
-					'actor' => $event->getAuthor(),
-					'stack' => [
-						'id' => (int) $result->getId(),
-						//'uri' => $calendarData['uri'],
-						'name' => $stack->getTitle(),
-					],
-					'board' => [
-						'id' => (int) $boardId,
-						'name' => $board->getTitle(),
-					],
-				]);*/
-
-		$this->activityManager->publish($event);
-		return $result;
+		$stack = $this->stackMapper->insert($stack);
+		$event = $this->activityManager->createEvent(ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_CREATE);
+		$this->activityManager->sendToUsers($event);
+		return $stack;
 	}
 
 	/**
@@ -246,10 +224,12 @@ class StackService {
 
 		$stack = $this->stackMapper->find($id);
 		$stack->setDeletedAt(time());
-		$this->stackMapper->update($stack);
+		$stack = $this->stackMapper->update($stack);
+
+		$event = $this->activityManager->createEvent(ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_DELETE);
+		$this->activityManager->sendToUsers($event);
 
 		$this->enrichStackWithCards($stack);
-
 		return $stack;
 	}
 
@@ -289,11 +269,15 @@ class StackService {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		$stack = $this->stackMapper->find($id);
+		$changes = new ChangeSet($stack);
 		$stack->setTitle($title);
 		$stack->setBoardId($boardId);
 		$stack->setOrder($order);
 		$stack->setDeletedAt($deletedAt);
-		return $this->stackMapper->update($stack);
+		$changes->setAfter($stack);
+		$stack = $this->stackMapper->update($stack);
+		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_BOARD, $changes->getAfter(), ActivityManager::SUBJECT_STACK_UPDATE, $changes->getBefore());
+		return $stack;
 	}
 
 	/**
