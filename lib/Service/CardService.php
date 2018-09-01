@@ -23,6 +23,8 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\Activity\ActivityManager;
+use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\Db\AssignedUsers;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Card;
@@ -48,17 +50,19 @@ class CardService {
 	private $assignedUsersMapper;
 	private $attachmentService;
 	private $currentUser;
+	private $activityManager;
 
 	public function __construct(
 		CardMapper $cardMapper,
 		StackMapper $stackMapper,
 		BoardMapper $boardMapper,
 		LabelMapper $labelMapper,
-		PermissionService $permissionService, 
+		PermissionService $permissionService,
 		BoardService $boardService,
 		NotificationHelper $notificationHelper,
-		AssignedUsersMapper $assignedUsersMapper, 
+		AssignedUsersMapper $assignedUsersMapper,
 		AttachmentService $attachmentService,
+		ActivityManager $activityManager,
 		$userId
 	) {
 		$this->cardMapper = $cardMapper;
@@ -70,6 +74,7 @@ class CardService {
 		$this->notificationHelper = $notificationHelper;
 		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->attachmentService = $attachmentService;
+		$this->activityManager = $activityManager;
 		$this->currentUser = $userId;
 	}
 
@@ -157,7 +162,9 @@ class CardService {
 		$card->setType($type);
 		$card->setOrder($order);
 		$card->setOwner($owner);
-		return $this->cardMapper->insert($card);
+		$card = $this->cardMapper->insert($card);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE);
+		return $card;
 	}
 
 	/**
@@ -182,6 +189,7 @@ class CardService {
 		$card = $this->cardMapper->find($id);
 		$card->setDeletedAt(time());
 		$this->cardMapper->update($card);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_DELETE);
 		return $card;
 	}
 
@@ -204,7 +212,7 @@ class CardService {
 	public function update($id, $title, $stackId, $type, $order = 0, $description = '', $owner, $duedate = null, $deletedAt) {
 
 		if (is_numeric($id) === false) {
-			throw new BadRequestException('card id must be a number');			
+			throw new BadRequestException('card id must be a number');
 		}
 
 		if ($title === false || $title === null) {
@@ -231,6 +239,7 @@ class CardService {
 		if ($card->getArchived()) {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
+		$changes = new ChangeSet($card);
 		$card->setTitle($title);
 		$card->setStackId($stackId);
 		$card->setType($type);
@@ -239,7 +248,9 @@ class CardService {
 		$card->setDescription($description);
 		$card->setDuedate($duedate);
 		$card->setDeletedAt($deletedAt);
-		return $this->cardMapper->update($card);
+		$changes->setAfter($card);
+		$this->cardMapper->update($card);
+		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_CARD, $changes, ActivityManager::SUBJECT_CARD_UPDATE);
 	}
 
 	/**
@@ -350,7 +361,10 @@ class CardService {
 		}
 		$card = $this->cardMapper->find($id);
 		$card->setArchived(true);
-		return $this->cardMapper->update($card);
+		$newCard = $this->cardMapper->update($card);
+		$event = $this->activityManager->createEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_ARCHIVE);
+		$this->activityManager->sendToUsers($event);
+		return $newCard;
 	}
 
 	/**
@@ -374,7 +388,9 @@ class CardService {
 		}
 		$card = $this->cardMapper->find($id);
 		$card->setArchived(false);
-		return $this->cardMapper->update($card);
+		$newCard = $this->cardMapper->update($card);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_UNARCHIVE);
+		return $newCard;
 	}
 
 	/**
