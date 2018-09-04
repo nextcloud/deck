@@ -28,6 +28,7 @@ class ChangeSet {
 
 	private $before;
 	private $after;
+	private $diff = false;
 
 	public function __construct($before = null, $after = null) {
 		if ($before !== null) {
@@ -36,6 +37,14 @@ class ChangeSet {
 		if ($after !== null) {
 			$this->setAfter($after);
 		}
+	}
+
+	public function enableDiff() {
+		$this->diff = true;
+	}
+
+	public function getDiff() {
+		return $this->diff;
 	}
 
 	public function setBefore($before) {

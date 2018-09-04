@@ -24,9 +24,9 @@
 namespace OCA\Deck\Activity;
 
 
+use cogpowered\FineDiff\Diff;
 use OCP\Activity\IEvent;
 use OCP\Activity\IProvider;
-use OCP\IL10N;
 use OCP\IURLGenerator;
 
 class DeckProvider implements IProvider {
@@ -61,12 +61,32 @@ class DeckProvider implements IProvider {
 		}
 
 		$event->setIcon(\OC::$server->getURLGenerator()->imagePath('deck', 'deck-dark.svg'));
+		if (strpos($event->getSubject(), '_update') !== false) {
+			$event->setIcon(\OC::$server->getURLGenerator()->imagePath('files', 'change.svg'));
+		}
+		if (strpos($event->getSubject(), '_create') !== false) {
+			$event->setIcon(\OC::$server->getURLGenerator()->imagePath('files', 'add-color.svg'));
+		}
+		if (strpos($event->getSubject(), '_delete') !== false) {
+			$event->setIcon(\OC::$server->getURLGenerator()->imagePath('files', 'delete-color.svg'));
+		}
+		if (strpos($event->getSubject(), 'archive') !== false) {
+			$event->setIcon(\OC::$server->getURLGenerator()->imagePath('deck', 'archive.svg'));
+		}
+		if (strpos($event->getSubject(), '_restore') !== false) {
+			$event->setIcon(\OC::$server->getURLGenerator()->imagePath('core', 'actions/history.svg'));
+		}
+		if (strpos($event->getSubject(), 'attachment_') !== false) {
+			$event->setIcon(\OC::$server->getURLGenerator()->imagePath('core', 'places/files.svg'));
+		}
+
 
 		$subjectIdentifier = $event->getSubject();
 		$subjectParams = $event->getSubjectParameters();
 
 		$ownActivity = ($event->getAuthor() === $this->userId);
 
+		$board = null;
 		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_BOARD) {
 			$board = [
 				'type' => 'highlight',
@@ -76,6 +96,7 @@ class DeckProvider implements IProvider {
 			];
 		}
 
+		$card = null;
 		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_CARD) {
 			$card = [
 				'type' => 'highlight',
@@ -84,8 +105,8 @@ class DeckProvider implements IProvider {
 			];
 
 			if ($subjectParams['board']) {
-				// TODO: check if archvied?
-				$card['link'] = $this->deckUrl('/board/' . $subjectParams['board']['id'] . '//card/' . $event->getObjectId());
+				$archivedParam = $subjectParams['card']['archived'] ? 'archived' : '';
+				$card['link'] = $this->deckUrl('/board/' . $subjectParams['board']['id'] . '/' . $archivedParam . '/card/' . $event->getObjectId());
 			}
 		}
 
@@ -120,6 +141,32 @@ class DeckProvider implements IProvider {
 			];
 		}
 
+		if (array_key_exists('label', $subjectParams)) {
+			$params['label'] = [
+				'type' => 'highlight',
+				'id' => $subjectParams['label']['id'],
+				'name' => $subjectParams['label']['title']
+			];
+		}
+
+		if (array_key_exists('attachment', $subjectParams)) {
+			$params['attachment'] = [
+				'type' => 'highlight',
+				'id' => $subjectParams['attachment']['id'],
+				'name' => $subjectParams['attachment']['data'],
+				'link' => $this->urlGenerator->linkToRoute('deck.attachment.display', ['cardId' => $subjectParams['card']['id'], 'attachmentId' => $subjectParams['attachment']['id']]),
+			];
+		}
+
+		if (array_key_exists('assigneduser', $subjectParams)) {
+			$user = $userManager->get($subjectParams['assigneduser']);
+			$params['assigneduser'] = [
+				'type' => 'user',
+				'id' => $subjectParams['assigneduser'],
+				'name' => $user !== null ? $user->getDisplayName() : $subjectParams['assigneduser']
+			];
+		}
+
 		if (array_key_exists('before', $subjectParams)) {
 			$params['before'] = [
 				'type' => 'highlight',
@@ -127,15 +174,28 @@ class DeckProvider implements IProvider {
 				'name' => $subjectParams['before']
 			];
 		}
+		if (array_key_exists('after', $subjectParams)) {
+			$params['after'] = [
+				'type' => 'highlight',
+				'id' => $subjectParams['after'],
+				'name' => $subjectParams['after']
+			];
+		}
 
-		$subject = $this->activityManager->getActivityFormat($subjectIdentifier, $ownActivity);
+		try {
+			$subject = $this->activityManager->getActivityFormat($subjectIdentifier, $subjectParams, $ownActivity);
+		} catch (\Exception $e) {
+			return $event;
+		}
+
 		$event->setParsedSubject($subject);
 		$event->setRichSubject(
 			$subject,
 			$params
 		);
 		if ($event->getMessage() !== '') {
-			$event->setParsedMessage('<pre>' . $event->getMessage() . '</pre>');
+			$diff = new Diff();
+			$event->setParsedMessage('<pre class="visualdiff">' . $diff->render($subjectParams['before'], $subjectParams['after']) . '</pre>');
 		}
 
 		return $event;

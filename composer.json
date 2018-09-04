@@ -8,8 +8,11 @@
             "email": "jus@bitgrid.net"
         }
     ],
-    "require": {},
+    "require": {
+        "cogpowered/finediff": "0.3.*"
+    },
     "require-dev": {
+        "roave/security-advisories": "dev-master",
         "christophwurst/nextcloud": "^13.0",
         "jakub-onderka/php-parallel-lint": "^1.0.0"
     }

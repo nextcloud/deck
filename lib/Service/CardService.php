@@ -420,7 +420,9 @@ class CardService {
 		if ($card->getArchived()) {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
+		$label = $this->labelMapper->find($labelId);
 		$this->cardMapper->assignLabel($cardId, $labelId);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_ASSIGN, ['label' => $label]);
 	}
 
 	/**
@@ -450,7 +452,9 @@ class CardService {
 		if ($card->getArchived()) {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
+		$label = $this->labelMapper->find($labelId);
 		$this->cardMapper->removeLabel($cardId, $labelId);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_UNASSING, ['label' => $label]);
 	}
 
 	/**
@@ -478,17 +482,19 @@ class CardService {
 				return false;
 			}
 		}
+		$card = $this->cardMapper->find($cardId);
 
 		if ($userId !== $this->currentUser) {
 			/* Notifyuser about the card assignment */
-			$card = $this->cardMapper->find($cardId);
 			$this->notificationHelper->sendCardAssigned($card, $userId);
 		}
 
 		$assignment = new AssignedUsers();
 		$assignment->setCardId($cardId);
 		$assignment->setParticipant($userId);
-		return $this->assignedUsersMapper->insert($assignment);
+		$assignment = $this->assignedUsersMapper->insert($assignment);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_USER_ASSIGN, ['assigneduser' => $userId]);
+		return $assignment;
 	}
 
 	/**
@@ -514,7 +520,10 @@ class CardService {
 		$assignments = $this->assignedUsersMapper->find($cardId);
 		foreach ($assignments as $assignment) {
 			if ($assignment->getParticipant() === $userId) {
-				return $this->assignedUsersMapper->delete($assignment);
+				$assignment = $this->assignedUsersMapper->delete($assignment);
+				$card = $this->cardMapper->find($cardId);
+				$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_USER_UNASSIGN, ['assigneduser' => $userId]);
+				return $assignment;
 			}
 		}
 		throw new NotFoundException('No assignment for ' . $userId . 'found.');

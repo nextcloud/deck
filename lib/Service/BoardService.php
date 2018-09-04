@@ -382,7 +382,7 @@ class BoardService {
 		$changes->setAfter($board);
 		$this->boardMapper->update($board); // operate on clone so we can check for updated fields
 		$this->boardMapper->mapOwner($newBoard);
-		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_BOARD, $changes->getAfter(), ActivityManager::SUBJECT_BOARD_UPDATE, $changes->getBefore());
+		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_BOARD_UPDATE);
 		return $board;
 	}
 
