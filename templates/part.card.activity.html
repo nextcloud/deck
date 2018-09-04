@@ -1,0 +1,12 @@
+<ul class="activities" infinite-scroll="$ctrl.page()" infinite-scroll-container="'#app-sidebar'">
+	<li class="activity box" ng-repeat="activity in $ctrl.getData($ctrl.element.id)">
+		<div class="activity-icon">
+			<img src="{{activity.icon}}" alt="">
+		</div>
+		<div class="activitysubject"
+			 ng-bind-html="$ctrl.parseMessage(activity.subject_rich[0], activity.subject_rich[1])"></div>
+		<span class="activitytime has-tooltip live-relative-timestamp"
+			  data-timestamp="{{ activity.timestamp }}">{{ activity.timestamp/1000 | relativeDateFilter }}</span>
+		<div class="activitymessage">{{ activity.activity_id }}</div>
+	</li>
+</ul>

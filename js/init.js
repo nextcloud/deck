@@ -14,9 +14,11 @@ import './app/Run.js';
 
 import ListController from 'controller/ListController.js';
 import attachmentListComponent from './controller/AttachmentController.js';
+import activityComponent from './controller/ActivityController.js';
 
 app.controller('ListController', ListController);
 app.component('attachmentListComponent', attachmentListComponent);
+app.component('activityComponent', activityComponent);
 
 
 // require all the js files from subdirectories
