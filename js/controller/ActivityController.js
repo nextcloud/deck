@@ -29,14 +29,18 @@ class ActivityController {
 		this.activityservice = ActivityService;
 		this.$scope = $scope;
 		this.type = '';
-		var self = this;
-		this.$scope.$watch(function() {
+		this.loading = false;
+
+		const self = this;
+		this.$scope.$watch(function () {
 			return self.element.id;
 		}, function (params) {
-			self.activityservice.fetchMoreActivities(self.type, self.element.id);
-			self.activityservice.fetchNewerActivities(self.type, self.element.id);
+			if (self.getData(self.element.id).length === 0) {
+				self.loading = true;
+				self.fetchUntilResults();
+			}
+			self.activityservice.fetchNewerActivities(self.type, self.element.id).then(function () {});
 		}, true);
-		console.log('constructor');
 	}
 
 	getData(id) {
@@ -48,8 +52,40 @@ class ActivityController {
 		return OCA.Activity.RichObjectStringParser.parseMessage(subject, parameters);
 	}
 
+	fetchUntilResults () {
+		const self = this;
+		let dataLengthBefore = self.getData(self.element.id).length;
+		let _executeFetch = function() {
+			let promise = self.activityservice.fetchMoreActivities(self.type, self.element.id);
+			if (Promise.resolve(promise) === promise) {
+				promise.then(function (data) {
+					let dataLengthAfter = self.getData(self.element.id).length;
+					if (data !== null || dataLengthAfter <= dataLengthBefore || dataLengthAfter < 5) {
+						_executeFetch();
+					} else {
+						self.loading = false;
+						self.$scope.$apply();
+					}
+				}, function () {
+					self.loading = false;
+					self.$scope.$apply();
+				});
+			}
+		};
+		_executeFetch();
+	};
+
 	page() {
-		this.activityservice.fetchMoreActivities(this.type, this.element.id);
+		if (!this.activityservice.since[this.type][this.element.id].finished) {
+			this.loading = true;
+			this.fetchUntilResults();
+		} else {
+			this.loading = false;
+		}
+	}
+
+	loadingNewer() {
+		return this.activityservice.runningNewer;
 	}
 
 }

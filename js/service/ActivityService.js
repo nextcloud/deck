@@ -30,6 +30,7 @@ class ActivityService {
 
 	constructor ($rootScope, $filter, $http, $q) {
 		this.running = false;
+		this.runningNewer = false;
 		this.$filter = $filter;
 		this.$http = $http;
 		this.$q = $q;
@@ -50,18 +51,18 @@ class ActivityService {
 		if (type === DECK_ACTIVITY_TYPE_CARD)
 			return OC.linkToOCS('apps/activity/api/v2/activity', 2) + 'filter?format=json&object_type=deck_card&object_id=' + id + '&limit=5&since=' + since;
 		if (type === DECK_ACTIVITY_TYPE_BOARD)
-			return OC.linkToOCS('apps/activity/api/v2/activity', 2) + 'filter?format=json&object_type=deck_board&object_id=' + id + '&limit=5&since=' + since;
+			return OC.linkToOCS('apps/activity/api/v2/activity', 2) + 'deck?format=json&limit=5&since=' + since;
 	}
 
 	fetchCardActivities(type, id, since) {
-		var deferred = this.$q.defer();
 		this.running = true;
 
 		this.checkData(type, id);
 		var self = this;
-		this.$http.get(ActivityService.getUrl(type, id, since)).then(function (response) {
+		return this.$http.get(ActivityService.getUrl(type, id, since)).then(function (response) {
 			var objects = response.data.ocs.data;
 
+			var dataLengthBefore = self.data[type][id].length;
 			for (let index in objects) {
 				let item = objects[index];
 				self.addItem(type, id, item);
@@ -69,30 +70,30 @@ class ActivityService {
 					self.since[type][id].latest = item.activity_id;
 				}
 			}
+			var dataLengthAfter = self.data[type][id].length;
 			self.data[type][id].sort(function(a, b) {
 				return b.activity_id - a.activity_id;
 			});
 			self.since[type][id].oldest = response.headers('X-Activity-Last-Given');
 			self.running = false;
-			deferred.resolve(objects);
 		}, function (error) {
 			if (error.status === 304) {
 				self.since[type][id].finished = true;
 			}
 			self.running = false;
 		});
-		return deferred.promise;
 	}
 	fetchMoreActivities(type, id) {
 		this.checkData(type, id);
 		if (this.running === true) {
-			return;
+			return this.runningPromise;
 		}
 		if (!this.since[type][id].finished) {
-			return this.fetchCardActivities(type, id, this.since[type][id].oldest);
+			this.runningPromise = this.fetchCardActivities(type, id, this.since[type][id].oldest);
+			return this.runningPromise;
 		}
+		return Promise.reject();
 	}
-
 	checkData(type, id) {
 		if (!Array.isArray(this.data[type][id])) {
 			this.data[type][id] = [];
@@ -108,8 +109,13 @@ class ActivityService {
 	}
 
 	addItem(type, id, item) {
-		console.log(id);
 		if (this.data[type][id].findIndex((entry) => { return entry.activity_id === item.activity_id; }) === -1) {
+			if (type === DECK_ACTIVITY_TYPE_BOARD && (
+				(item.object_type === DECK_ACTIVITY_TYPE_CARD && item.subject_rich[1].board && item.subject_rich[1].board.id !== id)
+				|| (item.object_type === DECK_ACTIVITY_TYPE_BOARD && item.object_id !== id)
+			)) {
+				return;
+			}
 			item.timestamp = new Date(item.datetime).getTime();
 			this.data[type][id].push(item);
 		}
@@ -123,17 +129,18 @@ class ActivityService {
 	 */
 	fetchNewerActivities(type, id) {
 		if (this.since[type][id].latest === 0) {
-			return;
+			return Promise.resolve();
 		}
 		let self = this;
-		this.fetchNewer(type, id).then(function() {
-			self.fetchNewerActivities(type, id);
+		return this.fetchNewer(type, id).then(function() {
+			return self.fetchNewerActivities(type, id);
 		});
 	}
 
 	fetchNewer(type, id) {
 		var deferred = this.$q.defer();
 		this.running = true;
+		this.runningNewer = true;
 		var self = this;
 		this.$http.get(ActivityService.getUrl(type, id, this.since[type][id].latest) + '&sort=asc').then(function (response) {
 			var objects = response.data.ocs.data;
@@ -149,14 +156,19 @@ class ActivityService {
 			self.since[type][id].latest = response.headers('X-Activity-Last-Given');
 			self.data[type][id] = data.concat(self.data[type][id]);
 			self.running = false;
+			self.runningNewer = false;
 			deferred.resolve(objects);
 		}, function (error) {
+			self.runningNewer = false;
 			self.running = false;
 		});
 		return deferred.promise;
 	}
 
 	getData(type, id) {
+		if (!Array.isArray(this.data[type][id])) {
+			return [];
+		}
 		return this.data[type][id];
 	}
 
