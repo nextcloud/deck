@@ -1,5 +1,6 @@
-<ul class="activities" infinite-scroll="$ctrl.page()" infinite-scroll-container="'#app-sidebar'">
-	<li class="activity box" ng-repeat="activity in $ctrl.getData($ctrl.element.id)">
+<ul class="activities" infinite-scroll="$ctrl.page()" infinite-scroll-container="'#app-sidebar'" infinite-scroll-disabled="$ctrl.activityservice.running">
+	<li ng-if="$ctrl.loadingNewer()"><div class="icon-loading-small"></div></li>
+	<li class="activity box" ng-repeat="activity in $ctrl.getData($ctrl.element.id) track by $index">
 		<div class="activity-icon">
 			<img src="{{activity.icon}}" alt="">
 		</div>
@@ -7,6 +8,8 @@
 			 ng-bind-html="$ctrl.parseMessage(activity.subject_rich[0], activity.subject_rich[1])"></div>
 		<span class="activitytime has-tooltip live-relative-timestamp"
 			  data-timestamp="{{ activity.timestamp }}">{{ activity.timestamp/1000 | relativeDateFilter }}</span>
-		<div class="activitymessage">{{ activity.activity_id }}</div>
+		<div class="activitymessage" ng-bind-html="activity.message"></div>
 	</li>
+
+	<li ng-if="$ctrl.loading"><div class="icon-loading-small"></div></li>
 </ul>

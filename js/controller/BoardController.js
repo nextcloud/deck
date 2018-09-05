@@ -434,6 +434,14 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		};
 	};
 
+	$scope.colorValue = function(color) {
+		const re = /^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/;
+		if (re.test(color)) {
+			return color;
+		}
+		return '';
+	};
+
 	$scope.attachmentCount = function(card) {
 		if (Array.isArray(card.attachments)) {
 			return card.attachments.filter((obj) => obj.deletedAt === 0).length;

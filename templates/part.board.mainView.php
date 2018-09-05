@@ -24,13 +24,13 @@
 	</div>
 
 	<div class="board-header-controls hidden">
-		<?php print_unescaped($this->inc('part.board.headerControls')); ?>
+		<?php print_unescaped($this->inc('part.board.headerControls', ['headerControlsId' => 'main'])); ?>
 	</div>
 	<div class="board-header-controls app-popover-menu-utils">
 		<button class="icon-more button"></button>
 		<div class="popovermenu hidden">
 			<div id="popover-controls">
-				<?php print_unescaped($this->inc('part.board.headerControls')); ?>
+				<?php print_unescaped($this->inc('part.board.headerControls', ['headerControlsId' => 'popover'])); ?>
 			</div>
 		</div>
 	</div>
