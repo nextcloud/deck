@@ -249,8 +249,9 @@ class CardService {
 		$card->setDuedate($duedate);
 		$card->setDeletedAt($deletedAt);
 		$changes->setAfter($card);
-		$this->cardMapper->update($card);
+		$card = $this->cardMapper->update($card);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_CARD, $changes, ActivityManager::SUBJECT_CARD_UPDATE);
+		return $card;
 	}
 
 	/**

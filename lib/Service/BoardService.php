@@ -381,7 +381,7 @@ class BoardService {
 		$board->setArchived($archived);
 		$changes->setAfter($board);
 		$this->boardMapper->update($board); // operate on clone so we can check for updated fields
-		$this->boardMapper->mapOwner($newBoard);
+		$this->boardMapper->mapOwner($board);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_BOARD_UPDATE);
 		return $board;
 	}
