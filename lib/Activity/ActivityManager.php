@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Activity;
 
+use InvalidArgumentException;
 use OCA\Deck\Db\AssignedUsers;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
@@ -127,7 +128,7 @@ class ActivityManager {
 		$subject = '';
 		switch ($subjectIdentifier) {
 			case self::SUBJECT_BOARD_CREATE:
-				$subject = $this->l10n->t('You have created a new board {board}');
+				$subject = $ownActivity ? $this->l10n->t('You have created a new board {board}'): $this->l10n->t('{user} has created a new board {board}');
 				break;
 			case self::SUBJECT_BOARD_DELETE:
 				$subject = $ownActivity ? $this->l10n->t('You have deleted the board {board}') : $this->l10n->t('{user} has deleted the board {board}');
@@ -174,7 +175,7 @@ class ActivityManager {
 				$subject = $ownActivity ? $this->l10n->t('You have renamed the card {before} to {card}') : $this->l10n->t('{user} has renamed the card {before} to {card}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_DESCRIPTION:
-				if ($subjectParams['before'] === null) {
+				if (!isset($subjectParams['before'])) {
 					$subject = $ownActivity ? $this->l10n->t('You have added a description to {card} in {stack} on {board}') : $this->l10n->t('{user} has added a description to {card} in {stack} on {board}');
 				} else {
 					$subject = $ownActivity ? $this->l10n->t('You have updated the description of {card} in {stack} on {board}') : $this->l10n->t('{user} has updated the description {card} in {stack} on {board}');
@@ -187,9 +188,9 @@ class ActivityManager {
 				$subject = $ownActivity ? $this->l10n->t('You have unarchived {card} in {stack} on {board}') : $this->l10n->t('{user} has unarchived {card} in {stack} on {board}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_DUEDATE:
-				if ($subjectParams['after'] === null) {
+				if (!isset($subjectParams['after'])) {
 					$subject = $ownActivity ? $this->l10n->t('You have removed the due date of {card}') : $this->l10n->t('{user} has removed the due date of {card}');
-				} else if ($subjectParams['before'] === null && $subjectParams['after'] !== null) {
+				} else if (isset($subjectParams['before']) && !isset($subjectParams['after'])) {
 					$subject = $ownActivity ? $this->l10n->t('You have set the due date of {card} to {after}') : $this->l10n->t('{user} has set the due date of {card} to {after}');
 				} else {
 					$subject = $ownActivity ? $this->l10n->t('You have updated the due date of {card} to {after}') : $this->l10n->t('{user} has updated the due date of {card} to {after}');
@@ -400,28 +401,36 @@ class ActivityManager {
 	private function findObjectForEntity($objectType, $entity) {
 		$className = \get_class($entity);
 		$objectId = null;
-		switch ($className) {
-			case Board::class:
-			case Card::class:
-				$objectId = $entity->getId();
-				break;
-			case Attachment::class:
-			case Label::class:
-			case AssignedUsers::class:
-				$objectId = $entity->getCardId();
-				break;
-			case Stack::class:
-				$objectId = $entity->getBoardId();
-		}
-
 		if ($objectType === self::DECK_OBJECT_CARD) {
+			switch ($className) {
+				case Card::class:
+					$objectId = $entity->getId();
+					break;
+				case Attachment::class:
+				case Label::class:
+				case AssignedUsers::class:
+					$objectId = $entity->getCardId();
+					break;
+				default:
+					throw new InvalidArgumentException('No entity relation present for '. $className . ' to ' . $objectType);
+			}
 			return $this->cardMapper->find($objectId);
 		}
 		if ($objectType === self::DECK_OBJECT_BOARD) {
+			switch ($className) {
+				case Board::class:
+					$objectId = $entity->getId();
+					break;
+				case Label::class:
+				case Stack::class:
+					$objectId = $entity->getBoardId();
+					break;
+				default:
+					throw new InvalidArgumentException('No entity relation present for '. $className . ' to ' . $objectType);
+			}
 			return $this->boardMapper->find($objectId);
 		}
-
-		return null;
+		throw new InvalidArgumentException('No entity relation present for '. $className . ' to ' . $objectType);
 	}
 
 	private function findDetailsForStack($stackId) {
