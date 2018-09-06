@@ -363,8 +363,7 @@ class CardService {
 		$card = $this->cardMapper->find($id);
 		$card->setArchived(true);
 		$newCard = $this->cardMapper->update($card);
-		$event = $this->activityManager->createEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_ARCHIVE);
-		$this->activityManager->sendToUsers($event);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_ARCHIVE);
 		return $newCard;
 	}
 

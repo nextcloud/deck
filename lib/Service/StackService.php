@@ -74,7 +74,7 @@ class StackService {
 	}
 
 	private function enrichStackWithCards($stack) {
-		$cards = $this->cardMapper->findAll($stack->id);
+		$cards = $this->cardMapper->findAll($stack->getId());
 
 		if(is_null($cards)) {
 			return;
@@ -201,8 +201,7 @@ class StackService {
 		$stack->setBoardId($boardId);
 		$stack->setOrder($order);
 		$stack = $this->stackMapper->insert($stack);
-		$event = $this->activityManager->createEvent(ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_CREATE);
-		$this->activityManager->sendToUsers($event);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_CREATE);
 		return $stack;
 	}
 
@@ -226,8 +225,7 @@ class StackService {
 		$stack->setDeletedAt(time());
 		$stack = $this->stackMapper->update($stack);
 
-		$event = $this->activityManager->createEvent(ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_DELETE);
-		$this->activityManager->sendToUsers($event);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_DELETE);
 
 		$this->enrichStackWithCards($stack);
 		return $stack;
@@ -276,7 +274,7 @@ class StackService {
 		$stack->setDeletedAt($deletedAt);
 		$changes->setAfter($stack);
 		$stack = $this->stackMapper->update($stack);
-		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_BOARD, $changes->getAfter(), ActivityManager::SUBJECT_STACK_UPDATE, $changes->getBefore());
+		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_STACK_UPDATE);
 		return $stack;
 	}
 

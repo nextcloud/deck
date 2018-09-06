@@ -275,8 +275,7 @@ class BoardService {
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE],
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
 		]);
-		$event = $this->activityManager->createEvent(ActivityManager::DECK_OBJECT_BOARD, $new_board, ActivityManager::SUBJECT_BOARD_CREATE);
-		$this->activityManager->sendToUsers($event);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $new_board, ActivityManager::SUBJECT_BOARD_CREATE);
 		return $new_board;
 
 	}
@@ -299,8 +298,7 @@ class BoardService {
 		$board = $this->find($id);
 		$board->setDeletedAt(time());
 		$board = $this->boardMapper->update($board);
-		$event = $this->activityManager->createEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_DELETE);
-		$this->activityManager->sendToUsers($event);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_DELETE);
 		return $board;
 	}
 
@@ -321,8 +319,7 @@ class BoardService {
 		$board = $this->find($id);
 		$board->setDeletedAt(0);
 		$board = $this->boardMapper->update($board);
-		$event = $this->activityManager->createEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_RESTORE);
-		$this->activityManager->sendToUsers($event);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_RESTORE);
 		return $board;
 	}
 
@@ -438,8 +435,7 @@ class BoardService {
 
 		$newAcl = $this->aclMapper->insert($acl);
 		$this->boardMapper->mapAcl($newAcl);
-		$event = $this->activityManager->createEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE);
-		$this->activityManager->sendToUsers($event);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE);
 		return $newAcl;
 	}
 
