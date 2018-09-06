@@ -22,6 +22,24 @@ pipeline:
     when:
       matrix:
         TESTS: check-app-compatbility
+  check-app-compatbility-14:
+    image: nextcloudci/php7.0:php7.0-17
+    environment:
+      - APP_NAME=deck
+      - CORE_BRANCH=stable14
+      - DB=sqlite
+    commands:
+      # Pre-setup steps
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server
+      # Code checker
+      - ./occ app:check-code $APP_NAME -c strong-comparison
+      - ./occ app:check-code $APP_NAME -c deprecation
+      - cd apps/$APP_NAME/
+    when:
+      matrix:
+        TESTS: check-app-compatbility-14
   check-app-compatbility-13:
     image: nextcloudci/php7.0:php7.0-17
     environment:
@@ -213,6 +231,7 @@ matrix:
   include:
     - TESTS: check-app-compatbility
     - TESTS: check-app-compatbility-13
+    - TESTS: check-app-compatbility-14
     - TESTS: signed-off-check
     - TESTS: syntax-php5.6
     - TESTS: syntax-php7.0
