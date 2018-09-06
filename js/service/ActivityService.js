@@ -44,14 +44,16 @@ class ActivityService {
 			deck_board: {
 
 			},
-		}
+		};
 	}
 
 	static getUrl(type, id, since) {
-		if (type === DECK_ACTIVITY_TYPE_CARD)
+		if (type === DECK_ACTIVITY_TYPE_CARD) {
 			return OC.linkToOCS('apps/activity/api/v2/activity', 2) + 'filter?format=json&object_type=deck_card&object_id=' + id + '&limit=5&since=' + since;
-		if (type === DECK_ACTIVITY_TYPE_BOARD)
+		}
+		if (type === DECK_ACTIVITY_TYPE_BOARD) {
 			return OC.linkToOCS('apps/activity/api/v2/activity', 2) + 'deck?format=json&limit=5&since=' + since;
+		}
 	}
 
 	fetchCardActivities(type, id, since) {
@@ -60,17 +62,17 @@ class ActivityService {
 		this.checkData(type, id);
 		var self = this;
 		return this.$http.get(ActivityService.getUrl(type, id, since)).then(function (response) {
-			var objects = response.data.ocs.data;
+			const objects = response.data.ocs.data;
 
-			var dataLengthBefore = self.data[type][id].length;
 			for (let index in objects) {
-				let item = objects[index];
-				self.addItem(type, id, item);
-				if (item.activity_id > self.since[type][id].latest) {
-					self.since[type][id].latest = item.activity_id;
+				if (objects.hasOwnProperty(index)) {
+					let item = objects[index];
+					self.addItem(type, id, item);
+					if (item.activity_id > self.since[type][id].latest) {
+						self.since[type][id].latest = item.activity_id;
+					}
 				}
 			}
-			var dataLengthAfter = self.data[type][id].length;
 			self.data[type][id].sort(function(a, b) {
 				return b.activity_id - a.activity_id;
 			});
@@ -147,8 +149,10 @@ class ActivityService {
 
 			let data = [];
 			for (let index in objects) {
-				let item = objects[index];
-				self.addItem(type, id, item);
+				if (objects.hasOwnProperty(index)) {
+					let item = objects[index];
+					self.addItem(type, id, item);
+				}
 			}
 			self.data[type][id].sort(function(a, b) {
 				return b.activity_id - a.activity_id;
@@ -172,7 +176,7 @@ class ActivityService {
 		return this.data[type][id];
 	}
 
-};
+}
 
 app.service('ActivityService', ActivityService);
 

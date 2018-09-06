@@ -73,7 +73,7 @@ class ActivityController {
 			}
 		};
 		_executeFetch();
-	};
+	}
 
 	page() {
 		if (!this.activityservice.since[this.type][this.element.id].finished) {
