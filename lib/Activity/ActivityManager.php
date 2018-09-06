@@ -24,6 +24,8 @@
 namespace OCA\Deck\Activity;
 
 use InvalidArgumentException;
+use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsers;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
@@ -50,6 +52,7 @@ class ActivityManager {
 	private $boardMapper;
 	private $cardMapper;
 	private $attachmentMapper;
+	private $aclMapper;
 	private $stackMapper;
 	private $l10n;
 
@@ -63,6 +66,7 @@ class ActivityManager {
 	const SUBJECT_BOARD_DELETE = 'board_delete';
 	const SUBJECT_BOARD_RESTORE = 'board_restore';
 	const SUBJECT_BOARD_SHARE = 'board_share';
+	const SUBJECT_BOARD_UNSHARE = 'board_unshare';
 	const SUBJECT_BOARD_ARCHIVE = 'board_archive';
 	const SUBJECT_BOARD_UNARCHIVE = 'board_unarchive';
 
@@ -105,6 +109,7 @@ class ActivityManager {
 		CardMapper $cardMapper,
 		StackMapper $stackMapper,
 		AttachmentMapper $attachmentMapper,
+		AclMapper $aclMapper,
 		IL10N $l10n,
 		$userId
 	) {
@@ -114,6 +119,7 @@ class ActivityManager {
 		$this->cardMapper = $cardMapper;
 		$this->stackMapper = $stackMapper;
 		$this->attachmentMapper = $attachmentMapper;
+		$this->aclMapper = $aclMapper;
 		$this->l10n = $l10n;
 		$this->userId = $userId;
 	}
@@ -137,7 +143,10 @@ class ActivityManager {
 				$subject = $ownActivity ? $this->l10n->t('You have restored the board {board}') : $this->l10n->t('{user} has restored the board {board}');
 				break;
 			case self::SUBJECT_BOARD_SHARE:
-				$subject = $ownActivity ? $this->l10n->t('You have shared the board {board} with {sharee}') : $this->l10n->t('{user} has shared the board {board} with {sharee}');
+				$subject = $ownActivity ? $this->l10n->t('You have shared the board {board} with {acl}') : $this->l10n->t('{user} has shared the board {board} with {sharee}');
+				break;
+			case self::SUBJECT_BOARD_UNSHARE:
+				$subject = $ownActivity ? $this->l10n->t('You have removed {acl} from the board {board}') : $this->l10n->t('{user} has removed {acl} from the board {board}');
 				break;
 			case self::SUBJECT_BOARD_ARCHIVE:
 				$subject = $ownActivity ? $this->l10n->t('You have archived the board {board}') : $this->l10n->t('{user} has archived the board {board}');
@@ -343,6 +352,10 @@ class ActivityManager {
 				$subjectParams = $this->findDetailsForAttachment($entity->getId());
 				$object = $subjectParams['card'];
 				break;
+			case self::SUBJECT_BOARD_SHARE:
+			case self::SUBJECT_BOARD_UNSHARE:
+				$subjectParams = $this->findDetailsForAcl($entity->getId());
+				break;
 			default:
 				throw new \Exception('Unknown subject for activity.');
 				break;
@@ -423,6 +436,7 @@ class ActivityManager {
 					break;
 				case Label::class:
 				case Stack::class:
+				case Acl::class:
 					$objectId = $entity->getBoardId();
 					break;
 				default:
@@ -457,6 +471,15 @@ class ActivityManager {
 		$attachment = $this->attachmentMapper->find($attachmentId);
 		$data = $this->findDetailsForCard($attachment->getCardId());
 		return array_merge($data, ['attachment' => $attachment]);
+	}
+
+	private function findDetailsForAcl($aclId) {
+		$acl = $this->aclMapper->find($aclId);
+		$board = $this->boardMapper->find($acl->getBoardId());
+		return [
+			'acl' => $acl,
+			'board' => $board
+		];
 	}
 
 }

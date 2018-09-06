@@ -434,8 +434,8 @@ class BoardService {
 		$this->notificationHelper->sendBoardShared($boardId, $acl);
 
 		$newAcl = $this->aclMapper->insert($acl);
-		$this->boardMapper->mapAcl($newAcl);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE);
+		$this->boardMapper->mapAcl($newAcl);
 		return $newAcl;
 	}
 
@@ -502,6 +502,7 @@ class BoardService {
 				$this->assignedUsersMapper->delete($assignement);
 			}
 		}
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $acl, ActivityManager::SUBJECT_BOARD_UNSHARE);
 		return $this->aclMapper->delete($acl);
 	}
 

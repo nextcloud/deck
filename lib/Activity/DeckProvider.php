@@ -25,6 +25,7 @@ namespace OCA\Deck\Activity;
 
 
 use cogpowered\FineDiff\Diff;
+use OCA\Deck\Db\Acl;
 use OCP\Activity\IEvent;
 use OCP\Activity\IProvider;
 use OCP\IURLGenerator;
@@ -162,12 +163,30 @@ class DeckProvider implements IProvider {
 		}
 
 		if (array_key_exists('assigneduser', $subjectParams)) {
-			$user = $userManager->get($subjectParams['assigneduser']);
+			$user = $this->userManager->get($subjectParams['assigneduser']);
 			$params['assigneduser'] = [
 				'type' => 'user',
 				'id' => $subjectParams['assigneduser'],
 				'name' => $user !== null ? $user->getDisplayName() : $subjectParams['assigneduser']
 			];
+		}
+
+		if (array_key_exists('acl', $subjectParams)) {
+			if ($subjectParams['acl']['type'] === Acl::PERMISSION_TYPE_USER) {
+				$user = $this->userManager->get($subjectParams['acl']['participant']);
+				$params['acl'] = [
+					'type' => 'user',
+					'id' => $subjectParams['acl']['participant'],
+					'name' => $user !== null ? $user->getDisplayName() : $subjectParams['acl']['participant']
+				];
+			} else {
+				$params['acl'] = [
+					'type' => 'highlight',
+					'id' => $subjectParams['acl']['participant'],
+					'name' => $subjectParams['acl']['participant']
+				];
+			}
+
 		}
 
 		if (array_key_exists('before', $subjectParams)) {
