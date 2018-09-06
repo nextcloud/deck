@@ -23,51 +23,36 @@
 
 namespace OCA\Deck\Activity;
 
+use PHPUnit\Framework\TestCase;
 
-class ChangeSet {
 
-	private $before;
-	private $after;
-	private $diff = false;
+class ChangeSetTest extends TestCase {
 
-	public function __construct($before = null, $after = null) {
-		if ($before !== null) {
-			$this->setBefore($before);
-		}
-		if ($after !== null) {
-			$this->setAfter($after);
-		}
+	public function setUp() {
 	}
 
-	public function enableDiff() {
-		$this->diff = true;
+	public function testChangeSetScalar() {
+		$changeSet = new ChangeSet('A', 'B');
+		$this->assertEquals('A', $changeSet->getBefore());
+		$this->assertEquals('B', $changeSet->getAfter());
+		$this->assertFalse($changeSet->getDiff());
+		$changeSet->enableDiff();
+		$this->assertTrue($changeSet->getDiff());
 	}
 
-	public function getDiff() {
-		return $this->diff;
+	public function testChangeSetObject() {
+		$a = new \stdClass;
+		$a->data = 'A';
+		$b = new \stdClass;
+		$b->data = 'B';
+		$changeSet = new ChangeSet($a, $b);
+		$this->assertEquals('A', $changeSet->getBefore()->data);
+		$this->assertEquals('B', $changeSet->getAfter()->data);
+		$this->assertNotSame($a, $changeSet->getBefore());
+		$this->assertNotSame($b, $changeSet->getAfter());
+		$this->assertFalse($changeSet->getDiff());
+		$changeSet->enableDiff();
+		$this->assertTrue($changeSet->getDiff());
 	}
 
-	public function setBefore($before) {
-		if (is_object($before)) {
-			$this->before = clone $before;
-		} else {
-			$this->before = $before;
-		}
-	}
-
-	public function setAfter($after) {
-		if (is_object($after)) {
-			$this->after = clone $after;
-		} else {
-			$this->after = $after;
-		}
-	}
-
-	public function getBefore() {
-		return $this->before;
-	}
-
-	public function getAfter() {
-		return $this->after;
-	}
 }

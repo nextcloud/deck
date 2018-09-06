@@ -24,15 +24,19 @@
 namespace OCA\Deck\Activity;
 
 use OCP\IL10N;
+use OCP\IURLGenerator;
 
 class Filter implements \OCP\Activity\IFilter {
 
 	private $l10n;
+	private $urlGenerator;
 
 	public function __construct(
-		IL10N $l10n
+		IL10N $l10n,
+		IURLGenerator $urlGenerator
 	) {
 		$this->l10n = $l10n;
+		$this->urlGenerator = $urlGenerator;
 	}
 
 	/**
@@ -66,8 +70,7 @@ class Filter implements \OCP\Activity\IFilter {
 	 * @since 11.0.0
 	 */
 	public function getIcon() {
-		//TODO: inject
-		return \OC::$server->getURLGenerator()->imagePath('deck', 'deck-dark.svg');
+		return $this->urlGenerator->imagePath('deck', 'deck-dark.svg');
 	}
 
 	/**

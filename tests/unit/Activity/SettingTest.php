@@ -23,51 +23,43 @@
 
 namespace OCA\Deck\Activity;
 
+use PHPUnit\Framework\TestCase;
 
-class ChangeSet {
+class SettingTest extends TestCase {
 
-	private $before;
-	private $after;
-	private $diff = false;
+	/** @var Setting */
+	private $setting;
 
-	public function __construct($before = null, $after = null) {
-		if ($before !== null) {
-			$this->setBefore($before);
-		}
-		if ($after !== null) {
-			$this->setAfter($after);
-		}
+	public function setUp() {
+		$this->setting = new Setting();
 	}
 
-	public function enableDiff() {
-		$this->diff = true;
+	public function testGetIdentifier() {
+		$this->assertEquals('deck', $this->setting->getIdentifier());
 	}
 
-	public function getDiff() {
-		return $this->diff;
+	public function testGetName() {
+		$this->assertEquals('Deck', $this->setting->getName());
 	}
 
-	public function setBefore($before) {
-		if (is_object($before)) {
-			$this->before = clone $before;
-		} else {
-			$this->before = $before;
-		}
+	public function testGetPriority() {
+		$this->assertEquals(90, $this->setting->getPriority());
 	}
 
-	public function setAfter($after) {
-		if (is_object($after)) {
-			$this->after = clone $after;
-		} else {
-			$this->after = $after;
-		}
+	public function testCanChangeStream() {
+		$this->assertTrue($this->setting->canChangeStream());
 	}
 
-	public function getBefore() {
-		return $this->before;
+	public function testIsDefaultEnabledStream() {
+		$this->assertTrue($this->setting->isDefaultEnabledStream());
 	}
 
-	public function getAfter() {
-		return $this->after;
+	public function testCanChangeMail() {
+		$this->assertTrue($this->setting->canChangeMail());
 	}
+
+	public function testIsDefaultEnabledMail() {
+		$this->assertFalse($this->setting->isDefaultEnabledMail());
+	}
+
 }

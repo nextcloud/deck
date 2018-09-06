@@ -118,40 +118,6 @@ class ActivityManager {
 	}
 
 	/**
-	 * @param $objectType
-	 * @param $entity
-	 * @return null|\OCA\Deck\Db\RelationalEntity|\OCP\AppFramework\Db\Entity
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
-	 */
-	protected function findObjectForEntity($objectType, $entity) {
-		$className = \get_class($entity);
-		$objectId = null;
-		switch ($className) {
-			case Board::class:
-			case Card::class:
-				$objectId = $entity->getId();
-				break;
-			case Attachment::class:
-			case Label::class:
-			case AssignedUsers::class:
-				$objectId = $entity->getCardId();
-				break;
-			case Stack::class:
-				$objectId = $entity->getBoardId();
-		}
-
-		if ($objectType === self::DECK_OBJECT_CARD) {
-			return $this->cardMapper->find($objectId);
-		}
-		if ($objectType === self::DECK_OBJECT_BOARD) {
-			return $this->boardMapper->find($objectId);
-		}
-
-		return null;
-	}
-
-	/**
 	 * @param $subjectIdentifier
 	 * @param array $subjectParams
 	 * @param bool $ownActivity
@@ -321,7 +287,7 @@ class ActivityManager {
 	 * @return IEvent
 	 * @throws \Exception
 	 */
-	public function createEvent($objectType, $entity, $subject, $additionalParams = []) {
+	private function createEvent($objectType, $entity, $subject, $additionalParams = []) {
 		try {
 			$object = $this->findObjectForEntity($objectType, $entity);
 		} catch (DoesNotExistException $e) {
@@ -405,7 +371,7 @@ class ActivityManager {
 	 *
 	 * @param IEvent $event
 	 */
-	public function sendToUsers(IEvent $event) {
+	private function sendToUsers(IEvent $event) {
 		switch ($event->getObjectType()) {
 			case self::DECK_OBJECT_BOARD:
 				$mapper = $this->boardMapper;
@@ -423,7 +389,41 @@ class ActivityManager {
 		}
 	}
 
-	public function findDetailsForStack($stackId) {
+	/**
+	 * @param $objectType
+	 * @param $entity
+	 * @return null|\OCA\Deck\Db\RelationalEntity|\OCP\AppFramework\Db\Entity
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
+	private function findObjectForEntity($objectType, $entity) {
+		$className = \get_class($entity);
+		$objectId = null;
+		switch ($className) {
+			case Board::class:
+			case Card::class:
+				$objectId = $entity->getId();
+				break;
+			case Attachment::class:
+			case Label::class:
+			case AssignedUsers::class:
+				$objectId = $entity->getCardId();
+				break;
+			case Stack::class:
+				$objectId = $entity->getBoardId();
+		}
+
+		if ($objectType === self::DECK_OBJECT_CARD) {
+			return $this->cardMapper->find($objectId);
+		}
+		if ($objectType === self::DECK_OBJECT_BOARD) {
+			return $this->boardMapper->find($objectId);
+		}
+
+		return null;
+	}
+
+	private function findDetailsForStack($stackId) {
 		$stack = $this->stackMapper->find($stackId);
 		$board = $this->boardMapper->find($stack->getBoardId());
 		return [
@@ -432,7 +432,7 @@ class ActivityManager {
 		];
 	}
 
-	public function findDetailsForCard($cardId) {
+	private function findDetailsForCard($cardId) {
 		$card = $this->cardMapper->find($cardId);
 		$stack = $this->stackMapper->find($card->getStackId());
 		$board = $this->boardMapper->find($stack->getBoardId());
@@ -443,7 +443,7 @@ class ActivityManager {
 		];
 	}
 
-	public function findDetailsForAttachment($attachmentId) {
+	private function findDetailsForAttachment($attachmentId) {
 		$attachment = $this->attachmentMapper->find($attachmentId);
 		$data = $this->findDetailsForCard($attachment->getCardId());
 		return array_merge($data, ['attachment' => $attachment]);
