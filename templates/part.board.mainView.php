@@ -73,12 +73,16 @@
 							<h4>
 								<span class="editable-inline"
 									ng-show="!c.status.editCard"
-									ng-click="c.status.editCard=true">{{cardservice.get(c.id).title}}</span>
-
-								<form ng-if="c.status.editCard" ng-submit="cardservice.update(c); c.status.editCard=false">
-									<input class="input-inline" type="text" placeholder="<?php p($l->t('Add a new card')); ?>"
-										ng-blur="cardservice.update(c); c.status.editCard=false" ng-model="c.title"
-										autofocus-on-insert required maxlength="100" />
+									ng-click="startTitleEdit(c)">{{cardservice.get(c.id).title}}</span>
+								<form ng-if="c.status.editCard" ng-submit="finishTitleEdit(c)">
+									<input
+											class="input-inline"
+											type="text"
+											ng-blur="finishTitleEdit(c)"
+											ng-model="c.renameTitle"
+											autofocus-on-insert
+											required
+											maxlength="100">
 								</form>
 							</h4>
 							<ul class="labels compact-item" ng-if="!compactMode">

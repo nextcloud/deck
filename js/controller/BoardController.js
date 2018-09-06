@@ -42,6 +42,38 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.board = BoardService.getCurrent();
 	$scope.uploader = FileService.uploader;
 
+	$scope.startTitleEdit = function(card) {
+		card.renameTitle = card.title;
+		card.status = card.status || {};
+		card.status.editCard = true;
+	};
+
+	$scope.finishTitleEdit = function(card) {
+		var newTitle;
+		if (!card.renameTitle || !card.renameTitle.trim()) {
+			newTitle = '';
+		} else {
+			newTitle = card.renameTitle.trim();
+		}
+
+		if (newTitle === card.title) {
+			// title unchanged
+			card.status.editCard = false;
+			delete card.renameTitle;
+		} else if (newTitle !== '') {
+			// title changed
+			card.title = newTitle;
+			CardService.update(card).then(function (data) {
+				card.status.editCard = false;
+				delete card.renameTitle;
+			});
+		} else {
+			// empty title
+			card.status.editCard = false;
+			delete card.renameTitle;
+		}
+	};
+
 	$scope.$watch(function() {
 		return $state.current;
 	}, function(currentState) {
