@@ -112,7 +112,7 @@ class AttachmentServiceTest extends TestCase {
 		$application->expects($this->any())
 			->method('getContainer')
 			->willReturn($appContainer);
-		$attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->permissionService, $application, $this->cacheFactory, $this->userId, $this->l10n);
+		$attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->permissionService, $application, $this->cacheFactory, $this->userId, $this->l10n, $this->activityManager);
 		$attachmentService->registerAttachmentService('custom', MyAttachmentService::class);
 		$this->assertEquals($fileServiceMock, $attachmentService->getService('deck_file'));
 		$this->assertEquals(MyAttachmentService::class, get_class($attachmentService->getService('custom')));
@@ -130,7 +130,7 @@ class AttachmentServiceTest extends TestCase {
 		$application->expects($this->any())
 			->method('getContainer')
 			->willReturn($appContainer);
-		$attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->permissionService, $application, $this->cacheFactory, $this->userId, $this->l10n);
+		$attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->permissionService, $application, $this->cacheFactory, $this->userId, $this->l10n, $this->activityManager);
 		$attachmentService->registerAttachmentService('custom', MyAttachmentService::class);
 		$attachmentService->getService('deck_file_invalid');
 	}

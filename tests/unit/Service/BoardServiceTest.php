@@ -24,6 +24,7 @@
 namespace OCA\Deck\Service;
 
 use OC\L10N\L10N;
+use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsers;
@@ -59,8 +60,10 @@ class BoardServiceTest extends TestCase {
 	private $userManager;
 	/** @var IUserManager */
 	private $groupManager;
+	/** @var ActivityManager */
+	private $activityManager;
 
-	private $userId = 'admin';	
+	private $userId = 'admin';
 
 	public function setUp() {
 		parent::setUp();
@@ -72,7 +75,8 @@ class BoardServiceTest extends TestCase {
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
 		$this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
 		$this->userManager = $this->createMock(IUserManager::class);
-		$this->groupManager = $this->createMock(IGroupManager::class);				
+		$this->groupManager = $this->createMock(IGroupManager::class);
+		$this->activityManager = $this->createMock(ActivityManager::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -84,11 +88,12 @@ class BoardServiceTest extends TestCase {
 			$this->assignedUsersMapper,
 			$this->userManager,
 			$this->groupManager,
+			$this->activityManager,
 			$this->userId
 		);
 
 		$user = $this->createMock(IUser::class);
-		$user->method('getUID')->willReturn('admin');		
+		$user->method('getUID')->willReturn('admin');
 	}
 
 	public function testFindAll() {
@@ -186,7 +191,12 @@ class BoardServiceTest extends TestCase {
 			->willReturn([
 				'admin' => 'admin',
 			]);
-		$this->assertEquals($board, $this->service->delete(123));
+		$boardDeleted = clone $board;
+		$board->setDeletedAt(1);
+		$this->boardMapper->expects($this->once())
+			->method('update')
+			->willReturn($boardDeleted);
+		$this->assertEquals($boardDeleted, $this->service->delete(123));
 	}
 
 	public function testAddAcl() {
