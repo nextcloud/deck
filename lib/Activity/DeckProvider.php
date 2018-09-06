@@ -49,7 +49,6 @@ class DeckProvider implements IProvider {
 		$this->userManager = $userManager;
 	}
 
-
 	/**
 	 * @param string $language The language which should be used for translating, e.g. "en"
 	 * @param IEvent $event The current event which should be parsed
@@ -65,32 +64,15 @@ class DeckProvider implements IProvider {
 			throw new \InvalidArgumentException();
 		}
 
-		$event->setIcon($this->urlGenerator->imagePath('deck', 'deck-dark.svg'));
-		if (strpos($event->getSubject(), '_update') !== false) {
-			$event->setIcon($this->urlGenerator->imagePath('files', 'change.svg'));
-		}
-		if (strpos($event->getSubject(), '_create') !== false) {
-			$event->setIcon($this->urlGenerator->imagePath('files', 'add-color.svg'));
-		}
-		if (strpos($event->getSubject(), '_delete') !== false) {
-			$event->setIcon($this->urlGenerator->imagePath('files', 'delete-color.svg'));
-		}
-		if (strpos($event->getSubject(), 'archive') !== false) {
-			$event->setIcon($this->urlGenerator->imagePath('deck', 'archive.svg'));
-		}
-		if (strpos($event->getSubject(), '_restore') !== false) {
-			$event->setIcon($this->urlGenerator->imagePath('core', 'actions/history.svg'));
-		}
-		if (strpos($event->getSubject(), 'attachment_') !== false) {
-			$event->setIcon($this->urlGenerator->imagePath('core', 'places/files.svg'));
-		}
-
+		$event = $this->getIcon($event);
 
 		$subjectIdentifier = $event->getSubject();
 		$subjectParams = $event->getSubjectParameters();
-
 		$ownActivity = ($event->getAuthor() === $this->userId);
 
+		/**
+		 * Map stored parameter objects to rich string types
+		 */
 		$board = null;
 		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_BOARD) {
 			$board = [
@@ -127,38 +109,16 @@ class DeckProvider implements IProvider {
 			]
 		];
 
-		if (array_key_exists('stack', $subjectParams)) {
-			$params['stack'] = [
-				'type' => 'highlight',
-				'id' => $subjectParams['stack']['id'],
-				'name' => $subjectParams['stack']['title'],
-				'link' => $this->deckUrl('/board/' . $subjectParams['stack']['boardId'] . '/'),
-			];
-		}
-
-		if (array_key_exists('board', $subjectParams)) {
-			$params['board'] = [
-				'type' => 'highlight',
-				'id' => $subjectParams['board']['id'],
-				'name' => $subjectParams['board']['title'],
-				'link' => $this->deckUrl('/board/' . $subjectParams['board']['id'] . '/'),
-			];
-		}
+		$params = $this->parseParamForBoard('board', $subjectParams, $params);
+		$params = $this->parseParamForStack('stack', $subjectParams, $params);
+		$params = $this->parseParamForStack('stackBefore', $subjectParams, $params);
+		$params = $this->parseParamForAttachment('attachment', $subjectParams, $params);
 
 		if (array_key_exists('label', $subjectParams)) {
 			$params['label'] = [
 				'type' => 'highlight',
 				'id' => $subjectParams['label']['id'],
 				'name' => $subjectParams['label']['title']
-			];
-		}
-
-		if (array_key_exists('attachment', $subjectParams)) {
-			$params['attachment'] = [
-				'type' => 'highlight',
-				'id' => $subjectParams['attachment']['id'],
-				'name' => $subjectParams['attachment']['data'],
-				'link' => $this->urlGenerator->linkToRoute('deck.attachment.display', ['cardId' => $subjectParams['card']['id'], 'attachmentId' => $subjectParams['attachment']['id']]),
 			];
 		}
 
@@ -171,6 +131,76 @@ class DeckProvider implements IProvider {
 			];
 		}
 
+		$params = $this->parseParamsForAcl($subjectParams, $params);
+		$params = $this->parseParamsForChanges($subjectParams, $params, $event);
+
+		try {
+			$subject = $this->activityManager->getActivityFormat($subjectIdentifier, $subjectParams, $ownActivity);
+			$event->setParsedSubject($subject);
+			$event->setRichSubject($subject, $params);
+		} catch (\Exception $e) {
+		}
+		return $event;
+	}
+
+	private function getIcon(IEvent $event) {
+		$event->setIcon($this->urlGenerator->imagePath('deck', 'deck-dark.svg'));
+		if (strpos($event->getSubject(), '_update') !== false) {
+			$event->setIcon($this->urlGenerator->imagePath('files', 'change.svg'));
+		}
+		if (strpos($event->getSubject(), '_create') !== false) {
+			$event->setIcon($this->urlGenerator->imagePath('files', 'add-color.svg'));
+		}
+		if (strpos($event->getSubject(), '_delete') !== false) {
+			$event->setIcon($this->urlGenerator->imagePath('files', 'delete-color.svg'));
+		}
+		if (strpos($event->getSubject(), 'archive') !== false) {
+			$event->setIcon($this->urlGenerator->imagePath('deck', 'archive.svg'));
+		}
+		if (strpos($event->getSubject(), '_restore') !== false) {
+			$event->setIcon($this->urlGenerator->imagePath('core', 'actions/history.svg'));
+		}
+		if (strpos($event->getSubject(), 'attachment_') !== false) {
+			$event->setIcon($this->urlGenerator->imagePath('core', 'places/files.svg'));
+		}
+		return $event;
+	}
+
+	private function parseParamForBoard($paramName, $subjectParams, $params) {
+		if (array_key_exists($paramName, $subjectParams)) {
+			$params[$paramName] = [
+				'type' => 'highlight',
+				'id' => $subjectParams[$paramName]['id'],
+				'name' => $subjectParams[$paramName]['title'],
+				'link' => $this->deckUrl('/board/' . $subjectParams[$paramName]['id'] . '/'),
+			];
+		}
+		return $params;
+	}
+	private function parseParamForStack($paramName, $subjectParams, $params) {
+		if (array_key_exists($paramName, $subjectParams)) {
+			$params[$paramName] = [
+				'type' => 'highlight',
+				'id' => $subjectParams[$paramName]['id'],
+				'name' => $subjectParams[$paramName]['title'],
+			];
+		}
+		return $params;
+	}
+
+	private function parseParamForAttachment($paramName, $subjectParams, $params) {
+		if (array_key_exists('attachment', $subjectParams)) {
+			$params[$paramName] = [
+				'type' => 'highlight',
+				'id' => $subjectParams[$paramName]['id'],
+				'name' => $subjectParams[$paramName]['data'],
+				'link' => $this->urlGenerator->linkToRoute('deck.attachment.display', ['cardId' => $subjectParams['card']['id'], 'attachmentId' => $subjectParams['attachment']['id']]),
+			];
+		}
+		return $params;
+	}
+
+	private function parseParamsForAcl($subjectParams, $params) {
 		if (array_key_exists('acl', $subjectParams)) {
 			if ($subjectParams['acl']['type'] === Acl::PERMISSION_TYPE_USER) {
 				$user = $this->userManager->get($subjectParams['acl']['participant']);
@@ -186,9 +216,25 @@ class DeckProvider implements IProvider {
 					'name' => $subjectParams['acl']['participant']
 				];
 			}
-
 		}
+		return $params;
+	}
 
+	/**
+	 * Add diff to message if the subject parameter 'diff' is set, otherwise
+	 * the changed values are added to before/after
+	 *
+	 * @param $subjectParams
+	 * @param $params
+	 * @return mixed
+	 */
+	private function parseParamsForChanges($subjectParams, $params, $event) {
+		if (array_key_exists('diff', $subjectParams) && $subjectParams['diff']) {
+			$diff = new Diff();
+			$event->setMessage($subjectParams['after']);
+			$event->setParsedMessage('<pre class="visualdiff">' . $diff->render($subjectParams['before'], $subjectParams['after']) . '</pre>');
+			return $params;
+		}
 		if (array_key_exists('before', $subjectParams)) {
 			$params['before'] = [
 				'type' => 'highlight',
@@ -196,31 +242,14 @@ class DeckProvider implements IProvider {
 				'name' => $subjectParams['before']
 			];
 		}
-		if (array_key_exists('after', $subjectParams)) {
+		if (array_key_exists('before', $subjectParams)) {
 			$params['after'] = [
 				'type' => 'highlight',
 				'id' => $subjectParams['after'],
 				'name' => $subjectParams['after']
 			];
 		}
-
-		try {
-			$subject = $this->activityManager->getActivityFormat($subjectIdentifier, $subjectParams, $ownActivity);
-		} catch (\Exception $e) {
-			return $event;
-		}
-
-		$event->setParsedSubject($subject);
-		$event->setRichSubject(
-			$subject,
-			$params
-		);
-		if ($event->getMessage() !== '') {
-			$diff = new Diff();
-			$event->setParsedMessage('<pre class="visualdiff">' . $diff->render($subjectParams['before'], $subjectParams['after']) . '</pre>');
-		}
-
-		return $event;
+		return $params;
 	}
 
 	public function deckUrl($endpoint) {

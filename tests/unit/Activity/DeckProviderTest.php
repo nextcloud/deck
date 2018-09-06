@@ -91,7 +91,7 @@ class DeckProviderTest extends TestCase {
 
 	public function dataEventIcons() {
 		return [
-			[ActivityManager::SUBJECT_CARD_MOVE_STACK, 'deck', 'deck-dark.svg'],
+			[ActivityManager::SUBJECT_LABEL_ASSIGN, 'deck', 'deck-dark.svg'],
 			[ActivityManager::SUBJECT_CARD_CREATE, 'files', 'add-color.svg'],
 			[ActivityManager::SUBJECT_CARD_UPDATE, 'files', 'change.svg'],
 			[ActivityManager::SUBJECT_CARD_DELETE, 'files', 'delete-color.svg'],
@@ -237,7 +237,8 @@ class DeckProviderTest extends TestCase {
 		$event->setApp('deck');
 		$event->setSubject(ActivityManager::SUBJECT_CARD_UPDATE_DESCRIPTION, [
 			'before' => 'ABC',
-			'after' => 'BCD'
+			'after' => 'BCD',
+			'diff' => true,
 		]);
 		$event->setAffectedUser($this->userId);
 		$event->setAuthor($this->userId);
@@ -257,15 +258,12 @@ class DeckProviderTest extends TestCase {
 				'id' => 'admin',
 				'name' => 'Administrator',
 			],
-			'before' => ['type' => 'highlight', 'id' => 'ABC', 'name' => 'ABC'],
-			'after' => ['type' => 'highlight', 'id' => 'BCD', 'name' => 'BCD']
 		];
 		$this->assertEquals($data, $event->getRichSubjectParameters());
 		$this->assertEquals('test string {board}', $event->getParsedSubject());
 		$this->assertEquals('test string {board}', $event->getRichSubject());
 		$this->assertEquals('BCD', $event->getMessage());
 		$this->assertEquals('<pre class="visualdiff"><del>A</del>BC<ins>D</ins></pre>', $event->getParsedMessage());
-
 	}
 
 }

@@ -67,8 +67,6 @@ class ActivityManager {
 	const SUBJECT_BOARD_RESTORE = 'board_restore';
 	const SUBJECT_BOARD_SHARE = 'board_share';
 	const SUBJECT_BOARD_UNSHARE = 'board_unshare';
-	const SUBJECT_BOARD_ARCHIVE = 'board_archive';
-	const SUBJECT_BOARD_UNARCHIVE = 'board_unarchive';
 
 	const SUBJECT_STACK_CREATE = 'stack_create';
 	const SUBJECT_STACK_UPDATE = 'stack_update';
@@ -88,8 +86,6 @@ class ActivityManager {
 	const SUBJECT_CARD_UPDATE_STACKID = 'card_update_stackId';
 	const SUBJECT_CARD_USER_ASSIGN = 'card_user_assign';
 	const SUBJECT_CARD_USER_UNASSIGN = 'card_user_unassign';
-	const SUBJECT_CARD_MOVE_STACK = 'card_move_stack';
-
 
 	const SUBJECT_ATTACHMENT_CREATE = 'attachment_create';
 	const SUBJECT_ATTACHMENT_UPDATE = 'attachment_update';
@@ -148,18 +144,16 @@ class ActivityManager {
 			case self::SUBJECT_BOARD_UNSHARE:
 				$subject = $ownActivity ? $this->l10n->t('You have removed {acl} from the board {board}') : $this->l10n->t('{user} has removed {acl} from the board {board}');
 				break;
-			case self::SUBJECT_BOARD_ARCHIVE:
-				$subject = $ownActivity ? $this->l10n->t('You have archived the board {board}') : $this->l10n->t('{user} has archived the board {board}');
-				break;
-			case self::SUBJECT_BOARD_UNARCHIVE:
-				$subject = $ownActivity ? $this->l10n->t('You have unarchived the board {board}') : $this->l10n->t('{user} has unarchived the board {board}');
-				break;
 
 			case self::SUBJECT_BOARD_UPDATE_TITLE:
 				$subject = $ownActivity ? $this->l10n->t('You have renamed the board {before} to {board}') : $this->l10n->t('{user} has has renamed the board {before} to {board}');
 				break;
 			case self::SUBJECT_BOARD_UPDATE_ARCHIVED:
-				$subject = $ownActivity ? $this->l10n->t('You have renamed the board {before} to {board}') : $this->l10n->t('{user} has has renamed the board {before} to {board}');
+				if (isset($subjectParams['after']) && $subjectParams['after']) {
+					$subject = $ownActivity ? $this->l10n->t('You have archived the board {board}') : $this->l10n->t('{user} has archived the board {before}');
+				} else {
+					$subject = $ownActivity ? $this->l10n->t('You have unarchived the board {board}') : $this->l10n->t('{user} has unarchived the board {before}');
+				}
 				break;
 
 			case self::SUBJECT_STACK_CREATE:
@@ -219,7 +213,7 @@ class ActivityManager {
 				$subject = $ownActivity ? $this->l10n->t('You have unassigned {assigneduser} from {card} on {board}') : $this->l10n->t('{user} has unassigned {assigneduser} from {card} on {board}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_STACKID:
-				$subject = $ownActivity ? $this->l10n->t('You have moved the card {card} from {before} to {stack}') : $this->l10n->t('{user} has moved the card {card} from {before} to {stack}');
+				$subject = $ownActivity ? $this->l10n->t('You have moved the card {card} from {stackBefore} to {stack}') : $this->l10n->t('{user} has moved the card {card} from {stackBefore} to {stack}');
 				break;
 			case self::SUBJECT_ATTACHMENT_CREATE:
 				$subject = $ownActivity ? $this->l10n->t('You have added the attachment {attachment} to {card}') : $this->l10n->t('{user} has added the attachment {attachment} to {card}');
@@ -276,7 +270,6 @@ class ActivityManager {
 					}
 				}
 			}
-
 		} else {
 			try {
 				$events = [$this->createEvent($objectType, $entity, $subject)];
@@ -317,6 +310,8 @@ class ActivityManager {
 			case self::SUBJECT_BOARD_CREATE:
 			case self::SUBJECT_BOARD_UPDATE_TITLE:
 			case self::SUBJECT_BOARD_UPDATE_ARCHIVED:
+			case self::SUBJECT_BOARD_DELETE:
+			case self::SUBJECT_BOARD_RESTORE:
 			// Not defined as there is no activity for
 			// case self::SUBJECT_BOARD_UPDATE_COLOR
 				break;
@@ -341,7 +336,6 @@ class ActivityManager {
 			case self::SUBJECT_LABEL_UNASSING:
 			case self::SUBJECT_CARD_USER_ASSIGN:
 			case self::SUBJECT_CARD_USER_UNASSIGN:
-			case self::SUBJECT_CARD_MOVE_STACK:
 				$subjectParams = $this->findDetailsForCard($entity->getId());
 				$object = $entity;
 				break;
@@ -362,8 +356,10 @@ class ActivityManager {
 		}
 
 		if ($subject === self::SUBJECT_CARD_UPDATE_DESCRIPTION){
-			// TODO: Use ChangeSet and getDiff method
-			$message = $additionalParams['after'];
+			$subjectParams['diff'] = true;
+		}
+		if ($subject === self::SUBJECT_CARD_UPDATE_STACKID) {
+			$subjectParams['stackBefore'] = $this->stackMapper->find($additionalParams['before']);
 		}
 
 		$event = $this->manager->generateEvent();

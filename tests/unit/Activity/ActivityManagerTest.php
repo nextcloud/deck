@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Activity;
 
+use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsers;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
@@ -57,6 +58,8 @@ class ActivityManagerTest extends TestCase {
 	private $stackMapper;
 	/** @var AttachmentMapper|MockObject */
 	private $attachmentMapper;
+	/** @var AclMapper|MockObject */
+	private $aclMapper;
 	/** @var IL10N|MockObject */
 	private $l10n;
 	/** @var string */
@@ -69,6 +72,7 @@ class ActivityManagerTest extends TestCase {
 		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->stackMapper = $this->createMock(StackMapper::class);
 		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
+		$this->aclMapper = $this->createMock(AclMapper::class);
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->activityManager = new ActivityManager(
 			$this->manager,
@@ -77,6 +81,7 @@ class ActivityManagerTest extends TestCase {
 			$this->cardMapper,
 			$this->stackMapper,
 			$this->attachmentMapper,
+			$this->aclMapper,
 			$this->l10n,
 			$this->userId
 		);

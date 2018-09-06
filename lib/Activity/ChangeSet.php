@@ -24,7 +24,7 @@
 namespace OCA\Deck\Activity;
 
 
-class ChangeSet {
+class ChangeSet implements \JsonSerializable {
 
 	private $before;
 	private $after;
@@ -69,5 +69,22 @@ class ChangeSet {
 
 	public function getAfter() {
 		return $this->after;
+	}
+
+	/**
+	 * Specify data which should be serialized to JSON
+	 *
+	 * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+	 * @return mixed data which can be serialized by <b>json_encode</b>,
+	 * which is a value of any type other than a resource.
+	 * @since 5.4.0
+	 */
+	public function jsonSerialize() {
+		return [
+			'before' => $this->getBefore(),
+			'after' => $this->getAfter(),
+			'diff' => $this->getDiff(),
+			'type' => get_class($this->before)
+		];
 	}
 }
