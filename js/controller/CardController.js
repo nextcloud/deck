@@ -4,20 +4,20 @@
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *  
+ *
  */
 
 /* global app moment angular OC */
@@ -26,6 +26,7 @@ import app from '../app/App.js';
 app.controller('CardController', function ($scope, $rootScope, $sce, $location, $stateParams, $state, $interval, $timeout, $filter, BoardService, CardService, StackService, StatusService, markdownItConverter, FileService) {
 	$scope.sidebar = $rootScope.sidebar;
 	$scope.status = {
+		renameTitle: '',
 		lastEdit: 0,
 		lastSave: Date.now()
 	};
@@ -89,9 +90,10 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 	});
 
 	$scope.cardRenameShow = function () {
-		if ($scope.archived || !BoardService.canEdit())
-		{return false;}
-		else {
+		if ($scope.archived || !BoardService.canEdit()) {
+			return false;
+		} else {
+			$scope.status.renameTitle = CardService.getCurrent().title;
 			$scope.status.cardRename = true;
 		}
 	};
@@ -167,9 +169,27 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 
 	// handle rename to update information on the board as well
 	$scope.cardRename = function (card) {
-		CardService.rename(card).then(function (data) {
+		var newTitle;
+		if (!$scope.status.renameTitle || !$scope.status.renameTitle.trim()) {
+			newTitle = '';
+		} else {
+			newTitle = $scope.status.renameTitle.trim();
+		}
+
+		if (newTitle === card.title) {
+			// title unchanged
 			$scope.status.renameCard = false;
-		});
+		} else if (newTitle !== '') {
+			// title changed
+			card.title = newTitle;
+			CardService.rename(card).then(function (data) {
+				$scope.status.renameCard = false;
+			});
+		} else {
+			// empty title
+			$scope.status.renameTitle = card.title;
+			$scope.status.renameCard = false;
+		}
 	};
 	$scope.cardUpdate = function (card) {
 		CardService.update(card).then(function (data) {
@@ -220,7 +240,7 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 		element.duedate = null;
 		CardService.update(element);
 	};
-	
+
 	/**
 	 * Show ui-select field when clicking the add button
 	 */
