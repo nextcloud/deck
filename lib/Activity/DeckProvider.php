@@ -28,6 +28,7 @@ use cogpowered\FineDiff\Diff;
 use OCP\Activity\IEvent;
 use OCP\Activity\IProvider;
 use OCP\IURLGenerator;
+use OCP\IUserManager;
 
 class DeckProvider implements IProvider {
 
@@ -37,11 +38,14 @@ class DeckProvider implements IProvider {
 	private $urlGenerator;
 	/** @var ActivityManager */
 	private $activityManager;
+	/** @var IUserManager */
+	private $userManager;
 
-	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, $userId) {
+	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, IUserManager $userManager, $userId) {
 		$this->userId = $userId;
 		$this->urlGenerator = $urlGenerator;
 		$this->activityManager = $activityManager;
+		$this->userManager = $userManager;
 	}
 
 
@@ -104,15 +108,14 @@ class DeckProvider implements IProvider {
 				'name' => $event->getObjectName(),
 			];
 
-			if ($subjectParams['board']) {
+			if (array_key_exists('board', $subjectParams)) {
 				$archivedParam = $subjectParams['card']['archived'] ? 'archived' : '';
 				$card['link'] = $this->deckUrl('/board/' . $subjectParams['board']['id'] . '/' . $archivedParam . '/card/' . $event->getObjectId());
 			}
 		}
 
-		$userManager = \OC::$server->getUserManager();
 		$author = $event->getAuthor();
-		$user = $userManager->get($author);
+		$user = $this->userManager->get($author);
 		$params = [
 			'board' => $board,
 			'card' => $card,

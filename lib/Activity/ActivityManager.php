@@ -348,6 +348,7 @@ class ActivityManager {
 		}
 
 		if ($subject === self::SUBJECT_CARD_UPDATE_DESCRIPTION){
+			// TODO: Use ChangeSet and getDiff method
 			$message = $additionalParams['after'];
 		}
 

@@ -23,9 +23,13 @@
 
 namespace OCA\Deck\Activity;
 
+use OC\Activity\Event;
 use OCP\Activity\IEvent;
 use OCP\IL10N;
 use OCP\IURLGenerator;
+use OCP\IUser;
+use OCP\IUserManager;
+use OCP\RichObjectStrings\IValidator;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
@@ -40,6 +44,9 @@ class DeckProviderTest extends TestCase {
 	/** @var ActivityManager|MockObject */
 	private $activityManager;
 
+	/** @var IUserManager|MockObject */
+	private $userManager;
+
 	/** @var string */
 	private $userId = 'admin';
 
@@ -47,7 +54,8 @@ class DeckProviderTest extends TestCase {
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
-		$this->provider = new DeckProvider($this->urlGenerator, $this->activityManager, $this->userId);
+		$this->userManager = $this->createMock(IUserManager::class);
+		$this->provider = new DeckProvider($this->urlGenerator, $this->activityManager, $this->userManager, $this->userId);
 	}
 
 	private function mockEvent($objectType, $objectId, $objectName, $subject, $subjectParameters = []) {
@@ -84,7 +92,12 @@ class DeckProviderTest extends TestCase {
 	public function dataEventIcons() {
 		return [
 			[ActivityManager::SUBJECT_CARD_MOVE_STACK, 'deck', 'deck-dark.svg'],
+			[ActivityManager::SUBJECT_CARD_CREATE, 'files', 'add-color.svg'],
 			[ActivityManager::SUBJECT_CARD_UPDATE, 'files', 'change.svg'],
+			[ActivityManager::SUBJECT_CARD_DELETE, 'files', 'delete-color.svg'],
+			[ActivityManager::SUBJECT_CARD_UPDATE_ARCHIVE, 'deck', 'archive.svg'],
+			[ActivityManager::SUBJECT_CARD_RESTORE, 'core', 'actions/history.svg'],
+			[ActivityManager::SUBJECT_ATTACHMENT_UPDATE, 'core', 'places/files.svg'],
 		];
 	}
 	/**
@@ -114,6 +127,145 @@ class DeckProviderTest extends TestCase {
 			'http://localhost/index.php/apps/deck/#!board/1/card/1',
 			$this->provider->deckUrl('board/1/card/1')
 		);
+	}
+
+	public function testParseObjectTypeBoard() {
+		$this->urlGenerator->expects($this->any())
+			->method('imagePath')
+			->will($this->returnCallback(function($a, $i) {
+				return $a . '/' . $i;
+			}));
+		$this->activityManager->expects($this->once())
+			->method('getActivityFormat')
+			->willReturn('test string {board}');
+		$user = $this->createMock(IUser::class);
+		$user->expects($this->any())->method('getDisplayName')->willReturn('Administrator');
+		$this->userManager->expects($this->any())
+			->method('get')
+			->willReturn($user);
+
+		$richValidator = $this->createMock(IValidator::class);
+		$event = new Event($richValidator);
+
+		$event->setApp('deck');
+		$event->setSubject(ActivityManager::SUBJECT_BOARD_CREATE);
+		$event->setAffectedUser($this->userId);
+		$event->setAuthor($this->userId);
+		$event->setObject(ActivityManager::DECK_OBJECT_BOARD, 1, 'Board');
+
+		$this->provider->parse('en_US', $event);
+		$data = [
+			'board' => [
+				'type' => 'highlight',
+				'id' => 1,
+				'name' => 'Board',
+				'link' => '#!/board/1',
+			],
+			'card' => null,
+			'user' => [
+				'type' => 'user',
+				'id' => 'admin',
+				'name' => 'Administrator',
+			]
+		];
+		$this->assertEquals($data, $event->getRichSubjectParameters());
+	}
+
+	public function testParseObjectTypeCard() {
+		$this->urlGenerator->expects($this->any())
+			->method('imagePath')
+			->will($this->returnCallback(function($a, $i) {
+				return $a . '/' . $i;
+			}));
+		$this->activityManager->expects($this->once())
+			->method('getActivityFormat')
+			->willReturn('test string {board}');
+		$user = $this->createMock(IUser::class);
+		$user->expects($this->any())->method('getDisplayName')->willReturn('Administrator');
+		$this->userManager->expects($this->any())
+			->method('get')
+			->willReturn($user);
+
+		$richValidator = $this->createMock(IValidator::class);
+		$event = new Event($richValidator);
+
+		$event->setApp('deck');
+		$event->setSubject(ActivityManager::SUBJECT_CARD_CREATE);
+		$event->setAffectedUser($this->userId);
+		$event->setAuthor($this->userId);
+		$event->setObject(ActivityManager::DECK_OBJECT_CARD, 1, 'Card');
+
+		$this->provider->parse('en_US', $event);
+		$data = [
+			'board' => null,
+			'card' => [
+				'type' => 'highlight',
+				'id' => 1,
+				'name' => 'Card',
+			],
+			'user' => [
+				'type' => 'user',
+				'id' => 'admin',
+				'name' => 'Administrator',
+			]
+		];
+		$this->assertEquals($data, $event->getRichSubjectParameters());
+		$this->assertEquals('test string {board}', $event->getParsedSubject());
+		$this->assertEquals('test string {board}', $event->getRichSubject());
+		$this->assertEquals('', $event->getMessage());
+
+	}
+
+	public function testParseObjectTypeCardWithDiff() {
+		$this->urlGenerator->expects($this->any())
+			->method('imagePath')
+			->will($this->returnCallback(function($a, $i) {
+				return $a . '/' . $i;
+			}));
+		$this->activityManager->expects($this->once())
+			->method('getActivityFormat')
+			->willReturn('test string {board}');
+		$user = $this->createMock(IUser::class);
+		$user->expects($this->any())->method('getDisplayName')->willReturn('Administrator');
+		$this->userManager->expects($this->any())
+			->method('get')
+			->willReturn($user);
+
+		$richValidator = $this->createMock(IValidator::class);
+		$event = new Event($richValidator);
+
+		$event->setApp('deck');
+		$event->setSubject(ActivityManager::SUBJECT_CARD_UPDATE_DESCRIPTION, [
+			'before' => 'ABC',
+			'after' => 'BCD'
+		]);
+		$event->setAffectedUser($this->userId);
+		$event->setAuthor($this->userId);
+		$event->setObject(ActivityManager::DECK_OBJECT_CARD, 1, 'Card');
+		$event->setMessage('BCD');
+
+		$this->provider->parse('en_US', $event);
+		$data = [
+			'board' => null,
+			'card' => [
+				'type' => 'highlight',
+				'id' => 1,
+				'name' => 'Card',
+			],
+			'user' => [
+				'type' => 'user',
+				'id' => 'admin',
+				'name' => 'Administrator',
+			],
+			'before' => ['type' => 'highlight', 'id' => 'ABC', 'name' => 'ABC'],
+			'after' => ['type' => 'highlight', 'id' => 'BCD', 'name' => 'BCD']
+		];
+		$this->assertEquals($data, $event->getRichSubjectParameters());
+		$this->assertEquals('test string {board}', $event->getParsedSubject());
+		$this->assertEquals('test string {board}', $event->getRichSubject());
+		$this->assertEquals('BCD', $event->getMessage());
+		$this->assertEquals('<pre class="visualdiff"><del>A</del>BC<ins>D</ins></pre>', $event->getParsedMessage());
+
 	}
 
 }
