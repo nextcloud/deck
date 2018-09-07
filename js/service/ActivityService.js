@@ -49,10 +49,10 @@ class ActivityService {
 
 	static getUrl(type, id, since) {
 		if (type === DECK_ACTIVITY_TYPE_CARD) {
-			return OC.linkToOCS('apps/activity/api/v2/activity', 2) + 'filter?format=json&object_type=deck_card&object_id=' + id + '&limit=5&since=' + since;
+			return OC.linkToOCS('apps/activity/api/v2/activity', 2) + 'filter?format=json&object_type=deck_card&object_id=' + id + '&limit=50&since=' + since;
 		}
 		if (type === DECK_ACTIVITY_TYPE_BOARD) {
-			return OC.linkToOCS('apps/activity/api/v2/activity', 2) + 'deck?format=json&limit=5&since=' + since;
+			return OC.linkToOCS('apps/activity/api/v2/activity', 2) + 'deck?format=json&limit=50&since=' + since;
 		}
 	}
 
@@ -60,7 +60,7 @@ class ActivityService {
 		this.running = true;
 
 		this.checkData(type, id);
-		var self = this;
+		const self = this;
 		return this.$http.get(ActivityService.getUrl(type, id, since)).then(function (response) {
 			const objects = response.data.ocs.data;
 
@@ -111,16 +111,18 @@ class ActivityService {
 	}
 
 	addItem(type, id, item) {
-		if (this.data[type][id].findIndex((entry) => { return entry.activity_id === item.activity_id; }) === -1) {
-			if (type === DECK_ACTIVITY_TYPE_BOARD && (
-				(item.object_type === DECK_ACTIVITY_TYPE_CARD && item.subject_rich[1].board && item.subject_rich[1].board.id !== id)
-				|| (item.object_type === DECK_ACTIVITY_TYPE_BOARD && item.object_id !== id)
-			)) {
-				return;
-			}
-			item.timestamp = new Date(item.datetime).getTime();
-			this.data[type][id].push(item);
+		const existingEntry = this.data[type][id].findIndex((entry) => { return entry.activity_id === item.activity_id; });
+		if (existingEntry !== -1) {
+			return;
 		}
+		/** check if the fetched item from all deck activities is actually related */
+		const isUnrelatedBoard = (item.object_type === DECK_ACTIVITY_TYPE_BOARD && item.object_id !== id);
+		const isUnrelatedCard = (item.object_type === DECK_ACTIVITY_TYPE_CARD && item.subject_rich[1].board && item.subject_rich[1].board.id !== id);
+		if (type === DECK_ACTIVITY_TYPE_BOARD && (isUnrelatedBoard || isUnrelatedCard)) {
+			return;
+		}
+		item.timestamp = new Date(item.datetime).getTime();
+		this.data[type][id].push(item);
 	}
 
 	/**
@@ -140,12 +142,12 @@ class ActivityService {
 	}
 
 	fetchNewer(type, id) {
-		var deferred = this.$q.defer();
+		const deferred = this.$q.defer();
 		this.running = true;
 		this.runningNewer = true;
-		var self = this;
+		const self = this;
 		this.$http.get(ActivityService.getUrl(type, id, this.since[type][id].latest) + '&sort=asc').then(function (response) {
-			var objects = response.data.ocs.data;
+			let objects = response.data.ocs.data;
 
 			let data = [];
 			for (let index in objects) {

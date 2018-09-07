@@ -20,7 +20,7 @@
  *
  */
 
-/* global OC */
+/* global OC OCA */
 
 class ActivityController {
 	constructor ($scope, CardService, ActivityService) {
