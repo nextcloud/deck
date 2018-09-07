@@ -24,6 +24,7 @@
 namespace OCA\Deck\Activity;
 
 use OC\Activity\Event;
+use OCA\Deck\Db\Acl;
 use OCP\Activity\IEvent;
 use OCP\IL10N;
 use OCP\IURLGenerator;
@@ -266,4 +267,188 @@ class DeckProviderTest extends TestCase {
 		$this->assertEquals('<pre class="visualdiff"><del>A</del>BC<ins>D</ins></pre>', $event->getParsedMessage());
 	}
 
+	public function testParseParamForBoard() {
+		$params = [];
+		$subjectParams = [
+			'board' => [
+				'id' => 1,
+				'title' => 'Board name',
+			],
+		];
+		$expected = [
+			'board' => [
+				'type' => 'highlight',
+				'id' => 1,
+				'name' => 'Board name',
+				'link' => '#!/board/1/',
+			],
+		];
+		$actual = $this->invokePrivate($this->provider, 'parseParamForBoard', ['board', $subjectParams, $params]);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testParseParamForStack() {
+		$params = [];
+		$subjectParams = [
+			'stack' => [
+				'id' => 1,
+				'title' => 'Stack name',
+			],
+		];
+		$expected = [
+			'stack' => [
+				'type' => 'highlight',
+				'id' => 1,
+				'name' => 'Stack name',
+			],
+		];
+		$actual = $this->invokePrivate($this->provider, 'parseParamForStack', ['stack', $subjectParams, $params]);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testParseParamForAttachment() {
+		$this->urlGenerator->expects($this->once())
+			->method('linkToRoute')
+			->willReturn('/link/to/attachment');
+		$params = [];
+		$subjectParams = [
+			'attachment' => [
+				'id' => 1,
+				'data' => 'File name',
+			],
+			'card' => [
+				'id' => 1,
+			]
+		];
+		$expected = [
+			'attachment' => [
+				'type' => 'highlight',
+				'id' => 1,
+				'name' => 'File name',
+				'link' => '/link/to/attachment',
+			],
+		];
+		$actual = $this->invokePrivate($this->provider, 'parseParamForAttachment', ['attachment', $subjectParams, $params]);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testParseParamForAssignedUser() {
+		$user = $this->createMock(IUser::class);
+		$user->expects($this->once())
+			->method('getDisplayName')
+			->willReturn('User 1');
+		$this->userManager->expects($this->once())
+			->method('get')
+			->willReturn($user);
+		$params = [];
+		$subjectParams = [
+			'assigneduser' => 'user1',
+		];
+		$expected = [
+			'assigneduser' => [
+				'type' => 'user',
+				'id' => 'user1',
+				'name' => 'User 1'
+			],
+		];
+		$actual = $this->invokePrivate($this->provider, 'parseParamForAssignedUser', [$subjectParams, $params]);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testParseParamForLabel() {
+		$params = [];
+		$subjectParams = [
+			'label' => [
+				'id' => 1,
+				'title' => 'Label title',
+			],
+		];
+		$expected = [
+			'label' => [
+				'type' => 'highlight',
+				'id' => 1,
+				'name' => 'Label title'
+			],
+		];
+		$actual = $this->invokePrivate($this->provider, 'parseParamForLabel', [$subjectParams, $params]);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testParseParamForAclUser() {
+		$user = $this->createMock(IUser::class);
+		$user->expects($this->once())
+			->method('getDisplayName')
+			->willReturn('User 1');
+		$this->userManager->expects($this->once())
+			->method('get')
+			->willReturn($user);
+		$params = [];
+		$subjectParams = [
+			'acl' => [
+				'id' => 1,
+				'type' => Acl::PERMISSION_TYPE_USER,
+				'participant' => 'user1'
+			],
+		];
+		$expected = [
+			'acl' => [
+				'type' => 'user',
+				'id' => 'user1',
+				'name' => 'User 1'
+			],
+		];
+		$actual = $this->invokePrivate($this->provider, 'parseParamForAcl', [$subjectParams, $params]);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testParseParamForAclGroup() {
+		$params = [];
+		$subjectParams = [
+			'acl' => [
+				'id' => 1,
+				'type' => Acl::PERMISSION_TYPE_GROUP,
+				'participant' => 'group'
+			],
+		];
+		$expected = [
+			'acl' => [
+				'type' => 'highlight',
+				'id' => 'group',
+				'name' => 'group'
+			],
+		];
+		$actual = $this->invokePrivate($this->provider, 'parseParamForAcl', [$subjectParams, $params]);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testParseParamForChanges() {
+		$event = $this->createMock(IEvent::class);
+		$params = [];
+		$subjectParams = [
+			'before' => 'ABC',
+			'after' => 'BCD'
+		];
+		$expected = [
+			'before' => [
+				'type' => 'highlight',
+				'id' => 'ABC',
+				'name' => 'ABC'
+			],
+			'after' => [
+				'type' => 'highlight',
+				'id' => 'BCD',
+				'name' => 'BCD'
+			],
+		];
+		$actual = $this->invokePrivate($this->provider, 'parseParamForChanges', [$subjectParams, $params, $event]);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function invokePrivate(&$object, $methodName, array $parameters = array())
+	{
+		$reflection = new \ReflectionClass(get_class($object));
+		$method = $reflection->getMethod($methodName);
+		$method->setAccessible(true);
+		return $method->invokeArgs($object, $parameters);
+	}
 }

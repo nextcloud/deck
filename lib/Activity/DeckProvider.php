@@ -113,26 +113,10 @@ class DeckProvider implements IProvider {
 		$params = $this->parseParamForStack('stack', $subjectParams, $params);
 		$params = $this->parseParamForStack('stackBefore', $subjectParams, $params);
 		$params = $this->parseParamForAttachment('attachment', $subjectParams, $params);
-
-		if (array_key_exists('label', $subjectParams)) {
-			$params['label'] = [
-				'type' => 'highlight',
-				'id' => $subjectParams['label']['id'],
-				'name' => $subjectParams['label']['title']
-			];
-		}
-
-		if (array_key_exists('assigneduser', $subjectParams)) {
-			$user = $this->userManager->get($subjectParams['assigneduser']);
-			$params['assigneduser'] = [
-				'type' => 'user',
-				'id' => $subjectParams['assigneduser'],
-				'name' => $user !== null ? $user->getDisplayName() : $subjectParams['assigneduser']
-			];
-		}
-
-		$params = $this->parseParamsForAcl($subjectParams, $params);
-		$params = $this->parseParamsForChanges($subjectParams, $params, $event);
+		$params = $this->parseParamForLabel($subjectParams, $params);
+		$params = $this->parseParamForAssignedUser($subjectParams, $params);
+		$params = $this->parseParamForAcl($subjectParams, $params);
+		$params = $this->parseParamForChanges($subjectParams, $params, $event);
 
 		try {
 			$subject = $this->activityManager->getActivityFormat($subjectIdentifier, $subjectParams, $ownActivity);
@@ -189,7 +173,7 @@ class DeckProvider implements IProvider {
 	}
 
 	private function parseParamForAttachment($paramName, $subjectParams, $params) {
-		if (array_key_exists('attachment', $subjectParams)) {
+		if (array_key_exists($paramName, $subjectParams)) {
 			$params[$paramName] = [
 				'type' => 'highlight',
 				'id' => $subjectParams[$paramName]['id'],
@@ -200,7 +184,30 @@ class DeckProvider implements IProvider {
 		return $params;
 	}
 
-	private function parseParamsForAcl($subjectParams, $params) {
+	private function parseParamForAssignedUser($subjectParams, $params) {
+		if (array_key_exists('assigneduser', $subjectParams)) {
+			$user = $this->userManager->get($subjectParams['assigneduser']);
+			$params['assigneduser'] = [
+				'type' => 'user',
+				'id' => $subjectParams['assigneduser'],
+				'name' => $user !== null ? $user->getDisplayName() : $subjectParams['assigneduser']
+			];
+		}
+		return $params;
+	}
+
+	private function parseParamForLabel($subjectParams, $params) {
+		if (array_key_exists('label', $subjectParams)) {
+			$params['label'] = [
+				'type' => 'highlight',
+				'id' => $subjectParams['label']['id'],
+				'name' => $subjectParams['label']['title']
+			];
+		}
+		return $params;
+	}
+
+	private function parseParamForAcl($subjectParams, $params) {
 		if (array_key_exists('acl', $subjectParams)) {
 			if ($subjectParams['acl']['type'] === Acl::PERMISSION_TYPE_USER) {
 				$user = $this->userManager->get($subjectParams['acl']['participant']);
@@ -228,7 +235,7 @@ class DeckProvider implements IProvider {
 	 * @param $params
 	 * @return mixed
 	 */
-	private function parseParamsForChanges($subjectParams, $params, $event) {
+	private function parseParamForChanges($subjectParams, $params, $event) {
 		if (array_key_exists('diff', $subjectParams) && $subjectParams['diff']) {
 			$diff = new Diff();
 			$event->setMessage($subjectParams['after']);
@@ -242,7 +249,7 @@ class DeckProvider implements IProvider {
 				'name' => $subjectParams['before']
 			];
 		}
-		if (array_key_exists('before', $subjectParams)) {
+		if (array_key_exists('after', $subjectParams)) {
 			$params['after'] = [
 				'type' => 'highlight',
 				'id' => $subjectParams['after'],
