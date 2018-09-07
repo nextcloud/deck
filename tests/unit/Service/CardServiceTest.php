@@ -24,6 +24,7 @@
 namespace OCA\Deck\Service;
 
 
+use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\AssignedUsers;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Card;
@@ -34,6 +35,7 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
+use OCP\Activity\IEvent;
 use Test\TestCase;
 
 class CardServiceTest extends TestCase {
@@ -55,7 +57,10 @@ class CardServiceTest extends TestCase {
   	/** @var LabelMapper|\PHPUnit\Framework\MockObject\MockObject */
   	private $labelMapper;
 	private $boardMapper;
+	/** @var AttachmentService|\PHPUnit\Framework\MockObject\MockObject */
 	private $attachmentService;
+	/** @var ActivityManager|\PHPUnit\Framework\MockObject\MockObject */
+	private $activityManager;
 
 	public function setUp() {
 		    parent::setUp();
@@ -68,7 +73,8 @@ class CardServiceTest extends TestCase {
         $this->notificationHelper = $this->createMock(NotificationHelper::class);
         $this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
 		$this->attachmentService = $this->createMock(AttachmentService::class);
-        $this->cardService = new CardService(
+		$this->activityManager = $this->createMock(ActivityManager::class);
+		$this->cardService = new CardService(
 			$this->cardMapper,
 			$this->stackMapper,
 			$this->boardMapper,
@@ -78,9 +84,22 @@ class CardServiceTest extends TestCase {
 			$this->notificationHelper,
 			$this->assignedUsersMapper,
 			$this->attachmentService,
+			$this->activityManager,
 			'user1'
         );
     }
+
+    public function mockActivity($type, $object, $subject) {
+		// ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE
+		$event = $this->createMock(IEvent::class);
+		$this->activityManager->expects($this->once())
+			->method('createEvent')
+			->with($type, $object, $subject)
+			->willReturn($event);
+		$this->activityManager->expects($this->once())
+			->method('sendToUsers')
+			->with($event);
+	}
 
     public function testFind() {
     	$card = new Card();
@@ -263,7 +282,7 @@ class CardServiceTest extends TestCase {
         $card = new Card();
         $card->setArchived(true);
         $this->cardMapper->expects($this->once())->method('find')->willReturn($card);
-        $this->cardMapper->expects($this->never())->method('removeLabel');		
+        $this->cardMapper->expects($this->never())->method('removeLabel');
 		$this->expectException(StatusException::class);
         $this->cardService->removeLabel(123, 999);
     }
@@ -321,9 +340,9 @@ class CardServiceTest extends TestCase {
 
 	/**
 	 * @expectException \OCA\Deck\NotFoundException
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
 	 */
 	public function testUnassignUserNotExisting() {
 		$assignment = new AssignedUsers();
@@ -337,7 +356,7 @@ class CardServiceTest extends TestCase {
 			->with(123)
 			->willReturn($assignments);
 		$this->expectException(NotFoundException::class);
-		$actual = $this->cardService->unassignUser(123, 'user');		
+		$actual = $this->cardService->unassignUser(123, 'user');
 	}
 
 

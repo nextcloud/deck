@@ -90,8 +90,10 @@
 
 	<div class="section-header-tabbed">
 		<ul class="tabHeaders ng-scope">
-			<li class="tabHeader selected" ng-class="{'selected': (params.tab==0 || !params.tab)}" ui-sref="{tab: 0}"><a><?php p($l->t('Description')); ?></a></li>
+			<li class="tabHeader" ng-class="{'selected': (params.tab==0 || !params.tab)}" ui-sref="{tab: 0}"><a><?php p($l->t('Description')); ?></a></li>
 			<li class="tabHeader" ng-class="{'selected': (params.tab==1)}" ui-sref="{tab: 1}"><a><?php p($l->t('Attachments')); ?></a></li>
+			<li class="tabHeader" ng-class="{'selected': (params.tab==2)}" ui-sref="{tab: 2}"><a><?php p($l->t('Activity')); ?></a></li>
+
 		</ul>
 		<div class="tabDetails">
 			<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
@@ -128,4 +130,10 @@
 				 ng-if="!description()"><?php p($l->t('Add a card description…')); ?></div>
 		</div>
 	</div>
+
+	<div class="section-content card-activity activityTabView" ng-if="params.tab === 2">
+		<activity-component type="deck_card" element="cardservice.getCurrent()"></activity-component>
+	</div>
+
+
 </div>

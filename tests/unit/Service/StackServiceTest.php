@@ -25,6 +25,7 @@ namespace OCA\Deck\Service;
 
 
 
+use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
@@ -63,6 +64,8 @@ class StackServiceTest extends TestCase {
 	private $boardService;
 	/** @var CardService|\PHPUnit\Framework\MockObject\MockObject */
 	private $cardService;
+	/** @var ActivityManager|\PHPUnit\Framework\MockObject\MockObject */
+	private $activityManager;
 
 	public function setUp() {
 		parent::setUp();
@@ -75,18 +78,19 @@ class StackServiceTest extends TestCase {
 		$this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
 		$this->attachmentService = $this->createMock(AttachmentService::class);
 		$this->labelMapper = $this->createMock(LabelMapper::class);
+		$this->activityManager = $this->createMock(ActivityManager::class);
 
 		$this->stackService = new StackService(
 			$this->stackMapper,
-      $this->boardMapper,
-      $this->cardMapper,
-      $this->labelMapper,
-
+			$this->boardMapper,
+			$this->cardMapper,
+			$this->labelMapper,
 			$this->permissionService,
 			$this->boardService,
 			$this->cardService,
 			$this->assignedUsersMapper,
-			$this->attachmentService
+			$this->attachmentService,
+			$this->activityManager
 		);
 	}
 
@@ -176,14 +180,16 @@ class StackServiceTest extends TestCase {
     }
 
 	public function testDelete() {
-	    $this->permissionService->expects($this->once())->method('checkPermission');
-			$stackToBeDeleted = new Stack();
-			$stackToBeDeleted->setId(1);
-      $this->stackMapper->expects($this->once())->method('find')->willReturn($stackToBeDeleted);
-	    $this->stackMapper->expects($this->once())->method('update');
-	    $this->stackService->delete(123);
-			$this->assertTrue($stackToBeDeleted->getDeletedAt() <= time(), "deletedAt is in the past");
-    }
+		$this->permissionService->expects($this->once())->method('checkPermission');
+		$stackToBeDeleted = new Stack();
+		$stackToBeDeleted->setId(1);
+		$this->stackMapper->expects($this->once())->method('find')->willReturn($stackToBeDeleted);
+		$this->stackMapper->expects($this->once())->method('update')->willReturn($stackToBeDeleted);
+		$this->stackService->delete(123);
+		$this->assertTrue($stackToBeDeleted->getDeletedAt() <= time(), "deletedAt is in the past");
+		$this->assertTrue($stackToBeDeleted->getDeletedAt() > 0, "deletedAt is set");
+
+	}
 
     public function testUpdate() {
         $this->permissionService->expects($this->once())->method('checkPermission');

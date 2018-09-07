@@ -23,6 +23,9 @@
 
 use OCP\Util;
 
+Util::addScript('activity', 'richObjectStringParser');
+Util::addStyle('activity', 'style');
+
 Util::addStyle('deck', '../js/build/vendor');
 Util::addScript('deck', 'build/vendor');
 

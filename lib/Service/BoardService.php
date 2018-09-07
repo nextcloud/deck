@@ -23,6 +23,8 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\Activity\ActivityManager;
+use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
@@ -51,6 +53,7 @@ class BoardService {
 	private $userManager;
 	private $groupManager;
 	private $userId;
+	private $activityManager;
 
 	public function __construct(
 		BoardMapper $boardMapper,
@@ -62,6 +65,7 @@ class BoardService {
 		AssignedUsersMapper $assignedUsersMapper,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
+		ActivityManager $activityManager,
 		$userId
 	) {
 		$this->boardMapper = $boardMapper;
@@ -73,6 +77,7 @@ class BoardService {
 		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
+		$this->activityManager = $activityManager;
 		$this->userId = $userId;
 	}
 
@@ -244,7 +249,7 @@ class BoardService {
 		$board->setTitle($title);
 		$board->setOwner($userId);
 		$board->setColor($color);
-		$new_board = $this->boardMapper->insert($board);		
+		$new_board = $this->boardMapper->insert($board);
 
 		// create new labels
 		$default_labels = [
@@ -270,6 +275,7 @@ class BoardService {
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE],
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
 		]);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $new_board, ActivityManager::SUBJECT_BOARD_CREATE);
 		return $new_board;
 
 	}
@@ -291,7 +297,8 @@ class BoardService {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
 		$board->setDeletedAt(time());
-		$this->boardMapper->update($board);
+		$board = $this->boardMapper->update($board);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_DELETE);
 		return $board;
 	}
 
@@ -311,7 +318,9 @@ class BoardService {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
 		$board->setDeletedAt(0);
-		return $this->boardMapper->update($board);
+		$board = $this->boardMapper->update($board);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_RESTORE);
+		return $board;
 	}
 
 	/**
@@ -322,7 +331,7 @@ class BoardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function deleteForce($id) {		
+	public function deleteForce($id) {
 		if (is_numeric($id) === false)  {
 			throw new BadRequestException('id must be a number');
 		}
@@ -363,11 +372,15 @@ class BoardService {
 
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
+		$changes = new ChangeSet($board);
 		$board->setTitle($title);
 		$board->setColor($color);
 		$board->setArchived($archived);
+		$changes->setAfter($board);
+		$this->boardMapper->update($board); // operate on clone so we can check for updated fields
 		$this->boardMapper->mapOwner($board);
-		return $this->boardMapper->update($board);
+		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_BOARD_UPDATE);
+		return $board;
 	}
 
 
@@ -421,6 +434,7 @@ class BoardService {
 		$this->notificationHelper->sendBoardShared($boardId, $acl);
 
 		$newAcl = $this->aclMapper->insert($acl);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE);
 		$this->boardMapper->mapAcl($newAcl);
 		return $newAcl;
 	}
@@ -488,6 +502,7 @@ class BoardService {
 				$this->assignedUsersMapper->delete($assignement);
 			}
 		}
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $acl, ActivityManager::SUBJECT_BOARD_UNSHARE);
 		return $this->aclMapper->delete($acl);
 	}
 

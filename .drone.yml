@@ -134,6 +134,7 @@ pipeline:
       - cd ../server/
       - ./occ app:enable $APP_NAME
       - cd apps/$APP_NAME
+      - composer install
       - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
       - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
     when:
@@ -153,6 +154,7 @@ pipeline:
       - php occ app:enable deck
       - cd apps/$APP_NAME
       # Run phpunit tests
+      - composer install
       - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
       - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
     when:
@@ -171,6 +173,7 @@ pipeline:
       - cd ../server/
       - php occ app:enable deck
       - cd apps/$APP_NAME
+      - composer install
       - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
       - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
     when:
@@ -189,6 +192,7 @@ pipeline:
       - cd ../server/
       - php occ app:enable deck
       - cd apps/$APP_NAME
+      - composer install
       - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
       - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
     when:

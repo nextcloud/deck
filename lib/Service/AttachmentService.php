@@ -24,7 +24,9 @@
 namespace OCA\Deck\Service;
 
 
+use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\AppInfo\Application;
+use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
@@ -52,6 +54,8 @@ class AttachmentService {
 	private $cache;
 	/** @var IL10N */
 	private $l10n;
+	/** @var ActivityManager */
+	private $activityManager;
 
 	/**
 	 * AttachmentService constructor.
@@ -65,7 +69,7 @@ class AttachmentService {
 	 * @param IL10N $l10n
 	 * @throws \OCP\AppFramework\QueryException
 	 */
-	public function __construct(AttachmentMapper $attachmentMapper, CardMapper $cardMapper, PermissionService $permissionService, Application $application, ICacheFactory $cacheFactory, $userId, IL10N $l10n) {
+	public function __construct(AttachmentMapper $attachmentMapper, CardMapper $cardMapper, PermissionService $permissionService, Application $application, ICacheFactory $cacheFactory, $userId, IL10N $l10n, ActivityManager $activityManager) {
 		$this->attachmentMapper = $attachmentMapper;
 		$this->cardMapper = $cardMapper;
 		$this->permissionService = $permissionService;
@@ -73,6 +77,7 @@ class AttachmentService {
 		$this->application = $application;
 		$this->cache = $cacheFactory->createDistributed('deck-card-attachments-');
 		$this->l10n = $l10n;
+		$this->activityManager = $activityManager;
 
 		// Register shipped attachment services
 		// TODO: move this to a plugin based approach once we have different types of attachments
@@ -168,7 +173,7 @@ class AttachmentService {
 		}
 
 		if ($data === false || $data === null) {
-			throw new BadRequestException('data must be provided');
+			//throw new BadRequestException('data must be provided');
 		}
 
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
@@ -200,6 +205,7 @@ class AttachmentService {
 		} catch (InvalidAttachmentType $e) {
 			// just store the data
 		}
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_CREATE);
 		return $attachment;
 	}
 
@@ -261,7 +267,7 @@ class AttachmentService {
 		}
 
 		if ($data === false || $data === null) {
-			throw new BadRequestException('data must be provided');
+			//throw new BadRequestException('data must be provided');
 		}
 
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
@@ -284,6 +290,7 @@ class AttachmentService {
 		} catch (InvalidAttachmentType $e) {
 			// just store the data
 		}
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_UPDATE);
 		return $attachment;
 	}
 
@@ -317,13 +324,16 @@ class AttachmentService {
 			$service = $this->getService($attachment->getType());
 			if ($service->allowUndo()) {
 				$service->markAsDeleted($attachment);
+				$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_DELETE);
 				return $this->attachmentMapper->update($attachment);
 			}
 			$service->delete($attachment);
 		} catch (InvalidAttachmentType $e) {
 			// just delete without further action
 		}
-		return $this->attachmentMapper->delete($attachment);
+		$attachment = $this->attachmentMapper->delete($attachment);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_DELETE);
+		return $attachment;
 	}
 
 	public function restore($cardId, $attachmentId) {
@@ -344,7 +354,9 @@ class AttachmentService {
 			$service = $this->getService($attachment->getType());
 			if ($service->allowUndo()) {
 				$attachment->setDeletedAt(0);
-				return $this->attachmentMapper->update($attachment);
+				$attachment = $this->attachmentMapper->update($attachment);
+				$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_RESTORE);
+				return $attachment;
 			}
 		} catch (InvalidAttachmentType $e) {
 		}

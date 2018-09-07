@@ -20,12 +20,15 @@ clean-build:
 clean-dist:
 	rm -rf js/node_modules
 
-install-deps:
+install-deps: install-deps-js
+	composer install
+
+install-deps-js:
 	cd js && npm install
 
-build: build-js
+build: install-deps build-js
 
-build-js: install-deps
+build-js: install-deps-js
 	cd js && npm run build 
 
 build-js-dev: install-deps

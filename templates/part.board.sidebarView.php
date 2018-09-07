@@ -16,6 +16,8 @@
     <li class="tabHeader" ng-class="{'selected': (params.tab==1)}" ui-sref="{tab: 1}"><a><?php p($l->t('Tags')); ?></a></li>
     <li class="tabHeader" ng-class="{'selected': (params.tab==2)}" ui-sref="{tab: 2}"><a><?php p($l->t('Deleted Stacks')); ?></a></li>
     <li class="tabHeader" ng-class="{'selected': (params.tab==3)}" ui-sref="{tab: 3}"><a><?php p($l->t('Deleted Cards')); ?></a></li>
+	<li class="tabHeader" ng-class="{'selected': (params.tab==4)}" ui-sref="{tab: 4}"><a><?php p($l->t('Activity')); ?></a></li>
+
 </ul>
 <div class="tabsContainer">
     <div id="tabBoardShare" class="tab" ng-if="params.tab==0 || !params.tab">
@@ -147,4 +149,10 @@
     	   </li>
     	</ul>
     </div>
+
+	<div id="board-detail-activity" class="tab activityTabView" ng-if="params.tab==4">
+		<activity-component ng-if="boardservice.getCurrent()" type="deck_board" element="boardservice.getCurrent()"></activity-component>
+	</div>
+
+
 </div>

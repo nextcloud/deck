@@ -24,6 +24,7 @@ before_script:
     - cd apps/deck
 
 script:
+    - composer install
     - make test-unit
 
 after_success:
