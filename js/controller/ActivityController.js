@@ -63,7 +63,6 @@ class ActivityController {
 					_executeFetch();
 				} else {
 					self.loading = false;
-					self.$scope.$apply();
 				}
 			}, function () {
 				self.loading = false;
