@@ -7,3 +7,17 @@
 	background-color: rgba(233, 50, 45, 0.2);
 	text-decoration: none;
 }
+
+.activityTabView .avatardiv-container {
+	display: inline-block;
+	bottom: -3px;
+	margin-left: 3px;
+}
+
+.activityTabView .avatar-name-wrapper {
+	font-weight: bold;
+}
+
+.activityTabView .activitysubject a {
+	font-weight: bold;
+}

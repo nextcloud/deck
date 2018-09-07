@@ -48,7 +48,7 @@ class ActivityController {
 	}
 
 	parseMessage(subject, parameters) {
-		OCA.Activity.RichObjectStringParser._userLocalTemplate = '<avatar ng-attr-contactsmenu ng-attr-tooltip ng-attr-user="{{ id }}" ng-attr-displayname="{{name}}"></avatar>';
+		OCA.Activity.RichObjectStringParser._userLocalTemplate = '<span class="avatar-name-wrapper"><avatar ng-attr-contactsmenu ng-attr-tooltip ng-attr-user="{{ id }}" ng-attr-displayname="{{name}}" ng-attr-size="16"></avatar> {{ name }}</span>';
 		return OCA.Activity.RichObjectStringParser.parseMessage(subject, parameters);
 	}
 
@@ -57,20 +57,19 @@ class ActivityController {
 		let dataLengthBefore = self.getData(self.element.id).length;
 		let _executeFetch = function() {
 			let promise = self.activityservice.fetchMoreActivities(self.type, self.element.id);
-			if (Promise.resolve(promise) === promise) {
-				promise.then(function (data) {
-					let dataLengthAfter = self.getData(self.element.id).length;
-					if (data !== null || dataLengthAfter <= dataLengthBefore || dataLengthAfter < 5) {
-						_executeFetch();
-					} else {
-						self.loading = false;
-						self.$scope.$apply();
-					}
-				}, function () {
+			promise.then(function (data) {
+				let dataLengthAfter = self.getData(self.element.id).length;
+				if (data !== null && (dataLengthAfter <= dataLengthBefore || dataLengthAfter < 5)) {
+					_executeFetch();
+				} else {
 					self.loading = false;
 					self.$scope.$apply();
-				});
-			}
+				}
+			}, function () {
+				self.loading = false;
+				self.$scope.$apply();
+			});
+
 		};
 		_executeFetch();
 	}

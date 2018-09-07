@@ -78,6 +78,7 @@ class ActivityService {
 			});
 			self.since[type][id].oldest = response.headers('X-Activity-Last-Given');
 			self.running = false;
+			return response;
 		}, function (error) {
 			if (error.status === 304) {
 				self.since[type][id].finished = true;

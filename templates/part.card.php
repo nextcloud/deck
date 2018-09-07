@@ -131,7 +131,7 @@
 		</div>
 	</div>
 
-	<div class="section-content card-activity" ng-if="params.tab === 2">
+	<div class="section-content card-activity activityTabView" ng-if="params.tab === 2">
 		<activity-component type="deck_card" element="cardservice.getCurrent()"></activity-component>
 	</div>
 

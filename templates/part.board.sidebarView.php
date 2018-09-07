@@ -150,7 +150,7 @@
     	</ul>
     </div>
 
-	<div id="board-detail-activity" class="tab" ng-if="params.tab==4">
+	<div id="board-detail-activity" class="tab activityTabView" ng-if="params.tab==4">
 		<activity-component ng-if="boardservice.getCurrent()" type="deck_board" element="boardservice.getCurrent()"></activity-component>
 	</div>
 
