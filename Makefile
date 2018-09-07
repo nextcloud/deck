@@ -21,6 +21,7 @@ clean-dist:
 	rm -rf js/node_modules
 
 install-deps:
+	composer install
 	cd js && npm install
 
 build: build-js
