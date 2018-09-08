@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Hours" : "Hodín",
     "Minutes" : "Minút",
+    "Deck" : "Tabuľa",
     "The card \"%s\" on \"%s\" has reached its due date." : "Karta \"%s\" na \"%s\" dosiahla dátum platnosti",
     "The board \"%s\" has been shared with you by %s." : "Používateľ %s vám sprístupnil tabuľu \"%s\".",
     "{user} has shared the board %s with you." : "Používateľ {user} vám sprístupnil tabuľu %s.",
@@ -11,7 +12,6 @@ OC.L10N.register(
     "Action needed" : "Potrebná akcia",
     "Later" : "Neskôr",
     "The file was uploaded" : "Súbor bol nahraný",
-    "Deck" : "Tabuľa",
     "Add a new stack" : "Pridať nový stoh",
     "Submit" : "Odoslať",
     "Show archived cards" : "Zobraziť archivované karty",

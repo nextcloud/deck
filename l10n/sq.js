@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Hours" : "Orët",
     "Minutes" : "Minutat",
+    "Deck" : "Shto paisjen U2F",
     "Finished" : "Përfunduar",
     "To review" : "Për rishikim",
     "Action needed" : "Nevoitet veprim",
@@ -11,7 +12,6 @@ OC.L10N.register(
     "Doing" : "Duke e bërë",
     "Done" : "Përfunduar",
     "The file was uploaded" : "Skedari u ngarkua",
-    "Deck" : "Shto paisjen U2F",
     "Add a new stack" : "Shto një raft të ri",
     "Submit" : "Dërgo",
     "Show archived cards" : "Trego kartat e arkivuara",

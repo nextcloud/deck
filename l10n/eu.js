@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Hours" : "Orduak",
     "Minutes" : "Minutuak",
+    "Deck" : "Mahaigaina",
     "The card \"%s\" on \"%s\" has reached its due date." : " \"%s\" txartela,  \"%s\" -n dagoena, epe-mugara ailegatu da.",
     "The board \"%s\" has been shared with you by %s." : "\"%s\" mahaingaina %s-k zurekin partekatu du.",
     "{user} has shared the board %s with you." : "{user} erabiltzaileak %s mahaigaina zurekin partekatu du.",
@@ -10,7 +11,6 @@ OC.L10N.register(
     "To review" : "Errebisatzeko",
     "Action needed" : "Ekintza beharrezkoa",
     "Later" : "Beranduago",
-    "Deck" : "Mahaigaina",
     "Add a new stack" : "Pila berria gehitu",
     "Submit" : "Bidali",
     "Show archived cards" : "Artxibatutako txartelak erakutsi",

@@ -1,11 +1,11 @@
 { "translations": {
     "Hours" : "Годин",
     "Minutes" : "Хвилин",
+    "Deck" : "Колода",
     "Finished" : "Завершено",
     "To review" : "На перегляд",
     "Action needed" : "Потребує дій",
     "Later" : "Пізніше",
-    "Deck" : "Колода",
     "Add a new stack" : "Додати нову купу",
     "Show archived cards" : "Показати архівні картки",
     "Hide archived cards" : "Приховати архівні картки",
