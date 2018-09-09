@@ -7,6 +7,7 @@ OC.L10N.register(
     "Hours" : "Сати",
     "Minutes" : "Минути",
     "Maximum file size of {size} exceeded" : "Премашена максимална величина фајла од {size}",
+    "You have created a new board {board}" : "Направили сте нову таблу {board}",
     "Deck" : "Шпил",
     "Personal" : "Лично",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Корисник %s Вам је доделио картицу \"%s\" са табле \"%s\".",

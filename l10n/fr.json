@@ -5,6 +5,7 @@
     "Hours" : "Heures",
     "Minutes" : "Minutes",
     "Maximum file size of {size} exceeded" : "Taille de fichier maximale de {size} dépassée",
+    "You have created a new board {board}" : "Vous avez créé un nouveau tableau {tableau}",
     "Deck" : "Deck",
     "Personal" : "Personnel",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "La carte \"%s\" de \"%s\" vous a été assignée par %s.",
