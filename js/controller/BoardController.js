@@ -282,6 +282,11 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		StackService.removeCard(card);
 	};
 
+	$scope.cardMove = function (card) {
+		console.log(' ====== moving the card =====');
+		console.log(card);
+	};
+
 	$scope.labelDelete = function (label) {
 		LabelService.delete(label.id);
 		// remove from board data

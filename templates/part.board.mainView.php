@@ -130,6 +130,40 @@
 											   ng-click="cardArchive(c); $event.stopPropagation();"><span
 														class="icon icon-archive"></span><span><?php p($l->t('Archive')); ?></span></a>
 										</li>
+										<li ng-if="params.filter!=='archive'">
+											<a class="menuitem action action-rename permanent popover-form">
+											   <span class="icon icon-archive"></span>
+												<span><?php p($l->t('Move')); ?></span>
+												<div class="popover-form-container">
+													<div class="form-row">
+														Move Card Title
+														<hr />
+													</div>
+													<div class="form-row">
+														<ui-select multiple tagging="" ng-model="card.labels" theme="select2"
+																ng-disabled="boardservice.isArchived() || card.archived"
+																title="<?php p($l->t('Select a board')); ?>"
+																placeholder="<?php p($l->t('Select a board')); ?>"
+																ng-disabled="!boardservice.canEdit() || archived">
+															<ui-select-match placeholder="<?php p($l->t('Select board')); ?>">
+																<span class="select-label" ng-style="labelStyle($item.color)">{{$item.title}}&nbsp;</span>
+															</ui-select-match>
+															<ui-select-choices
+																repeat="label in boardservice.getCurrent().labels | filter:$select.search track by label.id">
+																<span class="choose-label" ng-style="labelStyle(label.color)">{{label.title}}</span>
+															</ui-select-choices>
+														</ui-select>
+													</div>
+													<div class="form-row">
+														Stack Selector here!
+													</div>
+													<div class="form-row">
+														<button ng-click="cardMove(c); $event.stopPropagation();">Move</button>
+													</div>
+												</div>
+											</a>
+
+										</li>
 										<li ng-if="params.filter==='archive'">
 											<a class="menuitem action action-rename permanent"
 											   data-action="Unarchive"
