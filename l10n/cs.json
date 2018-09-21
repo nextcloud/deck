@@ -1,4 +1,5 @@
 { "translations": {
+    "The associated stack is deleted as well, it will be restored as well." : "Související stack je také smazaný a bude také obnoven.",
     "Restore associated stack" : "Obnovit související stack",
     "Remove user from card" : "Odebrat uživatele z karty",
     "Hours" : "Hodiny",
@@ -10,6 +11,7 @@
     "{user} has deleted the board {board}" : "{user} smazal(a) nástěnku {board}",
     "You have restored the board {board}" : "Obnovili jste nástěnku {board}",
     "{user} has restored the board {board}" : "{user} obnovil(a) nástěnku {board}",
+    "You have shared the board {board} with {acl}" : "Nasdíleli jste nástěnku {board} s {acl}",
     "{user} has shared the board {board} with {sharee}" : "{user} nasdílel(a) nástěnku {board} pro {sharee}",
     "You have removed {acl} from the board {board}" : "Odebrali jste {acl} z nástěnky {board}",
     "{user} has removed {acl} from the board {board}" : "{user} odebral(a) {acl} z nástěnky {board}",
@@ -17,6 +19,8 @@
     "{user} has has renamed the board {before} to {board}" : "{user} uživatel přejmenoval nástěnku {before} na {board}",
     "You have archived the board {board}" : "Zaarchivovali jste nástěnku {board}",
     "{user} has archived the board {before}" : "{user} zaarchivoval(a) nástěnku {before}",
+    "You have unarchived the board {board}" : "Zrušili jste archivaci nástěnky {board}",
+    "{user} has unarchived the board {before}" : "{user} zrušil(a) archivaci nástěnky {before}",
     "You have created a new stack {stack} on {board}" : "Vytvořili jste nový stack {stack} na {board}",
     "{user} has created a new stack {stack} on {board}" : "{user} vytvořil(a) nový stack {stack} na {board}",
     "You have renamed a new stack {before} to {stack} on {board}" : "Přejmenovali jste nový stack {before} na {stack} na {board}",

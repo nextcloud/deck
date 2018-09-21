@@ -23,6 +23,8 @@ OC.L10N.register(
     "{user} has archived the board {before}" : "{user} ha archivado el tablero {board}",
     "You have unarchived the board {board}" : "Has desarchivado el tablero {board}",
     "{user} has unarchived the board {before}" : "{user} ha desarchivado el tablero {before}",
+    "You have created a new stack {stack} on {board}" : "Has creado la pila {stack} en {board}",
+    "{user} has created a new stack {stack} on {board}" : "{user} ha creado la pila {stack} en {board}",
     "You have deleted {stack} on {board}" : "Has eliminado {stack} en {board}",
     "{user} has deleted {stack} on {board}" : "{user} ha eliminado {stack} en {board}",
     "You have renamed the card {before} to {card}" : "Has renombrado la tarjeta {before} como {card}",
