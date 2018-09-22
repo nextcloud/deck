@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Hours" : "Ure",
     "Minutes" : "Minute",
+    "Personal" : "Osebno",
     "Finished" : "Zaključeno",
     "To review" : "Za pregled",
     "Action needed" : "Operacija je potrebna",
@@ -16,7 +17,7 @@ OC.L10N.register(
     "Unarchive" : "Odarhiviraj",
     "Delete" : "Izbriši",
     "Enter a card title" : "Vpiši naslov kartice",
-    "Sharing" : "Deli",
+    "Sharing" : "Souporaba",
     "Tags" : "Oznake",
     "Select users or groups to share with" : "Izberi uporabnike ali skupine s katerimi želiš deliti",
     "No matching user or group found." : "Ne najdem ujemajočega uporabnika ali skupine.",
