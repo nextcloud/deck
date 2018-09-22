@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.5",
+    "babel-loader": "^8.0.2",
     "babel-preset-env": "^1.7.0",
     "css-loader": "^1.0.0",
     "karma": "^3.0.0",
