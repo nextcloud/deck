@@ -1,6 +1,9 @@
 { "translations": {
     "Hours" : "Ure",
     "Minutes" : "Minute",
+    "You have added a description to {card} in {stack} on {board}" : "Dodan je opis za kartico {card} v {stack} na {board}.",
+    "You have added the label {label} to {card} in {stack} on {board}" : "Dodan je naziv {label} za kartico {card} v {stack} na {board}.",
+    "You have added the attachment {attachment} to {card}" : "Dodana je priloga {attachment} h kartici {card}.",
     "Personal" : "Osebno",
     "Finished" : "Zaključeno",
     "To review" : "Za pregled",
