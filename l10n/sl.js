@@ -38,6 +38,7 @@ OC.L10N.register(
     "Delete board" : "Izbriši tablo",
     "Create new board" : "Ustvari novo tablo",
     "New board title" : "Naslov nove table",
+    "Cancel upload" : "Prekliči pošiljanje",
     "by" : "s strani",
     "Modified:" : "Spremenjeno:",
     "Created:" : "Ustvarjeno:",
