@@ -40,6 +40,7 @@
     "You have archived {card} in {stack} on {board}" : "Has archivado {card} en la pila {stack} en {board}",
     "{user} has archived {card} in {stack} on {board}" : "{user} ha archivado {card} en la pila {stack} en {board}",
     "You have unarchived {card} in {stack} on {board}" : "Has desarchivado {card} en la pila {stack} en {board}",
+    "{user} has unarchived {card} in {stack} on {board}" : "{user} ha desarchivado {card} en la pila {stack} de {board}",
     "You have removed the due date of {card}" : "Has eliminado la fecha de vencimiento de {card}",
     "{user} has removed the due date of {card}" : "{user} ha eliminado la fecha de vencimiento de {card}",
     "You have set the due date of {card} to {after}" : "Has establecido la fecha de vencimiento de {card} como {after}",
