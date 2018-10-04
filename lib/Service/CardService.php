@@ -83,6 +83,11 @@ class CardService {
 		$card->setAssignedUsers($this->assignedUsersMapper->find($cardId));
 		$card->setLabels($this->labelMapper->findAssignedLabelsForCard($cardId));
 		$card->setAttachmentCount($this->attachmentService->count($cardId));
+		/** @var ICommentsManager commentsManager */
+		$this->commentsManager = \OC::$server->getCommentsManager();
+		$lastRead = $this->commentsManager->getReadMark('deckCard', (string)$card->getId(), \OC::$server->getUserSession()->getUser());
+		$count = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId(), $lastRead);
+		$card->setCommentsUnread($count);
 	}
 
 	public function fetchDeleted($boardId) {
@@ -114,6 +119,7 @@ class CardService {
 		$attachments = $this->attachmentService->findAll($cardId, true);
 		$card->setAssignedUsers($assignedUsers);
 		$card->setAttachments($attachments);
+		$this->enrich($card);
 		return $card;
 	}
 

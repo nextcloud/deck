@@ -28,6 +28,7 @@ use cogpowered\FineDiff\Diff;
 use OCA\Deck\Db\Acl;
 use OCP\Activity\IEvent;
 use OCP\Activity\IProvider;
+use OCP\Comments\IComment;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 
@@ -106,7 +107,7 @@ class DeckProvider implements IProvider {
 				'type' => 'user',
 				'id' => $author,
 				'name' => $user !== null ? $user->getDisplayName() : $author
-			]
+			],
 		];
 
 		$params = $this->parseParamForBoard('board', $subjectParams, $params);
@@ -117,6 +118,7 @@ class DeckProvider implements IProvider {
 		$params = $this->parseParamForAssignedUser($subjectParams, $params);
 		$params = $this->parseParamForAcl($subjectParams, $params);
 		$params = $this->parseParamForChanges($subjectParams, $params, $event);
+		$params = $this->parseParamForComment($subjectParams, $params, $event);
 
 		try {
 			$subject = $this->activityManager->getActivityFormat($subjectIdentifier, $subjectParams, $ownActivity);
@@ -146,6 +148,9 @@ class DeckProvider implements IProvider {
 		}
 		if (strpos($event->getSubject(), 'attachment_') !== false) {
 			$event->setIcon($this->urlGenerator->imagePath('core', 'places/files.svg'));
+		}
+		if (strpos($event->getSubject(), 'comment_') !== false) {
+			$event->setIcon($this->urlGenerator->imagePath('core', 'actions/comment.svg'));
 		}
 		return $event;
 	}
@@ -224,6 +229,16 @@ class DeckProvider implements IProvider {
 				];
 			}
 		}
+		return $params;
+	}
+
+	private function parseParamForComment($subjectParams, $params, IEvent $event) {
+		if (array_key_exists('comment', $subjectParams)) {
+			/** @var IComment $comment */
+			$comment = \OC::$server->getCommentsManager()->get((int) $subjectParams['comment']);
+			$event->setParsedMessage($comment->getMessage());
+		}
+		$params['comment'] = $subjectParams['comment'];
 		return $params;
 	}
 
