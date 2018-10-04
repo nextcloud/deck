@@ -941,6 +941,17 @@ input.input-inline {
 	opacity: 1 !important;
 }
 
+.activitysubject .app-popover-menu-utils {
+	display: inline-block;
+	position: absolute;
+	top: -5px;
+	right: 0;
+	button {
+		opacity: .5;
+		padding: 14px 19px;
+	}
+}
+
 .card-attachments {
 	.error {
 		padding-left: 38px;

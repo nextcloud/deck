@@ -18,18 +18,25 @@
 	<li ng-if="$ctrl.loadingNewer()"><div class="icon-loading-small"></div></li>
 	<li class="activity box" ng-repeat="activity in $ctrl.getActivityStream() track by $index">
 		<div class="activity-icon">
-			<img ng-if="activity.timelineType == 'activity'" src="{{activity.icon}}" alt="">
-			<div ng-if="activity.timelineType == 'comment'" avatar ng-attr-size="16" ng-attr-user="{{ activity.actorId }}" ng-attr-displayname="{{ activity.actorDisplayName }}"></div>
+			<img ng-if="!activity.commentModel" src="{{activity.icon}}" alt="">
+			<div ng-if="activity.commentModel" avatar ng-attr-size="16" ng-attr-user="{{ activity.commentModel.get('actorId') }}" ng-attr-displayname="{{ activity.actorDisplayName }}"></div>
 		</div>
-		<div class="activitysubject"
-			 ng-if="activity.timelineType == 'activity'"
-			 bind-html-compile="$ctrl.parseMessage(activity.subject_rich[0], activity.subject_rich[1])"></div>
-		<div class="activitysubject"
-			 ng-if="activity.timelineType == 'comment'">{{ activity.subject_rich[1].user.name }}</div>
+		<div class="activitysubject" ng-if="!activity.commentModel" bind-html-compile="$ctrl.parseMessage(activity.subject_rich[0], activity.subject_rich[1])"></div>
+		<div class="activitysubject" ng-if="activity.commentModel">
+			{{ activity.subject_rich[1].user.name }}
+			<div class="app-popover-menu-utils">
+				<button class="button-inline icon-more ng-pristine ng-valid ng-empty ng-touched" aria-label="Actions"></button>
+				<div class="popovermenu hidden">
+					<ul>
+						<li><a ng-click="$ctrl.updateComment(activity)" class="menuitem action edit permanent" data-action="edit"><span class="icon icon-rename"></span><span>Edit comment</span></a></li>
+						<li><a ng-click="$ctrl.deleteComment(activity)" class="menuitem action delete permanent" data-action="delete"><span class="icon icon-delete"></span><span>Delete comment</span></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
 		<span class="activitytime has-tooltip live-relative-timestamp"
 			  data-timestamp="{{ activity.timelineTimestamp }}">{{ activity.timelineTimestamp/1000 | relativeDateFilter }}</span>
 		<div class="activitymessage" ng-bind-html="activity.message"></div>
-		<div id="foobar" ng-click="$ctrl.updateComment(activity)">{{ activity.commentModel }}</div>
 	</li>
 
 	<li ng-if="$ctrl.loading"><div class="icon-loading-small"></div></li>
