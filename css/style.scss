@@ -492,7 +492,7 @@ input.input-inline {
 			}
 		}
 
-		.card-tasks, .card-files {
+		.card-tasks, .card-files, .card-comments {
 			border-radius: 3px;
 			margin: 4px 4px 4px 0px;
 			padding: 0 2px;
@@ -935,6 +935,10 @@ input.input-inline {
 			}
 		}
 	}
+}
+
+.activity-icon {
+	opacity: 1 !important;
 }
 
 .card-attachments {

@@ -1,14 +1,35 @@
+<div class="icon icon-activity"></div>
+<div class="icon icon-comment"></div>
+<div id="commentsTabView">
+	<div class="newCommentRow comment" data-id="">
+		<div class="authorRow">
+			<div class="avatardiv" avatar ng-attr-user="admin" ng-attr-displayname="Admin"></div>
+			<div class="author currentUser">admin</div>
+		</div>
+		<form class="newCommentForm">
+			<div contenteditable="true" class="message" data-placeholder="{{ $ctrl.t('deck', 'New comment …') }}" ng-model="$ctrl.$scope.newComment"></div>
+			<input class="submit icon-confirm has-tooltip" type="submit"
+				   value="" title="" data-original-title="Post" ng-click="$ctrl.postComment()">
+			<div class="submitLoading icon-loading-small hidden"></div>
+		</form>
+	</div>
+</div>
 <ul class="activities" infinite-scroll="$ctrl.page()" infinite-scroll-container="'#app-sidebar'" infinite-scroll-disabled="$ctrl.activityservice.running" infinite-scroll-immediate-check="false">
 	<li ng-if="$ctrl.loadingNewer()"><div class="icon-loading-small"></div></li>
-	<li class="activity box" ng-repeat="activity in $ctrl.getData($ctrl.element.id) track by $index">
+	<li class="activity box" ng-repeat="activity in $ctrl.getActivityStream() track by $index">
 		<div class="activity-icon">
-			<img src="{{activity.icon}}" alt="">
+			<img ng-if="activity.timelineType == 'activity'" src="{{activity.icon}}" alt="">
+			<div ng-if="activity.timelineType == 'comment'" avatar ng-attr-size="16" ng-attr-user="{{ activity.actorId }}" ng-attr-displayname="{{ activity.actorDisplayName }}"></div>
 		</div>
 		<div class="activitysubject"
+			 ng-if="activity.timelineType == 'activity'"
 			 bind-html-compile="$ctrl.parseMessage(activity.subject_rich[0], activity.subject_rich[1])"></div>
+		<div class="activitysubject"
+			 ng-if="activity.timelineType == 'comment'">{{ activity.subject_rich[1].user.name }}</div>
 		<span class="activitytime has-tooltip live-relative-timestamp"
-			  data-timestamp="{{ activity.timestamp }}">{{ activity.timestamp/1000 | relativeDateFilter }}</span>
+			  data-timestamp="{{ activity.timelineTimestamp }}">{{ activity.timelineTimestamp/1000 | relativeDateFilter }}</span>
 		<div class="activitymessage" ng-bind-html="activity.message"></div>
+		<div id="foobar" ng-click="$ctrl.updateComment(activity)">{{ activity.commentModel }}</div>
 	</li>
 
 	<li ng-if="$ctrl.loading"><div class="icon-loading-small"></div></li>

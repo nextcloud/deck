@@ -107,6 +107,10 @@
 								<i class="icon icon-files-dark"></i>
 								<span>{{ attachmentCount(cardservice.get(c.id)) }}</span>
 							</div>
+							<div class="card-comments" ng-if="unreadCommentCount(cardservice.get(c.id)) > 0">
+								<i class="icon icon-comment"></i>
+								<span>{{ unreadCommentCount(cardservice.get(c.id)) }}</span>
+							</div>
 							<div class="card-assigned-users">
 								<div class="assigned-user" ng-repeat="user in cardservice.get(c.id).assignedUsers | limitTo: 3">
 									<avatar data-user="{{ user.participant.uid }}" data-displayname="{{ user.participant.displayname }}" data-tooltip></avatar>
