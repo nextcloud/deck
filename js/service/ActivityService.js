@@ -21,12 +21,16 @@
  */
 
 import app from '../app/App.js';
+import CommentCollection from '../legacy/commentcollection';
+import CommentModel from '../legacy/commentmodel';
 
 const DECK_ACTIVITY_TYPE_BOARD = 'deck_board';
 const DECK_ACTIVITY_TYPE_CARD = 'deck_card';
 
 /* global OC oc_requesttoken */
 class ActivityService {
+
+	static get RESULT_PER_PAGE() { return 5; }
 
 	constructor ($rootScope, $filter, $http, $q) {
 		this.running = false;
@@ -37,6 +41,31 @@ class ActivityService {
 		this.data = {};
 		this.data[DECK_ACTIVITY_TYPE_BOARD] = {};
 		this.data[DECK_ACTIVITY_TYPE_CARD] = {};
+		this.toEnhanceWithComments = [];
+		this.commentCollection = new CommentCollection();
+		this.commentCollection._limit = this.RESULT_PER_PAGE;
+		this.commentCollection.on('request', function() {
+			console.log("REQUEST");
+		}, this);
+		this.commentCollection.on('sync', function() {
+			console.log("SYNC");
+			for (let index in this.toEnhanceWithComments) {
+				let item = this.toEnhanceWithComments[index];
+				item.commentModel = this.commentCollection.get(item.subject_rich[1].comment);
+				if (typeof item.commentModel !== 'undefined') {
+					// FIXME: not working
+					this.toEnhanceWithComments.remove(item);
+				}
+			}
+			console.log(this.toEnhanceWithComments);
+			var firstUnread = this.commentCollection.findWhere({isUnread: true});
+			if (typeof firstUnread !== 'undefined') {
+				this.commentCollection.updateReadMarker();
+			}
+		}, this);
+		this.commentCollection.on('add', function(data) {
+			console.log("ADD");
+		}, this);
 		this.since = {
 			deck_card: {
 
@@ -49,10 +78,10 @@ class ActivityService {
 
 	static getUrl(type, id, since) {
 		if (type === DECK_ACTIVITY_TYPE_CARD) {
-			return OC.linkToOCS('apps/activity/api/v2/activity', 2) + 'filter?format=json&object_type=deck_card&object_id=' + id + '&limit=50&since=' + since;
+			return OC.linkToOCS('apps/activity/api/v2/activity', 2) + 'filter?format=json&object_type=deck_card&object_id=' + id + '&limit=' + this.RESULT_PER_PAGE + '&since=' + since;
 		}
 		if (type === DECK_ACTIVITY_TYPE_BOARD) {
-			return OC.linkToOCS('apps/activity/api/v2/activity', 2) + 'deck?format=json&limit=50&since=' + since;
+			return OC.linkToOCS('apps/activity/api/v2/activity', 2) + 'deck?format=json&limit=' + this.RESULT_PER_PAGE + '&since=' + since;
 		}
 	}
 
@@ -86,12 +115,14 @@ class ActivityService {
 			self.running = false;
 		});
 	}
+
 	fetchMoreActivities(type, id) {
 		this.checkData(type, id);
 		if (this.running === true) {
 			return this.runningPromise;
 		}
 		if (!this.since[type][id].finished) {
+			this.commentCollection.fetchNext();
 			this.runningPromise = this.fetchCardActivities(type, id, this.since[type][id].oldest);
 			return this.runningPromise;
 		}
@@ -112,6 +143,7 @@ class ActivityService {
 	}
 
 	addItem(type, id, item) {
+		const self = this;
 		const existingEntry = this.data[type][id].findIndex((entry) => { return entry.activity_id === item.activity_id; });
 		if (existingEntry !== -1) {
 			return;
@@ -123,6 +155,13 @@ class ActivityService {
 			return;
 		}
 		item.timestamp = new Date(item.datetime).getTime();
+
+		if (item.subject_rich[1].comment) {
+			item.commentModel = this.commentCollection.get(item.subject_rich[1].comment);
+			if (typeof item.commentModel === 'undefined') {
+				this.toEnhanceWithComments.push(item);
+			}
+		}
 		this.data[type][id].push(item);
 	}
 
@@ -177,6 +216,12 @@ class ActivityService {
 			return [];
 		}
 		return this.data[type][id];
+	}
+
+	loadComments(id) {
+		this.commentCollection.reset();
+		this.commentCollection.setObjectId(id);
+		this.commentCollection.fetchNext();
 	}
 
 }
