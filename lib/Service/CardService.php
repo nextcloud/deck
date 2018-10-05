@@ -37,6 +37,7 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\StatusException;
 use OCA\Deck\BadRequestException;
+use OCP\Comments\ICommentsManager;
 
 class CardService {
 
@@ -51,6 +52,7 @@ class CardService {
 	private $attachmentService;
 	private $currentUser;
 	private $activityManager;
+	private $commentsManager;
 
 	public function __construct(
 		CardMapper $cardMapper,
@@ -63,6 +65,7 @@ class CardService {
 		AssignedUsersMapper $assignedUsersMapper,
 		AttachmentService $attachmentService,
 		ActivityManager $activityManager,
+		ICommentsManager $commentsManager,
 		$userId
 	) {
 		$this->cardMapper = $cardMapper;
@@ -75,6 +78,7 @@ class CardService {
 		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->attachmentService = $attachmentService;
 		$this->activityManager = $activityManager;
+		$this->commentsManager = $commentsManager;
 		$this->currentUser = $userId;
 	}
 
@@ -83,8 +87,6 @@ class CardService {
 		$card->setAssignedUsers($this->assignedUsersMapper->find($cardId));
 		$card->setLabels($this->labelMapper->findAssignedLabelsForCard($cardId));
 		$card->setAttachmentCount($this->attachmentService->count($cardId));
-		/** @var ICommentsManager commentsManager */
-		$this->commentsManager = \OC::$server->getCommentsManager();
 		$lastRead = $this->commentsManager->getReadMark('deckCard', (string)$card->getId(), \OC::$server->getUserSession()->getUser());
 		$count = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId(), $lastRead);
 		$card->setCommentsUnread($count);

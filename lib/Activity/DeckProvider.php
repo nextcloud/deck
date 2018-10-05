@@ -29,6 +29,7 @@ use OCA\Deck\Db\Acl;
 use OCP\Activity\IEvent;
 use OCP\Activity\IProvider;
 use OCP\Comments\IComment;
+use OCP\Comments\ICommentsManager;
 use OCP\Comments\NotFoundException;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
@@ -43,11 +44,14 @@ class DeckProvider implements IProvider {
 	private $activityManager;
 	/** @var IUserManager */
 	private $userManager;
+	/** @var ICommentsManager */
+	private $commentsManager;
 
-	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, IUserManager $userManager, $userId) {
+	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, IUserManager $userManager, ICommentsManager $commentsManager, $userId) {
 		$this->userId = $userId;
 		$this->urlGenerator = $urlGenerator;
 		$this->activityManager = $activityManager;
+		$this->commentsManager = $commentsManager;
 		$this->userManager = $userManager;
 	}
 
@@ -237,7 +241,7 @@ class DeckProvider implements IProvider {
 		if (array_key_exists('comment', $subjectParams)) {
 			/** @var IComment $comment */
 			try {
-				$comment = \OC::$server->getCommentsManager()->get((int)$subjectParams['comment']);
+				$comment = $this->commentsManager->get((int)$subjectParams['comment']);
 				$event->setParsedMessage($comment->getMessage());
 			} catch (NotFoundException $e) {
 			}
