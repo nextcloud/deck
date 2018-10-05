@@ -7,10 +7,10 @@
 			<div class="author currentUser">admin</div>
 		</div>
 		<form class="newCommentForm">
-			<div contenteditable="true" class="message" data-placeholder="{{ $ctrl.t('deck', 'New comment …') }}" ng-model="$ctrl.$scope.newComment"></div>
+			<div contenteditable="true" class="message" data-placeholder="{{ $ctrl.t('deck', 'New comment …') }}" ng-model="$ctrl.$scope.newComment" ng-disabled="$ctrl.status.commentCreateLoading"></div>
 			<input class="submit icon-confirm has-tooltip" type="submit"
-				   value="" title="" data-original-title="Post" ng-click="$ctrl.postComment()">
-			<div class="submitLoading icon-loading-small hidden"></div>
+				   value="" title="" data-original-title="Post" ng-click="$ctrl.postComment()" ng-if="!$ctrl.status.commentCreateLoading">
+			<div class="submitLoading icon-loading-small" ng-if="$ctrl.status.commentCreateLoading"></div>
 		</form>
 	</div>
 </div>

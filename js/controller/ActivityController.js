@@ -33,6 +33,9 @@ class ActivityController {
 		this.$scope = $scope;
 		this.type = '';
 		this.loading = false;
+		this.status = {
+			commentCreateLoading: false
+		};
 		this.$scope.newComment = '';
 
 		const self = this;
@@ -51,6 +54,7 @@ class ActivityController {
 
 	postComment() {
 		const self = this;
+		this.status.commentCreateLoading = true;
 		var model = this.activityservice.commentCollection.create({
 			actorId: OC.getCurrentUser().uid,
 			actorDisplayName: OC.getCurrentUser().displayName,
@@ -66,6 +70,7 @@ class ActivityController {
 				console.log("SUCCESS");
 				self.$scope.newComment = '';
 				self.activityservice.fetchNewerActivities(self.type, self.element.id).then(function () {});
+				self.status.commentCreateLoading = false;
 			},
 			error: function() {
 
@@ -82,8 +87,9 @@ class ActivityController {
 
 	}
 
-	deleteComment() {
-
+	deleteComment(item) {
+		item.commentModel.destroy();
+		item.deleted = true;
 	}
 
 	getCommentDetails() {}
@@ -125,17 +131,8 @@ class ActivityController {
 	}
 
 	getActivityStream() {
-		const self = this;
 		let activities = this.activityservice.getData(this.type, this.element.id);
-		this.data = [];
-		for (let i in activities) {
-			let activity = activities[i];
-			activity.timelineType = 'activity';
-			activity.timelineTimestamp = activity.timestamp;
-			this.data.push(activity);
-		}
-		let sorted = this.data.sort((a, b) => b.timelineTimestamp - a.timelineTimestamp);
-		return sorted;
+		return activities;
 	}
 
 	page() {

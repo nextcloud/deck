@@ -66,6 +66,14 @@ var CommentModel = OC.Backbone.Model.extend(
 		};
 	},
 
+	url: function() {
+		if (typeof this.get('id') !== 'undefined') {
+			return this.collection.url() + this.get('id');
+		} else {
+			return this.collection.url();
+		}
+	}
+
 });
 
 export default CommentModel;

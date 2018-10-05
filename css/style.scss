@@ -946,6 +946,9 @@ input.input-inline {
 	position: absolute;
 	top: -5px;
 	right: 0;
+	a {
+		font-weight: normal;
+	}
 	button {
 		opacity: .5;
 		padding: 14px 19px;

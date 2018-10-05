@@ -53,11 +53,9 @@ class ActivityService {
 				let item = this.toEnhanceWithComments[index];
 				item.commentModel = this.commentCollection.get(item.subject_rich[1].comment);
 				if (typeof item.commentModel !== 'undefined') {
-					// FIXME: not working
-					this.toEnhanceWithComments.remove(item);
+					this.toEnhanceWithComments = this.toEnhanceWithComments.filter(entry => entry.id !== item.id);
 				}
 			}
-			console.log(this.toEnhanceWithComments);
 			var firstUnread = this.commentCollection.findWhere({isUnread: true});
 			if (typeof firstUnread !== 'undefined') {
 				this.commentCollection.updateReadMarker();
@@ -155,13 +153,15 @@ class ActivityService {
 			return;
 		}
 		item.timestamp = new Date(item.datetime).getTime();
-
+		item.type = 'activity';
 		if (item.subject_rich[1].comment) {
+			item.type = 'comment';
 			item.commentModel = this.commentCollection.get(item.subject_rich[1].comment);
 			if (typeof item.commentModel === 'undefined') {
 				this.toEnhanceWithComments.push(item);
 			}
 		}
+
 		this.data[type][id].push(item);
 	}
 
