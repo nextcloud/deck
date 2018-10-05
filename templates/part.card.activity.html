@@ -1,5 +1,3 @@
-<div class="icon icon-activity"></div>
-<div class="icon icon-comment"></div>
 <div id="commentsTabView">
 	<div class="newCommentRow comment" data-id="">
 		<div class="authorRow">
@@ -35,7 +33,7 @@
 			</div>
 		</div>
 		<span class="activitytime has-tooltip live-relative-timestamp"
-			  data-timestamp="{{ activity.timelineTimestamp }}">{{ activity.timelineTimestamp/1000 | relativeDateFilter }}</span>
+			  data-timestamp="{{ activity.timelineTimestamp }}">{{ activity.timestamp/1000 | relativeDateFilter }}</span>
 		<div class="activitymessage" ng-bind-html="activity.message"></div>
 	</li>
 

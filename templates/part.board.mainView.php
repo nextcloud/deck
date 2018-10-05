@@ -94,7 +94,7 @@
 						</div>
 
 						<div class="card-controls compact-item" ng-if="!compactMode">
-							<i class="icon icon-filetype-text" ng-if="cardservice.get(c.id).description" title="{{ cardservice.get(c.id).description }}"></i>
+							<i class="icon icon-description" ng-if="cardservice.get(c.id).description" title="{{ cardservice.get(c.id).description }}"></i>
 							<span class="due" ng-if="cardservice.get(c.id).duedate" ng-class="{'overdue': cardservice.get(c.id).overdue == 3, 'now': cardservice.get(c.id).overdue == 2, 'next': cardservice.get(c.id).overdue == 1  }" title="{{ cardservice.get(c.id).duedate }}">
 								<i class="icon icon-badge"></i>
 								<span data-timestamp="{{ cardservice.get(c.id).duedate | dateToTimestamp }}" class="live-relative-timestamp">{{ cardservice.get(c.id).duedate | relativeDateFilterString }}</span>

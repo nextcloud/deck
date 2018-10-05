@@ -454,9 +454,10 @@ input.input-inline {
 			opacity: 1;
 		}
 
-		.icon-filetype-text {
+		.icon-description {
 			margin: 10px;
 			margin-left: 0px;
+			opacity: 0.5;
 		}
 
 		.due {
@@ -955,6 +956,11 @@ input.input-inline {
 	}
 }
 
+#commentsTabView .comment {
+	position: relative;
+	padding: 0 0 15px;
+}
+
 .card-attachments {
 	.error {
 		padding-left: 38px;
@@ -1268,6 +1274,13 @@ input.input-inline {
 	clear: both;
 	overflow: initial;
 	margin-bottom: 0;
+	.icon {
+		display: inline-block;
+		background-size: contain;
+		margin: -3px;
+		margin-right: 5px;
+		opacity: 0.5;
+	}
 }
 
 .tabsContainer {
