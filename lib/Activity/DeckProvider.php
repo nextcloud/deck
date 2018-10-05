@@ -245,8 +245,8 @@ class DeckProvider implements IProvider {
 				$event->setParsedMessage($comment->getMessage());
 			} catch (NotFoundException $e) {
 			}
+			$params['comment'] = $subjectParams['comment'];
 		}
-		$params['comment'] = $subjectParams['comment'];
 		return $params;
 	}
 

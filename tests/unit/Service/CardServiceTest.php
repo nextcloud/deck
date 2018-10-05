@@ -36,6 +36,7 @@ use OCA\Deck\NotFoundException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
 use OCP\Activity\IEvent;
+use OCP\Comments\ICommentsManager;
 use Test\TestCase;
 
 class CardServiceTest extends TestCase {
@@ -61,6 +62,8 @@ class CardServiceTest extends TestCase {
 	private $attachmentService;
 	/** @var ActivityManager|\PHPUnit\Framework\MockObject\MockObject */
 	private $activityManager;
+	/** @var ICommentsManager|\PHPUnit\Framework\MockObject\MockObject */
+	private $commentsManager;
 
 	public function setUp() {
 		    parent::setUp();
@@ -74,6 +77,7 @@ class CardServiceTest extends TestCase {
         $this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
 		$this->attachmentService = $this->createMock(AttachmentService::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
+		$this->commentsManager = $this->createMock(ICommentsManager::class);
 		$this->cardService = new CardService(
 			$this->cardMapper,
 			$this->stackMapper,
@@ -85,6 +89,7 @@ class CardServiceTest extends TestCase {
 			$this->assignedUsersMapper,
 			$this->attachmentService,
 			$this->activityManager,
+			$this->commentsManager,
 			'user1'
         );
     }
@@ -104,11 +109,11 @@ class CardServiceTest extends TestCase {
     public function testFind() {
     	$card = new Card();
     	$card->setId(1337);
-        $this->cardMapper->expects($this->once())
+        $this->cardMapper->expects($this->any())
             ->method('find')
             ->with(123)
             ->willReturn($card);
-        $this->assignedUsersMapper->expects($this->once())
+        $this->assignedUsersMapper->expects($this->any())
 			->method('find')
 			->with(1337)
 			->willReturn(['user1', 'user2']);
