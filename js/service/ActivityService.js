@@ -43,12 +43,10 @@ class ActivityService {
 		this.data[DECK_ACTIVITY_TYPE_CARD] = {};
 		this.toEnhanceWithComments = [];
 		this.commentCollection = new CommentCollection();
-		this.commentCollection._limit = this.RESULT_PER_PAGE;
+		this.commentCollection._limit = ActivityService.RESULT_PER_PAGE;
 		this.commentCollection.on('request', function() {
-			console.log("REQUEST");
 		}, this);
-		this.commentCollection.on('sync', function() {
-			console.log("SYNC");
+		this.commentCollection.on('sync', function(a) {
 			for (let index in this.toEnhanceWithComments) {
 				let item = this.toEnhanceWithComments[index];
 				item.commentModel = this.commentCollection.get(item.subject_rich[1].comment);
@@ -61,8 +59,10 @@ class ActivityService {
 				this.commentCollection.updateReadMarker();
 			}
 		}, this);
-		this.commentCollection.on('add', function(data) {
-			console.log("ADD");
+		this.commentCollection.on('add', function(model, collection, options) {
+			// we need to update the model, because it consists of client data
+			// only, but the server might add meta data, e.g. about mentions
+			model.fetch();
 		}, this);
 		this.since = {
 			deck_card: {

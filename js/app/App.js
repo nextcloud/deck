@@ -49,6 +49,8 @@ import md from 'angular-markdown-it';
 import nganimate from 'angular-animate';
 import 'angular-file-upload';
 import ngInfiniteScroll from 'ng-infinite-scroll';
+import '../legacy/jquery.atwho.min';
+import '../legacy/jquery.caret.min';
 
 var app = angular.module('Deck', [
 	ngsanitize,

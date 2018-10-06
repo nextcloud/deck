@@ -34,7 +34,8 @@
 		</div>
 		<span class="activitytime has-tooltip live-relative-timestamp"
 			  data-timestamp="{{ activity.timelineTimestamp }}">{{ activity.timestamp/1000 | relativeDateFilter }}</span>
-		<div class="activitymessage" ng-bind-html="activity.message"></div>
+		<div class="activitymessage" ng-if="!activity.commentModel" ng-bind-html="activity.message"></div>
+		<div class="activitymessage" ng-if="activity.commentModel" bind-html-compile="$ctrl.formatMessage(activity)"></div>
 	</li>
 
 	<li ng-if="$ctrl.loading"><div class="icon-loading-small"></div></li>

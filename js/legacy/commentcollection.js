@@ -45,7 +45,7 @@ var CommentCollection = OC.Backbone.Collection.extend(
 	 *
 	 * @type int
 	 */
-	_limit : 2,
+	_limit : 5,
 
 	/**
 	 * Initializes the collection

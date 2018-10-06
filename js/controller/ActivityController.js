@@ -49,31 +49,146 @@ class ActivityController {
 			}
 			self.activityservice.fetchNewerActivities(self.type, self.element.id).then(function () {});
 		}, true);
+
+
+		let $target = $('.newCommentForm .message');
+		if (!$target) {
+			return;
+		}
+		$target.atwho({
+			at: "@",
+			data:[{id: 'johndoe', label: 'John Doe'}],
+			callbacks: {
+				highlighter: function (li) {
+					// misuse the highlighter callback to instead of
+					// highlighting loads the avatars.
+					var $li = $(li);
+					$li.find('.avatar').avatar(undefined, 32);
+					return $li;
+				},
+				sorter: function (q, items) { return items; }
+			},
+			displayTpl: function (item) {
+				return '<li>' +
+					'<span class="avatar-name-wrapper">' +
+					'<span class="avatar" ' +
+					'data-username="' + escapeHTML(item.id) + '" ' + // for avatars
+					'data-user="' + escapeHTML(item.id) + '" ' + // for contactsmenu
+					'data-user-display-name="' + escapeHTML(item.label) + '">' +
+					'</span>' +
+					'<strong>' + escapeHTML(item.label) + '</strong>' +
+					'</span></li>';
+			},
+			insertTpl: function (item) {
+				return '' +
+					'<span class="avatar-name-wrapper">' +
+					'<span class="avatar" ' +
+					'data-username="' + escapeHTML(item.id) + '" ' + // for avatars
+					'data-user="' + escapeHTML(item.id) + '" ' + // for contactsmenu
+					'data-user-display-name="' + escapeHTML(item.label) + '">' +
+					'</span>' +
+					'<strong>' + escapeHTML(item.label) + '</strong>' +
+					'</span>';
+			},
+			searchKey: "label"
+		});
+		$target.on('inserted.atwho', function (je, $el) {
+			$(je.target).find(
+					'span[data-username="' + $el.find('[data-username]').data('username') + '"]'
+				).avatar();
+		});
 	}
 
+	commentBodyToPlain(content) {
+		let $comment = $('<div/>').html(content);
+		$comment.find('.avatar-name-wrapper').each(function () {
+			var $this = $(this);
+			var $inserted = $this.parent();
+			$inserted.html('@' + $this.find('.avatar').data('username'));
+		});
+		$comment.html(OCP.Comments.richToPlain($comment.html()));
+		$comment.html($comment.html().replace(/<br\s*[\/]?>/gi, "\n"));
+		return $comment.text();
+	}
+
+	static _composeHTMLMention(uid, displayName) {
+		var avatar = '' +
+			'<span class="avatar" ng-attr-size="16" ' +
+			'ng-attr-user="' + _.escape(uid) + '" ' +
+			'ng-attr-displayname="' + _.escape(displayName) + '">' +
+			'</span>';
+
+		var isCurrentUser = (uid === OC.getCurrentUser().uid);
+
+		return '' +
+			'<span class="atwho-inserted">' +
+			'<span class="avatar-name-wrapper' + (isCurrentUser ? ' currentUser' : '') + '">' +
+			avatar +
+			'<strong>' + _.escape(displayName) + '</strong>' +
+			'</span>' +
+			'</span>';
+	}
+
+	formatMessage(activity) {
+		let message = activity.message;
+		let mentions = activity.commentModel.get('mentions');
+		const editMode = false;
+		message = escapeHTML(message).replace(/\n/g, '<br/>');
+
+		for(var i in mentions) {
+			if(!mentions.hasOwnProperty(i)) {
+				return;
+			}
+			var mention = '@' + mentions[i].mentionId;
+			// escape possible regex characters in the name
+			mention = mention.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+			const displayName = ActivityController._composeHTMLMention(mentions[i].mentionId, mentions[i].mentionDisplayName);
+			// replace every mention either at the start of the input or after a whitespace
+			// followed by a non-word character.
+			message = message.replace(new RegExp("(^|\\s)(" + mention + ")\\b", 'g'),
+				function(match, p1) {
+					// to  get number of whitespaces (0 vs 1) right
+					return p1+displayName;
+				}
+			);
+
+		}
+		if(editMode !== true) {
+			message = OCP.Comments.plainToRich(message);
+		}
+		return message;
+	}
 
 	postComment() {
 		const self = this;
 		this.status.commentCreateLoading = true;
+
+		let content = this.commentBodyToPlain(self.$scope.newComment);
+		if (content.length < 1) {
+			self.status.commentCreateLoading = false;
+			OC.Notification.showTemporary(t('deck', 'Please provide a content for your comment.'));
+			return;
+		}
 		var model = this.activityservice.commentCollection.create({
 			actorId: OC.getCurrentUser().uid,
 			actorDisplayName: OC.getCurrentUser().displayName,
 			actorType: 'users',
 			verb: 'comment',
-			message: self.$scope.newComment,
+			message: content,
 			creationDateTime: (new Date()).toUTCString()
 		}, {
 			at: 0,
 			// wait for real creation before adding
 			wait: true,
 			success: function() {
-				console.log("SUCCESS");
 				self.$scope.newComment = '';
 				self.activityservice.fetchNewerActivities(self.type, self.element.id).then(function () {});
 				self.status.commentCreateLoading = false;
 			},
 			error: function() {
-
+				self.status.commentCreateLoading = false;
+				OC.Notification.showTemporary(t('deck', 'Posting the comment failed.'));
 			}
 		});
 	}
