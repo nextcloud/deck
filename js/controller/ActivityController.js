@@ -94,8 +94,8 @@ class ActivityController {
 		});
 		$target.on('inserted.atwho', function (je, $el) {
 			$(je.target).find(
-					'span[data-username="' + $el.find('[data-username]').data('username') + '"]'
-				).avatar();
+				'span[data-username="' + $el.find('[data-username]').data('username') + '"]'
+			).avatar();
 		});
 	}
 

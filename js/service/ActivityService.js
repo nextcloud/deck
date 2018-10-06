@@ -48,10 +48,12 @@ class ActivityService {
 		}, this);
 		this.commentCollection.on('sync', function(a) {
 			for (let index in this.toEnhanceWithComments) {
-				let item = this.toEnhanceWithComments[index];
-				item.commentModel = this.commentCollection.get(item.subject_rich[1].comment);
-				if (typeof item.commentModel !== 'undefined') {
-					this.toEnhanceWithComments = this.toEnhanceWithComments.filter(entry => entry.id !== item.id);
+				if (this.toEnhanceWithComments.hasOwnProperty(index)) {
+					let item = this.toEnhanceWithComments[index];
+					item.commentModel = this.commentCollection.get(item.subject_rich[1].comment);
+					if (typeof item.commentModel !== 'undefined') {
+						this.toEnhanceWithComments = this.toEnhanceWithComments.filter(entry => entry.id !== item.id);
+					}
 				}
 			}
 			var firstUnread = this.commentCollection.findWhere({isUnread: true});
