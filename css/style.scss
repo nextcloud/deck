@@ -941,25 +941,59 @@ input.input-inline {
 
 .activity-icon {
 	opacity: 1 !important;
+	.avatardiv-container {
+		top: -4px;
+		left: -7px;
+		margin-right: 5px;
+		img {
+			max-width: 24px;
+			max-height: 24px;
+		}
+	}
 }
 
+.activitysubject.commentAuthor {
+	margin-left: 26px;
+	margin-right: 0;
+	margin-top: 10px;
+}
+.activityTabView {
+	.activity {
+		margin-bottom: 20px;
+	}
+	.activitytime {
+		margin: 0 !important;
+	}
+}
 .activitysubject .app-popover-menu-utils {
 	display: inline-block;
-	position: absolute;
-	top: -5px;
-	right: 0;
 	a {
 		font-weight: normal;
 	}
 	button {
 		opacity: .5;
-		padding: 14px 19px;
+		padding: 7px;
+		margin-left: 10px;
 	}
 }
 
-#commentsTabView .comment {
-	position: relative;
-	padding: 0 0 15px;
+#commentsTabView {
+	.newCommentRow .avatardiv-container {
+		left: -7px;
+	}
+	.comment {
+		position: relative;
+		padding: 0 0 15px;
+
+		.avatardiv {
+			width: 24px;
+			height: 24px;
+			line-height: 24px;
+		}
+	}
+	.newCommentForm {
+		margin-left: 26px;
+	}
 }
 
 .card-attachments {

@@ -38,6 +38,8 @@ class ActivityController {
 		};
 		this.$scope.newComment = '';
 
+		this.currentUser = OC.getCurrentUser();
+
 		const self = this;
 		this.$scope.$watch(function () {
 			return self.element.id;
@@ -115,7 +117,7 @@ class ActivityController {
 		var avatar = '' +
 			'<span class="avatar" ng-attr-size="16" ' +
 			'ng-attr-user="' + _.escape(uid) + '" ' +
-			'ng-attr-displayname="' + _.escape(displayName) + '">' +
+			'ng-attr-displayname="' + _.escape(displayName) + '" ng-attr-contactsmenu="true">' +
 			'</span>';
 
 		var isCurrentUser = (uid === OC.getCurrentUser().uid);
@@ -263,6 +265,9 @@ class ActivityController {
 		return this.activityservice.runningNewer;
 	}
 
+	t(text) {
+		return t('deck', text);
+	}
 }
 
 let activityComponent = {
