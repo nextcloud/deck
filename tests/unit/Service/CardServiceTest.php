@@ -37,33 +37,38 @@ use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
 use OCP\Activity\IEvent;
 use OCP\Comments\ICommentsManager;
+use OCP\IUser;
+use OCP\IUserManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 class CardServiceTest extends TestCase {
 
-    /** @var CardService|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var CardService|MockObject */
     private $cardService;
-    /** @var CardMapper|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var CardMapper|MockObject */
     private $cardMapper;
-    /** @var StackMapper|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var StackMapper|MockObject */
     private $stackMapper;
-    /** @var PermissionService|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var PermissionService|MockObject */
     private $permissionService;
     /** @var NotificationHelper */
     private $notificationHelper;
-    /** @var AssignedUsersMapper|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var AssignedUsersMapper|MockObject */
     private $assignedUsersMapper;
-  	/** @var BoardService|\PHPUnit\Framework\MockObject\MockObject */
+  	/** @var BoardService|MockObject */
   	private $boardService;
-  	/** @var LabelMapper|\PHPUnit\Framework\MockObject\MockObject */
+  	/** @var LabelMapper|MockObject */
   	private $labelMapper;
 	private $boardMapper;
-	/** @var AttachmentService|\PHPUnit\Framework\MockObject\MockObject */
+	/** @var AttachmentService|MockObject */
 	private $attachmentService;
-	/** @var ActivityManager|\PHPUnit\Framework\MockObject\MockObject */
+	/** @var ActivityManager|MockObject */
 	private $activityManager;
-	/** @var ICommentsManager|\PHPUnit\Framework\MockObject\MockObject */
+	/** @var ICommentsManager|MockObject */
 	private $commentsManager;
+	/** @var ICommentsManager|MockObject */
+	private $userManager;
 
 	public function setUp() {
 		    parent::setUp();
@@ -78,6 +83,7 @@ class CardServiceTest extends TestCase {
 		$this->attachmentService = $this->createMock(AttachmentService::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->commentsManager = $this->createMock(ICommentsManager::class);
+		$this->userManager = $this->createMock(IUserManager::class);
 		$this->cardService = new CardService(
 			$this->cardMapper,
 			$this->stackMapper,
@@ -90,6 +96,7 @@ class CardServiceTest extends TestCase {
 			$this->attachmentService,
 			$this->activityManager,
 			$this->commentsManager,
+			$this->userManager,
 			'user1'
         );
     }
@@ -107,6 +114,10 @@ class CardServiceTest extends TestCase {
 	}
 
     public function testFind() {
+		$user = $this->createMock(IUser::class);
+		$this->userManager->expects($this->once())
+			->method('get')
+			->willReturn($user);
     	$card = new Card();
     	$card->setId(1337);
         $this->cardMapper->expects($this->any())
