@@ -20,7 +20,7 @@
  *
  */
 
-/* global OC OCA */
+/* global OC OCA OCP _ */
 
 import CommentCollection from '../legacy/commentcollection';
 import CommentModel from '../legacy/commentmodel';
@@ -59,7 +59,7 @@ class ActivityController {
 			return;
 		}
 		$target.atwho({
-			at: "@",
+			at: '@',
 			callbacks: {
 				remoteFilter: function(query, callback) {
 					let uids = self.boardservice.getUsers();
@@ -97,7 +97,7 @@ class ActivityController {
 					'<strong>' + escapeHTML(item.displayname) + '</strong>' +
 					'</span>';
 			},
-			searchKey: "label"
+			searchKey: 'displayname'
 		});
 		$target.on('inserted.atwho', function (je, $el) {
 			$(je.target).find(
@@ -153,7 +153,7 @@ class ActivityController {
 			const displayName = ActivityController._composeHTMLMention(mentions[i].mentionId, mentions[i].mentionDisplayName);
 			// replace every mention either at the start of the input or after a whitespace
 			// followed by a non-word character.
-			message = message.replace(new RegExp("(^|\\s)(" + mention + ")\\b", 'g'),
+			message = message.replace(new RegExp('(^|\\s)(' + mention + ')\\b', 'g'),
 				function(match, p1) {
 					// to  get number of whitespaces (0 vs 1) right
 					return p1+displayName;
