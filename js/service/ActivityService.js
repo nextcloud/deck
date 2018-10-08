@@ -223,7 +223,6 @@ class ActivityService {
 	loadComments(id) {
 		this.commentCollection.reset();
 		this.commentCollection.setObjectId(id);
-		this.commentCollection.fetchNext();
 	}
 
 }

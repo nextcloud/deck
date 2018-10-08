@@ -208,10 +208,10 @@ class ActivityController {
 	}
 
 	updateComment(item) {
-		let message = this.formatMessage(item);
-		item.commentEdit = message;
+		item.commentEdit = this.formatMessage(item);
 		let $target = $('.newCommentForm .message');
 		this.applyAtWho($target);
+		/** Workaround to trigger avatar rendering after the view has been updated */
 		window.setTimeout(function () {
 			$target.find('.avatar').avatar(undefined, 16);
 		}, 0);

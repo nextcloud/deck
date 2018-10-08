@@ -99,10 +99,18 @@ var CommentModel = OC.Backbone.Model.extend(
 	},
 
 	url: function() {
-		if (typeof this.get('id') !== 'undefined') {
-			return this.collection.url() + this.get('id');
+		let baseUrl;
+		if (typeof this.collection === 'undefined') {
+			baseUrl = OC.linkToRemote('dav') + '/comments/' +
+				encodeURIComponent(this.get('objectType')) + '/' +
+				encodeURIComponent(this.get('objectId')) + '/';
 		} else {
-			return this.collection.url();
+			baseUrl = this.collection.url();
+		}
+		if (typeof this.get('id') !== 'undefined') {
+			return baseUrl + this.get('id');
+		} else {
+			return baseUrl;
 		}
 	}
 });
