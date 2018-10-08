@@ -245,11 +245,9 @@ class ActivityController {
 	deleteComment(item) {
 		item.commentModel.destroy();
 		item.deleted = true;
+		item.commentModel = undefined;
+		item.message = t('deck', 'The comment has been deleted');
 	}
-
-	getCommentDetails() {}
-
-
 
 	getData(id) {
 		return this.activityservice.getData(this.type, id);
