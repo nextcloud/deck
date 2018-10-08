@@ -51,6 +51,7 @@ class ActivityController {
 				self.fetchUntilResults();
 			}
 			self.activityservice.fetchNewerActivities(self.type, self.element.id).then(function () {});
+			self.cardservice.getCurrent().commentsUnread = 0;
 		}, true);
 
 		let $target = $('.newCommentForm .message');

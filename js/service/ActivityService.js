@@ -30,7 +30,7 @@ const DECK_ACTIVITY_TYPE_CARD = 'deck_card';
 /* global OC oc_requesttoken */
 class ActivityService {
 
-	static get RESULT_PER_PAGE() { return 5; }
+	static get RESULT_PER_PAGE() { return 50; }
 
 	constructor ($rootScope, $filter, $http, $q) {
 		this.running = false;
@@ -116,7 +116,7 @@ class ActivityService {
 		});
 	}
 
-	fetchMoreActivities(type, id) {
+	fetchMoreActivities(type, id, success) {
 		this.checkData(type, id);
 		if (this.running === true) {
 			return this.runningPromise;
