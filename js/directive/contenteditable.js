@@ -22,10 +22,13 @@
 
 import app from '../app/App';
 
-app.directive("ngContenteditable", function($compile) {
+app.directive('ngContenteditable', function($compile) {
 	return {
-		require: "ngModel",
+		require: 'ngModel',
 		restrict: 'A',
+		scope: {
+			submit: '&ngSubmit'
+		},
 		link: function(scope, element, attrs, ngModel) {
 
 			//read the text typed in the div (syncing model with the view)
@@ -37,13 +40,20 @@ app.directive("ngContenteditable", function($compile) {
 			//$render is invoked when the modelvalue differs from the viewvalue
 			//see documentation: https://docs.angularjs.org/api/ng/type/ngModel.NgModelController#
 			ngModel.$render = function() {
-				element.html(ngModel.$viewValue || "");
+				element.html(ngModel.$viewValue || '');
 			};
 
 			//do this whenever someone starts typing
-			element.bind("blur keyup change", function() {
+			element.bind('blur keyup change', function(event) {
 				scope.$apply(read);
 			});
+
+			element.bind('keydown', function(event) {
+				if(event.which == '13' && event.shiftKey) {
+					scope.submit();
+				}
+			});
+
 		}
 	};
 });

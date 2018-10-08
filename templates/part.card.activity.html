@@ -4,10 +4,10 @@
 			<div class="avatardiv" avatar ng-attr-user="{{ $ctrl.currentUser.uid }}" ng-attr-displayname="{{ $ctrl.currentUser.displayName }}" ng-attr-size="24"></div>
 			<div class="author currentUser">{{ $ctrl.currentUser.displayName }}</div>
 		</div>
-		<form class="newCommentForm">
-			<div ng-contenteditable contenteditable="true" class="message" data-placeholder="{{ $ctrl.t('New comment …') }}" ng-model="$ctrl.$scope.newComment" ng-disabled="$ctrl.status.commentCreateLoading"></div>
+		<form class="newCommentForm" ng-submit="$ctrl.postComment()">
+			<div ng-contenteditable contenteditable="true" class="message" ng-submit="$ctrl.postComment()" data-placeholder="{{ $ctrl.t('New comment …') }}" ng-model="$ctrl.$scope.newComment" ng-disabled="$ctrl.status.commentCreateLoading"></div>
 			<input class="submit icon-confirm has-tooltip" type="submit"
-				   value="" title="" data-original-title="Post" ng-click="$ctrl.postComment()" ng-if="!$ctrl.status.commentCreateLoading">
+				   value="" title="" data-original-title="Post" ng-if="!$ctrl.status.commentCreateLoading">
 			<div class="submitLoading icon-loading-small" ng-if="$ctrl.status.commentCreateLoading"></div>
 		</form>
 	</div>
