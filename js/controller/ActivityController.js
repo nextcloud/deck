@@ -56,6 +56,10 @@ class ActivityController {
 
 		let $target = $('.newCommentForm .message');
 		this.applyAtWho($target);
+
+		this.activityservice.subscribe(this.$scope, function() {
+			self.$scope.$apply();
+		})
 	}
 
 	applyAtWho($target) {

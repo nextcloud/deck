@@ -38,6 +38,7 @@ class ActivityService {
 		this.$filter = $filter;
 		this.$http = $http;
 		this.$q = $q;
+		this.$rootScope = $rootScope;
 		this.data = {};
 		this.data[DECK_ACTIVITY_TYPE_BOARD] = {};
 		this.data[DECK_ACTIVITY_TYPE_CARD] = {};
@@ -52,7 +53,7 @@ class ActivityService {
 					let item = this.toEnhanceWithComments[index];
 					item.commentModel = this.commentCollection.get(item.subject_rich[1].comment);
 					if (typeof item.commentModel !== 'undefined') {
-						this.toEnhanceWithComments = this.toEnhanceWithComments.filter(entry => entry.id !== item.id);
+						this.toEnhanceWithComments = this.toEnhanceWithComments.filter(entry => entry.activity_id !== item.activity_id);
 					}
 				}
 			}
@@ -60,6 +61,7 @@ class ActivityService {
 			if (typeof firstUnread !== 'undefined') {
 				this.commentCollection.updateReadMarker();
 			}
+			this.notify();
 		}, this);
 		this.commentCollection.on('add', function(model, collection, options) {
 			// we need to update the model, because it consists of client data
@@ -74,6 +76,19 @@ class ActivityService {
 
 			},
 		};
+	}
+
+	/**
+	 * We need a event here to properly update scope once the external data from
+	 * the comments backbone js code has changed
+	 */
+	subscribe(scope, callback) {
+		let handler = this.$rootScope.$on('notify-comment-update', callback);
+		scope.$on('$destroy', handler);
+	}
+
+	notify() {
+		this.$rootScope.$emit('notify-comment-update');
 	}
 
 	static getUrl(type, id, since) {
@@ -117,13 +132,16 @@ class ActivityService {
 	}
 
 	fetchMoreActivities(type, id, success) {
+		const self = this;
 		this.checkData(type, id);
 		if (this.running === true) {
 			return this.runningPromise;
 		}
 		if (!this.since[type][id].finished) {
-			this.commentCollection.fetchNext();
 			this.runningPromise = this.fetchCardActivities(type, id, this.since[type][id].oldest);
+			this.runningPromise.then(function() {
+				self.commentCollection.fetchNext();
+			});
 			return this.runningPromise;
 		}
 		return Promise.reject();
