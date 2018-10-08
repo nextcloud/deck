@@ -122,7 +122,7 @@ class Notifier implements INotifier {
 					[
 						'user' => [
 							'type' => 'user',
-							'id' => $params[0],
+							'id' => $params[2],
 							'name' => $dn,
 						]
 					]
