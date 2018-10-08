@@ -26,9 +26,10 @@ import CommentCollection from '../legacy/commentcollection';
 import CommentModel from '../legacy/commentmodel';
 
 class ActivityController {
-	constructor ($scope, CardService, ActivityService) {
+	constructor ($scope, CardService, ActivityService, BoardService) {
 		'ngInject';
 		this.cardservice = CardService;
+		this.boardservice = BoardService;
 		this.activityservice = ActivityService;
 		this.$scope = $scope;
 		this.type = '';
@@ -59,8 +60,12 @@ class ActivityController {
 		}
 		$target.atwho({
 			at: "@",
-			data:[{id: 'johndoe', label: 'John Doe'}],
 			callbacks: {
+				remoteFilter: function(query, callback) {
+					let uids = self.boardservice.getUsers();
+					uids = uids.filter(x => x.uid.toLowerCase().includes(query.toLowerCase()) || x.displayname.toLowerCase().includes(query.toLowerCase()));
+					callback(uids);
+				},
 				highlighter: function (li) {
 					// misuse the highlighter callback to instead of
 					// highlighting loads the avatars.
@@ -74,22 +79,22 @@ class ActivityController {
 				return '<li>' +
 					'<span class="avatar-name-wrapper">' +
 					'<span class="avatar" ' +
-					'data-username="' + escapeHTML(item.id) + '" ' + // for avatars
-					'data-user="' + escapeHTML(item.id) + '" ' + // for contactsmenu
-					'data-user-display-name="' + escapeHTML(item.label) + '">' +
+					'data-username="' + escapeHTML(item.uid) + '" ' + // for avatars
+					'data-user="' + escapeHTML(item.uid) + '" ' + // for contactsmenu
+					'data-user-display-name="' + escapeHTML(item.displayname) + '">' +
 					'</span>' +
-					'<strong>' + escapeHTML(item.label) + '</strong>' +
+					'<strong>' + escapeHTML(item.displayname) + '</strong>' +
 					'</span></li>';
 			},
 			insertTpl: function (item) {
 				return '' +
 					'<span class="avatar-name-wrapper">' +
 					'<span class="avatar" ' +
-					'data-username="' + escapeHTML(item.id) + '" ' + // for avatars
-					'data-user="' + escapeHTML(item.id) + '" ' + // for contactsmenu
-					'data-user-display-name="' + escapeHTML(item.label) + '">' +
+					'data-username="' + escapeHTML(item.uid) + '" ' + // for avatars
+					'data-user="' + escapeHTML(item.uid) + '" ' + // for contactsmenu
+					'data-user-display-name="' + escapeHTML(item.displayname) + '">' +
 					'</span>' +
-					'<strong>' + escapeHTML(item.label) + '</strong>' +
+					'<strong>' + escapeHTML(item.displayname) + '</strong>' +
 					'</span>';
 			},
 			searchKey: "label"
