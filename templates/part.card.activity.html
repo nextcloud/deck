@@ -5,13 +5,12 @@
 			<div class="author currentUser">{{ $ctrl.currentUser.displayName }}</div>
 		</div>
 		<form class="newCommentForm">
-			<div contenteditable="true" class="message" data-placeholder="{{ $ctrl.t('New comment …') }}" ng-model="$ctrl.$scope.newComment" ng-disabled="$ctrl.status.commentCreateLoading"></div>
+			<div ng-contenteditable contenteditable="true" class="message" data-placeholder="{{ $ctrl.t('New comment …') }}" ng-model="$ctrl.$scope.newComment" ng-disabled="$ctrl.status.commentCreateLoading"></div>
 			<input class="submit icon-confirm has-tooltip" type="submit"
 				   value="" title="" data-original-title="Post" ng-click="$ctrl.postComment()" ng-if="!$ctrl.status.commentCreateLoading">
 			<div class="submitLoading icon-loading-small" ng-if="$ctrl.status.commentCreateLoading"></div>
 		</form>
 	</div>
-</div>
 <ul class="activities" infinite-scroll="$ctrl.page()" infinite-scroll-container="'#app-sidebar'" infinite-scroll-disabled="$ctrl.activityservice.running" infinite-scroll-immediate-check="false">
 	<li ng-if="$ctrl.loadingNewer()"><div class="icon-loading-small"></div></li>
 	<li class="activity box" ng-repeat="activity in $ctrl.getActivityStream() track by $index">
@@ -35,8 +34,14 @@
 			</div>
 		</div>
 		<div class="activitymessage" ng-if="!activity.commentModel" ng-bind-html="activity.message"></div>
-		<div class="activitymessage" ng-if="activity.commentModel" bind-html-compile="$ctrl.formatMessage(activity)"></div>
+		<div class="activitymessage" ng-if="activity.commentModel && !activity.commentEdit" bind-html-compile="$ctrl.formatMessage(activity)"></div>
+		<form class="newCommentForm" ng-show="activity.commentEdit">
+			<div ng-contenteditable contenteditable="true" class="message" ng-model="activity.commentEdit"></div>
+			<input class="submit icon-confirm has-tooltip" type="submit"
+				   value="" title="" data-original-title="Post" ng-click="$ctrl.editComment(activity)">
+		</form>
 	</li>
 
 	<li ng-if="$ctrl.loading"><div class="icon-loading-small"></div></li>
 </ul>
+</div>

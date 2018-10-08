@@ -22,9 +22,10 @@
 
 import app from '../app/App';
 
-app.directive("contenteditable", function() {
+app.directive("ngContenteditable", function($compile) {
 	return {
 		require: "ngModel",
+		restrict: 'A',
 		link: function(scope, element, attrs, ngModel) {
 
 			//read the text typed in the div (syncing model with the view)

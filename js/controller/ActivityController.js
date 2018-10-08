@@ -53,8 +53,12 @@ class ActivityController {
 			self.activityservice.fetchNewerActivities(self.type, self.element.id).then(function () {});
 		}, true);
 
-
 		let $target = $('.newCommentForm .message');
+		this.applyAtWho($target);
+	}
+
+	applyAtWho($target) {
+		const self = this;
 		if (!$target) {
 			return;
 		}
@@ -104,6 +108,9 @@ class ActivityController {
 				'span[data-username="' + $el.find('[data-username]').data('username') + '"]'
 			).avatar();
 		});
+		$target.on('shown.atwho', function (je) {
+			$target.find('.avatar').avatar();
+		});
 	}
 
 	commentBodyToPlain(content) {
@@ -120,7 +127,7 @@ class ActivityController {
 
 	static _composeHTMLMention(uid, displayName) {
 		var avatar = '' +
-			'<span class="avatar" ng-attr-size="16" ' +
+			'<span class="avatar" data-username="' + _.escape(uid) + '" data-user="' + _.escape(uid) + '" ng-attr-size="16" ' +
 			'ng-attr-user="' + _.escape(uid) + '" ' +
 			'ng-attr-displayname="' + _.escape(displayName) + '" ng-attr-contactsmenu="true">' +
 			'</span>';
@@ -128,7 +135,7 @@ class ActivityController {
 		var isCurrentUser = (uid === OC.getCurrentUser().uid);
 
 		return '' +
-			'<span class="atwho-inserted">' +
+			'<span class="atwho-inserted" contenteditable="false">' +
 			'<span class="avatar-name-wrapper' + (isCurrentUser ? ' currentUser' : '') + '">' +
 			avatar +
 			'<strong>' + _.escape(displayName) + '</strong>' +
@@ -201,12 +208,38 @@ class ActivityController {
 	}
 
 	updateComment(item) {
-		let newMessage = 'Edited at ' + (new Date());
-		item.commentModel.save({
-			message: newMessage,
-		});
-		item.message = newMessage;
+		let message = this.formatMessage(item);
+		item.commentEdit = message;
+		let $target = $('.newCommentForm .message');
+		this.applyAtWho($target);
+		window.setTimeout(function () {
+			$target.find('.avatar').avatar(undefined, 16);
+		}, 0);
+	}
 
+	editComment(item) {
+		const self = this;
+		let content = this.commentBodyToPlain(item.commentEdit);
+		if (content.length < 1) {
+			OC.Notification.showTemporary(t('deck', 'Please provide a content for your comment.'));
+			return;
+		}
+		/** We need to save the model and afterwards run a fetch to update the mentions
+		 * and call apply to propagate the changes to angular
+		 */
+		item.commentModel.on('sync', function() {
+			item.commentModel.off('sync');
+			item.commentModel.fetch({
+				success: function() {
+					self.$scope.$apply();
+				}
+			});
+		});
+		item.commentModel.save({
+			message: content,
+		});
+		item.message = content;
+		item.commentEdit = undefined;
 	}
 
 	deleteComment(item) {
