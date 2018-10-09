@@ -46,12 +46,16 @@ class ActivityController {
 			return self.element.id;
 		}, function (params) {
 			if (self.getData(self.element.id).length === 0) {
-				self.activityservice.loadComments(self.element.id);
+				if (self.type === 'deck_card') {
+					self.activityservice.loadComments(self.element.id);
+				}
 				self.loading = true;
 				self.fetchUntilResults();
 			}
 			self.activityservice.fetchNewerActivities(self.type, self.element.id).then(function () {});
-			self.cardservice.getCurrent().commentsUnread = 0;
+			if (self.type === 'deck_card') {
+				self.cardservice.getCurrent().commentsUnread = 0;
+			}
 		}, true);
 
 		let $target = $('.newCommentForm .message');

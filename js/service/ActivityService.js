@@ -124,7 +124,7 @@ class ActivityService {
 			self.running = false;
 			return response;
 		}, function (error) {
-			if (error.status === 304) {
+			if (error.status === 304 || error.status === 404) {
 				self.since[type][id].finished = true;
 			}
 			self.running = false;
@@ -140,7 +140,9 @@ class ActivityService {
 		if (!this.since[type][id].finished) {
 			this.runningPromise = this.fetchCardActivities(type, id, this.since[type][id].oldest);
 			this.runningPromise.then(function() {
-				self.commentCollection.fetchNext();
+				if (type === 'deck_card') {
+					self.commentCollection.fetchNext();
+				}
 			});
 			return this.runningPromise;
 		}

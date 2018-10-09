@@ -1,5 +1,5 @@
 <div id="commentsTabView">
-	<div class="newCommentRow comment" data-id="">
+	<div class="newCommentRow comment" data-id="" ng-show="$ctrl.type === 'deck_card'">
 		<div class="authorRow">
 			<div class="avatardiv" avatar ng-attr-user="{{ $ctrl.currentUser.uid }}" ng-attr-displayname="{{ $ctrl.currentUser.displayName }}" ng-attr-size="24"></div>
 			<div class="author currentUser">{{ $ctrl.currentUser.displayName }}</div>
