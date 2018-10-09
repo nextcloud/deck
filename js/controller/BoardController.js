@@ -486,4 +486,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.unreadCommentCount = function(card) {
 		return card.commentsUnread;
 	};
+
+	$scope.isTimelineEnabled = function() {
+		return OCP.Comments && OCA.Activity;
+	};
+
 });

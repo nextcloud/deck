@@ -278,4 +278,8 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 		};
 	};
 
+	$scope.isTimelineEnabled = function() {
+		return OCP.Comments && OCA.Activity;
+	};
+
 });
