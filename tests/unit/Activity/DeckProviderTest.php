@@ -26,6 +26,7 @@ namespace OCA\Deck\Activity;
 use OC\Activity\Event;
 use OCA\Deck\Db\Acl;
 use OCP\Activity\IEvent;
+use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
 use OCP\IL10N;
 use OCP\IURLGenerator;
@@ -446,6 +447,30 @@ class DeckProviderTest extends TestCase {
 			],
 		];
 		$actual = $this->invokePrivate($this->provider, 'parseParamForChanges', [$subjectParams, $params, $event]);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testParseParamForComment() {
+		$comment = $this->createMock(IComment::class);
+		$comment->expects($this->once())
+			->method('getMessage')
+			->willReturn('Comment content');
+		$this->commentsManager->expects($this->once())
+			->method('get')
+			->with(123)
+			->willReturn($comment);
+		$event = $this->createMock(IEvent::class);
+		$event->expects($this->once())
+			->method('setParsedMessage')
+			->with('Comment content');
+		$params = [];
+		$subjectParams = [
+			'comment' => 123
+		];
+		$expected = [
+			'comment' => 123,
+		];
+		$actual = $this->invokePrivate($this->provider, 'parseParamForComment', [$subjectParams, $params, $event]);
 		$this->assertEquals($expected, $actual);
 	}
 
