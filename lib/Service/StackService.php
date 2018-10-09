@@ -34,6 +34,7 @@ use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\StatusException;
 use OCA\Deck\BadRequestException;
+use OCP\Comments\ICommentsManager;
 
 
 class StackService {

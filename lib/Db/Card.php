@@ -43,6 +43,7 @@ class Card extends RelationalEntity {
 	protected $duedate;
 	protected $notified = false;
 	protected $deletedAt = 0;
+	protected $commentsUnread = 0;
 
 	private $databaseType = 'sqlite';
 
@@ -65,6 +66,7 @@ class Card extends RelationalEntity {
 		$this->addRelation('attachments');
 		$this->addRelation('attachmentCount');
 		$this->addRelation('participants');
+		$this->addRelation('commentsUnread');
 		$this->addResolvable('owner');
 	}
 

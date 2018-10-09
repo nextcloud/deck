@@ -94,7 +94,7 @@
 						</div>
 
 						<div class="card-controls compact-item" ng-if="!compactMode">
-							<i class="icon icon-filetype-text" ng-if="cardservice.get(c.id).description" title="{{ cardservice.get(c.id).description }}"></i>
+							<i class="icon icon-description" ng-if="cardservice.get(c.id).description" title="{{ cardservice.get(c.id).description }}"></i>
 							<span class="due" ng-if="cardservice.get(c.id).duedate" ng-class="{'overdue': cardservice.get(c.id).overdue == 3, 'now': cardservice.get(c.id).overdue == 2, 'next': cardservice.get(c.id).overdue == 1  }" title="{{ cardservice.get(c.id).duedate }}">
 								<i class="icon icon-badge"></i>
 								<span data-timestamp="{{ cardservice.get(c.id).duedate | dateToTimestamp }}" class="live-relative-timestamp">{{ cardservice.get(c.id).duedate | relativeDateFilterString }}</span>
@@ -106,6 +106,10 @@
 							<div class="card-files" ng-if="attachmentCount(cardservice.get(c.id)) > 0">
 								<i class="icon icon-files-dark"></i>
 								<span>{{ attachmentCount(cardservice.get(c.id)) }}</span>
+							</div>
+							<div class="card-comments" ng-if="unreadCommentCount(cardservice.get(c.id)) > 0">
+								<i class="icon icon-comment"></i>
+								<span>{{ unreadCommentCount(cardservice.get(c.id)) }}</span>
 							</div>
 							<div class="card-assigned-users">
 								<div class="assigned-user" ng-repeat="user in cardservice.get(c.id).assignedUsers | limitTo: 3">

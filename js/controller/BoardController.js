@@ -482,4 +482,8 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		}
 		return card.attachmentCount;
 	};
+
+	$scope.unreadCommentCount = function(card) {
+		return card.commentsUnread;
+	};
 });

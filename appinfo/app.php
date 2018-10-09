@@ -28,5 +28,7 @@ if ((@include_once __DIR__ . '/../vendor/autoload.php')===false) {
 $app = new \OCA\Deck\AppInfo\Application();
 $app->registerNavigationEntry();
 $app->registerNotifications();
+$app->registerCommentsEntity();
 
+/** Load activity style global so it is availabile in the activity app as well */
 \OC_Util::addStyle('deck', 'activity');

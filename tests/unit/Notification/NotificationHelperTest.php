@@ -31,6 +31,7 @@ use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\User;
 use OCA\Deck\Service\PermissionService;
+use OCP\Comments\IComment;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IUser;
@@ -292,6 +293,63 @@ class NotificationHelperTest extends \Test\TestCase {
 			->with($notification);
 
 		$this->notificationHelper->sendBoardShared(123, $acl);
+	}
+
+	public function testSendMention() {
+		$comment = $this->createMock(IComment::class);
+		$comment->expects($this->any())
+			->method('getObjectId')
+			->willReturn(123);
+		$comment->expects($this->any())
+			->method('getMessage')
+			->willReturn('@user1 @user2 This is a message.');
+		$comment->expects($this->once())
+			->method('getMentions')
+			->willReturn([
+				['id' => 'user1'],
+				['id' => 'user2']
+			]);
+		$card = new Card();
+		$card->setId(123);
+		$card->setTitle('MyCard');
+		$this->cardMapper->expects($this->any())
+			->method('find')
+			->with(123)
+			->willReturn($card);
+		$this->cardMapper->expects($this->any())
+			->method('findBoardId')
+			->with(123)
+			->willReturn(1);
+
+		$notification1 = $this->createMock(INotification::class);
+		$notification1->expects($this->once())->method('setApp')->with('deck')->willReturn($notification1);
+		$notification1->expects($this->once())->method('setUser')->with('user1')->willReturn($notification1);
+		$notification1->expects($this->once())->method('setObject')->with('card', 123)->willReturn($notification1);
+		$notification1->expects($this->once())->method('setSubject')->with('card-comment-mentioned', ['MyCard', 1, 'admin'])->willReturn($notification1);
+		$notification1->expects($this->once())->method('setDateTime')->willReturn($notification1);
+
+		$notification2 = $this->createMock(INotification::class);
+		$notification2->expects($this->once())->method('setApp')->with('deck')->willReturn($notification2);
+		$notification2->expects($this->once())->method('setUser')->with('user2')->willReturn($notification2);
+		$notification2->expects($this->once())->method('setObject')->with('card', 123)->willReturn($notification2);
+		$notification2->expects($this->once())->method('setSubject')->with('card-comment-mentioned', ['MyCard', 1, 'admin'])->willReturn($notification2);
+		$notification2->expects($this->once())->method('setDateTime')->willReturn($notification2);
+
+		$this->notificationManager->expects($this->at(0))
+			->method('createNotification')
+			->willReturn($notification1);
+		$this->notificationManager->expects($this->at(1))
+			->method('notify')
+			->with($notification1);
+
+		$this->notificationManager->expects($this->at(2))
+			->method('createNotification')
+			->willReturn($notification2);
+		$this->notificationManager->expects($this->at(3))
+			->method('notify')
+			->with($notification2);
+
+		$this->notificationHelper->sendMention($comment);
 	}
 
 
