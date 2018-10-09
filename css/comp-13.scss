@@ -36,3 +36,14 @@ body:not(.snapjs-left) {
 		}
 	}
 }
+
+#commentsTabView .newCommentForm .message {
+	width: 100%;
+	margin-left: 0;
+	padding-right: 0;
+	display: block;
+}
+
+#commentsTabView .comment {
+	margin-bottom: 0;
+}
