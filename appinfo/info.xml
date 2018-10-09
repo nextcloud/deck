@@ -18,6 +18,9 @@
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
+    <types>
+        <logging/>
+    </types>
     <category>organization</category>
     <category>office</category>
     <website>https://github.com/nextcloud/deck</website>
