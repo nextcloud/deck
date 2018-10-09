@@ -20,7 +20,7 @@
  *
  */
 
-/* global OC OCA OCP _ */
+/* global OC OCA OCP t escapeHTML */
 
 import CommentCollection from '../legacy/commentcollection';
 import CommentModel from '../legacy/commentmodel';
@@ -59,7 +59,7 @@ class ActivityController {
 
 		this.activityservice.subscribe(this.$scope, function() {
 			self.$scope.$apply();
-		})
+		});
 	}
 
 	applyAtWho($target) {
@@ -72,7 +72,7 @@ class ActivityController {
 			callbacks: {
 				remoteFilter: function(query, callback) {
 					let uids = self.boardservice.getUsers();
-					uids = uids.filter(x => x.uid.toLowerCase().includes(query.toLowerCase()) || x.displayname.toLowerCase().includes(query.toLowerCase()));
+					uids = uids.filter((x) => x.uid.toLowerCase().includes(query.toLowerCase()) || x.displayname.toLowerCase().includes(query.toLowerCase()));
 					callback(uids);
 				},
 				highlighter: function (li) {
@@ -126,15 +126,15 @@ class ActivityController {
 			$inserted.html('@' + $this.find('.avatar').data('username'));
 		});
 		$comment.html(OCP.Comments.richToPlain($comment.html()));
-		$comment.html($comment.html().replace(/<br\s*[\/]?>/gi, "\n"));
+		$comment.html($comment.html().replace(/<br\s*[\/]?>/gi, '\n'));
 		return $comment.text();
 	}
 
 	static _composeHTMLMention(uid, displayName) {
 		var avatar = '' +
-			'<span class="avatar" data-username="' + _.escape(uid) + '" data-user="' + _.escape(uid) + '" ng-attr-size="16" ' +
-			'ng-attr-user="' + _.escape(uid) + '" ' +
-			'ng-attr-displayname="' + _.escape(displayName) + '" ng-attr-contactsmenu="true">' +
+			'<span class="avatar" data-username="' + escapeHTML(uid) + '" data-user="' + escapeHTML(uid) + '" ng-attr-size="16" ' +
+			'ng-attr-user="' + escapeHTML(uid) + '" ' +
+			'ng-attr-displayname="' + escapeHTML(displayName) + '" ng-attr-contactsmenu="true">' +
 			'</span>';
 
 		var isCurrentUser = (uid === OC.getCurrentUser().uid);
@@ -143,7 +143,7 @@ class ActivityController {
 			'<span class="atwho-inserted" contenteditable="false">' +
 			'<span class="avatar-name-wrapper' + (isCurrentUser ? ' currentUser' : '') + '">' +
 			avatar +
-			'<strong>' + _.escape(displayName) + '</strong>' +
+			'<strong>' + escapeHTML(displayName) + '</strong>' +
 			'</span>' +
 			'</span>';
 	}

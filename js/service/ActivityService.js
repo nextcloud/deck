@@ -53,7 +53,7 @@ class ActivityService {
 					let item = this.toEnhanceWithComments[index];
 					item.commentModel = this.commentCollection.get(item.subject_rich[1].comment);
 					if (typeof item.commentModel !== 'undefined') {
-						this.toEnhanceWithComments = this.toEnhanceWithComments.filter(entry => entry.activity_id !== item.activity_id);
+						this.toEnhanceWithComments = this.toEnhanceWithComments.filter((entry) => entry.activity_id !== item.activity_id);
 					}
 				}
 			}

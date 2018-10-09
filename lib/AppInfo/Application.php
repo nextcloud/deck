@@ -131,7 +131,7 @@ class Application extends App {
 				/** @var CardMapper */
 				$service = $this->getContainer()->query(CardMapper::class);
 				try {
-					$card = $service->find((int) $name);
+					$service->find((int) $name);
 				} catch (\InvalidArgumentException $e) {
 					return false;
 				}

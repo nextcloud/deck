@@ -49,7 +49,7 @@ app.directive('ngContenteditable', function($compile) {
 			});
 
 			element.bind('keydown', function(event) {
-				if(event.which == '13' && event.shiftKey) {
+				if(event.which === 13 && event.shiftKey) {
 					scope.submit();
 				}
 			});
