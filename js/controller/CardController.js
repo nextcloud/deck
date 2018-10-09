@@ -20,7 +20,7 @@
  *
  */
 
-/* global app moment angular OC */
+/* global app moment angular OC OCP OCA */
 import app from '../app/App.js';
 
 app.controller('CardController', function ($scope, $rootScope, $sce, $location, $stateParams, $state, $interval, $timeout, $filter, BoardService, CardService, StackService, StatusService, markdownItConverter, FileService) {
