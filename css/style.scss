@@ -655,17 +655,28 @@ input.input-inline {
  */
 
 #sidebar-header {
+
+	position: sticky;
+	top: 0;
+	background-color: $color-main-background;
+	z-index: 200;
+
 	h3 {
 		font-size: 14pt;
-		padding: 9px 10px;
+		padding: 15px 15px 3px;
 		margin: 0;
 		overflow: hidden;
-		background-color: $color-lightgrey;
 
 		input {
 			min-height: 0px;
 			margin: 0px;
 		}
+	}
+
+	#card-dates {
+		font-size: 80%;
+		opacity: 0.5;
+		padding-left: 15px;
 	}
 
 	.icon-close {
@@ -708,7 +719,7 @@ input.input-inline {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	padding: 15px;
+	padding: 0 15px;
 
 	.duedate {
 		display: flex;
@@ -783,12 +794,6 @@ input.input-inline {
 		opacity: 0.5;
 		padding: 5px 15px;
 		display: inline;
-	}
-
-	#card-dates {
-		font-size: 80%;
-		opacity: 0.5;
-		text-align: right;
 	}
 
 	.card-details-assign-users {
@@ -1336,7 +1341,7 @@ input.input-inline {
 	padding: 0;
 	float: left !important;
 	display: block;
-	border-radius: 0px 0px 5px 5px !important;
+	border-radius: 3px !important;
 
 	.select-label {
 		color: $color-primary-text;

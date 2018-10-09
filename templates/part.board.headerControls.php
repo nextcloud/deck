@@ -13,8 +13,8 @@
     </form>
 </div>
 
-<button ng-if="params.filter!='archive'" ng-click="switchFilter('archive')" style="opacity:0.5;" title="<?php p($l->t('Show archived cards')); ?>">
-    <i class="icon icon-archive"></i>
+<button ng-if="params.filter!='archive'" ng-click="switchFilter('archive')" title="<?php p($l->t('Show archived cards')); ?>">
+    <i class="icon icon-archive" style="opacity:0.5;"></i>
     <span class="hidden-visually"><?php p($l->t('Show archived cards')); ?></span>
 </button>
 <button ng-if="params.filter=='archive'" ng-click="switchFilter('')" title="<?php p($l->t('Hide archived cards')); ?>">
