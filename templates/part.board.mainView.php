@@ -73,12 +73,16 @@
 							<h4>
 								<span class="editable-inline"
 									ng-show="!c.status.editCard"
-									ng-click="c.status.editCard=true">{{cardservice.get(c.id).title}}</span>
-
-								<form ng-if="c.status.editCard" ng-submit="cardservice.update(c); c.status.editCard=false">
-									<input class="input-inline" type="text" placeholder="<?php p($l->t('Add a new card')); ?>"
-										ng-blur="cardservice.update(c); c.status.editCard=false" ng-model="c.title"
-										autofocus-on-insert required maxlength="100" />
+									ng-click="startTitleEdit(c)">{{cardservice.get(c.id).title}}</span>
+								<form ng-if="c.status.editCard" ng-submit="finishTitleEdit(c)">
+									<input
+											class="input-inline"
+											type="text"
+											ng-blur="finishTitleEdit(c)"
+											ng-model="c.renameTitle"
+											autofocus-on-insert
+											required
+											maxlength="100">
 								</form>
 							</h4>
 							<ul class="labels compact-item" ng-if="!compactMode">
@@ -152,9 +156,12 @@
 			</ul>
 
 			<!-- CREATE CARD //-->
-			<div class="card create" ng-class="{emptyStack: !s.cards.length}"
-				 ng-style="{'border-color':'#{{ boardservice.getCurrent().color }}'}" ng-if="boardservice.canEdit() && checkCanEdit() && params.filter!=='archive'">
-				<form ng-submit="createCard(s.id, newCard.title)">
+			<div
+					class="card create"
+					ng-class="{emptyStack: !s.cards.length}"
+				 	ng-style="{'border-color':'#{{ boardservice.getCurrent().color }}'}"
+					ng-if="boardservice.canEdit() && checkCanEdit() && params.filter !== 'archive'">
+				<form name="addCardForm{{ s.id }}" ng-submit="createCard(s.id, newCard.title)">
 					<h4 ng-if="status.addCard[s.id]">
 						<input type="text" autofocus-on-insert
 							   ng-model="newCard.title"

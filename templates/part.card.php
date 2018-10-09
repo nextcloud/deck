@@ -15,7 +15,7 @@
 		<!-- TODO: change to textarea elastic //-->
 		<form ng-submit="cardRename(cardservice.getCurrent())">
 			<input class="input-inline" type="text" ng-if="status.cardRename"
-				   ng-model="cardservice.getCurrent().title"
+				   ng-model="status.renameTitle"
 				   ng-blur="cardRename(cardservice.getCurrent())"
 				   autofocus-on-insert required maxlength="100">
 		</form>
