@@ -92,8 +92,7 @@
 		<ul class="tabHeaders ng-scope">
 			<li class="tabHeader" ng-class="{'selected': (params.tab==0 || !params.tab)}" ui-sref="{tab: 0}"><a><span class="icon icon-description"></span><?php p($l->t('Description')); ?></a></li>
 			<li class="tabHeader" ng-class="{'selected': (params.tab==1)}" ui-sref="{tab: 1}"><a><span class="icon icon-files-dark"></span><?php p($l->t('Attachments')); ?></a></li>
-			<li class="tabHeader" ng-class="{'selected': (params.tab==2)}" ui-sref="{tab: 2}"><a><span class="icon icon-activity"></span><?php p($l->t('Activity/Comments')); ?></a></li>
-
+			<li class="tabHeader" ng-class="{'selected': (params.tab==2)}" ui-sref="{tab: 2}" ng-if="isTimelineEnabled()"><a><span class="icon icon-activity"></span><?php p($l->t('Timeline')); ?></a></li>
 		</ul>
 		<div class="tabDetails">
 			<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
@@ -131,7 +130,7 @@
 		</div>
 	</div>
 
-	<div class="section-content card-activity activityTabView" ng-if="params.tab === 2">
+	<div class="section-content card-activity activityTabView" ng-if="isTimelineEnabled() && params.tab === 2">
 		<activity-component type="deck_card" element="cardservice.getCurrent()"></activity-component>
 	</div>
 

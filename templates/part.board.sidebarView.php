@@ -14,9 +14,8 @@
 <ul class="tabHeaders">
     <li class="tabHeader" ng-class="{'selected': (params.tab==0 || !params.tab)}" ui-sref="{tab: 0}"><a><?php p($l->t('Sharing')); ?></a></li>
     <li class="tabHeader" ng-class="{'selected': (params.tab==1)}" ui-sref="{tab: 1}"><a><?php p($l->t('Tags')); ?></a></li>
-    <li class="tabHeader" ng-class="{'selected': (params.tab==2)}" ui-sref="{tab: 2}"><a><?php p($l->t('Deleted Stacks')); ?></a></li>
-    <li class="tabHeader" ng-class="{'selected': (params.tab==3)}" ui-sref="{tab: 3}"><a><?php p($l->t('Deleted Cards')); ?></a></li>
-	<li class="tabHeader" ng-class="{'selected': (params.tab==4)}" ui-sref="{tab: 4}"><a><?php p($l->t('Activity')); ?></a></li>
+    <li class="tabHeader" ng-class="{'selected': (params.tab==2)}" ui-sref="{tab: 2}"><a><?php p($l->t('Deleted items')); ?></a></li>
+	<li class="tabHeader" ng-class="{'selected': (params.tab==4)}" ui-sref="{tab: 4}" ng-if="isTimelineEnabled()"><a><?php p($l->t('Timeline')); ?></a></li>
 
 </ul>
 <div class="tabsContainer">
@@ -124,6 +123,7 @@
     </div>
 
     <div id="board-detail-deleted-stacks" class="tab deletedStacksTabView" ng-if="params.tab==2">
+		<h3><?php p($l->t('Deleted stacks')); ?></h3>
     	<ul class='board-detail__deleted-list'>
     	   <li class='board-detail__deleted-list__item' ng-repeat="deletedStack in stackservice.deleted">
            <span class="icon icon-deck"></span>
@@ -134,10 +134,10 @@
            </a>
     	   </li>
     	</ul>
-    </div>
 
-    <div id="board-detail-deleted-cards" class="tab deletedCardsTabView" ng-if="params.tab==3">
-    	<ul class='board-detail__deleted-list'>
+		<h3><?php p($l->t('Deleted cards')); ?></h3>
+
+		<ul class='board-detail__deleted-list'>
     	   <li class='board-detail__deleted-list__item' ng-repeat="deletedCard in cardservice.deleted">
             <span class="icon icon-deck"></span>
     			  <span>{{deletedCard.title}}</span>
@@ -150,7 +150,7 @@
     	</ul>
     </div>
 
-	<div id="board-detail-activity" class="tab activityTabView" ng-if="params.tab==4">
+	<div id="board-detail-activity" class="tab activityTabView" ng-if="isTimelineEnabled() && params.tab==4">
 		<activity-component ng-if="boardservice.getCurrent()" type="deck_board" element="boardservice.getCurrent()"></activity-component>
 	</div>
 

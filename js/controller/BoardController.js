@@ -21,7 +21,7 @@
  */
 
 import app from '../app/App.js';
-/* global oc_defaults OC */
+/* global oc_defaults OC OCP OCA */
 app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter, FileService) {
 
 	$scope.sidebar = $rootScope.sidebar;
@@ -486,4 +486,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.unreadCommentCount = function(card) {
 		return card.commentsUnread;
 	};
+
+	$scope.isTimelineEnabled = function() {
+		return OCP.Comments && OCA.Activity;
+	};
+
 });

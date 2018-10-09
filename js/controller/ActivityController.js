@@ -46,12 +46,16 @@ class ActivityController {
 			return self.element.id;
 		}, function (params) {
 			if (self.getData(self.element.id).length === 0) {
-				self.activityservice.loadComments(self.element.id);
+				if (self.type === 'deck_card') {
+					self.activityservice.loadComments(self.element.id);
+				}
 				self.loading = true;
 				self.fetchUntilResults();
 			}
 			self.activityservice.fetchNewerActivities(self.type, self.element.id).then(function () {});
-			self.cardservice.getCurrent().commentsUnread = 0;
+			if (self.type === 'deck_card') {
+				self.cardservice.getCurrent().commentsUnread = 0;
+			}
 		}, true);
 
 		let $target = $('.newCommentForm .message');
@@ -111,10 +115,10 @@ class ActivityController {
 		$target.on('inserted.atwho', function (je, $el) {
 			$(je.target).find(
 				'span[data-username="' + $el.find('[data-username]').data('username') + '"]'
-			).avatar();
+			).avatar(undefined, 16);
 		});
 		$target.on('shown.atwho', function (je) {
-			$target.find('.avatar').avatar();
+			$target.find('.avatar').avatar(undefined, 16);
 		});
 	}
 
