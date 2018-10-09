@@ -1,15 +1,26 @@
 @media print {
 	/* hide stuff */
-	header
-	, div#app-navigation
-	, div.board-header-controls
-	, div#controls.ng-scope div.crumb
-	, div#controls.ng-scope div.crumb a.bullet
-	, a.ng-binding+a
-	, #app-navigation-toggle.icon-menu
-	, div.card.create
-	, button.card-options
-	{display:none;}
+	#body-user {
+		#header,
+		div#app-navigation,
+		div.board-header-controls,
+		#app-navigation-toggle,
+		#app-navigation-toggle-custom,
+		div#controls.ng-scope div.crumb:not(.title),
+		div#controls.ng-scope div.crumb a.bullet,
+		a.ng-binding + a,
+		div.card.create,
+		button.card-options {
+			display: none !important;
+		}
+		#content {
+			margin: 0;
+			padding: 0;
+		}
+		#app-content {
+			margin: 0 !important;
+		}
+	}
 
 	div#app-navigation-toggle.icon-menu {
 		display:block;
@@ -37,7 +48,7 @@
 		flex-direction:row;
 		flex-wrap:wrap;
 	}
-	div.card-controls i.icon.icon-filetype-text {background:none;}  
+	div.card-controls i.icon.icon-filetype-text {background:none;}
 	div.card-controls i.icon.icon-filetype-text:after {
 		content: attr(title);
 		display:block;
@@ -52,14 +63,6 @@
 
 	div.card-assigned-users {
 		margin-right:10px;
-	}
-
-	/* labels/tags */
-	ul.labels li.ng-scope {
-		-webkit-box-sizing: border-box; /* Safari, other WebKit */
-		-moz-box-sizing: border-box;    /* Firefox, other Gecko */
-		box-sizing: border-box;         /* Opera/IE 8+ */
-		width:40px;
 	}
 
 	ul.labels li.ng-scope span.ng-binding {
@@ -80,7 +83,7 @@
 	}
 
 	div.stack.ng-scope.as-sortable-item {border-right: 1px solid #000;}
-	
+
 	div#innerBoard.ng-pristine.ng-untouched.ng-valid.ng-scope.ng-not-empty div.stack.ng-scope.as-sortable-item:nth-child(6n) {
 		page-break-after: always;
 	}
