@@ -11,10 +11,13 @@
 - 📄 Write down additional notes in markdown
 - 🔖 Assign labels for even better organization
 - 👥 Share with your team, friends or family
+- 📎 Attach files and embed them in your markdown description
+- 💬 Discuss with your team using comments
+- ⚡ Keep track of changes in the activity stream
 - 🚀 Get your project organized
 
 </description>
-    <version>0.5.0-dev4</version>
+    <version>0.5.0-beta1</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
@@ -29,7 +32,7 @@
     <screenshot>https://download.bitgrid.net/nextcloud/deck/screenshots/Deck_Board.png</screenshot>
     <screenshot>https://download.bitgrid.net/nextcloud/deck/screenshots/Deck_Details.png</screenshot>
     <dependencies>
-        <nextcloud min-version="13" max-version="15" />
+        <nextcloud min-version="13" max-version="14" />
     </dependencies>
     <background-jobs>
         <job>OCA\Deck\Cron\DeleteCron</job>

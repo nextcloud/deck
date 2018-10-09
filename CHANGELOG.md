@@ -1,6 +1,28 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.5.0 - unreleased
+
+### Added
+
+- Activity stream for board and cards
+- Comments on cards
+- Use users locale format on date picker
+- Compact display mode
+- Card title inline editing
+- REST API
+- Empty content view for board lists
+- Undo for card and stack deletion
+- Show tag name on board
+- Notify users about card assignments
+- Add shortcut to assign a card to yourself
+- Improved view for printing
+
+### Fixed
+
+- Accesibility improvements
+- Don't allow empty card titles
+
 ## 0.4.0 - 2018-07-11
 
 ### Added

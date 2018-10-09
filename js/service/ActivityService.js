@@ -154,7 +154,7 @@ class ActivityService {
 		}
 		if (typeof this.since[type][id] === 'undefined') {
 			this.since[type][id] = {
-				latest: 0,
+				latest: -1,
 				oldestCatchedUp: false,
 				oldest: '0',
 				finished: false,

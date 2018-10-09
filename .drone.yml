@@ -8,7 +8,7 @@ pipeline:
     image: nextcloudci/php7.0:php7.0-17
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable14
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -62,7 +62,7 @@ pipeline:
     image: nextcloudci/php7.0:php7.0-17
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable14
       - DB=sqlite
     commands:
       - wget https://raw.githubusercontent.com/nextcloud/server/master/build/signed-off-checker.php
@@ -87,7 +87,7 @@ pipeline:
     image: nextcloudci/php7.0:php7.0-17
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable14
       - DB=sqlite
     commands:
       - composer install
@@ -99,7 +99,7 @@ pipeline:
     image: nextcloudci/php7.1:php7.1-15
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable14
       - DB=sqlite
     commands:
       - composer install
@@ -111,7 +111,7 @@ pipeline:
     image: nextcloudci/php7.2:php7.2-9
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable14
       - DB=sqlite
     commands:
       - composer install
@@ -144,7 +144,7 @@ pipeline:
     image: nextcloudci/php7.0:php7.0-17
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable14
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -164,7 +164,7 @@ pipeline:
     image: nextcloudci/php7.1:php7.1-15
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable14
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -183,7 +183,7 @@ pipeline:
     image: nextcloudci/php7.2:php7.2-9
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable14
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -202,7 +202,7 @@ pipeline:
     image: nextcloudci/integration-php7.0:integration-php7.0-6
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=master
+      - CORE_BRANCH=stable14
       - DB=sqlite
     commands:
       # Pre-setup steps
@@ -233,7 +233,6 @@ pipeline:
         TESTS: jsbuild
 matrix:
   include:
-    - TESTS: check-app-compatbility
     - TESTS: check-app-compatbility-13
     - TESTS: check-app-compatbility-14
     - TESTS: signed-off-check
