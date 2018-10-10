@@ -45,7 +45,6 @@ OC.L10N.register(
     "Close" : "Loka",
     "Sharing" : "Deiling",
     "Tags" : "Merki",
-    "Activity" : "Virkni",
     "Select users or groups to share with" : "Veldu notendur eða hópa til að deila með",
     "Access for" : "Aðgangur fyrir",
     "No matching user or group found." : "Engir samsvarandi notendur eða hópar fundust.",
