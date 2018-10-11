@@ -127,6 +127,8 @@ OC.L10N.register(
     "Update" : "Aktualisieren",
     "Create" : "Erstellen",
     "Create a new tag" : "Schlagwort erstellen",
+    "Deleted stacks" : "Gelöschte Stapel",
+    "Deleted cards" : "Gelöschte Karten",
     "Status" : "Status",
     "No archived boards to display" : "Keine archivierten Boards zum Anzeigen",
     "No shared boards to display" : "Keine geteilten Boards zum Anzeigen",
