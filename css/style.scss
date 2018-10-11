@@ -1490,6 +1490,21 @@ input.input-inline {
 	}
 }
 
+.section-wrapper {
+	display: flex;
+	max-width: 100%;
+	margin-top: 10px;
+}
+
+.section-label {
+	background-position: 0px center;
+	width:28px;
+	flex-shrink: 0;
+}
+
+.section-details {
+	flex-grow: 1;
+}
 /**
  * Mobile optimizations
  */
