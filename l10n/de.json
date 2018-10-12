@@ -65,6 +65,7 @@
     "{user} has deleted the attachment {attachment} to {card}" : "{user} hat den Anhang {attachment} von {card} entfernt",
     "You have restored the attachment {attachment} to {card}" : "Du hast den Anhang {attachment} von {card} wiederhergestellt",
     "{user} has restored the attachment {attachment} to {card}" : "{user} hat den Anhang {attachment} von {card} wiederhergestellt",
+    "You have commented on {card}" : "Du hast {card} kommentiert",
     "Deck" : "Deck",
     "Personal" : "Persönlich",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Die Karte \"%s\" auf \"%s\" wurde Dir von %s zugewiesen.",
