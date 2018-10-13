@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "The comment has been deleted" : "Komentář byl smazán",
     "The associated stack is deleted as well, it will be restored as well." : "Související stack je také smazaný a bude také obnoven.",
     "Restore associated stack" : "Obnovit související stack",
     "Remove user from card" : "Odebrat uživatele z karty",
@@ -116,6 +117,8 @@ OC.L10N.register(
     "Close" : "Zavřít",
     "Sharing" : "Sdílení",
     "Tags" : "Značky",
+    "Deleted items" : "Smazané položky",
+    "Timeline" : "Časová osa",
     "Select users or groups to share with" : "Vyberte uživatele nebo skupiny pro sdílení",
     "Access for" : "Přístup pro",
     "No matching user or group found." : "Nevyhovuje žádný uživatel ani skupina",
@@ -127,6 +130,7 @@ OC.L10N.register(
     "Update" : "Aktualizovat",
     "Create" : "Vytvořit",
     "Create a new tag" : "Vytvořit nový štítek",
+    "Deleted cards" : "Smazané karty",
     "Status" : "Stav",
     "No archived boards to display" : "Žádné archivované nástěnky k zobrazení",
     "No shared boards to display" : "Žádné sdílené nástěnky k zobrazení",
