@@ -290,7 +290,7 @@ Returns an array of board items
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the stack belongs to |
-| stackId   | Integer | The if of the stack                      |
+| stackId   | Integer | The id of the stack                      |
 
 #### Response
 
@@ -315,7 +315,7 @@ Returns an array of board items
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the stack belongs to |
-| stackId   | Integer | The if of the stack                      |
+| stackId   | Integer | The id of the stack                      |
 
 #### Response
 
@@ -328,7 +328,7 @@ Returns an array of board items
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the stack belongs to |
-| stackId   | Integer | The if of the stack                      |
+| stackId   | Integer | The id of the stack                      |
 
 #### Response
 
@@ -343,7 +343,7 @@ Returns an array of board items
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The if of the stack the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
 #### Response
@@ -357,7 +357,7 @@ Returns an array of board items
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The if of the stack the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
 
 #### Response
 
@@ -370,7 +370,7 @@ Returns an array of board items
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The if of the stack the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
 #### Response
@@ -384,7 +384,7 @@ Returns an array of board items
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The if of the stack the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
 #### Response
@@ -398,7 +398,7 @@ Returns an array of board items
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The if of the stack the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
 #### Response
@@ -412,7 +412,7 @@ Returns an array of board items
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The if of the stack the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
 #### Response
@@ -426,7 +426,7 @@ Returns an array of board items
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The if of the stack the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
 #### Response
@@ -440,7 +440,7 @@ Returns an array of board items
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The if of the stack the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
 #### Response
@@ -454,7 +454,7 @@ Returns an array of board items
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The if of the stack the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
 #### Response
@@ -523,7 +523,7 @@ Returns an array of board items
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
 | boardId   | Integer | The id of the board the card belongs to |
-| stackId   | Integer | The if of the stack the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
 #### Response
@@ -537,7 +537,7 @@ Returns an array of board items
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
 | boardId      | Integer | The id of the board the attachment belongs to |
-| stackId      | Integer | The if of the stack the attachment belongs to |
+| stackId      | Integer | The id of the stack the attachment belongs to |
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
 
@@ -552,7 +552,7 @@ Returns an array of board items
 | Parameter | Type    | Description                                   |
 | --------- | ------- | --------------------------------------------- |
 | boardId   | Integer | The id of the board the attachment belongs to |
-| stackId   | Integer | The if of the stack the attachment belongs to |
+| stackId   | Integer | The id of the stack the attachment belongs to |
 | cardId    | Integer | The id of the card the attachment belongs to  |
 
 #### Response
@@ -566,7 +566,7 @@ Returns an array of board items
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
 | boardId      | Integer | The id of the board the attachment belongs to |
-| stackId      | Integer | The if of the stack the attachment belongs to |
+| stackId      | Integer | The id of the stack the attachment belongs to |
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
 
@@ -581,7 +581,7 @@ Returns an array of board items
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
 | boardId      | Integer | The id of the board the attachment belongs to |
-| stackId      | Integer | The if of the stack the attachment belongs to |
+| stackId      | Integer | The id of the stack the attachment belongs to |
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
 
@@ -596,7 +596,7 @@ Returns an array of board items
 | Parameter    | Type    | Description                                   |
 | ------------ | ------- | --------------------------------------------- |
 | boardId      | Integer | The id of the board the attachment belongs to |
-| stackId      | Integer | The if of the stack the attachment belongs to |
+| stackId      | Integer | The id of the stack the attachment belongs to |
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
 
