@@ -1,4 +1,7 @@
 { "translations": {
+    "Please provide a content for your comment." : "Por favor, suministra un contenido para tu comentario.",
+    "Posting the comment failed." : "Fallo al enviar el comentario.",
+    "The comment has been deleted" : "El comentario ha sido borrado",
     "The associated stack is deleted as well, it will be restored as well." : "Se había eliminado también la pila asociada. También será restaurada.",
     "Restore associated stack" : "Restaurar la pila asociada",
     "Remove user from card" : "Eliminar usuario de la tarjeta",
