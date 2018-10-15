@@ -25,7 +25,6 @@ import app from '../app/App.js';
 app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter, FileService) {
 
 	$scope.sidebar = $rootScope.sidebar;
-
 	$scope.id = $stateParams.boardId;
 	$scope.status = {
 		addCard: [],
@@ -40,7 +39,15 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.labelservice = LabelService;
 	$scope.defaultColors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
 	$scope.board = BoardService.getCurrent();
+	$scope.boardsList = BoardService.getData();
 	$scope.uploader = FileService.uploader;
+
+	$scope.$watch('boardsList', function(newValue, oldValue){
+		console.log('New Value:');
+		console.log(newValue);
+		console.log('Old value:');
+		console.log(oldValue);
+	});
 
 	$scope.startTitleEdit = function(card) {
 		card.renameTitle = card.title;
