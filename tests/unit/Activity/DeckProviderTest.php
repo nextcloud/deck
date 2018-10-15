@@ -26,6 +26,8 @@ namespace OCA\Deck\Activity;
 use OC\Activity\Event;
 use OCA\Deck\Db\Acl;
 use OCP\Activity\IEvent;
+use OCP\Comments\IComment;
+use OCP\Comments\ICommentsManager;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
@@ -48,6 +50,9 @@ class DeckProviderTest extends TestCase {
 	/** @var IUserManager|MockObject */
 	private $userManager;
 
+	/** @var ICommentsManager|MockObject */
+	private $commentsManager;
+
 	/** @var string */
 	private $userId = 'admin';
 
@@ -56,7 +61,8 @@ class DeckProviderTest extends TestCase {
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->userManager = $this->createMock(IUserManager::class);
-		$this->provider = new DeckProvider($this->urlGenerator, $this->activityManager, $this->userManager, $this->userId);
+		$this->commentsManager = $this->createMock(ICommentsManager::class);
+		$this->provider = new DeckProvider($this->urlGenerator, $this->activityManager, $this->userManager, $this->commentsManager, $this->userId);
 	}
 
 	private function mockEvent($objectType, $objectId, $objectName, $subject, $subjectParameters = []) {
@@ -441,6 +447,30 @@ class DeckProviderTest extends TestCase {
 			],
 		];
 		$actual = $this->invokePrivate($this->provider, 'parseParamForChanges', [$subjectParams, $params, $event]);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testParseParamForComment() {
+		$comment = $this->createMock(IComment::class);
+		$comment->expects($this->once())
+			->method('getMessage')
+			->willReturn('Comment content');
+		$this->commentsManager->expects($this->once())
+			->method('get')
+			->with(123)
+			->willReturn($comment);
+		$event = $this->createMock(IEvent::class);
+		$event->expects($this->once())
+			->method('setParsedMessage')
+			->with('Comment content');
+		$params = [];
+		$subjectParams = [
+			'comment' => 123
+		];
+		$expected = [
+			'comment' => 123,
+		];
+		$actual = $this->invokePrivate($this->provider, 'parseParamForComment', [$subjectParams, $params, $event]);
 		$this->assertEquals($expected, $actual);
 	}
 

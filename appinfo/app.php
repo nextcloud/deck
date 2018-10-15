@@ -29,4 +29,5 @@ $app = new \OCA\Deck\AppInfo\Application();
 $app->registerNavigationEntry();
 $app->registerNotifications();
 
+/** Load activity style global so it is availabile in the activity app as well */
 \OC_Util::addStyle('deck', 'activity');

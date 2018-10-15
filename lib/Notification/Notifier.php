@@ -105,6 +105,31 @@ class Notifier implements INotifier {
 				);
 				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#!/board/' . $boardId . '//card/' . $cardId . '');
 				break;
+			case 'card-comment-mentioned':
+				$cardId = $notification->getObjectId();
+				$boardId = $this->cardMapper->findBoardId($cardId);
+				$initiator = $this->userManager->get($params[2]);
+				if ($initiator !== null) {
+					$dn = $initiator->getDisplayName();
+				} else {
+					$dn = $params[2];
+				}
+				$notification->setParsedSubject(
+					(string) $l->t('%s has mentioned in a comment on "%s".', [$dn, $params[0]])
+				);
+				$notification->setRichSubject(
+					(string) $l->t('{user} has mentioned in a comment on "%s".', [$params[0]]),
+					[
+						'user' => [
+							'type' => 'user',
+							'id' => $params[2],
+							'name' => $dn,
+						]
+					]
+				);
+				$notification->setParsedMessage($notification->getMessage());
+				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#!/board/' . $boardId . '//card/' . $cardId . '');
+				break;
 			case 'board-shared':
 				$boardId = $notification->getObjectId();
 				$initiator = $this->userManager->get($params[1]);

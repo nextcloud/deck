@@ -41,6 +41,7 @@ $compact-board-last-item-margin: 5px 10px 10px;
 @import 'icons';
 @import 'animations';
 @import 'compact-mode';
+@import 'autocomplete';
 
 /**
  * General styles
@@ -454,9 +455,10 @@ input.input-inline {
 			opacity: 1;
 		}
 
-		.icon-filetype-text {
+		.icon-description {
 			margin: 10px;
 			margin-left: 0px;
+			opacity: 0.5;
 		}
 
 		.due {
@@ -492,7 +494,7 @@ input.input-inline {
 			}
 		}
 
-		.card-tasks, .card-files {
+		.card-tasks, .card-files, .card-comments {
 			border-radius: 3px;
 			margin: 4px 4px 4px 0px;
 			padding: 0 2px;
@@ -937,6 +939,64 @@ input.input-inline {
 	}
 }
 
+.activity-icon {
+	opacity: 1 !important;
+	.avatardiv-container {
+		top: -4px;
+		left: -7px;
+		margin-right: 5px;
+		img {
+			max-width: 24px;
+			max-height: 24px;
+		}
+	}
+}
+
+.activitysubject.commentAuthor {
+	margin-left: 26px;
+	margin-right: 0;
+	margin-top: 10px;
+}
+.activityTabView {
+	.activity {
+		margin-bottom: 20px;
+	}
+	.activitytime {
+		margin: 0 !important;
+	}
+}
+.activitysubject .app-popover-menu-utils {
+	display: inline-block;
+	position: relative;
+	a {
+		font-weight: normal;
+	}
+	button {
+		opacity: .5;
+		padding: 7px;
+		margin-left: 10px;
+	}
+}
+
+#commentsTabView {
+	.newCommentRow .avatardiv-container {
+		left: -7px;
+	}
+	.comment {
+		position: relative;
+		padding: 0 0 15px;
+
+		.avatardiv {
+			width: 24px;
+			height: 24px;
+			line-height: 24px;
+		}
+	}
+	.newCommentForm {
+		margin-left: 26px;
+	}
+}
+
 .card-attachments {
 	.error {
 		padding-left: 38px;
@@ -1250,6 +1310,13 @@ input.input-inline {
 	clear: both;
 	overflow: initial;
 	margin-bottom: 0;
+	.icon {
+		display: inline-block;
+		background-size: contain;
+		margin: -3px;
+		margin-right: 5px;
+		opacity: 0.5;
+	}
 }
 
 .tabsContainer {
@@ -1481,6 +1548,11 @@ body:not(.snapjs-left) {
 		display: none;
 	}
 }
+
+/**
+ * Print settings, better leave them at the eof
+ */
+@import 'print.scss';
 
 /**
  * Pop over form

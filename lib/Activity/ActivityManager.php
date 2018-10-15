@@ -41,6 +41,7 @@ use OCP\Activity\IEvent;
 use OCP\Activity\IManager;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\Comments\IComment;
 use OCP\IL10N;
 use OCP\IUser;
 
@@ -97,6 +98,8 @@ class ActivityManager {
 	const SUBJECT_LABEL_DELETE = 'label_delete';
 	const SUBJECT_LABEL_ASSIGN = 'label_assign';
 	const SUBJECT_LABEL_UNASSING = 'label_unassign';
+
+	const SUBJECT_CARD_COMMENT_CREATE = 'card_comment_create';
 
 	public function __construct(
 		IManager $manager,
@@ -227,6 +230,9 @@ class ActivityManager {
 			case self::SUBJECT_ATTACHMENT_RESTORE:
 				$subject = $ownActivity ? $this->l10n->t('You have restored the attachment {attachment} to {card}') : $this->l10n->t('{user} has restored the attachment {attachment} to {card}');
 				break;
+			case self::SUBJECT_CARD_COMMENT_CREATE:
+				$subject = $ownActivity ? $this->l10n->t('You have commented on {card}') : $this->l10n->t('{user} has commented on {card}');
+				break;
 			default:
 				break;
 		}
@@ -314,6 +320,13 @@ class ActivityManager {
 			case self::SUBJECT_BOARD_RESTORE:
 			// Not defined as there is no activity for
 			// case self::SUBJECT_BOARD_UPDATE_COLOR
+				break;
+			case self::SUBJECT_CARD_COMMENT_CREATE:
+				/** @var IComment $entity */
+				$subjectParams = [
+					'comment' => $entity->getMessage()
+				];
+				$message = $entity->getMessage();
 				break;
 
 			case self::SUBJECT_STACK_CREATE:
@@ -409,6 +422,9 @@ class ActivityManager {
 	 */
 	private function findObjectForEntity($objectType, $entity) {
 		$className = \get_class($entity);
+		if ($entity instanceof IComment) {
+			$className = IComment::class;
+		}
 		$objectId = null;
 		if ($objectType === self::DECK_OBJECT_CARD) {
 			switch ($className) {
@@ -419,6 +435,9 @@ class ActivityManager {
 				case Label::class:
 				case AssignedUsers::class:
 					$objectId = $entity->getCardId();
+					break;
+				case IComment::class:
+					$objectId = $entity->getObjectId();
 					break;
 				default:
 					throw new InvalidArgumentException('No entity relation present for '. $className . ' to ' . $objectType);

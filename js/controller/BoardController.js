@@ -21,7 +21,7 @@
  */
 
 import app from '../app/App.js';
-/* global oc_defaults OC */
+/* global oc_defaults OC OCP OCA */
 app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter, FileService) {
 
 	$scope.sidebar = $rootScope.sidebar;
@@ -41,6 +41,38 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.defaultColors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
 	$scope.board = BoardService.getCurrent();
 	$scope.uploader = FileService.uploader;
+
+	$scope.startTitleEdit = function(card) {
+		card.renameTitle = card.title;
+		card.status = card.status || {};
+		card.status.editCard = true;
+	};
+
+	$scope.finishTitleEdit = function(card) {
+		var newTitle;
+		if (!card.renameTitle || !card.renameTitle.trim()) {
+			newTitle = '';
+		} else {
+			newTitle = card.renameTitle.trim();
+		}
+
+		if (newTitle === card.title) {
+			// title unchanged
+			card.status.editCard = false;
+			delete card.renameTitle;
+		} else if (newTitle !== '') {
+			// title changed
+			card.title = newTitle;
+			CardService.update(card).then(function (data) {
+				card.status.editCard = false;
+				delete card.renameTitle;
+			});
+		} else {
+			// empty title
+			card.status.editCard = false;
+			delete card.renameTitle;
+		}
+	};
 
 	$scope.$watch(function() {
 		return $state.current;
@@ -189,15 +221,17 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 
 	$scope.createCard = function (stack, title) {
-		var newCard = {
-			'title': title,
-			'stackId': stack,
-			'type': 'plain'
-		};
-		CardService.create(newCard).then(function (data) {
-			$scope.stackservice.addCard(data);
-			$scope.newCard.title = '';
-		});
+		if (this['addCardForm' + stack].$valid) {
+			var newCard = {
+				'title': title,
+				'stackId': stack,
+				'type': 'plain'
+			};
+			CardService.create(newCard).then(function (data) {
+				$scope.stackservice.addCard(data);
+				$scope.newCard.title = '';
+			});
+		}
 	};
 
 	$scope.stackDelete = function (stack) {
@@ -453,4 +487,13 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		}
 		return card.attachmentCount;
 	};
+
+	$scope.unreadCommentCount = function(card) {
+		return card.commentsUnread;
+	};
+
+	$scope.isTimelineEnabled = function() {
+		return OCP.Comments && OCA.Activity;
+	};
+
 });

@@ -73,12 +73,16 @@
 							<h4>
 								<span class="editable-inline"
 									ng-show="!c.status.editCard"
-									ng-click="c.status.editCard=true">{{cardservice.get(c.id).title}}</span>
-
-								<form ng-if="c.status.editCard" ng-submit="cardservice.update(c); c.status.editCard=false">
-									<input class="input-inline" type="text" placeholder="<?php p($l->t('Add a new card')); ?>"
-										ng-blur="cardservice.update(c); c.status.editCard=false" ng-model="c.title"
-										autofocus-on-insert required maxlength="100" />
+									ng-click="startTitleEdit(c)">{{cardservice.get(c.id).title}}</span>
+								<form ng-if="c.status.editCard" ng-submit="finishTitleEdit(c)">
+									<input
+											class="input-inline"
+											type="text"
+											ng-blur="finishTitleEdit(c)"
+											ng-model="c.renameTitle"
+											autofocus-on-insert
+											required
+											maxlength="100">
 								</form>
 							</h4>
 							<ul class="labels compact-item" ng-if="!compactMode">
@@ -90,7 +94,7 @@
 						</div>
 
 						<div class="card-controls compact-item" ng-if="!compactMode">
-							<i class="icon icon-filetype-text" ng-if="cardservice.get(c.id).description" title="{{ cardservice.get(c.id).description }}"></i>
+							<i class="icon icon-description" ng-if="cardservice.get(c.id).description" title="{{ cardservice.get(c.id).description }}"></i>
 							<span class="due" ng-if="cardservice.get(c.id).duedate" ng-class="{'overdue': cardservice.get(c.id).overdue == 3, 'now': cardservice.get(c.id).overdue == 2, 'next': cardservice.get(c.id).overdue == 1  }" title="{{ cardservice.get(c.id).duedate }}">
 								<i class="icon icon-badge"></i>
 								<span data-timestamp="{{ cardservice.get(c.id).duedate | dateToTimestamp }}" class="live-relative-timestamp">{{ cardservice.get(c.id).duedate | relativeDateFilterString }}</span>
@@ -102,6 +106,10 @@
 							<div class="card-files" ng-if="attachmentCount(cardservice.get(c.id)) > 0">
 								<i class="icon icon-files-dark"></i>
 								<span>{{ attachmentCount(cardservice.get(c.id)) }}</span>
+							</div>
+							<div class="card-comments" ng-if="unreadCommentCount(cardservice.get(c.id)) > 0">
+								<i class="icon icon-comment"></i>
+								<span>{{ unreadCommentCount(cardservice.get(c.id)) }}</span>
 							</div>
 							<div class="card-assigned-users">
 								<div class="assigned-user" ng-repeat="user in cardservice.get(c.id).assignedUsers | limitTo: 3">
@@ -186,9 +194,12 @@
 			</ul>
 
 			<!-- CREATE CARD //-->
-			<div class="card create" ng-class="{emptyStack: !s.cards.length}"
-				 ng-style="{'border-color':'#{{ boardservice.getCurrent().color }}'}" ng-if="boardservice.canEdit() && checkCanEdit() && params.filter!=='archive'">
-				<form ng-submit="createCard(s.id, newCard.title)">
+			<div
+					class="card create"
+					ng-class="{emptyStack: !s.cards.length}"
+				 	ng-style="{'border-color':'#{{ boardservice.getCurrent().color }}'}"
+					ng-if="boardservice.canEdit() && checkCanEdit() && params.filter !== 'archive'">
+				<form name="addCardForm{{ s.id }}" ng-submit="createCard(s.id, newCard.title)">
 					<h4 ng-if="status.addCard[s.id]">
 						<input type="text" autofocus-on-insert
 							   ng-model="newCard.title"

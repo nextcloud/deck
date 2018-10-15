@@ -23,12 +23,15 @@
 
 namespace OCA\Deck\AppInfo;
 
+use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Notification\Notifier;
 use OCP\AppFramework\App;
 use OCA\Deck\Middleware\SharingMiddleware;
+use OCP\Comments\CommentsEntityEvent;
 use OCP\IGroup;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -96,6 +99,8 @@ class Application extends App {
 			}
 		});
 
+		$this->registerCommentsEntity();
+
 	}
 
 	public function registerNavigationEntry() {
@@ -120,6 +125,27 @@ class Application extends App {
 		}, function() {
 			return ['id' => 'deck', 'name' => 'Deck'];
 		});
+	}
 
+	public function registerCommentsEntity() {
+		$this->getContainer()->getServer()->getEventDispatcher()->addListener(CommentsEntityEvent::EVENT_ENTITY, function(CommentsEntityEvent $event) {
+			$event->addEntityCollection('deckCard', function($name) {
+				/** @var CardMapper */
+				$service = $this->getContainer()->query(CardMapper::class);
+				try {
+					$service->find((int) $name);
+				} catch (\InvalidArgumentException $e) {
+					return false;
+				}
+				return true;
+			});
+		});
+		$this->registerCommentsEventHandler();
+	}
+
+	protected function registerCommentsEventHandler() {
+		$this->getContainer()->getServer()->getCommentsManager()->registerEventHandler(function () {
+			return $this->getContainer()->query(CommentEventHandler::class);
+		});
 	}
 }

@@ -29,6 +29,7 @@ use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Service\PermissionService;
+use OCP\Comments\IComment;
 use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\Notification\IManager;
@@ -131,6 +132,22 @@ class NotificationHelper {
 				$notification = $this->generateBoardShared($board, $user->getUID());
 				$this->notificationManager->notify($notification);
 			}
+		}
+	}
+
+	public function sendMention(IComment $comment) {
+		foreach ($comment->getMentions() as $mention) {
+			$card = $this->cardMapper->find($comment->getObjectId());
+			$boardId = $this->cardMapper->findBoardId($card->getId());
+			$notification = $this->notificationManager->createNotification();
+			$notification
+				->setApp('deck')
+				->setUser((string) $mention['id'])
+				->setDateTime(new DateTime())
+				->setObject('card', (string) $card->getId())
+				->setSubject('card-comment-mentioned', [$card->getTitle(), $boardId, $this->currentUser])
+				->setMessage($comment->getMessage());
+			$this->notificationManager->notify($notification);
 		}
 	}
 

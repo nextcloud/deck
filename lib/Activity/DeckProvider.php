@@ -28,6 +28,9 @@ use cogpowered\FineDiff\Diff;
 use OCA\Deck\Db\Acl;
 use OCP\Activity\IEvent;
 use OCP\Activity\IProvider;
+use OCP\Comments\IComment;
+use OCP\Comments\ICommentsManager;
+use OCP\Comments\NotFoundException;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 
@@ -41,11 +44,14 @@ class DeckProvider implements IProvider {
 	private $activityManager;
 	/** @var IUserManager */
 	private $userManager;
+	/** @var ICommentsManager */
+	private $commentsManager;
 
-	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, IUserManager $userManager, $userId) {
+	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, IUserManager $userManager, ICommentsManager $commentsManager, $userId) {
 		$this->userId = $userId;
 		$this->urlGenerator = $urlGenerator;
 		$this->activityManager = $activityManager;
+		$this->commentsManager = $commentsManager;
 		$this->userManager = $userManager;
 	}
 
@@ -106,7 +112,7 @@ class DeckProvider implements IProvider {
 				'type' => 'user',
 				'id' => $author,
 				'name' => $user !== null ? $user->getDisplayName() : $author
-			]
+			],
 		];
 
 		$params = $this->parseParamForBoard('board', $subjectParams, $params);
@@ -117,6 +123,7 @@ class DeckProvider implements IProvider {
 		$params = $this->parseParamForAssignedUser($subjectParams, $params);
 		$params = $this->parseParamForAcl($subjectParams, $params);
 		$params = $this->parseParamForChanges($subjectParams, $params, $event);
+		$params = $this->parseParamForComment($subjectParams, $params, $event);
 
 		try {
 			$subject = $this->activityManager->getActivityFormat($subjectIdentifier, $subjectParams, $ownActivity);
@@ -146,6 +153,9 @@ class DeckProvider implements IProvider {
 		}
 		if (strpos($event->getSubject(), 'attachment_') !== false) {
 			$event->setIcon($this->urlGenerator->imagePath('core', 'places/files.svg'));
+		}
+		if (strpos($event->getSubject(), 'comment_') !== false) {
+			$event->setIcon($this->urlGenerator->imagePath('core', 'actions/comment.svg'));
 		}
 		return $event;
 	}
@@ -223,6 +233,19 @@ class DeckProvider implements IProvider {
 					'name' => $subjectParams['acl']['participant']
 				];
 			}
+		}
+		return $params;
+	}
+
+	private function parseParamForComment($subjectParams, $params, IEvent $event) {
+		if (array_key_exists('comment', $subjectParams)) {
+			/** @var IComment $comment */
+			try {
+				$comment = $this->commentsManager->get((int)$subjectParams['comment']);
+				$event->setParsedMessage($comment->getMessage());
+			} catch (NotFoundException $e) {
+			}
+			$params['comment'] = $subjectParams['comment'];
 		}
 		return $params;
 	}

@@ -34,6 +34,7 @@ OC.L10N.register(
     "Board details" : "Nánar um borð",
     "All Boards" : "Öll borð",
     "Archived boards" : "Borð í geymslu",
+    "Actions" : "Aðgerðir",
     "Assign to me" : "Úthluta mér",
     "Unassign from me" : "Aftengja úthlutun til mín",
     "Archive" : "Setja í safnskrá",

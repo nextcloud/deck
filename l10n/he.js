@@ -24,7 +24,6 @@ OC.L10N.register(
     "A PHP extension stopped the file upload" : "הרחבת PHP עצרה את העלאת הקובץ",
     "No file uploaded or file size exceeds maximum of %s" : "לא הועלה אף קובץ או שגודל הקובץ חרג מהסף המרבי של %s",
     "A kanban style project and personal management tool for Nextcloud" : "כלי ניהול למיזמים או לדברים אישיים עבור Nextcloud",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 🚀 Get your project organized" : "חבילה היא כלי ניהול בסגנון קנבן שמיועד לתכנון אישי או לארגון מיזמים לצוותים בשילוב עם Nextcloud.\n\n\n- 📥 הוספת המשימות שלך וסידור שלהן\n- 📄 כתיבת הערות נוספות בתצורת markdown\n- 🔖 הקצאת תוויות למטרת ארגון טוב יותר\n- 👥 שיתוף עם הצוות, החברים או המשפחה שלך\n- 🚀 ארגון המיזם שלך כמו שצריך",
     "Add a new stack" : "הוספת ערימה חדשה",
     "Submit" : "הגשה",
     "Show archived cards" : "הצגת כרטיסים בארכיון",

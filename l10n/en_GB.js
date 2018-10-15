@@ -13,7 +13,6 @@ OC.L10N.register(
     "Action needed" : "Action needed",
     "Later" : "Later",
     "A kanban style project and personal management tool for Nextcloud" : "A kanban style project and personal management tool for Nextcloud",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 🚀 Get your project organized" : "Deck is a kanban style organization tool aimed at personal planning and project organisation for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 🚀 Get your project organised",
     "Add a new stack" : "Add a new stack",
     "Submit" : "Submit",
     "Show archived cards" : "Show archived cards",

@@ -37,6 +37,8 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\StatusException;
 use OCA\Deck\BadRequestException;
+use OCP\Comments\ICommentsManager;
+use OCP\IUserManager;
 
 class CardService {
 
@@ -51,6 +53,7 @@ class CardService {
 	private $attachmentService;
 	private $currentUser;
 	private $activityManager;
+	private $commentsManager;
 
 	public function __construct(
 		CardMapper $cardMapper,
@@ -63,6 +66,8 @@ class CardService {
 		AssignedUsersMapper $assignedUsersMapper,
 		AttachmentService $attachmentService,
 		ActivityManager $activityManager,
+		ICommentsManager $commentsManager,
+		IUserManager $userManager,
 		$userId
 	) {
 		$this->cardMapper = $cardMapper;
@@ -75,6 +80,8 @@ class CardService {
 		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->attachmentService = $attachmentService;
 		$this->activityManager = $activityManager;
+		$this->commentsManager = $commentsManager;
+		$this->userManager = $userManager;
 		$this->currentUser = $userId;
 	}
 
@@ -83,6 +90,10 @@ class CardService {
 		$card->setAssignedUsers($this->assignedUsersMapper->find($cardId));
 		$card->setLabels($this->labelMapper->findAssignedLabelsForCard($cardId));
 		$card->setAttachmentCount($this->attachmentService->count($cardId));
+		$user = $this->userManager->get($this->currentUser);
+		$lastRead = $this->commentsManager->getReadMark('deckCard', (string)$card->getId(), $user);
+		$count = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId(), $lastRead);
+		$card->setCommentsUnread($count);
 	}
 
 	public function fetchDeleted($boardId) {
@@ -114,6 +125,7 @@ class CardService {
 		$attachments = $this->attachmentService->findAll($cardId, true);
 		$card->setAssignedUsers($assignedUsers);
 		$card->setAttachments($attachments);
+		$this->enrich($card);
 		return $card;
 	}
 
