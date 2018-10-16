@@ -118,7 +118,7 @@
 							</div>
 							<div class="app-popover-menu-utils" ng-if="!boardservice.isArchived()">
 								<button class="button-inline card-options icon-more" ng-model="card" aria-label="<?php p($l->t('Actions')) ?>"></button>
-								<div class="popovermenu hidden">
+								<div class="popovermenu hiden">
 									<ul>
 										<li ng-if="!isCurrentUserAssigned(c)">
 											<a class="menuitem action action-rename permanent"
@@ -141,41 +141,41 @@
 										<li ng-if="params.filter!=='archive'">
 											<span class="menuitem permanent popover-form">
 											   <span class="icon icon-archive"></span>
-												<span><?php p($l->t('Move')); ?></span>
-												<div class="popover-form-container">
+												<span ng-click="card.showMovePopOver = !card.showMovePopOver"><?php p($l->t('Move')); ?></span>
+												<div ng-show="card.showMovePopOver" class="popover-form-container">
 														<div class="form-row">
 														<?php p($l->t('Move')); ?> {{c.title}}
 															<hr />
 														</div>
 														<div class="form-row">
-															<!-- <ui-select
-																	ng-model="card.moveToBoard"
-																	theme="select2"
-																	title="<?php p($l->t('Select a board')); ?>"
-																	placeholder="<?php p($l->t('Select a board')); ?>"
-																	ng-disabled="(boardservice.getAll() || card.archived) || (!boardservice.canEdit() || archived)">
-																<ui-select-match placeholder="<?php p($l->t('Select board')); ?>">
-																	<span class="select-label">{{$item.title}}&nbsp;</span>
-																</ui-select-match>
-																<ui-select-choices repeat="board.value as (key, board) in boardservice.getAll() | filter: {'value':$select.search}">
-																	<div ng-bing-html="board.value.title | highlight: $select.search"></div>
-																	<small>
-																	title: {{board.value.title}}
-																	</small>
-																</ui-select-choices>
-															</ui-select> -->
-
-															<ui-select ng-model="card.moveToBoardId" theme="select2" ng-disabled="disabled" title="Choose a board">
+															<ui-select ng-model="card.moveToBoardId" theme="select2"
+																	title="<?php p($l->t('Select board to move this card to')); ?>"
+																	placeholder="<?php p($l->t('Select board to move this card to')); ?>"
+																	search-enabled="true"
+																	on-select="populateMoveStackSelect(card.moveToBoardId, card)">
 																<ui-select-match placeholder="Select a board">{{$select.selected.value.title}}</ui-select-match>
-																<ui-select-choices repeat="board.value as (key, board) in boards | filter: $select.search"
-																	<small>title: {{board.value.title}}</small>
+																<ui-select-choices repeat="board.value as (key, board) in boards | filter: $select.search">
+																	<span>{{board.value.title}}</span>
 																</ui-select-choices>
+																<ui-select-no-choice>
+																	<?php p($l->t('No matching board found.')); ?>
+																</ui-select-no-choice>
 															</ui-select>
 														</div>
 														<div class="form-row">
-															Stack Selector here!
-															{{boardservice.getAll()}}
-
+															<ui-select ng-if="card.moveToBoardId" ng-model="card.selectedBoardStack" theme="select2"
+																	title="<?php p($l->t('Select stack to move this card onto')); ?>"
+																	placeholder="<?php p($l->t('Select stack to move this card onto')); ?>"
+																	search-enabled="true"
+																	>
+																<ui-select-match placeholder="Select a stack">{{$select.selected.value.title}}</ui-select-match>
+																<ui-select-choices repeat="stack.value as (key, card) in card.selectedBoardStacks | filter: $select.search">
+																	<span>{{stack.value.title}}</span>
+																</ui-select-choices>
+																<ui-select-no-choice>
+																	<?php p($l->t('No matching stack found.')); ?>
+																</ui-select-no-choice>
+															</ui-select>
 														</div>
 														<div class="form-row">
 															<button ng-click="cardMove(c); $event.stopPropagation();">Move</button>

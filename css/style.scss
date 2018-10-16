@@ -1580,7 +1580,7 @@ body:not(.snapjs-left) {
 	min-width: 200px;
 }
 
-.popover-form:hover .popover-form-container {
+.popover-form .popover-form-container {
 	padding: 12px 12px;
     height: auto;
     opacity: 1;

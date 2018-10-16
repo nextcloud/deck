@@ -48,15 +48,6 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.uploader = FileService.uploader;
 	$scope.boards = BoardService.getAll();
 
-	$scope.$watch(function() {
-		return $scope.boardservice.getAll();
-	}, function(newValue, oldValue){
-			console.log('New Value:');
-			console.log(newValue);
-			console.log('Old value:');
-			console.log(oldValue);
-	});
-
 	$scope.startTitleEdit = function(card) {
 		card.renameTitle = card.title;
 		card.status = card.status || {};
@@ -510,5 +501,14 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.isTimelineEnabled = function() {
 		return OCP.Comments && OCA.Activity;
 	};
+
+	$scope.populateMoveStackSelect = function(selectedBoard, card) {
+		StackService.fetchAll(selectedBoard.id).then(function (data) {
+			$scope.statusservice.releaseWaiting();
+			card.selectedBoardStacks = data;
+		}, function (error) {
+			$scope.statusservice.setError('Error occured', error);
+		});
+	}
 
 });
