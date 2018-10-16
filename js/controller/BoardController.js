@@ -24,6 +24,12 @@ import app from '../app/App.js';
 /* global oc_defaults OC OCP OCA */
 app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter, FileService) {
 
+	$scope.testData = {
+		1: {id: 1, title: 'Test Board Title 1'},
+		2: {id: 1, title: 'Test Board Title 2'},
+		3: {id: 1, title: 'Test Board Title 3'},
+	}
+
 	$scope.sidebar = $rootScope.sidebar;
 	$scope.id = $stateParams.boardId;
 	$scope.status = {

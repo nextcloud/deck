@@ -139,7 +139,7 @@
 														class="icon icon-archive"></span><span><?php p($l->t('Archive')); ?></span></a>
 										</li>
 										<li ng-if="params.filter!=='archive'">
-											<span class="menuitem action action-rename permanent popover-form">
+											<span class="menuitem permanent popover-form">
 											   <span class="icon icon-archive"></span>
 												<span><?php p($l->t('Move')); ?></span>
 												<div class="popover-form-container">
@@ -148,22 +148,35 @@
 															<hr />
 														</div>
 														<div class="form-row">
-															<ui-select multiple tagging="" ng-model="card.labels" theme="select2"
-																	ng-disabled="boardservice.getAll() || card.archived"
+															<!-- <ui-select
+																	ng-model="card.moveToBoard"
+																	theme="select2"
 																	title="<?php p($l->t('Select a board')); ?>"
 																	placeholder="<?php p($l->t('Select a board')); ?>"
-																	ng-disabled="!boardservice.canEdit() || archived">
+																	ng-disabled="(boardservice.getAll() || card.archived) || (!boardservice.canEdit() || archived)">
 																<ui-select-match placeholder="<?php p($l->t('Select board')); ?>">
 																	<span class="select-label">{{$item.title}}&nbsp;</span>
 																</ui-select-match>
-																<ui-select-choices
-																	repeat="(id, boards) in boardservice.getAll() | filter:$select.search track by boards.id">
-																	{{boards.title}}
+																<ui-select-choices repeat="board.value as (key, board) in boardservice.getAll() | filter: {'value':$select.search}">
+																	<div ng-bing-html="board.value.title | highlight: $select.search"></div>
+																	<small>
+																	title: {{board.value.title}}
+																	</small>
+																</ui-select-choices>
+															</ui-select> -->
+
+															<ui-select ng-model="card.moveToBoardId" theme="select2" ng-disabled="disabled" title="Choose a board">
+																<ui-select-match placeholder="Select a board">{{$select.selected.value.title}}</ui-select-match>
+																<ui-select-choices repeat="board.value as (key, board) in $scope.testData | filter: {'value':$select.search}">
+																	<div ng-bind-html="board.value.title | highlight: $select.search"></div>
+																	<small>title: {{board.value.title}}</small>
 																</ui-select-choices>
 															</ui-select>
 														</div>
 														<div class="form-row">
 															Stack Selector here!
+															{{boardservice.getAll()}}
+
 														</div>
 														<div class="form-row">
 															<button ng-click="cardMove(c); $event.stopPropagation();">Move</button>
