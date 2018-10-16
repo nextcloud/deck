@@ -26,8 +26,6 @@
 	<div id="card-dates">
 		<?php p($l->t('Modified:')); ?> <span class="live-relative-timestamp" data-timestamp="{{cardservice.getCurrent().lastModified*1000}}">{{ cardservice.getCurrent().lastModified|relativeDateFilter }}</span>
 		<?php p($l->t('Created:')); ?> <span class="live-relative-timestamp" data-timestamp="{{cardservice.getCurrent().createdAt*1000}}">{{ cardservice.getCurrent().createdAt|relativeDateFilter }}</span>
-		<?php p($l->t('by')); ?>
-		<span>{{ cardservice.getCurrent().owner.displayname }}</span>
 	</div>
 </div>
 
