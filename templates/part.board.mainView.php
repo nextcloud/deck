@@ -167,8 +167,7 @@
 
 															<ui-select ng-model="card.moveToBoardId" theme="select2" ng-disabled="disabled" title="Choose a board">
 																<ui-select-match placeholder="Select a board">{{$select.selected.value.title}}</ui-select-match>
-																<ui-select-choices repeat="board.value as (key, board) in $scope.testData | filter: {'value':$select.search}">
-																	<div ng-bind-html="board.value.title | highlight: $select.search"></div>
+																<ui-select-choices repeat="board.value as (key, board) in boards | filter: $select.search"
 																	<small>title: {{board.value.title}}</small>
 																</ui-select-choices>
 															</ui-select>
