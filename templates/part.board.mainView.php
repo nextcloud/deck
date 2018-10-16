@@ -149,7 +149,7 @@
 														</div>
 														<div class="form-row">
 															<ui-select multiple tagging="" ng-model="card.labels" theme="select2"
-																	ng-disabled="boardsList || card.archived"
+																	ng-disabled="boardservice.getAll() || card.archived"
 																	title="<?php p($l->t('Select a board')); ?>"
 																	placeholder="<?php p($l->t('Select a board')); ?>"
 																	ng-disabled="!boardservice.canEdit() || archived">
@@ -157,7 +157,7 @@
 																	<span class="select-label">{{$item.title}}&nbsp;</span>
 																</ui-select-match>
 																<ui-select-choices
-																	repeat="boards in boardsList | filter:$select.search track by boards.id">
+																	repeat="(id, boards) in boardservice.getAll() | filter:$select.search track by boards.id">
 																	{{boards.title}}
 																</ui-select-choices>
 															</ui-select>

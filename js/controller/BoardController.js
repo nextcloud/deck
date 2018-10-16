@@ -39,14 +39,15 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.labelservice = LabelService;
 	$scope.defaultColors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
 	$scope.board = BoardService.getCurrent();
-	$scope.boardsList = BoardService.getData();
 	$scope.uploader = FileService.uploader;
 
-	$scope.$watch('boardsList', function(newValue, oldValue){
-		console.log('New Value:');
-		console.log(newValue);
-		console.log('Old value:');
-		console.log(oldValue);
+	$scope.$watch(function() {
+		return $scope.boardservice.getAll();
+	}, function(newValue, oldValue){
+			console.log('New Value:');
+			console.log(newValue);
+			console.log('Old value:');
+			console.log(oldValue);
 	});
 
 	$scope.startTitleEdit = function(card) {
