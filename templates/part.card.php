@@ -32,7 +32,7 @@
 <div id="card-meta" class="card-block">
 
 	<div class="section-wrapper" ng-if="!(boardservice.isArchived() || card.archived) && card.labels">
-		<div class="section-label icon-tag"><span class="hidden-visually"><?php p($l->t('Tags')); ?></span></div>
+		<div class="section-label icon-tag" data-toggle="tooltip" data-placement="right" title="<?php p($l->t('Tags')); ?>"><span class="hidden-visually"><?php p($l->t('Tags')); ?></span></div>
 		<div class="section-details">
 			<ui-select multiple tagging="" ng-model="card.labels" theme="select2"
 					   ng-disabled="boardservice.isArchived() || card.archived"
@@ -76,7 +76,7 @@
 
 
 	<div class="section-wrapper">
-		<div class="section-label icon-calendar-dark"><span class="hidden-visually"><?php p($l->t('Due date')); ?></span></div>
+		<div class="section-label icon-calendar-dark" data-placement="right" title="<?php p($l->t('Due date')); ?>"><span class="hidden-visually"><?php p($l->t('Due date')); ?></span></div>
 		<div class="section-details duedate">
 			<input class="datepicker-input medium focus" type="text" placeholder="<?php p($l->t('Click to set')); ?>" value="{{ cardservice.getCurrent().duedate | parseDate }}" datepicker="due" ng-disabled="(boardservice.isArchived() || card.archived)" />
 			<input class="timepicker-input medium focus" type="text" placeholder="00:00" ng-disabled="!cardservice.getCurrent().duedate || (boardservice.isArchived() || card.archived)" value="{{ cardservice.getCurrent().duedate | parseTime }}" timepicker="due" />
