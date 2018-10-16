@@ -83,7 +83,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 
 		// add public shares
 		if ($withPublicShares) {
-			$shares = $this->labelMapper->findAll($id);
+			$shares = $this->publicShareMapper->findAll($id);
 			$board->setPublicShares($shares);
 		}
 

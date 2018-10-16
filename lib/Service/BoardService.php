@@ -127,7 +127,7 @@ class BoardService {
 
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		/** @var Board $board */
-		$board = $this->boardMapper->find($boardId, true, true);
+		$board = $this->boardMapper->find($boardId, true, true, true);
 		$this->boardMapper->mapOwner($board);
 		foreach ($board->getAcl() as &$acl) {
 			if ($acl !== null) {

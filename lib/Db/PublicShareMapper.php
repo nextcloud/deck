@@ -32,13 +32,13 @@ class PublicShareMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	public function findAll($boardId, $limit = null, $offset = null) {
-		// $sql = 'SELECT * FROM `*PREFIX*deck_labels` WHERE `board_id` = ? ORDER BY `id`';
-        // return $this->findEntities($sql, [$boardId], $limit, $offset);
-        throw new Exception('Not Implemented');
+		$sql = 'SELECT * FROM `*PREFIX*deck_public_board_shares` WHERE `board_id` = ? ORDER BY `id`';
+        return $this->findEntities($sql, [$boardId], $limit, $offset);
 	}
 
     public function isOwner($userId, $boardId) {
-		throw new Exception('Not Implemented');
+		$board = $this->find($boardId);
+		return ($board->getOwner() === $userId);
 	}
 
     public function findBoardId($publicShareId) {
