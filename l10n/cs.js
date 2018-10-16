@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Please provide a content for your comment." : "Zadejte obsah svého komentáře.",
     "The comment has been deleted" : "Komentář byl smazán",
     "The associated stack is deleted as well, it will be restored as well." : "Související stack je také smazaný a bude také obnoven.",
     "Restore associated stack" : "Obnovit související stack",
