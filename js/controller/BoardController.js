@@ -491,4 +491,35 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		return OCP.Comments && OCA.Activity;
 	};
 
+	$scope.$watch(function() {
+		return $scope.boardservice.getCurrent();
+	}, function(currentBoard) {
+		console.log('debug output board:')
+		console.log(currentBoard)
+	});
+
+	// hardcoded public shares to finish frontend development.
+	$scope.testPublicShares = [
+		{
+			id: 1,
+			share_link: 'DKSFJLDS_125741',
+			board_id: 1
+		},
+		{
+			id: 2,
+			share_link: 'DKSFJLDS_125878',
+			board_id: 2
+		},
+		{
+			id: 3,
+			share_link: 'DKSFJLDS_125987',
+			board_id: 3
+		}
+	]
+
+	$scope.publicShareDeleteClicked = function(publicShare) {
+		console.log('delete button clicked!');
+		console.log(publicShare);
+	}
+
 });

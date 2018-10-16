@@ -35,6 +35,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	private $stackMapper;
 	private $userManager;
 	private $groupManager;
+	private $publicShareMapper;
 
 	public function __construct(
 		IDBConnection $db,
@@ -42,7 +43,8 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		AclMapper $aclMapper,
 		StackMapper $stackMapper,
 		IUserManager $userManager,
-		IGroupManager $groupManager
+		IGroupManager $groupManager,
+		PublicShareMapper $publicShareMapper
 	) {
 		parent::__construct($db, 'deck_boards', Board::class);
 		$this->labelMapper = $labelMapper;
@@ -50,6 +52,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		$this->stackMapper = $stackMapper;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
+		$this->publicShareMapper = $publicShareMapper;
 	}
 
 
@@ -61,7 +64,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws DoesNotExistException
 	 */
-	public function find($id, $withLabels = false, $withAcl = false) {
+	public function find($id, $withLabels = false, $withAcl = false, $withPublicShares = false) {
 		$sql = 'SELECT id, title, owner, color, archived, deleted_at FROM `*PREFIX*deck_boards` ' .
 			'WHERE `id` = ?';
 		$board = $this->findEntity($sql, [$id]);
@@ -76,6 +79,12 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		if ($withAcl) {
 			$acl = $this->aclMapper->findAll($id);
 			$board->setAcl($acl);
+		}
+
+		// add public shares
+		if ($withPublicShares) {
+			$shares = $this->labelMapper->findAll($id);
+			$board->setPublicShares($shares);
 		}
 
 		return $board;

@@ -19,7 +19,27 @@
 
 </ul>
 <div class="tabsContainer">
+
     <div id="tabBoardShare" class="tab" ng-if="params.tab==0 || !params.tab">
+
+        <div id="publicBoardShares">
+            <ul class="labels">
+                <li ng-repeat="publicShare in testPublicShares">
+                    <span href="#" class="label-title" style="background-color:#317CCC">
+                        <span>{{publicShare.share_link}}</span>
+                    </span>
+                    <a ng-click="publicShareDeleteClicked(publicShare)" class="icon ng-scope" title="<?php p($l->t('Delete')); ?>">
+                        <i class="icon icon-delete"></i>
+                        <span class="hidden-visually"><?php p($l->t('Delete')); ?></span>
+                    </a>
+                </li>
+            </ul>
+            <a class="button" style="max-width: 130px;">
+                <span class="icon icon-add"></span><br>
+                <span>Generate Link</span>
+            </a>
+        </div>
+
         <ui-select ng-if="boardservice.canShare()" ng-model="status.addSharee" theme="select2"
 				   title="<?php p($l->t('Select users or groups to share with')); ?>"
 				   placeholder="<?php p($l->t('Select users or groups to share with')); ?>"
