@@ -1,9 +1,13 @@
 OC.L10N.register(
     "deck",
     {
+    "Restore associated stack" : "Restaura la pila associada",
     "Remove user from card" : "Esborra usuari de la targeta",
     "Hours" : "Hores",
     "Minutes" : "Minuts",
+    "You have removed the due date of {card}" : "Has tret la data prevista de {card}",
+    "{user} has removed the due date of {card}" : "{user} ha tret la data prevista de {card}",
+    "{user} has set the due date of {card} to {after}" : "{user} ha posat la data prevista de {card} d'aquí {after}",
     "Deck" : "Coberta",
     "Finished" : "Acabat",
     "To review" : "Per revisar",

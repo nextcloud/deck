@@ -75,8 +75,6 @@
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "\"%s\" kartı \"%s\" zamanında %s tarafından size atandı.",
     "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user} size \"%s\" kartını \"%s\" zamanında atadı.",
     "The card \"%s\" on \"%s\" has reached its due date." : "\"%s\" kartı \"%s\" zamanında son kullanma tarihine  ulaştı.",
-    "%s has mentioned in a comment on \"%s\"." : "%s kullanıcısından \"%s\" üzerindeki bir yorumda bahsedilmiş.",
-    "{user} has mentioned in a comment on \"%s\"." : "{user} kullanıcısından \"%s\" üzerindeki bir yorumda bahsedilmiş.",
     "The board \"%s\" has been shared with you by %s." : "\"%s\" panosu %s tarafından sizinle paylaşıldı.",
     "{user} has shared the board %s with you." : "{user} sizinle %s panosunu paylaştı.",
     "No data was provided to create an attachment." : "Bir ek dosyası oluşturmak için herhangi bir veri sağlanmadı.",

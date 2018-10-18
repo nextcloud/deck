@@ -75,8 +75,6 @@
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Die Karte \"%s\" auf \"%s\" wurde Dir von %s zugewiesen.",
     "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user} hat Dir die Karte \"%s\" auf \"%s\" zugewiesen.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Die Karte \"%s\" auf \"%s\" ist überfällig.",
-    "%s has mentioned in a comment on \"%s\"." : " %s hat Sie in einem Kommentar zu \"%s\" erwähnt.",
-    "{user} has mentioned in a comment on \"%s\"." : "{user} hat Sie in einem Kommentar zu \"%s\" erwähnt.",
     "The board \"%s\" has been shared with you by %s." : "Das Board \"%s\" wurde von %s mit Dir geteilt.",
     "{user} has shared the board %s with you." : "{user} hat das Board %s mit Dir geteilt.",
     "No data was provided to create an attachment." : "Es wurde keine Daten zum Erstellen eines Anhangs bereitgestellt.",

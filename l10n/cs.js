@@ -2,6 +2,7 @@ OC.L10N.register(
     "deck",
     {
     "Please provide a content for your comment." : "Zadejte obsah svého komentáře.",
+    "Posting the comment failed." : "Odeslání komentáře se nezdařilo.",
     "The comment has been deleted" : "Komentář byl smazán",
     "The associated stack is deleted as well, it will be restored as well." : "Související stack je také smazaný a bude také obnoven.",
     "Restore associated stack" : "Obnovit související stack",
@@ -69,6 +70,8 @@ OC.L10N.register(
     "{user} has deleted the attachment {attachment} to {card}" : "{user} smazal(a) přílohu {attachment} k {card}",
     "You have restored the attachment {attachment} to {card}" : "Obnovili jste přílohu {attachment} k {card}",
     "{user} has restored the attachment {attachment} to {card}" : "{user} obnovil(a) přílohu {attachment} k {card}",
+    "You have commented on {card}" : "Přidali jste komentář na {card}",
+    "{user} has commented on {card}" : "{user} přidal komentář na {card}",
     "Deck" : "Balík",
     "Personal" : "Osobní",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Kartu „%s“ na „%s“ vám přiřadil(a) %s.",
