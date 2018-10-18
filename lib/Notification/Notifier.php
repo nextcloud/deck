@@ -115,10 +115,10 @@ class Notifier implements INotifier {
 					$dn = $params[2];
 				}
 				$notification->setParsedSubject(
-					(string) $l->t('%s has mentioned in a comment on "%s".', [$dn, $params[0]])
+					(string) $l->t('%s has mentioned you in a comment on "%s".', [$dn, $params[0]])
 				);
 				$notification->setRichSubject(
-					(string) $l->t('{user} has mentioned in a comment on "%s".', [$params[0]]),
+					(string) $l->t('{user} has mentioned you in a comment on "%s".', [$params[0]]),
 					[
 						'user' => [
 							'type' => 'user',

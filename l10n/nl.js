@@ -77,8 +77,6 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "De kaart \"%s\" op \"%s\" is aan jou toegewezen door %s.",
     "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user} heeft kaart \"%s\" op \"%s\" aan jou toegewezen.",
     "The card \"%s\" on \"%s\" has reached its due date." : "De kaart \"%s\" in \"%s\" heeft zijn vervaldatum bereikt.",
-    "%s has mentioned in a comment on \"%s\"." : "%s vermeldde in een reactie op \"%s\".",
-    "{user} has mentioned in a comment on \"%s\"." : "{user} vermeldde in een reactie op \"%s\".",
     "The board \"%s\" has been shared with you by %s." : "Het bord \"%s\" is door %s met je gedeeld.",
     "{user} has shared the board %s with you." : "{user} heeft het bord %s met je gedeeld.",
     "No data was provided to create an attachment." : "Geen gegevens opgegeven voor het maken van een bijlage.",

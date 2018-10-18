@@ -149,13 +149,13 @@ class NotifierTest extends \Test\TestCase {
 		$this->cardMapper->expects($this->once())
 			->method('findBoardId')
 			->willReturn(999);
-		$expectedMessage = 'admin has mentioned in a comment on "Card title".';
+		$expectedMessage = 'admin has mentioned you in a comment on "Card title".';
 		$notification->expects($this->once())
 			->method('setParsedSubject')
 			->with($expectedMessage);
 		$notification->expects($this->once())
 			->method('setRichSubject')
-			->with('{user} has mentioned in a comment on "Card title".');
+			->with('{user} has mentioned you in a comment on "Card title".');
 
 
 		$this->url->expects($this->once())
