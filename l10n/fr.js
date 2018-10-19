@@ -77,6 +77,8 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "La carte \"%s\" de \"%s\" vous a été assignée par %s.",
     "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user} vous a assigné la carte \"%s\" de \"%s\".",
     "The card \"%s\" on \"%s\" has reached its due date." : "Le délai de la carte %s de %s est expiré.",
+    "%s has mentioned you in a comment on \"%s\"." : "%s vous a mentionné dans un commentaire sur \"%s\".",
+    "{user} has mentioned you in a comment on \"%s\"." : " {user} vous a mentionné dans un commentaire sur \"%s\".",
     "The board \"%s\" has been shared with you by %s." : "Le tableau %s a été partagé avec vous par %s.",
     "{user} has shared the board %s with you." : "{user} a partagé le tableau %s avec vous.",
     "No data was provided to create an attachment." : "Aucune donnée n'a été fournie pour créer une pièce jointe.",

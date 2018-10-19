@@ -75,6 +75,8 @@
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "O cartão \"%s\" em \"%s\" foi atribuído a você por %s.",
     "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user} atribuiu o cartão \"%s\" em \"%s\" para você.",
     "The card \"%s\" on \"%s\" has reached its due date." : "O cartão \"%s\" em \"%s\" atingiu sua data de vencimento.",
+    "%s has mentioned you in a comment on \"%s\"." : "%s citou você num comentário em \"%s\".",
+    "{user} has mentioned you in a comment on \"%s\"." : "{user} citou você num comentário em \"%s\".",
     "The board \"%s\" has been shared with you by %s." : "O quadro \"%s\" foi compartilhado com você por %s.",
     "{user} has shared the board %s with you." : "{user} compartilhou o quadro %s com você.",
     "No data was provided to create an attachment." : "Nenhum dado foi fornecido para criar um anexo.",

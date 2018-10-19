@@ -77,6 +77,8 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "La scheda \"%s\" in \"%s\" ti è stata assegnata da %s.",
     "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user} ti ha assegnato la scheda \"%s\" in \"%s\".",
     "The card \"%s\" on \"%s\" has reached its due date." : "La scheda \"%s\" in \"%s\" ha raggiunto la sua data di scadenza.",
+    "%s has mentioned you in a comment on \"%s\"." : "%s ti ha menzionato in un commento su \"%s\".",
+    "{user} has mentioned you in a comment on \"%s\"." : "{user} ti ha menzionato in un commento su \"%s\".",
     "The board \"%s\" has been shared with you by %s." : "La lavagna \"%s\" è stata condivisa con te da %s.",
     "{user} has shared the board %s with you." : "{user} ha condiviso la lavagna %s con te.",
     "No data was provided to create an attachment." : "Non è  stato fornito alcun dato per creare un allegato.",
