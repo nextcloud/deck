@@ -35,10 +35,12 @@
 
 .icon-home {
   background-image: url('../../../core/img/places/home.svg');
+  background-image: var(--icon-home-000);
 }
 
 .icon-description {
   background-image: url('../img/description.svg');
+  background-image: var(--icon-text-000);
 }
 
 .icon-badge {
@@ -46,9 +48,25 @@
 }
 
 .icon-toggle-compact-collapsed {
-  background-image: url('../img/toggle_view_expand.svg');
+  background-image: url('../img/toggle-view-expand.svg');
 }
 
 .icon-toggle-compact-expanded {
-  background-image: url('../img/toggle_view_collapse.svg');
+  background-image: url('../img/toggle-view-collapse.svg');
+}
+
+@if mixin-exists('icon-black-white') {
+	@include icon-black-white('deck', 'deck', 1);
+	@include icon-black-white('archive', 'deck', 1);
+	
+	.icon-toggle-compact-collapsed {
+		@include icon-color('toggle-view-expand', 'deck', $color-black);
+	}
+
+	.icon-toggle-compact-expanded {
+		@include icon-color('toggle-view-collapse', 'deck', $color-black);
+	}
+	.icon-activity {
+		@include icon-color('activity-dark', 'activity', $color-black);
+	}
 }
