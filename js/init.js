@@ -1,5 +1,8 @@
 'use strict';
 
+/* global __webpack_nonce__ OC */
+__webpack_nonce__ = btoa(OC.requestToken); // eslint-disable-line no-native-reassign
+
 // used for building a vendor stylesheet
 import 'ng-sortable/dist/ng-sortable.css';
 
