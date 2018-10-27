@@ -141,7 +141,7 @@ OC.L10N.register(
     "Deleted cards" : "Cartes supprimées",
     "Status" : "Statut",
     "No archived boards to display" : "Pas de tableaux archivés à afficher",
-    "No shared boards to display" : "Pas de tableaux partagé à afficher",
+    "No shared boards to display" : "Pas de tableaux partagés à afficher",
     "Title" : "Titre",
     "Members" : "Membres",
     "More actions" : "Plus d'actions",
