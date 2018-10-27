@@ -24,6 +24,7 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\ChangeHelper;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -60,9 +61,14 @@ class BoardApiController extends ApiController {
 	 * Return all of the boards that the current user has access to.
 	 */
 	public function index() {
-		$boards = $this->service->findAll();
+		$modified = $this->request->getHeader('If-Modified-Since');
+		if ($modified === '') {
+			$boards = $this->service->findAll();
+		} else {
+			$boards = $this->service->findAll(strtotime($modified));
+		}
 		return new DataResponse($boards, HTTP::STATUS_OK);
-	}
+	 }
 
 	/**
 	 * @NoAdminRequired
@@ -87,8 +93,8 @@ class BoardApiController extends ApiController {
 	 *
 	 * Create a board with the specified title and color.
 	 */
-	public function create($title, $color) {		
-		$board = $this->service->create($title, $this->userId, $color);		
+	public function create($title, $color) {
+		$board = $this->service->create($title, $this->userId, $color);
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
@@ -96,14 +102,14 @@ class BoardApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 *	 
+	 *
 	 * @params $title
-	 * @params $color	
-	 * @params $archived 
+	 * @params $color
+	 * @params $archived
 	 *
 	 * Update a board with the specified boardId, title and color, and archived state.
 	 */
-	public function update($title, $color, $archived = false) {		
+	public function update($title, $color, $archived = false) {
 		$board = $this->service->update($this->request->getParam('boardId'), $title, $color, $archived);
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
@@ -112,7 +118,7 @@ class BoardApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 *	 
+	 *
 	 *
 	 * Delete the board specified by $boardId.  Return the board that was deleted.
 	 */
@@ -125,12 +131,12 @@ class BoardApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 *	 
+	 *
 	 *
 	 * Undo the deletion of the board specified by $boardId.
 	 */
-	public function undoDelete() {		
-		$board = $this->service->deleteUndo($this->request->getParam('boardId'));		
+	public function undoDelete() {
+		$board = $this->service->deleteUndo($this->request->getParam('boardId'));
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 

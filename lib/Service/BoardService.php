@@ -84,10 +84,10 @@ class BoardService {
 	/**
 	 * @return array
 	 */
-	public function findAll() {
+	public function findAll($since = 0) {
 		$userInfo = $this->getBoardPrerequisites();
-		$userBoards = $this->boardMapper->findAllByUser($userInfo['user']);
-		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups']);
+		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null, $since);
+		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null,  $since);
 		$complete = array_merge($userBoards, $groupBoards);
 		$result = [];
 		foreach ($complete as &$item) {

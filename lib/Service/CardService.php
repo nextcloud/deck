@@ -30,6 +30,7 @@ use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Db\BoardMapper;
@@ -54,6 +55,7 @@ class CardService {
 	private $currentUser;
 	private $activityManager;
 	private $commentsManager;
+	private $changeHelper;
 
 	public function __construct(
 		CardMapper $cardMapper,
@@ -68,6 +70,7 @@ class CardService {
 		ActivityManager $activityManager,
 		ICommentsManager $commentsManager,
 		IUserManager $userManager,
+		ChangeHelper $changeHelper,
 		$userId
 	) {
 		$this->cardMapper = $cardMapper;
@@ -82,6 +85,7 @@ class CardService {
 		$this->activityManager = $activityManager;
 		$this->commentsManager = $commentsManager;
 		$this->userManager = $userManager;
+		$this->changeHelper = $changeHelper;
 		$this->currentUser = $userId;
 	}
 
@@ -176,6 +180,7 @@ class CardService {
 		$card->setOwner($owner);
 		$card = $this->cardMapper->insert($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE);
+		$this->changeHelper->cardChanged($card->getId(), false);
 		return $card;
 	}
 
@@ -202,6 +207,7 @@ class CardService {
 		$card->setDeletedAt(time());
 		$this->cardMapper->update($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_DELETE);
+		$this->changeHelper->cardChanged($card->getId(), false);
 		return $card;
 	}
 
@@ -263,6 +269,7 @@ class CardService {
 		$changes->setAfter($card);
 		$card = $this->cardMapper->update($card);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_CARD, $changes, ActivityManager::SUBJECT_CARD_UPDATE);
+		$this->changeHelper->cardChanged($card->getId(), false);
 		return $card;
 	}
 
@@ -295,6 +302,7 @@ class CardService {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$card->setTitle($title);
+		$this->changeHelper->cardChanged($card->getId(), false);
 		return $this->cardMapper->update($card);
 	}
 
@@ -349,7 +357,7 @@ class CardService {
 			$this->cardMapper->update($card);
 			$result[$card->getOrder()] = $card;
 		}
-
+		$this->changeHelper->cardChanged($id, false);
 		return $result;
 	}
 
@@ -376,6 +384,7 @@ class CardService {
 		$card->setArchived(true);
 		$newCard = $this->cardMapper->update($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_ARCHIVE);
+		$this->changeHelper->cardChanged($id, false);
 		return $newCard;
 	}
 
@@ -402,6 +411,7 @@ class CardService {
 		$card->setArchived(false);
 		$newCard = $this->cardMapper->update($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_UNARCHIVE);
+		$this->changeHelper->cardChanged($id, false);
 		return $newCard;
 	}
 
@@ -434,6 +444,7 @@ class CardService {
 		}
 		$label = $this->labelMapper->find($labelId);
 		$this->cardMapper->assignLabel($cardId, $labelId);
+		$this->changeHelper->cardChanged($cardId, false);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_ASSIGN, ['label' => $label]);
 	}
 
@@ -466,6 +477,7 @@ class CardService {
 		}
 		$label = $this->labelMapper->find($labelId);
 		$this->cardMapper->removeLabel($cardId, $labelId);
+		$this->changeHelper->cardChanged($cardId, false);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_UNASSING, ['label' => $label]);
 	}
 
@@ -505,6 +517,7 @@ class CardService {
 		$assignment->setCardId($cardId);
 		$assignment->setParticipant($userId);
 		$assignment = $this->assignedUsersMapper->insert($assignment);
+		$this->changeHelper->cardChanged($cardId, false);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_USER_ASSIGN, ['assigneduser' => $userId]);
 		return $assignment;
 	}
@@ -535,6 +548,7 @@ class CardService {
 				$assignment = $this->assignedUsersMapper->delete($assignment);
 				$card = $this->cardMapper->find($cardId);
 				$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_USER_UNASSIGN, ['assigneduser' => $userId]);
+				$this->changeHelper->cardChanged($cardId, false);
 				return $assignment;
 			}
 		}

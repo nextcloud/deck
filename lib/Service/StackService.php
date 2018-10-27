@@ -74,10 +74,10 @@ class StackService {
 		$this->activityManager = $activityManager;
 	}
 
-	private function enrichStackWithCards($stack) {
-		$cards = $this->cardMapper->findAll($stack->getId());
+	private function enrichStackWithCards($stack, $since = -1) {
+		$cards = $this->cardMapper->findAll($stack->getId(), null, null, $since);
 
-		if(is_null($cards)) {
+		if(\count($cards) === 0) {
 			return;
 		}
 
@@ -88,9 +88,9 @@ class StackService {
 		$stack->setCards($cards);
 	}
 
-	private function enrichStacksWithCards($stacks) {
+	private function enrichStacksWithCards($stacks, $since = -1) {
 		foreach ($stacks as $stack) {
-			$this->enrichStackWithCards($stack);
+			$this->enrichStackWithCards($stack, $since);
 		}
 	}
 
@@ -123,14 +123,14 @@ class StackService {
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws BadRequestException
 	 */
-	public function findAll($boardId) {
+	public function findAll($boardId, $since = 0) {
 		if (is_numeric($boardId) === false) {
 			throw new BadRequestException('boardId must be a number');
 		}
 
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
 		$stacks = $this->stackMapper->findAll($boardId);
-		$this->enrichStacksWithCards($stacks);
+		$this->enrichStacksWithCards($stacks, $since);
 		return $stacks;
 	}
 

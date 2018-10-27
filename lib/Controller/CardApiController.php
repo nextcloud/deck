@@ -23,6 +23,7 @@
 
  namespace OCA\Deck\Controller;
 
+ use OCA\Deck\Db\ChangeHelper;
  use OCP\AppFramework\ApiController;
  use OCP\AppFramework\Http;
  use OCP\AppFramework\Http\DataResponse;
@@ -35,8 +36,8 @@
  * @package OCA\Deck\Controller
  */
 class CardApiController extends ApiController {
-	private $cardService;		
-	private $userId;	
+	private $cardService;
+	private $userId;
 
 	/**
 	 * @param string $appName
@@ -45,9 +46,9 @@ class CardApiController extends ApiController {
 	 * @param $userId
 	 */
 	public function __construct($appName, IRequest $request, CardService $cardService, $userId) {
-		parent::__construct($appName, $request);		
-		$this->cardService = $cardService;		
-		$this->userId = $userId;		
+		parent::__construct($appName, $request);
+		$this->cardService = $cardService;
+		$this->userId = $userId;
 	}
 
 	/**
@@ -118,8 +119,8 @@ class CardApiController extends ApiController {
 	/**
 	 * @NoAdminRequired
 	 * @CORS
-	 * @NoCSRFRequired	 	 
-	 * 
+	 * @NoCSRFRequired
+	 *
 	 * Assign a label to a card.
 	 */
 	public function removeLabel($labelId) {
@@ -130,8 +131,8 @@ class CardApiController extends ApiController {
 	/**
 	 * @NoAdminRequired
 	 * @CORS
-	 * @NoCSRFRequired	 	 
-	 * 
+	 * @NoCSRFRequired
+	 *
 	 * Unassign a label to a card.
 	 */
 	public function unassignUser($userId) {
@@ -147,8 +148,8 @@ class CardApiController extends ApiController {
 	/**
 	 * @NoAdminRequired
 	 * @CORS
-	 * @NoCSRFRequired	 	 
-	 * 
+	 * @NoCSRFRequired
+	 *
 	 * Unassign a label to a card.
 	 */
 	public function reorder($stackId, $order) {

@@ -31,6 +31,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
@@ -69,7 +70,7 @@ class AttachmentService {
 	 * @param IL10N $l10n
 	 * @throws \OCP\AppFramework\QueryException
 	 */
-	public function __construct(AttachmentMapper $attachmentMapper, CardMapper $cardMapper, PermissionService $permissionService, Application $application, ICacheFactory $cacheFactory, $userId, IL10N $l10n, ActivityManager $activityManager) {
+	public function __construct(AttachmentMapper $attachmentMapper, CardMapper $cardMapper, ChangeHelper $changeHelper, PermissionService $permissionService, Application $application, ICacheFactory $cacheFactory, $userId, IL10N $l10n, ActivityManager $activityManager) {
 		$this->attachmentMapper = $attachmentMapper;
 		$this->cardMapper = $cardMapper;
 		$this->permissionService = $permissionService;
@@ -78,6 +79,7 @@ class AttachmentService {
 		$this->cache = $cacheFactory->createDistributed('deck-card-attachments-');
 		$this->l10n = $l10n;
 		$this->activityManager = $activityManager;
+		$this->changeHelper = $changeHelper;
 
 		// Register shipped attachment services
 		// TODO: move this to a plugin based approach once we have different types of attachments
@@ -205,6 +207,7 @@ class AttachmentService {
 		} catch (InvalidAttachmentType $e) {
 			// just store the data
 		}
+		$this->changeHelper->cardChanged($attachment->getCardId());
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_CREATE);
 		return $attachment;
 	}
@@ -290,6 +293,7 @@ class AttachmentService {
 		} catch (InvalidAttachmentType $e) {
 			// just store the data
 		}
+		$this->changeHelper->cardChanged($attachment->getCardId());
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_UPDATE);
 		return $attachment;
 	}
@@ -332,6 +336,7 @@ class AttachmentService {
 			// just delete without further action
 		}
 		$attachment = $this->attachmentMapper->delete($attachment);
+		$this->changeHelper->cardChanged($attachment->getCardId());
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_DELETE);
 		return $attachment;
 	}
@@ -355,6 +360,7 @@ class AttachmentService {
 			if ($service->allowUndo()) {
 				$attachment->setDeletedAt(0);
 				$attachment = $this->attachmentMapper->update($attachment);
+				$this->changeHelper->cardChanged($attachment->getCardId());
 				$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_RESTORE);
 				return $attachment;
 			}

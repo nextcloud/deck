@@ -30,11 +30,13 @@ class Stack extends RelationalEntity {
 	protected $deletedAt = 0;
 	protected $cards = array();
 	protected $order;
+	protected $lastModified = 0;
 
 	public function __construct() {
 		$this->addType('id', 'integer');
 		$this->addType('boardId', 'integer');
 		$this->addType('deletedAt', 'integer');
+		$this->addType('lastModified', 'integer');
 		$this->addType('order', 'integer');
 	}
 
