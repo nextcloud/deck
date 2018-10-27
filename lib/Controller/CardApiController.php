@@ -23,7 +23,6 @@
 
  namespace OCA\Deck\Controller;
 
- use OCA\Deck\Db\ChangeHelper;
  use OCP\AppFramework\ApiController;
  use OCP\AppFramework\Http;
  use OCP\AppFramework\Http\DataResponse;
@@ -71,7 +70,7 @@ class CardApiController extends ApiController {
 	 * @params $title
 	 * @params $type
 	 * @params $order
-	 * 
+	 *
 	 * Get a specific card.
 	 */
 	public function create($title, $type = 'plain', $order = 999) {
@@ -83,20 +82,20 @@ class CardApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 *	 
-	 * 
+	 *
+	 *
 	 * Update a card
 	 */
 	public function update($title, $type, $order = 0, $description = '', $owner, $duedate = null) {
 		$card = $this->cardService->update($this->request->getParam('cardId'), $title, $this->request->getParam('stackId'), $type, $order, $description, $owner, $duedate, 0);
 		return new DataResponse($card, HTTP::STATUS_OK);
-	}		
+	}
 
 	/**
 	 * @NoAdminRequired
 	 * @CORS
-	 * @NoCSRFRequired	 	 
-	 * 
+	 * @NoCSRFRequired
+	 *
 	 * Delete a specific card.
 	 */
 	public function delete() {
@@ -107,8 +106,8 @@ class CardApiController extends ApiController {
 	/**
 	 * @NoAdminRequired
 	 * @CORS
-	 * @NoCSRFRequired	 	 
-	 * 
+	 * @NoCSRFRequired
+	 *
 	 * Assign a label to a card.
 	 */
 	public function assignLabel($labelId) {

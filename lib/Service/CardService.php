@@ -56,6 +56,7 @@ class CardService {
 	private $activityManager;
 	private $commentsManager;
 	private $changeHelper;
+	private $userManager;
 
 	public function __construct(
 		CardMapper $cardMapper,
@@ -485,9 +486,10 @@ class CardService {
 	 * @param $cardId
 	 * @param $userId
 	 * @return bool|null|\OCP\AppFramework\Db\Entity
+	 * @throws BadRequestException
+	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
-	 * @throws BadRequestException
 	 */
 	public function assignUser($cardId, $userId) {
 
@@ -526,10 +528,11 @@ class CardService {
 	 * @param $cardId
 	 * @param $userId
 	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws BadRequestException
 	 * @throws NotFoundException
+	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
-	 * @throws BadRequestException
 	 */
 	public function unassignUser($cardId, $userId) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);

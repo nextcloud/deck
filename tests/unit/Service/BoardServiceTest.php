@@ -31,6 +31,7 @@ use OCA\Deck\Db\AssignedUsers;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\IUser;
@@ -62,7 +63,8 @@ class BoardServiceTest extends TestCase {
 	private $groupManager;
 	/** @var ActivityManager */
 	private $activityManager;
-
+	/** @var ChangeHelper */
+	private $changeHelper;
 	private $userId = 'admin';
 
 	public function setUp() {
@@ -77,6 +79,7 @@ class BoardServiceTest extends TestCase {
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
+		$this->changeHelper = $this->createMock(ChangeHelper::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -89,6 +92,7 @@ class BoardServiceTest extends TestCase {
 			$this->userManager,
 			$this->groupManager,
 			$this->activityManager,
+			$this->changeHelper,
 			$this->userId
 		);
 

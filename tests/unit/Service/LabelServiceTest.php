@@ -24,6 +24,7 @@
 namespace OCA\Deck\Service;
 
 
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use Test\TestCase;
@@ -38,6 +39,8 @@ class LabelServiceTest extends TestCase {
     private $labelService;
 	/** @var BoardService|\PHPUnit\Framework\MockObject\MockObject */
 	private $boardService;
+	/** @var ChangeHelper|\PHPUnit\Framework\MockObject\MockObject */
+	private $changeHelper;
 
     public function setUp() {
 		parent::setUp();
@@ -46,10 +49,12 @@ class LabelServiceTest extends TestCase {
         $this->permissionService = $this->getMockBuilder(PermissionService::class)
             ->disableOriginalConstructor()->getMock();
         $this->boardService = $this->createMock(BoardService::class);
+        $this->changeHelper = $this->createMock(ChangeHelper::class);
         $this->labelService = new LabelService(
             $this->labelMapper,
             $this->permissionService,
-			$this->boardService
+			$this->boardService,
+			$this->changeHelper
         );
     }
 
@@ -95,13 +100,15 @@ class LabelServiceTest extends TestCase {
     }
 
     public function testDelete() {
+		$label = new Label();
+		$label->setId(1);
         $this->labelMapper->expects($this->once())
             ->method('find')
-            ->willReturn(new Label());
+            ->willReturn($label);
         $this->labelMapper->expects($this->once())
             ->method('delete')
-            ->willReturn(1);
-        $this->assertEquals(1, $this->labelService->delete(123));
+            ->willReturn($label);
+        $this->assertEquals($label, $this->labelService->delete(1));
     }
 
 }

@@ -57,6 +57,8 @@ class AttachmentService {
 	private $l10n;
 	/** @var ActivityManager */
 	private $activityManager;
+	/** @var ChangeHelper */
+	private $changeHelper;
 
 	/**
 	 * AttachmentService constructor.
@@ -219,12 +221,11 @@ class AttachmentService {
 	 * @param $cardId
 	 * @param $attachmentId
 	 * @return Response
-	 * @throws \OCA\Deck\NotFoundException
+	 * @throws BadRequestException
 	 * @throws NoPermissionException
 	 * @throws NotFoundException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
-	 * @throws \OCP\AppFramework\Db\
-	 * @throws BadRequestException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function display($cardId, $attachmentId) {
 

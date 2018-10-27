@@ -24,7 +24,6 @@
 
 namespace OCA\Deck\Controller;
 
-use OCA\Deck\Db\ChangeHelper;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -78,7 +77,7 @@ class BoardApiController extends ApiController {
 	 *
 	 * Return the board specified by $this->request->getParam('boardId').
 	 */
-	public function get() {		
+	public function get() {
 		$board = $this->service->find($this->request->getParam('boardId'));
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}

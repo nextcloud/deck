@@ -28,6 +28,7 @@ use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Stack;
@@ -49,6 +50,7 @@ class StackService {
 	private $assignedUsersMapper;
 	private $attachmentService;
 	private $activityManager;
+	private $changeHelper;
 
 	public function __construct(
 		StackMapper $stackMapper,
@@ -60,7 +62,8 @@ class StackService {
 		CardService $cardService,
 		AssignedUsersMapper $assignedUsersMapper,
 		AttachmentService $attachmentService,
-		ActivityManager $activityManager
+		ActivityManager $activityManager,
+		ChangeHelper $changeHelper
 	) {
 		$this->stackMapper = $stackMapper;
 		$this->boardMapper = $boardMapper;
@@ -72,6 +75,7 @@ class StackService {
 		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->attachmentService = $attachmentService;
 		$this->activityManager = $activityManager;
+		$this->changeHelper = $changeHelper;
 	}
 
 	private function enrichStackWithCards($stack, $since = -1) {
@@ -203,6 +207,7 @@ class StackService {
 		$stack->setOrder($order);
 		$stack = $this->stackMapper->insert($stack);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_CREATE);
+		$this->changeHelper->boardChanged($boardId);
 		return $stack;
 	}
 
@@ -227,7 +232,7 @@ class StackService {
 		$stack = $this->stackMapper->update($stack);
 
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_DELETE);
-
+		$this->changeHelper->boardChanged($stack->getBoardId());
 		$this->enrichStackWithCards($stack);
 		return $stack;
 	}
@@ -276,6 +281,7 @@ class StackService {
 		$changes->setAfter($stack);
 		$stack = $this->stackMapper->update($stack);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_STACK_UPDATE);
+		$this->changeHelper->boardChanged($stack->getBoardId());
 		return $stack;
 	}
 
@@ -318,7 +324,7 @@ class StackService {
 			$this->stackMapper->update($stack);
 			$result[$stack->getOrder()] = $stack;
 		}
-
+		$this->changeHelper->boardChanged($stackToSort->getBoardId());
 		return $result;
 	}
 }

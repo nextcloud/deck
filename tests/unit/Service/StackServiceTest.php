@@ -30,6 +30,7 @@ use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
@@ -66,6 +67,8 @@ class StackServiceTest extends TestCase {
 	private $cardService;
 	/** @var ActivityManager|\PHPUnit\Framework\MockObject\MockObject */
 	private $activityManager;
+	/** @var ChangeHelper|\PHPUnit\Framework\MockObject\MockObject */
+	private $changeHelper;
 
 	public function setUp() {
 		parent::setUp();
@@ -79,6 +82,7 @@ class StackServiceTest extends TestCase {
 		$this->attachmentService = $this->createMock(AttachmentService::class);
 		$this->labelMapper = $this->createMock(LabelMapper::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
+		$this->changeHelper = $this->createMock(ChangeHelper::class);
 
 		$this->stackService = new StackService(
 			$this->stackMapper,
@@ -90,7 +94,8 @@ class StackServiceTest extends TestCase {
 			$this->cardService,
 			$this->assignedUsersMapper,
 			$this->attachmentService,
-			$this->activityManager
+			$this->activityManager,
+			$this->changeHelper
 		);
 	}
 
@@ -185,6 +190,7 @@ class StackServiceTest extends TestCase {
 		$stackToBeDeleted->setId(1);
 		$this->stackMapper->expects($this->once())->method('find')->willReturn($stackToBeDeleted);
 		$this->stackMapper->expects($this->once())->method('update')->willReturn($stackToBeDeleted);
+		$this->cardMapper->expects($this->once())->method('findAll')->willReturn([]);
 		$this->stackService->delete(123);
 		$this->assertTrue($stackToBeDeleted->getDeletedAt() <= time(), "deletedAt is in the past");
 		$this->assertTrue($stackToBeDeleted->getDeletedAt() > 0, "deletedAt is set");
