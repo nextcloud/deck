@@ -1,9 +1,10 @@
 
-The REST API provides access for authenticated users to their data inside the Deck app.
+The REST API provides access for authenticated users to their data inside the Deck app. To get a better understand of Decks data models and their relations, please have a look at the  [data structure](structure.md) documentation.
 
 # Prequisited
 
-All requests require a `OCS-APIRequest` HTTP header to be set to `true` and a `Content-Type` of `application/json`. The API is located at https://nextcloud.local/index.php/apps/deck/api/v1.0
+- All requests require a `OCS-APIRequest` HTTP header to be set to `true` and a `Content-Type` of `application/json`.
+- The API is located at https://nextcloud.local/index.php/apps/deck/api/v1.0
 
 ## Naming
 
@@ -225,7 +226,7 @@ Returns an array of board items
 {
     "title": "Board title",
     "color": "ff0000",
-      "archived: false
+    "archived: false
 }
 ```
 
