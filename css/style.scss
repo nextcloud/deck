@@ -55,10 +55,10 @@ button,
 		border: 0;
 		background-color: transparent;
 	}
-    &.button-inline:hover {
+	&.button-inline:hover {
 		border: 0;
 		background-color: transparent;
-    }
+	}
 }
 
 input.input-inline {
@@ -109,7 +109,7 @@ input.input-inline {
 
 #app-navigation {
 	/** menu */
-	.board-bullet {
+	.board-bullet, .board-bullet-shared, .board-bullet-shared-white {
 		position: absolute;
 		margin-left: 17px;
 		margin-top: 16px;
@@ -119,6 +119,19 @@ input.input-inline {
 		border-radius: 50%;
 		cursor: pointer;
 	}
+
+ 	.board-bullet-shared, .board-bullet-shared-white {
+		background-image: var(--icon-share-000);
+		background-size: 6px;
+		background-position: center center;
+		background-repeat: no-repeat;
+		opacity: 1;
+	}
+
+	.board-bullet-shared-white {
+		background-image: var(--icon-share-fff);
+	}
+
 	.app-navigation-entry-utils-menu-share i {
 		height: 100%;
 		width: 100%;
@@ -237,7 +250,7 @@ input.input-inline {
 	display: flex;
 	align-items: center;
 	position: inherit;
-    padding-left: 44px;
+	padding-left: 44px;
 
 	.crumb {
 		order: 0;
@@ -1149,12 +1162,23 @@ input.input-inline {
 		padding: 0 10px;
 		border-bottom: 1px solid $color-grey;
 
-		.board-bullet {
+		.board-bullet, .board-bullet-shared, .board-bullet-shared-white {
 			width: 32px;
 			height: 32px;
 			border-radius: 50%;
 			cursor: pointer;
 			margin: 6px;
+		}
+
+		.board-bullet-shared, .board-bullet-shared-white{
+			background-image: var(--icon-share-000);
+			background-position: center center;
+			background-repeat: no-repeat;
+			opacity: 1;
+		}
+
+		.board-bullet-shared-white {
+			background-image: var(--icon-share-fff);
 		}
 
 		form {

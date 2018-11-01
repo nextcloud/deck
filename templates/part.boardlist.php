@@ -34,7 +34,8 @@
 		<tbody>
 		<tr data-ng-repeat="b in boardservice.sorted track by b.id" ng-class="{deleted: b.deletedAt > 0}">
 			<td ng-click="gotoBoard(b)">
-				<div class="board-bullet" ng-style="{'background-color':'#'+b.color}"> </div>
+				<div ng-if="b.acl.length !== 0" class="board-bullet-shared{{ b.color | iconWhiteFilter }}" ng-style="{'background-color':'#'+b.color}"></div>
+				<div ng-if="b.acl.length === 0" class="board-bullet" ng-style="{'background-color':'#'+b.color}"></div>
 			</td>
 			<td>
 				<div ng-click="gotoBoard(b)" ng-show="!b.status.edit">{{ b.title }}</div>
@@ -42,11 +43,11 @@
 					<form ng-disabled="isAddingList" class="ng-pristine ng-valid" ng-submit="boardUpdate(b)">
 						<input class="edit ng-valid ng-empty" type="text" autofocus-on-insert ng-model="b.title" maxlength="100" ng-model-options="{ debounce: 250 }">
 						<div class="colorselect" ng-controller="ColorPickerController">
-                            <div class="color" ng-repeat="c in ::colors" ng-style="{'background-color':'#{{ c }}'}" ng-click="b=setColor(b,c)" ng-class="{'selected': (c == b.color) }"></div>
-                            <label class="colorselect-label{{ b.color | iconWhiteFilter }} color" ng-style="getCustomBackground(b.hashedColor)" ng-init="b.hashedColor='#' + b.color">
-                                <input class="color" type="color" ng-model="b.hashedColor" value="#{{b.color}}" ng-change="b=setHashedColor(b)"/>
-                            </label>
-                        </div>
+							<div class="color" ng-repeat="c in ::colors" ng-style="{'background-color':'#{{ c }}'}" ng-click="b=setColor(b,c)" ng-class="{'selected': (c == b.color) }"></div>
+							<label class="colorselect-label{{ b.color | iconWhiteFilter }} color" ng-style="getCustomBackground(b.hashedColor)" ng-init="b.hashedColor='#' + b.color">
+								<input class="color" type="color" ng-model="b.hashedColor" value="#{{b.color}}" ng-change="b=setHashedColor(b)"/>
+							</label>
+						</div>
 					</form>
 				</div>
 			</td>
@@ -113,12 +114,12 @@
 					<input class="edit ng-valid ng-empty"
 						   type="text" placeholder="<?php p($l->t('New board title')); ?>"
 						   autofocus-on-insert ng-model="newBoard.title" maxlength="100" ng-model-options="{ debounce: 250 }">
-                    <div class="colorselect" ng-controller="ColorPickerController">
-                        <div class="color" ng-repeat="c in ::colors" ng-style="{'background-color':'#{{ c }}'}" ng-click="selectColor(c);b=setColor(b,c);"ng-class="{'selected': (c == newBoard.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"></div>
-                        <label class="colorselect-label{{ newBoard.color | iconWhiteFilter }} color" ng-style="getCustomBackground(newBoard.hashedColor)" ng-init="newBoard.hashedColor='#' + newBoard.color">
-                            <input class="color" type="color" ng-model="newBoard.hashedColor" value="#{{newBoard.color}}" ng-change="newBoard=setHashedColor(newBoard)"/>
-                        </label>
-                    </div>
+						<div class="colorselect" ng-controller="ColorPickerController">
+						<div class="color" ng-repeat="c in ::colors" ng-style="{'background-color':'#{{ c }}'}" ng-click="selectColor(c);b=setColor(b,c);"ng-class="{'selected': (c == newBoard.color), 'dark': (newBoard.color | textColorFilter) === '#ffffff' }"></div>
+							<label class="colorselect-label{{ newBoard.color | iconWhiteFilter }} color" ng-style="getCustomBackground(newBoard.hashedColor)" ng-init="newBoard.hashedColor='#' + newBoard.color">
+							<input class="color" type="color" ng-model="newBoard.hashedColor" value="#{{newBoard.color}}" ng-change="newBoard=setHashedColor(newBoard)"/>
+						</label>
+						</div>
 				</form>
 			</td>
 			<td></td>
