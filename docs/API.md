@@ -29,11 +29,30 @@ In any case a user doesn't have access to a requested entity, a 403 error will b
 }
 ```
 
+## Headers
+
+### If-Modified-Since
+
+Some index endpoints support limiting the result set to entries that have been changed since the given time.
+
+Example curl request:
+
+```bash
+curl -u admin:admin -X GET \
+    'http://localhost:8000/index.php/apps/deck/api/v1.0/boards/2/stacks' \
+    -H "OCS-APIRequest: true" \
+    -H "If-Modified-Since: Mon, 5 Nov 2018 09:28:00 GMT"
+```
+
 # Endpoints
 
 ## Boards
 
 ### GET /boards - Get a list of boards
+
+#### Headers
+
+The board list endpoint supports setting an `If-Modified-Since` header to limit the results to entities that are changed after the provided time.
 
 #### Response
 
@@ -262,6 +281,11 @@ Returns an array of board items
 
 ### GET /board/{boardId}/stacks - Get stacks
 
+#### Headers
+
+The board list endpoint supports setting an `If-Modified-Since` header to limit the results to entities that are changed after the provided time.
+
+
 #### Request parameters
 
 | Parameter | Type    | Description                  |
@@ -269,6 +293,20 @@ Returns an array of board items
 | boardId   | Integer | The id of the board to fetch |
 
 #### Response
+
+```json
+[
+  {
+    "title": "ToDo",
+    "boardId": 2,
+    "deletedAt": 0,
+    "lastModified": 1541426139,
+    "cards": [...],
+    "order": 999,
+    "id": 4
+  }
+]
+```
 
 ##### 200 Success
 
@@ -281,6 +319,20 @@ Returns an array of board items
 | boardId   | Integer | The id of the board to fetch |
 
 #### Response
+
+```json
+[
+  {
+    "title": "ToDo",
+    "boardId": 2,
+    "deletedAt": 0,
+    "lastModified": 1541426139,
+    "cards": [...],
+    "order": 999,
+    "id": 4
+  }
+]
+```
 
 ##### 200 Success
 
@@ -317,6 +369,13 @@ Returns an array of board items
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the stack belongs to |
 | stackId   | Integer | The id of the stack                      |
+
+#### Request body
+
+| Parameter | Type    | Description                                          |
+| --------- | ------- | ---------------------------------------------------- |
+| title     | String  | The title of the new stack                           |
+| order     | Integer | Order for sorting the stacks                         |
 
 #### Response
 
@@ -359,6 +418,18 @@ Returns an array of board items
 | --------- | ------- | --------------------------------------- |
 | boardId   | Integer | The id of the board the card belongs to |
 | stackId   | Integer | The id of the stack the card belongs to |
+
+#### Request body
+
+| Parameter | Type    | Description                                          |
+| --------- | ------- | ---------------------------------------------------- |
+| title     | String  | The title of the new stack                           |
+| type      | String  | Type of the card (for later use) use 'plain' for now |
+| 
+     
+     | Integer | Order for sorting the stacks                         |
+
+
 
 #### Response
 
