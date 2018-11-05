@@ -30,7 +30,7 @@
     "karma": "^3.1.1",
     "mini-css-extract-plugin": "^0.4.4",
     "node-sass": "^4.9.4",
-    "webpack": "^4.23.1",
+    "webpack": "^4.24.0",
     "webpack-cli": "^3.1.2",
     "webpack-merge": "^4.1.4"
   },
