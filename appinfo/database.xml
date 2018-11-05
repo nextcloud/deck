@@ -46,6 +46,13 @@
                 <notnull>false</notnull>
                 <unsigned>true</unsigned>
             </field>
+            <field>
+                <name>last_modified</name>
+                <type>integer</type>
+                <default></default>
+                <notnull>false</notnull>
+                <unsigned>true</unsigned>
+            </field>
         </declaration>
     </table>
     <table>
@@ -82,6 +89,13 @@
                 <type>integer</type>
                 <default>0</default>
                 <length>8</length>
+                <notnull>false</notnull>
+                <unsigned>true</unsigned>
+            </field>
+            <field>
+                <name>last_modified</name>
+                <type>integer</type>
+                <default></default>
                 <notnull>false</notnull>
                 <unsigned>true</unsigned>
             </field>

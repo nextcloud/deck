@@ -39,7 +39,8 @@ class StackTest extends \Test\TestCase {
 			'title' => "My Stack",
 			'order' => 1,
 			'boardId' => 1,
-			'deletedAt' => 0
+			'deletedAt' => 0,
+			'lastModified' => 0,
 		], $board->jsonSerialize());
 	}
 	public function testJsonSerializeWithCards() {
@@ -52,7 +53,8 @@ class StackTest extends \Test\TestCase {
 			'order' => 1,
 			'boardId' => 1,
 			'cards' => array("foo", "bar"),
-			'deletedAt' => 0
+			'deletedAt' => 0,
+			'lastModified' => 0,
 		], $board->jsonSerialize());
 	}
 }

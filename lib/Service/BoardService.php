@@ -28,6 +28,7 @@ use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Notification\NotificationHelper;
@@ -54,6 +55,7 @@ class BoardService {
 	private $groupManager;
 	private $userId;
 	private $activityManager;
+	private $changeHelper;
 
 	public function __construct(
 		BoardMapper $boardMapper,
@@ -66,6 +68,7 @@ class BoardService {
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		ActivityManager $activityManager,
+		ChangeHelper $changeHelper,
 		$userId
 	) {
 		$this->boardMapper = $boardMapper;
@@ -78,16 +81,17 @@ class BoardService {
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->activityManager = $activityManager;
+		$this->changeHelper = $changeHelper;
 		$this->userId = $userId;
 	}
 
 	/**
 	 * @return array
 	 */
-	public function findAll() {
+	public function findAll($since = 0) {
 		$userInfo = $this->getBoardPrerequisites();
-		$userBoards = $this->boardMapper->findAllByUser($userInfo['user']);
-		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups']);
+		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null, $since);
+		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null,  $since);
 		$complete = array_merge($userBoards, $groupBoards);
 		$result = [];
 		foreach ($complete as &$item) {
@@ -276,6 +280,7 @@ class BoardService {
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
 		]);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $new_board, ActivityManager::SUBJECT_BOARD_CREATE);
+		$this->changeHelper->boardChanged($new_board->getId());
 		return $new_board;
 
 	}
@@ -299,6 +304,7 @@ class BoardService {
 		$board->setDeletedAt(time());
 		$board = $this->boardMapper->update($board);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_DELETE);
+		$this->changeHelper->boardChanged($board->getId());
 		return $board;
 	}
 
@@ -320,6 +326,7 @@ class BoardService {
 		$board->setDeletedAt(0);
 		$board = $this->boardMapper->update($board);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_RESTORE);
+		$this->changeHelper->boardChanged($board->getId());
 		return $board;
 	}
 
@@ -380,6 +387,7 @@ class BoardService {
 		$this->boardMapper->update($board); // operate on clone so we can check for updated fields
 		$this->boardMapper->mapOwner($board);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_BOARD_UPDATE);
+		$this->changeHelper->boardChanged($board->getId());
 		return $board;
 	}
 
@@ -392,8 +400,8 @@ class BoardService {
 	 * @param $share
 	 * @param $manage
 	 * @return \OCP\AppFramework\Db\Entity
-	 * @throws \OCA\Deck\
 	 * @throws BadRequestException
+	 * @throws \OCA\Deck\NoPermissionException
 	 */
 	public function addAcl($boardId, $type, $participant, $edit, $share, $manage) {
 
@@ -436,6 +444,7 @@ class BoardService {
 		$newAcl = $this->aclMapper->insert($acl);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE);
 		$this->boardMapper->mapAcl($newAcl);
+		$this->changeHelper->boardChanged($boardId);
 		return $newAcl;
 	}
 
@@ -475,7 +484,9 @@ class BoardService {
 		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
 		$this->boardMapper->mapAcl($acl);
-		return $this->aclMapper->update($acl);
+		$board = $this->aclMapper->update($acl);
+		$this->changeHelper->boardChanged($acl->getBoardId());
+		return $board;
 	}
 
 	/**
@@ -503,6 +514,7 @@ class BoardService {
 			}
 		}
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $acl, ActivityManager::SUBJECT_BOARD_UNSHARE);
+		$this->changeHelper->boardChanged($acl->getBoardId());
 		return $this->aclMapper->delete($acl);
 	}
 

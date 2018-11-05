@@ -49,7 +49,7 @@ class StackApiController extends ApiController {
 	public function __construct($appName, IRequest $request, StackService $stackService, BoardService $boardService) {
 		parent::__construct($appName, $request);
 		$this->stackService = $stackService;
-		$this->boardService = $boardService;		
+		$this->boardService = $boardService;
 	}
 
 	/**
@@ -59,8 +59,13 @@ class StackApiController extends ApiController {
 	 *
 	 * Return all of the stacks in the specified board.
 	 */
-	public function index() {				
-		$stacks = $this->stackService->findAll($this->request->getParam('boardId'));
+	public function index() {
+		$since = 0;
+		$modified = $this->request->getHeader('If-Modified-Since');
+		if ($modified !== '') {
+			$since = strtotime($modified);
+		}
+		$stacks = $this->stackService->findAll($this->request->getParam('boardId'), $since);
 		return new DataResponse($stacks, HTTP::STATUS_OK);
 	}
 
@@ -75,7 +80,7 @@ class StackApiController extends ApiController {
 		$stack = $this->stackService->find($this->request->getParam('stackId'));
 		return new DataResponse($stack, HTTP::STATUS_OK);
 	}
-	
+
 	/**
 	 * @NoAdminRequired
 	 * @CORS
@@ -95,13 +100,13 @@ class StackApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 *	 
-	 * @params $title	 
+	 *
+	 * @params $title
 	 * @params $order
 	 *
 	 * Update a stack by the specified stackId and boardId with the values that were put.
 	 */
-	public function update($title, $order) {		
+	public function update($title, $order) {
 		$stack = $this->stackService->update($this->request->getParam('stackId'), $title, $this->request->getParam('boardId'), $order, 0);
 		return new DataResponse($stack, HTTP::STATUS_OK);
 	}
@@ -113,7 +118,7 @@ class StackApiController extends ApiController {
 	 *
 	 * Delete the stack specified by $this->request->getParam('stackId').
 	 */
-	public function delete() {				
+	public function delete() {
 		$stack = $this->stackService->delete($this->request->getParam('stackId'));
 		return new DataResponse($stack, HTTP::STATUS_OK);
 	}

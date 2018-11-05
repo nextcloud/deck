@@ -5,24 +5,25 @@
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *  
+ *
  */
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\LabelMapper;
@@ -38,11 +39,14 @@ class LabelService {
 	private $permissionService;
 	/** @var BoardService */
 	private $boardService;
+	/** @var ChangeHelper */
+	private $changeHelper;
 
-	public function __construct(LabelMapper $labelMapper, PermissionService $permissionService, BoardService $boardService) {
+	public function __construct(LabelMapper $labelMapper, PermissionService $permissionService, BoardService $boardService, ChangeHelper $changeHelper) {
 		$this->labelMapper = $labelMapper;
 		$this->permissionService = $permissionService;
 		$this->boardService = $boardService;
+		$this->changeHelper = $changeHelper;
 	}
 
 	/**
@@ -94,6 +98,7 @@ class LabelService {
 		$label->setTitle($title);
 		$label->setColor($color);
 		$label->setBoardId($boardId);
+		$this->changeHelper->boardChanged($boardId);
 		return $this->labelMapper->insert($label);
 	}
 
@@ -116,7 +121,9 @@ class LabelService {
 		if ($this->boardService->isArchived($this->labelMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
-		return $this->labelMapper->delete($this->find($id));
+		$label = $this->labelMapper->delete($this->find($id));
+		$this->changeHelper->boardChanged($label->getBoardId());
+		return $label;
 	}
 
 	/**
@@ -151,6 +158,7 @@ class LabelService {
 		$label = $this->find($id);
 		$label->setTitle($title);
 		$label->setColor($color);
+		$this->changeHelper->boardChanged($label->getBoardId());
 		return $this->labelMapper->update($label);
 	}
 

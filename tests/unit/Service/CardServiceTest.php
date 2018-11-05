@@ -29,6 +29,7 @@ use OCA\Deck\Db\AssignedUsers;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
@@ -69,6 +70,8 @@ class CardServiceTest extends TestCase {
 	private $commentsManager;
 	/** @var ICommentsManager|MockObject */
 	private $userManager;
+	/** @var ChangeHelper|MockObject */
+	private $changeHelper;
 
 	public function setUp() {
 		    parent::setUp();
@@ -84,6 +87,7 @@ class CardServiceTest extends TestCase {
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->commentsManager = $this->createMock(ICommentsManager::class);
 		$this->userManager = $this->createMock(IUserManager::class);
+		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->cardService = new CardService(
 			$this->cardMapper,
 			$this->stackMapper,
@@ -97,6 +101,7 @@ class CardServiceTest extends TestCase {
 			$this->activityManager,
 			$this->commentsManager,
 			$this->userManager,
+			$this->changeHelper,
 			'user1'
         );
     }
