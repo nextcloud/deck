@@ -65,10 +65,21 @@ class ChangeHelper {
 			$this->db->executeUpdate($sql, [time(), $cardId]);
 		}
 
-		$sql = 'SELECT s.board_id as id FROM oc_deck_stacks as s inner join oc_deck_cards as c ON c.stack_id = s.id WHERE c.id = ?';
+		$sql = 'SELECT s.board_id as id, c.stack_id as stack_id FROM oc_deck_stacks as s inner join oc_deck_cards as c ON c.stack_id = s.id WHERE c.id = ?';
 		$result = $this->db->executeQuery($sql, [$cardId]);
 		if ($row = $result->fetch()) {
 			$this->boardChanged($row['id']);
+			$this->stackChanged($row['stack_id']);
+		}
+	}
+
+	public function stackChanged($stackId, $updateBoard = true) {
+		$time = time();
+		$etag = md5($time . microtime());
+		$this->cache->set(self::TYPE_CARD . '-' .$stackId, $etag);
+		if ($updateBoard) {
+			$sql = 'UPDATE `*PREFIX*deck_stacks` SET `last_modified` = ? WHERE `id` = ?';
+			$this->db->executeUpdate($sql, [time(), $stackId]);
 		}
 	}
 
