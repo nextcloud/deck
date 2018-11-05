@@ -24,6 +24,9 @@
 use OCP\Util;
 
 Util::addScript('activity', 'richObjectStringParser');
+Util::addScript('activity', 'templates');
+Util::addScript('activity', 'script');
+
 Util::addStyle('activity', 'style');
 Util::addStyle('comments', 'comments');
 Util::addScript('oc-backbone-webdav');
