@@ -245,7 +245,7 @@ Returns an array of board items
 {
     "title": "Board title",
     "color": "ff0000",
-    "archived: false
+    "archived": false
 }
 ```
 
@@ -425,13 +425,32 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | --------- | ------- | ---------------------------------------------------- |
 | title     | String  | The title of the new stack                           |
 | type      | String  | Type of the card (for later use) use 'plain' for now |
-| 
-     
-     | Integer | Order for sorting the stacks                         |
-
-
+| order     | Integer | Order for sorting the stacks                         |
 
 #### Response
+
+```json
+{  
+   "title":"Test",
+   "description":null,
+   "stackId":6,
+   "type":"plain",
+   "lastModified":1541528026,
+   "createdAt":1541528026,
+   "labels":null,
+   "assignedUsers":null,
+   "attachments":null,
+   "attachmentCount":null,
+   "owner":"admin",
+   "order":999,
+   "archived":false,
+   "duedate":null,
+   "deletedAt":0,
+   "commentsUnread":0,
+   "id":10,
+   "overdue":0
+}
+```
 
 ##### 200 Success
 
@@ -444,6 +463,27 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | boardId   | Integer | The id of the board the card belongs to |
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
+
+#### Request data
+
+| Parameter   | Type      | Description                                          |
+|-------------|-----------|------------------------------------------------------|
+| title       | String    | The card title                                       |
+| description | String    | The markdown description of the card                 |
+| type        | String    | Type of the card (for later use) use 'plain' for now |
+| order       | Integer   | Order for sorting the stacks                         |
+| duedate     | timestamp | The duedate of the card or null                      |
+
+
+```
+{  
+   "title": "Test card",
+   "description": "A card description",
+   "type": "plain",
+   "order": 999,
+   "duedate": null,
+}
+```
 
 #### Response
 
@@ -473,6 +513,11 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
+#### Request data
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| labelId   | Integer | The label id to assign to the card      |
 #### Response
 
 ##### 200 Success
@@ -486,6 +531,12 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | boardId   | Integer | The id of the board the card belongs to |
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
+
+#### Request data
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| labelId   | Integer | The label id to remove to the card      |
 
 #### Response
 
@@ -501,6 +552,12 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
+#### Request data
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| userId    | String  | The user id to assign to the card       |
+
 #### Response
 
 ##### 200 Success
@@ -515,6 +572,12 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
 
+#### Request data
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| userId    | String  | The user id to assign to the card       |
+
 #### Response
 
 ##### 200 Success
@@ -528,6 +591,14 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | boardId   | Integer | The id of the board the card belongs to |
 | stackId   | Integer | The id of the stack the card belongs to |
 | cardId    | Integer | The id of the card                      |
+
+#### Request data
+
+| Parameter | Type    | Description                                                 |
+| --------- | ------- | ----------------------------------------------------------- |
+| order     | Integer | The position in the stack where the card should be moved to |
+| stackId   | Integer | The id of the stack where the card should be moved to       |
+
 
 #### Response
 
@@ -548,6 +619,16 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
+```json
+{
+  "title": "Abgeschlossen",
+  "color": "31CC7C",
+  "boardId": "2",
+  "cardId": null,
+  "id": 5
+}
+```
+
 ### POST /board/{boardId}/labels - Create a new label
 
 #### Request parameters
@@ -555,6 +636,15 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | Parameter | Type    | Description                              |
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the label belongs to |
+
+#### Request data
+
+```json
+{
+  "title": "Finished",
+  "color": "31CC7C"
+}
+```
 
 #### Response
 
@@ -568,6 +658,16 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | --------- | ------- | ---------------------------------------- |
 | boardId   | Integer | The id of the board the label belongs to |
 | labelId   | Integer | The id of the label                      |
+
+
+#### Request data
+
+```json
+{
+  "title": "Finished",
+  "color": "31CC7C"
+}
+```
 
 #### Response
 
@@ -602,6 +702,32 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
+```json
+[
+  {
+    "cardId": 5,
+    "type": "deck_file",
+    "data": "6DADC2C69F4.eml",
+    "lastModified": 1541529048,
+    "createdAt": 1541529048,
+    "createdBy": "admin",
+    "deletedAt": 0,
+    "extendedData": {
+      "filesize": 922258,
+      "mimetype": "application/octet-stream",
+      "info": {
+        "dirname": ".",
+        "basename": "6DADC2C69F4.eml",
+        "extension": "eml",
+        "filename": "6DADC2C69F4"
+      }
+    },
+    "id": 6
+  }
+]
+
+```
+
 ### GET /board/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Get the attachment file
 
 #### Request parameters
@@ -627,6 +753,15 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack the attachment belongs to |
 | cardId    | Integer | The id of the card the attachment belongs to  |
 
+#### Request data
+
+| Parameter | Type    | Description                                   |
+| --------- | ------- | --------------------------------------------- |
+| type      | String  | The type of the attachement                   |
+| file      | Binary  | File data to add as an attachment             |
+
+For now only `deck_file` is supported as an attachment type.
+
 #### Response
 
 ##### 200 Success
@@ -641,6 +776,15 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId      | Integer | The id of the stack the attachment belongs to |
 | cardId       | Integer | The id of the card the attachment belongs to  |
 | attachmentId | Integer | The id of the attachment                      |
+
+#### Request data
+
+| Parameter | Type    | Description                                   |
+| --------- | ------- | --------------------------------------------- |
+| type      | String  | The type of the attachement                   |
+| file      | Binary  | File data to add as an attachment             |
+
+For now only `deck_file` is supported as an attachment type.
 
 #### Response
 
