@@ -1,0 +1,14 @@
+site_name: Nextcloud Deck
+theme:
+    name: readthedocs
+extra_css: [extra.css]
+pages:
+    - Home: index.md
+    - User documentation:
+        - Markdown composing: Markdown.md
+    - API documentation:
+        - REST API: API.md
+        - Nextcloud API: API-Nextcloud.md
+    - Developer documentation:
+        - Data structure: structure.md
+

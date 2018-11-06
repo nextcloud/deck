@@ -25,6 +25,7 @@ namespace OCA\Deck\Controller;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\FileDisplayResponse;
 use OCP\IRequest;
 use OCA\Deck\Service\AttachmentService;
 
@@ -56,7 +57,7 @@ class AttachmentApiController extends ApiController {
 	 */
     public function display() {
         $attachment = $this->attachmentService->display($this->request->getParam('cardId'), $this->request->getParam('attachmentId'));
-        return new DataResponse($attachment, HTTP::STATUS_OK);
+		return $attachment;
     }
 
     /**
