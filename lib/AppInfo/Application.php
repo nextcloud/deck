@@ -99,8 +99,6 @@ class Application extends App {
 			}
 		});
 
-		$this->registerCommentsEntity();
-
 	}
 
 	public function registerNavigationEntry() {
