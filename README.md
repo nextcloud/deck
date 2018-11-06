@@ -57,7 +57,9 @@ You can use the provided Makefile to run all tests by using:
 
     make test
 
+### Documentation
 
+The documentation for our REST API can be found at https://deck.readthedocs.io/en/latest/API/
 
 ## Contribution Guidelines
 
