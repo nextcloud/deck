@@ -85,7 +85,7 @@ class AttachmentApiControllerTest extends \Test\TestCase {
                 $this->cardId,
                 $this->attachmentExample->getId());
 
-        $expected = new DataResponse($this->attachmentExample, HTTP::STATUS_OK);
+        $expected = $this->attachmentExample;
         $actual = $this->controller->display();
         $this->assertEquals($expected, $actual);
     }
