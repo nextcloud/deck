@@ -18,6 +18,17 @@ The REST API provides access for authenticated users to their data inside the De
 
 ## Global responses
 
+### 400 Bad request
+
+In case the request is invalid, e.g. because a parameter is missing, a 400 error will be returned:
+
+```json
+{
+  "status": 400,
+  "message": "title must be provided"
+}
+```
+
 ### 403 Permission denied
 
 In any case a user doesn't have access to a requested entity, a 403 error will be returned:
