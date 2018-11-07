@@ -100,11 +100,11 @@ checkboxReplace = function(md, options, Token) {
         continue;
       }
       tokens = blockTokens[j].children;
-      i = tokens.length - 1;
-      while (i >= 0) {
+      i = 0;
+      while (i < tokens.length) {
         token = tokens[i];
         blockTokens[j].children = tokens = arrayReplaceAt(tokens, i, splitTextToken(token, state.Token));
-        i--;
+        i++;
       }
       j++;
     }
