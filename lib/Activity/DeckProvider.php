@@ -127,11 +127,26 @@ class DeckProvider implements IProvider {
 
 		try {
 			$subject = $this->activityManager->getActivityFormat($subjectIdentifier, $subjectParams, $ownActivity);
-			$event->setParsedSubject($subject);
-			$event->setRichSubject($subject, $params);
+			$this->setSubjects($event, $subject, $params);
 		} catch (\Exception $e) {
 		}
 		return $event;
+	}
+
+	/**
+	 * @param IEvent $event
+	 * @param string $subject
+	 * @param array $parameters
+	 */
+	protected function setSubjects(IEvent $event, $subject, array $parameters) {
+		$placeholders = $replacements = [];
+		foreach ($parameters as $placeholder => $parameter) {
+			$placeholders[] = '{' . $placeholder . '}';
+			$replacements[] = $parameter['name'];
+		}
+
+		$event->setParsedSubject(str_replace($placeholders, $replacements, $subject))
+			->setRichSubject($subject, $parameters);
 	}
 
 	private function getIcon(IEvent $event) {

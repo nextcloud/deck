@@ -76,8 +76,17 @@ class DeckProviderTest extends TestCase {
 		$event->expects($this->any())->method('getObjectName')->willReturn($objectName);
 		$event->expects($this->any())->method('getAuthor')->willReturn('admin');
 		$event->expects($this->any())->method('getMessage')->willReturn('');
-		$event->expects($this->any())->method('setIcon')->will($this->returnCallback(function($icon) use (&$data) {
+		$event->expects($this->any())->method('setIcon')->will($this->returnCallback(function($icon) use (&$data, $event) {
 			$data['icon'] = $icon;
+			return $event;
+		}));
+		$event->expects($this->any())->method('setParsedSubject')->will($this->returnCallback(function($subject) use (&$data, $event) {
+			$data['parsedSubject'] = $subject;
+			return $event;
+		}));
+		$event->expects($this->any())->method('setRichSubject')->will($this->returnCallback(function($subject) use (&$data, $event) {
+			$data['richSubject'] = $subject;
+			return $event;
 		}));
 		$event->expects($this->any())->method('getIcon')->will(
 			$this->returnCallback(function() use (&$data) {
@@ -116,6 +125,9 @@ class DeckProviderTest extends TestCase {
 		$event = $this->mockEvent(
 			ActivityManager::DECK_OBJECT_BOARD, 1, 'Board',
 			$subject);
+		$this->activityManager->expects($this->once())
+			->method('getActivityFormat')
+			->willReturn('test string {board}');
 		$this->urlGenerator->expects($this->any())
 			->method('imagePath')
 			->will($this->returnCallback(function($a, $i) {
@@ -186,7 +198,7 @@ class DeckProviderTest extends TestCase {
 			}));
 		$this->activityManager->expects($this->once())
 			->method('getActivityFormat')
-			->willReturn('test string {board}');
+			->willReturn('test string {card}');
 		$user = $this->createMock(IUser::class);
 		$user->expects($this->any())->method('getDisplayName')->willReturn('Administrator');
 		$this->userManager->expects($this->any())
@@ -217,8 +229,8 @@ class DeckProviderTest extends TestCase {
 			]
 		];
 		$this->assertEquals($data, $event->getRichSubjectParameters());
-		$this->assertEquals('test string {board}', $event->getParsedSubject());
-		$this->assertEquals('test string {board}', $event->getRichSubject());
+		$this->assertEquals('test string Card', $event->getParsedSubject());
+		$this->assertEquals('test string {card}', $event->getRichSubject());
 		$this->assertEquals('', $event->getMessage());
 
 	}
@@ -231,7 +243,7 @@ class DeckProviderTest extends TestCase {
 			}));
 		$this->activityManager->expects($this->once())
 			->method('getActivityFormat')
-			->willReturn('test string {board}');
+			->willReturn('test string {card}');
 		$user = $this->createMock(IUser::class);
 		$user->expects($this->any())->method('getDisplayName')->willReturn('Administrator');
 		$this->userManager->expects($this->any())
@@ -267,8 +279,8 @@ class DeckProviderTest extends TestCase {
 			],
 		];
 		$this->assertEquals($data, $event->getRichSubjectParameters());
-		$this->assertEquals('test string {board}', $event->getParsedSubject());
-		$this->assertEquals('test string {board}', $event->getRichSubject());
+		$this->assertEquals('test string Card', $event->getParsedSubject());
+		$this->assertEquals('test string {card}', $event->getRichSubject());
 		$this->assertEquals('BCD', $event->getMessage());
 		$this->assertEquals('<pre class="visualdiff"><del>A</del>BC<ins>D</ins></pre>', $event->getParsedMessage());
 	}
