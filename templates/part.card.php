@@ -90,15 +90,16 @@
 			<li class="tabHeader" ng-class="{'selected': (params.tab==1)}" ui-sref="{tab: 1}"><a><span class="icon icon-files-dark"></span><?php p($l->t('Attachments')); ?></a></li>
 			<li class="tabHeader" ng-class="{'selected': (params.tab==2)}" ui-sref="{tab: 2}" ng-if="isTimelineEnabled()"><a><span class="icon icon-activity"></span><?php p($l->t('Timeline')); ?></a></li>
 		</ul>
-		<div class="tabDetails">
-			<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
-			<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>
-			<a ng-if="params.tab === 0" href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
-			<label ng-if="params.tab === 1" for="attachment-upload" class="button icon-upload" ng-class="{'icon-loading-small': fileservice.uploader.isUploading}" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Upload attachment')); ?>"></label>
-			<input id="attachment-upload" type="file" nv-file-select="" uploader="fileservice.uploader" class="hidden" options="{cardId: cardservice.getCurrent().id}"/>
-			<input ng-if="status.cardEditDescription" type="button" ng-mousedown="status.continueEdit = true; status.selectAttachment = true;" class="icon-files-dark" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Insert attachment')); ?>"/>
+	</div>
+	<div class="tabDetails" style="display: flex;">
+		<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
+		<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>
+		<div style="flex-grow: 1;"> </div>
+		<a ng-if="params.tab === 0" href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
+		<label ng-if="params.tab === 1" for="attachment-upload" class="button icon-upload" ng-class="{'icon-loading-small': fileservice.uploader.isUploading}" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Upload attachment')); ?>"></label>
+		<input id="attachment-upload" type="file" nv-file-select="" uploader="fileservice.uploader" class="hidden" options="{cardId: cardservice.getCurrent().id}"/>
+		<input ng-if="status.cardEditDescription" type="button" ng-mousedown="status.continueEdit = true; status.selectAttachment = true;" class="icon-files-dark" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Insert attachment')); ?>"/>
 
-		</div>
 	</div>
 	<div class="section-content card-attachments">
 		<div class="error icon-error" ng-if="fileservice.status"><strong>{{ fileservice.status.error }}</strong><br />{{ fileservice.status.message }}</div>

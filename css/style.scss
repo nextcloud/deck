@@ -191,7 +191,7 @@ input.input-inline {
 
 			&.current {
 				box-shadow: 0px 0px 7px 0px $color-darkgrey;
-				box-shadow: 0px 0px 7px 0px var(--color-darkgrey);
+				box-shadow: 0px 0px 7px 0px var(--color-background-dark);
 			}
 		}
 	}
@@ -334,7 +334,7 @@ input.input-inline {
 
 #stack-add {
 	background-color: $color-lightgrey;
-	background-color: var(--color-lightgrey);
+	background-color: var(--color-background-dark);
 	border-radius: 3px;
 	margin: 3px;
 	display: flex;
@@ -810,9 +810,9 @@ input.input-inline {
 		}
 		&.unsaved {
 			background-color: $color-lightgrey;
-			background-color: var(--color-lightgrey);
+			background-color: var(--color-background-dark);
 			color: $color-darkgrey;
-			color: var(--color-darkgrey);
+			color: var(--color-text-light);
 		}
 	}
 
@@ -873,7 +873,7 @@ input.input-inline {
 			z-index: 2;
 			border-radius: 3px;
 			box-shadow: 0 0 3px $color-darkgrey;
-			box-shadow: 0 0 3px var(--color-darkgrey);
+			box-shadow: 0 0 3px var(--color-background-dark);
 			overflow: scroll;
 		}
 		h3.attachment-selector {
