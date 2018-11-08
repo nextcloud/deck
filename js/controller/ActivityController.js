@@ -64,6 +64,23 @@ class ActivityController {
 		this.activityservice.subscribe(this.$scope, function() {
 			self.$scope.$apply();
 		});
+
+		if (typeof OCA.Activity.Templates !== 'undefined') {
+			OCA.Activity.Templates.userLocal = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+					var helper;
+					// Compiled handlesbars template
+					// '<span class="avatar-name-wrapper"><avatar ng-attr-contactsmenu ng-attr-tooltip ng-attr-user="{{ id }}" ng-attr-displayname="{{name}}" ng-attr-size="16"></avatar> {{ name }}</span>';
+					return "<span class=\"avatar-name-wrapper\"><avatar ng-attr-contactsmenu ng-attr-tooltip ng-attr-user=\""
+						+ container.escapeExpression(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"id","hash":{},"data":data}) : helper)))
+						+ "\" ng-attr-displayname=\""
+						+ container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"name","hash":{},"data":data}) : helper)))
+						+ "\" ng-attr-size=\"16\"></avatar> "
+						+ container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"name","hash":{},"data":data}) : helper)))
+						+ "</span>";
+				},"useData":true});
+		} else {
+			OCA.Activity.RichObjectStringParser._userLocalTemplate = '<span class="avatar-name-wrapper"><avatar ng-attr-contactsmenu ng-attr-tooltip ng-attr-user="{{ id }}" ng-attr-displayname="{{name}}" ng-attr-size="16"></avatar> {{ name }}</span>';
+		}
 	}
 
 	applyAtWho($target) {
@@ -263,23 +280,6 @@ class ActivityController {
 	}
 
 	parseMessage(subject, parameters) {
-		if (typeof OCA.Activity.Templates !== 'undefined') {
-			OCA.Activity.Templates.userLocal = {"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-				var helper;
-				// Compiled handlesbars template
-				// '<span class="avatar-name-wrapper"><avatar ng-attr-contactsmenu ng-attr-tooltip ng-attr-user="{{ id }}" ng-attr-displayname="{{name}}" ng-attr-size="16"></avatar> {{ name }}</span>';
-				return "<span class=\"avatar-name-wrapper\"><avatar ng-attr-contactsmenu ng-attr-tooltip ng-attr-user=\""
-					+ container.escapeExpression(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"id","hash":{},"data":data}) : helper)))
-					+ "\" ng-attr-displayname=\""
-					+ container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"name","hash":{},"data":data}) : helper)))
-					+ "\" ng-attr-size=\"16\"></avatar> "
-					+ container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"name","hash":{},"data":data}) : helper)))
-					+ "</span>";
-			},"useData":true};
-		} else {
-			OCA.Activity.RichObjectStringParser._userLocalTemplate = '<span class="avatar-name-wrapper"><avatar ng-attr-contactsmenu ng-attr-tooltip ng-attr-user="{{ id }}" ng-attr-displayname="{{name}}" ng-attr-size="16"></avatar> {{ name }}</span>';
-		}
-
 		return OCA.Activity.RichObjectStringParser.parseMessage(subject, parameters);
 	}
 
