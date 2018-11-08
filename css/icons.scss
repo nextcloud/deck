@@ -34,13 +34,11 @@
 }
 
 .icon-home {
-  background-image: url('../../../core/img/places/home.svg');
-  background-image: var(--icon-home-000);
+  background-image: var(--icon-home-000, url('../../../core/img/places/home.svg'));
 }
 
 .icon-description {
-  background-image: url('../img/description.svg');
-  background-image: var(--icon-text-000);
+  background-image: var(--icon-text-000, url('../img/description.svg'));
 }
 
 .icon-badge {

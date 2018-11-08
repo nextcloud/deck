@@ -96,12 +96,17 @@
 		<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>
 		<div style="flex-grow: 1;"> </div>
 		<a ng-if="params.tab === 0" href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
-		<label ng-if="params.tab === 1" for="attachment-upload" class="button icon-upload" ng-class="{'icon-loading-small': fileservice.uploader.isUploading}" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Upload attachment')); ?>"></label>
-		<input id="attachment-upload" type="file" nv-file-select="" uploader="fileservice.uploader" class="hidden" options="{cardId: cardservice.getCurrent().id}"/>
 		<input ng-if="status.cardEditDescription" type="button" ng-mousedown="status.continueEdit = true; status.selectAttachment = true;" class="icon-files-dark" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Insert attachment')); ?>"/>
 
 	</div>
 	<div class="section-content card-attachments">
+		<div>
+			<label ng-if="params.tab === 1" for="attachment-upload" class="button data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Upload attachment')); ?>">
+			<span class="icon-upload" ng-class="{'icon-loading-small': fileservice.uploader.isUploading}"></span>
+			<?php p($l->t('Upload attachment')); ?>
+			</label>
+			<input id="attachment-upload" type="file" nv-file-select="" uploader="fileservice.uploader" class="hidden" options="{cardId: cardservice.getCurrent().id}"/>
+		</div>
 		<div class="error icon-error" ng-if="fileservice.status"><strong>{{ fileservice.status.error }}</strong><br />{{ fileservice.status.message }}</div>
 		<attachment-list-component ng-if="params.tab === 1 && cardservice.getCurrent() && isArray(cardservice.getCurrent().attachments)" attachments="cardservice.getCurrent().attachments"></attachment-list-component>
 	</div>

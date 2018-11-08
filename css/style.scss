@@ -156,8 +156,7 @@ input.input-inline {
 	z-index: 999;
 	width: 100%;
 	height: 100%;
-	background-color: $color-main-background;
-	background-color: var(--color-main-background);
+	background-color: var(--color-main-background, $color-main-background);
 }
 
 #board {
@@ -186,12 +185,10 @@ input.input-inline {
 	&.card-selected {
 
 		.card {
-			box-shadow: 0px 0px 7px 0px $color-grey;
-			box-shadow: 0px 0px 7px 0px var(--color-grey);
+			box-shadow: 0px 0px 7px 0px var(--color-background-dark, $color-grey);
 
 			&.current {
-				box-shadow: 0px 0px 7px 0px $color-darkgrey;
-				box-shadow: 0px 0px 7px 0px var(--color-background-dark);
+				box-shadow: 0px 0px 7px 0px var(--color-background-darker, $color-darkgrey);
 			}
 		}
 	}
@@ -224,10 +221,7 @@ input.input-inline {
 	}
 
 	> .as-sortable-drag {
-		background-color: $color-main-background;
-		background-color: var(--color-main-background);
-		box-shadow: 0 0 7px 0 $color-background-dark;
-		box-shadow: 0 0 7px 0 var(--color-background-dark);
+		background-color: var(--color-main-background $color-main-background);
 	}
 }
 
@@ -266,9 +260,17 @@ input.input-inline {
 	}
 
 	button {
-		height: inherit;
+		width: 36px;
+		height: 36px;
+		padding: 9px;
 	}
 
+	#stack-add form {
+		button {
+			height: auto;
+			width: 32px;
+		}
+	}
 	input[type='text'] {
 		padding: 6px;
 		border: 0 none transparent;
@@ -333,8 +335,7 @@ input.input-inline {
 }
 
 #stack-add {
-	background-color: $color-lightgrey;
-	background-color: var(--color-background-dark);
+	background-color: var(--color-background-dark, $color-lightgrey);
 	border-radius: 3px;
 	margin: 3px;
 	display: flex;
@@ -380,8 +381,7 @@ input.input-inline {
 			margin: 0;
 			font-size: 12pt;
 			border: 0;
-			background-color: $color-main-background;
-			background-color: var(--color-main-background);
+			background-color: var(--color-main-background, $color-main-background);
 			min-height: initial;
 		}
 
@@ -427,13 +427,11 @@ input.input-inline {
 }
 
 .card {
-	background-color: $color-main-background;
-	background-color: var(--color-main-background);
+	background-color: var(--color-main-background, $color-main-background);
 	margin: $board-item-margin;
 	white-space: normal;
 	position: relative;
-	box-shadow: 0 0 3px $color-darkgrey;
-	box-shadow: 0 0 3px --var(color-darkgrey);
+	box-shadow: 0 0 3px var(--color-background-dark, $color-darkgrey);
 	border-radius: 3px;
 	transition: margin 250ms linear;
 
@@ -462,8 +460,7 @@ input.input-inline {
 	}
 
 	.card-controls {
-		background: $color-lightgrey;
-		background: var(--color-background-dark);
+		background: var(--color-background-dark, $color-lightgrey);
 		display: flex;
 		position: relative;
 		padding-left: 10px;
@@ -497,8 +494,7 @@ input.input-inline {
 
 			&.overdue {
 				background-color: $color-error;
-				color: $color-primary-text;
-				color: var(--color-primary-text);
+				color: var(--color-primary-text, $color-primary-text);
 
 				.icon-badge {
 					background-image: url('../img/calendar-white.svg');
@@ -680,8 +676,7 @@ input.input-inline {
 
 	position: sticky;
 	top: 0;
-	background-color: $color-main-background;
-	background-color: var(--color-main-background);
+	background-color: var(--color-main-background, $color-main-background);
 	z-index: 200;
 
 	h3 {
@@ -721,8 +716,7 @@ input.input-inline {
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	background-color: $color-main-background;
-	background-color: var(--color-main-background);
+	background-color: var(--color-main-background, $color-main-background);
 	z-index: 100;
 	opacity: 0.9;
 	text-align: center;
@@ -809,10 +803,8 @@ input.input-inline {
 			color: $color-primary-text;
 		}
 		&.unsaved {
-			background-color: $color-lightgrey;
-			background-color: var(--color-background-dark);
-			color: $color-darkgrey;
-			color: var(--color-text-light);
+			background-color: var(--color-background-dark, $color-lightgrey);
+			color: var(--color-text-light, $color-darkgrey);
 		}
 	}
 
@@ -853,9 +845,9 @@ input.input-inline {
 		width: 100%;
 		height: 100%;
 		background-color: rgba($color-darkgrey, 0.5);
-		background-color: var(--color-background-dark);
 		left: 0;
 		top: 0;
+		z-index: 300;
 	}
 	.attachment-list {
 		&.selector {
@@ -868,12 +860,10 @@ input.input-inline {
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
-			background-color: $color-main-background;
-			background-color: var(--color-main-background);
+			background-color: var(--color-main-background, $color-main-background);
 			z-index: 2;
 			border-radius: 3px;
-			box-shadow: 0 0 3px $color-darkgrey;
-			box-shadow: 0 0 3px var(--color-background-dark);
+			box-shadow: 0 0 3px var(--color-background-dark, $color-darkgrey);
 			overflow: scroll;
 		}
 		h3.attachment-selector {
@@ -967,8 +957,7 @@ input.input-inline {
 			}
 
 			.container {
-				background-color: $color-main-background;
-				background-color: var(--color-main-background);
+				background-color: var(--color-main-background, $color-main-background);
 
 			}
 		}
@@ -1493,8 +1482,7 @@ input.input-inline {
 	}
 
 	pre {
-		background-color: $color-lightgrey;
-		background-color: var(--color-background-dark);
+		background-color: var(--color-background-dark, $color-lightgrey);
 		padding: 3px;
 		overflow: auto;
 
