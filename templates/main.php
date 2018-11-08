@@ -24,7 +24,9 @@
 use OCP\Util;
 
 Util::addScript('activity', 'richObjectStringParser');
-Util::addScript('activity', 'templates');
+if (\OC_Util::getVersion()[0] > 14) {
+	Util::addScript('activity', 'templates');
+}
 Util::addScript('activity', 'script');
 
 Util::addStyle('activity', 'style');

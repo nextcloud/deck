@@ -86,9 +86,9 @@
 
 	<div class="section-header-tabbed">
 		<ul class="tabHeaders ng-scope">
-			<li class="tabHeader" ng-class="{'selected': (params.tab==0 || !params.tab)}" ui-sref="{tab: 0}"><a><span class="icon icon-description"></span><?php p($l->t('Description')); ?></a></li>
-			<li class="tabHeader" ng-class="{'selected': (params.tab==1)}" ui-sref="{tab: 1}"><a><span class="icon icon-files-dark"></span><?php p($l->t('Attachments')); ?></a></li>
-			<li class="tabHeader" ng-class="{'selected': (params.tab==2)}" ui-sref="{tab: 2}" ng-if="isTimelineEnabled()"><a><span class="icon icon-activity"></span><?php p($l->t('Timeline')); ?></a></li>
+			<li class="tabHeader" ng-class="{'selected': (params.tab==0 || !params.tab)}" ui-sref="{tab: 0}"><span class="icon icon-description"></span><a><?php p($l->t('Description')); ?></a></li>
+			<li class="tabHeader" ng-class="{'selected': (params.tab==1)}" ui-sref="{tab: 1}"><span class="icon icon-files-dark"></span><a><?php p($l->t('Attachments')); ?></a></li>
+			<li class="tabHeader" ng-class="{'selected': (params.tab==2)}" ui-sref="{tab: 2}" ng-if="isTimelineEnabled()"><span class="icon icon-activity"></span><a><?php p($l->t('Timeline')); ?></a></li>
 		</ul>
 	</div>
 	<div class="tabDetails" style="display: flex;">
