@@ -157,8 +157,13 @@ class FileService implements IAttachmentService {
 
 		$target = $folder->newFile($fileName);
 		$content = fopen($file['tmp_name'], 'rb');
+		if ($content === false) {
+			throw new StatusException('Could not read file');
+		}
 		$target->putContent($content);
-		fclose($content);
+		if (is_resource($content)) {
+			fclose($content);
+		}
 
 		$attachment->setData($fileName);
 	}
@@ -175,8 +180,13 @@ class FileService implements IAttachmentService {
 
 		$target = $this->getFileForAttachment($attachment);
 		$content = fopen($file['tmp_name'], 'rb');
+		if ($content === false) {
+			throw new StatusException('Could not read file');
+		}
 		$target->putContent($content);
-		fclose($content);
+		if (is_resource($content)) {
+			fclose($content);
+		}
 
 		$attachment->setLastModified(time());
 	}
