@@ -75,9 +75,9 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	};
 
 	$scope.$watch(function() {
-		return $state.current;
-	}, function(currentState) {
-		if(currentState.name === 'board.detail') {
+		return $scope.params.tab;
+	}, function (newTab, oldTab) {
+		if (newTab === 2 && oldTab !== 2) {
 			CardService.fetchDeleted($scope.id);
 			StackService.fetchDeleted($scope.id);
 		}

@@ -64,6 +64,7 @@ app.factory('ApiService', function ($http, $q) {
 	ApiService.prototype.fetchDeleted = function (scopeId) {
 		var deferred = $q.defer();
 		var self = this;
+		self.deleted = {};
 		$http.get(this.generateUrl(scopeId + '/' + this.endpoint + '/deleted')).then(function (response) {
 			var objects = response.data;
 			objects.forEach(function (obj) {
