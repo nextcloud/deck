@@ -101,11 +101,11 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 	$scope.toggleCheckbox = function (id) {
 		$('#markdown input[type=checkbox]').attr('disabled', true);
 		$scope.status.edit = angular.copy(CardService.getCurrent());
-		var reg = /\[(X|\s|\_|\-)\]\s(.*)/ig;
+		var reg = /\[(X|\s|\_|\-)\]/ig;
 		var nth = 0;
 		$scope.status.edit.description = $scope.status.edit.description.replace(reg, function (match, i, original) {
 			var result = match;
-			if (nth++ === id) {
+			if ('' + nth++ === '' + id) {
 				if (match.match(/^\[\s\]/i)) {
 					result = match.replace(/\[\s\]/i, '[x]');
 				}

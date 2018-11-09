@@ -100,8 +100,8 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	 * @returns array of [finished, total] checkboxes
 	 */
 	$scope.getCheckboxes = function(text) {
-		const regTotal = /\[(X|\s|\_|\-)\]\s(.*)/ig;
-		const regFinished = /\[(X|\_|\-)\]\s(.*)/ig;
+		const regTotal = /\[(X|\s|\_|\-)\]/igm;
+		const regFinished = /\[(X|\_|\-)\]/igm;
 		return [
 			((text || '').match(regFinished) || []).length,
 			((text || '').match(regTotal) || []).length
@@ -375,7 +375,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		itemMoved: function (event) {
 			event.source.itemScope.modelValue.status = event.dest.sortableScope.$parent.column;
 			var order = event.dest.index;
-			var card = event.source.itemScope.c;
+			var card = $scope.cardservice.get(event.source.itemScope.c.id);
 			var newStack = event.dest.sortableScope.$parent.s.id;
 			var oldStack = card.stackId;
 			card.stackId = newStack;
@@ -391,7 +391,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		},
 		orderChanged: function (event) {
 			var order = event.dest.index;
-			var card = event.source.itemScope.c;
+			var card = $scope.cardservice.get(event.source.itemScope.c.id);
 			var stack = event.dest.sortableScope.$parent.s.id;
 			CardService.reorder(card, order).then(function (data) {
 				StackService.reorderCard(card, order);
