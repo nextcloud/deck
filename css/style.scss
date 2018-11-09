@@ -1518,6 +1518,19 @@ input.input-inline {
 	li input[type="checkbox"].checkbox:not(:checked) + label::before {
 			background-color: $color-main-background;
 	}
+
+	table {
+		margin-bottom: 10px;
+		border-collapse: collapse;
+		
+		thead {
+			background-color: var(--color-background-dark, $color-lightgrey);
+		}
+		td, th {
+			border: 1px solid var(--color-background-darker, $color-darkgrey);
+			padding: 3px;
+		}
+	}
 }
 
 .section-wrapper {
