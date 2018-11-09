@@ -1428,6 +1428,8 @@ input.input-inline {
  */
 #markdown {
 	width: 100% !important;
+	min-height: 40px;
+	cursor: text;
 
 	p {
 		margin-bottom: 15px;
