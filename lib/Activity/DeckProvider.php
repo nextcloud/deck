@@ -276,7 +276,8 @@ class DeckProvider implements IProvider {
 	private function parseParamForChanges($subjectParams, $params, $event) {
 		if (array_key_exists('diff', $subjectParams) && $subjectParams['diff']) {
 			$diff = new Diff();
-			$event->setMessage($subjectParams['after']);
+			// Don't add diff as message since we are limited to 255 chars here
+			//$event->setMessage($subjectParams['after']);
 			$event->setParsedMessage('<pre class="visualdiff">' . $diff->render($subjectParams['before'], $subjectParams['after']) . '</pre>');
 			return $params;
 		}
