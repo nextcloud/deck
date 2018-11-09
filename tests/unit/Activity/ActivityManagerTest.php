@@ -116,6 +116,7 @@ class ActivityManagerTest extends TestCase {
 
 	public function testCreateEvent() {
 		$board = new Board();
+		$board->setTitle('');
 		$this->boardMapper->expects($this->once())
 			->method('find')
 			->willReturn($board);
