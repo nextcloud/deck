@@ -128,10 +128,11 @@ app.controller('CardController', function ($scope, $rootScope, $sce, $location, 
 		var checkboxId = $($event.target).data('id');
 		if ($event.target.tagName === 'LABEL') {
 			$scope.toggleCheckbox(checkboxId);
-			return;
+			$event.stopPropagation();
+			return false;
 		}
 		if ($event.target.tagName === 'INPUT') {
-			$scope.toggleCheckbox(checkboxId);
+			$event.stopPropagation();
 			return;
 		}
 		if (BoardService.isArchived() || CardService.getCurrent().archived) {
