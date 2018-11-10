@@ -17,11 +17,14 @@ All notable changes to this project will be documented in this file.
 - Notify users about card assignments
 - Add shortcut to assign a card to yourself
 - Improved view for printing
+- Support for Nextcloud 15
 
 ### Fixed
 
 - Accesibility improvements
 - Don't allow empty card titles
+- Improved checkbox handling in markdown
+
 
 ## 0.4.0 - 2018-07-11
 

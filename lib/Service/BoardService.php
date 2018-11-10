@@ -88,7 +88,7 @@ class BoardService {
 	/**
 	 * @return array
 	 */
-	public function findAll($since = 0) {
+	public function findAll($since = -1) {
 		$userInfo = $this->getBoardPrerequisites();
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null, $since);
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null,  $since);
