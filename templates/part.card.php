@@ -51,8 +51,8 @@
 		</div>
 	</div>
 
-	<div class="section-wrapper card-details-assign-users" ng-click="toggleAssignUser()">
-		<div class="section-label icon-user" data-toggle="tooltip" data-placement="right" title="<?php p($l->t('Assign users')); ?>"><span class="hidden-visually"><?php p($l->t('Assign users')); ?></span></div>
+	<div class="section-wrapper card-details-assign-users">
+		<div class="section-label icon-user" data-toggle="tooltip" data-placement="right" title="<?php p($l->t('Assign users')); ?>" ng-click="toggleAssignUser()"><span class="hidden-visually"><?php p($l->t('Assign users')); ?></span></div>
 		<div class="section-details" ng-if="cardservice.getCurrent()">
 			<ui-select id="assignUserSelect" class="card-details-assign-user" ng-model="status.assignedUser" ng-show="status.showAssignUser" uis-open-close="assingUserOpenClose(isOpen)"
 					   theme="select2"
@@ -69,7 +69,7 @@
 				<div class="assigned-user" ng-repeat="user in cardservice.getCurrent().assignedUsers track by user.participant.uid">
 					<avatar ng-attr-contactsmenu ng-attr-tooltip ng-attr-user="{{ user.participant.uid }}" ng-attr-displayname="{{ user.participant.displayname }}" contactsmenudelete ></avatar>
 				</div>
-				<a class="icon-add icon-inline"></a>
+				<a class="icon-add icon-inline" ng-click="toggleAssignUser()"></a>
 			</div>
 		</div>
 	</div>
@@ -86,21 +86,27 @@
 
 	<div class="section-header-tabbed">
 		<ul class="tabHeaders ng-scope">
-			<li class="tabHeader" ng-class="{'selected': (params.tab==0 || !params.tab)}" ui-sref="{tab: 0}"><a><span class="icon icon-description"></span><?php p($l->t('Description')); ?></a></li>
-			<li class="tabHeader" ng-class="{'selected': (params.tab==1)}" ui-sref="{tab: 1}"><a><span class="icon icon-files-dark"></span><?php p($l->t('Attachments')); ?></a></li>
-			<li class="tabHeader" ng-class="{'selected': (params.tab==2)}" ui-sref="{tab: 2}" ng-if="isTimelineEnabled()"><a><span class="icon icon-activity"></span><?php p($l->t('Timeline')); ?></a></li>
+			<li class="tabHeader" ng-class="{'selected': (params.tab==0 || !params.tab)}" ui-sref="{tab: 0}"><span class="icon icon-description"></span><a><?php p($l->t('Description')); ?></a></li>
+			<li class="tabHeader" ng-class="{'selected': (params.tab==1)}" ui-sref="{tab: 1}"><span class="icon icon-files-dark"></span><a><?php p($l->t('Attachments')); ?></a></li>
+			<li class="tabHeader" ng-class="{'selected': (params.tab==2)}" ui-sref="{tab: 2}" ng-if="isTimelineEnabled()"><span class="icon icon-activity"></span><a><?php p($l->t('Timeline')); ?></a></li>
 		</ul>
-		<div class="tabDetails">
-			<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
-			<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>
-			<a ng-if="params.tab === 0" href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
-			<label ng-if="params.tab === 1" for="attachment-upload" class="button icon-upload" ng-class="{'icon-loading-small': fileservice.uploader.isUploading}" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Upload attachment')); ?>"></label>
-			<input id="attachment-upload" type="file" nv-file-select="" uploader="fileservice.uploader" class="hidden" options="{cardId: cardservice.getCurrent().id}"/>
-			<input ng-if="status.cardEditDescription" type="button" ng-mousedown="status.continueEdit = true; status.selectAttachment = true;" class="icon-files-dark" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Insert attachment')); ?>"/>
+	</div>
+	<div class="tabDetails" style="display: flex;">
+		<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
+		<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>
+		<div style="flex-grow: 1;"> </div>
+		<a ng-if="params.tab === 0" href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
+		<input ng-if="status.cardEditDescription" type="button" ng-mousedown="status.continueEdit = true; status.selectAttachment = true;" class="icon-files-dark" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Insert attachment')); ?>"/>
 
-		</div>
 	</div>
 	<div class="section-content card-attachments">
+		<div>
+			<label ng-if="params.tab === 1" for="attachment-upload" class="button data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Upload attachment')); ?>">
+			<span class="icon-upload" ng-class="{'icon-loading-small': fileservice.uploader.isUploading}"></span>
+			<?php p($l->t('Upload attachment')); ?>
+			</label>
+			<input id="attachment-upload" type="file" nv-file-select="" uploader="fileservice.uploader" class="hidden" options="{cardId: cardservice.getCurrent().id}"/>
+		</div>
 		<div class="error icon-error" ng-if="fileservice.status"><strong>{{ fileservice.status.error }}</strong><br />{{ fileservice.status.message }}</div>
 		<attachment-list-component ng-if="params.tab === 1 && cardservice.getCurrent() && isArray(cardservice.getCurrent().attachments)" attachments="cardservice.getCurrent().attachments"></attachment-list-component>
 	</div>

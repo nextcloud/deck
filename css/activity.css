@@ -8,6 +8,11 @@
 	text-decoration: none;
 }
 
+.activitymessage .visualdiff {
+	overflow: scroll;
+	max-height: 200px;
+}
+
 .activityTabView .avatardiv-container {
 	display: inline-block;
 	bottom: -3px;
