@@ -15,6 +15,7 @@ exclude = [
     "js/Gruntfile.js",
     "js/package.json",
     "js/package-lock.json",
+    "docs/",
     "tests",
     ".codecov.yml",
     "composer.json",
@@ -28,6 +29,7 @@ exclude = [
     "issue_template.md",
     "krankerl.toml",
     "Makefile",
+    "mkdocs.yml",
     "run-eslint.sh"
 ]
 
