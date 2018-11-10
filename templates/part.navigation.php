@@ -10,7 +10,7 @@
 		<a href="#!/board/{{b.id}}/">{{ b.title }}</a>
 		<div class="app-navigation-entry-utils">
 			<ul>
-				<li class="app-navigation-entry-utils-menu-button svg" ng-show="!status.deleteUndo[b.id]"><button class="icon-more" title="<?php p($l->t('View more')); ?>"><span class="hidden-visually"><?php p($l->t('View more')); ?></span></button></li>
+				<li class="app-navigation-entry-utils-menu-button svg" ng-show="!status.deleteUndo[b.id]"><button class="icon-more" title="<?php p($l->t('Actions')); ?>"><span class="hidden-visually"><?php p($l->t('Actions')); ?></span></button></li>
 			</ul>
 		</div>
 		<div class="app-navigation-entry-menu" ng-show="!b.status.editNavigation">
