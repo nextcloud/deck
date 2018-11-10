@@ -127,7 +127,7 @@ class StackService {
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws BadRequestException
 	 */
-	public function findAll($boardId, $since = 0) {
+	public function findAll($boardId, $since = -1) {
 		if (is_numeric($boardId) === false) {
 			throw new BadRequestException('boardId must be a number');
 		}

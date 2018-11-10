@@ -142,7 +142,11 @@ class DeckProvider implements IProvider {
 		$placeholders = $replacements = [];
 		foreach ($parameters as $placeholder => $parameter) {
 			$placeholders[] = '{' . $placeholder . '}';
-			$replacements[] = $parameter['name'];
+			if (array_key_exists('name', $parameter)) {
+				$replacements[] = $parameter['name'];
+			} else {
+				$replacements[] = '';
+			}
 		}
 
 		$event->setParsedSubject(str_replace($placeholders, $replacements, $subject))
