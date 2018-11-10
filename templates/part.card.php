@@ -51,8 +51,8 @@
 		</div>
 	</div>
 
-	<div class="section-wrapper card-details-assign-users" ng-click="toggleAssignUser()">
-		<div class="section-label icon-user" data-toggle="tooltip" data-placement="right" title="<?php p($l->t('Assign users')); ?>"><span class="hidden-visually"><?php p($l->t('Assign users')); ?></span></div>
+	<div class="section-wrapper card-details-assign-users">
+		<div class="section-label icon-user" data-toggle="tooltip" data-placement="right" title="<?php p($l->t('Assign users')); ?>" ng-click="toggleAssignUser()"><span class="hidden-visually"><?php p($l->t('Assign users')); ?></span></div>
 		<div class="section-details" ng-if="cardservice.getCurrent()">
 			<ui-select id="assignUserSelect" class="card-details-assign-user" ng-model="status.assignedUser" ng-show="status.showAssignUser" uis-open-close="assingUserOpenClose(isOpen)"
 					   theme="select2"
@@ -69,7 +69,7 @@
 				<div class="assigned-user" ng-repeat="user in cardservice.getCurrent().assignedUsers track by user.participant.uid">
 					<avatar ng-attr-contactsmenu ng-attr-tooltip ng-attr-user="{{ user.participant.uid }}" ng-attr-displayname="{{ user.participant.displayname }}" contactsmenudelete ></avatar>
 				</div>
-				<a class="icon-add icon-inline"></a>
+				<a class="icon-add icon-inline" ng-click="toggleAssignUser()"></a>
 			</div>
 		</div>
 	</div>
