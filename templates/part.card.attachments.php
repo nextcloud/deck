@@ -38,7 +38,7 @@
 				<span class="hidden-visually"><?php p($l->t('Insert the file into the description')); ?></span>
 			</button>
 			<div class="app-popover-menu-utils" ng-if="!$ctrl.isFileSelector && attachment.deletedAt == 0">
-				<button class="button-inline icon icon-more"></button>
+				<button class="button-inline icon icon-more" title="<?php p($l->t('Actions')) ?>"></button>
 				<div class="popovermenu hidden">
 					<ul>
 						<li>

@@ -27,7 +27,7 @@
 		<?php print_unescaped($this->inc('part.board.headerControls', ['headerControlsId' => 'main'])); ?>
 	</div>
 	<div class="board-header-controls app-popover-menu-utils">
-		<button class="icon-more button"></button>
+		<button class="icon-more button" title="<?php p($l->t('Actions')) ?>"></button>
 		<div class="popovermenu hidden">
 			<div id="popover-controls">
 				<?php print_unescaped($this->inc('part.board.headerControls', ['headerControlsId' => 'popover'])); ?>
@@ -117,7 +117,7 @@
 								</div>
 							</div>
 							<div class="app-popover-menu-utils" ng-if="!boardservice.isArchived()">
-								<button class="button-inline card-options icon-more" ng-model="card" aria-label="<?php p($l->t('Actions')) ?>"></button>
+								<button class="button-inline card-options icon-more" ng-model="card" title="<?php p($l->t('Actions')) ?>"></button>
 								<div class="popovermenu hidden">
 									<ul>
 										<li ng-if="!isCurrentUserAssigned(c)">
