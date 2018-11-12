@@ -91,13 +91,12 @@
 			<li class="tabHeader" ng-class="{'selected': (params.tab==2)}" ui-sref="{tab: 2}" ng-if="isTimelineEnabled()"><span class="icon icon-activity"></span><a><?php p($l->t('Timeline')); ?></a></li>
 		</ul>
 	</div>
-	<div class="tabDetails" style="display: flex;">
+	<div class="tabDetails" ng-if="params.tab === 0">
 		<span class="save-indicator saved"><?php p($l->t('Saved')); ?></span>
 		<span class="save-indicator unsaved"><?php p($l->t('Unsaved changes')); ?></span>
 		<div style="flex-grow: 1;"> </div>
-		<a ng-if="params.tab === 0" href="https://github.com/nextcloud/deck/wiki/Markdown-Help" target="_blank" class="icon icon-help" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
 		<input ng-if="status.cardEditDescription" type="button" ng-mousedown="status.continueEdit = true; status.selectAttachment = true;" class="icon-files-dark" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Insert attachment')); ?>"/>
-
+		<a href="https://deck.readthedocs.io/en/latest/Markdown/" target="_blank" class="icon icon-help" data-toggle="tooltip" data-placement="left" title="<?php p($l->t('Formatting help')); ?>"><span class="hidden-visually"><?php p($l->t('Formatting help')); ?></span></a>
 	</div>
 	<div class="section-content card-attachments">
 		<div>
@@ -126,9 +125,9 @@
 				  autofocus-on-insert> </textarea>
 		<div class="container" ng-click="clickCardDescription($event)"
 			 ng-if="!status.cardEditDescription" ng-animate>
-			<div id="markdown" ng-bind-html="description()">{{ description() }}</div>
 			<div class="placeholder"
 				 ng-if="!description()"><?php p($l->t('Add a card description…')); ?></div>
+			<div id="markdown" ng-bind-html="description()">{{ description() }}</div>
 		</div>
 	</div>
 

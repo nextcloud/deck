@@ -776,6 +776,7 @@ input.input-inline {
 			flex: 1;
 		}
 	}
+
 	.section-header-tabbed {
 		margin-top: 10px;
 		margin-bottom: 5px;
@@ -785,8 +786,15 @@ input.input-inline {
 			margin: 0;
 			flex-grow: 1;
 		}
-		.tabDetails {
-			display: flex;
+	}
+
+	.tabDetails {
+		display: flex;
+		height: 40px;
+		align-items: center;
+		justify-content: center;
+		input[type=button] {
+			width: 32px;
 		}
 	}
 
@@ -796,7 +804,6 @@ input.input-inline {
 		padding: 0 10px;
 		font-size: 8pt;
 		display: none;
-		align-self: flex-end;
 		text-align: center;
 		&.saved {
 			background-color: $color-success;
