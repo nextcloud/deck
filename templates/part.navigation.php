@@ -32,7 +32,7 @@
 				</li>
 				<li ui-sref="board.detail({boardId: b.id})">
 					<a class="icon-settings-dark">
-						<?php p($l->t('Board details')); ?>
+						<?php p($l->t('Show board details')); ?>
 					</a>
 				</li>
 			</ul>

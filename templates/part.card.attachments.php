@@ -44,7 +44,7 @@
 						<li>
 							<a class="menuitem action action-delete"
 							   ng-click="$ctrl.cardservice.attachmentRemove(attachment); $event.stopPropagation();"><span
-										class="icon icon-delete"></span><span><?php p($l->t('Delete')); ?></span></a>
+										class="icon icon-delete"></span><span><?php p($l->t('Delete attachment')); ?></span></a>
 						</li>
 					</ul>
 				</div>

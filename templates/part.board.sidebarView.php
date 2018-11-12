@@ -94,9 +94,9 @@
                             </label>
                         </div>
                     </div>
-                    <a ng-if="boardservice.canManage() && label.edit" ng-click="labelUpdate(label)" class="icon" title="<?php p($l->t('Update')); ?>"><i class="icon icon-checkmark" ></i><span class="hidden-visually"><?php p($l->t('Update')); ?></span></a>
-                    <a ng-if="boardservice.canManage() && !label.edit" ng-click="label.edit=true" class="icon" title="<?php p($l->t('Edit')); ?>"><i class="icon icon-rename"></i><span class="hidden-visually"><?php p($l->t('Edit')); ?></span></a>
-                    <a ng-if="boardservice.canManage()" ng-click="labelDelete(label)" class="icon" title="<?php p($l->t('Delete')); ?>"><i class="icon icon-delete" ></i><span class="hidden-visually"><?php p($l->t('Delete')); ?></span></a>
+                    <a ng-if="boardservice.canManage() && label.edit" ng-click="labelUpdate(label)" class="icon" title="<?php p($l->t('Update tag')); ?>"><i class="icon icon-checkmark" ></i><span class="hidden-visually"><?php p($l->t('Update tag')); ?></span></a>
+                    <a ng-if="boardservice.canManage() && !label.edit" ng-click="label.edit=true" class="icon" title="<?php p($l->t('Edit tag')); ?>"><i class="icon icon-rename"></i><span class="hidden-visually"><?php p($l->t('Edit tag')); ?></span></a>
+                    <a ng-if="boardservice.canManage()" ng-click="labelDelete(label)" class="icon" title="<?php p($l->t('Delete tag')); ?>"><i class="icon icon-delete" ></i><span class="hidden-visually"><?php p($l->t('Delete tag')); ?></span></a>
                 </li>
                 <li ng-if="status.createLabel">
                     <div class="label-edit">

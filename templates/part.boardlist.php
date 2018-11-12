@@ -80,15 +80,15 @@
 								</a>
 							</li>
 							<li ui-sref="board.detail({boardId: b.id})">
-								<a class="menuitem"><span class="icon-settings-dark"></span> <?php p($l->t('Board details')); ?>
+								<a class="menuitem"><span class="icon-settings-dark"></span> <?php p($l->t('Show board details')); ?>
 								</a>
 							</li>
 						</ul>
 					</div>
 				</div>
 				<div class="board-edit-controls" ng-show="b.status.edit">
-					<span class="icon icon-checkmark" ng-click="boardUpdate(b)" title="<?php p($l->t('Update')); ?>"><span class="hidden-visually"><?php p($l->t('Update')); ?></span></span>
-					<span class="icon icon-close" ng-click="boardUpdateReset(b)" title="<?php p($l->t('Reset')); ?>"><span class="hidden-visually"><?php p($l->t('Reset')); ?></span></span>
+					<span class="icon icon-checkmark" ng-click="boardUpdate(b)" title="<?php p($l->t('Update board')); ?>"><span class="hidden-visually"><?php p($l->t('Update board')); ?></span></span>
+					<span class="icon icon-close" ng-click="boardUpdateReset(b)" title="<?php p($l->t('Reset board')); ?>"><span class="hidden-visually"><?php p($l->t('Reset board')); ?></span></span>
 				</div>
 				<div class="app-popover-menu-utils" ng-if="b.deletedAt > 0">
 					<button class="icon icon-history button-inline" ng-click="boardDeleteUndo(b)" title="<?php p($l->t('Undo board deletion - Otherwise the board will be deleted during the next cronjob run.')); ?>"><span class="hidden-visually"><?php p($l->t('Undo board deletion - Otherwise the board will be deleted during the next cronjob run.')); ?></span></button>
@@ -124,7 +124,7 @@
 			<td></td>
 			<td>
 				<div class="board-edit-controls">
-					<span class="icon icon-checkmark" ng-click="boardCreate()" title="<?php p($l->t('Create')); ?>"><span class="hidden-visually"><?php p($l->t('Create')); ?></span></span>
+					<span class="icon icon-checkmark" ng-click="boardCreate()" title="<?php p($l->t('Create  board')); ?>"><span class="hidden-visually"><?php p($l->t('Create board')); ?></span></span>
 					<span class="icon icon-close" ng-click="status.addBoard=!status.addBoard" title="<?php p($l->t('Close')); ?>"><span class="hidden-visually"><?php p($l->t('Close')); ?></span></span>
 				</div>
 			</td>
