@@ -146,7 +146,7 @@ class NotificationHelper {
 				->setDateTime(new DateTime())
 				->setObject('card', (string) $card->getId())
 				->setSubject('card-comment-mentioned', [$card->getTitle(), $boardId, $this->currentUser])
-				->setMessage($comment->getMessage());
+				->setMessage('{message}', ['message' => $comment->getMessage()]);
 			$this->notificationManager->notify($notification);
 		}
 	}

@@ -127,7 +127,9 @@ class Notifier implements INotifier {
 						]
 					]
 				);
-				$notification->setParsedMessage($notification->getMessage());
+				if ($notification->getMessage() === '{message}') {
+					$notification->setParsedMessage($notification->getMessageParameters()['message']);
+				}
 				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#!/board/' . $boardId . '//card/' . $cardId . '');
 				break;
 			case 'board-shared':
