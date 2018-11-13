@@ -65,12 +65,11 @@ OC.L10N.register(
     "Attachments" : "Bilagor",
     "Saved" : "Sparad",
     "Unsaved changes" : "Osparade ändringar",
-    "Formatting help" : "Formatteringshjälp",
     "Insert attachment" : "Infoga bilaga",
+    "Formatting help" : "Formatteringshjälp",
     "Upload attachment" : "Ladda upp bilaga",
     "Add a card description…" : "Lägg till en kortbeskrivning...",
     "Shared boards" : "Delade tavlor",
-    "View more" : "Titta mer",
     "Move board to archive" : "Flytta tavla till arkiv",
     "Create a new board" : "Skapa en ny tavla"
 },

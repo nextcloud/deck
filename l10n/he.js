@@ -84,12 +84,11 @@ OC.L10N.register(
     "Attachments" : "קבצים מצורפים",
     "Saved" : "נשמר",
     "Unsaved changes" : "שינויים שלא נשמרו",
-    "Formatting help" : "עזרה בסידור בתבנית",
     "Insert attachment" : "הוספת קובץ מצורף",
+    "Formatting help" : "עזרה בסידור בתבנית",
     "Upload attachment" : "העלאת קבצים מצורפים",
     "Add a card description…" : "הוספת תיאור כרטיס…",
     "Shared boards" : "לוחות משותפים",
-    "View more" : "הצגת עוד",
     "Move board to archive" : "העברת לוח לארכיון",
     "Create a new board" : "יצירת לוח חדש"
 },

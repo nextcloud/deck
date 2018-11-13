@@ -110,8 +110,8 @@
     "All Boards" : "Tutte le lavagne",
     "Archived boards" : "Lavagne archiviate",
     "Share board" : "Condividi lavagna",
-    "Drop your files here to upload it to the card" : "Rilascia qui i tuoi file per caricarli nella scheda",
     "Actions" : "Azioni",
+    "Drop your files here to upload it to the card" : "Rilascia qui i tuoi file per caricarli nella scheda",
     "Assign to me" : "Assegna a me",
     "Unassign from me" : "Rimuovi assegnazione da me",
     "Archive" : "Archivio",
@@ -172,12 +172,11 @@
     "Attachments" : "Allegati",
     "Saved" : "Salvato",
     "Unsaved changes" : "Modifiche non salvate",
-    "Formatting help" : "Guida di formattazione",
     "Insert attachment" : "Inserisci allegato",
+    "Formatting help" : "Guida di formattazione",
     "Upload attachment" : "Carica allegato",
     "Add a card description…" : "Aggiungi descrizione della scheda...",
     "Shared boards" : "Lavagne condivise",
-    "View more" : "Visualizza altro",
     "Move board to archive" : "Sposta lavagna nell'archivio",
     "Create a new board" : "Crea una nuova lavagna"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

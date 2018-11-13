@@ -69,7 +69,6 @@ OC.L10N.register(
     "Formatting help" : "Formateringshjelp",
     "Add a card description…" : "Legg til en kortbeskrivelse…",
     "Shared boards" : "Delte bord",
-    "View more" : "Vis mer",
     "Move board to archive" : "Flytt bord til arkiv",
     "Create a new board" : "Opprett et nytt bord"
 },

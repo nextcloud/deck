@@ -110,8 +110,8 @@
     "All Boards" : "Alle borden",
     "Archived boards" : "Gearchiveerde borden",
     "Share board" : "Bord delen",
-    "Drop your files here to upload it to the card" : "Sleep je bestanden hierheen om naar de kaart te uploaden",
     "Actions" : "Acties",
+    "Drop your files here to upload it to the card" : "Sleep je bestanden hierheen om naar de kaart te uploaden",
     "Assign to me" : "Aan mij toewijzen",
     "Unassign from me" : "Van mij terughalen",
     "Archive" : "Archiveer",
@@ -172,12 +172,11 @@
     "Attachments" : "Bijlagen",
     "Saved" : "Opgeslagen",
     "Unsaved changes" : "Niet bewaarde wijzigingen",
-    "Formatting help" : "Formatteringshulp",
     "Insert attachment" : "Toevoegen bijlage",
+    "Formatting help" : "Formatteringshulp",
     "Upload attachment" : "Uploaden bijlage",
     "Add a card description…" : "Voeg een kaartbeschrijving toe...",
     "Shared boards" : "Gedeelde borden",
-    "View more" : "Bekijk meer",
     "Move board to archive" : "Verplaats bord naar archief",
     "Create a new board" : "Een nieuw bord maken"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

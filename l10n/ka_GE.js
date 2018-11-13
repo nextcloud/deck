@@ -68,7 +68,6 @@ OC.L10N.register(
     "Formatting help" : "დახმარება ფორმატირებაზე",
     "Add a card description…" : "დაამატეთ ბარათის აღწერილობა...",
     "Shared boards" : "გაზიარებული დაფები",
-    "View more" : "მეტის ჩვენება",
     "Move board to archive" : "დაფის არქვიში გადატანა",
     "Create a new board" : "ახალი დაფის შექმნა"
 },

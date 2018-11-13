@@ -73,12 +73,11 @@ OC.L10N.register(
     "Attachments" : "Priedai",
     "Saved" : "Įrašyta",
     "Unsaved changes" : "Neįrašyti pakeitimai",
-    "Formatting help" : "Formatavimo pagalba",
     "Insert attachment" : "Įterpti priedą",
+    "Formatting help" : "Formatavimo pagalba",
     "Upload attachment" : "Įkelti priedą",
     "Add a card description…" : "Pridėti elemento apibūdinimą...",
     "Shared boards" : "Bendrinami sąrašai",
-    "View more" : "Rodyti daugiau",
     "Move board to archive" : "Perkelti sąrašą į archyvą",
     "Create a new board" : "Sukurti naują sąrašą"
 },

@@ -68,7 +68,6 @@ OC.L10N.register(
     "Formatting help" : "서식 도움말",
     "Add a card description…" : "카드 설명 추가…",
     "Shared boards" : "공유된 게시판",
-    "View more" : "더 보기",
     "Move board to archive" : "게시판을 보관 항목으로 이동",
     "Create a new board" : "새 게시판 만들기"
 },

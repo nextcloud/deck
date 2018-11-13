@@ -75,7 +75,6 @@ OC.L10N.register(
     "Upload attachment" : "Lähetä liite",
     "Add a card description…" : "Lisää kortin kuvaus…",
     "Shared boards" : "Jaetut taulut",
-    "View more" : "Näytä lisää",
     "Move board to archive" : "Siirrä taulu arkistoon",
     "Create a new board" : "Luo uusi taulu"
 },

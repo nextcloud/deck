@@ -55,7 +55,6 @@ OC.L10N.register(
     "Formatting help" : "Βοήθεια μορφοποίησης",
     "Add a card description…" : "Προσθήκη περιγραφής κάρτας...",
     "Shared boards" : "Διαμοιρασμένοι πίνακες",
-    "View more" : "Προβολή περισσοτέρων",
     "Move board to archive" : "Μετακίνηση πίνακα στην αρχειοθήκη",
     "Create a new board" : "Δημιουργία νέου πίνακα"
 },

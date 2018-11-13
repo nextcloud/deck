@@ -51,7 +51,6 @@ OC.L10N.register(
     "Add a tag" : "Adicionar uma etiqueta",
     "Description" : "Descrição",
     "Saved" : "Guardado",
-    "View more" : "Ver mais",
     "Create a new board" : "Criar um novo quadro"
 },
 "nplurals=2; plural=(n != 1);");

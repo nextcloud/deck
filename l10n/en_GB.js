@@ -69,7 +69,6 @@ OC.L10N.register(
     "Formatting help" : "Formatting help",
     "Add a card description…" : "Add a card description…",
     "Shared boards" : "Shared boards",
-    "View more" : "View more",
     "Move board to archive" : "Move board to archive",
     "Create a new board" : "Create a new board"
 },

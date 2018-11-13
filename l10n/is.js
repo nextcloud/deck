@@ -87,12 +87,11 @@ OC.L10N.register(
     "Attachments" : "Viðhengi",
     "Saved" : "Vistað",
     "Unsaved changes" : "Óvistaðar breytingar",
-    "Formatting help" : "Hjálp við að sníða",
     "Insert attachment" : "Setja inn Viðhengi",
+    "Formatting help" : "Hjálp við að sníða",
     "Upload attachment" : "Senda inn viðhengi",
     "Add a card description…" : "Settu inn lýsingu á spjaldi ...",
     "Shared boards" : "Deild borð",
-    "View more" : "Skoða meira",
     "Move board to archive" : "Færa borð í geymslu",
     "Create a new board" : "Búa til nýtt borð"
 },

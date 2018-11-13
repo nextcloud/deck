@@ -110,8 +110,8 @@
     "All Boards" : "Все доски",
     "Archived boards" : "Архив досок",
     "Share board" : "Поделиться",
-    "Drop your files here to upload it to the card" : "Для загрузки файла в карточку, перетащите его сюда",
     "Actions" : "Действия",
+    "Drop your files here to upload it to the card" : "Для загрузки файла в карточку, перетащите его сюда",
     "Assign to me" : "Назначить себе",
     "Unassign from me" : "Отказаться от назначения",
     "Archive" : "Переместить в архив",
@@ -172,12 +172,11 @@
     "Attachments" : "Вложения",
     "Saved" : "Сохранено",
     "Unsaved changes" : "Не сохраненные изменения",
-    "Formatting help" : "Справка по форматированию",
     "Insert attachment" : "Вставить вложение",
+    "Formatting help" : "Справка по форматированию",
     "Upload attachment" : "Загрузить вложение",
     "Add a card description…" : "Введите описание карточки…",
     "Shared boards" : "Общие доски",
-    "View more" : "Просмотреть дальше",
     "Move board to archive" : "Переместить доску в архив",
     "Create a new board" : "Создать доску"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"

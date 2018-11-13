@@ -110,8 +110,8 @@
     "All Boards" : "Všechny desky",
     "Archived boards" : "Archivované desky",
     "Share board" : "Sdílet nástěnku",
-    "Drop your files here to upload it to the card" : "Přetáhněte soubor sem, pokud jej chcete připojit ke kartě.",
     "Actions" : "Akce",
+    "Drop your files here to upload it to the card" : "Přetáhněte soubor sem, pokud jej chcete připojit ke kartě.",
     "Assign to me" : "Přiřadit mě",
     "Unassign from me" : "Zrušit přiřazení mě",
     "Archive" : "Archiv",
@@ -172,12 +172,11 @@
     "Attachments" : "Přílohy",
     "Saved" : "Uloženo",
     "Unsaved changes" : "Neuložené změny",
-    "Formatting help" : "Nápověda k formátování",
     "Insert attachment" : "Vložit přílohu",
+    "Formatting help" : "Nápověda k formátování",
     "Upload attachment" : "Nahrát přílohu",
     "Add a card description…" : "Přidat popis karty…",
     "Shared boards" : "Sdílené desky",
-    "View more" : "Ukázat více",
     "Move board to archive" : "Přesunout desku do archivu",
     "Create a new board" : "Vytvořit novou desku"
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"

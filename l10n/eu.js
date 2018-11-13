@@ -66,7 +66,6 @@ OC.L10N.register(
     "Formatting help" : "Formatua emateko laguntza",
     "Add a card description…" : "Txartelaren deskribapena gehitu...",
     "Shared boards" : "Partekatutako txartelak",
-    "View more" : "Gehiago ikusi",
     "Move board to archive" : "Txartela artxibora mugitu",
     "Create a new board" : "Mahaigain berria sortu"
 },

@@ -74,12 +74,11 @@ OC.L10N.register(
     "Attachments" : "Mellékletek",
     "Saved" : "Elmentve",
     "Unsaved changes" : "Mentetlen változtatások",
-    "Formatting help" : "Formázási segítség",
     "Insert attachment" : "Melléklet beillesztése",
+    "Formatting help" : "Formázási segítség",
     "Upload attachment" : "Melléklet feltöltése",
     "Add a card description…" : "Adj hozzá kártya leírást...",
     "Shared boards" : "Megosztott táblák",
-    "View more" : "Több megtekintése",
     "Move board to archive" : "Tábla mozgatása archívumba",
     "Create a new board" : "Új tábla létrehozása"
 },

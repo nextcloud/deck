@@ -102,8 +102,8 @@
     "All Boards" : "Tất cả dự án",
     "Archived boards" : "Dự án đã lưu trữ",
     "Share board" : "Dự án chia sẽ",
-    "Drop your files here to upload it to the card" : "Thả tệp của bạn vào đây để tải nó lên tác vụ",
     "Actions" : "Hành động",
+    "Drop your files here to upload it to the card" : "Thả tệp của bạn vào đây để tải nó lên tác vụ",
     "Assign to me" : "Phân công cho tôi",
     "Unassign from me" : "Chưa được phân công từ tôi",
     "Archive" : "Lưu trữ",
@@ -160,12 +160,11 @@
     "Attachments" : "Đính kèm",
     "Saved" : "Đã lưu",
     "Unsaved changes" : "Thay đổi chưa được lưu",
-    "Formatting help" : "Định dạng trợ giúp",
     "Insert attachment" : "Thêm đính kèm",
+    "Formatting help" : "Định dạng trợ giúp",
     "Upload attachment" : "Tải lên một đính kèm",
     "Add a card description…" : "Thêm một mô tả tác vụ...",
     "Shared boards" : "Chia sẽ dự án",
-    "View more" : "Xem nhiều hơn",
     "Move board to archive" : "Di chuyển dự án sang lưu trữ",
     "Create a new board" : "Tạo dự án mới"
 },"pluralForm" :"nplurals=1; plural=0;"

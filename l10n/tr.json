@@ -110,8 +110,8 @@
     "All Boards" : "Tüm Panolar",
     "Archived boards" : "Arşivlenmiş panolar",
     "Share board" : "Panoyu paylaş",
-    "Drop your files here to upload it to the card" : "Karta yüklemek istediğiniz dosyalarınızı sürükleyip buraya bırakın",
     "Actions" : "İşlemler",
+    "Drop your files here to upload it to the card" : "Karta yüklemek istediğiniz dosyalarınızı sürükleyip buraya bırakın",
     "Assign to me" : "Bana ata",
     "Unassign from me" : "Benden atamasını kaldır",
     "Archive" : "Arşivle",
@@ -172,12 +172,11 @@
     "Attachments" : "Ek dosyalar",
     "Saved" : "Kaydedildi",
     "Unsaved changes" : "Kaydedilmemiş değişiklikler",
-    "Formatting help" : "Biçimlendirme yardımı",
     "Insert attachment" : "Ek dosya ekle",
+    "Formatting help" : "Biçimlendirme yardımı",
     "Upload attachment" : "Ek dosya yükle",
     "Add a card description…" : "Bir kart açıklaması ekle...",
     "Shared boards" : "Paylaşılmış panolar",
-    "View more" : "Diğerlerini görüntüle",
     "Move board to archive" : "Panoyu arşive taşı",
     "Create a new board" : "Pano ekle"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"

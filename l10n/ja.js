@@ -46,7 +46,6 @@ OC.L10N.register(
     "Choose a tag" : "タグを選択",
     "Add a tag" : "タグを追加",
     "Saved" : "保存しました",
-    "Unsaved changes" : "保存していない変更点",
-    "View more" : "もっと見る"
+    "Unsaved changes" : "保存していない変更点"
 },
 "nplurals=1; plural=0;");
