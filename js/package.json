@@ -22,7 +22,7 @@
     "ui-select": "^0.19.8"
   },
   "devDependencies": {
-    "@babel/core": "^7.1.5",
+    "@babel/core": "^7.1.6",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.5",
     "babel-loader": "^8.0.4",
