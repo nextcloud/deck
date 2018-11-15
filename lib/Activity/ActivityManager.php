@@ -326,7 +326,7 @@ class ActivityManager {
 				$subjectParams = [
 					'comment' => $entity->getMessage()
 				];
-				$message = $entity->getMessage();
+				$message = '{comment}';
 				break;
 
 			case self::SUBJECT_STACK_CREATE:
