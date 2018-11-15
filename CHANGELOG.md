@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.5.0 - unreleased
+## 0.5.0 - 2018-11-15
 
 ### Added
 
