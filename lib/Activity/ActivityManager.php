@@ -309,6 +309,7 @@ class ActivityManager {
 		 * Automatically fetch related details for subject parameters
 		 * depending on the subject
 		 */
+		$eventType = 'deck';
 		$subjectParams = [];
 		$message = null;
 		switch ($subject) {
@@ -372,6 +373,7 @@ class ActivityManager {
 
 		if ($subject === self::SUBJECT_CARD_UPDATE_DESCRIPTION){
 			$subjectParams['diff'] = true;
+			$eventType = 'deck_card_description';
 		}
 		if ($subject === self::SUBJECT_CARD_UPDATE_STACKID) {
 			$subjectParams['stackBefore'] = $this->stackMapper->find($additionalParams['before']);
@@ -382,7 +384,7 @@ class ActivityManager {
 
 		$event = $this->manager->generateEvent();
 		$event->setApp('deck')
-			->setType('deck')
+			->setType($eventType)
 			->setAuthor($this->userId)
 			->setObject($objectType, (int)$object->getId(), $object->getTitle())
 			->setSubject($subject, array_merge($subjectParams, $additionalParams))

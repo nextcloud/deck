@@ -17,7 +17,7 @@
 - 🚀 Get your project organized
 
 </description>
-    <version>0.5.0</version>
+    <version>0.5.1-dev1</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
@@ -53,6 +53,7 @@
     <activity>
         <settings>
             <setting>OCA\Deck\Activity\Setting</setting>
+            <setting>OCA\Deck\Activity\DescriptionSetting</setting>
         </settings>
         <filters>
             <filter>OCA\Deck\Activity\Filter</filter>

@@ -24,7 +24,19 @@
 namespace OCA\Deck\Activity;
 
 
+use OCP\IL10N;
+
 class Setting implements \OCP\Activity\ISetting {
+
+	/** @var IL10N */
+	protected $l;
+
+	/**
+	 * @param IL10N $l
+	 */
+	public function __construct(IL10N $l) {
+		$this->l = $l;
+	}
 
 	/**
 	 * @return string Lowercase a-z and underscore only identifier
@@ -39,7 +51,7 @@ class Setting implements \OCP\Activity\ISetting {
 	 * @since 11.0.0
 	 */
 	public function getName() {
-		return 'Deck';
+		return $this->l->t('Changes in the <strong>Deck app</strong>');
 	}
 
 	/**
