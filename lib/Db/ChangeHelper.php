@@ -65,7 +65,7 @@ class ChangeHelper {
 			$this->db->executeUpdate($sql, [time(), $cardId]);
 		}
 
-		$sql = 'SELECT s.board_id as id, c.stack_id as stack_id FROM oc_deck_stacks as s inner join oc_deck_cards as c ON c.stack_id = s.id WHERE c.id = ?';
+		$sql = 'SELECT s.board_id as id, c.stack_id as stack_id FROM `*PREFIX*deck_stacks` as s inner join `*PREFIX*deck_cards` as c ON c.stack_id = s.id WHERE c.id = ?';
 		$result = $this->db->executeQuery($sql, [$cardId]);
 		if ($row = $result->fetch()) {
 			$this->boardChanged($row['id']);
