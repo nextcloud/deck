@@ -124,31 +124,31 @@
 											<a class="menuitem action action-rename permanent"
 											   data-action="AssignToMe"
 											   ng-click="cardAssignToMe(c); $event.stopPropagation();"><span
-														class="icon icon-user"></span><span><?php p($l->t('Assign to me')); ?></span></a>
+														class="icon icon-user"></span><span><?php p($l->t('Assign card to me')); ?></span></a>
 										</li>
 										<li ng-if="isCurrentUserAssigned(c)">
 											<a class="menuitem action action-rename permanent"
 											   data-action="UnassignFromMe"
 											   ng-click="cardUnassignFromMe(c); $event.stopPropagation();"><span
-														class="icon icon-user"></span><span><?php p($l->t('Unassign from me')); ?></span></a>
+														class="icon icon-user"></span><span><?php p($l->t('Unassign card from me')); ?></span></a>
 										</li>
 										<li ng-if="params.filter!=='archive'">
 											<a class="menuitem action action-rename permanent"
 											   data-action="Archive"
 											   ng-click="cardArchive(c); $event.stopPropagation();"><span
-														class="icon icon-archive"></span><span><?php p($l->t('Archive')); ?></span></a>
+														class="icon icon-archive"></span><span><?php p($l->t('Archive card')); ?></span></a>
 										</li>
 										<li ng-if="params.filter==='archive'">
 											<a class="menuitem action action-rename permanent"
 											   data-action="Unarchive"
 											   ng-click="cardUnarchive(c); $event.stopPropagation();"><span
-														class="icon icon-archive"></span><span><?php p($l->t('Unarchive')); ?></span></a>
+														class="icon icon-archive"></span><span><?php p($l->t('Unarchive card')); ?></span></a>
 										</li>
 										<li>
 											<a class="menuitem action action-delete permanent"
 											   data-action="Delete"
 											   ng-click="cardDelete(c); $event.stopPropagation();"><span
-														class="icon icon-delete"></span><span><?php p($l->t('Delete')); ?></span></a>
+														class="icon icon-delete"></span><span><?php p($l->t('Delete card')); ?></span></a>
 										</li>
 									</ul>
 								</div>
