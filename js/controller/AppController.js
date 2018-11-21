@@ -22,7 +22,7 @@
 
 import app from '../app/App.js';
 
-/** global: OC */
+/* globals oc_current_user: false */
 app.controller('AppController', function ($scope, $location, $http, $log, $rootScope, $attrs) {
 	$rootScope.sidebar = {
 		show: false
@@ -32,13 +32,13 @@ app.controller('AppController', function ($scope, $location, $http, $log, $rootS
 	$rootScope.config = JSON.parse($attrs.config);
 
 	$rootScope.compactMode = localStorage.getItem('deck.compactMode') === 'true';
-
-	$scope.appNavigationHide = false;
+	$scope.appNavigationHide = localStorage.getItem('deck.appNavigationHide') === 'true';
 
 	$scope.toggleSidebar = function() {
 		if ($(window).width() > 768) {
+			$log.debug($scope.appNavigationHide);
 			$scope.appNavigationHide = !$scope.appNavigationHide;
-			console.log($scope.appNavigationHide);
+			localStorage.setItem('deck.appNavigationHide', JSON.stringify($scope.appNavigationHide));
 		}
 	};
 });
