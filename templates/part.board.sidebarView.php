@@ -122,33 +122,30 @@
 
     </div>
 
-    <div id="board-detail-deleted-stacks" class="tab deletedStacksTabView" ng-if="params.tab==2">
+	<div id="board-detail-deleted-stacks" class="tab deletedStacksTabView" ng-if="params.tab==2">
 		<h3><?php p($l->t('Deleted stacks')); ?></h3>
-    	<ul class='board-detail__deleted-list'>
-    	   <li class='board-detail__deleted-list__item' ng-repeat="deletedStack in stackservice.deleted">
-           <span class="icon icon-deck"></span>
-           <span>{{deletedStack.title}}</span>
-    			 <span>{{deletedStack.deletedAt | relativeDateFilter }}</span>
-           <a ng-click="stackUndoDelete(deletedStack)">
-             <span class="icon icon-history"></span>
-           </a>
-    	   </li>
-    	</ul>
+		<ul class='board-detail__deleted-list'>
+			<li class='board-detail__deleted-list__item' ng-repeat="deletedStack in stackservice.deleted">
+				<span class="icon icon-deck"></span>
+				<span class="title">{{deletedStack.title}}</span>
+				<span class="live-relative-timestamp" data-timestamp="{{ deletedStack.deletedAt*1000  }}">{{deletedStack.deletedAt | relativeDateFilter }}</span>
+				<a ng-click="stackUndoDelete(deletedStack)"><span class="icon icon-history"></span></a>
+			</li>
+		</ul>
 
 		<h3><?php p($l->t('Deleted cards')); ?></h3>
 
 		<ul class='board-detail__deleted-list'>
-    	   <li class='board-detail__deleted-list__item' ng-repeat="deletedCard in cardservice.deleted">
-            <span class="icon icon-deck"></span>
-    			  <span>{{deletedCard.title}}</span>
-    			  <span>{{stackservice.tryAllThenDeleted(deletedCard.stackId).title}}</span>
-    			  <span>{{deletedCard.deletedAt | relativeDateFilter }}</span>
-        	  <a ng-click="cardOrCardAndStackUndoDelete(deletedCard)">
-              <span class="icon icon-history"></span>
-            </a>
-    	   </li>
-    	</ul>
-    </div>
+			<li class='board-detail__deleted-list__item' ng-repeat="deletedCard in cardservice.deleted">
+				<span class="icon icon-deck"></span>
+				<span class="title">{{deletedCard.title}} ({{stackservice.tryAllThenDeleted(deletedCard.stackId).title}})</span>
+				<span class="live-relative-timestamp" data-timestamp="{{ deletedCard.deletedAt*1000  }}">{{deletedCard.deletedAt | relativeDateFilter }}</span>
+				<a ng-click="cardOrCardAndStackUndoDelete(deletedCard)">
+					<span class="icon icon-history"></span>
+				</a>
+			</li>
+		</ul>
+	</div>
 
 	<div id="board-detail-activity" class="tab activityTabView" ng-if="isTimelineEnabled() && params.tab==4">
 		<activity-component ng-if="boardservice.getCurrent()" type="deck_board" element="boardservice.getCurrent()"></activity-component>

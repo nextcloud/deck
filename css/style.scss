@@ -1288,10 +1288,16 @@ input.input-inline {
 .board-detail__deleted-list__item {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
 
 	* {
-		flex-basis: 20%;
+		flex-basis: 44px;
+	}
+
+	.title {
+		flex-grow: 2;
+	}
+	.live-relative-timestamp {
+		flex-grow: 1;
 	}
 }
 
