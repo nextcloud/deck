@@ -124,7 +124,7 @@
 			<td></td>
 			<td>
 				<div class="board-edit-controls">
-					<span class="icon icon-checkmark" ng-click="boardCreate()" title="<?php p($l->t('Create  board')); ?>"><span class="hidden-visually"><?php p($l->t('Create board')); ?></span></span>
+					<span class="icon icon-checkmark" ng-click="boardCreate()" title="<?php p($l->t('Create board')); ?>"><span class="hidden-visually"><?php p($l->t('Create board')); ?></span></span>
 					<span class="icon icon-close" ng-click="status.addBoard=!status.addBoard" title="<?php p($l->t('Close')); ?>"><span class="hidden-visually"><?php p($l->t('Close')); ?></span></span>
 				</div>
 			</td>
