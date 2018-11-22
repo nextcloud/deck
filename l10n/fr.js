@@ -114,6 +114,8 @@ OC.L10N.register(
     "Share board" : "Partager le tableau",
     "Actions" : "Actions",
     "Drop your files here to upload it to the card" : "Déposez vos fichiers ici pour les téléverser sur la carte",
+    "Assign card to me" : "Assignez-moi la carte",
+    "Unassign card from me" : "Retirez-moi la carte",
     "Archive card" : "Archiver la carte",
     "Unarchive card" : "Ne plus archiver la carte",
     "Delete card" : "Supprimer la carte",
