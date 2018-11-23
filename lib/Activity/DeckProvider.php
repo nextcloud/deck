@@ -79,7 +79,16 @@ class DeckProvider implements IProvider {
 		/**
 		 * Map stored parameter objects to rich string types
 		 */
-		$board = null;
+
+		$author = $event->getAuthor();
+		$user = $this->userManager->get($author);
+		$params = [
+			'user' => [
+				'type' => 'user',
+				'id' => $author,
+				'name' => $user !== null ? $user->getDisplayName() : $author
+			],
+		];
 		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_BOARD) {
 			$board = [
 				'type' => 'highlight',
@@ -87,9 +96,9 @@ class DeckProvider implements IProvider {
 				'name' => $event->getObjectName(),
 				'link' => $this->deckUrl('/board/' . $event->getObjectId()),
 			];
+			$params['board'] = $board;
 		}
 
-		$card = null;
 		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_CARD) {
 			$card = [
 				'type' => 'highlight',
@@ -101,19 +110,8 @@ class DeckProvider implements IProvider {
 				$archivedParam = $subjectParams['card']['archived'] ? 'archived' : '';
 				$card['link'] = $this->deckUrl('/board/' . $subjectParams['board']['id'] . '/' . $archivedParam . '/card/' . $event->getObjectId());
 			}
+			$params['card'] = $card;
 		}
-
-		$author = $event->getAuthor();
-		$user = $this->userManager->get($author);
-		$params = [
-			'board' => $board,
-			'card' => $card,
-			'user' => [
-				'type' => 'user',
-				'id' => $author,
-				'name' => $user !== null ? $user->getDisplayName() : $author
-			],
-		];
 
 		$params = $this->parseParamForBoard('board', $subjectParams, $params);
 		$params = $this->parseParamForStack('stack', $subjectParams, $params);

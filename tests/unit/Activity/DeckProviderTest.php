@@ -180,7 +180,6 @@ class DeckProviderTest extends TestCase {
 				'name' => 'Board',
 				'link' => '#!/board/1',
 			],
-			'card' => null,
 			'user' => [
 				'type' => 'user',
 				'id' => 'admin',
@@ -216,7 +215,6 @@ class DeckProviderTest extends TestCase {
 
 		$this->provider->parse('en_US', $event);
 		$data = [
-			'board' => null,
 			'card' => [
 				'type' => 'highlight',
 				'id' => 1,
@@ -266,7 +264,6 @@ class DeckProviderTest extends TestCase {
 
 		$this->provider->parse('en_US', $event);
 		$data = [
-			'board' => null,
 			'card' => [
 				'type' => 'highlight',
 				'id' => 1,
