@@ -1,4 +1,6 @@
 {
+  "esversion": 6,
+
   "globals": {
     "jasmine"    : false,
     "spyOn"      : false,
@@ -21,7 +23,6 @@
   "devel"     : true,
   "eqeqeq"    : true,
   "eqnull"    : false,
-  "es5"       : true,
   "evil"      : false,
   "forin"     : true,
   "immed"     : true,
@@ -39,7 +40,6 @@
   "plusplus"  : false,
   "quotmark"  : "single",
   "regexp"    : false,
-  "strict"    : true,
   "sub"       : true,
   "trailing"  : true,
   "undef"     : true,
