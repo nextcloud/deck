@@ -8,7 +8,7 @@ pipeline:
     image: nextcloudci/php7.0:php7.0-17
     environment:
       - APP_NAME=deck
-      - CORE_BRANCH=stable14
+      - CORE_BRANCH=stable15
       - DB=sqlite
     commands:
       # Pre-setup steps
