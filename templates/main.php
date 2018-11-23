@@ -27,7 +27,6 @@ Util::addScript('activity', 'richObjectStringParser');
 if (\OC_Util::getVersion()[0] > 14) {
 	Util::addScript('activity', 'templates');
 }
-Util::addScript('activity', 'script');
 
 Util::addStyle('activity', 'style');
 Util::addStyle('comments', 'comments');
