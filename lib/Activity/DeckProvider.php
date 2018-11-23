@@ -79,7 +79,16 @@ class DeckProvider implements IProvider {
 		/**
 		 * Map stored parameter objects to rich string types
 		 */
-		$board = null;
+
+		$author = $event->getAuthor();
+		$user = $this->userManager->get($author);
+		$params = [
+			'user' => [
+				'type' => 'user',
+				'id' => $author,
+				'name' => $user !== null ? $user->getDisplayName() : $author
+			],
+		];
 		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_BOARD) {
 			$board = [
 				'type' => 'highlight',
@@ -87,18 +96,8 @@ class DeckProvider implements IProvider {
 				'name' => $event->getObjectName(),
 				'link' => $this->deckUrl('/board/' . $event->getObjectId()),
 			];
+			$params['board'] = $board;
 		}
-
-		$author = $event->getAuthor();
-		$user = $this->userManager->get($author);
-		$params = [
-			'board' => $board,
-			'user' => [
-				'type' => 'user',
-				'id' => $author,
-				'name' => $user !== null ? $user->getDisplayName() : $author
-			],
-		];
 
 		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_CARD) {
 			$card = [
