@@ -154,7 +154,6 @@
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Löschen des Boards rückgängig machen - Andernfalls wird das Board beim nächsten CronJob-Lauf gelöscht.",
     "Create new board" : "Neues Board",
     "New board title" : "Board-Titel",
-    "Create  board" : "Neues Board",
     "Create board" : "Neues Board",
     "Select an attachment" : "Wählen Sie einen Anhang",
     "Cancel upload" : "Hochladen abbrechen",

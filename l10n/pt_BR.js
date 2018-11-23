@@ -156,7 +156,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Desfazer a exclusão do painel - Caso contrário, o painel será excluída durante o próximo cronjob.",
     "Create new board" : "Criar novo painel",
     "New board title" : "Título do novo painel",
-    "Create  board" : "Criar painel",
     "Create board" : "Criar painel",
     "Select an attachment" : "Selecionar um anexo",
     "Cancel upload" : "Cancelar envio",

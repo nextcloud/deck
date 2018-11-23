@@ -156,7 +156,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Annuler la suppression du tableau - Autrement le tableau sera supprimé lors du prochain lancement de la tâche cron.",
     "Create new board" : "Créer un nouveau tableau",
     "New board title" : "Nouveau titre pour le tableau",
-    "Create  board" : "Créer le tableau",
     "Create board" : "Créer le tableau",
     "Select an attachment" : "Sélectionner une pièce jointe",
     "Cancel upload" : "Annuler le téléversement",

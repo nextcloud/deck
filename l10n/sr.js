@@ -156,7 +156,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Врати брисање табле - у супротном ће табла бити обрисана за време следећег крон посла.",
     "Create new board" : "Направи нову таблу",
     "New board title" : "Назив нове табле",
-    "Create  board" : "Направи таблу",
     "Create board" : "Направи таблу",
     "Select an attachment" : "Одаберите прилог",
     "Cancel upload" : "Откажи отпремање",

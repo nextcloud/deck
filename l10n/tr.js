@@ -156,7 +156,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Pano silme işlemini geri alır. Yoksa pano zamanlanmış görevin bir sonraki çalışmasında silinir.",
     "Create new board" : "Pano ekle",
     "New board title" : "Yeni pano başlığı",
-    "Create  board" : "Pano ekle",
     "Create board" : "Pano ekle",
     "Select an attachment" : "Bir ek dosyası seçin",
     "Cancel upload" : "Yüklemeyi iptal et",

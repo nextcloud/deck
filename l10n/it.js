@@ -156,7 +156,6 @@ OC.L10N.register(
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Annulla eliminazione della lavagna - Altrimenti la lavagna sarà eliminata durante la prossima esecuzione del job di cron.",
     "Create new board" : "Crea una nuova lavagna",
     "New board title" : "Titolo nuova lavagna",
-    "Create  board" : "Crea lavagna",
     "Create board" : "Crea lavagna",
     "Select an attachment" : "Scegli un allegato",
     "Cancel upload" : "Annulla caricamento",
