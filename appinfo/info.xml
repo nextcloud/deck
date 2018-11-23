@@ -22,7 +22,7 @@
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
     <types>
-        <logging/>
+        <dav />
     </types>
     <category>organization</category>
     <category>office</category>
