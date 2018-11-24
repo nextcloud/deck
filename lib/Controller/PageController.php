@@ -66,7 +66,7 @@ class PageController extends Controller {
 			$this->defaultBoardService->createDefaultBoard($this->l10n->t('Personal'), $this->userId, '000000');
 		}
 
-		return new TemplateResponse('deck', 'main', $params);
+		return new TemplateResponse('deck', 'vue', $params);
 	}
 
 }
