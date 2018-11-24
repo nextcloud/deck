@@ -1,3 +1,7 @@
+node_modules/*
+js/*deck.js
+js/*deck.js.map
+
 js/node_modules/*
 js/vendor/
 js/public/
