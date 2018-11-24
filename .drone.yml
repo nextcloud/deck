@@ -219,15 +219,16 @@ pipeline:
   eslint:
     image: nextcloudci/eslint:eslint-1
     commands:
-      - ./run-eslint.sh
+      - npm install
+      - npm run lint
     when:
       matrix:
         TESTS: eslint
   jsbuild:
-    image: mhart/alpine-node:6.8.0
+    image: node:11-alpine
     commands:
-      - apk add --no-cache make
-      - make build-js
+      - npm install
+      - npm run build
     when:
       matrix:
         TESTS: jsbuild
