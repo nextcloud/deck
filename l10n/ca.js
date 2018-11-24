@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Please provide a content for your comment." : "Si us plau, proporciona un comentari.",
     "Posting the comment failed." : "Error al posar el comentari.",
     "The comment has been deleted" : "S'ha esborrat el comentari",
     "Restore associated stack" : "Restaura la pila associada",
@@ -10,6 +11,11 @@ OC.L10N.register(
     "Maximum file size of {size} exceeded" : "Mida màxima per fitxer de {size} superada",
     "You have created a new board {board}" : "Has creat el nou tauler {board}",
     "{user} has created a new board {board}" : "{user} ha creat el nou tauler {board}",
+    "You have deleted the board {board}" : "Has esborrat el taulell {board}",
+    "{user} has deleted the board {board}" : "{user} ha esborrat el taulell {board}",
+    "You have restored the board {board}" : "Has restaurat el taulell {board}",
+    "{user} has restored the board {board}" : "{user} ha restaurat el taulell {board}",
+    "You have shared the board {board} with {acl}" : "Has compartit el taulell {board} amb {acl}",
     "You have deleted {stack} on {board}" : "Has esborrat {stack} de {board}",
     "{user} has deleted {stack} on {board}" : "{user} ha esborrat {stack} de {board}",
     "You have created {card} in {stack} on {board}" : "Has creat {card} a {stack} dins de {board}",
