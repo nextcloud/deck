@@ -4,7 +4,7 @@ OC.L10N.register(
     "Remove user from card" : "Ta bort användare från kort",
     "Hours" : "Timmar",
     "Minutes" : "Minuter",
-    "Deck" : "Kort",
+    "Deck" : "Kortlek",
     "The card \"%s\" on \"%s\" has reached its due date." : "Kortet \"%s\" på \"%s\" har nått sitt utgångsdatum.",
     "The board \"%s\" has been shared with you by %s." : "Tavlan \"%s\" har delats med dig av %s.",
     "{user} has shared the board %s with you." : "{user} har delat tavlan %s med dig.",
