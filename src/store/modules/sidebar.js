@@ -1,7 +1,7 @@
 /*
  * @copyright Copyright (c) 2018 Julius Härtl <jus@bitgrid.net>
  *
- * @author Julius Härtl <jus@bitgrid.net>
+ * @author Michael Weimann <mail@michael-weimann.eu>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -20,32 +20,34 @@
  *
  */
 
-import Vue from 'vue'
-import Router from 'vue-router'
-import { generateUrl } from 'nextcloud-server/dist/router'
 
-const Main = () => import('./components/Main')
+// initial state
+const state = {
+    hidden: true,
+    component: 'Sidebar'
+}
 
-Vue.use(Router)
+// getters
+const getters = {}
 
-export default new Router({
-	base: generateUrl('/apps/deck/'),
-	linkActiveClass: 'active',
-	routes: [
-		{
-			path: '/',
-			name: 'main',
-			component: Main
-		},
-		{
-			path: '/boards',
-			name: 'boards',
-			component: Main
-		},
-		{
-			path: '/boards/archived',
-			name: 'boards.archived',
-			component: Main
-		}
-	]
-})
+// actions
+const actions = {
+    toggle ({ commit }) {
+        commit('toggle')
+    }
+}
+
+// mutations
+const mutations = {
+    toggle (state) {
+        state.hidden = !state.hidden
+    }
+}
+
+export default {
+    namespaced: true,
+    state,
+    getters,
+    actions,
+    mutations
+}

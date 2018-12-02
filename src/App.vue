@@ -21,11 +21,77 @@
  -->
 
 <template>
-	<router-view />
+
+<div
+		id="content"
+		v-bind:class="{ 'nav-hidden': navHidden, 'sidebar-hidden': sidebarHidden }">
+	<AppNavigation :menu="menu" />
+	<div id="app-content">
+		<Controls></Controls>
+		<router-view />
+	</div>
+	<div id="app-sidebar">
+        <component v-bind:is="sidebarComponent"></component>
+	</div>
+</div>
+
 </template>
 
 <script>
+
+import { AppNavigation } from 'nextcloud-vue'
+import Controls from './components/Controls'
+import { mapState } from 'vuex'
+import Sidebar from './components/Sidebar'
+
 export default {
-	name: 'App'
+	name: 'App',
+	components: {
+		AppNavigation,
+		Controls,
+        Sidebar
+	},
+	computed: mapState({
+		navHidden: state => state.nav.hidden,
+		sidebarHidden: state => state.sidebar.hidden,
+		menu: state => state.nav.menu,
+        sidebarComponent: state => state.sidebar.component
+	})
 }
+
 </script>
+
+<style lang="scss" scoped>
+
+#content {
+	#app-content {
+		transition: margin-left 100ms ease;
+	}
+
+	#app-sidebar {
+		transition: width 100ms ease;
+	}
+
+	&.nav-hidden {
+		#app-content {
+			margin-left: 0;
+		}
+	}
+
+	&.sidebar-hidden {
+		#app-sidebar {
+			max-width: 0;
+			min-width: 0;
+		}
+	}
+}
+
+.deck-main {
+	bottom: 0;
+	overflow: auto;
+	position: absolute;
+	top: 44px;
+	width: 100%;
+}
+
+</style>

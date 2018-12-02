@@ -21,15 +21,16 @@
   -->
 
 <template>
-	<div />
+<div class="deck-main">
+    Main
+</div>
 </template>
 
 <script>
 export default {
-	name: 'Sidebar'
+	name: 'Main'
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
 </style>
