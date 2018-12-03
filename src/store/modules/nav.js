@@ -20,10 +20,29 @@
  *
  */
 
-// nav stuff
-// todo maybe move out of nav.js directly and import here
-
 import { translate as t } from 'nextcloud-server/dist/l10n'
+import axios from 'nextcloud-axios'
+
+/**
+ * Maps an API board to a menu item.
+ * @param board
+ * @returns {{id: *, classes: Array, bullet: string, text: *, router: {name: string, params: {id: *}}, utils: {actions: *[]}}}
+ */
+const mapBoardToItem = board => {
+	return {
+		id: board.id,
+		classes: [],
+		bullet: `#${board.color}`,
+		text: board.title,
+		router: {
+			name: 'board',
+			params: { id: board.id }
+		},
+		utils: {
+			actions: boardActions
+		}
+	}
+}
 
 let defaultCategories = [
 	{
@@ -82,22 +101,6 @@ const boardActions = [
 	}
 ]
 
-const boards = [
-	{
-		id: 'deck-board-1',
-		classes: [],
-		bullet: '#00cc00',
-		text: 'Example board',
-		router: {
-			name: 'board',
-			params: { id: 1 }
-		},
-		utils: {
-			actions: boardActions
-		}
-	}
-]
-
 const addButton = {
 	icon: 'icon-add',
 	text: t('deck', 'Create new board'),
@@ -108,19 +111,32 @@ const addButton = {
 // initial state
 const state = {
 	hidden: false,
-	menu: {
-		items: defaultCategories.concat(boards).concat([addButton]),
-		loading: false
-	}
+	boards: [],
+	loading: false
 }
 
 // getters
-const getters = {}
+const getters = {
+	menu: state => {
+		return {
+			loading: state.loading,
+			items: defaultCategories
+				.concat(state.boards.map(mapBoardToItem))
+				.concat([addButton])
+		}
+	}
+}
 
 // actions
 const actions = {
 	toggle({ commit }) {
 		commit('toggle')
+	},
+	loadBoards({ commit }) {
+		axios.get('/apps/deck/boards')
+			.then((response) => {
+				commit('setBoards', response.data)
+			})
 	}
 }
 
@@ -128,6 +144,9 @@ const actions = {
 const mutations = {
 	toggle(state) {
 		state.hidden = !state.hidden
+	},
+	setBoards(state, boards) {
+		state.boards = boards
 	}
 }
 

@@ -41,7 +41,7 @@
 
 import { AppNavigation } from 'nextcloud-vue'
 import Controls from './components/Controls'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import Sidebar from './components/Sidebar'
 
 export default {
@@ -51,12 +51,19 @@ export default {
 		Controls,
 		Sidebar
 	},
-	computed: mapState({
-		navHidden: state => state.nav.hidden,
-		sidebarHidden: state => state.sidebar.hidden,
-		menu: state => state.nav.menu,
-		sidebarComponent: state => state.sidebar.component
-	})
+	computed: {
+		...mapGetters('nav', [
+			'menu'
+		]),
+		...mapState({
+			navHidden: state => state.nav.hidden,
+			sidebarHidden: state => state.sidebar.hidden,
+			sidebarComponent: state => state.sidebar.component
+		})
+	},
+	created: function() {
+		this.$store.dispatch('nav/loadBoards')
+	}
 }
 
 </script>
