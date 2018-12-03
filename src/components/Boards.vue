@@ -22,13 +22,24 @@
 
 <template>
 	<div class="deck-main">
-		Main
+		Boards
 	</div>
 </template>
 
 <script>
 export default {
-	name: 'Main'
+	name: 'Main',
+	props: {
+		navFilter: {
+			type: String,
+			default: ''
+		}
+	},
+	watch: {
+		navFilter: function(value) {
+			this.$store.commit('nav/setFilter', value)
+		}
+	}
 }
 </script>
 

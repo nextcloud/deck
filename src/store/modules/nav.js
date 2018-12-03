@@ -20,6 +20,8 @@
  *
  */
 
+// eslint
+
 import { translate as t } from 'nextcloud-server/dist/l10n'
 import axios from 'nextcloud-axios'
 
@@ -112,16 +114,31 @@ const addButton = {
 const state = {
 	hidden: false,
 	boards: [],
-	loading: false
+	loading: false,
+	filter: ''
+}
+
+export const BOARD_FILTERS = {
+	ALL: '',
+	ARCHIVED: 'archived',
+	SHARED: 'shared'
 }
 
 // getters
 const getters = {
 	menu: state => {
+
+		// filters the boards depending on the active filter
+		const boards = state.boards.filter(board => {
+			return state.filter === BOARD_FILTERS.ALL
+				|| (state.filter === BOARD_FILTERS.ARCHIVED && board.archived === true)
+				|| (state.filter === BOARD_FILTERS.SHARED && board.shared === 1)
+		})
+
 		return {
 			loading: state.loading,
 			items: defaultCategories
-				.concat(state.boards.map(mapBoardToItem))
+				.concat(boards.map(mapBoardToItem))
 				.concat([addButton])
 		}
 	}
@@ -147,6 +164,9 @@ const mutations = {
 	},
 	setBoards(state, boards) {
 		state.boards = boards
+	},
+	setFilter(state, filter) {
+		state.filter = filter
 	}
 }
 
