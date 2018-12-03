@@ -22,18 +22,18 @@
 
 <template>
 
-<div
+	<div
 		id="content"
 		v-bind:class="{ 'nav-hidden': navHidden, 'sidebar-hidden': sidebarHidden }">
-	<AppNavigation :menu="menu" />
-	<div id="app-content">
-		<Controls></Controls>
-		<router-view />
+		<AppNavigation :menu="menu" />
+		<div id="app-content">
+			<Controls />
+			<router-view />
+		</div>
+		<div id="app-sidebar">
+			<component v-bind:is="sidebarComponent" />
+		</div>
 	</div>
-	<div id="app-sidebar">
-        <component v-bind:is="sidebarComponent"></component>
-	</div>
-</div>
 
 </template>
 
@@ -49,13 +49,13 @@ export default {
 	components: {
 		AppNavigation,
 		Controls,
-        Sidebar
+		Sidebar
 	},
 	computed: mapState({
 		navHidden: state => state.nav.hidden,
 		sidebarHidden: state => state.sidebar.hidden,
 		menu: state => state.nav.menu,
-        sidebarComponent: state => state.sidebar.component
+		sidebarComponent: state => state.sidebar.component
 	})
 }
 
@@ -63,35 +63,35 @@ export default {
 
 <style lang="scss" scoped>
 
-#content {
-	#app-content {
-		transition: margin-left 100ms ease;
-	}
-
-	#app-sidebar {
-		transition: width 100ms ease;
-	}
-
-	&.nav-hidden {
+	#content {
 		#app-content {
-			margin-left: 0;
+			transition: margin-left 100ms ease;
 		}
-	}
 
-	&.sidebar-hidden {
 		#app-sidebar {
-			max-width: 0;
-			min-width: 0;
+			transition: width 100ms ease;
+		}
+
+		&.nav-hidden {
+			#app-content {
+				margin-left: 0;
+			}
+		}
+
+		&.sidebar-hidden {
+			#app-sidebar {
+				max-width: 0;
+				min-width: 0;
+			}
 		}
 	}
-}
 
-.deck-main {
-	bottom: 0;
-	overflow: auto;
-	position: absolute;
-	top: 44px;
-	width: 100%;
-}
+	.deck-main {
+		bottom: 0;
+		overflow: auto;
+		position: absolute;
+		top: 44px;
+		width: 100%;
+	}
 
 </style>

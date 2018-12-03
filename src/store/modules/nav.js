@@ -26,87 +26,92 @@
 import { translate as t } from 'nextcloud-server/dist/l10n'
 
 let defaultCategories = [
-    {
-        id: 'deck-boards',
-        classes: [],
-        icon: 'icon-deck',
-        text: t('deck', 'All boards'),
-        router: {
-            name: 'boards'
-        }
-    },
-    {
-        id: 'deck-boards-archived',
-        classes: [],
-        icon: 'icon-archive',
-        text: t('deck', 'Archived boards'),
-        router: {
-            name: 'boards.archived'
-        }
-    },
-    {
-        id: 'deck-boards-shared',
-        classes: [],
-        icon: 'icon-shared',
-        text: t('deck', 'Shared boards'),
-        router: {
-            name: 'boards.shared'
-        }
-    }
+	{
+		id: 'deck-boards',
+		classes: [],
+		icon: 'icon-deck',
+		text: t('deck', 'All boards'),
+		router: {
+			name: 'boards'
+		}
+	},
+	{
+		id: 'deck-boards-archived',
+		classes: [],
+		icon: 'icon-archive',
+		text: t('deck', 'Archived boards'),
+		router: {
+			name: 'boards.archived'
+		}
+	},
+	{
+		id: 'deck-boards-shared',
+		classes: [],
+		icon: 'icon-shared',
+		text: t('deck', 'Shared boards'),
+		router: {
+			name: 'boards.shared'
+		}
+	}
 ]
 
 const boardActions = [
-    {
-        action: () => {},
-        icon: 'icon-edit',
-        text: t('deck', 'Edit board')
-    },
-    {
-        action: () => {},
-        icon: 'icon-archive',
-        text: t('deck', 'Archive board')
-    },
-    {
-        action: () => {},
-        icon: 'icon-delete',
-        text: t('deck', 'Delete board')
-    },
-    {
-        action: () => {},
-        icon: 'icon-settings',
-        text: t('deck', 'Board details')
-    }
+	{
+		action: () => {
+		},
+		icon: 'icon-edit',
+		text: t('deck', 'Edit board')
+	},
+	{
+		action: () => {
+		},
+		icon: 'icon-archive',
+		text: t('deck', 'Archive board')
+	},
+	{
+		action: () => {
+		},
+		icon: 'icon-delete',
+		text: t('deck', 'Delete board')
+	},
+	{
+		action: () => {
+		},
+		icon: 'icon-settings',
+		text: t('deck', 'Board details')
+	}
 ]
 
 const boards = [
-    {
-        id: 'deck-board-1',
-        classes: [],
-        bullet: '#00cc00',
-        text: 'Example board',
-        router: {
-            name: 'board',
-            params: { id: 1 }
-        },
-        utils: {
-            actions: boardActions
-        }
-    }
+	{
+		id: 'deck-board-1',
+		classes: [],
+		bullet: '#00cc00',
+		text: 'Example board',
+		router: {
+			name: 'board',
+			params: { id: 1 }
+		},
+		utils: {
+			actions: boardActions
+		}
+	}
 ]
 
 const addButton = {
-    icon: 'icon-add',
-    text: t('deck', 'Create new board'),
-    action: () => {}
+	icon: 'icon-add',
+	text: t('deck', 'Create new board'),
+	action: () => {
+	}
 }
 
 // initial state
 const state = {
-    hidden: false,
-    menu: {
-        items: defaultCategories.concat(boards).concat([addButton]),
-        loading: false
-    }
+	hidden: false,
+	menu: {
+		items: defaultCategories.concat(boards).concat([addButton]),
+		loading: false
+	}
 }
 
 // getters
@@ -114,22 +119,22 @@ const getters = {}
 
 // actions
 const actions = {
-    toggle ({ commit }) {
-        commit('toggle')
-    }
+	toggle({ commit }) {
+		commit('toggle')
+	}
 }
 
 // mutations
 const mutations = {
-    toggle (state) {
-        state.hidden = !state.hidden
-    }
+	toggle(state) {
+		state.hidden = !state.hidden
+	}
 }
 
 export default {
-    namespaced: true,
-    state,
-    getters,
-    actions,
-    mutations
+	namespaced: true,
+	state,
+	getters,
+	actions,
+	mutations
 }

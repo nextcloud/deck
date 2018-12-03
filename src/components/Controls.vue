@@ -22,20 +22,20 @@
 
 <template>
 
-<div>
-    <div id="app-navigation-toggle-custom" class="icon-menu" v-on:click="toggleNav"></div>
-</div>
+	<div>
+		<div id="app-navigation-toggle-custom" class="icon-menu" v-on:click="toggleNav" />
+	</div>
 
 </template>
 
 <script>
 export default {
-    name: "Controls",
-    methods: {
-        toggleNav() {
-            this.$store.dispatch('nav/toggle')
-        }
-    }
+	name: 'Controls',
+	methods: {
+		toggleNav() {
+			this.$store.dispatch('nav/toggle')
+		}
+	}
 }
 </script>
 

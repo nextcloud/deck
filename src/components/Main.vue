@@ -21,9 +21,9 @@
   -->
 
 <template>
-<div class="deck-main">
-    Main
-</div>
+	<div class="deck-main">
+		Main
+	</div>
 </template>
 
 <script>

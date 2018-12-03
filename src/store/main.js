@@ -30,12 +30,12 @@ Vue.use(Vuex)
 const debug = process.env.NODE_ENV !== 'production'
 
 export default new Vuex.Store({
-    modules: {
-        nav,
-        sidebar
-    },
+	modules: {
+		nav,
+		sidebar
+	},
 	strict: debug,
-    state: {},
-    mutations: {},
-    actions: {}
+	state: {},
+	mutations: {},
+	actions: {}
 })

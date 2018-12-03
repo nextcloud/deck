@@ -20,11 +20,10 @@
  *
  */
 
-
 // initial state
 const state = {
-    hidden: true,
-    component: 'Sidebar'
+	hidden: true,
+	component: 'Sidebar'
 }
 
 // getters
@@ -32,22 +31,22 @@ const getters = {}
 
 // actions
 const actions = {
-    toggle ({ commit }) {
-        commit('toggle')
-    }
+	toggle({ commit }) {
+		commit('toggle')
+	}
 }
 
 // mutations
 const mutations = {
-    toggle (state) {
-        state.hidden = !state.hidden
-    }
+	toggle(state) {
+		state.hidden = !state.hidden
+	}
 }
 
 export default {
-    namespaced: true,
-    state,
-    getters,
-    actions,
-    mutations
+	namespaced: true,
+	state,
+	getters,
+	actions,
+	mutations
 }
