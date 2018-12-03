@@ -24,8 +24,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { generateUrl } from 'nextcloud-server/dist/router'
 import { BOARD_FILTERS } from './store/modules/nav'
-
-const Boards = () => import('./components/Boards')
+import Boards from './components/Boards'
+import Board from './components/Board'
 
 Vue.use(Router)
 
@@ -61,6 +61,12 @@ export default new Router({
 			props: {
 				navFilter: BOARD_FILTERS.SHARED
 			}
+		},
+		{
+			path: '/boards/:id',
+			name: 'board',
+			component: Board,
+			props: true
 		}
 	]
 })

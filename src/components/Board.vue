@@ -21,12 +21,18 @@
   -->
 
 <template>
-	<div />
+	<div>Board goes here, id: {{ id }}</div>
 </template>
 
 <script>
 export default {
-	name: 'Board'
+	name: 'Board',
+	props: {
+		id: {
+			type: Number,
+			default: null
+		}
+	}
 }
 </script>
 
