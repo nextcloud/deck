@@ -33,6 +33,7 @@ use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\ILogger;
 use OCP\IUserManager;
@@ -50,6 +51,8 @@ class PermissionService {
 	private $userManager;
 	/** @var IGroupManager */
 	private $groupManager;
+	/** @var IConfig */
+	private $config;
 	/** @var string */
 	private $userId;
 	/** @var array */
@@ -61,6 +64,7 @@ class PermissionService {
 		BoardMapper $boardMapper,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
+		IConfig $config,
 		$userId
 	) {
 		$this->aclMapper = $aclMapper;
@@ -68,6 +72,7 @@ class PermissionService {
 		$this->logger = $logger;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
+		$this->config = $config;
 		$this->userId = $userId;
 	}
 
@@ -234,5 +239,24 @@ class PermissionService {
 		}
 		$this->users[(string) $boardId] = $users;
 		return $this->users[(string) $boardId];
+	}
+
+	public function canCreate() {
+		$groups = $this->getGroupLimitList();
+		foreach ($groups as $group) {
+			if ($this->groupManager->isInGroup($this->userId, $group)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private function getGroupLimitList() {
+		$value = $this->config->getAppValue('deck', 'groupLimit', '');
+		$groups = explode(',', $value);
+		if ($value === '') {
+			return [];
+		}
+		return $groups;
 	}
 }

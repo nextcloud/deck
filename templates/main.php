@@ -53,7 +53,7 @@ if (\OC_Util::getVersion()[0] < 14) {
 
 	<div id="app-navigation" data-ng-controller="ListController" ng-init="initSidebar()">
 		<?php print_unescaped($this->inc('part.navigation')); ?>
-		<?php /* print_unescaped($this->inc('part.settings')); */ ?>
+		<?php print_unescaped($this->inc('part.settings')); ?>
 	</div>
 	<div id="app-content" ng-class="{ 'details-visible': sidebar.show }"><div id="app-navigation-toggle-custom" class="icon-menu" ng-click="toggleSidebar()"></div><div ui-view></div></div>
 	<div id="app-sidebar" ng-class="{ 'details-visible': sidebar.show }" ng-if="sidebar.show" class="details-view scroll-container" ui-view="sidebarView"></div>

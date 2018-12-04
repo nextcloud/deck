@@ -31,6 +31,7 @@ use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IGroupManager;
@@ -248,6 +249,10 @@ class BoardService {
 
 		if ($color === false || $color === null) {
 			throw new BadRequestException('color must be provided');
+		}
+
+		if (!$this->permissionService->canCreate()) {
+			throw new NoPermissionException('Creating boards has been disabled for your account.');
 		}
 
 		$board = new Board();
