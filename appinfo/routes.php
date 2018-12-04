@@ -26,6 +26,9 @@ return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 
+		['name' => 'Config#get', 'url' => '/config', 'verb' => 'GET'],
+		['name' => 'Config#setValue', 'url' => '/config/{key}', 'verb' => 'POST'],
+
 		// boards
 		['name' => 'board#index', 'url' => '/boards', 'verb' => 'GET'],
 		['name' => 'board#create', 'url' => '/boards', 'verb' => 'POST'],

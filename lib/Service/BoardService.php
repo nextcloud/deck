@@ -31,6 +31,7 @@ use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IGroupManager;
@@ -94,6 +95,7 @@ class BoardService {
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null,  $since);
 		$complete = array_merge($userBoards, $groupBoards);
 		$result = [];
+		/** @var Board $item */
 		foreach ($complete as &$item) {
 			if (!array_key_exists($item->getId(), $result)) {
 				$this->boardMapper->mapOwner($item);
@@ -247,6 +249,10 @@ class BoardService {
 
 		if ($color === false || $color === null) {
 			throw new BadRequestException('color must be provided');
+		}
+
+		if (!$this->permissionService->canCreate()) {
+			throw new NoPermissionException('Creating boards has been disabled for your account.');
 		}
 
 		$board = new Board();
@@ -417,15 +423,15 @@ class BoardService {
 			throw new BadRequestException('participant must be provided');
 		}
 
-		if ($edit === false || $edit === null) {
+		if ($edit === null) {
 			throw new BadRequestException('edit must be provided');
 		}
 
-		if ($share === false || $share === null) {
+		if ($share === null) {
 			throw new BadRequestException('share must be provided');
 		}
 
-		if ($manage === false || $manage === null) {
+		if ($manage === null) {
 			throw new BadRequestException('manage must be provided');
 		}
 

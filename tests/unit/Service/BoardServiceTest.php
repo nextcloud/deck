@@ -150,12 +150,29 @@ class BoardServiceTest extends TestCase {
 		$this->boardMapper->expects($this->once())
 			->method('insert')
 			->willReturn($board);
+		$this->permissionService->expects($this->once())
+			->method('canCreate')
+			->willReturn(true);
 		$b = $this->service->create('MyBoard', 'admin', '00ff00');
 
 		$this->assertEquals($b->getTitle(), 'MyBoard');
 		$this->assertEquals($b->getOwner(), 'admin');
 		$this->assertEquals($b->getColor(), '00ff00');
 		$this->assertCount(4, $b->getLabels());
+	}
+
+	/**
+	 * @expectedException \OCA\Deck\NoPermissionException
+	 */
+	public function testCreateDenied() {
+		$board = new Board();
+		$board->setTitle('MyBoard');
+		$board->setOwner('admin');
+		$board->setColor('00ff00');
+		$this->permissionService->expects($this->once())
+			->method('canCreate')
+			->willReturn(false);
+		$b = $this->service->create('MyBoard', 'admin', '00ff00');
 	}
 
 	public function testUpdate() {

@@ -33,9 +33,11 @@ use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\ILogger;
 use OCP\IUserManager;
+use OCP\Share\IManager;
 
 
 class PermissionService {
@@ -50,6 +52,10 @@ class PermissionService {
 	private $userManager;
 	/** @var IGroupManager */
 	private $groupManager;
+	/** @var IConfig */
+	private $config;
+	/** @var IManager */
+	private $shareManager;
 	/** @var string */
 	private $userId;
 	/** @var array */
@@ -61,6 +67,8 @@ class PermissionService {
 		BoardMapper $boardMapper,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
+		IManager $shareManager,
+		IConfig $config,
 		$userId
 	) {
 		$this->aclMapper = $aclMapper;
@@ -68,6 +76,8 @@ class PermissionService {
 		$this->logger = $logger;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
+		$this->shareManager = $shareManager;
+		$this->config = $config;
 		$this->userId = $userId;
 	}
 
@@ -84,7 +94,8 @@ class PermissionService {
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
 			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE),
-			Acl::PERMISSION_SHARE => $owner || $this->userCan($acls, Acl::PERMISSION_SHARE),
+			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE))
+				&& (!$this->shareManager->sharingDisabledForUser($this->userId))
 		];
 	}
 
@@ -102,7 +113,8 @@ class PermissionService {
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
 			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE),
-			Acl::PERMISSION_SHARE => $owner || $this->userCan($acls, Acl::PERMISSION_SHARE),
+			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE))
+				&& (!$this->shareManager->sharingDisabledForUser($this->userId))
 		];
 	}
 
@@ -123,6 +135,10 @@ class PermissionService {
 		if ($boardId === null) {
 			// Throw NoPermission to not leak information about existing entries
 			throw new NoPermissionException('Permission denied');
+		}
+
+		if ($permission === Acl::PERMISSION_SHARE && $this->shareManager->sharingDisabledForUser($this->userId)) {
+			return false;
 		}
 
 		if ($this->userIsBoardOwner($boardId)) {
@@ -150,7 +166,7 @@ class PermissionService {
 		} catch (DoesNotExistException $e) {
 		} catch (MultipleObjectsReturnedException $e) {
 			return false;
-		}		
+		}
 	}
 
 	/**
@@ -228,5 +244,24 @@ class PermissionService {
 		}
 		$this->users[(string) $boardId] = $users;
 		return $this->users[(string) $boardId];
+	}
+
+	public function canCreate() {
+		$groups = $this->getGroupLimitList();
+		foreach ($groups as $group) {
+			if ($this->groupManager->isInGroup($this->userId, $group)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private function getGroupLimitList() {
+		$value = $this->config->getAppValue('deck', 'groupLimit', '');
+		$groups = explode(',', $value);
+		if ($value === '') {
+			return [];
+		}
+		return $groups;
 	}
 }

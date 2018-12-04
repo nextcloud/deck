@@ -52,7 +52,7 @@
 		</div>
 	</li>
 
-	<li ng-class="{editing: status.addBoard}">
+	<li ng-class="{editing: status.addBoard}" ng-if="canCreate">
 		<a ng-click="status.addBoard=!status.addBoard" class="icon-add app-navigation-noclose">
 			<?php p($l->t('Create a new board')); ?>
 		</a>
