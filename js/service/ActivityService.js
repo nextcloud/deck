@@ -170,7 +170,9 @@ class ActivityService {
 		}
 		/** check if the fetched item from all deck activities is actually related */
 		const isUnrelatedBoard = (item.object_type === DECK_ACTIVITY_TYPE_BOARD && item.object_id !== id);
-		const isUnrelatedCard = (item.object_type === DECK_ACTIVITY_TYPE_CARD && item.subject_rich[1].board && item.subject_rich[1].board.id !== id);
+		const isUnrelatedCard = (item.object_type === DECK_ACTIVITY_TYPE_CARD && (
+			(item.subject_rich[1].board && item.subject_rich[1].board.id !== id) || (typeof item.subject_rich[1].board === 'undefined'))
+		);
 		if (type === DECK_ACTIVITY_TYPE_BOARD && (isUnrelatedBoard || isUnrelatedCard)) {
 			return;
 		}
