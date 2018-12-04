@@ -259,18 +259,41 @@ class CardService {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$changes = new ChangeSet($card);
+		if ($card->getLastEditor() !== $this->currentUser && $card->getLastEditor() !== null) {
+			$this->activityManager->triggerEvent(
+				ActivityManager::DECK_OBJECT_CARD,
+				$card,
+				ActivityManager::SUBJECT_CARD_UPDATE_DESCRIPTION,
+				[
+					'before' => $card->getDescriptionPrev(),
+					'after' => $card->getDescription()
+				],
+				$card->getLastEditor()
+			);
+
+			$card->setDescriptionPrev($card->getDescription());
+			$card->setLastEditor($this->currentUser);
+		}
 		$card->setTitle($title);
 		$card->setStackId($stackId);
 		$card->setType($type);
 		$card->setOrder($order);
 		$card->setOwner($owner);
-		$card->setDescription($description);
 		$card->setDuedate($duedate);
 		$card->setDeletedAt($deletedAt);
+
+		// Trigger update events before setting description as it is handled separately
 		$changes->setAfter($card);
-		$card = $this->cardMapper->update($card);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_CARD, $changes, ActivityManager::SUBJECT_CARD_UPDATE);
-		$this->changeHelper->cardChanged($card->getId(), false);
+
+		if ($card->getDescriptionPrev() === null) {
+			$card->setDescriptionPrev($card->getDescription());
+		}
+		$card->setDescription($description);
+
+
+		$card = $this->cardMapper->update($card);
+		$this->changeHelper->cardChanged($card->getId(), true);
 		return $card;
 	}
 

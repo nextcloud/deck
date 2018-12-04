@@ -17,7 +17,7 @@
 - 🚀 Get your project organized
 
 </description>
-    <version>0.5.1-dev1</version>
+    <version>0.5.1-dev2</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
@@ -41,6 +41,7 @@
     <background-jobs>
         <job>OCA\Deck\Cron\DeleteCron</job>
         <job>OCA\Deck\Cron\ScheduledNotifications</job>
+        <job>OCA\Deck\Cron\CardDescriptionActivity</job>
     </background-jobs>
     <repair-steps>
         <post-migration>
