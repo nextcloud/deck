@@ -56,13 +56,13 @@
                     {{ acl.participant.displayname }}
 				</span>
 				<span class="sharingOptionsGroup">
-                <span class="shareOption" ng-if="boardservice.canManage()">
-                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-share" ng-model="acl.permissionShare" ng-change="aclUpdate(acl)" />
-                    <label for="checkbox-permission-{{ acl.id }}-share"><?php p($l->t('Share')); ?></label>
-                </span>
                 <span class="shareOption"ng-if="boardservice.canManage()">
                     <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-edit" ng-model="acl.permissionEdit" ng-change="aclUpdate(acl)" />
                     <label for="checkbox-permission-{{ acl.id }}-edit"><?php p($l->t('Edit')); ?></label>
+                </span>
+				<span class="shareOption" ng-if="boardservice.canManage()">
+                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-share" ng-model="acl.permissionShare" ng-change="aclUpdate(acl)" />
+                    <label for="checkbox-permission-{{ acl.id }}-share"><?php p($l->t('Share')); ?></label>
                 </span>
                 <span class="shareOption"ng-if="boardservice.canManage()">
                     <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-manage" ng-model="acl.permissionManage" ng-change="aclUpdate(acl)" />
@@ -71,6 +71,9 @@
 				</span>
                 <a ng-if="boardservice.canManage()" ng-click="aclDelete(acl)"><span class="icon-loading-small hidden"></span><span class="icon icon-delete"></span><span class="hidden-visually"><?php p($l->t('Discard share')); ?></span></a>
             </li>
+			<li ng-if="!boardservice.canShare()">
+				<?php p($l->t('Sharing has been disabled for your account.')); ?>
+			</li>
         </ul>
 
     </div>

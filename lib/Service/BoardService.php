@@ -417,15 +417,15 @@ class BoardService {
 			throw new BadRequestException('participant must be provided');
 		}
 
-		if ($edit === false || $edit === null) {
+		if ($edit === null) {
 			throw new BadRequestException('edit must be provided');
 		}
 
-		if ($share === false || $share === null) {
+		if ($share === null) {
 			throw new BadRequestException('share must be provided');
 		}
 
-		if ($manage === false || $manage === null) {
+		if ($manage === null) {
 			throw new BadRequestException('manage must be provided');
 		}
 

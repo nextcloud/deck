@@ -125,8 +125,8 @@ app.factory('BoardService', function (ApiService, $http, $q) {
 				displayname: ocsItem.label
 			},
 			permissionEdit: true,
-			permissionManage: true,
-			permissionShare: true,
+			permissionManage: false,
+			permissionShare: false,
 			type: type
 		};
 	};
