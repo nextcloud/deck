@@ -94,6 +94,7 @@ class BoardService {
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null,  $since);
 		$complete = array_merge($userBoards, $groupBoards);
 		$result = [];
+		/** @var Board $item */
 		foreach ($complete as &$item) {
 			if (!array_key_exists($item->getId(), $result)) {
 				$this->boardMapper->mapOwner($item);

@@ -84,7 +84,8 @@ class PermissionService {
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
 			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE),
-			Acl::PERMISSION_SHARE => $owner || $this->userCan($acls, Acl::PERMISSION_SHARE),
+			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE))
+				&& (!\OC::$server->getShareManager()->sharingDisabledForUser($this->userId))
 		];
 	}
 
@@ -102,7 +103,8 @@ class PermissionService {
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
 			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE),
-			Acl::PERMISSION_SHARE => $owner || $this->userCan($acls, Acl::PERMISSION_SHARE),
+			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE))
+				&& (!\OC::$server->getShareManager()->sharingDisabledForUser($this->userId))
 		];
 	}
 
@@ -123,6 +125,10 @@ class PermissionService {
 		if ($boardId === null) {
 			// Throw NoPermission to not leak information about existing entries
 			throw new NoPermissionException('Permission denied');
+		}
+
+		if ($permission === Acl::PERMISSION_SHARE && !\OC::$server->getShareManager()->sharingDisabledForUser($this->userId)) {
+			return false;
 		}
 
 		if ($this->userIsBoardOwner($boardId)) {
@@ -150,7 +156,7 @@ class PermissionService {
 		} catch (DoesNotExistException $e) {
 		} catch (MultipleObjectsReturnedException $e) {
 			return false;
-		}		
+		}
 	}
 
 	/**
