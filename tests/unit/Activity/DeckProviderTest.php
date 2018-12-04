@@ -139,7 +139,7 @@ class DeckProviderTest extends TestCase {
 
 	public function testDeckUrl() {
 		$this->urlGenerator->expects($this->once())
-			->method('linkToRoute')
+			->method('linkToRouteAbsolute')
 			->with('deck.page.index')
 			->willReturn('http://localhost/index.php/apps/deck/');
 		$this->assertEquals(

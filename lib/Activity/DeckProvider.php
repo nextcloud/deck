@@ -81,6 +81,11 @@ class DeckProvider implements IProvider {
 		 */
 
 		$author = $event->getAuthor();
+		// get author if
+		if ($author === '' && array_key_exists('author', $subjectParams)) {
+			$author = $subjectParams['author'];
+			unset($subjectParams['author']);
+		}
 		$user = $this->userManager->get($author);
 		$params = [
 			'user' => [
@@ -90,6 +95,9 @@ class DeckProvider implements IProvider {
 			],
 		];
 		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_BOARD) {
+			if ($event->getObjectName() === '') {
+				$event->setObject($event->getObjectType(), $event->getObjectId(), $subjectParams['board']['title']);
+			}
 			$board = [
 				'type' => 'highlight',
 				'id' => $event->getObjectId(),
@@ -100,6 +108,9 @@ class DeckProvider implements IProvider {
 		}
 
 		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_CARD) {
+			if ($event->getObjectName() === '') {
+				$event->setObject($event->getObjectType(), $event->getObjectId(), $subjectParams['card']['title']);
+			}
 			$card = [
 				'type' => 'highlight',
 				'id' => $event->getObjectId(),
@@ -149,6 +160,7 @@ class DeckProvider implements IProvider {
 
 		$event->setParsedSubject(str_replace($placeholders, $replacements, $subject))
 			->setRichSubject($subject, $parameters);
+		$event->setSubject($subject, $parameters);
 	}
 
 	private function getIcon(IEvent $event) {
@@ -301,6 +313,6 @@ class DeckProvider implements IProvider {
 	}
 
 	public function deckUrl($endpoint) {
-		return $this->urlGenerator->linkToRoute('deck.page.index') . '#!' . $endpoint;
+		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . '#!' . $endpoint;
 	}
 }

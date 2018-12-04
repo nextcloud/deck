@@ -322,11 +322,13 @@ class ActivityManager {
 			// case self::SUBJECT_BOARD_UPDATE_COLOR
 				break;
 			case self::SUBJECT_CARD_COMMENT_CREATE:
-				/** @var IComment $entity */
-				$subjectParams = [
-					'comment' => $entity->getMessage()
-				];
-				$message = '{comment}';
+				$subjectParams = $this->findDetailsForCard($entity->getId());
+				if (array_key_exists('comment', $additionalParams)) {
+					/** @var IComment $entity */
+					$comment = $additionalParams['comment'];
+					$subjectParams['comment'] = $comment->getId();
+					unset($additionalParams['comment']);
+				}
 				break;
 
 			case self::SUBJECT_STACK_CREATE:
@@ -374,6 +376,9 @@ class ActivityManager {
 		if ($subject === self::SUBJECT_CARD_UPDATE_STACKID) {
 			$subjectParams['stackBefore'] = $this->stackMapper->find($additionalParams['before']);
 		}
+
+		$subjectParams['author'] = $this->userId;
+
 
 		$event = $this->manager->generateEvent();
 		$event->setApp('deck')
