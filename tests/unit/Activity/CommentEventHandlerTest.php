@@ -53,13 +53,17 @@ class CommentEventHandlerTest extends TestCase {
 	private $activityManager;
 	/** @var NotificationHelper */
 	private $notificationHelper;
+	/** @var CardMapper */
+	private $cardMapper;
 
 	public function setUp() {
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
+		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->commentEventHandler = new CommentEventHandler(
 			$this->activityManager,
-			$this->notificationHelper
+			$this->notificationHelper,
+			$this->cardMapper
 		);
 	}
 
@@ -67,10 +71,15 @@ class CommentEventHandlerTest extends TestCase {
 		$comment = $this->createMock(IComment::class);
 		$comment->expects($this->any())->method('getId')->willReturn(1);
 		$comment->expects($this->any())->method('getObjectType')->willReturn('deckCard');
+		$comment->expects($this->any())->method('getMessage')->willReturn('Hello world');
+		$card = $this->createMock(Card::class);
+		$this->cardMapper->expects($this->once())
+			->method('find')
+			->willReturn($card);
 		$commentsEvent = new CommentsEvent(CommentsEvent::EVENT_ADD, $comment);
 		$this->activityManager->expects($this->once())
 			->method('triggerEvent')
-			->with(ActivityManager::DECK_OBJECT_CARD, $comment, ActivityManager::SUBJECT_CARD_COMMENT_CREATE, ['comment' => 1]);
+			->with(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_COMMENT_CREATE, ['comment' => $comment]);
 		$this->notificationHelper->expects($this->once())
 			->method('sendMention')
 			->with($comment);

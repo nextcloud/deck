@@ -377,6 +377,9 @@ class ActivityManager {
 			$subjectParams['stackBefore'] = $this->stackMapper->find($additionalParams['before']);
 		}
 
+		$subjectParams['author'] = $this->userId;
+
+
 		$event = $this->manager->generateEvent();
 		$event->setApp('deck')
 			->setType('deck')
