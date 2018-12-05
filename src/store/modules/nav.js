@@ -36,6 +36,7 @@ const mapBoardToItem = board => {
 		classes: [],
 		bullet: `#${board.color}`,
 		text: board.title,
+		owner: board.owner,
 		router: {
 			name: 'board',
 			params: { id: board.id }
@@ -141,6 +142,16 @@ const getters = {
 				.concat(boards.map(mapBoardToItem))
 				.concat([addButton])
 		}
+	},
+	boards: state => {
+		// filters the boards depending on the active filter
+		const boards = state.boards.filter(board => {
+			return state.filter === BOARD_FILTERS.ALL
+				|| (state.filter === BOARD_FILTERS.ARCHIVED && board.archived === true)
+				|| (state.filter === BOARD_FILTERS.SHARED && board.shared === 1)
+		})
+
+		return boards.map(mapBoardToItem)
 	}
 }
 

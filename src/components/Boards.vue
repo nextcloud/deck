@@ -21,19 +21,37 @@
   -->
 
 <template>
-	<div class="deck-main">
-		Boards
+	<div class="board-list">
+		<div class="board-list-row board-list-header-row">
+			<div class="board-list-bullet-cell"><div class="board-list-bullet" /></div>
+			<div class="board-list-title-cell">Title</div>
+			<div class="board-list-avatars-cell">Members</div>
+			<div class="board-list-actions-cell" />
+		</div>
+		<BoardItem v-for="board in boards" :key="board.id" :board="board" />
 	</div>
 </template>
 
 <script>
+
+import BoardItem from './boards/BoardItem'
+import { mapGetters } from 'vuex'
+
 export default {
 	name: 'Main',
+	components: {
+		BoardItem
+	},
 	props: {
 		navFilter: {
 			type: String,
 			default: ''
 		}
+	},
+	computed: {
+		...mapGetters('nav', [
+			'boards'
+		])
 	},
 	watch: {
 		navFilter: function(value) {
@@ -43,5 +61,42 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+	.board-list {
+
+		.board-list-row {
+			align-items: center;
+			border-bottom: 1px solid #ededed;
+			display: flex;
+		}
+
+		.board-list-header-row {
+			color: var(--color-text-lighter);
+		}
+
+		.board-list-bullet-cell,
+		.board-list-avatars-cell {
+			padding: 6px 15px;
+		}
+
+		.board-list-avatars-cell {
+			flex: 0 0 50px;
+		}
+
+		.board-list-avatar,
+		.board-list-bullet {
+			height: 32px;
+			width: 32px;
+		}
+
+		.board-list-title-cell {
+			flex: 1 0 auto;
+			padding: 15px;
+		}
+
+		.board-list-actions-cell {
+			// placeholder
+			flex: 0 0 50px;
+		}
+	}
 </style>
