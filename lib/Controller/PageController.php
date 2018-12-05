@@ -68,7 +68,9 @@ class PageController extends Controller {
 		];
 
 		if ($this->defaultBoardService->checkFirstRun($this->userId, $this->appName)) {
-			$this->defaultBoardService->createDefaultBoard($this->l10n->t('Personal'), $this->userId, '000000');
+			if ($this->permissionService->canCreate()) {
+				$this->defaultBoardService->createDefaultBoard($this->l10n->t('Personal'), $this->userId, '000000');
+			}
 		}
 
 		return new TemplateResponse('deck', 'main', $params);

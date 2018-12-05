@@ -65,9 +65,16 @@ var ListController = function ($scope, $location, $filter, BoardService, $elemen
 		$scope.groupLimitDisabled = true;
 		let fetchGroups = function () {
 			var deferred = $q.defer();
-			$http.get(OC.linkToOCS('cloud', 2) + 'groups/details').then(function (response) {
-				$scope.groups = response.data.ocs.data.groups;
-				deferred.resolve(response.data.ocs.data.groups);
+			// TODO: move to groups/details once 15 is min version
+			$http.get(OC.linkToOCS('cloud', 2) + 'groups').then(function (response) {
+				$scope.groups = response.data.ocs.data.groups.reduce((obj, item) => {
+					obj.push({
+						id: item,
+						displayname: item,
+					});
+					return obj;
+				}, []);
+				deferred.resolve($scope.groups);
 			}, function (error) {
 				deferred.reject('Error while loading groups');
 			});
