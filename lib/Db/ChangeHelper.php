@@ -41,11 +41,13 @@ class ChangeHelper {
 	public function __construct(
 		IDBConnection $db,
 		ICacheFactory $cacheFactory,
-		IRequest $request
+		IRequest $request,
+		$userId
 	) {
 		$this->db = $db;
 		$this->cache = $cacheFactory->createDistributed('deck_changes');
 		$this->request = $request;
+		$this->userId = $userId;
 	}
 
 	public function boardChanged($boardId) {
@@ -61,8 +63,8 @@ class ChangeHelper {
 		$etag = md5($time . microtime());
 		$this->cache->set(self::TYPE_CARD . '-' .$cardId, $etag);
 		if ($updateCard) {
-			$sql = 'UPDATE `*PREFIX*deck_cards` SET `last_modified` = ? WHERE `id` = ?';
-			$this->db->executeUpdate($sql, [time(), $cardId]);
+			$sql = 'UPDATE `*PREFIX*deck_cards` SET `last_modified` = ?, `last_editor` = ? WHERE `id` = ?';
+			$this->db->executeUpdate($sql, [time(), $this->userId, $cardId]);
 		}
 
 		$sql = 'SELECT s.board_id as id, c.stack_id as stack_id FROM `*PREFIX*deck_stacks` as s inner join `*PREFIX*deck_cards` as c ON c.stack_id = s.id WHERE c.id = ?';

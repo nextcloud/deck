@@ -147,6 +147,11 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($sql);
 	}
 
+	public function findUnexposedDescriptionChances() {
+		$sql = 'SELECT id,title,duedate,notified,description_prev,last_editor,description from `*PREFIX*deck_cards` WHERE last_editor IS NOT NULL AND description_prev IS NOT NULL';
+		return $this->findEntities($sql);
+	}
+
 	public function delete(Entity $entity) {
 		// delete assigned labels
 		$this->labelMapper->deleteLabelAssignmentsForCard($entity->getId());

@@ -136,6 +136,11 @@
                 <notnull>false</notnull>
             </field>
             <field>
+                <name>description_prev</name>
+                <type>clob</type>
+                <notnull>false</notnull>
+            </field>
+            <field>
                 <name>stack_id</name>
                 <type>integer</type>
                 <length>8</length>
@@ -154,6 +159,12 @@
                 <default></default>
                 <notnull>false</notnull>
                 <unsigned>true</unsigned>
+            </field>
+            <field>
+                <name>last_editor</name>
+                <type>text</type>
+                <notnull>false</notnull>
+                <length>64</length>
             </field>
             <field>
                 <name>created_at</name>

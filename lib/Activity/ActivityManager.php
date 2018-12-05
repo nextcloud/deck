@@ -239,10 +239,12 @@ class ActivityManager {
 		return $subject;
 	}
 
-	public function triggerEvent($objectType, $entity, $subject, $additionalParams = []) {
+	public function triggerEvent($objectType, $entity, $subject, $additionalParams = [], $author = null) {
 		try {
-			$event = $this->createEvent($objectType, $entity, $subject, $additionalParams);
-			$this->sendToUsers($event);
+			$event = $this->createEvent($objectType, $entity, $subject, $additionalParams, $author);
+			if ($event !== null) {
+				$this->sendToUsers($event);
+			}
 		} catch (\Exception $e) {
 			// Ignore exception for undefined activities on update events
 		}
@@ -262,15 +264,17 @@ class ActivityManager {
 		if ($previousEntity !== null) {
 			foreach ($entity->getUpdatedFields() as $field => $value) {
 				$getter = 'get' . ucfirst($field);
-				$subject = $subject . '_' . $field;
+				$subjectComplete = $subject . '_' . $field;
 				$changes = [
 					'before' => $previousEntity->$getter(),
 					'after' => $entity->$getter()
 				];
 				if ($changes['before'] !== $changes['after']) {
 					try {
-						$event = $this->createEvent($objectType, $entity, $subject, $changes);
-						$events[] = $event;
+						$event = $this->createEvent($objectType, $entity, $subjectComplete, $changes);
+						if ($event !== null) {
+							$events[] = $event;
+						}
 					} catch (\Exception $e) {
 						// Ignore exception for undefined activities on update events
 					}
@@ -278,7 +282,7 @@ class ActivityManager {
 			}
 		} else {
 			try {
-				$events = [$this->createEvent($objectType, $entity, $subject)];
+				$events = [$this->createEvent($objectType, $entity, $subject, $author)];
 			} catch (\Exception $e) {
 				// Ignore exception for undefined activities on update events
 			}
@@ -293,10 +297,10 @@ class ActivityManager {
 	 * @param $entity
 	 * @param $subject
 	 * @param array $additionalParams
-	 * @return IEvent
+	 * @return IEvent|null
 	 * @throws \Exception
 	 */
-	private function createEvent($objectType, $entity, $subject, $additionalParams = []) {
+	private function createEvent($objectType, $entity, $subject, $additionalParams = [], $author = null) {
 		try {
 			$object = $this->findObjectForEntity($objectType, $entity);
 		} catch (DoesNotExistException $e) {
@@ -309,6 +313,7 @@ class ActivityManager {
 		 * Automatically fetch related details for subject parameters
 		 * depending on the subject
 		 */
+		$eventType = 'deck';
 		$subjectParams = [];
 		$message = null;
 		switch ($subject) {
@@ -371,7 +376,12 @@ class ActivityManager {
 		}
 
 		if ($subject === self::SUBJECT_CARD_UPDATE_DESCRIPTION){
+			$card = $subjectParams['card'];
+			if ($card->getLastEditor() === $this->userId) {
+				return null;
+			}
 			$subjectParams['diff'] = true;
+			$eventType = 'deck_card_description';
 		}
 		if ($subject === self::SUBJECT_CARD_UPDATE_STACKID) {
 			$subjectParams['stackBefore'] = $this->stackMapper->find($additionalParams['before']);
@@ -382,8 +392,8 @@ class ActivityManager {
 
 		$event = $this->manager->generateEvent();
 		$event->setApp('deck')
-			->setType('deck')
-			->setAuthor($this->userId)
+			->setType($eventType)
+			->setAuthor($author === null ? $this->userId : $author)
 			->setObject($objectType, (int)$object->getId(), $object->getTitle())
 			->setSubject($subject, array_merge($subjectParams, $additionalParams))
 			->setTimestamp(time());
