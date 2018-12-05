@@ -1,5 +1,5 @@
 <!--
-* @copyright Copyright (c) 2018 Julius Härtl <jus@bitgrid.net>
+* @copyright Copyright (c) 2018 Michael Weimann <mail@michael-weimann.eu>
 *
 * @author Michael Weimann <mail@michael-weimann.eu>
 *
@@ -22,8 +22,15 @@
 
 <template>
 
-	<div>
+	<div class="controls">
 		<div id="app-navigation-toggle-custom" class="icon-menu" v-on:click="toggleNav" />
+		<div class="breadcrumb">
+			<div class="crumb svg last">
+				<router-link to="/boards" class="icon-home" title="All Boards">
+					<span class="hidden-visually">All Boards</span>
+				</router-link>
+			</div>
+		</div>
 	</div>
 
 </template>
@@ -40,5 +47,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+	.controls {
+		display: flex;
+	}
+
+	#app-navigation-toggle-custom {
+		position: static;
+	}
 
 </style>
