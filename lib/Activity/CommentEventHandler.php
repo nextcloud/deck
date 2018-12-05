@@ -63,9 +63,7 @@ class CommentEventHandler implements ICommentsEventHandler {
 		}
 
 		$applicableEvents = [
-			CommentsEvent::EVENT_PRE_UPDATE,
-			CommentsEvent::EVENT_UPDATE,
-			CommentsEvent::EVENT_DELETE,
+			CommentsEvent::EVENT_UPDATE
 		];
 		if(in_array($eventType, $applicableEvents)) {
 			$this->notificationHandler($event);
