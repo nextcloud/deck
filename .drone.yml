@@ -119,6 +119,18 @@ pipeline:
     when:
       matrix:
         TESTS: syntax-php7.2
+  syntax-php7.3:
+    image: nextcloudci/php7.3:php7.3-2
+    environment:
+      - APP_NAME=deck
+      - CORE_BRANCH=stable15
+      - DB=sqlite
+    commands:
+      - composer install
+      - ./vendor/bin/parallel-lint --exclude ./vendor/ .
+    when:
+      matrix:
+        TESTS: syntax-php7.3
   php5.6:
     image: nextcloudci/php5.6:php5.6-8
     environment:
@@ -198,6 +210,25 @@ pipeline:
     when:
       matrix:
         TESTS: php7.2
+  php7.3:
+    image: nextcloudci/php7.3:php7.3-2
+    environment:
+      - APP_NAME=deck
+      - CORE_BRANCH=stable15
+      - DB=sqlite
+    commands:
+      # Pre-setup steps
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server/
+      - php occ app:enable deck
+      - cd apps/$APP_NAME
+      - composer install
+      - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
+      - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
+    when:
+      matrix:
+        TESTS: php7.3
   integration:
     image: nextcloudci/integration-php7.0:integration-php7.0-6
     environment:
@@ -240,10 +271,12 @@ matrix:
     - TESTS: syntax-php7.0
     - TESTS: syntax-php7.1
     - TESTS: syntax-php7.2
+    - TESTS: syntax-php7.3
     - TESTS: php5.6
     - TESTS: php7.0
     - TESTS: php7.1
     - TESTS: php7.2
+    - TESTS: php7.3
     - TESTS: eslint
     - TESTS: jsbuild
     #- TESTS: integration
