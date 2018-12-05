@@ -65,7 +65,34 @@ class PageControllerTest extends \Test\TestCase {
 			->method('checkFirstRun')
 			->willReturn(true);
 
+		$this->permissionService->expects($this->any())
+			->method('canCreate')
+			->willReturn(true);
+
 		$this->defaultBoardService->expects($this->once())
+			->method('createDefaultBoard')
+			->willReturn($board);
+
+		$response = $this->controller->index();
+		$this->assertEquals('main', $response->getTemplateName());
+	}
+
+	public function testIndexOnFirstRunNoCreate() {
+
+		$board = new Board();
+		$board->setTitle('Personal');
+		$board->setOwner($this->userId);
+		$board->setColor('000000');
+
+		$this->defaultBoardService->expects($this->once())
+			->method('checkFirstRun')
+			->willReturn(true);
+
+		$this->permissionService->expects($this->any())
+			->method('canCreate')
+			->willReturn(false);
+
+		$this->defaultBoardService->expects($this->never())
 			->method('createDefaultBoard')
 			->willReturn($board);
 
