@@ -134,6 +134,7 @@ OC.L10N.register(
     "Share" : "Compartilhar",
     "Manage" : "Gerenciar",
     "Discard share" : "Descartar compartilhamento",
+    "Sharing has been disabled for your account." : "O compartilhamento foi desativado para sua conta.",
     "Update tag" : "Atualizar rótulo",
     "Edit tag" : "Editar rótulo",
     "Delete tag" : "Excluir tag",
@@ -185,6 +186,9 @@ OC.L10N.register(
     "Add a card description…" : "Adicionar uma descrição para o cartão...",
     "Shared boards" : "Painéis compartilhados",
     "Move board to archive" : "Mover painel para o arquivo",
-    "Create a new board" : "Criar um novo painel"
+    "Create a new board" : "Criar um novo painel",
+    "Settings" : "Configurações",
+    "Limit deck to groups" : "Limite do Deck para grupos",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitar o Deck impedirá que usuários que não fazem parte desses grupos criem seus próprios quadros. Os usuários ainda poderão trabalhar em pastas que foram compartilhadas com eles."
 },
 "nplurals=2; plural=(n > 1);");

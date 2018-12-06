@@ -102,7 +102,7 @@ OC.L10N.register(
     "A PHP extension stopped the file upload" : "Bir PHP eklentisi dosyanın yüklenmesini engelledi",
     "No file uploaded or file size exceeds maximum of %s" : "Herhangi bir dosya yüklenmedi ya da %s olan en büyük dosya boyutu sınırı aşıldı",
     "A kanban style project and personal management tool for Nextcloud" : "Nextcloud için Kanban tarzında bir proje ve kişisel yönetim uygulaması",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deste, Nextcloud ile bütünleştirilmiş takımlar için Kanban tarzında bir kişisel planlama ve proje yönetimi uygulamasıdır.\n\n\n- 📥 Görevleri kartlara ekleyerek sıralayabilirsiniz\n- 📄 Markdown ile biçimlendirilmiş notlar ekleyebilirsiniz\n- 🔖 Daha iyi düzenleme için etiketler atayabilirsiniz\n- 👥 Takımınız, arkadaşlarınız ya da aileniz ile paylaşabilirsiniz\n- 💬 Yorumları kullanarak konular üzerinde takımınız ile yazışabilirsiniz\n- ⚡ İşlem akışı ile değişiklikleri görebilirsiniz\n- 🚀 Projelerinizi düzenli tutarak izleyebilirsiniz",
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Tahta, Nextcloud ile bütünleştirilmiş takımlar için Kanban tarzında bir kişisel planlama ve proje yönetimi uygulamasıdır.\n\n\n- 📥 Görevleri kartlara ekleyerek sıralayabilirsiniz\n- 📄 Markdown ile biçimlendirilmiş notlar ekleyebilirsiniz\n- 🔖 Daha iyi düzenleme için etiketler atayabilirsiniz\n- 👥 Takımınız, arkadaşlarınız ya da aileniz ile paylaşabilirsiniz\n- 💬 Yorumları kullanarak konular üzerinde takımınız ile yazışabilirsiniz\n- ⚡ İşlem akışı ile değişiklikleri görebilirsiniz\n- 🚀 Projelerinizi düzenli tutarak izleyebilirsiniz",
     "Add a new stack" : "Yığın ekle",
     "Submit" : "Gönder",
     "Show archived cards" : "Arşivlenmiş kartları görüntüle",
@@ -134,6 +134,7 @@ OC.L10N.register(
     "Share" : "Paylaş",
     "Manage" : "Yönetim",
     "Discard share" : "Paylaşımı kaldır",
+    "Sharing has been disabled for your account." : "Hesabınız için paylaşım özelliği devre dışı bırakılmış.",
     "Update tag" : "Kartı güncelle",
     "Edit tag" : "Kartı düzenle",
     "Delete tag" : "Etiketi sil",
@@ -185,6 +186,9 @@ OC.L10N.register(
     "Add a card description…" : "Bir kart açıklaması ekle...",
     "Shared boards" : "Paylaşılmış panolar",
     "Move board to archive" : "Panoyu arşive taşı",
-    "Create a new board" : "Pano ekle"
+    "Create a new board" : "Pano ekle",
+    "Settings" : "Ayarlar",
+    "Limit deck to groups" : "Tahtayı şu gruplar kullanabilsin",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Tahta kullanımı gruplar ile sınırlandığında belirtilen grupların üyesi olmayan kişiler kendi tahtalarını oluşturamaz. Bu kullanıcılar ancak kendileri ile paylaşılan tahtalar üzerinde çalışabilir."
 },
 "nplurals=2; plural=(n > 1);");

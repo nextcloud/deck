@@ -185,6 +185,7 @@ OC.L10N.register(
     "Add a card description…" : "Eine Kartenbeschreibung hinzufügen…",
     "Shared boards" : "Geteilte Boards",
     "Move board to archive" : "Board ins Archiv verschieben",
-    "Create a new board" : "Neues Board"
+    "Create a new board" : "Neues Board",
+    "Settings" : "Einstellungen"
 },
 "nplurals=2; plural=(n != 1);");

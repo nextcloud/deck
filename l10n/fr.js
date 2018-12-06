@@ -185,6 +185,8 @@ OC.L10N.register(
     "Add a card description…" : "Ajouter une description pour la carte",
     "Shared boards" : "Tableaux partagés",
     "Move board to archive" : "Déplacer le tableau vers l'archive",
-    "Create a new board" : "Créer un nouveau tableau"
+    "Create a new board" : "Créer un nouveau tableau",
+    "Settings" : "Paramètres",
+    "Limit deck to groups" : "Limiter deck aux groupes"
 },
 "nplurals=2; plural=(n > 1);");
