@@ -20,7 +20,7 @@
  *
  */
 
-/* global OC OCA OCP t escapeHTML Handlebars */
+/* global OC OCA OCP t escapeHTML Handlebars moment */
 
 import CommentCollection from '../legacy/commentcollection';
 import CommentModel from '../legacy/commentmodel';
@@ -279,7 +279,13 @@ class ActivityController {
 		return this.activityservice.getData(this.type, id);
 	}
 
-	parseMessage(subject, parameters) {
+	parseMessage(activity) {
+		let subject = activity.subject_rich[0];
+		let parameters = activity.subject_rich[1];
+		if (parameters.after && parameters.after.id && parameters.after.id.startsWith('dt:')) {
+			let dateTime = parameters.after.id.substr(3);
+			parameters.after.name = moment(dateTime).format('L LTS');
+		}
 		return OCA.Activity.RichObjectStringParser.parseMessage(subject, parameters);
 	}
 

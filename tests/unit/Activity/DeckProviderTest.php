@@ -28,10 +28,12 @@ use OCA\Deck\Db\Acl;
 use OCP\Activity\IEvent;
 use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
+use OCP\IConfig;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\L10N\IFactory;
 use OCP\RichObjectStrings\IValidator;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -62,7 +64,9 @@ class DeckProviderTest extends TestCase {
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->commentsManager = $this->createMock(ICommentsManager::class);
-		$this->provider = new DeckProvider($this->urlGenerator, $this->activityManager, $this->userManager, $this->commentsManager, $this->userId);
+		$this->l10nFactory = $this->createMock(IFactory::class);
+		$this->config = $this->createMock(IConfig::class);
+		$this->provider = new DeckProvider($this->urlGenerator, $this->activityManager, $this->userManager, $this->commentsManager, $this->l10nFactory, $this->config, $this->userId);
 	}
 
 	private function mockEvent($objectType, $objectId, $objectName, $subject, $subjectParameters = []) {
