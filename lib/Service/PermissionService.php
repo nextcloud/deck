@@ -248,12 +248,15 @@ class PermissionService {
 
 	public function canCreate() {
 		$groups = $this->getGroupLimitList();
+		if (count($groups) === 0) {
+			return true;
+		}
 		foreach ($groups as $group) {
 			if ($this->groupManager->isInGroup($this->userId, $group)) {
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 	private function getGroupLimitList() {
