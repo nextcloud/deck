@@ -91,7 +91,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 
 	public function formatField($property) {
 		$value = $this->getter($property);
-		if ($this->_formatFields[$property] === 'timestamp') {
+		if (\array_key_exists($property, $this->_formatFields) && $this->_formatFields[$property] === 'timestamp') {
 			if ($value === null || $value <= 0) {
 				return null;
 			}
