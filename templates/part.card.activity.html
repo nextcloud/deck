@@ -5,7 +5,7 @@
 			<div class="author currentUser">{{ $ctrl.currentUser.displayName }}</div>
 		</div>
 		<form class="newCommentForm" ng-submit="$ctrl.postComment()">
-			<div ng-contenteditable contenteditable="true" class="message" ng-submit="$ctrl.postComment()" data-placeholder="{{ $ctrl.t('New comment …') }}" ng-model="$ctrl.$scope.newComment" ng-disabled="$ctrl.status.commentCreateLoading"></div>
+			<div ng-contenteditable contenteditable="true" class="message" ng-submit="$ctrl.postComment()" data-placeholder="{{ newCommentString }}" ng-model="$ctrl.$scope.newComment" ng-disabled="$ctrl.status.commentCreateLoading"></div>
 			<input class="submit icon-confirm has-tooltip" type="submit"
 				   value="" title="" data-original-title="Post" ng-if="!$ctrl.status.commentCreateLoading">
 			<div class="submitLoading icon-loading-small" ng-if="$ctrl.status.commentCreateLoading"></div>

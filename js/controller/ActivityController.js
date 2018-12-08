@@ -38,6 +38,7 @@ class ActivityController {
 			commentCreateLoading: false
 		};
 		this.$scope.newComment = '';
+		this.$scope.newCommentString = 'New comment…';
 
 		this.currentUser = OC.getCurrentUser();
 
