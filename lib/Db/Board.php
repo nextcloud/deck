@@ -50,6 +50,9 @@ class Board extends RelationalEntity {
 		$this->addRelation('permissions');
 		$this->addResolvable('owner');
 		$this->shared = -1;
+		$this->setFieldFormat('createdAt', 'timestamp');
+		$this->setFieldFormat('deletedAt', 'timestamp');
+		$this->setFieldFormat('lastModified', 'timestamp');
 	}
 
 	public function jsonSerialize() {

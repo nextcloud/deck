@@ -70,6 +70,9 @@ class Card extends RelationalEntity {
 		$this->addRelation('participants');
 		$this->addRelation('commentsUnread');
 		$this->addResolvable('owner');
+		$this->setFieldFormat('createdAt', 'timestamp');
+		$this->setFieldFormat('deletedAt', 'timestamp');
+		$this->setFieldFormat('lastModified', 'timestamp');
 	}
 
 	public function setDatabaseType($type) {

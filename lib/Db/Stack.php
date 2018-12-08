@@ -38,6 +38,9 @@ class Stack extends RelationalEntity {
 		$this->addType('deletedAt', 'integer');
 		$this->addType('lastModified', 'integer');
 		$this->addType('order', 'integer');
+		$this->setFieldFormat('createdAt', 'timestamp');
+		$this->setFieldFormat('deletedAt', 'timestamp');
+		$this->setFieldFormat('lastModified', 'timestamp');
 	}
 
 	public function setCards($cards) {

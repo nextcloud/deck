@@ -27,7 +27,7 @@
 					<span class="extension">.{{ attachment.extendedData.info.extension}}</span>
 				</div>
 					<span class="filesize">{{ attachment.extendedData.filesize | bytes }}</span>
-					<span class="filedate">{{ attachment.lastModified|relativeDateFilter }}</span>
+					<span class="filedate">{{ attachment.lastModified|relativeDateFilterString }}</span>
 					<span class="filedate"><?php p($l->t('by')); ?> {{ attachment.createdBy }}</span>
 				</a>
 			</div>

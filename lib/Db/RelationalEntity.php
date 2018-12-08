@@ -29,6 +29,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 
 	private $_relations = array();
 	private $_resolvedProperties = [];
+	private $_formatFields = [];
 
 	/**
 	 * Mark a property as relation so it will not get updated using Mapper::update
@@ -72,7 +73,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 			if (strpos($property, '_') !== 0 && $reflection->hasProperty($property)) {
 				$propertyReflection = $reflection->getProperty($property);
 				if (!$propertyReflection->isPrivate() && !in_array($property, $this->_resolvedProperties, true)) {
-					$json[$property] = $this->getter($property);
+					$json[$property] = $this->formatField($property);
 				}
 			}
 		}
@@ -82,6 +83,21 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 			}
 		}
 		return $json;
+	}
+
+	public function setFieldFormat($property, $type) {
+		$this->_formatFields[$property] = $type;
+	}
+
+	public function formatField($property) {
+		$value = $this->getter($property);
+		if ($this->_formatFields[$property] === 'timestamp') {
+			if ($value === null || $value <= 0) {
+				return null;
+			}
+			return (new \DateTime('@' . $value))->format('c');
+		}
+		return $value;
 	}
 
 	/*

@@ -42,6 +42,9 @@ class Attachment extends RelationalEntity {
 		$this->addType('deletedAt', 'integer');
 		$this->addResolvable('createdBy');
 		$this->addRelation('extendedData');
+		$this->setFieldFormat('createdAt', 'timestamp');
+		$this->setFieldFormat('deletedAt', 'timestamp');
+		$this->setFieldFormat('lastModified', 'timestamp');
 	}
 
 }
