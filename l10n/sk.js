@@ -21,12 +21,15 @@ OC.L10N.register(
     "You have removed {acl} from the board {board}" : "Odobrali ste {acl} z nástenky {board}",
     "{user} has removed {acl} from the board {board}" : "Používateľ {user} odobral {acl} z nástenky {board}",
     "You have renamed the board {before} to {board}" : "Premenovali ste nástenku {before} na {board}",
+    "{user} has renamed the board {before} to {board}" : "{user} premenoval(a) nástenku {before} na {board}",
     "You have archived the board {board}" : "Archivovali ste nástenku {board}",
     "{user} has archived the board {before}" : "Používateľ {user} archivoval nástenku {board}",
     "You have unarchived the board {board}" : "Zrušili ste archiváciu nástenky {board}",
     "{user} has unarchived the board {before}" : "Používateľ {user} zrušil archiváciu nástenky {before}",
     "You have renamed the card {before} to {card}" : "Premenovali ste kartu {before} na {card}",
     "{user} has renamed the card {before} to {card}" : "Používateľ {user} premenoval kartu {before} na {card}",
+    "You have commented on card {card}" : "Komentovali ste kartu {card}",
+    "{user} has commented on card {card}" : "{user} komentoval(a) kartu {card}",
     "Deck" : "Nástenka",
     "Personal" : "Osobné",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Používateľ %s vám priradil kartu „%s“ na „%s“.",
@@ -140,6 +143,7 @@ OC.L10N.register(
     "Add a card description…" : "Pridať popis karty...",
     "Shared boards" : "Sprístupnené nástenky",
     "Move board to archive" : "Presunúť nástenku do archívu",
-    "Create a new board" : "Vytvoriť novú nástenku"
+    "Create a new board" : "Vytvoriť novú nástenku",
+    "Settings" : "Nastavenia"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

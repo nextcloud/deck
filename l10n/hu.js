@@ -74,6 +74,7 @@ OC.L10N.register(
     "Add a card description…" : "Adj hozzá kártya leírást...",
     "Shared boards" : "Megosztott táblák",
     "Move board to archive" : "Tábla mozgatása archívumba",
-    "Create a new board" : "Új tábla létrehozása"
+    "Create a new board" : "Új tábla létrehozása",
+    "Settings" : "Beállítások"
 },
 "nplurals=2; plural=(n != 1);");

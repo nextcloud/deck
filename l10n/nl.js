@@ -72,7 +72,9 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} herstelde bijlage {attachment} bij kaart {card}",
     "You have commented on card {card}" : "Je hebt gereageerd op kaart {card}",
     "{user} has commented on card {card}" : "{user} reageerde op kaart {card}",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "Een <strong>kaart beschrijving</strong> binnen de Deck app is gewijzigd",
     "Deck" : "Deck",
+    "Changes in the <strong>Deck app</strong>" : "Wijzigingen in de <strong>Deck app</strong>",
     "Personal" : "Persoonlijk",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "De kaart \"%s\" op \"%s\" is aan jou toegewezen door %s.",
     "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user} heeft kaart \"%s\" op \"%s\" aan jou toegewezen.",
@@ -187,6 +189,8 @@ OC.L10N.register(
     "Shared boards" : "Gedeelde borden",
     "Move board to archive" : "Verplaats bord naar archief",
     "Create a new board" : "Een nieuw bord maken",
-    "Settings" : "Instellingen"
+    "Settings" : "Instellingen",
+    "Limit deck to groups" : "Beperk deck tot groepen",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Het beperken van Deck verhindert dat gebruikers die niet lid zijn van die groepen hun eigen borden kunnen maken. gebruikers kunnen nog wel werken met de borden die met deze gebruikers zijn gedeeld."
 },
 "nplurals=2; plural=(n != 1);");
