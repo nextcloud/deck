@@ -1,5 +1,5 @@
 /*
- * @copyright Copyright (c) 2018 Julius Härtl <jus@bitgrid.net>
+ * @copyright Copyright (c) 2018 Michael Weimann <mail@michael-weimann.eu>
  *
  * @author Michael Weimann <mail@michael-weimann.eu>
  *

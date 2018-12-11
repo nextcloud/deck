@@ -28,7 +28,7 @@
 			<div class="board-list-avatars-cell">Members</div>
 			<div class="board-list-actions-cell" />
 		</div>
-		<BoardItem v-for="board in boards" :key="board.id" :board="board" />
+		<BoardItem v-for="board in filteredBoards" :key="board.id" :board="board" />
 	</div>
 </template>
 
@@ -49,13 +49,13 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters('nav', [
-			'boards'
+		...mapGetters('boards', [
+			'filteredBoards'
 		])
 	},
 	watch: {
 		navFilter: function(value) {
-			this.$store.commit('nav/setFilter', value)
+			this.$store.commit('boards/setFilter', value)
 		}
 	}
 }

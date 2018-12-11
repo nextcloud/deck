@@ -62,7 +62,7 @@ export default {
 		})
 	},
 	created: function() {
-		this.$store.dispatch('nav/loadBoards')
+		this.$store.dispatch('boards/loadBoards')
 	}
 }
 
