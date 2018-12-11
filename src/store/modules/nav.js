@@ -129,17 +129,10 @@ export const BOARD_FILTERS = {
 const getters = {
 	menu: state => {
 
-		// filters the boards depending on the active filter
-		const boards = state.boards.filter(board => {
-			return state.filter === BOARD_FILTERS.ALL
-				|| (state.filter === BOARD_FILTERS.ARCHIVED && board.archived === true)
-				|| (state.filter === BOARD_FILTERS.SHARED && board.shared === 1)
-		})
-
 		return {
 			loading: state.loading,
 			items: defaultCategories
-				.concat(boards.map(mapBoardToItem))
+				.concat(state.boards.map(mapBoardToItem))
 				.concat([addButton])
 		}
 	},
