@@ -21,12 +21,56 @@
   -->
 
 <template>
-	<div>sidebar</div>
+	<div>
+		<Controls :board="board" />
+		<div v-if="board">
+			board {{ board.title }}<br>
+			<button @click="toggleSidebar">toggle sidebar</button>
+		</div>
+	</div>
 </template>
 
 <script>
+
+import { mapState } from 'vuex'
+import Controls from '../Controls'
+
 export default {
-	name: 'Sidebar'
+	name: 'Board',
+	components: {
+		Controls
+	},
+	inject: [
+		'boardApi'
+	],
+	props: {
+		id: {
+			type: Number,
+			default: null
+		}
+	},
+	data: function() {
+		return {
+			loading: true
+		}
+	},
+	computed: {
+		...mapState({
+			board: state => state.currentBoard
+		})
+	},
+	created: function() {
+		this.boardApi.loadById(this.id)
+			.then((board) => {
+				this.$store.dispatch('setCurrentBoard', board)
+				this.loading = false
+			})
+	},
+	methods: {
+		toggleSidebar: function() {
+			this.$store.dispatch('toggleSidebar')
+		}
+	}
 }
 </script>
 

@@ -21,16 +21,20 @@
   -->
 
 <template>
-	<div>Board goes here, id: {{ id }}</div>
+	<div>
+		Board sidebar {{ board.title }}
+	</div>
 </template>
 
 <script>
 export default {
-	name: 'Board',
+	name: 'BoardSidebar',
 	props: {
-		id: {
-			type: Number,
-			default: null
+		board: {
+			type: Object,
+			default: function() {
+				return {}
+			}
 		}
 	}
 }

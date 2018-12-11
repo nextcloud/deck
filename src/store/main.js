@@ -22,22 +22,74 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-import boards from './modules/boards'
-import nav from './modules/nav'
-import sidebar from './modules/sidebar'
+import { boardToMenuItem } from './../helpers/boardToMenuItem'
 
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
 
+export const BOARD_FILTERS = {
+	ALL: '',
+	ARCHIVED: 'archived',
+	SHARED: 'shared'
+}
+
 export default new Vuex.Store({
-	modules: {
-		boards,
-		nav,
-		sidebar
-	},
+	modules: {},
 	strict: debug,
-	state: {},
-	mutations: {},
-	actions: {}
+	state: {
+		navShown: true,
+		sidebarShown: false,
+		currentBoard: null,
+		boards: [],
+		boardFilter: BOARD_FILTERS.ALL
+	},
+	getters: {
+		boards: state => {
+			return state.boards
+		},
+		filteredBoards: state => {
+			// filters the boards depending on the active filter
+			const boards = state.boards.filter(board => {
+				return state.boardFilter === BOARD_FILTERS.ALL
+					|| (state.boardFilter === BOARD_FILTERS.ARCHIVED && board.archived === true)
+					|| (state.boardFilter === BOARD_FILTERS.SHARED && board.shared === 1)
+			})
+			return boards.map(boardToMenuItem)
+		}
+	},
+	mutations: {
+		toggleNav(state) {
+			state.navShown = !state.navShown
+		},
+		toggleSidebar(state) {
+			state.sidebarShown = !state.sidebarShown
+		},
+		setBoards(state, boards) {
+			state.boards = boards
+		},
+		setBoardFilter(state, filter) {
+			state.boardFilter = filter
+		},
+		setCurrentBoard(state, board) {
+			state.currentBoard = board
+		}
+	},
+	actions: {
+		setBoards({ commit }, boards) {
+			commit('setBoards', boards)
+		},
+		setBoardFilter({ commmit }, filter) {
+			commmit('setBoardFilter', filter)
+		},
+		toggleNav({ commit }) {
+			commit('toggleNav')
+		},
+		toggleSidebar({ commit }) {
+			commit('toggleSidebar')
+		},
+		setCurrentBoard({ commit }, board) {
+			commit('setCurrentBoard', board)
+		}
+	}
 })

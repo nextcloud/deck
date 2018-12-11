@@ -20,8 +20,6 @@
  *
  */
 
-import axios from 'nextcloud-axios'
-
 const boardActions = [
 	{
 		action: () => {
@@ -49,18 +47,12 @@ const boardActions = [
 	}
 ]
 
-export const BOARD_FILTERS = {
-	ALL: '',
-	ARCHIVED: 'archived',
-	SHARED: 'shared'
-}
-
 /**
  * Maps an API board to a menu item.
  * @param board
  * @returns {{id: *, classes: Array, bullet: string, text: *, router: {name: string, params: {id: *}}, utils: {actions: *[]}}}
  */
-export const mapBoardToItem = board => {
+export const boardToMenuItem = board => {
 	return {
 		id: board.id,
 		classes: [],
@@ -75,54 +67,4 @@ export const mapBoardToItem = board => {
 			actions: boardActions
 		}
 	}
-}
-
-const state = {
-	boards: [],
-	loading: false,
-	filter: ''
-}
-
-const getters = {
-	filteredBoards: state => {
-		// filters the boards depending on the active filter
-		const boards = state.boards.filter(board => {
-			return state.filter === BOARD_FILTERS.ALL
-				|| (state.filter === BOARD_FILTERS.ARCHIVED && board.archived === true)
-				|| (state.filter === BOARD_FILTERS.SHARED && board.shared === 1)
-		})
-		return boards.map(mapBoardToItem)
-	}
-}
-
-const actions = {
-	toggle({ commit }) {
-		commit('toggle')
-	},
-	loadBoards({ commit }) {
-		axios.get('/apps/deck/boards')
-			.then((response) => {
-				commit('setBoards', response.data)
-			})
-	}
-}
-
-const mutations = {
-	toggle(state) {
-		state.hidden = !state.hidden
-	},
-	setBoards(state, boards) {
-		state.boards = boards
-	},
-	setFilter(state, filter) {
-		state.filter = filter
-	}
-}
-
-export default {
-	namespaced: true,
-	state,
-	getters,
-	actions,
-	mutations
 }

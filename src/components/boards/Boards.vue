@@ -21,26 +21,31 @@
   -->
 
 <template>
-	<div class="board-list">
-		<div class="board-list-row board-list-header-row">
-			<div class="board-list-bullet-cell"><div class="board-list-bullet" /></div>
-			<div class="board-list-title-cell">Title</div>
-			<div class="board-list-avatars-cell">Members</div>
-			<div class="board-list-actions-cell" />
+	<div>
+		<Controls />
+		<div class="board-list">
+			<div class="board-list-row board-list-header-row">
+				<div class="board-list-bullet-cell"><div class="board-list-bullet" /></div>
+				<div class="board-list-title-cell">Title</div>
+				<div class="board-list-avatars-cell">Members</div>
+				<div class="board-list-actions-cell" />
+			</div>
+			<BoardItem v-for="board in filteredBoards" :key="board.id" :board="board" />
 		</div>
-		<BoardItem v-for="board in filteredBoards" :key="board.id" :board="board" />
 	</div>
 </template>
 
 <script>
 
-import BoardItem from './boards/BoardItem'
+import BoardItem from './BoardItem'
+import Controls from '../Controls'
 import { mapGetters } from 'vuex'
 
 export default {
 	name: 'Main',
 	components: {
-		BoardItem
+		BoardItem,
+		Controls
 	},
 	props: {
 		navFilter: {
@@ -49,13 +54,13 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters('boards', [
+		...mapGetters([
 			'filteredBoards'
 		])
 	},
 	watch: {
 		navFilter: function(value) {
-			this.$store.commit('boards/setFilter', value)
+			this.$store.commit('setBoardFilter', value)
 		}
 	}
 }

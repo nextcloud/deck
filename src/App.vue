@@ -22,16 +22,13 @@
 
 <template>
 
-	<div
-		id="content"
-		v-bind:class="{ 'nav-hidden': navHidden, 'sidebar-hidden': sidebarHidden }">
-		<AppNavigation :menu="menu" />
+	<div id="content" v-bind:class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarShown }">
+		<DeckAppNav />
 		<div id="app-content">
-			<Controls />
 			<router-view />
 		</div>
 		<div id="app-sidebar">
-			<component v-bind:is="sidebarComponent" />
+			<BoardSidebar v-if="currentBoard" :board="currentBoard" />
 		</div>
 	</div>
 
@@ -39,30 +36,55 @@
 
 <script>
 
-import { AppNavigation } from 'nextcloud-vue'
-import Controls from './components/Controls'
-import { mapState, mapGetters } from 'vuex'
-import Sidebar from './components/Sidebar'
+import { mapState } from 'vuex'
+import BoardSidebar from './components/board/BoardSidebar'
+import DeckAppNav from './components/DeckAppNav'
+import { BoardApi } from './services/BoardApi'
+
+const boardApi = new BoardApi()
 
 export default {
 	name: 'App',
 	components: {
-		AppNavigation,
-		Controls,
-		Sidebar
+		BoardSidebar,
+		DeckAppNav
+	},
+	data: function() {
+		return {
+			addButton: {
+				icon: 'icon-add',
+				classes: [],
+				text: t('deck', 'Create new board'),
+				edit: {
+					text: t('deck', 'new board'),
+					action: () => {
+					},
+					reset: () => {
+					}
+				},
+				action: () => {
+					this.addButton.classes.push('editing')
+				}
+			}
+		}
 	},
 	computed: {
-		...mapGetters('nav', [
-			'menu'
-		]),
 		...mapState({
-			navHidden: state => state.nav.hidden,
-			sidebarHidden: state => state.sidebar.hidden,
-			sidebarComponent: state => state.sidebar.component
+			navShown: state => state.navShown,
+			sidebarShown: state => state.sidebarShown,
+			currentBoard: state => state.currentBoard
 		})
 	},
+	provide: function() {
+		return {
+			boardApi: boardApi
+		}
+	},
 	created: function() {
-		this.$store.dispatch('boards/loadBoards')
+		boardApi.loadBoards()
+			.then((boards) => {
+				this.$store.dispatch('setBoards', boards)
+			})
 	}
 }
 
@@ -76,7 +98,7 @@ export default {
 		}
 
 		#app-sidebar {
-			transition: width 100ms ease;
+			transition: max-width 100ms ease;
 		}
 
 		&.nav-hidden {

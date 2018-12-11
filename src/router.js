@@ -23,9 +23,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import { generateUrl } from 'nextcloud-server/dist/router'
-import { BOARD_FILTERS } from './store/modules/boards'
-import Boards from './components/Boards'
-import Board from './components/Board'
+import { BOARD_FILTERS } from './store/main'
+import Boards from './components/boards/Boards'
+import Board from './components/board/Board'
 
 Vue.use(Router)
 
@@ -66,7 +66,11 @@ export default new Router({
 			path: '/boards/:id',
 			name: 'board',
 			component: Board,
-			props: true
+			props: (route) => {
+				return {
+					id: parseInt(route.params.id, 10)
+				}
+			}
 		}
 	]
 })

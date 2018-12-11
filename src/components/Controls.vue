@@ -31,6 +31,10 @@
 				</router-link>
 			</div>
 		</div>
+		<div v-if="board" class="crumb svg">
+			<a href="#todo">{{ board.title }}</a>
+			<span style="display: inline;" class="icon-shared" />
+		</div>
 	</div>
 
 </template>
@@ -38,9 +42,16 @@
 <script>
 export default {
 	name: 'Controls',
+	props: {
+		board: {
+			type: Object,
+			required: false,
+			default: null
+		}
+	},
 	methods: {
 		toggleNav() {
-			this.$store.dispatch('nav/toggle')
+			this.$store.dispatch('toggleNav')
 		}
 	}
 }

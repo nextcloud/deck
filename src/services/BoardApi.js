@@ -20,33 +20,46 @@
  *
  */
 
-// initial state
-const state = {
-	hidden: true,
-	component: 'Sidebar'
-}
+import axios from 'nextcloud-axios'
 
-// getters
-const getters = {}
+/**
+ * This class handles all the api communication with the Deck backend.
+ */
+export class BoardApi {
 
-// actions
-const actions = {
-	toggle({ commit }) {
-		commit('toggle')
+	url(url) {
+		url = `/apps/deck${url}`
+		return OC.generateUrl(url)
 	}
-}
 
-// mutations
-const mutations = {
-	toggle(state) {
-		state.hidden = !state.hidden
+	loadBoards() {
+		return axios.get(this.url('/boards'))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
 	}
-}
 
-export default {
-	namespaced: true,
-	state,
-	getters,
-	actions,
-	mutations
+	loadById(id) {
+		return axios.get(this.url(`/boards/${id}`))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 }
