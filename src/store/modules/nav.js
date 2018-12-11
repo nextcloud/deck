@@ -22,6 +22,7 @@
 
 import { translate as t } from 'nextcloud-server/dist/l10n'
 import { mapBoardToItem } from './boards'
+import store from '../main'
 
 let defaultCategories = [
 	{
@@ -53,16 +54,24 @@ let defaultCategories = [
 	}
 ]
 
-const addButton = {
-	icon: 'icon-add',
-	text: t('deck', 'Create new board'),
-	action: () => {
-	}
-}
-
 const state = {
 	hidden: false,
-	loading: false
+	loading: false,
+	addButton: {
+		icon: 'icon-add',
+		classes: [],
+		text: t('deck', 'Create new board'),
+		edit: {
+			text: t('deck', 'new board'),
+			action: () => {
+			},
+			reset: () => {
+			}
+		},
+		action: () => {
+			store.dispatch('nav/startAddBoard')
+		}
+	}
 }
 
 const getters = {
@@ -71,7 +80,7 @@ const getters = {
 			loading: state.loading,
 			items: defaultCategories
 				.concat(rootState.boards.boards.map(mapBoardToItem))
-				.concat([addButton])
+				.concat([state.addButton])
 		}
 	}
 }
@@ -79,6 +88,9 @@ const getters = {
 const actions = {
 	toggle({ commit }) {
 		commit('toggle')
+	},
+	startAddBoard({ commit }) {
+		commit('startAddBoard')
 	}
 }
 
@@ -86,6 +98,9 @@ const actions = {
 const mutations = {
 	toggle(state) {
 		state.hidden = !state.hidden
+	},
+	startAddBoard(state) {
+		state.addButton.classes.push('editing')
 	}
 }
 
