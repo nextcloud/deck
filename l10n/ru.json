@@ -19,12 +19,15 @@
     "You have removed {acl} from the board {board}" : "Вы закрыли {acl} доступ к рабочей доске «{board}»",
     "{user} has removed {acl} from the board {board}" : "{user} закрыл(а) {acl} доступ к рабочей доске «{board}»",
     "You have renamed the board {before} to {board}" : "Вы переименовали рабочую доску из «{before}» в «{board}»",
+    "{user} has renamed the board {before} to {board}" : "{user} переименовал(а) рабочую доску из «{before}» в «{board}»",
     "You have archived the board {board}" : "Вы переместили доску «{board}» в архив",
     "{user} has archived the board {before}" : "{user} переместил(а) доску «{board}» в архив",
     "You have unarchived the board {board}" : "Вы восстановили доску «{board}» из архива",
     "{user} has unarchived the board {before}" : "{user} восстановил(а) доску «{before}» из архива",
+    "You have created a new stack {stack} on board {board}" : "Вы создали стопку карточек «{stack}» на рабочей доске «{board}»",
     "You have renamed the card {before} to {card}" : "Вы переименовали карточку из «{before}» в «{card}»",
     "{user} has renamed the card {before} to {card}" : "{user} переименовал(а) карточку из «{before}» в «{card}»",
+    "{user} has restored the attachment {attachment} to card {card}" : "{user} восстановил(а) из корзины файл «{attachment}» в карточке «{card}»",
     "Deck" : "Deck",
     "Personal" : "Личное",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Вам назначена карточка «%s» с рабочей доски «%s»  пользователем %s.",
@@ -138,6 +141,7 @@
     "Add a card description…" : "Введите описание карточки…",
     "Shared boards" : "Общие доски",
     "Move board to archive" : "Переместить доску в архив",
-    "Create a new board" : "Создать доску"
+    "Create a new board" : "Создать доску",
+    "Settings" : "Параметры"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }
