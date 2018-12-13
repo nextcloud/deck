@@ -21,6 +21,7 @@ OC.L10N.register(
     "You have removed {acl} from the board {board}" : "Odebrali jste {acl} z nástěnky {board}",
     "{user} has removed {acl} from the board {board}" : "{user} odebral(a) {acl} z nástěnky {board}",
     "You have renamed the board {before} to {board}" : "Přejmenovali jste nástěnku {before} na {board}",
+    "{user} has renamed the board {before} to {board}" : "{user} přejmenoval(a) desku {before} na {board}",
     "You have archived the board {board}" : "Zaarchivovali jste nástěnku {board}",
     "{user} has archived the board {before}" : "{user} zaarchivoval(a) nástěnku {before}",
     "You have unarchived the board {board}" : "Zrušili jste archivaci nástěnky {board}",
