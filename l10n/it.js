@@ -50,6 +50,13 @@ OC.L10N.register(
     "{user} has set the due date of card {card} to {after}" : "{user} ha impostato la data di scadenza dell scheda {card} a {after}",
     "You have updated the due date of card {card} to {after}" : "Hai aggiornato la data di scadenza della scheda {card} a {after}",
     "{user} has updated the due date of card {card} to {after}" : "{user} ha aggiornato la data di scadenza della scheda {card} a {after}",
+    "You have added the tag {label} to card {card} in stack {stack} on board {board}" : "Hai aggiunto l'etichetta {label} alla scheda {card} nella pila {stack} sulla lavagna {board}",
+    "{user} has added the tag {label} to card {card} in stack {stack} on board {board}" : "{user} ha aggiunto l'etichetta {label} alla scheda {card} nella pila {stack} sulla lavagna {board}",
+    "You have removed the tag {label} from card {card} in stack {stack} on board {board}" : "Hai rimosso l'etichetta {label} alla scheda {card} nella pila {stack} sulla lavagna {board}",
+    "{user} has removed the tag {label} from card {card} in stack {stack} on board {board}" : "{user} ha rimosso l'etichetta {label} alla scheda {card} nella pila {stack} sulla lavagna {board}",
+    "You have assigned {assigneduser} to card {card} on board {board}" : "Hai assegnato {assigneduser} alla scheda {card} sulla lavagna {board}",
+    "{user} has assigned {assigneduser} to card {card} on board {board}" : "{user} ha assegnato {assigneduser} alla scheda {card} sulla lavagna {board}",
+    "You have moved the card {card} from stack {stackBefore} to {stack}" : "Hai spostato la scheda {card} dalla pila {stackBefore} in {stack}",
     "{user} has moved the card {card} from stack {stackBefore} to {stack}" : "{user} ha spostato la scheda {card} dalla pila {stackBefore} in {stack}",
     "You have added the attachment {attachment} to card {card}" : "Hai aggiunto l'allegato {attachment} alla scheda {card}",
     "{user} has added the attachment {attachment} to card {card}" : "{user} ha aggiunto l'allegato {attachment} alla scheda {card}",
@@ -61,7 +68,9 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} ha ripristinato l'allegato {attachment} nella scheda {card}",
     "You have commented on card {card}" : "Hai commentato sulla scheda {card}",
     "{user} has commented on card {card}" : "{user} ha commentato sulla scheda {card}",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "La <strong>descrizione di una scheda</strong> nell'applicazione Deck è stata modificata",
     "Deck" : "Deck",
+    "Changes in the <strong>Deck app</strong>" : "Modifiche nell'<strong>applicazione Deck</strong>",
     "Personal" : "Personale",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "La scheda \"%s\" in \"%s\" ti è stata assegnata da %s.",
     "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user} ti ha assegnato la scheda \"%s\" in \"%s\".",
@@ -176,6 +185,7 @@ OC.L10N.register(
     "Shared boards" : "Lavagne condivise",
     "Move board to archive" : "Sposta lavagna nell'archivio",
     "Create a new board" : "Crea una nuova lavagna",
-    "Settings" : "Impostazioni"
+    "Settings" : "Impostazioni",
+    "Limit deck to groups" : "Limita Deck a gruppi"
 },
 "nplurals=2; plural=(n != 1);");

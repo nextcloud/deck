@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "Please provide a content for your comment." : "Please provide a content for your comment.",
+    "Posting the comment failed." : "Posting the comment failed.",
     "Remove user from card" : "Remove user from card",
     "Hours" : "Hours",
     "Minutes" : "Minutes",
