@@ -29,6 +29,7 @@
 import { AppNavigation } from 'nextcloud-vue'
 import { translate as t } from 'nextcloud-server/dist/l10n'
 import { boardToMenuItem } from './../helpers/boardToMenuItem'
+import store from './../store/main'
 
 const defaultCategories = [
 	{
@@ -66,7 +67,13 @@ const addButton = {
 	text: t('deck', 'Create new board'),
 	edit: {
 		text: t('deck', 'new board'),
-		action: () => {
+		action: (submitEvent) => {
+			const title = submitEvent.currentTarget.childNodes[0].value
+			store.dispatch('createBoard', {
+				title: title,
+				color: '#000000'
+			})
+			addButton.classes = []
 		},
 		reset: () => {
 		}

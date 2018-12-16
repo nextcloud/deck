@@ -32,6 +32,29 @@ export class BoardApi {
 		return OC.generateUrl(url)
 	}
 
+	/**
+	 * Creates a new board.
+	 *
+	 * @param {{String title, String color}} boardData The board data with title and color in hex format, e.g. "#ff0000"
+	 * @return Promise
+	 */
+	createBoard(boardData) {
+		boardData.color = boardData.color.substr(1)
+
+		return axios.post(this.url('/boards'), boardData)
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 	loadBoards() {
 		return axios.get(this.url('/boards'))
 			.then(

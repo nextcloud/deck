@@ -23,9 +23,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { boardToMenuItem } from './../helpers/boardToMenuItem'
+import { BoardApi } from './../services/BoardApi'
 
 Vue.use(Vuex)
 
+const apiClient = new BoardApi()
 const debug = process.env.NODE_ENV !== 'production'
 
 export const BOARD_FILTERS = {
@@ -59,6 +61,9 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+		addBoard(state, board) {
+			state.boards.push(board)
+		},
 		toggleNav(state) {
 			state.navShown = !state.navShown
 		},
@@ -76,6 +81,12 @@ export default new Vuex.Store({
 		}
 	},
 	actions: {
+		createBoard({ commit }, boardData) {
+			apiClient.createBoard(boardData)
+				.then((board) => {
+					commit('addBoard', board)
+				})
+		},
 		setBoards({ commit }, boards) {
 			commit('setBoards', boards)
 		},
