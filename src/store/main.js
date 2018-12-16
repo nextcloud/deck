@@ -50,10 +50,15 @@ export default new Vuex.Store({
 		boards: state => {
 			return state.boards
 		},
+		noneArchivedBoards: state => {
+			return state.boards.filter(board => {
+				return board.archived === false
+			})
+		},
 		filteredBoards: state => {
 			// filters the boards depending on the active filter
 			const boards = state.boards.filter(board => {
-				return state.boardFilter === BOARD_FILTERS.ALL
+				return (state.boardFilter === BOARD_FILTERS.ALL && board.archived === false)
 					|| (state.boardFilter === BOARD_FILTERS.ARCHIVED && board.archived === true)
 					|| (state.boardFilter === BOARD_FILTERS.SHARED && board.shared === 1)
 			})
@@ -62,7 +67,15 @@ export default new Vuex.Store({
 	},
 	mutations: {
 		addBoard(state, board) {
-			state.boards.push(board)
+			const indexExisting = state.boards.findIndex((b) => {
+				return board.id === b.id
+			})
+
+			if (indexExisting > -1) {
+				Vue.set(state.boards, indexExisting, board)
+			} else {
+				state.boards.push(board)
+			}
 		},
 		toggleNav(state) {
 			state.navShown = !state.navShown
@@ -81,6 +94,19 @@ export default new Vuex.Store({
 		}
 	},
 	actions: {
+		/**
+		 * @param commit
+		 * @param state
+		 * @param {Board} board
+		 */
+		archiveBoard({ commit }, board) {
+			const boardCopy = JSON.parse(JSON.stringify(board))
+			boardCopy.archived = true
+			apiClient.updateBoard(boardCopy)
+				.then((board) => {
+					commit('addBoard', board)
+				})
+		},
 		createBoard({ commit }, boardData) {
 			apiClient.createBoard(boardData)
 				.then((board) => {

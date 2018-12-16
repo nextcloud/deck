@@ -33,14 +33,35 @@ export class BoardApi {
 	}
 
 	/**
+	 * Updates a board.
+	 *
+	 * @param {Board} board
+	 * @return Promise
+	 */
+	updateBoard(board) {
+		return axios.put(this.url(`/boards/${board.id}`), board)
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	/**
 	 * Creates a new board.
 	 *
-	 * @param {{String title, String color}} boardData The board data with title and color in hex format, e.g. "#ff0000"
+	 * @param {{String title, String color, String hashedColor}} boardData The board data to send.
+	 * 															 hashedColor is the color in hex format, e.g. "#ff0000"
+	 * 															 color is the same color without the "#"
 	 * @return Promise
 	 */
 	createBoard(boardData) {
-		boardData.color = boardData.color.substr(1)
-
 		return axios.post(this.url('/boards'), boardData)
 			.then(
 				(response) => {

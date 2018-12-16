@@ -71,7 +71,8 @@ const addButton = {
 			const title = submitEvent.currentTarget.childNodes[0].value
 			store.dispatch('createBoard', {
 				title: title,
-				color: '#000000'
+				hashedColor: '#000000',
+				color: '000000'
 			})
 			addButton.classes = []
 		},
@@ -99,7 +100,7 @@ export default {
 			return {
 				loading: this.loading,
 				items: defaultCategories
-					.concat(this.$store.getters.boards.map(boardToMenuItem))
+					.concat(this.$store.getters.noneArchivedBoards.map(boardToMenuItem))
 					.concat([this.addButton])
 			}
 		}

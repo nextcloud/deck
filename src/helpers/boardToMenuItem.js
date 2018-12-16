@@ -20,32 +20,37 @@
  *
  */
 
-const boardActions = [
-	{
-		action: () => {
+import store from './../store/main'
+
+function boardActions(board) {
+	return [
+		{
+			action: () => {
+			},
+			icon: 'icon-edit',
+			text: t('deck', 'Edit board')
 		},
-		icon: 'icon-edit',
-		text: t('deck', 'Edit board')
-	},
-	{
-		action: () => {
+		{
+			action: function() {
+				store.dispatch('archiveBoard', board)
+			},
+			icon: 'icon-archive',
+			text: t('deck', 'Archive board')
 		},
-		icon: 'icon-archive',
-		text: t('deck', 'Archive board')
-	},
-	{
-		action: () => {
+		{
+			action: () => {
+			},
+			icon: 'icon-delete',
+			text: t('deck', 'Delete board')
 		},
-		icon: 'icon-delete',
-		text: t('deck', 'Delete board')
-	},
-	{
-		action: () => {
-		},
-		icon: 'icon-settings',
-		text: t('deck', 'Board details')
-	}
-]
+		{
+			action: () => {
+			},
+			icon: 'icon-settings',
+			text: t('deck', 'Board details')
+		}
+	]
+}
 
 /**
  * Maps an API board to a menu item.
@@ -64,7 +69,8 @@ export const boardToMenuItem = board => {
 			params: { id: board.id }
 		},
 		utils: {
-			actions: boardActions
-		}
+			actions: boardActions(board)
+		},
+		board: board
 	}
 }

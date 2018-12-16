@@ -28,6 +28,14 @@ import { translate, translatePlural } from 'nextcloud-server/dist/l10n'
 import { generateFilePath } from 'nextcloud-server/dist/router'
 import VTooltip from 'v-tooltip'
 
+/**
+ * Board model
+ *
+ * @typedef {Object} Board
+ * @property {String} title
+ * @property {boolean} archived
+ */
+
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken)
 // eslint-disable-next-line
