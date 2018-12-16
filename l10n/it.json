@@ -42,6 +42,8 @@
     "{user} has updated the description card {card} in stack {stack} on board {board}" : "{user} ha aggiornato la descrizione alla scheda {card} nella pila {stack} sulla lavagna {board}",
     "You have archived card {card} in stack {stack} on board {board}" : "Hai archiviato la scheda {card} nella pila {stack} sulla lavagna {board}",
     "{user} has archived card {card} in stack {stack} on board {board}" : "{user} ha archiviato la scheda {card} nella pila {stack} sulla lavagna {board}",
+    "You have unarchived card {card} in stack {stack} on board {board}" : "Hai annullato l'archiviazione della scheda {card} nella pila {stack} sulla lavagna {board}",
+    "{user} has unarchived card {card} in stack {stack} on board {board}" : "{user} ha annullato l'archiviazione della scheda {card} nella pila {stack} sulla lavagna {board}",
     "You have removed the due date of card {card}" : "Hai rimosso la data di scadenza della scheda {card}",
     "{user} has removed the due date of card {card}" : "{user} ha rimosso la data di scadenza dalla scheda {card}",
     "You have set the due date of card {card} to {after}" : "Hai impostato la data di scadenza della scheda {card} a {after}",
@@ -54,6 +56,8 @@
     "{user} has removed the tag {label} from card {card} in stack {stack} on board {board}" : "{user} ha rimosso l'etichetta {label} alla scheda {card} nella pila {stack} sulla lavagna {board}",
     "You have assigned {assigneduser} to card {card} on board {board}" : "Hai assegnato {assigneduser} alla scheda {card} sulla lavagna {board}",
     "{user} has assigned {assigneduser} to card {card} on board {board}" : "{user} ha assegnato {assigneduser} alla scheda {card} sulla lavagna {board}",
+    "You have unassigned {assigneduser} from card {card} on board {board}" : "Hai annullato l'assegnazione di {assigneduser} da scheda {card} sulla lavagna {board}",
+    "{user} has unassigned {assigneduser} from card {card} on board {board}" : "{user} ha annullato l'assegnazione di {assigneduser} dalla scheda {card} sulla lavagna {board}",
     "You have moved the card {card} from stack {stackBefore} to {stack}" : "Hai spostato la scheda {card} dalla pila {stackBefore} in {stack}",
     "{user} has moved the card {card} from stack {stackBefore} to {stack}" : "{user} ha spostato la scheda {card} dalla pila {stackBefore} in {stack}",
     "You have added the attachment {attachment} to card {card}" : "Hai aggiunto l'allegato {attachment} alla scheda {card}",
@@ -184,6 +188,7 @@
     "Move board to archive" : "Sposta lavagna nell'archivio",
     "Create a new board" : "Crea una nuova lavagna",
     "Settings" : "Impostazioni",
-    "Limit deck to groups" : "Limita Deck a gruppi"
+    "Limit deck to groups" : "Limita Deck a gruppi",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "La limitazione di Deck impedirà agli utenti che non fanno parte di tali gruppi di creare le proprie lavagne. Gli utenti saranno ancora in grado di lavorare sulle lavagne che sono state condivise con loro,"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
