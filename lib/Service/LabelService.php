@@ -90,6 +90,14 @@ class LabelService {
 			throw new BadRequestException('board id must be a number');
 		}
 
+		$boardLabels = $this->labelMapper->findAll($boardId);
+		foreach($boardLabels as $boardLabel) {
+			if ($boardLabel->getTitle() === $title) {
+				throw new BadRequestException('title must be unique');
+				break;
+			}
+		}
+
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
 		if ($this->boardService->isArchived(null, $boardId)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
