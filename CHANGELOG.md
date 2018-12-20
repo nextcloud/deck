@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.5.2 - 2018-12-20
+
+### Fixed
+- Mark notification as read if a card with duedate gets archived
+- Use proper timezone and locale format for due date activities
+- Various translation fixes and updates
+- Check group limit properly
+- Fix comment activities on Nextcloud 15
+- Fix issues with Edge
+- API: Fix numeric types that were returned as strings
+- API: Fix If-Modified-Since header parsing  
+
+
 ## 0.5.1 - 2018-12-05
 
 ### Added
