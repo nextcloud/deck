@@ -95,6 +95,15 @@ class NotificationHelper {
 		$this->cardMapper->markNotified($card);
 	}
 
+	public function markDuedateAsRead($card) {
+		$notification = $this->notificationManager->createNotification();
+		$notification
+			->setApp('deck')
+			->setObject('card', $card->getId())
+			->setSubject('card-overdue', []);
+		$this->notificationManager->markProcessed($notification);
+	}
+
 	public function sendCardAssigned($card, $userId) {
 		$boardId = $this->cardMapper->findBoardId($card->getId());
 		$board = $this->getBoard($boardId);
