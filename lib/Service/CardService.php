@@ -407,6 +407,7 @@ class CardService {
 		$card = $this->cardMapper->find($id);
 		$card->setArchived(true);
 		$newCard = $this->cardMapper->update($card);
+		$this->notificationHelper->markDuedateAsRead($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_ARCHIVE);
 		$this->changeHelper->cardChanged($id, false);
 		return $newCard;
