@@ -25,10 +25,10 @@
 						<?php p($l->t('Archive board')); ?>
 					</a>
 				</li>
-				<li ng-if="boardservice.canManage(b)" ng-click="boardDelete(b)">
+				<li ng-if="boardservice.canManage(b)">
 					<a class="icon-delete" title ="<?php p($l->t('Delete board')); ?>" ng-click="boardDelete(b)">
-					<?php p($l->t('Delete board')); ?>
-				</a>
+						<?php p($l->t('Delete board')); ?>
+					</a>
 				</li>
 				<li ui-sref="board.detail({boardId: b.id})">
 					<a class="icon-settings-dark">
