@@ -24,12 +24,14 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\StatusException;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use OCA\Deck\Service\StackService;
 use OCA\Deck\Service\BoardService;
+use Sabre\HTTP\Util;
 
 /**
  * Class StackApiController
@@ -62,8 +64,12 @@ class StackApiController extends ApiController {
 	public function index() {
 		$since = 0;
 		$modified = $this->request->getHeader('If-Modified-Since');
-		if ($modified !== '') {
-			$since = strtotime($modified);
+		if ($modified !== null && $modified !== '') {
+			$date = Util::parseHTTPDate($modified);
+			if (!$date) {
+				throw new StatusException('Invalid If-Modified-Since header provided.');
+			}
+			$since = $date->getTimestamp();
 		}
 		$stacks = $this->stackService->findAll($this->request->getParam('boardId'), $since);
 		return new DataResponse($stacks, HTTP::STATUS_OK);

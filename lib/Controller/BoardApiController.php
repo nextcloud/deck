@@ -24,12 +24,14 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\StatusException;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
 use OCA\Deck\Service\BoardService;
+use Sabre\HTTP\Util;
 
 /**
  * Class BoardApiController
@@ -61,10 +63,14 @@ class BoardApiController extends ApiController {
 	 */
 	public function index() {
 		$modified = $this->request->getHeader('If-Modified-Since');
-		if ($modified === '') {
+		if ($modified === null || $modified === '') {
 			$boards = $this->service->findAll();
 		} else {
-			$boards = $this->service->findAll(strtotime($modified));
+			$date = Util::parseHTTPDate($modified);
+			if (!$date) {
+				throw new StatusException('Invalid If-Modified-Since header provided.');
+			}
+			$boards = $this->service->findAll($date->getTimestamp());
 		}
 		return new DataResponse($boards, HTTP::STATUS_OK);
 	 }
