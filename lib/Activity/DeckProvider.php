@@ -158,18 +158,19 @@ class DeckProvider implements IProvider {
 	 * @param array $parameters
 	 */
 	protected function setSubjects(IEvent $event, $subject, array $parameters) {
-		$placeholders = $replacements = [];
+		$placeholders = $replacements = $richParameters = [];
 		foreach ($parameters as $placeholder => $parameter) {
 			$placeholders[] = '{' . $placeholder . '}';
 			if (is_array($parameter) && array_key_exists('name', $parameter)) {
 				$replacements[] = $parameter['name'];
+				$richParameters[$placeholder] = $parameter;
 			} else {
 				$replacements[] = '';
 			}
 		}
 
 		$event->setParsedSubject(str_replace($placeholders, $replacements, $subject))
-			->setRichSubject($subject, $parameters);
+			->setRichSubject($subject, $richParameters);
 		$event->setSubject($subject, $parameters);
 	}
 
@@ -284,7 +285,11 @@ class DeckProvider implements IProvider {
 				$event->setParsedMessage($comment->getMessage());
 			} catch (NotFoundException $e) {
 			}
-			$params['comment'] = $subjectParams['comment'];
+			$params['comment'] =[
+				'type' => 'highlight',
+				'id' => $subjectParams['comment'],
+				'name' => $comment->getMessage()
+			];
 		}
 		return $params;
 	}

@@ -465,7 +465,7 @@ class DeckProviderTest extends TestCase {
 
 	public function testParseParamForComment() {
 		$comment = $this->createMock(IComment::class);
-		$comment->expects($this->once())
+		$comment->expects($this->any())
 			->method('getMessage')
 			->willReturn('Comment content');
 		$this->commentsManager->expects($this->once())
@@ -481,7 +481,11 @@ class DeckProviderTest extends TestCase {
 			'comment' => 123
 		];
 		$expected = [
-			'comment' => 123,
+			'comment' => [
+				'type' => 'highlight',
+				'id' => 123,
+				'name' => 'Comment content'
+			]
 		];
 		$actual = $this->invokePrivate($this->provider, 'parseParamForComment', [$subjectParams, $params, $event]);
 		$this->assertEquals($expected, $actual);
