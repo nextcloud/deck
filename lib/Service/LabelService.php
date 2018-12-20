@@ -90,15 +90,10 @@ class LabelService {
 			throw new BadRequestException('board id must be a number');
 		}
 
-		$boardLabels = $this->labelMapper->findAll($boardId);
-		foreach($boardLabels as $boardLabel) {
-			if ($boardLabel->getTitle() === $title) {
-				throw new BadRequestException('title must be unique');
-				break;
-			}
-		}
-
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
+
+		$this->checkDuplicateTitle($boardId, $title);
+
 		if ($this->boardService->isArchived(null, $boardId)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
@@ -160,14 +155,33 @@ class LabelService {
 		}
 
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
+		
+		$label = $this->find($id);
+		$this->checkDuplicateTitle($label->getBoardId(), $title);
+		
 		if ($this->boardService->isArchived($this->labelMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
-		$label = $this->find($id);
+
 		$label->setTitle($title);
 		$label->setColor($color);
 		$this->changeHelper->boardChanged($label->getBoardId());
 		return $this->labelMapper->update($label);
+	}
+
+	/**
+	 * @param $boardId
+	 * @param $title
+	 * @throws BadRequestException
+	 */
+	private function checkDuplicateTitle($boardId, $title) {
+		$boardLabels = $this->labelMapper->findAll($boardId);
+		foreach($boardLabels as $boardLabel) {
+			if ($boardLabel->getTitle() === $title) {
+				throw new BadRequestException('title must be unique');
+				break;
+			}
+		}
 	}
 
 }
