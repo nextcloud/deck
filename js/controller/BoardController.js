@@ -41,6 +41,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.defaultColors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
 	$scope.board = BoardService.getCurrent();
 	$scope.uploader = FileService.uploader;
+	$scope.searchText = '';
 
 	$scope.startTitleEdit = function(card) {
 		card.renameTitle = card.title;
