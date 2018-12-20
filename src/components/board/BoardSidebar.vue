@@ -21,12 +21,12 @@
   -->
 
 <template>
-	<div class="sidebar-header">
+  <div class="sidebar-header">
     <a class="icon-close" title="Close" @click="closeSidebar">
-		  <span class="hidden-visually">Close</span>
+      <span class="hidden-visually">Close</span>
 	  </a>
     <h3>{{ board.title }}</h3>
-	</div>
+  </div>
 </template>
 
 <script>
