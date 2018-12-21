@@ -20,7 +20,7 @@
 	</div>
 	<div class="crumb title" ng-if="params.filter=='archive'">
 		<a><span class="icon icon-archive"></span></a>
-		<a>Archived cards</a>
+		<a><?php p($l->t('Archived cards')); ?></a>
 	</div>
 
 	<div class="board-header-controls hidden">
