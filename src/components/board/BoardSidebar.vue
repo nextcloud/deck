@@ -21,12 +21,27 @@
   -->
 
 <template>
-  <div class="sidebar-header">
-    <a class="icon-close" title="Close" @click="closeSidebar">
-      <span class="hidden-visually">Close</span>
-	  </a>
-    <h3>{{ board.title }}</h3>
-  </div>
+	<div class="sidebar">
+		<div class="sidebar-header">
+			<a class="icon-close" title="Close" @click="closeSidebar">
+				<span class="hidden-visually">Close</span>
+			</a>
+			<h3>{{ board.title }}</h3>
+		</div>
+
+		<ul class="tab-headers">
+			<li v-for="tab in tabs" :class="{ 'selected': tab.isSelected }" :key="tab.name">
+				<a @click="setSelectedHeader(tab.name)">{{ tab.name }}</a>
+			</li>
+		</ul>
+
+		<div class="tabs-container">
+			<ul
+				id="shareWithList"
+				class="shareWithList"
+			/>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -39,10 +54,38 @@ export default {
 				return {}
 			}
 		}
-  },
-  methods: {
-		closeSidebar: function() {
+	},
+	data() {
+		return {
+			activeTab: 'shareWithList',
+			tabs: [
+				{
+					name: 'Sharing',
+					isSelected: true
+				},
+				{
+					name: 'Tags',
+					isSelected: false
+				},
+				{
+					name: 'Deleted items',
+					isSelected: false
+				},
+				{
+					name: 'Timeline',
+					isSelected: false
+				}
+			]
+		}
+	},
+	methods: {
+		closeSidebar() {
 			this.$store.dispatch('toggleSidebar')
+		},
+		setSelectedHeader(tabName) {
+			this.tabs.forEach(tab => {
+				tab.isSelected = (tab.name === tabName)
+			})
 		}
 	}
 }
@@ -64,5 +107,19 @@ export default {
     padding: 14px;
     height: 24px;
     width: 24px;
+  }
+  ul.tab-headers {
+	margin: 15px 15px 0 15px;
+		li {
+			display: inline-block;
+			&.selected {
+				color: #000;
+				border-bottom: 1px solid #4d4d4d;
+				font-weight: 600;
+			}
+			a {
+				padding: 12px;
+			}
+		}
   }
 </style>
