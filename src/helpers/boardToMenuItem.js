@@ -23,33 +23,38 @@
 import store from './../store/main'
 
 function boardActions(board) {
-	return [
-		{
-			action: () => {
-			},
-			icon: 'icon-edit',
-			text: t('deck', 'Edit board')
+	const actions = [{
+		action: () => {
 		},
-		{
+		icon: 'icon-edit',
+		text: t('deck', 'Edit board')
+	}]
+
+	if (!board.archived) {
+		actions.push({
 			action: function() {
 				store.dispatch('archiveBoard', board)
 			},
 			icon: 'icon-archive',
 			text: t('deck', 'Archive board')
+		})
+	}
+
+	actions.push({
+		action: () => {
 		},
-		{
-			action: () => {
-			},
-			icon: 'icon-delete',
-			text: t('deck', 'Delete board')
+		icon: 'icon-delete',
+		text: t('deck', 'Delete board')
+	})
+
+	actions.push({
+		action: () => {
 		},
-		{
-			action: () => {
-			},
-			icon: 'icon-settings',
-			text: t('deck', 'Board details')
-		}
-	]
+		icon: 'icon-settings',
+		text: t('deck', 'Board details')
+	})
+
+	return actions
 }
 
 /**
