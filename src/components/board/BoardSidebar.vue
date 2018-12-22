@@ -35,18 +35,30 @@
 			</li>
 		</ul>
 
-		<div class="tabs-container">
-			<ul
-				id="shareWithList"
-				class="shareWithList"
-			/>
+		<div class="tabsContainer">
+			<div class="tab">
+				<ul
+					v-if="activeTab === 'Sharing'"
+					id="shareWithList"
+					class="shareWithList"
+				>
+					<li>
+						<avatar :user="board.owner.uid" />
+						<span class="has-tooltip username">
+							{{ board.owner.displayname }}
+						</span>
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+import { Avatar } from 'nextcloud-vue'
 export default {
 	name: 'BoardSidebar',
+	components: { Avatar },
 	props: {
 		board: {
 			type: Object,
@@ -57,7 +69,7 @@ export default {
 	},
 	data() {
 		return {
-			activeTab: 'shareWithList',
+			activeTab: 'Sharing',
 			tabs: [
 				{
 					name: 'Sharing',
@@ -83,6 +95,7 @@ export default {
 			this.$store.dispatch('toggleSidebar')
 		},
 		setSelectedHeader(tabName) {
+			this.activeTab = tabName
 			this.tabs.forEach(tab => {
 				tab.isSelected = (tab.name === tabName)
 			})
@@ -122,4 +135,9 @@ export default {
 			}
 		}
   }
+	.tabsContainer {
+		.tab {
+			padding: 0 15px 15px;
+		}
+	}
 </style>
