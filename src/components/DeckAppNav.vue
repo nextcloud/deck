@@ -26,40 +26,47 @@
 
 <script>
 
-import { AppNavigation } from 'nextcloud-vue'
+import AppNavigation from 'nextcloud-vue/src/components/AppNavigation/AppNavigation'
 import { translate as t } from 'nextcloud-server/dist/l10n'
 import { boardToMenuItem } from './../helpers/boardToMenuItem'
+import { mapGetters } from 'vuex'
 import store from './../store/main'
 
-const defaultCategories = [
-	{
-		id: 'deck-boards',
-		classes: [],
-		icon: 'icon-deck',
-		text: t('deck', 'All boards'),
-		router: {
-			name: 'boards'
-		}
+const categoryAll = {
+	id: 'deck-boards',
+	classes: [],
+	icon: 'icon-deck',
+	text: t('deck', 'All boards'),
+	router: {
+		name: 'boards'
 	},
-	{
-		id: 'deck-boards-archived',
-		classes: [],
-		icon: 'icon-archive',
-		text: t('deck', 'Archived boards'),
-		router: {
-			name: 'boards.archived'
-		}
+	collapsible: false,
+	children: []
+}
+
+const categoryArchived = {
+	id: 'deck-boards-archived',
+	classes: [],
+	icon: 'icon-archive',
+	text: t('deck', 'Archived boards'),
+	router: {
+		name: 'boards.archived'
 	},
-	{
-		id: 'deck-boards-shared',
-		classes: [],
-		icon: 'icon-shared',
-		text: t('deck', 'Shared boards'),
-		router: {
-			name: 'boards.shared'
-		}
-	}
-]
+	collapsible: false,
+	children: []
+}
+
+const categoryShared = 	{
+	id: 'deck-boards-shared',
+	classes: [],
+	icon: 'icon-shared',
+	text: t('deck', 'Shared boards'),
+	router: {
+		name: 'boards.shared'
+	},
+	collapsible: false,
+	children: []
+}
 
 const addButton = {
 	icon: 'icon-add',
@@ -96,11 +103,54 @@ export default {
 		}
 	},
 	computed: {
+		...mapGetters([
+			'noneArchivedBoards',
+			'archivedBoards',
+			'sharedBoards'
+		]),
+		allBoardsNavItem: function() {
+			return {
+				id: 'deck-boards',
+				classes: [],
+				icon: 'icon-deck',
+				text: t('deck', 'All boards'),
+				router: {
+					name: 'boards'
+				},
+				collapsible: true,
+				children: this.noneArchivedBoards.map(boardToMenuItem)
+			}
+		},
+		archivedBoardsNavItem: function() {
+			return {
+				id: 'deck-boards-archived',
+				classes: [],
+				icon: 'icon-archive',
+				text: t('deck', 'Archived boards'),
+				router: {
+					name: 'boards.archived'
+				},
+				collapsible: true,
+				children: this.archivedBoards.map(boardToMenuItem)
+			}
+		},
+		sharedBoardsNavItem: function() {
+			return {
+				id: 'deck-boards-shared',
+				classes: [],
+				icon: 'icon-shared',
+				text: t('deck', 'Shared boards'),
+				router: {
+					name: 'boards.shared'
+				},
+				collapsible: false,
+				children: this.sharedBoards.map(boardToMenuItem)
+			}
+		},
 		menu: function() {
 			return {
 				loading: this.loading,
-				items: defaultCategories
-					.concat(this.$store.getters.noneArchivedBoards.map(boardToMenuItem))
+				items: [this.allBoardsNavItem, this.archivedBoardsNavItem, this.sharedBoardsNavItem]
 					.concat([this.addButton])
 			}
 		}

@@ -34,6 +34,7 @@ import VTooltip from 'v-tooltip'
  * @typedef {Object} Board
  * @property {String} title
  * @property {boolean} archived
+ * @property {number} shared 1 (shared) or 0 (not shared)
  */
 
 // eslint-disable-next-line

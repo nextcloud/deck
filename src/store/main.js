@@ -55,6 +55,16 @@ export default new Vuex.Store({
 				return board.archived === false
 			})
 		},
+		archivedBoards: state => {
+			return state.boards.filter(board => {
+				return board.archived === true
+			})
+		},
+		sharedBoards: state => {
+			return state.boards.filter(board => {
+				return board.shared
+			})
+		},
 		filteredBoards: state => {
 			// filters the boards depending on the active filter
 			const boards = state.boards.filter(board => {
