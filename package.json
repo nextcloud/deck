@@ -34,6 +34,7 @@
 		"vue-click-outside": "^1.0.7",
 		"vue-infinite-loading": "^2.4.1",
 		"vue-router": "^3.0.1",
+		"vue-smooth-dnd": "^0.2.8",
 		"vuex": "^3.0.1",
 		"vuex-router-sync": "^5.0.0"
 	},
