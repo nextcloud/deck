@@ -114,6 +114,7 @@ OC.L10N.register(
     "All Boards" : "Tutte le lavagne",
     "Archived boards" : "Lavagne archiviate",
     "Share board" : "Condividi lavagna",
+    "Archived cards" : "Schede archiviate",
     "Actions" : "Azioni",
     "Drop your files here to upload it to the card" : "Rilascia qui i tuoi file per caricarli nella scheda",
     "Assign card to me" : "Assegna scheda a me",

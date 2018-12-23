@@ -114,6 +114,7 @@ OC.L10N.register(
     "All Boards" : "Todos los tableros",
     "Archived boards" : "Tableros archivados",
     "Share board" : "Compartir tablero",
+    "Archived cards" : "Tarjetas archivadas",
     "Actions" : "Acciones",
     "Drop your files here to upload it to the card" : "Arrastra tus archivos aquí para subirlos a la tarjeta",
     "Assign card to me" : "Asignarme tarjeta a mí",
