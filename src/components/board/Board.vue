@@ -24,7 +24,6 @@
 	<div>
 		<Controls :board="board" />
 		<div v-if="board">
-			board {{ board.title }}<br>
 			<!-- example for external drop zone -->
 			<container :should-accept-drop="() => true" style="border:1px solid #aaa;" />
 			<button @click="toggleSidebar">toggle sidebar</button>
@@ -104,7 +103,7 @@ export default {
 			board: state => state.currentBoard
 		}),
 		orderedCards() {
-			//return (stack) => _.orderBy(this.stacks[stack].cards, 'order')
+			// return (stack) => _.orderBy(this.stacks[stack].cards, 'order')
 		}
 
 	},

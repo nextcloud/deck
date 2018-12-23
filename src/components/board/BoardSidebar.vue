@@ -23,9 +23,6 @@
 <template>
 	<div class="sidebar">
 		<div class="sidebar-header">
-			<a class="icon-close" title="Close" @click="closeSidebar">
-				<span class="hidden-visually">Close</span>
-			</a>
 			<h3>{{ board.title }}</h3>
 		</div>
 
@@ -56,16 +53,12 @@
 
 <script>
 import { Avatar } from 'nextcloud-vue'
+import { mapState } from 'vuex'
+
 export default {
 	name: 'BoardSidebar',
 	components: { Avatar },
 	props: {
-		board: {
-			type: Object,
-			default: function() {
-				return {}
-			}
-		}
 	},
 	data() {
 		return {
@@ -89,6 +82,11 @@ export default {
 				}
 			]
 		}
+	},
+	computed: {
+		...mapState({
+			board: state => state.currentBoard
+		})
 	},
 	methods: {
 		closeSidebar() {
