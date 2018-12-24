@@ -114,6 +114,7 @@ OC.L10N.register(
     "All Boards" : "Tüm Panolar",
     "Archived boards" : "Arşivlenmiş panolar",
     "Share board" : "Panoyu paylaş",
+    "Archived cards" : "Arşivlenmiş kartlar",
     "Actions" : "İşlemler",
     "Drop your files here to upload it to the card" : "Karta yüklemek istediğiniz dosyalarınızı sürükleyip buraya bırakın",
     "Assign card to me" : "Kartı bana ata",
