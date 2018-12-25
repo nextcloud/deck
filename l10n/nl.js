@@ -114,6 +114,7 @@ OC.L10N.register(
     "All Boards" : "Alle borden",
     "Archived boards" : "Gearchiveerde borden",
     "Share board" : "Bord delen",
+    "Archived cards" : "Gearchiveerde kaarten",
     "Actions" : "Acties",
     "Drop your files here to upload it to the card" : "Sleep je bestanden hierheen om naar de kaart te uploaden",
     "Assign card to me" : "Wijs kaart toe aan mij",
