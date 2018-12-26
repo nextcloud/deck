@@ -114,6 +114,7 @@ OC.L10N.register(
     "All Boards" : "Све табле",
     "Archived boards" : "Архивиране табле",
     "Share board" : "Подели таблу",
+    "Archived cards" : "Архивиране картице",
     "Actions" : "Радње",
     "Drop your files here to upload it to the card" : "Превуците Ваше фајлове овде да их отпремите у картицу",
     "Assign card to me" : "Додели картицу мени",
