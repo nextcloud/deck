@@ -65,6 +65,7 @@ OC.L10N.register(
     "New board title" : "Új tábla címe",
     "Create board" : "Tábla készítése",
     "Select an attachment" : "Melléklet kiválasztása",
+    "Cancel upload" : "A feltöltés megszakítása",
     "by" : "tőle: ",
     "Undo file deletion" : "Fájltörlés visszavonása",
     "Insert the file into the description" : "Illeszd be a fájlt a leírásba",
