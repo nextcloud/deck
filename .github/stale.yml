@@ -9,6 +9,7 @@ exemptLabels:
   - "3. to review"
   - "discussion"
   - "bug"
+  - "enhancement"
 
 # Limit the number of actions per hour, from 1-30. Default is 30
 limitPerRun: 30
