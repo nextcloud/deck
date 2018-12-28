@@ -34,18 +34,41 @@
 
 		<div class="tabsContainer">
 			<div class="tab">
-				<ul
-					v-if="activeTab === 'Sharing'"
-					id="shareWithList"
-					class="shareWithList"
+				<div v-if="activeTab === 'Sharing'">
+
+					<multiselect v-model="value" :options="board.sharees" />
+
+					<ul
+						id="shareWithList"
+						class="shareWithList"
+					>
+						<li>
+							<avatar :user="board.owner.uid" />
+							<span class="has-tooltip username">
+								{{ board.owner.displayname }}
+							</span>
+						</li>
+						<li v-for="acl in board.acl" :key="acl.participant.uid">
+							<avatar :user="acl.participant.uid" />
+							<span class="has-tooltip username">
+								{{ acl.participant.displayname }}
+							</span>
+						</li>
+					</ul>
+				</div>
+
+				<div
+					v-if="activeTab === 'Tags'"
+					id="board-detail-labels"
 				>
-					<li>
-						<avatar :user="board.owner.uid" />
-						<span class="has-tooltip username">
-							{{ board.owner.displayname }}
-						</span>
-					</li>
-				</ul>
+					<ul class="labels">
+						<li v-for="label in board.labels" :key="label.id">
+							<span v-if="!label.edit" :style="{ backgroundColor: `#${label.color}`, color: `#${label.color || '000'}` }" class="label-title">
+								<span v-if="label.title">{{ label.title }}</span><i v-if="!label.title"><br></i>
+							</span>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -54,10 +77,14 @@
 <script>
 import { Avatar } from 'nextcloud-vue'
 import { mapState } from 'vuex'
+import Multiselect from 'vue-multiselect'
 
 export default {
 	name: 'BoardSidebar',
-	components: { Avatar },
+	components: {
+		Avatar,
+		Multiselect
+	},
 	props: {
 	},
 	data() {
@@ -123,13 +150,11 @@ export default {
 	margin: 15px 15px 0 15px;
 		li {
 			display: inline-block;
+			padding: 12px;
 			&.selected {
 				color: #000;
 				border-bottom: 1px solid #4d4d4d;
 				font-weight: 600;
-			}
-			a {
-				padding: 12px;
 			}
 		}
   }
