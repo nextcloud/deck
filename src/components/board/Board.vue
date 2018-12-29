@@ -24,23 +24,28 @@
 	<div>
 		<Controls :board="board" />
 		<div v-if="board">
-			<!-- example for external drop zone -->
-			<!-- <container :should-accept-drop="() => true" style="border:1px solid #aaa;" /> -->
 			<container lock-axix="y" orientation="horizontal" @drop="onDropStack">
-				<draggable v-for="stack in stacks" :key="stack.id" class="stack">
+				<draggable v-for="stack in stacksByBoard" :key="stack.id" class="stack">
 					<h3>{{ stack.title }}</h3>
-					<container :get-child-payload="payload(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)">
-						<draggable v-for="card in stack.cards" :key="card.id">
-							<card-item :id="card.id" />
+					<container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)">
+						<draggable v-for="card in cardsByStack(stack.id)" :key="card.id">
+							<card-item v-if="card" :id="card.id" />
 						</draggable>
 					</container>
+					<div class="card create">
+						<div title="Add card">
+							<i class="icon icon-add"></i>
+							<span class="hidden-visually">Add card</span>
+						</div>
+					</div>
+
 				</draggable>
 			</container>
 		</div>
 		<div v-else class="emptycontent">
-			<div class="icon icon-deck"></div>
-			<h2>{{ t('deck', 'Board not found')}}</h2>
-			<p></p>
+			<div class="icon icon-deck" />
+			<h2>{{ t('deck', 'Board not found') }}</h2>
+			<p />
 		</div>
 	</div>
 </template>
@@ -48,36 +53,9 @@
 <script>
 
 import { Container, Draggable } from 'vue-smooth-dnd'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import Controls from '../Controls'
 import CardItem from '../cards/CardItem'
-
-const applyDrag = (arr, dragResult) => {
-	const { removedIndex, addedIndex, payload } = dragResult
-	if (removedIndex === null && addedIndex === null) return arr
-
-	const result = [...arr]
-	let itemToAdd = payload
-
-	if (removedIndex !== null) {
-		itemToAdd = result.splice(removedIndex, 1)[0]
-	}
-
-	if (addedIndex !== null) {
-		result.splice(addedIndex, 0, itemToAdd)
-	}
-
-	return result
-}
-
-const dummyCard = function(i) {
-	return {
-		id: i,
-		order: 0,
-		title: 'card ' + i,
-		stackId: 1
-	}
-}
 
 export default {
 	name: 'Board',
@@ -98,50 +76,53 @@ export default {
 	},
 	data: function() {
 		return {
-			loading: true,
-			stacks: [
-				{ id: 1, title: 'abc', cards: [dummyCard(1), dummyCard(2), dummyCard(3), dummyCard(4), dummyCard(5)] },
-				{ id: 2, title: '234', cards: [dummyCard(6), dummyCard(7)] }
-			]
+			loading: true
 		}
 	},
 	computed: {
 		...mapState({
 			board: state => state.currentBoard
 		}),
-		orderedCards() {
-			// return (stack) => _.orderBy(this.stacks[stack].cards, 'order')
+		stacksByBoard() {
+			return this.$store.getters.stacksByBoard(this.board.id)
+		},
+		cardsByStack() {
+			return (id) => this.$store.getters.cardsByStack(id)
 		}
-
 	},
-	created: function() {
-		this.boardApi.loadById(this.id)
-			.then((board) => {
-				this.$store.dispatch('setCurrentBoard', board)
-				this.loading = false
-			})
+	watch: {
+		'$route': 'fetchData'
+	},
+	created() {
+		this.fetchData()
 	},
 	methods: {
-		onDropStack(dropResult) {
-			// TODO: persist new order in order field
-			this.stacks = applyDrag(this.stacks, dropResult)
+		fetchData() {
+			this.boardApi.loadById(this.id)
+				.then((board) => {
+					this.$store.dispatch('setCurrentBoard', board)
+					this.$store.dispatch('loadStacks', board)
+					this.loading = false
+				})
 		},
-		onDropCard(stackId, dropResult) {
-			if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
-				// TODO: persist new order in order field
-				const stacks = this.stacks
-				const stack = stacks.filter(p => p.id === stackId)[0]
-				const stackIndex = stacks.indexOf(stack)
-				const newStack = Object.assign({}, stack)
-				newStack.cards = applyDrag(newStack.cards, dropResult)
-				stacks.splice(stackIndex, 1, newStack)
-				this.stacks = stacks
-			}
+		onDropStack({ removedIndex, addedIndex }) {
+			this.$store.dispatch('orderStack', { stack: this.stacksByBoard[removedIndex], removedIndex, addedIndex })
 		},
-		payload(stackId) {
+		onDropCard({ removedIndex, addedIndex }) {
+
+		},
+		payloadForCard(stackId) {
 			return index => {
-				return this.stacks.find(stack => stack.id === stackId).cards[index]
+				return this.cardsByStack(stackId)[index]
 			}
+		},
+		createStack() {
+			let newStack = {
+				title: 'FooBar',
+				boardId: this.id,
+				order: this.stacksByBoard().length
+			}
+			this.$store.dispatch('createStack', newStack)
 		}
 	}
 }

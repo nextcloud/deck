@@ -23,7 +23,7 @@
 <template>
 	<div @click="openCard" tag="div" class="card">
 		<div class="card-upper">
-			<h3>Card {{ id }}</h3>
+			<h3>{{ card.title }}</h3>
 			<ul class="labels">
 				<li v-for="label in labels" :key="label.id" :style="labelStyle(label)"><span>{{ label.title }}</span></li>
 			</ul>
@@ -67,7 +67,7 @@ export default {
 			return false
 		},
 		card() {
-			return this.id
+			return this.$store.getters.cardById(this.id)
 		},
 		menu() {
 			return []

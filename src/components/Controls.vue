@@ -23,7 +23,7 @@
 <template>
 
 	<div class="controls">
-		<div id="app-navigation-toggle-custom" class="icon-menu" v-on:click="toggleNav" />
+		<div id="app-navigation-toggle-custom" class="icon-menu" @click="toggleNav" />
 		<div class="breadcrumb">
 			<div class="crumb svg last">
 				<router-link to="/boards" class="icon-home" title="All Boards">
@@ -35,8 +35,26 @@
 			<a href="#todo">{{ board.title }}</a>
 			<span style="display: inline;" class="icon-shared" />
 		</div>
-		<div class="board-actions">
-			<router-link :to="{name: 'board.details'}" v-tooltip="t('deck', 'Board settings')" class="icon-settings" tag="button"></router-link>
+		<div v-if="board" class="board-actions">
+			<div id="stack-add">
+				<form>
+					<label for="new-stack-input-main" class="hidden-visually">Add a new stack</label>
+					<input type="text" class="no-close" id="new-stack-input-main" placeholder="Add a new stack">
+					<button class="button-inline icon icon-add" type="submit" title="Submit">
+						<span class="hidden-visually">Submit</span>
+					</button>
+				</form>
+			</div>
+			<button title="Show archived cards">
+				<i class="icon icon-archive"></i>
+				<span class="hidden-visually">Show archived cards</span>
+			</button>
+			<button title="Toggle compact mode">
+				<i class="icon icon-toggle-compact-expanded"></i>
+				<span class="hidden-visually">Toggle compact mode</span>
+			</button>
+			<router-link v-tooltip="t('deck', 'Board settings')" :to="{name: 'board.details'}" class="icon-settings"
+				tag="button" />
 		</div>
 	</div>
 
