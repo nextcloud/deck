@@ -22,7 +22,7 @@
 
 import store from './../store/main'
 
-function boardActions(board) {
+function boardActions(item, board) {
 	const actions = [{
 		action: () => {
 		},
@@ -42,6 +42,9 @@ function boardActions(board) {
 
 	actions.push({
 		action: () => {
+			item.loading = true
+			item.utils.actions = []
+			item.menuOpened = false
 		},
 		icon: 'icon-delete',
 		text: t('deck', 'Delete board')
@@ -63,8 +66,10 @@ function boardActions(board) {
  * @returns {{id: *, classes: Array, bullet: string, text: *, router: {name: string, params: {id: *}}, utils: {actions: *[]}}}
  */
 export const boardToMenuItem = board => {
-	return {
+
+	const item = {
 		id: board.id,
+		key: board.id,
 		classes: [],
 		bullet: `#${board.color}`,
 		text: board.title,
@@ -73,9 +78,11 @@ export const boardToMenuItem = board => {
 			name: 'board',
 			params: { id: board.id }
 		},
-		utils: {
-			actions: boardActions(board)
-		},
+		utils: {},
 		board: board
 	}
+
+	item.utils.actions = boardActions(item, board)
+
+	return item
 }
