@@ -52,17 +52,17 @@ export default new Vuex.Store({
 		},
 		noneArchivedBoards: state => {
 			return state.boards.filter(board => {
-				return board.archived === false
+				return board.archived === false && !board.deletedAt
 			})
 		},
 		archivedBoards: state => {
 			return state.boards.filter(board => {
-				return board.archived === true
+				return board.archived === true && !board.deletedAt
 			})
 		},
 		sharedBoards: state => {
 			return state.boards.filter(board => {
-				return board.shared
+				return board.shared && !board.deletedAt
 			})
 		},
 		filteredBoards: state => {
@@ -86,6 +86,17 @@ export default new Vuex.Store({
 			} else {
 				state.boards.push(board)
 			}
+		},
+		/**
+		 * Removes the board from the store.
+		 *
+		 * @param state
+		 * @param board
+		 */
+		removeBoard(state, board) {
+			state.boards = state.boards.filter((b) => {
+				return board.id !== b.id
+			})
 		},
 		toggleNav(state) {
 			state.navShown = !state.navShown
@@ -122,6 +133,9 @@ export default new Vuex.Store({
 				.then((board) => {
 					commit('addBoard', board)
 				})
+		},
+		removeBoard({ commit }, board) {
+			commit('removeBoard', board)
 		},
 		setBoards({ commit }, boards) {
 			commit('setBoards', boards)

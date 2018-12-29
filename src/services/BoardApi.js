@@ -76,6 +76,36 @@ export class BoardApi {
 			})
 	}
 
+	deleteBoard(board) {
+		return axios.delete(this.url(`/boards/${board.id}`))
+			.then(
+				() => {
+					return Promise.resolve()
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	unDeleteBoard(board) {
+		return axios.post(this.url(`/boards/${board.id}/deleteUndo`))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 	loadBoards() {
 		return axios.get(this.url('/boards'))
 			.then(
