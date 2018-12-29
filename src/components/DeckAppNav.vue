@@ -26,7 +26,7 @@
 
 <script>
 
-import AppNavigation from 'nextcloud-vue/src/components/AppNavigation/AppNavigation'
+import { AppNavigation } from 'nextcloud-vue'
 import { translate as t } from 'nextcloud-server/dist/l10n'
 import { boardToMenuItem } from './../helpers/boardToMenuItem'
 import { mapGetters } from 'vuex'
