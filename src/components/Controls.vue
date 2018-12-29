@@ -35,6 +35,9 @@
 			<a href="#todo">{{ board.title }}</a>
 			<span style="display: inline;" class="icon-shared" />
 		</div>
+		<div class="board-actions">
+			<router-link :to="{name: 'board.details'}" v-tooltip="t('deck', 'Board settings')" class="icon-settings" tag="button"></router-link>
+		</div>
 	</div>
 
 </template>
@@ -52,6 +55,9 @@ export default {
 	methods: {
 		toggleNav() {
 			this.$store.dispatch('toggleNav')
+		},
+		toggleSidebar: function() {
+			this.$store.dispatch('toggleSidebar')
 		}
 	}
 }
@@ -65,6 +71,16 @@ export default {
 
 	#app-navigation-toggle-custom {
 		position: static;
+	}
+
+	.board-actions {
+		flex-grow: 1;
+		order: 100;
+		display: flex;
+		justify-content: flex-end;
+	}
+	button.icon-settings {
+		width: 44px;
 	}
 
 </style>

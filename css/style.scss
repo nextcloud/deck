@@ -526,11 +526,6 @@ input.input-inline {
 				margin-right: 2px;
 			}
 		}
-
-		button {
-			padding: 22px;
-			margin: 0;
-		}
 	}
 
 	a {
@@ -1537,7 +1532,7 @@ input.input-inline {
 	table {
 		margin-bottom: 10px;
 		border-collapse: collapse;
-		
+
 		thead {
 			background-color: var(--color-background-dark, $color-lightgrey);
 		}

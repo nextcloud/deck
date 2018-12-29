@@ -22,14 +22,12 @@
 
 <template>
 
-	<div id="content" v-bind:class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarShown }">
+	<div id="content" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
 		<DeckAppNav />
 		<div id="app-content">
 			<router-view />
 		</div>
-		<div id="app-sidebar">
-			<BoardSidebar v-if="currentBoard" :board="currentBoard" />
-		</div>
+		<router-view name="sidebar" />
 	</div>
 
 </template>
@@ -71,9 +69,17 @@ export default {
 	computed: {
 		...mapState({
 			navShown: state => state.navShown,
-			sidebarShown: state => state.sidebarShown,
+			sidebarShownState: state => state.sidebarShown,
 			currentBoard: state => state.currentBoard
-		})
+		}),
+		// TODO: properly handle sidebar showing for route subview and board sidebar
+		sidebarRouterView() {
+			console.log(this.$route)
+			return this.$route.name === 'card' || this.$route.name === 'board.details'
+		},
+		sidebarShown() {
+			return this.sidebarRouterView || this.sidebarShownState
+		}
 	},
 	provide: function() {
 		return {

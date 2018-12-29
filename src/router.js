@@ -26,6 +26,9 @@ import { generateUrl } from 'nextcloud-server/dist/router'
 import { BOARD_FILTERS } from './store/main'
 import Boards from './components/boards/Boards'
 import Board from './components/board/Board'
+import Sidebar from './components/Sidebar'
+import BoardSidebar from './components/board/BoardSidebar'
+import CardSidebar from './components/card/CardSidebar'
 
 Vue.use(Router)
 
@@ -65,12 +68,34 @@ export default new Router({
 		{
 			path: '/boards/:id',
 			name: 'board',
-			component: Board,
-			props: (route) => {
-				return {
-					id: parseInt(route.params.id, 10)
+			components: {
+				default: Board,
+				sidebar: Sidebar
+			},
+			props: {
+				default: (route) => {
+					return {
+						id: parseInt(route.params.id, 10)
+					}
 				}
-			}
+			},
+			children: [
+				{
+					path: 'details',
+					name: 'board.details',
+					components: {
+						default: Boards,
+						sidebar: BoardSidebar
+					}
+				},
+				{
+					path: 'cards/:cardId',
+					name: 'card',
+					components: {
+						sidebar: CardSidebar
+					}
+				}
+			]
 		}
 	]
 })

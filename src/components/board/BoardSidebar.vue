@@ -23,9 +23,6 @@
 <template>
 	<div class="sidebar">
 		<div class="sidebar-header">
-			<a class="icon-close" title="Close" @click="closeSidebar">
-				<span class="hidden-visually">Close</span>
-			</a>
 			<h3>{{ board.title }}</h3>
 		</div>
 
@@ -35,29 +32,64 @@
 			</li>
 		</ul>
 
-		<div class="tabs-container">
-			<ul
-				id="shareWithList"
-				class="shareWithList"
-			/>
+		<div class="tabsContainer">
+			<div class="tab">
+				<div v-if="activeTab === 'Sharing'">
+
+					<multiselect v-model="value" :options="board.sharees" />
+
+					<ul
+						id="shareWithList"
+						class="shareWithList"
+					>
+						<li>
+							<avatar :user="board.owner.uid" />
+							<span class="has-tooltip username">
+								{{ board.owner.displayname }}
+							</span>
+						</li>
+						<li v-for="acl in board.acl" :key="acl.participant.uid">
+							<avatar :user="acl.participant.uid" />
+							<span class="has-tooltip username">
+								{{ acl.participant.displayname }}
+							</span>
+						</li>
+					</ul>
+				</div>
+
+				<div
+					v-if="activeTab === 'Tags'"
+					id="board-detail-labels"
+				>
+					<ul class="labels">
+						<li v-for="label in board.labels" :key="label.id">
+							<span v-if="!label.edit" :style="{ backgroundColor: `#${label.color}`, color: `#${label.color || '000'}` }" class="label-title">
+								<span v-if="label.title">{{ label.title }}</span><i v-if="!label.title"><br></i>
+							</span>
+						</li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+import { Avatar } from 'nextcloud-vue'
+import { mapState } from 'vuex'
+import Multiselect from 'vue-multiselect'
+
 export default {
 	name: 'BoardSidebar',
+	components: {
+		Avatar,
+		Multiselect
+	},
 	props: {
-		board: {
-			type: Object,
-			default: function() {
-				return {}
-			}
-		}
 	},
 	data() {
 		return {
-			activeTab: 'shareWithList',
+			activeTab: 'Sharing',
 			tabs: [
 				{
 					name: 'Sharing',
@@ -78,11 +110,17 @@ export default {
 			]
 		}
 	},
+	computed: {
+		...mapState({
+			board: state => state.currentBoard
+		})
+	},
 	methods: {
 		closeSidebar() {
 			this.$store.dispatch('toggleSidebar')
 		},
 		setSelectedHeader(tabName) {
+			this.activeTab = tabName
 			this.tabs.forEach(tab => {
 				tab.isSelected = (tab.name === tabName)
 			})
@@ -112,14 +150,17 @@ export default {
 	margin: 15px 15px 0 15px;
 		li {
 			display: inline-block;
+			padding: 12px;
 			&.selected {
 				color: #000;
 				border-bottom: 1px solid #4d4d4d;
 				font-weight: 600;
 			}
-			a {
-				padding: 12px;
-			}
 		}
   }
+	.tabsContainer {
+		.tab {
+			padding: 0 15px 15px;
+		}
+	}
 </style>
