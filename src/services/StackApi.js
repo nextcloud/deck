@@ -22,24 +22,15 @@
 
 import axios from 'nextcloud-axios'
 
-/**
- * This class handles all the api communication with the Deck backend.
- */
-export class BoardApi {
+export class StackApi {
 
 	url(url) {
 		url = `/apps/deck${url}`
 		return OC.generateUrl(url)
 	}
 
-	/**
-	 * Updates a board.
-	 *
-	 * @param {Board} board
-	 * @return Promise
-	 */
-	updateBoard(board) {
-		return axios.put(this.url(`/boards/${board.id}`), board)
+	loadStacks(boardId) {
+		return axios.get(this.url(`/stacks/${boardId}`))
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)
@@ -54,15 +45,11 @@ export class BoardApi {
 	}
 
 	/**
-	 * Creates a new board.
-	 *
-	 * @param {{String title, String color, String hashedColor}} boardData The board data to send.
-	 * 															 hashedColor is the color in hex format, e.g. "#ff0000"
-	 * 															 color is the same color without the "#"
-	 * @return Promise
+	 * @param {Stack} stack
+	 * @returns {Promise}
 	 */
-	createBoard(boardData) {
-		return axios.post(this.url('/boards'), boardData)
+	createStack(stack) {
+		return axios.post(this.url(`/stacks`), stack)
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)
@@ -76,23 +63,8 @@ export class BoardApi {
 			})
 	}
 
-	loadBoards() {
-		return axios.get(this.url('/boards'))
-			.then(
-				(response) => {
-					return Promise.resolve(response.data)
-				},
-				(err) => {
-					return Promise.reject(err)
-				}
-			)
-			.catch((err) => {
-				return Promise.reject(err)
-			})
-	}
-
-	loadById(id) {
-		return axios.get(this.url(`/boards/${id}`))
+	reorderStack(stackId, order) {
+		return axios.put(this.url(`/stacks/${stackId}/reorder`), { order })
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)

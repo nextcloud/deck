@@ -19,36 +19,32 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 import Vue from 'vue'
-import App from './App'
-import router from './router'
-import store from './store/main'
-import { sync } from 'vuex-router-sync'
-import { translate, translatePlural } from 'nextcloud-server/dist/l10n'
-import { generateFilePath } from 'nextcloud-server/dist/router'
-import VTooltip from 'v-tooltip'
-import './models'
 
-// eslint-disable-next-line
-__webpack_nonce__ = btoa(OC.requestToken)
-// eslint-disable-next-line
-__webpack_public_path__ = generateFilePath('deck', '', 'js/')
-
-sync(store, router)
-
-Vue.mixin({
-	methods: {
-		t: translate,
-		n: translatePlural
+export default {
+	state: {
+		cards: []
+	},
+	getters: {
+		cardsByStack: state => (id) => {
+			return state.cards.filter((card) => card.stackId === id).sort((a, b) => a.order - b.order)
+		},
+		cardById: state => (id) => {
+			return state.cards.find((card) => card.id === id)
+		}
+	},
+	mutations: {
+		addCard(state, card) {
+			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			if (existingIndex !== -1) {
+				let existingCard = state.cards.find(_card => _card.id === card.id)
+				Vue.set(state.cards, existingIndex, Object.assign({}, existingCard, card))
+			} else {
+				state.cards.push(card)
+			}
+		}
+	},
+	actions: {
 	}
-})
-
-Vue.use(VTooltip)
-
-/* eslint-disable-next-line no-new */
-new Vue({
-	el: '#content',
-	router,
-	store,
-	render: h => h(App)
-})
+}

@@ -19,36 +19,30 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import Vue from 'vue'
-import App from './App'
-import router from './router'
-import store from './store/main'
-import { sync } from 'vuex-router-sync'
-import { translate, translatePlural } from 'nextcloud-server/dist/l10n'
-import { generateFilePath } from 'nextcloud-server/dist/router'
-import VTooltip from 'v-tooltip'
-import './models'
 
-// eslint-disable-next-line
-__webpack_nonce__ = btoa(OC.requestToken)
-// eslint-disable-next-line
-__webpack_public_path__ = generateFilePath('deck', '', 'js/')
+/**
+ * Board model
+ *
+ * @typedef {Object} Board
+ * @property {String} title
+ * @property {boolean} archived
+ * @property {number} shared 1 (shared) or 0 (not shared)
+ */
 
-sync(store, router)
+/**
+ * Stack model
+ *
+ * @typedef {Object} Stack
+ * @property {String} title
+ * @property {number} boardId
+ * @property {number} order
+ */
 
-Vue.mixin({
-	methods: {
-		t: translate,
-		n: translatePlural
-	}
-})
-
-Vue.use(VTooltip)
-
-/* eslint-disable-next-line no-new */
-new Vue({
-	el: '#content',
-	router,
-	store,
-	render: h => h(App)
-})
+/**
+ * Card model
+ *
+ * @typedef {Object} Card
+ * @property {String} title
+ * @property {boolean} archived
+ * @property {number} order
+ */

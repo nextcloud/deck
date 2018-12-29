@@ -24,6 +24,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { boardToMenuItem } from './../helpers/boardToMenuItem'
 import { BoardApi } from './../services/BoardApi'
+import stack from './stack'
+import card from './card'
 
 Vue.use(Vuex)
 
@@ -37,7 +39,10 @@ export const BOARD_FILTERS = {
 }
 
 export default new Vuex.Store({
-	modules: {},
+	modules: {
+		stack,
+		card
+	},
 	strict: debug,
 	state: {
 		navShown: true,
