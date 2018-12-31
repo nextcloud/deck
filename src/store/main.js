@@ -22,6 +22,7 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'nextcloud-axios'
 import { boardToMenuItem } from './../helpers/boardToMenuItem'
 import { BoardApi } from './../services/BoardApi'
 import stack from './stack'
@@ -112,6 +113,9 @@ export default new Vuex.Store({
 		setBoards(state, boards) {
 			state.boards = boards
 		},
+		setSharees(state, sharees) {
+			state.sharees = sharees
+		},
 		setBoardFilter(state, filter) {
 			state.boardFilter = filter
 		},
@@ -142,8 +146,18 @@ export default new Vuex.Store({
 		removeBoard({ commit }, board) {
 			commit('removeBoard', board)
 		},
-		setBoards({ commit }, boards) {
+		async setBoards({ commit }) {
+			const boards = await apiClient.loadBoards()
 			commit('setBoards', boards)
+		},
+		async setSharees({ commit }) {
+			const params = {
+				format: 'json',
+				perPage: 4,
+				itemType: [0, 1]
+			}
+			const { data } = await axios.get(OC.linkToOCS('apps/files_sharing/api/v1') + 'sharees', { params })
+			commit('setSharees', data.users)
 		},
 		setBoardFilter({ commmit }, filter) {
 			commmit('setBoardFilter', filter)

@@ -36,10 +36,7 @@
 
 import { mapState } from 'vuex'
 import BoardSidebar from './components/board/BoardSidebar'
-import { BoardApi } from './services/BoardApi'
 import AppNavigation from './components/navigation/AppNavigation';
-
-const boardApi = new BoardApi()
 
 export default {
 	name: 'App',
@@ -81,16 +78,9 @@ export default {
 			return this.sidebarRouterView || this.sidebarShownState
 		}
 	},
-	provide: function() {
-		return {
-			boardApi: boardApi
-		}
-	},
 	created: function() {
-		boardApi.loadBoards()
-			.then((boards) => {
-				this.$store.dispatch('setBoards', boards)
-			})
+		this.$store.dispatch('setBoards')
+		this.$store.dispatch('setSharees')
 	}
 }
 

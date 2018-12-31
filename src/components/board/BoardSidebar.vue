@@ -75,9 +75,8 @@
 </template>
 
 <script>
-import { Avatar } from 'nextcloud-vue'
+import { Avatar, Multiselect } from 'nextcloud-vue'
 import { mapState } from 'vuex'
-import Multiselect from 'vue-multiselect'
 
 export default {
 	name: 'BoardSidebar',
