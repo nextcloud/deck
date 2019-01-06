@@ -82,6 +82,13 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+		/**
+		 * Adds or replaces a board in the store.
+		 * Matches a board by it's id.
+		 *
+		 * @param state
+		 * @param board
+		 */
 		addBoard(state, board) {
 			const indexExisting = state.boards.findIndex((b) => {
 				return board.id === b.id
@@ -136,6 +143,17 @@ export default new Vuex.Store({
 				.then((board) => {
 					commit('addBoard', board)
 				})
+		},
+		/**
+		 * Updates a board API side.
+		 *
+		 * @param commit
+		 * @param board The board to update.
+		 * @return {Promise<void>}
+		 */
+		async updateBoard({ commit }, board) {
+			const storedBoard = await apiClient.updateBoard(board)
+			commit('addBoard', storedBoard)
 		},
 		createBoard({ commit }, boardData) {
 			apiClient.createBoard(boardData)

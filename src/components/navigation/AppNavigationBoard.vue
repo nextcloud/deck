@@ -21,7 +21,7 @@
   -->
 <template>
 	<router-link :id="`board-${board.id}`"
-		:title="board.title" :class="[{'icon-loading-small': loading, deleted: deleted }, classes]"
+		:title="board.title" :class="[{'icon-loading-small': loading, deleted: deleted, editing: editing }, classes]"
 		:to="routeTo" tag="li">
 		<div :style="{ backgroundColor: `#${board.color}` }" class="app-navigation-entry-bullet" />
 		<a href="#">
@@ -47,6 +47,16 @@
 				:title="t('settings', 'Undo')"
 				class="app-navigation-entry-deleted-button icon-history"
 				@click="unDelete" />
+		</div>
+
+		<!-- edit entry -->
+		<div v-if="editing" class="app-navigation-entry-edit">
+			<form @submit.prevent.stop="applyEdit">
+				<input v-model="editTitle" type="text">
+				<input type="submit" value="" class="icon-confirm">
+				<input type="submit" value="" class="icon-close"
+					@click.stop.prevent="cancelEdit">
+			</form>
 		</div>
 	</router-link>
 </template>
@@ -74,8 +84,10 @@ export default {
 			classes: [],
 			deleted: false,
 			loading: false,
+			editing: false,
 			menuOpen: false,
-			undoTimeoutHandle: null
+			undoTimeoutHandle: null,
+			editTitle: ''
 		}
 	},
 	computed: {
@@ -96,7 +108,11 @@ export default {
 			if (this.loading === false) {
 
 				actions.push({
-					action: () => {},
+					action: () => {
+						this.hideMenu()
+						this.editTitle = this.board.title
+						this.editing = true
+					},
 					icon: 'icon-edit',
 					text: t('deck', 'Edit board')
 				})
@@ -160,11 +176,20 @@ export default {
 		hideMenu() {
 			this.menuOpen = false
 		},
-		cancelEdit(e) {
-			const editingIdx = this.classes.indexOf('editing')
-			if (editingIdx !== -1) {
-				this.classes.splice(editingIdx, 1)
+		applyEdit(e) {
+			this.editing = false
+			if (this.editTitle) {
+				this.loading = true
+				const copy = JSON.parse(JSON.stringify(this.board))
+				copy.title = this.editTitle
+				this.$store.dispatch('updateBoard', copy)
+					.then(() => {
+						this.loading = false
+					})
 			}
+		},
+		cancelEdit(e) {
+			this.editing = false
 		}
 	},
 	inject: [
@@ -172,3 +197,9 @@ export default {
 	]
 }
 </script>
+
+<style lang="scss" scoped>
+	#app-navigation #deck-navigation .editing {
+		height: auto !important;
+	}
+</style>
