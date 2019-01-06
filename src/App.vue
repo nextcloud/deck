@@ -36,7 +36,10 @@
 
 import { mapState } from 'vuex'
 import BoardSidebar from './components/board/BoardSidebar'
-import AppNavigation from './components/navigation/AppNavigation';
+import AppNavigation from './components/navigation/AppNavigation'
+import { BoardApi } from './services/BoardApi'
+
+const boardApi = new BoardApi()
 
 export default {
 	name: 'App',
@@ -76,6 +79,11 @@ export default {
 		},
 		sidebarShown() {
 			return this.sidebarRouterView || this.sidebarShownState
+		}
+	},
+	provide: function() {
+		return {
+			boardApi: boardApi
 		}
 	},
 	created: function() {
