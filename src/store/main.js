@@ -146,11 +146,11 @@ export default new Vuex.Store({
 		removeBoard({ commit }, board) {
 			commit('removeBoard', board)
 		},
-		async setBoards({ commit }) {
+		async loadBoards({ commit }) {
 			const boards = await apiClient.loadBoards()
 			commit('setBoards', boards)
 		},
-		async setSharees({ commit }) {
+		async loadSharees({ commit }) {
 			const params = {
 				format: 'json',
 				perPage: 4,

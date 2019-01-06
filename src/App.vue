@@ -79,8 +79,8 @@ export default {
 		}
 	},
 	created: function() {
-		this.$store.dispatch('setBoards')
-		this.$store.dispatch('setSharees')
+		this.$store.dispatch('loadBoards')
+		this.$store.dispatch('loadSharees')
 	}
 }
 
