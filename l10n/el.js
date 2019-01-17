@@ -23,6 +23,8 @@ OC.L10N.register(
     "Close" : "Κλείσιμο",
     "Sharing" : "Διαμοιρασμός",
     "Tags" : "Ετικέτες",
+    "Deleted items" : "Διαγραμμένα αντικείμενα",
+    "Timeline" : "Χρονοδιάγραμμα",
     "Select users or groups to share with" : "Επιλέξτε χρήστες ή ομάδες με τις οποίες θα μοιραστείτε",
     "No matching user or group found." : "Δεν βρέθηκε χρήστης ή ομάδα να ταιριάζει.",
     "Loading" : "Γίνεται φόρτωση",
