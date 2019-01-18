@@ -13,7 +13,7 @@
     "angular-animate": "^1.7.5",
     "angular-file-upload": "^2.5.0",
     "angular-markdown-it": "^0.6.1",
-    "angular-sanitize": "^1.7.5",
+    "angular-sanitize": "^1.7.6",
     "babel-polyfill": "^6.26.0",
     "markdown-it": "^8.4.2",
     "markdown-it-link-target": "^1.0.2",
