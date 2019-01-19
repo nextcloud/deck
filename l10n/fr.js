@@ -64,8 +64,15 @@ OC.L10N.register(
     "{user} has moved the card {card} from stack {stackBefore} to {stack}" : "{user} a déplacé la carte {card} de la pile {stackBefore} vers {stack}",
     "You have added the attachment {attachment} to card {card}" : "Vous avez ajouté la pièce jointe {attachment} à la carte {card}",
     "{user} has added the attachment {attachment} to card {card}" : "{user} a ajouté la pièce jointe {attachment} à la carte {card}",
+    "You have updated the attachment {attachment} on card {card}" : "Vous avez mis à jour la pièce jointe {attachment} de la carte {card}",
+    "{user} has updated the attachment {attachment} to card {card}" : "{user} a mis à jour la pièce jointe {attachment} de la carte {card}",
+    "You have deleted the attachment {attachment} from card {card}" : "Vous avez supprimé la pièce jointe {attachment} de la carte {card}",
+    "{user} has deleted the attachment {attachment} to card {card}" : "{user} a supprimé la pièce jointe {attachment} de la carte {card}",
+    "You have restored the attachment {attachment} to card {card}" : "Vous avez restauré la pièce jointe {attachment} de la carte {card}",
+    "{user} has restored the attachment {attachment} to card {card}" : "{user} a restauré la pièce jointe {attachment} de la carte {card}",
     "You have commented on card {card}" : "Vous avez commenté la carte {card}",
     "{user} has commented on card {card}" : "{user} a commenté la carte {card}",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "La <strong>description de la carte</strong> présente dans le Deck app a été modifiée",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Modifications dans <strong>Deck app</strong>",
     "Personal" : "Personnel",
@@ -184,6 +191,7 @@ OC.L10N.register(
     "Move board to archive" : "Déplacer le tableau vers l'archive",
     "Create a new board" : "Créer un nouveau tableau",
     "Settings" : "Paramètres",
-    "Limit deck to groups" : "Limiter deck aux groupes"
+    "Limit deck to groups" : "Limiter deck aux groupes",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limiter le Deck empêchera les utilisateurs ne faisant pas partie de ces groupes de créer leurs propres tableaux. Les utilisateurs pourront toujours travailler sur des tableaux qui ont été partagés avec eux."
 },
 "nplurals=2; plural=(n > 1);");
