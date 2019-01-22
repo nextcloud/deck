@@ -59,6 +59,7 @@ OC.L10N.register(
     "Add a card description…" : "Afegeix una descripció de la targeta ...",
     "Shared boards" : "Taulers compartits",
     "Move board to archive" : "Mou la placa a l'arxiu",
-    "Create a new board" : "Crear nova"
+    "Create a new board" : "Crear nova",
+    "Settings" : "Paràmetres"
 },
 "nplurals=2; plural=(n != 1);");
