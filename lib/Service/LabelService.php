@@ -92,7 +92,14 @@ class LabelService {
 
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
 
-		$this->checkDuplicateTitle($boardId, $title);
+		//$this->checkDuplicateTitle($boardId, $title);
+		$boardLabels = $this->labelMapper->findAll($boardId);
+		foreach($boardLabels as $boardLabel) {
+			if ($boardLabel->getTitle() === $title) {
+				throw new BadRequestException('title must be unique');
+				break;
+			}
+		}
 
 		if ($this->boardService->isArchived(null, $boardId)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
@@ -157,7 +164,18 @@ class LabelService {
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
 		
 		$label = $this->find($id);
-		$this->checkDuplicateTitle($label->getBoardId(), $title);
+		//$this->checkDuplicateTitle($label->getBoardId(), $title);
+		
+		$boardLabels = $this->labelMapper->findAll($label->getBoardId());
+		foreach($boardLabels as $boardLabel) {
+			if ($boardLabel->getId() === $label->getId()) {
+				continue;
+			}
+			if ($boardLabel->getTitle() === $title) {
+				throw new BadRequestException('title must be unique');
+				break;
+			}
+		}
 		
 		if ($this->boardService->isArchived($this->labelMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
