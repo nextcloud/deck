@@ -45,7 +45,7 @@ OC.L10N.register(
     "Done" : "Feito",
     "Submit" : "Enviar ",
     "Show archived cards" : "Amosar as tarxetas arquivadas",
-    "Hide archived cards" : "Agochar as tarxetas arquivadas",
+    "Hide archived cards" : "Agachar as tarxetas arquivadas",
     "All Boards" : "Todos os taboleiros",
     "Archived cards" : "Tarxetas arquivadas",
     "Actions" : "Accións",
