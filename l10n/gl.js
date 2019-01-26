@@ -49,7 +49,7 @@ OC.L10N.register(
     "All Boards" : "Todos os taboleiros",
     "Archived cards" : "Tarxetas arquivadas",
     "Actions" : "Accións",
-    "Enter a card title" : "Insira o título da tarxeta",
+    "Enter a card title" : "Introduza o título da tarxeta",
     "Close" : "Pechar",
     "Sharing" : "Compartindo",
     "Tags" : "Etiquetas",
