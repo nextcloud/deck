@@ -30,7 +30,7 @@
     "karma": "^3.1.4",
     "mini-css-extract-plugin": "^0.5.0",
     "uglifyjs-webpack-plugin": "^2.1.1",
-    "webpack": "^4.28.4",
+    "webpack": "^4.29.0",
     "webpack-cli": "^3.2.0",
     "webpack-merge": "^4.2.1"
   },
