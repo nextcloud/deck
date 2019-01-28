@@ -246,6 +246,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.cardDelete = function (card) {
 		CardService.delete(card.id).then(function () {
 			StackService.removeCard(card);
+			$scope.sidebar.show = false;
 		});
 	};
 
