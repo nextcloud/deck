@@ -347,15 +347,19 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			$scope.status.createLabel = false;
 			$scope.newLabel = {};
 		}).catch(err => {
-			OC.Notification.showTemporary('Duplicate label name is not allowed');
+			OC.Notification.showTemporary(err);
 		});
+	};
+
+	$scope.labelUpdateBefore = function (label) {
+		label.renameTitle = label.title;
 	};
 
 	$scope.labelUpdate = function (label) {
 		label.edit = false;
 		LabelService.update(label).catch(err => {
-			label.title('XXX');
-			OC.Notification.showTemporary('Duplicate label name is not allowed');
+			label.title = label.renameTitle;
+			OC.Notification.showTemporary(err);
 		});
 
 		// update labels in UI

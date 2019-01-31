@@ -153,7 +153,7 @@ class LabelService {
 			throw new BadRequestException('label id must be a number');
 		}
 
-		if ($title === false || $title === null) {
+		if ($title === false || $title === null || $title === "") {
 			throw new BadRequestException('title must be provided');
 		}
 
