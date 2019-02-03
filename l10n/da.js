@@ -64,6 +64,7 @@ OC.L10N.register(
     "Add a card description…" : "Tilføj en beskrivelse...",
     "Shared boards" : "Delte lister",
     "Move board to archive" : "Flyt liste til arkiv",
-    "Create a new board" : "Opret ny liste"
+    "Create a new board" : "Opret ny liste",
+    "Settings" : "Indstillinger"
 },
 "nplurals=2; plural=(n != 1);");
