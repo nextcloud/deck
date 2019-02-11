@@ -9,3 +9,5 @@ tests/integration/vendor/
 tests/integration/composer.lock
 vendor/
 *.lock
+
+\.idea/
