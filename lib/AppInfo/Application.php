@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\AppInfo;
 
+use Exception;
 use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
@@ -30,6 +31,7 @@ use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
+use OCA\Deck\Service\FullTextSearchService;
 use OCP\AppFramework\App;
 use OCA\Deck\Middleware\SharingMiddleware;
 use OCP\Collaboration\Resources\IManager;
@@ -39,13 +41,20 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IURLGenerator;
 use OCP\INavigationManager;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 class Application extends App {
+
+
+	/** @var FullTextSearchService */
+	private $fullTextSearchService;
+
 
 	/**
 	 * Application constructor.
 	 *
 	 * @param array $urlParams
+	 *
 	 * @throws \OCP\AppFramework\QueryException
 	 */
 	public function __construct(array $urlParams = array()) {
@@ -179,4 +188,47 @@ class Application extends App {
 			\OCP\Util::addScript('deck', 'build/collections');
 		});
 	}
+
+	public function registerFullTextSearch() {
+
+		$c = $this->getContainer();
+		try {
+			$this->fullTextSearchService = $c->query(FullTextSearchService::class);
+		} catch (Exception $e) {
+			return;
+		}
+
+		$eventDispatcher = \OC::$server->getEventDispatcher();
+		$eventDispatcher->addListener(
+			'\OCA\Deck\Card::onCreate', function(GenericEvent $e) {
+			$this->fullTextSearchService->onCardCreated($e);
+		}
+		);
+		$eventDispatcher->addListener(
+			'\OCA\Deck\Card::onUpdate', function(GenericEvent $e) {
+			$this->fullTextSearchService->onCardUpdated($e);
+		}
+		);
+		$eventDispatcher->addListener(
+			'\OCA\Deck\Card::onDelete', function(GenericEvent $e) {
+			$this->fullTextSearchService->onCardDeleted($e);
+		}
+		);
+		$eventDispatcher->addListener(
+			'\OCA\Deck\Board::onShareNew', function(GenericEvent $e) {
+			$this->fullTextSearchService->onBoardShares($e);
+		}
+		);
+		$eventDispatcher->addListener(
+			'\OCA\Deck\Board::onShareEdit', function(GenericEvent $e) {
+			$this->fullTextSearchService->onBoardShares($e);
+		}
+		);
+		$eventDispatcher->addListener(
+			'\OCA\Deck\Board::onShareDelete', function(GenericEvent $e) {
+			$this->fullTextSearchService->onBoardShares($e);
+		}
+		);
+	}
+
 }
