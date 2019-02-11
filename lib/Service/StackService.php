@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
+ * @author Maxence Lange <maxence@artificial-owl.com>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -25,17 +26,18 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
+use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
-use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
-use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\StatusException;
-use OCA\Deck\BadRequestException;
-use OCP\Comments\ICommentsManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 
 class StackService {
@@ -50,6 +52,8 @@ class StackService {
 	private $assignedUsersMapper;
 	private $attachmentService;
 	private $activityManager;
+	/** @var EventDispatcherInterface */
+	private $eventDispatcher;
 	private $changeHelper;
 
 	public function __construct(
@@ -63,6 +67,7 @@ class StackService {
 		AssignedUsersMapper $assignedUsersMapper,
 		AttachmentService $attachmentService,
 		ActivityManager $activityManager,
+		EventDispatcherInterface $eventDispatcher,
 		ChangeHelper $changeHelper
 	) {
 		$this->stackMapper = $stackMapper;
@@ -75,13 +80,14 @@ class StackService {
 		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->attachmentService = $attachmentService;
 		$this->activityManager = $activityManager;
+		$this->eventDispatcher = $eventDispatcher;
 		$this->changeHelper = $changeHelper;
 	}
 
 	private function enrichStackWithCards($stack, $since = -1) {
 		$cards = $this->cardMapper->findAll($stack->getId(), null, null, $since);
 
-		if(\count($cards) === 0) {
+		if (\count($cards) === 0) {
 			return;
 		}
 
@@ -100,6 +106,7 @@ class StackService {
 
 	/**
 	 * @param $stackId
+	 *
 	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
@@ -118,11 +125,13 @@ class StackService {
 			$card->setAttachmentCount($this->attachmentService->count($card->getId()));
 		}
 		$stack->setCards($cards);
+
 		return $stack;
 	}
 
 	/**
 	 * @param $boardId
+	 *
 	 * @return array
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws BadRequestException
@@ -135,18 +144,23 @@ class StackService {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
 		$stacks = $this->stackMapper->findAll($boardId);
 		$this->enrichStacksWithCards($stacks, $since);
+
 		return $stacks;
 	}
 
 	public function fetchDeleted($boardId) {
-		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission(
+			$this->boardMapper, $boardId, Acl::PERMISSION_READ
+		);
 		$stacks = $this->stackMapper->findDeleted($boardId);
 		$this->enrichStacksWithCards($stacks);
+
 		return $stacks;
 	}
 
 	/**
 	 * @param $boardId
+	 *
 	 * @return array
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws BadRequestException
@@ -169,6 +183,7 @@ class StackService {
 			}
 			$stacks[$stackIndex]->setCards($cards);
 		}
+
 		return $stacks;
 	}
 
@@ -176,6 +191,7 @@ class StackService {
 	 * @param $title
 	 * @param $boardId
 	 * @param integer $order
+	 *
 	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
@@ -206,13 +222,22 @@ class StackService {
 		$stack->setBoardId($boardId);
 		$stack->setOrder($order);
 		$stack = $this->stackMapper->insert($stack);
-		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_CREATE);
+		$this->activityManager->triggerEvent(
+			ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_CREATE
+		);
 		$this->changeHelper->boardChanged($boardId);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Stack::onCreate',
+			new GenericEvent(null, ['id' => $stack->getId(), 'stack' => $stack])
+		);
+
 		return $stack;
 	}
 
 	/**
 	 * @param $id
+	 *
 	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
@@ -221,7 +246,7 @@ class StackService {
 	 */
 	public function delete($id) {
 
-		if ( is_numeric($id) === false ) {
+		if (is_numeric($id) === false) {
 			throw new BadRequestException('stack id must be a number');
 		}
 
@@ -231,9 +256,16 @@ class StackService {
 		$stack->setDeletedAt(time());
 		$stack = $this->stackMapper->update($stack);
 
-		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_DELETE);
+		$this->activityManager->triggerEvent(
+			ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_DELETE
+		);
 		$this->changeHelper->boardChanged($stack->getBoardId());
 		$this->enrichStackWithCards($stack);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Stack::onDelete', new GenericEvent(null, ['id' => $id, 'stack' => $stack])
+		);
+
 		return $stack;
 	}
 
@@ -243,6 +275,7 @@ class StackService {
 	 * @param $boardId
 	 * @param $order
 	 * @param $deletedAt
+	 *
 	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
@@ -280,14 +313,22 @@ class StackService {
 		$stack->setDeletedAt($deletedAt);
 		$changes->setAfter($stack);
 		$stack = $this->stackMapper->update($stack);
-		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_STACK_UPDATE);
+		$this->activityManager->triggerUpdateEvents(
+			ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_STACK_UPDATE
+		);
 		$this->changeHelper->boardChanged($stack->getBoardId());
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Stack::onUpdate', new GenericEvent(null, ['id' => $id, 'stack' => $stack])
+		);
+
 		return $stack;
 	}
 
 	/**
 	 * @param $id
 	 * @param $order
+	 *
 	 * @return array
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
@@ -325,6 +366,7 @@ class StackService {
 			$result[$stack->getOrder()] = $stack;
 		}
 		$this->changeHelper->boardChanged($stackToSort->getBoardId());
+
 		return $result;
 	}
 }
