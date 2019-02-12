@@ -73,7 +73,7 @@
 							<h4>
 								<span class="editable-inline"
 									ng-show="!c.status.editCard"
-									ng-click="startTitleEdit(c)">{{cardservice.get(c.id).title}}</span>
+									ng-click="$event.stopPropagation(); startTitleEdit(c)">{{cardservice.get(c.id).title}}</span>
 								<form ng-if="c.status.editCard" ng-submit="finishTitleEdit(c)">
 									<input
 											class="input-inline"
