@@ -1,4 +1,7 @@
 { "translations": {
+    "Please provide a content for your comment." : "Podaj treść komentarza.",
+    "Posting the comment failed." : "Publikowanie komentarza nie powiodło się.",
+    "The comment has been deleted" : "Komentarz został usunięty",
     "The associated stack is deleted as well, it will be restored as well." : "Powiązany blok został również usunięty, zostanie on także przywrócony.",
     "Restore associated stack" : "Przywróć powiązany blok",
     "Remove user from card" : "Usuń użytkownika z karty",
