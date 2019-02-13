@@ -130,7 +130,6 @@ OC.L10N.register(
     "Deleted items" : "Slettede element",
     "Timeline" : "Tidslinje",
     "Select users or groups to share with" : "Velg brukere og grupper du vil dele med",
-    "Access for" : "Tilgang for",
     "No matching user or group found." : "Ingen treff på bruker eller gruppe.",
     "Loading" : "Laster",
     "Edit" : "Rediger",

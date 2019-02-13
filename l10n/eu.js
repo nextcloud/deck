@@ -40,7 +40,6 @@ OC.L10N.register(
     "Deleted items" : "Ezabatutako elementuak",
     "Timeline" : "Denbora-lerroa",
     "Select users or groups to share with" : "Partekatzeko erabiltzaile eta taldeak hautatu",
-    "Access for" : "Sarbidea",
     "No matching user or group found." : "Ados datorren erabiltzailerik edo talderik ez da topatu",
     "Loading" : "Kargatzen",
     "Edit" : "Editatu",

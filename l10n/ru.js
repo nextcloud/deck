@@ -85,7 +85,6 @@ OC.L10N.register(
     "Deleted items" : "Объекты в корзине",
     "Timeline" : "Шкала времени",
     "Select users or groups to share with" : "Поделиться с пользователями или группами",
-    "Access for" : "Доступ для",
     "No matching user or group found." : "Не найдено соответствующих групп или пользователей.",
     "Loading" : "Загрузка",
     "Edit" : "Редактировать",

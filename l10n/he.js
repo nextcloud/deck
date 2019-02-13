@@ -37,7 +37,6 @@ OC.L10N.register(
     "Sharing" : "שיתוף",
     "Tags" : "תגיות",
     "Select users or groups to share with" : "נא לבחור משתמשים או קבוצות לשתף אתם",
-    "Access for" : "גישה לטובת",
     "No matching user or group found." : "לא נמצא משתמש או קבוצה.",
     "Loading" : "בטעינה",
     "Edit" : "עריכה",

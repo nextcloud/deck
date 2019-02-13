@@ -42,7 +42,6 @@ OC.L10N.register(
     "Deleted items" : "Törölt elemek",
     "Timeline" : "Idővonal",
     "Select users or groups to share with" : "Válassz felhasználókat vagy csoportokat a megosztáshoz",
-    "Access for" : "Hozzáfér",
     "No matching user or group found." : "Nem található egyező felhasználó vagy csoport.",
     "Loading" : "Betöltés",
     "Edit" : "Szerkesztés",

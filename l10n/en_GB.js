@@ -27,7 +27,6 @@ OC.L10N.register(
     "Sharing" : "Sharing",
     "Tags" : "Tags",
     "Select users or groups to share with" : "Select users or groups to share with",
-    "Access for" : "Access for",
     "No matching user or group found." : "No matching user or group found.",
     "Loading" : "Loading",
     "Edit" : "Edit",

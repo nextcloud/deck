@@ -130,7 +130,6 @@ OC.L10N.register(
     "Deleted items" : "Verwijderde objecten",
     "Timeline" : "Tijdlijn",
     "Select users or groups to share with" : "Gebruikers of groepen selecteren om te delen",
-    "Access for" : "Toegang voor",
     "No matching user or group found." : "Geen passende gebruiker of groep gevonden",
     "Loading" : "Laden",
     "Edit" : "Bewerken",

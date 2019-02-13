@@ -130,7 +130,6 @@ OC.L10N.register(
     "Deleted items" : "Обрисане ставке",
     "Timeline" : "Временска оса",
     "Select users or groups to share with" : "Одаберите кориснике или групе за дељење",
-    "Access for" : "Приступ за",
     "No matching user or group found." : "Нема корисника ни група који одговарају претрази.",
     "Loading" : "Учитавам",
     "Edit" : "Измени",

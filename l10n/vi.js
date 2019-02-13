@@ -68,7 +68,6 @@ OC.L10N.register(
     "Sharing" : "Đang chia sẽ",
     "Tags" : "Thẻ",
     "Select users or groups to share with" : "Chọn người dùng hoặc nhóm để chia sẽ với",
-    "Access for" : "Truy cập cho",
     "No matching user or group found." : "Không tìm thấy người dùng hoặc nhóm.",
     "Loading" : "Đang tải",
     "Edit" : "Chỉnh sửa",

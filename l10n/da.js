@@ -25,7 +25,6 @@ OC.L10N.register(
     "Sharing" : "Deling",
     "Tags" : "Mærkat",
     "Select users or groups to share with" : "Vælg brugere eller grupper og dele med",
-    "Access for" : "Adgang for",
     "No matching user or group found." : "Ingen bruger eller gruppe fundet",
     "Loading" : "Loader",
     "Edit" : "Redigér",

@@ -24,7 +24,6 @@ OC.L10N.register(
     "Sharing" : "გაზიარება",
     "Tags" : "ტეგები",
     "Select users or groups to share with" : "გასაზიარებლად აირჩიეთ მომხმარებლები ან ჯგუფები",
-    "Access for" : "წვდომა ობიექტისთვის",
     "No matching user or group found." : "მომხმარებლები ან ჯგუფები ვერ იქნა ნაპოვნი.",
     "Loading" : "იტვირთება",
     "Edit" : "შეცვლა",

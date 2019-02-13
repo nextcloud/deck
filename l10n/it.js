@@ -130,7 +130,6 @@ OC.L10N.register(
     "Deleted items" : "Elementi eliminati",
     "Timeline" : "Linea temporale",
     "Select users or groups to share with" : "Seleziona utenti o gruppi con cui condividere",
-    "Access for" : "Accesso per",
     "No matching user or group found." : "Nessun utente  o gruppo trovato.",
     "Loading" : "Caricamento",
     "Edit" : "Modifica",

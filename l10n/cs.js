@@ -130,7 +130,6 @@ OC.L10N.register(
     "Deleted items" : "Smazané položky",
     "Timeline" : "Časová osa",
     "Select users or groups to share with" : "Vyberte uživatele nebo skupiny pro sdílení",
-    "Access for" : "Přístup pro",
     "No matching user or group found." : "Nevyhovuje žádný uživatel ani skupina",
     "Loading" : "Načítání",
     "Edit" : "Upravit",

@@ -83,7 +83,6 @@ OC.L10N.register(
     "Deleted items" : "削除されたアイテム",
     "Timeline" : "タイムライン",
     "Select users or groups to share with" : "共有するユーザーまたはグループを選択する",
-    "Access for" : "のためのアクセス",
     "No matching user or group found." : "一致するユーザーまたはグループが見つかりません。",
     "Loading" : "読み込み中",
     "Edit" : "編集",
