@@ -307,6 +307,9 @@ class BoardService {
 
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
+		if ($board->getDeletedAt() > 0) {
+			throw new BadRequestException('This board has already been deleted');
+		}
 		$board->setDeletedAt(time());
 		$board = $this->boardMapper->update($board);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_DELETE);
