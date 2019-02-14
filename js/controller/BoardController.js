@@ -327,13 +327,15 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		// remove from cards
 		var cards = CardService.data;
 		for (var card in cards) {
-			var labelsFromCard = cards[card].labels;
+			if (Object.prototype.hasOwnProperty.call(cards, card)) {
+				var labelsFromCard = cards[card].labels;
 
-			labelsFromCard.forEach(function (labelFromCard, index) {
-				if (labelFromCard.id === label.id) {
-					cards[card].labels.splice(index, 1);
-				}
-			});
+				labelsFromCard.forEach(function (labelFromCard, index) {
+					if (labelFromCard.id === label.id) {
+						cards[card].labels.splice(index, 1);
+					}
+				});
+			}
 		}
 	};
 
@@ -353,13 +355,15 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		// update labels in UI
 		var cards = CardService.data;
 		for (var card in cards) {
-			var labelsFromCard = cards[card].labels;
+			if (Object.prototype.hasOwnProperty.call(cards, card)) {
+				var labelsFromCard = cards[card].labels;
 
-			labelsFromCard.forEach(function (labelFromCard, index) {
-				if (labelFromCard.id === label.id) {
-					cards[card].labels[index] = label;
-				}
-			});
+				labelsFromCard.forEach(function (labelFromCard, index) {
+					if (labelFromCard.id === label.id) {
+						cards[card].labels[index] = label;
+					}
+				});
+			}
 		}
 	};
 
