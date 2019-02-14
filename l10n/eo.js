@@ -130,6 +130,7 @@ OC.L10N.register(
     "Deleted items" : "Forigitaj elementoj",
     "Timeline" : "Kronologio",
     "Select users or groups to share with" : "Elektu uzantojn aŭ grupojn, kun kiuj vi volas kunhavigi",
+    "Group" : "Grupo",
     "No matching user or group found." : "Neniu kongrua uzanto aŭ grupo trovita.",
     "Loading" : "Ŝargante",
     "Edit" : "Redakti",

@@ -130,6 +130,7 @@ OC.L10N.register(
     "Deleted items" : "Silinmiş ögeler",
     "Timeline" : "Zaman tüneli",
     "Select users or groups to share with" : "Paylaşılacak kullanıcı ya da grupları seçin",
+    "Group" : "Grup",
     "No matching user or group found." : "Eşleşen bir kullanıcı ya da grup bulunamadı.",
     "Loading" : "Yükleniyor",
     "Edit" : "Düzenle",
