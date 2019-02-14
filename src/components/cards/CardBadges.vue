@@ -25,7 +25,7 @@
 		<i v-if="true" class="icon icon-description" title="" />
 		<span v-if="true" class="due">
 			<i class="icon icon-badge" />
-			<span data-timestamp="" class="live-relative-timestamp"></span>
+			<span data-timestamp="" class="live-relative-timestamp" />
 		</span>
 		<div v-if="true" class="card-tasks">
 			<i class="icon icon-checkmark" />
@@ -53,7 +53,10 @@ export default {
 	name: 'CardBadges',
 	components: { Avatar },
 	props: {
-		id: {}
+		id: {
+			type: Number,
+			default: null
+		}
 	},
 	computed: {
 		compactMode() {

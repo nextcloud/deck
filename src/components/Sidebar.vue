@@ -25,7 +25,7 @@
 		<span class="icon-close" title="Close" @click="closeSidebar">
 			<span class="hidden-visually">Close</span>
 		</span>
-		<router-view name="sidebar"></router-view>
+		<router-view name="sidebar" />
 	</div>
 
 </template>

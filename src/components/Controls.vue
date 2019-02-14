@@ -39,18 +39,19 @@
 			<div id="stack-add">
 				<form>
 					<label for="new-stack-input-main" class="hidden-visually">Add a new stack</label>
-					<input type="text" class="no-close" id="new-stack-input-main" placeholder="Add a new stack">
+					<input id="new-stack-input-main" type="text" class="no-close"
+						placeholder="Add a new stack">
 					<button class="button-inline icon icon-add" type="submit" title="Submit">
 						<span class="hidden-visually">Submit</span>
 					</button>
 				</form>
 			</div>
 			<button title="Show archived cards">
-				<i class="icon icon-archive"></i>
+				<i class="icon icon-archive" />
 				<span class="hidden-visually">Show archived cards</span>
 			</button>
 			<button title="Toggle compact mode">
-				<i class="icon icon-toggle-compact-expanded"></i>
+				<i class="icon icon-toggle-compact-expanded" />
 				<span class="hidden-visually">Toggle compact mode</span>
 			</button>
 			<router-link v-tooltip="t('deck', 'Board settings')" :to="{name: 'board.details'}" class="icon-settings"

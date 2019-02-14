@@ -34,7 +34,7 @@
 					</container>
 					<div class="card create">
 						<div title="Add card">
-							<i class="icon icon-add"></i>
+							<i class="icon icon-add" />
 							<span class="hidden-visually">Add card</span>
 						</div>
 					</div>
@@ -53,7 +53,7 @@
 <script>
 
 import { Container, Draggable } from 'vue-smooth-dnd'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import Controls from '../Controls'
 import CardItem from '../cards/CardItem'
 

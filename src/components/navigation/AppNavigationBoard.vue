@@ -102,6 +102,8 @@ export default {
 			}
 		},
 		actions: function() {
+			/* eslint-disable vue/no-side-effects-in-computed-properties */
+			/* eslint-disable vue/no-async-in-computed-properties */
 			const actions = []
 
 			// do not show actions while the item is loading

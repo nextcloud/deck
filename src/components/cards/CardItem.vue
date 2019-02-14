@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div @click="openCard" tag="div" class="card">
+	<div tag="div" class="card" @click="openCard">
 		<div class="card-upper">
 			<h3>{{ card.title }}</h3>
 			<ul class="labels">
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { Avatar, PopoverMenu } from 'nextcloud-vue'
+import { PopoverMenu } from 'nextcloud-vue'
 import ClickOutside from 'vue-click-outside'
 
 import CardBadges from './CardBadges'
@@ -55,7 +55,10 @@ export default {
 	},
 	mixins: [Color],
 	props: {
-		id: {}
+		id: {
+			type: Number,
+			default: null
+		}
 	},
 	data() {
 		return {

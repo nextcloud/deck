@@ -24,12 +24,14 @@ export default {
 	methods: {
 		hexToRgb(hex) {
 			let result = /^#?([A-Fa-f\d]{2})([A-Fa-f\d]{2})([A-Fa-f\d]{2})$/i.exec(hex)
-			return result
-				? {
+			if (result) {
+				return {
 					r: parseInt(result[1], 16),
 					g: parseInt(result[2], 16),
 					b: parseInt(result[3], 16)
-				} : null
+				}
+			}
+			return null
 		},
 		rgb2hls(rgb) {
 			// RGB2HLS by Garry Tan
