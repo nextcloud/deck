@@ -93,6 +93,7 @@ class LabelService {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
 
 		//$this->checkDuplicateTitle($boardId, $title);
+		$boardLabels = array();
 		$boardLabels = $this->labelMapper->findAll($boardId);
 		foreach($boardLabels as $boardLabel) {
 			if ($boardLabel->getTitle() === $title) {
@@ -166,6 +167,7 @@ class LabelService {
 		$label = $this->find($id);
 		//$this->checkDuplicateTitle($label->getBoardId(), $title);
 		
+		$boardLabels = array();
 		$boardLabels = $this->labelMapper->findAll($label->getBoardId());
 		foreach($boardLabels as $boardLabel) {
 			if ($boardLabel->getId() === $label->getId()) {
