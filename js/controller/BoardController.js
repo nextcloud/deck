@@ -323,7 +323,20 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		// remove from board data
 		var i = BoardService.getCurrent().labels.indexOf(label);
 		BoardService.getCurrent().labels.splice(i, 1);
-		// TODO: remove from cards
+		
+		// remove from cards
+		var cards = CardService.data;
+		for (var card in cards) {
+			if (Object.prototype.hasOwnProperty.call(cards, card)) {
+				var labelsFromCard = cards[card].labels;
+
+				labelsFromCard.forEach(function (labelFromCard, index) {
+					if (labelFromCard.id === label.id) {
+						cards[card].labels.splice(index, 1);
+					}
+				});
+			}
+		}
 	};
 
 	$scope.labelCreate = function (label) {
@@ -338,6 +351,20 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.labelUpdate = function (label) {
 		label.edit = false;
 		LabelService.update(label);
+
+		// update labels in UI
+		var cards = CardService.data;
+		for (var card in cards) {
+			if (Object.prototype.hasOwnProperty.call(cards, card)) {
+				var labelsFromCard = cards[card].labels;
+
+				labelsFromCard.forEach(function (labelFromCard, index) {
+					if (labelFromCard.id === label.id) {
+						cards[card].labels[index] = label;
+					}
+				});
+			}
+		}
 	};
 
 	$scope.aclAdd = function (sharee) {
