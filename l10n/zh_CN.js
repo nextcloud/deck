@@ -130,6 +130,7 @@ OC.L10N.register(
     "Deleted items" : "已删除项",
     "Timeline" : "时间线",
     "Select users or groups to share with" : "选择要共享的用户或组",
+    "Group" : "分组",
     "No matching user or group found." : "未找到匹配的用户或组。",
     "Loading" : "加载中",
     "Edit" : "编辑",
