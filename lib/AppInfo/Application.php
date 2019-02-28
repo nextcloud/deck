@@ -41,6 +41,7 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IURLGenerator;
 use OCP\INavigationManager;
+use OCP\Util;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 class Application extends App {
@@ -190,6 +191,9 @@ class Application extends App {
 	}
 
 	public function registerFullTextSearch() {
+		if (Util::getVersion()[0] < 16) {
+			return;
+		}
 
 		$c = $this->getContainer();
 		try {

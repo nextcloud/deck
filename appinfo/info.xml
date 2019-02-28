@@ -65,7 +65,7 @@
     </activity>
 
     <fulltextsearch>
-        <provider>OCA\Deck\Provider\DeckProvider</provider>
+        <provider min-version="16">OCA\Deck\Provider\DeckProvider</provider>
     </fulltextsearch>
 
 </info>
