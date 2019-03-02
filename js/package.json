@@ -27,7 +27,7 @@
     "@babel/preset-env": "^7.3.1",
     "babel-loader": "^8.0.5",
     "css-loader": "^2.1.0",
-    "karma": "^4.0.0",
+    "karma": "^4.0.1",
     "mini-css-extract-plugin": "^0.5.0",
     "uglifyjs-webpack-plugin": "^2.1.1",
     "webpack": "^4.29.5",
