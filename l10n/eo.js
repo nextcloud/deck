@@ -101,7 +101,7 @@ OC.L10N.register(
     "No file was uploaded" : "Neniu dosiero alŝutiĝis",
     "Missing a temporary folder" : "Mankas provizora dosierujo",
     "Could not write file to disk" : "Ne eblis skribi dosieron sur diskon",
-    "A PHP extension stopped the file upload" : "PHP-modulo haltigis la dosieralŝuto",
+    "A PHP extension stopped the file upload" : "PHP-modulo haltigis la dosieralŝuton",
     "No file uploaded or file size exceeds maximum of %s" : "Neniu dosiero alŝutita, aŭ dosiergrando transpasas la maksimumon %s",
     "A kanban style project and personal management tool for Nextcloud" : "Kanban-eca projekto kaj ilo por mastrumi sian vivon, por Nextcloud",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Kartaro („Deck“) estas kanban-eca organiza ilo por mastrumi sian vivon kaj teaman projektaron per Nextcloud.\n\n\n- 📥 Aldonu viajn taskojn al kartoj, kaj organizu ilin \n- 📄 Skribu pliajn notojn per marklingvo „Markdown“\n- 🔖 Uzu etikedojn por pli bone organiziĝi\n- 👥 Kunhavigu kun viaj teamo, amikoj, familio\n- 📎 Aldonu dosierojn, kaj enmetu ilin en via „Markdown“-a priskribo\n- 💬 Diskutu kun via teamo pere de la komentoj\n- ⚡ Sekvu la ŝanĝojn per la aktivaĵa fluo\n- 🚀 Organizu vian projekton",
