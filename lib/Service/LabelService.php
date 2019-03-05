@@ -94,7 +94,7 @@ class LabelService {
 
 		//$this->checkDuplicateTitle($boardId, $title);
 		$boardLabels = $this->labelMapper->findAll($boardId);
-		if (is_array($boardLabels) || is_object($boardLabels)) {
+		if (\is_array($boardLabels)) {
 			foreach($boardLabels as $boardLabel) {
 				if ($boardLabel->getTitle() === $title) {
 					throw new BadRequestException('title must be unique');
@@ -164,13 +164,12 @@ class LabelService {
 		}
 
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
-		
+
 		$label = $this->find($id);
 		//$this->checkDuplicateTitle($label->getBoardId(), $title);
-		
-		$boardLabels = array();
+
 		$boardLabels = $this->labelMapper->findAll($label->getBoardId());
-		if (is_array($boardLabels) || is_object($boardLabels)) {
+		if (\is_array($boardLabels)) {
 			foreach($boardLabels as $boardLabel) {
 				if ($boardLabel->getId() === $label->getId()) {
 					continue;
@@ -181,7 +180,7 @@ class LabelService {
 				}
 			}
 		}
-		
+
 		if ($this->boardService->isArchived($this->labelMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
