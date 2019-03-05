@@ -323,7 +323,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		// remove from board data
 		var i = BoardService.getCurrent().labels.indexOf(label);
 		BoardService.getCurrent().labels.splice(i, 1);
-		
+
 		// remove from cards
 		var cards = CardService.data;
 		for (var card in cards) {
@@ -346,11 +346,21 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			BoardService.getCurrent().labels.push(data);
 			$scope.status.createLabel = false;
 			$scope.newLabel = {};
+		}).catch((err) => {
+			OC.Notification.showTemporary(err);
 		});
 	};
+
+	$scope.labelUpdateBefore = function (label) {
+		label.renameTitle = label.title;
+	};
+
 	$scope.labelUpdate = function (label) {
 		label.edit = false;
-		LabelService.update(label);
+		LabelService.update(label).catch((err) => {
+			label.title = label.renameTitle;
+			OC.Notification.showTemporary(err);
+		});
 
 		// update labels in UI
 		var cards = CardService.data;

@@ -119,7 +119,7 @@ app.factory('ApiService', function ($http, $q) {
 			self.add(response.data);
 			deferred.resolve(response.data);
 		}, function (error) {
-			deferred.reject('Fetching' + self.endpoint + ' failed');
+			deferred.reject(error.data.message);
 		});
 		return deferred.promise;
 	};
@@ -131,7 +131,7 @@ app.factory('ApiService', function ($http, $q) {
 			self.add(response.data);
 			deferred.resolve(response.data);
 		}, function (error) {
-			deferred.reject('Updating ' + self.endpoint + ' failed');
+			deferred.reject(error.data.message);
 		});
 		return deferred.promise;
 
