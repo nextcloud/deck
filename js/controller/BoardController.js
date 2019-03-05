@@ -346,7 +346,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			BoardService.getCurrent().labels.push(data);
 			$scope.status.createLabel = false;
 			$scope.newLabel = {};
-		}).catch(err => {
+		}).catch((err) => {
 			OC.Notification.showTemporary(err);
 		});
 	};
@@ -357,7 +357,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 
 	$scope.labelUpdate = function (label) {
 		label.edit = false;
-		LabelService.update(label).catch(err => {
+		LabelService.update(label).catch((err) => {
 			label.title = label.renameTitle;
 			OC.Notification.showTemporary(err);
 		});

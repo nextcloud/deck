@@ -92,7 +92,6 @@ class LabelService {
 
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
 
-		//$this->checkDuplicateTitle($boardId, $title);
 		$boardLabels = $this->labelMapper->findAll($boardId);
 		if (\is_array($boardLabels)) {
 			foreach($boardLabels as $boardLabel) {
@@ -166,7 +165,6 @@ class LabelService {
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
 
 		$label = $this->find($id);
-		//$this->checkDuplicateTitle($label->getBoardId(), $title);
 
 		$boardLabels = $this->labelMapper->findAll($label->getBoardId());
 		if (\is_array($boardLabels)) {
@@ -189,21 +187,6 @@ class LabelService {
 		$label->setColor($color);
 		$this->changeHelper->boardChanged($label->getBoardId());
 		return $this->labelMapper->update($label);
-	}
-
-	/**
-	 * @param $boardId
-	 * @param $title
-	 * @throws BadRequestException
-	 */
-	private function checkDuplicateTitle($boardId, $title) {
-		$boardLabels = $this->labelMapper->findAll($boardId);
-		foreach($boardLabels as $boardLabel) {
-			if ($boardLabel->getTitle() === $title) {
-				throw new BadRequestException('title must be unique');
-				break;
-			}
-		}
 	}
 
 }
