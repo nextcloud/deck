@@ -24,6 +24,7 @@
 namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\QueryException;
 use OCP\IDBConnection;
 use OCP\IUserManager;
 use OCP\IGroupManager;
@@ -35,6 +36,8 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	private $stackMapper;
 	private $userManager;
 	private $groupManager;
+
+	private $circlesEnabled;
 
 	public function __construct(
 		IDBConnection $db,
@@ -50,6 +53,8 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		$this->stackMapper = $stackMapper;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
+
+		$this->circlesEnabled = \OC::$server->getAppManager()->isEnabledForUser('circles');
 	}
 
 
@@ -136,6 +141,35 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		return $entries;
 	}
 
+	public function findAllByCircles($userId, $limit = null, $offset = null) {
+		if (!$this->circlesEnabled) {
+			return [];
+		}
+		$circles = array_map(function($circle) {
+			return $circle->getUniqueId();
+		}, \OCA\Circles\Api\v1\Circles::joinedCircles('', true));
+		if (count($circles) === 0) {
+			return [];
+		}
+
+		$sql = 'SELECT boards.id, title, owner, color, archived, deleted_at, 2 as shared, last_modified FROM `*PREFIX*deck_boards` as boards ' .
+			'INNER JOIN `*PREFIX*deck_board_acl` as acl ON boards.id=acl.board_id WHERE owner != ? AND type=? AND (';
+		for ($i = 0, $iMax = count($circles); $i < $iMax; $i++) {
+			$sql .= 'acl.participant = ? ';
+			if (count($circles) > 1 && $i < count($circles) - 1) {
+				$sql .= ' OR ';
+			}
+		}
+		$sql .= ');';
+		$entries = $this->findEntities($sql, array_merge([$userId, Acl::PERMISSION_TYPE_CIRCLE], $circles), $limit, $offset);
+		/* @var Board $entry */
+		foreach ($entries as $entry) {
+			$acl = $this->aclMapper->findAll($entry->id);
+			$entry->setAcl($acl);
+		}
+		return $entries;
+	}
+
 	public function findAll() {
 		$sql = 'SELECT id from *PREFIX*deck_boards;';
 		return $this->findEntities($sql);
@@ -200,6 +234,20 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 				\OC::$server->getLogger()->debug('Group ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
 				return null;
 			}
+			// TODO: get circles list
+			if ($acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
+				try {
+					$circle = \OCA\Circles\Api\v1\Circles::detailsCircle($acl->getParticipant());
+					if ($circle) {
+						return new Circle($circle);
+					}
+				} catch (QueryException $e) {
+				} catch (\Exception $e) {
+					// TODO catch not found
+				}
+				return null;
+			}
+			// TODO: get circles list
 			throw new \Exception('Unknown permission type for mapping Acl');
 		});
 	}

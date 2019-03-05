@@ -56,6 +56,7 @@
 @if mixin-exists('icon-black-white') {
 	@include icon-black-white('deck', 'deck', 1);
 	@include icon-black-white('archive', 'deck', 1);
+	@include icon-black-white('circles', 'deck', 1);
 	
 	.icon-toggle-compact-collapsed {
 		@include icon-color('toggle-view-expand', 'deck', $color-black);
@@ -67,4 +68,13 @@
 	.icon-activity {
 		@include icon-color('activity-dark', 'activity', $color-black);
 	}
+}
+
+.avatardiv.circles {
+  background: var(--color-primary);
+}
+.icon-circles {
+  opacity: 1;
+  background-size: 20px;
+  background-position: center center;
 }
