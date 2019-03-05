@@ -2,6 +2,7 @@
 
 /* global __webpack_nonce__ OC */
 __webpack_nonce__ = btoa(OC.requestToken); // eslint-disable-line no-native-reassign
+__webpack_public_path__ = OC.linkTo('deck', 'js/build/');
 
 // used for building a vendor stylesheet
 import 'ng-sortable/dist/ng-sortable.css';

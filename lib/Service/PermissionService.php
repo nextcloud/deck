@@ -127,7 +127,7 @@ class PermissionService {
 	 * @return bool
 	 * @throws NoPermissionException
 	 */
-	public function checkPermission($mapper, $id, $permission) {
+	public function checkPermission($mapper, $id, $permission, $userId = null) {
 		$boardId = $id;
 		if ($mapper instanceof IPermissionMapper) {
 			$boardId = $mapper->findBoardId($id);
@@ -141,12 +141,12 @@ class PermissionService {
 			return false;
 		}
 
-		if ($this->userIsBoardOwner($boardId)) {
+		if ($this->userIsBoardOwner($boardId, $userId)) {
 			return true;
 		}
 
 		$acls = $this->aclMapper->findAll($boardId);
-		$result = $this->userCan($acls, $permission);
+		$result = $this->userCan($acls, $permission, $userId);
 		if ($result) {
 			return true;
 		}
@@ -159,10 +159,13 @@ class PermissionService {
 	 * @param $boardId
 	 * @return bool
 	 */
-	public function userIsBoardOwner($boardId) {
+	public function userIsBoardOwner($boardId, $userId = null) {
+		if ($userId === null) {
+			$userId = $this->userId;
+		}
 		try {
 			$board = $this->boardMapper->find($boardId);
-			return $board && $this->userId === $board->getOwner();
+			return $board && $userId === $board->getOwner();
 		} catch (DoesNotExistException $e) {
 		} catch (MultipleObjectsReturnedException $e) {
 			return false;
@@ -176,17 +179,20 @@ class PermissionService {
 	 * @param $permission
 	 * @return bool
 	 */
-	public function userCan(array $acls, $permission) {
+	public function userCan(array $acls, $permission, $userId = null) {
+		if ($userId === null) {
+			$userId = $this->userId;
+		}
 		// check for users
 		foreach ($acls as $acl) {
-			if ($acl->getType() === Acl::PERMISSION_TYPE_USER && $acl->getParticipant() === $this->userId) {
+			if ($acl->getType() === Acl::PERMISSION_TYPE_USER && $acl->getParticipant() === $userId) {
 				return $acl->getPermission($permission);
 			}
 		}
 		// check for groups
 		$hasGroupPermission = false;
 		foreach ($acls as $acl) {
-			if (!$hasGroupPermission && $acl->getType() === Acl::PERMISSION_TYPE_GROUP && $this->groupManager->isInGroup($this->userId, $acl->getParticipant())) {
+			if (!$hasGroupPermission && $acl->getType() === Acl::PERMISSION_TYPE_GROUP && $this->groupManager->isInGroup($userId, $acl->getParticipant())) {
 				$hasGroupPermission = $acl->getPermission($permission);
 			}
 		}

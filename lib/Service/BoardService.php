@@ -25,6 +25,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
+use OCA\Deck\Collaboration\Resources\ResourceProvider;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
@@ -59,6 +60,7 @@ class BoardService {
 	private $userId;
 	private $activityManager;
 	private $changeHelper;
+	private $resourceProvider;
 
 	public function __construct(
 		BoardMapper $boardMapper,
@@ -73,6 +75,7 @@ class BoardService {
 		IGroupManager $groupManager,
 		ActivityManager $activityManager,
 		ChangeHelper $changeHelper,
+		ResourceProvider $resourceProvider,
 		$userId
 	) {
 		$this->boardMapper = $boardMapper;
@@ -87,6 +90,7 @@ class BoardService {
 		$this->groupManager = $groupManager;
 		$this->activityManager = $activityManager;
 		$this->changeHelper = $changeHelper;
+		$this->resourceProvider = $resourceProvider;
 		$this->userId = $userId;
 	}
 
@@ -459,6 +463,7 @@ class BoardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE);
 		$this->boardMapper->mapAcl($newAcl);
 		$this->changeHelper->boardChanged($boardId);
+		$this->resourceProvider->invalidateAccessCache($boardId);
 		return $newAcl;
 	}
 
@@ -529,6 +534,7 @@ class BoardService {
 		}
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $acl, ActivityManager::SUBJECT_BOARD_UNSHARE);
 		$this->changeHelper->boardChanged($acl->getBoardId());
+		$this->resourceProvider->invalidateAccessCache($acl->getBoardId());
 		return $this->aclMapper->delete($acl);
 	}
 

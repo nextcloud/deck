@@ -34,7 +34,7 @@
 					{{ sharee.participant.displayname }} (<?php p($l->t('Group')); ?>)
 				</span>
                 <span class="has-tooltip username" ng-if="sharee.type==OC.Share.SHARE_TYPE_USER">
-					{{ sharee.participant.displayname }} 
+					{{ sharee.participant.displayname }}
 				</span>
             </ui-select-choices>
             <ui-select-no-choice>
@@ -82,6 +82,8 @@
 				<?php p($l->t('Sharing has been disabled for your account.')); ?>
 			</li>
         </ul>
+		<h1>Collections</h1>
+		<div id="collaborationResources"></div>
 
     </div>
     <div id="board-detail-labels" class="tab commentsTabView" ng-if="params.tab==1">
