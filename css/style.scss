@@ -996,7 +996,11 @@ input.input-inline {
 		img {
 			max-width: 24px;
 			max-height: 24px;
+			opacity: 1;
 		}
+	}
+	& > img {
+		opacity: 0.7;
 	}
 }
 
