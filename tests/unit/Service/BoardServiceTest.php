@@ -204,6 +204,7 @@ class BoardServiceTest extends TestCase {
 	public function testDelete() {
 		$board = new Board();
 		$board->setOwner('admin');
+		$board->setDeletedAt(0);
 		$this->boardMapper->expects($this->once())
 			->method('find')
 			->willReturn($board);
@@ -213,7 +214,7 @@ class BoardServiceTest extends TestCase {
 				'admin' => 'admin',
 			]);
 		$boardDeleted = clone $board;
-		$board->setDeletedAt(1);
+		$boardDeleted->setDeletedAt(1);
 		$this->boardMapper->expects($this->once())
 			->method('update')
 			->willReturn($boardDeleted);
