@@ -125,7 +125,7 @@ OC.L10N.register(
     "Add a tag" : "タグを追加",
     "Select tags" : "タグを選択..",
     "Assign users" : "ユーザーを割り当てる",
-    "Choose a user to assign" : "割り当てるユーザを選択する",
+    "Choose a user to assign" : "割り当てるユーザーを選択する",
     "Assign this card to a user" : "このカードをユーザーに割り当てる",
     "Due date" : "期限",
     "Click to set" : "クリックして設定する",
