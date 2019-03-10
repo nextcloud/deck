@@ -35,6 +35,7 @@ OC.L10N.register(
     "Assign card to me" : "Assigna'm la targeta",
     "Unassign card from me" : "Desassigna'm la targeta",
     "Enter a card title" : "Introduïu un títol de la targeta",
+    "Close" : "Tanca",
     "Sharing" : "Compartir",
     "Tags" : "Etiquetes",
     "Select users or groups to share with" : "Seleccioneu usuaris o grups per compartir",

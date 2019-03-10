@@ -24,11 +24,13 @@
     "All Boards" : "Alla tavlor",
     "Archived boards" : "Arkiverade tavlor",
     "Drop your files here to upload it to the card" : "Släpp dina filer här för att ladda upp det till kortet",
+    "Delete card" : "Ta bort kort",
     "Enter a card title" : "Ange en korttitel",
     "Add card" : "Lägg till kort",
     "Close" : "Stäng",
     "Sharing" : "Delning",
     "Tags" : "Taggar",
+    "Timeline" : "Tidslinje",
     "Select users or groups to share with" : "Välj användare och grupper att dela med",
     "No matching user or group found." : "Ingen matchande användare eller grupp hittades.",
     "Loading" : "Laddar",
@@ -36,6 +38,8 @@
     "Share" : "Dela",
     "Manage" : "Hantera",
     "Discard share" : "Ta bort delning",
+    "Update tag" : "Uppdatera tagg",
+    "Edit tag" : "Redigera tagg",
     "Create" : "Skapa",
     "Create a new tag" : "Skapa en ny tagg",
     "Status" : "Status",
@@ -54,6 +58,7 @@
     "Undo file deletion - Otherwise the file will be deleted during the next cronjob run." : "Ångra filborttagning - annars kommer filen att tas bort när nästa cronjob körs.",
     "Undo file deletion" : "Ångra filborttagning",
     "Insert the file into the description" : "Infoga filen i beskrivningen",
+    "Delete attachment" : "Ta bort bilaga",
     "Modified:" : "Ändrad:",
     "Created:" : "Skapad:",
     "Choose a tag" : "Välj en tagg",
@@ -75,6 +80,7 @@
     "Add a card description…" : "Lägg till en kortbeskrivning...",
     "Shared boards" : "Delade tavlor",
     "Move board to archive" : "Flytta tavla till arkiv",
-    "Create a new board" : "Skapa en ny tavla"
+    "Create a new board" : "Skapa en ny tavla",
+    "Settings" : "Inställningar"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
