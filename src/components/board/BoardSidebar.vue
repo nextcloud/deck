@@ -35,39 +35,26 @@
 		<div class="tabsContainer">
 			<div class="tab">
 				<div v-if="activeTab === 'Sharing'">
-
-					<multiselect v-model="value" :options="board.sharees" />
-
-					<ul
-						id="shareWithList"
-						class="shareWithList"
-					>
-						<li>
-							<avatar :user="board.owner.uid" />
-							<span class="has-tooltip username">
-								{{ board.owner.displayname }}
-							</span>
-						</li>
-						<li v-for="acl in board.acl" :key="acl.participant.uid">
-							<avatar :user="acl.participant.uid" />
-							<span class="has-tooltip username">
-								{{ acl.participant.displayname }}
-							</span>
-						</li>
-					</ul>
+					<SharingTabSidebard :board="board"></SharingTabSidebard>
 				</div>
 
 				<div
 					v-if="activeTab === 'Tags'"
 					id="board-detail-labels"
 				>
-					<ul class="labels">
-						<li v-for="label in board.labels" :key="label.id">
-							<span v-if="!label.edit" :style="{ backgroundColor: `#${label.color}`, color: `#${label.color || '000'}` }" class="label-title">
-								<span v-if="label.title">{{ label.title }}</span><i v-if="!label.title"><br></i>
-							</span>
-						</li>
-					</ul>
+					<TagsTabSidebard :board="board" :labels="labels" />
+				</div>
+
+				<div
+					v-if="activeTab === 'Deleted items'"
+				>
+					<DeletedTabSidebard :board="board" />
+				</div>
+
+				<div
+					v-if="activeTab === 'Timeline'"
+				>
+					<TimelineTabSidebard :board="board" />
 				</div>
 			</div>
 		</div>
@@ -77,12 +64,20 @@
 <script>
 import { Avatar, Multiselect } from 'nextcloud-vue'
 import { mapState } from 'vuex'
+import SharingTabSidebard from './SharingTabSidebard'
+import TagsTabSidebard from './TagsTabSidebard'
+import DeletedTabSidebard from './DeletedTabSidebard'
+import TimelineTabSidebard from './TimelineTabSidebard'
 
 export default {
 	name: 'BoardSidebar',
 	components: {
 		Avatar,
-		Multiselect
+		Multiselect,
+		SharingTabSidebard,
+		TagsTabSidebard,
+		DeletedTabSidebard,
+		TimelineTabSidebard
 	},
 	props: {
 	},
@@ -111,7 +106,8 @@ export default {
 	},
 	computed: {
 		...mapState({
-			board: state => state.currentBoard
+			board: state => state.currentBoard,
+			labels: state => state.labels
 		})
 	},
 	methods: {

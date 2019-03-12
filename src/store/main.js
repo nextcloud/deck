@@ -27,6 +27,7 @@ import { boardToMenuItem } from './../helpers/boardToMenuItem'
 import { BoardApi } from './../services/BoardApi'
 import stack from './stack'
 import card from './card'
+import label from './label'
 
 Vue.use(Vuex)
 
@@ -42,7 +43,8 @@ export const BOARD_FILTERS = {
 export default new Vuex.Store({
 	modules: {
 		stack,
-		card
+		card,
+		label
 	},
 	strict: debug,
 	state: {
