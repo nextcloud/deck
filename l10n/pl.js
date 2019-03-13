@@ -71,6 +71,7 @@ OC.L10N.register(
     "Sharing" : "Współdzielenie",
     "Tags" : "Etykiety",
     "Select users or groups to share with" : "Wybierz użytkowników lub grupy, żeby współdzielić z nimi",
+    "Group" : "Grupa",
     "No matching user or group found." : "Nie znaleziono pasujących użytkowników lub grup",
     "Loading" : "Ładowanie",
     "Edit" : "Edycja",
@@ -92,9 +93,12 @@ OC.L10N.register(
     "Archive board" : "Zarchiwizuj tablicę",
     "Unarchive board" : "Przywróć tablicę",
     "Delete board" : "Usuń tablicę",
+    "Update board" : "Zaktualizuj tablicę",
+    "Reset board" : "Zresetuj tablicę",
     "Undo board deletion - Otherwise the board will be deleted during the next cronjob run." : "Cofnij usunięcie tablicy - w innym przypadku tablica zostanie usunięta przy kolejnym wykonaniu zadania cron.",
     "Create new board" : "Utwórz nową tablicę",
     "New board title" : "Tytuł nowej tablicy",
+    "Create board" : "Utwórz tablicę",
     "Select an attachment" : "Zaznacz załącznik",
     "Cancel upload" : "Anuluj wysyłanie",
     "by" : "przez",
@@ -122,6 +126,7 @@ OC.L10N.register(
     "Add a card description…" : "Dodaj opis karty",
     "Shared boards" : "Tablice współdzielone",
     "Move board to archive" : "Przesuń tablicę do archiwum",
-    "Create a new board" : "Utwórz nową tablicę"
+    "Create a new board" : "Utwórz nową tablicę",
+    "Settings" : "Ustawienia"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");
