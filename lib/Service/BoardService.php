@@ -31,6 +31,7 @@ use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
+use OCA\Deck\Db\StackMapper;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -46,6 +47,7 @@ use OCA\Deck\BadRequestException;
 class BoardService {
 
 	private $boardMapper;
+	private $stackMapper;
 	private $labelMapper;
 	private $aclMapper;
 	private $l10n;
@@ -60,6 +62,7 @@ class BoardService {
 
 	public function __construct(
 		BoardMapper $boardMapper,
+		StackMapper $stackMapper,
 		IL10N $l10n,
 		LabelMapper $labelMapper,
 		AclMapper $aclMapper,
@@ -73,6 +76,7 @@ class BoardService {
 		$userId
 	) {
 		$this->boardMapper = $boardMapper;
+		$this->stackMapper = $stackMapper;
 		$this->labelMapper = $labelMapper;
 		$this->aclMapper = $aclMapper;
 		$this->l10n = $l10n;
@@ -89,7 +93,7 @@ class BoardService {
 	/**
 	 * @return array
 	 */
-	public function findAll($since = -1) {
+	public function findAll($since = 0) {
 		$userInfo = $this->getBoardPrerequisites();
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null, $since);
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null,  $since);
@@ -104,6 +108,7 @@ class BoardService {
 						$this->boardMapper->mapAcl($acl);
 					}
 				}
+				$this->enrichWithStacks($item);
 				$permissions = $this->permissionService->matchPermissions($item);
 				$item->setPermissions([
 					'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ],
@@ -525,6 +530,16 @@ class BoardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $acl, ActivityManager::SUBJECT_BOARD_UNSHARE);
 		$this->changeHelper->boardChanged($acl->getBoardId());
 		return $this->aclMapper->delete($acl);
+	}
+
+	private function enrichWithStacks($board, $since = -1) {
+		$stacks = $this->stackMapper->findAll($board->getId(), null, null, $since);
+
+		if(\count($stacks) === 0) {
+			return;
+		}
+
+		$board->setStacks($stacks);
 	}
 
 }
