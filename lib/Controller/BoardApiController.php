@@ -60,6 +60,7 @@ class BoardApiController extends ApiController {
 	 * @NoCSRFRequired
 	 *
 	 * Return all of the boards that the current user has access to.
+	 * @throws StatusException
 	 */
 	public function index() {
 		$modified = $this->request->getHeader('If-Modified-Since');

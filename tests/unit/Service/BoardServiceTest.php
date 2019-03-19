@@ -33,6 +33,7 @@ use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
+use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -51,6 +52,8 @@ class BoardServiceTest extends TestCase {
 	private $aclMapper;
 	/** @var BoardMapper */
 	private $boardMapper;
+	/** @var StackMapper */
+	private $stackMapper;
 	/** @var PermissionService */
 	private $permissionService;
 	/** @var NotificationHelper */
@@ -72,6 +75,7 @@ class BoardServiceTest extends TestCase {
 		$this->l10n = $this->createMock(L10N::class);
 		$this->aclMapper = $this->createMock(AclMapper::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
+		$this->stackMapper = $this->createMock(StackMapper::class);
 		$this->labelMapper = $this->createMock(LabelMapper::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
@@ -83,6 +87,7 @@ class BoardServiceTest extends TestCase {
 
 		$this->service = new BoardService(
 			$this->boardMapper,
+			$this->stackMapper,
 			$this->l10n,
 			$this->labelMapper,
 			$this->aclMapper,
@@ -111,6 +116,9 @@ class BoardServiceTest extends TestCase {
 			->method('findAllByUser')
 			->with('admin')
 			->willReturn([$b1, $b2]);
+		$this->stackMapper->expects($this->any())
+			->method('findAll')
+			->willReturn([]);
 		$this->boardMapper->expects($this->once())
 			->method('findAllByGroups')
 			->with('admin', ['a', 'b', 'c'])
