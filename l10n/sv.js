@@ -73,7 +73,7 @@ OC.L10N.register(
     "You have commented on card {card}" : "Du har kommenterat på kortet {card}",
     "{user} has commented on card {card}" : "{user} har kommenterat på kortet {card}",
     "A <strong>card description</strong> inside the Deck app has been changed" : "En <strong>kortbeskrivning</strong> i Deck-appen har ändrats",
-    "Deck" : "Kortlek",
+    "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Ändringar i <strong>Deck-appen</strong>",
     "Personal" : "Personlig",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Kortet \"%s\" på \"%s\" har tilldelats dig av %s.",
