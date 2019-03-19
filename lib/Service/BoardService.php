@@ -75,7 +75,6 @@ class BoardService {
 		IGroupManager $groupManager,
 		ActivityManager $activityManager,
 		ChangeHelper $changeHelper,
-		ResourceProvider $resourceProvider,
 		$userId
 	) {
 		$this->boardMapper = $boardMapper;
@@ -90,7 +89,6 @@ class BoardService {
 		$this->groupManager = $groupManager;
 		$this->activityManager = $activityManager;
 		$this->changeHelper = $changeHelper;
-		$this->resourceProvider = $resourceProvider;
 		$this->userId = $userId;
 	}
 
@@ -463,7 +461,13 @@ class BoardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE);
 		$this->boardMapper->mapAcl($newAcl);
 		$this->changeHelper->boardChanged($boardId);
-		$this->resourceProvider->invalidateAccessCache($boardId);
+		$version = \OC_Util::getVersion()[0];
+		if ($version >= 16) {
+			try {
+				$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+				$resourceProvider->invalidateAccessCache($boardId);
+			} catch (\Exception $e) {}
+		}
 		return $newAcl;
 	}
 
@@ -534,7 +538,13 @@ class BoardService {
 		}
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $acl, ActivityManager::SUBJECT_BOARD_UNSHARE);
 		$this->changeHelper->boardChanged($acl->getBoardId());
-		$this->resourceProvider->invalidateAccessCache($acl->getBoardId());
+		$version = \OC_Util::getVersion()[0];
+		if ($version >= 16) {
+			try {
+				$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+				$resourceProvider->invalidateAccessCache($acl->getBoardId());
+			} catch (\Exception $e) {}
+		}
 		return $this->aclMapper->delete($acl);
 	}
 

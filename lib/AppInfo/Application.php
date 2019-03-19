@@ -154,6 +154,11 @@ class Application extends App {
 	}
 
 	protected function registerCollaborationResources() {
+		$version = \OC_Util::getVersion()[0];
+		if ($version < 16) {
+			return;
+		}
+
 		/**
 		 * Register Collaboration ResourceProvider
 		 */

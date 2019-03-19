@@ -5,7 +5,7 @@ clone:
 
 pipeline:
   check-app-compatbility:
-    image: nextcloudci/php7.0:php7.0-17
+    image: nextcloudci/php7.1:php7.1-15
     environment:
       - APP_NAME=deck
       - CORE_BRANCH=stable15
@@ -43,7 +43,7 @@ pipeline:
       - DB=sqlite
     commands:
       - composer install
-      - ./vendor/bin/parallel-lint --exclude ./vendor/ .
+      - ./vendor/bin/parallel-lint --exclude ./vendor/ --exclude ./lib/Collaboration/ .
     when:
       matrix:
         TESTS: syntax-php7.0
