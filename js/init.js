@@ -1,6 +1,6 @@
 'use strict';
 
-/* global __webpack_nonce__ OC */
+/* global __webpack_nonce__ __webpack_public_path__ OC  */
 __webpack_nonce__ = btoa(OC.requestToken); // eslint-disable-line no-native-reassign
 __webpack_public_path__ = OC.linkTo('deck', 'js/build/');
 

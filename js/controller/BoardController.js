@@ -157,11 +157,9 @@ app.controller('BoardController', function ($rootScope, $scope, $element, $state
 			model: BoardService.getCurrent()
 		},
 	});
-	$scope.mountCollections = () => {
-		console.log('mountCollections');
+	$scope.mountCollections = function() {
 		const MountingPoint = document.getElementById('collaborationResources');
 		if (MountingPoint) {
-			console.log(MountingPoint);
 			ComponentVM.model = BoardService.getCurrent();
 			ComponentVM.$mount(MountingPoint);
 		}

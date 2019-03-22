@@ -22,7 +22,7 @@
 
 'use strict';
 
-/* global __webpack_nonce__ OC */
+/* global __webpack_nonce__ __webpack_public_path__ OC t */
 __webpack_nonce__ = btoa(OC.requestToken); // eslint-disable-line no-native-reassign
 __webpack_public_path__ = OC.linkTo('deck', 'js/build/');
 
@@ -31,7 +31,7 @@ import BoardSelector from './views/BoardSelector';
 
 import './../css/collections.css';
 
-(function(OCP) {
+((function(OCP) {
 
 	Vue.prototype.$ = $
 	Vue.prototype.t = t
@@ -64,4 +64,4 @@ import './../css/collections.css';
 		typeString: t('deck', 'board'),
 		typeIconClass: 'icon-deck'
 	});
-})(window.OCP);
+})(window.OCP));
