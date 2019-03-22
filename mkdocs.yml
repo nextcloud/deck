@@ -4,8 +4,8 @@ theme:
 extra_css: [extra.css]
 pages:
     - Home: index.md
-    - User documentation:
-        - Markdown composing: Markdown.md
+    - User documentation: User_documentation_en.md
+    - Markdown composing: Markdown.md
     - API documentation:
         - REST API: API.md
         - Nextcloud API: API-Nextcloud.md
