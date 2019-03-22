@@ -60,7 +60,6 @@ class BoardService {
 	private $userId;
 	private $activityManager;
 	private $changeHelper;
-	private $resourceProvider;
 
 	public function __construct(
 		BoardMapper $boardMapper,
