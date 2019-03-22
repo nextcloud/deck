@@ -234,20 +234,16 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 				\OC::$server->getLogger()->debug('Group ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
 				return null;
 			}
-			// TODO: get circles list
 			if ($acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
 				try {
-					$circle = \OCA\Circles\Api\v1\Circles::detailsCircle($acl->getParticipant());
+					$circle = \OCA\Circles\Api\v1\Circles::detailsCircle($acl->getParticipant(), true);
 					if ($circle) {
 						return new Circle($circle);
 					}
-				} catch (QueryException $e) {
 				} catch (\Exception $e) {
-					// TODO catch not found
 				}
 				return null;
 			}
-			// TODO: get circles list
 			throw new \Exception('Unknown permission type for mapping Acl');
 		});
 	}
