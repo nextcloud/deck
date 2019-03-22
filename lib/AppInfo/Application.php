@@ -28,6 +28,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
 use OCP\AppFramework\App;
 use OCA\Deck\Middleware\SharingMiddleware;
@@ -52,13 +53,13 @@ class Application extends App {
 		$container = $this->getContainer();
 		$server = $container->getServer();
 
-		$container->registerService('SharingMiddleware', function() use ($server) {
-			return new SharingMiddleware(
+		$container->registerService('ExceptionMiddleware', function() use ($server) {
+			return new ExceptionMiddleware(
 				$server->getLogger(),
 				$server->getConfig()
 			);
 		});
-		$container->registerMiddleWare('SharingMiddleware');
+		$container->registerMiddleWare('ExceptionMiddleware');
 
 		$container->registerService('databaseType', function($container) {
 			return $container->getServer()->getConfig()->getSystemValue('dbtype', 'sqlite');
