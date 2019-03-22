@@ -24,7 +24,6 @@
 namespace OCA\Deck\AppInfo;
 
 use OCA\Deck\Activity\CommentEventHandler;
-use OCA\Deck\Collaboration\Resources\ResourceProvider;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
@@ -33,7 +32,6 @@ use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
 use OCP\AppFramework\App;
 use OCA\Deck\Middleware\SharingMiddleware;
-use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Collaboration\Resources\IManager;
 use OCP\Comments\CommentsEntityEvent;
 use OCP\IGroup;
@@ -107,6 +105,9 @@ class Application extends App {
 
 	}
 
+	/**
+	 * @throws \OCP\AppFramework\QueryException
+	 */
 	public function registerNavigationEntry() {
 		$container = $this->getContainer();
 		$container->query(INavigationManager::class)->add(function() use ($container) {
@@ -131,6 +132,9 @@ class Application extends App {
 		});
 	}
 
+	/**
+	 * @throws \OCP\AppFramework\QueryException
+	 */
 	public function registerCommentsEntity() {
 		$this->getContainer()->getServer()->getEventDispatcher()->addListener(CommentsEntityEvent::EVENT_ENTITY, function(CommentsEntityEvent $event) {
 			$event->addEntityCollection('deckCard', function($name) {
@@ -147,12 +151,18 @@ class Application extends App {
 		$this->registerCommentsEventHandler();
 	}
 
+	/**
+	 * @throws \OCP\AppFramework\QueryException
+	 */
 	protected function registerCommentsEventHandler() {
 		$this->getContainer()->getServer()->getCommentsManager()->registerEventHandler(function () {
 			return $this->getContainer()->query(CommentEventHandler::class);
 		});
 	}
 
+	/**
+	 * @throws \OCP\AppFramework\QueryException
+	 */
 	protected function registerCollaborationResources() {
 		$version = \OC_Util::getVersion()[0];
 		if ($version < 16) {
@@ -164,7 +174,7 @@ class Application extends App {
 		 */
 		/** @var IManager $resourceManager */
 		$resourceManager = $this->getContainer()->query(IManager::class);
-		$resourceManager->registerResourceProvider(ResourceProvider::class);
+		$resourceManager->registerResourceProvider(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
 		\OC::$server->getEventDispatcher()->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', function () {
 			\OCP\Util::addScript('deck', 'build/collections');
 		});
