@@ -19,6 +19,7 @@
     "You have removed {acl} from the board {board}" : "Usunąłes(-aś) {acl} z tablicy {board}",
     "{user} has removed {acl} from the board {board}" : "Użytkownik {user} usunął {acl} z tablicy {board}",
     "You have renamed the board {before} to {board}" : "Zmieniłeś(-aś) nazwę tablicy {before} na {board}",
+    "{user} has renamed the board {before} to {board}" : "{user} zmienił(-a) nazwę tablicy {before} na {board} ",
     "You have archived the board {board}" : "Zarchiwizowałeś(-aś) tablicę {board}",
     "{user} has archived the board {before}" : "Użytkownik {user} zarchiwizował(-a) tablicę {board}",
     "You have unarchived the board {board}" : "Przywróciłeś(-aś) tablicę {board} z archiwum",
