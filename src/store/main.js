@@ -27,7 +27,6 @@ import { boardToMenuItem } from './../helpers/boardToMenuItem'
 import { BoardApi } from './../services/BoardApi'
 import stack from './stack'
 import card from './card'
-import label from './label'
 
 Vue.use(Vuex)
 
@@ -43,8 +42,7 @@ export const BOARD_FILTERS = {
 export default new Vuex.Store({
 	modules: {
 		stack,
-		card,
-		label
+		card
 	},
 	strict: debug,
 	state: {
@@ -82,6 +80,9 @@ export default new Vuex.Store({
 					|| (state.boardFilter === BOARD_FILTERS.SHARED && board.shared === 1)
 			})
 			return boards.map(boardToMenuItem)
+		},
+		currentBoardLabels: state => {
+			return state.currentBoard.labels
 		}
 	},
 	mutations: {
@@ -134,6 +135,17 @@ export default new Vuex.Store({
 		},
 		setCurrentBoard(state, board) {
 			state.currentBoard = board
+		},
+
+		// label mutators
+		removeLabelFromCurrentBoard(state, labelId) {
+			const removeIndex = state.currentBoard.labels.findIndex((l) => {
+				return labelId !== l.id
+			})
+
+			if (removeIndex > -1) {
+				state.currentBoard.labels.splice(removeIndex, 1)
+			}
 		}
 	},
 	actions: {
@@ -210,6 +222,11 @@ export default new Vuex.Store({
 		},
 		setCurrentBoard({ commit }, board) {
 			commit('setCurrentBoard', board)
+		},
+
+		// label actions
+		removeLabelFromCurrentBoard({ commit }, labelId) {
+			commit('removeLabelFromCurrentBoard', labelId);
 		}
 	}
 })

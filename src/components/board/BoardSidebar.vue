@@ -22,39 +22,38 @@
 
 <template>
 	<div class="sidebar">
-		<div class="sidebar-header">
-			<h3>{{ board.title }}</h3>
-		</div>
+		<div v-if="board">
+			<div class="sidebar-header">
+				<h3>{{ board.title }}</h3>
+			</div>
 
-		<ul class="tab-headers">
-			<li v-for="tab in tabs" :class="{ 'selected': tab.isSelected }" :key="tab.name">
-				<a @click="setSelectedHeader(tab.name)">{{ tab.name }}</a>
-			</li>
-		</ul>
+			<ul class="tab-headers">
+				<li v-for="tab in tabs" :class="{ 'selected': tab.isSelected }" :key="tab.name">
+					<a @click="setSelectedHeader(tab.name)">{{ tab.name }}</a>
+				</li>
+			</ul>
 
-		<div class="tabsContainer">
-			<div class="tab">
-				<div v-if="activeTab === 'Sharing'">
-					<SharingTabSidebard :board="board"></SharingTabSidebard>
-				</div>
+			<div class="tabsContainer">
+				<div class="tab">
+					<div v-if="activeTab === 'Sharing'">
+						<SharingTabSidebard :board="board"></SharingTabSidebard>
+					</div>
 
-				<div
-					v-if="activeTab === 'Tags'"
-					id="board-detail-labels"
-				>
-					<TagsTabSidebard :board="board" :labels="labels" />
-				</div>
+					<div
+						v-if="activeTab === 'Tags'"
+						id="board-detail-labels">
+						<TagsTabSidebard :board="board" />
+					</div>
 
-				<div
-					v-if="activeTab === 'Deleted items'"
-				>
-					<DeletedTabSidebard :board="board" />
-				</div>
+					<div
+						v-if="activeTab === 'Deleted items'">
+						<DeletedTabSidebard :board="board" />
+					</div>
 
-				<div
-					v-if="activeTab === 'Timeline'"
-				>
-					<TimelineTabSidebard :board="board" />
+					<div
+						v-if="activeTab === 'Timeline'">
+						<TimelineTabSidebard :board="board" />
+					</div>
 				</div>
 			</div>
 		</div>
