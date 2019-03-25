@@ -30,10 +30,8 @@
 	import { CollectionList } from 'nextcloud-vue-collections';
 	import Vue from 'vue';
 	import PopoverMenu from 'nextcloud-vue/dist/Components/PopoverMenu'
-	import vClickOutside from 'v-click-outside'
 
 	Vue.component('popover-menu', PopoverMenu);
-	Vue.use(vClickOutside)
 
 	export default {
 		name: 'CollaborationView',
