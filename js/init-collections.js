@@ -23,7 +23,9 @@
 'use strict';
 
 /* global __webpack_nonce__ __webpack_public_path__ OC t n */
-__webpack_nonce__ = btoa(OC.requestToken); // eslint-disable-line no-native-reassign
+// eslint-disable-next-line
+__webpack_nonce__ = btoa(OC.requestToken);
+// eslint-disable-next-line
 __webpack_public_path__ = OC.linkTo('deck', 'js/build/');
 
 import Vue from 'vue';
