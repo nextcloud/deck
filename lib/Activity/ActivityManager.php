@@ -182,7 +182,7 @@ class ActivityManager {
 				if (!isset($subjectParams['before'])) {
 					$subject = $ownActivity ? $this->l10n->t('You have added a description to card {card} in stack {stack} on board {board}') : $this->l10n->t('{user} has added a description to card {card} in stack {stack} on board {board}');
 				} else {
-					$subject = $ownActivity ? $this->l10n->t('You have updated the description of card {card} in stack {stack} on board {board}') : $this->l10n->t('{user} has updated the description card {card} in stack {stack} on board {board}');
+					$subject = $ownActivity ? $this->l10n->t('You have updated the description of card {card} in stack {stack} on board {board}') : $this->l10n->t('{user} has updated the description of the card {card} in stack {stack} on board {board}');
 				}
 				break;
 			case self::SUBJECT_CARD_UPDATE_ARCHIVE:
