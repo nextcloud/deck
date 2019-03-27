@@ -14,6 +14,8 @@ find -name "*.js" -path '*js/*' -not -path '*js/node_modules*' \
     -not -path '*js/tests*' \
     -not -path '*js/webpack*' \
     -not -path '*js/public*' \
+    -not -path '*js/views*' \
+    -not -path '*js/init-collections.js' \
     -not -path '*build/*' \
     -not -path '*tests/*' \
     -print0 | xargs -0 $ESLINT

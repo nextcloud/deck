@@ -25,6 +25,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
+use OCA\Deck\Collaboration\Resources\ResourceProvider;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
@@ -459,6 +460,13 @@ class BoardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE);
 		$this->boardMapper->mapAcl($newAcl);
 		$this->changeHelper->boardChanged($boardId);
+		$version = \OC_Util::getVersion()[0];
+		if ($version >= 16) {
+			try {
+				$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+				$resourceProvider->invalidateAccessCache($boardId);
+			} catch (\Exception $e) {}
+		}
 		return $newAcl;
 	}
 
@@ -529,6 +537,13 @@ class BoardService {
 		}
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $acl, ActivityManager::SUBJECT_BOARD_UNSHARE);
 		$this->changeHelper->boardChanged($acl->getBoardId());
+		$version = \OC_Util::getVersion()[0];
+		if ($version >= 16) {
+			try {
+				$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+				$resourceProvider->invalidateAccessCache($acl->getBoardId());
+			} catch (\Exception $e) {}
+		}
 		return $this->aclMapper->delete($acl);
 	}
 

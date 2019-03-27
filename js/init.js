@@ -1,7 +1,10 @@
 'use strict';
 
-/* global __webpack_nonce__ OC */
-__webpack_nonce__ = btoa(OC.requestToken); // eslint-disable-line no-native-reassign
+/* global __webpack_nonce__ __webpack_public_path__ OC t n */
+// eslint-disable-next-line
+__webpack_nonce__ = btoa(OC.requestToken);
+// eslint-disable-next-line
+__webpack_public_path__ = OC.linkTo('deck', 'js/build/');
 
 // used for building a vendor stylesheet
 import 'ng-sortable/dist/ng-sortable.css';

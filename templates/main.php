@@ -32,8 +32,8 @@ Util::addStyle('activity', 'style');
 Util::addStyle('comments', 'comments');
 Util::addScript('oc-backbone-webdav');
 
-Util::addStyle('deck', '../js/build/vendor');
-Util::addScript('deck', 'build/vendor');
+//Util::addStyle('deck', '../js/build/vendor');
+//Util::addScript('deck', 'build/vendor');
 
 Util::addStyle('deck', 'style');
 Util::addScript('deck', 'build/deck');
@@ -41,6 +41,7 @@ Util::addScript('deck', 'build/deck');
 if (\OC_Util::getVersion()[0] < 14) {
 	Util::addStyle('deck', 'comp-13');
 }
+\OC::$server->getEventDispatcher()->dispatch('\OCP\Collaboration\Resources::loadAdditionalScripts');
 ?>
 
 <div

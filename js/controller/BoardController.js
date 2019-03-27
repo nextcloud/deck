@@ -21,8 +21,11 @@
  */
 
 import app from '../app/App.js';
+import Vue from 'vue';
+import CollaborationView from '../views/CollaborationView';
+
 /* global oc_defaults OC OCP OCA */
-app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter, FileService) {
+app.controller('BoardController', function ($rootScope, $scope, $element, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter, FileService) {
 
 	$scope.sidebar = $rootScope.sidebar;
 
@@ -145,6 +148,29 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			$scope.loadArchived();
 		} else {
 			$scope.loadDefault();
+		}
+	});
+
+	const ComponentVM = new Vue({
+		render: h => h(CollaborationView),
+		data: {
+			model: BoardService.getCurrent()
+		},
+	});
+	$scope.mountCollections = function() {
+		const MountingPoint = document.getElementById('collaborationResources');
+		if (MountingPoint) {
+			ComponentVM.model = BoardService.getCurrent();
+			ComponentVM.$mount(MountingPoint);
+		}
+	};
+	$scope.$$postDigest($scope.mountCollections);
+	$scope.$watch(function () {
+		return BoardService.getCurrent();
+	}, function() {
+		ComponentVM.model = BoardService.getCurrent();
+		if ($scope.sidebar.show) {
+			$scope.$$postDigest($scope.mountCollections);
 		}
 	});
 
