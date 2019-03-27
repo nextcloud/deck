@@ -39,7 +39,6 @@
     "You have added a description to card {card} in stack {stack} on board {board}" : "Leírást adott hozzá a(z) {card} kártyához a(z) {stack} rakásban, a(z) {board} táblán",
     "{user} has added a description to card {card} in stack {stack} on board {board}" : "{user} leírást adott hozzá a(z) {card} kártyához a(z) {stack} rakásban, a(z) {board} táblán",
     "You have updated the description of card {card} in stack {stack} on board {board}" : "Frissítette a(z) {card} kártya leírását a(z) {stack} rakásban, a(z) {board} táblán",
-    "{user} has updated the description card {card} in stack {stack} on board {board}" : "{user} frissítette a(z) {card} kártya leírását a(z) {stack} rakásban, a(z) {board} táblán",
     "You have archived card {card} in stack {stack} on board {board}" : "Archiválta a(z) {card} kártyát a(z) {stack} rakásban, a(z) {board} táblán",
     "{user} has archived card {card} in stack {stack} on board {board}" : "{user} archiválta a(z) {card} kártyát a(z) {stack} rakásban, a(z) {board} táblán",
     "You have unarchived card {card} in stack {stack} on board {board}" : "Visszavonta a(z) {card} kártya archiválását a(z) {stack} rakásban, a(z) {board} táblán",

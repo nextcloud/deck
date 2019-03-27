@@ -39,7 +39,6 @@
     "You have added a description to card {card} in stack {stack} on board {board}" : "Vostede engadiu a descrición á tarxeta {card} na rima {stack} no taboleiro {board}",
     "{user} has added a description to card {card} in stack {stack} on board {board}" : "{user} engadiu a descrición á tarxeta {card} na rima {stack} no taboleiro {board}",
     "You have updated the description of card {card} in stack {stack} on board {board}" : "Vostede actualizou a descrición da tarxeta {card} na rima {stack} no taboleiro {board}",
-    "{user} has updated the description card {card} in stack {stack} on board {board}" : "{user} actualizou a descrición da tarxeta {card} na rima {stack} no taboleiro {board}",
     "You have archived card {card} in stack {stack} on board {board}" : "Vostede arquivou a tarxeta {card} na rima {stack} no taboleiro {board}",
     "{user} has archived card {card} in stack {stack} on board {board}" : "{user} arquivou a tarxeta {card} na rima {stack} no taboleiro {board}",
     "You have unarchived card {card} in stack {stack} on board {board}" : "Vostede desarquivou a tarxeta {card} na rima {stack} no taboleiro {board}",

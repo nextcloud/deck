@@ -41,7 +41,6 @@ OC.L10N.register(
     "You have added a description to card {card} in stack {stack} on board {board}" : "Du har lagt til beskrivelse for kort {card} i stabel {stack} på tavle {board}",
     "{user} has added a description to card {card} in stack {stack} on board {board}" : "{user} har lagt til beskrivelse for kort {card} i stabel {stack} på tavle {board}",
     "You have updated the description of card {card} in stack {stack} on board {board}" : "Du har endret beskrivelse for kort {card} i stabel {stack} på tavle {board}",
-    "{user} has updated the description card {card} in stack {stack} on board {board}" : "{user} har endret beskrivelse for kort {card} i stabel {stack} på tavle {board}",
     "You have archived card {card} in stack {stack} on board {board}" : "Du har arkivert kort {card} i stabel {stack} på tavle {board}",
     "{user} has archived card {card} in stack {stack} on board {board}" : "{user} har arkivert kort {card} i stabel {stack} på tavle {board}",
     "You have unarchived card {card} in stack {stack} on board {board}" : "Du har hentet arkivert kort {card} tilbake til stabel {stack} på tavle {board}",

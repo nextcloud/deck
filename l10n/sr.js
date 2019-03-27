@@ -41,7 +41,6 @@ OC.L10N.register(
     "You have added a description to card {card} in stack {stack} on board {board}" : "Додали сте опис картици {card} са гомиле {stack} на табли {board}",
     "{user} has added a description to card {card} in stack {stack} on board {board}" : "{user} је додао опис картици {card} са гомиле {stack} на табли {board}",
     "You have updated the description of card {card} in stack {stack} on board {board}" : "Ажурирали сте опис картице {card} са гомиле {stack} на табли {board}",
-    "{user} has updated the description card {card} in stack {stack} on board {board}" : "{user} је ажурирао опис картице {card} са гомиле {stack} на табли {board}",
     "You have archived card {card} in stack {stack} on board {board}" : "Архивирали сте картицу {card} са гомиле {stack} на табли {board}",
     "{user} has archived card {card} in stack {stack} on board {board}" : "{user} је архивирао картицу {card} са гомиле {stack} на табли {board}",
     "You have unarchived card {card} in stack {stack} on board {board}" : "Вратили сте из архиве картицу {card} са гомиле {stack} у табли {board}",

@@ -41,7 +41,6 @@ OC.L10N.register(
     "You have added a description to card {card} in stack {stack} on board {board}" : "Je voegde een beschrijving toe aan kaart {card} in stapel {stack} op bord {board}",
     "{user} has added a description to card {card} in stack {stack} on board {board}" : "{user} voegde een beschrijving toe aan kaart {card} in stapel {stack} op bord {board}",
     "You have updated the description of card {card} in stack {stack} on board {board}" : "Je bewerkte de beschrijving bij op kaart {card} in stapel {stack} op bord {board}",
-    "{user} has updated the description card {card} in stack {stack} on board {board}" : "{user} werkte de beschrijving bij van kaart {card} in {stack} op bord {board}",
     "You have archived card {card} in stack {stack} on board {board}" : "Je archiveerde kaart {card} in stapel {stack} op bord {board}",
     "{user} has archived card {card} in stack {stack} on board {board}" : "{user} archiveerde kaart {card} in stapel {stack} op bord {board}",
     "You have unarchived card {card} in stack {stack} on board {board}" : "Je haalde kaart {card} in stapel {stack} op bord {board} uit het archief",

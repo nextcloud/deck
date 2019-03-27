@@ -41,7 +41,6 @@ OC.L10N.register(
     "You have added a description to card {card} in stack {stack} on board {board}" : "{board} panosundaki {stack} yığınının içindeki {card} kartına bir açıklama eklediniz",
     "{user} has added a description to card {card} in stack {stack} on board {board}" : "{user}, {board} panosundaki {stack} yığınının içindeki {card} kartına bir açıklama ekledi",
     "You have updated the description of card {card} in stack {stack} on board {board}" : "{board} panosundaKİ {stack} yığınının içindeki {card} kartının açıklamasını güncellediniz",
-    "{user} has updated the description card {card} in stack {stack} on board {board}" : "{user}, {board} panosundaki {stack} yığınının içindeki {card} kartının açıklamasını güncelledi",
     "You have archived card {card} in stack {stack} on board {board}" : "{board} panosundaki {stack} yığınının içindeki {card} kartını arşive kaldırdınız",
     "{user} has archived card {card} in stack {stack} on board {board}" : "{user}, {board} panosundaki {stack} yığınının içindeki {card} kartını arşive kaldırdı",
     "You have unarchived card {card} in stack {stack} on board {board}" : "{board} panosundaki {stack} yığını içindeki {card} kartını arşivden çıkardınız",

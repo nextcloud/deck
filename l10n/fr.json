@@ -39,7 +39,6 @@
     "You have added a description to card {card} in stack {stack} on board {board}" : "Vous avez ajouté une description à la carte {card} de la pile {stack} du tableau {board}",
     "{user} has added a description to card {card} in stack {stack} on board {board}" : "{user} a ajouté une description à la carte {card} de la pile {stack} du tableau {board}",
     "You have updated the description of card {card} in stack {stack} on board {board}" : "Vous avez mis à jour la description de la carte {card} de la pile {stack} du tableau {board}",
-    "{user} has updated the description card {card} in stack {stack} on board {board}" : "{user} a mis à jour la description de la carte {card} de la pile {stack} du tableau {board}",
     "You have archived card {card} in stack {stack} on board {board}" : "Vous avez archivé la carte {card} de la pile {stack} du tableau {board}",
     "{user} has archived card {card} in stack {stack} on board {board}" : "{user} a archivé la carte {card} de la pile {stack} du tableau {board}",
     "You have unarchived card {card} in stack {stack} on board {board}" : "Vous avez une carte {card} non-archivée dans la pile {stack} du tableau {board}",
