@@ -87,7 +87,11 @@ return [
 		['name' => 'board_api#delete', 'url' => '/api/v1.0/boards/{boardId}', 'verb' => 'DELETE'],
 		['name' => 'board_api#update', 'url' => '/api/v1.0/boards/{boardId}', 'verb' => 'PUT'],
 		['name' => 'board_api#undo_delete', 'url' => '/api/v1.0/boards/{boardId}/undo_delete', 'verb' => 'POST'],
-		
+		['name' => 'board_api#addAcl', 'url' => '/api/v1.0/boards/{boardId}/acl', 'verb' => 'POST'],
+		['name' => 'board_api#deleteAcl', 'url' => '/api/v1.0/boards/{boardId}/acl', 'verb' => 'DELETE'],
+		['name' => 'board_api#updateAcl', 'url' => '/api/v1.0/boards/{boardId}/acl', 'verb' => 'PUT'],
+
+
 		['name' => 'stack_api#index', 'url' => '/api/v1.0/boards/{boardId}/stacks', 'verb' => 'GET'],
 		['name' => 'stack_api#getArchived', 'url' => '/api/v1.0/boards/{boardId}/stacks/archived', 'verb' => 'GET'],
 		['name' => 'stack_api#get', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}', 'verb' => 'GET'],
