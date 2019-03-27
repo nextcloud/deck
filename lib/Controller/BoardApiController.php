@@ -161,8 +161,8 @@ class BoardApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function updateAcl($id, $permissionEdit, $permissionShare, $permissionManage) {
-		$acl = $this->boardService->updateAcl($id, $permissionEdit, $permissionShare, $permissionManage);
+	public function updateAcl($aclId, $permissionEdit, $permissionShare, $permissionManage) {
+		$acl = $this->boardService->updateAcl($aclId, $permissionEdit, $permissionShare, $permissionManage);
 		return new DataResponse($acl, HTTP::STATUS_OK);
 	}
 
