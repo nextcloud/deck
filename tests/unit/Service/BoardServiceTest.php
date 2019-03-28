@@ -38,6 +38,7 @@ use OCA\Deck\Notification\NotificationHelper;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IGroupManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use \Test\TestCase;
 
 class BoardServiceTest extends TestCase {
@@ -68,6 +69,8 @@ class BoardServiceTest extends TestCase {
 	private $activityManager;
 	/** @var ChangeHelper */
 	private $changeHelper;
+	/** @var EventDispatcherInterface */
+	private $eventDispatcher;
 	private $userId = 'admin';
 
 	public function setUp() {
@@ -84,6 +87,7 @@ class BoardServiceTest extends TestCase {
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
+		$this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -97,6 +101,7 @@ class BoardServiceTest extends TestCase {
 			$this->userManager,
 			$this->groupManager,
 			$this->activityManager,
+			$this->eventDispatcher,
 			$this->changeHelper,
 			$this->userId
 		);

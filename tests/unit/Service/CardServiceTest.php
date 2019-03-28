@@ -41,6 +41,7 @@ use OCP\Comments\ICommentsManager;
 use OCP\IUser;
 use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Test\TestCase;
 
 class CardServiceTest extends TestCase {
@@ -70,6 +71,8 @@ class CardServiceTest extends TestCase {
 	private $commentsManager;
 	/** @var ICommentsManager|MockObject */
 	private $userManager;
+	/** @var EventDispatcherInterface */
+	private $eventDispatcher;
 	/** @var ChangeHelper|MockObject */
 	private $changeHelper;
 
@@ -87,6 +90,7 @@ class CardServiceTest extends TestCase {
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->commentsManager = $this->createMock(ICommentsManager::class);
 		$this->userManager = $this->createMock(IUserManager::class);
+		$this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->cardService = new CardService(
 			$this->cardMapper,
@@ -102,6 +106,7 @@ class CardServiceTest extends TestCase {
 			$this->commentsManager,
 			$this->userManager,
 			$this->changeHelper,
+			$this->eventDispatcher,
 			'user1'
         );
     }
