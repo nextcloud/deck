@@ -24,7 +24,7 @@ import app from '../app/App.js';
 import Vue from 'vue';
 import CollaborationView from '../views/CollaborationView';
 
-/* global oc_defaults OC OCP OCA */
+/* global oc_defaults oc_config OC OCP OCA */
 app.controller('BoardController', function ($rootScope, $scope, $element, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter, FileService) {
 
 	$scope.sidebar = $rootScope.sidebar;
