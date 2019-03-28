@@ -83,7 +83,8 @@ class PermissionService {
 		$this->config = $config;
 		$this->userId = $userId;
 
-		$this->circlesEnabled = \OC::$server->getAppManager()->isEnabledForUser('circles');
+		$this->circlesEnabled = \OC::$server->getAppManager()->isEnabledForUser('circles') &&
+			(version_compare(\OC::$server->getAppManager()->getAppVersion('circles'), '0.17.1') >= 0);
 	}
 
 	/**

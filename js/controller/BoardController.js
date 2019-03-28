@@ -151,28 +151,30 @@ app.controller('BoardController', function ($rootScope, $scope, $element, $state
 		}
 	});
 
-	const ComponentVM = new Vue({
-		render: h => h(CollaborationView),
-		data: {
-			model: BoardService.getCurrent()
-		},
-	});
-	$scope.mountCollections = function() {
-		const MountingPoint = document.getElementById('collaborationResources');
-		if (MountingPoint) {
+	if (parseInt(oc_config.version.split('.')[0]) >= 16) {
+		const ComponentVM = new Vue({
+			render: h => h(CollaborationView),
+			data: {
+				model: BoardService.getCurrent()
+			},
+		});
+		$scope.mountCollections = function () {
+			const MountingPoint = document.getElementById('collaborationResources');
+			if (MountingPoint) {
+				ComponentVM.model = BoardService.getCurrent();
+				ComponentVM.$mount(MountingPoint);
+			}
+		};
+		$scope.$$postDigest($scope.mountCollections);
+		$scope.$watch(function () {
+			return BoardService.getCurrent();
+		}, function () {
 			ComponentVM.model = BoardService.getCurrent();
-			ComponentVM.$mount(MountingPoint);
-		}
-	};
-	$scope.$$postDigest($scope.mountCollections);
-	$scope.$watch(function () {
-		return BoardService.getCurrent();
-	}, function() {
-		ComponentVM.model = BoardService.getCurrent();
-		if ($scope.sidebar.show) {
-			$scope.$$postDigest($scope.mountCollections);
-		}
-	});
+			if ($scope.sidebar.show) {
+				$scope.$$postDigest($scope.mountCollections);
+			}
+		});
+	}
 
 	$scope.toggleCompactMode = function() {
 		$rootScope.compactMode = !$rootScope.compactMode;
