@@ -32,6 +32,7 @@ class Acl extends RelationalEntity {
 
 	const PERMISSION_TYPE_USER = 0;
 	const PERMISSION_TYPE_GROUP = 1;
+	const PERMISSION_TYPE_CIRCLE = 7;
 
 	protected $participant;
 	protected $type;

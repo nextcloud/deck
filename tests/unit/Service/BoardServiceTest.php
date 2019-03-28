@@ -123,6 +123,10 @@ class BoardServiceTest extends TestCase {
 			->method('findAllByGroups')
 			->with('admin', ['a', 'b', 'c'])
 			->willReturn([$b2, $b3]);
+		$this->boardMapper->expects($this->once())
+			->method('findAllByCircles')
+			->with('admin')
+			->willReturn([]);
 		$user = $this->createMock(IUser::class);
 		$this->groupManager->method('getUserGroupIds')
 			->willReturn(['a', 'b', 'c']);

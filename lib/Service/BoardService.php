@@ -98,7 +98,8 @@ class BoardService {
 		$userInfo = $this->getBoardPrerequisites();
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null, $since);
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null,  $since);
-		$complete = array_merge($userBoards, $groupBoards);
+		$circleBoards = $this->boardMapper->findAllByCircles($userInfo['user'], null, null,  $since);
+		$complete = array_merge($userBoards, $groupBoards, $circleBoards);
 		$result = [];
 		/** @var Board $item */
 		foreach ($complete as &$item) {

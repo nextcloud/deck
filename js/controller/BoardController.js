@@ -429,6 +429,8 @@ app.controller('BoardController', function ($rootScope, $scope, $element, $state
 				return 'user';
 			case OC.Share.SHARE_TYPE_GROUP:
 				return 'group';
+			case OC.Share.SHARE_TYPE_CIRCLE:
+				return 'circles';
 			default:
 				return '';
 		}

@@ -33,6 +33,7 @@ use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\AppFramework\QueryException;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\ILogger;
@@ -61,6 +62,8 @@ class PermissionService {
 	/** @var array */
 	private $users = [];
 
+	private $circlesEnabled = false;
+
 	public function __construct(
 		ILogger $logger,
 		AclMapper $aclMapper,
@@ -79,6 +82,8 @@ class PermissionService {
 		$this->shareManager = $shareManager;
 		$this->config = $config;
 		$this->userId = $userId;
+
+		$this->circlesEnabled = \OC::$server->getAppManager()->isEnabledForUser('circles');
 	}
 
 	/**
@@ -187,6 +192,15 @@ class PermissionService {
 		foreach ($acls as $acl) {
 			if ($acl->getType() === Acl::PERMISSION_TYPE_USER && $acl->getParticipant() === $userId) {
 				return $acl->getPermission($permission);
+			}
+
+			if ($this->circlesEnabled && $acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
+				try {
+					\OCA\Circles\Api\v1\Circles::getMember($acl->getParticipant(), $this->userId, 1, true);
+					return $acl->getPermission($permission);
+				} catch (\Exception $e) {
+					$this->logger->info('Member not found in circle that was accessed. This should not happen.');
+				}
 			}
 		}
 		// check for groups
