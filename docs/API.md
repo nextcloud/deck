@@ -65,6 +65,12 @@ curl -u admin:admin -X GET \
 
 The board list endpoint supports setting an `If-Modified-Since` header to limit the results to entities that are changed after the provided time.
 
+#### Request parameters
+
+| Parameter | Type    | Description                  |
+| --------- | ------- | ---------------------------- |
+| options   | Bool    | **Optional** Enhance boards with details about labels, stacks and users |
+
 #### Response
 
 ##### 200 Success
@@ -283,6 +289,64 @@ Returns an array of board items
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
 | boardId   | Integer | The id of the board to fetch |
+
+#### Response
+
+##### 200 Success
+
+### POST /boards/{boardId}/acl - Add new acl rule
+
+#### Request body
+
+| Parameter | Type   | Description                                          |
+| --------- | ------ | ---------------------------------------------------- |
+| type      | Integer | Type of the participant                              |
+| participant     | String | The uid of the participant |
+| permissionEdit  | Bool   | Setting if the participant has edit permissions |
+| permissionShare  | Bool   | Setting if the participant has sharing permissions |
+| permissionManage  | Bool   | Setting if the participant has management permissions |
+
+##### Supported participant types:
+- 0 User
+- 1 Group
+- 7 Circle
+
+#### Response
+
+##### 200 Success
+
+```json
+[{
+  "participant": {
+    "primaryKey": "userid",
+    "uid": "userid",
+    "displayname": "User Name"
+  },
+  "type": 0,
+  "boardId": 1,
+  "permissionEdit": true,
+  "permissionShare": false,
+  "permissionManage": true,
+  "owner": false,
+  "id": 1
+}]
+```
+
+### PUT /boards/{boardId}/acl/{aclId} - Update an acl rule
+
+#### Request parameters
+
+| Parameter | Type   | Description                                          |
+| --------- | ------ | ---------------------------------------------------- |
+| permissionEdit  | Bool   | Setting if the participant has edit permissions |
+| permissionShare  | Bool   | Setting if the participant has sharing permissions |
+| permissionManage  | Bool   | Setting if the participant has management permissions |
+
+#### Response
+
+##### 200 Success
+
+### DELETE /boards/{boardId}/acl/{aclId} - Delete an acl rule
 
 #### Response
 
