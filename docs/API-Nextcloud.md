@@ -1,5 +1,20 @@
 # Nextcloud APIs
 
+## Available sharees
+
+When sharing a board to a user, group or circle, the possible sharees can be obtained though the files_sharing API.
+
+API endpoint: https://nextcloud.local/index.php/apps/files_sharing/api/v1/sharees
+
+### Parameters
+- format: **The response format**
+- perPage: **Limit response number**
+- itemType: **List of types. Currently supported are**
+  - 0 user
+  - 1 group
+  - 7 circle
+
+
 ## Comments
 
 Comments are stored using the Nextcloud Comments API. You can use the WebDAV endpoint of Nextcloud to fetch, update and delete comments.

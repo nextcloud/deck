@@ -40,7 +40,7 @@ use Sabre\HTTP\Util;
  */
 class BoardApiController extends ApiController {
 
-	private $service;
+	private $boardService;
 
 	/**
 	 * @param string $appName
@@ -50,7 +50,7 @@ class BoardApiController extends ApiController {
 	 */
 	public function __construct($appName, IRequest $request, BoardService $service, $userId) {
 		parent::__construct($appName, $request);
-		$this->service = $service;
+		$this->boardService = $service;
 		$this->userId = $userId;
 	}
 
@@ -62,16 +62,16 @@ class BoardApiController extends ApiController {
 	 * Return all of the boards that the current user has access to.
 	 * @throws StatusException
 	 */
-	public function index() {
+	public function index($details = null) {
 		$modified = $this->request->getHeader('If-Modified-Since');
 		if ($modified === null || $modified === '') {
-			$boards = $this->service->findAll();
+			$boards = $this->boardService->findAll(0, $details);
 		} else {
 			$date = Util::parseHTTPDate($modified);
 			if (!$date) {
 				throw new StatusException('Invalid If-Modified-Since header provided.');
 			}
-			$boards = $this->service->findAll($date->getTimestamp());
+			$boards = $this->boardService->findAll($date->getTimestamp(), $details);
 		}
 		return new DataResponse($boards, HTTP::STATUS_OK);
 	 }
@@ -85,7 +85,7 @@ class BoardApiController extends ApiController {
 	 * Return the board specified by $this->request->getParam('boardId').
 	 */
 	public function get() {
-		$board = $this->service->find($this->request->getParam('boardId'));
+		$board = $this->boardService->find($this->request->getParam('boardId'));
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
@@ -100,7 +100,7 @@ class BoardApiController extends ApiController {
 	 * Create a board with the specified title and color.
 	 */
 	public function create($title, $color) {
-		$board = $this->service->create($title, $this->userId, $color);
+		$board = $this->boardService->create($title, $this->userId, $color);
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
@@ -116,7 +116,7 @@ class BoardApiController extends ApiController {
 	 * Update a board with the specified boardId, title and color, and archived state.
 	 */
 	public function update($title, $color, $archived = false) {
-		$board = $this->service->update($this->request->getParam('boardId'), $title, $color, $archived);
+		$board = $this->boardService->update($this->request->getParam('boardId'), $title, $color, $archived);
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
@@ -129,7 +129,7 @@ class BoardApiController extends ApiController {
 	 * Delete the board specified by $boardId.  Return the board that was deleted.
 	 */
 	public function delete() {
-		$board = $this->service->delete($this->request->getParam('boardId'));
+		$board = $this->boardService->delete($this->request->getParam('boardId'));
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 
@@ -142,8 +142,38 @@ class BoardApiController extends ApiController {
 	 * Undo the deletion of the board specified by $boardId.
 	 */
 	public function undoDelete() {
-		$board = $this->service->deleteUndo($this->request->getParam('boardId'));
+		$board = $this->boardService->deleteUndo($this->request->getParam('boardId'));
 		return new DataResponse($board, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 */
+	public function addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage) {
+		$acl = $this->boardService->addAcl($boardId, $type, $participant, $permissionEdit, $permissionShare, $permissionManage);
+		return new DataResponse($acl, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 */
+	public function updateAcl($aclId, $permissionEdit, $permissionShare, $permissionManage) {
+		$acl = $this->boardService->updateAcl($aclId, $permissionEdit, $permissionShare, $permissionManage);
+		return new DataResponse($acl, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 */
+	public function deleteAcl($aclId) {
+		$acl = $this->boardService->deleteAcl($aclId);
+		return new DataResponse($acl, HTTP::STATUS_OK);
 	}
 
 }

@@ -94,7 +94,7 @@ class BoardService {
 	/**
 	 * @return array
 	 */
-	public function findAll($since = 0) {
+	public function findAll($since = 0, $details = null) {
 		$userInfo = $this->getBoardPrerequisites();
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null, $since);
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null,  $since);
@@ -110,7 +110,11 @@ class BoardService {
 						$this->boardMapper->mapAcl($acl);
 					}
 				}
-				$this->enrichWithStacks($item);
+				if ($details !== null) {
+					$this->enrichWithStacks($item);
+					$this->enrichWithLabels($item);
+					$this->enrichWithUsers($item);
+				}
 				$permissions = $this->permissionService->matchPermissions($item);
 				$item->setPermissions([
 					'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ],
@@ -154,8 +158,7 @@ class BoardService {
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE],
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
 		]);
-		$boardUsers = $this->permissionService->findUsers($boardId);
-		$board->setUsers(array_values($boardUsers));
+		$this->enrichWithUsers($board);
 		return $board;
 	}
 
@@ -556,6 +559,24 @@ class BoardService {
 		}
 
 		$board->setStacks($stacks);
+	}
+
+	private function enrichWithLabels($board, $since = -1) {
+		$labels = $this->labelMapper->findAll($board->getId(), null, null, $since);
+
+		if(\count($labels) === 0) {
+			return;
+		}
+
+		$board->setLabels($labels);
+	}
+
+	private function enrichWithUsers($board, $since = -1) {
+		$boardUsers = $this->permissionService->findUsers($board->getId());
+		if(\count($boardUsers) === 0) {
+			return;
+		}
+		$board->setUsers(array_values($boardUsers));
 	}
 
 }
