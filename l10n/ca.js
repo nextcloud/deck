@@ -23,12 +23,15 @@ OC.L10N.register(
     "{user} has renamed the card {before} to {card}" : "{user} ha canviat el nom de la targeta de {before} a {card}",
     "{user} has assigned {assigneduser} to card {card} on board {board}" : "{user} ha assignat a {assigneduser} la targeta {card} del taulell {board}",
     "You have commented on card {card}" : "Heu comentat la targeta {card}",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "S'ha canviat una <strong>descripció de carta</strong> de l'aplicació Tauler",
     "Deck" : "Tauler",
+    "Changes in the <strong>Deck app</strong>" : "Hi ha canvis a l'<strong>aplicació Tauler</strong>",
     "Personal" : "Personal",
     "Finished" : "Acabat",
     "To review" : "Per revisar",
     "Action needed" : "Acció necessaria",
     "Later" : "Més tard",
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Tauler és una eina d'organització a l'estil kanban dirigida a la planificació personal i a l'organització de projectes per equips integrada a Nextcloud.\n\n\n- 📥 Afegiu les tasques en cartes i poseu-les en ordre\n- 📄 Apunteu notes adicionals en markdown\n- 🔖 Assigneu etiquetes per una organització encara millor\n- 👥 Compartiu amb el vostre equip, família o amics\n- 📎 Adjunteu fitxers i encasteu-los en la descripció en markdown\n- 💬 Debatiu amb el vostre equip usant comentaris\n- ⚡ Mantingueu el seguiment de canvis al flux d'activitat\n- 🚀 Tingueu el vostre projecte organitzat",
     "Add a new stack" : "Afegeix una nova pila",
     "Show archived cards" : "Mostra les targetes arxivades",
     "Hide archived cards" : "Amaga les targetes arxivades",
@@ -72,6 +75,8 @@ OC.L10N.register(
     "Shared boards" : "Taulers compartits",
     "Move board to archive" : "Mou la placa a l'arxiu",
     "Create a new board" : "Crear nova",
-    "Settings" : "Paràmetres"
+    "Settings" : "Paràmetres",
+    "Limit deck to groups" : "Limita el tauler per grups",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitar el Tauler bloquejarà la creació de taulers als usuaris que no són part d'aquests grups. Els usuaris podràn seguir treballant en els taulers que hagin estat compartits amb ells."
 },
 "nplurals=2; plural=(n != 1);");

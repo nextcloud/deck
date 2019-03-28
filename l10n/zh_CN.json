@@ -39,6 +39,7 @@
     "You have added a description to card {card} in stack {stack} on board {board}" : "您为面板 {board} 上的任务 {stack} 中的卡片 {card} 添加了描述",
     "{user} has added a description to card {card} in stack {stack} on board {board}" : "{user} 为面板 {board} 上的任务 {stack} 中的卡片 {card} 添加了描述",
     "You have updated the description of card {card} in stack {stack} on board {board}" : "您更新了面板 {board} 上的任务 {stack} 中的卡片 {card} 的描述",
+    "{user} has updated the description of the card {card} in stack {stack} on board {board}" : "{user} 更新了面板 {board} 上，任务 {stack} 的卡片 {card}中的描述",
     "You have archived card {card} in stack {stack} on board {board}" : "您已对面板 {board} 上的任务 {stack} 中的卡片 {card} 存档",
     "{user} has archived card {card} in stack {stack} on board {board}" : "{user} 已对面板 {board} 上的任务 {stack} 中的卡片 {card} 存档",
     "You have unarchived card {card} in stack {stack} on board {board}" : "您已对面板 {board} 上的任务 {stack} 中的卡片 {card} 恢复存档",

@@ -41,6 +41,7 @@ OC.L10N.register(
     "You have added a description to card {card} in stack {stack} on board {board}" : "Hai aggiunto una descrizione alla scheda {card} nella pila {stack} sulla lavagna {board}",
     "{user} has added a description to card {card} in stack {stack} on board {board}" : "{user} ha aggiunto una descrizione alla scheda {card} nella pila {stack} sulla lavagna {board}",
     "You have updated the description of card {card} in stack {stack} on board {board}" : "Hai aggiornato la descrizione della scheda {card} nella pila {stack} sulla lavagna {board}",
+    "{user} has updated the description of the card {card} in stack {stack} on board {board}" : "{user} ha aggiornato la descrizione della scheda {card} nella pila {stack} sulla lavagna {board}",
     "You have archived card {card} in stack {stack} on board {board}" : "Hai archiviato la scheda {card} nella pila {stack} sulla lavagna {board}",
     "{user} has archived card {card} in stack {stack} on board {board}" : "{user} ha archiviato la scheda {card} nella pila {stack} sulla lavagna {board}",
     "You have unarchived card {card} in stack {stack} on board {board}" : "Hai annullato l'archiviazione della scheda {card} nella pila {stack} sulla lavagna {board}",

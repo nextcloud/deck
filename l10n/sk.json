@@ -39,6 +39,7 @@
     "You have added a description to card {card} in stack {stack} on board {board}" : "Pridali ste popis ku karte {card} v stohu {stack} na nástenke {board}",
     "{user} has added a description to card {card} in stack {stack} on board {board}" : "Používateľ {user} pridal popis ku karte {card} v stohu {stack} na nástenke {board}",
     "You have updated the description of card {card} in stack {stack} on board {board}" : "Aktualizovali ste popis v karte {card} v stohu {stack} na nástenke {board}",
+    "{user} has updated the description of the card {card} in stack {stack} on board {board}" : "Používateľ {user} aktualizoval popis karty {card} v stohu {stack} na nástenke {board}",
     "You have archived card {card} in stack {stack} on board {board}" : "Archivovali ste kartu {card} v stohu {stack} na nástenke {board}",
     "{user} has archived card {card} in stack {stack} on board {board}" : "Používateľ {user} archivoval kartu {card} v stohu {stack} na nástenke {board}",
     "You have unarchived card {card} in stack {stack} on board {board}" : "Zrušili ste archiváciu karty {card} v stohu {stack} na nástenke {board}",
