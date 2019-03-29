@@ -9,6 +9,7 @@ OC.L10N.register(
     "Remove user from card" : "Usuń użytkownika z karty",
     "Hours" : "Godzin",
     "Minutes" : "Minut",
+    "board" : "tablica",
     "Maximum file size of {size} exceeded" : "Przekroczono maksymalny rozmiar pliku {size}",
     "You have created a new board {board}" : "Stworzyłeś(-aś) nową tablicę {board}",
     "{user} has created a new board {board}" : "{user} utworzył(-a) nową tablicę {board}",

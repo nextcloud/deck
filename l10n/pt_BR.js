@@ -9,6 +9,7 @@ OC.L10N.register(
     "Remove user from card" : "Remover usuário do cartão",
     "Hours" : "Horas",
     "Minutes" : "Minutos",
+    "board" : "painel",
     "Maximum file size of {size} exceeded" : "Excedeu o tamanho máximo de arquivo de {size}",
     "You have created a new board {board}" : "Você criou um novo painel {board}",
     "{user} has created a new board {board}" : "{user} criou um novo painel {board}",
