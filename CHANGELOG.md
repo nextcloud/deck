@@ -1,6 +1,24 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.6.0 - unreleased
+
+### Added
+- Share boards with circles
+- Integration with collections in Nextcloud 16
+- Support for full text search
+- Nextcloud 16 compatibility
+
+### Fixed
+- Fix duplicate call to delete
+- Prevent duplicate tag names @jakobroehrl
+- Prevent loading details when editing the card title @jakobroehrl
+- Hide sidebar after card deletion @jakobroehrl
+- Update labels after change in the UI @jakobroehrl
+- Allow limiting the app to groups again
+- Various REST API enhancements and fixes
+
+
 ## 0.5.2 - 2018-12-20
 
 ### Fixed
