@@ -132,6 +132,7 @@ OC.L10N.register(
     "Timeline" : "Chronologie",
     "Select users or groups to share with" : "Sélectionnez des utilisateurs ou des groupes avec qui partager",
     "Group" : "Groupe",
+    "Circle" : "Cercle",
     "No matching user or group found." : "Aucun utilisateur ou groupe correspondant trouvé",
     "Loading" : "Chargement",
     "Edit" : "Modifier",
