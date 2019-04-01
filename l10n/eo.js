@@ -132,6 +132,7 @@ OC.L10N.register(
     "Timeline" : "Kronologio",
     "Select users or groups to share with" : "Elektu uzantojn aŭ grupojn, kun kiuj vi volas kunhavigi",
     "Group" : "Grupo",
+    "Circle" : "Rondo",
     "No matching user or group found." : "Neniu kongrua uzanto aŭ grupo trovita.",
     "Loading" : "Ŝargante",
     "Edit" : "Redakti",

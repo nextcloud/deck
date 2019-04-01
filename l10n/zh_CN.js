@@ -132,6 +132,7 @@ OC.L10N.register(
     "Timeline" : "时间线",
     "Select users or groups to share with" : "选择要共享的用户或组",
     "Group" : "分组",
+    "Circle" : "圈子",
     "No matching user or group found." : "未找到匹配的用户或组。",
     "Loading" : "加载中",
     "Edit" : "编辑",
