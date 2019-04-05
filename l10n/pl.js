@@ -144,7 +144,7 @@ OC.L10N.register(
     "Edit tag" : "Edytuj etykiety",
     "Delete tag" : "Usuń etykiety",
     "Create" : "Utwórz",
-    "Create a new tag" : "Utwórz nowa etykietę",
+    "Create a new tag" : "Utwórz nową etykietę",
     "Deleted stacks" : "Usunięte Stosy",
     "Deleted cards" : "Usunięte karty",
     "Status" : "Status",
