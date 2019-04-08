@@ -62,7 +62,7 @@ trigger:
 
 ---
 kind: pipeline
-name: deck-unit
+name: unit
 steps:
   - name: php7.0
     image: nextcloudci/php7.0:php7.0-17
@@ -138,13 +138,13 @@ trigger:
     - push
 ---
 kind: pipeline
-name: deck-integration
+name: integration
 steps:
   - name: integration
-    image: nextcloudci/integration-php7.0:integration-php7.0-6
+    image: nextcloudci/php7.1:php7.1-16
     environment:
       APP_NAME: deck
-      CORE_BRANCH: stable15
+      CORE_BRANCH: master
       DB: sqlite
     commands:
       # Pre-setup steps
@@ -165,7 +165,7 @@ trigger:
 
 ---
 kind: pipeline
-name: deck-frontend
+name: frontend
 steps:
   - name: eslint
     image: nextcloudci/eslint:eslint-1
