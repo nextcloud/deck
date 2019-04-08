@@ -13,8 +13,8 @@ steps:
     - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
     - cd ../server
     # Code checker
-    - ./occ app:check-code $APP_NAME -c strong-comparison || true
-    - ./occ app:check-code $APP_NAME -c deprecation || true
+    - ./occ app:check-code $APP_NAME -c strong-comparison
+    - ./occ app:check-code $APP_NAME -c deprecation
     - cd apps/$APP_NAME/
 - name: syntax-php7.0
   image: nextcloudci/php7.0:php7.0-17
