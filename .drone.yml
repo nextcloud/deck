@@ -16,16 +16,6 @@ steps:
     - ./occ app:check-code $APP_NAME -c strong-comparison || true
     - ./occ app:check-code $APP_NAME -c deprecation || true
     - cd apps/$APP_NAME/
-- name: signed-off-check
-  image: nextcloudci/php7.0:php7.0-17
-  environment:
-    APP_NAME: deck
-    CORE_BRANCH: stable15
-    DB: sqlite
-  commands:
-    - wget https://raw.githubusercontent.com/nextcloud/server/master/build/signed-off-checker.php
-    - php ./signed-off-checker.php
-  secrets: [ github_token ]
 - name: syntax-php7.0
   image: nextcloudci/php7.0:php7.0-17
   environment:
