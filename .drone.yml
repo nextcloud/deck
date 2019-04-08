@@ -1,94 +1,85 @@
-clone:
-  git:
-    image: plugins/git
-    depth: 1
+kind: pipeline
+name: checkers
+steps:
+- name: compatibility
+  image: nextcloudci/php7.1:php7.1-16
+  environment:
+    APP_NAME: deck
+    CORE_BRANCH: master
+    DB: sqlite
+  commands:
+    # Pre-setup steps
+    - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+    - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+    - cd ../server
+    # Code checker
+    - ./occ app:check-code $APP_NAME -c strong-comparison || true
+    - ./occ app:check-code $APP_NAME -c deprecation || true
+    - cd apps/$APP_NAME/
+- name: signed-off-check
+  image: nextcloudci/php7.0:php7.0-17
+  environment:
+    APP_NAME: deck
+    CORE_BRANCH: stable15
+    DB: sqlite
+  commands:
+    - wget https://raw.githubusercontent.com/nextcloud/server/master/build/signed-off-checker.php
+    - php ./signed-off-checker.php
+  secrets: [ github_token ]
+- name: syntax-php7.0
+  image: nextcloudci/php7.0:php7.0-17
+  environment:
+    APP_NAME: deck
+    CORE_BRANCH: stable15
+    DB: sqlite
+  commands:
+    - composer install
+    - ./vendor/bin/parallel-lint --exclude ./vendor/ --exclude ./lib/Collaboration/ .
+- name: syntax-php7.1
+  image: nextcloudci/php7.1:php7.1-15
+  environment:
+    APP_NAME: deck
+    CORE_BRANCH: stable15
+    DB: sqlite
+  commands:
+    - composer install
+    - ./vendor/bin/parallel-lint --exclude ./vendor/ .
+- name: syntax-php7.2
+  image: nextcloudci/php7.2:php7.2-9
+  environment:
+    APP_NAME: deck
+    CORE_BRANCH: stable15
+    DB: sqlite
+  commands:
+    - composer install
+    - ./vendor/bin/parallel-lint --exclude ./vendor/ .
+- name: syntax-php7.3
+  image: nextcloudci/php7.3:php7.3-2
+  environment:
+    APP_NAME: deck
+    CORE_BRANCH: stable15
+    DB: sqlite
+  commands:
+    - composer install
+    - ./vendor/bin/parallel-lint --exclude ./vendor/ .
+trigger:
+  branch:
+    - master
+    - stable*
+  event:
+    - pull_request
+    - push
 
-pipeline:
-  check-app-compatbility:
-    image: nextcloudci/php7.1:php7.1-15
-    environment:
-      - APP_NAME=deck
-      - CORE_BRANCH=master
-      - DB=sqlite
-    commands:
-      # Pre-setup steps
-      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
-      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-      - cd ../server
-      # Code checker
-      - ./occ app:check-code $APP_NAME -c strong-comparison || true
-      - ./occ app:check-code $APP_NAME -c deprecation || true
-      - cd apps/$APP_NAME/
-    when:
-      matrix:
-        TESTS: check-app-compatbility
-  signed-off-check:
+---
+kind: pipeline
+name: deck-unit
+steps:
+  - name: php7.0
     image: nextcloudci/php7.0:php7.0-17
     environment:
-      - APP_NAME=deck
-      - CORE_BRANCH=stable15
-      - DB=sqlite
-    commands:
-      - wget https://raw.githubusercontent.com/nextcloud/server/master/build/signed-off-checker.php
-      - php ./signed-off-checker.php
-    secrets: [ github_token ]
-    when:
-      matrix:
-        TESTS: signed-off-check
-  syntax-php7.0:
-    image: nextcloudci/php7.0:php7.0-17
-    environment:
-      - APP_NAME=deck
-      - CORE_BRANCH=stable15
-      - DB=sqlite
-    commands:
-      - composer install
-      - ./vendor/bin/parallel-lint --exclude ./vendor/ --exclude ./lib/Collaboration/ .
-    when:
-      matrix:
-        TESTS: syntax-php7.0
-  syntax-php7.1:
-    image: nextcloudci/php7.1:php7.1-15
-    environment:
-      - APP_NAME=deck
-      - CORE_BRANCH=stable15
-      - DB=sqlite
-    commands:
-      - composer install
-      - ./vendor/bin/parallel-lint --exclude ./vendor/ .
-    when:
-      matrix:
-        TESTS: syntax-php7.1
-  syntax-php7.2:
-    image: nextcloudci/php7.2:php7.2-9
-    environment:
-      - APP_NAME=deck
-      - CORE_BRANCH=stable15
-      - DB=sqlite
-    commands:
-      - composer install
-      - ./vendor/bin/parallel-lint --exclude ./vendor/ .
-    when:
-      matrix:
-        TESTS: syntax-php7.2
-  syntax-php7.3:
-    image: nextcloudci/php7.3:php7.3-2
-    environment:
-      - APP_NAME=deck
-      - CORE_BRANCH=stable15
-      - DB=sqlite
-    commands:
-      - composer install
-      - ./vendor/bin/parallel-lint --exclude ./vendor/ .
-    when:
-      matrix:
-        TESTS: syntax-php7.3
-  php7.0:
-    image: nextcloudci/php7.0:php7.0-17
-    environment:
-      - APP_NAME=deck
-      - CORE_BRANCH=stable15
-      - DB=sqlite
+      APP_NAME: deck
+      CORE_BRANCH: stable15
+      DB: sqlite
     commands:
       # Pre-setup steps
       - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
@@ -100,15 +91,12 @@ pipeline:
       - composer install
       - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
       - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
-    when:
-      matrix:
-        TESTS: php7.0
-  php7.1:
+  - name: php7.1
     image: nextcloudci/php7.1:php7.1-15
     environment:
-      - APP_NAME=deck
-      - CORE_BRANCH=stable15
-      - DB=sqlite
+      APP_NAME: deck
+      CORE_BRANCH: stable15
+      DB: sqlite
     commands:
       # Pre-setup steps
       - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
@@ -119,15 +107,12 @@ pipeline:
       - composer install
       - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
       - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
-    when:
-      matrix:
-        TESTS: php7.1
-  php7.2:
+  - name: php7.2
     image: nextcloudci/php7.2:php7.2-9
     environment:
-      - APP_NAME=deck
-      - CORE_BRANCH=stable15
-      - DB=sqlite
+      APP_NAME: deck
+      CORE_BRANCH: stable15
+      DB: sqlite
     commands:
       # Pre-setup steps
       - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
@@ -138,15 +123,12 @@ pipeline:
       - composer install
       - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
       - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
-    when:
-      matrix:
-        TESTS: php7.2
-  php7.3:
+  - name: php7.3
     image: nextcloudci/php7.3:php7.3-2
     environment:
-      - APP_NAME=deck
-      - CORE_BRANCH=stable15
-      - DB=sqlite
+      APP_NAME: deck
+      CORE_BRANCH: stable15
+      DB: sqlite
     commands:
       # Pre-setup steps
       - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
@@ -157,15 +139,23 @@ pipeline:
       - composer install
       - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
       - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
-    when:
-      matrix:
-        TESTS: php7.3
-  integration:
+trigger:
+  branch:
+    - master
+    - stable*
+  event:
+    - pull_request
+    - push
+---
+kind: pipeline
+name: deck-integration
+steps:
+  - name: integration
     image: nextcloudci/integration-php7.0:integration-php7.0-6
     environment:
-      - APP_NAME=deck
-      - CORE_BRANCH=stable15
-      - DB=sqlite
+      APP_NAME: deck
+      CORE_BRANCH: stable15
+      DB: sqlite
     commands:
       # Pre-setup steps
       - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
@@ -175,40 +165,31 @@ pipeline:
       - cd apps/$APP_NAME
       - cd tests/integration
       - ./run.sh
-    when:
-      matrix:
-        TESTS: integration
-  eslint:
+trigger:
+  branch:
+    - master
+    - stable*
+  event:
+    - pull_request
+    - push
+
+---
+kind: pipeline
+name: deck-frontend
+steps:
+  - name: eslint
     image: nextcloudci/eslint:eslint-1
     commands:
       - ./run-eslint.sh
-    when:
-      matrix:
-        TESTS: eslint
-  jsbuild:
+  - name: jsbuild
     image: mhart/alpine-node:6.8.0
     commands:
       - apk add --no-cache make
       - make build-js
-    when:
-      matrix:
-        TESTS: jsbuild
-matrix:
-  include:
-    - TESTS: check-app-compatbility
-    - TESTS: signed-off-check
-    - TESTS: syntax-php7.0
-    - TESTS: syntax-php7.1
-    - TESTS: syntax-php7.2
-    - TESTS: syntax-php7.3
-    - TESTS: php7.0
-    - TESTS: php7.1
-    - TESTS: php7.2
-    - TESTS: php7.3
-    - TESTS: eslint
-    - TESTS: jsbuild
-    #- TESTS: integration
-
-branches: [ master, stable* ]
-
-
+trigger:
+  branch:
+    - master
+    - stable*
+  event:
+    - pull_request
+    - push
