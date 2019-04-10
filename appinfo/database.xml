@@ -317,6 +317,13 @@
                 <notnull>true</notnull>
                 <length>8</length>
             </field>
+            <field>
+                <name>last_modified</name>
+                <type>integer</type>
+                <default></default>
+                <notnull>false</notnull>
+                <unsigned>true</unsigned>
+            </field>
             <index>
                 <name>deck_labels_board_id_index</name>
                 <field>
