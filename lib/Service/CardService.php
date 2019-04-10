@@ -99,6 +99,7 @@ class CardService {
 
 	public function enrich($card) {
 		$cardId = $card->getId();
+		$this->cardMapper->mapOwner($card);
 		$card->setAssignedUsers($this->assignedUsersMapper->find($cardId));
 		$card->setLabels($this->labelMapper->findAssignedLabelsForCard($cardId));
 		$card->setAttachmentCount($this->attachmentService->count($cardId));
