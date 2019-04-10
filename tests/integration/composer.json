@@ -11,8 +11,8 @@
             "../../../../build/integration/features/bootstrap/Auth.php",
             "../../../../build/integration/features/bootstrap/Provisioning.php",
             "../../../../build/integration/features/bootstrap/Sharing.php",
-            "../../../../build/integration/features/bootstrap/Trashbin.php",
-            "../../../../build/integration/features/bootstrap/WebDav.php"
+            "../../../../build/integration/features/bootstrap/WebDav.php",
+            "../../../../build/integration/features/bootstrap/Trashbin.php"
         ],
         "psr-0": {
             "": [
