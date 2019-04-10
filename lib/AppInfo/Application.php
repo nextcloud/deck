@@ -191,7 +191,7 @@ class Application extends App {
 	}
 
 	public function registerFullTextSearch() {
-		if (Util::getVersion()[0] < 16) {
+		if (Util::getVersion()[0] < 16 || !\OC::$server->getAppManager()->isEnabledForUser('fulltextsearch')) {
 			return;
 		}
 
