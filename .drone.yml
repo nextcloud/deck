@@ -59,10 +59,9 @@ trigger:
   event:
     - pull_request
     - push
-
 ---
 kind: pipeline
-name: unit
+name: unit-php7.0
 steps:
   - name: php7.0
     image: nextcloudci/php7.0:php7.0-17
@@ -81,6 +80,17 @@ steps:
       - composer install
       - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
       - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
+trigger:
+  branch:
+    - master
+    - stable*
+  event:
+    - pull_request
+    - push
+---
+kind: pipeline
+name: unit-php7.1
+steps:
   - name: php7.1
     image: nextcloudci/php7.1:php7.1-15
     environment:
@@ -97,6 +107,17 @@ steps:
       - composer install
       - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
       - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
+trigger:
+  branch:
+    - master
+    - stable*
+  event:
+    - pull_request
+    - push
+---
+kind: pipeline
+name: unit-php7.2
+steps:
   - name: php7.2
     image: nextcloudci/php7.2:php7.2-9
     environment:
@@ -113,6 +134,17 @@ steps:
       - composer install
       - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
       - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
+trigger:
+  branch:
+    - master
+    - stable*
+  event:
+    - pull_request
+    - push
+---
+kind: pipeline
+name: unit-php7.3
+steps:
   - name: php7.3
     image: nextcloudci/php7.3:php7.3-2
     environment:
