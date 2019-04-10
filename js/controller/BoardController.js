@@ -22,6 +22,11 @@
 
 import app from '../app/App.js';
 import Vue from 'vue';
+
+Vue.prototype.t = t;
+Vue.prototype.n = n;
+Vue.prototype.OC = OC;
+
 import CollaborationView from '../views/CollaborationView';
 
 /* global oc_defaults oc_config OC OCP OCA */

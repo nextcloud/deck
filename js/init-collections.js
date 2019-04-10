@@ -29,16 +29,17 @@ __webpack_nonce__ = btoa(OC.requestToken);
 __webpack_public_path__ = OC.linkTo('deck', 'js/build/');
 
 import Vue from 'vue';
+
+Vue.prototype.$ = $
+Vue.prototype.t = t
+Vue.prototype.n = n
+Vue.prototype.OC = OC
+
 import BoardSelector from './views/BoardSelector';
 
 import './../css/collections.css';
 
 ((function(OCP) {
-
-	Vue.prototype.$ = $
-	Vue.prototype.t = t
-	Vue.prototype.n = n
-	Vue.prototype.OC = OC
 
 	OCP.Collaboration.registerType('deck', {
 		action: () => {
