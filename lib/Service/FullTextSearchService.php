@@ -92,7 +92,7 @@ class FullTextSearchService {
 	 * @param GenericEvent $e
 	 */
 	public function onCardCreated(GenericEvent $e) {
-		$cardId = $e->getArgument('id');
+		$cardId = (int)$e->getArgument('id');
 		$userId = $e->getArgument('userId');
 
 		$this->fullTextSearchManager->createIndex(
@@ -105,7 +105,7 @@ class FullTextSearchService {
 	 * @param GenericEvent $e
 	 */
 	public function onCardUpdated(GenericEvent $e) {
-		$cardId = $e->getArgument('id');
+		$cardId = (int)$e->getArgument('id');
 
 		$this->fullTextSearchManager->updateIndexStatus(
 			DeckProvider::DECK_PROVIDER_ID, (string)$cardId, IIndex::INDEX_CONTENT
@@ -117,7 +117,7 @@ class FullTextSearchService {
 	 * @param GenericEvent $e
 	 */
 	public function onCardDeleted(GenericEvent $e) {
-		$cardId = $e->getArgument('id');
+		$cardId = (int)$e->getArgument('id');
 
 		$this->fullTextSearchManager->updateIndexStatus(
 			DeckProvider::DECK_PROVIDER_ID, (string)$cardId, IIndex::INDEX_REMOVE
@@ -129,7 +129,7 @@ class FullTextSearchService {
 	 * @param GenericEvent $e
 	 */
 	public function onBoardShares(GenericEvent $e) {
-		$boardId = $e->getArgument('boardId');
+		$boardId = (int)$e->getArgument('boardId');
 
 		$cards = array_map(
 			function(Card $item) {
