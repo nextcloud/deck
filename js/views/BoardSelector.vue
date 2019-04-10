@@ -23,14 +23,14 @@
 <template>
 	<Modal @close="close">
 		<div id="modal-inner" :class="{ 'icon-loading': loading }">
-			<h1>Select a board to add to the collection</h1>
+			<h1>{{ t('deck', 'Select the board to link to a project') }}</h1>
 			<ul v-if="!loading">
 				<li v-for="board in boards" v-if="currentBoard && ''+board.id !== ''+currentBoard" @click="selectedBoard=board.id" :class="{'selected': (selectedBoard === board.id) }">
 					<span class="board-bullet" :style="{ 'backgroundColor': '#' + board.color }"></span>
 					<span>{{ board.title }}</span>
 				</li>
 			</ul>
-			<button v-if="!loading" @click="select" class="primary">Select board</button>
+			<button v-if="!loading" @click="select" class="primary">{{ t('deck', 'Select board') }}</button>
 		</div>
 	</Modal>
 </template>
