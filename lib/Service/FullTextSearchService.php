@@ -40,6 +40,7 @@ use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Provider\DeckProvider;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\FullTextSearch\Exceptions\FullTextSearchAppNotAvailableException;
 use OCP\FullTextSearch\IFullTextSearchManager;
 use OCP\FullTextSearch\Model\IDocumentAccess;
 use OCP\FullTextSearch\Model\IIndex;
@@ -92,12 +93,15 @@ class FullTextSearchService {
 	 * @param GenericEvent $e
 	 */
 	public function onCardCreated(GenericEvent $e) {
-		$cardId = (int)$e->getArgument('id');
+		$cardId = $e->getArgument('id');
 		$userId = $e->getArgument('userId');
 
-		$this->fullTextSearchManager->createIndex(
-			DeckProvider::DECK_PROVIDER_ID, (string)$cardId, $userId, IIndex::INDEX_FULL
-		);
+		try {
+			$this->fullTextSearchManager->createIndex(
+				DeckProvider::DECK_PROVIDER_ID, (string)$cardId, $userId, IIndex::INDEX_FULL
+			);
+		} catch (FullTextSearchAppNotAvailableException $e) {
+		}
 	}
 
 
@@ -105,11 +109,14 @@ class FullTextSearchService {
 	 * @param GenericEvent $e
 	 */
 	public function onCardUpdated(GenericEvent $e) {
-		$cardId = (int)$e->getArgument('id');
+		$cardId = $e->getArgument('id');
 
-		$this->fullTextSearchManager->updateIndexStatus(
+		try {
+			$this->fullTextSearchManager->updateIndexStatus(
 			DeckProvider::DECK_PROVIDER_ID, (string)$cardId, IIndex::INDEX_CONTENT
 		);
+		} catch (FullTextSearchAppNotAvailableException $e) {
+		}
 	}
 
 
@@ -117,11 +124,14 @@ class FullTextSearchService {
 	 * @param GenericEvent $e
 	 */
 	public function onCardDeleted(GenericEvent $e) {
-		$cardId = (int)$e->getArgument('id');
+		$cardId = $e->getArgument('id');
 
-		$this->fullTextSearchManager->updateIndexStatus(
-			DeckProvider::DECK_PROVIDER_ID, (string)$cardId, IIndex::INDEX_REMOVE
-		);
+		try {
+			$this->fullTextSearchManager->updateIndexStatus(
+				DeckProvider::DECK_PROVIDER_ID, (string)$cardId, IIndex::INDEX_REMOVE
+			);
+		} catch (FullTextSearchAppNotAvailableException $e) {
+		}
 	}
 
 
@@ -137,9 +147,12 @@ class FullTextSearchService {
 			},
 			$this->getCardsFromBoard($boardId)
 		);
-		$this->fullTextSearchManager->updateIndexesStatus(
-			DeckProvider::DECK_PROVIDER_ID, $cards, IIndex::INDEX_META
-		);
+		try {
+			$this->fullTextSearchManager->updateIndexesStatus(
+				DeckProvider::DECK_PROVIDER_ID, $cards, IIndex::INDEX_META
+			);
+		} catch (FullTextSearchAppNotAvailableException $e) {
+		}
 	}
 
 
@@ -167,7 +180,7 @@ class FullTextSearchService {
 
 		$document->setTitle($card->getTitle());
 		$document->setContent($card->getDescription());
-		$document->setAccess($this->generateDocumentAccessFromCardId($card->getId()));
+		$document->setAccess($this->generateDocumentAccessFromCardId((int)$card->getId()));
 	}
 
 
@@ -181,9 +194,7 @@ class FullTextSearchService {
 	public function generateDocumentAccessFromCardId(int $cardId): IDocumentAccess {
 		$board = $this->getBoardFromCardId($cardId);
 
-		$access = new DocumentAccess($board->getOwner());
-
-		return $access;
+		return new DocumentAccess($board->getOwner());
 	}
 
 
