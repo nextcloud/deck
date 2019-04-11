@@ -19,12 +19,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+/* global oc_defaults oc_config OC OCP OCA t n */
 
 import app from '../app/App.js';
 import Vue from 'vue';
+
+Vue.prototype.t = t;
+Vue.prototype.n = n;
+Vue.prototype.OC = OC;
+
 import CollaborationView from '../views/CollaborationView';
 
-/* global oc_defaults oc_config OC OCP OCA */
 app.controller('BoardController', function ($rootScope, $scope, $element, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter, FileService) {
 
 	$scope.sidebar = $rootScope.sidebar;
