@@ -32,6 +32,8 @@
   .stack {
     .as-sortable-placeholder {
       margin: $compact-board-item-margin;
+      min-height: 43px;
+      height: 43px;
 
       &:last-child {
         margin: $compact-board-last-item-margin;
