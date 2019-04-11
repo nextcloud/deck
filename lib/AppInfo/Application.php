@@ -24,7 +24,6 @@
 namespace OCA\Deck\AppInfo;
 
 use Exception;
-use OC\FullTextSearch\FullTextSearchManager;
 use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
@@ -203,7 +202,7 @@ class Application extends App {
 		$c = $this->getContainer();
 		try {
 			$this->fullTextSearchService = $c->query(FullTextSearchService::class);
-			$this->fullTextSearchManager = $c->query(FullTextSearchManager::class);
+			$this->fullTextSearchManager = $c->query(IFullTextSearchManager::class);
 		} catch (Exception $e) {
 			return;
 		}
