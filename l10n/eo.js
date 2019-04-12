@@ -9,7 +9,6 @@ OC.L10N.register(
     "Remove user from card" : "Forigi uzanton el la karto",
     "Hours" : "Horoj",
     "Minutes" : "Minutoj",
-    "board" : "tabulo",
     "Maximum file size of {size} exceeded" : "Maksimuma dosiergrando {size} transpasita",
     "You have created a new board {board}" : "Vi kreis novan tabulon {board}",
     "{user} has created a new board {board}" : "{user} kreis novan tabulon {board}",

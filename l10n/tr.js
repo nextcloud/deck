@@ -9,7 +9,6 @@ OC.L10N.register(
     "Remove user from card" : "Kullanıcıyı karttan kaldır",
     "Hours" : "Saat",
     "Minutes" : "Dakika",
-    "board" : "pano",
     "Maximum file size of {size} exceeded" : "{size} olan en büyük dosya boyutu sınırı aşıldı",
     "You have created a new board {board}" : "{board} panosunu eklediniz",
     "{user} has created a new board {board}" : "{user}, {board} panosunu ekledi",

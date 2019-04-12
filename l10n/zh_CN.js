@@ -9,7 +9,6 @@ OC.L10N.register(
     "Remove user from card" : "从卡片中删除用户",
     "Hours" : "小时",
     "Minutes" : "分",
-    "board" : "面板",
     "Maximum file size of {size} exceeded" : "文件大小 {size} 超出最大限制",
     "You have created a new board {board}" : "您创建了一个新面板 {board}",
     "{user} has created a new board {board}" : "{user} 创建了一个新面板 {board}",

@@ -7,7 +7,6 @@
     "Remove user from card" : "Ta bort användare från kort",
     "Hours" : "Timmar",
     "Minutes" : "Minuter",
-    "board" : "tavla",
     "Maximum file size of {size} exceeded" : "Maximal filstorlek på {size} överskriden",
     "You have created a new board {board}" : "Du har skapat en ny tavla {board}",
     "{user} has created a new board {board}" : "{user} har skapat en ny tavla {board}",

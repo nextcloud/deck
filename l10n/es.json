@@ -7,7 +7,6 @@
     "Remove user from card" : "Eliminar usuario de la tarjeta",
     "Hours" : "Horas",
     "Minutes" : "Minutos",
-    "board" : "tablero",
     "Maximum file size of {size} exceeded" : "Tamaño máximo de archivo de {size} excedido",
     "You have created a new board {board}" : "Has creado el tablero nuevo {board}",
     "{user} has created a new board {board}" : "{user} ha creado el tablero nuevo {board}",

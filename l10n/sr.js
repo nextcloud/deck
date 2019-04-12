@@ -9,7 +9,6 @@ OC.L10N.register(
     "Remove user from card" : "Уклони корисника са картице",
     "Hours" : "Сати",
     "Minutes" : "Минути",
-    "board" : "табла",
     "Maximum file size of {size} exceeded" : "Премашена максимална величина фајла од {size}",
     "You have created a new board {board}" : "Направили сте нову таблу {board}",
     "{user} has created a new board {board}" : "{user} је направио нову таблу {board}",

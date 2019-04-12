@@ -7,7 +7,6 @@
     "Remove user from card" : "Suprimeix l'usuari de la targeta",
     "Hours" : "Hores",
     "Minutes" : "Minuts",
-    "board" : "tauler",
     "Maximum file size of {size} exceeded" : "S'ha superat la mida màxima per fitxer de {size}",
     "You have created a new board {board}" : "Heu creat el nou tauler {board}",
     "{user} has created a new board {board}" : "{user} ha creat el nou tauler {board}",

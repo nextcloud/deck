@@ -9,7 +9,6 @@ OC.L10N.register(
     "Remove user from card" : "Fjarlægja notanda af spjaldi",
     "Hours" : "klukkustundir",
     "Minutes" : "mínútur",
-    "board" : "borð",
     "Maximum file size of {size} exceeded" : "Fór yfir hámarks skráarstærð {size}",
     "You have created a new board {board}" : "Þú hefur búið til nýja borðið {board}",
     "{user} has created a new board {board}" : "{user} hefur búið til nýja borðið {board}",

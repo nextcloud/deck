@@ -9,7 +9,6 @@ OC.L10N.register(
     "Remove user from card" : "Odebrat uživatele z karty",
     "Hours" : "Hodiny",
     "Minutes" : "Minuty",
-    "board" : "nástěnka",
     "Maximum file size of {size} exceeded" : "U souboru {size} překročena nejvyšší umožněná velikost",
     "You have created a new board {board}" : "Vytvořili jste nástěnku {board}",
     "{user} has created a new board {board}" : "{user} vytvořil(a) novou nástěnku {board}",
