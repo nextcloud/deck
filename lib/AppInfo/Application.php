@@ -36,6 +36,7 @@ use OCP\AppFramework\App;
 use OCA\Deck\Middleware\SharingMiddleware;
 use OCP\Collaboration\Resources\IManager;
 use OCP\Comments\CommentsEntityEvent;
+use OCP\FullTextSearch\IFullTextSearchManager;
 use OCP\IGroup;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -49,6 +50,9 @@ class Application extends App {
 
 	/** @var FullTextSearchService */
 	private $fullTextSearchService;
+
+	/** @var IFullTextSearchManager */
+	private $fullTextSearchManager;
 
 
 	/**
@@ -191,14 +195,19 @@ class Application extends App {
 	}
 
 	public function registerFullTextSearch() {
-		if (Util::getVersion()[0] < 16 || !\OC::$server->getAppManager()->isEnabledForUser('fulltextsearch')) {
+		if (Util::getVersion()[0] < 16) {
 			return;
 		}
 
 		$c = $this->getContainer();
 		try {
 			$this->fullTextSearchService = $c->query(FullTextSearchService::class);
+			$this->fullTextSearchManager = $c->query(IFullTextSearchManager::class);
 		} catch (Exception $e) {
+			return;
+		}
+
+		if (!$this->fullTextSearchManager->isAvailable()) {
 			return;
 		}
 
