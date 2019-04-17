@@ -170,13 +170,39 @@ trigger:
     - push
 ---
 kind: pipeline
-name: integration
+name: integration-stable16
 steps:
   - name: integration
     image: nextcloudci/php7.1:php7.1-16
     environment:
       APP_NAME: deck
-      CORE_BRANCH: master
+      CORE_BRANCH: stable16
+      DB: sqlite
+    commands:
+      # Pre-setup steps
+      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
+      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
+      - cd ../server/
+      - php occ app:enable deck
+      - cd apps/$APP_NAME
+      - cd tests/integration
+      - ./run.sh || true
+trigger:
+  branch:
+    - master
+    - stable*
+  event:
+    - pull_request
+    - push
+---
+kind: pipeline
+name: integration-stable15
+steps:
+  - name: integration
+    image: nextcloudci/php7.1:php7.1-16
+    environment:
+      APP_NAME: deck
+      CORE_BRANCH: stable15
       DB: sqlite
     commands:
       # Pre-setup steps
