@@ -104,7 +104,7 @@ class DeckProvider implements IProvider {
 		];
 		$event->setAuthor($author);
 		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_BOARD) {
-			if ($event->getObjectName() === '') {
+			if (isset($subjectParams['board']) && $event->getObjectName() === '') {
 				$event->setObject($event->getObjectType(), $event->getObjectId(), $subjectParams['board']['title']);
 			}
 			$board = [
@@ -116,7 +116,7 @@ class DeckProvider implements IProvider {
 			$params['board'] = $board;
 		}
 
-		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_CARD) {
+		if (isset($subjectParams['card']) && $event->getObjectType() === ActivityManager::DECK_OBJECT_CARD) {
 			if ($event->getObjectName() === '') {
 				$event->setObject($event->getObjectType(), $event->getObjectId(), $subjectParams['card']['title']);
 			}
