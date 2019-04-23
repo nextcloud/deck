@@ -46,10 +46,11 @@ class ActivityController {
 		this.$scope.$watch(function () {
 			return self.element.id;
 		}, function (params) {
+			if (self.type === 'deck_card') {
+				self.activityservice.loadComments(self.element.id);
+			}
+
 			if (self.getData(self.element.id).length === 0) {
-				if (self.type === 'deck_card') {
-					self.activityservice.loadComments(self.element.id);
-				}
 				self.loading = true;
 				self.fetchUntilResults();
 			}
