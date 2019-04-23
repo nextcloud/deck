@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.6.0 - unreleased
+## 0.6.0 - 2019-04-23
 
 ### Added
 - Share boards with circles
@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Update labels after change in the UI @jakobroehrl
 - Allow limiting the app to groups again
 - Various REST API enhancements and fixes
+- Fix some issues with comments/activites
 
 
 ## 0.5.2 - 2018-12-20
