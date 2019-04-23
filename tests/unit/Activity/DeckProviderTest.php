@@ -25,6 +25,7 @@ namespace OCA\Deck\Activity;
 
 use OC\Activity\Event;
 use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\Card;
 use OCP\Activity\IEvent;
 use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
@@ -212,7 +213,7 @@ class DeckProviderTest extends TestCase {
 		$event = new Event($richValidator);
 
 		$event->setApp('deck');
-		$event->setSubject(ActivityManager::SUBJECT_CARD_CREATE);
+		$event->setSubject(ActivityManager::SUBJECT_CARD_CREATE, ['card' => new Card()]);
 		$event->setAffectedUser($this->userId);
 		$event->setAuthor($this->userId);
 		$event->setObject(ActivityManager::DECK_OBJECT_CARD, 1, 'Card');
@@ -260,6 +261,7 @@ class DeckProviderTest extends TestCase {
 			'before' => 'ABC',
 			'after' => 'BCD',
 			'diff' => true,
+			'card' => new Card()
 		]);
 		$event->setAffectedUser($this->userId);
 		$event->setAuthor($this->userId);
