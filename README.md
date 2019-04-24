@@ -9,6 +9,7 @@ Deck is a kanban style organization tool aimed at personal planning and project 
 - :page_facing_up: Write down additional notes in markdown
 - :bookmark: Assign labels for even better organization
 - :busts_in_silhouette: Share with your team, friends or family
+- :family: Integrates with the [Circles](https://github.com/nextcloud/circles) app!
 - :paperclip: Attach files and embed them in your markdown description
 - :speech_balloon: Discuss with your team using comments
 - :zap: Keep track of changes in the activity stream
