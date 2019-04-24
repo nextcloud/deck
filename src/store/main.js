@@ -139,7 +139,6 @@ export default new Vuex.Store({
 
 		// label mutators
 		removeLabelFromCurrentBoard(state, labelId) {
-			console.log(labelId)
 			const removeIndex = state.currentBoard.labels.findIndex((l) => {
 				return labelId === l.id
 			})
@@ -252,6 +251,7 @@ export default new Vuex.Store({
 			})	
 		}, 
 		addLabelToCurrentBoard({ commit }, newLabel) {
+			newLabel.boardId = this.state.currentBoard.id
 			apiClient.createLabel(newLabel)
 			.then((newLabel) => {
 				commit('addLabelToCurrentBoard', newLabel);

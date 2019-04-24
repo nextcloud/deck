@@ -152,7 +152,7 @@ export class BoardApi {
 	}
 
 	updateLabel(label) {
-		return axios.put(this.url('/labels/${label.id}'), label)
+		return axios.put(this.url(`/labels/${label.id}`), label)
 		.then(
 			(response) => {
 				return Promise.resolve(response.data)
