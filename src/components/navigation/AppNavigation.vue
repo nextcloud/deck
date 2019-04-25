@@ -49,7 +49,8 @@
 				</button>
 			</div>
 			<div id="app-settings-content">
-				<Multiselect :options="groups" :multiple="true" v-model="groupLimit"
+				<Multiselect :class="{'icon-loading-small': groupLimitDisabled}" :options="groups" :multiple="true"
+					v-model="groupLimit"
 					:disabled="groupLimitDisabled" label="displayname" track-by="id"
 					@input="updateConfig" />
 				<p>{{ t('deck', 'Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them.') }}</p>

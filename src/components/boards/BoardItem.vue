@@ -21,9 +21,9 @@
 -->
 
 <template>
-	<router-link class="board-list-row"
-				 :id="`board-${board.id}`"
-				 :title="board.title" :to="routeTo" tag="div">
+	<router-link :id="`board-${board.id}`"
+		:title="board.title"
+		:to="routeTo" class="board-list-row" tag="div">
 		<div class="board-list-bullet-cell">
 			<div :style="{ 'background-color': board.bullet }" class="board-list-bullet" />
 		</div>
