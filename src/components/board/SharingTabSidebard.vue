@@ -1,6 +1,10 @@
 <template>
 		<div>
-			<multiselect :options="board.sharees" />
+			<multiselect :options="sharees" @search-change="asyncFind" label="label">
+				<template #option="scope">
+					{{ scope.option.label }}
+				</template>
+			</multiselect>
 
 			<ul
 				id="shareWithList"
@@ -24,6 +28,7 @@
 
 <script>
 import { Avatar, Multiselect } from 'nextcloud-vue'
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'SharingTabSidebard',
@@ -31,20 +36,32 @@ export default {
 		Avatar,
 		Multiselect,
 	},
-	props: {
-	},
 	data() {
 		return {
+			isLoading: false
 		}
+	},
+	computed: {
+		...mapGetters({
+			sharees: 'sharees'
+		})
 	},
 	props: {
 		board: {
 			type: Object,
 			default: undefined
 		}
+	},
+	methods: {
+		asyncFind (query) {
+			this.isLoading = true
+			this.$store.dispatch('loadSharees').then(response => {
+				this.isLoading = false
+			})
+		},
 	}
-	
-	
-	
+
+
+
 }
 </script>

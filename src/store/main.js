@@ -51,11 +51,15 @@ export default new Vuex.Store({
 		sidebarShown: false,
 		currentBoard: null,
 		boards: [],
+		sharees: [],
 		boardFilter: BOARD_FILTERS.ALL
 	},
 	getters: {
 		boards: state => {
 			return state.boards
+		},
+		sharees: state => {
+			return state.sharees
 		},
 		noneArchivedBoards: state => {
 			return state.boards.filter(board => {
@@ -212,14 +216,15 @@ export default new Vuex.Store({
 			const boards = await apiClient.loadBoards()
 			commit('setBoards', boards)
 		},
-		async loadSharees({ commit }) {
-			const params = {
-				format: 'json',
-				perPage: 4,
-				itemType: [0, 1]
-			}
-			const { data } = await axios.get(OC.linkToOCS('apps/files_sharing/api/v1') + 'sharees', { params })
-			commit('setSharees', data.users)
+		loadSharees({ commit }) {
+			const params = new URLSearchParams()
+			params.append('format', 'json')
+			params.append('perPage', 4)
+			params.append('itemType', 0)
+			params.append('itemType', 1)
+			axios.get(OC.linkToOCS('apps/files_sharing/api/v1') + 'sharees', { params }).then((response) => {
+				commit('setSharees', response.data.ocs.data.users)
+			})
 		},
 		setBoardFilter({ commmit }, filter) {
 			commmit('setBoardFilter', filter)
@@ -242,20 +247,20 @@ export default new Vuex.Store({
 			apiClient.deleteLabel(label)
 			.then((label) => {
 				commit('removeLabelFromCurrentBoard', label.id);
-			})	
-		}, 
+			})
+		},
 		updateLabelFromCurrentBoard({ commit }, newLabel) {
 			apiClient.updateLabel(newLabel)
 			.then((newLabel) => {
 				commit('updateLabelFromCurrentBoard', newLabel);
-			})	
-		}, 
+			})
+		},
 		addLabelToCurrentBoard({ commit }, newLabel) {
 			newLabel.boardId = this.state.currentBoard.id
 			apiClient.createLabel(newLabel)
 			.then((newLabel) => {
 				commit('addLabelToCurrentBoard', newLabel);
-			})	
+			})
 		}
 	}
 })
