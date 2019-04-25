@@ -115,7 +115,7 @@ export default {
 						this.editTitle = this.board.title
 						this.editing = true
 					},
-					icon: 'icon-edit',
+					icon: 'icon-rename',
 					text: t('deck', 'Edit board')
 				})
 
@@ -160,8 +160,8 @@ export default {
 
 				actions.push({
 					action: () => {
-						const route = this.routeTo;
-						route.name = 'board.details';
+						const route = this.routeTo
+						route.name = 'board.details'
 						this.$router.push(route)
 					},
 					icon: 'icon-settings-dark',
