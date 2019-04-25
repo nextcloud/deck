@@ -33,7 +33,6 @@ use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
 use OCA\Deck\Service\FullTextSearchService;
 use OCP\AppFramework\App;
-use OCA\Deck\Middleware\SharingMiddleware;
 use OCP\Collaboration\Resources\IManager;
 use OCP\Comments\CommentsEntityEvent;
 use OCP\FullTextSearch\IFullTextSearchManager;
