@@ -20,7 +20,8 @@
   -
   -->
 <template>
-	<li :id="id" :title="text" :class="{'open': opened, 'collapsible': collapsible }">
+	<li v-if="boards.length > 0" :id="id" :title="text"
+		:class="{'open': opened, 'collapsible': collapsible }">
 		<button v-if="collapsible" class="collapse" @click.prevent.stop="toggleCollapse" />
 		<a :class="icon" href="#">
 			{{ text }}
