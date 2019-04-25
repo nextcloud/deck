@@ -129,6 +129,16 @@ export default {
 						icon: 'icon-archive',
 						text: t('deck', 'Archive board')
 					})
+				} else {
+					actions.push({
+						action: () => {
+							this.hideMenu()
+							this.loading = true
+							this.$store.dispatch('unarchiveBoard', this.board)
+						},
+						icon: 'icon-archive',
+						text: t('deck', 'Unarchive board')
+					})
 				}
 
 				actions.push({
@@ -149,8 +159,12 @@ export default {
 				})
 
 				actions.push({
-					action: () => {},
-					icon: 'icon-settings',
+					action: () => {
+						const route = this.routeTo;
+						route.name = 'board.details';
+						this.$router.push(route)
+					},
+					icon: 'icon-settings-dark',
 					text: t('deck', 'Board details')
 				})
 

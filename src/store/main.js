@@ -145,6 +145,19 @@ export default new Vuex.Store({
 				})
 		},
 		/**
+		 * @param commit
+		 * @param state
+		 * @param {Board} board
+		 */
+		unarchiveBoard({ commit }, board) {
+			const boardCopy = JSON.parse(JSON.stringify(board))
+			boardCopy.archived = false
+			apiClient.updateBoard(boardCopy)
+				.then((board) => {
+					commit('addBoard', board)
+				})
+		},
+		/**
 		 * Updates a board API side.
 		 *
 		 * @param commit
