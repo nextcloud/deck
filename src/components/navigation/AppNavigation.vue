@@ -41,25 +41,28 @@
 				icon="icon-shared" />
 			<app-navigation-add-board />
 		</ul>
-		<div v-click-outside="closeMenu" v-if="!!$slots['settings-content']" id="app-settings"
-			:class="{open: opened}">
+		<div v-click-outside="closeMenu" v-if="isAdmin"
+			id="app-settings" :class="{open: opened}">
 			<div id="app-settings-header">
-				<button class="settings-button"
-					data-apps-slide-toggle="#app-settings-content"
-					@click="toggleMenu">
-					{{ t('contacts', 'Settings') }}
+				<button class="settings-button" @click="toggleMenu">
+					{{ t('deck', 'Settings') }}
 				</button>
 			</div>
 			<div id="app-settings-content">
-				<slot name="settings-content" />
+				<Multiselect :options="groups" :multiple="true" v-model="groupLimit"
+					:disabled="groupLimitDisabled" label="displayname" track-by="id"
+					@input="updateConfig" />
+				<p>{{ t('deck', 'Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them.') }}</p>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+import axios from 'nextcloud-axios'
 import { mapGetters } from 'vuex'
 import ClickOutside from 'vue-click-outside'
+import { Multiselect } from 'nextcloud-vue'
 
 import AppNavigationAddBoard from './AppNavigationAddBoard'
 import AppNavigationBoard from './AppNavigationBoard'
@@ -70,7 +73,8 @@ export default {
 	components: {
 		AppNavigationAddBoard,
 		AppNavigationBoard,
-		AppNavigationBoardCategory
+		AppNavigationBoardCategory,
+		Multiselect
 	},
 	directives: {
 		ClickOutside
@@ -83,7 +87,10 @@ export default {
 	},
 	data() {
 		return {
-			opened: false
+			opened: false,
+			groups: [],
+			groupLimit: [],
+			groupLimitDisabled: true
 		}
 	},
 	computed: {
@@ -91,7 +98,32 @@ export default {
 			'noneArchivedBoards',
 			'archivedBoards',
 			'sharedBoards'
-		])
+		]),
+		isAdmin() {
+			// eslint-disable-next-line
+			return oc_isadmin
+		}
+	},
+	beforeMount() {
+		if (this.isAdmin) {
+			axios.get(OC.generateUrl('apps/deck/config')).then((response) => {
+				this.groupLimit = response.data.groupLimit
+				this.groupLimitDisabled = false
+			}, (error) => {
+				console.error('Error while loading groupLimit', error.response)
+			})
+			axios.get(OC.linkToOCS('cloud', 2) + 'groups').then((response) => {
+				this.groups = response.data.ocs.data.groups.reduce((obj, item) => {
+					obj.push({
+						id: item,
+						displayname: item
+					})
+					return obj
+				}, [])
+			}, (error) => {
+				console.error('Error while loading group list', error.response)
+			})
+		}
 	},
 	methods: {
 		toggleMenu() {
@@ -99,7 +131,22 @@ export default {
 		},
 		closeMenu() {
 			this.opened = false
+		},
+		updateConfig() {
+			this.groupLimitDisabled = true
+			axios.post(OC.generateUrl('apps/deck/config/groupLimit'), {
+				value: this.groupLimit
+			}).then(() => {
+				this.groupLimitDisabled = false
+			}, (error) => {
+				console.error('Error while saving groupLimit', error.response)
+			})
 		}
 	}
 }
 </script>
+<style>
+	.multiselect {
+		width: 100%;
+	}
+</style>
