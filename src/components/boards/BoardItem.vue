@@ -21,25 +21,40 @@
 -->
 
 <template>
-	<div class="board-list-row">
+	<router-link class="board-list-row"
+				 :id="`board-${board.id}`"
+				 :title="board.title" :to="routeTo" tag="div">
 		<div class="board-list-bullet-cell">
 			<div :style="{ 'background-color': board.bullet }" class="board-list-bullet" />
 		</div>
 		<div class="board-list-title-cell">{{ board.text }}</div>
 		<div class="board-list-avatars-cell">
-			<img :src="`/avatar/${board.owner.uid}/32`" class="board-list-avatar">
+			<avatar :user="board.owner.uid" class="board-list-avatar" />
 		</div>
 		<div class="board-list-actions-cell" />
-	</div>
+	</router-link>
 </template>
 
 <script>
+import { Avatar } from 'nextcloud-vue'
+
 export default {
 	name: 'BoardItem',
+	components: {
+		Avatar
+	},
 	props: {
 		board: {
 			type: Object,
 			default: () => { return {} }
+		}
+	},
+	computed: {
+		routeTo: function() {
+			return {
+				name: 'board',
+				params: { id: this.board.id }
+			}
 		}
 	}
 }
