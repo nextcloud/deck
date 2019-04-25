@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "Please provide a content for your comment." : "Please provide a content for your comment.",
+    "Posting the comment failed." : "Posting the comment failed.",
     "Remove user from card" : "Remove user from card",
     "Hours" : "Hours",
     "Minutes" : "Minutes",
@@ -25,11 +27,10 @@ OC.L10N.register(
     "Sharing" : "Sharing",
     "Tags" : "Tags",
     "Select users or groups to share with" : "Select users or groups to share with",
-    "Access for" : "Access for",
     "No matching user or group found." : "No matching user or group found.",
     "Loading" : "Loading",
-    "Share" : "Share",
     "Edit" : "Edit",
+    "Share" : "Share",
     "Manage" : "Manage",
     "Discard share" : "Discard share",
     "Create" : "Create",

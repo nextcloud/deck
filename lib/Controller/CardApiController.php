@@ -132,13 +132,20 @@ class CardApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 *
-	 * Unassign a label to a card.
+	 * Unassign a user from a card
 	 */
 	public function unassignUser($userId) {
 		$card = $this->cardService->unassignUser($this->request->getParam('cardId'), $userId);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * Assign a user to a card
+	 */
 	public function assignUser($userId) {
 		$card = $this->cardService->assignUser($this->request->getParam('cardId'), $userId);;
 		return new DataResponse($card, HTTP::STATUS_OK);
@@ -149,7 +156,7 @@ class CardApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 *
-	 * Unassign a label to a card.
+	 * Reorder cards
 	 */
 	public function reorder($stackId, $order) {
 		$card = $this->cardService->reorder($this->request->getParam('cardId'), $stackId, $order);

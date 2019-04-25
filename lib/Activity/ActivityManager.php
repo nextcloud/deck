@@ -147,9 +147,8 @@ class ActivityManager {
 			case self::SUBJECT_BOARD_UNSHARE:
 				$subject = $ownActivity ? $this->l10n->t('You have removed {acl} from the board {board}') : $this->l10n->t('{user} has removed {acl} from the board {board}');
 				break;
-
 			case self::SUBJECT_BOARD_UPDATE_TITLE:
-				$subject = $ownActivity ? $this->l10n->t('You have renamed the board {before} to {board}') : $this->l10n->t('{user} has has renamed the board {before} to {board}');
+				$subject = $ownActivity ? $this->l10n->t('You have renamed the board {before} to {board}') : $this->l10n->t('{user} has renamed the board {before} to {board}');
 				break;
 			case self::SUBJECT_BOARD_UPDATE_ARCHIVED:
 				if (isset($subjectParams['after']) && $subjectParams['after']) {
@@ -158,80 +157,79 @@ class ActivityManager {
 					$subject = $ownActivity ? $this->l10n->t('You have unarchived the board {board}') : $this->l10n->t('{user} has unarchived the board {before}');
 				}
 				break;
-
 			case self::SUBJECT_STACK_CREATE:
-				$subject = $ownActivity ? $this->l10n->t('You have created a new stack {stack} on {board}') : $this->l10n->t('{user} has created a new stack {stack} on {board}');
+				$subject = $ownActivity ? $this->l10n->t('You have created a new stack {stack} on board {board}') : $this->l10n->t('{user} has created a new stack {stack} on board {board}');
 				break;
 			case self::SUBJECT_STACK_UPDATE:
-				$subject = $ownActivity ? $this->l10n->t('You have created a new stack {stack} on {board}') : $this->l10n->t('{user} has created a new stack {stack} on {board}');
+				$subject = $ownActivity ? $this->l10n->t('You have created a new stack {stack} on board {board}') : $this->l10n->t('{user} has created a new stack {stack} on board {board}');
 				break;
 			case self::SUBJECT_STACK_UPDATE_TITLE:
-				$subject = $ownActivity ? $this->l10n->t('You have renamed a new stack {before} to {stack} on {board}') : $this->l10n->t('{user} has renamed a new stack {before} to {stack} on {board}');
+				$subject = $ownActivity ? $this->l10n->t('You have renamed stack {before} to {stack} on board {board}') : $this->l10n->t('{user} has renamed stack {before} to {stack} on board {board}');
 				break;
 			case self::SUBJECT_STACK_DELETE:
-				$subject = $ownActivity ? $this->l10n->t('You have deleted {stack} on {board}') : $this->l10n->t('{user} has deleted {stack} on {board}');
+				$subject = $ownActivity ? $this->l10n->t('You have deleted stack {stack} on board {board}') : $this->l10n->t('{user} has deleted stack {stack} on board {board}');
 				break;
 			case self::SUBJECT_CARD_CREATE:
-				$subject = $ownActivity ? $this->l10n->t('You have created {card} in {stack} on {board}') : $this->l10n->t('{user} has created {card} in {stack} on {board}');
+				$subject = $ownActivity ? $this->l10n->t('You have created card {card} in stack {stack} on board {board}') : $this->l10n->t('{user} has created card {card} in stack {stack} on board {board}');
 				break;
 			case self::SUBJECT_CARD_DELETE:
-				$subject = $ownActivity ? $this->l10n->t('You have deleted {card} in {stack} on {board}') : $this->l10n->t('{user} has deleted {card} in {stack} on {board}');
+				$subject = $ownActivity ? $this->l10n->t('You have deleted card {card} in stack {stack} on board {board}') : $this->l10n->t('{user} has deleted card {card} in stack {stack} on board {board}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_TITLE:
 				$subject = $ownActivity ? $this->l10n->t('You have renamed the card {before} to {card}') : $this->l10n->t('{user} has renamed the card {before} to {card}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_DESCRIPTION:
 				if (!isset($subjectParams['before'])) {
-					$subject = $ownActivity ? $this->l10n->t('You have added a description to {card} in {stack} on {board}') : $this->l10n->t('{user} has added a description to {card} in {stack} on {board}');
+					$subject = $ownActivity ? $this->l10n->t('You have added a description to card {card} in stack {stack} on board {board}') : $this->l10n->t('{user} has added a description to card {card} in stack {stack} on board {board}');
 				} else {
-					$subject = $ownActivity ? $this->l10n->t('You have updated the description of {card} in {stack} on {board}') : $this->l10n->t('{user} has updated the description {card} in {stack} on {board}');
+					$subject = $ownActivity ? $this->l10n->t('You have updated the description of card {card} in stack {stack} on board {board}') : $this->l10n->t('{user} has updated the description of the card {card} in stack {stack} on board {board}');
 				}
 				break;
 			case self::SUBJECT_CARD_UPDATE_ARCHIVE:
-				$subject = $ownActivity ? $this->l10n->t('You have archived {card} in {stack} on {board}') : $this->l10n->t('{user} has archived {card} in {stack} on {board}');
+				$subject = $ownActivity ? $this->l10n->t('You have archived card {card} in stack {stack} on board {board}') : $this->l10n->t('{user} has archived card {card} in stack {stack} on board {board}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_UNARCHIVE:
-				$subject = $ownActivity ? $this->l10n->t('You have unarchived {card} in {stack} on {board}') : $this->l10n->t('{user} has unarchived {card} in {stack} on {board}');
+				$subject = $ownActivity ? $this->l10n->t('You have unarchived card {card} in stack {stack} on board {board}') : $this->l10n->t('{user} has unarchived card {card} in stack {stack} on board {board}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_DUEDATE:
 				if (!isset($subjectParams['after'])) {
-					$subject = $ownActivity ? $this->l10n->t('You have removed the due date of {card}') : $this->l10n->t('{user} has removed the due date of {card}');
-				} else if (isset($subjectParams['before']) && !isset($subjectParams['after'])) {
-					$subject = $ownActivity ? $this->l10n->t('You have set the due date of {card} to {after}') : $this->l10n->t('{user} has set the due date of {card} to {after}');
+					$subject = $ownActivity ? $this->l10n->t('You have removed the due date of card {card}') : $this->l10n->t('{user} has removed the due date of card {card}');
+				} else if (!isset($subjectParams['before']) && isset($subjectParams['after'])) {
+					$subject = $ownActivity ? $this->l10n->t('You have set the due date of card {card} to {after}') : $this->l10n->t('{user} has set the due date of card {card} to {after}');
 				} else {
-					$subject = $ownActivity ? $this->l10n->t('You have updated the due date of {card} to {after}') : $this->l10n->t('{user} has updated the due date of {card} to {after}');
+					$subject = $ownActivity ? $this->l10n->t('You have updated the due date of card {card} to {after}') : $this->l10n->t('{user} has updated the due date of card {card} to {after}');
 				}
 
 				break;
 			case self::SUBJECT_LABEL_ASSIGN:
-				$subject = $ownActivity ? $this->l10n->t('You have added the label {label} to {card} in {stack} on {board}') : $this->l10n->t('{user} has added the label {label} to {card} in {stack} on {board}');
+				$subject = $ownActivity ? $this->l10n->t('You have added the tag {label} to card {card} in stack {stack} on board {board}') : $this->l10n->t('{user} has added the tag {label} to card {card} in stack {stack} on board {board}');
 				break;
 			case self::SUBJECT_LABEL_UNASSING:
-				$subject = $ownActivity ? $this->l10n->t('You have removed the label {label} from {card} in {stack} on {board}') : $this->l10n->t('{user} has removed the label {label} from {card} in {stack} on {board}');
+				$subject = $ownActivity ? $this->l10n->t('You have removed the tag {label} from card {card} in stack {stack} on board {board}') : $this->l10n->t('{user} has removed the tag {label} from card {card} in stack {stack} on board {board}');
 				break;
 			case self::SUBJECT_CARD_USER_ASSIGN:
-				$subject = $ownActivity ? $this->l10n->t('You have assigned {assigneduser} to {card} on {board}') : $this->l10n->t('{user} has assigned {assigneduser} to {card} on {board}');
+				$subject = $ownActivity ? $this->l10n->t('You have assigned {assigneduser} to card {card} on board {board}') : $this->l10n->t('{user} has assigned {assigneduser} to card {card} on board {board}');
 				break;
 			case self::SUBJECT_CARD_USER_UNASSIGN:
-				$subject = $ownActivity ? $this->l10n->t('You have unassigned {assigneduser} from {card} on {board}') : $this->l10n->t('{user} has unassigned {assigneduser} from {card} on {board}');
+				$subject = $ownActivity ? $this->l10n->t('You have unassigned {assigneduser} from card {card} on board {board}') : $this->l10n->t('{user} has unassigned {assigneduser} from card {card} on board {board}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_STACKID:
-				$subject = $ownActivity ? $this->l10n->t('You have moved the card {card} from {stackBefore} to {stack}') : $this->l10n->t('{user} has moved the card {card} from {stackBefore} to {stack}');
+				$subject = $ownActivity ? $this->l10n->t('You have moved the card {card} from stack {stackBefore} to {stack}') : $this->l10n->t('{user} has moved the card {card} from stack {stackBefore} to {stack}');
 				break;
 			case self::SUBJECT_ATTACHMENT_CREATE:
-				$subject = $ownActivity ? $this->l10n->t('You have added the attachment {attachment} to {card}') : $this->l10n->t('{user} has added the attachment {attachment} to {card}');
+				$subject = $ownActivity ? $this->l10n->t('You have added the attachment {attachment} to card {card}') : $this->l10n->t('{user} has added the attachment {attachment} to card {card}');
 				break;
 			case self::SUBJECT_ATTACHMENT_UPDATE:
-				$subject = $ownActivity ? $this->l10n->t('You have updated the attachment {attachment} on {card}') : $this->l10n->t('{user} has updated the attachment {attachment} to {card}');
+				$subject = $ownActivity ? $this->l10n->t('You have updated the attachment {attachment} on card {card}') : $this->l10n->t('{user} has updated the attachment {attachment} to card {card}');
 				break;
 			case self::SUBJECT_ATTACHMENT_DELETE:
-				$subject = $ownActivity ? $this->l10n->t('You have deleted the attachment {attachment} from {card}') : $this->l10n->t('{user} has deleted the attachment {attachment} to {card}');
+				$subject = $ownActivity ? $this->l10n->t('You have deleted the attachment {attachment} from card {card}') : $this->l10n->t('{user} has deleted the attachment {attachment} to card {card}');
 				break;
 			case self::SUBJECT_ATTACHMENT_RESTORE:
-				$subject = $ownActivity ? $this->l10n->t('You have restored the attachment {attachment} to {card}') : $this->l10n->t('{user} has restored the attachment {attachment} to {card}');
+				$subject = $ownActivity ? $this->l10n->t('You have restored the attachment {attachment} to card {card}') : $this->l10n->t('{user} has restored the attachment {attachment} to card {card}');
 				break;
 			case self::SUBJECT_CARD_COMMENT_CREATE:
-				$subject = $ownActivity ? $this->l10n->t('You have commented on {card}') : $this->l10n->t('{user} has commented on {card}');
+				$subject = $ownActivity ? $this->l10n->t('You have commented on card {card}') : $this->l10n->t('{user} has commented on card {card}');
 				break;
 			default:
 				break;
@@ -239,10 +237,12 @@ class ActivityManager {
 		return $subject;
 	}
 
-	public function triggerEvent($objectType, $entity, $subject, $additionalParams = []) {
+	public function triggerEvent($objectType, $entity, $subject, $additionalParams = [], $author = null) {
 		try {
-			$event = $this->createEvent($objectType, $entity, $subject, $additionalParams);
-			$this->sendToUsers($event);
+			$event = $this->createEvent($objectType, $entity, $subject, $additionalParams, $author);
+			if ($event !== null) {
+				$this->sendToUsers($event);
+			}
 		} catch (\Exception $e) {
 			// Ignore exception for undefined activities on update events
 		}
@@ -262,15 +262,17 @@ class ActivityManager {
 		if ($previousEntity !== null) {
 			foreach ($entity->getUpdatedFields() as $field => $value) {
 				$getter = 'get' . ucfirst($field);
-				$subject = $subject . '_' . $field;
+				$subjectComplete = $subject . '_' . $field;
 				$changes = [
 					'before' => $previousEntity->$getter(),
 					'after' => $entity->$getter()
 				];
 				if ($changes['before'] !== $changes['after']) {
 					try {
-						$event = $this->createEvent($objectType, $entity, $subject, $changes);
-						$events[] = $event;
+						$event = $this->createEvent($objectType, $entity, $subjectComplete, $changes);
+						if ($event !== null) {
+							$events[] = $event;
+						}
 					} catch (\Exception $e) {
 						// Ignore exception for undefined activities on update events
 					}
@@ -278,7 +280,7 @@ class ActivityManager {
 			}
 		} else {
 			try {
-				$events = [$this->createEvent($objectType, $entity, $subject)];
+				$events = [$this->createEvent($objectType, $entity, $subject, $author)];
 			} catch (\Exception $e) {
 				// Ignore exception for undefined activities on update events
 			}
@@ -293,13 +295,15 @@ class ActivityManager {
 	 * @param $entity
 	 * @param $subject
 	 * @param array $additionalParams
-	 * @return IEvent
+	 * @return IEvent|null
 	 * @throws \Exception
 	 */
-	private function createEvent($objectType, $entity, $subject, $additionalParams = []) {
+	private function createEvent($objectType, $entity, $subject, $additionalParams = [], $author = null) {
 		try {
 			$object = $this->findObjectForEntity($objectType, $entity);
 		} catch (DoesNotExistException $e) {
+			\OC::$server->getLogger()->error('Could not create activity entry for ' . $subject . '. Entity not found.', $entity);
+			return null;
 		} catch (MultipleObjectsReturnedException $e) {
 			\OC::$server->getLogger()->error('Could not create activity entry for ' . $subject . '. Entity not found.', $entity);
 			return null;
@@ -309,6 +313,7 @@ class ActivityManager {
 		 * Automatically fetch related details for subject parameters
 		 * depending on the subject
 		 */
+		$eventType = 'deck';
 		$subjectParams = [];
 		$message = null;
 		switch ($subject) {
@@ -322,11 +327,13 @@ class ActivityManager {
 			// case self::SUBJECT_BOARD_UPDATE_COLOR
 				break;
 			case self::SUBJECT_CARD_COMMENT_CREATE:
-				/** @var IComment $entity */
-				$subjectParams = [
-					'comment' => $entity->getMessage()
-				];
-				$message = '{comment}';
+				$subjectParams = $this->findDetailsForCard($entity->getId());
+				if (array_key_exists('comment', $additionalParams)) {
+					/** @var IComment $entity */
+					$comment = $additionalParams['comment'];
+					$subjectParams['comment'] = $comment->getId();
+					unset($additionalParams['comment']);
+				}
 				break;
 
 			case self::SUBJECT_STACK_CREATE:
@@ -369,16 +376,24 @@ class ActivityManager {
 		}
 
 		if ($subject === self::SUBJECT_CARD_UPDATE_DESCRIPTION){
+			$card = $subjectParams['card'];
+			if ($card->getLastEditor() === $this->userId) {
+				return null;
+			}
 			$subjectParams['diff'] = true;
+			$eventType = 'deck_card_description';
 		}
 		if ($subject === self::SUBJECT_CARD_UPDATE_STACKID) {
 			$subjectParams['stackBefore'] = $this->stackMapper->find($additionalParams['before']);
 		}
 
+		$subjectParams['author'] = $this->userId;
+
+
 		$event = $this->manager->generateEvent();
 		$event->setApp('deck')
-			->setType('deck')
-			->setAuthor($this->userId)
+			->setType($eventType)
+			->setAuthor($author === null ? $this->userId : $author)
 			->setObject($objectType, (int)$object->getId(), $object->getTitle())
 			->setSubject($subject, array_merge($subjectParams, $additionalParams))
 			->setTimestamp(time());

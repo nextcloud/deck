@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
+ * @author Maxence Lange <maxence@artificial-owl.com>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -40,6 +41,8 @@ use OCA\Deck\StatusException;
 use OCA\Deck\BadRequestException;
 use OCP\Comments\ICommentsManager;
 use OCP\IUserManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 class CardService {
 
@@ -56,6 +59,8 @@ class CardService {
 	private $activityManager;
 	private $commentsManager;
 	private $changeHelper;
+	/** @var EventDispatcherInterface */
+	private $eventDispatcher;
 	private $userManager;
 
 	public function __construct(
@@ -72,6 +77,7 @@ class CardService {
 		ICommentsManager $commentsManager,
 		IUserManager $userManager,
 		ChangeHelper $changeHelper,
+		EventDispatcherInterface $eventDispatcher,
 		$userId
 	) {
 		$this->cardMapper = $cardMapper;
@@ -87,11 +93,13 @@ class CardService {
 		$this->commentsManager = $commentsManager;
 		$this->userManager = $userManager;
 		$this->changeHelper = $changeHelper;
+		$this->eventDispatcher = $eventDispatcher;
 		$this->currentUser = $userId;
 	}
 
 	public function enrich($card) {
 		$cardId = $card->getId();
+		$this->cardMapper->mapOwner($card);
 		$card->setAssignedUsers($this->assignedUsersMapper->find($cardId));
 		$card->setLabels($this->labelMapper->findAssignedLabelsForCard($cardId));
 		$card->setAttachmentCount($this->attachmentService->count($cardId));
@@ -182,6 +190,14 @@ class CardService {
 		$card = $this->cardMapper->insert($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE);
 		$this->changeHelper->cardChanged($card->getId(), false);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Card::onCreate',
+			new GenericEvent(
+				null, ['id' => $card->getId(), 'card' => $card, 'userId' => $owner, 'stackId' => $stackId]
+			)
+		);
+
 		return $card;
 	}
 
@@ -209,6 +225,11 @@ class CardService {
 		$this->cardMapper->update($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_DELETE);
 		$this->changeHelper->cardChanged($card->getId(), false);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Card::onDelete', new GenericEvent(null, ['id' => $id, 'card' => $card])
+		);
+
 		return $card;
 	}
 
@@ -259,18 +280,46 @@ class CardService {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$changes = new ChangeSet($card);
+		if ($card->getLastEditor() !== $this->currentUser && $card->getLastEditor() !== null) {
+			$this->activityManager->triggerEvent(
+				ActivityManager::DECK_OBJECT_CARD,
+				$card,
+				ActivityManager::SUBJECT_CARD_UPDATE_DESCRIPTION,
+				[
+					'before' => $card->getDescriptionPrev(),
+					'after' => $card->getDescription()
+				],
+				$card->getLastEditor()
+			);
+
+			$card->setDescriptionPrev($card->getDescription());
+			$card->setLastEditor($this->currentUser);
+		}
 		$card->setTitle($title);
 		$card->setStackId($stackId);
 		$card->setType($type);
 		$card->setOrder($order);
 		$card->setOwner($owner);
-		$card->setDescription($description);
 		$card->setDuedate($duedate);
 		$card->setDeletedAt($deletedAt);
+
+		// Trigger update events before setting description as it is handled separately
 		$changes->setAfter($card);
-		$card = $this->cardMapper->update($card);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_CARD, $changes, ActivityManager::SUBJECT_CARD_UPDATE);
-		$this->changeHelper->cardChanged($card->getId(), false);
+
+		if ($card->getDescriptionPrev() === null) {
+			$card->setDescriptionPrev($card->getDescription());
+		}
+		$card->setDescription($description);
+
+
+		$card = $this->cardMapper->update($card);
+		$this->changeHelper->cardChanged($card->getId(), true);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Card::onUpdate', new GenericEvent(null, ['id' => $id, 'card' => $card])
+		);
+
 		return $card;
 	}
 
@@ -304,7 +353,13 @@ class CardService {
 		}
 		$card->setTitle($title);
 		$this->changeHelper->cardChanged($card->getId(), false);
-		return $this->cardMapper->update($card);
+		$update = $this->cardMapper->update($card);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Card::onUpdate', new GenericEvent(null, ['id' => $id, 'card' => $card])
+		);
+
+		return $update;
 	}
 
 	/**
@@ -384,8 +439,14 @@ class CardService {
 		$card = $this->cardMapper->find($id);
 		$card->setArchived(true);
 		$newCard = $this->cardMapper->update($card);
+		$this->notificationHelper->markDuedateAsRead($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_ARCHIVE);
 		$this->changeHelper->cardChanged($id, false);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Card::onUpdate', new GenericEvent(null, ['id' => $id, 'card' => $card])
+		);
+
 		return $newCard;
 	}
 
@@ -413,6 +474,11 @@ class CardService {
 		$newCard = $this->cardMapper->update($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_UNARCHIVE);
 		$this->changeHelper->cardChanged($id, false);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Card::onUpdate', new GenericEvent(null, ['id' => $id, 'card' => $card])
+		);
+
 		return $newCard;
 	}
 
@@ -447,6 +513,10 @@ class CardService {
 		$this->cardMapper->assignLabel($cardId, $labelId);
 		$this->changeHelper->cardChanged($cardId, false);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_ASSIGN, ['label' => $label]);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Card::onUpdate', new GenericEvent(null, ['id' => $cardId, 'card' => $card])
+		);
 	}
 
 	/**
@@ -480,6 +550,10 @@ class CardService {
 		$this->cardMapper->removeLabel($cardId, $labelId);
 		$this->changeHelper->cardChanged($cardId, false);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_UNASSING, ['label' => $label]);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Card::onUpdate', new GenericEvent(null, ['id' => $cardId, 'card' => $card])
+		);
 	}
 
 	/**
@@ -521,6 +595,11 @@ class CardService {
 		$assignment = $this->assignedUsersMapper->insert($assignment);
 		$this->changeHelper->cardChanged($cardId, false);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_USER_ASSIGN, ['assigneduser' => $userId]);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Card::onUpdate', new GenericEvent(null, ['id' => $cardId, 'card' => $card])
+		);
+
 		return $assignment;
 	}
 
@@ -552,6 +631,11 @@ class CardService {
 				$card = $this->cardMapper->find($cardId);
 				$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_USER_UNASSIGN, ['assigneduser' => $userId]);
 				$this->changeHelper->cardChanged($cardId, false);
+
+				$this->eventDispatcher->dispatch(
+					'\OCA\Deck\Card::onUpdate', new GenericEvent(null, ['id' => $cardId, 'card' => $card])
+				);
+
 				return $assignment;
 			}
 		}

@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
+ * @author Maxence Lange <maxence@artificial-owl.com>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -25,12 +26,15 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
+use OCA\Deck\Collaboration\Resources\ResourceProvider;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
+use OCA\Deck\Db\StackMapper;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IGroupManager;
@@ -40,11 +44,14 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCP\IUserManager;
 use OCA\Deck\BadRequestException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 
 class BoardService {
 
 	private $boardMapper;
+	private $stackMapper;
 	private $labelMapper;
 	private $aclMapper;
 	private $l10n;
@@ -55,10 +62,13 @@ class BoardService {
 	private $groupManager;
 	private $userId;
 	private $activityManager;
+	/** @var EventDispatcherInterface */
+	private $eventDispatcher;
 	private $changeHelper;
 
 	public function __construct(
 		BoardMapper $boardMapper,
+		StackMapper $stackMapper,
 		IL10N $l10n,
 		LabelMapper $labelMapper,
 		AclMapper $aclMapper,
@@ -68,10 +78,12 @@ class BoardService {
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		ActivityManager $activityManager,
+		EventDispatcherInterface $eventDispatcher,
 		ChangeHelper $changeHelper,
 		$userId
 	) {
 		$this->boardMapper = $boardMapper;
+		$this->stackMapper = $stackMapper;
 		$this->labelMapper = $labelMapper;
 		$this->aclMapper = $aclMapper;
 		$this->l10n = $l10n;
@@ -81,6 +93,7 @@ class BoardService {
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->activityManager = $activityManager;
+		$this->eventDispatcher = $eventDispatcher;
 		$this->changeHelper = $changeHelper;
 		$this->userId = $userId;
 	}
@@ -88,12 +101,14 @@ class BoardService {
 	/**
 	 * @return array
 	 */
-	public function findAll($since = -1) {
+	public function findAll($since = 0, $details = null) {
 		$userInfo = $this->getBoardPrerequisites();
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null, $since);
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null,  $since);
-		$complete = array_merge($userBoards, $groupBoards);
+		$circleBoards = $this->boardMapper->findAllByCircles($userInfo['user'], null, null,  $since);
+		$complete = array_merge($userBoards, $groupBoards, $circleBoards);
 		$result = [];
+		/** @var Board $item */
 		foreach ($complete as &$item) {
 			if (!array_key_exists($item->getId(), $result)) {
 				$this->boardMapper->mapOwner($item);
@@ -101,6 +116,11 @@ class BoardService {
 					foreach ($item->getAcl() as &$acl) {
 						$this->boardMapper->mapAcl($acl);
 					}
+				}
+				if ($details !== null) {
+					$this->enrichWithStacks($item);
+					$this->enrichWithLabels($item);
+					$this->enrichWithUsers($item);
 				}
 				$permissions = $this->permissionService->matchPermissions($item);
 				$item->setPermissions([
@@ -145,8 +165,7 @@ class BoardService {
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE],
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
 		]);
-		$boardUsers = $this->permissionService->findUsers($boardId);
-		$board->setUsers(array_values($boardUsers));
+		$this->enrichWithUsers($board);
 		return $board;
 	}
 
@@ -249,6 +268,10 @@ class BoardService {
 			throw new BadRequestException('color must be provided');
 		}
 
+		if (!$this->permissionService->canCreate()) {
+			throw new NoPermissionException('Creating boards has been disabled for your account.');
+		}
+
 		$board = new Board();
 		$board->setTitle($title);
 		$board->setOwner($userId);
@@ -281,8 +304,15 @@ class BoardService {
 		]);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $new_board, ActivityManager::SUBJECT_BOARD_CREATE);
 		$this->changeHelper->boardChanged($new_board->getId());
-		return $new_board;
 
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Board::onCreate',
+			new GenericEvent(
+				null, ['id' => $new_board->getId(), 'userId' => $userId, 'board' => $new_board]
+			)
+		);
+
+		return $new_board;
 	}
 
 	/**
@@ -301,10 +331,18 @@ class BoardService {
 
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
+		if ($board->getDeletedAt() > 0) {
+			throw new BadRequestException('This board has already been deleted');
+		}
 		$board->setDeletedAt(time());
 		$board = $this->boardMapper->update($board);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_DELETE);
 		$this->changeHelper->boardChanged($board->getId());
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Board::onDelete', new GenericEvent(null, ['id' => $id])
+		);
+
 		return $board;
 	}
 
@@ -327,6 +365,11 @@ class BoardService {
 		$board = $this->boardMapper->update($board);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_RESTORE);
 		$this->changeHelper->boardChanged($board->getId());
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Board::onUpdate', new GenericEvent(null, ['id' => $id, 'board' => $board])
+		);
+
 		return $board;
 	}
 
@@ -345,7 +388,13 @@ class BoardService {
 
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 		$board = $this->find($id);
-		return $this->boardMapper->delete($board);
+		$delete = $this->boardMapper->delete($board);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Board::onDelete', new GenericEvent(null, ['id' => $id])
+		);
+
+		return $delete;
 	}
 
 	/**
@@ -388,6 +437,11 @@ class BoardService {
 		$this->boardMapper->mapOwner($board);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_BOARD_UPDATE);
 		$this->changeHelper->boardChanged($board->getId());
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Board::onUpdate', new GenericEvent(null, ['id' => $id, 'board' => $board])
+		);
+
 		return $board;
 	}
 
@@ -417,15 +471,15 @@ class BoardService {
 			throw new BadRequestException('participant must be provided');
 		}
 
-		if ($edit === false || $edit === null) {
+		if ($edit === null) {
 			throw new BadRequestException('edit must be provided');
 		}
 
-		if ($share === false || $share === null) {
+		if ($share === null) {
 			throw new BadRequestException('share must be provided');
 		}
 
-		if ($manage === false || $manage === null) {
+		if ($manage === null) {
 			throw new BadRequestException('manage must be provided');
 		}
 
@@ -445,6 +499,20 @@ class BoardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE);
 		$this->boardMapper->mapAcl($newAcl);
 		$this->changeHelper->boardChanged($boardId);
+
+		// TODO: use the dispatched event for this
+		$version = \OC_Util::getVersion()[0];
+		if ($version >= 16) {
+			try {
+				$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+				$resourceProvider->invalidateAccessCache($boardId);
+			} catch (\Exception $e) {}
+		}
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Board::onShareNew', new GenericEvent(null, ['id' => $newAcl->getId(), 'acl' => $newAcl, 'boardId' => $boardId])
+		);
+
 		return $newAcl;
 	}
 
@@ -486,6 +554,11 @@ class BoardService {
 		$this->boardMapper->mapAcl($acl);
 		$board = $this->aclMapper->update($acl);
 		$this->changeHelper->boardChanged($acl->getBoardId());
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Board::onShareEdit', new GenericEvent(null, ['id' => $id, 'boardId' => $acl->getBoardId(), 'acl' => $acl])
+		);
+
 		return $board;
 	}
 
@@ -515,7 +588,49 @@ class BoardService {
 		}
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $acl, ActivityManager::SUBJECT_BOARD_UNSHARE);
 		$this->changeHelper->boardChanged($acl->getBoardId());
-		return $this->aclMapper->delete($acl);
+
+		$version = \OC_Util::getVersion()[0];
+		if ($version >= 16) {
+			try {
+				$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+				$resourceProvider->invalidateAccessCache($acl->getBoardId());
+			} catch (\Exception $e) {}
+		}
+		$delete = $this->aclMapper->delete($acl);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Board::onShareDelete', new GenericEvent(null, ['id' => $id, 'boardId' => $acl->getBoardId(), 'acl' => $acl])
+		);
+
+		return $delete;
+	}
+
+	private function enrichWithStacks($board, $since = -1) {
+		$stacks = $this->stackMapper->findAll($board->getId(), null, null, $since);
+
+		if(\count($stacks) === 0) {
+			return;
+		}
+
+		$board->setStacks($stacks);
+	}
+
+	private function enrichWithLabels($board, $since = -1) {
+		$labels = $this->labelMapper->findAll($board->getId(), null, null, $since);
+
+		if(\count($labels) === 0) {
+			return;
+		}
+
+		$board->setLabels($labels);
+	}
+
+	private function enrichWithUsers($board, $since = -1) {
+		$boardUsers = $this->permissionService->findUsers($board->getId());
+		if(\count($boardUsers) === 0) {
+			return;
+		}
+		$board->setUsers(array_values($boardUsers));
 	}
 
 }

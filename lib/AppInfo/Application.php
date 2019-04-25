@@ -23,27 +23,43 @@
 
 namespace OCA\Deck\AppInfo;
 
+use Exception;
 use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
+use OCA\Deck\Service\FullTextSearchService;
 use OCP\AppFramework\App;
 use OCA\Deck\Middleware\SharingMiddleware;
+use OCP\Collaboration\Resources\IManager;
 use OCP\Comments\CommentsEntityEvent;
+use OCP\FullTextSearch\IFullTextSearchManager;
 use OCP\IGroup;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IURLGenerator;
 use OCP\INavigationManager;
+use OCP\Util;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 class Application extends App {
+
+
+	/** @var FullTextSearchService */
+	private $fullTextSearchService;
+
+	/** @var IFullTextSearchManager */
+	private $fullTextSearchManager;
+
 
 	/**
 	 * Application constructor.
 	 *
 	 * @param array $urlParams
+	 *
 	 * @throws \OCP\AppFramework\QueryException
 	 */
 	public function __construct(array $urlParams = array()) {
@@ -52,13 +68,13 @@ class Application extends App {
 		$container = $this->getContainer();
 		$server = $container->getServer();
 
-		$container->registerService('SharingMiddleware', function() use ($server) {
-			return new SharingMiddleware(
+		$container->registerService('ExceptionMiddleware', function() use ($server) {
+			return new ExceptionMiddleware(
 				$server->getLogger(),
 				$server->getConfig()
 			);
 		});
-		$container->registerMiddleWare('SharingMiddleware');
+		$container->registerMiddleWare('ExceptionMiddleware');
 
 		$container->registerService('databaseType', function($container) {
 			return $container->getServer()->getConfig()->getSystemValue('dbtype', 'sqlite');
@@ -99,8 +115,13 @@ class Application extends App {
 			}
 		});
 
+		$this->registerCollaborationResources();
+
 	}
 
+	/**
+	 * @throws \OCP\AppFramework\QueryException
+	 */
 	public function registerNavigationEntry() {
 		$container = $this->getContainer();
 		$container->query(INavigationManager::class)->add(function() use ($container) {
@@ -125,6 +146,9 @@ class Application extends App {
 		});
 	}
 
+	/**
+	 * @throws \OCP\AppFramework\QueryException
+	 */
 	public function registerCommentsEntity() {
 		$this->getContainer()->getServer()->getEventDispatcher()->addListener(CommentsEntityEvent::EVENT_ENTITY, function(CommentsEntityEvent $event) {
 			$event->addEntityCollection('deckCard', function($name) {
@@ -141,9 +165,83 @@ class Application extends App {
 		$this->registerCommentsEventHandler();
 	}
 
+	/**
+	 * @throws \OCP\AppFramework\QueryException
+	 */
 	protected function registerCommentsEventHandler() {
 		$this->getContainer()->getServer()->getCommentsManager()->registerEventHandler(function () {
 			return $this->getContainer()->query(CommentEventHandler::class);
 		});
 	}
+
+	/**
+	 * @throws \OCP\AppFramework\QueryException
+	 */
+	protected function registerCollaborationResources() {
+		$version = \OC_Util::getVersion()[0];
+		if ($version < 16) {
+			return;
+		}
+
+		/**
+		 * Register Collaboration ResourceProvider
+		 */
+		/** @var IManager $resourceManager */
+		$resourceManager = $this->getContainer()->query(IManager::class);
+		$resourceManager->registerResourceProvider(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+		\OC::$server->getEventDispatcher()->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', function () {
+			\OCP\Util::addScript('deck', 'build/collections');
+		});
+	}
+
+	public function registerFullTextSearch() {
+		if (Util::getVersion()[0] < 16) {
+			return;
+		}
+
+		$c = $this->getContainer();
+		try {
+			$this->fullTextSearchService = $c->query(FullTextSearchService::class);
+			$this->fullTextSearchManager = $c->query(IFullTextSearchManager::class);
+		} catch (Exception $e) {
+			return;
+		}
+
+		if (!$this->fullTextSearchManager->isAvailable()) {
+			return;
+		}
+
+		$eventDispatcher = \OC::$server->getEventDispatcher();
+		$eventDispatcher->addListener(
+			'\OCA\Deck\Card::onCreate', function(GenericEvent $e) {
+			$this->fullTextSearchService->onCardCreated($e);
+		}
+		);
+		$eventDispatcher->addListener(
+			'\OCA\Deck\Card::onUpdate', function(GenericEvent $e) {
+			$this->fullTextSearchService->onCardUpdated($e);
+		}
+		);
+		$eventDispatcher->addListener(
+			'\OCA\Deck\Card::onDelete', function(GenericEvent $e) {
+			$this->fullTextSearchService->onCardDeleted($e);
+		}
+		);
+		$eventDispatcher->addListener(
+			'\OCA\Deck\Board::onShareNew', function(GenericEvent $e) {
+			$this->fullTextSearchService->onBoardShares($e);
+		}
+		);
+		$eventDispatcher->addListener(
+			'\OCA\Deck\Board::onShareEdit', function(GenericEvent $e) {
+			$this->fullTextSearchService->onBoardShares($e);
+		}
+		);
+		$eventDispatcher->addListener(
+			'\OCA\Deck\Board::onShareDelete', function(GenericEvent $e) {
+			$this->fullTextSearchService->onBoardShares($e);
+		}
+		);
+	}
+
 }

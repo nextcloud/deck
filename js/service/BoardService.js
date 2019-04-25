@@ -20,7 +20,7 @@
  *  
  */
 import app from '../app/App.js';
-/* global app OC */
+/* global app OC angular */
 app.factory('BoardService', function (ApiService, $http, $q) {
 	var BoardService = function ($http, ep, $q) {
 		ApiService.call(this, $http, ep, $q);
@@ -59,7 +59,7 @@ app.factory('BoardService', function (ApiService, $http, $q) {
 		var searchData = {
 			format: 'json',
 			perPage: 4,
-			itemType: [0, 1]
+			itemType: [0, 1, 7]
 		};
 		if (search !== "") {
 			searchData.search = search;
@@ -79,6 +79,7 @@ app.factory('BoardService', function (ApiService, $http, $q) {
 
 				var users = response.ocs.data.exact.users.concat(response.ocs.data.users.slice(0, 4));
 				var groups = response.ocs.data.exact.groups.concat(response.ocs.data.groups.slice(0, 4));
+				var circles = response.ocs.data.exact.groups.concat(response.ocs.data.circles.slice(0, 4));
 
 				// filter out everyone who is already in the share list
 				angular.forEach(users, function (item) {
@@ -95,6 +96,18 @@ app.factory('BoardService', function (ApiService, $http, $q) {
 				});
 				angular.forEach(groups, function (item) {
 					var acl = self.generateAcl(OC.Share.SHARE_TYPE_GROUP, item);
+					var exists = false;
+					angular.forEach(self.getCurrent().acl, function (acl) {
+						if (acl.participant.primaryKey === item.value.shareWith) {
+							exists = true;
+						}
+					});
+					if (!exists) {
+						self.sharees.push(acl);
+					}
+				});
+				angular.forEach(circles, function (item) {
+					var acl = self.generateAcl(OC.Share.SHARE_TYPE_CIRCLE, item);
 					var exists = false;
 					angular.forEach(self.getCurrent().acl, function (acl) {
 						if (acl.participant.primaryKey === item.value.shareWith) {
@@ -125,8 +138,8 @@ app.factory('BoardService', function (ApiService, $http, $q) {
 				displayname: ocsItem.label
 			},
 			permissionEdit: true,
-			permissionManage: true,
-			permissionShare: true,
+			permissionManage: false,
+			permissionShare: false,
 			type: type
 		};
 	};

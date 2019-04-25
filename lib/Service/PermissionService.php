@@ -33,9 +33,12 @@ use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\AppFramework\QueryException;
+use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\ILogger;
 use OCP\IUserManager;
+use OCP\Share\IManager;
 
 
 class PermissionService {
@@ -50,10 +53,16 @@ class PermissionService {
 	private $userManager;
 	/** @var IGroupManager */
 	private $groupManager;
+	/** @var IConfig */
+	private $config;
+	/** @var IManager */
+	private $shareManager;
 	/** @var string */
 	private $userId;
 	/** @var array */
 	private $users = [];
+
+	private $circlesEnabled = false;
 
 	public function __construct(
 		ILogger $logger,
@@ -61,6 +70,8 @@ class PermissionService {
 		BoardMapper $boardMapper,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
+		IManager $shareManager,
+		IConfig $config,
 		$userId
 	) {
 		$this->aclMapper = $aclMapper;
@@ -68,7 +79,12 @@ class PermissionService {
 		$this->logger = $logger;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
+		$this->shareManager = $shareManager;
+		$this->config = $config;
 		$this->userId = $userId;
+
+		$this->circlesEnabled = \OC::$server->getAppManager()->isEnabledForUser('circles') &&
+			(version_compare(\OC::$server->getAppManager()->getAppVersion('circles'), '0.17.1') >= 0);
 	}
 
 	/**
@@ -84,7 +100,8 @@ class PermissionService {
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
 			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE),
-			Acl::PERMISSION_SHARE => $owner || $this->userCan($acls, Acl::PERMISSION_SHARE),
+			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE))
+				&& (!$this->shareManager->sharingDisabledForUser($this->userId))
 		];
 	}
 
@@ -102,7 +119,8 @@ class PermissionService {
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
 			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE),
-			Acl::PERMISSION_SHARE => $owner || $this->userCan($acls, Acl::PERMISSION_SHARE),
+			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE))
+				&& (!$this->shareManager->sharingDisabledForUser($this->userId))
 		];
 	}
 
@@ -115,7 +133,7 @@ class PermissionService {
 	 * @return bool
 	 * @throws NoPermissionException
 	 */
-	public function checkPermission($mapper, $id, $permission) {
+	public function checkPermission($mapper, $id, $permission, $userId = null) {
 		$boardId = $id;
 		if ($mapper instanceof IPermissionMapper) {
 			$boardId = $mapper->findBoardId($id);
@@ -125,12 +143,16 @@ class PermissionService {
 			throw new NoPermissionException('Permission denied');
 		}
 
-		if ($this->userIsBoardOwner($boardId)) {
+		if ($permission === Acl::PERMISSION_SHARE && $this->shareManager->sharingDisabledForUser($this->userId)) {
+			return false;
+		}
+
+		if ($this->userIsBoardOwner($boardId, $userId)) {
 			return true;
 		}
 
 		$acls = $this->aclMapper->findAll($boardId);
-		$result = $this->userCan($acls, $permission);
+		$result = $this->userCan($acls, $permission, $userId);
 		if ($result) {
 			return true;
 		}
@@ -143,14 +165,17 @@ class PermissionService {
 	 * @param $boardId
 	 * @return bool
 	 */
-	public function userIsBoardOwner($boardId) {
+	public function userIsBoardOwner($boardId, $userId = null) {
+		if ($userId === null) {
+			$userId = $this->userId;
+		}
 		try {
 			$board = $this->boardMapper->find($boardId);
-			return $board && $this->userId === $board->getOwner();
+			return $board && $userId === $board->getOwner();
 		} catch (DoesNotExistException $e) {
 		} catch (MultipleObjectsReturnedException $e) {
 			return false;
-		}		
+		}
 	}
 
 	/**
@@ -160,17 +185,29 @@ class PermissionService {
 	 * @param $permission
 	 * @return bool
 	 */
-	public function userCan(array $acls, $permission) {
+	public function userCan(array $acls, $permission, $userId = null) {
+		if ($userId === null) {
+			$userId = $this->userId;
+		}
 		// check for users
 		foreach ($acls as $acl) {
-			if ($acl->getType() === Acl::PERMISSION_TYPE_USER && $acl->getParticipant() === $this->userId) {
+			if ($acl->getType() === Acl::PERMISSION_TYPE_USER && $acl->getParticipant() === $userId) {
 				return $acl->getPermission($permission);
+			}
+
+			if ($this->circlesEnabled && $acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
+				try {
+					\OCA\Circles\Api\v1\Circles::getMember($acl->getParticipant(), $this->userId, 1, true);
+					return $acl->getPermission($permission);
+				} catch (\Exception $e) {
+					$this->logger->info('Member not found in circle that was accessed. This should not happen.');
+				}
 			}
 		}
 		// check for groups
 		$hasGroupPermission = false;
 		foreach ($acls as $acl) {
-			if (!$hasGroupPermission && $acl->getType() === Acl::PERMISSION_TYPE_GROUP && $this->groupManager->isInGroup($this->userId, $acl->getParticipant())) {
+			if (!$hasGroupPermission && $acl->getType() === Acl::PERMISSION_TYPE_GROUP && $this->groupManager->isInGroup($userId, $acl->getParticipant())) {
 				$hasGroupPermission = $acl->getPermission($permission);
 			}
 		}
@@ -228,5 +265,27 @@ class PermissionService {
 		}
 		$this->users[(string) $boardId] = $users;
 		return $this->users[(string) $boardId];
+	}
+
+	public function canCreate() {
+		$groups = $this->getGroupLimitList();
+		if (count($groups) === 0) {
+			return true;
+		}
+		foreach ($groups as $group) {
+			if ($this->groupManager->isInGroup($this->userId, $group)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private function getGroupLimitList() {
+		$value = $this->config->getAppValue('deck', 'groupLimit', '');
+		$groups = explode(',', $value);
+		if ($value === '') {
+			return [];
+		}
+		return $groups;
 	}
 }

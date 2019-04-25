@@ -91,6 +91,17 @@ class LabelService {
 		}
 
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
+
+		$boardLabels = $this->labelMapper->findAll($boardId);
+		if (\is_array($boardLabels)) {
+			foreach($boardLabels as $boardLabel) {
+				if ($boardLabel->getTitle() === $title) {
+					throw new BadRequestException('title must be unique');
+					break;
+				}
+			}
+		}
+
 		if ($this->boardService->isArchived(null, $boardId)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
@@ -143,7 +154,7 @@ class LabelService {
 			throw new BadRequestException('label id must be a number');
 		}
 
-		if ($title === false || $title === null) {
+		if ($title === false || $title === null || $title === "") {
 			throw new BadRequestException('title must be provided');
 		}
 
@@ -152,10 +163,26 @@ class LabelService {
 		}
 
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);
+
+		$label = $this->find($id);
+
+		$boardLabels = $this->labelMapper->findAll($label->getBoardId());
+		if (\is_array($boardLabels)) {
+			foreach($boardLabels as $boardLabel) {
+				if ($boardLabel->getId() === $label->getId()) {
+					continue;
+				}
+				if ($boardLabel->getTitle() === $title) {
+					throw new BadRequestException('title must be unique');
+					break;
+				}
+			}
+		}
+
 		if ($this->boardService->isArchived($this->labelMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
-		$label = $this->find($id);
+
 		$label->setTitle($title);
 		$label->setColor($color);
 		$this->changeHelper->boardChanged($label->getBoardId());

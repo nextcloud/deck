@@ -5,43 +5,51 @@
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *  
+ *
  */
 
 namespace OCA\Deck\Middleware;
 
+use OCA\Deck\Controller\BoardController;
+use OCA\Deck\Controller\PageController;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
+use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\PermissionService;
+use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\ILogger;
 use OCP\IConfig;
+use OCP\IRequest;
 
 
-class SharingMiddlewareTest extends \Test\TestCase {
+class ExceptionMiddlewareTest extends \Test\TestCase {
 
 	/** @var ILogger */
 	private $logger;
 	/** @var IConfig */
 	private $config;
-	private $sharingMiddleware;
+	private $controller;
+	private $exceptionMiddleware;
 
 	public function setUp() {
 		$this->logger = $this->createMock(ILogger::class);
 		$this->config = $this->createMock(IConfig::class);
-		$this->sharingMiddleware = new SharingMiddleware(
+		$this->controller = $this->createMock(Controller::class);
+		$this->exceptionMiddleware = new ExceptionMiddleware(
 			$this->logger,
 			$this->config
 		);
@@ -58,7 +66,7 @@ class SharingMiddlewareTest extends \Test\TestCase {
 	 * @dataProvider dataAfterException
 	 */
 	public function testAfterException($exception, $status, $message) {
-		$result = $this->sharingMiddleware->afterException('Foo', 'bar', $exception);
+		$result = $this->exceptionMiddleware->afterException($this->controller, 'bar', $exception);
 		$expected = new JSONResponse([
 			"status" => $status,
 			"message" => $message
@@ -66,12 +74,22 @@ class SharingMiddlewareTest extends \Test\TestCase {
 		$this->assertEquals($expected, $result);
 	}
 
+	/**
+	 * @expectedException \Exception
+	 * @expectedExceptionMessage failed hard
+	 */
+	public function testAfterExceptionNoController() {
+		$pageController = $this->createMock(PageController::class);
+		$result = $this->exceptionMiddleware->afterException($pageController, 'bar', new \Exception('failed hard'));
+	}
+
 	public function testAfterExceptionFail() {
-		try {
-			$result = $this->sharingMiddleware->afterException('Foo', 'bar', new \Exception('failed hard'));
-		} catch (\Exception $e) {
-			$this->assertEquals('failed hard', $e->getMessage());
-		}
+		// BoardService $boardService, PermissionService $permissionService, $userId
+		$boardController = new BoardController('deck', $this->createMock(IRequest::class), $this->createMock(BoardService::class), $this->createMock(PermissionService::class), 'admin');
+		$result = $this->exceptionMiddleware->afterException($boardController, 'bar', new \Exception('failed hard'));
+		$this->assertEquals('failed hard', $result->getData()['message']);
+		$this->assertEquals(500, $result->getData()['status']);
+
 	}
 
 }

@@ -17,12 +17,12 @@
 - 🚀 Get your project organized
 
 </description>
-    <version>0.5.0</version>
+    <version>0.6.0</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
     <types>
-        <logging/>
+        <dav />
     </types>
     <category>organization</category>
     <category>office</category>
@@ -36,11 +36,12 @@
         <database min-version="9.4">pgsql</database>
         <database>sqlite</database>
         <database min-version="5.5">mysql</database>
-        <nextcloud min-version="13" max-version="16" />
+        <nextcloud min-version="15" max-version="16" />
     </dependencies>
     <background-jobs>
         <job>OCA\Deck\Cron\DeleteCron</job>
         <job>OCA\Deck\Cron\ScheduledNotifications</job>
+        <job>OCA\Deck\Cron\CardDescriptionActivity</job>
     </background-jobs>
     <repair-steps>
         <post-migration>
@@ -53,6 +54,7 @@
     <activity>
         <settings>
             <setting>OCA\Deck\Activity\Setting</setting>
+            <setting>OCA\Deck\Activity\DescriptionSetting</setting>
         </settings>
         <filters>
             <filter>OCA\Deck\Activity\Filter</filter>
@@ -61,4 +63,9 @@
             <provider>OCA\Deck\Activity\DeckProvider</provider>
         </providers>
     </activity>
+
+    <fulltextsearch>
+        <provider min-version="16">OCA\Deck\Provider\DeckProvider</provider>
+    </fulltextsearch>
+
 </info>

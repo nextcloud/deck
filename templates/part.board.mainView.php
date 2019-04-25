@@ -20,7 +20,7 @@
 	</div>
 	<div class="crumb title" ng-if="params.filter=='archive'">
 		<a><span class="icon icon-archive"></span></a>
-		<a>Archived cards</a>
+		<a><?php p($l->t('Archived cards')); ?></a>
 	</div>
 
 	<div class="board-header-controls hidden">
@@ -63,7 +63,7 @@
 					data-as-sortable-item
 					ng-click="$event.stopPropagation()"
 					ui-sref="board.card({boardId: id, cardId: c.id})"
-					ng-class="{'archived': cardservice.get(c.id).archived, 'has-labels': cardservice.get(c.id).labels.length>0, 'current': cardservice.get(c.id).id == params.cardId }"
+					ng-class="{'archived': cardservice.get(c.id).archived, 'has-labels': cardservice.get(c.id).labels.length>0, 'current': cardservice.get(c.id).id == params.cardId, 'overdue': cardservice.get(c.id).overdue == 3, 'now': cardservice.get(c.id).overdue == 2, 'next': cardservice.get(c.id).overdue == 1, 'has-tasks': getCheckboxes(cardservice.get(c.id).description)[1] > 0, 'has-tasks-completed': getCheckboxes(cardservice.get(c.id).description)[1] > 0 && getCheckboxes(cardservice.get(c.id).description)[1] == getCheckboxes(cardservice.get(c.id).description)[0] }"
 					nv-file-drop="" uploader="uploader" options="{cardId: c.id}">
 					<div class="drop-indicator" uploader="uploader" nv-file-over>
 						<p><?php p($l->t('Drop your files here to upload it to the card')); ?></p>
@@ -73,7 +73,7 @@
 							<h4>
 								<span class="editable-inline"
 									ng-show="!c.status.editCard"
-									ng-click="startTitleEdit(c)">{{cardservice.get(c.id).title}}</span>
+									ng-click="$event.stopPropagation(); startTitleEdit(c)">{{cardservice.get(c.id).title}}</span>
 								<form ng-if="c.status.editCard" ng-submit="finishTitleEdit(c)">
 									<input
 											class="input-inline"

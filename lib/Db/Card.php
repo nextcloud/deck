@@ -29,9 +29,11 @@ class Card extends RelationalEntity {
 
 	protected $title;
 	protected $description;
+	protected $descriptionPrev;
 	protected $stackId;
 	protected $type;
 	protected $lastModified;
+	protected $lastEditor;
 	protected $createdAt;
 	protected $labels;
 	protected $assignedUsers;
@@ -113,6 +115,7 @@ class Card extends RelationalEntity {
 		}
 		$json['duedate'] = $this->getDuedate(true);
 		unset($json['notified']);
+		unset($json['descriptionPrev']);
 		return $json;
 	}
 

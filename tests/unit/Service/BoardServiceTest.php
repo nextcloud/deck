@@ -33,10 +33,12 @@ use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
+use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IGroupManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use \Test\TestCase;
 
 class BoardServiceTest extends TestCase {
@@ -51,6 +53,8 @@ class BoardServiceTest extends TestCase {
 	private $aclMapper;
 	/** @var BoardMapper */
 	private $boardMapper;
+	/** @var StackMapper */
+	private $stackMapper;
 	/** @var PermissionService */
 	private $permissionService;
 	/** @var NotificationHelper */
@@ -65,6 +69,8 @@ class BoardServiceTest extends TestCase {
 	private $activityManager;
 	/** @var ChangeHelper */
 	private $changeHelper;
+	/** @var EventDispatcherInterface */
+	private $eventDispatcher;
 	private $userId = 'admin';
 
 	public function setUp() {
@@ -72,6 +78,7 @@ class BoardServiceTest extends TestCase {
 		$this->l10n = $this->createMock(L10N::class);
 		$this->aclMapper = $this->createMock(AclMapper::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
+		$this->stackMapper = $this->createMock(StackMapper::class);
 		$this->labelMapper = $this->createMock(LabelMapper::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
@@ -80,9 +87,11 @@ class BoardServiceTest extends TestCase {
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
+		$this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
+			$this->stackMapper,
 			$this->l10n,
 			$this->labelMapper,
 			$this->aclMapper,
@@ -92,6 +101,7 @@ class BoardServiceTest extends TestCase {
 			$this->userManager,
 			$this->groupManager,
 			$this->activityManager,
+			$this->eventDispatcher,
 			$this->changeHelper,
 			$this->userId
 		);
@@ -111,10 +121,17 @@ class BoardServiceTest extends TestCase {
 			->method('findAllByUser')
 			->with('admin')
 			->willReturn([$b1, $b2]);
+		$this->stackMapper->expects($this->any())
+			->method('findAll')
+			->willReturn([]);
 		$this->boardMapper->expects($this->once())
 			->method('findAllByGroups')
 			->with('admin', ['a', 'b', 'c'])
 			->willReturn([$b2, $b3]);
+		$this->boardMapper->expects($this->once())
+			->method('findAllByCircles')
+			->with('admin')
+			->willReturn([]);
 		$user = $this->createMock(IUser::class);
 		$this->groupManager->method('getUserGroupIds')
 			->willReturn(['a', 'b', 'c']);
@@ -150,12 +167,29 @@ class BoardServiceTest extends TestCase {
 		$this->boardMapper->expects($this->once())
 			->method('insert')
 			->willReturn($board);
+		$this->permissionService->expects($this->once())
+			->method('canCreate')
+			->willReturn(true);
 		$b = $this->service->create('MyBoard', 'admin', '00ff00');
 
 		$this->assertEquals($b->getTitle(), 'MyBoard');
 		$this->assertEquals($b->getOwner(), 'admin');
 		$this->assertEquals($b->getColor(), '00ff00');
 		$this->assertCount(4, $b->getLabels());
+	}
+
+	/**
+	 * @expectedException \OCA\Deck\NoPermissionException
+	 */
+	public function testCreateDenied() {
+		$board = new Board();
+		$board->setTitle('MyBoard');
+		$board->setOwner('admin');
+		$board->setColor('00ff00');
+		$this->permissionService->expects($this->once())
+			->method('canCreate')
+			->willReturn(false);
+		$b = $this->service->create('MyBoard', 'admin', '00ff00');
 	}
 
 	public function testUpdate() {
@@ -187,6 +221,7 @@ class BoardServiceTest extends TestCase {
 	public function testDelete() {
 		$board = new Board();
 		$board->setOwner('admin');
+		$board->setDeletedAt(0);
 		$this->boardMapper->expects($this->once())
 			->method('find')
 			->willReturn($board);
@@ -196,7 +231,7 @@ class BoardServiceTest extends TestCase {
 				'admin' => 'admin',
 			]);
 		$boardDeleted = clone $board;
-		$board->setDeletedAt(1);
+		$boardDeleted->setDeletedAt(1);
 		$this->boardMapper->expects($this->once())
 			->method('update')
 			->willReturn($boardDeleted);

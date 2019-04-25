@@ -31,11 +31,13 @@ use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IConfig;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\ILogger;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\Share\IManager;
 
 class PermissionServiceTest extends \Test\TestCase {
 
@@ -51,21 +53,22 @@ class PermissionServiceTest extends \Test\TestCase {
     private $userManager;
     /** @var IGroupManager */
 	private $groupManager;
+	/** @var IManager */
+	private $shareManager;
+	/** @var IConfig */
+	private $config;
 	/** @var string */
 	private $userId = 'admin';
 
 	public function setUp() {
 		parent::setUp();
-		$this->logger = $this->request = $this->getMockBuilder(ILogger::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$this->aclMapper = $this->getMockBuilder(AclMapper::class)
-			->disableOriginalConstructor()->getMock();
-		$this->boardMapper = $this->getMockBuilder(BoardMapper::class)
-			->disableOriginalConstructor()->getMock();
+		$this->logger = $this->request = $this->createMock(ILogger::class);
+		$this->aclMapper = $this->createMock(AclMapper::class);
+		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->userManager = $this->createMock(IUserManager::class);
-		$this->groupManager = $this->getMockBuilder(IGroupManager::class)
-			->disableOriginalConstructor()->getMock();
+		$this->groupManager = $this->createMock(IGroupManager::class);
+		$this->shareManager = $this->createMock(IManager::class);
+		$this->config = $this->createMock(IConfig::class);
 
 		$this->service = new PermissionService(
 			$this->logger,
@@ -73,6 +76,8 @@ class PermissionServiceTest extends \Test\TestCase {
 			$this->boardMapper,
 			$this->userManager,
 			$this->groupManager,
+			$this->shareManager,
+			$this->config,
 			'admin'
 		);
 	}
@@ -226,6 +231,9 @@ class PermissionServiceTest extends \Test\TestCase {
         $acls = $this->getAcls($boardId);
         $this->aclMapper->expects($this->any())->method('findAll')->willReturn($acls);
 
+        $this->shareManager->expects($this->any())
+			->method('sharingDisabledForUser')
+			->willReturn(false);
 
 	    if($result) {
             $actual = $this->service->checkPermission($mapper, 1234, $permission);
@@ -251,6 +259,7 @@ class PermissionServiceTest extends \Test\TestCase {
         $acls = $this->getAcls($boardId);
         $this->aclMapper->expects($this->any())->method('findAll')->willReturn($acls);
 
+
         if($result) {
             $actual = $this->service->checkPermission($mapper, 1234, $permission);
             $this->assertTrue($actual);
@@ -263,7 +272,7 @@ class PermissionServiceTest extends \Test\TestCase {
 
     public function testCheckPermissionNotFound() {
         $mapper = $this->getMockBuilder(IPermissionMapper::class)->getMock();
-        $mapper->expects($this->once())->method('findBoardId')->willThrowException(new NoPermissionException(null));		
+        $mapper->expects($this->once())->method('findBoardId')->willThrowException(new NoPermissionException(null));
 		$this->expectException(NoPermissionException::class);
         $this->service->checkPermission($mapper, 1234, Acl::PERMISSION_READ);
     }

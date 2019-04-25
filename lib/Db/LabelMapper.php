@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Db;
 
+use OCP\AppFramework\Db\Entity;
 use OCP\IDBConnection;
 
 
@@ -45,7 +46,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	public function findAssignedLabelsForCard($cardId, $limit = null, $offset = null) {
-		$sql = 'SELECT l.* FROM `*PREFIX*deck_assigned_labels` as al INNER JOIN *PREFIX*deck_labels as l ON l.id = al.label_id WHERE `card_id` = ? ORDER BY l.id';
+		$sql = 'SELECT l.*,card_id FROM `*PREFIX*deck_assigned_labels` as al INNER JOIN *PREFIX*deck_labels as l ON l.id = al.label_id WHERE `card_id` = ? ORDER BY l.id';
 		return $this->findEntities($sql, [$cardId], $limit, $offset);
 	}
 	public function findAssignedLabelsForBoard($boardId, $limit = null, $offset = null) {
@@ -53,6 +54,19 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 			' INNER JOIN `*PREFIX*deck_assigned_labels` as al ON al.card_id = c.id INNER JOIN `*PREFIX*deck_labels` as l ON  al.label_id = l.id WHERE board_id=? ORDER BY l.id';
 		return $this->findEntities($sql, [$boardId], $limit, $offset);
 	}
+
+	public function insert(Entity $entity) {
+		$entity->setLastModified(time());
+		return parent::insert($entity);
+	}
+
+	public function update(Entity $entity, $updateModified = true) {
+		if ($updateModified) {
+			$entity->setLastModified(time());
+		}
+		return parent::update($entity);
+	}
+
 
 	public function getAssignedLabelsForBoard($boardId) {
 		$labels = $this->findAssignedLabelsForBoard($boardId);

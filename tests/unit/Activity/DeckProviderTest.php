@@ -25,13 +25,16 @@ namespace OCA\Deck\Activity;
 
 use OC\Activity\Event;
 use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\Card;
 use OCP\Activity\IEvent;
 use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
+use OCP\IConfig;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\L10N\IFactory;
 use OCP\RichObjectStrings\IValidator;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -62,7 +65,9 @@ class DeckProviderTest extends TestCase {
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->commentsManager = $this->createMock(ICommentsManager::class);
-		$this->provider = new DeckProvider($this->urlGenerator, $this->activityManager, $this->userManager, $this->commentsManager, $this->userId);
+		$this->l10nFactory = $this->createMock(IFactory::class);
+		$this->config = $this->createMock(IConfig::class);
+		$this->provider = new DeckProvider($this->urlGenerator, $this->activityManager, $this->userManager, $this->commentsManager, $this->l10nFactory, $this->config, $this->userId);
 	}
 
 	private function mockEvent($objectType, $objectId, $objectName, $subject, $subjectParameters = []) {
@@ -139,7 +144,7 @@ class DeckProviderTest extends TestCase {
 
 	public function testDeckUrl() {
 		$this->urlGenerator->expects($this->once())
-			->method('linkToRoute')
+			->method('linkToRouteAbsolute')
 			->with('deck.page.index')
 			->willReturn('http://localhost/index.php/apps/deck/');
 		$this->assertEquals(
@@ -208,7 +213,7 @@ class DeckProviderTest extends TestCase {
 		$event = new Event($richValidator);
 
 		$event->setApp('deck');
-		$event->setSubject(ActivityManager::SUBJECT_CARD_CREATE);
+		$event->setSubject(ActivityManager::SUBJECT_CARD_CREATE, ['card' => new Card()]);
 		$event->setAffectedUser($this->userId);
 		$event->setAuthor($this->userId);
 		$event->setObject(ActivityManager::DECK_OBJECT_CARD, 1, 'Card');
@@ -256,6 +261,7 @@ class DeckProviderTest extends TestCase {
 			'before' => 'ABC',
 			'after' => 'BCD',
 			'diff' => true,
+			'card' => new Card()
 		]);
 		$event->setAffectedUser($this->userId);
 		$event->setAuthor($this->userId);
@@ -461,7 +467,7 @@ class DeckProviderTest extends TestCase {
 
 	public function testParseParamForComment() {
 		$comment = $this->createMock(IComment::class);
-		$comment->expects($this->once())
+		$comment->expects($this->any())
 			->method('getMessage')
 			->willReturn('Comment content');
 		$this->commentsManager->expects($this->once())
@@ -477,7 +483,11 @@ class DeckProviderTest extends TestCase {
 			'comment' => 123
 		];
 		$expected = [
-			'comment' => 123,
+			'comment' => [
+				'type' => 'highlight',
+				'id' => 123,
+				'name' => 'Comment content'
+			]
 		];
 		$actual = $this->invokePrivate($this->provider, 'parseParamForComment', [$subjectParams, $params, $event]);
 		$this->assertEquals($expected, $actual);

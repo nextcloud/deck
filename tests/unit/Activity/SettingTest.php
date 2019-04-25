@@ -23,15 +23,20 @@
 
 namespace OCA\Deck\Activity;
 
+use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
 
 class SettingTest extends TestCase {
 
+	/** @var IL10N */
+	private $l10n;
 	/** @var Setting */
 	private $setting;
 
 	public function setUp() {
-		$this->setting = new Setting();
+		$this->l10n = $this->createMock(IL10N::class);
+		$this->l10n->expects($this->any())->method('t')->will($this->returnCallback(function ($s) { return $s; }));
+		$this->setting = new Setting($this->l10n);
 	}
 
 	public function testGetIdentifier() {
@@ -39,7 +44,7 @@ class SettingTest extends TestCase {
 	}
 
 	public function testGetName() {
-		$this->assertEquals('Deck', $this->setting->getName());
+		$this->assertEquals('Changes in the <strong>Deck app</strong>', $this->setting->getName());
 	}
 
 	public function testGetPriority() {

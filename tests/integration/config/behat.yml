@@ -2,7 +2,7 @@ default:
   suites:
     test:
       paths:
-        - %paths.base%/../features/
+        - '%paths.base%/../features/'
       contexts:
         - FeatureContext:
             baseUrl:  http://localhost:8080/index.php/ocs/

@@ -41,6 +41,7 @@ class LabelTest extends TestCase {
 				'title' => 'My Label',
 				'boardId' => 123,
 				'cardId' => null,
+				'lastModified' => null,
 				'color' => '000000'
 			], $label->jsonSerialize());
 
@@ -53,6 +54,7 @@ class LabelTest extends TestCase {
 			'title' => 'My Label',
 			'boardId' => null,
 			'cardId' => 123,
+			'lastModified' => null,
 			'color' => '000000'
 		], $label->jsonSerialize());
 

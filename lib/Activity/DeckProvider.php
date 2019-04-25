@@ -31,8 +31,10 @@ use OCP\Activity\IProvider;
 use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
 use OCP\Comments\NotFoundException;
+use OCP\IConfig;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
+use OCP\L10N\IFactory;
 
 class DeckProvider implements IProvider {
 
@@ -46,13 +48,19 @@ class DeckProvider implements IProvider {
 	private $userManager;
 	/** @var ICommentsManager */
 	private $commentsManager;
+	/** @var IFactory */
+	private $l10nFactory;
+	/** @var IConfig */
+	private $config;
 
-	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, IUserManager $userManager, ICommentsManager $commentsManager, $userId) {
+	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, IUserManager $userManager, ICommentsManager $commentsManager, IFactory $l10n, IConfig $config, $userId) {
 		$this->userId = $userId;
 		$this->urlGenerator = $urlGenerator;
 		$this->activityManager = $activityManager;
 		$this->commentsManager = $commentsManager;
 		$this->userManager = $userManager;
+		$this->l10nFactory = $l10n;
+		$this->config = $config;
 	}
 
 	/**
@@ -81,15 +89,26 @@ class DeckProvider implements IProvider {
 		 */
 
 		$author = $event->getAuthor();
+		// get author if
+		if ($author === '' && array_key_exists('author', $subjectParams)) {
+			$author = $subjectParams['author'];
+			unset($subjectParams['author']);
+		}
 		$user = $this->userManager->get($author);
-		$params = [
-			'user' => [
-				'type' => 'user',
-				'id' => $author,
-				'name' => $user !== null ? $user->getDisplayName() : $author
-			],
-		];
+		if ($user !== null) {
+			$params = [
+				'user' => [
+					'type' => 'user',
+					'id' => $author,
+					'name' => $user !== null ? $user->getDisplayName() : $author
+				],
+			];
+			$event->setAuthor($author);
+		}
 		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_BOARD) {
+			if (isset($subjectParams['board']) && $event->getObjectName() === '') {
+				$event->setObject($event->getObjectType(), $event->getObjectId(), $subjectParams['board']['title']);
+			}
 			$board = [
 				'type' => 'highlight',
 				'id' => $event->getObjectId(),
@@ -99,7 +118,10 @@ class DeckProvider implements IProvider {
 			$params['board'] = $board;
 		}
 
-		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_CARD) {
+		if (isset($subjectParams['card']) && $event->getObjectType() === ActivityManager::DECK_OBJECT_CARD) {
+			if ($event->getObjectName() === '') {
+				$event->setObject($event->getObjectType(), $event->getObjectId(), $subjectParams['card']['title']);
+			}
 			$card = [
 				'type' => 'highlight',
 				'id' => $event->getObjectId(),
@@ -122,6 +144,7 @@ class DeckProvider implements IProvider {
 		$params = $this->parseParamForAcl($subjectParams, $params);
 		$params = $this->parseParamForChanges($subjectParams, $params, $event);
 		$params = $this->parseParamForComment($subjectParams, $params, $event);
+		$params = $this->parseParamForDuedate($subjectParams, $params, $event);
 
 		try {
 			$subject = $this->activityManager->getActivityFormat($subjectIdentifier, $subjectParams, $ownActivity);
@@ -137,18 +160,20 @@ class DeckProvider implements IProvider {
 	 * @param array $parameters
 	 */
 	protected function setSubjects(IEvent $event, $subject, array $parameters) {
-		$placeholders = $replacements = [];
+		$placeholders = $replacements = $richParameters = [];
 		foreach ($parameters as $placeholder => $parameter) {
 			$placeholders[] = '{' . $placeholder . '}';
 			if (is_array($parameter) && array_key_exists('name', $parameter)) {
 				$replacements[] = $parameter['name'];
+				$richParameters[$placeholder] = $parameter;
 			} else {
 				$replacements[] = '';
 			}
 		}
 
 		$event->setParsedSubject(str_replace($placeholders, $replacements, $subject))
-			->setRichSubject($subject, $parameters);
+			->setRichSubject($subject, $richParameters);
+		$event->setSubject($subject, $parameters);
 	}
 
 	private function getIcon(IEvent $event) {
@@ -260,9 +285,29 @@ class DeckProvider implements IProvider {
 			try {
 				$comment = $this->commentsManager->get((int)$subjectParams['comment']);
 				$event->setParsedMessage($comment->getMessage());
+				$params['comment'] =[
+					'type' => 'highlight',
+					'id' => $subjectParams['comment'],
+					'name' => $comment->getMessage()
+				];
 			} catch (NotFoundException $e) {
 			}
-			$params['comment'] = $subjectParams['comment'];
+		}
+		return $params;
+	}
+
+	private function parseParamForDuedate($subjectParams, $params, IEvent $event) {
+		if (array_key_exists('after', $subjectParams) && $event->getSubject() === ActivityManager::SUBJECT_CARD_UPDATE_DUEDATE) {
+			$userLanguage = $this->config->getUserValue($event->getAuthor(), 'core', 'lang', $this->l10nFactory->findLanguage());
+			$userLocale = $this->config->getUserValue($event->getAuthor(), 'core', 'locale', $this->l10nFactory->findLocale());
+			$l10n = $this->l10nFactory->get('deck', $userLanguage, $userLocale);
+			$date = new \DateTime($subjectParams['after']);
+			$date->setTimezone(new \DateTimeZone(\date_default_timezone_get()));
+			$params['after'] = [
+				'type' => 'highlight',
+				'id' => 'dt:' . $subjectParams['after'],
+				'name' => $l10n->l('datetime', $date)
+			];
 		}
 		return $params;
 	}
@@ -301,6 +346,6 @@ class DeckProvider implements IProvider {
 	}
 
 	public function deckUrl($endpoint) {
-		return $this->urlGenerator->linkToRoute('deck.page.index') . '#!' . $endpoint;
+		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . '#!' . $endpoint;
 	}
 }

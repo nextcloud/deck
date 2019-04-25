@@ -23,8 +23,8 @@
 
 namespace OCA\Deck\Middleware;
 
+use OCA\Deck\Controller\PageController;
 use OCA\Deck\StatusException;
-use OCA\Deck\BadRequestException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Middleware;
 use OCP\AppFramework\Http\JSONResponse;
@@ -33,7 +33,7 @@ use OCP\Util;
 use OCP\IConfig;
 
 
-class SharingMiddleware extends Middleware {
+class ExceptionMiddleware extends Middleware {
 
 	/** @var ILogger */
 	private $logger;
@@ -69,6 +69,20 @@ class SharingMiddleware extends Middleware {
 				'status' => $exception->getStatus(),
 				'message' => $exception->getMessage()
 			], $exception->getStatus());
+		}
+
+		if (strpos(get_class($controller), 'OCA\\Deck\\Controller\\') === 0) {
+			$response = [
+				'status' => 500,
+				'message' => $exception->getMessage()
+			];
+			if ($this->config->getSystemValue('loglevel', Util::WARN) === Util::DEBUG) {
+				$this->logger->logException($exception);
+			}
+			if ($this->config->getSystemValue('debug', true) === true) {
+				$response['exception'] = (array) $exception;
+			}
+			return new JSONResponse($response, 500);
 		}
 
 		// uncatched DoesNotExistExceptions will be thrown when the main entity is not found

@@ -19,10 +19,18 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+/* global oc_defaults oc_config OC OCP OCA t n */
 
 import app from '../app/App.js';
-/* global oc_defaults OC OCP OCA */
-app.controller('BoardController', function ($rootScope, $scope, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter, FileService) {
+import Vue from 'vue';
+
+Vue.prototype.t = t;
+Vue.prototype.n = n;
+Vue.prototype.OC = OC;
+
+import CollaborationView from '../views/CollaborationView';
+
+app.controller('BoardController', function ($rootScope, $scope, $element, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter, FileService) {
 
 	$scope.sidebar = $rootScope.sidebar;
 
@@ -41,6 +49,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.defaultColors = ['31CC7C', '317CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'];
 	$scope.board = BoardService.getCurrent();
 	$scope.uploader = FileService.uploader;
+	$scope.searchText = '';
 
 	$scope.startTitleEdit = function(card) {
 		card.renameTitle = card.title;
@@ -147,6 +156,31 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		}
 	});
 
+	if (parseInt(oc_config.version.split('.')[0]) >= 16) {
+		const ComponentVM = new Vue({
+			render: h => h(CollaborationView),
+			data: {
+				model: BoardService.getCurrent()
+			},
+		});
+		$scope.mountCollections = function () {
+			const MountingPoint = document.getElementById('collaborationResources');
+			if (MountingPoint) {
+				ComponentVM.model = BoardService.getCurrent();
+				ComponentVM.$mount(MountingPoint);
+			}
+		};
+		$scope.$$postDigest($scope.mountCollections);
+		$scope.$watch(function () {
+			return BoardService.getCurrent();
+		}, function () {
+			ComponentVM.model = BoardService.getCurrent();
+			if ($scope.sidebar.show) {
+				$scope.$$postDigest($scope.mountCollections);
+			}
+		});
+	}
+
 	$scope.toggleCompactMode = function() {
 		$rootScope.compactMode = !$rootScope.compactMode;
 		localStorage.setItem('deck.compactMode', JSON.stringify($rootScope.compactMode));
@@ -245,6 +279,7 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 	$scope.cardDelete = function (card) {
 		CardService.delete(card.id).then(function () {
 			StackService.removeCard(card);
+			$scope.sidebar.show = false;
 		});
 	};
 
@@ -321,7 +356,20 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 		// remove from board data
 		var i = BoardService.getCurrent().labels.indexOf(label);
 		BoardService.getCurrent().labels.splice(i, 1);
-		// TODO: remove from cards
+
+		// remove from cards
+		var cards = CardService.data;
+		for (var card in cards) {
+			if (Object.prototype.hasOwnProperty.call(cards, card)) {
+				var labelsFromCard = cards[card].labels;
+
+				labelsFromCard.forEach(function (labelFromCard, index) {
+					if (labelFromCard.id === label.id) {
+						cards[card].labels.splice(index, 1);
+					}
+				});
+			}
+		}
 	};
 
 	$scope.labelCreate = function (label) {
@@ -331,11 +379,35 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 			BoardService.getCurrent().labels.push(data);
 			$scope.status.createLabel = false;
 			$scope.newLabel = {};
+		}).catch((err) => {
+			OC.Notification.showTemporary(err);
 		});
 	};
+
+	$scope.labelUpdateBefore = function (label) {
+		label.renameTitle = label.title;
+	};
+
 	$scope.labelUpdate = function (label) {
 		label.edit = false;
-		LabelService.update(label);
+		LabelService.update(label).catch((err) => {
+			label.title = label.renameTitle;
+			OC.Notification.showTemporary(err);
+		});
+
+		// update labels in UI
+		var cards = CardService.data;
+		for (var card in cards) {
+			if (Object.prototype.hasOwnProperty.call(cards, card)) {
+				var labelsFromCard = cards[card].labels;
+
+				labelsFromCard.forEach(function (labelFromCard, index) {
+					if (labelFromCard.id === label.id) {
+						cards[card].labels[index] = label;
+					}
+				});
+			}
+		}
 	};
 
 	$scope.aclAdd = function (sharee) {
@@ -364,6 +436,8 @@ app.controller('BoardController', function ($rootScope, $scope, $stateParams, St
 				return 'user';
 			case OC.Share.SHARE_TYPE_GROUP:
 				return 'group';
+			case OC.Share.SHARE_TYPE_CIRCLE:
+				return 'circles';
 			default:
 				return '';
 		}

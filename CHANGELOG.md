@@ -1,6 +1,60 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.6.0 - 2019-04-23
+
+### Added
+- Share boards with circles
+- Integration with collections in Nextcloud 16
+- Support for full text search
+- Nextcloud 16 compatibility
+
+### Fixed
+- Fix duplicate call to delete
+- Prevent duplicate tag names @jakobroehrl
+- Prevent loading details when editing the card title @jakobroehrl
+- Hide sidebar after card deletion @jakobroehrl
+- Update labels after change in the UI @jakobroehrl
+- Allow limiting the app to groups again
+- Various REST API enhancements and fixes
+- Fix some issues with comments/activites
+
+
+## 0.5.2 - 2018-12-20
+
+### Fixed
+- Mark notification as read if a card with duedate gets archived
+- Use proper timezone and locale format for due date activities
+- Various translation fixes and updates
+- Check group limit properly
+- Fix comment activities on Nextcloud 15
+- Fix issues with Edge
+- API: Fix numeric types that were returned as strings
+- API: Fix If-Modified-Since header parsing  
+
+
+## 0.5.1 - 2018-12-05
+
+### Added
+- Separate settings for description changes in activity
+- Less verbose description change activities
+- Use server settings to restrict sharing to groups
+- Add setting to exclude groups from creating their own boards
+
+### Fixed
+- Fix issue when using a separate table prefix @bpcurse
+- Fix invalid activity parameters being published
+- Wording fixes @cloud2018
+- Improve loading performance by removing unused activity preloading
+- Fix timestamp issues in deleted items tab
+- Remember show state of the board navigation @weeman1337
+- Add optional classes for custom styling @tinko92
+- Fix missing details on activity emails
+- Fix unrelated comments in board activity list
+- Fix search not working properly
+- Trigger comment notification on update only
+
+
 ## 0.5.0 - 2018-11-15
 
 ### Added

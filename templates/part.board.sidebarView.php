@@ -29,8 +29,15 @@
             </ui-select-match>
             <ui-select-choices refresh="searchForUser($select.search)" refresh-delay="0" repeat="sharee in boardservice.sharees">
 				<div class="avatardiv" avatar data-user="{{ sharee.participant.uid }}" data-displayname="{{ sharee.participant.displayname }}" ng-if="sharee.type==OC.Share.SHARE_TYPE_USER"></div>
-				<div class="avatardiv" ng-if="sharee.type==OC.Share.SHARE_TYPE_GROUP"><i class="icon icon-{{aclTypeString(sharee)}}" title="<?php p($l->t('Access for')); ?> {{aclTypeString(sharee)}}"></i></div>
-				<span class="has-tooltip username">
+				<div class="avatardiv" ng-if="sharee.type==OC.Share.SHARE_TYPE_GROUP"><i class="icon icon-{{aclTypeString(sharee)}}" ></i></div>
+				<span class="has-tooltip username" ng-if="sharee.type==OC.Share.SHARE_TYPE_GROUP">
+					{{ sharee.participant.displayname }} (<?php p($l->t('Group')); ?>)
+				</span>
+				<div class="avatardiv circles" ng-if="sharee.type==OC.Share.SHARE_TYPE_CIRCLE"><i class="icon icon-circles icon-white"></i></div>
+				<span class="has-tooltip username" ng-if="sharee.type==OC.Share.SHARE_TYPE_CIRCLE">
+					{{ sharee.participant.displayname }} (<?php p($l->t('Circle')); ?>)
+				</span>
+                <span class="has-tooltip username" ng-if="sharee.type==OC.Share.SHARE_TYPE_USER">
 					{{ sharee.participant.displayname }}
 				</span>
             </ui-select-choices>
@@ -50,19 +57,27 @@
             <li ng-repeat="acl in boardservice.getCurrent().acl track by acl.participant.primaryKey">
                 <span class="icon-loading-small" style="display:none;" title="<?php p($l->t('Loading')); ?>"></span>
                 <div class="avatardiv" avatar data-contactsmenu="true" data-user="{{ acl.participant.uid }}" data-displayname="{{ acl.participant.displayname }}" ng-if="acl.type==OC.Share.SHARE_TYPE_USER"></div>
-                <div class="avatardiv" ng-if="acl.type==OC.Share.SHARE_TYPE_GROUP"><i class="icon icon-{{aclTypeString(acl)}}" title="<?php p($l->t('Access for')); ?> {{aclTypeString(acl)}}"></i></div>
+                <div class="avatardiv" ng-if="acl.type!=OC.Share.SHARE_TYPE_USER"><i class="icon icon-{{aclTypeString(acl)}}" ></i></div>
 
-                <span class="has-tooltip username">
+				<span class="has-tooltip username" ng-if="acl.type==OC.Share.SHARE_TYPE_USER">
                     {{ acl.participant.displayname }}
 				</span>
+                <span class="has-tooltip username" ng-if="acl.type==OC.Share.SHARE_TYPE_GROUP">
+                    {{ acl.participant.displayname }} (<?php p($l->t('Group')); ?>)
+				</span>
+				<span class="has-tooltip username" ng-if="acl.type==OC.Share.SHARE_TYPE_CIRCLE">
+                    {{ acl.participant.displayname }} (<?php p($l->t('Circle')); ?> {{ acl.participant.typeString }})
+					<div>{{ acl.participant.circleOwner.display_name }}</div>
+				</span>
+
 				<span class="sharingOptionsGroup">
-                <span class="shareOption" ng-if="boardservice.canManage()">
-                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-share" ng-model="acl.permissionShare" ng-change="aclUpdate(acl)" />
-                    <label for="checkbox-permission-{{ acl.id }}-share"><?php p($l->t('Share')); ?></label>
-                </span>
                 <span class="shareOption"ng-if="boardservice.canManage()">
                     <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-edit" ng-model="acl.permissionEdit" ng-change="aclUpdate(acl)" />
                     <label for="checkbox-permission-{{ acl.id }}-edit"><?php p($l->t('Edit')); ?></label>
+                </span>
+				<span class="shareOption" ng-if="boardservice.canManage()">
+                    <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-share" ng-model="acl.permissionShare" ng-change="aclUpdate(acl)" />
+                    <label for="checkbox-permission-{{ acl.id }}-share"><?php p($l->t('Share')); ?></label>
                 </span>
                 <span class="shareOption"ng-if="boardservice.canManage()">
                     <input type="checkbox" class="permissions checkbox" id="checkbox-permission-{{ acl.id }}-manage" ng-model="acl.permissionManage" ng-change="aclUpdate(acl)" />
@@ -71,7 +86,12 @@
 				</span>
                 <a ng-if="boardservice.canManage()" ng-click="aclDelete(acl)"><span class="icon-loading-small hidden"></span><span class="icon icon-delete"></span><span class="hidden-visually"><?php p($l->t('Discard share')); ?></span></a>
             </li>
+			<li ng-if="!boardservice.canShare()">
+				<?php p($l->t('Sharing has been disabled for your account.')); ?>
+			</li>
         </ul>
+		<h1>Collections</h1>
+		<div id="collaborationResources"></div>
 
     </div>
     <div id="board-detail-labels" class="tab commentsTabView" ng-if="params.tab==1">
@@ -95,7 +115,7 @@
                         </div>
                     </div>
                     <a ng-if="boardservice.canManage() && label.edit" ng-click="labelUpdate(label)" class="icon" title="<?php p($l->t('Update tag')); ?>"><i class="icon icon-checkmark" ></i><span class="hidden-visually"><?php p($l->t('Update tag')); ?></span></a>
-                    <a ng-if="boardservice.canManage() && !label.edit" ng-click="label.edit=true" class="icon" title="<?php p($l->t('Edit tag')); ?>"><i class="icon icon-rename"></i><span class="hidden-visually"><?php p($l->t('Edit tag')); ?></span></a>
+                    <a ng-if="boardservice.canManage() && !label.edit" ng-click="labelUpdateBefore(label); label.edit=true" class="icon" title="<?php p($l->t('Edit tag')); ?>"><i class="icon icon-rename"></i><span class="hidden-visually"><?php p($l->t('Edit tag')); ?></span></a>
                     <a ng-if="boardservice.canManage()" ng-click="labelDelete(label)" class="icon" title="<?php p($l->t('Delete tag')); ?>"><i class="icon icon-delete" ></i><span class="hidden-visually"><?php p($l->t('Delete tag')); ?></span></a>
                 </li>
                 <li ng-if="status.createLabel">

@@ -51,7 +51,8 @@ class ActivityService {
 			for (let index in this.toEnhanceWithComments) {
 				if (this.toEnhanceWithComments.hasOwnProperty(index)) {
 					let item = this.toEnhanceWithComments[index];
-					item.commentModel = this.commentCollection.get(item.subject_rich[1].comment);
+					let commentId = Array.isArray(item.subject_rich[1].comment) ? item.subject_rich[1].comment.id : item.subject_rich[1].comment;
+					item.commentModel = this.commentCollection.get(commentId);
 					if (typeof item.commentModel !== 'undefined') {
 						this.toEnhanceWithComments = this.toEnhanceWithComments.filter((entry) => entry.activity_id !== item.activity_id);
 					}
@@ -170,7 +171,9 @@ class ActivityService {
 		}
 		/** check if the fetched item from all deck activities is actually related */
 		const isUnrelatedBoard = (item.object_type === DECK_ACTIVITY_TYPE_BOARD && item.object_id !== id);
-		const isUnrelatedCard = (item.object_type === DECK_ACTIVITY_TYPE_CARD && item.subject_rich[1].board && item.subject_rich[1].board.id !== id);
+		const isUnrelatedCard = (item.object_type === DECK_ACTIVITY_TYPE_CARD && (
+			(item.subject_rich[1].board && item.subject_rich[1].board.id !== id) || (typeof item.subject_rich[1].board === 'undefined'))
+		);
 		if (type === DECK_ACTIVITY_TYPE_BOARD && (isUnrelatedBoard || isUnrelatedCard)) {
 			return;
 		}
