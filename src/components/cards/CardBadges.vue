@@ -22,27 +22,21 @@
 
 <template>
 	<div class="badges">
-		<i v-if="true" class="icon icon-description" title="" />
-		<span v-if="true" class="due">
-			<i class="icon icon-badge" />
-			<span data-timestamp="" class="live-relative-timestamp" />
-		</span>
-		<div v-if="true" class="card-tasks">
-			<i class="icon icon-checkmark" />
+		<div v-if="true" class="icon icon-description" title="" />
+		<div v-if="true" class="due icon icon-calendar-dark">
+			<span>Now</span>
+		</div>
+		<div v-if="true" class="card-tasks icon icon-checkmark">
 			<span>0/0</span>
 		</div>
-		<div v-if="true" class="card-files">
-			<i class="icon icon-files-dark" />
+		<div v-if="true" class="card-files icon icon-files-dark">
 			<span>1</span>
 		</div>
-		<div v-if="true" class="card-comments">
-			<i class="icon icon-comment" />
+		<div v-if="true" class="card-comments icon icon-comment">
 			<span>1</span>
 		</div>
 		<div v-if="true" class="card-assigned-users">
-			<div class="assigned-user">
-				<avatar user="admin" />
-			</div>
+			<avatar user="admin" />
 		</div>
 	</div>
 </template>
@@ -70,5 +64,21 @@ export default {
 	.badges {
 		display: flex;
 		flex-grow: 1;
+		.icon {
+			opacity: 0.5;
+			padding: 12px 3px;
+			background-position: left;
+			span {
+				margin-left: 18px;
+			}
+		}
+		.card-assigned-users {
+			flex-grow: 1;
+			padding: 6px 0px;
+			margin-right: -5px;
+			.avatardiv {
+				float: right;
+			}
+		}
 	}
 </style>

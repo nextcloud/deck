@@ -65,7 +65,7 @@
 <script>
 import { PopoverMenu } from 'nextcloud-vue'
 import ClickOutside from 'vue-click-outside'
-import ColorPicker from '../ColorPicker';
+import ColorPicker from '../ColorPicker'
 
 export default {
 	name: 'AppNavigationBoard',
@@ -91,7 +91,7 @@ export default {
 			menuOpen: false,
 			undoTimeoutHandle: null,
 			editTitle: '',
-			editColor: '',
+			editColor: ''
 		}
 	},
 	computed: {

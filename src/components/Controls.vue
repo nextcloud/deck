@@ -32,7 +32,7 @@
 			</div>
 		</div>
 		<div v-if="board" class="crumb svg">
-			<div class="board-bullet"></div>
+			<div class="board-bullet" />
 			<a href="#todo">{{ board.title }}</a>
 			<span style="display: inline;" class="icon-shared" />
 		</div>
@@ -42,12 +42,13 @@
 					<label for="new-stack-input-main" class="hidden-visually">Add a new stack</label>
 					<input id="new-stack-input-main" type="text" class="no-close"
 						placeholder="Add a new stack">
-					<input class="icon-confirm" type="button" title="Submit" />
+					<input class="icon-confirm" type="button" title="Submit">
 				</form>
 			</div>
 			<div class="board-action-buttons">
 				<button title="Show archived cards" class="icon icon-archive" />
-				<button title="Toggle compact mode" class="icon icon-toggle-compact-expanded" />
+				<button :class="[(compactMode ? 'icon-toggle-compact-collapsed' : 'icon-toggle-compact-expanded')]" title="Toggle compact mode" class="icon"
+					@click="toggleCompactMode" />
 				<router-link v-tooltip="t('deck', 'Board settings')" :to="{name: 'board.details'}" class="icon-settings-dark"
 					tag="button" />
 			</div>
@@ -57,6 +58,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
 	name: 'Controls',
 	props: {
@@ -66,12 +68,20 @@ export default {
 			default: null
 		}
 	},
+	computed: {
+		...mapState({
+			compactMode: state => state.compactMode
+		})
+	},
 	methods: {
 		toggleNav() {
 			this.$store.dispatch('toggleNav')
 		},
 		toggleSidebar: function() {
 			this.$store.dispatch('toggleSidebar')
+		},
+		toggleCompactMode() {
+			this.$store.dispatch('toggleCompactMode')
 		}
 	}
 }

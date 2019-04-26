@@ -47,6 +47,7 @@ export default new Vuex.Store({
 	strict: debug,
 	state: {
 		navShown: true,
+		compactMode: false,
 		sidebarShown: false,
 		currentBoard: null,
 		boards: [],
@@ -116,6 +117,9 @@ export default new Vuex.Store({
 		},
 		toggleSidebar(state) {
 			state.sidebarShown = !state.sidebarShown
+		},
+		toggleCompactMode(state) {
+			state.compactMode = !state.compactMode
 		},
 		setBoards(state, boards) {
 			state.boards = boards
@@ -198,6 +202,9 @@ export default new Vuex.Store({
 		},
 		toggleSidebar({ commit }) {
 			commit('toggleSidebar')
+		},
+		toggleCompactMode({ commit }) {
+			commit('toggleCompactMode')
 		},
 		setCurrentBoard({ commit }, board) {
 			commit('setCurrentBoard', board)

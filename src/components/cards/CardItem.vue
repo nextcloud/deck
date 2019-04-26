@@ -21,35 +21,33 @@
   -->
 
 <template>
-	<div tag="div" class="card" @click="openCard">
+	<div :class="{'compact': compactMode}" tag="div" class="card"
+		@click="openCard">
 		<div class="card-upper">
 			<h3>{{ card.title }}</h3>
-			<ul class="labels">
-				<li v-for="label in labels" :key="label.id" :style="labelStyle(label)"><span>{{ label.title }}</span></li>
-			</ul>
+			<action :actions="visibilityPopover" />
 		</div>
-		<div class="card-controls compact-item">
+		<ul class="labels">
+			<li v-for="label in labels" :key="label.id" :style="labelStyle(label)"><span>{{ label.title }}</span></li>
+		</ul>
+		<div v-show="!compactMode" class="card-controls compact-item">
 			<card-badges />
-			<div v-click-outside="hidePopoverMenu">
-				<a class="icon-more" @click.prevent="togglePopoverMenu" />
-				<div :class="{open: menuOpened}" class="popovermenu">
-					<PopoverMenu :menu="visibilityPopover" />
-				</div>
-			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-import { PopoverMenu } from 'nextcloud-vue'
+import { PopoverMenu, Action } from 'nextcloud-vue'
 import ClickOutside from 'vue-click-outside'
+import { mapState } from 'vuex'
 
 import CardBadges from './CardBadges'
 import LabelTag from './LabelTag'
 import Color from '../../mixins/color'
+
 export default {
 	name: 'CardItem',
-	components: { PopoverMenu, CardBadges, LabelTag },
+	components: { PopoverMenu, CardBadges, LabelTag, Action },
 	directives: {
 		ClickOutside
 	},
@@ -66,9 +64,9 @@ export default {
 		}
 	},
 	computed: {
-		compactMode() {
-			return false
-		},
+		...mapState({
+			compactMode: state => state.compactMode
+		}),
 		card() {
 			return this.$store.getters.cardById(this.id)
 		},
@@ -91,6 +89,11 @@ export default {
 		},
 		visibilityPopover() {
 			return [
+				{
+					action: () => {},
+					icon: 'icon-archive-dark',
+					text: t('deck', 'Archive card')
+				},
 				{
 					action: () => {},
 					icon: 'icon-settings-dark',
@@ -116,19 +119,58 @@ export default {
 <style lang="scss" scoped>
 	.card {
 		box-shadow: 0 0 5px #aaa;
-		.icon-more {
-			width: 44px;
-		}
-		.popovermenu {
-			display: none;
-			&.open {
-				display: block;
-				top: 44px;
+		border-radius: 3px;
+		margin: 10px;
+		width: 260px; // TODO: TMP
+		font-size: 100%;
+		background-color: var(--color-main-background);
+
+		.card-upper {
+			display: flex;
+			h3 {
+				margin: 12px;
+				flex-grow: 1;
+				font-size: 100%;
 			}
 		}
-		.card-controls > div {
+
+		.labels {
 			display: flex;
-			height: 44px;
+			margin-left: 12px;
+			margin-top: -5px;
+			margin-bottom: -5px;
+
+			li {
+				padding: 1px 4px;
+				border-radius: 3px;
+				font-size: 90%;
+				margin-right: 2px;
+			}
+		}
+
+		.card-controls {
+			display: flex;
+			margin-left: 12px;
+			margin-right: 12px;
+			& > div {
+				display: flex;
+				height: 44px;
+			}
+		}
+	}
+
+	.compact {
+		padding-bottom: 12px;
+		.labels {
+			height: 6px;
+			margin-top: -10px;
+			margin-bottom: 3px;
+		}
+		.labels li {
+			width: 30px;
+			height: 6px;
+			font-size: 0;
+			color: transparent;
 		}
 	}
 </style>

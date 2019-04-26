@@ -22,13 +22,11 @@
 
 <template>
 	<app-sidebar
-				 title="andy-yeo-1387151-unsplash.jpg"
-				 subtitle="4,3 MB, last edited 19 days ago"
-				 :actions="[]"
-				 @close="closeSidebar">
-		<template #action>
-
-		</template>
+		:actions="[]"
+		title="andy-yeo-1387151-unsplash.jpg"
+		subtitle="4,3 MB, last edited 19 days ago"
+		@close="closeSidebar">
+		<template #action />
 		<AppSidebarTab name="Description" icon="icon-description">
 			this is the description tab
 		</AppSidebarTab>
