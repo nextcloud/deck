@@ -1,34 +1,42 @@
 <template>
 	<div>
 		<ul class="labels">
-			<li v-for="label in labels" :key="label.id">
+			<li v-for="label in labels" :key="label.id" :class="{editing: (editingLabelId === label.id)}">
 				<template v-if="editingLabelId === label.id">
-					<input v-model="editingLabel.title">
-					<compact-picker :value="editingLabel.color" :palette="defaultColors" @input="updateColor" />
-					<button v-tooltip="{content: missingDataLabel, show: !editLabelObjValidated, trigger: 'manual' }" :disabled="!editLabelObjValidated" class="icon-checkmark"
-						@click="updateLabel(label)" />
-
-					<button v-tooltip="t('deck', 'Cancel')" class="icon-close" @click="editingLabelId = null" />
+					<form class="label-form">
+						<input v-model="editingLabel.title" type="text">
+						<input v-tooltip="{content: missingDataLabel, show: !editLabelObjValidated, trigger: 'manual' }" :disabled="!editLabelObjValidated" type="submit"
+							value="" class="icon-confirm"
+							@click="updateLabel(label)">
+						<input v-tooltip="t('deck', 'Cancel')" type="submit" value=""
+							class="icon-close" @click="editingLabelId = null">
+					</form>
+					<ColorPicker :value="'#' + editingLabel.color" @input="updateColor" />
 				</template>
 				<template v-else>
-					<span :style="{ backgroundColor: `#${label.color}`, color:textColor(label.color) }" class="label-title">
+					<div :style="{ backgroundColor: `#${label.color}`, color:textColor(label.color) }" class="label-title">
 						<span>{{ label.title }}</span>
-					</span>
+					</div>
 					<button v-tooltip="t('deck', 'Edit')" class="icon-rename" @click="clickEdit(label)" />
 					<button v-tooltip="t('deck', 'Delete')" class="icon-delete" @click="deleteLabel(label.id)" />
 				</template>
 			</li>
 
-			<li v-if="addLabel">
+			<li v-if="addLabel" class="editing">
 				<template>
-					<input v-model="addLabelObj.title">
-					<compact-picker :palette="defaultColors" value="" @input="updateColor" />
-					<button v-tooltip="{content: missingDataLabel, show: !addLabelObjValidated, trigger: 'manual' }" :disabled="!addLabelObjValidated" class="icon-checkmark"
-						@click="clickAddLabel()" />
-					<button v-tooltip="t('deck', 'Cancel')" class="icon-close" @click="addLabel=false" />
+					<form class="label-form">
+						<input v-model="addLabelObj.title" type="text">
+						<input v-tooltip="{content: missingDataLabel, show: !addLabelObjValidated, trigger: 'manual' }" :disabled="!addLabelObjValidated" type="submit"
+							value="" class="icon-confirm"
+							@click="clickAddLabel()">
+						<input v-tooltip="t('deck', 'Cancel')" type="submit" value=""
+							class="icon-close" @click="addLabel=false">
+					</form>
+					<ColorPicker :value="'#' + addLabelObj.color" @input="updateColor" />
 				</template>
 			</li>
-			<button v-tooltip="t('deck', 'Add')" class="icon-add" @click="clickShowAddLabel()" />
+			<button @click="clickShowAddLabel()">
+			<span class="icon-add" />{{ t('deck', 'Add a new label') }}</button>
 		</ul>
 	</div>
 </template>
@@ -38,10 +46,12 @@
 import { mapGetters } from 'vuex'
 import Color from '../../mixins/color'
 import { Compact } from 'vue-color'
+import ColorPicker from '../ColorPicker'
 
 export default {
 	name: 'TagsTabSidebard',
 	components: {
+		ColorPicker,
 		'compact-picker': Compact
 	},
 	mixins: [Color],
@@ -103,7 +113,7 @@ export default {
 			this.editingLabelId = null
 		},
 		clickShowAddLabel() {
-			this.addLabelObj = { cardId: null, color: '000', title: '' }
+			this.addLabelObj = { cardId: null, color: '000000', title: '' }
 			this.addLabel = true
 		},
 		clickAddLabel() {
@@ -114,3 +124,41 @@ export default {
 	}
 }
 </script>
+<style scoped lang="scss">
+	.labels li {
+		margin-bottom: 3px;
+
+		.label-title {
+			flex-grow: 1;
+			border-radius: 3px;
+			padding: 4px;
+		}
+		&:not(.editing) button {
+			width: 40px;
+			height: 34px;
+			margin: 0;
+			margin-left: -3px;
+		}
+	}
+	.labels li {
+		display: flex;
+		&.editing {
+			display: block;
+		}
+		form {
+			display: flex;
+			input[type=text] {
+				flex-grow: 1;
+			}
+		}
+		button,
+		input:not([type='text']):last-child {
+			border-bottom-right-radius: var(--border-radius);
+			border-top-right-radius: var(--border-radius);
+			border-bottom-left-radius: 0;
+			border-top-left-radius: 0;
+			margin-left: -1px;
+			width: 35px;
+		}
+	}
+</style>
