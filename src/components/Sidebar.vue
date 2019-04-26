@@ -37,13 +37,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-	.icon-close {
-		top: 0;
-		width: 44px;
-		height: 44px;
-		display: inline-block;
-		position: absolute;
-		right: 0;
+<style lang="scss">
+	#app-sidebar .icon-close {
+		z-index: 100;
 	}
 </style>
