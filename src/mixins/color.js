@@ -81,6 +81,15 @@ export default {
 				return '#000000'
 			}
 
+		},
+		colorIsValid(hex) {
+
+			var re = new RegExp('[A-Fa-f0-9]{6}')
+			if (re.test(hex)) {
+				return true
+			}
+			return false
+
 		}
 
 	}

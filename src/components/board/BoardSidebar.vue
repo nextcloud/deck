@@ -36,7 +36,7 @@
 			<div class="tabsContainer">
 				<div class="tab">
 					<div v-if="activeTab === 'Sharing'">
-						<SharingTabSidebard :board="board"></SharingTabSidebard>
+						<SharingTabSidebard :board="board" />
 					</div>
 
 					<div

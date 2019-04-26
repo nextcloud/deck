@@ -245,22 +245,22 @@ export default new Vuex.Store({
 		// label actions
 		removeLabelFromCurrentBoard({ commit }, label) {
 			apiClient.deleteLabel(label)
-			.then((label) => {
-				commit('removeLabelFromCurrentBoard', label.id);
-			})
+				.then((label) => {
+					commit('removeLabelFromCurrentBoard', label.id)
+				})
 		},
 		updateLabelFromCurrentBoard({ commit }, newLabel) {
 			apiClient.updateLabel(newLabel)
-			.then((newLabel) => {
-				commit('updateLabelFromCurrentBoard', newLabel);
-			})
+				.then((newLabel) => {
+					commit('updateLabelFromCurrentBoard', newLabel)
+				})
 		},
 		addLabelToCurrentBoard({ commit }, newLabel) {
 			newLabel.boardId = this.state.currentBoard.id
 			apiClient.createLabel(newLabel)
-			.then((newLabel) => {
-				commit('addLabelToCurrentBoard', newLabel);
-			})
+				.then((newLabel) => {
+					commit('addLabelToCurrentBoard', newLabel)
+				})
 		}
 	}
 })

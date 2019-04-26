@@ -138,47 +138,47 @@ export class BoardApi {
 	// Label API Calls
 	deleteLabel(id) {
 		return axios.delete(this.url(`/labels/${id}`))
-		.then(
-			(response) => {
-				return Promise.resolve(response.data)
-			},
-			(err) => {
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
 				return Promise.reject(err)
-			}
-		)
-		.catch((err) => {
-			return Promise.reject(err)
-		})
+			})
 	}
 
 	updateLabel(label) {
 		return axios.put(this.url(`/labels/${label.id}`), label)
-		.then(
-			(response) => {
-				return Promise.resolve(response.data)
-			},
-			(err) => {
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
 				return Promise.reject(err)
-			}
-		)
-		.catch((err) => {
-			return Promise.reject(err)
-		})
+			})
 	}
 
 	createLabel(labelData) {
 		return axios.post(this.url('/labels'), labelData)
-		.then(
-			(response) => {
-				return Promise.resolve(response.data)
-			},
-			(err) => {
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
 				return Promise.reject(err)
-			}
-		)
-		.catch((err) => {
-			return Promise.reject(err)
-		})
+			})
 	}
 
 }
