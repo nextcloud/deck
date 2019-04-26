@@ -21,21 +21,43 @@
   -->
 
 <template>
-	<div class="sidebar">
-		<div class="sidebar-header">
-			<h3>Card sidebar</h3>
-		</div>
-	</div>
+	<app-sidebar
+				 title="andy-yeo-1387151-unsplash.jpg"
+				 subtitle="4,3 MB, last edited 19 days ago"
+				 :actions="[]"
+				 @close="closeSidebar">
+		<template #action>
+
+		</template>
+		<AppSidebarTab name="Description" icon="icon-description">
+			this is the description tab
+		</AppSidebarTab>
+		<AppSidebarTab name="Timeline" icon="icon-activity">
+			this is the activity tab
+		</AppSidebarTab>
+		<AppSidebarTab name="Attachments" icon="icon-files-dark">
+			this is the files tab
+		</AppSidebarTab>
+	</app-sidebar>
 </template>
 
 <script>
+import { AppSidebar, AppSidebarTab } from 'nextcloud-vue'
+
 export default {
 	name: 'CardSidebar',
+	components: {
+		AppSidebar,
+		AppSidebarTab
+	},
 	data() {
 		return {
 		}
 	},
 	methods: {
+		closeSidebar() {
+			this.$router.push({ name: 'board' })
+		}
 	}
 }
 </script>
