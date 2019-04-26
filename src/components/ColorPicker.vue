@@ -74,6 +74,7 @@ export default {
 		display: block !important;
 		overflow: hidden;
 		border-radius: 3px;
+		margin-bottom: 10px;
 	}
 </style>
 <style lang="scss">
@@ -101,7 +102,7 @@ export default {
 			border-radius: 0;
 			box-shadow: none;
 			background-color: transparent;
-			width: auto;
+			width: 90%
 		}
 
 		.vc-chrome {
@@ -118,9 +119,18 @@ export default {
 		.vc-compact-color-item {
 			display: inline-flex;
 			height: $color-field-width;
-			width: $color-field-width;
 			padding: 0;
 			margin: 0;
+			flex-grow: 1;
+		}
+		.vc-compact-dot {
+			width: 10px;
+			height: 10px;
+			position: unset;
+			border-radius: 50%;
+			opacity: 1;
+			background: #fff;
+			margin: auto;
 		}
 		.vc-chrome-controls {
 			display: flex;

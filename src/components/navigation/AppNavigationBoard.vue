@@ -57,6 +57,7 @@
 				<input type="submit" value="" class="icon-close"
 					@click.stop.prevent="cancelEdit">
 			</form>
+			<ColorPicker v-model="editColor" />
 		</div>
 	</router-link>
 </template>
@@ -64,10 +65,12 @@
 <script>
 import { PopoverMenu } from 'nextcloud-vue'
 import ClickOutside from 'vue-click-outside'
+import ColorPicker from '../ColorPicker';
 
 export default {
 	name: 'AppNavigationBoard',
 	components: {
+		ColorPicker,
 		PopoverMenu
 	},
 	directives: {
@@ -87,7 +90,8 @@ export default {
 			editing: false,
 			menuOpen: false,
 			undoTimeoutHandle: null,
-			editTitle: ''
+			editTitle: '',
+			editColor: '',
 		}
 	},
 	computed: {
@@ -113,6 +117,7 @@ export default {
 					action: () => {
 						this.hideMenu()
 						this.editTitle = this.board.title
+						this.editColor = '#' + this.board.color
 						this.editing = true
 					},
 					icon: 'icon-rename',
@@ -194,10 +199,11 @@ export default {
 		},
 		applyEdit(e) {
 			this.editing = false
-			if (this.editTitle) {
+			if (this.editTitle || this.editColor) {
 				this.loading = true
 				const copy = JSON.parse(JSON.stringify(this.board))
 				copy.title = this.editTitle
+				copy.color = (typeof this.editColor.hex !== 'undefined' ? this.editColor.hex : this.editColor).substring(1)
 				this.$store.dispatch('updateBoard', copy)
 					.then(() => {
 						this.loading = false
