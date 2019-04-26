@@ -24,8 +24,14 @@
 	<div :class="{'compact': compactMode}" tag="div" class="card"
 		@click="openCard">
 		<div class="card-upper">
-			<h3>{{ card.title }}</h3>
-			<action :actions="visibilityPopover" />
+			<h3 @click.stop="startEditing">{{ card.title }}</h3>
+			<transition name="fade" mode="out-in">
+				<form v-if="editing">
+					<input :value="card.title" type="text" autofocus>
+					<input type="button" class="icon-confirm" @click.stop="editing=false">
+				</form>
+				<action v-if="!editing" :actions="visibilityPopover" @click.stop="" />
+			</transition>
 		</div>
 		<ul class="labels">
 			<li v-for="label in labels" :key="label.id" :style="labelStyle(label)"><span>{{ label.title }}</span></li>
@@ -60,7 +66,8 @@ export default {
 	},
 	data() {
 		return {
-			menuOpened: false
+			menuOpened: false,
+			editing: false
 		}
 	},
 	computed: {
@@ -111,32 +118,57 @@ export default {
 		},
 		hidePopoverMenu() {
 			this.menuOpened = false
+		},
+		startEditing() {
+			this.editing = true
 		}
 	}
 }
 </script>
 
 <style lang="scss" scoped>
+	$card-spacing: 20px;
+	$card-padding: 15px;
+
+	.fade-enter-active, .fade-leave-active {
+		transition: opacity .125s;
+	}
+	.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+		opacity: 0;
+	}
+
 	.card {
-		box-shadow: 0 0 5px #aaa;
+		box-shadow: 0 0 3px 0 var(--color-box-shadow);
 		border-radius: 3px;
-		margin: 10px;
-		width: 260px; // TODO: TMP
 		font-size: 100%;
 		background-color: var(--color-main-background);
+		margin-bottom: $card-spacing;
+		&.current {
+			box-shadow: 0 0 3px 1px var(--color-box-shadow);
+		}
 
 		.card-upper {
 			display: flex;
+			form {
+				display: flex;
+				padding: 5px 7px;
+				position: absolute;
+				input[type=text] {
+					width: 100%;
+				}
+
+			}
 			h3 {
-				margin: 12px;
+				margin: $card-padding;
 				flex-grow: 1;
 				font-size: 100%;
+				cursor: text;
 			}
 		}
 
 		.labels {
 			display: flex;
-			margin-left: 12px;
+			margin-left: $card-padding;
 			margin-top: -5px;
 			margin-bottom: -5px;
 
@@ -150,8 +182,8 @@ export default {
 
 		.card-controls {
 			display: flex;
-			margin-left: 12px;
-			margin-right: 12px;
+			margin-left: $card-padding;
+			margin-right: $card-padding;
 			& > div {
 				display: flex;
 				height: 44px;
@@ -160,7 +192,7 @@ export default {
 	}
 
 	.compact {
-		padding-bottom: 12px;
+		padding-bottom: $card-padding;
 		.labels {
 			height: 6px;
 			margin-top: -10px;

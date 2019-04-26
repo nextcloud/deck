@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<Controls :board="board" />
-		<div v-if="board">
+		<div v-if="board" class="board">
 			<container lock-axix="y" orientation="horizontal" @drop="onDropStack">
 				<draggable v-for="stack in stacksByBoard" :key="stack.id" class="stack">
 					<h3>{{ stack.title }}</h3>
@@ -128,7 +128,21 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
+	$board-spacing: 15px;
+	$stack-spacing: 10px;
+	$stack-width: 300px;
+
+	.board {
+		margin-left: $board-spacing;
+	}
+
+	.stack {
+		width: $stack-width;
+		padding: $stack-spacing;
+		padding-top: 0;
+	}
 
 	.smooth-dnd-container.vertical {
 		display: flex;

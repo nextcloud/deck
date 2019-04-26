@@ -22,18 +22,13 @@
 
 <template>
 	<div class="badges">
-		<div v-if="true" class="icon icon-description" title="" />
-		<div v-if="true" class="due icon icon-calendar-dark">
+		<div v-if="true" class="card-files icon icon-files-dark" />
+		<div v-if="true" class="card-comments icon icon-comment" />
+		<div v-if="true" :class="{'icon-calendar': true, 'icon-calendar-dark': false}" class="due icon now">
 			<span>Now</span>
 		</div>
 		<div v-if="true" class="card-tasks icon icon-checkmark">
 			<span>0/0</span>
-		</div>
-		<div v-if="true" class="card-files icon icon-files-dark">
-			<span>1</span>
-		</div>
-		<div v-if="true" class="card-comments icon icon-comment">
-			<span>1</span>
 		</div>
 		<div v-if="true" class="card-assigned-users">
 			<avatar user="admin" />
@@ -74,11 +69,42 @@ export default {
 		}
 		.card-assigned-users {
 			flex-grow: 1;
-			padding: 6px 0px;
+			padding: 6px 0;
 			margin-right: -5px;
 			.avatardiv {
 				float: right;
 			}
+		}
+	}
+
+	.badges .icon.due {
+		background-position: 4px center;
+		border-radius: 3px;
+		margin: 10px 0;
+		margin-right: 3px;
+		padding: 4px;
+		font-size: 90%;
+		display: flex;
+		align-items: center;
+		opacity: .7;
+
+		.icon {
+			background-size: contain;
+		}
+
+		&.overdue {
+			background-color: var(--color-error);
+			color: var(--color-primary-text);
+		}
+		&.now {
+			background-color: var(--color-warning);
+		}
+		&.next {
+			background-color: var(--color-warning-light);
+		}
+
+		span {
+			margin-left: 20px;
 		}
 	}
 </style>
