@@ -51,11 +51,15 @@ export default new Vuex.Store({
 		sidebarShown: false,
 		currentBoard: null,
 		boards: [],
+		sharees: [],
 		boardFilter: BOARD_FILTERS.ALL
 	},
 	getters: {
 		boards: state => {
 			return state.boards
+		},
+		sharees: state => {
+			return state.sharees
 		},
 		noneArchivedBoards: state => {
 			return state.boards.filter(board => {
@@ -80,6 +84,9 @@ export default new Vuex.Store({
 					|| (state.boardFilter === BOARD_FILTERS.SHARED && board.shared === 1)
 			})
 			return boards.map(boardToMenuItem)
+		},
+		currentBoardLabels: state => {
+			return state.currentBoard.labels
 		}
 	},
 	mutations: {
@@ -132,6 +139,30 @@ export default new Vuex.Store({
 		},
 		setCurrentBoard(state, board) {
 			state.currentBoard = board
+		},
+
+		// label mutators
+		removeLabelFromCurrentBoard(state, labelId) {
+			const removeIndex = state.currentBoard.labels.findIndex((l) => {
+				return labelId === l.id
+			})
+
+			if (removeIndex > -1) {
+				state.currentBoard.labels.splice(removeIndex, 1)
+			}
+		},
+		updateLabelFromCurrentBoard(state, newLabel) {
+
+			let labelToUpdate = state.currentBoard.labels.find((l) => {
+				return newLabel.id === l.id
+			})
+
+			labelToUpdate.title = newLabel.title
+			labelToUpdate.color = newLabel.color
+		},
+		addLabelToCurrentBoard(state, newLabel) {
+
+			state.currentBoard.labels.push(newLabel)
 		}
 	},
 	actions: {
@@ -185,14 +216,15 @@ export default new Vuex.Store({
 			const boards = await apiClient.loadBoards()
 			commit('setBoards', boards)
 		},
-		async loadSharees({ commit }) {
-			const params = {
-				format: 'json',
-				perPage: 4,
-				itemType: [0, 1]
-			}
-			const { data } = await axios.get(OC.linkToOCS('apps/files_sharing/api/v1') + 'sharees', { params })
-			commit('setSharees', data.users)
+		loadSharees({ commit }) {
+			const params = new URLSearchParams()
+			params.append('format', 'json')
+			params.append('perPage', 4)
+			params.append('itemType', 0)
+			params.append('itemType', 1)
+			axios.get(OC.linkToOCS('apps/files_sharing/api/v1') + 'sharees', { params }).then((response) => {
+				commit('setSharees', response.data.ocs.data.users)
+			})
 		},
 		setBoardFilter({ commmit }, filter) {
 			commmit('setBoardFilter', filter)
@@ -208,6 +240,27 @@ export default new Vuex.Store({
 		},
 		setCurrentBoard({ commit }, board) {
 			commit('setCurrentBoard', board)
+		},
+
+		// label actions
+		removeLabelFromCurrentBoard({ commit }, label) {
+			apiClient.deleteLabel(label)
+				.then((label) => {
+					commit('removeLabelFromCurrentBoard', label.id)
+				})
+		},
+		updateLabelFromCurrentBoard({ commit }, newLabel) {
+			apiClient.updateLabel(newLabel)
+				.then((newLabel) => {
+					commit('updateLabelFromCurrentBoard', newLabel)
+				})
+		},
+		addLabelToCurrentBoard({ commit }, newLabel) {
+			newLabel.boardId = this.state.currentBoard.id
+			apiClient.createLabel(newLabel)
+				.then((newLabel) => {
+					commit('addLabelToCurrentBoard', newLabel)
+				})
 		}
 	}
 })

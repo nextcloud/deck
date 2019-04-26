@@ -103,6 +103,8 @@ export default {
 					this.$store.dispatch('setCurrentBoard', board)
 					this.$store.dispatch('loadStacks', board)
 					this.loading = false
+					console.log(board)
+					this.$store.state.labels = board.labels
 				})
 		},
 		onDropStack({ removedIndex, addedIndex }) {

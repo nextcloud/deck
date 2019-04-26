@@ -21,145 +21,58 @@
   -->
 
 <template>
-	<div class="sidebar">
-		<div class="sidebar-header">
-			<h3>{{ board.title }}</h3>
-		</div>
+	<app-sidebar
+		:actions="[]"
+		:title="board.title"
+		@close="closeSidebar">
 
-		<ul class="tab-headers">
-			<li v-for="tab in tabs" :class="{ 'selected': tab.isSelected }" :key="tab.name">
-				<a @click="setSelectedHeader(tab.name)">{{ tab.name }}</a>
-			</li>
-		</ul>
+		<AppSidebarTab name="Sharing" icon="icon-shared">
+			<SharingTabSidebard :board="board" />
+		</AppSidebarTab>
 
-		<div class="tabsContainer">
-			<div class="tab">
-				<div v-if="activeTab === 'Sharing'">
+		<AppSidebarTab name="Tags" icon="icon-tag">
+			<TagsTabSidebard :board="board" />
+		</AppSidebarTab>
 
-					<multiselect v-model="value" :options="board.sharees" />
+		<AppSidebarTab name="Deleted items" icon="icon-delete">
+			<DeletedTabSidebard :board="board" />
+		</AppSidebarTab>
 
-					<ul
-						id="shareWithList"
-						class="shareWithList"
-					>
-						<li>
-							<avatar :user="board.owner.uid" />
-							<span class="has-tooltip username">
-								{{ board.owner.displayname }}
-							</span>
-						</li>
-						<li v-for="acl in board.acl" :key="acl.participant.uid">
-							<avatar :user="acl.participant.uid" />
-							<span class="has-tooltip username">
-								{{ acl.participant.displayname }}
-							</span>
-						</li>
-					</ul>
-				</div>
+		<AppSidebarTab name="Timeline" icon="icon-activity">
+			<TimelineTabSidebard :board="board" />
+		</AppSidebarTab>
 
-				<div
-					v-if="activeTab === 'Tags'"
-					id="board-detail-labels"
-				>
-					<ul class="labels">
-						<li v-for="label in board.labels" :key="label.id">
-							<span v-if="!label.edit" :style="{ backgroundColor: `#${label.color}`, color: `#${label.color || '000'}` }" class="label-title">
-								<span v-if="label.title">{{ label.title }}</span><i v-if="!label.title"><br></i>
-							</span>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
+	</app-sidebar>
 </template>
 
 <script>
-import { Avatar, Multiselect } from 'nextcloud-vue'
 import { mapState } from 'vuex'
+import SharingTabSidebard from './SharingTabSidebard'
+import TagsTabSidebard from './TagsTabSidebard'
+import DeletedTabSidebard from './DeletedTabSidebard'
+import TimelineTabSidebard from './TimelineTabSidebard'
+import { AppSidebar, AppSidebarTab } from 'nextcloud-vue'
 
 export default {
 	name: 'BoardSidebar',
 	components: {
-		Avatar,
-		Multiselect
-	},
-	props: {
-	},
-	data() {
-		return {
-			activeTab: 'Sharing',
-			tabs: [
-				{
-					name: 'Sharing',
-					isSelected: true
-				},
-				{
-					name: 'Tags',
-					isSelected: false
-				},
-				{
-					name: 'Deleted items',
-					isSelected: false
-				},
-				{
-					name: 'Timeline',
-					isSelected: false
-				}
-			]
-		}
+		AppSidebar,
+		AppSidebarTab,
+		SharingTabSidebard,
+		TagsTabSidebard,
+		DeletedTabSidebard,
+		TimelineTabSidebard
 	},
 	computed: {
 		...mapState({
-			board: state => state.currentBoard
+			board: state => state.currentBoard,
+			labels: state => state.labels
 		})
 	},
 	methods: {
 		closeSidebar() {
-			this.$store.dispatch('toggleSidebar')
-		},
-		setSelectedHeader(tabName) {
-			this.activeTab = tabName
-			this.tabs.forEach(tab => {
-				tab.isSelected = (tab.name === tabName)
-			})
+			this.$router.push({ name: 'board' })
 		}
 	}
 }
 </script>
-
-<style lang="scss" scoped>
-  .sidebar-header {
-    h3 {
-      font-size: 14pt;
-      padding: 15px 15px 3px;
-      margin: 0;
-      overflow: hidden;
-    }
-  }
-  .icon-close {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    padding: 14px;
-    height: 24px;
-    width: 24px;
-  }
-  ul.tab-headers {
-	margin: 15px 15px 0 15px;
-		li {
-			display: inline-block;
-			padding: 12px;
-			&.selected {
-				color: #000;
-				border-bottom: 1px solid #4d4d4d;
-				font-weight: 600;
-			}
-		}
-  }
-	.tabsContainer {
-		.tab {
-			padding: 0 15px 15px;
-		}
-	}
-</style>

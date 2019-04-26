@@ -46,3 +46,10 @@
  * @property {boolean} archived
  * @property {number} order
  */
+/**
+ * Label model
+ *
+ * @typedef {Object} Label
+ * @property {String} title
+ * @property {String} color
+ */

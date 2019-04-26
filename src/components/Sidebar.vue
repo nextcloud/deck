@@ -21,9 +21,7 @@
   -->
 
 <template>
-	<div id="app-sidebar">
-		<router-view name="sidebar" />
-	</div>
+	<router-view name="sidebar" />
 </template>
 
 <script>

@@ -225,6 +225,10 @@ trigger:
 kind: pipeline
 name: frontend
 steps:
+  - name: install
+    image: node:11-alpine
+    commands:
+      - npm install
   - name: eslint
     image: node:11-alpine
     commands:
@@ -232,7 +236,6 @@ steps:
   - name: jsbuild
     image: node:11-alpine
     commands:
-      - npm install
       - npm run build
 trigger:
   branch:
