@@ -28,23 +28,23 @@
 		</a>
 
 		<!-- edit entry -->
-		<div v-if="editing" class="app-navigation-entry-edit-copy">
+		<div v-if="editing" class="app-navigation-entry-edit">
 			<form @submit.prevent.stop="createBoard">
 				<input :placeholder="t('deck', 'New board title')" type="text">
 				<input type="submit" value="" class="icon-confirm">
 				<input type="submit" value="" class="icon-close"
 					@click.stop.prevent="cancelEdit">
 			</form>
-			<ColorPicker v-model="color"></ColorPicker>
+			<ColorPicker v-model="color" />
 		</div>
 	</li>
 </template>
 
 <script>
-import ColorPicker from '../ColorPicker';
+import ColorPicker from '../ColorPicker'
 export default {
 	name: 'AppNavigationAddBoard',
-	components: {ColorPicker},
+	components: { ColorPicker },
 	directives: {},
 	props: {},
 	data() {
@@ -77,19 +77,9 @@ export default {
 	}
 }
 </script>
-<style>
-	#app-navigation .app-navigation-entry-edit-copy {
-		width: calc(100% - 1px);
-		transition: transform 250ms ease-in-out, opacity 250ms ease-in-out, z-index 250ms ease-in-out;
-		position: absolute;
-		left: 0;
-		background-color: var(--color-main-background);
-		box-sizing: border-box;
+<style scoped>
+	#app-navigation .app-navigation-entry-edit div {
+		width: auto;
 		display: block;
-		position: absolute;
-		background: #fff;
-		height: auto;
-		z-index: 250;
-		padding-left: 38px !important;
 	}
 </style>
