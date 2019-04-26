@@ -32,6 +32,7 @@
 			</div>
 		</div>
 		<div v-if="board" class="crumb svg">
+			<div class="board-bullet"></div>
 			<a href="#todo">{{ board.title }}</a>
 			<span style="display: inline;" class="icon-shared" />
 		</div>
@@ -41,21 +42,15 @@
 					<label for="new-stack-input-main" class="hidden-visually">Add a new stack</label>
 					<input id="new-stack-input-main" type="text" class="no-close"
 						placeholder="Add a new stack">
-					<button class="button-inline icon icon-add" type="submit" title="Submit">
-						<span class="hidden-visually">Submit</span>
-					</button>
+					<input class="icon-confirm" type="button" title="Submit" />
 				</form>
 			</div>
-			<button title="Show archived cards">
-				<i class="icon icon-archive" />
-				<span class="hidden-visually">Show archived cards</span>
-			</button>
-			<button title="Toggle compact mode">
-				<i class="icon icon-toggle-compact-expanded" />
-				<span class="hidden-visually">Toggle compact mode</span>
-			</button>
-			<router-link v-tooltip="t('deck', 'Board settings')" :to="{name: 'board.details'}" class="icon-settings"
-				tag="button" />
+			<div class="board-action-buttons">
+				<button title="Show archived cards" class="icon icon-archive" />
+				<button title="Toggle compact mode" class="icon icon-toggle-compact-expanded" />
+				<router-link v-tooltip="t('deck', 'Board settings')" :to="{name: 'board.details'}" class="icon-settings-dark"
+					tag="button" />
+			</div>
 		</div>
 	</div>
 
@@ -83,6 +78,45 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+	.controls {
+		.crumb {
+			order: 0;
+
+			a:nth-child(2),
+			a:nth-child(3) {
+				padding-left: 0;
+				margin-left: -5px;
+			}
+
+			a .icon {
+				margin-top: 2px;
+			}
+
+			.board-bullet {
+				display: inline-block;
+				width: 20px;
+				height: 20px;
+				border: none;
+				border-radius: 50%;
+				background-color: #aaa;
+				margin: 12px;
+				margin-left: -4px;
+			}
+		}
+
+		#stack-add form {
+			display: flex;
+		}
+	}
+
+	#app-navigation-toggle-custom {
+		width: 44px;
+		height: 44px;
+		cursor: pointer;
+		opacity: 1;
+		display: inline-block !important;
+		position: fixed;
+	}
 
 	.controls {
 		display: flex;
@@ -98,8 +132,21 @@ export default {
 		display: flex;
 		justify-content: flex-end;
 	}
-	button.icon-settings {
-		width: 44px;
+
+	.board-action-buttons {
+		display: flex;
+		padding: 3px 4px 7px 4px;
+		button {
+			border-radius: 0;
+			width: 44px;
+			margin: 0 0 0 -1px;
+		}
+		button:first-child {
+			border-radius: 3px 0 0 3px;
+		}
+		button:last-child {
+			border-radius: 0 3px 3px 0;
+		}
 	}
 
 </style>

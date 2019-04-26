@@ -23,7 +23,7 @@
 
 use OCP\Util;
 
-style('deck', 'style');
+style('deck', 'globalstyles');
 script('deck', 'deck');
 
 \OC::$server->getEventDispatcher()->dispatch('\OCP\Collaboration\Resources::loadAdditionalScripts');
