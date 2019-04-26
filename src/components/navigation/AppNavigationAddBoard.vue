@@ -28,27 +28,31 @@
 		</a>
 
 		<!-- edit entry -->
-		<div v-if="editing" class="app-navigation-entry-edit">
+		<div v-if="editing" class="app-navigation-entry-edit-copy">
 			<form @submit.prevent.stop="createBoard">
 				<input :placeholder="t('deck', 'New board title')" type="text">
 				<input type="submit" value="" class="icon-confirm">
 				<input type="submit" value="" class="icon-close"
 					@click.stop.prevent="cancelEdit">
 			</form>
+			<ColorPicker v-model="color"></ColorPicker>
 		</div>
 	</li>
 </template>
 
 <script>
+import ColorPicker from '../ColorPicker';
 export default {
 	name: 'AppNavigationAddBoard',
+	components: {ColorPicker},
 	directives: {},
 	props: {},
 	data() {
 		return {
 			classes: [],
 			editing: false,
-			loading: false
+			loading: false,
+			color: '#000000'
 		}
 	},
 	computed: {},
@@ -62,8 +66,7 @@ export default {
 			const title = e.currentTarget.childNodes[0].value
 			this.$store.dispatch('createBoard', {
 				title: title,
-				hashedColor: '#000000',
-				color: '000000'
+				color: this.color.hex.substring(1)
 			})
 			this.editing = false
 		},
@@ -74,3 +77,19 @@ export default {
 	}
 }
 </script>
+<style>
+	#app-navigation .app-navigation-entry-edit-copy {
+		width: calc(100% - 1px);
+		transition: transform 250ms ease-in-out, opacity 250ms ease-in-out, z-index 250ms ease-in-out;
+		position: absolute;
+		left: 0;
+		background-color: var(--color-main-background);
+		box-sizing: border-box;
+		display: block;
+		position: absolute;
+		background: #fff;
+		height: auto;
+		z-index: 250;
+		padding-left: 38px !important;
+	}
+</style>

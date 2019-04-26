@@ -56,9 +56,8 @@ export class BoardApi {
 	/**
 	 * Creates a new board.
 	 *
-	 * @param {{String title, String color, String hashedColor}} boardData The board data to send.
-	 * 															 hashedColor is the color in hex format, e.g. "#ff0000"
-	 * 															 color is the same color without the "#"
+	 * @param {{String title, String color}} boardData The board data to send.
+	 * 										 color the hexadecimal color value formated /[0-9A-F]{6}/i
 	 * @return Promise
 	 */
 	createBoard(boardData) {
