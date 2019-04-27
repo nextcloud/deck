@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.6.1 - 2019-04-27
+
+### Fixed
+- Fix issue with boards not being shown after update
+- Fix board selection in projects view outside of deck
+- Remove collections text from sidebar
+- Remove leftover use statement
+
 ## 0.6.0 - 2019-04-23
 
 ### Added
