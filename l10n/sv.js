@@ -181,7 +181,7 @@ OC.L10N.register(
     "Choose a user to assign" : "Välj en användare att tilldela",
     "Assign this card to a user" : "Tilldela detta kort till en användare",
     "Due date" : "Slutdatum",
-    "Click to set" : "Klicka för att sätta",
+    "Click to set" : "Sätt datum",
     "Remove due date" : "Ta bort slutdatum",
     "Description" : "Beskrivning",
     "Attachments" : "Bilagor",
