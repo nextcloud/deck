@@ -302,10 +302,10 @@ class ActivityManager {
 		try {
 			$object = $this->findObjectForEntity($objectType, $entity);
 		} catch (DoesNotExistException $e) {
-			\OC::$server->getLogger()->error('Could not create activity entry for ' . $subject . '. Entity not found.', $entity);
+			\OC::$server->getLogger()->error('Could not create activity entry for ' . $subject . '. Entity not found.', (array)$entity);
 			return null;
 		} catch (MultipleObjectsReturnedException $e) {
-			\OC::$server->getLogger()->error('Could not create activity entry for ' . $subject . '. Entity not found.', $entity);
+			\OC::$server->getLogger()->error('Could not create activity entry for ' . $subject . '. Entity not found.', (array)$entity);
 			return null;
 		}
 
