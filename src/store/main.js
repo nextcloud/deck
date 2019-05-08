@@ -163,6 +163,27 @@ export default new Vuex.Store({
 		addLabelToCurrentBoard(state, newLabel) {
 
 			state.currentBoard.labels.push(newLabel)
+		},
+
+		// acl mutators
+		addAclToCurrentBoard(state, acl) {
+			console.log(state.currentBoard)
+		},
+		updateAclFromCurrentBoard(state, acl) {
+			for (var acl_ in state.currentBoard.acl) {
+				if (state.currentBoard.acl[acl_].participant.uid === acl.participant.uid) {
+					state.currentBoard.acl[acl_] = acl
+					break
+				}
+			}
+		},
+		deleteAclFromCurrentBoard(state, acl) {
+			for (var acl_ in state.currentBoard.acl) {
+				if (state.currentBoard.acl[acl_].participant.uid === acl.participant.uid) {
+					delete state.currentBoard.acl[acl_]
+					break
+				}
+			}
 		}
 	},
 	actions: {
@@ -260,6 +281,29 @@ export default new Vuex.Store({
 			apiClient.createLabel(newLabel)
 				.then((newLabel) => {
 					commit('addLabelToCurrentBoard', newLabel)
+				})
+		},
+
+		// acl actions
+		addAclToCurrentBoard({ commit }, acl) {
+			acl.boardId = this.state.currentBoard.id
+			apiClient.addAcl(acl)
+				.then((acl) => {
+					commit('addAclToCurrentBoard', acl)
+				})
+		},
+		updateAclFromCurrentBoard({ commit }, acl) {
+			acl.boardId = this.state.currentBoard.id
+			apiClient.updateAcl(acl)
+				.then((acl) => {
+					commit('updateAclFromCurrentBoard', acl)
+				})
+		},
+		deleteAclFromCurrentBoard({ commit }, acl) {
+			acl.boardId = this.state.currentBoard.id
+			apiClient.deleteAcl(acl)
+				.then((acl) => {
+					commit('deleteAclFromCurrentBoard', acl)
 				})
 		}
 	}

@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<multiselect :options="sharees" label="label" @search-change="asyncFind">
+		<multiselect v-model="addAcl" :options="sharees" label="label"
+			@input="clickAddAcl" @search-change="asyncFind">
 			<template #option="scope">
 				{{ scope.option.label }}
 			</template>
@@ -21,20 +22,35 @@
 				<span class="has-tooltip username">
 					{{ acl.participant.displayname }}
 				</span>
+
+				<input :checked="acl.permissionEdit" type="checkbox" @click="clickEditAcl(acl)">
+				<label for="checkbox">{{ t('deck', 'Edit') }}</label>
+
+				<input :checked="acl.permissionShare" type="checkbox" @click="clickShareAcl(acl)">
+				<label for="checkbox">{{ t('deck', 'Share') }}</label>
+
+				<input :checked="acl.permissionManage" type="checkbox" @click="clickManageAcl(acl)">
+				<label for="checkbox">{{ t('deck', 'Manage') }}</label>
+
+				<button v-tooltip="t('deck', 'Delete')" class="icon-delete" @click="clickDeleteAcl(acl)" />
+
 			</li>
 		</ul>
+		<CollaborationView />
 	</div>
 </template>
 
 <script>
 import { Avatar, Multiselect } from 'nextcloud-vue'
+import CollaborationView from '../CollaborationView'
 import { mapGetters } from 'vuex'
 
 export default {
 	name: 'SharingTabSidebard',
 	components: {
 		Avatar,
-		Multiselect
+		Multiselect,
+		CollaborationView
 	},
 	props: {
 		board: {
@@ -44,7 +60,9 @@ export default {
 	},
 	data() {
 		return {
-			isLoading: false
+			isLoading: false,
+			addAcl: null,
+			addAclForAPI: null
 		}
 	},
 	computed: {
@@ -58,8 +76,35 @@ export default {
 			this.$store.dispatch('loadSharees').then(response => {
 				this.isLoading = false
 			})
+		},
+		clickAddAcl() {
+			this.addAclForAPI = {
+				type: 0,
+				participant: this.addAcl.value.shareWith,
+				permissionEdit: false,
+				permissionShare: false,
+				permissionManage: false
+			}
+			this.$store.dispatch('addAclToCurrentBoard', this.addAclForAPI)
+		},
+		clickEditAcl(acl) {
+			this.addAclForAPI = Object.assign({}, acl)
+			this.addAclForAPI.permissionEdit = !acl.permissionEdit
+			this.$store.dispatch('updateAclFromCurrentBoard', this.addAclForAPI)
+		},
+		clickShareAcl(acl) {
+			this.addAclForAPI = Object.assign({}, acl)
+			this.addAclForAPI.permissionShare = !acl.permissionShare
+			this.$store.dispatch('updateAclFromCurrentBoard', this.addAclForAPI)
+		},
+		clickManageAcl(acl) {
+			this.addAclForAPI = Object.assign({}, acl)
+			this.addAclForAPI.permissionManage = !acl.permissionManage
+			this.$store.dispatch('updateAclFromCurrentBoard', this.addAclForAPI)
+		},
+		clickDeleteAcl(acl) {
+			this.$store.dispatch('deleteAclFromCurrentBoard', acl)
 		}
 	}
-
 }
 </script>

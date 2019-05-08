@@ -181,4 +181,51 @@ export class BoardApi {
 			})
 	}
 
+	// Acl API Calls
+
+	addAcl(acl) {
+		return axios.post(this.url(`/boards/${acl.boardId}/acl`), acl)
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	updateAcl(acl) {
+		return axios.put(this.url(`/boards/${acl.boardId}/acl/${acl.id}`), acl)
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	deleteAcl(acl) {
+		return axios.delete(this.url(`/boards/${acl.boardId}/acl/${acl.id}`))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 }
