@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.6.2 - 2019-05-15
+
+### Fixed
+- Fix group limit for nonexisting groups
+- Only map circle ACLs if the app is enabled
+- Fix updating sharing permissions
+- Add app version to capabilities
+
 ## 0.6.1 - 2019-04-27
 
 ### Fixed
