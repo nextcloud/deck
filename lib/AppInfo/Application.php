@@ -25,6 +25,7 @@ namespace OCA\Deck\AppInfo;
 
 use Exception;
 use OCA\Deck\Activity\CommentEventHandler;
+use OCA\Deck\Capabilities;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
@@ -115,6 +116,9 @@ class Application extends App {
 		});
 
 		$this->registerCollaborationResources();
+
+		$this->getContainer()->registerCapability(Capabilities::class);
+
 
 	}
 
