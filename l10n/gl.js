@@ -111,7 +111,7 @@ OC.L10N.register(
     "Add a new stack" : "Engadir unha nova rima",
     "Submit" : "Enviar",
     "Show archived cards" : "Amosar as tarxetas arquivadas",
-    "Hide archived cards" : "Agachar as tarxetas arquivadas",
+    "Hide archived cards" : "Agochar as tarxetas arquivadas",
     "Toggle compact mode" : "Alternar o modo compacto",
     "Show board details" : "Amosar os detalles do taboleiro",
     "All Boards" : "Todos os taboleiros",
