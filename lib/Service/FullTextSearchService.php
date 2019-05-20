@@ -178,8 +178,8 @@ class FullTextSearchService {
 		/** @var Card $card */
 		$card = $this->cardMapper->find((int)$document->getId());
 
-		$document->setTitle($card->getTitle());
-		$document->setContent($card->getDescription());
+		$document->setTitle(($card->getTitle() === null) ? '' : $card->getTitle());
+		$document->setContent(($card->getDescription() === null) ? '' : $card->getDescription());
 		$document->setAccess($this->generateDocumentAccessFromCardId((int)$card->getId()));
 	}
 
