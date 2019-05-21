@@ -134,6 +134,9 @@ export default new Vuex.Store({
 		setSharees(state, sharees) {
 			state.sharees = sharees
 		},
+		addShareesGroups(state, groups) {
+			state.sharees.push(...groups)
+		},
 		setBoardFilter(state, filter) {
 			state.boardFilter = filter
 		},
@@ -168,6 +171,9 @@ export default new Vuex.Store({
 		// acl mutators
 		addAclToCurrentBoard(state, acl) {
 			console.log(state.currentBoard)
+			let id = acl.participant.uid
+			state.currentBoard.acl[id] = acl
+			console.log(state.currentBoard)
 		},
 		updateAclFromCurrentBoard(state, acl) {
 			for (var acl_ in state.currentBoard.acl) {
@@ -178,11 +184,12 @@ export default new Vuex.Store({
 			}
 		},
 		deleteAclFromCurrentBoard(state, acl) {
-			for (var acl_ in state.currentBoard.acl) {
-				if (state.currentBoard.acl[acl_].participant.uid === acl.participant.uid) {
-					delete state.currentBoard.acl[acl_]
-					break
-				}
+			const removeIndex = state.currentBoard.acl.findIndex((a) => {
+				return a.participant.uid === acl.participant.uid
+			})
+
+			if (removeIndex > -1) {
+				state.currentBoard.acl.splice(removeIndex, 1)
 			}
 		}
 	},
@@ -245,6 +252,7 @@ export default new Vuex.Store({
 			params.append('itemType', 1)
 			axios.get(OC.linkToOCS('apps/files_sharing/api/v1') + 'sharees', { params }).then((response) => {
 				commit('setSharees', response.data.ocs.data.users)
+				// commit('addShareesGroups', response.data.ocs.data.groups)
 			})
 		},
 		setBoardFilter({ commmit }, filter) {
