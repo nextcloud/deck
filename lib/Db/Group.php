@@ -35,7 +35,7 @@ class Group extends RelationalObject {
 	public function getObjectSerialization() {
 		return [
 			'uid' => $this->object->getGID(),
-			'displayname' => $this->object->getGID()
+			'displayname' => $this->object->getDisplayName()
 		];
 	}
 }
