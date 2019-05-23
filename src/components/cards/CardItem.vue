@@ -28,7 +28,7 @@
 			<transition name="fade" mode="out-in">
 				<form v-if="editing">
 					<input :value="card.title" type="text" autofocus>
-					<input type="button" class="icon-confirm" @click.stop="editing=false">
+					<input type="button" class="icon-confirm" @click="clickTitleEditSave">
 				</form>
 				<action v-if="!editing" :actions="visibilityPopover" @click.stop="" />
 			</transition>
@@ -121,6 +121,10 @@ export default {
 		},
 		startEditing() {
 			this.editing = true
+		},
+		clickTitleEditSave() {
+
+			this.editing = false
 		}
 	}
 }

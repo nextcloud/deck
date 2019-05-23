@@ -40,9 +40,11 @@
 			<div id="stack-add">
 				<form>
 					<label for="new-stack-input-main" class="hidden-visually">Add a new stack</label>
-					<input id="new-stack-input-main" type="text" class="no-close"
+					<input id="new-stack-input-main" v-model="newStackTitle" type="text"
+						class="no-close"
 						placeholder="Add a new stack">
-					<input class="icon-confirm" type="button" title="Submit">
+					<input class="icon-confirm" type="button" title="Submit"
+						@click="clickAddNewStack()">
 				</form>
 			</div>
 			<div class="board-action-buttons">
@@ -68,6 +70,12 @@ export default {
 			default: null
 		}
 	},
+	data() {
+		return {
+			newStackTitle: '',
+			stack: ''
+		}
+	},
 	computed: {
 		...mapState({
 			compactMode: state => state.compactMode
@@ -82,6 +90,12 @@ export default {
 		},
 		toggleCompactMode() {
 			this.$store.dispatch('toggleCompactMode')
+		},
+		clickAddNewStack() {
+			this.stack = { title: this.newStackTitle }
+			this.$store.dispatch('createStack', this.stack)
+			this.newStackTitle = ''
+			this.stack = null
 		}
 	}
 }

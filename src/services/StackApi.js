@@ -78,4 +78,34 @@ export class StackApi {
 			})
 	}
 
+	deleteStack(stackId) {
+		return axios.delete(this.url(`/stacks/${stackId}`))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	updateStack(stack) {
+		return axios.put(this.url(`/stacks/${stack.id}`), { stack })
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 }

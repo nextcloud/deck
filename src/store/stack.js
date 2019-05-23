@@ -51,6 +51,16 @@ export default {
 			for (let i = 0; i < newOrder.length; i++) {
 				newOrder[i].order = parseInt(i)
 			}
+		},
+		deleteStack(state, stack) {
+			let existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
+			console.log(existingIndex)
+			if (existingIndex !== -1) {
+				state.stacks.splice(existingIndex, 1)
+			}
+		},
+		updateStack(state, stack) {
+
 		}
 	},
 	actions: {
@@ -77,9 +87,22 @@ export default {
 				})
 		},
 		createStack({ commit }, stack) {
+			stack.boardId = this.state.currentBoard.id
 			apiClient.createStack(stack)
+				.then((createdStack) => {
+					commit('addStack', createdStack)
+				})
+		},
+		deleteStack({ commit }, stack) {
+			apiClient.deleteStack(stack.id)
 				.then((stack) => {
-					commit('addStack', stack)
+					commit('deleteStack', stack)
+				})
+		},
+		updateStack({ commit }, stack) {
+			apiClient.updateStack(stack)
+				.then((stack) => {
+					commit('updateStack', stack)
 				})
 		}
 	}

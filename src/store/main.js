@@ -169,10 +169,8 @@ export default new Vuex.Store({
 		},
 
 		// acl mutators
-		addAclToCurrentBoard(state, acl) {
-			console.log(state.currentBoard)
-			let id = acl.participant.uid
-			state.currentBoard.acl[id] = acl
+		addAclToCurrentBoard(state, createdAcl) {
+			state.currentBoard.acl[createdAcl.id] = createdAcl
 			console.log(state.currentBoard)
 		},
 		updateAclFromCurrentBoard(state, acl) {
@@ -293,11 +291,11 @@ export default new Vuex.Store({
 		},
 
 		// acl actions
-		addAclToCurrentBoard({ commit }, acl) {
-			acl.boardId = this.state.currentBoard.id
-			apiClient.addAcl(acl)
-				.then((acl) => {
-					commit('addAclToCurrentBoard', acl)
+		addAclToCurrentBoard({ commit }, newAcl) {
+			newAcl.boardId = this.state.currentBoard.id
+			apiClient.addAcl(newAcl)
+				.then((returnAcl) => {
+					commit('addAclToCurrentBoard', returnAcl)
 				})
 		},
 		updateAclFromCurrentBoard({ commit }, acl) {

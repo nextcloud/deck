@@ -117,7 +117,7 @@ export default {
 			this.addLabel = true
 		},
 		clickAddLabel() {
-			this.$store.dispatch('addLabelToCurrentBoard', this.addLabelObj)
+			this.$store.dispatch('createStack', this.addLabelObj)
 			this.addLabel = false
 			this.addLabelObj = null
 		}
