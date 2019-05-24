@@ -54,13 +54,15 @@ export default {
 		},
 		deleteStack(state, stack) {
 			let existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
-			console.log(existingIndex)
 			if (existingIndex !== -1) {
 				state.stacks.splice(existingIndex, 1)
 			}
 		},
 		updateStack(state, stack) {
-
+			let existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
+			if (existingIndex !== -1) {
+				state.stacks[existingIndex] = stack
+			}
 		}
 	},
 	actions: {

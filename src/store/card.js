@@ -21,6 +21,9 @@
  */
 
 import Vue from 'vue'
+import { CardApi } from './../services/CardApi'
+
+const apiClient = new CardApi()
 
 export default {
 	state: {
@@ -36,15 +39,22 @@ export default {
 	},
 	mutations: {
 		addCard(state, card) {
-			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			state.cards.push(card)
+			/* let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
 				let existingCard = state.cards.find(_card => _card.id === card.id)
 				Vue.set(state.cards, existingIndex, Object.assign({}, existingCard, card))
 			} else {
 				state.cards.push(card)
-			}
+			} */
 		}
 	},
 	actions: {
+		addCard({ commit }, card) {
+			apiClient.addCard(card)
+				.then((createdCard) => {
+					commit('addCard', createdCard)
+				})
+		}
 	}
 }

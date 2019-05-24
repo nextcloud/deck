@@ -99,7 +99,17 @@ export default {
 				{
 					action: () => {},
 					icon: 'icon-archive-dark',
+					text: t('deck', 'Assign to me')
+				},
+				{
+					action: () => {},
+					icon: 'icon-archive-dark',
 					text: t('deck', 'Archive card')
+				},
+				{
+					action: () => {},
+					icon: 'icon-delete-dark',
+					text: t('deck', 'Delete card')
 				},
 				{
 					action: () => {},

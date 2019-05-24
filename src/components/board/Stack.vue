@@ -22,96 +22,76 @@
 
 <template>
 	<div>
-		<Controls :board="board" />
-		<div v-if="board" class="board">
-			<container lock-axix="y" orientation="horizontal" @drop="onDropStack">
-				<draggable v-for="stack in stacksByBoard" :key="stack.id" class="stack">
-					<h3>{{ stack.title }}
-						<button v-tooltip="t('deck', 'Delete')" class="icon-delete"
-							@click="deleteStack(stack)" />
-					</h3>
-					<container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)">
-						<draggable v-for="card in cardsByStack(stack.id)" :key="card.id">
-							<card-item v-if="card" :id="card.id" />
-						</draggable>
-					</container>
-					<div class="card create">
-						<div title="Add card">
-							<i class="icon icon-add" />
-							<span class="hidden-visually">Add card</span>
-						</div>
-					</div>
 
-				</draggable>
-			</container>
+		<h3 v-if="!editing" @click="startEditing(stack)">{{ stack.title }}
+			<button v-tooltip="t('deck', 'Delete')" class="icon-delete"
+				@click="deleteStack(stack)" />
+		</h3>
+
+		<transition name="fade" mode="out-in">
+			<div id="card-add">
+				<form v-if="editing">
+					<input v-model="copiedStack.title" type="text" autofocus>
+					<input type="button" class="icon-confirm" @click="finishedEdit(stack)">
+				</form>
+			</div>
+		</transition>
+
+		<container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)">
+			<draggable v-for="card in cardsByStack(stack.id)" :key="card.id">
+				<card-item v-if="card" :id="card.id" />
+			</draggable>
+		</container>
+
+		<div id="card-add">
+			<form>
+				<label for="new-stack-input-main" class="hidden-visually">Add a new card</label>
+				<input id="new-stack-input-main" v-model="newCardTitle" type="text"
+					class="no-close"
+					placeholder="Add a new card">
+				<input class="icon-confirm" type="button" title="Submit"
+					@click="clickAddCard()">
+			</form>
 		</div>
-		<div v-else class="emptycontent">
-			<div class="icon icon-deck" />
-			<h2>{{ t('deck', 'Board not found') }}</h2>
-			<p />
-		</div>
+
 	</div>
 </template>
 
 <script>
 
 import { Container, Draggable } from 'vue-smooth-dnd'
-import { mapState } from 'vuex'
-import Controls from '../Controls'
 import CardItem from '../cards/CardItem'
+import { mapState } from 'vuex'
 
 export default {
-	name: 'Board',
+	name: 'Stack',
 	components: {
 		CardItem,
-		Controls,
 		Container,
 		Draggable
 	},
-	inject: [
-		'boardApi'
-	],
+
 	props: {
-		id: {
-			type: Number,
-			default: null
+		stack: {
+			type: Object,
+			default: undefined
 		}
 	},
-	data: function() {
+	data() {
 		return {
-			loading: true
+			editing: false,
+			copiedStack: '',
+			newCardTitle: ''
 		}
 	},
 	computed: {
-		...mapState({
-			board: state => state.currentBoard
-		}),
-		stacksByBoard() {
-			return this.$store.getters.stacksByBoard(this.board.id)
-		},
 		cardsByStack() {
 			return (id) => this.$store.getters.cardsByStack(id)
 		}
 	},
-	watch: {
-		'$route': 'fetchData'
-	},
-	created() {
-		this.fetchData()
-	},
+
 	methods: {
-		fetchData() {
-			this.boardApi.loadById(this.id)
-				.then((board) => {
-					this.$store.dispatch('setCurrentBoard', board)
-					this.$store.dispatch('loadStacks', board)
-					this.loading = false
-					this.$store.state.labels = board.labels
-				})
-		},
-		onDropStack({ removedIndex, addedIndex }) {
-			this.$store.dispatch('orderStack', { stack: this.stacksByBoard[removedIndex], removedIndex, addedIndex })
-		},
+
 		onDropCard({ removedIndex, addedIndex }) {
 
 		},
@@ -120,16 +100,26 @@ export default {
 				return this.cardsByStack(stackId)[index]
 			}
 		},
-		createStack() {
-			let newStack = {
-				title: 'FooBar',
-				boardId: this.id,
-				order: this.stacksByBoard().length
-			}
-			this.$store.dispatch('createStack', newStack)
-		},
 		deleteStack(stack) {
 			this.$store.dispatch('deleteStack', stack)
+		},
+		startEditing(stack) {
+			this.copiedStack = Object.assign({}, stack)
+			this.editing = true
+		},
+		finishedEdit(stack) {
+			if (this.copiedStack.title !== stack.title) {
+				this.$store.dispatch('updateStack', this.copiedStack)
+			}
+			this.editing = false
+		},
+		clickAddCard() {
+			let newCard = {
+				title: this.newCardTitle,
+				stackId: this.stack.id,
+				boardId: this.stack.boardId
+			}
+			this.$store.dispatch('addCard', newCard)
 		}
 	}
 }
@@ -137,13 +127,8 @@ export default {
 
 <style lang="scss" scoped>
 
-	$board-spacing: 15px;
 	$stack-spacing: 10px;
 	$stack-width: 300px;
-
-	.board {
-		margin-left: $board-spacing;
-	}
 
 	.stack {
 		width: $stack-width;
@@ -163,5 +148,9 @@ export default {
 	.smooth-dnd-container.vertical .smooth-dnd-draggable-wrapper {
 		height: auto;
 	}
+
+	#card-add form {
+			display: flex;
+		}
 
 </style>

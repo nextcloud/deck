@@ -30,11 +30,11 @@
 		<AppSidebarTab name="Description" icon="icon-description">
 			this is the description tab
 		</AppSidebarTab>
-		<AppSidebarTab name="Timeline" icon="icon-activity">
-			this is the activity tab
-		</AppSidebarTab>
 		<AppSidebarTab name="Attachments" icon="icon-files-dark">
 			this is the files tab
+		</AppSidebarTab>
+		<AppSidebarTab name="Timeline" icon="icon-activity">
+			this is the activity tab
 		</AppSidebarTab>
 	</app-sidebar>
 </template>
