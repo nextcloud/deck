@@ -80,8 +80,8 @@ export default class FileService {
 			});
 			if (typeof existingFile !== 'undefined') {
 				OC.dialogs.confirm(
-					`A file with the name ${fileItem.file.name} already exists. Do you want to overwrite it?`,
-					'File already exists',
+					t('deck', `A file with the name ${fileItem.file.name} already exists. Do you want to overwrite it?`),
+					t('deck', 'File already exists'),
 					function (result) {
 						if (result) {
 							self.runUpload(fileItem, existingFile.id);
