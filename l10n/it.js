@@ -11,6 +11,7 @@ OC.L10N.register(
     "Minutes" : "Minuti",
     "Link to a board" : "Collega a una lavagna",
     "Maximum file size of {size} exceeded" : "Dimensione massima dei file di {size} superata",
+    "File already exists" : "Il file esiste già",
     "You have created a new board {board}" : "Hai creato una nuova lavagna {board}",
     "{user} has created a new board {board}" : "{user} ha creato una nuova lavagna {board}",
     "You have deleted the board {board}" : "Hai eliminato la lavagna {board}",

@@ -11,6 +11,7 @@ OC.L10N.register(
     "Minutes" : "Dakika",
     "Link to a board" : "Bir panoya bağla",
     "Maximum file size of {size} exceeded" : "{size} olan en büyük dosya boyutu sınırı aşıldı",
+    "File already exists" : "Dosya zaten var",
     "You have created a new board {board}" : "{board} panosunu eklediniz",
     "{user} has created a new board {board}" : "{user}, {board} panosunu ekledi",
     "You have deleted the board {board}" : "{board} panosunu sildiniz",

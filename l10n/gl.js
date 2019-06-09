@@ -11,6 +11,7 @@ OC.L10N.register(
     "Minutes" : "Minutos",
     "Link to a board" : "Ligar a un taboleiro",
     "Maximum file size of {size} exceeded" : "Excedeuse o tamaño máximo de ficheiro de {size}",
+    "File already exists" : "O ficheiro xa existe",
     "You have created a new board {board}" : "Vostede creou o novo taboleiro {board}",
     "{user} has created a new board {board}" : "{user}  creou o novo taboleiro {board}",
     "You have deleted the board {board}" : "Vostede eliminou o taboleiro {board}",

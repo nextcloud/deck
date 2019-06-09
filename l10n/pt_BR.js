@@ -11,6 +11,7 @@ OC.L10N.register(
     "Minutes" : "Minutos",
     "Link to a board" : "Linkar a um painel",
     "Maximum file size of {size} exceeded" : "Excedeu o tamanho máximo de arquivo de {size}",
+    "File already exists" : "Arquivo já existe",
     "You have created a new board {board}" : "Você criou um novo painel {board}",
     "{user} has created a new board {board}" : "{user} criou um novo painel {board}",
     "You have deleted the board {board}" : "Você excluiu o painel {board}",

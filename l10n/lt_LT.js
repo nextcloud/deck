@@ -7,6 +7,7 @@ OC.L10N.register(
     "Remove user from card" : "Šalinti naudotoją iš kortelės",
     "Hours" : "Valandos",
     "Minutes" : "Minutės",
+    "File already exists" : "Failas jau yra",
     "{user} has shared the board {board} with {sharee}" : "{user} pasidalino {board} su {sharee}",
     "Deck" : "Užduočių saugykla",
     "No data was provided to create an attachment." : "Priedo sukūrimui nebuvo pateikta jokių duomenų.",

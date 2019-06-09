@@ -9,6 +9,7 @@
     "Minutes" : "Minutes",
     "Link to a board" : "Lien à un tableau",
     "Maximum file size of {size} exceeded" : "Taille de fichier maximale de {size} dépassée",
+    "File already exists" : "Le fichier existe déjà",
     "You have created a new board {board}" : "Vous avez créé un nouveau tableau {tableau}",
     "{user} has created a new board {board}" : "{user} a créé un nouveau tableau {board}",
     "You have deleted the board {board}" : "Vous avez supprimé le tableau {board}",
