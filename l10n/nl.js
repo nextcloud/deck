@@ -11,6 +11,7 @@ OC.L10N.register(
     "Minutes" : "Minuten",
     "Link to a board" : "Verbind met een bord",
     "Maximum file size of {size} exceeded" : "Maximale bestandsomvang van {size} overschreden",
+    "File already exists" : "Bestand bestaat al",
     "You have created a new board {board}" : "Je creëerde een nieuw bord {board}",
     "{user} has created a new board {board}" : "{user} creëerde een nieuw bord {board}",
     "You have deleted the board {board}" : "Je verwijderde bord {board}",
