@@ -9,6 +9,7 @@
     "Minutes" : "分",
     "Link to a board" : "链接到一个面板",
     "Maximum file size of {size} exceeded" : "文件大小 {size} 超出最大限制",
+    "File already exists" : "文件已存在",
     "You have created a new board {board}" : "您创建了一个新面板 {board}",
     "{user} has created a new board {board}" : "{user} 创建了一个新面板 {board}",
     "You have deleted the board {board}" : "您删除了面板 {board}",

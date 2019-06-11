@@ -11,6 +11,7 @@ OC.L10N.register(
     "Minutes" : "Минуты",
     "Link to a board" : "Ссылка на доску",
     "Maximum file size of {size} exceeded" : "Превышен максимально разрешённый размер файла в  {size}",
+    "File already exists" : "Файл уже существует",
     "You have created a new board {board}" : "Вы создали доску «{board}»",
     "{user} has created a new board {board}" : "{user} создал(а) рабочую доску «{board}»",
     "You have deleted the board {board}" : "Вы удалили рабочую доску «{board}»",

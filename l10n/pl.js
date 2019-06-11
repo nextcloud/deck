@@ -11,6 +11,7 @@ OC.L10N.register(
     "Minutes" : "Minut",
     "Link to a board" : "Link do tablicy",
     "Maximum file size of {size} exceeded" : "Przekroczono maksymalny rozmiar pliku {size}",
+    "File already exists" : "Plik już istnieje",
     "You have created a new board {board}" : "Stworzyłeś(-aś) nową tablicę {board}",
     "{user} has created a new board {board}" : "{user} utworzył(-a) nową tablicę {board}",
     "You have deleted the board {board}" : "Usunąłeś(-aś) tablicę {board}",
