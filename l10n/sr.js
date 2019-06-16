@@ -11,6 +11,7 @@ OC.L10N.register(
     "Minutes" : "Минути",
     "Link to a board" : "Веза ка табли",
     "Maximum file size of {size} exceeded" : "Премашена максимална величина фајла од {size}",
+    "File already exists" : "Фајл већ постоји",
     "You have created a new board {board}" : "Направили сте нову таблу {board}",
     "{user} has created a new board {board}" : "{user} је направио нову таблу {board}",
     "You have deleted the board {board}" : "Обрисали сте таблу {board}",
