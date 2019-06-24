@@ -11,6 +11,7 @@ OC.L10N.register(
     "Minutes" : "Minuts",
     "Link to a board" : "Enllaça a un tauler",
     "Maximum file size of {size} exceeded" : "S'ha superat la mida màxima per fitxer de {size}",
+    "File already exists" : "El fitxer ja existeix",
     "You have created a new board {board}" : "Heu creat el nou tauler {board}",
     "{user} has created a new board {board}" : "{user} ha creat el nou tauler {board}",
     "You have deleted the board {board}" : "Heu suprimit el tauler {board}",
