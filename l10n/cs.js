@@ -10,6 +10,7 @@ OC.L10N.register(
     "Hours" : "Hodiny",
     "Minutes" : "Minuty",
     "Maximum file size of {size} exceeded" : "U souboru {size} překročena nejvyšší umožněná velikost",
+    "File already exists" : "Soubor už existuje",
     "You have created a new board {board}" : "Vytvořili jste nástěnku {board}",
     "{user} has created a new board {board}" : "{user} vytvořil(a) novou nástěnku {board}",
     "You have deleted the board {board}" : "Smazali jste nástěnku {board}",
