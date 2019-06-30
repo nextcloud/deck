@@ -47,6 +47,7 @@ use OCP\IUser;
 
 class ActivityManager {
 
+	const DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED = 'DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED';
 	private $manager;
 	private $userId;
 	private $permissionService;
@@ -327,6 +328,7 @@ class ActivityManager {
 			// case self::SUBJECT_BOARD_UPDATE_COLOR
 				break;
 			case self::SUBJECT_CARD_COMMENT_CREATE:
+				$eventType = 'deck_comment';
 				$subjectParams = $this->findDetailsForCard($entity->getId());
 				if (array_key_exists('comment', $additionalParams)) {
 					/** @var IComment $entity */
@@ -335,7 +337,6 @@ class ActivityManager {
 					unset($additionalParams['comment']);
 				}
 				break;
-
 			case self::SUBJECT_STACK_CREATE:
 			case self::SUBJECT_STACK_UPDATE:
 			case self::SUBJECT_STACK_UPDATE_TITLE:
@@ -400,6 +401,12 @@ class ActivityManager {
 
 		if ($message !== null) {
 			$event->setMessage($message);
+		}
+
+		// FIXME: We currently require activities for comments even if they are disabled though settings
+		// Get rid of this once the frontend fetches comments/activity individually
+		if ($eventType === 'deck_comment') {
+			$event->setAuthor(self::DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED);
 		}
 
 		return $event;
