@@ -143,7 +143,7 @@ class ActivityManager {
 				$subject = $ownActivity ? $this->l10n->t('You have restored the board {board}') : $this->l10n->t('{user} has restored the board {board}');
 				break;
 			case self::SUBJECT_BOARD_SHARE:
-				$subject = $ownActivity ? $this->l10n->t('You have shared the board {board} with {acl}') : $this->l10n->t('{user} has shared the board {board} with {sharee}');
+				$subject = $ownActivity ? $this->l10n->t('You have shared the board {board} with {acl}') : $this->l10n->t('{user} has shared the board {board} with {acl}');
 				break;
 			case self::SUBJECT_BOARD_UNSHARE:
 				$subject = $ownActivity ? $this->l10n->t('You have removed {acl} from the board {board}') : $this->l10n->t('{user} has removed {acl} from the board {board}');
