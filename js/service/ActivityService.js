@@ -94,7 +94,7 @@ class ActivityService {
 
 	static getUrl(type, id, since) {
 		if (type === DECK_ACTIVITY_TYPE_CARD) {
-			return OC.linkToOCS('apps/activity/api/v2/activity', 2) + 'filter?format=json&object_type=deck_card&object_id=' + id + '&limit=' + this.RESULT_PER_PAGE + '&since=' + since;
+			return OC.linkToOCS('apps/activity/api/v2/activity', 2) + 'deck?format=json&object_type=deck_card&object_id=' + id + '&limit=' + this.RESULT_PER_PAGE + '&since=' + since;
 		}
 		if (type === DECK_ACTIVITY_TYPE_BOARD) {
 			return OC.linkToOCS('apps/activity/api/v2/activity', 2) + 'deck?format=json&limit=' + this.RESULT_PER_PAGE + '&since=' + since;

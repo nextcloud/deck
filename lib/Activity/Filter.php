@@ -79,7 +79,7 @@ class Filter implements \OCP\Activity\IFilter {
 	 * @since 11.0.0
 	 */
 	public function filterTypes(array $types) {
-		return $types;
+		return array_merge($types, ['deck_comment']);
 	}
 
 	/**
