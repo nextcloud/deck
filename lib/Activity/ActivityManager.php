@@ -281,7 +281,7 @@ class ActivityManager {
 			}
 		} else {
 			try {
-				$events = [$this->createEvent($objectType, $entity, $subject, $author)];
+				$events = [$this->createEvent($objectType, $entity, $subject)];
 			} catch (\Exception $e) {
 				// Ignore exception for undefined activities on update events
 			}
