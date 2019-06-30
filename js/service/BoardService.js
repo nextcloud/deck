@@ -172,7 +172,8 @@ app.factory('BoardService', function (ApiService, $http, $q) {
 		var deferred = $q.defer();
 		var self = this;
 		$http.delete(this.baseUrl + '/' + acl.boardId + '/acl/' + acl.id).then(function (response) {
-			delete board.acl[response.data.id];
+			var index = board.acl.findIndex((item) => item.id === response.data.id);
+			delete board.acl[index];
 			if (response.data.type === OC.Share.SHARE_TYPE_USER) {
 				self._updateUsers();
 			} else {
@@ -192,7 +193,8 @@ app.factory('BoardService', function (ApiService, $http, $q) {
 		var self = this;
 		var _acl = acl;
 		$http.put(this.baseUrl + '/' + acl.boardId + '/acl', _acl).then(function (response) {
-			board.acl[_acl.id] = response.data;
+			var index = board.acl.findIndex((item) => item.id === _acl.id);
+			board.acl[index] = response.data;
 			if (response.data.type === OC.Share.SHARE_TYPE_USER) {
 				self._updateUsers();
 			} else {
