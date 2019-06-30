@@ -249,7 +249,7 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function update($id, $title, $stackId, $type, $order = 0, $description = '', $owner, $duedate = null, $deletedAt) {
+	public function update($id, $title, $stackId, $type, $order = 0, $description = '', $owner, $duedate = null, $deletedAt = null, $archived = null) {
 
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('card id must be a number');
@@ -276,7 +276,7 @@ class CardService {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		$card = $this->cardMapper->find($id);
-		if ($card->getArchived()) {
+		if ($archived !== null && $card->getArchived() && $archived === true) {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
 		$changes = new ChangeSet($card);
@@ -301,7 +301,13 @@ class CardService {
 		$card->setOrder($order);
 		$card->setOwner($owner);
 		$card->setDuedate($duedate);
-		$card->setDeletedAt($deletedAt);
+		if ($deletedAt) {
+			$card->setDeletedAt($deletedAt);
+		}
+		if ($archived !== null) {
+			$card->setArchived($archived);
+		}
+
 
 		// Trigger update events before setting description as it is handled separately
 		$changes->setAfter($card);

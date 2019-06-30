@@ -57,7 +57,7 @@ class BoardTest extends TestCase {
 		$acl->setId(1);
 		$board = $this->createBoard();
 		$board->setAcl(array($acl));
-		$result = $board->getAcl()[1];
+		$result = $board->getAcl()[0];
 		$this->assertEquals($acl, $result);
 	}
 	public function testSetShared() {

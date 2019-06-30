@@ -76,7 +76,7 @@ class Board extends RelationalEntity {
 	 */
 	public function setAcl($acl) {
 		foreach ($acl as $a) {
-			$this->acl[$a->id] = $a;
+			$this->acl[] = $a;
 		}
 	}
 }

@@ -197,7 +197,7 @@ class CardServiceTest extends TestCase {
         $this->cardMapper->expects($this->once())->method('find')->willReturn($card);
         $this->cardMapper->expects($this->never())->method('update');
 		$this->expectException(StatusException::class);
-        $this->cardService->update(123, 'newtitle', 234, 'text', 999, 'foo', 'admin', '2017-01-01 00:00:00', null);
+        $this->cardService->update(123, 'newtitle', 234, 'text', 999, 'foo', 'admin', '2017-01-01 00:00:00', null, true);
     }
 
     public function testRename() {

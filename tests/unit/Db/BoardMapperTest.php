@@ -158,10 +158,7 @@ class BoardMapperTest extends MapperTestUtility  {
 
     public function testFindWithAcl() {
         $actual = $this->boardMapper->find($this->boards[0]->getId(), false, true);
-        $expected = [
-            $this->acls[1]->getId() => $this->acls[1],
-            $this->acls[2]->getId() => $this->acls[2]
-        ];
+        $expected = [$this->acls[1], $this->acls[2]];
         $this->assertEquals($expected, $actual->getAcl());
     }
 
