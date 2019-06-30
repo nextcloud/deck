@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.6.3 - 2019-06-30
+
+### Fixed
+- Fix issues with comments and activity stream
+- Fix setting archived state through API
+- Fix type of acl in API responses
+- Fix type mismatch with fulltext search
+
 ## 0.6.2 - 2019-05-15
 
 ### Fixed
