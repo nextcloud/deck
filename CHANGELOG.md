@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.6.4 - 2019-06-30
+
+### Fixed
+- Restore stable15 compatibility
+
 ## 0.6.3 - 2019-06-30
 
 ### Fixed
