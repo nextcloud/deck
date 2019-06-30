@@ -357,7 +357,7 @@ class ActivityManager {
 			case self::SUBJECT_LABEL_UNASSING:
 			case self::SUBJECT_CARD_USER_ASSIGN:
 			case self::SUBJECT_CARD_USER_UNASSIGN:
-				$subjectParams = $this->findDetailsForCard($entity->getId());
+				$subjectParams = $this->findDetailsForCard($entity->getId(), $subject);
 				$object = $entity;
 				break;
 			case self::SUBJECT_ATTACHMENT_CREATE:
@@ -493,10 +493,17 @@ class ActivityManager {
 		];
 	}
 
-	private function findDetailsForCard($cardId) {
+	private function findDetailsForCard($cardId, $subject = null) {
 		$card = $this->cardMapper->find($cardId);
 		$stack = $this->stackMapper->find($card->getStackId());
 		$board = $this->boardMapper->find($stack->getBoardId());
+		if ($subject !== self::SUBJECT_CARD_UPDATE_DESCRIPTION) {
+			$card = [
+				'id' => $card->getId(),
+				'title' => $card->getTitle(),
+				'archived' => $card->getArchived()
+			];
+		}
 		return [
 			'card' => $card,
 			'stack' => $stack,

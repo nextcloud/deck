@@ -71,7 +71,7 @@ class FilterTest extends TestCase {
 
 	public function testFilterTypes() {
 		$data = ['deck_board', 'deck_card'];
-		$this->assertEquals($data, $this->filter->filterTypes($data));
+		$this->assertEquals(array_merge($data, ['deck_comment']), $this->filter->filterTypes($data));
 	}
 
 	public function testAllowedApps() {
