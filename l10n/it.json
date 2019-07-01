@@ -17,7 +17,6 @@
     "You have restored the board {board}" : "Hai ripristinato la lavagna {board}",
     "{user} has restored the board {board}" : "{user} ha ripristinato la lavagna {board}",
     "You have shared the board {board} with {acl}" : "Hai condiviso la lavagna {board} con {acl}",
-    "{user} has shared the board {board} with {sharee}" : "{user} ha condiviso la lavagna {board} con {sharee}",
     "You have removed {acl} from the board {board}" : "Hai rimosso {acl} dalla lavagna {board}",
     "{user} has removed {acl} from the board {board}" : "{user} ha rimosso {acl} dalla lavagna {board}",
     "You have renamed the board {before} to {board}" : "Hai rinominato la lavagna {before} in {board}",

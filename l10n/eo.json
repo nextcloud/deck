@@ -16,7 +16,6 @@
     "You have restored the board {board}" : "Vi restaŭris tabulon {board}",
     "{user} has restored the board {board}" : "{user} restaŭris tabulon {board}",
     "You have shared the board {board} with {acl}" : "Vi kunhavigis tabulon {board} kun {acl}",
-    "{user} has shared the board {board} with {sharee}" : "{user} kunhavigis tabulon {board} kun {sharee}",
     "You have removed {acl} from the board {board}" : "Vi forigis {acl} el la tabulo {board}",
     "{user} has removed {acl} from the board {board}" : "{user} forigis {acl} el la tabulo {board}",
     "You have renamed the board {before} to {board}" : "Vi alinomis la tabulon {before} al {board}",

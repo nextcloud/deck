@@ -17,7 +17,6 @@
     "You have restored the board {board}" : "Je herstelde bord {board}",
     "{user} has restored the board {board}" : "{user} herstelde bord {board}",
     "You have shared the board {board} with {acl}" : "Je deelde bord {board} met {acl}",
-    "{user} has shared the board {board} with {sharee}" : "{user} deelde bord {board} met {sharee}",
     "You have removed {acl} from the board {board}" : "Je verwijderde {acl} van bord {board}",
     "{user} has removed {acl} from the board {board}" : "{user} verwijderde {acl} van bord {board}",
     "You have renamed the board {before} to {board}" : "Je hernoemde bord {before} naar {board}",

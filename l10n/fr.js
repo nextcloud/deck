@@ -19,7 +19,6 @@ OC.L10N.register(
     "You have restored the board {board}" : "Vous avez restauré le tableau {board}",
     "{user} has restored the board {board}" : "{user} a restauré le tableau {board}",
     "You have shared the board {board} with {acl}" : "Vous avez partagé le tableau {board} avec {acl}",
-    "{user} has shared the board {board} with {sharee}" : "{user} a partagé le tableau {board} avec {sharee}",
     "You have removed {acl} from the board {board}" : "Vous avez supprimé {acl} du tableau {board}",
     "{user} has removed {acl} from the board {board}" : "{user} a supprimé {acl} du tableau {board}",
     "You have renamed the board {before} to {board}" : "Vous avez renommé le tableau {before} en {board}",

@@ -19,7 +19,6 @@ OC.L10N.register(
     "You have restored the board {board}" : "Повратили сте таблу {board}",
     "{user} has restored the board {board}" : "{user} је повратио таблу {board}",
     "You have shared the board {board} with {acl}" : "Поделили сте таблу {board} са {acl}",
-    "{user} has shared the board {board} with {sharee}" : "{user} је поделио таблу {board} са {sharee}",
     "You have removed {acl} from the board {board}" : "Уклонили сте {acl} са табле {board}",
     "{user} has removed {acl} from the board {board}" : "{user} је уклонио {acl} са табле {board}",
     "You have renamed the board {before} to {board}" : "Преименовали сте таблу {before} у {board}",

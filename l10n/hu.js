@@ -19,7 +19,6 @@ OC.L10N.register(
     "You have restored the board {board}" : "Visszaállította a(z) {board} táblát",
     "{user} has restored the board {board}" : "{user} visszaállította a(z) {board} táblát",
     "You have shared the board {board} with {acl}" : "Megosztotta a(z) {board} táblát a következővel: {acl}",
-    "{user} has shared the board {board} with {sharee}" : "{user} megosztotta a(z) {board} táblát a következővel: {sharee}",
     "You have removed {acl} from the board {board}" : "Eltávolította a következőt a(z) {board} táblától: {acl}",
     "{user} has removed {acl} from the board {board}" : "{user} eltávolította a következőt a(z) {board} táblától: {acl}",
     "You have renamed the board {before} to {board}" : "Átnevezte a(z) {before} táblát erre: {board}",

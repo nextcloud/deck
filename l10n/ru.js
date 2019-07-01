@@ -19,7 +19,6 @@ OC.L10N.register(
     "You have restored the board {board}" : "Вы восстановили из корзины рабочую доску «{board}»",
     "{user} has restored the board {board}" : "{user} восстановил(а) рабочую доску «{board}» из корзины",
     "You have shared the board {board} with {acl}" : "Вы предоставили {acl} доступ к рабочей доске «{board}»",
-    "{user} has shared the board {board} with {sharee}" : "{user} предоставил(а) {acl} доступ к рабочей доске «{board}»",
     "You have removed {acl} from the board {board}" : "Вы закрыли {acl} доступ к рабочей доске «{board}»",
     "{user} has removed {acl} from the board {board}" : "{user} закрыл(а) {acl} доступ к рабочей доске «{board}»",
     "You have renamed the board {before} to {board}" : "Вы переименовали рабочую доску из «{before}» в «{board}»",

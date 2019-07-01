@@ -19,7 +19,6 @@ OC.L10N.register(
     "You have restored the board {board}" : "Du har återställt tavlan {board}",
     "{user} has restored the board {board}" : "{user} har återställt tavlan {board}",
     "You have shared the board {board} with {acl}" : "Du har delat tavlan {board} med {acl}",
-    "{user} has shared the board {board} with {sharee}" : "{user} har delat tavlan {board} med {sharee}",
     "You have removed {acl} from the board {board}" : "Du har raderat {acl} från tavlan {board}",
     "{user} has removed {acl} from the board {board}" : "{user} har raderat {acl} från tavlan {board}",
     "You have renamed the board {before} to {board}" : "Du har bytt namn på tavlan {before} till {board}",

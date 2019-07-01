@@ -19,7 +19,6 @@ OC.L10N.register(
     "You have restored the board {board}" : "Przywróciłeś(-aś) tablicę {board}",
     "{user} has restored the board {board}" : "{user} przywrócił(-a) tablicę {board}",
     "You have shared the board {board} with {acl}" : "Udostępniłeś(-aś) tablicę {board} z {acl}",
-    "{user} has shared the board {board} with {sharee}" : "Użytkownik {user} udostępnił(-a) tablicę {board} z {sharee}",
     "You have removed {acl} from the board {board}" : "Usunąłes(-aś) {acl} z tablicy {board}",
     "{user} has removed {acl} from the board {board}" : "Użytkownik {user} usunął {acl} z tablicy {board}",
     "You have renamed the board {before} to {board}" : "Zmieniłeś(-aś) nazwę tablicy {before} na {board}",

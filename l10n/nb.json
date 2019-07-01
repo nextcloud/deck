@@ -16,7 +16,6 @@
     "You have restored the board {board}" : "Du har gjennopprettet tavle {board}",
     "{user} has restored the board {board}" : "{user} har gjennopprettet tavle {board}",
     "You have shared the board {board} with {acl}" : "Du har delt tavle {board} med {acl}",
-    "{user} has shared the board {board} with {sharee}" : "{user} har delt tavle {board} med {sharee}",
     "You have removed {acl} from the board {board}" : "Du har fjernet {acl} fra tavle {board}",
     "{user} has removed {acl} from the board {board}" : "{user} har fjernet {acl} fra tavle {board}",
     "You have renamed the board {before} to {board}" : "Du har endret navn på tavle {before} til {board}",

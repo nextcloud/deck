@@ -17,7 +17,6 @@
     "You have restored the board {board}" : "Vostede restaurou o taboleiro {board}",
     "{user} has restored the board {board}" : "{user} restaurou o taboleiro {board}",
     "You have shared the board {board} with {acl}" : "Vostede compartiu o taboleiro {board} con {acl}",
-    "{user} has shared the board {board} with {sharee}" : "{user} compartiu o taboleiro {board} con {acl}",
     "You have removed {acl} from the board {board}" : "Vostede retirou a {acl} do taboleiro {board}",
     "{user} has removed {acl} from the board {board}" : "{user} retirou a {acl} do taboleiro {board}",
     "You have renamed the board {before} to {board}" : "Vostede renomeou o taboleiro {before} como {board}",

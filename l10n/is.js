@@ -18,7 +18,6 @@ OC.L10N.register(
     "You have restored the board {board}" : "Þú hefur endurheimt borðið {board}",
     "{user} has restored the board {board}" : "{user} hefur endurheimt borðið {board}",
     "You have shared the board {board} with {acl}" : "Þú hefur deilt borðinu {board} með {acl}",
-    "{user} has shared the board {board} with {sharee}" : "{user} hefur deilt borðinu {board} með {sharee}",
     "You have removed {acl} from the board {board}" : "Þú fjarlægðir {acl} af borðinu {board}",
     "{user} has removed {acl} from the board {board}" : "{user} fjarlægði {acl} af borðinu {board}",
     "You have renamed the board {before} to {board}" : "Þú hefur endurnefnt borðið {before} sem {board}",

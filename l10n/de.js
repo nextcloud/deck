@@ -19,7 +19,6 @@ OC.L10N.register(
     "You have restored the board {board}" : "Du hast das Board {board} wiederhergestellt",
     "{user} has restored the board {board}" : "{user} hat das Board {board} wiederhergestellt",
     "You have shared the board {board} with {acl}" : "Du hast das Board {board} mit {acl} geteilt",
-    "{user} has shared the board {board} with {sharee}" : "{user} hat das Board {board} mit {sharee} geteilt",
     "You have removed {acl} from the board {board}" : "Du hast {acl} vom Board {board} entfernt",
     "{user} has removed {acl} from the board {board}" : "{user} hat {acl} vom Board {board} entfernt",
     "You have renamed the board {before} to {board}" : "Du hast das Board {before} in {board} umbenannt",

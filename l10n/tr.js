@@ -19,7 +19,6 @@ OC.L10N.register(
     "You have restored the board {board}" : "{board} panosunu geri yüklediniz",
     "{user} has restored the board {board}" : "{user}, {board} panosunu geri yükledi",
     "You have shared the board {board} with {acl}" : "{board} panosunu {acl} ile paylaştınız",
-    "{user} has shared the board {board} with {sharee}" : "{user}, {board} panosunu {sharee} ile paylaştı",
     "You have removed {acl} from the board {board}" : "{board} panosunun {acl} ile paylaşımını kaldırdınız",
     "{user} has removed {acl} from the board {board}" : "{user}, {board} panosunun {acl} ile paylaşımını kaldırdı",
     "You have renamed the board {before} to {board}" : "Panonun {before} olan adını {board} olarak değiştirdiniz",

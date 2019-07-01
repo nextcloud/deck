@@ -12,7 +12,6 @@
     "You have restored the board {board}" : "Bạn đã khôi phục lại dự án {board}",
     "{user} has restored the board {board}" : "{user} đã khôi phục dự án {board}",
     "You have shared the board {board} with {acl}" : "Bạn đã chia sẽ dự án {board} với {acl}",
-    "{user} has shared the board {board} with {sharee}" : "{user} đã chia sẽ dự án {board} với {sharee}",
     "You have removed {acl} from the board {board}" : "Bạn đã loại bỏ {acl} khỏi dự án {board}",
     "{user} has removed {acl} from the board {board}" : "{user} đã loại bỏ {acl} khỏi dự án {board}",
     "You have renamed the board {before} to {board}" : "Bạn đã đổi tên dự án từ {before} thành {board}",

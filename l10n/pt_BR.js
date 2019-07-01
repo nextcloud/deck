@@ -19,7 +19,6 @@ OC.L10N.register(
     "You have restored the board {board}" : "Você restaurou o painel {board}",
     "{user} has restored the board {board}" : "{user} restaurou o painel {board}",
     "You have shared the board {board} with {acl}" : "Você compartilhou o painel {board} com {acl}",
-    "{user} has shared the board {board} with {sharee}" : "{user} compartilhou o painel {board} com {sharee}",
     "You have removed {acl} from the board {board}" : "Você excluiu {acl} do painel {board}",
     "{user} has removed {acl} from the board {board}" : "{user} excluiu {acl} do painel {board}",
     "You have renamed the board {before} to {board}" : "Você renomeou o painel {before} para {board}",

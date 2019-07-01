@@ -19,7 +19,6 @@ OC.L10N.register(
     "You have restored the board {board}" : "Heu restaurat el tauler {board}",
     "{user} has restored the board {board}" : "{user} ha restaurat el tauler {board}",
     "You have shared the board {board} with {acl}" : "Heu compartit el tauler {board} amb {acl}",
-    "{user} has shared the board {board} with {sharee}" : "{user} ha compartit el tauler {board} amb {sharee}",
     "You have removed {acl} from the board {board}" : "Heu suprimit {acl} del tauler {board}",
     "{user} has removed {acl} from the board {board}" : "{user} ha suprimit {acl} del tauler {board}",
     "You have renamed the board {before} to {board}" : "Heu reanomenat el tauler {before} a {board}",

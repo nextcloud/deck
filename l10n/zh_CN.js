@@ -19,7 +19,6 @@ OC.L10N.register(
     "You have restored the board {board}" : "您恢复了面板 {board}",
     "{user} has restored the board {board}" : "{user} 恢复了 {board}",
     "You have shared the board {board} with {acl}" : "您已共享 {board} 给 {acl}",
-    "{user} has shared the board {board} with {sharee}" : "{user} 已共享面板 {board} 给 {sharee}",
     "You have removed {acl} from the board {board}" : "您从面板 {board} 中移除了 {acl}",
     "{user} has removed {acl} from the board {board}" : "{user} 从面板 {board} 中移除了 {acl} ",
     "You have renamed the board {before} to {board}" : "您将面板 {before} 重命名为 {board}",

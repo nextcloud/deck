@@ -18,7 +18,6 @@ OC.L10N.register(
     "You have restored the board {board}" : "Obnovili ste nástenku {board}",
     "{user} has restored the board {board}" : "Používateľ {user} obnovil nástenku {board}",
     "You have shared the board {board} with {acl}" : "Sprístupnili ste nástenku {board} s {acl}",
-    "{user} has shared the board {board} with {sharee}" : "Používateľ {user} sprístupnil nástenku {board} pre {sharee}",
     "You have removed {acl} from the board {board}" : "Odobrali ste {acl} z nástenky {board}",
     "{user} has removed {acl} from the board {board}" : "Používateľ {user} odobral {acl} z nástenky {board}",
     "You have renamed the board {before} to {board}" : "Premenovali ste nástenku {before} na {board}",
