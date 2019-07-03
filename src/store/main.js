@@ -171,7 +171,6 @@ export default new Vuex.Store({
 		// acl mutators
 		addAclToCurrentBoard(state, createdAcl) {
 			state.currentBoard.acl[createdAcl.id] = createdAcl
-			console.log(state.currentBoard)
 		},
 		updateAclFromCurrentBoard(state, acl) {
 			for (var acl_ in state.currentBoard.acl) {
@@ -182,12 +181,17 @@ export default new Vuex.Store({
 			}
 		},
 		deleteAclFromCurrentBoard(state, acl) {
-			const removeIndex = state.currentBoard.acl.findIndex((a) => {
-				return a.participant.uid === acl.participant.uid
-			})
+			let removeIndex = -1
+			for (var index in state.currentBoard.acl) {
+				var attr = state.currentBoard.acl[index]
+				if (acl.id === attr.id) {
+					removeIndex = index
+					break
+				}
+			}
 
 			if (removeIndex > -1) {
-				state.currentBoard.acl.splice(removeIndex, 1)
+				delete state.currentBoard.acl[removeIndex]
 			}
 		}
 	},

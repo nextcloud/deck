@@ -20,7 +20,6 @@
  *
  */
 
-import Vue from 'vue'
 import { CardApi } from './../services/CardApi'
 
 const apiClient = new CardApi()

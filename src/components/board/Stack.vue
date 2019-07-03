@@ -61,7 +61,6 @@
 
 import { Container, Draggable } from 'vue-smooth-dnd'
 import CardItem from '../cards/CardItem'
-import { mapState } from 'vuex'
 
 export default {
 	name: 'Stack',
