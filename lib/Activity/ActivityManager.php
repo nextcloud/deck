@@ -358,14 +358,12 @@ class ActivityManager {
 			case self::SUBJECT_CARD_USER_ASSIGN:
 			case self::SUBJECT_CARD_USER_UNASSIGN:
 				$subjectParams = $this->findDetailsForCard($entity->getId(), $subject);
-				$object = $entity;
 				break;
 			case self::SUBJECT_ATTACHMENT_CREATE:
 			case self::SUBJECT_ATTACHMENT_UPDATE:
 			case self::SUBJECT_ATTACHMENT_DELETE:
 			case self::SUBJECT_ATTACHMENT_RESTORE:
 				$subjectParams = $this->findDetailsForAttachment($entity->getId());
-				$object = $subjectParams['card'];
 				break;
 			case self::SUBJECT_BOARD_SHARE:
 			case self::SUBJECT_BOARD_UNSHARE:
