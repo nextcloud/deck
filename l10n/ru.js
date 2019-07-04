@@ -188,7 +188,7 @@ OC.L10N.register(
     "Description" : "Описание",
     "Attachments" : "Вложения",
     "Saved" : "Сохранено",
-    "Unsaved changes" : "Не сохраненные изменения",
+    "Unsaved changes" : "Несохраненные изменения",
     "Insert attachment" : "Вставить вложение",
     "Formatting help" : "Справка по форматированию",
     "Upload attachment" : "Загрузить вложение",
