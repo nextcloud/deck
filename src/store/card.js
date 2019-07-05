@@ -38,14 +38,13 @@ export default {
 	},
 	mutations: {
 		addCard(state, card) {
-			state.cards.push(card)
-			/* let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
 				let existingCard = state.cards.find(_card => _card.id === card.id)
 				Vue.set(state.cards, existingIndex, Object.assign({}, existingCard, card))
 			} else {
 				state.cards.push(card)
-			} */
+			}
 		}
 	},
 	actions: {

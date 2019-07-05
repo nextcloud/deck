@@ -53,6 +53,7 @@ export default {
 			}
 		},
 		deleteStack(state, stack) {
+
 			let existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
 			if (existingIndex !== -1) {
 				state.stacks.splice(existingIndex, 1)
@@ -61,7 +62,7 @@ export default {
 		updateStack(state, stack) {
 			let existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
 			if (existingIndex !== -1) {
-				state.stacks[existingIndex] = stack
+				state.stacks[existingIndex].title = stack.title
 			}
 		}
 	},

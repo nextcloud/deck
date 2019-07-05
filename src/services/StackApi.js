@@ -94,7 +94,7 @@ export class StackApi {
 	}
 
 	updateStack(stack) {
-		return axios.put(this.url(`/stacks/${stack.id}`), { stack })
+		return axios.put(this.url(`/stacks/${stack.id}`), stack)
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)
