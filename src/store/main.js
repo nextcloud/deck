@@ -46,10 +46,12 @@ export default new Vuex.Store({
 	},
 	strict: debug,
 	state: {
+		showArchived: false,
 		navShown: true,
 		compactMode: false,
 		sidebarShown: false,
 		currentBoard: null,
+		currentCard: null,
 		boards: [],
 		sharees: [],
 		boardFilter: BOARD_FILTERS.ALL
@@ -90,6 +92,9 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+		toggleShowArchived(state) {
+			state.showArchived = !state.showArchived
+		},
 		/**
 		 * Adds or replaces a board in the store.
 		 * Matches a board by it's id.
@@ -142,6 +147,9 @@ export default new Vuex.Store({
 		},
 		setCurrentBoard(state, board) {
 			state.currentBoard = board
+		},
+		setCurrentCard(state, card) {
+			state.currentCard = card
 		},
 
 		// label mutators
@@ -196,6 +204,9 @@ export default new Vuex.Store({
 		}
 	},
 	actions: {
+		toggleShowArchived({ commit }) {
+			commit('toggleShowArchived')
+		},
 		/**
 		 * @param commit
 		 * @param state
@@ -271,6 +282,9 @@ export default new Vuex.Store({
 		},
 		setCurrentBoard({ commit }, board) {
 			commit('setCurrentBoard', board)
+		},
+		setCurrentCard({ commit }, card) {
+			commit('setCurrentCard', card)
 		},
 
 		// label actions

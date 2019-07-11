@@ -27,22 +27,6 @@
 			<container lock-axix="y" orientation="horizontal" @drop="onDropStack">
 				<draggable v-for="stack in stacksByBoard" :key="stack.id" class="stack">
 					<stack :stack="stack" />
-					<!-- <h3>{{ stack.title }}
-						<button v-tooltip="t('deck', 'Delete')" class="icon-delete"
-							@click="deleteStack(stack)" />
-					</h3>
-					<container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)">
-						<draggable v-for="card in cardsByStack(stack.id)" :key="card.id">
-							<card-item v-if="card" :id="card.id" />
-						</draggable>
-					</container>
-					<div class="card create">
-						<div title="Add card">
-							<i class="icon icon-add" />
-							<span class="hidden-visually">Add card</span>
-						</div>
-					</div>
- -->
 				</draggable>
 			</container>
 		</div>
@@ -59,13 +43,11 @@
 import { Container, Draggable } from 'vue-smooth-dnd'
 import { mapState } from 'vuex'
 import Controls from '../Controls'
-/* import CardItem from '../cards/CardItem' */
 import Stack from './Stack'
 
 export default {
 	name: 'Board',
 	components: {
-		/* CardItem, */
 		Controls,
 		Container,
 		Draggable,
@@ -87,7 +69,8 @@ export default {
 	},
 	computed: {
 		...mapState({
-			board: state => state.currentBoard
+			board: state => state.currentBoard,
+			showArchived: state => state.showArchived
 		}),
 		stacksByBoard() {
 			return this.$store.getters.stacksByBoard(this.board.id)
@@ -97,7 +80,11 @@ export default {
 		} */
 	},
 	watch: {
-		'$route': 'fetchData'
+		'$route': 'fetchData',
+		showArchived() {
+
+			this.fetchData()
+		}
 	},
 	created() {
 		this.fetchData()

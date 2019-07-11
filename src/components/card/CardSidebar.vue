@@ -21,17 +21,17 @@
   -->
 
 <template>
-	<app-sidebar
+	<app-sidebar v-if="currentCard != null"
 		:actions="[]"
-		title="andy-yeo-1387151-unsplash.jpg"
-		subtitle="4,3 MB, last edited 19 days ago"
+		:title="currentCard.title"
+		:subtitle="subtitle"
 		@close="closeSidebar">
 		<template #action />
 		<AppSidebarTab name="Description" icon="icon-description">
-			this is the description tab
+			{{ currentCard.description }}
 		</AppSidebarTab>
 		<AppSidebarTab name="Attachments" icon="icon-files-dark">
-			this is the files tab
+			{{ currentCard.attachments }}
 		</AppSidebarTab>
 		<AppSidebarTab name="Timeline" icon="icon-activity">
 			this is the activity tab
@@ -41,6 +41,7 @@
 
 <script>
 import { AppSidebar, AppSidebarTab } from 'nextcloud-vue'
+import { mapState } from 'vuex'
 
 export default {
 	name: 'CardSidebar',
@@ -50,6 +51,17 @@ export default {
 	},
 	data() {
 		return {
+		}
+	},
+	computed: {
+		...mapState({
+			currentCard: state => state.currentCard
+		}),
+		subtitle() {
+			let lastModified = this.currentCard.lastModified
+			let createdAt = this.currentCard.createdAt
+
+			return t('deck', 'Modified') + ': ' + lastModified + ' ' + t('deck', 'Created') + ': ' + createdAt
 		}
 	},
 	methods: {

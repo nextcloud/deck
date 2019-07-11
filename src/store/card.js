@@ -21,6 +21,7 @@
  */
 
 import { CardApi } from './../services/CardApi'
+import Vue from 'vue'
 
 const apiClient = new CardApi()
 
@@ -37,6 +38,9 @@ export default {
 		}
 	},
 	mutations: {
+		clearCards(state) {
+			state.cards = []
+		},
 		addCard(state, card) {
 			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
@@ -45,6 +49,21 @@ export default {
 			} else {
 				state.cards.push(card)
 			}
+		},
+		deleteCard(state, card) {
+			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			if (existingIndex !== -1) {
+				state.cards.splice(existingIndex, 1)
+			}
+		},
+		updateTitle(state, card) {
+			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			if (existingIndex !== -1) {
+				state.cards[existingIndex].title = card.title
+			}
+		},
+		assignCardToMe(state, card) {
+			// let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 		}
 	},
 	actions: {
@@ -52,6 +71,35 @@ export default {
 			apiClient.addCard(card)
 				.then((createdCard) => {
 					commit('addCard', createdCard)
+				})
+		},
+		updateCard({ commit }, card) {
+			apiClient.updateCard(card)
+				.then((updatedCard) => {
+					commit('updateTitle', updatedCard)
+				})
+		},
+		deleteCard({ commit }, card) {
+			apiClient.deleteCard(card.id)
+				.then((card) => {
+					commit('deleteCard', card)
+				})
+		},
+		archiveUnarchiveCard({ commit }, card) {
+			let call = 'archiveCard'
+			if (card.archived === false) {
+				call = 'unArchiveCard'
+			}
+
+			apiClient[call](card)
+				.then((card) => {
+					commit('deleteCard', card)
+				})
+		},
+		assignCardToMe({ commit }, card) {
+			apiClient.assignUser(card)
+				.then((card) => {
+					commit('assignCardToMe', card)
 				})
 		}
 	}

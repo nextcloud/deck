@@ -44,6 +44,21 @@ export class StackApi {
 			})
 	}
 
+	loadArchivedStacks(boardId) {
+		return axios.get(this.url(`/stacks/${boardId}/archived`))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 	/**
 	 * @param {Stack} stack
 	 * @returns {Promise}

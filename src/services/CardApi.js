@@ -44,4 +44,79 @@ export class CardApi {
 			})
 	}
 
+	deleteCard(cardId) {
+		return axios.delete(this.url(`/cards/${cardId}`))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	updateCard(card) {
+		return axios.put(this.url(`/cards/${card.id}`), card)
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	assignUser(card) {
+		return axios.put(this.url(`/cards/${card.id}/assignUser`), card.assignUser)
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	archiveCard(card) {
+		return axios.put(this.url(`/cards/${card.id}/archive`))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	unArchiveCard(card) {
+		return axios.put(this.url(`/cards/${card.id}/unarchive`))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 }

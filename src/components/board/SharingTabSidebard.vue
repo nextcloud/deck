@@ -36,7 +36,7 @@
 			</li>
 		</ul>
 
-		<collection-list v-if="board.id" :id="&quot;board.id&quot;" :name="board.title"
+		<collection-list v-if="board.id" :id="`${board.id}`" :name="board.title"
 			type="deck" />
 	</div>
 </template>

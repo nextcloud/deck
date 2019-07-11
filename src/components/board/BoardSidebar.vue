@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<app-sidebar
+	<app-sidebar v-if="board != null"
 		:actions="[]"
 		:title="board.title"
 		@close="closeSidebar">

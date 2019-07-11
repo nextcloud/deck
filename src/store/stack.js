@@ -77,7 +77,12 @@ export default {
 				})
 		},
 		loadStacks({ commit }, board) {
-			apiClient.loadStacks(board.id)
+			commit('clearCards')
+			let call = 'loadStacks'
+			if (this.state.showArchived === true) {
+				call = 'loadArchivedStacks'
+			}
+			apiClient[call](board.id)
 				.then((stacks) => {
 					for (let i in stacks) {
 						let stack = stacks[i]

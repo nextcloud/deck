@@ -24,11 +24,11 @@
 	<div :class="{'compact': compactMode}" tag="div" class="card"
 		@click="openCard">
 		<div class="card-upper">
-			<h3 @click.stop="startEditing">{{ card.title }}</h3>
+			<h3 @click.stop="startEditing(card)">{{ card.title }}</h3>
 			<transition name="fade" mode="out-in">
 				<form v-if="editing">
-					<input :value="card.title" type="text" autofocus>
-					<input type="button" class="icon-confirm" @click="clickTitleEditSave">
+					<input v-model="copiedCard.title" type="text" autofocus>
+					<input type="button" class="icon-confirm" @click="finishedEdit(card)">
 				</form>
 				<action v-if="!editing" :actions="visibilityPopover" @click.stop="" />
 			</transition>
@@ -67,12 +67,14 @@ export default {
 	data() {
 		return {
 			menuOpened: false,
-			editing: false
+			editing: false,
+			copiedCard: ''
 		}
 	},
 	computed: {
 		...mapState({
-			compactMode: state => state.compactMode
+			compactMode: state => state.compactMode,
+			showArchived: state => state.showArchived
 		}),
 		card() {
 			return this.$store.getters.cardById(this.id)
@@ -97,22 +99,30 @@ export default {
 		visibilityPopover() {
 			return [
 				{
-					action: () => {},
+					action: () => {
+						this.assignCardToMe()
+					},
 					icon: 'icon-archive-dark',
 					text: t('deck', 'Assign to me')
 				},
 				{
-					action: () => {},
-					icon: 'icon-archive-dark',
-					text: t('deck', 'Archive card')
+					action: () => {
+						this.archiveUnarchiveCard()
+					},
+					icon: 'icon-archive',
+					text: t('deck', (this.showArchived ? 'Unarchive card' : 'Archive card'))
 				},
 				{
-					action: () => {},
-					icon: 'icon-delete-dark',
+					action: () => {
+						this.deleteCard()
+					},
+					icon: 'icon-delete',
 					text: t('deck', 'Delete card')
 				},
 				{
-					action: () => {},
+					action: () => {
+						this.setCurrentCard()
+					},
 					icon: 'icon-settings-dark',
 					text: t('deck', 'Card details')
 				}
@@ -121,7 +131,7 @@ export default {
 	},
 	methods: {
 		openCard() {
-			this.$router.push({ name: 'card', params: { cardId: 123 } })
+			this.$router.push({ name: 'card', params: { cardId: this.id } })
 		},
 		togglePopoverMenu() {
 			this.menuOpened = !this.menuOpened
@@ -129,13 +139,33 @@ export default {
 		hidePopoverMenu() {
 			this.menuOpened = false
 		},
-		startEditing() {
+		startEditing(card) {
+			this.copiedCard = Object.assign({}, card)
 			this.editing = true
 		},
-		clickTitleEditSave() {
-
+		finishedEdit(card) {
+			if (this.copiedCard.title !== card.title) {
+				this.$store.dispatch('updateCard', this.copiedCard)
+			}
 			this.editing = false
+		},
+		deleteCard() {
+			this.$store.dispatch('deleteCard', this.card)
+		},
+		archiveUnarchiveCard() {
+			this.copiedCard = Object.assign({}, this.card)
+			this.copiedCard.archived = !this.copiedCard.archived
+			this.$store.dispatch('archiveUnarchiveCard', this.copiedCard)
+		},
+		assignCardToMe() {
+			this.copiedCard = Object.assign({}, this.card)
+			this.copiedCard.assignUser = this.card.owner.uid
+			this.$store.dispatch('assignCardToMe', this.copiedCard)
+		},
+		setCurrentCard() {
+			this.$store.dispatch('setCurrentCard', this.card)
 		}
+
 	}
 }
 </script>

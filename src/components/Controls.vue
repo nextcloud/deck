@@ -48,7 +48,7 @@
 				</form>
 			</div>
 			<div class="board-action-buttons">
-				<button title="Show archived cards" class="icon icon-archive" />
+				<button title="Show archived cards" class="icon icon-archive" @click="toggleShowArchived" />
 				<button :class="[(compactMode ? 'icon-toggle-compact-collapsed' : 'icon-toggle-compact-expanded')]" title="Toggle compact mode" class="icon"
 					@click="toggleCompactMode" />
 				<router-link v-tooltip="t('deck', 'Board settings')" :to="{name: 'board.details'}" class="icon-settings-dark"
@@ -90,6 +90,9 @@ export default {
 		},
 		toggleCompactMode() {
 			this.$store.dispatch('toggleCompactMode')
+		},
+		toggleShowArchived() {
+			this.$store.dispatch('toggleShowArchived')
 		},
 		clickAddNewStack() {
 			this.stack = { title: this.newStackTitle }
