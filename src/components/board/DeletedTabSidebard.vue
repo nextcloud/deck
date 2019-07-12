@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<h3>{{ t('deck', 'Deleted stacks') }}</h3>
+
 		<ul>
 			<!-- <li ng-repeat="deletedStack in stackservice.deleted">
 				<span class="icon icon-deck"></span>
@@ -11,6 +12,7 @@
 		</ul>
 
 		<h3>{{ t('deck', 'Deleted cards') }}</h3>
+		{{ deletedCards }}
 		<ul>
 			<!-- <li ng-repeat="deletedCard in cardservice.deleted">
 				<span class="icon icon-deck"></span>
@@ -25,7 +27,7 @@
 </template>
 
 <script>
-
+import { mapState } from 'vuex'
 export default {
 	name: 'DeletedTabSidebard',
 	components: {
@@ -39,9 +41,33 @@ export default {
 	},
 	data() {
 		return {
+			isLoading: false
+		}
+	},
+	computed: {
+		...mapState({
+			deletedStacks: state => state.deletedStacks
+			// deletedCards: state => state.deletedCards
+		}),
+
+		deletedCards() {
+			console.log(store.state.deletedCards)
+			return store.state.deletedCards
+		}
+
+	},
+	created() {
+		this.getData()
+	},
+	methods: {
+		getData() {
+			this.isLoading = true
+
+			this.$store.dispatch('deletedItems', 1).then(response => {
+				this.isLoading = false
+			})
 		}
 	}
-
 }
 </script>
 

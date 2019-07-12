@@ -63,7 +63,11 @@ export default {
 			}
 		},
 		assignCardToMe(state, card) {
-			// let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			console.log(card)
+			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			if (existingIndex !== -1) {
+
+			}
 		}
 	},
 	actions: {

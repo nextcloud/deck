@@ -159,7 +159,7 @@ export default {
 		},
 		assignCardToMe() {
 			this.copiedCard = Object.assign({}, this.card)
-			this.copiedCard.assignUser = this.card.owner.uid
+			this.copiedCard.newUserUid = this.card.owner.uid
 			this.$store.dispatch('assignCardToMe', this.copiedCard)
 		},
 		setCurrentCard() {

@@ -71,22 +71,12 @@ export default {
 			sharees: 'sharees'
 		}),
 		unallocatedSharees() {
-			let ret = []
-
-			let allocatedSharees = []
-			for (var user in this.board.acl) {
-				allocatedSharees.push(this.board.acl[user].participant.uid)
-			}
-
-			this.sharees.forEach(function(sharee) {
-				if (allocatedSharees.indexOf(sharee.value.shareWith) === -1) {
-					ret.push(sharee)
-				}
+			return this.sharees.filter((sharee) => {
+				return Object.values(this.board.acl).findIndex((acl) => {
+					return acl.participant.uid === sharee.value.shareWith
+				})
 			})
-
-			return ret
 		}
-
 	},
 	methods: {
 		asyncFind(query) {

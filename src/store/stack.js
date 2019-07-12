@@ -28,7 +28,9 @@ const apiClient = new StackApi()
 
 export default {
 	state: {
-		stacks: []
+		stacks: [],
+		deletedStacks: [],
+		deletedCards: []
 	},
 	getters: {
 		stacksByBoard: state => (id) => {
@@ -64,6 +66,12 @@ export default {
 			if (existingIndex !== -1) {
 				state.stacks[existingIndex].title = stack.title
 			}
+		},
+		setDeletedStacks(state, delStacks) {
+			state.deletedStacks.push(delStacks)
+		},
+		setDeletedCards(state, delCards) {
+			state.deletedCards.push(delCards)
 		}
 	},
 	actions: {
@@ -111,6 +119,16 @@ export default {
 			apiClient.updateStack(stack)
 				.then((stack) => {
 					commit('updateStack', stack)
+				})
+		},
+		deletedItems({ commit }, boardId) {
+			apiClient.deletedStacks(boardId)
+				.then((deletedStacks) => {
+					commit('setDeletedStacks', deletedStacks)
+				})
+			apiClient.deletedCards(boardId)
+				.then((deletedCards) => {
+					commit('setDeletedCards', deletedCards)
 				})
 		}
 	}
