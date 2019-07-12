@@ -12,7 +12,7 @@
 		</ul>
 
 		<h3>{{ t('deck', 'Deleted cards') }}</h3>
-		{{ deletedCards }}
+		
 		<ul>
 			<!-- <li ng-repeat="deletedCard in cardservice.deleted">
 				<span class="icon icon-deck"></span>

@@ -49,7 +49,7 @@
 				<label for="new-stack-input-main" class="hidden-visually">Add a new card</label>
 				<input id="new-stack-input-main" v-model="newCardTitle" type="text"
 					class="no-close"
-					placeholder="Add a new card">
+					placeholder="Add a new card" @keyup.enter="clickAddCard()">
 				<input class="icon-confirm" type="button" title="Submit"
 					@click="clickAddCard()">
 			</form>
@@ -120,7 +120,7 @@ export default {
 				boardId: this.stack.boardId
 			}
 			this.$store.dispatch('addCard', newCard)
-		}
+		},
 	}
 }
 </script>

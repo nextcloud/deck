@@ -33,8 +33,8 @@
 		</div>
 		<div v-if="board" class="crumb svg">
 			<div class="board-bullet" />
-			<a href="#todo">{{ board.title }}</a>
-			<span style="display: inline;" class="icon-shared" />
+			<a href="#">{{ board.title }}</a>
+			<router-link :to="{name: 'board.details'}" class="icon-shared" />
 		</div>
 		<div v-if="board" class="board-actions">
 			<div id="stack-add">
@@ -42,7 +42,7 @@
 					<label for="new-stack-input-main" class="hidden-visually">Add a new stack</label>
 					<input id="new-stack-input-main" v-model="newStackTitle" type="text"
 						class="no-close"
-						placeholder="Add a new stack">
+						placeholder="Add a new stack" @keyup.enter="clickAddNewStack()">
 					<input class="icon-confirm" type="button" title="Submit"
 						@click="clickAddNewStack()">
 				</form>
