@@ -77,6 +77,7 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "Una <strong>descripción de tarjeta</strong> dentro de la app Deck ha cambiado",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Cambios en la <strong>app Deck</strong>",
+    "A <strong>comment</strong> was created on a card" : "Un <strong>comment</strong> ha sido creado en una tarjeta",
     "Personal" : "Personal",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "La tarjeta \"%s\" en \"%s\" te ha sido asignada por %s.",
     "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user} te ha asignado la tarjeta \"%s\" en \"%s\".",
