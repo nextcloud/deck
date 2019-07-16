@@ -22,9 +22,9 @@
 
 <template>
 	<div class="badges">
-		<div v-if="true" class="card-files icon icon-files-dark" />
-		<div v-if="true" class="card-comments icon icon-comment" />
-		<div v-if="true" :class="{'icon-calendar': true, 'icon-calendar-dark': false}" class="due icon now">
+		<div v-if="card.attechments" class="card-files icon icon-files-dark" />
+		<div v-if="card.description" class="card-comments icon icon-comment" />
+		<div v-if="card.duedate" :class="{'icon-calendar': true, 'icon-calendar-dark': false}" class="due icon now">
 			<span>Now</span>
 		</div>
 		<div v-if="true" class="card-tasks icon icon-checkmark">
@@ -50,6 +50,9 @@ export default {
 	computed: {
 		compactMode() {
 			return false
+		},
+		card() {
+			return this.$store.getters.cardById(this.id)
 		}
 	}
 }

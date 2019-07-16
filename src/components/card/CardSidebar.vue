@@ -22,13 +22,37 @@
 
 <template>
 	<app-sidebar v-if="currentCard != null"
-		:actions="[]"
+		:actions="toolbarActions"
 		:title="currentCard.title"
 		:subtitle="subtitle"
 		@close="closeSidebar">
 		<template #action />
+		<AppSidebarTab name="Details" icon="icon-home">
+
+			<p>Tags</p>
+			<multiselect v-model="addedLabelToCard" :options="currentBoard.labels" label="label"
+				@input="clickaddLabelToCard">
+				<template #option="scope">
+					{{ scope.option.title }}
+				</template>
+			</multiselect>
+
+			<p>Assign to user</p>
+			<multiselect v-model="addAclToCard" :options="unallocatedSharees" label="label"
+				@input="clickAddAclToCard" @search-change="asyncFind">
+				<template #option="scope">
+					{{ scope.option.label }}
+				</template>
+			</multiselect>
+
+			<p>Due to</p>
+
+			<DatetimePicker />
+
+		</AppSidebarTab>
 		<AppSidebarTab name="Description" icon="icon-description">
-			{{ currentCard.description }}
+			<textarea v-model="copiedCard.description" type="text" autofocus />
+			<input type="button" class="icon-confirm" @click="saveDesc()">
 		</AppSidebarTab>
 		<AppSidebarTab name="Attachments" icon="icon-files-dark">
 			{{ currentCard.attachments }}
@@ -40,33 +64,101 @@
 </template>
 
 <script>
-import { AppSidebar, AppSidebarTab } from 'nextcloud-vue'
+import { AppSidebar, AppSidebarTab, Multiselect, DatetimePicker } from 'nextcloud-vue'
 import { mapState } from 'vuex'
 
 export default {
 	name: 'CardSidebar',
 	components: {
 		AppSidebar,
-		AppSidebarTab
+		AppSidebarTab,
+		Multiselect,
+		DatetimePicker
 	},
 	data() {
 		return {
+			addAclToCard: null,
+			addedLabelToCard: null,
+			isLoading: false,
+			copiedCard: null
 		}
 	},
 	computed: {
 		...mapState({
-			currentCard: state => state.currentCard
+			currentCard: state => state.currentCard,
+			currentBoard: state => state.currentBoard,
+			sharees: 'sharees'
 		}),
 		subtitle() {
 			let lastModified = this.currentCard.lastModified
 			let createdAt = this.currentCard.createdAt
 
 			return t('deck', 'Modified') + ': ' + lastModified + ' ' + t('deck', 'Created') + ': ' + createdAt
+		},
+		unallocatedSharees() {
+
+			return this.sharees
+
+			/* return this.sharees.filter((sharee) => {
+				return Object.values(this.board.acl).findIndex((acl) => {
+					return acl.participant.uid === sharee.value.shareWith
+				})
+			}) */
+		},
+		toolbarActions() {
+			return [
+				{
+					action: () => {
+
+					},
+					icon: 'icon-archive-dark',
+					text: t('deck', 'Assign to me')
+				},
+				{
+					action: () => {
+
+					},
+					icon: 'icon-archive',
+					text: t('deck', (this.showArchived ? 'Unarchive card' : 'Archive card'))
+				}
+			]
+		}
+	},
+	watch: {
+		currentCard() {
+			this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
 		}
 	},
 	methods: {
+		saveDesc() {
+			this.$store.dispatch('updateCard', this.copiedCard)
+		},
+		asyncFind(query) {
+			this.isLoading = true
+			this.$store.dispatch('loadSharees').then(response => {
+				this.isLoading = false
+			})
+		},
 		closeSidebar() {
 			this.$router.push({ name: 'board' })
+		},
+		clickAddAclToCard() {
+			/* this.addAclForAPI = {
+				type: 0,
+				participant: this.addAcl.value.shareWith,
+				permissionEdit: false,
+				permissionShare: false,
+				permissionManage: false
+			}
+			this.$store.dispatch('addAclToCurrentBoard', this.addAclForAPI) */
+		},
+		clickaddLabelToCard() {
+			this.copiedCard.labels.push(this.addedLabelToCard)
+			let data = {
+				cardId: this.copiedCard.id,
+				labelId: this.addedLabelToCard.id
+			}
+			this.$store.dispatch('assignLabel', data)
 		}
 	}
 }

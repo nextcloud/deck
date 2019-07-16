@@ -34,10 +34,10 @@
 			</transition>
 		</div>
 		<ul class="labels">
-			<li v-for="label in labels" :key="label.id" :style="labelStyle(label)"><span>{{ label.title }}</span></li>
+			<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)"><span>{{ label.title }}</span></li>
 		</ul>
 		<div v-show="!compactMode" class="card-controls compact-item">
-			<card-badges />
+			<card-badges :id="id" />
 		</div>
 	</div>
 </template>
@@ -81,12 +81,6 @@ export default {
 		},
 		menu() {
 			return []
-		},
-		labels() {
-			return [
-				{ id: 1, title: 'ToDo', color: 'aa0000' },
-				{ id: 2, title: 'Done', color: '33ff33' }
-			]
 		},
 		labelStyle() {
 			return (label) => {

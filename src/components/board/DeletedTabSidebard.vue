@@ -12,7 +12,6 @@
 		</ul>
 
 		<h3>{{ t('deck', 'Deleted cards') }}</h3>
-		
 		<ul>
 			<!-- <li ng-repeat="deletedCard in cardservice.deleted">
 				<span class="icon icon-deck"></span>
@@ -48,12 +47,7 @@ export default {
 		...mapState({
 			deletedStacks: state => state.deletedStacks
 			// deletedCards: state => state.deletedCards
-		}),
-
-		deletedCards() {
-			console.log(store.state.deletedCards)
-			return store.state.deletedCards
-		}
+		})
 
 	},
 	created() {

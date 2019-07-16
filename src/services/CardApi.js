@@ -75,7 +75,7 @@ export class CardApi {
 	}
 
 	assignUser(card) {
-		return axios.post(this.url(`/cards/${card.id}/assignUser`), card.newUserUid)
+		return axios.post(this.url(`/cards/${card.id}/assign`), card.newUserUid)
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)
@@ -106,6 +106,21 @@ export class CardApi {
 
 	unArchiveCard(card) {
 		return axios.put(this.url(`/cards/${card.id}/unarchive`))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	assignLabelToCard(data) {
+		return axios.post(this.url(`/cards/${data.cardId}/label/${data.labelId}`))
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)

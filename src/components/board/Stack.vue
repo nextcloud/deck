@@ -120,7 +120,7 @@ export default {
 				boardId: this.stack.boardId
 			}
 			this.$store.dispatch('addCard', newCard)
-		},
+		}
 	}
 }
 </script>

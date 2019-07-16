@@ -64,10 +64,18 @@ export default {
 		},
 		assignCardToMe(state, card) {
 			console.log(card)
-			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
-			if (existingIndex !== -1) {
+			// let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			/* if (existingIndex !== -1) {
 
-			}
+			} */
+		},
+		updateCard(state, card) {
+			// console.log(card)
+			// new card is not returned!
+			// let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			/* if (existingIndex !== -1) {
+				state.cards[existingIndex] = card
+			} */
 		}
 	},
 	actions: {
@@ -104,6 +112,12 @@ export default {
 			apiClient.assignUser(card)
 				.then((card) => {
 					commit('assignCardToMe', card)
+				})
+		},
+		assignLabel({ commit }, data) {
+			apiClient.assignLabelToCard(data)
+				.then((card) => {
+					commit('updateCard', card)
 				})
 		}
 	}
