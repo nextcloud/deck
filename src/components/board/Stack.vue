@@ -23,7 +23,7 @@
 
 <template>
 	<div>
-
+		order: {{ stack.order }}
 		<h3 v-if="!editing" @click="startEditing(stack)">{{ stack.title }}
 			<button v-tooltip="t('deck', 'Delete')" class="icon-delete"
 				@click="deleteStack(stack)" />
@@ -38,7 +38,8 @@
 			</div>
 		</transition>
 
-		<container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)">
+		<!-- <container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)"> -->
+		<container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="onDropCard">
 			<draggable v-for="card in cardsByStack(stack.id)" :key="card.id">
 				<card-item v-if="card" :id="card.id" />
 			</draggable>
@@ -93,7 +94,6 @@ export default {
 	methods: {
 
 		onDropCard({ removedIndex, addedIndex }) {
-
 		},
 		payloadForCard(stackId) {
 			return index => {

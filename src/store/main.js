@@ -262,7 +262,6 @@ export default new Vuex.Store({
 			params.append('itemType', 0)
 			params.append('itemType', 1)
 			axios.get(OC.linkToOCS('apps/files_sharing/api/v1') + 'sharees', { params }).then((response) => {
-				// commit('setSharees', response.data.ocs.data.users)
 				commit('setSharees', response.data.ocs.data)
 			})
 		},

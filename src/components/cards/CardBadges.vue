@@ -24,14 +24,15 @@
 	<div class="badges">
 		<div v-if="card.attechments" class="card-files icon icon-files-dark" />
 		<div v-if="card.description" class="card-comments icon icon-comment" />
+
 		<div v-if="card.duedate" :class="{'icon-calendar': true, 'icon-calendar-dark': false}" class="due icon now">
-			<span>Now</span>
+			<span>{{ dueTimeDiff }}</span>
 		</div>
 		<div v-if="true" class="card-tasks icon icon-checkmark">
 			<span>0/0</span>
 		</div>
-		<div v-if="true" class="card-assigned-users">
-			<avatar user="admin" />
+		<div v-if="card.assignedUsers" class="card-assigned-users">
+			<avatar v-for="user in card.assignedUsers" :key="user.id" user="user.participant.primaryKey" />
 		</div>
 	</div>
 </template>
@@ -50,6 +51,40 @@ export default {
 	computed: {
 		compactMode() {
 			return false
+		},
+		dueIcon() {
+			let timeInHours = Math.round((Date.parse(this.card.duedate) - Date.now()) / 1000 / 60 / 60 / 24)
+
+			if (timeInHours === 1) {
+				return 'due icon next'
+			}
+			if (timeInHours === 0) {
+				return 'due icon now'
+			}
+			if (timeInHours < 0) {
+				return 'due icon overdue'
+			}
+		},
+		dueTimeDiff() {
+			let unit = 'Minutes'
+			let timeInMin = (Date.parse(this.card.duedate) - Date.now()) / 60000
+
+			if (timeInMin > 59) {
+				timeInMin /= 60
+				unit = 'Hours'
+			}
+
+			if (timeInMin > 23) {
+				timeInMin /= 24
+				unit = 'Days'
+			}
+
+			if (timeInMin > 355) {
+				timeInMin /= 355
+				unit = 'Years'
+			}
+
+			return Math.round(timeInMin) + ' ' + unit
 		},
 		card() {
 			return this.$store.getters.cardById(this.id)

@@ -62,20 +62,30 @@ export default {
 				state.cards[existingIndex].title = card.title
 			}
 		},
-		assignCardToMe(state, card) {
-			console.log(card)
+		assignCardToUser(state, card) {
 			// let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			/* if (existingIndex !== -1) {
 
 			} */
 		},
-		updateCard(state, card) {
-			// console.log(card)
-			// new card is not returned!
-			// let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
-			/* if (existingIndex !== -1) {
-				state.cards[existingIndex] = card
-			} */
+		updateCardDesc(state, card) {
+			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			if (existingIndex !== -1) {
+				state.cards[existingIndex].description = card.description
+			}
+		},
+		updateCardDue(state, card) {
+			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			if (existingIndex !== -1) {
+				state.cards[existingIndex].duedate = card.duedate
+			}
+		},
+		updateCardLabels(state, card) {
+			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			if (existingIndex !== -1) {
+				let existingCard = state.cards.find(_card => _card.id === card.id)
+				existingCard.labels = card.labels
+			}
 		}
 	},
 	actions: {
@@ -108,16 +118,40 @@ export default {
 					commit('deleteCard', card)
 				})
 		},
-		assignCardToMe({ commit }, card) {
+		assignCardToUser({ commit }, card) {
 			apiClient.assignUser(card)
-				.then((card) => {
-					commit('assignCardToMe', card)
+				.then(() => {
+					commit('assignCardToUser')
 				})
 		},
-		assignLabel({ commit }, data) {
+		addLabel({ commit }, data) {
 			apiClient.assignLabelToCard(data)
+				.then(() => {
+					commit('updateCardLabels', data.card)
+				})
+		},
+		removeLabel({ commit }, data) {
+			apiClient.removeLabelFromCard(data)
+				.then(() => {
+					commit('updateCardLabels', data.card)
+				})
+		},
+		cardUndoDelete({ commit }, card) {
+			apiClient.updateCard(card)
 				.then((card) => {
 					commit('updateCard', card)
+				})
+		},
+		updateCardDesc({ commit }, card) {
+			apiClient.updateCard(card)
+				.then((updatedCard) => {
+					commit('updateCardDesc', updatedCard)
+				})
+		},
+		updateCardDue({ commit }, card) {
+			apiClient.updateCard(card)
+				.then((card) => {
+					commit('updateCardDue', card)
 				})
 		}
 	}

@@ -24,30 +24,35 @@
 	<app-sidebar v-if="currentCard != null"
 		:actions="toolbarActions"
 		:title="currentCard.title"
-		:subtitle="subtitle"
 		@close="closeSidebar">
 		<template #action />
 		<AppSidebarTab name="Details" icon="icon-home">
 
+			{{ currentCard }}
 			<p>Tags</p>
-			<multiselect v-model="addedLabelToCard" :options="currentBoard.labels" label="label"
-				@input="clickaddLabelToCard">
+			<multiselect v-model="allLabels" :multiple="true" :options="currentBoard.labels"
+				:taggable="true" label="title"
+				track-by="id" @select="addLabelToCard" @remove="removeLabelFromCard">
 				<template #option="scope">
-					{{ scope.option.title }}
+					<span>{{ scope.option.title }}</span>
 				</template>
 			</multiselect>
 
 			<p>Assign to user</p>
 			<multiselect v-model="addAclToCard" :options="unallocatedSharees" label="label"
-				@input="clickAddAclToCard" @search-change="asyncFind">
+				track-by="value.shareWith"
+				@select="assignUserToCard" @remove="removeUserFromCard" @search-change="asyncFind">
 				<template #option="scope">
 					{{ scope.option.label }}
 				</template>
 			</multiselect>
 
 			<p>Due to</p>
+			<DatetimePicker v-model="copiedCard.duedate" type="datetime" lang="en"
+				format="YYYY-MM-DD HH:mm" confirm @change="setDue()" />
 
-			<DatetimePicker />
+			<hr>
+			<p>{{ subtitle }}</p>
 
 		</AppSidebarTab>
 		<AppSidebarTab name="Description" icon="icon-description">
@@ -80,7 +85,8 @@ export default {
 			addAclToCard: null,
 			addedLabelToCard: null,
 			isLoading: false,
-			copiedCard: null
+			copiedCard: null,
+			allLabels: null
 		}
 	},
 	computed: {
@@ -127,22 +133,37 @@ export default {
 	watch: {
 		currentCard() {
 			this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
+			this.allLabels = this.currentCard.labels
+			this.addAclToCard = this.currentCard.assignedUsers
 		}
 	},
+	created() {
+
+	},
 	methods: {
-		saveDesc() {
-			this.$store.dispatch('updateCard', this.copiedCard)
+		setDue() {
+			this.$store.dispatch('updateCardDue', this.copiedCard)
 		},
+
+		saveDesc() {
+			this.$store.dispatch('updateCardDesc', this.copiedCard)
+		},
+
 		asyncFind(query) {
 			this.isLoading = true
 			this.$store.dispatch('loadSharees').then(response => {
 				this.isLoading = false
 			})
 		},
+
 		closeSidebar() {
 			this.$router.push({ name: 'board' })
 		},
-		clickAddAclToCard() {
+
+		assignUserToCard(user) {
+			this.copiedCard.assignedUsers.push(user)
+			this.copiedCard.newUserUid = user.value.shareWith
+			this.$store.dispatch('assignCardToUser', this.copiedCard)
 			/* this.addAclForAPI = {
 				type: 0,
 				participant: this.addAcl.value.shareWith,
@@ -152,18 +173,35 @@ export default {
 			}
 			this.$store.dispatch('addAclToCurrentBoard', this.addAclForAPI) */
 		},
-		clickaddLabelToCard() {
-			this.copiedCard.labels.push(this.addedLabelToCard)
+
+		removeUserFromCard(user) {
+
+		},
+
+		addLabelToCard(newLabel) {
+			this.copiedCard.labels.push(newLabel)
 			let data = {
-				cardId: this.copiedCard.id,
-				labelId: this.addedLabelToCard.id
+				card: this.copiedCard,
+				labelId: newLabel.id
 			}
-			this.$store.dispatch('assignLabel', data)
+			this.$store.dispatch('addLabel', data)
+		},
+
+		removeLabelFromCard(removedLabel) {
+
+			let removeIndex = this.copiedCard.labels.findIndex((label) => {
+				return label.id === removedLabel.id
+			})
+			if (removeIndex !== -1) {
+				this.copiedCard.labels.splice(removeIndex, 1)
+			}
+
+			let data = {
+				card: this.copiedCard,
+				labelId: removedLabel.id
+			}
+			this.$store.dispatch('removeLabel', data)
 		}
 	}
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

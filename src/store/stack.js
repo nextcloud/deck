@@ -68,7 +68,7 @@ export default {
 			}
 		},
 		setDeletedStacks(state, delStacks) {
-			state.deletedStacks.push(delStacks)
+			state.deletedStacks.push(delStacks[0])
 		},
 		setDeletedCards(state, delCards) {
 			state.deletedCards.push(delCards)
@@ -130,6 +130,13 @@ export default {
 				.then((deletedCards) => {
 					commit('setDeletedCards', deletedCards)
 				})
+		},
+		stackUndoDelete({ commit }, stack) {
+			apiClient.updateStack(stack)
+				.then((stack) => {
+					commit('addStack', stack)
+				})
 		}
+
 	}
 }
