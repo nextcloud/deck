@@ -16,20 +16,11 @@ steps:
     - ./occ app:check-code $APP_NAME -c strong-comparison
     - ./occ app:check-code $APP_NAME -c deprecation
     - cd apps/$APP_NAME/
-- name: syntax-php7.0
-  image: nextcloudci/php7.0:php7.0-17
-  environment:
-    APP_NAME: deck
-    CORE_BRANCH: stable15
-    DB: sqlite
-  commands:
-    - composer install
-    - ./vendor/bin/parallel-lint --exclude ./vendor/ --exclude ./lib/Collaboration/ .
 - name: syntax-php7.1
   image: nextcloudci/php7.1:php7.1-15
   environment:
     APP_NAME: deck
-    CORE_BRANCH: stable15
+    CORE_BRANCH: master
     DB: sqlite
   commands:
     - composer install
@@ -38,7 +29,7 @@ steps:
   image: nextcloudci/php7.2:php7.2-9
   environment:
     APP_NAME: deck
-    CORE_BRANCH: stable15
+    CORE_BRANCH: master
     DB: sqlite
   commands:
     - composer install
@@ -47,39 +38,11 @@ steps:
   image: nextcloudci/php7.3:php7.3-2
   environment:
     APP_NAME: deck
-    CORE_BRANCH: stable15
+    CORE_BRANCH: master
     DB: sqlite
   commands:
     - composer install
     - ./vendor/bin/parallel-lint --exclude ./vendor/ .
-trigger:
-  branch:
-    - master
-    - stable*
-  event:
-    - pull_request
-    - push
----
-kind: pipeline
-name: unit-php7.0
-steps:
-  - name: php7.0
-    image: nextcloudci/php7.0:php7.0-17
-    environment:
-      APP_NAME: deck
-      CORE_BRANCH: stable15
-      DB: sqlite
-    commands:
-      # Pre-setup steps
-      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
-      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-      - cd ../server/
-      - php occ app:enable deck
-      - cd apps/$APP_NAME
-      # Run phpunit tests
-      - composer install
-      - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
-      - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
 trigger:
   branch:
     - master
@@ -95,7 +58,7 @@ steps:
     image: nextcloudci/php7.1:php7.1-15
     environment:
       APP_NAME: deck
-      CORE_BRANCH: stable15
+      CORE_BRANCH: master
       DB: sqlite
     commands:
       # Pre-setup steps
@@ -122,7 +85,7 @@ steps:
     image: nextcloudci/php7.2:php7.2-9
     environment:
       APP_NAME: deck
-      CORE_BRANCH: stable15
+      CORE_BRANCH: master
       DB: sqlite
     commands:
       # Pre-setup steps
@@ -149,7 +112,7 @@ steps:
     image: nextcloudci/php7.3:php7.3-2
     environment:
       APP_NAME: deck
-      CORE_BRANCH: stable15
+      CORE_BRANCH: master
       DB: sqlite
     commands:
       # Pre-setup steps
@@ -170,39 +133,13 @@ trigger:
     - push
 ---
 kind: pipeline
-name: integration-stable16
+name: integration
 steps:
   - name: integration
     image: nextcloudci/php7.1:php7.1-16
     environment:
       APP_NAME: deck
-      CORE_BRANCH: stable16
-      DB: sqlite
-    commands:
-      # Pre-setup steps
-      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
-      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-      - cd ../server/
-      - php occ app:enable deck
-      - cd apps/$APP_NAME
-      - cd tests/integration
-      - ./run.sh || true
-trigger:
-  branch:
-    - master
-    - stable*
-  event:
-    - pull_request
-    - push
----
-kind: pipeline
-name: integration-stable15
-steps:
-  - name: integration
-    image: nextcloudci/php7.1:php7.1-16
-    environment:
-      APP_NAME: deck
-      CORE_BRANCH: stable15
+      CORE_BRANCH: master
       DB: sqlite
     commands:
       # Pre-setup steps
