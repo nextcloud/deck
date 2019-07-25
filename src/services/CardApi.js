@@ -75,6 +75,8 @@ export class CardApi {
 	}
 
 	assignUser(card) {
+		console.log(card)
+		console.log(card.newUserUid)
 		return axios.post(this.url(`/cards/${card.id}/assign`), { userId: card.newUserUid })
 			.then(
 				(response) => {

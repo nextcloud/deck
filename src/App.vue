@@ -74,7 +74,7 @@ export default {
 		}),
 		// TODO: properly handle sidebar showing for route subview and board sidebar
 		sidebarRouterView() {
-			console.log(this.$route)
+			// console.log(this.$route)
 			return this.$route.name === 'card' || this.$route.name === 'board.details'
 		},
 		sidebarShown() {

@@ -28,7 +28,6 @@
 		<template #action />
 		<AppSidebarTab name="Details" icon="icon-home">
 
-			{{ currentCard }}
 			<p>Tags</p>
 			<multiselect v-model="allLabels" :multiple="true" :options="currentBoard.labels"
 				:taggable="true" label="title"
@@ -39,8 +38,12 @@
 			</multiselect>
 
 			<p>Assign to user</p>
-			<multiselect v-model="addAclToCard" :options="unallocatedSharees" label="label"
-				track-by="value.shareWith"
+			{{ unallocatedSharees }}
+			<hr>
+			{{ addAclToCard }}
+			<multiselect v-model="addAclToCard" :multiple="true" :options="unallocatedSharees"
+				label="participant"
+				track-by="shareWith"
 				@select="assignUserToCard" @remove="removeUserFromCard" @search-change="asyncFind">
 				<template #option="scope">
 					{{ scope.option.label }}
@@ -58,6 +61,8 @@
 		<AppSidebarTab name="Description" icon="icon-description">
 			<textarea v-model="copiedCard.description" type="text" autofocus />
 			<input type="button" class="icon-confirm" @click="saveDesc()">
+
+			<markdown-editor ref="markdownEditor" v-model="desc" :configs="{autosave: {enabled: true, uniqueId: 'unique'}}" />
 		</AppSidebarTab>
 		<AppSidebarTab name="Attachments" icon="icon-files-dark">
 			{{ currentCard.attachments }}
@@ -71,6 +76,7 @@
 <script>
 import { AppSidebar, AppSidebarTab, Multiselect, DatetimePicker } from 'nextcloud-vue'
 import { mapState } from 'vuex'
+import markdownEditor from 'vue-easymde/src/markdown-editor'
 
 export default {
 	name: 'CardSidebar',
@@ -78,7 +84,8 @@ export default {
 		AppSidebar,
 		AppSidebarTab,
 		Multiselect,
-		DatetimePicker
+		DatetimePicker,
+		markdownEditor
 	},
 	data() {
 		return {
@@ -86,7 +93,8 @@ export default {
 			addedLabelToCard: null,
 			isLoading: false,
 			copiedCard: null,
-			allLabels: null
+			allLabels: null,
+			desc: null
 		}
 	},
 	computed: {
@@ -135,6 +143,10 @@ export default {
 			this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
 			this.allLabels = this.currentCard.labels
 			this.addAclToCard = this.currentCard.assignedUsers
+			this.desc = this.currentCard.description
+		},
+		desc() {
+			this.$store.dispatch('updateCardDesc', this.desc)
 		}
 	},
 	created() {
@@ -161,7 +173,7 @@ export default {
 		},
 
 		assignUserToCard(user) {
-			this.copiedCard.assignedUsers.push(user)
+			// this.copiedCard.assignedUsers.push(user)
 			this.copiedCard.newUserUid = user.value.shareWith
 			this.$store.dispatch('assignCardToUser', this.copiedCard)
 			/* this.addAclForAPI = {
@@ -205,3 +217,7 @@ export default {
 	}
 }
 </script>
+
+<style>
+ @import "~easymde/dist/easymde.min.css";
+</style>

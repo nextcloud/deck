@@ -25,7 +25,8 @@
 		<div v-if="card.attechments" class="card-files icon icon-files-dark" />
 		<div v-if="card.description" class="card-comments icon icon-comment" />
 
-		<div v-if="card.duedate" :class="{'icon-calendar': true, 'icon-calendar-dark': false}" class="due icon now">
+		<!-- <div v-if="card.duedate" :class="{'icon-calendar': true, 'icon-calendar-dark': false}" class="due icon now"> -->
+		<div v-if="card.duedate" :class="dueIcon">
 			<span>{{ dueTimeDiff }}</span>
 		</div>
 		<div v-if="true" class="card-tasks icon icon-checkmark">
@@ -56,13 +57,13 @@ export default {
 			let timeInHours = Math.round((Date.parse(this.card.duedate) - Date.now()) / 1000 / 60 / 60 / 24)
 
 			if (timeInHours === 1) {
-				return 'due icon next'
+				return 'icon-calendar-dark due icon next'
 			}
 			if (timeInHours === 0) {
-				return 'due icon now'
+				return 'icon-calendar-dark due icon now'
 			}
 			if (timeInHours < 0) {
-				return 'due icon overdue'
+				return 'icon-calendar-dark due icon overdue'
 			}
 		},
 		dueTimeDiff() {
