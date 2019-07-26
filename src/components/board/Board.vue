@@ -95,6 +95,7 @@ export default {
 				.then((board) => {
 					this.$store.dispatch('setCurrentBoard', board)
 					this.$store.dispatch('loadStacks', board)
+					this.$store.dispatch('setAssignableUsers', board.users)
 					this.loading = false
 					this.$store.state.labels = board.labels
 				})

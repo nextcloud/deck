@@ -68,9 +68,13 @@ export default {
 			}
 		},
 		setDeletedStacks(state, delStacks) {
-			state.deletedStacks.push(delStacks[0])
+			state.deletedStacks = []
+			if (delStacks.length > 0) {
+				state.deletedStacks.push(delStacks[0])
+			}
 		},
 		setDeletedCards(state, delCards) {
+			state.deletedCards = []
 			state.deletedCards.push(delCards)
 		}
 	},

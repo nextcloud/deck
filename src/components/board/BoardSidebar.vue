@@ -35,7 +35,7 @@
 		</AppSidebarTab>
 
 		<AppSidebarTab name="Deleted items" icon="icon-delete">
-			<DeletedTabSidebard :board="board" />
+			<DeletedTabSidebar :board="board" />
 		</AppSidebarTab>
 
 		<AppSidebarTab name="Timeline" icon="icon-activity">
@@ -49,7 +49,7 @@
 import { mapState } from 'vuex'
 import SharingTabSidebard from './SharingTabSidebard'
 import TagsTabSidebard from './TagsTabSidebard'
-import DeletedTabSidebard from './DeletedTabSidebard'
+import DeletedTabSidebar from './DeletedTabSidebar'
 import TimelineTabSidebard from './TimelineTabSidebard'
 import { AppSidebar, AppSidebarTab } from 'nextcloud-vue'
 
@@ -60,7 +60,7 @@ export default {
 		AppSidebarTab,
 		SharingTabSidebard,
 		TagsTabSidebard,
-		DeletedTabSidebard,
+		DeletedTabSidebar,
 		TimelineTabSidebard
 	},
 	computed: {

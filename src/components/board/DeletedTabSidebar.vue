@@ -2,11 +2,12 @@
 	<div>
 
 		<h3>{{ t('deck', 'Deleted stacks') }}</h3>
+
 		<ul>
 			<li v-for="deletedStack in deletedStacks" :key="deletedStack.id">
+
 				<span class="icon icon-deck" />
 				<span class="title">{{ deletedStack.title }}</span>
-				<span class="live-relative-timestamp" />
 				<button
 					:title="t('settings', 'Undo')"
 					class="app-navigation-entry-deleted-button icon-history"
@@ -43,7 +44,7 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-	name: 'DeletedTabSidebard',
+	name: 'DeletedTabSidebar',
 	components: {
 
 	},
@@ -63,8 +64,7 @@ export default {
 	computed: {
 		...mapState({
 			deletedStacks: state => state.stack.deletedStacks,
-			deletedCards: state => state.stack.deletedCards,
-			currentBoard: state => state.currentBoard
+			deletedCards: state => state.stack.deletedCards
 		})
 
 	},
@@ -74,7 +74,7 @@ export default {
 	methods: {
 		getData() {
 			this.isLoading = true
-			this.$store.dispatch('deletedItems', this.currentBoard.id).then(response => {
+			this.$store.dispatch('deletedItems', this.board.id).then(response => {
 				this.isLoading = false
 			})
 		},

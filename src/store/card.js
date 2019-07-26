@@ -62,11 +62,20 @@ export default {
 				state.cards[existingIndex].title = card.title
 			}
 		},
-		assignCardToUser(state, card) {
-			// let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
-			/* if (existingIndex !== -1) {
-
-			} */
+		assignCardToUser(state, user) {
+			let existingIndex = state.cards.findIndex(_card => _card.id === user.cardId)
+			if (existingIndex !== -1) {
+				state.cards[existingIndex].assignedUsers.push(user)
+			}
+		},
+		removeUserFromCard(state, user) {
+			let existingIndex = state.cards.findIndex(_card => _card.id === user.cardId)
+			if (existingIndex !== -1) {
+				let foundIndex = state.cards[existingIndex].assignedUsers.findIndex(_user => _user.id === user.id)
+				if (foundIndex !== -1) {
+					state.cards[existingIndex].assignedUsers.splice(foundIndex, 1)
+				}
+			}
 		},
 		updateCardDesc(state, card) {
 			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
@@ -120,8 +129,14 @@ export default {
 		},
 		assignCardToUser({ commit }, card) {
 			apiClient.assignUser(card)
-				.then(() => {
-					commit('assignCardToUser')
+				.then((user) => {
+					commit('assignCardToUser', user)
+				})
+		},
+		removeUserFromCard({ commit }, card) {
+			apiClient.removeUser(card)
+				.then((user) => {
+					commit('removeUserFromCard', user)
 				})
 		},
 		addLabel({ commit }, data) {

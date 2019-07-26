@@ -54,6 +54,7 @@ export default new Vuex.Store({
 		currentCard: null,
 		boards: [],
 		sharees: [],
+		assignableUsers: [],
 		boardFilter: BOARD_FILTERS.ALL
 	},
 	getters: {
@@ -139,6 +140,9 @@ export default new Vuex.Store({
 		setSharees(state, shareesUsersAndGroups) {
 			state.sharees = shareesUsersAndGroups.users
 			state.sharees.push(...shareesUsersAndGroups.groups)
+		},
+		setAssignableUsers(state, users) {
+			state.assignableUsers = users
 		},
 		setBoardFilter(state, filter) {
 			state.boardFilter = filter
@@ -265,6 +269,7 @@ export default new Vuex.Store({
 				commit('setSharees', response.data.ocs.data)
 			})
 		},
+
 		setBoardFilter({ commmit }, filter) {
 			commmit('setBoardFilter', filter)
 		},
@@ -279,6 +284,9 @@ export default new Vuex.Store({
 		},
 		setCurrentBoard({ commit }, board) {
 			commit('setCurrentBoard', board)
+		},
+		setAssignableUsers({ commit }, board) {
+			commit('setAssignableUsers', board)
 		},
 		setCurrentCard({ commit }, card) {
 			commit('setCurrentCard', card)

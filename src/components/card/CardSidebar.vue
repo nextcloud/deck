@@ -38,31 +38,32 @@
 			</multiselect>
 
 			<p>Assign to user</p>
-			{{ unallocatedSharees }}
-			<hr>
-			{{ addAclToCard }}
-			<multiselect v-model="addAclToCard" :multiple="true" :options="unallocatedSharees"
-				label="participant"
-				track-by="shareWith"
-				@select="assignUserToCard" @remove="removeUserFromCard" @search-change="asyncFind">
+			assignd:
+			{{ copiedCard.assignedUsers }}
+			<multiselect v-model="assignedUsers" :multiple="true" :options="assignableUsers"
+				label="displayname"
+				track-by="primaryKey"
+				@select="assignUserToCard" @remove="removeUserFromCard">
 				<template #option="scope">
-					{{ scope.option.label }}
+					{{ scope.option.displayname }}
 				</template>
 			</multiselect>
 
 			<p>Due to</p>
+
 			<DatetimePicker v-model="copiedCard.duedate" type="datetime" lang="en"
 				format="YYYY-MM-DD HH:mm" confirm @change="setDue()" />
-
+			<button v-tooltip="t('deck', 'Delete')" v-if="copiedCard.duedate" class="icon-delete"
+				@click="removeDue()" />
 			<hr>
 			<p>{{ subtitle }}</p>
 
 		</AppSidebarTab>
 		<AppSidebarTab name="Description" icon="icon-description">
-			<textarea v-model="copiedCard.description" type="text" autofocus />
-			<input type="button" class="icon-confirm" @click="saveDesc()">
+			<!-- <textarea v-model="copiedCard.description" type="text" autofocus />
+			<input type="button" class="icon-confirm" @click="saveDesc()"> -->
 
-			<markdown-editor ref="markdownEditor" v-model="desc" :configs="{autosave: {enabled: true, uniqueId: 'unique'}}" />
+			<markdown-editor ref="markdownEditor" v-model="desc" :configs="{autofocus: true, autosave: {enabled: true, uniqueId: 'unique'}, toolbar: false}" />
 		</AppSidebarTab>
 		<AppSidebarTab name="Attachments" icon="icon-files-dark">
 			{{ currentCard.attachments }}
@@ -89,7 +90,7 @@ export default {
 	},
 	data() {
 		return {
-			addAclToCard: null,
+			assignedUsers: null,
 			addedLabelToCard: null,
 			isLoading: false,
 			copiedCard: null,
@@ -101,23 +102,13 @@ export default {
 		...mapState({
 			currentCard: state => state.currentCard,
 			currentBoard: state => state.currentBoard,
-			sharees: 'sharees'
+			assignableUsers: state => state.assignableUsers
 		}),
 		subtitle() {
 			let lastModified = this.currentCard.lastModified
 			let createdAt = this.currentCard.createdAt
 
 			return t('deck', 'Modified') + ': ' + lastModified + ' ' + t('deck', 'Created') + ': ' + createdAt
-		},
-		unallocatedSharees() {
-
-			return this.sharees
-
-			/* return this.sharees.filter((sharee) => {
-				return Object.values(this.board.acl).findIndex((acl) => {
-					return acl.participant.uid === sharee.value.shareWith
-				})
-			}) */
 		},
 		toolbarActions() {
 			return [
@@ -142,30 +133,24 @@ export default {
 		currentCard() {
 			this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
 			this.allLabels = this.currentCard.labels
-			this.addAclToCard = this.currentCard.assignedUsers
+			this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
 			this.desc = this.currentCard.description
 		},
 		desc() {
-			this.$store.dispatch('updateCardDesc', this.desc)
+			this.copiedCard.description = this.desc
+			this.saveDesc()
 		}
-	},
-	created() {
-
 	},
 	methods: {
 		setDue() {
 			this.$store.dispatch('updateCardDue', this.copiedCard)
 		},
-
+		removeDue() {
+			this.copiedCard.duedate = null
+			this.$store.dispatch('updateCardDue', this.copiedCard)
+		},
 		saveDesc() {
 			this.$store.dispatch('updateCardDesc', this.copiedCard)
-		},
-
-		asyncFind(query) {
-			this.isLoading = true
-			this.$store.dispatch('loadSharees').then(response => {
-				this.isLoading = false
-			})
 		},
 
 		closeSidebar() {
@@ -173,21 +158,13 @@ export default {
 		},
 
 		assignUserToCard(user) {
-			// this.copiedCard.assignedUsers.push(user)
-			this.copiedCard.newUserUid = user.value.shareWith
+			this.copiedCard.newUserUid = user.uid
 			this.$store.dispatch('assignCardToUser', this.copiedCard)
-			/* this.addAclForAPI = {
-				type: 0,
-				participant: this.addAcl.value.shareWith,
-				permissionEdit: false,
-				permissionShare: false,
-				permissionManage: false
-			}
-			this.$store.dispatch('addAclToCurrentBoard', this.addAclForAPI) */
 		},
 
 		removeUserFromCard(user) {
-
+			this.copiedCard.removeUserUid = user.uid
+			this.$store.dispatch('removeUserFromCard', this.copiedCard)
 		},
 
 		addLabelToCard(newLabel) {

@@ -29,7 +29,7 @@
 		<div v-if="card.duedate" :class="dueIcon">
 			<span>{{ dueTimeDiff }}</span>
 		</div>
-		<div v-if="true" class="card-tasks icon icon-checkmark">
+		<div v-if="card.description && card.description.match(/\[\s*\]/g)" class="card-tasks icon icon-checkmark">
 			<span>0/0</span>
 		</div>
 		<div v-if="card.assignedUsers" class="card-assigned-users">
