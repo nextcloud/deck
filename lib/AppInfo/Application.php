@@ -141,12 +141,7 @@ class Application extends App {
 
 	public function registerNotifications() {
 		$notificationManager = \OC::$server->getNotificationManager();
-		$self = &$this;
-		$notificationManager->registerNotifier(function() use (&$self) {
-			return $self->getContainer()->query(Notifier::class);
-		}, function() {
-			return ['id' => 'deck', 'name' => 'Deck'];
-		});
+		$notificationManager->registerNotifierService(Notifier::class);
 	}
 
 	/**
