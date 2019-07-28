@@ -55,7 +55,7 @@ kind: pipeline
 name: unit-php7.1
 steps:
   - name: php7.1
-    image: nextcloudci/php7.1:php7.1-15
+    image: nextcloudci/php7.1:php7.1-16
     environment:
       APP_NAME: deck
       CORE_BRANCH: master
