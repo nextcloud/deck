@@ -1,7 +1,7 @@
 OC.L10N.register(
     "deck",
     {
-    "Please provide a content for your comment." : "Si us plau, proporcioneu un contingut per al vostre comentari.",
+    "Please provide a content for your comment." : "Proporcioneu un contingut per al vostre comentari.",
     "Posting the comment failed." : "No s'ha pogut publicar el comentari.",
     "The comment has been deleted" : "S'ha suprimit el comentari",
     "The associated stack is deleted as well, it will be restored as well." : "La pila associada també se suprimeix, també es restaurarà.",
