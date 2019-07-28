@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.6.5 - 2019-07-28
+
+### Fixed
+- Fix attachment upload/delete failures
+- Bump dependencies
+
 ## 0.6.4 - 2019-06-30
 
 ### Fixed
