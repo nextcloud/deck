@@ -189,7 +189,7 @@ OC.L10N.register(
     "Attachments" : "Viðhengi",
     "Saved" : "Vistað",
     "Unsaved changes" : "Óvistaðar breytingar",
-    "Insert attachment" : "Setja inn Viðhengi",
+    "Insert attachment" : "Setja inn viðhengi",
     "Formatting help" : "Hjálp við að sníða",
     "Upload attachment" : "Senda inn viðhengi",
     "Add a card description…" : "Settu inn lýsingu á spjaldi ...",
