@@ -82,7 +82,7 @@
     "The card \"%s\" on \"%s\" has reached its due date." : "\"%s\"のカード \"%s\"は期日に達しました。",
     "%s has mentioned you in a comment on \"%s\"." : "%sさんは \"%s\"へのコメントであなたについて言及しました。",
     "{user} has mentioned you in a comment on \"%s\"." : "{user} は \"%s\"へのコメントであなたについて言及しました。",
-    "The board \"%s\" has been shared with you by %s." : "ボード「%s」は、%sによってあなたと共有されています。",
+    "The board \"%s\" has been shared with you by %s." : "\"%s\" ボードは、%s からあなたに共有されています。",
     "{user} has shared the board %s with you." : "{user}があなたとボード%sを共有しました。",
     "No data was provided to create an attachment." : "添付ファイルを作成するためのデータは提供されていません。",
     "Finished" : "完了",
