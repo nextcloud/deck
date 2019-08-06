@@ -42,7 +42,7 @@
     "{user} has added a description to card {card} in stack {stack} on board {board}" : "{user}がボード{board}のスタック{stack}のカード{card}に説明を追加しました",
     "You have updated the description of card {card} in stack {stack} on board {board}" : "ボード{board}のスタック{stack}のカード{card}の説明を更新しました",
     "{user} has updated the description of the card {card} in stack {stack} on board {board}" : "{user}はボード{board}のスタック{stack}のカード{card}の説明を更新しました",
-    "You have archived card {card} in stack {stack} on board {board}" : "ボード {board}上のスタック {stack}にあるカード {card} を保存しました",
+    "You have archived card {card} in stack {stack} on board {board}" : "ボード {board}上のスタック {stack}にあるカード {card} をアーカイブしました",
     "{user} has archived card {card} in stack {stack} on board {board}" : "{user}がボード{board}のスタック{stack}にカード{card}をアーカイブしました",
     "You have unarchived card {card} in stack {stack} on board {board}" : "ボード{board}のスタック{stack}に未アーカイブのカード{card}があります",
     "{user} has unarchived card {card} in stack {stack} on board {board}" : "{user}がボード{board}のスタック{stack}にアーカイブされていないカード{card}があります",
