@@ -154,7 +154,7 @@ export default {
 		cardUndoDelete({ commit }, card) {
 			apiClient.updateCard(card)
 				.then((card) => {
-					commit('updateCard', card)
+					commit('addCard', card)
 				})
 		},
 		updateCardDesc({ commit }, card) {

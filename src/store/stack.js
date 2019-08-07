@@ -70,12 +70,12 @@ export default {
 		setDeletedStacks(state, delStacks) {
 			state.deletedStacks = []
 			if (delStacks.length > 0) {
-				state.deletedStacks.push(delStacks[0])
+				state.deletedStacks = delStacks
 			}
 		},
 		setDeletedCards(state, delCards) {
 			state.deletedCards = []
-			state.deletedCards.push(delCards)
+			state.deletedCards = delCards
 		}
 	},
 	actions: {

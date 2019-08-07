@@ -2,7 +2,6 @@
 	<div>
 
 		<h3>{{ t('deck', 'Deleted stacks') }}</h3>
-
 		<ul>
 			<li v-for="deletedStack in deletedStacks" :key="deletedStack.id">
 
@@ -26,7 +25,7 @@
 				<button
 					:title="t('settings', 'Undo')"
 					class="app-navigation-entry-deleted-button icon-history"
-					@click="cardUndoDelete(deletedCards)" />
+					@click="cardUndoDelete(deletedCard)" />
 			</li>
 
 			<!-- <li ng-repeat="deletedCard in cardservice.deleted">
@@ -82,11 +81,13 @@ export default {
 			this.copiedDeletedStack = Object.assign({}, deletedStack)
 			this.copiedDeletedStack.deletedAt = 0
 			this.$store.dispatch('stackUndoDelete', this.copiedDeletedStack)
+			this.getData()
 		},
 		cardUndoDelete(deletedCard) {
 			this.copiedDeletedCard = Object.assign({}, deletedCard)
 			this.copiedDeletedCard.deletedAt = 0
 			this.$store.dispatch('cardUndoDelete', this.copiedDeletedCard)
+			this.getData()
 		}
 	}
 }
