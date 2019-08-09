@@ -120,11 +120,11 @@
     "Archived cards" : "カードをアーカイブ",
     "Actions" : "アクション",
     "Drop your files here to upload it to the card" : "ファイルをここにドロップしてカードをアップロードします",
-    "Assign card to me" : "私にカードを割り当てる",
+    "Assign card to me" : "カードを自分に割り当てる",
     "Unassign card from me" : "カードの割り当てを解除する",
     "Archive card" : "カードをアーカイブ",
     "Unarchive card" : "カードのアーカイブを解除する",
-    "Delete card" : "削除済みのカード",
+    "Delete card" : "カードを削除する",
     "Enter a card title" : "カードのタイトルを入力してください",
     "Add card" : "カードを追加",
     "Close" : "閉じる",
@@ -181,7 +181,7 @@
     "Choose a user to assign" : "割り当てるユーザーを選択する",
     "Assign this card to a user" : "このカードをユーザーに割り当てる",
     "Due date" : "期限",
-    "Click to set" : "クリックして設定する",
+    "Click to set" : "時刻設定",
     "Remove due date" : "期限を削除",
     "Description" : "説明",
     "Attachments" : "添付ファイル",
@@ -195,7 +195,7 @@
     "Move board to archive" : "ボードをアーカイブに移動する",
     "Create a new board" : "新しいボードを作成",
     "Settings" : "設定",
-    "Limit deck to groups" : "デッキをグループに制限する",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limiting Deckは、グループに属していないユーザーが自分のボードを作成することをブロックします。 ユーザーは共有されているボードでのみ作業することができます。"
+    "Limit deck to groups" : "デッキ作成制限",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "デッキ作成制限は、設定したグループに非所属のユーザーがボードを作成できないようにします。非所属ユーザーは共有されているボードでのみ作業できます。"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
