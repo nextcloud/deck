@@ -32,7 +32,7 @@
 			</div>
 		</div>
 		<div v-if="board" class="crumb svg">
-			<div class="board-bullet" />
+			<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
 			<a href="#">{{ board.title }}</a>
 			<router-link :to="{name: 'board.details'}" class="icon-shared" />
 		</div>
