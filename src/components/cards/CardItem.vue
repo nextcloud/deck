@@ -30,7 +30,14 @@
 					<input v-model="copiedCard.title" type="text" autofocus>
 					<input type="button" class="icon-confirm" @click="finishedEdit(card)">
 				</form>
-				<action v-if="!editing" :actions="visibilityPopover" @click.stop="" />
+
+				<Actions>
+					<ActionButton icon="icon-archive-dark" @click="assignCardToMe()">{{ t('deck', 'Assign to me') }}</ActionButton>
+					<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">{{ t('deck', (showArchived ? 'Unarchive card' : 'Archive card')) }}</ActionButton>
+					<ActionButton icon="icon-delete" @click="deleteCard()">{{ t('deck', 'Delete card') }}</ActionButton>
+					<ActionButton icon="icon-settings-dark" @click="setCurrentCard()">{{ t('deck', 'Card details') }}</ActionButton>
+				</Actions>
+
 			</transition>
 		</div>
 		<ul class="labels">
@@ -43,7 +50,9 @@
 </template>
 
 <script>
-import { PopoverMenu, Action } from 'nextcloud-vue'
+import { PopoverMenu } from 'nextcloud-vue'
+import { Actions } from 'nextcloud-vue/dist/Components/Actions'
+import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
 import ClickOutside from 'vue-click-outside'
 import { mapState } from 'vuex'
 
@@ -53,7 +62,7 @@ import Color from '../../mixins/color'
 
 export default {
 	name: 'CardItem',
-	components: { PopoverMenu, CardBadges, LabelTag, Action },
+	components: { PopoverMenu, CardBadges, LabelTag, Actions, ActionButton },
 	directives: {
 		ClickOutside
 	},
@@ -89,38 +98,6 @@ export default {
 					color: this.textColor(label.color)
 				}
 			}
-		},
-		visibilityPopover() {
-			return [
-				{
-					action: () => {
-						this.assignCardToMe()
-					},
-					icon: 'icon-archive-dark',
-					text: t('deck', 'Assign to me')
-				},
-				{
-					action: () => {
-						this.archiveUnarchiveCard()
-					},
-					icon: 'icon-archive',
-					text: t('deck', (this.showArchived ? 'Unarchive card' : 'Archive card'))
-				},
-				{
-					action: () => {
-						this.deleteCard()
-					},
-					icon: 'icon-delete',
-					text: t('deck', 'Delete card')
-				},
-				{
-					action: () => {
-						this.setCurrentCard()
-					},
-					icon: 'icon-settings-dark',
-					text: t('deck', 'Card details')
-				}
-			]
 		}
 	},
 	methods: {

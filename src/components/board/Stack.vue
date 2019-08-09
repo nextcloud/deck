@@ -23,7 +23,6 @@
 
 <template>
 	<div>
-		order: {{ stack.order }}
 		<h3 v-if="!editing" @click="startEditing(stack)">{{ stack.title }}
 			<button v-tooltip="t('deck', 'Delete')" class="icon-delete"
 				@click="deleteStack(stack)" />

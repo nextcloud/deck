@@ -27,6 +27,18 @@
 		<a href="#">
 			{{ board.title }}
 		</a>
+
+		<span v-if="actions.length > 0">
+
+			<template v-if="board.acl.length === 0">
+				<button class="icon-shared" style="opacity: 0.3" @click="showSidebar" />
+			</template>
+
+			<template v-else>
+				<button class="icon-shared" @click="showSidebar" />
+			</template>
+
+		</span>
 		<div v-if="actions.length > 0" class="app-navigation-entry-utils">
 			<ul>
 				<li class="app-navigation-entry-utils-menu-button">
@@ -212,6 +224,11 @@ export default {
 		},
 		cancelEdit(e) {
 			this.editing = false
+		},
+		showSidebar() {
+			const route = this.routeTo
+			route.name = 'board.details'
+			this.$router.push(route)
 		}
 	},
 	inject: [

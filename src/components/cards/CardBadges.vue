@@ -33,7 +33,7 @@
 			<span>0/0</span>
 		</div>
 		<div v-if="card.assignedUsers" class="card-assigned-users">
-			<avatar v-for="user in card.assignedUsers" :key="user.id" user="user.participant.primaryKey" />
+			<avatar v-for="user in card.assignedUsers" :key="user.id" :user="user.participant.primaryKey" />
 		</div>
 	</div>
 </template>

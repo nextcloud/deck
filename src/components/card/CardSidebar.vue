@@ -38,8 +38,6 @@
 			</multiselect>
 
 			<p>Assign to user</p>
-			assignd:
-			{{ copiedCard.assignedUsers }}
 			<multiselect v-model="assignedUsers" :multiple="true" :options="assignableUsers"
 				label="displayname"
 				track-by="primaryKey"
@@ -67,6 +65,9 @@
 		</AppSidebarTab>
 		<AppSidebarTab name="Attachments" icon="icon-files-dark">
 			{{ currentCard.attachments }}
+			<button class="icon-upload" @click="clickAddNewAttachmment()">
+				{{ t('deck', 'Upload attachment') }}
+			</button>
 		</AppSidebarTab>
 		<AppSidebarTab name="Timeline" icon="icon-activity">
 			this is the activity tab
@@ -190,7 +191,11 @@ export default {
 				labelId: removedLabel.id
 			}
 			this.$store.dispatch('removeLabel', data)
+		},
+		clickAddNewAttachmment() {
+
 		}
+
 	}
 }
 </script>
