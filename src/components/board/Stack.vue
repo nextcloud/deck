@@ -22,20 +22,19 @@
   -->
 
 <template>
-	<div>
-		<h3 v-if="!editing" @click="startEditing(stack)">{{ stack.title }}
-			<button v-tooltip="t('deck', 'Delete')" class="icon-delete"
-				@click="deleteStack(stack)" />
-		</h3>
-
-		<transition name="fade" mode="out-in">
-			<div id="card-add">
-				<form v-if="editing">
+	<div class="stack">
+		<div class="stack--header">
+			<transition name="fade" mode="out-in">
+				<h3 v-if="!editing" @click="startEditing(stack)">{{ stack.title }}</h3>
+				<form v-else>
 					<input v-model="copiedStack.title" type="text" autofocus>
 					<input type="button" class="icon-confirm" @click="finishedEdit(stack)">
 				</form>
-			</div>
-		</transition>
+			</transition>
+			<Actions>
+				<ActionButton icon="icon-delete" @click="deleteStack(stack)">{{ t('deck', 'Delete stack') }}</ActionButton>
+			</Actions>
+		</div>
 
 		<!-- <container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)"> -->
 		<container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="onDropCard">
@@ -44,16 +43,13 @@
 			</draggable>
 		</container>
 
-		<div id="card-add">
-			<form>
-				<label for="new-stack-input-main" class="hidden-visually">Add a new card</label>
-				<input id="new-stack-input-main" v-model="newCardTitle" type="text"
-					class="no-close"
-					placeholder="Add a new card" @keyup.enter="clickAddCard()">
-				<input class="icon-confirm" type="button" title="Submit"
-					@click="clickAddCard()">
-			</form>
-		</div>
+		<form class="stack--card-add" @submit.prevent="clickAddCard()">
+			<label for="new-stack-input-main" class="hidden-visually">Add a new card</label>
+			<input id="new-stack-input-main" v-model="newCardTitle" type="text"
+				class="no-close"
+				placeholder="Add a new card">
+			<input class="icon-confirm" type="button" title="Submit">
+		</form>
 
 	</div>
 </template>
@@ -61,11 +57,14 @@
 <script>
 
 import { Container, Draggable } from 'vue-smooth-dnd'
+import { Actions, ActionButton } from 'nextcloud-vue'
 import CardItem from '../cards/CardItem'
 
 export default {
 	name: 'Stack',
 	components: {
+		Actions,
+		ActionButton,
 		CardItem,
 		Container,
 		Draggable
@@ -148,8 +147,25 @@ export default {
 		height: auto;
 	}
 
-	#card-add form {
+	.stack--header {
+		display: flex;
+
+		h3, form {
+			flex-grow: 1;
 			display: flex;
+
+			input[type=text] {
+				flex-grow: 1;
+			}
 		}
+	}
+
+	.stack--card-add {
+		display: flex;
+
+		input[type=text] {
+			flex-grow: 1;
+		}
+	}
 
 </style>
