@@ -6,7 +6,8 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, './js'),
 		publicPath: '/js/',
-		filename: 'deck.js'
+		filename: 'deck.js',
+		jsonpFunction: 'webpackJsonpOCADeck'
 	},
 	module: {
 		rules: [
