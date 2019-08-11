@@ -57,7 +57,8 @@
 <script>
 
 import { Container, Draggable } from 'vue-smooth-dnd'
-import { Actions, ActionButton } from 'nextcloud-vue'
+import { Actions } from 'nextcloud-vue/dist/Components/Actions'
+import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
 import CardItem from '../cards/CardItem'
 
 export default {
