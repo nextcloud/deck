@@ -13,6 +13,5 @@ tests/integration/vendor/
 tests/integration/composer.lock
 vendor/
 *.lock
-package-lock.json
 
 \.idea/
