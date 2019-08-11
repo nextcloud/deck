@@ -28,19 +28,13 @@
 			{{ board.title }}
 		</a>
 
-		<span v-if="actions.length > 0">
-
-			<template v-if="board.acl.length === 0">
-				<button class="icon-shared" style="opacity: 0.3" @click="showSidebar" />
-			</template>
-
-			<template v-else>
-				<button class="icon-shared" @click="showSidebar" />
-			</template>
-
-		</span>
 		<div v-if="actions.length > 0" class="app-navigation-entry-utils">
 			<ul>
+				<li class="app-navigation-entry-utils-menu-button">
+					<button v-if="board.acl.length === 0" class="icon-shared" style="opacity: 0.3"
+						@click="showSidebar" />
+					<button v-else class="icon-shared" @click="showSidebar" />
+				</li>
 				<li class="app-navigation-entry-utils-menu-button">
 					<button v-click-outside="hideMenu" @click="showMenu" />
 				</li>
