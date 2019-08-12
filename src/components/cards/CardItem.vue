@@ -22,7 +22,7 @@
 
 <template>
 	<div :class="{'compact': compactMode}" tag="div" class="card"
-		@click="openCard">
+		@click.self="openCard">
 		<div class="card-upper">
 			<h3 @click.stop="startEditing(card)">{{ card.title }}</h3>
 			<transition name="fade" mode="out-in">
@@ -31,8 +31,8 @@
 					<input type="button" class="icon-confirm" @click="finishedEdit(card)">
 				</form>
 
-				<Actions>
-					<ActionButton icon="icon-archive-dark" @click="assignCardToMe()">{{ t('deck', 'Assign to me') }}</ActionButton>
+				<Actions @click.stop.prevent>
+					<ActionButton icon="icon-user" @click="assignCardToMe()">{{ t('deck', 'Assign to me') }}</ActionButton>
 					<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">{{ t('deck', (showArchived ? 'Unarchive card' : 'Archive card')) }}</ActionButton>
 					<ActionButton icon="icon-delete" @click="deleteCard()">{{ t('deck', 'Delete card') }}</ActionButton>
 					<ActionButton icon="icon-settings-dark" @click="setCurrentCard()">{{ t('deck', 'Card details') }}</ActionButton>
@@ -40,10 +40,10 @@
 
 			</transition>
 		</div>
-		<ul class="labels">
+		<ul class="labels" @click="openCard">
 			<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)"><span>{{ label.title }}</span></li>
 		</ul>
-		<div v-show="!compactMode" class="card-controls compact-item">
+		<div v-show="!compactMode" @click="openCard" class="card-controls compact-item">
 			<card-badges :id="id" />
 		</div>
 	</div>
@@ -168,8 +168,9 @@ export default {
 				display: flex;
 				padding: 5px 7px;
 				position: absolute;
+				width: calc(100% - 14px);
 				input[type=text] {
-					width: 100%;
+					flex-grow: 1;
 				}
 
 			}
