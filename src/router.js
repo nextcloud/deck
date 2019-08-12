@@ -93,7 +93,7 @@ export default new Router({
 								id: parseInt(route.params.id, 10)
 							}
 						}
-					},
+					}
 				},
 				{
 					path: 'cards/:cardId',
@@ -107,7 +107,7 @@ export default new Router({
 								id: parseInt(route.params.cardId, 10)
 							}
 						}
-					},
+					}
 				}
 			]
 		}

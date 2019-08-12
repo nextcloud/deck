@@ -65,7 +65,8 @@ export default {
 	},
 	props: {
 		id: {
-			type: Number
+			type: Number,
+			required: true
 		}
 	},
 	computed: {

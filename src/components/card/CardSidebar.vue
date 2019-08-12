@@ -27,7 +27,7 @@
 		:subtitle="subtitle"
 		@close="closeSidebar">
 		<template #action />
-		<AppSidebarTab name="Details" icon="icon-home" :order="0">
+		<AppSidebarTab :order="0" name="Details" icon="icon-home">
 
 			<p>Tags</p>
 			<multiselect v-model="allLabels" :multiple="true" :options="currentBoard.labels"
@@ -57,13 +57,13 @@
 
 			<markdown-editor ref="markdownEditor" v-model="desc" :configs="{autofocus: true, autosave: {enabled: true, uniqueId: 'unique'}, toolbar: false}" />
 		</AppSidebarTab>
-		<AppSidebarTab name="Attachments" icon="icon-files-dark" :order="1">
+		<AppSidebarTab :order="1" name="Attachments" icon="icon-files-dark">
 			{{ currentCard.attachments }}
 			<button class="icon-upload" @click="clickAddNewAttachmment()">
 				{{ t('deck', 'Upload attachment') }}
 			</button>
 		</AppSidebarTab>
-		<AppSidebarTab name="Timeline" icon="icon-activity" :order="2">
+		<AppSidebarTab :order="2" name="Timeline" icon="icon-activity">
 			this is the activity tab
 		</AppSidebarTab>
 	</app-sidebar>
@@ -85,7 +85,8 @@ export default {
 	},
 	props: {
 		id: {
-			type: Number
+			type: Number,
+			required: true
 		}
 	},
 	data() {
@@ -135,7 +136,6 @@ export default {
 		'currentCard': {
 			immediate: true,
 			handler() {
-				console.log(this.currentCard)
 				this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
 				this.allLabels = this.currentCard.labels
 				this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)

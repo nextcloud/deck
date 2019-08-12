@@ -43,7 +43,7 @@
 		<ul class="labels" @click="openCard">
 			<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)"><span>{{ label.title }}</span></li>
 		</ul>
-		<div v-show="!compactMode" @click="openCard" class="card-controls compact-item">
+		<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
 			<card-badges :id="id" />
 		</div>
 	</div>
