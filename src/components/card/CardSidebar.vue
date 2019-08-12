@@ -24,9 +24,10 @@
 	<app-sidebar v-if="currentCard !== null && copiedCard !== null"
 		:actions="toolbarActions"
 		:title="currentCard.title"
+		:subtitle="subtitle"
 		@close="closeSidebar">
 		<template #action />
-		<AppSidebarTab name="Details" icon="icon-home">
+		<AppSidebarTab name="Details" icon="icon-home" :order="0">
 
 			<p>Tags</p>
 			<multiselect v-model="allLabels" :multiple="true" :options="currentBoard.labels"
@@ -53,23 +54,16 @@
 				format="YYYY-MM-DD HH:mm" confirm @change="setDue()" />
 			<button v-tooltip="t('deck', 'Delete')" v-if="copiedCard.duedate" class="icon-delete"
 				@click="removeDue()" />
-			<hr>
-			<p>{{ subtitle }}</p>
-
-		</AppSidebarTab>
-		<AppSidebarTab name="Description" icon="icon-description">
-			<!-- <textarea v-model="copiedCard.description" type="text" autofocus />
-			<input type="button" class="icon-confirm" @click="saveDesc()"> -->
 
 			<markdown-editor ref="markdownEditor" v-model="desc" :configs="{autofocus: true, autosave: {enabled: true, uniqueId: 'unique'}, toolbar: false}" />
 		</AppSidebarTab>
-		<AppSidebarTab name="Attachments" icon="icon-files-dark">
+		<AppSidebarTab name="Attachments" icon="icon-files-dark" :order="1">
 			{{ currentCard.attachments }}
 			<button class="icon-upload" @click="clickAddNewAttachmment()">
 				{{ t('deck', 'Upload attachment') }}
 			</button>
 		</AppSidebarTab>
-		<AppSidebarTab name="Timeline" icon="icon-activity">
+		<AppSidebarTab name="Timeline" icon="icon-activity" :order="2">
 			this is the activity tab
 		</AppSidebarTab>
 	</app-sidebar>
