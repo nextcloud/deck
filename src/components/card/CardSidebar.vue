@@ -206,5 +206,9 @@ export default {
 </script>
 
 <style>
- @import "~easymde/dist/easymde.min.css";
+	@import "~easymde/dist/easymde.min.css";
+	.editor-preview,
+	.editor-statusbar {
+		display: none;
+	}
 </style>

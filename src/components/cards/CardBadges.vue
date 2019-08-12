@@ -22,16 +22,19 @@
 
 <template>
 	<div class="badges">
-		<div v-if="card.attechments" class="card-files icon icon-files-dark" />
-		<div v-if="card.description" class="card-comments icon icon-comment" />
+		<div v-if="card.attachments" class="card-files icon icon-files-dark" />
 
-		<!-- <div v-if="card.duedate" :class="{'icon-calendar': true, 'icon-calendar-dark': false}" class="due icon now"> -->
+		<div v-if="card.description" class="card-comments icon icon-filetype-text" />
+
 		<div v-if="card.duedate" :class="dueIcon">
 			<span>{{ dueTimeDiff }}</span>
 		</div>
+
 		<div v-if="card.description && card.description.match(/\[\s*\]/g)" class="card-tasks icon icon-checkmark">
+			<!-- TODO: get checkbox values -->
 			<span>0/0</span>
 		</div>
+
 		<div v-if="card.assignedUsers" class="card-assigned-users">
 			<avatar v-for="user in card.assignedUsers" :key="user.id" :user="user.participant.primaryKey" />
 		</div>
