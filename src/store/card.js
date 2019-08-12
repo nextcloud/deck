@@ -20,7 +20,10 @@
  *
  */
 
+import { CardApi } from './../services/CardApi'
 import Vue from 'vue'
+
+const apiClient = new CardApi()
 
 export default {
 	state: {
@@ -35,6 +38,9 @@ export default {
 		}
 	},
 	mutations: {
+		clearCards(state) {
+			state.cards = []
+		},
 		addCard(state, card) {
 			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
@@ -43,8 +49,125 @@ export default {
 			} else {
 				state.cards.push(card)
 			}
+		},
+		deleteCard(state, card) {
+			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			if (existingIndex !== -1) {
+				state.cards.splice(existingIndex, 1)
+			}
+		},
+		updateTitle(state, card) {
+			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			if (existingIndex !== -1) {
+				state.cards[existingIndex].title = card.title
+			}
+		},
+		assignCardToUser(state, user) {
+			let existingIndex = state.cards.findIndex(_card => _card.id === user.cardId)
+			if (existingIndex !== -1) {
+				state.cards[existingIndex].assignedUsers.push(user)
+			}
+		},
+		removeUserFromCard(state, user) {
+			let existingIndex = state.cards.findIndex(_card => _card.id === user.cardId)
+			if (existingIndex !== -1) {
+				let foundIndex = state.cards[existingIndex].assignedUsers.findIndex(_user => _user.id === user.id)
+				if (foundIndex !== -1) {
+					state.cards[existingIndex].assignedUsers.splice(foundIndex, 1)
+				}
+			}
+		},
+		updateCardDesc(state, card) {
+			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			if (existingIndex !== -1) {
+				state.cards[existingIndex].description = card.description
+			}
+		},
+		updateCardDue(state, card) {
+			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			if (existingIndex !== -1) {
+				state.cards[existingIndex].duedate = card.duedate
+			}
+		},
+		updateCardLabels(state, card) {
+			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			if (existingIndex !== -1) {
+				let existingCard = state.cards.find(_card => _card.id === card.id)
+				existingCard.labels = card.labels
+			}
 		}
 	},
 	actions: {
+		addCard({ commit }, card) {
+			apiClient.addCard(card)
+				.then((createdCard) => {
+					commit('addCard', createdCard)
+				})
+		},
+		updateCard({ commit }, card) {
+			apiClient.updateCard(card)
+				.then((updatedCard) => {
+					commit('updateTitle', updatedCard)
+				})
+		},
+		deleteCard({ commit }, card) {
+			apiClient.deleteCard(card.id)
+				.then((card) => {
+					commit('deleteCard', card)
+				})
+		},
+		archiveUnarchiveCard({ commit }, card) {
+			let call = 'archiveCard'
+			if (card.archived === false) {
+				call = 'unArchiveCard'
+			}
+
+			apiClient[call](card)
+				.then((card) => {
+					commit('deleteCard', card)
+				})
+		},
+		assignCardToUser({ commit }, card) {
+			apiClient.assignUser(card)
+				.then((user) => {
+					commit('assignCardToUser', user)
+				})
+		},
+		removeUserFromCard({ commit }, card) {
+			apiClient.removeUser(card)
+				.then((user) => {
+					commit('removeUserFromCard', user)
+				})
+		},
+		addLabel({ commit }, data) {
+			apiClient.assignLabelToCard(data)
+				.then(() => {
+					commit('updateCardLabels', data.card)
+				})
+		},
+		removeLabel({ commit }, data) {
+			apiClient.removeLabelFromCard(data)
+				.then(() => {
+					commit('updateCardLabels', data.card)
+				})
+		},
+		cardUndoDelete({ commit }, card) {
+			apiClient.updateCard(card)
+				.then((card) => {
+					commit('addCard', card)
+				})
+		},
+		updateCardDesc({ commit }, card) {
+			apiClient.updateCard(card)
+				.then((updatedCard) => {
+					commit('updateCardDesc', updatedCard)
+				})
+		},
+		updateCardDue({ commit }, card) {
+			apiClient.updateCard(card)
+				.then((card) => {
+					commit('updateCardDue', card)
+				})
+		}
 	}
 }

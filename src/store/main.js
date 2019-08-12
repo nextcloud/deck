@@ -46,12 +46,15 @@ export default new Vuex.Store({
 	},
 	strict: debug,
 	state: {
+		showArchived: false,
 		navShown: true,
 		compactMode: false,
 		sidebarShown: false,
 		currentBoard: null,
+		currentCard: null,
 		boards: [],
 		sharees: [],
+		assignableUsers: [],
 		boardFilter: BOARD_FILTERS.ALL
 	},
 	getters: {
@@ -90,6 +93,9 @@ export default new Vuex.Store({
 		}
 	},
 	mutations: {
+		toggleShowArchived(state) {
+			state.showArchived = !state.showArchived
+		},
 		/**
 		 * Adds or replaces a board in the store.
 		 * Matches a board by it's id.
@@ -131,14 +137,21 @@ export default new Vuex.Store({
 		setBoards(state, boards) {
 			state.boards = boards
 		},
-		setSharees(state, sharees) {
-			state.sharees = sharees
+		setSharees(state, shareesUsersAndGroups) {
+			state.sharees = shareesUsersAndGroups.users
+			state.sharees.push(...shareesUsersAndGroups.groups)
+		},
+		setAssignableUsers(state, users) {
+			state.assignableUsers = users
 		},
 		setBoardFilter(state, filter) {
 			state.boardFilter = filter
 		},
 		setCurrentBoard(state, board) {
 			state.currentBoard = board
+		},
+		setCurrentCard(state, card) {
+			state.currentCard = card
 		},
 
 		// label mutators
@@ -166,8 +179,8 @@ export default new Vuex.Store({
 		},
 
 		// acl mutators
-		addAclToCurrentBoard(state, acl) {
-			console.log(state.currentBoard)
+		addAclToCurrentBoard(state, createdAcl) {
+			Vue.set(state.currentBoard.acl, createdAcl.id, createdAcl)
 		},
 		updateAclFromCurrentBoard(state, acl) {
 			for (var acl_ in state.currentBoard.acl) {
@@ -178,15 +191,24 @@ export default new Vuex.Store({
 			}
 		},
 		deleteAclFromCurrentBoard(state, acl) {
-			for (var acl_ in state.currentBoard.acl) {
-				if (state.currentBoard.acl[acl_].participant.uid === acl.participant.uid) {
-					delete state.currentBoard.acl[acl_]
+			let removeIndex = -1
+			for (var index in state.currentBoard.acl) {
+				var attr = state.currentBoard.acl[index]
+				if (acl.id === attr.id) {
+					removeIndex = index
 					break
 				}
+			}
+
+			if (removeIndex > -1) {
+				Vue.delete(state.currentBoard.acl, removeIndex)
 			}
 		}
 	},
 	actions: {
+		toggleShowArchived({ commit }) {
+			commit('toggleShowArchived')
+		},
 		/**
 		 * @param commit
 		 * @param state
@@ -244,9 +266,10 @@ export default new Vuex.Store({
 			params.append('itemType', 0)
 			params.append('itemType', 1)
 			axios.get(OC.linkToOCS('apps/files_sharing/api/v1') + 'sharees', { params }).then((response) => {
-				commit('setSharees', response.data.ocs.data.users)
+				commit('setSharees', response.data.ocs.data)
 			})
 		},
+
 		setBoardFilter({ commmit }, filter) {
 			commmit('setBoardFilter', filter)
 		},
@@ -261,6 +284,12 @@ export default new Vuex.Store({
 		},
 		setCurrentBoard({ commit }, board) {
 			commit('setCurrentBoard', board)
+		},
+		setAssignableUsers({ commit }, board) {
+			commit('setAssignableUsers', board)
+		},
+		setCurrentCard({ commit }, card) {
+			commit('setCurrentCard', card)
 		},
 
 		// label actions
@@ -285,11 +314,11 @@ export default new Vuex.Store({
 		},
 
 		// acl actions
-		addAclToCurrentBoard({ commit }, acl) {
-			acl.boardId = this.state.currentBoard.id
-			apiClient.addAcl(acl)
-				.then((acl) => {
-					commit('addAclToCurrentBoard', acl)
+		addAclToCurrentBoard({ commit }, newAcl) {
+			newAcl.boardId = this.state.currentBoard.id
+			apiClient.addAcl(newAcl)
+				.then((returnAcl) => {
+					commit('addAclToCurrentBoard', returnAcl)
 				})
 		},
 		updateAclFromCurrentBoard({ commit }, acl) {

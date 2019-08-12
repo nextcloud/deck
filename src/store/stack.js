@@ -28,7 +28,9 @@ const apiClient = new StackApi()
 
 export default {
 	state: {
-		stacks: []
+		stacks: [],
+		deletedStacks: [],
+		deletedCards: []
 	},
 	getters: {
 		stacksByBoard: state => (id) => {
@@ -51,6 +53,29 @@ export default {
 			for (let i = 0; i < newOrder.length; i++) {
 				newOrder[i].order = parseInt(i)
 			}
+		},
+		deleteStack(state, stack) {
+
+			let existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
+			if (existingIndex !== -1) {
+				state.stacks.splice(existingIndex, 1)
+			}
+		},
+		updateStack(state, stack) {
+			let existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
+			if (existingIndex !== -1) {
+				state.stacks[existingIndex].title = stack.title
+			}
+		},
+		setDeletedStacks(state, delStacks) {
+			state.deletedStacks = []
+			if (delStacks.length > 0) {
+				state.deletedStacks = delStacks
+			}
+		},
+		setDeletedCards(state, delCards) {
+			state.deletedCards = []
+			state.deletedCards = delCards
 		}
 	},
 	actions: {
@@ -64,7 +89,12 @@ export default {
 				})
 		},
 		loadStacks({ commit }, board) {
-			apiClient.loadStacks(board.id)
+			commit('clearCards')
+			let call = 'loadStacks'
+			if (this.state.showArchived === true) {
+				call = 'loadArchivedStacks'
+			}
+			apiClient[call](board.id)
 				.then((stacks) => {
 					for (let i in stacks) {
 						let stack = stacks[i]
@@ -77,10 +107,40 @@ export default {
 				})
 		},
 		createStack({ commit }, stack) {
+			stack.boardId = this.state.currentBoard.id
 			apiClient.createStack(stack)
+				.then((createdStack) => {
+					commit('addStack', createdStack)
+				})
+		},
+		deleteStack({ commit }, stack) {
+			apiClient.deleteStack(stack.id)
+				.then((stack) => {
+					commit('deleteStack', stack)
+				})
+		},
+		updateStack({ commit }, stack) {
+			apiClient.updateStack(stack)
+				.then((stack) => {
+					commit('updateStack', stack)
+				})
+		},
+		deletedItems({ commit }, boardId) {
+			apiClient.deletedStacks(boardId)
+				.then((deletedStacks) => {
+					commit('setDeletedStacks', deletedStacks)
+				})
+			apiClient.deletedCards(boardId)
+				.then((deletedCards) => {
+					commit('setDeletedCards', deletedCards)
+				})
+		},
+		stackUndoDelete({ commit }, stack) {
+			apiClient.updateStack(stack)
 				.then((stack) => {
 					commit('addStack', stack)
 				})
 		}
+
 	}
 }

@@ -26,19 +26,7 @@
 		<div v-if="board" class="board">
 			<container lock-axix="y" orientation="horizontal" @drop="onDropStack">
 				<draggable v-for="stack in stacksByBoard" :key="stack.id" class="stack">
-					<h3>{{ stack.title }}</h3>
-					<container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)">
-						<draggable v-for="card in cardsByStack(stack.id)" :key="card.id">
-							<card-item v-if="card" :id="card.id" />
-						</draggable>
-					</container>
-					<div class="card create">
-						<div title="Add card">
-							<i class="icon icon-add" />
-							<span class="hidden-visually">Add card</span>
-						</div>
-					</div>
-
+					<stack :stack="stack" />
 				</draggable>
 			</container>
 		</div>
@@ -55,15 +43,15 @@
 import { Container, Draggable } from 'vue-smooth-dnd'
 import { mapState } from 'vuex'
 import Controls from '../Controls'
-import CardItem from '../cards/CardItem'
+import Stack from './Stack'
 
 export default {
 	name: 'Board',
 	components: {
-		CardItem,
 		Controls,
 		Container,
-		Draggable
+		Draggable,
+		Stack
 	},
 	inject: [
 		'boardApi'
@@ -81,17 +69,21 @@ export default {
 	},
 	computed: {
 		...mapState({
-			board: state => state.currentBoard
+			board: state => state.currentBoard,
+			showArchived: state => state.showArchived
 		}),
 		stacksByBoard() {
 			return this.$store.getters.stacksByBoard(this.board.id)
-		},
-		cardsByStack() {
-			return (id) => this.$store.getters.cardsByStack(id)
 		}
+		/* cardsByStack() {
+			return (id) => this.$store.getters.cardsByStack(id)
+		} */
 	},
 	watch: {
-		'$route': 'fetchData'
+		id: 'fetchData',
+		showArchived() {
+			this.fetchData()
+		}
 	},
 	created() {
 		this.fetchData()
@@ -102,22 +94,22 @@ export default {
 				.then((board) => {
 					this.$store.dispatch('setCurrentBoard', board)
 					this.$store.dispatch('loadStacks', board)
+					this.$store.dispatch('setAssignableUsers', board.users)
 					this.loading = false
-					console.log(board)
 					this.$store.state.labels = board.labels
 				})
 		},
 		onDropStack({ removedIndex, addedIndex }) {
 			this.$store.dispatch('orderStack', { stack: this.stacksByBoard[removedIndex], removedIndex, addedIndex })
 		},
-		onDropCard({ removedIndex, addedIndex }) {
+		/* onDropCard({ removedIndex, addedIndex }) {
 
-		},
-		payloadForCard(stackId) {
+		}, */
+		/* payloadForCard(stackId) {
 			return index => {
 				return this.cardsByStack(stackId)[index]
 			}
-		},
+		}, */
 		createStack() {
 			let newStack = {
 				title: 'FooBar',
@@ -126,6 +118,9 @@ export default {
 			}
 			this.$store.dispatch('createStack', newStack)
 		}
+		/* deleteStack(stack) {
+			this.$store.dispatch('deleteStack', stack)
+		} */
 	}
 }
 </script>
@@ -146,6 +141,7 @@ export default {
 		padding-top: 0;
 	}
 
+	/*
 	.smooth-dnd-container.vertical {
 		display: flex;
 		flex-direction: column;
@@ -157,6 +153,6 @@ export default {
 
 	.smooth-dnd-container.vertical .smooth-dnd-draggable-wrapper {
 		height: auto;
-	}
+	} */
 
 </style>

@@ -63,11 +63,10 @@ export default {
 			this.editing = true
 		},
 		createBoard(e) {
-			console.log(this.color)
 			const title = e.currentTarget.childNodes[0].value
 			this.$store.dispatch('createBoard', {
 				title: title,
-				color: this.color.hex.substring(1)
+				color: this.color.substring(1)
 			})
 			this.editing = false
 		},

@@ -60,7 +60,7 @@ export default {
 	},
 	methods: {
 		updateColor() {
-			this.$emit('input', this.color)
+			this.$emit('input', this.color.hex)
 		},
 		hidePicker() {
 			this.showFullPicker = false

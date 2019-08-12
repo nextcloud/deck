@@ -102,7 +102,8 @@ export default {
 		]),
 		isAdmin() {
 			// eslint-disable-next-line
-			return oc_isadmin
+			//return oc_isadmin
+			return OC.isUserAdmin()
 		}
 	},
 	beforeMount() {

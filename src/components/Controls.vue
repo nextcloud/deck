@@ -32,21 +32,24 @@
 			</div>
 		</div>
 		<div v-if="board" class="crumb svg">
-			<div class="board-bullet" />
-			<a href="#todo">{{ board.title }}</a>
-			<span style="display: inline;" class="icon-shared" />
+			<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
+			<a href="#">{{ board.title }}</a>
+			<router-link :to="{name: 'board.details'}" class="icon-shared" />
 		</div>
 		<div v-if="board" class="board-actions">
 			<div id="stack-add">
 				<form>
 					<label for="new-stack-input-main" class="hidden-visually">Add a new stack</label>
-					<input id="new-stack-input-main" type="text" class="no-close"
-						placeholder="Add a new stack">
-					<input class="icon-confirm" type="button" title="Submit">
+					<input id="new-stack-input-main" v-model="newStackTitle" type="text"
+						class="no-close"
+						placeholder="Add a new stack" @keyup.enter="clickAddNewStack()">
+					<input class="icon-confirm" type="button" title="Submit"
+						@click="clickAddNewStack()">
 				</form>
 			</div>
 			<div class="board-action-buttons">
-				<button title="Show archived cards" class="icon icon-archive" />
+				<button :style="archivStyle" title="Show archived cards" class="icon icon-archive"
+					@click="toggleShowArchived" />
 				<button :class="[(compactMode ? 'icon-toggle-compact-collapsed' : 'icon-toggle-compact-expanded')]" title="Toggle compact mode" class="icon"
 					@click="toggleCompactMode" />
 				<router-link v-tooltip="t('deck', 'Board settings')" :to="{name: 'board.details'}" class="icon-settings-dark"
@@ -68,10 +71,24 @@ export default {
 			default: null
 		}
 	},
+	data() {
+		return {
+			newStackTitle: '',
+			stack: '',
+			showArchived: false
+		}
+	},
 	computed: {
 		...mapState({
 			compactMode: state => state.compactMode
-		})
+		}),
+		archivStyle() {
+
+			if (this.showArchived === true) {
+				return 'opacity: 1.0'
+			}
+			return 'opacity: 0.3'
+		}
 	},
 	methods: {
 		toggleNav() {
@@ -82,6 +99,16 @@ export default {
 		},
 		toggleCompactMode() {
 			this.$store.dispatch('toggleCompactMode')
+		},
+		toggleShowArchived() {
+			this.$store.dispatch('toggleShowArchived')
+			this.showArchived = !this.showArchived
+		},
+		clickAddNewStack() {
+			this.stack = { title: this.newStackTitle }
+			this.$store.dispatch('createStack', this.stack)
+			this.newStackTitle = ''
+			this.stack = null
 		}
 	}
 }

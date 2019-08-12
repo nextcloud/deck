@@ -74,7 +74,7 @@ export default {
 		}),
 		// TODO: properly handle sidebar showing for route subview and board sidebar
 		sidebarRouterView() {
-			console.log(this.$route)
+			// console.log(this.$route)
 			return this.$route.name === 'card' || this.$route.name === 'board.details'
 		},
 		sidebarShown() {
@@ -119,12 +119,10 @@ export default {
 		}
 	}
 
-	.deck-main {
-		bottom: 0;
-		overflow: auto;
-		position: absolute;
-		top: 44px;
-		width: 100%;
-	}
+</style>
 
+<style>
+	#content * {
+		box-sizing: border-box;
+	}
 </style>

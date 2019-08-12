@@ -22,28 +22,37 @@
 
 <template>
 	<div :class="{'compact': compactMode}" tag="div" class="card"
-		@click="openCard">
+		@click.self="openCard">
 		<div class="card-upper">
-			<h3 @click.stop="startEditing">{{ card.title }}</h3>
+			<h3 @click.stop="startEditing(card)">{{ card.title }}</h3>
 			<transition name="fade" mode="out-in">
 				<form v-if="editing">
-					<input :value="card.title" type="text" autofocus>
-					<input type="button" class="icon-confirm" @click.stop="editing=false">
+					<input v-model="copiedCard.title" type="text" autofocus>
+					<input type="button" class="icon-confirm" @click="finishedEdit(card)">
 				</form>
-				<action v-if="!editing" :actions="visibilityPopover" @click.stop="" />
+
+				<Actions @click.stop.prevent>
+					<ActionButton icon="icon-user" @click="assignCardToMe()">{{ t('deck', 'Assign to me') }}</ActionButton>
+					<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">{{ t('deck', (showArchived ? 'Unarchive card' : 'Archive card')) }}</ActionButton>
+					<ActionButton icon="icon-delete" @click="deleteCard()">{{ t('deck', 'Delete card') }}</ActionButton>
+					<ActionButton icon="icon-settings-dark" @click="setCurrentCard()">{{ t('deck', 'Card details') }}</ActionButton>
+				</Actions>
+
 			</transition>
 		</div>
-		<ul class="labels">
-			<li v-for="label in labels" :key="label.id" :style="labelStyle(label)"><span>{{ label.title }}</span></li>
+		<ul class="labels" @click="openCard">
+			<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)"><span>{{ label.title }}</span></li>
 		</ul>
-		<div v-show="!compactMode" class="card-controls compact-item">
-			<card-badges />
+		<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
+			<card-badges :id="id" />
 		</div>
 	</div>
 </template>
 
 <script>
-import { PopoverMenu, Action } from 'nextcloud-vue'
+import { PopoverMenu } from 'nextcloud-vue'
+import { Actions } from 'nextcloud-vue/dist/Components/Actions'
+import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
 import ClickOutside from 'vue-click-outside'
 import { mapState } from 'vuex'
 
@@ -53,7 +62,7 @@ import Color from '../../mixins/color'
 
 export default {
 	name: 'CardItem',
-	components: { PopoverMenu, CardBadges, LabelTag, Action },
+	components: { PopoverMenu, CardBadges, LabelTag, Actions, ActionButton },
 	directives: {
 		ClickOutside
 	},
@@ -67,24 +76,20 @@ export default {
 	data() {
 		return {
 			menuOpened: false,
-			editing: false
+			editing: false,
+			copiedCard: ''
 		}
 	},
 	computed: {
 		...mapState({
-			compactMode: state => state.compactMode
+			compactMode: state => state.compactMode,
+			showArchived: state => state.showArchived
 		}),
 		card() {
 			return this.$store.getters.cardById(this.id)
 		},
 		menu() {
 			return []
-		},
-		labels() {
-			return [
-				{ id: 1, title: 'ToDo', color: 'aa0000' },
-				{ id: 2, title: 'Done', color: '33ff33' }
-			]
 		},
 		labelStyle() {
 			return (label) => {
@@ -93,25 +98,11 @@ export default {
 					color: this.textColor(label.color)
 				}
 			}
-		},
-		visibilityPopover() {
-			return [
-				{
-					action: () => {},
-					icon: 'icon-archive-dark',
-					text: t('deck', 'Archive card')
-				},
-				{
-					action: () => {},
-					icon: 'icon-settings-dark',
-					text: t('deck', 'Card details')
-				}
-			]
 		}
 	},
 	methods: {
 		openCard() {
-			this.$router.push({ name: 'card', params: { cardId: 123 } })
+			this.$router.push({ name: 'card', params: { cardId: this.id } })
 		},
 		togglePopoverMenu() {
 			this.menuOpened = !this.menuOpened
@@ -119,9 +110,33 @@ export default {
 		hidePopoverMenu() {
 			this.menuOpened = false
 		},
-		startEditing() {
+		startEditing(card) {
+			this.copiedCard = Object.assign({}, card)
 			this.editing = true
+		},
+		finishedEdit(card) {
+			if (this.copiedCard.title !== card.title) {
+				this.$store.dispatch('updateCard', this.copiedCard)
+			}
+			this.editing = false
+		},
+		deleteCard() {
+			this.$store.dispatch('deleteCard', this.card)
+		},
+		archiveUnarchiveCard() {
+			this.copiedCard = Object.assign({}, this.card)
+			this.copiedCard.archived = !this.copiedCard.archived
+			this.$store.dispatch('archiveUnarchiveCard', this.copiedCard)
+		},
+		assignCardToMe() {
+			this.copiedCard = Object.assign({}, this.card)
+			this.copiedCard.newUserUid = this.card.owner.uid
+			this.$store.dispatch('assignCardToUser', this.copiedCard)
+		},
+		setCurrentCard() {
+			this.$store.dispatch('setCurrentCard', this.card)
 		}
+
 	}
 }
 </script>
@@ -153,8 +168,9 @@ export default {
 				display: flex;
 				padding: 5px 7px;
 				position: absolute;
+				width: calc(100% - 14px);
 				input[type=text] {
-					width: 100%;
+					flex-grow: 1;
 				}
 
 			}

@@ -22,15 +22,15 @@
 
 import axios from 'nextcloud-axios'
 
-export class StackApi {
+export class CardApi {
 
 	url(url) {
 		url = `/apps/deck${url}`
 		return OC.generateUrl(url)
 	}
 
-	loadStacks(boardId) {
-		return axios.get(this.url(`/stacks/${boardId}`))
+	addCard(card) {
+		return axios.post(this.url(`/cards`), card)
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)
@@ -44,8 +44,8 @@ export class StackApi {
 			})
 	}
 
-	deletedStacks(boardId) {
-		return axios.get(this.url(`/${boardId}/stacks/deleted`))
+	deleteCard(cardId) {
+		return axios.delete(this.url(`/cards/${cardId}`))
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)
@@ -59,8 +59,8 @@ export class StackApi {
 			})
 	}
 
-	deletedCards(boardId) {
-		return axios.get(this.url(`/${boardId}/cards/deleted`))
+	updateCard(card) {
+		return axios.put(this.url(`/cards/${card.id}`), card)
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)
@@ -74,8 +74,8 @@ export class StackApi {
 			})
 	}
 
-	loadArchivedStacks(boardId) {
-		return axios.get(this.url(`/stacks/${boardId}/archived`))
+	assignUser(card) {
+		return axios.post(this.url(`/cards/${card.id}/assign`), { userId: card.newUserUid })
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)
@@ -89,12 +89,8 @@ export class StackApi {
 			})
 	}
 
-	/**
-	 * @param {Stack} stack
-	 * @returns {Promise}
-	 */
-	createStack(stack) {
-		return axios.post(this.url(`/stacks`), stack)
+	removeUser(card) {
+		return axios.delete(this.url(`/cards/${card.id}/assign/${card.removeUserUid}`))
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)
@@ -108,8 +104,8 @@ export class StackApi {
 			})
 	}
 
-	reorderStack(stackId, order) {
-		return axios.put(this.url(`/stacks/${stackId}/reorder`), { order })
+	archiveCard(card) {
+		return axios.put(this.url(`/cards/${card.id}/archive`))
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)
@@ -123,8 +119,8 @@ export class StackApi {
 			})
 	}
 
-	deleteStack(stackId) {
-		return axios.delete(this.url(`/stacks/${stackId}`))
+	unArchiveCard(card) {
+		return axios.put(this.url(`/cards/${card.id}/unarchive`))
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)
@@ -138,8 +134,23 @@ export class StackApi {
 			})
 	}
 
-	updateStack(stack) {
-		return axios.put(this.url(`/stacks/${stack.id}`), stack)
+	assignLabelToCard(data) {
+		return axios.post(this.url(`/cards/${data.card.id}/label/${data.labelId}`))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	removeLabelFromCard(data) {
+		return axios.delete(this.url(`/cards/${data.card.id}/label/${data.labelId}`))
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<multiselect v-model="addAcl" :options="sharees" label="label"
+		<multiselect v-model="addAcl" :options="unallocatedSharees" label="label"
 			@input="clickAddAcl" @search-change="asyncFind">
 			<template #option="scope">
 				{{ scope.option.label }}
@@ -23,34 +23,36 @@
 					{{ acl.participant.displayname }}
 				</span>
 
-				<input :checked="acl.permissionEdit" type="checkbox" @click="clickEditAcl(acl)">
-				<label for="checkbox">{{ t('deck', 'Edit') }}</label>
-
-				<input :checked="acl.permissionShare" type="checkbox" @click="clickShareAcl(acl)">
-				<label for="checkbox">{{ t('deck', 'Share') }}</label>
-
-				<input :checked="acl.permissionManage" type="checkbox" @click="clickManageAcl(acl)">
-				<label for="checkbox">{{ t('deck', 'Manage') }}</label>
-
-				<button v-tooltip="t('deck', 'Delete')" class="icon-delete" @click="clickDeleteAcl(acl)" />
-
+				<Actions>
+					<ActionCheckbox :checked="acl.permissionEdit" @change="clickEditAcl(acl)">{{ t('deck', 'Can edit') }}</ActionCheckbox>
+				</Actions>
+				<Actions>
+					<ActionCheckbox :checked="acl.permissionShare" @change="clickShareAcl(acl)">{{ t('deck', 'Can share') }}</ActionCheckbox>
+					<ActionCheckbox :checked="acl.permissionManage" @change="clickManageAcl(acl)">{{ t('deck', 'Can manage') }}</ActionCheckbox>
+					<ActionButton icon="icon-delete" @click="clickDeleteAcl(acl)">{{ t('deck', 'Delete') }}</ActionButton>
+				</Actions>
 			</li>
 		</ul>
-		<CollaborationView />
+
+		<collection-list v-if="board.id" :id="`${board.id}`" :name="board.title"
+			type="deck" />
 	</div>
 </template>
 
 <script>
-import { Avatar, Multiselect } from 'nextcloud-vue'
-import CollaborationView from '../CollaborationView'
+import { Avatar, Multiselect, Actions, ActionButton, ActionCheckbox } from 'nextcloud-vue'
+import { CollectionList } from 'nextcloud-vue-collections'
 import { mapGetters } from 'vuex'
 
 export default {
 	name: 'SharingTabSidebard',
 	components: {
 		Avatar,
+		Actions,
+		ActionButton,
+		ActionCheckbox,
 		Multiselect,
-		CollaborationView
+		CollectionList
 	},
 	props: {
 		board: {
@@ -68,7 +70,14 @@ export default {
 	computed: {
 		...mapGetters({
 			sharees: 'sharees'
-		})
+		}),
+		unallocatedSharees() {
+			return this.sharees.filter((sharee) => {
+				return Object.values(this.board.acl).findIndex((acl) => {
+					return acl.participant.uid === sharee.value.shareWith
+				})
+			})
+		}
 	},
 	methods: {
 		asyncFind(query) {
@@ -108,3 +117,16 @@ export default {
 	}
 }
 </script>
+<style scoped>
+	#shareWithList {
+		margin-bottom: 20px;
+	}
+	#shareWithList li {
+		display: flex;
+		align-items: center;
+	}
+	.username {
+		padding: 12px 9px;
+		flex-grow: 1;
+	}
+</style>
