@@ -86,14 +86,28 @@ export default new Router({
 					components: {
 						default: Boards,
 						sidebar: BoardSidebar
-					}
+					},
+					props: {
+						default: (route) => {
+							return {
+								id: parseInt(route.params.id, 10)
+							}
+						}
+					},
 				},
 				{
 					path: 'cards/:cardId',
 					name: 'card',
 					components: {
 						sidebar: CardSidebar
-					}
+					},
+					props: {
+						sidebar: (route) => {
+							return {
+								id: parseInt(route.params.cardId, 10)
+							}
+						}
+					},
 				}
 			]
 		}

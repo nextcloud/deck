@@ -63,6 +63,11 @@ export default {
 		DeletedTabSidebar,
 		TimelineTabSidebard
 	},
+	props: {
+		id: {
+			type: Number
+		}
+	},
 	computed: {
 		...mapState({
 			board: state => state.currentBoard,

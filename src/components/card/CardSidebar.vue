@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<app-sidebar v-if="currentCard != null"
+	<app-sidebar v-if="currentCard !== null && copiedCard !== null"
 		:actions="toolbarActions"
 		:title="currentCard.title"
 		@close="closeSidebar">
@@ -89,6 +89,11 @@ export default {
 		DatetimePicker,
 		markdownEditor
 	},
+	props: {
+		id: {
+			type: Number
+		}
+	},
 	data() {
 		return {
 			assignedUsers: null,
@@ -101,10 +106,12 @@ export default {
 	},
 	computed: {
 		...mapState({
-			currentCard: state => state.currentCard,
 			currentBoard: state => state.currentBoard,
 			assignableUsers: state => state.assignableUsers
 		}),
+		currentCard() {
+			return this.$store.getters.cardById(this.id)
+		},
 		subtitle() {
 			let lastModified = this.currentCard.lastModified
 			let createdAt = this.currentCard.createdAt
@@ -131,11 +138,15 @@ export default {
 		}
 	},
 	watch: {
-		currentCard() {
-			this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
-			this.allLabels = this.currentCard.labels
-			this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
-			this.desc = this.currentCard.description
+		'currentCard': {
+			immediate: true,
+			handler() {
+				console.log(this.currentCard)
+				this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
+				this.allLabels = this.currentCard.labels
+				this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
+				this.desc = this.currentCard.description
+			}
 		},
 		desc() {
 			this.copiedCard.description = this.desc

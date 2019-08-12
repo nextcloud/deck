@@ -80,9 +80,8 @@ export default {
 		} */
 	},
 	watch: {
-		'$route': 'fetchData',
+		id: 'fetchData',
 		showArchived() {
-
 			this.fetchData()
 		}
 	},
