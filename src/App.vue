@@ -119,12 +119,10 @@ export default {
 		}
 	}
 
-	.deck-main {
-		bottom: 0;
-		overflow: auto;
-		position: absolute;
-		top: 44px;
-		width: 100%;
-	}
+</style>
 
+<style>
+	#content * {
+		box-sizing: border-box;
+	}
 </style>
