@@ -26,9 +26,9 @@
 		<div class="stack--header">
 			<transition name="fade" mode="out-in">
 				<h3 v-if="!editing" @click="startEditing(stack)">{{ stack.title }}</h3>
-				<form v-else>
+				<form v-else @submit.prevent="finishedEdit(stack)">
 					<input v-model="copiedStack.title" type="text" autofocus>
-					<input type="button" class="icon-confirm" @click="finishedEdit(stack)">
+					<input class="icon-confirm" type="submit" value="" v-tooltip="t('deck', 'Add a new stack')">
 				</form>
 			</transition>
 			<Actions>
