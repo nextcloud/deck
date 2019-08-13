@@ -52,6 +52,21 @@ Nothing to prepare, just dig into the code.
 
 Deck requires running a `make build-js` to install npm dependencies and build the JavaScript code using webpack. While developing you can also use `make watch` to rebuild everytime the code changes.
 
+#### Hot reloading
+
+Without SSL: 
+```
+webpack-dev-server --inline --hot --port 3000 --config webpack.dev.js --public localhost
+```
+
+With SSL:
+```
+webpack-dev-server --inline --hot --port 3000 --config webpack.dev.js \
+    --https --cert ~/repos/nextcloud/nc-dev/data/ssl/nextcloud.local.dev.bitgrid.net.crt \
+    --key ~/repos/nextcloud/nc-dev/data/ssl/nextcloud.local.dev.bitgrid.net.key \
+    --public nextcloud.local.dev.bitgrid.net:3000
+```
+
 ### Running tests
 You can use the provided Makefile to run all tests by using:
 

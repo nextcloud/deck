@@ -25,6 +25,7 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Service\DefaultBoardService;
 use OCA\Deck\Service\PermissionService;
+use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Controller;
@@ -73,7 +74,12 @@ class PageController extends Controller {
 			}
 		}
 
-		return new TemplateResponse('deck', 'main', $params);
+		$response = new TemplateResponse('deck', 'main', $params);
+		$csp = new ContentSecurityPolicy();
+		$csp->addAllowedConnectDomain('*');
+		$csp->addAllowedScriptDomain('*');
+		$response->setContentSecurityPolicy($csp);
+		return $response;
 	}
 
 }
