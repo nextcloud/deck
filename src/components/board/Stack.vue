@@ -48,7 +48,7 @@
 			<input id="new-stack-input-main" v-model="newCardTitle" type="text"
 				class="no-close"
 				placeholder="Add a new card">
-			<input class="icon-confirm" type="button" title="Submit">
+			<input class="icon-confirm" type="submit" value="" v-tooltip="t('deck', 'Create a new card')">
 		</form>
 
 	</div>
