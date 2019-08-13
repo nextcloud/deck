@@ -26,9 +26,10 @@
 		<div class="stack--header">
 			<transition name="fade" mode="out-in">
 				<h3 v-if="!editing" @click="startEditing(stack)">{{ stack.title }}</h3>
-				<form v-else>
+				<form v-else @submit.prevent="finishedEdit(stack)">
 					<input v-model="copiedStack.title" type="text" autofocus>
-					<input type="button" class="icon-confirm" @click="finishedEdit(stack)">
+					<input v-tooltip="t('deck', 'Add a new stack')" class="icon-confirm" type="submit"
+						value="">
 				</form>
 			</transition>
 			<Actions>
@@ -48,7 +49,8 @@
 			<input id="new-stack-input-main" v-model="newCardTitle" type="text"
 				class="no-close"
 				placeholder="Add a new card">
-			<input class="icon-confirm" type="button" title="Submit">
+			<input v-tooltip="t('deck', 'Create a new card')" class="icon-confirm" type="submit"
+				value="">
 		</form>
 
 	</div>
