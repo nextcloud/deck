@@ -35,7 +35,7 @@
 					<ActionButton icon="icon-user" @click="assignCardToMe()">{{ t('deck', 'Assign to me') }}</ActionButton>
 					<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">{{ t('deck', (showArchived ? 'Unarchive card' : 'Archive card')) }}</ActionButton>
 					<ActionButton icon="icon-delete" @click="deleteCard()">{{ t('deck', 'Delete card') }}</ActionButton>
-					<ActionButton icon="icon-settings-dark" @click="openCardSidebar()">{{ t('deck', 'Card details') }}</ActionButton>
+					<ActionButton icon="icon-settings-dark" @click="openCard">{{ t('deck', 'Card details') }}</ActionButton>
 				</Actions>
 
 			</transition>
@@ -132,11 +132,7 @@ export default {
 			this.copiedCard = Object.assign({}, this.card)
 			this.copiedCard.newUserUid = this.card.owner.uid
 			this.$store.dispatch('assignCardToUser', this.copiedCard)
-		},
-		openCardSidebar() {
-			this.$router.push({ name: 'card', params: { cardId: this.id } })
 		}
-
 	}
 }
 </script>
