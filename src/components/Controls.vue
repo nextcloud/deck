@@ -38,13 +38,13 @@
 		</div>
 		<div v-if="board" class="board-actions">
 			<div id="stack-add">
-				<form>
+				<form @submit.prevent="clickAddNewStack()">
 					<label for="new-stack-input-main" class="hidden-visually">Add a new stack</label>
 					<input id="new-stack-input-main" v-model="newStackTitle" type="text"
 						class="no-close"
-						placeholder="Add a new stack" @keyup.enter="clickAddNewStack()">
-					<input class="icon-confirm" type="button" title="Submit"
-						@click="clickAddNewStack()">
+						placeholder="Add a new stack">
+					<input v-tooltip="t('deck', 'clickAddNewStack')" class="icon-confirm" type="submit"
+						value="">
 				</form>
 			</div>
 			<div class="board-action-buttons">
