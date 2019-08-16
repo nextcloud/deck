@@ -3,12 +3,11 @@
 		<ul class="labels">
 			<li v-for="label in labels" :key="label.id" :class="{editing: (editingLabelId === label.id)}">
 				<template v-if="editingLabelId === label.id">
-					<form class="label-form">
+					<form class="label-form" @submit.prevent="updateLabel(label)">
 						<input v-model="editingLabel.title" type="text">
 						<input v-tooltip="{content: missingDataLabel, show: !editLabelObjValidated, trigger: 'manual' }" :disabled="!editLabelObjValidated" type="submit"
-							value="" class="icon-confirm"
-							@click="updateLabel(label)">
-						<input v-tooltip="t('deck', 'Cancel')" type="submit" value=""
+							value="" class="icon-confirm">
+						<input v-tooltip="t('deck', 'Cancel')" value=""
 							class="icon-close" @click="editingLabelId = null">
 					</form>
 					<ColorPicker :value="'#' + editingLabel.color" @input="updateColor" />
@@ -24,19 +23,20 @@
 
 			<li v-if="addLabel" class="editing">
 				<template>
-					<form class="label-form">
+					<form class="label-form" @submit.prevent="clickAddLabel">
 						<input v-model="addLabelObj.title" type="text">
-						<input v-tooltip="{content: missingDataLabel, show: !addLabelObjValidated, trigger: 'manual' }" :disabled="!addLabelObjValidated" type="submit"
-							value="" class="icon-confirm"
-							@click="clickAddLabel()">
-						<input v-tooltip="t('deck', 'Cancel')" type="submit" value=""
+						<input v-tooltip="{content: missingDataLabel, show: !addLabelObjValidated, trigger: 'manual' }" :disabled="!addLabelObjValidated"
+							type="submit"
+							value="" class="icon-confirm">
+						<input v-tooltip="t('deck', 'Cancel')" value=""
 							class="icon-close" @click="addLabel=false">
 					</form>
 					<ColorPicker :value="'#' + addLabelObj.color" @input="updateColor" />
 				</template>
 			</li>
 			<button @click="clickShowAddLabel()">
-			<span class="icon-add" />{{ t('deck', 'Add a new label') }}</button>
+				<span class="icon-add" />{{ t('deck', 'Add a new label') }}
+			</button>
 		</ul>
 	</div>
 </template>
@@ -96,9 +96,9 @@ export default {
 	methods: {
 		updateColor(c) {
 			if (this.editingLabel === null) {
-				this.addLabelObj.color = c.hex.substring(1, 7)
+				this.addLabelObj.color = c.substring(1, 7)
 			} else {
-				this.editingLabel.color = c.hex.substring(1, 7)
+				this.editingLabel.color = c.substring(1, 7)
 			}
 		},
 		clickEdit(label) {
