@@ -52,8 +52,10 @@
 
 			<DatetimePicker v-model="copiedCard.duedate" type="datetime" lang="en"
 				format="YYYY-MM-DD HH:mm" confirm @change="setDue()" />
-			<button v-tooltip="t('deck', 'Delete')" v-if="copiedCard.duedate" class="icon-delete"
-				@click="removeDue()" />
+			
+			<Actions>
+				<ActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">{{ t('deck', 'Remove due date') }}</ActionButton>
+			</Actions>
 
 			<markdown-editor ref="markdownEditor" v-model="desc" :configs="{autofocus: true, autosave: {enabled: true, uniqueId: 'unique'}, toolbar: false}" />
 		</AppSidebarTab>
@@ -73,6 +75,8 @@
 import { AppSidebar, AppSidebarTab, Multiselect, DatetimePicker } from 'nextcloud-vue'
 import { mapState } from 'vuex'
 import markdownEditor from 'vue-easymde/src/markdown-editor'
+import { Actions } from 'nextcloud-vue/dist/Components/Actions'
+import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
 
 export default {
 	name: 'CardSidebar',
@@ -81,7 +85,9 @@ export default {
 		AppSidebarTab,
 		Multiselect,
 		DatetimePicker,
-		markdownEditor
+		markdownEditor,
+		Actions,
+		ActionButton
 	},
 	props: {
 		id: {
@@ -96,16 +102,10 @@ export default {
 			isLoading: false,
 			copiedCard: null,
 			allLabels: null,
-			desc: null
+			desc: null,
+			lastModifiedRelative: null,
+			lastCreatedRemative: null
 		}
-	},
-	created() {
-		setInterval(this.lastModifiedRelative, 10000)		
-		setInterval(this.lastCreatedRemative, 10000)
-	},
-	destroyed() {
-		clearInterval(this.lastModifiedRelative)
-		clearInterval(this.lastCreatedRemative)
 	},
 	computed: {
 		...mapState({
@@ -116,7 +116,7 @@ export default {
 			return this.$store.getters.cardById(this.id)
 		},
 		subtitle() {
-			return t('deck', 'Modified') + ': ' + this.lastModifiedRelative() + ' ' + t('deck', 'Created') + ': ' + this.lastCreatedRemative()
+			return t('deck', 'Modified') + ': ' + this.lastModifiedRelative + ' ' + t('deck', 'Created') + ': ' + this.lastCreatedRemative
 		},
 		toolbarActions() {
 			return [
@@ -138,21 +138,12 @@ export default {
 		}
 	},
 	watch: {
-		/* currentCard: {
-			immediate: true,
-			handler() {
-				this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
-				this.allLabels = this.currentCard.labels
-				this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
-				this.desc = this.currentCard.description
-			}
-		}, */
 		currentCard() {
 			this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
 			this.allLabels = this.currentCard.labels
 			this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
 			this.desc = this.currentCard.description
-			console.log("change card" + this.desc)
+			this.updateRelativeTimestamps()
 		},
 
 		desc() {
@@ -160,13 +151,16 @@ export default {
 			this.saveDesc()
 		}
 	},
+	created() {
+		setInterval(this.updateRelativeTimestamps, 10000)
+	},
+	destroyed() {
+		clearInterval(this.updateRelativeTimestamps)
+	},
 	methods: {
-		lastModifiedRelative() {
-			console.log(this.currentCard.lastModified)
-			return OC.Util.relativeModifiedDate(this.currentCard.lastModified * 1000)
-		},
-		lastCreatedRemative() {
-			return OC.Util.relativeModifiedDate(this.currentCard.createdAt * 1000)
+		updateRelativeTimestamps() {
+			this.lastModifiedRelative = OC.Util.relativeModifiedDate(this.currentCard.lastModified * 1000)
+			this.lastCreatedRemative = OC.Util.relativeModifiedDate(this.currentCard.createdAt * 1000)
 		},
 		setDue() {
 			this.$store.dispatch('updateCardDue', this.copiedCard)

@@ -1,3 +1,5 @@
+cardbadges
+
 <!--
   - @copyright Copyright (c) 2018 Julius Härtl <jus@bitgrid.net>
   -
@@ -27,12 +29,10 @@
 		<div v-if="card.description" class="card-comments icon icon-filetype-text" />
 
 		<div v-if="card.duedate" :class="dueIcon">
-			<span>{{ dueTimeDiff }}</span>
+			<span>{{ dueTime }}</span>
 		</div>
-
-		<div v-if="card.description && card.description.match(/\[\s*\]/g)" class="card-tasks icon icon-checkmark">
-			<!-- TODO: get checkbox values -->
-			<span>0/0</span>
+		<div v-if="card.description && checkListCount > 0" class="card-tasks icon icon-checkmark">
+			<span>{{ checkListCheckedCount }}/{{ checkListCount }}</span>
 		</div>
 
 		<div v-if="card.assignedUsers" class="card-assigned-users">
@@ -52,28 +52,47 @@ export default {
 			default: null
 		}
 	},
+	data() {
+		return {
+			dueTime: null,
+			dueIcon: null
+		}
+	},
 	computed: {
+		checkListCount() {
+			return (this.card.description.match(/\[\s*\x*\]/g) || []).length
+		},
+		checkListCheckedCount() {
+			return (this.card.description.match(/\[\s*x\s*\]/g) || []).length
+		},
 		compactMode() {
 			return false
 		},
-		dueIcon() {
-			let timeInHours = Math.round((Date.parse(this.card.duedate) - Date.now()) / 1000 / 60 / 60 / 24)
-
-			if (timeInHours >= 1) {
-				return 'icon-calendar-dark due icon next'
-			}
-			if (timeInHours === 0) {
-				return 'icon-calendar-dark due icon now'
-			}
-			if (timeInHours < 0) {
-				return 'icon-calendar-dark due icon overdue'
-			}
-		},
-		dueTimeDiff() {
-			return OC.Util.relativeModifiedDate(this.card.duedate)
-		},
 		card() {
 			return this.$store.getters.cardById(this.id)
+		}
+	},
+	created() {
+		this.updateDueTime()
+		setInterval(this.updateDueTime, 10000)
+	},
+	destroyed() {
+		clearInterval(this.updateDueTime)
+	},
+	methods: {
+		updateDueTime() {
+			this.dueTime = OC.Util.relativeModifiedDate(this.card.duedate)
+
+			let timeInHours = Math.round((Date.parse(this.card.duedate) - Date.now()) / 1000 / 60 / 60 / 24)
+			if (timeInHours >= 1) {
+				this.dueIcon = 'icon-calendar-dark due icon next'
+			}
+			if (timeInHours === 0) {
+				this.dueIcon = 'icon-calendar-dark due icon now'
+			}
+			if (timeInHours < 0) {
+				this.dueIcon = 'icon-calendar-dark due icon overdue'
+			}
 		}
 	}
 }
