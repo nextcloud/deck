@@ -108,8 +108,8 @@ export default {
 			return this.$store.getters.cardById(this.id)
 		},
 		subtitle() {
-			let lastModified = this.currentCard.lastModified
-			let createdAt = this.currentCard.createdAt
+			let lastModified = OC.Util.relativeModifiedDate(this.currentCard.lastModified * 1000)
+			let createdAt = OC.Util.relativeModifiedDate(this.currentCard.createdAt * 1000)
 
 			return t('deck', 'Modified') + ': ' + lastModified + ' ' + t('deck', 'Created') + ': ' + createdAt
 		},

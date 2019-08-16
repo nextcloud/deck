@@ -59,7 +59,7 @@ export default {
 		dueIcon() {
 			let timeInHours = Math.round((Date.parse(this.card.duedate) - Date.now()) / 1000 / 60 / 60 / 24)
 
-			if (timeInHours === 1) {
+			if (timeInHours >= 1) {
 				return 'icon-calendar-dark due icon next'
 			}
 			if (timeInHours === 0) {
@@ -70,25 +70,7 @@ export default {
 			}
 		},
 		dueTimeDiff() {
-			let unit = 'Minutes'
-			let timeInMin = (Date.parse(this.card.duedate) - Date.now()) / 60000
-
-			if (timeInMin > 59) {
-				timeInMin /= 60
-				unit = 'Hours'
-			}
-
-			if (timeInMin > 23) {
-				timeInMin /= 24
-				unit = 'Days'
-			}
-
-			if (timeInMin > 355) {
-				timeInMin /= 355
-				unit = 'Years'
-			}
-
-			return Math.round(timeInMin) + ' ' + unit
+			return OC.Util.relativeModifiedDate(this.card.duedate)
 		},
 		card() {
 			return this.$store.getters.cardById(this.id)
