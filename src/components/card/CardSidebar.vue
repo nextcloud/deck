@@ -99,6 +99,14 @@ export default {
 			desc: null
 		}
 	},
+	created() {
+		setInterval(this.lastModifiedRelative, 10000)		
+		setInterval(this.lastCreatedRemative, 10000)
+	},
+	destroyed() {
+		clearInterval(this.lastModifiedRelative)
+		clearInterval(this.lastCreatedRemative)
+	},
 	computed: {
 		...mapState({
 			currentBoard: state => state.currentBoard,
@@ -108,10 +116,7 @@ export default {
 			return this.$store.getters.cardById(this.id)
 		},
 		subtitle() {
-			let lastModified = OC.Util.relativeModifiedDate(this.currentCard.lastModified * 1000)
-			let createdAt = OC.Util.relativeModifiedDate(this.currentCard.createdAt * 1000)
-
-			return t('deck', 'Modified') + ': ' + lastModified + ' ' + t('deck', 'Created') + ': ' + createdAt
+			return t('deck', 'Modified') + ': ' + this.lastModifiedRelative() + ' ' + t('deck', 'Created') + ': ' + this.lastCreatedRemative()
 		},
 		toolbarActions() {
 			return [
@@ -133,7 +138,7 @@ export default {
 		}
 	},
 	watch: {
-		'currentCard': {
+		/* currentCard: {
 			immediate: true,
 			handler() {
 				this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
@@ -141,13 +146,28 @@ export default {
 				this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
 				this.desc = this.currentCard.description
 			}
+		}, */
+		currentCard() {
+			this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
+			this.allLabels = this.currentCard.labels
+			this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
+			this.desc = this.currentCard.description
+			console.log("change card" + this.desc)
 		},
+
 		desc() {
 			this.copiedCard.description = this.desc
 			this.saveDesc()
 		}
 	},
 	methods: {
+		lastModifiedRelative() {
+			console.log(this.currentCard.lastModified)
+			return OC.Util.relativeModifiedDate(this.currentCard.lastModified * 1000)
+		},
+		lastCreatedRemative() {
+			return OC.Util.relativeModifiedDate(this.currentCard.createdAt * 1000)
+		},
 		setDue() {
 			this.$store.dispatch('updateCardDue', this.copiedCard)
 		},
