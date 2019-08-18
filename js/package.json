@@ -14,7 +14,7 @@
     "angular-markdown-it": "^0.6.1",
     "angular-sanitize": "^1.7.8",
     "babel-polyfill": "^6.26.0",
-    "markdown-it": "^9.0.1",
+    "markdown-it": "^9.1.0",
     "markdown-it-link-target": "^1.0.2",
     "nextcloud-axios": "^0.2.0",
     "nextcloud-vue": "^0.12.1",
