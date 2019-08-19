@@ -76,7 +76,7 @@ class CardApiController extends ApiController {
 	 *
 	 * Get a specific card.
 	 */
-	public function create($title, $type = 'plain', $order = 999, $description) {
+	public function create($title, $type = 'plain', $order = 999, $description = '') {
 		$card = $this->cardService->create($title, $this->request->getParam('stackId'), $type, $order, $this->userId, $description);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
