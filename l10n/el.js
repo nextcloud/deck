@@ -26,6 +26,7 @@ OC.L10N.register(
     "Deleted items" : "Διαγραμμένα αντικείμενα",
     "Timeline" : "Χρονοδιάγραμμα",
     "Select users or groups to share with" : "Επιλέξτε χρήστες ή ομάδες με τις οποίες θα μοιραστείτε",
+    "Group" : "Ομάδα",
     "No matching user or group found." : "Δεν βρέθηκε χρήστης ή ομάδα να ταιριάζει.",
     "Loading" : "Γίνεται φόρτωση",
     "Edit" : "Επεξεργασία",
