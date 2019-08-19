@@ -2,6 +2,8 @@
 /**
  * @copyright Copyright (c) 2018 Ryan Fletcher <ryan.fletcher@codepassion.ca>
  *
+ * @copyright Copyright (c) 2019, Alexandru Puiu (alexpuiu20@yahoo.com)
+ *
  * @author Ryan Fletcher <ryan.fletcher@codepassion.ca>
  *
  * @license GNU AGPL version 3 or any later version
@@ -70,11 +72,12 @@ class CardApiController extends ApiController {
 	 * @params $title
 	 * @params $type
 	 * @params $order
+	 * @params $description
 	 *
 	 * Get a specific card.
 	 */
-	public function create($title, $type = 'plain', $order = 999) {
-		$card = $this->cardService->create($title, $this->request->getParam('stackId'), $type, $order, $this->userId);
+	public function create($title, $type = 'plain', $order = 999, $description) {
+		$card = $this->cardService->create($title, $this->request->getParam('stackId'), $type, $order, $this->userId, $description);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
