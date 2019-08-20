@@ -90,7 +90,6 @@
 				<?php p($l->t('Sharing has been disabled for your account.')); ?>
 			</li>
         </ul>
-		<h1>Collections</h1>
 		<div id="collaborationResources"></div>
 
     </div>

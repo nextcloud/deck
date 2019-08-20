@@ -284,7 +284,7 @@ class ActivityController {
 	parseMessage(activity) {
 		let subject = activity.subject_rich[0];
 		let parameters = activity.subject_rich[1];
-		if (parameters.after && parameters.after.id && parameters.after.id.startsWith('dt:')) {
+		if (parameters.after && typeof parameters.after.id === 'string' && parameters.after.id.startsWith('dt:')) {
 			let dateTime = parameters.after.id.substr(3);
 			parameters.after.name = moment(dateTime).format('L LTS');
 		}

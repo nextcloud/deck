@@ -1,0 +1,26 @@
+OC.L10N.register(
+    "deck",
+    {
+    "Deck" : "Ажлын талбар",
+    "Finished" : "Дуусгасан",
+    "To review" : "Дахин хянах",
+    "Action needed" : "Үйлдэл шаардлагатай",
+    "Later" : "Хойшлуулах",
+    "Show archived cards" : "Архивлагдсан картуудыг харах",
+    "Hide archived cards" : "Архивлагдсан картуудыг нуух",
+    "Enter a card title" : "Картын нэр оруулах",
+    "Sharing" : "Түгээх",
+    "Select users or groups to share with" : "Түгээх хэрэглэгч, бүлэг сонгоно уу",
+    "No matching user or group found." : "Тохирох бүлэг эсвэл хэрэглэгч олдохгүй байна.",
+    "Edit" : "Засварлах",
+    "Share" : "Түгээх",
+    "Manage" : "Зохицуулах",
+    "Discard share" : "Түгээлтийг хүчингүй болгох",
+    "Members" : "Гишүүд",
+    "Modified:" : "Өөрчлөгдсөн:",
+    "Created:" : "Үүсгэсэн:",
+    "Description" : "Тайлбар",
+    "Saved" : "Хадгалсан",
+    "Add a card description…" : "Картын тайлбар..."
+},
+"nplurals=2; plural=(n != 1);");

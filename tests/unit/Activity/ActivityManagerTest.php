@@ -295,7 +295,11 @@ class ActivityManagerTest extends TestCase {
 		$this->assertEquals([
 			'stack' => $stack,
 			'board' => $board,
-			'card' => $card
+			'card' => [
+				'id' => $card->getId(),
+				'title' => $card->getTitle(),
+				'archived' => $card->getArchived()
+			]
 		], $this->invokePrivate($this->activityManager, 'findDetailsForCard', [555]));
 	}
 
@@ -329,7 +333,11 @@ class ActivityManagerTest extends TestCase {
 		$this->assertEquals([
 			'stack' => $stack,
 			'board' => $board,
-			'card' => $card,
+			'card' => [
+				'id' => $card->getId(),
+				'title' => $card->getTitle(),
+				'archived' => $card->getArchived()
+			],
 			'attachment' => $attachment
 		], $this->invokePrivate($this->activityManager, 'findDetailsForAttachment', [777]));
 	}

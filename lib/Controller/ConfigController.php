@@ -103,12 +103,15 @@ class ConfigController extends Controller {
 		$groups = array_map(function($groupId) {
 			/** @var IGroup $groups */
 			$group = $this->groupManager->get($groupId);
+			if ($group === null) {
+				return null;
+			}
 			return [
 				'id' => $group->getGID(),
 				'displayname' => $group->getDisplayName(),
 			];
 		}, $groups);
-		return $groups;
+		return array_filter($groups);
 	}
 
 }
