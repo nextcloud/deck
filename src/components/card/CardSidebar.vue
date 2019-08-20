@@ -52,7 +52,7 @@
 
 			<DatetimePicker v-model="copiedCard.duedate" type="datetime" lang="en"
 				format="YYYY-MM-DD HH:mm" confirm @change="setDue()" />
-			
+
 			<Actions>
 				<ActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">{{ t('deck', 'Remove due date') }}</ActionButton>
 			</Actions>
@@ -138,12 +138,15 @@ export default {
 		}
 	},
 	watch: {
-		currentCard() {
-			this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
-			this.allLabels = this.currentCard.labels
-			this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
-			this.desc = this.currentCard.description
-			this.updateRelativeTimestamps()
+		'currentCard': {
+			immediate: true,
+			handler() {
+				this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
+				this.allLabels = this.currentCard.labels
+				this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
+				this.desc = this.currentCard.description
+				this.updateRelativeTimestamps()
+			}
 		},
 
 		desc() {
