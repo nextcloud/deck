@@ -2,6 +2,8 @@
 /**
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
+ * @copyright Copyright (c) 2019, Alexandru Puiu (alexpuiu20@yahoo.com)
+ *
  * @author Julius Härtl <jus@bitgrid.net>
  * @author Maxence Lange <maxence@artificial-owl.com>
  *
@@ -147,6 +149,7 @@ class CardService {
 	 * @param $stackId
 	 * @param $type
 	 * @param integer $order
+	 * @param $description
 	 * @param $owner
 	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
@@ -155,8 +158,7 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadrequestException
 	 */
-	public function create($title, $stackId, $type, $order, $owner) {
-
+	public function create($title, $stackId, $type, $order, $owner, $description = '') {
 		if ($title === 'false' || $title === null) {
 			throw new BadRequestException('title must be provided');
 		}
@@ -187,6 +189,7 @@ class CardService {
 		$card->setType($type);
 		$card->setOrder($order);
 		$card->setOwner($owner);
+		$card->setDescription($description);
 		$card = $this->cardMapper->insert($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE);
 		$this->changeHelper->cardChanged($card->getId(), false);
