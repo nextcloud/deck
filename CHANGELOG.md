@@ -1,6 +1,23 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.7.0 - 2019-08-20
+
+## Added
+- Make deck compatible to Nextcloud 17
+- Allow to set the description when creating cards though the REST API
+
+## 0.6.6 - 2019-08-01
+
+### Fixed
+- Bump security related dependencies
+
+## 0.6.5 - 2019-07-28
+
+### Fixed
+- Fix attachment upload/delete failures
+- Bump dependencies
+
 ## 0.6.4 - 2019-06-30
 
 ### Fixed
