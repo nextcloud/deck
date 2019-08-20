@@ -90,7 +90,7 @@ class DeckProvider implements IProvider {
 
 		$author = $event->getAuthor();
 		// get author if
-		if ($author === '' && array_key_exists('author', $subjectParams)) {
+		if (($author === '' || $author === ActivityManager::DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED) && array_key_exists('author', $subjectParams)) {
 			$author = $subjectParams['author'];
 			unset($subjectParams['author']);
 		}

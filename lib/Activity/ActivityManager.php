@@ -47,6 +47,7 @@ use OCP\IUser;
 
 class ActivityManager {
 
+	const DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED = 'DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED';
 	private $manager;
 	private $userId;
 	private $permissionService;
@@ -142,7 +143,7 @@ class ActivityManager {
 				$subject = $ownActivity ? $this->l10n->t('You have restored the board {board}') : $this->l10n->t('{user} has restored the board {board}');
 				break;
 			case self::SUBJECT_BOARD_SHARE:
-				$subject = $ownActivity ? $this->l10n->t('You have shared the board {board} with {acl}') : $this->l10n->t('{user} has shared the board {board} with {sharee}');
+				$subject = $ownActivity ? $this->l10n->t('You have shared the board {board} with {acl}') : $this->l10n->t('{user} has shared the board {board} with {acl}');
 				break;
 			case self::SUBJECT_BOARD_UNSHARE:
 				$subject = $ownActivity ? $this->l10n->t('You have removed {acl} from the board {board}') : $this->l10n->t('{user} has removed {acl} from the board {board}');
@@ -280,7 +281,7 @@ class ActivityManager {
 			}
 		} else {
 			try {
-				$events = [$this->createEvent($objectType, $entity, $subject, $author)];
+				$events = [$this->createEvent($objectType, $entity, $subject)];
 			} catch (\Exception $e) {
 				// Ignore exception for undefined activities on update events
 			}
@@ -302,10 +303,10 @@ class ActivityManager {
 		try {
 			$object = $this->findObjectForEntity($objectType, $entity);
 		} catch (DoesNotExistException $e) {
-			\OC::$server->getLogger()->error('Could not create activity entry for ' . $subject . '. Entity not found.', $entity);
+			\OC::$server->getLogger()->error('Could not create activity entry for ' . $subject . '. Entity not found.', (array)$entity);
 			return null;
 		} catch (MultipleObjectsReturnedException $e) {
-			\OC::$server->getLogger()->error('Could not create activity entry for ' . $subject . '. Entity not found.', $entity);
+			\OC::$server->getLogger()->error('Could not create activity entry for ' . $subject . '. Entity not found.', (array)$entity);
 			return null;
 		}
 
@@ -327,6 +328,7 @@ class ActivityManager {
 			// case self::SUBJECT_BOARD_UPDATE_COLOR
 				break;
 			case self::SUBJECT_CARD_COMMENT_CREATE:
+				$eventType = 'deck_comment';
 				$subjectParams = $this->findDetailsForCard($entity->getId());
 				if (array_key_exists('comment', $additionalParams)) {
 					/** @var IComment $entity */
@@ -335,7 +337,6 @@ class ActivityManager {
 					unset($additionalParams['comment']);
 				}
 				break;
-
 			case self::SUBJECT_STACK_CREATE:
 			case self::SUBJECT_STACK_UPDATE:
 			case self::SUBJECT_STACK_UPDATE_TITLE:
@@ -356,15 +357,13 @@ class ActivityManager {
 			case self::SUBJECT_LABEL_UNASSING:
 			case self::SUBJECT_CARD_USER_ASSIGN:
 			case self::SUBJECT_CARD_USER_UNASSIGN:
-				$subjectParams = $this->findDetailsForCard($entity->getId());
-				$object = $entity;
+				$subjectParams = $this->findDetailsForCard($entity->getId(), $subject);
 				break;
 			case self::SUBJECT_ATTACHMENT_CREATE:
 			case self::SUBJECT_ATTACHMENT_UPDATE:
 			case self::SUBJECT_ATTACHMENT_DELETE:
 			case self::SUBJECT_ATTACHMENT_RESTORE:
 				$subjectParams = $this->findDetailsForAttachment($entity->getId());
-				$object = $subjectParams['card'];
 				break;
 			case self::SUBJECT_BOARD_SHARE:
 			case self::SUBJECT_BOARD_UNSHARE:
@@ -400,6 +399,12 @@ class ActivityManager {
 
 		if ($message !== null) {
 			$event->setMessage($message);
+		}
+
+		// FIXME: We currently require activities for comments even if they are disabled though settings
+		// Get rid of this once the frontend fetches comments/activity individually
+		if ($eventType === 'deck_comment') {
+			$event->setAuthor(self::DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED);
 		}
 
 		return $event;
@@ -486,10 +491,17 @@ class ActivityManager {
 		];
 	}
 
-	private function findDetailsForCard($cardId) {
+	private function findDetailsForCard($cardId, $subject = null) {
 		$card = $this->cardMapper->find($cardId);
 		$stack = $this->stackMapper->find($card->getStackId());
 		$board = $this->boardMapper->find($stack->getBoardId());
+		if ($subject !== self::SUBJECT_CARD_UPDATE_DESCRIPTION) {
+			$card = [
+				'id' => $card->getId(),
+				'title' => $card->getTitle(),
+				'archived' => $card->getArchived()
+			];
+		}
 		return [
 			'card' => $card,
 			'stack' => $stack,

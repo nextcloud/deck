@@ -354,7 +354,7 @@ Returns an array of board items
 
 ## Stacks
 
-### GET /board/{boardId}/stacks - Get stacks
+### GET /boards/{boardId}/stacks - Get stacks
 
 #### Headers
 
@@ -385,7 +385,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
-### GET /board/{boardId}/stacks/archived - Get list of archived stacks
+### GET /boards/{boardId}/stacks/archived - Get list of archived stacks
 
 #### Request parameters
 
@@ -411,7 +411,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
-### GET /board/{boardId}/stacks/{stackId} - Get stack details
+### GET /boards/{boardId}/stacks/{stackId} - Get stack details
 
 #### Request parameters
 
@@ -424,7 +424,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
-### POST /board/{boardId}/stacks - Create a new stack
+### POST /boards/{boardId}/stacks - Create a new stack
 
 #### Request parameters
 
@@ -436,7 +436,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
-### PUT /board/{boardId}/stacks/{stackId} - Update stack details
+### PUT /boards/{boardId}/stacks/{stackId} - Update stack details
 
 #### Request parameters
 
@@ -456,7 +456,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
-### DELETE /board/{boardId}/stacks/{stackId} - Delete a stack
+### DELETE /boards/{boardId}/stacks/{stackId} - Delete a stack
 
 #### Request parameters
 
@@ -471,7 +471,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ## Cards
 
-### GET /board/{boardId}/stacks/{stackId}/cards/{cardId} - Get card details
+### GET /boards/{boardId}/stacks/{stackId}/cards/{cardId} - Get card details
 
 #### Request parameters
 
@@ -485,7 +485,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
-### POST /board/{boardId}/stacks/{stackId}/cards - Create a new card
+### POST /boards/{boardId}/stacks/{stackId}/cards - Create a new card
 
 #### Request parameters
 
@@ -529,7 +529,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
-### PUT /board/{boardId}/stacks/{stackId}/cards/{cardId} - Update card details
+### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId} - Update card details
 
 #### Request parameters
 
@@ -564,7 +564,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
-### DELETE /board/{boardId}/stacks/{stackId}/cards/{cardId} - Delete a card
+### DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId} - Delete a card
 
 #### Request parameters
 
@@ -578,7 +578,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
-### PUT /board/{boardId}/stacks/{stackId}/cards/{cardId}/assignLabel - Assign a label to a card
+### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignLabel - Assign a label to a card
 
 #### Request parameters
 
@@ -597,7 +597,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
-### PUT /board/{boardId}/stacks/{stackId}/cards/{cardId}/removeLabel - Remove a label to a card
+### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/removeLabel - Remove a label to a card
 
 #### Request parameters
 
@@ -617,7 +617,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
-### PUT /board/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser - Assign a user to a card
+### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser - Assign a user to a card
 
 #### Request parameters
 
@@ -637,7 +637,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
-### PUT /board/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser - Assign a user to a card
+### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser - Assign a user to a card
 
 #### Request parameters
 
@@ -657,7 +657,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
-### PUT /board/{boardId}/stacks/{stackId}/cards/{cardId}/reorder - Change the sorting order of a card
+### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder - Change the sorting order of a card
 
 #### Request parameters
 
@@ -681,7 +681,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ## Labels
 
-### GET /board/{boardId}/labels/{labelId} - Get label details
+### GET /boards/{boardId}/labels/{labelId} - Get label details
 
 #### Request parameters
 
@@ -704,7 +704,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 }
 ```
 
-### POST /board/{boardId}/labels - Create a new label
+### POST /boards/{boardId}/labels - Create a new label
 
 #### Request parameters
 
@@ -725,7 +725,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
-### PUT /board/{boardId}/labels/{labelId} - Update label details
+### PUT /boards/{boardId}/labels/{labelId} - Update label details
 
 #### Request parameters
 
@@ -748,7 +748,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
-### DELETE /board/{boardId}/labels/{labelId} - Delete a label
+### DELETE /boards/{boardId}/labels/{labelId} - Delete a label
 
 #### Request parameters
 
@@ -763,7 +763,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ## Attachments
 
-### GET /board/{boardId}/stacks/{stackId}/cards/{cardId}/attachments - Get a list of attachments
+### GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments - Get a list of attachments
 
 #### Request parameters
 
@@ -803,7 +803,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ```
 
-### GET /board/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Get the attachment file
+### GET /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Get the attachment file
 
 #### Request parameters
 
@@ -818,7 +818,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
-### POST /board/{boardId}/stacks/{stackId}/cards/{cardId}/attachments - Upload an attachment
+### POST /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments - Upload an attachment
 
 #### Request parameters
 
@@ -841,7 +841,7 @@ For now only `deck_file` is supported as an attachment type.
 
 ##### 200 Success
 
-### PUT /board/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Update an attachment
+### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Update an attachment
 
 #### Request parameters
 
@@ -865,7 +865,7 @@ For now only `deck_file` is supported as an attachment type.
 
 ##### 200 Success
 
-### DELETE /board/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Delete an attachment
+### DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Delete an attachment
 
 #### Request parameters
 
@@ -880,7 +880,7 @@ For now only `deck_file` is supported as an attachment type.
 
 ##### 200 Success
 
-### PUT /board/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore - Resore a deleted attachment
+### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore - Resore a deleted attachment
 
 #### Request parameters
 

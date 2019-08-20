@@ -1,6 +1,52 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.7.0 - 2019-08-20
+
+## Added
+- Make deck compatible to Nextcloud 17
+- Allow to set the description when creating cards though the REST API
+
+## 0.6.6 - 2019-08-01
+
+### Fixed
+- Bump security related dependencies
+
+## 0.6.5 - 2019-07-28
+
+### Fixed
+- Fix attachment upload/delete failures
+- Bump dependencies
+
+## 0.6.4 - 2019-06-30
+
+### Fixed
+- Restore stable15 compatibility
+
+## 0.6.3 - 2019-06-30
+
+### Fixed
+- Fix issues with comments and activity stream
+- Fix setting archived state through API
+- Fix type of acl in API responses
+- Fix type mismatch with fulltext search
+
+## 0.6.2 - 2019-05-15
+
+### Fixed
+- Fix group limit for nonexisting groups
+- Only map circle ACLs if the app is enabled
+- Fix updating sharing permissions
+- Add app version to capabilities
+
+## 0.6.1 - 2019-04-27
+
+### Fixed
+- Fix issue with boards not being shown after update
+- Fix board selection in projects view outside of deck
+- Remove collections text from sidebar
+- Remove leftover use statement
+
 ## 0.6.0 - 2019-04-23
 
 ### Added

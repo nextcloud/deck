@@ -1,5 +1,7 @@
 'use strict';
 
+import "@babel/polyfill";
+
 /* global __webpack_nonce__ __webpack_public_path__ OC t n */
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken);

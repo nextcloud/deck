@@ -26,6 +26,7 @@ namespace OCA\Deck\Db;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\QueryException;
 use OCP\IDBConnection;
+use OCP\ILogger;
 use OCP\IUserManager;
 use OCP\IGroupManager;
 
@@ -234,7 +235,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 				\OC::$server->getLogger()->debug('Group ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
 				return null;
 			}
-			if ($acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
+			if ($acl->getType() === Acl::PERMISSION_TYPE_CIRCLE && $this->circlesEnabled) {
 				try {
 					$circle = \OCA\Circles\Api\v1\Circles::detailsCircle($acl->getParticipant(), true);
 					if ($circle) {
@@ -244,7 +245,8 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 				}
 				return null;
 			}
-			throw new \Exception('Unknown permission type for mapping Acl');
+			\OC::$server->getLogger()->log(ILogger::WARN, 'Unknown permission type for mapping acl ' . $acl->getId());
+			return null;
 		});
 	}
 
