@@ -25,6 +25,7 @@ namespace OCA\Deck\AppInfo;
 
 use Exception;
 use OCA\Deck\Activity\CommentEventHandler;
+use OCA\Deck\Capabilities;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
@@ -33,7 +34,6 @@ use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
 use OCA\Deck\Service\FullTextSearchService;
 use OCP\AppFramework\App;
-use OCA\Deck\Middleware\SharingMiddleware;
 use OCP\Collaboration\Resources\IManager;
 use OCP\Comments\CommentsEntityEvent;
 use OCP\FullTextSearch\IFullTextSearchManager;
@@ -117,6 +117,9 @@ class Application extends App {
 
 		$this->registerCollaborationResources();
 
+		$this->getContainer()->registerCapability(Capabilities::class);
+
+
 	}
 
 	/**
@@ -138,12 +141,7 @@ class Application extends App {
 
 	public function registerNotifications() {
 		$notificationManager = \OC::$server->getNotificationManager();
-		$self = &$this;
-		$notificationManager->registerNotifier(function() use (&$self) {
-			return $self->getContainer()->query(Notifier::class);
-		}, function() {
-			return ['id' => 'deck', 'name' => 'Deck'];
-		});
+		$notificationManager->registerNotifierService(Notifier::class);
 	}
 
 	/**

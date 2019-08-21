@@ -2,18 +2,17 @@ language: php
 services:
     - mysql
 php:
-    - 7.0
     - 7.1
     - 7.2
     - 7.3
 env:
-    - CORE_BRANCH=stable15 DB=mysql
+    - CORE_BRANCH=master DB=mysql
 
 before_install:
-    - wget https://phar.phpunit.de/phpunit-5.7.phar
-    - chmod +x phpunit-5.7.phar
+    - wget https://phar.phpunit.de/phpunit-6.5.phar
+    - chmod +x phpunit-6.5.phar
     - mkdir bin
-    - mv phpunit-5.7.phar bin/phpunit
+    - mv phpunit-6.5.phar bin/phpunit
     - export PATH="$PWD/bin:$PATH"
     - phpunit --version
     - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh

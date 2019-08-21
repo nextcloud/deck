@@ -33,10 +33,13 @@ class GroupTest extends \Test\TestCase {
 		$group->expects($this->any())
 			->method('getGID')
 			->willReturn('mygroup');
+		$group->expects($this->any())
+			->method('getDisplayName')
+			->willReturn('My Group');
 		$groupRelationalObject = new Group($group);
 		$expected = [
 			'uid' => 'mygroup',
-			'displayname' => 'mygroup'
+			'displayname' => 'My Group'
 		];
 		$this->assertEquals($expected, $groupRelationalObject->getObjectSerialization());
 	}
@@ -47,12 +50,19 @@ class GroupTest extends \Test\TestCase {
 		$group->expects($this->any())
 			->method('getGID')
 			->willReturn('mygroup');
+		$group->expects($this->any())
+			->method('getDisplayName')
+			->willReturn('My Group');
 		$groupRelationalObject = new Group($group);
 		$expected = [
 			'uid' => 'mygroup',
-			'displayname' => 'mygroup',
+			'displayname' => 'My Group',
 			'primaryKey' => 'mygroup'
 		];
-		$this->assertEquals($expected, $groupRelationalObject->jsonSerialize());
+
+		$actual = $groupRelationalObject->jsonSerialize();
+		asort($expected);
+		asort($actual);
+		$this->assertEquals($expected, $actual);
 	}
 }

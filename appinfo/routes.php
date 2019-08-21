@@ -38,7 +38,7 @@ return [
 		['name' => 'board#deleteUndo', 'url' => '/boards/{boardId}/deleteUndo', 'verb' => 'POST'],
 		['name' => 'board#getUserPermissions', 'url' => '/boards/{boardId}/permissions', 'verb' => 'GET'],
 		['name' => 'board#addAcl', 'url' => '/boards/{boardId}/acl', 'verb' => 'POST'],
-		['name' => 'board#updateAcl', 'url' => '/boards/{boardId}/acl/{aclId}', 'verb' => 'PUT'],
+		['name' => 'board#updateAcl', 'url' => '/boards/{boardId}/acl', 'verb' => 'PUT'],
 		['name' => 'board#deleteAcl', 'url' => '/boards/{boardId}/acl/{aclId}', 'verb' => 'DELETE'],
 
 		// stacks
@@ -88,8 +88,8 @@ return [
 		['name' => 'board_api#update', 'url' => '/api/v1.0/boards/{boardId}', 'verb' => 'PUT'],
 		['name' => 'board_api#undo_delete', 'url' => '/api/v1.0/boards/{boardId}/undo_delete', 'verb' => 'POST'],
 		['name' => 'board_api#addAcl', 'url' => '/api/v1.0/boards/{boardId}/acl', 'verb' => 'POST'],
-		['name' => 'board_api#deleteAcl', 'url' => '/api/v1.0/boards/{boardId}/acl', 'verb' => 'DELETE'],
-		['name' => 'board_api#updateAcl', 'url' => '/api/v1.0/boards/{boardId}/acl', 'verb' => 'PUT'],
+		['name' => 'board_api#deleteAcl', 'url' => '/api/v1.0/boards/{boardId}/acl/{aclId}', 'verb' => 'DELETE'],
+		['name' => 'board_api#updateAcl', 'url' => '/api/v1.0/boards/{boardId}/acl/{aclId}', 'verb' => 'PUT'],
 
 
 		['name' => 'stack_api#index', 'url' => '/api/v1.0/boards/{boardId}/stacks', 'verb' => 'GET'],
