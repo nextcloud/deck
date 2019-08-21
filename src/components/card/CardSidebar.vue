@@ -74,8 +74,7 @@
 <script>
 import { AppSidebar, AppSidebarTab, Multiselect, DatetimePicker } from 'nextcloud-vue'
 import { mapState } from 'vuex'
-import VueEasymde from "vue-easymde"
-import markdownEditor from 'vue-easymde/src/markdown-editor'
+import VueEasymde from 'vue-easymde'
 import { Actions } from 'nextcloud-vue/dist/Components/Actions'
 import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
 
@@ -86,7 +85,7 @@ export default {
 		AppSidebarTab,
 		Multiselect,
 		DatetimePicker,
-		VueEasymde
+		VueEasymde,
 		Actions,
 		ActionButton
 	},
@@ -105,12 +104,12 @@ export default {
 			allLabels: null,
 			desc: null,
 			mdeConfig: {
-				autoDownloadFontAwesome: false, 
-				spellChecker: false, 
-				autofocus: true, 
-				autosave: {enabled: true, uniqueId: 'unique'}, 
+				autoDownloadFontAwesome: false,
+				spellChecker: false,
+				autofocus: true,
+				autosave: { enabled: true, uniqueId: 'unique' },
 				toolbar: false
-			}
+			},
 			lastModifiedRelative: null,
 			lastCreatedRemative: null
 		}
