@@ -55,7 +55,7 @@
 			<button v-tooltip="t('deck', 'Delete')" v-if="copiedCard.duedate" class="icon-delete"
 				@click="removeDue()" />
 
-			<markdown-editor ref="markdownEditor" v-model="desc" :configs="{autofocus: true, autosave: {enabled: true, uniqueId: 'unique'}, toolbar: false}" />
+			<VueEasymde ref="markdownEditor" v-model="desc" :configs="mdeConfig" />
 		</AppSidebarTab>
 		<AppSidebarTab :order="1" name="Attachments" icon="icon-files-dark">
 			{{ currentCard.attachments }}
@@ -72,7 +72,7 @@
 <script>
 import { AppSidebar, AppSidebarTab, Multiselect, DatetimePicker } from 'nextcloud-vue'
 import { mapState } from 'vuex'
-import markdownEditor from 'vue-easymde/src/markdown-editor'
+import VueEasymde from 'vue-easymde'
 
 export default {
 	name: 'CardSidebar',
@@ -81,7 +81,7 @@ export default {
 		AppSidebarTab,
 		Multiselect,
 		DatetimePicker,
-		markdownEditor
+		VueEasymde
 	},
 	props: {
 		id: {
@@ -96,7 +96,14 @@ export default {
 			isLoading: false,
 			copiedCard: null,
 			allLabels: null,
-			desc: null
+			desc: null,
+			mdeConfig: {
+				autoDownloadFontAwesome: false,
+				spellChecker: false,
+				autofocus: true,
+				autosave: { enabled: true, uniqueId: 'unique' },
+				toolbar: false
+			}
 		}
 	},
 	computed: {
