@@ -69,47 +69,53 @@ export default {
 }
 </script>
 
-<style scoped>
-	div.color-picker {
+<style scoped lang="scss">
+	$color-field-width: 27px;
+
+	// #app-navigation .app-navigation-entry-edit form, #app-navigation .app-navigation-entry-edit div
+	// has a to wide scope in the server styles so we need to force some width and display styles
+
+	.color-picker::v-deep {
 		display: block !important;
 		overflow: hidden;
 		border-radius: 3px;
 		margin-bottom: 10px;
-	}
-</style>
-<style lang="scss">
-	$color-field-width: 27px;
-	#content .color-picker {
-		// this is required to overwrite
-		// #app-navigation .app-navigation-entry-edit form, #app-navigation .app-navigation-entry-edit div
-		// which has a to wide scope in the server styles
-		div {
-			width: auto;
-			display: block;
-		}
+
 		.color-picker-compact {
-			display: flex;
+			display: flex !important;
 		}
 		.custom-color-button {
-			width: $color-field-width;
+			width: $color-field-width !important;
 			height: $color-field-width;
-			display: block;
+			display: inline-flex !important;
 			flex-grow: 1;
+			flex-basis: 44px;
 		}
 
 		.vc-compact {
+			flex-grow: 5;
+			width: initial;
+			max-width: calc(8 * #{$color-field-width});
+			display: block !important;
 			padding: 0;
 			border-radius: 0;
 			box-shadow: none;
 			background-color: transparent;
-			width: 90%
 		}
 
 		.vc-chrome {
+			width: 100%;
 			border-radius: 0 3px;
 			box-shadow: 0 0 2px var(--color-box-shadow);
+
+			.vc-saturation-pointer, .vc-saturation-circle {
+				width: 12px !important;
+				height: 12px !important;
+			}
+
 		}
-		.vc-chrome-fields-wrap {
+
+		.vc-chrome-fields-wrap, .vc-chrome-body {
 			display: none !important;
 		}
 
@@ -119,12 +125,13 @@ export default {
 		.vc-compact-color-item {
 			display: inline-flex;
 			height: $color-field-width;
+			width: 100%;
+			max-width: $color-field-width;
 			padding: 0;
 			margin: 0;
-			flex-grow: 1;
 		}
 		.vc-compact-dot {
-			width: 10px;
+			width: 10px !important;
 			height: 10px;
 			position: unset;
 			border-radius: 50%;
