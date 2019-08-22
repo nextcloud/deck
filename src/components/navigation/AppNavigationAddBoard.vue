@@ -30,7 +30,7 @@
 		<!-- edit entry -->
 		<div v-if="editing" class="app-navigation-entry-edit">
 			<form @submit.prevent.stop="createBoard">
-				<input :placeholder="t('deck', 'New board title')" type="text">
+				<input :placeholder="t('deck', 'New board title')" type="text" required>
 				<input type="submit" value="" class="icon-confirm">
 				<input type="submit" value="" class="icon-close"
 					@click.stop.prevent="cancelEdit">
