@@ -25,13 +25,14 @@
 		:title="board.title"
 		:to="routeTo" class="board-list-row" tag="div">
 		<div class="board-list-bullet-cell">
-			<div :style="{ 'background-color': board.bullet }" class="board-list-bullet" />
+			<div :style="{ 'background-color': `#${board.color}` }" class="board-list-bullet" />
 		</div>
-		<div class="board-list-title-cell">{{ board.text }}</div>
+		<div class="board-list-title-cell">{{ board.title }}</div>
 		<div class="board-list-avatars-cell">
 			<avatar :user="board.owner.uid" class="board-list-avatar" />
-			<avatar v-for="user in board.board.acl" :key="user.id" :user="user.participant.uid"
+			<avatar v-for="user in limitedAcl" :key="user.id" :user="user.participant.uid"
 				class="board-list-avatar" />
+			<div v-tooltip="otherAcl" v-if="board.acl.length > 5" class="avatardiv popovermenu-wrapper board-list-avatar icon-more" />
 		</div>
 		<div class="board-list-actions-cell" />
 	</router-link>
@@ -57,6 +58,12 @@ export default {
 				name: 'board',
 				params: { id: this.board.id }
 			}
+		},
+		limitedAcl() {
+			return [...this.board.acl].splice(0, 5)
+		},
+		otherAcl() {
+			return [...this.board.acl].splice(6).map((item) => item.participant.displayname || item.participant).join(', ')
 		}
 	}
 }
@@ -87,6 +94,10 @@ export default {
 			border-radius: 50%;
 			height: 32px;
 			width: 32px;
+			margin-left: 3px;
+			&.icon-more {
+				background-color:var(--color-background-dark);
+			}
 		}
 	}
 

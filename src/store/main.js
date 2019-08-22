@@ -23,7 +23,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'nextcloud-axios'
-import { boardToMenuItem } from './../helpers/boardToMenuItem'
 import { BoardApi } from './../services/BoardApi'
 import stack from './stack'
 import card from './card'
@@ -86,7 +85,7 @@ export default new Vuex.Store({
 					|| (state.boardFilter === BOARD_FILTERS.ARCHIVED && board.archived === true)
 					|| (state.boardFilter === BOARD_FILTERS.SHARED && board.shared === 1)
 			})
-			return boards.map(boardToMenuItem)
+			return boards
 		},
 		currentBoardLabels: state => {
 			return state.currentBoard.labels
