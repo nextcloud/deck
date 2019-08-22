@@ -30,6 +30,8 @@
 		<div class="board-list-title-cell">{{ board.text }}</div>
 		<div class="board-list-avatars-cell">
 			<avatar :user="board.owner.uid" class="board-list-avatar" />
+			<avatar v-for="user in board.board.acl" :key="user.id" :user="user.participant.uid"
+				class="board-list-avatar" />
 		</div>
 		<div class="board-list-actions-cell" />
 	</router-link>
@@ -78,6 +80,7 @@ export default {
 	}
 
 	.board-list-avatars-cell {
+		display: flex;
 		padding: 6px 15px;
 
 		.board-list-avatar {
