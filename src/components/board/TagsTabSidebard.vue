@@ -131,7 +131,10 @@ export default {
 		.label-title {
 			flex-grow: 1;
 			border-radius: 3px;
-			padding: 4px;
+			padding: 7px;
+			span {
+				vertical-align: middle;
+			}
 		}
 		&:not(.editing) button {
 			width: 40px;
