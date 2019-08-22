@@ -54,7 +54,8 @@ export default new Vuex.Store({
 		boards: [],
 		sharees: [],
 		assignableUsers: [],
-		boardFilter: BOARD_FILTERS.ALL
+		boardFilter: BOARD_FILTERS.ALL,
+		boardActivity: []
 	},
 	getters: {
 		boards: state => {
@@ -62,6 +63,9 @@ export default new Vuex.Store({
 		},
 		sharees: state => {
 			return state.sharees
+		},
+		boardActivity: state => {
+			return state.boardActivity
 		},
 		noneArchivedBoards: state => {
 			return state.boards.filter(board => {
@@ -139,6 +143,9 @@ export default new Vuex.Store({
 		setSharees(state, shareesUsersAndGroups) {
 			state.sharees = shareesUsersAndGroups.users
 			state.sharees.push(...shareesUsersAndGroups.groups)
+		},
+		setBoardActivity(state, boardActivity) {
+			state.boardActivity.push(...boardActivity)
 		},
 		setAssignableUsers(state, users) {
 			state.assignableUsers = users
@@ -266,6 +273,15 @@ export default new Vuex.Store({
 			params.append('itemType', 1)
 			axios.get(OC.linkToOCS('apps/files_sharing/api/v1') + 'sharees', { params }).then((response) => {
 				commit('setSharees', response.data.ocs.data)
+			})
+		},
+		loadBoardActivity({ commit }, obj) {
+			const params = new URLSearchParams()
+			params.append('format', 'json')
+			params.append('limit', obj.limit)
+			params.append('since', obj.since)
+			axios.get(OC.linkToOCS('apps/activity/api/v2/activity') + 'deck', { params }).then((response) => {
+				commit('setBoardActivity', response.data.ocs.data)
 			})
 		},
 
