@@ -58,7 +58,7 @@
 		<!-- edit entry -->
 		<div v-if="editing" class="app-navigation-entry-edit">
 			<form @submit.prevent.stop="applyEdit">
-				<input v-model="editTitle" type="text">
+				<input v-model="editTitle" type="text" required>
 				<input type="submit" value="" class="icon-confirm">
 				<input type="submit" value="" class="icon-close"
 					@click.stop.prevent="cancelEdit">
