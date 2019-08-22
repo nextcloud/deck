@@ -81,6 +81,14 @@ export default {
 	},
 	methods: {
 		updateDueTime() {
+			if (this.card === undefined) {
+				return
+			}
+
+			if (this.card.duedate === null) {
+				return
+			}
+
 			this.dueTime = OC.Util.relativeModifiedDate(this.card.duedate)
 
 			let timeInHours = Math.round((Date.parse(this.card.duedate) - Date.now()) / 1000 / 60 / 60 / 24)

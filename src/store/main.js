@@ -180,7 +180,7 @@ export default new Vuex.Store({
 
 		// acl mutators
 		addAclToCurrentBoard(state, createdAcl) {
-			Vue.set(state.currentBoard.acl, createdAcl.id, createdAcl)
+			state.currentBoard.acl.push(createdAcl)
 		},
 		updateAclFromCurrentBoard(state, acl) {
 			for (var acl_ in state.currentBoard.acl) {

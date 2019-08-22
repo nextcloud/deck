@@ -88,7 +88,7 @@ export default {
 		},
 		clickAddAcl() {
 			this.addAclForAPI = {
-				type: 0,
+				type: this.addAcl.value.shareType,
 				participant: this.addAcl.value.shareWith,
 				permissionEdit: false,
 				permissionShare: false,
