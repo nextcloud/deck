@@ -29,34 +29,45 @@
 		<template #action />
 		<AppSidebarTab :order="0" name="Details" icon="icon-home">
 
-			<p>Tags</p>
-			<multiselect v-model="allLabels" :multiple="true" :options="currentBoard.labels"
-				:taggable="true" label="title"
-				track-by="id" @select="addLabelToCard" @remove="removeLabelFromCard">
-				<template #option="scope">
-					<span>{{ scope.option.title }}</span>
-				</template>
-			</multiselect>
+			<div class="section-wrapper">
+				<div class="section-label icon-tag" v-tooltip="t('deck', 'Tags')"><span class="hidden-visually">{{ t('deck', 'Tags') }}</span></div>
+				<div class="section-details">
+					<multiselect v-model="allLabels" :multiple="true" :options="currentBoard.labels"
+								 :taggable="true" label="title"
+								 track-by="id" @select="addLabelToCard" @remove="removeLabelFromCard">
+						<template #option="scope">
+							<span>{{ scope.option.title }}</span>
+						</template>
+					</multiselect>
+				</div>
+			</div>
 
-			<p>Assign to user</p>
-			<multiselect v-model="assignedUsers" :multiple="true" :options="assignableUsers"
-				label="displayname"
-				track-by="primaryKey"
-				@select="assignUserToCard" @remove="removeUserFromCard">
-				<template #option="scope">
-					{{ scope.option.displayname }}
-				</template>
-			</multiselect>
+			<div class="section-wrapper">
+				<div class="section-label icon-group" v-tooltip="t('deck', 'Assign to users')"><span class="hidden-visually">{{ t('deck', 'Assign to users') }}</span></div>
+				<div class="section-details">
+					<multiselect v-model="assignedUsers" :multiple="true" :options="assignableUsers"
+								 label="displayname"
+								 track-by="primaryKey"
+								 @select="assignUserToCard" @remove="removeUserFromCard">
+						<template #option="scope">
+							{{ scope.option.displayname }}
+						</template>
+					</multiselect>
+				</div>
+			</div>
 
-			<p>Due to</p>
+			<div class="section-wrapper">
+				<div class="section-label icon-calendar-dark" v-tooltip="t('deck', 'Due date')"><span class="hidden-visually">{{ t('deck', 'Due date') }}</span></div>
+				<div class="section-details">
+					<DatetimePicker v-model="copiedCard.duedate" type="datetime" lang="en"
+									format="YYYY-MM-DD HH:mm" confirm @change="setDue()" />
+					<Actions>
+						<ActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">{{ t('deck', 'Remove due date') }}</ActionButton>
+					</Actions>
+				</div>
+			</div>
 
-			<DatetimePicker v-model="copiedCard.duedate" type="datetime" lang="en"
-				format="YYYY-MM-DD HH:mm" confirm @change="setDue()" />
-
-			<Actions>
-				<ActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">{{ t('deck', 'Remove due date') }}</ActionButton>
-			</Actions>
-
+			<h5>Description</h5>
 			<VueEasymde ref="markdownEditor" v-model="desc" :configs="mdeConfig" />
 		</AppSidebarTab>
 		<AppSidebarTab :order="1" name="Attachments" icon="icon-files-dark">
@@ -231,8 +242,48 @@ export default {
 
 <style>
 	@import "~easymde/dist/easymde.min.css";
+	.vue-easymde, .CodeMirror {
+		border: none;
+	}
 	.editor-preview,
 	.editor-statusbar {
 		display: none;
 	}
+
+	#app-sidebar .app-sidebar-header__desc h4 {
+		font-size: 12px !important;
+	}
 </style>
+
+<style lang="scss">
+
+	h5 {
+		border-bottom: 1px solid var(--color-border);
+		margin-top: 20px;
+		margin-bottom: 5px;
+		color: var(--color-text-maxcontrast);
+	}
+
+	.section-wrapper {
+		display: flex;
+		max-width: 100%;
+		margin-top: 10px;
+
+		.section-label {
+			background-position: 0px center;
+			width:28px;
+			flex-shrink: 0;
+		}
+
+		.section-details {
+			flex-grow: 1;
+
+			button.action-item--single {
+				margin-top: -6px;
+			}
+		}
+	}
+
+
+</style>
+
