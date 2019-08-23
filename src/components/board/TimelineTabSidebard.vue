@@ -1,9 +1,11 @@
 <template>
 	<div>
-		<div v-for="entry in boardActivity" :key="entry.activity_id">
+		<div v-if="isLoading" class="icon icon-loading" />
+
+		<div v-for="entry in boardActivity" v-else :key="entry.activity_id">
 			<img :src="entry.icon">
-			{{ entry.subject }}
-			{{ getTime(entry.datetime) }}
+			<span v-html="parseMessage(entry)" />
+			<span> {{ getTime(entry.datetime) }} </span>
 		</div>
 		<button @click="loadMore">Load More</button>
 	</div>
@@ -57,6 +59,15 @@ export default {
 
 			this.params.since = aId
 			this.loadBoardActivity()
+		},
+		parseMessage(activity) {
+			let subject = activity.subject_rich[0]
+			let parameters = activity.subject_rich[1]
+			if (parameters.after && typeof parameters.after.id === 'string' && parameters.after.id.startsWith('dt:')) {
+				let dateTime = parameters.after.id.substr(3)
+				parameters.after.name = window.moment(dateTime).format('L LTS')
+			}
+			return OCA.Activity.RichObjectStringParser.parseMessage(subject, parameters)
 		}
 	}
 }

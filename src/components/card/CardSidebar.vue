@@ -41,7 +41,7 @@
 					</multiselect>
 				</div>
 			</div>
-				
+
 			<div class="section-wrapper">
 				<div v-tooltip="t('deck', 'Assign to users')" class="section-label icon-group"><span class="hidden-visually">{{ t('deck', 'Assign to users') }}</span></div>
 				<div class="section-details">
@@ -77,7 +77,9 @@
 			</button>
 		</AppSidebarTab>
 		<AppSidebarTab :order="2" name="Timeline" icon="icon-activity">
-			<div v-for="entry in cardActivity" :key="entry.activity_id">
+
+			<div v-if="isLoading" class="icon icon-loading" />
+			<div v-for="entry in cardActivity" v-else :key="entry.activity_id">
 				<img :src="entry.icon">
 				{{ entry.subject }}
 				{{ getTime(entry.datetime) }}
