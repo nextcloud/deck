@@ -2,6 +2,8 @@
 /**
  * @copyright Copyright (c) 2018 Julius Härtl <jus@bitgrid.net>
  *
+ * @copyright Copyright (c) 2019 Alexandru Puiu <alexpuiu20@yahoo.com>
+ *
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
@@ -384,6 +386,7 @@ class ActivityManager {
 		}
 		if ($subject === self::SUBJECT_CARD_UPDATE_STACKID) {
 			$subjectParams['stackBefore'] = $this->stackMapper->find($additionalParams['before']);
+			$subjectParams['stack'] = $this->stackMapper->find($additionalParams['after']);
 		}
 
 		$subjectParams['author'] = $this->userId;
