@@ -179,16 +179,17 @@ export default {
 		}
 
 		.labels {
-			display: flex;
 			margin-left: $card-padding;
 			margin-top: -5px;
-			margin-bottom: -5px;
+			overflow: hidden;
 
 			li {
-				padding: 1px 4px;
+				float: left;
+				padding: 1px 3px;
 				border-radius: 3px;
-				font-size: 90%;
-				margin-right: 2px;
+				font-size: 85%;
+				margin-right: 3px;
+				margin-bottom: 3px;
 			}
 		}
 
