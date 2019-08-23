@@ -2,7 +2,6 @@
 	<div>
 		<div v-for="entry in boardActivity" :key="entry.activity_id">
 			<img :src="entry.icon">
-			{{ entry.activity_id }}
 			{{ entry.subject }}
 			{{ getTime(entry.datetime) }}
 		</div>
@@ -28,14 +27,15 @@ export default {
 		return {
 			isLoading: false,
 			params: {
-				limit: 50,
-				since: 0
+				type: 'deck',
+				since: 0,
+				object_id: this.board.id
 			}
 		}
 	},
 	computed: {
 		...mapGetters({
-			boardActivity: 'boardActivity'
+			boardActivity: 'activity'
 		})
 	},
 	created() {
@@ -44,7 +44,7 @@ export default {
 	methods: {
 		loadBoardActivity() {
 			this.isLoading = true
-			this.$store.dispatch('loadBoardActivity', this.params).then(response => {
+			this.$store.dispatch('loadActivity', this.params).then(response => {
 				this.isLoading = false
 			})
 		},

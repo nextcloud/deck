@@ -92,6 +92,11 @@ export default new Router({
 							return {
 								id: parseInt(route.params.id, 10)
 							}
+						},
+						sidebar: (route) => {
+							return {
+								id: parseInt(route.params.id, 10)
+							}
 						}
 					}
 				},

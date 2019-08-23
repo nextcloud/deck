@@ -41,7 +41,7 @@
 					</multiselect>
 				</div>
 			</div>
-
+				
 			<div class="section-wrapper">
 				<div v-tooltip="t('deck', 'Assign to users')" class="section-label icon-group"><span class="hidden-visually">{{ t('deck', 'Assign to users') }}</span></div>
 				<div class="section-details">
@@ -77,7 +77,12 @@
 			</button>
 		</AppSidebarTab>
 		<AppSidebarTab :order="2" name="Timeline" icon="icon-activity">
-			this is the activity tab
+			<div v-for="entry in cardActivity" :key="entry.activity_id">
+				<img :src="entry.icon">
+				{{ entry.subject }}
+				{{ getTime(entry.datetime) }}
+			</div>
+			<button @click="loadMore">Load More</button>
 		</AppSidebarTab>
 	</app-sidebar>
 </template>
@@ -122,13 +127,20 @@ export default {
 				toolbar: false
 			},
 			lastModifiedRelative: null,
-			lastCreatedRemative: null
+			lastCreatedRemative: null,
+			params: {
+				type: 'filter',
+				since: 0,
+				object_type: 'deck_card',
+				object_id: this.id
+			}
 		}
 	},
 	computed: {
 		...mapState({
 			currentBoard: state => state.currentBoard,
-			assignableUsers: state => state.assignableUsers
+			assignableUsers: state => state.assignableUsers,
+			cardActivity: 'activity'
 		}),
 		currentCard() {
 			return this.$store.getters.cardById(this.id)
@@ -172,6 +184,7 @@ export default {
 	},
 	created() {
 		setInterval(this.updateRelativeTimestamps, 10000)
+		this.loadCardActivity()
 	},
 	destroyed() {
 		clearInterval(this.updateRelativeTimestamps)
@@ -229,6 +242,22 @@ export default {
 				labelId: removedLabel.id
 			}
 			this.$store.dispatch('removeLabel', data)
+		},
+		loadCardActivity() {
+			this.isLoading = true
+			this.$store.dispatch('loadActivity', this.params).then(response => {
+				this.isLoading = false
+			})
+		},
+		getTime(timestamp) {
+			return OC.Util.relativeModifiedDate(timestamp)
+		},
+		loadMore() {
+			let array = Object.values(this.cardActivity)
+			let aId = (array[array.length - 1].activity_id)
+
+			this.params.since = aId
+			this.loadCardActivity()
 		},
 		clickAddNewAttachmment() {
 
