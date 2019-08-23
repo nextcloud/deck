@@ -95,8 +95,16 @@ export default {
 
 <style scoped lang="scss">
 	ul {
-		display: flex;
-		flex-direction: row;
+		display: block;
+
+		li {
+			display: flex;
+			height: 44px;
+		}
+
+		span {
+			display: block;
+		}
 
 		* {
 			flex-basis: 44px;
@@ -104,25 +112,24 @@ export default {
 
 		.title {
 			flex-grow: 2;
+			padding: 13px 0px;
 		}
+
 		.live-relative-timestamp {
 			flex-grow: 1;
 		}
-	}
 
-	li {
-	display: flex;
-	flex-direction: row;
-
-	* {
-		flex-basis: 44px;
+		button {
+			border: none;
+			background-color: transparent;
+			opacity: 0.5;
+		}
+		li {
+			&:hover, &:active, &.focus {
+				button {
+					opacity: 1;
+				}
+			}
+		}
 	}
-
-	.title {
-		flex-grow: 2;
-	}
-	.live-relative-timestamp {
-		flex-grow: 1;
-	}
-}
 </style>

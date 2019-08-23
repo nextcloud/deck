@@ -24,16 +24,17 @@ cardbadges
 
 <template>
 	<div class="badges">
-		<div v-if="card.attachments" class="card-files icon icon-files-dark" />
-
 		<div v-if="card.description" class="card-comments icon icon-filetype-text" />
 
 		<div v-if="card.duedate" :class="dueIcon">
 			<span>{{ dueTime }}</span>
 		</div>
+
 		<div v-if="card.description && checkListCount > 0" class="card-tasks icon icon-checkmark">
 			<span>{{ checkListCheckedCount }}/{{ checkListCount }}</span>
 		</div>
+
+		<div v-if="card.attachments" class="card-files icon icon-files-dark" />
 
 		<div v-if="card.assignedUsers" class="card-assigned-users">
 			<avatar v-for="user in card.assignedUsers" :key="user.id" :user="user.participant.primaryKey" />
@@ -99,7 +100,7 @@ export default {
 				this.dueIcon = 'icon-calendar-dark due icon now'
 			}
 			if (timeInHours < 0) {
-				this.dueIcon = 'icon-calendar-dark due icon overdue'
+				this.dueIcon = 'icon-calendar due icon overdue'
 			}
 		}
 	}
@@ -110,12 +111,19 @@ export default {
 	.badges {
 		display: flex;
 		flex-grow: 1;
+
+		& > div {
+			margin-right: 10px;
+		}
 		.icon {
 			opacity: 0.5;
 			padding: 12px 3px;
 			background-position: left;
 			span {
 				margin-left: 18px;
+			}
+			&.icon-filetype-text {
+				opacity: 1;
 			}
 		}
 		.card-assigned-users {
@@ -131,8 +139,8 @@ export default {
 	.badges .icon.due {
 		background-position: 4px center;
 		border-radius: 3px;
-		margin: 10px 0;
-		margin-right: 3px;
+		margin-top: 10px;
+		margin-bottom: 10px;
 		padding: 4px;
 		font-size: 90%;
 		display: flex;

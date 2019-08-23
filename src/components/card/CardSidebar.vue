@@ -30,11 +30,11 @@
 		<AppSidebarTab :order="0" name="Details" icon="icon-home">
 
 			<div class="section-wrapper">
-				<div class="section-label icon-tag" v-tooltip="t('deck', 'Tags')"><span class="hidden-visually">{{ t('deck', 'Tags') }}</span></div>
+				<div v-tooltip="t('deck', 'Tags')" class="section-label icon-tag"><span class="hidden-visually">{{ t('deck', 'Tags') }}</span></div>
 				<div class="section-details">
 					<multiselect v-model="allLabels" :multiple="true" :options="currentBoard.labels"
-								 :taggable="true" label="title"
-								 track-by="id" @select="addLabelToCard" @remove="removeLabelFromCard">
+						:taggable="true" label="title"
+						track-by="id" @select="addLabelToCard" @remove="removeLabelFromCard">
 						<template #option="scope">
 							<span>{{ scope.option.title }}</span>
 						</template>
@@ -43,12 +43,12 @@
 			</div>
 
 			<div class="section-wrapper">
-				<div class="section-label icon-group" v-tooltip="t('deck', 'Assign to users')"><span class="hidden-visually">{{ t('deck', 'Assign to users') }}</span></div>
+				<div v-tooltip="t('deck', 'Assign to users')" class="section-label icon-group"><span class="hidden-visually">{{ t('deck', 'Assign to users') }}</span></div>
 				<div class="section-details">
 					<multiselect v-model="assignedUsers" :multiple="true" :options="assignableUsers"
-								 label="displayname"
-								 track-by="primaryKey"
-								 @select="assignUserToCard" @remove="removeUserFromCard">
+						label="displayname"
+						track-by="primaryKey"
+						@select="assignUserToCard" @remove="removeUserFromCard">
 						<template #option="scope">
 							{{ scope.option.displayname }}
 						</template>
@@ -57,10 +57,10 @@
 			</div>
 
 			<div class="section-wrapper">
-				<div class="section-label icon-calendar-dark" v-tooltip="t('deck', 'Due date')"><span class="hidden-visually">{{ t('deck', 'Due date') }}</span></div>
+				<div v-tooltip="t('deck', 'Due date')" class="section-label icon-calendar-dark"><span class="hidden-visually">{{ t('deck', 'Due date') }}</span></div>
 				<div class="section-details">
 					<DatetimePicker v-model="copiedCard.duedate" type="datetime" lang="en"
-									format="YYYY-MM-DD HH:mm" confirm @change="setDue()" />
+						format="YYYY-MM-DD HH:mm" confirm @change="setDue()" />
 					<Actions>
 						<ActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">{{ t('deck', 'Remove due date') }}</ActionButton>
 					</Actions>
@@ -284,6 +284,4 @@ export default {
 		}
 	}
 
-
 </style>
-
