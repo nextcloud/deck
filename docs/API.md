@@ -52,7 +52,7 @@ Example curl request:
 curl -u admin:admin -X GET \
     'http://localhost:8000/index.php/apps/deck/api/v1.0/boards/2/stacks' \
     -H "OCS-APIRequest: true" \
-    -H "If-Modified-Since: Mon, 5 Nov 2018 09:28:00 GMT"
+    -H "If-Modified-Since: Mon, 05 Nov 2018 09:28:00 GMT"
 ```
 
 # Endpoints
