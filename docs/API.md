@@ -47,9 +47,11 @@ In any case a user doesn't have access to a requested entity, a 403 error will b
 Some index endpoints support limiting the result set to entries that have been changed since the given time.
 The supported date formats are:
 
-* IMF-fixdate:      `Sun, 03 Aug 2019 10:34:12 GMT`
-* RFC 850:          `Sunday, 03-Aug-19 10:34:12 GMT`
-* ANSI C asctime(): `Sun Aug  3 10:34:12 2019`
+* IMF-fixdate:                 `Sun, 03 Aug 2019 10:34:12 GMT`
+* (obsolete) RFC 850:          `Sunday, 03-Aug-19 10:34:12 GMT`
+* (obsolete) ANSI C asctime(): `Sun Aug  3 10:34:12 2019`
+
+It is highly recommended to only use the IMF-fixdate format.
 
 Example curl request:
 
