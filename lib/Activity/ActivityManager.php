@@ -2,6 +2,8 @@
 /**
  * @copyright Copyright (c) 2018 Julius Härtl <jus@bitgrid.net>
  *
+ * @copyright Copyright (c) 2019 Alexandru Puiu <alexpuiu20@yahoo.com>
+ *
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
@@ -177,7 +179,7 @@ class ActivityManager {
 				$subject = $ownActivity ? $this->l10n->t('You have deleted card {card} in stack {stack} on board {board}') : $this->l10n->t('{user} has deleted card {card} in stack {stack} on board {board}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_TITLE:
-				$subject = $ownActivity ? $this->l10n->t('You have renamed the card {before} to {card}') : $this->l10n->t('{user} has renamed the card {before} to {card}');
+				$subject = $ownActivity ? $this->l10n->t('You have renamed the card {before} to {after}') : $this->l10n->t('{user} has renamed the card {before} to {after}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_DESCRIPTION:
 				if (!isset($subjectParams['before'])) {
@@ -384,6 +386,7 @@ class ActivityManager {
 		}
 		if ($subject === self::SUBJECT_CARD_UPDATE_STACKID) {
 			$subjectParams['stackBefore'] = $this->stackMapper->find($additionalParams['before']);
+			$subjectParams['stack'] = $this->stackMapper->find($additionalParams['after']);
 		}
 
 		$subjectParams['author'] = $this->userId;
