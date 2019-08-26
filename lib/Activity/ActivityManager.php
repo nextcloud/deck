@@ -179,7 +179,7 @@ class ActivityManager {
 				$subject = $ownActivity ? $this->l10n->t('You have deleted card {card} in stack {stack} on board {board}') : $this->l10n->t('{user} has deleted card {card} in stack {stack} on board {board}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_TITLE:
-				$subject = $ownActivity ? $this->l10n->t('You have renamed the card {before} to {after}') : $this->l10n->t('{user} has renamed the card {before} to {card}');
+				$subject = $ownActivity ? $this->l10n->t('You have renamed the card {before} to {after}') : $this->l10n->t('{user} has renamed the card {before} to {after}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_DESCRIPTION:
 				if (!isset($subjectParams['before'])) {
