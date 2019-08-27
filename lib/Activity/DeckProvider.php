@@ -2,6 +2,8 @@
 /**
  * @copyright Copyright (c) 2018 Julius Härtl <jus@bitgrid.net>
  *
+ * @copyright Copyright (c) 2019 Alexandru Puiu <alexpuiu20@yahoo.com>
+ *
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
@@ -337,6 +339,13 @@ class DeckProvider implements IProvider {
 		}
 		if (array_key_exists('after', $subjectParams)) {
 			$params['after'] = [
+				'type' => 'highlight',
+				'id' => $subjectParams['after'],
+				'name' => $subjectParams['after']
+			];
+		}
+		if (array_key_exists('card', $subjectParams) && $event->getSubject() === ActivityManager::SUBJECT_CARD_UPDATE_TITLE) {
+			$params['card'] = [
 				'type' => 'highlight',
 				'id' => $subjectParams['after'],
 				'name' => $subjectParams['after']
