@@ -81,10 +81,10 @@
 			<div v-if="isLoading" class="icon icon-loading" />
 			<div v-for="entry in cardActivity" v-else :key="entry.activity_id">
 				<img :src="entry.icon">
-				{{ entry.subject }}
+				<span v-html="parseMessage(entry)" />
 				{{ getTime(entry.datetime) }}
 			</div>
-			<button @click="loadMore">Load More</button>
+			<button v-if="activityLoadMore" @click="loadMore">Load More</button>
 		</AppSidebarTab>
 	</app-sidebar>
 </template>
@@ -142,7 +142,8 @@ export default {
 		...mapState({
 			currentBoard: state => state.currentBoard,
 			assignableUsers: state => state.assignableUsers,
-			cardActivity: 'activity'
+			cardActivity: 'activity',
+			activityLoadMore: 'activityLoadMore'
 		}),
 		currentCard() {
 			return this.$store.getters.cardById(this.id)
@@ -175,8 +176,16 @@ export default {
 			handler() {
 				this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
 				this.allLabels = this.currentCard.labels
-				this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
+
+				if (this.currentCard.assignedUsers.length > 0) {
+					this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
+				}
+
+				this.desc = this.currentCard.description
 				this.updateRelativeTimestamps()
+
+				this.params.object_id = this.id
+				this.loadCardActivity()
 			}
 		},
 
@@ -260,6 +269,15 @@ export default {
 
 			this.params.since = aId
 			this.loadCardActivity()
+		},
+		parseMessage(activity) {
+			let subject = activity.subject_rich[0]
+			let parameters = activity.subject_rich[1]
+			if (parameters.after && typeof parameters.after.id === 'string' && parameters.after.id.startsWith('dt:')) {
+				let dateTime = parameters.after.id.substr(3)
+				parameters.after.name = window.moment(dateTime).format('L LTS')
+			}
+			return OCA.Activity.RichObjectStringParser.parseMessage(subject, parameters)
 		},
 		clickAddNewAttachmment() {
 

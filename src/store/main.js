@@ -55,7 +55,8 @@ export default new Vuex.Store({
 		sharees: [],
 		assignableUsers: [],
 		boardFilter: BOARD_FILTERS.ALL,
-		activity: []
+		activity: [],
+		activityLoadMore: true
 	},
 	getters: {
 		boards: state => {
@@ -63,9 +64,6 @@ export default new Vuex.Store({
 		},
 		sharees: state => {
 			return state.sharees
-		},
-		activity: state => {
-			return state.activity
 		},
 		noneArchivedBoards: state => {
 			return state.boards.filter(board => {
@@ -151,6 +149,12 @@ export default new Vuex.Store({
 				}
 			})
 
+		},
+		clearActivity(state) {
+			state.activity = []
+		},
+		setActivityLoadMore(state, value) {
+			state.activityLoadMore = value
 		},
 		setAssignableUsers(state, users) {
 			state.assignableUsers = users
@@ -288,12 +292,20 @@ export default new Vuex.Store({
 			params.append('object_type', obj.object_type)
 			params.append('object_id', obj.object_id)
 
+			if (obj.since === 0) {
+				commit('clearActivity')
+			}
+
 			let keyword = 'deck'
 			if (obj.type === 'filter') {
 				keyword = 'filter'
 			}
 			axios.get(OC.linkToOCS('apps/activity/api/v2/activity') + keyword, { params }).then((response) => {
 				commit('setActivity', response.data.ocs.data)
+				commit('setActivityLoadMore', true)
+				if (response.data.ocs.meta.statuscode === 304) {
+					commit('setActivityLoadMore', false)
+				}
 			})
 		},
 

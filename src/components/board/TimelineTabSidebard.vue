@@ -7,12 +7,12 @@
 			<span v-html="parseMessage(entry)" />
 			<span> {{ getTime(entry.datetime) }} </span>
 		</div>
-		<button @click="loadMore">Load More</button>
+		<button v-if="activityLoadMore" @click="loadMore">Load More</button>
 	</div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
 	name: 'TimelineTabSidebard',
@@ -36,8 +36,9 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters({
-			boardActivity: 'activity'
+		...mapState({
+			boardActivity: 'activity',
+			activityLoadMore: 'activityLoadMore'
 		})
 	},
 	created() {
