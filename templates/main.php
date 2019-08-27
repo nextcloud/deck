@@ -23,6 +23,10 @@
 
 use OCP\Util;
 
+Util::addScript('activity', 'richObjectStringParser');
+Util::addScript('activity', 'templates');
+Util::addStyle('activity', 'style');
+
 style('deck', 'globalstyles');
 script('deck', 'deck');
 

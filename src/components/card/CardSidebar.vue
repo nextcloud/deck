@@ -77,7 +77,10 @@
 			</button>
 		</AppSidebarTab>
 		<AppSidebarTab :order="2" name="Timeline" icon="icon-activity">
-			this is the activity tab
+			<div v-if="isLoading" class="icon icon-loading" />
+			<ActivityEntry v-for="entry in cardActivity" v-else :key="entry.activity_id"
+				:activity="entry" />
+			<button v-if="activityLoadMore" @click="loadMore">Load More</button>
 		</AppSidebarTab>
 	</app-sidebar>
 </template>
@@ -88,10 +91,12 @@ import { mapState } from 'vuex'
 import VueEasymde from 'vue-easymde'
 import { Actions } from 'nextcloud-vue/dist/Components/Actions'
 import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
+import ActivityEntry from '../ActivityEntry'
 
 export default {
 	name: 'CardSidebar',
 	components: {
+		ActivityEntry,
 		AppSidebar,
 		AppSidebarTab,
 		Multiselect,
@@ -122,13 +127,21 @@ export default {
 				toolbar: false
 			},
 			lastModifiedRelative: null,
-			lastCreatedRemative: null
+			lastCreatedRemative: null,
+			params: {
+				type: 'filter',
+				since: 0,
+				object_type: 'deck_card',
+				object_id: this.id
+			}
 		}
 	},
 	computed: {
 		...mapState({
 			currentBoard: state => state.currentBoard,
-			assignableUsers: state => state.assignableUsers
+			assignableUsers: state => state.assignableUsers,
+			cardActivity: 'activity',
+			activityLoadMore: 'activityLoadMore'
 		}),
 		currentCard() {
 			return this.$store.getters.cardById(this.id)
@@ -161,8 +174,16 @@ export default {
 			handler() {
 				this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
 				this.allLabels = this.currentCard.labels
-				this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
+
+				if (this.currentCard.assignedUsers.length > 0) {
+					this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
+				}
+
+				this.desc = this.currentCard.description
 				this.updateRelativeTimestamps()
+
+				this.params.object_id = this.id
+				this.loadCardActivity()
 			}
 		},
 
@@ -172,6 +193,7 @@ export default {
 	},
 	created() {
 		setInterval(this.updateRelativeTimestamps, 10000)
+		this.loadCardActivity()
 	},
 	destroyed() {
 		clearInterval(this.updateRelativeTimestamps)
@@ -229,6 +251,19 @@ export default {
 				labelId: removedLabel.id
 			}
 			this.$store.dispatch('removeLabel', data)
+		},
+		loadCardActivity() {
+			this.isLoading = true
+			this.$store.dispatch('loadActivity', this.params).then(response => {
+				this.isLoading = false
+			})
+		},
+		loadMore() {
+			let array = Object.values(this.cardActivity)
+			let aId = (array[array.length - 1].activity_id)
+
+			this.params.since = aId
+			this.loadCardActivity()
 		},
 		clickAddNewAttachmment() {
 
