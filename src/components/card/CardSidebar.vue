@@ -77,13 +77,9 @@
 			</button>
 		</AppSidebarTab>
 		<AppSidebarTab :order="2" name="Timeline" icon="icon-activity">
-
 			<div v-if="isLoading" class="icon icon-loading" />
-			<div v-for="entry in cardActivity" v-else :key="entry.activity_id">
-				<img :src="entry.icon">
-				<span v-html="parseMessage(entry)" />
-				{{ getTime(entry.datetime) }}
-			</div>
+			<ActivityEntry v-for="entry in cardActivity" v-else :key="entry.activity_id"
+				:activity="entry" />
 			<button v-if="activityLoadMore" @click="loadMore">Load More</button>
 		</AppSidebarTab>
 	</app-sidebar>
@@ -95,10 +91,12 @@ import { mapState } from 'vuex'
 import VueEasymde from 'vue-easymde'
 import { Actions } from 'nextcloud-vue/dist/Components/Actions'
 import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
+import ActivityEntry from '../ActivityEntry'
 
 export default {
 	name: 'CardSidebar',
 	components: {
+		ActivityEntry,
 		AppSidebar,
 		AppSidebarTab,
 		Multiselect,
@@ -260,24 +258,12 @@ export default {
 				this.isLoading = false
 			})
 		},
-		getTime(timestamp) {
-			return OC.Util.relativeModifiedDate(timestamp)
-		},
 		loadMore() {
 			let array = Object.values(this.cardActivity)
 			let aId = (array[array.length - 1].activity_id)
 
 			this.params.since = aId
 			this.loadCardActivity()
-		},
-		parseMessage(activity) {
-			let subject = activity.subject_rich[0]
-			let parameters = activity.subject_rich[1]
-			if (parameters.after && typeof parameters.after.id === 'string' && parameters.after.id.startsWith('dt:')) {
-				let dateTime = parameters.after.id.substr(3)
-				parameters.after.name = window.moment(dateTime).format('L LTS')
-			}
-			return OCA.Activity.RichObjectStringParser.parseMessage(subject, parameters)
 		},
 		clickAddNewAttachmment() {
 

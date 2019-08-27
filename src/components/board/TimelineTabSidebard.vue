@@ -2,22 +2,20 @@
 	<div>
 		<div v-if="isLoading" class="icon icon-loading" />
 
-		<div v-for="entry in boardActivity" v-else :key="entry.activity_id">
-			<img :src="entry.icon">
-			<span v-html="parseMessage(entry)" />
-			<span> {{ getTime(entry.datetime) }} </span>
-		</div>
+		<ActivityEntry v-for="entry in boardActivity" v-else :key="entry.activity_id"
+			:activity="entry" />
 		<button v-if="activityLoadMore" @click="loadMore">Load More</button>
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import ActivityEntry from '../ActivityEntry'
 
 export default {
 	name: 'TimelineTabSidebard',
 	components: {
-
+		ActivityEntry
 	},
 	props: {
 		board: {
@@ -51,24 +49,12 @@ export default {
 				this.isLoading = false
 			})
 		},
-		getTime(timestamp) {
-			return OC.Util.relativeModifiedDate(timestamp)
-		},
 		loadMore() {
 			let array = Object.values(this.boardActivity)
 			let aId = (array[array.length - 1].activity_id)
 
 			this.params.since = aId
 			this.loadBoardActivity()
-		},
-		parseMessage(activity) {
-			let subject = activity.subject_rich[0]
-			let parameters = activity.subject_rich[1]
-			if (parameters.after && typeof parameters.after.id === 'string' && parameters.after.id.startsWith('dt:')) {
-				let dateTime = parameters.after.id.substr(3)
-				parameters.after.name = window.moment(dateTime).format('L LTS')
-			}
-			return OCA.Activity.RichObjectStringParser.parseMessage(subject, parameters)
 		}
 	}
 }
