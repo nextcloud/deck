@@ -68,7 +68,7 @@
 			</div>
 
 			<h5>Description</h5>
-			<VueEasymde ref="markdownEditor" v-model="desc" :configs="mdeConfig" />
+			<VueEasymde ref="markdownEditor" v-model="copiedCard.description" :configs="mdeConfig" />
 		</AppSidebarTab>
 		<AppSidebarTab :order="1" name="Attachments" icon="icon-files-dark">
 			{{ currentCard.attachments }}
@@ -162,13 +162,11 @@ export default {
 				this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
 				this.allLabels = this.currentCard.labels
 				this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
-				this.desc = this.currentCard.description
 				this.updateRelativeTimestamps()
 			}
 		},
 
-		desc() {
-			this.copiedCard.description = this.desc
+		'copiedCard.description': function() {
 			this.saveDesc()
 		}
 	},
