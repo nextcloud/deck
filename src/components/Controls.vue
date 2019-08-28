@@ -42,9 +42,10 @@
 					<label for="new-stack-input-main" class="hidden-visually">Add a new stack</label>
 					<input id="new-stack-input-main" v-model="newStackTitle" type="text"
 						class="no-close"
-						placeholder="Add a new stack">
+						placeholder="Add a new stack" required>
 					<input v-tooltip="t('deck', 'clickAddNewStack')" class="icon-confirm" type="submit"
 						value="">
+
 				</form>
 			</div>
 			<div class="board-action-buttons">
@@ -75,7 +76,8 @@ export default {
 		return {
 			newStackTitle: '',
 			stack: '',
-			showArchived: false
+			showArchived: false,
+			missingStackName: t('deck', 'stack title must be provided')
 		}
 	},
 	computed: {
@@ -88,6 +90,13 @@ export default {
 				return 'opacity: 1.0'
 			}
 			return 'opacity: 0.3'
+		},
+		addNewStackValidation() {
+			if (this.newStackTitle === '') {
+				return false
+			}
+
+			return true
 		}
 	},
 	methods: {

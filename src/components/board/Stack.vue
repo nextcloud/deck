@@ -49,7 +49,11 @@
 			<input id="new-stack-input-main" v-model="newCardTitle" type="text"
 				class="no-close"
 				placeholder="Add a new card">
-			<input v-tooltip="t('deck', 'Create a new card')" class="icon-confirm" type="submit"
+
+			<input v-tooltip="{content: missingCardName, show: !addNewCardValidation, trigger: 'manual' }"
+				:disabled="!addNewCardValidation"
+				class="icon-confirm"
+				type="submit"
 				value="">
 		</form>
 
@@ -83,12 +87,20 @@ export default {
 		return {
 			editing: false,
 			copiedStack: '',
-			newCardTitle: ''
+			newCardTitle: '',
+			missingCardName: t('deck', 'card title must be provided')
 		}
 	},
 	computed: {
 		cardsByStack() {
 			return (id) => this.$store.getters.cardsByStack(id)
+		},
+		addNewCardValidation() {
+			if (this.newCardTitle === '') {
+				return false
+			}
+
+			return true
 		}
 	},
 
@@ -121,6 +133,7 @@ export default {
 				boardId: this.stack.boardId
 			}
 			this.$store.dispatch('addCard', newCard)
+			this.newCardTitle = ''
 		}
 	}
 }
