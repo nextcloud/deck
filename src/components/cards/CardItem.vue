@@ -24,7 +24,8 @@
 	<div :class="{'compact': compactMode}" tag="div" class="card"
 		@click.self="openCard">
 		<div class="card-upper">
-			<h3 @click.stop="startEditing(card)">{{ card.title }}</h3>
+			<h3 v-if="showArchived">{{ card.title }}</h3>
+			<h3 v-else @click.stop="startEditing(card)">{{ card.title }}</h3>
 			<transition name="fade" mode="out-in">
 				<form v-if="editing">
 					<input v-model="copiedCard.title" type="text" autofocus>
@@ -32,9 +33,9 @@
 				</form>
 
 				<Actions @click.stop.prevent>
-					<ActionButton icon="icon-user" @click="assignCardToMe()">{{ t('deck', 'Assign to me') }}</ActionButton>
+					<ActionButton v-if="showArchived === false" icon="icon-user" @click="assignCardToMe()">{{ t('deck', 'Assign to me') }}</ActionButton>
 					<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">{{ t('deck', (showArchived ? 'Unarchive card' : 'Archive card')) }}</ActionButton>
-					<ActionButton icon="icon-delete" @click="deleteCard()">{{ t('deck', 'Delete card') }}</ActionButton>
+					<ActionButton v-if="showArchived === false" icon="icon-delete" @click="deleteCard()">{{ t('deck', 'Delete card') }}</ActionButton>
 					<ActionButton icon="icon-settings-dark" @click="openCard">{{ t('deck', 'Card details') }}</ActionButton>
 				</Actions>
 
