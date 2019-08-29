@@ -1,13 +1,5 @@
 <template>
 	<div>
-		<!-- <multiselect v-model="addAcl" :options="unallocatedSharees" label="label"
-			@input="clickAddAcl" @search-change="asyncFind">
-			<template #option="scope">
-				<avatar :user="scope.option.value.shareWith" />
-				<span class="avatarLabel">{{ scope.option.label }} </span>
-			</template>
-		</multiselect> -->
-
 		<multiselect
 			v-model="addAcl"
 			:options="formatedSharees"
@@ -83,13 +75,23 @@ export default {
 		}),
 		formatedSharees() {
 			return this.unallocatedSharees.map(item => {
-				return {
+
+				let sharee = {
 					user: item.label,
 					displayName: item.label,
-					// desc: 'desc',
-					icon: item.value.shareType === 1 ? 'icon-group' : 'icon-user',
-					isNoUser: item.value.shareType === 1
+					icon: 'icon-user'
 				}
+
+				if (item.value.shareType === 1) {
+					sharee.icon = 'icon-group'
+					sharee.isNoUser = true
+				}
+				if (item.value.shareType === 7) {
+					sharee.icon = 'icon-circle'
+					sharee.isNoUser = true
+				}
+
+				return sharee
 			})
 		},
 		unallocatedSharees() {
