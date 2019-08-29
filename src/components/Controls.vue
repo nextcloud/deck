@@ -42,9 +42,10 @@
 					<label for="new-stack-input-main" class="hidden-visually">Add a new stack</label>
 					<input id="new-stack-input-main" v-model="newStackTitle" type="text"
 						class="no-close"
-						placeholder="Add a new stack">
+						placeholder="Add a new stack" required>
 					<input v-tooltip="t('deck', 'clickAddNewStack')" class="icon-confirm" type="submit"
 						value="">
+
 				</form>
 			</div>
 			<div class="board-action-buttons">

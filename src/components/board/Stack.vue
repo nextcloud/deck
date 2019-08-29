@@ -48,8 +48,10 @@
 			<label for="new-stack-input-main" class="hidden-visually">Add a new card</label>
 			<input id="new-stack-input-main" v-model="newCardTitle" type="text"
 				class="no-close"
-				placeholder="Add a new card">
-			<input v-tooltip="t('deck', 'Create a new card')" class="icon-confirm" type="submit"
+				placeholder="Add a new card" required>
+
+			<input class="icon-confirm"
+				type="submit"
 				value="">
 		</form>
 
@@ -121,6 +123,7 @@ export default {
 				boardId: this.stack.boardId
 			}
 			this.$store.dispatch('addCard', newCard)
+			this.newCardTitle = ''
 		}
 	}
 }
