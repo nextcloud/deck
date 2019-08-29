@@ -42,7 +42,7 @@
     "vue-template-compiler": "^2.6.10",
     "webpack": "^4.39.2",
     "webpack-cli": "^3.3.7",
-    "webpack-merge": "^4.2.1"
+    "webpack-merge": "^4.2.2"
   },
   "scripts": {
     "build": "NODE_ENV=production ./node_modules/webpack-cli/bin/cli.js --mode production --config webpack.prod.config.js",
