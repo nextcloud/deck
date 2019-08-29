@@ -100,7 +100,8 @@ export default {
 			}
 		},
 		currentCard() {
-			return this.$route.params.cardId === this.id
+			console.log(this.$route.params)
+			return this.$route.params.cardId == this.id
 		}
 	},
 	methods: {
@@ -149,10 +150,6 @@ export default {
 	}
 	.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
 		opacity: 0;
-	}
-
-	.current-card {
-		box-shadow: 0 0 3px 0 grey !important;
 	}
 
 	.card {
@@ -208,6 +205,10 @@ export default {
 				display: flex;
 				height: 44px;
 			}
+		}
+
+		&.current-card {
+			box-shadow: 0 0 6px 0 var(--color-box-shadow);
 		}
 	}
 
