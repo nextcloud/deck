@@ -36,7 +36,7 @@
 						:taggable="true" label="title"
 						track-by="id" @select="addLabelToCard" @remove="removeLabelFromCard">
 						<template #option="scope">
-							<span>{{ scope.option.title }}</span>
+							<div :style="{ color: '#' + scope.option.color}">{{ scope.option.title }}</div>
 						</template>
 					</multiselect>
 				</div>
@@ -50,7 +50,8 @@
 						track-by="primaryKey"
 						@select="assignUserToCard" @remove="removeUserFromCard">
 						<template #option="scope">
-							{{ scope.option.displayname }}
+							<avatar :user="scope.option.primaryKey" />
+							<span class="avatarLabel">{{ scope.option.displayname }} </span>
 						</template>
 					</multiselect>
 				</div>
@@ -86,7 +87,7 @@
 </template>
 
 <script>
-import { AppSidebar, AppSidebarTab, Multiselect, DatetimePicker } from 'nextcloud-vue'
+import { AppSidebar, AppSidebarTab, Multiselect, DatetimePicker, Avatar } from 'nextcloud-vue'
 import { mapState } from 'vuex'
 import VueEasymde from 'vue-easymde'
 import { Actions } from 'nextcloud-vue/dist/Components/Actions'
@@ -103,7 +104,8 @@ export default {
 		DatetimePicker,
 		VueEasymde,
 		Actions,
-		ActionButton
+		ActionButton,
+		Avatar
 	},
 	props: {
 		id: {
@@ -315,6 +317,10 @@ export default {
 				margin-top: -6px;
 			}
 		}
+	}
+
+	.avatarLabel {
+		padding: 6px
 	}
 
 </style>

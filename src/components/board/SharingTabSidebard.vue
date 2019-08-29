@@ -3,7 +3,8 @@
 		<multiselect v-model="addAcl" :options="unallocatedSharees" label="label"
 			@input="clickAddAcl" @search-change="asyncFind">
 			<template #option="scope">
-				{{ scope.option.label }}
+				<avatar :user="scope.option.value.shareWith" />
+				<span class="avatarLabel">{{ scope.option.label }} </span>
 			</template>
 		</multiselect>
 
@@ -128,5 +129,8 @@ export default {
 	.username {
 		padding: 12px 9px;
 		flex-grow: 1;
+	}
+	.avatarLabel {
+		padding: 6px
 	}
 </style>
