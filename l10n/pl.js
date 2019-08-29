@@ -183,7 +183,7 @@ OC.L10N.register(
     "Choose a user to assign" : "Wybierz użytkownika, który chcesz przypisać",
     "Assign this card to a user" : "Przydziel tę kartę użytkownikowi",
     "Due date" : "Data realizacji",
-    "Click to set" : "Kliknij by ustawić",
+    "Click to set" : "Kliknij, aby ustawić",
     "Remove due date" : "Usuń datę realizacji",
     "Description" : "Opis",
     "Attachments" : "Załączniki",
