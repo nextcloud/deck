@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div :class="{'compact': compactMode}" tag="div" class="card"
+	<div :class="{'compact': compactMode, 'current-card': currentCard}" tag="div" class="card"
 		@click.self="openCard">
 		<div class="card-upper">
 			<h3 @click.stop="startEditing(card)">{{ card.title }}</h3>
@@ -98,6 +98,9 @@ export default {
 					color: this.textColor(label.color)
 				}
 			}
+		},
+		currentCard() {
+			return this.$route.params.cardId === this.id
 		}
 	},
 	methods: {
@@ -146,6 +149,10 @@ export default {
 	}
 	.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
 		opacity: 0;
+	}
+
+	.current-card {
+		box-shadow: 0 0 3px 0 grey !important;
 	}
 
 	.card {
