@@ -76,8 +76,7 @@ export default {
 		return {
 			newStackTitle: '',
 			stack: '',
-			showArchived: false,
-			missingStackName: t('deck', 'stack title must be provided')
+			showArchived: false
 		}
 	},
 	computed: {
@@ -90,13 +89,6 @@ export default {
 				return 'opacity: 1.0'
 			}
 			return 'opacity: 0.3'
-		},
-		addNewStackValidation() {
-			if (this.newStackTitle === '') {
-				return false
-			}
-
-			return true
 		}
 	},
 	methods: {
