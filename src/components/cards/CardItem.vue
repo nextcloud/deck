@@ -100,8 +100,7 @@ export default {
 			}
 		},
 		currentCard() {
-			console.log(this.$route.params)
-			return this.$route.params.cardId == this.id
+			return this.$route.params.cardId === this.id
 		}
 	},
 	methods: {
