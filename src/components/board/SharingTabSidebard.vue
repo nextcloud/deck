@@ -1,11 +1,13 @@
 <template>
 	<div>
-		<multiselect v-model="addAcl" :options="unallocatedSharees" label="label"
-			@input="clickAddAcl" @search-change="asyncFind">
-			<template #option="scope">
-				{{ scope.option.label }}
-			</template>
-		</multiselect>
+		<multiselect
+			v-model="addAcl"
+			:options="formatedSharees"
+			:user-select="true"
+			label="displayName"
+			track-by="user"
+			@input="clickAddAcl"
+			@search-change="asyncFind" />
 
 		<ul
 			id="shareWithList"
@@ -71,6 +73,27 @@ export default {
 		...mapGetters({
 			sharees: 'sharees'
 		}),
+		formatedSharees() {
+			return this.unallocatedSharees.map(item => {
+
+				let sharee = {
+					user: item.label,
+					displayName: item.label,
+					icon: 'icon-user'
+				}
+
+				if (item.value.shareType === 1) {
+					sharee.icon = 'icon-group'
+					sharee.isNoUser = true
+				}
+				if (item.value.shareType === 7) {
+					sharee.icon = 'icon-circle'
+					sharee.isNoUser = true
+				}
+
+				return sharee
+			})
+		},
 		unallocatedSharees() {
 			return this.sharees.filter((sharee) => {
 				return Object.values(this.board.acl).findIndex((acl) => {
@@ -128,5 +151,8 @@ export default {
 	.username {
 		padding: 12px 9px;
 		flex-grow: 1;
+	}
+	.avatarLabel {
+		padding: 6px
 	}
 </style>
