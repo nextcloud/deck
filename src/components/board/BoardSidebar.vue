@@ -26,19 +26,19 @@
 		:title="board.title"
 		@close="closeSidebar">
 
-		<AppSidebarTab name="Sharing" icon="icon-shared">
+		<AppSidebarTab :order="0" name="Sharing" icon="icon-shared">
 			<SharingTabSidebard :board="board" />
 		</AppSidebarTab>
 
-		<AppSidebarTab name="Tags" icon="icon-tag">
+		<AppSidebarTab :order="1" name="Tags" icon="icon-tag">
 			<TagsTabSidebard :board="board" />
 		</AppSidebarTab>
 
-		<AppSidebarTab name="Deleted items" icon="icon-delete">
+		<AppSidebarTab :order="2" name="Deleted items" icon="icon-delete">
 			<DeletedTabSidebar :board="board" />
 		</AppSidebarTab>
 
-		<AppSidebarTab name="Timeline" icon="icon-activity">
+		<AppSidebarTab :order="3" name="Timeline" icon="icon-activity">
 			<TimelineTabSidebard :board="board" />
 		</AppSidebarTab>
 

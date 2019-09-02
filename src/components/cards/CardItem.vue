@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div :class="{'compact': compactMode}" tag="div" class="card"
+	<div :class="{'compact': compactMode, 'current-card': currentCard}" tag="div" class="card"
 		@click.self="openCard">
 		<div class="card-upper">
 			<h3 v-if="showArchived">{{ card.title }}</h3>
@@ -99,6 +99,9 @@ export default {
 					color: this.textColor(label.color)
 				}
 			}
+		},
+		currentCard() {
+			return this.$route.params.cardId === this.id
 		}
 	},
 	methods: {
@@ -202,6 +205,10 @@ export default {
 				display: flex;
 				height: 44px;
 			}
+		}
+
+		&.current-card {
+			box-shadow: 0 0 6px 0 var(--color-box-shadow);
 		}
 	}
 

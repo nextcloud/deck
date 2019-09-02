@@ -107,6 +107,11 @@ export default new Router({
 						sidebar: CardSidebar
 					},
 					props: {
+						default: (route) => {
+							return {
+								cardId: parseInt(route.params.cardId, 10)
+							}
+						},
 						sidebar: (route) => {
 							return {
 								id: parseInt(route.params.cardId, 10)
