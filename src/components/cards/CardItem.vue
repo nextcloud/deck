@@ -189,10 +189,10 @@ export default {
 			display: flex;
 			flex-direction: row;
 			margin-left: $card-padding;
+			margin-right: $card-padding;
 			margin-top: -5px;
 
 			li {
-				flex-basis: 5em;
 				flex-grow: 0;
 				flex-shrink: 1;
 				display: flex;
@@ -203,6 +203,10 @@ export default {
 				font-size: 85%;
 				margin-right: 3px;
 				margin-bottom: 3px;
+
+				&:hover {
+					overflow: unset;
+				}
 
 				span {
 					flex-grow: 0;
