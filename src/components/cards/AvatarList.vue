@@ -21,15 +21,15 @@
   -->
 
 <template>
-	<div class="session-list">
+	<div class="avatars">
 		<div class="avatar-list" @click="popoverVisible=!popoverVisible">
-			<div v-if="sessionsPopover.length > 0" class="avatardiv icon-more" />
-			<avatar v-for="session in sessionsVisible" :key="session.id"
-				:url="avatarUrl(session)" :disable-tooltip="true" :size="32" />
+			<div v-if="popover.length > 0" class="avatardiv icon-more" />
+			<avatar v-for="user in firstUsers" :key="user.id"
+				:url="avatarUrl(user)" :disable-tooltip="true" :size="32" />
 		</div>
 
 		<div v-show="popoverVisible" class="popovermenu menu-right">
-			<popover-menu :menu="sessionsPopover" />
+			<popover-menu :menu="popover" />
 			<slot />
 		</div>
 	</div>
@@ -49,7 +49,7 @@ export default {
 		tooltip: Tooltip
 	},
 	props: {
-		sessions: {
+		users: {
 			type: Array,
 			default: () => { return {} }
 		}
@@ -60,8 +60,8 @@ export default {
 		}
 	},
 	computed: {
-		sessionsVisible() {
-			return this.sessions.slice(0, 3)
+		firstUsers() {
+			return this.users.slice(0, 3)
 		},
 		avatarUrl() {
 			return (session) => {
@@ -75,9 +75,9 @@ export default {
 				return window.location.protocol + '//' + window.location.host + avatarUrl
 			}
 		},
-		sessionsPopover() {
+		popover() {
 			return [
-				...this.sessions.slice(3).map((session) => {
+				...this.users.slice(3).map((session) => {
 					return {
 						href: '#',
 						icon: this.avatarUrl(session),
@@ -92,7 +92,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	.session-list {
+	.avatars {
+		margin: 0;
 		position: relative;
 		flex-grow: 1;
 		/deep/ .popovermenu {
@@ -129,5 +130,6 @@ export default {
 	}
 	.popovermenu {
 		display: block;
+		margin: 40px -6px;
 	}
 </style>

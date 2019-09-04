@@ -36,7 +36,7 @@ cardbadges
 
 		<div v-if="card.attachments" class="card-files icon icon-files-dark" />
 
-		<avatar-list :sessions="card.assignedUsers" />
+		<avatar-list :users="card.assignedUsers" />
 	</div>
 </template>
 <script>
@@ -111,9 +111,9 @@ export default {
 		display: flex;
 		flex-grow: 1;
 
-		& > div {
+		/* & > div {
 			margin-right: 10px;
-		}
+		} */
 		.icon {
 			opacity: 0.5;
 			padding: 12px 3px;
