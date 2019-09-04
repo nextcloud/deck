@@ -41,9 +41,9 @@
 
 			</transition>
 		</div>
-		<ul class="labels" @click="openCard">
-			<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)"><span>{{ label.title }}</span></li>
-		</ul>
+		<div class="labels" @click="openCard">
+			<div v-for="label in card.labels" :key="label.id" :style="labelStyle(label)"><span>{{ label.title }}</span></div>
+		</div>
 		<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
 			<card-badges :id="id" />
 		</div>
@@ -183,17 +183,35 @@ export default {
 		}
 
 		.labels {
+			flex-grow: 1;
+			flex-shrink: 1;
+			min-width: 0;
+			display: flex;
+			flex-direction: row;
 			margin-left: $card-padding;
 			margin-top: -5px;
-			overflow: hidden;
 
-			li {
-				float: left;
+			div {
+				flex-basis: 5em;
+				flex-grow: 0;
+				flex-shrink: 1;
+				display: flex;
+				flex-direction: row;
+				overflow: hidden;
 				padding: 1px 3px;
 				border-radius: 3px;
 				font-size: 85%;
 				margin-right: 3px;
 				margin-bottom: 3px;
+
+				span {
+					flex-grow: 0;
+					flex-shrink: 1;
+					min-width: 0;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
 			}
 		}
 
