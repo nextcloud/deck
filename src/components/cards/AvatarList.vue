@@ -22,7 +22,7 @@
 
 <template>
 	<div class="avatars">
-		<div class="avatar-list" @click="popoverVisible=!popoverVisible">
+		<div class="avatar-list" @click.stop="popoverVisible=!popoverVisible">
 			<div v-if="popover.length > 0" class="avatardiv icon-more" />
 			<avatar v-for="user in firstUsers" :key="user.id"
 				:url="avatarUrl(user)" :disable-tooltip="true" :size="32" />
