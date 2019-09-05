@@ -36,17 +36,16 @@ cardbadges
 
 		<div v-if="card.attachments" class="card-files icon icon-files-dark" />
 
-		<div v-if="card.assignedUsers" class="card-assigned-users">
-			<avatar v-for="user in card.assignedUsers" :key="user.id" :user="user.participant.primaryKey" />
-		</div>
+		<avatar-list :users="card.assignedUsers" />
 	</div>
 </template>
 <script>
 import { Avatar } from 'nextcloud-vue'
+import AvatarList from './AvatarList'
 
 export default {
 	name: 'CardBadges',
-	components: { Avatar },
+	components: { Avatar, AvatarList },
 	props: {
 		id: {
 			type: Number,
@@ -112,9 +111,6 @@ export default {
 		display: flex;
 		flex-grow: 1;
 
-		& > div {
-			margin-right: 10px;
-		}
 		.icon {
 			opacity: 0.5;
 			padding: 12px 3px;
@@ -124,14 +120,6 @@ export default {
 			}
 			&.icon-filetype-text {
 				opacity: 1;
-			}
-		}
-		.card-assigned-users {
-			flex-grow: 1;
-			padding: 6px 0;
-			margin-right: -5px;
-			.avatardiv {
-				float: right;
 			}
 		}
 	}
