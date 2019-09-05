@@ -24,7 +24,7 @@ cardbadges
 
 <template>
 	<div class="badges">
-		<div v-if="card.description" class="card-comments icon icon-filetype-text" />
+		<div v-if="card.description" class="card-comments icon icon-edit" />
 
 		<div v-if="card.duedate" :class="dueIcon">
 			<span>{{ dueTime }}</span>
@@ -145,7 +145,7 @@ export default {
 		font-size: 90%;
 		display: flex;
 		align-items: center;
-		opacity: .7;
+		opacity: .5;
 
 		.icon {
 			background-size: contain;
@@ -154,12 +154,15 @@ export default {
 		&.overdue {
 			background-color: var(--color-error);
 			color: var(--color-primary-text);
+			opacity: .7;
 		}
 		&.now {
 			background-color: var(--color-warning);
+			opacity: .7;
 		}
 		&.next {
 			background-color: var(--color-warning-light);
+			opacity: .7;
 		}
 
 		span {
