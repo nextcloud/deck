@@ -88,7 +88,7 @@ class StackController extends Controller {
 	 * @return array
 	 */
 	public function reorder($stackId, $order) {
-		return $this->stackService->reorder($stackId, $order);
+		return $this->stackService->reorder((int)$stackId, (int)$order);
 	}
 
 	/**

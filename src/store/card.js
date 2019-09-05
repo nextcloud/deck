@@ -56,6 +56,12 @@ export default {
 				state.cards.splice(existingIndex, 1)
 			}
 		},
+		updateCard(state, card) {
+			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			if (existingIndex !== -1) {
+				Vue.set(state.cards, existingIndex, card)
+			}
+		},
 		updateTitle(state, card) {
 			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
@@ -108,6 +114,18 @@ export default {
 			apiClient.updateCard(card)
 				.then((updatedCard) => {
 					commit('updateTitle', updatedCard)
+				})
+		},
+		reorderCard({ commit }, card) {
+			commit('updateCard', card)
+			// TODO iterate over cards in stacks and increase order state from cards >= card.order
+			// the current flickering issue is caused by two cards with the same order that will get the corret setting once
+			// the reordering has been persisted
+			apiClient.reorderCard(card)
+				.then((cards) => {
+					Object.values(cards).forEach((newCard) =>
+						commit('updateCard', newCard)
+					)
 				})
 		},
 		deleteCard({ commit }, card) {

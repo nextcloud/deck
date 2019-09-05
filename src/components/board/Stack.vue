@@ -37,8 +37,7 @@
 			</Actions>
 		</div>
 
-		<!-- <container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)"> -->
-		<container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="onDropCard">
+		<container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)">
 			<draggable v-for="card in cardsByStack(stack.id)" :key="card.id">
 				<card-item v-if="card" :id="card.id" />
 			</draggable>
@@ -96,7 +95,23 @@ export default {
 
 	methods: {
 
-		onDropCard({ removedIndex, addedIndex }) {
+		onDropCard(stackId, event) {
+			const { addedIndex, removedIndex, payload } = event
+			const card = Object.assign({}, payload)
+			if (this.stack.id === stackId) {
+				if (addedIndex !== null && removedIndex === null) {
+					// move card to new stack
+					card.stackId = stackId
+					card.order = addedIndex
+					console.debug('move card to stack', card.stackId, card.order)
+					this.$store.dispatch('reorderCard', card)
+				}
+				if (addedIndex !== null && removedIndex !== null) {
+					card.order = addedIndex
+					console.debug('move card in stack', card.stackId, card.order)
+					this.$store.dispatch('reorderCard', card)
+				}
+			}
 		},
 		payloadForCard(stackId) {
 			return index => {

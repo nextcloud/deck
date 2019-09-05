@@ -55,7 +55,7 @@ class CardController extends Controller {
 	 * @return array
 	 */
 	public function reorder($cardId, $stackId, $order) {
-		return $this->cardService->reorder($cardId, $stackId, $order);
+		return $this->cardService->reorder((int)$cardId, (int)$stackId, (int)$order);
 	}
 
 	/**

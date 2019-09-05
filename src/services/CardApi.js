@@ -74,6 +74,21 @@ export class CardApi {
 			})
 	}
 
+	reorderCard(card) {
+		return axios.put(this.url(`/cards/${card.id}/reorder`), card)
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 	assignUser(card) {
 		return axios.post(this.url(`/cards/${card.id}/assign`), { userId: card.newUserUid })
 			.then(
