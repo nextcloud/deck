@@ -183,17 +183,39 @@ export default {
 		}
 
 		.labels {
+			flex-grow: 1;
+			flex-shrink: 1;
+			min-width: 0;
+			display: flex;
+			flex-direction: row;
 			margin-left: $card-padding;
+			margin-right: $card-padding;
 			margin-top: -5px;
-			overflow: hidden;
 
 			li {
-				float: left;
+				flex-grow: 0;
+				flex-shrink: 1;
+				display: flex;
+				flex-direction: row;
+				overflow: hidden;
 				padding: 1px 3px;
 				border-radius: 3px;
 				font-size: 85%;
 				margin-right: 3px;
 				margin-bottom: 3px;
+
+				&:hover {
+					overflow: unset;
+				}
+
+				span {
+					flex-grow: 0;
+					flex-shrink: 1;
+					min-width: 0;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
 			}
 		}
 

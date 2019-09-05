@@ -36,7 +36,10 @@
 						:taggable="true" label="title"
 						track-by="id" @select="addLabelToCard" @remove="removeLabelFromCard">
 						<template #option="scope">
-							<div :style="{ color: '#' + scope.option.color}">{{ scope.option.title }}</div>
+							<div :style="{ backgroundColor: '#' + scope.option.color, color: textColor(scope.option.color)}" class="tag">{{ scope.option.title }}</div>
+						</template>
+						<template #tag="scope">
+							<div :style="{ backgroundColor: '#' + scope.option.color, color: textColor(scope.option.color)}" class="tag">{{ scope.option.title }}</div>
 						</template>
 					</multiselect>
 				</div>
@@ -93,6 +96,7 @@ import VueEasymde from 'vue-easymde'
 import { Actions } from 'nextcloud-vue/dist/Components/Actions'
 import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
 import ActivityEntry from '../ActivityEntry'
+import Color from '../../mixins/color'
 
 export default {
 	name: 'CardSidebar',
@@ -107,6 +111,9 @@ export default {
 		ActionButton,
 		Avatar
 	},
+	mixins: [
+		Color
+	],
 	props: {
 		id: {
 			type: Number,
@@ -317,6 +324,16 @@ export default {
 				margin-top: -6px;
 			}
 		}
+	}
+
+	.tag {
+		flex-grow: 0;
+		flex-shrink: 1;
+		overflow: hidden;
+		padding: 1px 3px;
+		border-radius: 3px;
+		font-size: 85%;
+		margin-right: 3px;
 	}
 
 	.avatarLabel {
