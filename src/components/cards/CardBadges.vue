@@ -114,6 +114,7 @@ export default {
 		.icon {
 			opacity: 0.5;
 			padding: 12px 3px;
+			margin-right: 10px;
 			background-position: left;
 			span {
 				margin-left: 18px;
