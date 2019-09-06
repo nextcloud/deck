@@ -69,7 +69,7 @@ class PageController extends Controller {
 
 		if ($this->defaultBoardService->checkFirstRun($this->userId, $this->appName)) {
 			if ($this->permissionService->canCreate()) {
-				$this->defaultBoardService->createDefaultBoard($this->l10n->t('Personal'), $this->userId, '000000');
+				$this->defaultBoardService->createDefaultBoard($this->l10n->t('Personal'), $this->userId, '0087C5');
 			}
 		}
 
