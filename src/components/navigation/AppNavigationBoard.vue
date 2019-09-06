@@ -130,6 +130,16 @@ export default {
 					text: t('deck', 'Edit board')
 				})
 
+				actions.push({
+					action: () => {
+						this.hideMenu()
+						// this.boardApi.cloneBoard(this.board)
+						this.$store.dispatch('cloneBoard', this.board)
+					},
+					icon: 'icon-clone',
+					text: t('deck', 'Clone board')
+				})
+
 				if (!this.board.archived) {
 					actions.push({
 						action: () => {

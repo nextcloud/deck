@@ -40,6 +40,7 @@ return [
 		['name' => 'board#addAcl', 'url' => '/boards/{boardId}/acl', 'verb' => 'POST'],
 		['name' => 'board#updateAcl', 'url' => '/boards/{boardId}/acl', 'verb' => 'PUT'],
 		['name' => 'board#deleteAcl', 'url' => '/boards/{boardId}/acl/{aclId}', 'verb' => 'DELETE'],
+		['name' => 'board#clone', 'url' => '/boards/{boardId}/clone', 'verb' => 'POST'],
 
 		// stacks
 		['name' => 'stack#index', 'url' => '/stacks/{boardId}', 'verb' => 'GET'],
