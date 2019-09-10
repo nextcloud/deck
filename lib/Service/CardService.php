@@ -402,6 +402,9 @@ class CardService {
 		}
 
 		$card = $this->cardMapper->find($id);
+		if ($card->getArchived()) {
+			throw new StatusException('Operation not allowed. This card is archived.');
+		}
 		$card->setStackId($stackId);
 		$this->cardMapper->update($card);
 

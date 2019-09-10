@@ -231,7 +231,10 @@ class CardServiceTest extends TestCase {
     public function testReorder($cardId, $newPosition, $order) {
         $cards = $this->getCards();
         $cardsTmp = [];
-        $this->cardMapper->expects($this->at(0))->method('findAll')->willReturn($cards);
+        $this->cardMapper->expects($this->once())->method('findAll')->willReturn($cards);
+        $card = new Card();
+        $card->setStackId(123);
+		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
         $result = $this->cardService->reorder($cardId, 123, $newPosition);
         foreach ($result as $card) {
             $actual[$card->getOrder()] = $card->getId();
@@ -254,7 +257,8 @@ class CardServiceTest extends TestCase {
         $card = new Card();
         $card->setTitle('title');
         $card->setArchived(true);
-        $this->cardMapper->expects($this->once())->method('findAll')->willReturn([$card]);
+		$card->setStackId(123);
+		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
         $this->cardMapper->expects($this->never())->method('update')->willReturnCallback(function($c) { return $c; });
         $this->expectException(StatusException::class);
         $actual = $this->cardService->reorder(123, 234, 1);
