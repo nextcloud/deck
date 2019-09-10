@@ -59,7 +59,7 @@ class PageControllerTest extends \Test\TestCase {
 		$board = new Board();
 		$board->setTitle('Personal');
 		$board->setOwner($this->userId);
-		$board->setColor('000000');
+		$board->setColor('317CCC');
 
 		$this->defaultBoardService->expects($this->once())
 			->method('checkFirstRun')
@@ -82,7 +82,7 @@ class PageControllerTest extends \Test\TestCase {
 		$board = new Board();
 		$board->setTitle('Personal');
 		$board->setOwner($this->userId);
-		$board->setColor('000000');
+		$board->setColor('317CCC');
 
 		$this->defaultBoardService->expects($this->once())
 			->method('checkFirstRun')

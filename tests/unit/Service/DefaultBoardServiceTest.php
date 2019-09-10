@@ -103,7 +103,7 @@ class DefaultBoardServiceTest extends TestCase {
 		$board = new Board();
 		$board->setTitle('Personal');
 		$board->setOwner($this->userId);
-		$board->setColor('000000');
+		$board->setColor('317CCC');
 
 		$userBoards = [$board];
 
@@ -121,7 +121,7 @@ class DefaultBoardServiceTest extends TestCase {
 
 	public function testCreateDefaultBoard() {	
 		$title = 'Personal';		
-		$color = '000000';
+		$color = '317CCC';
 		$boardId = 5;
 		
 		$board = new Board();
