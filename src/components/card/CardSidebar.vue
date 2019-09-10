@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<AppSidebar v-if="currentCard !== null && copiedCard !== null"
+	<app-sidebar v-if="currentCard !== null && currentBoard && copiedCard !== null"
 		:actions="toolbarActions"
 		:title="currentCard.title"
 		:subtitle="subtitle"
@@ -113,7 +113,12 @@
 				{{ t('deck', 'Upload attachment') }}
 			</button>
 		</AppSidebarTab>
-		<AppSidebarTab :order="2" name="Timeline" icon="icon-activity">
+
+		<AppSidebarTab :order="2" name="Comments" icon="icon-comment">
+			<CommentsTabSidebar :card="currentCard" />
+		</AppSidebarTab>
+
+		<AppSidebarTab :order="3" name="Timeline" icon="icon-activity">
 			<div v-if="isLoading" class="icon icon-loading" />
 			<ActivityEntry v-for="entry in cardActivity"
 				v-else
@@ -139,6 +144,7 @@ import { ActionButton } from '@nextcloud/vue/dist/Components/ActionButton'
 import ActivityEntry from '../ActivityEntry'
 import Color from '../../mixins/color'
 import { CollectionList } from 'nextcloud-vue-collections'
+import CommentsTabSidebar from './CommentsTabSidebar'
 
 export default {
 	name: 'CardSidebar',
@@ -153,6 +159,7 @@ export default {
 		ActionButton,
 		Avatar,
 		CollectionList,
+		CommentsTabSidebar
 	},
 	mixins: [
 		Color,
@@ -248,7 +255,6 @@ export default {
 	},
 	created() {
 		setInterval(this.updateRelativeTimestamps, 10000)
-		this.loadCardActivity()
 	},
 	destroyed() {
 		clearInterval(this.updateRelativeTimestamps)
