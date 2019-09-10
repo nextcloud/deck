@@ -80,7 +80,12 @@
 				{{ t('deck', 'Upload attachment') }}
 			</button>
 		</AppSidebarTab>
-		<AppSidebarTab :order="2" name="Timeline" icon="icon-activity">
+
+		<AppSidebarTab :order="2" name="Comments" icon="icon-comment">
+			<CommentsTabSidebar :card="currentCard" />
+		</AppSidebarTab>
+
+		<AppSidebarTab :order="3" name="Timeline" icon="icon-activity">
 			<div v-if="isLoading" class="icon icon-loading" />
 			<ActivityEntry v-for="entry in cardActivity" v-else :key="entry.activity_id"
 				:activity="entry" />
@@ -97,6 +102,7 @@ import { Actions } from 'nextcloud-vue/dist/Components/Actions'
 import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
 import ActivityEntry from '../ActivityEntry'
 import Color from '../../mixins/color'
+import CommentsTabSidebar from './CommentsTabSidebar'
 
 export default {
 	name: 'CardSidebar',
@@ -109,7 +115,8 @@ export default {
 		VueEasymde,
 		Actions,
 		ActionButton,
-		Avatar
+		Avatar,
+		CommentsTabSidebar
 	},
 	mixins: [
 		Color
