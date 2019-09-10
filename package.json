@@ -26,7 +26,7 @@
 		"test:coverage": "jest --coverage"
 	},
 	"dependencies": {
-		"@babel/polyfill": "^7.4.4",
+		"@babel/polyfill": "^7.6.0",
 		"nextcloud-axios": "^0.2.1",
 		"nextcloud-server": "^0.15.10",
 		"nextcloud-vue": "^0.12.3",
