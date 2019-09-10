@@ -30,17 +30,18 @@ export class CommentApi {
 	}
 
 	listComments(cardId) {
+
 		return axios({
-			method: 'PROPFIND',
+			method: 'REPORT',
 			url: this.url(`${cardId}`)
-			}).then(
-				(response) => {
-					return Promise.resolve(response.data)
-				},
-				(err) => {
-					return Promise.reject(err)
-				}
-			)
+		}).then(
+			(response) => {
+				return Promise.resolve(response.data)
+			},
+			(err) => {
+				return Promise.reject(err)
+			}
+		)
 			.catch((err) => {
 				return Promise.reject(err)
 			})

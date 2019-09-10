@@ -21,7 +21,6 @@
  */
 
 import { CommentApi } from '../services/CommentApi'
-import Vue from 'vue'
 
 const apiClient = new CommentApi()
 
@@ -38,7 +37,7 @@ export default {
 		} */
 	},
 	mutations: {
-		
+
 		/* listComments(state, comments) {
 			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
@@ -48,13 +47,13 @@ export default {
 				state.cards.push(card)
 			}
 		}, */
-		
+
 	},
 	actions: {
 		listComments({ commit }, card) {
-			apiClient.listComments(card)
+			apiClient.listComments(card.id)
 				.then((comments) => {
-					//commit('listComments', comments)
+					// commit('listComments', comments)
 				})
 		}
 	}

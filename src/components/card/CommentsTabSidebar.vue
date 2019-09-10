@@ -9,15 +9,14 @@
 
 		<div id="commentForm">
 			<form @submit.prevent="">
-				<input :placeholder="t('deck', 'New comment') + ' ...'" v-model="comment" type="text" autofocus>
+				<input :placeholder="t('deck', 'New comment') + ' ...'" v-model="comment" type="text"
+					autofocus>
 				<input v-tooltip="t('deck', 'Save')" class="icon-confirm" type="submit"
 					value="">
 			</form>
 		</div>
 
-		<div id="commentsFeed">
-
-		</div>
+		<div id="commentsFeed" />
 	</div>
 </template>
 
@@ -38,7 +37,7 @@ export default {
 	data() {
 		return {
 			comment: ''
-			
+
 		}
 	},
 	computed: {
@@ -50,7 +49,7 @@ export default {
 	created() {
 		this.loadComments()
 	},
-	
+
 	methods: {
 		loadComments() {
 			this.$store.dispatch('listComments', this.card)
@@ -67,5 +66,5 @@ export default {
 		padding: 12px 9px;
 		flex-grow: 1;
 	}
-	
+
 </style>
