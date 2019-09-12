@@ -8,25 +8,35 @@
 		</div>
 
 		<div id="commentForm">
-			<form @submit.prevent="">
+			<form @submit.prevent="createComment()">
 				<input :placeholder="t('deck', 'New comment') + ' ...'" v-model="comment" type="text"
-					autofocus>
+					autofocus required>
 				<input v-tooltip="t('deck', 'Save')" class="icon-confirm" type="submit"
 					value="">
 			</form>
 		</div>
 
-		<div id="commentsFeed" />
+		<ul id="commentsFeed">
+			<CommentItem v-for="comment in comments" :comment="comment" :key="comment.id"
+				@doReload="loadComments" />
+		</ul>
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import { Avatar } from 'nextcloud-vue'
+import { Actions } from 'nextcloud-vue/dist/Components/Actions'
+import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
+import CommentItem from './CommentItem'
+
 export default {
 	name: 'CommentsTabSidebar',
 	components: {
-		Avatar
+		Avatar,
+		Actions,
+		ActionButton,
+		CommentItem
 	},
 	props: {
 		card: {
@@ -42,9 +52,16 @@ export default {
 	},
 	computed: {
 		...mapState({
-			comments: state => state.comments.comments
+			comments: state => state.comment.comments
 		})
 
+	},
+	watch: {
+		'card': {
+			handler() {
+				this.loadComments()
+			}
+		}
 	},
 	created() {
 		this.loadComments()
@@ -53,6 +70,13 @@ export default {
 	methods: {
 		loadComments() {
 			this.$store.dispatch('listComments', this.card)
+		},
+		createComment() {
+			this.card.comment = this.comment
+			this.$store.dispatch('createComment', this.card)
+			this.loadComments()
+			this.card.comment = ''
+			this.comment = ''
 		}
 	}
 }
@@ -66,5 +90,4 @@ export default {
 		padding: 12px 9px;
 		flex-grow: 1;
 	}
-
 </style>

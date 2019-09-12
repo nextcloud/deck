@@ -25,15 +25,19 @@ import axios from 'nextcloud-axios'
 export class CommentApi {
 
 	url(url) {
-		url = `/remote.php/dav/comments/deckCard/${url}`
-		return OC.generateUrl(url)
+		url = `dav/comments/deckCard/${url}`
+		return OC.linkToRemote(url)
 	}
 
 	listComments(cardId) {
-
 		return axios({
 			method: 'REPORT',
-			url: this.url(`${cardId}`)
+			url: this.url(`${cardId}`),
+			data: `<?xml version="1.0" encoding="utf-8" ?>
+			<oc:filter-comments xmlns:D="DAV:" xmlns:oc="http://owncloud.org/ns">
+				<oc:limit>21</oc:limit>
+				<oc:offset>0</oc:offset>
+			</oc:filter-comments>`
 		}).then(
 			(response) => {
 				return Promise.resolve(response.data)
@@ -47,46 +51,61 @@ export class CommentApi {
 			})
 	}
 
-	createComment(cardId) {
-		return axios.post(this.url(`${cardId}`))
-			.then(
-				(response) => {
-					return Promise.resolve(response.data)
-				},
-				(err) => {
-					return Promise.reject(err)
-				}
-			)
+	createComment(card) {
+		return axios({
+			method: 'POST',
+			url: this.url(`${card.id}`),
+			data: { actorType: 'users', message: `${card.comment}`, verb: 'comment' }
+		}).then(
+			(response) => {
+				return Promise.resolve(response.data)
+			},
+			(err) => {
+				return Promise.reject(err)
+			}
+		)
 			.catch((err) => {
 				return Promise.reject(err)
 			})
 	}
 
-	updateComment(cardId, commentId) {
-		return axios.proppatch(this.url(`${cardId}/${commentId}`))
-			.then(
-				(response) => {
-					return Promise.resolve(response.data)
-				},
-				(err) => {
-					return Promise.reject(err)
-				}
-			)
+	updateComment(data) {
+		return axios({
+			method: 'PROPPATCH',
+			url: this.url(`${data.cardId}/${data.commentId}`),
+			data: `<?xml version="1.0"?>
+			<d:propertyupdate xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
+				<d:set>
+					<d:prop>
+						<oc:message>${data.comment}</oc:message>
+					</d:prop>
+				</d:set>
+			</d:propertyupdate>`
+		}).then(
+			(response) => {
+				return Promise.resolve(response.data)
+			},
+			(err) => {
+				return Promise.reject(err)
+			}
+		)
 			.catch((err) => {
 				return Promise.reject(err)
 			})
 	}
 
-	deleteComment(cardId, commentId) {
-		return axios.delete(this.url(`${cardId}/${commentId}`))
-			.then(
-				(response) => {
-					return Promise.resolve(response.data)
-				},
-				(err) => {
-					return Promise.reject(err)
-				}
-			)
+	deleteComment(data) {
+		return axios({
+			method: 'DELETE',
+			url: this.url(`${data.cardId}/${data.commentId}`)
+		}).then(
+			(response) => {
+				return Promise.resolve(response.data)
+			},
+			(err) => {
+				return Promise.reject(err)
+			}
+		)
 			.catch((err) => {
 				return Promise.reject(err)
 			})

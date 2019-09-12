@@ -21,6 +21,7 @@
  */
 
 import { CommentApi } from '../services/CommentApi'
+import xmlToTagList from '../helpers/xml'
 
 const apiClient = new CommentApi()
 
@@ -28,32 +29,42 @@ export default {
 	state: {
 		comments: []
 	},
-	getters: {
-		/* cardsByStack: state => (id) => {
-			return state.cards.filter((card) => card.stackId === id).sort((a, b) => a.order - b.order)
-		},
-		cardById: state => (id) => {
-			return state.cards.find((card) => card.id === id)
-		} */
-	},
 	mutations: {
-
-		/* listComments(state, comments) {
-			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+		listComments(state, comment) {
+			state.comments = []
+			state.comments = comment
+		},
+		updateComment(state, comment) {
+			let existingIndex = state.comments.findIndex(_comment => _comment.id === comment.commentId)
 			if (existingIndex !== -1) {
-				let existingCard = state.cards.find(_card => _card.id === card.id)
-				Vue.set(state.cards, existingIndex, Object.assign({}, existingCard, card))
-			} else {
-				state.cards.push(card)
+				state.comments[existingIndex].message = comment.comment
 			}
-		}, */
-
+		}
 	},
 	actions: {
 		listComments({ commit }, card) {
 			apiClient.listComments(card.id)
 				.then((comments) => {
-					// commit('listComments', comments)
+					let commentsJson = xmlToTagList(comments)
+					commit('listComments', commentsJson)
+				})
+		},
+		createComment({ commit }, card) {
+			apiClient.createComment(card)
+				.then((comments) => {
+
+				})
+		},
+		deleteComment({ commit }, data) {
+			apiClient.deleteComment(data)
+				.then((retVal) => {
+
+				})
+		},
+		updateComment({ commit }, data) {
+			apiClient.updateComment(data)
+				.then((retVal) => {
+					commit('updateComment', data)
 				})
 		}
 	}
