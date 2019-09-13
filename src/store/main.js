@@ -141,6 +141,7 @@ export default new Vuex.Store({
 		setSharees(state, shareesUsersAndGroups) {
 			state.sharees = shareesUsersAndGroups.users
 			state.sharees.push(...shareesUsersAndGroups.groups)
+			state.sharees.push(...shareesUsersAndGroups.circles)
 		},
 		setActivity(state, activity) {
 			activity.forEach(element => {
