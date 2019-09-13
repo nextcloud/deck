@@ -37,9 +37,18 @@
 					<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">{{ t('deck', (showArchived ? 'Unarchive card' : 'Archive card')) }}</ActionButton>
 					<ActionButton v-if="showArchived === false" icon="icon-delete" @click="deleteCard()">{{ t('deck', 'Delete card') }}</ActionButton>
 					<ActionButton icon="icon-settings-dark" @click="openCard">{{ t('deck', 'Card details') }}</ActionButton>
+					<ActionButton icon="icon-settings-dark" @click.stop="modalShow=true">{{ t('deck', 'Move card') }}</ActionButton>
 				</Actions>
 
 			</transition>
+			<modal v-if="modalShow" title="Move card to another board" @close="modalShow=false">
+				<div class="modal__content">
+					<Multiselect v-model="selectedBoard" :options="boards" label="title" />
+					{{ stacksBySelectedBoard }}
+
+				</div>
+			</modal>
+
 		</div>
 		<ul class="labels" @click="openCard">
 			<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)"><span>{{ label.title }}</span></li>
@@ -51,9 +60,10 @@
 </template>
 
 <script>
-import { PopoverMenu } from 'nextcloud-vue'
+import { Modal } from 'nextcloud-vue/dist/Components/Modal'
 import { Actions } from 'nextcloud-vue/dist/Components/Actions'
 import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
+import { Multiselect } from 'nextcloud-vue/dist/Components/Multiselect'
 import ClickOutside from 'vue-click-outside'
 import { mapState } from 'vuex'
 
@@ -63,7 +73,7 @@ import Color from '../../mixins/color'
 
 export default {
 	name: 'CardItem',
-	components: { PopoverMenu, CardBadges, LabelTag, Actions, ActionButton },
+	components: { Modal, CardBadges, LabelTag, Actions, ActionButton, Multiselect },
 	directives: {
 		ClickOutside
 	},
@@ -78,16 +88,31 @@ export default {
 		return {
 			menuOpened: false,
 			editing: false,
-			copiedCard: ''
+			copiedCard: '',
+			modalShow: false,
+			selectedBoard: '',
+			selectedStack: ''
 		}
 	},
 	computed: {
 		...mapState({
 			compactMode: state => state.compactMode,
-			showArchived: state => state.showArchived
+			showArchived: state => state.showArchived,
+			currentBoard: state => state.currentBoard
 		}),
 		card() {
 			return this.$store.getters.cardById(this.id)
+		},
+		boards() {
+			return this.$store.getters.boards.filter(board => {
+				return board.id !== this.currentBoard.id
+			})
+		},
+		stacksBySelectedBoard() {
+			if (this.selectedBoard === '') {
+				return []
+			}
+			return this.$store.getters.stacksByBoard(this.selectedBoard.id)
 		},
 		menu() {
 			return []
@@ -136,6 +161,9 @@ export default {
 			this.copiedCard = Object.assign({}, this.card)
 			this.copiedCard.newUserUid = this.card.owner.uid
 			this.$store.dispatch('assignCardToUser', this.copiedCard)
+		},
+		moveCard() {
+
 		}
 	}
 }
@@ -247,5 +275,11 @@ export default {
 			font-size: 0;
 			color: transparent;
 		}
+	}
+
+	.modal__content {
+		width: 50vw;
+		text-align: center;
+		margin: 10vw 0;
 	}
 </style>
