@@ -87,10 +87,11 @@ export default {
 					sharee.isNoUser = true
 				}
 				if (item.value.shareType === 7) {
-					sharee.icon = 'icon-circle'
+					sharee.icon = 'icon-circles'
 					sharee.isNoUser = true
 				}
 
+				sharee.value = item.value
 				return sharee
 			})
 		},
