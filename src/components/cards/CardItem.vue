@@ -29,9 +29,11 @@
 		@click.self="openCard">
 		<div class="card-upper">
 			<h3 v-if="showArchived">{{ card.title }}</h3>
-			<h3 v-else @click.stop="startEditing(card)">{{ card.title }}</h3>
+			<h3 v-else-if="!editing" @click.stop="startEditing(card)">{{ card.title }}</h3>
+			<h3 v-else>editing</h3>
 			<transition name="fade" mode="out-in">
-				<form v-if="editing" v-click-outside="cancelEdit" @keyup.esc="cancelEdit" @submit.prevent="finishedEdit(card)">
+				<form v-click-outside="cancelEdit" v-if="editing" @keyup.esc="cancelEdit"
+					@submit.prevent="finishedEdit(card)">
 					<input v-model="copiedCard.title" type="text" autofocus>
 					<input type="button" class="icon-confirm" @click="finishedEdit(card)">
 				</form>
