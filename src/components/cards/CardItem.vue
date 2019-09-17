@@ -31,7 +31,7 @@
 			<h3 v-if="showArchived">{{ card.title }}</h3>
 			<h3 v-else @click.stop="startEditing(card)">{{ card.title }}</h3>
 			<transition name="fade" mode="out-in">
-				<form v-if="editing" v-click-outside="cancelEdit">
+				<form v-if="editing" v-click-outside="cancelEdit" @submit.prevent="finishedEdit(card)">
 					<input v-model="copiedCard.title" type="text" autofocus>
 					<input type="button" class="icon-confirm" @click="finishedEdit(card)">
 				</form>
