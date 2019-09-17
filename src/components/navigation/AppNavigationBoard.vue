@@ -133,8 +133,14 @@ export default {
 				actions.push({
 					action: () => {
 						this.hideMenu()
-						// this.boardApi.cloneBoard(this.board)
-						this.$store.dispatch('cloneBoard', this.board)
+						this.loading = true
+						this.$store.dispatch('cloneBoard', this.board).then((newBoard) => {
+							this.loading = false
+							this.editTitle = this.board.title
+							this.editColor = '#' + this.board.color
+							this.editing = true
+
+						})
 					},
 					icon: 'icon-clone',
 					text: t('deck', 'Clone board')
