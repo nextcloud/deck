@@ -44,6 +44,8 @@
 			<modal v-if="modalShow" title="Move card to another board" @close="modalShow=false">
 				<div class="modal__content">
 					<Multiselect v-model="selectedBoard" :options="boards" label="title" />
+					<Multiselect v-model="selectedStack" :options="stacksBySelectedBoard" label="title" />
+
 					{{ stacksBySelectedBoard }}
 
 				</div>
@@ -66,6 +68,7 @@ import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
 import { Multiselect } from 'nextcloud-vue/dist/Components/Multiselect'
 import ClickOutside from 'vue-click-outside'
 import { mapState } from 'vuex'
+import axios from 'nextcloud-axios'
 
 import CardBadges from './CardBadges'
 import LabelTag from './LabelTag'
@@ -112,7 +115,22 @@ export default {
 			if (this.selectedBoard === '') {
 				return []
 			}
-			return this.$store.getters.stacksByBoard(this.selectedBoard.id)
+
+			let url = OC.generateUrl('/apps/deck/stacks/' + this.selectedBoard.id)
+			axios.get(url)
+				.then(
+					(response) => {
+						return Promise.resolve(response.data)
+					},
+					(err) => {
+						return Promise.reject(err)
+					}
+				)
+				.catch((err) => {
+					return Promise.reject(err)
+				}).then((result) => {
+					return result
+				})
 		},
 		menu() {
 			return []
