@@ -420,7 +420,7 @@ class CardService {
 			$result[$card->getOrder()] = $card;
 		}
 		$this->changeHelper->cardChanged($id, false);
-		return $result;
+		return array_values($result);
 	}
 
 	/**
