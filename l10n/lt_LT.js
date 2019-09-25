@@ -68,6 +68,7 @@ OC.L10N.register(
     "by" : " ",
     "Undo file deletion" : "Atšaukti failo ištrynimą",
     "Insert the file into the description" : "Įterpti failą į aprašą",
+    "Delete attachment" : "Ištrinti priedą",
     "Modified:" : "Keitimo laikas:",
     "Created:" : "Sukūrimo laikas:",
     "Add a tag" : "Pridėti žymę",
