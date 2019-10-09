@@ -43,8 +43,15 @@
 			</transition>
 			<modal v-if="modalShow" title="Move card to another board" @close="modalShow=false">
 				<div class="modal__content">
-					<Multiselect v-model="selectedBoard" :options="boards" label="title" />
-					<Multiselect v-model="selectedStack" :options="asyncFindStacks" label="title" />
+					<Multiselect v-model="selectedBoard" :options="boards" label="title"
+						@select="loadStacksFromBoard" />
+					<Multiselect v-model="selectedStack" :options="stacksFromBoard" label="title" />
+					<button @click="moveCard">
+						<span class="icon-confirm" />{{ t('deck', 'Move card') }}
+					</button>
+					<button @click="modalShow=false">
+						<span class="icon-cancel" />{{ t('deck', 'Cancel') }}
+					</button>
 
 				</div>
 			</modal>
@@ -92,7 +99,8 @@ export default {
 			copiedCard: '',
 			modalShow: false,
 			selectedBoard: '',
-			selectedStack: ''
+			selectedStack: '',
+			stacksFromBoard: []
 		}
 	},
 	computed: {
@@ -157,17 +165,20 @@ export default {
 			this.copiedCard.newUserUid = this.card.owner.uid
 			this.$store.dispatch('assignCardToUser', this.copiedCard)
 		},
-		async asyncFindStacks() {
+		async loadStacksFromBoard(board) {
 			try {
-				let url = OC.generateUrl('/apps/deck/stacks/' + this.selectedBoard.id)
+				let url = OC.generateUrl('/apps/deck/stacks/' + board.id)
 				let response = await axios.get(url)
-				return response.data
+				this.stacksFromBoard = response.data
 			} catch (err) {
 				return err
 			}
 		},
 		moveCard() {
-
+			this.copiedCard = Object.assign({}, this.card)
+			this.copiedCard.stackId = this.selectedStack.id
+			this.$store.dispatch('moveCard', this.copiedCard)
+			this.modalShow = false
 		}
 	}
 }
