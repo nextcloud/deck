@@ -280,17 +280,14 @@ export default new Vuex.Store({
 					commit('addBoard', board)
 				})
 		},
-		cloneBoard({ commit }, boardData) {
-			return new Promise((resolve, reject) => {
-				apiClient.cloneBoard(boardData)
-					.then((board) => {
-						commit('cloneBoard', board)
-						resolve(board)
-					})
-					.catch((err) => {
-						return reject(err)
-					})
-			})
+		async cloneBoard({ commit }, boardData) {
+			try {
+				let newBoard = await apiClient.cloneBoard(boardData)
+				commit('cloneBoard', newBoard)
+				return newBoard
+			} catch (err) {
+				return err
+			}
 		},
 		removeBoard({ commit }, board) {
 			commit('removeBoard', board)

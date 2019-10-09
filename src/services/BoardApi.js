@@ -135,19 +135,13 @@ export class BoardApi {
 			})
 	}
 
-	cloneBoard(board) {
-		return axios.post(this.url(`/boards/${board.id}/clone`))
-			.then(
-				(response) => {
-					return Promise.resolve(response.data)
-				},
-				(err) => {
-					return Promise.reject(err)
-				}
-			)
-			.catch((err) => {
-				return Promise.reject(err)
-			})
+	async cloneBoard(board) {
+		try {
+			let response = await axios.post(this.url(`/boards/${board.id}/clone`))
+			return response.data
+		} catch (err) {
+			return err
+		}
 	}
 
 	// Label API Calls
