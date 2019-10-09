@@ -44,9 +44,7 @@
 			<modal v-if="modalShow" title="Move card to another board" @close="modalShow=false">
 				<div class="modal__content">
 					<Multiselect v-model="selectedBoard" :options="boards" label="title" />
-					<Multiselect v-model="selectedStack" :options="stacksBySelectedBoard" label="title" />
-
-					{{ stacksBySelectedBoard }}
+					<Multiselect v-model="selectedStack" :options="asyncFindStacks" label="title" />
 
 				</div>
 			</modal>
@@ -111,27 +109,6 @@ export default {
 				return board.id !== this.currentBoard.id
 			})
 		},
-		stacksBySelectedBoard() {
-			if (this.selectedBoard === '') {
-				return []
-			}
-
-			let url = OC.generateUrl('/apps/deck/stacks/' + this.selectedBoard.id)
-			axios.get(url)
-				.then(
-					(response) => {
-						return Promise.resolve(response.data)
-					},
-					(err) => {
-						return Promise.reject(err)
-					}
-				)
-				.catch((err) => {
-					return Promise.reject(err)
-				}).then((result) => {
-					return result
-				})
-		},
 		menu() {
 			return []
 		},
@@ -179,6 +156,15 @@ export default {
 			this.copiedCard = Object.assign({}, this.card)
 			this.copiedCard.newUserUid = this.card.owner.uid
 			this.$store.dispatch('assignCardToUser', this.copiedCard)
+		},
+		async asyncFindStacks() {
+			try {
+				let url = OC.generateUrl('/apps/deck/stacks/' + this.selectedBoard.id)
+				let response = await axios.get(url)
+				return response.data
+			} catch (err) {
+				return err
+			}
 		},
 		moveCard() {
 
