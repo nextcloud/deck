@@ -153,7 +153,7 @@ class BoardController extends ApiController {
 	/**
 	 * @NoAdminRequired
 	 * @param $boardId
-	 * @return \OCP\AppFramework\Db\Entity
+	 * @return \OCP\Deck\DB\Board
 	 */
 	public function clone($boardId) {
 		return $this->boardService->clone($boardId);

@@ -55,8 +55,8 @@
 
 
 @if mixin-exists('icon-black-white') {
-	@include icon-black-white('deck', 'deck', 1);
-	@include icon-black-white('archive', 'deck', 1);
+  @include icon-black-white('deck', 'deck', 1);
+  @include icon-black-white('archive', 'deck', 1);
   @include icon-black-white('circles', 'deck', 1);
   @include icon-black-white('clone', 'deck', 1);
 	

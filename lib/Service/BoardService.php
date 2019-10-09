@@ -624,7 +624,7 @@ class BoardService {
 		
 		$board = $this->boardMapper->find($id);
 		$newBoard = new Board();
-		$newBoard->setTitle($board->getTitle() . ' (copy)');
+		$newBoard->setTitle($board->getTitle() . ' (' . $this->l10n->t('copy') . ')');
 		$newBoard->setOwner($board->getOwner());
 		$newBoard->setColor($board->getColor());
 		$this->boardMapper->insert($newBoard);

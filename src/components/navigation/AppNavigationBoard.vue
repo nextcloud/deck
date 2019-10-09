@@ -131,16 +131,20 @@ export default {
 				})
 
 				actions.push({
-					action: () => {
+					action: async () => {
 						this.hideMenu()
 						this.loading = true
-						this.$store.dispatch('cloneBoard', this.board).then((newBoard) => {
+						try {
+							const newBoard = await this.$store.dispatch('cloneBoard', this.board)
+							
 							this.loading = false
-							this.editTitle = this.board.title
-							this.editColor = '#' + this.board.color
-							this.editing = true
-
-						})
+							const route = this.routeTo
+							route.params.id = newBoard.id
+							this.$router.push(route)
+						}
+						catch {
+							OC.Notification.showTemporary(t('deck', 'An error occurred'))
+						}
 					},
 					icon: 'icon-clone',
 					text: t('deck', 'Clone board')
