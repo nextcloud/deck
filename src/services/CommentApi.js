@@ -21,6 +21,7 @@
  */
 
 import axios from 'nextcloud-axios'
+import { getCurrentUser } from '@nextcloud/auth'
 
 export class CommentApi {
 
@@ -51,14 +52,25 @@ export class CommentApi {
 			})
 	}
 
-	createComment(card) {
+	createComment(commentObj) {
 		return axios({
 			method: 'POST',
-			url: this.url(`${card.id}`),
-			data: { actorType: 'users', message: `${card.comment}`, verb: 'comment' }
+			url: this.url(`${commentObj.cardId}`),
+			data: { actorType: 'users', message: `${commentObj.comment}`, verb: 'comment' }
 		}).then(
 			(response) => {
-				return Promise.resolve(response.data)
+				let header = response.headers['content-location']
+				let headerArray = header.split('/')
+				let id = headerArray[headerArray.length - 1]
+
+				let ret = {
+					cardId: commentObj.cardId,
+					id: id,
+					uId: getCurrentUser().uid,
+					creationDateTime: new Date(),
+					message: commentObj.comment
+				}
+				return Promise.resolve(ret)
 			},
 			(err) => {
 				return Promise.reject(err)

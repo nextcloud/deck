@@ -16,8 +16,10 @@
 			</form>
 		</div>
 
+		<div v-if="isLoading" class="icon icon-loading" />
+
 		<ul id="commentsFeed">
-			<CommentItem v-for="comment in comments" :comment="comment" :key="comment.id"
+			<CommentItem v-for="comment in comments[card.id]" :comment="comment" :key="comment.id"
 				@doReload="loadComments" />
 		</ul>
 	</div>
@@ -46,8 +48,8 @@ export default {
 	},
 	data() {
 		return {
-			comment: ''
-
+			comment: '',
+			isLoading: false
 		}
 	},
 	computed: {
@@ -69,13 +71,18 @@ export default {
 
 	methods: {
 		loadComments() {
-			this.$store.dispatch('listComments', this.card)
+			this.isLoading = true
+			this.$store.dispatch('listComments', this.card).then(response => {
+				this.isLoading = false
+			})
 		},
 		createComment() {
-			this.card.comment = this.comment
-			this.$store.dispatch('createComment', this.card)
+			let commentObj = {
+				cardId: this.card.id,
+				comment: this.comment
+			}
+			this.$store.dispatch('createComment', commentObj)
 			this.loadComments()
-			this.card.comment = ''
 			this.comment = ''
 		}
 	}
@@ -83,6 +90,12 @@ export default {
 </script>
 
 <style lang="scss">
+	#commentForm form {
+		display: flex
+	}
+	#commentForm form input {
+		flex-grow: 1;
+	}
 	#userDiv {
 		margin-bottom: 20px;
 	}

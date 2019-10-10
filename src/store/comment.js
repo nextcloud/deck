@@ -27,17 +27,19 @@ const apiClient = new CommentApi()
 
 export default {
 	state: {
-		comments: []
+		comments: {}
 	},
 	mutations: {
-		listComments(state, comment) {
-			state.comments = []
-			state.comments = comment
+		listComments(state, commentObj) {
+			state.comments[commentObj.cardId] = commentObj.comments
+		},
+		createComment(state, newComment) {
+			state.comments[newComment.cardId] = newComment
 		},
 		updateComment(state, comment) {
 			let existingIndex = state.comments.findIndex(_comment => _comment.id === comment.commentId)
 			if (existingIndex !== -1) {
-				state.comments[existingIndex].message = comment.comment
+				Vue.set(state.comments, existingIndex, comment)
 			}
 		}
 	},
@@ -46,13 +48,17 @@ export default {
 			apiClient.listComments(card.id)
 				.then((comments) => {
 					let commentsJson = xmlToTagList(comments)
-					commit('listComments', commentsJson)
+					let returnObj = {
+						cardId: card.id,
+						comments: commentsJson
+					}
+					commit('listComments', returnObj)
 				})
 		},
-		createComment({ commit }, card) {
-			apiClient.createComment(card)
-				.then((comments) => {
-
+		createComment({ commit }, newComment) {
+			apiClient.createComment(newComment)
+				.then((newComment) => {
+					commit('createComment', newComment)
 				})
 		},
 		deleteComment({ commit }, data) {
