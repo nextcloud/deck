@@ -115,6 +115,19 @@ export default new Vuex.Store({
 				state.boards.push(board)
 			}
 		},
+
+		cloneBoard(state, board) {
+			const indexExisting = state.boards.findIndex((b) => {
+				return board.id === b.id
+			})
+
+			if (indexExisting > -1) {
+				Vue.set(state.boards, indexExisting, board)
+			} else {
+				state.boards.push(board)
+			}
+		},
+
 		/**
 		 * Removes the board from the store.
 		 *
@@ -267,6 +280,15 @@ export default new Vuex.Store({
 				.then((board) => {
 					commit('addBoard', board)
 				})
+		},
+		async cloneBoard({ commit }, boardData) {
+			try {
+				let newBoard = await apiClient.cloneBoard(boardData)
+				commit('cloneBoard', newBoard)
+				return newBoard
+			} catch (err) {
+				return err
+			}
 		},
 		removeBoard({ commit }, board) {
 			commit('removeBoard', board)

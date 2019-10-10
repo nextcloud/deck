@@ -150,4 +150,13 @@ class BoardController extends ApiController {
 		return $this->boardService->deleteAcl($aclId);
 	}
 
+	/**
+	 * @NoAdminRequired
+	 * @param $boardId
+	 * @return \OCP\Deck\DB\Board
+	 */
+	public function clone($boardId) {
+		return $this->boardService->clone($boardId);
+	}
+
 }

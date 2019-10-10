@@ -33,6 +33,7 @@ use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
+use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
@@ -603,6 +604,49 @@ class BoardService {
 		);
 
 		return $delete;
+	}
+
+	/**
+	 * @param $id
+	 * @return Board
+	 * @throws DoesNotExistException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
+	public function clone($id) {
+
+		if (is_numeric($id) === false) {
+			throw new BadRequestException('board id must be a number');
+		}
+
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
+		
+		$board = $this->boardMapper->find($id);
+		$newBoard = new Board();
+		$newBoard->setTitle($board->getTitle() . ' (' . $this->l10n->t('copy') . ')');
+		$newBoard->setOwner($board->getOwner());
+		$newBoard->setColor($board->getColor());
+		$this->boardMapper->insert($newBoard);
+
+		$labels = $this->labelMapper->findAll($id);
+		foreach ($labels as $label) {
+			$newLabel = new Label();
+			$newLabel->setTitle($label->getTitle());
+			$newLabel->setColor($label->getColor());
+			$newLabel->setBoardId($newBoard->getId());
+			$this->labelMapper->insert($newLabel);
+		}
+
+		$stacks = $this->stackMapper->findAll($id);
+		foreach ($stacks as $stack) {
+			$newStack = new Stack();
+			$newStack->setTitle($stack->getTitle());
+			$newStack->setBoardId($newBoard->getId());
+			$this->stackMapper->insert($newStack);
+		}
+		
+		return $newBoard;
 	}
 
 	private function enrichWithStacks($board, $since = -1) {
