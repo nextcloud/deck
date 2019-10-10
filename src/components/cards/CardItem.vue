@@ -36,22 +36,21 @@
 					<ActionButton v-if="showArchived === false" icon="icon-user" @click="assignCardToMe()">{{ t('deck', 'Assign to me') }}</ActionButton>
 					<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">{{ t('deck', (showArchived ? 'Unarchive card' : 'Archive card')) }}</ActionButton>
 					<ActionButton v-if="showArchived === false" icon="icon-delete" @click="deleteCard()">{{ t('deck', 'Delete card') }}</ActionButton>
+					<ActionButton icon="icon-external" @click.stop="modalShow=true">{{ t('deck', 'Move card') }}</ActionButton>
 					<ActionButton icon="icon-settings-dark" @click="openCard">{{ t('deck', 'Card details') }}</ActionButton>
-					<ActionButton icon="icon-settings-dark" @click.stop="modalShow=true">{{ t('deck', 'Move card') }}</ActionButton>
 				</Actions>
 
 			</transition>
 			<modal v-if="modalShow" title="Move card to another board" @close="modalShow=false">
 				<div class="modal__content">
-					<Multiselect v-model="selectedBoard" :options="boards" label="title"
+					<Multiselect :placeholder="t('deck', 'select board')" v-model="selectedBoard" :options="boards"
+						label="title"
 						@select="loadStacksFromBoard" />
-					<Multiselect v-model="selectedStack" :options="stacksFromBoard" label="title" />
-					<button @click="moveCard">
-						<span class="icon-confirm" />{{ t('deck', 'Move card') }}
-					</button>
-					<button @click="modalShow=false">
-						<span class="icon-cancel" />{{ t('deck', 'Cancel') }}
-					</button>
+					<Multiselect :placeholder="t('deck', 'select stack')" v-model="selectedStack" :options="stacksFromBoard"
+						label="title" />
+
+					<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">{{ t('deck', 'Move card') }}</button>
+					<button @click="modalShow=false">{{ t('deck', 'Cancel') }}</button>
 
 				</div>
 			</modal>
@@ -130,6 +129,12 @@ export default {
 		},
 		currentCard() {
 			return this.$route.params.cardId === this.id
+		},
+		isBoardAndStackChoosen() {
+			if (this.selectedBoard === '' || this.selectedStack === '') {
+				return false
+			}
+			return true
 		}
 	},
 	methods: {
@@ -293,8 +298,11 @@ export default {
 	}
 
 	.modal__content {
-		width: 50vw;
+		width: 25vw;
 		text-align: center;
-		margin: 10vw 0;
+		margin: 4vw 1vw;
+	}
+	.modal__content button{
+		float: right;
 	}
 </style>
