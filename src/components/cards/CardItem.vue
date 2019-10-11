@@ -43,10 +43,10 @@
 			</transition>
 			<modal v-if="modalShow" title="Move card to another board" @close="modalShow=false">
 				<div class="modal__content">
-					<Multiselect :placeholder="t('deck', 'select board')" v-model="selectedBoard" :options="boards"
+					<Multiselect :placeholder="t('deck', 'Select a board')" v-model="selectedBoard" :options="boards"
 						label="title"
 						@select="loadStacksFromBoard" />
-					<Multiselect :placeholder="t('deck', 'select stack')" v-model="selectedStack" :options="stacksFromBoard"
+					<Multiselect :placeholder="t('deck', 'Select a stack')" v-model="selectedStack" :options="stacksFromBoard"
 						label="title" />
 
 					<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">{{ t('deck', 'Move card') }}</button>
@@ -299,10 +299,17 @@ export default {
 
 	.modal__content {
 		width: 25vw;
+		min-width: 250px;
+		height: 120px;
 		text-align: center;
-		margin: 4vw 1vw;
+		margin: 20px 20px 60px 20px;
+
+		.multiselect {
+			margin-bottom: 10px;
+		}
 	}
-	.modal__content button{
+
+	.modal__content button {
 		float: right;
 	}
 </style>
