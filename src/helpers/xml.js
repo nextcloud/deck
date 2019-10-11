@@ -39,14 +39,19 @@ const parseXml = (xml) => {
 	return dom
 }
 const xmlToTagList = (xml) => {
+
 	let json = xmlToJson(parseXml(xml))
 	let list = json['d:multistatus']['d:response']
+
+	// no element
+	if (list === undefined) {
+		return []
+	}
 	let result = []
-	for (let index in list) {
-		let tag = list[index]['d:propstat']
-		if (tag['d:status']['#text'] !== 'HTTP/1.1 200 OK') {
-			continue
-		}
+
+	// one element
+	if (Array.isArray(list) === false) {
+		let tag = list['d:propstat']
 		result.push({
 			cardId: tag['d:prop']['oc:objectId']['#text'],
 			id: tag['d:prop']['oc:id']['#text'],
@@ -54,6 +59,22 @@ const xmlToTagList = (xml) => {
 			creationDateTime: tag['d:prop']['oc:creationDateTime']['#text'],
 			message: tag['d:prop']['oc:message']['#text']
 		})
+
+	// two or more elements
+	} else {
+		for (let index in list) {
+			let tag = list[index]['d:propstat']
+			if (tag['d:status']['#text'] !== 'HTTP/1.1 200 OK') {
+				continue
+			}
+			result.push({
+				cardId: tag['d:prop']['oc:objectId']['#text'],
+				id: tag['d:prop']['oc:id']['#text'],
+				uId: tag['d:prop']['oc:actorId']['#text'],
+				creationDateTime: tag['d:prop']['oc:creationDateTime']['#text'],
+				message: tag['d:prop']['oc:message']['#text']
+			})
+		}
 	}
 	return result
 }

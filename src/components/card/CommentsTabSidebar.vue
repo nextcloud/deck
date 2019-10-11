@@ -9,7 +9,7 @@
 
 		<div id="commentForm">
 			<form @submit.prevent="createComment()">
-				<input :placeholder="t('deck', 'New comment') + ' ...'" v-model="comment" type="text"
+				<input :placeholder="t('deck', 'New comment') + ' ...'" v-model="newComment" type="text"
 					autofocus required>
 				<input v-tooltip="t('deck', 'Save')" class="icon-confirm" type="submit"
 					value="">
@@ -48,7 +48,7 @@ export default {
 	},
 	data() {
 		return {
-			comment: '',
+			newComment: '',
 			isLoading: false
 		}
 	},
@@ -79,11 +79,11 @@ export default {
 		createComment() {
 			let commentObj = {
 				cardId: this.card.id,
-				comment: this.comment
+				comment: this.newComment
 			}
 			this.$store.dispatch('createComment', commentObj)
 			this.loadComments()
-			this.comment = ''
+			this.newComment = ''
 		}
 	}
 }

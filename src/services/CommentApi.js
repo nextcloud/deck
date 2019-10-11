@@ -64,10 +64,10 @@ export class CommentApi {
 				let id = headerArray[headerArray.length - 1]
 
 				let ret = {
-					cardId: commentObj.cardId,
+					cardId: (commentObj.cardId).toString(),
 					id: id,
 					uId: getCurrentUser().uid,
-					creationDateTime: new Date(),
+					creationDateTime: (new Date()).toString(),
 					message: commentObj.comment
 				}
 				return Promise.resolve(ret)

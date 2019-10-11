@@ -34,12 +34,18 @@ export default {
 			state.comments[commentObj.cardId] = commentObj.comments
 		},
 		createComment(state, newComment) {
-			state.comments[newComment.cardId] = newComment
+			state.comments[newComment.cardId].push(newComment)
 		},
 		updateComment(state, comment) {
-			let existingIndex = state.comments.findIndex(_comment => _comment.id === comment.commentId)
+			let existingIndex = state.comments[comment.cardId].findIndex(_comment => _comment.id === comment.commentId)
 			if (existingIndex !== -1) {
-				Vue.set(state.comments, existingIndex, comment)
+				state.comments[comment.cardId][existingIndex].message = comment.comment
+			}
+		},
+		deleteComment(state, comment) {
+			let existingIndex = state.comments[comment.cardId].findIndex(_comment => _comment.id === comment.commentId)
+			if (existingIndex !== -1) {
+				state.comments[comment.cardId].splice(existingIndex, 1)
 			}
 		}
 	},
@@ -64,7 +70,7 @@ export default {
 		deleteComment({ commit }, data) {
 			apiClient.deleteComment(data)
 				.then((retVal) => {
-
+					commit('deleteComment', data)
 				})
 		},
 		updateComment({ commit }, data) {

@@ -68,8 +68,14 @@ export default {
 				cardId: this.comment.cardId
 			}
 			this.$store.dispatch('deleteComment', data)
-			this.$emit('doReload')
 		}
 	}
 }
 </script>
+
+<style lang="scss">
+	form {
+		display: flex
+	}
+
+</style>
