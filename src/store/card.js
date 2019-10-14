@@ -116,6 +116,12 @@ export default {
 					commit('updateTitle', updatedCard)
 				})
 		},
+		moveCard({ commit }, card) {
+			apiClient.updateCard(card)
+				.then((updatedCard) => {
+					commit('deleteCard', updatedCard)
+				})
+		},
 		reorderCard({ commit }, card) {
 			commit('updateCard', card)
 			// TODO iterate over cards in stacks and increase order state from cards >= card.order

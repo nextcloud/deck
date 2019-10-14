@@ -36,10 +36,25 @@
 					<ActionButton v-if="showArchived === false" icon="icon-user" @click="assignCardToMe()">{{ t('deck', 'Assign to me') }}</ActionButton>
 					<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">{{ t('deck', (showArchived ? 'Unarchive card' : 'Archive card')) }}</ActionButton>
 					<ActionButton v-if="showArchived === false" icon="icon-delete" @click="deleteCard()">{{ t('deck', 'Delete card') }}</ActionButton>
+					<ActionButton icon="icon-external" @click.stop="modalShow=true">{{ t('deck', 'Move card') }}</ActionButton>
 					<ActionButton icon="icon-settings-dark" @click="openCard">{{ t('deck', 'Card details') }}</ActionButton>
 				</Actions>
 
 			</transition>
+			<modal v-if="modalShow" title="Move card to another board" @close="modalShow=false">
+				<div class="modal__content">
+					<Multiselect :placeholder="t('deck', 'Select a board')" v-model="selectedBoard" :options="boards"
+						label="title"
+						@select="loadStacksFromBoard" />
+					<Multiselect :placeholder="t('deck', 'Select a stack')" v-model="selectedStack" :options="stacksFromBoard"
+						label="title" />
+
+					<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">{{ t('deck', 'Move card') }}</button>
+					<button @click="modalShow=false">{{ t('deck', 'Cancel') }}</button>
+
+				</div>
+			</modal>
+
 		</div>
 		<ul class="labels" @click="openCard">
 			<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)"><span>{{ label.title }}</span></li>
@@ -51,11 +66,13 @@
 </template>
 
 <script>
-import { PopoverMenu } from 'nextcloud-vue'
+import { Modal } from 'nextcloud-vue/dist/Components/Modal'
 import { Actions } from 'nextcloud-vue/dist/Components/Actions'
 import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
+import { Multiselect } from 'nextcloud-vue/dist/Components/Multiselect'
 import ClickOutside from 'vue-click-outside'
 import { mapState } from 'vuex'
+import axios from 'nextcloud-axios'
 
 import CardBadges from './CardBadges'
 import LabelTag from './LabelTag'
@@ -63,7 +80,7 @@ import Color from '../../mixins/color'
 
 export default {
 	name: 'CardItem',
-	components: { PopoverMenu, CardBadges, LabelTag, Actions, ActionButton },
+	components: { Modal, CardBadges, LabelTag, Actions, ActionButton, Multiselect },
 	directives: {
 		ClickOutside
 	},
@@ -78,16 +95,26 @@ export default {
 		return {
 			menuOpened: false,
 			editing: false,
-			copiedCard: ''
+			copiedCard: '',
+			modalShow: false,
+			selectedBoard: '',
+			selectedStack: '',
+			stacksFromBoard: []
 		}
 	},
 	computed: {
 		...mapState({
 			compactMode: state => state.compactMode,
-			showArchived: state => state.showArchived
+			showArchived: state => state.showArchived,
+			currentBoard: state => state.currentBoard
 		}),
 		card() {
 			return this.$store.getters.cardById(this.id)
+		},
+		boards() {
+			return this.$store.getters.boards.filter(board => {
+				return board.id !== this.currentBoard.id
+			})
 		},
 		menu() {
 			return []
@@ -102,6 +129,12 @@ export default {
 		},
 		currentCard() {
 			return this.$route.params.cardId === this.id
+		},
+		isBoardAndStackChoosen() {
+			if (this.selectedBoard === '' || this.selectedStack === '') {
+				return false
+			}
+			return true
 		}
 	},
 	methods: {
@@ -136,6 +169,21 @@ export default {
 			this.copiedCard = Object.assign({}, this.card)
 			this.copiedCard.newUserUid = this.card.owner.uid
 			this.$store.dispatch('assignCardToUser', this.copiedCard)
+		},
+		async loadStacksFromBoard(board) {
+			try {
+				let url = OC.generateUrl('/apps/deck/stacks/' + board.id)
+				let response = await axios.get(url)
+				this.stacksFromBoard = response.data
+			} catch (err) {
+				return err
+			}
+		},
+		moveCard() {
+			this.copiedCard = Object.assign({}, this.card)
+			this.copiedCard.stackId = this.selectedStack.id
+			this.$store.dispatch('moveCard', this.copiedCard)
+			this.modalShow = false
 		}
 	}
 }
@@ -247,5 +295,21 @@ export default {
 			font-size: 0;
 			color: transparent;
 		}
+	}
+
+	.modal__content {
+		width: 25vw;
+		min-width: 250px;
+		height: 120px;
+		text-align: center;
+		margin: 20px 20px 60px 20px;
+
+		.multiselect {
+			margin-bottom: 10px;
+		}
+	}
+
+	.modal__content button {
+		float: right;
 	}
 </style>
