@@ -51,7 +51,7 @@
 	"devDependencies": {
 		"@babel/core": "^7.6.4",
 		"@babel/plugin-syntax-dynamic-import": "^7.0.0",
-		"@babel/preset-env": "^7.6.2",
+		"@babel/preset-env": "^7.6.3",
 		"@vue/test-utils": "^1.0.0-beta.29",
 		"babel-eslint": "^10.0.3",
 		"babel-jest": "^24.9.0",
