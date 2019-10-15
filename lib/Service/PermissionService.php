@@ -272,7 +272,8 @@ class PermissionService {
 					}
 				
 					foreach ($circle->getMembers() as $user) {
-						//$users[$user->getUserId()] = new User($user);
+						$iuser = $this->userManager->get($user->getUserId());
+						$users[$user->getUserId()] = new User($iuser);
 					}   
 				} catch (\Exception $e) {
 					$this->logger->info('Member not found in circle that was accessed. This should not happen.');
