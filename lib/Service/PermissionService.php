@@ -270,14 +270,10 @@ class PermissionService {
 						$this->logger->info('No circle found for acl rule ' . $acl->getId());
 						continue;
 					}
-					
-					/* $b = $circle->getMember();
-
-					foreach ($circle['members'] as $user) {
-						$a = $user;
-						//$users[$user->userId()] = new User($user);
-					}  */ 
-					
+				
+					foreach ($circle->getMembers() as $user) {
+						//$users[$user->getUserId()] = new User($user);
+					}   
 				} catch (\Exception $e) {
 					$this->logger->info('Member not found in circle that was accessed. This should not happen.');
 				}
