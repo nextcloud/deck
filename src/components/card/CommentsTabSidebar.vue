@@ -22,6 +22,7 @@
 			<CommentItem v-for="comment in comments[card.id]" :comment="comment" :key="comment.id"
 				@doReload="loadComments" />
 		</ul>
+		<button @click="loadMore">Load More</button>
 	</div>
 </template>
 
@@ -49,7 +50,9 @@ export default {
 	data() {
 		return {
 			newComment: '',
-			isLoading: false
+			isLoading: false,
+			limit: 20,
+			offset: 0
 		}
 	},
 	computed: {
@@ -72,6 +75,8 @@ export default {
 	methods: {
 		loadComments() {
 			this.isLoading = true
+			this.card.limit = this.limit
+			this.card.offset = this.offset
 			this.$store.dispatch('listComments', this.card).then(response => {
 				this.isLoading = false
 			})
@@ -84,6 +89,10 @@ export default {
 			this.$store.dispatch('createComment', commentObj)
 			this.loadComments()
 			this.newComment = ''
+		},
+		loadMore() {
+			this.offset = this.offset + this.limit
+			this.loadComments()
 		}
 	}
 }

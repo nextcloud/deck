@@ -30,14 +30,14 @@ export class CommentApi {
 		return OC.linkToRemote(url)
 	}
 
-	listComments(cardId) {
+	listComments(card) {
 		return axios({
 			method: 'REPORT',
-			url: this.url(`${cardId}`),
+			url: this.url(`${card.id}`),
 			data: `<?xml version="1.0" encoding="utf-8" ?>
 			<oc:filter-comments xmlns:D="DAV:" xmlns:oc="http://owncloud.org/ns">
-				<oc:limit>21</oc:limit>
-				<oc:offset>0</oc:offset>
+				<oc:limit>${card.limit}</oc:limit>
+				<oc:offset>${card.offset}</oc:offset>
 			</oc:filter-comments>`
 		}).then(
 			(response) => {

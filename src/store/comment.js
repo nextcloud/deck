@@ -22,6 +22,7 @@
 
 import { CommentApi } from '../services/CommentApi'
 import xmlToTagList from '../helpers/xml'
+import Vue from 'vue'
 
 const apiClient = new CommentApi()
 
@@ -30,10 +31,17 @@ export default {
 		comments: {}
 	},
 	mutations: {
-		listComments(state, commentObj) {
-			state.comments[commentObj.cardId] = commentObj.comments
+		addComments(state, commentObj) {
+			if (state.comments[commentObj.cardId] === undefined) {
+				Vue.set(state.comments, commentObj.cardId, commentObj.comments)
+			} else {
+				state.comments[commentObj.cardId].push(...commentObj.comments)
+			}
 		},
 		createComment(state, newComment) {
+			if (state.comments[newComment.cardId] === undefined) {
+				state.comments[newComment.cardId] = []
+			}
 			state.comments[newComment.cardId].push(newComment)
 		},
 		updateComment(state, comment) {
@@ -51,14 +59,14 @@ export default {
 	},
 	actions: {
 		listComments({ commit }, card) {
-			apiClient.listComments(card.id)
+			apiClient.listComments(card)
 				.then((comments) => {
-					let commentsJson = xmlToTagList(comments)
+					const commentsJson = xmlToTagList(comments)
 					let returnObj = {
 						cardId: card.id,
 						comments: commentsJson
 					}
-					commit('listComments', returnObj)
+					commit('addComments', returnObj)
 				})
 		},
 		createComment({ commit }, newComment) {
