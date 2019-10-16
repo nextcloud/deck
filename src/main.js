@@ -26,7 +26,7 @@ import store from './store/main'
 import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from 'nextcloud-server/dist/l10n'
 import { generateFilePath } from 'nextcloud-server/dist/router'
-import VTooltip from 'v-tooltip'
+import Tooltip from 'nextcloud-vue/dist/Directives/Tooltip'
 import './models'
 
 // eslint-disable-next-line
@@ -43,7 +43,7 @@ Vue.mixin({
 	}
 })
 
-Vue.use(VTooltip)
+Vue.use(Tooltip)
 
 /* eslint-disable-next-line no-new */
 new Vue({
