@@ -20,50 +20,50 @@
  *
  */
 
-'use strict';
+import Vue from 'vue'
+
+import BoardSelector from './BoardSelector'
+
+import './../css/collections.css'
+
+'use strict'
 
 /* global __webpack_nonce__ __webpack_public_path__ OC t n */
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken);
 // eslint-disable-next-line
-__webpack_public_path__ = OC.linkTo('deck', 'js/build/');
+__webpack_public_path__ = OC.linkTo('deck', 'js/');
 
-import Vue from 'vue';
-
-Vue.prototype.t = t;
-Vue.prototype.n = n;
+Vue.prototype.t = t
+Vue.prototype.n = n
 Vue.prototype.OC = OC;
-
-import BoardSelector from './views/BoardSelector';
-
-import './../css/collections.css';
 
 ((function(OCP) {
 
 	OCP.Collaboration.registerType('deck', {
 		action: () => {
 			return new Promise((resolve, reject) => {
-				const container = document.createElement('div');
-				container.id = 'deck-board-select';
-				const body = document.getElementById('body-user');
-				body.append(container);
+				const container = document.createElement('div')
+				container.id = 'deck-board-select'
+				const body = document.getElementById('body-user')
+				body.append(container)
 				const ComponentVM = new Vue({
-					render: h => h(BoardSelector),
-				});
-				ComponentVM.$mount(container);
+					render: h => h(BoardSelector)
+				})
+				ComponentVM.$mount(container)
 				ComponentVM.$root.$on('close', () => {
-					ComponentVM.$el.remove();
-					ComponentVM.$destroy();
-					reject();
-				});
+					ComponentVM.$el.remove()
+					ComponentVM.$destroy()
+					reject()
+				})
 				ComponentVM.$root.$on('select', (id) => {
-					resolve(id);
-					ComponentVM.$el.remove();
-					ComponentVM.$destroy();
-				});
-			});
+					resolve(id)
+					ComponentVM.$el.remove()
+					ComponentVM.$destroy()
+				})
+			})
 		},
 		typeString: t('deck', 'Link to a board'),
 		typeIconClass: 'icon-deck'
-	});
-})(window.OCP));
+	})
+})(window.OCP))

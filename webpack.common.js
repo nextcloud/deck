@@ -2,11 +2,14 @@ const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {
-	entry: path.join(__dirname, 'src', 'main.js'),
+	entry: {
+		deck: path.join(__dirname, 'src', 'main.js'),
+		collections: ['./src/init-collections.js']
+	},
 	output: {
-		path: path.resolve(__dirname, './js'),
+		filename: '[name].js',
+		path: __dirname + '/js',
 		publicPath: '/js/',
-		filename: 'deck.js',
 		jsonpFunction: 'webpackJsonpOCADeck'
 	},
 	module: {

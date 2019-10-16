@@ -9,7 +9,7 @@ module.exports = {
 	},
 	entry: {
 		deck: ['./init.js'],
-		collections: ['./init-collections.js']
+		//collections: ['./src/init-collections.js']
 	},
 	output: {
 		filename: '[name].js',
