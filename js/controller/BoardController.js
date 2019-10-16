@@ -28,7 +28,7 @@ Vue.prototype.t = t;
 Vue.prototype.n = n;
 Vue.prototype.OC = OC;
 
-import CollaborationView from '../views/CollaborationView';
+import CollaborationView from '../../src/BoardSelector';
 
 app.controller('BoardController', function ($rootScope, $scope, $element, $stateParams, StatusService, BoardService, StackService, CardService, LabelService, $state, $transitions, $filter, FileService) {
 
