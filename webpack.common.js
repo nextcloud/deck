@@ -4,7 +4,7 @@ const { VueLoaderPlugin } = require('vue-loader');
 module.exports = {
 	entry: {
 		deck: path.join(__dirname, 'src', 'main.js'),
-		collections: ['./src/init-collections.js']
+		collections: path.join(__dirname, 'src', 'init-collections.js'),
 	},
 	output: {
 		filename: '[name].js',
