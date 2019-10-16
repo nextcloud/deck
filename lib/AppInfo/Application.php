@@ -188,7 +188,7 @@ class Application extends App {
 		$resourceManager = $this->getContainer()->query(IManager::class);
 		$resourceManager->registerResourceProvider(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
 		\OC::$server->getEventDispatcher()->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', function () {
-			\OCP\Util::addScript('deck', 'build/collections');
+			\OCP\Util::addScript('deck', 'collections');
 		});
 	}
 
