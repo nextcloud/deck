@@ -20,7 +20,9 @@
 				</span>
 			</li>
 			<li v-for="acl in board.acl" :key="acl.participant.uid">
-				<avatar :user="acl.participant.uid" />
+				<avatar v-if="acl.type===0" :user="acl.participant.uid" />
+				<div v-if="acl.type===1" class="icon icon-group" />
+				<div v-if="acl.type===7" class="icon icon-circles" />
 				<span class="has-tooltip username">
 					{{ acl.participant.displayname }}
 				</span>
@@ -97,9 +99,13 @@ export default {
 		},
 		unallocatedSharees() {
 			return this.sharees.filter((sharee) => {
-				return Object.values(this.board.acl).findIndex((acl) => {
+				let foundIndex = this.board.acl.findIndex((acl) => {
 					return acl.participant.uid === sharee.value.shareWith
 				})
+				if (foundIndex === -1) {
+					return true
+				}
+				return false
 			})
 		}
 	},
