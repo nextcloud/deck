@@ -74,7 +74,8 @@ class ResourceProviderCard implements IProvider {
 	 */
 	public function getResourceRichObject(IResource $resource): array {
 		$board = $this->getBoard($resource);
-		$link = \OC::$server->getURLGenerator()->linkToRoute('deck.page.index') . '#!/board/' . $resource->getId();
+		//$link = \OC::$server->getURLGenerator()->linkToRoute('deck.page.index') . '#/board/' . $resource->getId();
+		$link = \OC::$server->getURLGenerator()->linkToRoute('deck.page.index') ;
 
 		return [
 			'type' => self::RESOURCE_TYPE,

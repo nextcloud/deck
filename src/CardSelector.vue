@@ -21,50 +21,51 @@
   -->
 
 <template>
-	<Modal @close="close">
+	<Modal @close="close" :title="t('deck', 'Select the card to link to a project')">
 		<div id="modal-inner" :class="{ 'icon-loading': loading }">
-			<h1>{{ t('deck', 'Select the card to link to a project') }}</h1>
-			<ul v-if="!loading">
-				<li v-for="board in boards" v-if="!currentBoard || ''+board.id !== ''+currentBoard" :class="{'selected': (selectedBoard === board.id) }"
-					@click="selectedBoard=board.id">
-					<span :style="{ 'backgroundColor': '#' + board.color }" class="board-bullet" />
-					<span>{{ board.title }}</span>
-				</li>
-			</ul>
-			<button v-if="!loading" class="primary" @click="select">{{ t('deck', 'Select board') }}</button>
+			<Multiselect :placeholder="t('deck', 'Select a board')" v-model="selectedBoard" :options="boards"
+				label="title"
+				@select="fetchCardsFromBoard" />
+
+			<Multiselect :placeholder="t('deck', 'Select a card')" v-model="selectedCard" :options="cardsFromBoard"
+						label="title"/>
+
+			<button :disabled="!isBoardAndStackChoosen" class="primary" @click="select">{{ t('deck', 'Link to card') }}</button>
+			<button @click="close">{{ t('deck', 'Cancel') }}</button>
 		</div>
 	</Modal>
 </template>
 
 <script>
-/* global OC */
 import { Modal } from 'nextcloud-vue/dist/Components/Modal'
-import { Avatar } from 'nextcloud-vue/dist/Components/Avatar'
+import { Multiselect } from 'nextcloud-vue/dist/Components/Multiselect'
 import axios from 'nextcloud-axios'
 
 export default {
 	name: 'CollaborationView',
 	components: {
-		Modal, Avatar
+		Modal, 
+		Multiselect
 	},
 	data() {
 		return {
 			boards: [],
-			selectedBoard: null,
-			loading: true,
-			currentBoard: null
+			selectedBoard: '',
+			cardsFromBoard: [],
+			selectedCard: '',
+			loading: true
 		}
 	},
 	computed: {
-
+		isBoardAndStackChoosen() {
+			if (this.selectedBoard === '' || this.selectedCard === '') {
+				return false
+			}
+			return true
+		}
 	},
 	beforeMount() {
 		this.fetchBoards()
-		if (typeof angular !== 'undefined' && angular.element('#board')) {
-			try {
-				this.currentBoard = angular.element('#board').scope().boardservice.id || null
-			} catch (e) {}
-		}
 	},
 	methods: {
 		fetchBoards() {
@@ -73,11 +74,24 @@ export default {
 				this.loading = false
 			})
 		},
+		async fetchCardsFromBoard(board) {
+			try {
+				this.cardsFromBoard = []
+				let url = OC.generateUrl('/apps/deck/stacks/' + board.id)
+				let response = await axios.get(url)
+				response.data.forEach(stack => {
+					this.cardsFromBoard.push(...stack.cards)
+				})
+			} catch (err) {
+				return err
+			}
+			
+		},
 		close() {
 			this.$root.$emit('close')
 		},
 		select() {
-			this.$root.$emit('select', this.selectedBoard)
+			this.$root.$emit('select', this.selectedCard.id)
 
 		}
 	}
@@ -90,6 +104,7 @@ export default {
 		width: 90vw;
 		max-width: 400px;
 		padding: 20px;
+		height: 500px;
 	}
 	ul {
 		min-height: 100px;
@@ -115,5 +130,8 @@ export default {
 	li > span,
 	.avatar {
 		vertical-align: middle;
+	}
+	button {
+		float: right;
 	}
 </style>

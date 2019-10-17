@@ -5,7 +5,6 @@ module.exports = {
 	entry: {
 		deck: path.join(__dirname, 'src', 'main.js'),
 		collections: path.join(__dirname, 'src', 'init-collections.js'),
-		collectionscard: path.join(__dirname, 'src', 'init-collections-card.js'),
 	},
 	output: {
 		filename: '[name].js',

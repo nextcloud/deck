@@ -23,6 +23,7 @@
 import Vue from 'vue'
 
 import BoardSelector from './BoardSelector'
+import CardSelector from './CardSelector'
 
 import './../css/collections.css'
 
@@ -64,6 +65,33 @@ Vue.prototype.OC = OC;
 			})
 		},
 		typeString: t('deck', 'Link to a board'),
+		typeIconClass: 'icon-deck'
+	})
+
+	OCP.Collaboration.registerType('deck-card', {
+		action: () => {
+			return new Promise((resolve, reject) => {
+				const container = document.createElement('div')
+				container.id = 'deck-board-select'
+				const body = document.getElementById('body-user')
+				body.append(container)
+				const ComponentVM = new Vue({
+					render: h => h(CardSelector)
+				})
+				ComponentVM.$mount(container)
+				ComponentVM.$root.$on('close', () => {
+					ComponentVM.$el.remove()
+					ComponentVM.$destroy()
+					reject()
+				})
+				ComponentVM.$root.$on('select', (id) => {
+					resolve(id)
+					ComponentVM.$el.remove()
+					ComponentVM.$destroy()
+				})
+			})
+		},
+		typeString: t('deck', 'Link to a card'),
 		typeIconClass: 'icon-deck'
 	})
 })(window.OCP))
