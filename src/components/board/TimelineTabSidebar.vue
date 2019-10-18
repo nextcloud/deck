@@ -13,7 +13,7 @@ import { mapState } from 'vuex'
 import ActivityEntry from '../ActivityEntry'
 
 export default {
-	name: 'TimelineTabSidebard',
+	name: 'TimelineTabSidebar',
 	components: {
 		ActivityEntry
 	},
