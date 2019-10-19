@@ -90,14 +90,21 @@ export default {
 	},
 	methods: {
 		fetchData() {
-			this.boardApi.loadById(this.id)
+
+			this.$store.dispatch('loadBoardById', this.id).then(response => {
+				this.$store.dispatch('loadStacks', this.id).then(response => {
+					this.loading = false
+				})
+			})
+
+			/* this.boardApi.loadById(this.id)
 				.then((board) => {
 					this.$store.dispatch('setCurrentBoard', board)
 					this.$store.dispatch('loadStacks', board)
 					this.$store.dispatch('setAssignableUsers', board.users)
 					this.loading = false
 					this.$store.state.labels = board.labels
-				})
+				}) */
 		},
 		onDropStack({ removedIndex, addedIndex }) {
 			this.$store.dispatch('orderStack', { stack: this.stacksByBoard[removedIndex], removedIndex, addedIndex })

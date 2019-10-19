@@ -235,6 +235,14 @@ export default new Vuex.Store({
 		}
 	},
 	actions: {
+		loadBoardById({ commit }, boardId) {
+			apiClient.loadById(boardId)
+				.then((board) => {
+					commit('setCurrentBoard', board)
+					commit('setAssignableUsers', board.users)
+				})
+		},
+
 		toggleShowArchived({ commit }) {
 			commit('toggleShowArchived')
 		},
@@ -381,6 +389,9 @@ export default new Vuex.Store({
 			apiClient.addAcl(newAcl)
 				.then((returnAcl) => {
 					commit('addAclToCurrentBoard', returnAcl)
+					this.$store.dispatch('loadBoardById', newAcl.boardId).then(() => {
+
+					})
 				})
 		},
 		updateAclFromCurrentBoard({ commit }, acl) {
