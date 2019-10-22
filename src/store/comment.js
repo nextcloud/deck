@@ -35,7 +35,9 @@ export default {
 			if (state.comments[commentObj.cardId] === undefined) {
 				Vue.set(state.comments, commentObj.cardId, commentObj.comments)
 			} else {
-				state.comments[commentObj.cardId].push(...commentObj.comments)
+				// FIXME append comments once incremental fetching is implemented
+				// state.comments[commentObj.cardId].push(...commentObj.comments)
+				Vue.set(state.comments, commentObj.cardId, commentObj.comments)
 			}
 		},
 		createComment(state, newComment) {

@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<app-sidebar v-if="currentCard !== null && copiedCard !== null"
+	<app-sidebar v-if="currentCard !== null && currentBoard && copiedCard !== null"
 		:actions="toolbarActions"
 		:title="currentCard.title"
 		:subtitle="subtitle"
@@ -87,8 +87,10 @@
 
 		<AppSidebarTab :order="3" name="Timeline" icon="icon-activity">
 			<div v-if="isLoading" class="icon icon-loading" />
-			<ActivityEntry v-for="entry in cardActivity" v-else :key="entry.activity_id"
-				:activity="entry" />
+			<div v-else>
+				<ActivityEntry v-for="entry in cardActivity" :key="entry.activity_id"
+					:activity="entry" />
+			</div>
 			<button v-if="activityLoadMore" @click="loadMore">Load More</button>
 		</AppSidebarTab>
 	</app-sidebar>
@@ -188,6 +190,9 @@ export default {
 		'currentCard': {
 			immediate: true,
 			handler() {
+				if (typeof this.currentCard === 'undefined') {
+					return
+				}
 				this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
 				this.allLabels = this.currentCard.labels
 
@@ -209,7 +214,6 @@ export default {
 	},
 	created() {
 		setInterval(this.updateRelativeTimestamps, 10000)
-		this.loadCardActivity()
 	},
 	destroyed() {
 		clearInterval(this.updateRelativeTimestamps)

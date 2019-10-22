@@ -211,13 +211,13 @@ export default {
 	},
 	watch: {
 		'card': {
+			immediate: true,
 			handler() {
 				this.loadComments()
 			}
 		}
 	},
 	created() {
-		this.loadComments()
 	},
 
 	methods: {

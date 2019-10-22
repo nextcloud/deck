@@ -92,7 +92,7 @@ export default new Vuex.Store({
 			return boards
 		},
 		currentBoardLabels: state => {
-			return state.currentBoard.labels
+			return state.currentBoard ? state.currentBoard.labels : []
 		}
 	},
 	mutations: {
