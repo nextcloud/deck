@@ -71,6 +71,11 @@
 				</div>
 			</div>
 
+			<div class="section-wrapper">
+				<collection-list v-if="currentCard.id" :id="`${currentCard.id}`" :name="currentCard.title"
+				type="deck-card" />
+			</div>
+
 			<h5>Description</h5>
 			<VueEasymde ref="markdownEditor" v-model="copiedCard.description" :configs="mdeConfig" />
 		</AppSidebarTab>
@@ -97,6 +102,7 @@ import { Actions } from 'nextcloud-vue/dist/Components/Actions'
 import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
 import ActivityEntry from '../ActivityEntry'
 import Color from '../../mixins/color'
+import { CollectionList } from 'nextcloud-vue-collections'
 
 export default {
 	name: 'CardSidebar',
@@ -109,7 +115,8 @@ export default {
 		VueEasymde,
 		Actions,
 		ActionButton,
-		Avatar
+		Avatar,
+		CollectionList
 	},
 	mixins: [
 		Color
