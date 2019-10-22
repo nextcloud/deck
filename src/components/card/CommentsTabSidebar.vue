@@ -17,12 +17,13 @@
 		</div>
  -->
 
-		<div class="editor" id="commentForm">
+		<div id="commentForm" class="editor">
 			<form @submit.prevent="createComment()">
-				<editor-content :editor="editor" class="editor__content" 
-				:placeholder="t('deck', 'New comment') + ' ...'" 
-				required />
-				<input v-tooltip="t('deck', 'Save')" class="icon-confirm" type="submit" value="">
+				<editor-content :editor="editor" :placeholder="t('deck', 'New comment') + ' ...'"
+					class="editor__content"
+					required />
+				<input v-tooltip="t('deck', 'Save')" class="icon-confirm" type="submit"
+					value="">
 			</form>
 		</div>
 
@@ -30,12 +31,12 @@
 			<template v-if="hasResults">
 				<div
 					v-for="(user, index) in filteredUsers"
-					:key="user.id"
+					:key="user.uid"
 					:class="{ 'is-selected': navigatedUserIndex === index }"
 					class="suggestion-list__item"
 					@click="selectUser(user)"
 				>
-					{{ user.name }}
+					{{ user.displayname }}
 				</div>
 			</template>
 			<div v-else class="suggestion-list__item is-empty">
@@ -43,7 +44,7 @@
 			</div>
 		</div>
 
-
+		<p v-for="comment in comments[card.id]">{{ comment.id }}</p>
 
 		<div v-if="isLoading" class="icon icon-loading" />
 
@@ -59,14 +60,10 @@
 <script>
 import Fuse from 'fuse.js'
 import tippy from 'tippy.js'
-import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
+import { Editor, EditorContent } from 'tiptap'
 import {
 	HardBreak,
-	Heading,
-	Mention,
-	Code,
-	Bold,
-	Italic
+	Mention
 } from 'tiptap-extensions'
 
 import { mapState } from 'vuex'
@@ -82,8 +79,7 @@ export default {
 		Actions,
 		ActionButton,
 		CommentItem,
-    	EditorContent,
-    	EditorMenuBar
+    	EditorContent
 	},
 	props: {
 		card: {
@@ -101,16 +97,11 @@ export default {
 			editor: new Editor({
 				extensions: [
 					new HardBreak(),
-					new Heading({ levels: [1, 2, 3] }),
 					new Mention({
 						// a list of all suggested items
-						items: () => [
-							{ id: 1, name: 'Philipp Kühn' },
-							{ id: 2, name: 'Hans Pagel' },
-							{ id: 3, name: 'Kris Siepert' },
-							{ id: 4, name: 'Justin Schueler' }
-						],
-						// items: this.currentBoard.users,
+						items: () => {
+							return this.currentBoard.users
+						},
 						// is called when a suggestion starts
 						onEnter: ({
 							items, query, range, command, virtualNode
@@ -172,19 +163,16 @@ export default {
 							}
 							const fuse = new Fuse(items, {
 								threshold: 0.2,
-								keys: ['name']
+								keys: ['uid', 'displayname']
 							})
 							return fuse.search(query)
 						}
-					}),
-					new Code(),
-					new Bold(),
-					new Italic()
+					})
 				],
 				content: '',
-				onUpdate: ({getHTML}) => {
-					this.newComment = getHTML().replace(/(<p>|<\/p>)/g, "")
-				}, 
+				onUpdate: ({ getHTML }) => {
+					this.newComment = getHTML().replace(/(<p>|<\/p>)/g, '')
+				}
 			}),
 			query: null,
 			suggestionRange: null,
