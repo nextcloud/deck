@@ -384,14 +384,12 @@ export default new Vuex.Store({
 		},
 
 		// acl actions
-		addAclToCurrentBoard({ commit }, newAcl) {
+		addAclToCurrentBoard({ dispatch, commit }, newAcl) {
 			newAcl.boardId = this.state.currentBoard.id
 			apiClient.addAcl(newAcl)
 				.then((returnAcl) => {
 					commit('addAclToCurrentBoard', returnAcl)
-					this.$store.dispatch('loadBoardById', newAcl.boardId).then(() => {
-
-					})
+					dispatch('loadBoardById', newAcl.boardId)
 				})
 		},
 		updateAclFromCurrentBoard({ commit }, acl) {
@@ -401,11 +399,12 @@ export default new Vuex.Store({
 					commit('updateAclFromCurrentBoard', acl)
 				})
 		},
-		deleteAclFromCurrentBoard({ commit }, acl) {
+		deleteAclFromCurrentBoard({ dispatch, commit }, acl) {
 			acl.boardId = this.state.currentBoard.id
 			apiClient.deleteAcl(acl)
 				.then((acl) => {
 					commit('deleteAclFromCurrentBoard', acl)
+					dispatch('loadBoardById', acl.boardId)
 				})
 		}
 	}
