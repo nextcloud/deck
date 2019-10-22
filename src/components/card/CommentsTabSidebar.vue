@@ -7,16 +7,6 @@
 			</span>
 		</div>
 
-		<!-- <div id="commentForm">
-			<form @submit.prevent="createComment()">
-				<input :placeholder="t('deck', 'New comment') + ' ...'" v-model="newComment" type="text"
-					autofocus required>
-				<input v-tooltip="t('deck', 'Save')" class="icon-confirm" type="submit"
-					value="">
-			</form>
-		</div>
- -->
-
 		<div id="commentForm" class="editor">
 			<form @submit.prevent="createComment()">
 				<editor-content :editor="editor" :placeholder="t('deck', 'New comment') + ' ...'"
@@ -40,11 +30,9 @@
 				</div>
 			</template>
 			<div v-else class="suggestion-list__item is-empty">
-				No users found
+				{{ t('deck', 'No users found') }}
 			</div>
 		</div>
-
-		<p v-for="comment in comments[card.id]">{{ comment.id }}</p>
 
 		<div v-if="isLoading" class="icon icon-loading" />
 
@@ -52,7 +40,7 @@
 			<CommentItem v-for="comment in comments[card.id]" :comment="comment" :key="comment.id"
 				@doReload="loadComments" />
 		</ul>
-		<button @click="loadMore">Load More</button>
+		<button @click="loadMore">{{ t('deck', 'No users found') }}</button>
 
 	</div>
 </template>
@@ -76,7 +64,7 @@ export default {
 		Actions,
 		ActionButton,
 		CommentItem,
-    	EditorContent
+		EditorContent
 	},
 	props: {
 		card: {
@@ -167,7 +155,7 @@ export default {
 				],
 				content: '',
 				onUpdate: ({ getHTML }) => {
-					this.newComment = getHTML().replace(/(<p>|<\/p>)/g, '')
+					this.newComment = getHTML().replace(/(<([^>]+)>)/ig, '')
 				}
 			}),
 			query: null,
@@ -220,7 +208,7 @@ export default {
 			}
 			this.$store.dispatch('createComment', commentObj)
 			this.loadComments()
-			this.newComment = ''
+			this.editor.clearContent()
 		},
 		loadMore() {
 			this.offset = this.offset + this.limit

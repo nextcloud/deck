@@ -1,5 +1,6 @@
 <template>
 	<li>
+		<hr>
 		<form v-if="edit" @submit.prevent="updateComment">
 			<input v-model="commentMsg" type="text" autofocus
 				required>
@@ -10,11 +11,13 @@
 		</form>
 
 		<template v-else>
-			{{ comment.uId }}: {{ comment.message }}
+			<avatar :user="comment.displayname" />
+			<span>{{ comment.uId }}</span>
 			<Actions @click.stop.prevent>
 				<ActionButton icon="icon-rename" @click="showUpdateForm()">{{ t('deck', 'Update') }}</ActionButton>
 				<ActionButton icon="icon-delete" @click="deleteComment(comment.id)">{{ t('deck', 'Delete') }}</ActionButton>
 			</Actions>
+			{{ comment.message }}
 		</template>
 	</li>
 </template>
@@ -76,6 +79,9 @@ export default {
 <style lang="scss">
 	form {
 		display: flex
+	}
+	.mention {
+		font-weight: bold;
 	}
 
 </style>

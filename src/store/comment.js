@@ -44,12 +44,13 @@ export default {
 			if (state.comments[newComment.cardId] === undefined) {
 				state.comments[newComment.cardId] = []
 			}
-			state.comments[newComment.cardId].push(newComment)
+			Vue.set(state.comments, newComment.cardId, newComment)
 		},
 		updateComment(state, comment) {
 			let existingIndex = state.comments[comment.cardId].findIndex(_comment => _comment.id === comment.commentId)
 			if (existingIndex !== -1) {
 				state.comments[comment.cardId][existingIndex].message = comment.comment
+				// Vue.set(state.comments[comment.cardId][existingIndex], message, comment.comment)
 			}
 		},
 		deleteComment(state, comment) {
