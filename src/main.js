@@ -43,7 +43,7 @@ Vue.mixin({
 	}
 })
 
-Vue.use(Tooltip)
+Vue.directive('tooltip', Tooltip)
 
 /* eslint-disable-next-line no-new */
 new Vue({
