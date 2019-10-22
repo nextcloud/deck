@@ -5,10 +5,6 @@
   background-image: url('../img/deck-dark.svg');
 }
 
-.icon-group {
-  background-image: url('../../../settings/img/users.svg');
-}
-
 .icon-help {
   background-image: url('../../../settings/img/help.svg');
 }
@@ -59,7 +55,7 @@
   @include icon-black-white('archive', 'deck', 1);
   @include icon-black-white('circles', 'deck', 1);
   @include icon-black-white('clone', 'deck', 1);
-	
+
 	.icon-toggle-compact-collapsed {
 		@include icon-color('toggle-view-expand', 'deck', $color-black);
 	}

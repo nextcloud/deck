@@ -88,13 +88,13 @@ export default {
 					commit('orderStack', { stack, addedIndex, removedIndex })
 				})
 		},
-		loadStacks({ commit }, board) {
+		loadStacks({ commit }, boardId) {
 			commit('clearCards')
 			let call = 'loadStacks'
 			if (this.state.showArchived === true) {
 				call = 'loadArchivedStacks'
 			}
-			apiClient[call](board.id)
+			apiClient[call](boardId)
 				.then((stacks) => {
 					for (let i in stacks) {
 						let stack = stacks[i]

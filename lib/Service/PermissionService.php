@@ -262,6 +262,27 @@ class PermissionService {
 					$users[$user->getUID()] = new User($user);
 				}
 			}
+
+			if ($this->circlesEnabled && $acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
+				try {
+					$circle = \OCA\Circles\Api\v1\Circles::detailsCircle($acl->getParticipant(), true);
+					if ($circle === null) {
+						$this->logger->info('No circle found for acl rule ' . $acl->getId());
+						continue;
+					}
+				
+					foreach ($circle->getMembers() as $member) {
+						$user = $this->userManager->get($member->getUserId());
+						if ($user === null) {
+							$this->logger->info('No user found for circle member ' . $member->getUserId());
+						} else {
+							$users[$member->getUserId()] = new User($user);
+						}
+					}   
+				} catch (\Exception $e) {
+					$this->logger->info('Member not found in circle that was accessed. This should not happen.');
+				}
+			}
 		}
 		$this->users[(string) $boardId] = $users;
 		return $this->users[(string) $boardId];

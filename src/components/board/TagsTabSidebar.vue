@@ -49,7 +49,7 @@ import { Compact } from 'vue-color'
 import ColorPicker from '../ColorPicker'
 
 export default {
-	name: 'TagsTabSidebard',
+	name: 'TagsTabSidebar',
 	components: {
 		ColorPicker,
 		'compact-picker': Compact

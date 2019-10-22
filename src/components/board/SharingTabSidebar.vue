@@ -20,9 +20,13 @@
 				</span>
 			</li>
 			<li v-for="acl in board.acl" :key="acl.participant.uid">
-				<avatar :user="acl.participant.uid" />
+				<avatar v-if="acl.type===0" :user="acl.participant.uid" />
+				<div v-if="acl.type===1" class="avatardiv icon icon-group" />
+				<div v-if="acl.type===7" class="avatardiv icon icon-circles" />
 				<span class="has-tooltip username">
 					{{ acl.participant.displayname }}
+					<span v-if="acl.type===1">{{ t('deck', '(Group)') }}</span>
+					<span v-if="acl.type===7">{{ t('deck', '(Circle)') }}</span>
 				</span>
 
 				<Actions>
@@ -47,7 +51,7 @@ import { CollectionList } from 'nextcloud-vue-collections'
 import { mapGetters } from 'vuex'
 
 export default {
-	name: 'SharingTabSidebard',
+	name: 'SharingTabSidebar',
 	components: {
 		Avatar,
 		Actions,
@@ -97,9 +101,13 @@ export default {
 		},
 		unallocatedSharees() {
 			return this.sharees.filter((sharee) => {
-				return Object.values(this.board.acl).findIndex((acl) => {
+				let foundIndex = this.board.acl.findIndex((acl) => {
 					return acl.participant.uid === sharee.value.shareWith
 				})
+				if (foundIndex === -1) {
+					return true
+				}
+				return false
 			})
 		}
 	},
@@ -155,5 +163,11 @@ export default {
 	}
 	.avatarLabel {
 		padding: 6px
+	}
+	.avatardiv {
+		background-color: #f5f5f5;
+		border-radius: 16px;
+		width: 32px;
+		height: 32px;
 	}
 </style>

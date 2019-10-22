@@ -27,11 +27,11 @@
 		@close="closeSidebar">
 
 		<AppSidebarTab :order="0" name="Sharing" icon="icon-shared">
-			<SharingTabSidebard :board="board" />
+			<SharingTabSidebar :board="board" />
 		</AppSidebarTab>
 
 		<AppSidebarTab :order="1" name="Tags" icon="icon-tag">
-			<TagsTabSidebard :board="board" />
+			<TagsTabSidebar :board="board" />
 		</AppSidebarTab>
 
 		<AppSidebarTab :order="2" name="Deleted items" icon="icon-delete">
@@ -39,7 +39,7 @@
 		</AppSidebarTab>
 
 		<AppSidebarTab :order="3" name="Timeline" icon="icon-activity">
-			<TimelineTabSidebard :board="board" />
+			<TimelineTabSidebar :board="board" />
 		</AppSidebarTab>
 
 	</app-sidebar>
@@ -47,10 +47,10 @@
 
 <script>
 import { mapState } from 'vuex'
-import SharingTabSidebard from './SharingTabSidebard'
-import TagsTabSidebard from './TagsTabSidebard'
+import SharingTabSidebar from './SharingTabSidebar'
+import TagsTabSidebar from './TagsTabSidebar'
 import DeletedTabSidebar from './DeletedTabSidebar'
-import TimelineTabSidebard from './TimelineTabSidebard'
+import TimelineTabSidebar from './TimelineTabSidebar'
 import { AppSidebar, AppSidebarTab } from 'nextcloud-vue'
 
 export default {
@@ -58,10 +58,10 @@ export default {
 	components: {
 		AppSidebar,
 		AppSidebarTab,
-		SharingTabSidebard,
-		TagsTabSidebard,
+		SharingTabSidebar,
+		TagsTabSidebar,
 		DeletedTabSidebar,
-		TimelineTabSidebard
+		TimelineTabSidebar
 	},
 	props: {
 		id: {
