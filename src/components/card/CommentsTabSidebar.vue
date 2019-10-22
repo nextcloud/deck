@@ -61,10 +61,7 @@
 import Fuse from 'fuse.js'
 import tippy from 'tippy.js'
 import { Editor, EditorContent } from 'tiptap'
-import {
-	HardBreak,
-	Mention
-} from 'tiptap-extensions'
+import { Mention } from 'tiptap-extensions'
 
 import { mapState } from 'vuex'
 import { Avatar } from 'nextcloud-vue'
@@ -96,7 +93,6 @@ export default {
 
 			editor: new Editor({
 				extensions: [
-					new HardBreak(),
 					new Mention({
 						// a list of all suggested items
 						items: () => {
@@ -231,7 +227,7 @@ export default {
 			this.loadComments()
 		},
 
-		 // navigate to the previous item
+		// navigate to the previous item
 		// if it's the first item, navigate to the last one
 		upHandler() {
 			this.navigatedUserIndex = ((this.navigatedUserIndex + this.filteredUsers.length) - 1) % this.filteredUsers.length
@@ -269,13 +265,10 @@ export default {
 				content: this.$refs.suggestions,
 				trigger: 'mouseenter',
 				interactive: true,
-				theme: 'dark',
-				placement: 'top-start',
+				placement: 'bottom-start',
 				inertia: true,
 				duration: [400, 200],
-				showOnInit: true,
-				arrow: true,
-				arrowType: 'round'
+				showOnInit: true
 			})
 			// we have to update tippy whenever the DOM is updated
 			if (MutationObserver) {
@@ -302,15 +295,18 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 	#commentForm form {
-		display: flex
-	}
-	#commentForm form {
+		display: flex;
 		flex-grow: 1;
 	}
+
 	.editor__content {
 		flex-grow: 1;
+
+		.ProseMirror {
+			width: 100%;
+		}
 	}
 	#userDiv {
 		margin-bottom: 20px;
@@ -319,4 +315,5 @@ export default {
 		padding: 12px 9px;
 		flex-grow: 1;
 	}
+
 </style>
