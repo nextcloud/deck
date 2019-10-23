@@ -99,7 +99,7 @@ class ResourceProviderCard implements IProvider {
 			'id' => $resource->getId(),
 			'name' => $board->getTitle() . ': ' . $card->getTitle(),
 			'link' => $link,
-			'iconUrl' => \OC::$server->getURLGenerator()->imagePath('core', 'actions/toggle-pictures.svg')
+			'iconUrl' => $this->urlGenerator->imagePath('core', 'actions/toggle-pictures.svg')
 		];
 
 	}
@@ -117,8 +117,7 @@ class ResourceProviderCard implements IProvider {
 			return false;
 		}
 		try {
-			$boardId = $this->cardMapper->findBoardId($resource->getId());
-			$board = $this->getBoard($boardId);
+			$board = $this->getBoard($resource->getId());
 		} catch (DoesNotExistException $e) {
 			return false;
 		} catch (MultipleObjectsReturnedException $e) {
