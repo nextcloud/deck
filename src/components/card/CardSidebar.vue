@@ -74,7 +74,7 @@
 			<h5>Description</h5>
 			<VueEasymde ref="markdownEditor" v-model="copiedCard.description" :configs="mdeConfig" />
 		</AppSidebarTab>
-		<AppSidebarTab :order="1" name="Attachments" icon="icon-files-dark">
+		<AppSidebarTab :order="1" name="Attachments" icon="icon-attach">
 			{{ currentCard.attachments }}
 			<button class="icon-upload" @click="clickAddNewAttachmment()">
 				{{ t('deck', 'Upload attachment') }}
