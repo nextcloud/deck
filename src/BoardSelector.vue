@@ -25,12 +25,14 @@
 		<div id="modal-inner" :class="{ 'icon-loading': loading }">
 			<h1>{{ t('deck', 'Select the board to link to a project') }}</h1>
 			<ul v-if="!loading">
-				<li v-for="board in boards" v-if="!currentBoard || ''+board.id !== ''+currentBoard" @click="selectedBoard=board.id" :class="{'selected': (selectedBoard === board.id) }">
-					<span class="board-bullet" :style="{ 'backgroundColor': '#' + board.color }"></span>
+				<li v-for="board in boards" v-if="!currentBoard || ''+board.id !== ''+currentBoard" :key="board.id"
+					:class="{'selected': (selectedBoard === board.id) }"
+					@click="selectedBoard=board.id">
+					<span :style="{ 'backgroundColor': '#' + board.color }" class="board-bullet" />
 					<span>{{ board.title }}</span>
 				</li>
 			</ul>
-			<button v-if="!loading" @click="select" class="primary">{{ t('deck', 'Select board') }}</button>
+			<button v-if="!loading" class="primary" @click="select">{{ t('deck', 'Select board') }}</button>
 		</div>
 	</Modal>
 </template>
@@ -69,50 +71,42 @@
 
 </style>
 <script>
-	/* global OC */
-	import { Modal } from 'nextcloud-vue/dist/Components/Modal'
-	import { Avatar } from 'nextcloud-vue/dist/Components/Avatar'
-	import axios from 'nextcloud-axios'
+/* global OC */
+import { Modal } from 'nextcloud-vue/dist/Components/Modal'
+import { Avatar } from 'nextcloud-vue/dist/Components/Avatar'
+import axios from 'nextcloud-axios'
 
-	export default {
-		name: 'CollaborationView',
-		components: {
-			Modal, Avatar
+export default {
+	name: 'CollaborationView',
+	components: {
+		Modal, Avatar
+	},
+	data() {
+		return {
+			boards: [],
+			selectedBoard: null,
+			loading: true,
+			currentBoard: null
+		}
+	},
+	beforeMount() {
+		this.fetchBoards()
+		this.currentBoard = window.location.hash.match(/\/boards\/([0-9]+)/)[1] || null
+	},
+	methods: {
+		fetchBoards() {
+			axios.get(OC.generateUrl('/apps/deck/boards')).then((response) => {
+				this.boards = response.data
+				this.loading = false
+			})
 		},
-		data() {
-			return {
-				boards: [],
-				selectedBoard: null,
-				loading: true,
-				currentBoard: null,
-			}
+		close() {
+			this.$root.$emit('close')
 		},
-		beforeMount() {
-			this.fetchBoards();
-			if (typeof angular !== 'undefined' && angular.element('#board')) {
-				try {
-					this.currentBoard = angular.element('#board').scope().boardservice.id || null;
-				} catch (e) {}
-			}
-		},
-		methods: {
-			fetchBoards() {
-				axios.get(OC.generateUrl('/apps/deck/boards')).then((response) => {
-					this.boards = response.data
-					this.loading = false
-				})
-			},
-			close() {
-				this.$root.$emit('close');
-			},
-			select() {
-				this.$root.$emit('select', this.selectedBoard)
-
-			}
-		},
-		computed: {
-
-		},
-
+		select() {
+			this.$root.$emit('select', this.selectedBoard)
+		}
 	}
+
+}
 </script>
