@@ -73,7 +73,7 @@
 
 			<div class="section-wrapper">
 				<collection-list v-if="currentCard.id" :id="`${currentCard.id}`" :name="currentCard.title"
-				type="deck-card" />
+					type="deck-card" />
 			</div>
 
 			<h5>Description</h5>

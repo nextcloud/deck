@@ -27,9 +27,6 @@ import CardSelector from './CardSelector'
 
 import './../css/collections.css'
 
-'use strict'
-
-/* global __webpack_nonce__ __webpack_public_path__ OC t n */
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken);
 // eslint-disable-next-line
@@ -55,7 +52,7 @@ Vue.prototype.OC = OC;
 				ComponentVM.$root.$on('close', () => {
 					ComponentVM.$el.remove()
 					ComponentVM.$destroy()
-					reject()
+					reject(new Error('Board selection canceled'))
 				})
 				ComponentVM.$root.$on('select', (id) => {
 					resolve(id)
@@ -82,7 +79,7 @@ Vue.prototype.OC = OC;
 				ComponentVM.$root.$on('close', () => {
 					ComponentVM.$el.remove()
 					ComponentVM.$destroy()
-					reject()
+					reject(new Error('Card selection canceled'))
 				})
 				ComponentVM.$root.$on('select', (id) => {
 					resolve(id)

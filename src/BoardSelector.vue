@@ -25,7 +25,8 @@
 		<div id="modal-inner" :class="{ 'icon-loading': loading }">
 			<h1>{{ t('deck', 'Select the board to link to a project') }}</h1>
 			<ul v-if="!loading">
-				<li v-for="board in boards" v-if="!currentBoard || ''+board.id !== ''+currentBoard" :class="{'selected': (selectedBoard === board.id) }"
+				<li v-for="board in boards" v-if="!currentBoard || ''+board.id !== ''+currentBoard" :key="board.id"
+					:class="{'selected': (selectedBoard === board.id) }"
 					@click="selectedBoard=board.id">
 					<span :style="{ 'backgroundColor': '#' + board.color }" class="board-bullet" />
 					<span>{{ board.title }}</span>
@@ -88,16 +89,9 @@ export default {
 			currentBoard: null
 		}
 	},
-	computed: {
-
-	},
 	beforeMount() {
 		this.fetchBoards()
-		if (typeof angular !== 'undefined' && angular.element('#board')) {
-			try {
-				this.currentBoard = angular.element('#board').scope().boardservice.id || null
-			} catch (e) {}
-		}
+		this.currentBoard = window.location.hash.match(/\/boards\/([0-9]+)/)[1] || null
 	},
 	methods: {
 		fetchBoards() {
@@ -111,7 +105,6 @@ export default {
 		},
 		select() {
 			this.$root.$emit('select', this.selectedBoard)
-
 		}
 	}
 

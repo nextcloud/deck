@@ -21,14 +21,14 @@
   -->
 
 <template>
-	<Modal @close="close" :title="t('deck', 'Select the card to link to a project')">
+	<Modal :title="t('deck', 'Select the card to link to a project')" @close="close">
 		<div id="modal-inner" :class="{ 'icon-loading': loading }">
 			<Multiselect :placeholder="t('deck', 'Select a board')" v-model="selectedBoard" :options="boards"
 				label="title"
 				@select="fetchCardsFromBoard" />
 
 			<Multiselect :placeholder="t('deck', 'Select a card')" v-model="selectedCard" :options="cardsFromBoard"
-						label="title"/>
+				label="title" />
 
 			<button :disabled="!isBoardAndStackChoosen" class="primary" @click="select">{{ t('deck', 'Link to card') }}</button>
 			<button @click="close">{{ t('deck', 'Cancel') }}</button>
@@ -44,7 +44,7 @@ import axios from 'nextcloud-axios'
 export default {
 	name: 'CollaborationView',
 	components: {
-		Modal, 
+		Modal,
 		Multiselect
 	},
 	data() {
@@ -85,7 +85,7 @@ export default {
 			} catch (err) {
 				return err
 			}
-			
+
 		},
 		close() {
 			this.$root.$emit('close')
