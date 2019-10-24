@@ -7,15 +7,12 @@
 			</span>
 		</div>
 
-		<div id="commentForm" class="editor">
-			<form @submit.prevent="createComment()">
-				<editor-content :editor="editor" :placeholder="t('deck', 'New comment') + ' ...'"
-					class="editor__content"
-					required />
-				<input v-tooltip="t('deck', 'Save')" class="icon-confirm" type="submit"
-					value="">
-			</form>
-		</div>
+		<form id="commentForm" @submit.prevent="createComment()">
+			<editor-content :editor="editor" :placeholder="t('deck', 'New comment') + ' ...'" class="editor__content"
+				required />
+			<input v-tooltip="t('deck', 'Save')" class="icon-confirm" type="submit"
+				value="">
+		</form>
 
 		<div v-show="showSuggestions" ref="suggestions" class="suggestion-list">
 			<template v-if="hasResults">
@@ -36,11 +33,18 @@
 
 		<div v-if="isLoading" class="icon icon-loading" />
 
-		<ul id="commentsFeed">
-			<CommentItem v-for="comment in comments[card.id]" :comment="comment" :key="comment.id"
-				@doReload="loadComments" />
-		</ul>
-		<button @click="loadMore">{{ t('deck', 'No users found') }}</button>
+		<div v-if="comments[card.id] !== undefined && comments[card.id].length === 0" class="emptycontent">
+			<div class="icon-comment" />
+			<p>{{ t('deck', 'No comments yet. Start the discussion!') }}</p>
+		</div>
+
+		<template v-else>
+			<ul id="commentsFeed">
+				<CommentItem v-for="comment in comments[card.id]" :comment="comment" :key="comment.id"
+					@doReload="loadComments" />
+			</ul>
+			<button @click="loadMore">{{ t('deck', 'Load more') }}</button>
+		</template>
 
 	</div>
 </template>
@@ -49,8 +53,7 @@
 import Fuse from 'fuse.js'
 import tippy from 'tippy.js'
 import { Editor, EditorContent } from 'tiptap'
-import { Mention } from 'tiptap-extensions'
-
+import { Mention, Placeholder } from 'tiptap-extensions'
 import { mapState } from 'vuex'
 import { Avatar } from 'nextcloud-vue'
 import { Actions } from 'nextcloud-vue/dist/Components/Actions'
@@ -81,6 +84,11 @@ export default {
 
 			editor: new Editor({
 				extensions: [
+					new Placeholder({
+						emptyNodeClass: 'is-empty',
+						emptyNodeText: t('deck', 'New comment') + ' ...',
+						showOnlyWhenEditable: false
+					}),
 					new Mention({
 						// a list of all suggested items
 						items: () => {
@@ -284,24 +292,46 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	#commentForm form {
+	#userDiv {
 		display: flex;
-		flex-grow: 1;
-	}
-
-	.editor__content {
-		flex-grow: 1;
-
-		.ProseMirror {
-			width: 100%;
+		align-items: center;
+		.username {
+			padding: 12px 9px;
+			flex-grow: 1;
+			opacity: .5;
 		}
 	}
-	#userDiv {
-		margin-bottom: 20px;
-	}
-	.username {
-		padding: 12px 9px;
-		flex-grow: 1;
+
+	#commentForm {
+		margin-left: 36px;
+		position: relative;
+		margin-bottom: 15px;
+
+		input {
+			width: 44px;
+			height: 44px;
+			margin: 0;
+			padding: 13px;
+			background-color: transparent;
+			border: none;
+			opacity: .3;
+			position: absolute;
+			right: 0;
+		}
+
+		.editor__content {
+			flex-grow: 1;
+		}
 	}
 
+</style>
+
+<style lang="scss">
+	#commentForm > div > div {
+		width: 100%;
+		padding: 10px;
+		min-height: 44px;
+		margin: 0;
+		padding-right: 30px;
+	}
 </style>

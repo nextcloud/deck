@@ -1,23 +1,24 @@
 <template>
-	<li>
-		<hr>
-		<form v-if="edit" @submit.prevent="updateComment">
-			<input v-model="commentMsg" type="text" autofocus
-				required>
-			<input v-tooltip="t('deck', 'Save')" class="icon-confirm" type="submit"
-				value="">
-			<input type="submit" value="" class="icon-close"
-				@click.stop.prevent="hideUpdateForm">
-		</form>
+	<li class="comment">
+		<CommentItemEdit
+			v-if="edit"
+			:comment="comment"
+			@update="updateComment"
+			@close="edit = false"
+		/>
 
 		<template v-else>
-			<avatar :user="comment.displayname" />
-			<span>{{ comment.uId }}</span>
-			<Actions @click.stop.prevent>
-				<ActionButton icon="icon-rename" @click="showUpdateForm()">{{ t('deck', 'Update') }}</ActionButton>
-				<ActionButton icon="icon-delete" @click="deleteComment(comment.id)">{{ t('deck', 'Delete') }}</ActionButton>
-			</Actions>
-			{{ comment.message }}
+
+			<div id="userDiv">
+				<avatar :user="comment.uId" />
+				<span class="username">{{ comment.uId }}</span>
+				<Actions class="action" @click.stop.prevent>
+					<ActionButton icon="icon-rename" @click="edit = true">{{ t('deck', 'Update') }}</ActionButton>
+					<ActionButton icon="icon-delete" @click="deleteComment(comment.id)">{{ t('deck', 'Delete') }}</ActionButton>
+				</Actions>
+				<span class="creationDateTime">{{ getTime(comment.creationDateTime) }}</span>
+			</div>
+			<div class="message">{{ comment.message }}</div>
 		</template>
 	</li>
 </template>
@@ -26,12 +27,15 @@
 import { Avatar } from 'nextcloud-vue'
 import { Actions } from 'nextcloud-vue/dist/Components/Actions'
 import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
+import CommentItemEdit from './CommentItemEdit'
+
 export default {
 	name: 'CommentItem',
 	components: {
 		Avatar,
 		Actions,
-		ActionButton
+		ActionButton,
+		CommentItemEdit
 	},
 	props: {
 		comment: {
@@ -41,29 +45,22 @@ export default {
 	},
 	data() {
 		return {
-			edit: false,
-			commentMsg: ''
+			edit: false
 		}
 	},
 
 	methods: {
-
-		showUpdateForm() {
-			this.commentMsg = this.comment.message
-			this.edit = true
+		getTime(timestamp) {
+			return OC.Util.relativeModifiedDate(timestamp)
 		},
-		hideUpdateForm() {
-			this.commentMsg = ''
-			this.edit = false
-		},
-		updateComment() {
+		updateComment(newMsg) {
 			let data = {
-				comment: this.commentMsg,
+				comment: newMsg,
 				cardId: this.comment.cardId,
 				commentId: this.comment.id
 			}
 			this.$store.dispatch('updateComment', data)
-			this.hideUpdateForm()
+			this.edit = false
 		},
 		deleteComment(commentId) {
 			let data = {
@@ -76,12 +73,38 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
+	#userDiv {
+		display: flex;
+		align-items: center;
+		.username {
+			padding: 12px 9px;
+			opacity: .5;
+		}
+		.creationDateTime {
+			flex-grow: 1;
+			text-align: right;
+			opacity: .5;
+		}
+		.action {
+			opacity: .3;
+		}
+
+	}
+
 	form {
 		display: flex
 	}
-	.mention {
-		font-weight: bold;
+
+	.comment {
+		border-top: 1px solid var(--color-border);
+		padding: 10px 0 15px;
+	}
+
+	.message {
+		padding-left: 40px;
+		word-wrap: break-word;
+		overflow-wrap: break-word;
 	}
 
 </style>
