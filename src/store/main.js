@@ -20,6 +20,8 @@
  *
  */
 
+import 'url-search-params-polyfill';
+
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'nextcloud-axios'
