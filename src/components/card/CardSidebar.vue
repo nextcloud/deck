@@ -97,7 +97,7 @@
 <script>
 import { AppSidebar, AppSidebarTab, Multiselect, DatetimePicker, Avatar } from '@nextcloud/vue'
 import { mapState } from 'vuex'
-import VueEasymde from 'vue-easymde'
+import VueEasymde from 'vue-easymde/dist/VueEasyMDE.common'
 import { Actions } from '@nextcloud/vue/dist/Components/Actions'
 import { ActionButton } from '@nextcloud/vue/dist/Components/ActionButton'
 import ActivityEntry from '../ActivityEntry'
