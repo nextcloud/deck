@@ -20,7 +20,7 @@
  *
  */
 
-import 'url-search-params-polyfill';
+import 'url-search-params-polyfill'
 
 import Vue from 'vue'
 import Vuex from 'vuex'
