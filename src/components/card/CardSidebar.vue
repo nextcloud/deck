@@ -95,7 +95,11 @@
 </template>
 
 <script>
-import { AppSidebar, AppSidebarTab, Multiselect, DatetimePicker, Avatar } from '@nextcloud/vue'
+import { Avatar } from '@nextcloud/vue/dist/Components/Avatar'
+import { Multiselect } from '@nextcloud/vue/dist/Components/Multiselect'
+import { AppSidebar } from '@nextcloud/vue/dist/Components/AppSidebar'
+import { AppSidebarTab } from '@nextcloud/vue/dist/Components/AppSidebarTab'
+import { DatetimePicker } from '@nextcloud/vue/dist/Components/DatetimePicker'
 import { mapState } from 'vuex'
 import VueEasymde from 'vue-easymde/dist/VueEasyMDE.common'
 import { Actions } from '@nextcloud/vue/dist/Components/Actions'
