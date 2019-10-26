@@ -51,7 +51,7 @@ import SharingTabSidebar from './SharingTabSidebar'
 import TagsTabSidebar from './TagsTabSidebar'
 import DeletedTabSidebar from './DeletedTabSidebar'
 import TimelineTabSidebar from './TimelineTabSidebar'
-import { AppSidebar, AppSidebarTab } from 'nextcloud-vue'
+import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 
 export default {
 	name: 'BoardSidebar',

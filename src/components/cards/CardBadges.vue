@@ -40,7 +40,7 @@ cardbadges
 	</div>
 </template>
 <script>
-import { Avatar } from 'nextcloud-vue'
+import { Avatar } from '@nextcloud/vue'
 import AvatarList from './AvatarList'
 
 export default {

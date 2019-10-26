@@ -30,7 +30,7 @@
 <script>
 import { CollectionList } from 'nextcloud-vue-collections'
 import Vue from 'vue'
-import PopoverMenu from 'nextcloud-vue/dist/Components/PopoverMenu'
+import PopoverMenu from '@nextcloud/vue/dist/Components/PopoverMenu'
 
 Vue.component('popover-menu', PopoverMenu)
 

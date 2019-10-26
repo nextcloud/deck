@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { Avatar } from 'nextcloud-vue'
+import { Avatar } from '@nextcloud/vue'
 
 export default {
 	name: 'BoardItem',

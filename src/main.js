@@ -26,7 +26,7 @@ import store from './store/main'
 import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { generateFilePath } from '@nextcloud/router'
-import Tooltip from 'nextcloud-vue/dist/Directives/Tooltip'
+import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import './models'
 
 // eslint-disable-next-line

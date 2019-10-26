@@ -95,11 +95,11 @@
 </template>
 
 <script>
-import { AppSidebar, AppSidebarTab, Multiselect, DatetimePicker, Avatar } from 'nextcloud-vue'
+import { AppSidebar, AppSidebarTab, Multiselect, DatetimePicker, Avatar } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import VueEasymde from 'vue-easymde'
-import { Actions } from 'nextcloud-vue/dist/Components/Actions'
-import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
+import { Actions } from '@nextcloud/vue/dist/Components/Actions'
+import { ActionButton } from '@nextcloud/vue/dist/Components/ActionButton'
 import ActivityEntry from '../ActivityEntry'
 import Color from '../../mixins/color'
 import { CollectionList } from 'nextcloud-vue-collections'

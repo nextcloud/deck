@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { Avatar, Multiselect, Actions, ActionButton, ActionCheckbox } from 'nextcloud-vue'
+import { Avatar, Multiselect, Actions, ActionButton, ActionCheckbox } from '@nextcloud/vue'
 import { CollectionList } from 'nextcloud-vue-collections'
 import { mapGetters } from 'vuex'
 
