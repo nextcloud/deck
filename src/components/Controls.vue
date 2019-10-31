@@ -53,6 +53,8 @@
 					@click="toggleShowArchived" />
 				<button :class="[(compactMode ? 'icon-toggle-compact-collapsed' : 'icon-toggle-compact-expanded')]" title="Toggle compact mode" class="icon"
 					@click="toggleCompactMode" />
+				<button :class="[(listMode ? 'icon-deck' : 'icon-menu')]" title="Toggle view" class="icon"
+					@click="toggleListMode" />
 				<router-link v-tooltip="t('deck', 'Board settings')" :to="{name: 'board.details'}" class="icon-settings-dark"
 					tag="button" />
 			</div>
@@ -81,7 +83,8 @@ export default {
 	},
 	computed: {
 		...mapState({
-			compactMode: state => state.compactMode
+			compactMode: state => state.compactMode,
+			listMode: state => state.listMode
 		}),
 		archivStyle() {
 
@@ -100,6 +103,9 @@ export default {
 		},
 		toggleCompactMode() {
 			this.$store.dispatch('toggleCompactMode')
+		},
+		toggleListMode() {
+			this.$store.dispatch('toggleListMode')
 		},
 		toggleShowArchived() {
 			this.$store.dispatch('toggleShowArchived')

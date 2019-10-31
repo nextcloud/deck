@@ -24,8 +24,8 @@
 	<div>
 		<Controls :board="board" />
 		<div v-if="board" class="board">
-			<container lock-axix="y" orientation="horizontal" @drop="onDropStack">
-				<draggable v-for="stack in stacksByBoard" :key="stack.id" class="stack">
+			<container lock-axix="y" :orientation="getOrientation" @drop="onDropStack">
+				<draggable v-for="stack in stacksByBoard" :key="stack.id" :class="[(listMode ? 'stack-list' : 'stack')]">
 					<stack :stack="stack" />
 				</draggable>
 			</container>
@@ -70,10 +70,17 @@ export default {
 	computed: {
 		...mapState({
 			board: state => state.currentBoard,
-			showArchived: state => state.showArchived
+			showArchived: state => state.showArchived,
+			listMode: state => state.listMode
 		}),
 		stacksByBoard() {
 			return this.$store.getters.stacksByBoard(this.board.id)
+		},
+		getOrientation() {
+			if (this.listMode) {
+				return 'vertical'
+			}
+			return 'horizontal'
 		}
 		/* cardsByStack() {
 			return (id) => this.$store.getters.cardsByStack(id)
@@ -136,14 +143,20 @@ export default {
 
 	$board-spacing: 15px;
 	$stack-spacing: 10px;
-	$stack-width: 300px;
 
 	.board {
 		margin-left: $board-spacing;
 	}
 
 	.stack {
-		width: $stack-width;
+		width: 300px;
+		padding: $stack-spacing;
+		padding-top: 0;
+	}
+
+	.stack-list {
+		width: 80%;
+		margin: auto;
 		padding: $stack-spacing;
 		padding-top: 0;
 	}

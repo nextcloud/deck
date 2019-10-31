@@ -22,7 +22,7 @@
   -->
 
 <template>
-	<div class="stack">
+	<div :class="[(listMode ? 'stack-list' : 'stack')]">
 		<div class="stack--header">
 			<transition name="fade" mode="out-in">
 				<h3 v-if="!editing" @click="startEditing(stack)">{{ stack.title }}</h3>
@@ -39,7 +39,12 @@
 
 		<container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)">
 			<draggable v-for="card in cardsByStack(stack.id)" :key="card.id">
-				<card-item v-if="card" :id="card.id" />
+				<template v-if="listMode">
+					<list-item v-if="card" :id="card.id" />
+				</template>
+				<template v-else>
+					<card-item v-if="card" :id="card.id" />
+				</template>
 			</draggable>
 		</container>
 
@@ -62,7 +67,9 @@
 import { Container, Draggable } from 'vue-smooth-dnd'
 import { Actions } from 'nextcloud-vue/dist/Components/Actions'
 import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
+import { mapState } from 'vuex'
 import CardItem from '../cards/CardItem'
+import ListItem from '../cards/ListItem'
 
 export default {
 	name: 'Stack',
@@ -70,6 +77,7 @@ export default {
 		Actions,
 		ActionButton,
 		CardItem,
+		ListItem,
 		Container,
 		Draggable
 	},
@@ -88,6 +96,9 @@ export default {
 		}
 	},
 	computed: {
+		...mapState({
+			listMode: state => state.listMode
+		}),
 		cardsByStack() {
 			return (id) => this.$store.getters.cardsByStack(id)
 		}
@@ -147,10 +158,15 @@ export default {
 <style lang="scss" scoped>
 
 	$stack-spacing: 10px;
-	$stack-width: 300px;
 
 	.stack {
-		width: $stack-width;
+		width: 300px;
+		padding: $stack-spacing;
+		padding-top: 0;
+	}
+
+	.stack-list {
+		width: 80%;
 		padding: $stack-spacing;
 		padding-top: 0;
 	}

@@ -48,6 +48,7 @@ export default new Vuex.Store({
 		showArchived: false,
 		navShown: true,
 		compactMode: false,
+		listMode: true,
 		sidebarShown: false,
 		currentBoard: null,
 		currentCard: null,
@@ -147,6 +148,9 @@ export default new Vuex.Store({
 		},
 		toggleCompactMode(state) {
 			state.compactMode = !state.compactMode
+		},
+		toggleListMode(state) {
+			state.listMode = !state.listMode
 		},
 		setBoards(state, boards) {
 			state.boards = boards
@@ -351,6 +355,9 @@ export default new Vuex.Store({
 		},
 		toggleCompactMode({ commit }) {
 			commit('toggleCompactMode')
+		},
+		toggleListMode({ commit }) {
+			commit('toggleListMode')
 		},
 		setCurrentBoard({ commit }, board) {
 			commit('setCurrentBoard', board)
