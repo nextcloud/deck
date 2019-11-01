@@ -1,4 +1,4 @@
-<div id="stack-add" ng-if="boardservice.canEdit() && checkCanEdit()">
+<div id="stack-add" ng-if="boardservice.canManage() && checkCanEdit()">
     <form class="ng-pristine ng-valid" ng-submit="createStack()">
         <label for="new-stack-input-<?php p($_['headerControlsId']); ?>" class="hidden-visually"><?php p($l->t('Add a new stack')); ?></label>
         <input type="text" class="no-close" placeholder="<?php p($l->t('Add a new stack')); ?>"
