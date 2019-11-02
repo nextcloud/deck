@@ -36,6 +36,9 @@ export default {
 		cardById: state => (id) => {
 			return state.cards.find((card) => card.id === id)
 		},
+		allCards(state) {
+			return state.cards
+		}
 	},
 	mutations: {
 		clearCards(state) {

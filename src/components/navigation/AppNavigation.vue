@@ -23,6 +23,12 @@
 <template>
 	<div id="app-navigation" :class="{'icon-loading': loading}">
 		<ul id="deck-navigation">
+			<AppNavigationCollection
+				id="deck-navigation-all"
+				:text="t('deck', 'Overview')"
+				:boards="noneArchivedBoards"
+				:open-on-add-boards="true"
+				icon="icon-desktop" />
 			<AppNavigationBoardCategory
 				id="deck-navigation-all"
 				:text="t('deck', 'All boards')"
@@ -73,6 +79,7 @@ import { Multiselect } from '@nextcloud/vue/dist/Components/Multiselect'
 
 import AppNavigationAddBoard from './AppNavigationAddBoard'
 import AppNavigationBoardCategory from './AppNavigationBoardCategory'
+import AppNavigationCollection from './AppNavigationCollection'
 
 export default {
 	name: 'AppNavigation',
@@ -80,6 +87,7 @@ export default {
 		AppNavigationAddBoard,
 		AppNavigationBoardCategory,
 		Multiselect,
+		AppNavigationCollection,
 	},
 	directives: {
 		ClickOutside,

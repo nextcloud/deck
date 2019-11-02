@@ -23,12 +23,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import { generateUrl } from '@nextcloud/router'
-import { BOARD_FILTERS } from './store/main'
+import { BOARD_FILTERS, COLLECTION_FILTERS } from './store/main'
+
 import Boards from './components/boards/Boards'
 import Board from './components/board/Board'
 import Sidebar from './components/Sidebar'
 import BoardSidebar from './components/board/BoardSidebar'
 import CardSidebar from './components/card/CardSidebar'
+import Collections from './components/Collections'
 
 Vue.use(Router)
 
@@ -64,6 +66,30 @@ export default new Router({
 			props: {
 				navFilter: BOARD_FILTERS.SHARED,
 			},
+		},
+		{
+			path: '/collections',
+			name: 'collections',
+			component: Collections,
+			props: {
+				navFilter: COLLECTION_FILTERS.ALL
+			}
+		},
+		{
+			path: '/collections/due',
+			name: 'collections.due',
+			component: Collections,
+			props: {
+				navFilter: COLLECTION_FILTERS.DUE
+			}
+		},
+		{
+			path: '/collections/my',
+			name: 'collections.my',
+			component: Collections,
+			props: {
+				navFilter: COLLECTION_FILTERS.MY
+			}
 		},
 		{
 			path: '/boards/:id',
