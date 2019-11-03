@@ -123,7 +123,7 @@
 				  ng-model="status.edit.description"
 				  ng-change="cardEditDescriptionChanged(); updateMarkdown(status.edit.description)"
 				  autofocus-on-insert> </textarea>
-		<div class="container" ng-click="clickCardDescription($event)"
+		<div class="container" ng-dblclick="clickCardDescription($event)"
 			 ng-if="!status.cardEditDescription" ng-animate>
 			<div class="placeholder"
 				 ng-if="!description()"><?php p($l->t('Add a card description…')); ?></div>
