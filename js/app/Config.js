@@ -26,7 +26,7 @@ import app from './App.js';
 import md from 'angular-markdown-it';
 import markdownitLinkTarget from 'markdown-it-link-target';
 import markdownitCheckbox from 'legacy/markdown-it-checkbox.js';
-import markdownitAbbr from  'legacy/markdown-it-abbr.js';
+import markdownitAbbr from  'markdown-it-abbr';
 
 app.config(function ($provide, $interpolateProvider, $httpProvider, $urlRouterProvider, $stateProvider, $compileProvider, markdownItConverterProvider) {
 	'use strict';
