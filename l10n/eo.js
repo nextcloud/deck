@@ -138,7 +138,7 @@ OC.L10N.register(
     "Group" : "Grupo",
     "Circle" : "Rondo",
     "No matching user or group found." : "Neniu kongrua uzanto aŭ grupo trovita.",
-    "Loading" : "Ŝargante",
+    "Loading" : "Ŝargado",
     "Edit" : "Redakti",
     "Share" : "Kunhavigi",
     "Manage" : "Administri",
