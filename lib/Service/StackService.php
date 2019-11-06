@@ -345,7 +345,7 @@ class StackService {
 			throw new BadRequestException('order must be provided');
 		}
 
-		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_EDIT);
+		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
 		$stackToSort = $this->stackMapper->find($id);
 		$stacks = $this->stackMapper->findAll($stackToSort->getBoardId());
 		$result = [];
