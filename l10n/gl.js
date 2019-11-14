@@ -190,7 +190,7 @@ OC.L10N.register(
     "Saved" : "Gardado",
     "Unsaved changes" : "Cambios sen gardar",
     "Insert attachment" : "Inserir o anexo",
-    "Formatting help" : "Axuda de formato",
+    "Formatting help" : "Axuda de formatado",
     "Upload attachment" : "Enviar anexos",
     "Add a card description…" : "Engadir unha descrición da tarxeta…",
     "Shared boards" : "Taboleiros compartidos",
