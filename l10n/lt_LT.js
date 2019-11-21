@@ -40,7 +40,7 @@ OC.L10N.register(
     "Sharing" : "Bendrinimas",
     "Tags" : "Žymės",
     "Deleted items" : "Ištrinti elementai",
-    "Select users or groups to share with" : "Pasirinkti naudotojus ar naudotojų grupes bendrinimui",
+    "Select users or groups to share with" : "Pasirinkti naudotojus ar grupes su kuriomis bendrinti",
     "Group" : "Grupė",
     "Circle" : "Ratas",
     "No matching user or group found." : "Nerasta vartotojų ir grupių",
