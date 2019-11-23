@@ -433,6 +433,13 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ### POST /boards/{boardId}/stacks - Create a new stack
 
+#### Request body
+
+| Parameter | Type    | Description                                          |
+| --------- | ------- | ---------------------------------------------------- |
+| title     | String  | The title of the new stack                           |
+| order     | Integer | Order for sorting the stacks                         |
+
 #### Request parameters
 
 | Parameter | Type    | Description                  |
