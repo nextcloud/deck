@@ -223,10 +223,10 @@ class ActivityManager {
 				$subject = $ownActivity ? $this->l10n->t('You have added the attachment {attachment} to card {card}') : $this->l10n->t('{user} has added the attachment {attachment} to card {card}');
 				break;
 			case self::SUBJECT_ATTACHMENT_UPDATE:
-				$subject = $ownActivity ? $this->l10n->t('You have updated the attachment {attachment} on card {card}') : $this->l10n->t('{user} has updated the attachment {attachment} to card {card}');
+				$subject = $ownActivity ? $this->l10n->t('You have updated the attachment {attachment} on card {card}') : $this->l10n->t('{user} has updated the attachment {attachment} on card {card}');
 				break;
 			case self::SUBJECT_ATTACHMENT_DELETE:
-				$subject = $ownActivity ? $this->l10n->t('You have deleted the attachment {attachment} from card {card}') : $this->l10n->t('{user} has deleted the attachment {attachment} to card {card}');
+				$subject = $ownActivity ? $this->l10n->t('You have deleted the attachment {attachment} from card {card}') : $this->l10n->t('{user} has deleted the attachment {attachment} from card {card}');
 				break;
 			case self::SUBJECT_ATTACHMENT_RESTORE:
 				$subject = $ownActivity ? $this->l10n->t('You have restored the attachment {attachment} to card {card}') : $this->l10n->t('{user} has restored the attachment {attachment} to card {card}');
