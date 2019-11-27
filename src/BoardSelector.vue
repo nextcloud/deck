@@ -72,8 +72,8 @@
 </style>
 <script>
 /* global OC */
-import { Modal } from 'nextcloud-vue/dist/Components/Modal'
-import { Avatar } from 'nextcloud-vue/dist/Components/Avatar'
+import { Modal } from '@nextcloud/vue/dist/Components/Modal'
+import { Avatar } from '@nextcloud/vue/dist/Components/Avatar'
 import axios from 'nextcloud-axios'
 
 export default {

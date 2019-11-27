@@ -1,5 +1,3 @@
-cardbadges
-
 <!--
   - @copyright Copyright (c) 2018 Julius Härtl <jus@bitgrid.net>
   -
@@ -40,7 +38,7 @@ cardbadges
 	</div>
 </template>
 <script>
-import { Avatar } from 'nextcloud-vue'
+import { Avatar } from '@nextcloud/vue/dist/Components/Avatar'
 import AvatarList from './AvatarList'
 
 export default {

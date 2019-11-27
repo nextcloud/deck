@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { PopoverMenu } from 'nextcloud-vue'
+import { PopoverMenu } from '@nextcloud/vue/dist/Components/PopoverMenu'
 import ClickOutside from 'vue-click-outside'
 import ColorPicker from '../ColorPicker'
 

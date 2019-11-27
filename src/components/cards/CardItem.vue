@@ -69,10 +69,10 @@
 </template>
 
 <script>
-import { Modal } from 'nextcloud-vue/dist/Components/Modal'
-import { Actions } from 'nextcloud-vue/dist/Components/Actions'
-import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
-import { Multiselect } from 'nextcloud-vue/dist/Components/Multiselect'
+import { Modal } from '@nextcloud/vue/dist/Components/Modal'
+import { Actions } from '@nextcloud/vue/dist/Components/Actions'
+import { ActionButton } from '@nextcloud/vue/dist/Components/ActionButton'
+import { Multiselect } from '@nextcloud/vue/dist/Components/Multiselect'
 import ClickOutside from 'vue-click-outside'
 import { mapState } from 'vuex'
 import axios from 'nextcloud-axios'
