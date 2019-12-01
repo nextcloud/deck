@@ -56,7 +56,7 @@
 		"@babel/plugin-syntax-dynamic-import": "^7.7.4",
 		"@babel/preset-env": "^7.7.4",
 		"@nextcloud/browserslist-config": "^1.0.0",
-		"@vue/test-utils": "^1.0.0-beta.29",
+		"@vue/test-utils": "^1.0.0-beta.30",
 		"babel-eslint": "^10.0.3",
 		"babel-jest": "^24.9.0",
 		"babel-loader": "^8.0.6",
