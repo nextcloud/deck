@@ -36,7 +36,7 @@
     "mini-css-extract-plugin": "^0.8.0",
     "style-loader": "^1.0.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
-    "url-loader": "^2.1.0",
+    "url-loader": "^3.0.0",
     "vue-loader": "^15.7.2",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.10",
