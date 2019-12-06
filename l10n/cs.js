@@ -170,7 +170,7 @@ OC.L10N.register(
     "Select an attachment" : "Vybrat přílohu",
     "Cancel upload" : "Zrušit nahrávání",
     "by" : "od",
-    "Undo file deletion - Otherwise the file will be deleted during the next cronjob run." : "Vrátit smazání souboru – v opačném případě bude soubor trvale smazán při dalším běhu cronjobu.",
+    "Undo file deletion - Otherwise the file will be deleted during the next cronjob run." : "Vrátit smazání souboru – jinak bude trvale smazán při dalším běhu naplánované úlohy.",
     "Undo file deletion" : "Vzít zpět smazání souboru",
     "Insert the file into the description" : "Vložte soubor do popisu",
     "Delete attachment" : "Smazat přílohu",
