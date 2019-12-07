@@ -192,7 +192,7 @@ OC.L10N.register(
     "Insert attachment" : "Ek dosya ekle",
     "Formatting help" : "Biçimlendirme yardımı",
     "Upload attachment" : "Ek dosya yükle",
-    "Add a card description…" : "Bir kart açıklaması ekle...",
+    "Add a card description…" : "Bir kart açıklaması ekle …",
     "Shared boards" : "Paylaşılmış panolar",
     "Move board to archive" : "Panoyu arşive taşı",
     "Create a new board" : "Pano ekle",
