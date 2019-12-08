@@ -84,7 +84,7 @@
     "{user} has mentioned you in a comment on \"%s\"." : "{user} kullanıcısı, \"%s\" üzerindeki bir yorumda sizi andı",
     "The board \"%s\" has been shared with you by %s." : "\"%s\" panosu %s tarafından sizinle paylaşıldı.",
     "{user} has shared the board %s with you." : "{user} sizinle %s panosunu paylaştı.",
-    "No data was provided to create an attachment." : "Bir ek dosyası oluşturmak için herhangi bir veri sağlanmadı.",
+    "No data was provided to create an attachment." : "Bir ek dosya oluşturmak için herhangi bir veri belirtilmedi.",
     "Finished" : "Tamamlandı",
     "To review" : "İncelenecek",
     "Action needed" : "İşlem yapılması gerekiyor",
