@@ -30,7 +30,7 @@ use OCA\Deck\Db\Card;
 use OCA\Deck\Service\CardService;
 
 class CardApiControllerTest extends \Test\TestCase {
-	
+
 	private $controller;
 	private $request;
 	private $cardService;
@@ -38,26 +38,26 @@ class CardApiControllerTest extends \Test\TestCase {
 	private $cardExample;
 	private $stackExample;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
-		
+
 		$this->request = $this->createMock(IRequest::class);
 		$this->cardService = $this->createMock(CardService::class);
-		
+
 		$this->cardExample['id'] = 1;
 		$this->stackExample['id'] = 1;
 
 		$this->controller = new CardApiController (
 			$appName = 'deck',
 			$this->request,
-			$this->cardService,			
+			$this->cardService,
 			$this->userId
 		);
 	}
 
 	public function testGet() {
 		$card = new Card();
-		$card->setId($this->cardExample['id']);		
+		$card->setId($this->cardExample['id']);
 
 		$this->request->expects($this->once())
 			->method('getParam')
@@ -104,7 +104,7 @@ class CardApiControllerTest extends \Test\TestCase {
 				['cardId'],
 				['stackId']
 			)->willReturnonConsecutiveCalls(
-				$this->cardExample['id'], 
+				$this->cardExample['id'],
 				$this->stackExample['id']);
 
 		$this->cardService->expects($this->once())
@@ -120,7 +120,7 @@ class CardApiControllerTest extends \Test\TestCase {
 
 		$card = new Card();
 		$card->setId($this->cardExample['id']);
-		
+
 		$this->request->expects($this->once())
 			->method('getParam')
 			->with('cardId')

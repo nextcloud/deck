@@ -45,6 +45,13 @@ In any case a user doesn't have access to a requested entity, a 403 error will b
 ### If-Modified-Since
 
 Some index endpoints support limiting the result set to entries that have been changed since the given time.
+The supported date formats are:
+
+* IMF-fixdate:                 `Sun, 03 Aug 2019 10:34:12 GMT`
+* (obsolete) RFC 850:          `Sunday, 03-Aug-19 10:34:12 GMT`
+* (obsolete) ANSI C asctime(): `Sun Aug  3 10:34:12 2019`
+
+It is highly recommended to only use the IMF-fixdate format.
 
 Example curl request:
 
@@ -52,7 +59,7 @@ Example curl request:
 curl -u admin:admin -X GET \
     'http://localhost:8000/index.php/apps/deck/api/v1.0/boards/2/stacks' \
     -H "OCS-APIRequest: true" \
-    -H "If-Modified-Since: Mon, 5 Nov 2018 09:28:00 GMT"
+    -H "If-Modified-Since: Mon, 05 Nov 2018 09:28:00 GMT"
 ```
 
 # Endpoints
@@ -425,6 +432,13 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 ##### 200 Success
 
 ### POST /boards/{boardId}/stacks - Create a new stack
+
+#### Request body
+
+| Parameter | Type    | Description                                          |
+| --------- | ------- | ---------------------------------------------------- |
+| title     | String  | The title of the new stack                           |
+| order     | Integer | Order for sorting the stacks                         |
 
 #### Request parameters
 

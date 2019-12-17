@@ -39,7 +39,7 @@ class FilterTest extends TestCase {
 	/** @var IURLGenerator|MockObject */
 	private $urlGenerator;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->filter = new Filter($this->l10n, $this->urlGenerator);

@@ -95,10 +95,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	 * @param null $offset
 	 * @return array
 	 */
-	public function findAllByUser($userId, $limit = null, $offset = null, $since = 0) {
-		$sql = 'SELECT id, title, owner, color, archived, deleted_at, 0 as shared, last_modified FROM `*PREFIX*deck_boards` WHERE owner = ? AND last_modified > ?';
-		$entries = $this->findEntities($sql, [$userId, $since], $limit, $offset);
-
+	public function findAllByUser($userId, $limit = null, $offset = null, $since = -1) {
 		$sql = 'SELECT id, title, owner, color, archived, deleted_at, 0 as shared, last_modified FROM `*PREFIX*deck_boards` WHERE owner = ? AND last_modified > ? UNION ' .
 			'SELECT boards.id, title, owner, color, archived, deleted_at, 1 as shared, last_modified FROM `*PREFIX*deck_boards` as boards ' .
 			'JOIN `*PREFIX*deck_board_acl` as acl ON boards.id=acl.board_id WHERE acl.participant=? AND acl.type=? AND boards.owner != ? AND last_modified > ?';

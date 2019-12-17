@@ -42,7 +42,7 @@ class LabelServiceTest extends TestCase {
 	/** @var ChangeHelper|\PHPUnit\Framework\MockObject\MockObject */
 	private $changeHelper;
 
-    public function setUp() {
+    public function setUp(): void {
 		parent::setUp();
         $this->labelMapper = $this->getMockBuilder(LabelMapper::class)
             ->disableOriginalConstructor()->getMock();

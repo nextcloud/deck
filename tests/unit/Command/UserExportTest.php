@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *  
+ *
  */
 
 namespace OCA\Deck\Command;
@@ -54,7 +54,7 @@ class UserExportTest extends \Test\TestCase {
 
 	private $userExport;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->boardService= $this->createMock(BoardService::class);

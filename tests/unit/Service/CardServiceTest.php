@@ -76,7 +76,7 @@ class CardServiceTest extends TestCase {
 	/** @var ChangeHelper|MockObject */
 	private $changeHelper;
 
-	public function setUp() {
+	public function setUp(): void {
 		    parent::setUp();
         $this->cardMapper = $this->createMock(CardMapper::class);
         $this->stackMapper = $this->createMock(StackMapper::class);

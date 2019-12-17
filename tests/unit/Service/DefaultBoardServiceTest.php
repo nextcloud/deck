@@ -36,9 +36,9 @@ use OCP\IL10N;
 use \Test\TestCase;
 
 class DefaultBoardServiceTest extends TestCase {
-	
+
 	/** @var DefaultBoardService */
-	private $service;	
+	private $service;
 
 	/** @var BoardService */
 	private $boardService;
@@ -50,16 +50,16 @@ class DefaultBoardServiceTest extends TestCase {
 	private $cardService;
 
 	/** @var BoardMapper */
-	private $boardMapper;	
+	private $boardMapper;
 
 	/** @var IConfig */
 	private $config;
 
 	private $l10n;
-	
-	private $userId = 'admin';	
 
-	public function setUp() {
+	private $userId = 'admin';
+
+	public function setUp(): void {
 		parent::setUp();
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->boardService = $this->createMock(BoardService::class);
@@ -76,7 +76,7 @@ class DefaultBoardServiceTest extends TestCase {
 			$this->stackService,
 			$this->cardService,
 			$this->config
-		);		
+		);
 	}
 
 	public function testCheckFirstRunCaseTrue() {
@@ -86,13 +86,13 @@ class DefaultBoardServiceTest extends TestCase {
 		$this->config->expects($this->once())
 			->method('getUserValue')
 			->willReturn('yes');
-		
+
 		$this->boardMapper->expects($this->once())
 			->method('findAllByUser')
 			->willReturn($userBoards);
 
 		$this->config->expects($this->once())
-			->method('setUserValue');			
+			->method('setUserValue');
 
 		$result = $this->service->checkFirstRun($this->userId, $appName);
 		$this->assertEquals($result, true);
@@ -119,11 +119,11 @@ class DefaultBoardServiceTest extends TestCase {
 		$this->assertEquals($result, false);
 	}
 
-	public function testCreateDefaultBoard() {	
-		$title = 'Personal';		
+	public function testCreateDefaultBoard() {
+		$title = 'Personal';
 		$color = '317CCC';
 		$boardId = 5;
-		
+
 		$board = new Board();
 		$board->setId($boardId);
 		$board->setTitle($title);
@@ -137,12 +137,12 @@ class DefaultBoardServiceTest extends TestCase {
 			->method('t')
 			->willReturnCallback(function($text) { return $text; });
 
-		$stackToDoId = '123';		
+		$stackToDoId = '123';
 		$stackToDo = $this->assembleTestStack('To do', $stackToDoId, $boardId);
-		
-		$stackDoingId = '124';		
+
+		$stackDoingId = '124';
 		$stackDoing = $this->assembleTestStack('Doing', $stackDoingId, $boardId);
-		
+
 		$stackDoneId = '125';
 		$stackDone = $this->assembleTestStack('Done', $stackDoneId, $boardId);
 		$this->stackService->expects($this->exactly(3))
@@ -153,7 +153,7 @@ class DefaultBoardServiceTest extends TestCase {
 				[$this->l10n->t('Done'),  $boardId, 1]
 			)
 			->willReturnOnConsecutiveCalls($stackToDo, $stackDoing, $stackDone);
-		
+
 		$cardExampleTask3 = $this->assembleTestCard('Example Task 3', $stackToDoId, $this->userId);
 		$cardExampleTask2 = $this->assembleTestCard('Example Task 2', $stackDoingId, $this->userId);
 		$cardExampleTask1 = $this->assembleTestCard('Example Task 1', $stackDoneId, $this->userId);
@@ -172,8 +172,8 @@ class DefaultBoardServiceTest extends TestCase {
 		$this->assertEquals($result->getOwner(), $this->userId);
 		$this->assertEquals($result->getColor(), $color);
 	}
-	
-	private function assembleTestStack($title, $id, $boardId) {		
+
+	private function assembleTestStack($title, $id, $boardId) {
 		$stack = new Stack();
 		$stack->setId($id);
 		$stack->setTitle($title);

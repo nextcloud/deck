@@ -38,8 +38,8 @@ class BoardApiControllerTest extends \Test\TestCase {
 	private $exampleBoard;
 	private $deniedBoard;
 
-	public function setUp() {
-		parent::setUp();					
+	public function setUp(): void {
+		parent::setUp();
 		$this->request = $this->createMock(IRequest::class);
 		$this->boardService = $this->createMock(BoardService::class);
 
@@ -76,7 +76,7 @@ class BoardApiControllerTest extends \Test\TestCase {
 
 		$this->assertEquals($expected, $actual);
 	}
-	
+
 	public function testGet() {
 		$boardId = 25;
 		$board = new Board();
@@ -94,7 +94,7 @@ class BoardApiControllerTest extends \Test\TestCase {
 		$actual = $this->controller->get();
 		$this->assertEquals($expected, $actual);
 	}
-	
+
 	public function testCreate() {
 		$board = new Board();
 		$board->setId($this->exampleBoard['id']);
@@ -103,11 +103,11 @@ class BoardApiControllerTest extends \Test\TestCase {
 		$this->boardService->expects($this->once())
 			->method('create')
 			->willReturn($board);
-		
+
 		$expected = new DataResponse($board, HTTP::STATUS_OK);
 		$actual = $this->controller->create($this->exampleBoard['title'], $this->exampleBoard['color']);
 		$this->assertEquals($expected, $actual);
-	}	
+	}
 
 	public function testUpdate() {
 		$board = new Board();
@@ -125,9 +125,9 @@ class BoardApiControllerTest extends \Test\TestCase {
 
 		$expected = new DataResponse($board, HTTP::STATUS_OK);
 		$actual = $this->controller->update($this->exampleBoard['title'], $this->exampleBoard['color']);
-		$this->assertEquals($expected, $actual);		
-	}					
-	
+		$this->assertEquals($expected, $actual);
+	}
+
 	public function testDelete() {
 		$board = new Board();
 		$board->setId($this->exampleBoard['id']);
@@ -136,7 +136,7 @@ class BoardApiControllerTest extends \Test\TestCase {
 		$this->boardService->expects($this->once())
 			->method('delete')
 			->willReturn($board);
-		
+
 		$this->request->expects($this->any())
 			->method('getParam')
 			->with('boardId')
@@ -146,8 +146,8 @@ class BoardApiControllerTest extends \Test\TestCase {
 		$actual = $this->controller->delete();
 
 		$this->assertEquals($expected, $actual);
-	}		
-	
+	}
+
 	public function testUndoDelete() {
 		$board = new board();
 		$board->setId($this->exampleBoard['id']);
