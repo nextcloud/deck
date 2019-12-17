@@ -22,7 +22,8 @@
 <template>
 	<router-link :id="`board-${board.id}`"
 		:title="board.title" :class="[{'icon-loading-small': loading, deleted: deleted, editing: editing }, classes]"
-		:to="routeTo" tag="li">
+		:to="routeTo" tag="li"
+	>
 		<div :style="{ backgroundColor: `#${board.color}` }" class="app-navigation-entry-bullet" />
 		<a href="#">
 			{{ board.title }}
@@ -32,7 +33,8 @@
 			<ul>
 				<li class="app-navigation-entry-utils-menu-button">
 					<button v-if="board.acl.length === 0" class="icon-shared" style="opacity: 0.3"
-						@click="showSidebar" />
+						@click="showSidebar"
+					/>
 					<button v-else class="icon-shared" @click="showSidebar" />
 				</li>
 				<li class="app-navigation-entry-utils-menu-button">
@@ -52,7 +54,8 @@
 			<button
 				:title="t('settings', 'Undo')"
 				class="app-navigation-entry-deleted-button icon-history"
-				@click="unDelete" />
+				@click="unDelete"
+			/>
 		</div>
 
 		<!-- edit entry -->
@@ -61,7 +64,8 @@
 				<input v-model="editTitle" type="text" required>
 				<input type="submit" value="" class="icon-confirm">
 				<input type="submit" value="" class="icon-close"
-					@click.stop.prevent="cancelEdit">
+					@click.stop.prevent="cancelEdit"
+				>
 			</form>
 			<ColorPicker v-model="editColor" />
 		</div>

@@ -28,31 +28,36 @@
 				:text="t('deck', 'All boards')"
 				:boards="noneArchivedBoards"
 				:open-on-add-boards="true"
-				icon="icon-deck" />
+				icon="icon-deck"
+			/>
 			<app-navigation-board-category
 				id="deck-navigation-archived"
 				:text="t('deck', 'Archived boards')"
 				:boards="archivedBoards"
-				icon="icon-archive" />
+				icon="icon-archive"
+			/>
 			<app-navigation-board-category
 				id="deck-navigation-shared"
 				:text="t('deck', 'Shared boards')"
 				:boards="sharedBoards"
-				icon="icon-shared" />
+				icon="icon-shared"
+			/>
 			<app-navigation-add-board />
 		</ul>
-		<div v-click-outside="closeMenu" v-if="isAdmin"
-			id="app-settings" :class="{open: opened}">
+		<div v-if="isAdmin" id="app-settings"
+			v-click-outside="closeMenu" :class="{open: opened}"
+		>
 			<div id="app-settings-header">
 				<button class="settings-button" @click="toggleMenu">
 					{{ t('deck', 'Settings') }}
 				</button>
 			</div>
 			<div id="app-settings-content">
-				<Multiselect :class="{'icon-loading-small': groupLimitDisabled}" :options="groups" :multiple="true"
-					v-model="groupLimit"
+				<Multiselect v-model="groupLimit" :class="{'icon-loading-small': groupLimitDisabled}" :options="groups"
+					:multiple="true"
 					:disabled="groupLimitDisabled" label="displayname" track-by="id"
-					@input="updateConfig" />
+					@input="updateConfig"
+				/>
 				<p>{{ t('deck', 'Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them.') }}</p>
 			</div>
 		</div>
@@ -66,14 +71,12 @@ import ClickOutside from 'vue-click-outside'
 import { Multiselect } from '@nextcloud/vue/dist/Components/Multiselect'
 
 import AppNavigationAddBoard from './AppNavigationAddBoard'
-import AppNavigationBoard from './AppNavigationBoard'
 import AppNavigationBoardCategory from './AppNavigationBoardCategory'
 
 export default {
 	name: 'AppNavigation',
 	components: {
 		AppNavigationAddBoard,
-		AppNavigationBoard,
 		AppNavigationBoardCategory,
 		Multiselect
 	},

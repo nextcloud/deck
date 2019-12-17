@@ -38,12 +38,11 @@
 	</div>
 </template>
 <script>
-import { Avatar } from '@nextcloud/vue/dist/Components/Avatar'
 import AvatarList from './AvatarList'
 
 export default {
 	name: 'CardBadges',
-	components: { Avatar, AvatarList },
+	components: { AvatarList },
 	props: {
 		id: {
 			type: Number,

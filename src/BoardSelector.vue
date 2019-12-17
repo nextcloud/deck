@@ -25,14 +25,17 @@
 		<div id="modal-inner" :class="{ 'icon-loading': loading }">
 			<h1>{{ t('deck', 'Select the board to link to a project') }}</h1>
 			<ul v-if="!loading">
-				<li v-for="board in boards" v-if="!currentBoard || ''+board.id !== ''+currentBoard" :key="board.id"
+				<li v-for="board in availableBoards" :key="board.id"
 					:class="{'selected': (selectedBoard === board.id) }"
-					@click="selectedBoard=board.id">
+					@click="selectedBoard=board.id"
+				>
 					<span :style="{ 'backgroundColor': '#' + board.color }" class="board-bullet" />
 					<span>{{ board.title }}</span>
 				</li>
 			</ul>
-			<button v-if="!loading" class="primary" @click="select">{{ t('deck', 'Select board') }}</button>
+			<button v-if="!loading" class="primary" @click="select">
+				{{ t('deck', 'Select board') }}
+			</button>
 		</div>
 	</Modal>
 </template>
@@ -71,15 +74,13 @@
 
 </style>
 <script>
-/* global OC */
 import { Modal } from '@nextcloud/vue/dist/Components/Modal'
-import { Avatar } from '@nextcloud/vue/dist/Components/Avatar'
 import axios from 'nextcloud-axios'
 
 export default {
 	name: 'CollaborationView',
 	components: {
-		Modal, Avatar
+		Modal
 	},
 	data() {
 		return {
@@ -87,6 +88,11 @@ export default {
 			selectedBoard: null,
 			loading: true,
 			currentBoard: null
+		}
+	},
+	computed: {
+		availableBoards() {
+			return this.boards.filter((board) => ('' + board.id !== '' + this.currentBoard))
 		}
 	},
 	beforeMount() {

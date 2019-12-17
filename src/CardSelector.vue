@@ -23,15 +23,21 @@
 <template>
 	<Modal :title="t('deck', 'Select the card to link to a project')" @close="close">
 		<div id="modal-inner" :class="{ 'icon-loading': loading }">
-			<Multiselect :placeholder="t('deck', 'Select a board')" v-model="selectedBoard" :options="boards"
+			<Multiselect v-model="selectedBoard" :placeholder="t('deck', 'Select a board')" :options="boards"
 				label="title"
-				@select="fetchCardsFromBoard" />
+				@select="fetchCardsFromBoard"
+			/>
 
-			<Multiselect :placeholder="t('deck', 'Select a card')" v-model="selectedCard" :options="cardsFromBoard"
-				label="title" />
+			<Multiselect v-model="selectedCard" :placeholder="t('deck', 'Select a card')" :options="cardsFromBoard"
+				label="title"
+			/>
 
-			<button :disabled="!isBoardAndStackChoosen" class="primary" @click="select">{{ t('deck', 'Link to card') }}</button>
-			<button @click="close">{{ t('deck', 'Cancel') }}</button>
+			<button :disabled="!isBoardAndStackChoosen" class="primary" @click="select">
+				{{ t('deck', 'Link to card') }}
+			</button>
+			<button @click="close">
+				{{ t('deck', 'Cancel') }}
+			</button>
 		</div>
 	</Modal>
 </template>

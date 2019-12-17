@@ -3,8 +3,11 @@
 		<div v-if="isLoading" class="icon icon-loading" />
 
 		<ActivityEntry v-for="entry in boardActivity" v-else :key="entry.activity_id"
-			:activity="entry" />
-		<button v-if="activityLoadMore" @click="loadMore">Load More</button>
+			:activity="entry"
+		/>
+		<button v-if="activityLoadMore" @click="loadMore">
+			Load More
+		</button>
 	</div>
 </template>
 

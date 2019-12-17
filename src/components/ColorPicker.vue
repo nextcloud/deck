@@ -23,11 +23,12 @@
 <template>
 	<div v-click-outside="hidePicker" class="color-picker">
 		<div class="color-picker-compact">
-			<Compact :palette="defaultColors" v-model="color" @input="updateColor" />
+			<Compact v-model="color" :palette="defaultColors" @input="updateColor" />
 			<div :style="{'background-color': color.hex}" class="custom-color-button icon-colorpicker" @click.prevent="showFullPicker=!showFullPicker" />
 		</div>
-		<Chrome v-if="showFullPicker" :palette="defaultColors" v-model="color"
-			@input="updateColor" />
+		<Chrome v-if="showFullPicker" v-model="color" :palette="defaultColors"
+			@input="updateColor"
+		/>
 	</div>
 </template>
 
