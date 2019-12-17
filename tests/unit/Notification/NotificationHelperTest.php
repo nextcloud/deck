@@ -55,7 +55,7 @@ class NotificationHelperTest extends \Test\TestCase {
 	/** @var NotificationHelper */
 	protected $notificationHelper;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);

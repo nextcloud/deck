@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 
 class ChangeSetTest extends TestCase {
 
-	public function setUp() {
+	public function setUp(): void {
 	}
 
 	public function testChangeSetScalar() {

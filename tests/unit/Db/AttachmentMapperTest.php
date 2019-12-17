@@ -18,7 +18,7 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *  
+ *
  */
 
 namespace OCA\Deck\Db;
@@ -47,7 +47,7 @@ class AttachmentMapperTest extends MapperTestUtility  {
 	private $attachments;
 	private $attachmentsById = [];
 
-	public function setup(){
+	public function setup(): void {
 		parent::setUp();
 
 		$this->userManager = $this->createMock(IUserManager::class);
@@ -138,7 +138,7 @@ class AttachmentMapperTest extends MapperTestUtility  {
 		}
 	}
 
-    public function tearDown() {
+    public function tearDown(): void {
         parent::tearDown();
         foreach ($this->attachments as $attachment) {
             $this->attachmentMapper->delete($attachment);

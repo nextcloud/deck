@@ -48,7 +48,7 @@ class BoardMapperTest extends MapperTestUtility  {
 	private $acls;
 	private $boards;
 
-	public function setup(){
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->userManager = $this->createMock(IUserManager::class);
@@ -162,7 +162,7 @@ class BoardMapperTest extends MapperTestUtility  {
         $this->assertEquals($expected, $actual->getAcl());
     }
 
-    public function tearDown() {
+    public function tearDown(): void {
         parent::tearDown();
         foreach ($this->acls as $acl) {
             $this->aclMapper->delete($acl);

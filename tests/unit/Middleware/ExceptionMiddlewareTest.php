@@ -45,7 +45,7 @@ class ExceptionMiddlewareTest extends \Test\TestCase {
 	private $controller;
 	private $exceptionMiddleware;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->logger = $this->createMock(ILogger::class);
 		$this->config = $this->createMock(IConfig::class);
 		$this->controller = $this->createMock(Controller::class);
@@ -74,11 +74,9 @@ class ExceptionMiddlewareTest extends \Test\TestCase {
 		$this->assertEquals($expected, $result);
 	}
 
-	/**
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage failed hard
-	 */
 	public function testAfterExceptionNoController() {
+		$this->expectException(\Exception::class);
+		$this->expectExceptionMessage('failed hard');
 		$pageController = $this->createMock(PageController::class);
 		$result = $this->exceptionMiddleware->afterException($pageController, 'bar', new \Exception('failed hard'));
 	}

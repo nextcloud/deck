@@ -5,20 +5,20 @@
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *  
+ *
  */
 
 use OCP\AppFramework\App;
@@ -35,7 +35,7 @@ class AppTest extends TestCase {
     private $container;
 	private $app;
 
-    public function setUp() {
+    public function setUp(): void {
         parent::setUp();
         $this->app = new \OCA\Deck\AppInfo\Application();
         $this->container = $this->app->getContainer();
@@ -47,7 +47,8 @@ class AppTest extends TestCase {
     }
 
     public function testNavigationEntry() {
-    	$this->app->registerNavigationEntry();
+		$this->app->registerNavigationEntry();
+		$this->assertTrue(true);
 	}
 
 }

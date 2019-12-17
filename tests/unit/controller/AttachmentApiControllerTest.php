@@ -33,12 +33,12 @@ class AttachmentApiControllerTest extends \Test\TestCase {
 
     private $appName = 'deck';
     private $controller;
-    private $request;    
+    private $request;
     private $attachmentExample;
     private $cardId;
     private $attachmentService;
 
-    public function setUp() {
+    public function setUp(): void {
         parent::setUp();
         $this->attachmentExample = new Attachment();
         $this->attachmentExample->setId(1);
@@ -111,7 +111,7 @@ class AttachmentApiControllerTest extends \Test\TestCase {
 
     public function testUpdate() {
 
-        // FIXME: what is data supposed to be in this context?        
+        // FIXME: what is data supposed to be in this context?
         $data = ['not empty data'];
 
         $this->attachmentService->expects($this->once())

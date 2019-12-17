@@ -32,6 +32,8 @@ use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\InvalidAttachmentType;
+use OCA\Deck\NoPermissionException;
+use OCA\Deck\NotFoundException;
 use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\IAppContainer;
 use OCP\ICache;
@@ -80,7 +82,7 @@ class AttachmentServiceTest extends TestCase {
 	/**
 	 * @throws \OCP\AppFramework\QueryException
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->attachmentServiceImpl = $this->createMock(IAttachmentService::class);
@@ -122,10 +124,8 @@ class AttachmentServiceTest extends TestCase {
 		$this->assertEquals(MyAttachmentService::class, get_class($attachmentService->getService('custom')));
 	}
 
-	/**
-	 * @expectedException \OCA\Deck\InvalidAttachmentType
-	 */
 	public function testRegisterAttachmentServiceNotExisting() {
+		$this->expectException(InvalidAttachmentType::class);
 		$application = $this->createMock(Application::class);
 		$appContainer = $this->createMock(IAppContainer::class);
 		$fileServiceMock = $this->createMock(FileService::class);
@@ -251,10 +251,8 @@ class AttachmentServiceTest extends TestCase {
 		$this->assertEquals($response, $actual);
 	}
 
-	/**
-	 * @expectedException  \OCA\Deck\NotFoundException
-	 */
 	public function testDisplayInvalid() {
+		$this->expectException(NotFoundException::class);
 		$attachment = $this->createAttachment('deck_file', 'filename');
 		$response = new Response();
 		$this->mockPermission(Acl::PERMISSION_READ);
@@ -357,10 +355,8 @@ class AttachmentServiceTest extends TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
-	/**
-	 * @expectedException \OCA\Deck\NoPermissionException
-	 */
 	public function testRestoreNotAllowed() {
+		$this->expectException(NoPermissionException::class);
 		$attachment = $this->createAttachment('deck_file', 'file_name.jpg');
 		$expected = $this->createAttachment('deck_file', 'file_name.jpg');
 		$this->mockPermission(Acl::PERMISSION_EDIT);

@@ -73,7 +73,7 @@ class StackServiceTest extends TestCase {
 	/** @var EventDispatcherInterface */
 	private $eventDispatcher;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->stackMapper = $this->createMock(StackMapper::class);
 		$this->cardMapper = $this->createMock(CardMapper::class);

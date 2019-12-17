@@ -42,7 +42,7 @@ class PageControllerTest extends \Test\TestCase {
 	private $permissionService;
 	private $config;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->request = $this->createMock(IRequest::class);
 		$this->defaultBoardService = $this->createMock(DefaultBoardService::class);

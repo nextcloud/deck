@@ -41,7 +41,7 @@ class StackControllerTest extends \Test\TestCase {
 	/** @var string */
 	private $userId = 'user';
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->request = $this->getMockBuilder(
 			'\OCP\IRequest')
 			->disableOriginalConstructor()

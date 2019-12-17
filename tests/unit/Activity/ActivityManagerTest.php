@@ -65,7 +65,7 @@ class ActivityManagerTest extends TestCase {
 	/** @var string */
 	private $userId = 'admin';
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->manager = $this->createMock(IManager::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
@@ -97,7 +97,7 @@ class ActivityManagerTest extends TestCase {
 			if (strpos($constant, 'SUBJECT') === 0) {
 				$format = $this->activityManager->getActivityFormat($value, [], false);
 				if ($format !== '') {
-					$this->assertContains('{user}', $format);
+					$this->assertStringContainsString('{user}', $format);
 				} else {
 					/** @noinspection ForgottenDebugOutputInspection */
 					print_r('No activity string found for '. $constant . PHP_EOL);

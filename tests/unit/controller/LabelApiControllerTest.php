@@ -29,7 +29,7 @@ use OCP\IRequest;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Service\LabelService;
 
-class LabelApiControllerTest extends \Test\TestCase {	
+class LabelApiControllerTest extends \Test\TestCase {
 
 	private $controller;
 	private $request;
@@ -37,7 +37,7 @@ class LabelApiControllerTest extends \Test\TestCase {
 	private $userId = 'admin';
 	private $exampleLabel;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->request = $this->createMock(IRequest::class);
 		$this->labelService = $this->createMock(LabelService::class);

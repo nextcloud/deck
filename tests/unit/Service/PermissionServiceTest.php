@@ -60,7 +60,7 @@ class PermissionServiceTest extends \Test\TestCase {
 	/** @var string */
 	private $userId = 'admin';
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->logger = $this->request = $this->createMock(ILogger::class);
 		$this->aclMapper = $this->createMock(AclMapper::class);

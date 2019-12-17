@@ -34,8 +34,8 @@ class BoardDatabaseTest extends \Test\TestCase
 
     /** @var \OCA\Deck\Service\BoardService */
     private $boardService;
-    public static function setUpBeforeClass()
-    {
+
+    public static function setUpBeforeClass(): void {
         parent::setUpBeforeClass();
 
         $backend = new \Test\Util\User\Dummy();
@@ -60,7 +60,7 @@ class BoardDatabaseTest extends \Test\TestCase
         $groupBackend->addToGroup(self::TEST_USER2, self::TEST_GROUP1);
         \OC::$server->getGroupManager()->addBackend($groupBackend);
     }
-    public function setUp() {
+    public function setUp(): void {
     	parent::setUp();
         \OC::$server->getUserSession()->login(self::TEST_USER1, self::TEST_USER1);
         $this->boardService = \OC::$server->query("\OCA\Deck\Service\BoardService");
@@ -80,7 +80,7 @@ class BoardDatabaseTest extends \Test\TestCase
         $this->boardService->deleteForce($id);
     }
 
-    public function tearDown() {
+    public function tearDown(): void {
     	parent::tearDown();
     }
 }
