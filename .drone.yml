@@ -136,11 +136,11 @@ kind: pipeline
 name: frontend
 steps:
   - name: install
-    image: node:11-alpine
+    image: node:lts-alpine
     commands:
       - npm install
   - name: eslint
-    image: node:11-alpine
+    image: node:lts-alpine
     commands:
       - npm run lint
   - name: jsbuild
