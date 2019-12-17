@@ -82,7 +82,7 @@
 		"stylelint": "^8.4.0",
 		"stylelint-config-recommended-scss": "^3.3.0",
 		"stylelint-webpack-plugin": "^0.10.5",
-		"url-loader": "^2.3.0",
+		"url-loader": "^3.0.0",
 		"vue-jest": "^3.0.5",
 		"vue-loader": "^15.7.2",
 		"vue-style-loader": "^4.1.1",
