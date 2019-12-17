@@ -7,7 +7,8 @@
 			label="displayName"
 			track-by="user"
 			@input="clickAddAcl"
-			@search-change="asyncFind" />
+			@search-change="asyncFind"
+		/>
 
 		<ul
 			id="shareWithList"
@@ -30,18 +31,27 @@
 				</span>
 
 				<Actions>
-					<ActionCheckbox :checked="acl.permissionEdit" @change="clickEditAcl(acl)">{{ t('deck', 'Can edit') }}</ActionCheckbox>
+					<ActionCheckbox :checked="acl.permissionEdit" @change="clickEditAcl(acl)">
+						{{ t('deck', 'Can edit') }}
+					</ActionCheckbox>
 				</Actions>
 				<Actions>
-					<ActionCheckbox :checked="acl.permissionShare" @change="clickShareAcl(acl)">{{ t('deck', 'Can share') }}</ActionCheckbox>
-					<ActionCheckbox :checked="acl.permissionManage" @change="clickManageAcl(acl)">{{ t('deck', 'Can manage') }}</ActionCheckbox>
-					<ActionButton icon="icon-delete" @click="clickDeleteAcl(acl)">{{ t('deck', 'Delete') }}</ActionButton>
+					<ActionCheckbox :checked="acl.permissionShare" @change="clickShareAcl(acl)">
+						{{ t('deck', 'Can share') }}
+					</ActionCheckbox>
+					<ActionCheckbox :checked="acl.permissionManage" @change="clickManageAcl(acl)">
+						{{ t('deck', 'Can manage') }}
+					</ActionCheckbox>
+					<ActionButton icon="icon-delete" @click="clickDeleteAcl(acl)">
+						{{ t('deck', 'Delete') }}
+					</ActionButton>
 				</Actions>
 			</li>
 		</ul>
 
 		<collection-list v-if="board.id" :id="`${board.id}`" :name="board.title"
-			type="deck" />
+			type="deck"
+		/>
 	</div>
 </template>
 

@@ -24,7 +24,9 @@
 	<div v-if="activity" class="activity">
 		<img :src="activity.icon" class="activity--icon">
 		<div class="activity--message" v-html="parseMessage(activity)" />
-		<div class="activity--timestamp">{{ getTime(activity.datetime) }}</div>
+		<div class="activity--timestamp">
+			{{ getTime(activity.datetime) }}
+		</div>
 	</div>
 </template>
 

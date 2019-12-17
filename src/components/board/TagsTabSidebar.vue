@@ -6,9 +6,11 @@
 					<form class="label-form" @submit.prevent="updateLabel(label)">
 						<input v-model="editingLabel.title" type="text">
 						<input v-tooltip="{content: missingDataLabel, show: !editLabelObjValidated, trigger: 'manual' }" :disabled="!editLabelObjValidated" type="submit"
-							value="" class="icon-confirm">
+							value="" class="icon-confirm"
+						>
 						<input v-tooltip="t('deck', 'Cancel')" value=""
-							class="icon-close" @click="editingLabelId = null">
+							class="icon-close" @click="editingLabelId = null"
+						>
 					</form>
 					<ColorPicker :value="'#' + editingLabel.color" @input="updateColor" />
 				</template>
@@ -27,9 +29,11 @@
 						<input v-model="addLabelObj.title" type="text">
 						<input v-tooltip="{content: missingDataLabel, show: !addLabelObjValidated, trigger: 'manual' }" :disabled="!addLabelObjValidated"
 							type="submit"
-							value="" class="icon-confirm">
+							value="" class="icon-confirm"
+						>
 						<input v-tooltip="t('deck', 'Cancel')" value=""
-							class="icon-close" @click="addLabel=false">
+							class="icon-close" @click="addLabel=false"
+						>
 					</form>
 					<ColorPicker :value="'#' + addLabelObj.color" @input="updateColor" />
 				</template>
@@ -45,14 +49,12 @@
 
 import { mapGetters } from 'vuex'
 import Color from '../../mixins/color'
-import { Compact } from 'vue-color'
 import ColorPicker from '../ColorPicker'
 
 export default {
 	name: 'TagsTabSidebar',
 	components: {
-		ColorPicker,
-		'compact-picker': Compact
+		ColorPicker
 	},
 	mixins: [Color],
 	data() {

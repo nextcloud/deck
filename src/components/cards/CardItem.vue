@@ -26,41 +26,66 @@
 
 <template>
 	<div :class="{'compact': compactMode, 'current-card': currentCard}" tag="div" class="card"
-		@click.self="openCard">
+		@click.self="openCard"
+	>
 		<div class="card-upper">
-			<h3 v-if="showArchived">{{ card.title }}</h3>
-			<h3 v-else-if="!editing" @click.stop="startEditing(card)">{{ card.title }}</h3>
-			<h3 v-else>&nbsp;</h3>
-			<form v-click-outside="cancelEdit" v-if="editing" @keyup.esc="cancelEdit"
-				@submit.prevent="finishedEdit(card)">
+			<h3 v-if="showArchived">
+				{{ card.title }}
+			</h3>
+			<h3 v-else-if="!editing" @click.stop="startEditing(card)">
+				{{ card.title }}
+			</h3>
+			<h3 v-else>
+&nbsp;
+			</h3>
+			<form v-if="editing" v-click-outside="cancelEdit" @keyup.esc="cancelEdit"
+				@submit.prevent="finishedEdit(card)"
+			>
 				<input v-model="copiedCard.title" type="text" autofocus>
 				<input type="button" class="icon-confirm" @click="finishedEdit(card)">
 			</form>
 
 			<Actions v-if="!editing" @click.stop.prevent>
-				<ActionButton v-if="showArchived === false" icon="icon-user" @click="assignCardToMe()">{{ t('deck', 'Assign to me') }}</ActionButton>
-				<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">{{ t('deck', (showArchived ? 'Unarchive card' : 'Archive card')) }}</ActionButton>
-				<ActionButton v-if="showArchived === false" icon="icon-delete" @click="deleteCard()">{{ t('deck', 'Delete card') }}</ActionButton>
-				<ActionButton icon="icon-external" @click.stop="modalShow=true">{{ t('deck', 'Move card') }}</ActionButton>
-				<ActionButton icon="icon-settings-dark" @click="openCard">{{ t('deck', 'Card details') }}</ActionButton>
+				<ActionButton v-if="showArchived === false" icon="icon-user" @click="assignCardToMe()">
+					{{ t('deck', 'Assign to me') }}
+				</ActionButton>
+				<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">
+					{{ t('deck', (showArchived ? 'Unarchive card' : 'Archive card')) }}
+				</ActionButton>
+				<ActionButton v-if="showArchived === false" icon="icon-delete" @click="deleteCard()">
+					{{ t('deck', 'Delete card') }}
+				</ActionButton>
+				<ActionButton icon="icon-external" @click.stop="modalShow=true">
+					{{ t('deck', 'Move card') }}
+				</ActionButton>
+				<ActionButton icon="icon-settings-dark" @click="openCard">
+					{{ t('deck', 'Card details') }}
+				</ActionButton>
 			</Actions>
 
 			<modal v-if="modalShow" title="Move card to another board" @close="modalShow=false">
 				<div class="modal__content">
-					<Multiselect :placeholder="t('deck', 'Select a board')" v-model="selectedBoard" :options="boards"
+					<Multiselect v-model="selectedBoard" :placeholder="t('deck', 'Select a board')" :options="boards"
 						label="title"
-						@select="loadStacksFromBoard" />
-					<Multiselect :placeholder="t('deck', 'Select a stack')" v-model="selectedStack" :options="stacksFromBoard"
-						label="title" />
+						@select="loadStacksFromBoard"
+					/>
+					<Multiselect v-model="selectedStack" :placeholder="t('deck', 'Select a stack')" :options="stacksFromBoard"
+						label="title"
+					/>
 
-					<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">{{ t('deck', 'Move card') }}</button>
-					<button @click="modalShow=false">{{ t('deck', 'Cancel') }}</button>
-
+					<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">
+						{{ t('deck', 'Move card') }}
+					</button>
+					<button @click="modalShow=false">
+						{{ t('deck', 'Cancel') }}
+					</button>
 				</div>
 			</modal>
 		</div>
 		<ul class="labels" @click="openCard">
-			<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)"><span>{{ label.title }}</span></li>
+			<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)">
+				<span>{{ label.title }}</span>
+			</li>
 		</ul>
 		<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
 			<card-badges :id="id" />
@@ -78,12 +103,11 @@ import { mapState } from 'vuex'
 import axios from 'nextcloud-axios'
 
 import CardBadges from './CardBadges'
-import LabelTag from './LabelTag'
 import Color from '../../mixins/color'
 
 export default {
 	name: 'CardItem',
-	components: { Modal, CardBadges, LabelTag, Actions, ActionButton, Multiselect },
+	components: { Modal, CardBadges, Actions, ActionButton, Multiselect },
 	directives: {
 		ClickOutside
 	},

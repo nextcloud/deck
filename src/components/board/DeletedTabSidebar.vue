@@ -1,18 +1,17 @@
 <template>
 	<div>
-
 		<h3>{{ t('deck', 'Deleted stacks') }}</h3>
 		<ul>
 			<li v-for="deletedStack in deletedStacks" :key="deletedStack.id">
-
 				<span class="icon icon-deck" />
 				<span class="title">{{ deletedStack.title }}</span>
 				<button
 					:title="t('settings', 'Undo')"
 					class="app-navigation-entry-deleted-button icon-history"
-					@click="stackUndoDelete(deletedStack)" />
+					@click="stackUndoDelete(deletedStack)"
+				/>
 
-					<!-- <span class="live-relative-timestamp" data-timestamp="{{ deletedStack.deletedAt*1000  }}">{{deletedStack.deletedAt | relativeDateFilter }}</span>
+				<!-- <span class="live-relative-timestamp" data-timestamp="{{ deletedStack.deletedAt*1000  }}">{{deletedStack.deletedAt | relativeDateFilter }}</span>
 				<a @click="stackUndoDelete(deletedStack)"><span class="icon icon-history"></span></a> -->
 			</li>
 		</ul>
@@ -25,7 +24,8 @@
 				<button
 					:title="t('settings', 'Undo')"
 					class="app-navigation-entry-deleted-button icon-history"
-					@click="cardUndoDelete(deletedCard)" />
+					@click="cardUndoDelete(deletedCard)"
+				/>
 			</li>
 
 			<!-- <li ng-repeat="deletedCard in cardservice.deleted">

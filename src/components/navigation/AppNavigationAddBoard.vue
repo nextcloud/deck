@@ -21,8 +21,8 @@
   -->
 <template>
 	<li id="deck-navigation-add"
-		:title="t('deck', 'Create new board')" :class="[{'icon-loading-small': loading, 'editing': editing}, classes]">
-
+		:title="t('deck', 'Create new board')" :class="[{'icon-loading-small': loading, 'editing': editing}, classes]"
+	>
 		<a class="icon-add" href="#" @click.prevent.stop="startCreateBoard">
 			{{ t('deck', 'Create new board') }}
 		</a>
@@ -33,7 +33,8 @@
 				<input :placeholder="t('deck', 'New board title')" type="text" required>
 				<input type="submit" value="" class="icon-confirm">
 				<input type="submit" value="" class="icon-close"
-					@click.stop.prevent="cancelEdit">
+					@click.stop.prevent="cancelEdit"
+				>
 			</form>
 			<ColorPicker v-model="color" />
 		</div>

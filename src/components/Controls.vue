@@ -21,7 +21,6 @@
 -->
 
 <template>
-
 	<div class="controls">
 		<div id="app-navigation-toggle-custom" class="icon-menu" @click="toggleNav" />
 		<div class="breadcrumb">
@@ -42,23 +41,26 @@
 					<label for="new-stack-input-main" class="hidden-visually">Add a new stack</label>
 					<input id="new-stack-input-main" v-model="newStackTitle" type="text"
 						class="no-close"
-						placeholder="Add a new stack" required>
+						placeholder="Add a new stack" required
+					>
 					<input v-tooltip="t('deck', 'clickAddNewStack')" class="icon-confirm" type="submit"
-						value="">
-
+						value=""
+					>
 				</form>
 			</div>
 			<div class="board-action-buttons">
 				<button :style="archivStyle" title="Show archived cards" class="icon icon-archive"
-					@click="toggleShowArchived" />
+					@click="toggleShowArchived"
+				/>
 				<button :class="[(compactMode ? 'icon-toggle-compact-collapsed' : 'icon-toggle-compact-expanded')]" title="Toggle compact mode" class="icon"
-					@click="toggleCompactMode" />
+					@click="toggleCompactMode"
+				/>
 				<router-link v-tooltip="t('deck', 'Board settings')" :to="{name: 'board.details'}" class="icon-settings-dark"
-					tag="button" />
+					tag="button"
+				/>
 			</div>
 		</div>
 	</div>
-
 </template>
 
 <script>

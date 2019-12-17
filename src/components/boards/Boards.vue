@@ -25,9 +25,15 @@
 		<Controls />
 		<div class="board-list">
 			<div class="board-list-row board-list-header-row">
-				<div class="board-list-bullet-cell"><div class="board-list-bullet" /></div>
-				<div class="board-list-title-cell">Title</div>
-				<div class="board-list-avatars-cell">Members</div>
+				<div class="board-list-bullet-cell">
+					<div class="board-list-bullet" />
+				</div>
+				<div class="board-list-title-cell">
+					Title
+				</div>
+				<div class="board-list-avatars-cell">
+					Members
+				</div>
 				<div class="board-list-actions-cell" />
 			</div>
 			<BoardItem v-for="board in filteredBoards" :key="board.id" :board="board" />

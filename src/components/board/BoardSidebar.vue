@@ -24,8 +24,8 @@
 	<app-sidebar v-if="board != null"
 		:actions="[]"
 		:title="board.title"
-		@close="closeSidebar">
-
+		@close="closeSidebar"
+	>
 		<AppSidebarTab :order="0" name="Sharing" icon="icon-shared">
 			<SharingTabSidebar :board="board" />
 		</AppSidebarTab>
@@ -41,7 +41,6 @@
 		<AppSidebarTab :order="3" name="Timeline" icon="icon-activity">
 			<TimelineTabSidebar :board="board" />
 		</AppSidebarTab>
-
 	</app-sidebar>
 </template>
 

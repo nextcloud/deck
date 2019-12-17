@@ -25,15 +25,20 @@
 	<div class="stack">
 		<div class="stack--header">
 			<transition name="fade" mode="out-in">
-				<h3 v-if="!editing" @click="startEditing(stack)">{{ stack.title }}</h3>
+				<h3 v-if="!editing" @click="startEditing(stack)">
+					{{ stack.title }}
+				</h3>
 				<form v-else @submit.prevent="finishedEdit(stack)">
 					<input v-model="copiedStack.title" type="text" autofocus>
 					<input v-tooltip="t('deck', 'Add a new stack')" class="icon-confirm" type="submit"
-						value="">
+						value=""
+					>
 				</form>
 			</transition>
 			<Actions>
-				<ActionButton icon="icon-delete" @click="deleteStack(stack)">{{ t('deck', 'Delete stack') }}</ActionButton>
+				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
+					{{ t('deck', 'Delete stack') }}
+				</ActionButton>
 			</Actions>
 		</div>
 
@@ -47,13 +52,14 @@
 			<label for="new-stack-input-main" class="hidden-visually">Add a new card</label>
 			<input id="new-stack-input-main" v-model="newCardTitle" type="text"
 				class="no-close"
-				placeholder="Add a new card" required>
+				placeholder="Add a new card" required
+			>
 
 			<input class="icon-confirm"
 				type="submit"
-				value="">
+				value=""
+			>
 		</form>
-
 	</div>
 </template>
 

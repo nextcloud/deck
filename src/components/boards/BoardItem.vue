@@ -23,16 +23,20 @@
 <template>
 	<router-link :id="`board-${board.id}`"
 		:title="board.title"
-		:to="routeTo" class="board-list-row" tag="div">
+		:to="routeTo" class="board-list-row" tag="div"
+	>
 		<div class="board-list-bullet-cell">
 			<div :style="{ 'background-color': `#${board.color}` }" class="board-list-bullet" />
 		</div>
-		<div class="board-list-title-cell">{{ board.title }}</div>
+		<div class="board-list-title-cell">
+			{{ board.title }}
+		</div>
 		<div class="board-list-avatars-cell">
 			<avatar :user="board.owner.uid" class="board-list-avatar" />
 			<avatar v-for="user in limitedAcl" :key="user.id" :user="user.participant.uid"
-				class="board-list-avatar" />
-			<div v-tooltip="otherAcl" v-if="board.acl.length > 5" class="avatardiv popovermenu-wrapper board-list-avatar icon-more" />
+				class="board-list-avatar"
+			/>
+			<div v-if="board.acl.length > 5" v-tooltip="otherAcl" class="avatardiv popovermenu-wrapper board-list-avatar icon-more" />
 		</div>
 		<div class="board-list-actions-cell" />
 	</router-link>

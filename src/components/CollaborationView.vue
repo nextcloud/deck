@@ -23,7 +23,8 @@
 <template>
 	<div>
 		<collection-list v-if="boardId" :id="boardId" :name="boardTitle"
-			type="deck" />
+			type="deck"
+		/>
 	</div>
 </template>
 

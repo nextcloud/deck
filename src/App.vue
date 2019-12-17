@@ -21,7 +21,6 @@
  -->
 
 <template>
-
 	<div id="content" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
 		<AppNavigation />
 		<div id="app-content">
@@ -29,13 +28,11 @@
 		</div>
 		<router-view name="sidebar" />
 	</div>
-
 </template>
 
 <script>
 
 import { mapState } from 'vuex'
-import BoardSidebar from './components/board/BoardSidebar'
 import AppNavigation from './components/navigation/AppNavigation'
 import { BoardApi } from './services/BoardApi'
 
@@ -44,8 +41,7 @@ const boardApi = new BoardApi()
 export default {
 	name: 'App',
 	components: {
-		AppNavigation,
-		BoardSidebar
+		AppNavigation
 	},
 	data: function() {
 		return {

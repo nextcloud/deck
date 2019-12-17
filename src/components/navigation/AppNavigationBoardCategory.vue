@@ -21,7 +21,8 @@
   -->
 <template>
 	<li v-if="boards.length > 0" :id="id" :title="text"
-		:class="{'open': opened, 'collapsible': collapsible }">
+		:class="{'open': opened, 'collapsible': collapsible }"
+	>
 		<button v-if="collapsible" class="collapse" @click.prevent.stop="toggleCollapse" />
 		<a :class="icon" href="#">
 			{{ text }}
@@ -33,15 +34,13 @@
 </template>
 
 <script>
-import { PopoverMenu } from '@nextcloud/vue/dist/Components/PopoverMenu'
 import ClickOutside from 'vue-click-outside'
 import AppNavigationBoard from './AppNavigationBoard'
 
 export default {
 	name: 'AppNavigationBoardCategory',
 	components: {
-		AppNavigationBoard,
-		PopoverMenu
+		AppNavigationBoard
 	},
 	directives: {
 		ClickOutside
