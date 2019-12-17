@@ -59,7 +59,7 @@ class DeckProviderTest extends TestCase {
 	/** @var string */
 	private $userId = 'admin';
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
@@ -101,10 +101,8 @@ class DeckProviderTest extends TestCase {
 		return $event;
 	}
 
-	/**
-	 * @expectedException \InvalidArgumentException
-	 */
 	public function testParseFailureApp() {
+		$this->expectException(\InvalidArgumentException::class);
 		$event = $this->createMock(IEvent::class);
 		$event->expects($this->once())->method('getApp')->willReturn('notdeck');
 		$this->provider->parse('en_US', $event, $event);

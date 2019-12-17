@@ -73,7 +73,7 @@ class BoardServiceTest extends TestCase {
 	private $eventDispatcher;
 	private $userId = 'admin';
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->l10n = $this->createMock(L10N::class);
 		$this->aclMapper = $this->createMock(AclMapper::class);
@@ -178,10 +178,8 @@ class BoardServiceTest extends TestCase {
 		$this->assertCount(4, $b->getLabels());
 	}
 
-	/**
-	 * @expectedException \OCA\Deck\NoPermissionException
-	 */
 	public function testCreateDenied() {
+		$this->expectException(\OCA\Deck\NoPermissionException::class);
 		$board = new Board();
 		$board->setTitle('MyBoard');
 		$board->setOwner('admin');

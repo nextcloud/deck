@@ -70,7 +70,7 @@ class FileServiceTest extends TestCase {
 	/** @var IConfig */
 	private $config;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->request = $this->createMock(IRequest::class);
 		$this->appData = $this->createMock(IAppData::class);
@@ -161,10 +161,8 @@ class FileServiceTest extends TestCase {
 		$this->assertEquals($expected, $this->fileService->extendData($attachment));
 	}
 
-	/**
-	 * @expectedException \Exception
-	 */
 	public function testCreateEmpty() {
+		$this->expectException(\Exception::class);
 		$attachment = $this->getAttachment();
 		$this->l10n->expects($this->any())
 			->method('t')
@@ -173,10 +171,8 @@ class FileServiceTest extends TestCase {
 		$this->fileService->create($attachment);
 	}
 
-	/**
-	 * @expectedException \Exception
-	 */
 	public function testCreateError() {
+		$this->expectException(\Exception::class);
 		$attachment = $this->getAttachment();
 		$this->mockGetUploadedFileError(UPLOAD_ERR_INI_SIZE);
 		$this->l10n->expects($this->any())
@@ -221,11 +217,10 @@ class FileServiceTest extends TestCase {
 		$this->fileService->create($attachment);
 	}
 
-	/**
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage File already exists.
-	 */
 	public function testCreateExists() {
+		$this->expectException(\Exception::class);
+		$this->expectExceptionMessage('File already exists.');
+
 		$attachment = $this->getAttachment();
 		$this->mockGetUploadedFile();
 		$folder = $this->mockGetFolder(123);

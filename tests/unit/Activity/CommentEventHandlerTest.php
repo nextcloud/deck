@@ -56,7 +56,7 @@ class CommentEventHandlerTest extends TestCase {
 	/** @var CardMapper */
 	private $cardMapper;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
 		$this->cardMapper = $this->createMock(CardMapper::class);

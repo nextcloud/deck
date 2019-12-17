@@ -52,7 +52,7 @@ class NotifierTest extends \Test\TestCase {
 	/** @var IL10N */
 	protected $l10n;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->l10nFactory = $this->createMock(IFactory::class);
 		$this->url = $this->createMock(IURLGenerator::class);
@@ -72,10 +72,8 @@ class NotifierTest extends \Test\TestCase {
 			->willReturn($this->l10n);
 	}
 
-	/**
-	 * @expectedException \InvalidArgumentException
-	 */
 	public function testPrepareWrongApp() {
+		$this->expectException(\InvalidArgumentException::class);
 		/** @var INotification $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->once())

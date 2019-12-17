@@ -42,7 +42,7 @@ class AttachmentControllerTest extends \Test\TestCase {
 	/** @var string */
 	private $userId = 'user';
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->request = $this->createMock(IRequest::class);
 		$this->attachmentService = $this->createMock(AttachmentService::class);
 		$this->controller = new AttachmentController(

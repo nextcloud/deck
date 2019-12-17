@@ -2,7 +2,7 @@ kind: pipeline
 name: checkers
 steps:
 - name: compatibility
-  image: nextcloudci/php7.1:php7.1-16
+  image: nextcloudci/php7.2:php7.2-13
   environment:
     APP_NAME: deck
     CORE_BRANCH: master
@@ -16,17 +16,8 @@ steps:
     - ./occ app:check-code $APP_NAME -c strong-comparison
     - ./occ app:check-code $APP_NAME -c deprecation
     - cd apps/$APP_NAME/
-- name: syntax-php7.1
-  image: nextcloudci/php7.1:php7.1-15
-  environment:
-    APP_NAME: deck
-    CORE_BRANCH: master
-    DB: sqlite
-  commands:
-    - composer install
-    - ./vendor/bin/parallel-lint --exclude ./vendor/ .
 - name: syntax-php7.2
-  image: nextcloudci/php7.2:php7.2-9
+  image: nextcloudci/php7.2:php7.2-13
   environment:
     APP_NAME: deck
     CORE_BRANCH: master
@@ -43,33 +34,15 @@ steps:
   commands:
     - composer install
     - ./vendor/bin/parallel-lint --exclude ./vendor/ .
-trigger:
-  branch:
-    - master
-    - stable*
-  event:
-    - pull_request
-    - push
----
-kind: pipeline
-name: unit-php7.1
-steps:
-  - name: php7.1
-    image: nextcloudci/php7.1:php7.1-16
-    environment:
+- name: syntax-php7.4
+  image: nextcloudci/php7.4:2
+  environment:
       APP_NAME: deck
       CORE_BRANCH: master
       DB: sqlite
-    commands:
-      # Pre-setup steps
-      - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
-      - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-      - cd ../server/
-      - php occ app:enable deck
-      - cd apps/$APP_NAME
+  commands:
       - composer install
-      - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
-      - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
+      - ./vendor/bin/parallel-lint --exclude ./vendor/ .
 trigger:
   branch:
     - master
@@ -82,7 +55,7 @@ kind: pipeline
 name: unit-php7.2
 steps:
   - name: php7.2
-    image: nextcloudci/php7.2:php7.2-9
+    image: nextcloudci/php7.2:php7.2-13
     environment:
       APP_NAME: deck
       CORE_BRANCH: master
@@ -109,7 +82,7 @@ kind: pipeline
 name: unit-php7.3
 steps:
   - name: php7.3
-    image: nextcloudci/php7.3:php7.3-2
+    image: nextcloudci/php7.3:php7.3-5
     environment:
       APP_NAME: deck
       CORE_BRANCH: master
@@ -136,7 +109,7 @@ kind: pipeline
 name: integration
 steps:
   - name: integration
-    image: nextcloudci/php7.1:php7.1-16
+    image: nextcloudci/php7.2:php7.2-13
     environment:
       APP_NAME: deck
       CORE_BRANCH: master
@@ -167,7 +140,7 @@ steps:
     commands:
       - ./run-eslint.sh
   - name: jsbuild
-    image: mhart/alpine-node:6.8.0
+    image: node:lts-alpine
     commands:
       - apk add --no-cache make
       - make build-js

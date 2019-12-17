@@ -35,17 +35,17 @@ class StackApiControllerTest extends \Test\TestCase {
 
 	private $appName = 'deck';
 	private $userId = 'admin';
-	private $controller;	
+	private $controller;
 	private $boardService;
 	private $stackService;
 	private $exampleStack;
 	private $exampleBoard;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->request = $this->createMock(IRequest::class);
 		$this->boardService = $this->createMock(BoardService::class);
-		$this->stackService = $this->createMock(StackService::class);		
+		$this->stackService = $this->createMock(StackService::class);
 
 		$this->exampleStack['id'] = 345;
 		$this->exampleStack['boardId'] = $this->exampleBoard['boardId'];
@@ -67,7 +67,7 @@ class StackApiControllerTest extends \Test\TestCase {
 		$stack->setId($this->exampleStack['id']);
 		$stack->setBoardId($this->exampleStack['boardId']);
 		$stack->setOrder($this->exampleStack['order']);
-		$stacks = [$stack];		
+		$stacks = [$stack];
 
 		$this->stackService->expects($this->once())
 			->method('findAll')
@@ -87,7 +87,7 @@ class StackApiControllerTest extends \Test\TestCase {
 		$stack = new Stack();
 		$stack->setId($this->exampleStack['id']);
 		$stack->setBoardId($this->exampleStack['boardId']);
-		$stack->setOrder($this->exampleStack['order']);		
+		$stack->setOrder($this->exampleStack['order']);
 
 		$this->stackService->expects($this->once())
 			->method('find')
@@ -96,12 +96,12 @@ class StackApiControllerTest extends \Test\TestCase {
 		$this->request->expects($this->once())
 			->method('getParam')
 			->with('stackId')
-			->willReturn($this->exampleStack['id']);	
+			->willReturn($this->exampleStack['id']);
 
 		$expected = new DataResponse($stack, HTTP::STATUS_OK);
 		$actual = $this->controller->get();
 		$this->assertEquals($expected, $actual);
-	}				
+	}
 
 	public function testCreate() {
 
@@ -126,8 +126,8 @@ class StackApiControllerTest extends \Test\TestCase {
 	}
 
 	public function testUpdate() {
-		
-		$this->request->expects($this->exactly(2))		
+
+		$this->request->expects($this->exactly(2))
 			->method('getParam')
 			->withConsecutive(
 				['stackId'],

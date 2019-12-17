@@ -44,7 +44,7 @@ class UnknownUserTest extends \Test\TestCase {
 	/** @var UnknownUsers */
 	private $unknownUsers;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);

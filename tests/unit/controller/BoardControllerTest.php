@@ -36,7 +36,7 @@ class BoardControllerTest extends \Test\TestCase {
 	private $permissionService;
 	private $userId = 'user';
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->l10n = $this->request = $this->getMockBuilder(
 			'\OCP\IL10n')
 			->disableOriginalConstructor()
@@ -71,7 +71,7 @@ class BoardControllerTest extends \Test\TestCase {
 
 		$this->controller = new BoardController(
 			'deck',
-			$this->request,			
+			$this->request,
 			$this->boardService,
 			$this->permissionService,
 			$this->userId
