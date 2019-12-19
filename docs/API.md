@@ -548,7 +548,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
    "owner":"admin",
    "order":999,
    "archived":false,
-   "duedate":null,
+   "duedate": "2019-12-24T19:29:30+00:00",
    "deletedAt":0,
    "commentsUnread":0,
    "id":10,
@@ -576,7 +576,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | description | String    | The markdown description of the card                 |
 | type        | String    | Type of the card (for later use) use 'plain' for now |
 | order       | Integer   | Order for sorting the stacks                         |
-| duedate     | timestamp | The duedate of the card or null                      |
+| duedate     | timestamp | The ISO-8601 formatted duedate of the card or null   |
 
 
 ```
@@ -585,7 +585,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
    "description": "A card description",
    "type": "plain",
    "order": 999,
-   "duedate": null,
+   "duedate": "2019-12-24T19:29:30+00:00",
 }
 ```
 
