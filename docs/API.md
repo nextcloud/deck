@@ -651,6 +651,33 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
+```json
+{
+  "id": 3,
+  "participant": {
+    "primaryKey": "admin",
+    "uid": "admin",
+    "displayname": "admin"
+  },
+  "cardId": 1
+}
+```
+
+##### 400 Bad request
+
+```json
+{
+  "status": 400,
+  "message": "The user is already assigned to the card"
+}
+```
+
+The request can fail with a bad request response for the following reasons:
+- Missing or wrongly formatted request parameters
+- The user is already assigned to the card
+- The user is not part of the board
+
+
 ### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser - Assign a user to a card
 
 #### Request parameters
