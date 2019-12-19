@@ -30,11 +30,9 @@
 					<span v-if="acl.type===7">{{ t('deck', '(Circle)') }}</span>
 				</span>
 
-				<Actions>
-					<ActionCheckbox :checked="acl.permissionEdit" @change="clickEditAcl(acl)">
-						{{ t('deck', 'Can edit') }}
-					</ActionCheckbox>
-				</Actions>
+				<ActionCheckbox :checked="acl.permissionEdit" @change="clickEditAcl(acl)">
+					{{ t('deck', 'Can edit') }}
+				</ActionCheckbox>
 				<Actions>
 					<ActionCheckbox :checked="acl.permissionShare" @change="clickShareAcl(acl)">
 						{{ t('deck', 'Can share') }}
