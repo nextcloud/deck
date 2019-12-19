@@ -88,13 +88,8 @@ class UserExport extends Command {
 
 		$userId = $input->getArgument('user-id');
 
-		$groups = $this->groupManager->getUserGroupIds(
-			$this->userManager->get($userId)
-		);
-		$boards = $this->boardService->findAll([
-			'user' => $userId,
-			'groups' => $groups
-		]);
+		$this->boardService->setUserId($userId);
+		$boards = $this->boardService->findAll();
 
 		$data = [];
 		foreach ($boards as $board) {

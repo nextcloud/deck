@@ -89,28 +89,12 @@ class UserExportTest extends \Test\TestCase {
 		$input->expects($this->once())->method('getArgument')->with('user-id')->willReturn('admin');
 		$output = $this->createMock(OutputInterface::class);
 
-		$user = $this->createMock(IUser::class);
-		$this->userManager->expects($this->once())
-			->method('get')
-			->with('admin')
-			->willReturn($user);
-
-		$groups = [];
-		$this->groupManager->expects($this->once())
-			->method('getUserGroupIds')
-			->with($user)
-			->willReturn($groups);
-
 		$boards = [
 			$this->getBoard(1),
 			$this->getBoard(2),
 		];
 		$this->boardService->expects($this->once())
 			->method('findAll')
-			->with([
-				'user' => 'admin',
-				'groups' => $groups
-			])
 			->willReturn($boards);
 		$this->boardMapper->expects($this->exactly(count($boards)))
 			->method('find')
