@@ -67,6 +67,10 @@ class NotificationHelper {
 		$this->currentUser = $userId;
 	}
 
+	/**
+	 * @param $card
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 */
 	public function sendCardDuedate($card) {
 		// check if notification has already been sent
 		// ideally notifications should not be deleted once seen by the user so we can
