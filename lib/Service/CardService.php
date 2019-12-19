@@ -594,7 +594,7 @@ class CardService {
 
 		$card = $this->cardMapper->find($cardId);
 		$boardId = $this->cardMapper->findBoardId($cardId);
-		$boardUsers = array_keys($this->permissionService->findUsers($boardId));
+		$boardUsers = array_keys($this->permissionService->findUsers($boardId, true));
 		if (!in_array($userId, $boardUsers)) {
 			throw new BadRequestException('The user is not part of the board');
 		}

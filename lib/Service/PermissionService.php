@@ -221,9 +221,9 @@ class PermissionService {
 	 * @param $boardId
 	 * @return array
 	 */
-	public function findUsers($boardId) {
+	public function findUsers($boardId, $refresh = false) {
 		// cache users of a board so we don't query them for every cards
-		if (array_key_exists((string) $boardId, $this->users)) {
+		if (array_key_exists((string) $boardId, $this->users) && !$refresh) {
 			return $this->users[(string) $boardId];
 		}
 		try {
