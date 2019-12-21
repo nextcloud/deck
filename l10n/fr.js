@@ -67,6 +67,7 @@ OC.L10N.register(
     "You have added the attachment {attachment} to card {card}" : "Vous avez ajouté la pièce jointe {attachment} à la carte {card}",
     "{user} has added the attachment {attachment} to card {card}" : "{user} a ajouté la pièce jointe {attachment} à la carte {card}",
     "You have updated the attachment {attachment} on card {card}" : "Vous avez mis à jour la pièce jointe {attachment} de la carte {card}",
+    "{user} has updated the attachment {attachment} on card {card}" : "{user} a mis à jour la pièce jointe {attachment} de la carte {card}",
     "You have deleted the attachment {attachment} from card {card}" : "Vous avez supprimé la pièce jointe {attachment} de la carte {card}",
     "You have restored the attachment {attachment} to card {card}" : "Vous avez restauré la pièce jointe {attachment} de la carte {card}",
     "{user} has restored the attachment {attachment} to card {card}" : "{user} a restauré la pièce jointe {attachment} de la carte {card}",
