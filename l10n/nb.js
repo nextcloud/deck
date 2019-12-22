@@ -11,6 +11,7 @@ OC.L10N.register(
     "Minutes" : "Minutter",
     "Link to a board" : "Lenke til tavle",
     "Maximum file size of {size} exceeded" : "Maksimal størrelse for filer på {size} er overskredet",
+    "File already exists" : "Filen finnes allerede",
     "You have created a new board {board}" : "Du har opprettet ny tavle {board}",
     "{user} has created a new board {board}" : "{user} har opprettet tavle {board}",
     "You have deleted the board {board}" : "Du har slettet tavle {board}",

@@ -67,6 +67,8 @@ OC.L10N.register(
     "Sharing" : "Đang chia sẽ",
     "Tags" : "Thẻ",
     "Select users or groups to share with" : "Chọn người dùng hoặc nhóm để chia sẽ với",
+    "Group" : "N",
+    "Circle" : "Vòng kết nối",
     "No matching user or group found." : "Không tìm thấy người dùng hoặc nhóm.",
     "Loading" : "Đang tải",
     "Edit" : "Chỉnh sửa",
@@ -115,6 +117,7 @@ OC.L10N.register(
     "Add a card description…" : "Thêm một mô tả tác vụ...",
     "Shared boards" : "Chia sẽ dự án",
     "Move board to archive" : "Di chuyển dự án sang lưu trữ",
-    "Create a new board" : "Tạo dự án mới"
+    "Create a new board" : "Tạo dự án mới",
+    "Settings" : "Thiết lập"
 },
 "nplurals=1; plural=0;");

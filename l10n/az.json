@@ -1,0 +1,27 @@
+{ "translations": {
+    "Hours" : "Saatlar",
+    "Minutes" : "Dəqiqələr",
+    "Personal" : "Şəxsi",
+    "Done" : "Done",
+    "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Yüklənilən faylın həcmi HTML formasinda olan MAX_FILE_SIZE direktivində təyin dilmiş həcmi aşır.",
+    "No file was uploaded" : "Heç bir fayl yüklənilmədi",
+    "Missing a temporary folder" : "Müvəqqəti qovluq çatışmır",
+    "Actions" : "İşlər",
+    "Close" : "Bağla",
+    "Sharing" : "Paylaşılır",
+    "Tags" : "Işarələr",
+    "Group" : "Qrup",
+    "Loading" : "Loading",
+    "Edit" : "Dəyişiklik et",
+    "Share" : "Paylaş",
+    "Create" : "Yarat",
+    "Title" : "Başlıq",
+    "Cancel upload" : "Yüklənməni dayandır",
+    "by" : "onunla",
+    "Modified:" : "Dəyişdirildi:",
+    "Created:" : "Yaradıldı:",
+    "Description" : "Açıqlanma",
+    "Saved" : "Saxlanıldı",
+    "Settings" : "Quraşdırmalar"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

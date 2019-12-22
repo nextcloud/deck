@@ -1,0 +1,23 @@
+{ "translations": {
+    "Personal" : "පෞද්ගලික",
+    "Done" : "Done",
+    "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "උඩුගත කළ ගොනුවේ විශාලත්වය HTML පෝරමයේ නියම කළ ඇති MAX_FILE_SIZE විශාලත්වයට වඩා වැඩිය",
+    "No file was uploaded" : "ගොනුවක් උඩුගත නොවුණි",
+    "Missing a temporary folder" : "තාවකාලික ෆොල්ඩරයක් අතුරුදහන්",
+    "Close" : "වසන්න",
+    "Sharing" : "හුවමාරු කිරීම",
+    "Tags" : "ටැග",
+    "Group" : "Group",
+    "Loading" : "Loading",
+    "Edit" : "සකසන්න",
+    "Share" : "බෙදා හදා ගන්න",
+    "Create" : "තනන්න",
+    "Title" : "මාතෘකාව",
+    "Cancel upload" : "උඩුගත කිරීම අත් හරින්න",
+    "by" : "විසින්",
+    "Modified:" : "වෙනස් කළ දිනය:",
+    "Created:" : "සෑදු දිනය:",
+    "Description" : "විස්තරය",
+    "Settings" : "සැකසුම්"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

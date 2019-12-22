@@ -89,6 +89,7 @@
     "Example Task 1" : "Primer naloge 1",
     "The file was uploaded" : "Datoteka je uspešno poslana.",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Poslana datoteka presega določilo največje dovoljene velikosti v datoteki php.ini",
+    "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Poslana datoteka presega velikost, ki jo določa parameter največje dovoljene velikosti MAX_FILE_SIZE v zapisu HTML.",
     "The file was only partially uploaded" : "Datoteka ni bila poslana v celoti",
     "No file was uploaded" : "Datoteka ni bila poslana",
     "Missing a temporary folder" : "Manjka začasna mapa",
