@@ -189,6 +189,7 @@ OC.L10N.register(
     "Shared boards" : "Partekatutako txartelak",
     "Move board to archive" : "Artxibatu txartela",
     "Create a new board" : "Sortu taula berri bat",
-    "Settings" : "Ezarpenak"
+    "Settings" : "Ezarpenak",
+    "Limit deck to groups" : "Mugatu deck-a taldeei"
 },
 "nplurals=2; plural=(n != 1);");
