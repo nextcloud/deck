@@ -28,6 +28,7 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Notification\NotificationHelper;
+use OCP\ILogger;
 
 class ScheduledNoificationsTest extends \Test\TestCase {
 
@@ -35,6 +36,8 @@ class ScheduledNoificationsTest extends \Test\TestCase {
 	protected $cardMapper;
 	/** @var NotificationHelper|\PHPUnit\Framework\MockObject\MockObject */
 	protected $notificationHelper;
+	/** @var ILogger|\PHPUnit\Framework\MockObject\MockObject */
+	protected $logger;
 	/** @var ScheduledNotifications */
 	protected $scheduledNotifications;
 
@@ -42,7 +45,8 @@ class ScheduledNoificationsTest extends \Test\TestCase {
 		parent::setUp();
 		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
-		$this->scheduledNotifications = new ScheduledNotifications($this->cardMapper, $this->notificationHelper);
+		$this->logger = $this->createMock(ILogger::class);
+		$this->scheduledNotifications = new ScheduledNotifications($this->cardMapper, $this->notificationHelper, $this->logger);
 	}
 
 	public function testDeleteCron() {
