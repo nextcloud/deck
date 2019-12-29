@@ -183,10 +183,18 @@ class Application extends App {
 
 		/**
 		 * Register Collaboration ResourceProvider
+		 *
+		 * @Todo: Remove if min-version is 18
 		 */
-		/** @var IManager $resourceManager */
-		$resourceManager = $this->getContainer()->query(IManager::class);
+		if ($version < 18) {
+			/** @var IManager $resourceManager */
+			$resourceManager = $this->getContainer()->query(IManager::class);
+		} else {
+			/** @var \OCP\Collaboration\Resources\IProviderManager $resourceManager */
+			$resourceManager = $this->getContainer()->query(\OCP\Collaboration\Resources\IProviderManager::class);
+		}
 		$resourceManager->registerResourceProvider(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+
 		\OC::$server->getEventDispatcher()->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', function () {
 			\OCP\Util::addScript('deck', 'build/collections');
 		});
