@@ -99,6 +99,15 @@ class BoardService {
 	}
 
 	/**
+	 * Set a different user than the current one, e.g. when no user is available in occ
+	 *
+	 * @param string $userId
+	 */
+	public function setUserId(string $userId): void {
+		$this->userId = $userId;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function findAll($since = -1, $details = null) {
