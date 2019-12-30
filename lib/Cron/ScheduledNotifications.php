@@ -27,6 +27,8 @@ use OC\BackgroundJob\Job;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Notification\NotificationHelper;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\ILogger;
 
 class ScheduledNotifications extends Job {
 
@@ -34,13 +36,17 @@ class ScheduledNotifications extends Job {
 	protected $cardMapper;
 	/** @var NotificationHelper */
 	protected $notificationHelper;
+	/** @var ILogger */
+	protected $logger;
 
 	public function __construct(
 		CardMapper $cardMapper,
-		NotificationHelper $notificationHelper
+		NotificationHelper $notificationHelper,
+		ILogger $logger
 	) {
 		$this->cardMapper = $cardMapper;
 		$this->notificationHelper = $notificationHelper;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -52,7 +58,12 @@ class ScheduledNotifications extends Job {
 		$cards = $this->cardMapper->findOverdue();
 		/** @var Card $card */
 		foreach ($cards as $card) {
-			$this->notificationHelper->sendCardDuedate($card);
+			try {
+				$this->notificationHelper->sendCardDuedate($card);
+			} catch (DoesNotExistException $e) {
+				// Skip if any error occurs
+				$this->logger->debug('Could not create overdue notification for card with id ' . $card->getId());
+			}
 		}
 	}
 
