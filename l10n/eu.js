@@ -79,6 +79,8 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "<strong>Deck app</strong>-an aldaketak",
     "A <strong>comment</strong> was created on a card" : "<strong>Iruzkin bat</strong> sortu da txartel batean",
     "Personal" : "Pertsonala",
+    "The card \"%s\" on \"%s\" has been assigned to you by %s." : "\"%s\" txartela \"%s\"-n %sk esleitu zaizu.",
+    "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user}k \"%s\" txartela \"%s\"-n  esleitu zaitu.",
     "The card \"%s\" on \"%s\" has reached its due date." : " \"%s\" txartela,  \"%s\" -n dagoena, epe-mugara ailegatu da.",
     "%s has mentioned you in a comment on \"%s\"." : "%sk aipatu dizu \"%s\"-ri buruzko iruzkin batean.",
     "{user} has mentioned you in a comment on \"%s\"." : "{user}k aipatu dizu \"%s\"-ri buruzko iruzkin batean.",
