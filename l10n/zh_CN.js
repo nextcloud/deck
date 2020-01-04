@@ -143,7 +143,7 @@ OC.L10N.register(
     "Share" : "共享",
     "Manage" : "管理",
     "Discard share" : "取消共享",
-    "Sharing has been disabled for your account." : "您的账户已禁用分享",
+    "Sharing has been disabled for your account." : "您的账号已禁用分享",
     "Update tag" : "更新标签",
     "Edit tag" : "编辑标签",
     "Delete tag" : "删除标签",
