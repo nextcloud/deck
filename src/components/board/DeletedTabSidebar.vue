@@ -8,8 +8,7 @@
 				<button
 					:title="t('settings', 'Undo')"
 					class="app-navigation-entry-deleted-button icon-history"
-					@click="stackUndoDelete(deletedStack)"
-				/>
+					@click="stackUndoDelete(deletedStack)" />
 
 				<!-- <span class="live-relative-timestamp" data-timestamp="{{ deletedStack.deletedAt*1000  }}">{{deletedStack.deletedAt | relativeDateFilter }}</span>
 				<a @click="stackUndoDelete(deletedStack)"><span class="icon icon-history"></span></a> -->
@@ -24,8 +23,7 @@
 				<button
 					:title="t('settings', 'Undo')"
 					class="app-navigation-entry-deleted-button icon-history"
-					@click="cardUndoDelete(deletedCard)"
-				/>
+					@click="cardUndoDelete(deletedCard)" />
 			</li>
 
 			<!-- <li ng-repeat="deletedCard in cardservice.deleted">
@@ -50,21 +48,21 @@ export default {
 	props: {
 		board: {
 			type: Object,
-			default: undefined
-		}
+			default: undefined,
+		},
 	},
 	data() {
 		return {
 			isLoading: false,
 			copiedDeletedStack: null,
-			copiedDeletedCard: null
+			copiedDeletedCard: null,
 		}
 	},
 	computed: {
 		...mapState({
 			deletedStacks: state => state.stack.deletedStacks,
-			deletedCards: state => state.stack.deletedCards
-		})
+			deletedCards: state => state.stack.deletedCards,
+		}),
 
 	},
 	created() {
@@ -88,8 +86,8 @@ export default {
 			this.copiedDeletedCard.deletedAt = 0
 			this.$store.dispatch('cardUndoDelete', this.copiedDeletedCard)
 			this.getData()
-		}
-	}
+		},
+	},
 }
 </script>
 

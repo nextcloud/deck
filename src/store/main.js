@@ -37,13 +37,13 @@ const debug = process.env.NODE_ENV !== 'production'
 export const BOARD_FILTERS = {
 	ALL: '',
 	ARCHIVED: 'archived',
-	SHARED: 'shared'
+	SHARED: 'shared',
 }
 
 export default new Vuex.Store({
 	modules: {
 		stack,
-		card
+		card,
 	},
 	strict: debug,
 	state: {
@@ -58,7 +58,7 @@ export default new Vuex.Store({
 		assignableUsers: [],
 		boardFilter: BOARD_FILTERS.ALL,
 		activity: [],
-		activityLoadMore: true
+		activityLoadMore: true,
 	},
 	getters: {
 		boards: state => {
@@ -93,7 +93,7 @@ export default new Vuex.Store({
 		},
 		currentBoardLabels: state => {
 			return state.currentBoard.labels
-		}
+		},
 	},
 	mutations: {
 		toggleShowArchived(state) {
@@ -197,7 +197,7 @@ export default new Vuex.Store({
 		},
 		updateLabelFromCurrentBoard(state, newLabel) {
 
-			let labelToUpdate = state.currentBoard.labels.find((l) => {
+			const labelToUpdate = state.currentBoard.labels.find((l) => {
 				return newLabel.id === l.id
 			})
 
@@ -214,7 +214,7 @@ export default new Vuex.Store({
 			state.currentBoard.acl.push(createdAcl)
 		},
 		updateAclFromCurrentBoard(state, acl) {
-			for (var acl_ in state.currentBoard.acl) {
+			for (const acl_ in state.currentBoard.acl) {
 				if (state.currentBoard.acl[acl_].participant.uid === acl.participant.uid) {
 					state.currentBoard.acl[acl_] = acl
 					break
@@ -223,8 +223,8 @@ export default new Vuex.Store({
 		},
 		deleteAclFromCurrentBoard(state, acl) {
 			let removeIndex = -1
-			for (var index in state.currentBoard.acl) {
-				var attr = state.currentBoard.acl[index]
+			for (const index in state.currentBoard.acl) {
+				const attr = state.currentBoard.acl[index]
 				if (acl.id === attr.id) {
 					removeIndex = index
 					break
@@ -234,7 +234,7 @@ export default new Vuex.Store({
 			if (removeIndex > -1) {
 				Vue.delete(state.currentBoard.acl, removeIndex)
 			}
-		}
+		},
 	},
 	actions: {
 		loadBoardById({ commit }, boardId) {
@@ -279,7 +279,7 @@ export default new Vuex.Store({
 		 *
 		 * @param commit
 		 * @param board The board to update.
-		 * @return {Promise<void>}
+		 * @returns {Promise<void>}
 		 */
 		async updateBoard({ commit }, board) {
 			const storedBoard = await apiClient.updateBoard(board)
@@ -293,7 +293,7 @@ export default new Vuex.Store({
 		},
 		async cloneBoard({ commit }, boardData) {
 			try {
-				let newBoard = await apiClient.cloneBoard(boardData)
+				const newBoard = await apiClient.cloneBoard(boardData)
 				commit('cloneBoard', newBoard)
 				return newBoard
 			} catch (err) {
@@ -408,6 +408,6 @@ export default new Vuex.Store({
 					commit('deleteAclFromCurrentBoard', acl)
 					dispatch('loadBoardById', acl.boardId)
 				})
-		}
-	}
+		},
+	},
 })

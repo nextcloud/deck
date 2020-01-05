@@ -26,9 +26,10 @@
 			<Compact v-model="color" :palette="defaultColors" @input="updateColor" />
 			<div :style="{'background-color': color.hex}" class="custom-color-button icon-colorpicker" @click.prevent="showFullPicker=!showFullPicker" />
 		</div>
-		<Chrome v-if="showFullPicker" v-model="color" :palette="defaultColors"
-			@input="updateColor"
-		/>
+		<Chrome v-if="showFullPicker"
+			v-model="color"
+			:palette="defaultColors"
+			@input="updateColor" />
 	</div>
 </template>
 
@@ -41,22 +42,22 @@ export default {
 	name: 'ColorPicker',
 	components: {
 		Compact,
-		Chrome
+		Chrome,
 	},
 	directives: {
-		ClickOutside
+		ClickOutside,
 	},
 	props: {
 		value: {
 			type: [String, Object],
-			default: null
-		}
+			default: null,
+		},
 	},
 	data() {
 		return {
 			color: { hex: this.value },
 			defaultColors: ['#31CC7C', '#317CCC', '#FF7A66', '#F1DB50', '#7C31CC', '#CC317C', '#3A3B3D', '#CACBCD'],
-			showFullPicker: false
+			showFullPicker: false,
 		}
 	},
 	methods: {
@@ -65,8 +66,8 @@ export default {
 		},
 		hidePicker() {
 			this.showFullPicker = false
-		}
-	}
+		},
+	},
 }
 </script>
 

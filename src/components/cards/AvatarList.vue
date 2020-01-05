@@ -24,13 +24,15 @@
 	<div class="avatars">
 		<div class="avatar-list" @click.stop="popoverVisible=!popoverVisible">
 			<div v-if="popover.length > 0" class="avatardiv icon-more" />
-			<avatar v-for="user in firstUsers" :key="user.id"
-				:url="avatarUrl(user)" :disable-tooltip="true" :size="32"
-			/>
+			<Avatar v-for="user in firstUsers"
+				:key="user.id"
+				:url="avatarUrl(user)"
+				:disable-tooltip="true"
+				:size="32" />
 		</div>
 
 		<div v-show="popoverVisible" class="popovermenu menu-right">
-			<popover-menu :menu="popover" />
+			<PopoverMenu :menu="popover" />
 			<slot />
 		</div>
 	</div>
@@ -44,20 +46,20 @@ export default {
 	name: 'AvatarList',
 	components: {
 		Avatar,
-		PopoverMenu
+		PopoverMenu,
 	},
 	directives: {
-		tooltip: Tooltip
+		tooltip: Tooltip,
 	},
 	props: {
 		users: {
 			type: Array,
-			default: () => { return {} }
-		}
+			default: () => { return {} },
+		},
 	},
 	data() {
 		return {
-			popoverVisible: false
+			popoverVisible: false,
 		}
 	},
 	computed: {
@@ -71,7 +73,7 @@ export default {
 				const avatarUrl = OC.generateUrl('/avatar/{user}/{size}',
 					{
 						user: user,
-						size: size
+						size: size,
 					})
 				return window.location.protocol + '//' + window.location.host + avatarUrl
 			}
@@ -82,13 +84,13 @@ export default {
 					return {
 						href: '#',
 						icon: this.avatarUrl(session),
-						text: session.participant.displayname
+						text: session.participant.displayname,
 					}
-				})
+				}),
 			]
-		}
+		},
 
-	}
+	},
 }
 </script>
 

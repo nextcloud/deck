@@ -41,7 +41,7 @@ const boardApi = new BoardApi()
 export default {
 	name: 'App',
 	components: {
-		AppNavigation
+		AppNavigation,
 	},
 	data: function() {
 		return {
@@ -54,19 +54,19 @@ export default {
 					action: () => {
 					},
 					reset: () => {
-					}
+					},
 				},
 				action: () => {
 					this.addButton.classes.push('editing')
-				}
-			}
+				},
+			},
 		}
 	},
 	computed: {
 		...mapState({
 			navShown: state => state.navShown,
 			sidebarShownState: state => state.sidebarShown,
-			currentBoard: state => state.currentBoard
+			currentBoard: state => state.currentBoard,
 		}),
 		// TODO: properly handle sidebar showing for route subview and board sidebar
 		sidebarRouterView() {
@@ -75,17 +75,17 @@ export default {
 		},
 		sidebarShown() {
 			return this.sidebarRouterView || this.sidebarShownState
-		}
+		},
 	},
 	provide: function() {
 		return {
-			boardApi: boardApi
+			boardApi: boardApi,
 		}
 	},
 	created: function() {
 		this.$store.dispatch('loadBoards')
 		this.$store.dispatch('loadSharees')
-	}
+	},
 }
 
 </script>

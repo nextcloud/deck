@@ -2,9 +2,10 @@
 	<div>
 		<div v-if="isLoading" class="icon icon-loading" />
 
-		<ActivityEntry v-for="entry in boardActivity" v-else :key="entry.activity_id"
-			:activity="entry"
-		/>
+		<ActivityEntry v-for="entry in boardActivity"
+			v-else
+			:key="entry.activity_id"
+			:activity="entry" />
 		<button v-if="activityLoadMore" @click="loadMore">
 			Load More
 		</button>
@@ -18,13 +19,13 @@ import ActivityEntry from '../ActivityEntry'
 export default {
 	name: 'TimelineTabSidebar',
 	components: {
-		ActivityEntry
+		ActivityEntry,
 	},
 	props: {
 		board: {
 			type: Object,
-			default: undefined
-		}
+			default: undefined,
+		},
 	},
 	data() {
 		return {
@@ -32,15 +33,15 @@ export default {
 			params: {
 				type: 'deck',
 				since: 0,
-				object_id: this.board.id
-			}
+				object_id: this.board.id,
+			},
 		}
 	},
 	computed: {
 		...mapState({
 			boardActivity: 'activity',
-			activityLoadMore: 'activityLoadMore'
-		})
+			activityLoadMore: 'activityLoadMore',
+		}),
 	},
 	created() {
 		this.loadBoardActivity()
@@ -53,12 +54,12 @@ export default {
 			})
 		},
 		loadMore() {
-			let array = Object.values(this.boardActivity)
-			let aId = (array[array.length - 1].activity_id)
+			const array = Object.values(this.boardActivity)
+			const aId = (array[array.length - 1].activity_id)
 
 			this.params.since = aId
 			this.loadBoardActivity()
-		}
-	}
+		},
+	},
 }
 </script>

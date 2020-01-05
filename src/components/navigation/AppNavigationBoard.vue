@@ -21,9 +21,10 @@
   -->
 <template>
 	<router-link :id="`board-${board.id}`"
-		:title="board.title" :class="[{'icon-loading-small': loading, deleted: deleted, editing: editing }, classes]"
-		:to="routeTo" tag="li"
-	>
+		:title="board.title"
+		:class="[{'icon-loading-small': loading, deleted: deleted, editing: editing }, classes]"
+		:to="routeTo"
+		tag="li">
 		<div :style="{ backgroundColor: `#${board.color}` }" class="app-navigation-entry-bullet" />
 		<a href="#">
 			{{ board.title }}
@@ -32,9 +33,10 @@
 		<div v-if="actions.length > 0" class="app-navigation-entry-utils">
 			<ul>
 				<li class="app-navigation-entry-utils-menu-button">
-					<button v-if="board.acl.length === 0" class="icon-shared" style="opacity: 0.3"
-						@click="showSidebar"
-					/>
+					<button v-if="board.acl.length === 0"
+						class="icon-shared"
+						style="opacity: 0.3"
+						@click="showSidebar" />
 					<button v-else class="icon-shared" @click="showSidebar" />
 				</li>
 				<li class="app-navigation-entry-utils-menu-button">
@@ -43,7 +45,7 @@
 			</ul>
 		</div>
 		<div :class="{ 'open': menuOpen }" class="app-navigation-entry-menu">
-			<popover-menu :menu="actions" />
+			<PopoverMenu :menu="actions" />
 		</div>
 
 		<!-- undo action -->
@@ -54,8 +56,7 @@
 			<button
 				:title="t('settings', 'Undo')"
 				class="app-navigation-entry-deleted-button icon-history"
-				@click="unDelete"
-			/>
+				@click="unDelete" />
 		</div>
 
 		<!-- edit entry -->
@@ -63,9 +64,10 @@
 			<form @submit.prevent.stop="applyEdit">
 				<input v-model="editTitle" type="text" required>
 				<input type="submit" value="" class="icon-confirm">
-				<input type="submit" value="" class="icon-close"
-					@click.stop.prevent="cancelEdit"
-				>
+				<input type="submit"
+					value=""
+					class="icon-close"
+					@click.stop.prevent="cancelEdit">
 			</form>
 			<ColorPicker v-model="editColor" />
 		</div>
@@ -81,16 +83,16 @@ export default {
 	name: 'AppNavigationBoard',
 	components: {
 		ColorPicker,
-		PopoverMenu
+		PopoverMenu,
 	},
 	directives: {
-		ClickOutside
+		ClickOutside,
 	},
 	props: {
 		board: {
 			type: Object,
-			required: true
-		}
+			required: true,
+		},
 	},
 	data() {
 		return {
@@ -101,7 +103,7 @@ export default {
 			menuOpen: false,
 			undoTimeoutHandle: null,
 			editTitle: '',
-			editColor: ''
+			editColor: '',
 		}
 	},
 	computed: {
@@ -112,7 +114,7 @@ export default {
 		routeTo: function() {
 			return {
 				name: 'board',
-				params: { id: this.board.id }
+				params: { id: this.board.id },
 			}
 		},
 		actions: function() {
@@ -131,7 +133,7 @@ export default {
 						this.editing = true
 					},
 					icon: 'icon-rename',
-					text: t('deck', 'Edit board')
+					text: t('deck', 'Edit board'),
 				})
 
 				actions.push({
@@ -150,7 +152,7 @@ export default {
 						}
 					},
 					icon: 'icon-clone',
-					text: t('deck', 'Clone board')
+					text: t('deck', 'Clone board'),
 				})
 
 				if (!this.board.archived) {
@@ -161,7 +163,7 @@ export default {
 							this.$store.dispatch('archiveBoard', this.board)
 						},
 						icon: 'icon-archive',
-						text: t('deck', 'Archive board')
+						text: t('deck', 'Archive board'),
 					})
 				} else {
 					actions.push({
@@ -171,7 +173,7 @@ export default {
 							this.$store.dispatch('unarchiveBoard', this.board)
 						},
 						icon: 'icon-archive',
-						text: t('deck', 'Unarchive board')
+						text: t('deck', 'Unarchive board'),
 					})
 				}
 
@@ -189,7 +191,7 @@ export default {
 							})
 					},
 					icon: 'icon-delete',
-					text: t('deck', 'Delete board')
+					text: t('deck', 'Delete board'),
 				})
 
 				actions.push({
@@ -199,13 +201,13 @@ export default {
 						this.$router.push(route)
 					},
 					icon: 'icon-settings-dark',
-					text: t('deck', 'Board details')
+					text: t('deck', 'Board details'),
 				})
 
 			}
 
 			return actions
-		}
+		},
 	},
 	watch: {},
 	mounted() {
@@ -246,11 +248,11 @@ export default {
 			const route = this.routeTo
 			route.name = 'board.details'
 			this.$router.push(route)
-		}
+		},
 	},
 	inject: [
-		'boardApi'
-	]
+		'boardApi',
+	],
 }
 </script>
 

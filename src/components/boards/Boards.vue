@@ -48,27 +48,27 @@ import Controls from '../Controls'
 import { mapGetters } from 'vuex'
 
 export default {
-	name: 'Main',
+	name: 'Boards',
 	components: {
 		BoardItem,
-		Controls
+		Controls,
 	},
 	props: {
 		navFilter: {
 			type: String,
-			default: ''
-		}
+			default: '',
+		},
 	},
 	computed: {
 		...mapGetters([
-			'filteredBoards'
-		])
+			'filteredBoards',
+		]),
 	},
 	watch: {
 		navFilter: function(value) {
 			this.$store.commit('setBoardFilter', value)
-		}
-	}
+		},
+	},
 }
 </script>
 

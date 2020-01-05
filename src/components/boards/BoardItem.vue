@@ -23,8 +23,9 @@
 <template>
 	<router-link :id="`board-${board.id}`"
 		:title="board.title"
-		:to="routeTo" class="board-list-row" tag="div"
-	>
+		:to="routeTo"
+		class="board-list-row"
+		tag="div">
 		<div class="board-list-bullet-cell">
 			<div :style="{ 'background-color': `#${board.color}` }" class="board-list-bullet" />
 		</div>
@@ -32,10 +33,11 @@
 			{{ board.title }}
 		</div>
 		<div class="board-list-avatars-cell">
-			<avatar :user="board.owner.uid" class="board-list-avatar" />
-			<avatar v-for="user in limitedAcl" :key="user.id" :user="user.participant.uid"
-				class="board-list-avatar"
-			/>
+			<Avatar :user="board.owner.uid" class="board-list-avatar" />
+			<Avatar v-for="user in limitedAcl"
+				:key="user.id"
+				:user="user.participant.uid"
+				class="board-list-avatar" />
 			<div v-if="board.acl.length > 5" v-tooltip="otherAcl" class="avatardiv popovermenu-wrapper board-list-avatar icon-more" />
 		</div>
 		<div class="board-list-actions-cell" />
@@ -48,19 +50,19 @@ import { Avatar } from '@nextcloud/vue/dist/Components/Avatar'
 export default {
 	name: 'BoardItem',
 	components: {
-		Avatar
+		Avatar,
 	},
 	props: {
 		board: {
 			type: Object,
-			default: () => { return {} }
-		}
+			default: () => { return {} },
+		},
 	},
 	computed: {
 		routeTo: function() {
 			return {
 				name: 'board',
-				params: { id: this.board.id }
+				params: { id: this.board.id },
 			}
 		},
 		limitedAcl() {
@@ -68,8 +70,8 @@ export default {
 		},
 		otherAcl() {
 			return [...this.board.acl].splice(6).map((item) => item.participant.displayname || item.participant).join(', ')
-		}
-	}
+		},
+	},
 }
 </script>
 

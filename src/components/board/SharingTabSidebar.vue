@@ -1,27 +1,25 @@
 <template>
 	<div>
-		<multiselect
+		<Multiselect
 			v-model="addAcl"
 			:options="formatedSharees"
 			:user-select="true"
 			label="displayName"
 			track-by="user"
 			@input="clickAddAcl"
-			@search-change="asyncFind"
-		/>
+			@search-change="asyncFind" />
 
 		<ul
 			id="shareWithList"
-			class="shareWithList"
-		>
+			class="shareWithList">
 			<li>
-				<avatar :user="board.owner.uid" />
+				<Avatar :user="board.owner.uid" />
 				<span class="has-tooltip username">
 					{{ board.owner.displayname }}
 				</span>
 			</li>
 			<li v-for="acl in board.acl" :key="acl.participant.uid">
-				<avatar v-if="acl.type===0" :user="acl.participant.uid" />
+				<Avatar v-if="acl.type===0" :user="acl.participant.uid" />
 				<div v-if="acl.type===1" class="avatardiv icon icon-group" />
 				<div v-if="acl.type===7" class="avatardiv icon icon-circles" />
 				<span class="has-tooltip username">
@@ -47,9 +45,10 @@
 			</li>
 		</ul>
 
-		<collection-list v-if="board.id" :id="`${board.id}`" :name="board.title"
-			type="deck"
-		/>
+		<CollectionList v-if="board.id"
+			:id="`${board.id}`"
+			:name="board.title"
+			type="deck" />
 	</div>
 </template>
 
@@ -70,32 +69,32 @@ export default {
 		ActionButton,
 		ActionCheckbox,
 		Multiselect,
-		CollectionList
+		CollectionList,
 	},
 	props: {
 		board: {
 			type: Object,
-			default: undefined
-		}
+			default: undefined,
+		},
 	},
 	data() {
 		return {
 			isLoading: false,
 			addAcl: null,
-			addAclForAPI: null
+			addAclForAPI: null,
 		}
 	},
 	computed: {
 		...mapGetters({
-			sharees: 'sharees'
+			sharees: 'sharees',
 		}),
 		formatedSharees() {
 			return this.unallocatedSharees.map(item => {
 
-				let sharee = {
+				const sharee = {
 					user: item.label,
 					displayName: item.label,
-					icon: 'icon-user'
+					icon: 'icon-user',
 				}
 
 				if (item.value.shareType === 1) {
@@ -113,7 +112,7 @@ export default {
 		},
 		unallocatedSharees() {
 			return this.sharees.filter((sharee) => {
-				let foundIndex = this.board.acl.findIndex((acl) => {
+				const foundIndex = this.board.acl.findIndex((acl) => {
 					return acl.participant.uid === sharee.value.shareWith
 				})
 				if (foundIndex === -1) {
@@ -121,7 +120,7 @@ export default {
 				}
 				return false
 			})
-		}
+		},
 	},
 	methods: {
 		asyncFind(query) {
@@ -136,7 +135,7 @@ export default {
 				participant: this.addAcl.value.shareWith,
 				permissionEdit: false,
 				permissionShare: false,
-				permissionManage: false
+				permissionManage: false,
 			}
 			this.$store.dispatch('addAclToCurrentBoard', this.addAclForAPI)
 		},
@@ -157,8 +156,8 @@ export default {
 		},
 		clickDeleteAcl(acl) {
 			this.$store.dispatch('deleteAclFromCurrentBoard', acl)
-		}
-	}
+		},
+	},
 }
 </script>
 <style scoped>

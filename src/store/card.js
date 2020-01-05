@@ -27,7 +27,7 @@ const apiClient = new CardApi()
 
 export default {
 	state: {
-		cards: []
+		cards: [],
 	},
 	getters: {
 		cardsByStack: state => (id) => {
@@ -35,73 +35,73 @@ export default {
 		},
 		cardById: state => (id) => {
 			return state.cards.find((card) => card.id === id)
-		}
+		},
 	},
 	mutations: {
 		clearCards(state) {
 			state.cards = []
 		},
 		addCard(state, card) {
-			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
-				let existingCard = state.cards.find(_card => _card.id === card.id)
+				const existingCard = state.cards.find(_card => _card.id === card.id)
 				Vue.set(state.cards, existingIndex, Object.assign({}, existingCard, card))
 			} else {
 				state.cards.push(card)
 			}
 		},
 		deleteCard(state, card) {
-			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
 				state.cards.splice(existingIndex, 1)
 			}
 		},
 		updateCard(state, card) {
-			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
 				Vue.set(state.cards, existingIndex, card)
 			}
 		},
 		updateTitle(state, card) {
-			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
 				state.cards[existingIndex].title = card.title
 			}
 		},
 		assignCardToUser(state, user) {
-			let existingIndex = state.cards.findIndex(_card => _card.id === user.cardId)
+			const existingIndex = state.cards.findIndex(_card => _card.id === user.cardId)
 			if (existingIndex !== -1) {
 				state.cards[existingIndex].assignedUsers.push(user)
 			}
 		},
 		removeUserFromCard(state, user) {
-			let existingIndex = state.cards.findIndex(_card => _card.id === user.cardId)
+			const existingIndex = state.cards.findIndex(_card => _card.id === user.cardId)
 			if (existingIndex !== -1) {
-				let foundIndex = state.cards[existingIndex].assignedUsers.findIndex(_user => _user.id === user.id)
+				const foundIndex = state.cards[existingIndex].assignedUsers.findIndex(_user => _user.id === user.id)
 				if (foundIndex !== -1) {
 					state.cards[existingIndex].assignedUsers.splice(foundIndex, 1)
 				}
 			}
 		},
 		updateCardDesc(state, card) {
-			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
 				state.cards[existingIndex].description = card.description
 			}
 		},
 		updateCardDue(state, card) {
-			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
 				state.cards[existingIndex].duedate = card.duedate
 			}
 		},
 		updateCardLabels(state, card) {
-			let existingIndex = state.cards.findIndex(_card => _card.id === card.id)
+			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
-				let existingCard = state.cards.find(_card => _card.id === card.id)
+				const existingCard = state.cards.find(_card => _card.id === card.id)
 				existingCard.labels = card.labels
 			}
-		}
+		},
 	},
 	actions: {
 		addCard({ commit }, card) {
@@ -192,6 +192,6 @@ export default {
 				.then((card) => {
 					commit('updateCardDue', card)
 				})
-		}
-	}
+		},
+	},
 }

@@ -36,23 +36,23 @@ export default {
 	props: {
 		activity: {
 			type: Object,
-			default: null
-		}
+			default: null,
+		},
 	},
 	methods: {
 		getTime(timestamp) {
 			return OC.Util.relativeModifiedDate(timestamp)
 		},
 		parseMessage(activity) {
-			let subject = activity.subject_rich[0]
-			let parameters = activity.subject_rich[1]
+			const subject = activity.subject_rich[0]
+			const parameters = activity.subject_rich[1]
 			if (parameters.after && typeof parameters.after.id === 'string' && parameters.after.id.startsWith('dt:')) {
-				let dateTime = parameters.after.id.substr(3)
+				const dateTime = parameters.after.id.substr(3)
 				parameters.after.name = window.moment(dateTime).format('L LTS')
 			}
 			return OCA.Activity.RichObjectStringParser.parseMessage(subject, parameters)
-		}
-	}
+		},
+	},
 }
 </script>
 

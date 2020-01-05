@@ -23,41 +23,42 @@
 <template>
 	<div id="app-navigation" :class="{'icon-loading': loading}">
 		<ul id="deck-navigation">
-			<app-navigation-board-category
+			<AppNavigationBoardCategory
 				id="deck-navigation-all"
 				:text="t('deck', 'All boards')"
 				:boards="noneArchivedBoards"
 				:open-on-add-boards="true"
-				icon="icon-deck"
-			/>
-			<app-navigation-board-category
+				icon="icon-deck" />
+			<AppNavigationBoardCategory
 				id="deck-navigation-archived"
 				:text="t('deck', 'Archived boards')"
 				:boards="archivedBoards"
-				icon="icon-archive"
-			/>
-			<app-navigation-board-category
+				icon="icon-archive" />
+			<AppNavigationBoardCategory
 				id="deck-navigation-shared"
 				:text="t('deck', 'Shared boards')"
 				:boards="sharedBoards"
-				icon="icon-shared"
-			/>
-			<app-navigation-add-board />
+				icon="icon-shared" />
+			<AppNavigationAddBoard />
 		</ul>
-		<div v-if="isAdmin" id="app-settings"
-			v-click-outside="closeMenu" :class="{open: opened}"
-		>
+		<div v-if="isAdmin"
+			id="app-settings"
+			v-click-outside="closeMenu"
+			:class="{open: opened}">
 			<div id="app-settings-header">
 				<button class="settings-button" @click="toggleMenu">
 					{{ t('deck', 'Settings') }}
 				</button>
 			</div>
 			<div id="app-settings-content">
-				<Multiselect v-model="groupLimit" :class="{'icon-loading-small': groupLimitDisabled}" :options="groups"
+				<Multiselect v-model="groupLimit"
+					:class="{'icon-loading-small': groupLimitDisabled}"
+					:options="groups"
 					:multiple="true"
-					:disabled="groupLimitDisabled" label="displayname" track-by="id"
-					@input="updateConfig"
-				/>
+					:disabled="groupLimitDisabled"
+					label="displayname"
+					track-by="id"
+					@input="updateConfig" />
 				<p>{{ t('deck', 'Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them.') }}</p>
 			</div>
 		</div>
@@ -78,36 +79,36 @@ export default {
 	components: {
 		AppNavigationAddBoard,
 		AppNavigationBoardCategory,
-		Multiselect
+		Multiselect,
 	},
 	directives: {
-		ClickOutside
+		ClickOutside,
 	},
 	props: {
 		loading: {
 			type: Boolean,
-			default: false
-		}
+			default: false,
+		},
 	},
 	data() {
 		return {
 			opened: false,
 			groups: [],
 			groupLimit: [],
-			groupLimitDisabled: true
+			groupLimitDisabled: true,
 		}
 	},
 	computed: {
 		...mapGetters([
 			'noneArchivedBoards',
 			'archivedBoards',
-			'sharedBoards'
+			'sharedBoards',
 		]),
 		isAdmin() {
 			// eslint-disable-next-line
 			//return oc_isadmin
 			return OC.isUserAdmin()
-		}
+		},
 	},
 	beforeMount() {
 		if (this.isAdmin) {
@@ -121,7 +122,7 @@ export default {
 				this.groups = response.data.ocs.data.groups.reduce((obj, item) => {
 					obj.push({
 						id: item,
-						displayname: item
+						displayname: item,
 					})
 					return obj
 				}, [])
@@ -140,14 +141,14 @@ export default {
 		updateConfig() {
 			this.groupLimitDisabled = true
 			axios.post(OC.generateUrl('apps/deck/config/groupLimit'), {
-				value: this.groupLimit
+				value: this.groupLimit,
 			}).then(() => {
 				this.groupLimitDisabled = false
 			}, (error) => {
 				console.error('Error while saving groupLimit', error.response)
 			})
-		}
-	}
+		},
+	},
 }
 </script>
 <style>

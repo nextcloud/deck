@@ -25,9 +25,10 @@
   -->
 
 <template>
-	<div :class="{'compact': compactMode, 'current-card': currentCard}" tag="div" class="card"
-		@click.self="openCard"
-	>
+	<div :class="{'compact': compactMode, 'current-card': currentCard}"
+		tag="div"
+		class="card"
+		@click.self="openCard">
 		<div class="card-upper">
 			<h3 v-if="showArchived">
 				{{ card.title }}
@@ -38,9 +39,10 @@
 			<h3 v-else>
 &nbsp;
 			</h3>
-			<form v-if="editing" v-click-outside="cancelEdit" @keyup.esc="cancelEdit"
-				@submit.prevent="finishedEdit(card)"
-			>
+			<form v-if="editing"
+				v-click-outside="cancelEdit"
+				@keyup.esc="cancelEdit"
+				@submit.prevent="finishedEdit(card)">
 				<input v-model="copiedCard.title" type="text" autofocus>
 				<input type="button" class="icon-confirm" @click="finishedEdit(card)">
 			</form>
@@ -63,15 +65,17 @@
 				</ActionButton>
 			</Actions>
 
-			<modal v-if="modalShow" title="Move card to another board" @close="modalShow=false">
+			<Modal v-if="modalShow" title="Move card to another board" @close="modalShow=false">
 				<div class="modal__content">
-					<Multiselect v-model="selectedBoard" :placeholder="t('deck', 'Select a board')" :options="boards"
+					<Multiselect v-model="selectedBoard"
+						:placeholder="t('deck', 'Select a board')"
+						:options="boards"
 						label="title"
-						@select="loadStacksFromBoard"
-					/>
-					<Multiselect v-model="selectedStack" :placeholder="t('deck', 'Select a stack')" :options="stacksFromBoard"
-						label="title"
-					/>
+						@select="loadStacksFromBoard" />
+					<Multiselect v-model="selectedStack"
+						:placeholder="t('deck', 'Select a stack')"
+						:options="stacksFromBoard"
+						label="title" />
 
 					<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">
 						{{ t('deck', 'Move card') }}
@@ -80,7 +84,7 @@
 						{{ t('deck', 'Cancel') }}
 					</button>
 				</div>
-			</modal>
+			</Modal>
 		</div>
 		<ul class="labels" @click="openCard">
 			<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)">
@@ -88,7 +92,7 @@
 			</li>
 		</ul>
 		<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
-			<card-badges :id="id" />
+			<CardBadges :id="id" />
 		</div>
 	</div>
 </template>
@@ -109,14 +113,14 @@ export default {
 	name: 'CardItem',
 	components: { Modal, CardBadges, Actions, ActionButton, Multiselect },
 	directives: {
-		ClickOutside
+		ClickOutside,
 	},
 	mixins: [Color],
 	props: {
 		id: {
 			type: Number,
-			default: null
-		}
+			default: null,
+		},
 	},
 	data() {
 		return {
@@ -126,14 +130,14 @@ export default {
 			modalShow: false,
 			selectedBoard: '',
 			selectedStack: '',
-			stacksFromBoard: []
+			stacksFromBoard: [],
 		}
 	},
 	computed: {
 		...mapState({
 			compactMode: state => state.compactMode,
 			showArchived: state => state.showArchived,
-			currentBoard: state => state.currentBoard
+			currentBoard: state => state.currentBoard,
 		}),
 		card() {
 			return this.$store.getters.cardById(this.id)
@@ -150,7 +154,7 @@ export default {
 			return (label) => {
 				return {
 					backgroundColor: '#' + label.color,
-					color: this.textColor(label.color)
+					color: this.textColor(label.color),
 				}
 			}
 		},
@@ -162,7 +166,7 @@ export default {
 				return false
 			}
 			return true
-		}
+		},
 	},
 	methods: {
 		openCard() {
@@ -202,8 +206,8 @@ export default {
 		},
 		async loadStacksFromBoard(board) {
 			try {
-				let url = OC.generateUrl('/apps/deck/stacks/' + board.id)
-				let response = await axios.get(url)
+				const url = OC.generateUrl('/apps/deck/stacks/' + board.id)
+				const response = await axios.get(url)
 				this.stacksFromBoard = response.data
 			} catch (err) {
 				return err
@@ -214,8 +218,8 @@ export default {
 			this.copiedCard.stackId = this.selectedStack.id
 			this.$store.dispatch('moveCard', this.copiedCard)
 			this.modalShow = false
-		}
-	}
+		},
+	},
 }
 </script>
 

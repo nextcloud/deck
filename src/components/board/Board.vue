@@ -24,11 +24,11 @@
 	<div>
 		<Controls :board="board" />
 		<div v-if="board" class="board">
-			<container lock-axix="y" orientation="horizontal" @drop="onDropStack">
-				<draggable v-for="stack in stacksByBoard" :key="stack.id" class="stack">
-					<stack :stack="stack" />
-				</draggable>
-			</container>
+			<Container lock-axix="y" orientation="horizontal" @drop="onDropStack">
+				<Draggable v-for="stack in stacksByBoard" :key="stack.id" class="stack">
+					<Stack :stack="stack" />
+				</Draggable>
+			</Container>
 		</div>
 		<div v-else class="emptycontent">
 			<div class="icon icon-deck" />
@@ -51,30 +51,30 @@ export default {
 		Controls,
 		Container,
 		Draggable,
-		Stack
+		Stack,
 	},
 	inject: [
-		'boardApi'
+		'boardApi',
 	],
 	props: {
 		id: {
 			type: Number,
-			default: null
-		}
+			default: null,
+		},
 	},
 	data: function() {
 		return {
-			loading: true
+			loading: true,
 		}
 	},
 	computed: {
 		...mapState({
 			board: state => state.currentBoard,
-			showArchived: state => state.showArchived
+			showArchived: state => state.showArchived,
 		}),
 		stacksByBoard() {
 			return this.$store.getters.stacksByBoard(this.board.id)
-		}
+		},
 		/* cardsByStack() {
 			return (id) => this.$store.getters.cardsByStack(id)
 		} */
@@ -83,7 +83,7 @@ export default {
 		id: 'fetchData',
 		showArchived() {
 			this.fetchData()
-		}
+		},
 	},
 	created() {
 		this.fetchData()
@@ -118,17 +118,17 @@ export default {
 			}
 		}, */
 		createStack() {
-			let newStack = {
+			const newStack = {
 				title: 'FooBar',
 				boardId: this.id,
-				order: this.stacksByBoard().length
+				order: this.stacksByBoard().length,
 			}
 			this.$store.dispatch('createStack', newStack)
-		}
+		},
 		/* deleteStack(stack) {
 			this.$store.dispatch('deleteStack', stack)
 		} */
-	}
+	},
 }
 </script>
 

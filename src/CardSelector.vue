@@ -23,14 +23,16 @@
 <template>
 	<Modal :title="t('deck', 'Select the card to link to a project')" @close="close">
 		<div id="modal-inner" :class="{ 'icon-loading': loading }">
-			<Multiselect v-model="selectedBoard" :placeholder="t('deck', 'Select a board')" :options="boards"
+			<Multiselect v-model="selectedBoard"
+				:placeholder="t('deck', 'Select a board')"
+				:options="boards"
 				label="title"
-				@select="fetchCardsFromBoard"
-			/>
+				@select="fetchCardsFromBoard" />
 
-			<Multiselect v-model="selectedCard" :placeholder="t('deck', 'Select a card')" :options="cardsFromBoard"
-				label="title"
-			/>
+			<Multiselect v-model="selectedCard"
+				:placeholder="t('deck', 'Select a card')"
+				:options="cardsFromBoard"
+				label="title" />
 
 			<button :disabled="!isBoardAndStackChoosen" class="primary" @click="select">
 				{{ t('deck', 'Link to card') }}
@@ -48,10 +50,10 @@ import { Multiselect } from '@nextcloud/vue/dist/Components/Multiselect'
 import axios from 'nextcloud-axios'
 
 export default {
-	name: 'CollaborationView',
+	name: 'CardSelector',
 	components: {
 		Modal,
-		Multiselect
+		Multiselect,
 	},
 	data() {
 		return {
@@ -59,7 +61,7 @@ export default {
 			selectedBoard: '',
 			cardsFromBoard: [],
 			selectedCard: '',
-			loading: true
+			loading: true,
 		}
 	},
 	computed: {
@@ -68,7 +70,7 @@ export default {
 				return false
 			}
 			return true
-		}
+		},
 	},
 	beforeMount() {
 		this.fetchBoards()
@@ -83,8 +85,8 @@ export default {
 		async fetchCardsFromBoard(board) {
 			try {
 				this.cardsFromBoard = []
-				let url = OC.generateUrl('/apps/deck/stacks/' + board.id)
-				let response = await axios.get(url)
+				const url = OC.generateUrl('/apps/deck/stacks/' + board.id)
+				const response = await axios.get(url)
 				response.data.forEach(stack => {
 					this.cardsFromBoard.push(...stack.cards)
 				})
@@ -99,8 +101,8 @@ export default {
 		select() {
 			this.$root.$emit('select', this.selectedCard.id)
 
-		}
-	}
+		},
+	},
 
 }
 </script>

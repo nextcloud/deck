@@ -20,15 +20,16 @@
   -
   -->
 <template>
-	<li v-if="boards.length > 0" :id="id" :title="text"
-		:class="{'open': opened, 'collapsible': collapsible }"
-	>
+	<li v-if="boards.length > 0"
+		:id="id"
+		:title="text"
+		:class="{'open': opened, 'collapsible': collapsible }">
 		<button v-if="collapsible" class="collapse" @click.prevent.stop="toggleCollapse" />
 		<a :class="icon" href="#">
 			{{ text }}
 		</a>
 		<ul v-if="boards.length > 0">
-			<app-navigation-board v-for="board in boards" :key="board.id" :board="board" />
+			<AppNavigationBoard v-for="board in boards" :key="board.id" :board="board" />
 		</ul>
 	</li>
 </template>
@@ -40,27 +41,27 @@ import AppNavigationBoard from './AppNavigationBoard'
 export default {
 	name: 'AppNavigationBoardCategory',
 	components: {
-		AppNavigationBoard
+		AppNavigationBoard,
 	},
 	directives: {
-		ClickOutside
+		ClickOutside,
 	},
 	props: {
 		id: {
 			type: String,
-			required: true
+			required: true,
 		},
 		text: {
 			type: String,
-			required: true
+			required: true,
 		},
 		icon: {
 			type: String,
-			required: true
+			required: true,
 		},
 		boards: {
 			type: Array,
-			required: true
+			required: true,
 		},
 		/**
 		 * Control whether the category should be opened when adding boards.
@@ -68,31 +69,31 @@ export default {
 		 */
 		openOnAddBoards: {
 			type: Boolean,
-			default: false
-		}
+			default: false,
+		},
 	},
 	data() {
 		return {
-			opened: false
+			opened: false,
 		}
 	},
 	computed: {
 		collapsible() {
 			return this.boards.length > 0
-		}
+		},
 	},
 	watch: {
 		boards: function(newVal, prevVal) {
 			if (this.openOnAddBoards === true && prevVal.length < newVal.length) {
 				this.opened = true
 			}
-		}
+		},
 	},
 	mounted() {},
 	methods: {
 		toggleCollapse() {
 			this.opened = !this.opened
-		}
-	}
+		},
+	},
 }
 </script>
