@@ -30,8 +30,8 @@ export default {
 	methods: {
 		closeSidebar() {
 			this.$router.push({ name: 'board' })
-		}
-	}
+		},
+	},
 }
 </script>
 

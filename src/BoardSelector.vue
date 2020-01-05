@@ -25,10 +25,10 @@
 		<div id="modal-inner" :class="{ 'icon-loading': loading }">
 			<h1>{{ t('deck', 'Select the board to link to a project') }}</h1>
 			<ul v-if="!loading">
-				<li v-for="board in availableBoards" :key="board.id"
+				<li v-for="board in availableBoards"
+					:key="board.id"
 					:class="{'selected': (selectedBoard === board.id) }"
-					@click="selectedBoard=board.id"
-				>
+					@click="selectedBoard=board.id">
 					<span :style="{ 'backgroundColor': '#' + board.color }" class="board-bullet" />
 					<span>{{ board.title }}</span>
 				</li>
@@ -78,22 +78,22 @@ import { Modal } from '@nextcloud/vue/dist/Components/Modal'
 import axios from 'nextcloud-axios'
 
 export default {
-	name: 'CollaborationView',
+	name: 'BoardSelector',
 	components: {
-		Modal
+		Modal,
 	},
 	data() {
 		return {
 			boards: [],
 			selectedBoard: null,
 			loading: true,
-			currentBoard: null
+			currentBoard: null,
 		}
 	},
 	computed: {
 		availableBoards() {
 			return this.boards.filter((board) => ('' + board.id !== '' + this.currentBoard))
-		}
+		},
 	},
 	beforeMount() {
 		this.fetchBoards()
@@ -111,8 +111,8 @@ export default {
 		},
 		select() {
 			this.$root.$emit('select', this.selectedBoard)
-		}
-	}
+		},
+	},
 
 }
 </script>

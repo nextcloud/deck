@@ -39,45 +39,45 @@ export default new Router({
 		{
 			path: '/',
 			name: 'main',
-			component: Boards
+			component: Boards,
 		},
 		{
 			path: '/boards',
 			name: 'boards',
 			component: Boards,
 			props: {
-				navFilter: BOARD_FILTERS.ALL
-			}
+				navFilter: BOARD_FILTERS.ALL,
+			},
 		},
 		{
 			path: '/boards/archived',
 			name: 'boards.archived',
 			component: Boards,
 			props: {
-				navFilter: BOARD_FILTERS.ARCHIVED
-			}
+				navFilter: BOARD_FILTERS.ARCHIVED,
+			},
 		},
 		{
 			path: '/boards/shared',
 			name: 'boards.shared',
 			component: Boards,
 			props: {
-				navFilter: BOARD_FILTERS.SHARED
-			}
+				navFilter: BOARD_FILTERS.SHARED,
+			},
 		},
 		{
 			path: '/boards/:id',
 			name: 'board',
 			components: {
 				default: Board,
-				sidebar: Sidebar
+				sidebar: Sidebar,
 			},
 			props: {
 				default: (route) => {
 					return {
-						id: parseInt(route.params.id, 10)
+						id: parseInt(route.params.id, 10),
 					}
-				}
+				},
 			},
 			children: [
 				{
@@ -85,41 +85,41 @@ export default new Router({
 					name: 'board.details',
 					components: {
 						default: Boards,
-						sidebar: BoardSidebar
+						sidebar: BoardSidebar,
 					},
 					props: {
 						default: (route) => {
 							return {
-								id: parseInt(route.params.id, 10)
+								id: parseInt(route.params.id, 10),
 							}
 						},
 						sidebar: (route) => {
 							return {
-								id: parseInt(route.params.id, 10)
+								id: parseInt(route.params.id, 10),
 							}
-						}
-					}
+						},
+					},
 				},
 				{
 					path: 'cards/:cardId',
 					name: 'card',
 					components: {
-						sidebar: CardSidebar
+						sidebar: CardSidebar,
 					},
 					props: {
 						default: (route) => {
 							return {
-								cardId: parseInt(route.params.cardId, 10)
+								cardId: parseInt(route.params.cardId, 10),
 							}
 						},
 						sidebar: (route) => {
 							return {
-								id: parseInt(route.params.cardId, 10)
+								id: parseInt(route.params.cardId, 10),
 							}
-						}
-					}
-				}
-			]
-		}
-	]
+						},
+					},
+				},
+			],
+		},
+	],
 })

@@ -30,9 +30,10 @@
 				</h3>
 				<form v-else @submit.prevent="finishedEdit(stack)">
 					<input v-model="copiedStack.title" type="text" autofocus>
-					<input v-tooltip="t('deck', 'Add a new stack')" class="icon-confirm" type="submit"
-						value=""
-					>
+					<input v-tooltip="t('deck', 'Add a new stack')"
+						class="icon-confirm"
+						type="submit"
+						value="">
 				</form>
 			</transition>
 			<Actions>
@@ -42,23 +43,24 @@
 			</Actions>
 		</div>
 
-		<container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)">
-			<draggable v-for="card in cardsByStack(stack.id)" :key="card.id">
-				<card-item v-if="card" :id="card.id" />
-			</draggable>
-		</container>
+		<Container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)">
+			<Draggable v-for="card in cardsByStack(stack.id)" :key="card.id">
+				<CardItem v-if="card" :id="card.id" />
+			</Draggable>
+		</Container>
 
 		<form class="stack--card-add" @submit.prevent="clickAddCard()">
 			<label for="new-stack-input-main" class="hidden-visually">Add a new card</label>
-			<input id="new-stack-input-main" v-model="newCardTitle" type="text"
+			<input id="new-stack-input-main"
+				v-model="newCardTitle"
+				type="text"
 				class="no-close"
-				placeholder="Add a new card" required
-			>
+				placeholder="Add a new card"
+				required>
 
 			<input class="icon-confirm"
 				type="submit"
-				value=""
-			>
+				value="">
 		</form>
 	</div>
 </template>
@@ -77,26 +79,26 @@ export default {
 		ActionButton,
 		CardItem,
 		Container,
-		Draggable
+		Draggable,
 	},
 
 	props: {
 		stack: {
 			type: Object,
-			default: undefined
-		}
+			default: undefined,
+		},
 	},
 	data() {
 		return {
 			editing: false,
 			copiedStack: '',
-			newCardTitle: ''
+			newCardTitle: '',
 		}
 	},
 	computed: {
 		cardsByStack() {
 			return (id) => this.$store.getters.cardsByStack(id)
-		}
+		},
 	},
 
 	methods: {
@@ -138,15 +140,15 @@ export default {
 			this.editing = false
 		},
 		clickAddCard() {
-			let newCard = {
+			const newCard = {
 				title: this.newCardTitle,
 				stackId: this.stack.id,
-				boardId: this.stack.boardId
+				boardId: this.stack.boardId,
 			}
 			this.$store.dispatch('addCard', newCard)
 			this.newCardTitle = ''
-		}
-	}
+		},
+	},
 }
 </script>
 

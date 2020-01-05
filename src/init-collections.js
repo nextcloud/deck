@@ -46,7 +46,7 @@ Vue.prototype.OC = OC;
 				const body = document.getElementById('body-user')
 				body.append(container)
 				const ComponentVM = new Vue({
-					render: h => h(BoardSelector)
+					render: h => h(BoardSelector),
 				})
 				ComponentVM.$mount(container)
 				ComponentVM.$root.$on('close', () => {
@@ -62,7 +62,7 @@ Vue.prototype.OC = OC;
 			})
 		},
 		typeString: t('deck', 'Link to a board'),
-		typeIconClass: 'icon-deck'
+		typeIconClass: 'icon-deck',
 	})
 
 	OCP.Collaboration.registerType('deck-card', {
@@ -73,7 +73,7 @@ Vue.prototype.OC = OC;
 				const body = document.getElementById('body-user')
 				body.append(container)
 				const ComponentVM = new Vue({
-					render: h => h(CardSelector)
+					render: h => h(CardSelector),
 				})
 				ComponentVM.$mount(container)
 				ComponentVM.$root.$on('close', () => {
@@ -89,6 +89,6 @@ Vue.prototype.OC = OC;
 			})
 		},
 		typeString: t('deck', 'Link to a card'),
-		typeIconClass: 'icon-deck'
+		typeIconClass: 'icon-deck',
 	})
 })(window.OCP))

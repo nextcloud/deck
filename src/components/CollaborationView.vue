@@ -22,23 +22,20 @@
 
 <template>
 	<div>
-		<collection-list v-if="boardId" :id="boardId" :name="boardTitle"
-			type="deck"
-		/>
+		<CollectionList v-if="boardId"
+			:id="boardId"
+			:name="boardTitle"
+			type="deck" />
 	</div>
 </template>
 
 <script>
 import { CollectionList } from 'nextcloud-vue-collections'
-import Vue from 'vue'
-import PopoverMenu from '@nextcloud/vue/dist/Components/PopoverMenu'
-
-Vue.component('popover-menu', PopoverMenu)
 
 export default {
 	name: 'CollaborationView',
 	components: {
-		CollectionList: CollectionList
+		CollectionList: CollectionList,
 	},
 	computed: {
 		boardId() {
@@ -52,7 +49,7 @@ export default {
 				return '' + this.$root.model.title
 			}
 			return ''
-		}
-	}
+		},
+	},
 }
 </script>

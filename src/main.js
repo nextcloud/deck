@@ -39,8 +39,8 @@ sync(store, router)
 Vue.mixin({
 	methods: {
 		t: translate,
-		n: translatePlural
-	}
+		n: translatePlural,
+	},
 })
 
 Vue.directive('tooltip', Tooltip)
@@ -50,5 +50,5 @@ new Vue({
 	el: '#content',
 	router,
 	store,
-	render: h => h(App)
+	render: h => h(App),
 })

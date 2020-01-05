@@ -21,8 +21,8 @@
   -->
 <template>
 	<li id="deck-navigation-add"
-		:title="t('deck', 'Create new board')" :class="[{'icon-loading-small': loading, 'editing': editing}, classes]"
-	>
+		:title="t('deck', 'Create new board')"
+		:class="[{'icon-loading-small': loading, 'editing': editing}, classes]">
 		<a class="icon-add" href="#" @click.prevent.stop="startCreateBoard">
 			{{ t('deck', 'Create new board') }}
 		</a>
@@ -32,9 +32,10 @@
 			<form @submit.prevent.stop="createBoard">
 				<input :placeholder="t('deck', 'New board title')" type="text" required>
 				<input type="submit" value="" class="icon-confirm">
-				<input type="submit" value="" class="icon-close"
-					@click.stop.prevent="cancelEdit"
-				>
+				<input type="submit"
+					value=""
+					class="icon-close"
+					@click.stop.prevent="cancelEdit">
 			</form>
 			<ColorPicker v-model="color" />
 		</div>
@@ -53,7 +54,7 @@ export default {
 			classes: [],
 			editing: false,
 			loading: false,
-			color: '#000000'
+			color: '#000000',
 		}
 	},
 	computed: {},
@@ -67,15 +68,15 @@ export default {
 			const title = e.currentTarget.childNodes[0].value
 			this.$store.dispatch('createBoard', {
 				title: title,
-				color: this.color.substring(1)
+				color: this.color.substring(1),
 			})
 			this.editing = false
 		},
 		cancelEdit(e) {
 			this.editing = false
 			this.item.edit.reset(e)
-		}
-	}
+		},
+	},
 }
 </script>
 <style scoped>

@@ -39,25 +39,31 @@
 			<div id="stack-add">
 				<form @submit.prevent="clickAddNewStack()">
 					<label for="new-stack-input-main" class="hidden-visually">Add a new stack</label>
-					<input id="new-stack-input-main" v-model="newStackTitle" type="text"
+					<input id="new-stack-input-main"
+						v-model="newStackTitle"
+						type="text"
 						class="no-close"
-						placeholder="Add a new stack" required
-					>
-					<input v-tooltip="t('deck', 'clickAddNewStack')" class="icon-confirm" type="submit"
-						value=""
-					>
+						placeholder="Add a new stack"
+						required>
+					<input v-tooltip="t('deck', 'clickAddNewStack')"
+						class="icon-confirm"
+						type="submit"
+						value="">
 				</form>
 			</div>
 			<div class="board-action-buttons">
-				<button :style="archivStyle" title="Show archived cards" class="icon icon-archive"
-					@click="toggleShowArchived"
-				/>
-				<button :class="[(compactMode ? 'icon-toggle-compact-collapsed' : 'icon-toggle-compact-expanded')]" title="Toggle compact mode" class="icon"
-					@click="toggleCompactMode"
-				/>
-				<router-link v-tooltip="t('deck', 'Board settings')" :to="{name: 'board.details'}" class="icon-settings-dark"
-					tag="button"
-				/>
+				<button :style="archivStyle"
+					title="Show archived cards"
+					class="icon icon-archive"
+					@click="toggleShowArchived" />
+				<button :class="[(compactMode ? 'icon-toggle-compact-collapsed' : 'icon-toggle-compact-expanded')]"
+					title="Toggle compact mode"
+					class="icon"
+					@click="toggleCompactMode" />
+				<router-link v-tooltip="t('deck', 'Board settings')"
+					:to="{name: 'board.details'}"
+					class="icon-settings-dark"
+					tag="button" />
 			</div>
 		</div>
 	</div>
@@ -71,19 +77,19 @@ export default {
 		board: {
 			type: Object,
 			required: false,
-			default: null
-		}
+			default: null,
+		},
 	},
 	data() {
 		return {
 			newStackTitle: '',
 			stack: '',
-			showArchived: false
+			showArchived: false,
 		}
 	},
 	computed: {
 		...mapState({
-			compactMode: state => state.compactMode
+			compactMode: state => state.compactMode,
 		}),
 		archivStyle() {
 
@@ -91,7 +97,7 @@ export default {
 				return 'opacity: 1.0'
 			}
 			return 'opacity: 0.3'
-		}
+		},
 	},
 	methods: {
 		toggleNav() {
@@ -112,8 +118,8 @@ export default {
 			this.$store.dispatch('createStack', this.stack)
 			this.newStackTitle = ''
 			this.stack = null
-		}
-	}
+		},
+	},
 }
 </script>
 

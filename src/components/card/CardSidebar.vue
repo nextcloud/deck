@@ -21,12 +21,11 @@
   -->
 
 <template>
-	<app-sidebar v-if="currentCard !== null && copiedCard !== null"
+	<AppSidebar v-if="currentCard !== null && copiedCard !== null"
 		:actions="toolbarActions"
 		:title="currentCard.title"
 		:subtitle="subtitle"
-		@close="closeSidebar"
-	>
+		@close="closeSidebar">
 		<template #action />
 		<AppSidebarTab :order="0" name="Details" icon="icon-home">
 			<div class="section-wrapper">
@@ -34,10 +33,14 @@
 					<span class="hidden-visually">{{ t('deck', 'Tags') }}</span>
 				</div>
 				<div class="section-details">
-					<multiselect v-model="allLabels" :multiple="true" :options="currentBoard.labels"
-						:taggable="true" label="title"
-						track-by="id" @select="addLabelToCard" @remove="removeLabelFromCard"
-					>
+					<Multiselect v-model="allLabels"
+						:multiple="true"
+						:options="currentBoard.labels"
+						:taggable="true"
+						label="title"
+						track-by="id"
+						@select="addLabelToCard"
+						@remove="removeLabelFromCard">
 						<template #option="scope">
 							<div :style="{ backgroundColor: '#' + scope.option.color, color: textColor(scope.option.color)}" class="tag">
 								{{ scope.option.title }}
@@ -48,7 +51,7 @@
 								{{ scope.option.title }}
 							</div>
 						</template>
-					</multiselect>
+					</Multiselect>
 				</div>
 			</div>
 
@@ -57,16 +60,18 @@
 					<span class="hidden-visually">{{ t('deck', 'Assign to users') }}</span>
 				</div>
 				<div class="section-details">
-					<multiselect v-model="assignedUsers" :multiple="true" :options="assignableUsers"
+					<Multiselect v-model="assignedUsers"
+						:multiple="true"
+						:options="assignableUsers"
 						label="displayname"
 						track-by="primaryKey"
-						@select="assignUserToCard" @remove="removeUserFromCard"
-					>
+						@select="assignUserToCard"
+						@remove="removeUserFromCard">
 						<template #option="scope">
-							<avatar :user="scope.option.primaryKey" />
+							<Avatar :user="scope.option.primaryKey" />
 							<span class="avatarLabel">{{ scope.option.displayname }} </span>
 						</template>
-					</multiselect>
+					</Multiselect>
 				</div>
 			</div>
 
@@ -75,9 +80,12 @@
 					<span class="hidden-visually">{{ t('deck', 'Due date') }}</span>
 				</div>
 				<div class="section-details">
-					<DatetimePicker v-model="copiedCard.duedate" type="datetime" lang="en"
-						format="YYYY-MM-DD HH:mm" confirm @change="setDue()"
-					/>
+					<DatetimePicker v-model="copiedCard.duedate"
+						type="datetime"
+						lang="en"
+						format="YYYY-MM-DD HH:mm"
+						confirm
+						@change="setDue()" />
 					<Actions>
 						<ActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">
 							{{ t('deck', 'Remove due date') }}
@@ -87,9 +95,10 @@
 			</div>
 
 			<div class="section-wrapper">
-				<collection-list v-if="currentCard.id" :id="`${currentCard.id}`" :name="currentCard.title"
-					type="deck-card"
-				/>
+				<CollectionList v-if="currentCard.id"
+					:id="`${currentCard.id}`"
+					:name="currentCard.title"
+					type="deck-card" />
 			</div>
 
 			<h5>Description</h5>
@@ -103,14 +112,15 @@
 		</AppSidebarTab>
 		<AppSidebarTab :order="2" name="Timeline" icon="icon-activity">
 			<div v-if="isLoading" class="icon icon-loading" />
-			<ActivityEntry v-for="entry in cardActivity" v-else :key="entry.activity_id"
-				:activity="entry"
-			/>
+			<ActivityEntry v-for="entry in cardActivity"
+				v-else
+				:key="entry.activity_id"
+				:activity="entry" />
 			<button v-if="activityLoadMore" @click="loadMore">
 				Load More
 			</button>
 		</AppSidebarTab>
-	</app-sidebar>
+	</AppSidebar>
 </template>
 
 <script>
@@ -139,16 +149,16 @@ export default {
 		Actions,
 		ActionButton,
 		Avatar,
-		CollectionList
+		CollectionList,
 	},
 	mixins: [
-		Color
+		Color,
 	],
 	props: {
 		id: {
 			type: Number,
-			required: true
-		}
+			required: true,
+		},
 	},
 	data() {
 		return {
@@ -163,7 +173,7 @@ export default {
 				spellChecker: false,
 				autofocus: true,
 				autosave: { enabled: true, uniqueId: 'unique' },
-				toolbar: false
+				toolbar: false,
 			},
 			lastModifiedRelative: null,
 			lastCreatedRemative: null,
@@ -171,8 +181,8 @@ export default {
 				type: 'filter',
 				since: 0,
 				object_type: 'deck_card',
-				object_id: this.id
-			}
+				object_id: this.id,
+			},
 		}
 	},
 	computed: {
@@ -180,7 +190,7 @@ export default {
 			currentBoard: state => state.currentBoard,
 			assignableUsers: state => state.assignableUsers,
 			cardActivity: 'activity',
-			activityLoadMore: 'activityLoadMore'
+			activityLoadMore: 'activityLoadMore',
 		}),
 		currentCard() {
 			return this.$store.getters.cardById(this.id)
@@ -195,17 +205,17 @@ export default {
 
 					},
 					icon: 'icon-archive-dark',
-					text: t('deck', 'Assign to me')
+					text: t('deck', 'Assign to me'),
 				},
 				{
 					action: () => {
 
 					},
 					icon: 'icon-archive',
-					text: t('deck', (this.showArchived ? 'Unarchive card' : 'Archive card'))
-				}
+					text: t('deck', (this.showArchived ? 'Unarchive card' : 'Archive card')),
+				},
 			]
-		}
+		},
 	},
 	watch: {
 		'currentCard': {
@@ -223,12 +233,12 @@ export default {
 
 				this.params.object_id = this.id
 				this.loadCardActivity()
-			}
+			},
 		},
 
 		'copiedCard.description': function() {
 			this.saveDesc()
-		}
+		},
 	},
 	created() {
 		setInterval(this.updateRelativeTimestamps, 10000)
@@ -269,25 +279,25 @@ export default {
 
 		addLabelToCard(newLabel) {
 			this.copiedCard.labels.push(newLabel)
-			let data = {
+			const data = {
 				card: this.copiedCard,
-				labelId: newLabel.id
+				labelId: newLabel.id,
 			}
 			this.$store.dispatch('addLabel', data)
 		},
 
 		removeLabelFromCard(removedLabel) {
 
-			let removeIndex = this.copiedCard.labels.findIndex((label) => {
+			const removeIndex = this.copiedCard.labels.findIndex((label) => {
 				return label.id === removedLabel.id
 			})
 			if (removeIndex !== -1) {
 				this.copiedCard.labels.splice(removeIndex, 1)
 			}
 
-			let data = {
+			const data = {
 				card: this.copiedCard,
-				labelId: removedLabel.id
+				labelId: removedLabel.id,
 			}
 			this.$store.dispatch('removeLabel', data)
 		},
@@ -298,17 +308,17 @@ export default {
 			})
 		},
 		loadMore() {
-			let array = Object.values(this.cardActivity)
-			let aId = (array[array.length - 1].activity_id)
+			const array = Object.values(this.cardActivity)
+			const aId = (array[array.length - 1].activity_id)
 
 			this.params.since = aId
 			this.loadCardActivity()
 		},
 		clickAddNewAttachmment() {
 
-		}
+		},
 
-	}
+	},
 }
 </script>
 

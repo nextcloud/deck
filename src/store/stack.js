@@ -30,39 +30,39 @@ export default {
 	state: {
 		stacks: [],
 		deletedStacks: [],
-		deletedCards: []
+		deletedCards: [],
 	},
 	getters: {
 		stacksByBoard: state => (id) => {
 			return state.stacks.filter((stack) => stack.boardId === id).sort((a, b) => a.order - b.order)
-		}
+		},
 	},
 	mutations: {
 		addStack(state, stack) {
-			let existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
+			const existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
 			if (existingIndex !== -1) {
-				let existingStack = state.stacks.find(_stack => _stack.id === stack.id)
+				const existingStack = state.stacks.find(_stack => _stack.id === stack.id)
 				Vue.set(state.stacks, existingIndex, Object.assign({}, existingStack, stack))
 			} else {
 				state.stacks.push(stack)
 			}
 		},
 		orderStack(state, { stack, removedIndex, addedIndex }) {
-			let currentOrder = state.stacks.filter((_stack) => _stack.boardId === stack.boardId).sort((a, b) => a.order - b.order)
-			var newOrder = applyOrderToArray(currentOrder, removedIndex, addedIndex)
+			const currentOrder = state.stacks.filter((_stack) => _stack.boardId === stack.boardId).sort((a, b) => a.order - b.order)
+			const newOrder = applyOrderToArray(currentOrder, removedIndex, addedIndex)
 			for (let i = 0; i < newOrder.length; i++) {
 				newOrder[i].order = parseInt(i)
 			}
 		},
 		deleteStack(state, stack) {
 
-			let existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
+			const existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
 			if (existingIndex !== -1) {
 				state.stacks.splice(existingIndex, 1)
 			}
 		},
 		updateStack(state, stack) {
-			let existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
+			const existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
 			if (existingIndex !== -1) {
 				state.stacks[existingIndex].title = stack.title
 			}
@@ -76,7 +76,7 @@ export default {
 		setDeletedCards(state, delCards) {
 			state.deletedCards = []
 			state.deletedCards = delCards
-		}
+		},
 	},
 	actions: {
 		orderStack({ commit }, { stack, removedIndex, addedIndex }) {
@@ -96,9 +96,9 @@ export default {
 			}
 			apiClient[call](boardId)
 				.then((stacks) => {
-					for (let i in stacks) {
-						let stack = stacks[i]
-						for (let j in stack.cards) {
+					for (const i in stacks) {
+						const stack = stacks[i]
+						for (const j in stack.cards) {
 							commit('addCard', stack.cards[j])
 						}
 						delete stack.cards
@@ -140,7 +140,7 @@ export default {
 				.then((stack) => {
 					commit('addStack', stack)
 				})
-		}
+		},
 
-	}
+	},
 }

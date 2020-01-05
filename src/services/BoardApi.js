@@ -36,7 +36,7 @@ export class BoardApi {
 	 * Updates a board.
 	 *
 	 * @param {Board} board
-	 * @return Promise
+	 * @returns Promise
 	 */
 	updateBoard(board) {
 		return axios.put(this.url(`/boards/${board.id}`), board)
@@ -57,7 +57,7 @@ export class BoardApi {
 	 * Creates a new board.
 	 *
 	 * @param {{String title, String color}} boardData The board data to send.
-	 * 										 color the hexadecimal color value formated /[0-9A-F]{6}/i
+	 *   color the hexadecimal color value formated /[0-9A-F]{6}/i
 	 * @return Promise
 	 */
 	createBoard(boardData) {
@@ -137,7 +137,7 @@ export class BoardApi {
 
 	async cloneBoard(board) {
 		try {
-			let response = await axios.post(this.url(`/boards/${board.id}/clone`))
+			const response = await axios.post(this.url(`/boards/${board.id}/clone`))
 			return response.data
 		} catch (err) {
 			return err

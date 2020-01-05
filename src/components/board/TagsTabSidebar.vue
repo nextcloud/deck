@@ -5,12 +5,15 @@
 				<template v-if="editingLabelId === label.id">
 					<form class="label-form" @submit.prevent="updateLabel(label)">
 						<input v-model="editingLabel.title" type="text">
-						<input v-tooltip="{content: missingDataLabel, show: !editLabelObjValidated, trigger: 'manual' }" :disabled="!editLabelObjValidated" type="submit"
-							value="" class="icon-confirm"
-						>
-						<input v-tooltip="t('deck', 'Cancel')" value=""
-							class="icon-close" @click="editingLabelId = null"
-						>
+						<input v-tooltip="{content: missingDataLabel, show: !editLabelObjValidated, trigger: 'manual' }"
+							:disabled="!editLabelObjValidated"
+							type="submit"
+							value=""
+							class="icon-confirm">
+						<input v-tooltip="t('deck', 'Cancel')"
+							value=""
+							class="icon-close"
+							@click="editingLabelId = null">
 					</form>
 					<ColorPicker :value="'#' + editingLabel.color" @input="updateColor" />
 				</template>
@@ -27,13 +30,15 @@
 				<template>
 					<form class="label-form" @submit.prevent="clickAddLabel">
 						<input v-model="addLabelObj.title" type="text">
-						<input v-tooltip="{content: missingDataLabel, show: !addLabelObjValidated, trigger: 'manual' }" :disabled="!addLabelObjValidated"
+						<input v-tooltip="{content: missingDataLabel, show: !addLabelObjValidated, trigger: 'manual' }"
+							:disabled="!addLabelObjValidated"
 							type="submit"
-							value="" class="icon-confirm"
-						>
-						<input v-tooltip="t('deck', 'Cancel')" value=""
-							class="icon-close" @click="addLabel=false"
-						>
+							value=""
+							class="icon-confirm">
+						<input v-tooltip="t('deck', 'Cancel')"
+							value=""
+							class="icon-close"
+							@click="addLabel=false">
 					</form>
 					<ColorPicker :value="'#' + addLabelObj.color" @input="updateColor" />
 				</template>
@@ -54,7 +59,7 @@ import ColorPicker from '../ColorPicker'
 export default {
 	name: 'TagsTabSidebar',
 	components: {
-		ColorPicker
+		ColorPicker,
 	},
 	mixins: [Color],
 	data() {
@@ -64,12 +69,12 @@ export default {
 			addLabelObj: null,
 			addLabel: false,
 			missingDataLabel: t('deck', 'title and color value must be provided'),
-			defaultColors: ['#31CC7C', '#317CCC', '#FF7A66', '#F1DB50', '#7C31CC', '#CC317C', '#3A3B3D', '#CACBCD']
+			defaultColors: ['#31CC7C', '#317CCC', '#FF7A66', '#F1DB50', '#7C31CC', '#CC317C', '#3A3B3D', '#CACBCD'],
 		}
 	},
 	computed: {
 		...mapGetters({
-			labels: 'currentBoardLabels'
+			labels: 'currentBoardLabels',
 		}),
 		addLabelObjValidated() {
 			if (this.addLabelObj.title === '') {
@@ -92,7 +97,7 @@ export default {
 			}
 
 			return true
-		}
+		},
 
 	},
 	methods: {
@@ -122,8 +127,8 @@ export default {
 			this.$store.dispatch('addLabelToCurrentBoard', this.addLabelObj)
 			this.addLabel = false
 			this.addLabelObj = null
-		}
-	}
+		},
+	},
 }
 </script>
 <style scoped lang="scss">

@@ -34,7 +34,7 @@
 
 		<div v-if="card.attachments" class="card-files icon icon-files-dark" />
 
-		<avatar-list :users="card.assignedUsers" />
+		<AvatarList :users="card.assignedUsers" />
 	</div>
 </template>
 <script>
@@ -46,13 +46,13 @@ export default {
 	props: {
 		id: {
 			type: Number,
-			default: null
-		}
+			default: null,
+		},
 	},
 	data() {
 		return {
 			dueTime: null,
-			dueIcon: null
+			dueIcon: null,
 		}
 	},
 	computed: {
@@ -67,7 +67,7 @@ export default {
 		},
 		card() {
 			return this.$store.getters.cardById(this.id)
-		}
+		},
 	},
 	created() {
 		this.updateDueTime()
@@ -88,7 +88,7 @@ export default {
 
 			this.dueTime = OC.Util.relativeModifiedDate(this.card.duedate)
 
-			let timeInHours = Math.round((Date.parse(this.card.duedate) - Date.now()) / 1000 / 60 / 60 / 24)
+			const timeInHours = Math.round((Date.parse(this.card.duedate) - Date.now()) / 1000 / 60 / 60 / 24)
 			if (timeInHours >= 1) {
 				this.dueIcon = 'icon-calendar-dark due icon next'
 			}
@@ -98,8 +98,8 @@ export default {
 			if (timeInHours < 0) {
 				this.dueIcon = 'icon-calendar due icon overdue'
 			}
-		}
-	}
+		},
+	},
 }
 </script>
 

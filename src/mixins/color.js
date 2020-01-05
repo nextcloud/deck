@@ -23,12 +23,12 @@
 export default {
 	methods: {
 		hexToRgb(hex) {
-			let result = /^#?([A-Fa-f\d]{2})([A-Fa-f\d]{2})([A-Fa-f\d]{2})$/i.exec(hex)
+			const result = /^#?([A-Fa-f\d]{2})([A-Fa-f\d]{2})([A-Fa-f\d]{2})$/i.exec(hex)
 			if (result) {
 				return {
 					r: parseInt(result[1], 16),
 					g: parseInt(result[2], 16),
-					b: parseInt(result[3], 16)
+					b: parseInt(result[3], 16),
 				}
 			}
 			return null
@@ -39,11 +39,11 @@ export default {
 			const r = rgb.r / 255
 			const g = rgb.g / 255
 			const b = rgb.b / 255
-			let max = Math.max(r, g, b)
-			let min = Math.min(r, g, b)
+			const max = Math.max(r, g, b)
+			const min = Math.min(r, g, b)
 			let h
 			let s
-			let l = (max + min) / 2
+			const l = (max + min) / 2
 
 			if (max === min) {
 				h = s = 0 // achromatic
@@ -64,12 +64,12 @@ export default {
 				h /= 6
 			}
 			return {
-				h, l, s
+				h, l, s,
 			}
 		},
 		textColor(hex) {
 
-			let rgb = this.hexToRgb(hex)
+			const rgb = this.hexToRgb(hex)
 			if (rgb === null) {
 				return '#000000'
 			}
@@ -84,13 +84,13 @@ export default {
 		},
 		colorIsValid(hex) {
 
-			var re = new RegExp('[A-Fa-f0-9]{6}')
+			const re = new RegExp('[A-Fa-f0-9]{6}')
 			if (re.test(hex)) {
 				return true
 			}
 			return false
 
-		}
+		},
 
-	}
+	},
 }
