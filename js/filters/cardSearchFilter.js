@@ -31,7 +31,8 @@ app.filter('cardSearchFilter', function() {
 		angular.forEach(cards, function(card){
 			var _card = card;
 			Object.keys(rules).some(function(rule) {
-				if(_card[rule].search(new RegExp(rules[rule], "i"))>=0) {
+				var pattern = rules[rule];
+				if(_card[rule].search(new RegExp(pattern, 'i'))>=0) {
 					_result[_card.id] = _card;
 				}
 			});
