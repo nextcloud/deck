@@ -32,6 +32,7 @@ app.filter('cardSearchFilter', function() {
 			var _card = card;
 			Object.keys(rules).some(function(rule) {
 				var pattern = rules[rule];
+				// eslint-disable-next-line detect-non-literal-regexp
 				if(_card[rule].search(new RegExp(pattern, 'i'))>=0) {
 					_result[_card.id] = _card;
 				}
