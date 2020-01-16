@@ -25,6 +25,7 @@ OC.L10N.register(
     "Share" : "هم‌رسانی",
     "Create" : "ایجاد کردن",
     "Title" : "عنوان",
+    "More actions" : "اقدامات بیشتر",
     "Edit board" : "ویرایش تخته ها",
     "Archive board" : " بایگانی تابلو",
     "Delete board" : "حذف تابلو",
