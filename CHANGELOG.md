@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.8.0 - 2020-01-16
+
+## Added
+- Case insensitive search (@matchish)
+
+## Fixed
+- Fix reversed permissions for reordering stacks (@JLueke)
+- Fix reversed visibility of 'add stack' field (@JLueke)
+- Fix occ export command
+- Fix error causing cron execution to fail
+- Fix activity entry on moving cards
+- Proper wording in activity timeline (@a11exandru)
+
 ## 0.7.0 - 2019-08-20
 
 ## Added
