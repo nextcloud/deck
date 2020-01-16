@@ -103,33 +103,24 @@ class AssignedUsersMapperTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @covers ::__construct
-	 */
-	public function testConstructor() {
-		//$this->assertAttributeInstanceOf(IDBConnection::class, 'db', $this->assignedUsersMapper);
-		//$this->assertAttributeEquals(AssignedUsers::class, 'entityClass', $this->assignedUsersMapper);
-		//$this->assertAttributeEquals('*PREFIX*deck_assigned_users', 'tableName', $this->assignedUsersMapper);
-	}
-
-	/**
 	 * @covers ::find
 	 */
 	public function testFind() {
 		$uids = [];
 		$this->cardService->assignUser($this->cards[0]->getId(), self::TEST_USER1);
-		$this->cardService->assignUser($this->cards[0]->getId(), self::TEST_USER4);
+		$this->cardService->assignUser($this->cards[0]->getId(), self::TEST_USER2);
 
 		$assignedUsers = $this->assignedUsersMapper->find($this->cards[0]->getId());
 		foreach ($assignedUsers as $user) {
 			$uids[$user->getParticipant()] = $user;
 		}
 		$this->assertArrayHasKey(self::TEST_USER1, $uids);
-		$this->assertArrayNotHasKey(self::TEST_USER2, $uids);
+		$this->assertArrayHasKey(self::TEST_USER2, $uids);
 		$this->assertArrayNotHasKey(self::TEST_USER3, $uids);
-		$this->assertArrayHasKey(self::TEST_USER4, $uids);
+		$this->assertArrayNotHasKey(self::TEST_USER4, $uids);
 
 		$this->cardService->unassignUser($this->cards[0]->getId(), self::TEST_USER1);
-		$this->cardService->unassignUser($this->cards[0]->getId(), self::TEST_USER4);
+		$this->cardService->unassignUser($this->cards[0]->getId(), self::TEST_USER2);
 	}
 
 	/**

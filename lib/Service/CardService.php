@@ -588,10 +588,17 @@ class CardService {
 		$assignments = $this->assignedUsersMapper->find($cardId);
 		foreach ($assignments as $assignment) {
 			if ($assignment->getParticipant() === $userId) {
-				return false;
+				throw new BadRequestException('The user is already assigned to the card');
 			}
 		}
+
 		$card = $this->cardMapper->find($cardId);
+		$boardId = $this->cardMapper->findBoardId($cardId);
+		$boardUsers = array_keys($this->permissionService->findUsers($boardId, true));
+		if (!in_array($userId, $boardUsers)) {
+			throw new BadRequestException('The user is not part of the board');
+		}
+
 
 		if ($userId !== $this->currentUser) {
 			/* Notifyuser about the card assignment */
