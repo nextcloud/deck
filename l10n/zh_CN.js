@@ -138,7 +138,7 @@ OC.L10N.register(
     "Group" : "分组",
     "Circle" : "圈子",
     "No matching user or group found." : "未找到匹配的用户或组。",
-    "Loading" : "加载中",
+    "Loading" : "正在加载",
     "Edit" : "编辑",
     "Share" : "共享",
     "Manage" : "管理",
