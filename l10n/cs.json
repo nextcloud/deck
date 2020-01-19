@@ -74,7 +74,7 @@
     "{user} has commented on card {card}" : "{user} přidal(a) komentář na kartě {card}",
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Popis karty</strong> v Deck-aplikace byl změněn",
     "Deck" : "Balík",
-    "Changes in the <strong>Deck app</strong>" : "Změny v <strong>Deck aplikace</strong>",
+    "Changes in the <strong>Deck app</strong>" : "Změny v <strong>aplikaci Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "Na kartě byl vytvořen <strong>komentář</strong>",
     "Personal" : "Osobní",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Kartu „%s“ na „%s“ vám přiřadil(a) %s.",
