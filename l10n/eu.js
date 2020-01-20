@@ -197,6 +197,7 @@ OC.L10N.register(
     "Move board to archive" : "Artxibatu txartela",
     "Create a new board" : "Sortu taula berri bat",
     "Settings" : "Ezarpenak",
-    "Limit deck to groups" : "Mugatu deck-a taldeei"
+    "Limit deck to groups" : "Mugatu deck-a taldeei",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Deck mugatzeak taldeetako kide ez diren erabiltzaileei bere arbel propioak sortzea eragotziko die. Erabiltzaileek beraiekin partekatu diren arbeletan lan egin ahalko dute."
 },
 "nplurals=2; plural=(n != 1);");
