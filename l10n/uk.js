@@ -19,6 +19,7 @@ OC.L10N.register(
     "Hide archived cards" : "Приховати архівні картки",
     "All Boards" : "Всі дошки",
     "Archived boards" : "Архівовані дошки",
+    "Share board" : "Поширити дошку",
     "Actions" : "Дії",
     "Assign card to me" : "Прив'язати картку до мене",
     "Unassign card from me" : "Відв'язати картку від мене",
