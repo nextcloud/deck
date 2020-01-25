@@ -28,6 +28,7 @@ import axios from 'nextcloud-axios'
 import { BoardApi } from './../services/BoardApi'
 import stack from './stack'
 import card from './card'
+import comment from './comment'
 
 Vue.use(Vuex)
 
@@ -44,6 +45,7 @@ export default new Vuex.Store({
 	modules: {
 		stack,
 		card,
+		comment,
 	},
 	strict: debug,
 	state: {
@@ -92,7 +94,7 @@ export default new Vuex.Store({
 			return boards
 		},
 		currentBoardLabels: state => {
-			return state.currentBoard.labels
+			return state.currentBoard ? state.currentBoard.labels : []
 		},
 	},
 	mutations: {
