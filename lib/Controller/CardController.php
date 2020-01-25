@@ -55,7 +55,7 @@ class CardController extends Controller {
 	 * @return array
 	 */
 	public function reorder($cardId, $stackId, $order) {
-		return $this->cardService->reorder($cardId, $stackId, $order);
+		return $this->cardService->reorder((int)$cardId, (int)$stackId, (int)$order);
 	}
 
 	/**
@@ -76,7 +76,7 @@ class CardController extends Controller {
 	 * @param int $order
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function create($title, $stackId, $type, $order = 999) {
+	public function create($title, $stackId, $type = 'plain', $order = 999) {
 		return $this->cardService->create($title, $stackId, $type, $order, $this->userId);
 	}
 

@@ -221,24 +221,27 @@ class CardServiceTest extends TestCase {
 		$this->cardService->rename(123, 'newtitle');
 	}
 
-	public function dataReorder() {
-		return [
-			[0, 0, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]],
-			[0, 9, [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]],
-			[1, 3, [0, 2, 3, 1, 4, 5, 6, 7, 8, 9]]
-		];
-	}
-	/** @dataProvider dataReorder */
-	public function testReorder($cardId, $newPosition, $order) {
-		$cards = $this->getCards();
-		$cardsTmp = [];
-		$this->cardMapper->expects($this->at(0))->method('findAll')->willReturn($cards);
-		$result = $this->cardService->reorder($cardId, 123, $newPosition);
-		foreach ($result as $card) {
-			$actual[$card->getOrder()] = $card->getId();
-		}
-		$this->assertEquals($order, $actual);
-	}
+    public function dataReorder() {
+        return [
+            [0, 0, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]],
+            [0, 9, [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]],
+            [1, 3, [0, 2, 3, 1, 4, 5, 6, 7, 8, 9]]
+        ];
+    }
+    /** @dataProvider dataReorder */
+    public function testReorder($cardId, $newPosition, $order) {
+        $cards = $this->getCards();
+        $cardsTmp = [];
+        $this->cardMapper->expects($this->once())->method('findAll')->willReturn($cards);
+        $card = new Card();
+        $card->setStackId(123);
+		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
+        $result = $this->cardService->reorder($cardId, 123, $newPosition);
+        foreach ($result as $card) {
+            $actual[$card->getOrder()] = $card->getId();
+        }
+        $this->assertEquals($order, $actual);
+    }
 
 	private function getCards() {
 		$cards = [];
@@ -251,34 +254,35 @@ class CardServiceTest extends TestCase {
 		return $cards;
 	}
 
-	public function testReorderArchived() {
-		$card = new Card();
-		$card->setTitle('title');
-		$card->setArchived(true);
-		$this->cardMapper->expects($this->once())->method('findAll')->willReturn([$card]);
-		$this->cardMapper->expects($this->never())->method('update')->willReturnCallback(function($c) { return $c; });
-		$this->expectException(StatusException::class);
-		$actual = $this->cardService->reorder(123, 234, 1);
-	}
-	public function testArchive() {
-		$card = new Card();
-		$this->assertFalse($card->getArchived());
+    public function testReorderArchived() {
+        $card = new Card();
+        $card->setTitle('title');
+        $card->setArchived(true);
+		$card->setStackId(123);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
-		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function($c) {
-			return $c;
-		});
-		$this->assertTrue($this->cardService->archive(123)->getArchived());
-	}
-	public function testUnarchive() {
-		$card = new Card();
-		$card->setArchived(true);
-		$this->assertTrue($card->getArchived());
-		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
-		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function($c) {
-			return $c;
-		});
-		$this->assertFalse($this->cardService->unarchive(123)->getArchived());
-	}
+        $this->cardMapper->expects($this->never())->method('update')->willReturnCallback(function($c) { return $c; });
+        $this->expectException(StatusException::class);
+        $actual = $this->cardService->reorder(123, 234, 1);
+    }
+    public function testArchive() {
+        $card = new Card();
+        $this->assertFalse($card->getArchived());
+        $this->cardMapper->expects($this->once())->method('find')->willReturn($card);
+        $this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function($c) {
+            return $c;
+        });
+        $this->assertTrue($this->cardService->archive(123)->getArchived());
+    }
+    public function testUnarchive() {
+        $card = new Card();
+        $card->setArchived(true);
+        $this->assertTrue($card->getArchived());
+        $this->cardMapper->expects($this->once())->method('find')->willReturn($card);
+        $this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function($c) {
+            return $c;
+        });
+        $this->assertFalse($this->cardService->unarchive(123)->getArchived());
+    }
 
 	public function testAssignLabel() {
 		$card = new Card();

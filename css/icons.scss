@@ -5,16 +5,16 @@
   background-image: url('../img/deck-dark.svg');
 }
 
-.icon-group {
-  background-image: url('../../../settings/img/users.svg');
-}
-
 .icon-help {
   background-image: url('../../../settings/img/help.svg');
 }
 
 .icon-add-white {
   background-image: url('../img/add-white.svg');
+}
+
+.icon-attach {
+  background-image: url('../img/attach.svg');
 }
 
 .icon-archive {
@@ -53,11 +53,14 @@
   background-image: url('../img/toggle-view-collapse.svg');
 }
 
+
 @if mixin-exists('icon-black-white') {
-	@include icon-black-white('deck', 'deck', 1);
-	@include icon-black-white('archive', 'deck', 1);
-	@include icon-black-white('circles', 'deck', 1);
-	
+  @include icon-black-white('deck', 'deck', 1);
+  @include icon-black-white('archive', 'deck', 1);
+  @include icon-black-white('circles', 'deck', 1);
+  @include icon-black-white('clone', 'deck', 1);
+  @include icon-black-white('attach', 'deck', 1);
+
 	.icon-toggle-compact-collapsed {
 		@include icon-color('toggle-view-expand', 'deck', $color-black);
 	}
@@ -77,4 +80,7 @@
   opacity: 1;
   background-size: 20px;
   background-position: center center;
+}
+.icon-colorpicker {
+	background-image: url('../img/color_picker.svg');
 }
