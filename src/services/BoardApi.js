@@ -20,7 +20,7 @@
  *
  */
 
-import axios from 'nextcloud-axios'
+import axios from '@nextcloud/axios'
 
 /**
  * This class handles all the api communication with the Deck backend.

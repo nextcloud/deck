@@ -20,7 +20,7 @@
  *
  */
 
-import axios from 'nextcloud-axios'
+import axios from '@nextcloud/axios'
 import { getCurrentUser } from '@nextcloud/auth'
 
 export class CommentApi {

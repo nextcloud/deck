@@ -124,17 +124,20 @@ export default {
 
 			// do not show actions while the item is loading
 			if (this.loading === false) {
+				const canManage = this.board.permissions.PERMISSION_MANAGE
 
-				actions.push({
-					action: () => {
-						this.hideMenu()
-						this.editTitle = this.board.title
-						this.editColor = '#' + this.board.color
-						this.editing = true
-					},
-					icon: 'icon-rename',
-					text: t('deck', 'Edit board'),
-				})
+				if (canManage) {
+					actions.push({
+						action: () => {
+							this.hideMenu()
+							this.editTitle = this.board.title
+							this.editColor = '#' + this.board.color
+							this.editing = true
+						},
+						icon: 'icon-rename',
+						text: t('deck', 'Edit board'),
+					})
+				}
 
 				actions.push({
 					action: async() => {
@@ -154,45 +157,46 @@ export default {
 					icon: 'icon-clone',
 					text: t('deck', 'Clone board'),
 				})
+				if (canManage) {
+					if (!this.board.archived) {
+						actions.push({
+							action: () => {
+								this.hideMenu()
+								this.loading = true
+								this.$store.dispatch('archiveBoard', this.board)
+							},
+							icon: 'icon-archive',
+							text: t('deck', 'Archive board'),
+						})
+					} else {
+						actions.push({
+							action: () => {
+								this.hideMenu()
+								this.loading = true
+								this.$store.dispatch('unarchiveBoard', this.board)
+							},
+							icon: 'icon-archive',
+							text: t('deck', 'Unarchive board'),
+						})
+					}
 
-				if (!this.board.archived) {
 					actions.push({
 						action: () => {
 							this.hideMenu()
 							this.loading = true
-							this.$store.dispatch('archiveBoard', this.board)
+							this.boardApi.deleteBoard(this.board)
+								.then(() => {
+									this.loading = false
+									this.deleted = true
+									this.undoTimeoutHandle = setTimeout(() => {
+										this.$store.dispatch('removeBoard', this.board)
+									}, 7000)
+								})
 						},
-						icon: 'icon-archive',
-						text: t('deck', 'Archive board'),
-					})
-				} else {
-					actions.push({
-						action: () => {
-							this.hideMenu()
-							this.loading = true
-							this.$store.dispatch('unarchiveBoard', this.board)
-						},
-						icon: 'icon-archive',
-						text: t('deck', 'Unarchive board'),
+						icon: 'icon-delete',
+						text: t('deck', 'Delete board'),
 					})
 				}
-
-				actions.push({
-					action: () => {
-						this.hideMenu()
-						this.loading = true
-						this.boardApi.deleteBoard(this.board)
-							.then(() => {
-								this.loading = false
-								this.deleted = true
-								this.undoTimeoutHandle = setTimeout(() => {
-									this.$store.dispatch('removeBoard', this.board)
-								}, 7000)
-							})
-					},
-					icon: 'icon-delete',
-					text: t('deck', 'Delete board'),
-				})
 
 				actions.push({
 					action: () => {

@@ -29,7 +29,10 @@
 			<p />
 		</div>
 		<div v-else-if="board" class="board">
-			<Container lock-axix="y" orientation="horizontal" @drop="onDropStack">
+			<Container lock-axix="y"
+				orientation="horizontal"
+				:drag-handle-selector="dragHandleSelector"
+				@drop="onDropStack">
 				<Draggable v-for="stack in stacksByBoard" :key="stack.id">
 					<Stack :stack="stack" />
 				</Draggable>
@@ -46,7 +49,7 @@
 <script>
 
 import { Container, Draggable } from 'vue-smooth-dnd'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import Controls from '../Controls'
 import Stack from './Stack'
 
@@ -77,8 +80,14 @@ export default {
 			board: state => state.currentBoard,
 			showArchived: state => state.showArchived,
 		}),
+		...mapGetters([
+			'canEdit',
+		]),
 		stacksByBoard() {
 			return this.$store.getters.stacksByBoard(this.board.id)
+		},
+		dragHandleSelector() {
+			return this.canEdit ? null : '.no-drag'
 		},
 	},
 	watch: {

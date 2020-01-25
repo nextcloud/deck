@@ -75,7 +75,7 @@
 </style>
 <script>
 import { Modal } from '@nextcloud/vue/dist/Components/Modal'
-import axios from 'nextcloud-axios'
+import axios from '@nextcloud/axios'
 
 export default {
 	name: 'BoardSelector',

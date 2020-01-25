@@ -30,7 +30,7 @@
 		class="card"
 		@click.self="openCard">
 		<div class="card-upper">
-			<h3 v-if="showArchived">
+			<h3 v-if="showArchived || !canEdit">
 				{{ card.title }}
 			</h3>
 			<h3 v-else-if="!editing" @click.stop="startEditing(card)">
@@ -47,7 +47,7 @@
 				<input type="button" class="icon-confirm" @click="finishedEdit(card)">
 			</form>
 
-			<Actions v-if="!editing" @click.stop.prevent>
+			<Actions v-if="canEdit && !editing" @click.stop.prevent>
 				<ActionButton v-if="showArchived === false" icon="icon-user" @click="assignCardToMe()">
 					{{ t('deck', 'Assign to me') }}
 				</ActionButton>
@@ -103,8 +103,8 @@ import { Actions } from '@nextcloud/vue/dist/Components/Actions'
 import { ActionButton } from '@nextcloud/vue/dist/Components/ActionButton'
 import { Multiselect } from '@nextcloud/vue/dist/Components/Multiselect'
 import ClickOutside from 'vue-click-outside'
-import { mapState } from 'vuex'
-import axios from 'nextcloud-axios'
+import { mapState, mapGetters } from 'vuex'
+import axios from '@nextcloud/axios'
 
 import CardBadges from './CardBadges'
 import Color from '../../mixins/color'
@@ -139,6 +139,9 @@ export default {
 			showArchived: state => state.showArchived,
 			currentBoard: state => state.currentBoard,
 		}),
+		...mapGetters([
+			'canEdit',
+		]),
 		card() {
 			return this.$store.getters.cardById(this.id)
 		},

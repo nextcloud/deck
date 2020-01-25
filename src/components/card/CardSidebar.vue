@@ -34,6 +34,7 @@
 				<div class="section-details">
 					<Multiselect v-model="allLabels"
 						:multiple="true"
+						:disabled="!canEdit"
 						:options="currentBoard.labels"
 						:placeholder="t('deck', 'Assign a tag to this card…')"
 						:taggable="true"
@@ -61,6 +62,7 @@
 				</div>
 				<div class="section-details">
 					<Multiselect v-model="assignedUsers"
+						:disabled="!canEdit"
 						:multiple="true"
 						:options="assignableUsers"
 						:placeholder="t('deck', 'Assign a user to this card…')"
@@ -85,10 +87,11 @@
 						:placeholder="t('deck', 'Set a due date')"
 						type="datetime"
 						lang="en"
+						:disabled="!canEdit"
 						format="YYYY-MM-DD HH:mm"
 						confirm
 						@change="setDue()" />
-					<Actions>
+					<Actions v-if="canEdit">
 						<ActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">
 							{{ t('deck', 'Remove due date') }}
 						</ActionButton>
@@ -104,6 +107,7 @@
 			</div>
 
 			<h5>{{ t('deck', 'Description') }}</h5>
+			<!-- FIXME: make sure the editor is disabled when canEdit is false -->
 			<VueEasymde ref="markdownEditor" v-model="copiedCard.description" :configs="mdeConfig" />
 		</AppSidebarTab>
 
@@ -127,7 +131,7 @@ import { Multiselect } from '@nextcloud/vue/dist/Components/Multiselect'
 import { AppSidebar } from '@nextcloud/vue/dist/Components/AppSidebar'
 import { AppSidebarTab } from '@nextcloud/vue/dist/Components/AppSidebarTab'
 import { DatetimePicker } from '@nextcloud/vue/dist/Components/DatetimePicker'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import VueEasymde from 'vue-easymde/dist/VueEasyMDE.common'
 import { Actions } from '@nextcloud/vue/dist/Components/Actions'
 import { ActionButton } from '@nextcloud/vue/dist/Components/ActionButton'
@@ -186,6 +190,7 @@ export default {
 			currentBoard: state => state.currentBoard,
 			assignableUsers: state => state.assignableUsers,
 		}),
+		...mapGetters(['canEdit']),
 		currentCard() {
 			return this.$store.getters.cardById(this.id)
 		},

@@ -12,30 +12,30 @@ sign_dir=$(build_dir)/sign
 cert_dir=$(HOME)/.nextcloud/certificates
 
 
-default: package 
+default: build
 
 clean-build:
 	rm -rf $(build_dir)
 
 clean-dist:
-	rm -rf js/node_modules
+	rm -rf node_modules/
 
 install-deps: install-deps-js
 	composer install
 
 install-deps-js:
-	cd js && npm install
+	npm ci
 
-build: install-deps build-js
+build: clean-dist install-deps build-js
 
 build-js: install-deps-js
-	cd js && npm run build 
+	npm run build
 
 build-js-dev: install-deps
-	cd js && npm run dev
+	npm run dev
 
 watch:
-	cd js && npm run watch
+	npm run watch
 
 # appstore: clean install-deps
 appstore: clean-build build
@@ -96,7 +96,7 @@ test-integration:
 	cd tests/integration && ./run.sh
 
 test-js: install-deps
-	cd js && run test
+	npm run test
 
 package:
 	krankerl package
