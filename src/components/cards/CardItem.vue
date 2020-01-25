@@ -104,7 +104,7 @@ import { ActionButton } from '@nextcloud/vue/dist/Components/ActionButton'
 import { Multiselect } from '@nextcloud/vue/dist/Components/Multiselect'
 import ClickOutside from 'vue-click-outside'
 import { mapState } from 'vuex'
-import axios from 'nextcloud-axios'
+import axios from '@nextcloud/axios'
 
 import CardBadges from './CardBadges'
 import Color from '../../mixins/color'

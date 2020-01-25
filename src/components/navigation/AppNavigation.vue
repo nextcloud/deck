@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import axios from 'nextcloud-axios'
+import axios from '@nextcloud/axios'
 import { mapGetters } from 'vuex'
 import ClickOutside from 'vue-click-outside'
 import { Multiselect } from '@nextcloud/vue/dist/Components/Multiselect'
