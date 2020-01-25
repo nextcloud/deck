@@ -36,7 +36,7 @@
 			</div>
 		</div>
 
-		<ul id="commentsFeed" v-if="comments[card.id] && comments[card.id].length > 0">
+		<ul v-if="comments[card.id] && comments[card.id].length > 0" id="commentsFeed">
 			<CommentItem v-for="comment in comments[card.id]"
 				:key="comment.id"
 				:comment="comment"
@@ -46,8 +46,8 @@
 			</a>
 		</ul>
 		<div v-else-if="isLoading" class="icon icon-loading" />
-		<div class="emptycontent" v-else>
-			<div class="icon-comment"></div>
+		<div v-else class="emptycontent">
+			<div class="icon-comment" />
 			<p>Keine Kommentare bisher. Beginne die Diskussion!</p>
 		</div>
 	</div>
@@ -64,7 +64,7 @@ import { Avatar } from '@nextcloud/vue'
 import CommentItem from './CommentItem'
 
 export default {
-	name: 'CommentsTabSidebar',
+	name: 'CardSidebarTabComments',
 	components: {
 		Avatar,
 		CommentItem,

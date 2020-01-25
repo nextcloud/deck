@@ -21,12 +21,11 @@
   -->
 
 <template>
-	<AppSidebar v-if="currentCard !== null && currentBoard && copiedCard !== null"
-		:actions="toolbarActions"
+	<AppSidebar v-if="currentBoard && currentCard && copiedCard"
 		:title="currentCard.title"
 		:subtitle="subtitle"
 		@close="closeSidebar">
-		<template #action />
+		<template #secondary-actions />
 		<AppSidebarTab :order="0" name="Details" icon="icon-home">
 			<div class="section-wrapper">
 				<div v-tooltip="t('deck', 'Tags')" class="section-label icon-tag">
@@ -104,29 +103,20 @@
 					type="deck-card" />
 			</div>
 
-			<h5>Description</h5>
+			<h5>{{ t('deck', 'Description') }}</h5>
 			<VueEasymde ref="markdownEditor" v-model="copiedCard.description" :configs="mdeConfig" />
 		</AppSidebarTab>
-		<AppSidebarTab :order="1" name="Attachments" icon="icon-attach">
-			{{ currentCard.attachments }}
-			<button class="icon-upload" @click="clickAddNewAttachmment()">
-				{{ t('deck', 'Upload attachment') }}
-			</button>
+
+		<AppSidebarTab :order="1" :name="t('deck', 'Attachments')" icon="icon-attach">
+			<CardSidebarTabAttachments :card="currentCard" />
 		</AppSidebarTab>
 
-		<AppSidebarTab :order="2" name="Comments" icon="icon-comment">
-			<CommentsTabSidebar :card="currentCard" />
+		<AppSidebarTab :order="2" :name="t('deck', 'Comments')" icon="icon-comment">
+			<CardSidebarTabComments :card="currentCard" />
 		</AppSidebarTab>
 
-		<AppSidebarTab :order="3" name="Timeline" icon="icon-activity">
-			<div v-if="isLoading" class="icon icon-loading" />
-			<ActivityEntry v-for="entry in cardActivity"
-				v-else
-				:key="entry.activity_id"
-				:activity="entry" />
-			<button v-if="activityLoadMore" @click="loadMore">
-				Load More
-			</button>
+		<AppSidebarTab :order="3" :name="t('deck', 'Timeline')" icon="icon-activity">
+			<CardSidebarTabActivity :card="currentCard" />
 		</AppSidebarTab>
 	</AppSidebar>
 </template>
@@ -141,15 +131,16 @@ import { mapState } from 'vuex'
 import VueEasymde from 'vue-easymde/dist/VueEasyMDE.common'
 import { Actions } from '@nextcloud/vue/dist/Components/Actions'
 import { ActionButton } from '@nextcloud/vue/dist/Components/ActionButton'
-import ActivityEntry from '../ActivityEntry'
 import Color from '../../mixins/color'
 import { CollectionList } from 'nextcloud-vue-collections'
-import CommentsTabSidebar from './CommentsTabSidebar'
+
+import CardSidebarTabAttachments from './CardSidebarTabAttachments'
+import CardSidebarTabComments from './CardSidebarTabComments'
+import CardSidebarTabActivity from './CardSidebarTabActivity'
 
 export default {
 	name: 'CardSidebar',
 	components: {
-		ActivityEntry,
 		AppSidebar,
 		AppSidebarTab,
 		Multiselect,
@@ -159,7 +150,9 @@ export default {
 		ActionButton,
 		Avatar,
 		CollectionList,
-		CommentsTabSidebar,
+		CardSidebarTabAttachments,
+		CardSidebarTabComments,
+		CardSidebarTabActivity,
 	},
 	mixins: [
 		Color,
@@ -174,7 +167,6 @@ export default {
 		return {
 			assignedUsers: null,
 			addedLabelToCard: null,
-			isLoading: false,
 			copiedCard: null,
 			allLabels: null,
 			desc: null,
@@ -187,44 +179,18 @@ export default {
 			},
 			lastModifiedRelative: null,
 			lastCreatedRemative: null,
-			params: {
-				type: 'filter',
-				since: 0,
-				object_type: 'deck_card',
-				object_id: this.id,
-			},
 		}
 	},
 	computed: {
 		...mapState({
 			currentBoard: state => state.currentBoard,
 			assignableUsers: state => state.assignableUsers,
-			cardActivity: 'activity',
-			activityLoadMore: 'activityLoadMore',
 		}),
 		currentCard() {
 			return this.$store.getters.cardById(this.id)
 		},
 		subtitle() {
 			return t('deck', 'Modified') + ': ' + this.lastModifiedRelative + ' ' + t('deck', 'Created') + ': ' + this.lastCreatedRemative
-		},
-		toolbarActions() {
-			return [
-				{
-					action: () => {
-
-					},
-					icon: 'icon-archive-dark',
-					text: t('deck', 'Assign to me'),
-				},
-				{
-					action: () => {
-
-					},
-					icon: 'icon-archive',
-					text: t('deck', (this.showArchived ? 'Unarchive card' : 'Archive card')),
-				},
-			]
 		},
 	},
 	watch: {
@@ -243,9 +209,6 @@ export default {
 
 				this.desc = this.currentCard.description
 				this.updateRelativeTimestamps()
-
-				this.params.object_id = this.id
-				this.loadCardActivity()
 			},
 		},
 
@@ -313,23 +276,6 @@ export default {
 			}
 			this.$store.dispatch('removeLabel', data)
 		},
-		loadCardActivity() {
-			this.isLoading = true
-			this.$store.dispatch('loadActivity', this.params).then(response => {
-				this.isLoading = false
-			})
-		},
-		loadMore() {
-			const array = Object.values(this.cardActivity)
-			const aId = (array[array.length - 1].activity_id)
-
-			this.params.since = aId
-			this.loadCardActivity()
-		},
-		clickAddNewAttachmment() {
-
-		},
-
 	},
 }
 </script>
