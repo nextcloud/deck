@@ -73,11 +73,9 @@
 </template>
 
 <script>
-import { Avatar } from 'nextcloud-vue'
+import { Avatar, Actions, ActionButton } from '@nextcloud/vue'
 import Color from '../mixins/color'
 import AvatarList from './cards/AvatarList'
-import { Actions } from 'nextcloud-vue/dist/Components/Actions'
-import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
 
 export default {
 	name: 'CardItem',
