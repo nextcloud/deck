@@ -45,69 +45,81 @@
 		<div class="card-list-bullet-cell">
 			<div :style="{ 'background-color': `#990` }" class="card-list-bullet" />
 		</div>
-		<div class="card-list-title-cell">{{ card.title }}</div>
+		<div class="card-list-title-cell">
+			{{ card.title }}
+		</div>
 
 		<div>
 			<ul class="labels card-list-title-cell">
-				<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)"><span>{{ label.title }}</span></li>
+				<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)">
+					<span>{{ label.title }}</span>
+				</li>
 			</ul>
 		</div>
 
 		<div>
 			<div v-if="card.attachments" class="card-files icon icon-files-dark" />
-			<div v-if="card.duedate"><span>{{ dueTime(card.duetime) }}</span></div>
+			<div v-if="card.duedate">
+				<span>{{ dueTime(card.duetime) }}</span>
+			</div>
 		</div>
 
-		<avatar-list :users="card.assignedUsers" class="card-list-avatars-cell" />
+		<AvatarList :users="card.assignedUsers" class="card-list-avatars-cell" />
 		<div class="card-list-actions-cell">
-
 			<Actions v-if="!editing" @click.stop.prevent>
-				<ActionButton icon="icon-user">{{ t('deck', 'Assign to me') }}</ActionButton>
+				<ActionButton icon="icon-user">
+					{{ t('deck', 'Assign to me') }}
+				</ActionButton>
 
-				<ActionButton icon="icon-delete">{{ t('deck', 'Delete card') }}</ActionButton>
-				<ActionButton icon="icon-external">{{ t('deck', 'Move card') }}</ActionButton>
-				<ActionButton icon="icon-settings-dark">{{ t('deck', 'Card details') }}</ActionButton>
+				<ActionButton icon="icon-delete">
+					{{ t('deck', 'Delete card') }}
+				</ActionButton>
+				<ActionButton icon="icon-external">
+					{{ t('deck', 'Move card') }}
+				</ActionButton>
+				<ActionButton icon="icon-settings-dark">
+					{{ t('deck', 'Card details') }}
+				</ActionButton>
 			</Actions>
 		</div>
 	</div>
 </template>
 
 <script>
-import { Avatar, Actions, ActionButton } from '@nextcloud/vue'
+import { Actions, ActionButton } from '@nextcloud/vue'
 import Color from '../mixins/color'
 import AvatarList from './cards/AvatarList'
 
 export default {
 	name: 'CardItem',
 	components: {
-		Avatar,
 		AvatarList,
 		Actions,
-		ActionButton
+		ActionButton,
 	},
 	mixins: [Color],
 	props: {
 		card: {
 			type: Object,
-			default: () => { return {} }
-		}
+			default: () => { return {} },
+		},
 	},
 	computed: {
 		labelStyle() {
 			return (label) => {
 				return {
 					backgroundColor: '#' + label.color,
-					color: this.textColor(label.color)
+					color: this.textColor(label.color),
 				}
 			}
-		}
+		},
 
 	},
 	methods: {
 		dueTime(due) {
 			return OC.Util.relativeModifiedDate(due)
-		}
-	}
+		},
+	},
 }
 </script>
 

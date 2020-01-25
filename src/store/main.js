@@ -44,7 +44,7 @@ export const BOARD_FILTERS = {
 export const COLLECTION_FILTERS = {
 	ALL: 'all',
 	DUE: 'due',
-	MY: 'my'
+	MY: 'my',
 }
 
 export default new Vuex.Store({

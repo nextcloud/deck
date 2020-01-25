@@ -72,24 +72,24 @@ export default new Router({
 			name: 'collections',
 			component: Collections,
 			props: {
-				navFilter: COLLECTION_FILTERS.ALL
-			}
+				navFilter: COLLECTION_FILTERS.ALL,
+			},
 		},
 		{
 			path: '/collections/due',
 			name: 'collections.due',
 			component: Collections,
 			props: {
-				navFilter: COLLECTION_FILTERS.DUE
-			}
+				navFilter: COLLECTION_FILTERS.DUE,
+			},
 		},
 		{
 			path: '/collections/my',
 			name: 'collections.my',
 			component: Collections,
 			props: {
-				navFilter: COLLECTION_FILTERS.MY
-			}
+				navFilter: COLLECTION_FILTERS.MY,
+			},
 		},
 		{
 			path: '/boards/:id',

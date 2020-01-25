@@ -26,11 +26,19 @@
 		<div class="card-list">
 			<div class="card-list-row card-list-header-row">
 				<div class="card-list-bullet-cell" />
-				<div class="card-list-bullet-cell"><div class="card-list-bullet" /></div>
-				<div class="card-list-title-cell">Title</div>
+				<div class="card-list-bullet-cell">
+					<div class="card-list-bullet" />
+				</div>
+				<div class="card-list-title-cell">
+					Title
+				</div>
 				<div class="card-list-title-cell" />
-				<div class="card-list-title-cell">Due</div>
-				<div class="card-list-avatars-cell">Assigned</div>
+				<div class="card-list-title-cell">
+					Due
+				</div>
+				<div class="card-list-avatars-cell">
+					Assigned
+				</div>
 				<div class="card-list-actions-cell" />
 			</div>
 			<CardItem v-for="card in filteredCards" :key="card.id" :card="card" />
@@ -45,20 +53,20 @@ import Controls from './Controls'
 import { mapGetters } from 'vuex'
 
 export default {
-	name: 'Main',
+	name: 'Collections',
 	components: {
 		Controls,
-		CardItem
+		CardItem,
 	},
 	props: {
 		navFilter: {
 			type: String,
-			default: ''
-		}
+			default: '',
+		},
 	},
 	data: function() {
 		return {
-			loading: true
+			loading: true,
 		}
 	},
 	methods: {
@@ -68,11 +76,11 @@ export default {
 					this.loading = false
 				})
 			})
-		}
+		},
 	},
 	computed: {
 		...mapGetters([
-			'filteredBoards'
+			'filteredBoards',
 
 		]),
 		allStacks() {
@@ -97,7 +105,7 @@ export default {
 			} else {
 				return this.allCards
 			}
-		}
+		},
 	},
 	watch: {
 		navFilter: function(value) {
@@ -105,8 +113,8 @@ export default {
 		},
 		filteredBoards() {
 			this.fetchData()
-		}
-	}
+		},
+	},
 }
 </script>
 

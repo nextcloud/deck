@@ -38,7 +38,7 @@ export default {
 		},
 		allStacks(state) {
 			return state.stacks
-		}
+		},
 	},
 	mutations: {
 		addStack(state, stack) {

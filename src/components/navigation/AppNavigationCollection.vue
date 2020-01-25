@@ -20,17 +20,22 @@
   -
   -->
 <template>
-	<li v-if="boards.length > 0" :id="id"
+	<li v-if="boards.length > 0"
+		:id="id"
 		:class="{'open': opened, 'collapsible': collapsible }">
 		<button v-if="collapsible" class="collapse" @click.prevent.stop="toggleCollapse" />
 		<a :class="icon" href="#">
 			{{ text }}
 		</a>
 		<ul class="list">
-			<router-link v-for="item in items" id="board-1"
+			<router-link v-for="item in items"
+				id="board-1"
 
-				:key="item.title" :title="item.title" :to="{name: item.to}"
-				tag="li" class="list-item">
+				:key="item.title"
+				:title="item.title"
+				:to="{name: item.to}"
+				tag="li"
+				class="list-item">
 				<div :class="item.icon" style="padding: 0 12px 0 44px" />{{ item.title }}
 			</router-link>
 		</ul>
@@ -43,24 +48,24 @@ import ClickOutside from 'vue-click-outside'
 export default {
 	name: 'AppNavigationCollection',
 	directives: {
-		ClickOutside
+		ClickOutside,
 	},
 	props: {
 		id: {
 			type: String,
-			required: true
+			required: true,
 		},
 		text: {
 			type: String,
-			required: true
+			required: true,
 		},
 		icon: {
 			type: String,
-			required: true
+			required: true,
 		},
 		boards: {
 			type: Array,
-			required: true
+			required: true,
 		},
 		/**
 		 * Control whether the category should be opened when adding boards.
@@ -68,8 +73,8 @@ export default {
 		 */
 		openOnAddBoards: {
 			type: Boolean,
-			default: false
-		}
+			default: false,
+		},
 	},
 	data() {
 		return {
@@ -77,28 +82,28 @@ export default {
 			items: [
 				{ title: t('deck', 'Due soon') + ' (5)', icon: 'icon-calendar-dark', to: 'collections.due' },
 				{ title: t('deck', 'Assigned to me') + ' (9)', icon: 'icon-user', to: 'collections.my' },
-				{ title: t('deck', 'All cards'), icon: 'icon-projects', to: 'collections' }
-			]
+				{ title: t('deck', 'All cards'), icon: 'icon-projects', to: 'collections' },
+			],
 		}
 	},
 	computed: {
 		collapsible() {
 			return this.boards.length > 0
-		}
+		},
 	},
 	watch: {
 		boards: function(newVal, prevVal) {
 			if (this.openOnAddBoards === true && prevVal.length < newVal.length) {
 				this.opened = true
 			}
-		}
+		},
 	},
 	mounted() {},
 	methods: {
 		toggleCollapse() {
 			this.opened = !this.opened
-		}
-	}
+		},
+	},
 }
 </script>
 <style>

@@ -38,7 +38,7 @@ export default {
 		},
 		allCards(state) {
 			return state.cards
-		}
+		},
 	},
 	mutations: {
 		clearCards(state) {
