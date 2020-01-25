@@ -30,17 +30,17 @@
 		<div v-if="board" class="board-actions">
 			<div v-if="canManage" id="stack-add" v-click-outside="hideAddStack">
 				<Actions v-if="!isAddStackVisible">
-					<ActionButton icon="icon-add" :title="t('deck', 'Add new stack')" @click.stop="showAddStack" />
+					<ActionButton icon="icon-add" :title="t('deck', 'Add new list')" @click.stop="showAddStack" />
 				</Actions>
 				<form v-else @submit.prevent="addNewStack()">
-					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new stack') }}</label>
+					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add new list') }}</label>
 					<input id="new-stack-input-main"
 						v-model="newStackTitle"
 						type="text"
 						class="no-close"
-						placeholder="Add a new stack"
+						:placeholder="t('deck', 'List name')"
 						required>
-					<input v-tooltip="t('deck', 'Add new stack')"
+					<input v-tooltip="t('deck', 'Add new list')"
 						class="icon-confirm"
 						type="submit"
 						value="">
