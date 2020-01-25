@@ -237,14 +237,19 @@ export default {
 		opacity: 0;
 	}
 
+	body.dark .card {
+		border: 1px solid var(--color-border);
+	}
+
 	.card {
-		box-shadow: 0 0 3px 0 var(--color-box-shadow);
+		box-shadow: 0 0 2px 0 var(--color-box-shadow);
 		border-radius: 3px;
 		font-size: 100%;
 		background-color: var(--color-main-background);
 		margin-bottom: $card-spacing;
-		&.current {
-			box-shadow: 0 0 3px 1px var(--color-box-shadow);
+
+		&.current-card {
+			box-shadow: 0 0 5px 0 var(--color-box-shadow);
 		}
 
 		.card-upper {
@@ -314,10 +319,6 @@ export default {
 				display: flex;
 				height: 44px;
 			}
-		}
-
-		&.current-card {
-			box-shadow: 0 0 6px 0 var(--color-box-shadow);
 		}
 	}
 
