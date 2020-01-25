@@ -2,6 +2,7 @@
 	<div>
 		<Multiselect
 			v-model="addAcl"
+			:placeholder="t('deck', 'Share board with a user, group or circle …')"
 			:options="formatedSharees"
 			:user-select="true"
 			label="displayName"

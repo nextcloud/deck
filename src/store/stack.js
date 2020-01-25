@@ -88,23 +88,21 @@ export default {
 					commit('orderStack', { stack, addedIndex, removedIndex })
 				})
 		},
-		loadStacks({ commit }, boardId) {
+		async loadStacks({ commit }, boardId) {
 			commit('clearCards')
 			let call = 'loadStacks'
 			if (this.state.showArchived === true) {
 				call = 'loadArchivedStacks'
 			}
-			apiClient[call](boardId)
-				.then((stacks) => {
-					for (const i in stacks) {
-						const stack = stacks[i]
-						for (const j in stack.cards) {
-							commit('addCard', stack.cards[j])
-						}
-						delete stack.cards
-						commit('addStack', stack)
-					}
-				})
+			const stacks = await apiClient[call](boardId)
+			for (const i in stacks) {
+				const stack = stacks[i]
+				for (const j in stack.cards) {
+					commit('addCard', stack.cards[j])
+				}
+				delete stack.cards
+				commit('addStack', stack)
+			}
 		},
 		createStack({ commit }, stack) {
 			stack.boardId = this.state.currentBoard.id

@@ -23,21 +23,16 @@
 <template>
 	<div class="controls">
 		<div id="app-navigation-toggle-custom" class="icon-menu" @click="toggleNav" />
-		<div class="breadcrumb">
-			<div class="crumb svg last">
-				<router-link to="/boards" class="icon-home" title="All Boards">
-					<span class="hidden-visually">All Boards</span>
-				</router-link>
-			</div>
-		</div>
-		<div v-if="board" class="crumb svg">
+		<div v-if="board" class="board-title">
 			<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
-			<a href="#">{{ board.title }}</a>
-			<router-link :to="{name: 'board.details'}" class="icon-shared" />
+			<h2><a href="#">{{ board.title }}</a></h2>
 		</div>
 		<div v-if="board" class="board-actions">
-			<div id="stack-add">
-				<form @submit.prevent="clickAddNewStack()">
+			<div id="stack-add" v-click-outside="hideAddStack">
+				<Actions v-if="!isAddStackVisible">
+					<ActionButton icon="icon-add" :title="t('deck', 'Add new stack')" @click.stop="showAddStack" />
+				</Actions>
+				<form v-else @submit.prevent="addNewStack()">
 					<label for="new-stack-input-main" class="hidden-visually">Add a new stack</label>
 					<input id="new-stack-input-main"
 						v-model="newStackTitle"
@@ -45,25 +40,37 @@
 						class="no-close"
 						placeholder="Add a new stack"
 						required>
-					<input v-tooltip="t('deck', 'clickAddNewStack')"
+					<input v-tooltip="t('deck', 'Add new stack')"
 						class="icon-confirm"
 						type="submit"
 						value="">
 				</form>
 			</div>
 			<div class="board-action-buttons">
-				<button :style="archivStyle"
-					title="Show archived cards"
-					class="icon icon-archive"
-					@click="toggleShowArchived" />
-				<button :class="[(compactMode ? 'icon-toggle-compact-collapsed' : 'icon-toggle-compact-expanded')]"
-					title="Toggle compact mode"
-					class="icon"
-					@click="toggleCompactMode" />
-				<router-link v-tooltip="t('deck', 'Board settings')"
-					:to="{name: 'board.details'}"
-					class="icon-settings-dark"
-					tag="button" />
+				<Actions style="opacity: .5;">
+					<ActionButton v-if="showArchived"
+						icon="icon-archive"
+						:title="t('deck', 'Show archived cards')"
+						@click="toggleShowArchived" />
+					<ActionButton v-else
+						icon="icon-archive"
+						:title="t('deck', 'Hide archived cards')"
+						@click="toggleShowArchived" />
+				</Actions>
+				<Actions>
+					<ActionButton v-if="compactMode"
+						icon="icon-toggle-compact-collapsed"
+						:title="t('deck', 'Toggle compact mode')"
+						@click="toggleCompactMode" />
+					<ActionButton v-else
+						icon="icon-toggle-compact-expanded"
+						:title="t('deck', 'Toggle compact mode')"
+						@click="toggleCompactMode" />
+				</Actions>
+				<!-- FIXME: ActionRouter currently doesn't work as an inline action -->
+				<Actions>
+					<ActionButton icon="icon-share" @click="toggleDetailsView" />
+				</Actions>
 			</div>
 		</div>
 	</div>
@@ -71,8 +78,13 @@
 
 <script>
 import { mapState } from 'vuex'
+import { Actions, ActionButton } from '@nextcloud/vue'
+
 export default {
 	name: 'Controls',
+	components: {
+		Actions, ActionButton,
+	},
 	props: {
 		board: {
 			type: Object,
@@ -85,26 +97,22 @@ export default {
 			newStackTitle: '',
 			stack: '',
 			showArchived: false,
+			isAddStackVisible: false,
 		}
 	},
 	computed: {
 		...mapState({
 			compactMode: state => state.compactMode,
 		}),
-		archivStyle() {
-
-			if (this.showArchived === true) {
-				return 'opacity: 1.0'
+		detailsRoute() {
+			return {
+				name: 'board.details',
 			}
-			return 'opacity: 0.3'
 		},
 	},
 	methods: {
 		toggleNav() {
 			this.$store.dispatch('toggleNav')
-		},
-		toggleSidebar: function() {
-			this.$store.dispatch('toggleSidebar')
 		},
 		toggleCompactMode() {
 			this.$store.dispatch('toggleCompactMode')
@@ -113,11 +121,25 @@ export default {
 			this.$store.dispatch('toggleShowArchived')
 			this.showArchived = !this.showArchived
 		},
-		clickAddNewStack() {
+		addNewStack() {
 			this.stack = { title: this.newStackTitle }
 			this.$store.dispatch('createStack', this.stack)
 			this.newStackTitle = ''
 			this.stack = null
+			this.isAddStackVisible = false
+		},
+		showAddStack() {
+			this.isAddStackVisible = true
+		},
+		hideAddStack() {
+			this.isAddStackVisible = false
+		},
+		toggleDetailsView() {
+			if (this.$route.name === 'board.details') {
+				this.$router.push({ name: 'board' })
+			} else {
+				this.$router.push({ name: 'board.details' })
+			}
 		},
 	},
 }
@@ -125,17 +147,13 @@ export default {
 
 <style lang="scss" scoped>
 	.controls {
-		.crumb {
-			order: 0;
+		.board-title {
+			display: flex;
+			align-items: center;
 
-			a:nth-child(2),
-			a:nth-child(3) {
-				padding-left: 0;
-				margin-left: -5px;
-			}
-
-			a .icon {
-				margin-top: 2px;
+			h2 {
+				margin: 0;
+				margin-right: 10px;
 			}
 
 			.board-bullet {
@@ -181,17 +199,11 @@ export default {
 
 	.board-action-buttons {
 		display: flex;
-		padding: 3px 4px 7px 4px;
 		button {
-			border-radius: 0;
+			border: 0;
 			width: 44px;
 			margin: 0 0 0 -1px;
-		}
-		button:first-child {
-			border-radius: 3px 0 0 3px;
-		}
-		button:last-child {
-			border-radius: 0 3px 3px 0;
+			background-color: transparent;
 		}
 	}
 

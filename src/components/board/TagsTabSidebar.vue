@@ -133,6 +133,7 @@ export default {
 </script>
 <style scoped lang="scss">
 	.labels li {
+		display: flex;
 		margin-bottom: 3px;
 
 		.label-title {
@@ -144,14 +145,21 @@ export default {
 			}
 		}
 		&:not(.editing) button {
-			width: 40px;
-			height: 34px;
+			width: 44px;
 			margin: 0;
 			margin-left: -3px;
 		}
-	}
-	.labels li {
-		display: flex;
+
+		.color-picker {
+			display: flex;
+		}
+
+		.color-picker-button {
+			width: 100px;
+			margin-left: 20px;
+			border-radius: 6px;
+		}
+
 		&.editing {
 			display: block;
 		}

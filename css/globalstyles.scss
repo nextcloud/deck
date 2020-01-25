@@ -24,17 +24,5 @@
  *
  */
 
-// colors
-$color-warning-light: nc-lighten($color-warning, 15%);
-$color-lightgrey: nc-darken($color-main-background, 4%);
-$color-grey: nc-darken($color-main-background, 7%);
-$color-darkgrey: nc-darken($color-main-background, 32%);
-
-// margins/paddings
-$board-item-margin: 10px 10px 20px 10px;
-$board-last-item-margin: 10px;
-
-$compact-board-item-margin: 5px 10px 10px 10px;
-$compact-board-last-item-margin: 5px 10px 10px;
-
 @import 'icons';
+@import 'print';

@@ -27,6 +27,7 @@ import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { generateFilePath } from '@nextcloud/router'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
+import ClickOutside from 'vue-click-outside'
 import './models'
 
 // eslint-disable-next-line
@@ -44,6 +45,13 @@ Vue.mixin({
 })
 
 Vue.directive('tooltip', Tooltip)
+Vue.directive('click-outside', ClickOutside)
+
+Vue.directive('focus', {
+	inserted: function(el) {
+		el.focus()
+	},
+})
 
 /* eslint-disable-next-line no-new */
 new Vue({

@@ -36,23 +36,23 @@
 						value="">
 				</form>
 			</transition>
-			<Actions>
+			<Actions :force-menu="true">
 				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete stack') }}
 				</ActionButton>
 			</Actions>
+			<Actions>
+				<ActionButton icon="icon-add" @click="showAddCard=true">
+					{{ t('deck', 'Add card') }}
+				</ActionButton>
+			</Actions>
 		</div>
 
-		<Container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)">
-			<Draggable v-for="card in cardsByStack(stack.id)" :key="card.id">
-				<CardItem v-if="card" :id="card.id" />
-			</Draggable>
-		</Container>
-
-		<form class="stack--card-add" @submit.prevent="clickAddCard()">
+		<form v-if="showAddCard" class="stack--card-add" @submit.prevent="clickAddCard()">
 			<label for="new-stack-input-main" class="hidden-visually">Add a new card</label>
 			<input id="new-stack-input-main"
 				v-model="newCardTitle"
+				v-focus
 				type="text"
 				class="no-close"
 				placeholder="Add a new card"
@@ -62,6 +62,12 @@
 				type="submit"
 				value="">
 		</form>
+
+		<Container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)">
+			<Draggable v-for="card in cardsByStack(stack.id)" :key="card.id">
+				<CardItem v-if="card" :id="card.id" />
+			</Draggable>
+		</Container>
 	</div>
 </template>
 
@@ -93,6 +99,7 @@ export default {
 			editing: false,
 			copiedStack: '',
 			newCardTitle: '',
+			showAddCard: false,
 		}
 	},
 	computed: {
@@ -147,6 +154,7 @@ export default {
 			}
 			this.$store.dispatch('addCard', newCard)
 			this.newCardTitle = ''
+			this.showAddCard = false
 		},
 	},
 }
@@ -155,29 +163,24 @@ export default {
 <style lang="scss" scoped>
 
 	$stack-spacing: 10px;
-	$stack-width: 300px;
+	$stack-width: 260px;
 
 	.stack {
 		width: $stack-width;
-		padding: $stack-spacing;
-		padding-top: 0;
-	}
-
-	.smooth-dnd-container.vertical {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
-		overflow: initial;
-	}
-
-	.smooth-dnd-container.vertical .smooth-dnd-draggable-wrapper {
-		height: auto;
+		margin-left: $stack-spacing;
+		margin-right: $stack-spacing;
 	}
 
 	.stack--header {
 		display: flex;
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		padding: 3px;
+		margin: 3px -3px;
+		margin-right: -10px;
+		margin-top: 0;
+		background-color: var(--color-main-background-translucent);
 
 		h3, form {
 			flex-grow: 1;
@@ -191,10 +194,23 @@ export default {
 
 	.stack--card-add {
 		display: flex;
+		margin-left: 3px;
+		margin-right: 3px;
+		box-shadow: 0 0 3px #aaa;
+		border-radius: 3px;
+		margin-bottom: 15px;
 
 		input[type=text] {
 			flex-grow: 1;
 		}
+
+		input {
+			border: none;
+		}
 	}
+
+	/**
+	 * Rules to handle scrolling behaviour are inherited from Board.vue
+	 */
 
 </style>

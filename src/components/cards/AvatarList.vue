@@ -64,6 +64,9 @@ export default {
 	},
 	computed: {
 		firstUsers() {
+			if (!this.users || this.users.length === 0) {
+				return []
+			}
 			return this.users.slice(0, 3)
 		},
 		avatarUrl() {
@@ -79,6 +82,9 @@ export default {
 			}
 		},
 		popover() {
+			if (!this.users || this.users.length < 0) {
+				return []
+			}
 			return [
 				...this.users.slice(3).map((session) => {
 					return {

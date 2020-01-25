@@ -45,7 +45,7 @@ export default {
 		},
 		parseMessage(activity) {
 			const subject = activity.subject_rich[0]
-			const parameters = activity.subject_rich[1]
+			const parameters = JSON.parse(JSON.stringify(activity.subject_rich[1]))
 			if (parameters.after && typeof parameters.after.id === 'string' && parameters.after.id.startsWith('dt:')) {
 				const dateTime = parameters.after.id.substr(3)
 				parameters.after.name = window.moment(dateTime).format('L LTS')

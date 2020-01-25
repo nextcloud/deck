@@ -237,12 +237,11 @@ export default new Vuex.Store({
 		},
 	},
 	actions: {
-		loadBoardById({ commit }, boardId) {
-			apiClient.loadById(boardId)
-				.then((board) => {
-					commit('setCurrentBoard', board)
-					commit('setAssignableUsers', board.users)
-				})
+		async loadBoardById({ commit }, boardId) {
+			commit('setCurrentBoard', null)
+			const board = await apiClient.loadById(boardId)
+			commit('setCurrentBoard', board)
+			commit('setAssignableUsers', board.users)
 		},
 
 		toggleShowArchived({ commit }) {

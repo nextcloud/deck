@@ -95,6 +95,9 @@ export default {
 	#content {
 		#app-content {
 			transition: margin-left 100ms ease;
+			position: relative;
+			overflow-x: hidden;
+			align-items: stretch;
 		}
 
 		#app-sidebar {

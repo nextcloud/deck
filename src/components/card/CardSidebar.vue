@@ -36,6 +36,7 @@
 					<Multiselect v-model="allLabels"
 						:multiple="true"
 						:options="currentBoard.labels"
+						:placeholder="t('deck', 'Assign a tag to this card…')"
 						:taggable="true"
 						label="title"
 						track-by="id"
@@ -63,6 +64,7 @@
 					<Multiselect v-model="assignedUsers"
 						:multiple="true"
 						:options="assignableUsers"
+						:placeholder="t('deck', 'Assign a user to this card…')"
 						label="displayname"
 						track-by="primaryKey"
 						@select="assignUserToCard"
@@ -81,6 +83,7 @@
 				</div>
 				<div class="section-details">
 					<DatetimePicker v-model="copiedCard.duedate"
+						:placeholder="t('deck', 'Set a due date')"
 						type="datetime"
 						lang="en"
 						format="YYYY-MM-DD HH:mm"
@@ -221,6 +224,9 @@ export default {
 		'currentCard': {
 			immediate: true,
 			handler() {
+				if (!this.currentCard) {
+					return
+				}
 				this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
 				this.allLabels = this.currentCard.labels
 
@@ -353,7 +359,8 @@ export default {
 
 		.section-label {
 			background-position: 0px center;
-			width:28px;
+			width: 28px;
+			margin-left: 9px;
 			flex-shrink: 0;
 		}
 

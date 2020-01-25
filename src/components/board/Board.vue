@@ -21,11 +21,16 @@
   -->
 
 <template>
-	<div>
+	<div class="board-wrapper">
 		<Controls :board="board" />
-		<div v-if="board" class="board">
+		<div v-if="loading" class="emptycontent">
+			<div class="icon icon-loading" />
+			<h2>{{ t('deck', 'Loading board') }}</h2>
+			<p />
+		</div>
+		<div v-else-if="board" class="board">
 			<Container lock-axix="y" orientation="horizontal" @drop="onDropStack">
-				<Draggable v-for="stack in stacksByBoard" :key="stack.id" class="stack">
+				<Draggable v-for="stack in stacksByBoard" :key="stack.id">
 					<Stack :stack="stack" />
 				</Draggable>
 			</Container>
@@ -75,9 +80,6 @@ export default {
 		stacksByBoard() {
 			return this.$store.getters.stacksByBoard(this.board.id)
 		},
-		/* cardsByStack() {
-			return (id) => this.$store.getters.cardsByStack(id)
-		} */
 	},
 	watch: {
 		id: 'fetchData',
@@ -89,34 +91,17 @@ export default {
 		this.fetchData()
 	},
 	methods: {
-		fetchData() {
-
-			this.$store.dispatch('loadBoardById', this.id).then(response => {
-				this.$store.dispatch('loadStacks', this.id).then(response => {
-					this.loading = false
-				})
-			})
-
-			/* this.boardApi.loadById(this.id)
-				.then((board) => {
-					this.$store.dispatch('setCurrentBoard', board)
-					this.$store.dispatch('loadStacks', board)
-					this.$store.dispatch('setAssignableUsers', board.users)
-					this.loading = false
-					this.$store.state.labels = board.labels
-				}) */
+		async fetchData() {
+			this.loading = true
+			await this.$store.dispatch('loadBoardById', this.id)
+			await this.$store.dispatch('loadStacks', this.id)
+			this.loading = false
 		},
+
 		onDropStack({ removedIndex, addedIndex }) {
 			this.$store.dispatch('orderStack', { stack: this.stacksByBoard[removedIndex], removedIndex, addedIndex })
 		},
-		/* onDropCard({ removedIndex, addedIndex }) {
 
-		}, */
-		/* payloadForCard(stackId) {
-			return index => {
-				return this.cardsByStack(stackId)[index]
-			}
-		}, */
 		createStack() {
 			const newStack = {
 				title: 'FooBar',
@@ -125,9 +110,6 @@ export default {
 			}
 			this.$store.dispatch('createStack', newStack)
 		},
-		/* deleteStack(stack) {
-			this.$store.dispatch('deleteStack', stack)
-		} */
 	},
 }
 </script>
@@ -138,28 +120,61 @@ export default {
 	$stack-spacing: 10px;
 	$stack-width: 300px;
 
+	.board-wrapper {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		max-height: calc(100vh - 50px);
+	}
+
 	.board {
 		margin-left: $board-spacing;
+		position: relative;
+		height: calc(100% - 44px);
+		overflow-x: scroll;
 	}
 
-	.stack {
-		width: $stack-width;
-		padding: $stack-spacing;
-		padding-top: 0;
-	}
-
-	/*
-	.smooth-dnd-container.vertical {
+	/**
+	 * Combined rules to handle proper board scrolling and
+	 * drag and drop behavior
+	 */
+	.smooth-dnd-container.horizontal {
 		display: flex;
-		flex-direction: column;
-	}
+		align-items: stretch;
+		.smooth-dnd-draggable-wrapper::v-deep {
+			display: flex;
+			height: auto;
 
-	.smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
-		overflow: initial;
-	}
+			.stack {
+				display: flex;
+				flex-direction: column;
 
-	.smooth-dnd-container.vertical .smooth-dnd-draggable-wrapper {
-		height: auto;
-	} */
+				.smooth-dnd-container.vertical {
+					flex-grow: 1;
+					display: flex;
+					flex-direction: column;
+					padding: 3px;
+					padding-top: 0;
+					/**
+					 * Use this to scroll each stack individually
+					 * This currenly has the issue that the popover menu will be cut off
+					 */
+					/*
+					overflow-x: scroll;
+					height: calc(100vh - 50px - 44px * 2 - 30px);
+					max-height: calc(100vh - 50px - 44px * 2 - 30px);
+					*/
+				}
+
+				.smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
+					overflow: initial;
+				}
+
+				.smooth-dnd-container.vertical .smooth-dnd-draggable-wrapper {
+					height: auto;
+				}
+			}
+		}
+	}
 
 </style>
