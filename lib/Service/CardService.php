@@ -400,6 +400,14 @@ class CardService {
 		if ($this->boardService->isArchived($this->cardMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
+
+		$card = $this->cardMapper->find($id);
+		if ($card->getArchived()) {
+			throw new StatusException('Operation not allowed. This card is archived.');
+		}
+		$card->setStackId($stackId);
+		$this->cardMapper->update($card);
+
 		$cards = $this->cardMapper->findAll($stackId);
 		$result = [];
 		$i = 0;

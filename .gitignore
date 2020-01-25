@@ -1,7 +1,5 @@
-js/node_modules/*
-js/vendor/
-js/public/
-js/build/
+node_modules/*
+js/
 build/
 css/style.css
 css/vendor.css

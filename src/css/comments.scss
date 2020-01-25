@@ -1,0 +1,44 @@
+.comment-form form {
+	display: flex;
+	flex-grow: 1;
+	position: relative;
+
+	.editor__content::v-deep {
+		flex-grow: 1;
+		margin-left: 44px;
+
+		.ProseMirror {
+			width: 100%;
+		}
+	}
+
+	input[type="submit"] {
+		width: 44px;
+		height: 44px;
+		margin: 0;
+		padding: 13px;
+		background-color: transparent;
+		border: none;
+		opacity: .3;
+		position: absolute;
+		bottom: 0;
+		right: 0;
+	}
+}
+.comment {
+	margin-bottom: 10px;
+}
+.comment--header {
+	display: flex;
+	align-items: center;
+	color: var(--color-text-light);
+
+	.username {
+		flex-grow: 1;
+		padding: 10px;
+	}
+}
+
+.comment--content {
+	margin-left: 44px;
+}

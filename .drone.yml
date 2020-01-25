@@ -135,19 +135,23 @@ trigger:
 kind: pipeline
 name: frontend
 steps:
-  - name: eslint
-    image: nextcloudci/eslint:eslint-1
+  - name: install
+    image: node:lts-alpine
     commands:
-      - ./run-eslint.sh
+      - npm install
+  - name: eslint
+    image: node:lts-alpine
+    commands:
+      - npm run lint
   - name: jsbuild
     image: node:lts-alpine
     commands:
-      - apk add --no-cache make
-      - make build-js
+      - npm run build
 trigger:
   branch:
     - master
     - stable*
+    - vue
   event:
     - pull_request
     - push
