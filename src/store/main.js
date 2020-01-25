@@ -95,7 +95,7 @@ export default new Vuex.Store({
 		},
 		currentBoardLabels: state => {
 			return state.currentBoard ? state.currentBoard.labels : []
-		}
+		},
 	},
 	mutations: {
 		toggleShowArchived(state) {

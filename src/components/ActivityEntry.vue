@@ -59,6 +59,8 @@ export default {
 <style scoped lang="scss">
 	.activity {
 		display: flex;
+		padding: 10px;
+
 		.activity--icon {
 			width: 16px;
 			height: 16px;

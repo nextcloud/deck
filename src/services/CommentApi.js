@@ -38,7 +38,7 @@ export class CommentApi {
 			<oc:filter-comments xmlns:D="DAV:" xmlns:oc="http://owncloud.org/ns">
 				<oc:limit>${card.limit}</oc:limit>
 				<oc:offset>${card.offset}</oc:offset>
-			</oc:filter-comments>`
+			</oc:filter-comments>`,
 		}).then(
 			(response) => {
 				return Promise.resolve(response.data)
@@ -56,19 +56,19 @@ export class CommentApi {
 		return axios({
 			method: 'POST',
 			url: this.url(`${commentObj.cardId}`),
-			data: { actorType: 'users', message: `${commentObj.comment}`, verb: 'comment' }
+			data: { actorType: 'users', message: `${commentObj.comment}`, verb: 'comment' },
 		}).then(
 			(response) => {
-				let header = response.headers['content-location']
-				let headerArray = header.split('/')
-				let id = headerArray[headerArray.length - 1]
+				const header = response.headers['content-location']
+				const headerArray = header.split('/')
+				const id = headerArray[headerArray.length - 1]
 
-				let ret = {
+				const ret = {
 					cardId: (commentObj.cardId).toString(),
 					id: id,
 					uId: getCurrentUser().uid,
 					creationDateTime: (new Date()).toString(),
-					message: commentObj.comment
+					message: commentObj.comment,
 				}
 				return Promise.resolve(ret)
 			},
@@ -92,7 +92,7 @@ export class CommentApi {
 						<oc:message>${data.comment}</oc:message>
 					</d:prop>
 				</d:set>
-			</d:propertyupdate>`
+			</d:propertyupdate>`,
 		}).then(
 			(response) => {
 				return Promise.resolve(response.data)
@@ -109,7 +109,7 @@ export class CommentApi {
 	deleteComment(data) {
 		return axios({
 			method: 'DELETE',
-			url: this.url(`${data.cardId}/${data.commentId}`)
+			url: this.url(`${data.cardId}/${data.commentId}`),
 		}).then(
 			(response) => {
 				return Promise.resolve(response.data)

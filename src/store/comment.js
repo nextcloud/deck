@@ -28,7 +28,7 @@ const apiClient = new CommentApi()
 
 export default {
 	state: {
-		comments: {}
+		comments: {},
 	},
 	mutations: {
 		addComments(state, commentObj) {
@@ -47,26 +47,26 @@ export default {
 			state.comments[newComment.cardId].push(newComment)
 		},
 		updateComment(state, comment) {
-			let existingIndex = state.comments[comment.cardId].findIndex(_comment => _comment.id === comment.commentId)
+			const existingIndex = state.comments[comment.cardId].findIndex(_comment => _comment.id === comment.commentId)
 			if (existingIndex !== -1) {
 				state.comments[comment.cardId][existingIndex].message = comment.comment
 			}
 		},
 		deleteComment(state, comment) {
-			let existingIndex = state.comments[comment.cardId].findIndex(_comment => _comment.id === comment.commentId)
+			const existingIndex = state.comments[comment.cardId].findIndex(_comment => _comment.id === comment.commentId)
 			if (existingIndex !== -1) {
 				state.comments[comment.cardId].splice(existingIndex, 1)
 			}
-		}
+		},
 	},
 	actions: {
 		listComments({ commit }, card) {
 			apiClient.listComments(card)
 				.then((comments) => {
 					const commentsJson = xmlToTagList(comments)
-					let returnObj = {
+					const returnObj = {
 						cardId: card.id,
-						comments: commentsJson
+						comments: commentsJson,
 					}
 					commit('addComments', returnObj)
 				})
@@ -88,6 +88,6 @@ export default {
 				.then((retVal) => {
 					commit('updateComment', data)
 				})
-		}
-	}
+		},
+	},
 }

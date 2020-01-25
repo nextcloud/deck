@@ -1,45 +1,60 @@
 <template>
-	<li>
-		<form v-if="edit" @submit.prevent="updateComment">
-			<input v-model="commentMsg" type="text" autofocus
+	<li class="comment">
+		<template v-if="!edit">
+			<div class="comment--header">
+				<Avatar :user="comment.actorId" />
+				<span class="has-tooltip username">
+					{{ comment.actorDisplayName }}
+				</span>
+				<Actions @click.stop.prevent>
+					<ActionButton icon="icon-rename" @click="showUpdateForm()">
+						{{ t('deck', 'Update') }}
+					</ActionButton>
+					<ActionButton icon="icon-delete" @click="deleteComment(comment.id)">
+						{{ t('deck', 'Delete') }}
+					</ActionButton>
+				</Actions>
+			</div>
+			<!-- FIXME: Check if input is sanitized -->
+			<p class="comment--content" v-html="comment.message" /><p />
+		</template>
+		<form v-else @submit.prevent="updateComment">
+			<input v-model="commentMsg"
+				type="text"
+				autofocus
 				required>
-			<input v-tooltip="t('deck', 'Save')" class="icon-confirm" type="submit"
+			<input v-tooltip="t('deck', 'Save')"
+				class="icon-confirm"
+				type="submit"
 				value="">
-			<input type="submit" value="" class="icon-close"
+			<input type="submit"
+				value=""
+				class="icon-close"
 				@click.stop.prevent="hideUpdateForm">
 		</form>
-
-		<template v-else>
-			{{ comment.uId }}: {{ comment.message }}
-			<Actions @click.stop.prevent>
-				<ActionButton icon="icon-rename" @click="showUpdateForm()">{{ t('deck', 'Update') }}</ActionButton>
-				<ActionButton icon="icon-delete" @click="deleteComment(comment.id)">{{ t('deck', 'Delete') }}</ActionButton>
-			</Actions>
-		</template>
 	</li>
 </template>
 
 <script>
-import { Avatar } from 'nextcloud-vue'
-import { Actions } from 'nextcloud-vue/dist/Components/Actions'
-import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
+import { Avatar, Actions, ActionButton } from '@nextcloud/vue'
+
 export default {
 	name: 'CommentItem',
 	components: {
 		Avatar,
 		Actions,
-		ActionButton
+		ActionButton,
 	},
 	props: {
 		comment: {
 			type: Object,
-			default: undefined
-		}
+			default: undefined,
+		},
 	},
 	data() {
 		return {
 			edit: false,
-			commentMsg: ''
+			commentMsg: '',
 		}
 	},
 
@@ -54,28 +69,25 @@ export default {
 			this.edit = false
 		},
 		updateComment() {
-			let data = {
+			const data = {
 				comment: this.commentMsg,
 				cardId: this.comment.cardId,
-				commentId: this.comment.id
+				commentId: this.comment.id,
 			}
 			this.$store.dispatch('updateComment', data)
 			this.hideUpdateForm()
 		},
 		deleteComment(commentId) {
-			let data = {
+			const data = {
 				commentId: commentId,
-				cardId: this.comment.cardId
+				cardId: this.comment.cardId,
 			}
 			this.$store.dispatch('deleteComment', data)
-		}
-	}
+		},
+	},
 }
 </script>
 
-<style lang="scss">
-	form {
-		display: flex
-	}
-
+<style scoped lang="scss">
+	@import "../../css/comments";
 </style>

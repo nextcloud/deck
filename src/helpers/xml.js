@@ -19,7 +19,7 @@ const xmlToJson = (xml) => {
 				obj[nodeName] = xmlToJson(item)
 			} else {
 				if (typeof obj[nodeName].push === 'undefined') {
-					var old = obj[nodeName]
+					const old = obj[nodeName]
 					obj[nodeName] = []
 					obj[nodeName].push(old)
 				}
@@ -38,42 +38,41 @@ const parseXml = (xml) => {
 	}
 	return dom
 }
+
+const commentToObject = (tag) => {
+	return {
+		cardId: tag['d:prop']['oc:objectId']['#text'],
+		id: tag['d:prop']['oc:id']['#text'],
+		actorId: tag['d:prop']['oc:actorId']['#text'],
+		actorDisplayName: tag['d:prop']['oc:actorDisplayName']['#text'],
+		creationDateTime: tag['d:prop']['oc:creationDateTime']['#text'],
+		message: tag['d:prop']['oc:message']['#text'],
+	}
+}
+
+// FIXME: make this generic and not depending on comments
 const xmlToTagList = (xml) => {
 
-	let json = xmlToJson(parseXml(xml))
-	let list = json['d:multistatus']['d:response']
+	const json = xmlToJson(parseXml(xml))
+	const list = json['d:multistatus']['d:response']
 
 	// no element
 	if (list === undefined) {
 		return []
 	}
-	let result = []
+	const result = []
 
 	// one element
 	if (Array.isArray(list) === false) {
-		let tag = list['d:propstat']
-		result.push({
-			cardId: tag['d:prop']['oc:objectId']['#text'],
-			id: tag['d:prop']['oc:id']['#text'],
-			uId: tag['d:prop']['oc:actorId']['#text'],
-			creationDateTime: tag['d:prop']['oc:creationDateTime']['#text'],
-			message: tag['d:prop']['oc:message']['#text']
-		})
+		result.push(commentToObject(list['d:propstat']))
 
 	// two or more elements
 	} else {
-		for (let index in list) {
-			let tag = list[index]['d:propstat']
-			if (tag['d:status']['#text'] !== 'HTTP/1.1 200 OK') {
+		for (const index in list) {
+			if (list[index]['d:propstat']['d:status']['#text'] !== 'HTTP/1.1 200 OK') {
 				continue
 			}
-			result.push({
-				cardId: tag['d:prop']['oc:objectId']['#text'],
-				id: tag['d:prop']['oc:id']['#text'],
-				uId: tag['d:prop']['oc:actorId']['#text'],
-				creationDateTime: tag['d:prop']['oc:creationDateTime']['#text'],
-				message: tag['d:prop']['oc:message']['#text']
-			})
+			result.push(commentToObject(list[index]['d:propstat']))
 		}
 	}
 	return result

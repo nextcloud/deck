@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<app-sidebar v-if="currentCard !== null && currentBoard && copiedCard !== null"
+	<AppSidebar v-if="currentCard !== null && currentBoard && copiedCard !== null"
 		:actions="toolbarActions"
 		:title="currentCard.title"
 		:subtitle="subtitle"
@@ -159,7 +159,7 @@ export default {
 		ActionButton,
 		Avatar,
 		CollectionList,
-		CommentsTabSidebar
+		CommentsTabSidebar,
 	},
 	mixins: [
 		Color,

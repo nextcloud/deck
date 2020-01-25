@@ -1,28 +1,21 @@
 <template>
 	<div>
-		<div id="userDiv">
-			<avatar :user="card.owner.uid" />
+		<div class="comment--header">
+			<Avatar :user="card.owner.uid" />
 			<span class="has-tooltip username">
 				{{ card.owner.displayname }}
 			</span>
 		</div>
 
-		<!-- <div id="commentForm">
+		<div class="comment-form">
 			<form @submit.prevent="createComment()">
-				<input :placeholder="t('deck', 'New comment') + ' ...'" v-model="newComment" type="text"
-					autofocus required>
-				<input v-tooltip="t('deck', 'Save')" class="icon-confirm" type="submit"
-					value="">
-			</form>
-		</div>
- -->
-
-		<div id="commentForm" class="editor">
-			<form @submit.prevent="createComment()">
-				<editor-content :editor="editor" :placeholder="t('deck', 'New comment') + ' ...'"
+				<EditorContent :editor="editor"
+					:placeholder="t('deck', 'New comment') + ' ...'"
 					class="editor__content"
 					required />
-				<input v-tooltip="t('deck', 'Save')" class="icon-confirm" type="submit"
+				<input v-tooltip="t('deck', 'Save')"
+					class="icon-confirm"
+					type="submit"
 					value="">
 			</form>
 		</div>
@@ -34,8 +27,7 @@
 					:key="user.uid"
 					:class="{ 'is-selected': navigatedUserIndex === index }"
 					class="suggestion-list__item"
-					@click="selectUser(user)"
-				>
+					@click="selectUser(user)">
 					{{ user.displayname }}
 				</div>
 			</template>
@@ -44,16 +36,20 @@
 			</div>
 		</div>
 
-		<p v-for="comment in comments[card.id]">{{ comment.id }}</p>
-
-		<div v-if="isLoading" class="icon icon-loading" />
-
-		<ul id="commentsFeed">
-			<CommentItem v-for="comment in comments[card.id]" :comment="comment" :key="comment.id"
+		<ul id="commentsFeed" v-if="comments[card.id] && comments[card.id].length > 0">
+			<CommentItem v-for="comment in comments[card.id]"
+				:key="comment.id"
+				:comment="comment"
 				@doReload="loadComments" />
+			<a @click="loadMore">
+				Load More
+			</a>
 		</ul>
-		<button @click="loadMore">Load More</button>
-
+		<div v-else-if="isLoading" class="icon icon-loading" />
+		<div class="emptycontent" v-else>
+			<div class="icon-comment"></div>
+			<p>Keine Kommentare bisher. Beginne die Diskussion!</p>
+		</div>
 	</div>
 </template>
 
@@ -64,25 +60,21 @@ import { Editor, EditorContent } from 'tiptap'
 import { Mention } from 'tiptap-extensions'
 
 import { mapState } from 'vuex'
-import { Avatar } from 'nextcloud-vue'
-import { Actions } from 'nextcloud-vue/dist/Components/Actions'
-import { ActionButton } from 'nextcloud-vue/dist/Components/ActionButton'
+import { Avatar } from '@nextcloud/vue'
 import CommentItem from './CommentItem'
 
 export default {
 	name: 'CommentsTabSidebar',
 	components: {
 		Avatar,
-		Actions,
-		ActionButton,
 		CommentItem,
-    	EditorContent
+		EditorContent,
 	},
 	props: {
 		card: {
 			type: Object,
-			default: undefined
-		}
+			default: undefined,
+		},
 	},
 	data() {
 		return {
@@ -100,7 +92,7 @@ export default {
 						},
 						// is called when a suggestion starts
 						onEnter: ({
-							items, query, range, command, virtualNode
+							items, query, range, command, virtualNode,
 						}) => {
 							this.query = query
 							this.filteredUsers = items
@@ -113,7 +105,7 @@ export default {
 						},
 						// is called when a suggestion has changed
 						onChange: ({
-							items, query, range, virtualNode
+							items, query, range, virtualNode,
 						}) => {
 							this.query = query
 							this.filteredUsers = items
@@ -159,30 +151,30 @@ export default {
 							}
 							const fuse = new Fuse(items, {
 								threshold: 0.2,
-								keys: ['uid', 'displayname']
+								keys: ['uid', 'displayname'],
 							})
 							return fuse.search(query)
-						}
-					})
+						},
+					}),
 				],
 				content: '',
 				onUpdate: ({ getHTML }) => {
 					this.newComment = getHTML().replace(/(<p>|<\/p>)/g, '')
-				}
+				},
 			}),
 			query: null,
 			suggestionRange: null,
 			filteredUsers: [],
 			navigatedUserIndex: 0,
 			insertMention: () => {},
-			observer: null
+			observer: null,
 
 		}
 	},
 	computed: {
 		...mapState({
 			comments: state => state.comment.comments,
-			currentBoard: state => state.currentBoard
+			currentBoard: state => state.currentBoard,
 		}),
 
 		hasResults() {
@@ -190,7 +182,7 @@ export default {
 		},
 		showSuggestions() {
 			return this.query || this.hasResults
-		}
+		},
 
 	},
 	watch: {
@@ -198,8 +190,8 @@ export default {
 			immediate: true,
 			handler() {
 				this.loadComments()
-			}
-		}
+			},
+		},
 	},
 	created() {
 	},
@@ -214,13 +206,14 @@ export default {
 			})
 		},
 		createComment() {
-			let commentObj = {
+			const commentObj = {
 				cardId: this.card.id,
-				comment: this.newComment
+				comment: this.newComment,
 			}
 			this.$store.dispatch('createComment', commentObj)
 			this.loadComments()
 			this.newComment = ''
+			this.editor.setContent('')
 		},
 		loadMore() {
 			this.offset = this.offset + this.limit
@@ -250,8 +243,8 @@ export default {
 				range: this.suggestionRange,
 				attrs: {
 					id: user.uid,
-					label: user.displayname
-				}
+					label: user.displayname,
+				},
 			})
 			this.editor.focus()
 		},
@@ -268,7 +261,7 @@ export default {
 				placement: 'bottom-start',
 				inertia: true,
 				duration: [400, 200],
-				showOnInit: true
+				showOnInit: true,
 			})
 			// we have to update tippy whenever the DOM is updated
 			if (MutationObserver) {
@@ -278,7 +271,7 @@ export default {
 				this.observer.observe(this.$refs.suggestions, {
 					childList: true,
 					subtree: true,
-					characterData: true
+					characterData: true,
 				})
 			}
 		},
@@ -290,30 +283,11 @@ export default {
 			if (this.observer) {
 				this.observer.disconnect()
 			}
-		}
-	}
+		},
+	},
 }
 </script>
 
 <style scoped lang="scss">
-	#commentForm form {
-		display: flex;
-		flex-grow: 1;
-	}
-
-	.editor__content {
-		flex-grow: 1;
-
-		.ProseMirror {
-			width: 100%;
-		}
-	}
-	#userDiv {
-		margin-bottom: 20px;
-	}
-	.username {
-		padding: 12px 9px;
-		flex-grow: 1;
-	}
-
+	@import "../../css/comments";
 </style>
