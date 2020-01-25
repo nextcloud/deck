@@ -96,6 +96,15 @@ export default new Vuex.Store({
 		currentBoardLabels: state => {
 			return state.currentBoard ? state.currentBoard.labels : []
 		},
+		canEdit: state => {
+			return state.currentBoard ? state.currentBoard.permissions.PERMISSION_EDIT : false
+		},
+		canManage: state => {
+			return state.currentBoard ? state.currentBoard.permissions.PERMISSION_MANAGE : false
+		},
+		canShare: state => {
+			return state.currentBoard ? state.currentBoard.permissions.PERMISSION_SHARE : false
+		},
 	},
 	mutations: {
 		toggleShowArchived(state) {
@@ -218,7 +227,7 @@ export default new Vuex.Store({
 		updateAclFromCurrentBoard(state, acl) {
 			for (const acl_ in state.currentBoard.acl) {
 				if (state.currentBoard.acl[acl_].participant.uid === acl.participant.uid) {
-					state.currentBoard.acl[acl_] = acl
+					Vue.set(state.currentBoard.acl, acl_, acl)
 					break
 				}
 			}
@@ -241,6 +250,12 @@ export default new Vuex.Store({
 	actions: {
 		async loadBoardById({ commit }, boardId) {
 			commit('setCurrentBoard', null)
+			const board = await apiClient.loadById(boardId)
+			commit('setCurrentBoard', board)
+			commit('setAssignableUsers', board.users)
+		},
+
+		async refreshBoard({ commit }, boardId) {
 			const board = await apiClient.loadById(boardId)
 			commit('setCurrentBoard', board)
 			commit('setAssignableUsers', board.users)
@@ -392,7 +407,7 @@ export default new Vuex.Store({
 			apiClient.addAcl(newAcl)
 				.then((returnAcl) => {
 					commit('addAclToCurrentBoard', returnAcl)
-					dispatch('loadBoardById', newAcl.boardId)
+					dispatch('refreshBoard', newAcl.boardId)
 				})
 		},
 		updateAclFromCurrentBoard({ commit }, acl) {

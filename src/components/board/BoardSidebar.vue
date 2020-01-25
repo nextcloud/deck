@@ -33,7 +33,10 @@
 			<TagsTabSidebar :board="board" />
 		</AppSidebarTab>
 
-		<AppSidebarTab :order="2" name="Deleted items" icon="icon-delete">
+		<AppSidebarTab v-if="canEdit"
+			:order="2"
+			name="Deleted items"
+			icon="icon-delete">
 			<DeletedTabSidebar :board="board" />
 		</AppSidebarTab>
 
@@ -44,7 +47,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import SharingTabSidebar from './SharingTabSidebar'
 import TagsTabSidebar from './TagsTabSidebar'
 import DeletedTabSidebar from './DeletedTabSidebar'
@@ -73,6 +76,7 @@ export default {
 			board: state => state.currentBoard,
 			labels: state => state.labels,
 		}),
+		...mapGetters(['canEdit']),
 	},
 	methods: {
 		closeSidebar() {

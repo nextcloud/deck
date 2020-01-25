@@ -28,7 +28,7 @@
 			<h2><a href="#">{{ board.title }}</a></h2>
 		</div>
 		<div v-if="board" class="board-actions">
-			<div id="stack-add" v-click-outside="hideAddStack">
+			<div v-if="canManage" id="stack-add" v-click-outside="hideAddStack">
 				<Actions v-if="!isAddStackVisible">
 					<ActionButton icon="icon-add" :title="t('deck', 'Add new stack')" @click.stop="showAddStack" />
 				</Actions>
@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { Actions, ActionButton } from '@nextcloud/vue'
 
 export default {
@@ -101,6 +101,10 @@ export default {
 		}
 	},
 	computed: {
+		...mapGetters([
+			'canEdit',
+			'canManage',
+		]),
 		...mapState({
 			compactMode: state => state.compactMode,
 		}),

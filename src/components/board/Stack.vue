@@ -25,7 +25,10 @@
 	<div class="stack">
 		<div class="stack--header">
 			<transition name="fade" mode="out-in">
-				<h3 v-if="!editing" @click="startEditing(stack)">
+				<h3 v-if="!canManage">
+					{{ stack.title }}
+				</h3>
+				<h3 v-else-if="!editing" @click="startEditing(stack)">
 					{{ stack.title }}
 				</h3>
 				<form v-else @submit.prevent="finishedEdit(stack)">
@@ -36,12 +39,12 @@
 						value="">
 				</form>
 			</transition>
-			<Actions :force-menu="true">
+			<Actions v-if="canManage" :force-menu="true">
 				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete stack') }}
 				</ActionButton>
 			</Actions>
-			<Actions>
+			<Actions v-if="canEdit">
 				<ActionButton icon="icon-add" @click="showAddCard=true">
 					{{ t('deck', 'Add card') }}
 				</ActionButton>
@@ -63,7 +66,11 @@
 				value="">
 		</form>
 
-		<Container :get-child-payload="payloadForCard(stack.id)" group-name="stack" @drop="($event) => onDropCard(stack.id, $event)">
+		<Container :get-child-payload="payloadForCard(stack.id)"
+			group-name="stack"
+			:drag-handle-selector="dragHandleSelector"
+			@should-accept-drop="canEdit"
+			@drop="($event) => onDropCard(stack.id, $event)">
 			<Draggable v-for="card in cardsByStack(stack.id)" :key="card.id">
 				<CardItem v-if="card" :id="card.id" />
 			</Draggable>
@@ -73,6 +80,7 @@
 
 <script>
 
+import { mapGetters } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
 import { Actions } from '@nextcloud/vue/dist/Components/Actions'
 import { ActionButton } from '@nextcloud/vue/dist/Components/ActionButton'
@@ -103,13 +111,19 @@ export default {
 		}
 	},
 	computed: {
+		...mapGetters([
+			'canManage',
+			'canEdit',
+		]),
 		cardsByStack() {
 			return (id) => this.$store.getters.cardsByStack(id)
+		},
+		dragHandleSelector() {
+			return this.canEdit ? null : '.no-drag'
 		},
 	},
 
 	methods: {
-
 		onDropCard(stackId, event) {
 			const { addedIndex, removedIndex, payload } = event
 			const card = Object.assign({}, payload)

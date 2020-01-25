@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<Multiselect
+			v-if="canShare"
 			v-model="addAcl"
 			:placeholder="t('deck', 'Share board with a user, group or circle …')"
 			:options="formatedSharees"
@@ -17,6 +18,9 @@
 				<Avatar :user="board.owner.uid" />
 				<span class="has-tooltip username">
 					{{ board.owner.displayname }}
+					<span v-if="!isCurrentUser(board.owner.uid)" class="board-owner-label">
+						{{ t('deck', 'Board owner') }}
+					</span>
 				</span>
 			</li>
 			<li v-for="acl in board.acl" :key="acl.participant.uid">
@@ -29,17 +33,17 @@
 					<span v-if="acl.type===7">{{ t('deck', '(Circle)') }}</span>
 				</span>
 
-				<ActionCheckbox :checked="acl.permissionEdit" @change="clickEditAcl(acl)">
+				<ActionCheckbox v-if="!isCurrentUser(acl.participant.uid) && (canManage || (canEdit && canShare))" :checked="acl.permissionEdit" @change="clickEditAcl(acl)">
 					{{ t('deck', 'Can edit') }}
 				</ActionCheckbox>
-				<Actions>
-					<ActionCheckbox :checked="acl.permissionShare" @change="clickShareAcl(acl)">
+				<Actions v-if="!isCurrentUser(acl.participant.uid)" :force-menu="true">
+					<ActionCheckbox v-if="canManage || canShare" :checked="acl.permissionShare" @change="clickShareAcl(acl)">
 						{{ t('deck', 'Can share') }}
 					</ActionCheckbox>
-					<ActionCheckbox :checked="acl.permissionManage" @change="clickManageAcl(acl)">
+					<ActionCheckbox v-if="canManage" :checked="acl.permissionManage" @change="clickManageAcl(acl)">
 						{{ t('deck', 'Can manage') }}
 					</ActionCheckbox>
-					<ActionButton icon="icon-delete" @click="clickDeleteAcl(acl)">
+					<ActionButton v-if="canManage" icon="icon-delete" @click="clickDeleteAcl(acl)">
 						{{ t('deck', 'Delete') }}
 					</ActionButton>
 				</Actions>
@@ -61,6 +65,7 @@ import { ActionButton } from '@nextcloud/vue/dist/Components/ActionButton'
 import { ActionCheckbox } from '@nextcloud/vue/dist/Components/ActionCheckbox'
 import { CollectionList } from 'nextcloud-vue-collections'
 import { mapGetters } from 'vuex'
+import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
 	name: 'SharingTabSidebar',
@@ -86,9 +91,15 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters({
-			sharees: 'sharees',
-		}),
+		...mapGetters([
+			'sharees',
+			'canEdit',
+			'canManage',
+			'canShare',
+		]),
+		isCurrentUser() {
+			return (uid) => uid === getCurrentUser().uid
+		},
 		formatedSharees() {
 			return this.unallocatedSharees.map(item => {
 
@@ -172,6 +183,9 @@ export default {
 	.username {
 		padding: 12px 9px;
 		flex-grow: 1;
+	}
+	.board-owner-label {
+		opacity: .7;
 	}
 	.avatarLabel {
 		padding: 6px

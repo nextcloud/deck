@@ -21,8 +21,14 @@
 					<div :style="{ backgroundColor: `#${label.color}`, color:textColor(label.color) }" class="label-title">
 						<span>{{ label.title }}</span>
 					</div>
-					<button v-tooltip="t('deck', 'Edit')" class="icon-rename" @click="clickEdit(label)" />
-					<button v-tooltip="t('deck', 'Delete')" class="icon-delete" @click="deleteLabel(label.id)" />
+					<button v-if="canManage"
+						v-tooltip="t('deck', 'Edit')"
+						class="icon-rename"
+						@click="clickEdit(label)" />
+					<button v-if="canManage"
+						v-tooltip="t('deck', 'Delete')"
+						class="icon-delete"
+						@click="deleteLabel(label.id)" />
 				</template>
 			</li>
 
@@ -43,7 +49,7 @@
 					<ColorPicker :value="'#' + addLabelObj.color" @input="updateColor" />
 				</template>
 			</li>
-			<button @click="clickShowAddLabel()">
+			<button v-if="canManage" @click="clickShowAddLabel()">
 				<span class="icon-add" />{{ t('deck', 'Add a new label') }}
 			</button>
 		</ul>
@@ -75,6 +81,7 @@ export default {
 	computed: {
 		...mapGetters({
 			labels: 'currentBoardLabels',
+			canManage: 'canManage',
 		}),
 		addLabelObjValidated() {
 			if (this.addLabelObj.title === '') {
