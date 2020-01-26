@@ -37,7 +37,7 @@
 		"nextcloud-server": "^0.15.10",
 		"nextcloud-vue-collections": "^0.7.1",
 		"tippy.js": "^4.3.5",
-		"tiptap": "^1.26.3",
+		"tiptap": "^1.26.6",
 		"tiptap-extensions": "^1.28.6",
 		"url-search-params-polyfill": "^7.0.1",
 		"vue": "^2.6.11",
