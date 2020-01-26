@@ -5,6 +5,7 @@ The REST API provides access for authenticated users to their data inside the De
 
 - All requests require a `OCS-APIRequest` HTTP header to be set to `true` and a `Content-Type` of `application/json`.
 - The API is located at https://nextcloud.local/index.php/apps/deck/api/v1.0
+- All request parameters are required, unless otherwise specified
 
 ## Naming
 
@@ -20,7 +21,7 @@ The REST API provides access for authenticated users to their data inside the De
 
 ### 400 Bad request
 
-In case the request is invalid, e.g. because a parameter is missing, a 400 error will be returned:
+In case the request is invalid, e.g. because a parameter is missing or an invalid value has been transmitted, a 400 error will be returned:
 
 ```json
 {
@@ -40,6 +41,12 @@ In any case a user doesn't have access to a requested entity, a 403 error will b
 }
 ```
 
+## Formats
+
+### Date
+
+Datetime values in request data need to be provided in ISO-8601. Example: 2020-01-20T09:52:43+00:00
+
 ## Headers
 
 ### If-Modified-Since
@@ -51,7 +58,7 @@ The supported date formats are:
 * (obsolete) RFC 850:          `Sunday, 03-Aug-19 10:34:12 GMT`
 * (obsolete) ANSI C asctime(): `Sun Aug  3 10:34:12 2019`
 
-It is highly recommended to only use the IMF-fixdate format.
+It is highly recommended to only use the IMF-fixdate format. Note that according to [RFC2616](https://tools.ietf.org/html/rfc2616#section-3.3) all HTTP date/time stamps MUST be represented in Greenwich Mean Time (GMT), without exception.
 
 Example curl request:
 
@@ -196,6 +203,10 @@ Returns an array of board items
     "lastModified": 1586269585
 }
 ```
+
+##### 403 Forbidden
+
+A 403 response might be returned if the users ability to create new boards has been disabled by the administrator. For checking this before, see the `canCreateBoards` value in the [Nextcloud capabilties](./API-Nextcloud.md).
 
 ### GET /boards/{boardId} - Get board details
 
