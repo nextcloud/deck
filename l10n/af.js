@@ -1,9 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Hours" : "Uur",
-    "Minutes" : "Minute",
-    "File already exists" : "Lêer bestaan reeds",
     "Personal" : "Persoonlik",
     "Done" : "Gereed",
     "The file was uploaded" : "Die lêer is opgelaai",
@@ -13,21 +10,10 @@ OC.L10N.register(
     "No file was uploaded" : "Geen lêer is opgelaai",
     "Missing a temporary folder" : "Ontbrekende tydelike gids",
     "A PHP extension stopped the file upload" : "’n PHP-uitbreiding het die oplaai gestaak",
-    "Actions" : "Aksies",
-    "Close" : "Sluit",
-    "Tags" : "Etikette",
-    "Group" : "Groep",
-    "Loading" : "Laai tans..",
     "Edit" : "Wysig",
-    "Share" : "Deel",
-    "Create" : "Skep",
-    "Title" : "Titel",
-    "Cancel upload" : "Kanselleer oplaai",
-    "by" : "deur",
-    "Created:" : "Geskep:",
+    "Tags" : "Etikette",
     "Due date" : "Sperdatum",
     "Description" : "Beskrywing",
-    "Saved" : "Bewaar",
     "Settings" : "Instellings"
 },
 "nplurals=2; plural=(n != 1);");
