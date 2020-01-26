@@ -1,5 +1,34 @@
 # Nextcloud APIs
 
+## Capabilities
+
+The [Nextcloud Capabilities API](https://docs.nextcloud.com/server/latest/developer_manual/client_apis/OCS/ocs-api-overview.html#capabilities-api) provides the following information for the Deck app:
+
+- `version` Current version of the Deck app running
+- `canCreateBoards` Ability of the current user to create new boards for themselves
+
+```
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": {
+      "capabilities": {
+        "deck": {
+          "version": "0.8.0",
+          "canCreateBoards": true
+        },
+      }
+    }
+  }
+}
+```
+
+
+
 ## Available sharees
 
 When sharing a board to a user, group or circle, the possible sharees can be obtained though the files_sharing API.
