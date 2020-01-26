@@ -34,23 +34,20 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
-use OCA\Deck\Service\DefaultBoardService;
 use OCA\Deck\Service\FullTextSearchService;
-use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\App;
 use OCP\Collaboration\Resources\IManager;
 use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Comments\CommentsEntityEvent;
 use OCP\FullTextSearch\IFullTextSearchManager;
 use OCP\IGroup;
-use OCP\ILogger;
 use OCP\IServerContainer;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IURLGenerator;
-use OCP\IUserSession;
 use OCP\Util;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
@@ -67,9 +64,6 @@ class Application extends App {
 	/** @var IFullTextSearchManager */
 	private $fullTextSearchManager;
 
-	/** @var ILogger */
-	private $logger;
-
 	public function __construct(array $urlParams = array()) {
 		parent::__construct('deck', $urlParams);
 
@@ -77,10 +71,10 @@ class Application extends App {
 		$server = $this->getContainer()->getServer();
 
 		$this->server = $server;
-		$this->logger = $server->getLogger();
 
 		$container->registerCapability(Capabilities::class);
 		$container->registerMiddleWare(ExceptionMiddleware::class);
+		$container->registerMiddleWare(DefaultBoardMiddleware::class);
 
 		$container->registerService('databaseType', static function() use ($server) {
 			return $server->getConfig()->getSystemValue('dbtype', 'sqlite');
@@ -88,7 +82,6 @@ class Application extends App {
 		$container->registerService('database4ByteSupport', static function() use ($server) {
 			return $server->getDatabaseConnection()->supports4ByteText();
 		});
-
 	}
 
 	public function register(): void {
@@ -98,7 +91,6 @@ class Application extends App {
 		$this->registerCommentsEntity();
 		$this->registerFullTextSearch();
 		$this->registerCollaborationResources();
-		$this->checkDefaultBoard();
 	}
 
 	public function registerNavigationEntry(): void {
@@ -254,19 +246,4 @@ class Application extends App {
 		);
 	}
 
-	private function checkDefaultBoard(): void {
-		try {
-			/** @var IUserSession $userSession */
-			$userSession = $this->getContainer()->query(IUserSession::class);
-			$userId = $userSession->getUser() ? $userSession->getUser()->getUID() : null;
-			/** @var DefaultBoardService $defaultBoardService */
-			$defaultBoardService = $this->getContainer()->query(DefaultBoardService::class);
-			$permissionService = $this->getContainer()->query(PermissionService::class);
-			if ($userId !== null && $defaultBoardService->checkFirstRun($userId) && $permissionService->canCreate()) {
-				$defaultBoardService->createDefaultBoard($this->server->getL10N(self::APP_ID)->t('Personal'), $userId, '0087C5');
-			}
-		} catch (\Throwable $e) {
-			$this->logger->logException($e);
-		}
-	}
 }
