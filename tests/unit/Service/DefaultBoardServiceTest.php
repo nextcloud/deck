@@ -94,7 +94,7 @@ class DefaultBoardServiceTest extends TestCase {
 		$this->config->expects($this->once())
 			->method('setUserValue');
 
-		$result = $this->service->checkFirstRun($this->userId, $appName);
+		$result = $this->service->checkFirstRun($this->userId);
 		$this->assertEquals($result, true);
 	}
 
@@ -115,7 +115,7 @@ class DefaultBoardServiceTest extends TestCase {
 			->method('findAllByUser')
 			->willReturn($userBoards);
 
-		$result = $this->service->checkFirstRun($this->userId, $appName);
+		$result = $this->service->checkFirstRun($this->userId);
 		$this->assertEquals($result, false);
 	}
 

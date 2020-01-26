@@ -24,29 +24,42 @@
 namespace OCA\Deck\AppInfo;
 
 use Exception;
+use InvalidArgumentException;
+use OC_Util;
 use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Capabilities;
+use OCA\Deck\Collaboration\Resources\ResourceProvider;
+use OCA\Deck\Collaboration\Resources\ResourceProviderCard;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
+use OCA\Deck\Service\DefaultBoardService;
 use OCA\Deck\Service\FullTextSearchService;
+use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\App;
 use OCP\Collaboration\Resources\IManager;
+use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Comments\CommentsEntityEvent;
 use OCP\FullTextSearch\IFullTextSearchManager;
 use OCP\IGroup;
+use OCP\ILogger;
+use OCP\IServerContainer;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IURLGenerator;
-use OCP\INavigationManager;
+use OCP\IUserSession;
 use OCP\Util;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 class Application extends App {
 
+	public const APP_ID = 'deck';
+
+	/** @var IServerContainer */
+	private $server;
 
 	/** @var FullTextSearchService */
 	private $fullTextSearchService;
@@ -54,40 +67,60 @@ class Application extends App {
 	/** @var IFullTextSearchManager */
 	private $fullTextSearchManager;
 
+	/** @var ILogger */
+	private $logger;
 
-	/**
-	 * Application constructor.
-	 *
-	 * @param array $urlParams
-	 *
-	 * @throws \OCP\AppFramework\QueryException
-	 */
 	public function __construct(array $urlParams = array()) {
 		parent::__construct('deck', $urlParams);
 
 		$container = $this->getContainer();
-		$server = $container->getServer();
+		$server = $this->getContainer()->getServer();
 
-		$container->registerService('ExceptionMiddleware', function() use ($server) {
-			return new ExceptionMiddleware(
-				$server->getLogger(),
-				$server->getConfig()
-			);
+		$this->server = $server;
+		$this->logger = $server->getLogger();
+
+		$container->registerCapability(Capabilities::class);
+		$container->registerMiddleWare(ExceptionMiddleware::class);
+
+		$container->registerService('databaseType', static function() use ($server) {
+			return $server->getConfig()->getSystemValue('dbtype', 'sqlite');
 		});
-		$container->registerMiddleWare('ExceptionMiddleware');
-
-		$container->registerService('databaseType', function($container) {
-			return $container->getServer()->getConfig()->getSystemValue('dbtype', 'sqlite');
-		});
-
-		$container->registerService('database4ByteSupport', function($container) {
-			return $container->getServer()->getDatabaseConnection()->supports4ByteText();
+		$container->registerService('database4ByteSupport', static function() use ($server) {
+			return $server->getDatabaseConnection()->supports4ByteText();
 		});
 
+	}
+
+	public function register(): void {
+		$this->registerNavigationEntry();
+		$this->registerUserGroupHooks();
+		$this->registerNotifications();
+		$this->registerCommentsEntity();
+		$this->registerFullTextSearch();
+		$this->registerCollaborationResources();
+		$this->checkDefaultBoard();
+	}
+
+	public function registerNavigationEntry(): void {
+		$container = $this->getContainer();
+		$this->server->getNavigationManager()->add(static function() use ($container) {
+			$urlGenerator = $container->query(IURLGenerator::class);
+			return [
+				'id' => 'deck',
+				'order' => 10,
+				'href' => $urlGenerator->linkToRoute('deck.page.index'),
+				'icon' => $urlGenerator->imagePath('deck', 'deck.svg'),
+				'name' => 'Deck',
+			];
+		});
+	}
+
+	private function registerUserGroupHooks(): void {
+		$container = $this->getContainer();
 		// Delete user/group acl entries when they get deleted
 		/** @var IUserManager $userManager */
-		$userManager = $server->getUserManager();
-		$userManager->listen('\OC\User', 'postDelete', function(IUser $user) use ($container) {
+		$userManager = $this->server->getUserManager();
+		$userManager->listen('\OC\User', 'postDelete', static function(IUser $user) use ($container) {
 			// delete existing acl entries for deleted user
 			/** @var AclMapper $aclMapper */
 			$aclMapper = $container->query(AclMapper::class);
@@ -104,8 +137,8 @@ class Application extends App {
 		});
 
 		/** @var IUserManager $userManager */
-		$groupManager = $server->getGroupManager();
-		$groupManager->listen('\OC\Group', 'postDelete', function(IGroup $group) use ($container) {
+		$groupManager = $this->server->getGroupManager();
+		$groupManager->listen('\OC\Group', 'postDelete', static function(IGroup $group) use ($container) {
 			/** @var AclMapper $aclMapper */
 			$aclMapper = $container->query(AclMapper::class);
 			$aclMapper->findByParticipant(Acl::PERMISSION_TYPE_GROUP, $group->getGID());
@@ -114,47 +147,21 @@ class Application extends App {
 				$aclMapper->delete($acl);
 			}
 		});
-
-		$this->registerCollaborationResources();
-
-		$this->getContainer()->registerCapability(Capabilities::class);
-
-
 	}
 
-	/**
-	 * @throws \OCP\AppFramework\QueryException
-	 */
-	public function registerNavigationEntry() {
-		$container = $this->getContainer();
-		$container->query(INavigationManager::class)->add(function() use ($container) {
-			$urlGenerator = $container->query(IURLGenerator::class);
-			return [
-				'id' => 'deck',
-				'order' => 10,
-				'href' => $urlGenerator->linkToRoute('deck.page.index'),
-				'icon' => $urlGenerator->imagePath('deck', 'deck.svg'),
-				'name' => 'Deck',
-			];
-		});
-	}
-
-	public function registerNotifications() {
-		$notificationManager = \OC::$server->getNotificationManager();
+	public function registerNotifications(): void {
+		$notificationManager = $this->server->getNotificationManager();
 		$notificationManager->registerNotifierService(Notifier::class);
 	}
 
-	/**
-	 * @throws \OCP\AppFramework\QueryException
-	 */
-	public function registerCommentsEntity() {
-		$this->getContainer()->getServer()->getEventDispatcher()->addListener(CommentsEntityEvent::EVENT_ENTITY, function(CommentsEntityEvent $event) {
+	public function registerCommentsEntity(): void {
+		$this->server->getEventDispatcher()->addListener(CommentsEntityEvent::EVENT_ENTITY, function(CommentsEntityEvent $event) {
 			$event->addEntityCollection('deckCard', function($name) {
 				/** @var CardMapper */
 				$service = $this->getContainer()->query(CardMapper::class);
 				try {
 					$service->find((int) $name);
-				} catch (\InvalidArgumentException $e) {
+				} catch (InvalidArgumentException $e) {
 					return false;
 				}
 				return true;
@@ -164,19 +171,15 @@ class Application extends App {
 	}
 
 	/**
-	 * @throws \OCP\AppFramework\QueryException
 	 */
-	protected function registerCommentsEventHandler() {
-		$this->getContainer()->getServer()->getCommentsManager()->registerEventHandler(function () {
+	protected function registerCommentsEventHandler(): void {
+		$this->server->getCommentsManager()->registerEventHandler(function () {
 			return $this->getContainer()->query(CommentEventHandler::class);
 		});
 	}
 
-	/**
-	 * @throws \OCP\AppFramework\QueryException
-	 */
-	protected function registerCollaborationResources() {
-		$version = \OC_Util::getVersion()[0];
+	protected function registerCollaborationResources(): void {
+		$version = OC_Util::getVersion()[0];
 		if ($version < 16) {
 			return;
 		}
@@ -190,18 +193,18 @@ class Application extends App {
 			/** @var IManager $resourceManager */
 			$resourceManager = $this->getContainer()->query(IManager::class);
 		} else {
-			/** @var \OCP\Collaboration\Resources\IProviderManager $resourceManager */
-			$resourceManager = $this->getContainer()->query(\OCP\Collaboration\Resources\IProviderManager::class);
+			/** @var IProviderManager $resourceManager */
+			$resourceManager = $this->getContainer()->query(IProviderManager::class);
 		}
-		$resourceManager->registerResourceProvider(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
-		$resourceManager->registerResourceProvider(\OCA\Deck\Collaboration\Resources\ResourceProviderCard::class);
+		$resourceManager->registerResourceProvider(ResourceProvider::class);
+		$resourceManager->registerResourceProvider(ResourceProviderCard::class);
 
-		\OC::$server->getEventDispatcher()->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', function () {
-			\OCP\Util::addScript('deck', 'collections');
+		$this->server->getEventDispatcher()->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
+			Util::addScript('deck', 'collections');
 		});
 	}
 
-	public function registerFullTextSearch() {
+	public function registerFullTextSearch(): void {
 		if (Util::getVersion()[0] < 16) {
 			return;
 		}
@@ -218,7 +221,7 @@ class Application extends App {
 			return;
 		}
 
-		$eventDispatcher = \OC::$server->getEventDispatcher();
+		$eventDispatcher = $this->server->getEventDispatcher();
 		$eventDispatcher->addListener(
 			'\OCA\Deck\Card::onCreate', function(GenericEvent $e) {
 			$this->fullTextSearchService->onCardCreated($e);
@@ -251,4 +254,19 @@ class Application extends App {
 		);
 	}
 
+	private function checkDefaultBoard(): void {
+		try {
+			/** @var IUserSession $userSession */
+			$userSession = $this->getContainer()->query(IUserSession::class);
+			$userId = $userSession->getUser() ? $userSession->getUser()->getUID() : null;
+			/** @var DefaultBoardService $defaultBoardService */
+			$defaultBoardService = $this->getContainer()->query(DefaultBoardService::class);
+			$permissionService = $this->getContainer()->query(PermissionService::class);
+			if ($userId !== null && $defaultBoardService->checkFirstRun($userId) && $permissionService->canCreate()) {
+				$defaultBoardService->createDefaultBoard($this->server->getL10N(self::APP_ID)->t('Personal'), $userId, '0087C5');
+			}
+		} catch (\Throwable $e) {
+			$this->logger->logException($e);
+		}
+	}
 }

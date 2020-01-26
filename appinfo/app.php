@@ -21,15 +21,19 @@
  *
  */
 
-if ((@include_once __DIR__ . '/../vendor/autoload.php')===false) {
+use OCA\Deck\AppInfo\Application;
+use OCP\AppFramework\QueryException;
+
+if ((@include_once __DIR__ . '/../vendor/autoload.php')=== false) {
 	throw new Exception('Cannot include autoload. Did you run install dependencies using composer?');
 }
 
-$app = \OC::$server->query(\OCA\Deck\AppInfo\Application::class);
-$app->registerNavigationEntry();
-$app->registerNotifications();
-$app->registerCommentsEntity();
-$app->registerFullTextSearch();
+try {
+	/** @var Application $app */
+	$app = \OC::$server->query(Application::class);
+	$app->register();
+} catch (QueryException $e) {
+}
 
 /** Load activity style global so it is availabile in the activity app as well */
 \OC_Util::addStyle('deck', 'activity');
