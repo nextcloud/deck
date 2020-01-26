@@ -36,7 +36,7 @@
 		"nextcloud-axios": "^0.2.1",
 		"nextcloud-server": "^0.15.10",
 		"nextcloud-vue-collections": "^0.7.1",
-		"tippy.js": "^4.3.5",
+		"tippy.js": "^5.1.4",
 		"tiptap": "^1.26.6",
 		"tiptap-extensions": "^1.28.6",
 		"url-search-params-polyfill": "^7.0.1",
