@@ -6,12 +6,22 @@
     "Action needed" : "Үйлдэл шаардлагатай",
     "Later" : "Хойшлуулах",
     "Done" : "Хийсэн",
+    "Cancel" : "болиулах",
     "Show archived cards" : "Архивлагдсан картуудыг харах",
     "Hide archived cards" : "Архивлагдсан картуудыг нуух",
+    "Undo" : "буцах",
+    "Can edit" : "Can edit",
+    "Can share" : "Can share",
+    "Delete" : "Устгах",
     "Edit" : "Засварлах",
     "Tags" : "Tag-үүд",
     "Description" : "Тайлбар",
     "Attachments" : "Хавсралт",
+    "Comments" : "Сэтгэгдлүүд",
+    "Modified" : "Өөрчлөгдсөн",
+    "Created" : "Үүсгэсэн",
+    "Save" : "Хадгалах",
+    "Update" : "Шинэчлэх",
     "Settings" : "Тохиргоо"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

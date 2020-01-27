@@ -6,9 +6,17 @@ OC.L10N.register(
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "උඩුගත කළ ගොනුවේ විශාලත්වය HTML පෝරමයේ නියම කළ ඇති MAX_FILE_SIZE විශාලත්වයට වඩා වැඩිය",
     "No file was uploaded" : "ගොනුවක් උඩුගත නොවුණි",
     "Missing a temporary folder" : "තාවකාලික ෆොල්ඩරයක් අතුරුදහන්",
+    "Cancel" : "අවලංගු කරන්න",
+    "Can edit" : "Can edit",
+    "Can share" : "Can share",
+    "Delete" : "ඉවත් කරන්න",
     "Edit" : "සකසන්න",
     "Tags" : "ටැග",
     "Description" : "විස්තරය",
+    "Comments" : "අදහස්",
+    "Modified" : "වෙනස් කළ",
+    "Save" : "සුරකින්න",
+    "Update" : "යාවත්කාල කිරීම",
     "Settings" : "සැකසුම්"
 },
 "nplurals=2; plural=(n != 1);");

@@ -1,0 +1,16 @@
+OC.L10N.register(
+    "deck",
+    {
+    "Personal" : "個人",
+    "Done" : "Done",
+    "Cancel" : "取消",
+    "Can edit" : "Can edit",
+    "Can share" : "Can share",
+    "Delete" : "刪除",
+    "Edit" : "編輯",
+    "Description" : "描述",
+    "Save" : "儲存",
+    "Update" : "更新",
+    "Settings" : "設定"
+},
+"nplurals=1; plural=0;");

@@ -1,0 +1,13 @@
+{ "translations": {
+    "Personal" : "Shaxsiy",
+    "Done" : "Bajarildi",
+    "Cancel" : "Bekor qilish",
+    "Can edit" : "Tahrirlashi mumkin",
+    "Delete" : "O'chir",
+    "Tags" : "Teglar",
+    "Comments" : "Fikrlar",
+    "Save" : "Saqlash",
+    "Update" : "Yangilash",
+    "Settings" : "Sozlamalar"
+},"pluralForm" :"nplurals=1; plural=0;"
+}

@@ -2,6 +2,7 @@ OC.L10N.register(
     "deck",
     {
     "Personal" : "Persoonlik",
+    "copy" : "kopie",
     "Done" : "Gereed",
     "The file was uploaded" : "Die lêer is opgelaai",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Die opgelaaide lêer oorskry die upload_max_filesize riglyn in php.ini",
@@ -10,10 +11,20 @@ OC.L10N.register(
     "No file was uploaded" : "Geen lêer is opgelaai",
     "Missing a temporary folder" : "Ontbrekende tydelike gids",
     "A PHP extension stopped the file upload" : "’n PHP-uitbreiding het die oplaai gestaak",
+    "Cancel" : "Kanselleer",
+    "Can edit" : "Kan redigeer",
+    "Can share" : "Kan deel",
+    "Delete" : "Skrap",
     "Edit" : "Wysig",
     "Tags" : "Etikette",
     "Due date" : "Sperdatum",
     "Description" : "Beskrywing",
-    "Settings" : "Instellings"
+    "Comments" : "Kommentare",
+    "Modified" : "Gewysig",
+    "Created" : "Geskep",
+    "Save" : "Stoor",
+    "Update" : "Werk by",
+    "Settings" : "Instellings",
+    "An error occurred" : "'n Fout het voorgekom"
 },
 "nplurals=2; plural=(n != 1);");

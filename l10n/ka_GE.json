@@ -14,8 +14,13 @@
     "No file was uploaded" : "ფაილი არ აიტვირთა",
     "Missing a temporary folder" : "დროებითი დირექტორია არ არსებობს",
     "Create new board" : "ახალი დაფის შექმნა",
+    "Cancel" : "უარყოფა",
     "Show archived cards" : "არქივირებული ბარათების ჩვენება",
     "Hide archived cards" : "არქივირებული ბარათების დამალვა",
+    "Undo" : "დაბრუნება",
+    "Can edit" : "შეუძლია შეცვალოს",
+    "Can share" : "შეუძლია გააზიაროს",
+    "Delete" : "წაშლა",
     "Add a new stack" : "დასტის დამატება",
     "Add card" : "ბარათის დამატება",
     "Edit" : "შეცვლა",
@@ -23,7 +28,12 @@
     "Due date" : "დროისთვის",
     "Remove due date" : "მოაშორეთ დანიშნულების დრო",
     "Description" : "აღწერა",
+    "Comments" : "კომენტარები",
+    "Modified" : "შეიცვალა",
+    "Created" : "შექმნილია",
     "Upload attachment" : "დანართის ატვირთვა",
+    "Save" : "შენახვა",
+    "Update" : "განახლება",
     "Archived boards" : "არქივირებული დაფები",
     "Shared boards" : "გაზიარებული დაფები",
     "Settings" : "პარამეტრები",
@@ -31,6 +41,7 @@
     "Edit board" : "დაფის შეცვლა",
     "Archive board" : "დაფის არქივირება",
     "Unarchive board" : "დაფის ამოღება",
-    "Delete board" : "დაფის გაუქმება"
+    "Delete board" : "დაფის გაუქმება",
+    "Board details" : "დაფის დეტალები"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }

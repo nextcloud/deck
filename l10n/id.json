@@ -5,9 +5,19 @@
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Berkas yang diunggah melampaui direktif MAX_FILE_SIZE yang ditentukan dalam formulir HTML.",
     "No file was uploaded" : "Tidak ada berkas yang diunggah",
     "Missing a temporary folder" : "Folder sementara tidak ada",
+    "Cancel" : "Membatalkan",
+    "Undo" : "Undo",
+    "Can edit" : "Can edit",
+    "Can share" : "Can share",
+    "Delete" : "Hapus",
     "Edit" : "Sunting",
     "Tags" : "Tag",
     "Description" : "Deskrisi",
+    "Comments" : "Komentar",
+    "Modified" : "Dimodifikasi",
+    "Created" : "Dibuat",
+    "Save" : "Simpan",
+    "Update" : "Perbarui",
     "Settings" : "Setelan"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

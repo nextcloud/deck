@@ -1,17 +1,28 @@
 { "translations": {
     "Personal" : "شخصي",
     "Finished" : "مكتملة",
+    "copy" : "أنسخ",
     "Done" : "تم",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "حجم الملف الذي تريد ترفيعه أعلى مما MAX_FILE_SIZE يسمح به في واجهة ال HTML.",
     "No file was uploaded" : "لم يتم رفع أي ملف",
     "Missing a temporary folder" : "المجلد المؤقت غير موجود",
+    "Cancel" : "إلغاء",
+    "Undo" : "تراجع",
+    "Can edit" : "يمكنه التغيير",
+    "Can share" : "Can share",
+    "Delete" : "حذف ",
     "Edit" : "تعديل",
     "Tags" : "الوسوم",
     "Description" : "الوصف",
     "Attachments" : "المرفقات",
+    "Comments" : "تعليقات",
     "Timeline" : "الخيط الزمني",
+    "Modified" : "آخر تعديل",
     "Upload attachment" : "رفع المرفقات",
+    "Save" : "حفظ",
+    "Update" : "تحديث",
     "Delete card" : "حذف البطاقة",
-    "Settings" : "الإعدادات"
+    "Settings" : "الإعدادات",
+    "An error occurred" : "طرأ هناك خطأ"
 },"pluralForm" :"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;"
 }

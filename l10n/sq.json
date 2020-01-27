@@ -5,6 +5,7 @@
     "To review" : "Për rishikim",
     "Action needed" : "Nevoitet veprim",
     "Later" : "Më vonë",
+    "copy" : "kopjo",
     "To do" : "Për t'u bërë",
     "Doing" : "Duke e bërë",
     "Done" : "Përfunduar",
@@ -13,8 +14,13 @@
     "No file was uploaded" : "S’u ngarkua kartelë",
     "Missing a temporary folder" : "Mungon një dosje e përkohshme",
     "Create new board" : "Krijo bord të ri",
+    "Cancel" : "Anullo",
     "Show archived cards" : "Trego kartat e arkivuara",
     "Hide archived cards" : "Fsheh kartat e arkivuara ",
+    "Undo" : "Ktheje pas",
+    "Can edit" : "Can edit",
+    "Can share" : "Mund të ndaj",
+    "Delete" : "Delete",
     "Add a new stack" : "Shto një raft të ri",
     "Add card" : "Shto kartë",
     "Edit" : "Edito",
@@ -23,7 +29,12 @@
     "Remove due date" : "Hiq datën e mbarimit",
     "Description" : "Përshkrim",
     "Attachments" : "Bashkangjitjet",
+    "Comments" : "Komentet",
+    "Modified" : "Modifikuar ",
+    "Created" : "U krijua",
     "Upload attachment" : "Ngarko bashkëngjitje",
+    "Save" : "Ruaj",
+    "Update" : "Përditëso",
     "Archived boards" : "Borde të arkivuara",
     "Shared boards" : "Tabela të shpërndara",
     "Settings" : "Rregullimet",
@@ -31,6 +42,7 @@
     "Edit board" : "Tabela e editimeve",
     "Archive board" : "Arkivo bordin",
     "Unarchive board" : "Hiq bordin nga arkivi",
-    "Delete board" : "Fshij bordin"
+    "Delete board" : "Fshij bordin",
+    "Board details" : "Detajet e Tabeles "
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

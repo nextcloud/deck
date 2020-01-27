@@ -1,0 +1,13 @@
+{ "translations": {
+    "Personal" : "شخصی",
+    "Done" : "Done",
+    "Cancel" : "منسوخ کریں",
+    "Can edit" : "Can edit",
+    "Can share" : "Can share",
+    "Delete" : "حذف کریں",
+    "Edit" : "تدوین کریں",
+    "Description" : "تصریح",
+    "Save" : "حفظ",
+    "Settings" : "سیٹینگز"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

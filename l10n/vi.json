@@ -44,9 +44,13 @@
     "No file uploaded or file size exceeds maximum of %s" : "Chưa có tệp nào được tải lên hoặc kích thước tệp vượt quá giới hạn của %s",
     "A kanban style project and personal management tool for Nextcloud" : "Dự án theo kiểu kanban và công cụ quản lý cá nhân cho Hệ thống",
     "Create new board" : "Tạo dự án mới",
+    "Cancel" : "Hủy bỏ",
     "Show archived cards" : "Hiện tác vụ đã lưu trữ",
     "Hide archived cards" : "Ẩn tác vụ đã lưu trữ",
     "Toggle compact mode" : "Chuyển đổi chế độ thu gọn",
+    "Can edit" : "Có thể chỉnh sửa",
+    "Can share" : "Can share",
+    "Delete" : "Xóa",
     "Add a new stack" : "Thêm một giai đoạn mới",
     "Add card" : "Thêm tác vụ",
     "Edit" : "Chỉnh sửa",
@@ -55,7 +59,13 @@
     "Remove due date" : "Xóa thời hạn",
     "Description" : "Mô tả",
     "Attachments" : "Đính kèm",
+    "Comments" : "Các bình luận",
+    "Modified" : "Thay đổi",
+    "Created" : "Đã tạo",
     "Upload attachment" : "Tải lên một đính kèm",
+    "Save" : "Lưu",
+    "Update" : "Cập nhật",
+    "Assign to me" : "Phân công cho tôi",
     "Archived boards" : "Dự án đã lưu trữ",
     "Shared boards" : "Chia sẽ dự án",
     "Settings" : "Thiết lập",
@@ -63,6 +73,7 @@
     "Edit board" : "Chỉnh sửa dự án",
     "Archive board" : "Lưu trữ dự án",
     "Unarchive board" : "Bỏ lưu trữ dự án",
-    "Delete board" : "Xóa dự án"
+    "Delete board" : "Xóa dự án",
+    "Board details" : "Thông tin dự án"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

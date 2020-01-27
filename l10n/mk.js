@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Personal" : "Лично",
     "Finished" : "Завршено",
+    "copy" : "копирај",
     "Done" : "Готово",
     "The file was uploaded" : "Датотеката е прикачена",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Подигнатата датотека ја надминува upload_max_filesize директивата во php.ini",
@@ -12,10 +13,19 @@ OC.L10N.register(
     "Missing a temporary folder" : "Недостасува привремена папка",
     "Could not write file to disk" : "Неможе да се запишува на дискот",
     "A PHP extension stopped the file upload" : "PHP додаток го стопираше прикачувањето на датотеката",
+    "Cancel" : "Откажи",
+    "Can edit" : "Може да се уредува",
+    "Can share" : "Can share",
+    "Delete" : "Избриши",
     "Edit" : "Уреди",
     "Tags" : "Ознаки",
     "Description" : "Опис",
+    "Comments" : "Коментари",
+    "Modified" : "Изменето",
     "Upload attachment" : "Прикачи прилог",
-    "Settings" : "Параметри"
+    "Save" : "Зачувај",
+    "Update" : "Ажурирај",
+    "Settings" : "Параметри",
+    "An error occurred" : "Настана грешка"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");
