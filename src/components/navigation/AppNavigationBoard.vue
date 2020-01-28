@@ -69,7 +69,12 @@
 					class="icon-close"
 					@click.stop.prevent="cancelEdit">
 			</form>
-			<ColorPicker v-model="editColor" />
+			<!-- <ColorPicker v-model="editColor" /> -->
+			<ColorPicker :value="`#${board.color}`" @input="updateColor">
+				<div :style="{ backgroundColor: getColor }" class="color0">
+					Click to choose color
+				</div>
+			</ColorPicker>
 		</div>
 	</router-link>
 </template>
@@ -77,7 +82,8 @@
 <script>
 import { PopoverMenu } from '@nextcloud/vue/dist/Components/PopoverMenu'
 import ClickOutside from 'vue-click-outside'
-import ColorPicker from '../ColorPicker'
+// import ColorPicker from '../ColorPicker'
+import { ColorPicker } from '@nextcloud/vue/dist/Components/ColorPicker'
 
 export default {
 	name: 'AppNavigationBoard',
@@ -107,6 +113,12 @@ export default {
 		}
 	},
 	computed: {
+		getColor() {
+			if (this.editColor !== '') {
+				return this.editColor
+			}
+			return this.board.color
+		},
 		undoText: function() {
 			// todo translation
 			return 'deleted ' + this.board.title
@@ -232,6 +244,9 @@ export default {
 		hideMenu() {
 			this.menuOpen = false
 		},
+		updateColor(newColor) {
+			this.editColor = newColor
+		},
 		applyEdit(e) {
 			this.editing = false
 			if (this.editTitle || this.editColor) {
@@ -263,5 +278,9 @@ export default {
 <style lang="scss" scoped>
 	#app-navigation #deck-navigation .editing {
 		height: auto !important;
+	}
+	.color0 {
+		border-radius: 6px;
+		height: 25px;
 	}
 </style>
