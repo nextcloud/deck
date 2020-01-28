@@ -1,0 +1,62 @@
+name: Nightly build
+
+on:
+  push:
+    branches:
+      - nightly
+  schedule:
+    - cron: '0 1 * * *' # run at 2 AM UTC
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v1
+      with:
+        php-version: '7.4'
+        tools: composer
+    - name: install dependencies
+      run: |
+        wget https://github.com/ChristophWurst/krankerl/releases/download/v0.12.2/krankerl_0.12.2_amd64.deb
+        sudo dpkg -i krankerl_0.12.2_amd64.deb
+    - name: package
+      run: |
+        uname -a
+        RUST_BACKTRACE=1 krankerl --version
+        RUST_BACKTRACE=1 krankerl package
+    - name: Set git config
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git tag -f nightly
+    - name: Push tag
+      uses: juliushaertl/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        tags: true
+        force: true
+    - name: Create Release
+      id: create_release
+      uses: juliushaertl/action-release@master
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: nightly
+        files: ./build/artifacts/deck.tar.gz
+        name: Nightly build
+        body: |
+          Nightly release of deck
+        draft: false
+        prerelease: true
+        overwrite: true

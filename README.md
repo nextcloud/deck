@@ -41,7 +41,7 @@ Please make sure you have installed the following dependencies: `make, which, ta
 
 ### Install the nightly builds
 
-Instead of setting everything up manually, you can just [download the nightly builds](https://download.bitgrid.net/nextcloud/deck/nightly/) instead. These builds are updated every 24 hours, and are pre-configured with all the needed dependencies.
+Instead of setting everything up manually, you can just [download the nightly build](https://github.com/nextcloud/deck/releases/tag/nightly) instead. These builds are updated every 24 hours, and are pre-configured with all the needed dependencies.
 
 ## Developing
 

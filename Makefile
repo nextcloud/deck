@@ -14,19 +14,21 @@ cert_dir=$(HOME)/.nextcloud/certificates
 
 default: build
 
-clean-build:
-	rm -rf $(build_dir)
-
 clean-dist:
 	rm -rf node_modules/
 
 install-deps: install-deps-js
 	composer install
 
+install-deps-nodev: install-deps-js
+	composer install --no-dev
+
 install-deps-js:
 	npm ci
 
 build: clean-dist install-deps build-js
+
+release: clean-dist install-deps-nodev build-js
 
 build-js: install-deps-js
 	npm run build
@@ -36,46 +38,6 @@ build-js-dev: install-deps
 
 watch:
 	npm run watch
-
-# appstore: clean install-deps
-appstore: clean-build build
-	rm -rf $(appstore_build_directory)
-	mkdir -p $(appstore_build_directory)
-	tar cvzf $(appstore_package_name).tar.gz \
-	--exclude="../$(app_name)/build" \
-	--exclude="../$(app_name)/tests" \
-	--exclude="../$(app_name)/Makefile" \
-	--exclude="../$(app_name)/*.log" \
-	--exclude="../$(app_name)/phpunit*xml" \
-	--exclude="../$(app_name)/composer.*" \
-	--exclude="../$(app_name)/js/node_modules" \
-	--exclude="../$(app_name)/js/tests" \
-	--exclude="../$(app_name)/js/test" \
-	--exclude="../$(app_name)/js/*.log" \
-	--exclude="../$(app_name)/js/package-lock.json" \
-	--exclude="../$(app_name)/js/package.json" \
-	--exclude="../$(app_name)/js/bower.json" \
-	--exclude="../$(app_name)/js/karma.*" \
-	--exclude="../$(app_name)/js/protractor.*" \
-	--exclude="../$(app_name)/package.json" \
-	--exclude="../$(app_name)/bower.json" \
-	--exclude="../$(app_name)/karma.*" \
-	--exclude="../$(app_name)/protractor\.*" \
-	--exclude="../$(app_name)/.*" \
-	--exclude="../$(app_name)/*.lock" \
-	--exclude="../$(app_name)/run-eslint.sh" \
-	--exclude="../$(app_name)/js/.*" \
-	--exclude="../$(app_name)/vendor" \
-	--exclude-vcs \
-	 ../$(app_name)
-
-
-	@if [ -f $(cert_dir)/$(app_name).key ]; then \
-		echo "Signing package…"; \
-		openssl dgst -sha512 -sign $(cert_dir)/$(app_name).key $(build_dir)/$(app_name).tar.gz | openssl base64; \
-	fi
-
-	echo $(appstore_package_name).tar.gz
 
 test: test-unit test-integration
 
@@ -97,6 +59,3 @@ test-integration:
 
 test-js: install-deps
 	npm run test
-
-package:
-	krankerl package
