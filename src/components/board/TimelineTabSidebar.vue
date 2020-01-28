@@ -7,7 +7,7 @@
 			:key="entry.activity_id"
 			:activity="entry" />
 		<button v-if="activityLoadMore" @click="loadMore">
-			Load More
+			{{ t('deck', 'Load More') }}
 		</button>
 	</div>
 </template>

@@ -32,7 +32,7 @@
 				</div>
 			</template>
 			<div v-else class="suggestion-list__item is-empty">
-				No users found
+				{{ t('deck', 'No users found') }}
 			</div>
 		</div>
 
@@ -42,13 +42,13 @@
 				:comment="comment"
 				@doReload="loadComments" />
 			<a @click="loadMore">
-				Load More
+				{{ t('deck', 'Load More') }}
 			</a>
 		</ul>
 		<div v-else-if="isLoading" class="icon icon-loading" />
 		<div v-else class="emptycontent">
 			<div class="icon-comment" />
-			<p>Keine Kommentare bisher. Beginne die Diskussion!</p>
+			<p>{{ t('deck', 'No comments yet. Begin the discussion!') }}</p>
 		</div>
 	</div>
 </template>

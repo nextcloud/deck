@@ -52,7 +52,7 @@
 		</div>
 
 		<form v-if="showAddCard" class="stack--card-add" @submit.prevent="clickAddCard()">
-			<label for="new-stack-input-main" class="hidden-visually">Add a new card</label>
+			<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
 			<input id="new-stack-input-main"
 				v-model="newCardTitle"
 				v-focus

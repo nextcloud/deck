@@ -33,7 +33,7 @@
 					<ActionButton icon="icon-add" :title="t('deck', 'Add new stack')" @click.stop="showAddStack" />
 				</Actions>
 				<form v-else @submit.prevent="addNewStack()">
-					<label for="new-stack-input-main" class="hidden-visually">Add a new stack</label>
+					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new stack') }}</label>
 					<input id="new-stack-input-main"
 						v-model="newStackTitle"
 						type="text"
