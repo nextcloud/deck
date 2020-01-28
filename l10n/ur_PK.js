@@ -3,13 +3,13 @@ OC.L10N.register(
     {
     "Personal" : "شخصی",
     "Done" : "Done",
-    "Close" : "بند ",
-    "Group" : "Group",
-    "Loading" : "Loading",
+    "Cancel" : "منسوخ کریں",
+    "Can edit" : "Can edit",
+    "Can share" : "Can share",
+    "Delete" : "حذف کریں",
     "Edit" : "تدوین کریں",
-    "Share" : "تقسیم",
-    "Title" : "عنوان",
     "Description" : "تصریح",
+    "Save" : "حفظ",
     "Settings" : "سیٹینگز"
 },
 "nplurals=2; plural=(n != 1);");
