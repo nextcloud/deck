@@ -106,7 +106,13 @@
 					type="deck-card" />
 			</div>
 
-			<h5>{{ t('deck', 'Description') }}</h5>
+			<h5>
+				{{ t('deck', 'Description') }}
+				<a v-tooltip="t('deck', 'Formatting help')"
+					href="https://deck.readthedocs.io/en/latest/Markdown/"
+					target="_blank"
+					class="icon icon-info" />
+			</h5>
 			<!-- FIXME: make sure the editor is disabled when canEdit is false -->
 			<VueEasymde ref="markdownEditor" v-model="copiedCard.description" :configs="mdeConfig" />
 		</AppSidebarTab>
@@ -300,13 +306,21 @@ export default {
 	}
 </style>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 	h5 {
 		border-bottom: 1px solid var(--color-border);
 		margin-top: 20px;
 		margin-bottom: 5px;
 		color: var(--color-text-maxcontrast);
+
+		.icon-info {
+			display: inline-block;
+			width: 16px;
+			height: 16px;
+			float: right;
+			opacity: .7;
+		}
 	}
 
 	.section-wrapper {

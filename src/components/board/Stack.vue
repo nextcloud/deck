@@ -193,6 +193,7 @@ export default {
 		padding: 3px;
 		margin: 3px -3px;
 		margin-right: -10px;
+		margin-bottom: 5px;
 		margin-top: 0;
 		background-color: var(--color-main-background-translucent);
 
