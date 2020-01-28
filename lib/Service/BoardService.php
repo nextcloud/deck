@@ -134,10 +134,10 @@ class BoardService {
 				}
 				$permissions = $this->permissionService->matchPermissions($item);
 				$item->setPermissions([
-					'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ],
-					'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT],
-					'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE],
-					'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
+					'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
+					'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
+					'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
+					'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
 				]);
 				$result[$item->getId()] = $item;
 			}
@@ -170,10 +170,10 @@ class BoardService {
 		}
 		$permissions = $this->permissionService->matchPermissions($board);
 		$board->setPermissions([
-			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ],
-			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT],
-			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE],
-			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
+			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
+			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
+			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
+			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
 		]);
 		$this->enrichWithUsers($board);
 		return $board;
@@ -307,10 +307,10 @@ class BoardService {
 		$this->boardMapper->mapOwner($new_board);
 		$permissions = $this->permissionService->matchPermissions($new_board);
 		$new_board->setPermissions([
-			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ],
-			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT],
-			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE],
-			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE]
+			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
+			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
+			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
+			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
 		]);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $new_board, ActivityManager::SUBJECT_BOARD_CREATE);
 		$this->changeHelper->boardChanged($new_board->getId());
@@ -630,7 +630,7 @@ class BoardService {
 		}
 
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
-		
+
 		$board = $this->boardMapper->find($id);
 		$newBoard = new Board();
 		$newBoard->setTitle($board->getTitle() . ' (' . $this->l10n->t('copy') . ')');
@@ -654,7 +654,7 @@ class BoardService {
 			$newStack->setBoardId($newBoard->getId());
 			$this->stackMapper->insert($newStack);
 		}
-		
+
 		return $newBoard;
 	}
 

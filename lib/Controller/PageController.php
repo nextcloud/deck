@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Controller;
 
-use OCA\Deck\Service\DefaultBoardService;
 use OCA\Deck\Service\PermissionService;
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -32,7 +31,6 @@ use OCP\IL10N;
 
 class PageController extends Controller {
 
-	private $defaultBoardService;
 	private $permissionService;
 	private $userId;
 	private $l10n;
@@ -40,7 +38,6 @@ class PageController extends Controller {
 	public function __construct(
 		$AppName,
 		IRequest $request,
-		DefaultBoardService $defaultBoardService,
 		PermissionService $permissionService,
 		IL10N $l10n,
 		$userId
@@ -48,7 +45,6 @@ class PageController extends Controller {
 		parent::__construct($AppName, $request);
 
 		$this->userId = $userId;
-		$this->defaultBoardService = $defaultBoardService;
 		$this->permissionService = $permissionService;
 		$this->l10n = $l10n;
 	}
@@ -66,12 +62,6 @@ class PageController extends Controller {
 			'maxUploadSize' => (int)\OCP\Util::uploadLimit(),
 			'canCreate' => $this->permissionService->canCreate()
 		];
-
-		if ($this->defaultBoardService->checkFirstRun($this->userId, $this->appName)) {
-			if ($this->permissionService->canCreate()) {
-				$this->defaultBoardService->createDefaultBoard($this->l10n->t('Personal'), $this->userId, '0087C5');
-			}
-		}
 
 		return new TemplateResponse('deck', 'main', $params);
 	}
