@@ -121,7 +121,7 @@ OC.L10N.register(
     "(Group)" : "(Gruppe)",
     "(Circle)" : "(Kreis)",
     "Can edit" : "Kann bearbeiten",
-    "Can share" : "Kann teilen",
+    "Can share" : "kann teilen",
     "Can manage" : "kann verwalten",
     "Delete" : "Löschen",
     "Add a new stack" : "Neuer Stapel",
