@@ -33,7 +33,7 @@
 		"@nextcloud/l10n": "^1.0.1",
 		"@nextcloud/router": "^1.0.0",
 		"@nextcloud/vue": "^1.2.7",
-		"fuse.js": "^3.4.5",
+		"fuse.js": "^3.4.6",
 		"nextcloud-server": "^0.15.10",
 		"nextcloud-vue-collections": "^0.7.1",
 		"tippy.js": "^4.3.5",
