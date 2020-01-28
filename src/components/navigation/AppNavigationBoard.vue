@@ -61,6 +61,9 @@
 
 		<!-- edit entry -->
 		<div v-if="editing" class="app-navigation-entry-edit">
+			<ColorPicker class="app-navigation-entry-bullet-wrapper" :value="`#${board.color}`" @input="updateColor">
+				<div :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet"></div>
+			</ColorPicker>
 			<form @submit.prevent.stop="applyEdit">
 				<input v-model="editTitle" type="text" required>
 				<input type="submit" value="" class="icon-confirm">
@@ -69,12 +72,6 @@
 					class="icon-close"
 					@click.stop.prevent="cancelEdit">
 			</form>
-			<!-- <ColorPicker v-model="editColor" /> -->
-			<ColorPicker :value="`#${board.color}`" @input="updateColor">
-				<div :style="{ backgroundColor: getColor }" class="color0">
-					Click to choose color
-				</div>
-			</ColorPicker>
 		</div>
 	</router-link>
 </template>
@@ -279,8 +276,17 @@ export default {
 	#app-navigation #deck-navigation .editing {
 		height: auto !important;
 	}
-	.color0 {
-		border-radius: 6px;
-		height: 25px;
+	.app-navigation-entry-bullet-wrapper {
+		position: absolute;
+		left: 33px;
+		width: 44px !important;
+		margin: 6px;
+		height: 44px;
+		.color0 {
+			width: 30px !important;
+			height: 30px;
+			border-radius: 50%;
+			background-size: 14px;
+		}
 	}
 </style>
