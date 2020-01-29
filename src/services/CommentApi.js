@@ -22,6 +22,7 @@
 
 import axios from '@nextcloud/axios'
 import { getCurrentUser } from '@nextcloud/auth'
+import xmlToTagList from '../helpers/xml'
 
 export class CommentApi {
 
@@ -30,97 +31,62 @@ export class CommentApi {
 		return OC.linkToRemote(url)
 	}
 
-	listComments(card) {
-		return axios({
+	async loadComments({ cardId, limit, offset }) {
+		const response = await axios({
 			method: 'REPORT',
-			url: this.url(`${card.id}`),
+			url: this.url(`${cardId}`),
 			data: `<?xml version="1.0" encoding="utf-8" ?>
 			<oc:filter-comments xmlns:D="DAV:" xmlns:oc="http://owncloud.org/ns">
-				<oc:limit>${card.limit}</oc:limit>
-				<oc:offset>${card.offset}</oc:offset>
+				<oc:limit>${limit}</oc:limit>
+				<oc:offset>${offset}</oc:offset>
 			</oc:filter-comments>`,
-		}).then(
-			(response) => {
-				return Promise.resolve(response.data)
-			},
-			(err) => {
-				return Promise.reject(err)
-			}
-		)
-			.catch((err) => {
-				return Promise.reject(err)
-			})
+		})
+		return xmlToTagList(response.data)
 	}
 
-	createComment(commentObj) {
-		return axios({
+	async createComment({ cardId, comment }) {
+		const response = await axios({
 			method: 'POST',
-			url: this.url(`${commentObj.cardId}`),
-			data: { actorType: 'users', message: `${commentObj.comment}`, verb: 'comment' },
-		}).then(
-			(response) => {
-				const header = response.headers['content-location']
-				const headerArray = header.split('/')
-				const id = headerArray[headerArray.length - 1]
+			url: this.url(`${cardId}`),
+			data: { actorType: 'users', message: `${comment}`, verb: 'comment' },
+		})
 
-				const ret = {
-					cardId: (commentObj.cardId).toString(),
-					id: id,
-					uId: getCurrentUser().uid,
-					creationDateTime: (new Date()).toString(),
-					message: commentObj.comment,
-				}
-				return Promise.resolve(ret)
-			},
-			(err) => {
-				return Promise.reject(err)
-			}
-		)
-			.catch((err) => {
-				return Promise.reject(err)
-			})
+		const header = response.headers['content-location']
+		const headerArray = header.split('/')
+		const id = headerArray[headerArray.length - 1]
+
+		const ret = {
+			cardId: (cardId).toString(),
+			id: id,
+			uId: getCurrentUser().uid,
+			creationDateTime: (new Date()).toString(),
+			message: comment,
+		}
+		return ret
 	}
 
-	updateComment(data) {
-		return axios({
+	async updateComment({ cardId, commentId, comment }) {
+		const response = await axios({
 			method: 'PROPPATCH',
-			url: this.url(`${data.cardId}/${data.commentId}`),
+			url: this.url(`${cardId}/${commentId}`),
 			data: `<?xml version="1.0"?>
 			<d:propertyupdate xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
 				<d:set>
 					<d:prop>
-						<oc:message>${data.comment}</oc:message>
+						<oc:message>${comment}</oc:message>
 					</d:prop>
 				</d:set>
 			</d:propertyupdate>`,
-		}).then(
-			(response) => {
-				return Promise.resolve(response.data)
-			},
-			(err) => {
-				return Promise.reject(err)
-			}
-		)
-			.catch((err) => {
-				return Promise.reject(err)
-			})
+		})
+		return response.data
 	}
 
-	deleteComment(data) {
-		return axios({
+	async deleteComment({ cardId, commentId }) {
+		const response = await axios({
 			method: 'DELETE',
-			url: this.url(`${data.cardId}/${data.commentId}`),
-		}).then(
-			(response) => {
-				return Promise.resolve(response.data)
-			},
-			(err) => {
-				return Promise.reject(err)
-			}
-		)
-			.catch((err) => {
-				return Promise.reject(err)
-			})
+			url: this.url(`${cardId}/${commentId}`),
+		})
+		return response.data
 	}
 
 }

@@ -36,14 +36,16 @@
 			</div>
 		</div>
 
-		<ul v-if="comments[card.id] && comments[card.id].length > 0" id="commentsFeed">
-			<CommentItem v-for="comment in comments[card.id]"
+		<ul v-if="getCommentsForCard(card.id).length > 0" id="commentsFeed">
+			<CommentItem v-for="comment in getCommentsForCard(card.id)"
 				:key="comment.id"
 				:comment="comment"
 				@doReload="loadComments" />
-			<a @click="loadMore">
-				{{ t('deck', 'Load More') }}
-			</a>
+			<InfiniteLoading :identifier="card.id" @infinite="infiniteHandler">
+				<div slot="spinner" class="icon-loading" />
+				<div slot="no-more" />
+				<div slot="no-results" />
+			</InfiniteLoading>
 		</ul>
 		<div v-else-if="isLoading" class="icon icon-loading" />
 		<div v-else class="emptycontent">
@@ -59,9 +61,10 @@ import tippy from 'tippy.js'
 import { Editor, EditorContent } from 'tiptap'
 import { Mention } from 'tiptap-extensions'
 
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { Avatar } from '@nextcloud/vue'
 import CommentItem from './CommentItem'
+import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
 	name: 'CardSidebarTabComments',
@@ -69,6 +72,7 @@ export default {
 		Avatar,
 		CommentItem,
 		EditorContent,
+		InfiniteLoading,
 	},
 	props: {
 		card: {
@@ -80,9 +84,6 @@ export default {
 		return {
 			newComment: '',
 			isLoading: false,
-			limit: 20,
-			offset: 0,
-
 			editor: new Editor({
 				extensions: [
 					new Mention({
@@ -176,7 +177,7 @@ export default {
 			comments: state => state.comment.comments,
 			currentBoard: state => state.currentBoard,
 		}),
-
+		...mapGetters(['getCommentsForCard', 'hasMoreComments']),
 		hasResults() {
 			return this.filteredUsers.length
 		},
@@ -193,17 +194,19 @@ export default {
 			},
 		},
 	},
-	created() {
-	},
-
 	methods: {
-		loadComments() {
+		async infiniteHandler($state) {
+			await this.loadMore()
+			if (this.hasMoreComments(this.card.id)) {
+				$state.loaded()
+			} else {
+				$state.complete()
+			}
+		},
+		async loadComments() {
 			this.isLoading = true
-			this.card.limit = this.limit
-			this.card.offset = this.offset
-			this.$store.dispatch('listComments', this.card).then(response => {
-				this.isLoading = false
-			})
+			await this.$store.dispatch('fetchComments', { cardId: this.card.id })
+			this.isLoading = false
 		},
 		createComment() {
 			const commentObj = {
@@ -215,9 +218,10 @@ export default {
 			this.newComment = ''
 			this.editor.setContent('')
 		},
-		loadMore() {
-			this.offset = this.offset + this.limit
-			this.loadComments()
+		async loadMore() {
+			this.isLoading = true
+			await this.$store.dispatch('fetchMore', { cardId: this.card.id })
+			this.isLoading = false
 		},
 
 		// navigate to the previous item

@@ -110,12 +110,9 @@ export default new Vuex.Store({
 		toggleShowArchived(state) {
 			state.showArchived = !state.showArchived
 		},
-		/**
+		/*
 		 * Adds or replaces a board in the store.
 		 * Matches a board by it's id.
-		 *
-		 * @param state
-		 * @param board
 		 */
 		addBoard(state, board) {
 			const indexExisting = state.boards.findIndex((b) => {
@@ -141,11 +138,8 @@ export default new Vuex.Store({
 			}
 		},
 
-		/**
+		/*
 		 * Removes the board from the store.
-		 *
-		 * @param state
-		 * @param board
 		 */
 		removeBoard(state, board) {
 			state.boards = state.boards.filter((b) => {
@@ -207,7 +201,6 @@ export default new Vuex.Store({
 			}
 		},
 		updateLabelFromCurrentBoard(state, newLabel) {
-
 			const labelToUpdate = state.currentBoard.labels.find((l) => {
 				return newLabel.id === l.id
 			})
@@ -264,6 +257,7 @@ export default new Vuex.Store({
 		toggleShowArchived({ commit }) {
 			commit('toggleShowArchived')
 		},
+
 		/**
 		 * @param commit
 		 * @param state

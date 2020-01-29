@@ -21,73 +21,93 @@
  */
 
 import { CommentApi } from '../services/CommentApi'
-import xmlToTagList from '../helpers/xml'
 import Vue from 'vue'
 
 const apiClient = new CommentApi()
+
+const COMMENT_FETCH_LIMIT = 3
 
 export default {
 	state: {
 		comments: {},
 	},
+	getters: {
+		getCommentsForCard: (state) => (id) => {
+			if (state.comments[id]) {
+				return [...state.comments[id].comments].sort((a, b) => b.id - a.id)
+			}
+			return []
+		},
+		hasMoreComments: (state) => (cardId) => {
+			return state.comments[cardId] && state.comments[cardId].hasMore
+		},
+	},
 	mutations: {
-		addComments(state, commentObj) {
-			if (state.comments[commentObj.cardId] === undefined) {
-				Vue.set(state.comments, commentObj.cardId, commentObj.comments)
-			} else {
-				// FIXME append comments once incremental fetching is implemented
-				// state.comments[commentObj.cardId].push(...commentObj.comments)
-				Vue.set(state.comments, commentObj.cardId, commentObj.comments)
+		endReached(state, { cardId }) {
+			if (state.comments[cardId]) {
+				state.comments[cardId].hasMore = false
 			}
 		},
-		createComment(state, newComment) {
-			if (state.comments[newComment.cardId] === undefined) {
-				state.comments[newComment.cardId] = []
+		addComments(state, { comments, cardId }) {
+			if (state.comments[cardId] === undefined) {
+				Vue.set(state.comments, cardId, {
+					hasMore: comments.length > 0,
+					comments,
+				})
+			} else {
+				const newComments = comments.filter((comment) => {
+					return state.comments[cardId].comments.findIndex((item) => item.id === comment.id) === -1
+				})
+				state.comments[cardId].comments.push(...newComments)
 			}
-			state.comments[newComment.cardId].push(newComment)
 		},
 		updateComment(state, comment) {
-			const existingIndex = state.comments[comment.cardId].findIndex(_comment => _comment.id === comment.commentId)
+			const existingIndex = state.comments[comment.cardId].comments.findIndex(_comment => _comment.id === comment.commentId)
 			if (existingIndex !== -1) {
-				state.comments[comment.cardId][existingIndex].message = comment.comment
+				state.comments[comment.cardId].comments[existingIndex].message = comment.comment
 			}
 		},
 		deleteComment(state, comment) {
-			const existingIndex = state.comments[comment.cardId].findIndex(_comment => _comment.id === comment.commentId)
+			const existingIndex = state.comments[comment.cardId].comments.findIndex(_comment => _comment.id === comment.commentId)
 			if (existingIndex !== -1) {
-				state.comments[comment.cardId].splice(existingIndex, 1)
+				state.comments[comment.cardId].comments.splice(existingIndex, 1)
 			}
 		},
 	},
 	actions: {
-		listComments({ commit }, card) {
-			apiClient.listComments(card)
-				.then((comments) => {
-					const commentsJson = xmlToTagList(comments)
-					const returnObj = {
-						cardId: card.id,
-						comments: commentsJson,
-					}
-					commit('addComments', returnObj)
-				})
+		async fetchComments({ commit }, { cardId, offset }) {
+			const comments = await apiClient.loadComments({
+				cardId,
+				limit: COMMENT_FETCH_LIMIT,
+				offset: offset || 0,
+			})
+
+			if (comments.length < COMMENT_FETCH_LIMIT) {
+				commit('endReached', { cardId })
+				return
+			}
+			commit('addComments', {
+				cardId,
+				comments,
+			})
 		},
-		createComment({ commit }, newComment) {
-			apiClient.createComment(newComment)
-				.then((newComment) => {
-					commit('createComment', newComment)
-				})
+		async fetchMore({ commit, dispatch, getters }, { cardId }) {
+			// fetch newer comments first
+			await dispatch('fetchComments', { cardId })
+			await dispatch('fetchComments', { cardId, offset: getters.getCommentsForCard(cardId).length })
+
 		},
-		deleteComment({ commit }, data) {
-			apiClient.deleteComment(data)
-				.then((retVal) => {
-					commit('deleteComment', data)
-				})
+		async createComment({ commit, dispatch }, { cardId, comment }) {
+			await apiClient.createComment({ cardId, comment })
+			await dispatch('fetchComments', { cardId })
 		},
-		updateComment({ commit }, data) {
-			apiClient.updateComment(data)
-				.then((retVal) => {
-					commit('updateComment', data)
-				})
+		async deleteComment({ commit }, data) {
+			await apiClient.deleteComment(data)
+			commit('deleteComment', data)
+		},
+		async updateComment({ commit }, data) {
+			await apiClient.updateComment(data)
+			commit('updateComment', data)
 		},
 	},
 }
