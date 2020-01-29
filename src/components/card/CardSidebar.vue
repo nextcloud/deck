@@ -26,7 +26,10 @@
 		:subtitle="subtitle"
 		@close="closeSidebar">
 		<template #secondary-actions />
-		<AppSidebarTab :order="0" name="Details" icon="icon-home">
+		<AppSidebarTab id="details"
+			:order="0"
+			:name="t('deck', 'Details')"
+			icon="icon-home">
 			<div class="section-wrapper">
 				<div v-tooltip="t('deck', 'Tags')" class="section-label icon-tag">
 					<span class="hidden-visually">{{ t('deck', 'Tags') }}</span>
@@ -117,15 +120,24 @@
 			<VueEasymde ref="markdownEditor" v-model="copiedCard.description" :configs="mdeConfig" />
 		</AppSidebarTab>
 
-		<AppSidebarTab :order="1" :name="t('deck', 'Attachments')" icon="icon-attach">
+		<AppSidebarTab id="attachments"
+			:order="1"
+			:name="t('deck', 'Attachments')"
+			icon="icon-attach">
 			<CardSidebarTabAttachments :card="currentCard" />
 		</AppSidebarTab>
 
-		<AppSidebarTab :order="2" :name="t('deck', 'Comments')" icon="icon-comment">
+		<AppSidebarTab id="comments"
+			:order="2"
+			:name="t('deck', 'Comments')"
+			icon="icon-comment">
 			<CardSidebarTabComments :card="currentCard" />
 		</AppSidebarTab>
 
-		<AppSidebarTab :order="3" :name="t('deck', 'Timeline')" icon="icon-activity">
+		<AppSidebarTab id="timeline"
+			:order="3"
+			:name="t('deck', 'Timeline')"
+			icon="icon-activity">
 			<CardSidebarTabActivity :card="currentCard" />
 		</AppSidebarTab>
 	</AppSidebar>

@@ -4,10 +4,10 @@
 			<li v-for="label in labels" :key="label.id" :class="{editing: (editingLabelId === label.id)}">
 				<!-- Edit Tag -->
 				<template v-if="editingLabelId === label.id">
-					<ColorPicker class="app-navigation-entry-bullet-wrapper" :value="'#' + editingLabel.color" @input="updateColor">
-						<div :style="{ backgroundColor: '#' + editingLabel.color }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
-					</ColorPicker>
 					<form class="label-form" @submit.prevent="updateLabel(label)">
+						<ColorPicker class="color-picker-wrapper" :value="'#' + editingLabel.color" @input="updateColor">
+							<div :style="{ backgroundColor: '#' + editingLabel.color }" class="color0 icon-colorpicker" />
+						</ColorPicker>
 						<input v-model="editingLabel.title" type="text">
 						<input v-tooltip="{content: missingDataLabel, show: !editLabelObjValidated, trigger: 'manual' }"
 							:disabled="!editLabelObjValidated"
@@ -38,10 +38,10 @@
 			<li v-if="addLabel" class="editing">
 				<!-- New Tag -->
 				<template>
-					<ColorPicker class="app-navigation-entry-bullet-wrapper" :value="'#' + addLabelObj.color" @input="updateColor">
-						<div :style="{ backgroundColor: '#' + addLabelObj.color }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
-					</ColorPicker>
 					<form class="label-form" @submit.prevent="clickAddLabel">
+						<ColorPicker class="color-picker-wrapper" :value="'#' + addLabelObj.color" @input="updateColor">
+							<div :style="{ backgroundColor: '#' + addLabelObj.color }" class="color0 icon-colorpicker" />
+						</ColorPicker>
 						<input v-model="addLabelObj.title" type="text">
 						<input v-tooltip="{content: missingDataLabel, show: !addLabelObjValidated, trigger: 'manual' }"
 							:disabled="!addLabelObjValidated"
@@ -81,7 +81,7 @@ export default {
 			addLabelObj: null,
 			addLabel: false,
 			missingDataLabel: t('deck', 'title and color value must be provided'),
-			defaultColors: ['#31CC7C', '#317CCC', '#FF7A66', '#F1DB50', '#7C31CC', '#CC317C', '#3A3B3D', '#CACBCD'],
+			defaultColors: ['31CC7C', '17CCC', 'FF7A66', 'F1DB50', '7C31CC', 'CC317C', '3A3B3D', 'CACBCD'],
 		}
 	},
 	computed: {
@@ -133,7 +133,7 @@ export default {
 			this.editingLabelId = null
 		},
 		clickShowAddLabel() {
-			this.addLabelObj = { cardId: null, color: '000000', title: '' }
+			this.addLabelObj = { cardId: null, color: this.defaultColors[Math.floor(Math.random() * this.defaultColors.length)], title: '' }
 			this.addLabel = true
 		},
 		clickAddLabel() {
@@ -145,9 +145,13 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+	$clickable-area: 37px;
+
 	.labels li {
 		display: flex;
 		margin-bottom: 3px;
+		align-items: stretch;
+		height: $clickable-area;
 
 		.label-title {
 			flex-grow: 1;
@@ -158,23 +162,27 @@ export default {
 			}
 		}
 		&:not(.editing) button {
-			width: 44px;
-			margin: 0;
-			margin-left: -3px;
+			width: $clickable-area;
+			margin: 0 0 0 -3px;
 		}
 
-		.app-navigation-entry-bullet-wrapper {
-		position: absolute;
-		width: 44px !important;
-		margin: 6px;
-		height: 44px;
-		.color0 {
-			width: 30px !important;
-			height: 30px;
-			border-radius: 50%;
-			background-size: 14px;
+		.color-picker-wrapper {
+			&, &::v-deep > .trigger {
+				width: $clickable-area;
+				padding: 3px;
+				display: flex;
+				align-items: stretch;
+				position: relative;
+			}
+
+			.color0 {
+				position: absolute;
+				width: calc(#{$clickable-area} - 6px);
+				height: calc(#{$clickable-area} - 6px);
+				background-size: 14px;
+				border-radius: 50%;
+			}
 		}
-	}
 
 		&.editing {
 			display: block;
@@ -187,12 +195,11 @@ export default {
 		}
 		button,
 		input:not([type='text']):last-child {
-			border-bottom-right-radius: var(--border-radius);
-			border-top-right-radius: var(--border-radius);
-			border-bottom-left-radius: 0;
-			border-top-left-radius: 0;
+			min-width: $clickable-area;
+			border-radius: 0 var(--border-radius) var(--border-radius) 0;
 			margin-left: -1px;
 			width: 35px;
+			background-color: var(--color-main-background);
 		}
 	}
 </style>
