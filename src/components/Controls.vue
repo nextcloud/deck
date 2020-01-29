@@ -47,6 +47,26 @@
 				</form>
 			</div>
 			<div class="board-action-buttons">
+				<Actions defaultIcon="icon-search">
+					{{ t('deck', 'Filter by tag') }}
+					
+					<ActionCheckbox v-for="label in board.labels"
+					:key="label.id" 
+					@change="alert('(un)checked !')">
+					{{ label.title }}
+					</ActionCheckbox>
+					
+					{{ t('deck', 'Filter by assigned user') }}
+					<ActionCheckbox v-for="user in board.users"
+					:key="user.uid" 
+					@change="alert('(un)checked !')">
+					{{ user.displayname }}
+					</ActionCheckbox>
+
+					{{ t('deck', 'Filter by duedate') }}
+					<ActionCheckbox @change="alert('(un)checked !')">Third choice (checked)</ActionCheckbox>
+					<ActionCheckbox @change="alert('(un)checked !')">Second choice (disabled)</ActionCheckbox>
+				</Actions>
 				<Actions style="opacity: .5;">
 					<ActionButton v-if="showArchived"
 						icon="icon-archive"
@@ -69,7 +89,7 @@
 				</Actions>
 				<!-- FIXME: ActionRouter currently doesn't work as an inline action -->
 				<Actions>
-					<ActionButton icon="icon-share" @click="toggleDetailsView" />
+					<ActionButton icon="icon-settings" @click="toggleDetailsView" />
 				</Actions>
 			</div>
 		</div>
@@ -78,12 +98,12 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Actions, ActionButton } from '@nextcloud/vue'
+import { Actions, ActionButton, ActionCheckbox } from '@nextcloud/vue'
 
 export default {
 	name: 'Controls',
 	components: {
-		Actions, ActionButton,
+		Actions, ActionButton, ActionCheckbox
 	},
 	props: {
 		board: {
