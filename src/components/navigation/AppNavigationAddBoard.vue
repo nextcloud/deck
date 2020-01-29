@@ -29,6 +29,9 @@
 
 		<!-- edit entry -->
 		<div v-if="editing" class="app-navigation-entry-edit">
+			<ColorPicker v-model="color" class="app-navigation-entry-bullet-wrapper">
+				<div :style="{ backgroundColor: color }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
+			</ColorPicker>
 			<form @submit.prevent.stop="createBoard">
 				<input :placeholder="t('deck', 'New board title')" type="text" required>
 				<input type="submit" value="" class="icon-confirm">
@@ -37,13 +40,14 @@
 					class="icon-close"
 					@click.stop.prevent="cancelEdit">
 			</form>
-			<ColorPicker v-model="color" />
+
+			<!-- <ColorPicker v-model="color" /> -->
 		</div>
 	</li>
 </template>
 
 <script>
-import ColorPicker from '../ColorPicker'
+import { ColorPicker } from '@nextcloud/vue/dist/Components/ColorPicker'
 export default {
 	name: 'AppNavigationAddBoard',
 	components: { ColorPicker },
@@ -79,9 +83,22 @@ export default {
 	},
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 	#app-navigation .app-navigation-entry-edit div {
 		width: auto;
 		display: block;
+	}
+	.app-navigation-entry-bullet-wrapper {
+		position: absolute;
+		left: 33px;
+		width: 44px !important;
+		margin: 6px;
+		height: 44px;
+		.color0 {
+			width: 30px !important;
+			height: 30px;
+			border-radius: 50%;
+			background-size: 14px;
+		}
 	}
 </style>

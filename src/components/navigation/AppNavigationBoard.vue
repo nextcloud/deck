@@ -61,6 +61,9 @@
 
 		<!-- edit entry -->
 		<div v-if="editing" class="app-navigation-entry-edit">
+			<ColorPicker class="app-navigation-entry-bullet-wrapper" :value="`#${board.color}`" @input="updateColor">
+				<div :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
+			</ColorPicker>
 			<form @submit.prevent.stop="applyEdit">
 				<input v-model="editTitle" type="text" required>
 				<input type="submit" value="" class="icon-confirm">
@@ -69,7 +72,6 @@
 					class="icon-close"
 					@click.stop.prevent="cancelEdit">
 			</form>
-			<ColorPicker v-model="editColor" />
 		</div>
 	</router-link>
 </template>
@@ -77,7 +79,7 @@
 <script>
 import { PopoverMenu } from '@nextcloud/vue/dist/Components/PopoverMenu'
 import ClickOutside from 'vue-click-outside'
-import ColorPicker from '../ColorPicker'
+import { ColorPicker } from '@nextcloud/vue/dist/Components/ColorPicker'
 
 export default {
 	name: 'AppNavigationBoard',
@@ -107,6 +109,12 @@ export default {
 		}
 	},
 	computed: {
+		getColor() {
+			if (this.editColor !== '') {
+				return this.editColor
+			}
+			return this.board.color
+		},
 		undoText: function() {
 			// todo translation
 			return 'deleted ' + this.board.title
@@ -232,6 +240,9 @@ export default {
 		hideMenu() {
 			this.menuOpen = false
 		},
+		updateColor(newColor) {
+			this.editColor = newColor
+		},
 		applyEdit(e) {
 			this.editing = false
 			if (this.editTitle || this.editColor) {
@@ -263,5 +274,18 @@ export default {
 <style lang="scss" scoped>
 	#app-navigation #deck-navigation .editing {
 		height: auto !important;
+	}
+	.app-navigation-entry-bullet-wrapper {
+		position: absolute;
+		left: 33px;
+		width: 44px !important;
+		margin: 6px;
+		height: 44px;
+		.color0 {
+			width: 30px !important;
+			height: 30px;
+			border-radius: 50%;
+			background-size: 14px;
+		}
 	}
 </style>

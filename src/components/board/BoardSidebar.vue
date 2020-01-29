@@ -25,22 +25,32 @@
 		:actions="[]"
 		:title="board.title"
 		@close="closeSidebar">
-		<AppSidebarTab :order="0" name="Sharing" icon="icon-shared">
+		<AppSidebarTab id="sharing"
+			:order="0"
+			:name="t('deck', 'Sharing')"
+			icon="icon-shared">
 			<SharingTabSidebar :board="board" />
 		</AppSidebarTab>
 
-		<AppSidebarTab :order="1" name="Tags" icon="icon-tag">
+		<AppSidebarTab id="tags"
+			:order="1"
+			:name="t('deck', 'Tags')"
+			icon="icon-tag">
 			<TagsTabSidebar :board="board" />
 		</AppSidebarTab>
 
 		<AppSidebarTab v-if="canEdit"
+			id="deleted"
 			:order="2"
-			name="Deleted items"
+			:name="t('deck', 'Deleted items')"
 			icon="icon-delete">
 			<DeletedTabSidebar :board="board" />
 		</AppSidebarTab>
 
-		<AppSidebarTab :order="3" name="Timeline" icon="icon-activity">
+		<AppSidebarTab id="activity"
+			:order="3"
+			:name="t('deck', 'Timeline')"
+			icon="icon-activity">
 			<TimelineTabSidebar :board="board" />
 		</AppSidebarTab>
 	</AppSidebar>
