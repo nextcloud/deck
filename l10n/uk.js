@@ -27,6 +27,7 @@ OC.L10N.register(
     "Due date" : "Протягом",
     "Remove due date" : "Видалити до",
     "Description" : "Опис",
+    "Formatting help" : "Форматування довідки",
     "Attachments" : "Вкладення",
     "Comments" : "Коментарі",
     "Modified" : "Змінено",

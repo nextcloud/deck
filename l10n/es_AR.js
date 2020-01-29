@@ -24,6 +24,7 @@ OC.L10N.register(
     "Tags" : "Etiquetas",
     "Due date" : "Fecha de vencimiento",
     "Description" : "Descripción",
+    "Formatting help" : "Ayuda de formato",
     "Attachments" : "Adjuntos",
     "Comments" : "Comentarios",
     "Modified" : "Modificado",

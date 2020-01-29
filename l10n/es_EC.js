@@ -34,6 +34,7 @@ OC.L10N.register(
     "Due date" : "Fecha de vencimiento",
     "Remove due date" : "Eliminar fecha de expiración",
     "Description" : "Descripción",
+    "Formatting help" : "Ayuda de formato",
     "Comments" : "Comentarios",
     "Modified" : "Modificado",
     "Created" : "Creado",

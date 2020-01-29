@@ -30,6 +30,7 @@ OC.L10N.register(
     "Due date" : "Data e vendosur",
     "Remove due date" : "Hiq datën e mbarimit",
     "Description" : "Përshkrim",
+    "Formatting help" : "Ndihmë formatimi",
     "Attachments" : "Bashkangjitjet",
     "Comments" : "Komentet",
     "Modified" : "Modifikuar ",

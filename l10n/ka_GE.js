@@ -30,6 +30,7 @@ OC.L10N.register(
     "Due date" : "დროისთვის",
     "Remove due date" : "მოაშორეთ დანიშნულების დრო",
     "Description" : "აღწერა",
+    "Formatting help" : "დახმარება ფორმატირებაზე",
     "Comments" : "კომენტარები",
     "Modified" : "შეიცვალა",
     "Created" : "შექმნილია",

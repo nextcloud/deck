@@ -49,6 +49,7 @@ OC.L10N.register(
     "Due date" : "Ημερομηνία λήξης",
     "Remove due date" : "Αφαίρεση ημερομηνίας λήξης",
     "Description" : "Περιγραφή",
+    "Formatting help" : "Βοήθεια μορφοποίησης",
     "Attachments" : "Συνημμένα",
     "Comments" : "Σχόλια",
     "Timeline" : "Χρονοδιάγραμμα",

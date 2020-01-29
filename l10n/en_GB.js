@@ -19,7 +19,6 @@ OC.L10N.register(
     "Missing a temporary folder" : "Missing a temporary folder",
     "Could not write file to disk" : "Could not write file to disk",
     "A PHP extension stopped the file upload" : "A PHP extension stopped the file upload",
-    "A kanban style project and personal management tool for Nextcloud" : "A kanban style project and personal management tool for Nextcloud",
     "Create new board" : "Create new board",
     "Cancel" : "Cancel",
     "Show archived cards" : "Show archived cards",
