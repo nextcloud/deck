@@ -8,32 +8,31 @@
 		</div>
 
 		<div class="comment-form">
-			<form @submit.prevent="createComment()">
-				<EditorContent :editor="editor"
-					:placeholder="t('deck', 'New comment') + ' ...'"
-					class="editor__content"
-					required />
+			<form @submit.prevent="createComment">
+				<At ref="at"
+					v-model="newComment"
+					:members="members"
+					name-key="primaryKey"
+					:tab-select="true">
+					<template v-slot:item="s">
+						<Avatar :user="s.item.uid" />
+						<span v-text="s.item.displayname" />
+					</template>
+					<template v-slot:embeddedItem="scope">
+						<span>
+							<UserBubble v-if="scope.current.primaryKey"
+								:data-mention-id="scope.current.primaryKey"
+								:user="scope.current.primaryKey"
+								:display-name="scope.current.displayname" />
+						</span>
+					</template>
+					<div ref="contentEditable" contenteditable />
+				</At>
 				<input v-tooltip="t('deck', 'Save')"
 					class="icon-confirm"
 					type="submit"
 					value="">
 			</form>
-		</div>
-
-		<div v-show="showSuggestions" ref="suggestions" class="suggestion-list">
-			<template v-if="hasResults">
-				<div
-					v-for="(user, index) in filteredUsers"
-					:key="user.uid"
-					:class="{ 'is-selected': navigatedUserIndex === index }"
-					class="suggestion-list__item"
-					@click="selectUser(user)">
-					{{ user.displayname }}
-				</div>
-			</template>
-			<div v-else class="suggestion-list__item is-empty">
-				{{ t('deck', 'No users found') }}
-			</div>
 		</div>
 
 		<ul v-if="getCommentsForCard(card.id).length > 0" id="commentsFeed">
@@ -56,23 +55,21 @@
 </template>
 
 <script>
-import Fuse from 'fuse.js'
-import tippy from 'tippy.js'
-import { Editor, EditorContent } from 'tiptap'
-import { Mention } from 'tiptap-extensions'
-
 import { mapState, mapGetters } from 'vuex'
-import { Avatar } from '@nextcloud/vue'
+import { Avatar, UserBubble } from '@nextcloud/vue'
 import CommentItem from './CommentItem'
 import InfiniteLoading from 'vue-infinite-loading'
+import At from 'vue-at'
+import { rawToParsed } from '../../helpers/mentions'
 
 export default {
 	name: 'CardSidebarTabComments',
 	components: {
 		Avatar,
 		CommentItem,
-		EditorContent,
 		InfiniteLoading,
+		At,
+		UserBubble,
 	},
 	props: {
 		card: {
@@ -84,107 +81,19 @@ export default {
 		return {
 			newComment: '',
 			isLoading: false,
-			editor: new Editor({
-				extensions: [
-					new Mention({
-						// a list of all suggested items
-						items: () => {
-							return this.currentBoard.users
-						},
-						// is called when a suggestion starts
-						onEnter: ({
-							items, query, range, command, virtualNode,
-						}) => {
-							this.query = query
-							this.filteredUsers = items
-							this.suggestionRange = range
-							this.renderPopup(virtualNode)
-							// we save the command for inserting a selected mention
-							// this allows us to call it inside of our custom popup
-							// via keyboard navigation and on click
-							this.insertMention = command
-						},
-						// is called when a suggestion has changed
-						onChange: ({
-							items, query, range, virtualNode,
-						}) => {
-							this.query = query
-							this.filteredUsers = items
-							this.suggestionRange = range
-							this.navigatedUserIndex = 0
-							this.renderPopup(virtualNode)
-						},
-						// is called when a suggestion is cancelled
-						onExit: () => {
-							// reset all saved values
-							this.query = null
-							this.filteredUsers = []
-							this.suggestionRange = null
-							this.navigatedUserIndex = 0
-							this.destroyPopup()
-						},
-						// is called on every keyDown event while a suggestion is active
-						onKeyDown: ({ event }) => {
-							// pressing up arrow
-							if (event.keyCode === 38) {
-								this.upHandler()
-								return true
-							}
-							// pressing down arrow
-							if (event.keyCode === 40) {
-								this.downHandler()
-								return true
-							}
-							// pressing enter
-							if (event.keyCode === 13) {
-								this.enterHandler()
-								return true
-							}
-							return false
-						},
-						// is called when a suggestion has changed
-						// this function is optional because there is basic filtering built-in
-						// you can overwrite it if you prefer your own filtering
-						// in this example we use fuse.js with support for fuzzy search
-						onFilter: (items, query) => {
-							if (!query) {
-								return items
-							}
-							const fuse = new Fuse(items, {
-								threshold: 0.2,
-								keys: ['uid', 'displayname'],
-							})
-							return fuse.search(query)
-						},
-					}),
-				],
-				content: '',
-				onUpdate: ({ getHTML }) => {
-					this.newComment = getHTML().replace(/(<p>|<\/p>)/g, '')
-				},
-			}),
-			query: null,
-			suggestionRange: null,
-			filteredUsers: [],
-			navigatedUserIndex: 0,
-			insertMention: () => {},
-			observer: null,
-
 		}
 	},
 	computed: {
 		...mapState({
-			comments: state => state.comment.comments,
 			currentBoard: state => state.currentBoard,
 		}),
-		...mapGetters(['getCommentsForCard', 'hasMoreComments']),
-		hasResults() {
-			return this.filteredUsers.length
+		...mapGetters([
+			'getCommentsForCard',
+			'hasMoreComments',
+		]),
+		members() {
+			return this.currentBoard.users
 		},
-		showSuggestions() {
-			return this.query || this.hasResults
-		},
-
 	},
 	watch: {
 		'card': {
@@ -208,15 +117,15 @@ export default {
 			await this.$store.dispatch('fetchComments', { cardId: this.card.id })
 			this.isLoading = false
 		},
-		createComment() {
+		async createComment() {
+			const content = this.contentEditableToParsed()
 			const commentObj = {
 				cardId: this.card.id,
-				comment: this.newComment,
+				comment: content,
 			}
-			this.$store.dispatch('createComment', commentObj)
-			this.loadComments()
+			await this.$store.dispatch('createComment', commentObj)
 			this.newComment = ''
-			this.editor.setContent('')
+			await this.loadComments()
 		},
 		async loadMore() {
 			this.isLoading = true
@@ -224,69 +133,20 @@ export default {
 			this.isLoading = false
 		},
 
-		// navigate to the previous item
-		// if it's the first item, navigate to the last one
-		upHandler() {
-			this.navigatedUserIndex = ((this.navigatedUserIndex + this.filteredUsers.length) - 1) % this.filteredUsers.length
-		},
-		// navigate to the next item
-		// if it's the last item, navigate to the first one
-		downHandler() {
-			this.navigatedUserIndex = (this.navigatedUserIndex + 1) % this.filteredUsers.length
-		},
-		enterHandler() {
-			const user = this.filteredUsers[this.navigatedUserIndex]
-			if (user) {
-				this.selectUser(user)
-			}
-		},
-		// we have to replace our suggestion text with a mention
-		// so it's important to pass also the position of your suggestion text
-		selectUser(user) {
-			this.insertMention({
-				range: this.suggestionRange,
-				attrs: {
-					id: user.uid,
-					label: user.displayname,
-				},
+		/**
+		 * All credits for this go to the talk app
+		 * https://github.com/nextcloud/spreed/blob/e69740b372e17eec4541337b47baa262a5766510/src/components/NewMessageForm/NewMessageForm.vue#L100-L143
+		 */
+		contentEditableToParsed() {
+			const mentions = this.$refs.contentEditable.querySelectorAll('span[data-at-embedded]')
+			mentions.forEach(mention => {
+				// FIXME Adding a space after the mention should be improved to
+				// do it or not based on the next element instead of always
+				// adding it.
+				mention.replaceWith('@' + mention.firstElementChild.attributes['data-mention-id'].value + ' ')
 			})
-			this.editor.focus()
-		},
-		// renders a popup with suggestions
-		// tiptap provides a virtualNode object for using popper.js (or tippy.js) for popups
-		renderPopup(node) {
-			if (this.popup) {
-				return
-			}
-			this.popup = tippy(node, {
-				content: this.$refs.suggestions,
-				trigger: 'mouseenter',
-				interactive: true,
-				placement: 'bottom-start',
-				inertia: true,
-				duration: [400, 200],
-				showOnInit: true,
-			})
-			// we have to update tippy whenever the DOM is updated
-			if (MutationObserver) {
-				this.observer = new MutationObserver(() => {
-					this.popup.popperInstance.scheduleUpdate()
-				})
-				this.observer.observe(this.$refs.suggestions, {
-					childList: true,
-					subtree: true,
-					characterData: true,
-				})
-			}
-		},
-		destroyPopup() {
-			if (this.popup) {
-				this.popup.destroy()
-				this.popup = null
-			}
-			if (this.observer) {
-				this.observer.disconnect()
-			}
+
+			return rawToParsed(this.$refs.contentEditable.innerHTML)
 		},
 	},
 }
@@ -294,4 +154,15 @@ export default {
 
 <style scoped lang="scss">
 	@import "../../css/comments";
+
+	.atwho-wrap {
+		width: 100%;
+		& > div[contenteditable] {
+			width: 100%;
+
+			&::v-deep > span > div {
+				vertical-align: middle;
+			}
+		}
+	}
 </style>

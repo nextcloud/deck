@@ -16,7 +16,7 @@
 				</Actions>
 			</div>
 			<!-- FIXME: Check if input is sanitized -->
-			<p class="comment--content" v-html="comment.message" /><p />
+			<p class="comment--content" v-html="parsedMessage" /><p />
 		</template>
 		<form v-else @submit.prevent="updateComment">
 			<input v-model="commentMsg"
@@ -37,6 +37,7 @@
 
 <script>
 import { Avatar, Actions, ActionButton } from '@nextcloud/vue'
+import escapeHtml from 'escape-html'
 
 export default {
 	name: 'CommentItem',
@@ -56,6 +57,21 @@ export default {
 			edit: false,
 			commentMsg: '',
 		}
+	},
+
+	computed: {
+		parsedMessage() {
+			const div = document.createElement('div')
+			div.innerHTML = this.comment.message
+			let message = escapeHtml(div.textContent || div.innerText || '')
+			// FIXME: We need a proper way to show user bubbles in the comment content
+			// Either we split the text and render components for each part or we could try
+			// to manually mount a component into the current components dom
+			this.comment.mentions.forEach((mention) => {
+				message = message.replace('@' + mention.mentionId + ' ', '<strong data-mention-id="' + mention.mentionId + '">@' + mention.mentionDisplayName + '</strong> ')
+			})
+			return message
+		},
 	},
 
 	methods: {
