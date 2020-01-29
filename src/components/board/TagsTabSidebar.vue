@@ -2,7 +2,11 @@
 	<div>
 		<ul class="labels">
 			<li v-for="label in labels" :key="label.id" :class="{editing: (editingLabelId === label.id)}">
+				<!-- Edit Tag -->
 				<template v-if="editingLabelId === label.id">
+					<ColorPicker class="app-navigation-entry-bullet-wrapper" :value="'#' + editingLabel.color" @input="updateColor">
+						<div :style="{ backgroundColor: '#' + editingLabel.color }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
+					</ColorPicker>
 					<form class="label-form" @submit.prevent="updateLabel(label)">
 						<input v-model="editingLabel.title" type="text">
 						<input v-tooltip="{content: missingDataLabel, show: !editLabelObjValidated, trigger: 'manual' }"
@@ -15,7 +19,6 @@
 							class="icon-close"
 							@click="editingLabelId = null">
 					</form>
-					<ColorPicker :value="'#' + editingLabel.color" @input="updateColor" />
 				</template>
 				<template v-else>
 					<div :style="{ backgroundColor: `#${label.color}`, color:textColor(label.color) }" class="label-title">
@@ -33,7 +36,11 @@
 			</li>
 
 			<li v-if="addLabel" class="editing">
+				<!-- New Tag -->
 				<template>
+					<ColorPicker class="app-navigation-entry-bullet-wrapper" :value="'#' + addLabelObj.color" @input="updateColor">
+						<div :style="{ backgroundColor: '#' + addLabelObj.color }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
+					</ColorPicker>
 					<form class="label-form" @submit.prevent="clickAddLabel">
 						<input v-model="addLabelObj.title" type="text">
 						<input v-tooltip="{content: missingDataLabel, show: !addLabelObjValidated, trigger: 'manual' }"
@@ -46,7 +53,6 @@
 							class="icon-close"
 							@click="addLabel=false">
 					</form>
-					<ColorPicker :value="'#' + addLabelObj.color" @input="updateColor" />
 				</template>
 			</li>
 			<button v-if="canManage" @click="clickShowAddLabel()">
@@ -60,7 +66,7 @@
 
 import { mapGetters } from 'vuex'
 import Color from '../../mixins/color'
-import ColorPicker from '../ColorPicker'
+import { ColorPicker } from '@nextcloud/vue/dist/Components/ColorPicker'
 
 export default {
 	name: 'TagsTabSidebar',
@@ -157,15 +163,18 @@ export default {
 			margin-left: -3px;
 		}
 
-		.color-picker {
-			display: flex;
+		.app-navigation-entry-bullet-wrapper {
+		position: absolute;
+		width: 44px !important;
+		margin: 6px;
+		height: 44px;
+		.color0 {
+			width: 30px !important;
+			height: 30px;
+			border-radius: 50%;
+			background-size: 14px;
 		}
-
-		.color-picker-button {
-			width: 100px;
-			margin-left: 20px;
-			border-radius: 6px;
-		}
+	}
 
 		&.editing {
 			display: block;

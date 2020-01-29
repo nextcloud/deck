@@ -62,7 +62,7 @@
 		<!-- edit entry -->
 		<div v-if="editing" class="app-navigation-entry-edit">
 			<ColorPicker class="app-navigation-entry-bullet-wrapper" :value="`#${board.color}`" @input="updateColor">
-				<div :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet"></div>
+				<div :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
 			</ColorPicker>
 			<form @submit.prevent.stop="applyEdit">
 				<input v-model="editTitle" type="text" required>
@@ -79,7 +79,6 @@
 <script>
 import { PopoverMenu } from '@nextcloud/vue/dist/Components/PopoverMenu'
 import ClickOutside from 'vue-click-outside'
-// import ColorPicker from '../ColorPicker'
 import { ColorPicker } from '@nextcloud/vue/dist/Components/ColorPicker'
 
 export default {
