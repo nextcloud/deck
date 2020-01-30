@@ -40,6 +40,7 @@
 				:boards="sharedBoards"
 				icon="icon-shared" />
 			<AppNavigationAddBoard />
+			<AppNavigationCalendar />
 		</ul>
 		<div v-if="isAdmin"
 			id="app-settings"
@@ -73,6 +74,7 @@ import { Multiselect } from '@nextcloud/vue/dist/Components/Multiselect'
 
 import AppNavigationAddBoard from './AppNavigationAddBoard'
 import AppNavigationBoardCategory from './AppNavigationBoardCategory'
+import AppNavigationCalendar from './AppNavigationCalendar'
 
 export default {
 	name: 'AppNavigation',
@@ -80,6 +82,7 @@ export default {
 		AppNavigationAddBoard,
 		AppNavigationBoardCategory,
 		Multiselect,
+		AppNavigationCalendar,
 	},
 	directives: {
 		ClickOutside,

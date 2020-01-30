@@ -29,13 +29,28 @@ import Board from './components/board/Board'
 import Sidebar from './components/Sidebar'
 import BoardSidebar from './components/board/BoardSidebar'
 import CardSidebar from './components/card/CardSidebar'
+import IsCalendarInstalled from '../src/services/IsCalendarInstalled'
 
 Vue.use(Router)
+
+let calendarPath = generateUrl('/apps/calendar')
+if (!IsCalendarInstalled) {
+	calendarPath = generateUrl('/settings/apps/integration/calendar')
+}
+
+
 
 export default new Router({
 	base: generateUrl('/apps/deck/'),
 	linkActiveClass: 'active',
 	routes: [
+		{
+			path: '/calendar',
+			name: 'calendar',
+			beforeEnter() {
+				location.href = calendarPath
+			}
+		},
 		{
 			path: '/',
 			name: 'main',

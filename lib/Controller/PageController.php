@@ -28,25 +28,32 @@ use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Controller;
 use OCP\IL10N;
+use OCP\IConfig;
+use OCP\IInitialStateService;
 
 class PageController extends Controller {
 
 	private $permissionService;
 	private $userId;
 	private $l10n;
+	private $config;
 
 	public function __construct(
 		$AppName,
 		IRequest $request,
 		PermissionService $permissionService,
 		IL10N $l10n,
-		$userId
+		$userId,
+		IConfig $config,
+		IInitialStateService $initialStateService
 		) {
 		parent::__construct($AppName, $request);
 
 		$this->userId = $userId;
 		$this->permissionService = $permissionService;
 		$this->l10n = $l10n;
+		$this->config = $config;
+		$this->initialStateService = $initialStateService;
 	}
 
 	/**
@@ -62,6 +69,8 @@ class PageController extends Controller {
 			'maxUploadSize' => (int)\OCP\Util::uploadLimit(),
 			'canCreate' => $this->permissionService->canCreate()
 		];
+
+		$this->initialStateService->provideInitialState($this->appName, 'calendar', $this->config->getAppValue('calendar', 'enabled', 'no') === 'yes');
 
 		return new TemplateResponse('deck', 'main', $params);
 	}
