@@ -15,8 +15,7 @@
 					</ActionButton>
 				</Actions>
 			</div>
-			<!-- FIXME: Check if input is sanitized -->
-			<p class="comment--content" v-html="parsedMessage" /><p />
+			<RichText :text="richText" :arguments="richArgs" />
 		</template>
 		<form v-else @submit.prevent="updateComment">
 			<input v-model="commentMsg"
@@ -36,8 +35,9 @@
 </template>
 
 <script>
-import { Avatar, Actions, ActionButton } from '@nextcloud/vue'
+import { Avatar, Actions, ActionButton, UserBubble } from '@nextcloud/vue'
 import escapeHtml from 'escape-html'
+import RichText from '@juliushaertl/vue-richtext'
 
 export default {
 	name: 'CommentItem',
@@ -45,6 +45,7 @@ export default {
 		Avatar,
 		Actions,
 		ActionButton,
+		RichText,
 	},
 	props: {
 		comment: {
@@ -60,17 +61,33 @@ export default {
 	},
 
 	computed: {
+		richText() {
+			let message = this.parsedMessage
+			this.comment.mentions.forEach((mention, index) => {
+				message = message.replace('@' + mention.mentionId + '', `{user${index}}`)
+			})
+			return message
+		},
+		richArgs() {
+			const mentions = [...this.comment.mentions]
+			// TODO mentions are set once per user, so when mentioning the same user multiple times this doesn't work
+			const result = mentions.reduce(function(result, item, index) {
+				const itemKey = 'user' + index
+				result[itemKey] = {
+					component: UserBubble,
+					props: {
+						user: item.mentionId,
+						displayName: item.mentionDisplayName,
+					},
+				}
+				return result
+			}, {})
+			return result
+		},
 		parsedMessage() {
 			const div = document.createElement('div')
 			div.innerHTML = this.comment.message
-			let message = escapeHtml(div.textContent || div.innerText || '')
-			// FIXME: We need a proper way to show user bubbles in the comment content
-			// Either we split the text and render components for each part or we could try
-			// to manually mount a component into the current components dom
-			this.comment.mentions.forEach((mention) => {
-				message = message.replace('@' + mention.mentionId + ' ', '<strong data-mention-id="' + mention.mentionId + '">@' + mention.mentionDisplayName + '</strong> ')
-			})
-			return message
+			return escapeHtml(div.textContent || div.innerText || '')
 		},
 	},
 
