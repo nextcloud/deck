@@ -22,6 +22,7 @@
 
 <template>
 	<div class="controls">
+		{{ filter }}
 		<div id="app-navigation-toggle-custom" class="icon-menu" @click="toggleNav" />
 		<div v-if="board" class="board-title">
 			<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
@@ -47,26 +48,83 @@
 				</form>
 			</div>
 			<div class="board-action-buttons">
-				<Actions defaultIcon="icon-search">
-					{{ t('deck', 'Filter by tag') }}
-					
-					<ActionCheckbox v-for="label in board.labels"
-					:key="label.id" 
-					@change="alert('(un)checked !')">
-					{{ label.title }}
-					</ActionCheckbox>
-					
-					{{ t('deck', 'Filter by assigned user') }}
-					<ActionCheckbox v-for="user in board.users"
-					:key="user.uid" 
-					@change="alert('(un)checked !')">
-					{{ user.displayname }}
-					</ActionCheckbox>
+				<Popover>
+					<button slot="trigger" style="opacity: .5;" class="icon-search" />
+					<template>
+						<h3>{{ t('deck', 'Filter by tag') }}</h3>
+						<div v-for="label in board.labels" :key="label.id">
+							<input
+								:id="label.id"
+								v-model="filter.tags"
+								type="checkbox"
+								class="checkbox"
+								:value="label.title"
+								@input="setFilter">
+							<label :for="label.id">{{ label.title }}</label>
+						</div>
 
-					{{ t('deck', 'Filter by duedate') }}
-					<ActionCheckbox @change="alert('(un)checked !')">Third choice (checked)</ActionCheckbox>
-					<ActionCheckbox @change="alert('(un)checked !')">Second choice (disabled)</ActionCheckbox>
-				</Actions>
+						<h3>{{ t('deck', 'Filter by assigned user') }}</h3>
+						<div v-for="user in board.users" :key="user.uid">
+							<input
+								:id="user.uid"
+								v-model="filter.users"
+								type="checkbox"
+								class="checkbox"
+								:value="user.uid"
+								@input="setFilter">
+							<label :for="user.uid">{{ user.displayname }}</label>
+							<Avatar :user="user.uid" />
+						</div>
+
+						<h3>{{ t('deck', 'Filter by duedate') }}</h3>
+
+						<input
+							id="overdue"
+							v-model="filter.due"
+							type="checkbox"
+							class="checkbox"
+							value="overdue"
+							@input="setFilter">
+						<label for="overdue">{{ t('deck', 'Overdue') }}</label>
+
+						<input
+							id="dueToday"
+							v-model="filter.due"
+							type="checkbox"
+							class="checkbox"
+							value="dueToday"
+							@input="setFilter">
+						<label for="dueToday">{{ t('deck', 'Today') }}</label>
+
+						<input
+							id="dueWeek"
+							v-model="filter.due"
+							type="checkbox"
+							class="checkbox"
+							value="dueWeek"
+							@input="setFilter">
+						<label for="dueWeek">{{ t('deck', 'Week') }}</label>
+
+						<input
+							id="dueMonth"
+							v-model="filter.due"
+							type="checkbox"
+							class="checkbox"
+							value="dueMonth"
+							@input="setFilter">
+						<label for="dueMonth">{{ t('deck', 'Month') }}</label>
+
+						<input
+							id="noDue"
+							v-model="filter.due"
+							type="checkbox"
+							class="checkbox"
+							value="noDue"
+							@input="setFilter">
+						<label for="noDue">{{ t('deck', 'No due') }}</label>
+					</template>
+				</Popover>
+
 				<Actions style="opacity: .5;">
 					<ActionButton v-if="showArchived"
 						icon="icon-archive"
@@ -98,12 +156,14 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Actions, ActionButton, ActionCheckbox } from '@nextcloud/vue'
+import { Actions, ActionButton } from '@nextcloud/vue'
+import { Popover } from '@nextcloud/vue/dist/Components/Popover'
+import { Avatar } from '@nextcloud/vue/dist/Components/Avatar'
 
 export default {
 	name: 'Controls',
 	components: {
-		Actions, ActionButton, ActionCheckbox
+		Actions, ActionButton, Popover, Avatar,
 	},
 	props: {
 		board: {
@@ -118,8 +178,10 @@ export default {
 			stack: '',
 			showArchived: false,
 			isAddStackVisible: false,
+			filter: { tags: [], users: [], due: [] },
 		}
 	},
+
 	computed: {
 		...mapGetters([
 			'canEdit',
@@ -135,6 +197,9 @@ export default {
 		},
 	},
 	methods: {
+		setFilter() {
+			this.$store.dispatch('setFilter', this.filter)
+		},
 		toggleNav() {
 			this.$store.dispatch('toggleNav')
 		},
