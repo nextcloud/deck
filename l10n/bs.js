@@ -7,6 +7,7 @@ OC.L10N.register(
     "No file was uploaded" : "Nijedna datoteka nije učitana.",
     "Missing a temporary folder" : "Nedostaje privremeni direktorij.",
     "Cancel" : "Otkaži",
+    "Sharing" : "Dijeljenje",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Delete" : "Obriši",

@@ -6,6 +6,7 @@ OC.L10N.register(
     "No file was uploaded" : "ವರ್ಗಾವಣೆಗೆ ﻿ಯಾವುದೇ ಕಡತಗಳು ಕಂಡುಬಂದಿಲ್ಲ",
     "Missing a temporary folder" : "ತಾತ್ಕಾಲಿಕ ಕಡತಕೋಶ ದೊರೆಕುತ್ತಿಲ್ಲ",
     "Cancel" : "﻿ರದ್ದು",
+    "Sharing" : "﻿ಹಂಚಿಕೆ",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Delete" : "﻿ಅಳಿಸಿ",
