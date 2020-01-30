@@ -58,8 +58,8 @@
 								v-model="filter.tags"
 								type="checkbox"
 								class="checkbox"
-								:value="label.title"
-								@input="setFilter">
+								:value="label.id"
+								@change="setFilter">
 							<label :for="label.id">{{ label.title }}</label>
 						</div>
 
@@ -71,7 +71,7 @@
 								type="checkbox"
 								class="checkbox"
 								:value="user.uid"
-								@input="setFilter">
+								@change="setFilter">
 							<label :for="user.uid">{{ user.displayname }}</label>
 							<Avatar :user="user.uid" />
 						</div>
@@ -80,47 +80,47 @@
 
 						<input
 							id="overdue"
-							v-model="filter.due"
+							v-model="filter.duedates"
 							type="checkbox"
 							class="checkbox"
 							value="overdue"
-							@input="setFilter">
+							@change="setFilter">
 						<label for="overdue">{{ t('deck', 'Overdue') }}</label>
 
 						<input
 							id="dueToday"
-							v-model="filter.due"
+							v-model="filter.duedates"
 							type="checkbox"
 							class="checkbox"
 							value="dueToday"
-							@input="setFilter">
+							@change="setFilter">
 						<label for="dueToday">{{ t('deck', 'Today') }}</label>
 
 						<input
 							id="dueWeek"
-							v-model="filter.due"
+							v-model="filter.duedates"
 							type="checkbox"
 							class="checkbox"
 							value="dueWeek"
-							@input="setFilter">
+							@change="setFilter">
 						<label for="dueWeek">{{ t('deck', 'Week') }}</label>
 
 						<input
 							id="dueMonth"
-							v-model="filter.due"
+							v-model="filter.duedates"
 							type="checkbox"
 							class="checkbox"
 							value="dueMonth"
-							@input="setFilter">
+							@change="setFilter">
 						<label for="dueMonth">{{ t('deck', 'Month') }}</label>
 
 						<input
 							id="noDue"
-							v-model="filter.due"
+							v-model="filter.duedates"
 							type="checkbox"
 							class="checkbox"
 							value="noDue"
-							@input="setFilter">
+							@change="setFilter">
 						<label for="noDue">{{ t('deck', 'No due') }}</label>
 					</template>
 				</Popover>
@@ -198,7 +198,7 @@ export default {
 	},
 	methods: {
 		setFilter() {
-			this.$store.dispatch('setFilter', this.filter)
+			this.$nextTick(() => this.$store.dispatch('setFilter', this.filter))
 		},
 		toggleNav() {
 			this.$store.dispatch('toggleNav')

@@ -30,9 +30,48 @@ export default {
 		cards: [],
 	},
 	getters: {
-		cardsByStack: (state, getters) => (id) => {
-			return state.cards.filter((card) => card.stackId === id && (getters.getSearchQuery === '' || (card.title.toLowerCase().includes(getters.getSearchQuery.toLowerCase()) || card.description.toLowerCase().includes(getters.getSearchQuery.toLowerCase())))
-			).sort((a, b) => a.order - b.order)
+		cardsByStack: (state, getters, rootState) => (id) => {
+			return state.cards
+				.filter((card) => card.stackId === id && (getters.getSearchQuery === '' || (card.title.toLowerCase().includes(getters.getSearchQuery.toLowerCase()) || card.description.toLowerCase().includes(getters.getSearchQuery.toLowerCase()))
+				.filter((card) => {
+					const { tags, users, duedates } = rootState.filter
+					let allTagsMatch = true
+					let allUsersMatch = true
+					const allDuedatesMatch = true
+
+					if (tags.length > 0) {
+						tags.forEach((tag) => {
+							if (card.labels.findIndex((l) => l.id === tag) === -1) {
+								allTagsMatch = false
+							}
+						})
+						if (!allTagsMatch) {
+							return false
+						}
+					}
+
+					if (users.length > 0) {
+						users.forEach((user) => {
+							if (card.assignedUsers.findIndex((u) => u.participant.uid === user) === -1) {
+								allUsersMatch = false
+							}
+						})
+						if (!allUsersMatch) {
+							return false
+						}
+					}
+
+					if (duedates) {
+						// FIXME: check for duedate ranges
+
+						if (!allDuedatesMatch) {
+							return false
+						}
+					}
+
+					return true
+				})
+				.sort((a, b) => a.order - b.order)
 		},
 		cardById: state => (id) => {
 			return state.cards.find((card) => card.id === id)

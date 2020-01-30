@@ -62,7 +62,7 @@ export default new Vuex.Store({
 		searchQuery: '',
 		activity: [],
 		activityLoadMore: true,
-		filter: { tags: [], user: [], due: [] },
+		filter: { tags: [], users: [], duedates: [] },
 	},
 	getters: {
 		getSearchQuery: state => {
@@ -119,7 +119,7 @@ export default new Vuex.Store({
 			state.searchQuery = searchQuery
 		},
 		setFilter(state, filter) {
-			Vue.set(state.filter, filter)
+			Object.assign(state.filter, filter)
 		},
 		toggleShowArchived(state) {
 			state.showArchived = !state.showArchived
