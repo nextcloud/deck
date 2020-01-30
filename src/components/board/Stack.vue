@@ -53,13 +53,14 @@
 
 		<form v-if="showAddCard" class="stack--card-add" @submit.prevent="clickAddCard()">
 			<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
-			<input id="new-stack-input-main"
+			<textarea id="new-stack-input-main"
 				v-model="newCardTitle"
 				v-focus
 				type="text"
 				class="no-close"
 				placeholder="Add a new card"
 				required>
+			</textarea>
 
 			<input class="icon-confirm"
 				type="submit"
@@ -161,14 +162,36 @@ export default {
 			this.editing = false
 		},
 		clickAddCard() {
-			const newCard = {
-				title: this.newCardTitle,
-				stackId: this.stack.id,
-				boardId: this.stack.boardId,
+
+			let match = /\r|\n/.exec(this.newCardTitle);
+			if (match) {
+				
+				match.forEach(() => (line) => {
+				
+					let newCard = {
+					title: line,
+					stackId: this.stack.id,
+					boardId: this.stack.boardId,
+					}
+				
+					this.$store.dispatch('addCard', newCard)
+					this.newCardTitle = ''
+					this.showAddCard = false
+				})
+
+			} else {
+
+				const newCard = {
+					title: this.newCardTitle,
+					stackId: this.stack.id,
+					boardId: this.stack.boardId,
+				}
+				
+				this.$store.dispatch('addCard', newCard)
+				this.newCardTitle = ''
+				this.showAddCard = false
+
 			}
-			this.$store.dispatch('addCard', newCard)
-			this.newCardTitle = ''
-			this.showAddCard = false
 		},
 	},
 }
