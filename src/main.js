@@ -44,6 +44,8 @@ Vue.mixin({
 	},
 })
 
+Vue.prototype.$OC = OC
+
 Vue.directive('tooltip', Tooltip)
 Vue.directive('click-outside', ClickOutside)
 
@@ -58,5 +60,16 @@ new Vue({
 	el: '#content',
 	router,
 	store,
+	mounted: function() {
+		this.$OC.Search = new OCA.Search(this.filter, this.cleanSearch)
+	},
+	methods: {
+		filter(query) {
+			this.$store.commit('setSearchQuery', query)
+		},
+		cleanSearch() {
+			this.$store.commit('setSearchQuery', '')
+		},
+	},
 	render: h => h(App),
 })
