@@ -4,6 +4,7 @@ OC.L10N.register(
     "Personal" : "個人",
     "Done" : "Done",
     "Cancel" : "取消",
+    "Sharing" : "分享",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Delete" : "刪除",
