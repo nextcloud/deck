@@ -31,11 +31,8 @@ export default {
 	},
 	getters: {
 		cardsByStack: (state, getters) => (id) => {
-			return state.cards.filter(
-				(card) => card.stackId === id
-				&& (card.title.includes(getters.getSearchQuery) || card.description.includes(getters.getSearchQuery))
-			)
-				.sort((a, b) => a.order - b.order)
+			return state.cards.filter((card) => card.stackId === id && (getters.getSearchQuery === '' || (card.title.toLowerCase().includes(getters.getSearchQuery.toLowerCase()) || card.description.toLowerCase().includes(getters.getSearchQuery.toLowerCase())))
+			).sort((a, b) => a.order - b.order)
 		},
 		cardById: state => (id) => {
 			return state.cards.find((card) => card.id === id)

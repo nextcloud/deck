@@ -44,8 +44,6 @@ Vue.mixin({
 	},
 })
 
-Vue.prototype.$OC = OC
-
 Vue.directive('tooltip', Tooltip)
 Vue.directive('click-outside', ClickOutside)
 
@@ -61,7 +59,8 @@ new Vue({
 	router,
 	store,
 	mounted: function() {
-		this.$OC.Search = new OCA.Search(this.filter, this.cleanSearch)
+		// eslint-disable-next-line
+		new OCA.Search(this.filter, this.cleanSearch)
 	},
 	methods: {
 		filter(query) {
