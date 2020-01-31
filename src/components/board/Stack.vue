@@ -59,8 +59,7 @@
 				type="text"
 				class="no-close"
 				placeholder="Add a new card"
-				required>
-			</textarea>
+				required />
 
 			<input class="icon-confirm"
 				type="submit"
@@ -163,35 +162,31 @@ export default {
 		},
 		clickAddCard() {
 
-			let match = /\r|\n/.exec(this.newCardTitle);
+			const match = /\r|\n/.exec(this.newCardTitle)
 			if (match) {
-				
-				match.forEach(() => (line) => {
-				
-					let newCard = {
-					title: line,
-					stackId: this.stack.id,
-					boardId: this.stack.boardId,
-					}
-				
-					this.$store.dispatch('addCard', newCard)
-					this.newCardTitle = ''
-					this.showAddCard = false
+				console.log(match)
+				const results = this.newCardTitle.split(match[0])
+				results.forEach((line) => {
+
+					this.addCard(line)
 				})
 
-			} else {
-
-				const newCard = {
-					title: this.newCardTitle,
-					stackId: this.stack.id,
-					boardId: this.stack.boardId,
-				}
-				
-				this.$store.dispatch('addCard', newCard)
 				this.newCardTitle = ''
 				this.showAddCard = false
 
+			} else {
+				this.addCard(this.newCardTitle)
+				this.newCardTitle = ''
+				this.showAddCard = false
 			}
+		},
+		addCard(title) {
+			const newCard = {
+				title: title,
+				stackId: this.stack.id,
+				boardId: this.stack.boardId,
+			}
+			this.$store.dispatch('addCard', newCard)
 		},
 	},
 }
