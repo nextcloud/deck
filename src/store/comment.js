@@ -25,7 +25,7 @@ import Vue from 'vue'
 
 const apiClient = new CommentApi()
 
-const COMMENT_FETCH_LIMIT = 3
+const COMMENT_FETCH_LIMIT = 10
 
 export default {
 	state: {
@@ -61,10 +61,10 @@ export default {
 				state.comments[cardId].comments.push(...newComments)
 			}
 		},
-		updateComment(state, comment) {
-			const existingIndex = state.comments[comment.cardId].comments.findIndex(_comment => _comment.id === comment.commentId)
+		updateComment(state, { cardId, comment }) {
+			const existingIndex = state.comments[cardId].comments.findIndex(c => c.id === comment.id)
 			if (existingIndex !== -1) {
-				state.comments[comment.cardId].comments[existingIndex].message = comment.comment
+				Object.assign(state.comments[cardId].comments[existingIndex], comment)
 			}
 		},
 		deleteComment(state, comment) {
@@ -82,14 +82,15 @@ export default {
 				offset: offset || 0,
 			})
 
-			if (comments.length < COMMENT_FETCH_LIMIT) {
-				commit('endReached', { cardId })
-				return
-			}
 			commit('addComments', {
 				cardId,
 				comments,
 			})
+
+			if (comments.length < COMMENT_FETCH_LIMIT) {
+				commit('endReached', { cardId })
+
+			}
 		},
 		async fetchMore({ commit, dispatch, getters }, { cardId }) {
 			// fetch newer comments first
@@ -107,7 +108,8 @@ export default {
 		},
 		async updateComment({ commit }, data) {
 			await apiClient.updateComment(data)
-			commit('updateComment', data)
+			const commentData = await apiClient.fetchComment(data)
+			await commit('updateComment', { cardId: data.cardId, comment: commentData[0] })
 		},
 	},
 }

@@ -7,33 +7,7 @@
 			</span>
 		</div>
 
-		<div class="comment-form">
-			<form @submit.prevent="createComment">
-				<At ref="at"
-					v-model="newComment"
-					:members="members"
-					name-key="primaryKey"
-					:tab-select="true">
-					<template v-slot:item="s">
-						<Avatar :user="s.item.uid" />
-						<span v-text="s.item.displayname" />
-					</template>
-					<template v-slot:embeddedItem="scope">
-						<span>
-							<UserBubble v-if="scope.current.primaryKey"
-								:data-mention-id="scope.current.primaryKey"
-								:user="scope.current.primaryKey"
-								:display-name="scope.current.displayname" />
-						</span>
-					</template>
-					<div ref="contentEditable" contenteditable />
-				</At>
-				<input v-tooltip="t('deck', 'Save')"
-					class="icon-confirm"
-					type="submit"
-					value="">
-			</form>
-		</div>
+		<CommentForm v-model="newComment" @submit="createComment" />
 
 		<ul v-if="getCommentsForCard(card.id).length > 0" id="commentsFeed">
 			<CommentItem v-for="comment in getCommentsForCard(card.id)"
@@ -56,20 +30,18 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Avatar, UserBubble } from '@nextcloud/vue'
+import { Avatar } from '@nextcloud/vue'
 import CommentItem from './CommentItem'
+import CommentForm from './CommentForm'
 import InfiniteLoading from 'vue-infinite-loading'
-import At from 'vue-at'
-import { rawToParsed } from '../../helpers/mentions'
 
 export default {
 	name: 'CardSidebarTabComments',
 	components: {
 		Avatar,
 		CommentItem,
+		CommentForm,
 		InfiniteLoading,
-		At,
-		UserBubble,
 	},
 	props: {
 		card: {
@@ -117,8 +89,7 @@ export default {
 			await this.$store.dispatch('fetchComments', { cardId: this.card.id })
 			this.isLoading = false
 		},
-		async createComment() {
-			const content = this.contentEditableToParsed()
+		async createComment(content) {
 			const commentObj = {
 				cardId: this.card.id,
 				comment: content,
@@ -132,37 +103,10 @@ export default {
 			await this.$store.dispatch('fetchMore', { cardId: this.card.id })
 			this.isLoading = false
 		},
-
-		/**
-		 * All credits for this go to the talk app
-		 * https://github.com/nextcloud/spreed/blob/e69740b372e17eec4541337b47baa262a5766510/src/components/NewMessageForm/NewMessageForm.vue#L100-L143
-		 */
-		contentEditableToParsed() {
-			const mentions = this.$refs.contentEditable.querySelectorAll('span[data-at-embedded]')
-			mentions.forEach(mention => {
-				// FIXME Adding a space after the mention should be improved to
-				// do it or not based on the next element instead of always
-				// adding it.
-				mention.replaceWith('@' + mention.firstElementChild.attributes['data-mention-id'].value + ' ')
-			})
-
-			return rawToParsed(this.$refs.contentEditable.innerHTML)
-		},
 	},
 }
 </script>
 
 <style scoped lang="scss">
 	@import "../../css/comments";
-
-	.atwho-wrap {
-		width: 100%;
-		& > div[contenteditable] {
-			width: 100%;
-
-			&::v-deep > span > div {
-				vertical-align: middle;
-			}
-		}
-	}
 </style>

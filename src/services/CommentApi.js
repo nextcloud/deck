@@ -44,6 +44,29 @@ export class CommentApi {
 		return xmlToTagList(response.data)
 	}
 
+	async fetchComment({ cardId, commentId }) {
+		const response = await axios({
+			method: 'PROPFIND',
+			url: this.url(`${cardId}/${commentId}`),
+			data: `<?xml version="1.0"?>
+				<d:propfind  xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
+					<d:prop>
+						<oc:id />
+						<oc:message />
+						<oc:actorType />
+						<oc:actorId />
+						<oc:actorDisplayName />
+						<oc:creationDateTime />
+						<oc:objectType />
+						<oc:objectId />
+						<oc:isUnread />
+						<oc:mentions />
+					</d:prop>
+				</d:propfind>`,
+		})
+		return xmlToTagList(response.data)
+	}
+
 	async createComment({ cardId, comment }) {
 		const response = await axios({
 			method: 'POST',

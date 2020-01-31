@@ -1,12 +1,12 @@
 <template>
 	<li class="comment">
-		<template v-if="!edit">
+		<template>
 			<div class="comment--header">
 				<Avatar :user="comment.actorId" />
 				<span class="has-tooltip username">
 					{{ comment.actorDisplayName }}
 				</span>
-				<Actions @click.stop.prevent>
+				<Actions v-if="!edit" @click.stop.prevent>
 					<ActionButton icon="icon-rename" @click="showUpdateForm()">
 						{{ t('deck', 'Update') }}
 					</ActionButton>
@@ -14,37 +14,31 @@
 						{{ t('deck', 'Delete') }}
 					</ActionButton>
 				</Actions>
+				<Actions v-else @click.stop.prevent>
+					<ActionButton icon="icon-close" @click="hideUpdateForm" />
+				</Actions>
 			</div>
-			<RichText :text="richText" :arguments="richArgs" />
+			<RichText v-if="!edit"
+				class="comment--content"
+				:text="richText"
+				:arguments="richArgs"
+				:autolink="true" />
+			<CommentForm v-else v-model="commentMsg" @submit="updateComment" />
 		</template>
-		<form v-else @submit.prevent="updateComment">
-			<input v-model="commentMsg"
-				type="text"
-				autofocus
-				required>
-			<input v-tooltip="t('deck', 'Save')"
-				class="icon-confirm"
-				type="submit"
-				value="">
-			<input type="submit"
-				value=""
-				class="icon-close"
-				@click.stop.prevent="hideUpdateForm">
-		</form>
 	</li>
 </template>
 
 <script>
 import { Avatar, Actions, ActionButton, UserBubble } from '@nextcloud/vue'
-import escapeHtml from 'escape-html'
 import RichText from '@juliushaertl/vue-richtext'
-
+import CommentForm from './CommentForm'
 export default {
 	name: 'CommentItem',
 	components: {
 		Avatar,
 		Actions,
 		ActionButton,
+		CommentForm,
 		RichText,
 	},
 	props: {
@@ -64,15 +58,15 @@ export default {
 		richText() {
 			let message = this.parsedMessage
 			this.comment.mentions.forEach((mention, index) => {
-				message = message.replace('@' + mention.mentionId + '', `{user${index}}`)
+				// FIXME: currently only [a-z\-_0-9] are allowed inside of placeholders
+				message = message.split('@' + mention.mentionId + '').join(`{user-${mention.mentionId}}`)
 			})
 			return message
 		},
 		richArgs() {
 			const mentions = [...this.comment.mentions]
-			// TODO mentions are set once per user, so when mentioning the same user multiple times this doesn't work
 			const result = mentions.reduce(function(result, item, index) {
-				const itemKey = 'user' + index
+				const itemKey = 'user-' + item.mentionId
 				result[itemKey] = {
 					component: UserBubble,
 					props: {
@@ -87,7 +81,7 @@ export default {
 		parsedMessage() {
 			const div = document.createElement('div')
 			div.innerHTML = this.comment.message
-			return escapeHtml(div.textContent || div.innerText || '')
+			return (div.textContent || div.innerText || '')
 		},
 	},
 
@@ -101,13 +95,13 @@ export default {
 			this.commentMsg = ''
 			this.edit = false
 		},
-		updateComment() {
+		async updateComment() {
 			const data = {
 				comment: this.commentMsg,
 				cardId: this.comment.cardId,
 				commentId: this.comment.id,
 			}
-			this.$store.dispatch('updateComment', data)
+			await this.$store.dispatch('updateComment', data)
 			this.hideUpdateForm()
 		},
 		deleteComment(commentId) {
@@ -123,4 +117,8 @@ export default {
 
 <style scoped lang="scss">
 	@import "../../css/comments";
+
+	.comment--content::v-deep a {
+		text-decoration: underline;
+	}
 </style>
