@@ -22,35 +22,95 @@
 
 <template>
 	<div v-if="activity" class="activity">
-		<img :src="activity.icon" class="activity--icon">
-		<div class="activity--message" v-html="parseMessage(activity)" />
-		<div class="activity--timestamp">
-			{{ getTime(activity.datetime) }}
+		<div class="activity--header">
+			<img :src="activity.icon" class="activity--icon">
+			<RichText class="activity--subject" :text="message.subject" :arguments="message.parameters" />
+			<div class="activity--timestamp">
+				{{ getTime(activity.datetime) }}
+			</div>
 		</div>
+		<p v-if="activity.message" class="activity--message">
+			{{ activity.message }}
+		</p>
 	</div>
 </template>
 
 <script>
+import RichText from '@juliushaertl/vue-richtext'
+import { UserBubble } from '@nextcloud/vue'
+
+const InternalLink = {
+	name: 'InternalLink',
+	functional: true,
+	props: {
+		href: {
+			type: String,
+			default: '',
+		},
+		name: {
+			type: String,
+			default: '',
+		},
+	},
+	render(createElement, context) {
+		return createElement('a', { attrs: { href: context.props.href }, style: { 'font-weight': 600 } }, context.props.name)
+	},
+}
 export default {
 	name: 'ActivityEntry',
+	components: {
+		RichText,
+	},
 	props: {
 		activity: {
 			type: Object,
 			default: null,
 		},
 	},
-	methods: {
-		getTime(timestamp) {
-			return OC.Util.relativeModifiedDate(timestamp)
-		},
-		parseMessage(activity) {
-			const subject = activity.subject_rich[0]
-			const parameters = JSON.parse(JSON.stringify(activity.subject_rich[1]))
+	computed: {
+		message() {
+			const subject = this.activity.subject_rich[0]
+			const parameters = JSON.parse(JSON.stringify(this.activity.subject_rich[1]))
 			if (parameters.after && typeof parameters.after.id === 'string' && parameters.after.id.startsWith('dt:')) {
 				const dateTime = parameters.after.id.substr(3)
 				parameters.after.name = window.moment(dateTime).format('L LTS')
 			}
-			return OCA.Activity.RichObjectStringParser.parseMessage(subject, parameters)
+
+			Object.keys(parameters).map(function(key, index) {
+				const { type } = parameters[key]
+				switch (type) {
+				case 'highlight':
+					parameters[key] = {
+						component: InternalLink,
+						props: {
+							href: parameters[key].link,
+							name: parameters[key].name,
+						},
+					}
+					break
+				case 'user':
+					parameters[key] = {
+						component: UserBubble,
+						props: {
+							user: parameters[key].id,
+							displayName: parameters[key].name,
+						},
+					}
+					break
+				default:
+					parameters[key] = `{${key}}`
+				}
+
+			})
+
+			return {
+				subject, parameters,
+			}
+		},
+	},
+	methods: {
+		getTime(timestamp) {
+			return OC.Util.relativeModifiedDate(timestamp)
 		},
 	},
 }
@@ -58,8 +118,11 @@ export default {
 
 <style scoped lang="scss">
 	.activity {
-		display: flex;
-		padding: 10px;
+
+		.activity--header {
+			display: flex;
+			padding: 10px;
+		}
 
 		.activity--icon {
 			width: 16px;
@@ -67,14 +130,19 @@ export default {
 			flex-shrink: 0;
 			flex-grow: 0;
 		}
-		.activity--message {
+		.activity--subject {
 			margin-left: 10px;
 		}
+		.activity--message {
+			margin-left: 44px;
+			color: var(--color-text-light);
+			margin-bottom: 10px;
+		}
 		.activity--timestamp {
+			flex-grow: 1;
 			color: var(--color-text-maxcontrast);
 			text-align: right;
 			font-size: 0.8em;
-			width: 25%;
 			padding: 1px;
 		}
 	}
