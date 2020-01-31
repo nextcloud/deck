@@ -49,7 +49,7 @@
 			<div class="board-action-buttons">
 				<Popover>
 					<Actions slot="trigger">
-						<ActionButton icon="icon-search" :title="t('deck', 'Apply filter')" />
+						<ActionButton icon="icon-filter" :title="t('deck', 'Apply filter')" />
 					</Actions>
 
 					<template>
