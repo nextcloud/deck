@@ -112,4 +112,21 @@ export class CommentApi {
 		return response.data
 	}
 
+	async markCommentsAsRead(cardId) {
+		const readMarker = (new Date()).toUTCString()
+		const response = await axios({
+			method: 'PROPPATCH',
+			url: this.url(`${cardId}`),
+			data: `<?xml version="1.0"?>
+				<d:propertyupdate  xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
+				  <d:set>
+				   <d:prop>
+					  <oc:readMarker>${readMarker}</oc:readMarker>
+					</d:prop>
+				  </d:set>
+				</d:propertyupdate>`,
+		})
+		return response.data
+	}
+
 }

@@ -88,6 +88,9 @@ export default {
 			this.isLoading = true
 			await this.$store.dispatch('fetchComments', { cardId: this.card.id })
 			this.isLoading = false
+			if (this.card.commentsUnread > 0) {
+				await this.$store.dispatch('markCommentsAsRead', this.card.id)
+			}
 		},
 		async createComment(content) {
 			const commentObj = {

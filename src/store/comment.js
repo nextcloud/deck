@@ -68,11 +68,16 @@ export default {
 			}
 		},
 		deleteComment(state, comment) {
-			const existingIndex = state.comments[comment.cardId].comments.findIndex(_comment => _comment.id === comment.commentId)
+			const existingIndex = state.comments[comment.cardId].comments.findIndex(_comment => _comment.id === comment.id)
 			if (existingIndex !== -1) {
 				state.comments[comment.cardId].comments.splice(existingIndex, 1)
 			}
 		},
+		markCommentsAsRead(state, cardId) {
+			state.comments[cardId].comments.forEach(_comment => {
+				Vue.set(_comment, 'isUnread', false)
+			})
+		}
 	},
 	actions: {
 		async fetchComments({ commit }, { cardId, offset }) {
@@ -111,5 +116,9 @@ export default {
 			const commentData = await apiClient.fetchComment(data)
 			await commit('updateComment', { cardId: data.cardId, comment: commentData[0] })
 		},
+		async markCommentsAsRead({ commit }, cardId) {
+			await apiClient.markCommentsAsRead(cardId)
+			await commit('markCommentsAsRead', cardId)
+		}
 	},
 }

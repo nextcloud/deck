@@ -22,7 +22,10 @@
 
 <template>
 	<div class="badges">
-		<div v-if="card.description" class="card-comments icon icon-edit" />
+		<div v-if="card.description" class="icon icon-edit" />
+
+		<div v-if="card.commentsUnread > 0" class="icon icon-comment" />
+
 
 		<div v-if="card.duedate" :class="dueIcon">
 			<span>{{ dueTime }}</span>

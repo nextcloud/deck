@@ -52,6 +52,7 @@ const commentToObject = (tag) => {
 		actorDisplayName: tag['d:prop']['oc:actorDisplayName']['#text'],
 		creationDateTime: tag['d:prop']['oc:creationDateTime']['#text'],
 		message: tag['d:prop']['oc:message']['#text'],
+		isUnread: tag['d:prop']['oc:isUnread']['#text'] === 'true',
 		mentions: mentions.map((mention) => {
 			return {
 				mentionType: mention['oc:mentionType']['#text'],
