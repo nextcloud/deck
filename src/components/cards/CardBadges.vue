@@ -26,7 +26,6 @@
 
 		<div v-if="card.commentsUnread > 0" class="icon icon-comment" />
 
-
 		<div v-if="card.duedate" :class="dueIcon">
 			<span>{{ dueTime }}</span>
 		</div>

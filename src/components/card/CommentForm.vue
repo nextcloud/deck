@@ -125,7 +125,8 @@ export default {
 			if (!this.$refs.contentEditable) {
 				return
 			}
-			const mentions = this.$refs.contentEditable.querySelectorAll('span[data-at-embedded]')
+			const node = this.$refs.contentEditable.cloneNode(true)
+			const mentions = node.querySelectorAll('span[data-at-embedded]')
 			mentions.forEach(mention => {
 				// FIXME Adding a space after the mention should be improved to
 				// do it or not based on the next element instead of always
@@ -133,7 +134,7 @@ export default {
 				mention.replaceWith(' @' + mention.firstElementChild.attributes['data-mention-id'].value + ' ')
 			})
 
-			return rawToParsed(this.$refs.contentEditable.innerHTML)
+			return rawToParsed(node.innerHTML)
 		},
 
 		/**

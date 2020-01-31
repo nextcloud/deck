@@ -77,7 +77,7 @@ export default {
 			state.comments[cardId].comments.forEach(_comment => {
 				Vue.set(_comment, 'isUnread', false)
 			})
-		}
+		},
 	},
 	actions: {
 		async fetchComments({ commit }, { cardId, offset }) {
@@ -119,6 +119,6 @@ export default {
 		async markCommentsAsRead({ commit }, cardId) {
 			await apiClient.markCommentsAsRead(cardId)
 			await commit('markCommentsAsRead', cardId)
-		}
+		},
 	},
 }

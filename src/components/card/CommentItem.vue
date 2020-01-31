@@ -6,7 +6,7 @@
 				<span class="has-tooltip username">
 					{{ comment.actorDisplayName }}
 				</span>
-				<Actions v-if="!edit" @click.stop.prevent>
+				<Actions v-show="canEdit && !edit">
 					<ActionButton icon="icon-rename" @click="showUpdateForm()">
 						{{ t('deck', 'Update') }}
 					</ActionButton>
@@ -14,16 +14,17 @@
 						{{ t('deck', 'Delete') }}
 					</ActionButton>
 				</Actions>
-				<Actions v-else @click.stop.prevent>
+				<Actions v-if="edit">
 					<ActionButton icon="icon-close" @click="hideUpdateForm" />
 				</Actions>
 			</div>
-			<RichText v-if="!edit"
+			<RichText v-show="!edit"
+				ref="richTextElement"
 				class="comment--content"
 				:text="richText"
 				:arguments="richArgs"
 				:autolink="true" />
-			<CommentForm v-else v-model="commentMsg" @submit="updateComment" />
+			<CommentForm v-if="edit" v-model="commentMsg" @submit="updateComment" />
 		</template>
 	</li>
 </template>
@@ -32,6 +33,21 @@
 import { Avatar, Actions, ActionButton, UserBubble } from '@nextcloud/vue'
 import RichText from '@juliushaertl/vue-richtext'
 import CommentForm from './CommentForm'
+import { getCurrentUser } from '@nextcloud/auth'
+
+const AtMention = {
+	name: 'AtMention',
+	functional: true,
+	render(createElement, context) {
+		const { user, displayName } = context.props
+		return createElement(
+			'span',
+			{ attrs: { 'data-at-embedded': true, 'contenteditable': false } },
+			[createElement(UserBubble, { props: { user, displayName }, attrs: { 'data-mention-id': user } })]
+		)
+	},
+}
+
 export default {
 	name: 'CommentItem',
 	components: {
@@ -55,6 +71,9 @@ export default {
 	},
 
 	computed: {
+		canEdit() {
+			return this.comment.actorId === getCurrentUser().uid
+		},
 		richText() {
 			let message = this.parsedMessage
 			this.comment.mentions.forEach((mention, index) => {
@@ -68,7 +87,7 @@ export default {
 			const result = mentions.reduce(function(result, item, index) {
 				const itemKey = 'user-' + item.mentionId
 				result[itemKey] = {
-					component: UserBubble,
+					component: AtMention,
 					props: {
 						user: item.mentionId,
 						displayName: item.mentionDisplayName,
@@ -88,7 +107,7 @@ export default {
 	methods: {
 
 		showUpdateForm() {
-			this.commentMsg = this.comment.message
+			this.commentMsg = this.$refs.richTextElement.$el.innerHTML
 			this.edit = true
 		},
 		hideUpdateForm() {
