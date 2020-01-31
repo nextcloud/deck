@@ -22,7 +22,6 @@
 
 <template>
 	<div class="controls">
-		{{ filter }}
 		<div id="app-navigation-toggle-custom" class="icon-menu" @click="toggleNav" />
 		<div v-if="board" class="board-title">
 			<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
@@ -49,7 +48,10 @@
 			</div>
 			<div class="board-action-buttons">
 				<Popover>
-					<button slot="trigger" style="opacity: .5;" class="icon-search" />
+					<Actions slot="trigger">
+						<ActionButton icon="icon-search" :title="t('deck', 'Apply filter')" />
+					</Actions>
+
 					<template>
 						<h3>{{ t('deck', 'Filter by tag') }}</h3>
 						<div v-for="label in board.labels" :key="label.id">
@@ -147,7 +149,7 @@
 				</Actions>
 				<!-- FIXME: ActionRouter currently doesn't work as an inline action -->
 				<Actions>
-					<ActionButton icon="icon-settings" @click="toggleDetailsView" />
+					<ActionButton icon="icon-menu-sidebar" @click="toggleDetailsView" />
 				</Actions>
 			</div>
 		</div>
@@ -156,9 +158,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Actions, ActionButton } from '@nextcloud/vue'
-import { Popover } from '@nextcloud/vue/dist/Components/Popover'
-import { Avatar } from '@nextcloud/vue/dist/Components/Avatar'
+import { Actions, ActionButton, Popover, Avatar } from '@nextcloud/vue'
 
 export default {
 	name: 'Controls',
