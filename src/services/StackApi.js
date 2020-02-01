@@ -21,6 +21,7 @@
  */
 
 import axios from '@nextcloud/axios'
+import './../models'
 
 export class StackApi {
 

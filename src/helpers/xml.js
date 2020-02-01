@@ -40,6 +40,11 @@ const parseXml = (xml) => {
 }
 
 const commentToObject = (tag) => {
+	let mentions = tag['d:prop']['oc:mentions']['oc:mention'] ?? []
+	if (mentions && !Array.isArray(mentions)) {
+		mentions = [mentions]
+	}
+
 	return {
 		cardId: tag['d:prop']['oc:objectId']['#text'],
 		id: tag['d:prop']['oc:id']['#text'],
@@ -47,6 +52,14 @@ const commentToObject = (tag) => {
 		actorDisplayName: tag['d:prop']['oc:actorDisplayName']['#text'],
 		creationDateTime: tag['d:prop']['oc:creationDateTime']['#text'],
 		message: tag['d:prop']['oc:message']['#text'],
+		isUnread: tag['d:prop']['oc:isUnread']['#text'] === 'true',
+		mentions: mentions.map((mention) => {
+			return {
+				mentionType: mention['oc:mentionType']['#text'],
+				mentionId: mention['oc:mentionId']['#text'],
+				mentionDisplayName: mention['oc:mentionDisplayName']['#text'],
+			}
+		}),
 	}
 }
 
