@@ -34,10 +34,10 @@ export default {
 			return state.cards
 				.filter((card) => card.stackId === id && (getters.getSearchQuery === '' || (card.title.toLowerCase().includes(getters.getSearchQuery.toLowerCase()) || card.description.toLowerCase().includes(getters.getSearchQuery.toLowerCase()))
 				.filter((card) => {
-					const { tags, users, duedates } = rootState.filter
+					const { tags, users, due } = rootState.filter
 					let allTagsMatch = true
 					let allUsersMatch = true
-					const allDuedatesMatch = true
+					// const allDuedatesMatch = true
 
 					if (tags.length > 0) {
 						tags.forEach((tag) => {
@@ -61,12 +61,51 @@ export default {
 						}
 					}
 
-					if (duedates) {
-						// FIXME: check for duedate ranges
+					if (due !== '') {
+						const datediffHour = ((new Date() - new Date(card.duedate)) / 3600000)
+						switch (due) {
+						case 'overdue':
+							if (card.overdue === 0) {
+								return false
+							} else {
+								return true
+							}
+							break
+						case 'dueToday':
+							if (datediffHour <= 24) {
+								return true
+							} else {
+								return false
+							}
+							break
+						case 'dueWeek':
+							if (datediffHour <= 168) {
+								return true
+							} else {
+								return false
+							}
+							break
+						case 'dueMonth':
+							if (datediffHour <= 5040) {
+								return true
+							} else {
+								return false
+							}
+							break
+						case 'noDue':
+							if (card.duedate === null) {
+								return true
+							} else {
+								return false
+							}
+							break
+							break
 
-						if (!allDuedatesMatch) {
-							return false
 						}
+
+						/* if (!allDuedatesMatch) {
+							return false
+						} */
 					}
 
 					return true

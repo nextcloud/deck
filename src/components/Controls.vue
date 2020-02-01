@@ -22,6 +22,7 @@
 
 <template>
 	<div class="controls">
+		{{ filter }}
 		<div id="app-navigation-toggle-custom" class="icon-menu" @click="toggleNav" />
 		<div v-if="board" class="board-title">
 			<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
@@ -53,77 +54,88 @@
 					</Actions>
 
 					<template>
-						<h3>{{ t('deck', 'Filter by tag') }}</h3>
-						<div v-for="label in board.labels" :key="label.id">
-							<input
-								:id="label.id"
-								v-model="filter.tags"
-								type="checkbox"
-								class="checkbox"
-								:value="label.id"
-								@change="setFilter">
-							<label :for="label.id">{{ label.title }}</label>
+						<div class="filter">
+							<h3>{{ t('deck', 'Filter by tag') }}</h3>
+							<div v-for="label in board.labels" :key="label.id" class="filter--item">
+								<input
+									:id="label.id"
+									v-model="filter.tags"
+									type="checkbox"
+									class="checkbox"
+									:value="label.id"
+									@change="setFilter">
+								<label :for="label.id"><span class="label" :style="labelStyle(label)">{{ label.title }}</span></label>
+							</div>
+
+							<h3>{{ t('deck', 'Filter by assigned user') }}</h3>
+							<div v-for="user in board.users" :key="user.uid" class="filter--item">
+								<input
+									:id="user.uid"
+									v-model="filter.users"
+									type="checkbox"
+									class="checkbox"
+									:value="user.uid"
+									@change="setFilter">
+								<label :for="user.uid"><Avatar :user="user.uid" :size="24" :disable-menu="true" /> {{ user.displayname }}</label>
+							</div>
+
+							<h3>{{ t('deck', 'Filter by duedate') }}</h3>
+
+							<div class="filter--item">
+								<input
+									id="overdue"
+									v-model="filter.due"
+									type="radio"
+									class="radio"
+									value="overdue"
+									@change="setFilter">
+								<label for="overdue">{{ t('deck', 'Overdue') }}</label>
+							</div>
+
+							<div class="filter--item">
+								<input
+									id="dueToday"
+									v-model="filter.due"
+									type="radio"
+									class="radio"
+									value="dueToday"
+									@change="setFilter">
+								<label for="dueToday">{{ t('deck', 'Today') }}</label>
+							</div>
+
+							<div class="filter--item">
+								<input
+									id="dueWeek"
+									v-model="filter.due"
+									type="radio"
+									class="radio"
+									value="dueWeek"
+									@change="setFilter">
+								<label for="dueWeek">{{ t('deck', 'Week') }}</label>
+							</div>
+
+							<div class="filter--item">
+								<input
+									id="dueMonth"
+									v-model="filter.due"
+									type="radio"
+									class="radio"
+									value="dueMonth"
+									@change="setFilter">
+								<label for="dueMonth">{{ t('deck', 'Month') }}</label>
+							</div>
+
+							<div class="filter--item">
+								<input
+									id="noDue"
+									v-model="filter.due"
+									type="radio"
+									class="radio"
+									value="noDue"
+									@change="setFilter">
+								<label for="noDue">{{ t('deck', 'No due') }}</label>
+							</div>
 						</div>
-
-						<h3>{{ t('deck', 'Filter by assigned user') }}</h3>
-						<div v-for="user in board.users" :key="user.uid">
-							<input
-								:id="user.uid"
-								v-model="filter.users"
-								type="checkbox"
-								class="checkbox"
-								:value="user.uid"
-								@change="setFilter">
-							<label :for="user.uid">{{ user.displayname }}</label>
-							<Avatar :user="user.uid" />
-						</div>
-
-						<h3>{{ t('deck', 'Filter by duedate') }}</h3>
-
-						<input
-							id="overdue"
-							v-model="filter.duedates"
-							type="checkbox"
-							class="checkbox"
-							value="overdue"
-							@change="setFilter">
-						<label for="overdue">{{ t('deck', 'Overdue') }}</label>
-
-						<input
-							id="dueToday"
-							v-model="filter.duedates"
-							type="checkbox"
-							class="checkbox"
-							value="dueToday"
-							@change="setFilter">
-						<label for="dueToday">{{ t('deck', 'Today') }}</label>
-
-						<input
-							id="dueWeek"
-							v-model="filter.duedates"
-							type="checkbox"
-							class="checkbox"
-							value="dueWeek"
-							@change="setFilter">
-						<label for="dueWeek">{{ t('deck', 'Week') }}</label>
-
-						<input
-							id="dueMonth"
-							v-model="filter.duedates"
-							type="checkbox"
-							class="checkbox"
-							value="dueMonth"
-							@change="setFilter">
-						<label for="dueMonth">{{ t('deck', 'Month') }}</label>
-
-						<input
-							id="noDue"
-							v-model="filter.duedates"
-							type="checkbox"
-							class="checkbox"
-							value="noDue"
-							@change="setFilter">
-						<label for="noDue">{{ t('deck', 'No due') }}</label>
 					</template>
 				</Popover>
 
@@ -159,12 +171,14 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { Actions, ActionButton, Popover, Avatar } from '@nextcloud/vue'
+import labelStyle from '../mixins/labelStyle'
 
 export default {
 	name: 'Controls',
 	components: {
 		Actions, ActionButton, Popover, Avatar,
 	},
+	mixins: [ labelStyle ],
 	props: {
 		board: {
 			type: Object,
@@ -178,7 +192,7 @@ export default {
 			stack: '',
 			showArchived: false,
 			isAddStackVisible: false,
-			filter: { tags: [], users: [], due: [] },
+			filter: { tags: [], users: [], due: '' },
 		}
 	},
 
@@ -295,5 +309,34 @@ export default {
 			background-color: transparent;
 		}
 	}
-
+	.filter--item {
+		input + label {
+			display: block;
+			padding: 6px 0;
+			vertical-align: middle;
+			.avatardiv {
+				vertical-align: middle;
+				margin-bottom: 2px;
+				margin-right: 3px;
+			}
+			.label {
+				padding: 5px;
+				border-radius: 3px;
+			}
+		}
+	}
+	.filter {
+		width: 250px;
+		max-height: 80vh;
+		overflow: auto;
+	}
+	.filter h3 {
+		margin-top: 0px;
+		margin-bottom: 5px;
+	}
+</style>
+<style lang="scss">
+	.tooltip-inner.popover-inner {
+		text-align: left;
+	}
 </style>
