@@ -66,7 +66,7 @@
 
 import { mapGetters } from 'vuex'
 import Color from '../../mixins/color'
-import { ColorPicker } from '@nextcloud/vue/dist/Components/ColorPicker'
+import { ColorPicker } from '@nextcloud/vue'
 
 export default {
 	name: 'TagsTabSidebar',

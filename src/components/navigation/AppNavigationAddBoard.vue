@@ -47,7 +47,8 @@
 </template>
 
 <script>
-import { ColorPicker } from '@nextcloud/vue/dist/Components/ColorPicker'
+import { ColorPicker } from '@nextcloud/vue'
+
 export default {
 	name: 'AppNavigationAddBoard',
 	components: { ColorPicker },
