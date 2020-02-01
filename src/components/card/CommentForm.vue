@@ -131,7 +131,9 @@ export default {
 				// FIXME Adding a space after the mention should be improved to
 				// do it or not based on the next element instead of always
 				// adding it.
-				mention.replaceWith(' @' + mention.firstElementChild.attributes['data-mention-id'].value + ' ')
+				// FIXME user names can contain spaces, in that case they need to be wrapped @"user name" [a-zA-Z0-9\ _\.@\-']+
+				const mentionValue = mention.firstElementChild.attributes['data-mention-id'].value
+				mention.replaceWith(' @' + mentionValue + ' ')
 			})
 
 			return rawToParsed(node.innerHTML)
