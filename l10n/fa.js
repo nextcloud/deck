@@ -31,6 +31,7 @@ OC.L10N.register(
     "Move card" : "انتقال کارت",
     "Settings" : "تنظیمات",
     "Edit board" : "ویرایش تخته ها",
+    "An error occurred" : "خطایی روی داد",
     "Archive board" : " بایگانی تابلو",
     "Delete board" : "حذف تابلو"
 },

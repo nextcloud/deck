@@ -153,6 +153,8 @@ OC.L10N.register(
     "Upload attachment" : "Envoyer une pièce jointe",
     "No comments yet. Begin the discussion!" : "Aucun commentaire pour l'instant, démarrez la discussion !",
     "Save" : "Enregistrer",
+    "The comment cannot be empty." : "Un commentaire ne peut pas être vide.",
+    "The comment cannot be longer than 1000 characters." : "Un commentaire est limité à 1 000 caractères.",
     "Update" : "Mettre à jour",
     "Assign to me" : "Me l'assigner",
     "Delete card" : "Supprimer la carte",
