@@ -1,12 +1,12 @@
 <template>
 	<li class="comment">
-		<template v-if="!edit">
+		<template>
 			<div class="comment--header">
 				<Avatar :user="comment.actorId" />
 				<span class="has-tooltip username">
 					{{ comment.actorDisplayName }}
 				</span>
-				<Actions @click.stop.prevent>
+				<Actions v-show="canEdit && !edit">
 					<ActionButton icon="icon-rename" @click="showUpdateForm()">
 						{{ t('deck', 'Update') }}
 					</ActionButton>
@@ -14,29 +14,39 @@
 						{{ t('deck', 'Delete') }}
 					</ActionButton>
 				</Actions>
+				<Actions v-if="edit">
+					<ActionButton icon="icon-close" @click="hideUpdateForm" />
+				</Actions>
 			</div>
-			<!-- FIXME: Check if input is sanitized -->
-			<p class="comment--content" v-html="comment.message" /><p />
+			<RichText v-show="!edit"
+				ref="richTextElement"
+				class="comment--content"
+				:text="richText"
+				:arguments="richArgs"
+				:autolink="true" />
+			<CommentForm v-if="edit" v-model="commentMsg" @submit="updateComment" />
 		</template>
-		<form v-else @submit.prevent="updateComment">
-			<input v-model="commentMsg"
-				type="text"
-				autofocus
-				required>
-			<input v-tooltip="t('deck', 'Save')"
-				class="icon-confirm"
-				type="submit"
-				value="">
-			<input type="submit"
-				value=""
-				class="icon-close"
-				@click.stop.prevent="hideUpdateForm">
-		</form>
 	</li>
 </template>
 
 <script>
-import { Avatar, Actions, ActionButton } from '@nextcloud/vue'
+import { Avatar, Actions, ActionButton, UserBubble } from '@nextcloud/vue'
+import RichText from '@juliushaertl/vue-richtext'
+import CommentForm from './CommentForm'
+import { getCurrentUser } from '@nextcloud/auth'
+
+const AtMention = {
+	name: 'AtMention',
+	functional: true,
+	render(createElement, context) {
+		const { user, displayName } = context.props
+		return createElement(
+			'span',
+			{ attrs: { 'data-at-embedded': true, 'contenteditable': false } },
+			[createElement(UserBubble, { props: { user, displayName }, attrs: { 'data-mention-id': user } })]
+		)
+	},
+}
 
 export default {
 	name: 'CommentItem',
@@ -44,6 +54,8 @@ export default {
 		Avatar,
 		Actions,
 		ActionButton,
+		CommentForm,
+		RichText,
 	},
 	props: {
 		comment: {
@@ -58,23 +70,57 @@ export default {
 		}
 	},
 
+	computed: {
+		canEdit() {
+			return this.comment.actorId === getCurrentUser().uid
+		},
+		richText() {
+			let message = this.parsedMessage
+			this.comment.mentions.forEach((mention, index) => {
+				// FIXME: currently only [a-z\-_0-9] are allowed inside of placeholders
+				message = message.split('@' + mention.mentionId + '').join(`{user-${mention.mentionId}}`)
+			})
+			return message
+		},
+		richArgs() {
+			const mentions = [...this.comment.mentions]
+			const result = mentions.reduce(function(result, item, index) {
+				const itemKey = 'user-' + item.mentionId
+				result[itemKey] = {
+					component: AtMention,
+					props: {
+						user: item.mentionId,
+						displayName: item.mentionDisplayName,
+					},
+				}
+				return result
+			}, {})
+			return result
+		},
+		parsedMessage() {
+			const div = document.createElement('div')
+			div.innerHTML = this.comment.message
+			return (div.textContent || div.innerText || '')
+		},
+	},
+
 	methods: {
 
 		showUpdateForm() {
-			this.commentMsg = this.comment.message
+			this.commentMsg = this.$refs.richTextElement.$el.innerHTML
 			this.edit = true
 		},
 		hideUpdateForm() {
 			this.commentMsg = ''
 			this.edit = false
 		},
-		updateComment() {
+		async updateComment() {
 			const data = {
 				comment: this.commentMsg,
 				cardId: this.comment.cardId,
 				commentId: this.comment.id,
 			}
-			this.$store.dispatch('updateComment', data)
+			await this.$store.dispatch('updateComment', data)
 			this.hideUpdateForm()
 		},
 		deleteComment(commentId) {
@@ -90,4 +136,8 @@ export default {
 
 <style scoped lang="scss">
 	@import "../../css/comments";
+
+	.comment--content::v-deep a {
+		text-decoration: underline;
+	}
 </style>

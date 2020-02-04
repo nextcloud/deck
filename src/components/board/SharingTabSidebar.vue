@@ -58,11 +58,7 @@
 </template>
 
 <script>
-import { Avatar } from '@nextcloud/vue/dist/Components/Avatar'
-import { Multiselect } from '@nextcloud/vue/dist/Components/Multiselect'
-import { Actions } from '@nextcloud/vue/dist/Components/Actions'
-import { ActionButton } from '@nextcloud/vue/dist/Components/ActionButton'
-import { ActionCheckbox } from '@nextcloud/vue/dist/Components/ActionCheckbox'
+import { Avatar, Multiselect, Actions, ActionButton, ActionCheckbox } from '@nextcloud/vue'
 import { CollectionList } from 'nextcloud-vue-collections'
 import { mapGetters } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'

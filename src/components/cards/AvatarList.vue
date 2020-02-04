@@ -39,9 +39,8 @@
 </template>
 
 <script>
-import Avatar from '@nextcloud/vue/dist/Components/Avatar'
-import PopoverMenu from '@nextcloud/vue/dist/Components/PopoverMenu'
-import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
+import { Avatar, PopoverMenu, Tooltip } from '@nextcloud/vue'
+
 export default {
 	name: 'AvatarList',
 	components: {
