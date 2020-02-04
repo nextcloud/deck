@@ -234,11 +234,11 @@ class PermissionService {
 			return [];
 		}
 
+		$users = [];
 		$owner = $this->userManager->get($board->getOwner());
 		if ($owner === null) {
 			$this->logger->info('No owner found for board ' . $board->getId());
 		} else {
-			$users = [];
 			$users[$owner->getUID()] = new User($owner);
 		}
 		$acls = $this->aclMapper->findAll($boardId);
