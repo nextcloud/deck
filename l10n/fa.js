@@ -9,6 +9,7 @@ OC.L10N.register(
     "No file was uploaded" : "هیچ پروندهای بارگذاری نشده",
     "Missing a temporary folder" : "یک پوشه موقت گم شده",
     "Cancel" : "لغو",
+    "Sharing" : "اشتراک گذاری",
     "Tags" : "برچسب‌ها",
     "Undo" : "برگرداندن",
     "(Group)" : "(گروه)",
@@ -17,6 +18,7 @@ OC.L10N.register(
     "Delete" : "حذف",
     "Add card" : "کارت اضافه کنید",
     "Edit" : "ویرایش",
+    "Details" : "جزئیات",
     "Due date" : "موعد مقرر",
     "Description" : "توضیحات",
     "Attachments" : "پیوست ها",
@@ -29,6 +31,7 @@ OC.L10N.register(
     "Move card" : "انتقال کارت",
     "Settings" : "تنظیمات",
     "Edit board" : "ویرایش تخته ها",
+    "An error occurred" : "خطایی روی داد",
     "Archive board" : " بایگانی تابلو",
     "Delete board" : "حذف تابلو"
 },

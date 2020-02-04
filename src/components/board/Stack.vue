@@ -82,8 +82,7 @@
 
 import { mapGetters } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
-import { Actions } from '@nextcloud/vue/dist/Components/Actions'
-import { ActionButton } from '@nextcloud/vue/dist/Components/ActionButton'
+import { Actions, ActionButton } from '@nextcloud/vue'
 import CardItem from '../cards/CardItem'
 
 export default {
@@ -124,7 +123,7 @@ export default {
 	},
 
 	methods: {
-		onDropCard(stackId, event) {
+		async onDropCard(stackId, event) {
 			const { addedIndex, removedIndex, payload } = event
 			const card = Object.assign({}, payload)
 			if (this.stack.id === stackId) {
@@ -133,12 +132,12 @@ export default {
 					card.stackId = stackId
 					card.order = addedIndex
 					console.debug('move card to stack', card.stackId, card.order)
-					this.$store.dispatch('reorderCard', card)
+					await this.$store.dispatch('reorderCard', card)
 				}
 				if (addedIndex !== null && removedIndex !== null) {
 					card.order = addedIndex
 					console.debug('move card in stack', card.stackId, card.order)
-					this.$store.dispatch('reorderCard', card)
+					await this.$store.dispatch('reorderCard', card)
 				}
 			}
 		},

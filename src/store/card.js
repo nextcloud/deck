@@ -60,7 +60,16 @@ export default {
 		updateCard(state, card) {
 			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
-				Vue.set(state.cards, existingIndex, card)
+				Vue.set(state.cards, existingIndex, Object.assign({}, state.cards[existingIndex], card))
+			}
+		},
+		updateCardsReorder(state, cards) {
+			for (const newCard of cards) {
+				const existingIndex = state.cards.findIndex(_card => _card.id === newCard.id)
+				if (existingIndex !== -1) {
+					const newCardObject = Object.assign({}, state.cards[existingIndex], { id: newCard.id, order: newCard.order, stackId: newCard.stackId })
+					Vue.set(state.cards, existingIndex, newCardObject)
+				}
 			}
 		},
 		updateTitle(state, card) {
@@ -123,17 +132,24 @@ export default {
 					commit('deleteCard', updatedCard)
 				})
 		},
-		reorderCard({ commit }, card) {
-			commit('updateCard', card)
-			// TODO iterate over cards in stacks and increase order state from cards >= card.order
-			// the current flickering issue is caused by two cards with the same order that will get the corret setting once
-			// the reordering has been persisted
-			apiClient.reorderCard(card)
-				.then((cards) => {
-					Object.values(cards).forEach((newCard) =>
-						commit('updateCard', newCard)
-					)
-				})
+		async reorderCard({ commit, getters }, card) {
+			let i = 0
+			for (const c of getters.cardsByStack(card.stackId)) {
+				if (c.id === card.id) {
+					await commit('updateCardsReorder', [card])
+				}
+				if (i === card.order) {
+					i++
+				}
+				if (c.id !== card.id) {
+					await commit('updateCardsReorder', [{ ...c, order: i++ }])
+				}
+			}
+			await commit('updateCardsReorder', [card])
+
+			const cards = await apiClient.reorderCard(card)
+			await commit('updateCardsReorder', Object.values(cards))
+
 		},
 		deleteCard({ commit }, card) {
 			apiClient.deleteCard(card.id)

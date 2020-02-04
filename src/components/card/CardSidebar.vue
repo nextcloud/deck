@@ -144,18 +144,11 @@
 </template>
 
 <script>
-import { Avatar } from '@nextcloud/vue/dist/Components/Avatar'
-import { Multiselect } from '@nextcloud/vue/dist/Components/Multiselect'
-import { AppSidebar } from '@nextcloud/vue/dist/Components/AppSidebar'
-import { AppSidebarTab } from '@nextcloud/vue/dist/Components/AppSidebarTab'
-import { DatetimePicker } from '@nextcloud/vue/dist/Components/DatetimePicker'
+import { Avatar, Actions, ActionButton, Multiselect, AppSidebar, AppSidebarTab, DatetimePicker } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 import VueEasymde from 'vue-easymde/dist/VueEasyMDE.common'
-import { Actions } from '@nextcloud/vue/dist/Components/Actions'
-import { ActionButton } from '@nextcloud/vue/dist/Components/ActionButton'
 import Color from '../../mixins/color'
 import { CollectionList } from 'nextcloud-vue-collections'
-
 import CardSidebarTabAttachments from './CardSidebarTabAttachments'
 import CardSidebarTabComments from './CardSidebarTabComments'
 import CardSidebarTabActivity from './CardSidebarTabActivity'

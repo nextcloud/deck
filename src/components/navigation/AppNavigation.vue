@@ -69,7 +69,7 @@
 import axios from '@nextcloud/axios'
 import { mapGetters } from 'vuex'
 import ClickOutside from 'vue-click-outside'
-import { Multiselect } from '@nextcloud/vue/dist/Components/Multiselect'
+import { Multiselect } from '@nextcloud/vue'
 
 import AppNavigationAddBoard from './AppNavigationAddBoard'
 import AppNavigationBoardCategory from './AppNavigationBoardCategory'

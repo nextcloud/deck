@@ -77,9 +77,8 @@
 </template>
 
 <script>
-import { PopoverMenu } from '@nextcloud/vue/dist/Components/PopoverMenu'
+import { PopoverMenu, ColorPicker } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
-import { ColorPicker } from '@nextcloud/vue/dist/Components/ColorPicker'
 
 export default {
 	name: 'AppNavigationBoard',
