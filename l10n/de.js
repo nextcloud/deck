@@ -153,6 +153,8 @@ OC.L10N.register(
     "Upload attachment" : "Anhang hochladen",
     "No comments yet. Begin the discussion!" : "Bislang keine Kommentare. Beginne die Diskussion!",
     "Save" : "Speichern",
+    "The comment cannot be empty." : "Der Kommentar darf nicht leer sein.",
+    "The comment cannot be longer than 1000 characters." : "Der Kommentar darf nicht länger als 1000 Zeichen sein.",
     "Update" : "Aktualisieren",
     "Assign to me" : "Mir zuweisen",
     "Delete card" : "Karte löschen",

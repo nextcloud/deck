@@ -153,6 +153,8 @@ OC.L10N.register(
     "Upload attachment" : "Μεταφόρτωση συνημμένων",
     "No comments yet. Begin the discussion!" : "Χωρίς σχόλια ακόμη. Ξεκινήστε την συζήτηση!",
     "Save" : "Αποθήκευση",
+    "The comment cannot be empty." : "Το σχόλιο δεν μπορεί να είναι κενό.",
+    "The comment cannot be longer than 1000 characters." : "Το σχόλιο δεν μπορεί να έχι περισσότερους από 1000 χαρακτήρες.",
     "Update" : "Ενημέρωση",
     "Assign to me" : "Ανάθεση σε εμένα",
     "Delete card" : "Διαγραφή κάρτας",

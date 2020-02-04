@@ -152,6 +152,8 @@ OC.L10N.register(
     "Upload attachment" : "Ladda upp bilaga",
     "No comments yet. Begin the discussion!" : "Inga kommentarer än. Börja diskussionen!",
     "Save" : "Spara",
+    "The comment cannot be empty." : "Kommentaren kan inte vara tom.",
+    "The comment cannot be longer than 1000 characters." : "Kommentaren kan inte vara längre än 1000 tecken.",
     "Update" : "Uppdatera",
     "Assign to me" : "Tilldela till mig",
     "Delete card" : "Ta bort kort",
