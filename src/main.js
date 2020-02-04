@@ -58,5 +58,17 @@ new Vue({
 	el: '#content',
 	router,
 	store,
+	mounted: function() {
+		// eslint-disable-next-line
+		new OCA.Search(this.filter, this.cleanSearch)
+	},
+	methods: {
+		filter(query) {
+			this.$store.commit('setSearchQuery', query)
+		},
+		cleanSearch() {
+			this.$store.commit('setSearchQuery', '')
+		},
+	},
 	render: h => h(App),
 })

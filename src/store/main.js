@@ -61,8 +61,12 @@ export default new Vuex.Store({
 		boardFilter: BOARD_FILTERS.ALL,
 		activity: [],
 		activityLoadMore: true,
+		searchQuery: '',
 	},
 	getters: {
+		getSearchQuery: state => {
+			return state.searchQuery
+		},
 		boards: state => {
 			return state.boards
 		},
@@ -107,6 +111,9 @@ export default new Vuex.Store({
 		},
 	},
 	mutations: {
+		setSearchQuery(state, searchQuery) {
+			state.searchQuery = searchQuery
+		},
 		toggleShowArchived(state) {
 			state.showArchived = !state.showArchived
 		},
