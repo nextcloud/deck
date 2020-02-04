@@ -123,7 +123,7 @@ export default {
 	},
 
 	methods: {
-		onDropCard(stackId, event) {
+		async onDropCard(stackId, event) {
 			const { addedIndex, removedIndex, payload } = event
 			const card = Object.assign({}, payload)
 			if (this.stack.id === stackId) {
@@ -132,12 +132,12 @@ export default {
 					card.stackId = stackId
 					card.order = addedIndex
 					console.debug('move card to stack', card.stackId, card.order)
-					this.$store.dispatch('reorderCard', card)
+					await this.$store.dispatch('reorderCard', card)
 				}
 				if (addedIndex !== null && removedIndex !== null) {
 					card.order = addedIndex
 					console.debug('move card in stack', card.stackId, card.order)
-					this.$store.dispatch('reorderCard', card)
+					await this.$store.dispatch('reorderCard', card)
 				}
 			}
 		},
