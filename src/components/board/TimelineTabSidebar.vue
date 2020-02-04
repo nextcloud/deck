@@ -1,64 +1,23 @@
 <template>
-	<div>
-		<div v-if="isLoading" class="icon icon-loading" />
-
-		<ActivityEntry v-for="entry in boardActivity"
-			v-else
-			:key="entry.activity_id"
-			:activity="entry" />
-		<button v-if="activityLoadMore" @click="loadMore">
-			{{ t('deck', 'Load More') }}
-		</button>
-	</div>
+	<ActivityList v-if="$parent.isActive"
+		filter="deck"
+		:object-id="board.id"
+		object-type="deck"
+		type="deck" />
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import ActivityEntry from '../ActivityEntry'
+import ActivityList from '../ActivityList'
 
 export default {
 	name: 'TimelineTabSidebar',
 	components: {
-		ActivityEntry,
+		ActivityList,
 	},
 	props: {
 		board: {
 			type: Object,
 			default: undefined,
-		},
-	},
-	data() {
-		return {
-			isLoading: false,
-			params: {
-				type: 'deck',
-				since: 0,
-				object_id: this.board.id,
-			},
-		}
-	},
-	computed: {
-		...mapState({
-			boardActivity: 'activity',
-			activityLoadMore: 'activityLoadMore',
-		}),
-	},
-	created() {
-		this.loadBoardActivity()
-	},
-	methods: {
-		loadBoardActivity() {
-			this.isLoading = true
-			this.$store.dispatch('loadActivity', this.params).then(response => {
-				this.isLoading = false
-			})
-		},
-		loadMore() {
-			const array = Object.values(this.boardActivity)
-			const aId = (array[array.length - 1].activity_id)
-
-			this.params.since = aId
-			this.loadBoardActivity()
 		},
 	},
 }

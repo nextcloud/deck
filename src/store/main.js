@@ -59,8 +59,6 @@ export default new Vuex.Store({
 		sharees: [],
 		assignableUsers: [],
 		boardFilter: BOARD_FILTERS.ALL,
-		activity: [],
-		activityLoadMore: true,
 		searchQuery: '',
 	},
 	getters: {
@@ -169,20 +167,6 @@ export default new Vuex.Store({
 			state.sharees = shareesUsersAndGroups.users
 			state.sharees.push(...shareesUsersAndGroups.groups)
 			state.sharees.push(...shareesUsersAndGroups.circles)
-		},
-		setActivity(state, activity) {
-			activity.forEach(element => {
-				if (element.subject_rich[1].board.id === state.currentBoard.id) {
-					state.activity.push(element)
-				}
-			})
-
-		},
-		clearActivity(state) {
-			state.activity = []
-		},
-		setActivityLoadMore(state, value) {
-			state.activityLoadMore = value
 		},
 		setAssignableUsers(state, users) {
 			state.assignableUsers = users
@@ -332,30 +316,6 @@ export default new Vuex.Store({
 			params.append('itemType', 1)
 			axios.get(OC.linkToOCS('apps/files_sharing/api/v1') + 'sharees', { params }).then((response) => {
 				commit('setSharees', response.data.ocs.data)
-			})
-		},
-		loadActivity({ commit }, obj) {
-			const params = new URLSearchParams()
-			params.append('format', 'json')
-			params.append('type', 'deck')
-			params.append('since', obj.since)
-			params.append('object_type', obj.object_type)
-			params.append('object_id', obj.object_id)
-
-			if (obj.since === 0) {
-				commit('clearActivity')
-			}
-
-			let keyword = 'deck'
-			if (obj.type === 'filter') {
-				keyword = 'filter'
-			}
-			axios.get(OC.linkToOCS('apps/activity/api/v2/activity') + keyword, { params }).then((response) => {
-				commit('setActivity', response.data.ocs.data)
-				commit('setActivityLoadMore', true)
-				if (response.data.ocs.meta.statuscode === 304) {
-					commit('setActivityLoadMore', false)
-				}
 			})
 		},
 
