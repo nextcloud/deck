@@ -21,29 +21,21 @@
   -->
 
 <template>
-	<div>
-		<div v-if="isLoading" class="icon icon-loading" />
-		<div v-else>
-			<ActivityEntry v-for="entry in cardActivity"
-
-				:key="entry.activity_id"
-				:activity="entry" />
-		</div>
-		<button v-if="activityLoadMore" @click="loadMore">
-			{{ t('deck', 'Load More') }}
-		</button>
-	</div>
+	<ActivityList v-if="$parent.isActive"
+		:key="card.id"
+		filter="filter"
+		:object-id="card.id"
+		object-type="deck_card"
+		type="deck" />
 </template>
 
 <script>
-import ActivityEntry from '../ActivityEntry'
-
-import { mapState } from 'vuex'
+import ActivityList from '../ActivityList'
 
 export default {
 	name: 'CardSidebarTabActivity',
 	components: {
-		ActivityEntry,
+		ActivityList,
 	},
 	props: {
 		card: {
@@ -54,45 +46,7 @@ export default {
 	data() {
 		return {
 			id: 'activity',
-			isLoading: false,
-			params: {
-				type: 'filter',
-				since: 0,
-				object_type: 'deck_card',
-				object_id: this.id,
-			},
 		}
-	},
-	computed: {
-		...mapState({
-			currentBoard: state => state.currentBoard,
-			assignableUsers: state => state.assignableUsers,
-			cardActivity: 'activity',
-			activityLoadMore: 'activityLoadMore',
-		}),
-	},
-	mounted() {
-		this.params.object_id = this.card.id
-		this.loadCardActivity()
-	},
-	methods: {
-		loadCardActivity() {
-			this.isLoading = true
-			this.$store.dispatch('loadActivity', this.params).then(response => {
-				this.isLoading = false
-			})
-		},
-		loadMore() {
-			const array = Object.values(this.cardActivity)
-			const aId = (array[array.length - 1].activity_id)
-
-			this.params.since = aId
-			this.loadCardActivity()
-		},
 	},
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -29,15 +29,15 @@
 				{{ getTime(activity.datetime) }}
 			</div>
 		</div>
-		<p v-if="activity.message" class="activity--message">
-			{{ activity.message }}
-		</p>
+		<p v-if="activity.message" class="activity--message" v-html="sanitizedMessage" />
 	</div>
 </template>
 
 <script>
 import RichText from '@juliushaertl/vue-richtext'
 import { UserBubble } from '@nextcloud/vue'
+import moment from '@nextcloud/moment'
+import DOMPurify from 'dompurify'
 
 const InternalLink = {
 	name: 'InternalLink',
@@ -73,7 +73,7 @@ export default {
 			const parameters = JSON.parse(JSON.stringify(this.activity.subject_rich[1]))
 			if (parameters.after && typeof parameters.after.id === 'string' && parameters.after.id.startsWith('dt:')) {
 				const dateTime = parameters.after.id.substr(3)
-				parameters.after.name = window.moment(dateTime).format('L LTS')
+				parameters.after.name = moment(dateTime).format('L LTS')
 			}
 
 			Object.keys(parameters).map(function(key, index) {
@@ -107,10 +107,18 @@ export default {
 				subject, parameters,
 			}
 		},
-	},
-	methods: {
-		getTime(timestamp) {
-			return OC.Util.relativeModifiedDate(timestamp)
+
+		sanitizedMessage() {
+			return DOMPurify.sanitize(this.activity.message, { ALLOWED_TAGS: ['ins', 'del'], ALLOWED_ATTR: ['class'] })
+		},
+		getTime() {
+			return (timestamp) => {
+				const diff = moment(this.$root.time).diff(moment(timestamp))
+				if (diff >= 0 && diff < 45000) {
+					return t('core', 'seconds ago')
+				}
+				return moment(timestamp).fromNow()
+			}
 		},
 	},
 }
@@ -145,5 +153,13 @@ export default {
 			font-size: 0.8em;
 			padding: 1px;
 		}
+	}
+</style>
+<style>
+	.visualdiff ins {
+		color: green;
+	}
+	.visualdiff del {
+		color: darkred;
 	}
 </style>

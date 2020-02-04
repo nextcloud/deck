@@ -58,9 +58,21 @@ new Vue({
 	el: '#content',
 	router,
 	store,
-	mounted: function() {
+	data() {
+		return {
+			time: Date.now(),
+			interval: null,
+		}
+	},
+	created() {
 		// eslint-disable-next-line
 		new OCA.Search(this.filter, this.cleanSearch)
+		this.interval = setInterval(() => {
+			this.time = Date.now()
+		}, 1000)
+	},
+	beforeDestroy() {
+		clearInterval(this.interval)
 	},
 	methods: {
 		filter(query) {
