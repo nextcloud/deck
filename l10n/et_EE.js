@@ -24,6 +24,7 @@ OC.L10N.register(
     "Created" : "Loodud",
     "Save" : "Salvesta",
     "Update" : "Uuenda",
-    "Settings" : "Seaded"
+    "Settings" : "Seaded",
+    "An error occurred" : "Tekkis tõrge"
 },
 "nplurals=2; plural=(n != 1);");
