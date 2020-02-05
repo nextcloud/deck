@@ -16,5 +16,12 @@
         "christophwurst/nextcloud": "^17",
         "jakub-onderka/php-parallel-lint": "^1.0.0",
         "phpunit/phpunit": "^8"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "classmap-authoritative": true
+    },
+    "scripts": {
+        "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;"
     }
 }
