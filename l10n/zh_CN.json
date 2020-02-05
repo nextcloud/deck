@@ -151,6 +151,8 @@
     "Upload attachment" : "上传附件",
     "No comments yet. Begin the discussion!" : "还没有评论。 开始讨论吧！",
     "Save" : "保存",
+    "The comment cannot be empty." : "注释不能为空。",
+    "The comment cannot be longer than 1000 characters." : "注释不能超过 1000 个字符。",
     "Update" : "更新",
     "Assign to me" : "指派给我",
     "Delete card" : "删除卡片",
