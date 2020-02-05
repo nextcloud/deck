@@ -234,11 +234,11 @@ class PermissionService {
 			return [];
 		}
 
+		$users = [];
 		$owner = $this->userManager->get($board->getOwner());
 		if ($owner === null) {
 			$this->logger->info('No owner found for board ' . $board->getId());
 		} else {
-			$users = [];
 			$users[$owner->getUID()] = new User($owner);
 		}
 		$acls = $this->aclMapper->findAll($boardId);
@@ -270,7 +270,7 @@ class PermissionService {
 						$this->logger->info('No circle found for acl rule ' . $acl->getId());
 						continue;
 					}
-				
+
 					foreach ($circle->getMembers() as $member) {
 						$user = $this->userManager->get($member->getUserId());
 						if ($user === null) {
@@ -278,7 +278,7 @@ class PermissionService {
 						} else {
 							$users[$member->getUserId()] = new User($user);
 						}
-					}   
+					}
 				} catch (\Exception $e) {
 					$this->logger->info('Member not found in circle that was accessed. This should not happen.');
 				}
