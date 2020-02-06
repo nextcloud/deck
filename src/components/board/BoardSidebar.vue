@@ -47,7 +47,8 @@
 			<DeletedTabSidebar :board="board" />
 		</AppSidebarTab>
 
-		<AppSidebarTab id="activity"
+		<AppSidebarTab v-if="hasActivity"
+			id="activity"
 			:order="3"
 			:name="t('deck', 'Timeline')"
 			icon="icon-activity">
@@ -64,6 +65,8 @@ import DeletedTabSidebar from './DeletedTabSidebar'
 import TimelineTabSidebar from './TimelineTabSidebar'
 import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 
+const capabilities = window.OC.getCapabilities()
+
 export default {
 	name: 'BoardSidebar',
 	components: {
@@ -79,6 +82,11 @@ export default {
 			type: Number,
 			required: true,
 		},
+	},
+	data() {
+		return {
+			hasActivity: capabilities && capabilities.activity,
+		}
 	},
 	computed: {
 		...mapState({
