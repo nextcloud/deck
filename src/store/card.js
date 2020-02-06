@@ -37,7 +37,6 @@ export default {
 					const { tags, users, due } = rootState.filter
 					let allTagsMatch = true
 					let allUsersMatch = true
-					// const allDuedatesMatch = true
 
 					if (tags.length > 0) {
 						tags.forEach((tag) => {
@@ -62,50 +61,39 @@ export default {
 					}
 
 					if (due !== '') {
-						const datediffHour = ((new Date() - new Date(card.duedate)) / 3600000)
+						const datediffHour = ((new Date(card.duedate) - new Date()) / 3600000)
 						switch (due) {
-						case 'overdue':
-							if (card.overdue === 0) {
-								return false
-							} else {
-								return true
-							}
-							break
-						case 'dueToday':
-							if (datediffHour <= 24) {
-								return true
-							} else {
-								return false
-							}
-							break
-						case 'dueWeek':
-							if (datediffHour <= 168) {
-								return true
-							} else {
-								return false
-							}
-							break
-						case 'dueMonth':
-							if (datediffHour <= 5040) {
-								return true
-							} else {
-								return false
-							}
-							break
 						case 'noDue':
 							if (card.duedate === null) {
 								return true
 							} else {
 								return false
 							}
-							break
-							break
-
+						case 'overdue':
+							if (card.overdue === 3) {
+								return true
+							} else {
+								return false
+							}
+						case 'dueToday':
+							if (card.overdue >= 2) {
+								return true
+							} else {
+								return false
+							}
+						case 'dueWeek':
+							if (datediffHour <= 168 && card.duedate != null) {
+								return true
+							} else {
+								return false
+							}
+						case 'dueMonth':
+							if (datediffHour <= 5040 && card.duedate != null) {
+								return true
+							} else {
+								return false
+							}
 						}
-
-						/* if (!allDuedatesMatch) {
-							return false
-						} */
 					}
 
 					return true

@@ -62,7 +62,7 @@ export default new Vuex.Store({
 		searchQuery: '',
 		activity: [],
 		activityLoadMore: true,
-		filter: { tags: [], users: [], duedates: [] },
+		filter: { tags: [], users: [], due: '' },
 	},
 	getters: {
 		getSearchQuery: state => {

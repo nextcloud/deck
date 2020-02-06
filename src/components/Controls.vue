@@ -88,7 +88,8 @@
 									type="radio"
 									class="radio"
 									value="overdue"
-									@change="setFilter">
+									@change="setFilter"
+									@click="beforeSetFilter">
 								<label for="overdue">{{ t('deck', 'Overdue') }}</label>
 							</div>
 
@@ -99,7 +100,8 @@
 									type="radio"
 									class="radio"
 									value="dueToday"
-									@change="setFilter">
+									@change="setFilter"
+									@click="beforeSetFilter">
 								<label for="dueToday">{{ t('deck', 'Today') }}</label>
 							</div>
 
@@ -110,8 +112,9 @@
 									type="radio"
 									class="radio"
 									value="dueWeek"
-									@change="setFilter">
-								<label for="dueWeek">{{ t('deck', 'Week') }}</label>
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="dueWeek">{{ t('deck', 'Next 7 Days') }}</label>
 							</div>
 
 							<div class="filter--item">
@@ -121,8 +124,9 @@
 									type="radio"
 									class="radio"
 									value="dueMonth"
-									@change="setFilter">
-								<label for="dueMonth">{{ t('deck', 'Month') }}</label>
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="dueMonth">{{ t('deck', 'Next 30 Days') }}</label>
 							</div>
 
 							<div class="filter--item">
@@ -132,7 +136,8 @@
 									type="radio"
 									class="radio"
 									value="noDue"
-									@change="setFilter">
+									@change="setFilter"
+									@click="beforeSetFilter">
 								<label for="noDue">{{ t('deck', 'No due') }}</label>
 							</div>
 						</div>
@@ -211,8 +216,12 @@ export default {
 		},
 	},
 	methods: {
+		beforeSetFilter() {
+			console.log(this.filter.due)
+			this.$nextTick(() => { console.log(this.filter.due) })
+		},
 		setFilter() {
-			this.$nextTick(() => this.$store.dispatch('setFilter', this.filter))
+			this.$nextTick(() => this.$store.dispatch('setFilter', { ...this.filter }))
 		},
 		toggleNav() {
 			this.$store.dispatch('toggleNav')
