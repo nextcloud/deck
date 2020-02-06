@@ -110,7 +110,7 @@ class DeckProviderTest extends TestCase {
 
 	public function dataEventIcons() {
 		return [
-			[ActivityManager::SUBJECT_LABEL_ASSIGN, 'deck', 'deck-dark.svg'],
+			[ActivityManager::SUBJECT_LABEL_ASSIGN, 'core', 'actions/tag.svg'],
 			[ActivityManager::SUBJECT_CARD_CREATE, 'files', 'add-color.svg'],
 			[ActivityManager::SUBJECT_CARD_UPDATE, 'files', 'change.svg'],
 			[ActivityManager::SUBJECT_CARD_DELETE, 'files', 'delete-color.svg'],
