@@ -127,14 +127,16 @@
 			<CardSidebarTabAttachments :card="currentCard" />
 		</AppSidebarTab>
 
-		<AppSidebarTab id="comments"
+		<AppSidebarTab v-if="hasComments"
+			id="comments"
 			:order="2"
 			:name="t('deck', 'Comments')"
 			icon="icon-comment">
 			<CardSidebarTabComments :card="currentCard" />
 		</AppSidebarTab>
 
-		<AppSidebarTab id="timeline"
+		<AppSidebarTab v-if="hasActivity"
+			id="timeline"
 			:order="3"
 			:name="t('deck', 'Timeline')"
 			icon="icon-activity">
@@ -152,6 +154,8 @@ import { CollectionList } from 'nextcloud-vue-collections'
 import CardSidebarTabAttachments from './CardSidebarTabAttachments'
 import CardSidebarTabComments from './CardSidebarTabComments'
 import CardSidebarTabActivity from './CardSidebarTabActivity'
+
+const capabilities = window.OC.getCapabilities()
 
 export default {
 	name: 'CardSidebar',
@@ -194,6 +198,8 @@ export default {
 			},
 			lastModifiedRelative: null,
 			lastCreatedRemative: null,
+			hasActivity: capabilities && capabilities.activity,
+			hasComments: window.OCP && window.OCP.Comments,
 		}
 	},
 	computed: {
