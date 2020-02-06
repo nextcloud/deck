@@ -201,6 +201,9 @@ class DeckProvider implements IProvider {
 		if (strpos($event->getSubject(), 'comment_') !== false) {
 			$event->setIcon($this->urlGenerator->imagePath('core', 'actions/comment.svg'));
 		}
+		if (strpos($event->getSubject(), 'label_') !== false) {
+			$event->setIcon($this->urlGenerator->imagePath('core', 'actions/tag.svg'));
+		}
 		return $event;
 	}
 
