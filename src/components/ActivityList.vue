@@ -85,18 +85,17 @@ export default {
 			params.append('limit', ACTIVITY_FETCH_LIMIT)
 
 			const response = await axios.get(generateOcsUrl('apps/activity/api/v2/activity') + this.filter + '?' + params)
-			const activities = response.data.ocs.data
+			let activities = response.data.ocs.data
 			if (this.filter === 'deck') {
 				// We need to manually filter activities here, since currently we use two different types and there is no way
 				// to tell the backend to fetch all activites related to cards of a given board
-				this.activities.push(...activities.filter((activity) => {
+				activities = activities.filter((activity) => {
 					return (activity.object_type === 'deck_board' && activity.object_id === this.objectId)
 							|| (activity.object_type === 'deck_card' && activity.subject_rich[1].board.id === this.objectId)
-				}))
-			} else {
-				this.activities.push(...activities)
+				})
 			}
-			if (response.data.ocs.meta.statuscode === 304) {
+			this.activities.push(...activities)
+			if (response.data.ocs.meta.statuscode === 304 || activities.length === 0) {
 				this.endReached = true
 				return []
 			}
