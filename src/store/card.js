@@ -30,9 +30,56 @@ export default {
 		cards: [],
 	},
 	getters: {
-		cardsByStack: (state, getters) => (id) => {
-			return state.cards.filter((card) => card.stackId === id && (getters.getSearchQuery === '' || (card.title.toLowerCase().includes(getters.getSearchQuery.toLowerCase()) || card.description.toLowerCase().includes(getters.getSearchQuery.toLowerCase())))
-			).sort((a, b) => a.order - b.order)
+		cardsByStack: (state, getters, rootState) => (id) => {
+			return state.cards.filter((card) => {
+				const { tags, users, due } = rootState.filter
+				let allTagsMatch = true
+				let allUsersMatch = true
+
+				if (tags.length > 0) {
+					tags.forEach((tag) => {
+						if (card.labels.findIndex((l) => l.id === tag) === -1) {
+							allTagsMatch = false
+						}
+					})
+					if (!allTagsMatch) {
+						return false
+					}
+				}
+
+				if (users.length > 0) {
+					users.forEach((user) => {
+						if (card.assignedUsers.findIndex((u) => u.participant.uid === user) === -1) {
+							allUsersMatch = false
+						}
+					})
+					if (!allUsersMatch) {
+						return false
+					}
+				}
+
+				if (due !== '') {
+					const datediffHour = ((new Date(card.duedate) - new Date()) / 3600000)
+					switch (due) {
+					case 'noDue':
+						return (card.duedate === null)
+					case 'overdue':
+						return (card.overdue === 3)
+					case 'dueToday':
+						return (card.overdue >= 2)
+					case 'dueWeek':
+						return (datediffHour <= 168 && card.duedate !== null)
+					case 'dueMonth':
+						return (datediffHour <= 5040 && card.duedate !== null)
+					}
+				}
+
+				return true
+			})
+				.filter((card) => card.stackId === id && (getters.getSearchQuery === ''
+					|| (card.title.toLowerCase().includes(getters.getSearchQuery.toLowerCase())
+					|| card.description.toLowerCase().includes(getters.getSearchQuery.toLowerCase()))
+						.sort((a, b) => a.order - b.order)))
 		},
 		cardById: state => (id) => {
 			return state.cards.find((card) => card.id === id)

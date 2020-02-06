@@ -47,6 +47,102 @@
 				</form>
 			</div>
 			<div class="board-action-buttons">
+				<Popover>
+					<Actions slot="trigger">
+						<ActionButton icon="icon-filter" :title="t('deck', 'Apply filter')" />
+					</Actions>
+
+					<template>
+						<div class="filter">
+							<h3>{{ t('deck', 'Filter by tag') }}</h3>
+							<div v-for="label in board.labels" :key="label.id" class="filter--item">
+								<input
+									:id="label.id"
+									v-model="filter.tags"
+									type="checkbox"
+									class="checkbox"
+									:value="label.id"
+									@change="setFilter">
+								<label :for="label.id"><span class="label" :style="labelStyle(label)">{{ label.title }}</span></label>
+							</div>
+
+							<h3>{{ t('deck', 'Filter by assigned user') }}</h3>
+							<div v-for="user in board.users" :key="user.uid" class="filter--item">
+								<input
+									:id="user.uid"
+									v-model="filter.users"
+									type="checkbox"
+									class="checkbox"
+									:value="user.uid"
+									@change="setFilter">
+								<label :for="user.uid"><Avatar :user="user.uid" :size="24" :disable-menu="true" /> {{ user.displayname }}</label>
+							</div>
+
+							<h3>{{ t('deck', 'Filter by duedate') }}</h3>
+
+							<div class="filter--item">
+								<input
+									id="overdue"
+									v-model="filter.due"
+									type="radio"
+									class="radio"
+									value="overdue"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="overdue">{{ t('deck', 'Overdue') }}</label>
+							</div>
+
+							<div class="filter--item">
+								<input
+									id="dueToday"
+									v-model="filter.due"
+									type="radio"
+									class="radio"
+									value="dueToday"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="dueToday">{{ t('deck', 'Today') }}</label>
+							</div>
+
+							<div class="filter--item">
+								<input
+									id="dueWeek"
+									v-model="filter.due"
+									type="radio"
+									class="radio"
+									value="dueWeek"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="dueWeek">{{ t('deck', 'Next 7 days') }}</label>
+							</div>
+
+							<div class="filter--item">
+								<input
+									id="dueMonth"
+									v-model="filter.due"
+									type="radio"
+									class="radio"
+									value="dueMonth"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="dueMonth">{{ t('deck', 'Next 30 days') }}</label>
+							</div>
+
+							<div class="filter--item">
+								<input
+									id="noDue"
+									v-model="filter.due"
+									type="radio"
+									class="radio"
+									value="noDue"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="noDue">{{ t('deck', 'No due date') }}</label>
+							</div>
+						</div>
+					</template>
+				</Popover>
+
 				<Actions style="opacity: .5;">
 					<ActionButton v-if="showArchived"
 						icon="icon-archive"
@@ -69,7 +165,7 @@
 				</Actions>
 				<!-- FIXME: ActionRouter currently doesn't work as an inline action -->
 				<Actions>
-					<ActionButton icon="icon-share" @click="toggleDetailsView" />
+					<ActionButton icon="icon-menu-sidebar" @click="toggleDetailsView" />
 				</Actions>
 			</div>
 		</div>
@@ -78,13 +174,15 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Actions, ActionButton } from '@nextcloud/vue'
+import { Actions, ActionButton, Popover, Avatar } from '@nextcloud/vue'
+import labelStyle from '../mixins/labelStyle'
 
 export default {
 	name: 'Controls',
 	components: {
-		Actions, ActionButton,
+		Actions, ActionButton, Popover, Avatar,
 	},
+	mixins: [ labelStyle ],
 	props: {
 		board: {
 			type: Object,
@@ -98,8 +196,10 @@ export default {
 			stack: '',
 			showArchived: false,
 			isAddStackVisible: false,
+			filter: { tags: [], users: [], due: '' },
 		}
 	},
+
 	computed: {
 		...mapGetters([
 			'canEdit',
@@ -115,6 +215,15 @@ export default {
 		},
 	},
 	methods: {
+		beforeSetFilter(e) {
+			if (this.filter.due === e.target.value) {
+				this.filter.due = ''
+				this.$store.dispatch('setFilter', { ...this.filter })
+			}
+		},
+		setFilter() {
+			this.$nextTick(() => this.$store.dispatch('setFilter', { ...this.filter }))
+		},
 		toggleNav() {
 			this.$store.dispatch('toggleNav')
 		},
@@ -210,5 +319,34 @@ export default {
 			background-color: transparent;
 		}
 	}
-
+	.filter--item {
+		input + label {
+			display: block;
+			padding: 6px 0;
+			vertical-align: middle;
+			.avatardiv {
+				vertical-align: middle;
+				margin-bottom: 2px;
+				margin-right: 3px;
+			}
+			.label {
+				padding: 5px;
+				border-radius: 3px;
+			}
+		}
+	}
+	.filter {
+		width: 250px;
+		max-height: 80vh;
+		overflow: auto;
+	}
+	.filter h3 {
+		margin-top: 0px;
+		margin-bottom: 5px;
+	}
+</style>
+<style lang="scss">
+	.tooltip-inner.popover-inner {
+		text-align: left;
+	}
 </style>

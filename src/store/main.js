@@ -60,10 +60,16 @@ export default new Vuex.Store({
 		assignableUsers: [],
 		boardFilter: BOARD_FILTERS.ALL,
 		searchQuery: '',
+		activity: [],
+		activityLoadMore: true,
+		filter: { tags: [], users: [], due: '' },
 	},
 	getters: {
 		getSearchQuery: state => {
 			return state.searchQuery
+		},
+		getFilter: state => {
+			return state.filter
 		},
 		boards: state => {
 			return state.boards
@@ -111,6 +117,9 @@ export default new Vuex.Store({
 	mutations: {
 		setSearchQuery(state, searchQuery) {
 			state.searchQuery = searchQuery
+		},
+		setFilter(state, filter) {
+			Object.assign(state.filter, filter)
 		},
 		toggleShowArchived(state) {
 			state.showArchived = !state.showArchived
@@ -232,6 +241,9 @@ export default new Vuex.Store({
 		},
 	},
 	actions: {
+		setFilter({ commit }, filter) {
+			commit('setFilter', filter)
+		},
 		async loadBoardById({ commit }, boardId) {
 			commit('setCurrentBoard', null)
 			const board = await apiClient.loadById(boardId)

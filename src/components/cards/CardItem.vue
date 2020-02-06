@@ -105,6 +105,7 @@ import axios from '@nextcloud/axios'
 
 import CardBadges from './CardBadges'
 import Color from '../../mixins/color'
+import labelStyle from '../../mixins/labelStyle'
 
 export default {
 	name: 'CardItem',
@@ -112,7 +113,7 @@ export default {
 	directives: {
 		ClickOutside,
 	},
-	mixins: [Color],
+	mixins: [Color, labelStyle],
 	props: {
 		id: {
 			type: Number,
@@ -149,14 +150,6 @@ export default {
 		},
 		menu() {
 			return []
-		},
-		labelStyle() {
-			return (label) => {
-				return {
-					backgroundColor: '#' + label.color,
-					color: this.textColor(label.color),
-				}
-			}
 		},
 		currentCard() {
 			return this.$route.params.cardId === this.id
