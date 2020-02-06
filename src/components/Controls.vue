@@ -22,7 +22,6 @@
 
 <template>
 	<div class="controls">
-		{{ filter }}
 		<div id="app-navigation-toggle-custom" class="icon-menu" @click="toggleNav" />
 		<div v-if="board" class="board-title">
 			<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
@@ -114,7 +113,7 @@
 									value="dueWeek"
 									@change="setFilter"
 									@click="beforeSetFilter">
-								<label for="dueWeek">{{ t('deck', 'Next 7 Days') }}</label>
+								<label for="dueWeek">{{ t('deck', 'Next 7 days') }}</label>
 							</div>
 
 							<div class="filter--item">
@@ -126,7 +125,7 @@
 									value="dueMonth"
 									@change="setFilter"
 									@click="beforeSetFilter">
-								<label for="dueMonth">{{ t('deck', 'Next 30 Days') }}</label>
+								<label for="dueMonth">{{ t('deck', 'Next 30 days') }}</label>
 							</div>
 
 							<div class="filter--item">
@@ -138,7 +137,7 @@
 									value="noDue"
 									@change="setFilter"
 									@click="beforeSetFilter">
-								<label for="noDue">{{ t('deck', 'No due') }}</label>
+								<label for="noDue">{{ t('deck', 'No due date') }}</label>
 							</div>
 						</div>
 					</template>
@@ -216,9 +215,11 @@ export default {
 		},
 	},
 	methods: {
-		beforeSetFilter() {
-			console.log(this.filter.due)
-			this.$nextTick(() => { console.log(this.filter.due) })
+		beforeSetFilter(e) {
+			if (this.filter.due === e.target.value) {
+				this.filter.due = ''
+				this.$store.dispatch('setFilter', { ...this.filter })
+			}
 		},
 		setFilter() {
 			this.$nextTick(() => this.$store.dispatch('setFilter', { ...this.filter }))
