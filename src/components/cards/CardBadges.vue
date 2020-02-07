@@ -34,7 +34,9 @@
 			<span>{{ checkListCheckedCount }}/{{ checkListCount }}</span>
 		</div>
 
-		<div v-if="card.attachments" class="card-files icon icon-files-dark" />
+		<div v-if="card.attachmentCount > 0" class="icon-attach icon icon-attach-dark">
+			{{ card.attachmentCount }}
+		</div>
 
 		<AvatarList :users="card.assignedUsers" />
 	</div>
@@ -99,9 +101,10 @@ export default {
 
 		.icon {
 			opacity: 0.5;
-			padding: 12px 3px;
+			padding: 12px 14px;
 			margin-right: 10px;
 			background-position: left;
+			background-size: 16px;
 			span {
 				margin-left: 18px;
 			}

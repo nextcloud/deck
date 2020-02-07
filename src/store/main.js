@@ -30,6 +30,7 @@ import stack from './stack'
 import card from './card'
 import comment from './comment'
 import trashbin from './trashbin'
+import attachment from './attachment'
 
 Vue.use(Vuex)
 
@@ -48,6 +49,7 @@ export default new Vuex.Store({
 		card,
 		comment,
 		trashbin,
+		attachment,
 	},
 	strict: debug,
 	state: {

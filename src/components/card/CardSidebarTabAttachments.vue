@@ -22,30 +22,98 @@
 
 <template>
 	<div>
-		{{ card.attachments }}
+		<li v-for="attachment in attachments" :key="attachment.id" class="attachment">
+			<a class="fileicon" :style="mimetypeForAttachment(attachment)" />
+			<div class="details" :href="attachmentUrl(attachment)">
+				<div class="filename">
+					<span class="basename">{{ attachment.data }}</span>
+				</div>
+				<span class="filesize">{{ attachment.extendedData.filesize }}</span>
+				<span class="filedate">{{ attachment.createdAt }}</span>
+				<span class="filedate">{{ attachment.createdBy }}</span>
+			</div>
+			<Actions>
+				<ActionButton icon="icon-delete" @click="deleteAttachment(attachment)">
+					{{ t('deck', 'Delete Attachment') }}
+				</ActionButton>
+			</Actions>
+		</li>
 		<button class="icon-upload" @click="clickAddNewAttachmment()">
 			{{ t('deck', 'Upload attachment') }}
 		</button>
+		<input ref="localAttachments"
+			type="file"
+			style="display: none;"
+			@change="onLocalAttachmentSelected">
 	</div>
 </template>
 
 <script>
+import { Actions, ActionButton } from '@nextcloud/vue'
+
 export default {
 	name: 'CardSidebarTabAttachments',
+	components: {
+		Actions,
+		ActionButton,
+	},
 	props: {
 		card: {
 			type: Object,
 			default: null,
 		},
 	},
+	data() {
+		return {
+		}
+	},
+	computed: {
+		attachments() {
+			return this.$store.getters.attachmentsByCard(this.card.id)
+		},
+
+	},
+	created: function() {
+		this.$store.dispatch('fetchAttachments', this.card.id)
+	},
 	methods: {
 		clickAddNewAttachmment() {
-
+			this.$refs.localAttachments.click()
+		},
+		onLocalAttachmentSelected(e) {
+			const bodyFormData = new FormData()
+			bodyFormData.append('cardId', this.card.id)
+			bodyFormData.append('type', 'deck_file')
+			bodyFormData.append('file', e.target.files[0])
+			try {
+				this.$store.dispatch('createAttachment', { cardId: this.card.id, formData: bodyFormData })
+			} catch (e) {
+				console.log(e)
+			}
+		},
+		deleteAttachment(attachment) {
+			this.$store.dispatch('deleteAttachment', attachment)
+		},
+		mimetypeForAttachment(attachment) {
+			const url = OC.MimeType.getIconUrl(attachment.extendedData.mimetype)
+			const styles = {
+				'background-image': `url("${url}")`,
+			}
+			return styles
+		},
+		attachmentUrl(attachment) {
+			return OC.generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
 		},
 	},
 }
 </script>
 
 <style scoped>
-
+	.fileicon {
+		display: inline-block;
+		min-width: 32px;
+		width: 32px;
+		height: 32px;
+		background-size: contain;
+	}
 </style>

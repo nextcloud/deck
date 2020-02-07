@@ -140,6 +140,20 @@ export default {
 				Vue.set(state.cards[existingIndex], property, card[property])
 			}
 		},
+		cardIncreaseAttachmentCount(state, cardId) {
+			const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
+			if (existingIndex !== -1) {
+				const existingCard = state.cards.find(_card => _card.id === cardId)
+				Vue.set(state.cards, existingCard.attachmentCount, existingCard.attachmentCount++)
+			}
+		},
+		cardDecreaseAttachmentCount(state, cardId) {
+			const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
+			if (existingIndex !== -1) {
+				const existingCard = state.cards.find(_card => _card.id === cardId)
+				Vue.set(state.cards, existingCard.attachmentCount, existingCard.attachmentCount--)
+			}
+		},
 	},
 	actions: {
 		async addCard({ commit }, card) {
