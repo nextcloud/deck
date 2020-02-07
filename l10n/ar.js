@@ -9,6 +9,8 @@ OC.L10N.register(
     "No file was uploaded" : "لم يتم رفع أي ملف",
     "Missing a temporary folder" : "المجلد المؤقت غير موجود",
     "Cancel" : "إلغاء",
+    "seconds ago" : "ثوان مضت",
+    "Today" : "اليوم",
     "Sharing" : "المشاركة",
     "Tags" : "الوسوم",
     "Timeline" : "الخيط الزمني",

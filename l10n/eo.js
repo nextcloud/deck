@@ -101,6 +101,8 @@ OC.L10N.register(
     "Select the board to link to a project" : "Elekti la tabulon ligotan al projekto",
     "Select board" : "Elekti tabulon",
     "Cancel" : "Nuligi",
+    "seconds ago" : "antaŭ kelkaj sekundoj",
+    "Today" : "Hodiaŭ",
     "Show archived cards" : "Montri arĥivigitajn kartojn",
     "Hide archived cards" : "Kaŝi arĥivigitajn kartojn",
     "Toggle compact mode" : "Baskuligi densigan vidon",

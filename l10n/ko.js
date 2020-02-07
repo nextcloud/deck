@@ -22,6 +22,8 @@ OC.L10N.register(
     "A PHP extension stopped the file upload" : "PHP 확장 기능에서 파일 업로드를 차단함",
     "Create new board" : "새 게시판 만들기",
     "Cancel" : "취소",
+    "seconds ago" : "초 전",
+    "Today" : "오늘",
     "Show archived cards" : "보관된 카드 보기",
     "Hide archived cards" : "보관된 카드 숨기기",
     "Sharing" : "공유",

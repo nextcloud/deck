@@ -18,6 +18,8 @@ OC.L10N.register(
     "Missing a temporary folder" : "Manglende midlertidig mappe.",
     "Create new board" : "Opret ny liste",
     "Cancel" : "Annullér",
+    "seconds ago" : "sekunder siden",
+    "Today" : "I dag",
     "Show archived cards" : "Vis arkiverede kort",
     "Hide archived cards" : "Skjul arkiverede kort",
     "Sharing" : "Deling",

@@ -14,6 +14,8 @@ OC.L10N.register(
     "Missing a temporary folder" : "Відсутній тимчасовий каталог",
     "Create new board" : "Створити нову дошку",
     "Cancel" : "Скасувати",
+    "seconds ago" : "секунд тому",
+    "Today" : "Сьогодні",
     "Show archived cards" : "Показати архівні картки",
     "Hide archived cards" : "Приховати архівні картки",
     "Sharing" : "Поділитись",

@@ -4,6 +4,8 @@ OC.L10N.register(
     "Personal" : "個人",
     "Done" : "Done",
     "Cancel" : "取消",
+    "seconds ago" : "秒前",
+    "Today" : "今日",
     "Sharing" : "分享",
     "Can edit" : "Can edit",
     "Can share" : "Can share",

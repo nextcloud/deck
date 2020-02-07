@@ -101,6 +101,8 @@ OC.L10N.register(
     "Select the board to link to a project" : "Vybrať nástenku na vytvorenie odkazu ku projektu",
     "Select board" : "Vybrať nástenku",
     "Cancel" : "Zrušiť",
+    "seconds ago" : "pred niekoľkými sekundami",
+    "Today" : "Dnes",
     "Show archived cards" : "Zobraziť archivované karty",
     "Hide archived cards" : "Skryť archivované karty",
     "Toggle compact mode" : "Vyp/zap. kompaktný režim",

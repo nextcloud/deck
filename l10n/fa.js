@@ -9,6 +9,8 @@ OC.L10N.register(
     "No file was uploaded" : "هیچ پروندهای بارگذاری نشده",
     "Missing a temporary folder" : "یک پوشه موقت گم شده",
     "Cancel" : "لغو",
+    "seconds ago" : "ثانیه‌هایی پیش",
+    "Today" : "Today",
     "Sharing" : "اشتراک گذاری",
     "Tags" : "برچسب‌ها",
     "Undo" : "برگرداندن",

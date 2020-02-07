@@ -7,6 +7,8 @@ OC.L10N.register(
     "No file was uploaded" : "কোন ফাইল আপলোড করা হয় নি",
     "Missing a temporary folder" : "অস্থায়ী ফোল্ডারটি হারানো গিয়েছে",
     "Cancel" : "বাতির",
+    "seconds ago" : "সেকেন্ড পূর্বে",
+    "Today" : "আজ",
     "Sharing" : "ভাগাভাগিরত",
     "Tags" : "ট্যাগ",
     "Can edit" : "Can edit",

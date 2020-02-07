@@ -101,6 +101,8 @@ OC.L10N.register(
     "Select the board to link to a project" : "Hautatu taula proiektu bati estekatzeko",
     "Select board" : "Hautatu taula",
     "Cancel" : "Utzi",
+    "seconds ago" : "segundo lehenago",
+    "Today" : "Gaur",
     "Show archived cards" : "Erakutsi artxibatutako txartelak",
     "Hide archived cards" : "Ezkutatu artxibatutako txartelak",
     "Toggle compact mode" : "Txandakatu modu trinkoa",

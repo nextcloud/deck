@@ -9,6 +9,8 @@ OC.L10N.register(
     "No file was uploaded" : "Nu a fost încărcat niciun fișier",
     "Missing a temporary folder" : "Lipsește un dosar temporar",
     "Cancel" : "Anulează",
+    "seconds ago" : "secunde în urmă",
+    "Today" : "Azi",
     "Sharing" : "Partajare",
     "Tags" : "Etichete",
     "Undo" : "Anulează ultima acțiune",

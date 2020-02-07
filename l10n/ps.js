@@ -4,6 +4,7 @@ OC.L10N.register(
     "Personal" : "شخصي",
     "copy" : "کاپي",
     "Cancel" : "پرېښول",
+    "Today" : "نن",
     "Tags" : "نښکې",
     "Can edit" : "سمون راوستی شي",
     "Delete" : "ړنګول",

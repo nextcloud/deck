@@ -21,6 +21,8 @@ OC.L10N.register(
     "A PHP extension stopped the file upload" : "Una extensión de PHP detuvo la carga del archivo",
     "Create new board" : "Crear un nuevo tablero",
     "Cancel" : "Cancelar",
+    "seconds ago" : "hace segundos",
+    "Today" : "Hoy",
     "Show archived cards" : "Mostrar tarjetas archivadas",
     "Hide archived cards" : "Ocultar tarjetas archivadas",
     "Sharing" : "Compartiendo",

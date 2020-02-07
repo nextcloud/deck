@@ -21,6 +21,8 @@ OC.L10N.register(
     "Could not write file to disk" : "寫入硬碟失敗",
     "A PHP extension stopped the file upload" : "一個 PHP 擴充功能終止檔案的上傳",
     "Cancel" : "取消",
+    "seconds ago" : "幾秒前",
+    "Today" : "今天",
     "Sharing" : "分享",
     "Tags" : "標籤",
     "Undo" : "復原",

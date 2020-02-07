@@ -136,7 +136,6 @@ OC.L10N.register(
     "Edit" : "Editar",
     "Add a new label" : "Engadir unha nova etiqueta",
     "title and color value must be provided" : "debe indicar o título e o valor da cor",
-    "Load More" : "Cargar máis",
     "Details" : "Detalles",
     "Assign a tag to this card…" : "Asignar unha etiqueta a esta tarxeta…",
     "Assign to users" : "Asignar a usuarios",

@@ -18,6 +18,8 @@ OC.L10N.register(
     "Missing a temporary folder" : "Falta uma pasta temporária",
     "Create new board" : "Criar novo quadro",
     "Cancel" : "Cancelar",
+    "seconds ago" : "segundos atrás",
+    "Today" : "Hoje",
     "Show archived cards" : "Mostrar cartões arquivados",
     "Hide archived cards" : "Esconder cartões arquivados",
     "Sharing" : "Partilha",

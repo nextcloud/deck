@@ -3,6 +3,8 @@ OC.L10N.register(
     {
     "Done" : "Done",
     "Cancel" : "Anullar",
+    "seconds ago" : "i a qualques segondas",
+    "Today" : "Uèi",
     "Sharing" : "Partiment",
     "Can edit" : "Can edit",
     "Can share" : "Can share",

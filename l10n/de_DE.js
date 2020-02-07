@@ -136,7 +136,6 @@ OC.L10N.register(
     "Edit" : "Bearbeiten",
     "Add a new label" : "Neues Schlagwort hinzufügen",
     "title and color value must be provided" : "Titel und Farbwert müssen angegeben werden",
-    "Load More" : "Mehr laden",
     "Details" : "Details",
     "Assign a tag to this card…" : "Dieser Karte ein Schlagwort zuweisen…",
     "Assign to users" : "Benutzern zuweisen",

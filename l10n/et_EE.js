@@ -10,6 +10,8 @@ OC.L10N.register(
     "No file was uploaded" : "Ühtegi faili ei latud üles",
     "Missing a temporary folder" : "Ajutine kausta on puudu",
     "Cancel" : "Loobu",
+    "seconds ago" : "sekundit tagasi",
+    "Today" : "Täna",
     "Sharing" : "Jagamine",
     "Tags" : "Sildid",
     "Can edit" : "Võib redigeerida",
