@@ -78,7 +78,7 @@
 								<label :for="user.uid"><Avatar :user="user.uid" :size="24" :disable-menu="true" /> {{ user.displayname }}</label>
 							</div>
 
-							<h3>{{ t('deck', 'Filter by duedate') }}</h3>
+							<h3>{{ t('deck', 'Filter by due date') }}</h3>
 
 							<div class="filter--item">
 								<input
