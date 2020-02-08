@@ -98,6 +98,8 @@ OC.L10N.register(
     "Select a card" : "Izbor naloge",
     "Link to card" : "Poveži nalogo",
     "Cancel" : "Prekliči",
+    "seconds ago" : "pred nekaj sekundami",
+    "Today" : "Danes",
     "Show archived cards" : "Prikaži arhivirane naloge",
     "Hide archived cards" : "Skrij arhivirane naloge",
     "Toggle compact mode" : "Preklopi način prikaza",

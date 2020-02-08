@@ -17,6 +17,8 @@ OC.L10N.register(
     "Missing a temporary folder" : "Mungon një dosje e përkohshme",
     "Create new board" : "Krijo bord të ri",
     "Cancel" : "Anullo",
+    "seconds ago" : "sekonda më parë",
+    "Today" : "Sot",
     "Show archived cards" : "Trego kartat e arkivuara",
     "Hide archived cards" : "Fsheh kartat e arkivuara ",
     "Sharing" : "Ndarje",

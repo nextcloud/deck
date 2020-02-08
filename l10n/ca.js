@@ -99,6 +99,8 @@ OC.L10N.register(
     "Select the board to link to a project" : "Selecciona el tauler per enllaçar a un projecte",
     "Select board" : "Selecciona un tauler",
     "Cancel" : "Cancel·la",
+    "seconds ago" : "fa uns segons",
+    "Today" : "Avui",
     "Show archived cards" : "Mostra les targetes arxivades",
     "Hide archived cards" : "Amaga les targetes arxivades",
     "Toggle compact mode" : "Commuta el mode compacte",

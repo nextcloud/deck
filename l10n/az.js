@@ -7,6 +7,8 @@ OC.L10N.register(
     "No file was uploaded" : "Heç bir fayl yüklənilmədi",
     "Missing a temporary folder" : "Müvəqqəti qovluq çatışmır",
     "Cancel" : "Dayandır",
+    "seconds ago" : "saniyələr öncə",
+    "Today" : "Bu gün",
     "Sharing" : "Paylaşılır",
     "Tags" : "Işarələr",
     "Can edit" : "Can edit",
