@@ -27,6 +27,7 @@ OC.L10N.register(
     "Comments" : "نظرات",
     "Modified" : "تغییر یافته",
     "Created" : "ایجاد شده",
+    "Upload attachment" : "پیوست را بارگیری کنید",
     "Save" : "ذخیره",
     "Update" : "به روز رسانی",
     "Delete card" : "حذف کارت",

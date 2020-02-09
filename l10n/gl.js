@@ -113,6 +113,7 @@ OC.L10N.register(
     "Apply filter" : "Aplicar filtro",
     "Filter by tag" : "Filtrar pola etiqueta",
     "Filter by assigned user" : "Filtrar polo usuario asignado",
+    "Filter by due date" : "Filtrar pola data de caducidade",
     "Overdue" : "Caducado",
     "Today" : "Hoxe",
     "Next 7 days" : "Próximos 7 días",

@@ -112,6 +112,7 @@ OC.L10N.register(
     "Apply filter" : "Tillämpa filter",
     "Filter by tag" : "Filtrera efter tagg",
     "Filter by assigned user" : "Filtrera efter tilldelad användare",
+    "Filter by due date" : "Filtrera efter förfallodatum",
     "Overdue" : "Förfallen",
     "Today" : "Idag",
     "Next 7 days" : "Nästa 7 dagar",
