@@ -133,7 +133,11 @@ export default {
 				// adding it.
 				// FIXME user names can contain spaces, in that case they need to be wrapped @"user name" [a-zA-Z0-9\ _\.@\-']+
 				const mentionValue = mention.firstElementChild.attributes['data-mention-id'].value
-				mention.replaceWith(' @' + mentionValue + ' ')
+				if (mentionValue.indexOf(' ') !== -1) {
+					mention.replaceWith(' @"' + mentionValue + '" ')
+				} else {
+					mention.replaceWith(' @' + mentionValue + ' ')
+				}
 			})
 
 			return rawToParsed(node.innerHTML)

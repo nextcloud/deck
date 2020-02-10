@@ -34,6 +34,7 @@ import { Avatar, Actions, ActionButton, UserBubble } from '@nextcloud/vue'
 import RichText from '@juliushaertl/vue-richtext'
 import CommentForm from './CommentForm'
 import { getCurrentUser } from '@nextcloud/auth'
+import md5 from 'blueimp-md5'
 
 const AtMention = {
 	name: 'AtMention',
@@ -77,15 +78,18 @@ export default {
 		richText() {
 			let message = this.parsedMessage
 			this.comment.mentions.forEach((mention, index) => {
-				// FIXME: currently only [a-z\-_0-9] are allowed inside of placeholders
-				message = message.split('@' + mention.mentionId + '').join(`{user-${mention.mentionId}}`)
+				// Currently only [a-z\-_0-9] are allowed inside of placeholders so we use a hash of the mention id as a unique identifier
+				const hash = md5(mention.mentionId)
+				message = message.split('@' + mention.mentionId + '').join(`{user-${hash}}`)
+				message = message.split('@"' + mention.mentionId + '"').join(`{user-${hash}}`)
+
 			})
 			return message
 		},
 		richArgs() {
 			const mentions = [...this.comment.mentions]
 			const result = mentions.reduce(function(result, item, index) {
-				const itemKey = 'user-' + item.mentionId
+				const itemKey = 'user-' + md5(item.mentionId)
 				result[itemKey] = {
 					component: AtMention,
 					props: {
