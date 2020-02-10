@@ -113,6 +113,7 @@ OC.L10N.register(
     "Apply filter" : "应用过滤器",
     "Filter by tag" : "标签筛选",
     "Filter by assigned user" : "根据指定用户过滤",
+    "Filter by due date" : "根据截止日期过滤",
     "Overdue" : "逾期",
     "Today" : "今天",
     "Next 7 days" : "下个7天",
