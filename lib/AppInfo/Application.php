@@ -56,6 +56,8 @@ class Application extends App {
 
 	public const APP_ID = 'deck';
 
+	public const COMMENT_ENTITY_TYPE = 'deckCard';
+
 	/** @var IServerContainer */
 	private $server;
 
@@ -149,7 +151,7 @@ class Application extends App {
 
 	public function registerCommentsEntity(): void {
 		$this->server->getEventDispatcher()->addListener(CommentsEntityEvent::EVENT_ENTITY, function(CommentsEntityEvent $event) {
-			$event->addEntityCollection('deckCard', function($name) {
+			$event->addEntityCollection(self::COMMENT_ENTITY_TYPE, function($name) {
 				/** @var CardMapper */
 				$cardMapper = $this->getContainer()->query(CardMapper::class);
 				$permissionService = $this->getContainer()->query(PermissionService::class);

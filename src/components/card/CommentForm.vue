@@ -45,7 +45,7 @@
 					@keydown.enter="handleKeydown"
 					@paste="onPaste"
 					@blur="error = null"
-					@input="validate" />
+					@input="validate()" />
 			</At>
 			<input v-tooltip="t('deck', 'Save')"
 				class="icon-confirm"
@@ -99,10 +99,10 @@ export default {
 		},
 	},
 	methods: {
-		validate() {
+		validate(submit) {
 			this.error = null
 			const content = this.contentEditableToParsed()
-			if (content.length === 0) {
+			if (submit && content.length === 0) {
 				this.error = t('deck', 'The comment cannot be empty.')
 			}
 			if (content.length > 1000) {
@@ -111,14 +111,13 @@ export default {
 			return this.error === null ? content : null
 		},
 		submit() {
-			const content = this.validate()
+			const content = this.validate(true)
 			if (content) {
 				this.$emit('input', content)
 				this.$emit('submit', content)
 			}
 		},
-		/**
-		 * All credits for this go to the talk app
+		/* All credits for this go to the talk app
 		 * https://github.com/nextcloud/spreed/blob/e69740b372e17eec4541337b47baa262a5766510/src/components/NewMessageForm/NewMessageForm.vue#L100-L143
 		 */
 		contentEditableToParsed() {

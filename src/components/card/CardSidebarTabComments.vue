@@ -7,6 +7,7 @@
 			</span>
 		</div>
 
+		<CommentItem v-if="replyTo" :comment="replyTo" :reply="true" />
 		<CommentForm v-model="newComment" @submit="createComment" />
 
 		<ul v-if="getCommentsForCard(card.id).length > 0" id="commentsFeed">
@@ -58,6 +59,7 @@ export default {
 	computed: {
 		...mapState({
 			currentBoard: state => state.currentBoard,
+			replyTo: state => state.comment.replyTo,
 		}),
 		...mapGetters([
 			'getCommentsForCard',
@@ -98,6 +100,7 @@ export default {
 				comment: content,
 			}
 			await this.$store.dispatch('createComment', commentObj)
+			this.$store.dispatch('setReplyTo', null)
 			this.newComment = ''
 			await this.loadComments()
 		},

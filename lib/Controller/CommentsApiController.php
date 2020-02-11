@@ -23,87 +23,59 @@
 
 namespace OCA\Deck\Controller;
 
-
+use OCA\Deck\Service\CommentService;
+use OCA\Deck\StatusException;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\Http\JSONResponse;
-use OCP\Comments\IComment;
-use OCP\Comments\ICommentsManager;
-use OCP\Comments\NotFoundException;
-use OCP\ILogger;
+
 use OCP\IRequest;
-use OCP\IUserManager;
 
 class CommentsApiController extends ApiController {
 
-	/** @var ICommentsManager */
-	private $commentsManager;
-	/** @var IUserManager */
-	private $userManager;
-	/** @var ILogger */
-	private $logger;
+	/** @var CommentService */
+	private $commentService;
 
 	public function __construct(
 		$appName, IRequest $request, $corsMethods = 'PUT, POST, GET, DELETE, PATCH', $corsAllowedHeaders = 'Authorization, Content-Type, Accept', $corsMaxAge = 1728000,
-		ICommentsManager $commentsManager,
-		IUserManager $userManager,
-		ILogger $logger
+		CommentService $commentService
 	) {
 		parent::__construct($appName, $request, $corsMethods, $corsAllowedHeaders, $corsMaxAge);
-
-		$this->commentsManager = $commentsManager;
-		$this->userManager = $userManager;
-		$this->logger = $logger;
+		$this->commentService = $commentService;
 	}
 
 	/**
 	 * @NoAdminRequired
-	 * @CORS
 	 * @NoCSRFRequired
+	 * @throws StatusException
 	 */
-	public function list(int $cardId, $limit = 20, $offset = 0): JSONResponse {
-		$comments = $this->commentsManager->getForObject('deckCard', $cardId, $limit, $offset);
-		$result = [];
-		foreach ($comments as $comment) {
-			$formattedComment = $this->formatComment($comment);
-			try {
-				if ($comment->getParentId() !== '0' && $replyTo = $this->commentsManager->get($comment->getParentId())) {
-					$formattedComment['replyTo'] = $this->formatComment($replyTo);
-				}
-			} catch (NotFoundException $e) {
-			}
-			$result[] = $formattedComment;
-		}
-		return new JSONResponse($result);
+	public function list(string $cardId, int $limit = 20, int $offset = 0): DataResponse {
+		return $this->commentService->list($cardId, $limit, $offset);
 	}
 
-	private function formatComment(IComment $comment): array {
-		$user = $this->userManager->get($comment->getActorId());
-		$actorDisplayName = $user !== null ? $user->getDisplayName() : $comment->getActorId();
-
-		return [
-			'id' => $comment->getId(),
-			'message' => $comment->getMessage(),
-			'actorId' => $comment->getActorId(),
-			'actorType' => $comment->getActorType(),
-			'actorDisplayName' => $actorDisplayName,
-			'mentions' => array_map(function($mention) {
-				try {
-					$displayName = $this->commentsManager->resolveDisplayName($mention['type'], $mention['id']);
-				} catch (\OutOfBoundsException $e) {
-					$this->logger->logException($e);
-					// No displayname, upon client's discretion what to display.
-					$displayName = '';
-				}
-
-				return [
-					'mentionId' => $mention['id'],
-					'mentionType' => $mention['type'],
-					'mentionDisplayName' => $displayName
-				];
-			}, $comment->getMentions()),
-		];
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @throws StatusException
+	 */
+	public function create(string $cardId, string $message, string $parentId = '0'): DataResponse {
+		return $this->commentService->create($cardId, $message, $parentId);
 	}
 
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @throws StatusException
+	 */
+	public function update(string $cardId, string $commentId, string $message): DataResponse {
+		return $this->commentService->update($cardId, $commentId, $message);
+	}
 
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @throws StatusException
+	 */
+	public function delete(string $cardId, string $commentId): DataResponse {
+		return $this->commentService->delete($cardId, $commentId);
+	}
 }

@@ -1,0 +1,172 @@
+<?php
+/**
+ * @copyright Copyright (c) 2020 Julius Härtl <jus@bitgrid.net>
+ *
+ * @author Julius Härtl <jus@bitgrid.net>
+ *
+ * @license GNU AGPL version 3 or any later version
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+namespace OCA\Deck\Service;
+
+
+use OCA\Deck\AppInfo\Application;
+use OCA\Deck\BadRequestException;
+use OCA\Deck\NoPermissionException;
+use OCA\Deck\NotFoundException;
+use OCA\Deck\StatusException;
+use OCP\AppFramework\Http\DataResponse;
+use OCP\Comments\IComment;
+use OCP\Comments\ICommentsManager;
+use OCP\Comments\MessageTooLongException;
+use OCP\Comments\NotFoundException as CommentNotFoundException;
+use OCP\ILogger;
+use OCP\IUserManager;
+use OutOfBoundsException;
+use Sabre\DAV\Exception\Forbidden;
+use function is_numeric;
+
+class CommentService {
+
+	/**
+	 * @var ICommentsManager
+	 */
+	private $commentsManager;
+	/**
+	 * @var IUserManager
+	 */
+	private $userManager;
+	/** @var ILogger */
+	private $logger;
+	private $userId;
+
+	public function __construct(ICommentsManager $commentsManager, IUserManager $userManager, ILogger $logger, $userId) {
+		$this->commentsManager = $commentsManager;
+		$this->userManager = $userManager;
+		$this->logger = $logger;
+		$this->userId = $userId;
+	}
+
+	public function list(string $cardId, int $limit = 20, int $offset = 0): DataResponse {
+		if (!is_numeric($cardId)) {
+			throw new BadRequestException('A valid card id must be provided');
+		}
+		$comments = $this->commentsManager->getForObject(Application::COMMENT_ENTITY_TYPE, $cardId, $limit, $offset);
+		$result = [];
+		foreach ($comments as $comment) {
+			$formattedComment = $this->formatComment($comment);
+			try {
+				if ($comment->getParentId() !== '0' && $replyTo = $this->commentsManager->get($comment->getParentId())) {
+					$formattedComment['replyTo'] = $this->formatComment($replyTo);
+				}
+			} catch (CommentNotFoundException $e) {
+			}
+			$result[] = $formattedComment;
+		}
+		return new DataResponse($result);
+	}
+
+	/**
+	 * @param string $cardId
+	 * @param string $message
+	 * @param string $replyTo
+	 * @return DataResponse
+	 * @throws BadRequestException
+	 * @throws NotFoundException
+	 */
+	public function create(string $cardId, string $message, string $replyTo = '0'): DataResponse {
+		if (!is_numeric($cardId)) {
+			throw new BadRequestException('A valid card id must be provided');
+		}
+		try {
+			$comment = $this->commentsManager->create('users', $this->userId, Application::COMMENT_ENTITY_TYPE, $cardId);
+			$comment->setMessage($message);
+			$comment->setVerb('comment');
+			$comment->setParentId($replyTo);
+			$this->commentsManager->save($comment);
+			return new DataResponse($this->formatComment($comment));
+		} catch (\InvalidArgumentException $e) {
+			throw new BadRequestException('Invalid input values');
+		} catch (MessageTooLongException $e) {
+			$msg = 'Message exceeds allowed character limit of ';
+			throw new BadRequestException($msg . IComment::MAX_MESSAGE_LENGTH);
+		} catch (CommentNotFoundException $e) {
+			throw new NotFoundException('Could not create comment.');
+		}
+	}
+
+	public function update(string $cardId, string $commentId, string $message): DataResponse {
+		if (!is_numeric($cardId)) {
+			throw new BadRequestException('A valid card id must be provided');
+		}
+		if (!is_numeric($commentId)) {
+			throw new BadRequestException('A valid comment id must be provided');
+		}
+		try {
+			$comment = $this->commentsManager->get($commentId);
+		} catch (CommentNotFoundException $e) {
+			throw new NotFoundException('No comment found.');
+		}
+		if ($comment->getActorType() !== 'users' || $comment->getActorId() !== $this->userId) {
+			throw new NoPermissionException('Only authors are allowed to edit their comment.');
+		}
+		$comment->setMessage($message);
+		$this->commentsManager->save($comment);
+		return new DataResponse($this->formatComment($comment));
+	}
+
+	public function delete(string $cardId, string $commentId): DataResponse {
+		if (!is_numeric($cardId)) {
+			throw new BadRequestException('A valid card id must be provided');
+		}
+		if (!is_numeric($commentId)) {
+			throw new BadRequestException('A valid comment id must be provided');
+		}
+		$this->commentsManager->delete($commentId);
+		return new DataResponse([]);
+	}
+
+	private function formatComment(IComment $comment): array {
+		$user = $this->userManager->get($comment->getActorId());
+		$actorDisplayName = $user !== null ? $user->getDisplayName() : $comment->getActorId();
+
+		return [
+			'id' => $comment->getId(),
+			'objectId' => $comment->getObjectId(),
+			'message' => $comment->getMessage(),
+			'actorId' => $comment->getActorId(),
+			'actorType' => $comment->getActorType(),
+			'actorDisplayName' => $actorDisplayName,
+			'mentions' => array_map(function($mention) {
+				try {
+					$displayName = $this->commentsManager->resolveDisplayName($mention['type'], $mention['id']);
+				} catch (OutOfBoundsException $e) {
+					$this->logger->logException($e);
+					// No displayname, upon client's discretion what to display.
+					$displayName = '';
+				}
+
+				return [
+					'mentionId' => $mention['id'],
+					'mentionType' => $mention['type'],
+					'mentionDisplayName' => $displayName
+				];
+			}, $comment->getMentions()),
+		];
+	}
+
+}
