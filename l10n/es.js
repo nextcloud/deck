@@ -113,6 +113,7 @@ OC.L10N.register(
     "Apply filter" : "Aplicar filtro",
     "Filter by tag" : "Filtrar por etiqueta",
     "Filter by assigned user" : "Filtrar por usuario asignado",
+    "Filter by due date" : "Filtrar por fecha de finalización",
     "Overdue" : "Demorado",
     "Today" : "Hoy",
     "Next 7 days" : "Siguientes 7 días",
