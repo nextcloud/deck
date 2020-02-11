@@ -38,6 +38,7 @@ use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
 use OCA\Deck\Service\FullTextSearchService;
+use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\App;
 use OCP\Collaboration\Resources\IManager;
 use OCP\Collaboration\Resources\IProviderManager;
@@ -150,13 +151,14 @@ class Application extends App {
 		$this->server->getEventDispatcher()->addListener(CommentsEntityEvent::EVENT_ENTITY, function(CommentsEntityEvent $event) {
 			$event->addEntityCollection('deckCard', function($name) {
 				/** @var CardMapper */
-				$service = $this->getContainer()->query(CardMapper::class);
+				$cardMapper = $this->getContainer()->query(CardMapper::class);
+				$permissionService = $this->getContainer()->query(PermissionService::class);
+
 				try {
-					$service->find((int) $name);
-				} catch (InvalidArgumentException $e) {
+					return $permissionService->checkPermission($cardMapper, (int) $name, Acl::PERMISSION_READ);
+				} catch (\Exception $e) {
 					return false;
 				}
-				return true;
 			});
 		});
 		$this->registerCommentsEventHandler();
