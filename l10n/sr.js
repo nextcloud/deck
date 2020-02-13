@@ -63,7 +63,7 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} је повратио прилог {attachment} на картицу {card}",
     "You have commented on card {card}" : "Оставили сте коментар на картици {card}",
     "{user} has commented on card {card}" : "{user} је оставио коментар на картици {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>опис картице</strong> унутар Deck апликације је промењен",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Опис картице</strong> унутар Deck апликације је промењен",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Измене у <strong>Deck апликацији</strong>",
     "A <strong>comment</strong> was created on a card" : "Направљен је <strong>коментар</strong> на картици",

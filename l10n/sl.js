@@ -144,7 +144,7 @@ OC.L10N.register(
     "Archive board" : "Arhiviraj zbirko",
     "Unarchive board" : "Povrni zbirko",
     "Delete board" : "Izbriši zbirko",
-    "Board details" : "Podrobnosti table",
+    "Board details" : "Podrobnosti zbirke",
     "Link to a board" : "Povezava do zbirke",
     "Link to a card" : "Povezava do naloge"
 },
