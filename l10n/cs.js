@@ -111,7 +111,7 @@ OC.L10N.register(
     "Add new list" : "Přidat nový seznam",
     "List name" : "Název seznamu",
     "Apply filter" : "Uplatnit filtr",
-    "Filter by tag" : "Filtrování podle příznaků",
+    "Filter by tag" : "Filtrovat podle příznaků",
     "Filter by assigned user" : "Filtrovat podle uživatele, který je úkolem pověřen",
     "Filter by due date" : "Filtrovat podle termínu",
     "Overdue" : "Po termínu",
