@@ -134,6 +134,7 @@ OC.L10N.register(
     "Update" : "Aktualizovať",
     "Assign to me" : "Priradiť mne",
     "Delete card" : "Zmazať kartu",
+    "Move card" : "Presunúť kartu",
     "Archived boards" : "Archivované nástenky",
     "Shared boards" : "Sprístupnené nástenky",
     "Settings" : "Nastavenia",
