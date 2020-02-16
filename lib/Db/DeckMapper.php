@@ -29,10 +29,11 @@ use OCP\AppFramework\Db\Mapper;
  * Class DeckMapper
  *
  * @package OCA\Deck\Db
+ * @deprecated use QBMapper
  *
  * TODO: Move to QBMapper once Nextcloud 14 is a minimum requirement
  */
-abstract class DeckMapper extends Mapper {
+class DeckMapper extends Mapper {
 
 	/**
 	 * @param $id

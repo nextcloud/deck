@@ -23,7 +23,9 @@
 
 namespace OCA\Deck\Db;
 
+use Exception;
 use OCP\AppFramework\Db\Entity;
+
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
@@ -81,16 +83,20 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 
 		// make sure we only reset the notification flag if the duedate changes
 		if (in_array('duedate', $entity->getUpdatedFields(), true)) {
-			$existing = $this->find($entity->getId());
-			if ($existing->getDuedate() !== $entity->getDuedate()) {
-				$entity->setNotified(false);
+			/** @var Card $existing */
+			try {
+				$existing = $this->find($entity->getId());
+				if ($existing && $entity->getDuedate() !== $existing->getDuedate()) {
+					$entity->setNotified(false);
+				}
+				// remove pending notifications
+				$notification = $this->notificationManager->createNotification();
+				$notification
+					->setApp('deck')
+					->setObject('card', $entity->getId());
+				$this->notificationManager->markProcessed($notification);
+			} catch (Exception $e) {
 			}
-			// remove pending notifications
-			$notification = $this->notificationManager->createNotification();
-			$notification
-				->setApp('deck')
-				->setObject('card', $entity->getId());
-			$this->notificationManager->markProcessed($notification);
 		}
 		return parent::update($entity);
 	}
@@ -102,19 +108,13 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return parent::update($cardUpdate);
 	}
 
-	/**
-	 * @param $id
-	 * @return RelationalEntity if not found
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException
-	 */
-	public function find($id): Entity {
+	public function find($id): Card {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')->from('deck_cards')
+		$qb->select('*')
+			->from('deck_cards')
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
 			->orderBy('order')
 			->addOrderBy('id');
-
 		/** @var Card $card */
 		$card = $this->findEntity($qb);
 		$labels = $this->labelMapper->findAssignedLabelsForCard($card->id);
@@ -131,10 +131,9 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
 			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->gt('last_modified', $qb->createNamedParameter($since, IQueryBuilder::PARAM_INT)))
+			->orderBy('order', 'id')
 			->setMaxResults($limit)
-			->setFirstResult($offset)
-			->orderBy('order')
-			->addOrderBy('id');
+			->setFirstResult($offset);
 		return $this->findEntities($qb);
 	}
 
@@ -153,17 +152,35 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			->from('deck_cards', 'c')
 			->innerJoin('c', 'deck_stacks', 's', $qb->expr()->eq('s.id', 'c.stack_id'))
 			->andWhere($qb->expr()->in('s.board_id', $qb->createNamedParameter($boardIds, IQueryBuilder::PARAM_INT_ARRAY)));
-
 		return $qb;
 	}
 
 	public function findDeleted($boardId, $limit = null, $offset = null) {
-		$qb = $this->queryCardsByBoard($boardId);
-		$qb->andWhere($qb->expr()->neq('c.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_cards', 'c')
+			->join('c', 'deck_stacks', 's', $qb->expr()->eq('s.id', 'c.stack_id'))
+			->where($qb->expr()->eq('s.board_id', $qb->createNamedParameter($boardId)))
+			->andWhere($qb->expr()->neq('c.archived', $qb->createNamedParameter(true)))
+			->andWhere($qb->expr()->neq('c.deleted_at', $qb->createNamedParameter(0)))
+			->orderBy('c.order')
 			->setMaxResults($limit)
-			->setFirstResult($offset)
-			->orderBy('order')
-			->addOrderBy('id');
+			->setFirstResult($offset);
+		return $this->findEntities($qb);
+	}
+
+	public function findCalendarEntries($boardId, $limit = null, $offset = null) {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('c.*')
+			->from('deck_cards', 'c')
+			->join('c', 'deck_stacks', 's', 's.id = c.stack_id')
+			->where($qb->expr()->eq('s.board_id', $qb->createNamedParameter($boardId)))
+			->andWhere($qb->expr()->neq('c.archived', $qb->createNamedParameter(true)))
+			->andWhere($qb->expr()->eq('c.deleted_at', $qb->createNamedParameter('0')))
+			->andWhere($qb->expr()->isNotNull('c.duedate'))
+			->orderBy('c.duedate')
+			->setMaxResults($limit)
+			->setFirstResult($offset);
 		return $this->findEntities($qb);
 	}
 
@@ -278,19 +295,21 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	public function assignLabel($card, $label) {
-		$sql = 'INSERT INTO `*PREFIX*deck_assigned_labels` (`label_id`,`card_id`) VALUES (?,?)';
-		$stmt = $this->db->prepare($sql);
-		$stmt->bindParam(1, $label, \PDO::PARAM_INT);
-		$stmt->bindParam(2, $card, \PDO::PARAM_INT);
-		$stmt->execute();
+		$qb = $this->db->getQueryBuilder();
+		$qb->insert('deck_assigned_labels')
+			->values([
+				'label_id' => $qb->createNamedParameter($label, IQueryBuilder::PARAM_INT),
+				'card_id' => $qb->createNamedParameter($card, IQueryBuilder::PARAM_INT),
+			]);
+		$qb->execute();
 	}
 
 	public function removeLabel($card, $label) {
-		$sql = 'DELETE FROM `*PREFIX*deck_assigned_labels` WHERE card_id = ? AND label_id = ?';
-		$stmt = $this->db->prepare($sql);
-		$stmt->bindParam(1, $card, \PDO::PARAM_INT);
-		$stmt->bindParam(2, $label, \PDO::PARAM_INT);
-		$stmt->execute();
+		$qb = $this->db->getQueryBuilder();
+		$qb->delete('deck_assigned_labels')
+			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($card)))
+			->andWhere($qb->expr()->eq('label_id', $qb->createNamedParameter($label)));
+		$qb->execute();
 	}
 
 	public function isOwner($userId, $cardId) {
