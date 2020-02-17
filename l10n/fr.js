@@ -1,7 +1,7 @@
 OC.L10N.register(
     "deck",
     {
-    "You have created a new board {board}" : "Vous avez créé un nouveau tableau {tableau}",
+    "You have created a new board {board}" : "Vous avez créé un nouveau tableau {board}",
     "{user} has created a new board {board}" : "{user} a créé un nouveau tableau {board}",
     "You have deleted the board {board}" : "Vous avez supprimé le tableau {board}",
     "{user} has deleted the board {board}" : "{user} a supprimé le tableau {board}",
@@ -16,7 +16,7 @@ OC.L10N.register(
     "You have archived the board {board}" : "Vous avez archivé le tableau {board}",
     "{user} has archived the board {before}" : "{user} a archivé le tableau {before}",
     "You have unarchived the board {board}" : "Vous avez sorti des archives le tableau {board}",
-    "{user} has unarchived the board {before}" : "{user} a sorti des archives le tableau {board}",
+    "{user} has unarchived the board {before}" : "{user} a sorti des archives le tableau {before}",
     "You have created a new stack {stack} on board {board}" : "Vous avez créé une nouvelle pile {stack} sur le tableau {board}",
     "{user} has created a new stack {stack} on board {board}" : "{user} a créé une nouvelle pile {stack} sur le tableau {board}",
     "You have renamed stack {before} to {stack} on board {board}" : "Vous avez renommé la pile {before} en {stack} sur le tableau {board}",
