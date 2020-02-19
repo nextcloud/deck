@@ -132,6 +132,7 @@ OC.L10N.register(
     "Save" : "Mentés",
     "Update" : "Frissítés",
     "Delete card" : "Kártya törlése",
+    "Move card" : "Kártya áthelyezése",
     "Archived boards" : "Archivált táblák",
     "Shared boards" : "Megosztott táblák",
     "Settings" : "Beállítások",
