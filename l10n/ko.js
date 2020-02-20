@@ -49,6 +49,7 @@ OC.L10N.register(
     "Save" : "저장",
     "Update" : "업데이트",
     "Delete card" : "카드 삭제",
+    "Move card" : "카드 이동",
     "Archived boards" : "보관된 게시판",
     "Shared boards" : "공유된 게시판",
     "Settings" : "설정",
