@@ -217,8 +217,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	$card-spacing: 20px;
-	$card-padding: 15px;
+	$card-spacing: 10px;
+	$card-padding: 10px;
 
 	.fade-enter-active, .fade-leave-active {
 		transition: opacity .125s;
