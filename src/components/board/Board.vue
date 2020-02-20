@@ -162,8 +162,7 @@ export default {
 					flex-grow: 1;
 					display: flex;
 					flex-direction: column;
-					padding: 3px;
-					padding-top: 0;
+					padding: 0;
 					/**
 					 * Use this to scroll each stack individually
 					 * This currenly has the issue that the popover menu will be cut off
