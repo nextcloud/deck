@@ -42,6 +42,7 @@ use OCP\IConfig;
 use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
+use OCP\Deck\ConflictException;
 
 class FileService implements IAttachmentService {
 
@@ -146,13 +147,14 @@ class FileService implements IAttachmentService {
 	 * @param Attachment $attachment
 	 * @throws NotPermittedException
 	 * @throws StatusException
+	 * @throws ConflictException
 	 */
 	public function create(Attachment $attachment) {
 		$file = $this->getUploadedFile();
 		$folder = $this->getFolder($attachment);
 		$fileName = $file['name'];
 		if ($folder->fileExists($fileName)) {
-			throw new StatusException('File already exists.');
+			throw new ConflictException('File already exists.');
 		}
 
 		$target = $folder->newFile($fileName);

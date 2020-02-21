@@ -80,14 +80,15 @@ export default {
 		clickAddNewAttachmment() {
 			this.$refs.localAttachments.click()
 		},
-		onLocalAttachmentSelected(e) {
+		async onLocalAttachmentSelected(e) {
 			const bodyFormData = new FormData()
 			bodyFormData.append('cardId', this.card.id)
 			bodyFormData.append('type', 'deck_file')
 			bodyFormData.append('file', e.target.files[0])
 			try {
-				this.$store.dispatch('createAttachment', { cardId: this.card.id, formData: bodyFormData })
+				await this.$store.dispatch('createAttachment', { cardId: this.card.id, formData: bodyFormData })
 			} catch (e) {
+				console.log("doppelt")
 				console.log(e)
 			}
 		},
