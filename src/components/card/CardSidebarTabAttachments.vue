@@ -45,17 +45,38 @@
 			type="file"
 			style="display: none;"
 			@change="onLocalAttachmentSelected">
+
+		<Modal v-if="modalShow" title="File already exists" @close="modalShow=false">
+			<div class="modal__content">
+				<h2>{{ t('deck', 'File already exists') }}</h2>
+				<p>
+					{{ t('deck', 'A file with the name') }}
+					{{ file.name }}
+					{{ t('deck', 'already exists.') }}
+				</p>
+				<p>
+					{{ t('deck', 'Do you want to overwrite it?') }}
+				</p>
+				<button class="primary" @click="overrideAttachment">
+					{{ t('deck', 'Yes') }}
+				</button>
+				<button @click="modalShow=false">
+					{{ t('deck', 'No') }}
+				</button>
+			</div>
+		</Modal>
 	</div>
 </template>
 
 <script>
-import { Actions, ActionButton } from '@nextcloud/vue'
+import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 
 export default {
 	name: 'CardSidebarTabAttachments',
 	components: {
 		Actions,
 		ActionButton,
+		Modal,
 	},
 	props: {
 		card: {
@@ -65,6 +86,9 @@ export default {
 	},
 	data() {
 		return {
+			modalShow: false,
+			file: '',
+			overrideError: null
 		}
 	},
 	computed: {
@@ -85,11 +109,12 @@ export default {
 			bodyFormData.append('cardId', this.card.id)
 			bodyFormData.append('type', 'deck_file')
 			bodyFormData.append('file', e.target.files[0])
+			this.file = e.target.files[0]
 			try {
-				await this.$store.dispatch('createAttachment', { cardId: this.card.id, formData: bodyFormData })
+				const data = await this.$store.dispatch('createAttachment', { cardId: this.card.id, formData: bodyFormData })
+				console.log(data)
 			} catch (e) {
-				console.log("doppelt")
-				console.log(e)
+				this.modalShow = true
 			}
 		},
 		deleteAttachment(attachment) {
@@ -105,6 +130,15 @@ export default {
 		attachmentUrl(attachment) {
 			return OC.generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
 		},
+		overrideAttachment() {
+			const bodyFormData = new FormData()
+			bodyFormData.append('cardId', this.card.id)
+			bodyFormData.append('type', 'deck_file')
+			bodyFormData.append('file', this.file)
+			this.$store.dispatch('updateAttachment', { cardId: this.card.id, attachmentId: 1, formData: bodyFormData })
+
+			this.modalShow = false
+		},
 	},
 }
 </script>
@@ -116,5 +150,17 @@ export default {
 		width: 32px;
 		height: 32px;
 		background-size: contain;
+	}
+	.modal__content {
+		width: 25vw;
+		min-width: 250px;
+		height: 120px;
+		text-align: center;
+		margin: 20px 20px 60px 20px;
+	}
+
+	.modal__content button {
+		float: right;
+		margin: 40px 3px 3px 0;
 	}
 </style>

@@ -26,6 +26,7 @@ namespace OCA\Deck\Service;
 use OC\Security\CSP\ContentSecurityPolicyManager;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\StatusException;
+use OCA\Deck\Exceptions\ConflictException;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\EmptyContentSecurityPolicy;
 use OCP\AppFramework\Http\FileDisplayResponse;
@@ -42,7 +43,7 @@ use OCP\IConfig;
 use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
-use OCP\Deck\ConflictException;
+
 
 class FileService implements IAttachmentService {
 
@@ -154,7 +155,7 @@ class FileService implements IAttachmentService {
 		$folder = $this->getFolder($attachment);
 		$fileName = $file['name'];
 		if ($folder->fileExists($fileName)) {
-			throw new ConflictException('File already exists.');
+			throw new ConflictException('File already exists.', $attachment);
 		}
 
 		$target = $folder->newFile($fileName);

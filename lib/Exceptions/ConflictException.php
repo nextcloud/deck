@@ -21,16 +21,24 @@
  *
  */
 
-namespace OCA\Deck;
+namespace OCA\Deck\Exceptions;
 
+use OCA\Deck\StatusException;
 
-class ConflictException extends \Exception {
+class ConflictException extends StatusException {
 
-	public function __construct($message) {
+	private $data;
+
+	public function __construct($message, $data = null) {
 		parent::__construct($message);
+		$this->data = $data;
 	}
 
 	public function getStatus() {
 		return 409;
+	}
+
+	public function getData() {
+		return $this->data;
 	}
 }

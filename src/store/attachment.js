@@ -47,6 +47,10 @@ export default {
 			}
 		},
 
+		updateAttachment(state, { cardId, attachment }) {
+			Vue.set(state.attachments, cardId, attachment)
+		},
+
 		deleteAttachment(state, deletedAttachment) {
 			const existingIndex = state.attachments[deletedAttachment.cardId].findIndex(a => a.id === deletedAttachment.id)
 			if (existingIndex !== -1) {
@@ -65,6 +69,11 @@ export default {
 			const attachments = await apiClient.createAttachment({ cardId, formData })
 			commit('createAttachment', { cardId, attachments })
 			commit('cardIncreaseAttachmentCount', cardId)
+		},
+
+		async updateAttachment({ commit }, { cardId, attachmentId, formData }) {
+			const attachment = await apiClient.updateAttachment({ cardId, attachmentId, formData })
+			commit('updateAttachment', { cardId, attachment })
 		},
 
 		async deleteAttachment({ commit }, attachment) {

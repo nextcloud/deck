@@ -38,12 +38,21 @@ export class AttachmentApi {
 	}
 
 	async createAttachment({ cardId, formData }) {
-		const response = await axios({
+		 const response = await axios({
 			method: 'POST',
 			url: this.url(`/cards/${cardId}/attachment`),
 			data: formData,
 		})
 		return response.data
+	}
+
+	async updateAttachment({ cardId, attachmentId, formData }) {
+		const response = await axios({
+		   method: 'PUT',
+		   url: this.url(`/cards/${cardId}/attachment/${attachmentId}`),
+		   data: formData,
+	   })
+	   return response.data
 	}
 
 	async deleteAttachment(attachment) {
