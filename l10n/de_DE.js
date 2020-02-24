@@ -135,7 +135,7 @@ OC.L10N.register(
     "Board owner" : "Board-Besitzer",
     "(Group)" : "(Gruppe)",
     "(Circle)" : "(Kreis)",
-    "Can edit" : "Kann bearbeiten",
+    "Can edit" : "kann bearbeiten",
     "Can share" : "kann teilen",
     "Can manage" : "kann verwalten",
     "Delete" : "Löschen",
