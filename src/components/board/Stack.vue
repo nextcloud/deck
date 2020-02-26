@@ -68,6 +68,7 @@
 
 		<Container :get-child-payload="payloadForCard(stack.id)"
 			group-name="stack"
+			non-drag-area-selector=".dragDisabled"
 			:drag-handle-selector="dragHandleSelector"
 			@should-accept-drop="canEdit"
 			@drop="($event) => onDropCard(stack.id, $event)">
