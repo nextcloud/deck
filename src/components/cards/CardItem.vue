@@ -41,6 +41,7 @@
 			</h3>
 			<form v-if="editing"
 				v-click-outside="cancelEdit"
+				class="dragDisabled"
 				@keyup.esc="cancelEdit"
 				@submit.prevent="finishedEdit(card)">
 				<input v-model="copiedCard.title" type="text" autofocus>
