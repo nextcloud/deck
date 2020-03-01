@@ -32,6 +32,7 @@ OC.L10N.register(
     "Sharing" : "שיתוף",
     "Tags" : "תגיות",
     "Undo" : "ביטול",
+    "(Group)" : "(קבוצה)",
     "Can edit" : "ניתן לערוך",
     "Can share" : "Can share",
     "Delete" : "מחיקה",
