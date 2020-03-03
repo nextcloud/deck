@@ -15,6 +15,9 @@ Deck is a kanban style organization tool aimed at personal planning and project 
 - :zap: Keep track of changes in the activity stream
 - :rocket: Get your project organized
 
+### Mobile apps
+
+- The [Nextcloud Deck app for Android](https://github.com/stefan-niedermann/nextcloud-deck) is available as [beta release in the Google Play Store](https://play.google.com/apps/testing/it.niedermann.nextcloud.deck.play) 
 
 ![Deck - Manage cards on your board](https://download.bitgrid.net/nextcloud/deck/screenshots/Deck.png)
 
