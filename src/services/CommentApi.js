@@ -21,6 +21,7 @@
  */
 
 import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
 import xmlToTagList from '../helpers/xml'
 
 export class CommentApi {
@@ -31,7 +32,7 @@ export class CommentApi {
 	}
 
 	async loadComments({ cardId, limit, offset }) {
-		const api = await axios.get(OC.generateUrl(`/apps/deck/api/v1.0/boards/0/stacks/0/cards/${cardId}/comments`), {
+		const api = await axios.get(generateUrl(`/apps/deck/api/v1.0/boards/0/stacks/0/cards/${cardId}/comments`), {
 			headers: { 'OCS-APIRequest': 'true' },
 		})
 		return api.data
@@ -61,7 +62,7 @@ export class CommentApi {
 	}
 
 	async createComment({ cardId, comment, replyTo }) {
-		const api = await axios.post(OC.generateUrl(`/apps/deck/api/v1.0/boards/0/stacks/0/cards/${cardId}/comments`), {
+		const api = await axios.post(generateUrl(`/apps/deck/api/v1.0/boards/0/stacks/0/cards/${cardId}/comments`), {
 			message: `${comment}`,
 			parentId: replyTo ? replyTo.id : null,
 		})
@@ -69,14 +70,14 @@ export class CommentApi {
 	}
 
 	async updateComment({ cardId, commentId, comment }) {
-		const api = await axios.put(OC.generateUrl(`/apps/deck/api/v1.0/boards/0/stacks/0/cards/${cardId}/comments/${commentId}`), {
+		const api = await axios.put(generateUrl(`/apps/deck/api/v1.0/boards/0/stacks/0/cards/${cardId}/comments/${commentId}`), {
 			message: `${comment}`,
 		})
 		return api.data
 	}
 
 	async deleteComment({ cardId, commentId }) {
-		const api = await axios.delete(OC.generateUrl(`/apps/deck/api/v1.0/boards/0/stacks/0/cards/${cardId}/comments/${commentId}`))
+		const api = await axios.delete(generateUrl(`/apps/deck/api/v1.0/boards/0/stacks/0/cards/${cardId}/comments/${commentId}`))
 		return api.data
 	}
 

@@ -21,6 +21,7 @@
  */
 
 import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
 import './../models'
 
 /**
@@ -30,7 +31,7 @@ export class BoardApi {
 
 	url(url) {
 		url = `/apps/deck${url}`
-		return OC.generateUrl(url)
+		return generateUrl(url)
 	}
 
 	/**

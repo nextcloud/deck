@@ -21,12 +21,13 @@
  */
 
 import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
 
 export class CardApi {
 
 	url(url) {
 		url = `/apps/deck${url}`
-		return OC.generateUrl(url)
+		return generateUrl(url)
 	}
 
 	addCard(card) {
