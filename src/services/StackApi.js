@@ -92,7 +92,7 @@ export class StackApi {
 	}
 
 	/**
-	 * @param {Stack} stack
+	 * @param {Stack} stack stack object to create
 	 * @returns {Promise}
 	 */
 	createStack(stack) {
