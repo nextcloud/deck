@@ -39,7 +39,15 @@ export default {
 
 	},
 	mutations: {
-		createAttachment(state, { cardId, attachments }) {
+		createAttachment(state, { cardId, attachment }) {
+			if (typeof state.attachments[cardId] === 'undefined') {
+				Vue.set(state.attachments, cardId, attachment)
+			} else {
+				state.attachments[cardId].push(attachment)
+			}
+		},
+
+		createAttachments(state, { cardId, attachments }) {
 			if (typeof state.attachments[cardId] === 'undefined') {
 				Vue.set(state.attachments, cardId, attachments)
 			} else {
@@ -54,7 +62,15 @@ export default {
 		deleteAttachment(state, deletedAttachment) {
 			const existingIndex = state.attachments[deletedAttachment.cardId].findIndex(a => a.id === deletedAttachment.id)
 			if (existingIndex !== -1) {
-				state.attachments[deletedAttachment.cardId].splice(existingIndex, 1)
+				//state.attachments[deletedAttachment.cardId].splice(existingIndex, 1)
+				state.attachments[deletedAttachment.cardId][existingIndex].deletedAt = -1
+			}
+		},
+
+		restoreAttachment(state, restoredAttachment) {
+			const existingIndex = state.attachments[restoredAttachment.cardId].findIndex(a => a.id === restoredAttachment.id)
+			if (existingIndex !== -1) {
+				state.attachments[restoredAttachment.cardId][existingIndex].deletedAt = 0
 			}
 		},
 
@@ -62,12 +78,12 @@ export default {
 	actions: {
 		async fetchAttachments({ commit }, cardId) {
 			const attachments = await apiClient.fetchAttachments(cardId)
-			commit('createAttachment', { cardId, attachments })
+			commit('createAttachments', { cardId, attachments })
 		},
 
 		async createAttachment({ commit }, { cardId, formData }) {
-			const attachments = await apiClient.createAttachment({ cardId, formData })
-			commit('createAttachment', { cardId, attachments })
+			const attachment = await apiClient.createAttachment({ cardId, formData })
+			commit('createAttachment', { cardId, attachment })
 			commit('cardIncreaseAttachmentCount', cardId)
 		},
 
@@ -80,6 +96,12 @@ export default {
 			await apiClient.deleteAttachment(attachment)
 			commit('deleteAttachment', attachment)
 			commit('cardDecreaseAttachmentCount', attachment.cardId)
+		},
+
+		async restoreAttachment({ commit }, attachment) {
+			const restoredAttachment = await apiClient.restoreAttachment(attachment)
+			commit('restoreAttachment', restoredAttachment)
+			commit('cardIncreaseAttachmentCount', attachment.cardId)
 		},
 
 	},

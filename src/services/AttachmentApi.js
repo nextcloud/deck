@@ -38,7 +38,7 @@ export class AttachmentApi {
 	}
 
 	async createAttachment({ cardId, formData }) {
-		 const response = await axios({
+		const response = await axios({
 			method: 'POST',
 			url: this.url(`/cards/${cardId}/attachment`),
 			data: formData,
@@ -48,10 +48,11 @@ export class AttachmentApi {
 
 	async updateAttachment({ cardId, attachmentId, formData }) {
 		const response = await axios({
-		   method: 'PUT',
+		   method: 'POST',
 		   url: this.url(`/cards/${cardId}/attachment/${attachmentId}`),
 		   data: formData,
 	   })
+	   console.log(response)
 	   return response.data
 	}
 
@@ -60,6 +61,14 @@ export class AttachmentApi {
 			method: 'DELETE',
 			url: this.url(`/cards/${attachment.cardId}/attachment/${attachment.id}`),
 		})
+	}
+	
+	async restoreAttachment(attachment) {
+		const response = await axios({
+			method: 'GET',
+			url: this.url(`/cards/${attachment.cardId}/attachment/${attachment.id}/restore`),
+		})
+		return response.data
 	}
 
 	async displayAttachment(attachment) {

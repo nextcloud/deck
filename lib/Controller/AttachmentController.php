@@ -42,7 +42,7 @@ class AttachmentController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function getAll($cardId) {
-		return $this->attachmentService->findAll($cardId);
+		return $this->attachmentService->findAll($cardId, true);
 	}
 
 	/**

@@ -81,6 +81,22 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 		return $this->mapRowToEntity($row);
 	}
 
+	public function findByData($cardId, $data) {
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('*')
+                ->from('deck_attachment')
+                ->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
+                ->andWhere($qb->expr()->eq('data', $qb->createNamedParameter($data, IQueryBuilder::PARAM_STR)));
+        $cursor = $qb->execute();
+        $row = $cursor->fetch(PDO::FETCH_ASSOC);
+        if($row === false) {
+                $cursor->closeCursor();
+                throw new DoesNotExistException('Did expect one result but found none when executing' . $qb);
+        }
+        $cursor->closeCursor();
+        return $this->mapRowToEntity($row);
+	}
+
 	/**
 	 * Find all attachments for a card
 	 *

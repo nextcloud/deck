@@ -22,22 +22,6 @@
 
 <template>
 	<div>
-		<li v-for="attachment in attachments" :key="attachment.id" class="attachment">
-			<a class="fileicon" :style="mimetypeForAttachment(attachment)" />
-			<div class="details" :href="attachmentUrl(attachment)">
-				<div class="filename">
-					<span class="basename">{{ attachment.data }}</span>
-				</div>
-				<span class="filesize">{{ attachment.extendedData.filesize }}</span>
-				<span class="filedate">{{ attachment.createdAt }}</span>
-				<span class="filedate">{{ attachment.createdBy }}</span>
-			</div>
-			<Actions>
-				<ActionButton icon="icon-delete" @click="deleteAttachment(attachment)">
-					{{ t('deck', 'Delete Attachment') }}
-				</ActionButton>
-			</Actions>
-		</li>
 		<button class="icon-upload" @click="clickAddNewAttachmment()">
 			{{ t('deck', 'Upload attachment') }}
 		</button>
@@ -45,7 +29,41 @@
 			type="file"
 			style="display: none;"
 			@change="onLocalAttachmentSelected">
+		<attachment-list-component>
+			<div class="attachment-list-wrapper">
+				<div class="attachment-list">
+					<ul>	
+						<li v-for="attachment in attachments" :key="attachment.id" class="attachment">
+							<a class="fileicon" :style="mimetypeForAttachment(attachment)" :href="attachmentUrl(attachment)" 
+								style="background-image: url(&quot;/apps/theming/img/core/filetypes/image.svg?v=13&quot;);"></a>
+								<div class="details">
+									<a :href="attachmentUrl(attachment)" target="_blank">
+										<div class="filename">
+											<span class="basename">{{ attachment.data }}</span>
+											<span class="extension">.xxx</span>
+										</div>
+										<span class="filesize">{{ attachment.extendedData.filesize }}</span>
+										<span class="filedate">{{ attachment.createdAt }}</span>
+										<span class="filedate">{{ attachment.createdBy }}</span>
+									</a>
+								</div>
 
+							<Actions>
+								<ActionButton v-if="attachment.deletedAt === 0" icon="icon-delete" @click="deleteAttachment(attachment)">
+									{{ t('deck', 'Delete Attachment') }}
+								</ActionButton>
+
+								<ActionButton v-else icon="icon-history" @click="restoreAttachment(attachment)">
+									{{ t('deck', 'Restore Attachment') }}
+								</ActionButton>
+							</Actions>
+							
+						</li>
+					</ul>
+				</div>	
+			</div>
+		</attachment-list-component>
+		
 		<Modal v-if="modalShow" title="File already exists" @close="modalShow=false">
 			<div class="modal__content">
 				<h2>{{ t('deck', 'File already exists') }}</h2>
@@ -70,6 +88,7 @@
 
 <script>
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
+import { showError } from '@nextcloud/dialogs'
 
 export default {
 	name: 'CardSidebarTabAttachments',
@@ -88,7 +107,7 @@ export default {
 		return {
 			modalShow: false,
 			file: '',
-			overrideError: null
+			overwriteAttachment: null
 		}
 	},
 	computed: {
@@ -111,14 +130,21 @@ export default {
 			bodyFormData.append('file', e.target.files[0])
 			this.file = e.target.files[0]
 			try {
-				const data = await this.$store.dispatch('createAttachment', { cardId: this.card.id, formData: bodyFormData })
-				console.log(data)
+				await this.$store.dispatch('createAttachment', { cardId: this.card.id, formData: bodyFormData })
 			} catch (e) {
-				this.modalShow = true
+				if (e.response.data.status === 409) {
+					this.overwriteAttachment = e.response.data.data
+					this.modalShow = true
+				} else {
+					showError(e.response.data.message)
+				}
 			}
 		},
 		deleteAttachment(attachment) {
 			this.$store.dispatch('deleteAttachment', attachment)
+		},
+		restoreAttachment(attachment) {
+			this.$store.dispatch('restoreAttachment', attachment)
 		},
 		mimetypeForAttachment(attachment) {
 			const url = OC.MimeType.getIconUrl(attachment.extendedData.mimetype)
@@ -135,7 +161,11 @@ export default {
 			bodyFormData.append('cardId', this.card.id)
 			bodyFormData.append('type', 'deck_file')
 			bodyFormData.append('file', this.file)
-			this.$store.dispatch('updateAttachment', { cardId: this.card.id, attachmentId: 1, formData: bodyFormData })
+			this.$store.dispatch('updateAttachment', { 
+				cardId: this.card.id,
+				attachmentId: this.overwriteAttachment.id,
+				formData: bodyFormData 
+			})
 
 			this.modalShow = false
 		},
@@ -143,14 +173,7 @@ export default {
 }
 </script>
 
-<style scoped>
-	.fileicon {
-		display: inline-block;
-		min-width: 32px;
-		width: 32px;
-		height: 32px;
-		background-size: contain;
-	}
+<style scoped lang="scss">
 	.modal__content {
 		width: 25vw;
 		min-width: 250px;
@@ -162,5 +185,97 @@ export default {
 	.modal__content button {
 		float: right;
 		margin: 40px 3px 3px 0;
+	}
+
+	.attachment-list-wrapper {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(darkgray, 0.5);
+		left: 0;
+		top: 0;
+		z-index: 300;
+	}
+	.attachment-list {
+		&.selector {
+			padding: 10px;
+			position: absolute;
+			width: 30%;
+			max-width: 500px;
+			min-width: 200px;
+			max-height: 50%;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background-color: #eee;
+			z-index: 2;
+			border-radius: 3px;
+			box-shadow: 0 0 3px darkgray;
+			overflow: scroll;
+		}
+		h3.attachment-selector {
+			margin: 0 0 10px;
+			padding: 0;
+			.icon-close {
+				display: inline-block;
+				float: right;
+			}
+		}
+
+		li.attachment {
+			display: flex;
+			padding: 3px;
+
+			&.deleted {
+				opacity: .5;
+			}
+
+			.fileicon {
+				display: inline-block;
+				min-width: 32px;
+				width: 32px;
+				height: 32px;
+				background-size: contain;
+			}
+			.details {
+				flex-grow: 1;
+				flex-shrink: 1;
+				min-width: 0;
+				flex-basis: 50%;
+				line-height: 110%;
+				padding: 2px;
+			}
+			.filename {
+				width: 70%;
+				display: flex;
+				.basename {
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					padding-bottom: 2px;
+				}
+				.extension {
+					opacity: 0.7;
+				}
+			}
+			.filesize, .filedate {
+				font-size: 90%;
+				color: darkgray;
+			}
+			.app-popover-menu-utils {
+				position: relative;
+				right: -10px;
+				button {
+					height: 32px;
+					width: 42px;
+				}
+			}
+			button.icon-history {
+				width: 44px;
+			}
+			progress {
+				margin-top: 3px;
+			}
+		}
 	}
 </style>
