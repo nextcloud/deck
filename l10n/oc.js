@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "copy" : "copiar",
     "Done" : "Done",
     "Cancel" : "Anullar",
     "seconds ago" : "i a qualques segondas",
