@@ -176,6 +176,12 @@ export default {
 		border-left: 3px solid var(--color-primary-element);
 		padding-left: 5px;
 		margin-left: 2px;
+		margin-bottom: 5px;
+
+		&::v-deep .rich-text--wrapper {
+			margin-top: -3px;
+			color: var(--color-text-light);
+		}
 
 		.reply--hint {
 			font-size: 0.9em;
