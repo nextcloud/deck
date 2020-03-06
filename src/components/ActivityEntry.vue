@@ -60,10 +60,10 @@ const InternalLink = {
 }
 export default {
 	name: 'ActivityEntry',
-	mixins: [ relativeDate ],
 	components: {
 		RichText,
 	},
+	mixins: [ relativeDate ],
 	props: {
 		activity: {
 			type: Object,

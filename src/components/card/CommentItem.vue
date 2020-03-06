@@ -68,7 +68,6 @@ const AtMention = {
 
 export default {
 	name: 'CommentItem',
-	mixins: [ relativeDate ],
 	components: {
 		Avatar,
 		UserBubble,
@@ -77,6 +76,7 @@ export default {
 		CommentForm,
 		RichText,
 	},
+	mixins: [ relativeDate ],
 	props: {
 		comment: {
 			type: Object,

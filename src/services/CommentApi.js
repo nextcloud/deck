@@ -21,7 +21,7 @@
  */
 
 import axios from '@nextcloud/axios'
-import { generateUrl, generateOcsUrl } from '@nextcloud/router'
+import { generateOcsUrl } from '@nextcloud/router'
 
 export class CommentApi {
 
