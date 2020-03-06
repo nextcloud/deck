@@ -27,6 +27,10 @@
 				<Actions v-if="edit">
 					<ActionButton icon="icon-close" @click="hideUpdateForm" />
 				</Actions>
+				<div class="spacer" />
+				<div class="timestamp">
+					{{ relativeDate(comment.creationDateTime) }}
+				</div>
 			</div>
 			<CommentItem v-if="comment.replyTo" :reply="true" :comment="comment.replyTo" />
 			<RichText v-show="!edit"
@@ -46,6 +50,7 @@ import RichText from '@juliushaertl/vue-richtext'
 import CommentForm from './CommentForm'
 import { getCurrentUser } from '@nextcloud/auth'
 import md5 from 'blueimp-md5'
+import relativeDate from '../../mixins/relativeDate'
 
 const AtMention = {
 	name: 'AtMention',
@@ -62,6 +67,7 @@ const AtMention = {
 
 export default {
 	name: 'CommentItem',
+	mixins: [ relativeDate ],
 	components: {
 		Avatar,
 		UserBubble,

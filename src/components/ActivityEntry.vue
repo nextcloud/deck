@@ -26,7 +26,7 @@
 			<img :src="activity.icon" class="activity--icon">
 			<RichText class="activity--subject" :text="message.subject" :arguments="message.parameters" />
 			<div class="activity--timestamp">
-				{{ getTime(activity.datetime) }}
+				{{ relativeDate(activity.datetime) }}
 			</div>
 		</div>
 		<!-- FIXME ins/del tags do no longer work with activity so we should get rid of that -->
@@ -39,6 +39,7 @@ import RichText from '@juliushaertl/vue-richtext'
 import { UserBubble } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import DOMPurify from 'dompurify'
+import relativeDate from '../mixins/relativeDate'
 
 const InternalLink = {
 	name: 'InternalLink',
@@ -59,6 +60,7 @@ const InternalLink = {
 }
 export default {
 	name: 'ActivityEntry',
+	mixins: [ relativeDate ],
 	components: {
 		RichText,
 	},
@@ -112,15 +114,7 @@ export default {
 		sanitizedMessage() {
 			return DOMPurify.sanitize(this.activity.message, { ALLOWED_TAGS: ['ins', 'del'], ALLOWED_ATTR: ['class'] })
 		},
-		getTime() {
-			return (timestamp) => {
-				const diff = moment(this.$root.time).diff(moment(timestamp))
-				if (diff >= 0 && diff < 45000) {
-					return t('core', 'seconds ago')
-				}
-				return moment(timestamp).fromNow()
-			}
-		},
+
 	},
 }
 </script>
