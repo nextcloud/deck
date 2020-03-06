@@ -23,14 +23,17 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\BadRequestException;
 use OCA\Deck\Service\CommentService;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http\DataResponse;
 
+use OCP\AppFramework\OCS\OCSException;
+use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
-class CommentsApiController extends ApiController {
+class CommentsApiController extends OCSController {
 
 	/** @var CommentService */
 	private $commentService;
@@ -45,7 +48,6 @@ class CommentsApiController extends ApiController {
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @throws StatusException
 	 */
 	public function list(string $cardId, int $limit = 20, int $offset = 0): DataResponse {
@@ -54,7 +56,6 @@ class CommentsApiController extends ApiController {
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @throws StatusException
 	 */
 	public function create(string $cardId, string $message, string $parentId = '0'): DataResponse {
@@ -63,7 +64,6 @@ class CommentsApiController extends ApiController {
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @throws StatusException
 	 */
 	public function update(string $cardId, string $commentId, string $message): DataResponse {
@@ -72,7 +72,6 @@ class CommentsApiController extends ApiController {
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 * @throws StatusException
 	 */
 	public function delete(string $cardId, string $commentId): DataResponse {

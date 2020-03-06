@@ -28,6 +28,8 @@ use OCA\Deck\StatusException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Middleware;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\OCS\OCSException;
+use OCP\AppFramework\OCSController;
 use OCP\ILogger;
 use OCP\Util;
 use OCP\IConfig;
@@ -64,6 +66,11 @@ class ExceptionMiddleware extends Middleware {
 		if ($exception instanceof StatusException) {
 			if ($this->config->getSystemValue('loglevel', Util::WARN) === Util::DEBUG) {
 				$this->logger->logException($exception);
+			}
+
+			if ($controller instanceof OCSController) {
+				$exception = new OCSException($exception->getMessage(), $exception->getStatus(), $exception);
+				throw $exception;
 			}
 			return new JSONResponse([
 				'status' => $exception->getStatus(),

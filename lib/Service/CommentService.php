@@ -151,6 +151,7 @@ class CommentService {
 			'actorId' => $comment->getActorId(),
 			'actorType' => $comment->getActorType(),
 			'actorDisplayName' => $actorDisplayName,
+			'creationDateTime' => $comment->getCreationDateTime()->format(\DateTime::ATOM),
 			'mentions' => array_map(function($mention) {
 				try {
 					$displayName = $this->commentsManager->resolveDisplayName($mention['type'], $mention['id']);
