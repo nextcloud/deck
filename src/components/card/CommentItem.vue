@@ -142,7 +142,7 @@ export default {
 			this.$store.dispatch('setReplyTo', this.comment)
 		},
 		showUpdateForm() {
-			this.commentMsg = this.$refs.richTextElement.$el.innerHTML
+			this.commentMsg = this.$refs.richTextElement.children[0].innerHTML
 			this.edit = true
 		},
 		hideUpdateForm() {
