@@ -21,8 +21,7 @@
  */
 
 import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
-import xmlToTagList from '../helpers/xml'
+import { generateUrl, generateOcsUrl } from '@nextcloud/router'
 
 export class CommentApi {
 
@@ -32,53 +31,30 @@ export class CommentApi {
 	}
 
 	async loadComments({ cardId, limit, offset }) {
-		const api = await axios.get(generateUrl(`/apps/deck/api/v1.0/boards/0/stacks/0/cards/${cardId}/comments`), {
+		const api = await axios.get(generateOcsUrl(`apps/deck/api/v1.0/cards`, 2) + `${cardId}/comments`, {
 			headers: { 'OCS-APIRequest': 'true' },
 		})
-		return api.data
-	}
-
-	async fetchComment({ cardId, commentId }) {
-		const response = await axios({
-			method: 'PROPFIND',
-			url: this.url(`${cardId}/${commentId}`),
-			data: `<?xml version="1.0"?>
-				<d:propfind  xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
-					<d:prop>
-						<oc:id />
-						<oc:message />
-						<oc:actorType />
-						<oc:actorId />
-						<oc:actorDisplayName />
-						<oc:creationDateTime />
-						<oc:objectType />
-						<oc:objectId />
-						<oc:isUnread />
-						<oc:mentions />
-					</d:prop>
-				</d:propfind>`,
-		})
-		return xmlToTagList(response.data)
+		return api.data.ocs.data
 	}
 
 	async createComment({ cardId, comment, replyTo }) {
-		const api = await axios.post(generateUrl(`/apps/deck/api/v1.0/boards/0/stacks/0/cards/${cardId}/comments`), {
+		const api = await axios.post(generateOcsUrl(`apps/deck/api/v1.0/cards`, 2) + `${cardId}/comments`, {
 			message: `${comment}`,
 			parentId: replyTo ? replyTo.id : null,
 		})
-		return api.data
+		return api.data.ocs.data
 	}
 
-	async updateComment({ cardId, commentId, comment }) {
-		const api = await axios.put(generateUrl(`/apps/deck/api/v1.0/boards/0/stacks/0/cards/${cardId}/comments/${commentId}`), {
+	async updateComment({ cardId, id, comment }) {
+		const api = await axios.put(generateOcsUrl(`apps/deck/api/v1.0/cards`, 2) + `${cardId}/comments/${id}`, {
 			message: `${comment}`,
 		})
-		return api.data
+		return api.data.ocs.data
 	}
 
-	async deleteComment({ cardId, commentId }) {
-		const api = await axios.delete(generateUrl(`/apps/deck/api/v1.0/boards/0/stacks/0/cards/${cardId}/comments/${commentId}`))
-		return api.data
+	async deleteComment({ cardId, id }) {
+		const api = await axios.delete(generateOcsUrl(`apps/deck/api/v1.0/cards`, 2) + `${cardId}/comments/${id}`)
+		return api.data.ocs.data
 	}
 
 	async markCommentsAsRead(cardId) {

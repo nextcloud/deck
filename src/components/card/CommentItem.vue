@@ -1,6 +1,6 @@
 <template>
 	<div v-if="reply" class="reply">
-		{{ t('deck', 'In reply to') }} <UserBubble :user="comment.actorId" :display-name="comment.actorDisplayName" />
+		<span class="reply--hint">{{ t('deck', 'In reply to') }} <UserBubble :user="comment.actorId" :display-name="comment.actorDisplayName" /></span>
 		<RichText class="comment--content"
 			:text="richText(comment)"
 			:arguments="richArgs(comment)"
@@ -13,14 +13,14 @@
 				<span class="has-tooltip username">
 					{{ comment.actorDisplayName }}
 				</span>
-				<Actions v-show="canEdit && !edit">
+				<Actions v-show="!edit" :force-menu="true">
 					<ActionButton icon="icon-reply" @click="replyTo()">
 						{{ t('deck', 'Reply') }}
 					</ActionButton>
-					<ActionButton icon="icon-rename" @click="showUpdateForm()">
+					<ActionButton v-if="canEdit" icon="icon-rename" @click="showUpdateForm()">
 						{{ t('deck', 'Update') }}
 					</ActionButton>
-					<ActionButton icon="icon-delete" @click="deleteComment()">
+					<ActionButton v-if="canEdit" icon="icon-delete" @click="deleteComment()">
 						{{ t('deck', 'Delete') }}
 					</ActionButton>
 				</Actions>
@@ -33,12 +33,13 @@
 				</div>
 			</div>
 			<CommentItem v-if="comment.replyTo" :reply="true" :comment="comment.replyTo" />
-			<RichText v-show="!edit"
-				ref="richTextElement"
-				class="comment--content"
-				:text="richText(comment)"
-				:arguments="richArgs(comment)"
-				:autolink="true" />
+			<div v-show="!edit" ref="richTextElement">
+				<RichText
+					class="comment--content"
+					:text="richText(comment)"
+					:arguments="richArgs(comment)"
+					:autolink="true" />
+			</div>
 			<CommentForm v-if="edit" v-model="commentMsg" @submit="updateComment" />
 		</template>
 	</li>
@@ -152,14 +153,14 @@ export default {
 			const data = {
 				comment: this.commentMsg,
 				cardId: this.comment.objectId,
-				commentId: this.comment.id,
+				id: this.comment.id,
 			}
 			await this.$store.dispatch('updateComment', data)
 			this.hideUpdateForm()
 		},
 		deleteComment() {
 			const data = {
-				commentId: this.comment.id,
+				id: this.comment.id,
 				cardId: this.comment.objectId,
 			}
 			this.$store.dispatch('deleteComment', data)
@@ -173,8 +174,14 @@ export default {
 
 	.reply {
 		border-left: 3px solid var(--color-primary-element);
-		padding-left: 10px;
-		margin-left: 44px;
+		padding-left: 5px;
+		margin-left: 2px;
+
+		.reply--hint {
+			font-size: 0.9em;
+			color: var(--color-text-lighter);
+			vertical-align: top;
+		}
 
 		.comment--content {
 			margin: 0;

@@ -53,7 +53,7 @@ export default {
 			if (state.comments[cardId] === undefined) {
 				Vue.set(state.comments, cardId, {
 					hasMore: comments.length > 0,
-					comments,
+					comments: [ ...comments ],
 				})
 			} else {
 				const newComments = comments.filter((comment) => {
