@@ -61,21 +61,6 @@ export class StackApi {
 			})
 	}
 
-	deletedCards(boardId) {
-		return axios.get(this.url(`/${boardId}/cards/deleted`))
-			.then(
-				(response) => {
-					return Promise.resolve(response.data)
-				},
-				(err) => {
-					return Promise.reject(err)
-				}
-			)
-			.catch((err) => {
-				return Promise.reject(err)
-			})
-	}
-
 	loadArchivedStacks(boardId) {
 		return axios.get(this.url(`/stacks/${boardId}/archived`))
 			.then(

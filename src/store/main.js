@@ -29,6 +29,7 @@ import { BoardApi } from './../services/BoardApi'
 import stack from './stack'
 import card from './card'
 import comment from './comment'
+import trashbin from './trashbin'
 
 Vue.use(Vuex)
 
@@ -46,6 +47,7 @@ export default new Vuex.Store({
 		stack,
 		card,
 		comment,
+		trashbin,
 	},
 	strict: debug,
 	state: {
