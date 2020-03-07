@@ -178,7 +178,7 @@ export default {
 		},
 		finishedEdit(card) {
 			if (this.copiedCard.title !== card.title) {
-				this.$store.dispatch('updateCard', this.copiedCard)
+				this.$store.dispatch('updateCardTitle', this.copiedCard)
 			}
 			this.editing = false
 		},
