@@ -36,6 +36,7 @@
 					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add new list') }}</label>
 					<input id="new-stack-input-main"
 						v-model="newStackTitle"
+						v-focus
 						type="text"
 						class="no-close"
 						:placeholder="t('deck', 'List name')"
