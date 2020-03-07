@@ -227,6 +227,8 @@ export default {
 
 				if (this.currentCard.assignedUsers.length > 0) {
 					this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
+				} else {
+					this.assignedUsers = []
 				}
 
 				this.desc = this.currentCard.description
