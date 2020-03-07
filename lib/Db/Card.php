@@ -128,7 +128,7 @@ class Card extends RelationalEntity {
 		$event->DTEND = new \DateTime($this->getDuedate());
 		$event->add('RELATED-TO', 'deck-stack-' . $this->getStackId());
 
-		// For write support: CANCELLED / IN-PROCESS handling
+		// FIXME: For write support: CANCELLED / IN-PROCESS handling
 		$event->STATUS = $this->getArchived() ? "COMPLETED" : "NEEDS-ACTION";
 		if ($this->getArchived()) {
 			$date = new DateTime();
@@ -140,6 +140,13 @@ class Card extends RelationalEntity {
 				return $label->getTitle();
 			}, $this->getLabels());
 		}
+		foreach ($this->getAssignedUsers() as $user) {
+			$participant = $user->resolveParticipant();
+			// FIXME use proper uri
+			$event->add('ATTENDEE', 'https://localhost/remote.php/dav/principals/users/:' . $participant->getUID(), [ 'CN' => $participant->getDisplayName()]);
+		}
+
+
 		$event->SUMMARY = $this->getTitle();
 		$calendar->add($event);
 		return $calendar;
