@@ -121,14 +121,32 @@ class Card extends RelationalEntity {
 
 	public function getCalendarObject(): VCalendar {
 		$calendar = new VCalendar();
-		$event = $calendar->createComponent('VEVENT');
-		$event->UID = 'deck-cardevent' . $this->getId() . '@example.com';
+		$event = $calendar->createComponent('VTODO');
+		$event->UID = 'deck-card-' . $this->getId();
 		$event->DTSTAMP = new \DateTime($this->getDuedate());
 		$event->DTSTART = new \DateTime($this->getDuedate());
 		$event->DTEND = new \DateTime($this->getDuedate());
+		$event->add('RELATED-TO', 'deck-stack-' . $this->getStackId());
+
+		// For write support: CANCELLED / IN-PROCESS handling
+		$event->STATUS = $this->getArchived() ? "COMPLETED" : "NEEDS-ACTION";
+		if ($this->getArchived()) {
+			$date = new DateTime();
+			$date->setTimestamp($this->getLastModified());
+			$event->COMPLETED = $date;
+		}
+		if (count($this->getLabels()) > 0) {
+			$event->CATEGORIES = array_map(function ($label) {
+				return $label->getTitle();
+			}, $this->getLabels());
+		}
 		$event->SUMMARY = $this->getTitle();
 		$calendar->add($event);
 		return $calendar;
+	}
+
+	public function getCalendarPrefix(): string {
+		return 'card';
 	}
 
 }

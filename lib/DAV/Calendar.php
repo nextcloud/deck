@@ -27,7 +27,9 @@ use OCA\DAV\CalDAV\Plugin;
 use OCA\DAV\DAV\Sharing\IShareable;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
+use OCA\Deck\Db\Stack;
 use OCA\Deck\Service\CardService;
+use OCA\Deck\Service\StackService;
 use Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet;
 use Sabre\DAV\PropPatch;
 
@@ -62,9 +64,14 @@ class Calendar extends ExternalCalendar implements IShareable {
 
 
 		if ($board) {
-			/** @var CardService cardService */
+			/** @var CardService $cardService */
 			$cardService = \OC::$server->query(CardService::class);
-			$this->children = $cardService->findCalendarEntries($board->getId());
+			/** @var StackService $stackService */
+			$stackService = \OC::$server->query(StackService::class);
+			$this->children = array_merge(
+				$cardService->findCalendarEntries($board->getId()),
+				$stackService->findCalendarEntries($board->getId())
+			);
 		} else {
 			$this->children = [];
 		}
@@ -120,8 +127,8 @@ class Calendar extends ExternalCalendar implements IShareable {
 	 */
 	function calendarQuery(array $filters) {
 		// In a real implementation this should actually filter
-		return array_map(function (Card $card) {
-			return $card->getId() . '.ics';
+		return array_map(function ($card) {
+			return $card->getCalendarPrefix() . '-' . $card->getId() . '.ics';
 		}, $this->children);
 	}
 
@@ -140,7 +147,7 @@ class Calendar extends ExternalCalendar implements IShareable {
 			$card = array_values(array_filter(
 				$this->children,
 				function ($card) use (&$name) {
-					return $card->getId() . '.ics' === $name;
+					return $card->getCalendarPrefix() . '-' . $card->getId() . '.ics' === $name;
 				}
 			));
 			if (count($card) > 0) {
@@ -153,8 +160,8 @@ class Calendar extends ExternalCalendar implements IShareable {
 	 * @inheritDoc
 	 */
 	function getChildren() {
-		$childNames = array_map(function (Card $card) {
-			return $card->getId() . '.ics';
+		$childNames = array_map(function ($card) {
+			return $card->getCalendarPrefix() . '-' . $card->getId() . '.ics';
 		}, $this->children);
 
 		$children = [];
@@ -173,7 +180,7 @@ class Calendar extends ExternalCalendar implements IShareable {
 		return count(array_filter(
 			$this->children,
 			function ($card) use (&$name) {
-				return $card->getId() . '.ics' === $name;
+				return $card->getCalendarPrefix() . '-' . $card->getId() . '.ics' === $name;
 			}
 		)) > 0;
 	}

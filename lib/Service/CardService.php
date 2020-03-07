@@ -146,8 +146,11 @@ class CardService {
 
 	public function findCalendarEntries($boardId) {
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
-
-		return $this->cardMapper->findCalendarEntries($boardId);
+		$cards = $this->cardMapper->findCalendarEntries($boardId);
+		foreach ($cards as $card) {
+			$this->enrich($card);
+		}
+		return $cards;
 	}
 
 	/**

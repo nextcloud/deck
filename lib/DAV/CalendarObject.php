@@ -36,7 +36,7 @@ class CalendarObject implements \Sabre\CalDAV\ICalendarObject, \Sabre\DAVACL\IAC
 	/**
 	 * @var Card
 	 */
-	private $card;
+	private $sourceItem;
 
 	/**
 	 * CalendarObject constructor.
@@ -44,10 +44,10 @@ class CalendarObject implements \Sabre\CalDAV\ICalendarObject, \Sabre\DAVACL\IAC
 	 * @param Calendar $calendar
 	 * @param string $name
 	 */
-	public function __construct(Calendar $calendar, string $name, Card $card = null) {
+	public function __construct(Calendar $calendar, string $name, $sourceItem = null) {
 		$this->calendar = $calendar;
 		$this->name = $name;
-		$this->card = $card;
+		$this->sourceItem = $sourceItem;
 	}
 
 	/**
@@ -96,8 +96,8 @@ class CalendarObject implements \Sabre\CalDAV\ICalendarObject, \Sabre\DAVACL\IAC
 	 * @inheritDoc
 	 */
 	function get() {
-		if ($this->card) {
-			return $this->card->getCalendarObject()->serialize();
+		if ($this->sourceItem) {
+			return $this->sourceItem->getCalendarObject()->serialize();
 		}
 	}
 
@@ -147,6 +147,6 @@ class CalendarObject implements \Sabre\CalDAV\ICalendarObject, \Sabre\DAVACL\IAC
 	 * @inheritDoc
 	 */
 	function getLastModified() {
-		return $this->card->getLastModified();
+		return $this->sourceItem->getLastModified();
 	}
 }
