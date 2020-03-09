@@ -53,6 +53,14 @@ Vue.directive('focus', {
 	},
 })
 
+Vue.config.errorHandler = (err, vm, info) => {
+	if (err.response && err.response.data.message) {
+		const errorMessage = t('deck', 'Something went wrong')
+		OCP.Toast.error(`${errorMessage}: ${err.response.data.status} ${err.response.data.message}`)
+	}
+	throw err
+}
+
 /* eslint-disable-next-line no-new */
 new Vue({
 	el: '#content',

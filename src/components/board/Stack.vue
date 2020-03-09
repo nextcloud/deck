@@ -51,17 +51,22 @@
 			</Actions>
 		</div>
 
-		<form v-if="showAddCard" class="stack--card-add" @submit.prevent="clickAddCard()">
+		<form v-if="showAddCard"
+			class="stack--card-add"
+			:class="{ 'icon-loading-small': stateCardCreating }"
+			@submit.prevent="clickAddCard()">
 			<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
 			<input id="new-stack-input-main"
 				v-model="newCardTitle"
 				v-focus
 				type="text"
 				class="no-close"
+				:disabled="stateCardCreating"
 				placeholder="Add a new card"
 				required>
 
-			<input class="icon-confirm"
+			<input v-show="!stateCardCreating"
+				class="icon-confirm"
 				type="submit"
 				value="">
 		</form>
@@ -108,6 +113,7 @@ export default {
 			copiedStack: '',
 			newCardTitle: '',
 			showAddCard: false,
+			stateCardCreating: false,
 		}
 	},
 	computed: {
@@ -160,15 +166,21 @@ export default {
 			}
 			this.editing = false
 		},
-		clickAddCard() {
-			const newCard = {
-				title: this.newCardTitle,
-				stackId: this.stack.id,
-				boardId: this.stack.boardId,
+		async clickAddCard() {
+			this.stateCardCreating = true
+			try {
+				await this.$store.dispatch('addCard', {
+					title: this.newCardTitle,
+					stackId: this.stack.id,
+					boardId: this.stack.boardId,
+				})
+				this.newCardTitle = ''
+				this.showAddCard = false
+			} catch (e) {
+				OCP.Toast.error('Could not create card: ' + e.response.data.message)
+			} finally {
+				this.stateCardCreating = false
 			}
-			this.$store.dispatch('addCard', newCard)
-			this.newCardTitle = ''
-			this.showAddCard = false
 		},
 	},
 }
@@ -209,11 +221,14 @@ export default {
 
 	.stack--card-add {
 		display: flex;
-		margin-left: 3px;
-		margin-right: 3px;
-		box-shadow: 0 0 3px #aaa;
+		margin-bottom: 10px;
+		box-shadow: 0 0 3px var(--color-box-shadow);
 		border-radius: 3px;
-		margin-bottom: 15px;
+
+		&.icon-loading-small:after,
+		&.icon-loading-small-dark:after {
+			margin-left: calc(50% - 25px);
+		}
 
 		input[type=text] {
 			flex-grow: 1;

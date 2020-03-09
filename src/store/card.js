@@ -119,12 +119,6 @@ export default {
 				}
 			}
 		},
-		updateTitle(state, card) {
-			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
-			if (existingIndex !== -1) {
-				state.cards[existingIndex].title = card.title
-			}
-		},
 		assignCardToUser(state, user) {
 			const existingIndex = state.cards.findIndex(_card => _card.id === user.cardId)
 			if (existingIndex !== -1) {
@@ -140,44 +134,25 @@ export default {
 				}
 			}
 		},
-		updateCardDesc(state, card) {
+		updateCardProperty(state, { card, property }) {
 			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
-				state.cards[existingIndex].description = card.description
-			}
-		},
-		updateCardDue(state, card) {
-			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
-			if (existingIndex !== -1) {
-				state.cards[existingIndex].duedate = card.duedate
-			}
-		},
-		updateCardLabels(state, card) {
-			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
-			if (existingIndex !== -1) {
-				const existingCard = state.cards.find(_card => _card.id === card.id)
-				existingCard.labels = card.labels
+				Vue.set(state.cards[existingIndex], property, card[property])
 			}
 		},
 	},
 	actions: {
-		addCard({ commit }, card) {
-			apiClient.addCard(card)
-				.then((createdCard) => {
-					commit('addCard', createdCard)
-				})
+		async addCard({ commit }, card) {
+			const createdCard = await apiClient.addCard(card)
+			commit('addCard', createdCard)
 		},
-		updateCard({ commit }, card) {
-			apiClient.updateCard(card)
-				.then((updatedCard) => {
-					commit('updateTitle', updatedCard)
-				})
+		async updateCardTitle({ commit }, card) {
+			const updatedCard = await apiClient.updateCard(card)
+			commit('updateCardProperty', { property: 'title', card: updatedCard })
 		},
-		moveCard({ commit }, card) {
-			apiClient.updateCard(card)
-				.then((updatedCard) => {
-					commit('deleteCard', updatedCard)
-				})
+		async moveCard({ commit }, card) {
+			const updatedCard = await apiClient.updateCard(card)
+			commit('deleteCard', updatedCard)
 		},
 		async reorderCard({ commit, getters }, card) {
 			let i = 0
@@ -196,66 +171,47 @@ export default {
 
 			const cards = await apiClient.reorderCard(card)
 			await commit('updateCardsReorder', Object.values(cards))
-
 		},
-		deleteCard({ commit }, card) {
-			apiClient.deleteCard(card.id)
-				.then((card) => {
-					commit('deleteCard', card)
-				})
+		async deleteCard({ commit }, card) {
+			await apiClient.deleteCard(card.id)
+			commit('deleteCard', card)
 		},
-		archiveUnarchiveCard({ commit }, card) {
+		async archiveUnarchiveCard({ commit }, card) {
 			let call = 'archiveCard'
 			if (card.archived === false) {
 				call = 'unArchiveCard'
 			}
 
-			apiClient[call](card)
-				.then((card) => {
-					commit('deleteCard', card)
-				})
+			const updatedCard = await apiClient[call](card)
+			commit('deleteCard', updatedCard)
 		},
-		assignCardToUser({ commit }, card) {
-			apiClient.assignUser(card)
-				.then((user) => {
-					commit('assignCardToUser', user)
-				})
+		async assignCardToUser({ commit }, card) {
+			const user = await apiClient.assignUser(card)
+			commit('assignCardToUser', user)
 		},
-		removeUserFromCard({ commit }, card) {
-			apiClient.removeUser(card)
-				.then((user) => {
-					commit('removeUserFromCard', user)
-				})
+		async removeUserFromCard({ commit }, card) {
+			const user = await apiClient.removeUser(card)
+			commit('removeUserFromCard', user)
 		},
-		addLabel({ commit }, data) {
-			apiClient.assignLabelToCard(data)
-				.then(() => {
-					commit('updateCardLabels', data.card)
-				})
+		async addLabel({ commit }, data) {
+			await apiClient.assignLabelToCard(data)
+			commit('updateCardProperty', { property: 'labels', card: data.card })
 		},
-		removeLabel({ commit }, data) {
-			apiClient.removeLabelFromCard(data)
-				.then(() => {
-					commit('updateCardLabels', data.card)
-				})
+		async removeLabel({ commit }, data) {
+			await apiClient.removeLabelFromCard(data)
+			commit('updateCardProperty', { property: 'labels', card: data.card })
 		},
-		cardUndoDelete({ commit }, card) {
-			apiClient.updateCard(card)
-				.then((card) => {
-					commit('addCard', card)
-				})
+		async cardUndoDelete({ commit }, card) {
+			const updatedCard = await apiClient.updateCard(card)
+			commit('addCard', updatedCard)
 		},
-		updateCardDesc({ commit }, card) {
-			apiClient.updateCard(card)
-				.then((updatedCard) => {
-					commit('updateCardDesc', updatedCard)
-				})
+		async updateCardDesc({ commit }, card) {
+			const updatedCard = await apiClient.updateCard(card)
+			commit('updateCardProperty', { property: 'description', card: updatedCard })
 		},
-		updateCardDue({ commit }, card) {
-			apiClient.updateCard(card)
-				.then((card) => {
-					commit('updateCardDue', card)
-				})
+		async updateCardDue({ commit }, card) {
+			const updatedCard = apiClient.updateCard(card)
+			commit('updateCardProperty', { property: 'duedate', card: updatedCard })
 		},
 	},
 }
