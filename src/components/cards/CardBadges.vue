@@ -26,7 +26,7 @@
 
 		<div v-if="card.commentsUnread > 0" class="icon icon-comment" />
 
-		<div v-if="card.duedate" :class="dueIcon">
+		<div v-if="card.duedate" v-tooltip="dueDateTooltip" :class="dueIcon">
 			<span>{{ dueTime }}</span>
 		</div>
 
@@ -41,6 +41,7 @@
 </template>
 <script>
 import AvatarList from './AvatarList'
+import moment from '@nextcloud/moment'
 
 export default {
 	name: 'CardBadges',
@@ -69,6 +70,9 @@ export default {
 		},
 		card() {
 			return this.$store.getters.cardById(this.id)
+		},
+		dueDateTooltip() {
+			return moment(this.card.duedate).format('LLLL')
 		},
 	},
 	created() {
