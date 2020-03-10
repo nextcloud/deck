@@ -26,8 +26,8 @@
 
 		<div v-if="card.commentsUnread > 0" class="icon icon-comment" />
 
-		<div v-if="card.duedate" v-tooltip="dueDateTooltip" :class="dueIcon">
-			<span>{{ dueTime }}</span>
+		<div v-if="card.duedate" :class="dueIcon">
+			<span>{{ relativeDate }}</span>
 		</div>
 
 		<div v-if="card.description && checkListCount > 0" class="card-tasks icon icon-checkmark">
@@ -52,12 +52,6 @@ export default {
 			default: null,
 		},
 	},
-	data() {
-		return {
-			dueTime: null,
-			dueIcon: null,
-		}
-	},
 	computed: {
 		checkListCount() {
 			return (this.card.description.match(/\[\s*\x*\]/g) || []).length
@@ -74,36 +68,25 @@ export default {
 		dueDateTooltip() {
 			return moment(this.card.duedate).format('LLLL')
 		},
-	},
-	created() {
-		this.updateDueTime()
-		setInterval(this.updateDueTime, 10000)
-	},
-	destroyed() {
-		clearInterval(this.updateDueTime)
-	},
-	methods: {
-		updateDueTime() {
-			if (this.card === undefined) {
-				return
+		relativeDate() {
+			const diff = moment(this.$root.time).diff(this.card.duedate, 'seconds')
+			if (diff >= 0 && diff < 45) {
+				return t('core', 'seconds ago')
 			}
-
-			if (this.card.duedate === null) {
-				return
+			return moment(this.card.duedate).fromNow()
+		},
+		dueIcon() {
+			const days = Math.floor(moment(this.card.duedate).diff(this.$root.time, 'seconds') / 60 / 60 / 24)
+			if (days < 0) {
+				return 'icon-calendar due icon overdue'
 			}
-
-			this.dueTime = OC.Util.relativeModifiedDate(this.card.duedate)
-
-			const timeInHours = Math.round((Date.parse(this.card.duedate) - Date.now()) / 1000 / 60 / 60 / 24)
-			if (timeInHours >= 1) {
-				this.dueIcon = 'icon-calendar-dark due icon next'
+			if (days === 0) {
+				return 'icon-calendar-dark due icon now'
 			}
-			if (timeInHours === 0) {
-				this.dueIcon = 'icon-calendar-dark due icon now'
+			if (days === 1) {
+				return 'icon-calendar-dark due icon next'
 			}
-			if (timeInHours < 0) {
-				this.dueIcon = 'icon-calendar due icon overdue'
-			}
+			return 'icon-calendar-dark due icon'
 		},
 	},
 }
@@ -153,7 +136,7 @@ export default {
 			opacity: .7;
 		}
 		&.next {
-			background-color: var(--color-warning-light);
+			background-color: var(--color-background-dark);
 			opacity: .7;
 		}
 
