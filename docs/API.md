@@ -936,3 +936,232 @@ For now only `deck_file` is supported as an attachment type.
 
 ##### 200 Success
 
+# OCS API
+
+The following endpoints are available tough the Nextcloud OCS endpoint, which is available at `/ocs/v2.php/apps/deck/api/v1.0/`. 
+This has the benefit that both the web UI as well as external integrations can use the same API.
+
+## Comments
+
+### GET /cards/{cardId}/comments - List comments
+
+#### Request parameters
+
+string $cardId, int $limit = 20, int $offset = 0
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| cardId    | Integer | The id of the card                      |
+| limit     | Integer | The maximum number of comments that should be returned, defaults to 20 |
+| offset    | Integer | The start offset used for pagination, defaults to 0 |
+
+```
+curl 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
+    -H 'Accept: application/json' -H 'OCS-APIRequest: true'
+```
+
+#### Response
+
+A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
+
+##### 200 Success
+
+```
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": [
+      {
+        "id": "175",
+        "objectId": "12",
+        "message": "This is a comment with a mention to  @alice",
+        "actorId": "admin",
+        "actorType": "users",
+        "actorDisplayName": "Administrator",
+        "creationDateTime": "2020-03-10T10:23:07+00:00",
+        "mentions": [
+          {
+            "mentionId": "alice",
+            "mentionType": "user",
+            "mentionDisplayName": "alice"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+
+### POST /cards/{cardId}/comments - Create a new comment
+
+#### Request parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| cardId    | Integer | The id of the card                      |
+| message     | String | The message of the comment, maximum length is limited to 1000 characters |
+| parentId    | Integer | The start offset used for pagination, defaults to null |
+
+Mentions will be parsed by the server. The server will return a list of mentions in the response to this request as shown below.
+
+```
+curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
+    -H 'Accept: application/json' -H 'OCS-APIRequest: true'
+    -H 'Content-Type: application/json;charset=utf-8'
+    --data '{"message":"My message to @bob","parentId":null}'
+```
+
+#### Response
+
+A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
+
+##### 200 Success
+
+```
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": {
+      "id": "177",
+      "objectId": "13",
+      "message": "My message to @bob",
+      "actorId": "admin",
+      "actorType": "users",
+      "actorDisplayName": "Administrator",
+      "creationDateTime": "2020-03-10T10:30:17+00:00",
+      "mentions": [
+        {
+          "mentionId": "bob",
+          "mentionType": "user",
+          "mentionDisplayName": "bob"
+        }
+      ]
+    }
+  }
+}
+```
+
+##### 400 Bad request
+
+A bad request response is returned if invalid input values are provided. The response message will contain details about which part was not valid.
+
+##### 404 Not found
+
+A not found response might be returned if:
+- The card for the given cardId could not be found
+- The parent comment could not be found
+
+
+### PUT /cards/{cardId}/comments/{commentId} - Update a new comment
+
+#### Request parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| cardId    | Integer | The id of the card                      |
+| commentId    | Integer | The id of the comment                      |
+| message     | String | The message of the comment, maximum length is limited to 1000 characters |
+
+Mentions will be parsed by the server. The server will return a list of mentions in the response to this request as shown below.
+
+Updating comments is limited to the current user being the same as the comment author specified in the `actorId` of the comment.
+
+```
+curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
+    -H 'Accept: application/json' -H 'OCS-APIRequest: true'
+    -H 'Content-Type: application/json;charset=utf-8'
+    --data '{"message":"My message"}'
+```
+
+#### Response
+
+A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
+
+##### 200 Success
+
+```
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": {
+      "id": "177",
+      "objectId": "13",
+      "message": "My message",
+      "actorId": "admin",
+      "actorType": "users",
+      "actorDisplayName": "Administrator",
+      "creationDateTime": "2020-03-10T10:30:17+00:00",
+      "mentions": []
+    }
+  }
+}
+```
+
+##### 400 Bad request
+
+A bad request response is returned if invalid input values are provided. The response message will contain details about which part was not valid.
+
+##### 404 Not found
+
+A not found response might be returned if:
+- The card for the given cardId could not be found
+- The comment could not be found
+
+### DELETE /cards/{cardId}/comments/{commentId} - Delete a comment
+
+#### Request parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| cardId    | Integer | The id of the card                      |
+| commentId    | Integer | The id of the comment                      |
+
+Deleting comments is limited to the current user being the same as the comment author specified in the `actorId` of the comment.
+
+```
+curl -X DELETE 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/cards/12/comments' \
+    -H 'Accept: application/json' -H 'OCS-APIRequest: true'
+    -H 'Content-Type: application/json;charset=utf-8'
+```
+
+#### Response
+
+A list of comments will be provided under the `ocs.data` key. If no or no more comments are available the list will be empty.
+
+##### 200 Success
+
+```
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": []
+  }
+}
+```
+
+##### 400 Bad request
+
+A bad request response is returned if invalid input values are provided. The response message will contain details about which part was not valid.
+
+##### 404 Not found
+
+A not found response might be returned if:
+- The card for the given cardId could not be found
+- The comment could not be found
