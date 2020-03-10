@@ -34,8 +34,13 @@
 	color: var(--color-text-light);
 
 	.username {
-		flex-grow: 1;
 		padding: 10px;
+	}
+	.spacer {
+		flex-grow: 1;
+	}
+	.timestamp {
+		color: var(--color-text-maxcontrast);
 	}
 }
 

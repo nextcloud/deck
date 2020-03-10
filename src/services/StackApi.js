@@ -21,13 +21,14 @@
  */
 
 import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
 import './../models'
 
 export class StackApi {
 
 	url(url) {
 		url = `/apps/deck${url}`
-		return OC.generateUrl(url)
+		return generateUrl(url)
 	}
 
 	loadStacks(boardId) {
@@ -91,7 +92,7 @@ export class StackApi {
 	}
 
 	/**
-	 * @param {Stack} stack
+	 * @param {Stack} stack stack object to create
 	 * @returns {Promise}
 	 */
 	createStack(stack) {

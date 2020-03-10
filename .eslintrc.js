@@ -3,6 +3,6 @@ module.exports = {
 		'nextcloud'
 	],
 	rules: {
-		'valid-jsdoc': ['warn'],
+		'valid-jsdoc': ['off'],
 	}
 }

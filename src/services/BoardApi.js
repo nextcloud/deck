@@ -21,6 +21,7 @@
  */
 
 import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
 import './../models'
 
 /**
@@ -30,14 +31,14 @@ export class BoardApi {
 
 	url(url) {
 		url = `/apps/deck${url}`
-		return OC.generateUrl(url)
+		return generateUrl(url)
 	}
 
 	/**
 	 * Updates a board.
 	 *
-	 * @param {Board} board
-	 * @returns Promise
+	 * @param {Board} board the board object to update
+	 * @returns {Promise}
 	 */
 	updateBoard(board) {
 		return axios.put(this.url(`/boards/${board.id}`), board)
@@ -56,10 +57,13 @@ export class BoardApi {
 
 	/**
 	 * Creates a new board.
+	 * @typedef {Object} BoardCreateObject
+	 * @property {string} title
+	 * @property {string} color
 	 *
-	 * @param {{String title, String color}} boardData The board data to send.
-	 *   color the hexadecimal color value formated /[0-9A-F]{6}/i
-	 * @return Promise
+	 * @param {BoardCreateObject} boardData The board data to send.
+	 *        color the hexadecimal color value formated /[0-9A-F]{6}/i
+	 * @returns {Promise}
 	 */
 	createBoard(boardData) {
 		return axios.post(this.url('/boards'), boardData)

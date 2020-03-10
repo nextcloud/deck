@@ -21,8 +21,7 @@
  */
 
 import axios from '@nextcloud/axios'
-import { getCurrentUser } from '@nextcloud/auth'
-import xmlToTagList from '../helpers/xml'
+import { generateOcsUrl } from '@nextcloud/router'
 
 export class CommentApi {
 
@@ -32,84 +31,30 @@ export class CommentApi {
 	}
 
 	async loadComments({ cardId, limit, offset }) {
-		const response = await axios({
-			method: 'REPORT',
-			url: this.url(`${cardId}`),
-			data: `<?xml version="1.0" encoding="utf-8" ?>
-			<oc:filter-comments xmlns:D="DAV:" xmlns:oc="http://owncloud.org/ns">
-				<oc:limit>${limit}</oc:limit>
-				<oc:offset>${offset}</oc:offset>
-			</oc:filter-comments>`,
+		const api = await axios.get(generateOcsUrl(`apps/deck/api/v1.0/cards`, 2) + `${cardId}/comments`, {
+			headers: { 'OCS-APIRequest': 'true' },
 		})
-		return xmlToTagList(response.data)
+		return api.data.ocs.data
 	}
 
-	async fetchComment({ cardId, commentId }) {
-		const response = await axios({
-			method: 'PROPFIND',
-			url: this.url(`${cardId}/${commentId}`),
-			data: `<?xml version="1.0"?>
-				<d:propfind  xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
-					<d:prop>
-						<oc:id />
-						<oc:message />
-						<oc:actorType />
-						<oc:actorId />
-						<oc:actorDisplayName />
-						<oc:creationDateTime />
-						<oc:objectType />
-						<oc:objectId />
-						<oc:isUnread />
-						<oc:mentions />
-					</d:prop>
-				</d:propfind>`,
+	async createComment({ cardId, comment, replyTo }) {
+		const api = await axios.post(generateOcsUrl(`apps/deck/api/v1.0/cards`, 2) + `${cardId}/comments`, {
+			message: `${comment}`,
+			parentId: replyTo ? replyTo.id : null,
 		})
-		return xmlToTagList(response.data)
+		return api.data.ocs.data
 	}
 
-	async createComment({ cardId, comment }) {
-		const response = await axios({
-			method: 'POST',
-			url: this.url(`${cardId}`),
-			data: { actorType: 'users', message: `${comment}`, verb: 'comment' },
+	async updateComment({ cardId, id, comment }) {
+		const api = await axios.put(generateOcsUrl(`apps/deck/api/v1.0/cards`, 2) + `${cardId}/comments/${id}`, {
+			message: `${comment}`,
 		})
-
-		const header = response.headers['content-location']
-		const headerArray = header.split('/')
-		const id = headerArray[headerArray.length - 1]
-
-		const ret = {
-			cardId: (cardId).toString(),
-			id: id,
-			uId: getCurrentUser().uid,
-			creationDateTime: (new Date()).toString(),
-			message: comment,
-		}
-		return ret
+		return api.data.ocs.data
 	}
 
-	async updateComment({ cardId, commentId, comment }) {
-		const response = await axios({
-			method: 'PROPPATCH',
-			url: this.url(`${cardId}/${commentId}`),
-			data: `<?xml version="1.0"?>
-			<d:propertyupdate xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
-				<d:set>
-					<d:prop>
-						<oc:message>${comment}</oc:message>
-					</d:prop>
-				</d:set>
-			</d:propertyupdate>`,
-		})
-		return response.data
-	}
-
-	async deleteComment({ cardId, commentId }) {
-		const response = await axios({
-			method: 'DELETE',
-			url: this.url(`${cardId}/${commentId}`),
-		})
-		return response.data
+	async deleteComment({ cardId, id }) {
+		const api = await axios.delete(generateOcsUrl(`apps/deck/api/v1.0/cards`, 2) + `${cardId}/comments/${id}`)
+		return api.data.ocs.data
 	}
 
 	async markCommentsAsRead(cardId) {

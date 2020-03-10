@@ -30,6 +30,7 @@ const COMMENT_FETCH_LIMIT = 10
 export default {
 	state: {
 		comments: {},
+		replyTo: null,
 	},
 	getters: {
 		getCommentsForCard: (state) => (id) => {
@@ -52,7 +53,7 @@ export default {
 			if (state.comments[cardId] === undefined) {
 				Vue.set(state.comments, cardId, {
 					hasMore: comments.length > 0,
-					comments,
+					comments: [ ...comments ],
 				})
 			} else {
 				const newComments = comments.filter((comment) => {
@@ -77,6 +78,9 @@ export default {
 			state.comments[cardId].comments.forEach(_comment => {
 				Vue.set(_comment, 'isUnread', false)
 			})
+		},
+		setReplyTo(state, comment) {
+			Vue.set(state, 'replyTo', comment)
 		},
 	},
 	actions: {
@@ -103,8 +107,8 @@ export default {
 			await dispatch('fetchComments', { cardId, offset: getters.getCommentsForCard(cardId).length })
 
 		},
-		async createComment({ commit, dispatch }, { cardId, comment }) {
-			await apiClient.createComment({ cardId, comment })
+		async createComment({ commit, dispatch, state }, { cardId, comment }) {
+			await apiClient.createComment({ cardId, comment, replyTo: state.replyTo })
 			await dispatch('fetchComments', { cardId })
 		},
 		async deleteComment({ commit }, data) {
@@ -112,13 +116,15 @@ export default {
 			commit('deleteComment', data)
 		},
 		async updateComment({ commit }, data) {
-			await apiClient.updateComment(data)
-			const commentData = await apiClient.fetchComment(data)
-			await commit('updateComment', { cardId: data.cardId, comment: commentData[0] })
+			const comment = await apiClient.updateComment(data)
+			await commit('updateComment', { cardId: data.cardId, comment: comment })
 		},
 		async markCommentsAsRead({ commit }, cardId) {
 			await apiClient.markCommentsAsRead(cardId)
 			await commit('markCommentsAsRead', cardId)
+		},
+		setReplyTo({ commit }, comment) {
+			commit('setReplyTo', comment)
 		},
 	},
 }
