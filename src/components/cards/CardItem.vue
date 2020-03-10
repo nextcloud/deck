@@ -243,7 +243,7 @@ export default {
 
 		.card-upper {
 			display: flex;
-			height: 50px;
+			min-height: 50px;
 			form {
 				display: flex;
 				padding: 5px 7px;
@@ -306,7 +306,7 @@ export default {
 			margin-right: $card-padding;
 			& > div {
 				display: flex;
-				height: 44px;
+				max-height: 44px;
 			}
 		}
 	}
