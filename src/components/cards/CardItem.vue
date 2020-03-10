@@ -25,7 +25,7 @@
   -->
 
 <template>
-	<div :class="{'compact': compactMode, 'current-card': currentCard}"
+	<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels.length > 0, 'is-editing': editing}"
 		tag="div"
 		class="card"
 		@click.self="openCard">
@@ -36,9 +36,7 @@
 			<h3 v-else-if="!editing" @click.stop="startEditing(card)">
 				{{ card.title }}
 			</h3>
-			<h3 v-else>
-&nbsp;
-			</h3>
+
 			<form v-if="editing"
 				v-click-outside="cancelEdit"
 				class="dragDisabled"
@@ -87,7 +85,7 @@
 				</div>
 			</Modal>
 		</div>
-		<ul class="labels" @click="openCard">
+		<ul v-if="card.labels.length > 0" class="labels" @click="openCard">
 			<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)">
 				<span>{{ label.title }}</span>
 			</li>
@@ -245,10 +243,10 @@ export default {
 
 		.card-upper {
 			display: flex;
+			min-height: 50px;
 			form {
 				display: flex;
 				padding: 5px 7px;
-				position: absolute;
 				width: 100%;
 				input[type=text] {
 					flex-grow: 1;
@@ -256,7 +254,7 @@ export default {
 
 			}
 			h3 {
-				margin: $card-padding;
+				margin: 14px $card-padding;
 				flex-grow: 1;
 				font-size: 100%;
 				cursor: text;
@@ -308,16 +306,20 @@ export default {
 			margin-right: $card-padding;
 			& > div {
 				display: flex;
-				height: 44px;
+				max-height: 44px;
 			}
 		}
 	}
 
 	.compact {
-		padding-bottom: $card-padding;
+		min-height: 50px;
+
+		&.has-labels {
+			padding-bottom: $card-padding;
+		}
 		.labels {
 			height: 6px;
-			margin-top: -10px;
+			margin-top: -7px;
 			margin-bottom: 3px;
 		}
 		.labels li {
