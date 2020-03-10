@@ -26,6 +26,8 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
+use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\CardMapper;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\StatusException;
@@ -54,8 +56,10 @@ class CommentService {
 	private $logger;
 	private $userId;
 
-	public function __construct(ICommentsManager $commentsManager, IUserManager $userManager, ILogger $logger, $userId) {
+	public function __construct(ICommentsManager $commentsManager, PermissionService $permissionService, CardMapper $cardMapper, IUserManager $userManager, ILogger $logger, $userId) {
 		$this->commentsManager = $commentsManager;
+		$this->permissionService = $permissionService;
+		$this->cardMapper = $cardMapper;
 		$this->userManager = $userManager;
 		$this->logger = $logger;
 		$this->userId = $userId;
@@ -65,6 +69,7 @@ class CommentService {
 		if (!is_numeric($cardId)) {
 			throw new BadRequestException('A valid card id must be provided');
 		}
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		$comments = $this->commentsManager->getForObject(Application::COMMENT_ENTITY_TYPE, $cardId, $limit, $offset);
 		$result = [];
 		foreach ($comments as $comment) {
@@ -92,6 +97,7 @@ class CommentService {
 		if (!is_numeric($cardId)) {
 			throw new BadRequestException('A valid card id must be provided');
 		}
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		try {
 			$comment = $this->commentsManager->create('users', $this->userId, Application::COMMENT_ENTITY_TYPE, $cardId);
 			$comment->setMessage($message);
@@ -116,8 +122,10 @@ class CommentService {
 		if (!is_numeric($commentId)) {
 			throw new BadRequestException('A valid comment id must be provided');
 		}
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		try {
 			$comment = $this->commentsManager->get($commentId);
+
 		} catch (CommentNotFoundException $e) {
 			throw new NotFoundException('No comment found.');
 		}
@@ -135,6 +143,16 @@ class CommentService {
 		}
 		if (!is_numeric($commentId)) {
 			throw new BadRequestException('A valid comment id must be provided');
+		}
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
+		try {
+			$comment = $this->commentsManager->get($commentId);
+
+		} catch (CommentNotFoundException $e) {
+			throw new NotFoundException('No comment found.');
+		}
+		if ($comment->getActorType() !== 'users' || $comment->getActorId() !== $this->userId) {
+			throw new NoPermissionException('Only authors are allowed to edit their comment.');
 		}
 		$this->commentsManager->delete($commentId);
 		return new DataResponse([]);
