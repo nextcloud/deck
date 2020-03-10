@@ -60,6 +60,21 @@ export class CardApi {
 			})
 	}
 
+	deletedCards(boardId) {
+		return axios.get(this.url(`/${boardId}/cards/deleted`))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 	updateCard(card) {
 		return axios.put(this.url(`/cards/${card.id}`), card)
 			.then(

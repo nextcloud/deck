@@ -175,6 +175,7 @@ export default {
 		async deleteCard({ commit }, card) {
 			await apiClient.deleteCard(card.id)
 			commit('deleteCard', card)
+			commit('moveCardToTrash', card)
 		},
 		async archiveUnarchiveCard({ commit }, card) {
 			let call = 'archiveCard'
@@ -200,10 +201,6 @@ export default {
 		async removeLabel({ commit }, data) {
 			await apiClient.removeLabelFromCard(data)
 			commit('updateCardProperty', { property: 'labels', card: data.card })
-		},
-		async cardUndoDelete({ commit }, card) {
-			const updatedCard = await apiClient.updateCard(card)
-			commit('addCard', updatedCard)
 		},
 		async updateCardDesc({ commit }, card) {
 			const updatedCard = await apiClient.updateCard(card)

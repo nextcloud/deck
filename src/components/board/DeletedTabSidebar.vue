@@ -4,14 +4,14 @@
 		<ul>
 			<li v-for="deletedStack in deletedStacks" :key="deletedStack.id">
 				<span class="icon icon-deck" />
-				<span class="title">{{ deletedStack.title }}</span>
+				<div class="title">
+					<span>{{ deletedStack.title }}</span>
+					<span class="timestamp">{{ relativeDate(deletedStack.deletedAt*1000) }}</span>
+				</div>
 				<button
 					:title="t('settings', 'Undo')"
 					class="app-navigation-entry-deleted-button icon-history"
 					@click="stackUndoDelete(deletedStack)" />
-
-				<!-- <span class="live-relative-timestamp" data-timestamp="{{ deletedStack.deletedAt*1000  }}">{{deletedStack.deletedAt | relativeDateFilter }}</span>
-				<a @click="stackUndoDelete(deletedStack)"><span class="icon icon-history"></span></a> -->
 			</li>
 		</ul>
 
@@ -19,32 +19,26 @@
 		<ul>
 			<li v-for="deletedCard in deletedCards" :key="deletedCard.id">
 				<div class="icon icon-deck" />
-				<span class="title">{{ deletedCard.title }}</span>
+				<div class="title">
+					<span>{{ deletedCard.title }}</span>
+					<span class="timestamp">{{ relativeDate(deletedCard.deletedAt*1000) }}</span>
+				</div>
 				<button
 					:title="t('settings', 'Undo')"
 					class="app-navigation-entry-deleted-button icon-history"
 					@click="cardUndoDelete(deletedCard)" />
 			</li>
-
-			<!-- <li ng-repeat="deletedCard in cardservice.deleted">
-				<span class="icon icon-deck"></span>
-				<span class="title">{{deletedCard.title}} ({{stackservice.tryAllThenDeleted(deletedCard.stackId).title}})</span>
-				<span class="live-relative-timestamp" data-timestamp="{{ deletedCard.deletedAt*1000  }}">{{deletedCard.deletedAt | relativeDateFilter }}</span>
-				<a ng-click="cardOrCardAndStackUndoDelete(deletedCard)">
-					<span class="icon icon-history"></span>
-				</a>
-			</li> -->
 		</ul>
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import relativeDate from '../../mixins/relativeDate'
+
 export default {
 	name: 'DeletedTabSidebar',
-	components: {
-
-	},
+	mixins: [ relativeDate ],
 	props: {
 		board: {
 			type: Object,
@@ -60,8 +54,8 @@ export default {
 	},
 	computed: {
 		...mapState({
-			deletedStacks: state => state.stack.deletedStacks,
-			deletedCards: state => state.stack.deletedCards,
+			deletedStacks: state => [...state.trashbin.deletedStacks].sort((a, b) => (a.deletedAt > b.deletedAt) ? -1 : 1),
+			deletedCards: state => [...state.trashbin.deletedCards].sort((a, b) => (a.deletedAt > b.deletedAt) ? -1 : 1),
 		}),
 
 	},
@@ -69,23 +63,20 @@ export default {
 		this.getData()
 	},
 	methods: {
-		getData() {
+		async getData() {
 			this.isLoading = true
-			this.$store.dispatch('deletedItems', this.board.id).then(response => {
-				this.isLoading = false
-			})
+			await this.$store.dispatch('fetchDeletedItems', this.board.id)
+			this.isLoading = false
 		},
 		stackUndoDelete(deletedStack) {
-			this.copiedDeletedStack = Object.assign({}, deletedStack)
-			this.copiedDeletedStack.deletedAt = 0
-			this.$store.dispatch('stackUndoDelete', this.copiedDeletedStack)
-			this.getData()
+			const copiedDeletedStack = Object.assign({}, deletedStack)
+			copiedDeletedStack.deletedAt = 0
+			this.$store.dispatch('stackUndoDelete', copiedDeletedStack)
 		},
 		cardUndoDelete(deletedCard) {
-			this.copiedDeletedCard = Object.assign({}, deletedCard)
-			this.copiedDeletedCard.deletedAt = 0
-			this.$store.dispatch('cardUndoDelete', this.copiedDeletedCard)
-			this.getData()
+			const copiedDeletedCard = Object.assign({}, deletedCard)
+			copiedDeletedCard.deletedAt = 0
+			this.$store.dispatch('cardUndoDelete', copiedDeletedCard)
 		},
 	},
 }
@@ -110,7 +101,13 @@ export default {
 
 		.title {
 			flex-grow: 2;
-			padding: 13px 0px;
+			padding: 3px 0px;
+
+			.timestamp {
+				font-size: 0.9em;
+				color: var(--color-text-lighter);
+				margin-top: -7px;
+			}
 		}
 
 		.live-relative-timestamp {

@@ -304,7 +304,7 @@ class CardService {
 		$card->setOrder($order);
 		$card->setOwner($owner);
 		$card->setDuedate($duedate);
-		if ($deletedAt) {
+		if ($deletedAt !== null) {
 			$card->setDeletedAt($deletedAt);
 		}
 		if ($archived !== null) {
