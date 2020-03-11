@@ -52,7 +52,6 @@ export class AttachmentApi {
 		   url: this.url(`/cards/${cardId}/attachment/${attachmentId}`),
 		   data: formData,
 	   })
-	   console.log(response)
 	   return response.data
 	}
 
@@ -62,7 +61,7 @@ export class AttachmentApi {
 			url: this.url(`/cards/${attachment.cardId}/attachment/${attachment.id}`),
 		})
 	}
-	
+
 	async restoreAttachment(attachment) {
 		const response = await axios({
 			method: 'GET',

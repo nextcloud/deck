@@ -29,41 +29,36 @@
 			type="file"
 			style="display: none;"
 			@change="onLocalAttachmentSelected">
-		<attachment-list-component>
-			<div class="attachment-list-wrapper">
-				<div class="attachment-list">
-					<ul>	
-						<li v-for="attachment in attachments" :key="attachment.id" class="attachment">
-							<a class="fileicon" :style="mimetypeForAttachment(attachment)" :href="attachmentUrl(attachment)" 
-								style="background-image: url(&quot;/apps/theming/img/core/filetypes/image.svg?v=13&quot;);"></a>
-								<div class="details">
-									<a :href="attachmentUrl(attachment)" target="_blank">
-										<div class="filename">
-											<span class="basename">{{ attachment.data }}</span>
-											<span class="extension">.xxx</span>
-										</div>
-										<span class="filesize">{{ attachment.extendedData.filesize }}</span>
-										<span class="filedate">{{ attachment.createdAt }}</span>
-										<span class="filedate">{{ attachment.createdBy }}</span>
-									</a>
-								</div>
+		<div class="attachment-list">
+			<ul>
+				<li v-for="attachment in attachments"
+					:key="attachment.id"
+					class="attachment"
+					style="display: flex;">
+					<a class="fileicon" :style="mimetypeForAttachment(attachment)" :href="attachmentUrl(attachment)" />
+					<div class="details">
+						<a :href="attachmentUrl(attachment)" target="_blank">
+							<div class="filename">
+								<span class="basename">{{ attachment.data }}</span>
+							</div>
+							<span class="filesize">{{ formattedFileSize(attachment.extendedData.filesize) }}</span>
+							<span class="filedate">{{ relativeDate(attachment.createdAt*1000) }}</span>
+							<span class="filedate">{{ attachment.createdBy }}</span>
+						</a>
+					</div>
+					<Actions>
+						<ActionButton v-if="attachment.deletedAt === 0" icon="icon-delete" @click="deleteAttachment(attachment)">
+							{{ t('deck', 'Delete Attachment') }}
+						</ActionButton>
 
-							<Actions>
-								<ActionButton v-if="attachment.deletedAt === 0" icon="icon-delete" @click="deleteAttachment(attachment)">
-									{{ t('deck', 'Delete Attachment') }}
-								</ActionButton>
+						<ActionButton v-else icon="icon-history" @click="restoreAttachment(attachment)">
+							{{ t('deck', 'Restore Attachment') }}
+						</ActionButton>
+					</Actions>
+				</li>
+			</ul>
+		</div>
 
-								<ActionButton v-else icon="icon-history" @click="restoreAttachment(attachment)">
-									{{ t('deck', 'Restore Attachment') }}
-								</ActionButton>
-							</Actions>
-							
-						</li>
-					</ul>
-				</div>	
-			</div>
-		</attachment-list-component>
-		
 		<Modal v-if="modalShow" title="File already exists" @close="modalShow=false">
 			<div class="modal__content">
 				<h2>{{ t('deck', 'File already exists') }}</h2>
@@ -89,6 +84,8 @@
 <script>
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
+import { formatFileSize } from '@nextcloud/files'
+import relativeDate from '../../mixins/relativeDate'
 
 export default {
 	name: 'CardSidebarTabAttachments',
@@ -97,6 +94,7 @@ export default {
 		ActionButton,
 		Modal,
 	},
+	mixins: [ relativeDate ],
 	props: {
 		card: {
 			type: Object,
@@ -107,12 +105,15 @@ export default {
 		return {
 			modalShow: false,
 			file: '',
-			overwriteAttachment: null
+			overwriteAttachment: null,
 		}
 	},
 	computed: {
 		attachments() {
 			return this.$store.getters.attachmentsByCard(this.card.id)
+		},
+		formattedFileSize() {
+			return (filesize) => formatFileSize(filesize)
 		},
 
 	},
@@ -161,10 +162,10 @@ export default {
 			bodyFormData.append('cardId', this.card.id)
 			bodyFormData.append('type', 'deck_file')
 			bodyFormData.append('file', this.file)
-			this.$store.dispatch('updateAttachment', { 
+			this.$store.dispatch('updateAttachment', {
 				cardId: this.card.id,
 				attachmentId: this.overwriteAttachment.id,
-				formData: bodyFormData 
+				formData: bodyFormData,
 			})
 
 			this.modalShow = false
@@ -187,15 +188,6 @@ export default {
 		margin: 40px 3px 3px 0;
 	}
 
-	.attachment-list-wrapper {
-		position: fixed;
-		width: 100%;
-		height: 100%;
-		background-color: rgba(darkgray, 0.5);
-		left: 0;
-		top: 0;
-		z-index: 300;
-	}
 	.attachment-list {
 		&.selector {
 			padding: 10px;
