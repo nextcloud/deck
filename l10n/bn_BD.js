@@ -7,7 +7,6 @@ OC.L10N.register(
     "No file was uploaded" : "কোন ফাইল আপলোড করা হয় নি",
     "Missing a temporary folder" : "অস্থায়ী ফোল্ডারটি হারানো গিয়েছে",
     "Cancel" : "বাতির",
-    "seconds ago" : "সেকেন্ড পূর্বে",
     "Today" : "আজ",
     "Sharing" : "ভাগাভাগিরত",
     "Tags" : "ট্যাগ",
@@ -19,7 +18,9 @@ OC.L10N.register(
     "Description" : "বিবরণ",
     "Modified" : "পরিবর্তিত",
     "Save" : "সংরক্ষণ",
+    "Reply" : "জবাব",
     "Update" : "পরিবর্ধন",
+    "seconds ago" : "সেকেন্ড পূর্বে",
     "Settings" : "সেটিংস"
 },
 "nplurals=2; plural=(n != 1);");

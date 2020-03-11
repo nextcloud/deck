@@ -107,7 +107,6 @@ OC.L10N.register(
     "Select a card" : "Wybierz kartę",
     "Link to card" : "Link do karty",
     "Cancel" : "Anuluj",
-    "seconds ago" : "przed chwilą",
     "Add new list" : "Dodaj nową listę",
     "List name" : "Nazwa listy",
     "Apply filter" : "Zastosuj filtr",
@@ -165,6 +164,7 @@ OC.L10N.register(
     "The comment cannot be empty." : "Komentarz nie może być pusty.",
     "The comment cannot be longer than 1000 characters." : "Komentarz nie może być dłuższy niż 1000 znaków.",
     "Update" : "Aktualizuj",
+    "seconds ago" : "przed chwilą",
     "Assign to me" : "Przydziel do mnie",
     "Delete card" : "Usuń kartę",
     "Move card" : "Przenieś kartę",
@@ -184,6 +184,7 @@ OC.L10N.register(
     "Delete board" : "Usuń tablicę",
     "Board details" : "Szczegóły tablicy",
     "Link to a board" : "Link do tablicy",
-    "Link to a card" : "Link do karty"
+    "Link to a card" : "Link do karty",
+    "Something went wrong" : "Coś poszło nie tak"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

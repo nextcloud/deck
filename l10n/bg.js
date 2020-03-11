@@ -14,7 +14,6 @@ OC.L10N.register(
     "No file was uploaded" : "Нито един файл не е качен",
     "Missing a temporary folder" : "Липсва временна папка",
     "Cancel" : "Отказ",
-    "seconds ago" : "преди секунди",
     "Filter by tag" : "Филтрирай по маркер",
     "Today" : "Днес",
     "Sharing" : "Споделяне",
@@ -35,6 +34,7 @@ OC.L10N.register(
     "Upload attachment" : "Качване",
     "Save" : "Запазване",
     "Update" : "Обновяване",
+    "seconds ago" : "преди секунди",
     "Settings" : "Настройки",
     "An error occurred" : "Възникна грешка"
 },

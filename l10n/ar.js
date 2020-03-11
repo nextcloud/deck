@@ -9,7 +9,6 @@ OC.L10N.register(
     "No file was uploaded" : "لم يتم رفع أي ملف",
     "Missing a temporary folder" : "المجلد المؤقت غير موجود",
     "Cancel" : "إلغاء",
-    "seconds ago" : "ثوان مضت",
     "Today" : "اليوم",
     "Sharing" : "المشاركة",
     "Tags" : "الوسوم",
@@ -26,7 +25,9 @@ OC.L10N.register(
     "Modified" : "آخر تعديل",
     "Upload attachment" : "رفع المرفقات",
     "Save" : "حفظ",
+    "Reply" : "رد",
     "Update" : "تحديث",
+    "seconds ago" : "ثوان مضت",
     "Delete card" : "حذف البطاقة",
     "Settings" : "الإعدادات",
     "An error occurred" : "طرأ هناك خطأ"

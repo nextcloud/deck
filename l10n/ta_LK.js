@@ -7,7 +7,6 @@ OC.L10N.register(
     "No file was uploaded" : "எந்த கோப்பும் பதிவேற்றப்படவில்லை",
     "Missing a temporary folder" : "ஒரு தற்காலிகமான கோப்புறையை காணவில்லை",
     "Cancel" : "இரத்து செய்க",
-    "seconds ago" : "செக்கன்களுக்கு முன்",
     "Today" : "இன்று",
     "Tags" : "சீட்டுகள்",
     "Can edit" : "Can edit",
@@ -19,6 +18,7 @@ OC.L10N.register(
     "Modified" : "மாற்றப்பட்டது",
     "Save" : "சேமிக்க ",
     "Update" : "இற்றைப்படுத்தல்",
+    "seconds ago" : "செக்கன்களுக்கு முன்",
     "Settings" : "அமைப்புகள்"
 },
 "nplurals=2; plural=(n != 1);");

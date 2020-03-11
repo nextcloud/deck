@@ -5,7 +5,6 @@
     "No file was uploaded" : "Heç bir fayl yüklənilmədi",
     "Missing a temporary folder" : "Müvəqqəti qovluq çatışmır",
     "Cancel" : "Dayandır",
-    "seconds ago" : "saniyələr öncə",
     "Today" : "Bu gün",
     "Sharing" : "Paylaşılır",
     "Tags" : "Işarələr",
@@ -17,7 +16,9 @@
     "Description" : "Açıqlanma",
     "Modified" : "Dəyişdirildi",
     "Save" : "Saxla",
+    "Reply" : "Cavab",
     "Update" : "Yenilənmə",
+    "seconds ago" : "saniyələr öncə",
     "Settings" : "Quraşdırmalar"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

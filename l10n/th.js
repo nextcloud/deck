@@ -7,7 +7,6 @@ OC.L10N.register(
     "No file was uploaded" : "ไม่มีไฟล์ที่ถูกอัพโหลด",
     "Missing a temporary folder" : "โฟลเดอร์ชั่วคราวเกิดการสูญหาย",
     "Cancel" : "ยกเลิก",
-    "seconds ago" : "วินาที ก่อนหน้านี้",
     "Today" : "วันนี้",
     "Sharing" : "แชร์ข้อมูล",
     "Tags" : "ป้ายกำกับ",
@@ -21,7 +20,9 @@ OC.L10N.register(
     "Comments" : "ความคิดเห็น",
     "Modified" : "แก้ไขเมื่อ",
     "Save" : "บันทึก",
+    "Reply" : "ตอบกลับ",
     "Update" : "อัพเดท",
+    "seconds ago" : "วินาที ก่อนหน้านี้",
     "Settings" : "ตั้งค่า"
 },
 "nplurals=1; plural=0;");

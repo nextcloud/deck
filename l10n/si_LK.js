@@ -7,7 +7,6 @@ OC.L10N.register(
     "No file was uploaded" : "ගොනුවක් උඩුගත නොවුණි",
     "Missing a temporary folder" : "තාවකාලික ෆොල්ඩරයක් අතුරුදහන්",
     "Cancel" : "අවලංගු කරන්න",
-    "seconds ago" : "තත්පරයන්ට පෙර",
     "Today" : "අද",
     "Sharing" : "හුවමාරු කිරීම",
     "Tags" : "ටැග",
@@ -20,6 +19,7 @@ OC.L10N.register(
     "Modified" : "වෙනස් කළ",
     "Save" : "සුරකින්න",
     "Update" : "යාවත්කාල කිරීම",
+    "seconds ago" : "තත්පරයන්ට පෙර",
     "Settings" : "සැකසුම්"
 },
 "nplurals=2; plural=(n != 1);");

@@ -5,7 +5,6 @@
     "No file was uploaded" : "Et ass kee Fichier ropgeluede ginn",
     "Missing a temporary folder" : "Et feelt en temporären Dossier",
     "Cancel" : "Ofbriechen",
-    "seconds ago" : "Sekonnen hier",
     "Today" : "Haut",
     "Sharing" : "Gedeelt",
     "Tags" : "Tags",
@@ -18,7 +17,9 @@
     "Comments" : "Kommentarer",
     "Modified" : "Geännert",
     "Save" : "Späicheren",
+    "Reply" : "Äntwerten",
     "Update" : "Update",
+    "seconds ago" : "Sekonnen hier",
     "Settings" : "Astellungen"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

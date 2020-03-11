@@ -106,7 +106,6 @@ OC.L10N.register(
     "Select a card" : "Välj ett kort",
     "Link to card" : "Länka till kort",
     "Cancel" : "Avbryt",
-    "seconds ago" : "sekunder sedan",
     "Add new list" : "Lägg till en ny lista",
     "List name" : "Namn på lista",
     "Apply filter" : "Tillämpa filter",
@@ -163,7 +162,9 @@ OC.L10N.register(
     "Save" : "Spara",
     "The comment cannot be empty." : "Kommentaren kan inte vara tom.",
     "The comment cannot be longer than 1000 characters." : "Kommentaren kan inte vara längre än 1000 tecken.",
+    "Reply" : "Svara",
     "Update" : "Uppdatera",
+    "seconds ago" : "sekunder sedan",
     "Assign to me" : "Tilldela till mig",
     "Delete card" : "Ta bort kort",
     "Move card" : "Flytta kort",
@@ -183,6 +184,7 @@ OC.L10N.register(
     "Delete board" : "Ta bort tavla",
     "Board details" : "Taveldetaljer",
     "Link to a board" : "Länka till en tavla",
-    "Link to a card" : "Länka till ett kort"
+    "Link to a card" : "Länka till ett kort",
+    "Something went wrong" : "Något gick fel"
 },
 "nplurals=2; plural=(n != 1);");

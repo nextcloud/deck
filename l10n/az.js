@@ -7,7 +7,6 @@ OC.L10N.register(
     "No file was uploaded" : "Heç bir fayl yüklənilmədi",
     "Missing a temporary folder" : "Müvəqqəti qovluq çatışmır",
     "Cancel" : "Dayandır",
-    "seconds ago" : "saniyələr öncə",
     "Today" : "Bu gün",
     "Sharing" : "Paylaşılır",
     "Tags" : "Işarələr",
@@ -19,7 +18,9 @@ OC.L10N.register(
     "Description" : "Açıqlanma",
     "Modified" : "Dəyişdirildi",
     "Save" : "Saxla",
+    "Reply" : "Cavab",
     "Update" : "Yenilənmə",
+    "seconds ago" : "saniyələr öncə",
     "Settings" : "Quraşdırmalar"
 },
 "nplurals=2; plural=(n != 1);");

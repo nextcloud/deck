@@ -5,7 +5,6 @@
     "No file was uploaded" : "Ni lwythwyd ffeil i fyny",
     "Missing a temporary folder" : "Plygell dros dro yn eisiau",
     "Cancel" : "Diddymu",
-    "seconds ago" : "eiliad yn ôl",
     "Today" : "Heddiw",
     "Tags" : "Tagiau",
     "Undo" : "Dadwneud",
@@ -19,6 +18,7 @@
     "Upload attachment" : "Llwytho atodiad",
     "Save" : "Cadw",
     "Update" : "Diweddaru",
+    "seconds ago" : "eiliad yn ôl",
     "Settings" : "Gosodiadau",
     "An error occurred" : "Digwyddodd gwall"
 },"pluralForm" :"nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;"

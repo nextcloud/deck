@@ -107,7 +107,6 @@ OC.L10N.register(
     "Select a card" : "Vybrat tabuli",
     "Link to card" : "Propojit s kartou",
     "Cancel" : "Storno",
-    "seconds ago" : "před několika sekundami",
     "Add new list" : "Přidat nový seznam",
     "List name" : "Název seznamu",
     "Apply filter" : "Uplatnit filtr",
@@ -165,6 +164,7 @@ OC.L10N.register(
     "The comment cannot be empty." : "Komentář je třeba vyplnit",
     "The comment cannot be longer than 1000 characters." : "Délka komentáře může být nejvýše 1 000 znaků.",
     "Update" : "Aktualizovat",
+    "seconds ago" : "před několika sekundami",
     "Assign to me" : "Přiřadit mě",
     "Delete card" : "Smazat kartu",
     "Move card" : "Přesunout kartu",
@@ -184,6 +184,7 @@ OC.L10N.register(
     "Delete board" : "Smazat tabuli",
     "Board details" : "Podrobnosti o desce",
     "Link to a board" : "Propojit s tabulí",
-    "Link to a card" : "Propojit s kartou"
+    "Link to a card" : "Propojit s kartou",
+    "Something went wrong" : "Něco se pokazilo"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

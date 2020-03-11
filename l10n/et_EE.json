@@ -8,7 +8,6 @@
     "No file was uploaded" : "Ühtegi faili ei latud üles",
     "Missing a temporary folder" : "Ajutine kausta on puudu",
     "Cancel" : "Loobu",
-    "seconds ago" : "sekundit tagasi",
     "Today" : "Täna",
     "Sharing" : "Jagamine",
     "Tags" : "Sildid",
@@ -23,7 +22,9 @@
     "Modified" : "Muudetud",
     "Created" : "Loodud",
     "Save" : "Salvesta",
+    "Reply" : "Vasta",
     "Update" : "Uuenda",
+    "seconds ago" : "sekundit tagasi",
     "Settings" : "Seaded",
     "An error occurred" : "Tekkis tõrge"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

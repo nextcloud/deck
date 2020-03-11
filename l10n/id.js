@@ -8,7 +8,6 @@ OC.L10N.register(
     "No file was uploaded" : "Tidak ada berkas yang diunggah",
     "Missing a temporary folder" : "Folder sementara tidak ada",
     "Cancel" : "Membatalkan",
-    "seconds ago" : "beberapa detik yang lalu",
     "Today" : "Hari ini",
     "Sharing" : "Berbagi",
     "Tags" : "Tag",
@@ -23,7 +22,9 @@ OC.L10N.register(
     "Modified" : "Dimodifikasi",
     "Created" : "Dibuat",
     "Save" : "Simpan",
+    "Reply" : "Balas",
     "Update" : "Perbarui",
+    "seconds ago" : "beberapa detik yang lalu",
     "Settings" : "Setelan"
 },
 "nplurals=1; plural=0;");

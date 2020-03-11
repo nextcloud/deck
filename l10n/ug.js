@@ -16,6 +16,7 @@ OC.L10N.register(
     "Description" : "چۈشەندۈرۈش",
     "Modified" : "ئۆزگەرتكەن",
     "Save" : "ساقلا",
+    "Reply" : "جاۋاب قايتۇر",
     "Update" : "يېڭىلا",
     "Settings" : "تەڭشەكلەر"
 },

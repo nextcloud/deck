@@ -14,7 +14,6 @@ OC.L10N.register(
     "Could not write file to disk" : "Неможе да се запишува на дискот",
     "A PHP extension stopped the file upload" : "PHP додаток го стопираше прикачувањето на датотеката",
     "Cancel" : "Откажи",
-    "seconds ago" : "пред неколку секунди",
     "Today" : "Денес",
     "Sharing" : "Споделување",
     "Tags" : "Ознаки",
@@ -29,6 +28,7 @@ OC.L10N.register(
     "Upload attachment" : "Прикачи прилог",
     "Save" : "Зачувај",
     "Update" : "Ажурирај",
+    "seconds ago" : "пред неколку секунди",
     "Settings" : "Параметри",
     "An error occurred" : "Настана грешка"
 },

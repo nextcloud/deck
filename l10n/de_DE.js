@@ -107,7 +107,6 @@ OC.L10N.register(
     "Select a card" : "Eine Karte auswählen",
     "Link to card" : "Mit einer Karte verknüpfen",
     "Cancel" : "Abbrechen",
-    "seconds ago" : "Gerade eben",
     "Add new list" : "Neue Liste hinzufügen",
     "List name" : "Listenname",
     "Apply filter" : "Filter anwenden",
@@ -164,7 +163,9 @@ OC.L10N.register(
     "Save" : "Speichern",
     "The comment cannot be empty." : "Der Kommentar darf nicht leer sein.",
     "The comment cannot be longer than 1000 characters." : "Der Kommentar darf nicht länger als 1000 Zeichen sein.",
+    "Reply" : "Antworten",
     "Update" : "Aktualisieren",
+    "seconds ago" : "Gerade eben",
     "Assign to me" : "Mir zuweisen",
     "Delete card" : "Karte löschen",
     "Move card" : "Karte verschieben",
@@ -184,6 +185,7 @@ OC.L10N.register(
     "Delete board" : "Board löschen",
     "Board details" : "Board-Details",
     "Link to a board" : "Mit einem Board verknüpfen",
-    "Link to a card" : "Mit einer Karte verknüpfen"
+    "Link to a card" : "Mit einer Karte verknüpfen",
+    "Something went wrong" : "Etwas ist schiefgelaufen"
 },
 "nplurals=2; plural=(n != 1);");

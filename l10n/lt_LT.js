@@ -104,7 +104,6 @@ OC.L10N.register(
     "Select a card" : "Pasirinkti kortelę",
     "Link to card" : "Susieti su kortele",
     "Cancel" : "Atsisakyti",
-    "seconds ago" : "prieš keletą sekundžių",
     "Add new list" : "Pridėti naują sąrašą",
     "List name" : "Sąrašo pavadinimas",
     "Apply filter" : "Taikyti filtrą",
@@ -156,7 +155,9 @@ OC.L10N.register(
     "Save" : "Įrašyti",
     "The comment cannot be empty." : "Komentaras negali būti tuščias.",
     "The comment cannot be longer than 1000 characters." : "Komentaras negali būti ilgesnis nei 1000 simbolių.",
+    "Reply" : "Atsakyti",
     "Update" : "Atnaujinti",
+    "seconds ago" : "prieš keletą sekundžių",
     "Assign to me" : "Priskirti sau",
     "Delete card" : "Ištrinti kortelę",
     "Move card" : "Perkelti kortelę",
@@ -175,6 +176,7 @@ OC.L10N.register(
     "Delete board" : "Ištrinti plokštę",
     "Board details" : "Detalesnė informacija",
     "Link to a board" : "Susieti su plokšte",
-    "Link to a card" : "Susieti su kortele"
+    "Link to a card" : "Susieti su kortele",
+    "Something went wrong" : "Kažkas nutiko"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");

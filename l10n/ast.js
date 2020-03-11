@@ -15,7 +15,6 @@ OC.L10N.register(
     "Could not write file to disk" : "Nun pudo escribise nel discu'l ficheru",
     "A PHP extension stopped the file upload" : "Una estensión de PHP paró la xuba de ficheros",
     "Cancel" : "Encaboxar",
-    "seconds ago" : "hai segundos",
     "Today" : "Güei",
     "Show archived cards" : "Amosar tarxetes archivaes",
     "Sharing" : "Compartiendo",
@@ -32,7 +31,9 @@ OC.L10N.register(
     "Modified" : "Modificóse'l",
     "Created" : "Creóse",
     "Save" : "Guardar",
+    "Reply" : "Rempuesta",
     "Update" : "Anovar",
+    "seconds ago" : "hai segundos",
     "Settings" : "Settings"
 },
 "nplurals=2; plural=(n != 1);");

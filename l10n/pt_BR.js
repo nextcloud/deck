@@ -107,7 +107,6 @@ OC.L10N.register(
     "Select a card" : "Selecionar um cartão",
     "Link to card" : "Vincular ao cartão",
     "Cancel" : "Cancelar",
-    "seconds ago" : "segundos atrás",
     "Add new list" : "Adicionar nova lista",
     "List name" : "Nome da lista",
     "Apply filter" : "Aplicar filtro",
@@ -165,6 +164,7 @@ OC.L10N.register(
     "The comment cannot be empty." : "O comentário não pode zer vazio.",
     "The comment cannot be longer than 1000 characters." : "O comentário não pode ter mais que 1000 caracteres.",
     "Update" : "Atualizar",
+    "seconds ago" : "segundos atrás",
     "Assign to me" : "Atribuir a mim",
     "Delete card" : "Excluir cartão",
     "Move card" : "Mover cartão",
@@ -184,6 +184,7 @@ OC.L10N.register(
     "Delete board" : "Excluir painel",
     "Board details" : "Detalhes do painel",
     "Link to a board" : "Linkar a um painel",
-    "Link to a card" : "Vincular a um cartão"
+    "Link to a card" : "Vincular a um cartão",
+    "Something went wrong" : "Algo deu errado"
 },
 "nplurals=2; plural=(n > 1);");

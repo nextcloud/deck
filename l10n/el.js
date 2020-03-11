@@ -107,7 +107,6 @@ OC.L10N.register(
     "Select a card" : "Επίλογή μιας καρτέλας",
     "Link to card" : "Σύνδεσμος σε καρτέλα",
     "Cancel" : "Aκύρωση",
-    "seconds ago" : " δευτερόλεπτα πριν ",
     "Add new list" : "Προσθήκη νέας λιστάς",
     "List name" : "Λίστα ονομάτων",
     "Apply filter" : "Εφαρμογή φίλτρου",
@@ -164,7 +163,9 @@ OC.L10N.register(
     "Save" : "Αποθήκευση",
     "The comment cannot be empty." : "Το σχόλιο δεν μπορεί να είναι κενό.",
     "The comment cannot be longer than 1000 characters." : "Το σχόλιο δεν μπορεί να έχι περισσότερους από 1000 χαρακτήρες.",
+    "Reply" : "Απάντηση",
     "Update" : "Ενημέρωση",
+    "seconds ago" : " δευτερόλεπτα πριν ",
     "Assign to me" : "Ανάθεση σε εμένα",
     "Delete card" : "Διαγραφή κάρτας",
     "Move card" : "Μετακίνηση κάρτας",
@@ -184,6 +185,7 @@ OC.L10N.register(
     "Delete board" : "Διαγραφή πίνακα",
     "Board details" : "Λεπτομέριες πίνακα",
     "Link to a board" : "Σύνδεσμος στον πίνακα",
-    "Link to a card" : "Σύνδεσμος σε καρτέλα"
+    "Link to a card" : "Σύνδεσμος σε καρτέλα",
+    "Something went wrong" : "Κάτι πήγε στραβά"
 },
 "nplurals=2; plural=(n != 1);");

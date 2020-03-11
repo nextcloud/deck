@@ -6,7 +6,6 @@
     "No file was uploaded" : "Tidak ada berkas yang diunggah",
     "Missing a temporary folder" : "Folder sementara tidak ada",
     "Cancel" : "Membatalkan",
-    "seconds ago" : "beberapa detik yang lalu",
     "Today" : "Hari ini",
     "Sharing" : "Berbagi",
     "Tags" : "Tag",
@@ -21,7 +20,9 @@
     "Modified" : "Dimodifikasi",
     "Created" : "Dibuat",
     "Save" : "Simpan",
+    "Reply" : "Balas",
     "Update" : "Perbarui",
+    "seconds ago" : "beberapa detik yang lalu",
     "Settings" : "Setelan"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

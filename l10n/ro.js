@@ -9,7 +9,6 @@ OC.L10N.register(
     "No file was uploaded" : "Nu a fost încărcat niciun fișier",
     "Missing a temporary folder" : "Lipsește un dosar temporar",
     "Cancel" : "Anulează",
-    "seconds ago" : "secunde în urmă",
     "Today" : "Azi",
     "Sharing" : "Partajare",
     "Tags" : "Etichete",
@@ -23,7 +22,9 @@ OC.L10N.register(
     "Comments" : "Comentarii",
     "Modified" : "Modificat",
     "Save" : "Salvează",
+    "Reply" : "Răspunde",
     "Update" : "Actualizare",
+    "seconds ago" : "secunde în urmă",
     "Settings" : "Setări"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

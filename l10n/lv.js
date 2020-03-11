@@ -10,7 +10,6 @@ OC.L10N.register(
     "No file was uploaded" : "Neviena datne netika augšupielādēta",
     "Missing a temporary folder" : "Trūkst pagaidu mapes",
     "Cancel" : "Atcelt",
-    "seconds ago" : "sekundēm",
     "Today" : "Šodien",
     "Show archived cards" : "Rādīt arhivētās kartes",
     "Hide archived cards" : "Slēpt arhivētās kartes",
@@ -30,7 +29,9 @@ OC.L10N.register(
     "Modified" : "Mainīts",
     "Created" : "Izveidots",
     "Save" : "Saglabāt",
+    "Reply" : "Atbildēt",
     "Update" : "Atjaunināt",
+    "seconds ago" : "sekundēm",
     "Settings" : "Iestatījumi",
     "An error occurred" : "Gadījās kļūda"
 },

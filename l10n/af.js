@@ -12,7 +12,6 @@ OC.L10N.register(
     "Missing a temporary folder" : "Ontbrekende tydelike gids",
     "A PHP extension stopped the file upload" : "’n PHP-uitbreiding het die oplaai gestaak",
     "Cancel" : "Kanselleer",
-    "seconds ago" : "sekondes gelede",
     "Today" : "Vandag",
     "Tags" : "Etikette",
     "Can edit" : "Kan redigeer",
@@ -27,6 +26,7 @@ OC.L10N.register(
     "Created" : "Geskep",
     "Save" : "Stoor",
     "Update" : "Werk by",
+    "seconds ago" : "sekondes gelede",
     "Settings" : "Instellings",
     "An error occurred" : "'n Fout het voorgekom"
 },

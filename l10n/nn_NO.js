@@ -7,7 +7,6 @@ OC.L10N.register(
     "No file was uploaded" : "Ingen filer vart lasta opp",
     "Missing a temporary folder" : "Manglar ei mellombels mappe",
     "Cancel" : "Avbryt",
-    "seconds ago" : "sekund sidan",
     "Today" : "I dag",
     "Sharing" : "Deling",
     "Tags" : "Emneord",
@@ -22,6 +21,7 @@ OC.L10N.register(
     "Created" : "Lagd",
     "Save" : "Lagre",
     "Update" : "Oppdater",
+    "seconds ago" : "sekund sidan",
     "Settings" : "Instillingar"
 },
 "nplurals=2; plural=(n != 1);");

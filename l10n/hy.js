@@ -4,7 +4,6 @@ OC.L10N.register(
     "Personal" : "Անձնական",
     "Done" : "Done",
     "Cancel" : "ընդհատել",
-    "seconds ago" : "վրկ. առաջ",
     "Today" : "այսօր",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
@@ -16,6 +15,7 @@ OC.L10N.register(
     "Modified" : "Փոփոխված",
     "Save" : "Պահպանել",
     "Update" : "Թարմացնել",
+    "seconds ago" : "վրկ. առաջ",
     "Settings" : "կարգավորումներ"
 },
 "nplurals=2; plural=(n != 1);");

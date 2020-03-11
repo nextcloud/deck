@@ -4,7 +4,6 @@ OC.L10N.register(
     "Personal" : "شخصی",
     "Done" : "Done",
     "Cancel" : "منسوخ کریں",
-    "seconds ago" : "سیکنڈز پہلے",
     "Today" : "آج",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
@@ -12,6 +11,8 @@ OC.L10N.register(
     "Edit" : "تدوین کریں",
     "Description" : "تصریح",
     "Save" : "حفظ",
+    "Reply" : "جواب",
+    "seconds ago" : "سیکنڈز پہلے",
     "Settings" : "سیٹینگز"
 },
 "nplurals=2; plural=(n != 1);");

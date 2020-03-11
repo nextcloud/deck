@@ -9,7 +9,6 @@ OC.L10N.register(
     "Later" : "Хойшлуулах",
     "Done" : "Хийсэн",
     "Cancel" : "болиулах",
-    "seconds ago" : "хоёрдахь өмнө",
     "Today" : "өнөөдөр",
     "Show archived cards" : "Архивлагдсан картуудыг харах",
     "Hide archived cards" : "Архивлагдсан картуудыг нуух",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Created" : "Үүсгэсэн",
     "Save" : "Хадгалах",
     "Update" : "Шинэчлэх",
+    "seconds ago" : "хоёрдахь өмнө",
     "Settings" : "Тохиргоо"
 },
 "nplurals=2; plural=(n != 1);");

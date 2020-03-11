@@ -2,7 +2,6 @@
     "Personal" : "ផ្ទាល់​ខ្លួន",
     "Done" : "Done",
     "Cancel" : "បោះបង់",
-    "seconds ago" : "វិនាទី​មុន",
     "Today" : "ថ្ងៃ​នេះ",
     "Sharing" : "ការ​ចែក​រំលែក",
     "Tags" : "ស្លាក",
@@ -14,7 +13,9 @@
     "Description" : "ការ​អធិប្បាយ",
     "Modified" : "បាន​កែ​ប្រែ",
     "Save" : "រក្សាទុក",
+    "Reply" : "ឆ្លើយតប",
     "Update" : "ធ្វើ​បច្ចុប្បន្នភាព",
+    "seconds ago" : "វិនាទី​មុន",
     "Settings" : "ការកំណត់"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
