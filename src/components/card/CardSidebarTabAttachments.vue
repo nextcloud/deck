@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<button class="icon-upload" @click="clickAddNewAttachmment()">
-			{{ t('deck', 'Upload attachment') }}
+			{{ t('settings', 'Upload attachment') }}
 		</button>
 		<input ref="localAttachments"
 			type="file"
@@ -59,22 +59,20 @@
 			</ul>
 		</div>
 
-		<Modal v-if="modalShow" title="File already exists" @close="modalShow=false">
+		<Modal v-if="modalShow" :title="t('deck', 'File already exists')" @close="modalShow=false">
 			<div class="modal__content">
 				<h2>{{ t('deck', 'File already exists') }}</h2>
 				<p>
-					{{ t('deck', 'A file with the name') }}
-					{{ file.name }}
-					{{ t('deck', 'already exists.') }}
+					{{ t('deck', 'A file with the name {filename} already exists.', {filename: file.name}) }}
 				</p>
 				<p>
 					{{ t('deck', 'Do you want to overwrite it?') }}
 				</p>
 				<button class="primary" @click="overrideAttachment">
-					{{ t('deck', 'Yes') }}
+					{{ t('deck', 'Overwrite file') }}
 				</button>
 				<button @click="modalShow=false">
-					{{ t('deck', 'No') }}
+					{{ t('deck', 'Keep existing file') }}
 				</button>
 			</div>
 		</Modal>
@@ -115,7 +113,24 @@ export default {
 		formattedFileSize() {
 			return (filesize) => formatFileSize(filesize)
 		},
-
+		mimetypeForAttachment() {
+			return (attachment) => {
+				const url = OC.MimeType.getIconUrl(attachment.extendedData.mimetype)
+				const styles = {
+					'background-image': `url("${url}")`,
+				}
+				return styles
+			}
+		},
+		attachmentUrl() {
+			return (attachment) => OC.generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
+		},
+	},
+	watch: {
+		'card': {
+			handler() {
+			},
+		},
 	},
 	created: function() {
 		this.$store.dispatch('fetchAttachments', this.card.id)
@@ -124,38 +139,29 @@ export default {
 		clickAddNewAttachmment() {
 			this.$refs.localAttachments.click()
 		},
-		async onLocalAttachmentSelected(e) {
+		async onLocalAttachmentSelected(event) {
 			const bodyFormData = new FormData()
 			bodyFormData.append('cardId', this.card.id)
 			bodyFormData.append('type', 'deck_file')
-			bodyFormData.append('file', e.target.files[0])
-			this.file = e.target.files[0]
+			bodyFormData.append('file', event.target.files[0])
+			this.file = event.target.files[0]
 			try {
 				await this.$store.dispatch('createAttachment', { cardId: this.card.id, formData: bodyFormData })
-			} catch (e) {
-				if (e.response.data.status === 409) {
-					this.overwriteAttachment = e.response.data.data
+			} catch (err) {
+				if (err.response.data.status === 409) {
+					this.overwriteAttachment = err.response.data.data
 					this.modalShow = true
 				} else {
-					showError(e.response.data.message)
+					showError(err.response.data.message)
 				}
 			}
+			event.target.value = ''
 		},
 		deleteAttachment(attachment) {
 			this.$store.dispatch('deleteAttachment', attachment)
 		},
 		restoreAttachment(attachment) {
 			this.$store.dispatch('restoreAttachment', attachment)
-		},
-		mimetypeForAttachment(attachment) {
-			const url = OC.MimeType.getIconUrl(attachment.extendedData.mimetype)
-			const styles = {
-				'background-image': `url("${url}")`,
-			}
-			return styles
-		},
-		attachmentUrl(attachment) {
-			return OC.generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
 		},
 		overrideAttachment() {
 			const bodyFormData = new FormData()
@@ -175,6 +181,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+	.icon-upload {
+		padding-left: 20px;
+		background-position: left center;
+	}
+
 	.modal__content {
 		width: 25vw;
 		min-width: 250px;

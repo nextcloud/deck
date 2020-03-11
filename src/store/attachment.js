@@ -41,7 +41,7 @@ export default {
 	mutations: {
 		createAttachment(state, { cardId, attachment }) {
 			if (typeof state.attachments[cardId] === 'undefined') {
-				Vue.set(state.attachments, cardId, attachment)
+				Vue.set(state.attachments, cardId, [attachment])
 			} else {
 				state.attachments[cardId].push(attachment)
 			}
@@ -56,13 +56,15 @@ export default {
 		},
 
 		updateAttachment(state, { cardId, attachment }) {
-			Vue.set(state.attachments, cardId, attachment)
+			const existingIndex = state.attachments[attachment.cardId].findIndex(a => a.id === attachment.id)
+			if (existingIndex !== -1) {
+				Vue.set(state.attachments[cardId], existingIndex, attachment)
+			}
 		},
 
 		deleteAttachment(state, deletedAttachment) {
 			const existingIndex = state.attachments[deletedAttachment.cardId].findIndex(a => a.id === deletedAttachment.id)
 			if (existingIndex !== -1) {
-				// state.attachments[deletedAttachment.cardId].splice(existingIndex, 1)
 				state.attachments[deletedAttachment.cardId][existingIndex].deletedAt = -1
 			}
 		},
