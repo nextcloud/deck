@@ -25,6 +25,7 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Service\PermissionService;
+use OCP\IInitialStateService;
 use OCP\IL10N;
 use OCP\IRequest;
 use PHPUnit_Framework_TestCase;
@@ -38,8 +39,8 @@ class PageControllerTest extends \Test\TestCase {
 	private $request;
 	private $l10n;
 	private $userId = 'john';
-	private $defaultBoardService;
 	private $permissionService;
+	private $initialState;
 	private $config;
 
 	public function setUp(): void {
@@ -47,9 +48,10 @@ class PageControllerTest extends \Test\TestCase {
 		$this->request = $this->createMock(IRequest::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->config = $this->createMock(IConfig::class);
+		$this->initialState = $this->createMock(IInitialStateService::class);
 
 		$this->controller = new PageController(
-			'deck', $this->request, $this->permissionService, $this->l10n, $this->userId
+			'deck', $this->request, $this->permissionService, $this->initialState, $this->l10n, $this->userId
 		);
 	}
 

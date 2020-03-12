@@ -84,6 +84,9 @@ import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import { formatFileSize } from '@nextcloud/files'
 import relativeDate from '../../mixins/relativeDate'
+import { loadState } from '@nextcloud/initial-state'
+
+const maxUploadSizeState = loadState('deck', 'maxUploadSize')
 
 export default {
 	name: 'CardSidebarTabAttachments',
@@ -104,6 +107,7 @@ export default {
 			modalShow: false,
 			file: '',
 			overwriteAttachment: null,
+			maxUploadSize: maxUploadSizeState,
 		}
 	},
 	computed: {
@@ -140,11 +144,21 @@ export default {
 			this.$refs.localAttachments.click()
 		},
 		async onLocalAttachmentSelected(event) {
+			const file = event.target.files[0]
+			if (this.maxUploadSize > 0 && this.file.size > this.maxUploadSize) {
+				showError(
+					t('deck', `Failed to upload {name}`, { name: this.file.name }) + ' - '
+						+ t('deck', 'Maximum file size of {size} exceeded', { size: formatFileSize(this.maxUploadSize) })
+				)
+				event.target.value = ''
+				return
+			}
+
 			const bodyFormData = new FormData()
 			bodyFormData.append('cardId', this.card.id)
 			bodyFormData.append('type', 'deck_file')
-			bodyFormData.append('file', event.target.files[0])
-			this.file = event.target.files[0]
+			bodyFormData.append('file', file)
+
 			try {
 				await this.$store.dispatch('createAttachment', { cardId: this.card.id, formData: bodyFormData })
 			} catch (err) {
