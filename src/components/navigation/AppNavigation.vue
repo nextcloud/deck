@@ -39,7 +39,7 @@
 				:text="t('deck', 'Shared boards')"
 				:boards="sharedBoards"
 				icon="icon-shared" />
-			<AppNavigationAddBoard />
+			<AppNavigationAddBoard v-if="canCreate" />
 		</ul>
 		<div v-if="isAdmin"
 			id="app-settings"
@@ -73,6 +73,9 @@ import { Multiselect } from '@nextcloud/vue'
 
 import AppNavigationAddBoard from './AppNavigationAddBoard'
 import AppNavigationBoardCategory from './AppNavigationBoardCategory'
+import { loadState } from '@nextcloud/initial-state'
+
+const canCreateState = loadState('deck', 'canCreate')
 
 export default {
 	name: 'AppNavigation',
@@ -96,6 +99,7 @@ export default {
 			groups: [],
 			groupLimit: [],
 			groupLimitDisabled: true,
+			canCreate: canCreateState,
 		}
 	},
 	computed: {
