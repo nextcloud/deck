@@ -182,8 +182,8 @@ export default {
 
 <style scoped lang="scss">
 	.icon-upload {
-		padding-left: 20px;
-		background-position: left center;
+		padding-left: 35px;
+		background-position: 10px center;
 	}
 
 	.modal__content {
