@@ -24,28 +24,15 @@
 namespace OCA\Deck\Service;
 
 
-use OCA\Deck\AppInfo\Application;
-use OCA\Deck\Db\AssignedUsers;
-use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
-use OCA\Deck\Db\Card;
-use OCA\Deck\Db\CardMapper;
-use OCA\Deck\Db\StackMapper;
-use OCA\Deck\InvalidAttachmentType;
-use OCA\Deck\NotFoundException;
-use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
-use OCP\AppFramework\Http\FileDisplayResponse;
-use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\Http\StreamResponse;
-use OCP\AppFramework\IAppContainer;
 use OCP\Files\Folder;
 use OCP\Files\IAppData;
 use OCP\Files\IRootFolder;
 use OCP\Files\SimpleFS\ISimpleFile;
 use OCP\Files\SimpleFS\ISimpleFolder;
-use OCP\ICacheFactory;
 use OCP\IConfig;
 use OCP\IL10N;
 use OCP\ILogger;
@@ -69,6 +56,8 @@ class FileServiceTest extends TestCase {
 	private $rootFolder;
 	/** @var IConfig */
 	private $config;
+	/** @var AttachmentMapper|MockObject */
+	private $attachmentMapper;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -78,7 +67,8 @@ class FileServiceTest extends TestCase {
 		$this->logger = $this->createMock(ILogger::class);
 		$this->rootFolder = $this->createMock(IRootFolder::class);
 		$this->config = $this->createMock(IConfig::class);
-		$this->fileService = new FileService($this->l10n, $this->appData, $this->request, $this->logger, $this->rootFolder, $this->config);
+		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
+		$this->fileService = new FileService($this->l10n, $this->appData, $this->request, $this->logger, $this->rootFolder, $this->config, $this->attachmentMapper);
     }
 
     public function mockGetFolder($cardId) {
