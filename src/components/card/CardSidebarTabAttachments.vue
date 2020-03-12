@@ -67,10 +67,14 @@
 				v-show="isDraggingOver"
 				class="dragover">
 				<div class="drop-hint">
-					<div class="drop-hint__icon icon-upload" />
+					<div
+						class="drop-hint__icon"
+						:class="{
+							'icon-upload' : !isReadOnly,
+							'icon-error' : isReadOnly}" />
 					<h2
 						class="drop-hint__text">
-						text
+						{{ dropHintText }}
 					</h2>
 				</div>
 			</div>
@@ -101,6 +105,7 @@ import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import { formatFileSize } from '@nextcloud/files'
 import relativeDate from '../../mixins/relativeDate'
+import { mapState } from 'vuex'
 
 export default {
 	name: 'CardSidebarTabAttachments',
@@ -125,6 +130,19 @@ export default {
 		}
 	},
 	computed: {
+		...mapState({
+			currentBoard: state => state.currentBoard,
+		}),
+		isReadOnly() {
+			return !this.$store.getters.canEdit
+		},
+		dropHintText() {
+			if (this.isReadOnly) {
+				return t('deck', 'This board is read only')
+			} else {
+				return t('deck', 'Drop your files to upload')
+			}
+		},
 		attachments() {
 			return this.$store.getters.attachmentsByCard(this.card.id)
 		},
@@ -156,6 +174,9 @@ export default {
 	methods: {
 		handleDropFiles(event) {
 			this.isDraggingOver = false
+			if (this.isReadOnly) {
+				return
+			}
 			this.onLocalAttachmentSelected(event.dataTransfer.files[0])
 			event.dataTransfer.value = ''
 		},
