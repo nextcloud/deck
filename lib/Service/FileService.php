@@ -25,7 +25,9 @@ namespace OCA\Deck\Service;
 
 use OC\Security\CSP\ContentSecurityPolicyManager;
 use OCA\Deck\Db\Attachment;
+use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\StatusException;
+use OCA\Deck\Exceptions\ConflictException;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\EmptyContentSecurityPolicy;
 use OCP\AppFramework\Http\FileDisplayResponse;
@@ -43,6 +45,7 @@ use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
 
+
 class FileService implements IAttachmentService {
 
 	private $l10n;
@@ -51,6 +54,7 @@ class FileService implements IAttachmentService {
 	private $logger;
 	private $rootFolder;
 	private $config;
+	private $attachmentMapper;
 
 	public function __construct(
 		IL10N $l10n,
@@ -58,7 +62,8 @@ class FileService implements IAttachmentService {
 		IRequest $request,
 		ILogger $logger,
 		IRootFolder $rootFolder,
-		IConfig $config
+		IConfig $config,
+		AttachmentMapper $attachmentMapper
 	) {
 		$this->l10n = $l10n;
 		$this->appData = $appData;
@@ -66,6 +71,7 @@ class FileService implements IAttachmentService {
 		$this->logger = $logger;
 		$this->rootFolder = $rootFolder;
 		$this->config = $config;
+		$this->attachmentMapper = $attachmentMapper;
 	}
 
 	/**
@@ -146,13 +152,15 @@ class FileService implements IAttachmentService {
 	 * @param Attachment $attachment
 	 * @throws NotPermittedException
 	 * @throws StatusException
+	 * @throws ConflictException
 	 */
 	public function create(Attachment $attachment) {
 		$file = $this->getUploadedFile();
 		$folder = $this->getFolder($attachment);
 		$fileName = $file['name'];
 		if ($folder->fileExists($fileName)) {
-			throw new StatusException('File already exists.');
+			$attachment = $this->attachmentMapper->findByData($attachment->getCardId(), $fileName);
+			throw new ConflictException('File already exists.', $attachment);
 		}
 
 		$target = $folder->newFile($fileName);

@@ -45,7 +45,7 @@ class AttachmentApiController extends ApiController {
 	 *
 	 */
     public function getAll() {
-        $attachment = $this->attachmentService->findAll($this->request->getParam('cardId'));
+        $attachment = $this->attachmentService->findAll($this->request->getParam('cardId'), true);
         return new DataResponse($attachment, HTTP::STATUS_OK);
     }
 
