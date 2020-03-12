@@ -27,6 +27,7 @@ OC.L10N.register(
     "Modified" : "Изменето",
     "Upload attachment" : "Прикачи прилог",
     "Save" : "Зачувај",
+    "Reply" : "Одговор",
     "Update" : "Ажурирај",
     "seconds ago" : "пред неколку секунди",
     "Settings" : "Параметри",

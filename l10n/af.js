@@ -25,6 +25,7 @@ OC.L10N.register(
     "Modified" : "Gewysig",
     "Created" : "Geskep",
     "Save" : "Stoor",
+    "Reply" : "Antwoord",
     "Update" : "Werk by",
     "seconds ago" : "sekondes gelede",
     "Settings" : "Instellings",

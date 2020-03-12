@@ -163,6 +163,7 @@ OC.L10N.register(
     "Save" : "Opslaan",
     "The comment cannot be empty." : "De reactie kan niet leeg zijn.",
     "The comment cannot be longer than 1000 characters." : "De reactie kan niet langer dan 1000 tekens zijn.",
+    "In reply to" : "Als antwoord op",
     "Reply" : "Antwoord",
     "Update" : "Bijwerken",
     "seconds ago" : "seconden geleden",
@@ -185,6 +186,7 @@ OC.L10N.register(
     "Delete board" : "Verwijder bord",
     "Board details" : "Bord details",
     "Link to a board" : "Verbind met een bord",
-    "Link to a card" : "Koppel met een kaart"
+    "Link to a card" : "Koppel met een kaart",
+    "Something went wrong" : "Er ging iets verkeerd"
 },
 "nplurals=2; plural=(n != 1);");

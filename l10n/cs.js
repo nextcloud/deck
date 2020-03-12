@@ -163,6 +163,8 @@ OC.L10N.register(
     "Save" : "Uložit",
     "The comment cannot be empty." : "Komentář je třeba vyplnit",
     "The comment cannot be longer than 1000 characters." : "Délka komentáře může být nejvýše 1 000 znaků.",
+    "In reply to" : "V odpověď na",
+    "Reply" : "Odpovědět",
     "Update" : "Aktualizovat",
     "seconds ago" : "před několika sekundami",
     "Assign to me" : "Přiřadit mě",

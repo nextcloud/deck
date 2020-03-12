@@ -33,6 +33,7 @@ OC.L10N.register(
     "Created" : "Създаден",
     "Upload attachment" : "Качване",
     "Save" : "Запазване",
+    "Reply" : "Отговори",
     "Update" : "Обновяване",
     "seconds ago" : "преди секунди",
     "Settings" : "Настройки",

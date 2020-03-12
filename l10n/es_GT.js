@@ -43,6 +43,7 @@ OC.L10N.register(
     "Created" : "Creado",
     "Upload attachment" : "Cargar adjunto",
     "Save" : "Guardar",
+    "Reply" : "Responder",
     "Update" : "Actualizar",
     "seconds ago" : "hace segundos",
     "Archived boards" : "Tableros archivados",

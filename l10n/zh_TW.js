@@ -46,6 +46,7 @@ OC.L10N.register(
     "Created" : "已新增",
     "Upload attachment" : "上傳附件",
     "Save" : "儲存",
+    "Reply" : "回覆",
     "Update" : "更新",
     "seconds ago" : "幾秒前",
     "Assign to me" : "分派給我",

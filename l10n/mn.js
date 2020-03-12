@@ -26,6 +26,7 @@ OC.L10N.register(
     "Modified" : "Өөрчлөгдсөн",
     "Created" : "Үүсгэсэн",
     "Save" : "Хадгалах",
+    "Reply" : "хариулт",
     "Update" : "Шинэчлэх",
     "seconds ago" : "хоёрдахь өмнө",
     "Settings" : "Тохиргоо"

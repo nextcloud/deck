@@ -19,6 +19,7 @@ OC.L10N.register(
     "Description" : "Opis",
     "Attachments" : "Prilozi",
     "Save" : "Sačuvaj",
+    "Reply" : "Odgovori",
     "Update" : "Ažuriraj",
     "seconds ago" : "pre nekoliko sekundi",
     "Delete card" : "Obriši karticu",

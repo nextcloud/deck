@@ -128,6 +128,7 @@ OC.L10N.register(
     "Created" : "Creat",
     "Upload attachment" : "Carrega l'adjunt",
     "Save" : "Desa",
+    "Reply" : "Respon",
     "Update" : "Actualitza",
     "seconds ago" : "fa uns segons",
     "Delete card" : "Suprimeix targeta",

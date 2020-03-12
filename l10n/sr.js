@@ -163,6 +163,7 @@ OC.L10N.register(
     "Save" : "Сачувај",
     "The comment cannot be empty." : "Коментар не може да буде празан.",
     "The comment cannot be longer than 1000 characters." : "Коментар не може да има преко 1000 карактера.",
+    "Reply" : "Одговори",
     "Update" : "Ажурирај",
     "seconds ago" : "пре неколико секунди",
     "Assign to me" : "Додели мени",

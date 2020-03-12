@@ -41,6 +41,7 @@ OC.L10N.register(
     "Created" : "Oprettet",
     "Upload attachment" : "Upload vedhæftning",
     "Save" : "Gem",
+    "Reply" : "Besvar",
     "Update" : "Opdatér",
     "seconds ago" : "sekunder siden",
     "Delete card" : "Slet kort",

@@ -163,6 +163,7 @@ OC.L10N.register(
     "Save" : "Vista",
     "The comment cannot be empty." : "Athugasemdin má ekki vera tóm.",
     "The comment cannot be longer than 1000 characters." : "Athugasemdin má ekki vera lengri en 1000 stafir.",
+    "Reply" : "Svara",
     "Update" : "Uppfæra",
     "seconds ago" : "sekúndum síðan",
     "Assign to me" : "Úthluta mér",

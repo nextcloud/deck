@@ -163,6 +163,8 @@ OC.L10N.register(
     "Save" : "Guardar",
     "The comment cannot be empty." : "El comentario no puede estar vacío.",
     "The comment cannot be longer than 1000 characters." : "El comentario no puede tener más de 1000  caracteres.",
+    "In reply to" : "En respuesta a",
+    "Reply" : "Responder",
     "Update" : "Actualizar",
     "seconds ago" : "hace unos segundos",
     "Assign to me" : "Asignarme a mí",

@@ -45,6 +45,7 @@ OC.L10N.register(
     "Created" : "Created",
     "Upload attachment" : "Upload attachment",
     "Save" : "Save",
+    "Reply" : "Reply",
     "Update" : "Update",
     "seconds ago" : "seconds ago",
     "Delete card" : "Delete card",

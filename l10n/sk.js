@@ -130,6 +130,7 @@ OC.L10N.register(
     "Created" : "Vytvorené",
     "Upload attachment" : "Nahrať prílohu",
     "Save" : "Uložiť",
+    "Reply" : "Odpoveď",
     "Update" : "Aktualizovať",
     "seconds ago" : "pred niekoľkými sekundami",
     "Assign to me" : "Priradiť mne",

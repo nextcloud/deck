@@ -28,6 +28,7 @@ OC.L10N.register(
     "Created" : "ایجاد شده",
     "Upload attachment" : "پیوست را بارگیری کنید",
     "Save" : "ذخیره",
+    "Reply" : "پاسخ",
     "Update" : "به روز رسانی",
     "seconds ago" : "ثانیه‌هایی پیش",
     "Delete card" : "حذف کارت",

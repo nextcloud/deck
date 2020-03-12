@@ -130,6 +130,7 @@ OC.L10N.register(
     "Created" : "Kreita",
     "Upload attachment" : "Alŝuti dosieran aldonaĵon",
     "Save" : "Konservi",
+    "Reply" : "Respondi",
     "Update" : "Ĝisdatigi",
     "seconds ago" : "antaŭ kelkaj sekundoj",
     "Delete card" : "Forigi karton",

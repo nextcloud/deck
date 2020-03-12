@@ -131,6 +131,7 @@ OC.L10N.register(
     "Created" : "作成時刻",
     "Upload attachment" : "添付ファイルをアップロードする",
     "Save" : "保存",
+    "Reply" : "返信",
     "Update" : "更新",
     "seconds ago" : "数秒前",
     "Delete card" : "カードを削除する",

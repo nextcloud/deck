@@ -161,6 +161,8 @@
     "Save" : "Enregistrer",
     "The comment cannot be empty." : "Un commentaire ne peut pas être vide.",
     "The comment cannot be longer than 1000 characters." : "Un commentaire est limité à 1 000 caractères.",
+    "In reply to" : "En réponse à",
+    "Reply" : "Répondre",
     "Update" : "Mettre à jour",
     "seconds ago" : "à l'instant",
     "Assign to me" : "Me l'assigner",
