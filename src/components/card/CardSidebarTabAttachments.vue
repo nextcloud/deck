@@ -21,14 +21,17 @@
   -->
 
 <template>
-	<div>
+	<div
+		@dragover.prevent="isDraggingOver = true"
+		@dragleave.prevent="isDraggingOver = false"
+		@drop.prevent="handleDropFiles">
 		<button class="icon-upload" @click="clickAddNewAttachmment()">
 			{{ t('settings', 'Upload attachment') }}
 		</button>
 		<input ref="localAttachments"
 			type="file"
 			style="display: none;"
-			@change="onLocalAttachmentSelected">
+			@change="handleUploadFile">
 		<div class="attachment-list">
 			<ul>
 				<li v-for="attachment in attachments"
@@ -58,6 +61,20 @@
 				</li>
 			</ul>
 		</div>
+
+		<transition name="slide" mode="out-in">
+			<div
+				v-show="isDraggingOver"
+				class="dragover">
+				<div class="drop-hint">
+					<div class="drop-hint__icon icon-upload" />
+					<h2
+						class="drop-hint__text">
+						text
+					</h2>
+				</div>
+			</div>
+		</transition>
 
 		<Modal v-if="modalShow" :title="t('deck', 'File already exists')" @close="modalShow=false">
 			<div class="modal__content">
@@ -104,6 +121,7 @@ export default {
 			modalShow: false,
 			file: '',
 			overwriteAttachment: null,
+			isDraggingOver: false,
 		}
 	},
 	computed: {
@@ -136,15 +154,24 @@ export default {
 		this.$store.dispatch('fetchAttachments', this.card.id)
 	},
 	methods: {
+		handleDropFiles(event) {
+			this.isDraggingOver = false
+			this.onLocalAttachmentSelected(event.dataTransfer.files[0])
+			event.dataTransfer.value = ''
+		},
+		handleUploadFile(event) {
+			this.onLocalAttachmentSelected(event.target.files[0])
+			event.target.value = ''
+		},
 		clickAddNewAttachmment() {
 			this.$refs.localAttachments.click()
 		},
-		async onLocalAttachmentSelected(event) {
+		async onLocalAttachmentSelected(file) {
 			const bodyFormData = new FormData()
 			bodyFormData.append('cardId', this.card.id)
 			bodyFormData.append('type', 'deck_file')
-			bodyFormData.append('file', event.target.files[0])
-			this.file = event.target.files[0]
+			bodyFormData.append('file', file)
+			this.file = file
 			try {
 				await this.$store.dispatch('createAttachment', { cardId: this.card.id, formData: bodyFormData })
 			} catch (err) {
@@ -155,7 +182,6 @@ export default {
 					showError(err.response.data.message)
 				}
 			}
-			event.target.value = ''
 		},
 		deleteAttachment(attachment) {
 			this.$store.dispatch('deleteAttachment', attachment)
@@ -181,6 +207,69 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+.dragover {
+	position: absolute;
+	top: 10%;
+	left: 10%;
+	width: 80%;
+	height: 80%;
+	background: var(--color-primary-light);
+	z-index: 11;
+	display: flex;
+	box-shadow: 0px 0px 36px var(--color-box-shadow);
+	border-radius: var(--border-radius);
+	opacity: 90%;
+}
+.drop-hint {
+	margin: auto;
+	&__icon {
+		background-size: 48px;
+		height: 48px;
+		margin-bottom: 16px;
+	}
+}
+.slide {
+	&-enter {
+		transform: translateY(-50%);
+		opacity: 0;
+	}
+	&-enter-to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+	&-leave {
+		transform: translateY(0);
+		opacity: 1;
+	}
+	&-leave-to {
+		transform: translateY(-50%);
+		opacity: 0;
+	}
+	&-enter-active,
+	&-leave-active {
+		transition: all 150ms ease-in-out;
+	}
+}
+.fade {
+	&-enter {
+		opacity: 0;
+	}
+	&-enter-to {
+		opacity: 1;
+	}
+	&-leave {
+		opacity: 1;
+	}
+	&-leave-to {
+		opacity: 0;
+	}
+	&-enter-active,
+	&-leave-active {
+		transition: all 150ms ease-in-out;
+	}
+}
+
 	.icon-upload {
 		padding-left: 35px;
 		background-position: 10px center;
