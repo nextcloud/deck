@@ -44,6 +44,8 @@ OC.L10N.register(
     "Modified" : "Modified",
     "Created" : "Created",
     "Upload attachment" : "Upload attachment",
+    "File already exists" : "File already exists",
+    "Do you want to overwrite it?" : "Do you want to overwrite it?",
     "Save" : "Save",
     "Reply" : "Reply",
     "Update" : "Update",

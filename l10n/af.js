@@ -24,6 +24,7 @@ OC.L10N.register(
     "Comments" : "Kommentare",
     "Modified" : "Gewysig",
     "Created" : "Geskep",
+    "File already exists" : "Lêer bestaan reeds",
     "Save" : "Stoor",
     "Reply" : "Antwoord",
     "Update" : "Werk by",

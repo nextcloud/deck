@@ -69,6 +69,7 @@ OC.L10N.register(
     "Modified" : "Thay đổi",
     "Created" : "Đã tạo",
     "Upload attachment" : "Tải lên một đính kèm",
+    "Maximum file size of {size} exceeded" : "Đã vượt quá kích thước {size} tối đa tập tin",
     "Save" : "Lưu",
     "Reply" : "Trả l",
     "Update" : "Cập nhật",

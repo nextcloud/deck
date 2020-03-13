@@ -23,7 +23,9 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Service\PermissionService;
+use OCP\IInitialStateService;
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Controller;
@@ -34,11 +36,13 @@ class PageController extends Controller {
 	private $permissionService;
 	private $userId;
 	private $l10n;
+	private $initialState;
 
 	public function __construct(
 		$AppName,
 		IRequest $request,
 		PermissionService $permissionService,
+		IInitialStateService $initialStateService,
 		IL10N $l10n,
 		$userId
 		) {
@@ -46,6 +50,7 @@ class PageController extends Controller {
 
 		$this->userId = $userId;
 		$this->permissionService = $permissionService;
+		$this->initialState = $initialStateService;
 		$this->l10n = $l10n;
 	}
 
@@ -57,13 +62,10 @@ class PageController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function index() {
-		$params = [
-			'user' => $this->userId,
-			'maxUploadSize' => (int)\OCP\Util::uploadLimit(),
-			'canCreate' => $this->permissionService->canCreate()
-		];
+		$this->initialState->provideInitialState(Application::APP_ID, 'maxUploadSize', (int)\OCP\Util::uploadLimit());
+		$this->initialState->provideInitialState(Application::APP_ID, 'canCreate', $this->permissionService->canCreate());
 
-		return new TemplateResponse('deck', 'main', $params);
+		return new TemplateResponse('deck', 'main');
 	}
 
 }

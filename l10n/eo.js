@@ -129,6 +129,8 @@ OC.L10N.register(
     "Modified" : "Modifita",
     "Created" : "Kreita",
     "Upload attachment" : "Alŝuti dosieran aldonaĵon",
+    "File already exists" : "La dosiero jam ekzistas",
+    "Maximum file size of {size} exceeded" : "Maksimuma dosiergrando {size} transpasita",
     "Save" : "Konservi",
     "Reply" : "Respondi",
     "Update" : "Ĝisdatigi",

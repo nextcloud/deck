@@ -30,6 +30,7 @@ OC.L10N.register(
     "Comments" : "Comentarios",
     "Modified" : "Modificóse'l",
     "Created" : "Creóse",
+    "File already exists" : "Yá esiste'l ficheru",
     "Save" : "Guardar",
     "Reply" : "Rempuesta",
     "Update" : "Anovar",

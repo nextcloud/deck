@@ -26,6 +26,8 @@
     "Comments" : "Komentāri",
     "Modified" : "Mainīts",
     "Created" : "Izveidots",
+    "File already exists" : "Datne jau pastāv",
+    "Do you want to overwrite it?" : "Vai tu gribi pārrakstīt to?",
     "Save" : "Saglabāt",
     "Reply" : "Atbildēt",
     "Update" : "Atjaunināt",

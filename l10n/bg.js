@@ -32,6 +32,8 @@ OC.L10N.register(
     "Modified" : "Промяна",
     "Created" : "Създаден",
     "Upload attachment" : "Качване",
+    "File already exists" : "Файлът вече съществува",
+    "Do you want to overwrite it?" : "Искате ли да го презапишете?",
     "Save" : "Запазване",
     "Reply" : "Отговори",
     "Update" : "Обновяване",

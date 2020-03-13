@@ -34,6 +34,7 @@ OC.L10N.register(
     "Attachments" : "Вкладення",
     "Comments" : "Коментарі",
     "Modified" : "Змінено",
+    "File already exists" : "Файл вже існує",
     "Save" : "Зберегти",
     "Reply" : "Відповісти",
     "Update" : "Оновлення",
