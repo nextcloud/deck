@@ -43,6 +43,8 @@
     "Modified" : "已修改",
     "Created" : "已新增",
     "Upload attachment" : "上傳附件",
+    "File already exists" : "檔案已存在",
+    "Maximum file size of {size} exceeded" : "達到最大的檔案大小 {size} ",
     "Save" : "儲存",
     "Reply" : "回覆",
     "Update" : "更新",

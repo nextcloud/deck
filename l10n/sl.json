@@ -148,6 +148,8 @@
     "Modified" : "Spremenjeno",
     "Created" : "Ustvarjeno",
     "Upload attachment" : "Pošlji prilogo",
+    "File already exists" : "Datoteka s tem imenom že obstaja.",
+    "Maximum file size of {size} exceeded" : "Omejitev velikosti datoteke {size} je prekoračena.",
     "Save" : "Shrani",
     "The comment cannot be empty." : "Polje opombe ne sme biti prazno.",
     "The comment cannot be longer than 1000 characters." : "Opomba ne sme biti daljša od 1000 znakov.",
