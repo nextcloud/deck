@@ -21,9 +21,9 @@
   -->
 
 <template>
-	<div
-		@dragover.prevent="isDraggingOver = true"
-		@dragleave.prevent="isDraggingOver = false"
+	<div class="attachments-drag-zone"
+		@dragover.prevent="!isDraggingOver && (isDraggingOver = true)"
+		@dragleave.prevent="isDraggingOver && (isDraggingOver = false)"
 		@drop.prevent="handleDropFiles">
 		<button class="icon-upload" @click="clickAddNewAttachmment()">
 			{{ t('settings', 'Upload attachment') }}
@@ -62,7 +62,7 @@
 			</ul>
 		</div>
 
-		<transition name="slide" mode="out-in">
+		<transition name="fade" mode="out-in">
 			<div
 				v-show="isDraggingOver"
 				class="dragover">
@@ -108,7 +108,6 @@ import relativeDate from '../../mixins/relativeDate'
 import { mapState } from 'vuex'
 import { loadState } from '@nextcloud/initial-state'
 const maxUploadSizeState = loadState('deck', 'maxUploadSize')
-
 
 export default {
 	name: 'CardSidebarTabAttachments',
@@ -166,16 +165,16 @@ export default {
 			return (attachment) => OC.generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
 		},
 	},
-	watch: {
-		'card': {
-			handler() {
-			},
-		},
-	},
 	created: function() {
 		this.$store.dispatch('fetchAttachments', this.card.id)
 	},
 	methods: {
+		dragEnter() {
+
+		},
+		dragLeave() {
+
+		},
 		handleDropFiles(event) {
 			this.isDraggingOver = false
 			if (this.isReadOnly) {
@@ -241,67 +240,51 @@ export default {
 
 <style scoped lang="scss">
 
-.dragover {
-	position: absolute;
-	top: 10%;
-	left: 10%;
-	width: 80%;
-	height: 80%;
-	background: var(--color-primary-light);
-	z-index: 11;
-	display: flex;
-	box-shadow: 0px 0px 36px var(--color-box-shadow);
-	border-radius: var(--border-radius);
-	opacity: 90%;
-}
-.drop-hint {
-	margin: auto;
-	&__icon {
-		background-size: 48px;
-		height: 48px;
-		margin-bottom: 16px;
+	.attachments-drag-zone {
+		flex-grow: 1;
 	}
-}
-.slide {
-	&-enter {
-		transform: translateY(-50%);
-		opacity: 0;
+
+	.dragover {
+		position: absolute;
+		top: 20%;
+		left: 10%;
+		width: 80%;
+		height: 60%;
+		background: var(--color-primary-light);
+		z-index: 11;
+		display: flex;
+		box-shadow: 0px 0px 36px var(--color-box-shadow);
+		border-radius: var(--border-radius);
+		opacity: .9;
 	}
-	&-enter-to {
-		transform: translateY(0);
-		opacity: 1;
+
+	.drop-hint {
+		margin: auto;
+		&__icon {
+			background-size: 48px;
+			height: 48px;
+			margin-bottom: 16px;
+		}
 	}
-	&-leave {
-		transform: translateY(0);
-		opacity: 1;
+
+	.fade {
+		&-enter {
+			opacity: 0;
+		}
+		&-enter-to {
+			opacity: .9;
+		}
+		&-leave {
+			opacity: .9;
+		}
+		&-leave-to {
+			opacity: 0;
+		}
+		&-enter-active,
+		&-leave-active {
+			transition: opacity 150ms ease-in-out;
+		}
 	}
-	&-leave-to {
-		transform: translateY(-50%);
-		opacity: 0;
-	}
-	&-enter-active,
-	&-leave-active {
-		transition: all 150ms ease-in-out;
-	}
-}
-.fade {
-	&-enter {
-		opacity: 0;
-	}
-	&-enter-to {
-		opacity: 1;
-	}
-	&-leave {
-		opacity: 1;
-	}
-	&-leave-to {
-		opacity: 0;
-	}
-	&-enter-active,
-	&-leave-active {
-		transition: all 150ms ease-in-out;
-	}
-}
 
 	.icon-upload {
 		padding-left: 35px;
