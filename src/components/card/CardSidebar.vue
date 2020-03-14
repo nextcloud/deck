@@ -336,6 +336,11 @@ export default {
 		}
 	}
 
+	aside::v-deep section {
+		display: flex;
+		flex-direction: column;
+	}
+
 	.section-wrapper {
 		display: flex;
 		max-width: 100%;

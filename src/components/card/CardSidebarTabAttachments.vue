@@ -21,14 +21,17 @@
   -->
 
 <template>
-	<div>
+	<div class="attachments-drag-zone"
+		@dragover.prevent="!isDraggingOver && (isDraggingOver = true)"
+		@dragleave.prevent="isDraggingOver && (isDraggingOver = false)"
+		@drop.prevent="handleDropFiles">
 		<button class="icon-upload" @click="clickAddNewAttachmment()">
 			{{ t('settings', 'Upload attachment') }}
 		</button>
 		<input ref="localAttachments"
 			type="file"
 			style="display: none;"
-			@change="onLocalAttachmentSelected">
+			@change="handleUploadFile">
 		<div class="attachment-list">
 			<ul>
 				<li v-for="attachment in attachments"
@@ -59,6 +62,24 @@
 			</ul>
 		</div>
 
+		<transition name="fade" mode="out-in">
+			<div
+				v-show="isDraggingOver"
+				class="dragover">
+				<div class="drop-hint">
+					<div
+						class="drop-hint__icon"
+						:class="{
+							'icon-upload' : !isReadOnly,
+							'icon-error' : isReadOnly}" />
+					<h2
+						class="drop-hint__text">
+						{{ dropHintText }}
+					</h2>
+				</div>
+			</div>
+		</transition>
+
 		<Modal v-if="modalShow" :title="t('deck', 'File already exists')" @close="modalShow=false">
 			<div class="modal__content">
 				<h2>{{ t('deck', 'File already exists') }}</h2>
@@ -84,8 +105,8 @@ import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import { formatFileSize } from '@nextcloud/files'
 import relativeDate from '../../mixins/relativeDate'
+import { mapState } from 'vuex'
 import { loadState } from '@nextcloud/initial-state'
-
 const maxUploadSizeState = loadState('deck', 'maxUploadSize')
 
 export default {
@@ -107,10 +128,24 @@ export default {
 			modalShow: false,
 			file: '',
 			overwriteAttachment: null,
+			isDraggingOver: false,
 			maxUploadSize: maxUploadSizeState,
 		}
 	},
 	computed: {
+		...mapState({
+			currentBoard: state => state.currentBoard,
+		}),
+		isReadOnly() {
+			return !this.$store.getters.canEdit
+		},
+		dropHintText() {
+			if (this.isReadOnly) {
+				return t('deck', 'This board is read only')
+			} else {
+				return t('deck', 'Drop your files to upload')
+			}
+		},
 		attachments() {
 			return this.$store.getters.attachmentsByCard(this.card.id)
 		},
@@ -130,24 +165,35 @@ export default {
 			return (attachment) => OC.generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
 		},
 	},
-	watch: {
-		'card': {
-			handler() {
-			},
-		},
-	},
 	created: function() {
 		this.$store.dispatch('fetchAttachments', this.card.id)
 	},
 	methods: {
+		dragEnter() {
+
+		},
+		dragLeave() {
+
+		},
+		handleDropFiles(event) {
+			this.isDraggingOver = false
+			if (this.isReadOnly) {
+				return
+			}
+			this.onLocalAttachmentSelected(event.dataTransfer.files[0])
+			event.dataTransfer.value = ''
+		},
+		handleUploadFile(event) {
+			this.onLocalAttachmentSelected(event.target.files[0])
+			event.target.value = ''
+		},
 		clickAddNewAttachmment() {
 			this.$refs.localAttachments.click()
 		},
-		async onLocalAttachmentSelected(event) {
-			const file = event.target.files[0]
-			if (this.maxUploadSize > 0 && this.file.size > this.maxUploadSize) {
+		async onLocalAttachmentSelected(file) {
+			if (this.maxUploadSize > 0 && file.size > this.maxUploadSize) {
 				showError(
-					t('deck', `Failed to upload {name}`, { name: this.file.name }) + ' - '
+					t('deck', `Failed to upload {name}`, { name: file.name }) + ' - '
 						+ t('deck', 'Maximum file size of {size} exceeded', { size: formatFileSize(this.maxUploadSize) })
 				)
 				event.target.value = ''
@@ -158,7 +204,6 @@ export default {
 			bodyFormData.append('cardId', this.card.id)
 			bodyFormData.append('type', 'deck_file')
 			bodyFormData.append('file', file)
-
 			try {
 				await this.$store.dispatch('createAttachment', { cardId: this.card.id, formData: bodyFormData })
 			} catch (err) {
@@ -169,7 +214,6 @@ export default {
 					showError(err.response.data.message)
 				}
 			}
-			event.target.value = ''
 		},
 		deleteAttachment(attachment) {
 			this.$store.dispatch('deleteAttachment', attachment)
@@ -195,6 +239,53 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+	.attachments-drag-zone {
+		flex-grow: 1;
+	}
+
+	.dragover {
+		position: absolute;
+		top: 20%;
+		left: 10%;
+		width: 80%;
+		height: 60%;
+		background: var(--color-primary-light);
+		z-index: 11;
+		display: flex;
+		box-shadow: 0px 0px 36px var(--color-box-shadow);
+		border-radius: var(--border-radius);
+		opacity: .9;
+	}
+
+	.drop-hint {
+		margin: auto;
+		&__icon {
+			background-size: 48px;
+			height: 48px;
+			margin-bottom: 16px;
+		}
+	}
+
+	.fade {
+		&-enter {
+			opacity: 0;
+		}
+		&-enter-to {
+			opacity: .9;
+		}
+		&-leave {
+			opacity: .9;
+		}
+		&-leave-to {
+			opacity: 0;
+		}
+		&-enter-active,
+		&-leave-active {
+			transition: opacity 150ms ease-in-out;
+		}
+	}
+
 	.icon-upload {
 		padding-left: 35px;
 		background-position: 10px center;
