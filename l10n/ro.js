@@ -21,6 +21,7 @@ OC.L10N.register(
     "Description" : "Descriere",
     "Comments" : "Comentarii",
     "Modified" : "Modificat",
+    "File already exists" : "Fișierul există deja",
     "Save" : "Salvează",
     "Reply" : "Răspunde",
     "Update" : "Actualizare",

@@ -159,10 +159,19 @@ OC.L10N.register(
     "Modified" : "Değiştirilme",
     "Created" : "Oluşturulma",
     "Upload attachment" : "Ek dosya yükle",
+    "Delete Attachment" : "Eki Sil",
+    "Restore Attachment" : "Eki Geri Getir",
+    "File already exists" : "Dosya zaten var",
+    "A file with the name {filename} already exists." : "{filename} isminde bir dosya zaten var.",
+    "Do you want to overwrite it?" : "Üzerine yazmak ister misiniz?",
+    "Overwrite file" : "Üzerine yaz",
+    "Keep existing file" : "Mevcut dosyayı koru",
+    "Maximum file size of {size} exceeded" : "{size} olan en büyük dosya boyutu sınırı aşıldı",
     "No comments yet. Begin the discussion!" : "Henüz bir yorum yapılmamış. Tartışmayı başlatın!",
     "Save" : "Kaydet",
     "The comment cannot be empty." : "Yorum boş olamaz.",
     "The comment cannot be longer than 1000 characters." : "Yorum 1000 karakterden uzun olamaz.",
+    "In reply to" : "Kime",
     "Reply" : "Yanıtla",
     "Update" : "Güncelle",
     "seconds ago" : "saniye önce",
@@ -185,6 +194,7 @@ OC.L10N.register(
     "Delete board" : "Panoyu sil",
     "Board details" : "Pano ayrıntıları",
     "Link to a board" : "Bir pano ile ilişkilendir",
-    "Link to a card" : "Bir kart ile ilişkilendir"
+    "Link to a card" : "Bir kart ile ilişkilendir",
+    "Something went wrong" : "Bazı şeyler yanlış gitti"
 },
 "nplurals=2; plural=(n > 1);");

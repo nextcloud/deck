@@ -39,6 +39,8 @@ OC.L10N.register(
     "Modified" : "შეიცვალა",
     "Created" : "შექმნილია",
     "Upload attachment" : "დანართის ატვირთვა",
+    "File already exists" : "ფაილი უკვე არსებობს",
+    "Do you want to overwrite it?" : "გსურთ მისი გადაწერა?",
     "Save" : "შენახვა",
     "Reply" : "პასუხი",
     "Update" : "განახლება",

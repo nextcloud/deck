@@ -128,6 +128,8 @@ OC.L10N.register(
     "Modified" : "Aldatua",
     "Created" : "Sortua",
     "Upload attachment" : "Igo eranskina",
+    "File already exists" : "Badago izen bereko fitxategi bat",
+    "Maximum file size of {size} exceeded" : "Fitxategiaren gehienezko {size} tamaina gainditu da",
     "Save" : "Gorde",
     "Reply" : "Erantzun",
     "Update" : "Eguneratu",

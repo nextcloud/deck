@@ -129,6 +129,8 @@ OC.L10N.register(
     "Modified" : "Upravené",
     "Created" : "Vytvorené",
     "Upload attachment" : "Nahrať prílohu",
+    "File already exists" : "Súbor už existuje",
+    "Maximum file size of {size} exceeded" : "Bola prekročená maximálna veľkosť súboru {size}",
     "Save" : "Uložiť",
     "Reply" : "Odpoveď",
     "Update" : "Aktualizovať",

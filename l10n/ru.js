@@ -159,13 +159,19 @@ OC.L10N.register(
     "Modified" : "Изменён",
     "Created" : "Создана",
     "Upload attachment" : "Загрузить вложение",
+    "Delete Attachment" : "Удалить вложение",
+    "Restore Attachment" : "Восстановить вложение",
     "File already exists" : "Файл уже существует",
+    "A file with the name {filename} already exists." : "Файл «{filename}» уже существует.",
     "Do you want to overwrite it?" : "Перезаписать?",
+    "Overwrite file" : "Перезаписать",
+    "Keep existing file" : "Сохранить имеющийся",
     "Maximum file size of {size} exceeded" : "Превышен максимально разрешённый размер файла в  {size}",
     "No comments yet. Begin the discussion!" : "Комментарии отсутствуют, начните обсуждение!",
     "Save" : "Сохранить",
     "The comment cannot be empty." : "Комментарий не может быть пустым.",
     "The comment cannot be longer than 1000 characters." : "Комментарий не может быть длиннее 1 000 символов.",
+    "In reply to" : "В ответ",
     "Reply" : "Ответить",
     "Update" : "Обновить",
     "seconds ago" : "несколько секунд назад",
@@ -188,6 +194,7 @@ OC.L10N.register(
     "Delete board" : "Удалить доску",
     "Board details" : "Подробные сведения",
     "Link to a board" : "Ссылка на доску",
-    "Link to a card" : "Ссылка на карточку"
+    "Link to a card" : "Ссылка на карточку",
+    "Something went wrong" : "Неизвестная ошибка"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

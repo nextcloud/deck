@@ -38,6 +38,7 @@ OC.L10N.register(
     "Comments" : "Comentários",
     "Modified" : "Modificado",
     "Created" : "Criado",
+    "File already exists" : "O ficheiro já existe",
     "Save" : "Guardar",
     "Reply" : "Resposta",
     "Update" : "Atualizar",

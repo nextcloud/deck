@@ -27,6 +27,7 @@ OC.L10N.register(
     "Modified" : "تغییر یافته",
     "Created" : "ایجاد شده",
     "Upload attachment" : "پیوست را بارگیری کنید",
+    "File already exists" : "فایل از قبل موجود میباشد",
     "Save" : "ذخیره",
     "Reply" : "پاسخ",
     "Update" : "به روز رسانی",

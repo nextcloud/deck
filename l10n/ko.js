@@ -45,6 +45,8 @@ OC.L10N.register(
     "Modified" : "수정한 날짜",
     "Created" : "생성됨",
     "Upload attachment" : "첨부 파일 업로드",
+    "File already exists" : "파일이 이미 존재함",
+    "Do you want to overwrite it?" : "덮어쓰시겠습니까?",
     "Save" : "저장",
     "Reply" : "답장",
     "Update" : "업데이트",

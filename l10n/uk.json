@@ -1,4 +1,9 @@
 { "translations": {
+    "You have created a new board {board}" : "Ви створили новц дошку {board}",
+    "{user} has created a new board {board}" : "{user} створив нову дошку {board}",
+    "You have deleted the board {board}" : "Ви вилучили дошку {board}",
+    "{user} has deleted the board {board}" : "{user} вилучив дошку {board}",
+    "You have restored the board {board}" : "Ви відновили дошку {board}",
     "Deck" : "Колода",
     "Personal" : "Особисте",
     "Finished" : "Завершено",

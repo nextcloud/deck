@@ -24,6 +24,7 @@ OC.L10N.register(
     "Comments" : "تعليقات",
     "Modified" : "آخر تعديل",
     "Upload attachment" : "رفع المرفقات",
+    "File already exists" : "الملف موجود مسبقاً",
     "Save" : "حفظ",
     "Reply" : "رد",
     "Update" : "تحديث",

@@ -16,6 +16,7 @@ OC.L10N.register(
     "Description" : "Opis",
     "Comments" : "Komentari",
     "Modified" : "Izmijenjeno",
+    "Maximum file size of {size} exceeded" : "Maksimalna veličina datoteke prekoračena",
     "Save" : "Spremi",
     "Update" : "Ažuriraj",
     "Settings" : "Podešavanje"
