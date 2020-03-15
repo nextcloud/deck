@@ -166,6 +166,7 @@ OC.L10N.register(
     "Do you want to overwrite it?" : "Επιθυμείτε να γίνει αντικατάσταση του?",
     "Overwrite file" : "Αντικατάσταση αρχείου",
     "Keep existing file" : "Διατήρηση υπάρχων αρχείου",
+    "Drop your files to upload" : "Αποθέστε τα αρχεία σας για ανέβασμα",
     "Maximum file size of {size} exceeded" : "Υπέρβαση επιτρεπόμενου μεγέθους αρχείου {size}",
     "No comments yet. Begin the discussion!" : "Χωρίς σχόλια ακόμη. Ξεκινήστε την συζήτηση!",
     "Save" : "Αποθήκευση",

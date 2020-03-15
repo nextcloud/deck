@@ -161,6 +161,7 @@ OC.L10N.register(
     "Upload attachment" : "Subir adjunto",
     "File already exists" : "El archivo ya existe",
     "Do you want to overwrite it?" : "¿Desea sobreescribirlo?",
+    "Drop your files to upload" : "Arrastra tus archivos para subir",
     "Maximum file size of {size} exceeded" : "Tamaño máximo de archivo de {size} excedido",
     "No comments yet. Begin the discussion!" : "Todavía no hay comentarios. ¡Comienza la discusión!",
     "Save" : "Guardar",

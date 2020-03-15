@@ -166,6 +166,7 @@ OC.L10N.register(
     "Do you want to overwrite it?" : "Vuoi sovrascriverlo?",
     "Overwrite file" : "Sovrascrivi file",
     "Keep existing file" : "Mantieni file esistente",
+    "Drop your files to upload" : "Rilascia i tuoi file per caricarli",
     "Maximum file size of {size} exceeded" : "Dimensione massima dei file di {size} superata",
     "No comments yet. Begin the discussion!" : "Ancora nessun commento. Inizia la discussione.",
     "Save" : "Salva",

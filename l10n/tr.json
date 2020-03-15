@@ -164,6 +164,7 @@
     "Do you want to overwrite it?" : "Üzerine yazmak ister misiniz?",
     "Overwrite file" : "Üzerine yaz",
     "Keep existing file" : "Mevcut dosyayı koru",
+    "Drop your files to upload" : "Yüklenecek dosyaları sürükleyip bırakın",
     "Maximum file size of {size} exceeded" : "{size} olan en büyük dosya boyutu sınırı aşıldı",
     "No comments yet. Begin the discussion!" : "Henüz bir yorum yapılmamış. Tartışmayı başlatın!",
     "Save" : "Kaydet",

@@ -161,6 +161,7 @@ OC.L10N.register(
     "Upload attachment" : "Uploaden bijlage",
     "File already exists" : "Bestand bestaat al",
     "Do you want to overwrite it?" : "Wil je het overschrijven?",
+    "Drop your files to upload" : "Zet uw bestanden hier neer om te uploaden",
     "Maximum file size of {size} exceeded" : "Maximale bestandsomvang van {size} overschreden",
     "No comments yet. Begin the discussion!" : "Nog geen reacties. Begin de discussie!",
     "Save" : "Opslaan",

@@ -42,6 +42,7 @@ OC.L10N.register(
     "Upload attachment" : "Upload vedhæftning",
     "File already exists" : "Fil findes allerede",
     "Do you want to overwrite it?" : "Vil du overskrive den?",
+    "Drop your files to upload" : "Drop dine filer for at uploade",
     "Save" : "Gem",
     "Reply" : "Besvar",
     "Update" : "Opdatér",

@@ -166,6 +166,7 @@ OC.L10N.register(
     "Do you want to overwrite it?" : "Chcete položku přepsat?",
     "Overwrite file" : "Přepsat soubor",
     "Keep existing file" : "Ponechat existující soubor",
+    "Drop your files to upload" : "Přetáhněte sem soubor, které chcete nahrát",
     "Maximum file size of {size} exceeded" : "Překročena nejvyšší umožněná velikost souboru {size}",
     "No comments yet. Begin the discussion!" : "Zatím bez komentářů. Zahajte diskuzi!",
     "Save" : "Uložit",
