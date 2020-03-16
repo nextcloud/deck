@@ -159,6 +159,7 @@ OC.L10N.register(
     "Do you want to overwrite it?" : "Haluatko ylikirjoittaa sen?",
     "Overwrite file" : "Päällekirjoita tiedosto",
     "Keep existing file" : "Pidä nykyinen tiedosto",
+    "This board is read only" : "Tämä taulu on kirjoitussuojattu",
     "Drop your files to upload" : "Pudota tiedostot lähettääksesi ne",
     "Maximum file size of {size} exceeded" : "Tiedoston enimmäiskoko {size} ylitetty",
     "No comments yet. Begin the discussion!" : "Ei vielä kommentteja. Aloita keskustelu!",

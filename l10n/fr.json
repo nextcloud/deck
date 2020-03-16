@@ -164,6 +164,8 @@
     "Do you want to overwrite it?" : "Souhaitez-vous l'écraser ?",
     "Overwrite file" : "Remplacer le fichier",
     "Keep existing file" : "Conserver le fichier existant",
+    "This board is read only" : "Ce tableau est en lecture seule",
+    "Drop your files to upload" : "Glissez vos fichiers pour les envoyer",
     "Maximum file size of {size} exceeded" : "Taille de fichier maximale de {size} dépassée",
     "No comments yet. Begin the discussion!" : "Aucun commentaire pour l'instant, démarrez la discussion !",
     "Save" : "Enregistrer",

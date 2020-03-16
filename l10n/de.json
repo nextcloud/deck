@@ -164,6 +164,7 @@
     "Do you want to overwrite it?" : "Möchtest Du überschreiben?",
     "Overwrite file" : "Datei überschreiben",
     "Keep existing file" : "Existierende Datei behalten",
+    "This board is read only" : "Dieses Board ist schreibgeschützt",
     "Drop your files to upload" : "Dateien zum Hochladen hineinziehen",
     "Maximum file size of {size} exceeded" : "Maximale Dateigröße von {size} überschritten",
     "No comments yet. Begin the discussion!" : "Bislang keine Kommentare. Beginne die Diskussion!",
