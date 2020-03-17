@@ -21,10 +21,7 @@
   -->
 
 <template>
-	<div class="attachments-drag-zone"
-		@dragover.prevent="!isDraggingOver && (isDraggingOver = true)"
-		@dragleave.prevent="isDraggingOver && (isDraggingOver = false)"
-		@drop.prevent="handleDropFiles">
+	<AttachmentDragAndDrop :card-id="card.id">
 		<button class="icon-upload" @click="clickAddNewAttachmment()">
 			{{ t('settings', 'Upload attachment') }}
 		</button>
@@ -61,52 +58,17 @@
 				</li>
 			</ul>
 		</div>
-
-		<transition name="fade" mode="out-in">
-			<div
-				v-show="isDraggingOver"
-				class="dragover">
-				<div class="drop-hint">
-					<div
-						class="drop-hint__icon"
-						:class="{
-							'icon-upload' : !isReadOnly,
-							'icon-error' : isReadOnly}" />
-					<h2
-						class="drop-hint__text">
-						{{ dropHintText }}
-					</h2>
-				</div>
-			</div>
-		</transition>
-
-		<Modal v-if="modalShow" :title="t('deck', 'File already exists')" @close="modalShow=false">
-			<div class="modal__content">
-				<h2>{{ t('deck', 'File already exists') }}</h2>
-				<p>
-					{{ t('deck', 'A file with the name {filename} already exists.', {filename: file.name}) }}
-				</p>
-				<p>
-					{{ t('deck', 'Do you want to overwrite it?') }}
-				</p>
-				<button class="primary" @click="overrideAttachment">
-					{{ t('deck', 'Overwrite file') }}
-				</button>
-				<button @click="modalShow=false">
-					{{ t('deck', 'Keep existing file') }}
-				</button>
-			</div>
-		</Modal>
-	</div>
+	</AttachmentDragAndDrop>
 </template>
 
 <script>
-import { Actions, ActionButton, Modal } from '@nextcloud/vue'
-import { showError } from '@nextcloud/dialogs'
+import { Actions, ActionButton } from '@nextcloud/vue'
 import { formatFileSize } from '@nextcloud/files'
 import relativeDate from '../../mixins/relativeDate'
 import { mapState } from 'vuex'
 import { loadState } from '@nextcloud/initial-state'
+import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
+import attachmentUpload from '../../mixins/attachmentUpload'
 const maxUploadSizeState = loadState('deck', 'maxUploadSize')
 
 export default {
@@ -114,9 +76,9 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
-		Modal,
+		AttachmentDragAndDrop,
 	},
-	mixins: [ relativeDate ],
+	mixins: [ relativeDate, attachmentUpload ],
 	props: {
 		card: {
 			type: Object,
@@ -164,6 +126,9 @@ export default {
 		attachmentUrl() {
 			return (attachment) => OC.generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
 		},
+		cardId() {
+			return this.card.id
+		},
 	},
 	created: function() {
 		this.$store.dispatch('fetchAttachments', this.card.id)
@@ -190,49 +155,12 @@ export default {
 		clickAddNewAttachmment() {
 			this.$refs.localAttachments.click()
 		},
-		async onLocalAttachmentSelected(file) {
-			if (this.maxUploadSize > 0 && file.size > this.maxUploadSize) {
-				showError(
-					t('deck', `Failed to upload {name}`, { name: file.name }) + ' - '
-						+ t('deck', 'Maximum file size of {size} exceeded', { size: formatFileSize(this.maxUploadSize) })
-				)
-				event.target.value = ''
-				return
-			}
 
-			const bodyFormData = new FormData()
-			bodyFormData.append('cardId', this.card.id)
-			bodyFormData.append('type', 'deck_file')
-			bodyFormData.append('file', file)
-			try {
-				await this.$store.dispatch('createAttachment', { cardId: this.card.id, formData: bodyFormData })
-			} catch (err) {
-				if (err.response.data.status === 409) {
-					this.overwriteAttachment = err.response.data.data
-					this.modalShow = true
-				} else {
-					showError(err.response.data.message)
-				}
-			}
-		},
 		deleteAttachment(attachment) {
 			this.$store.dispatch('deleteAttachment', attachment)
 		},
 		restoreAttachment(attachment) {
 			this.$store.dispatch('restoreAttachment', attachment)
-		},
-		overrideAttachment() {
-			const bodyFormData = new FormData()
-			bodyFormData.append('cardId', this.card.id)
-			bodyFormData.append('type', 'deck_file')
-			bodyFormData.append('file', this.file)
-			this.$store.dispatch('updateAttachment', {
-				cardId: this.card.id,
-				attachmentId: this.overwriteAttachment.id,
-				formData: bodyFormData,
-			})
-
-			this.modalShow = false
 		},
 	},
 }

@@ -25,75 +25,77 @@
   -->
 
 <template>
-	<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'is-editing': editing}"
-		tag="div"
-		class="card"
-		@click="openCard">
-		<div class="card-upper">
-			<h3 v-if="showArchived || !canEdit">
-				{{ card.title }}
-			</h3>
-			<h3 v-else-if="!editing">
-				<span @click.stop="startEditing(card)">{{ card.title }}</span>
-			</h3>
+	<AttachmentDragAndDrop :card-id="id">
+		<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'is-editing': editing}"
+			tag="div"
+			class="card"
+			@click="openCard">
+			<div class="card-upper">
+				<h3 v-if="showArchived || !canEdit">
+					{{ card.title }}
+				</h3>
+				<h3 v-else-if="!editing">
+					<span @click.stop="startEditing(card)">{{ card.title }}</span>
+				</h3>
 
-			<form v-if="editing"
-				v-click-outside="cancelEdit"
-				class="dragDisabled"
-				@keyup.esc="cancelEdit"
-				@submit.prevent="finishedEdit(card)">
-				<input v-model="copiedCard.title" type="text" autofocus>
-				<input type="button" class="icon-confirm" @click="finishedEdit(card)">
-			</form>
+				<form v-if="editing"
+					v-click-outside="cancelEdit"
+					class="dragDisabled"
+					@keyup.esc="cancelEdit"
+					@submit.prevent="finishedEdit(card)">
+					<input v-model="copiedCard.title" type="text" autofocus>
+					<input type="button" class="icon-confirm" @click="finishedEdit(card)">
+				</form>
 
-			<Actions v-if="canEdit && !editing" @click.stop.prevent>
-				<ActionButton v-if="showArchived === false" icon="icon-user" @click="assignCardToMe()">
-					{{ t('deck', 'Assign to me') }}
-				</ActionButton>
-				<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">
-					{{ t('deck', (showArchived ? 'Unarchive card' : 'Archive card')) }}
-				</ActionButton>
-				<ActionButton v-if="showArchived === false" icon="icon-delete" @click="deleteCard()">
-					{{ t('deck', 'Delete card') }}
-				</ActionButton>
-				<ActionButton icon="icon-external" @click.stop="modalShow=true">
-					{{ t('deck', 'Move card') }}
-				</ActionButton>
-				<ActionButton icon="icon-settings-dark" @click="openCard">
-					{{ t('deck', 'Card details') }}
-				</ActionButton>
-			</Actions>
-
-			<Modal v-if="modalShow" title="Move card to another board" @close="modalShow=false">
-				<div class="modal__content">
-					<Multiselect v-model="selectedBoard"
-						:placeholder="t('deck', 'Select a board')"
-						:options="boards"
-						label="title"
-						@select="loadStacksFromBoard" />
-					<Multiselect v-model="selectedStack"
-						:placeholder="t('deck', 'Select a stack')"
-						:options="stacksFromBoard"
-						label="title" />
-
-					<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">
+				<Actions v-if="canEdit && !editing" @click.stop.prevent>
+					<ActionButton v-if="showArchived === false" icon="icon-user" @click="assignCardToMe()">
+						{{ t('deck', 'Assign to me') }}
+					</ActionButton>
+					<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">
+						{{ t('deck', (showArchived ? 'Unarchive card' : 'Archive card')) }}
+					</ActionButton>
+					<ActionButton v-if="showArchived === false" icon="icon-delete" @click="deleteCard()">
+						{{ t('deck', 'Delete card') }}
+					</ActionButton>
+					<ActionButton icon="icon-external" @click.stop="modalShow=true">
 						{{ t('deck', 'Move card') }}
-					</button>
-					<button @click="modalShow=false">
-						{{ t('deck', 'Cancel') }}
-					</button>
-				</div>
-			</Modal>
+					</ActionButton>
+					<ActionButton icon="icon-settings-dark" @click="openCard">
+						{{ t('deck', 'Card details') }}
+					</ActionButton>
+				</Actions>
+
+				<Modal v-if="modalShow" title="Move card to another board" @close="modalShow=false">
+					<div class="modal__content">
+						<Multiselect v-model="selectedBoard"
+							:placeholder="t('deck', 'Select a board')"
+							:options="boards"
+							label="title"
+							@select="loadStacksFromBoard" />
+						<Multiselect v-model="selectedStack"
+							:placeholder="t('deck', 'Select a stack')"
+							:options="stacksFromBoard"
+							label="title" />
+
+						<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">
+							{{ t('deck', 'Move card') }}
+						</button>
+						<button @click="modalShow=false">
+							{{ t('deck', 'Cancel') }}
+						</button>
+					</div>
+				</Modal>
+			</div>
+			<ul v-if="card.labels && card.labels.length > 0" class="labels" @click="openCard">
+				<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)">
+					<span>{{ label.title }}</span>
+				</li>
+			</ul>
+			<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
+				<CardBadges :id="id" />
+			</div>
 		</div>
-		<ul v-if="card.labels && card.labels.length > 0" class="labels" @click="openCard">
-			<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)">
-				<span>{{ label.title }}</span>
-			</li>
-		</ul>
-		<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
-			<CardBadges :id="id" />
-		</div>
-	</div>
+	</AttachmentDragAndDrop>
 </template>
 
 <script>
@@ -105,10 +107,11 @@ import axios from '@nextcloud/axios'
 import CardBadges from './CardBadges'
 import Color from '../../mixins/color'
 import labelStyle from '../../mixins/labelStyle'
+import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
 
 export default {
 	name: 'CardItem',
-	components: { Modal, CardBadges, Actions, ActionButton, Multiselect },
+	components: { Modal, CardBadges, Actions, ActionButton, Multiselect, AttachmentDragAndDrop },
 	directives: {
 		ClickOutside,
 	},
