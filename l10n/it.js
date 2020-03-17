@@ -40,7 +40,7 @@ OC.L10N.register(
     "You have removed the due date of card {card}" : "Hai rimosso la data di scadenza della scheda {card}",
     "{user} has removed the due date of card {card}" : "{user} ha rimosso la data di scadenza dalla scheda {card}",
     "You have set the due date of card {card} to {after}" : "Hai impostato la data di scadenza della scheda {card} a {after}",
-    "{user} has set the due date of card {card} to {after}" : "{user} ha impostato la data di scadenza dell scheda {card} a {after}",
+    "{user} has set the due date of card {card} to {after}" : "{user} ha impostato la data di scadenza della scheda {card} a {after}",
     "You have updated the due date of card {card} to {after}" : "Hai aggiornato la data di scadenza della scheda {card} a {after}",
     "{user} has updated the due date of card {card} to {after}" : "{user} ha aggiornato la data di scadenza della scheda {card} a {after}",
     "You have added the tag {label} to card {card} in stack {stack} on board {board}" : "Hai aggiunto l'etichetta {label} alla scheda {card} nella pila {stack} sulla lavagna {board}",
