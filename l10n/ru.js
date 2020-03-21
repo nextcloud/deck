@@ -166,6 +166,7 @@ OC.L10N.register(
     "Do you want to overwrite it?" : "Перезаписать?",
     "Overwrite file" : "Перезаписать",
     "Keep existing file" : "Сохранить имеющийся",
+    "This board is read only" : "Эта доска доступна только для чтения",
     "Drop your files to upload" : "Для загрузки файлов, перетащите их сюда",
     "Maximum file size of {size} exceeded" : "Превышен максимально разрешённый размер файла в  {size}",
     "No comments yet. Begin the discussion!" : "Комментарии отсутствуют, начните обсуждение!",
