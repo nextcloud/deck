@@ -68,6 +68,8 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "Spremembe v programu <strong>Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "Nalogi je dodana nova <strong>opomba</strong>",
     "Personal" : "Osebno",
+    "%s has mentioned you in a comment on \"%s\"." : "%s vas omeni v opombi na »%s«.",
+    "{user} has mentioned you in a comment on \"%s\"." : "{user} vas omeni v opombi na »%s«.",
     "{user} has shared the board %s with you." : "{user} vam omogoči souporabo zbirke %s.",
     "No data was provided to create an attachment." : "Ni podanih podatkov za ustvarjanje priloge.",
     "Finished" : "Končano",
