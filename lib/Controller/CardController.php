@@ -5,24 +5,25 @@
  * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *  
+ *
  */
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\CardService;
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
@@ -31,11 +32,13 @@ class CardController extends Controller {
 
 	private $userId;
 	private $cardService;
+	private $assignmentService;
 
-	public function __construct($appName, IRequest $request, CardService $cardService, $userId) {
+	public function __construct($appName, IRequest $request, CardService $cardService, AssignmentService $assignmentService, $userId) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
 		$this->cardService = $cardService;
+		$this->assignmentService = $assignmentService;
 	}
 
 	/**
@@ -153,15 +156,15 @@ class CardController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 */
-	public function assignUser($cardId, $userId) {
-		return $this->cardService->assignUser($cardId, $userId);
+	public function assignUser($cardId, $userId, $type = 0) {
+		return $this->assignmentService->assignUser($cardId, $userId, $type);
 	}
 
 	/**
 	 * @NoAdminRequired
 	 */
-	public function unassignUser($cardId, $userId) {
-		return $this->cardService->unassignUser($cardId, $userId);
+	public function unassignUser($cardId, $userId, $type = 0) {
+		return $this->assignmentService->unassignUser($cardId, $userId, $type);
 	}
 
 

@@ -30,10 +30,16 @@ class AssignedUsers extends RelationalEntity implements JsonSerializable {
 	public $id;
 	protected $participant;
 	protected $cardId;
+	protected $type;
+
+	public const TYPE_USER = Acl::PERMISSION_TYPE_USER;
+	public const TYPE_GROUP = Acl::PERMISSION_TYPE_GROUP;
+	public const TYPE_CIRCLE = Acl::PERMISSION_TYPE_CIRCLE;
 
 	public function __construct() {
 		$this->addType('id', 'integer');
 		$this->addType('cardId', 'integer');
+		$this->addType('type', 'integer');
 		$this->addResolvable('participant');
 	}
 

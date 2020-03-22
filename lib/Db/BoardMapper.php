@@ -232,7 +232,10 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 				\OC::$server->getLogger()->debug('Group ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
 				return null;
 			}
-			if ($acl->getType() === Acl::PERMISSION_TYPE_CIRCLE && $this->circlesEnabled) {
+			if ($acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
+				if (!$this->circlesEnabled) {
+					return null;
+				}
 				try {
 					$circle = \OCA\Circles\Api\v1\Circles::detailsCircle($acl->getParticipant(), true);
 					if ($circle) {
