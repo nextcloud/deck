@@ -174,7 +174,7 @@ OC.L10N.register(
     "The comment cannot be empty." : "Der Kommentar darf nicht leer sein.",
     "The comment cannot be longer than 1000 characters." : "Der Kommentar darf nicht länger als 1000 Zeichen sein.",
     "In reply to" : "Als Antwort auf",
-    "Reply" : "Benötigt keine Übersetzung. Für Android wird nur die formelle Übersetzung verwendet (de_DE).",
+    "Reply" : "Antworten",
     "Update" : "Aktualisieren",
     "seconds ago" : "Gerade eben",
     "Assign to me" : "Mir zuweisen",
