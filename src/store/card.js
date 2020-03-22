@@ -198,12 +198,12 @@ export default {
 			const updatedCard = await apiClient[call](card)
 			commit('deleteCard', updatedCard)
 		},
-		async assignCardToUser({ commit }, card) {
-			const user = await apiClient.assignUser(card)
+		async assignCardToUser({ commit }, { card, assignee }) {
+			const user = await apiClient.assignUser(card.id, assignee.userId, assignee.type)
 			commit('assignCardToUser', user)
 		},
-		async removeUserFromCard({ commit }, card) {
-			const user = await apiClient.removeUser(card)
+		async removeUserFromCard({ commit }, { card, assignee }) {
+			const user = await apiClient.removeUser(card.id, assignee.userId, assignee.type)
 			commit('removeUserFromCard', user)
 		},
 		async addLabel({ commit }, data) {
@@ -219,7 +219,7 @@ export default {
 			commit('updateCardProperty', { property: 'description', card: updatedCard })
 		},
 		async updateCardDue({ commit }, card) {
-			const updatedCard = apiClient.updateCard(card)
+			const updatedCard = await apiClient.updateCard(card)
 			commit('updateCardProperty', { property: 'duedate', card: updatedCard })
 		},
 	},

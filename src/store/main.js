@@ -78,8 +78,12 @@ export default new Vuex.Store({
 		boards: state => {
 			return state.boards
 		},
-		sharees: state => {
-			return state.sharees
+		assignables: state => {
+			return [
+				...state.assignableUsers.map((user) => ({ ...user, type: 0 })),
+				...state.currentBoard.acl.filter((acl) => acl.type === 1 && typeof acl.participant === 'object').map((group) => ({ ...group.participant, type: 1 })),
+				...state.currentBoard.acl.filter((acl) => acl.type === 7 && typeof acl.participant === 'object').map((circle) => ({ ...circle.participant, type: 7 })),
+			]
 		},
 		noneArchivedBoards: state => {
 			return state.boards.filter(board => {

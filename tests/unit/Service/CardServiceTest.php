@@ -39,6 +39,9 @@ use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
 use OCP\Activity\IEvent;
 use OCP\Comments\ICommentsManager;
+use OCP\EventDispatcher\ABroadcastedEvent;
+use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IUser;
 use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -91,7 +94,7 @@ class CardServiceTest extends TestCase {
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->commentsManager = $this->createMock(ICommentsManager::class);
 		$this->userManager = $this->createMock(IUserManager::class);
-		$this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->cardService = new CardService(
 			$this->cardMapper,
@@ -317,103 +320,5 @@ class CardServiceTest extends TestCase {
 		$this->expectException(StatusException::class);
 		$this->cardService->removeLabel(123, 999);
 	}
-
-	public function testAssignUser() {
-		$assignments = [];
-		$this->assignedUsersMapper->expects($this->once())
-			->method('find')
-			->with(123)
-			->willReturn($assignments);
-		$assignment = new AssignedUsers();
-		$assignment->setCardId(123);
-		$assignment->setParticipant('admin');
-		$this->cardMapper->expects($this->once())
-			->method('findBoardId')
-			->willReturn(1);
-		$this->permissionService->expects($this->once())
-			->method('findUsers')
-			->with(1)
-			->willReturn(['admin' => 'admin', 'user1' => 'user1']);
-		$this->assignedUsersMapper->expects($this->once())
-			->method('insert')
-			->with($assignment)
-			->willReturn($assignment);
-		$actual = $this->cardService->assignUser(123, 'admin');
-		$this->assertEquals($assignment, $actual);
-	}
-
-	public function testAssignUserNoParticipant() {
-		$this->expectException(BadRequestException::class);
-		$this->expectExceptionMessage('The user is not part of the board');
-		$assignments = [];
-		$this->assignedUsersMapper->expects($this->once())
-			->method('find')
-			->with(123)
-			->willReturn($assignments);
-		$assignment = new AssignedUsers();
-		$assignment->setCardId(123);
-		$assignment->setParticipant('admin');
-		$this->cardMapper->expects($this->once())
-			->method('findBoardId')
-			->willReturn(1);
-		$this->permissionService->expects($this->once())
-			->method('findUsers')
-			->with(1)
-			->willReturn(['user2' => 'user2', 'user1' => 'user1']);
-		$actual = $this->cardService->assignUser(123, 'admin');
-	}
-
-	public function testAssignUserExisting() {
-		$this->expectException(BadRequestException::class);
-		$this->expectExceptionMessage('The user is already assigned to the card');
-		$assignment = new AssignedUsers();
-		$assignment->setCardId(123);
-		$assignment->setParticipant('admin');
-		$assignments = [
-			$assignment
-		];
-		$this->assignedUsersMapper->expects($this->once())
-			->method('find')
-			->with(123)
-			->willReturn($assignments);
-		$actual = $this->cardService->assignUser(123, 'admin');
-		$this->assertFalse($actual);
-	}
-
-	public function testUnassignUserExisting() {
-		$assignment = new AssignedUsers();
-		$assignment->setCardId(123);
-		$assignment->setParticipant('admin');
-		$assignments = [
-			$assignment
-		];
-		$this->assignedUsersMapper->expects($this->once())
-			->method('find')
-			->with(123)
-			->willReturn($assignments);
-		$this->assignedUsersMapper->expects($this->once())
-			->method('delete')
-			->with($assignment)
-			->willReturn($assignment);
-		$actual = $this->cardService->unassignUser(123, 'admin');
-		$this->assertEquals($assignment, $actual);
-	}
-
-	public function testUnassignUserNotExisting() {
-		$this->expectException(NotFoundException::class);
-		$assignment = new AssignedUsers();
-		$assignment->setCardId(123);
-		$assignment->setParticipant('admin');
-		$assignments = [
-			$assignment
-		];
-		$this->assignedUsersMapper->expects($this->once())
-			->method('find')
-			->with(123)
-			->willReturn($assignments);
-		$this->expectException(NotFoundException::class);
-		$actual = $this->cardService->unassignUser(123, 'user');
-	}
-
 
 }

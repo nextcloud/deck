@@ -22,13 +22,31 @@
 
 <template>
 	<div class="avatars">
-		<div class="avatar-list" @click.stop="popoverVisible=!popoverVisible">
-			<div v-if="popover.length > 0" class="avatardiv icon-more" />
-			<Avatar v-for="user in firstUsers"
-				:key="user.id"
-				:url="avatarUrl(user)"
-				:disable-tooltip="true"
-				:size="32" />
+		<div class="avatar-list" @click.stop="togglePopover">
+			<div v-if="popover.length > 0">
+				<div class="avatardiv icon-more" />
+			</div>
+			<div v-for="user in firstUsers" :key="user.id">
+				<Avatar v-if="user.type === 0"
+					:user="user.participant.uid"
+					:display-name="user.participant.displayname"
+					:disable-menu="true"
+					:size="32" />
+				<Avatar v-if="user.type === 1"
+					:user="user.participant.primaryKey"
+					:display-name="user.participant.primaryKey"
+					:tooltip-message="user.participant.primaryKey + ' ' + t('deck', '(group)')"
+					:is-no-user="true"
+					:disable-="true"
+					:size="32" />
+				<Avatar v-if="user.type === 7"
+					:user="user.participant.primaryKey"
+					:display-name="user.participant.primaryKey"
+					:tooltip-message="user.participant.primaryKey + ' ' + t('deck', '(circle)')"
+					:is-no-user="true"
+					:disable-="true"
+					:size="32" />
+			</div>
 		</div>
 
 		<div v-show="popoverVisible" class="popovermenu menu-right">
@@ -69,8 +87,11 @@ export default {
 			return this.users.slice(0, 3)
 		},
 		avatarUrl() {
-			return (session) => {
-				const user = session.participant.displayname
+			return (assignable) => {
+				if (assignable.type === 1) {
+					return 'icon-group'
+				}
+				const user = assignable.participant.primaryKey
 				const size = 32
 				const avatarUrl = OC.generateUrl('/avatar/{user}/{size}',
 					{
@@ -81,7 +102,7 @@ export default {
 			}
 		},
 		popover() {
-			if (!this.users || this.users.length < 0) {
+			if (!this.users || this.users.length === 0) {
 				return []
 			}
 			return [
@@ -89,19 +110,25 @@ export default {
 					return {
 						href: '#',
 						icon: this.avatarUrl(session),
-						text: session.participant.displayname,
+						text: session.participant.displayname + (session.type === 1 ? ' ' + t('deck', '(group)') : ''),
 					}
 				}),
 			]
 		},
-
+	},
+	methods: {
+		togglePopover() {
+			if (this.popover.length > 0) {
+				this.popoverVisible = !this.popoverVisible
+			}
+		},
 	},
 }
 </script>
 
 <style scoped lang="scss">
 	.avatars {
-		margin: 0;
+		margin-top: 5px;
 		position: relative;
 		flex-grow: 1;
 		/deep/ .popovermenu {
@@ -118,14 +145,12 @@ export default {
 	.avatar-list {
 		float: right;
 		display: inline-flex;
+		padding-right: 8px;
 		flex-direction: row-reverse;
 		.avatardiv,
 		/deep/ .avatardiv {
 			width: 36px;
 			height: 36px;
-			margin-right: -8px;
-			border: 2px solid var(--color-main-background);
-			background-color: var(--color-main-background) !important;
 			box-sizing: content-box !important;
 			&.icon-more {
 				width: 32px;
@@ -134,6 +159,13 @@ export default {
 				background-color: var(--color-background-dark) !important;
 				cursor: pointer;
 			}
+			& {
+				margin-right: -12px;
+				transition: margin-right 0.2s ease-in-out;
+			}
+		}
+		&:hover div:nth-child(n+2) /deep/ .avatardiv {
+			margin-right: 1px;
 		}
 	}
 	.popovermenu {

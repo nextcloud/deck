@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<div class="comment--header">
-			<Avatar :user="card.owner.uid" />
+			<Avatar :user="currentUser.uid" />
 			<span class="has-tooltip username">
-				{{ card.owner.displayname }}
+				{{ currentUser.displayName }}
 			</span>
 		</div>
 
@@ -54,6 +54,7 @@ export default {
 		return {
 			newComment: '',
 			isLoading: false,
+			currentUser: OC.getCurrentUser(),
 		}
 	},
 	computed: {

@@ -86,7 +86,8 @@ class AssignmentService {
 		NotificationHelper $notificationHelper,
 		ActivityManager $activityManager,
 		ChangeHelper $changeHelper,
-		IEventDispatcher $eventDispatcher
+		IEventDispatcher $eventDispatcher,
+		$userId
 	) {
 		$this->permissionService = $permissionService;
 		$this->cardMapper = $cardMapper;
@@ -96,6 +97,7 @@ class AssignmentService {
 		$this->changeHelper = $changeHelper;
 		$this->activityManager = $activityManager;
 		$this->eventDispatcher = $eventDispatcher;
+		$this->currentUser = $userId;
 	}
 
 	/**
@@ -107,7 +109,7 @@ class AssignmentService {
 	 * @throws MultipleObjectsReturnedException
 	 * @throws DoesNotExistException
 	 */
-	public function assignUser($cardId, $userId, int $type = 0) {
+	public function assignUser($cardId, $userId, int $type = AssignedUsers::TYPE_USER) {
 
 		if (is_numeric($cardId) === false) {
 			throw new BadRequestException('card id must be a number');

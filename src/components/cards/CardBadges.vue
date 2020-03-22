@@ -97,19 +97,21 @@ export default {
 <style lang="scss" scoped>
 	.badges {
 		display: flex;
+		width: 100%;
 		flex-grow: 1;
 
 		.icon {
 			opacity: 0.5;
 			padding: 12px 14px;
-			margin-right: 10px;
+			padding-right: 4px;
+			margin-right: 5px;
 			background-position: left;
 			background-size: 16px;
 			span {
 				margin-left: 18px;
 			}
-			&.icon-filetype-text {
-				opacity: 1;
+			&.icon-edit {
+				opacity: 0.5;
 			}
 		}
 	}
@@ -124,6 +126,7 @@ export default {
 		display: flex;
 		align-items: center;
 		opacity: .5;
+		flex-shrink: 1;
 
 		.icon {
 			background-size: contain;
@@ -145,6 +148,9 @@ export default {
 
 		span {
 			margin-left: 20px;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
 		}
 	}
 </style>

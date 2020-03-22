@@ -60,7 +60,7 @@
 <script>
 import { Avatar, Multiselect, Actions, ActionButton, ActionCheckbox } from '@nextcloud/vue'
 import { CollectionList } from 'nextcloud-vue-collections'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
@@ -87,8 +87,10 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters([
+		...mapState([
 			'sharees',
+		]),
+		...mapGetters([
 			'canEdit',
 			'canManage',
 			'canShare',
