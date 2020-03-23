@@ -25,16 +25,16 @@
   -->
 
 <template>
-	<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels.length > 0, 'is-editing': editing}"
+	<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'is-editing': editing}"
 		tag="div"
 		class="card"
-		@click.self="openCard">
+		@click="openCard">
 		<div class="card-upper">
 			<h3 v-if="showArchived || !canEdit">
 				{{ card.title }}
 			</h3>
-			<h3 v-else-if="!editing" @click.stop="startEditing(card)">
-				{{ card.title }}
+			<h3 v-else-if="!editing">
+				<span @click.stop="startEditing(card)">{{ card.title }}</span>
 			</h3>
 
 			<form v-if="editing"
@@ -85,7 +85,7 @@
 				</div>
 			</Modal>
 		</div>
-		<ul v-if="card.labels.length > 0" class="labels" @click="openCard">
+		<ul v-if="card.labels && card.labels.length > 0" class="labels" @click="openCard">
 			<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)">
 				<span>{{ label.title }}</span>
 			</li>
@@ -257,9 +257,11 @@ export default {
 				margin: 14px $card-padding;
 				flex-grow: 1;
 				font-size: 100%;
-				cursor: text;
 				overflow-x: hidden;
 				word-wrap: break-word;
+				span {
+					cursor: text;
+				}
 			}
 		}
 
