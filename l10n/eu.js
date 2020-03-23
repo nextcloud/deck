@@ -129,6 +129,7 @@ OC.L10N.register(
     "Created" : "Sortua",
     "Upload attachment" : "Igo eranskina",
     "File already exists" : "Badago izen bereko fitxategi bat",
+    "Drop your files to upload" : "Jaregin zure fitxategiak kargatzeko",
     "Maximum file size of {size} exceeded" : "Fitxategiaren gehienezko {size} tamaina gainditu da",
     "Save" : "Gorde",
     "Reply" : "Erantzun",
