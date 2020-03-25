@@ -138,6 +138,7 @@ OC.L10N.register(
     "Add a new card" : "Dodaj novo nalogo",
     "Edit" : "Uredi",
     "Add a new label" : "Dodaj novo oznako",
+    "title and color value must be provided" : "navedena morata biti podatka naslova in barve",
     "Details" : "Podrobnosti",
     "Assign a tag to this card…" : "Dodeli oznako nalogi ...",
     "Assign to users" : "Dodeli uporabnikom",
@@ -152,8 +153,14 @@ OC.L10N.register(
     "Modified" : "Spremenjeno",
     "Created" : "Ustvarjeno",
     "Upload attachment" : "Pošlji prilogo",
+    "Delete Attachment" : "Izbriši prilogo",
+    "Restore Attachment" : "Obnovi prilogo",
     "File already exists" : "Datoteka s tem imenom že obstaja.",
+    "Do you want to overwrite it?" : "Ali želite predmet prepisati?",
+    "Overwrite file" : "Prepiši datoteko",
+    "Keep existing file" : "Ohrani obstoječe datoteke",
     "Maximum file size of {size} exceeded" : "Omejitev velikosti datoteke {size} je prekoračena.",
+    "No comments yet. Begin the discussion!" : "Ni še odzivov, bodite prvi!",
     "Save" : "Shrani",
     "The comment cannot be empty." : "Polje opombe ne sme biti prazno.",
     "The comment cannot be longer than 1000 characters." : "Opomba ne sme biti daljša od 1000 znakov.",
@@ -179,6 +186,7 @@ OC.L10N.register(
     "Delete board" : "Izbriši zbirko",
     "Board details" : "Podrobnosti zbirke",
     "Link to a board" : "Povezava do zbirke",
-    "Link to a card" : "Povezava do naloge"
+    "Link to a card" : "Povezava do naloge",
+    "Something went wrong" : "Prišlo je do napake ..."
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");
