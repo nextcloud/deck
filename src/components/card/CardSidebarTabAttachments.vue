@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<AttachmentDragAndDrop :card-id="card.id">
+	<AttachmentDragAndDrop :card-id="card.id" class="drop-upload--sidebar">
 		<button class="icon-upload" @click="clickAddNewAttachmment()">
 			{{ t('settings', 'Upload attachment') }}
 		</button>
@@ -35,7 +35,7 @@
 					:key="attachment.id"
 					class="attachment"
 					style="display: flex;">
-					<a class="fileicon" :style="mimetypeForAttachment(attachment)" :href="attachmentUrl(attachment)" />
+					<a class="fileicon" :style="mimetypeForAttachment(attachment.extendedData.mimetype)" :href="attachmentUrl(attachment)" />
 					<div class="details">
 						<a :href="attachmentUrl(attachment)" target="_blank">
 							<div class="filename">
@@ -115,8 +115,8 @@ export default {
 			return (filesize) => formatFileSize(filesize)
 		},
 		mimetypeForAttachment() {
-			return (attachment) => {
-				const url = OC.MimeType.getIconUrl(attachment.extendedData.mimetype)
+			return (mimetype) => {
+				const url = OC.MimeType.getIconUrl(mimetype)
 				const styles = {
 					'background-image': `url("${url}")`,
 				}
@@ -167,53 +167,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
-	.attachments-drag-zone {
-		flex-grow: 1;
-	}
-
-	.dragover {
-		position: absolute;
-		top: 20%;
-		left: 10%;
-		width: 80%;
-		height: 60%;
-		background: var(--color-primary-light);
-		z-index: 11;
-		display: flex;
-		box-shadow: 0px 0px 36px var(--color-box-shadow);
-		border-radius: var(--border-radius);
-		opacity: .9;
-	}
-
-	.drop-hint {
-		margin: auto;
-		&__icon {
-			background-size: 48px;
-			height: 48px;
-			margin-bottom: 16px;
-		}
-	}
-
-	.fade {
-		&-enter {
-			opacity: 0;
-		}
-		&-enter-to {
-			opacity: .9;
-		}
-		&-leave {
-			opacity: .9;
-		}
-		&-leave-to {
-			opacity: 0;
-		}
-		&-enter-active,
-		&-leave-active {
-			transition: opacity 150ms ease-in-out;
-		}
-	}
-
 	.icon-upload {
 		padding-left: 35px;
 		background-position: 10px center;

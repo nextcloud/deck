@@ -124,28 +124,62 @@ export default {
 
 	.attachments-drag-zone {
 		flex-grow: 1;
+		position: relative;
 	}
 
 	.dragover {
 		position: absolute;
+		background: var(--color-primary-light);
+		z-index: 11;
+		display: flex;
+		border-radius: var(--border-radius);
+		opacity: .9;
+		margin: auto;
+
+		.drop-hint {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+
+			&__icon {
+				background-size: 32px;
+				background-position: center center;
+				height: 48px;
+				margin-bottom: 16px;
+			}
+
+			&__text {
+				line-height: 125%;
+				text-align: center;
+			}
+		}
+	}
+
+	.drop-upload--sidebar .dragover {
 		top: 20%;
 		left: 10%;
 		width: 80%;
 		height: 60%;
-		background: var(--color-primary-light);
-		z-index: 11;
-		display: flex;
 		box-shadow: 0px 0px 36px var(--color-box-shadow);
-		border-radius: var(--border-radius);
-		opacity: .9;
 	}
 
-	.drop-hint {
-		margin: auto;
-		&__icon {
-			background-size: 48px;
-			height: 48px;
-			margin-bottom: 16px;
+	.drop-upload--card .dragover {
+		border: 0;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+
+		h2 {
+			font-size: 13px;
+			margin: 0;
+		}
+
+		.drop-hint__icon {
+			margin: 0;
+			background-size: 16px;
+			height: 16px;
 		}
 	}
 
@@ -166,11 +200,6 @@ export default {
 		&-leave-active {
 			transition: opacity 150ms ease-in-out;
 		}
-	}
-
-	.icon-upload {
-		padding-left: 35px;
-		background-position: 10px center;
 	}
 
 	.modal__content {

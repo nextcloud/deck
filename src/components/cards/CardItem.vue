@@ -25,7 +25,7 @@
   -->
 
 <template>
-	<AttachmentDragAndDrop :card-id="id">
+	<AttachmentDragAndDrop :card-id="id" class="drop-upload--card">
 		<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'is-editing': editing}"
 			tag="div"
 			class="card"
