@@ -158,7 +158,7 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadrequestException
 	 */
-	public function create($title, $stackId, $type, $order, $owner, $description = '') {
+	public function create($title, $stackId, $type, $order, $owner, $description = '', $duedate = null) {
 		if ($title === 'false' || $title === null) {
 			throw new BadRequestException('title must be provided');
 		}
@@ -190,6 +190,7 @@ class CardService {
 		$card->setOrder($order);
 		$card->setOwner($owner);
 		$card->setDescription($description);
+		$card->setDuedate($duedate);
 		$card = $this->cardMapper->insert($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE);
 		$this->changeHelper->cardChanged($card->getId(), false);
