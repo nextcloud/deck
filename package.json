@@ -91,7 +91,7 @@
 		"stylelint-webpack-plugin": "^0.10.5",
 		"url-loader": "^4.0.0",
 		"vue-jest": "^3.0.5",
-		"vue-loader": "^15.9.0",
+		"vue-loader": "^15.9.1",
 		"vue-style-loader": "^4.1.1",
 		"vue-template-compiler": "^2.6.11",
 		"webpack": "^4.42.1",
