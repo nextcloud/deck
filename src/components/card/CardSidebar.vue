@@ -61,10 +61,9 @@
 
 			<div class="section-wrapper">
 				<div v-tooltip="t('deck', 'Assign to users')" class="section-label icon-group">
-					<span class="hidden-visually">{{ t('deck', 'Assign to users') }}</span>
+					<span class="hidden-visually">{{ t('deck', 'Assign to users/groups/circles') }}</span>
 				</div>
 				<div class="section-details">
-					<!-- FIXME: model not wokring due to id -->
 					<Multiselect v-if="canEdit"
 						v-model="assignedUsers"
 						:multiple="true"
@@ -78,7 +77,7 @@
 						@remove="removeUserFromCard">
 						<template #tag="scope">
 							<div class="avatarlist--inline">
-								<Avatar :user="scope.option.primaryKey"
+								<Avatar :user="scope.option.uid"
 									:display-name="scope.option.displayname"
 									:size="24"
 									:disable-menu="true" />
@@ -87,8 +86,8 @@
 					</Multiselect>
 					<div v-else class="avatar-list--readonly">
 						<Avatar v-for="option in currentCard.assignedUsers"
-							:key="option.id"
-							:user="option.participant.primaryKey"
+							:key="option.primaryKey"
+							:user="option.participant.uid"
 							:display-name="option.participant.displayname"
 							:size="32" />
 					</div>

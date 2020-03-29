@@ -57,7 +57,7 @@ class GroupTest extends \Test\TestCase {
 		$expected = [
 			'uid' => 'mygroup',
 			'displayname' => 'My Group',
-			'primaryKey' => 'mygroup'
+			'primaryKey' => '1:mygroup'
 		];
 
 		$actual = $groupRelationalObject->jsonSerialize();

@@ -24,11 +24,12 @@
 namespace OCA\Deck\Db;
 
 use OCP\IGroup;
+use OCP\Share\IShare;
 
 class Group extends RelationalObject {
 
 	public function __construct(IGroup $group) {
-		$primaryKey = $group->getGID();
+		$primaryKey = IShare::TYPE_GROUP . ':' . $group->getGID();
 		parent::__construct($primaryKey, $group);
 	}
 

@@ -26,7 +26,7 @@
 			<At ref="at"
 				v-model="commentText"
 				:members="members"
-				name-key="primaryKey"
+				name-key="uid"
 				:tab-select="true">
 				<template v-slot:item="s">
 					<Avatar class="atwho-li--avatar" :user="s.item.uid" :size="24" />
@@ -34,9 +34,9 @@
 				</template>
 				<template v-slot:embeddedItem="scope">
 					<span>
-						<UserBubble v-if="scope.current.primaryKey"
-							:data-mention-id="scope.current.primaryKey"
-							:user="scope.current.primaryKey"
+						<UserBubble v-if="scope.current.uid"
+							:data-mention-id="scope.current.uid"
+							:user="scope.current.uid"
 							:display-name="scope.current.displayname" />
 					</span>
 				</template>

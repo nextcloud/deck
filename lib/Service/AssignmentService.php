@@ -126,7 +126,7 @@ class AssignmentService {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 		$assignments = $this->assignedUsersMapper->find($cardId);
 		foreach ($assignments as $assignment) {
-			if ($assignment->getParticipant() === $userId) {
+			if ($assignment->getParticipant() === $userId && $assignment->getType() === $type) {
 				throw new BadRequestException('The user is already assigned to the card');
 			}
 		}

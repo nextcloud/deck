@@ -24,13 +24,15 @@
 namespace OCA\Deck\Db;
 
 
+use OCP\Share\IShare;
+
 class Circle extends RelationalObject {
 
 	/** @var \OCA\Circles\Model\Circle */
 	protected $object;
 
 	public function __construct(\OCA\Circles\Model\Circle $circle) {
-		$primaryKey = $circle->getUniqueId();
+		$primaryKey = IShare::TYPE_CIRCLE . ':' . $circle->getUniqueId();
 		parent::__construct($primaryKey, $circle);
 	}
 
