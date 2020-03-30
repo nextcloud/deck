@@ -105,6 +105,12 @@
     "Select a card" : "Bir kart seçin",
     "Link to card" : "Kart ile ilişkilendir",
     "Cancel" : "İptal",
+    "File already exists" : "Dosya zaten var",
+    "A file with the name {filename} already exists." : "{filename} isminde bir dosya zaten var.",
+    "Do you want to overwrite it?" : "Üzerine yazmak ister misiniz?",
+    "Overwrite file" : "Üzerine yaz",
+    "Keep existing file" : "Mevcut dosyayı koru",
+    "Drop your files to upload" : "Yüklenecek dosyaları sürükleyip bırakın",
     "Add new list" : "Liste ekle",
     "List name" : "Liste adı",
     "Apply filter" : "Süzgeci uygula",
@@ -159,13 +165,6 @@
     "Upload attachment" : "Ek dosya yükle",
     "Delete Attachment" : "Eki Sil",
     "Restore Attachment" : "Eki Geri Getir",
-    "File already exists" : "Dosya zaten var",
-    "A file with the name {filename} already exists." : "{filename} isminde bir dosya zaten var.",
-    "Do you want to overwrite it?" : "Üzerine yazmak ister misiniz?",
-    "Overwrite file" : "Üzerine yaz",
-    "Keep existing file" : "Mevcut dosyayı koru",
-    "Drop your files to upload" : "Yüklenecek dosyaları sürükleyip bırakın",
-    "Maximum file size of {size} exceeded" : "{size} olan en büyük dosya boyutu sınırı aşıldı",
     "No comments yet. Begin the discussion!" : "Henüz bir yorum yapılmamış. Tartışmayı başlatın!",
     "Save" : "Kaydet",
     "The comment cannot be empty." : "Yorum boş olamaz.",
@@ -194,6 +193,7 @@
     "Board details" : "Pano ayrıntıları",
     "Link to a board" : "Bir pano ile ilişkilendir",
     "Link to a card" : "Bir kart ile ilişkilendir",
-    "Something went wrong" : "Bazı şeyler yanlış gitti"
+    "Something went wrong" : "Bazı şeyler yanlış gitti",
+    "Maximum file size of {size} exceeded" : "{size} olan en büyük dosya boyutu sınırı aşıldı"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

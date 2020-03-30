@@ -105,6 +105,13 @@
     "Select a card" : "Выберите карточку",
     "Link to card" : "Ссылка на карточку",
     "Cancel" : "Отменить",
+    "File already exists" : "Файл уже существует",
+    "A file with the name {filename} already exists." : "Файл «{filename}» уже существует.",
+    "Do you want to overwrite it?" : "Перезаписать?",
+    "Overwrite file" : "Перезаписать",
+    "Keep existing file" : "Сохранить имеющийся",
+    "This board is read only" : "Эта доска доступна только для чтения",
+    "Drop your files to upload" : "Для загрузки файлов, перетащите их сюда",
     "Add new list" : "Добавить список",
     "List name" : "Название списка",
     "Apply filter" : "Применить фильтр",
@@ -159,14 +166,6 @@
     "Upload attachment" : "Загрузить вложение",
     "Delete Attachment" : "Удалить вложение",
     "Restore Attachment" : "Восстановить вложение",
-    "File already exists" : "Файл уже существует",
-    "A file with the name {filename} already exists." : "Файл «{filename}» уже существует.",
-    "Do you want to overwrite it?" : "Перезаписать?",
-    "Overwrite file" : "Перезаписать",
-    "Keep existing file" : "Сохранить имеющийся",
-    "This board is read only" : "Эта доска доступна только для чтения",
-    "Drop your files to upload" : "Для загрузки файлов, перетащите их сюда",
-    "Maximum file size of {size} exceeded" : "Превышен максимально разрешённый размер файла в  {size}",
     "No comments yet. Begin the discussion!" : "Комментарии отсутствуют, начните обсуждение!",
     "Save" : "Сохранить",
     "The comment cannot be empty." : "Комментарий не может быть пустым.",
@@ -195,6 +194,7 @@
     "Board details" : "Подробные сведения",
     "Link to a board" : "Ссылка на доску",
     "Link to a card" : "Ссылка на карточку",
-    "Something went wrong" : "Неизвестная ошибка"
+    "Something went wrong" : "Неизвестная ошибка",
+    "Maximum file size of {size} exceeded" : "Превышен максимально разрешённый размер файла в  {size}"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }

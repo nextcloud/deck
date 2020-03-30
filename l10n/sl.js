@@ -102,6 +102,10 @@ OC.L10N.register(
     "Select a card" : "Izbor naloge",
     "Link to card" : "Poveži nalogo",
     "Cancel" : "Prekliči",
+    "File already exists" : "Datoteka s tem imenom že obstaja.",
+    "Do you want to overwrite it?" : "Ali želite predmet prepisati?",
+    "Overwrite file" : "Prepiši datoteko",
+    "Keep existing file" : "Ohrani obstoječe datoteke",
     "Add new list" : "Dodaj nov seznam",
     "List name" : "Ime seznama",
     "Apply filter" : "Uveljavi filter",
@@ -155,11 +159,6 @@ OC.L10N.register(
     "Upload attachment" : "Pošlji prilogo",
     "Delete Attachment" : "Izbriši prilogo",
     "Restore Attachment" : "Obnovi prilogo",
-    "File already exists" : "Datoteka s tem imenom že obstaja.",
-    "Do you want to overwrite it?" : "Ali želite predmet prepisati?",
-    "Overwrite file" : "Prepiši datoteko",
-    "Keep existing file" : "Ohrani obstoječe datoteke",
-    "Maximum file size of {size} exceeded" : "Omejitev velikosti datoteke {size} je prekoračena.",
     "No comments yet. Begin the discussion!" : "Ni še odzivov, bodite prvi!",
     "Save" : "Shrani",
     "The comment cannot be empty." : "Polje opombe ne sme biti prazno.",
@@ -187,6 +186,7 @@ OC.L10N.register(
     "Board details" : "Podrobnosti zbirke",
     "Link to a board" : "Povezava do zbirke",
     "Link to a card" : "Povezava do naloge",
-    "Something went wrong" : "Prišlo je do napake ..."
+    "Something went wrong" : "Prišlo je do napake ...",
+    "Maximum file size of {size} exceeded" : "Omejitev velikosti datoteke {size} je prekoračena."
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

@@ -105,6 +105,13 @@
     "Select a card" : "Eine Karte auswählen",
     "Link to card" : "Mit einer Karte verknüpfen",
     "Cancel" : "Abbrechen",
+    "File already exists" : "Datei bereits vorhanden",
+    "A file with the name {filename} already exists." : "Eine Datei mit diesem Namen {filename} existiert bereits.",
+    "Do you want to overwrite it?" : "Möchten Sie überschreiben?",
+    "Overwrite file" : "Datei überschreiben",
+    "Keep existing file" : "Existierende Datei behalten",
+    "This board is read only" : "Dieses Board ist schreibgeschützt",
+    "Drop your files to upload" : "Dateien zum Hochladen hineinziehen",
     "Add new list" : "Neue Liste hinzufügen",
     "List name" : "Listenname",
     "Apply filter" : "Filter anwenden",
@@ -159,14 +166,6 @@
     "Upload attachment" : "Anhang hochladen",
     "Delete Attachment" : "Anhang löschen",
     "Restore Attachment" : "Anhang wiederherstellen",
-    "File already exists" : "Datei bereits vorhanden",
-    "A file with the name {filename} already exists." : "Eine Datei mit diesem Namen {filename} existiert bereits.",
-    "Do you want to overwrite it?" : "Möchten Sie überschreiben?",
-    "Overwrite file" : "Datei überschreiben",
-    "Keep existing file" : "Existierende Datei behalten",
-    "This board is read only" : "Dieses Board ist schreibgeschützt",
-    "Drop your files to upload" : "Dateien zum Hochladen hineinziehen",
-    "Maximum file size of {size} exceeded" : "Maximale Dateigröße von {size} überschritten",
     "No comments yet. Begin the discussion!" : "Bislang keine Kommentare. Beginnen Sie die Diskussion!",
     "Save" : "Speichern",
     "The comment cannot be empty." : "Der Kommentar darf nicht leer sein.",
@@ -195,6 +194,7 @@
     "Board details" : "Board-Details",
     "Link to a board" : "Mit einem Board verknüpfen",
     "Link to a card" : "Mit einer Karte verknüpfen",
-    "Something went wrong" : "Etwas ist schiefgelaufen"
+    "Something went wrong" : "Etwas ist schiefgelaufen",
+    "Maximum file size of {size} exceeded" : "Maximale Dateigröße von {size} überschritten"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

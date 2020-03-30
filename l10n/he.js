@@ -24,6 +24,8 @@ OC.L10N.register(
     "No file uploaded or file size exceeds maximum of %s" : "לא הועלה אף קובץ או שגודל הקובץ חרג מהסף המרבי של %s",
     "Create new board" : "יצירת לוח חדש",
     "Cancel" : "ביטול",
+    "File already exists" : "הקובץ כבר קיים",
+    "Do you want to overwrite it?" : "לשכתב עליו?",
     "Filter by tag" : "סינון לפי תגית",
     "Today" : "היום",
     "Show archived cards" : "הצגת כרטיסים בארכיון",
@@ -48,9 +50,6 @@ OC.L10N.register(
     "Modified" : "מועד שינוי",
     "Created" : "מועד היצירה",
     "Upload attachment" : "העלאת קבצים מצורפים",
-    "File already exists" : "הקובץ כבר קיים",
-    "Do you want to overwrite it?" : "לשכתב עליו?",
-    "Maximum file size of {size} exceeded" : "גודל הקבצים המרבי {size} הושג",
     "Save" : "שמור",
     "Reply" : "תגובה",
     "Update" : "עדכון",
@@ -65,6 +64,7 @@ OC.L10N.register(
     "Archive board" : "העברת לוח לארכיון",
     "Unarchive board" : "הוצאת ארכיון מהלוח",
     "Delete board" : "מחיקת לו",
-    "Board details" : "פרטי לוח"
+    "Board details" : "פרטי לוח",
+    "Maximum file size of {size} exceeded" : "גודל הקבצים המרבי {size} הושג"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

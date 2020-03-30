@@ -107,6 +107,8 @@ OC.L10N.register(
     "Select a card" : "选择一张卡片",
     "Link to card" : "链接到卡片",
     "Cancel" : "取消",
+    "File already exists" : "文件已存在",
+    "Do you want to overwrite it?" : "您确定要覆盖吗？",
     "Add new list" : "添加新的列表",
     "List name" : "列表名称",
     "Apply filter" : "应用过滤器",
@@ -159,9 +161,6 @@ OC.L10N.register(
     "Modified" : "已修改",
     "Created" : "已创建",
     "Upload attachment" : "上传附件",
-    "File already exists" : "文件已存在",
-    "Do you want to overwrite it?" : "您确定要覆盖吗？",
-    "Maximum file size of {size} exceeded" : "文件大小 {size} 超出最大限制",
     "No comments yet. Begin the discussion!" : "还没有评论。 开始讨论吧！",
     "Save" : "保存",
     "The comment cannot be empty." : "注释不能为空。",
@@ -188,6 +187,7 @@ OC.L10N.register(
     "Delete board" : "删除面板",
     "Board details" : "面板详情",
     "Link to a board" : "链接到一个面板",
-    "Link to a card" : "链接到一张卡片"
+    "Link to a card" : "链接到一张卡片",
+    "Maximum file size of {size} exceeded" : "文件大小 {size} 超出最大限制"
 },
 "nplurals=1; plural=0;");

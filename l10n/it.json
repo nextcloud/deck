@@ -105,6 +105,13 @@
     "Select a card" : "Seleziona una scheda",
     "Link to card" : " Collega una scheda",
     "Cancel" : "Annulla",
+    "File already exists" : "Il file esiste già",
+    "A file with the name {filename} already exists." : "Un file con il nome {filename} esiste già.",
+    "Do you want to overwrite it?" : "Vuoi sovrascriverlo?",
+    "Overwrite file" : "Sovrascrivi file",
+    "Keep existing file" : "Mantieni file esistente",
+    "This board is read only" : "Questa lavagna è in sola lettura",
+    "Drop your files to upload" : "Rilascia i tuoi file per caricarli",
     "Add new list" : "Aggiungi nuovo elenco",
     "List name" : "Nome elenco",
     "Apply filter" : "Applica filtro",
@@ -159,14 +166,6 @@
     "Upload attachment" : "Carica allegato",
     "Delete Attachment" : "Elimina allegato",
     "Restore Attachment" : "Ripristina allegato",
-    "File already exists" : "Il file esiste già",
-    "A file with the name {filename} already exists." : "Un file con il nome {filename} esiste già.",
-    "Do you want to overwrite it?" : "Vuoi sovrascriverlo?",
-    "Overwrite file" : "Sovrascrivi file",
-    "Keep existing file" : "Mantieni file esistente",
-    "This board is read only" : "Questa lavagna è in sola lettura",
-    "Drop your files to upload" : "Rilascia i tuoi file per caricarli",
-    "Maximum file size of {size} exceeded" : "Dimensione massima dei file di {size} superata",
     "No comments yet. Begin the discussion!" : "Ancora nessun commento. Inizia la discussione.",
     "Save" : "Salva",
     "The comment cannot be empty." : "Il commento non può essere vuoto.",
@@ -195,6 +194,7 @@
     "Board details" : "Dettagli lavagna",
     "Link to a board" : "Collega a una lavagna",
     "Link to a card" : " Collega a una scheda",
-    "Something went wrong" : "Qualcosa non ha funzionato"
+    "Something went wrong" : "Qualcosa non ha funzionato",
+    "Maximum file size of {size} exceeded" : "Dimensione massima dei file di {size} superata"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

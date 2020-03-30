@@ -105,6 +105,13 @@
     "Select a card" : "Wybierz kartę",
     "Link to card" : "Link do karty",
     "Cancel" : "Anuluj",
+    "File already exists" : "Plik już istnieje",
+    "A file with the name {filename} already exists." : "Plik o nazwie {filename} już istnieje.",
+    "Do you want to overwrite it?" : "Czy chcesz go nadpisać?",
+    "Overwrite file" : "Nadpisać plik",
+    "Keep existing file" : "Zachowaj istniejący plik",
+    "This board is read only" : "Ta tablica jest tylko do odczytu",
+    "Drop your files to upload" : "Upuść swoje pliki do wysłania",
     "Add new list" : "Dodaj nową listę",
     "List name" : "Nazwa listy",
     "Apply filter" : "Zastosuj filtr",
@@ -159,14 +166,6 @@
     "Upload attachment" : "Wyślij załącznik",
     "Delete Attachment" : "Usuń załącznik",
     "Restore Attachment" : "Przywróć załącznik",
-    "File already exists" : "Plik już istnieje",
-    "A file with the name {filename} already exists." : "Plik o nazwie {filename} już istnieje.",
-    "Do you want to overwrite it?" : "Czy chcesz go nadpisać?",
-    "Overwrite file" : "Nadpisać plik",
-    "Keep existing file" : "Zachowaj istniejący plik",
-    "This board is read only" : "Ta tablica jest tylko do odczytu",
-    "Drop your files to upload" : "Upuść swoje pliki do wysłania",
-    "Maximum file size of {size} exceeded" : "Przekroczono maksymalny rozmiar pliku {size}",
     "No comments yet. Begin the discussion!" : "Brak komentarzy. Rozpocznij dyskusję!",
     "Save" : "Zapisz",
     "The comment cannot be empty." : "Komentarz nie może być pusty.",
@@ -195,6 +194,7 @@
     "Board details" : "Szczegóły tablicy",
     "Link to a board" : "Link do tablicy",
     "Link to a card" : "Link do karty",
-    "Something went wrong" : "Coś poszło nie tak"
+    "Something went wrong" : "Coś poszło nie tak",
+    "Maximum file size of {size} exceeded" : "Przekroczono maksymalny rozmiar pliku {size}"
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }

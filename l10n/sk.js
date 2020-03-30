@@ -101,6 +101,7 @@ OC.L10N.register(
     "Select the board to link to a project" : "Vybrať nástenku na vytvorenie odkazu ku projektu",
     "Select board" : "Vybrať nástenku",
     "Cancel" : "Zrušiť",
+    "File already exists" : "Súbor už existuje",
     "Today" : "Dnes",
     "Show archived cards" : "Zobraziť archivované karty",
     "Hide archived cards" : "Skryť archivované karty",
@@ -129,8 +130,6 @@ OC.L10N.register(
     "Modified" : "Upravené",
     "Created" : "Vytvorené",
     "Upload attachment" : "Nahrať prílohu",
-    "File already exists" : "Súbor už existuje",
-    "Maximum file size of {size} exceeded" : "Bola prekročená maximálna veľkosť súboru {size}",
     "Save" : "Uložiť",
     "Reply" : "Odpoveď",
     "Update" : "Aktualizovať",
@@ -149,6 +148,7 @@ OC.L10N.register(
     "Unarchive board" : "Vybrať nástenku z archívu",
     "Delete board" : "Zmazať nástenku",
     "Board details" : "Podrobnosti o nástenke",
-    "Link to a board" : "Odkaz na nástenku"
+    "Link to a board" : "Odkaz na nástenku",
+    "Maximum file size of {size} exceeded" : "Bola prekročená maximálna veľkosť súboru {size}"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

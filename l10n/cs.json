@@ -105,6 +105,13 @@
     "Select a card" : "Vybrat tabuli",
     "Link to card" : "Propojit s kartou",
     "Cancel" : "Storno",
+    "File already exists" : "Soubor už existuje",
+    "A file with the name {filename} already exists." : "Soubor nazvaný {filename} už existuje.",
+    "Do you want to overwrite it?" : "Chcete položku přepsat?",
+    "Overwrite file" : "Přepsat soubor",
+    "Keep existing file" : "Ponechat existující soubor",
+    "This board is read only" : "Tato tabule je pouze pro čtení",
+    "Drop your files to upload" : "Přetáhněte sem soubory, které chcete nahrát",
     "Add new list" : "Přidat nový seznam",
     "List name" : "Název seznamu",
     "Apply filter" : "Uplatnit filtr",
@@ -159,14 +166,6 @@
     "Upload attachment" : "Nahrát přílohu",
     "Delete Attachment" : "Smazat přílohu",
     "Restore Attachment" : "Obnovit přílohu",
-    "File already exists" : "Soubor už existuje",
-    "A file with the name {filename} already exists." : "Soubor nazvaný {filename} už existuje.",
-    "Do you want to overwrite it?" : "Chcete položku přepsat?",
-    "Overwrite file" : "Přepsat soubor",
-    "Keep existing file" : "Ponechat existující soubor",
-    "This board is read only" : "Tato tabule je pouze pro čtení",
-    "Drop your files to upload" : "Přetáhněte sem soubory, které chcete nahrát",
-    "Maximum file size of {size} exceeded" : "Překročena nejvyšší umožněná velikost souboru {size}",
     "No comments yet. Begin the discussion!" : "Zatím bez komentářů. Zahajte diskuzi!",
     "Save" : "Uložit",
     "The comment cannot be empty." : "Komentář je třeba vyplnit",
@@ -195,6 +194,7 @@
     "Board details" : "Podrobnosti o desce",
     "Link to a board" : "Propojit s tabulí",
     "Link to a card" : "Propojit s kartou",
-    "Something went wrong" : "Něco se pokazilo"
+    "Something went wrong" : "Něco se pokazilo",
+    "Maximum file size of {size} exceeded" : "Překročena nejvyšší umožněná velikost souboru {size}"
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }

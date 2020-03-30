@@ -97,6 +97,8 @@ OC.L10N.register(
     "Select the board to link to a project" : "Velg tavle som skal lenkes til prosjekt",
     "Select board" : "Velg tavle",
     "Cancel" : "Avbryt",
+    "File already exists" : "Filen finnes allerede",
+    "Do you want to overwrite it?" : "Vil du overskrive?",
     "Filter by tag" : "Filtrer på knagg",
     "Today" : "I dag",
     "Show archived cards" : "Vis arkiverkte kort",
@@ -125,9 +127,6 @@ OC.L10N.register(
     "Modified" : "Endret",
     "Created" : "Opprettet",
     "Upload attachment" : "Last opp vedlegg",
-    "File already exists" : "Filen finnes allerede",
-    "Do you want to overwrite it?" : "Vil du overskrive?",
-    "Maximum file size of {size} exceeded" : "Maksimal størrelse for filer på {size} er overskredet",
     "Save" : "Lagre",
     "Reply" : "Svar",
     "Update" : "Oppdater",
@@ -144,6 +143,7 @@ OC.L10N.register(
     "Unarchive board" : "Aktiver tavle",
     "Delete board" : "Slett tavle",
     "Board details" : "Forumseksjonsdetaljer",
-    "Link to a board" : "Lenke til tavle"
+    "Link to a board" : "Lenke til tavle",
+    "Maximum file size of {size} exceeded" : "Maksimal størrelse for filer på {size} er overskredet"
 },
 "nplurals=2; plural=(n != 1);");

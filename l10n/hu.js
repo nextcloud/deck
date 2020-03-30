@@ -99,6 +99,8 @@ OC.L10N.register(
     "Select the board to link to a project" : "Válasszon ki egy táblát, amely egy projektre fog hivatkozni",
     "Select board" : "Válasszon táblát",
     "Cancel" : "Mégse",
+    "File already exists" : "A fájl már létezik",
+    "Do you want to overwrite it?" : "Felülírod?",
     "Filter by tag" : "Címke szerinti szűrés",
     "Today" : "Ma",
     "Show archived cards" : "Archivált kártyák megjelenítése",
@@ -128,9 +130,6 @@ OC.L10N.register(
     "Modified" : "Módosítva",
     "Created" : "Létrehozva",
     "Upload attachment" : "Melléklet feltöltése",
-    "File already exists" : "A fájl már létezik",
-    "Do you want to overwrite it?" : "Felülírod?",
-    "Maximum file size of {size} exceeded" : "A legnagyobb fájlméret ({size}) túllépve",
     "Save" : "Mentés",
     "Reply" : "Válasz",
     "Update" : "Frissítés",
@@ -148,6 +147,7 @@ OC.L10N.register(
     "Unarchive board" : "Tábla archiválásának visszavonása",
     "Delete board" : "Tábla törlése",
     "Board details" : "Tábla részletek",
-    "Link to a board" : "Hivatkozás egy táblához"
+    "Link to a board" : "Hivatkozás egy táblához",
+    "Maximum file size of {size} exceeded" : "A legnagyobb fájlméret ({size}) túllépve"
 },
 "nplurals=2; plural=(n != 1);");

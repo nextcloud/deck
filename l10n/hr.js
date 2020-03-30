@@ -107,6 +107,8 @@ OC.L10N.register(
     "Select a card" : "Odaberite karticu",
     "Link to card" : "Poveznica na karticu",
     "Cancel" : "Odustani",
+    "File already exists" : "Datoteka već postoji",
+    "Do you want to overwrite it?" : "Želite li prepisati?",
     "Add new list" : "Dodaj novi popis",
     "List name" : "Naziv popisa",
     "Apply filter" : "Primijeni filtar",
@@ -159,9 +161,6 @@ OC.L10N.register(
     "Modified" : "Promijenjeno",
     "Created" : "Stvoreno",
     "Upload attachment" : "Otpremi privitak",
-    "File already exists" : "Datoteka već postoji",
-    "Do you want to overwrite it?" : "Želite li prepisati?",
-    "Maximum file size of {size} exceeded" : "Prekoračena je maksimalna veličina datoteke od {size}",
     "No comments yet. Begin the discussion!" : "Nema komentara. Započnite raspravu!",
     "Save" : "Spremi",
     "The comment cannot be empty." : "Komentar ne može biti prazan.",
@@ -188,6 +187,7 @@ OC.L10N.register(
     "Delete board" : "Izbriši ploču",
     "Board details" : "Pojedinosti o ploči",
     "Link to a board" : "Poveznica na ploču",
-    "Link to a card" : "Poveznica na karticu"
+    "Link to a card" : "Poveznica na karticu",
+    "Maximum file size of {size} exceeded" : "Prekoračena je maksimalna veličina datoteke od {size}"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

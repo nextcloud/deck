@@ -101,6 +101,8 @@ OC.L10N.register(
     "Select the board to link to a project" : "Hautatu taula proiektu bati estekatzeko",
     "Select board" : "Hautatu taula",
     "Cancel" : "Utzi",
+    "File already exists" : "Badago izen bereko fitxategi bat",
+    "Drop your files to upload" : "Jaregin zure fitxategiak kargatzeko",
     "Today" : "Gaur",
     "Show archived cards" : "Erakutsi artxibatutako txartelak",
     "Hide archived cards" : "Ezkutatu artxibatutako txartelak",
@@ -116,6 +118,7 @@ OC.L10N.register(
     "Can share" : "Partekatu dezake",
     "Delete" : "Ezabatu",
     "Add a new stack" : "Gehitu pila berria",
+    "Delete list" : "Zerrenda ezabatu",
     "Add card" : "Gehitu txartela",
     "Edit" : "Editatu",
     "Details" : "Xehetasunak",
@@ -129,9 +132,6 @@ OC.L10N.register(
     "Created" : "Sortua",
     "Upload attachment" : "Igo eranskina",
     "Delete Attachment" : "Ezabatu eranskina",
-    "File already exists" : "Badago izen bereko fitxategi bat",
-    "Drop your files to upload" : "Jaregin zure fitxategiak kargatzeko",
-    "Maximum file size of {size} exceeded" : "Fitxategiaren gehienezko {size} tamaina gainditu da",
     "Save" : "Gorde",
     "In reply to" : "Honi erantzunez",
     "Reply" : "Erantzun",
@@ -150,6 +150,7 @@ OC.L10N.register(
     "Unarchive board" : "Atera taula artxibotik",
     "Delete board" : "Ezabatu taula",
     "Board details" : "Mahaigainaren xehetasunak",
-    "Link to a board" : "Estekatu taula batera"
+    "Link to a board" : "Estekatu taula batera",
+    "Maximum file size of {size} exceeded" : "Fitxategiaren gehienezko {size} tamaina gainditu da"
 },
 "nplurals=2; plural=(n != 1);");

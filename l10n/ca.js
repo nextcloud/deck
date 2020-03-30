@@ -99,6 +99,8 @@ OC.L10N.register(
     "Select the board to link to a project" : "Selecciona el tauler per enllaçar a un projecte",
     "Select board" : "Selecciona un tauler",
     "Cancel" : "Cancel·la",
+    "File already exists" : "El fitxer ja existeix",
+    "Do you want to overwrite it?" : "Voleu sobre-escriure'l?",
     "Today" : "Avui",
     "Show archived cards" : "Mostra les targetes arxivades",
     "Hide archived cards" : "Amaga les targetes arxivades",
@@ -127,9 +129,6 @@ OC.L10N.register(
     "Modified" : "Darrera modificació",
     "Created" : "Creat",
     "Upload attachment" : "Carrega l'adjunt",
-    "File already exists" : "El fitxer ja existeix",
-    "Do you want to overwrite it?" : "Voleu sobre-escriure'l?",
-    "Maximum file size of {size} exceeded" : "S'ha superat la mida màxima per fitxer de {size}",
     "Save" : "Desa",
     "Reply" : "Respon",
     "Update" : "Actualitza",
@@ -147,6 +146,7 @@ OC.L10N.register(
     "Unarchive board" : "Desarxiva tauler",
     "Delete board" : "Suprimeix tauler",
     "Board details" : "Detalls de la junta",
-    "Link to a board" : "Enllaça a un tauler"
+    "Link to a board" : "Enllaça a un tauler",
+    "Maximum file size of {size} exceeded" : "S'ha superat la mida màxima per fitxer de {size}"
 },
 "nplurals=2; plural=(n != 1);");

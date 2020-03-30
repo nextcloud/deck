@@ -101,6 +101,7 @@ OC.L10N.register(
     "Select the board to link to a project" : "Elekti la tabulon ligotan al projekto",
     "Select board" : "Elekti tabulon",
     "Cancel" : "Nuligi",
+    "File already exists" : "La dosiero jam ekzistas",
     "Today" : "Hodiaŭ",
     "Show archived cards" : "Montri arĥivigitajn kartojn",
     "Hide archived cards" : "Kaŝi arĥivigitajn kartojn",
@@ -129,8 +130,6 @@ OC.L10N.register(
     "Modified" : "Modifita",
     "Created" : "Kreita",
     "Upload attachment" : "Alŝuti dosieran aldonaĵon",
-    "File already exists" : "La dosiero jam ekzistas",
-    "Maximum file size of {size} exceeded" : "Maksimuma dosiergrando {size} transpasita",
     "Save" : "Konservi",
     "Reply" : "Respondi",
     "Update" : "Ĝisdatigi",
@@ -146,6 +145,7 @@ OC.L10N.register(
     "Archive board" : "Enarĥivigi tabulon",
     "Unarchive board" : "Elarĥivigi tabulon",
     "Delete board" : "Forigi tabulon",
-    "Link to a board" : "Ligilo al tabulo"
+    "Link to a board" : "Ligilo al tabulo",
+    "Maximum file size of {size} exceeded" : "Maksimuma dosiergrando {size} transpasita"
 },
 "nplurals=2; plural=(n != 1);");

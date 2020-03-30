@@ -105,6 +105,13 @@
     "Select a card" : "Επίλογή μιας καρτέλας",
     "Link to card" : "Σύνδεσμος σε καρτέλα",
     "Cancel" : "Aκύρωση",
+    "File already exists" : "Το αρχείο υπάρχει ήδη",
+    "A file with the name {filename} already exists." : "Το αρχείο με όνομα {filename} υπάρχει ήδη.",
+    "Do you want to overwrite it?" : "Επιθυμείτε να γίνει αντικατάσταση του?",
+    "Overwrite file" : "Αντικατάσταση αρχείου",
+    "Keep existing file" : "Διατήρηση υπάρχων αρχείου",
+    "This board is read only" : "Ο πίνακας είναι μόνο για ανάγνωση",
+    "Drop your files to upload" : "Αποθέστε τα αρχεία σας για ανέβασμα",
     "Add new list" : "Προσθήκη νέας λιστάς",
     "List name" : "Λίστα ονομάτων",
     "Apply filter" : "Εφαρμογή φίλτρου",
@@ -159,14 +166,6 @@
     "Upload attachment" : "Μεταφόρτωση συνημμένων",
     "Delete Attachment" : "Διαγραφή Συνημμένου",
     "Restore Attachment" : "Επαναφορά Συνημμένου",
-    "File already exists" : "Το αρχείο υπάρχει ήδη",
-    "A file with the name {filename} already exists." : "Το αρχείο με όνομα {filename} υπάρχει ήδη.",
-    "Do you want to overwrite it?" : "Επιθυμείτε να γίνει αντικατάσταση του?",
-    "Overwrite file" : "Αντικατάσταση αρχείου",
-    "Keep existing file" : "Διατήρηση υπάρχων αρχείου",
-    "This board is read only" : "Ο πίνακας είναι μόνο για ανάγνωση",
-    "Drop your files to upload" : "Αποθέστε τα αρχεία σας για ανέβασμα",
-    "Maximum file size of {size} exceeded" : "Υπέρβαση επιτρεπόμενου μεγέθους αρχείου {size}",
     "No comments yet. Begin the discussion!" : "Χωρίς σχόλια ακόμη. Ξεκινήστε την συζήτηση!",
     "Save" : "Αποθήκευση",
     "The comment cannot be empty." : "Το σχόλιο δεν μπορεί να είναι κενό.",
@@ -195,6 +194,7 @@
     "Board details" : "Λεπτομέριες πίνακα",
     "Link to a board" : "Σύνδεσμος στον πίνακα",
     "Link to a card" : "Σύνδεσμος σε καρτέλα",
-    "Something went wrong" : "Κάτι πήγε στραβά"
+    "Something went wrong" : "Κάτι πήγε στραβά",
+    "Maximum file size of {size} exceeded" : "Υπέρβαση επιτρεπόμενου μεγέθους αρχείου {size}"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

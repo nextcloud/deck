@@ -22,6 +22,7 @@ OC.L10N.register(
     "A PHP extension stopped the file upload" : "一個 PHP 擴充功能終止檔案的上傳",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck是一種看板式組織工具，旨在針對與Nextcloud集成的團隊進行個人計劃和項目組織。\n\n\n- 📥 增加您的任務到card和把它們整理好\n- 📄 寫下額外的筆記在markdown\n- 🔖 分配標籤以更好地組織\n- 👥 與您的團隊，朋友或家人分享\n- 📎 附加檔案並將其嵌入到您的 markdown 描述\n- 💬 使用評論與您的團隊討論\n- ⚡ 跟踪變化在活動流程中\n- 🚀 取得您的專案組織",
     "Cancel" : "取消",
+    "File already exists" : "檔案已存在",
     "Add new list" : "新增清單",
     "Today" : "今天",
     "Sharing" : "分享",
@@ -45,8 +46,6 @@ OC.L10N.register(
     "Modified" : "已修改",
     "Created" : "已新增",
     "Upload attachment" : "上傳附件",
-    "File already exists" : "檔案已存在",
-    "Maximum file size of {size} exceeded" : "達到最大的檔案大小 {size} ",
     "Save" : "儲存",
     "Reply" : "回覆",
     "Update" : "更新",
@@ -59,6 +58,7 @@ OC.L10N.register(
     "An error occurred" : "發生錯誤",
     "Archive board" : "封存的專案",
     "Delete board" : "刪除的專案",
-    "Link to a board" : "連結到佈告欄"
+    "Link to a board" : "連結到佈告欄",
+    "Maximum file size of {size} exceeded" : "達到最大的檔案大小 {size} "
 },
 "nplurals=1; plural=0;");

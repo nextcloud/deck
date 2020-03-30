@@ -105,6 +105,13 @@
     "Select a card" : "Selecteer een kaart",
     "Link to card" : "Koppelen met kaart",
     "Cancel" : "Annuleren",
+    "File already exists" : "Bestand bestaat al",
+    "A file with the name {filename} already exists." : "Er bestaat al een gebruiker met de naam {filename}.",
+    "Do you want to overwrite it?" : "Wil je het overschrijven?",
+    "Overwrite file" : "Overschrijven bestand",
+    "Keep existing file" : "Bewaar het al bestaande bestand",
+    "This board is read only" : "Dit bord is alleen-lezen",
+    "Drop your files to upload" : "Zet uw bestanden hier neer om te uploaden",
     "Add new list" : "Voeg nieuwe lijst toe",
     "List name" : "Lijstnaam",
     "Apply filter" : "Filter toepassen",
@@ -159,14 +166,6 @@
     "Upload attachment" : "Uploaden bijlage",
     "Delete Attachment" : "Verwijderen bijlage",
     "Restore Attachment" : "Herstellen bijlage",
-    "File already exists" : "Bestand bestaat al",
-    "A file with the name {filename} already exists." : "Er bestaat al een gebruiker met de naam {filename}.",
-    "Do you want to overwrite it?" : "Wil je het overschrijven?",
-    "Overwrite file" : "Overschrijven bestand",
-    "Keep existing file" : "Bewaar het al bestaande bestand",
-    "This board is read only" : "Dit bord is alleen-lezen",
-    "Drop your files to upload" : "Zet uw bestanden hier neer om te uploaden",
-    "Maximum file size of {size} exceeded" : "Maximale bestandsomvang van {size} overschreden",
     "No comments yet. Begin the discussion!" : "Nog geen reacties. Begin de discussie!",
     "Save" : "Opslaan",
     "The comment cannot be empty." : "De reactie kan niet leeg zijn.",
@@ -195,6 +194,7 @@
     "Board details" : "Bord details",
     "Link to a board" : "Verbind met een bord",
     "Link to a card" : "Koppel met een kaart",
-    "Something went wrong" : "Er ging iets verkeerd"
+    "Something went wrong" : "Er ging iets verkeerd",
+    "Maximum file size of {size} exceeded" : "Maximale bestandsomvang van {size} overschreden"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

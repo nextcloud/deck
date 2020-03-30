@@ -105,6 +105,13 @@
     "Select a card" : "Seleccionar una tarjeta",
     "Link to card" : "Enlace a tarjeta",
     "Cancel" : "Cancelar",
+    "File already exists" : "El archivo ya existe",
+    "A file with the name {filename} already exists." : "Ya existe un archivo con el nombre {filename}.",
+    "Do you want to overwrite it?" : "¿Desea sobreescribirlo?",
+    "Overwrite file" : "Sobreescribir archivo",
+    "Keep existing file" : "Mantener el archivo existente",
+    "This board is read only" : "Este tablero es de sólo lectura",
+    "Drop your files to upload" : "Arrastra tus archivos para subir",
     "Add new list" : "Añadir nueva lista",
     "List name" : "Nombre de la lista",
     "Apply filter" : "Aplicar filtro",
@@ -159,14 +166,6 @@
     "Upload attachment" : "Subir adjunto",
     "Delete Attachment" : "Eliminar adjunto",
     "Restore Attachment" : "Restaurar Adjunto",
-    "File already exists" : "El archivo ya existe",
-    "A file with the name {filename} already exists." : "Ya existe un archivo con el nombre {filename}.",
-    "Do you want to overwrite it?" : "¿Desea sobreescribirlo?",
-    "Overwrite file" : "Sobreescribir archivo",
-    "Keep existing file" : "Mantener el archivo existente",
-    "This board is read only" : "Este tablero es de sólo lectura",
-    "Drop your files to upload" : "Arrastra tus archivos para subir",
-    "Maximum file size of {size} exceeded" : "Tamaño máximo de archivo de {size} excedido",
     "No comments yet. Begin the discussion!" : "Todavía no hay comentarios. ¡Comienza la discusión!",
     "Save" : "Guardar",
     "The comment cannot be empty." : "El comentario no puede estar vacío.",
@@ -195,6 +194,7 @@
     "Board details" : "Detalles del tablero",
     "Link to a board" : "Enlace a un tablero",
     "Link to a card" : "Enlace a una tarjeta",
-    "Something went wrong" : "Algo ha ido mal"
+    "Something went wrong" : "Algo ha ido mal",
+    "Maximum file size of {size} exceeded" : "Tamaño máximo de archivo de {size} excedido"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -101,6 +101,8 @@ OC.L10N.register(
     "Select the board to link to a project" : "プロジェクトにリンクするボードを選択",
     "Select board" : "ボードを選択",
     "Cancel" : "キャンセル",
+    "File already exists" : "ファイルはすでに存在します",
+    "Do you want to overwrite it?" : "上書きしますか？",
     "Filter by tag" : "タグによるフィルター",
     "Today" : "今日",
     "Show archived cards" : "アーカイブされたカードを表示する",
@@ -130,9 +132,6 @@ OC.L10N.register(
     "Modified" : "更新日時",
     "Created" : "作成時刻",
     "Upload attachment" : "添付ファイルをアップロードする",
-    "File already exists" : "ファイルはすでに存在します",
-    "Do you want to overwrite it?" : "上書きしますか？",
-    "Maximum file size of {size} exceeded" : "最大ファイルサイズ（{size}）を超えています",
     "Save" : "保存",
     "Reply" : "返信",
     "Update" : "更新",
@@ -150,6 +149,7 @@ OC.L10N.register(
     "Unarchive board" : "ボードのアーカイブを解除",
     "Delete board" : "ボードを削除",
     "Board details" : "ボードの詳細",
-    "Link to a board" : "ボードへのリンク"
+    "Link to a board" : "ボードへのリンク",
+    "Maximum file size of {size} exceeded" : "最大ファイルサイズ（{size}）を超えています"
 },
 "nplurals=1; plural=0;");

@@ -107,6 +107,8 @@ OC.L10N.register(
     "Select a card" : "Veldu spjald",
     "Link to card" : "Tengill á spjald",
     "Cancel" : "Hætta við",
+    "File already exists" : "Skrá er þegar til",
+    "Do you want to overwrite it?" : "Viltu skrifa yfir það?",
     "Add new list" : "Bæta við nýjum lista",
     "List name" : "Heiti á lista",
     "Apply filter" : "Beita síu",
@@ -159,9 +161,6 @@ OC.L10N.register(
     "Modified" : "Breytt",
     "Created" : "Búið til þann",
     "Upload attachment" : "Senda inn viðhengi",
-    "File already exists" : "Skrá er þegar til",
-    "Do you want to overwrite it?" : "Viltu skrifa yfir það?",
-    "Maximum file size of {size} exceeded" : "Fór yfir hámarks skráarstærð {size}",
     "No comments yet. Begin the discussion!" : "Engar athugasemdir ennþá. Byrjaðu umræðuna!",
     "Save" : "Vista",
     "The comment cannot be empty." : "Athugasemdin má ekki vera tóm.",
@@ -189,6 +188,7 @@ OC.L10N.register(
     "Board details" : "Nánar um borð",
     "Link to a board" : "Tengill við borð",
     "Link to a card" : "Tengja við spjald",
-    "Something went wrong" : "Eitthvað fór úrskeiðis"
+    "Something went wrong" : "Eitthvað fór úrskeiðis",
+    "Maximum file size of {size} exceeded" : "Fór yfir hámarks skráarstærð {size}"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

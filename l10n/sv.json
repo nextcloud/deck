@@ -104,6 +104,13 @@
     "Select a card" : "Välj ett kort",
     "Link to card" : "Länka till kort",
     "Cancel" : "Avbryt",
+    "File already exists" : "Filen finns redan",
+    "A file with the name {filename} already exists." : "En fil med namnet {filename} finns redan.",
+    "Do you want to overwrite it?" : "Vill du skriva över det?",
+    "Overwrite file" : "Skriv över filen",
+    "Keep existing file" : "Behåll nuvarande fil",
+    "This board is read only" : "Denna tavla är skrivskyddad",
+    "Drop your files to upload" : "Släpp dina filer för att ladda upp",
     "Add new list" : "Lägg till en ny lista",
     "List name" : "Namn på lista",
     "Apply filter" : "Tillämpa filter",
@@ -158,14 +165,6 @@
     "Upload attachment" : "Ladda upp bilaga",
     "Delete Attachment" : "Ta bort bilaga",
     "Restore Attachment" : "Återställ bilaga",
-    "File already exists" : "Filen finns redan",
-    "A file with the name {filename} already exists." : "En fil med namnet {filename} finns redan.",
-    "Do you want to overwrite it?" : "Vill du skriva över det?",
-    "Overwrite file" : "Skriv över filen",
-    "Keep existing file" : "Behåll nuvarande fil",
-    "This board is read only" : "Denna tavla är skrivskyddad",
-    "Drop your files to upload" : "Släpp dina filer för att ladda upp",
-    "Maximum file size of {size} exceeded" : "Maximal filstorlek på {size} överskriden",
     "No comments yet. Begin the discussion!" : "Inga kommentarer än. Börja diskussionen!",
     "Save" : "Spara",
     "The comment cannot be empty." : "Kommentaren kan inte vara tom.",
@@ -194,6 +193,7 @@
     "Board details" : "Taveldetaljer",
     "Link to a board" : "Länka till en tavla",
     "Link to a card" : "Länka till ett kort",
-    "Something went wrong" : "Något gick fel"
+    "Something went wrong" : "Något gick fel",
+    "Maximum file size of {size} exceeded" : "Maximal filstorlek på {size} överskriden"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
