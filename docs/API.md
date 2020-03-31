@@ -515,6 +515,8 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | title     | String  | The title of the new stack                           |
 | type      | String  | Type of the card (for later use) use 'plain' for now |
 | order     | Integer | Order for sorting the stacks                         |
+| description | String  | _(optional)_ The markdown description of the card  |
+| duedate   | timestamp | _(optional)_ The duedate of the card or null       |
 
 #### Response
 
