@@ -118,6 +118,7 @@ OC.L10N.register(
     "Can share" : "Môže sprístupniť",
     "Delete" : "Zmazať",
     "Add a new stack" : "Pridať nový stoh",
+    "Delete list" : "Vymazať zoznam",
     "Add card" : "Pridať kartu",
     "Edit" : "Upraviť",
     "Details" : "Podrobnosti",

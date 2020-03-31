@@ -145,7 +145,7 @@ OC.L10N.register(
     "Can share" : "Pode compartilhar",
     "Can manage" : "Pode gerenciar",
     "Delete" : "Excluir",
-    "Add a new stack" : "Adicionar uma nova lista",
+    "Add a new stack" : "Adicione uma nova lista",
     "Delete list" : "Excluir lista",
     "Add card" : "Adicionar cartão",
     "Add a new card" : "Adicionar um novo cartão",
