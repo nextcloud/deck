@@ -37,11 +37,20 @@ export class AttachmentApi {
 		return response.data
 	}
 
-	async createAttachment({ cardId, formData }) {
+	async createAttachment({ cardId, formData, onUploadProgress }) {
+		const config = {
+			onUploadProgress: function(progressEvent) {
+			  const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+			  console.log(percentCompleted)
+			},
+		}
+
 		const response = await axios({
 			method: 'POST',
 			url: this.url(`/cards/${cardId}/attachment`),
 			data: formData,
+			...config,
+			onUploadProgress,
 		})
 		return response.data
 	}

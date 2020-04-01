@@ -39,7 +39,11 @@ export default {
 			bodyFormData.append('type', 'deck_file')
 			bodyFormData.append('file', file)
 			try {
-				await this.$store.dispatch('createAttachment', { cardId: this.cardId, formData: bodyFormData })
+				await this.$store.dispatch('createAttachment', { cardId: this.cardId,
+					formData: bodyFormData,
+					onUploadProgress: (e) => {
+						console.log(e)
+					} })
 			} catch (err) {
 				if (err.response.data.status === 409) {
 					this.overwriteAttachment = err.response.data.data
