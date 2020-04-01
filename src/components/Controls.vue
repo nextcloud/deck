@@ -49,13 +49,14 @@
 			</div>
 			<div class="board-action-buttons">
 				<Popover>
-					<Actions slot="trigger">
+					<Actions slot="trigger" :style="filterOpacity">
 						<ActionButton icon="icon-filter" :title="t('deck', 'Apply filter')" />
 					</Actions>
 
 					<template>
 						<div class="filter">
 							<h3>{{ t('deck', 'Filter by tag') }}</h3>
+							{{ filter }}
 							<div v-for="label in board.labels" :key="label.id" class="filter--item">
 								<input
 									:id="label.id"
@@ -144,7 +145,7 @@
 					</template>
 				</Popover>
 
-				<Actions style="opacity: .5;">
+				<Actions :style="archivedOpacity">
 					<ActionButton v-if="showArchived"
 						icon="icon-archive"
 						:title="t('deck', 'Show archived cards')"
@@ -213,6 +214,18 @@ export default {
 			return {
 				name: 'board.details',
 			}
+		},
+		archivedOpacity() {
+			if (this.showArchived) {
+				return 'opacity: 1;'
+			}
+			return 'opacity: .5;'
+		},
+		filterOpacity() {
+			if (this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '') {
+				return 'opacity: 1;'
+			}
+			return 'opacity: .5;'
 		},
 	},
 	methods: {
