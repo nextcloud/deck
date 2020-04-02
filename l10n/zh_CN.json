@@ -106,7 +106,11 @@
     "Link to card" : "链接到卡片",
     "Cancel" : "取消",
     "File already exists" : "文件已存在",
+    "A file with the name {filename} already exists." : "使用文件名 {filename} 的文件已存在。",
     "Do you want to overwrite it?" : "您确定要覆盖吗？",
+    "Overwrite file" : "覆盖文件",
+    "Keep existing file" : "保持已存在的文件",
+    "Drop your files to upload" : "拖放您的文件以上传",
     "Add new list" : "添加新的列表",
     "List name" : "列表名称",
     "Apply filter" : "应用过滤器",
@@ -159,10 +163,13 @@
     "Modified" : "已修改",
     "Created" : "已创建",
     "Upload attachment" : "上传附件",
+    "Delete Attachment" : "删除附件",
+    "Restore Attachment" : "恢复附件",
     "No comments yet. Begin the discussion!" : "还没有评论。 开始讨论吧！",
     "Save" : "保存",
     "The comment cannot be empty." : "注释不能为空。",
     "The comment cannot be longer than 1000 characters." : "注释不能超过 1000 个字符。",
+    "In reply to" : "回复",
     "Reply" : "回复",
     "Update" : "更新",
     "seconds ago" : "几秒前",
@@ -186,6 +193,7 @@
     "Board details" : "面板详情",
     "Link to a board" : "链接到一个面板",
     "Link to a card" : "链接到一张卡片",
+    "Something went wrong" : "有地方出错了",
     "Maximum file size of {size} exceeded" : "文件大小 {size} 超出最大限制"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
