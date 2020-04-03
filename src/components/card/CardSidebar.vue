@@ -61,23 +61,36 @@
 
 			<div class="section-wrapper">
 				<div v-tooltip="t('deck', 'Assign to users')" class="section-label icon-group">
-					<span class="hidden-visually">{{ t('deck', 'Assign to users') }}</span>
+					<span class="hidden-visually">{{ t('deck', 'Assign to users/groups/circles') }}</span>
 				</div>
 				<div class="section-details">
-					<Multiselect v-model="assignedUsers"
-						:disabled="!canEdit"
+					<Multiselect v-if="canEdit"
+						v-model="assignedUsers"
 						:multiple="true"
-						:options="assignableUsers"
+						:options="formatedAssignables"
+						:user-select="true"
+						:auto-limit="false"
 						:placeholder="t('deck', 'Assign a user to this card…')"
 						label="displayname"
 						track-by="primaryKey"
 						@select="assignUserToCard"
 						@remove="removeUserFromCard">
-						<template #option="scope">
-							<Avatar :user="scope.option.primaryKey" />
-							<span class="avatarLabel">{{ scope.option.displayname }} </span>
+						<template #tag="scope">
+							<div class="avatarlist--inline">
+								<Avatar :user="scope.option.uid"
+									:display-name="scope.option.displayname"
+									:size="24"
+									:disable-menu="true" />
+							</div>
 						</template>
 					</Multiselect>
+					<div v-else class="avatar-list--readonly">
+						<Avatar v-for="option in currentCard.assignedUsers"
+							:key="option.primaryKey"
+							:user="option.participant.uid"
+							:display-name="option.participant.displayname"
+							:size="32" />
+					</div>
 				</div>
 			</div>
 
@@ -86,14 +99,11 @@
 					<span class="hidden-visually">{{ t('deck', 'Due date') }}</span>
 				</div>
 				<div class="section-details">
-					<DatetimePicker v-model="copiedCard.duedate"
+					<DatetimePicker v-model="duedate"
 						:placeholder="t('deck', 'Set a due date')"
 						type="datetime"
-						lang="en"
-						:disabled="!canEdit"
-						format="YYYY-MM-DD HH:mm"
-						confirm
-						@change="setDue()" />
+						:disabled="saving || !canEdit"
+						confirm />
 					<Actions v-if="canEdit">
 						<ActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">
 							{{ t('deck', 'Remove due date') }}
@@ -189,11 +199,12 @@ export default {
 			copiedCard: null,
 			allLabels: null,
 			desc: null,
+			saving: false,
 			mdeConfig: {
 				autoDownloadFontAwesome: false,
 				spellChecker: false,
 				autofocus: true,
-				autosave: { enabled: true, uniqueId: 'unique' },
+				autosave: { enabled: false, uniqueId: 'unique' },
 				toolbar: false,
 			},
 			lastModifiedRelative: null,
@@ -205,14 +216,48 @@ export default {
 	computed: {
 		...mapState({
 			currentBoard: state => state.currentBoard,
-			assignableUsers: state => state.assignableUsers,
 		}),
-		...mapGetters(['canEdit']),
+		...mapGetters(['canEdit', 'assignables']),
 		currentCard() {
 			return this.$store.getters.cardById(this.id)
 		},
 		subtitle() {
 			return t('deck', 'Modified') + ': ' + this.lastModifiedRelative + ' ' + t('deck', 'Created') + ': ' + this.lastCreatedRemative
+		},
+		formatedAssignables() {
+			return this.assignables.map(item => {
+				const assignable = {
+					...item,
+					user: item.primaryKey,
+					displayName: item.displayname,
+					icon: 'icon-user',
+					isNoUser: false,
+				}
+
+				if (item.type === 1) {
+					assignable.icon = 'icon-group'
+					assignable.isNoUser = true
+				}
+				if (item.type === 7) {
+					assignable.icon = 'icon-circles'
+					assignable.isNoUser = true
+				}
+
+				return assignable
+			})
+		},
+		duedate: {
+			get() {
+				return this.currentCard.duedate ? new Date(this.currentCard.duedate) : null
+			},
+			async set(val) {
+				this.saving = true
+				await this.$store.dispatch('updateCardDue', {
+					...this.copiedCard,
+					duedate: val ? (new Date(val)).toISOString() : null,
+				})
+				this.saving = false
+			},
 		},
 	},
 	watch: {
@@ -234,10 +279,6 @@ export default {
 				this.desc = this.currentCard.description
 				this.updateRelativeTimestamps()
 			},
-		},
-
-		'copiedCard.description': function() {
-			this.saveDesc()
 		},
 	},
 	created() {
@@ -267,13 +308,23 @@ export default {
 		},
 
 		assignUserToCard(user) {
-			this.copiedCard.newUserUid = user.uid
-			this.$store.dispatch('assignCardToUser', this.copiedCard)
+			this.$store.dispatch('assignCardToUser', {
+				card: this.copiedCard,
+				assignee: {
+					userId: user.uid,
+					type: user.type,
+				},
+			})
 		},
 
 		removeUserFromCard(user) {
-			this.copiedCard.removeUserUid = user.uid
-			this.$store.dispatch('removeUserFromCard', this.copiedCard)
+			this.$store.dispatch('removeUserFromCard', {
+				card: this.copiedCard,
+				assignee: {
+					userId: user.uid,
+					type: user.type,
+				},
+			})
 		},
 
 		addLabelToCard(newLabel) {
@@ -376,4 +427,28 @@ export default {
 		padding: 6px
 	}
 
+	.section-details::v-deep .multiselect__tags-wrap {
+		flex-wrap: wrap;
+	}
+
+	.avatar-list--readonly .avatardiv {
+		margin-right: 3px;
+	}
+
+	.avatarlist--inline {
+		display: flex;
+		align-items: center;
+		margin-right: 3px;
+		.avatarLabel {
+			padding: 0;
+		}
+	}
+
+	.multiselect::v-deep .multiselect__tags-wrap {
+		z-index: 2;
+	}
+
+	.multiselect.multiselect--active::v-deep .multiselect__tags-wrap {
+		z-index: 0;
+	}
 </style>

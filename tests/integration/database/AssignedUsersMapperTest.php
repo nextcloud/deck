@@ -23,21 +23,22 @@
 
 namespace OCA\Deck\Db;
 
+use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\StackService;
 use OCA\Deck\Service\CardService;
-use OCP\IDBConnection;
 
 /**
  * @group DB
  * @coversDefaultClass OCA\Deck\Db\AssignedUsersMapper
  */
 class AssignedUsersMapperTest extends \Test\TestCase {
-	const TEST_USER1 = "test-share-user1";
-	const TEST_USER2 = "test-share-user2";
-	const TEST_USER3 = "test-share-user3";
-	const TEST_USER4 = "test-share-user4";
-	const TEST_GROUP1 = "test-share-group1";
+
+	private const TEST_USER1 = 'test-share-user1';
+	private const TEST_USER3 = 'test-share-user3';
+	private const TEST_USER2 = 'test-share-user2';
+	private const TEST_USER4 = 'test-share-user4';
+	private const TEST_GROUP1 = 'test-share-group1';
 
 	/** @var BoardService */
 	protected $boardService;
@@ -45,8 +46,10 @@ class AssignedUsersMapperTest extends \Test\TestCase {
 	protected $cardService;
 	/** @var StackService */
 	protected $stackService;
-	/** @var \OCA\Deck\Db\AssignedUsersMapper */
+	/** @var AssignedUsersMapper */
 	protected $assignedUsersMapper;
+	/** @var AssignmentService */
+	private $assignmentService;
 
 	public static function setUpBeforeClass(): void {
 		parent::setUpBeforeClass();
@@ -78,10 +81,11 @@ class AssignedUsersMapperTest extends \Test\TestCase {
 	public function setUp(): void {
 		parent::setUp();
 		\OC::$server->getUserSession()->login(self::TEST_USER1, self::TEST_USER1);
-		$this->boardService = \OC::$server->query("\OCA\Deck\Service\BoardService");
-		$this->stackService = \OC::$server->query("\OCA\Deck\Service\StackService");
-		$this->cardService = \OC::$server->query("\OCA\Deck\Service\CardService");
-		$this->assignedUsersMapper = \OC::$server->query(\OCA\Deck\Db\AssignedUsersMapper::class);
+		$this->boardService = \OC::$server->query(BoardService::class);
+		$this->stackService = \OC::$server->query(StackService::class);
+		$this->cardService = \OC::$server->query(CardService::class);
+		$this->assignmentService = \OC::$server->query(AssignmentService::class);
+		$this->assignedUsersMapper = \OC::$server->query(AssignedUsersMapper::class);
 		$this->createBoardWithExampleData();
 	}
 
@@ -107,8 +111,8 @@ class AssignedUsersMapperTest extends \Test\TestCase {
 	 */
 	public function testFind() {
 		$uids = [];
-		$this->cardService->assignUser($this->cards[0]->getId(), self::TEST_USER1);
-		$this->cardService->assignUser($this->cards[0]->getId(), self::TEST_USER2);
+		$this->assignmentService->assignUser($this->cards[0]->getId(), self::TEST_USER1);
+		$this->assignmentService->assignUser($this->cards[0]->getId(), self::TEST_USER2);
 
 		$assignedUsers = $this->assignedUsersMapper->find($this->cards[0]->getId());
 		foreach ($assignedUsers as $user) {
@@ -119,8 +123,8 @@ class AssignedUsersMapperTest extends \Test\TestCase {
 		$this->assertArrayNotHasKey(self::TEST_USER3, $uids);
 		$this->assertArrayNotHasKey(self::TEST_USER4, $uids);
 
-		$this->cardService->unassignUser($this->cards[0]->getId(), self::TEST_USER1);
-		$this->cardService->unassignUser($this->cards[0]->getId(), self::TEST_USER2);
+		$this->assignmentService->unassignUser($this->cards[0]->getId(), self::TEST_USER1);
+		$this->assignmentService->unassignUser($this->cards[0]->getId(), self::TEST_USER2);
 	}
 
 	/**
@@ -145,6 +149,7 @@ class AssignedUsersMapperTest extends \Test\TestCase {
 		$assignment = new AssignedUsers();
 		$assignment->setCardId($this->cards[1]->getId());
 		$assignment->setParticipant(self::TEST_USER4);
+		$assignment->setType(AssignedUsers::TYPE_USER);
 		$this->assignedUsersMapper->insert($assignment);
 
 		$actual = $this->assignedUsersMapper->find($this->cards[1]->getId());
@@ -160,6 +165,7 @@ class AssignedUsersMapperTest extends \Test\TestCase {
 		$assignment = new AssignedUsers();
 		$assignment->setCardId($this->cards[1]->getId());
 		$assignment->setParticipant('invalid-username');
+		$assignment->setType(AssignedUsers::TYPE_USER);
 		$actual = $this->assignedUsersMapper->insert($assignment);
 		$this->assertNull($actual);
 	}
@@ -171,12 +177,14 @@ class AssignedUsersMapperTest extends \Test\TestCase {
 		$assignment = new AssignedUsers();
 		$assignment->setCardId($this->cards[1]->getId());
 		$assignment->setParticipant(self::TEST_USER4);
+		$assignment->setType(AssignedUsers::TYPE_USER);
 		$this->assignedUsersMapper->mapParticipant($assignment);
 		$this->assertInstanceOf(User::class, $assignment->resolveParticipant());
 
 		$assignment = new AssignedUsers();
 		$assignment->setCardId($this->cards[1]->getId());
 		$assignment->setParticipant('invalid-username');
+		$assignment->setType(AssignedUsers::TYPE_USER);
 		$this->assignedUsersMapper->mapParticipant($assignment);
 		$this->assertEquals('invalid-username', $assignment->resolveParticipant());
 	}

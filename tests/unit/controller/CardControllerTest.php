@@ -23,34 +23,35 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\CardService;
-use OCP\AppFramework\Controller;
 use OCP\IRequest;
+use PHPUnit\Framework\MockObject\MockObject;
+use Test\TestCase;
 
-class CardControllerTest extends \Test\TestCase {
+class CardControllerTest extends TestCase {
 
-    /** @var CardController|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var CardController|MockObject */
 	private $controller;
-    /** @var IRequest|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var IRequest|MockObject */
     private $request;
-    /** @var CardService|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var CardService|MockObject */
 	private $cardService;
+	/** @var AssignmentService|MockObject */
+	private $assignmentService;
 	/** @var string */
 	private $userId = 'user';
 
+
 	public function setUp(): void {
-		$this->request = $this->getMockBuilder(
-			'\OCP\IRequest')
-			->disableOriginalConstructor()
-			->getMock();
-		$this->cardService = $this->getMockBuilder(
-			'\OCA\Deck\Service\CardService')
-			->disableOriginalConstructor()
-			->getMock();
+		$this->request = $this->createMock(IRequest::class);
+		$this->cardService = $this->createMock(CardService::class);
+		$this->assignmentService = $this->createMock(AssignmentService::class);
 		$this->controller = new CardController(
 			'deck',
 			$this->request,
 			$this->cardService,
+			$this->assignmentService,
 			$this->userId
 		);
 	}
@@ -115,12 +116,12 @@ class CardControllerTest extends \Test\TestCase {
     }
 
 	public function testAssignUser() {
-		$this->cardService->expects($this->once())->method('assignUser');
+		$this->assignmentService->expects($this->once())->method('assignUser');
 		$this->controller->assignUser(1, 'admin');
 	}
 
 	public function testUnssignUser() {
-		$this->cardService->expects($this->once())->method('unassignUser');
+		$this->assignmentService->expects($this->once())->method('unassignUser');
 		$this->controller->unassignUser(1, 'admin');
 	}
 

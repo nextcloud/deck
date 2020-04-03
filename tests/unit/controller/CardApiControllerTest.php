@@ -22,6 +22,7 @@
  */
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Service\AssignmentService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
@@ -37,12 +38,14 @@ class CardApiControllerTest extends \Test\TestCase {
 	private $userId = 'admin';
 	private $cardExample;
 	private $stackExample;
+	private $assignmentService;
 
 	public function setUp(): void {
 		parent::setUp();
 
 		$this->request = $this->createMock(IRequest::class);
 		$this->cardService = $this->createMock(CardService::class);
+		$this->assignmentService = $this->createMock(AssignmentService::class);
 
 		$this->cardExample['id'] = 1;
 		$this->stackExample['id'] = 1;
@@ -51,6 +54,7 @@ class CardApiControllerTest extends \Test\TestCase {
 			$appName = 'deck',
 			$this->request,
 			$this->cardService,
+			$this->assignmentService,
 			$this->userId
 		);
 	}

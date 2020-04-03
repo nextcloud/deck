@@ -64,7 +64,7 @@ return [
 		['name' => 'card#assignLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'POST'],
 		['name' => 'card#removeLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
 		['name' => 'card#assignUser', 'url' => '/cards/{cardId}/assign', 'verb' => 'POST'],
-		['name' => 'card#unassignUser', 'url' => '/cards/{cardId}/assign/{userId}', 'verb' => 'DELETE'],
+		['name' => 'card#unassignUser', 'url' => '/cards/{cardId}/unassign', 'verb' => 'PUT'],
 
 		['name' => 'attachment#getAll', 'url' => '/cards/{cardId}/attachments', 'verb' => 'GET'],
 		['name' => 'attachment#create', 'url' => '/cards/{cardId}/attachment', 'verb' => 'POST'],

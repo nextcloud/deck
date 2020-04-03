@@ -57,7 +57,7 @@ class UserTest extends \Test\TestCase {
 		$expected = [
 			'uid' => 'myuser',
 			'displayname' => 'myuser displayname',
-			'primaryKey' => 'myuser'
+			'primaryKey' => '0:myuser'
 		];
 		$this->assertEquals($expected, $userRelationalObject->jsonSerialize());
 	}

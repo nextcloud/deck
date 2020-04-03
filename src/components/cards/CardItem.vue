@@ -196,8 +196,13 @@ export default {
 		},
 		assignCardToMe() {
 			this.copiedCard = Object.assign({}, this.card)
-			this.copiedCard.newUserUid = this.card.owner.uid
-			this.$store.dispatch('assignCardToUser', this.copiedCard)
+			this.$store.dispatch('assignCardToUser', {
+				card: this.copiedCard,
+				assignee: {
+					userId: OC.getCurrentUser().uid,
+					type: 0,
+				},
+			})
 		},
 		async loadStacksFromBoard(board) {
 			try {
@@ -234,6 +239,7 @@ export default {
 	}
 
 	.card {
+		transition: box-shadow 0.1s ease-in-out;
 		box-shadow: 0 0 2px 0 var(--color-box-shadow);
 		border-radius: 3px;
 		font-size: 100%;

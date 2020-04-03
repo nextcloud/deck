@@ -23,7 +23,7 @@
 					</span>
 				</span>
 			</li>
-			<li v-for="acl in board.acl" :key="acl.participant.uid">
+			<li v-for="acl in board.acl" :key="acl.participant.primaryKey">
 				<Avatar v-if="acl.type===0" :user="acl.participant.uid" />
 				<div v-if="acl.type===1" class="avatardiv icon icon-group" />
 				<div v-if="acl.type===7" class="avatardiv icon icon-circles" />
@@ -33,10 +33,10 @@
 					<span v-if="acl.type===7">{{ t('deck', '(Circle)') }}</span>
 				</span>
 
-				<ActionCheckbox v-if="!isCurrentUser(acl.participant.uid) && (canManage || (canEdit && canShare))" :checked="acl.permissionEdit" @change="clickEditAcl(acl)">
+				<ActionCheckbox v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0) && (canManage || (canEdit && canShare))" :checked="acl.permissionEdit" @change="clickEditAcl(acl)">
 					{{ t('deck', 'Can edit') }}
 				</ActionCheckbox>
-				<Actions v-if="!isCurrentUser(acl.participant.uid)" :force-menu="true">
+				<Actions v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0)" :force-menu="true">
 					<ActionCheckbox v-if="canManage || canShare" :checked="acl.permissionShare" @change="clickShareAcl(acl)">
 						{{ t('deck', 'Can share') }}
 					</ActionCheckbox>
@@ -60,7 +60,7 @@
 <script>
 import { Avatar, Multiselect, Actions, ActionButton, ActionCheckbox } from '@nextcloud/vue'
 import { CollectionList } from 'nextcloud-vue-collections'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
@@ -87,8 +87,10 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters([
+		...mapState([
 			'sharees',
+		]),
+		...mapGetters([
 			'canEdit',
 			'canManage',
 			'canShare',

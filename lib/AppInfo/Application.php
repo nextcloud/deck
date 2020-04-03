@@ -43,6 +43,8 @@ use OCP\AppFramework\App;
 use OCP\Collaboration\Resources\IManager;
 use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Comments\CommentsEntityEvent;
+use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\FullTextSearch\IFullTextSearchManager;
 use OCP\IGroup;
 use OCP\IServerContainer;
@@ -217,34 +219,35 @@ class Application extends App {
 			return;
 		}
 
-		$eventDispatcher = $this->server->getEventDispatcher();
+		/** @var IEventDispatcher $eventDispatcher */
+		$eventDispatcher = $this->server->query(IEventDispatcher::class);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Card::onCreate', function(GenericEvent $e) {
+			'\OCA\Deck\Card::onCreate', function(Event $e) {
 			$this->fullTextSearchService->onCardCreated($e);
 		}
 		);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Card::onUpdate', function(GenericEvent $e) {
+			'\OCA\Deck\Card::onUpdate', function(Event $e) {
 			$this->fullTextSearchService->onCardUpdated($e);
 		}
 		);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Card::onDelete', function(GenericEvent $e) {
+			'\OCA\Deck\Card::onDelete', function(Event $e) {
 			$this->fullTextSearchService->onCardDeleted($e);
 		}
 		);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Board::onShareNew', function(GenericEvent $e) {
+			'\OCA\Deck\Board::onShareNew', function(Event $e) {
 			$this->fullTextSearchService->onBoardShares($e);
 		}
 		);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Board::onShareEdit', function(GenericEvent $e) {
+			'\OCA\Deck\Board::onShareEdit', function(Event $e) {
 			$this->fullTextSearchService->onBoardShares($e);
 		}
 		);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Board::onShareDelete', function(GenericEvent $e) {
+			'\OCA\Deck\Board::onShareDelete', function(Event $e) {
 			$this->fullTextSearchService->onBoardShares($e);
 		}
 		);
