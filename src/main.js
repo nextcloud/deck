@@ -30,6 +30,9 @@ import { Tooltip } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
 import './models'
 
+// the server snap.js conflicts with vertical scrolling so we disable it
+document.body.setAttribute('data-snap-ignore', 'true')
+
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken)
 // eslint-disable-next-line
