@@ -455,6 +455,17 @@ class BoardService {
 		return $board;
 	}
 
+	private function applyPermissions($boardId, $edit, $share, $manage) {
+		try {
+			$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_MANAGE);
+		} catch (NoPermissionException $e) {
+			$acls = $this->aclMapper->findAll($boardId);
+			$edit = $this->permissionService->userCan($acls, Acl::PERMISSION_EDIT, $this->userId) && $edit;
+			$share = $this->permissionService->userCan($acls, Acl::PERMISSION_SHARE, $this->userId) && $share;
+			$manage = $this->permissionService->userCan($acls, Acl::PERMISSION_MANAGE, $this->userId) && $manage;
+		}
+		return [$edit, $share, $manage];
+	}
 
 	/**
 	 * @param $boardId
@@ -494,6 +505,8 @@ class BoardService {
 		}
 
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_SHARE);
+		[$edit, $share, $manage] = $this->applyPermissions($boardId, $edit, $share, $manage);
+
 		$acl = new Acl();
 		$acl->setBoardId($boardId);
 		$acl->setType($type);
@@ -556,8 +569,10 @@ class BoardService {
 		}
 
 		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_SHARE);
+
 		/** @var Acl $acl */
 		$acl = $this->aclMapper->find($id);
+		[$edit, $share, $manage] = $this->applyPermissions($acl->getBoardId(), $edit, $share, $manage);
 		$acl->setPermissionEdit($edit);
 		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
