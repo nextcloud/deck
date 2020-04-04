@@ -34,6 +34,7 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -259,6 +260,93 @@ class BoardServiceTest extends TestCase {
 			->willReturn($acl);
 		$this->assertEquals($acl, $this->service->addAcl(
 			123, 'user', 'admin', true, true, true
+		));
+	}
+
+	public function dataAddAclExtendPermission() {
+		return [
+			[[false, false, false], [false, false, false], [false, false, false]],
+			[[false, false, false], [true, true, true], [false, false, false]],
+
+			// user has share permissions -> can only reshare with those
+			[[false, true, false], [false, false, false], [false, false, false]],
+			[[false, true, false], [false, true, false], [false, true, false]],
+			[[false, true, false], [true, true, true], [false, true, false]],
+
+			// user has write permissions -> can only reshare with those
+			[[true, true, false], [false, false, false], [false, false, false]],
+			[[true, true, false], [false, true, false], [false, true, false]],
+			[[true, true, false], [true, true, true], [true, true, false]],
+
+			// user has manage permissions -> can upgrade acl permissions
+			[[false, false, true], [true, true, true], [true, true, true]],
+			[[true, true, true], [false, false, true], [false, false, true]],
+		];
+	}
+
+	/**
+	 * @dataProvider dataAddAclExtendPermission
+	 * @param $currentUserAcl
+	 * @param $providedAcl
+	 * @param $resultingAcl
+	 * @throws NoPermissionException
+	 * @throws \OCA\Deck\BadRequestException
+	 */
+	public function testAddAclExtendPermission($currentUserAcl, $providedAcl, $resultingAcl) {
+		$existingAcl = new Acl();
+		$existingAcl->setBoardId(123);
+		$existingAcl->setType('user');
+		$existingAcl->setParticipant('admin');
+		$existingAcl->setPermissionEdit($currentUserAcl[0]);
+		$existingAcl->setPermissionShare($currentUserAcl[1]);
+		$existingAcl->setPermissionManage($currentUserAcl[2]);
+		$this->permissionService->expects($this->at(0))
+			->method('checkPermission')
+			->with($this->boardMapper, 123, Acl::PERMISSION_SHARE, null);
+		if ($currentUserAcl[2]) {
+			$this->permissionService->expects($this->at(1))
+				->method('checkPermission')
+				->with($this->boardMapper, 123, Acl::PERMISSION_MANAGE, null);
+		} else {
+			$this->aclMapper->expects($this->once())
+				->method('findAll')
+				->willReturn([$existingAcl]);
+			$this->permissionService->expects($this->at(1))
+				->method('checkPermission')
+				->with($this->boardMapper, 123, Acl::PERMISSION_MANAGE, null)
+				->willThrowException(new NoPermissionException('No permission'));
+			$this->permissionService->expects($this->at(2))
+				->method('userCan')
+				->willReturn($currentUserAcl[0]);
+			$this->permissionService->expects($this->at(3))
+				->method('userCan')
+				->willReturn($currentUserAcl[1]);
+			$this->permissionService->expects($this->at(4))
+				->method('userCan')
+				->willReturn($currentUserAcl[2]);
+		}
+
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('admin');
+		$acl = new Acl();
+		$acl->setBoardId(123);
+		$acl->setType('user');
+		$acl->setParticipant('admin');
+		$acl->setPermissionEdit($resultingAcl[0]);
+		$acl->setPermissionShare($resultingAcl[1]);
+		$acl->setPermissionManage($resultingAcl[2]);
+		$acl->resolveRelation('participant', function($participant) use (&$user) {
+			return null;
+		});
+		$this->notificationHelper->expects($this->once())
+			->method('sendBoardShared');
+		$expected = clone $acl;
+		$this->aclMapper->expects($this->once())
+			->method('insert')
+			->with($acl)
+			->willReturn($acl);
+		$this->assertEquals($expected, $this->service->addAcl(
+			123, 'user', 'admin', $providedAcl[0], $providedAcl[1], $providedAcl[2]
 		));
 	}
 
