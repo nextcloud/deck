@@ -32,14 +32,20 @@
 			@change="handleUploadFile">
 		<div class="attachment-list">
 			<ul>
-				<li v-for="attachment in uploadQueue">
-					{{ attachment.name }}
-					<progress :value="attachment.progress" max="100"></progress>
+				<li v-for="attachment in uploadQueue" :key="attachment.name" class="attachment">
+					<a class="fileicon" :style="mimetypeForAttachment('none')" />
+					<div class="details">
+						<a>
+							<div class="filename">
+								<span class="basename">{{ attachment.name }}</span>
+							</div>
+							<progress :value="attachment.progress" max="100" />
+						</a>
+					</div>
 				</li>
 				<li v-for="attachment in attachments"
 					:key="attachment.id"
-					class="attachment"
-					style="display: flex;">
+					class="attachment">
 					<a class="fileicon" :style="mimetypeForAttachment(attachment.extendedData.mimetype)" :href="attachmentUrl(attachment)" />
 					<div class="details">
 						<a :href="attachmentUrl(attachment)" target="_blank">
@@ -114,7 +120,7 @@ export default {
 			}
 		},
 		attachments() {
-			return this.$store.getters.attachmentsByCard(this.card.id).sort((a, b) => b.id - a.id)
+			return [...this.$store.getters.attachmentsByCard(this.card.id)].sort((a, b) => b.id - a.id)
 		},
 		formattedFileSize() {
 			return (filesize) => formatFileSize(filesize)
@@ -141,7 +147,7 @@ export default {
 	methods: {
 		handleUploadFile(event) {
 			const files = event.target.files ?? []
-			for (let file of files) {
+			for (const file of files) {
 				this.onLocalAttachmentSelected(file)
 			}
 			event.target.value = ''
@@ -208,6 +214,7 @@ export default {
 		li.attachment {
 			display: flex;
 			padding: 3px;
+			min-height: 44px;
 
 			&.deleted {
 				opacity: .5;
