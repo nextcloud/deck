@@ -110,6 +110,7 @@
     "Do you want to overwrite it?" : "您确定要覆盖吗？",
     "Overwrite file" : "覆盖文件",
     "Keep existing file" : "保持已存在的文件",
+    "This board is read only" : "此面板是只读的",
     "Drop your files to upload" : "拖放您的文件以上传",
     "Add new list" : "添加新的列表",
     "List name" : "列表名称",

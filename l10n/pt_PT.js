@@ -42,6 +42,7 @@ OC.L10N.register(
     "Save" : "Guardar",
     "Reply" : "Resposta",
     "Update" : "Atualizar",
+    "(group)" : "(grupo)",
     "seconds ago" : "segundos atrás",
     "Delete card" : "Eliminar cartão",
     "Archived boards" : "Quadros arquivados",

@@ -24,6 +24,7 @@ OC.L10N.register(
     "Save" : "Simpan",
     "Reply" : "Balas",
     "Update" : "Perbarui",
+    "(group)" : "(grup)",
     "seconds ago" : "beberapa detik yang lalu",
     "Settings" : "Setelan"
 },

@@ -43,6 +43,7 @@ OC.L10N.register(
     "Save" : "Зберегти",
     "Reply" : "Відповісти",
     "Update" : "Оновлення",
+    "(group)" : "(група)",
     "seconds ago" : "секунд тому",
     "Delete card" : "Видалити картку",
     "Move card" : "Пересунути картку",

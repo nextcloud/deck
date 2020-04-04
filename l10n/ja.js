@@ -135,6 +135,7 @@ OC.L10N.register(
     "Save" : "保存",
     "Reply" : "返信",
     "Update" : "更新",
+    "(group)" : "(グループ)",
     "seconds ago" : "数秒前",
     "Delete card" : "カードを削除する",
     "Move card" : "カードの移動",

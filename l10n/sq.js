@@ -44,6 +44,7 @@ OC.L10N.register(
     "Save" : "Ruaj",
     "Reply" : "Përgjigju",
     "Update" : "Përditëso",
+    "(group)" : "(grup)",
     "seconds ago" : "sekonda më parë",
     "Archived boards" : "Borde të arkivuara",
     "Shared boards" : "Tabela të shpërndara",

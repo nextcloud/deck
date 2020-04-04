@@ -136,6 +136,7 @@ OC.L10N.register(
     "In reply to" : "Honi erantzunez",
     "Reply" : "Erantzun",
     "Update" : "Eguneratu",
+    "(group)" : "(taldea)",
     "seconds ago" : "segundo lehenago",
     "Delete card" : "Ezabatu txartela",
     "Move card" : "Mugitu txartela",
