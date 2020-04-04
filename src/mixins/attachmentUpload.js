@@ -23,6 +23,11 @@ import { showError } from '@nextcloud/dialogs'
 import { formatFileSize } from '@nextcloud/files'
 
 export default {
+	data() {
+		return {
+			uploadQueue: {},
+		}
+	},
 	methods: {
 		async onLocalAttachmentSelected(file) {
 			if (this.maxUploadSize > 0 && file.size > this.maxUploadSize) {
@@ -34,6 +39,7 @@ export default {
 				return
 			}
 
+			this.$set(this.uploadQueue, file.name, { name: file.name, progress: 0})
 			const bodyFormData = new FormData()
 			bodyFormData.append('cardId', this.cardId)
 			bodyFormData.append('type', 'deck_file')
@@ -42,8 +48,11 @@ export default {
 				await this.$store.dispatch('createAttachment', { cardId: this.cardId,
 					formData: bodyFormData,
 					onUploadProgress: (e) => {
-						console.log(e)
-					} })
+						const percentCompleted = Math.round((e.loaded * 100) / e.total)
+						console.debug(percentCompleted)
+						this.$set(this.uploadQueue[file.name], 'progress', percentCompleted)
+					}
+				})
 			} catch (err) {
 				if (err.response.data.status === 409) {
 					this.overwriteAttachment = err.response.data.data
@@ -52,6 +61,7 @@ export default {
 					showError(err.response.data.message)
 				}
 			}
+			this.$delete(this.uploadQueue, file.name)
 		},
 
 		overrideAttachment() {

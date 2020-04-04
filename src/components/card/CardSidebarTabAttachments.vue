@@ -28,9 +28,14 @@
 		<input ref="localAttachments"
 			type="file"
 			style="display: none;"
+			multiple
 			@change="handleUploadFile">
 		<div class="attachment-list">
 			<ul>
+				<li v-for="attachment in uploadQueue">
+					{{ attachment.name }}
+					<progress :value="attachment.progress" max="100"></progress>
+				</li>
 				<li v-for="attachment in attachments"
 					:key="attachment.id"
 					class="attachment"
@@ -109,7 +114,7 @@ export default {
 			}
 		},
 		attachments() {
-			return this.$store.getters.attachmentsByCard(this.card.id)
+			return this.$store.getters.attachmentsByCard(this.card.id).sort((a, b) => b.id - a.id)
 		},
 		formattedFileSize() {
 			return (filesize) => formatFileSize(filesize)
@@ -134,22 +139,11 @@ export default {
 		this.$store.dispatch('fetchAttachments', this.card.id)
 	},
 	methods: {
-		dragEnter() {
-
-		},
-		dragLeave() {
-
-		},
-		handleDropFiles(event) {
-			this.isDraggingOver = false
-			if (this.isReadOnly) {
-				return
-			}
-			this.onLocalAttachmentSelected(event.dataTransfer.files[0])
-			event.dataTransfer.value = ''
-		},
 		handleUploadFile(event) {
-			this.onLocalAttachmentSelected(event.target.files[0])
+			const files = event.target.files ?? []
+			for (let file of files) {
+				this.onLocalAttachmentSelected(file)
+			}
 			event.target.value = ''
 		},
 		clickAddNewAttachmment() {

@@ -102,18 +102,15 @@ export default {
 		},
 	},
 	methods: {
-		dragEnter() {
-
-		},
-		dragLeave() {
-
-		},
 		handleDropFiles(event) {
 			this.isDraggingOver = false
 			if (this.isReadOnly) {
 				return
 			}
-			this.onLocalAttachmentSelected(event.dataTransfer.files[0])
+			const files = event.dataTransfer.files
+			for (let file of files) {
+				this.onLocalAttachmentSelected(file)
+			}
 			event.dataTransfer.value = ''
 		},
 	},
