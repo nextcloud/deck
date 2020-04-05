@@ -167,6 +167,7 @@ OC.L10N.register(
     "The comment cannot be longer than 1000 characters." : "Коментар не може да има преко 1000 карактера.",
     "Reply" : "Одговори",
     "Update" : "Ажурирај",
+    "(group)" : "(група)",
     "seconds ago" : "пре неколико секунди",
     "Assign to me" : "Додели мени",
     "Delete card" : "Обриши картицу",

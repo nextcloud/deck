@@ -49,6 +49,7 @@ OC.L10N.register(
     "Save" : "儲存",
     "Reply" : "回覆",
     "Update" : "更新",
+    "(group)" : "(群組)",
     "seconds ago" : "幾秒前",
     "Assign to me" : "分派給我",
     "Delete card" : "刪除作業",

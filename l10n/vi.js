@@ -72,6 +72,7 @@ OC.L10N.register(
     "Save" : "Lưu",
     "Reply" : "Trả l",
     "Update" : "Cập nhật",
+    "(group)" : "(nhóm)",
     "seconds ago" : "vài giây trước",
     "Assign to me" : "Phân công cho tôi",
     "Archived boards" : "Dự án đã lưu trữ",

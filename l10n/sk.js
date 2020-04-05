@@ -134,6 +134,7 @@ OC.L10N.register(
     "Save" : "Uložiť",
     "Reply" : "Odpoveď",
     "Update" : "Aktualizovať",
+    "(group)" : "(skupina)",
     "seconds ago" : "pred niekoľkými sekundami",
     "Assign to me" : "Priradiť mne",
     "Delete card" : "Zmazať kartu",

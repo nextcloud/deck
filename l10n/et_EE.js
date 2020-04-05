@@ -26,6 +26,7 @@ OC.L10N.register(
     "Save" : "Salvesta",
     "Reply" : "Vasta",
     "Update" : "Uuenda",
+    "(group)" : "(grupp)",
     "seconds ago" : "sekundit tagasi",
     "Settings" : "Seaded",
     "An error occurred" : "Tekkis tõrge"

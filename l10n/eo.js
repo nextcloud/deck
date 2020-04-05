@@ -133,6 +133,7 @@ OC.L10N.register(
     "Save" : "Konservi",
     "Reply" : "Respondi",
     "Update" : "Ĝisdatigi",
+    "(group)" : "(grupo)",
     "seconds ago" : "antaŭ kelkaj sekundoj",
     "Delete card" : "Forigi karton",
     "Archived boards" : "Arĥivigitaj tabuloj",

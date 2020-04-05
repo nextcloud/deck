@@ -133,6 +133,7 @@ OC.L10N.register(
     "Save" : "Mentés",
     "Reply" : "Válasz",
     "Update" : "Frissítés",
+    "(group)" : "(csoport)",
     "seconds ago" : "másodperce",
     "Delete card" : "Kártya törlése",
     "Move card" : "Kártya áthelyezése",

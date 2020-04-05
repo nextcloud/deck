@@ -175,6 +175,7 @@ OC.L10N.register(
     "In reply to" : "Şuna yanıtla",
     "Reply" : "Yanıtla",
     "Update" : "Güncelle",
+    "(group)" : "(grup)",
     "seconds ago" : "saniye önce",
     "Assign to me" : "Bana ata",
     "Delete card" : "Kartı sil",

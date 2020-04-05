@@ -47,6 +47,7 @@ OC.L10N.register(
     "Save" : "Guardar",
     "Reply" : "Responder",
     "Update" : "Actualizar",
+    "(group)" : "(grupo)",
     "seconds ago" : "hace segundos",
     "Archived boards" : "Tableros archivados",
     "Shared boards" : "Tableros compartidos",

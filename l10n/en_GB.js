@@ -49,6 +49,7 @@ OC.L10N.register(
     "Save" : "Save",
     "Reply" : "Reply",
     "Update" : "Update",
+    "(group)" : "(group)",
     "seconds ago" : "seconds ago",
     "Delete card" : "Delete card",
     "Archived boards" : "Archived boards",

@@ -34,6 +34,7 @@ OC.L10N.register(
     "Save" : "Guardar",
     "Reply" : "Rempuesta",
     "Update" : "Anovar",
+    "(group)" : "(grupu)",
     "seconds ago" : "hai segundos",
     "Settings" : "Settings"
 },

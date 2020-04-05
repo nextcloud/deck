@@ -50,6 +50,7 @@ OC.L10N.register(
     "Save" : "저장",
     "Reply" : "답장",
     "Update" : "업데이트",
+    "(group)" : "(그룹)",
     "seconds ago" : "초 전",
     "Delete card" : "카드 삭제",
     "Move card" : "카드 이동",

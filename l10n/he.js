@@ -53,6 +53,7 @@ OC.L10N.register(
     "Save" : "שמור",
     "Reply" : "תגובה",
     "Update" : "עדכון",
+    "(group)" : "(קבוצה)",
     "seconds ago" : "לפני מספר שניות",
     "Delete card" : "מחיקת כרטיס לארכיון",
     "Archived boards" : "לוחות שנשמרו בארכיון",

@@ -165,6 +165,7 @@
     "The comment cannot be longer than 1000 characters." : "Kommentin on oltava alle 1000 merkkiä pitkä.",
     "Reply" : "Vastaa",
     "Update" : "Päivitä",
+    "(group)" : "(ryhmä)",
     "seconds ago" : "sekuntia sitten",
     "Delete card" : "Poista kortti",
     "Move card" : "Siirrä kortti",

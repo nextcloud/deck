@@ -29,6 +29,7 @@ OC.L10N.register(
     "Save" : "Зачувај",
     "Reply" : "Одговор",
     "Update" : "Ажурирај",
+    "(group)" : "(group)",
     "seconds ago" : "пред неколку секунди",
     "Settings" : "Параметри",
     "An error occurred" : "Настана грешка"

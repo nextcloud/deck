@@ -175,6 +175,7 @@ OC.L10N.register(
     "In reply to" : "In risposta a",
     "Reply" : "Rispondi",
     "Update" : "Aggiorna",
+    "(group)" : "(gruppo)",
     "seconds ago" : "secondi fa",
     "Assign to me" : "Assegna a me",
     "Delete card" : "Elimina scheda",

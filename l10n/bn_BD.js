@@ -20,6 +20,7 @@ OC.L10N.register(
     "Save" : "সংরক্ষণ",
     "Reply" : "জবাব",
     "Update" : "পরিবর্ধন",
+    "(group)" : "(গোষ্ঠি)",
     "seconds ago" : "সেকেন্ড পূর্বে",
     "Settings" : "সেটিংস"
 },

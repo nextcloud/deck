@@ -165,6 +165,7 @@ OC.L10N.register(
     "The comment cannot be longer than 1000 characters." : "Komentaras negali būti ilgesnis nei 1000 simbolių.",
     "Reply" : "Atsakyti",
     "Update" : "Atnaujinti",
+    "(group)" : "(grupė)",
     "seconds ago" : "prieš keletą sekundžių",
     "Assign to me" : "Priskirti sau",
     "Delete card" : "Ištrinti kortelę",

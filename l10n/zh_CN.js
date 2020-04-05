@@ -175,6 +175,7 @@ OC.L10N.register(
     "In reply to" : "回复",
     "Reply" : "回复",
     "Update" : "更新",
+    "(group)" : "（组）",
     "seconds ago" : "几秒前",
     "Assign to me" : "指派给我",
     "Delete card" : "删除卡片",

@@ -33,6 +33,7 @@ OC.L10N.register(
     "Save" : "Saglabāt",
     "Reply" : "Atbildēt",
     "Update" : "Atjaunināt",
+    "(group)" : "(grupa)",
     "seconds ago" : "sekundēm",
     "Settings" : "Iestatījumi",
     "An error occurred" : "Gadījās kļūda"

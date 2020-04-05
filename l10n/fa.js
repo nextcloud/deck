@@ -31,6 +31,7 @@ OC.L10N.register(
     "Save" : "ذخیره",
     "Reply" : "پاسخ",
     "Update" : "به روز رسانی",
+    "(group)" : "(گروه)",
     "seconds ago" : "ثانیه‌هایی پیش",
     "Delete card" : "حذف کارت",
     "Move card" : "انتقال کارت",

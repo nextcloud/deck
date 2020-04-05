@@ -174,6 +174,7 @@ OC.L10N.register(
     "In reply to" : "Som svar på",
     "Reply" : "Svara",
     "Update" : "Uppdatera",
+    "(group)" : " (grupp)",
     "seconds ago" : "sekunder sedan",
     "Assign to me" : "Tilldela till mig",
     "Delete card" : "Ta bort kort",

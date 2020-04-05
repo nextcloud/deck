@@ -22,6 +22,7 @@ OC.L10N.register(
     "Save" : "บันทึก",
     "Reply" : "ตอบกลับ",
     "Update" : "อัพเดท",
+    "(group)" : "(กลุ่ม)",
     "seconds ago" : "วินาที ก่อนหน้านี้",
     "Settings" : "ตั้งค่า"
 },

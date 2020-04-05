@@ -175,6 +175,7 @@ OC.L10N.register(
     "In reply to" : "Kao odgovor",
     "Reply" : "Odgovori",
     "Update" : "Ažuriraj",
+    "(group)" : "(grupa)",
     "seconds ago" : "prije nekoliko sekundi",
     "Assign to me" : "Dodijeli meni",
     "Delete card" : "Izbriši karticu",

@@ -132,6 +132,7 @@ OC.L10N.register(
     "Save" : "Desa",
     "Reply" : "Respon",
     "Update" : "Actualitza",
+    "(group)" : "(grup)",
     "seconds ago" : "fa uns segons",
     "Delete card" : "Suprimeix targeta",
     "Move card" : "Mou la targeta",

@@ -20,6 +20,7 @@ OC.L10N.register(
     "Save" : "Saxla",
     "Reply" : "Cavab",
     "Update" : "Yenilənmə",
+    "(group)" : "(qrup)",
     "seconds ago" : "saniyələr öncə",
     "Settings" : "Quraşdırmalar"
 },

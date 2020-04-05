@@ -44,6 +44,7 @@ OC.L10N.register(
     "Save" : "შენახვა",
     "Reply" : "პასუხი",
     "Update" : "განახლება",
+    "(group)" : "(ჯგუფი)",
     "seconds ago" : "წამის წინ",
     "Archived boards" : "არქივირებული დაფები",
     "Shared boards" : "გაზიარებული დაფები",

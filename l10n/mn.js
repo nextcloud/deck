@@ -28,6 +28,7 @@ OC.L10N.register(
     "Save" : "Хадгалах",
     "Reply" : "хариулт",
     "Update" : "Шинэчлэх",
+    "(group)" : "(бүлэг)",
     "seconds ago" : "хоёрдахь өмнө",
     "Settings" : "Тохиргоо"
 },

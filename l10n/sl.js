@@ -165,6 +165,7 @@ OC.L10N.register(
     "The comment cannot be longer than 1000 characters." : "Opomba ne sme biti daljša od 1000 znakov.",
     "Reply" : "Odgovori",
     "Update" : "Posodobi",
+    "(group)" : "(skupina)",
     "seconds ago" : "pred nekaj sekundami",
     "Assign to me" : "Nalogo dodeli meni",
     "Delete card" : "Izbriši nalogo",

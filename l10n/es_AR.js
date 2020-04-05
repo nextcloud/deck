@@ -35,6 +35,7 @@ OC.L10N.register(
     "Save" : "Guardar",
     "Reply" : "Responder",
     "Update" : "Actualizar",
+    "(group)" : "(grupo)",
     "seconds ago" : "segundos",
     "Settings" : "Ajustes",
     "New board title" : "Nuevo título de tablero",

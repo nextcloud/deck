@@ -46,6 +46,7 @@ OC.L10N.register(
     "Save" : "Gem",
     "Reply" : "Besvar",
     "Update" : "Opdatér",
+    "(group)" : "(gruppe)",
     "seconds ago" : "sekunder siden",
     "Delete card" : "Slet kort",
     "Archived boards" : "Arkiverede lister",

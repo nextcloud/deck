@@ -25,6 +25,7 @@ OC.L10N.register(
     "Save" : "Salvează",
     "Reply" : "Răspunde",
     "Update" : "Actualizare",
+    "(group)" : "(grup)",
     "seconds ago" : "secunde în urmă",
     "Settings" : "Setări"
 },

@@ -130,6 +130,7 @@ OC.L10N.register(
     "Save" : "Lagre",
     "Reply" : "Svar",
     "Update" : "Oppdater",
+    "(group)" : "(gruppe)",
     "seconds ago" : "sekunder siden",
     "Delete card" : "Slett kort",
     "Archived boards" : "Arkiverte tavler",
