@@ -22,7 +22,7 @@
 
 <template>
 	<div class="badges">
-		<div v-if="card.description" class="icon icon-edit" />
+		<div v-if="false && card.description" class="icon icon-edit" />
 
 		<div v-if="card.commentsUnread > 0" class="icon icon-comment" />
 

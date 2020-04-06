@@ -121,13 +121,18 @@
 
 			<h5>
 				{{ t('deck', 'Description') }}
+				<span v-if="copiedCard.descriptionLastEdit && !descriptionSaving">{{ t('deck', '(Unsaved)') }}</span>
+				<span v-if="descriptionSaving">{{ t('deck', '(Saving…)') }}</span>
 				<a v-tooltip="t('deck', 'Formatting help')"
 					href="https://deck.readthedocs.io/en/latest/Markdown/"
 					target="_blank"
 					class="icon icon-info" />
 			</h5>
 			<!-- FIXME: make sure the editor is disabled when canEdit is false -->
-			<VueEasymde ref="markdownEditor" v-model="copiedCard.description" :configs="mdeConfig" />
+			<VueEasymde ref="markdownEditor"
+				:value="copiedCard.description"
+				:configs="mdeConfig"
+				@input="updateDescription" />
 		</AppSidebarTab>
 
 		<AppSidebarTab id="attachments"
@@ -158,7 +163,6 @@
 <script>
 import { Avatar, Actions, ActionButton, Multiselect, AppSidebar, AppSidebarTab, DatetimePicker } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
-import VueEasymde from 'vue-easymde/dist/VueEasyMDE.common'
 import Color from '../../mixins/color'
 import { CollectionList } from 'nextcloud-vue-collections'
 import CardSidebarTabAttachments from './CardSidebarTabAttachments'
@@ -174,7 +178,7 @@ export default {
 		AppSidebarTab,
 		Multiselect,
 		DatetimePicker,
-		VueEasymde,
+		VueEasymde: () => import('vue-easymde/dist/VueEasyMDE.common'),
 		Actions,
 		ActionButton,
 		Avatar,
@@ -209,6 +213,8 @@ export default {
 			},
 			lastModifiedRelative: null,
 			lastCreatedRemative: null,
+			descriptionSaveTimeout: null,
+			descriptionSaving: false,
 			hasActivity: capabilities && capabilities.activity,
 			hasComments: window.OCP && window.OCP.Comments,
 		}
@@ -299,8 +305,20 @@ export default {
 			this.copiedCard.duedate = null
 			this.$store.dispatch('updateCardDue', this.copiedCard)
 		},
-		saveDesc() {
-			this.$store.dispatch('updateCardDesc', this.copiedCard)
+		updateDescription(text) {
+			this.copiedCard.description = text
+			this.copiedCard.descriptionLastEdit = Date.now()
+			clearTimeout(this.descriptionSaveTimeout)
+			this.descriptionSaveTimeout = setTimeout(async() => {
+				if (!Object.prototype.hasOwnProperty.call(this.copiedCard, 'descriptionLastEdit') || this.descriptionSaving) {
+					return
+				}
+				this.descriptionSaving = true
+				await this.$store.dispatch('updateCardDesc', this.copiedCard)
+				delete this.copiedCard.descriptionLastEdit
+				this.descriptionSaving = false
+			}, 2500)
+
 		},
 
 		closeSidebar() {
