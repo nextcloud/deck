@@ -161,6 +161,8 @@ OC.L10N.register(
     "Set a due date" : "Ustaw termin",
     "Remove due date" : "Usuń datę realizacji",
     "Description" : "Opis",
+    "(Unsaved)" : "(Niezapisane)",
+    "(Saving…)" : "(Zapisywanie...)",
     "Formatting help" : "Pomoc przy formatowaniu",
     "Attachments" : "Załączniki",
     "Comments" : "Komentarze",

@@ -161,6 +161,8 @@ OC.L10N.register(
     "Set a due date" : "Definir uma data de finalização",
     "Remove due date" : "Remover data de vencimento",
     "Description" : "Descrição",
+    "(Unsaved)" : "(Não salvo)",
+    "(Saving…)" : "(Salvando...)",
     "Formatting help" : "Formatando ajuda",
     "Attachments" : "Anexos",
     "Comments" : "Comentários",
