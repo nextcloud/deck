@@ -1,38 +1,4 @@
 [package]
-exclude = [
-    "build/",
-    ".git",
-    "js/node_modules",
-    "js/tests",
-    "js/legacy",
-    "js/controller",
-    "js/directive",
-    "js/filters",
-    "js/service",
-    "js/bower.json",
-    "js/.bowerrc",
-    "js/.jshintrc",
-    "js/Gruntfile.js",
-    "js/package.json",
-    "js/package-lock.json",
-    "docs/",
-    "tests",
-    ".codecov.yml",
-    "composer.json",
-    "composer.lock",
-    "_config.yml",
-    ".drone.yml",
-    ".travis.yml",
-    ".eslintignore",
-    ".eslintrc.yml",
-    ".gitignore",
-    "issue_template.md",
-    "krankerl.toml",
-    "Makefile",
-    "mkdocs.yml",
-    "run-eslint.sh"
-]
-
 before_cmds = [
     'make clean-build',
     'make build'
