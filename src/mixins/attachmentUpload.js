@@ -21,8 +21,16 @@
  */
 import { showError } from '@nextcloud/dialogs'
 import { formatFileSize } from '@nextcloud/files'
+import PQueue from 'p-queue'
+
+const queue = new PQueue({ concurrency: 2 })
 
 export default {
+	data() {
+		return {
+			uploadQueue: {},
+		}
+	},
 	methods: {
 		async onLocalAttachmentSelected(file) {
 			if (this.maxUploadSize > 0 && file.size > this.maxUploadSize) {
@@ -34,20 +42,32 @@ export default {
 				return
 			}
 
+			this.$set(this.uploadQueue, file.name, { name: file.name, progress: 0 })
 			const bodyFormData = new FormData()
 			bodyFormData.append('cardId', this.cardId)
 			bodyFormData.append('type', 'deck_file')
 			bodyFormData.append('file', file)
-			try {
-				await this.$store.dispatch('createAttachment', { cardId: this.cardId, formData: bodyFormData })
-			} catch (err) {
-				if (err.response.data.status === 409) {
-					this.overwriteAttachment = err.response.data.data
-					this.modalShow = true
-				} else {
-					showError(err.response.data.message)
+			await queue.add(async() => {
+				try {
+					await this.$store.dispatch('createAttachment', { cardId: this.cardId,
+						formData: bodyFormData,
+						onUploadProgress: (e) => {
+							const percentCompleted = Math.round((e.loaded * 100) / e.total)
+							console.debug(percentCompleted)
+							this.$set(this.uploadQueue[file.name], 'progress', percentCompleted)
+						},
+					})
+				} catch (err) {
+					if (err.response.data.status === 409) {
+						this.overwriteAttachment = err.response.data.data
+						this.modalShow = true
+					} else {
+						showError(err.response.data.message)
+					}
 				}
-			}
+				this.$delete(this.uploadQueue, file.name)
+			})
+
 		},
 
 		overrideAttachment() {

@@ -161,6 +161,8 @@ OC.L10N.register(
     "Set a due date" : "Estabelecer a data de caducidade",
     "Remove due date" : "Retirar a data de caducidade",
     "Description" : "Descrición",
+    "(Unsaved)" : "(Sen gardar)",
+    "(Saving…)" : "(Gardando…)",
     "Formatting help" : "Axuda de formatado",
     "Attachments" : "Anexos",
     "Comments" : "Comentarios",

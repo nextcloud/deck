@@ -83,8 +83,8 @@ export default {
 			commit('createAttachments', { cardId, attachments })
 		},
 
-		async createAttachment({ commit }, { cardId, formData }) {
-			const attachment = await apiClient.createAttachment({ cardId, formData })
+		async createAttachment({ commit }, { cardId, formData, onUploadProgress }) {
+			const attachment = await apiClient.createAttachment({ cardId, formData, onUploadProgress })
 			commit('createAttachment', { cardId, attachment })
 			commit('cardIncreaseAttachmentCount', cardId)
 		},

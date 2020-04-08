@@ -161,6 +161,8 @@ OC.L10N.register(
     "Set a due date" : "Définir une date d'échéance",
     "Remove due date" : "Supprimer la date d'échéance",
     "Description" : "Description",
+    "(Unsaved)" : "(Non enregistré)",
+    "(Saving…)" : "(Enregistrement ...)",
     "Formatting help" : "Aide sur la mise en forme",
     "Attachments" : "Pièces jointes",
     "Comments" : "Commentaires",

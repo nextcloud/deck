@@ -37,11 +37,12 @@ export class AttachmentApi {
 		return response.data
 	}
 
-	async createAttachment({ cardId, formData }) {
+	async createAttachment({ cardId, formData, onUploadProgress }) {
 		const response = await axios({
 			method: 'POST',
 			url: this.url(`/cards/${cardId}/attachment`),
 			data: formData,
+			onUploadProgress,
 		})
 		return response.data
 	}

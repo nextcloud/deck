@@ -161,6 +161,8 @@ OC.L10N.register(
     "Set a due date" : "Vybrat termín",
     "Remove due date" : "Odstranit termín",
     "Description" : "Popis",
+    "(Unsaved)" : "(Neuloženo)",
+    "(Saving…)" : "(Ukládání…)",
     "Formatting help" : "Nápověda k formátování",
     "Attachments" : "Přílohy",
     "Comments" : "Komentáře",
