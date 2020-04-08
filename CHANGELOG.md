@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.8.2 - 2020-04-08
+
+## Fixed
+- Fix build with missing javascript bundles
+
 ## 0.8.1 - 2020-04-08
 
 ## Added
