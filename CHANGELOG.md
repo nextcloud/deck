@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.8.1 - 2020-04-08
+
+## Added
+- Nextcloud 19 compatibility
+
+## Fixed
+- Let new shares only use the current users permissions
+- Check for board membership on comments entity event
+
 ## 0.8.0 - 2020-01-16
 
 ## Added
