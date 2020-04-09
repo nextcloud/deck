@@ -1,6 +1,36 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.0.0 - unreleased
+
+## Added
+
+- Completly rewritten frontend
+	- Better maintainability
+	- Various small fixes
+	- Unified user interface with Nextcloud
+- Separate comment and activity timelines
+- Add ability to reply to comments #1537
+- Filter cards on board #1507 @jakobroehrl
+- Add cards to projects #1294 @jakobroehrl
+- Move cards to other boards #1242 @jakobroehrl
+- Clone boards with existing stacks and labels #1221 @jakobroehrl
+- Upload multiple files at once and in parallel
+
+A huge thangs goes to our awesome community that put enourmous effort into the frontend migration:
+
+Special thanks for contributing huge parts of the Vue.js migration:
+@jakobroehrl @weeman1337 @nicolad
+
+Testers/reporters:
+@cloud2018 @putt1ck @bpcurse
+
+Calendar/Tasks integration help:
+@raimund-schluessler @georgehrke
+
+Android app team for helping to improve our REST API:
+@desperateCoder @stefan-niedermann
+
 ## 0.8.0 - 2020-01-16
 
 ## Added
