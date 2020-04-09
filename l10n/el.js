@@ -161,6 +161,8 @@ OC.L10N.register(
     "Set a due date" : "Καθορίστε ημερομηνίας λήξης",
     "Remove due date" : "Αφαίρεση ημερομηνίας λήξης",
     "Description" : "Περιγραφή",
+    "(Unsaved)" : "(Δεν αποθηκεύτηκε)",
+    "(Saving…)" : "(Αποθήκευση...)",
     "Formatting help" : "Βοήθεια μορφοποίησης",
     "Attachments" : "Συνημμένα",
     "Comments" : "Σχόλια",

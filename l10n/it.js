@@ -161,6 +161,8 @@ OC.L10N.register(
     "Set a due date" : "Imposta una data di scadenza",
     "Remove due date" : "Rimuovi data di scadenza",
     "Description" : "Descrizione",
+    "(Unsaved)" : "(Non salvata)",
+    "(Saving…)" : "(Salvataggio...)",
     "Formatting help" : "Guida di formattazione",
     "Attachments" : "Allegati",
     "Comments" : "Commenti",
