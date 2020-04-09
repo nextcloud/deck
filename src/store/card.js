@@ -76,10 +76,16 @@ export default {
 
 				return true
 			})
-				.filter((card) => card.stackId === id && (getters.getSearchQuery === ''
-					|| (card.title.toLowerCase().includes(getters.getSearchQuery.toLowerCase())
-					|| card.description.toLowerCase().includes(getters.getSearchQuery.toLowerCase()))
-						.sort((a, b) => a.order - b.order)))
+				.filter((card) => card.stackId === id)
+				.filter((card) => {
+					if (getters.getSearchQuery === '') {
+						return true
+					}
+
+					return card.title.toLowerCase().includes(getters.getSearchQuery.toLowerCase())
+						|| card.description.toLowerCase().includes(getters.getSearchQuery.toLowerCase())
+				})
+				.sort((a, b) => a.order - b.order)
 		},
 		cardById: state => (id) => {
 			return state.cards.find((card) => card.id === id)
