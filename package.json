@@ -40,6 +40,7 @@
 		"@nextcloud/vue": "^1.4.1",
 		"blueimp-md5": "^2.13.0",
 		"dompurify": "^2.0.8",
+		"moment": "^2.24.0",
 		"nextcloud-vue-collections": "^0.7.2",
 		"p-queue": "^6.3.0",
 		"url-search-params-polyfill": "^8.0.0",
