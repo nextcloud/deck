@@ -77,7 +77,7 @@
 			:drag-handle-selector="dragHandleSelector"
 			@should-accept-drop="canEdit"
 			@drop="($event) => onDropCard(stack.id, $event)">
-			<Draggable v-for="card in cardsByStack(stack.id)" :key="card.id">
+			<Draggable v-for="card in cardsByStack" :key="card.id">
 				<CardItem v-if="card" :id="card.id" />
 			</Draggable>
 		</Container>
@@ -122,7 +122,7 @@ export default {
 			'canEdit',
 		]),
 		cardsByStack() {
-			return (id) => this.$store.getters.cardsByStack(id)
+			return this.$store.getters.cardsByStack(this.stack.id)
 		},
 		dragHandleSelector() {
 			return this.canEdit ? null : '.no-drag'
@@ -150,7 +150,7 @@ export default {
 		},
 		payloadForCard(stackId) {
 			return index => {
-				return this.cardsByStack(stackId)[index]
+				return this.cardsByStack[index]
 			}
 		},
 		deleteStack(stack) {
