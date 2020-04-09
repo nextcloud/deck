@@ -47,44 +47,11 @@
 					<input type="button" class="icon-confirm" @click="finishedEdit(card)">
 				</form>
 
-				<Actions v-if="canEdit && !editing" @click.stop.prevent>
-					<ActionButton v-if="showArchived === false" icon="icon-user" @click="assignCardToMe()">
-						{{ t('deck', 'Assign to me') }}
-					</ActionButton>
-					<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">
-						{{ t('deck', (showArchived ? 'Unarchive card' : 'Archive card')) }}
-					</ActionButton>
-					<ActionButton v-if="showArchived === false" icon="icon-delete" @click="deleteCard()">
-						{{ t('deck', 'Delete card') }}
-					</ActionButton>
-					<ActionButton icon="icon-external" @click.stop="modalShow=true">
-						{{ t('deck', 'Move card') }}
-					</ActionButton>
-					<ActionButton icon="icon-settings-dark" @click="openCard">
-						{{ t('deck', 'Card details') }}
-					</ActionButton>
-				</Actions>
-
-				<Modal v-if="modalShow" title="Move card to another board" @close="modalShow=false">
-					<div class="modal__content">
-						<Multiselect v-model="selectedBoard"
-							:placeholder="t('deck', 'Select a board')"
-							:options="boards"
-							label="title"
-							@select="loadStacksFromBoard" />
-						<Multiselect v-model="selectedStack"
-							:placeholder="t('deck', 'Select a stack')"
-							:options="stacksFromBoard"
-							label="title" />
-
-						<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">
-							{{ t('deck', 'Move card') }}
-						</button>
-						<button @click="modalShow=false">
-							{{ t('deck', 'Cancel') }}
-						</button>
+				<div v-if="!editing" class="right">
+					<div v-if="card.duedate" :class="dueIcon">
+						<span>{{ relativeDate }}</span>
 					</div>
-				</Modal>
+				</div>
 			</div>
 			<ul v-if="card.labels && card.labels.length > 0" class="labels" @click="openCard">
 				<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)">
@@ -99,11 +66,9 @@
 </template>
 
 <script>
-import { Modal, Actions, ActionButton, Multiselect } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
 import { mapState, mapGetters } from 'vuex'
-import axios from '@nextcloud/axios'
-
+import moment from 'moment'
 import CardBadges from './CardBadges'
 import Color from '../../mixins/color'
 import labelStyle from '../../mixins/labelStyle'
@@ -111,7 +76,7 @@ import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
 
 export default {
 	name: 'CardItem',
-	components: { Modal, CardBadges, Actions, ActionButton, Multiselect, AttachmentDragAndDrop },
+	components: { CardBadges, AttachmentDragAndDrop },
 	directives: {
 		ClickOutside,
 	},
@@ -124,13 +89,8 @@ export default {
 	},
 	data() {
 		return {
-			menuOpened: false,
 			editing: false,
-			copiedCard: '',
-			modalShow: false,
-			selectedBoard: '',
-			selectedStack: '',
-			stacksFromBoard: [],
+			copiedCard: null,
 		}
 	},
 	computed: {
@@ -145,33 +105,36 @@ export default {
 		card() {
 			return this.$store.getters.cardById(this.id)
 		},
-		boards() {
-			return this.$store.getters.boards.filter(board => {
-				return board.id !== this.currentBoard.id
-			})
-		},
-		menu() {
-			return []
-		},
 		currentCard() {
 			return this.$route.params.cardId === this.id
 		},
-		isBoardAndStackChoosen() {
-			if (this.selectedBoard === '' || this.selectedStack === '') {
-				return false
+		relativeDate() {
+			const diff = moment(this.$root.time).diff(this.card.duedate, 'seconds')
+			if (diff >= 0 && diff < 45) {
+				return t('core', 'seconds ago')
 			}
-			return true
+			return moment(this.card.duedate).fromNow()
+		},
+		dueIcon() {
+			const days = Math.floor(moment(this.card.duedate).diff(this.$root.time, 'seconds') / 60 / 60 / 24)
+			if (days < 0) {
+				return 'icon-calendar due icon overdue'
+			}
+			if (days === 0) {
+				return 'icon-calendar-dark due icon now'
+			}
+			if (days === 1) {
+				return 'icon-calendar-dark due icon next'
+			}
+			return 'icon-calendar-dark due icon'
+		},
+		dueDateTooltip() {
+			return moment(this.card.duedate).format('LLLL')
 		},
 	},
 	methods: {
 		openCard() {
 			this.$router.push({ name: 'card', params: { cardId: this.id } })
-		},
-		togglePopoverMenu() {
-			this.menuOpened = !this.menuOpened
-		},
-		hidePopoverMenu() {
-			this.menuOpened = false
 		},
 		startEditing(card) {
 			this.copiedCard = Object.assign({}, card)
@@ -186,39 +149,6 @@ export default {
 		cancelEdit() {
 			this.editing = false
 		},
-		deleteCard() {
-			this.$store.dispatch('deleteCard', this.card)
-		},
-		archiveUnarchiveCard() {
-			this.copiedCard = Object.assign({}, this.card)
-			this.copiedCard.archived = !this.copiedCard.archived
-			this.$store.dispatch('archiveUnarchiveCard', this.copiedCard)
-		},
-		assignCardToMe() {
-			this.copiedCard = Object.assign({}, this.card)
-			this.$store.dispatch('assignCardToUser', {
-				card: this.copiedCard,
-				assignee: {
-					userId: OC.getCurrentUser().uid,
-					type: 0,
-				},
-			})
-		},
-		async loadStacksFromBoard(board) {
-			try {
-				const url = OC.generateUrl('/apps/deck/stacks/' + board.id)
-				const response = await axios.get(url)
-				this.stacksFromBoard = response.data
-			} catch (err) {
-				return err
-			}
-		},
-		moveCard() {
-			this.copiedCard = Object.assign({}, this.card)
-			this.copiedCard.stackId = this.selectedStack.id
-			this.$store.dispatch('moveCard', this.copiedCard)
-			this.modalShow = false
-		},
 	},
 }
 </script>
@@ -226,13 +156,6 @@ export default {
 <style lang="scss" scoped>
 	$card-spacing: 10px;
 	$card-padding: 10px;
-
-	.fade-enter-active, .fade-leave-active {
-		transition: opacity .125s;
-	}
-	.fade-enter, .fade-leave-to {
-		opacity: 0;
-	}
 
 	body.dark .card {
 		border: 1px solid var(--color-border);
@@ -290,8 +213,8 @@ export default {
 				display: flex;
 				flex-direction: row;
 				overflow: hidden;
-				padding: 1px 3px;
-				border-radius: 3px;
+				padding: 3px 7px;
+				border-radius: 15px;
 				font-size: 85%;
 				margin-right: 3px;
 				margin-bottom: 3px;
@@ -314,11 +237,54 @@ export default {
 		.card-controls {
 			display: flex;
 			margin-left: $card-padding;
-			margin-right: $card-padding;
 			& > div {
 				display: flex;
 				max-height: 44px;
 			}
+		}
+	}
+	.right {
+		display: flex;
+		align-items: flex-start;
+		margin-right: 9px;
+	}
+
+	.icon.due {
+		background-position: 4px center;
+		border-radius: 3px;
+		margin-top: 9px;
+		margin-bottom: 9px;
+		padding: 3px 4px;
+		font-size: 90%;
+		display: flex;
+		align-items: center;
+		opacity: .5;
+		flex-shrink: 1;
+		z-index: 2;
+
+		.icon {
+			background-size: contain;
+		}
+
+		&.overdue {
+			background-color: var(--color-error);
+			color: var(--color-primary-text);
+			opacity: .7;
+		}
+		&.now {
+			background-color: var(--color-warning);
+			opacity: .7;
+		}
+		&.next {
+			background-color: var(--color-background-dark);
+			opacity: .7;
+		}
+
+		span {
+			margin-left: 20px;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
 		}
 	}
 
@@ -339,21 +305,5 @@ export default {
 			font-size: 0;
 			color: transparent;
 		}
-	}
-
-	.modal__content {
-		width: 25vw;
-		min-width: 250px;
-		height: 120px;
-		text-align: center;
-		margin: 20px 20px 60px 20px;
-
-		.multiselect {
-			margin-bottom: 10px;
-		}
-	}
-
-	.modal__content button {
-		float: right;
 	}
 </style>

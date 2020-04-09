@@ -276,7 +276,7 @@ export default {
 				this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
 				this.allLabels = this.currentCard.labels
 
-				if (this.currentCard.assignedUsers.length > 0) {
+				if (this.currentCard.assignedUsers && this.currentCard.assignedUsers.length > 0) {
 					this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
 				} else {
 					this.assignedUsers = []
