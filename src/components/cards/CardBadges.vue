@@ -25,7 +25,7 @@
 		<div v-if="card.commentsUnread > 0" class="icon icon-comment" />
 
 		<div v-if="card.description && checkListCount > 0" class="card-tasks icon icon-checkmark">
-			<span>{{ checkListCheckedCount }}/{{ checkListCount }}</span>
+			{{ checkListCheckedCount }}/{{ checkListCount }}
 		</div>
 
 		<div v-if="card.attachmentCount > 0" class="icon-attach icon icon-attach-dark">
@@ -178,7 +178,7 @@ export default {
 
 		.icon {
 			opacity: 0.5;
-			padding: 12px 14px;
+			padding: 12px 18px;
 			padding-right: 4px;
 			margin-right: 5px;
 			background-position: left;
