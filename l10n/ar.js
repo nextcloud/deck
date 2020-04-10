@@ -28,8 +28,8 @@ OC.L10N.register(
     "Save" : "حفظ",
     "Reply" : "رد",
     "Update" : "تحديث",
-    "seconds ago" : "ثوان مضت",
     "Delete card" : "حذف البطاقة",
+    "seconds ago" : "ثوان مضت",
     "Settings" : "الإعدادات",
     "An error occurred" : "طرأ هناك خطأ"
 },
