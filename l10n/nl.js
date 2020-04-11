@@ -161,6 +161,8 @@ OC.L10N.register(
     "Set a due date" : "Stel een vervaldatum in",
     "Remove due date" : "Verwijder vervaldatum",
     "Description" : "Beschrijving",
+    "(Unsaved)" : "(Niet opgeslagen)",
+    "(Saving…)" : "(Opslaan…)",
     "Formatting help" : "Formatteringshulp",
     "Attachments" : "Bijlagen",
     "Comments" : "Reacties",

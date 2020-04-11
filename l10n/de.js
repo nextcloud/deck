@@ -162,7 +162,7 @@ OC.L10N.register(
     "Remove due date" : "Fälligkeitsdatum löschen",
     "Description" : "Beschreibung",
     "(Unsaved)" : "(nicht gespeichert)",
-    "(Saving…)" : "(speichere...)",
+    "(Saving…)" : "(Speichere…)",
     "Formatting help" : "Formatierungshilfe",
     "Attachments" : "Anhänge",
     "Comments" : "Kommentare",
