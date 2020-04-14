@@ -80,6 +80,7 @@ OC.L10N.register(
     "Settings" : "Thiết lập",
     "New board title" : "Tên dự án mới",
     "Edit board" : "Chỉnh sửa dự án",
+    "An error occurred" : "Có lỗi đã xảy ra",
     "Archive board" : "Lưu trữ dự án",
     "Unarchive board" : "Bỏ lưu trữ dự án",
     "Delete board" : "Xóa dự án",
