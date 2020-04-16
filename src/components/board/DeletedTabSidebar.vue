@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h3>{{ t('deck', 'Deleted stacks') }}</h3>
+		<h3>{{ t('deck', 'Deleted lists') }}</h3>
 		<ul>
 			<li v-for="deletedStack in deletedStacks" :key="deletedStack.id">
 				<span class="icon icon-deck" />

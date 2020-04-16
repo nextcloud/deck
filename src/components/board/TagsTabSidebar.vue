@@ -56,7 +56,7 @@
 				</template>
 			</li>
 			<button v-if="canManage" @click="clickShowAddLabel()">
-				<span class="icon-add" />{{ t('deck', 'Add a new label') }}
+				<span class="icon-add" />{{ t('deck', 'Add a new tag') }}
 			</button>
 		</ul>
 	</div>
