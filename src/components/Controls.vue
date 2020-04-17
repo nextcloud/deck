@@ -28,7 +28,7 @@
 			<h2><a href="#">{{ board.title }}</a></h2>
 		</div>
 		<div v-if="board" class="board-actions">
-			<div v-if="canManage" id="stack-add" v-click-outside="hideAddStack">
+			<div v-if="canManage && !showArchived" id="stack-add" v-click-outside="hideAddStack">
 				<Actions v-if="!isAddStackVisible">
 					<ActionButton icon="icon-add" :title="t('deck', 'Add new list')" @click.stop="showAddStack" />
 				</Actions>
