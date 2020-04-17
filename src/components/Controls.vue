@@ -26,6 +26,9 @@
 		<div v-if="board" class="board-title">
 			<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
 			<h2><a href="#">{{ board.title }}</a></h2>
+			<p v-if="showArchived">
+				({{ t('deck', 'Archived cards') }})
+			</p>
 		</div>
 		<div v-if="board" class="board-actions">
 			<div v-if="canManage && !showArchived" id="stack-add" v-click-outside="hideAddStack">

@@ -44,7 +44,7 @@
 					{{ t('deck', 'Delete list') }}
 				</ActionButton>
 			</Actions>
-			<Actions v-if="canEdit">
+			<Actions v-if="canEdit && !showArchived">
 				<ActionButton icon="icon-add" @click="showAddCard=true">
 					{{ t('deck', 'Add card') }}
 				</ActionButton>
@@ -86,7 +86,7 @@
 
 <script>
 
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import CardItem from '../cards/CardItem'
@@ -121,6 +121,9 @@ export default {
 			'canManage',
 			'canEdit',
 		]),
+		...mapState({
+			showArchived: state => state.showArchived,
+		}),
 		cardsByStack() {
 			return this.$store.getters.cardsByStack(this.stack.id)
 		},
