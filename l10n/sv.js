@@ -160,6 +160,8 @@ OC.L10N.register(
     "Set a due date" : "Sätt ett slutdatum",
     "Remove due date" : "Ta bort slutdatum",
     "Description" : "Beskrivning",
+    "(Unsaved)" : "(Inte sparad)",
+    "(Saving…)" : "(Sparar…)",
     "Formatting help" : "Formatteringshjälp",
     "Attachments" : "Bilagor",
     "Comments" : "Kommentarer",
