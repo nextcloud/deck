@@ -651,6 +651,13 @@ class BoardService {
 		$newBoard->setTitle($board->getTitle() . ' (' . $this->l10n->t('copy') . ')');
 		$newBoard->setOwner($board->getOwner());
 		$newBoard->setColor($board->getColor());
+		$permissions = $this->permissionService->matchPermissions($board);
+		$newBoard->setPermissions([
+			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
+			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
+			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
+			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
+		]);
 		$this->boardMapper->insert($newBoard);
 
 		$labels = $this->labelMapper->findAll($id);
