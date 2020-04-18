@@ -108,7 +108,6 @@ OC.L10N.register(
     "Tags" : "Merkelapper",
     "Deleted items" : "Slettede element",
     "Timeline" : "Tidslinje",
-    "Deleted stacks" : "Slettede stabeler",
     "Undo" : "Angre",
     "Deleted cards" : "Slettede kort",
     "Can edit" : "Kan redigere",

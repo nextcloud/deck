@@ -110,7 +110,6 @@ OC.L10N.register(
     "Tags" : "Etikedoj",
     "Deleted items" : "Forigitaj elementoj",
     "Timeline" : "Kronologio",
-    "Deleted stacks" : "Forigitaj stakoj",
     "Undo" : "Malfari",
     "Deleted cards" : "Forigitaj kartoj",
     "(Group)" : "(grupo)",

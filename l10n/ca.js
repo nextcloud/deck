@@ -109,7 +109,6 @@ OC.L10N.register(
     "Tags" : "Etiquetes",
     "Deleted items" : "Elements suprimits",
     "Timeline" : "Línia de temps",
-    "Deleted stacks" : "Piles suprimides",
     "Undo" : "Desfés",
     "Deleted cards" : "Targetes suprimides",
     "(Group)" : "(Grup)",
