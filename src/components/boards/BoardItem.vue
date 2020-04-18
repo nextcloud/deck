@@ -32,7 +32,7 @@
 		<div class="board-list-title-cell">
 			{{ board.title }}
 		</div>
-		<div class="board-list-avatars-cell">
+		<div class="board-list-avatars-cell" :title="''">
 			<Avatar :user="board.owner.uid" :title="board.owner.displayname" class="board-list-avatar" />
 			<Avatar v-for="user in limitedAcl"
 				:key="user.id"
