@@ -36,11 +36,15 @@
 					<button v-if="board.acl.length === 0"
 						class="icon-shared"
 						style="opacity: 0.3"
+						:title="'Share'"
 						@click="showSidebar" />
-					<button v-else class="icon-shared" @click="showSidebar" />
+					<button v-else
+						class="icon-shared"
+						:title="'Share'"
+						@click="showSidebar" />
 				</li>
 				<li class="app-navigation-entry-utils-menu-button">
-					<button v-click-outside="hideMenu" @click="showMenu" />
+					<button v-click-outside="hideMenu" :title="'Options'" @click="showMenu" />
 				</li>
 			</ul>
 		</div>
