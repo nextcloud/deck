@@ -112,7 +112,6 @@ OC.L10N.register(
     "Tags" : "タグ",
     "Deleted items" : "削除されたアイテム",
     "Timeline" : "タイムライン",
-    "Deleted stacks" : "削除済みのスタック",
     "Undo" : "元に戻す",
     "Deleted cards" : "削除済みのカード",
     "(Group)" : "(グループ)",

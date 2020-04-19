@@ -36,7 +36,6 @@ OC.L10N.register(
     "Delete list" : "刪除清單",
     "Add card" : "增加卡片",
     "Edit" : "編輯",
-    "Add a new label" : "新增一個標籤",
     "Details" : "詳細資料",
     "Assign to users" : "分派給使用者",
     "Due date" : "截止日",
