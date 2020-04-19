@@ -189,16 +189,32 @@ export default {
 
 					actions.push({
 						action: () => {
-							this.hideMenu()
-							this.loading = true
-							this.boardApi.deleteBoard(this.board)
-								.then(() => {
-									this.loading = false
-									this.deleted = true
-									this.undoTimeoutHandle = setTimeout(() => {
-										this.$store.dispatch('removeBoard', this.board)
-									}, 7000)
-								})
+							OC.dialogs.confirmDestructive(
+								t('deck', 'Are you sure you want to delete the board {title}? This will delete all the data of this board.', { title: this.board.title }),
+								t('deck', 'Delete the board?'),
+								{
+									type: OC.dialogs.YES_NO_BUTTONS,
+									confirm: t('deck', 'Delete'),
+									confirmClasses: 'error',
+									cancel: t('deck', 'Cancel'),
+								},
+								(result) => {
+									if (result) {
+										this.hideMenu()
+										this.loading = true
+										this.boardApi.deleteBoard(this.board)
+											.then(() => {
+												this.loading = false
+												this.deleted = true
+												this.undoTimeoutHandle = setTimeout(() => {
+													this.$store.dispatch('removeBoard', this.board)
+												}, 7000)
+											})
+									}
+								},
+								true
+							)
+
 						},
 						icon: 'icon-delete',
 						text: t('deck', 'Delete board'),
