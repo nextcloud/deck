@@ -34,13 +34,17 @@
 			<ul>
 				<li class="app-navigation-entry-utils-menu-button">
 					<button v-if="board.acl.length === 0"
+						v-tooltip="t('deck', 'Share')"
 						class="icon-shared"
 						style="opacity: 0.3"
 						@click="showSidebar" />
-					<button v-else class="icon-shared" @click="showSidebar" />
+					<button v-else
+						v-tooltip="t('deck', 'Share')"
+						class="icon-shared"
+						@click="showSidebar" />
 				</li>
 				<li class="app-navigation-entry-utils-menu-button">
-					<button v-click-outside="hideMenu" @click="showMenu" />
+					<button v-click-outside="hideMenu" v-tooltip="t('deck', 'Options')" @click="showMenu" />
 				</li>
 			</ul>
 		</div>

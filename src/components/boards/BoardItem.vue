@@ -32,11 +32,12 @@
 		<div class="board-list-title-cell">
 			{{ board.title }}
 		</div>
-		<div class="board-list-avatars-cell">
-			<Avatar :user="board.owner.uid" class="board-list-avatar" />
+		<div class="board-list-avatars-cell" title="">
+			<Avatar :user="board.owner.uid" :display-name="board.owner.displayname" class="board-list-avatar" />
 			<Avatar v-for="user in limitedAcl"
 				:key="user.id"
 				:user="user.participant.uid"
+				:display-name="user.participant.displayname"
 				class="board-list-avatar" />
 			<div v-if="board.acl.length > 5" v-tooltip="otherAcl" class="avatardiv popovermenu-wrapper board-list-avatar icon-more" />
 		</div>

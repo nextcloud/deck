@@ -31,9 +31,11 @@
 			</p>
 		</div>
 		<div v-if="board" class="board-actions">
-			<div v-if="canManage && !showArchived" id="stack-add" v-click-outside="hideAddStack">
-				<Actions v-if="!isAddStackVisible">
-					<ActionButton icon="icon-add" :title="t('deck', 'Add new list')" @click.stop="showAddStack" />
+			<div v-if="canManage && !showArchived"
+				id="stack-add"
+				v-click-outside="hideAddStack">
+				<Actions v-if="!isAddStackVisible" :title="t('deck', 'Add new list')">
+					<ActionButton icon="icon-add" @click.stop="showAddStack" />
 				</Actions>
 				<form v-else @submit.prevent="addNewStack()">
 					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add new list') }}</label>
@@ -52,8 +54,8 @@
 			</div>
 			<div class="board-action-buttons">
 				<Popover>
-					<Actions slot="trigger" :style="filterOpacity">
-						<ActionButton icon="icon-filter" :title="t('deck', 'Apply filter')" />
+					<Actions slot="trigger" :style="filterOpacity" :title="t('deck', 'Apply filter')">
+						<ActionButton icon="icon-filter" />
 					</Actions>
 
 					<template>
@@ -148,28 +150,24 @@
 					</template>
 				</Popover>
 
-				<Actions :style="archivedOpacity">
+				<Actions :style="archivedOpacity" :title="t('deck', 'Show archived cards')">
 					<ActionButton v-if="showArchived"
 						icon="icon-archive"
-						:title="t('deck', 'Show archived cards')"
 						@click="toggleShowArchived" />
 					<ActionButton v-else
 						icon="icon-archive"
-						:title="t('deck', 'Hide archived cards')"
 						@click="toggleShowArchived" />
 				</Actions>
-				<Actions>
+				<Actions :title="t('deck', 'Toggle compact mode')">
 					<ActionButton v-if="compactMode"
 						icon="icon-toggle-compact-collapsed"
-						:title="t('deck', 'Toggle compact mode')"
 						@click="toggleCompactMode" />
 					<ActionButton v-else
 						icon="icon-toggle-compact-expanded"
-						:title="t('deck', 'Toggle compact mode')"
 						@click="toggleCompactMode" />
 				</Actions>
 				<!-- FIXME: ActionRouter currently doesn't work as an inline action -->
-				<Actions>
+				<Actions :title="t('deck', 'Details')">
 					<ActionButton icon="icon-menu-sidebar" @click="toggleDetailsView" />
 				</Actions>
 			</div>
