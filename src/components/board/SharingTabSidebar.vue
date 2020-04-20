@@ -132,10 +132,13 @@ export default {
 			})
 		},
 	},
+	mounted() {
+		this.asyncFind('')
+	},
 	methods: {
 		asyncFind(query) {
 			this.isLoading = true
-			this.$store.dispatch('loadSharees').then(response => {
+			this.$store.dispatch('loadSharees', query).then(response => {
 				this.isLoading = false
 			})
 		},
