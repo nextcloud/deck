@@ -136,6 +136,11 @@ class DeckProviderTest extends TestCase {
 			->will($this->returnCallback(function($a, $i) {
 				return $a . '/' . $i;
 			}));
+		$this->urlGenerator->expects($this->any())
+			->method('getAbsoluteURL')
+			->will($this->returnCallback(function($url) {
+				return $url;
+			}));
 		$this->provider->parse('en_US', $event);
 		$this->assertEquals($app . '/' . $icon, $event->getIcon());
 	}
