@@ -151,10 +151,7 @@
 				</Popover>
 
 				<Actions :style="archivedOpacity" :title="t('deck', 'Show archived cards')">
-					<ActionButton v-if="showArchived"
-						icon="icon-archive"
-						@click="toggleShowArchived" />
-					<ActionButton v-else
+					<ActionButton
 						icon="icon-archive"
 						@click="toggleShowArchived" />
 				</Actions>
