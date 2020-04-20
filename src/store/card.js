@@ -96,6 +96,8 @@ export default {
 			state.cards = []
 		},
 		addCard(state, card) {
+			card.labels = card.labels || []
+			card.assignedUsers = card.assignedUsers || []
 			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
 				const existingCard = state.cards.find(_card => _card.id === card.id)
