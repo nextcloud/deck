@@ -127,9 +127,22 @@
 					href="https://deck.readthedocs.io/en/latest/Markdown/"
 					target="_blank"
 					class="icon icon-info" />
+				<Actions v-if="canEdit">
+					<ActionButton v-if="!descriptionEditing" icon="icon-rename" @click="showEditor()">
+						{{ t('deck', 'Edit description') }}
+					</ActionButton>
+					<ActionButton v-else icon="icon-toggle" @click="hideEditor()">
+						{{ t('deck', 'View description') }}
+					</ActionButton>
+				</Actions>
 			</h5>
-			<!-- FIXME: make sure the editor is disabled when canEdit is false -->
-			<VueEasymde ref="markdownEditor"
+
+			<div v-if="!descriptionEditing"
+				id="description-preview"
+				@click="clickedPreview"
+				v-html="renderedDescription" />
+			<VueEasymde v-else
+				ref="markdownEditor"
 				:value="copiedCard.description"
 				:configs="mdeConfig"
 				@input="updateDescription" />
@@ -168,6 +181,11 @@ import { CollectionList } from 'nextcloud-vue-collections'
 import CardSidebarTabAttachments from './CardSidebarTabAttachments'
 import CardSidebarTabComments from './CardSidebarTabComments'
 import CardSidebarTabActivity from './CardSidebarTabActivity'
+import MarkdownIt from 'markdown-it'
+import MarkdownItTaskLists from 'markdown-it-task-lists'
+
+const markdownIt = new MarkdownIt()
+markdownIt.use(MarkdownItTaskLists, { enabled: true, label: true, labelAfter: true })
 
 const capabilities = window.OC.getCapabilities()
 
@@ -202,8 +220,10 @@ export default {
 			addedLabelToCard: null,
 			copiedCard: null,
 			allLabels: null,
-			desc: null,
+
 			saving: false,
+			markdownIt: null,
+			descriptionEditing: false,
 			mdeConfig: {
 				autoDownloadFontAwesome: false,
 				spellChecker: false,
@@ -265,26 +285,13 @@ export default {
 				this.saving = false
 			},
 		},
+		renderedDescription() {
+			return markdownIt.render(this.copiedCard.description)
+		},
 	},
 	watch: {
-		'currentCard': {
-			immediate: true,
-			handler() {
-				if (!this.currentCard) {
-					return
-				}
-				this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
-				this.allLabels = this.currentCard.labels
-
-				if (this.currentCard.assignedUsers && this.currentCard.assignedUsers.length > 0) {
-					this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
-				} else {
-					this.assignedUsers = []
-				}
-
-				this.desc = this.currentCard.description
-				this.updateRelativeTimestamps()
-			},
+		currentCard() {
+			this.initialize()
 		},
 	},
 	created() {
@@ -293,7 +300,57 @@ export default {
 	destroyed() {
 		clearInterval(this.updateRelativeTimestamps)
 	},
+	mounted() {
+		this.initialize()
+	},
 	methods: {
+		initialize() {
+			if (!this.currentCard) {
+				return
+			}
+
+			this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
+			this.allLabels = this.currentCard.labels
+
+			if (this.currentCard.assignedUsers && this.currentCard.assignedUsers.length > 0) {
+				this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
+			} else {
+				this.assignedUsers = []
+			}
+
+			this.desc = this.currentCard.description
+			this.updateRelativeTimestamps()
+		},
+		showEditor() {
+			if (!this.canEdit) {
+				return
+			}
+			this.descriptionEditing = true
+		},
+		hideEditor() {
+			this.descriptionEditing = false
+		},
+		clickedPreview(e) {
+			if (e.target.getAttribute('type') === 'checkbox') {
+				const clickedIndex = [...document.querySelector('#description-preview').querySelectorAll('input')].findIndex((li) => li.id === e.target.id)
+				const reg = /\[(X|\s|_|-)\]/ig
+				let nth = 0
+				const updatedDescription = this.copiedCard.description.replace(reg, (match, i, original) => {
+					let result = match
+					if ('' + nth++ === '' + clickedIndex) {
+						if (match.match(/^\[\s\]/i)) {
+							result = match.replace(/\[\s\]/i, '[x]')
+						}
+						if (match.match(/^\[x\]/i)) {
+							result = match.replace(/\[x\]/i, '[ ]')
+						}
+						return result
+					}
+					return match
+				})
+				this.updateDescription(updatedDescription)
+			}
+		},
 		updateRelativeTimestamps() {
 			this.lastModifiedRelative = OC.Util.relativeModifiedDate(this.currentCard.lastModified * 1000)
 			this.lastCreatedRemative = OC.Util.relativeModifiedDate(this.currentCard.createdAt * 1000)
@@ -377,6 +434,8 @@ export default {
 	@import "~easymde/dist/easymde.min.css";
 	.vue-easymde, .CodeMirror {
 		border: none;
+		margin: 0;
+		padding: 0;
 	}
 	.editor-preview,
 	.editor-statusbar {
@@ -398,10 +457,15 @@ export default {
 
 		.icon-info {
 			display: inline-block;
-			width: 16px;
+			width: 32px;
 			height: 16px;
 			float: right;
 			opacity: .7;
+		}
+
+		.icon-toggle, .icon-rename {
+			float: right;
+			margin-top: -14px;
 		}
 	}
 
@@ -469,4 +533,13 @@ export default {
 	.multiselect.multiselect--active::v-deep .multiselect__tags-wrap {
 		z-index: 0;
 	}
+
+	#description-preview {
+		min-height: 100px;
+
+		&::v-deep input {
+			min-height: auto;
+		}
+	}
+
 </style>
