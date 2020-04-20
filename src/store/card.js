@@ -85,7 +85,7 @@ export default {
 					return card.title.toLowerCase().includes(getters.getSearchQuery.toLowerCase())
 						|| card.description.toLowerCase().includes(getters.getSearchQuery.toLowerCase())
 				})
-				.sort((a, b) => a.order - b.order)
+				.sort((a, b) => a.order - b.order || a.createdAt - b.createdAt)
 		},
 		cardById: state => (id) => {
 			return state.cards.find((card) => card.id === id)
