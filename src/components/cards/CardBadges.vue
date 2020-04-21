@@ -107,10 +107,10 @@ export default {
 			currentBoard: state => state.currentBoard,
 		}),
 		checkListCount() {
-			return (this.card.description.match(/\[\s*\x*\]/g) || []).length
+			return (this.card.description.match(/^\s*(\*|-|(\d\.))\s+\[\s*(\s|x)\s*\](.*)$/gim) || []).length
 		},
 		checkListCheckedCount() {
-			return (this.card.description.match(/\[\s*x\s*\]/g) || []).length
+			return (this.card.description.match(/^\s*(\*|-|(\d\.))\s+\[\s*x\s*\](.*)$/gim) || []).length
 		},
 		compactMode() {
 			return false
