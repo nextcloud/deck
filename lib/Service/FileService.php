@@ -236,14 +236,15 @@ class FileService implements IAttachmentService {
 		} else {
 			$response = new FileDisplayResponse($file);
 		}
-		if ($file->getMimeType() === 'application/pdf') {
-			// We need those since otherwise chrome won't show the PDF file with CSP rule object-src 'none'
-			// https://bugs.chromium.org/p/chromium/issues/detail?id=271452
-			$policy = new ContentSecurityPolicy();
-			$policy->addAllowedObjectDomain('\'self\'');
-			$policy->addAllowedObjectDomain('blob:');
-			$response->setContentSecurityPolicy($policy);
-		}
+		// We need those since otherwise chrome won't show the PDF file with CSP rule object-src 'none'
+		// https://bugs.chromium.org/p/chromium/issues/detail?id=271452
+		$policy = new ContentSecurityPolicy();
+		$policy->addAllowedObjectDomain('\'self\'');
+		$policy->addAllowedObjectDomain('blob:');
+		$policy->addAllowedMediaDomain('\'self\'');
+		$policy->addAllowedMediaDomain('blob:');
+		$response->setContentSecurityPolicy($policy);
+
 		$response->addHeader('Content-Type', $file->getMimeType());
 		return $response;
 	}
