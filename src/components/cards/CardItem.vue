@@ -32,10 +32,10 @@
 			@click="openCard">
 			<div class="card-upper">
 				<h3 v-if="showArchived || !canEdit">
-					{{ card.title }}
+					{{ copiedCard.title }}
 				</h3>
 				<h3 v-else-if="!editing">
-					<span @click.stop="startEditing(card)">{{ card.title }}</span>
+					<span contenteditable @input="onCardInput" @paste="onCardPaste">{{ card.title }}</span>
 				</h3>
 
 				<form v-if="editing"
@@ -73,6 +73,7 @@ import CardBadges from './CardBadges'
 import Color from '../../mixins/color'
 import labelStyle from '../../mixins/labelStyle'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
+import debounce from 'lodash/debounce'
 
 export default {
 	name: 'CardItem',
@@ -92,6 +93,9 @@ export default {
 			editing: false,
 			copiedCard: null,
 		}
+	},
+	mounted() {
+		this.copiedCard = Object.assign({}, this.card)
 	},
 	computed: {
 		...mapState({
@@ -132,7 +136,21 @@ export default {
 			return moment(this.card.duedate).format('LLLL')
 		},
 	},
+	watch: {
+		'copiedCard.title': debounce(function() {
+			this.$store.dispatch('updateCardTitle', this.copiedCard)
+		}, 250),
+	},
 	methods: {
+		onCardInput(e) {
+			this.copiedCard.title = e.target.innerText
+		},
+		onCardPaste(e) {
+			e.preventDefault()
+			const text = (e.originalEvent || e).clipboardData.getData('text/plain')
+			document.execCommand('insertHTML', false, text)
+			return false
+		},
 		openCard() {
 			this.$router.push({ name: 'card', params: { cardId: this.id } })
 		},
