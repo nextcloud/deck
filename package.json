@@ -42,6 +42,7 @@
 		"dompurify": "^2.0.8",
 		"markdown-it": "^10.0.0",
 		"markdown-it-task-lists": "^2.1.1",
+		"lodash": "^4.17.15",
 		"moment": "^2.24.0",
 		"nextcloud-vue-collections": "^0.7.2",
 		"p-queue": "^6.3.0",

@@ -31,7 +31,7 @@ import card from './card'
 import comment from './comment'
 import trashbin from './trashbin'
 import attachment from './attachment'
-
+import debounce from 'lodash/debounce'
 Vue.use(Vuex)
 
 const apiClient = new BoardApi()
@@ -181,7 +181,11 @@ export default new Vuex.Store({
 			state.boards = boards
 		},
 		setSharees(state, shareesUsersAndGroups) {
-			state.sharees = shareesUsersAndGroups.users
+			state.sharees = shareesUsersAndGroups.exact.users
+			state.sharees.push(...shareesUsersAndGroups.exact.groups)
+			state.sharees.push(...shareesUsersAndGroups.exact.circles)
+
+			state.sharees.push(...shareesUsersAndGroups.users)
 			state.sharees.push(...shareesUsersAndGroups.groups)
 			state.sharees.push(...shareesUsersAndGroups.circles)
 		},
@@ -328,16 +332,20 @@ export default new Vuex.Store({
 			const boards = await apiClient.loadBoards()
 			commit('setBoards', boards)
 		},
-		loadSharees({ commit }) {
+		loadSharees: debounce(function({ commit }, query) {
 			const params = new URLSearchParams()
+			if (typeof query === 'undefined') {
+				return
+			}
+			params.append('search', query)
 			params.append('format', 'json')
-			params.append('perPage', 4)
-			params.append('itemType', 0)
-			params.append('itemType', 1)
+			params.append('perPage', 20)
+			params.append('itemType', [0, 1, 7])
+
 			axios.get(OC.linkToOCS('apps/files_sharing/api/v1') + 'sharees', { params }).then((response) => {
 				commit('setSharees', response.data.ocs.data)
 			})
-		},
+		}, 250),
 
 		setBoardFilter({ commmit }, filter) {
 			commmit('setBoardFilter', filter)
