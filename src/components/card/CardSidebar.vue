@@ -128,6 +128,11 @@
 					target="_blank"
 					class="icon icon-info" />
 				<Actions v-if="canEdit">
+					<ActionButton v-if="descriptionEditing" icon="icon-attach" @click="showAttachmentModal()">
+						{{ t('deck', 'Add Attachment') }}
+					</ActionButton>
+				</Actions>
+				<Actions v-if="canEdit">
 					<ActionButton v-if="!descriptionEditing" icon="icon-rename" @click="showEditor()">
 						{{ t('deck', 'Edit description') }}
 					</ActionButton>
@@ -170,11 +175,22 @@
 			icon="icon-activity">
 			<CardSidebarTabActivity :card="currentCard" />
 		</AppSidebarTab>
+		<Modal v-if="modalShow" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
+			<div class="modal__content">
+				<h3>{{ t('deck', 'Choose attachment') }}</h3>
+				<!-- <Actions>
+					<ActionButton icon="icon-close" @click="modalShow=false">
+						{{ t('deck', 'Cancel') }}
+					</ActionButton>
+				</Actions> -->
+				<AttachmentList :card-id="currentCard.id" />
+			</div>
+		</Modal>
 	</AppSidebar>
 </template>
 
 <script>
-import { Avatar, Actions, ActionButton, Multiselect, AppSidebar, AppSidebarTab, DatetimePicker } from '@nextcloud/vue'
+import { Avatar, Actions, ActionButton, Multiselect, AppSidebar, AppSidebarTab, DatetimePicker, Modal } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 import Color from '../../mixins/color'
 import { CollectionList } from 'nextcloud-vue-collections'
@@ -183,6 +199,9 @@ import CardSidebarTabComments from './CardSidebarTabComments'
 import CardSidebarTabActivity from './CardSidebarTabActivity'
 import MarkdownIt from 'markdown-it'
 import MarkdownItTaskLists from 'markdown-it-task-lists'
+import { formatFileSize } from '@nextcloud/files'
+import relativeDate from '../../mixins/relativeDate'
+import AttachmentList from './AttachmentList'
 
 const markdownIt = new MarkdownIt()
 markdownIt.use(MarkdownItTaskLists, { enabled: true, label: true, labelAfter: true })
@@ -204,10 +223,10 @@ export default {
 		CardSidebarTabAttachments,
 		CardSidebarTabComments,
 		CardSidebarTabActivity,
+		Modal,
+		AttachmentList,
 	},
-	mixins: [
-		Color,
-	],
+	mixins: [Color, relativeDate],
 	props: {
 		id: {
 			type: Number,
@@ -237,6 +256,7 @@ export default {
 			descriptionSaving: false,
 			hasActivity: capabilities && capabilities.activity,
 			hasComments: !!OC.appswebroots['comments'],
+			modalShow: false,
 		}
 	},
 	computed: {
@@ -244,6 +264,24 @@ export default {
 			currentBoard: state => state.currentBoard,
 		}),
 		...mapGetters(['canEdit', 'assignables']),
+		attachments() {
+			return [...this.$store.getters.attachmentsByCard(this.id)].sort((a, b) => b.id - a.id)
+		},
+		mimetypeForAttachment() {
+			return (mimetype) => {
+				const url = OC.MimeType.getIconUrl(mimetype)
+				const styles = {
+					'background-image': `url("${url}")`,
+				}
+				return styles
+			}
+		},
+		attachmentUrl() {
+			return (attachment) => OC.generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
+		},
+		formattedFileSize() {
+			return (filesize) => formatFileSize(filesize)
+		},
 		currentCard() {
 			return this.$store.getters.cardById(this.id)
 		},
@@ -329,6 +367,19 @@ export default {
 		},
 		hideEditor() {
 			this.descriptionEditing = false
+		},
+		showAttachmentModal() {
+			this.modalShow = true
+		},
+		addAttachment(attachment) {
+			const descString = this.$refs.markdownEditor.easymde.value()
+			let embed = ''
+			if (attachment.extendedData.mimetype.includes('image')) {
+				embed = '!'
+			}
+			const attachmentString = embed + '[📎 ' + attachment.data + '](' + this.attachmentUrl(attachment) + ')'
+			this.$refs.markdownEditor.easymde.value(descString + '\n' + attachmentString)
+			this.modalShow = false
 		},
 		clickedPreview(e) {
 			if (e.target.getAttribute('type') === 'checkbox') {
@@ -455,7 +506,7 @@ export default {
 		margin-bottom: 5px;
 		color: var(--color-text-maxcontrast);
 
-		.icon-info {
+		.icon-info, .icon-attach {
 			display: inline-block;
 			width: 32px;
 			height: 16px;
@@ -539,6 +590,103 @@ export default {
 
 		&::v-deep input {
 			min-height: auto;
+		}
+	}
+
+	.modal__content {
+		width: 25vw;
+		min-width: 250px;
+		height: 120px;
+		text-align: center;
+		margin: 20px 20px 60px 20px;
+	}
+
+	.modal__content button {
+		float: right;
+		margin: 40px 3px 3px 0;
+	}
+
+	.attachment-list {
+		&.selector {
+			padding: 10px;
+			position: absolute;
+			width: 30%;
+			max-width: 500px;
+			min-width: 200px;
+			max-height: 50%;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background-color: #eee;
+			z-index: 2;
+			border-radius: 3px;
+			box-shadow: 0 0 3px darkgray;
+			overflow: scroll;
+		}
+		h3.attachment-selector {
+			margin: 0 0 10px;
+			padding: 0;
+			.icon-close {
+				display: inline-block;
+				float: right;
+			}
+		}
+
+		li.attachment {
+			display: flex;
+			padding: 3px;
+			min-height: 44px;
+
+			&.deleted {
+				opacity: .5;
+			}
+
+			.fileicon {
+				display: inline-block;
+				min-width: 32px;
+				width: 32px;
+				height: 32px;
+				background-size: contain;
+			}
+			.details {
+				flex-grow: 1;
+				flex-shrink: 1;
+				min-width: 0;
+				flex-basis: 50%;
+				line-height: 110%;
+				padding: 2px;
+			}
+			.filename {
+				width: 70%;
+				display: flex;
+				.basename {
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					padding-bottom: 2px;
+				}
+				.extension {
+					opacity: 0.7;
+				}
+			}
+			.filesize, .filedate {
+				font-size: 90%;
+				color: darkgray;
+			}
+			.app-popover-menu-utils {
+				position: relative;
+				right: -10px;
+				button {
+					height: 32px;
+					width: 42px;
+				}
+			}
+			button.icon-history {
+				width: 44px;
+			}
+			progress {
+				margin-top: 3px;
+			}
 		}
 	}
 
