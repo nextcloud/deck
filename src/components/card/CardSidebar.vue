@@ -236,7 +236,7 @@ export default {
 			descriptionSaveTimeout: null,
 			descriptionSaving: false,
 			hasActivity: capabilities && capabilities.activity,
-			hasComments: window.OCP && window.OCP.Comments,
+			hasComments: !!OC.appswebroots['comments']
 		}
 	},
 	computed: {
