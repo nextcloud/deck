@@ -124,4 +124,8 @@ export default {
 	#content * {
 		box-sizing: border-box;
 	}
+
+	.multiselect {
+		width: 100%;
+	}
 </style>

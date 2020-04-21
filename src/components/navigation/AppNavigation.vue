@@ -53,9 +53,11 @@
 			<div id="app-settings-content">
 				<Multiselect v-model="groupLimit"
 					:class="{'icon-loading-small': groupLimitDisabled}"
+					open-direction="bottom"
 					:options="groups"
 					:multiple="true"
 					:disabled="groupLimitDisabled"
+					:placeholder="t('deck', 'Limit deck usage of groups')"
 					label="displayname"
 					track-by="id"
 					@input="updateConfig" />
@@ -155,8 +157,12 @@ export default {
 	},
 }
 </script>
-<style>
-	.multiselect {
-		width: 100%;
+<style scoped lang="scss">
+	#app-settings-content {
+		p {
+			margin-top: 20px;
+			margin-bottom: 20px;
+			color: var(--color-text-light);
+		}
 	}
 </style>
