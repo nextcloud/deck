@@ -42,7 +42,7 @@ export default new Router({
 			component: Boards,
 		},
 		{
-			path: '/boards',
+			path: '/board',
 			name: 'boards',
 			component: Boards,
 			props: {
@@ -50,7 +50,7 @@ export default new Router({
 			},
 		},
 		{
-			path: '/boards/archived',
+			path: '/board/archived',
 			name: 'boards.archived',
 			component: Boards,
 			props: {
@@ -58,7 +58,7 @@ export default new Router({
 			},
 		},
 		{
-			path: '/boards/shared',
+			path: '/board/shared',
 			name: 'boards.shared',
 			component: Boards,
 			props: {
@@ -66,7 +66,7 @@ export default new Router({
 			},
 		},
 		{
-			path: '/boards/:id',
+			path: '/board/:id',
 			name: 'board',
 			components: {
 				default: Board,
@@ -101,7 +101,7 @@ export default new Router({
 					},
 				},
 				{
-					path: 'cards/:cardId',
+					path: 'card/:cardId',
 					name: 'card',
 					components: {
 						sidebar: CardSidebar,
