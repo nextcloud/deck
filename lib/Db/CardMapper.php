@@ -109,7 +109,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 	 */
 	public function find($id) {
 		$sql = 'SELECT * FROM `*PREFIX*deck_cards` ' .
-			'WHERE `id` = ?';
+			'WHERE `id` = ? ORDER BY `order`, `id`';
 		/** @var Card $card */
 		$card = $this->findEntity($sql, [$id]);
 		$labels = $this->labelMapper->findAssignedLabelsForCard($card->id);
@@ -120,14 +120,14 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 
 	public function findAll($stackId, $limit = null, $offset = null, $since = -1) {
 		$sql = 'SELECT * FROM `*PREFIX*deck_cards` 
-          WHERE `stack_id` = ? AND NOT archived AND deleted_at = 0 AND last_modified > ? ORDER BY `order`';
+          WHERE `stack_id` = ? AND NOT archived AND deleted_at = 0 AND last_modified > ? ORDER BY `order`, `id`';
 		return $this->findEntities($sql, [$stackId, $since], $limit, $offset);
 	}
 
 	public function findDeleted($boardId, $limit = null, $offset = null) {
 		$sql = 'SELECT c.* FROM `*PREFIX*deck_cards` c
 	  INNER JOIN `*PREFIX*deck_stacks` s ON s.id = c.stack_id
-	  WHERE `s`.`board_id` = ? AND NOT c.archived AND NOT c.deleted_at = 0 ORDER BY `c`.`order`';
+	  WHERE `s`.`board_id` = ? AND NOT c.archived AND NOT c.deleted_at = 0 ORDER BY `c`.`order`, `c`.`id`';
 		return $this->findEntities($sql, [$boardId], $limit, $offset);
 	}
 
@@ -138,7 +138,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 
 	public function findAllByStack($stackId, $limit = null, $offset = null) {
 		$sql = 'SELECT id FROM `*PREFIX*deck_cards` 
-          WHERE `stack_id` = ?';
+          WHERE `stack_id` = ? ORDER BY `order`, `id`';
 		return $this->findEntities($sql, [$stackId], $limit, $offset);
 	}
 
