@@ -59,8 +59,6 @@
 		white-space: nowrap;
 	}
 
-	span.due { }
-
 	div.card-assigned-users {
 		margin-right:10px;
 	}
@@ -75,7 +73,7 @@
 	@page {
 		size: A4 landscape;
 		margin: 2cm;
-		}
+	}
 
 	div#innerBoard {
 		display:flex;

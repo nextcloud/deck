@@ -2,66 +2,66 @@
  * Custom icons
  */
 .icon-deck {
-  background-image: url('../img/deck-dark.svg');
+	background-image: url('../img/deck-dark.svg');
 }
 
 .icon-help {
-  background-image: url('../../../settings/img/help.svg');
+	background-image: url('../../../settings/img/help.svg');
 }
 
 .icon-add-white {
-  background-image: url('../img/add-white.svg');
+	background-image: url('../img/add-white.svg');
 }
 
 .icon-attach {
-  background-image: url('../img/attach.svg');
+	background-image: url('../img/attach.svg');
 }
 
 .icon-archive {
-  background-image: url('../img/archive.svg');
+	background-image: url('../img/archive.svg');
 }
 
 .icon-archive-white {
-  background-image: url('../img/archive-white.svg');
+	background-image: url('../img/archive-white.svg');
 }
 
 .icon-details {
-  background-image: url('../img/details.svg');
+	background-image: url('../img/details.svg');
 }
 
 .icon-details-white {
-  background-image: url('../img/details-white.svg');
+	background-image: url('../img/details-white.svg');
 }
 
 .icon-home {
-  background-image: var(--icon-home-000, url('../../../core/img/places/home.svg'));
+	background-image: var(--icon-home-000, url('../../../core/img/places/home.svg'));
 }
 
 .icon-description {
-  background-image: var(--icon-text-000, url('../img/description.svg'));
+	background-image: var(--icon-text-000, url('../img/description.svg'));
 }
 
 .icon-badge {
-  background-image: url('../img/calendar-dark.svg');
+	background-image: url('../img/calendar-dark.svg');
 }
 
 .icon-toggle-compact-collapsed {
-  background-image: url('../img/toggle-view-expand.svg');
+	background-image: url('../img/toggle-view-expand.svg');
 }
 
 .icon-toggle-compact-expanded {
-  background-image: url('../img/toggle-view-collapse.svg');
+	background-image: url('../img/toggle-view-collapse.svg');
 }
 
 
 @if mixin-exists('icon-black-white') {
-  @include icon-black-white('deck', 'deck', 1);
-  @include icon-black-white('archive', 'deck', 1);
-  @include icon-black-white('circles', 'deck', 1);
-  @include icon-black-white('clone', 'deck', 1);
-  @include icon-black-white('filter', 'deck', 1);
-  @include icon-black-white('attach', 'deck', 1);
-  @include icon-black-white('reply', 'deck', 1);
+	@include icon-black-white('deck', 'deck', 1);
+	@include icon-black-white('archive', 'deck', 1);
+	@include icon-black-white('circles', 'deck', 1);
+	@include icon-black-white('clone', 'deck', 1);
+	@include icon-black-white('filter', 'deck', 1);
+	@include icon-black-white('attach', 'deck', 1);
+	@include icon-black-white('reply', 'deck', 1);
 
 	.icon-toggle-compact-collapsed {
 		@include icon-color('toggle-view-expand', 'deck', $color-black);
@@ -76,13 +76,15 @@
 }
 
 .avatardiv.circles {
-  background: var(--color-primary);
+	background: var(--color-primary);
 }
+
 .icon-circles {
-  opacity: 1;
-  background-size: 20px;
-  background-position: center center;
+	opacity: 1;
+	background-size: 20px;
+	background-position: center center;
 }
+
 .icon-colorpicker {
 	background-image: url('../img/color_picker.svg');
 }

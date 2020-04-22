@@ -45,19 +45,24 @@
 		max-width: 400px;
 		padding: 20px;
 	}
+
 	ul {
 		min-height: 100px;
 	}
+
 	li {
 		padding: 6px;
 		border: 1px solid transparent;
 	}
+
 	li:hover, li:focus {
 		background-color: var(--color-background-dark);
 	}
+
 	li.selected {
 		border: 1px solid var(--color-primary);
 	}
+
 	.board-bullet {
 		display: inline-block;
 		width: 12px;
@@ -66,6 +71,7 @@
 		border-radius: 50%;
 		cursor: pointer;
 	}
+
 	li > span,
 	.avatar {
 		vertical-align: middle;
