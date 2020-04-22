@@ -26,7 +26,6 @@ namespace OCA\Deck\Db;
 use OCP\IGroup;
 
 class GroupTest extends \Test\TestCase {
-
 	public function testGroupObjectSerialize() {
 		/** @var IGroup $group */
 		$group = $this->createMock(IGroup::class);

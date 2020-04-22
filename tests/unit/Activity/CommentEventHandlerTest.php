@@ -23,27 +23,12 @@
 
 namespace OCA\Deck\Activity;
 
-use OCA\Deck\Db\AclMapper;
-use OCA\Deck\Db\AssignedUsers;
-use OCA\Deck\Db\Attachment;
-use OCA\Deck\Db\AttachmentMapper;
-use OCA\Deck\Db\Board;
-use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
-use OCA\Deck\Db\Label;
-use OCA\Deck\Db\Stack;
-use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Notification\NotificationHelper;
-use OCA\Deck\Service\PermissionService;
-use OCP\Activity\IEvent;
-use OCP\Activity\IManager;
 use OCP\Comments\CommentsEvent;
 use OCP\Comments\IComment;
-use OCP\IL10N;
-use OCP\IUser;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class CommentEventHandlerTest extends TestCase {
 
@@ -109,12 +94,10 @@ class CommentEventHandlerTest extends TestCase {
 		$this->commentEventHandler->handle($commentsEvent);
 	}
 
-	public function invokePrivate(&$object, $methodName, array $parameters = array())
-	{
+	public function invokePrivate(&$object, $methodName, array $parameters = []) {
 		$reflection = new \ReflectionClass(get_class($object));
 		$method = $reflection->getMethod($methodName);
 		$method->setAccessible(true);
 		return $method->invokeArgs($object, $parameters);
 	}
-
 }

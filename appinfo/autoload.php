@@ -23,8 +23,6 @@
 
 namespace OCA\Deck\AppInfo;
 
-use OCP\AppFramework\App;
-
 /**
  * Additional autoloader registration, e.g. registering composer autoloaders
  */

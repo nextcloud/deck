@@ -24,7 +24,6 @@
 namespace OCA\Deck\Db;
 
 class Attachment extends RelationalEntity {
-
 	protected $cardId;
 	protected $type;
 	protected $data;
@@ -43,5 +42,4 @@ class Attachment extends RelationalEntity {
 		$this->addResolvable('createdBy');
 		$this->addRelation('extendedData');
 	}
-
 }

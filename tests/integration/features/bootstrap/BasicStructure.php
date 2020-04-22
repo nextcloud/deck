@@ -32,7 +32,6 @@ use GuzzleHttp\Message\ResponseInterface;
 require __DIR__ . '/../../vendor/autoload.php';
 
 trait BasicStructure {
-
 	use Auth;
 
 	/** @var string */
@@ -104,7 +103,7 @@ trait BasicStructure {
 	 */
 	public function usingServer($server) {
 		$previousServer = $this->currentServer;
-		if ($server === 'LOCAL'){
+		if ($server === 'LOCAL') {
 			$this->baseUrl = $this->localBaseUrl;
 			$this->currentServer = 'LOCAL';
 			return $previousServer;
@@ -139,8 +138,10 @@ trait BasicStructure {
 	 * @param array $arrayOfArrays
 	 * @return array
 	 */
-	public function simplifyArray($arrayOfArrays){
-		$a = array_map(function($subArray) { return $subArray[0]; }, $arrayOfArrays);
+	public function simplifyArray($arrayOfArrays) {
+		$a = array_map(function ($subArray) {
+			return $subArray[0];
+		}, $arrayOfArrays);
 		return $a;
 	}
 
@@ -211,7 +212,7 @@ trait BasicStructure {
 		}
 	}
 
-	public function isExpectedUrl($possibleUrl, $finalPart){
+	public function isExpectedUrl($possibleUrl, $finalPart) {
 		$baseUrlChopped = substr($this->baseUrl, 0, -4);
 		$endCharacter = strlen($baseUrlChopped) + strlen($finalPart);
 		return (substr($possibleUrl,0,$endCharacter) == "$baseUrlChopped" . "$finalPart");
@@ -328,7 +329,7 @@ trait BasicStructure {
 		}
 	}
 
-	public static function removeFile($path, $filename){
+	public static function removeFile($path, $filename) {
 		if (file_exists("$path" . "$filename")) {
 			unlink("$path" . "$filename");
 		}
@@ -352,7 +353,7 @@ trait BasicStructure {
 		fclose($file);
 	}
 
-	public function createFileWithText($name, $text){
+	public function createFileWithText($name, $text) {
 		$file = fopen("work/" . "$name", 'w');
 		fwrite($file, $text);
 		fclose($file);
@@ -387,8 +388,8 @@ trait BasicStructure {
 	/**
 	 * @BeforeSuite
 	 */
-	public static function addFilesToSkeleton(){
-		for ($i=0; $i<5; $i++){
+	public static function addFilesToSkeleton() {
+		for ($i=0; $i<5; $i++) {
 			file_put_contents("../../core/skeleton/" . "textfile" . "$i" . ".txt", "Nextcloud test text file\n");
 		}
 		if (!file_exists("../../core/skeleton/FOLDER")) {
@@ -407,8 +408,8 @@ trait BasicStructure {
 	/**
 	 * @AfterSuite
 	 */
-	public static function removeFilesFromSkeleton(){
-		for ($i=0; $i<5; $i++){
+	public static function removeFilesFromSkeleton() {
+		for ($i=0; $i<5; $i++) {
 			self::removeFile("../../core/skeleton/", "textfile" . "$i" . ".txt");
 		}
 		if (is_dir("../../core/skeleton/FOLDER")) {
@@ -427,11 +428,11 @@ trait BasicStructure {
 	/**
 	 * @BeforeScenario @local_storage
 	 */
-	public static function removeFilesFromLocalStorageBefore(){
+	public static function removeFilesFromLocalStorageBefore() {
 		$dir = "./work/local_storage/";
 		$di = new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS);
 		$ri = new RecursiveIteratorIterator($di, RecursiveIteratorIterator::CHILD_FIRST);
-		foreach ( $ri as $file ) {
+		foreach ($ri as $file) {
 			$file->isDir() ?  rmdir($file) : unlink($file);
 		}
 	}
@@ -439,11 +440,11 @@ trait BasicStructure {
 	/**
 	 * @AfterScenario @local_storage
 	 */
-	public static function removeFilesFromLocalStorageAfter(){
+	public static function removeFilesFromLocalStorageAfter() {
 		$dir = "./work/local_storage/";
 		$di = new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS);
 		$ri = new RecursiveIteratorIterator($di, RecursiveIteratorIterator::CHILD_FIRST);
-		foreach ( $ri as $file ) {
+		foreach ($ri as $file) {
 			$file->isDir() ?  rmdir($file) : unlink($file);
 		}
 	}

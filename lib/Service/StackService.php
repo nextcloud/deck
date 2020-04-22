@@ -39,9 +39,7 @@ use OCA\Deck\StatusException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
-
 class StackService {
-
 	private $stackMapper;
 	private $cardMapper;
 	private $boardMapper;
@@ -166,7 +164,6 @@ class StackService {
 	 * @throws BadRequestException
 	 */
 	public function findAllArchived($boardId) {
-
 		if (is_numeric($boardId) === false) {
 			throw new BadRequestException('board id must be a number');
 		}
@@ -200,7 +197,6 @@ class StackService {
 	 * @throws BadRequestException
 	 */
 	public function create($title, $boardId, $order) {
-
 		if ($title === false || $title === null) {
 			throw new BadRequestException('title must be provided');
 		}
@@ -245,7 +241,6 @@ class StackService {
 	 * @throws BadRequestException
 	 */
 	public function delete($id) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('stack id must be a number');
 		}
@@ -284,7 +279,6 @@ class StackService {
 	 * @throws BadRequestException
 	 */
 	public function update($id, $title, $boardId, $order, $deletedAt) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('stack id must be a number');
 		}
@@ -336,7 +330,6 @@ class StackService {
 	 * @throws BadRequestException
 	 */
 	public function reorder($id, $order) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRquestException('id must be a number');
 		}

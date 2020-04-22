@@ -21,9 +21,7 @@
  *
  */
 
-use OCP\AppFramework\App;
 use Test\TestCase;
-
 
 /**
  * This test shows how to make a small Integration Test. Query your class
@@ -31,24 +29,22 @@ use Test\TestCase;
  * against the database
  */
 class AppTest extends TestCase {
-
-    private $container;
+	private $container;
 	private $app;
 
-    public function setUp(): void {
-        parent::setUp();
-        $this->app = new \OCA\Deck\AppInfo\Application();
-        $this->container = $this->app->getContainer();
-    }
+	public function setUp(): void {
+		parent::setUp();
+		$this->app = new \OCA\Deck\AppInfo\Application();
+		$this->container = $this->app->getContainer();
+	}
 
-    public function testAppInstalled() {
-        $appManager = $this->container->query('OCP\App\IAppManager');
-        $this->assertTrue($appManager->isInstalled('deck'));
-    }
+	public function testAppInstalled() {
+		$appManager = $this->container->query('OCP\App\IAppManager');
+		$this->assertTrue($appManager->isInstalled('deck'));
+	}
 
-    public function testNavigationEntry() {
+	public function testNavigationEntry() {
 		$this->app->registerNavigationEntry();
 		$this->assertTrue(true);
 	}
-
 }

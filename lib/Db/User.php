@@ -27,7 +27,6 @@ use OCP\IUser;
 use OCP\Share\IShare;
 
 class User extends RelationalObject {
-
 	public function __construct(IUser $user) {
 		$primaryKey = IShare::TYPE_USER . ':' . $user->getUID();
 		parent::__construct($primaryKey, $user);

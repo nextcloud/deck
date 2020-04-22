@@ -3,20 +3,18 @@
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Client;
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
 use GuzzleHttp\Exception\ClientException;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 class FeatureContext implements Context {
-
 	use WebDav;
 
 	/** @var string */
 	private $mappedUserId;
 
-	private $lastInsertIds = array();
+	private $lastInsertIds = [];
 
 	/**
 	 * @BeforeSuite
@@ -117,8 +115,8 @@ class FeatureContext implements Context {
 	 */
 	public function theResponseShouldBeAJsonArrayWithALengthOf($length) {
 		$realResponseArray = json_decode($this->response->getBody()->getContents(), true);
-    PHPUnit_Framework_Assert::assertEquals($realResponseArray, "foo");
-		if((int)count($realResponseArray) !== (int)$length) {
+		PHPUnit_Framework_Assert::assertEquals($realResponseArray, "foo");
+		if ((int)count($realResponseArray) !== (int)$length) {
 			throw new InvalidArgumentException(
 				sprintf(
 					'Expected %d as length got %d',
@@ -129,26 +127,25 @@ class FeatureContext implements Context {
 		}
 	}
 
-  /**
-     * @Then /^I should get:$/
-     *
-     * @param PyStringNode $string
-     * @throws \Exception
-     */
-    public function iShouldGet(PyStringNode $string)
-    {
-        if ((string) $string !== trim($this->cliOutput)) {
-            throw new Exception(sprintf(
-                'Expected "%s" but received "%s".',
-                $string,
-                $this->cliOutput
-            ));
-        }
+	/**
+	 * @Then /^I should get:$/
+	 *
+	 * @param PyStringNode $string
+	 * @throws \Exception
+	 */
+	public function iShouldGet(PyStringNode $string) {
+		if ((string) $string !== trim($this->cliOutput)) {
+			throw new Exception(sprintf(
+				'Expected "%s" but received "%s".',
+				$string,
+				$this->cliOutput
+			));
+		}
 
-        return;
-    }
+		return;
+	}
 
-    private function sendJSONrequest($method, $url, $data) {
+	private function sendJSONrequest($method, $url, $data) {
 		$baseUrl = substr($this->baseUrl, 0, -5);
 
 		$client = new Client;
@@ -172,11 +169,10 @@ class FeatureContext implements Context {
 	 * @Given /^creates a board named "([^"]*)" with color "([^"]*)"$/
 	 */
 	public function createsABoardNamedWithColor($title, $color) {
-
 		$this->sendJSONrequest('POST', '/index.php/apps/deck/boards', [
-				'title' => $title,
-				'color' => $color
-			]
+			'title' => $title,
+			'color' => $color
+		]
 		);
 		$response = json_decode($this->response->getBody()->getContents(), true);
 		$this->lastInsertIds[$title] = $response['id'];
@@ -190,5 +186,4 @@ class FeatureContext implements Context {
 		$id = $this->lastInsertIds[$boardName];
 		$this->sendJSONrequest('GET', '/index.php/apps/deck/boards/'.$id, []);
 	}
-
 }

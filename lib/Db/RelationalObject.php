@@ -24,7 +24,6 @@
 namespace OCA\Deck\Db;
 
 class RelationalObject implements \JsonSerializable {
-
 	protected $primaryKey;
 	protected $object;
 
@@ -58,5 +57,4 @@ class RelationalObject implements \JsonSerializable {
 			throw new \Exception('jsonSerialize is not implemented on ' . get_class($this));
 		}
 	}
-
 }

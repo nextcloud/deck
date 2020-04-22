@@ -43,15 +43,15 @@ class PermissionServiceTest extends \Test\TestCase {
 
 	/** @var PermissionService*/
 	private $service;
-    /** @var ILogger */
+	/** @var ILogger */
 	private $logger;
 	/** @var AclMapper */
 	private $aclMapper;
-    /** @var BoardMapper */
-    private $boardMapper;
-    /** @var IUserManager */
-    private $userManager;
-    /** @var IGroupManager */
+	/** @var BoardMapper */
+	private $boardMapper;
+	/** @var IUserManager */
+	private $userManager;
+	/** @var IGroupManager */
 	private $groupManager;
 	/** @var IManager */
 	private $shareManager;
@@ -176,135 +176,133 @@ class PermissionServiceTest extends \Test\TestCase {
 		$this->assertEquals($canEdit, $this->service->userCan($acls, Acl::PERMISSION_EDIT));
 		$this->assertEquals($canShare, $this->service->userCan($acls, Acl::PERMISSION_SHARE));
 		$this->assertEquals($canManage, $this->service->userCan($acls, Acl::PERMISSION_MANAGE));
-    }
+	}
 
 	public function testUserCanFail() {
 		$this->assertFalse($this->service->userCan([], Acl::PERMISSION_EDIT));
 	}
 
-    public function dataCheckPermission() {
-        return [
-            // see getAcls() for set permissions
-            [1, Acl::PERMISSION_READ, true],
-            [1, Acl::PERMISSION_EDIT, false],
-            [1, Acl::PERMISSION_MANAGE, false],
-            [1, Acl::PERMISSION_SHARE, false],
+	public function dataCheckPermission() {
+		return [
+			// see getAcls() for set permissions
+			[1, Acl::PERMISSION_READ, true],
+			[1, Acl::PERMISSION_EDIT, false],
+			[1, Acl::PERMISSION_MANAGE, false],
+			[1, Acl::PERMISSION_SHARE, false],
 
-            [2, Acl::PERMISSION_READ, true],
-            [2, Acl::PERMISSION_EDIT, true],
-            [2, Acl::PERMISSION_MANAGE, false],
-            [2, Acl::PERMISSION_SHARE, false],
+			[2, Acl::PERMISSION_READ, true],
+			[2, Acl::PERMISSION_EDIT, true],
+			[2, Acl::PERMISSION_MANAGE, false],
+			[2, Acl::PERMISSION_SHARE, false],
 
-            [3, Acl::PERMISSION_READ, true],
-            [3, Acl::PERMISSION_EDIT, false],
-            [3, Acl::PERMISSION_MANAGE, true],
-            [3, Acl::PERMISSION_SHARE, false],
+			[3, Acl::PERMISSION_READ, true],
+			[3, Acl::PERMISSION_EDIT, false],
+			[3, Acl::PERMISSION_MANAGE, true],
+			[3, Acl::PERMISSION_SHARE, false],
 
-            [4, Acl::PERMISSION_READ, true],
-            [4, Acl::PERMISSION_EDIT, false],
-            [4, Acl::PERMISSION_MANAGE, false],
-            [4, Acl::PERMISSION_SHARE, true],
+			[4, Acl::PERMISSION_READ, true],
+			[4, Acl::PERMISSION_EDIT, false],
+			[4, Acl::PERMISSION_MANAGE, false],
+			[4, Acl::PERMISSION_SHARE, true],
 
-            [null, Acl::PERMISSION_READ, false],
-            [6, Acl::PERMISSION_READ, false],
+			[null, Acl::PERMISSION_READ, false],
+			[6, Acl::PERMISSION_READ, false],
 
-            [1, Acl::PERMISSION_READ, true, 'admin'],
-            [1, Acl::PERMISSION_EDIT, true, 'admin'],
-            [1, Acl::PERMISSION_MANAGE, true, 'admin'],
-            [1, Acl::PERMISSION_SHARE, true, 'admin'],
-        ];
-    }
+			[1, Acl::PERMISSION_READ, true, 'admin'],
+			[1, Acl::PERMISSION_EDIT, true, 'admin'],
+			[1, Acl::PERMISSION_MANAGE, true, 'admin'],
+			[1, Acl::PERMISSION_SHARE, true, 'admin'],
+		];
+	}
 
 	/** @dataProvider dataCheckPermission */
 	public function testCheckPermission($boardId, $permission, $result, $owner='foo') {
-	    // Setup mapper
-	    $mapper = $this->getMockBuilder(IPermissionMapper::class)->getMock();
+		// Setup mapper
+		$mapper = $this->getMockBuilder(IPermissionMapper::class)->getMock();
 
-	    // board owner
-	    $mapper->expects($this->once())->method('findBoardId')->willReturn($boardId);
-        $board = new Board();
-        $board->setId($boardId);
-        $board->setOwner($owner);
-	    $this->boardMapper->expects($this->any())->method('find')->willReturn($board);
+		// board owner
+		$mapper->expects($this->once())->method('findBoardId')->willReturn($boardId);
+		$board = new Board();
+		$board->setId($boardId);
+		$board->setOwner($owner);
+		$this->boardMapper->expects($this->any())->method('find')->willReturn($board);
 
-        // acl check
-        $acls = $this->getAcls($boardId);
-        $this->aclMapper->expects($this->any())->method('findAll')->willReturn($acls);
+		// acl check
+		$acls = $this->getAcls($boardId);
+		$this->aclMapper->expects($this->any())->method('findAll')->willReturn($acls);
 
-        $this->shareManager->expects($this->any())
+		$this->shareManager->expects($this->any())
 			->method('sharingDisabledForUser')
 			->willReturn(false);
 
-	    if($result) {
-            $actual = $this->service->checkPermission($mapper, 1234, $permission);
-            $this->assertTrue($actual);
-        } else {
-            $this->expectException(NoPermissionException::class);
-            $this->service->checkPermission($mapper, 1234, $permission);
-        }
+		if ($result) {
+			$actual = $this->service->checkPermission($mapper, 1234, $permission);
+			$this->assertTrue($actual);
+		} else {
+			$this->expectException(NoPermissionException::class);
+			$this->service->checkPermission($mapper, 1234, $permission);
+		}
+	}
 
-    }
-
-    /** @dataProvider dataCheckPermission */
-    public function testCheckPermissionWithoutMapper($boardId, $permission, $result, $owner='foo') {
-        $mapper = null;
-        $board = new Board();
-        $board->setId($boardId);
-        $board->setOwner($owner);
-        if($boardId === null) {
-            $this->boardMapper->expects($this->any())->method('find')->willThrowException(new DoesNotExistException('not found'));
-        } else {
-            $this->boardMapper->expects($this->any())->method('find')->willReturn($board);
-        }
-        $acls = $this->getAcls($boardId);
-        $this->aclMapper->expects($this->any())->method('findAll')->willReturn($acls);
+	/** @dataProvider dataCheckPermission */
+	public function testCheckPermissionWithoutMapper($boardId, $permission, $result, $owner='foo') {
+		$mapper = null;
+		$board = new Board();
+		$board->setId($boardId);
+		$board->setOwner($owner);
+		if ($boardId === null) {
+			$this->boardMapper->expects($this->any())->method('find')->willThrowException(new DoesNotExistException('not found'));
+		} else {
+			$this->boardMapper->expects($this->any())->method('find')->willReturn($board);
+		}
+		$acls = $this->getAcls($boardId);
+		$this->aclMapper->expects($this->any())->method('findAll')->willReturn($acls);
 
 
-        if($result) {
-            $actual = $this->service->checkPermission($mapper, 1234, $permission);
-            $this->assertTrue($actual);
-        } else {
-            $this->expectException(NoPermissionException::class);
-            $this->service->checkPermission($mapper, 1234, $permission);
-        }
+		if ($result) {
+			$actual = $this->service->checkPermission($mapper, 1234, $permission);
+			$this->assertTrue($actual);
+		} else {
+			$this->expectException(NoPermissionException::class);
+			$this->service->checkPermission($mapper, 1234, $permission);
+		}
+	}
 
-    }
-
-    public function testCheckPermissionNotFound() {
-        $mapper = $this->getMockBuilder(IPermissionMapper::class)->getMock();
-        $mapper->expects($this->once())->method('findBoardId')->willThrowException(new NoPermissionException(null));
+	public function testCheckPermissionNotFound() {
+		$mapper = $this->getMockBuilder(IPermissionMapper::class)->getMock();
+		$mapper->expects($this->once())->method('findBoardId')->willThrowException(new NoPermissionException(null));
 		$this->expectException(NoPermissionException::class);
-        $this->service->checkPermission($mapper, 1234, Acl::PERMISSION_READ);
-    }
+		$this->service->checkPermission($mapper, 1234, Acl::PERMISSION_READ);
+	}
 
-    private function generateAcl($boardId, $type, $participant, $edit, $manage, $share) {
-	    $acl = new Acl();
-        $acl->setParticipant($participant);
-        $acl->setBoardId($boardId);
-	    $acl->setType($type);
-        $acl->setPermissionEdit($edit);
-        $acl->setPermissionShare($share);
-        $acl->setPermissionManage($manage);
-        return $acl;
-    }
+	private function generateAcl($boardId, $type, $participant, $edit, $manage, $share) {
+		$acl = new Acl();
+		$acl->setParticipant($participant);
+		$acl->setBoardId($boardId);
+		$acl->setType($type);
+		$acl->setPermissionEdit($edit);
+		$acl->setPermissionShare($share);
+		$acl->setPermissionManage($manage);
+		return $acl;
+	}
 
-    private function getAcls($boardId) {
-        $acls = [
-            $this->generateAcl(1, 'user', 'admin', false, false, false),
-            $this->generateAcl(2, 'user', 'admin', true, false, false),
-            $this->generateAcl(3, 'user', 'admin', false, true, false),
-            $this->generateAcl(4, 'user', 'admin', false, false, true),
-            $this->generateAcl(5, 'group', 'admin', false, false, false),
-            $this->generateAcl(6, 'user', 'foo', false, false, false)
-        ];
-	    $result = [];
-	    foreach ($acls as $acl) {
-	        if($acl->getBoardId() === $boardId) {
-	            $result[] = $acl;
-            }
-        }
-        return $result;
-    }
+	private function getAcls($boardId) {
+		$acls = [
+			$this->generateAcl(1, 'user', 'admin', false, false, false),
+			$this->generateAcl(2, 'user', 'admin', true, false, false),
+			$this->generateAcl(3, 'user', 'admin', false, true, false),
+			$this->generateAcl(4, 'user', 'admin', false, false, true),
+			$this->generateAcl(5, 'group', 'admin', false, false, false),
+			$this->generateAcl(6, 'user', 'foo', false, false, false)
+		];
+		$result = [];
+		foreach ($acls as $acl) {
+			if ($acl->getBoardId() === $boardId) {
+				$result[] = $acl;
+			}
+		}
+		return $result;
+	}
 
 	public function testFindUsersFail() {
 		$this->boardMapper->expects($this->once())
@@ -374,5 +372,4 @@ class PermissionServiceTest extends \Test\TestCase {
 			'user3' => new User($user3),
 		], $users);
 	}
-
 }

@@ -23,13 +23,10 @@
 
 namespace OCA\Deck\Controller;
 
-use OCA\Deck\BadRequestException;
 use OCA\Deck\Service\CommentService;
 use OCA\Deck\StatusException;
-use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCP\AppFramework\OCS\OCSException;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 

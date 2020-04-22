@@ -34,7 +34,6 @@ use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
 
 class UnknownUsers implements IRepairStep {
-
 	private $userManager;
 	private $groupManager;
 	private $aclMapper;
@@ -76,7 +75,6 @@ class UnknownUsers implements IRepairStep {
 						$this->aclMapper->delete($acl);
 					}
 				}
-
 			}
 		}
 	}

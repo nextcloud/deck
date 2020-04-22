@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Notification;
 
-
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
@@ -71,7 +70,6 @@ class NotificationHelperTest extends \Test\TestCase {
 			$this->groupManager,
 			$this->currentUser
 		);
-
 	}
 
 	public function testSendCardDuedateAlreadyNotified() {
@@ -101,7 +99,7 @@ class NotificationHelperTest extends \Test\TestCase {
 			->method('__call')
 			->with('getId', [])
 			->willReturn(123);
-		for($i=0; $i<3; $i++) {
+		for ($i=0; $i<3; $i++) {
 			$card->expects($this->at($i*3+2))
 				->method('__call')
 				->with('getId', [])
@@ -351,6 +349,4 @@ class NotificationHelperTest extends \Test\TestCase {
 
 		$this->notificationHelper->sendMention($comment);
 	}
-
-
 }

@@ -24,14 +24,12 @@
 namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\QueryException;
 use OCP\IDBConnection;
 use OCP\ILogger;
 use OCP\IUserManager;
 use OCP\IGroupManager;
 
 class BoardMapper extends DeckMapper implements IPermissionMapper {
-
 	private $labelMapper;
 	private $aclMapper;
 	private $stackMapper;
@@ -143,7 +141,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		if (!$this->circlesEnabled) {
 			return [];
 		}
-		$circles = array_map(function($circle) {
+		$circles = array_map(function ($circle) {
 			return $circle->getUniqueId();
 		}, \OCA\Circles\Api\v1\Circles::joinedCircles('', true));
 		if (count($circles) === 0) {
@@ -215,7 +213,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	public function mapAcl(Acl &$acl) {
 		$userManager = $this->userManager;
 		$groupManager = $this->groupManager;
-		$acl->resolveRelation('participant', function($participant) use (&$acl, &$userManager, &$groupManager) {
+		$acl->resolveRelation('participant', function ($participant) use (&$acl, &$userManager, &$groupManager) {
 			if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
 				$user = $userManager->get($participant);
 				if ($user !== null) {
@@ -255,7 +253,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	 */
 	public function mapOwner(Board &$board) {
 		$userManager = $this->userManager;
-		$board->resolveRelation('owner', function($owner) use (&$userManager) {
+		$board->resolveRelation('owner', function ($owner) use (&$userManager) {
 			$user = $userManager->get($owner);
 			if ($user !== null) {
 				return new User($user);
@@ -263,6 +261,4 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 			return null;
 		});
 	}
-
-
 }

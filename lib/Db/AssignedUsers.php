@@ -26,7 +26,6 @@ namespace OCA\Deck\Db;
 use JsonSerializable;
 
 class AssignedUsers extends RelationalEntity implements JsonSerializable {
-
 	public $id;
 	protected $participant;
 	protected $cardId;
@@ -42,5 +41,4 @@ class AssignedUsers extends RelationalEntity implements JsonSerializable {
 		$this->addType('type', 'integer');
 		$this->addResolvable('participant');
 	}
-
 }

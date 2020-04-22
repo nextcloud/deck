@@ -23,8 +23,6 @@
 
 namespace OCA\Deck\Cron;
 
-use OCA\Deck\Db\Board;
-use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Notification\NotificationHelper;

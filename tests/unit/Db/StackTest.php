@@ -44,7 +44,7 @@ class StackTest extends \Test\TestCase {
 		], $board->jsonSerialize());
 	}
 	public function testJsonSerializeWithCards() {
-		$cards = array("foo", "bar");
+		$cards = ["foo", "bar"];
 		$board = $this->createStack();
 		$board->setCards($cards);
 		$this->assertEquals([
@@ -52,7 +52,7 @@ class StackTest extends \Test\TestCase {
 			'title' => "My Stack",
 			'order' => 1,
 			'boardId' => 1,
-			'cards' => array("foo", "bar"),
+			'cards' => ["foo", "bar"],
 			'deletedAt' => 0,
 			'lastModified' => 0,
 		], $board->jsonSerialize());

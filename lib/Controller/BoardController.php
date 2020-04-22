@@ -28,9 +28,6 @@ use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\ApiController;
 use OCP\IRequest;
-use OCP\AppFramework\Controller;
-use OCP\IUserManager;
-use OCP\IGroupManager;
 
 class BoardController extends ApiController {
 	private $userId;
@@ -158,5 +155,4 @@ class BoardController extends ApiController {
 	public function clone($boardId) {
 		return $this->boardService->clone($boardId);
 	}
-
 }

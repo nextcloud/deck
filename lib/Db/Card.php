@@ -26,7 +26,6 @@ namespace OCA\Deck\Db;
 use DateTime;
 
 class Card extends RelationalEntity {
-
 	protected $title;
 	protected $description;
 	protected $descriptionPrev;
@@ -49,10 +48,10 @@ class Card extends RelationalEntity {
 
 	private $databaseType = 'sqlite';
 
-	const DUEDATE_FUTURE = 0;
-	const DUEDATE_NEXT = 1;
-	const DUEDATE_NOW = 2;
-	const DUEDATE_OVERDUE = 3;
+	public const DUEDATE_FUTURE = 0;
+	public const DUEDATE_NEXT = 1;
+	public const DUEDATE_NOW = 2;
+	public const DUEDATE_OVERDUE = 3;
 
 	public function __construct() {
 		$this->addType('id', 'integer');
@@ -118,5 +117,4 @@ class Card extends RelationalEntity {
 		unset($json['descriptionPrev']);
 		return $json;
 	}
-
 }

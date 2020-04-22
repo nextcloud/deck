@@ -24,7 +24,6 @@
 namespace OCA\Deck\AppInfo;
 
 use Exception;
-use InvalidArgumentException;
 use OC_Util;
 use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Capabilities;
@@ -52,10 +51,8 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IURLGenerator;
 use OCP\Util;
-use Symfony\Component\EventDispatcher\GenericEvent;
 
 class Application extends App {
-
 	public const APP_ID = 'deck';
 
 	public const COMMENT_ENTITY_TYPE = 'deckCard';
@@ -69,7 +66,7 @@ class Application extends App {
 	/** @var IFullTextSearchManager */
 	private $fullTextSearchManager;
 
-	public function __construct(array $urlParams = array()) {
+	public function __construct(array $urlParams = []) {
 		parent::__construct('deck', $urlParams);
 
 		$container = $this->getContainer();
@@ -81,10 +78,10 @@ class Application extends App {
 		$container->registerMiddleWare(ExceptionMiddleware::class);
 		$container->registerMiddleWare(DefaultBoardMiddleware::class);
 
-		$container->registerService('databaseType', static function() use ($server) {
+		$container->registerService('databaseType', static function () use ($server) {
 			return $server->getConfig()->getSystemValue('dbtype', 'sqlite');
 		});
-		$container->registerService('database4ByteSupport', static function() use ($server) {
+		$container->registerService('database4ByteSupport', static function () use ($server) {
 			return $server->getDatabaseConnection()->supports4ByteText();
 		});
 	}
@@ -100,7 +97,7 @@ class Application extends App {
 
 	public function registerNavigationEntry(): void {
 		$container = $this->getContainer();
-		$this->server->getNavigationManager()->add(static function() use ($container) {
+		$this->server->getNavigationManager()->add(static function () use ($container) {
 			$urlGenerator = $container->query(IURLGenerator::class);
 			return [
 				'id' => 'deck',
@@ -117,7 +114,7 @@ class Application extends App {
 		// Delete user/group acl entries when they get deleted
 		/** @var IUserManager $userManager */
 		$userManager = $this->server->getUserManager();
-		$userManager->listen('\OC\User', 'postDelete', static function(IUser $user) use ($container) {
+		$userManager->listen('\OC\User', 'postDelete', static function (IUser $user) use ($container) {
 			// delete existing acl entries for deleted user
 			/** @var AclMapper $aclMapper */
 			$aclMapper = $container->query(AclMapper::class);
@@ -135,7 +132,7 @@ class Application extends App {
 
 		/** @var IUserManager $userManager */
 		$groupManager = $this->server->getGroupManager();
-		$groupManager->listen('\OC\Group', 'postDelete', static function(IGroup $group) use ($container) {
+		$groupManager->listen('\OC\Group', 'postDelete', static function (IGroup $group) use ($container) {
 			/** @var AclMapper $aclMapper */
 			$aclMapper = $container->query(AclMapper::class);
 			$aclMapper->findByParticipant(Acl::PERMISSION_TYPE_GROUP, $group->getGID());
@@ -152,8 +149,8 @@ class Application extends App {
 	}
 
 	public function registerCommentsEntity(): void {
-		$this->server->getEventDispatcher()->addListener(CommentsEntityEvent::EVENT_ENTITY, function(CommentsEntityEvent $event) {
-			$event->addEntityCollection(self::COMMENT_ENTITY_TYPE, function($name) {
+		$this->server->getEventDispatcher()->addListener(CommentsEntityEvent::EVENT_ENTITY, function (CommentsEntityEvent $event) {
+			$event->addEntityCollection(self::COMMENT_ENTITY_TYPE, function ($name) {
 				/** @var CardMapper */
 				$cardMapper = $this->getContainer()->query(CardMapper::class);
 				$permissionService = $this->getContainer()->query(PermissionService::class);
@@ -222,35 +219,34 @@ class Application extends App {
 		/** @var IEventDispatcher $eventDispatcher */
 		$eventDispatcher = $this->server->query(IEventDispatcher::class);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Card::onCreate', function(Event $e) {
-			$this->fullTextSearchService->onCardCreated($e);
-		}
+			'\OCA\Deck\Card::onCreate', function (Event $e) {
+				$this->fullTextSearchService->onCardCreated($e);
+			}
 		);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Card::onUpdate', function(Event $e) {
-			$this->fullTextSearchService->onCardUpdated($e);
-		}
+			'\OCA\Deck\Card::onUpdate', function (Event $e) {
+				$this->fullTextSearchService->onCardUpdated($e);
+			}
 		);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Card::onDelete', function(Event $e) {
-			$this->fullTextSearchService->onCardDeleted($e);
-		}
+			'\OCA\Deck\Card::onDelete', function (Event $e) {
+				$this->fullTextSearchService->onCardDeleted($e);
+			}
 		);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Board::onShareNew', function(Event $e) {
-			$this->fullTextSearchService->onBoardShares($e);
-		}
+			'\OCA\Deck\Board::onShareNew', function (Event $e) {
+				$this->fullTextSearchService->onBoardShares($e);
+			}
 		);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Board::onShareEdit', function(Event $e) {
-			$this->fullTextSearchService->onBoardShares($e);
-		}
+			'\OCA\Deck\Board::onShareEdit', function (Event $e) {
+				$this->fullTextSearchService->onBoardShares($e);
+			}
 		);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Board::onShareDelete', function(Event $e) {
-			$this->fullTextSearchService->onBoardShares($e);
-		}
+			'\OCA\Deck\Board::onShareDelete', function (Event $e) {
+				$this->fullTextSearchService->onBoardShares($e);
+			}
 		);
 	}
-
 }

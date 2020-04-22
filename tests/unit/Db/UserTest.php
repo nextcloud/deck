@@ -26,7 +26,6 @@ namespace OCA\Deck\Db;
 use OCP\IUser;
 
 class UserTest extends \Test\TestCase {
-
 	public function testGroupObjectSerialize() {
 		/** @var IUser $user */
 		$user = $this->createMock(IUser::class);

@@ -23,9 +23,7 @@
 
 namespace OCA\Deck\Activity;
 
-
 class ChangeSet implements \JsonSerializable {
-
 	private $before;
 	private $after;
 	private $diff = false;

@@ -65,7 +65,5 @@ class DeleteCron extends Job {
 			}
 			$this->attachmentMapper->delete($attachment);
 		}
-
 	}
-
 }

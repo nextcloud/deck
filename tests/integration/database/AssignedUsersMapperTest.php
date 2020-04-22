@@ -33,7 +33,6 @@ use OCA\Deck\Service\CardService;
  * @coversDefaultClass OCA\Deck\Db\AssignedUsersMapper
  */
 class AssignedUsersMapperTest extends \Test\TestCase {
-
 	private const TEST_USER1 = 'test-share-user1';
 	private const TEST_USER3 = 'test-share-user3';
 	private const TEST_USER2 = 'test-share-user2';

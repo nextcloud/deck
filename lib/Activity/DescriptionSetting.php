@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Activity;
 
-
 class DescriptionSetting extends Setting {
 
 	/**
@@ -41,5 +40,4 @@ class DescriptionSetting extends Setting {
 	public function getName() {
 		return $this->l->t('A <strong>card description</strong> inside the Deck app has been changed');
 	}
-
 }

@@ -24,7 +24,6 @@
 namespace OCA\Deck\Db;
 
 class Board extends RelationalEntity {
-
 	protected $title;
 	protected $owner;
 	protected $color;

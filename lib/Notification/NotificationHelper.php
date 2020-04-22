@@ -189,5 +189,4 @@ class NotificationHelper {
 			->setSubject('board-shared', [$board->getTitle(), $this->currentUser]);
 		return $notification;
 	}
-
 }

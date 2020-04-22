@@ -31,11 +31,11 @@ use Test\AppFramework\Db\MapperTestUtility;
 /**
  * @group DB
  */
-class BoardMapperTest extends MapperTestUtility  {
+class BoardMapperTest extends MapperTestUtility {
 
 	/** @var IDBConnection */
-    private $dbConnection;
-    /** @var AclMapper|\PHPUnit\Framework\MockObject\MockObject */
+	private $dbConnection;
+	/** @var AclMapper|\PHPUnit\Framework\MockObject\MockObject */
 	private $aclMapper;
 	/** @var BoardMapper */
 	private $boardMapper;
@@ -55,35 +55,35 @@ class BoardMapperTest extends MapperTestUtility  {
 		$this->groupManager = $this->createMock(IGroupManager::class);
 
 		$this->dbConnection = \OC::$server->getDatabaseConnection();
-        $this->boardMapper = new BoardMapper(
-            $this->dbConnection,
-            \OC::$server->query(LabelMapper::class),
-            \OC::$server->query(AclMapper::class),
-            \OC::$server->query(StackMapper::class),
+		$this->boardMapper = new BoardMapper(
+			$this->dbConnection,
+			\OC::$server->query(LabelMapper::class),
+			\OC::$server->query(AclMapper::class),
+			\OC::$server->query(StackMapper::class),
 			$this->userManager,
 			$this->groupManager
-        );
-        $this->aclMapper = \OC::$server->query(AclMapper::class);
-        $this->labelMapper = \OC::$server->query(LabelMapper::class);
+		);
+		$this->aclMapper = \OC::$server->query(AclMapper::class);
+		$this->labelMapper = \OC::$server->query(LabelMapper::class);
 
-        $this->boards = [
-            $this->boardMapper->insert($this->getBoard('MyBoard 1', 'user1')),
-            $this->boardMapper->insert($this->getBoard('MyBoard 2', 'user2')),
-            $this->boardMapper->insert($this->getBoard('MyBoard 3', 'user3'))
-        ];
+		$this->boards = [
+			$this->boardMapper->insert($this->getBoard('MyBoard 1', 'user1')),
+			$this->boardMapper->insert($this->getBoard('MyBoard 2', 'user2')),
+			$this->boardMapper->insert($this->getBoard('MyBoard 3', 'user3'))
+		];
 		$this->acls = [
-		    $this->aclMapper->insert($this->getAcl('user','user1', false, false, false, $this->boards[1]->getId())),
-            $this->aclMapper->insert($this->getAcl('user','user2', true, false, false, $this->boards[0]->getId())),
-            $this->aclMapper->insert($this->getAcl('user','user3', true, true, false, $this->boards[0]->getId())),
-            $this->aclMapper->insert($this->getAcl('user','user1', false, false, false, $this->boards[2]->getId()))
-        ];
+			$this->aclMapper->insert($this->getAcl('user','user1', false, false, false, $this->boards[1]->getId())),
+			$this->aclMapper->insert($this->getAcl('user','user2', true, false, false, $this->boards[0]->getId())),
+			$this->aclMapper->insert($this->getAcl('user','user3', true, true, false, $this->boards[0]->getId())),
+			$this->aclMapper->insert($this->getAcl('user','user1', false, false, false, $this->boards[2]->getId()))
+		];
 
 		foreach ($this->acls as $acl) {
-            $acl->resetUpdatedFields();
-        }
-        foreach ($this->boards as $board) {
-            $board->resetUpdatedFields();
-        }
+			$acl->resetUpdatedFields();
+		}
+		foreach ($this->boards as $board) {
+			$board->resetUpdatedFields();
+		}
 	}
 	/** @return Acl */
 	public function getAcl($type='user', $participant='admin', $edit=false, $share=false, $manage=false, $boardId=123) {
@@ -99,20 +99,20 @@ class BoardMapperTest extends MapperTestUtility  {
 
 	/** @return Board */
 	public function getBoard($title, $owner) {
-	    $board = new Board();
-	    $board->setTitle($title);
-	    $board->setOwner($owner);
-	    return $board;
-    }
+		$board = new Board();
+		$board->setTitle($title);
+		$board->setOwner($owner);
+		return $board;
+	}
 
 	public function testFind() {
-        $actual = $this->boardMapper->find($this->boards[0]->getId());
-        /** @var Board $expected */
-        $expected = clone $this->boards[0];
-        $expected->setShared(-1);
-        $expected->resetUpdatedFields();
-        $this->assertEquals($expected, $actual);
-    }
+		$actual = $this->boardMapper->find($this->boards[0]->getId());
+		/** @var Board $expected */
+		$expected = clone $this->boards[0];
+		$expected->setShared(-1);
+		$expected->resetUpdatedFields();
+		$this->assertEquals($expected, $actual);
+	}
 
 	public function testFindAllByUser() {
 		$actual = $this->boardMapper->findAllByUser('user1');
@@ -123,7 +123,7 @@ class BoardMapperTest extends MapperTestUtility  {
 		];
 		foreach ($expected as $e) {
 			foreach ($actual as $a) {
-				if($e->getId() === $a->getId()) {
+				if ($e->getId() === $a->getId()) {
 					$this->assertEquals($e->getTitle(), $a->getTitle());
 				}
 			}
@@ -149,27 +149,26 @@ class BoardMapperTest extends MapperTestUtility  {
 		$this->boardMapper->update($this->boards[0]);
 	}
 
-    public function testFindWithLabels() {
-        $actual = $this->boardMapper->find($this->boards[0]->getId(), true, false);
+	public function testFindWithLabels() {
+		$actual = $this->boardMapper->find($this->boards[0]->getId(), true, false);
 		/** @var Board $expected */
 		$expected = $this->boards[0];
-        $this->assertEquals($expected->getLabels(), $actual->getLabels());
-    }
+		$this->assertEquals($expected->getLabels(), $actual->getLabels());
+	}
 
-    public function testFindWithAcl() {
-        $actual = $this->boardMapper->find($this->boards[0]->getId(), false, true);
-        $expected = [$this->acls[1], $this->acls[2]];
-        $this->assertEquals($expected, $actual->getAcl());
-    }
+	public function testFindWithAcl() {
+		$actual = $this->boardMapper->find($this->boards[0]->getId(), false, true);
+		$expected = [$this->acls[1], $this->acls[2]];
+		$this->assertEquals($expected, $actual->getAcl());
+	}
 
-    public function tearDown(): void {
-        parent::tearDown();
-        foreach ($this->acls as $acl) {
-            $this->aclMapper->delete($acl);
-        }
-        foreach ($this->boards as $board) {
-            $this->boardMapper->delete($board);
-        }
-    }
-
+	public function tearDown(): void {
+		parent::tearDown();
+		foreach ($this->acls as $acl) {
+			$this->aclMapper->delete($acl);
+		}
+		foreach ($this->boards as $board) {
+			$this->boardMapper->delete($board);
+		}
+	}
 }

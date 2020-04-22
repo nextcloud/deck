@@ -25,7 +25,6 @@
 
 namespace OCA\Deck\Activity;
 
-
 use cogpowered\FineDiff\Diff;
 use OCA\Deck\Db\Acl;
 use OCP\Activity\IEvent;

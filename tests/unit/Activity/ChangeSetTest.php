@@ -25,9 +25,7 @@ namespace OCA\Deck\Activity;
 
 use PHPUnit\Framework\TestCase;
 
-
 class ChangeSetTest extends TestCase {
-
 	public function setUp(): void {
 	}
 
@@ -54,5 +52,4 @@ class ChangeSetTest extends TestCase {
 		$changeSet->enableDiff();
 		$this->assertTrue($changeSet->getDiff());
 	}
-
 }

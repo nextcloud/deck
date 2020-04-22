@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Service;
 
-
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
@@ -40,8 +39,6 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\EventDispatcher\IEventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 
 class AssignmentService {
 
@@ -110,7 +107,6 @@ class AssignmentService {
 	 * @throws DoesNotExistException
 	 */
 	public function assignUser($cardId, $userId, int $type = AssignedUsers::TYPE_USER) {
-
 		if (is_numeric($cardId) === false) {
 			throw new BadRequestException('card id must be a number');
 		}

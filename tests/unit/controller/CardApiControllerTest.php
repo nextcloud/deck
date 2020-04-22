@@ -31,7 +31,6 @@ use OCA\Deck\Db\Card;
 use OCA\Deck\Service\CardService;
 
 class CardApiControllerTest extends \Test\TestCase {
-
 	private $controller;
 	private $request;
 	private $cardService;
@@ -50,7 +49,7 @@ class CardApiControllerTest extends \Test\TestCase {
 		$this->cardExample['id'] = 1;
 		$this->stackExample['id'] = 1;
 
-		$this->controller = new CardApiController (
+		$this->controller = new CardApiController(
 			$appName = 'deck',
 			$this->request,
 			$this->cardService,
@@ -78,7 +77,6 @@ class CardApiControllerTest extends \Test\TestCase {
 	}
 
 	public function testCreate() {
-
 		$card = new Card();
 		$card->setId($this->cardExample['id']);
 		$card->setStackId($this->stackExample['id']);
@@ -121,7 +119,6 @@ class CardApiControllerTest extends \Test\TestCase {
 	}
 
 	public function testDelete() {
-
 		$card = new Card();
 		$card->setId($this->cardExample['id']);
 
@@ -138,5 +135,4 @@ class CardApiControllerTest extends \Test\TestCase {
 		$actual = $this->controller->delete();
 		$this->assertEquals($expected, $actual);
 	}
-
 }

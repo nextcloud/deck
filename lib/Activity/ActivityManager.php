@@ -48,8 +48,7 @@ use OCP\IL10N;
 use OCP\IUser;
 
 class ActivityManager {
-
-	const DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED = 'DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED';
+	public const DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED = 'DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED';
 	private $manager;
 	private $userId;
 	private $permissionService;
@@ -60,49 +59,49 @@ class ActivityManager {
 	private $stackMapper;
 	private $l10n;
 
-	const DECK_OBJECT_BOARD = 'deck_board';
-	const DECK_OBJECT_CARD = 'deck_card';
+	public const DECK_OBJECT_BOARD = 'deck_board';
+	public const DECK_OBJECT_CARD = 'deck_card';
 
-	const SUBJECT_BOARD_CREATE = 'board_create';
-	const SUBJECT_BOARD_UPDATE = 'board_update';
-	const SUBJECT_BOARD_UPDATE_TITLE = 'board_update_title';
-	const SUBJECT_BOARD_UPDATE_ARCHIVED = 'board_update_archived';
-	const SUBJECT_BOARD_DELETE = 'board_delete';
-	const SUBJECT_BOARD_RESTORE = 'board_restore';
-	const SUBJECT_BOARD_SHARE = 'board_share';
-	const SUBJECT_BOARD_UNSHARE = 'board_unshare';
+	public const SUBJECT_BOARD_CREATE = 'board_create';
+	public const SUBJECT_BOARD_UPDATE = 'board_update';
+	public const SUBJECT_BOARD_UPDATE_TITLE = 'board_update_title';
+	public const SUBJECT_BOARD_UPDATE_ARCHIVED = 'board_update_archived';
+	public const SUBJECT_BOARD_DELETE = 'board_delete';
+	public const SUBJECT_BOARD_RESTORE = 'board_restore';
+	public const SUBJECT_BOARD_SHARE = 'board_share';
+	public const SUBJECT_BOARD_UNSHARE = 'board_unshare';
 
-	const SUBJECT_STACK_CREATE = 'stack_create';
-	const SUBJECT_STACK_UPDATE = 'stack_update';
-	const SUBJECT_STACK_UPDATE_TITLE = 'stack_update_title';
-	const SUBJECT_STACK_UPDATE_ORDER = 'stack_update_order';
-	const SUBJECT_STACK_DELETE = 'stack_delete';
+	public const SUBJECT_STACK_CREATE = 'stack_create';
+	public const SUBJECT_STACK_UPDATE = 'stack_update';
+	public const SUBJECT_STACK_UPDATE_TITLE = 'stack_update_title';
+	public const SUBJECT_STACK_UPDATE_ORDER = 'stack_update_order';
+	public const SUBJECT_STACK_DELETE = 'stack_delete';
 
-	const SUBJECT_CARD_CREATE = 'card_create';
-	const SUBJECT_CARD_DELETE = 'card_delete';
-	const SUBJECT_CARD_RESTORE = 'card_restore';
-	const SUBJECT_CARD_UPDATE = 'card_update';
-	const SUBJECT_CARD_UPDATE_TITLE = 'card_update_title';
-	const SUBJECT_CARD_UPDATE_DESCRIPTION = 'card_update_description';
-	const SUBJECT_CARD_UPDATE_DUEDATE = 'card_update_duedate';
-	const SUBJECT_CARD_UPDATE_ARCHIVE = 'card_update_archive';
-	const SUBJECT_CARD_UPDATE_UNARCHIVE = 'card_update_unarchive';
-	const SUBJECT_CARD_UPDATE_STACKID = 'card_update_stackId';
-	const SUBJECT_CARD_USER_ASSIGN = 'card_user_assign';
-	const SUBJECT_CARD_USER_UNASSIGN = 'card_user_unassign';
+	public const SUBJECT_CARD_CREATE = 'card_create';
+	public const SUBJECT_CARD_DELETE = 'card_delete';
+	public const SUBJECT_CARD_RESTORE = 'card_restore';
+	public const SUBJECT_CARD_UPDATE = 'card_update';
+	public const SUBJECT_CARD_UPDATE_TITLE = 'card_update_title';
+	public const SUBJECT_CARD_UPDATE_DESCRIPTION = 'card_update_description';
+	public const SUBJECT_CARD_UPDATE_DUEDATE = 'card_update_duedate';
+	public const SUBJECT_CARD_UPDATE_ARCHIVE = 'card_update_archive';
+	public const SUBJECT_CARD_UPDATE_UNARCHIVE = 'card_update_unarchive';
+	public const SUBJECT_CARD_UPDATE_STACKID = 'card_update_stackId';
+	public const SUBJECT_CARD_USER_ASSIGN = 'card_user_assign';
+	public const SUBJECT_CARD_USER_UNASSIGN = 'card_user_unassign';
 
-	const SUBJECT_ATTACHMENT_CREATE = 'attachment_create';
-	const SUBJECT_ATTACHMENT_UPDATE = 'attachment_update';
-	const SUBJECT_ATTACHMENT_DELETE = 'attachment_delete';
-	const SUBJECT_ATTACHMENT_RESTORE = 'attachment_restore';
+	public const SUBJECT_ATTACHMENT_CREATE = 'attachment_create';
+	public const SUBJECT_ATTACHMENT_UPDATE = 'attachment_update';
+	public const SUBJECT_ATTACHMENT_DELETE = 'attachment_delete';
+	public const SUBJECT_ATTACHMENT_RESTORE = 'attachment_restore';
 
-	const SUBJECT_LABEL_CREATE = 'label_create';
-	const SUBJECT_LABEL_UPDATE = 'label_update';
-	const SUBJECT_LABEL_DELETE = 'label_delete';
-	const SUBJECT_LABEL_ASSIGN = 'label_assign';
-	const SUBJECT_LABEL_UNASSING = 'label_unassign';
+	public const SUBJECT_LABEL_CREATE = 'label_create';
+	public const SUBJECT_LABEL_UPDATE = 'label_update';
+	public const SUBJECT_LABEL_DELETE = 'label_delete';
+	public const SUBJECT_LABEL_ASSIGN = 'label_assign';
+	public const SUBJECT_LABEL_UNASSING = 'label_unassign';
 
-	const SUBJECT_CARD_COMMENT_CREATE = 'card_comment_create';
+	public const SUBJECT_CARD_COMMENT_CREATE = 'card_comment_create';
 
 	public function __construct(
 		IManager $manager,
@@ -197,7 +196,7 @@ class ActivityManager {
 			case self::SUBJECT_CARD_UPDATE_DUEDATE:
 				if (!isset($subjectParams['after'])) {
 					$subject = $ownActivity ? $this->l10n->t('You have removed the due date of card {card}') : $this->l10n->t('{user} has removed the due date of card {card}');
-				} else if (!isset($subjectParams['before']) && isset($subjectParams['after'])) {
+				} elseif (!isset($subjectParams['before']) && isset($subjectParams['after'])) {
 					$subject = $ownActivity ? $this->l10n->t('You have set the due date of card {card} to {after}') : $this->l10n->t('{user} has set the due date of card {card} to {after}');
 				} else {
 					$subject = $ownActivity ? $this->l10n->t('You have updated the due date of card {card} to {after}') : $this->l10n->t('{user} has updated the due date of card {card} to {after}');
@@ -376,7 +375,7 @@ class ActivityManager {
 				break;
 		}
 
-		if ($subject === self::SUBJECT_CARD_UPDATE_DESCRIPTION){
+		if ($subject === self::SUBJECT_CARD_UPDATE_DESCRIPTION) {
 			$card = $subjectParams['card'];
 			if ($card->getLastEditor() === $this->userId) {
 				return null;
@@ -526,5 +525,4 @@ class ActivityManager {
 			'board' => $board
 		];
 	}
-
 }

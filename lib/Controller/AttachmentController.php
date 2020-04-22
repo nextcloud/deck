@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Controller;
 
-
 use OCA\Deck\Service\AttachmentService;
 use OCP\AppFramework\Controller;
 use OCP\IRequest;

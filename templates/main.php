@@ -21,7 +21,6 @@
  *
  */
 
-use OCP\Util;
 
 style('deck', 'globalstyles');
 script('deck', 'deck');

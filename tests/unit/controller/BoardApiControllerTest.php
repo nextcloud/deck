@@ -30,7 +30,6 @@ use OCA\Deck\Service\BoardService;
 use OCA\Deck\Db\Board;
 
 class BoardApiControllerTest extends \Test\TestCase {
-
 	private $appName = 'deck';
 	private $userId = 'admin';
 	private $controller;

@@ -30,7 +30,6 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\StatusException;
 use OCA\Deck\BadRequestException;
 
-
 class LabelService {
 
 	/** @var LabelMapper */
@@ -77,7 +76,6 @@ class LabelService {
 	 * @throws BadRequestException
 	 */
 	public function create($title, $color, $boardId) {
-
 		if ($title === false || $title === null) {
 			throw new BadRequestException('title must be provided');
 		}
@@ -94,7 +92,7 @@ class LabelService {
 
 		$boardLabels = $this->labelMapper->findAll($boardId);
 		if (\is_array($boardLabels)) {
-			foreach($boardLabels as $boardLabel) {
+			foreach ($boardLabels as $boardLabel) {
 				if ($boardLabel->getTitle() === $title) {
 					throw new BadRequestException('title must be unique');
 					break;
@@ -123,7 +121,6 @@ class LabelService {
 	 * @throws BadRequestException
 	 */
 	public function delete($id) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('label id must be a number');
 		}
@@ -149,7 +146,6 @@ class LabelService {
 	 * @throws BadRequestException
 	 */
 	public function update($id, $title, $color) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('label id must be a number');
 		}
@@ -168,7 +164,7 @@ class LabelService {
 
 		$boardLabels = $this->labelMapper->findAll($label->getBoardId());
 		if (\is_array($boardLabels)) {
-			foreach($boardLabels as $boardLabel) {
+			foreach ($boardLabels as $boardLabel) {
 				if ($boardLabel->getId() === $label->getId()) {
 					continue;
 				}
@@ -188,5 +184,4 @@ class LabelService {
 		$this->changeHelper->boardChanged($label->getBoardId());
 		return $this->labelMapper->update($label);
 	}
-
 }

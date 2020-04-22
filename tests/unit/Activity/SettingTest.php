@@ -35,7 +35,9 @@ class SettingTest extends TestCase {
 
 	public function setUp(): void {
 		$this->l10n = $this->createMock(IL10N::class);
-		$this->l10n->expects($this->any())->method('t')->will($this->returnCallback(function ($s) { return $s; }));
+		$this->l10n->expects($this->any())->method('t')->will($this->returnCallback(function ($s) {
+			return $s;
+		}));
 		$this->setting = new Setting($this->l10n);
 	}
 
@@ -66,5 +68,4 @@ class SettingTest extends TestCase {
 	public function testIsDefaultEnabledMail() {
 		$this->assertFalse($this->setting->isDefaultEnabledMail());
 	}
-
 }

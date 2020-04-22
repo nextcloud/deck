@@ -30,9 +30,8 @@ use Test\AppFramework\Db\MapperTestUtility;
 /**
  * @group DB
  */
-class AclMapperTest extends MapperTestUtility  {
-
-    private $dbConnection;
+class AclMapperTest extends MapperTestUtility {
+	private $dbConnection;
 	private $aclMapper;
 	private $boardMapper;
 	private $userManager;
@@ -46,33 +45,33 @@ class AclMapperTest extends MapperTestUtility  {
 		parent::setUp();
 
 		$this->dbConnection = \OC::$server->getDatabaseConnection();
-        $this->aclMapper = new AclMapper($this->dbConnection);
-        $this->userManager = $this->createMock(IUserManager::class);
-        $this->groupManager = $this->createMock(IGroupManager::class);
-        $this->boardMapper = new BoardMapper(
-            $this->dbConnection,
-            \OC::$server->query(LabelMapper::class),
-            $this->aclMapper,
-            \OC::$server->query(StackMapper::class),
+		$this->aclMapper = new AclMapper($this->dbConnection);
+		$this->userManager = $this->createMock(IUserManager::class);
+		$this->groupManager = $this->createMock(IGroupManager::class);
+		$this->boardMapper = new BoardMapper(
+			$this->dbConnection,
+			\OC::$server->query(LabelMapper::class),
+			$this->aclMapper,
+			\OC::$server->query(StackMapper::class),
 			$this->userManager,
 			$this->groupManager
 		);
 
-        $this->boards = [
-            $this->boardMapper->insert($this->getBoard('MyBoard 1', 'user1')),
-            $this->boardMapper->insert($this->getBoard('MyBoard 2', 'user2')),
-            $this->boardMapper->insert($this->getBoard('MyBoard 3', 'user3'))
-        ];
+		$this->boards = [
+			$this->boardMapper->insert($this->getBoard('MyBoard 1', 'user1')),
+			$this->boardMapper->insert($this->getBoard('MyBoard 2', 'user2')),
+			$this->boardMapper->insert($this->getBoard('MyBoard 3', 'user3'))
+		];
 		$this->acls = [
-		    $this->aclMapper->insert($this->getAcl('user','user1', false, false, false, $this->boards[1]->getId())),
-            $this->aclMapper->insert($this->getAcl('user','user2', true, false, false, $this->boards[0]->getId())),
-            $this->aclMapper->insert($this->getAcl('user','user3', true, true, false, $this->boards[0]->getId())),
-            $this->aclMapper->insert($this->getAcl('user','user1', false, false, false, $this->boards[2]->getId()))
-            ];
+			$this->aclMapper->insert($this->getAcl('user','user1', false, false, false, $this->boards[1]->getId())),
+			$this->aclMapper->insert($this->getAcl('user','user2', true, false, false, $this->boards[0]->getId())),
+			$this->aclMapper->insert($this->getAcl('user','user3', true, true, false, $this->boards[0]->getId())),
+			$this->aclMapper->insert($this->getAcl('user','user1', false, false, false, $this->boards[2]->getId()))
+		];
 
-        foreach ($this->acls as $acl) {
-            $acl->resetUpdatedFields();
-        }
+		foreach ($this->acls as $acl) {
+			$acl->resetUpdatedFields();
+		}
 	}
 	/** @return Acl */
 	public function getAcl($type='user', $participant='admin', $edit=false, $share=false, $manage=false, $boardId=123) {
@@ -88,39 +87,38 @@ class AclMapperTest extends MapperTestUtility  {
 
 	/** @return Board */
 	public function getBoard($title, $owner) {
-	    $board = new Board();
-	    $board->setTitle($title);
-	    $board->setOwner($owner);
-	    return $board;
-    }
+		$board = new Board();
+		$board->setTitle($title);
+		$board->setOwner($owner);
+		return $board;
+	}
 
 	public function testFindAllDatabase() {
-        $actual = $this->aclMapper->findAll($this->boards[0]->getId());
-        $expected = [$this->acls[1], $this->acls[2]];
-        $this->assertEquals($expected, $actual);
-    }
-    public function testIsOwnerDatabase() {
-        $this->assertTrue($this->aclMapper->isOwner('user2', $this->acls[0]->getId()));
-        $this->assertTrue($this->aclMapper->isOwner('user1', $this->acls[1]->getId()));
-        $this->assertTrue($this->aclMapper->isOwner('user1', $this->acls[2]->getId()));
-        $this->assertTrue($this->aclMapper->isOwner('user3', $this->acls[3]->getId()));
-        $this->assertFalse($this->aclMapper->isOwner('user3', $this->acls[0]->getId()));
-        $this->assertFalse($this->aclMapper->isOwner('user1', $this->acls[0]->getId()));
-    }
+		$actual = $this->aclMapper->findAll($this->boards[0]->getId());
+		$expected = [$this->acls[1], $this->acls[2]];
+		$this->assertEquals($expected, $actual);
+	}
+	public function testIsOwnerDatabase() {
+		$this->assertTrue($this->aclMapper->isOwner('user2', $this->acls[0]->getId()));
+		$this->assertTrue($this->aclMapper->isOwner('user1', $this->acls[1]->getId()));
+		$this->assertTrue($this->aclMapper->isOwner('user1', $this->acls[2]->getId()));
+		$this->assertTrue($this->aclMapper->isOwner('user3', $this->acls[3]->getId()));
+		$this->assertFalse($this->aclMapper->isOwner('user3', $this->acls[0]->getId()));
+		$this->assertFalse($this->aclMapper->isOwner('user1', $this->acls[0]->getId()));
+	}
 
-    public function testFindBoardIdDatabase() {
-	    $this->assertEquals($this->boards[0]->getId(), $this->aclMapper->findBoardId($this->acls[1]->getId()));
-    }
+	public function testFindBoardIdDatabase() {
+		$this->assertEquals($this->boards[0]->getId(), $this->aclMapper->findBoardId($this->acls[1]->getId()));
+	}
 
 
-    public function tearDown(): void {
-        parent::tearDown();
-        foreach ($this->acls as $acl) {
-            $this->aclMapper->delete($acl);
-        }
-        foreach ($this->boards as $board) {
-            $this->boardMapper->delete($board);
-        }
-    }
-
+	public function tearDown(): void {
+		parent::tearDown();
+		foreach ($this->acls as $acl) {
+			$this->aclMapper->delete($acl);
+		}
+		foreach ($this->boards as $board) {
+			$this->boardMapper->delete($board);
+		}
+	}
 }

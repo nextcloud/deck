@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Service;
 
-
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
@@ -42,7 +41,6 @@ use OCP\ICacheFactory;
 use OCP\IL10N;
 
 class AttachmentService {
-
 	private $attachmentMapper;
 	private $cardMapper;
 	private $permissionService;
@@ -116,7 +114,6 @@ class AttachmentService {
 	 * @throws BadRequestException
 	 */
 	public function findAll($cardId, $withDeleted = false) {
-
 		if (is_numeric($cardId) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
@@ -144,7 +141,6 @@ class AttachmentService {
 	 * @throws BadRequestException
 	 */
 	public function count($cardId) {
-
 		if (is_numeric($cardId) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
@@ -167,7 +163,6 @@ class AttachmentService {
 	 * @throws BadRequestException
 	 */
 	public function create($cardId, $type, $data) {
-
 		if (is_numeric($cardId) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
@@ -228,7 +223,6 @@ class AttachmentService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function display($cardId, $attachmentId) {
-
 		if (is_numeric($cardId) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
@@ -261,7 +255,6 @@ class AttachmentService {
 	 * @throws BadRequestException
 	 */
 	public function update($cardId, $attachmentId, $data) {
-
 		if (is_numeric($cardId) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
@@ -312,7 +305,6 @@ class AttachmentService {
 	 * @throws BadRequestException
 	 */
 	public function delete($cardId, $attachmentId) {
-
 		if (is_numeric($cardId) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
@@ -343,7 +335,6 @@ class AttachmentService {
 	}
 
 	public function restore($cardId, $attachmentId) {
-
 		if (is_numeric($cardId) === false) {
 			throw new BadRequestException('card id must be a number');
 		}

@@ -24,12 +24,11 @@
 namespace OCA\Deck\Db;
 
 class Stack extends RelationalEntity {
-
 	protected $title;
 	protected $boardId;
 	protected $deletedAt = 0;
 	protected $lastModified = 0;
-	protected $cards = array();
+	protected $cards = [];
 	protected $order;
 
 	public function __construct() {

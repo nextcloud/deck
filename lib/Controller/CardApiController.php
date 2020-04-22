@@ -33,10 +33,10 @@
  use OCA\Deck\Service\CardService;
 
  /**
- * Class BoardApiController
- *
- * @package OCA\Deck\Controller
- */
+  * Class BoardApiController
+  *
+  * @package OCA\Deck\Controller
+  */
 class CardApiController extends ApiController {
 	private $cardService;
 	private $userId;

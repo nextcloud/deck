@@ -23,9 +23,7 @@
 
 namespace OCA\Deck;
 
-
 class NoPermissionException extends StatusException {
-
 	public function __construct($message, $controller = null, $method = null) {
 		parent::__construct($message);
 		if ($controller && $method) {

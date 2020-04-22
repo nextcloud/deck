@@ -25,82 +25,80 @@ namespace OCA\Deck\Controller;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\Http\FileDisplayResponse;
 use OCP\IRequest;
 use OCA\Deck\Service\AttachmentService;
 
 class AttachmentApiController extends ApiController {
+	private $attachmentService;
 
-    private $attachmentService;
+	public function __construct($appName, IRequest $request, AttachmentService $attachmentService) {
+		parent::__construct($appName, $request);
+		$this->attachmentService = $attachmentService;
+	}
 
-    public function __construct($appName, IRequest $request, AttachmentService $attachmentService) {
-        parent::__construct($appName, $request);
-        $this->attachmentService = $attachmentService;
-    }
-
-    /**
+	/**
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
 	 *
 	 */
-    public function getAll() {
-        $attachment = $this->attachmentService->findAll($this->request->getParam('cardId'), true);
-        return new DataResponse($attachment, HTTP::STATUS_OK);
-    }
+	public function getAll() {
+		$attachment = $this->attachmentService->findAll($this->request->getParam('cardId'), true);
+		return new DataResponse($attachment, HTTP::STATUS_OK);
+	}
 
-    /**
+	/**
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
 	 *
 	 */
-    public function display() {
-        $attachment = $this->attachmentService->display($this->request->getParam('cardId'), $this->request->getParam('attachmentId'));
+	public function display() {
+		$attachment = $this->attachmentService->display($this->request->getParam('cardId'), $this->request->getParam('attachmentId'));
 		return $attachment;
-    }
+	}
 
-    /**
+	/**
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
 	 *
 	 */
-    public function create($type, $data) {
-        $attachment = $this->attachmentService->create($this->request->getParam('cardId'), $type, $data);
-        return new DataResponse($attachment, HTTP::STATUS_OK);
-    }
+	public function create($type, $data) {
+		$attachment = $this->attachmentService->create($this->request->getParam('cardId'), $type, $data);
+		return new DataResponse($attachment, HTTP::STATUS_OK);
+	}
 
-    /**
+	/**
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
 	 *
 	 */
-    public function update($data) {
-        $attachment = $this->attachmentService->update($this->request->getParam('cardId'), $this->request->getParam('attachmentId'), $data);
-        return new DataResponse($attachment, HTTP::STATUS_OK);
-    }
+	public function update($data) {
+		$attachment = $this->attachmentService->update($this->request->getParam('cardId'), $this->request->getParam('attachmentId'), $data);
+		return new DataResponse($attachment, HTTP::STATUS_OK);
+	}
 
-    /**
+	/**
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
 	 *
 	 */
-    public function delete() {
-        $attachment = $this->attachmentService->delete($this->request->getParam('cardId'), $this->request->getParam('attachmentId'));
-        return new DataResponse($attachment, HTTP::STATUS_OK);
-    }
+	public function delete() {
+		$attachment = $this->attachmentService->delete($this->request->getParam('cardId'), $this->request->getParam('attachmentId'));
+		return new DataResponse($attachment, HTTP::STATUS_OK);
+	}
 
-    /**
+	/**
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
 	 *
 	 */
-    public function restore() {
-        $attachment = $this->attachmentService->restore($this->request->getParam('cardId'), $this->request->getParam('attachmentId'));
-        return new DataResponse($attachment, HTTP::STATUS_OK);
-    }
+	public function restore() {
+		$attachment = $this->attachmentService->restore($this->request->getParam('cardId'), $this->request->getParam('attachmentId'));
+		return new DataResponse($attachment, HTTP::STATUS_OK);
+	}
 }

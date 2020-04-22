@@ -23,21 +23,17 @@
 
 namespace OCA\Deck\Controller;
 
-use OCA\Deck\Db\Acl;
 use OCA\Deck\Service\AttachmentService;
-use OCA\Deck\Service\CardService;
-use OCA\Deck\Service\LabelService;
-use OCA\Deck\Service\StackService;
 use OCP\AppFramework\Controller;
 use OCP\IRequest;
 
 class AttachmentControllerTest extends \Test\TestCase {
 
-    /** @var Controller|\PHPUnit\Framework\MockObject\MockObject */
+	/** @var Controller|\PHPUnit\Framework\MockObject\MockObject */
 	private $controller;
-    /** @var IRequest|\PHPUnit\Framework\MockObject\MockObject */
-    private $request;
-    /** @var AttachmentService|\PHPUnit\Framework\MockObject\MockObject */
+	/** @var IRequest|\PHPUnit\Framework\MockObject\MockObject */
+	private $request;
+	/** @var AttachmentService|\PHPUnit\Framework\MockObject\MockObject */
 	private $attachmentService;
 	/** @var string */
 	private $userId = 'user';
@@ -49,19 +45,19 @@ class AttachmentControllerTest extends \Test\TestCase {
 			'deck',
 			$this->request,
 			$this->attachmentService,
-            $this->userId
-        );
+			$this->userId
+		);
 	}
 
-    public function testGetAll() {
-	    $this->attachmentService->expects($this->once())->method('findAll')->with(1);
-	    $this->controller->getAll(1);
-    }
+	public function testGetAll() {
+		$this->attachmentService->expects($this->once())->method('findAll')->with(1);
+		$this->controller->getAll(1);
+	}
 
-    public function testDisplay() {
-        $this->attachmentService->expects($this->once())->method('display')->with(1, 2);
-        $this->controller->display(1, 2);
-    }
+	public function testDisplay() {
+		$this->attachmentService->expects($this->once())->method('display')->with(1, 2);
+		$this->controller->display(1, 2);
+	}
 
 	public function testCreate() {
 		$this->request->expects($this->exactly(2))
@@ -101,5 +97,4 @@ class AttachmentControllerTest extends \Test\TestCase {
 			->willReturn(1);
 		$this->assertEquals(1, $this->controller->restore(123, 234));
 	}
-
 }

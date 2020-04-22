@@ -23,12 +23,12 @@ class BoardTest extends TestCase {
 			'title' => "My Board",
 			'owner' => "admin",
 			'color' => "000000",
-			'labels' => array(),
+			'labels' => [],
 			'permissions' => [],
 			'stacks' => [],
 			'deletedAt' => 0,
 			'lastModified' => 0,
-			'acl' => array(),
+			'acl' => [],
 			'archived' => false,
 			'users' => ['user1', 'user2'],
 		], $board->jsonSerialize());
@@ -36,18 +36,18 @@ class BoardTest extends TestCase {
 
 	public function testSetLabels() {
 		$board = $this->createBoard();
-		$board->setLabels(array("foo", "bar"));
+		$board->setLabels(["foo", "bar"]);
 		$this->assertEquals([
 			'id' => 1,
 			'title' => "My Board",
 			'owner' => "admin",
 			'color' => "000000",
-			'labels' => array("foo", "bar"),
+			'labels' => ["foo", "bar"],
 			'permissions' => [],
 			'stacks' => [],
 			'deletedAt' => 0,
 			'lastModified' => 0,
-			'acl' => array(),
+			'acl' => [],
 			'archived' => false,
 			'users' => [],
 		], $board->jsonSerialize());
@@ -56,7 +56,7 @@ class BoardTest extends TestCase {
 		$acl = new Acl();
 		$acl->setId(1);
 		$board = $this->createBoard();
-		$board->setAcl(array($acl));
+		$board->setAcl([$acl]);
 		$result = $board->getAcl()[0];
 		$this->assertEquals($acl, $result);
 	}
@@ -68,12 +68,12 @@ class BoardTest extends TestCase {
 			'title' => "My Board",
 			'owner' => "admin",
 			'color' => "000000",
-			'labels' => array(),
+			'labels' => [],
 			'permissions' => [],
 			'stacks' => [],
 			'deletedAt' => 0,
 			'lastModified' => 0,
-			'acl' => array(),
+			'acl' => [],
 			'archived' => false,
 			'shared' => 1,
 			'users' => [],
