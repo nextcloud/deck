@@ -1,6 +1,6 @@
 module.exports = {
 	extends: [
-		'nextcloud'
+		'@nextcloud'
 	],
 	rules: {
 		'valid-jsdoc': ['off'],
