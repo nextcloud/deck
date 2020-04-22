@@ -8,6 +8,7 @@
 			:user-select="true"
 			label="displayName"
 			track-by="user"
+			:internal-search="false"
 			@input="clickAddAcl"
 			@search-change="asyncFind" />
 
