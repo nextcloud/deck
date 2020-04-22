@@ -23,7 +23,7 @@
 
 <template>
 	<div class="stack">
-		<div class="stack--header">
+		<div v-click-outside="stopCardCreation" class="stack--header">
 			<transition name="fade" mode="out-in">
 				<h3 v-if="!canManage">
 					{{ stack.title }}
@@ -32,7 +32,7 @@
 					{{ stack.title }}
 				</h3>
 				<form v-else @submit.prevent="finishedEdit(stack)">
-					<input v-model="copiedStack.title" type="text" autofocus>
+					<input v-model="copiedStack.title" v-focus type="text">
 					<input v-tooltip="t('deck', 'Add a new stack')"
 						class="icon-confirm"
 						type="submit"
@@ -45,31 +45,35 @@
 				</ActionButton>
 			</Actions>
 			<Actions v-if="canEdit && !showArchived">
-				<ActionButton icon="icon-add" @click="showAddCard=true">
+				<ActionButton icon="icon-add" @click.stop="showAddCard=true">
 					{{ t('deck', 'Add card') }}
 				</ActionButton>
 			</Actions>
 		</div>
 
-		<form v-if="showAddCard"
-			class="stack--card-add"
-			:class="{ 'icon-loading-small': stateCardCreating }"
-			@submit.prevent="clickAddCard()">
-			<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
-			<input id="new-stack-input-main"
-				v-model="newCardTitle"
-				v-focus
-				type="text"
-				class="no-close"
-				:disabled="stateCardCreating"
-				placeholder="Add a new card"
-				required>
+		<transition name="slide-top" appear>
+			<div v-if="showAddCard" class="stack--card-add">
+				<form :class="{ 'icon-loading-small': stateCardCreating }"
+					@submit.prevent.stop="clickAddCard()">
+					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
+					<input id="new-stack-input-main"
+						ref="newCardInput"
+						v-model="newCardTitle"
+						v-focus
+						type="text"
+						class="no-close"
+						:disabled="stateCardCreating"
+						placeholder="Add a new card"
+						required
+						@keydown.esc="stopCardCreation">
 
-			<input v-show="!stateCardCreating"
-				class="icon-confirm"
-				type="submit"
-				value="">
-		</form>
+					<input v-show="!stateCardCreating"
+						class="icon-confirm"
+						type="submit"
+						value="">
+				</form>
+			</div>
+		</transition>
 
 		<Container :get-child-payload="payloadForCard(stack.id)"
 			group-name="stack"
@@ -78,7 +82,11 @@
 			@should-accept-drop="canEdit"
 			@drop="($event) => onDropCard(stack.id, $event)">
 			<Draggable v-for="card in cardsByStack" :key="card.id">
-				<CardItem v-if="card" :id="card.id" />
+				<transition :appear="animate && !card.animated && (card.animated=true)"
+					:appear-class="'zoom-appear-class'"
+					:appear-active-class="'zoom-appear-active-class'">
+					<CardItem :id="card.id" />
+				</transition>
 			</Draggable>
 		</Container>
 	</div>
@@ -114,6 +122,7 @@ export default {
 			newCardTitle: '',
 			showAddCard: false,
 			stateCardCreating: false,
+			animate: false,
 		}
 	},
 	computed: {
@@ -133,6 +142,16 @@ export default {
 	},
 
 	methods: {
+		stopCardCreation(e) {
+			// For some reason the submit event triggers a MouseEvent that is bubbling to the outside
+			// so we have to ignore it
+			e.stopPropagation()
+			if (this.$refs.newCardInput && this.$refs.newCardInput.parentElement === e.target.parentElement) {
+				return false
+			}
+			this.showAddCard = false
+			return false
+		},
 		async onDropCard(stackId, event) {
 			const { addedIndex, removedIndex, payload } = event
 			const card = Object.assign({}, payload)
@@ -172,13 +191,19 @@ export default {
 		async clickAddCard() {
 			this.stateCardCreating = true
 			try {
-				await this.$store.dispatch('addCard', {
+				this.animate = true
+				const newCard = await this.$store.dispatch('addCard', {
 					title: this.newCardTitle,
 					stackId: this.stack.id,
 					boardId: this.stack.boardId,
 				})
 				this.newCardTitle = ''
-				this.showAddCard = false
+				this.showAddCard = true
+				this.$nextTick(() => {
+					this.$refs.newCardInput.focus()
+					this.animate = false
+				})
+				this.$router.push({ name: 'card', params: { cardId: newCard.id } })
 			} catch (e) {
 				OCP.Toast.error('Could not create card: ' + e.response.data.message)
 			} finally {
@@ -208,8 +233,8 @@ export default {
 		padding: 3px;
 		margin: 3px -3px;
 		margin-right: -10px;
-		margin-bottom: 5px;
 		margin-top: 0;
+		margin-bottom: 0;
 		background-color: var(--color-main-background-translucent);
 
 		h3, form {
@@ -223,10 +248,25 @@ export default {
 	}
 
 	.stack--card-add {
+		position: sticky;
+		top: 52px;
+		height: 52px;
+		z-index: 100;
 		display: flex;
-		margin-bottom: 10px;
-		box-shadow: 0 0 3px var(--color-box-shadow);
-		border-radius: 3px;
+		background-color: var(--color-main-background);
+		margin-left: -10px;
+		margin-right: -10px;
+		padding-top: 3px;
+
+		form {
+			display: flex;
+			width: 100%;
+			margin: 10px;
+			margin-top: 0;
+			margin-bottom: 10px;
+			box-shadow: 0 0 3px var(--color-box-shadow);
+			border-radius: 3px;
+		}
 
 		&.icon-loading-small:after,
 		&.icon-loading-small-dark:after {
@@ -241,9 +281,22 @@ export default {
 			border: none;
 		}
 	}
+	.stack .smooth-dnd-container.vertical {
+		margin-top: 3px;
+	}
 
 	/**
 	 * Rules to handle scrolling behaviour are inherited from Board.vue
 	 */
+
+	.slide-top-enter-active,
+	.slide-top-leave-active {
+		transition: all 100ms ease;
+	}
+	.slide-top-enter, .slide-top-leave-to {
+		transform: translateY(-10px);
+		opacity: 0;
+		height: 0px;
+	}
 
 </style>

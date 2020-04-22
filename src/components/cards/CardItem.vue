@@ -48,16 +48,21 @@
 				</form>
 
 				<div v-if="!editing" class="right">
-					<div v-if="card.duedate" :class="dueIcon">
-						<span>{{ relativeDate }}</span>
-					</div>
+					<transition name="zoom">
+						<div v-if="card.duedate" :class="dueIcon">
+							<span>{{ relativeDate }}</span>
+						</div>
+					</transition>
 				</div>
 			</div>
-			<ul v-if="card.labels && card.labels.length > 0" class="labels" @click="openCard">
+			<transition-group name="zoom"
+				tag="ul"
+				class="labels"
+				@click="openCard">
 				<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)">
 					<span>{{ label.title }}</span>
 				</li>
-			</ul>
+			</transition-group>
 			<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
 				<CardBadges :id="id" />
 			</div>
@@ -132,6 +137,13 @@ export default {
 			return moment(this.card.duedate).format('LLLL')
 		},
 	},
+	watch: {
+		currentCard(newValue) {
+			if (newValue) {
+				this.$nextTick(() => this.$el.scrollIntoView())
+			}
+		},
+	},
 	methods: {
 		openCard() {
 			this.$router.push({ name: 'card', params: { cardId: this.id } })
@@ -154,6 +166,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+	@import './../../css/animations';
+
 	$card-spacing: 10px;
 	$card-padding: 10px;
 
