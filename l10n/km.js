@@ -18,6 +18,7 @@ OC.L10N.register(
     "Reply" : "ឆ្លើយតប",
     "Update" : "ធ្វើ​បច្ចុប្បន្នភាព",
     "seconds ago" : "វិនាទី​មុន",
-    "Settings" : "ការកំណត់"
+    "Settings" : "ការកំណត់",
+    "Share" : "ចែក​រំលែក"
 },
 "nplurals=1; plural=0;");

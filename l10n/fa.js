@@ -36,6 +36,8 @@ OC.L10N.register(
     "Move card" : "انتقال کارت",
     "seconds ago" : "ثانیه‌هایی پیش",
     "Settings" : "تنظیمات",
+    "Share" : "اشتراک",
+    "Options" : "گزینه ها",
     "Edit board" : "ویرایش تخته ها",
     "An error occurred" : "خطایی روی داد",
     "Archive board" : " بایگانی تابلو",

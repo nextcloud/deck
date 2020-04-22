@@ -191,6 +191,7 @@ OC.L10N.register(
     "Settings" : "Inställningar",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begränsa Deck blockerar användare som inte ingår i dessa grupper från att skapa egna tavlor. Användare kan fortfarande arbeta med tavlor som har delats med dem.",
     "New board title" : "Ny titel för tavla",
+    "Share" : "Dela",
     "Edit board" : "Ändra tavla",
     "An error occurred" : "Ett fel uppstod",
     "Clone board" : "Kopiera tavla",

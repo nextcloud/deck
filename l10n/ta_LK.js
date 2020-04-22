@@ -19,6 +19,7 @@ OC.L10N.register(
     "Save" : "சேமிக்க ",
     "Update" : "இற்றைப்படுத்தல்",
     "seconds ago" : "செக்கன்களுக்கு முன்",
-    "Settings" : "அமைப்புகள்"
+    "Settings" : "அமைப்புகள்",
+    "Share" : "பகிர்வு"
 },
 "nplurals=2; plural=(n != 1);");

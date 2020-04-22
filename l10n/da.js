@@ -52,6 +52,7 @@ OC.L10N.register(
     "Shared boards" : "Delte lister",
     "Settings" : "Indstillinger",
     "New board title" : "Ny titel på liste",
+    "Share" : "Del",
     "Edit board" : "Rediger liste",
     "An error occurred" : "Der var en fejl",
     "Archive board" : "Arkivér liste",

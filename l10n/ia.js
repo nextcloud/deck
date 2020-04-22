@@ -29,6 +29,7 @@ OC.L10N.register(
     "Update" : "Actualisation",
     "(group)" : "(gruppo)",
     "seconds ago" : "secundas passate",
-    "Settings" : "Configurationes"
+    "Settings" : "Configurationes",
+    "Share" : "Compartir"
 },
 "nplurals=2; plural=(n != 1);");

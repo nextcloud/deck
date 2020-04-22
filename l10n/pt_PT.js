@@ -47,6 +47,7 @@ OC.L10N.register(
     "Archived boards" : "Quadros arquivados",
     "Settings" : "Definições",
     "New board title" : "Novo título de quadro",
+    "Share" : "Partilhar",
     "Edit board" : "Editar quadro",
     "An error occurred" : "Ocorreu um erro",
     "Archive board" : "Arquivar quadro",

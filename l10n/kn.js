@@ -14,6 +14,7 @@ OC.L10N.register(
     "Edit" : "ಸಂಪಾದಿಸು",
     "Modified" : "﻿ಬದಲಾಯಿಸಿದ",
     "Save" : "﻿ಉಳಿಸಿ",
-    "Settings" : "ಆಯ್ಕೆ"
+    "Settings" : "ಆಯ್ಕೆ",
+    "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ"
 },
 "nplurals=2; plural=(n > 1);");

@@ -49,6 +49,7 @@ OC.L10N.register(
     "Shared boards" : "Tabela të shpërndara",
     "Settings" : "Rregullimet",
     "New board title" : "Titull i ri bordi",
+    "Share" : "Shpërndaje",
     "Edit board" : "Tabela e editimeve",
     "Archive board" : "Arkivo bordin",
     "Unarchive board" : "Hiq bordin nga arkivi",

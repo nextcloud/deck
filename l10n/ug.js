@@ -18,6 +18,7 @@ OC.L10N.register(
     "Save" : "ساقلا",
     "Reply" : "جاۋاب قايتۇر",
     "Update" : "يېڭىلا",
-    "Settings" : "تەڭشەكلەر"
+    "Settings" : "تەڭشەكلەر",
+    "Share" : "ھەمبەھىر"
 },
 "nplurals=1; plural=0;");

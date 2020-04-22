@@ -12,6 +12,7 @@ OC.L10N.register(
     "Comments" : "تبصرې",
     "Modified" : "د بدلون نېټه",
     "Save" : "ساتل",
-    "Settings" : "سمونې"
+    "Settings" : "سمونې",
+    "Share" : "شریکول"
 },
 "nplurals=2; plural=(n != 1);");

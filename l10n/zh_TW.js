@@ -54,6 +54,8 @@ OC.L10N.register(
     "Move card" : "移動卡片",
     "seconds ago" : "幾秒前",
     "Settings" : "設定",
+    "Share" : "分享",
+    "Options" : "設定",
     "Edit board" : "編輯專案",
     "An error occurred" : "發生錯誤",
     "Archive board" : "封存的專案",

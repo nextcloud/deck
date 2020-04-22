@@ -192,6 +192,8 @@ OC.L10N.register(
     "Settings" : "Ezarpenak",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Deck mugatzeak taldeetako kide ez diren erabiltzaileei bere arbel propioak sortzea eragotziko die. Erabiltzaileek beraiekin partekatu diren arbeletan lan egin ahalko dute.",
     "New board title" : "Taula berriaren izenburua",
+    "Share" : "Partekatu",
+    "Options" : "Aukerak",
     "Edit board" : "Editatu taula",
     "An error occurred" : "Errore bat gertatu da",
     "Clone board" : "Klonatu taula",

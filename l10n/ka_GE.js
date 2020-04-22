@@ -49,6 +49,7 @@ OC.L10N.register(
     "Shared boards" : "გაზიარებული დაფები",
     "Settings" : "პარამეტრები",
     "New board title" : "ახალი დაფის სახელი",
+    "Share" : "გაზიარება",
     "Edit board" : "დაფის შეცვლა",
     "Archive board" : "დაფის არქივირება",
     "Unarchive board" : "დაფის ამოღება",

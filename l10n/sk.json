@@ -190,6 +190,7 @@
     "Settings" : "Nastavenia",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Obmedzenie Násteniek bráni používateľom, ktorí nie sú súčasťou týchto skupín, aby si vytvárali vlastné nástenky. Môžu však stále pracovať na nástenkách, ktoré im niekto sprístupní.",
     "New board title" : "Názov novej nástenky",
+    "Share" : "Sprístupňovať",
     "Edit board" : "Upraviť nástenku",
     "An error occurred" : "Vyskytla sa chyba",
     "Clone board" : "Duplikovať nástenku",

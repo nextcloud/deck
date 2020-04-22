@@ -16,6 +16,7 @@ OC.L10N.register(
     "Save" : "Պահպանել",
     "Update" : "Թարմացնել",
     "seconds ago" : "վրկ. առաջ",
-    "Settings" : "կարգավորումներ"
+    "Settings" : "կարգավորումներ",
+    "Share" : "Կիսվել"
 },
 "nplurals=2; plural=(n != 1);");

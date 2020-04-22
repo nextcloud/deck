@@ -52,6 +52,7 @@ OC.L10N.register(
     "Shared boards" : "Tableros compartidos",
     "Settings" : "Configuraciones ",
     "New board title" : "Nuevo título del tablero",
+    "Share" : "Compartir",
     "Edit board" : "Editar el tablero",
     "Archive board" : "Archivar tablero",
     "Unarchive board" : "Desarchivar tablero",

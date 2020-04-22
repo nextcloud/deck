@@ -15,6 +15,7 @@ OC.L10N.register(
     "Reply" : "回覆",
     "Update" : "更新",
     "seconds ago" : "秒前",
-    "Settings" : "設定"
+    "Settings" : "設定",
+    "Share" : "分享"
 },
 "nplurals=1; plural=0;");

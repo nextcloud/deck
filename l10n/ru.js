@@ -192,6 +192,8 @@ OC.L10N.register(
     "Settings" : "Параметры",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ограничение Deck заблокирует возможность создания собственных рабочих досок пользователям, не входящим в эти группы. Пользователи всё ещё смогут работать на досках, которыми поделились с ними.",
     "New board title" : "Введите заголовок рабочей доски…",
+    "Share" : "Публикация",
+    "Options" : "Варианты",
     "Edit board" : "Редактировать",
     "An error occurred" : "Произошла ошибка",
     "Clone board" : "Скопировать доску",

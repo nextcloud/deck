@@ -59,6 +59,8 @@ OC.L10N.register(
     "Shared boards" : "לוחות משותפים",
     "Settings" : "הגדרות",
     "New board title" : "כותרת לוח חדשה",
+    "Share" : "שיתוף",
+    "Options" : "אפשרויות",
     "Edit board" : "עריכת לוח",
     "An error occurred" : "אירעה שגיאה",
     "Archive board" : "העברת לוח לארכיון",

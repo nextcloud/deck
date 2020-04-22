@@ -55,6 +55,7 @@ OC.L10N.register(
     "Shared boards" : "Shared boards",
     "Settings" : "Settings",
     "New board title" : "New board title",
+    "Share" : "Share",
     "Edit board" : "Edit board",
     "Archive board" : "Archive board",
     "Unarchive board" : "Unarchive board",

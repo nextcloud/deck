@@ -54,6 +54,7 @@ OC.L10N.register(
     "Shared boards" : "Tableros compartidos",
     "Settings" : "Configuraciones ",
     "New board title" : "Nuevo título del tablero",
+    "Share" : "Compartir",
     "Edit board" : "Editar el tablero",
     "An error occurred" : "Ha ocurrido un error",
     "Archive board" : "Archivar tablero",

@@ -50,6 +50,7 @@ OC.L10N.register(
     "Shared boards" : "Спільні дошки",
     "Settings" : "Налаштування",
     "New board title" : "Новий заголовок дошки",
+    "Share" : "Поділитися",
     "Edit board" : "Змінити дошку",
     "An error occurred" : "Виникла помилка",
     "Archive board" : "Архівувати дошку",

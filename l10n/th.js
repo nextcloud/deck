@@ -24,6 +24,7 @@ OC.L10N.register(
     "Update" : "อัพเดท",
     "(group)" : "(กลุ่ม)",
     "seconds ago" : "วินาที ก่อนหน้านี้",
-    "Settings" : "ตั้งค่า"
+    "Settings" : "ตั้งค่า",
+    "Share" : "แชร์"
 },
 "nplurals=1; plural=0;");

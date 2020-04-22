@@ -78,6 +78,7 @@ OC.L10N.register(
     "Shared boards" : "Chia sẽ dự án",
     "Settings" : "Thiết lập",
     "New board title" : "Tên dự án mới",
+    "Share" : "Chia sẻ",
     "Edit board" : "Chỉnh sửa dự án",
     "An error occurred" : "Có lỗi đã xảy ra",
     "Archive board" : "Lưu trữ dự án",

@@ -26,6 +26,7 @@ OC.L10N.register(
     "Update" : "Perbarui",
     "(group)" : "(grup)",
     "seconds ago" : "beberapa detik yang lalu",
-    "Settings" : "Setelan"
+    "Settings" : "Setelan",
+    "Share" : "Bagikan"
 },
 "nplurals=1; plural=0;");
