@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Middleware;
 
-use OCA\Deck\Controller\PageController;
 use OCA\Deck\StatusException;
 use OCA\Deck\Exceptions\ConflictException;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -34,7 +33,6 @@ use OCP\AppFramework\OCSController;
 use OCP\ILogger;
 use OCP\Util;
 use OCP\IConfig;
-
 
 class ExceptionMiddleware extends Middleware {
 
@@ -116,5 +114,4 @@ class ExceptionMiddleware extends Middleware {
 
 		throw $exception;
 	}
-
 }

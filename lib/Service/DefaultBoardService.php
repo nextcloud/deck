@@ -31,7 +31,6 @@ use OCA\Deck\BadRequestException;
 use OCP\PreConditionNotMetException;
 
 class DefaultBoardService {
-
 	private $boardMapper;
 	private $boardService;
 	private $stackService;
@@ -39,7 +38,7 @@ class DefaultBoardService {
 	private $config;
 	private $l10n;
 
-    public function __construct(
+	public function __construct(
 			IL10N $l10n,
 			BoardMapper $boardMapper,
 			BoardService $boardService,
@@ -47,14 +46,13 @@ class DefaultBoardService {
 			CardService $cardService,
 			IConfig $config
 			) {
-
 		$this->boardService = $boardService;
 		$this->stackService = $stackService;
 		$this->cardService = $cardService;
 		$this->config = $config;
 		$this->boardMapper = $boardMapper;
 		$this->l10n = $l10n;
-    }
+	}
 
 	/**
 	 * Return true if this is the first time a user is acessing their instance with deck enabled
@@ -76,7 +74,7 @@ class DefaultBoardService {
 		}
 
 		return false;
-    }
+	}
 
 	/**
 	 * @param $title
@@ -90,7 +88,6 @@ class DefaultBoardService {
 	 * @throws BadRequestException
 	 */
 	public function createDefaultBoard(string $title, string $userId, string $color) {
-
 		if ($title === false || $title === null) {
 			throw new BadRequestException('title must be provided');
 		}
@@ -103,9 +100,9 @@ class DefaultBoardService {
 			throw new BadRequestException('color must be provided');
 		}
 
-        $defaultBoard = $this->boardService->create($title, $userId, $color);
-        $defaultStacks = [];
-        $defaultCards = [];
+		$defaultBoard = $this->boardService->create($title, $userId, $color);
+		$defaultStacks = [];
+		$defaultCards = [];
 
 		$boardId = $defaultBoard->getId();
 
@@ -118,5 +115,5 @@ class DefaultBoardService {
 		$defaultCards[] = $this->cardService->create($this->l10n->t('Example Task 1'), $defaultStacks[2]->getId(), 'text', 0, $userId);
 
 		return $defaultBoard;
-    }
+	}
 }

@@ -25,17 +25,16 @@ namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IDBConnection;
-use OCP\IGroupManager;
 use OCP\IUserManager;
 use Test\AppFramework\Db\MapperTestUtility;
 
 /**
  * @group DB
  */
-class AttachmentMapperTest extends MapperTestUtility  {
+class AttachmentMapperTest extends MapperTestUtility {
 
 	/** @var IDBConnection */
-    private $dbConnection;
+	private $dbConnection;
 	/** @var AttachmentMapper */
 	private $attachmentMapper;
 	/** @var IUserManager|\PHPUnit\Framework\MockObject\MockObject */
@@ -54,13 +53,13 @@ class AttachmentMapperTest extends MapperTestUtility  {
 		$this->cardMapper = $this->createMock(CardMapper::class);
 
 		$this->dbConnection = \OC::$server->getDatabaseConnection();
-        $this->attachmentMapper = new AttachmentMapper(
-            $this->dbConnection,
-            $this->cardMapper,
+		$this->attachmentMapper = new AttachmentMapper(
+			$this->dbConnection,
+			$this->cardMapper,
 			$this->userManager
-        );
-        $this->attachments = [
-        	$this->createAttachmentEntity(1, 'deck_file', 'file1.pdf'),
+		);
+		$this->attachments = [
+			$this->createAttachmentEntity(1, 'deck_file', 'file1.pdf'),
 			$this->createAttachmentEntity(1, 'deck_file', 'file2.pdf'),
 			$this->createAttachmentEntity(2, 'deck_file', 'file3.pdf'),
 			$this->createAttachmentEntity(3, 'deck_file', 'file4.pdf')
@@ -138,11 +137,10 @@ class AttachmentMapperTest extends MapperTestUtility  {
 		}
 	}
 
-    public function tearDown(): void {
-        parent::tearDown();
-        foreach ($this->attachments as $attachment) {
-            $this->attachmentMapper->delete($attachment);
-        }
-    }
-
+	public function tearDown(): void {
+		parent::tearDown();
+		foreach ($this->attachments as $attachment) {
+			$this->attachmentMapper->delete($attachment);
+		}
+	}
 }

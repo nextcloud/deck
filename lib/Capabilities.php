@@ -23,10 +23,9 @@
 
 namespace OCA\Deck;
 
-
 use OCP\Capabilities\ICapability;
 
-class Capabilities  implements ICapability {
+class Capabilities implements ICapability {
 
 	/**
 	 * Function an app uses to return the capabilities

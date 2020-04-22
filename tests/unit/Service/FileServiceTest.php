@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Service;
 
-
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
@@ -69,9 +68,9 @@ class FileServiceTest extends TestCase {
 		$this->config = $this->createMock(IConfig::class);
 		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
 		$this->fileService = new FileService($this->l10n, $this->appData, $this->request, $this->logger, $this->rootFolder, $this->config, $this->attachmentMapper);
-    }
+	}
 
-    public function mockGetFolder($cardId) {
+	public function mockGetFolder($cardId) {
 		$folder = $this->createMock(ISimpleFolder::class);
 		$this->appData->expects($this->once())
 			->method('getFolder')

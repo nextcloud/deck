@@ -32,7 +32,6 @@ use OCP\AppFramework\Controller;
 use OCP\IL10N;
 
 class PageController extends Controller {
-
 	private $permissionService;
 	private $userId;
 	private $l10n;
@@ -67,5 +66,4 @@ class PageController extends Controller {
 
 		return new TemplateResponse('deck', 'main');
 	}
-
 }

@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Activity;
 
-
 class SettingComment extends Setting {
 
 	/**
@@ -49,5 +48,4 @@ class SettingComment extends Setting {
 	public function canChangeStream() {
 		return false;
 	}
-
 }

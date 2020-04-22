@@ -28,7 +28,6 @@ use OCP\IDBConnection;
 use OCP\IUserManager;
 use OCP\Notification\IManager;
 
-
 class CardMapper extends DeckMapper implements IPermissionMapper {
 
 	/** @var LabelMapper */
@@ -164,7 +163,6 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		foreach ($cards as $card) {
 			$this->delete($card);
 		}
-
 	}
 
 	public function assignLabel($card, $label) {
@@ -199,7 +197,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 
 	public function mapOwner(Card &$card) {
 		$userManager = $this->userManager;
-		$card->resolveRelation('owner', function($owner) use (&$userManager) {
+		$card->resolveRelation('owner', function ($owner) use (&$userManager) {
 			$user = $userManager->get($owner);
 			if ($user !== null) {
 				return new User($user);
@@ -207,6 +205,4 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 			return null;
 		});
 	}
-
-
 }

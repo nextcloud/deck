@@ -24,7 +24,6 @@
 namespace OCA\Deck\Db;
 
 class Label extends RelationalEntity {
-
 	protected $title;
 	protected $color;
 	protected $boardId;

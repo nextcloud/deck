@@ -32,9 +32,7 @@ use OCP\IDBConnection;
 use OCP\IUserManager;
 use PDO;
 
-
 class AttachmentMapper extends DeckMapper implements IPermissionMapper {
-
 	private $cardMapper;
 	private $userManager;
 	private $qb;
@@ -67,14 +65,14 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 
 		$cursor = $qb->execute();
 		$row = $cursor->fetch(PDO::FETCH_ASSOC);
-		if($row === false) {
+		if ($row === false) {
 			$cursor->closeCursor();
 			throw new DoesNotExistException('Did expect one result but found none when executing' . $qb);
 		}
 
 		$row2 = $cursor->fetch();
 		$cursor->closeCursor();
-		if($row2 !== false ) {
+		if ($row2 !== false) {
 			throw new MultipleObjectsReturnedException('Did not expect more than one result when executing' . $query);
 		}
 
@@ -82,19 +80,19 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	public function findByData($cardId, $data) {
-        $qb = $this->db->getQueryBuilder();
-        $qb->select('*')
-                ->from('deck_attachment')
-                ->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
-                ->andWhere($qb->expr()->eq('data', $qb->createNamedParameter($data, IQueryBuilder::PARAM_STR)));
-        $cursor = $qb->execute();
-        $row = $cursor->fetch(PDO::FETCH_ASSOC);
-        if($row === false) {
-                $cursor->closeCursor();
-                throw new DoesNotExistException('Did expect one result but found none when executing' . $qb);
-        }
-        $cursor->closeCursor();
-        return $this->mapRowToEntity($row);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+				->from('deck_attachment')
+				->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
+				->andWhere($qb->expr()->eq('data', $qb->createNamedParameter($data, IQueryBuilder::PARAM_STR)));
+		$cursor = $qb->execute();
+		$row = $cursor->fetch(PDO::FETCH_ASSOC);
+		if ($row === false) {
+			$cursor->closeCursor();
+			throw new DoesNotExistException('Did expect one result but found none when executing' . $qb);
+		}
+		$cursor->closeCursor();
+		return $this->mapRowToEntity($row);
 	}
 
 	/**
@@ -113,7 +111,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 
 		$entities = [];
 		$cursor = $qb->execute();
-		while($row = $cursor->fetch()){
+		while ($row = $cursor->fetch()) {
 			$entities[] = $this->mapRowToEntity($row);
 		}
 		$cursor->closeCursor();
@@ -143,7 +141,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 
 		$entities = [];
 		$cursor = $qb->execute();
-		while($row = $cursor->fetch()){
+		while ($row = $cursor->fetch()) {
 			$entities[] = $this->mapRowToEntity($row);
 		}
 		$cursor->closeCursor();

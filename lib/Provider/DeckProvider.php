@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 
@@ -28,7 +29,6 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Provider;
 
-
 use OC\FullTextSearch\Model\IndexDocument;
 use OC\FullTextSearch\Model\SearchTemplate;
 use OCA\Deck\Service\FullTextSearchService;
@@ -46,16 +46,13 @@ use OCP\FullTextSearch\Model\ISearchTemplate;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 
-
 /**
  * Class DeckProvider
  *
  * @package OCA\Deck\Provider
  */
 class DeckProvider implements IFullTextSearchProvider {
-
-
-	const DECK_PROVIDER_ID = 'deck';
+	public const DECK_PROVIDER_ID = 'deck';
 
 
 	/** @var IL10N */
@@ -276,6 +273,4 @@ class DeckProvider implements IFullTextSearchProvider {
 
 		$this->runner->setInfo($info, $value);
 	}
-
 }
-

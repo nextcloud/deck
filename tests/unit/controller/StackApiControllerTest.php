@@ -28,11 +28,9 @@ use OCP\IRequest;
 
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\StackService;
-use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Stack;
 
 class StackApiControllerTest extends \Test\TestCase {
-
 	private $appName = 'deck';
 	private $userId = 'admin';
 	private $controller;
@@ -104,7 +102,6 @@ class StackApiControllerTest extends \Test\TestCase {
 	}
 
 	public function testCreate() {
-
 		$this->request->expects($this->any())
 			->method('getParam')
 			->with('boardId')
@@ -126,7 +123,6 @@ class StackApiControllerTest extends \Test\TestCase {
 	}
 
 	public function testUpdate() {
-
 		$this->request->expects($this->exactly(2))
 			->method('getParam')
 			->withConsecutive(
@@ -151,7 +147,6 @@ class StackApiControllerTest extends \Test\TestCase {
 	}
 
 	public function testDelete() {
-
 		$stack = new Stack();
 		$stack->setId($this->exampleStack['id']);
 		$stack->setBoardId($this->exampleStack['boardId']);

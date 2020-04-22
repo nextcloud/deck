@@ -23,19 +23,15 @@
 
 namespace OCA\Deck\Controller;
 
-use OCA\Deck\Service\DefaultBoardService;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
 use OCP\IConfig;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IRequest;
-use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Controller;
-use OCP\IL10N;
 
 class ConfigController extends Controller {
-
 	private $config;
 	private $userId;
 	private $groupManager;
@@ -100,7 +96,7 @@ class ConfigController extends Controller {
 
 	private function getGroupLimit() {
 		$groups = $this->getGroupLimitList();
-		$groups = array_map(function($groupId) {
+		$groups = array_map(function ($groupId) {
 			/** @var IGroup $groups */
 			$group = $this->groupManager->get($groupId);
 			if ($group === null) {
@@ -113,5 +109,4 @@ class ConfigController extends Controller {
 		}, $groups);
 		return array_filter($groups);
 	}
-
 }

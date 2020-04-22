@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Service;
 
-
 use OCA\Deck\Db\Attachment;
 use OCP\AppFramework\Http\Response;
 
@@ -95,5 +94,4 @@ interface IAttachmentService {
 	 * @param Attachment $attachment
 	 */
 	public function markAsDeleted(Attachment $attachment);
-
 }

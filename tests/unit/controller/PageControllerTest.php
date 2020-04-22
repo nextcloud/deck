@@ -28,13 +28,10 @@ use OCA\Deck\Service\PermissionService;
 use OCP\IInitialStateService;
 use OCP\IL10N;
 use OCP\IRequest;
-use PHPUnit_Framework_TestCase;
-use OCA\Deck\Service\DefaultBoardService;
 use OCA\Deck\Db\Board;
 use OCP\IConfig;
 
 class PageControllerTest extends \Test\TestCase {
-
 	private $controller;
 	private $request;
 	private $l10n;
@@ -56,7 +53,6 @@ class PageControllerTest extends \Test\TestCase {
 	}
 
 	public function testIndex() {
-
 		$board = new Board();
 		$board->setTitle('Personal');
 		$board->setOwner($this->userId);
@@ -69,5 +65,4 @@ class PageControllerTest extends \Test\TestCase {
 		$response = $this->controller->index();
 		$this->assertEquals('main', $response->getTemplateName());
 	}
-
 }

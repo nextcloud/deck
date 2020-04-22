@@ -31,11 +31,11 @@ use Test\TestCase;
 
 class CardControllerTest extends TestCase {
 
-    /** @var CardController|MockObject */
+	/** @var CardController|MockObject */
 	private $controller;
-    /** @var IRequest|MockObject */
-    private $request;
-    /** @var CardService|MockObject */
+	/** @var IRequest|MockObject */
+	private $request;
+	/** @var CardService|MockObject */
 	private $cardService;
 	/** @var AssignmentService|MockObject */
 	private $assignmentService;
@@ -89,31 +89,31 @@ class CardControllerTest extends TestCase {
 	}
 
 	public function testArchive() {
-	    $this->cardService->expects($this->once())->method('archive')->willReturn(true);
-	    $this->controller->archive(1);
-    }
-    public function testUnarchive() {
-        $this->cardService->expects($this->once())->method('unarchive');
-        $this->controller->unarchive(1);
-    }
-    public function testAssignLabel() {
-        $this->cardService->expects($this->once())->method('assignLabel');
-        $this->controller->assignLabel(1,2);
-    }
-    public function testRemoveLabel() {
-        $this->cardService->expects($this->once())->method('removeLabel');
-        $this->controller->removeLabel(1,2);
-    }
+		$this->cardService->expects($this->once())->method('archive')->willReturn(true);
+		$this->controller->archive(1);
+	}
+	public function testUnarchive() {
+		$this->cardService->expects($this->once())->method('unarchive');
+		$this->controller->unarchive(1);
+	}
+	public function testAssignLabel() {
+		$this->cardService->expects($this->once())->method('assignLabel');
+		$this->controller->assignLabel(1,2);
+	}
+	public function testRemoveLabel() {
+		$this->cardService->expects($this->once())->method('removeLabel');
+		$this->controller->removeLabel(1,2);
+	}
 
-    public function testReorder() {
-        $this->cardService->expects($this->once())->method('reorder');
-        $this->controller->reorder(1, 2, 3);
-    }
+	public function testReorder() {
+		$this->cardService->expects($this->once())->method('reorder');
+		$this->controller->reorder(1, 2, 3);
+	}
 
-    public function testRename() {
-        $this->cardService->expects($this->once())->method('rename');
-        $this->controller->rename(1, 'test');
-    }
+	public function testRename() {
+		$this->cardService->expects($this->once())->method('rename');
+		$this->controller->rename(1, 'test');
+	}
 
 	public function testAssignUser() {
 		$this->assignmentService->expects($this->once())->method('assignUser');
@@ -124,5 +124,4 @@ class CardControllerTest extends TestCase {
 		$this->assignmentService->expects($this->once())->method('unassignUser');
 		$this->controller->unassignUser(1, 'admin');
 	}
-
 }

@@ -23,20 +23,17 @@
 
 namespace OCA\Deck\Controller;
 
-use OCA\Deck\Db\Acl;
-use OCA\Deck\Service\CardService;
-use OCA\Deck\Service\LabelService;
 use OCA\Deck\Service\StackService;
 use OCP\AppFramework\Controller;
 use OCP\IRequest;
 
 class StackControllerTest extends \Test\TestCase {
 
-    /** @var Controller|\PHPUnit\Framework\MockObject\MockObject */
+	/** @var Controller|\PHPUnit\Framework\MockObject\MockObject */
 	private $controller;
-    /** @var IRequest|\PHPUnit\Framework\MockObject\MockObject */
-    private $request;
-    /** @var StackService|\PHPUnit\Framework\MockObject\MockObject */
+	/** @var IRequest|\PHPUnit\Framework\MockObject\MockObject */
+	private $request;
+	/** @var StackService|\PHPUnit\Framework\MockObject\MockObject */
 	private $stackService;
 	/** @var string */
 	private $userId = 'user';
@@ -54,19 +51,19 @@ class StackControllerTest extends \Test\TestCase {
 			'deck',
 			$this->request,
 			$this->stackService,
-            $this->userId
-        );
+			$this->userId
+		);
 	}
 
-    public function testIndex() {
-	    $this->stackService->expects($this->once())->method('findAll');
-	    $this->controller->index(1);
-    }
+	public function testIndex() {
+		$this->stackService->expects($this->once())->method('findAll');
+		$this->controller->index(1);
+	}
 
-    public function testArchived() {
-        $this->stackService->expects($this->once())->method('findAllArchived');
-        $this->controller->archived(1);
-    }
+	public function testArchived() {
+		$this->stackService->expects($this->once())->method('findAllArchived');
+		$this->controller->archived(1);
+	}
 
 	public function testCreate() {
 		$this->stackService->expects($this->once())
@@ -99,5 +96,4 @@ class StackControllerTest extends \Test\TestCase {
 			->willReturn(1);
 		$this->assertEquals(1, $this->controller->delete(123));
 	}
-
 }

@@ -23,14 +23,12 @@
 
 namespace OCA\Deck\Service;
 
-
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
-use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
@@ -39,7 +37,6 @@ use OCP\Comments\NotFoundException as CommentNotFoundException;
 use OCP\ILogger;
 use OCP\IUserManager;
 use OutOfBoundsException;
-use Sabre\DAV\Exception\Forbidden;
 use function is_numeric;
 
 class CommentService {
@@ -125,7 +122,6 @@ class CommentService {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		try {
 			$comment = $this->commentsManager->get($commentId);
-
 		} catch (CommentNotFoundException $e) {
 			throw new NotFoundException('No comment found.');
 		}
@@ -147,7 +143,6 @@ class CommentService {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		try {
 			$comment = $this->commentsManager->get($commentId);
-
 		} catch (CommentNotFoundException $e) {
 			throw new NotFoundException('No comment found.');
 		}
@@ -170,7 +165,7 @@ class CommentService {
 			'actorType' => $comment->getActorType(),
 			'actorDisplayName' => $actorDisplayName,
 			'creationDateTime' => $comment->getCreationDateTime()->format(\DateTime::ATOM),
-			'mentions' => array_map(function($mention) {
+			'mentions' => array_map(function ($mention) {
 				try {
 					$displayName = $this->commentsManager->resolveDisplayName($mention['type'], $mention['id']);
 				} catch (OutOfBoundsException $e) {
@@ -187,5 +182,4 @@ class CommentService {
 			}, $comment->getMentions()),
 		];
 	}
-
 }

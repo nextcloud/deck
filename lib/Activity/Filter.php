@@ -27,7 +27,6 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 
 class Filter implements \OCP\Activity\IFilter {
-
 	private $l10n;
 	private $urlGenerator;
 

@@ -26,9 +26,7 @@ namespace OCA\Deck\Db;
 use OCP\AppFramework\Db\Entity;
 use OCP\IDBConnection;
 
-
 class LabelMapper extends DeckMapper implements IPermissionMapper {
-
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'deck_labels', Label::class);
 	}
@@ -70,10 +68,10 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 
 	public function getAssignedLabelsForBoard($boardId) {
 		$labels = $this->findAssignedLabelsForBoard($boardId);
-		$result = array();
+		$result = [];
 		foreach ($labels as $label) {
 			if (!array_key_exists($label->getCardId(), $result)) {
-				$result[$label->getCardId()] = array();
+				$result[$label->getCardId()] = [];
 			}
 			$result[$label->getCardId()][] = $label;
 		}

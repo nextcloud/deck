@@ -30,7 +30,6 @@ use OCA\Deck\Db\Label;
 use OCA\Deck\Service\LabelService;
 
 class LabelApiControllerTest extends \Test\TestCase {
-
 	private $controller;
 	private $request;
 	private $labelService;
@@ -69,7 +68,6 @@ class LabelApiControllerTest extends \Test\TestCase {
 	}
 
 	public function testCreate() {
-
 		$label = new Label();
 		$label->setId($this->exampleLabel['id']);
 
@@ -88,7 +86,6 @@ class LabelApiControllerTest extends \Test\TestCase {
 	}
 
 	public function testUpdate() {
-
 		$label = new Label();
 		$label->setId($this->exampleLabel['id']);
 
@@ -107,7 +104,6 @@ class LabelApiControllerTest extends \Test\TestCase {
 	}
 
 	public function testDelete() {
-
 		$label = new Label();
 		$label->setId($this->exampleLabel['id']);
 
@@ -124,5 +120,4 @@ class LabelApiControllerTest extends \Test\TestCase {
 		$actual = $this->controller->delete();
 		$this->assertEquals($expected, $actual);
 	}
-
 }

@@ -59,5 +59,4 @@ class DefaultBoardMiddleware extends Middleware {
 			$this->logger->logException($e);
 		}
 	}
-
 }

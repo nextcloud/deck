@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Db;
 
-
 use OCP\Share\IShare;
 
 class Circle extends RelationalObject {

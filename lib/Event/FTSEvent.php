@@ -23,9 +23,7 @@
 
 namespace OCA\Deck\Event;
 
-
 use OCP\EventDispatcher\Event;
-use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * This is a class to keep compatibility for currently used events in full text search integration
@@ -43,13 +41,11 @@ class FTSEvent extends Event {
 		$this->arguments = $arguments;
 	}
 
-	public function getArgument($key)
-	{
+	public function getArgument($key) {
 		if ($this->hasArgument($key)) {
 			return $this->arguments[$key];
 		}
 
 		throw new \InvalidArgumentException(sprintf('Argument "%s" not found.', $key));
 	}
-
 }

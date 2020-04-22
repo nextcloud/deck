@@ -23,18 +23,13 @@
 
 namespace OCA\Deck\Db;
 
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\IDBConnection;
 use OCP\IRequest;
-use OCP\IUserManager;
-use OCP\IGroupManager;
 
 class ChangeHelper {
-
-	const TYPE_BOARD = 'boardChanged';
-	const TYPE_CARD = 'cardChanged';
+	public const TYPE_BOARD = 'boardChanged';
+	public const TYPE_CARD = 'cardChanged';
 
 	private $db;
 
@@ -100,5 +95,4 @@ class ChangeHelper {
 		}
 		return $entry;
 	}
-
 }

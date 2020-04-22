@@ -39,7 +39,6 @@ use Sabre\HTTP\Util;
  * @package OCA\Deck\Controller
  */
 class StackApiController extends ApiController {
-
 	private $boardService;
 	private $stackService;
 

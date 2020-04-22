@@ -66,5 +66,4 @@ class ScheduledNotifications extends Job {
 			}
 		}
 	}
-
 }

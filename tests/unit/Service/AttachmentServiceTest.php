@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Service;
 
-
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Db\Acl;
@@ -44,13 +43,20 @@ use Test\TestCase;
 
 /** @internal Just for testing the service registration */
 class MyAttachmentService {
-	public function extendData(Attachment $attachment) {}
-	public function display(Attachment $attachment) {}
-	public function create(Attachment $attachment) {}
-	public function update(Attachment $attachment) {}
-	public function delete(Attachment $attachment) {}
-	public function allowUndo() {}
-	public function markAsDeleted(Attachment $attachment) {}
+	public function extendData(Attachment $attachment) {
+	}
+	public function display(Attachment $attachment) {
+	}
+	public function create(Attachment $attachment) {
+	}
+	public function update(Attachment $attachment) {
+	}
+	public function delete(Attachment $attachment) {
+	}
+	public function allowUndo() {
+	}
+	public function markAsDeleted(Attachment $attachment) {
+	}
 }
 
 class AttachmentServiceTest extends TestCase {
@@ -106,10 +112,10 @@ class AttachmentServiceTest extends TestCase {
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 
-        $this->attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->changeHelper, $this->permissionService, $this->application, $this->cacheFactory, $this->userId, $this->l10n, $this->activityManager);
-    }
+		$this->attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->changeHelper, $this->permissionService, $this->application, $this->cacheFactory, $this->userId, $this->l10n, $this->activityManager);
+	}
 
-    public function testRegisterAttachmentService() {
+	public function testRegisterAttachmentService() {
 		$application = $this->createMock(Application::class);
 		$appContainer = $this->createMock(IAppContainer::class);
 		$fileServiceMock = $this->createMock(FileService::class);
@@ -227,7 +233,9 @@ class AttachmentServiceTest extends TestCase {
 			->willReturn($attachment);
 		$this->attachmentServiceImpl->expects($this->once())
 			->method('extendData')
-			->willReturnCallback(function($a) { $a->setExtendedData(['mime' => 'image/jpeg']); });
+			->willReturnCallback(function ($a) {
+				$a->setExtendedData(['mime' => 'image/jpeg']);
+			});
 
 		$actual = $this->attachmentService->create(123, 'deck_file', 'file_name.jpg');
 
@@ -282,7 +290,9 @@ class AttachmentServiceTest extends TestCase {
 			->willReturn($attachment);
 		$this->attachmentServiceImpl->expects($this->once())
 			->method('extendData')
-			->willReturnCallback(function($a) { $a->setExtendedData(['mime' => 'image/jpeg']); });
+			->willReturnCallback(function ($a) {
+				$a->setExtendedData(['mime' => 'image/jpeg']);
+			});
 
 		$actual = $this->attachmentService->update(123, 1, 'file_name.jpg');
 
@@ -326,7 +336,9 @@ class AttachmentServiceTest extends TestCase {
 			->willReturn(true);
 		$this->attachmentServiceImpl->expects($this->once())
 			->method('markAsDeleted')
-			->willReturnCallback(function($a) { $a->setDeletedAt(23); });
+			->willReturnCallback(function ($a) {
+				$a->setDeletedAt(23);
+			});
 		$this->attachmentMapper->expects($this->once())
 			->method('update')
 			->willReturn($attachment);
@@ -370,5 +382,4 @@ class AttachmentServiceTest extends TestCase {
 			->willReturn(false);
 		$actual = $this->attachmentService->restore(123, 1);
 	}
-
 }

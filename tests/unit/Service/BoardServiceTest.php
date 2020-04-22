@@ -162,9 +162,9 @@ class BoardServiceTest extends TestCase {
 
 	public function testCreate() {
 		$board = new Board();
-        $board->setTitle('MyBoard');
-        $board->setOwner('admin');
-        $board->setColor('00ff00');
+		$board->setTitle('MyBoard');
+		$board->setOwner('admin');
+		$board->setColor('00ff00');
 		$this->boardMapper->expects($this->once())
 			->method('insert')
 			->willReturn($board);
@@ -247,7 +247,7 @@ class BoardServiceTest extends TestCase {
 		$acl->setPermissionEdit(true);
 		$acl->setPermissionShare(true);
 		$acl->setPermissionManage(true);
-		$acl->resolveRelation('participant', function($participant) use (&$user) {
+		$acl->resolveRelation('participant', function ($participant) use (&$user) {
 			return null;
 		});
 		$this->notificationHelper->expects($this->once())
@@ -333,7 +333,7 @@ class BoardServiceTest extends TestCase {
 		$acl->setPermissionEdit($resultingAcl[0]);
 		$acl->setPermissionShare($resultingAcl[1]);
 		$acl->setPermissionManage($resultingAcl[2]);
-		$acl->resolveRelation('participant', function($participant) use (&$user) {
+		$acl->resolveRelation('participant', function ($participant) use (&$user) {
 			return null;
 		});
 		$this->notificationHelper->expects($this->once())
@@ -373,7 +373,6 @@ class BoardServiceTest extends TestCase {
 		$this->assertFalse($result->getPermissionEdit());
 		$this->assertFalse($result->getPermissionShare());
 		$this->assertFalse($result->getPermissionManage());
-
 	}
 
 	public function testDeleteAcl() {

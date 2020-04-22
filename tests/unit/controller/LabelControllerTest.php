@@ -23,19 +23,17 @@
 
 namespace OCA\Deck\Controller;
 
-use OCA\Deck\Db\Acl;
-use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\LabelService;
 use OCP\AppFramework\Controller;
 use OCP\IRequest;
 
 class LabelControllerTest extends \Test\TestCase {
 
-    /** @var Controller|\PHPUnit\Framework\MockObject\MockObject */
+	/** @var Controller|\PHPUnit\Framework\MockObject\MockObject */
 	private $controller;
-    /** @var IRequest|\PHPUnit\Framework\MockObject\MockObject */
-    private $request;
-    /** @var LabelService|\PHPUnit\Framework\MockObject\MockObject */
+	/** @var IRequest|\PHPUnit\Framework\MockObject\MockObject */
+	private $request;
+	/** @var LabelService|\PHPUnit\Framework\MockObject\MockObject */
 	private $labelService;
 	/** @var string */
 	private $userId = 'user';
@@ -53,7 +51,7 @@ class LabelControllerTest extends \Test\TestCase {
 			'deck',
 			$this->request,
 			$this->labelService
-        );
+		);
 	}
 
 
@@ -80,5 +78,4 @@ class LabelControllerTest extends \Test\TestCase {
 			->willReturn(1);
 		$this->assertEquals(1, $this->controller->delete(123));
 	}
-
 }

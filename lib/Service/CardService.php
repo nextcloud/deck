@@ -28,7 +28,6 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
-use OCA\Deck\Db\AssignedUsers;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
@@ -39,19 +38,13 @@ use OCA\Deck\Event\FTSEvent;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
-use OCA\Deck\NotFoundException;
 use OCA\Deck\StatusException;
 use OCA\Deck\BadRequestException;
-use OCP\Activity\IEvent;
 use OCP\Comments\ICommentsManager;
-use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IUserManager;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 
 class CardService {
-
 	private $cardMapper;
 	private $stackMapper;
 	private $boardMapper;
@@ -132,7 +125,6 @@ class CardService {
 	 * @throws BadRequestException
 	 */
 	public function find($cardId) {
-
 		if (is_numeric($cardId) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
@@ -218,7 +210,6 @@ class CardService {
 	 * @throws BadRequestException
 	 */
 	public function delete($id) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
@@ -257,7 +248,6 @@ class CardService {
 	 * @throws BadRequestException
 	 */
 	public function update($id, $title, $stackId, $type, $order = 0, $description = '', $owner, $duedate = null, $deletedAt = null, $archived = null) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
@@ -347,7 +337,6 @@ class CardService {
 	 * @throws BadRequestException
 	 */
 	public function rename($id, $title) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('id must be a number');
 		}
@@ -387,7 +376,6 @@ class CardService {
 	 * @throws BadRequestException
 	 */
 	public function reorder($id, $stackId, $order) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
@@ -448,7 +436,6 @@ class CardService {
 	 * @throws BadRequestException
 	 */
 	public function archive($id) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('id must be a number');
 		}
@@ -481,7 +468,6 @@ class CardService {
 	 * @throws BadRequestException
 	 */
 	public function unarchive($id) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('id must be a number');
 		}
@@ -513,7 +499,6 @@ class CardService {
 	 * @throws BadRequestException
 	 */
 	public function assignLabel($cardId, $labelId) {
-
 		if (is_numeric($cardId) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
@@ -550,7 +535,6 @@ class CardService {
 	 * @throws BadRequestException
 	 */
 	public function removeLabel($cardId, $labelId) {
-
 		if (is_numeric($cardId) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
@@ -576,5 +560,4 @@ class CardService {
 			'\OCA\Deck\Card::onUpdate', new FTSEvent(null, ['id' => $cardId, 'card' => $card])
 		);
 	}
-
 }

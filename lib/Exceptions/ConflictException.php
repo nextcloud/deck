@@ -26,7 +26,6 @@ namespace OCA\Deck\Exceptions;
 use OCA\Deck\StatusException;
 
 class ConflictException extends StatusException {
-
 	private $data;
 
 	public function __construct($message, $data = null) {

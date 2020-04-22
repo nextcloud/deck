@@ -27,10 +27,6 @@ use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\BoardMapper;
-use OCA\Deck\Service\DefaultBoardService;
-use OCA\Deck\Service\BoardService;
-use OCA\Deck\Service\StackService;
-use OCA\Deck\Service\CardService;
 use OCP\IConfig;
 use OCP\IL10N;
 use \Test\TestCase;
@@ -135,7 +131,9 @@ class DefaultBoardServiceTest extends TestCase {
 
 		$this->l10n->expects($this->any())
 			->method('t')
-			->willReturnCallback(function($text) { return $text; });
+			->willReturnCallback(function ($text) {
+				return $text;
+			});
 
 		$stackToDoId = '123';
 		$stackToDo = $this->assembleTestStack('To do', $stackToDoId, $boardId);

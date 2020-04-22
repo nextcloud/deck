@@ -29,7 +29,6 @@ use OCP\IRequest;
 use OCP\AppFramework\Controller;
 
 class CardController extends Controller {
-
 	private $userId;
 	private $cardService;
 	private $assignmentService;
@@ -96,7 +95,7 @@ class CardController extends Controller {
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
 	public function update($id, $title, $stackId, $type, $order, $description, $duedate, $deletedAt) {
-			return $this->cardService->update($id, $title, $stackId, $type, $order, $description, $this->userId, $duedate, $deletedAt);
+		return $this->cardService->update($id, $title, $stackId, $type, $order, $description, $this->userId, $duedate, $deletedAt);
 	}
 
 	/**
@@ -166,7 +165,4 @@ class CardController extends Controller {
 	public function unassignUser($cardId, $userId, $type = 0) {
 		return $this->assignmentService->unassignUser($cardId, $userId, $type);
 	}
-
-
-
 }

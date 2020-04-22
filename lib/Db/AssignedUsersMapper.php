@@ -29,9 +29,7 @@ use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
 
-
 class AssignedUsersMapper extends DeckMapper implements IPermissionMapper {
-
 	private $cardMapper;
 	private $userManager;
 	/**
@@ -96,7 +94,7 @@ class AssignedUsersMapper extends DeckMapper implements IPermissionMapper {
 
 	public function mapParticipant(AssignedUsers &$assignment) {
 		$self = $this;
-		$assignment->resolveRelation('participant', function() use (&$self, &$assignment) {
+		$assignment->resolveRelation('participant', function () use (&$self, &$assignment) {
 			return $self->getOrigin($assignment);
 		});
 	}
@@ -116,5 +114,4 @@ class AssignedUsersMapper extends DeckMapper implements IPermissionMapper {
 		}
 		return null;
 	}
-
 }

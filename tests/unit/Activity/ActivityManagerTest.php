@@ -91,7 +91,9 @@ class ActivityManagerTest extends TestCase {
 		$managerClass = new \ReflectionClass(ActivityManager::class);
 		$this->l10n->expects($this->any())
 			->method('t')
-			->will($this->returnCallback(function ($s) { return $s; }));
+			->will($this->returnCallback(function ($s) {
+				return $s;
+			}));
 
 		foreach ($managerClass->getConstants() as $constant => $value) {
 			if (strpos($constant, 'SUBJECT') === 0) {
@@ -111,7 +113,6 @@ class ActivityManagerTest extends TestCase {
 				}
 			}
 		}
-
 	}
 
 	public function testCreateEvent() {
@@ -342,12 +343,10 @@ class ActivityManagerTest extends TestCase {
 		], $this->invokePrivate($this->activityManager, 'findDetailsForAttachment', [777]));
 	}
 
-	public function invokePrivate(&$object, $methodName, array $parameters = array())
-	{
+	public function invokePrivate(&$object, $methodName, array $parameters = []) {
 		$reflection = new \ReflectionClass(get_class($object));
 		$method = $reflection->getMethod($methodName);
 		$method->setAccessible(true);
 		return $method->invokeArgs($object, $parameters);
 	}
-
 }

@@ -23,30 +23,18 @@
 
 namespace OCA\Deck\Service;
 
-
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsers;
 use OCA\Deck\Db\AssignedUsersMapper;
-use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
-use OCA\Deck\Db\StackMapper;
-use OCA\Deck\Db\BoardMapper;
-use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Notification\NotificationHelper;
-use OCA\Deck\StatusException;
 use OCP\Activity\IEvent;
-use OCP\Comments\ICommentsManager;
-use OCP\EventDispatcher\ABroadcastedEvent;
-use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
-use OCP\IUser;
-use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Test\TestCase;
 
 class AssignmentServiceTest extends TestCase {
@@ -231,6 +219,4 @@ class AssignmentServiceTest extends TestCase {
 		$this->expectException(NotFoundException::class);
 		$actual = $this->assignmentService->unassignUser(123, 'user');
 	}
-
-
 }

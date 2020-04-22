@@ -24,7 +24,6 @@
 
 namespace OCA\Deck\Db;
 
-
 interface IPermissionMapper {
 
 	/**
@@ -43,6 +42,4 @@ interface IPermissionMapper {
 	 * @return int|null id of Board
 	 */
 	public function findBoardId($id);
-
-	
 }

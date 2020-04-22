@@ -24,15 +24,14 @@
 namespace OCA\Deck\Db;
 
 class Acl extends RelationalEntity {
+	public const PERMISSION_READ = 0;
+	public const PERMISSION_EDIT = 1;
+	public const PERMISSION_SHARE = 2;
+	public const PERMISSION_MANAGE = 3;
 
-	const PERMISSION_READ = 0;
-	const PERMISSION_EDIT = 1;
-	const PERMISSION_SHARE = 2;
-	const PERMISSION_MANAGE = 3;
-
-	const PERMISSION_TYPE_USER = 0;
-	const PERMISSION_TYPE_GROUP = 1;
-	const PERMISSION_TYPE_CIRCLE = 7;
+	public const PERMISSION_TYPE_USER = 0;
+	public const PERMISSION_TYPE_GROUP = 1;
+	public const PERMISSION_TYPE_CIRCLE = 7;
 
 	protected $participant;
 	protected $type;
@@ -67,5 +66,4 @@ class Acl extends RelationalEntity {
 		}
 		return false;
 	}
-
 }

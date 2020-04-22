@@ -38,7 +38,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class UserExport extends Command {
-
 	protected $boardService;
 	protected $cardMapper;
 	private $userManager;
@@ -85,7 +84,6 @@ class UserExport extends Command {
 	 * @throws \ReflectionException
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output) {
-
 		$userId = $input->getArgument('user-id');
 
 		$this->boardService->setUserId($userId);
@@ -110,5 +108,3 @@ class UserExport extends Command {
 		$output->writeln(json_encode($data, JSON_PRETTY_PRINT));
 	}
 }
-
-

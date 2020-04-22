@@ -28,15 +28,13 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use OCA\Deck\Service\LabelService;
-use OCA\Deck\Controller\Helper\ApiHelper;
 
- /**
+/**
  * Class BoardApiController
  *
  * @package OCA\Deck\Controller
  */
 class LabelApiController extends ApiController {
-
 	private $labelService;
 	private $userId;
 
@@ -48,8 +46,8 @@ class LabelApiController extends ApiController {
 	 */
 	public function __construct($appName, IRequest $request, LabelService $labelService, $userId) {
 		parent::__construct($appName, $request);
-		$this->labelService = $labelService;		
-		$this->userId = $userId;		
+		$this->labelService = $labelService;
+		$this->userId = $userId;
 	}
 	
 	/**
@@ -60,7 +58,7 @@ class LabelApiController extends ApiController {
 	 * Get a specific label.
 	 */
 	public function get() {
-		$label = $this->labelService->find($this->request->getParam('labelId'));		
+		$label = $this->labelService->find($this->request->getParam('labelId'));
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}
 
@@ -87,7 +85,7 @@ class LabelApiController extends ApiController {
 	 * @params $color
 	 * Update a specific label
 	 */
-	public function update($title, $color) {				
+	public function update($title, $color) {
 		$label = $this->labelService->update($this->request->getParam('labelId'), $title, $color);
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}
@@ -96,12 +94,11 @@ class LabelApiController extends ApiController {
 	 * @NoAdminRequired
 	 * @CORS
 	 * @NoCSRFRequired
-	 *	 
+	 *
 	 * Delete a specific label
 	 */
 	public function delete() {
 		$label = $this->labelService->delete($this->request->getParam('labelId'));
 		return new DataResponse($label, HTTP::STATUS_OK);
 	}
-	
 }

@@ -77,5 +77,4 @@ class FilterTest extends TestCase {
 	public function testAllowedApps() {
 		$this->assertEquals(['deck'], $this->filter->allowedApps());
 	}
-
 }

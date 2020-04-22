@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 
@@ -28,7 +29,6 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Service;
 
-
 use OC\FullTextSearch\Model\DocumentAccess;
 use OC\FullTextSearch\Model\IndexDocument;
 use OCA\Deck\Db\Board;
@@ -46,7 +46,6 @@ use OCP\FullTextSearch\IFullTextSearchManager;
 use OCP\FullTextSearch\Model\IDocumentAccess;
 use OCP\FullTextSearch\Model\IIndex;
 use OCP\FullTextSearch\Model\IIndexDocument;
-
 
 /**
  * Class FullTextSearchService
@@ -142,7 +141,7 @@ class FullTextSearchService {
 		$boardId = (int)$e->getArgument('boardId');
 
 		$cards = array_map(
-			function(Card $item) {
+			function (Card $item) {
 				return $item->getId();
 			},
 			$this->getCardsFromBoard($boardId)
@@ -266,7 +265,6 @@ class FullTextSearchService {
 	 */
 	private function getStacksFromBoard(int $boardId): array {
 		return $this->stackMapper->findAll($boardId, null, null);
-
 	}
 
 
@@ -278,7 +276,4 @@ class FullTextSearchService {
 	private function getBoardsFromUser(string $userId): array {
 		return $this->boardMapper->findAllByUser($userId, null, null, -1);
 	}
-
-
 }
-

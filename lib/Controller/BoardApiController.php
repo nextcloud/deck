@@ -39,7 +39,6 @@ use Sabre\HTTP\Util;
  * @package OCA\Deck\Controller
  */
 class BoardApiController extends ApiController {
-
 	private $boardService;
 
 	/**
@@ -74,7 +73,7 @@ class BoardApiController extends ApiController {
 			$boards = $this->boardService->findAll($date->getTimestamp(), $details);
 		}
 		return new DataResponse($boards, HTTP::STATUS_OK);
-	 }
+	}
 
 	/**
 	 * @NoAdminRequired
@@ -175,5 +174,4 @@ class BoardApiController extends ApiController {
 		$acl = $this->boardService->deleteAcl($aclId);
 		return new DataResponse($acl, HTTP::STATUS_OK);
 	}
-
 }

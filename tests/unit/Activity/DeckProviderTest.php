@@ -81,20 +81,20 @@ class DeckProviderTest extends TestCase {
 		$event->expects($this->any())->method('getObjectName')->willReturn($objectName);
 		$event->expects($this->any())->method('getAuthor')->willReturn('admin');
 		$event->expects($this->any())->method('getMessage')->willReturn('');
-		$event->expects($this->any())->method('setIcon')->will($this->returnCallback(function($icon) use (&$data, $event) {
+		$event->expects($this->any())->method('setIcon')->will($this->returnCallback(function ($icon) use (&$data, $event) {
 			$data['icon'] = $icon;
 			return $event;
 		}));
-		$event->expects($this->any())->method('setParsedSubject')->will($this->returnCallback(function($subject) use (&$data, $event) {
+		$event->expects($this->any())->method('setParsedSubject')->will($this->returnCallback(function ($subject) use (&$data, $event) {
 			$data['parsedSubject'] = $subject;
 			return $event;
 		}));
-		$event->expects($this->any())->method('setRichSubject')->will($this->returnCallback(function($subject) use (&$data, $event) {
+		$event->expects($this->any())->method('setRichSubject')->will($this->returnCallback(function ($subject) use (&$data, $event) {
 			$data['richSubject'] = $subject;
 			return $event;
 		}));
 		$event->expects($this->any())->method('getIcon')->will(
-			$this->returnCallback(function() use (&$data) {
+			$this->returnCallback(function () use (&$data) {
 				return array_key_exists('icon', $data) ? $data['icon'] : 'noicon';
 			})
 		);
@@ -133,12 +133,12 @@ class DeckProviderTest extends TestCase {
 			->willReturn('test string {board}');
 		$this->urlGenerator->expects($this->any())
 			->method('imagePath')
-			->will($this->returnCallback(function($a, $i) {
+			->will($this->returnCallback(function ($a, $i) {
 				return $a . '/' . $i;
 			}));
 		$this->urlGenerator->expects($this->any())
 			->method('getAbsoluteURL')
-			->will($this->returnCallback(function($url) {
+			->will($this->returnCallback(function ($url) {
 				return $url;
 			}));
 		$this->provider->parse('en_US', $event);
@@ -159,7 +159,7 @@ class DeckProviderTest extends TestCase {
 	public function testParseObjectTypeBoard() {
 		$this->urlGenerator->expects($this->any())
 			->method('imagePath')
-			->will($this->returnCallback(function($a, $i) {
+			->will($this->returnCallback(function ($a, $i) {
 				return $a . '/' . $i;
 			}));
 		$this->activityManager->expects($this->once())
@@ -200,7 +200,7 @@ class DeckProviderTest extends TestCase {
 	public function testParseObjectTypeCard() {
 		$this->urlGenerator->expects($this->any())
 			->method('imagePath')
-			->will($this->returnCallback(function($a, $i) {
+			->will($this->returnCallback(function ($a, $i) {
 				return $a . '/' . $i;
 			}));
 		$this->activityManager->expects($this->once())
@@ -238,13 +238,12 @@ class DeckProviderTest extends TestCase {
 		$this->assertEquals('test string Card', $event->getParsedSubject());
 		$this->assertEquals('test string {card}', $event->getRichSubject());
 		$this->assertEquals('', $event->getMessage());
-
 	}
 
 	public function testParseObjectTypeCardWithDiff() {
 		$this->urlGenerator->expects($this->any())
 			->method('imagePath')
-			->will($this->returnCallback(function($a, $i) {
+			->will($this->returnCallback(function ($a, $i) {
 				return $a . '/' . $i;
 			}));
 		$this->activityManager->expects($this->once())
@@ -496,8 +495,7 @@ class DeckProviderTest extends TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
-	public function invokePrivate(&$object, $methodName, array $parameters = array())
-	{
+	public function invokePrivate(&$object, $methodName, array $parameters = []) {
 		$reflection = new \ReflectionClass(get_class($object));
 		$method = $reflection->getMethod($methodName);
 		$method->setAccessible(true);

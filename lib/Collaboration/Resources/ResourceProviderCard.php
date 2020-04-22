@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Collaboration\Resources;
 
-
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
@@ -40,8 +39,7 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 
 class ResourceProviderCard implements IProvider {
-
-	const RESOURCE_TYPE = 'deck-card';
+	public const RESOURCE_TYPE = 'deck-card';
 
 	/** @var CardMapper */
 	private $cardMapper;
@@ -101,7 +99,6 @@ class ResourceProviderCard implements IProvider {
 			'link' => $link,
 			'iconUrl' => $this->urlGenerator->imagePath('core', 'actions/toggle-pictures.svg')
 		];
-
 	}
 
 	/**

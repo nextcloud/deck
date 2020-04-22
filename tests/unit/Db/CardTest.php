@@ -88,7 +88,7 @@ class CardTest extends TestCase {
 	}
 	public function testJsonSerializeLabels() {
 		$card = $this->createCard();
-		$card->setLabels(array());
+		$card->setLabels([]);
 		$this->assertEquals([
 			'id' => 1,
 			'title' => "My Card",
@@ -99,7 +99,7 @@ class CardTest extends TestCase {
 			'owner' => 'admin',
 			'order' => 12,
 			'stackId' => 1,
-			'labels' => array(),
+			'labels' => [],
 			'duedate' => null,
 			'overdue' => 0,
 			'archived' => false,
@@ -123,7 +123,7 @@ class CardTest extends TestCase {
 	public function testJsonSerializeAsignedUsers() {
 		$card = $this->createCard();
 		$card->setAssignedUsers([ 'user1' ]);
-		$card->setLabels(array());
+		$card->setLabels([]);
 		$this->assertEquals([
 			'id' => 1,
 			'title' => "My Card",
@@ -134,7 +134,7 @@ class CardTest extends TestCase {
 			'owner' => 'admin',
 			'order' => 12,
 			'stackId' => 1,
-			'labels' => array(),
+			'labels' => [],
 			'duedate' => null,
 			'overdue' => 0,
 			'archived' => false,
@@ -146,5 +146,4 @@ class CardTest extends TestCase {
 			'lastEditor' => null,
 		], $card->jsonSerialize());
 	}
-
 }

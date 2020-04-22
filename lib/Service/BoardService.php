@@ -26,7 +26,6 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
-use OCA\Deck\Collaboration\Resources\ResourceProvider;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
@@ -48,9 +47,7 @@ use OCA\Deck\BadRequestException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
-
 class BoardService {
-
 	private $boardMapper;
 	private $stackMapper;
 	private $labelMapper;
@@ -154,8 +151,7 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function find($boardId) {
-
-		if ( is_numeric($boardId) === false ) {
+		if (is_numeric($boardId) === false) {
 			throw new BadRequestException('board id must be a number');
 		}
 
@@ -202,8 +198,7 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function isArchived($mapper, $id) {
-
-		if (is_numeric($id) === false)  {
+		if (is_numeric($id) === false) {
 			throw new BadRequestException('id must be a number');
 		}
 
@@ -232,12 +227,11 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function isDeleted($mapper, $id) {
-
 		if ($mapper === false || $mapper === null) {
 			throw new BadRequestException('mapper must be provided');
 		}
 
-		if (is_numeric($id) === false)  {
+		if (is_numeric($id) === false) {
 			throw new BadRequestException('id must be a number');
 		}
 
@@ -265,7 +259,6 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function create($title, $userId, $color) {
-
 		if ($title === false || $title === null) {
 			throw new BadRequestException('title must be provided');
 		}
@@ -334,7 +327,6 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function delete($id) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('board id must be a number');
 		}
@@ -364,7 +356,6 @@ class BoardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function deleteUndo($id) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('board id must be a number');
 		}
@@ -392,7 +383,7 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function deleteForce($id) {
-		if (is_numeric($id) === false)  {
+		if (is_numeric($id) === false) {
 			throw new BadRequestException('id must be a number');
 		}
 
@@ -419,7 +410,6 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function update($id, $title, $color, $archived) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('board id must be a number');
 		}
@@ -432,7 +422,7 @@ class BoardService {
 			throw new BadRequestException('color must be provided');
 		}
 
-		if ( is_bool($archived) === false ) {
+		if (is_bool($archived) === false) {
 			throw new BadRequestException('archived must be a boolean');
 		}
 
@@ -479,7 +469,6 @@ class BoardService {
 	 * @throws \OCA\Deck\NoPermissionException
 	 */
 	public function addAcl($boardId, $type, $participant, $edit, $share, $manage) {
-
 		if (is_numeric($boardId) === false) {
 			throw new BadRequestException('board id must be a number');
 		}
@@ -529,7 +518,8 @@ class BoardService {
 			try {
 				$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
 				$resourceProvider->invalidateAccessCache($boardId);
-			} catch (\Exception $e) {}
+			} catch (\Exception $e) {
+			}
 		}
 
 		$this->eventDispatcher->dispatch(
@@ -551,7 +541,6 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function updateAcl($id, $edit, $share, $manage) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('id must be a number');
 		}
@@ -596,7 +585,6 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function deleteAcl($id) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('id must be a number');
 		}
@@ -619,7 +607,8 @@ class BoardService {
 			try {
 				$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
 				$resourceProvider->invalidateAccessCache($acl->getBoardId());
-			} catch (\Exception $e) {}
+			} catch (\Exception $e) {
+			}
 		}
 		$delete = $this->aclMapper->delete($acl);
 
@@ -639,7 +628,6 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function clone($id) {
-
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('board id must be a number');
 		}
@@ -683,7 +671,7 @@ class BoardService {
 	private function enrichWithStacks($board, $since = -1) {
 		$stacks = $this->stackMapper->findAll($board->getId(), null, null, $since);
 
-		if(\count($stacks) === 0) {
+		if (\count($stacks) === 0) {
 			return;
 		}
 
@@ -693,7 +681,7 @@ class BoardService {
 	private function enrichWithLabels($board, $since = -1) {
 		$labels = $this->labelMapper->findAll($board->getId(), null, null, $since);
 
-		if(\count($labels) === 0) {
+		if (\count($labels) === 0) {
 			return;
 		}
 
@@ -702,10 +690,9 @@ class BoardService {
 
 	private function enrichWithUsers($board, $since = -1) {
 		$boardUsers = $this->permissionService->findUsers($board->getId());
-		if(\count($boardUsers) === 0) {
+		if (\count($boardUsers) === 0) {
 			return;
 		}
 		$board->setUsers(array_values($boardUsers));
 	}
-
 }

@@ -15,13 +15,16 @@
         "roave/security-advisories": "dev-master",
         "christophwurst/nextcloud": "^17",
         "jakub-onderka/php-parallel-lint": "^1.0.0",
-        "phpunit/phpunit": "^8"
+        "phpunit/phpunit": "^8",
+        "nextcloud/coding-standard": "^0.3.0"
     },
     "config": {
         "optimize-autoloader": true,
         "classmap-authoritative": true
     },
     "scripts": {
-        "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;"
+        "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;",
+        "cs:check": "php-cs-fixer fix --dry-run --diff",
+        "cs:fix": "php-cs-fixer fix"
     }
 }

@@ -31,9 +31,6 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
-use OCP\Notification\INotifier;
-use OCP\RichObjectStrings\Definitions;
-
 
 class NotifierTest extends \Test\TestCase {
 
@@ -124,7 +121,6 @@ class NotifierTest extends \Test\TestCase {
 		$actualNotification = $this->notifier->prepare($notification, 'en_US');
 
 		$this->assertEquals($notification, $actualNotification);
-
 	}
 
 	public function testPrepareCardCommentMentioned() {
@@ -171,7 +167,6 @@ class NotifierTest extends \Test\TestCase {
 		$actualNotification = $this->notifier->prepare($notification, 'en_US');
 
 		$this->assertEquals($notification, $actualNotification);
-
 	}
 
 	public function dataPrepareCardAssigned() {
@@ -313,5 +308,4 @@ class NotifierTest extends \Test\TestCase {
 
 		$this->assertEquals($notification, $actualNotification);
 	}
-
 }

@@ -24,26 +24,19 @@
 namespace OCA\Deck\Command;
 
 use OCA\Deck\Db\AssignedUsersMapper;
-use OCA\Deck\Db\Attachment;
-use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
-use OCA\Deck\InvalidAttachmentType;
-use OCA\Deck\Service\AttachmentService;
 use OCA\Deck\Service\BoardService;
-use OCA\Deck\Service\IAttachmentService;
 use OCP\IGroupManager;
-use OCP\IUser;
 use OCP\IUserManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class UserExportTest extends \Test\TestCase {
-
 	protected $boardMapper;
 	protected $boardService;
 	protected $stackMapper;

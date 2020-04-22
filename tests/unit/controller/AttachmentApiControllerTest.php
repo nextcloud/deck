@@ -30,143 +30,139 @@ use OCA\Deck\Service\AttachmentService;
 use OCA\Deck\Db\Attachment;
 
 class AttachmentApiControllerTest extends \Test\TestCase {
+	private $appName = 'deck';
+	private $controller;
+	private $request;
+	private $attachmentExample;
+	private $cardId;
+	private $attachmentService;
 
-    private $appName = 'deck';
-    private $controller;
-    private $request;
-    private $attachmentExample;
-    private $cardId;
-    private $attachmentService;
+	public function setUp(): void {
+		parent::setUp();
+		$this->attachmentExample = new Attachment();
+		$this->attachmentExample->setId(1);
+		$this->cardId = 1;
+		$this->request = $this->createMock(IRequest::class);
+		$this->attachmentService = $this->createMock(AttachmentService::class);
+		$this->controller = new AttachmentApiController(
+			$this->appName,
+			$this->request,
+			$this->attachmentService
+		);
+	}
 
-    public function setUp(): void {
-        parent::setUp();
-        $this->attachmentExample = new Attachment();
-        $this->attachmentExample->setId(1);
-        $this->cardId = 1;
-        $this->request = $this->createMock(IRequest::class);
-        $this->attachmentService = $this->createMock(AttachmentService::class);
-        $this->controller = new AttachmentApiController(
-            $this->appName,
-            $this->request,
-            $this->attachmentService
-        );
-    }
+	public function testGetAll() {
+		$allAttachments = [$this->attachmentExample];
 
-    public function testGetAll() {
+		$this->attachmentService->expects($this->once())
+			->method('findAll')
+			->willReturn($allAttachments);
 
-        $allAttachments = [$this->attachmentExample];
+		$this->request->expects($this->once())
+			->method('getParam')
+			->with('cardId')
+			->willReturn($allAttachments);
 
-        $this->attachmentService->expects($this->once())
-            ->method('findAll')
-            ->willReturn($allAttachments);
+		$expected = new DataResponse($allAttachments, HTTP::STATUS_OK);
+		$actual = $this->controller->getAll();
+		$this->assertEquals($expected, $actual);
+	}
 
-        $this->request->expects($this->once())
-            ->method('getParam')
-            ->with('cardId')
-            ->willReturn($allAttachments);
+	public function testDisplay() {
+		$this->attachmentService->expects($this->once())
+			->method('display')
+			->willReturn($this->attachmentExample);
 
-        $expected = new DataResponse($allAttachments, HTTP::STATUS_OK);
-        $actual = $this->controller->getAll();
-        $this->assertEquals($expected, $actual);
-    }
+		$this->request->expects($this->exactly(2))
+			->method('getParam')
+			->withConsecutive(
+				['cardId'],
+				['attachmentId']
+			)->willReturnonConsecutiveCalls(
+				$this->cardId,
+				$this->attachmentExample->getId());
 
-    public function testDisplay() {
+		$expected = $this->attachmentExample;
+		$actual = $this->controller->display();
+		$this->assertEquals($expected, $actual);
+	}
 
-        $this->attachmentService->expects($this->once())
-            ->method('display')
-            ->willReturn($this->attachmentExample);
+	public function testCreate() {
+		$type = 'not null';
+		$data = ['not null'];
 
-        $this->request->expects($this->exactly(2))
-            ->method('getParam')
-            ->withConsecutive(
-                ['cardId'],
-                ['attachmentId']
-            )->willReturnonConsecutiveCalls(
-                $this->cardId,
-                $this->attachmentExample->getId());
+		$this->attachmentService->expects($this->once())
+			->method('create')
+			->willReturn($this->attachmentExample);
 
-        $expected = $this->attachmentExample;
-        $actual = $this->controller->display();
-        $this->assertEquals($expected, $actual);
-    }
+		$this->request->expects($this->once())
+			->method('getParam')
+			->with('cardId')
+			->willReturn($this->cardId);
 
-    public function testCreate() {
+		$expected = new DataResponse($this->attachmentExample, HTTP::STATUS_OK);
+		$actual = $this->controller->create($type, $data);
+		$this->assertEquals($expected, $actual);
+	}
 
-        $type = 'not null';
-        $data = ['not null'];
+	public function testUpdate() {
 
-        $this->attachmentService->expects($this->once())
-            ->method('create')
-            ->willReturn($this->attachmentExample);
+		// FIXME: what is data supposed to be in this context?
+		$data = ['not empty data'];
 
-        $this->request->expects($this->once())
-            ->method('getParam')
-            ->with('cardId')
-            ->willReturn($this->cardId);
+		$this->attachmentService->expects($this->once())
+			->method('update')
+			->willReturn($this->attachmentExample);
 
-        $expected = new DataResponse($this->attachmentExample, HTTP::STATUS_OK);
-        $actual = $this->controller->create($type, $data);
-        $this->assertEquals($expected, $actual);
-    }
+		$this->request->expects($this->exactly(2))
+			->method('getParam')
+			->withConsecutive(
+				['cardId'],
+				['attachmentId']
+			)->willReturnonConsecutiveCalls(
+				$this->cardId,
+				$this->attachmentExample->getId());
 
-    public function testUpdate() {
+		$expected = new DataResponse($this->attachmentExample, HTTP::STATUS_OK);
+		$actual = $this->controller->update($data);
+		$this->assertEquals($expected, $actual);
+	}
 
-        // FIXME: what is data supposed to be in this context?
-        $data = ['not empty data'];
+	public function testDelete() {
+		$this->attachmentService->expects($this->once())
+			->method('delete')
+			->willReturn($this->attachmentExample);
 
-        $this->attachmentService->expects($this->once())
-            ->method('update')
-            ->willReturn($this->attachmentExample);
+		$this->request->expects($this->exactly(2))
+			->method('getParam')
+			->withConsecutive(
+				['cardId'],
+				['attachmentId']
+			)->willReturnonConsecutiveCalls(
+				$this->cardId,
+				$this->attachmentExample->getId());
 
-        $this->request->expects($this->exactly(2))
-            ->method('getParam')
-            ->withConsecutive(
-                ['cardId'],
-                ['attachmentId']
-            )->willReturnonConsecutiveCalls(
-                $this->cardId,
-                $this->attachmentExample->getId());
+		$expected = new DataResponse($this->attachmentExample, HTTP::STATUS_OK);
+		$actual = $this->controller->delete();
+		$this->assertEquals($expected, $actual);
+	}
 
-        $expected = new DataResponse($this->attachmentExample, HTTP::STATUS_OK);
-        $actual = $this->controller->update($data);
-        $this->assertEquals($expected, $actual);
-    }
+	public function testRestore() {
+		$this->attachmentService->expects($this->once())
+			->method('restore')
+			->willReturn($this->attachmentExample);
 
-    public function testDelete() {
-        $this->attachmentService->expects($this->once())
-            ->method('delete')
-            ->willReturn($this->attachmentExample);
+		$this->request->expects($this->exactly(2))
+			->method('getParam')
+			->withConsecutive(
+				['cardId'],
+				['attachmentId']
+			)->willReturnonConsecutiveCalls(
+				$this->cardId,
+				$this->attachmentExample->getId());
 
-        $this->request->expects($this->exactly(2))
-            ->method('getParam')
-            ->withConsecutive(
-                ['cardId'],
-                ['attachmentId']
-            )->willReturnonConsecutiveCalls(
-                $this->cardId,
-                $this->attachmentExample->getId());
-
-        $expected = new DataResponse($this->attachmentExample, HTTP::STATUS_OK);
-        $actual = $this->controller->delete();
-        $this->assertEquals($expected, $actual);
-    }
-
-    public function testRestore() {
-        $this->attachmentService->expects($this->once())
-            ->method('restore')
-            ->willReturn($this->attachmentExample);
-
-        $this->request->expects($this->exactly(2))
-            ->method('getParam')
-            ->withConsecutive(
-                ['cardId'],
-                ['attachmentId']
-            )->willReturnonConsecutiveCalls(
-                $this->cardId,
-                $this->attachmentExample->getId());
-
-        $expected = new DataResponse($this->attachmentExample, HTTP::STATUS_OK);
-        $actual = $this->controller->restore();
-        $this->assertEquals($expected, $actual);
-    }
+		$expected = new DataResponse($this->attachmentExample, HTTP::STATUS_OK);
+		$actual = $this->controller->restore();
+		$this->assertEquals($expected, $actual);
+	}
 }

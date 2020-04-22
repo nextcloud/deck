@@ -23,17 +23,13 @@
 
 namespace OCA\Deck\Service;
 
-use OC\Security\CSP\ContentSecurityPolicyManager;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\StatusException;
 use OCA\Deck\Exceptions\ConflictException;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
-use OCP\AppFramework\Http\EmptyContentSecurityPolicy;
 use OCP\AppFramework\Http\FileDisplayResponse;
 use OCP\AppFramework\Http\StreamResponse;
-use OCP\Files\Cache\IScanner;
-use OCP\Files\Folder;
 use OCP\Files\IAppData;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
@@ -45,9 +41,7 @@ use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
 
-
 class FileService implements IAttachmentService {
-
 	private $l10n;
 	private $appData;
 	private $request;
@@ -122,18 +116,18 @@ class FileService implements IAttachmentService {
 	 * @return array
 	 * @throws StatusException
 	 */
-	private function getUploadedFile () {
+	private function getUploadedFile() {
 		$file = $this->request->getUploadedFile('file');
 		$error = null;
 		$phpFileUploadErrors = [
-		UPLOAD_ERR_OK => $this->l10n->t('The file was uploaded'),
-		UPLOAD_ERR_INI_SIZE => $this->l10n->t('The uploaded file exceeds the upload_max_filesize directive in php.ini'),
-		UPLOAD_ERR_FORM_SIZE => $this->l10n->t('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form'),
-		UPLOAD_ERR_PARTIAL => $this->l10n->t('The file was only partially uploaded'),
-		UPLOAD_ERR_NO_FILE => $this->l10n->t('No file was uploaded'),
-		UPLOAD_ERR_NO_TMP_DIR => $this->l10n->t('Missing a temporary folder'),
-		UPLOAD_ERR_CANT_WRITE => $this->l10n->t('Could not write file to disk'),
-		UPLOAD_ERR_EXTENSION => $this->l10n->t('A PHP extension stopped the file upload'),
+			UPLOAD_ERR_OK => $this->l10n->t('The file was uploaded'),
+			UPLOAD_ERR_INI_SIZE => $this->l10n->t('The uploaded file exceeds the upload_max_filesize directive in php.ini'),
+			UPLOAD_ERR_FORM_SIZE => $this->l10n->t('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form'),
+			UPLOAD_ERR_PARTIAL => $this->l10n->t('The file was only partially uploaded'),
+			UPLOAD_ERR_NO_FILE => $this->l10n->t('No file was uploaded'),
+			UPLOAD_ERR_NO_TMP_DIR => $this->l10n->t('Missing a temporary folder'),
+			UPLOAD_ERR_CANT_WRITE => $this->l10n->t('Could not write file to disk'),
+			UPLOAD_ERR_EXTENSION => $this->l10n->t('A PHP extension stopped the file upload'),
 		];
 
 		if (empty($file)) {

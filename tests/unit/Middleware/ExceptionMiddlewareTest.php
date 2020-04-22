@@ -35,7 +35,6 @@ use OCP\ILogger;
 use OCP\IConfig;
 use OCP\IRequest;
 
-
 class ExceptionMiddlewareTest extends \Test\TestCase {
 
 	/** @var ILogger */
@@ -87,7 +86,5 @@ class ExceptionMiddlewareTest extends \Test\TestCase {
 		$result = $this->exceptionMiddleware->afterException($boardController, 'bar', new \Exception('failed hard'));
 		$this->assertEquals('failed hard', $result->getData()['message']);
 		$this->assertEquals(500, $result->getData()['status']);
-
 	}
-
 }

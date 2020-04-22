@@ -50,12 +50,12 @@ class CommentEventHandler implements ICommentsEventHandler {
 	 * @param CommentsEvent $event
 	 */
 	public function handle(CommentsEvent $event) {
-		if($event->getComment()->getObjectType() !== 'deckCard') {
+		if ($event->getComment()->getObjectType() !== 'deckCard') {
 			return;
 		}
 
 		$eventType = $event->getEvent();
-		if( $eventType === CommentsEvent::EVENT_ADD
+		if ($eventType === CommentsEvent::EVENT_ADD
 		) {
 			$this->notificationHandler($event);
 			$this->activityHandler($event);
@@ -65,7 +65,7 @@ class CommentEventHandler implements ICommentsEventHandler {
 		$applicableEvents = [
 			CommentsEvent::EVENT_UPDATE
 		];
-		if(in_array($eventType, $applicableEvents)) {
+		if (in_array($eventType, $applicableEvents)) {
 			$this->notificationHandler($event);
 			return;
 		}
@@ -79,7 +79,6 @@ class CommentEventHandler implements ICommentsEventHandler {
 		$comment = $event->getComment();
 		$card = $this->cardMapper->find($comment->getObjectId());
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_COMMENT_CREATE, ['comment' => $comment]);
-
 	}
 
 	/**
