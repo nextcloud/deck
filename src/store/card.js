@@ -59,7 +59,7 @@ export default {
 				}
 
 				if (due !== '') {
-					const datediffHour = ((new Date(card.duedate) - new Date()) / 3600000)
+					const datediffHour = ((new Date(card.duedate) - new Date()) / 3600 / 1000)
 					switch (due) {
 					case 'noDue':
 						return (card.duedate === null)
@@ -68,9 +68,9 @@ export default {
 					case 'dueToday':
 						return (card.overdue >= 2)
 					case 'dueWeek':
-						return (datediffHour <= 168 && card.duedate !== null)
+						return (datediffHour <= 7 * 24 && card.duedate !== null)
 					case 'dueMonth':
-						return (datediffHour <= 5040 && card.duedate !== null)
+						return (datediffHour <= 30 * 24 && card.duedate !== null)
 					}
 				}
 
