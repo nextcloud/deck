@@ -23,26 +23,29 @@
 <template>
 	<div class="board-wrapper">
 		<Controls :board="board" />
-		<div v-if="loading" class="emptycontent">
-			<div class="icon icon-loading" />
-			<h2>{{ t('deck', 'Loading board') }}</h2>
-			<p />
-		</div>
-		<div v-else-if="board" class="board">
-			<Container lock-axix="y"
-				orientation="horizontal"
-				:drag-handle-selector="dragHandleSelector"
-				@drop="onDropStack">
-				<Draggable v-for="stack in stacksByBoard" :key="stack.id">
-					<Stack :stack="stack" />
-				</Draggable>
-			</Container>
-		</div>
-		<div v-else class="emptycontent">
-			<div class="icon icon-deck" />
-			<h2>{{ t('deck', 'Board not found') }}</h2>
-			<p />
-		</div>
+		<transition name="fade" mode="out-in">
+			<div v-if="loading" class="emptycontent" key="loading">
+				<div class="icon icon-loading" />
+				<h2>{{ t('deck', 'Loading board') }}</h2>
+				<p />
+			</div>
+			<div v-else-if="board && !loading" class="board" key="board">
+				<Container lock-axix="y"
+					orientation="horizontal"
+					:drag-handle-selector="dragHandleSelector"
+					@drop="onDropStack">
+					<Draggable v-for="stack in stacksByBoard" :key="stack.id">
+						<Stack :stack="stack" />
+					</Draggable>
+				</Container>
+			</div>
+			<div v-else class="emptycontent" key="notfound">
+				<div class="icon icon-deck" />
+				<h2>{{ t('deck', 'Board not found') }}</h2>
+				<p />
+			</div>
+		</transition>
+
 	</div>
 </template>
 
@@ -102,8 +105,12 @@ export default {
 	methods: {
 		async fetchData() {
 			this.loading = true
-			await this.$store.dispatch('loadBoardById', this.id)
-			await this.$store.dispatch('loadStacks', this.id)
+			try {
+				await this.$store.dispatch('loadBoardById', this.id)
+				await this.$store.dispatch('loadStacks', this.id)
+			} catch (e) {
+				console.error(e)
+			}
 			this.loading = false
 		},
 
@@ -124,6 +131,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+	@import "../../css/animations.scss";
 
 	$board-spacing: 15px;
 	$stack-spacing: 10px;
