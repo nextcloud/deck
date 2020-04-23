@@ -45,7 +45,6 @@
 
 import BoardItem from './BoardItem'
 import Controls from '../Controls'
-import { mapGetters } from 'vuex'
 
 export default {
 	name: 'Boards',
@@ -60,9 +59,12 @@ export default {
 		},
 	},
 	computed: {
-		...mapGetters([
-			'filteredBoards',
-		]),
+		filteredBoards() {
+			const query = this.$store.getters.getSearchQuery
+			return this.$store.getters.filteredBoards.filter((board) => {
+				return board.title.toLowerCase().includes(query.toLowerCase())
+			})
+		},
 	},
 	watch: {
 		navFilter: function(value) {
