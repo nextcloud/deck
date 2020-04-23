@@ -164,6 +164,8 @@ OC.L10N.register(
     "(Unsaved)" : "(Non enregistré)",
     "(Saving…)" : "(Enregistrement ...)",
     "Formatting help" : "Aide sur la mise en forme",
+    "Edit description" : "Modifier la description",
+    "View description" : "Afficher la description",
     "Attachments" : "Pièces jointes",
     "Comments" : "Commentaires",
     "Modified" : "Modifié",
