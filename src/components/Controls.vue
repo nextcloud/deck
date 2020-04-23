@@ -108,7 +108,7 @@
 									value="dueToday"
 									@change="setFilter"
 									@click="beforeSetFilter">
-								<label for="dueToday">{{ t('deck', 'Today') }}</label>
+								<label for="dueToday">{{ t('deck', 'Next 24 hours') }}</label>
 							</div>
 
 							<div class="filter--item">
