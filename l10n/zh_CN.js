@@ -122,7 +122,6 @@ OC.L10N.register(
     "Filter by assigned user" : "根据指定用户过滤",
     "Filter by due date" : "根据截止日期过滤",
     "Overdue" : "逾期",
-    "Today" : "今天",
     "Next 7 days" : "下个7天",
     "Next 30 days" : "下个30天",
     "No due date" : "无截止日期",

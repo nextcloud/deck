@@ -4,7 +4,6 @@ OC.L10N.register(
     "Personal" : "Անձնական",
     "Done" : "Done",
     "Cancel" : "ընդհատել",
-    "Today" : "այսօր",
     "Details" : "Մանրամասներ",
     "Can edit" : "Can edit",
     "Can share" : "Can share",

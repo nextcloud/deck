@@ -122,7 +122,6 @@ OC.L10N.register(
     "Filter by assigned user" : "Filtrovat podle uživatele, který je úkolem pověřen",
     "Filter by due date" : "Filtrovat podle termínu",
     "Overdue" : "Po termínu",
-    "Today" : "Dnes",
     "Next 7 days" : "Příštích 7 dnů",
     "Next 30 days" : "Příštích 30 dnů",
     "No due date" : "Žádný termín",

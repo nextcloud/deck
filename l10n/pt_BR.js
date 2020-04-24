@@ -122,7 +122,6 @@ OC.L10N.register(
     "Filter by assigned user" : "Filtrar por usuário atribuído",
     "Filter by due date" : "Filtrar por data de vencimento",
     "Overdue" : "Vencidos",
-    "Today" : "Hoje",
     "Next 7 days" : "Próximos 7 dias",
     "Next 30 days" : "Próximos 30 dias",
     "No due date" : "Sem data de vencimento",

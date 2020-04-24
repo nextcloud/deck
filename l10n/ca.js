@@ -102,7 +102,6 @@ OC.L10N.register(
     "File already exists" : "El fitxer ja existeix",
     "Do you want to overwrite it?" : "Voleu sobre-escriure'l?",
     "Archived cards" : "Targetes arxivades",
-    "Today" : "Avui",
     "Show archived cards" : "Mostra les targetes arxivades",
     "Toggle compact mode" : "Commuta el mode compacte",
     "Details" : "Detalls",

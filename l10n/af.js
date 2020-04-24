@@ -13,7 +13,6 @@ OC.L10N.register(
     "A PHP extension stopped the file upload" : "’n PHP-uitbreiding het die oplaai gestaak",
     "Cancel" : "Kanselleer",
     "File already exists" : "Lêer bestaan reeds",
-    "Today" : "Vandag",
     "Details" : "Besonderhede",
     "Tags" : "Etikette",
     "Can edit" : "Kan redigeer",

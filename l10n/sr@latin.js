@@ -5,7 +5,6 @@ OC.L10N.register(
     "copy" : "kopiraj",
     "Done" : "Done",
     "Cancel" : "Otkaži",
-    "Today" : "Danas",
     "Details" : "Detalji",
     "Sharing" : "Deljenje",
     "Tags" : "Oznake",

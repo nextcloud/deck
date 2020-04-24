@@ -6,7 +6,6 @@ OC.L10N.register(
     "No file was uploaded" : "ھېچقانداق ھۆججەت يۈكلەنمىدى",
     "Missing a temporary folder" : "ۋاقىتلىق قىسقۇچ كەم.",
     "Cancel" : "ۋاز كەچ",
-    "Today" : "بۈگۈن",
     "Sharing" : "ھەمبەھىر",
     "Tags" : "بەلگەلەر",
     "Can edit" : "Can edit",

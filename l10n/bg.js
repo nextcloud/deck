@@ -17,7 +17,6 @@ OC.L10N.register(
     "File already exists" : "Файлът вече съществува",
     "Do you want to overwrite it?" : "Искате ли да го презапишете?",
     "Filter by tag" : "Филтрирай по маркер",
-    "Today" : "Днес",
     "Details" : "Подробности",
     "Sharing" : "Споделяне",
     "Tags" : "Етикети",

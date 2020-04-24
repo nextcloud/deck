@@ -11,7 +11,6 @@ OC.L10N.register(
     "No file was uploaded" : "Nulle file esseva incargate",
     "Missing a temporary folder" : "Il manca un dossier temporari",
     "Cancel" : "Cancellar",
-    "Today" : "Hodie",
     "Details" : "Detalios",
     "Sharing" : "Compartente",
     "Tags" : "Etiquettas",

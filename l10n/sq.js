@@ -19,7 +19,6 @@ OC.L10N.register(
     "Cancel" : "Anullo",
     "File already exists" : "Skedari ekziston tashmë",
     "Do you want to overwrite it?" : "Doni ta rishkruani atë?",
-    "Today" : "Sot",
     "Show archived cards" : "Trego kartat e arkivuara",
     "Details" : "Detajet",
     "Sharing" : "Ndarje",

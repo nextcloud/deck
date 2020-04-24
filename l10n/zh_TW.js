@@ -24,7 +24,6 @@ OC.L10N.register(
     "Cancel" : "取消",
     "File already exists" : "檔案已存在",
     "Add new list" : "新增清單",
-    "Today" : "今天",
     "Details" : "詳細資料",
     "Sharing" : "分享",
     "Tags" : "標籤",

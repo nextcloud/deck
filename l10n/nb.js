@@ -101,7 +101,6 @@ OC.L10N.register(
     "Do you want to overwrite it?" : "Vil du overskrive?",
     "Archived cards" : "Arkiver tavle",
     "Filter by tag" : "Filtrer på knagg",
-    "Today" : "I dag",
     "Show archived cards" : "Vis arkiverkte kort",
     "Toggle compact mode" : "Endre kompakt modus",
     "Details" : "Detaljer",

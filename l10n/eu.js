@@ -122,7 +122,6 @@ OC.L10N.register(
     "Filter by assigned user" : "Iragazi esleitutako erabiltzailez",
     "Filter by due date" : "Iragazi epe-mugaz",
     "Overdue" : "Atzeratuta",
-    "Today" : "Gaur",
     "Next 7 days" : "Hurrengo 7 egunetan",
     "Next 30 days" : "Hurrengo 30 egunetan",
     "No due date" : "Epe-mugarik gabe",

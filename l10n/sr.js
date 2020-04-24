@@ -122,7 +122,6 @@ OC.L10N.register(
     "Filter by assigned user" : "Филтрирај по додељеном кориснику",
     "Filter by due date" : "Филтрирај по року",
     "Overdue" : "Прошао рок",
-    "Today" : "Данас",
     "Next 7 days" : "Следећих 7 дана",
     "Next 30 days" : "Следећих 30 дана",
     "No due date" : "Без рока",

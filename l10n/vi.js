@@ -46,7 +46,6 @@ OC.L10N.register(
     "No file uploaded or file size exceeds maximum of %s" : "Chưa có tệp nào được tải lên hoặc kích thước tệp vượt quá giới hạn của %s",
     "Create new board" : "Tạo dự án mới",
     "Cancel" : "Hủy bỏ",
-    "Today" : "Hôm nay",
     "Show archived cards" : "Hiện tác vụ đã lưu trữ",
     "Toggle compact mode" : "Chuyển đổi chế độ thu gọn",
     "Details" : "Thông tin",

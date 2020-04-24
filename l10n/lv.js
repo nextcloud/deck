@@ -12,7 +12,6 @@ OC.L10N.register(
     "Cancel" : "Atcelt",
     "File already exists" : "Datne jau pastāv",
     "Do you want to overwrite it?" : "Vai tu gribi pārrakstīt to?",
-    "Today" : "Šodien",
     "Show archived cards" : "Rādīt arhivētās kartes",
     "Details" : "Detaļas",
     "Sharing" : "Koplietošana",

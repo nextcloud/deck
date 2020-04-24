@@ -103,7 +103,6 @@ OC.L10N.register(
     "Cancel" : "Nuligi",
     "File already exists" : "La dosiero jam ekzistas",
     "Archived cards" : "Arĥivigitaj kartoj",
-    "Today" : "Hodiaŭ",
     "Show archived cards" : "Montri arĥivigitajn kartojn",
     "Toggle compact mode" : "Baskuligi densigan vidon",
     "Details" : "Detaloj",

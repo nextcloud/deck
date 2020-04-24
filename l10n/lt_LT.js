@@ -118,7 +118,6 @@ OC.L10N.register(
     "Filter by assigned user" : "Filtruoti pagal priskirtą naudotoją",
     "Filter by due date" : "Filtruoti pagal galutinio termino datą",
     "Overdue" : "Praėjęs galutinis terminas",
-    "Today" : "Šiandien",
     "Next 7 days" : "Artimiausios 7 dienos",
     "Next 30 days" : "Artimiausios 30 dienų",
     "No due date" : "Be galutinio termino",

@@ -4,7 +4,6 @@ OC.L10N.register(
     "Personal" : "ផ្ទាល់​ខ្លួន",
     "Done" : "Done",
     "Cancel" : "បោះបង់",
-    "Today" : "ថ្ងៃ​នេះ",
     "Details" : "ព័ត៌មាន​លម្អិត",
     "Sharing" : "ការ​ចែក​រំលែក",
     "Tags" : "ស្លាក",

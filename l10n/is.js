@@ -117,7 +117,6 @@ OC.L10N.register(
     "Filter by assigned user" : "Sía eftir úthlutuðum notanda",
     "Filter by due date" : "Sía eftir lokadagsetningu",
     "Overdue" : "Fram yfir tímamörk",
-    "Today" : "Í dag",
     "Next 7 days" : "Næstu 7 daga",
     "Next 30 days" : "Næstu 30 daga",
     "No due date" : "Enginn lokadagur",

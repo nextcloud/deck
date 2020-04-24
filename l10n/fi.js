@@ -117,7 +117,6 @@ OC.L10N.register(
     "Apply filter" : "Toteuta suodatus",
     "Filter by tag" : "Suodata tunnisteen perusteella",
     "Overdue" : "Myöhässä",
-    "Today" : "Tänään",
     "Next 7 days" : "Seuraavat 7 päivää",
     "Next 30 days" : "Seuraavat 30 päivää",
     "No due date" : "Ei eräpäivää",

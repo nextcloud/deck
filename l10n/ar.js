@@ -10,7 +10,6 @@ OC.L10N.register(
     "Missing a temporary folder" : "المجلد المؤقت غير موجود",
     "Cancel" : "إلغاء",
     "File already exists" : "الملف موجود مسبقاً",
-    "Today" : "اليوم",
     "Details" : "التفاصيل",
     "Sharing" : "المشاركة",
     "Tags" : "الوسوم",

@@ -4,7 +4,6 @@ OC.L10N.register(
     "Personal" : "شخصی",
     "Done" : "Done",
     "Cancel" : "منسوخ کریں",
-    "Today" : "آج",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Delete" : "حذف کریں",

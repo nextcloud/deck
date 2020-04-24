@@ -105,7 +105,6 @@ OC.L10N.register(
     "Do you want to overwrite it?" : "上書きしますか？",
     "Archived cards" : "カードをアーカイブ",
     "Filter by tag" : "タグによるフィルター",
-    "Today" : "今日",
     "Show archived cards" : "アーカイブされたカードを表示する",
     "Toggle compact mode" : "コンパクトモードの切り替え",
     "Details" : "詳細",

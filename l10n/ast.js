@@ -16,7 +16,6 @@ OC.L10N.register(
     "A PHP extension stopped the file upload" : "Una estensión de PHP paró la xuba de ficheros",
     "Cancel" : "Encaboxar",
     "File already exists" : "Yá esiste'l ficheru",
-    "Today" : "Güei",
     "Show archived cards" : "Amosar tarxetes archivaes",
     "Details" : "Detalles",
     "Sharing" : "Compartiendo",

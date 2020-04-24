@@ -19,7 +19,6 @@ OC.L10N.register(
     "Create new board" : "Criar novo quadro",
     "Cancel" : "Cancelar",
     "File already exists" : "O ficheiro já existe",
-    "Today" : "Hoje",
     "Show archived cards" : "Mostrar cartões arquivados",
     "Details" : "Detalhes",
     "Sharing" : "Partilha",

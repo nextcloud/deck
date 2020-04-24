@@ -122,7 +122,6 @@ OC.L10N.register(
     "Filter by assigned user" : "Filter op toegewezen gebruiker",
     "Filter by due date" : "Filter op vervaldatum",
     "Overdue" : "Vervallen",
-    "Today" : "Vandaag",
     "Next 7 days" : "Komende 7 dagen",
     "Next 30 days" : "Komende 30 dagen",
     "No due date" : "Geen vervaldatum",

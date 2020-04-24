@@ -24,7 +24,6 @@ OC.L10N.register(
     "File already exists" : "File already exists",
     "Do you want to overwrite it?" : "Do you want to overwrite it?",
     "Filter by tag" : "Filter by tag",
-    "Today" : "Today",
     "Show archived cards" : "Show archived cards",
     "Details" : "Details",
     "Sharing" : "Sharing",

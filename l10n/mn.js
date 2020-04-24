@@ -9,7 +9,6 @@ OC.L10N.register(
     "Later" : "Хойшлуулах",
     "Done" : "Хийсэн",
     "Cancel" : "болиулах",
-    "Today" : "өнөөдөр",
     "Show archived cards" : "Архивлагдсан картуудыг харах",
     "Details" : "Дэлгэрэнгүй",
     "Sharing" : "Түгээх",

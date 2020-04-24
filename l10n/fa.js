@@ -10,7 +10,6 @@ OC.L10N.register(
     "Missing a temporary folder" : "یک پوشه موقت گم شده",
     "Cancel" : "لغو",
     "File already exists" : "فایل از قبل موجود میباشد",
-    "Today" : "Today",
     "Details" : "جزئیات",
     "Sharing" : "اشتراک گذاری",
     "Tags" : "برچسب‌ها",

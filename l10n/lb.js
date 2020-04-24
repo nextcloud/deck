@@ -7,7 +7,6 @@ OC.L10N.register(
     "No file was uploaded" : "Et ass kee Fichier ropgeluede ginn",
     "Missing a temporary folder" : "Et feelt en temporären Dossier",
     "Cancel" : "Ofbriechen",
-    "Today" : "Haut",
     "Details" : "Detailer",
     "Sharing" : "Gedeelt",
     "Tags" : "Tags",

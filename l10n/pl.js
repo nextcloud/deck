@@ -122,7 +122,6 @@ OC.L10N.register(
     "Filter by assigned user" : "Filtruj według przypisanego użytkownika",
     "Filter by due date" : "Filtruj według terminu",
     "Overdue" : "Zaległe",
-    "Today" : "Dzisiaj",
     "Next 7 days" : "Następne 7 dni",
     "Next 30 days" : "Następne 30 dni",
     "No due date" : "Brak daty ważności",

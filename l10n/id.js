@@ -8,7 +8,6 @@ OC.L10N.register(
     "No file was uploaded" : "Tidak ada berkas yang diunggah",
     "Missing a temporary folder" : "Folder sementara tidak ada",
     "Cancel" : "Membatalkan",
-    "Today" : "Hari ini",
     "Details" : "Detil",
     "Sharing" : "Berbagi",
     "Tags" : "Tag",

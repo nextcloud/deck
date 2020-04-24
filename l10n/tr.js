@@ -122,7 +122,6 @@ OC.L10N.register(
     "Filter by assigned user" : "Atanmış kullanıcıya göre süz",
     "Filter by due date" : "Bitiş tarihine göre süz",
     "Overdue" : "Zamanı geçmiş",
-    "Today" : "Bugün",
     "Next 7 days" : "Gelecek 7 gün",
     "Next 30 days" : "Gelecek 30 gün",
     "No due date" : "Bitiş tarihi yok",

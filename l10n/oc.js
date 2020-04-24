@@ -4,7 +4,6 @@ OC.L10N.register(
     "copy" : "copiar",
     "Done" : "Done",
     "Cancel" : "Anullar",
-    "Today" : "Uèi",
     "Details" : "Detalhs",
     "Sharing" : "Partiment",
     "Can edit" : "Can edit",

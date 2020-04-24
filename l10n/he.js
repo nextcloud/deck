@@ -27,7 +27,6 @@ OC.L10N.register(
     "File already exists" : "הקובץ כבר קיים",
     "Do you want to overwrite it?" : "לשכתב עליו?",
     "Filter by tag" : "סינון לפי תגית",
-    "Today" : "היום",
     "Show archived cards" : "הצגת כרטיסים בארכיון",
     "Details" : "פרטים",
     "Sharing" : "שיתוף",
