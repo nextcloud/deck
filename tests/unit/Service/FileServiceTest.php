@@ -272,7 +272,12 @@ class FileServiceTest extends TestCase {
 		$expected = new StreamResponse('fileresource');
 		$expected->addHeader('Content-Type', 'image/jpeg');
 		$expected->addHeader('Content-Disposition', 'inline; filename="' . rawurldecode($file->getName()) . '"');
-
+		$policy = new ContentSecurityPolicy();
+		$policy->addAllowedObjectDomain('\'self\'');
+		$policy->addAllowedObjectDomain('blob:');
+		$policy->addAllowedMediaDomain('\'self\'');
+		$policy->addAllowedMediaDomain('blob:');
+		$expected->setContentSecurityPolicy($policy);
 		$this->assertEquals($expected, $actual);
 	}
 
@@ -305,6 +310,8 @@ class FileServiceTest extends TestCase {
 		$policy = new ContentSecurityPolicy();
 		$policy->addAllowedObjectDomain('\'self\'');
 		$policy->addAllowedObjectDomain('blob:');
+		$policy->addAllowedMediaDomain('\'self\'');
+		$policy->addAllowedMediaDomain('blob:');
 		$expected->setContentSecurityPolicy($policy);
 		$this->assertEquals($expected, $actual);
 	}
