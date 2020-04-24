@@ -62,6 +62,13 @@ curl -u admin:admin -X GET \
     -H "If-Modified-Since: Mon, 05 Nov 2018 09:28:00 GMT"
 ```
 
+# Changelog
+
+## 1.0.0 (unreleased)
+
+- The maximum length of the card title has been extended from 100 to 255 characters
+- The API will now return a 400 Bad request response if the length limitation of a board, stack or card title is exceeded
+
 # Endpoints
 
 ## Boards
@@ -117,7 +124,7 @@ Returns an array of board items
 
 | Parameter | Type   | Description                                          |
 | --------- | ------ | ---------------------------------------------------- |
-| title     | String | The title of the new board                           |
+| title     | String | The title of the new board, maximum length is limited to 100 characters |
 | color     | String | The hexadecimal color of the new board (e.g. FF0000) |
 
 ```json
@@ -261,9 +268,9 @@ Returns an array of board items
 
 | Parameter | Type   | Description                                          |
 | --------- | ------ | ---------------------------------------------------- |
-| title     | String | The title of the new board                           |
-| color     | String | The hexadecimal color of the new board (e.g. FF0000) |
-| archived  | Bool   | The hexadecimal color of the new board (e.g. FF0000) |
+| title     | String | The title of the board, maximum length is limited to 100 characters |
+| color     | String | The hexadecimal color of the board (e.g. FF0000) |
+| archived  | Bool   | The hexadecimal color of the board (e.g. FF0000) |
 
 ```json
 {
@@ -437,7 +444,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
-| title     | String  | The title of the new stack                           |
+| title     | String | The title of the new stack, maximum length is limited to 100 characters |
 | order     | Integer | Order for sorting the stacks                         |
 
 #### Request parameters
@@ -463,7 +470,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
-| title     | String  | The title of the new stack                           |
+| title     | String | The title of the stack, maximum length is limited to 100 characters |
 | order     | Integer | Order for sorting the stacks                         |
 
 #### Response
@@ -512,7 +519,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 | Parameter | Type    | Description                                          |
 | --------- | ------- | ---------------------------------------------------- |
-| title     | String  | The title of the new stack                           |
+| title     | String | The title of the card, maximum length is limited to 255 characters |
 | type      | String  | Type of the card (for later use) use 'plain' for now |
 | order     | Integer | Order for sorting the stacks                         |
 | description | String  | _(optional)_ The markdown description of the card  |
@@ -559,7 +566,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 | Parameter   | Type      | Description                                          |
 |-------------|-----------|------------------------------------------------------|
-| title       | String    | The card title                                       |
+| title     | String | The title of the card, maximum length is limited to 255 characters |
 | description | String    | The markdown description of the card                 |
 | type        | String    | Type of the card (for later use) use 'plain' for now |
 | order       | Integer   | Order for sorting the stacks                         |
