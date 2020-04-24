@@ -62,6 +62,13 @@ curl -u admin:admin -X GET \
     -H "If-Modified-Since: Mon, 05 Nov 2018 09:28:00 GMT"
 ```
 
+# Changelog
+
+## 1.0.0 (unreleased)
+
+- The maximum length of the card title has been extended from 100 to 255 characters
+- The API will now return a 400 Bad request response if the length limitation of a board, stack or card title is exceeded
+
 # Endpoints
 
 ## Boards
