@@ -183,7 +183,11 @@
 						{{ t('deck', 'Cancel') }}
 					</ActionButton>
 				</Actions> -->
-				<AttachmentList :card-id="currentCard.id" />
+				<AttachmentList
+					:card-id="currentCard.id"
+					:selectable="true"
+					:editor="$refs.markdownEditor"
+					@selectAttachment="addAttachment" />
 			</div>
 		</Modal>
 	</AppSidebar>
@@ -372,6 +376,7 @@ export default {
 			this.modalShow = true
 		},
 		addAttachment(attachment) {
+			console.log('hier')
 			const descString = this.$refs.markdownEditor.easymde.value()
 			let embed = ''
 			if (attachment.extendedData.mimetype.includes('image')) {
@@ -604,90 +609,6 @@ export default {
 	.modal__content button {
 		float: right;
 		margin: 40px 3px 3px 0;
-	}
-
-	.attachment-list {
-		&.selector {
-			padding: 10px;
-			position: absolute;
-			width: 30%;
-			max-width: 500px;
-			min-width: 200px;
-			max-height: 50%;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			background-color: #eee;
-			z-index: 2;
-			border-radius: 3px;
-			box-shadow: 0 0 3px darkgray;
-			overflow: scroll;
-		}
-		h3.attachment-selector {
-			margin: 0 0 10px;
-			padding: 0;
-			.icon-close {
-				display: inline-block;
-				float: right;
-			}
-		}
-
-		li.attachment {
-			display: flex;
-			padding: 3px;
-			min-height: 44px;
-
-			&.deleted {
-				opacity: .5;
-			}
-
-			.fileicon {
-				display: inline-block;
-				min-width: 32px;
-				width: 32px;
-				height: 32px;
-				background-size: contain;
-			}
-			.details {
-				flex-grow: 1;
-				flex-shrink: 1;
-				min-width: 0;
-				flex-basis: 50%;
-				line-height: 110%;
-				padding: 2px;
-			}
-			.filename {
-				width: 70%;
-				display: flex;
-				.basename {
-					white-space: nowrap;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					padding-bottom: 2px;
-				}
-				.extension {
-					opacity: 0.7;
-				}
-			}
-			.filesize, .filedate {
-				font-size: 90%;
-				color: darkgray;
-			}
-			.app-popover-menu-utils {
-				position: relative;
-				right: -10px;
-				button {
-					height: 32px;
-					width: 42px;
-				}
-			}
-			button.icon-history {
-				width: 44px;
-			}
-			progress {
-				margin-top: 3px;
-			}
-		}
 	}
 
 </style>

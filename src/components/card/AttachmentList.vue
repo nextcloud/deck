@@ -37,9 +37,18 @@
 						<span class="filedate">{{ attachment.createdBy }}</span>
 					</a>
 				</div>
-				<Actions>
-					<ActionButton icon="icon-confirm" @click="addAttachment(attachment)">
+				<Actions v-if="selectable">
+					<ActionButton icon="icon-confirm" @click="this.$emit('selectAttachment', attachment)">
 						{{ t('deck', 'Add this attachment') }}
+					</ActionButton>
+				</Actions>
+				<Actions v-if="removable">
+					<ActionButton v-if="attachment.deletedAt === 0" icon="icon-delete" @click="deleteAttachment(attachment)">
+						{{ t('deck', 'Delete Attachment') }}
+					</ActionButton>
+
+					<ActionButton v-else icon="icon-history" @click="restoreAttachment(attachment)">
+						{{ t('deck', 'Restore Attachment') }}
 					</ActionButton>
 				</Actions>
 			</li>
@@ -63,6 +72,18 @@ export default {
 		cardId: {
 			type: Number,
 			required: true,
+		},
+		editor: {
+			type: Object,
+			required: false,
+		},
+		selectable: {
+			type: Boolean,
+			required: false,
+		},
+		removable: {
+			type: Boolean,
+			required: false,
 		},
 	},
 	data() {
@@ -94,7 +115,22 @@ export default {
 
 	},
 	methods: {
-
+		addAttachment(attachment) {
+			const descString = this.editor.easymde.value()
+			let embed = ''
+			if (attachment.extendedData.mimetype.includes('image')) {
+				embed = '!'
+			}
+			const attachmentString = embed + '[📎 ' + attachment.data + '](' + this.attachmentUrl(attachment) + ')'
+			this.editor.easymde.value(descString + '\n' + attachmentString)
+			this.modalShow = false
+		},
+		deleteAttachment(attachment) {
+			this.$store.dispatch('deleteAttachment', attachment)
+		},
+		restoreAttachment(attachment) {
+			this.$store.dispatch('restoreAttachment', attachment)
+		},
 	},
 }
 </script>
