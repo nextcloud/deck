@@ -122,6 +122,7 @@ OC.L10N.register(
     "Filter by assigned user" : "Filtrar polo usuario asignado",
     "Filter by due date" : "Filtrar pola data de caducidade",
     "Overdue" : "Caducado",
+    "Next 24 hours" : "Próximas 24 horas",
     "Next 7 days" : "Próximos 7 días",
     "Next 30 days" : "Próximos 30 días",
     "No due date" : "Sen data de caducidade",

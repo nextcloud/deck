@@ -122,6 +122,7 @@ OC.L10N.register(
     "Filter by assigned user" : "Filtra per utente assegnato",
     "Filter by due date" : "Filtra per data di scadenza",
     "Overdue" : "Scadenza",
+    "Next 24 hours" : "Prossime 24 ore",
     "Next 7 days" : "7 giorni successivi",
     "Next 30 days" : "30 giorni successivi",
     "No due date" : "Nessuna data di scadenza",

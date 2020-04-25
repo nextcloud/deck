@@ -122,6 +122,7 @@ OC.L10N.register(
     "Filter by assigned user" : "Nach zugewiesenem Benutzer filtern",
     "Filter by due date" : "Nach Fälligkeitsdatum filtern",
     "Overdue" : "Überfällig",
+    "Next 24 hours" : "Die nächsten 24 Stunden",
     "Next 7 days" : "Die nächsten 7 Tage",
     "Next 30 days" : "Die nächsten 30 Tage",
     "No due date" : "Kein Fälligkeitsdatum",

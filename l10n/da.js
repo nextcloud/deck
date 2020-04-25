@@ -47,6 +47,7 @@ OC.L10N.register(
     "Update" : "Opdatér",
     "(group)" : "(gruppe)",
     "Delete card" : "Slet kort",
+    "Move card" : "Flyt kort",
     "seconds ago" : "sekunder siden",
     "Archived boards" : "Arkiverede lister",
     "Shared boards" : "Delte lister",
