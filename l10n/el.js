@@ -122,6 +122,7 @@ OC.L10N.register(
     "Filter by assigned user" : "Φίλτρο ανά χρήστη",
     "Filter by due date" : "Φίλτρο ανά ημερομηνία λήξης",
     "Overdue" : "Εκπρόθεσμος",
+    "Next 24 hours" : "Επόμενες 24 ώρες",
     "Next 7 days" : "Επόμενες 7 ημέρες",
     "Next 30 days" : "Επόμενες 30 ημέρες",
     "No due date" : "Χωρίς ημερομηνία λήξης",
