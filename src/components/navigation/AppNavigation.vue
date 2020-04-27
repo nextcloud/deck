@@ -76,6 +76,7 @@ import { Multiselect } from '@nextcloud/vue'
 import AppNavigationAddBoard from './AppNavigationAddBoard'
 import AppNavigationBoardCategory from './AppNavigationBoardCategory'
 import { loadState } from '@nextcloud/initial-state'
+import { generateUrl, generateOcsUrl } from '@nextcloud/router'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -118,13 +119,13 @@ export default {
 	},
 	beforeMount() {
 		if (this.isAdmin) {
-			axios.get(OC.generateUrl('apps/deck/config')).then((response) => {
+			axios.get(generateUrl('apps/deck/config')).then((response) => {
 				this.groupLimit = response.data.groupLimit
 				this.groupLimitDisabled = false
 			}, (error) => {
 				console.error('Error while loading groupLimit', error.response)
 			})
-			axios.get(OC.linkToOCS('cloud', 2) + 'groups').then((response) => {
+			axios.get(generateOcsUrl('cloud', 2) + 'groups').then((response) => {
 				this.groups = response.data.ocs.data.groups.reduce((obj, item) => {
 					obj.push({
 						id: item,
@@ -146,7 +147,7 @@ export default {
 		},
 		updateConfig() {
 			this.groupLimitDisabled = true
-			axios.post(OC.generateUrl('apps/deck/config/groupLimit'), {
+			axios.post(generateUrl('apps/deck/config/groupLimit'), {
 				value: this.groupLimit,
 			}).then(() => {
 				this.groupLimitDisabled = false

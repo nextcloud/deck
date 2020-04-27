@@ -21,13 +21,13 @@
  */
 
 import axios from '@nextcloud/axios'
-import { generateOcsUrl } from '@nextcloud/router'
+import { generateOcsUrl, generateRemoteUrl } from '@nextcloud/router'
 
 export class CommentApi {
 
 	url(url) {
 		url = `dav/comments/deckCard/${url}`
-		return OC.linkToRemote(url)
+		return generateRemoteUrl(url)
 	}
 
 	async loadComments({ cardId, limit, offset }) {

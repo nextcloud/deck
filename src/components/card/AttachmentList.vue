@@ -60,6 +60,7 @@
 import { Actions, ActionButton } from '@nextcloud/vue'
 import relativeDate from '../../mixins/relativeDate'
 import { formatFileSize } from '@nextcloud/files'
+import { generateUrl } from '@nextcloud/router'
 
 export default {
 	name: 'AttachmentList',
@@ -101,7 +102,7 @@ export default {
 			}
 		},
 		attachmentUrl() {
-			return (attachment) => OC.generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
+			return (attachment) => generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
 		},
 		formattedFileSize() {
 			return (filesize) => formatFileSize(filesize)

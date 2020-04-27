@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { generateUrl } from '@nextcloud/router'
 import Modal from '@nextcloud/vue/dist/Components/Modal'
 import Multiselect from '@nextcloud/vue/dist/Components/Multiselect'
 import axios from '@nextcloud/axios'
@@ -77,7 +78,7 @@ export default {
 	},
 	methods: {
 		fetchBoards() {
-			axios.get(OC.generateUrl('/apps/deck/boards')).then((response) => {
+			axios.get(generateUrl('/apps/deck/boards')).then((response) => {
 				this.boards = response.data
 				this.loading = false
 			})
@@ -85,7 +86,7 @@ export default {
 		async fetchCardsFromBoard(board) {
 			try {
 				this.cardsFromBoard = []
-				const url = OC.generateUrl('/apps/deck/stacks/' + board.id)
+				const url = generateUrl('/apps/deck/stacks/' + board.id)
 				const response = await axios.get(url)
 				response.data.forEach(stack => {
 					this.cardsFromBoard.push(...stack.cards)

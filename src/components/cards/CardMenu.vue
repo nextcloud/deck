@@ -70,6 +70,8 @@
 import { Modal, Actions, ActionButton, Multiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
+import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
 	name: 'CardMenu',
@@ -127,7 +129,7 @@ export default {
 			this.$store.dispatch('assignCardToUser', {
 				card: this.copiedCard,
 				assignee: {
-					userId: OC.getCurrentUser().uid,
+					userId: getCurrentUser()?.uid,
 					type: 0,
 				},
 			})
@@ -140,7 +142,7 @@ export default {
 		},
 		async loadStacksFromBoard(board) {
 			try {
-				const url = OC.generateUrl('/apps/deck/stacks/' + board.id)
+				const url = generateUrl('/apps/deck/stacks/' + board.id)
 				const response = await axios.get(url)
 				this.stacksFromBoard = response.data
 			} catch (err) {

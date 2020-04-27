@@ -25,6 +25,7 @@ import 'url-search-params-polyfill'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
+import { generateOcsUrl } from '@nextcloud/router'
 import { BoardApi } from './../services/BoardApi'
 import stack from './stack'
 import card from './card'
@@ -344,7 +345,7 @@ export default new Vuex.Store({
 			params.append('perPage', 20)
 			params.append('itemType', [0, 1, 7])
 
-			axios.get(OC.linkToOCS('apps/files_sharing/api/v1') + 'sharees', { params }).then((response) => {
+			axios.get(generateOcsUrl('apps/files_sharing/api/v1') + 'sharees', { params }).then((response) => {
 				commit('setSharees', response.data.ocs.data)
 			})
 		}, 250),
