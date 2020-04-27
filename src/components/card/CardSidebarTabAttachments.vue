@@ -43,53 +43,32 @@
 						</a>
 					</div>
 				</li>
-				<li v-for="attachment in attachments"
-					:key="attachment.id"
-					class="attachment">
-					<a class="fileicon" :style="mimetypeForAttachment(attachment.extendedData.mimetype)" :href="attachmentUrl(attachment)" />
-					<div class="details">
-						<a :href="attachmentUrl(attachment)" target="_blank">
-							<div class="filename">
-								<span class="basename">{{ attachment.data }}</span>
-							</div>
-							<span class="filesize">{{ formattedFileSize(attachment.extendedData.filesize) }}</span>
-							<span class="filedate">{{ relativeDate(attachment.createdAt*1000) }}</span>
-							<span class="filedate">{{ attachment.createdBy }}</span>
-						</a>
-					</div>
-					<Actions>
-						<ActionButton v-if="attachment.deletedAt === 0" icon="icon-delete" @click="deleteAttachment(attachment)">
-							{{ t('deck', 'Delete Attachment') }}
-						</ActionButton>
 
-						<ActionButton v-else icon="icon-history" @click="restoreAttachment(attachment)">
-							{{ t('deck', 'Restore Attachment') }}
-						</ActionButton>
-					</Actions>
-				</li>
+				<AttachmentList
+					:card-id="card.id"
+					:removable="true"
+					@deleteAttachment="deleteAttachment"
+					@restoreAttachment="restoreAttachment" />
 			</ul>
 		</div>
 	</AttachmentDragAndDrop>
 </template>
 
 <script>
-import { Actions, ActionButton } from '@nextcloud/vue'
-import { formatFileSize } from '@nextcloud/files'
-import relativeDate from '../../mixins/relativeDate'
 import { mapState } from 'vuex'
 import { loadState } from '@nextcloud/initial-state'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
 import attachmentUpload from '../../mixins/attachmentUpload'
+import AttachmentList from './AttachmentList'
 const maxUploadSizeState = loadState('deck', 'maxUploadSize')
 
 export default {
 	name: 'CardSidebarTabAttachments',
 	components: {
-		Actions,
-		ActionButton,
 		AttachmentDragAndDrop,
+		AttachmentList,
 	},
-	mixins: [ relativeDate, attachmentUpload ],
+	mixins: [ attachmentUpload ],
 	props: {
 		card: {
 			type: Object,
@@ -122,9 +101,6 @@ export default {
 		attachments() {
 			return [...this.$store.getters.attachmentsByCard(this.card.id)].sort((a, b) => b.id - a.id)
 		},
-		formattedFileSize() {
-			return (filesize) => formatFileSize(filesize)
-		},
 		mimetypeForAttachment() {
 			return (mimetype) => {
 				const url = OC.MimeType.getIconUrl(mimetype)
@@ -133,9 +109,6 @@ export default {
 				}
 				return styles
 			}
-		},
-		attachmentUrl() {
-			return (attachment) => OC.generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
 		},
 		cardId() {
 			return this.card.id
@@ -155,7 +128,6 @@ export default {
 		clickAddNewAttachmment() {
 			this.$refs.localAttachments.click()
 		},
-
 		deleteAttachment(attachment) {
 			this.$store.dispatch('deleteAttachment', attachment)
 		},
@@ -170,19 +142,6 @@ export default {
 	.icon-upload {
 		padding-left: 35px;
 		background-position: 10px center;
-	}
-
-	.modal__content {
-		width: 25vw;
-		min-width: 250px;
-		height: 120px;
-		text-align: center;
-		margin: 20px 20px 60px 20px;
-	}
-
-	.modal__content button {
-		float: right;
-		margin: 40px 3px 3px 0;
 	}
 
 	.attachment-list {

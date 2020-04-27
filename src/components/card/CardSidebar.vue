@@ -128,6 +128,11 @@
 					target="_blank"
 					class="icon icon-info" />
 				<Actions v-if="canEdit">
+					<ActionButton v-if="descriptionEditing" icon="icon-attach" @click="showAttachmentModal()">
+						{{ t('deck', 'Add Attachment') }}
+					</ActionButton>
+				</Actions>
+				<Actions v-if="canEdit">
 					<ActionButton v-if="!descriptionEditing" icon="icon-rename" @click="showEditor()">
 						{{ t('deck', 'Edit description') }}
 					</ActionButton>
@@ -170,11 +175,20 @@
 			icon="icon-activity">
 			<CardSidebarTabActivity :card="currentCard" />
 		</AppSidebarTab>
+		<Modal v-if="modalShow" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
+			<div class="modal__content">
+				<h3>{{ t('deck', 'Choose attachment') }}</h3>
+				<AttachmentList
+					:card-id="currentCard.id"
+					:selectable="true"
+					@selectAttachment="addAttachment" />
+			</div>
+		</Modal>
 	</AppSidebar>
 </template>
 
 <script>
-import { Avatar, Actions, ActionButton, Multiselect, AppSidebar, AppSidebarTab, DatetimePicker } from '@nextcloud/vue'
+import { Avatar, Actions, ActionButton, Multiselect, AppSidebar, AppSidebarTab, DatetimePicker, Modal } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 import Color from '../../mixins/color'
 import { CollectionList } from 'nextcloud-vue-collections'
@@ -183,6 +197,9 @@ import CardSidebarTabComments from './CardSidebarTabComments'
 import CardSidebarTabActivity from './CardSidebarTabActivity'
 import MarkdownIt from 'markdown-it'
 import MarkdownItTaskLists from 'markdown-it-task-lists'
+import { formatFileSize } from '@nextcloud/files'
+import relativeDate from '../../mixins/relativeDate'
+import AttachmentList from './AttachmentList'
 
 const markdownIt = new MarkdownIt()
 markdownIt.use(MarkdownItTaskLists, { enabled: true, label: true, labelAfter: true })
@@ -204,10 +221,10 @@ export default {
 		CardSidebarTabAttachments,
 		CardSidebarTabComments,
 		CardSidebarTabActivity,
+		Modal,
+		AttachmentList,
 	},
-	mixins: [
-		Color,
-	],
+	mixins: [Color, relativeDate],
 	props: {
 		id: {
 			type: Number,
@@ -237,6 +254,7 @@ export default {
 			descriptionSaving: false,
 			hasActivity: capabilities && capabilities.activity,
 			hasComments: !!OC.appswebroots['comments'],
+			modalShow: false,
 		}
 	},
 	computed: {
@@ -244,6 +262,24 @@ export default {
 			currentBoard: state => state.currentBoard,
 		}),
 		...mapGetters(['canEdit', 'assignables']),
+		attachments() {
+			return [...this.$store.getters.attachmentsByCard(this.id)].sort((a, b) => b.id - a.id)
+		},
+		mimetypeForAttachment() {
+			return (mimetype) => {
+				const url = OC.MimeType.getIconUrl(mimetype)
+				const styles = {
+					'background-image': `url("${url}")`,
+				}
+				return styles
+			}
+		},
+		attachmentUrl() {
+			return (attachment) => OC.generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
+		},
+		formattedFileSize() {
+			return (filesize) => formatFileSize(filesize)
+		},
 		currentCard() {
 			return this.$store.getters.cardById(this.id)
 		},
@@ -329,6 +365,19 @@ export default {
 		},
 		hideEditor() {
 			this.descriptionEditing = false
+		},
+		showAttachmentModal() {
+			this.modalShow = true
+		},
+		addAttachment(attachment) {
+			const descString = this.$refs.markdownEditor.easymde.value()
+			let embed = ''
+			if (attachment.extendedData.mimetype.includes('image')) {
+				embed = '!'
+			}
+			const attachmentString = embed + '[📎 ' + attachment.data + '](' + this.attachmentUrl(attachment) + ')'
+			this.$refs.markdownEditor.easymde.value(descString + '\n' + attachmentString)
+			this.modalShow = false
 		},
 		clickedPreview(e) {
 			if (e.target.getAttribute('type') === 'checkbox') {
@@ -463,6 +512,13 @@ export default {
 			opacity: .7;
 		}
 
+		.icon-attach {
+			background-size: 16px;
+			float: right;
+			margin-top: -14px;
+			opacity: .7;
+		}
+
 		.icon-toggle, .icon-rename {
 			float: right;
 			margin-top: -14px;
@@ -540,6 +596,20 @@ export default {
 		&::v-deep input {
 			min-height: auto;
 		}
+	}
+
+	.modal__content {
+		width: 25vw;
+		min-width: 250px;
+		height: 120px;
+		text-align: center;
+		margin: 20px 20px 60px 20px;
+		padding-bottom: 20px;
+	}
+
+	.modal__content button {
+		float: right;
+		margin: 40px 3px 3px 0;
 	}
 
 </style>
