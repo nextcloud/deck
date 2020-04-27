@@ -25,6 +25,7 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Service\PermissionService;
+use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\IInitialStateService;
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -64,6 +65,15 @@ class PageController extends Controller {
 		$this->initialState->provideInitialState(Application::APP_ID, 'maxUploadSize', (int)\OCP\Util::uploadLimit());
 		$this->initialState->provideInitialState(Application::APP_ID, 'canCreate', $this->permissionService->canCreate());
 
-		return new TemplateResponse('deck', 'main');
+		$response = new TemplateResponse('deck', 'main');
+
+		if (\OC::$server->getConfig()->getSystemValueBool('debug', false)) {
+			$csp = new ContentSecurityPolicy();
+			$csp->addAllowedConnectDomain('*');
+			$csp->addAllowedScriptDomain('*');
+			$response->setContentSecurityPolicy($csp);
+		}
+
+		return $response;
 	}
 }

@@ -35,9 +35,10 @@ document.body.setAttribute('data-snap-ignore', 'true')
 
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken)
-// eslint-disable-next-line
-__webpack_public_path__ = generateFilePath('deck', '', 'js/')
-
+if (!process.env.HOT) {
+	// eslint-disable-next-line
+	__webpack_public_path__ = generateFilePath('deck', '', 'js/')
+}
 sync(store, router)
 
 Vue.mixin({
