@@ -178,15 +178,9 @@
 		<Modal v-if="modalShow" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
 			<div class="modal__content">
 				<h3>{{ t('deck', 'Choose attachment') }}</h3>
-				<!-- <Actions>
-					<ActionButton icon="icon-close" @click="modalShow=false">
-						{{ t('deck', 'Cancel') }}
-					</ActionButton>
-				</Actions> -->
 				<AttachmentList
 					:card-id="currentCard.id"
 					:selectable="true"
-					:editor="$refs.markdownEditor"
 					@selectAttachment="addAttachment" />
 			</div>
 		</Modal>
@@ -376,7 +370,6 @@ export default {
 			this.modalShow = true
 		},
 		addAttachment(attachment) {
-			console.log('hier')
 			const descString = this.$refs.markdownEditor.easymde.value()
 			let embed = ''
 			if (attachment.extendedData.mimetype.includes('image')) {
@@ -511,11 +504,18 @@ export default {
 		margin-bottom: 5px;
 		color: var(--color-text-maxcontrast);
 
-		.icon-info, .icon-attach {
+		.icon-info {
 			display: inline-block;
 			width: 32px;
 			height: 16px;
 			float: right;
+			opacity: .7;
+		}
+
+		.icon-attach {
+			background-size: 16px;
+			float: right;
+			margin-top: -14px;
 			opacity: .7;
 		}
 
@@ -604,6 +604,7 @@ export default {
 		height: 120px;
 		text-align: center;
 		margin: 20px 20px 60px 20px;
+		padding-bottom: 20px;
 	}
 
 	.modal__content button {

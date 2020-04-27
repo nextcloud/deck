@@ -44,7 +44,11 @@
 					</div>
 				</li>
 
-				<AttachmentList :card-id="card.id" :removable="true" />
+				<AttachmentList
+					:card-id="card.id"
+					:removable="true"
+					@deleteAttachment="deleteAttachment"
+					@restoreAttachment="restoreAttachment" />
 			</ul>
 		</div>
 	</AttachmentDragAndDrop>
@@ -124,7 +128,12 @@ export default {
 		clickAddNewAttachmment() {
 			this.$refs.localAttachments.click()
 		},
-
+		deleteAttachment(attachment) {
+			this.$store.dispatch('deleteAttachment', attachment)
+		},
+		restoreAttachment(attachment) {
+			this.$store.dispatch('restoreAttachment', attachment)
+		},
 	},
 }
 </script>
