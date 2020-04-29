@@ -58,6 +58,9 @@ export default {
 				state.stacks.splice(existingIndex, 1)
 			}
 		},
+		/* cloneStack(state, stack) {
+			this.commit('addStack', stack)
+		}, */
 		updateStack(state, stack) {
 			const existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
 			if (existingIndex !== -1) {
@@ -95,6 +98,15 @@ export default {
 			apiClient.createStack(stack)
 				.then((createdStack) => {
 					commit('addStack', createdStack)
+				})
+		},
+		cloneStack({ commit }, stack) {
+			apiClient.cloneStack(stack)
+				.then((stack) => {
+					for (const j in stack.cards) {
+						commit('addCard', stack.cards[j])
+					}
+					commit('addStack', stack)
 				})
 		},
 		deleteStack({ commit }, stack) {

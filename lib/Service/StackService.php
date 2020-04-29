@@ -30,6 +30,7 @@ use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
@@ -38,6 +39,9 @@ use OCA\Deck\Db\StackMapper;
 use OCA\Deck\StatusException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
+use OCP\IL10N;
+use OCA\Deck\Event\FTSEvent;
+use OCA\Deck\Service\AssignmentService;
 
 class StackService {
 	private $stackMapper;
@@ -49,10 +53,13 @@ class StackService {
 	private $cardService;
 	private $assignedUsersMapper;
 	private $attachmentService;
+	
 	private $activityManager;
 	/** @var EventDispatcherInterface */
 	private $eventDispatcher;
 	private $changeHelper;
+	private $l10n;
+	private $assignmentService;
 
 	public function __construct(
 		StackMapper $stackMapper,
@@ -66,7 +73,9 @@ class StackService {
 		AttachmentService $attachmentService,
 		ActivityManager $activityManager,
 		EventDispatcherInterface $eventDispatcher,
-		ChangeHelper $changeHelper
+		ChangeHelper $changeHelper,
+		IL10N $l10n,
+		AssignmentService $assignmentService
 	) {
 		$this->stackMapper = $stackMapper;
 		$this->boardMapper = $boardMapper;
@@ -80,6 +89,8 @@ class StackService {
 		$this->activityManager = $activityManager;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->changeHelper = $changeHelper;
+		$this->l10n = $l10n;
+		$this->assignmentService = $assignmentService;
 	}
 
 	private function enrichStackWithCards($stack, $since = -1) {
@@ -359,5 +370,107 @@ class StackService {
 		$this->changeHelper->boardChanged($stackToSort->getBoardId());
 
 		return $result;
+	}
+
+	/**
+	 * @param $id
+	 * @param $boardId
+	 * @param $userId
+	 * @return Stack
+	 * @throws StatusException
+	 * @throws BadRequestException
+	 */
+	public function clone($id, $boardId, $userId) {
+		if (is_numeric($id) === false) {
+			throw new BadRequestException('stack id must be a number');
+		}
+		if (is_numeric($boardId) === false) {
+			throw new BadRequestException('board id must be a number');
+		}
+
+		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
+		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
+		if ($this->boardService->isArchived(null, $boardId)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
+
+		$stack = $this->stackMapper->find($id);
+		$board = $this->boardMapper->find($boardId);
+
+
+		$newStack = new Stack();
+		$newStack->setTitle($stack->getTitle() . ' (' . $this->l10n->t('copy') . ')');
+		$newStack->setBoardId($boardId);
+		$newStack->setOrder($stack->getOrder() +1);
+		$newStack = $this->stackMapper->insert($newStack);
+
+		$this->activityManager->triggerEvent(
+			ActivityManager::DECK_OBJECT_BOARD, $newStack, ActivityManager::SUBJECT_STACK_CREATE
+		);
+		$this->changeHelper->boardChanged($boardId);
+
+		$this->eventDispatcher->dispatch(
+			'\OCA\Deck\Stack::onCreate',
+			new GenericEvent(null, ['id' => $newStack->getId(), 'stack' => $newStack])
+		);
+
+		$cards = $this->cardMapper->findAll($id);
+		foreach ($cards as $card) {
+			
+			$newCard = new Card();
+			$newCard->setTitle($card->getTitle());
+			$newCard->setStackId($newStack->getId());
+			$newCard->setType($card->getType());
+			$newCard->setOrder($card->getOrder());
+			$newCard->setOwner($userId);
+			$newCard->setDescription($card->getDescription());
+			$newCard->setDuedate($card->getDuedate());
+
+			$newCard = $this->cardMapper->insert($newCard);
+
+			$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_CREATE);
+			$this->changeHelper->cardChanged($newCard->getId(), false);
+			$this->eventDispatcher->dispatch('\OCA\Deck\Card::onCreate',
+				new FTSEvent(
+					null, ['id' => $newCard->getId(), 'card' => $newCard, 'userId' => $owner, 'stackId' => $stackId]
+				)
+			); 
+
+			if ($boardId === $stack->getBoardId()) {
+				$labels = $this->labelMapper->findAll($card->getId());
+				$labels = $this->labelMapper->findAssignedLabelsForCard($card->id);
+				
+				$l = [];
+				foreach ($labels as $label) {
+					$l = $this->cardMapper->assignLabel($newCard->getId(), $label->getId());
+				} 
+				$newCard->setLabels($l);
+				
+
+				$assignedUsers = $this->assignedUsersMapper->find($card->getId());
+				/* foreach ($assignedUsers as $assignedUser) {
+					$u = $this->assignmentService->assignUser($newCard->getId(), $assignedUser->getId());
+					$newCard->setAssignedUsers($u);
+				} */
+
+				//attachments???
+
+				
+
+
+			}
+
+		}
+
+		$createdCards = $this->cardMapper->findAll($newStack->getId());
+		$newStack->setCards($createdCards);
+
+
+		
+
+
+
+	
+		return $newStack;
 	}
 }

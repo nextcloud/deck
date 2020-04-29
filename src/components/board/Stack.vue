@@ -46,6 +46,9 @@
 				<ActionButton icon="icon-archive" @click="modalArchivAllCardsShow=true">
 					{{ t('deck', 'Archive all cards') }}
 				</ActionButton>
+				<ActionButton icon="icon-clone" @click="cloneStack(stack)">
+					{{ t('deck', 'Clone list') }}
+				</ActionButton>
 				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete list') }}
 				</ActionButton>
@@ -207,13 +210,15 @@ export default {
 			this.$store.dispatch('deleteStack', stack)
 		},
 		archiveAllCardsFromStack(stack) {
-
 			this.stackTransfer.total = this.cardsByStack.length
 			this.cardsByStack.forEach((card, index) => {
 				this.stackTransfer.current = index
 				this.$store.dispatch('archiveUnarchiveCard', { ...card, archived: true })
 			})
 			this.modalArchivAllCardsShow = false
+		},
+		cloneStack(stack) {
+			this.$store.dispatch('cloneStack', stack)
 		},
 		startEditing(stack) {
 			this.copiedStack = Object.assign({}, stack)

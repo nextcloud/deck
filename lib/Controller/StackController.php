@@ -107,4 +107,13 @@ class StackController extends Controller {
 	public function deleted($boardId) {
 		return $this->stackService->fetchDeleted($boardId);
 	}
+
+	/**
+	 * @NoAdminRequired
+	 * @param $boardId
+	 * @return \OCP\Deck\DB\Board
+	 */
+	public function clone($stackId, $boardId) {
+		return $this->stackService->clone($stackId, $boardId, $this->userId);
+	}
 }

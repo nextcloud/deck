@@ -140,4 +140,19 @@ export class StackApi {
 			})
 	}
 
+	cloneStack(stack) {
+		return axios.post(this.url(`/stacks/${stack.id}/clone`), stack)
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 }
