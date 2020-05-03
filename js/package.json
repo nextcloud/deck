@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "dependencies": {
-    "@uirouter/angularjs": "^1.0.25",
+    "@uirouter/angularjs": "^1.0.26",
     "angular": "^1.7.9",
     "angular-animate": "^1.7.9",
     "angular-file-upload": "^2.5.0",
