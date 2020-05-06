@@ -88,7 +88,7 @@
 		"eslint-plugin-standard": "^4.0.1",
 		"eslint-plugin-vue": "^6.2.2",
 		"file-loader": "^6.0.0",
-		"jest": "^25.4.0",
+		"jest": "^25.5.4",
 		"jest-serializer-vue": "^2.0.2",
 		"minimist": "^1.2.5",
 		"node-sass": "^4.14.0",
