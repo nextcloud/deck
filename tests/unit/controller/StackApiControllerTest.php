@@ -36,8 +36,8 @@ class StackApiControllerTest extends \Test\TestCase {
 	private $controller;
 	private $boardService;
 	private $stackService;
-	private $exampleStack;
-	private $exampleBoard;
+	private $exampleStack = [];
+	private $exampleBoard = [];
 
 	public function setUp(): void {
 		parent::setUp();
@@ -45,12 +45,12 @@ class StackApiControllerTest extends \Test\TestCase {
 		$this->boardService = $this->createMock(BoardService::class);
 		$this->stackService = $this->createMock(StackService::class);
 
+		$this->exampleBoard['boardId'] = '89';
+
 		$this->exampleStack['id'] = 345;
 		$this->exampleStack['boardId'] = $this->exampleBoard['boardId'];
 		$this->exampleStack['order'] = 0;
 		$this->exampleStack['title'] = 'Example Stack From API';
-
-		$this->exampleBoard['boardId'] = '89';
 
 		$this->controller = new StackApiController(
 			$this->appName,

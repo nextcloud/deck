@@ -38,7 +38,8 @@ class GroupTest extends \Test\TestCase {
 		$groupRelationalObject = new Group($group);
 		$expected = [
 			'uid' => 'mygroup',
-			'displayname' => 'My Group'
+			'displayname' => 'My Group',
+			'type' => 1
 		];
 		$this->assertEquals($expected, $groupRelationalObject->getObjectSerialization());
 	}
@@ -56,7 +57,8 @@ class GroupTest extends \Test\TestCase {
 		$expected = [
 			'uid' => 'mygroup',
 			'displayname' => 'My Group',
-			'primaryKey' => '1:mygroup'
+			'primaryKey' => 'mygroup',
+			'type' => 1
 		];
 
 		$actual = $groupRelationalObject->jsonSerialize();

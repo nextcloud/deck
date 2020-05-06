@@ -181,7 +181,7 @@ export default new Vuex.Store({
 			state.boards = boards
 		},
 		setSharees(state, shareesUsersAndGroups) {
-			state.sharees = shareesUsersAndGroups.exact.users
+			Vue.set(state, 'sharees', shareesUsersAndGroups.exact.users)
 			state.sharees.push(...shareesUsersAndGroups.exact.groups)
 			state.sharees.push(...shareesUsersAndGroups.exact.circles)
 

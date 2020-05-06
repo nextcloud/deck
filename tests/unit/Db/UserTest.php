@@ -38,7 +38,8 @@ class UserTest extends \Test\TestCase {
 		$userRelationalObject = new User($user);
 		$expected = [
 			'uid' => 'myuser',
-			'displayname' => 'myuser displayname'
+			'displayname' => 'myuser displayname',
+			'type' => 0
 		];
 		$this->assertEquals($expected, $userRelationalObject->getObjectSerialization());
 	}
@@ -56,7 +57,8 @@ class UserTest extends \Test\TestCase {
 		$expected = [
 			'uid' => 'myuser',
 			'displayname' => 'myuser displayname',
-			'primaryKey' => '0:myuser'
+			'primaryKey' => 'myuser',
+			'type' => 0,
 		];
 		$this->assertEquals($expected, $userRelationalObject->jsonSerialize());
 	}

@@ -33,14 +33,14 @@
 					:disable-menu="true"
 					:size="32" />
 				<Avatar v-if="user.type === 1"
-					:user="user.participant.primaryKey"
+					:user="user.participant.uid"
 					:display-name="user.participant.displayname"
 					:tooltip-message="user.participant.displayname + ' ' + t('deck', '(group)')"
 					:is-no-user="true"
 					:disable-="true"
 					:size="32" />
 				<Avatar v-if="user.type === 7"
-					:user="user.participant.primaryKey"
+					:user="user.participant.uid"
 					:display-name="user.participant.displayname"
 					:tooltip-message="user.participant.displayname + ' ' + t('deck', '(circle)')"
 					:is-no-user="true"
