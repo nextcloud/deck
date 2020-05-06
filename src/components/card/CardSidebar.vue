@@ -72,7 +72,7 @@
 						:auto-limit="false"
 						:placeholder="t('deck', 'Assign a user to this card…')"
 						label="displayname"
-						track-by="primaryKey"
+						track-by="multiselectKey"
 						@select="assignUserToCard"
 						@remove="removeUserFromCard">
 						<template #tag="scope">
@@ -80,6 +80,7 @@
 								<Avatar :user="scope.option.uid"
 									:display-name="scope.option.displayname"
 									:size="24"
+									:is-no-user="scope.option.isNoUser"
 									:disable-menu="true" />
 							</div>
 						</template>
@@ -89,6 +90,7 @@
 							:key="option.primaryKey"
 							:user="option.participant.uid"
 							:display-name="option.participant.displayname"
+							:is-no-user="scope.option.isNoUser"
 							:size="32" />
 					</div>
 				</div>
@@ -258,6 +260,7 @@ export default {
 					displayName: item.displayname,
 					icon: 'icon-user',
 					isNoUser: false,
+					multiselectKey: item.type + ':' + item.uid,
 				}
 
 				if (item.type === 1) {
@@ -313,7 +316,11 @@ export default {
 			this.allLabels = this.currentCard.labels
 
 			if (this.currentCard.assignedUsers && this.currentCard.assignedUsers.length > 0) {
-				this.assignedUsers = this.currentCard.assignedUsers.map((item) => item.participant)
+				this.assignedUsers = this.currentCard.assignedUsers.map((item) => ({
+					...item.participant,
+					isNoUser: item.participant.type !== 0,
+					multiselectKey: item.participant.type + ':' + item.participant.primaryKey,
+				}))
 			} else {
 				this.assignedUsers = []
 			}

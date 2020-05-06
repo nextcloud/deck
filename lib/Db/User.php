@@ -28,14 +28,15 @@ use OCP\Share\IShare;
 
 class User extends RelationalObject {
 	public function __construct(IUser $user) {
-		$primaryKey = IShare::TYPE_USER . ':' . $user->getUID();
+		$primaryKey = $user->getUID();
 		parent::__construct($primaryKey, $user);
 	}
 
 	public function getObjectSerialization() {
 		return [
 			'uid' => $this->object->getUID(),
-			'displayname' => $this->object->getDisplayName()
+			'displayname' => $this->object->getDisplayName(),
+			'type' => 0
 		];
 	}
 

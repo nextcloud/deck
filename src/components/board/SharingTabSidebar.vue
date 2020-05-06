@@ -7,8 +7,8 @@
 			:options="formatedSharees"
 			:user-select="true"
 			label="displayName"
-			track-by="user"
-			:internal-search="false"
+			track-by="multiselectKey"
+			:internal-search="true"
 			@input="clickAddAcl"
 			@search-change="asyncFind" />
 
@@ -24,7 +24,7 @@
 					</span>
 				</span>
 			</li>
-			<li v-for="acl in board.acl" :key="acl.participant.primaryKey">
+			<li v-for="acl in board.acl" :key="acl.id">
 				<Avatar v-if="acl.type===0" :user="acl.participant.uid" />
 				<div v-if="acl.type===1" class="avatardiv icon icon-group" />
 				<div v-if="acl.type===7" class="avatardiv icon icon-circles" />
@@ -101,11 +101,11 @@ export default {
 		},
 		formatedSharees() {
 			return this.unallocatedSharees.map(item => {
-
 				const sharee = {
 					user: item.label,
 					displayName: item.label,
 					icon: 'icon-user',
+					multiselectKey: item.shareType + ':' + item.primaryKey,
 				}
 
 				if (item.value.shareType === 1) {
@@ -124,7 +124,7 @@ export default {
 		unallocatedSharees() {
 			return this.sharees.filter((sharee) => {
 				const foundIndex = this.board.acl.findIndex((acl) => {
-					return acl.participant.uid === sharee.value.shareWith
+					return acl.participant.uid === sharee.value.shareWith && acl.participant.type === sharee.value.shareType
 				})
 				if (foundIndex === -1) {
 					return true

@@ -24,12 +24,12 @@
 	<div class="board-wrapper">
 		<Controls :board="board" />
 		<transition name="fade" mode="out-in">
-			<div v-if="loading" class="emptycontent" key="loading">
+			<div v-if="loading" key="loading" class="emptycontent">
 				<div class="icon icon-loading" />
 				<h2>{{ t('deck', 'Loading board') }}</h2>
 				<p />
 			</div>
-			<div v-else-if="board && !loading" class="board" key="board">
+			<div v-else-if="board && !loading" key="board" class="board">
 				<Container lock-axix="y"
 					orientation="horizontal"
 					:drag-handle-selector="dragHandleSelector"
@@ -39,13 +39,12 @@
 					</Draggable>
 				</Container>
 			</div>
-			<div v-else class="emptycontent" key="notfound">
+			<div v-else key="notfound" class="emptycontent">
 				<div class="icon icon-deck" />
 				<h2>{{ t('deck', 'Board not found') }}</h2>
 				<p />
 			</div>
 		</transition>
-
 	</div>
 </template>
 
