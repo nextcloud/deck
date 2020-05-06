@@ -5,6 +5,7 @@ css/style.css
 css/vendor.css
 tests/integration/vendor/
 tests/integration/composer.lock
+tests/.phpunit.result.cache
 vendor/
 *.lock
 .php_cs.cache
