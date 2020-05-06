@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.0.0 - unreleased
+## 1.0.0 - 2020-05-06
 
 ## Added
 
@@ -24,9 +24,6 @@ Special thanks for contributing huge parts of the Vue.js migration:
 
 Testers/reporters:
 @cloud2018 @putt1ck @bpcurse
-
-Calendar/Tasks integration help:
-@raimund-schluessler @georgehrke
 
 Android app team for helping to improve our REST API:
 @desperateCoder @stefan-niedermann

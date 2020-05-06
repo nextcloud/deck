@@ -17,7 +17,7 @@
 - 🚀 Get your project organized
 
 </description>
-    <version>1.0.0-beta2</version>
+    <version>1.0.0</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
@@ -29,8 +29,8 @@
     <website>https://github.com/nextcloud/deck</website>
     <bugs>https://github.com/nextcloud/deck/issues</bugs>
     <repository type="git">https://github.com/nextcloud/deck.git</repository>
-    <screenshot>https://download.bitgrid.net/nextcloud/deck/screenshots/0.5/deck-notifications.png</screenshot>
-    <screenshot>https://download.bitgrid.net/nextcloud/deck/screenshots/0.5/deck-comment2.png</screenshot>
+    <screenshot>https://download.bitgrid.net/nextcloud/deck/screenshots/1.0/Deck-1.png</screenshot>
+    <screenshot>https://download.bitgrid.net/nextcloud/deck/screenshots/1.0/Deck-2.png</screenshot>
     <dependencies>
         <php min-version="5.6"/>
         <database min-version="9.4">pgsql</database>
