@@ -24,7 +24,6 @@
 namespace OCA\Deck\Db;
 
 use OCP\IUser;
-use OCP\Share\IShare;
 
 class User extends RelationalObject {
 	public function __construct(IUser $user) {

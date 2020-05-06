@@ -34,7 +34,9 @@ class LabelApiControllerTest extends \Test\TestCase {
 	private $request;
 	private $labelService;
 	private $userId = 'admin';
-	private $exampleLabel;
+	private $exampleLabel = [
+		'id' => 123
+	];
 
 	public function setUp(): void {
 		parent::setUp();
