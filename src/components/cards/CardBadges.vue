@@ -53,16 +53,19 @@
 				</ActionButton>
 			</Actions>
 		</div>
-		<Modal v-if="modalShow" title="Move card to another board" @close="modalShow=false">
+		<Modal v-if="modalShow" :title="t('deck', 'Move card to another board')" @close="modalShow=false">
 			<div class="modal__content">
+				<h3>{{ t('deck', 'Move card to another board') }}</h3>
 				<Multiselect v-model="selectedBoard"
 					:placeholder="t('deck', 'Select a board')"
 					:options="boards"
+					:max-height="100"
 					label="title"
 					@select="loadStacksFromBoard" />
 				<Multiselect v-model="selectedStack"
 					:placeholder="t('deck', 'Select a stack')"
 					:options="stacksFromBoard"
+					:max-height="100"
 					label="title" />
 
 				<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">
@@ -240,9 +243,9 @@ export default {
 	.modal__content {
 		width: 25vw;
 		min-width: 250px;
-		height: 120px;
+		min-height: 120px;
 		text-align: center;
-		margin: 20px 20px 60px 20px;
+		margin: 20px 20px 100px 20px;
 
 		.multiselect {
 			margin-bottom: 10px;
@@ -251,5 +254,6 @@ export default {
 
 	.modal__content button {
 		float: right;
+		margin-top: 50px;
 	}
 </style>
