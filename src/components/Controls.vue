@@ -61,7 +61,6 @@
 					<template>
 						<div class="filter">
 							<h3>{{ t('deck', 'Filter by tag') }}</h3>
-							{{ filter }}
 							<div v-for="label in board.labels" :key="label.id" class="filter--item">
 								<input
 									:id="label.id"
