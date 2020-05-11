@@ -608,7 +608,7 @@ export default {
 	.modal__content {
 		width: 25vw;
 		min-width: 250px;
-		height: 120px;
+		min-height: 120px;
 		text-align: center;
 		margin: 20px 20px 60px 20px;
 		padding-bottom: 20px;
