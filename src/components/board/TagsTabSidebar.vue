@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<ul class="labels">
-			<li v-for="label in labels" :key="label.id" :class="{editing: (editingLabelId === label.id)}">
+			<li v-for="label in labelsSorted" :key="label.id" :class="{editing: (editingLabelId === label.id)}">
 				<!-- Edit Tag -->
 				<template v-if="editingLabelId === label.id">
 					<form class="label-form" @submit.prevent="updateLabel(label)">
@@ -110,6 +110,9 @@ export default {
 			}
 
 			return true
+		},
+		labelsSorted() {
+			return [...this.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 
 	},

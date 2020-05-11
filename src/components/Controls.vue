@@ -62,7 +62,7 @@
 						<div class="filter">
 							<h3>{{ t('deck', 'Filter by tag') }}</h3>
 							{{ filter }}
-							<div v-for="label in board.labels" :key="label.id" class="filter--item">
+							<div v-for="label in labelsSorted" :key="label.id" class="filter--item">
 								<input
 									:id="label.id"
 									v-model="filter.tags"
@@ -224,6 +224,9 @@ export default {
 				return 'opacity: 1;'
 			}
 			return 'opacity: .5;'
+		},
+		labelsSorted() {
+			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 	},
 	methods: {
