@@ -205,7 +205,7 @@ OC.L10N.register(
     "Clone board" : "Board klonen",
     "Archive board" : "Board archivieren",
     "Unarchive board" : "Board dearchivieren",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Möchtest Du wirklich dieses Board {title} mit all dessen Daten löschen?",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Möchtest Du wirklich dieses Board {title} mit all seinen Daten löschen?",
     "Delete the board?" : "Das Board löschen?",
     "Delete board" : "Board löschen",
     "Board details" : "Board-Details",
