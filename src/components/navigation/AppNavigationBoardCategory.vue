@@ -29,7 +29,7 @@
 			{{ text }}
 		</a>
 		<ul v-if="boards.length > 0">
-			<AppNavigationBoard v-for="board in boards" :key="board.id" :board="board" />
+			<AppNavigationBoard v-for="board in boardsSorted" :key="board.id" :board="board" />
 		</ul>
 	</li>
 </template>
@@ -78,6 +78,9 @@ export default {
 		}
 	},
 	computed: {
+		boardsSorted() {
+			return [...this.boards].sort((a, b) => (a.title < b.title) ? -1 : 1)
+		},
 		collapsible() {
 			return this.boards.length > 0
 		},
