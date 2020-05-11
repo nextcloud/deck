@@ -43,6 +43,9 @@
 				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete list') }}
 				</ActionButton>
+				<ActionButton icon="icon-archive" @click="archiveAllCardsFromStack(stack)">
+					{{ t('deck', 'Archive all cards in this list') }}
+				</ActionButton>
 			</Actions>
 			<Actions v-if="canEdit && !showArchived">
 				<ActionButton icon="icon-add" @click.stop="showAddCard=true">
@@ -177,6 +180,11 @@ export default {
 		},
 		deleteStack(stack) {
 			this.$store.dispatch('deleteStack', stack)
+		},
+		archiveAllCardsFromStack(stack) {
+			this.cardsByStack.forEach(card => {
+				this.$store.dispatch('archiveUnarchiveCard', { ...card, archived: true })
+			})
 		},
 		startEditing(stack) {
 			this.copiedStack = Object.assign({}, stack)
