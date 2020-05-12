@@ -104,6 +104,8 @@
 					<DatetimePicker v-model="duedate"
 						:placeholder="t('deck', 'Set a due date')"
 						type="datetime"
+						:show-second="false"
+						:format="format"
 						:disabled="saving || !canEdit"
 						confirm />
 					<Actions v-if="canEdit">
@@ -202,6 +204,7 @@ import MarkdownItTaskLists from 'markdown-it-task-lists'
 import { formatFileSize } from '@nextcloud/files'
 import relativeDate from '../../mixins/relativeDate'
 import AttachmentList from './AttachmentList'
+import moment from '@nextcloud/moment'
 
 const markdownIt = new MarkdownIt()
 markdownIt.use(MarkdownItTaskLists, { enabled: true, label: true, labelAfter: true })
@@ -257,6 +260,10 @@ export default {
 			hasActivity: capabilities && capabilities.activity,
 			hasComments: !!OC.appswebroots['comments'],
 			modalShow: false,
+			format: {
+				stringify: this.stringify,
+				parse: this.parse,
+			},
 		}
 	},
 	computed: {
@@ -481,6 +488,12 @@ export default {
 				labelId: removedLabel.id,
 			}
 			this.$store.dispatch('removeLabel', data)
+		},
+		stringify(date) {
+			return moment(date).locale(this.locale).format('LT')
+		},
+		parse(value) {
+			return moment(value, 'LT', this.locale).toDate()
 		},
 	},
 }
