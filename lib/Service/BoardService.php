@@ -621,13 +621,14 @@ class BoardService {
 
 	/**
 	 * @param $id
+	 * @param $userId
 	 * @return Board
 	 * @throws DoesNotExistException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function clone($id) {
+	public function clone($id, $userId) {
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('board id must be a number');
 		}
@@ -637,7 +638,7 @@ class BoardService {
 		$board = $this->boardMapper->find($id);
 		$newBoard = new Board();
 		$newBoard->setTitle($board->getTitle() . ' (' . $this->l10n->t('copy') . ')');
-		$newBoard->setOwner($board->getOwner());
+		$newBoard->setOwner($userId);
 		$newBoard->setColor($board->getColor());
 		$permissions = $this->permissionService->matchPermissions($board);
 		$newBoard->setPermissions([
