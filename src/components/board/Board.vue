@@ -23,6 +23,26 @@
 <template>
 	<div class="board-wrapper">
 		<Controls :board="board" />
+
+		<EmptyContent v-if="stacksByBoard.length === 0" icon="icon-pause">
+			No lists, add one
+			<template #desc>
+				<form @submit.prevent="addNewStack()">
+					<input id="new-stack-input-main"
+						v-model="newStackTitle"
+						v-focus
+						type="text"
+						class="no-close"
+						:placeholder="t('deck', 'List name')"
+						required>
+					<input v-tooltip="t('deck', 'Add new list')"
+						class="icon-confirm"
+						type="submit"
+						value="">
+				</form>
+			</template>
+		</EmptyContent>
+
 		<transition name="fade" mode="out-in">
 			<div v-if="loading" key="loading" class="emptycontent">
 				<div class="icon icon-loading" />
@@ -54,6 +74,7 @@ import { Container, Draggable } from 'vue-smooth-dnd'
 import { mapState, mapGetters } from 'vuex'
 import Controls from '../Controls'
 import Stack from './Stack'
+import { EmptyContent } from '@nextcloud/vue'
 
 export default {
 	name: 'Board',
@@ -62,6 +83,7 @@ export default {
 		Container,
 		Draggable,
 		Stack,
+		EmptyContent,
 	},
 	inject: [
 		'boardApi',
@@ -75,6 +97,7 @@ export default {
 	data() {
 		return {
 			loading: true,
+			newStackTitle: '',
 		}
 	},
 	computed: {
@@ -117,11 +140,10 @@ export default {
 			this.$store.dispatch('orderStack', { stack: this.stacksByBoard[removedIndex], removedIndex, addedIndex })
 		},
 
-		createStack() {
+		addNewStack() {
 			const newStack = {
-				title: 'FooBar',
+				title: this.newStackTitle,
 				boardId: this.id,
-				order: this.stacksByBoard().length,
 			}
 			this.$store.dispatch('createStack', newStack)
 		},
