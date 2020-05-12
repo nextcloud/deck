@@ -149,26 +149,27 @@ export default {
 						text: t('deck', 'Edit board'),
 					})
 				}
-
-				actions.push({
-					action: async() => {
-						this.hideMenu()
-						this.loading = true
-						try {
-							const newBoard = await this.$store.dispatch('cloneBoard', this.board)
-							this.loading = false
-							const route = this.routeTo
-							route.params.id = newBoard.id
-							this.$router.push(route)
-						} catch (e) {
-							OC.Notification.showTemporary(t('deck', 'An error occurred'))
-							console.error(e)
-						}
-					},
-					icon: 'icon-clone',
-					text: t('deck', 'Clone board'),
-				})
 				if (canManage) {
+
+					actions.push({
+						action: async() => {
+							this.hideMenu()
+							this.loading = true
+							try {
+								const newBoard = await this.$store.dispatch('cloneBoard', this.board)
+								this.loading = false
+								const route = this.routeTo
+								route.params.id = newBoard.id
+								this.$router.push(route)
+							} catch (e) {
+								OC.Notification.showTemporary(t('deck', 'An error occurred'))
+								console.error(e)
+							}
+						},
+						icon: 'icon-clone',
+						text: t('deck', 'Clone board'),
+					})
+
 					if (!this.board.archived) {
 						actions.push({
 							action: () => {
