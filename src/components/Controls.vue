@@ -54,8 +54,9 @@
 			</div>
 			<div class="board-action-buttons">
 				<Popover>
-					<Actions slot="trigger" :style="filterOpacity" :title="t('deck', 'Apply filter')">
-						<ActionButton icon="icon-filter" />
+					<Actions slot="trigger" :title="t('deck', 'Apply filter')">
+						<ActionButton v-if="isFilterActive" icon="icon-filter_set" />
+						<ActionButton v-else icon="icon-filter" />
 					</Actions>
 
 					<template>
@@ -218,11 +219,11 @@ export default {
 			}
 			return 'opacity: .5;'
 		},
-		filterOpacity() {
+		isFilterActive() {
 			if (this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '') {
-				return 'opacity: 1;'
+				return true
 			}
-			return 'opacity: .5;'
+			return false
 		},
 	},
 	methods: {
