@@ -40,11 +40,11 @@
 				</form>
 			</transition>
 			<Actions v-if="canManage" :force-menu="true">
+				<ActionButton icon="icon-archive" @click="modalShow=true">
+					{{ t('deck', 'Archive all cards') }}
+				</ActionButton>
 				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete list') }}
-				</ActionButton>
-				<ActionButton icon="icon-archive" @click="archiveAllCardsFromStack(stack)">
-					{{ t('deck', 'Archive all cards in this list') }}
 				</ActionButton>
 			</Actions>
 			<Actions v-if="canEdit && !showArchived">
@@ -53,6 +53,19 @@
 				</ActionButton>
 			</Actions>
 		</div>
+
+		<Modal v-if="modalShow" title="Archive all cards in this list" @close="modalShow=false">
+			<div class="modal__content">
+				<h3>Archive all cards in this list</h3>
+				<progress :value="archiveAllCardsProgress" :max="stackLen" />
+				<button class="primary" @click="archiveAllCardsFromStack(stack)">
+					{{ t('deck', 'Archive all cards') }}
+				</button>
+				<button @click="modalShow=false">
+					{{ t('deck', 'Cancel') }}
+				</button>
+			</div>
+		</Modal>
 
 		<transition name="slide-top" appear>
 			<div v-if="showAddCard" class="stack--card-add">
@@ -99,7 +112,7 @@
 
 import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
-import { Actions, ActionButton } from '@nextcloud/vue'
+import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import CardItem from '../cards/CardItem'
 
 export default {
@@ -110,6 +123,7 @@ export default {
 		CardItem,
 		Container,
 		Draggable,
+		Modal,
 	},
 
 	props: {
@@ -126,6 +140,9 @@ export default {
 			showAddCard: false,
 			stateCardCreating: false,
 			animate: false,
+			modalShow: false,
+			archiveAllCardsProgress: null,
+			stackLen: 0,
 		}
 	},
 	computed: {
@@ -182,9 +199,13 @@ export default {
 			this.$store.dispatch('deleteStack', stack)
 		},
 		archiveAllCardsFromStack(stack) {
-			this.cardsByStack.forEach(card => {
+
+			this.stackLen = this.cardsByStack.length
+			this.cardsByStack.forEach((card, index) => {
+				this.archiveAllCardsProgress = index
 				this.$store.dispatch('archiveUnarchiveCard', { ...card, archived: true })
 			})
+			this.modalShow = false
 		},
 		startEditing(stack) {
 			this.copiedStack = Object.assign({}, stack)
@@ -305,6 +326,27 @@ export default {
 		transform: translateY(-10px);
 		opacity: 0;
 		height: 0px;
+	}
+
+	.modal__content {
+		width: 25vw;
+		min-width: 250px;
+		min-height: 100px;
+		text-align: center;
+		margin: 20px 20px 20px 20px;
+
+		.multiselect {
+			margin-bottom: 10px;
+		}
+	}
+
+	.modal__content button {
+		float: right;
+	}
+
+	progress {
+		margin-top: 3px;
+		margin-bottom: 30px;
 	}
 
 </style>
