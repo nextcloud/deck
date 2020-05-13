@@ -24,6 +24,9 @@
 	<div id="content" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
 		<AppNavigation />
 		<div id="app-content">
+			<div v-if="isAndroid">
+				{{ t('deck', 'There is an Android App available, please consider downloading it') }}
+			</div>
 			<router-view />
 		</div>
 		<router-view name="sidebar" />
@@ -75,6 +78,13 @@ export default {
 		},
 		sidebarShown() {
 			return this.sidebarRouterView || this.sidebarShownState
+		},
+		isAndroid() {
+			const userAgent = navigator.userAgent || navigator.vendor || window.opera
+			if (/android/i.test(userAgent)) {
+				return true
+			}
+			return false
 		},
 	},
 	provide: function() {
