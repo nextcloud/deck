@@ -256,7 +256,9 @@ export default new Vuex.Store({
 		setFilter({ commit }, filter) {
 			commit('setFilter', filter)
 		},
-		async loadBoardById({ commit }, boardId) {
+		async loadBoardById({ commit, dispatch }, boardId) {
+			const filterReset = { tags: [], users: [], due: '' }
+			dispatch('setFilter', filterReset)
 			commit('setCurrentBoard', null)
 			const board = await apiClient.loadById(boardId)
 			commit('setCurrentBoard', board)
