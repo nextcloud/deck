@@ -239,10 +239,12 @@ export default {
 		margin-top: 0;
 		margin-bottom: 0;
 		background-color: var(--color-main-background-translucent);
+		cursor: grab;
 
 		h3, form {
 			flex-grow: 1;
 			display: flex;
+			cursor: inherit;
 
 			input[type=text] {
 				flex-grow: 1;
