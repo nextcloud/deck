@@ -83,6 +83,11 @@ export default {
 			display: flex;
 		}
 
+		.board-list-row:not(.board-list-header-row):hover {
+			transition: background-color 0.3s ease;
+			background-color: var(--color-background-dark);
+		}
+
 		.board-list-header-row {
 			color: var(--color-text-lighter);
 		}
