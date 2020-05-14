@@ -224,6 +224,9 @@ export default {
 			}
 			return 'opacity: .5;'
 		},
+		labelsSorted() {
+			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+		},
 	},
 	methods: {
 		beforeSetFilter(e) {
