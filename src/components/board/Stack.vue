@@ -28,7 +28,10 @@
 				<h3 v-if="!canManage">
 					{{ stack.title }}
 				</h3>
-				<h3 v-else-if="!editing" @click="startEditing(stack)">
+				<h3 v-else-if="!editing"
+					v-tooltip="stack.title"
+					class="stack--title"
+					@click="startEditing(stack)">
 					{{ stack.title }}
 				</h3>
 				<form v-else @submit.prevent="finishedEdit(stack)">
@@ -245,6 +248,13 @@ export default {
 				flex-grow: 1;
 			}
 		}
+	}
+
+	.stack--title {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: calc($stack-width - 60px);
 	}
 
 	.stack--card-add {
