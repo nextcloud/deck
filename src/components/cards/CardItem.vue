@@ -146,7 +146,7 @@ export default {
 	},
 	methods: {
 		openCard() {
-			this.$router.push({ name: 'card', params: { cardId: this.id } })
+			this.$router.push({ name: 'card', params: { cardId: this.id } }).catch(() => {})
 		},
 		startEditing(card) {
 			this.copiedCard = Object.assign({}, card)
