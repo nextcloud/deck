@@ -269,6 +269,8 @@ class CardService {
 		}
 
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
+		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
+
 		if ($this->boardService->isArchived($this->cardMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
@@ -389,6 +391,8 @@ class CardService {
 		}
 
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
+		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
+
 		if ($this->boardService->isArchived($this->cardMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
