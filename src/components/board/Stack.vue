@@ -237,7 +237,7 @@ export default {
 		margin: 3px -3px;
 		margin-right: -10px;
 		margin-top: 0;
-		margin-bottom: 0;
+		margin-bottom: 3px;
 		background-color: var(--color-main-background-translucent);
 		cursor: grab;
 

@@ -176,7 +176,7 @@ export default {
 	}
 
 	.card:hover {
-		box-shadow: 0 0 2px 2px var(--color-box-shadow);
+		box-shadow: 0 0 5px 1px var(--color-box-shadow);
 	}
 
 	.card {
