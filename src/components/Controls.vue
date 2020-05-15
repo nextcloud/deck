@@ -146,6 +146,10 @@
 									@click="beforeSetFilter">
 								<label for="noDue">{{ t('deck', 'No due date') }}</label>
 							</div>
+
+							<Button :disabled="!isFilterActive" @click="clearFilter">
+								{{ t('deck', 'Clear filter') }}
+							</Button>
 						</div>
 					</template>
 				</Popover>
@@ -229,6 +233,11 @@ export default {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 	},
+	watch: {
+		board() {
+			this.clearFilter()
+		},
+	},
 	methods: {
 		beforeSetFilter(e) {
 			if (this.filter.due === e.target.value) {
@@ -268,6 +277,11 @@ export default {
 			} else {
 				this.$router.push({ name: 'board.details' })
 			}
+		},
+		clearFilter() {
+			const filterReset = { tags: [], users: [], due: '' }
+			this.$store.dispatch('setFilter', { ...filterReset })
+			this.filter = filterReset
 		},
 	},
 }
