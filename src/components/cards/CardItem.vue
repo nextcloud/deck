@@ -137,13 +137,6 @@ export default {
 			return moment(this.card.duedate).format('LLLL')
 		},
 	},
-	watch: {
-		currentCard(newValue) {
-			if (newValue) {
-				this.$nextTick(() => this.$el.scrollIntoView())
-			}
-		},
-	},
 	methods: {
 		openCard() {
 			this.$router.push({ name: 'card', params: { cardId: this.id } })
