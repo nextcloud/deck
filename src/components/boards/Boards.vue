@@ -29,10 +29,10 @@
 					<div class="board-list-bullet" />
 				</div>
 				<div class="board-list-title-cell">
-					Title
+					{{ t('deck', 'Title') }}
 				</div>
 				<div class="board-list-avatars-cell">
-					Members
+					{{ t('deck', 'Members') }}
 				</div>
 				<div class="board-list-actions-cell" />
 			</div>
@@ -62,7 +62,7 @@ export default {
 		filteredBoards() {
 			const query = this.$store.getters.getSearchQuery
 			return this.$store.getters.filteredBoards.filter((board) => {
-				return board.title.toLowerCase().includes(query.toLowerCase())
+				return board.deletedAt <= 0 && board.title.toLowerCase().includes(query.toLowerCase())
 			})
 		},
 	},
