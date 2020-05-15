@@ -39,6 +39,7 @@ OC.L10N.register(
     "Attachments" : "Вкладення",
     "Comments" : "Коментарі",
     "Modified" : "Змінено",
+    "Upload attachment" : "Завантажити вкладення",
     "Save" : "Зберегти",
     "Reply" : "Відповісти",
     "Update" : "Оновлення",
