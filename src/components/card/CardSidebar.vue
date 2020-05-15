@@ -203,7 +203,9 @@ import { formatFileSize } from '@nextcloud/files'
 import relativeDate from '../../mixins/relativeDate'
 import AttachmentList from './AttachmentList'
 
-const markdownIt = new MarkdownIt()
+const markdownIt = new MarkdownIt({
+	linkify: true,
+})
 markdownIt.use(MarkdownItTaskLists, { enabled: true, label: true, labelAfter: true })
 
 const capabilities = window.OC.getCapabilities()
@@ -602,6 +604,10 @@ export default {
 
 		&::v-deep input {
 			min-height: auto;
+		}
+
+		&::v-deep a {
+			text-decoration: underline;
 		}
 	}
 
