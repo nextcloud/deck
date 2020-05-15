@@ -54,14 +54,14 @@
 			</div>
 			<div class="board-action-buttons">
 				<Popover>
-					<Actions slot="trigger" :style="filterOpacity" :title="t('deck', 'Apply filter')">
-						<ActionButton icon="icon-filter" />
+					<Actions slot="trigger" :title="t('deck', 'Apply filter')">
+						<ActionButton v-if="isFilterActive" icon="icon-filter_set" />
+						<ActionButton v-else icon="icon-filter" />
 					</Actions>
 
 					<template>
 						<div class="filter">
 							<h3>{{ t('deck', 'Filter by tag') }}</h3>
-							{{ filter }}
 							<div v-for="label in board.labels" :key="label.id" class="filter--item">
 								<input
 									:id="label.id"
@@ -219,11 +219,14 @@ export default {
 			}
 			return 'opacity: .5;'
 		},
-		filterOpacity() {
+		isFilterActive() {
 			if (this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '') {
-				return 'opacity: 1;'
+				return true
 			}
-			return 'opacity: .5;'
+			return false
+		},
+		labelsSorted() {
+			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 	},
 	methods: {

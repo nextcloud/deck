@@ -203,7 +203,9 @@ import { formatFileSize } from '@nextcloud/files'
 import relativeDate from '../../mixins/relativeDate'
 import AttachmentList from './AttachmentList'
 
-const markdownIt = new MarkdownIt()
+const markdownIt = new MarkdownIt({
+	linkify: true,
+})
 markdownIt.use(MarkdownItTaskLists, { enabled: true, label: true, labelAfter: true })
 
 const capabilities = window.OC.getCapabilities()
@@ -325,7 +327,7 @@ export default {
 			},
 		},
 		renderedDescription() {
-			return markdownIt.render(this.copiedCard.description)
+			return markdownIt.render(this.copiedCard.description || '')
 		},
 	},
 	watch: {
@@ -600,15 +602,23 @@ export default {
 	#description-preview {
 		min-height: 100px;
 
+		&::v-deep {
+			@import "./../../css/markdown";
+		}
+
 		&::v-deep input {
 			min-height: auto;
+		}
+
+		&::v-deep a {
+			text-decoration: underline;
 		}
 	}
 
 	.modal__content {
 		width: 25vw;
 		min-width: 250px;
-		height: 120px;
+		min-height: 120px;
 		text-align: center;
 		margin: 20px 20px 60px 20px;
 		padding-bottom: 20px;

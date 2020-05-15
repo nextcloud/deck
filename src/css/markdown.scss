@@ -1,0 +1,102 @@
+p {
+	margin-bottom: 15px;
+}
+
+* {
+	white-space: normal;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+}
+
+a {
+	opacity: 0.5;
+	text-decoration: underline;
+}
+
+ol,
+ul {
+	margin-left: 20px;
+	margin-bottom: 10px;
+}
+
+ul {
+	list-style-type: disc;
+}
+
+h1 {
+	font-size: 18px;
+	font-weight: 600;
+	margin-bottom: 5px;
+}
+
+h2 {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+h3 {
+	font-size: 14px;
+	font-weight: 600;
+}
+
+h4 {
+	font-size: 13px;
+	font-weight: 600;
+}
+
+h6 {
+	font-size: 12px;
+	font-weight: 600;
+}
+
+pre {
+	background-color: var(--color-background-dark);
+	padding: 3px;
+	overflow: auto;
+
+	code {
+		white-space: pre;
+	}
+}
+
+img {
+	max-width: 100%;
+	max-height: 50vh;
+	margin: auto;
+	display: block;
+}
+
+input[type=checkbox] {
+	margin: 0px 10px 0px 0px;
+	line-height: 10px;
+	font-size: 10px;
+	display: inline-block;
+	min-height: 12px;
+}
+
+li 	input[type="checkbox"].checkbox + label::before {
+	margin-left: -15px;
+
+}
+input[type="checkbox"].checkbox + label::before {
+	position: relative;
+	z-index: 100;
+	margin-right: 10px;
+	margin-top: 0;
+}
+li input[type="checkbox"].checkbox:not(:checked) + label::before {
+	background-color: var(--color-main-background);
+}
+
+table {
+	margin-bottom: 10px;
+	border-collapse: collapse;
+
+	thead {
+		background-color: var(--color-background-dark);
+	}
+	td, th {
+		border: 1px solid var(--color-background-darker);
+		padding: 3px;
+	}
+}

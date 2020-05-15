@@ -45,8 +45,8 @@
 </template>
 
 <script>
-import { Modal } from '@nextcloud/vue/dist/Components/Modal'
-import { Multiselect } from '@nextcloud/vue/dist/Components/Multiselect'
+import Modal from '@nextcloud/vue/dist/Components/Modal'
+import Multiselect from '@nextcloud/vue/dist/Components/Multiselect'
 import axios from '@nextcloud/axios'
 
 export default {

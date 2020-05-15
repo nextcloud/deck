@@ -62,7 +62,7 @@ Vue.config.errorHandler = (err, vm, info) => {
 		const errorMessage = t('deck', 'Something went wrong')
 		OCP.Toast.error(`${errorMessage}: ${err.response.data.status} ${err.response.data.message}`)
 	}
-	throw err
+	console.error(err)
 }
 
 /* eslint-disable-next-line no-new */

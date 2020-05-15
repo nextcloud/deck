@@ -153,6 +153,6 @@ class BoardController extends ApiController {
 	 * @return \OCP\Deck\DB\Board
 	 */
 	public function clone($boardId) {
-		return $this->boardService->clone($boardId);
+		return $this->boardService->clone($boardId, $this->userId);
 	}
 }

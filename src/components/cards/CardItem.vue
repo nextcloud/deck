@@ -54,6 +54,8 @@
 						</div>
 					</transition>
 				</div>
+
+				<CardMenu v-if="!editing && compactMode" :id="id" class="right" />
 			</div>
 			<transition-group name="zoom"
 				tag="ul"
@@ -78,10 +80,11 @@ import CardBadges from './CardBadges'
 import Color from '../../mixins/color'
 import labelStyle from '../../mixins/labelStyle'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
+import CardMenu from './CardMenu'
 
 export default {
 	name: 'CardItem',
-	components: { CardBadges, AttachmentDragAndDrop },
+	components: { CardBadges, AttachmentDragAndDrop, CardMenu },
 	directives: {
 		ClickOutside,
 	},
@@ -137,16 +140,9 @@ export default {
 			return moment(this.card.duedate).format('LLLL')
 		},
 	},
-	watch: {
-		currentCard(newValue) {
-			if (newValue) {
-				this.$nextTick(() => this.$el.scrollIntoView())
-			}
-		},
-	},
 	methods: {
 		openCard() {
-			this.$router.push({ name: 'card', params: { cardId: this.id } })
+			this.$router.push({ name: 'card', params: { cardId: this.id } }).catch(() => {})
 		},
 		startEditing(card) {
 			this.copiedCard = Object.assign({}, card)
@@ -173,6 +169,10 @@ export default {
 
 	body.dark .card {
 		border: 1px solid var(--color-border);
+	}
+
+	.card:hover {
+		box-shadow: 0 0 5px 1px var(--color-box-shadow);
 	}
 
 	.card {
