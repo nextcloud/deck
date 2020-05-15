@@ -122,8 +122,8 @@ export default {
 			for (const newCard of cards) {
 				const existingIndex = state.cards.findIndex(_card => _card.id === newCard.id)
 				if (existingIndex !== -1) {
-					const newCardObject = Object.assign({}, state.cards[existingIndex], { id: newCard.id, order: newCard.order, stackId: newCard.stackId })
-					Vue.set(state.cards, existingIndex, newCardObject)
+					Vue.set(state.cards[existingIndex], 'order', newCard.order)
+					Vue.set(state.cards[existingIndex], 'stackId', newCard.stackId)
 				}
 			}
 		},
@@ -176,18 +176,20 @@ export default {
 		},
 		async reorderCard({ commit, getters }, card) {
 			let i = 0
+			const newCards = []
 			for (const c of getters.cardsByStack(card.stackId)) {
 				if (c.id === card.id) {
-					await commit('updateCardsReorder', [card])
+					newCards.push(card)
 				}
 				if (i === card.order) {
 					i++
 				}
 				if (c.id !== card.id) {
-					await commit('updateCardsReorder', [{ ...c, order: i++ }])
+					newCards.push({ ...c, order: i++ })
 				}
 			}
-			await commit('updateCardsReorder', [card])
+			newCards.push(card)
+			await commit('updateCardsReorder', newCards)
 
 			const cards = await apiClient.reorderCard(card)
 			await commit('updateCardsReorder', Object.values(cards))
