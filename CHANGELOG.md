@@ -1,9 +1,34 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.0.1 - 2020-05-15
+
+### Fixed
+
+* Removes debug filter output
+* Labels are now sorted
+* Stack title doesn't break up
+* Fix move card modal
+* Sort boards in navigation
+* Fixes the attachment modal
+* Handle deleted boards better
+* User can only clone a board on canManage permissions
+* Fix modal imports
+* Show menu in compact mode
+* Added a filter reset button
+* Add hover effect to board list
+* New filter icon
+* Improve hovering response in board
+* Enable linkify in description renderer @icewind1991
+* Enhance board selector
+* Fix issue if card description might be null
+* Revert markdown styles from old frontend
+* Do not scroll cards into view
+* Fix reodering performance
+
 ## 1.0.0 - 2020-05-06
 
-## Added
+### Added
 
 - Completly rewritten frontend
 	- Better maintainability
@@ -30,10 +55,10 @@ Android app team for helping to improve our REST API:
 
 ## 0.8.0 - 2020-01-16
 
-## Added
+### Added
 - Case insensitive search (@matchish)
 
-## Fixed
+### Fixed
 - Fix reversed permissions for reordering stacks (@JLueke)
 - Fix reversed visibility of 'add stack' field (@JLueke)
 - Fix occ export command
@@ -43,7 +68,7 @@ Android app team for helping to improve our REST API:
 
 ## 0.7.0 - 2019-08-20
 
-## Added
+### Added
 - Make deck compatible to Nextcloud 17
 - Allow to set the description when creating cards though the REST API
 
