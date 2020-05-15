@@ -602,6 +602,10 @@ export default {
 	#description-preview {
 		min-height: 100px;
 
+		&::v-deep {
+			@import "./../../css/markdown";
+		}
+
 		&::v-deep input {
 			min-height: auto;
 		}
