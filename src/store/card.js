@@ -191,8 +191,9 @@ export default {
 			newCards.push(card)
 			await commit('updateCardsReorder', newCards)
 
-			const cards = await apiClient.reorderCard(card)
-			await commit('updateCardsReorder', Object.values(cards))
+			apiClient.reorderCard(card).then((cards) => {
+				commit('updateCardsReorder', Object.values(cards))
+			})
 		},
 		async deleteCard({ commit }, card) {
 			await apiClient.deleteCard(card.id)
