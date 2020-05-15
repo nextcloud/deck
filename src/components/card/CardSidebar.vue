@@ -327,7 +327,7 @@ export default {
 			},
 		},
 		renderedDescription() {
-			return markdownIt.render(this.copiedCard.description)
+			return markdownIt.render(this.copiedCard.description || '')
 		},
 	},
 	watch: {
