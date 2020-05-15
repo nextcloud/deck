@@ -24,6 +24,7 @@
 	<Modal @close="close">
 		<div id="modal-inner" :class="{ 'icon-loading': loading }">
 			<h1>{{ t('deck', 'Select the board to link to a project') }}</h1>
+			<input v-model="filter" type="text" :placeholder="t('deck', 'Search by board title')">
 			<ul v-if="!loading">
 				<li v-for="board in availableBoards"
 					:key="board.id"
@@ -46,8 +47,15 @@
 		padding: 20px;
 	}
 
+	input {
+		width: 100%;
+		margin-bottom: 15px;
+	}
+
 	ul {
-		min-height: 100px;
+		min-height: 50vh;
+		max-height: 300px;
+		overflow: scroll;
 	}
 
 	li {
@@ -90,6 +98,7 @@ export default {
 	},
 	data() {
 		return {
+			filter: '',
 			boards: [],
 			selectedBoard: null,
 			loading: true,
@@ -98,12 +107,16 @@ export default {
 	},
 	computed: {
 		availableBoards() {
-			return this.boards.filter((board) => ('' + board.id !== '' + this.currentBoard))
+			return this.boards.filter((board) => (
+				'' + board.id !== '' + this.currentBoard
+				&& board.title.match(this.filter)
+			))
 		},
 	},
 	beforeMount() {
 		this.fetchBoards()
-		this.currentBoard = window.location.hash.match(/\/boards\/([0-9]+)/)[1] || null
+		const hash = window.location.hash.match(/\/boards\/([0-9]+)/)
+		this.currentBoard = hash.length > 0 ? hash[1] : null
 	},
 	methods: {
 		fetchBoards() {
