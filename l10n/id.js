@@ -16,6 +16,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Hapus",
     "Edit" : "Sunting",
+    "Title" : "Judul",
     "Description" : "Deskrisi",
     "Comments" : "Komentar",
     "Modified" : "Dimodifikasi",

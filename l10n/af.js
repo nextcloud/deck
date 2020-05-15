@@ -19,6 +19,7 @@ OC.L10N.register(
     "Can share" : "Kan deel",
     "Delete" : "Skrap",
     "Edit" : "Wysig",
+    "Title" : "Titel",
     "Due date" : "Sperdatum",
     "Description" : "Beskrywing",
     "Comments" : "Kommentare",

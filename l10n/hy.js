@@ -9,6 +9,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "հեռացնել",
     "Edit" : "մշակել",
+    "Title" : "Վերնագիր",
     "Description" : "Նկարագրություն",
     "Comments" : "Կարծիքներ",
     "Modified" : "Փոփոխված",

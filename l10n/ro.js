@@ -18,6 +18,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Șterge",
     "Edit" : "Editează",
+    "Title" : "Titlu",
     "Description" : "Descriere",
     "Comments" : "Comentarii",
     "Modified" : "Modificat",

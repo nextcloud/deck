@@ -11,6 +11,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "﻿ಅಳಿಸಿ",
     "Edit" : "ಸಂಪಾದಿಸು",
+    "Title" : "ಶೀರ್ಷಿಕೆ",
     "Modified" : "﻿ಬದಲಾಯಿಸಿದ",
     "Save" : "﻿ಉಳಿಸಿ",
     "Settings" : "ಆಯ್ಕೆ",

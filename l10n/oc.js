@@ -10,6 +10,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Suprimir",
     "Edit" : "Modificar",
+    "Title" : "Títol",
     "Description" : "Descripcion",
     "Save" : "Salvar",
     "Reply" : "Respondre",
