@@ -25,6 +25,8 @@ OC.L10N.register(
     "Can share" : "Може да споделя",
     "Delete" : "Изтриване",
     "Edit" : "Редакция",
+    "Title" : "Име",
+    "Members" : "Членове",
     "Due date" : "Крайна дата",
     "Remove due date" : "Премахни крайната дата",
     "Description" : "Описание",

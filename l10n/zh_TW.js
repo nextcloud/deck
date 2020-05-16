@@ -36,6 +36,8 @@ OC.L10N.register(
     "Delete list" : "刪除清單",
     "Add card" : "增加卡片",
     "Edit" : "編輯",
+    "Title" : "標題",
+    "Members" : "成員",
     "Assign to users" : "分派給使用者",
     "Due date" : "截止日",
     "Description" : "描述",

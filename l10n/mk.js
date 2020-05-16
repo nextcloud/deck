@@ -21,6 +21,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Избриши",
     "Edit" : "Уреди",
+    "Title" : "Наслов",
     "Description" : "Опис",
     "Comments" : "Коментари",
     "Modified" : "Изменето",

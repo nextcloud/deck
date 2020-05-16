@@ -153,6 +153,8 @@ OC.L10N.register(
     "Edit" : "Editatu",
     "Add a new tag" : "Gehitu etiketa berri bat",
     "title and color value must be provided" : "izenburu eta kolore balioak hornitu behar dira",
+    "Title" : "Izenburua",
+    "Members" : "Partaideak",
     "Add this attachment" : "Gehitu eranskin hau",
     "Delete Attachment" : "Ezabatu eranskina",
     "Restore Attachment" : "Berezarri eranskina",

@@ -14,6 +14,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "মুছে",
     "Edit" : "সম্পাদনা",
+    "Title" : "শিরোনাম",
     "Description" : "বিবরণ",
     "Modified" : "পরিবর্তিত",
     "Save" : "সংরক্ষণ",

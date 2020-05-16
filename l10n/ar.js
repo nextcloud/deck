@@ -19,6 +19,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "حذف ",
     "Edit" : "تعديل",
+    "Title" : "العنوان",
     "Description" : "الوصف",
     "Attachments" : "المرفقات",
     "Comments" : "تعليقات",

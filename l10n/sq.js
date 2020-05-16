@@ -30,6 +30,8 @@ OC.L10N.register(
     "Add a new stack" : "Shto një raft të ri",
     "Add card" : "Shto kartë",
     "Edit" : "Edito",
+    "Title" : "Titulli",
+    "Members" : "Anëtar",
     "Due date" : "Data e vendosur",
     "Remove due date" : "Hiq datën e mbarimit",
     "Description" : "Përshkrim",

@@ -23,6 +23,8 @@ OC.L10N.register(
     "Can share" : "Puede compartir",
     "Delete" : "Eliminar",
     "Edit" : "Editar",
+    "Title" : "Título",
+    "Members" : "Miembros",
     "Due date" : "Fecha de vencimiento",
     "Description" : "Descripción",
     "Formatting help" : "Ayuda de formato",

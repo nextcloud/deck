@@ -118,6 +118,8 @@ OC.L10N.register(
     "Delete list" : "Slett listen",
     "Add card" : "Legg til kort",
     "Edit" : "Rediger",
+    "Title" : "Tittel",
+    "Members" : "Medlemmer",
     "Due date" : "Forfallsdato",
     "Remove due date" : "Fjern forfallsdato",
     "Description" : "Beskrivelse",

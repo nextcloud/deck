@@ -153,6 +153,8 @@ OC.L10N.register(
     "Edit" : "Редактировать",
     "Add a new tag" : "Добавить метку",
     "title and color value must be provided" : "необходимо указать цвет и название",
+    "Title" : "Название",
+    "Members" : "Участники",
     "Add this attachment" : "Добавить это вложение",
     "Delete Attachment" : "Удалить вложение",
     "Restore Attachment" : "Восстановить вложение",

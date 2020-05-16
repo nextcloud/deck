@@ -153,6 +153,8 @@ OC.L10N.register(
     "Edit" : "Upraviť",
     "Add a new tag" : "Pridať nový štítok",
     "title and color value must be provided" : "je potrebné zadať nadpis a vybrať farbu",
+    "Title" : "Názov",
+    "Members" : "Členovia",
     "Add this attachment" : "Pridať túto prílohu",
     "Delete Attachment" : "Odstrániť prílohu",
     "Restore Attachment" : "Obnoviť prílohu",

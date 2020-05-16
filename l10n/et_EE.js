@@ -17,6 +17,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Kustuta",
     "Edit" : "Redigeeri",
+    "Title" : "Pealkiri",
     "Due date" : "Tähtaeg",
     "Description" : "Kirjeldus",
     "Comments" : "Kommentaarid",

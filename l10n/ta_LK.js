@@ -13,6 +13,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "நீக்குக",
     "Edit" : "தொகுக்க",
+    "Title" : "தலைப்பு",
     "Description" : "விவரிப்பு",
     "Modified" : "மாற்றப்பட்டது",
     "Save" : "சேமிக்க ",

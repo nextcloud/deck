@@ -119,6 +119,8 @@ OC.L10N.register(
     "Add a new stack" : "Aldoni novan stakon",
     "Add card" : "Aldoni karton",
     "Edit" : "Redakti",
+    "Title" : "Titolo",
+    "Members" : "Membroj",
     "Due date" : "Limdato",
     "Remove due date" : "Viŝi limdaton",
     "Description" : "Priskribo",

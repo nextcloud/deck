@@ -58,6 +58,8 @@ OC.L10N.register(
     "Add card" : "Thêm tác vụ",
     "Add a new card" : "Thêm một tác vụ mới",
     "Edit" : "Chỉnh sửa",
+    "Title" : "Tên",
+    "Members" : "Thành viên",
     "Due date" : "Thời hạn",
     "Remove due date" : "Xóa thời hạn",
     "Description" : "Mô tả",

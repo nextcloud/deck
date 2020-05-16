@@ -14,6 +14,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Dileu",
     "Edit" : "Golygu",
+    "Title" : "Teitl",
     "Description" : "Disgrifiad",
     "Modified" : "Addaswyd",
     "Upload attachment" : "Llwytho atodiad",

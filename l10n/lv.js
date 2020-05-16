@@ -22,6 +22,8 @@ OC.L10N.register(
     "Can share" : "Var koplietot",
     "Delete" : "Dzēst",
     "Edit" : "Rediģēt",
+    "Title" : "Amats",
+    "Members" : "Biedri",
     "Due date" : "Izpildes datums",
     "Description" : "Apraksts",
     "Attachments" : "Pielikumi",

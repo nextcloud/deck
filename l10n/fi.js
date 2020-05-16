@@ -145,6 +145,8 @@ OC.L10N.register(
     "Add a new card" : "Lisää uusi kortti",
     "Edit" : "Muokkaa",
     "title and color value must be provided" : "tunnisteella on oltava nimi ja väri",
+    "Title" : "Otsikko",
+    "Members" : "Jäsenet",
     "Delete Attachment" : "Poista liite",
     "Restore Attachment" : "Palauta liite",
     "Assign a tag to this card…" : "Lisää kortille tunniste...",

@@ -152,6 +152,8 @@ OC.L10N.register(
     "Edit" : "Redigera",
     "Add a new tag" : "Lägg till en ny tagg",
     "title and color value must be provided" : "titel och färg måste anges",
+    "Title" : "Titel",
+    "Members" : "Medlemmar",
     "Add this attachment" : "Lägg till denna bilaga",
     "Delete Attachment" : "Ta bort bilaga",
     "Restore Attachment" : "Återställ bilaga",

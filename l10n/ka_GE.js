@@ -31,6 +31,8 @@ OC.L10N.register(
     "Add a new stack" : "დასტის დამატება",
     "Add card" : "ბარათის დამატება",
     "Edit" : "შეცვლა",
+    "Title" : "სათაური",
+    "Members" : "წევრები",
     "Due date" : "დროისთვის",
     "Remove due date" : "მოაშორეთ დანიშნულების დრო",
     "Description" : "აღწერა",

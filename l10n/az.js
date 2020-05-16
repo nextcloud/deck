@@ -14,6 +14,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Sil",
     "Edit" : "Dəyişiklik et",
+    "Title" : "Başlıq",
     "Description" : "Açıqlanma",
     "Modified" : "Dəyişdirildi",
     "Save" : "Saxla",

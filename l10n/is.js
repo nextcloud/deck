@@ -145,6 +145,8 @@ OC.L10N.register(
     "Add a new card" : "Bæta við nýju spjaldi",
     "Edit" : "Breyta",
     "title and color value must be provided" : "titill og litgildi verða að vera til staðar",
+    "Title" : "Titill",
+    "Members" : "Meðlimir",
     "Assign a tag to this card…" : "Úthluta merki á þetta spjald",
     "Assign to users" : "Úthluta á notendur",
     "Assign a user to this card…" : "Úthluta notanda á þetta spjald",

@@ -38,6 +38,8 @@ OC.L10N.register(
     "Delete list" : "목록 지우기",
     "Add card" : "카드 추가",
     "Edit" : "편집",
+    "Title" : "직위",
+    "Members" : "구성원",
     "Due date" : "만료 날짜",
     "Remove due date" : "만료 날짜 삭제",
     "Description" : "설명",
