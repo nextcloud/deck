@@ -100,6 +100,7 @@
 import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
 import { Actions, ActionButton } from '@nextcloud/vue'
+import { showError } from '@nextcloud/dialogs'
 import CardItem from '../cards/CardItem'
 
 export default {
@@ -208,7 +209,7 @@ export default {
 				})
 				this.$router.push({ name: 'card', params: { cardId: newCard.id } })
 			} catch (e) {
-				OCP.Toast.error('Could not create card: ' + e.response.data.message)
+				showError('Could not create card: ' + e.response.data.message)
 			} finally {
 				this.stateCardCreating = false
 			}

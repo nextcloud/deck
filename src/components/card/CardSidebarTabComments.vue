@@ -35,7 +35,7 @@ import { Avatar } from '@nextcloud/vue'
 import CommentItem from './CommentItem'
 import CommentForm from './CommentForm'
 import InfiniteLoading from 'vue-infinite-loading'
-
+import { getCurrentUser } from '@nextcloud/auth'
 export default {
 	name: 'CardSidebarTabComments',
 	components: {
@@ -54,7 +54,7 @@ export default {
 		return {
 			newComment: '',
 			isLoading: false,
-			currentUser: OC.getCurrentUser(),
+			currentUser: getCurrentUser(),
 		}
 	},
 	computed: {

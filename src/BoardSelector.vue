@@ -40,6 +40,55 @@
 		</div>
 	</Modal>
 </template>
+<script>
+import Modal from '@nextcloud/vue/dist/Components/Modal'
+import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
+
+export default {
+	name: 'BoardSelector',
+	components: {
+		Modal,
+	},
+	data() {
+		return {
+			filter: '',
+			boards: [],
+			selectedBoard: null,
+			loading: true,
+			currentBoard: null,
+		}
+	},
+	computed: {
+		availableBoards() {
+			return this.boards.filter((board) => (
+				'' + board.id !== '' + this.currentBoard
+				&& board.title.match(this.filter)
+			))
+		},
+	},
+	beforeMount() {
+		this.fetchBoards()
+		const hash = window.location.hash.match(/\/boards\/([0-9]+)/)
+		this.currentBoard = hash.length > 0 ? hash[1] : null
+	},
+	methods: {
+		fetchBoards() {
+			axios.get(generateUrl('/apps/deck/boards')).then((response) => {
+				this.boards = response.data
+				this.loading = false
+			})
+		},
+		close() {
+			this.$root.$emit('close')
+		},
+		select() {
+			this.$root.$emit('select', this.selectedBoard)
+		},
+	},
+
+}
+</script>
 <style scoped>
 	#modal-inner {
 		width: 90vw;
@@ -47,15 +96,8 @@
 		padding: 20px;
 	}
 
-	input {
-		width: 100%;
-		margin-bottom: 15px;
-	}
-
 	ul {
-		min-height: 50vh;
-		max-height: 300px;
-		overflow: scroll;
+		min-height: 100px;
 	}
 
 	li {
@@ -87,51 +129,3 @@
 	}
 
 </style>
-<script>
-import Modal from '@nextcloud/vue/dist/Components/Modal'
-import axios from '@nextcloud/axios'
-
-export default {
-	name: 'BoardSelector',
-	components: {
-		Modal,
-	},
-	data() {
-		return {
-			filter: '',
-			boards: [],
-			selectedBoard: null,
-			loading: true,
-			currentBoard: null,
-		}
-	},
-	computed: {
-		availableBoards() {
-			return this.boards.filter((board) => (
-				'' + board.id !== '' + this.currentBoard
-				&& board.title.match(this.filter)
-			))
-		},
-	},
-	beforeMount() {
-		this.fetchBoards()
-		const hash = window.location.hash.match(/\/boards\/([0-9]+)/)
-		this.currentBoard = hash.length > 0 ? hash[1] : null
-	},
-	methods: {
-		fetchBoards() {
-			axios.get(OC.generateUrl('/apps/deck/boards')).then((response) => {
-				this.boards = response.data
-				this.loading = false
-			})
-		},
-		close() {
-			this.$root.$emit('close')
-		},
-		select() {
-			this.$root.$emit('select', this.selectedBoard)
-		},
-	},
-
-}
-</script>

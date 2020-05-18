@@ -26,6 +26,7 @@ import store from './store/main'
 import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { generateFilePath } from '@nextcloud/router'
+import { showError } from '@nextcloud/dialogs'
 import { Tooltip } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
 import './models'
@@ -60,7 +61,7 @@ Vue.directive('focus', {
 Vue.config.errorHandler = (err, vm, info) => {
 	if (err.response && err.response.data.message) {
 		const errorMessage = t('deck', 'Something went wrong')
-		OCP.Toast.error(`${errorMessage}: ${err.response.data.status} ${err.response.data.message}`)
+		showError(`${errorMessage}: ${err.response.data.status} ${err.response.data.message}`)
 	}
 	console.error(err)
 }

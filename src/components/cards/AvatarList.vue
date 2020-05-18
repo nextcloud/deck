@@ -58,6 +58,7 @@
 
 <script>
 import { Avatar, PopoverMenu, Tooltip } from '@nextcloud/vue'
+import { generateUrl } from '@nextcloud/router'
 
 export default {
 	name: 'AvatarList',
@@ -93,7 +94,7 @@ export default {
 				}
 				const user = assignable.participant.uid
 				const size = 32
-				const avatarUrl = OC.generateUrl('/avatar/{user}/{size}',
+				const avatarUrl = generateUrl('/avatar/{user}/{size}',
 					{
 						user: user,
 						size: size,
