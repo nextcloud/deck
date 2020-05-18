@@ -165,6 +165,7 @@ export default {
 		async addCard({ commit }, card) {
 			const createdCard = await apiClient.addCard(card)
 			commit('addCard', createdCard)
+			return createdCard
 		},
 		async updateCardTitle({ commit }, card) {
 			const updatedCard = await apiClient.updateCard(card)
