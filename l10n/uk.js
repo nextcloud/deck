@@ -21,6 +21,7 @@ OC.L10N.register(
     "Create new board" : "Створити нову дошку",
     "Cancel" : "Скасувати",
     "File already exists" : "Файл вже існує",
+    "Drop your files to upload" : "Пересуньте файли сюди для завантаження",
     "Archived cards" : "Заархівовані картки",
     "Filter by tag" : "Відібрати за позначками",
     "Filter by assigned user" : "Відібрати за призначеним користувачем",

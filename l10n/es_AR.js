@@ -40,6 +40,7 @@ OC.L10N.register(
     "Settings" : "Ajustes",
     "New board title" : "Nuevo título de tablero",
     "Share" : "Compartir",
+    "Options" : "Opciones",
     "An error occurred" : "Ocurrió un error",
     "Board details" : "Detalles del tablero"
 },
