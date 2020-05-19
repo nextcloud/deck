@@ -74,6 +74,17 @@
 							</div>
 
 							<h3>{{ t('deck', 'Filter by assigned user') }}</h3>
+							<div class="filter--item">
+								<input
+									id="unassigned"
+									v-model="filter.unassigned"
+									type="checkbox"
+									class="checkbox"
+									value="unassigned"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="unassigned">{{ t('deck', 'Unassigned') }}</label>
+							</div>
 							<div v-for="user in board.users" :key="user.uid" class="filter--item">
 								<input
 									:id="user.uid"
@@ -200,7 +211,7 @@ export default {
 			stack: '',
 			showArchived: false,
 			isAddStackVisible: false,
-			filter: { tags: [], users: [], due: '' },
+			filter: { tags: [], users: [], due: '', unassigned: false },
 		}
 	},
 
@@ -243,6 +254,9 @@ export default {
 			if (this.filter.due === e.target.value) {
 				this.filter.due = ''
 				this.$store.dispatch('setFilter', { ...this.filter })
+			}
+			if (e.target.value === 'unassigned') {
+				this.filter.users = []
 			}
 		},
 		setFilter() {

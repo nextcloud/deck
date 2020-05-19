@@ -32,9 +32,10 @@ export default {
 	getters: {
 		cardsByStack: (state, getters, rootState) => (id) => {
 			return state.cards.filter((card) => {
-				const { tags, users, due } = rootState.filter
+				const { tags, users, due, unassigned } = rootState.filter
 				let allTagsMatch = true
 				let allUsersMatch = true
+				let allUnassigned = true
 
 				if (tags.length > 0) {
 					tags.forEach((tag) => {
@@ -54,6 +55,16 @@ export default {
 						}
 					})
 					if (!allUsersMatch) {
+						return false
+					}
+				}
+
+				if (unassigned) {
+					if (card.assignedUsers.length > 0) {
+						allUnassigned = false
+					}
+
+					if (!allUnassigned) {
 						return false
 					}
 				}
