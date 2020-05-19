@@ -417,5 +417,11 @@ export default new Vuex.Store({
 					dispatch('loadBoardById', acl.boardId)
 				})
 		},
+		unshareBoard({ commit }, board) {
+			apiClient.unshareBoard(board)
+				.then((board) => {
+					commit('removeBoard', board)
+				})
+		},
 	},
 })

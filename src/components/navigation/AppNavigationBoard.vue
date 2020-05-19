@@ -236,6 +236,18 @@ export default {
 					text: t('deck', 'Board details'),
 				})
 
+				if (this.board.shared) {
+					actions.push({
+						action: () => {
+							this.hideMenu()
+							this.loading = true
+							this.$store.dispatch('unshareBoard', this.board)
+						},
+						icon: 'icon-delete',
+						text: t('deck', 'Unshare board'),
+					})
+				}
+
 			}
 
 			return actions
