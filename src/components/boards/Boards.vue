@@ -36,7 +36,7 @@
 				</div>
 				<div class="board-list-actions-cell" />
 			</div>
-			<BoardItem v-for="board in filteredBoards" :key="board.id" :board="board" />
+			<BoardItem v-for="board in boardsSorted" :key="board.id" :board="board" />
 		</div>
 	</div>
 </template>
@@ -59,6 +59,9 @@ export default {
 		},
 	},
 	computed: {
+		boardsSorted() {
+			return [...this.filteredBoards].sort((a, b) => (a.title < b.title) ? -1 : 1)
+		},
 		filteredBoards() {
 			const query = this.$store.getters.getSearchQuery
 			return this.$store.getters.filteredBoards.filter((board) => {
