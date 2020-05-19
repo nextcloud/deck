@@ -33,7 +33,7 @@
 				<ActionButton v-if="showArchived === false" icon="icon-delete" @click="deleteCard()">
 					{{ t('deck', 'Delete card') }}
 				</ActionButton>
-				<ActionButton icon="icon-external" @click.stop="modalShow=true">
+				<ActionButton v-if="showArchived === false" icon="icon-external" @click.stop="modalShow=true">
 					{{ t('deck', 'Move card') }}
 				</ActionButton>
 				<ActionButton icon="icon-settings-dark" @click="openCard">

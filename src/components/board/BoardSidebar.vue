@@ -39,9 +39,17 @@
 			<TagsTabSidebar :board="board" />
 		</AppSidebarTab>
 
+		<AppSidebarTab
+			id="archived"
+			:order="2"
+			:name="t('deck', 'Archived cards')"
+			icon="icon-archive">
+			<ArchivedTabSidebar :board="board" />
+		</AppSidebarTab>
+
 		<AppSidebarTab v-if="canEdit"
 			id="deleted"
-			:order="2"
+			:order="3"
 			:name="t('deck', 'Deleted items')"
 			icon="icon-delete">
 			<DeletedTabSidebar :board="board" />
@@ -49,7 +57,7 @@
 
 		<AppSidebarTab v-if="hasActivity"
 			id="activity"
-			:order="3"
+			:order="4"
 			:name="t('deck', 'Timeline')"
 			icon="icon-activity">
 			<TimelineTabSidebar :board="board" />
@@ -62,6 +70,7 @@ import { mapState, mapGetters } from 'vuex'
 import SharingTabSidebar from './SharingTabSidebar'
 import TagsTabSidebar from './TagsTabSidebar'
 import DeletedTabSidebar from './DeletedTabSidebar'
+import ArchivedTabSidebar from './ArchivedTabSidebar'
 import TimelineTabSidebar from './TimelineTabSidebar'
 import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 
@@ -76,6 +85,7 @@ export default {
 		TagsTabSidebar,
 		DeletedTabSidebar,
 		TimelineTabSidebar,
+		ArchivedTabSidebar,
 	},
 	props: {
 		id: {

@@ -90,6 +90,9 @@ export default {
 		cardById: state => (id) => {
 			return state.cards.find((card) => card.id === id)
 		},
+		archivedCards: state => {
+			return state.cards.filter(card => card.archived === true)
+		},
 	},
 	mutations: {
 		clearCards(state) {
