@@ -32,6 +32,7 @@ import card from './card'
 import comment from './comment'
 import trashbin from './trashbin'
 import attachment from './attachment'
+import dashboard from './dashboard'
 import debounce from 'lodash/debounce'
 Vue.use(Vuex)
 
@@ -51,6 +52,7 @@ export default new Vuex.Store({
 		comment,
 		trashbin,
 		attachment,
+		dashboard,
 	},
 	strict: debug,
 	state: {

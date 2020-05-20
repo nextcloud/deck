@@ -195,4 +195,24 @@ export class CardApi {
 			})
 	}
 
+	findAllWithDue(data) {
+		return axios.get(this.url(`/dashboard/due`))
+			.then(
+				(response) => Promise.resolve(response.data),
+				(err) => Promise.reject(err)
+			)
+			.catch((err) => Promise.reject(err)
+			)
+	}
+
+	findMyAssignedCards(data) {
+		return axios.get(this.url(`/dashboard/assigned`))
+			.then(
+				(response) => Promise.resolve(response.data),
+				(err) => Promise.reject(err)
+			)
+			.catch((err) => Promise.reject(err)
+			)
+	}
+
 }

@@ -65,7 +65,12 @@ return [
 		['name' => 'card#removeLabel', 'url' => '/cards/{cardId}/label/{labelId}', 'verb' => 'DELETE'],
 		['name' => 'card#assignUser', 'url' => '/cards/{cardId}/assign', 'verb' => 'POST'],
 		['name' => 'card#unassignUser', 'url' => '/cards/{cardId}/unassign', 'verb' => 'PUT'],
+		
+		// dashboard
+		['name' => 'card#findAllWithDue', 'url' => '/dashboard/due', 'verb' => 'GET'],
+		['name' => 'card#findMyAssignedCards', 'url' => '/dashboard/assigned', 'verb' => 'GET'],
 
+		// attachments
 		['name' => 'attachment#getAll', 'url' => '/cards/{cardId}/attachments', 'verb' => 'GET'],
 		['name' => 'attachment#create', 'url' => '/cards/{cardId}/attachment', 'verb' => 'POST'],
 		['name' => 'attachment#display', 'url' => '/cards/{cardId}/attachment/{attachmentId}', 'verb' => 'GET'],
@@ -109,6 +114,8 @@ return [
 		['name' => 'card_api#unassignUser', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser', 'verb' => 'PUT'],
 		['name' => 'card_api#reorder', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder', 'verb' => 'PUT'],
 		['name' => 'card_api#delete', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'DELETE'],
+
+		['name' => 'card_api#findAllWithDue', 'url' => '/api/v1.0/dashboard/due', 'verb' => 'GET'],
 
 		['name' => 'label_api#get', 'url' => '/api/v1.0/boards/{boardId}/labels/{labelId}', 'verb' => 'GET'],
 		['name' => 'label_api#create', 'url' => '/api/v1.0/boards/{boardId}/labels', 'verb' => 'POST'],

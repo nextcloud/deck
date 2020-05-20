@@ -141,6 +141,23 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($sql, [$stackId], $limit, $offset);
 	}
 
+	public function findAllWithDue($boardId) {
+		$sql = 'SELECT c.* FROM `*PREFIX*deck_cards` c
+	  	INNER JOIN `*PREFIX*deck_stacks` s ON s.id = c.stack_id
+		INNER JOIN `*PREFIX*deck_boards` b ON b.id = s.board_id
+		  WHERE `s`.`board_id` = ? AND duedate IS NOT NULL AND NOT c.archived AND c.deleted_at = 0 AND s.deleted_at = 0 AND NOT b.archived AND b.deleted_at = 0';
+		return $this->findEntities($sql, [$boardId]);
+	}
+
+	public function findMyAssignedCards($boardId, $username) {
+		$sql = 'SELECT c.* FROM `*PREFIX*deck_cards` c
+	  	INNER JOIN `*PREFIX*deck_stacks` s ON s.id = c.stack_id
+		INNER JOIN `*PREFIX*deck_boards` b ON b.id = s.board_id
+		INNER JOIN `*PREFIX*deck_assigned_users` u ON c.id = card_id
+		  WHERE `s`.`board_id` = ? AND participant = ? AND NOT c.archived AND c.deleted_at = 0 AND s.deleted_at = 0 AND NOT b.archived AND b.deleted_at = 0';
+		return $this->findEntities($sql, [$boardId, $username]);
+	}
+
 	public function findOverdue() {
 		$sql = 'SELECT id,title,duedate,notified from `*PREFIX*deck_cards` WHERE duedate < NOW() AND NOT archived AND deleted_at = 0';
 		return $this->findEntities($sql);

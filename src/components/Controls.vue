@@ -30,6 +30,10 @@
 				({{ t('deck', 'Archived cards') }})
 			</p>
 		</div>
+		<div v-if="dashboardName" class="board-title">
+			<!-- <div :style="{backgroundColor: '#' + board.color}" class="board-bullet" /> -->
+			<h2><a href="#">{{ dashboardName }}</a></h2>
+		</div>
 		<div v-if="board" class="board-actions">
 			<div v-if="canManage && !showArchived && !board.archived"
 				id="stack-add"
@@ -203,6 +207,11 @@ export default {
 	props: {
 		board: {
 			type: Object,
+			required: false,
+			default: null,
+		},
+		dashboardName: {
+			type: String,
 			required: false,
 			default: null,
 		},
