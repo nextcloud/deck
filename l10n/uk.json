@@ -33,9 +33,10 @@
     "Sharing" : "Поділитись",
     "Tags" : "Теги",
     "Undo" : "відмінити",
+    "(Group)" : "(група)",
     "Can edit" : "Можна редагувати",
     "Can share" : "Can share",
-    "Delete" : "Видалити",
+    "Delete" : "Вилучити",
     "Add a new stack" : "Додати нову купу",
     "Delete list" : "Вилучити список",
     "Add card" : "Додати картку",
@@ -43,7 +44,7 @@
     "Title" : "Назва",
     "Members" : "Учасники",
     "Due date" : "Протягом",
-    "Remove due date" : "Видалити до",
+    "Remove due date" : "Вилучити до",
     "Description" : "Опис",
     "Formatting help" : "Форматування довідки",
     "Attachments" : "Вкладення",
@@ -55,7 +56,7 @@
     "Update" : "Оновлення",
     "(group)" : "(група)",
     "seconds ago" : "секунд тому",
-    "Delete card" : "Видалити картку",
+    "Delete card" : "Вилучити картку",
     "Move card" : "Пересунути картку",
     "Archived boards" : "Архівовані дошки",
     "Shared boards" : "Спільні дошки",
@@ -66,7 +67,7 @@
     "An error occurred" : "Виникла помилка",
     "Archive board" : "Архівувати дошку",
     "Unarchive board" : "Розархівувати дошку",
-    "Delete board" : "Видалити дошку",
+    "Delete board" : "Вилучити дошку",
     "Board details" : "Деталі дошки"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);"
 }
