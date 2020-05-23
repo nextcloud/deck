@@ -24,11 +24,11 @@
 					<div :style="{ backgroundColor: `#${label.color}`, color:textColor(label.color) }" class="label-title">
 						<span>{{ label.title }}</span>
 					</div>
-					<button v-if="canManage"
+					<button v-if="canManage && !isArchived"
 						v-tooltip="t('deck', 'Edit')"
 						class="icon-rename"
 						@click="clickEdit(label)" />
-					<button v-if="canManage"
+					<button v-if="canManage && !isArchived"
 						v-tooltip="t('deck', 'Delete')"
 						class="icon-delete"
 						@click="deleteLabel(label.id)" />
@@ -55,7 +55,7 @@
 					</form>
 				</template>
 			</li>
-			<button v-if="canManage" @click="clickShowAddLabel()">
+			<button v-if="canManage && !isArchived" @click="clickShowAddLabel()">
 				<span class="icon-add" />{{ t('deck', 'Add a new tag') }}
 			</button>
 		</ul>
@@ -88,6 +88,7 @@ export default {
 		...mapGetters({
 			labels: 'currentBoardLabels',
 			canManage: 'canManage',
+			isArchived: 'isArchived',
 		}),
 		addLabelObjValidated() {
 			if (this.addLabelObj.title === '') {

@@ -34,13 +34,13 @@
 			style="opacity: 0.5" />
 
 		<template v-if="!deleted" slot="actions">
-			<ActionButton v-if="canManage"
+			<ActionButton v-if="canManage && !board.archived"
 				icon="icon-rename"
 				:close-after-click="true"
 				@click="actionEdit">
 				{{ t('deck', 'Edit board') }}
 			</ActionButton>
-			<ActionButton v-if="canManage"
+			<ActionButton v-if="canManage && !board.archived"
 				icon="icon-clone"
 				:close-after-click="true"
 				@click="actionClone">

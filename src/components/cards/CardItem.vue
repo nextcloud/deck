@@ -31,7 +31,7 @@
 			class="card"
 			@click="openCard">
 			<div class="card-upper">
-				<h3 v-if="showArchived || !canEdit">
+				<h3 v-if="isArchived || showArchived || !canEdit">
 					{{ card.title }}
 				</h3>
 				<h3 v-else-if="!editing">
@@ -109,6 +109,7 @@ export default {
 		}),
 		...mapGetters([
 			'canEdit',
+			'isArchived',
 		]),
 		card() {
 			return this.$store.getters.cardById(this.id)

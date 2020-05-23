@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<div @click.stop.prevent>
-			<Actions v-if="canEdit">
+			<Actions v-if="canEdit && !isArchived">
 				<ActionButton v-if="showArchived === false" icon="icon-user" @click="assignCardToMe()">
 					{{ t('deck', 'Assign to me') }}
 				</ActionButton>
@@ -93,6 +93,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'canEdit',
+			'isArchived',
 		]),
 		...mapState({
 			showArchived: state => state.showArchived,

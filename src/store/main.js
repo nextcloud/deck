@@ -122,6 +122,9 @@ export default new Vuex.Store({
 		canShare: state => {
 			return state.currentBoard ? state.currentBoard.permissions.PERMISSION_SHARE : false
 		},
+		isArchived: state => {
+			return state.currentBoard && state.currentBoard.archived
+		}
 	},
 	mutations: {
 		setSearchQuery(state, searchQuery) {

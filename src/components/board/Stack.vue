@@ -25,7 +25,7 @@
 	<div class="stack">
 		<div v-click-outside="stopCardCreation" class="stack--header">
 			<transition name="fade" mode="out-in">
-				<h3 v-if="!canManage">
+				<h3 v-if="!canManage || isArchived">
 					{{ stack.title }}
 				</h3>
 				<h3 v-else-if="!editing"
@@ -42,12 +42,12 @@
 						value="">
 				</form>
 			</transition>
-			<Actions v-if="canManage" :force-menu="true">
+			<Actions v-if="canManage && !isArchived" :force-menu="true">
 				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete list') }}
 				</ActionButton>
 			</Actions>
-			<Actions v-if="canEdit && !showArchived">
+			<Actions v-if="canEdit && !showArchived && !isArchived">
 				<ActionButton icon="icon-add" @click.stop="showAddCard=true">
 					{{ t('deck', 'Add card') }}
 				</ActionButton>
@@ -133,6 +133,7 @@ export default {
 		...mapGetters([
 			'canManage',
 			'canEdit',
+			'isArchived',
 		]),
 		...mapState({
 			showArchived: state => state.showArchived,
