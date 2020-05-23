@@ -28,7 +28,7 @@
 					{{ t('deck', 'Assign to me') }}
 				</ActionButton>
 				<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">
-					{{ t('deck', (showArchived ? 'Unarchive card' : 'Archive card')) }}
+					{{ showArchived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
 				</ActionButton>
 				<ActionButton v-if="showArchived === false" icon="icon-delete" @click="deleteCard()">
 					{{ t('deck', 'Delete card') }}

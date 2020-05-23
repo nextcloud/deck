@@ -23,7 +23,7 @@
 <template>
 	<AttachmentDragAndDrop :card-id="card.id" class="drop-upload--sidebar">
 		<button class="icon-upload" @click="clickAddNewAttachmment()">
-			{{ t('settings', 'Upload attachment') }}
+			{{ t('deck', 'Upload attachment') }}
 		</button>
 		<input ref="localAttachments"
 			type="file"
