@@ -20,75 +20,80 @@
   -
   -->
 <template>
-	<router-link :id="`board-${board.id}`"
-		:title="board.title"
-		:class="[{'icon-loading-small': loading, deleted: deleted, editing: editing }, classes]"
+	<AppNavigationItem v-if="!editing"
+		:title="!deleted ? board.title : undoText"
+		:loading="loading"
 		:to="routeTo"
-		tag="li">
-		<div :style="{ backgroundColor: `#${board.color}` }" class="app-navigation-entry-bullet" />
-		<a href="#">
-			{{ board.title }}
-		</a>
+		:undo="deleted"
+		@undo="unDelete">
+		<AppNavigationIconBullet slot="icon" :color="board.color" />
 
-		<div v-if="actions.length > 0" class="app-navigation-entry-utils">
-			<ul>
-				<li class="app-navigation-entry-utils-menu-button">
-					<button v-if="board.acl.length === 0"
-						v-tooltip="t('deck', 'Share')"
-						class="icon-shared"
-						style="opacity: 0.3"
-						@click="showSidebar" />
-					<button v-else
-						v-tooltip="t('deck', 'Share')"
-						class="icon-shared"
-						@click="showSidebar" />
-				</li>
-				<li class="app-navigation-entry-utils-menu-button">
-					<button v-click-outside="hideMenu" v-tooltip="t('deck', 'Options')" @click="showMenu" />
-				</li>
-			</ul>
-		</div>
-		<div :class="{ 'open': menuOpen }" class="app-navigation-entry-menu">
-			<PopoverMenu :menu="actions" />
-		</div>
+		<AppNavigationCounter v-if="board.acl.length"
+			slot="counter"
+			class="icon-shared"
+			style="opacity: 0.5" />
 
-		<!-- undo action -->
-		<div v-if="deleted" class="app-navigation-entry-deleted">
-			<div class="app-navigation-entry-deleted-description">
-				{{ undoText }}
-			</div>
-			<button
-				:title="t('settings', 'Undo')"
-				class="app-navigation-entry-deleted-button icon-history"
-				@click="unDelete" />
-		</div>
-
-		<!-- edit entry -->
-		<div v-if="editing" class="app-navigation-entry-edit">
-			<ColorPicker class="app-navigation-entry-bullet-wrapper" :value="`#${board.color}`" @input="updateColor">
-				<div :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
-			</ColorPicker>
-			<form @submit.prevent.stop="applyEdit">
-				<input v-model="editTitle" type="text" required>
-				<input type="submit" value="" class="icon-confirm">
-				<input type="submit"
-					value=""
-					class="icon-close"
-					@click.stop.prevent="cancelEdit">
-			</form>
-		</div>
-	</router-link>
+		<template v-if="!deleted" slot="actions">
+			<ActionButton v-if="canManage"
+				icon="icon-rename"
+				:close-after-click="true"
+				@click="actionEdit">
+				{{ t('deck', 'Edit board') }}
+			</ActionButton>
+			<ActionButton v-if="canManage"
+				icon="icon-clone"
+				:close-after-click="true"
+				@click="actionClone">
+				{{ t('deck', 'Clone board ') }}
+			</ActionButton>
+			<ActionButton v-if="canManage && board.archived"
+				icon="icon-archive"
+				:close-after-click="true"
+				@click="actionUnarchive">
+				{{ t('deck', 'Unarchive board ') }}
+			</ActionButton>
+			<ActionButton v-if="canManage && !board.archived"
+				icon="icon-archive"
+				:close-after-click="true"
+				@click="actionArchive">
+				{{ t('deck', 'Archive board ') }}
+			</ActionButton>
+			<ActionButton v-if="canManage"
+				icon="icon-delete"
+				:close-after-click="true"
+				@click="actionDelete">
+				{{ t('deck', 'Delete board ') }}
+			</ActionButton>
+			<ActionButton icon="icon-more" :close-after-click="true" @click="actionDetails">
+				{{ t('deck', 'Board details') }}
+			</ActionButton>
+		</template>
+	</AppNavigationItem>
+	<div v-else-if="editing" class="board-edit">
+		<ColorPicker class="app-navigation-entry-bullet-wrapper" :value="`#${board.color}`" @input="updateColor">
+			<div :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
+		</ColorPicker>
+		<form @submit.prevent.stop="applyEdit">
+			<input v-model="editTitle" type="text" required>
+			<input type="submit" value="" class="icon-confirm">
+			<Actions><ActionButton icon="icon-close" @click.stop.prevent="cancelEdit" /></Actions>
+		</form>
+	</div>
 </template>
 
 <script>
-import { PopoverMenu, ColorPicker } from '@nextcloud/vue'
+import { AppNavigationIconBullet, AppNavigationCounter, AppNavigationItem, ColorPicker, Actions, ActionButton } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
 
 export default {
 	name: 'AppNavigationBoard',
 	components: {
+		AppNavigationIconBullet,
+		AppNavigationCounter,
+		AppNavigationItem,
 		ColorPicker,
-		PopoverMenu,
+		Actions,
+		ActionButton,
 	},
 	directives: {
 		ClickOutside,
@@ -119,8 +124,7 @@ export default {
 			return this.board.color
 		},
 		undoText: function() {
-			// todo translation
-			return 'deleted ' + this.board.title
+			return t('deck', 'Board {0} deleted', [this.board.title])
 		},
 		routeTo: function() {
 			return {
@@ -128,117 +132,8 @@ export default {
 				params: { id: this.board.id },
 			}
 		},
-		actions: function() {
-			/* eslint-disable vue/no-side-effects-in-computed-properties */
-			/* eslint-disable vue/no-async-in-computed-properties */
-			const actions = []
-
-			// do not show actions while the item is loading
-			if (this.loading === false) {
-				const canManage = this.board.permissions.PERMISSION_MANAGE
-
-				if (canManage) {
-					actions.push({
-						action: () => {
-							this.hideMenu()
-							this.editTitle = this.board.title
-							this.editColor = '#' + this.board.color
-							this.editing = true
-						},
-						icon: 'icon-rename',
-						text: t('deck', 'Edit board'),
-					})
-				}
-				if (canManage) {
-
-					actions.push({
-						action: async() => {
-							this.hideMenu()
-							this.loading = true
-							try {
-								const newBoard = await this.$store.dispatch('cloneBoard', this.board)
-								this.loading = false
-								const route = this.routeTo
-								route.params.id = newBoard.id
-								this.$router.push(route)
-							} catch (e) {
-								OC.Notification.showTemporary(t('deck', 'An error occurred'))
-								console.error(e)
-							}
-						},
-						icon: 'icon-clone',
-						text: t('deck', 'Clone board'),
-					})
-
-					if (!this.board.archived) {
-						actions.push({
-							action: () => {
-								this.hideMenu()
-								this.loading = true
-								this.$store.dispatch('archiveBoard', this.board)
-							},
-							icon: 'icon-archive',
-							text: t('deck', 'Archive board'),
-						})
-					} else {
-						actions.push({
-							action: () => {
-								this.hideMenu()
-								this.loading = true
-								this.$store.dispatch('unarchiveBoard', this.board)
-							},
-							icon: 'icon-archive',
-							text: t('deck', 'Unarchive board'),
-						})
-					}
-
-					actions.push({
-						action: () => {
-							OC.dialogs.confirmDestructive(
-								t('deck', 'Are you sure you want to delete the board {title}? This will delete all the data of this board.', { title: this.board.title }),
-								t('deck', 'Delete the board?'),
-								{
-									type: OC.dialogs.YES_NO_BUTTONS,
-									confirm: t('deck', 'Delete'),
-									confirmClasses: 'error',
-									cancel: t('deck', 'Cancel'),
-								},
-								(result) => {
-									if (result) {
-										this.hideMenu()
-										this.loading = true
-										this.boardApi.deleteBoard(this.board)
-											.then(() => {
-												this.loading = false
-												this.deleted = true
-												this.undoTimeoutHandle = setTimeout(() => {
-													this.$store.dispatch('removeBoard', this.board)
-												}, 7000)
-											})
-									}
-								},
-								true
-							)
-
-						},
-						icon: 'icon-delete',
-						text: t('deck', 'Delete board'),
-					})
-				}
-
-				actions.push({
-					action: () => {
-						const route = this.routeTo
-						route.name = 'board.details'
-						this.$router.push(route)
-					},
-					icon: 'icon-settings-dark',
-					text: t('deck', 'Board details'),
-				})
-
-			}
-
-			return actions
+		canManage() {
+			return this.board.permissions.PERMISSION_MANAGE
 		},
 	},
 	watch: {},
@@ -254,14 +149,65 @@ export default {
 					this.deleted = false
 				})
 		},
-		showMenu() {
-			this.menuOpen = true
-		},
-		hideMenu() {
-			this.menuOpen = false
-		},
 		updateColor(newColor) {
 			this.editColor = newColor
+		},
+		actionEdit() {
+			this.editTitle = this.board.title
+			this.editColor = '#' + this.board.color
+			this.editing = true
+		},
+		async actionClone() {
+			this.loading = true
+			try {
+				const newBoard = await this.$store.dispatch('cloneBoard', this.board)
+				this.loading = false
+				const route = this.routeTo
+				route.params.id = newBoard.id
+				this.$router.push(route)
+			} catch (e) {
+				OC.Notification.showTemporary(t('deck', 'An error occurred'))
+				console.error(e)
+			}
+		},
+		actionArchive() {
+			this.loading = true
+			this.$store.dispatch('archiveBoard', this.board)
+		},
+		actionUnarchive() {
+			this.loading = true
+			this.$store.dispatch('unarchiveBoard', this.board)
+		},
+		actionDelete() {
+			OC.dialogs.confirmDestructive(
+				t('deck', 'Are you sure you want to delete the board {title}? This will delete all the data of this board.', { title: this.board.title }),
+				t('deck', 'Delete the board?'),
+				{
+					type: OC.dialogs.YES_NO_BUTTONS,
+					confirm: t('deck', 'Delete'),
+					confirmClasses: 'error',
+					cancel: t('deck', 'Cancel'),
+				},
+				(result) => {
+					if (result) {
+						this.loading = true
+						this.boardApi.deleteBoard(this.board)
+							.then(() => {
+								this.loading = false
+								this.deleted = true
+								this.undoTimeoutHandle = setTimeout(() => {
+									this.$store.dispatch('removeBoard', this.board)
+								}, 7000)
+							})
+					}
+				},
+				true
+			)
+		},
+		actionDetails() {
+			const route = this.routeTo
+			route.name = 'board.details'
+			this.$router.push(route)
 		},
 		applyEdit(e) {
 			this.editing = false
@@ -292,17 +238,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	#app-navigation #deck-navigation .editing {
-		height: auto !important;
+	.board-edit {
+		margin-left: 44px;
+		order: 1;
+		display: flex;
+		height: 44px;
+
+		form {
+			display: flex;
+			flex-grow: 1;
+
+			input[type="text"] {
+				flex-grow: 1;
+			}
+		}
 	}
+
 	.app-navigation-entry-bullet-wrapper {
-		position: absolute;
-		left: 33px;
-		width: 44px !important;
-		margin: 6px;
+		width: 44px;
 		height: 44px;
 		.color0 {
 			width: 30px !important;
+			margin: 5px;
+			margin-left: 7px;
 			height: 30px;
 			border-radius: 50%;
 			background-size: 14px;

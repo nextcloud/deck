@@ -20,33 +20,31 @@
   -
   -->
 <template>
-	<li v-if="boards.length > 0"
-		:id="id"
+	<AppNavigationItem v-if="boards.length > 0"
 		:title="text"
-		:class="{'open': opened, 'collapsible': collapsible }">
-		<button v-if="collapsible" class="collapse" @click.prevent.stop="toggleCollapse" />
-		<a :class="icon" href="#">
-			{{ text }}
-		</a>
-		<ul v-if="boards.length > 0">
-			<AppNavigationBoard v-for="board in boardsSorted" :key="board.id" :board="board" />
-		</ul>
-	</li>
+		:icon="icon"
+		:to="to"
+		:allow-collapse="collapsible"
+		:open="opened">
+		<AppNavigationBoard v-for="board in boardsSorted" :key="board.id" :board="board" />
+	</AppNavigationItem>
 </template>
 
 <script>
-import ClickOutside from 'vue-click-outside'
 import AppNavigationBoard from './AppNavigationBoard'
+import { AppNavigationItem } from '@nextcloud/vue'
 
 export default {
 	name: 'AppNavigationBoardCategory',
 	components: {
+		AppNavigationItem,
 		AppNavigationBoard,
 	},
-	directives: {
-		ClickOutside,
-	},
 	props: {
+		to: {
+			type: String,
+			default: '',
+		},
 		id: {
 			type: String,
 			required: true,
@@ -90,12 +88,6 @@ export default {
 			if (this.openOnAddBoards === true && prevVal.length < newVal.length) {
 				this.opened = true
 			}
-		},
-	},
-	mounted() {},
-	methods: {
-		toggleCollapse() {
-			this.opened = !this.opened
 		},
 	},
 }
