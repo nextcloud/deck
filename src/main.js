@@ -42,12 +42,8 @@ if (!process.env.HOT) {
 }
 sync(store, router)
 
-Vue.mixin({
-	methods: {
-		t: translate,
-		n: translatePlural,
-	},
-})
+Vue.prototype.t = translate
+Vue.prototype.n = translatePlural
 
 Vue.directive('tooltip', Tooltip)
 Vue.directive('click-outside', ClickOutside)
