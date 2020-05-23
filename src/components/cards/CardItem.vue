@@ -47,7 +47,7 @@
 					<input type="button" class="icon-confirm" @click="finishedEdit(card)">
 				</form>
 
-				<div v-if="!editing" class="right">
+				<div v-if="!editing" class="duedate right">
 					<transition name="zoom">
 						<div v-if="card.duedate" :class="dueIcon">
 							<span>{{ relativeDate }}</span>
@@ -57,7 +57,8 @@
 
 				<CardMenu v-if="!editing && compactMode" :id="id" class="right" />
 			</div>
-			<transition-group name="zoom"
+			<transition-group v-if="card.labels.length"
+				name="zoom"
 				tag="ul"
 				class="labels"
 				@click="openCard">
@@ -190,7 +191,7 @@ export default {
 
 		.card-upper {
 			display: flex;
-			min-height: 50px;
+			min-height: 44px;
 			form {
 				display: flex;
 				padding: 5px 7px;
@@ -201,7 +202,7 @@ export default {
 
 			}
 			h3 {
-				margin: 14px $card-padding;
+				margin: 12px $card-padding;
 				flex-grow: 1;
 				font-size: 100%;
 				overflow-x: hidden;
@@ -258,10 +259,12 @@ export default {
 			}
 		}
 	}
+	.duedate {
+		margin-right: 9px;
+	}
 	.right {
 		display: flex;
 		align-items: flex-start;
-		margin-right: 9px;
 	}
 
 	.icon.due {
@@ -270,6 +273,7 @@ export default {
 		margin-top: 9px;
 		margin-bottom: 9px;
 		padding: 3px 4px;
+		padding-right: 0;
 		font-size: 90%;
 		display: flex;
 		align-items: center;
@@ -285,14 +289,17 @@ export default {
 			background-color: var(--color-error);
 			color: var(--color-primary-text);
 			opacity: .7;
+			padding: 3px 4px;
 		}
 		&.now {
 			background-color: var(--color-warning);
 			opacity: .7;
+			padding: 3px 4px;
 		}
 		&.next {
 			background-color: var(--color-background-dark);
 			opacity: .7;
+			padding: 3px 4px;
 		}
 
 		span {
@@ -304,8 +311,11 @@ export default {
 	}
 
 	.compact {
-		min-height: 50px;
+		min-height: 44px;
 
+		.duedate {
+			margin-right: 0;
+		}
 		&.has-labels {
 			padding-bottom: $card-padding;
 		}

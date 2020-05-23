@@ -124,7 +124,7 @@ export default new Vuex.Store({
 		},
 		isArchived: state => {
 			return state.currentBoard && state.currentBoard.archived
-		}
+		},
 	},
 	mutations: {
 		setSearchQuery(state, searchQuery) {
