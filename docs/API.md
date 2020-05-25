@@ -1,5 +1,5 @@
 
-The REST API provides access for authenticated users to their data inside the Deck app. To get a better understand of Decks data models and their relations, please have a look at the  [data structure](structure.md) documentation.
+The REST API provides access for authenticated users to their data inside the Deck app. To get a better understanding of Decks data models and their relations, please have a look at the  [data structure](structure.md) documentation.
 
 # Prequisited
 
@@ -687,7 +687,7 @@ The request can fail with a bad request response for the following reasons:
 - The user is not part of the board
 
 
-### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser - Assign a user to a card
+### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser - Unassign a user from a card
 
 #### Request parameters
 
@@ -701,7 +701,7 @@ The request can fail with a bad request response for the following reasons:
 
 | Parameter | Type    | Description                             |
 | --------- | ------- | --------------------------------------- |
-| userId    | String  | The user id to assign to the card       |
+| userId    | String  | The user id to unassign from the card   |
 
 #### Response
 
@@ -947,7 +947,7 @@ For now only `deck_file` is supported as an attachment type.
 
 # OCS API
 
-The following endpoints are available tough the Nextcloud OCS endpoint, which is available at `/ocs/v2.php/apps/deck/api/v1.0/`. 
+The following endpoints are available through the Nextcloud OCS endpoint, which is available at `/ocs/v2.php/apps/deck/api/v1.0/`. 
 This has the benefit that both the web UI as well as external integrations can use the same API.
 
 ## Comments
