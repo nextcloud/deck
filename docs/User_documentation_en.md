@@ -16,6 +16,7 @@ Overall, Deck is easy to use. You can create boards, add users, share the Deck, 
 5. [Manage your board](#5-manage-your-board)
 6. [Import boards](#6-import-boards)
 7. [Search](#7-search)
+8. [New owner for the deck entities](#8-new-owner-for-the-deck-entities)
 
 ### 1. Create my first board
 In this example, we're going to create a board and share it with an other nextcloud user.
@@ -159,3 +160,7 @@ For example the search `project tag:ToDo assigned:alice assigned:bob` will retur
 Other text tokens will be used to perform a case-insensitive search on the card title and description
 
 In addition wuotes can be used to pass a query with spaces, e.g. `"Exact match with spaces"` or `title:"My card"`.
+
+### 8. New owner for the deck entities
+You can transfer ownership of boards, cards, etc to a new user, using `occ` command `deck:transfer-ownership`  
+`$ php occ deck:transfer-ownership owner newOwner`
