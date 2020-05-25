@@ -43,7 +43,7 @@
 		"blueimp-md5": "^2.16.0",
 		"dompurify": "^2.0.11",
 		"lodash": "^4.17.15",
-		"markdown-it": "^10.0.0",
+		"markdown-it": "^11.0.0",
 		"markdown-it-task-lists": "^2.1.1",
 		"moment": "^2.25.3",
 		"nextcloud-vue-collections": "^0.7.2",
