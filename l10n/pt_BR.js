@@ -191,6 +191,8 @@ OC.L10N.register(
     "(circle)" : "(círculo)",
     "seconds ago" : "segundos atrás",
     "Assign to me" : "Atribuir a mim",
+    "Unarchive card" : "Desarquivar cartão",
+    "Archive card" : "Arquivar cartão",
     "Delete card" : "Excluir cartão",
     "Move card" : "Mover cartão",
     "Card details" : "Detalhes do cartão",

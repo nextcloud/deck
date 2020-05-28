@@ -49,6 +49,7 @@ OC.L10N.register(
     "Update" : "Opdatér",
     "(group)" : "(gruppe)",
     "seconds ago" : "sekunder siden",
+    "Archive card" : "Arkivér kort",
     "Delete card" : "Slet kort",
     "Move card" : "Flyt kort",
     "Archived boards" : "Arkiverede lister",

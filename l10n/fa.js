@@ -119,6 +119,7 @@ OC.L10N.register(
     "(group)" : "(گروه)",
     "(circle)" : "(حلقه)",
     "seconds ago" : "ثانیه‌هایی پیش",
+    "Archive card" : "کارت بایگانی",
     "Delete card" : "حذف کارت",
     "Move card" : "انتقال کارت",
     "Card details" : "جزئیات کارت",

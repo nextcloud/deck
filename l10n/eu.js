@@ -191,6 +191,8 @@ OC.L10N.register(
     "(circle)" : "(zirkulua)",
     "seconds ago" : "segundo lehenago",
     "Assign to me" : "Esleitu niri",
+    "Unarchive card" : "Berreskuratu txartela artxibotik",
+    "Archive card" : "Artxibatu txartela",
     "Delete card" : "Ezabatu txartela",
     "Move card" : "Mugitu txartela",
     "Card details" : "Txartelaren xehetasunak",

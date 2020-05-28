@@ -177,6 +177,8 @@ OC.L10N.register(
     "(circle)" : "(krog)",
     "seconds ago" : "pred nekaj sekundami",
     "Assign to me" : "Nalogo dodeli meni",
+    "Unarchive card" : "Povrni nalogo",
+    "Archive card" : "Arhiviraj nalogo",
     "Delete card" : "Izbriši nalogo",
     "Move card" : "Premakni nalogo",
     "Card details" : "Podrobnosti naloge",

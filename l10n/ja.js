@@ -144,6 +144,8 @@ OC.L10N.register(
     "Update" : "更新",
     "(group)" : "(グループ)",
     "seconds ago" : "数秒前",
+    "Unarchive card" : "カードのアーカイブを解除する",
+    "Archive card" : "カードをアーカイブ",
     "Delete card" : "カードを削除する",
     "Move card" : "カードの移動",
     "Archived boards" : "アーカイブ済みのボード",

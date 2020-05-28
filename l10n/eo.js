@@ -135,6 +135,8 @@ OC.L10N.register(
     "Update" : "Ĝisdatigi",
     "(group)" : "(grupo)",
     "seconds ago" : "antaŭ kelkaj sekundoj",
+    "Unarchive card" : "Malarĥivigi karton",
+    "Archive card" : "Arĥivigi karton",
     "Delete card" : "Forigi karton",
     "Archived boards" : "Arĥivigitaj tabuloj",
     "Shared boards" : "Kunhavigitaj tabuloj",

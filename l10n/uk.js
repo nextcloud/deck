@@ -69,6 +69,7 @@ OC.L10N.register(
     "Update" : "Оновлення",
     "(group)" : "(група)",
     "seconds ago" : "секунд тому",
+    "Archive card" : "Архівувати картку",
     "Delete card" : "Вилучити картку",
     "Move card" : "Пересунути картку",
     "Archived boards" : "Архівні дошки",

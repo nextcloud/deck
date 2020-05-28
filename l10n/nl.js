@@ -191,6 +191,8 @@ OC.L10N.register(
     "(circle)" : "(kring)",
     "seconds ago" : "seconden geleden",
     "Assign to me" : "Aan mij toewijzen",
+    "Unarchive card" : "Terughalen kaart uit archief",
+    "Archive card" : "Archiveer kaart",
     "Delete card" : "Verwijderen kaart",
     "Move card" : "Verplaats kaart",
     "Card details" : "Kaart details",

@@ -169,6 +169,8 @@ OC.L10N.register(
     "(group)" : "(hópur)",
     "seconds ago" : "sekúndum síðan",
     "Assign to me" : "Úthluta mér",
+    "Unarchive card" : "Taka spjald úr geymslu",
+    "Archive card" : "Setja spjald í geymslu",
     "Delete card" : "Eyða spjaldi",
     "Move card" : "Færa spjald",
     "Card details" : "Nánar um spjald",

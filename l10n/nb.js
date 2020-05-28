@@ -134,6 +134,8 @@ OC.L10N.register(
     "Update" : "Oppdater",
     "(group)" : "(gruppe)",
     "seconds ago" : "sekunder siden",
+    "Unarchive card" : "Hent kort fra arkiv",
+    "Archive card" : "Arkiver kort",
     "Delete card" : "Slett kort",
     "Archived boards" : "Arkiverte tavler",
     "Shared boards" : "Delte tavler",

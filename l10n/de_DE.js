@@ -191,6 +191,8 @@ OC.L10N.register(
     "(circle)" : "(Kreis)",
     "seconds ago" : "Gerade eben",
     "Assign to me" : "Mir zuweisen",
+    "Unarchive card" : "Karte dearchivieren",
+    "Archive card" : "Karte archivieren",
     "Delete card" : "Karte löschen",
     "Move card" : "Karte verschieben",
     "Card details" : "Kartendetails",

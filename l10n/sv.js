@@ -190,6 +190,8 @@ OC.L10N.register(
     "(circle)" : "(cirkel)",
     "seconds ago" : "sekunder sedan",
     "Assign to me" : "Tilldela till mig",
+    "Unarchive card" : "Avarkivera kort",
+    "Archive card" : "Arkivera kort",
     "Delete card" : "Ta bort kort",
     "Move card" : "Flytta kort",
     "Card details" : "Kortdetaljer",
