@@ -31,7 +31,7 @@
 			</p>
 		</div>
 		<div v-if="board" class="board-actions">
-			<div v-if="canManage && !showArchived"
+			<div v-if="canManage && !showArchived && !board.archived"
 				id="stack-add"
 				v-click-outside="hideAddStack">
 				<Actions v-if="!isAddStackVisible" :title="t('deck', 'Add new list')">
