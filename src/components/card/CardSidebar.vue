@@ -104,6 +104,9 @@
 					<DatetimePicker v-model="duedate"
 						:placeholder="t('deck', 'Set a due date')"
 						type="datetime"
+						:minute-step="5"
+						:show-second="false"
+						:format="format"
 						:disabled="saving || !canEdit"
 						confirm />
 					<Actions v-if="canEdit">
@@ -203,6 +206,8 @@ import { formatFileSize } from '@nextcloud/files'
 import relativeDate from '../../mixins/relativeDate'
 import AttachmentList from './AttachmentList'
 import { generateUrl } from '@nextcloud/router'
+import { getLocale } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
 
 const markdownIt = new MarkdownIt({
 	linkify: true,
@@ -242,6 +247,7 @@ export default {
 			addedLabelToCard: null,
 			copiedCard: null,
 			allLabels: null,
+			locale: getLocale(),
 
 			saving: false,
 			markdownIt: null,
@@ -260,6 +266,10 @@ export default {
 			hasActivity: capabilities && capabilities.activity,
 			hasComments: !!OC.appswebroots['comments'],
 			modalShow: false,
+			format: {
+				stringify: this.stringify,
+				parse: this.parse,
+			},
 		}
 	},
 	computed: {
@@ -484,6 +494,12 @@ export default {
 				labelId: removedLabel.id,
 			}
 			this.$store.dispatch('removeLabel', data)
+		},
+		stringify(date) {
+			return moment(date).locale(this.locale).format('LLL')
+		},
+		parse(value) {
+			return moment(value, 'LLL', this.locale).toDate()
 		},
 	},
 }
