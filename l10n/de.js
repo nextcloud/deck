@@ -191,6 +191,8 @@ OC.L10N.register(
     "(circle)" : "(Kreis)",
     "seconds ago" : "Gerade eben",
     "Assign to me" : "Mir zuweisen",
+    "Unarchive card" : "Karte dearchivieren",
+    "Archive card" : "Benötigt keine Übersetzung. Für Android wird nur die formelle Übersetzung verwendet (de_DE).",
     "Delete card" : "Karte löschen",
     "Move card" : "Karte verschieben",
     "Card details" : "Kartendetails",

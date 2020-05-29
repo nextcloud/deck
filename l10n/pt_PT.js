@@ -44,6 +44,7 @@ OC.L10N.register(
     "Update" : "Atualizar",
     "(group)" : "(grupo)",
     "seconds ago" : "segundos atrás",
+    "Archive card" : "Arquivar cartão",
     "Delete card" : "Eliminar cartão",
     "Archived boards" : "Quadros arquivados",
     "Settings" : "Definições",

@@ -189,6 +189,8 @@ OC.L10N.register(
     "(circle)" : "(круг)",
     "seconds ago" : "пре неколико секунди",
     "Assign to me" : "Додели мени",
+    "Unarchive card" : "Врати картицу из архиве",
+    "Archive card" : "Архивирај картицу",
     "Delete card" : "Обриши картицу",
     "Move card" : "Премести картицу",
     "Card details" : "Детаљи картице",

@@ -51,6 +51,7 @@ OC.L10N.register(
     "Update" : "Update",
     "(group)" : "(group)",
     "seconds ago" : "seconds ago",
+    "Archive card" : "Archive card",
     "Delete card" : "Delete card",
     "Archived boards" : "Archived boards",
     "Shared boards" : "Shared boards",

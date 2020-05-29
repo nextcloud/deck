@@ -191,6 +191,8 @@ OC.L10N.register(
     "(circle)" : "(circle)",
     "seconds ago" : "hace unos segundos",
     "Assign to me" : "Asignarme a mí",
+    "Unarchive card" : "Desarchivar tarjeta",
+    "Archive card" : "Archivar tarjeta",
     "Delete card" : "Eliminar tarjeta",
     "Move card" : "Mover tarjeta",
     "Card details" : "Detalles de la tarjeta",

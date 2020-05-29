@@ -189,6 +189,8 @@ OC.L10N.register(
     "(circle)" : "(cercle)",
     "seconds ago" : "fa uns segons",
     "Assign to me" : "Assigna'm a mi",
+    "Unarchive card" : "Desarxiva targeta",
+    "Archive card" : "Arxiva la targeta",
     "Delete card" : "Suprimeix targeta",
     "Move card" : "Mou la targeta",
     "Card details" : "Dades de la targeta",

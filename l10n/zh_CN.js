@@ -177,6 +177,8 @@ OC.L10N.register(
     "(group)" : "（组）",
     "seconds ago" : "几秒前",
     "Assign to me" : "指派给我",
+    "Unarchive card" : "恢复卡片存档",
+    "Archive card" : "归档卡片",
     "Delete card" : "删除卡片",
     "Move card" : "移动卡片",
     "Card details" : "卡片详情",

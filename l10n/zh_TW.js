@@ -52,6 +52,7 @@ OC.L10N.register(
     "(group)" : "(群組)",
     "seconds ago" : "幾秒前",
     "Assign to me" : "分派給我",
+    "Archive card" : "封存卡片",
     "Delete card" : "刪除作業",
     "Move card" : "移動卡片",
     "Settings" : "設定",

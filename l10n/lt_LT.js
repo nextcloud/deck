@@ -186,6 +186,8 @@ OC.L10N.register(
     "(circle)" : "(ratas)",
     "seconds ago" : "prieš keletą sekundžių",
     "Assign to me" : "Priskirti sau",
+    "Unarchive card" : "Išarchyvuoti kortelę",
+    "Archive card" : "Archyvuoti kortelę",
     "Delete card" : "Ištrinti kortelę",
     "Move card" : "Perkelti kortelę",
     "Card details" : "Išsamiau apie kortelę",

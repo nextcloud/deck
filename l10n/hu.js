@@ -191,6 +191,8 @@ OC.L10N.register(
     "(circle)" : "(kör)",
     "seconds ago" : "másodperce",
     "Assign to me" : "Hozzám rendelés",
+    "Unarchive card" : "Kártya archiválásának visszavonása",
+    "Archive card" : "Kártya archiválása",
     "Delete card" : "Kártya törlése",
     "Move card" : "Kártya áthelyezése",
     "Card details" : "Kártya részletei",

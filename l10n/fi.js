@@ -168,6 +168,8 @@ OC.L10N.register(
     "Update" : "Päivitä",
     "(group)" : "(ryhmä)",
     "seconds ago" : "sekuntia sitten",
+    "Unarchive card" : "Poista kortti arkistosta",
+    "Archive card" : "Arkistoi kortti",
     "Delete card" : "Poista kortti",
     "Move card" : "Siirrä kortti",
     "Card details" : "Näytä kortin sisältö",

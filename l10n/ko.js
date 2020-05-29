@@ -54,6 +54,7 @@ OC.L10N.register(
     "Update" : "업데이트",
     "(group)" : "(그룹)",
     "seconds ago" : "초 전",
+    "Archive card" : "보관 카드",
     "Delete card" : "카드 삭제",
     "Move card" : "카드 이동",
     "Archived boards" : "보관된 게시판",

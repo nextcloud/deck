@@ -191,6 +191,8 @@ OC.L10N.register(
     "(circle)" : "(круг)",
     "seconds ago" : "несколько секунд назад",
     "Assign to me" : "Назначить себе",
+    "Unarchive card" : "Восстановить из архива",
+    "Archive card" : "Переместить в архив",
     "Delete card" : "Удалить",
     "Move card" : "Переместить карточку",
     "Card details" : "Свойства карточки",
