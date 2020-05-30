@@ -16,7 +16,6 @@ OC.L10N.register(
     "Modified" : "Dimodifikasi",
     "Save" : "Simpan",
     "Update" : "Kemaskini",
-    "Settings" : "Tetapan",
-    "Share" : "Kongsi"
+    "Settings" : "Tetapan"
 },
 "nplurals=1; plural=0;");

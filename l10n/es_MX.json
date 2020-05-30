@@ -50,15 +50,10 @@
     "(group)" : "(grupo)",
     "seconds ago" : "hace segundos",
     "Archived boards" : "Tableros archivados",
-    "Shared boards" : "Tableros compartidos",
     "Settings" : "Configuraciones ",
     "New board title" : "Nuevo título del tablero",
-    "Share" : "Compartir",
     "Edit board" : "Editar el tablero",
-    "An error occurred" : "Ha ocurrido un error",
-    "Archive board" : "Archivar tablero",
-    "Unarchive board" : "Desarchivar tablero",
-    "Delete board" : "Borrar tableros",
-    "Board details" : "Detalles del tablero"
+    "Board details" : "Detalles del tablero",
+    "An error occurred" : "Ha ocurrido un error"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

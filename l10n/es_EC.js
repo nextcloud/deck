@@ -50,14 +50,10 @@ OC.L10N.register(
     "(group)" : "(grupo)",
     "seconds ago" : "hace segundos",
     "Archived boards" : "Tableros archivados",
-    "Shared boards" : "Tableros compartidos",
+    "Shared with you" : "Compartido con usted",
     "Settings" : "Configuraciones ",
     "New board title" : "Nuevo título del tablero",
-    "Share" : "Compartir",
     "Edit board" : "Editar el tablero",
-    "Archive board" : "Archivar tablero",
-    "Unarchive board" : "Desarchivar tablero",
-    "Delete board" : "Borrar tableros",
     "Board details" : "Detalles del tablero"
 },
 "nplurals=2; plural=(n != 1);");

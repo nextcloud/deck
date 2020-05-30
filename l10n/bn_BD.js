@@ -22,7 +22,6 @@ OC.L10N.register(
     "Update" : "পরিবর্ধন",
     "(group)" : "(গোষ্ঠি)",
     "seconds ago" : "সেকেন্ড পূর্বে",
-    "Settings" : "সেটিংস",
-    "Share" : "ভাগাভাগি কর"
+    "Settings" : "সেটিংস"
 },
 "nplurals=2; plural=(n != 1);");

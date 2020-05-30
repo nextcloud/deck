@@ -47,13 +47,11 @@ OC.L10N.register(
     "Archive card" : "Arquivar cartão",
     "Delete card" : "Eliminar cartão",
     "Archived boards" : "Quadros arquivados",
+    "Shared with you" : "Shared with you",
     "Settings" : "Definições",
     "New board title" : "Novo título de quadro",
-    "Share" : "Partilhar",
     "Edit board" : "Editar quadro",
-    "An error occurred" : "Ocorreu um erro",
-    "Archive board" : "Arquivar quadro",
-    "Delete board" : "Eliminar quadro",
-    "Board details" : "Detalhes do quadro"
+    "Board details" : "Detalhes do quadro",
+    "An error occurred" : "Ocorreu um erro"
 },
 "nplurals=2; plural=(n != 1);");

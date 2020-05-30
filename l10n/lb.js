@@ -22,7 +22,6 @@ OC.L10N.register(
     "Reply" : "Äntwerten",
     "Update" : "Update",
     "seconds ago" : "Sekonnen hier",
-    "Settings" : "Astellungen",
-    "Share" : "Deelen"
+    "Settings" : "Astellungen"
 },
 "nplurals=2; plural=(n != 1);");

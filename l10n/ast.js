@@ -37,7 +37,7 @@ OC.L10N.register(
     "Update" : "Anovar",
     "(group)" : "(grupu)",
     "seconds ago" : "hai segundos",
-    "Settings" : "Settings",
-    "Share" : "Share"
+    "Shared with you" : "Shared with you",
+    "Settings" : "Settings"
 },
 "nplurals=2; plural=(n != 1);");

@@ -39,9 +39,7 @@ OC.L10N.register(
     "seconds ago" : "segundos",
     "Settings" : "Ajustes",
     "New board title" : "Nuevo título de tablero",
-    "Share" : "Compartir",
-    "Options" : "Opciones",
-    "An error occurred" : "Ocurrió un error",
-    "Board details" : "Detalles del tablero"
+    "Board details" : "Detalles del tablero",
+    "An error occurred" : "Ocurrió un error"
 },
 "nplurals=2; plural=(n != 1);");

@@ -76,16 +76,11 @@ OC.L10N.register(
     "seconds ago" : "vài giây trước",
     "Assign to me" : "Phân công cho tôi",
     "Archived boards" : "Dự án đã lưu trữ",
-    "Shared boards" : "Chia sẽ dự án",
     "Settings" : "Thiết lập",
     "New board title" : "Tên dự án mới",
-    "Share" : "Chia sẻ",
     "Edit board" : "Chỉnh sửa dự án",
-    "An error occurred" : "Có lỗi đã xảy ra",
-    "Archive board" : "Lưu trữ dự án",
-    "Unarchive board" : "Bỏ lưu trữ dự án",
-    "Delete board" : "Xóa dự án",
     "Board details" : "Thông tin dự án",
+    "An error occurred" : "Có lỗi đã xảy ra",
     "Maximum file size of {size} exceeded" : "Đã vượt quá kích thước {size} tối đa tập tin"
 },
 "nplurals=1; plural=0;");

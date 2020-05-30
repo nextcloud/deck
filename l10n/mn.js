@@ -30,7 +30,7 @@ OC.L10N.register(
     "Update" : "Шинэчлэх",
     "(group)" : "(бүлэг)",
     "seconds ago" : "хоёрдахь өмнө",
-    "Settings" : "Тохиргоо",
-    "Share" : "Түгээх"
+    "Shared with you" : "тантай хуваалцсан",
+    "Settings" : "Тохиргоо"
 },
 "nplurals=2; plural=(n != 1);");

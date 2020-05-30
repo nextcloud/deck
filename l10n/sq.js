@@ -47,14 +47,10 @@ OC.L10N.register(
     "(group)" : "(grup)",
     "seconds ago" : "sekonda më parë",
     "Archived boards" : "Borde të arkivuara",
-    "Shared boards" : "Tabela të shpërndara",
+    "Shared with you" : "E ndarë me ju",
     "Settings" : "Rregullimet",
     "New board title" : "Titull i ri bordi",
-    "Share" : "Shpërndaje",
     "Edit board" : "Tabela e editimeve",
-    "Archive board" : "Arkivo bordin",
-    "Unarchive board" : "Hiq bordin nga arkivi",
-    "Delete board" : "Fshij bordin",
     "Board details" : "Detajet e Tabeles "
 },
 "nplurals=2; plural=(n != 1);");

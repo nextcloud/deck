@@ -47,14 +47,9 @@ OC.L10N.register(
     "(group)" : "(ჯგუფი)",
     "seconds ago" : "წამის წინ",
     "Archived boards" : "არქივირებული დაფები",
-    "Shared boards" : "გაზიარებული დაფები",
     "Settings" : "პარამეტრები",
     "New board title" : "ახალი დაფის სახელი",
-    "Share" : "გაზიარება",
     "Edit board" : "დაფის შეცვლა",
-    "Archive board" : "დაფის არქივირება",
-    "Unarchive board" : "დაფის ამოღება",
-    "Delete board" : "დაფის გაუქმება",
     "Board details" : "დაფის დეტალები"
 },
 "nplurals=2; plural=(n!=1);");

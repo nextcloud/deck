@@ -16,7 +16,7 @@ OC.L10N.register(
     "Reply" : "Respondre",
     "Update" : "Metre a jorn",
     "seconds ago" : "i a qualques segondas",
-    "Settings" : "Paramètres",
-    "Share" : "Partejar"
+    "Shared with you" : "Shared with you",
+    "Settings" : "Paramètres"
 },
 "nplurals=2; plural=(n > 1);");

@@ -22,7 +22,6 @@ OC.L10N.register(
     "Save" : "Lagre",
     "Update" : "Oppdater",
     "seconds ago" : "sekund sidan",
-    "Settings" : "Instillingar",
-    "Share" : "Del"
+    "Settings" : "Instillingar"
 },
 "nplurals=2; plural=(n != 1);");

@@ -126,14 +126,10 @@ OC.L10N.register(
     "Move card to another board" : "انتقال کارت به تخته‌ای دیگر",
     "All boards" : "همه تخته‌ها",
     "Archived boards" : "تخته‌های بایگانی شده",
-    "Shared boards" : "تخته‌های هم‌رسانی شده",
+    "Shared with you" : "با شما به اشتراک گذاشته شده است",
     "Settings" : "تنظیمات",
     "New board title" : "عنوان تختهٔ جدید",
-    "Share" : "هم‌رسانی",
-    "Options" : "گزینه‌ها",
     "Edit board" : "ویرایش تخته",
-    "An error occurred" : "خطایی روی داد",
-    "Archive board" : "تخته",
-    "Delete board" : "حذف تهته"
+    "An error occurred" : "خطایی روی داد"
 },
 "nplurals=2; plural=(n > 1);");

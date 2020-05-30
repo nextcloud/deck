@@ -22,7 +22,6 @@ OC.L10N.register(
     "Update" : "Diweddaru",
     "seconds ago" : "eiliad yn ôl",
     "Settings" : "Gosodiadau",
-    "Share" : "Rhannu",
     "An error occurred" : "Digwyddodd gwall"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

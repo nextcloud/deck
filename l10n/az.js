@@ -22,7 +22,7 @@ OC.L10N.register(
     "Update" : "Yenilənmə",
     "(group)" : "(qrup)",
     "seconds ago" : "saniyələr öncə",
-    "Settings" : "Quraşdırmalar",
-    "Share" : "Paylaş"
+    "Shared with you" : "Shared with you",
+    "Settings" : "Quraşdırmalar"
 },
 "nplurals=2; plural=(n != 1);");

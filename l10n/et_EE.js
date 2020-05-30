@@ -29,7 +29,6 @@ OC.L10N.register(
     "(group)" : "(grupp)",
     "seconds ago" : "sekundit tagasi",
     "Settings" : "Seaded",
-    "Share" : "Jaga",
     "An error occurred" : "Tekkis tõrge"
 },
 "nplurals=2; plural=(n != 1);");

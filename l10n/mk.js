@@ -31,9 +31,8 @@ OC.L10N.register(
     "Update" : "Ажурирај",
     "(group)" : "(group)",
     "seconds ago" : "пред неколку секунди",
+    "Shared with you" : "Споделено со тебе",
     "Settings" : "Параметри",
-    "Share" : "Сподели",
-    "Options" : "Опции",
     "An error occurred" : "Настана грешка"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

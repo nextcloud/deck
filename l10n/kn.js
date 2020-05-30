@@ -14,7 +14,6 @@ OC.L10N.register(
     "Title" : "ಶೀರ್ಷಿಕೆ",
     "Modified" : "﻿ಬದಲಾಯಿಸಿದ",
     "Save" : "﻿ಉಳಿಸಿ",
-    "Settings" : "ಆಯ್ಕೆ",
-    "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ"
+    "Settings" : "ಆಯ್ಕೆ"
 },
 "nplurals=2; plural=(n > 1);");

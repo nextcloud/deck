@@ -53,15 +53,11 @@ OC.L10N.register(
     "Delete card" : "Slet kort",
     "Move card" : "Flyt kort",
     "Archived boards" : "Arkiverede lister",
-    "Shared boards" : "Delte lister",
+    "Shared with you" : "Shared with you",
     "Settings" : "Indstillinger",
     "New board title" : "Ny titel på liste",
-    "Share" : "Del",
     "Edit board" : "Rediger liste",
-    "An error occurred" : "Der var en fejl",
-    "Archive board" : "Arkivér liste",
-    "Unarchive board" : "Annuller arkivering af liste",
-    "Delete board" : "Slet liste",
-    "Board details" : "Liste detaljer"
+    "Board details" : "Liste detaljer",
+    "An error occurred" : "Der var en fejl"
 },
 "nplurals=2; plural=(n != 1);");

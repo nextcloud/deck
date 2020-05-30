@@ -54,14 +54,9 @@ OC.L10N.register(
     "Archive card" : "Archive card",
     "Delete card" : "Delete card",
     "Archived boards" : "Archived boards",
-    "Shared boards" : "Shared boards",
     "Settings" : "Settings",
     "New board title" : "New board title",
-    "Share" : "Share",
     "Edit board" : "Edit board",
-    "Archive board" : "Archive board",
-    "Unarchive board" : "Unarchive board",
-    "Delete board" : "Delete board",
     "Board details" : "Board details"
 },
 "nplurals=2; plural=(n != 1);");

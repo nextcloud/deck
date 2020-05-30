@@ -29,8 +29,8 @@ OC.L10N.register(
     "Reply" : "Antwoord",
     "Update" : "Werk by",
     "seconds ago" : "sekondes gelede",
+    "Shared with you" : "Met u gedeel",
     "Settings" : "Instellings",
-    "Share" : "Deel",
     "An error occurred" : "'n Fout het voorgekom"
 },
 "nplurals=2; plural=(n != 1);");
