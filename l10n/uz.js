@@ -11,6 +11,7 @@ OC.L10N.register(
     "Save" : "Saqlash",
     "Update" : "Yangilash",
     "seconds ago" : "soniya oldin",
+    "Shared with you" : "Siz bilan baham ko'rdim",
     "Settings" : "Sozlamalar"
 },
 "nplurals=1; plural=0;");

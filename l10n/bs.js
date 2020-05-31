@@ -19,6 +19,7 @@ OC.L10N.register(
     "Modified" : "Izmijenjeno",
     "Save" : "Spremi",
     "Update" : "Ažuriraj",
+    "Shared with you" : "Shared with you",
     "Settings" : "Podešavanje",
     "Maximum file size of {size} exceeded" : "Maksimalna veličina datoteke prekoračena"
 },

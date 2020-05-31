@@ -197,6 +197,7 @@ OC.L10N.register(
     "Select a stack" : "Одаберите гомилу",
     "All boards" : "Све табле",
     "Archived boards" : "Архивиране табле",
+    "Shared with you" : "Дељено са Вама",
     "Limit deck usage of groups" : "Ограничи употребу шпила на групе",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ограничавање Deck апликације ће блокирати кориснике који нису део одабраних група да креирају своје табле. Корисници ће и даље моћи да раде на таблама које су подељене са њима.",
     "Settings" : "Поставке",

@@ -21,6 +21,7 @@ OC.L10N.register(
     "Save" : "Cadw",
     "Update" : "Diweddaru",
     "seconds ago" : "eiliad yn ôl",
+    "Shared with you" : "Shared with you",
     "Settings" : "Gosodiadau",
     "An error occurred" : "Digwyddodd gwall"
 },

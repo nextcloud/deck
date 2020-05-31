@@ -73,6 +73,7 @@ OC.L10N.register(
     "Delete card" : "Вилучити картку",
     "Move card" : "Пересунути картку",
     "Archived boards" : "Архівні дошки",
+    "Shared with you" : "Вам надано доступ",
     "Settings" : "Налаштування",
     "New board title" : "Новий заголовок дошки",
     "Edit board" : "Змінити дошку",

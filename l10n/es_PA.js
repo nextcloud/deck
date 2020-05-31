@@ -46,6 +46,7 @@ OC.L10N.register(
     "(group)" : "(grupo)",
     "seconds ago" : "hace segundos",
     "Archived boards" : "Tableros archivados",
+    "Shared with you" : "Compartido con usted",
     "Settings" : "Configuraciones ",
     "New board title" : "Nuevo título del tablero",
     "Edit board" : "Editar el tablero",

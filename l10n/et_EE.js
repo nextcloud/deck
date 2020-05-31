@@ -28,6 +28,7 @@ OC.L10N.register(
     "Update" : "Uuenda",
     "(group)" : "(grupp)",
     "seconds ago" : "sekundit tagasi",
+    "Shared with you" : "Sinuga jagatud",
     "Settings" : "Seaded",
     "An error occurred" : "Tekkis tõrge"
 },

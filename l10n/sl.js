@@ -185,6 +185,7 @@ OC.L10N.register(
     "Select a stack" : "Izbor paketa nalog",
     "All boards" : "Vse zbirke",
     "Archived boards" : "Arhivirane zbirke",
+    "Shared with you" : "V souporabi z vami",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Omejevanje programa prepreči uporabnikom, ki niso del teh skupin, ustvarjanje novih zbirk. Uporabniki bodo še vedno lahko spreminjali zbirke, ki so jih dobili v souporabo.",
     "Settings" : "Nastavitve",
     "New board title" : "Naslov nove zbirke",

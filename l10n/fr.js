@@ -200,6 +200,7 @@ OC.L10N.register(
     "Select a stack" : "Sélectionner une pile",
     "All boards" : "Tous les tableaux",
     "Archived boards" : "Tableaux archivés",
+    "Shared with you" : "Partagés avec vous",
     "Limit deck usage of groups" : "Limiter l'utilisation du tableau aux groupes",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limiter Deck empêchera les utilisateurs ne faisant pas partie de ces groupes de créer leurs propres tableaux. Ces utilisateurs pourront toujours travailler sur les tableaux qui ont été partagés avec eux.",
     "Settings" : "Paramètres",

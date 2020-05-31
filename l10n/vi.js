@@ -76,6 +76,7 @@ OC.L10N.register(
     "seconds ago" : "vài giây trước",
     "Assign to me" : "Phân công cho tôi",
     "Archived boards" : "Dự án đã lưu trữ",
+    "Shared with you" : "Đã chia sẻ với bạn",
     "Settings" : "Thiết lập",
     "New board title" : "Tên dự án mới",
     "Edit board" : "Chỉnh sửa dự án",

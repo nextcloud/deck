@@ -35,6 +35,7 @@ OC.L10N.register(
     "Update" : "Atjaunināt",
     "(group)" : "(grupa)",
     "seconds ago" : "sekundēm",
+    "Shared with you" : "Koplietots ar tevi",
     "Settings" : "Iestatījumi",
     "An error occurred" : "Gadījās kļūda"
 },

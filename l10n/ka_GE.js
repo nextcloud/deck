@@ -47,6 +47,7 @@ OC.L10N.register(
     "(group)" : "(ჯგუფი)",
     "seconds ago" : "წამის წინ",
     "Archived boards" : "არქივირებული დაფები",
+    "Shared with you" : "გაზიარებული თქვენთან",
     "Settings" : "პარამეტრები",
     "New board title" : "ახალი დაფის სახელი",
     "Edit board" : "დაფის შეცვლა",

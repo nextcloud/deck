@@ -200,6 +200,7 @@ OC.L10N.register(
     "Select a stack" : "Válasszon rakást",
     "All boards" : "Az összes tábla",
     "Archived boards" : "Archivált táblák",
+    "Shared with you" : "Megosztva Önnel",
     "Limit deck usage of groups" : "A kártyák használatának csoportokra korlátozása",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "A Kártyák korlátozása blokkolja a saját táblák létrehozását azoknál a felhasználóknál, akik nem tagjai a megadott csoportoknak. A felhasználók továbbra is tudnak dolgozni a velük megosztott táblákon.",
     "Settings" : "Beállítások",

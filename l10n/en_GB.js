@@ -54,6 +54,7 @@ OC.L10N.register(
     "Archive card" : "Archive card",
     "Delete card" : "Delete card",
     "Archived boards" : "Archived boards",
+    "Shared with you" : "Shared with you",
     "Settings" : "Settings",
     "New board title" : "New board title",
     "Edit board" : "Edit board",

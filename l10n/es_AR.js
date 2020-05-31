@@ -37,6 +37,7 @@ OC.L10N.register(
     "Update" : "Actualizar",
     "(group)" : "(grupo)",
     "seconds ago" : "segundos",
+    "Shared with you" : "Compartido con usted",
     "Settings" : "Ajustes",
     "New board title" : "Nuevo título de tablero",
     "Board details" : "Detalles del tablero",

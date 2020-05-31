@@ -55,6 +55,7 @@ OC.L10N.register(
     "Archive card" : "封存卡片",
     "Delete card" : "刪除作業",
     "Move card" : "移動卡片",
+    "Shared with you" : "與您分享",
     "Settings" : "設定",
     "Edit board" : "編輯專案",
     "An error occurred" : "發生錯誤",

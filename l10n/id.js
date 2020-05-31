@@ -200,6 +200,7 @@ OC.L10N.register(
     "Select a stack" : "Pilih tumpuk",
     "All boards" : "Semua papan",
     "Archived boards" : "Papan terarsip",
+    "Shared with you" : "Shared with you",
     "Limit deck usage of groups" : "Batasi grup pengguna longgok ",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Membatasi Longgok akan mencegah pengguna bukan bagian dari grup, untuk membuat papan mereka sendiri. Pengguna tetap menggunakan papan yang telah dibagikan kepadanya.",
     "Settings" : "Setelan",

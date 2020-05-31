@@ -40,6 +40,7 @@ OC.L10N.register(
     "Update" : "Обновяване",
     "(group)" : "(група)",
     "seconds ago" : "преди секунди",
+    "Shared with you" : "Споделени с вас",
     "Settings" : "Настройки",
     "An error occurred" : "Възникна грешка"
 },
