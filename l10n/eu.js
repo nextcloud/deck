@@ -206,6 +206,8 @@ OC.L10N.register(
     "Settings" : "Ezarpenak",
     "New board title" : "Taula berriaren izenburua",
     "Edit board" : "Editatu taula",
+    "Clone board " : "Klonatu mahaia",
+    "Archive board " : "Artxibatu mahaia",
     "Board details" : "Mahaigainaren xehetasunak",
     "An error occurred" : "Errore bat gertatu da",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Ziur zaude «{title}» mahaia ezabatu nahi duzula? Honek mahai honen datu guztiak ezabatuko ditu.",
