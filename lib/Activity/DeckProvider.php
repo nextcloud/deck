@@ -357,6 +357,6 @@ class DeckProvider implements IProvider {
 	}
 
 	public function deckUrl($endpoint) {
-		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . '#!' . $endpoint;
+		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . '#' . $endpoint;
 	}
 }
