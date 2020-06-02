@@ -60,6 +60,7 @@ OC.L10N.register(
     "List name" : "نام فهرست",
     "Apply filter" : "اعمال پالایه",
     "Filter by tag" : "پالایش برحسب برچسب",
+    "Overdue" : "تاریخ گذشته",
     "Next 24 hours" : "۲۴ ساعت آینده",
     "Next 7 days" : "۷ روز آینده",
     "Next 30 days" : "۳۰ روز آینده",
