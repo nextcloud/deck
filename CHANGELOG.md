@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.0.2 - 2020-06-03
+
+### Fixed
+
+* [#1774](https://github.com/nextcloud/deck/pull/1774) Remove deprecated global API calls
+* [#1918](https://github.com/nextcloud/deck/pull/1918) Save compact mode on localstorage @jakobroehrl
+* [#1919](https://github.com/nextcloud/deck/pull/1919) Show sidebar after card creation @jakobroehrl
+* [#1924](https://github.com/nextcloud/deck/pull/1924) Boards ordered in main page @jakobroehrl
+* [#1925](https://github.com/nextcloud/deck/pull/1925) Fix generated fronted urls
+* [#1944](https://github.com/nextcloud/deck/pull/1944) Move navigation to @nextcloud/vue components
+* [#1945](https://github.com/nextcloud/deck/pull/1945) Fix datetime picker
+* [#1946](https://github.com/nextcloud/deck/pull/1946) Fix translations
+* [#1976](https://github.com/nextcloud/deck/pull/1976) Delete boards that users own once they are deleted
+* [#1977](https://github.com/nextcloud/deck/pull/1977) Redirect from previously used routes to the current ones
+
 ## 1.0.1 - 2020-05-15
 
 ### Fixed
