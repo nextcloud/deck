@@ -121,5 +121,22 @@ export default new Router({
 				},
 			],
 		},
+		// redirects to keep compatibility to 1.0.0 routes
+		{
+			path: '/boards/:id',
+			redirect: '/board/:id',
+		},
+		{
+			path: '/boards/:id/cards/:cardId',
+			redirect: '/board/:id/card/:cardId',
+		},
+		{
+			path: '/!/board/:id',
+			redirect: '/board/:id',
+		},
+		{
+			path: '/!/board/:id/card/:cardId',
+			redirect: '/board/:id/card/:cardId',
+		},
 	],
 })
