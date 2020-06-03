@@ -32,6 +32,7 @@ use OCA\Deck\Collaboration\Resources\ResourceProviderCard;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
@@ -127,6 +128,13 @@ class Application extends App {
 			$assignments = $assignmentMapper->findByUserId($user->getUID());
 			foreach ($assignments as $assignment) {
 				$assignmentMapper->delete($assignment);
+			}
+
+			/** @var BoardMapper $boardMapper */
+			$boardMapper = $container->query(BoardMapper::class);
+			$boards = $boardMapper->findAllByOwner($user->getUID());
+			foreach ($boards as $board) {
+				$boardMapper->delete($board);
 			}
 		});
 

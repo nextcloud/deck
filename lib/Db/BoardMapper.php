@@ -106,6 +106,11 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		return $entries;
 	}
 
+	public function findAllByOwner(string $userId, int $limit = null, int $offset = null) {
+		$sql = 'SELECT * FROM `*PREFIX*deck_boards` WHERE owner = ?';
+		return $this->findEntities($sql, [$userId], $limit, $offset);
+	}
+
 	/**
 	 * Find all boards for a given user
 	 *
