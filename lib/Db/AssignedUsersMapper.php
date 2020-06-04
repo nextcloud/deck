@@ -114,4 +114,20 @@ class AssignedUsersMapper extends DeckMapper implements IPermissionMapper {
 		}
 		return null;
 	}
+
+	/**
+	 * @param $ownerId
+	 * @param $newOwnerId
+	 * @return void
+	 */
+	public function transferOwnership($ownerId, $newOwnerId)
+	{
+		$params = [
+			'owner' => $ownerId,
+			'newOwner' => $newOwnerId
+		];
+		$sql = "UPDATE `{$this->tableName}`  SET `participant` = :newOwner WHERE `participant` = :owner";
+		$stmt = $this->execute($sql, $params);
+		$stmt->closeCursor();
+	}
 }
