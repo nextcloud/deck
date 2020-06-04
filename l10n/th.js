@@ -7,6 +7,7 @@ OC.L10N.register(
     "No file was uploaded" : "ไม่มีไฟล์ที่ถูกอัพโหลด",
     "Missing a temporary folder" : "โฟลเดอร์ชั่วคราวเกิดการสูญหาย",
     "Cancel" : "ยกเลิก",
+    "File already exists" : "ไฟล์นี้มีแล้ว",
     "Details" : "รายละเอียด",
     "Sharing" : "แชร์ข้อมูล",
     "Tags" : "ป้ายกำกับ",
