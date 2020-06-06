@@ -72,7 +72,7 @@
     "%s has mentioned you in a comment on \"%s\"." : "%stelah menyebut Anda didalam suatu komentar pada \"%s\".",
     "{user} has mentioned you in a comment on \"%s\"." : "{user} telah menyebut Anda didalam suatu komentar pada \"%s\".",
     "The board \"%s\" has been shared with you by %s." : "Papan \"%s\" telah dibagikan kepada Anda oleh %s.",
-    "{user} has shared the board %s with you." : "{user} telah membagikan papan %skepada Anda.",
+    "{user} has shared the board %s with you." : "{user} telah membagikan papan %s kepada Anda.",
     "No data was provided to create an attachment." : "Tidak ada data untuk membuat lampiran.",
     "Finished" : "Selesai",
     "To review" : "Perlu ditinjau",
