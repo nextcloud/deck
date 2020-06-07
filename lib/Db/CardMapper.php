@@ -211,8 +211,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 	 * @param $newOwnerId
 	 * @return void
 	 */
-	public function transferOwnership($ownerId, $newOwnerId)
-	{
+	public function transferOwnership($ownerId, $newOwnerId) {
 		$params = [
 			'owner' => $ownerId,
 			'newOwner' => $newOwnerId

@@ -678,8 +678,7 @@ class BoardService {
 	 * @param $newOwnerId
 	 * @return void
 	 */
-	public function transferOwnership($owner, $newOwner)
-	{
+	public function transferOwnership($owner, $newOwner) {
 		$this->boardMapper->transferOwnership($owner, $newOwner);
 		$this->assignedUsersMapper->transferOwnership($owner, $newOwner);
 		$this->aclMapper->transferOwnership($owner, $newOwner);
