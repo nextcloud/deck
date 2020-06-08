@@ -52,7 +52,7 @@
 		"vue": "^2.6.11",
 		"vue-at": "^2.5.0-beta.2",
 		"vue-click-outside": "^1.1.0",
-		"vue-easymde": "^1.2.0",
+		"vue-easymde": "^1.2.1",
 		"vue-infinite-loading": "^2.4.5",
 		"vue-router": "^3.3.2",
 		"vue-smooth-dnd": "^0.8.1",
