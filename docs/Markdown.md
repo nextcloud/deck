@@ -14,6 +14,16 @@ That same link offers also a comprehensive list of what is supported, and what i
 
 [CommonMark Markdown Reference](http://commonmark.org/help/)
 
+## Note about checklists
+
+It is possible to create checklist in Deck by writing it in Markdown, using the following syntax:
+```md
+- [ ] This is a unchecked item
+- [x] This is a checked item
+```
+Then, the items can be checked and unchecked by clicking on the rendered checkbox.
+Also, a summary of the completed items will be visible under the card element.
+
 ## Known Issues
 
 As per [issue #127](https://github.com/nextcloud/deck/issues/127) Due to a known limitation of the current script to support markdown, Links that contain the `")"` character will not display well, or will break. 
