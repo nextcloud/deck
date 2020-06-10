@@ -66,7 +66,7 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Deskripsi kartu</strong> didalam aplikasi Longgok telah diubah",
     "Deck" : "Longgok",
     "Changes in the <strong>Deck app</strong>" : "Perubahan pada <strong>aplikasi Longgok</strong>",
-    "A <strong>comment</strong> was created on a card" : "<strong>Komentar</strong>telah dibuat pada suatu kartu",
+    "A <strong>comment</strong> was created on a card" : "<strong>Komentar</strong> telah dibuat pada suatu kartu",
     "Personal" : "Personal",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Kartu \"%s\" pada \"%s\" telah ditugaskan kepada Anda oleh %s.",
     "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user} telah menugaskan kartu \"%s\" pada \"%s\" kepada Anda",
