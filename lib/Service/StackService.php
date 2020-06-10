@@ -29,6 +29,9 @@ use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\AssignedUsers;
+use OCA\Deck\Db\AssignedLabelsMapper;
+use OCA\Deck\Db\AssignedLabels;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
@@ -52,6 +55,7 @@ class StackService {
 	private $boardService;
 	private $cardService;
 	private $assignedUsersMapper;
+	private $assignedLabelsMapper;
 	private $attachmentService;
 	
 	private $activityManager;
@@ -70,6 +74,7 @@ class StackService {
 		BoardService $boardService,
 		CardService $cardService,
 		AssignedUsersMapper $assignedUsersMapper,
+		AssignedLabelsMapper $assignedLabelsMapper,
 		AttachmentService $attachmentService,
 		ActivityManager $activityManager,
 		EventDispatcherInterface $eventDispatcher,
@@ -85,6 +90,7 @@ class StackService {
 		$this->boardService = $boardService;
 		$this->cardService = $cardService;
 		$this->assignedUsersMapper = $assignedUsersMapper;
+		$this->assignedLabelsMapper = $assignedLabelsMapper;
 		$this->attachmentService = $attachmentService;
 		$this->activityManager = $activityManager;
 		$this->eventDispatcher = $eventDispatcher;
@@ -415,6 +421,7 @@ class StackService {
 		);
 
 		$cards = $this->cardMapper->findAll($id);
+		$c = [];
 		foreach ($cards as $card) {
 			
 			$newCard = new Card();
@@ -437,40 +444,42 @@ class StackService {
 			); 
 
 			if ($boardId === $stack->getBoardId()) {
-				$labels = $this->labelMapper->findAll($card->getId());
-				$labels = $this->labelMapper->findAssignedLabelsForCard($card->id);
-				
+								
+				$assignedLabels = $this->assignedLabelsMapper->find($card->getId());
 				$l = [];
-				foreach ($labels as $label) {
-					$l = $this->cardMapper->assignLabel($newCard->getId(), $label->getId());
+				foreach ($assignedLabels as $assignedLabel) {
+					
+					$assignment = $assignedLabel;
+					$assignment->setCardId($newCard->getId());
+					$assignment = $this->assignedLabelsMapper->insert($assignment);
+
+
+					// $assignment = new AssignedLabels();
+					// $assignment->setCardId($newCard->getId());
+					// $assignment->setLabel($assignedLabel);
+					// $assignment = $this->assignedLabelsMapper->insert($assignment);
+					$l[] = $assignment;
 				} 
 				$newCard->setLabels($l);
 				
-
 				$assignedUsers = $this->assignedUsersMapper->find($card->getId());
-				/* foreach ($assignedUsers as $assignedUser) {
-					$u = $this->assignmentService->assignUser($newCard->getId(), $assignedUser->getId());
-					$newCard->setAssignedUsers($u);
-				} */
-
-				//attachments???
-
-				
-
+				$u = [];
+				foreach ($assignedUsers as $assignedUser) {
+					$assignment = new AssignedUsers();
+					$assignment->setCardId($newCard->getId());
+					$assignment->setParticipant($assignedUser->getParticipant());
+					$assignment->setType($assignedUser->getType());
+					$assignment = $this->assignedUsersMapper->insert($assignment);
+					$u[] = $assignment;
+				}
+				$newCard->setAssignedUsers($u);
+				$c[] = $newCard;
 
 			}
 
 		}
 
-		$createdCards = $this->cardMapper->findAll($newStack->getId());
-		$newStack->setCards($createdCards);
-
-
-		
-
-
-
-	
+		$newStack->setCards($c);
 		return $newStack;
 	}
 }
