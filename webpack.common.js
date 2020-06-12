@@ -10,7 +10,8 @@ module.exports = {
 		filename: '[name].js',
 		path: __dirname + '/js',
 		publicPath: '/js/',
-		jsonpFunction: 'webpackJsonpOCADeck'
+		jsonpFunction: 'webpackJsonpOCADeck',
+		chunkFilename: '[name].js?v=[contenthash]',
 	},
 	module: {
 		rules: [
