@@ -152,10 +152,12 @@
 				@click="clickedPreview"
 				v-html="renderedDescription" />
 			<VueEasymde v-else
+				:key="copiedCard.id"
 				ref="markdownEditor"
-				:value="copiedCard.description"
+				v-model="copiedCard.description"
 				:configs="mdeConfig"
-				@input="updateDescription" />
+				@input="updateDescription"
+				@blur="saveDescription" />
 		</AppSidebarTab>
 
 		<AppSidebarTab id="attachments"
@@ -356,9 +358,13 @@ export default {
 		this.initialize()
 	},
 	methods: {
-		initialize() {
+		async initialize() {
 			if (!this.currentCard) {
 				return
+			}
+
+			if (this.copiedCard) {
+				await this.saveDescription()
 			}
 
 			this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
@@ -431,20 +437,21 @@ export default {
 			this.copiedCard.duedate = null
 			this.$store.dispatch('updateCardDue', this.copiedCard)
 		},
+		async saveDescription() {
+			if (!Object.prototype.hasOwnProperty.call(this.copiedCard, 'descriptionLastEdit') || this.descriptionSaving) {
+				return
+			}
+			this.descriptionSaving = true
+			await this.$store.dispatch('updateCardDesc', this.copiedCard)
+			delete this.copiedCard.descriptionLastEdit
+			this.descriptionSaving = false
+		},
 		updateDescription(text) {
-			this.copiedCard.description = text
 			this.copiedCard.descriptionLastEdit = Date.now()
 			clearTimeout(this.descriptionSaveTimeout)
 			this.descriptionSaveTimeout = setTimeout(async() => {
-				if (!Object.prototype.hasOwnProperty.call(this.copiedCard, 'descriptionLastEdit') || this.descriptionSaving) {
-					return
-				}
-				this.descriptionSaving = true
-				await this.$store.dispatch('updateCardDesc', this.copiedCard)
-				delete this.copiedCard.descriptionLastEdit
-				this.descriptionSaving = false
+				 await this.saveDescription()
 			}, 2500)
-
 		},
 
 		closeSidebar() {
