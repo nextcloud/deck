@@ -133,16 +133,16 @@
 					target="_blank"
 					class="icon icon-info" />
 				<Actions v-if="canEdit">
-					<ActionButton v-if="descriptionEditing" icon="icon-attach" @click="showAttachmentModal()">
-						{{ t('deck', 'Add Attachment') }}
-					</ActionButton>
-				</Actions>
-				<Actions v-if="canEdit">
 					<ActionButton v-if="!descriptionEditing" icon="icon-rename" @click="showEditor()">
 						{{ t('deck', 'Edit description') }}
 					</ActionButton>
 					<ActionButton v-else icon="icon-toggle" @click="hideEditor()">
 						{{ t('deck', 'View description') }}
+					</ActionButton>
+				</Actions>
+				<Actions v-if="canEdit">
+					<ActionButton v-if="descriptionEditing" icon="icon-attach" @click="showAttachmentModal()">
+						{{ t('deck', 'Add Attachment') }}
 					</ActionButton>
 				</Actions>
 			</h5>
