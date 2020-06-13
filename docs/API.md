@@ -985,8 +985,8 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
     },
     "data": [
       {
-        "id": "175",
-        "objectId": "12",
+        "id": 175,
+        "objectId": 12,
         "message": "This is a comment with a mention to  @alice",
         "actorId": "admin",
         "actorType": "users",
@@ -1005,6 +1005,45 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 }
 ```
 
+In case a comment is marked as a reply to another comment object, the parent comment will be added as `replyTo` entry to the response. Only the next parent node is added, nested replies are not exposed directly. 
+
+```json
+[
+  {
+    "id": 175,
+    "objectId": 12,
+    "message": "This is a comment with a mention to  @alice",
+    "actorId": "admin",
+    "actorType": "users",
+    "actorDisplayName": "Administrator",
+    "creationDateTime": "2020-03-10T10:23:07+00:00",
+    "mentions": [
+      {
+        "mentionId": "alice",
+        "mentionType": "user",
+        "mentionDisplayName": "alice"
+      }
+    ],
+    "replyTo": {
+     "id": 175,
+     "objectId": 12,
+     "message": "This is a comment with a mention to  @alice",
+     "actorId": "admin",
+     "actorType": "users",
+     "actorDisplayName": "Administrator",
+     "creationDateTime": "2020-03-10T10:23:07+00:00",
+     "mentions": [
+       {
+         "mentionId": "alice",
+         "mentionType": "user",
+         "mentionDisplayName": "alice"
+       }
+     ]
+   }
+  }
+]
+```
+
 
 ### POST /cards/{cardId}/comments - Create a new comment
 
@@ -1014,7 +1053,7 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 | --------- | ------- | --------------------------------------- |
 | cardId    | Integer | The id of the card                      |
 | message     | String | The message of the comment, maximum length is limited to 1000 characters |
-| parentId    | Integer | The start offset used for pagination, defaults to null |
+| parentId    | Integer | _(optional)_ The start offset used for pagination, defaults to null |
 
 Mentions will be parsed by the server. The server will return a list of mentions in the response to this request as shown below.
 
@@ -1070,7 +1109,7 @@ A not found response might be returned if:
 - The parent comment could not be found
 
 
-### PUT /cards/{cardId}/comments/{commentId} - Update a new comment
+### PUT /cards/{cardId}/comments/{commentId} - Update a comment
 
 #### Request parameters
 
