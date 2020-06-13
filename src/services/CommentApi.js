@@ -32,6 +32,7 @@ export class CommentApi {
 
 	async loadComments({ cardId, limit, offset }) {
 		const api = await axios.get(generateOcsUrl(`apps/deck/api/v1.0/cards`, 2) + `${cardId}/comments`, {
+			params: { limit, offset },
 			headers: { 'OCS-APIRequest': 'true' },
 		})
 		return api.data.ocs.data
