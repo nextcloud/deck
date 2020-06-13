@@ -88,13 +88,26 @@ class CommentService {
 	 * @param string $replyTo
 	 * @return DataResponse
 	 * @throws BadRequestException
-	 * @throws NotFoundException
+	 * @throws NotFoundException|NoPermissionException
 	 */
 	public function create(string $cardId, string $message, string $replyTo = '0'): DataResponse {
 		if (!is_numeric($cardId)) {
 			throw new BadRequestException('A valid card id must be provided');
 		}
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
+
+		// Check if parent is a comment on the same card
+		if ($replyTo !== '0') {
+			try {
+				$comment = $this->commentsManager->get($replyTo);
+				if ($comment->getObjectType() !== Application::COMMENT_ENTITY_TYPE || $comment->getObjectId() !== $cardId) {
+					throw new CommentNotFoundException();
+				}
+			} catch (CommentNotFoundException $e) {
+				throw new BadRequestException('Invalid parent id: The parent comment was not found or belongs to a different card');
+			}
+		}
+
 		try {
 			$comment = $this->commentsManager->create('users', $this->userId, Application::COMMENT_ENTITY_TYPE, $cardId);
 			$comment->setMessage($message);
@@ -122,12 +135,19 @@ class CommentService {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		try {
 			$comment = $this->commentsManager->get($commentId);
+			if ($comment->getObjectType() !== Application::COMMENT_ENTITY_TYPE || $comment->getObjectId() !== $cardId) {
+				throw new CommentNotFoundException();
+			}
 		} catch (CommentNotFoundException $e) {
 			throw new NotFoundException('No comment found.');
 		}
 		if ($comment->getActorType() !== 'users' || $comment->getActorId() !== $this->userId) {
 			throw new NoPermissionException('Only authors are allowed to edit their comment.');
 		}
+		if ($comment->getParentId() !== '0') {
+			$this->permissionService->checkPermission($this->cardMapper, $comment->getParentId(), Acl::PERMISSION_READ);
+		}
+
 		$comment->setMessage($message);
 		$this->commentsManager->save($comment);
 		return new DataResponse($this->formatComment($comment));
@@ -141,8 +161,12 @@ class CommentService {
 			throw new BadRequestException('A valid comment id must be provided');
 		}
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
+
 		try {
 			$comment = $this->commentsManager->get($commentId);
+			if ($comment->getObjectType() !== Application::COMMENT_ENTITY_TYPE || $comment->getObjectId() !== $cardId) {
+				throw new CommentNotFoundException();
+			}
 		} catch (CommentNotFoundException $e) {
 			throw new NotFoundException('No comment found.');
 		}
