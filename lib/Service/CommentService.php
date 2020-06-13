@@ -114,7 +114,7 @@ class CommentService {
 			$comment->setVerb('comment');
 			$comment->setParentId($replyTo);
 			$this->commentsManager->save($comment);
-			return new DataResponse($this->formatComment($comment));
+			return new DataResponse($this->formatComment($comment, true));
 		} catch (\InvalidArgumentException $e) {
 			throw new BadRequestException('Invalid input values');
 		} catch (MessageTooLongException $e) {
@@ -177,13 +177,13 @@ class CommentService {
 		return new DataResponse([]);
 	}
 
-	private function formatComment(IComment $comment): array {
+	private function formatComment(IComment $comment, $addReplyTo = false): array {
 		$user = $this->userManager->get($comment->getActorId());
 		$actorDisplayName = $user !== null ? $user->getDisplayName() : $comment->getActorId();
 
-		return [
-			'id' => $comment->getId(),
-			'objectId' => $comment->getObjectId(),
+		$formattedComment = [
+			'id' => (int)$comment->getId(),
+			'objectId' => (int)$comment->getObjectId(),
 			'message' => $comment->getMessage(),
 			'actorId' => $comment->getActorId(),
 			'actorType' => $comment->getActorType(),
@@ -205,5 +205,13 @@ class CommentService {
 				];
 			}, $comment->getMentions()),
 		];
+
+		try {
+			if ($addReplyTo && $comment->getParentId() !== '0' && $replyTo = $this->commentsManager->get($comment->getParentId())) {
+				$formattedComment['replyTo'] = $this->formatComment($replyTo);
+			}
+		} catch (CommentNotFoundException $e) {
+		}
+		return $formattedComment;
 	}
 }
