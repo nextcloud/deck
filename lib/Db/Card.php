@@ -123,9 +123,12 @@ class Card extends RelationalEntity {
 		$calendar = new VCalendar();
 		$event = $calendar->createComponent('VTODO');
 		$event->UID = 'deck-card-' . $this->getId();
-		$event->DTSTAMP = new \DateTime($this->getDuedate());
-		$event->DTSTART = new \DateTime($this->getDuedate());
-		$event->DTEND = new \DateTime($this->getDuedate());
+		if ($this->getDuedate()) {
+			$event->DTSTAMP = new \DateTime();
+			$event->DTSTART = new \DateTime($this->getDuedate());
+			$event->DTEND = new \DateTime($this->getDuedate());
+			$event->DURATION = "PT1H";
+		}
 		$event->add('RELATED-TO', 'deck-stack-' . $this->getStackId());
 
 		// FIXME: For write support: CANCELLED / IN-PROCESS handling
@@ -134,6 +137,7 @@ class Card extends RelationalEntity {
 			$date = new DateTime();
 			$date->setTimestamp($this->getLastModified());
 			$event->COMPLETED = $date;
+			//$event->add('PERCENT-COMPLETE', 100);
 		}
 		if (count($this->getLabels()) > 0) {
 			$event->CATEGORIES = array_map(function ($label) {
@@ -142,7 +146,7 @@ class Card extends RelationalEntity {
 		}
 		foreach ($this->getAssignedUsers() as $user) {
 			$participant = $user->resolveParticipant();
-			// FIXME use proper uri
+			//  FIXME use proper uri
 			$event->add('ATTENDEE', 'https://localhost/remote.php/dav/principals/users/:' . $participant->getUID(), [ 'CN' => $participant->getDisplayName()]);
 		}
 
