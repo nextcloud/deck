@@ -51,7 +51,7 @@
 					label="title"
 					@select="loadStacksFromBoard" />
 				<Multiselect v-model="selectedStack"
-					:placeholder="t('deck', 'Select a stack')"
+					:placeholder="t('deck', 'Select a list')"
 					:options="stacksFromBoard"
 					:max-height="100"
 					label="title" />

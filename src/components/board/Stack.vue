@@ -36,7 +36,7 @@
 				</h3>
 				<form v-else @submit.prevent="finishedEdit(stack)">
 					<input v-model="copiedStack.title" v-focus type="text">
-					<input v-tooltip="t('deck', 'Add a new stack')"
+					<input v-tooltip="t('deck', 'Add a new list')"
 						class="icon-confirm"
 						type="submit"
 						value="">
