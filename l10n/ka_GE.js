@@ -28,7 +28,6 @@ OC.L10N.register(
     "Can edit" : "შეუძლია შეცვალოს",
     "Can share" : "შეუძლია გააზიაროს",
     "Delete" : "წაშლა",
-    "Add a new stack" : "დასტის დამატება",
     "Add card" : "ბარათის დამატება",
     "Edit" : "შეცვლა",
     "Title" : "სათაური",

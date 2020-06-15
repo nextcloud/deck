@@ -28,7 +28,6 @@ OC.L10N.register(
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Delete" : "Apagar",
-    "Add a new stack" : "Adicionar nova pilha",
     "Add card" : "Adicionar um cartão",
     "Edit" : "Editar",
     "Title" : "Título",

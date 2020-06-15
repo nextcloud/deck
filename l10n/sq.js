@@ -27,7 +27,6 @@ OC.L10N.register(
     "Can edit" : "Can edit",
     "Can share" : "Mund të ndaj",
     "Delete" : "Delete",
-    "Add a new stack" : "Shto një raft të ri",
     "Add card" : "Shto kartë",
     "Edit" : "Edito",
     "Title" : "Titulli",

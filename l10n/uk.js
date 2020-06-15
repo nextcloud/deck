@@ -64,7 +64,6 @@ OC.L10N.register(
     "Can edit" : "Можна редагувати",
     "Can share" : "Can share",
     "Delete" : "Вилучити",
-    "Add a new stack" : "Додати нову купу",
     "Delete list" : "Вилучити список",
     "Add card" : "Додати картку",
     "Edit" : "Редагувати",

@@ -59,7 +59,6 @@ OC.L10N.register(
     "Can edit" : "편집할 수 있음",
     "Can share" : "공유할 수 있음",
     "Delete" : "삭제",
-    "Add a new stack" : "새 스택 추가",
     "Delete list" : "목록 지우기",
     "Add card" : "카드 추가",
     "Edit" : "편집",

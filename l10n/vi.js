@@ -54,7 +54,6 @@ OC.L10N.register(
     "Can edit" : "Có thể chỉnh sửa",
     "Can share" : "Can share",
     "Delete" : "Xóa",
-    "Add a new stack" : "Thêm một giai đoạn mới",
     "Add card" : "Thêm tác vụ",
     "Add a new card" : "Thêm một tác vụ mới",
     "Edit" : "Chỉnh sửa",

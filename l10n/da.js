@@ -29,7 +29,6 @@ OC.L10N.register(
     "Can edit" : "Can edit",
     "Can share" : "Kan dele",
     "Delete" : "Slet",
-    "Add a new stack" : "Tilføj en ny stak",
     "Delete list" : "Slet liste",
     "Add card" : "Tilføj kort",
     "Edit" : "Redigér",
