@@ -55,7 +55,7 @@ class CommentsApiController extends OCSController {
 	 * @NoAdminRequired
 	 * @throws StatusException
 	 */
-	public function create(string $cardId, string $message, string $parentId = '0'): DataResponse {
+	public function create(int $cardId, string $message, int $parentId = 0): DataResponse {
 		return $this->commentService->create($cardId, $message, $parentId);
 	}
 
@@ -63,7 +63,7 @@ class CommentsApiController extends OCSController {
 	 * @NoAdminRequired
 	 * @throws StatusException
 	 */
-	public function update(string $cardId, string $commentId, string $message): DataResponse {
+	public function update(int $cardId, int $commentId, string $message): DataResponse {
 		return $this->commentService->update($cardId, $commentId, $message);
 	}
 
@@ -71,7 +71,7 @@ class CommentsApiController extends OCSController {
 	 * @NoAdminRequired
 	 * @throws StatusException
 	 */
-	public function delete(string $cardId, string $commentId): DataResponse {
+	public function delete(int $cardId, int $commentId): DataResponse {
 		return $this->commentService->delete($cardId, $commentId);
 	}
 }
