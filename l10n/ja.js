@@ -79,6 +79,7 @@ OC.L10N.register(
     "Cancel" : "キャンセル",
     "File already exists" : "ファイルはすでに存在します",
     "Do you want to overwrite it?" : "上書きしますか？",
+    "Drop your files to upload" : "アップロードするファイルをドロップしてください",
     "Archived cards" : "カードをアーカイブ",
     "Filter by tag" : "タグによるフィルター",
     "Filter by assigned user" : "割当ユーザーでフィルター",

@@ -17,6 +17,7 @@ OC.L10N.register(
     "{user} has archived the board {before}" : "{user} hat das Board {before} archiviert",
     "You have unarchived the board {board}" : "Du hast das Board {board} dearchiviert",
     "{user} has unarchived the board {before}" : "{user} hat das Board {before} dearchiviert",
+    "You have created a new list {stack} on board {board}" : "Sie haben die neue Liste {stack} auf dem Board {board} erstellt",
     "You have renamed the card {before} to {card}" : "Du hast die Karte {before} in {card} umbenannt",
     "{user} has renamed the card {before} to {card}" : "{user} hat die Karte {before} in {card} umbenannt",
     "You have removed the due date of card {card}" : "Du hast das Fälligkeitsdatum der Karte {card} entfernt",
