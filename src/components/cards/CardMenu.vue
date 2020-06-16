@@ -24,8 +24,11 @@
 	<div>
 		<div @click.stop.prevent>
 			<Actions v-if="canEdit && !isArchived">
-				<ActionButton v-if="showArchived === false" icon="icon-user" @click="assignCardToMe()">
+				<ActionButton v-if="showArchived === false && !isCurrentUserAssigned" icon="icon-user" @click="assignCardToMe()">
 					{{ t('deck', 'Assign to me') }}
+				</ActionButton>
+				<ActionButton v-if="showArchived === false && isCurrentUserAssigned" icon="icon-user" @click="unassignCardFromMe()">
+					{{ t('deck', 'Unassign myself') }}
 				</ActionButton>
 				<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">
 					{{ showArchived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
@@ -114,6 +117,9 @@ export default {
 				return board.id !== this.currentBoard.id
 			})
 		},
+		isCurrentUserAssigned() {
+			return this.card.assignedUsers.find((item) => item.type === 0 && item.participant.uid === getCurrentUser()?.uid)
+		},
 	},
 	methods: {
 		openCard() {
@@ -126,9 +132,17 @@ export default {
 			this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
 		},
 		assignCardToMe() {
-			this.copiedCard = Object.assign({}, this.card)
 			this.$store.dispatch('assignCardToUser', {
-				card: this.copiedCard,
+				card: this.card,
+				assignee: {
+					userId: getCurrentUser()?.uid,
+					type: 0,
+				},
+			})
+		},
+		unassignCardFromMe() {
+			this.$store.dispatch('removeUserFromCard', {
+				card: this.card,
 				assignee: {
 					userId: getCurrentUser()?.uid,
 					type: 0,
