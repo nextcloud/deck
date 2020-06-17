@@ -633,7 +633,6 @@ export default {
 		width: 25vw;
 		min-width: 250px;
 		min-height: 120px;
-		text-align: center;
 		margin: 20px 20px 60px 20px;
 		padding-bottom: 20px;
 	}

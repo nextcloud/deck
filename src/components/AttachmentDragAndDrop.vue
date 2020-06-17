@@ -207,8 +207,4 @@ export default {
 		margin: 20px 20px 60px 20px;
 	}
 
-	.modal__content button {
-		float: right;
-		margin: 40px 3px 3px 0;
-	}
 </style>
