@@ -27,7 +27,6 @@ OC.L10N.register(
     "Update" : "Actualizare",
     "(group)" : "(grup)",
     "seconds ago" : "secunde în urmă",
-    "Shared with you" : "Partajat cu tine",
-    "Settings" : "Setări"
+    "Shared with you" : "Partajat cu tine"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

@@ -22,7 +22,6 @@ OC.L10N.register(
     "Reply" : "Äntwerten",
     "Update" : "Update",
     "seconds ago" : "Sekonnen hier",
-    "Shared with you" : "Mat dir gedeelt",
-    "Settings" : "Astellungen"
+    "Shared with you" : "Mat dir gedeelt"
 },
 "nplurals=2; plural=(n != 1);");

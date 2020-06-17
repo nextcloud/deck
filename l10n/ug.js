@@ -18,7 +18,6 @@ OC.L10N.register(
     "Save" : "ساقلا",
     "Reply" : "جاۋاب قايتۇر",
     "Update" : "يېڭىلا",
-    "Shared with you" : "Shared with you",
-    "Settings" : "تەڭشەكلەر"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=2; plural=(n != 1);");

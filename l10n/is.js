@@ -153,7 +153,6 @@ OC.L10N.register(
     "Archived boards" : "Borð í geymslu",
     "Shared with you" : "Deilt með þér",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Takmörkun í  Deck spjaldaforritinu mun loka notendur sem tilheyra ekki þessum hópum frá því að útbúa sín eigin borð. Notendurnir munu samt geta áfram unnið með borð sem hefur verið deilt til þeirra.",
-    "Settings" : "Stillingar",
     "New board title" : "Nýr titill á borð",
     "Edit board" : "Breyta borði",
     "Board details" : "Nánar um borð",

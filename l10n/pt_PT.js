@@ -47,7 +47,6 @@ OC.L10N.register(
     "Delete card" : "Eliminar cartão",
     "Archived boards" : "Quadros arquivados",
     "Shared with you" : "Shared with you",
-    "Settings" : "Definições",
     "New board title" : "Novo título de quadro",
     "Edit board" : "Editar quadro",
     "Board details" : "Detalhes do quadro",

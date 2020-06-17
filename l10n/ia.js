@@ -30,7 +30,6 @@ OC.L10N.register(
     "Update" : "Actualisation",
     "(group)" : "(gruppo)",
     "seconds ago" : "secundas passate",
-    "Shared with you" : "Compartite con te",
-    "Settings" : "Configurationes"
+    "Shared with you" : "Compartite con te"
 },
 "nplurals=2; plural=(n != 1);");

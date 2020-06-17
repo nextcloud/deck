@@ -53,7 +53,6 @@ OC.L10N.register(
     "Move card" : "Flyt kort",
     "Archived boards" : "Arkiverede lister",
     "Shared with you" : "Shared with you",
-    "Settings" : "Indstillinger",
     "New board title" : "Ny titel på liste",
     "Edit board" : "Rediger liste",
     "Board details" : "Liste detaljer",

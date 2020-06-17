@@ -101,9 +101,9 @@ OC.L10N.register(
     "(Unsaved)" : "(ذخیره نشده)",
     "(Saving…)" : "(در حال ذخیره...)",
     "Formatting help" : "راهنمای قالب‌بندی",
-    "Add Attachment" : "افزودن پیوست",
     "Edit description" : "ویرایش توضیحات",
     "View description" : "نمایش توضیحات",
+    "Add Attachment" : "افزودن پیوست",
     "Attachments" : "پیوست‌ها",
     "Comments" : "نظرات",
     "Choose attachment" : "انتخاب پیوست",
@@ -128,7 +128,6 @@ OC.L10N.register(
     "All boards" : "همه تخته‌ها",
     "Archived boards" : "تخته‌های بایگانی شده",
     "Shared with you" : "با شما به اشتراک گذاشته شده است",
-    "Settings" : "تنظیمات",
     "New board title" : "عنوان تختهٔ جدید",
     "Edit board" : "ویرایش تخته",
     "An error occurred" : "خطایی روی داد"

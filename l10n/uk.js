@@ -96,7 +96,6 @@ OC.L10N.register(
     "All boards" : "Усі дошки",
     "Archived boards" : "Архівні дошки",
     "Shared with you" : "Вам надано доступ",
-    "Settings" : "Налаштування",
     "New board title" : "Новий заголовок дошки",
     "Edit board" : "Редагувати дошку",
     "Clone board " : "Копія дошки",

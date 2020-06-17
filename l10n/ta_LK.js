@@ -19,7 +19,6 @@ OC.L10N.register(
     "Save" : "சேமிக்க ",
     "Update" : "இற்றைப்படுத்தல்",
     "seconds ago" : "செக்கன்களுக்கு முன்",
-    "Shared with you" : "Shared with you",
-    "Settings" : "அமைப்புகள்"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=2; plural=(n != 1);");

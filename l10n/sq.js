@@ -47,7 +47,6 @@ OC.L10N.register(
     "seconds ago" : "sekonda më parë",
     "Archived boards" : "Borde të arkivuara",
     "Shared with you" : "E ndarë me ju",
-    "Settings" : "Rregullimet",
     "New board title" : "Titull i ri bordi",
     "Edit board" : "Tabela e editimeve",
     "Board details" : "Detajet e Tabeles "

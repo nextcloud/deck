@@ -152,7 +152,6 @@ OC.L10N.register(
     "Archived boards" : "Arkistoidut taulut",
     "Shared with you" : "Jaettu kanssasi",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Pakan käytön rajoittaminen estää merkittyjen ryhmien jäseniä luomasta omia taulujaan, mutta käyttäjät pystyvät silti käyttämään heidän kanssaan jaettuja tauluja.",
-    "Settings" : "Asetukset",
     "New board title" : "Uusi taulun otsikko",
     "Edit board" : "Muokkaa taulua",
     "Board details" : "Taulun tiedot",

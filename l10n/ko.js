@@ -85,7 +85,6 @@ OC.L10N.register(
     "All boards" : "모든 보드",
     "Archived boards" : "보관된 게시판",
     "Shared with you" : "나와 공유됨",
-    "Settings" : "설정",
     "New board title" : "새 게시판 제목",
     "Edit board" : "게시판 편집",
     "Board details" : "게시판 정보",

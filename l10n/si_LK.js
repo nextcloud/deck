@@ -20,7 +20,6 @@ OC.L10N.register(
     "Save" : "සුරකින්න",
     "Update" : "යාවත්කාල කිරීම",
     "seconds ago" : "තත්පරයන්ට පෙර",
-    "Shared with you" : "Shared with you",
-    "Settings" : "සැකසුම්"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=2; plural=(n != 1);");

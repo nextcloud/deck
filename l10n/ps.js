@@ -11,7 +11,6 @@ OC.L10N.register(
     "Comments" : "تبصرې",
     "Modified" : "د بدلون نېټه",
     "Save" : "ساتل",
-    "Shared with you" : "تاسې سره شريک شوي",
-    "Settings" : "سمونې"
+    "Shared with you" : "تاسې سره شريک شوي"
 },
 "nplurals=2; plural=(n != 1);");
