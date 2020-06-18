@@ -98,7 +98,7 @@
 		"stylelint-config-recommended": "^3.0.0",
 		"stylelint-config-recommended-scss": "^4.2.0",
 		"stylelint-scss": "^3.17.2",
-		"stylelint-webpack-plugin": "^2.0.0",
+		"stylelint-webpack-plugin": "^2.1.0",
 		"url-loader": "^4.1.0",
 		"vue-jest": "^3.0.5",
 		"vue-loader": "^15.9.2",
