@@ -191,6 +191,7 @@ OC.L10N.register(
     "(circle)" : "(okruh)",
     "seconds ago" : "pred niekoľkými sekundami",
     "Assign to me" : "Priradiť mne",
+    "Unassign myself" : "Zrušiť priradenie mne",
     "Unarchive card" : "Zrušiť archiváciu karty",
     "Archive card" : "Archivovať kartu",
     "Delete card" : "Zmazať kartu",

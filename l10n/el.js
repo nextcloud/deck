@@ -191,6 +191,7 @@ OC.L10N.register(
     "(circle)" : "(κύκλος)",
     "seconds ago" : " δευτερόλεπτα πριν ",
     "Assign to me" : "Ανάθεση σε εμένα",
+    "Unassign myself" : "Αποδέσμευσή μου",
     "Unarchive card" : "Αναίρεση αρχειοθέτησης κάρτας",
     "Archive card" : "Αρχειοθέτηση κάρτας",
     "Delete card" : "Διαγραφή κάρτας",

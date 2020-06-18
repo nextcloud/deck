@@ -191,6 +191,7 @@ OC.L10N.register(
     "(circle)" : "(círculo)",
     "seconds ago" : "segundos atrás",
     "Assign to me" : "Asignarme",
+    "Unassign myself" : "Desasignarme",
     "Unarchive card" : "Desarquivar a tarxeta",
     "Archive card" : "Arquivar a tarxeta",
     "Delete card" : "Eliminar tarxeta",

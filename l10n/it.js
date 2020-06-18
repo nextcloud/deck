@@ -191,6 +191,7 @@ OC.L10N.register(
     "(circle)" : "(cerchia)",
     "seconds ago" : "secondi fa",
     "Assign to me" : "Assegna a me",
+    "Unassign myself" : "Rimuovi assegnazione da me",
     "Unarchive card" : "Recupera lavagna dall'archivio",
     "Archive card" : "Archivia scheda",
     "Delete card" : "Elimina scheda",
