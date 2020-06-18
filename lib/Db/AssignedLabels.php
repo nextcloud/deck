@@ -27,12 +27,13 @@ use JsonSerializable;
 
 class AssignedLabels extends RelationalEntity implements JsonSerializable {
 	public $id;
-	protected $label;
+	protected $labelId;
 	protected $cardId;
 
 	public function __construct() {
 		$this->addType('id', 'integer');
 		$this->addType('cardId', 'integer');
-		$this->addResolvable('label');
+		$this->addType('labelId', 'integer');
+
 	}
 }

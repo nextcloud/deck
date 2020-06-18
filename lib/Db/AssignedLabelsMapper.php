@@ -38,7 +38,7 @@ class AssignedLabelsMapper extends DeckMapper  {
 	private $groupManager;
 
 	public function __construct(IDBConnection $db, CardMapper $cardMapper, IUserManager $userManager, IGroupManager $groupManager) {
-		parent::__construct($db, 'deck_assigned_labels', Labels::class);
+		parent::__construct($db, 'deck_assigned_labels', AssignedLabels::class);
 		$this->cardMapper = $cardMapper;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
@@ -50,9 +50,7 @@ class AssignedLabelsMapper extends DeckMapper  {
 	 * @return array|Entity
 	 */
 	public function find($cardId) {
-		$sql = 'SELECT l.*,card_id FROM `*PREFIX*deck_assigned_labels` as al ' . 
-			'INNER JOIN `*PREFIX*deck_labels` as l ON l.id = al.label_id ' . 
-			'WHERE `card_id` = ?';
+		$sql = 'SELECT * from `*PREFIX*deck_assigned_labels` where `card_id` = ?';
 
 		$labels = $this->findEntities($sql, [$cardId]);
 		return $labels;

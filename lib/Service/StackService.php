@@ -57,7 +57,7 @@ class StackService {
 	private $assignedUsersMapper;
 	private $assignedLabelsMapper;
 	private $attachmentService;
-	
+
 	private $activityManager;
 	/** @var EventDispatcherInterface */
 	private $eventDispatcher;
@@ -407,7 +407,7 @@ class StackService {
 		$newStack = new Stack();
 		$newStack->setTitle($stack->getTitle() . ' (' . $this->l10n->t('copy') . ')');
 		$newStack->setBoardId($boardId);
-		$newStack->setOrder($stack->getOrder() +1);
+		$newStack->setOrder(999);
 		$newStack = $this->stackMapper->insert($newStack);
 
 		$this->activityManager->triggerEvent(
@@ -421,9 +421,9 @@ class StackService {
 		);
 
 		$cards = $this->cardMapper->findAll($id);
-		$c = [];
+		$newCardArray = [];
 		foreach ($cards as $card) {
-			
+
 			$newCard = new Card();
 			$newCard->setTitle($card->getTitle());
 			$newCard->setStackId($newStack->getId());
@@ -441,45 +441,42 @@ class StackService {
 				new FTSEvent(
 					null, ['id' => $newCard->getId(), 'card' => $newCard, 'userId' => $owner, 'stackId' => $stackId]
 				)
-			); 
+			);
 
 			if ($boardId === $stack->getBoardId()) {
-								
+
 				$assignedLabels = $this->assignedLabelsMapper->find($card->getId());
-				$l = [];
+				$newLabelArray = [];
 				foreach ($assignedLabels as $assignedLabel) {
-					
-					$assignment = $assignedLabel;
+
+					$assignment = new AssignedLabels();
 					$assignment->setCardId($newCard->getId());
+					$assignment->setLabelId($assignedLabel->getLabelId());
 					$assignment = $this->assignedLabelsMapper->insert($assignment);
 
 
-					// $assignment = new AssignedLabels();
-					// $assignment->setCardId($newCard->getId());
-					// $assignment->setLabel($assignedLabel);
-					// $assignment = $this->assignedLabelsMapper->insert($assignment);
-					$l[] = $assignment;
-				} 
-				$newCard->setLabels($l);
-				
+					$newLabelArray[] = $assignment;
+				}
+				$newCard->setLabels($newLabelArray);
+
 				$assignedUsers = $this->assignedUsersMapper->find($card->getId());
-				$u = [];
+				$newUserArray = [];
 				foreach ($assignedUsers as $assignedUser) {
 					$assignment = new AssignedUsers();
 					$assignment->setCardId($newCard->getId());
 					$assignment->setParticipant($assignedUser->getParticipant());
 					$assignment->setType($assignedUser->getType());
 					$assignment = $this->assignedUsersMapper->insert($assignment);
-					$u[] = $assignment;
+					$newUserArray[] = $assignment;
 				}
-				$newCard->setAssignedUsers($u);
-				$c[] = $newCard;
+				$newCard->setAssignedUsers($newUserArray);
+				$newCardArray[] = $newCard;
 
 			}
 
 		}
 
-		$newStack->setCards($c);
+		$this->enrichStackWithCards($newStack);
 		return $newStack;
 	}
 }

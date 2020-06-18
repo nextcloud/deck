@@ -58,9 +58,6 @@ export default {
 				state.stacks.splice(existingIndex, 1)
 			}
 		},
-		/* cloneStack(state, stack) {
-			this.commit('addStack', stack)
-		}, */
 		updateStack(state, stack) {
 			const existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
 			if (existingIndex !== -1) {

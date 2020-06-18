@@ -101,6 +101,7 @@ return [
 		['name' => 'stack_api#create', 'url' => '/api/v1.0/boards/{boardId}/stacks', 'verb' => 'POST'],
 		['name' => 'stack_api#update', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}', 'verb' => 'PUT'],
 		['name' => 'stack_api#delete', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}', 'verb' => 'DELETE'],
+		['name' => 'stack_api#clone', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/clone', 'verb' => 'POST'],
 
 		['name' => 'card_api#get', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'GET'],
 		['name' => 'card_api#create', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards', 'verb' => 'POST'],
