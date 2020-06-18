@@ -229,7 +229,7 @@ export default {
 				display: flex;
 				flex-direction: row;
 				overflow: hidden;
-				padding: 3px 7px;
+				padding: 0px 5px;
 				border-radius: 15px;
 				font-size: 85%;
 				margin-right: 3px;
