@@ -14,24 +14,30 @@
 							type="submit"
 							value=""
 							class="icon-confirm">
-						<input v-tooltip="t('deck', 'Cancel')"
-							value=""
-							class="icon-close"
-							@click="editingLabelId = null">
+						<Actions>
+							<ActionButton v-tooltip="{content: missingDataLabel, show: !editLabelObjValidated, trigger: 'manual' }"
+								:disabled="!editLabelObjValidated"
+								icon="icon-close"
+								@click="editingLabelId = null">
+								{{ t('deck', 'Cancel') }}
+							</ActionButton>
+						</Actions>
 					</form>
 				</template>
 				<template v-else>
-					<div :style="{ backgroundColor: `#${label.color}`, color:textColor(label.color) }" class="label-title">
-						<span>{{ label.title }}</span>
+					<div class="label-title" @click="clickEdit(label)">
+						<span :style="{ backgroundColor: `#${label.color}`, color: textColor(label.color) }">{{ label.title }}</span>
 					</div>
-					<button v-if="canManage && !isArchived"
-						v-tooltip="t('deck', 'Edit')"
-						class="icon-rename"
-						@click="clickEdit(label)" />
-					<button v-if="canManage && !isArchived"
-						v-tooltip="t('deck', 'Delete')"
-						class="icon-delete"
-						@click="deleteLabel(label.id)" />
+					<Actions v-if="canManage && !isArchived">
+						<ActionButton icon="icon-rename" @click="clickEdit(label)">
+							{{ t('deck', 'Edit') }}
+						</ActionButton>
+					</Actions>
+					<Actions v-if="canManage && !isArchived">
+						<ActionButton icon="icon-delete" @click="deleteLabel(label.id)">
+							{{ t('deck', 'Delete') }}
+						</ActionButton>
+					</Actions>
 				</template>
 			</li>
 
@@ -48,10 +54,11 @@
 							type="submit"
 							value=""
 							class="icon-confirm">
-						<input v-tooltip="t('deck', 'Cancel')"
-							value=""
-							class="icon-close"
-							@click="addLabel=false">
+						<Actions>
+							<ActionButton icon="icon-close" @click="addLabel=false">
+								{{ t('deck', 'Cancel') }}
+							</ActionButton>
+						</Actions>
 					</form>
 				</template>
 			</li>
@@ -66,12 +73,14 @@
 
 import { mapGetters } from 'vuex'
 import Color from '../../mixins/color'
-import { ColorPicker } from '@nextcloud/vue'
+import { ColorPicker, Actions, ActionButton } from '@nextcloud/vue'
 
 export default {
 	name: 'TagsTabSidebar',
 	components: {
 		ColorPicker,
+		Actions,
+		ActionButton,
 	},
 	mixins: [Color],
 	data() {
@@ -149,7 +158,7 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-	$clickable-area: 37px;
+	$clickable-area: 44px;
 
 	.labels li {
 		display: flex;
@@ -157,12 +166,23 @@ export default {
 		align-items: stretch;
 		height: $clickable-area;
 
+		&:hover {
+			background-color: var(--color-background-hover);
+			border-radius: 3px;
+		}
+
 		.label-title {
 			flex-grow: 1;
-			border-radius: 3px;
-			padding: 7px;
+			padding: 10px;
+
+			&:hover, span:hover {
+				cursor: pointer;
+			}
+
 			span {
 				vertical-align: middle;
+				border-radius: 15px;
+				padding: 7px 12px;
 			}
 		}
 		&:not(.editing) button {
@@ -195,15 +215,11 @@ export default {
 			display: flex;
 			input[type=text] {
 				flex-grow: 1;
+				margin: 5px;
 			}
-		}
-		button,
-		input:not([type='text']):last-child {
-			min-width: $clickable-area;
-			border-radius: 0 var(--border-radius) var(--border-radius) 0;
-			margin-left: -1px;
-			width: 35px;
-			background-color: var(--color-main-background);
+			input[type=submit] {
+				margin-top: 5px;
+			}
 		}
 	}
 </style>
