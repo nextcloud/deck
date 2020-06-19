@@ -59,6 +59,7 @@ export default new Vuex.Store({
 		showArchived: false,
 		navShown: true,
 		compactMode: localStorage.getItem('deck.compactMode') === 'true',
+		cardDetailsInModal: false,
 		sidebarShown: false,
 		currentBoard: null,
 		currentCard: null,
@@ -184,6 +185,9 @@ export default new Vuex.Store({
 			state.compactMode = !state.compactMode
 			localStorage.setItem('deck.compactMode', state.compactMode)
 		},
+		setCardDetailsInModal(state, show) {
+			state.cardDetailsInModal = show
+		},
 		setBoards(state, boards) {
 			state.boards = boards
 		},
@@ -258,6 +262,7 @@ export default new Vuex.Store({
 				Vue.delete(state.currentBoard.acl, removeIndex)
 			}
 		},
+
 	},
 	actions: {
 		setFilter({ commit }, filter) {
@@ -367,6 +372,9 @@ export default new Vuex.Store({
 		},
 		toggleCompactMode({ commit }) {
 			commit('toggleCompactMode')
+		},
+		setCardDetailsInModal({ commit }, show) {
+			commit('setCardDetailsInModal', show)
 		},
 		setCurrentBoard({ commit }, board) {
 			commit('setCurrentBoard', board)

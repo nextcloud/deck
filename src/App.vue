@@ -26,7 +26,14 @@
 		<div id="app-content">
 			<router-view />
 		</div>
-		<router-view name="sidebar" />
+
+		<Modal v-if="cardDetailsInModal" :title="t('deck', 'Card details')" @close="hideModal()">
+			<div class="modal__content">
+				<router-view name="sidebar" />
+			</div>
+		</Modal>
+
+		<router-view v-else name="sidebar" />
 	</div>
 </template>
 
@@ -34,6 +41,7 @@
 
 import { mapState } from 'vuex'
 import AppNavigation from './components/navigation/AppNavigation'
+import { Modal } from '@nextcloud/vue'
 import { BoardApi } from './services/BoardApi'
 
 const boardApi = new BoardApi()
@@ -42,6 +50,7 @@ export default {
 	name: 'App',
 	components: {
 		AppNavigation,
+		Modal,
 	},
 	data() {
 		return {
@@ -67,6 +76,7 @@ export default {
 			navShown: state => state.navShown,
 			sidebarShownState: state => state.sidebarShown,
 			currentBoard: state => state.currentBoard,
+			cardDetailsInModal: state => state.cardDetailsInModal,
 		}),
 		// TODO: properly handle sidebar showing for route subview and board sidebar
 		sidebarRouterView() {
@@ -77,14 +87,19 @@ export default {
 			return this.sidebarRouterView || this.sidebarShownState
 		},
 	},
+	created() {
+		this.$store.dispatch('loadBoards')
+		this.$store.dispatch('loadSharees')
+	},
+	methods: {
+		hideModal() {
+			this.$store.dispatch('setCardDetailsInModal', false)
+		},
+	},
 	provide() {
 		return {
 			boardApi,
 		}
-	},
-	created() {
-		this.$store.dispatch('loadBoards')
-		this.$store.dispatch('loadSharees')
 	},
 }
 
@@ -123,5 +138,14 @@ export default {
 <style>
 	.multiselect {
 		width: 100%;
+	}
+
+	.modal__content {
+		width: 800px;
+		height: 600px;
+		min-width: 450px;
+		min-height: 450px;
+		margin: 20px 20px 60px 20px;
+		padding-bottom: 20px;
 	}
 </style>
