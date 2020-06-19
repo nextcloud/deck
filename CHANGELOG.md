@@ -1,6 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.0.3 - 2020-06-19
+
+### Fixed
+
+* [#2019](https://github.com/nextcloud/deck/pull/2019) Remove old global css rule @juliushaertl
+* [#2020](https://github.com/nextcloud/deck/pull/2020) Fix navigation issue with leftover nodes @juliushaertl
+* [#2021](https://github.com/nextcloud/deck/pull/2021) Fix description issues @juliushaertl
+* [#2022](https://github.com/nextcloud/deck/pull/2022) Fix replyto issues with the comments API @juliushaertl
+* [#2027](https://github.com/nextcloud/deck/pull/2027) Allow to unassign current user from card @juliushaertl
+* [#2029](https://github.com/nextcloud/deck/pull/2029) Fix wording : stack -> list @cloud2018
+* [#2032](https://github.com/nextcloud/deck/pull/2032) Force order by id as second sorting key @juliushaertl
+* [#2045](https://github.com/nextcloud/deck/pull/2045) Improve label styling @juliushaertl
+* [#2010](https://github.com/nextcloud/deck/pull/2010) User documentation fixes @Nyco
+* [#1998](https://github.com/nextcloud/deck/pull/1998) Add Checklist explaination to the doc @4rnoP
+
+
 ## 1.0.2 - 2020-06-03
 
 ### Fixed
