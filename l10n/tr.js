@@ -191,6 +191,7 @@ OC.L10N.register(
     "(circle)" : "(çevre)",
     "seconds ago" : "saniye önce",
     "Assign to me" : "Bana ata",
+    "Unassign myself" : "Kendi atamamı kaldır",
     "Unarchive card" : "Kartı arşivden çıkar",
     "Archive card" : "Kartı arşivle",
     "Delete card" : "Kartı sil",

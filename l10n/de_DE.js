@@ -140,7 +140,7 @@ OC.L10N.register(
     "Deleted lists" : "Gelöschte Listen",
     "Undo" : "Rückgängig",
     "Deleted cards" : "Gelöschte Karten",
-    "Share board with a user, group or circle …" : "Board mit Benutzer, Gruppe oder Kreis teilen …",
+    "Share board with a user, group or circle …" : "Board mit Benutzer, Gruppe oder Kreis teilen…",
     "Board owner" : "Board-Besitzer",
     "(Group)" : "(Gruppe)",
     "(Circle)" : "(Kreis)",
