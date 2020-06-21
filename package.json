@@ -45,7 +45,7 @@
 		"lodash": "^4.17.15",
 		"markdown-it": "^11.0.0",
 		"markdown-it-task-lists": "^2.1.1",
-		"moment": "^2.26.0",
+		"moment": "^2.27.0",
 		"nextcloud-vue-collections": "^0.7.2",
 		"p-queue": "^6.4.0",
 		"url-search-params-polyfill": "^8.1.0",
