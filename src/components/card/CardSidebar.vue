@@ -261,8 +261,6 @@ export default {
 				autosave: { enabled: false, uniqueId: 'unique' },
 				toolbar: false,
 			},
-			lastModifiedRelative: null,
-			lastCreatedRemative: null,
 			descriptionSaveTimeout: null,
 			descriptionSaving: false,
 			hasActivity: capabilities && capabilities.activity,
@@ -301,7 +299,7 @@ export default {
 			return this.$store.getters.cardById(this.id)
 		},
 		subtitle() {
-			return t('deck', 'Modified') + ': ' + this.lastModifiedRelative + ' ' + t('deck', 'Created') + ': ' + this.lastCreatedRemative
+			return t('deck', 'Modified') + ': ' + this.relativeDate(this.currentCard.lastModified * 1000) + ' ' + t('deck', 'Created') + ': ' + this.relativeDate(this.currentCard.createdAt * 1000)
 		},
 		formatedAssignables() {
 			return this.assignables.map(item => {
@@ -348,12 +346,6 @@ export default {
 			this.initialize()
 		},
 	},
-	created() {
-		setInterval(this.updateRelativeTimestamps, 10000)
-	},
-	destroyed() {
-		clearInterval(this.updateRelativeTimestamps)
-	},
 	mounted() {
 		this.initialize()
 	},
@@ -381,7 +373,6 @@ export default {
 			}
 
 			this.desc = this.currentCard.description
-			this.updateRelativeTimestamps()
 		},
 		showEditor() {
 			if (!this.canEdit) {
@@ -425,10 +416,6 @@ export default {
 				})
 				this.updateDescription(updatedDescription)
 			}
-		},
-		updateRelativeTimestamps() {
-			this.lastModifiedRelative = OC.Util.relativeModifiedDate(this.currentCard.lastModified * 1000)
-			this.lastCreatedRemative = OC.Util.relativeModifiedDate(this.currentCard.createdAt * 1000)
 		},
 		setDue() {
 			this.$store.dispatch('updateCardDue', this.copiedCard)
