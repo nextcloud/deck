@@ -83,11 +83,6 @@ export default {
 			required: false,
 		},
 	},
-	data() {
-		return {
-
-		}
-	},
 	computed: {
 		attachments() {
 			return [...this.$store.getters.attachmentsByCard(this.cardId)].sort((a, b) => b.id - a.id)
