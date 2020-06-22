@@ -22,7 +22,7 @@
 
 <template>
 	<div id="content" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
-		<AppNavigation />
+		<AppNavigation v-show="navShown" />
 		<div id="app-content">
 			<router-view />
 		</div>
