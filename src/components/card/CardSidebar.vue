@@ -423,7 +423,8 @@ export default {
 					}
 					return match
 				})
-				this.updateDescription(updatedDescription)
+				this.$set(this.copiedCard, 'description', updatedDescription)
+				this.$store.dispatch('updateCardDesc', this.copiedCard)
 			}
 		},
 		updateRelativeTimestamps() {
@@ -446,7 +447,7 @@ export default {
 			delete this.copiedCard.descriptionLastEdit
 			this.descriptionSaving = false
 		},
-		updateDescription(text) {
+		updateDescription() {
 			this.copiedCard.descriptionLastEdit = Date.now()
 			clearTimeout(this.descriptionSaveTimeout)
 			this.descriptionSaveTimeout = setTimeout(async() => {
