@@ -33,7 +33,7 @@
 			</div>
 		</Modal>
 
-		<router-view v-else name="sidebar" />
+		<router-view v-show="!cardDetailsInModal" name="sidebar" />
 	</div>
 </template>
 
