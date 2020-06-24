@@ -27,13 +27,13 @@
 			<router-view />
 		</div>
 
-		<Modal v-if="cardDetailsInModal" :title="t('deck', 'Card details')" @close="hideModal()">
+		<Modal v-if="cardDetailsInModal && $route.params.cardId" :title="t('deck', 'Card details')" @close="hideModal()">
 			<div class="modal__content">
 				<router-view name="sidebar" />
 			</div>
 		</Modal>
 
-		<router-view v-show="!cardDetailsInModal" name="sidebar" />
+		<router-view v-show="!cardDetailsInModal || !$route.params.cardId" name="sidebar" />
 	</div>
 </template>
 
@@ -93,7 +93,8 @@ export default {
 	},
 	methods: {
 		hideModal() {
-			this.$store.dispatch('setCardDetailsInModal', false)
+			// this.$store.dispatch('setCardDetailsInModal', false)
+			this.$router.push({ name: 'board' })
 		},
 	},
 	provide() {
