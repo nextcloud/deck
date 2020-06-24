@@ -100,3 +100,9 @@ table {
 		padding: 3px;
 	}
 }
+
+blockquote {
+	padding-left: 10px;
+	border-left: 3px solid var(--color-border-dark);
+	color: var(--color-text-lighter);
+}
