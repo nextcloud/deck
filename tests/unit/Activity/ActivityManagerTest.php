@@ -97,7 +97,7 @@ class ActivityManagerTest extends TestCase {
 			if (strpos($constant, 'SUBJECT') === 0) {
 				$format = $this->activityManager->getActivityFormat($value, [], false);
 				if ($format !== '') {
-					$this->assertStringContainsString('{user}', $format);
+					$this->assertContains('{user}', $format);
 				} else {
 					/** @noinspection ForgottenDebugOutputInspection */
 					print_r('No activity string found for '. $constant . PHP_EOL);

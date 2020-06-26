@@ -5,7 +5,7 @@ steps:
   image: nextcloudci/php7.2:php7.2-13
   environment:
     APP_NAME: deck
-    CORE_BRANCH: master
+    CORE_BRANCH: stable17
     DB: sqlite
   commands:
     # Pre-setup steps
@@ -20,7 +20,7 @@ steps:
   image: nextcloudci/php7.2:php7.2-13
   environment:
     APP_NAME: deck
-    CORE_BRANCH: master
+    CORE_BRANCH: stable17
     DB: sqlite
   commands:
     - composer install
@@ -29,7 +29,7 @@ steps:
   image: nextcloudci/php7.3:php7.3-2
   environment:
     APP_NAME: deck
-    CORE_BRANCH: master
+    CORE_BRANCH: stable17
     DB: sqlite
   commands:
     - composer install
@@ -38,7 +38,7 @@ steps:
   image: nextcloudci/php7.4:2
   environment:
       APP_NAME: deck
-      CORE_BRANCH: master
+      CORE_BRANCH: stable17
       DB: sqlite
   commands:
       - composer install
@@ -58,7 +58,7 @@ steps:
     image: nextcloudci/php7.2:php7.2-13
     environment:
       APP_NAME: deck
-      CORE_BRANCH: master
+      CORE_BRANCH: stable17
       DB: sqlite
     commands:
       # Pre-setup steps
@@ -68,8 +68,8 @@ steps:
       - php occ app:enable deck
       - cd apps/$APP_NAME
       - composer install
-      - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
-      - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
+      - ./vendor/bin/phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
+      - ./vendor/bin/phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
 trigger:
   branch:
     - master
@@ -85,7 +85,7 @@ steps:
     image: nextcloudci/php7.3:php7.3-5
     environment:
       APP_NAME: deck
-      CORE_BRANCH: master
+      CORE_BRANCH: stable17
       DB: sqlite
     commands:
       # Pre-setup steps
@@ -95,8 +95,8 @@ steps:
       - php occ app:enable deck
       - cd apps/$APP_NAME
       - composer install
-      - phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
-      - phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
+      - ./vendor/bin/phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
+      - ./vendor/bin/phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
 trigger:
   branch:
     - master
@@ -112,7 +112,7 @@ steps:
     image: nextcloudci/php7.2:php7.2-13
     environment:
       APP_NAME: deck
-      CORE_BRANCH: master
+      CORE_BRANCH: stable17
       DB: sqlite
     commands:
       # Pre-setup steps

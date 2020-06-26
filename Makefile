@@ -81,16 +81,8 @@ test: test-unit test-integration
 
 test-unit:
 	mkdir -p build/
-ifeq (, $(shell which phpunit 2> /dev/null))
-	@echo "No phpunit command available, downloading a copy from the web"
-	mkdir -p $(build_tools_directory)
-	curl -sSL https://phar.phpunit.de/phpunit-8.2.phar -o $(build_tools_directory)/phpunit.phar
-	php $(build_tools_directory)/phpunit.phar -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
-	php $(build_tools_directory)/phpunit.phar -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
-else
-	phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
-	phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
-endif
+	./vendor/bin/phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
+	./vendor/bin/phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
 
 test-integration:
 	cd tests/integration && ./run.sh
