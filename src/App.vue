@@ -93,7 +93,6 @@ export default {
 	},
 	methods: {
 		hideModal() {
-			// this.$store.dispatch('setCardDetailsInModal', false)
 			this.$router.push({ name: 'board' })
 		},
 	},

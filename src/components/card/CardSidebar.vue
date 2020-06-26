@@ -26,9 +26,14 @@
 		:subtitle="subtitle"
 		:title-editable.sync="titleEditable"
 		@update:title="updateTitle"
+		:class="{ 'app-sidebar-modal': cardDetailsInModal}"
 		@close="closeSidebar">
 		<template #secondary-actions>
-			<ActionButton icon="icon-external" @click.stop="showModal()">
+			<ActionButton v-if="cardDetailsInModal" icon="icon-menu-sidebar" @click.stop="showModal()">
+				{{ t('deck', 'Open in sidebar view') }}
+			</ActionButton>
+
+			<ActionButton v-else icon="icon-external" @click.stop="showModal()">
 				{{ t('deck', 'Open in bigger view') }}
 			</ActionButton>
 		</template>
@@ -140,6 +145,7 @@ export default {
 	computed: {
 		...mapState({
 			currentBoard: state => state.currentBoard,
+			cardDetailsInModal: state => state.cardDetailsInModal,
 		}),
 		...mapGetters(['canEdit', 'assignables']),
 		attachments() {
@@ -384,6 +390,12 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+	.app-sidebar-modal {
+		border-left: 0;
+		width: 800px;
+		max-width: 780px;
+		top: 0px;
+	}
 
 	h5 {
 		border-bottom: 1px solid var(--color-border);
