@@ -114,6 +114,11 @@ export default {
 			return this.card.id
 		},
 	},
+	watch: {
+		card(newCard) {
+			this.$store.dispatch('fetchAttachments', newCard.id)
+		},
+	},
 	created: function() {
 		this.$store.dispatch('fetchAttachments', this.card.id)
 	},
