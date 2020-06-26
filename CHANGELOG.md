@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.0.4 - 2020-06-26
+
+### Fixed
+
+* [#2062](https://github.com/nextcloud/deck/pull/2062) Fix saving card description after toggling checkboxes @juliushaertl
+* [#2065](https://github.com/nextcloud/deck/pull/2065) Adding CSS rule for Markdown Blockquotes @reox
+* [#2059](https://github.com/nextcloud/deck/pull/2059) Fix fetching attachments on card change @juliushaertl
+* [#2060](https://github.com/nextcloud/deck/pull/2060) Use mixing for relative date in card sidebar @juliushaertl
+
+
 ## 1.0.3 - 2020-06-19
 
 ### Fixed
