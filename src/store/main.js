@@ -59,7 +59,7 @@ export default new Vuex.Store({
 		showArchived: false,
 		navShown: true,
 		compactMode: localStorage.getItem('deck.compactMode') === 'true',
-		cardDetailsInModal: false,
+		cardDetailsInModal: localStorage.getItem('deck.cardDetailsInModal') === 'true',
 		sidebarShown: false,
 		currentBoard: null,
 		currentCard: null,
@@ -73,6 +73,9 @@ export default new Vuex.Store({
 		filter: { tags: [], users: [], due: '' },
 	},
 	getters: {
+		cardDetailsInModal: state => {
+			return state.cardDetailsInModal
+		},
 		getSearchQuery: state => {
 			return state.searchQuery
 		},
@@ -185,8 +188,9 @@ export default new Vuex.Store({
 			state.compactMode = !state.compactMode
 			localStorage.setItem('deck.compactMode', state.compactMode)
 		},
-		setCardDetailsInModal(state, show) {
-			state.cardDetailsInModal = show
+		setCardDetailsInModal(state) {
+			state.cardDetailsInModal = !state.cardDetailsInModal
+			localStorage.setItem('deck.cardDetailsInModal', state.cardDetailsInModal)
 		},
 		setBoards(state, boards) {
 			state.boards = boards
