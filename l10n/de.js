@@ -70,7 +70,7 @@ OC.L10N.register(
     "Personal" : "Persönlich",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Die Karte \"%s\" auf \"%s\" wurde Dir von %s zugewiesen.",
     "{user} has assigned the card \"%s\" on \"%s\" to you." : "{user} hat Dir die Karte \"%s\" auf \"%s\" zugewiesen.",
-    "The card \"%s\" on \"%s\" has reached its due date." : "Die Karte \"%s\" auf \"%s\" ist überfällig.",
+    "The card \"%s\" on \"%s\" has reached its due date." : "Die Karte \"%s\" in \"%s\" ist überfällig.",
     "%s has mentioned you in a comment on \"%s\"." : " %s hat Dich in einem Kommentar zu \"%s\" erwähnt.",
     "{user} has mentioned you in a comment on \"%s\"." : "{user} hat Dich in einem Kommentar zu “%s” erwähnt.",
     "The board \"%s\" has been shared with you by %s." : "Das Board \"%s\" wurde von %s mit Dir geteilt.",
