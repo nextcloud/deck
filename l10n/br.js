@@ -3,13 +3,17 @@ OC.L10N.register(
     {
     "Personal" : "Personel",
     "copy" : "eil",
+    "Done" : "Graet",
     "Cancel" : "Arrest",
     "Details" : "Munudoù",
+    "Sharing" : "Rannan",
     "Tags" : "Klavioù",
     "Can edit" : "Posuple eo embann",
     "Delete" : "Dilemel",
     "Edit" : "Cheñch",
     "Modified" : "Cheñchet",
+    "Save" : "Entilañ",
+    "Reply" : "Respont",
     "seconds ago" : "eilenn zo",
     "Shared with you" : "Rannet ganeoc'h"
 },
