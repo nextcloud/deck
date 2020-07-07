@@ -56,7 +56,7 @@
 		"vue-infinite-loading": "^2.4.5",
 		"vue-router": "^3.3.4",
 		"vue-smooth-dnd": "^0.8.1",
-		"vuex": "^3.4.0",
+		"vuex": "^3.5.1",
 		"vuex-router-sync": "^5.0.0"
 	},
 	"browserslist": [
