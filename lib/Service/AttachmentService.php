@@ -231,8 +231,12 @@ class AttachmentService {
 			throw new BadRequestException('attachment id must be a number');
 		}
 
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
-		$attachment = $this->attachmentMapper->find($attachmentId);
+		try {
+			$attachment = $this->attachmentMapper->find($attachmentId);
+		} catch (\Exception $e) {
+			throw new NoPermissionException('Permission denied');
+		}
+		$this->permissionService->checkPermission($this->cardMapper, $attachment->getCardId(), Acl::PERMISSION_READ);
 
 		try {
 			$service = $this->getService($attachment->getType());
@@ -266,11 +270,15 @@ class AttachmentService {
 		if ($data === false || $data === null) {
 			//throw new BadRequestException('data must be provided');
 		}
+		try {
+			$attachment = $this->attachmentMapper->find($attachmentId);
+		} catch (\Exception $e) {
+			throw new NoPermissionException('Permission denied');
+		}
 
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+		$this->permissionService->checkPermission($this->cardMapper, $attachment->getCardId(), Acl::PERMISSION_EDIT);
 		$this->cache->clear('card-' . $cardId);
 
-		$attachment = $this->attachmentMapper->find($attachmentId);
 		$attachment->setData($data);
 		try {
 			$service = $this->getService($attachment->getType());
@@ -313,10 +321,15 @@ class AttachmentService {
 			throw new BadRequestException('attachment id must be a number');
 		}
 
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+		try {
+			$attachment = $this->attachmentMapper->find($attachmentId);
+		} catch (\Exception $e) {
+			throw new NoPermissionException('Permission denied');
+		}
+
+		$this->permissionService->checkPermission($this->cardMapper, $attachment->getCardId(), Acl::PERMISSION_EDIT);
 		$this->cache->clear('card-' . $cardId);
 
-		$attachment = $this->attachmentMapper->find($attachmentId);
 		try {
 			$service = $this->getService($attachment->getType());
 			if ($service->allowUndo()) {
@@ -343,10 +356,15 @@ class AttachmentService {
 			throw new BadRequestException('attachment id must be a number');
 		}
 
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
+		try {
+			$attachment = $this->attachmentMapper->find($attachmentId);
+		} catch (\Exception $e) {
+			throw new NoPermissionException('Permission denied');
+		}
+
+		$this->permissionService->checkPermission($this->cardMapper, $attachment->getCardId(), Acl::PERMISSION_EDIT);
 		$this->cache->clear('card-' . $cardId);
 
-		$attachment = $this->attachmentMapper->find($attachmentId);
 		try {
 			$service = $this->getService($attachment->getType());
 			if ($service->allowUndo()) {
