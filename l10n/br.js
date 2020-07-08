@@ -11,6 +11,7 @@ OC.L10N.register(
     "Can edit" : "Posuple eo embann",
     "Delete" : "Dilemel",
     "Edit" : "Cheñch",
+    "Description" : "Diskrivadur",
     "Modified" : "Cheñchet",
     "Save" : "Entilañ",
     "Reply" : "Respont",
