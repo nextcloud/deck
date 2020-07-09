@@ -240,6 +240,9 @@ class ActivityManager {
 	}
 
 	public function triggerEvent($objectType, $entity, $subject, $additionalParams = [], $author = null) {
+		if ($author === null) {
+			$author = $this->userId;
+		}
 		try {
 			$event = $this->createEvent($objectType, $entity, $subject, $additionalParams, $author);
 			if ($event !== null) {
