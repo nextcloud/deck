@@ -2,6 +2,7 @@ OC.L10N.register(
     "deck",
     {
     "Personal" : "Personel",
+    "Finished" : "Achuet",
     "copy" : "eil",
     "Done" : "Graet",
     "Cancel" : "Arrest",
