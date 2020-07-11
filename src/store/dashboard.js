@@ -22,10 +22,10 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { CardApi } from '../services/CardApi'
+import { DashboardApi } from '../services/DashboardApi'
 Vue.use(Vuex)
 
-const apiClient = new CardApi()
+const apiClient = new DashboardApi()
 export default {
 	state: {
 		withDue: [],
@@ -57,7 +57,7 @@ export default {
 			const assignedCards = await apiClient.findMyAssignedCards()
 			const assignedCardsFlat = assignedCards.flat()
 			commit('setAssignedCards', assignedCardsFlat)
-			
+
 		},
 	},
 }

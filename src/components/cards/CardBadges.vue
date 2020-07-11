@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="badges">
+	<div v-if="card" class="badges">
 		<div v-if="card.commentsUnread > 0" class="icon icon-comment" />
 
 		<div v-if="card.description && checkListCount > 0" class="card-tasks icon icon-checkmark">
@@ -34,7 +34,7 @@
 
 		<AvatarList :users="card.assignedUsers" />
 
-		<CardMenu :id="id" />
+		<CardMenu :id="card.id" />
 	</div>
 </template>
 <script>
@@ -45,8 +45,8 @@ export default {
 	name: 'CardBadges',
 	components: { AvatarList, CardMenu },
 	props: {
-		id: {
-			type: Number,
+		card: {
+			type: Object,
 			default: null,
 		},
 	},
@@ -56,9 +56,6 @@ export default {
 		},
 		checkListCheckedCount() {
 			return (this.card.description.match(/^\s*([*+-]|(\d\.))\s+\[\s*x\s*\](.*)$/gim) || []).length
-		},
-		card() {
-			return this.$store.getters.cardById(this.id)
 		},
 	},
 }

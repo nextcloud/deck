@@ -583,8 +583,8 @@ class CardService {
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws BadRequestException
 	 */
-	public function findMyAssignedCards($userId) {
-		$cards = $this->cardMapper->findMyAssignedCards($userId);
+	public function findAssignedCards($userId) {
+		$cards = $this->cardMapper->findAssignedCards($userId);
 		
 		return $cards;
 	}

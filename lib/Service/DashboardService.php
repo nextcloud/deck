@@ -144,7 +144,7 @@ class DashboardService {
 	/**
 	 * @return array
 	 */
-	public function findMyAssignedCards($userId) {
+	public function findAssignedCards($userId) {
 		$userInfo = $this->getBoardPrerequisites();
 		$userBoards = $this->findAllBoardsFromUser($userInfo);
 		$allAssignedCards = [];
@@ -155,7 +155,7 @@ class DashboardService {
 				$cardData = $card->jsonSerialize();
 				$cardData['boardId'] = $userBoard->getId();
 				return $cardData;
-			}, $this->cardMapper->findMyAssignedCards($userBoard->getId(), $this->userId));
+			}, $this->cardMapper->findAssignedCards($userBoard->getId(), $this->userId));
 		}
 		return $allAssignedCards;
 	}

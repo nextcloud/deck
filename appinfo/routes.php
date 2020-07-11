@@ -66,10 +66,6 @@ return [
 		['name' => 'card#assignUser', 'url' => '/cards/{cardId}/assign', 'verb' => 'POST'],
 		['name' => 'card#unassignUser', 'url' => '/cards/{cardId}/unassign', 'verb' => 'PUT'],
 		
-		// dashboard
-		['name' => 'card#findAllWithDue', 'url' => '/dashboard/due', 'verb' => 'GET'],
-		['name' => 'card#findMyAssignedCards', 'url' => '/dashboard/assigned', 'verb' => 'GET'],
-
 		// attachments
 		['name' => 'attachment#getAll', 'url' => '/cards/{cardId}/attachments', 'verb' => 'GET'],
 		['name' => 'attachment#create', 'url' => '/cards/{cardId}/attachment', 'verb' => 'POST'],
@@ -138,5 +134,9 @@ return [
 		['name' => 'comments_api#create', 'url' => '/api/v1.0/cards/{cardId}/comments', 'verb' => 'POST'],
 		['name' => 'comments_api#update', 'url' => '/api/v1.0/cards/{cardId}/comments/{commentId}', 'verb' => 'PUT'],
 		['name' => 'comments_api#delete', 'url' => '/api/v1.0/cards/{cardId}/comments/{commentId}', 'verb' => 'DELETE'],
+
+		// dashboard
+		['name' => 'dashboard_api#findAllWithDue', 'url' => '/api/v1.0/dashboard/dashboard/due', 'verb' => 'GET'],
+		['name' => 'dashboard_api#findAssignedCards', 'url' => '/api/v1.0/dashboard/assigned', 'verb' => 'GET'],
 	]
 ];

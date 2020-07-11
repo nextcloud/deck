@@ -28,24 +28,29 @@
 			<div class="dashboard-column">
 				<h2>overdue</h2>
 				<div v-for="card in withDueDashboardGroup.overdue" :key="card.id">
-					<!-- <CardItem :id="card.id" /> -->
-					{{ card.title }}
+					<CardItem :item="card" />
 				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h2>today</h2>
-				{{ withDueDashboardGroup.today }}
+				<div v-for="card in withDueDashboardGroup.today" :key="card.id">
+					<CardItem :item="card" />
+				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h2>tomorrow</h2>
-				{{ withDueDashboardGroup.tomorrow }}
+				<div v-for="card in withDueDashboardGroup.tomorrow" :key="card.id">
+					<CardItem :item="card" />
+				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h2>this week</h2>
-				{{ withDueDashboardGroup.thisWeek }}
+				<div v-for="card in withDueDashboardGroup.thisWeek" :key="card.id">
+					<CardItem :item="card" />
+				</div>
 			</div>
 		</div>
 
@@ -53,26 +58,31 @@
 			<div class="dashboard-column">
 				<h2>overdue</h2>
 				<div v-for="card in assignedCardsDashboardGroup.overdue" :key="card.id">
-					{{ card.title }}
+					<CardItem :item="card" />
 				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h2>today</h2>
-				{{ assignedCardsDashboardGroup.today }}
+				<div v-for="card in assignedCardsDashboardGroup.today" :key="card.id">
+					<CardItem :item="card" />
+				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h2>tomorrow</h2>
-				{{ assignedCardsDashboardGroup.tomorrow }}
+				<div v-for="card in assignedCardsDashboardGroup.tomorrow" :key="card.id">
+					<CardItem :item="card" />
+				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h2>this week</h2>
-				{{ assignedCardsDashboardGroup.thisWeek }}
+				<div v-for="card in assignedCardsDashboardGroup.thisWeek" :key="card.id">
+					<CardItem :item="card" />
+				</div>
 			</div>
 		</div>
-
 	</div>
 </template>
 
@@ -81,6 +91,7 @@
 import Controls from '../Controls'
 import CardItem from '../cards/CardItem'
 import { mapGetters } from 'vuex'
+import moment from '@nextcloud/moment'
 
 export default {
 	name: 'Dashboards',
@@ -105,6 +116,9 @@ export default {
 		assignedCardsDashboardGroup() {
 			return this.groupByDue(this.assignedCardsDashboard)
 		},
+	},
+	created() {
+		this.$store.dispatch('loadDashboards')
 	},
 	methods: {
 		groupByDue(dataset) {

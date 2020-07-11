@@ -167,20 +167,4 @@ class CardController extends Controller {
 	public function unassignUser($cardId, $userId, $type = 0) {
 		return $this->assignmentService->unassignUser($cardId, $userId, $type);
 	}
-
-	/**
-	 * @NoAdminRequired
-	 * @return array
-	 */
-	public function findAllWithDue($userId) {
-		return $this->dashboardService->findAllWithDue($userId);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 * @return array
-	 */
-	public function findMyAssignedCards($userId) {
-		return $this->dashboardService->findMyAssignedCards($userId);
-	}
 }

@@ -149,7 +149,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($sql, [$boardId]);
 	}
 
-	public function findMyAssignedCards($boardId, $username) {
+	public function findAssignedCards($boardId, $username) {
 		$sql = 'SELECT c.* FROM `*PREFIX*deck_cards` c
 	  	INNER JOIN `*PREFIX*deck_stacks` s ON s.id = c.stack_id
 		INNER JOIN `*PREFIX*deck_boards` b ON b.id = s.board_id

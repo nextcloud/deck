@@ -25,7 +25,7 @@
   -->
 
 <template>
-	<AttachmentDragAndDrop :card-id="id" class="drop-upload--card">
+	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
 		<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'is-editing': editing}"
 			tag="div"
 			class="card"
@@ -67,7 +67,7 @@
 				</li>
 			</transition-group>
 			<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
-				<CardBadges :id="id" />
+				<CardBadges :card="card" />
 			</div>
 		</div>
 	</AttachmentDragAndDrop>
@@ -95,6 +95,10 @@ export default {
 			type: Number,
 			default: null,
 		},
+		item: {
+			type: Object,
+			default: null,
+		},
 	},
 	data() {
 		return {
@@ -113,10 +117,10 @@ export default {
 			'isArchived',
 		]),
 		card() {
-			return this.$store.getters.cardById(this.id)
+			return this.item ? this.item : this.$store.getters.cardById(this.id)
 		},
 		currentCard() {
-			return this.$route.params.cardId === this.id
+			return this.card && this.$route && this.$route.params.cardId === this.card.id
 		},
 		relativeDate() {
 			const diff = moment(this.$root.time).diff(this.card.duedate, 'seconds')
@@ -144,7 +148,8 @@ export default {
 	},
 	methods: {
 		openCard() {
-			this.$router.push({ name: 'card', params: { cardId: this.id } }).catch(() => {})
+			const boardId = this.item ? this.item.boardId : this.$route.params.id
+			this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id } }).catch(() => {})
 		},
 		startEditing(card) {
 			this.copiedCard = Object.assign({}, card)
