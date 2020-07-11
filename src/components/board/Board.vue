@@ -157,11 +157,8 @@ export default {
 
 <style lang="scss" scoped>
 
-	@import '../../css/animations.scss';
-
-	$board-spacing: 15px;
-	$stack-spacing: 10px;
-	$stack-width: 300px;
+	@import "../../css/animations.scss";
+	@import "../../css/variables.scss";
 
 	form {
 		text-align: center;

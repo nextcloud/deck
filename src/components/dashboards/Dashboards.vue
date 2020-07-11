@@ -132,25 +132,26 @@ export default {
 			})
 			return all
 
-		}
-	},
-	created() {
-		this.$store.dispatch('loadDashboards')
+		},
 	},
 
 }
 </script>
 
 <style lang="scss" scoped>
+@import './../../css/variables';
 
 .dashboard {
-  display: flex;
+	display: flex;
 	align-items: stretch;
+	margin: $board-spacing;
 
-  .dashboard-column {
-    display: flex;
-    flex-direction: column;
-  }
+	.dashboard-column {
+		display: flex;
+		flex-direction: column;
+		width: $stack-width;
+		margin: $stack-spacing;
+	}
 }
 
 </style>

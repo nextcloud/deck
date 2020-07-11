@@ -165,9 +165,7 @@ export default {
 
 <style lang="scss" scoped>
 	@import './../../css/animations';
-
-	$card-spacing: 10px;
-	$card-padding: 10px;
+	@import './../../css/variables';
 
 	body.dark .card {
 		border: 1px solid var(--color-border);
