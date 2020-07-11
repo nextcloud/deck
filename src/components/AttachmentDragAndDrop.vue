@@ -68,7 +68,11 @@
 import { Modal } from '@nextcloud/vue'
 import attachmentUpload from '../mixins/attachmentUpload'
 import { loadState } from '@nextcloud/initial-state'
-const maxUploadSizeState = loadState('deck', 'maxUploadSize')
+
+let maxUploadSizeState = -1
+try {
+	loadState('deck', 'maxUploadSize')
+} catch (e) {}
 
 export default {
 	name: 'AttachmentDragAndDrop',
