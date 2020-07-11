@@ -6,6 +6,7 @@ const config = {
 	entry: {
 		deck: path.join(__dirname, 'src', 'main.js'),
 		collections: path.join(__dirname, 'src', 'init-collections.js'),
+		dashboard: path.join(__dirname, 'src', 'init-dashboard.js'),
 	},
 	output: {
 		filename: '[name].js',
