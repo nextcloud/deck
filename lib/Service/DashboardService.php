@@ -100,6 +100,18 @@ class DashboardService {
 		$this->userId = $userId;
 	}
 
+	public function enrich($card) {
+		$cardId = $card->getId();
+		$this->cardMapper->mapOwner($card);
+		$card->setAssignedUsers($this->assignedUsersMapper->find($cardId));
+		$card->setLabels($this->labelMapper->findAssignedLabelsForCard($cardId));
+		//$card->setAttachmentCount($this->attachmentService->count($cardId));
+		//$user = $this->userManager->get($this->userId);
+		//$lastRead = $this->commentsManager->getReadMark('deckCard', (string)$card->getId(), $user);
+		//$count = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId(), $lastRead);
+		//$card->setCommentsUnread($count);
+	}
+
 	/**
 	 * Set a different user than the current one, e.g. when no user is available in occ
 	 *
@@ -118,7 +130,13 @@ class DashboardService {
 		$userBoards = $this->findAllBoardsFromUser($userInfo);
 		$allDueCards = [];
 		foreach ($userBoards as $userBoard) {
-			$allDueCards[] = $this->cardMapper->findAllWithDue($userBoard->getId());
+			$service = $this;
+			$allDueCards[] = array_map(function ($card) use ($service, $userBoard) {
+				$service->enrich($card);
+				$cardData = $card->jsonSerialize();
+				$cardData['boardId'] = $userBoard->getId();
+				return $cardData;
+			}, $this->cardMapper->findAllWithDue($userBoard->getId()));
 		}
 		return $allDueCards;
 	}
@@ -131,7 +149,13 @@ class DashboardService {
 		$userBoards = $this->findAllBoardsFromUser($userInfo);
 		$allAssignedCards = [];
 		foreach ($userBoards as $userBoard) {
-			$allAssignedCards[] = $this->cardMapper->findMyAssignedCards($userBoard->getId(), $this->userId);
+			$service = $this;
+			$allAssignedCards[] = array_map(function ($card) use ($service, $userBoard) {
+				$service->enrich($card);
+				$cardData = $card->jsonSerialize();
+				$cardData['boardId'] = $userBoard->getId();
+				return $cardData;
+			}, $this->cardMapper->findMyAssignedCards($userBoard->getId(), $this->userId));
 		}
 		return $allAssignedCards;
 	}
