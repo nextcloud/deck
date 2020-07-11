@@ -96,6 +96,7 @@ class DeckProvider implements IProvider {
 			unset($subjectParams['author']);
 		}
 		$user = $this->userManager->get($author);
+		$params = [];
 		if ($user !== null) {
 			$params = [
 				'user' => [
