@@ -22,7 +22,7 @@
 
 <template>
 	<AppNavigationVue :class="{'icon-loading': loading}">
-		<ul>
+		<template #list>
 			<AppNavigationBoardCategory
 				id="deck-navigation-all"
 				to="/board"
@@ -43,22 +43,24 @@
 				:boards="sharedBoards"
 				icon="icon-shared" />
 			<AppNavigationAddBoard v-if="canCreate" />
-		</ul>
-		<AppNavigationSettings>
-			<div>
-				<Multiselect v-model="groupLimit"
-					:class="{'icon-loading-small': groupLimitDisabled}"
-					open-direction="bottom"
-					:options="groups"
-					:multiple="true"
-					:disabled="groupLimitDisabled"
-					:placeholder="t('deck', 'Limit deck usage of groups')"
-					label="displayname"
-					track-by="id"
-					@input="updateConfig" />
-				<p>{{ t('deck', 'Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them.') }}</p>
-			</div>
-		</AppNavigationSettings>
+		</template>
+		<template #footer>
+			<AppNavigationSettings>
+				<div>
+					<Multiselect v-model="groupLimit"
+						:class="{'icon-loading-small': groupLimitDisabled}"
+						open-direction="bottom"
+						:options="groups"
+						:multiple="true"
+						:disabled="groupLimitDisabled"
+						:placeholder="t('deck', 'Limit deck usage of groups')"
+						label="displayname"
+						track-by="id"
+						@input="updateConfig" />
+					<p>{{ t('deck', 'Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them.') }}</p>
+				</div>
+			</AppNavigationSettings>
+		</template>
 	</AppNavigationVue>
 </template>
 
