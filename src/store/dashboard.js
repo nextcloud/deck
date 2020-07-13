@@ -32,6 +32,12 @@ export default {
 		assignedCards: [],
 	},
 	getters: {
+		dueOverdue: state => {
+			return state.withDue.filter((card) => {
+				return card
+			})
+				
+		},
 		withDueDashboard: state => {
 			return state.withDue
 		},
@@ -49,15 +55,16 @@ export default {
 
 	},
 	actions: {
-		async loadDashboards({ commit }) {
+		async loadDueDashboard({ commit }) {
 			const withDue = await apiClient.findAllWithDue()
 			const withDueFlat = withDue.flat()
 			commit('setWithDueDashboard', withDueFlat)
+		},
 
+		async loadAssignDashboard({ commit }) {
 			const assignedCards = await apiClient.findMyAssignedCards()
 			const assignedCardsFlat = assignedCards.flat()
 			commit('setAssignedCards', assignedCardsFlat)
-
 		},
 	},
 }

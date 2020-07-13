@@ -80,10 +80,6 @@ export default {
 	name: 'CardMenu',
 	components: { Actions, ActionButton, Modal, Multiselect },
 	props: {
-		/* id: {
-			type: Number,
-			default: null,
-		}, */
 		card: {
 			type: Object,
 			default: null,
@@ -107,9 +103,6 @@ export default {
 			currentBoard: state => state.currentBoard,
 		}),
 
-		/* card() {
-			return this.$store.getters.cardById(this.id)
-		}, */
 		isBoardAndStackChoosen() {
 			if (this.selectedBoard === '' || this.selectedStack === '') {
 				return false

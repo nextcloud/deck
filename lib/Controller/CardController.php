@@ -25,7 +25,6 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\CardService;
-use OCA\Deck\Service\DashboardService;
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
 
@@ -34,11 +33,10 @@ class CardController extends Controller {
 	private $cardService;
 	private $assignmentService;
 
-	public function __construct($appName, IRequest $request, CardService $cardService, DashboardService $dashboardService, AssignmentService $assignmentService, $userId) {
+	public function __construct($appName, IRequest $request, CardService $cardService, AssignmentService $assignmentService, $userId) {
 		parent::__construct($appName, $request);
 		$this->userId = $userId;
 		$this->cardService = $cardService;
-		$this->dashboardService = $dashboardService;
 		$this->assignmentService = $assignmentService;
 	}
 

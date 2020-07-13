@@ -24,83 +24,92 @@
 	<div>
 		<Controls :dashboard-name="filter" />
 
-		<div v-if="filter=='due'" class="dashboard">
-			<div class="dashboard-column">
-				<h2>overdue</h2>
-				<div v-for="card in withDueDashboardGroup.overdue" :key="card.id">
-					<CardItem :item="card" />
-				</div>
-			</div>
-
-			<div class="dashboard-column">
-				<h2>today</h2>
-				<div v-for="card in withDueDashboardGroup.today" :key="card.id">
-					<CardItem :item="card" />
-				</div>
-			</div>
-
-			<div class="dashboard-column">
-				<h2>tomorrow</h2>
-				<div v-for="card in withDueDashboardGroup.tomorrow" :key="card.id">
-					<CardItem :item="card" />
-				</div>
-			</div>
-
-			<div class="dashboard-column">
-				<h2>this week</h2>
-				<div v-for="card in withDueDashboardGroup.later" :key="card.id">
-					<CardItem :item="card" />
-				</div>
-			</div>
-
-			<div class="dashboard-column">
-				<h2>later</h2>
-				<div v-for="card in withDueDashboardGroup.thisWeek" :key="card.id">
-					<CardItem :item="card" />
-				</div>
-			</div>
+		<div v-if="loading" key="loading" class="emptycontent">
+			<div class="icon icon-loading" />
+			<h2>{{ t('deck', 'Loading Dashboard') }}</h2>
+			<p />
 		</div>
 
-		<div v-if="filter=='assigned'" class="dashboard">
-			<div class="dashboard-column">
-				<h2>no due</h2>
-				<div v-for="card in withDueDashboardGroup.noDue" :key="card.id">
-					<CardItem :item="card" />
+		<div v-else>
+
+			<div v-if="filter=='due'" class="dashboard">
+				<div class="dashboard-column">
+					<h2>{{ t('deck', 'overdue') }}</h2>
+					<div v-for="card in dueOverdue" :key="card.id">
+						<CardItem :item="card" />
+					</div>
+				</div>
+
+				<div class="dashboard-column">
+					<h2>{{ t('deck', 'today') }}</h2>
+					<div v-for="card in withDueDashboardGroup.today" :key="card.id">
+						<CardItem :item="card" />
+					</div>
+				</div>
+
+				<div class="dashboard-column">
+					<h2>{{ t('deck', 'tomorrow') }}</h2>
+					<div v-for="card in withDueDashboardGroup.tomorrow" :key="card.id">
+						<CardItem :item="card" />
+					</div>
+				</div>
+
+				<div class="dashboard-column">
+					<h2>{{ t('deck', 'this week') }}</h2>
+					<div v-for="card in withDueDashboardGroup.later" :key="card.id">
+						<CardItem :item="card" />
+					</div>
+				</div>
+
+				<div class="dashboard-column">
+					<h2>{{ t('deck', 'later') }}</h2>
+					<div v-for="card in withDueDashboardGroup.thisWeek" :key="card.id">
+						<CardItem :item="card" />
+					</div>
 				</div>
 			</div>
 
-			<div class="dashboard-column">
-				<h2>overdue</h2>
-				<div v-for="card in assignedCardsDashboardGroup.overdue" :key="card.id">
-					<CardItem :item="card" />
+			<div v-if="filter=='assigned'" class="dashboard">
+				<div class="dashboard-column">
+					<h2>{{ t('deck', 'no due') }}</h2>
+					<div v-for="card in assignedCardsDashboardGroup.nodue" :key="card.id">
+						<CardItem :item="card" />
+					</div>
 				</div>
-			</div>
 
-			<div class="dashboard-column">
-				<h2>today</h2>
-				<div v-for="card in assignedCardsDashboardGroup.today" :key="card.id">
-					<CardItem :item="card" />
+				<div class="dashboard-column">
+					<h2>{{ t('deck', 'overdue') }}</h2>
+					<div v-for="card in assignedCardsDashboardGroup.overdue" :key="card.id">
+						<CardItem :item="card" />
+					</div>
 				</div>
-			</div>
 
-			<div class="dashboard-column">
-				<h2>tomorrow</h2>
-				<div v-for="card in assignedCardsDashboardGroup.tomorrow" :key="card.id">
-					<CardItem :item="card" />
+				<div class="dashboard-column">
+					<h2>{{ t('deck', 'today') }}</h2>
+					<div v-for="card in assignedCardsDashboardGroup.today" :key="card.id">
+						<CardItem :item="card" />
+					</div>
 				</div>
-			</div>
 
-			<div class="dashboard-column">
-				<h2>this week</h2>
-				<div v-for="card in assignedCardsDashboardGroup.thisWeek" :key="card.id">
-					<CardItem :item="card" />
+				<div class="dashboard-column">
+					<h2>{{ t('deck', 'tomorrow') }}</h2>
+					<div v-for="card in assignedCardsDashboardGroup.tomorrow" :key="card.id">
+						<CardItem :item="card" />
+					</div>
 				</div>
-			</div>
 
-			<div class="dashboard-column">
-				<h2>this week</h2>
-				<div v-for="card in withDueDashboardGroup.later" :key="card.id">
-					<CardItem :item="card" />
+				<div class="dashboard-column">
+					<h2>{{ t('deck', 'this week') }}</h2>
+					<div v-for="card in assignedCardsDashboardGroup.thisWeek" :key="card.id">
+						<CardItem :item="card" />
+					</div>
+				</div>
+
+				<div class="dashboard-column">
+					<h2>{{ t('deck', 'later') }}</h2>
+					<div v-for="card in withDueDashboardGroup.later" :key="card.id">
+						<CardItem :item="card" />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -126,10 +135,16 @@ export default {
 			default: '',
 		},
 	},
+	data: function() {
+		return {
+			loading: true,
+		}
+	},
 	computed: {
 		...mapGetters([
 			'withDueDashboard',
 			'assignedCardsDashboard',
+			'dueOverdue'
 		]),
 		withDueDashboardGroup() {
 			return this.groupByDue(this.withDueDashboard)
@@ -139,9 +154,31 @@ export default {
 		},
 	},
 	created() {
-		this.$store.dispatch('loadDashboards')
+		this.getData()
+	},
+	watch: {
+		"$route.params.filter"() {
+			this.getData()
+		}
 	},
 	methods: {
+		async getData() {
+			this.loading = true
+			try {
+				if (this.filter === 'due') {
+					await this.$store.dispatch('loadDueDashboard')
+				}
+
+				if (this.filter === 'assigned') {
+					await this.$store.dispatch('loadAssignDashboard')
+				}
+			} catch (e) {
+				console.error(e)
+			}
+			this.loading = false
+		},
+
+
 		groupByDue(dataset) {
 			const all = {
 				nodue: [],
@@ -156,20 +193,23 @@ export default {
 				if (card.duedate === null) {
 					all.nodue.push(card)
 				} else {
-					const days = Math.floor(moment(card.duedate).diff(this.$root.time, 'seconds') / 60 / 60 / 24)
-					if (days < 0) {
+					const hours = Math.floor(moment(card.duedate).diff(this.$root.time, 'seconds') / 60 / 60 )
+					let d = new Date()
+					let currentHour = d.getHours()
+					console.log(card.title +' '+ hours )
+					if (hours < 0) {
 						all.overdue.push(card)
 					}
-					if (days === 0) {
+					if (hours >= 0 && hours < (24 - currentHour)) {
 						all.today.push(card)
 					}
-					if (days === 1) {
+					if (hours >= (24 - currentHour) && hours < (48 - currentHour)) {
 						all.tomorrow.push(card)
 					}
-					if (days > 1 && days < 8) {
+					if (hours >= (48 - currentHour) && hours < (24 * 7)) {
 						all.thisWeek.push(card)
 					}
-					if (days > 8) {
+					if (hours >= (24 * 7)) {
 						all.later.push(card)
 					}
 				}
