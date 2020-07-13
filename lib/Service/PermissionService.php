@@ -133,7 +133,7 @@ class PermissionService {
 	 */
 	public function checkPermission($mapper, $id, $permission, $userId = null) {
 		$boardId = $id;
-		if ($mapper instanceof IPermissionMapper) {
+		if ($mapper instanceof IPermissionMapper && !($mapper instanceof BoardMapper)) {
 			$boardId = $mapper->findBoardId($id);
 		}
 		if ($boardId === null) {

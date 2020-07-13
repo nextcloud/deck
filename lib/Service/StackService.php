@@ -147,9 +147,7 @@ class StackService {
 	}
 
 	public function fetchDeleted($boardId) {
-		$this->permissionService->checkPermission(
-			$this->boardMapper, $boardId, Acl::PERMISSION_READ
-		);
+		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		$stacks = $this->stackMapper->findDeleted($boardId);
 		$this->enrichStacksWithCards($stacks);
 
