@@ -34,7 +34,7 @@
 
 		<AvatarList :users="card.assignedUsers" />
 
-		<CardMenu :id="card.id" />
+		<CardMenu :card="card" />
 	</div>
 </template>
 <script>

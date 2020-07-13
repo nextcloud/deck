@@ -21,7 +21,7 @@
  */
 
 import axios from '@nextcloud/axios'
-import { generateOcsUrl, generateRemoteUrl } from '@nextcloud/router'
+import { generateOcsUrl } from '@nextcloud/router'
 
 export class DashboardApi {
 
@@ -30,11 +30,11 @@ export class DashboardApi {
 	}
 
 	findAllWithDue(data) {
-		return axios.get(this.url(`dashboard/dashboard/due`), {
+		return axios.get(this.url(`dashboard/due`), {
 			headers: { 'OCS-APIRequest': 'true' },
 		})
 			.then(
-				(response) => Promise.resolve(response.data),
+				(response) => Promise.resolve(response.data.ocs.data),
 				(err) => Promise.reject(err)
 			)
 			.catch((err) => Promise.reject(err)
@@ -46,7 +46,7 @@ export class DashboardApi {
 			headers: { 'OCS-APIRequest': 'true' },
 		})
 			.then(
-				(response) => Promise.resolve(response.data),
+				(response) => Promise.resolve(response.data.ocs.data),
 				(err) => Promise.reject(err)
 			)
 			.catch((err) => Promise.reject(err)

@@ -55,7 +55,7 @@
 					</transition>
 				</div>
 
-				<CardMenu v-if="!editing && compactMode" :id="id" class="right" />
+				<CardMenu v-if="!editing && compactMode" :card="card" class="right" />
 			</div>
 			<transition-group v-if="card.labels.length"
 				name="zoom"

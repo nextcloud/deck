@@ -48,6 +48,13 @@
 
 			<div class="dashboard-column">
 				<h2>this week</h2>
+				<div v-for="card in withDueDashboardGroup.later" :key="card.id">
+					<CardItem :item="card" />
+				</div>
+			</div>
+
+			<div class="dashboard-column">
+				<h2>later</h2>
 				<div v-for="card in withDueDashboardGroup.thisWeek" :key="card.id">
 					<CardItem :item="card" />
 				</div>
@@ -55,6 +62,13 @@
 		</div>
 
 		<div v-if="filter=='assigned'" class="dashboard">
+			<div class="dashboard-column">
+				<h2>no due</h2>
+				<div v-for="card in withDueDashboardGroup.noDue" :key="card.id">
+					<CardItem :item="card" />
+				</div>
+			</div>
+
 			<div class="dashboard-column">
 				<h2>overdue</h2>
 				<div v-for="card in assignedCardsDashboardGroup.overdue" :key="card.id">
@@ -79,6 +93,13 @@
 			<div class="dashboard-column">
 				<h2>this week</h2>
 				<div v-for="card in assignedCardsDashboardGroup.thisWeek" :key="card.id">
+					<CardItem :item="card" />
+				</div>
+			</div>
+
+			<div class="dashboard-column">
+				<h2>this week</h2>
+				<div v-for="card in withDueDashboardGroup.later" :key="card.id">
 					<CardItem :item="card" />
 				</div>
 			</div>
@@ -123,24 +144,34 @@ export default {
 	methods: {
 		groupByDue(dataset) {
 			const all = {
+				nodue: [],
 				overdue: [],
 				today: [],
 				tomorrow: [],
 				thisWeek: [],
+				later: [],
 			}
 			dataset.forEach(card => {
-				const days = Math.floor(moment(card.duedate).diff(this.$root.time, 'seconds') / 60 / 60 / 24)
-				if (days < 0) {
-				  all.overdue.push(card)
-				}
-				if (days === 0) {
-					all.thisWeek.push(card)
-				}
-				if (days === 1) {
-					all.tomorrow.push(card)
-				}
-				if (days === 2) {
-					all.today.push(card)
+
+				if (card.duedate === null) {
+					all.nodue.push(card)
+				} else {
+					const days = Math.floor(moment(card.duedate).diff(this.$root.time, 'seconds') / 60 / 60 / 24)
+					if (days < 0) {
+						all.overdue.push(card)
+					}
+					if (days === 0) {
+						all.today.push(card)
+					}
+					if (days === 1) {
+						all.tomorrow.push(card)
+					}
+					if (days > 1 && days < 8) {
+						all.thisWeek.push(card)
+					}
+					if (days > 8) {
+						all.later.push(card)
+					}
 				}
 
 			})
