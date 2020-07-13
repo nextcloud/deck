@@ -26,12 +26,13 @@ import { generateOcsUrl, generateRemoteUrl } from '@nextcloud/router'
 export class DashboardApi {
 
 	url(url) {
-		url = `/apps/deck${url}`
-		return generateOcsUrl(url)
+		return generateOcsUrl(`apps/deck/api/v1.0`) + url
 	}
 
 	findAllWithDue(data) {
-		return axios.get(this.url(`/api/v1.0/dashboard/dashboard/due`))
+		return axios.get(this.url(`dashboard/dashboard/due`), {
+			headers: { 'OCS-APIRequest': 'true' },
+		})
 			.then(
 				(response) => Promise.resolve(response.data),
 				(err) => Promise.reject(err)
@@ -41,7 +42,9 @@ export class DashboardApi {
 	}
 
 	findMyAssignedCards(data) {
-		return axios.get(this.url(`/ocs/v2.php/apps/deck/api/v1.0/dashboard/assigned`))
+		return axios.get(this.url(`dashboard/assigned`), {
+			headers: { 'OCS-APIRequest': 'true' },
+		})
 			.then(
 				(response) => Promise.resolve(response.data),
 				(err) => Promise.reject(err)

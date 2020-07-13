@@ -25,6 +25,8 @@ namespace OCA\Deck\Controller;
 
 
 use OCA\Deck\Service\DashboardService;
+use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
 
@@ -40,17 +42,17 @@ class DashboardApiController extends OCSController {
 
 	/**
 	 * @NoAdminRequired
-	 * @return array
+	 * @return DataResponse
 	 */
 	public function findAllWithDue($userId) {
-		return $this->dashboardService->findAllWithDue($userId);
+		return new DataResponse($this->dashboardService->findAllWithDue($userId));
 	}
 
 	/**
 	 * @NoAdminRequired
-	 * @return array
+	 * @return DataResponse
 	 */
 	public function findAssignedCards($userId) {
-		return $this->dashboardService->findAssignedCards($userId);
+		return new DataResponse($this->dashboardService->findAssignedCards($userId));
 	}
 }
