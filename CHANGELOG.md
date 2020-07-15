@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.0.5 - 2020-07-15
+
+### Fixed
+
+
+* [#2116](https://github.com/nextcloud/deck/pull/2116) Fix navigation layout issues @juliushaertl
+* [#2118](https://github.com/nextcloud/deck/pull/2118) Use proper parameter when handling attachments @juliushaertl
+
 ## 1.0.4 - 2020-06-26
 
 ### Fixed
