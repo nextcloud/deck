@@ -34,8 +34,10 @@
 			<div v-if="canManage && !showArchived && !board.archived"
 				id="stack-add"
 				v-click-outside="hideAddStack">
-				<Actions v-if="!isAddStackVisible" :title="t('deck', 'Add new list')">
-					<ActionButton icon="icon-add" @click.stop="showAddStack" />
+				<Actions v-if="!isAddStackVisible">
+					<ActionButton icon="icon-add" @click.stop="showAddStack">
+						{{ t('deck', 'Add new list') }}
+					</ActionButton>
 				</Actions>
 				<form v-else @submit.prevent="addNewStack()">
 					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add new list') }}</label>
