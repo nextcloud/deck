@@ -35,7 +35,6 @@ export default {
 				const { tags, users, due, unassigned } = rootState.filter
 				let allTagsMatch = true
 				let allUsersMatch = true
-				let allUnassigned = true
 
 				if (tags.length > 0) {
 					tags.forEach((tag) => {
@@ -59,14 +58,8 @@ export default {
 					}
 				}
 
-				if (unassigned) {
-					if (card.assignedUsers.length > 0) {
-						allUnassigned = false
-					}
-
-					if (!allUnassigned) {
-						return false
-					}
+				if (unassigned && card.assignedUsers.length > 0) {
+					return false
 				}
 
 				if (due !== '') {

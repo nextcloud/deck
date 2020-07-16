@@ -260,6 +260,9 @@ export default {
 			}
 		},
 		setFilter() {
+			if (this.filter.users.length > 0) {
+				this.filter.unassigned = false
+			}
 			this.$nextTick(() => this.$store.dispatch('setFilter', { ...this.filter }))
 		},
 		toggleNav() {
