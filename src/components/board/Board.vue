@@ -25,7 +25,7 @@
 		<Controls :board="board" />
 
 		<EmptyContent v-if="stacksByBoard.length === 0" icon="icon-pause">
-			No lists, add one
+			{{ t('deck', 'No lists, add one') }}
 			<template #desc>
 				<form @submit.prevent="addNewStack()">
 					<input id="new-stack-input-main"
@@ -146,6 +146,7 @@ export default {
 				boardId: this.id,
 			}
 			this.$store.dispatch('createStack', newStack)
+			this.newStackTitle = ''
 		},
 	},
 }
