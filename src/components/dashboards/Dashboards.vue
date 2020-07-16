@@ -31,11 +31,10 @@
 		</div>
 
 		<div v-else>
-
 			<div v-if="filter=='due'" class="dashboard">
 				<div class="dashboard-column">
 					<h2>{{ t('deck', 'overdue') }}</h2>
-					<div v-for="card in dueOverdue" :key="card.id">
+					<div v-for="card in withDueDashboardGroup.overdue" :key="card.id">
 						<CardItem :item="card" />
 					</div>
 				</div>
@@ -144,7 +143,6 @@ export default {
 		...mapGetters([
 			'withDueDashboard',
 			'assignedCardsDashboard',
-			'dueOverdue'
 		]),
 		withDueDashboardGroup() {
 			return this.groupByDue(this.withDueDashboard)
@@ -153,13 +151,13 @@ export default {
 			return this.groupByDue(this.assignedCardsDashboard)
 		},
 	},
+	watch: {
+		'$route.params.filter'() {
+			this.getData()
+		},
+	},
 	created() {
 		this.getData()
-	},
-	watch: {
-		"$route.params.filter"() {
-			this.getData()
-		}
 	},
 	methods: {
 		async getData() {
@@ -178,7 +176,6 @@ export default {
 			this.loading = false
 		},
 
-
 		groupByDue(dataset) {
 			const all = {
 				nodue: [],
@@ -193,10 +190,9 @@ export default {
 				if (card.duedate === null) {
 					all.nodue.push(card)
 				} else {
-					const hours = Math.floor(moment(card.duedate).diff(this.$root.time, 'seconds') / 60 / 60 )
-					let d = new Date()
-					let currentHour = d.getHours()
-					console.log(card.title +' '+ hours )
+					const hours = Math.floor(moment(card.duedate).diff(this.$root.time, 'seconds') / 60 / 60)
+					const d = new Date()
+					const currentHour = d.getHours()
 					if (hours < 0) {
 						all.overdue.push(card)
 					}

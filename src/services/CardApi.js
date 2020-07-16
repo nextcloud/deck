@@ -194,4 +194,5 @@ export class CardApi {
 				return Promise.reject(err)
 			})
 	}
+
 }

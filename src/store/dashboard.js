@@ -36,7 +36,7 @@ export default {
 			return state.withDue.filter((card) => {
 				return card
 			})
-				
+
 		},
 		withDueDashboard: state => {
 			return state.withDue

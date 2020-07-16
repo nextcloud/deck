@@ -24,22 +24,17 @@
 
 namespace OCA\Deck\Service;
 
-use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\Db\Acl;
-use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
-use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Stack;
-use OCA\Deck\Db\StackMapper;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IGroupManager;
-use OCP\IL10N;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
@@ -50,53 +45,32 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 
 class DashboardService {
 	private $boardMapper;
-	private $stackMapper;
 	private $labelMapper;
-	private $aclMapper;
 	private $cardMapper;
-	private $l10n;
-	private $permissionService;
-	private $notificationHelper;
 	private $assignedUsersMapper;
 	private $userManager;
 	private $groupManager;
 	private $userId;
-	private $activityManager;
 	/** @var EventDispatcherInterface */
 	private $eventDispatcher;
-	private $changeHelper;
 	
 	public function __construct(
 		BoardMapper $boardMapper,
-		StackMapper $stackMapper,
-		IL10N $l10n,
 		LabelMapper $labelMapper,
-		AclMapper $aclMapper,
 		CardMapper $cardMapper,
-		PermissionService $permissionService,
-		NotificationHelper $notificationHelper,
 		AssignedUsersMapper $assignedUsersMapper,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
-		ActivityManager $activityManager,
 		EventDispatcherInterface $eventDispatcher,
-		ChangeHelper $changeHelper,
 		$userId
 	) {
 		$this->boardMapper = $boardMapper;
-		$this->stackMapper = $stackMapper;
 		$this->labelMapper = $labelMapper;
-		$this->aclMapper = $aclMapper;
 		$this->cardMapper = $cardMapper;
-		$this->l10n = $l10n;
-		$this->permissionService = $permissionService;
-		$this->notificationHelper = $notificationHelper;
 		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
-		$this->activityManager = $activityManager;
 		$this->eventDispatcher = $eventDispatcher;
-		$this->changeHelper = $changeHelper;
 		$this->userId = $userId;
 	}
 
