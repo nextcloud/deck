@@ -25,8 +25,9 @@
 		<Controls :board="board" />
 
 		<EmptyContent v-if="stacksByBoard.length === 0" icon="icon-pause">
-			{{ t('deck', 'No lists, add one') }}
+			{{ t('deck', 'No lists available') }}
 			<template #desc>
+				{{ t('deck', 'Create a new list to add cards to this board') }}
 				<form @submit.prevent="addNewStack()">
 					<input id="new-stack-input-main"
 						v-model="newStackTitle"
@@ -159,6 +160,10 @@ export default {
 	$board-spacing: 15px;
 	$stack-spacing: 10px;
 	$stack-width: 300px;
+
+	form {
+		text-align: center;
+	}
 
 	.board-wrapper {
 		position: relative;
