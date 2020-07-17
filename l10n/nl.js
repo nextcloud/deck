@@ -126,7 +126,7 @@ OC.L10N.register(
     "Delete" : "Verwijderen",
     "Delete list" : "Lijst verwijderen",
     "Add card" : "Toevoegen kaart",
-    "Add a new card" : "Toevoegen nieuwe kaart",
+    "Add a new card" : "Nieuwe kaart toevoegen",
     "Edit" : "Bewerken",
     "Add a new tag" : "Nieuwe tag toevoegen",
     "title and color value must be provided" : "titel- en kleurwaarde moet gegeven worden",
