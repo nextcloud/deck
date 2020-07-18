@@ -57,8 +57,8 @@ class BoardServiceTest extends TestCase {
 	private $boardMapper;
 	/** @var StackMapper */
 	private $stackMapper;
-    /** @var CardMapper */
-    private $cardMapper;
+	/** @var CardMapper */
+	private $cardMapper;
 	/** @var PermissionService */
 	private $permissionService;
 	/** @var NotificationHelper */
