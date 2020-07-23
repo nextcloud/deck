@@ -16,7 +16,8 @@
         "christophwurst/nextcloud": "^17",
         "jakub-onderka/php-parallel-lint": "^1.0.0",
         "phpunit/phpunit": "^8",
-        "nextcloud/coding-standard": "^0.3.0"
+        "nextcloud/coding-standard": "^0.3.0",
+        "symfony/event-dispatcher": "^4.0"
     },
     "config": {
         "optimize-autoloader": true,
