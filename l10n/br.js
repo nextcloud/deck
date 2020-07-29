@@ -14,7 +14,7 @@ OC.L10N.register(
     "Edit" : "Cheñch",
     "Description" : "Diskrivadur",
     "Modified" : "Cheñchet",
-    "Save" : "Entilañ",
+    "Save" : "Enrollañ",
     "Reply" : "Respont",
     "seconds ago" : "eilenn zo",
     "Shared with you" : "Rannet ganeoc'h"
