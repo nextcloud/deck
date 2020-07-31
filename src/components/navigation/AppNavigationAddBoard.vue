@@ -87,7 +87,7 @@ export default {
 			display: flex;
 			flex-grow: 1;
 
-			input[type="text"] {
+			input[type='text'] {
 				flex-grow: 1;
 			}
 		}

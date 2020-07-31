@@ -291,6 +291,8 @@ export default {
 
 <style lang="scss" scoped>
 	.controls {
+		display: flex;
+
 		.board-title {
 			display: flex;
 			align-items: center;
@@ -318,20 +320,12 @@ export default {
 	}
 
 	#app-navigation-toggle-custom {
+		position: static;
 		width: 44px;
 		height: 44px;
 		cursor: pointer;
 		opacity: 1;
 		display: inline-block !important;
-		position: fixed;
-	}
-
-	.controls {
-		display: flex;
-	}
-
-	#app-navigation-toggle-custom {
-		position: static;
 	}
 
 	.board-actions {
@@ -350,6 +344,7 @@ export default {
 			background-color: transparent;
 		}
 	}
+
 	.filter--item {
 		input + label {
 			display: block;
@@ -366,11 +361,13 @@ export default {
 			}
 		}
 	}
+
 	.filter {
 		width: 250px;
 		max-height: 80vh;
 		overflow: auto;
 	}
+
 	.filter h3 {
 		margin-top: 0px;
 		margin-bottom: 5px;

@@ -74,17 +74,19 @@ input[type=checkbox] {
 	min-height: 12px;
 }
 
-li 	input[type="checkbox"].checkbox + label::before {
+li 	input[type='checkbox'].checkbox + label::before {
 	margin-left: -15px;
 
 }
-input[type="checkbox"].checkbox + label::before {
+
+input[type='checkbox'].checkbox + label::before {
 	position: relative;
 	z-index: 100;
 	margin-right: 10px;
 	margin-top: 0;
 }
-li input[type="checkbox"].checkbox:not(:checked) + label::before {
+
+li input[type='checkbox'].checkbox:not(:checked) + label::before {
 	background-color: var(--color-main-background);
 }
 

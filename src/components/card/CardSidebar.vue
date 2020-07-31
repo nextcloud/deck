@@ -501,12 +501,14 @@ export default {
 </script>
 
 <style>
-	@import "~easymde/dist/easymde.min.css";
+	@import '~easymde/dist/easymde.min.css';
+
 	.vue-easymde, .CodeMirror {
 		border: none;
 		margin: 0;
 		padding: 0;
 	}
+
 	.editor-preview,
 	.editor-statusbar {
 		display: none;
@@ -615,7 +617,7 @@ export default {
 		min-height: 100px;
 
 		&::v-deep {
-			@import "./../../css/markdown";
+			@import './../../css/markdown';
 		}
 
 		&::v-deep input {

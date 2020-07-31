@@ -154,6 +154,7 @@ export default {
 	.visualdiff ins {
 		color: green;
 	}
+
 	.visualdiff del {
 		color: darkred;
 	}

@@ -89,6 +89,12 @@ export default {
 		li {
 			display: flex;
 			height: 44px;
+
+			&:hover, &:active, &.focus {
+				button {
+					opacity: 1;
+				}
+			}
 		}
 
 		span {
@@ -118,13 +124,6 @@ export default {
 			border: none;
 			background-color: transparent;
 			opacity: 0.5;
-		}
-		li {
-			&:hover, &:active, &.focus {
-				button {
-					opacity: 1;
-				}
-			}
 		}
 	}
 </style>
