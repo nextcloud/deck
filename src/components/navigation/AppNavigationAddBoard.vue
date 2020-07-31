@@ -64,7 +64,7 @@ export default {
 		createBoard(e) {
 			const title = e.currentTarget.childNodes[0].value
 			this.$store.dispatch('createBoard', {
-				title: title,
+				title,
 				color: this.color.substring(1),
 			})
 			this.editing = false

@@ -70,7 +70,7 @@ export default {
 		},
 	},
 	watch: {
-		navFilter: function(value) {
+		navFilter(value) {
 			this.$store.commit('setBoardFilter', value)
 		},
 	},

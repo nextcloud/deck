@@ -123,10 +123,10 @@ export default {
 			}
 			return this.board.color
 		},
-		undoText: function() {
+		undoText() {
 			return t('deck', 'Board {0} deleted', [this.board.title])
 		},
-		routeTo: function() {
+		routeTo() {
 			return {
 				name: 'board',
 				params: { id: this.board.id },

@@ -84,7 +84,7 @@ export default {
 		},
 	},
 	watch: {
-		boards: function(newVal, prevVal) {
+		boards(newVal, prevVal) {
 			if (this.openOnAddBoards === true && prevVal.length < newVal.length) {
 				this.opened = true
 			}

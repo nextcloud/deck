@@ -49,7 +49,7 @@ Vue.directive('tooltip', Tooltip)
 Vue.directive('click-outside', ClickOutside)
 
 Vue.directive('focus', {
-	inserted: function(el) {
+	inserted(el) {
 		el.focus()
 	},
 })

@@ -96,8 +96,8 @@ export default {
 				const size = 32
 				const avatarUrl = generateUrl('/avatar/{user}/{size}',
 					{
-						user: user,
-						size: size,
+						user,
+						size,
 					})
 				return window.location.protocol + '//' + window.location.host + avatarUrl
 			}
