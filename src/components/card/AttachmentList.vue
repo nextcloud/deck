@@ -30,55 +30,48 @@
 			style="display: none;"
 			multiple
 			@change="handleUploadFile">
-		<div class="attachment-list">
-			<ul>
-				<li v-for="attachment in uploadQueue" :key="attachment.name" class="attachment">
-					<a class="fileicon" :style="mimetypeForAttachment('none')" />
-					<div class="details">
-						<a>
-							<div class="filename">
-								<span class="basename">{{ attachment.name }}</span>
-							</div>
-							<progress :value="attachment.progress" max="100" />
-						</a>
-					</div>
-				</li>
-
-				<div class="attachment-list">
-					<ul>
-						<li v-for="attachment in attachments"
-							:key="attachment.id"
-							class="attachment">
-							<a class="fileicon" :style="mimetypeForAttachment(attachment.extendedData.mimetype)" :href="attachmentUrl(attachment)" />
-							<div class="details">
-								<a :href="attachmentUrl(attachment)" target="_blank">
-									<div class="filename">
-										<span class="basename">{{ attachment.data }}</span>
-									</div>
-									<span class="filesize">{{ formattedFileSize(attachment.extendedData.filesize) }}</span>
-									<span class="filedate">{{ relativeDate(attachment.createdAt*1000) }}</span>
-									<span class="filedate">{{ attachment.createdBy }}</span>
-								</a>
-							</div>
-							<Actions v-if="selectable">
-								<ActionButton icon="icon-confirm" @click="$emit('selectAttachment', attachment)">
-									{{ t('deck', 'Add this attachment') }}
-								</ActionButton>
-							</Actions>
-							<Actions v-if="removable">
-								<ActionButton v-if="attachment.deletedAt === 0" icon="icon-delete" @click="$emit('deleteAttachment', attachment)">
-									{{ t('deck', 'Delete Attachment') }}
-								</ActionButton>
-
-								<ActionButton v-else icon="icon-history" @click="$emit('restoreAttachment', attachment)">
-									{{ t('deck', 'Restore Attachment') }}
-								</ActionButton>
-							</Actions>
-						</li>
-					</ul>
+		<ul class="attachment-list">
+			<li v-for="attachment in uploadQueue" :key="attachment.name" class="attachment">
+				<a class="fileicon" :style="mimetypeForAttachment('none')" />
+				<div class="details">
+					<a>
+						<div class="filename">
+							<span class="basename">{{ attachment.name }}</span>
+						</div>
+						<progress :value="attachment.progress" max="100" />
+					</a>
 				</div>
-			</ul>
-		</div>
+			</li>
+			<li v-for="attachment in attachments"
+				:key="attachment.id"
+				class="attachment">
+				<a class="fileicon" :style="mimetypeForAttachment(attachment.extendedData.mimetype)" :href="attachmentUrl(attachment)" />
+				<div class="details">
+					<a :href="attachmentUrl(attachment)" target="_blank">
+						<div class="filename">
+							<span class="basename">{{ attachment.data }}</span>
+						</div>
+						<span class="filesize">{{ formattedFileSize(attachment.extendedData.filesize) }}</span>
+						<span class="filedate">{{ relativeDate(attachment.createdAt*1000) }}</span>
+						<span class="filedate">{{ attachment.createdBy }}</span>
+					</a>
+				</div>
+				<Actions v-if="selectable">
+					<ActionButton icon="icon-confirm" @click="$emit('selectAttachment', attachment)">
+						{{ t('deck', 'Add this attachment') }}
+					</ActionButton>
+				</Actions>
+				<Actions v-if="removable">
+					<ActionButton v-if="attachment.deletedAt === 0" icon="icon-delete" @click="$emit('deleteAttachment', attachment)">
+						{{ t('deck', 'Delete Attachment') }}
+					</ActionButton>
+
+					<ActionButton v-else icon="icon-history" @click="$emit('restoreAttachment', attachment)">
+						{{ t('deck', 'Restore Attachment') }}
+					</ActionButton>
+				</Actions>
+			</li>
+		</ul>
 	</AttachmentDragAndDrop>
 </template>
 

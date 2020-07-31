@@ -32,5 +32,5 @@ const config = {
 	}
 };
 
-module.exports = merge(config, webpackConfig)
+module.exports = merge(webpackConfig, config)
 
