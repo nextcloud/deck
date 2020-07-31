@@ -119,7 +119,7 @@ export default {
 			this.$store.dispatch('fetchAttachments', newCard.id)
 		},
 	},
-	created: function() {
+	created() {
 		this.$store.dispatch('fetchAttachments', this.card.id)
 	},
 	methods: {

@@ -60,7 +60,7 @@ export default {
 		},
 	},
 	computed: {
-		routeTo: function() {
+		routeTo() {
 			return {
 				name: 'board',
 				params: { id: this.board.id },

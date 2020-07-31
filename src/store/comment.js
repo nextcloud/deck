@@ -117,7 +117,7 @@ export default {
 		},
 		async updateComment({ commit }, data) {
 			const comment = await apiClient.updateComment(data)
-			await commit('updateComment', { cardId: data.cardId, comment: comment })
+			await commit('updateComment', { cardId: data.cardId, comment })
 		},
 		async markCommentsAsRead({ commit }, cardId) {
 			await apiClient.markCommentsAsRead(cardId)

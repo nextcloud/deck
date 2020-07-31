@@ -72,7 +72,7 @@ export default {
 			default: null,
 		},
 	},
-	data: function() {
+	data() {
 		return {
 			loading: true,
 		}

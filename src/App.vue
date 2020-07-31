@@ -43,7 +43,7 @@ export default {
 	components: {
 		AppNavigation,
 	},
-	data: function() {
+	data() {
 		return {
 			addButton: {
 				icon: 'icon-add',
@@ -77,12 +77,12 @@ export default {
 			return this.sidebarRouterView || this.sidebarShownState
 		},
 	},
-	provide: function() {
+	provide() {
 		return {
-			boardApi: boardApi,
+			boardApi,
 		}
 	},
-	created: function() {
+	created() {
 		this.$store.dispatch('loadBoards')
 		this.$store.dispatch('loadSharees')
 	},
