@@ -154,16 +154,15 @@ export default {
 			width: 36px;
 			height: 36px;
 			box-sizing: content-box !important;
+			margin-right: -12px;
+			transition: margin-right 0.2s ease-in-out;
+
 			&.icon-more {
 				width: 32px;
 				height: 32px;
 				opacity: .5;
 				background-color: var(--color-background-dark) !important;
 				cursor: pointer;
-			}
-			& {
-				margin-right: -12px;
-				transition: margin-right 0.2s ease-in-out;
 			}
 		}
 		&:hover div:nth-child(n+2) /deep/ .avatardiv {

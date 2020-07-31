@@ -291,6 +291,8 @@ export default {
 
 <style lang="scss" scoped>
 	.controls {
+		display: flex;
+
 		.board-title {
 			display: flex;
 			align-items: center;
@@ -318,20 +320,12 @@ export default {
 	}
 
 	#app-navigation-toggle-custom {
+		position: static;
 		width: 44px;
 		height: 44px;
 		cursor: pointer;
 		opacity: 1;
 		display: inline-block !important;
-		position: fixed;
-	}
-
-	.controls {
-		display: flex;
-	}
-
-	#app-navigation-toggle-custom {
-		position: static;
 	}
 
 	.board-actions {
