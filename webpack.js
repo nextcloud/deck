@@ -12,6 +12,17 @@ const config = {
 		jsonpFunction: 'webpackJsonpOCADeck',
 		chunkFilename: '[name].js?v=[contenthash]',
 	},
+	module: {
+		rules: [
+			{
+				test: /\.(png|jpg|gif|svg)$/,
+				loader: 'url-loader',
+				options: {
+					name: '[name].[ext]?[hash]'
+				}
+			}
+		]
+	},
 	resolve: {
 		extensions: ['*', '.js', '.vue', '.json'],
 		modules: [
