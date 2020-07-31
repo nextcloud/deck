@@ -21,8 +21,27 @@
   -->
 
 <template>
-	<div class="attachment-list">
-		<ul>
+	<AttachmentDragAndDrop :card-id="cardId" class="drop-upload--sidebar">
+		<button class="icon-upload" @click="clickAddNewAttachmment()">
+			{{ t('deck', 'Upload attachment') }}
+		</button>
+		<input ref="localAttachments"
+			type="file"
+			style="display: none;"
+			multiple
+			@change="handleUploadFile">
+		<ul class="attachment-list">
+			<li v-for="attachment in uploadQueue" :key="attachment.name" class="attachment">
+				<a class="fileicon" :style="mimetypeForAttachment('none')" />
+				<div class="details">
+					<a>
+						<div class="filename">
+							<span class="basename">{{ attachment.name }}</span>
+						</div>
+						<progress :value="attachment.progress" max="100" />
+					</a>
+				</div>
+			</li>
 			<li v-for="attachment in attachments"
 				:key="attachment.id"
 				class="attachment">
@@ -53,22 +72,29 @@
 				</Actions>
 			</li>
 		</ul>
-	</div>
+	</AttachmentDragAndDrop>
 </template>
 
 <script>
 import { Actions, ActionButton } from '@nextcloud/vue'
+import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
 import relativeDate from '../../mixins/relativeDate'
 import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
+import { mapState } from 'vuex'
+import { loadState } from '@nextcloud/initial-state'
+import attachmentUpload from '../../mixins/attachmentUpload'
+const maxUploadSizeState = loadState('deck', 'maxUploadSize')
 
 export default {
 	name: 'AttachmentList',
 	components: {
 		Actions,
 		ActionButton,
+		AttachmentDragAndDrop,
 	},
-	mixins: [relativeDate],
+	mixins: [relativeDate, attachmentUpload],
+
 	props: {
 		cardId: {
 			type: Number,
@@ -82,6 +108,15 @@ export default {
 			type: Boolean,
 			required: false,
 		},
+	},
+	data() {
+		return {
+			modalShow: false,
+			file: '',
+			overwriteAttachment: null,
+			isDraggingOver: false,
+			maxUploadSize: maxUploadSizeState,
+		}
 	},
 	computed: {
 		attachments() {
@@ -102,14 +137,45 @@ export default {
 		formattedFileSize() {
 			return (filesize) => formatFileSize(filesize)
 		},
+		...mapState({
+			currentBoard: state => state.currentBoard,
+		}),
+		isReadOnly() {
+			return !this.$store.getters.canEdit
+		},
+		dropHintText() {
+			if (this.isReadOnly) {
+				return t('deck', 'This board is read only')
+			} else {
+				return t('deck', 'Drop your files to upload')
+			}
+		},
 	},
-	watch: {
-
+	created() {
+		this.$store.dispatch('fetchAttachments', this.cardId)
+	},
+	methods: {
+		handleUploadFile(event) {
+			const files = event.target.files ?? []
+			for (const file of files) {
+				this.onLocalAttachmentSelected(file)
+			}
+			event.target.value = ''
+		},
+		clickAddNewAttachmment() {
+			this.$refs.localAttachments.click()
+		},
 	},
 }
 </script>
 
 <style lang="scss" scoped>
+
+	.icon-upload {
+		padding-left: 35px;
+		background-position: 10px center;
+	}
+
 	.attachment-list {
 		&.selector {
 			padding: 10px;

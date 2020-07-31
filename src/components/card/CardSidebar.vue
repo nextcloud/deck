@@ -633,14 +633,16 @@ export default {
 		width: 25vw;
 		min-width: 250px;
 		min-height: 120px;
-		text-align: center;
-		margin: 20px 20px 60px 20px;
+		margin: 20px;
 		padding-bottom: 20px;
-	}
+		display: flex;
+		flex-direction: column;
 
-	.modal__content button {
-		float: right;
-		margin: 40px 3px 3px 0;
+		&::v-deep .attachment-list {
+			flex-shrink: 1;
+			overflow: scroll;
+			max-height: 50vh;
+		}
 	}
 
 </style>
