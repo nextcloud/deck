@@ -32,7 +32,7 @@ export default {
 	getters: {
 		cardsByStack: (state, getters, rootState) => (id) => {
 			return state.cards.filter((card) => {
-				const { tags, users, due } = rootState.filter
+				const { tags, users, due, unassigned } = rootState.filter
 				let allTagsMatch = true
 				let allUsersMatch = true
 
@@ -56,6 +56,10 @@ export default {
 					if (!allUsersMatch) {
 						return false
 					}
+				}
+
+				if (unassigned && card.assignedUsers.length > 0) {
+					return false
 				}
 
 				if (due !== '') {
