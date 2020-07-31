@@ -23,13 +23,33 @@
 <template>
 	<div class="board-wrapper">
 		<Controls :board="board" />
+
 		<transition name="fade" mode="out-in">
 			<div v-if="loading" key="loading" class="emptycontent">
 				<div class="icon icon-loading" />
 				<h2>{{ t('deck', 'Loading board') }}</h2>
 				<p />
 			</div>
-			<div v-else-if="board && !loading" key="board" class="board">
+			<EmptyContent v-else-if="isEmpty" key="empty" icon="icon-deck">
+				{{ t('deck', 'No lists available') }}
+				<template #desc>
+					{{ t('deck', 'Create a new list to add cards to this board') }}
+					<form @submit.prevent="addNewStack()">
+						<input id="new-stack-input-main"
+							v-model="newStackTitle"
+							v-focus
+							type="text"
+							class="no-close"
+							:placeholder="t('deck', 'List name')"
+							required>
+						<input v-tooltip="t('deck', 'Add new list')"
+							class="icon-confirm"
+							type="submit"
+							value="">
+					</form>
+				</template>
+			</EmptyContent>
+			<div v-else-if="!isEmpty && !loading" key="board" class="board">
 				<Container lock-axix="y"
 					orientation="horizontal"
 					:drag-handle-selector="dragHandleSelector"
@@ -54,6 +74,7 @@ import { Container, Draggable } from 'vue-smooth-dnd'
 import { mapState, mapGetters } from 'vuex'
 import Controls from '../Controls'
 import Stack from './Stack'
+import { EmptyContent } from '@nextcloud/vue'
 
 export default {
 	name: 'Board',
@@ -62,6 +83,7 @@ export default {
 		Container,
 		Draggable,
 		Stack,
+		EmptyContent,
 	},
 	inject: [
 		'boardApi',
@@ -75,6 +97,7 @@ export default {
 	data() {
 		return {
 			loading: true,
+			newStackTitle: '',
 		}
 	},
 	computed: {
@@ -90,6 +113,9 @@ export default {
 		},
 		dragHandleSelector() {
 			return this.canEdit ? null : '.no-drag'
+		},
+		isEmpty() {
+			return this.stacksByBoard.length === 0
 		},
 	},
 	watch: {
@@ -117,13 +143,13 @@ export default {
 			this.$store.dispatch('orderStack', { stack: this.stacksByBoard[removedIndex], removedIndex, addedIndex })
 		},
 
-		createStack() {
+		addNewStack() {
 			const newStack = {
-				title: 'FooBar',
+				title: this.newStackTitle,
 				boardId: this.id,
-				order: this.stacksByBoard().length,
 			}
 			this.$store.dispatch('createStack', newStack)
+			this.newStackTitle = ''
 		},
 	},
 }
@@ -136,6 +162,19 @@ export default {
 	$board-spacing: 15px;
 	$stack-spacing: 10px;
 	$stack-width: 300px;
+
+	form {
+		text-align: center;
+		display: flex;
+		width: 100%;
+		max-width: 200px;
+		margin: auto;
+		margin-top: 20px;
+
+		input[type=text] {
+			flex-grow: 1;
+		}
+	}
 
 	.board-wrapper {
 		position: relative;
