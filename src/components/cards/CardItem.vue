@@ -259,9 +259,11 @@ export default {
 			}
 		}
 	}
+
 	.duedate {
 		margin-right: 9px;
 	}
+
 	.right {
 		display: flex;
 		align-items: flex-start;

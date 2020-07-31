@@ -295,6 +295,7 @@ export default {
 			border: none;
 		}
 	}
+
 	.stack .smooth-dnd-container.vertical {
 		margin-top: 3px;
 	}
@@ -307,6 +308,7 @@ export default {
 	.slide-top-leave-active {
 		transition: all 100ms ease;
 	}
+
 	.slide-top-enter, .slide-top-leave-to {
 		transform: translateY(-10px);
 		opacity: 0;

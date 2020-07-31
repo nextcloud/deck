@@ -350,6 +350,7 @@ export default {
 			background-color: transparent;
 		}
 	}
+
 	.filter--item {
 		input + label {
 			display: block;
@@ -366,11 +367,13 @@ export default {
 			}
 		}
 	}
+
 	.filter {
 		width: 250px;
 		max-height: 80vh;
 		overflow: auto;
 	}
+
 	.filter h3 {
 		margin-top: 0px;
 		margin-bottom: 5px;

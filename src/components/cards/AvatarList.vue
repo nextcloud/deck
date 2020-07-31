@@ -143,6 +143,7 @@ export default {
 			}
 		}
 	}
+
 	.avatar-list {
 		float: right;
 		display: inline-flex;
@@ -169,6 +170,7 @@ export default {
 			margin-right: 1px;
 		}
 	}
+
 	.popovermenu {
 		display: block;
 		margin: 40px -6px;

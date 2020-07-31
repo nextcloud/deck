@@ -1,6 +1,7 @@
 .fade-enter-active {
 	transition: opacity 250ms;
 }
+
 .fade-enter, .fade-leave-to {
 	opacity: 0;
 }
@@ -9,6 +10,7 @@
 .zoom-enter-active {
 	animation: zoom-in var(--animation-quick);
 }
+
 .zoom-leave-active {
 	animation: zoom-in var(--animation-quick) reverse;
 	will-change: transform;
