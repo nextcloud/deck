@@ -22,6 +22,7 @@
 
 import { CardApi } from './../services/CardApi'
 import Vue from 'vue'
+import { emit } from '@nextcloud/event-bus'
 
 const apiClient = new CardApi()
 
@@ -102,6 +103,7 @@ export default {
 			if (existingIndex !== -1) {
 				const existingCard = state.cards.find(_card => _card.id === card.id)
 				Vue.set(state.cards, existingIndex, Object.assign({}, existingCard, card))
+				emit('deck:card:modified', card)
 			} else {
 				state.cards.push(card)
 			}
@@ -111,11 +113,13 @@ export default {
 			if (existingIndex !== -1) {
 				state.cards.splice(existingIndex, 1)
 			}
+			emit('deck:card:modified', card)
 		},
 		updateCard(state, card) {
 			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
 				Vue.set(state.cards, existingIndex, Object.assign({}, state.cards[existingIndex], card))
+				emit('deck:card:modified', card)
 			}
 		},
 		updateCardsReorder(state, cards) {
@@ -126,19 +130,24 @@ export default {
 					Vue.set(state.cards[existingIndex], 'stackId', newCard.stackId)
 				}
 			}
+			emit('deck:card:modified', cards[cards.length - 1])
 		},
-		assignCardToUser(state, user) {
+		assignCardToUser(state, { card, user }) {
 			const existingIndex = state.cards.findIndex(_card => _card.id === user.cardId)
 			if (existingIndex !== -1) {
 				state.cards[existingIndex].assignedUsers.push(user)
 			}
+			// FIXME: workaround since we have no server time on assignments
+			emit('deck:card:modified', { ...card, lastModified: Date.now() / 1000 })
 		},
-		removeUserFromCard(state, user) {
+		removeUserFromCard(state, { card, user }) {
 			const existingIndex = state.cards.findIndex(_card => _card.id === user.cardId)
 			if (existingIndex !== -1) {
 				const foundIndex = state.cards[existingIndex].assignedUsers.findIndex(_user => _user.id === user.id)
 				if (foundIndex !== -1) {
 					state.cards[existingIndex].assignedUsers.splice(foundIndex, 1)
+					// FIXME: workaround since we have no server time on assignments
+					emit('deck:card:modified', { ...card, lastModified: Date.now() / 1000 })
 				}
 			}
 		},
@@ -148,17 +157,20 @@ export default {
 				Vue.set(state.cards[existingIndex], property, card[property])
 			}
 			Vue.set(state.cards[existingIndex], 'lastModified', Date.now() / 1000)
+			emit('deck:card:modified', card)
 		},
 		cardIncreaseAttachmentCount(state, cardId) {
 			const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
 			if (existingIndex !== -1) {
 				Vue.set(state.cards[existingIndex], 'attachmentCount', state.cards[existingIndex].attachmentCount + 1)
+				emit('deck:card:modified', state.cards[existingIndex])
 			}
 		},
 		cardDecreaseAttachmentCount(state, cardId) {
 			const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
 			if (existingIndex !== -1) {
 				Vue.set(state.cards[existingIndex], 'attachmentCount', state.cards[existingIndex].attachmentCount - 1)
+				emit('deck:card:modified', state.cards[existingIndex])
 			}
 		},
 	},
@@ -213,11 +225,11 @@ export default {
 		},
 		async assignCardToUser({ commit }, { card, assignee }) {
 			const user = await apiClient.assignUser(card.id, assignee.userId, assignee.type)
-			commit('assignCardToUser', user)
+			commit('assignCardToUser', { card, user })
 		},
 		async removeUserFromCard({ commit }, { card, assignee }) {
 			const user = await apiClient.removeUser(card.id, assignee.userId, assignee.type)
-			commit('removeUserFromCard', user)
+			commit('removeUserFromCard', { card, user })
 		},
 		async addLabel({ commit }, data) {
 			await apiClient.assignLabelToCard(data)

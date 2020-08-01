@@ -317,6 +317,11 @@ export default new Vuex.Store({
 			const storedBoard = await apiClient.updateBoard(board)
 			commit('addBoard', storedBoard)
 		},
+		updateBoardLastModified({ commit }, board) {
+			commit('addBoard', board)
+			commit('setCurrentBoard', board)
+
+		},
 		createBoard({ commit }, boardData) {
 			apiClient.createBoard(boardData)
 				.then((board) => {

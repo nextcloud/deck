@@ -21,14 +21,18 @@
  */
 
 import Vue from 'vue'
+import { BoardApi } from './../services/BoardApi'
 import { StackApi } from './../services/StackApi'
 import applyOrderToArray from './../helpers/applyOrderToArray'
+import { emit } from '@nextcloud/event-bus'
 
+const boardApiClient = new BoardApi()
 const apiClient = new StackApi()
 
 export default {
 	state: {
 		stacks: [],
+		remoteUpdate: null,
 	},
 	getters: {
 		stacksByBoard: state => (id) => {
@@ -36,6 +40,12 @@ export default {
 		},
 	},
 	mutations: {
+		clearStacks(state) {
+			state.stacks = []
+		},
+		updateRemote(state, response) {
+			Vue.set(state, 'remoteUpdate', response)
+		},
 		addStack(state, stack) {
 			const existingIndex = state.stacks.findIndex(_stack => _stack.id === stack.id)
 			if (existingIndex !== -1) {
@@ -73,6 +83,7 @@ export default {
 					OC.Notification.showTemporary('Failed to change order')
 					console.error(err.response.data.message)
 					commit('orderStack', { stack, addedIndex, removedIndex })
+					emit('deck:stack:modified', { ...stack, lastModified: Date.now() / 1000 })
 				})
 		},
 		async loadStacks({ commit }, boardId) {
@@ -89,13 +100,57 @@ export default {
 				}
 				delete stack.cards
 				commit('addStack', stack)
+				emit('deck:stack:modified', { ...stack, lastModified: Date.now() / 1000 })
 			}
+		},
+		async poll({ commit, rootState, state }, boardId) {
+			if (!rootState.currentBoard) {
+				return
+			}
+			// TODO: set If-Modified-Since header
+			const board = await boardApiClient.loadById(rootState.currentBoard.id)
+
+			console.debug('[deck] poll: remote(' + board.lastModified + ') local(' + rootState.currentBoard.lastModified + ') update(' + state.remoteUpdate?.lastModified + ')')
+			if (rootState.currentBoard.lastModified >= board.lastModified || state.remoteUpdate?.lastModified === board.lastModified) {
+				console.debug('[deck] poll: no new data for board ' + board.title)
+				return
+			}
+
+			let call = 'loadStacks'
+			if (this.state.showArchived === true) {
+				call = 'loadArchivedStacks'
+			}
+			const stacks = await apiClient[call](boardId)
+			board.stacks = stacks
+			commit('updateRemote', board)
+			console.debug('[deck] poll: applied new data for board ' + board.title)
+
+		},
+		async pollApply({ commit, state }, boardId) {
+			commit('clearCards')
+			commit('clearStacks')
+			// TODO: trigger board updated at on every operation
+			// event bus deck:board:modified board
+			// event bus deck:card:modified card
+			// event bus deck:stack:modified stack
+			for (const i in state.remoteUpdate.stacks) {
+				const stack = state.remoteUpdate.stacks[i]
+				for (const j in stack.cards) {
+					commit('addCard', stack.cards[j])
+				}
+				delete stack.cards
+				commit('addStack', stack)
+			}
+			delete state.remoteUpdate.stacks
+			commit('setCurrentBoard', state.remoteUpdate)
+			commit('updateRemote', null)
 		},
 		createStack({ commit }, stack) {
 			stack.boardId = this.state.currentBoard.id
 			apiClient.createStack(stack)
 				.then((createdStack) => {
 					commit('addStack', createdStack)
+					emit('deck:stack:modified', { ...createdStack, lastModified: Date.now() / 1000 })
 				})
 		},
 		deleteStack({ commit }, stack) {
@@ -103,12 +158,14 @@ export default {
 				.then((stack) => {
 					commit('deleteStack', stack)
 					commit('moveStackToTrash', stack)
+					emit('deck:stack:modified', { ...stack, lastModified: Date.now() / 1000 })
 				})
 		},
 		updateStack({ commit }, stack) {
 			apiClient.updateStack(stack)
 				.then((stack) => {
 					commit('updateStack', stack)
+					emit('deck:stack:modified', { ...stack, lastModified: Date.now() / 1000 })
 				})
 		},
 	},

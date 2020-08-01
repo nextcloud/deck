@@ -22,6 +22,9 @@
 
 <template>
 	<div class="board-wrapper">
+		<div v-if="remoteUpdate" class="board-update-notification">
+			{{ t('deck', 'The board has been updated by someone else.') }} <a @click="updateFromRemote">{{ t('deck', 'Update') }}</a>
+		</div>
 		<Controls :board="board" />
 		<transition name="fade" mode="out-in">
 			<div v-if="loading" key="loading" class="emptycontent">
@@ -54,6 +57,9 @@ import { Container, Draggable } from 'vue-smooth-dnd'
 import { mapState, mapGetters } from 'vuex'
 import Controls from '../Controls'
 import Stack from './Stack'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+
+const BOARD_POLLING_INTERVAL = 1000
 
 export default {
 	name: 'Board',
@@ -81,6 +87,7 @@ export default {
 		...mapState({
 			board: state => state.currentBoard,
 			showArchived: state => state.showArchived,
+			remoteUpdate: state => state.stack.remoteUpdate,
 		}),
 		...mapGetters([
 			'canEdit',
@@ -100,6 +107,18 @@ export default {
 	},
 	created() {
 		this.fetchData()
+		setInterval(() => {
+			this.$store.dispatch('poll', this.id)
+		}, BOARD_POLLING_INTERVAL)
+
+		subscribe('deck:card:modified', (card) => {
+			console.log('card modified', card.lastModified)
+			this.$store.dispatch('updateBoardLastModified', { ...this.board, lastModified: card.lastModified })
+		})
+		subscribe('deck:stack:modified', (stack) => {
+			console.log('card modified', stack.lastModified)
+			this.$store.dispatch('updateBoardLastModified', { ...this.board, lastModified: stack.lastModified })
+		})
 	},
 	methods: {
 		async fetchData() {
@@ -111,6 +130,10 @@ export default {
 				console.error(e)
 			}
 			this.loading = false
+		},
+
+		updateFromRemote() {
+			this.$store.dispatch('pollApply', this.id)
 		},
 
 		onDropStack({ removedIndex, addedIndex }) {
@@ -191,6 +214,35 @@ export default {
 				}
 			}
 		}
+	}
+
+	.board-update-notification {
+		position: absolute;
+		background-color: var(--color-primary-light);
+		border-radius: var(--border-radius-large);
+		z-index: 1000;
+		padding: 4px 20px;
+		text-align: center;
+		display: inline-block;
+		width: auto;
+		margin: 10px auto;
+		top: 0;
+		left: 50%;
+		transform: translate(-50%, 0px);
+
+		animation: slideFromTop var(--animation-slow) ease-out forwards;
+		a {
+			font-weight: bold;
+			padding-left: 20px;
+			padding-right: 20px;
+		}
+
+	}
+
+	@keyframes slideFromTop
+	{
+		from {transform: translate(-50%, -100px); opacity: 0;}
+		to { transform: translate(-50%, 0); opacity: 1;}
 	}
 
 </style>
