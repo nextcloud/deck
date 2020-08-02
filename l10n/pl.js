@@ -133,6 +133,8 @@ OC.L10N.register(
     "Toggle compact mode" : "Przełącz w tryb kompaktowy",
     "Details" : "Szczegóły",
     "Loading board" : "Wczytywanie tablicy",
+    "No lists available" : "Brak dostępnych list",
+    "Create a new list to add cards to this board" : "Utwórz nową listę, aby dodać karty do tej tablicy",
     "Board not found" : "Nie znaleziono tablicy",
     "Sharing" : "Udostępnianie",
     "Tags" : "Etykiety",

@@ -97,6 +97,7 @@ OC.L10N.register(
     "Apply filter" : "Filter toepassen",
     "Filter by tag" : "Filter op label",
     "Filter by assigned user" : "Filter op toegewezen gebruiker",
+    "Unassigned" : "Niet-toegewezen",
     "Filter by due date" : "Filter op vervaldatum",
     "Overdue" : "Vervallen",
     "Next 24 hours" : "Volgende 24 uur",

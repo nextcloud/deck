@@ -133,6 +133,8 @@ OC.L10N.register(
     "Toggle compact mode" : "Commuta la modalità compatta",
     "Details" : "Dettagli",
     "Loading board" : "Caricamento lavagna",
+    "No lists available" : "Nessun elenco disponibile",
+    "Create a new list to add cards to this board" : "Crea un nuovo elenco per aggiungere schede a questa lavagna",
     "Board not found" : "Lavagna non trovata",
     "Sharing" : "Condivisione",
     "Tags" : "Etichette",

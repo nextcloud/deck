@@ -133,6 +133,8 @@ OC.L10N.register(
     "Toggle compact mode" : "Kompaktmodus umschalten",
     "Details" : "Details",
     "Loading board" : "Board laden",
+    "No lists available" : "Keine Listen verfügbar",
+    "Create a new list to add cards to this board" : "Erstellen Sie eine neue Liste, um diesem Board Karten hinzuzufügen",
     "Board not found" : "Board nicht gefunden",
     "Sharing" : "Teilen",
     "Tags" : "Schlagworte",

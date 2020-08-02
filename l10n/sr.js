@@ -121,6 +121,7 @@ OC.L10N.register(
     "Apply filter" : "Примени филтер",
     "Filter by tag" : "Филтрирај по ознаци",
     "Filter by assigned user" : "Филтрирај по додељеном кориснику",
+    "Unassigned" : "Недодељен",
     "Filter by due date" : "Филтрирај по року",
     "Overdue" : "Прошао рок",
     "Next 24 hours" : "Наредна 24 сата",
