@@ -133,6 +133,8 @@ OC.L10N.register(
     "Toggle compact mode" : "Vyp/zap. kompaktný režim",
     "Details" : "Podrobnosti",
     "Loading board" : "Načítanie nástenky",
+    "No lists available" : "Nie sú k dispozícii žiadne zoznamy",
+    "Create a new list to add cards to this board" : "Pre pridanie kariet na túto tabuľu vytvorte nový zoznam",
     "Board not found" : "Nástenka nebola nájdená",
     "Sharing" : "Sprístupnenie",
     "Tags" : "Štítky",
