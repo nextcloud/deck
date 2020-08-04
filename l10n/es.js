@@ -133,6 +133,8 @@ OC.L10N.register(
     "Toggle compact mode" : "Mostrar/ocultar modo compacto",
     "Details" : "Detalles",
     "Loading board" : "Cargando tablero",
+    "No lists available" : "No hay listas disponibles",
+    "Create a new list to add cards to this board" : "Crea una lista nueva para añadir tarjetas a este tablero",
     "Board not found" : "Tablero no encontrado",
     "Sharing" : "Compartir",
     "Tags" : "Etiquetas",

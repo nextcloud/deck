@@ -121,7 +121,7 @@ OC.L10N.register(
     "Apply filter" : "Filter anwenden",
     "Filter by tag" : "Nach Schlagwort filtern",
     "Filter by assigned user" : "Nach zugewiesenem Benutzer filtern",
-    "Unassigned" : "Benötigt keine Übersetzung. Für Android wird nur die formelle Übersetzung verwendet (de_DE).",
+    "Unassigned" : "Nicht zugewiesen",
     "Filter by due date" : "Nach Fälligkeitsdatum filtern",
     "Overdue" : "Überfällig",
     "Next 24 hours" : "Die nächsten 24 Stunden",
