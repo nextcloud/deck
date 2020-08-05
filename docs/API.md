@@ -113,7 +113,8 @@ Returns an array of board items
         "users": [],
         "shared": 0,
         "deletedAt": 0,
-        "id": 10
+        "id": 10,
+        "lastModified": 1586269585,
     }
 ]
 ```
@@ -187,7 +188,8 @@ Returns an array of board items
     },
     "users": [],
     "deletedAt": 0,
-    "id": 10
+    "id": 10,
+    "lastModified": 1586269585
 }
 ```
 
