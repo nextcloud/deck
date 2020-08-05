@@ -6,6 +6,7 @@ OC.L10N.register(
     "copy" : "eil",
     "Done" : "Graet",
     "Cancel" : "Arrest",
+    "Drop your files to upload" : "Laoskit ho restroù evit pellkas",
     "Details" : "Munudoù",
     "Sharing" : "Rannan",
     "Tags" : "Klavioù",
