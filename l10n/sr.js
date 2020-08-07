@@ -133,6 +133,8 @@ OC.L10N.register(
     "Toggle compact mode" : "Укључи/искључи компактни режим",
     "Details" : "Детаљи",
     "Loading board" : "Учитавам таблу",
+    "No lists available" : "Нема доступних спискова",
+    "Create a new list to add cards to this board" : "Направите нови списак да додате картице на ову таблу",
     "Board not found" : "Табла није нађена",
     "Sharing" : "Дељење",
     "Tags" : "Ознаке",
