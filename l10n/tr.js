@@ -133,6 +133,8 @@ OC.L10N.register(
     "Toggle compact mode" : "Sıkışık kipi değiştir",
     "Details" : "Ayrıntılar",
     "Loading board" : "Pano yükleniyor",
+    "No lists available" : "Kullanılabilecek bir liste yok",
+    "Create a new list to add cards to this board" : "Bu panoya kartlar eklemek için yeni bir liste ekleyin",
     "Board not found" : "Pano bulunamadı",
     "Sharing" : "Paylaşım",
     "Tags" : "Etiketler",
