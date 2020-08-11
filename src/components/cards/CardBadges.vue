@@ -52,10 +52,10 @@ export default {
 	},
 	computed: {
 		checkListCount() {
-			return (this.card.description.match(/^\s*(\*|-|(\d\.))\s+\[\s*(\s|x)\s*\](.*)$/gim) || []).length
+			return (this.card.description.match(/^\s*([*+-]|(\d\.))\s+\[\s*(\s|x)\s*\](.*)$/gim) || []).length
 		},
 		checkListCheckedCount() {
-			return (this.card.description.match(/^\s*(\*|-|(\d\.))\s+\[\s*x\s*\](.*)$/gim) || []).length
+			return (this.card.description.match(/^\s*([*+-]|(\d\.))\s+\[\s*x\s*\](.*)$/gim) || []).length
 		},
 		card() {
 			return this.$store.getters.cardById(this.id)
