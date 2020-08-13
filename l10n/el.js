@@ -121,6 +121,7 @@ OC.L10N.register(
     "Apply filter" : "Εφαρμογή φίλτρου",
     "Filter by tag" : "Φίλτρο ανά ετικέτα",
     "Filter by assigned user" : "Φίλτρο ανά χρήστη",
+    "Unassigned" : "Χωρίς ανάθεση",
     "Filter by due date" : "Φίλτρο ανά ημερομηνία λήξης",
     "Overdue" : "Εκπρόθεσμος",
     "Next 24 hours" : "Επόμενες 24 ώρες",
