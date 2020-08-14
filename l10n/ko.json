@@ -41,6 +41,7 @@
     "Apply filter" : "필터링 적용",
     "Filter by tag" : "태그로 필터링",
     "Filter by assigned user" : "지정된 사용자로 필터링",
+    "Unassigned" : "할당되지 않음",
     "Filter by due date" : "기한으로 필터링",
     "Overdue" : "기한 넘김",
     "Next 24 hours" : "다음 24시간",
