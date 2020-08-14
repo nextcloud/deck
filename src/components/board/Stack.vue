@@ -40,7 +40,7 @@
 				</form>
 			</transition>
 			<Actions v-if="canManage" :force-menu="true">
-				<ActionButton icon="icon-archive" @click="modalShow=true">
+				<ActionButton icon="icon-archive" @click="modalArchivAllCardsShow=true">
 					{{ t('deck', 'Archive all cards') }}
 				</ActionButton>
 				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
@@ -54,14 +54,14 @@
 			</Actions>
 		</div>
 
-		<Modal v-if="modalShow" title="Archive all cards in this list" @close="modalShow=false">
+		<Modal v-if="modalArchivAllCardsShow" @close="modalArchivAllCardsShow=false">
 			<div class="modal__content">
-				<h3>Archive all cards in this list</h3>
+				<h3>{{ t('deck', 'Archive all cards in this list') }}</h3>
 				<progress :value="archiveAllCardsProgress" :max="stackLen" />
 				<button class="primary" @click="archiveAllCardsFromStack(stack)">
 					{{ t('deck', 'Archive all cards') }}
 				</button>
-				<button @click="modalShow=false">
+				<button @click="modalArchivAllCardsShow=false">
 					{{ t('deck', 'Cancel') }}
 				</button>
 			</div>
@@ -140,7 +140,7 @@ export default {
 			showAddCard: false,
 			stateCardCreating: false,
 			animate: false,
-			modalShow: false,
+			modalArchivAllCardsShow: false,
 			archiveAllCardsProgress: null,
 			stackLen: 0,
 		}
@@ -205,7 +205,7 @@ export default {
 				this.archiveAllCardsProgress = index
 				this.$store.dispatch('archiveUnarchiveCard', { ...card, archived: true })
 			})
-			this.modalShow = false
+			this.modalArchivAllCardsShow = false
 		},
 		startEditing(stack) {
 			this.copiedStack = Object.assign({}, stack)
