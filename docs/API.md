@@ -492,6 +492,19 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 ##### 200 Success
 
+### POST /boards/{boardId}/stacks/{stackId}/clone - Clone a stack
+
+#### Request parameters
+
+| Parameter | Type    | Description                              |
+| --------- | ------- | ---------------------------------------- |
+| boardId   | Integer | The id of the board the stack belongs to |
+| stackId   | Integer | The id of the stack                      |
+
+#### Response
+
+##### 200 Success
+
 ## Cards
 
 ### GET /boards/{boardId}/stacks/{stackId}/cards/{cardId} - Get card details

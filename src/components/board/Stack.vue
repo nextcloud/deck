@@ -42,14 +42,14 @@
 						value="">
 				</form>
 			</transition>
-			<Actions v-if="canManage && !isArchived" :force-menu="true">
-				<ActionButton icon="icon-archive" @click="modalArchivAllCardsShow=true">
+			<Actions v-if="!isArchived" :force-menu="true">
+				<ActionButton v-if="canManage" icon="icon-archive" @click="modalArchivAllCardsShow=true">
 					{{ t('deck', 'Archive all cards') }}
 				</ActionButton>
-				<ActionButton icon="icon-clone" @click="cloneStack(stack)">
+				<ActionButton v-if="canEdit" icon="icon-clone" @click="cloneStack(stack)">
 					{{ t('deck', 'Clone list') }}
 				</ActionButton>
-				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
+				<ActionButton v-if="canManage" icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete list') }}
 				</ActionButton>
 			</Actions>
@@ -218,7 +218,11 @@ export default {
 			this.modalArchivAllCardsShow = false
 		},
 		cloneStack(stack) {
-			this.$store.dispatch('cloneStack', stack)
+			try {
+				this.$store.dispatch('cloneStack', stack)
+			} catch (e) {
+				showError('Could not clone stack: ' + e.response.data.message)
+			}
 		},
 		startEditing(stack) {
 			this.copiedStack = Object.assign({}, stack)
