@@ -69,4 +69,13 @@
         <provider min-version="16">OCA\Deck\Provider\DeckProvider</provider>
     </fulltextsearch>
 
+    <navigations>
+        <navigation>
+            <name>Deck</name>
+            <route>deck.page.index</route>
+            <icon>deck.svg</icon>
+            <order>10</order>
+        </navigation>
+    </navigations>
+
 </info>
