@@ -11,13 +11,13 @@
     "Can share" : "Can share",
     "Delete" : "ඉවත් කරන්න",
     "Edit" : "සකසන්න",
+    "Title" : "මාතෘකාව",
     "Description" : "විස්තරය",
     "Comments" : "අදහස්",
     "Modified" : "වෙනස් කළ",
     "Save" : "සුරකින්න",
     "Update" : "යාවත්කාල කිරීම",
     "seconds ago" : "තත්පරයන්ට පෙර",
-    "Settings" : "සැකසුම්",
-    "Share" : "බෙදා හදා ගන්න"
+    "Shared with you" : "Shared with you"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

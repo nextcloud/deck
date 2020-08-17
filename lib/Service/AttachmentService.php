@@ -213,7 +213,6 @@ class AttachmentService {
 	/**
 	 * Display the attachment
 	 *
-	 * @param $cardId
 	 * @param $attachmentId
 	 * @return Response
 	 * @throws BadRequestException
@@ -222,17 +221,17 @@ class AttachmentService {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
-	public function display($cardId, $attachmentId) {
-		if (is_numeric($cardId) === false) {
-			throw new BadRequestException('card id must be a number');
-		}
-
+	public function display($attachmentId) {
 		if (is_numeric($attachmentId) === false) {
 			throw new BadRequestException('attachment id must be a number');
 		}
 
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
-		$attachment = $this->attachmentMapper->find($attachmentId);
+		try {
+			$attachment = $this->attachmentMapper->find($attachmentId);
+		} catch (\Exception $e) {
+			throw new NoPermissionException('Permission denied');
+		}
+		$this->permissionService->checkPermission($this->cardMapper, $attachment->getCardId(), Acl::PERMISSION_READ);
 
 		try {
 			$service = $this->getService($attachment->getType());
@@ -245,7 +244,6 @@ class AttachmentService {
 	/**
 	 * Update an attachment with custom data
 	 *
-	 * @param $cardId
 	 * @param $attachmentId
 	 * @param $request
 	 * @return mixed
@@ -254,11 +252,7 @@ class AttachmentService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function update($cardId, $attachmentId, $data) {
-		if (is_numeric($cardId) === false) {
-			throw new BadRequestException('card id must be a number');
-		}
-
+	public function update($attachmentId, $data) {
 		if (is_numeric($attachmentId) === false) {
 			throw new BadRequestException('attachment id must be a number');
 		}
@@ -266,11 +260,15 @@ class AttachmentService {
 		if ($data === false || $data === null) {
 			//throw new BadRequestException('data must be provided');
 		}
+		try {
+			$attachment = $this->attachmentMapper->find($attachmentId);
+		} catch (\Exception $e) {
+			throw new NoPermissionException('Permission denied');
+		}
 
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
-		$this->cache->clear('card-' . $cardId);
+		$this->permissionService->checkPermission($this->cardMapper, $attachment->getCardId(), Acl::PERMISSION_EDIT);
+		$this->cache->clear('card-' . $attachment->getCardId());
 
-		$attachment = $this->attachmentMapper->find($attachmentId);
 		$attachment->setData($data);
 		try {
 			$service = $this->getService($attachment->getType());
@@ -296,7 +294,6 @@ class AttachmentService {
 	 * Either mark an attachment as deleted for later removal or just remove it depending
 	 * on the IAttachmentService implementation
 	 *
-	 * @param $cardId
 	 * @param $attachmentId
 	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws \OCA\Deck\NoPermissionException
@@ -304,19 +301,20 @@ class AttachmentService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function delete($cardId, $attachmentId) {
-		if (is_numeric($cardId) === false) {
-			throw new BadRequestException('card id must be a number');
-		}
-
+	public function delete($attachmentId) {
 		if (is_numeric($attachmentId) === false) {
 			throw new BadRequestException('attachment id must be a number');
 		}
 
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
-		$this->cache->clear('card-' . $cardId);
+		try {
+			$attachment = $this->attachmentMapper->find($attachmentId);
+		} catch (\Exception $e) {
+			throw new NoPermissionException('Permission denied');
+		}
 
-		$attachment = $this->attachmentMapper->find($attachmentId);
+		$this->permissionService->checkPermission($this->cardMapper, $attachment->getCardId(), Acl::PERMISSION_EDIT);
+		$this->cache->clear('card-' . $attachment->getCardId());
+
 		try {
 			$service = $this->getService($attachment->getType());
 			if ($service->allowUndo()) {
@@ -334,19 +332,20 @@ class AttachmentService {
 		return $attachment;
 	}
 
-	public function restore($cardId, $attachmentId) {
-		if (is_numeric($cardId) === false) {
-			throw new BadRequestException('card id must be a number');
-		}
-
+	public function restore($attachmentId) {
 		if (is_numeric($attachmentId) === false) {
 			throw new BadRequestException('attachment id must be a number');
 		}
 
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
-		$this->cache->clear('card-' . $cardId);
+		try {
+			$attachment = $this->attachmentMapper->find($attachmentId);
+		} catch (\Exception $e) {
+			throw new NoPermissionException('Permission denied');
+		}
 
-		$attachment = $this->attachmentMapper->find($attachmentId);
+		$this->permissionService->checkPermission($this->cardMapper, $attachment->getCardId(), Acl::PERMISSION_EDIT);
+		$this->cache->clear('card-' . $attachment->getCardId());
+
 		try {
 			$service = $this->getService($attachment->getType());
 			if ($service->allowUndo()) {

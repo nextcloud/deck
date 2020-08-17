@@ -14,6 +14,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Läschen",
     "Edit" : "Änneren",
+    "Title" : "Titel",
     "Description" : "Beschreiwung",
     "Comments" : "Kommentarer",
     "Modified" : "Geännert",
@@ -21,7 +22,6 @@ OC.L10N.register(
     "Reply" : "Äntwerten",
     "Update" : "Update",
     "seconds ago" : "Sekonnen hier",
-    "Settings" : "Astellungen",
-    "Share" : "Deelen"
+    "Shared with you" : "Mat dir gedeelt"
 },
 "nplurals=2; plural=(n != 1);");

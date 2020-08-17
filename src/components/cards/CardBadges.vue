@@ -34,137 +34,31 @@
 
 		<AvatarList :users="card.assignedUsers" />
 
-		<div @click.stop.prevent>
-			<Actions v-if="canEdit">
-				<ActionButton v-if="showArchived === false" icon="icon-user" @click="assignCardToMe()">
-					{{ t('deck', 'Assign to me') }}
-				</ActionButton>
-				<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">
-					{{ t('deck', (showArchived ? 'Unarchive card' : 'Archive card')) }}
-				</ActionButton>
-				<ActionButton v-if="showArchived === false" icon="icon-delete" @click="deleteCard()">
-					{{ t('deck', 'Delete card') }}
-				</ActionButton>
-				<ActionButton icon="icon-external" @click.stop="modalShow=true">
-					{{ t('deck', 'Move card') }}
-				</ActionButton>
-				<ActionButton icon="icon-settings-dark" @click="openCard">
-					{{ t('deck', 'Card details') }}
-				</ActionButton>
-			</Actions>
-		</div>
-		<Modal v-if="modalShow" title="Move card to another board" @close="modalShow=false">
-			<div class="modal__content">
-				<Multiselect v-model="selectedBoard"
-					:placeholder="t('deck', 'Select a board')"
-					:options="boards"
-					label="title"
-					@select="loadStacksFromBoard" />
-				<Multiselect v-model="selectedStack"
-					:placeholder="t('deck', 'Select a stack')"
-					:options="stacksFromBoard"
-					label="title" />
-
-				<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">
-					{{ t('deck', 'Move card') }}
-				</button>
-				<button @click="modalShow=false">
-					{{ t('deck', 'Cancel') }}
-				</button>
-			</div>
-		</Modal>
+		<CardMenu :id="id" />
 	</div>
 </template>
 <script>
 import AvatarList from './AvatarList'
-import { Modal, Actions, ActionButton, Multiselect } from '@nextcloud/vue'
-import { mapGetters, mapState } from 'vuex'
-import axios from '@nextcloud/axios'
+import CardMenu from './CardMenu'
 
 export default {
 	name: 'CardBadges',
-	components: { AvatarList, Actions, ActionButton, Modal, Multiselect },
+	components: { AvatarList, CardMenu },
 	props: {
 		id: {
 			type: Number,
 			default: null,
 		},
 	},
-	data() {
-		return {
-			modalShow: false,
-			selectedBoard: '',
-			selectedStack: '',
-			stacksFromBoard: [],
-		}
-	},
 	computed: {
-		...mapGetters([
-			'canEdit',
-		]),
-		...mapState({
-			showArchived: state => state.showArchived,
-			currentBoard: state => state.currentBoard,
-		}),
 		checkListCount() {
-			return (this.card.description.match(/^\s*(\*|-|(\d\.))\s+\[\s*(\s|x)\s*\](.*)$/gim) || []).length
+			return (this.card.description.match(/^\s*([*+-]|(\d\.))\s+\[\s*(\s|x)\s*\](.*)$/gim) || []).length
 		},
 		checkListCheckedCount() {
-			return (this.card.description.match(/^\s*(\*|-|(\d\.))\s+\[\s*x\s*\](.*)$/gim) || []).length
-		},
-		compactMode() {
-			return false
+			return (this.card.description.match(/^\s*([*+-]|(\d\.))\s+\[\s*x\s*\](.*)$/gim) || []).length
 		},
 		card() {
 			return this.$store.getters.cardById(this.id)
-		},
-		isBoardAndStackChoosen() {
-			if (this.selectedBoard === '' || this.selectedStack === '') {
-				return false
-			}
-			return true
-		},
-		boards() {
-			return this.$store.getters.boards.filter(board => {
-				return board.id !== this.currentBoard.id
-			})
-		},
-	},
-	methods: {
-		openCard() {
-			this.$router.push({ name: 'card', params: { cardId: this.id } })
-		},
-		deleteCard() {
-			this.$store.dispatch('deleteCard', this.card)
-		},
-		archiveUnarchiveCard() {
-			this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
-		},
-		assignCardToMe() {
-			this.copiedCard = Object.assign({}, this.card)
-			this.$store.dispatch('assignCardToUser', {
-				card: this.copiedCard,
-				assignee: {
-					userId: OC.getCurrentUser().uid,
-					type: 0,
-				},
-			})
-		},
-		moveCard() {
-			this.copiedCard = Object.assign({}, this.card)
-			this.copiedCard.stackId = this.selectedStack.id
-			this.$store.dispatch('moveCard', this.copiedCard)
-			this.modalShow = false
-		},
-		async loadStacksFromBoard(board) {
-			try {
-				console.debug(board)
-				const url = OC.generateUrl('/apps/deck/stacks/' + board.id)
-				const response = await axios.get(url)
-				this.stacksFromBoard = response.data
-			} catch (err) {
-				return err
-			}
 		},
 	},
 }
@@ -233,23 +127,8 @@ export default {
 	.fade-enter-active, .fade-leave-active {
 		transition: opacity .125s;
 	}
+
 	.fade-enter, .fade-leave-to {
 		opacity: 0;
-	}
-
-	.modal__content {
-		width: 25vw;
-		min-width: 250px;
-		height: 120px;
-		text-align: center;
-		margin: 20px 20px 60px 20px;
-
-		.multiselect {
-			margin-bottom: 10px;
-		}
-	}
-
-	.modal__content button {
-		float: right;
 	}
 </style>

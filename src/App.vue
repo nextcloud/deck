@@ -22,7 +22,7 @@
 
 <template>
 	<div id="content" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
-		<AppNavigation />
+		<AppNavigation v-show="navShown" />
 		<div id="app-content">
 			<router-view />
 		</div>
@@ -43,7 +43,7 @@ export default {
 	components: {
 		AppNavigation,
 	},
-	data: function() {
+	data() {
 		return {
 			addButton: {
 				icon: 'icon-add',
@@ -77,12 +77,12 @@ export default {
 			return this.sidebarRouterView || this.sidebarShownState
 		},
 	},
-	provide: function() {
+	provide() {
 		return {
-			boardApi: boardApi,
+			boardApi,
 		}
 	},
-	created: function() {
+	created() {
 		this.$store.dispatch('loadBoards')
 		this.$store.dispatch('loadSharees')
 	},
@@ -121,10 +121,6 @@ export default {
 </style>
 
 <style>
-	#content * {
-		box-sizing: border-box;
-	}
-
 	.multiselect {
 		width: 100%;
 	}

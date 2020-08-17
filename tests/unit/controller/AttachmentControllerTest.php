@@ -44,8 +44,7 @@ class AttachmentControllerTest extends \Test\TestCase {
 		$this->controller = new AttachmentController(
 			'deck',
 			$this->request,
-			$this->attachmentService,
-			$this->userId
+			$this->attachmentService
 		);
 	}
 
@@ -55,8 +54,8 @@ class AttachmentControllerTest extends \Test\TestCase {
 	}
 
 	public function testDisplay() {
-		$this->attachmentService->expects($this->once())->method('display')->with(1, 2);
-		$this->controller->display(1, 2);
+		$this->attachmentService->expects($this->once())->method('display')->with(2);
+		$this->controller->display(2);
 	}
 
 	public function testCreate() {
@@ -76,25 +75,25 @@ class AttachmentControllerTest extends \Test\TestCase {
 			->will($this->onConsecutiveCalls('data'));
 		$this->attachmentService->expects($this->once())
 			->method('update')
-			->with(1, 2, 'data')
+			->with(2, 'data')
 			->willReturn(1);
-		$this->assertEquals(1, $this->controller->update(1, 2));
+		$this->assertEquals(1, $this->controller->update(2));
 	}
 
 
 	public function testDelete() {
 		$this->attachmentService->expects($this->once())
 			->method('delete')
-			->with(123, 234)
+			->with(234)
 			->willReturn(1);
-		$this->assertEquals(1, $this->controller->delete(123, 234));
+		$this->assertEquals(1, $this->controller->delete(234));
 	}
 
 	public function testRestore() {
 		$this->attachmentService->expects($this->once())
 			->method('restore')
-			->with(123, 234)
+			->with(234)
 			->willReturn(1);
-		$this->assertEquals(1, $this->controller->restore(123, 234));
+		$this->assertEquals(1, $this->controller->restore(234));
 	}
 }

@@ -25,21 +25,24 @@
 	<div class="stack">
 		<div v-click-outside="stopCardCreation" class="stack--header">
 			<transition name="fade" mode="out-in">
-				<h3 v-if="!canManage">
+				<h3 v-if="!canManage || isArchived">
 					{{ stack.title }}
 				</h3>
-				<h3 v-else-if="!editing" @click="startEditing(stack)">
+				<h3 v-else-if="!editing"
+					v-tooltip="stack.title"
+					class="stack--title"
+					@click="startEditing(stack)">
 					{{ stack.title }}
 				</h3>
 				<form v-else @submit.prevent="finishedEdit(stack)">
 					<input v-model="copiedStack.title" v-focus type="text">
-					<input v-tooltip="t('deck', 'Add a new stack')"
+					<input v-tooltip="t('deck', 'Add a new list')"
 						class="icon-confirm"
 						type="submit"
 						value="">
 				</form>
 			</transition>
-			<Actions v-if="canManage" :force-menu="true">
+			<Actions v-if="canManage && !isArchived" :force-menu="true">
 				<ActionButton icon="icon-archive" @click="modalArchivAllCardsShow=true">
 					{{ t('deck', 'Archive all cards') }}
 				</ActionButton>
@@ -47,7 +50,7 @@
 					{{ t('deck', 'Delete list') }}
 				</ActionButton>
 			</Actions>
-			<Actions v-if="canEdit && !showArchived">
+			<Actions v-if="canEdit && !showArchived && !isArchived">
 				<ActionButton icon="icon-add" @click.stop="showAddCard=true">
 					{{ t('deck', 'Add card') }}
 				</ActionButton>
@@ -57,7 +60,7 @@
 		<Modal v-if="modalArchivAllCardsShow" @close="modalArchivAllCardsShow=false">
 			<div class="modal__content">
 				<h3>{{ t('deck', 'Archive all cards in this list') }}</h3>
-				<progress :value="archiveAllCardsProgress" :max="stackLen" />
+				<progress :value="stackTransfer.current" :max="stackTransfer.total" />
 				<button class="primary" @click="archiveAllCardsFromStack(stack)">
 					{{ t('deck', 'Archive all cards') }}
 				</button>
@@ -112,7 +115,9 @@
 
 import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
+
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
+import { showError } from '@nextcloud/dialogs'
 import CardItem from '../cards/CardItem'
 
 export default {
@@ -141,14 +146,17 @@ export default {
 			stateCardCreating: false,
 			animate: false,
 			modalArchivAllCardsShow: false,
-			archiveAllCardsProgress: null,
-			stackLen: 0,
+			stackTransfer: {
+				total: 0,
+				current: null,
+			},
 		}
 	},
 	computed: {
 		...mapGetters([
 			'canManage',
 			'canEdit',
+			'isArchived',
 		]),
 		...mapState({
 			showArchived: state => state.showArchived,
@@ -200,9 +208,9 @@ export default {
 		},
 		archiveAllCardsFromStack(stack) {
 
-			this.stackLen = this.cardsByStack.length
+			this.stackTransfer.total = this.cardsByStack.length
 			this.cardsByStack.forEach((card, index) => {
-				this.archiveAllCardsProgress = index
+				this.stackTransfer.current = index
 				this.$store.dispatch('archiveUnarchiveCard', { ...card, archived: true })
 			})
 			this.modalArchivAllCardsShow = false
@@ -234,7 +242,7 @@ export default {
 				})
 				this.$router.push({ name: 'card', params: { cardId: newCard.id } })
 			} catch (e) {
-				OCP.Toast.error('Could not create card: ' + e.response.data.message)
+				showError('Could not create card: ' + e.response.data.message)
 			} finally {
 				this.stateCardCreating = false
 			}
@@ -263,17 +271,26 @@ export default {
 		margin: 3px -3px;
 		margin-right: -10px;
 		margin-top: 0;
-		margin-bottom: 0;
+		margin-bottom: 3px;
 		background-color: var(--color-main-background-translucent);
+		cursor: grab;
 
 		h3, form {
 			flex-grow: 1;
 			display: flex;
+			cursor: inherit;
 
 			input[type=text] {
 				flex-grow: 1;
 			}
 		}
+	}
+
+	.stack--title {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		max-width: calc($stack-width - 60px);
 	}
 
 	.stack--card-add {
@@ -310,6 +327,7 @@ export default {
 			border: none;
 		}
 	}
+
 	.stack .smooth-dnd-container.vertical {
 		margin-top: 3px;
 	}
@@ -322,6 +340,7 @@ export default {
 	.slide-top-leave-active {
 		transition: all 100ms ease;
 	}
+
 	.slide-top-enter, .slide-top-leave-to {
 		transform: translateY(-10px);
 		opacity: 0;
@@ -334,10 +353,6 @@ export default {
 		min-height: 100px;
 		text-align: center;
 		margin: 20px 20px 20px 20px;
-
-		.multiselect {
-			margin-bottom: 10px;
-		}
 	}
 
 	.modal__content button {

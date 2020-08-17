@@ -29,14 +29,14 @@
 					<div class="board-list-bullet" />
 				</div>
 				<div class="board-list-title-cell">
-					Title
+					{{ t('deck', 'Title') }}
 				</div>
 				<div class="board-list-avatars-cell">
-					Members
+					{{ t('deck', 'Members') }}
 				</div>
 				<div class="board-list-actions-cell" />
 			</div>
-			<BoardItem v-for="board in filteredBoards" :key="board.id" :board="board" />
+			<BoardItem v-for="board in boardsSorted" :key="board.id" :board="board" />
 		</div>
 	</div>
 </template>
@@ -59,15 +59,18 @@ export default {
 		},
 	},
 	computed: {
+		boardsSorted() {
+			return [...this.filteredBoards].sort((a, b) => (a.title < b.title) ? -1 : 1)
+		},
 		filteredBoards() {
 			const query = this.$store.getters.getSearchQuery
 			return this.$store.getters.filteredBoards.filter((board) => {
-				return board.title.toLowerCase().includes(query.toLowerCase())
+				return board.deletedAt <= 0 && board.title.toLowerCase().includes(query.toLowerCase())
 			})
 		},
 	},
 	watch: {
-		navFilter: function(value) {
+		navFilter(value) {
 			this.$store.commit('setBoardFilter', value)
 		},
 	},
@@ -81,6 +84,11 @@ export default {
 			align-items: center;
 			border-bottom: 1px solid #ededed;
 			display: flex;
+		}
+
+		.board-list-row:not(.board-list-header-row):hover {
+			transition: background-color 0.3s ease;
+			background-color: var(--color-background-dark);
 		}
 
 		.board-list-header-row {

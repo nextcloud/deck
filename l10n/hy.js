@@ -9,13 +9,13 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "հեռացնել",
     "Edit" : "մշակել",
+    "Title" : "Վերնագիր",
     "Description" : "Նկարագրություն",
     "Comments" : "Կարծիքներ",
     "Modified" : "Փոփոխված",
     "Save" : "Պահպանել",
     "Update" : "Թարմացնել",
     "seconds ago" : "վրկ. առաջ",
-    "Settings" : "կարգավորումներ",
-    "Share" : "Կիսվել"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=2; plural=(n != 1);");

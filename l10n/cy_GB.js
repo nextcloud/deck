@@ -14,14 +14,14 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Dileu",
     "Edit" : "Golygu",
+    "Title" : "Teitl",
+    "Upload attachment" : "Llwytho atodiad",
     "Description" : "Disgrifiad",
     "Modified" : "Addaswyd",
-    "Upload attachment" : "Llwytho atodiad",
     "Save" : "Cadw",
     "Update" : "Diweddaru",
     "seconds ago" : "eiliad yn ôl",
-    "Settings" : "Gosodiadau",
-    "Share" : "Rhannu",
+    "Shared with you" : "Shared with you",
     "An error occurred" : "Digwyddodd gwall"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

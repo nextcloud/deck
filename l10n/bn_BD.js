@@ -14,6 +14,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "মুছে",
     "Edit" : "সম্পাদনা",
+    "Title" : "শিরোনাম",
     "Description" : "বিবরণ",
     "Modified" : "পরিবর্তিত",
     "Save" : "সংরক্ষণ",
@@ -21,7 +22,6 @@ OC.L10N.register(
     "Update" : "পরিবর্ধন",
     "(group)" : "(গোষ্ঠি)",
     "seconds ago" : "সেকেন্ড পূর্বে",
-    "Settings" : "সেটিংস",
-    "Share" : "ভাগাভাগি কর"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=2; plural=(n != 1);");

@@ -115,7 +115,7 @@ class Notifier implements INotifier {
 						]
 					]
 				);
-				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#!/board/' . $boardId . '/card/' . $cardId . '');
+				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $cardId . '');
 				break;
 			case 'card-overdue':
 				$cardId = $notification->getObjectId();
@@ -123,7 +123,7 @@ class Notifier implements INotifier {
 				$notification->setParsedSubject(
 					(string) $l->t('The card "%s" on "%s" has reached its due date.', $params)
 				);
-				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#!/board/' . $boardId . '/card/' . $cardId . '');
+				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $cardId . '');
 				break;
 			case 'card-comment-mentioned':
 				$cardId = $notification->getObjectId();
@@ -150,7 +150,7 @@ class Notifier implements INotifier {
 				if ($notification->getMessage() === '{message}') {
 					$notification->setParsedMessage($notification->getMessageParameters()['message']);
 				}
-				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#!/board/' . $boardId . '/card/' . $cardId . '');
+				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $cardId . '');
 				break;
 			case 'board-shared':
 				$boardId = $notification->getObjectId();
@@ -173,7 +173,7 @@ class Notifier implements INotifier {
 						]
 					]
 				);
-				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#!/board/' . $boardId . '/');
+				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/');
 				break;
 		}
 		return $notification;

@@ -7,6 +7,7 @@ OC.L10N.register(
     "No file was uploaded" : "ไม่มีไฟล์ที่ถูกอัพโหลด",
     "Missing a temporary folder" : "โฟลเดอร์ชั่วคราวเกิดการสูญหาย",
     "Cancel" : "ยกเลิก",
+    "File already exists" : "ไฟล์นี้มีแล้ว",
     "Details" : "รายละเอียด",
     "Sharing" : "แชร์ข้อมูล",
     "Tags" : "ป้ายกำกับ",
@@ -14,6 +15,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "ลบ",
     "Edit" : "แก้ไข",
+    "Title" : "ชื่อเรื่อง",
     "Due date" : "วันที่ครบกำหนด",
     "Description" : "รายละเอียด",
     "Comments" : "ความคิดเห็น",
@@ -23,7 +25,6 @@ OC.L10N.register(
     "Update" : "อัพเดท",
     "(group)" : "(กลุ่ม)",
     "seconds ago" : "วินาที ก่อนหน้านี้",
-    "Settings" : "ตั้งค่า",
-    "Share" : "แชร์"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=1; plural=0;");

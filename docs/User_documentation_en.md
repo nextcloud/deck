@@ -1,6 +1,6 @@
 ## Introduction
 ### What about Deck ?
-You may know Kanban website like Trello ? Deck is about the same thing but secured and respectful of your privacy !  
+You may know Kanban website like Trello? Deck is about the same thing but secured and respectful of your privacy!  
 Integrated in Nextcloud, you can easily manage your projects while having your data secured.
 
 ### Use cases
@@ -36,6 +36,7 @@ And all the magic of this software consists on moving your cards from a stack to
 
 ### 3. Handle cards options
 Once you have created your cards, you can modify them or add options by clicking on them. So, what are the options? Well, there are several of them:
+
 - Tag Management
 - Assign a card to a user (s·he will receive a notification)
 - Render date, or deadline
@@ -57,6 +58,7 @@ Once finished or obsolete, a task could be archived. The tasks is not deleted, i
 ### 5. Manage your board
 You can manage the settings of your Deck once you are inside it, by clicking on the small wheel at the top right.
 Once in this menu, you have access to several things:
+
 - Sharing
 - Tags
 - Deleted objects

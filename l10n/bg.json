@@ -23,6 +23,9 @@
     "Can share" : "Може да споделя",
     "Delete" : "Изтриване",
     "Edit" : "Редакция",
+    "Title" : "Име",
+    "Members" : "Членове",
+    "Upload attachment" : "Качване",
     "Due date" : "Крайна дата",
     "Remove due date" : "Премахни крайната дата",
     "Description" : "Описание",
@@ -30,14 +33,12 @@
     "Comments" : "Коментари",
     "Modified" : "Промяна",
     "Created" : "Създаден",
-    "Upload attachment" : "Качване",
     "Save" : "Запазване",
     "Reply" : "Отговори",
     "Update" : "Обновяване",
     "(group)" : "(група)",
     "seconds ago" : "преди секунди",
-    "Settings" : "Настройки",
-    "Share" : "Сподели",
+    "Shared with you" : "Споделени с вас",
     "An error occurred" : "Възникна грешка"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -26,6 +26,3 @@ style('deck', 'globalstyles');
 script('deck', 'deck');
 
 \OC::$server->getEventDispatcher()->dispatch('\OCP\Collaboration\Resources::loadAdditionalScripts');
-?>
-
-<input type="hidden" id="debug-mode" value="<?php p($_['debug'] ? 'true' : 'false'); ?>">

@@ -35,7 +35,7 @@ import { CollectionList } from 'nextcloud-vue-collections'
 export default {
 	name: 'CollaborationView',
 	components: {
-		CollectionList: CollectionList,
+		CollectionList,
 	},
 	computed: {
 		boardId() {

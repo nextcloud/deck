@@ -172,7 +172,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	@import "../../css/comments";
+	@import '../../css/comments';
 
 	.reply {
 		border-left: 3px solid var(--color-primary-element);
@@ -195,6 +195,7 @@ export default {
 			margin: 0;
 		}
 	}
+
 	.comment--content::v-deep a {
 		text-decoration: underline;
 	}

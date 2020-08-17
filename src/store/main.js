@@ -25,6 +25,7 @@ import 'url-search-params-polyfill'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
+import { generateOcsUrl } from '@nextcloud/router'
 import { BoardApi } from './../services/BoardApi'
 import stack from './stack'
 import card from './card'
@@ -55,7 +56,7 @@ export default new Vuex.Store({
 	state: {
 		showArchived: false,
 		navShown: true,
-		compactMode: false,
+		compactMode: localStorage.getItem('deck.compactMode') === 'true',
 		sidebarShown: false,
 		currentBoard: null,
 		currentCard: null,
@@ -121,6 +122,9 @@ export default new Vuex.Store({
 		canShare: state => {
 			return state.currentBoard ? state.currentBoard.permissions.PERMISSION_SHARE : false
 		},
+		isArchived: state => {
+			return state.currentBoard && state.currentBoard.archived
+		},
 	},
 	mutations: {
 		setSearchQuery(state, searchQuery) {
@@ -176,6 +180,7 @@ export default new Vuex.Store({
 		},
 		toggleCompactMode(state) {
 			state.compactMode = !state.compactMode
+			localStorage.setItem('deck.compactMode', state.compactMode)
 		},
 		setBoards(state, boards) {
 			state.boards = boards
@@ -256,7 +261,9 @@ export default new Vuex.Store({
 		setFilter({ commit }, filter) {
 			commit('setFilter', filter)
 		},
-		async loadBoardById({ commit }, boardId) {
+		async loadBoardById({ commit, dispatch }, boardId) {
+			const filterReset = { tags: [], users: [], due: '' }
+			dispatch('setFilter', filterReset)
 			commit('setCurrentBoard', null)
 			const board = await apiClient.loadById(boardId)
 			commit('setCurrentBoard', board)
@@ -342,7 +349,7 @@ export default new Vuex.Store({
 			params.append('perPage', 20)
 			params.append('itemType', [0, 1, 7])
 
-			axios.get(OC.linkToOCS('apps/files_sharing/api/v1') + 'sharees', { params }).then((response) => {
+			axios.get(generateOcsUrl('apps/files_sharing/api/v1') + 'sharees', { params }).then((response) => {
 				commit('setSharees', response.data.ocs.data)
 			})
 		}, 250),

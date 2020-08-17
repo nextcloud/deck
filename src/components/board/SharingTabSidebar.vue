@@ -178,20 +178,25 @@ export default {
 	#shareWithList {
 		margin-bottom: 20px;
 	}
+
 	#shareWithList li {
 		display: flex;
 		align-items: center;
 	}
+
 	.username {
 		padding: 12px 9px;
 		flex-grow: 1;
 	}
+
 	.board-owner-label {
 		opacity: .7;
 	}
+
 	.avatarLabel {
 		padding: 6px
 	}
+
 	.avatardiv {
 		background-color: #f5f5f5;
 		border-radius: 16px;

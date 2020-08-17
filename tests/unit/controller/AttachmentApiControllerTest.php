@@ -73,14 +73,9 @@ class AttachmentApiControllerTest extends \Test\TestCase {
 			->method('display')
 			->willReturn($this->attachmentExample);
 
-		$this->request->expects($this->exactly(2))
+		$this->request->expects($this->once())
 			->method('getParam')
-			->withConsecutive(
-				['cardId'],
-				['attachmentId']
-			)->willReturnonConsecutiveCalls(
-				$this->cardId,
-				$this->attachmentExample->getId());
+			->willReturn($this->attachmentExample->getId());
 
 		$expected = $this->attachmentExample;
 		$actual = $this->controller->display();
@@ -114,14 +109,9 @@ class AttachmentApiControllerTest extends \Test\TestCase {
 			->method('update')
 			->willReturn($this->attachmentExample);
 
-		$this->request->expects($this->exactly(2))
+		$this->request->expects($this->once())
 			->method('getParam')
-			->withConsecutive(
-				['cardId'],
-				['attachmentId']
-			)->willReturnonConsecutiveCalls(
-				$this->cardId,
-				$this->attachmentExample->getId());
+			->willReturn($this->attachmentExample->getId());
 
 		$expected = new DataResponse($this->attachmentExample, HTTP::STATUS_OK);
 		$actual = $this->controller->update($data);
@@ -133,14 +123,9 @@ class AttachmentApiControllerTest extends \Test\TestCase {
 			->method('delete')
 			->willReturn($this->attachmentExample);
 
-		$this->request->expects($this->exactly(2))
+		$this->request->expects($this->once())
 			->method('getParam')
-			->withConsecutive(
-				['cardId'],
-				['attachmentId']
-			)->willReturnonConsecutiveCalls(
-				$this->cardId,
-				$this->attachmentExample->getId());
+			->willReturn($this->attachmentExample->getId());
 
 		$expected = new DataResponse($this->attachmentExample, HTTP::STATUS_OK);
 		$actual = $this->controller->delete();
@@ -152,14 +137,9 @@ class AttachmentApiControllerTest extends \Test\TestCase {
 			->method('restore')
 			->willReturn($this->attachmentExample);
 
-		$this->request->expects($this->exactly(2))
+		$this->request->expects($this->once())
 			->method('getParam')
-			->withConsecutive(
-				['cardId'],
-				['attachmentId']
-			)->willReturnonConsecutiveCalls(
-				$this->cardId,
-				$this->attachmentExample->getId());
+			->willReturn($this->attachmentExample->getId());
 
 		$expected = new DataResponse($this->attachmentExample, HTTP::STATUS_OK);
 		$actual = $this->controller->restore();

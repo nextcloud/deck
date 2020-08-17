@@ -20,7 +20,13 @@ module.exports = {
 		'selector-type-case': null,
 		'selector-list-comma-newline-after': null,
 		'no-descending-specificity': null,
-		'string-quotes': 'single'
+		'string-quotes': 'single',
+		'selector-pseudo-element-no-unknown': [
+			true,
+			{
+				ignorePseudoElements: ['v-deep']
+			}
+		]
 	},
 	plugins: ['stylelint-scss']
 }

@@ -54,8 +54,7 @@ class AttachmentApiController extends ApiController {
 	 *
 	 */
 	public function display() {
-		$attachment = $this->attachmentService->display($this->request->getParam('cardId'), $this->request->getParam('attachmentId'));
-		return $attachment;
+		return $this->attachmentService->display($this->request->getParam('attachmentId'));
 	}
 
 	/**
@@ -76,7 +75,7 @@ class AttachmentApiController extends ApiController {
 	 *
 	 */
 	public function update($data) {
-		$attachment = $this->attachmentService->update($this->request->getParam('cardId'), $this->request->getParam('attachmentId'), $data);
+		$attachment = $this->attachmentService->update($this->request->getParam('attachmentId'), $data);
 		return new DataResponse($attachment, HTTP::STATUS_OK);
 	}
 
@@ -87,7 +86,7 @@ class AttachmentApiController extends ApiController {
 	 *
 	 */
 	public function delete() {
-		$attachment = $this->attachmentService->delete($this->request->getParam('cardId'), $this->request->getParam('attachmentId'));
+		$attachment = $this->attachmentService->delete($this->request->getParam('attachmentId'));
 		return new DataResponse($attachment, HTTP::STATUS_OK);
 	}
 
@@ -98,7 +97,7 @@ class AttachmentApiController extends ApiController {
 	 *
 	 */
 	public function restore() {
-		$attachment = $this->attachmentService->restore($this->request->getParam('cardId'), $this->request->getParam('attachmentId'));
+		$attachment = $this->attachmentService->restore($this->request->getParam('attachmentId'));
 		return new DataResponse($attachment, HTTP::STATUS_OK);
 	}
 }

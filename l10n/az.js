@@ -14,6 +14,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Sil",
     "Edit" : "Dəyişiklik et",
+    "Title" : "Başlıq",
     "Description" : "Açıqlanma",
     "Modified" : "Dəyişdirildi",
     "Save" : "Saxla",
@@ -21,7 +22,6 @@ OC.L10N.register(
     "Update" : "Yenilənmə",
     "(group)" : "(qrup)",
     "seconds ago" : "saniyələr öncə",
-    "Settings" : "Quraşdırmalar",
-    "Share" : "Paylaş"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=2; plural=(n != 1);");

@@ -4,8 +4,9 @@
 
 | Version | Nextcloud version | Supported          |
 | ------- | ----------------- | ------------------ |
-| 0.8.x   | 18, 19            | :white_check_mark: |
-| 0.7.x   | 17                | :x:                |
+| 1.0.x   | 18, 19            | :white_check_mark: |
+| 0.8.x   | 17                | :white_check_mark: |
+| <0.7.x   | -                 | :x:                |
 
 
 ## Reporting a Vulnerability

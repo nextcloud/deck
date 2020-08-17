@@ -10,12 +10,12 @@
     "Can share" : "Can share",
     "Delete" : "ئۆچۈر",
     "Edit" : "تەھرىر",
+    "Title" : "ماۋزۇ",
     "Description" : "چۈشەندۈرۈش",
     "Modified" : "ئۆزگەرتكەن",
     "Save" : "ساقلا",
     "Reply" : "جاۋاب قايتۇر",
     "Update" : "يېڭىلا",
-    "Settings" : "تەڭشەكلەر",
-    "Share" : "ھەمبەھىر"
-},"pluralForm" :"nplurals=1; plural=0;"
+    "Shared with you" : "Shared with you"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

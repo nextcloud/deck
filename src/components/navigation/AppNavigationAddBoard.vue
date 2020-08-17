@@ -20,38 +20,30 @@
   -
   -->
 <template>
-	<li id="deck-navigation-add"
+	<AppNavigationItem v-if="!editing"
 		:title="t('deck', 'Create new board')"
-		:class="[{'icon-loading-small': loading, 'editing': editing}, classes]">
-		<a class="icon-add" href="#" @click.prevent.stop="startCreateBoard">
-			{{ t('deck', 'Create new board') }}
-		</a>
-
-		<!-- edit entry -->
-		<div v-if="editing" class="app-navigation-entry-edit">
-			<ColorPicker v-model="color" class="app-navigation-entry-bullet-wrapper">
-				<div :style="{ backgroundColor: color }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
-			</ColorPicker>
-			<form @submit.prevent.stop="createBoard">
-				<input :placeholder="t('deck', 'New board title')" type="text" required>
-				<input type="submit" value="" class="icon-confirm">
-				<input type="submit"
-					value=""
-					class="icon-close"
-					@click.stop.prevent="cancelEdit">
-			</form>
-
-			<!-- <ColorPicker v-model="color" /> -->
-		</div>
-	</li>
+		icon="icon-add"
+		@click.prevent.stop="startCreateBoard" />
+	<div v-else class="board-create">
+		<ColorPicker v-model="color" class="app-navigation-entry-bullet-wrapper">
+			<div :style="{ backgroundColor: color }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
+		</ColorPicker>
+		<form @submit.prevent.stop="createBoard">
+			<input :placeholder="t('deck', 'New board title')" type="text" required>
+			<input type="submit" value="" class="icon-confirm">
+			<Actions><ActionButton icon="icon-close" @click.stop.prevent="cancelEdit" /></Actions>
+		</form>
+	</div>
 </template>
 
 <script>
-import { ColorPicker } from '@nextcloud/vue'
+import { ColorPicker, ActionButton, Actions, AppNavigationItem } from '@nextcloud/vue'
+
+const randomColor = () => '#' + ((1 << 24) * Math.random() | 0).toString(16)
 
 export default {
 	name: 'AppNavigationAddBoard',
-	components: { ColorPicker },
+	components: { ColorPicker, AppNavigationItem, ActionButton, Actions },
 	directives: {},
 	props: {},
 	data() {
@@ -59,7 +51,7 @@ export default {
 			classes: [],
 			editing: false,
 			loading: false,
-			color: '#000000',
+			color: randomColor(),
 		}
 	},
 	computed: {},
@@ -72,31 +64,42 @@ export default {
 		createBoard(e) {
 			const title = e.currentTarget.childNodes[0].value
 			this.$store.dispatch('createBoard', {
-				title: title,
+				title,
 				color: this.color.substring(1),
 			})
 			this.editing = false
+			this.color = randomColor()
 		},
 		cancelEdit(e) {
 			this.editing = false
-			this.item.edit.reset(e)
+			this.color = randomColor()
 		},
 	},
 }
 </script>
 <style lang="scss" scoped>
-	#app-navigation .app-navigation-entry-edit div {
-		width: auto;
-		display: block;
+	.board-create {
+		order: 1;
+		display: flex;
+		height: 44px;
+
+		form {
+			display: flex;
+			flex-grow: 1;
+
+			input[type='text'] {
+				flex-grow: 1;
+			}
+		}
 	}
+
 	.app-navigation-entry-bullet-wrapper {
-		position: absolute;
-		left: 33px;
-		width: 44px !important;
-		margin: 6px;
+		width: 44px;
 		height: 44px;
 		.color0 {
 			width: 30px !important;
+			margin: 5px;
+			margin-left: 7px;
 			height: 30px;
 			border-radius: 50%;
 			background-size: 14px;

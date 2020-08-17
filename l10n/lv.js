@@ -22,6 +22,8 @@ OC.L10N.register(
     "Can share" : "Var koplietot",
     "Delete" : "Dzēst",
     "Edit" : "Rediģēt",
+    "Title" : "Amats",
+    "Members" : "Biedri",
     "Due date" : "Izpildes datums",
     "Description" : "Apraksts",
     "Attachments" : "Pielikumi",
@@ -33,8 +35,7 @@ OC.L10N.register(
     "Update" : "Atjaunināt",
     "(group)" : "(grupa)",
     "seconds ago" : "sekundēm",
-    "Settings" : "Iestatījumi",
-    "Share" : "Koplietot",
+    "Shared with you" : "Koplietots ar tevi",
     "An error occurred" : "Gadījās kļūda"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

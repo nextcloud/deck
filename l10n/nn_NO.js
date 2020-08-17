@@ -14,6 +14,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Ta bort",
     "Edit" : "Endra",
+    "Title" : "Tittel",
     "Description" : "Skildring",
     "Comments" : "Kommentarar",
     "Modified" : "Endra",
@@ -21,7 +22,6 @@ OC.L10N.register(
     "Save" : "Lagre",
     "Update" : "Oppdater",
     "seconds ago" : "sekund sidan",
-    "Settings" : "Instillingar",
-    "Share" : "Del"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=2; plural=(n != 1);");

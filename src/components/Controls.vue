@@ -31,11 +31,13 @@
 			</p>
 		</div>
 		<div v-if="board" class="board-actions">
-			<div v-if="canManage && !showArchived"
+			<div v-if="canManage && !showArchived && !board.archived"
 				id="stack-add"
 				v-click-outside="hideAddStack">
-				<Actions v-if="!isAddStackVisible" :title="t('deck', 'Add new list')">
-					<ActionButton icon="icon-add" @click.stop="showAddStack" />
+				<Actions v-if="!isAddStackVisible">
+					<ActionButton icon="icon-add" @click.stop="showAddStack">
+						{{ t('deck', 'Add new list') }}
+					</ActionButton>
 				</Actions>
 				<form v-else @submit.prevent="addNewStack()">
 					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add new list') }}</label>
@@ -54,14 +56,14 @@
 			</div>
 			<div class="board-action-buttons">
 				<Popover>
-					<Actions slot="trigger" :style="filterOpacity" :title="t('deck', 'Apply filter')">
-						<ActionButton icon="icon-filter" />
+					<Actions slot="trigger" :title="t('deck', 'Apply filter')">
+						<ActionButton v-if="isFilterActive" icon="icon-filter_set" />
+						<ActionButton v-else icon="icon-filter" />
 					</Actions>
 
 					<template>
 						<div class="filter">
 							<h3>{{ t('deck', 'Filter by tag') }}</h3>
-							{{ filter }}
 							<div v-for="label in board.labels" :key="label.id" class="filter--item">
 								<input
 									:id="label.id"
@@ -74,6 +76,17 @@
 							</div>
 
 							<h3>{{ t('deck', 'Filter by assigned user') }}</h3>
+							<div class="filter--item">
+								<input
+									id="unassigned"
+									v-model="filter.unassigned"
+									type="checkbox"
+									class="checkbox"
+									value="unassigned"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="unassigned">{{ t('deck', 'Unassigned') }}</label>
+							</div>
 							<div v-for="user in board.users" :key="user.uid" class="filter--item">
 								<input
 									:id="user.uid"
@@ -146,6 +159,10 @@
 									@click="beforeSetFilter">
 								<label for="noDue">{{ t('deck', 'No due date') }}</label>
 							</div>
+
+							<Button :disabled="!isFilterActive" @click="clearFilter">
+								{{ t('deck', 'Clear filter') }}
+							</Button>
 						</div>
 					</template>
 				</Popover>
@@ -196,7 +213,7 @@ export default {
 			stack: '',
 			showArchived: false,
 			isAddStackVisible: false,
-			filter: { tags: [], users: [], due: '' },
+			filter: { tags: [], users: [], due: '', unassigned: false },
 		}
 	},
 
@@ -219,11 +236,19 @@ export default {
 			}
 			return 'opacity: .5;'
 		},
-		filterOpacity() {
+		isFilterActive() {
 			if (this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '') {
-				return 'opacity: 1;'
+				return true
 			}
-			return 'opacity: .5;'
+			return false
+		},
+		labelsSorted() {
+			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+		},
+	},
+	watch: {
+		board() {
+			this.clearFilter()
 		},
 	},
 	methods: {
@@ -232,8 +257,14 @@ export default {
 				this.filter.due = ''
 				this.$store.dispatch('setFilter', { ...this.filter })
 			}
+			if (e.target.value === 'unassigned') {
+				this.filter.users = []
+			}
 		},
 		setFilter() {
+			if (this.filter.users.length > 0) {
+				this.filter.unassigned = false
+			}
 			this.$nextTick(() => this.$store.dispatch('setFilter', { ...this.filter }))
 		},
 		toggleNav() {
@@ -266,12 +297,19 @@ export default {
 				this.$router.push({ name: 'board.details' })
 			}
 		},
+		clearFilter() {
+			const filterReset = { tags: [], users: [], due: '' }
+			this.$store.dispatch('setFilter', { ...filterReset })
+			this.filter = filterReset
+		},
 	},
 }
 </script>
 
 <style lang="scss" scoped>
 	.controls {
+		display: flex;
+
 		.board-title {
 			display: flex;
 			align-items: center;
@@ -299,20 +337,12 @@ export default {
 	}
 
 	#app-navigation-toggle-custom {
+		position: static;
 		width: 44px;
 		height: 44px;
 		cursor: pointer;
 		opacity: 1;
 		display: inline-block !important;
-		position: fixed;
-	}
-
-	.controls {
-		display: flex;
-	}
-
-	#app-navigation-toggle-custom {
-		position: static;
 	}
 
 	.board-actions {
@@ -331,6 +361,7 @@ export default {
 			background-color: transparent;
 		}
 	}
+
 	.filter--item {
 		input + label {
 			display: block;
@@ -347,11 +378,13 @@ export default {
 			}
 		}
 	}
+
 	.filter {
 		width: 250px;
 		max-height: 80vh;
 		overflow: auto;
 	}
+
 	.filter h3 {
 		margin-top: 0px;
 		margin-bottom: 5px;

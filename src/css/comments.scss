@@ -12,7 +12,7 @@
 		}
 	}
 
-	input[type="submit"] {
+	input[type='submit'] {
 		width: 44px;
 		height: 44px;
 		margin: 0;
@@ -25,9 +25,11 @@
 		right: 0;
 	}
 }
+
 .comment {
 	margin-bottom: 10px;
 }
+
 .comment--header {
 	display: flex;
 	align-items: center;

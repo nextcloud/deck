@@ -12,13 +12,14 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Obriši",
     "Edit" : "Izmjeni",
+    "Title" : "Naslov",
+    "Members" : "Članovi",
     "Description" : "Opis",
     "Comments" : "Komentari",
     "Modified" : "Izmijenjeno",
     "Save" : "Spremi",
     "Update" : "Ažuriraj",
-    "Settings" : "Podešavanje",
-    "Share" : "Podjeli",
+    "Shared with you" : "Shared with you",
     "Maximum file size of {size} exceeded" : "Maksimalna veličina datoteke prekoračena"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

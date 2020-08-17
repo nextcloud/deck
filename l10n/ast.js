@@ -25,6 +25,8 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Desaniciar",
     "Edit" : "Editar",
+    "Title" : "Títulu",
+    "Members" : "Miembros",
     "Description" : "Descripción",
     "Attachments" : "Axuntos",
     "Comments" : "Comentarios",
@@ -35,7 +37,6 @@ OC.L10N.register(
     "Update" : "Anovar",
     "(group)" : "(grupu)",
     "seconds ago" : "hai segundos",
-    "Settings" : "Settings",
-    "Share" : "Share"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=2; plural=(n != 1);");

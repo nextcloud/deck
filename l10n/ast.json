@@ -23,6 +23,8 @@
     "Can share" : "Can share",
     "Delete" : "Desaniciar",
     "Edit" : "Editar",
+    "Title" : "Títulu",
+    "Members" : "Miembros",
     "Description" : "Descripción",
     "Attachments" : "Axuntos",
     "Comments" : "Comentarios",
@@ -33,7 +35,6 @@
     "Update" : "Anovar",
     "(group)" : "(grupu)",
     "seconds ago" : "hai segundos",
-    "Settings" : "Settings",
-    "Share" : "Share"
+    "Shared with you" : "Shared with you"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

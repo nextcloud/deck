@@ -31,7 +31,7 @@
 			class="card"
 			@click="openCard">
 			<div class="card-upper">
-				<h3 v-if="showArchived || !canEdit">
+				<h3 v-if="isArchived || showArchived || !canEdit">
 					{{ card.title }}
 				</h3>
 				<h3 v-else-if="!editing">
@@ -47,15 +47,18 @@
 					<input type="button" class="icon-confirm" @click="finishedEdit(card)">
 				</form>
 
-				<div v-if="!editing" class="right">
+				<div v-if="!editing" class="duedate right">
 					<transition name="zoom">
 						<div v-if="card.duedate" :class="dueIcon">
 							<span>{{ relativeDate }}</span>
 						</div>
 					</transition>
 				</div>
+
+				<CardMenu v-if="!editing && compactMode" :id="id" class="right" />
 			</div>
-			<transition-group name="zoom"
+			<transition-group v-if="card.labels.length"
+				name="zoom"
 				tag="ul"
 				class="labels"
 				@click="openCard">
@@ -78,10 +81,11 @@ import CardBadges from './CardBadges'
 import Color from '../../mixins/color'
 import labelStyle from '../../mixins/labelStyle'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
+import CardMenu from './CardMenu'
 
 export default {
 	name: 'CardItem',
-	components: { CardBadges, AttachmentDragAndDrop },
+	components: { CardBadges, AttachmentDragAndDrop, CardMenu },
 	directives: {
 		ClickOutside,
 	},
@@ -106,6 +110,7 @@ export default {
 		}),
 		...mapGetters([
 			'canEdit',
+			'isArchived',
 		]),
 		card() {
 			return this.$store.getters.cardById(this.id)
@@ -137,16 +142,9 @@ export default {
 			return moment(this.card.duedate).format('LLLL')
 		},
 	},
-	watch: {
-		currentCard(newValue) {
-			if (newValue) {
-				this.$nextTick(() => this.$el.scrollIntoView())
-			}
-		},
-	},
 	methods: {
 		openCard() {
-			this.$router.push({ name: 'card', params: { cardId: this.id } })
+			this.$router.push({ name: 'card', params: { cardId: this.id } }).catch(() => {})
 		},
 		startEditing(card) {
 			this.copiedCard = Object.assign({}, card)
@@ -175,6 +173,10 @@ export default {
 		border: 1px solid var(--color-border);
 	}
 
+	.card:hover {
+		box-shadow: 0 0 5px 1px var(--color-box-shadow);
+	}
+
 	.card {
 		transition: box-shadow 0.1s ease-in-out;
 		box-shadow: 0 0 2px 0 var(--color-box-shadow);
@@ -189,7 +191,7 @@ export default {
 
 		.card-upper {
 			display: flex;
-			min-height: 50px;
+			min-height: 44px;
 			form {
 				display: flex;
 				padding: 5px 7px;
@@ -200,7 +202,7 @@ export default {
 
 			}
 			h3 {
-				margin: 14px $card-padding;
+				margin: 12px $card-padding;
 				flex-grow: 1;
 				font-size: 100%;
 				overflow-x: hidden;
@@ -227,7 +229,7 @@ export default {
 				display: flex;
 				flex-direction: row;
 				overflow: hidden;
-				padding: 3px 7px;
+				padding: 0px 5px;
 				border-radius: 15px;
 				font-size: 85%;
 				margin-right: 3px;
@@ -257,10 +259,14 @@ export default {
 			}
 		}
 	}
+
+	.duedate {
+		margin-right: 9px;
+	}
+
 	.right {
 		display: flex;
 		align-items: flex-start;
-		margin-right: 9px;
 	}
 
 	.icon.due {
@@ -269,6 +275,7 @@ export default {
 		margin-top: 9px;
 		margin-bottom: 9px;
 		padding: 3px 4px;
+		padding-right: 0;
 		font-size: 90%;
 		display: flex;
 		align-items: center;
@@ -284,14 +291,17 @@ export default {
 			background-color: var(--color-error);
 			color: var(--color-primary-text);
 			opacity: .7;
+			padding: 3px 4px;
 		}
 		&.now {
 			background-color: var(--color-warning);
 			opacity: .7;
+			padding: 3px 4px;
 		}
 		&.next {
 			background-color: var(--color-background-dark);
 			opacity: .7;
+			padding: 3px 4px;
 		}
 
 		span {
@@ -303,8 +313,11 @@ export default {
 	}
 
 	.compact {
-		min-height: 50px;
+		min-height: 44px;
 
+		.duedate {
+			margin-right: 0;
+		}
 		&.has-labels {
 			padding-bottom: $card-padding;
 		}

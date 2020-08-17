@@ -104,6 +104,9 @@
 					<DatetimePicker v-model="duedate"
 						:placeholder="t('deck', 'Set a due date')"
 						type="datetime"
+						:minute-step="5"
+						:show-second="false"
+						:format="format"
 						:disabled="saving || !canEdit"
 						confirm />
 					<Actions v-if="canEdit">
@@ -130,16 +133,16 @@
 					target="_blank"
 					class="icon icon-info" />
 				<Actions v-if="canEdit">
-					<ActionButton v-if="descriptionEditing" icon="icon-attach" @click="showAttachmentModal()">
-						{{ t('deck', 'Add Attachment') }}
-					</ActionButton>
-				</Actions>
-				<Actions v-if="canEdit">
 					<ActionButton v-if="!descriptionEditing" icon="icon-rename" @click="showEditor()">
 						{{ t('deck', 'Edit description') }}
 					</ActionButton>
 					<ActionButton v-else icon="icon-toggle" @click="hideEditor()">
 						{{ t('deck', 'View description') }}
+					</ActionButton>
+				</Actions>
+				<Actions v-if="canEdit">
+					<ActionButton v-if="descriptionEditing" icon="icon-attach" @click="showAttachmentModal()">
+						{{ t('deck', 'Add Attachment') }}
 					</ActionButton>
 				</Actions>
 			</h5>
@@ -149,10 +152,12 @@
 				@click="clickedPreview"
 				v-html="renderedDescription" />
 			<VueEasymde v-else
+				:key="copiedCard.id"
 				ref="markdownEditor"
-				:value="copiedCard.description"
+				v-model="copiedCard.description"
 				:configs="mdeConfig"
-				@input="updateDescription" />
+				@input="updateDescription"
+				@blur="saveDescription" />
 		</AppSidebarTab>
 
 		<AppSidebarTab id="attachments"
@@ -202,8 +207,13 @@ import MarkdownItTaskLists from 'markdown-it-task-lists'
 import { formatFileSize } from '@nextcloud/files'
 import relativeDate from '../../mixins/relativeDate'
 import AttachmentList from './AttachmentList'
+import { generateUrl } from '@nextcloud/router'
+import { getLocale } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
 
-const markdownIt = new MarkdownIt()
+const markdownIt = new MarkdownIt({
+	linkify: true,
+})
 markdownIt.use(MarkdownItTaskLists, { enabled: true, label: true, labelAfter: true })
 
 const capabilities = window.OC.getCapabilities()
@@ -239,6 +249,7 @@ export default {
 			addedLabelToCard: null,
 			copiedCard: null,
 			allLabels: null,
+			locale: getLocale(),
 
 			saving: false,
 			markdownIt: null,
@@ -250,13 +261,15 @@ export default {
 				autosave: { enabled: false, uniqueId: 'unique' },
 				toolbar: false,
 			},
-			lastModifiedRelative: null,
-			lastCreatedRemative: null,
 			descriptionSaveTimeout: null,
 			descriptionSaving: false,
 			hasActivity: capabilities && capabilities.activity,
 			hasComments: !!OC.appswebroots['comments'],
 			modalShow: false,
+			format: {
+				stringify: this.stringify,
+				parse: this.parse,
+			},
 		}
 	},
 	computed: {
@@ -277,7 +290,7 @@ export default {
 			}
 		},
 		attachmentUrl() {
-			return (attachment) => OC.generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
+			return (attachment) => generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
 		},
 		formattedFileSize() {
 			return (filesize) => formatFileSize(filesize)
@@ -286,7 +299,7 @@ export default {
 			return this.$store.getters.cardById(this.id)
 		},
 		subtitle() {
-			return t('deck', 'Modified') + ': ' + this.lastModifiedRelative + ' ' + t('deck', 'Created') + ': ' + this.lastCreatedRemative
+			return t('deck', 'Modified') + ': ' + this.relativeDate(this.currentCard.lastModified * 1000) + ' ' + t('deck', 'Created') + ': ' + this.relativeDate(this.currentCard.createdAt * 1000)
 		},
 		formatedAssignables() {
 			return this.assignables.map(item => {
@@ -325,7 +338,7 @@ export default {
 			},
 		},
 		renderedDescription() {
-			return markdownIt.render(this.copiedCard.description)
+			return markdownIt.render(this.copiedCard.description || '')
 		},
 	},
 	watch: {
@@ -333,19 +346,17 @@ export default {
 			this.initialize()
 		},
 	},
-	created() {
-		setInterval(this.updateRelativeTimestamps, 10000)
-	},
-	destroyed() {
-		clearInterval(this.updateRelativeTimestamps)
-	},
 	mounted() {
 		this.initialize()
 	},
 	methods: {
-		initialize() {
+		async initialize() {
 			if (!this.currentCard) {
 				return
+			}
+
+			if (this.copiedCard) {
+				await this.saveDescription()
 			}
 
 			this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
@@ -362,7 +373,6 @@ export default {
 			}
 
 			this.desc = this.currentCard.description
-			this.updateRelativeTimestamps()
 		},
 		showEditor() {
 			if (!this.canEdit) {
@@ -404,12 +414,9 @@ export default {
 					}
 					return match
 				})
-				this.updateDescription(updatedDescription)
+				this.$set(this.copiedCard, 'description', updatedDescription)
+				this.$store.dispatch('updateCardDesc', this.copiedCard)
 			}
-		},
-		updateRelativeTimestamps() {
-			this.lastModifiedRelative = OC.Util.relativeModifiedDate(this.currentCard.lastModified * 1000)
-			this.lastCreatedRemative = OC.Util.relativeModifiedDate(this.currentCard.createdAt * 1000)
 		},
 		setDue() {
 			this.$store.dispatch('updateCardDue', this.copiedCard)
@@ -418,20 +425,21 @@ export default {
 			this.copiedCard.duedate = null
 			this.$store.dispatch('updateCardDue', this.copiedCard)
 		},
-		updateDescription(text) {
-			this.copiedCard.description = text
+		async saveDescription() {
+			if (!Object.prototype.hasOwnProperty.call(this.copiedCard, 'descriptionLastEdit') || this.descriptionSaving) {
+				return
+			}
+			this.descriptionSaving = true
+			await this.$store.dispatch('updateCardDesc', this.copiedCard)
+			delete this.copiedCard.descriptionLastEdit
+			this.descriptionSaving = false
+		},
+		updateDescription() {
 			this.copiedCard.descriptionLastEdit = Date.now()
 			clearTimeout(this.descriptionSaveTimeout)
 			this.descriptionSaveTimeout = setTimeout(async() => {
-				if (!Object.prototype.hasOwnProperty.call(this.copiedCard, 'descriptionLastEdit') || this.descriptionSaving) {
-					return
-				}
-				this.descriptionSaving = true
-				await this.$store.dispatch('updateCardDesc', this.copiedCard)
-				delete this.copiedCard.descriptionLastEdit
-				this.descriptionSaving = false
+				 await this.saveDescription()
 			}, 2500)
-
 		},
 
 		closeSidebar() {
@@ -482,17 +490,25 @@ export default {
 			}
 			this.$store.dispatch('removeLabel', data)
 		},
+		stringify(date) {
+			return moment(date).locale(this.locale).format('LLL')
+		},
+		parse(value) {
+			return moment(value, 'LLL', this.locale).toDate()
+		},
 	},
 }
 </script>
 
 <style>
-	@import "~easymde/dist/easymde.min.css";
+	@import '~easymde/dist/easymde.min.css';
+
 	.vue-easymde, .CodeMirror {
 		border: none;
 		margin: 0;
 		padding: 0;
 	}
+
 	.editor-preview,
 	.editor-statusbar {
 		display: none;
@@ -562,8 +578,8 @@ export default {
 		flex-grow: 0;
 		flex-shrink: 1;
 		overflow: hidden;
-		padding: 1px 3px;
-		border-radius: 3px;
+		padding: 0px 5px;
+		border-radius: 15px;
 		font-size: 85%;
 		margin-right: 3px;
 	}
@@ -600,23 +616,33 @@ export default {
 	#description-preview {
 		min-height: 100px;
 
+		&::v-deep {
+			@import './../../css/markdown';
+		}
+
 		&::v-deep input {
 			min-height: auto;
+		}
+
+		&::v-deep a {
+			text-decoration: underline;
 		}
 	}
 
 	.modal__content {
 		width: 25vw;
 		min-width: 250px;
-		height: 120px;
-		text-align: center;
-		margin: 20px 20px 60px 20px;
+		min-height: 120px;
+		margin: 20px;
 		padding-bottom: 20px;
-	}
+		display: flex;
+		flex-direction: column;
 
-	.modal__content button {
-		float: right;
-		margin: 40px 3px 3px 0;
+		&::v-deep .attachment-list {
+			flex-shrink: 1;
+			overflow: scroll;
+			max-height: 50vh;
+		}
 	}
 
 </style>

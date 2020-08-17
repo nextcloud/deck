@@ -18,6 +18,8 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Устгах",
     "Edit" : "Засварлах",
+    "Title" : "Цол/Албан тушаал",
+    "Members" : "Гишүүд",
     "Description" : "Тайлбар",
     "Attachments" : "Хавсралт",
     "Comments" : "Сэтгэгдлүүд",
@@ -28,7 +30,6 @@ OC.L10N.register(
     "Update" : "Шинэчлэх",
     "(group)" : "(бүлэг)",
     "seconds ago" : "хоёрдахь өмнө",
-    "Settings" : "Тохиргоо",
-    "Share" : "Түгээх"
+    "Shared with you" : "тантай хуваалцсан"
 },
 "nplurals=2; plural=(n != 1);");

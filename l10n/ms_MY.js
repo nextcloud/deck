@@ -11,11 +11,11 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Padam",
     "Edit" : "Sunting",
+    "Title" : "Judul",
     "Description" : "Keterangan",
     "Modified" : "Dimodifikasi",
     "Save" : "Simpan",
     "Update" : "Kemaskini",
-    "Settings" : "Tetapan",
-    "Share" : "Kongsi"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=1; plural=0;");

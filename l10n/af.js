@@ -19,6 +19,7 @@ OC.L10N.register(
     "Can share" : "Kan deel",
     "Delete" : "Skrap",
     "Edit" : "Wysig",
+    "Title" : "Titel",
     "Due date" : "Sperdatum",
     "Description" : "Beskrywing",
     "Comments" : "Kommentare",
@@ -28,8 +29,7 @@ OC.L10N.register(
     "Reply" : "Antwoord",
     "Update" : "Werk by",
     "seconds ago" : "sekondes gelede",
-    "Settings" : "Instellings",
-    "Share" : "Deel",
+    "Shared with you" : "Met u gedeel",
     "An error occurred" : "'n Fout het voorgekom"
 },
 "nplurals=2; plural=(n != 1);");

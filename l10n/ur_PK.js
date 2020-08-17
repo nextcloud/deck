@@ -8,11 +8,11 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "حذف کریں",
     "Edit" : "تدوین کریں",
+    "Title" : "عنوان",
     "Description" : "تصریح",
     "Save" : "حفظ",
     "Reply" : "جواب",
     "seconds ago" : "سیکنڈز پہلے",
-    "Settings" : "سیٹینگز",
-    "Share" : "تقسیم"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=2; plural=(n != 1);");

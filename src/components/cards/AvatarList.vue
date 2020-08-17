@@ -58,6 +58,7 @@
 
 <script>
 import { Avatar, PopoverMenu, Tooltip } from '@nextcloud/vue'
+import { generateUrl } from '@nextcloud/router'
 
 export default {
 	name: 'AvatarList',
@@ -93,10 +94,10 @@ export default {
 				}
 				const user = assignable.participant.uid
 				const size = 32
-				const avatarUrl = OC.generateUrl('/avatar/{user}/{size}',
+				const avatarUrl = generateUrl('/avatar/{user}/{size}',
 					{
-						user: user,
-						size: size,
+						user,
+						size,
 					})
 				return window.location.protocol + '//' + window.location.host + avatarUrl
 			}
@@ -142,6 +143,7 @@ export default {
 			}
 		}
 	}
+
 	.avatar-list {
 		float: right;
 		display: inline-flex;
@@ -152,6 +154,9 @@ export default {
 			width: 36px;
 			height: 36px;
 			box-sizing: content-box !important;
+			margin-right: -12px;
+			transition: margin-right 0.2s ease-in-out;
+
 			&.icon-more {
 				width: 32px;
 				height: 32px;
@@ -159,15 +164,12 @@ export default {
 				background-color: var(--color-background-dark) !important;
 				cursor: pointer;
 			}
-			& {
-				margin-right: -12px;
-				transition: margin-right 0.2s ease-in-out;
-			}
 		}
 		&:hover div:nth-child(n+2) /deep/ .avatardiv {
 			margin-right: 1px;
 		}
 	}
+
 	.popovermenu {
 		display: block;
 		margin: 40px -6px;

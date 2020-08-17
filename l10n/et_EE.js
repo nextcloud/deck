@@ -17,6 +17,7 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Kustuta",
     "Edit" : "Redigeeri",
+    "Title" : "Pealkiri",
     "Due date" : "Tähtaeg",
     "Description" : "Kirjeldus",
     "Comments" : "Kommentaarid",
@@ -27,8 +28,7 @@ OC.L10N.register(
     "Update" : "Uuenda",
     "(group)" : "(grupp)",
     "seconds ago" : "sekundit tagasi",
-    "Settings" : "Seaded",
-    "Share" : "Jaga",
+    "Shared with you" : "Sinuga jagatud",
     "An error occurred" : "Tekkis tõrge"
 },
 "nplurals=2; plural=(n != 1);");

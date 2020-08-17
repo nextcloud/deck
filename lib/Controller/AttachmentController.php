@@ -52,8 +52,8 @@ class AttachmentController extends Controller {
 	 * @return \OCP\AppFramework\Http\Response
 	 * @throws \OCA\Deck\NotFoundException
 	 */
-	public function display($cardId, $attachmentId) {
-		return $this->attachmentService->display($cardId, $attachmentId);
+	public function display($attachmentId) {
+		return $this->attachmentService->display($attachmentId);
 	}
 
 	/**
@@ -70,21 +70,21 @@ class AttachmentController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 */
-	public function update($cardId, $attachmentId) {
-		return $this->attachmentService->update($cardId, $attachmentId, $this->request->getParam('data'));
+	public function update($attachmentId) {
+		return $this->attachmentService->update($attachmentId, $this->request->getParam('data'));
 	}
 
 	/**
 	 * @NoAdminRequired
 	 */
-	public function delete($cardId, $attachmentId) {
-		return $this->attachmentService->delete($cardId, $attachmentId);
+	public function delete($attachmentId) {
+		return $this->attachmentService->delete($attachmentId);
 	}
 
 	/**
 	 * @NoAdminRequired
 	 */
-	public function restore($cardId, $attachmentId) {
-		return $this->attachmentService->restore($cardId, $attachmentId);
+	public function restore($attachmentId) {
+		return $this->attachmentService->restore($attachmentId);
 	}
 }

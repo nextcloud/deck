@@ -48,11 +48,7 @@ export default {
 		},
 
 		createAttachments(state, { cardId, attachments }) {
-			if (typeof state.attachments[cardId] === 'undefined') {
-				Vue.set(state.attachments, cardId, attachments)
-			} else {
-				state.attachments[cardId].push(attachments)
-			}
+			Vue.set(state.attachments, cardId, attachments)
 		},
 
 		updateAttachment(state, { cardId, attachment }) {

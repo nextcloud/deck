@@ -12,12 +12,12 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "ئۆچۈر",
     "Edit" : "تەھرىر",
+    "Title" : "ماۋزۇ",
     "Description" : "چۈشەندۈرۈش",
     "Modified" : "ئۆزگەرتكەن",
     "Save" : "ساقلا",
     "Reply" : "جاۋاب قايتۇر",
     "Update" : "يېڭىلا",
-    "Settings" : "تەڭشەكلەر",
-    "Share" : "ھەمبەھىر"
+    "Shared with you" : "Shared with you"
 },
-"nplurals=1; plural=0;");
+"nplurals=2; plural=(n != 1);");

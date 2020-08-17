@@ -1,9 +1,83 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.0.5 - 2020-07-15
+
+### Fixed
+
+
+* [#2116](https://github.com/nextcloud/deck/pull/2116) Fix navigation layout issues @juliushaertl
+* [#2118](https://github.com/nextcloud/deck/pull/2118) Use proper parameter when handling attachments @juliushaertl
+
+## 1.0.4 - 2020-06-26
+
+### Fixed
+
+* [#2062](https://github.com/nextcloud/deck/pull/2062) Fix saving card description after toggling checkboxes @juliushaertl
+* [#2065](https://github.com/nextcloud/deck/pull/2065) Adding CSS rule for Markdown Blockquotes @reox
+* [#2059](https://github.com/nextcloud/deck/pull/2059) Fix fetching attachments on card change @juliushaertl
+* [#2060](https://github.com/nextcloud/deck/pull/2060) Use mixing for relative date in card sidebar @juliushaertl
+
+
+## 1.0.3 - 2020-06-19
+
+### Fixed
+
+* [#2019](https://github.com/nextcloud/deck/pull/2019) Remove old global css rule @juliushaertl
+* [#2020](https://github.com/nextcloud/deck/pull/2020) Fix navigation issue with leftover nodes @juliushaertl
+* [#2021](https://github.com/nextcloud/deck/pull/2021) Fix description issues @juliushaertl
+* [#2022](https://github.com/nextcloud/deck/pull/2022) Fix replyto issues with the comments API @juliushaertl
+* [#2027](https://github.com/nextcloud/deck/pull/2027) Allow to unassign current user from card @juliushaertl
+* [#2029](https://github.com/nextcloud/deck/pull/2029) Fix wording : stack -> list @cloud2018
+* [#2032](https://github.com/nextcloud/deck/pull/2032) Force order by id as second sorting key @juliushaertl
+* [#2045](https://github.com/nextcloud/deck/pull/2045) Improve label styling @juliushaertl
+* [#2010](https://github.com/nextcloud/deck/pull/2010) User documentation fixes @Nyco
+* [#1998](https://github.com/nextcloud/deck/pull/1998) Add Checklist explaination to the doc @4rnoP
+
+
+## 1.0.2 - 2020-06-03
+
+### Fixed
+
+* [#1774](https://github.com/nextcloud/deck/pull/1774) Remove deprecated global API calls
+* [#1918](https://github.com/nextcloud/deck/pull/1918) Save compact mode on localstorage @jakobroehrl
+* [#1919](https://github.com/nextcloud/deck/pull/1919) Show sidebar after card creation @jakobroehrl
+* [#1924](https://github.com/nextcloud/deck/pull/1924) Boards ordered in main page @jakobroehrl
+* [#1925](https://github.com/nextcloud/deck/pull/1925) Fix generated fronted urls
+* [#1944](https://github.com/nextcloud/deck/pull/1944) Move navigation to @nextcloud/vue components
+* [#1945](https://github.com/nextcloud/deck/pull/1945) Fix datetime picker
+* [#1946](https://github.com/nextcloud/deck/pull/1946) Fix translations
+* [#1976](https://github.com/nextcloud/deck/pull/1976) Delete boards that users own once they are deleted
+* [#1977](https://github.com/nextcloud/deck/pull/1977) Redirect from previously used routes to the current ones
+
+## 1.0.1 - 2020-05-15
+
+### Fixed
+
+* Removes debug filter output
+* Labels are now sorted
+* Stack title doesn't break up
+* Fix move card modal
+* Sort boards in navigation
+* Fixes the attachment modal
+* Handle deleted boards better
+* User can only clone a board on canManage permissions
+* Fix modal imports
+* Show menu in compact mode
+* Added a filter reset button
+* Add hover effect to board list
+* New filter icon
+* Improve hovering response in board
+* Enable linkify in description renderer @icewind1991
+* Enhance board selector
+* Fix issue if card description might be null
+* Revert markdown styles from old frontend
+* Do not scroll cards into view
+* Fix reodering performance
+
 ## 1.0.0 - 2020-05-06
 
-## Added
+### Added
 
 - Completly rewritten frontend
 	- Better maintainability
@@ -30,10 +104,10 @@ Android app team for helping to improve our REST API:
 
 ## 0.8.0 - 2020-01-16
 
-## Added
+### Added
 - Case insensitive search (@matchish)
 
-## Fixed
+### Fixed
 - Fix reversed permissions for reordering stacks (@JLueke)
 - Fix reversed visibility of 'add stack' field (@JLueke)
 - Fix occ export command
@@ -43,7 +117,7 @@ Android app team for helping to improve our REST API:
 
 ## 0.7.0 - 2019-08-20
 
-## Added
+### Added
 - Make deck compatible to Nextcloud 17
 - Allow to set the description when creating cards though the REST API
 

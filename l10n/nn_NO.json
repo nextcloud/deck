@@ -12,6 +12,7 @@
     "Can share" : "Can share",
     "Delete" : "Ta bort",
     "Edit" : "Endra",
+    "Title" : "Tittel",
     "Description" : "Skildring",
     "Comments" : "Kommentarar",
     "Modified" : "Endra",
@@ -19,7 +20,6 @@
     "Save" : "Lagre",
     "Update" : "Oppdater",
     "seconds ago" : "sekund sidan",
-    "Settings" : "Instillingar",
-    "Share" : "Del"
+    "Shared with you" : "Shared with you"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

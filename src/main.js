@@ -26,6 +26,7 @@ import store from './store/main'
 import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { generateFilePath } from '@nextcloud/router'
+import { showError } from '@nextcloud/dialogs'
 import { Tooltip } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
 import './models'
@@ -41,18 +42,14 @@ if (!process.env.HOT) {
 }
 sync(store, router)
 
-Vue.mixin({
-	methods: {
-		t: translate,
-		n: translatePlural,
-	},
-})
+Vue.prototype.t = translate
+Vue.prototype.n = translatePlural
 
 Vue.directive('tooltip', Tooltip)
 Vue.directive('click-outside', ClickOutside)
 
 Vue.directive('focus', {
-	inserted: function(el) {
+	inserted(el) {
 		el.focus()
 	},
 })
@@ -60,9 +57,9 @@ Vue.directive('focus', {
 Vue.config.errorHandler = (err, vm, info) => {
 	if (err.response && err.response.data.message) {
 		const errorMessage = t('deck', 'Something went wrong')
-		OCP.Toast.error(`${errorMessage}: ${err.response.data.status} ${err.response.data.message}`)
+		showError(`${errorMessage}: ${err.response.data.status} ${err.response.data.message}`)
 	}
-	throw err
+	console.error(err)
 }
 
 /* eslint-disable-next-line no-new */

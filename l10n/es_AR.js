@@ -23,6 +23,8 @@ OC.L10N.register(
     "Can share" : "Puede compartir",
     "Delete" : "Eliminar",
     "Edit" : "Editar",
+    "Title" : "Título",
+    "Members" : "Miembros",
     "Due date" : "Fecha de vencimiento",
     "Description" : "Descripción",
     "Formatting help" : "Ayuda de formato",
@@ -35,10 +37,9 @@ OC.L10N.register(
     "Update" : "Actualizar",
     "(group)" : "(grupo)",
     "seconds ago" : "segundos",
-    "Settings" : "Ajustes",
+    "Shared with you" : "Compartido con usted",
     "New board title" : "Nuevo título de tablero",
-    "Share" : "Compartir",
-    "An error occurred" : "Ocurrió un error",
-    "Board details" : "Detalles del tablero"
+    "Board details" : "Detalles del tablero",
+    "An error occurred" : "Ocurrió un error"
 },
 "nplurals=2; plural=(n != 1);");

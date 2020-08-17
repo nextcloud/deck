@@ -10,12 +10,12 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Suprimir",
     "Edit" : "Modificar",
+    "Title" : "Títol",
     "Description" : "Descripcion",
     "Save" : "Salvar",
     "Reply" : "Respondre",
     "Update" : "Metre a jorn",
     "seconds ago" : "i a qualques segondas",
-    "Settings" : "Paramètres",
-    "Share" : "Partejar"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=2; plural=(n > 1);");
