@@ -24,11 +24,14 @@
 namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Diagnostics\IQuery;
 use OCP\IDBConnection;
 use OCP\IUserManager;
 use OCP\Notification\IManager;
 
-class CardMapper extends DeckMapper implements IPermissionMapper {
+class CardMapper extends QBMapper implements IPermissionMapper {
 
 	/** @var LabelMapper */
 	private $labelMapper;
@@ -55,7 +58,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		$this->database4ByteSupport = $database4ByteSupport;
 	}
 
-	public function insert(Entity $entity) {
+	public function insert(Entity $entity): Entity {
 		$entity->setDatabaseType($this->databaseType);
 		$entity->setCreatedAt(time());
 		$entity->setLastModified(time());
@@ -66,7 +69,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		return parent::insert($entity);
 	}
 
-	public function update(Entity $entity, $updateModified = true) {
+	public function update(Entity $entity, $updateModified = true): Entity {
 		if (!$this->database4ByteSupport) {
 			$description = preg_replace('/[\x{10000}-\x{10FFFF}]/u', "\xEF\xBF\xBD", $entity->getDescription());
 			$entity->setDescription($description);
@@ -93,7 +96,7 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		return parent::update($entity);
 	}
 
-	public function markNotified(Card $card) {
+	public function markNotified(Card $card): Entity {
 		$cardUpdate = new Card();
 		$cardUpdate->setId($card->getId());
 		$cardUpdate->setNotified(true);
@@ -106,11 +109,15 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 */
-	public function find($id) {
-		$sql = 'SELECT * FROM `*PREFIX*deck_cards` ' .
-			'WHERE `id` = ? ORDER BY `order`, `id`';
+	public function find($id): Entity {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')->from('deck_cards')
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
+			->orderBy('order')
+			->addOrderBy('id');
+
 		/** @var Card $card */
-		$card = $this->findEntity($sql, [$id]);
+		$card = $this->findEntity($qb);
 		$labels = $this->labelMapper->findAssignedLabelsForCard($card->id);
 		$card->setLabels($labels);
 		$this->mapOwner($card);
@@ -118,27 +125,73 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	public function findAll($stackId, $limit = null, $offset = null, $since = -1) {
-		$sql = 'SELECT * FROM `*PREFIX*deck_cards` 
-          WHERE `stack_id` = ? AND NOT archived AND deleted_at = 0 AND last_modified > ? ORDER BY `order`, `id`';
-		return $this->findEntities($sql, [$stackId, $since], $limit, $offset);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_cards')
+			->where($qb->expr()->eq('stack_id', $qb->createNamedParameter($stackId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
+			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->gt('last_modified', $qb->createNamedParameter($since, IQueryBuilder::PARAM_INT)))
+			->setMaxResults($limit)
+			->setFirstResult($offset)
+			->orderBy('order')
+			->addOrderBy('id');
+		return $this->findEntities($qb);
+	}
+
+	public function queryCardsByBoard(int $boardId): IQueryBuilder {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('c.*')
+			->from('deck_cards', 'c')
+			->innerJoin('c', 'deck_stacks', 's', 'c.stack_id = s.id')
+			->where($qb->expr()->eq('s.board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)));
+		return $qb;
+	}
+
+	public function queryCardsByBoards(array $boardIds): IQueryBuilder {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('c.*')
+			->from('deck_cards', 'c')
+			->innerJoin('c', 'deck_stacks', 's', $qb->expr()->eq('s.id', 'c.stack_id'))
+			->andWhere($qb->expr()->in('s.board_id', $qb->createNamedParameter($boardIds, IQueryBuilder::PARAM_INT_ARRAY)));
+
+		return $qb;
 	}
 
 	public function findDeleted($boardId, $limit = null, $offset = null) {
-		$sql = 'SELECT c.* FROM `*PREFIX*deck_cards` c
-	  INNER JOIN `*PREFIX*deck_stacks` s ON s.id = c.stack_id
-	  WHERE `s`.`board_id` = ? AND NOT c.archived AND NOT c.deleted_at = 0 ORDER BY `c`.`order`, `c`.`id`';
-		return $this->findEntities($sql, [$boardId], $limit, $offset);
+		$qb = $this->queryCardsByBoard($boardId);
+		$qb->andWhere($qb->expr()->neq('c.archived', false))
+			->andWhere($qb->expr()->neq('c.deleted_at', false))
+			->setMaxResults($limit)
+			->setFirstResult($offset)
+			->orderBy('order')
+			->addOrderBy('id');
+		return $this->findEntities($qb);
 	}
 
 	public function findAllArchived($stackId, $limit = null, $offset = null) {
-		$sql = 'SELECT * FROM `*PREFIX*deck_cards` WHERE `stack_id`=? AND archived ORDER BY `last_modified`';
-		return $this->findEntities($sql, [$stackId], $limit, $offset);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_cards')
+			->where($qb->expr()->eq('stack_id', $qb->createNamedParameter($stackId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('archived', true))
+			->andWhere($qb->expr()->eq('deleted_at', 0))
+			->setMaxResults($limit)
+			->setFirstResult($offset)
+			->orderBy('last_modified');
+		return $this->findEntities($qb);
 	}
 
 	public function findAllByStack($stackId, $limit = null, $offset = null) {
-		$sql = 'SELECT id FROM `*PREFIX*deck_cards` 
-          WHERE `stack_id` = ? ORDER BY `order`, `id`';
-		return $this->findEntities($sql, [$stackId], $limit, $offset);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_cards')
+			->where($qb->expr()->eq('stack_id', $qb->createNamedParameter($stackId, IQueryBuilder::PARAM_INT)))
+			->setMaxResults($limit)
+			->setFirstResult($offset)
+			->orderBy('order')
+			->addOrderBy('id');
+		return $this->findEntities($qb);
 	}
 
 	public function findAllWithDue($boardId) {
@@ -159,16 +212,32 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	public function findOverdue() {
-		$sql = 'SELECT id,title,duedate,notified from `*PREFIX*deck_cards` WHERE duedate < NOW() AND NOT archived AND deleted_at = 0';
-		return $this->findEntities($sql);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('id,title,duedate,notified')
+			->from('deck_cards')
+			->where($qb->expr()->lt('duedate', $qb->createFunction('NOW()')))
+			->andWhere($qb->expr()->eq('archived', false))
+			->andWhere($qb->expr()->eq('deleted_at', 0));
+		return $this->findEntities($qb);
 	}
 
 	public function findUnexposedDescriptionChances() {
-		$sql = 'SELECT id,title,duedate,notified,description_prev,last_editor,description from `*PREFIX*deck_cards` WHERE last_editor IS NOT NULL AND description_prev IS NOT NULL';
-		return $this->findEntities($sql);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('id,title,duedate,notified,description_prev,last_editor,description')
+			->from('deck_cards')
+			->where($qb->expr()->isNotNull('last_editor'))
+			->andWhere($qb->expr()->isNotNull('description_prev'));
+		return $this->findEntities($qb);
 	}
 
-	public function delete(Entity $entity) {
+	public function search($boardIds, $term) {
+		$qb = $this->queryCardsByBoards($boardIds);
+		$qb->andWhere($qb->expr()->iLike('c.title', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($term) . '%')));
+		$qb->setMaxResults(10);
+		return $this->findEntities($qb);
+	}
+
+	public function delete(Entity $entity): Entity {
 		// delete assigned labels
 		$this->labelMapper->deleteLabelAssignmentsForCard($entity->getId());
 		// delete card
@@ -200,14 +269,18 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 
 	public function isOwner($userId, $cardId) {
 		$sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_stacks` WHERE id IN (SELECT stack_id FROM `*PREFIX*deck_cards` WHERE id = ?))';
-		$stmt = $this->execute($sql, [$cardId]);
+		$stmt = $this->db->prepare($sql);
+		$stmt->bindParam(1, $cardId, \PDO::PARAM_INT);
+		$stmt->execute();
 		$row = $stmt->fetch();
 		return ($row['owner'] === $userId);
 	}
 
 	public function findBoardId($cardId) {
 		$sql = 'SELECT id FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_stacks` WHERE id IN (SELECT stack_id FROM `*PREFIX*deck_cards` WHERE id = ?))';
-		$stmt = $this->execute($sql, [$cardId]);
+		$stmt = $this->db->prepare($sql);
+		$stmt->bindParam(1, $cardId, \PDO::PARAM_INT);
+		$stmt->execute();
 		$row = $stmt->fetch();
 		return $row['id'];
 	}
