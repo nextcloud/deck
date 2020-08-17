@@ -116,6 +116,11 @@ class CardService {
 		return $cards;
 	}
 
+	public function search($boardIds, $term) {
+		$cards = $this->cardMapper->search($boardIds, $term);
+		return $cards;
+	}
+
 	/**
 	 * @param $cardId
 	 * @return \OCA\Deck\Db\RelationalEntity
