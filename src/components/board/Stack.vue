@@ -43,6 +43,9 @@
 				</form>
 			</transition>
 			<Actions v-if="canManage && !isArchived" :force-menu="true">
+				<ActionButton icon="icon-archive" @click="modalArchivAllCardsShow=true">
+					{{ t('deck', 'Archive all cards') }}
+				</ActionButton>
 				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete list') }}
 				</ActionButton>
@@ -53,6 +56,19 @@
 				</ActionButton>
 			</Actions>
 		</div>
+
+		<Modal v-if="modalArchivAllCardsShow" @close="modalArchivAllCardsShow=false">
+			<div class="modal__content">
+				<h3>{{ t('deck', 'Archive all cards in this list') }}</h3>
+				<progress :value="stackTransfer.current" :max="stackTransfer.total" />
+				<button class="primary" @click="archiveAllCardsFromStack(stack)">
+					{{ t('deck', 'Archive all cards') }}
+				</button>
+				<button @click="modalArchivAllCardsShow=false">
+					{{ t('deck', 'Cancel') }}
+				</button>
+			</div>
+		</Modal>
 
 		<transition name="slide-top" appear>
 			<div v-if="showAddCard" class="stack--card-add">
@@ -99,7 +115,8 @@
 
 import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
-import { Actions, ActionButton } from '@nextcloud/vue'
+
+import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import CardItem from '../cards/CardItem'
 
@@ -111,6 +128,7 @@ export default {
 		CardItem,
 		Container,
 		Draggable,
+		Modal,
 	},
 
 	props: {
@@ -127,6 +145,11 @@ export default {
 			showAddCard: false,
 			stateCardCreating: false,
 			animate: false,
+			modalArchivAllCardsShow: false,
+			stackTransfer: {
+				total: 0,
+				current: null,
+			},
 		}
 	},
 	computed: {
@@ -182,6 +205,15 @@ export default {
 		},
 		deleteStack(stack) {
 			this.$store.dispatch('deleteStack', stack)
+		},
+		archiveAllCardsFromStack(stack) {
+
+			this.stackTransfer.total = this.cardsByStack.length
+			this.cardsByStack.forEach((card, index) => {
+				this.stackTransfer.current = index
+				this.$store.dispatch('archiveUnarchiveCard', { ...card, archived: true })
+			})
+			this.modalArchivAllCardsShow = false
 		},
 		startEditing(stack) {
 			this.copiedStack = Object.assign({}, stack)
@@ -313,6 +345,23 @@ export default {
 		transform: translateY(-10px);
 		opacity: 0;
 		height: 0px;
+	}
+
+	.modal__content {
+		width: 25vw;
+		min-width: 250px;
+		min-height: 100px;
+		text-align: center;
+		margin: 20px 20px 20px 20px;
+	}
+
+	.modal__content button {
+		float: right;
+	}
+
+	progress {
+		margin-top: 3px;
+		margin-bottom: 30px;
 	}
 
 </style>
