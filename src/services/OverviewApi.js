@@ -23,14 +23,14 @@
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 
-export class DashboardApi {
+export class OverviewApi {
 
 	url(url) {
 		return generateOcsUrl(`apps/deck/api/v1.0`) + url
 	}
 
 	findAllWithDue(data) {
-		return axios.get(this.url(`dashboard/due`), {
+		return axios.get(this.url(`overview/due`), {
 			headers: { 'OCS-APIRequest': 'true' },
 		})
 			.then(
@@ -42,7 +42,7 @@ export class DashboardApi {
 	}
 
 	findMyAssignedCards(data) {
-		return axios.get(this.url(`dashboard/assigned`), {
+		return axios.get(this.url(`overview/assigned`), {
 			headers: { 'OCS-APIRequest': 'true' },
 		})
 			.then(

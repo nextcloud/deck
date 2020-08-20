@@ -94,7 +94,7 @@ const SUPPORTED_FILTERS = [
 ]
 
 export default {
-	name: 'Dashboards',
+	name: 'Overview',
 	components: {
 		Controls,
 		CardItem,

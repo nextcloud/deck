@@ -22,10 +22,10 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { DashboardApi } from '../services/DashboardApi'
+import { OverviewApi } from '../services/OverviewApi'
 Vue.use(Vuex)
 
-const apiClient = new DashboardApi()
+const apiClient = new OverviewApi()
 export default {
 	state: {
 		withDue: [],
