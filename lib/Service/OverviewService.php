@@ -27,26 +27,15 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Service;
 
-use OCA\Deck\Activity\ChangeSet;
-use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Card;
-use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\CardMapper;
-use OCA\Deck\Db\Label;
-use OCA\Deck\Db\Stack;
-use OCA\Deck\NoPermissionException;
-use OCA\Deck\Notification\NotificationHelper;
-use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\Comments\ICommentsManager;
 use OCP\IGroupManager;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCP\IUserManager;
-use OCA\Deck\BadRequestException;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 
 class OverviewService {
 
