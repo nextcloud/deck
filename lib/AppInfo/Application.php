@@ -29,7 +29,7 @@ use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Capabilities;
 use OCA\Deck\Collaboration\Resources\ResourceProvider;
 use OCA\Deck\Collaboration\Resources\ResourceProviderCard;
-use OCA\Deck\Dashboard\DeckPanel;
+use OCA\Deck\Dashboard\DeckWidget;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
@@ -44,7 +44,7 @@ use OCP\AppFramework\App;
 use OCP\Collaboration\Resources\IManager;
 use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Comments\CommentsEntityEvent;
-use OCP\Dashboard\RegisterPanelEvent;
+use OCP\Dashboard\RegisterWidgetEvent;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\FullTextSearch\IFullTextSearchManager;
@@ -92,9 +92,9 @@ class Application extends App {
 		if ($version >= 20) {
 			/** @var IEventDispatcher $dispatcher */
 			$dispatcher = $container->getServer()->query(IEventDispatcher::class);
-			$dispatcher->addListener(RegisterPanelEvent::class, function (RegisterPanelEvent $event) use ($container) {
+			$dispatcher->addListener(RegisterWidgetEvent::class, function (RegisterWidgetEvent $event) use ($container) {
 				\OCP\Util::addScript('myapp', 'dashboard');
-				$event->registerPanel(DeckPanel::class);
+				$event->registerWidget(DeckWidget::class);
 			});
 		}
 	}

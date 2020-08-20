@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<Controls :dashboard-name="filterDisplayName" />
+		<Controls :overview-name="filterDisplayName" />
 
 		<div v-if="loading" key="loading" class="emptycontent">
 			<div class="icon icon-loading" />
@@ -33,43 +33,43 @@
 		<div v-else>
 			<div v-if="isValidFilter" class="dashboard">
 				<div class="dashboard-column">
-					<h2>{{ t('deck', 'No due') }}</h2>
-					<div v-for="card in cardsByDueDate.nodue" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
-				</div>
-
-				<div class="dashboard-column">
-					<h2>{{ t('deck', 'Overdue') }}</h2>
+					<h3>{{ t('deck', 'Overdue') }}</h3>
 					<div v-for="card in cardsByDueDate.overdue" :key="card.id">
 						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
-					<h2>{{ t('deck', 'Today') }}</h2>
+					<h3>{{ t('deck', 'Today') }}</h3>
 					<div v-for="card in cardsByDueDate.today" :key="card.id">
 						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
-					<h2>{{ t('deck', 'Tomorrow') }}</h2>
+					<h3>{{ t('deck', 'Tomorrow') }}</h3>
 					<div v-for="card in cardsByDueDate.tomorrow" :key="card.id">
 						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
-					<h2>{{ t('deck', 'This week') }}</h2>
+					<h3>{{ t('deck', 'This week') }}</h3>
 					<div v-for="card in cardsByDueDate.thisWeek" :key="card.id">
 						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
-					<h2>{{ t('deck', 'Later') }}</h2>
+					<h3>{{ t('deck', 'Later') }}</h3>
 					<div v-for="card in cardsByDueDate.later" :key="card.id">
+						<CardItem :id="card.id" />
+					</div>
+				</div>
+
+				<div class="dashboard-column">
+					<h3>{{ t('deck', 'No due') }}</h3>
+					<div v-for="card in cardsByDueDate.nodue" :key="card.id">
 						<CardItem :id="card.id" />
 					</div>
 				</div>
@@ -102,7 +102,7 @@ export default {
 	props: {
 		filter: {
 			type: String,
-			default: '',
+			default: FILTER_ASSIGNED,
 		},
 	},
 	data() {
@@ -116,8 +116,8 @@ export default {
 		},
 		filterDisplayName() {
 			switch (this.filter) {
-			case 'assigned':
-				return t('deck', 'My assigned cards')
+			case FILTER_ASSIGNED:
+				return t('deck', 'Assigned cards')
 			default:
 				return ''
 			}
@@ -211,13 +211,15 @@ export default {
 .dashboard {
 	display: flex;
 	align-items: stretch;
-	margin: $board-spacing;
+	margin-left: $board-spacing;
+	margin-right: $board-spacing;
 
 	.dashboard-column {
 		display: flex;
 		flex-direction: column;
-		width: $stack-width;
-		margin: $stack-spacing;
+		min-width: $stack-width;
+		margin-left: $stack-spacing;
+		margin-right: $stack-spacing;
 	}
 }
 

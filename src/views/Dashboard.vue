@@ -22,14 +22,17 @@
 
 <template>
 	<div>
-		<a :href="cardLink(card)" class="card" v-for="card in assignedCardsDashboard">
+		<a v-for="card in assignedCardsDashboard"
+			:key="card.id"
+			:href="cardLink(card)"
+			class="card">
 			<div class="card--header">
 				<DueDate class="right" :card="card" />
 				<span>{{ card.title }}</span>
 			</div>
 			<ul v-if="card.labels && card.labels.length"
-				  class="labels"
-				  @click="openCard">
+				class="labels"
+				@click="openCard">
 				<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)">
 					<span>{{ label.title }}</span>
 				</li>
@@ -50,9 +53,6 @@ export default {
 		DueDate,
 	},
 	mixins: [ labelStyle ],
-	beforeMount() {
-		this.$store.dispatch('loadDashboards')
-	},
 	computed: {
 		...mapGetters([
 			'withDueDashboard',
@@ -70,6 +70,9 @@ export default {
 			}
 		},
 	},
+	beforeMount() {
+		this.$store.dispatch('loadAssignDashboard')
+	},
 }
 </script>
 
@@ -78,15 +81,15 @@ export default {
 
 	.card {
 		display: block;
-		border-radius: var(--border-radius);
+		border-radius: var(--border-radius-large);
 		margin-bottom: 8px;
 		padding: 5px;
-		border: 1px solid var(--color-border);
 
 		&:hover {
 			background-color: var(--color-background-hover);
 		}
 	}
+
 	.card--header {
 		overflow: hidden;
 		margin-bottom: 5px;
@@ -95,14 +98,17 @@ export default {
 			padding: 5px;
 		}
 	}
+
 	.labels {
 		margin-left: 0;
 	}
+
 	.duedate::v-deep {
 		.due {
 			margin: 0;
 		}
 	}
+
 	.right {
 		float: right;
 	}

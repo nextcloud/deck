@@ -21,11 +21,7 @@
   -->
 
 <template>
-<<<<<<< HEAD
 	<div v-if="card" class="badges">
-=======
-	<div class="badges" v-if="card">
->>>>>>> 37196bbf... Move duedate to separate component
 		<div v-if="card.commentsUnread > 0" class="icon icon-comment" />
 
 		<div v-if="card.description && checkListCount > 0" class="card-tasks icon icon-checkmark">
@@ -59,11 +55,7 @@ export default {
 			return (this.card.description.match(/^\s*([*+-]|(\d\.))\s+\[\s*(\s|x)\s*\](.*)$/gim) || []).length
 		},
 		checkListCheckedCount() {
-<<<<<<< HEAD
 			return (this.card.description.match(/^\s*([*+-]|(\d\.))\s+\[\s*x\s*\](.*)$/gim) || []).length
-=======
-			return (this.card.description.match(/^\s*(\*|-|(\d\.))\s+\[\s*x\s*\](.*)$/gim) || []).length
->>>>>>> 37196bbf... Move duedate to separate component
 		},
 	},
 }

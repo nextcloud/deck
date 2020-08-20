@@ -27,9 +27,19 @@ declare(strict_types=1);
 namespace OCA\Deck\Dashboard;
 
 
-use OCP\Dashboard\IPanel;
+use OCP\Dashboard\IWidget;
+use OCP\IL10N;
 
-class DeckPanel implements IPanel {
+class DeckWidget implements IWidget {
+
+	/**
+	 * @var IL10N
+	 */
+	private $l10n;
+
+	public function __construct(IL10N $l10n) {
+		$this->l10n = $l10n;
+	}
 
 	/**
 	 * @inheritDoc
@@ -42,7 +52,7 @@ class DeckPanel implements IPanel {
 	 * @inheritDoc
 	 */
 	public function getTitle(): string {
-		return 'Deck';
+		return $this->l10n->t('Upcoming cards');
 	}
 
 	/**

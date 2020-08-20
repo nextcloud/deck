@@ -23,7 +23,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import dashboard from './store/dashboard'
+import overview from './store/overview'
+
+import './css/dashboard.scss'
+
+import Dashboard from './views/Dashboard.vue'
 
 Vue.use(Vuex)
 
@@ -31,12 +35,10 @@ const debug = process.env.NODE_ENV !== 'production'
 
 const store = new Vuex.Store({
 	modules: {
-		dashboard,
+		overview,
 	},
 	strict: debug,
 })
-
-import './css/dashboard.scss'
 
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken);
@@ -45,9 +47,7 @@ __webpack_public_path__ = OC.linkTo('deck', 'js/');
 
 Vue.prototype.t = t
 Vue.prototype.n = n
-Vue.prototype.OC = OC;
-
-import Dashboard from './views/Dashboard.vue'
+Vue.prototype.OC = OC
 
 document.addEventListener('DOMContentLoaded', () => {
 	OCA.Dashboard.register('deck', (el) => {
@@ -56,5 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			propsData: {},
 			store,
 		}).$mount(el)
+		return vm
 	})
 })

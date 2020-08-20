@@ -24,7 +24,7 @@
 	<AppNavigationVue :class="{'icon-loading': loading}">
 		<template #list>
 			<AppNavigationItem
-				:title="t('deck', 'My assigned cards')"
+				:title="t('deck', 'Assigned cards')"
 				icon="icon-group"
 				to="/overview/assigned" />
 			<AppNavigationBoardCategory

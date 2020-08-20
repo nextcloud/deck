@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="duedate" v-if="card">
+	<div v-if="card" class="duedate">
 		<transition name="zoom">
 			<div v-if="card.duedate" :class="dueIcon">
 				<span>{{ relativeDate }}</span>
@@ -65,7 +65,7 @@ export default {
 		dueDateTooltip() {
 			return moment(this.card.duedate).format('LLLL')
 		},
-	}
+	},
 }
 </script>
 
