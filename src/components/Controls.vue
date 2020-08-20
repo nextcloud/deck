@@ -30,6 +30,9 @@
 				({{ t('deck', 'Archived cards') }})
 			</p>
 		</div>
+		<div v-if="overviewName" class="board-title">
+			<h2><a href="#">{{ overviewName }}</a></h2>
+		</div>
 		<div v-if="board" class="board-actions">
 			<div v-if="canManage && !showArchived && !board.archived"
 				id="stack-add"
@@ -203,6 +206,11 @@ export default {
 	props: {
 		board: {
 			type: Object,
+			required: false,
+			default: null,
+		},
+		overviewName: {
+			type: String,
 			required: false,
 			default: null,
 		},

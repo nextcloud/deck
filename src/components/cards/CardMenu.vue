@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div>
+	<div v-if="card">
 		<div @click.stop.prevent>
 			<Actions v-if="canEdit && !isArchived">
 				<ActionButton v-if="showArchived === false && !isCurrentUserAssigned" icon="icon-user" @click="assignCardToMe()">
@@ -80,8 +80,8 @@ export default {
 	name: 'CardMenu',
 	components: { Actions, ActionButton, Modal, Multiselect },
 	props: {
-		id: {
-			type: Number,
+		card: {
+			type: Object,
 			default: null,
 		},
 	},
@@ -95,16 +95,18 @@ export default {
 	},
 	computed: {
 		...mapGetters([
-			'canEdit',
 			'isArchived',
 		]),
 		...mapState({
 			showArchived: state => state.showArchived,
 			currentBoard: state => state.currentBoard,
 		}),
-
-		card() {
-			return this.$store.getters.cardById(this.id)
+		canEdit() {
+			if (this.currentBoard) {
+				return this.$store.getters.canEdit
+			}
+			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
+			return board.permissions.PERMISSION_EDIT
 		},
 		isBoardAndStackChoosen() {
 			if (this.selectedBoard === '' || this.selectedStack === '') {

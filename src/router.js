@@ -29,6 +29,7 @@ import Board from './components/board/Board'
 import Sidebar from './components/Sidebar'
 import BoardSidebar from './components/board/BoardSidebar'
 import CardSidebar from './components/card/CardSidebar'
+import Overview from './components/overview/Overview'
 
 Vue.use(Router)
 
@@ -40,6 +41,20 @@ export default new Router({
 			path: '/',
 			name: 'main',
 			component: Boards,
+		},
+		{
+			path: '/overview/:filter',
+			name: 'overview',
+			components: {
+				default: Overview,
+			},
+			props: {
+				default: (route) => {
+					return {
+						filter: route.params.filter,
+					}
+				},
+			},
 		},
 		{
 			path: '/board',

@@ -66,6 +66,7 @@ return [
 		['name' => 'card#assignUser', 'url' => '/cards/{cardId}/assign', 'verb' => 'POST'],
 		['name' => 'card#unassignUser', 'url' => '/cards/{cardId}/unassign', 'verb' => 'PUT'],
 
+		// attachments
 		['name' => 'attachment#getAll', 'url' => '/cards/{cardId}/attachments', 'verb' => 'GET'],
 		['name' => 'attachment#create', 'url' => '/cards/{cardId}/attachment', 'verb' => 'POST'],
 		['name' => 'attachment#display', 'url' => '/cards/{cardId}/attachment/{attachmentId}', 'verb' => 'GET'],
@@ -110,6 +111,8 @@ return [
 		['name' => 'card_api#reorder', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder', 'verb' => 'PUT'],
 		['name' => 'card_api#delete', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'DELETE'],
 
+		['name' => 'card_api#findAllWithDue', 'url' => '/api/v1.0/dashboard/due', 'verb' => 'GET'],
+
 		['name' => 'label_api#get', 'url' => '/api/v1.0/boards/{boardId}/labels/{labelId}', 'verb' => 'GET'],
 		['name' => 'label_api#create', 'url' => '/api/v1.0/boards/{boardId}/labels', 'verb' => 'POST'],
 		['name' => 'label_api#update', 'url' => '/api/v1.0/boards/{boardId}/labels/{labelId}', 'verb' => 'PUT'],
@@ -131,5 +134,9 @@ return [
 		['name' => 'comments_api#create', 'url' => '/api/v1.0/cards/{cardId}/comments', 'verb' => 'POST'],
 		['name' => 'comments_api#update', 'url' => '/api/v1.0/cards/{cardId}/comments/{commentId}', 'verb' => 'PUT'],
 		['name' => 'comments_api#delete', 'url' => '/api/v1.0/cards/{cardId}/comments/{commentId}', 'verb' => 'DELETE'],
+
+		// dashboard
+		['name' => 'overview_api#findAllWithDue', 'url' => '/api/v1.0/overview/due', 'verb' => 'GET'],
+		['name' => 'overview_api#findAssignedCards', 'url' => '/api/v1.0/overview/assigned', 'verb' => 'GET'],
 	]
 ];

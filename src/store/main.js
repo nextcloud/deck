@@ -26,12 +26,13 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
-import { BoardApi } from './../services/BoardApi'
+import { BoardApi } from '../services/BoardApi'
 import stack from './stack'
 import card from './card'
 import comment from './comment'
 import trashbin from './trashbin'
 import attachment from './attachment'
+import overview from './overview'
 import debounce from 'lodash/debounce'
 Vue.use(Vuex)
 
@@ -51,6 +52,7 @@ export default new Vuex.Store({
 		comment,
 		trashbin,
 		attachment,
+		overview,
 	},
 	strict: debug,
 	state: {

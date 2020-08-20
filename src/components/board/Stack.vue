@@ -253,8 +253,7 @@ export default {
 
 <style lang="scss" scoped>
 
-	$stack-spacing: 10px;
-	$stack-width: 260px;
+	@import './../../css/variables';
 
 	.stack {
 		width: $stack-width;

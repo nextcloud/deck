@@ -25,7 +25,7 @@
   -->
 
 <template>
-	<AttachmentDragAndDrop :card-id="id" class="drop-upload--card">
+	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
 		<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'is-editing': editing}"
 			tag="div"
 			class="card"
@@ -55,7 +55,7 @@
 					</transition>
 				</div>
 
-				<CardMenu v-if="!editing && compactMode" :id="id" class="right" />
+				<CardMenu v-if="!editing && compactMode" :card="card" class="right" />
 			</div>
 			<transition-group v-if="card.labels.length"
 				name="zoom"
@@ -67,7 +67,7 @@
 				</li>
 			</transition-group>
 			<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
-				<CardBadges :id="id" />
+				<CardBadges :card="card" />
 			</div>
 		</div>
 	</AttachmentDragAndDrop>
@@ -95,6 +95,10 @@ export default {
 			type: Number,
 			default: null,
 		},
+		item: {
+			type: Object,
+			default: null,
+		},
 	},
 	data() {
 		return {
@@ -109,14 +113,20 @@ export default {
 			currentBoard: state => state.currentBoard,
 		}),
 		...mapGetters([
-			'canEdit',
 			'isArchived',
 		]),
+		canEdit() {
+			if (this.currentBoard) {
+				return this.$store.getters.canEdit
+			}
+			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
+			return board.permissions.PERMISSION_EDIT
+		},
 		card() {
-			return this.$store.getters.cardById(this.id)
+			return this.item ? this.item : this.$store.getters.cardById(this.id)
 		},
 		currentCard() {
-			return this.$route.params.cardId === this.id
+			return this.card && this.$route && this.$route.params.cardId === this.card.id
 		},
 		relativeDate() {
 			const diff = moment(this.$root.time).diff(this.card.duedate, 'seconds')
@@ -144,7 +154,8 @@ export default {
 	},
 	methods: {
 		openCard() {
-			this.$router.push({ name: 'card', params: { cardId: this.id } }).catch(() => {})
+			const boardId = this.card && this.card.boardId ? this.card.boardId : this.$route.params.id
+			this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id } }).catch(() => {})
 		},
 		startEditing(card) {
 			this.copiedCard = Object.assign({}, card)
@@ -165,9 +176,7 @@ export default {
 
 <style lang="scss" scoped>
 	@import './../../css/animations';
-
-	$card-spacing: 10px;
-	$card-padding: 10px;
+	@import './../../css/variables';
 
 	body.dark .card {
 		border: 1px solid var(--color-border);

@@ -96,9 +96,6 @@ export default {
 		},
 	},
 	mutations: {
-		clearCards(state) {
-			state.cards = []
-		},
 		addCard(state, card) {
 			card.labels = card.labels || []
 			card.assignedUsers = card.assignedUsers || []

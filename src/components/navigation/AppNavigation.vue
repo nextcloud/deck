@@ -23,6 +23,10 @@
 <template>
 	<AppNavigationVue :class="{'icon-loading': loading}">
 		<template #list>
+			<AppNavigationItem
+				:title="t('deck', 'My assigned cards')"
+				icon="icon-group"
+				to="/overview/assigned" />
 			<AppNavigationBoardCategory
 				id="deck-navigation-all"
 				to="/board"
@@ -68,7 +72,7 @@
 import axios from '@nextcloud/axios'
 import { mapGetters } from 'vuex'
 import ClickOutside from 'vue-click-outside'
-import { AppNavigation as AppNavigationVue, AppNavigationSettings, Multiselect } from '@nextcloud/vue'
+import { AppNavigation as AppNavigationVue, AppNavigationItem, AppNavigationSettings, Multiselect } from '@nextcloud/vue'
 import AppNavigationAddBoard from './AppNavigationAddBoard'
 import AppNavigationBoardCategory from './AppNavigationBoardCategory'
 import { loadState } from '@nextcloud/initial-state'
@@ -84,6 +88,7 @@ export default {
 		AppNavigationAddBoard,
 		AppNavigationBoardCategory,
 		Multiselect,
+		AppNavigationItem,
 	},
 	directives: {
 		ClickOutside,
@@ -111,7 +116,6 @@ export default {
 		]),
 		isAdmin() {
 			// eslint-disable-next-line
-			//return oc_isadmin
 			return OC.isUserAdmin()
 		},
 	},
