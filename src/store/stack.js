@@ -76,7 +76,6 @@ export default {
 				})
 		},
 		async loadStacks({ commit }, boardId) {
-			commit('clearCards')
 			let call = 'loadStacks'
 			if (this.state.showArchived === true) {
 				call = 'loadArchivedStacks'

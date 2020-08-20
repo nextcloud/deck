@@ -72,10 +72,9 @@
 import axios from '@nextcloud/axios'
 import { mapGetters } from 'vuex'
 import ClickOutside from 'vue-click-outside'
-import { AppNavigation as AppNavigationVue, AppNavigationSettings, Multiselect } from '@nextcloud/vue'
+import { AppNavigation as AppNavigationVue, AppNavigationItem, AppNavigationSettings, Multiselect } from '@nextcloud/vue'
 import AppNavigationAddBoard from './AppNavigationAddBoard'
 import AppNavigationBoardCategory from './AppNavigationBoardCategory'
-import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import { loadState } from '@nextcloud/initial-state'
 import { generateUrl, generateOcsUrl } from '@nextcloud/router'
 
@@ -107,15 +106,6 @@ export default {
 			groupLimit: [],
 			groupLimitDisabled: true,
 			canCreate: canCreateState,
-			allDashboards: [{
-				id: 1,
-				title: 'due',
-				color: '999999',
-				acl: [],
-				permissions: {
-					PERMISSION_MANAGE: false,
-				},
-			}],
 		}
 	},
 	computed: {
@@ -123,11 +113,9 @@ export default {
 			'noneArchivedBoards',
 			'archivedBoards',
 			'sharedBoards',
-			// 'dashboards',
 		]),
 		isAdmin() {
 			// eslint-disable-next-line
-			//return oc_isadmin
 			return OC.isUserAdmin()
 		},
 	},

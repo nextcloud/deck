@@ -32,12 +32,6 @@ export default {
 		assignedCards: [],
 	},
 	getters: {
-		dueOverdue: state => {
-			return state.withDue.filter((card) => {
-				return card
-			})
-
-		},
 		withDueDashboard: state => {
 			return state.withDue
 		},
@@ -52,7 +46,6 @@ export default {
 		setAssignedCards(state, assignedCards) {
 			state.assignedCards = assignedCards
 		},
-
 	},
 	actions: {
 		async loadDueDashboard({ commit }) {

@@ -90,7 +90,7 @@ const FILTER_ASSIGNED = 'assigned'
 
 const SUPPORTED_FILTERS = [
 	FILTER_ASSIGNED,
-	FILTER_DUE
+	FILTER_DUE,
 ]
 
 export default {
@@ -105,7 +105,7 @@ export default {
 			default: '',
 		},
 	},
-	data: function() {
+	data() {
 		return {
 			loading: true,
 		}
