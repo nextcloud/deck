@@ -64,6 +64,8 @@ class BoardService {
 	private $eventDispatcher;
 	private $changeHelper;
 
+	private $boardsCache = null;
+
 	public function __construct(
 		BoardMapper $boardMapper,
 		StackMapper $stackMapper,
@@ -109,6 +111,9 @@ class BoardService {
 	 * @return array
 	 */
 	public function findAll($since = -1, $details = null) {
+		if ($this->boardsCache) {
+			return $this->boardsCache;
+		}
 		$userInfo = $this->getBoardPrerequisites();
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null, $since);
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null,  $since);
@@ -139,6 +144,7 @@ class BoardService {
 				$result[$item->getId()] = $item;
 			}
 		}
+		$this->boardsCache = $result;
 		return array_values($result);
 	}
 
@@ -151,6 +157,9 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function find($boardId) {
+		if ($this->boardsCache && isset($this->boardsCache[$boardId])) {
+			return $this->boardsCache[$boardId];
+		}
 		if (is_numeric($boardId) === false) {
 			throw new BadRequestException('board id must be a number');
 		}
