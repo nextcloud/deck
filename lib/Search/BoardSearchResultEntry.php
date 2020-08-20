@@ -26,12 +26,10 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Search;
 
-
 use OCA\Deck\Db\Board;
 use OCP\Search\SearchResultEntry;
 
 class BoardSearchResultEntry extends SearchResultEntry {
-
 	public function __construct(Board $board, $urlGenerator) {
 		parent::__construct(
 			'',

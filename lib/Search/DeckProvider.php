@@ -26,7 +26,6 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Search;
 
-
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
@@ -69,9 +68,6 @@ class DeckProvider implements IProvider {
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getId(): string {
 		return 'deck';
 	}
@@ -80,12 +76,14 @@ class DeckProvider implements IProvider {
 		return 'Deck';
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
-		$boards = $this->boardService->findAll();
-		$cards = $this->cardMapper->search(array_map(function (Board $board) {
+		$boards = $this->boardService->getUserBoards();
+
+		$matchedBoards = array_filter($this->getUserBoards(-1), static function (Board $board) use ($query) {
+			return mb_stripos($board->getTitle(), $query->getTerm()) > -1;
+		});
+
+		$matchedCards = $this->cardMapper->search(array_map(static function (Board $board) {
 			return $board->getId();
 		}, $boards), $query->getTerm(), $query->getLimit(), $query->getCursor());
 
@@ -93,14 +91,13 @@ class DeckProvider implements IProvider {
 		$results = array_merge(
 			array_map(function (Board $board) {
 				return new BoardSearchResultEntry($board, $this->urlGenerator);
-			}, array_filter($boards, function($board) use ($query) {
-				return mb_strpos($board->getTitle(), $query->getTerm()) !== -1;
-			})),
+			}, $matchedBoards),
+
 			array_map(function (Card $card) use ($self) {
 				$board = $self->boardService->find($self->cardMapper->findBoardId($card->getId()));
 				$stack = $self->stackMapper->find($card->getStackId());
 				return new CardSearchResultEntry($board, $stack, $card, $this->urlGenerator);
-			}, $cards)
+			}, $matchedCards)
 		);
 
 		return SearchResult::complete(
@@ -111,7 +108,6 @@ class DeckProvider implements IProvider {
 
 	public function getOrder(string $route, array $routeParameters): int {
 		if ($route === 'deck.page.index') {
-			// Before comments
 			return -5;
 		}
 		return 10;
