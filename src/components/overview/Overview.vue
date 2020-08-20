@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<Controls :dashboard-name="filter" />
+		<Controls :dashboard-name="filterDisplayName" />
 
 		<div v-if="loading" key="loading" class="emptycontent">
 			<div class="icon icon-loading" />
@@ -31,82 +31,45 @@
 		</div>
 
 		<div v-else>
-			<div v-if="filter=='due'" class="dashboard">
+			<div v-if="isValidFilter" class="dashboard">
+				<div class="dashboard-column">
+					<h2>{{ t('deck', 'No due') }}</h2>
+					<div v-for="card in cardsByDueDate.nodue" :key="card.id">
+						<CardItem :id="card.id" />
+					</div>
+				</div>
+
 				<div class="dashboard-column">
 					<h2>{{ t('deck', 'Overdue') }}</h2>
-					<div v-for="card in withDueDashboardGroup.overdue" :key="card.id">
+					<div v-for="card in cardsByDueDate.overdue" :key="card.id">
 						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
 					<h2>{{ t('deck', 'Today') }}</h2>
-					<div v-for="card in withDueDashboardGroup.today" :key="card.id">
+					<div v-for="card in cardsByDueDate.today" :key="card.id">
 						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
 					<h2>{{ t('deck', 'Tomorrow') }}</h2>
-					<div v-for="card in withDueDashboardGroup.tomorrow" :key="card.id">
+					<div v-for="card in cardsByDueDate.tomorrow" :key="card.id">
 						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
 					<h2>{{ t('deck', 'This week') }}</h2>
-					<div v-for="card in withDueDashboardGroup.later" :key="card.id">
+					<div v-for="card in cardsByDueDate.thisWeek" :key="card.id">
 						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
 					<h2>{{ t('deck', 'Later') }}</h2>
-					<div v-for="card in withDueDashboardGroup.thisWeek" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
-				</div>
-			</div>
-
-			<div v-if="filter=='assigned'" class="dashboard">
-				<div class="dashboard-column">
-					<h2>{{ t('deck', 'no due') }}</h2>
-					<div v-for="card in assignedCardsDashboardGroup.nodue" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
-				</div>
-
-				<div class="dashboard-column">
-					<h2>{{ t('deck', 'overdue') }}</h2>
-					<div v-for="card in assignedCardsDashboardGroup.overdue" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
-				</div>
-
-				<div class="dashboard-column">
-					<h2>{{ t('deck', 'today') }}</h2>
-					<div v-for="card in assignedCardsDashboardGroup.today" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
-				</div>
-
-				<div class="dashboard-column">
-					<h2>{{ t('deck', 'tomorrow') }}</h2>
-					<div v-for="card in assignedCardsDashboardGroup.tomorrow" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
-				</div>
-
-				<div class="dashboard-column">
-					<h2>{{ t('deck', 'this week') }}</h2>
-					<div v-for="card in assignedCardsDashboardGroup.thisWeek" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
-				</div>
-
-				<div class="dashboard-column">
-					<h2>{{ t('deck', 'later') }}</h2>
-					<div v-for="card in withDueDashboardGroup.later" :key="card.id">
+					<div v-for="card in cardsByDueDate.later" :key="card.id">
 						<CardItem :id="card.id" />
 					</div>
 				</div>
@@ -121,6 +84,14 @@ import Controls from '../Controls'
 import CardItem from '../cards/CardItem'
 import { mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
+
+const FILTER_DUE = 'due'
+const FILTER_ASSIGNED = 'assigned'
+
+const SUPPORTED_FILTERS = [
+	FILTER_ASSIGNED,
+	FILTER_DUE
+]
 
 export default {
 	name: 'Dashboards',
@@ -140,15 +111,30 @@ export default {
 		}
 	},
 	computed: {
+		isValidFilter() {
+			return SUPPORTED_FILTERS.indexOf(this.filter) > -1
+		},
+		filterDisplayName() {
+			switch (this.filter) {
+			case 'assigned':
+				return t('deck', 'My assigned cards')
+			default:
+				return ''
+			}
+		},
 		...mapGetters([
 			'withDueDashboard',
 			'assignedCardsDashboard',
 		]),
-		withDueDashboardGroup() {
-			return this.groupByDue(this.withDueDashboard)
-		},
-		assignedCardsDashboardGroup() {
-			return this.groupByDue(this.assignedCardsDashboard)
+		cardsByDueDate() {
+			switch (this.filter) {
+			case FILTER_ASSIGNED:
+				return this.groupByDue(this.assignedCardsDashboard)
+			case FILTER_DUE:
+				return this.groupByDue(this.withDueDashboard)
+			default:
+				return null
+			}
 		},
 	},
 	watch: {

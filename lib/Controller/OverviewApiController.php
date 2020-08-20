@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2020 Jakob Röhrl <jakob.roehrl@web.de>
  *
@@ -23,36 +26,36 @@
 
 namespace OCA\Deck\Controller;
 
-
-use OCA\Deck\Service\DashboardService;
+use OCA\Deck\Service\OverviewService;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
-use OCP\AppFramework\Controller;
 
-class DashboardApiController extends OCSController {
+class OverviewApiController extends OCSController {
+
+	/** @var OverviewService */
+	private $dashboardService;
+
+	/** @var string */
 	private $userId;
-	private $cardService;
 
-	public function __construct($appName, IRequest $request, DashboardService $dashboardService, $userId) {
+	public function __construct($appName, IRequest $request, OverviewService $dashboardService, $userId) {
 		parent::__construct($appName, $request);
-		$this->userId = $userId;
 		$this->dashboardService = $dashboardService;
+		$this->userId = $userId;
 	}
 
 	/**
 	 * @NoAdminRequired
-	 * @return DataResponse
 	 */
-	public function findAllWithDue($userId) {
-		return new DataResponse($this->dashboardService->findAllWithDue($userId));
+	public function findAllWithDue(): DataResponse {
+		return new DataResponse($this->dashboardService->findAllWithDue($this->userId));
 	}
 
 	/**
 	 * @NoAdminRequired
-	 * @return DataResponse
 	 */
-	public function findAssignedCards($userId) {
-		return new DataResponse($this->dashboardService->findAssignedCards($userId));
+	public function findAssignedCards(): DataResponse {
+		return new DataResponse($this->dashboardService->findAssignedCards($this->userId));
 	}
 }

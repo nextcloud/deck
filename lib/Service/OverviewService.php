@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -27,6 +30,7 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\Card;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Label;
@@ -34,6 +38,7 @@ use OCA\Deck\Db\Stack;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\Comments\ICommentsManager;
 use OCP\IGroupManager;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
@@ -43,17 +48,25 @@ use OCA\Deck\BadRequestException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
-class DashboardService {
+class OverviewService {
+
+	/** @var BoardMapper */
 	private $boardMapper;
+	/** @var LabelMapper */
 	private $labelMapper;
+	/** @var CardMapper */
 	private $cardMapper;
+	/** @var AssignedUsersMapper */
 	private $assignedUsersMapper;
+	/** @var IUserManager */
 	private $userManager;
+	/** @var IGroupManager */
 	private $groupManager;
-	private $userId;
-	/** @var EventDispatcherInterface */
-	private $eventDispatcher;
-	
+	/** @var ICommentsManager */
+	private $commentsManager;
+	/** @var AttachmentService */
+	private $attachmentService;
+
 	public function __construct(
 		BoardMapper $boardMapper,
 		LabelMapper $labelMapper,
@@ -61,8 +74,8 @@ class DashboardService {
 		AssignedUsersMapper $assignedUsersMapper,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
-		EventDispatcherInterface $eventDispatcher,
-		$userId
+		ICommentsManager $commentsManager,
+		AttachmentService $attachmentService
 	) {
 		$this->boardMapper = $boardMapper;
 		$this->labelMapper = $labelMapper;
@@ -70,43 +83,33 @@ class DashboardService {
 		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
-		$this->eventDispatcher = $eventDispatcher;
-		$this->userId = $userId;
+		$this->commentsManager = $commentsManager;
+		$this->attachmentService = $attachmentService;
 	}
 
-	public function enrich($card) {
+	public function enrich(Card $card, string $userId): void {
 		$cardId = $card->getId();
+
 		$this->cardMapper->mapOwner($card);
 		$card->setAssignedUsers($this->assignedUsersMapper->find($cardId));
 		$card->setLabels($this->labelMapper->findAssignedLabelsForCard($cardId));
-		//$card->setAttachmentCount($this->attachmentService->count($cardId));
-		//$user = $this->userManager->get($this->userId);
-		//$lastRead = $this->commentsManager->getReadMark('deckCard', (string)$card->getId(), $user);
-		//$count = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId(), $lastRead);
-		//$card->setCommentsUnread($count);
+		$card->setAttachmentCount($this->attachmentService->count($cardId));
+
+		$user = $this->userManager->get($userId);
+		if ($user !== null) {
+			$lastRead = $this->commentsManager->getReadMark('deckCard', (string)$card->getId(), $user);
+			$count = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId(), $lastRead);
+			$card->setCommentsUnread($count);
+		}
 	}
 
-	/**
-	 * Set a different user than the current one, e.g. when no user is available in occ
-	 *
-	 * @param string $userId
-	 */
-	public function setUserId(string $userId): void {
-		$this->userId = $userId;
-	}
-
-	
-	/**
-	 * @return array
-	 */
-	public function findAllWithDue($userId) {
-		$userInfo = $this->getBoardPrerequisites();
-		$userBoards = $this->findAllBoardsFromUser($userInfo);
+	public function findAllWithDue(string $userId): array {
+		$userBoards = $this->findAllBoardsFromUser($userId);
 		$allDueCards = [];
 		foreach ($userBoards as $userBoard) {
 			$service = $this;
-			$allDueCards[] = array_map(function ($card) use ($service, $userBoard) {
-				$service->enrich($card);
+			$allDueCards[] = array_map(static function ($card) use ($service, $userBoard, $userId) {
+				$service->enrich($card, $userId);
 				$cardData = $card->jsonSerialize();
 				$cardData['boardId'] = $userBoard->getId();
 				return $cardData;
@@ -115,47 +118,37 @@ class DashboardService {
 		return $allDueCards;
 	}
 
-	/**
-	 * @return array
-	 */
-	public function findAssignedCards($userId) {
-		$userInfo = $this->getBoardPrerequisites();
-		$userBoards = $this->findAllBoardsFromUser($userInfo);
+	public function findAssignedCards(string $userId): array {
+		$userBoards = $this->findAllBoardsFromUser($userId);
 		$allAssignedCards = [];
 		foreach ($userBoards as $userBoard) {
 			$service = $this;
-			$allAssignedCards[] = array_map(function ($card) use ($service, $userBoard) {
-				$service->enrich($card);
+			$allAssignedCards[] = array_map(static function ($card) use ($service, $userBoard, $userId) {
+				$service->enrich($card, $userId);
 				$cardData = $card->jsonSerialize();
 				$cardData['boardId'] = $userBoard->getId();
 				return $cardData;
-			}, $this->cardMapper->findAssignedCards($userBoard->getId(), $this->userId));
+			}, $this->cardMapper->findAssignedCards($userBoard->getId(), $userId));
 		}
 		return $allAssignedCards;
 	}
 
-	/**
-	 * @return array
-	 */
-	private function findAllBoardsFromUser($userInfo, $since = -1) {
-		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null, $since);
-		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null,  $since);
-		$circleBoards = $this->boardMapper->findAllByCircles($userInfo['user'], null, null,  $since);
+	// FIXME: This is duplicate code with the board service
+
+	private function findAllBoardsFromUser(string $userId): array {
+		$userInfo = $this->getBoardPrerequisites($userId);
+		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null);
+		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null);
+		$circleBoards = $this->boardMapper->findAllByCircles($userInfo['user'], null, null);
 		return array_merge($userBoards, $groupBoards, $circleBoards);
 	}
 
-	/**
-	 * @return array
-	 */
-	private function getBoardPrerequisites() {
-		$groups = $this->groupManager->getUserGroupIds(
-			$this->userManager->get($this->userId)
-		);
+	private function getBoardPrerequisites($userId): array {
+		$user = $this->userManager->get($userId);
+		$groups = $user !== null ? $this->groupManager->getUserGroupIds($user) : [];
 		return [
-			'user' => $this->userId,
+			'user' => $userId,
 			'groups' => $groups
 		];
 	}
-
-
 }
