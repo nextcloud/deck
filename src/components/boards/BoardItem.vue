@@ -25,7 +25,7 @@
 		:title="board.title"
 		:to="routeTo"
 		class="board-list-row"
-		tag="div">
+		tag="a">
 		<div class="board-list-bullet-cell">
 			<div :style="{ 'background-color': `#${board.color}` }" class="board-list-bullet" />
 		</div>
@@ -77,6 +77,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+	.board-list-row {
+		&:hover, &:focus {
+			background-color: var(--color-background-hover);
+		}
+		cursor: pointer;
+	}
 
 	.board-list-bullet-cell {
 		padding: 6px 15px;
