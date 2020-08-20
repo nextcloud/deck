@@ -86,11 +86,11 @@
 						</template>
 					</Multiselect>
 					<div v-else class="avatar-list--readonly">
-						<Avatar v-for="option in currentCard.assignedUsers"
+						<Avatar v-for="option in assignedUsers"
 							:key="option.primaryKey"
-							:user="option.participant.uid"
-							:display-name="option.participant.displayname"
-							:is-no-user="scope.option.isNoUser"
+							:user="option.uid"
+							:display-name="option.displayname"
+							:is-no-user="option.isNoUser"
 							:size="32" />
 					</div>
 				</div>
