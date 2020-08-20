@@ -26,44 +26,44 @@
 
 		<div v-if="loading" key="loading" class="emptycontent">
 			<div class="icon icon-loading" />
-			<h2>{{ t('deck', 'Loading Dashboard') }}</h2>
+			<h2>{{ t('deck', 'Loading filtered view') }}</h2>
 			<p />
 		</div>
 
 		<div v-else>
 			<div v-if="filter=='due'" class="dashboard">
 				<div class="dashboard-column">
-					<h2>{{ t('deck', 'overdue') }}</h2>
+					<h2>{{ t('deck', 'Overdue') }}</h2>
 					<div v-for="card in withDueDashboardGroup.overdue" :key="card.id">
-						<CardItem :item="card" />
+						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
-					<h2>{{ t('deck', 'today') }}</h2>
+					<h2>{{ t('deck', 'Today') }}</h2>
 					<div v-for="card in withDueDashboardGroup.today" :key="card.id">
-						<CardItem :item="card" />
+						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
-					<h2>{{ t('deck', 'tomorrow') }}</h2>
+					<h2>{{ t('deck', 'Tomorrow') }}</h2>
 					<div v-for="card in withDueDashboardGroup.tomorrow" :key="card.id">
-						<CardItem :item="card" />
+						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
-					<h2>{{ t('deck', 'this week') }}</h2>
+					<h2>{{ t('deck', 'This week') }}</h2>
 					<div v-for="card in withDueDashboardGroup.later" :key="card.id">
-						<CardItem :item="card" />
+						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
-					<h2>{{ t('deck', 'later') }}</h2>
+					<h2>{{ t('deck', 'Later') }}</h2>
 					<div v-for="card in withDueDashboardGroup.thisWeek" :key="card.id">
-						<CardItem :item="card" />
+						<CardItem :id="card.id" />
 					</div>
 				</div>
 			</div>
@@ -72,42 +72,42 @@
 				<div class="dashboard-column">
 					<h2>{{ t('deck', 'no due') }}</h2>
 					<div v-for="card in assignedCardsDashboardGroup.nodue" :key="card.id">
-						<CardItem :item="card" />
+						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
 					<h2>{{ t('deck', 'overdue') }}</h2>
 					<div v-for="card in assignedCardsDashboardGroup.overdue" :key="card.id">
-						<CardItem :item="card" />
+						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
 					<h2>{{ t('deck', 'today') }}</h2>
 					<div v-for="card in assignedCardsDashboardGroup.today" :key="card.id">
-						<CardItem :item="card" />
+						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
 					<h2>{{ t('deck', 'tomorrow') }}</h2>
 					<div v-for="card in assignedCardsDashboardGroup.tomorrow" :key="card.id">
-						<CardItem :item="card" />
+						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
 					<h2>{{ t('deck', 'this week') }}</h2>
 					<div v-for="card in assignedCardsDashboardGroup.thisWeek" :key="card.id">
-						<CardItem :item="card" />
+						<CardItem :id="card.id" />
 					</div>
 				</div>
 
 				<div class="dashboard-column">
 					<h2>{{ t('deck', 'later') }}</h2>
 					<div v-for="card in withDueDashboardGroup.later" :key="card.id">
-						<CardItem :item="card" />
+						<CardItem :id="card.id" />
 					</div>
 				</div>
 			</div>

@@ -113,9 +113,15 @@ export default {
 			currentBoard: state => state.currentBoard,
 		}),
 		...mapGetters([
-			'canEdit',
 			'isArchived',
 		]),
+		canEdit() {
+			if (this.currentBoard) {
+				return this.$store.getters.canEdit
+			}
+			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
+			return board.permissions.PERMISSION_EDIT
+		},
 		card() {
 			return this.item ? this.item : this.$store.getters.cardById(this.id)
 		},
@@ -148,7 +154,7 @@ export default {
 	},
 	methods: {
 		openCard() {
-			const boardId = this.item ? this.item.boardId : this.$route.params.id
+			const boardId = this.card ? this.card.boardId : this.$route.params.id
 			this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id } }).catch(() => {})
 		},
 		startEditing(card) {

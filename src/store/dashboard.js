@@ -56,14 +56,22 @@ export default {
 	},
 	actions: {
 		async loadDueDashboard({ commit }) {
-			const withDue = await apiClient.findAllWithDue()
-			const withDueFlat = withDue.flat()
+			commit('setCurrentBoard', null)
+			const cardsWithDueDate = await apiClient.findAllWithDue()
+			const withDueFlat = cardsWithDueDate.flat()
+			for (const i in withDueFlat) {
+				commit('addCard', withDueFlat[i])
+			}
 			commit('setWithDueDashboard', withDueFlat)
 		},
 
 		async loadAssignDashboard({ commit }) {
+			commit('setCurrentBoard', null)
 			const assignedCards = await apiClient.findMyAssignedCards()
 			const assignedCardsFlat = assignedCards.flat()
+			for (const i in assignedCardsFlat) {
+				commit('addCard', assignedCardsFlat[i])
+			}
 			commit('setAssignedCards', assignedCardsFlat)
 		},
 	},

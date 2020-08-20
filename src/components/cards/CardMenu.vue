@@ -95,14 +95,19 @@ export default {
 	},
 	computed: {
 		...mapGetters([
-			'canEdit',
 			'isArchived',
 		]),
 		...mapState({
 			showArchived: state => state.showArchived,
 			currentBoard: state => state.currentBoard,
 		}),
-
+		canEdit() {
+			if (this.currentBoard) {
+				return this.$store.getters.canEdit
+			}
+			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
+			return board.permissions.PERMISSION_EDIT
+		},
 		isBoardAndStackChoosen() {
 			if (this.selectedBoard === '' || this.selectedStack === '') {
 				return false
