@@ -26,53 +26,37 @@ namespace OCA\Deck\DAV;
 use OCA\DAV\CalDAV\Integration\ExternalCalendar;
 use OCA\DAV\CalDAV\Integration\ICalendarProvider;
 use OCA\Deck\Db\Board;
-use OCA\Deck\Service\BoardService;
 
 class CalendarPlugin implements ICalendarProvider {
 
-	/**
-	 * @var BoardService
-	 */
-	private $boardService;
+	/** @var DeckCalendarBackend */
+	private $backend;
 
-	public function __construct(BoardService $boardService) {
-		$this->boardService = $boardService;
+	public function __construct(DeckCalendarBackend $backend) {
+		$this->backend = $backend;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getAppId(): string {
 		return 'deck';
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function fetchAllForCalendarHome(string $principalUri): array {
-		$boards = $this->boardService->findAll();
 		return array_map(function (Board $board) use ($principalUri) {
-			return new Calendar($principalUri, 'board-' . $board->getId(), $board);
-		}, $boards);
+			return new Calendar($principalUri, 'board-' . $board->getId(), $board, $this->backend);
+		}, $this->backend->getBoards());
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function hasCalendarInCalendarHome(string $principalUri, string $calendarUri): bool {
-		$boards = array_map(function(Board $board) {
+		$boards = array_map(static function (Board $board) {
 			return 'board-' . $board->getId();
-		}, $this->boardService->findAll());
+		}, $this->backend->getBoards());
 		return in_array($calendarUri, $boards, true);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getCalendarInCalendarHome(string $principalUri, string $calendarUri): ?ExternalCalendar {
 		if ($this->hasCalendarInCalendarHome($principalUri, $calendarUri)) {
-			$board = $this->boardService->find(str_replace('board-', '', $calendarUri));
-			return new Calendar($principalUri, $calendarUri, $board);
+			$board = $this->backend->getBoard((int)str_replace('board-', '', $calendarUri));
+			return new Calendar($principalUri, $calendarUri, $board, $this->backend);
 		}
 
 		return null;

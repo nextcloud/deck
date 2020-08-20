@@ -23,130 +23,88 @@
 namespace OCA\Deck\DAV;
 
 use OCA\Deck\Db\Card;
-use OCA\Deck\Service\CardService;
+use OCA\Deck\Db\Stack;
+use Sabre\CalDAV\ICalendarObject;
+use Sabre\DAV\Exception\Forbidden;
+use Sabre\DAVACL\IACL;
 use Sabre\VObject\Component\VCalendar;
 
-class CalendarObject implements \Sabre\CalDAV\ICalendarObject, \Sabre\DAVACL\IACL {
+class CalendarObject implements ICalendarObject, IACL {
 
 	/** @var Calendar */
 	private $calendar;
-
 	/** @var string */
 	private $name;
-	/**
-	 * @var Card
-	 */
+	/** @var Card|Stack */
 	private $sourceItem;
+	/** @var DeckCalendarBackend */
+	private $backend;
+	/** @var VCalendar */
+	private $calendarObject;
 
-	/**
-	 * CalendarObject constructor.
-	 *
-	 * @param Calendar $calendar
-	 * @param string $name
-	 */
-	public function __construct(Calendar $calendar, string $name, $sourceItem = null) {
+	public function __construct(Calendar $calendar, string $name, $sourceItem = null, DeckCalendarBackend $backend) {
 		$this->calendar = $calendar;
 		$this->name = $name;
 		$this->sourceItem = $sourceItem;
+		$this->backend = $backend;
+		$this->calendarObject = $this->sourceItem->getCalendarObject();
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	function getOwner() {
+	public function getOwner() {
 		return null;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	function getGroup() {
+	public function getGroup() {
 		return null;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	function getACL() {
+	public function getACL() {
 		return $this->calendar->getACL();
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	function setACL(array $acl) {
-		throw new \Sabre\DAV\Exception\Forbidden('Setting ACL is not supported on this node');
+	public function setACL(array $acl) {
+		throw new Forbidden('Setting ACL is not supported on this node');
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	function getSupportedPrivilegeSet() {
+	public function getSupportedPrivilegeSet() {
 		return null;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	function put($data) {
-		throw new \Sabre\DAV\Exception\Forbidden('This calendar-object is read-only');
+	public function put($data) {
+		throw new Forbidden('This calendar-object is read-only');
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	function get() {
+	public function get() {
 		if ($this->sourceItem) {
-			return $this->sourceItem->getCalendarObject()->serialize();
+			return $this->calendarObject->serialize();
 		}
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	function getContentType() {
+	public function getContentType() {
 		return 'text/calendar; charset=utf-8';
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	function getETag() {
-		return '"' . md5($this->get()) . '"';
+	public function getETag() {
+		return '"' . md5($this->sourceItem->getLastModified()) . '"';
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	function getSize() {
-		return strlen($this->get());
+	public function getSize() {
+		return mb_strlen($this->calendarObject->serialize());
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	function delete() {
-		throw new \Sabre\DAV\Exception\Forbidden('This calendar-object is read-only');
+	public function delete() {
+		throw new Forbidden('This calendar-object is read-only');
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	function getName() {
+	public function getName() {
 		return $this->name;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	function setName($name) {
-		throw new \Sabre\DAV\Exception\Forbidden('This calendar-object is read-only');
+	public function setName($name) {
+		throw new Forbidden('This calendar-object is read-only');
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	function getLastModified() {
+	public function getLastModified() {
 		return $this->sourceItem->getLastModified();
 	}
 }

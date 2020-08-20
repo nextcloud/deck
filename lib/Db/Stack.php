@@ -65,5 +65,4 @@ class Stack extends RelationalEntity {
 	public function getCalendarPrefix(): string {
 		return 'stack';
 	}
-
 }

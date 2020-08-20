@@ -159,5 +159,4 @@ class Card extends RelationalEntity {
 	public function getCalendarPrefix(): string {
 		return 'card';
 	}
-
 }
