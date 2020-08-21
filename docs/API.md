@@ -272,7 +272,7 @@ Returns an array of board items
 | --------- | ------ | ---------------------------------------------------- |
 | title     | String | The title of the board, maximum length is limited to 100 characters |
 | color     | String | The hexadecimal color of the board (e.g. FF0000) |
-| archived  | Bool   | The hexadecimal color of the board (e.g. FF0000) |
+| archived  | Bool   | Whether or not this board should be archived. |
 
 ```json
 {
