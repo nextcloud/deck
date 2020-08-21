@@ -198,7 +198,7 @@ export default {
 	}
 
 	.avatardiv {
-		background-color: #f5f5f5;
+		background-color: var(--color-background-dark);
 		border-radius: 16px;
 		width: 32px;
 		height: 32px;
