@@ -79,7 +79,7 @@ class DeckProvider implements IProvider {
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
 		$boards = $this->boardService->getUserBoards();
 
-		$matchedBoards = array_filter($this->getUserBoards(-1), static function (Board $board) use ($query) {
+		$matchedBoards = array_filter($this->boardService->getUserBoards(), static function (Board $board) use ($query) {
 			return mb_stripos($board->getTitle(), $query->getTerm()) > -1;
 		});
 
