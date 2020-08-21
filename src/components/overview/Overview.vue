@@ -117,7 +117,7 @@ export default {
 		filterDisplayName() {
 			switch (this.filter) {
 			case FILTER_ASSIGNED:
-				return t('deck', 'Assigned cards')
+				return t('deck', 'Upcoming cards')
 			default:
 				return ''
 			}
