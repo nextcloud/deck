@@ -22,6 +22,8 @@ OC.L10N.register(
     "Update" : "Yenilənmə",
     "(group)" : "(qrup)",
     "seconds ago" : "saniyələr öncə",
-    "Shared with you" : "Shared with you"
+    "Shared with you" : "Shared with you",
+    "Today" : "Bu gün",
+    "Tomorrow" : "Sabah"
 },
 "nplurals=2; plural=(n != 1);");

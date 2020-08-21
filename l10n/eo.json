@@ -117,6 +117,8 @@
     "New board title" : "Nova tabultitolo",
     "Edit board" : "Modifi tabulon",
     "An error occurred" : "Eraro okazis",
+    "Today" : "Hodiaŭ",
+    "Tomorrow" : "Morgaŭ",
     "Link to a board" : "Ligilo al tabulo",
     "Maximum file size of {size} exceeded" : "Maksimuma dosiergrando {size} transpasita"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

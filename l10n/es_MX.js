@@ -55,6 +55,9 @@ OC.L10N.register(
     "New board title" : "Nuevo título del tablero",
     "Edit board" : "Editar el tablero",
     "Board details" : "Detalles del tablero",
-    "An error occurred" : "Ha ocurrido un error"
+    "An error occurred" : "Ha ocurrido un error",
+    "Today" : "Hoy",
+    "Tomorrow" : "Mañana",
+    "This week" : "Esta semana"
 },
 "nplurals=2; plural=(n != 1);");

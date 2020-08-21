@@ -49,6 +49,9 @@ OC.L10N.register(
     "Shared with you" : "გაზიარებული თქვენთან",
     "New board title" : "ახალი დაფის სახელი",
     "Edit board" : "დაფის შეცვლა",
-    "Board details" : "დაფის დეტალები"
+    "Board details" : "დაფის დეტალები",
+    "Today" : "დღეს",
+    "Tomorrow" : "ხვალ",
+    "This week" : "ამ კვირაში"
 },
 "nplurals=2; plural=(n!=1);");

@@ -30,6 +30,9 @@ OC.L10N.register(
     "Update" : "Actualisation",
     "(group)" : "(gruppo)",
     "seconds ago" : "secundas passate",
-    "Shared with you" : "Compartite con te"
+    "Shared with you" : "Compartite con te",
+    "Today" : "Hodie",
+    "Tomorrow" : "Deman",
+    "This week" : "Iste septimana"
 },
 "nplurals=2; plural=(n != 1);");

@@ -22,6 +22,8 @@ OC.L10N.register(
     "Update" : "Diweddaru",
     "seconds ago" : "eiliad yn ôl",
     "Shared with you" : "Shared with you",
-    "An error occurred" : "Digwyddodd gwall"
+    "An error occurred" : "Digwyddodd gwall",
+    "Today" : "Heddiw",
+    "This week" : "Wythnos yma"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

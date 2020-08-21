@@ -22,6 +22,8 @@ OC.L10N.register(
     "Update" : "পরিবর্ধন",
     "(group)" : "(গোষ্ঠি)",
     "seconds ago" : "সেকেন্ড পূর্বে",
-    "Shared with you" : "Shared with you"
+    "Shared with you" : "Shared with you",
+    "Today" : "আজ",
+    "Tomorrow" : "আগামীকাল"
 },
 "nplurals=2; plural=(n != 1);");

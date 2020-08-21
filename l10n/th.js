@@ -25,6 +25,8 @@ OC.L10N.register(
     "Update" : "อัพเดท",
     "(group)" : "(กลุ่ม)",
     "seconds ago" : "วินาที ก่อนหน้านี้",
-    "Shared with you" : "Shared with you"
+    "Shared with you" : "Shared with you",
+    "Today" : "วันนี้",
+    "Tomorrow" : "วันพรุ่งนี้"
 },
 "nplurals=1; plural=0;");

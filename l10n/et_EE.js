@@ -29,6 +29,8 @@ OC.L10N.register(
     "(group)" : "(grupp)",
     "seconds ago" : "sekundit tagasi",
     "Shared with you" : "Sinuga jagatud",
-    "An error occurred" : "Tekkis tõrge"
+    "An error occurred" : "Tekkis tõrge",
+    "Today" : "Täna",
+    "Tomorrow" : "Homme"
 },
 "nplurals=2; plural=(n != 1);");

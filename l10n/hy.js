@@ -16,6 +16,8 @@ OC.L10N.register(
     "Save" : "Պահպանել",
     "Update" : "Թարմացնել",
     "seconds ago" : "վրկ. առաջ",
-    "Shared with you" : "Shared with you"
+    "Shared with you" : "Shared with you",
+    "Today" : "այսօր",
+    "This week" : "այս շաբաթ"
 },
 "nplurals=2; plural=(n != 1);");

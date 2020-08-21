@@ -37,6 +37,9 @@ OC.L10N.register(
     "Update" : "Anovar",
     "(group)" : "(grupu)",
     "seconds ago" : "hai segundos",
-    "Shared with you" : "Shared with you"
+    "Shared with you" : "Shared with you",
+    "Today" : "Güei",
+    "Tomorrow" : "Mañana",
+    "This week" : "Esta selmana"
 },
 "nplurals=2; plural=(n != 1);");

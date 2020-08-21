@@ -28,6 +28,9 @@
     "Update" : "Шинэчлэх",
     "(group)" : "(бүлэг)",
     "seconds ago" : "хоёрдахь өмнө",
-    "Shared with you" : "тантай хуваалцсан"
+    "Shared with you" : "тантай хуваалцсан",
+    "Today" : "өнөөдөр",
+    "Tomorrow" : "маргааш",
+    "This week" : "7 хоног"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

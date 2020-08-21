@@ -130,6 +130,9 @@ OC.L10N.register(
     "Shared with you" : "با شما به اشتراک گذاشته شده است",
     "New board title" : "عنوان تختهٔ جدید",
     "Edit board" : "ویرایش تخته",
-    "An error occurred" : "خطایی روی داد"
+    "An error occurred" : "خطایی روی داد",
+    "Today" : "Today",
+    "Tomorrow" : "فردا",
+    "This week" : "این هفته"
 },
 "nplurals=2; plural=(n > 1);");

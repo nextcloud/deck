@@ -13,6 +13,7 @@ OC.L10N.register(
     "Save" : "حفظ",
     "Reply" : "جواب",
     "seconds ago" : "سیکنڈز پہلے",
-    "Shared with you" : "Shared with you"
+    "Shared with you" : "Shared with you",
+    "Today" : "آج"
 },
 "nplurals=2; plural=(n != 1);");

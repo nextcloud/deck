@@ -47,6 +47,9 @@
     "Shared with you" : "გაზიარებული თქვენთან",
     "New board title" : "ახალი დაფის სახელი",
     "Edit board" : "დაფის შეცვლა",
-    "Board details" : "დაფის დეტალები"
+    "Board details" : "დაფის დეტალები",
+    "Today" : "დღეს",
+    "Tomorrow" : "ხვალ",
+    "This week" : "ამ კვირაში"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }

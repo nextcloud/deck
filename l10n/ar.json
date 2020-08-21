@@ -140,6 +140,9 @@
     "An error occurred" : "طرأ هناك خطأ",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "هل انت متأكد تريد مسح اللوح {title}؟ هذا سوف يمسح جميع بيانات هذا اللوح.",
     "Delete the board?" : "مسح اللوح؟",
+    "Today" : "اليوم",
+    "Tomorrow" : "غدا",
+    "This week" : "هذا الأسبوع",
     "Link to a board" : "ربط بلوح",
     "Link to a card" : "ربط ببطاقة",
     "Something went wrong" : "شيئا ما خاطئ"

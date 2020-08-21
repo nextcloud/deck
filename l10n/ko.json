@@ -90,6 +90,9 @@
     "An error occurred" : "오류가 발생함",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "정말로 보드 {title}을 지우시겠습니까? 보드의 모든 데이터가 삭제됩니다.",
     "Delete the board?" : "보드를 삭제합니까?",
+    "Today" : "오늘",
+    "Tomorrow" : "내일",
+    "This week" : "이번 주",
     "Something went wrong" : "잘못된 접근"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

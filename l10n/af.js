@@ -30,6 +30,8 @@ OC.L10N.register(
     "Update" : "Werk by",
     "seconds ago" : "sekondes gelede",
     "Shared with you" : "Met u gedeel",
-    "An error occurred" : "'n Fout het voorgekom"
+    "An error occurred" : "'n Fout het voorgekom",
+    "Today" : "Vandag",
+    "Tomorrow" : "Môre"
 },
 "nplurals=2; plural=(n != 1);");

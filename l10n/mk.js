@@ -32,6 +32,9 @@ OC.L10N.register(
     "(group)" : "(group)",
     "seconds ago" : "пред неколку секунди",
     "Shared with you" : "Споделено со тебе",
-    "An error occurred" : "Настана грешка"
+    "An error occurred" : "Настана грешка",
+    "Today" : "Денес",
+    "Tomorrow" : "Утре",
+    "This week" : "Оваа недела"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

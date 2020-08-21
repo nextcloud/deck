@@ -56,6 +56,9 @@ OC.L10N.register(
     "New board title" : "Ny titel på liste",
     "Edit board" : "Rediger liste",
     "Board details" : "Liste detaljer",
-    "An error occurred" : "Der var en fejl"
+    "An error occurred" : "Der var en fejl",
+    "Today" : "I dag",
+    "Tomorrow" : "I morgen",
+    "This week" : "Denne uge"
 },
 "nplurals=2; plural=(n != 1);");

@@ -60,6 +60,9 @@ OC.L10N.register(
     "Shared with you" : "與您分享",
     "Edit board" : "編輯專案",
     "An error occurred" : "發生錯誤",
+    "Today" : "今天",
+    "Tomorrow" : "明天",
+    "This week" : "本週",
     "Link to a board" : "連結到佈告欄",
     "Maximum file size of {size} exceeded" : "達到最大的檔案大小 {size} "
 },

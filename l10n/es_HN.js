@@ -48,6 +48,9 @@ OC.L10N.register(
     "Shared with you" : "Compartido con usted",
     "New board title" : "Nuevo título del tablero",
     "Edit board" : "Editar el tablero",
-    "Board details" : "Detalles del tablero"
+    "Board details" : "Detalles del tablero",
+    "Today" : "Hoy",
+    "Tomorrow" : "Mañana",
+    "This week" : "Esta semana"
 },
 "nplurals=2; plural=(n != 1);");

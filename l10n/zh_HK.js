@@ -15,6 +15,8 @@ OC.L10N.register(
     "Reply" : "回覆",
     "Update" : "更新",
     "seconds ago" : "秒前",
-    "Shared with you" : "Shared with you"
+    "Shared with you" : "Shared with you",
+    "Today" : "今日",
+    "Tomorrow" : "明天"
 },
 "nplurals=1; plural=0;");

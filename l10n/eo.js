@@ -119,6 +119,8 @@ OC.L10N.register(
     "New board title" : "Nova tabultitolo",
     "Edit board" : "Modifi tabulon",
     "An error occurred" : "Eraro okazis",
+    "Today" : "Hodiaŭ",
+    "Tomorrow" : "Morgaŭ",
     "Link to a board" : "Ligilo al tabulo",
     "Maximum file size of {size} exceeded" : "Maksimuma dosiergrando {size} transpasita"
 },

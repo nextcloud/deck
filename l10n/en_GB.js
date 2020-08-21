@@ -56,6 +56,9 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "New board title" : "New board title",
     "Edit board" : "Edit board",
-    "Board details" : "Board details"
+    "Board details" : "Board details",
+    "Today" : "Today",
+    "Tomorrow" : "Tomorrow",
+    "This week" : "This week"
 },
 "nplurals=2; plural=(n != 1);");

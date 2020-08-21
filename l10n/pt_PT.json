@@ -48,6 +48,9 @@
     "New board title" : "Novo título de quadro",
     "Edit board" : "Editar quadro",
     "Board details" : "Detalhes do quadro",
-    "An error occurred" : "Ocorreu um erro"
+    "An error occurred" : "Ocorreu um erro",
+    "Today" : "Hoje",
+    "Tomorrow" : "Amanhã",
+    "This week" : "Esta semana"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

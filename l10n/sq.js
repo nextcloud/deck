@@ -49,6 +49,9 @@ OC.L10N.register(
     "Shared with you" : "E ndarë me ju",
     "New board title" : "Titull i ri bordi",
     "Edit board" : "Tabela e editimeve",
-    "Board details" : "Detajet e Tabeles "
+    "Board details" : "Detajet e Tabeles ",
+    "Today" : "Sot",
+    "Tomorrow" : "Nesër",
+    "This week" : "Këtë javë"
 },
 "nplurals=2; plural=(n != 1);");

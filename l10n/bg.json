@@ -39,6 +39,9 @@
     "(group)" : "(група)",
     "seconds ago" : "преди секунди",
     "Shared with you" : "Споделени с вас",
-    "An error occurred" : "Възникна грешка"
+    "An error occurred" : "Възникна грешка",
+    "Today" : "Днес",
+    "Tomorrow" : "Утре",
+    "This week" : "Тази седмица"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

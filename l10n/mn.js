@@ -30,6 +30,9 @@ OC.L10N.register(
     "Update" : "Шинэчлэх",
     "(group)" : "(бүлэг)",
     "seconds ago" : "хоёрдахь өмнө",
-    "Shared with you" : "тантай хуваалцсан"
+    "Shared with you" : "тантай хуваалцсан",
+    "Today" : "өнөөдөр",
+    "Tomorrow" : "маргааш",
+    "This week" : "7 хоног"
 },
 "nplurals=2; plural=(n != 1);");
