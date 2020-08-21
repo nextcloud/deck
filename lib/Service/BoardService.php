@@ -415,7 +415,7 @@ class BoardService {
 		}
 
 		if ($title === false || $title === null) {
-			throw new BadRequestException('color must be provided');
+			throw new BadRequestException('title must be provided');
 		}
 
 		if ($color === false || $color === null) {
