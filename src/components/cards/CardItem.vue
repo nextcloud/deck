@@ -189,10 +189,14 @@ export default {
 	.card {
 		transition: box-shadow 0.1s ease-in-out;
 		box-shadow: 0 0 2px 0 var(--color-box-shadow);
-		border-radius: 3px;
+		border-radius: var(--border-radius-large);
 		font-size: 100%;
 		background-color: var(--color-main-background);
 		margin-bottom: $card-spacing;
+
+		body.dark &, body.theme--dark & {
+			border: 2px solid var(--color-border);
+		}
 
 		&.current-card {
 			box-shadow: 0 0 5px 0 var(--color-box-shadow);

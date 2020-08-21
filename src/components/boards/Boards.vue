@@ -79,10 +79,11 @@ export default {
 
 <style lang="scss">
 	.board-list {
+		margin-top: -44px;
 
 		.board-list-row {
 			align-items: center;
-			border-bottom: 1px solid #ededed;
+			border-bottom: 1px solid var(--color-border);
 			display: flex;
 		}
 
@@ -93,6 +94,7 @@ export default {
 
 		.board-list-header-row {
 			color: var(--color-text-lighter);
+			height: 44px;
 		}
 
 		.board-list-bullet-cell,
