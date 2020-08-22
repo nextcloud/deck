@@ -14,6 +14,7 @@ OC.L10N.register(
     "Delete" : "Dilemel",
     "Edit" : "Cheñch",
     "Description" : "Diskrivadur",
+    "Comments" : "Displegadennoù",
     "Modified" : "Cheñchet",
     "Save" : "Enrollañ",
     "Reply" : "Respont",
