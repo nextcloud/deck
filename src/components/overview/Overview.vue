@@ -32,7 +32,7 @@
 
 		<div v-else>
 			<div v-if="isValidFilter" class="dashboard">
-				<div class="dashboard-column">
+				<div v-if="cardsByDueDate.overdue.length > 0" class="dashboard-column">
 					<h3>{{ t('deck', 'Overdue') }}</h3>
 					<div v-for="card in cardsByDueDate.overdue" :key="card.id">
 						<CardItem :id="card.id" />
