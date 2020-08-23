@@ -223,7 +223,7 @@ OC.L10N.register(
     "Delete the board?" : "Das Board löschen?",
     "Loading filtered view" : "Lade gefilterte Ansicht",
     "No due" : "Kein Fälligkeitsdatum",
-    "Today" : "Benötigt keine Übersetzung. Für Android wird nur die formelle Übersetzung verwendet (de_DE).",
+    "Today" : "Heute",
     "Tomorrow" : "Morgen",
     "This week" : "Diese Woche",
     "Link to a board" : "Mit einem Board verknüpfen",
