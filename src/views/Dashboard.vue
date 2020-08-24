@@ -21,27 +21,41 @@
   -->
 
 <template>
-	<div>
-		<a v-for="card in assignedCardsDashboard"
-			:key="card.id"
-			:href="cardLink(card)"
-			class="card">
-			<div class="card--header">
-				<DueDate class="right" :card="card" />
-				<span>{{ card.title }}</span>
-			</div>
-			<ul v-if="card.labels && card.labels.length"
-				class="labels"
-				@click="openCard">
-				<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)">
-					<span>{{ label.title }}</span>
-				</li>
-			</ul>
-		</a>
-	</div>
+	<DashboardWidget :items="cards"
+		:show-more-url="showMoreUrl"
+		:loading="loading"
+		@hide="() => {}"
+		@markDone="() => {}">
+		<template v-slot:default="{ item }">
+			<a :key="item.id"
+				:href="cardLink(item)"
+				target="_blank"
+				class="card">
+				<div class="card--header">
+					<DueDate class="right" :card="item" />
+					<span class="title">{{ item.title }}</span>
+				</div>
+				<ul v-if="item.labels && item.labels.length"
+					class="labels">
+					<li v-for="label in item.labels" :key="label.id" :style="labelStyle(label)">
+						<span>{{ label.title }}</span>
+					</li>
+				</ul>
+			</a>
+		</template>
+		<template v-slot:empty-content>
+			<EmptyContent
+				id="deck-widget-empty-content"
+				icon="icon-deck">
+				{{ t('deck', 'No upcoming cards') }}
+			</EmptyContent>
+		</template>
+	</DashboardWidget>
 </template>
 
 <script>
+import { DashboardWidget } from '@nextcloud/vue-dashboard'
+import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import { mapGetters } from 'vuex'
 import labelStyle from './../mixins/labelStyle'
 import DueDate from '../components/cards/badges/DueDate'
@@ -51,27 +65,44 @@ export default {
 	name: 'Dashboard',
 	components: {
 		DueDate,
+		EmptyContent,
+		DashboardWidget,
 	},
 	mixins: [ labelStyle ],
+	data() {
+		return {
+			loading: false,
+		}
+	},
 	computed: {
 		...mapGetters([
-			'withDueDashboard',
 			'assignedCardsDashboard',
 		]),
 		cards() {
-			return [
-				...this.withDueDashboard,
+			const list = [
 				...this.assignedCardsDashboard,
-			]
+			].filter((card) => {
+				return card.duedate !== null
+			})
+			list.sort((a, b) => {
+				return (new Date(a.duedate)).getTime() - (new Date(b.duedate)).getTime()
+			})
+			return list
 		},
 		cardLink() {
 			return (card) => {
 				return generateUrl('/apps/deck') + `#/board/${card.boardId}/card/${card.id}`
 			}
 		},
+		showMoreUrl() {
+			return this.cards.length > 7 ? generateUrl('/apps/deck') : null
+		},
 	},
 	beforeMount() {
-		this.$store.dispatch('loadAssignDashboard')
+		this.loading = true
+		this.$store.dispatch('loadAssignDashboard').then(() => {
+			this.loading = false
+		})
 	},
 }
 </script>
@@ -82,8 +113,8 @@ export default {
 	.card {
 		display: block;
 		border-radius: var(--border-radius-large);
-		margin-bottom: 8px;
-		padding: 5px;
+		padding: 8px;
+		height: 60px;
 
 		&:hover {
 			background-color: var(--color-background-hover);
@@ -92,10 +123,11 @@ export default {
 
 	.card--header {
 		overflow: hidden;
-		margin-bottom: 5px;
-		span {
-			display: inline-block;
-			padding: 5px;
+		.title {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			display: block;
 		}
 	}
 
@@ -105,7 +137,9 @@ export default {
 
 	.duedate::v-deep {
 		.due {
-			margin: 0;
+			margin: 0 0 0 10px;
+			padding: 2px 4px;
+			font-size: 90%;
 		}
 	}
 
