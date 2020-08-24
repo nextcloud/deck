@@ -267,9 +267,9 @@ export default {
 	@import './../../css/variables';
 
 	.stack {
-		width: $stack-width;
-		margin-left: $stack-spacing;
-		margin-right: $stack-spacing;
+		width: $stack-width + $stack-spacing*3;
+		margin-left: $stack-spacing/2;
+		margin-right: $stack-spacing/2;
 	}
 
 	.stack--header {
@@ -337,10 +337,6 @@ export default {
 		input {
 			border: none;
 		}
-	}
-
-	.stack .smooth-dnd-container.vertical {
-		margin-top: 3px;
 	}
 
 	/**
