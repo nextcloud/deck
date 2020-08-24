@@ -28,39 +28,22 @@ Vue.use(Vuex)
 const apiClient = new OverviewApi()
 export default {
 	state: {
-		withDue: [],
 		assignedCards: [],
 	},
 	getters: {
-		withDueDashboard: state => {
-			return state.withDue
-		},
 		assignedCardsDashboard: state => {
 			return state.assignedCards
 		},
 	},
 	mutations: {
-		setWithDueDashboard(state, withDue) {
-			state.withDue = withDue
-		},
 		setAssignedCards(state, assignedCards) {
 			state.assignedCards = assignedCards
 		},
 	},
 	actions: {
-		async loadDueDashboard({ commit }) {
+		async loadUpcoming({ commit }) {
 			commit('setCurrentBoard', null)
-			const cardsWithDueDate = await apiClient.findAllWithDue()
-			const withDueFlat = cardsWithDueDate.flat()
-			for (const i in withDueFlat) {
-				commit('addCard', withDueFlat[i])
-			}
-			commit('setWithDueDashboard', withDueFlat)
-		},
-
-		async loadAssignDashboard({ commit }) {
-			commit('setCurrentBoard', null)
-			const assignedCards = await apiClient.findMyAssignedCards()
+			const assignedCards = await apiClient.get('upcoming')
 			const assignedCardsFlat = assignedCards.flat()
 			for (const i in assignedCardsFlat) {
 				commit('addCard', assignedCardsFlat[i])

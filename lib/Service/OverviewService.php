@@ -107,13 +107,13 @@ class OverviewService {
 		return $allDueCards;
 	}
 
-	public function findAssignedCards(string $userId): array {
+	public function findUpcomingCards(string $userId): array {
 		$userBoards = $this->findAllBoardsFromUser($userId);
 		$findCards = [];
 		foreach ($userBoards as $userBoard) {
 			$service = $this;
 
-			if (count($userBoard->getAcl()) == 0) {
+			if (count($userBoard->getAcl()) === 0) {
 				// get cards with due date
 				$findCards[] = array_map(static function ($card) use ($service, $userBoard, $userId) {
 					$service->enrich($card, $userId);
@@ -122,7 +122,7 @@ class OverviewService {
 					return $cardData;
 				}, $this->cardMapper->findAllWithDue($userBoard->getId()));
 			} else {
-				// get assigned cards 
+				// get assigned cards
 				$findCards[] = array_map(static function ($card) use ($service, $userBoard, $userId) {
 					$service->enrich($card, $userId);
 					$cardData = $card->jsonSerialize();
@@ -130,13 +130,11 @@ class OverviewService {
 					return $cardData;
 				}, $this->cardMapper->findAssignedCards($userBoard->getId(), $userId));
 			}
-			
 		}
 		return $findCards;
 	}
 
 	// FIXME: This is duplicate code with the board service
-
 	private function findAllBoardsFromUser(string $userId): array {
 		$userInfo = $this->getBoardPrerequisites($userId);
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null);

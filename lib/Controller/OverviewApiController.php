@@ -48,14 +48,7 @@ class OverviewApiController extends OCSController {
 	/**
 	 * @NoAdminRequired
 	 */
-	public function findAllWithDue(): DataResponse {
-		return new DataResponse($this->dashboardService->findAllWithDue($this->userId));
-	}
-
-	/**
-	 * @NoAdminRequired
-	 */
-	public function findAssignedCards(): DataResponse {
-		return new DataResponse($this->dashboardService->findAssignedCards($this->userId));
+	public function upcomingCards(): DataResponse {
+		return new DataResponse($this->dashboardService->findUpcomingCards($this->userId));
 	}
 }

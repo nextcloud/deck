@@ -85,12 +85,10 @@ import CardItem from '../cards/CardItem'
 import { mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
 
-const FILTER_DUE = 'due'
-const FILTER_ASSIGNED = 'assigned'
+const FILTER_UPCOMING = 'upcoming'
 
 const SUPPORTED_FILTERS = [
-	FILTER_ASSIGNED,
-	FILTER_DUE,
+	FILTER_UPCOMING,
 ]
 
 export default {
@@ -102,7 +100,7 @@ export default {
 	props: {
 		filter: {
 			type: String,
-			default: FILTER_ASSIGNED,
+			default: FILTER_UPCOMING,
 		},
 	},
 	data() {
@@ -116,25 +114,21 @@ export default {
 		},
 		filterDisplayName() {
 			switch (this.filter) {
-			case FILTER_ASSIGNED:
+			case FILTER_UPCOMING:
 				return t('deck', 'Upcoming cards')
 			default:
 				return ''
 			}
 		},
 		...mapGetters([
-			'withDueDashboard',
 			'assignedCardsDashboard',
 		]),
 		cardsByDueDate() {
 			switch (this.filter) {
-			case FILTER_ASSIGNED:
+			case FILTER_UPCOMING:
 				return this.groupByDue(this.assignedCardsDashboard)
-			case FILTER_DUE:
-				return this.groupByDue(this.withDueDashboard)
-			default:
-				return null
 			}
+			return null
 		},
 	},
 	watch: {
@@ -149,12 +143,8 @@ export default {
 		async getData() {
 			this.loading = true
 			try {
-				if (this.filter === 'due') {
-					await this.$store.dispatch('loadDueDashboard')
-				}
-
-				if (this.filter === 'assigned') {
-					await this.$store.dispatch('loadAssignDashboard')
+				if (this.filter === FILTER_UPCOMING) {
+					await this.$store.dispatch('loadUpcoming')
 				}
 			} catch (e) {
 				console.error(e)
@@ -172,7 +162,6 @@ export default {
 				later: [],
 			}
 			dataset.forEach(card => {
-
 				if (card.duedate === null) {
 					all.nodue.push(card)
 				} else {
@@ -195,10 +184,13 @@ export default {
 						all.later.push(card)
 					}
 				}
-
+			})
+			Object.keys(all).forEach((list) => {
+				all[list] = all[list].sort((a, b) => {
+					return (new Date(a.duedate)).getTime() - (new Date(b.duedate)).getTime()
+				})
 			})
 			return all
-
 		},
 	},
 

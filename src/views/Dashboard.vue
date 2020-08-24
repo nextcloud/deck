@@ -100,7 +100,7 @@ export default {
 	},
 	beforeMount() {
 		this.loading = true
-		this.$store.dispatch('loadAssignDashboard').then(() => {
+		this.$store.dispatch('loadUpcoming').then(() => {
 			this.loading = false
 		})
 	},
