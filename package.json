@@ -73,7 +73,7 @@
 		"@nextcloud/eslint-config": "^2.1.0",
 		"@nextcloud/eslint-plugin": "^1.4.0",
 		"@nextcloud/webpack-vue-config": "^1.1.0",
-		"@vue/test-utils": "^1.0.3",
+		"@vue/test-utils": "^1.0.4",
 		"acorn": "^7.4.0",
 		"babel-eslint": "^10.1.0",
 		"babel-jest": "^26.3.0",
