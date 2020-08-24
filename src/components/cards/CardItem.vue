@@ -150,6 +150,7 @@ export default {
 	@import './../../css/animations';
 	@import './../../css/variables';
 
+	body.theme--dark .card,
 	body.dark .card {
 		border: 1px solid var(--color-border);
 	}
