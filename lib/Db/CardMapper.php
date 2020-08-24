@@ -159,8 +159,8 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 
 	public function findDeleted($boardId, $limit = null, $offset = null) {
 		$qb = $this->queryCardsByBoard($boardId);
-		$qb->andWhere($qb->expr()->neq('c.archived', false))
-			->andWhere($qb->expr()->neq('c.deleted_at', false))
+		$qb->andWhere($qb->expr()->neq('c.archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
+			->andWhere($qb->expr()->neq('c.deleted_at', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
 			->setMaxResults($limit)
 			->setFirstResult($offset)
 			->orderBy('order')
@@ -173,8 +173,8 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		$qb->select('*')
 			->from('deck_cards')
 			->where($qb->expr()->eq('stack_id', $qb->createNamedParameter($stackId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('archived', true))
-			->andWhere($qb->expr()->eq('deleted_at', 0))
+			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(true, IQueryBuilder::PARAM_BOOL)))
+			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
 			->setMaxResults($limit)
 			->setFirstResult($offset)
 			->orderBy('last_modified');
@@ -194,20 +194,36 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	public function findAllWithDue($boardId) {
-		$sql = 'SELECT c.* FROM `*PREFIX*deck_cards` c
-	  	INNER JOIN `*PREFIX*deck_stacks` s ON s.id = c.stack_id
-		INNER JOIN `*PREFIX*deck_boards` b ON b.id = s.board_id
-		  WHERE `s`.`board_id` = ? AND duedate IS NOT NULL AND NOT c.archived AND c.deleted_at = 0 AND s.deleted_at = 0 AND NOT b.archived AND b.deleted_at = 0';
-		return $this->findEntities($sql, [$boardId]);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('c.*')
+			->from('deck_cards', 'c')
+			->innerJoin('c', 'deck_stacks', 's', 's.id = c.stack_id')
+			->innerJoin('s', 'deck_boards', 'b', 'b.id = s.board_id')
+			->where($qb->expr()->eq('s.board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->isNotNull('c.duedate'))
+			->andWhere($qb->expr()->eq('c.archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
+			->andWhere($qb->expr()->eq('c.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('b.archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
+			->andWhere($qb->expr()->eq('b.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		return $this->findEntities($qb);
 	}
 
 	public function findAssignedCards($boardId, $username) {
-		$sql = 'SELECT c.* FROM `*PREFIX*deck_cards` c
-	  	INNER JOIN `*PREFIX*deck_stacks` s ON s.id = c.stack_id
-		INNER JOIN `*PREFIX*deck_boards` b ON b.id = s.board_id
-		INNER JOIN `*PREFIX*deck_assigned_users` u ON c.id = card_id
-		  WHERE `s`.`board_id` = ? AND participant = ? AND NOT c.archived AND c.deleted_at = 0 AND s.deleted_at = 0 AND NOT b.archived AND b.deleted_at = 0';
-		return $this->findEntities($sql, [$boardId, $username]);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('c.*')
+			->from('deck_cards', 'c')
+			->innerJoin('c', 'deck_stacks', 's', 's.id = c.stack_id')
+			->innerJoin('s', 'deck_boards', 'b', 'b.id = s.board_id')
+			->innerJoin('c', 'deck_assigned_users', 'u', 'c.id = u.card_id')
+			->where($qb->expr()->eq('s.board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('u.participant', $qb->createNamedParameter($username, IQueryBuilder::PARAM_STR)))
+			->andWhere($qb->expr()->eq('u.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_USER, IQueryBuilder::PARAM_INT)))
+			// Filter out archived/deleted cards and board
+			->andWhere($qb->expr()->eq('c.archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
+			->andWhere($qb->expr()->eq('c.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('b.archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
+			->andWhere($qb->expr()->eq('b.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		return $this->findEntities($qb);
 	}
 
 	public function findOverdue() {
