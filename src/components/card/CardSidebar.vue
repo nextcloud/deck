@@ -507,6 +507,8 @@ export default {
 		border: none;
 		margin: 0;
 		padding: 0;
+		background-color: var(--color-main-background);
+		color: var(--color-main-text);
 	}
 
 	.editor-preview,
