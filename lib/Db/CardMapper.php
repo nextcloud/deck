@@ -159,8 +159,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 
 	public function findDeleted($boardId, $limit = null, $offset = null) {
 		$qb = $this->queryCardsByBoard($boardId);
-		$qb->andWhere($qb->expr()->neq('c.archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
-			->andWhere($qb->expr()->neq('c.deleted_at', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
+		$qb->andWhere($qb->expr()->neq('c.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
 			->setMaxResults($limit)
 			->setFirstResult($offset)
 			->orderBy('order')
@@ -186,6 +185,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		$qb->select('*')
 			->from('deck_cards')
 			->where($qb->expr()->eq('stack_id', $qb->createNamedParameter($stackId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
 			->setMaxResults($limit)
 			->setFirstResult($offset)
 			->orderBy('order')

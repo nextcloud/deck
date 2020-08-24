@@ -162,7 +162,12 @@ export default {
 			showArchived: state => state.showArchived,
 		}),
 		cardsByStack() {
-			return this.$store.getters.cardsByStack(this.stack.id)
+			return this.$store.getters.cardsByStack(this.stack.id).filter((card) => {
+				if (this.showArchived) {
+					return card.archived
+				}
+				return !card.archived
+			})
 		},
 		dragHandleSelector() {
 			return this.canEdit ? null : '.no-drag'
