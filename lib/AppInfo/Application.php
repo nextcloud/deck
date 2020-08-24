@@ -93,7 +93,6 @@ class Application extends App {
 			/** @var IEventDispatcher $dispatcher */
 			$dispatcher = $container->getServer()->query(IEventDispatcher::class);
 			$dispatcher->addListener(RegisterWidgetEvent::class, function (RegisterWidgetEvent $event) use ($container) {
-				\OCP\Util::addScript('myapp', 'dashboard');
 				$event->registerWidget(DeckWidget::class);
 			});
 		}
