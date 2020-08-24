@@ -92,26 +92,11 @@ class ApplicationLegacy extends App {
 	}
 
 	public function register(): void {
-		$this->registerNavigationEntry();
 		$this->registerUserGroupHooks();
 		$this->registerNotifications();
 		$this->registerCommentsEntity();
 		$this->registerFullTextSearch();
 		$this->registerCollaborationResources();
-	}
-
-	public function registerNavigationEntry(): void {
-		$container = $this->getContainer();
-		$this->server->getNavigationManager()->add(static function () use ($container) {
-			$urlGenerator = $container->query(IURLGenerator::class);
-			return [
-				'id' => 'deck',
-				'order' => 10,
-				'href' => $urlGenerator->linkToRoute('deck.page.index'),
-				'icon' => $urlGenerator->imagePath('deck', 'deck.svg'),
-				'name' => 'Deck',
-			];
-		});
 	}
 
 	private function registerUserGroupHooks(): void {
