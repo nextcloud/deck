@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div>
+	<div class="overview-wrapper">
 		<Controls :overview-name="filterDisplayName" />
 
 		<div v-if="loading" key="loading" class="emptycontent">
@@ -30,48 +30,46 @@
 			<p />
 		</div>
 
-		<div v-else>
-			<div v-if="isValidFilter" class="dashboard">
-				<div v-if="cardsByDueDate.overdue.length > 0" class="dashboard-column">
-					<h3>{{ t('deck', 'Overdue') }}</h3>
-					<div v-for="card in cardsByDueDate.overdue" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
+		<div v-else-if="isValidFilter" class="overview">
+			<div v-if="cardsByDueDate.overdue.length > 0" class="dashboard-column">
+				<h3>{{ t('deck', 'Overdue') }}</h3>
+				<div v-for="card in cardsByDueDate.overdue" :key="card.id">
+					<CardItem :id="card.id" />
 				</div>
+			</div>
 
-				<div class="dashboard-column">
-					<h3>{{ t('deck', 'Today') }}</h3>
-					<div v-for="card in cardsByDueDate.today" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
+			<div class="dashboard-column">
+				<h3>{{ t('deck', 'Today') }}</h3>
+				<div v-for="card in cardsByDueDate.today" :key="card.id">
+					<CardItem :id="card.id" />
 				</div>
+			</div>
 
-				<div class="dashboard-column">
-					<h3>{{ t('deck', 'Tomorrow') }}</h3>
-					<div v-for="card in cardsByDueDate.tomorrow" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
+			<div class="dashboard-column">
+				<h3>{{ t('deck', 'Tomorrow') }}</h3>
+				<div v-for="card in cardsByDueDate.tomorrow" :key="card.id">
+					<CardItem :id="card.id" />
 				</div>
+			</div>
 
-				<div class="dashboard-column">
-					<h3>{{ t('deck', 'This week') }}</h3>
-					<div v-for="card in cardsByDueDate.thisWeek" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
+			<div class="dashboard-column">
+				<h3>{{ t('deck', 'This week') }}</h3>
+				<div v-for="card in cardsByDueDate.thisWeek" :key="card.id">
+					<CardItem :id="card.id" />
 				</div>
+			</div>
 
-				<div class="dashboard-column">
-					<h3>{{ t('deck', 'Later') }}</h3>
-					<div v-for="card in cardsByDueDate.later" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
+			<div class="dashboard-column">
+				<h3>{{ t('deck', 'Later') }}</h3>
+				<div v-for="card in cardsByDueDate.later" :key="card.id">
+					<CardItem :id="card.id" />
 				</div>
+			</div>
 
-				<div class="dashboard-column">
-					<h3>{{ t('deck', 'No due') }}</h3>
-					<div v-for="card in cardsByDueDate.nodue" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
+			<div class="dashboard-column">
+				<h3>{{ t('deck', 'No due') }}</h3>
+				<div v-for="card in cardsByDueDate.nodue" :key="card.id">
+					<CardItem :id="card.id" />
 				</div>
 			</div>
 		</div>
@@ -200,11 +198,21 @@ export default {
 <style lang="scss" scoped>
 @import './../../css/variables';
 
-.dashboard {
+.overview-wrapper {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	max-height: calc(100vh - 50px);
+}
+
+.overview {
+	position: relative;
+	height: calc(100% - 44px);
+	overflow-x: scroll;
 	display: flex;
 	align-items: stretch;
-	margin-left: $board-spacing;
-	margin-right: $board-spacing;
+	padding-left: $board-spacing;
+	padding-right: $board-spacing;
 
 	.dashboard-column {
 		display: flex;
@@ -212,6 +220,17 @@ export default {
 		min-width: $stack-width;
 		margin-left: $stack-spacing;
 		margin-right: $stack-spacing;
+
+		h3 {
+			margin: -6px;
+			margin-bottom: 12px;
+			padding: 6px 13px;
+			position: sticky;
+			top: 0;
+			z-index: 100;
+			background-color: var(--color-main-background);
+			border: 1px solid var(--color-main-background);
+		}
 	}
 }
 

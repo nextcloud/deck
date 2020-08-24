@@ -22,6 +22,7 @@
 
 <template>
 	<DashboardWidget :items="cards"
+		:show-more-text="t('deck', 'upcoming cards')"
 		:show-more-url="showMoreUrl"
 		:loading="loading"
 		@hide="() => {}"
