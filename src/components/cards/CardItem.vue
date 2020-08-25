@@ -150,11 +150,6 @@ export default {
 	@import './../../css/animations';
 	@import './../../css/variables';
 
-	body.theme--dark .card,
-	body.dark .card {
-		border: 1px solid var(--color-border);
-	}
-
 	.card:hover {
 		box-shadow: 0 0 5px 1px var(--color-box-shadow);
 	}
