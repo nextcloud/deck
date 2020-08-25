@@ -26,7 +26,6 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Dashboard;
 
-
 use OCP\Dashboard\IWidget;
 use OCP\IL10N;
 
