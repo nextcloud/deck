@@ -11,6 +11,7 @@ OC.L10N.register(
     "Sharing" : "Rannan",
     "Tags" : "Klavioù",
     "Can edit" : "Posuple eo embann",
+    "Can share" : "Galout a ra rannañ",
     "Delete" : "Dilemel",
     "Edit" : "Cheñch",
     "Description" : "Diskrivadur",
