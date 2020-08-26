@@ -40,7 +40,7 @@ export default new Router({
 		{
 			path: '/',
 			name: 'main',
-			component: Boards,
+			component: Overview,
 		},
 		{
 			path: '/overview/:filter',

@@ -1,0 +1,39 @@
+$card-spacing: 10px;
+$card-padding: 10px;
+
+.labels {
+	flex-grow: 1;
+	flex-shrink: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: row;
+	margin-left: $card-padding;
+	margin-right: $card-padding;
+	margin-top: -5px;
+
+	li {
+		flex-grow: 0;
+		flex-shrink: 1;
+		display: flex;
+		flex-direction: row;
+		overflow: hidden;
+		padding: 0px 5px;
+		border-radius: 15px;
+		font-size: 85%;
+		margin-right: 3px;
+		margin-bottom: 3px;
+
+		&:hover {
+			overflow: unset;
+		}
+
+		span {
+			flex-grow: 0;
+			flex-shrink: 1;
+			min-width: 0;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+}

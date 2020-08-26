@@ -1,7 +1,7 @@
 /*
- * @copyright Copyright (c) 2020 Jakob Röhrl <jakob.roehrl@web.de>
+ * @copyright Copyright (c) 2019 Julius Härtl <jus@bitgrid.net>
  *
- * @author Jakob Röhrl <jakob.roehrl@web.de>
+ * @author Julius Härtl <jus@bitgrid.net>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -22,33 +22,40 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { OverviewApi } from '../services/OverviewApi'
+
+import overview from './store/overview'
+
+import './css/dashboard.scss'
+
+import Dashboard from './views/Dashboard.vue'
+
 Vue.use(Vuex)
 
-const apiClient = new OverviewApi()
-export default {
-	state: {
-		assignedCards: [],
+const debug = process.env.NODE_ENV !== 'production'
+
+const store = new Vuex.Store({
+	modules: {
+		overview,
 	},
-	getters: {
-		assignedCardsDashboard: state => {
-			return state.assignedCards
-		},
-	},
-	mutations: {
-		setAssignedCards(state, assignedCards) {
-			state.assignedCards = assignedCards
-		},
-	},
-	actions: {
-		async loadUpcoming({ commit }) {
-			commit('setCurrentBoard', null)
-			const assignedCards = await apiClient.get('upcoming')
-			const assignedCardsFlat = assignedCards.flat()
-			for (const i in assignedCardsFlat) {
-				commit('addCard', assignedCardsFlat[i])
-			}
-			commit('setAssignedCards', assignedCardsFlat)
-		},
-	},
-}
+	strict: debug,
+})
+
+// eslint-disable-next-line
+__webpack_nonce__ = btoa(OC.requestToken);
+// eslint-disable-next-line
+__webpack_public_path__ = OC.linkTo('deck', 'js/');
+
+Vue.prototype.t = t
+Vue.prototype.n = n
+Vue.prototype.OC = OC
+
+document.addEventListener('DOMContentLoaded', () => {
+	OCA.Dashboard.register('deck', (el) => {
+		const View = Vue.extend(Dashboard)
+		const vm = new View({
+			propsData: {},
+			store,
+		}).$mount(el)
+		return vm
+	})
+})

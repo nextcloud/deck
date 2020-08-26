@@ -21,8 +21,8 @@
   -->
 
 <template>
-	<div>
-		<Controls :dashboard-name="filterDisplayName" />
+	<div class="overview-wrapper">
+		<Controls :overview-name="filterDisplayName" />
 
 		<div v-if="loading" key="loading" class="emptycontent">
 			<div class="icon icon-loading" />
@@ -30,48 +30,46 @@
 			<p />
 		</div>
 
-		<div v-else>
-			<div v-if="isValidFilter" class="dashboard">
-				<div class="dashboard-column">
-					<h2>{{ t('deck', 'No due') }}</h2>
-					<div v-for="card in cardsByDueDate.nodue" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
+		<div v-else-if="isValidFilter" class="overview">
+			<div v-if="cardsByDueDate.overdue.length > 0" class="dashboard-column">
+				<h3>{{ t('deck', 'Overdue') }}</h3>
+				<div v-for="card in cardsByDueDate.overdue" :key="card.id">
+					<CardItem :id="card.id" />
 				</div>
+			</div>
 
-				<div class="dashboard-column">
-					<h2>{{ t('deck', 'Overdue') }}</h2>
-					<div v-for="card in cardsByDueDate.overdue" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
+			<div class="dashboard-column">
+				<h3>{{ t('deck', 'Today') }}</h3>
+				<div v-for="card in cardsByDueDate.today" :key="card.id">
+					<CardItem :id="card.id" />
 				</div>
+			</div>
 
-				<div class="dashboard-column">
-					<h2>{{ t('deck', 'Today') }}</h2>
-					<div v-for="card in cardsByDueDate.today" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
+			<div class="dashboard-column">
+				<h3>{{ t('deck', 'Tomorrow') }}</h3>
+				<div v-for="card in cardsByDueDate.tomorrow" :key="card.id">
+					<CardItem :id="card.id" />
 				</div>
+			</div>
 
-				<div class="dashboard-column">
-					<h2>{{ t('deck', 'Tomorrow') }}</h2>
-					<div v-for="card in cardsByDueDate.tomorrow" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
+			<div class="dashboard-column">
+				<h3>{{ t('deck', 'This week') }}</h3>
+				<div v-for="card in cardsByDueDate.thisWeek" :key="card.id">
+					<CardItem :id="card.id" />
 				</div>
+			</div>
 
-				<div class="dashboard-column">
-					<h2>{{ t('deck', 'This week') }}</h2>
-					<div v-for="card in cardsByDueDate.thisWeek" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
+			<div class="dashboard-column">
+				<h3>{{ t('deck', 'Later') }}</h3>
+				<div v-for="card in cardsByDueDate.later" :key="card.id">
+					<CardItem :id="card.id" />
 				</div>
+			</div>
 
-				<div class="dashboard-column">
-					<h2>{{ t('deck', 'Later') }}</h2>
-					<div v-for="card in cardsByDueDate.later" :key="card.id">
-						<CardItem :id="card.id" />
-					</div>
+			<div class="dashboard-column">
+				<h3>{{ t('deck', 'No due') }}</h3>
+				<div v-for="card in cardsByDueDate.nodue" :key="card.id">
+					<CardItem :id="card.id" />
 				</div>
 			</div>
 		</div>
@@ -85,12 +83,10 @@ import CardItem from '../cards/CardItem'
 import { mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
 
-const FILTER_DUE = 'due'
-const FILTER_ASSIGNED = 'assigned'
+const FILTER_UPCOMING = 'upcoming'
 
 const SUPPORTED_FILTERS = [
-	FILTER_ASSIGNED,
-	FILTER_DUE,
+	FILTER_UPCOMING,
 ]
 
 export default {
@@ -102,7 +98,7 @@ export default {
 	props: {
 		filter: {
 			type: String,
-			default: '',
+			default: FILTER_UPCOMING,
 		},
 	},
 	data() {
@@ -116,25 +112,21 @@ export default {
 		},
 		filterDisplayName() {
 			switch (this.filter) {
-			case 'assigned':
-				return t('deck', 'My assigned cards')
+			case FILTER_UPCOMING:
+				return t('deck', 'Upcoming cards')
 			default:
 				return ''
 			}
 		},
 		...mapGetters([
-			'withDueDashboard',
 			'assignedCardsDashboard',
 		]),
 		cardsByDueDate() {
 			switch (this.filter) {
-			case FILTER_ASSIGNED:
+			case FILTER_UPCOMING:
 				return this.groupByDue(this.assignedCardsDashboard)
-			case FILTER_DUE:
-				return this.groupByDue(this.withDueDashboard)
-			default:
-				return null
 			}
+			return null
 		},
 	},
 	watch: {
@@ -149,12 +141,8 @@ export default {
 		async getData() {
 			this.loading = true
 			try {
-				if (this.filter === 'due') {
-					await this.$store.dispatch('loadDueDashboard')
-				}
-
-				if (this.filter === 'assigned') {
-					await this.$store.dispatch('loadAssignDashboard')
+				if (this.filter === FILTER_UPCOMING) {
+					await this.$store.dispatch('loadUpcoming')
 				}
 			} catch (e) {
 				console.error(e)
@@ -172,7 +160,6 @@ export default {
 				later: [],
 			}
 			dataset.forEach(card => {
-
 				if (card.duedate === null) {
 					all.nodue.push(card)
 				} else {
@@ -195,10 +182,13 @@ export default {
 						all.later.push(card)
 					}
 				}
-
+			})
+			Object.keys(all).forEach((list) => {
+				all[list] = all[list].sort((a, b) => {
+					return (new Date(a.duedate)).getTime() - (new Date(b.duedate)).getTime()
+				})
 			})
 			return all
-
 		},
 	},
 
@@ -208,16 +198,39 @@ export default {
 <style lang="scss" scoped>
 @import './../../css/variables';
 
-.dashboard {
+.overview-wrapper {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	max-height: calc(100vh - 50px);
+}
+
+.overview {
+	position: relative;
+	height: calc(100% - 44px);
+	overflow-x: scroll;
 	display: flex;
 	align-items: stretch;
-	margin: $board-spacing;
+	padding-left: $board-spacing;
+	padding-right: $board-spacing;
 
 	.dashboard-column {
 		display: flex;
 		flex-direction: column;
-		width: $stack-width;
-		margin: $stack-spacing;
+		min-width: $stack-width;
+		margin-left: $stack-spacing;
+		margin-right: $stack-spacing;
+
+		h3 {
+			margin: -6px;
+			margin-bottom: 12px;
+			padding: 6px 13px;
+			position: sticky;
+			top: 0;
+			z-index: 100;
+			background-color: var(--color-main-background);
+			border: 1px solid var(--color-main-background);
+		}
 	}
 }
 

@@ -107,23 +107,34 @@ class OverviewService {
 		return $allDueCards;
 	}
 
-	public function findAssignedCards(string $userId): array {
+	public function findUpcomingCards(string $userId): array {
 		$userBoards = $this->findAllBoardsFromUser($userId);
-		$allAssignedCards = [];
+		$findCards = [];
 		foreach ($userBoards as $userBoard) {
 			$service = $this;
-			$allAssignedCards[] = array_map(static function ($card) use ($service, $userBoard, $userId) {
-				$service->enrich($card, $userId);
-				$cardData = $card->jsonSerialize();
-				$cardData['boardId'] = $userBoard->getId();
-				return $cardData;
-			}, $this->cardMapper->findAssignedCards($userBoard->getId(), $userId));
+
+			if (count($userBoard->getAcl()) === 0) {
+				// get cards with due date
+				$findCards[] = array_map(static function ($card) use ($service, $userBoard, $userId) {
+					$service->enrich($card, $userId);
+					$cardData = $card->jsonSerialize();
+					$cardData['boardId'] = $userBoard->getId();
+					return $cardData;
+				}, $this->cardMapper->findAllWithDue($userBoard->getId()));
+			} else {
+				// get assigned cards
+				$findCards[] = array_map(static function ($card) use ($service, $userBoard, $userId) {
+					$service->enrich($card, $userId);
+					$cardData = $card->jsonSerialize();
+					$cardData['boardId'] = $userBoard->getId();
+					return $cardData;
+				}, $this->cardMapper->findAssignedCards($userBoard->getId(), $userId));
+			}
 		}
-		return $allAssignedCards;
+		return $findCards;
 	}
 
 	// FIXME: This is duplicate code with the board service
-
 	private function findAllBoardsFromUser(string $userId): array {
 		$userInfo = $this->getBoardPrerequisites($userId);
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null);

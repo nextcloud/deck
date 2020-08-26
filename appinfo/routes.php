@@ -136,7 +136,6 @@ return [
 		['name' => 'comments_api#delete', 'url' => '/api/v1.0/cards/{cardId}/comments/{commentId}', 'verb' => 'DELETE'],
 
 		// dashboard
-		['name' => 'overview_api#findAllWithDue', 'url' => '/api/v1.0/overview/due', 'verb' => 'GET'],
-		['name' => 'overview_api#findAssignedCards', 'url' => '/api/v1.0/overview/assigned', 'verb' => 'GET'],
+		['name' => 'overview_api#upcomingCards', 'url' => '/api/v1.0/overview/upcoming', 'verb' => 'GET'],
 	]
 ];

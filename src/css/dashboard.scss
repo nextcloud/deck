@@ -1,0 +1,7 @@
+.icon-deck {
+	background-image: url(./../../img/deck-dark.svg);
+}
+
+body.dark .icon-deck {
+	background-image: url(./../../img/deck.svg);
+}

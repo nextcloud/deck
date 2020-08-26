@@ -29,6 +29,7 @@ use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Capabilities;
 use OCA\Deck\Collaboration\Resources\ResourceProvider;
 use OCA\Deck\Collaboration\Resources\ResourceProviderCard;
+use OCA\Deck\Dashboard\DeckWidget;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
@@ -43,6 +44,7 @@ use OCP\AppFramework\App;
 use OCP\Collaboration\Resources\IManager;
 use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Comments\CommentsEntityEvent;
+use OCP\Dashboard\RegisterWidgetEvent;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\FullTextSearch\IFullTextSearchManager;
@@ -85,6 +87,15 @@ class Application extends App {
 		$container->registerService('database4ByteSupport', static function () use ($server) {
 			return $server->getDatabaseConnection()->supports4ByteText();
 		});
+
+		$version = OC_Util::getVersion()[0];
+		if ($version >= 20) {
+			/** @var IEventDispatcher $dispatcher */
+			$dispatcher = $container->getServer()->query(IEventDispatcher::class);
+			$dispatcher->addListener(RegisterWidgetEvent::class, function (RegisterWidgetEvent $event) use ($container) {
+				$event->registerWidget(DeckWidget::class);
+			});
+		}
 	}
 
 	public function register(): void {

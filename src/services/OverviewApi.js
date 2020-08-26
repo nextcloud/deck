@@ -29,20 +29,8 @@ export class OverviewApi {
 		return generateOcsUrl(`apps/deck/api/v1.0`) + url
 	}
 
-	findAllWithDue(data) {
-		return axios.get(this.url(`overview/due`), {
-			headers: { 'OCS-APIRequest': 'true' },
-		})
-			.then(
-				(response) => Promise.resolve(response.data.ocs.data),
-				(err) => Promise.reject(err)
-			)
-			.catch((err) => Promise.reject(err)
-			)
-	}
-
-	findMyAssignedCards(data) {
-		return axios.get(this.url(`overview/assigned`), {
+	get(filter) {
+		return axios.get(this.url(`overview/${filter}`), {
 			headers: { 'OCS-APIRequest': 'true' },
 		})
 			.then(
