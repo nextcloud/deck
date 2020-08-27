@@ -73,10 +73,10 @@ import { ActionButton, AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 import Color from '../../mixins/color'
 
+import CardSidebarTabDetails from './CardSidebarTabDetails'
 import CardSidebarTabAttachments from './CardSidebarTabAttachments'
 import CardSidebarTabComments from './CardSidebarTabComments'
 import CardSidebarTabActivity from './CardSidebarTabActivity'
-import CardSidebarTabDetails from './CardSidebarTabDetails'
 import MarkdownIt from 'markdown-it'
 import MarkdownItTaskLists from 'markdown-it-task-lists'
 import { formatFileSize } from '@nextcloud/files'
@@ -99,10 +99,10 @@ export default {
 		AppSidebar,
 		AppSidebarTab,
 		ActionButton,
+		CardSidebarTabDetails,
 		CardSidebarTabAttachments,
 		CardSidebarTabComments,
 		CardSidebarTabActivity,
-		CardSidebarTabDetails,
 	},
 	mixins: [Color, relativeDate],
 	props: {

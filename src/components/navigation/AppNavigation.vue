@@ -52,9 +52,9 @@
 			<AppNavigationSettings>
 				<div>
 					<input id="toggle-modal"
-						   v-model="cardDetailsInModal"
-						   type="checkbox"
-						   class="checkbox">
+						v-model="cardDetailsInModal"
+						type="checkbox"
+						class="checkbox">
 					<label for="toggle-modal">
 						{{ t('deck', 'Use modal card view') }}
 					</label>
