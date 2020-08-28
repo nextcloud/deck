@@ -42,7 +42,134 @@
 			:order="0"
 			:name="t('deck', 'Details')"
 			icon="icon-home">
-			<CardSidebarTabDetails :id="id" />
+			<div class="section-wrapper">
+				<div v-tooltip="t('deck', 'Tags')" class="section-label icon-tag">
+					<span class="hidden-visually">{{ t('deck', 'Tags') }}</span>
+				</div>
+				<div class="section-details">
+					<Multiselect v-model="allLabels"
+						:multiple="true"
+						:disabled="!canEdit"
+						:options="currentBoard.labels"
+						:placeholder="t('deck', 'Assign a tag to this card…')"
+						:taggable="true"
+						label="title"
+						track-by="id"
+						@select="addLabelToCard"
+						@remove="removeLabelFromCard">
+						<template #option="scope">
+							<div :style="{ backgroundColor: '#' + scope.option.color, color: textColor(scope.option.color)}" class="tag">
+								{{ scope.option.title }}
+							</div>
+						</template>
+						<template #tag="scope">
+							<div :style="{ backgroundColor: '#' + scope.option.color, color: textColor(scope.option.color)}" class="tag">
+								{{ scope.option.title }}
+							</div>
+						</template>
+					</Multiselect>
+				</div>
+			</div>
+
+			<div class="section-wrapper">
+				<div v-tooltip="t('deck', 'Assign to users')" class="section-label icon-group">
+					<span class="hidden-visually">{{ t('deck', 'Assign to users/groups/circles') }}</span>
+				</div>
+				<div class="section-details">
+					<Multiselect v-if="canEdit"
+						v-model="assignedUsers"
+						:multiple="true"
+						:options="formatedAssignables"
+						:user-select="true"
+						:auto-limit="false"
+						:placeholder="t('deck', 'Assign a user to this card…')"
+						label="displayname"
+						track-by="multiselectKey"
+						@select="assignUserToCard"
+						@remove="removeUserFromCard">
+						<template #tag="scope">
+							<div class="avatarlist--inline">
+								<Avatar :user="scope.option.uid"
+									:display-name="scope.option.displayname"
+									:size="24"
+									:is-no-user="scope.option.isNoUser"
+									:disable-menu="true" />
+							</div>
+						</template>
+					</Multiselect>
+					<div v-else class="avatar-list--readonly">
+						<Avatar v-for="option in assignedUsers"
+							:key="option.primaryKey"
+							:user="option.uid"
+							:display-name="option.displayname"
+							:is-no-user="option.isNoUser"
+							:size="32" />
+					</div>
+				</div>
+			</div>
+
+			<div class="section-wrapper">
+				<div v-tooltip="t('deck', 'Due date')" class="section-label icon-calendar-dark">
+					<span class="hidden-visually">{{ t('deck', 'Due date') }}</span>
+				</div>
+				<div class="section-details">
+					<DatetimePicker v-model="duedate"
+						:placeholder="t('deck', 'Set a due date')"
+						type="datetime"
+						:minute-step="5"
+						:show-second="false"
+						:format="format"
+						:disabled="saving || !canEdit"
+						confirm />
+					<Actions v-if="canEdit">
+						<ActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">
+							{{ t('deck', 'Remove due date') }}
+						</ActionButton>
+					</Actions>
+				</div>
+			</div>
+
+			<div class="section-wrapper">
+				<CollectionList v-if="currentCard.id"
+					:id="`${currentCard.id}`"
+					:name="currentCard.title"
+					type="deck-card" />
+			</div>
+
+			<h5>
+				{{ t('deck', 'Description') }}
+				<span v-if="copiedCard.descriptionLastEdit && !descriptionSaving">{{ t('deck', '(Unsaved)') }}</span>
+				<span v-if="descriptionSaving">{{ t('deck', '(Saving…)') }}</span>
+				<a v-tooltip="t('deck', 'Formatting help')"
+					href="https://deck.readthedocs.io/en/latest/Markdown/"
+					target="_blank"
+					class="icon icon-info" />
+				<Actions v-if="canEdit">
+					<ActionButton v-if="!descriptionEditing" icon="icon-rename" @click="showEditor()">
+						{{ t('deck', 'Edit description') }}
+					</ActionButton>
+					<ActionButton v-else icon="icon-toggle" @click="hideEditor()">
+						{{ t('deck', 'View description') }}
+					</ActionButton>
+				</Actions>
+				<Actions v-if="canEdit">
+					<ActionButton v-if="descriptionEditing" icon="icon-attach" @click="showAttachmentModal()">
+						{{ t('deck', 'Add Attachment') }}
+					</ActionButton>
+				</Actions>
+			</h5>
+
+			<div v-if="!descriptionEditing"
+				id="description-preview"
+				@click="clickedPreview"
+				v-html="renderedDescription" />
+			<VueEasymde v-else
+				:key="copiedCard.id"
+				ref="markdownEditor"
+				v-model="copiedCard.description"
+				:configs="mdeConfig"
+				@input="updateDescription"
+				@blur="saveDescription" />
 		</AppSidebarTab>
 
 		<AppSidebarTab id="attachments"
@@ -71,11 +198,11 @@
 </template>
 
 <script>
-import { ActionButton, AppSidebar, AppSidebarTab } from '@nextcloud/vue'
+import { Actions, ActionButton, Avatar, AppSidebar, AppSidebarTab, Multiselect, DatetimePicker } from '@nextcloud/vue'
+import { CollectionList } from 'nextcloud-vue-collections'
 import { mapState, mapGetters } from 'vuex'
 import Color from '../../mixins/color'
 
-import CardSidebarTabDetails from './CardSidebarTabDetails'
 import CardSidebarTabAttachments from './CardSidebarTabAttachments'
 import CardSidebarTabComments from './CardSidebarTabComments'
 import CardSidebarTabActivity from './CardSidebarTabActivity'
@@ -101,10 +228,14 @@ export default {
 		AppSidebar,
 		AppSidebarTab,
 		ActionButton,
-		CardSidebarTabDetails,
 		CardSidebarTabAttachments,
 		CardSidebarTabComments,
 		CardSidebarTabActivity,
+		Multiselect,
+		DatetimePicker,
+		Avatar,
+		Actions,
+		CollectionList,
 	},
 	mixins: [Color, relativeDate],
 	props: {
@@ -520,5 +651,4 @@ export default {
 			max-height: 50vh;
 		}
 	}
-
 </style>
