@@ -26,7 +26,6 @@
 		:subtitle="subtitle"
 		:title-editable.sync="titleEditable"
 		@update:title="updateTitle"
-		:class="{ 'app-sidebar-modal': cardDetailsInModal}"
 		@close="closeSidebar">
 		<template #secondary-actions>
 			<ActionButton v-if="cardDetailsInModal" icon="icon-menu-sidebar" @click.stop="showModal()">
@@ -545,11 +544,41 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-	.app-sidebar-modal {
-		border-left: 0;
-		width: 800px;
-		max-width: 780px;
-		top: 0px;
+
+	// FIXME: Obivously we should at some point not randomly reuse the sidebar component
+	// since this is not oficially supported
+	.modal__card .app-sidebar {
+		border: 0;
+		min-width: 100%;
+		position: relative;
+		top: 0;
+		left: 0;
+		right: 0;
+		max-width: 100%;
+		max-height: 100%;
+		&::v-deep {
+			.app-sidebar-header {
+				position: sticky;
+				top: 0;
+				z-index: 100;
+				background-color: var(--color-main-background);
+			}
+			.app-sidebar-tabs__nav {
+				position: sticky;
+				top: 87px;
+				margin: 0;
+				z-index: 100;
+				background-color: var(--color-main-background);
+			}
+
+			section {
+				min-height: auto;
+			}
+
+			#emptycontent, .emptycontent {
+				margin-top: 88px;
+			}
+		}
 	}
 
 	h5 {

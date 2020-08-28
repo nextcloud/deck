@@ -28,7 +28,7 @@
 		</div>
 
 		<Modal v-if="cardDetailsInModal && $route.params.cardId" :title="t('deck', 'Card details')" @close="hideModal()">
-			<div class="modal__content">
+			<div class="modal__content modal__card">
 				<router-view name="sidebar" />
 			</div>
 		</Modal>
@@ -131,20 +131,19 @@ export default {
 			}
 		}
 	}
-
 </style>
 
-<style>
+<style lang="scss">
+
 	.multiselect {
 		width: 100%;
 	}
 
-	.modal__content {
-
-		height: 600px;
-		min-width: 450px;
-		min-height: 450px;
-		margin: 20px 20px 60px 20px;
-		padding-bottom: 20px;
+	.modal__card {
+		min-width: 320px;
+		width: 50vw;
+		max-width: 800px;
+		min-height: 200px;
+		height: 80vh;
 	}
 </style>
