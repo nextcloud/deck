@@ -194,15 +194,23 @@
 			icon="icon-activity">
 			<CardSidebarTabActivity :card="currentCard" />
 		</AppSidebarTab>
+		<Modal v-if="modalShow" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
+			<div class="modal__content">
+				<h3>{{ t('deck', 'Choose attachment') }}</h3>
+				<AttachmentList
+					:card-id="currentCard.id"
+					:selectable="true"
+					@selectAttachment="addAttachment" />
+			</div>
+		</Modal>
 	</AppSidebar>
 </template>
 
 <script>
-import { Actions, ActionButton, Avatar, AppSidebar, AppSidebarTab, Multiselect, DatetimePicker } from '@nextcloud/vue'
-import { CollectionList } from 'nextcloud-vue-collections'
+import { Avatar, Actions, ActionButton, Multiselect, AppSidebar, AppSidebarTab, DatetimePicker, Modal } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 import Color from '../../mixins/color'
-
+import { CollectionList } from 'nextcloud-vue-collections'
 import CardSidebarTabAttachments from './CardSidebarTabAttachments'
 import CardSidebarTabComments from './CardSidebarTabComments'
 import CardSidebarTabActivity from './CardSidebarTabActivity'
@@ -210,7 +218,7 @@ import MarkdownIt from 'markdown-it'
 import MarkdownItTaskLists from 'markdown-it-task-lists'
 import { formatFileSize } from '@nextcloud/files'
 import relativeDate from '../../mixins/relativeDate'
-
+import AttachmentList from './AttachmentList'
 import { generateUrl } from '@nextcloud/router'
 import { getLocale } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
@@ -227,15 +235,18 @@ export default {
 	components: {
 		AppSidebar,
 		AppSidebarTab,
+		Multiselect,
+		DatetimePicker,
+		VueEasymde: () => import('vue-easymde/dist/VueEasyMDE.common'),
+		Actions,
 		ActionButton,
+		Avatar,
+		CollectionList,
 		CardSidebarTabAttachments,
 		CardSidebarTabComments,
 		CardSidebarTabActivity,
-		Multiselect,
-		DatetimePicker,
-		Avatar,
-		Actions,
-		CollectionList,
+		Modal,
+		AttachmentList,
 	},
 	mixins: [Color, relativeDate],
 	props: {
@@ -267,6 +278,7 @@ export default {
 			descriptionSaving: false,
 			hasActivity: capabilities && capabilities.activity,
 			hasComments: !!OC.appswebroots['comments'],
+			modalShow: false,
 			format: {
 				stringify: this.stringify,
 				parse: this.parse,
@@ -385,7 +397,19 @@ export default {
 		hideEditor() {
 			this.descriptionEditing = false
 		},
-
+		showAttachmentModal() {
+			this.modalShow = true
+		},
+		addAttachment(attachment) {
+			const descString = this.$refs.markdownEditor.easymde.value()
+			let embed = ''
+			if (attachment.extendedData.mimetype.includes('image')) {
+				embed = '!'
+			}
+			const attachmentString = embed + '[📎 ' + attachment.data + '](' + this.attachmentUrl(attachment) + ')'
+			this.$refs.markdownEditor.easymde.value(descString + '\n' + attachmentString)
+			this.modalShow = false
+		},
 		clickedPreview(e) {
 			if (e.target.getAttribute('type') === 'checkbox') {
 				const clickedIndex = [...document.querySelector('#description-preview').querySelectorAll('input')].findIndex((li) => li.id === e.target.id)
@@ -651,4 +675,5 @@ export default {
 			max-height: 50vh;
 		}
 	}
+
 </style>
