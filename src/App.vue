@@ -140,7 +140,7 @@ export default {
 	}
 
 	.modal__content {
-		width: 800px;
+
 		height: 600px;
 		min-width: 450px;
 		min-height: 450px;
