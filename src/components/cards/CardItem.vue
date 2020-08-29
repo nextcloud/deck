@@ -175,7 +175,7 @@ export default {
 			min-height: 44px;
 			form {
 				display: flex;
-				padding: 5px 7px;
+				padding: 3px 5px;
 				width: 100%;
 				input[type=text] {
 					flex-grow: 1;
@@ -188,9 +188,13 @@ export default {
 				font-size: 100%;
 				overflow-x: hidden;
 				word-wrap: break-word;
+				padding-left: 4px;
 				span {
 					cursor: text;
 				}
+			}
+			input[type=text] {
+				font-size: 100%;
 			}
 		}
 
