@@ -174,7 +174,7 @@
 					<ActionButton
 						icon="icon-archive"
 						@click="toggleShowArchived">
-						{{ t('deck', 'Show archived cards') }}
+						{{ showArchived ? t('deck', 'Hide archived cards') : t('deck', 'Show archived cards') }}
 					</ActionButton>
 					<ActionButton v-if="compactMode"
 						icon="icon-toggle-compact-collapsed"

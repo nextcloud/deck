@@ -26,7 +26,7 @@
 
 <template>
 	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
-		<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'is-editing': editing}"
+		<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'is-editing': editing, 'card__editable': canEdit}"
 			tag="div"
 			class="card"
 			@click="openCard">
