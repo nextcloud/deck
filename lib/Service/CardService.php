@@ -538,7 +538,7 @@ class CardService {
 		}
 		$label = $this->labelMapper->find($labelId);
 		$this->cardMapper->assignLabel($cardId, $labelId);
-		$this->changeHelper->cardChanged($cardId, false);
+		$this->changeHelper->cardChanged($cardId);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_ASSIGN, ['label' => $label]);
 
 		$this->eventDispatcher->dispatch(
@@ -574,7 +574,7 @@ class CardService {
 		}
 		$label = $this->labelMapper->find($labelId);
 		$this->cardMapper->removeLabel($cardId, $labelId);
-		$this->changeHelper->cardChanged($cardId, false);
+		$this->changeHelper->cardChanged($cardId);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_UNASSING, ['label' => $label]);
 
 		$this->eventDispatcher->dispatch(
