@@ -25,7 +25,7 @@
 		<template #list>
 			<AppNavigationItem
 				:title="t('deck', 'Upcoming cards')"
-				icon="icon-desktop"
+				icon="icon-calendar-dark"
 				:exact="true"
 				to="/" />
 			<AppNavigationBoardCategory
