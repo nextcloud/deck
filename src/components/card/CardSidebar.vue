@@ -24,6 +24,8 @@
 	<AppSidebar v-if="currentBoard && currentCard && copiedCard"
 		:title="currentCard.title"
 		:subtitle="subtitle"
+		:title-editable.sync="titleEditable"
+		@update:title="updateTitle"
 		@close="closeSidebar">
 		<template #secondary-actions />
 		<AppSidebarTab id="details"
@@ -253,6 +255,7 @@ export default {
 
 			saving: false,
 			markdownIt: null,
+			titleEditable: false,
 			descriptionEditing: false,
 			mdeConfig: {
 				autoDownloadFontAwesome: false,
@@ -433,6 +436,12 @@ export default {
 			await this.$store.dispatch('updateCardDesc', this.copiedCard)
 			delete this.copiedCard.descriptionLastEdit
 			this.descriptionSaving = false
+		},
+		updateTitle(newTitle) {
+			this.$set(this.copiedCard, 'title', newTitle)
+			this.$store.dispatch('updateCardTitle', this.copiedCard).then(() => {
+				this.titleEditable = false
+			})
 		},
 		updateDescription() {
 			this.copiedCard.descriptionLastEdit = Date.now()
