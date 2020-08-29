@@ -155,4 +155,8 @@ class Card extends RelationalEntity {
 	public function getCalendarPrefix(): string {
 		return 'card';
 	}
+
+	public function getETag() {
+		return md5((string)$this->getLastModified());
+	}
 }

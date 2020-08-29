@@ -85,7 +85,9 @@ class BoardApiController extends ApiController {
 	 */
 	public function get() {
 		$board = $this->boardService->find($this->request->getParam('boardId'));
-		return new DataResponse($board, HTTP::STATUS_OK);
+		$response = new DataResponse($board, HTTP::STATUS_OK);
+		$response->setETag($board->getEtag());
+		return $response;
 	}
 
 	/**

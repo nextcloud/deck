@@ -81,4 +81,8 @@ class Board extends RelationalEntity {
 			$this->acl[] = $a;
 		}
 	}
+
+	public function getETag() {
+		return md5((string)$this->getLastModified());
+	}
 }
