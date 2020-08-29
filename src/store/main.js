@@ -132,8 +132,26 @@ export default new Vuex.Store({
 		setSearchQuery(state, searchQuery) {
 			state.searchQuery = searchQuery
 		},
-		setFilter(state, filter) {
+		SET_FILTER(state, filter) {
 			Object.assign(state.filter, filter)
+		},
+		TOGGLE_FILTER(state, filter) {
+			Object.keys(filter).forEach((key) => {
+				switch (key) {
+				case 'due':
+					Vue.set(state.filter, key, filter.due)
+					break
+				default:
+					filter[key].forEach((item) => {
+						if (state.filter[key].indexOf(item) === -1) {
+							state.filter[key].push(item)
+						} else {
+							state.filter[key].splice(state.filter[key].indexOf(item), 1)
+						}
+					})
+					break
+				}
+			})
 		},
 		toggleShowArchived(state) {
 			state.showArchived = !state.showArchived
@@ -261,7 +279,10 @@ export default new Vuex.Store({
 	},
 	actions: {
 		setFilter({ commit }, filter) {
-			commit('setFilter', filter)
+			commit('SET_FILTER', filter)
+		},
+		toggleFilter({ commit }, filter) {
+			commit('TOGGLE_FILTER', filter)
 		},
 		async loadBoardById({ commit, dispatch }, boardId) {
 			const filterReset = { tags: [], users: [], due: '' }
