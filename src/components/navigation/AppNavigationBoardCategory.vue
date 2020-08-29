@@ -24,6 +24,7 @@
 		:title="text"
 		:icon="icon"
 		:to="to"
+		:exact="true"
 		:allow-collapse="collapsible"
 		:open="opened">
 		<AppNavigationBoard v-for="board in boardsSorted" :key="board.id" :board="board" />

@@ -26,6 +26,7 @@
 			<AppNavigationItem
 				:title="t('deck', 'Upcoming cards')"
 				icon="icon-desktop"
+				:exact="true"
 				to="/" />
 			<AppNavigationBoardCategory
 				id="deck-navigation-all"
