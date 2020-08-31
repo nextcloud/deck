@@ -310,7 +310,8 @@ export default {
 			margin-top: 0;
 			margin-bottom: 10px;
 			box-shadow: 0 0 3px var(--color-box-shadow);
-			border-radius: 3px;
+			border-radius: var(--border-radius-large);
+			overflow: hidden;
 		}
 
 		&.icon-loading-small:after,

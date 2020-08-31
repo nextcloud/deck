@@ -170,18 +170,22 @@
 					</template>
 				</Popover>
 
-				<Actions :style="archivedOpacity" :title="t('deck', 'Show archived cards')">
+				<Actions :style="archivedOpacity">
 					<ActionButton
 						icon="icon-archive"
-						@click="toggleShowArchived" />
-				</Actions>
-				<Actions :title="t('deck', 'Toggle compact mode')">
+						@click="toggleShowArchived">
+						{{ showArchived ? t('deck', 'Hide archived cards') : t('deck', 'Show archived cards') }}
+					</ActionButton>
 					<ActionButton v-if="compactMode"
 						icon="icon-toggle-compact-collapsed"
-						@click="toggleCompactMode" />
+						@click="toggleCompactMode">
+						{{ t('deck', 'Toggle compact mode') }}
+					</ActionButton>
 					<ActionButton v-else
 						icon="icon-toggle-compact-expanded"
-						@click="toggleCompactMode" />
+						@click="toggleCompactMode">
+						{{ t('deck', 'Toggle compact mode') }}
+					</ActionButton>
 				</Actions>
 				<!-- FIXME: ActionRouter currently doesn't work as an inline action -->
 				<Actions :title="t('deck', 'Details')">
