@@ -57,7 +57,7 @@
 				class="labels"
 				@click="openCard">
 				<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)">
-					<span>{{ label.title }}</span>
+					<span @click="applyLabelFilter(label)">{{ label.title }}</span>
 				</li>
 			</transition-group>
 			<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
@@ -141,6 +141,9 @@ export default {
 		},
 		cancelEdit() {
 			this.editing = false
+		},
+		applyLabelFilter(label) {
+			this.$nextTick(() => this.$store.dispatch('toggleFilter', { tags: [label.id] }))
 		},
 	},
 }
