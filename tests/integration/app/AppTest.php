@@ -42,9 +42,4 @@ class AppTest extends TestCase {
 		$appManager = $this->container->query('OCP\App\IAppManager');
 		$this->assertTrue($appManager->isInstalled('deck'));
 	}
-
-	public function testNavigationEntry() {
-		$this->app->registerNavigationEntry();
-		$this->assertTrue(true);
-	}
 }

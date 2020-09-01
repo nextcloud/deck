@@ -64,6 +64,8 @@ class BoardService {
 	private $eventDispatcher;
 	private $changeHelper;
 
+	private $boardsCache = null;
+
 	public function __construct(
 		BoardMapper $boardMapper,
 		StackMapper $stackMapper,
@@ -105,40 +107,52 @@ class BoardService {
 		$this->userId = $userId;
 	}
 
-	/**
-	 * @return array
-	 */
-	public function findAll($since = -1, $details = null) {
+	public function getUserBoards(int $since = -1): array {
 		$userInfo = $this->getBoardPrerequisites();
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null, $since);
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null,  $since);
 		$circleBoards = $this->boardMapper->findAllByCircles($userInfo['user'], null, null,  $since);
-		$complete = array_merge($userBoards, $groupBoards, $circleBoards);
+		$mergedBoards = array_merge($userBoards, $groupBoards, $circleBoards);
 		$result = [];
 		/** @var Board $item */
-		foreach ($complete as &$item) {
+		foreach ($mergedBoards as &$item) {
 			if (!array_key_exists($item->getId(), $result)) {
-				$this->boardMapper->mapOwner($item);
-				if ($item->getAcl() !== null) {
-					foreach ($item->getAcl() as &$acl) {
-						$this->boardMapper->mapAcl($acl);
-					}
-				}
-				if ($details !== null) {
-					$this->enrichWithStacks($item);
-					$this->enrichWithLabels($item);
-					$this->enrichWithUsers($item);
-				}
-				$permissions = $this->permissionService->matchPermissions($item);
-				$item->setPermissions([
-					'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
-					'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
-					'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
-					'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
-				]);
 				$result[$item->getId()] = $item;
 			}
 		}
+		return array_values($result);
+	}
+	/**
+	 * @return array
+	 */
+	public function findAll($since = -1, $details = null) {
+		if ($this->boardsCache) {
+			return $this->boardsCache;
+		}
+		$complete = $this->getUserBoards($since);
+		/** @var Board $item */
+		foreach ($complete as &$item) {
+			$this->boardMapper->mapOwner($item);
+			if ($item->getAcl() !== null) {
+				foreach ($item->getAcl() as &$acl) {
+					$this->boardMapper->mapAcl($acl);
+				}
+			}
+			if ($details !== null) {
+				$this->enrichWithStacks($item);
+				$this->enrichWithLabels($item);
+				$this->enrichWithUsers($item);
+			}
+			$permissions = $this->permissionService->matchPermissions($item);
+			$item->setPermissions([
+				'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
+				'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
+				'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
+				'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
+			]);
+			$result[$item->getId()] = $item;
+		}
+		$this->boardsCache = $complete;
 		return array_values($result);
 	}
 
@@ -151,6 +165,9 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function find($boardId) {
+		if ($this->boardsCache && isset($this->boardsCache[$boardId])) {
+			return $this->boardsCache[$boardId];
+		}
 		if (is_numeric($boardId) === false) {
 			throw new BadRequestException('board id must be a number');
 		}
