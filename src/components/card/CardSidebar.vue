@@ -27,7 +27,16 @@
 		:title-editable.sync="titleEditable"
 		@update:title="updateTitle"
 		@close="closeSidebar">
-		<template #secondary-actions />
+		<template #secondary-actions>
+			<ActionButton v-if="cardDetailsInModal" icon="icon-menu-sidebar" @click.stop="showModal()">
+				{{ t('deck', 'Open in sidebar view') }}
+			</ActionButton>
+
+			<ActionButton v-else icon="icon-external" @click.stop="showModal()">
+				{{ t('deck', 'Open in bigger view') }}
+			</ActionButton>
+		</template>
+
 		<AppSidebarTab id="details"
 			:order="0"
 			:name="t('deck', 'Details')"
@@ -278,6 +287,7 @@ export default {
 	computed: {
 		...mapState({
 			currentBoard: state => state.currentBoard,
+			cardDetailsInModal: state => state.cardDetailsInModal,
 		}),
 		...mapGetters(['canEdit', 'assignables']),
 		attachments() {
@@ -505,6 +515,9 @@ export default {
 		parse(value) {
 			return moment(value, 'LLL', this.locale).toDate()
 		},
+		showModal() {
+			this.$store.dispatch('setCardDetailsInModal', true)
+		},
 	},
 }
 </script>
@@ -531,6 +544,42 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+
+	// FIXME: Obivously we should at some point not randomly reuse the sidebar component
+	// since this is not oficially supported
+	.modal__card .app-sidebar {
+		border: 0;
+		min-width: 100%;
+		position: relative;
+		top: 0;
+		left: 0;
+		right: 0;
+		max-width: 100%;
+		max-height: 100%;
+		&::v-deep {
+			.app-sidebar-header {
+				position: sticky;
+				top: 0;
+				z-index: 100;
+				background-color: var(--color-main-background);
+			}
+			.app-sidebar-tabs__nav {
+				position: sticky;
+				top: 87px;
+				margin: 0;
+				z-index: 100;
+				background-color: var(--color-main-background);
+			}
+
+			section {
+				min-height: auto;
+			}
+
+			#emptycontent, .emptycontent {
+				margin-top: 88px;
+			}
+		}
+	}
 
 	h5 {
 		border-bottom: 1px solid var(--color-border);
