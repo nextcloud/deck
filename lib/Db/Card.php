@@ -144,14 +144,9 @@ class Card extends RelationalEntity {
 				return $label->getTitle();
 			}, $this->getLabels());
 		}
-		foreach ($this->getAssignedUsers() as $user) {
-			$participant = $user->resolveParticipant();
-			//  FIXME use proper uri
-			$event->add('ATTENDEE', 'https://localhost/remote.php/dav/principals/users/:' . $participant->getUID(), [ 'CN' => $participant->getDisplayName()]);
-		}
-
 
 		$event->SUMMARY = $this->getTitle();
+		$event->DESCRIPTION = $this->getDescription();
 		$calendar->add($event);
 		return $calendar;
 	}

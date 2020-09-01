@@ -42,7 +42,7 @@ class CalendarObject implements ICalendarObject, IACL {
 	/** @var VCalendar */
 	private $calendarObject;
 
-	public function __construct(Calendar $calendar, string $name, $sourceItem = null, DeckCalendarBackend $backend) {
+	public function __construct(Calendar $calendar, string $name, DeckCalendarBackend $backend, $sourceItem) {
 		$this->calendar = $calendar;
 		$this->name = $name;
 		$this->sourceItem = $sourceItem;

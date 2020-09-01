@@ -28,6 +28,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet;
 use Sabre\DAV\Exception\Forbidden;
+use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\PropPatch;
 
 class Calendar extends ExternalCalendar {
@@ -66,24 +67,9 @@ class Calendar extends ExternalCalendar {
 				'privilege' => '{DAV:}read',
 				'principal' => $this->getOwner(),
 				'protected' => true,
-			],
-			[
-				'privilege' => '{DAV:}read',
-				'principal' => $this->getOwner() . '/calendar-proxy-write',
-				'protected' => true,
-			],
-			[
-				'privilege' => '{DAV:}read',
-				'principal' => $this->getOwner() . '/calendar-proxy-read',
-				'protected' => true,
-			],
+			]
 		];
-		if ($this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_EDIT)) {
-			$acl[] = [
-				'privilege' => '{DAV:}write',
-				'principal' => $this->getOwner(),
-				'protected' => true,
-			];
+		if ($this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_MANAGE)) {
 			$acl[] = [
 				'privilege' => '{DAV:}write-properties',
 				'principal' => $this->getOwner(),
@@ -109,7 +95,7 @@ class Calendar extends ExternalCalendar {
 	}
 
 	public function createFile($name, $data = null) {
-		throw new \Sabre\DAV\Exception\Forbidden('Creating a new entry is not implemented');
+		throw new Forbidden('Creating a new entry is not implemented');
 	}
 
 	public function getChild($name) {
@@ -121,9 +107,10 @@ class Calendar extends ExternalCalendar {
 				}
 			));
 			if (count($card) > 0) {
-				return new CalendarObject($this, $name, $card[0], $this->backend);
+				return new CalendarObject($this, $name, $this->backend, $card[0]);
 			}
 		}
+		throw new NotFound('Node not found');
 	}
 
 	public function getChildren() {
@@ -151,7 +138,7 @@ class Calendar extends ExternalCalendar {
 
 
 	public function delete() {
-		return null;
+		throw new Forbidden('Deleting an entry is not implemented');
 	}
 
 	public function getLastModified() {
@@ -171,7 +158,7 @@ class Calendar extends ExternalCalendar {
 			foreach ($properties as $key => $value) {
 				switch ($key) {
 					case '{DAV:}displayname':
-						if (mb_substr($value, 0, strlen('Deck: '))) {
+						if (mb_strpos($value, 'Deck: ') === 0) {
 							$value = mb_substr($value, strlen('Deck: '));
 						}
 						$this->board->setTitle($value);

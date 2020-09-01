@@ -32,6 +32,7 @@ use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Service\StackService;
+use Sabre\DAV\Exception\NotFound;
 
 class DeckCalendarBackend {
 
@@ -62,7 +63,11 @@ class DeckCalendarBackend {
 	}
 
 	public function getBoard(int $id): Board {
-		return $this->boardService->find($id);
+		try {
+			return $this->boardService->find($id);
+		} catch (\Exception $e) {
+			throw new NotFound('Board with id ' . $id . ' not found');
+		}
 	}
 
 	public function checkBoardPermission(int $id, int $permission): bool {

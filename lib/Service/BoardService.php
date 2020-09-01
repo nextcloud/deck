@@ -348,7 +348,7 @@ class BoardService {
 			throw new BadRequestException('board id must be a number');
 		}
 
-		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
 		if ($board->getDeletedAt() > 0) {
 			throw new BadRequestException('This board has already been deleted');
@@ -377,7 +377,7 @@ class BoardService {
 			throw new BadRequestException('board id must be a number');
 		}
 
-		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
 		$board->setDeletedAt(0);
 		$board = $this->boardMapper->update($board);
@@ -404,7 +404,7 @@ class BoardService {
 			throw new BadRequestException('id must be a number');
 		}
 
-		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
 		$delete = $this->boardMapper->delete($board);
 

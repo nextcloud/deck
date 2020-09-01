@@ -26,6 +26,7 @@ namespace OCA\Deck\DAV;
 use OCA\DAV\CalDAV\Integration\ExternalCalendar;
 use OCA\DAV\CalDAV\Integration\ICalendarProvider;
 use OCA\Deck\Db\Board;
+use Sabre\DAV\Exception\NotFound;
 
 class CalendarPlugin implements ICalendarProvider {
 
@@ -55,10 +56,13 @@ class CalendarPlugin implements ICalendarProvider {
 
 	public function getCalendarInCalendarHome(string $principalUri, string $calendarUri): ?ExternalCalendar {
 		if ($this->hasCalendarInCalendarHome($principalUri, $calendarUri)) {
-			$board = $this->backend->getBoard((int)str_replace('board-', '', $calendarUri));
-			return new Calendar($principalUri, $calendarUri, $board, $this->backend);
+			try {
+				$board = $this->backend->getBoard((int)str_replace('board-', '', $calendarUri));
+				return new Calendar($principalUri, $calendarUri, $board, $this->backend);
+			} catch (NotFound $e) {
+				// We can just return null if we have no matching board
+			}
 		}
-
 		return null;
 	}
 }

@@ -57,7 +57,7 @@ class Stack extends RelationalEntity {
 		$calendar = new VCalendar();
 		$event = $calendar->createComponent('VTODO');
 		$event->UID = 'deck-stack-' . $this->getId();
-		$event->SUMMARY = '[Stack]: ' . $this->getTitle();
+		$event->SUMMARY = 'List : ' . $this->getTitle();
 		$calendar->add($event);
 		return $calendar;
 	}
