@@ -30,6 +30,7 @@ use Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\PropPatch;
+use Sabre\VObject\InvalidDataException;
 
 class Calendar extends ExternalCalendar {
 
@@ -164,7 +165,11 @@ class Calendar extends ExternalCalendar {
 						$this->board->setTitle($value);
 						break;
 					case '{http://apple.com/ns/ical/}calendar-color':
-						$this->board->setColor(substr($value, 1));
+						$color = substr($value, 1, 6);
+						if (!preg_match('/[a-f0-9]{6}/i', $color)) {
+							throw new InvalidDataException('No valid color provided');
+						}
+						$this->board->setColor($color);
 						break;
 				}
 			}
