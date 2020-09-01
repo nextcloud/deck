@@ -1,6 +1,33 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.1.0 - unreleased
+
+### Merged PRs
+
+* [#1853](https://github.com/nextcloud/deck/pull/1853) Archive all cards from stack @jakobroehrl
+* [#1865](https://github.com/nextcloud/deck/pull/1865) Add stack button on empty board @jakobroehrl
+* [#1926](https://github.com/nextcloud/deck/pull/1926) New filter: unassigned cards @jakobroehrl
+* [#1934](https://github.com/nextcloud/deck/pull/1934) Card dashboard @jakobroehrl
+* [#2035](https://github.com/nextcloud/deck/pull/2035) Attach files in description @jakobroehrl
+* [#2047](https://github.com/nextcloud/deck/pull/2047) Show card details in modal @jakobroehrl
+* [#2115](https://github.com/nextcloud/deck/pull/2115) Dashboard panel @juliushaertl
+* [#2123](https://github.com/nextcloud/deck/pull/2123) Fix control tooltip @jakobroehrl
+* [#2144](https://github.com/nextcloud/deck/pull/2144) Fix nextcloud if install with dev dependencies @matchish
+* [#2157](https://github.com/nextcloud/deck/pull/2157) Build/webpack shared config @juliushaertl
+* [#2158](https://github.com/nextcloud/deck/pull/2158) Fix description in dark mode @juliushaertl
+* [#2169](https://github.com/nextcloud/deck/pull/2169) Bump webpack-merge from 5.0.9 to 5.1.0 @dependabot
+* [#2170](https://github.com/nextcloud/deck/pull/2170) Add lastModified date to boards API documentation @stefan-niedermann
+* [#2188](https://github.com/nextcloud/deck/pull/2188) CardBadges: Count checkboxes started with "+ [ ]" @joreiff
+* [#2200](https://github.com/nextcloud/deck/pull/2200) Unified search implementation @juliushaertl
+* [#2206](https://github.com/nextcloud/deck/pull/2206) Fix read-only sidebar (fixes #2033) @juliushaertl
+* [#2208](https://github.com/nextcloud/deck/pull/2208) Fix design, dark mode and keyboard navigation of the board list @juliushaertl
+* [#2210](https://github.com/nextcloud/deck/pull/2210) Fix an incorrect/misleading message in lib/Service/BoardService.php @jordanbancino
+* [#2211](https://github.com/nextcloud/deck/pull/2211) Update incorrect field in API documentation (docs/API.md) @jordanbancino
+* [#2243](https://github.com/nextcloud/deck/pull/2243) Various smaller styling fixes @juliushaertl
+* [#2244](https://github.com/nextcloud/deck/pull/2244) Toggle filter on clicking card labels @juliushaertl
+
+
 ## 1.0.5 - 2020-07-15
 
 ### Fixed
