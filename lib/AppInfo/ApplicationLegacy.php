@@ -88,6 +88,8 @@ class ApplicationLegacy extends App {
 		$container->registerService('database4ByteSupport', static function () use ($server) {
 			return $server->getDatabaseConnection()->supports4ByteText();
 		});
+
+		$this->register();
 	}
 
 	public function register(): void {
