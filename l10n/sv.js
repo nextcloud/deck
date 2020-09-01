@@ -129,6 +129,7 @@ OC.L10N.register(
     "Next 30 days" : "Nästa 30 dagar",
     "No due date" : "Inget slutdatum",
     "Clear filter" : "Rensa filter",
+    "Hide archived cards" : "Göm arkiverade kort",
     "Show archived cards" : "Visa arkiverade kort",
     "Toggle compact mode" : "Växla kompakt läge",
     "Details" : "Detaljer",

@@ -14,6 +14,7 @@ OC.L10N.register(
     "Missing a temporary folder" : "Falta un directorio temporal",
     "Create new board" : "Crear un nuevo tablero",
     "Cancel" : "Cancelar",
+    "Hide archived cards" : "Ocultar tarjetas archivadas",
     "Show archived cards" : "Mostrar tarjetas archivadas",
     "Details" : "Detalles",
     "Sharing" : "Compartiendo",

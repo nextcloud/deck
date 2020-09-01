@@ -129,6 +129,7 @@ OC.L10N.register(
     "Next 30 days" : "Komende 30 dagen",
     "No due date" : "Geen vervaldatum",
     "Clear filter" : "Filter leegmaken",
+    "Hide archived cards" : "Gearchiveerde kaarten verbergen",
     "Show archived cards" : "Gearchiveerde kaarten weergeven",
     "Toggle compact mode" : "Omschakelen compacte modus",
     "Details" : "Details",

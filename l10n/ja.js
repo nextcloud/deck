@@ -128,6 +128,7 @@ OC.L10N.register(
     "Next 30 days" : "次の30日間",
     "No due date" : "期限なし",
     "Clear filter" : "フィルターをクリア",
+    "Hide archived cards" : "アーカイブされたカードを非表示にする",
     "Show archived cards" : "アーカイブされたカードを表示する",
     "Toggle compact mode" : "コンパクトモードの切り替え",
     "Details" : "詳細",

@@ -78,6 +78,7 @@ OC.L10N.register(
     "Archived cards" : "Arkiver tavle",
     "Filter by tag" : "Filtrer på knagg",
     "Overdue" : "Utløpt",
+    "Hide archived cards" : "Skjul arkiverte kort",
     "Show archived cards" : "Vis arkiverkte kort",
     "Toggle compact mode" : "Endre kompakt modus",
     "Details" : "Detaljer",

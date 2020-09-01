@@ -85,6 +85,7 @@ OC.L10N.register(
     "Next 30 days" : "ב־30 הימים הבאים",
     "No due date" : "ללא תאריך יעד",
     "Clear filter" : "מחיקת מסנן",
+    "Hide archived cards" : "הסתרת כרטיסים בארכיון",
     "Show archived cards" : "הצגת כרטיסים בארכיון",
     "Toggle compact mode" : "החלפת מצב חסכוני",
     "Details" : "פרטים",

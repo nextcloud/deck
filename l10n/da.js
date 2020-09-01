@@ -21,6 +21,7 @@ OC.L10N.register(
     "File already exists" : "Fil findes allerede",
     "Do you want to overwrite it?" : "Vil du overskrive den?",
     "Drop your files to upload" : "Drop dine filer for at uploade",
+    "Hide archived cards" : "Skjul arkiverede kort",
     "Show archived cards" : "Vis arkiverede kort",
     "Details" : "Detaljer",
     "Sharing" : "Deling",

@@ -129,6 +129,7 @@ OC.L10N.register(
     "Next 30 days" : "Následujúcich 30 dní",
     "No due date" : "Bez termínu",
     "Clear filter" : "Vyčistiť filter",
+    "Hide archived cards" : "Skryť archivované karty",
     "Show archived cards" : "Zobraziť archivované karty",
     "Toggle compact mode" : "Vyp/zap. kompaktný režim",
     "Details" : "Podrobnosti",

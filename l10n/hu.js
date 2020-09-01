@@ -104,6 +104,7 @@ OC.L10N.register(
     "Next 30 days" : "Következő 30 nap",
     "No due date" : "Nincs határidő",
     "Clear filter" : "Szűrő törlése",
+    "Hide archived cards" : "Archivált kártyák elrejtése",
     "Show archived cards" : "Archivált kártyák megjelenítése",
     "Toggle compact mode" : "Kompakt mód be/ki",
     "Details" : "Részletek",

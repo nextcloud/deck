@@ -130,6 +130,7 @@ OC.L10N.register(
     "Next 30 days" : "Gelecek 30 gün",
     "No due date" : "Bitiş tarihi yok",
     "Clear filter" : "Süzgeci temizle",
+    "Hide archived cards" : "Arşivlenmiş kartları gizle",
     "Show archived cards" : "Arşivlenmiş kartları görüntüle",
     "Toggle compact mode" : "Sıkışık kipi değiştir",
     "Details" : "Ayrıntılar",

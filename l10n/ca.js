@@ -129,6 +129,7 @@ OC.L10N.register(
     "Next 30 days" : "Propers 30 dies",
     "No due date" : "Sense venciment",
     "Clear filter" : "Neteja el filtre",
+    "Hide archived cards" : "Amaga les targetes arxivades",
     "Show archived cards" : "Mostra les targetes arxivades",
     "Toggle compact mode" : "Commuta el mode compacte",
     "Details" : "Detalls",

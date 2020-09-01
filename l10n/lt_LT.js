@@ -100,6 +100,7 @@ OC.L10N.register(
     "Next 30 days" : "Artimiausios 30 dienų",
     "No due date" : "Be galutinio termino",
     "Clear filter" : "Išvalyti filtrą",
+    "Hide archived cards" : "Slėpti archyvuotas korteles",
     "Show archived cards" : "Rodyti archyvuotas korteles",
     "Toggle compact mode" : "Perjungti kompaktišką veikseną",
     "Details" : "Išsamiau",

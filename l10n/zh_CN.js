@@ -105,6 +105,7 @@ OC.L10N.register(
     "Next 30 days" : "下个30天",
     "No due date" : "无截止日期",
     "Clear filter" : "清空过滤器",
+    "Hide archived cards" : "隐藏已存档的卡片",
     "Show archived cards" : "显示已存档的卡片",
     "Toggle compact mode" : "切换简洁模式",
     "Details" : "详情",

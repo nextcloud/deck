@@ -129,6 +129,7 @@ OC.L10N.register(
     "Next 30 days" : "Naslednjih 30 dni",
     "No due date" : "Ni datuma preteka",
     "Clear filter" : "Počisti filter",
+    "Hide archived cards" : "Skrij arhivirane naloge",
     "Show archived cards" : "Prikaži arhivirane naloge",
     "Toggle compact mode" : "Preklopi način prikaza",
     "Details" : "Podrobnosti",

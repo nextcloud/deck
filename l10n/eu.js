@@ -130,6 +130,7 @@ OC.L10N.register(
     "Next 30 days" : "Hurrengo 30 egunetan",
     "No due date" : "Epe-mugarik gabe",
     "Clear filter" : "Garbitu iragazia",
+    "Hide archived cards" : "Ezkutatu artxibatutako txartelak",
     "Show archived cards" : "Erakutsi artxibatutako txartelak",
     "Toggle compact mode" : "Txandakatu modu trinkoa",
     "Details" : "Xehetasunak",

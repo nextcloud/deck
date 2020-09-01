@@ -96,6 +96,7 @@ OC.L10N.register(
     "Next 7 days" : "Næstu 7 daga",
     "Next 30 days" : "Næstu 30 daga",
     "No due date" : "Enginn lokadagur",
+    "Hide archived cards" : "Fela spjöld í geymslu",
     "Show archived cards" : "Sýna spjöld í geymslu",
     "Toggle compact mode" : "Víxla þjöppuðum ham af/á",
     "Details" : "Details",

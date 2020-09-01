@@ -129,6 +129,7 @@ OC.L10N.register(
     "Next 30 days" : "Ближайшие 30 дней",
     "No due date" : "Без назначенной даты",
     "Clear filter" : "Сбросить фильтр",
+    "Hide archived cards" : "Скрыть архивные карточки",
     "Show archived cards" : "Просмотреть или скрыть архивные карточки",
     "Toggle compact mode" : "Выбор компактного или обычного режима просмотра",
     "Details" : "Свойства",

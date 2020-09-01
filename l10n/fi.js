@@ -96,6 +96,7 @@ OC.L10N.register(
     "Next 7 days" : "Seuraavat 7 päivää",
     "Next 30 days" : "Seuraavat 30 päivää",
     "No due date" : "Ei eräpäivää",
+    "Hide archived cards" : "Piilota arkistoidut kortit",
     "Show archived cards" : "Näytä arkistoidut kortit",
     "Toggle compact mode" : "Käytä kompaktia tilaa",
     "Details" : "Tiedot",

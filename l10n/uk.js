@@ -64,6 +64,7 @@ OC.L10N.register(
     "Next 30 days" : "Наступні 30 днів",
     "No due date" : "Без дати завершення",
     "Clear filter" : "Очистити фільтр",
+    "Hide archived cards" : "Приховати архівні картки",
     "Show archived cards" : "Показати архівні картки",
     "Toggle compact mode" : "Перемкнути компактний вигляд",
     "Details" : "Деталі",
