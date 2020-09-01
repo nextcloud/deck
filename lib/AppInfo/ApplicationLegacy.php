@@ -50,7 +50,6 @@ use OCP\IGroup;
 use OCP\IServerContainer;
 use OCP\IUser;
 use OCP\IUserManager;
-use OCP\IURLGenerator;
 use OCP\Util;
 
 if ((@include_once __DIR__ . '/../../vendor/autoload.php') === false) {
