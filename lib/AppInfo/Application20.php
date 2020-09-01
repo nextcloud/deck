@@ -29,6 +29,7 @@ use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Capabilities;
 use OCA\Deck\Collaboration\Resources\ResourceProvider;
 use OCA\Deck\Collaboration\Resources\ResourceProviderCard;
+use OCA\Deck\Dashboard\DeckWidget;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
@@ -102,6 +103,8 @@ class Application20 extends App implements IBootstrap {
 		});
 
 		$context->registerSearchProvider(DeckProvider::class);
+
+		$context->registerDashboardWidget(DeckWidget::class);
 
 		$this->registerUserGroupHooks();
 
