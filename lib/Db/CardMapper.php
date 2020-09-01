@@ -83,8 +83,8 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 
 		// make sure we only reset the notification flag if the duedate changes
 		if (in_array('duedate', $entity->getUpdatedFields(), true)) {
-			/** @var Card $existing */
 			try {
+				/** @var Card $existing */
 				$existing = $this->find($entity->getId());
 				if ($existing && $entity->getDuedate() !== $existing->getDuedate()) {
 					$entity->setNotified(false);
@@ -131,9 +131,10 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
 			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->gt('last_modified', $qb->createNamedParameter($since, IQueryBuilder::PARAM_INT)))
-			->orderBy('order', 'id')
 			->setMaxResults($limit)
-			->setFirstResult($offset);
+			->setFirstResult($offset)
+			->orderBy('order')
+			->addOrderBy('id');
 		return $this->findEntities($qb);
 	}
 
@@ -156,16 +157,12 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	public function findDeleted($boardId, $limit = null, $offset = null) {
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
-			->from('deck_cards', 'c')
-			->join('c', 'deck_stacks', 's', $qb->expr()->eq('s.id', 'c.stack_id'))
-			->where($qb->expr()->eq('s.board_id', $qb->createNamedParameter($boardId)))
-			->andWhere($qb->expr()->neq('c.archived', $qb->createNamedParameter(true)))
-			->andWhere($qb->expr()->neq('c.deleted_at', $qb->createNamedParameter(0)))
-			->orderBy('c.order')
+		$qb = $this->queryCardsByBoard($boardId);
+		$qb->andWhere($qb->expr()->neq('c.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
 			->setMaxResults($limit)
-			->setFirstResult($offset);
+			->setFirstResult($offset)
+			->orderBy('order')
+			->addOrderBy('id');
 		return $this->findEntities($qb);
 	}
 
@@ -305,8 +302,8 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	public function removeLabel($card, $label) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete('deck_assigned_labels')
-			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($card)))
-			->andWhere($qb->expr()->eq('label_id', $qb->createNamedParameter($label)));
+			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($card, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('label_id', $qb->createNamedParameter($label, IQueryBuilder::PARAM_INT)));
 		$qb->execute();
 	}
 
