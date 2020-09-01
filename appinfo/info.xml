@@ -64,15 +64,9 @@
             <provider>OCA\Deck\Activity\DeckProvider</provider>
         </providers>
     </activity>
-    <sabre>
-        <calendar-plugins>
-            <plugin>OCA\Deck\DAV\CalendarPlugin</plugin>
-        </calendar-plugins>
-    </sabre>
     <fulltextsearch>
         <provider min-version="16">OCA\Deck\Provider\DeckProvider</provider>
     </fulltextsearch>
-
     <navigations>
         <navigation>
             <name>Deck</name>
@@ -81,5 +75,9 @@
             <order>10</order>
         </navigation>
     </navigations>
-
+    <sabre>
+        <calendar-plugins>
+            <plugin>OCA\Deck\DAV\CalendarPlugin</plugin>
+        </calendar-plugins>
+    </sabre>
 </info>
