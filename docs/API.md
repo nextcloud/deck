@@ -502,6 +502,19 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 | stackId   | Integer | The id of the stack                      |
 
 #### Response
+It will return an object of the new stack containing the new cards as well.
+
+```json
+  {"title":"l1 (copy)",
+  "boardId":6,
+  "deletedAt":0,
+  "lastModified":0,
+  "cards":
+    [{"title":"ME","description":"123","stackId":73,"type":"plain","lastModified":1599028559,"lastEditor":null,"createdAt":1599028559,"labels":[],"assignedUsers":[],"attachments":null,"attachmentCount":0,"owner":{"primaryKey":"root","uid":"root","displayname":"root","type":0},"order":0,"archived":false,"duedate":null,"deletedAt":0,"commentsUnread":0,"id":109,"overdue":0},
+    {"title":"ka","description":"","stackId":73,"type":"plain","lastModified":1599028559,"lastEditor":null,"createdAt":1599028559,"labels":[],"assignedUsers":[],"attachments":null,"attachmentCount":0,"owner":{"primaryKey":"root","uid":"root","displayname":"root","type":0},"order":1,"archived":false,"duedate":"2020-08-26T22:00:00+00:00","deletedAt":0,"commentsUnread":0,"id":110,"overdue":3}],
+  "order":999,
+  "id":73}
+```
 
 ##### 200 Success
 

@@ -43,10 +43,10 @@
 				</form>
 			</transition>
 			<Actions v-if="!isArchived" :force-menu="true">
-				<ActionButton v-if="canManage" icon="icon-archive" @click="modalArchivAllCardsShow=true">
+				<ActionButton v-if="canEdit" icon="icon-archive" @click="modalArchivAllCardsShow=true">
 					{{ t('deck', 'Archive all cards') }}
 				</ActionButton>
-				<ActionButton v-if="canEdit" icon="icon-clone" @click="cloneStack(stack)">
+				<ActionButton v-if="canManage" icon="icon-clone" @click="cloneStack(stack)">
 					{{ t('deck', 'Clone list') }}
 				</ActionButton>
 				<ActionButton v-if="canManage" icon="icon-delete" @click="deleteStack(stack)">

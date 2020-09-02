@@ -393,12 +393,18 @@ class StackService {
 		}
 
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
+		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
+
 		if ($this->boardService->isArchived(null, $boardId)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 
 		$stack = $this->stackMapper->find($id);
 		$board = $this->boardMapper->find($boardId);
+
+		if ($stack->getBoardId() !== $board->getId()) {
+			throw new StatusException('Operation not allowed. Stack is not part of this board');
+		}
 
 
 		$newStack = new Stack();
@@ -418,7 +424,6 @@ class StackService {
 		);
 
 		$cards = $this->cardMapper->findAll($id);
-		$newCardArray = [];
 		foreach ($cards as $card) {
 
 			$newCard = new Card();
