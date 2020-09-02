@@ -27,6 +27,7 @@ import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { generateFilePath } from '@nextcloud/router'
 import { showError } from '@nextcloud/dialogs'
+import { subscribe } from '@nextcloud/event-bus'
 import { Tooltip } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
 import './models'
@@ -74,8 +75,17 @@ new Vue({
 		}
 	},
 	created() {
+		subscribe('nextcloud:unified-search.search', ({ query }) => {
+			this.$store.commit('setSearchQuery', query)
+		})
+		subscribe('nextcloud:unified-search.reset', () => {
+			this.$store.commit('setSearchQuery', '')
+		})
+
+		// FIXME remove this once Nextcloud 20 is minimum required version
 		// eslint-disable-next-line
 		new OCA.Search(this.filter, this.cleanSearch)
+
 		this.interval = setInterval(() => {
 			this.time = Date.now()
 		}, 1000)
