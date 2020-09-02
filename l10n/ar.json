@@ -37,6 +37,7 @@
     "A PHP extension stopped the file upload" : "اضافة البي اچ بي PHP اوقفت رفع الملف",
     "Personal planning and team project organization" : "التخطيط الشخصي و تنظيم مشروع الفريق",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "دك (Deck) هو أداة تنظيم باسلوب كانبان (kanban) تهدف إلى التخطيط الشخصي وتنظيم المشروع للفرق مع نيكست كلاود (Nextcloud).\n- 📥 إضافة مهامك إلى البطاقات وترتيبها\n- 📄 كتابة ملاحظات إضافية  باستخدام مارك داون (markdown)\n- 🔖 تعيين تسميات لتنظيم أفضل\n- 👥 شارك مع فريقك أو أصدقائك أو عائلتك\n- 📎 إرفاق الملفات وتضمينها بالوصف المستخدم فيه مارك داون (markdown)\n- 💬 ناقش مع فريقك باستخدام التعليقات\n- ⚡ تتبع التغييرات في تيار النشاط\n- 🚀 اجعل مشروعك منظماً",
+    "Card details" : "تفاصيل البطاقة",
     "Create new board" : "انشاء لوح جديد",
     "new board" : "لوح جديد",
     "Select the board to link to a project" : "تحديد اللوح لربطه بمشروع",
@@ -127,7 +128,6 @@
     "Assign to me" : "ينسب لي",
     "Delete card" : "حذف البطاقة",
     "Move card" : "حرك البطاقة",
-    "Card details" : "تفاصيل البطاقة",
     "Move card to another board" : "حرك البطاقة الى لوح اخر",
     "seconds ago" : "ثوانٍ مضت",
     "All boards" : "جميع الالواح",
