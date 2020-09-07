@@ -46,10 +46,10 @@
 					<span class="hidden-visually">{{ t('deck', 'Tags') }}</span>
 				</div>
 				<div class="section-details">
-					<Multiselect v-model="allLabels"
+					<Multiselect v-model="assignedLabels"
 						:multiple="true"
 						:disabled="!canEdit"
-						:options="currentBoard.labels"
+						:options="labelsSorted"
 						:placeholder="t('deck', 'Assign a tag to this card…')"
 						:taggable="true"
 						label="title"
@@ -265,7 +265,7 @@ export default {
 			assignedUsers: null,
 			addedLabelToCard: null,
 			copiedCard: null,
-			allLabels: null,
+			assignedLabels: null,
 			locale: getLocale(),
 
 			saving: false,
@@ -369,6 +369,9 @@ export default {
 		renderedDescription() {
 			return markdownIt.render(this.copiedCard.description || '')
 		},
+		labelsSorted() {
+			return [...this.currentBoard.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+		},
 	},
 	watch: {
 		currentCard() {
@@ -389,7 +392,7 @@ export default {
 			}
 
 			this.copiedCard = JSON.parse(JSON.stringify(this.currentCard))
-			this.allLabels = this.currentCard.labels
+			this.assignedLabels = [...this.currentCard.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 
 			if (this.currentCard.assignedUsers && this.currentCard.assignedUsers.length > 0) {
 				this.assignedUsers = this.currentCard.assignedUsers.map((item) => ({
