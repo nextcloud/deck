@@ -28,7 +28,7 @@
 		"test:coverage": "jest --coverage"
 	},
 	"dependencies": {
-		"@babel/polyfill": "^7.10.4",
+		"@babel/polyfill": "^7.11.5",
 		"@babel/runtime": "^7.11.2",
 		"@juliushaertl/vue-richtext": "^0.3.3",
 		"@nextcloud/auth": "^1.3.0",
