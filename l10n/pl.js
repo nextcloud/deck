@@ -163,7 +163,7 @@ OC.L10N.register(
     "Edit" : "Edycja",
     "Add a new tag" : "Dodaj nową etykietę",
     "title and color value must be provided" : "należy podać tytuł i kolor",
-    "Title" : "Tutuł",
+    "Title" : "Tytuł",
     "Members" : "Członkowie",
     "Upload attachment" : "Wyślij załącznik",
     "Add this attachment" : "Dodaj ten załącznik",
