@@ -48,7 +48,9 @@
 			<EmptyContent
 				id="deck-widget-empty-content"
 				icon="icon-deck">
-				{{ t('deck', 'No upcoming cards') }}
+				<template #desc>
+					{{ t('deck', 'No upcoming cards') }}
+				</template>
 			</EmptyContent>
 		</template>
 	</DashboardWidget>
@@ -110,6 +112,11 @@ export default {
 
 <style lang="scss" scoped>
 	@import './../css/labels';
+
+	#deck-widget-empty-content {
+		text-align: center;
+		margin-top: 5vh;
+	}
 
 	.card {
 		display: block;
