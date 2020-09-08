@@ -228,7 +228,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 
 	public function findOverdue() {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('id,title,duedate,notified')
+		$qb->select('id','title','duedate','notified')
 			->from('deck_cards')
 			->where($qb->expr()->lt('duedate', $qb->createFunction('NOW()')))
 			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
@@ -238,7 +238,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 
 	public function findUnexposedDescriptionChances() {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('id,title,duedate,notified,description_prev,last_editor,description')
+		$qb->select('id','title','duedate','notified','description_prev','last_editor','description')
 			->from('deck_cards')
 			->where($qb->expr()->isNotNull('last_editor'))
 			->andWhere($qb->expr()->isNotNull('description_prev'));
