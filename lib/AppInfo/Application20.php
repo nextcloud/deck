@@ -206,6 +206,7 @@ class Application20 extends App implements IBootstrap {
 
 		$c = $this->getContainer();
 		try {
+			// FIXME we should probably lazy load this
 			$this->fullTextSearchService = $c->query(FullTextSearchService::class);
 			$this->fullTextSearchManager = $c->query(IFullTextSearchManager::class);
 		} catch (Exception $e) {
