@@ -59,6 +59,7 @@ use OCP\IServerContainer;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Util;
+use Psr\Container\ContainerInterface;
 
 class Application20 extends App implements IBootstrap {
 	public const APP_ID = 'deck';
@@ -84,6 +85,12 @@ class Application20 extends App implements IBootstrap {
 		$notificationManager = $context->getServerContainer()->get(\OCP\Notification\IManager::class);
 		$notificationManager->registerNotifierService(Notifier::class);
 		\OCP\Util::addStyle('deck', 'deck');
+
+		$this->registerUserGroupHooks();
+
+		$this->registerCommentsEntity();
+		$this->registerFullTextSearch();
+		$this->registerCollaborationResources();
 	}
 
 	public function register(IRegistrationContext $context): void {
@@ -95,22 +102,15 @@ class Application20 extends App implements IBootstrap {
 		$context->registerMiddleWare(ExceptionMiddleware::class);
 		$context->registerMiddleWare(DefaultBoardMiddleware::class);
 
-		$context->registerService('databaseType', static function (IContainer $c) {
+		$context->registerService('databaseType', static function (ContainerInterface $c) {
 			return $c->get(IConfig::class)->getSystemValue('dbtype', 'sqlite');
 		});
-		$context->registerService('database4ByteSupport', static function (IContainer $c) {
+		$context->registerService('database4ByteSupport', static function (ContainerInterface $c) {
 			return $c->get(IDBConnection::class)->supports4ByteText();
 		});
 
 		$context->registerSearchProvider(DeckProvider::class);
-
 		$context->registerDashboardWidget(DeckWidget::class);
-
-		$this->registerUserGroupHooks();
-
-		$this->registerCommentsEntity();
-		$this->registerFullTextSearch();
-		$this->registerCollaborationResources();
 	}
 
 	private function registerUserGroupHooks(): void {
