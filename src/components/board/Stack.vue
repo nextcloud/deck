@@ -82,7 +82,7 @@
 						type="text"
 						class="no-close"
 						:disabled="stateCardCreating"
-						placeholder="Add a new card"
+						:placeholder="t('deck', 'Card name')"
 						required
 						@keydown.esc="stopCardCreation">
 
