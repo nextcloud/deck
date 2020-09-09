@@ -122,6 +122,7 @@ OC.L10N.register(
     "Apply filter" : "フィルターを適用",
     "Filter by tag" : "タグによるフィルター",
     "Filter by assigned user" : "割当ユーザーでフィルター",
+    "Unassigned" : "未割り当て",
     "Filter by due date" : "期限でフィルター",
     "Overdue" : "期限超過",
     "Next 24 hours" : "次の24時間",
