@@ -155,12 +155,12 @@ class Application20 extends App implements IBootstrap {
 		});
 	}
 
-	public function registerCommentsEntity(SymfonyAdapter $symfonyAdapter): void {
-		$symfonyAdapter->addListener(CommentsEntityEvent::EVENT_ENTITY, function (CommentsEntityEvent $event) {
+	public function registerCommentsEntity(IEventDispatcher $eventDispatcher): void {
+		$eventDispatcher->addListener(CommentsEntityEvent::EVENT_ENTITY, function (CommentsEntityEvent $event) {
 			$event->addEntityCollection(self::COMMENT_ENTITY_TYPE, function ($name) {
 				/** @var CardMapper */
-				$cardMapper = $this->getContainer()->query(CardMapper::class);
-				$permissionService = $this->getContainer()->query(PermissionService::class);
+				$cardMapper = $this->getContainer()->get(CardMapper::class);
+				$permissionService = $this->getContainer()->get(PermissionService::class);
 
 				try {
 					return $permissionService->checkPermission($cardMapper, (int) $name, Acl::PERMISSION_READ);
