@@ -23,8 +23,9 @@
 
 namespace OCA\Deck\AppInfo;
 
+use Closure;
 use Exception;
-use OC_Util;
+use OC\EventDispatcher\SymfonyAdapter;
 use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Capabilities;
 use OCA\Deck\Collaboration\Resources\ResourceProvider;
@@ -45,19 +46,20 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
-use OCP\Collaboration\Resources\IManager;
 use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Comments\CommentsEntityEvent;
+use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\FullTextSearch\IFullTextSearchManager;
 use OCP\IConfig;
-use OCP\IContainer;
 use OCP\IDBConnection;
 use OCP\IGroup;
+use OCP\IGroupManager;
 use OCP\IServerContainer;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\Notification\IManager as NotificationManager;
 use OCP\Util;
 use Psr\Container\ContainerInterface;
 
@@ -82,15 +84,14 @@ class Application20 extends App implements IBootstrap {
 	}
 
 	public function boot(IBootContext $context): void {
-		$notificationManager = $context->getServerContainer()->get(\OCP\Notification\IManager::class);
-		$notificationManager->registerNotifierService(Notifier::class);
-		\OCP\Util::addStyle('deck', 'deck');
+		Util::addStyle('deck', 'deck');
 
-		$this->registerUserGroupHooks();
-
-		$this->registerCommentsEntity();
-		$this->registerFullTextSearch();
-		$this->registerCollaborationResources();
+		$context->injectFn(Closure::fromCallable([$this, 'registerUserGroupHooks']));
+		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEntity']));
+		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEventHandler']));
+		$context->injectFn(Closure::fromCallable([$this, 'registerNotifications']));
+		$context->injectFn(Closure::fromCallable([$this, 'registerFullTextSearch']));
+		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
 	}
 
 	public function register(IRegistrationContext $context): void {
@@ -113,11 +114,13 @@ class Application20 extends App implements IBootstrap {
 		$context->registerDashboardWidget(DeckWidget::class);
 	}
 
-	private function registerUserGroupHooks(): void {
+	public function registerNotifications(NotificationManager $notificationManager): void {
+		$notificationManager->registerNotifierService(Notifier::class);
+	}
+
+	private function registerUserGroupHooks(IUserManager $userManager, IGroupManager $groupManager): void {
 		$container = $this->getContainer();
 		// Delete user/group acl entries when they get deleted
-		/** @var IUserManager $userManager */
-		$userManager = $this->server->getUserManager();
 		$userManager->listen('\OC\User', 'postDelete', static function (IUser $user) use ($container) {
 			// delete existing acl entries for deleted user
 			/** @var AclMapper $aclMapper */
@@ -141,8 +144,6 @@ class Application20 extends App implements IBootstrap {
 			}
 		});
 
-		/** @var IUserManager $userManager */
-		$groupManager = $this->server->getGroupManager();
 		$groupManager->listen('\OC\Group', 'postDelete', static function (IGroup $group) use ($container) {
 			/** @var AclMapper $aclMapper */
 			$aclMapper = $container->query(AclMapper::class);
@@ -154,8 +155,8 @@ class Application20 extends App implements IBootstrap {
 		});
 	}
 
-	public function registerCommentsEntity(): void {
-		$this->server->getEventDispatcher()->addListener(CommentsEntityEvent::EVENT_ENTITY, function (CommentsEntityEvent $event) {
+	public function registerCommentsEntity(SymfonyAdapter $symfonyAdapter): void {
+		$symfonyAdapter->addListener(CommentsEntityEvent::EVENT_ENTITY, function (CommentsEntityEvent $event) {
 			$event->addEntityCollection(self::COMMENT_ENTITY_TYPE, function ($name) {
 				/** @var CardMapper */
 				$cardMapper = $this->getContainer()->query(CardMapper::class);
@@ -168,85 +169,64 @@ class Application20 extends App implements IBootstrap {
 				}
 			});
 		});
-		$this->registerCommentsEventHandler();
 	}
 
-	protected function registerCommentsEventHandler(): void {
-		$this->server->getCommentsManager()->registerEventHandler(function () {
+	protected function registerCommentsEventHandler(ICommentsManager $commentsManager): void {
+		$commentsManager->registerEventHandler(function () {
 			return $this->getContainer()->query(CommentEventHandler::class);
 		});
 	}
 
-	protected function registerCollaborationResources(): void {
-		$version = OC_Util::getVersion()[0];
-		/**
-		 * Register Collaboration ResourceProvider
-		 *
-		 * @Todo: Remove if min-version is 18
-		 */
-		if ($version < 18) {
-			/** @var IManager $resourceManager */
-			$resourceManager = $this->getContainer()->query(IManager::class);
-		} else {
-			/** @var IProviderManager $resourceManager */
-			$resourceManager = $this->getContainer()->query(IProviderManager::class);
-		}
+	protected function registerCollaborationResources(IProviderManager $resourceManager, SymfonyAdapter $symfonyAdapter): void {
 		$resourceManager->registerResourceProvider(ResourceProvider::class);
 		$resourceManager->registerResourceProvider(ResourceProviderCard::class);
 
-		$this->server->getEventDispatcher()->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
+		$symfonyAdapter->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
 			Util::addScript('deck', 'collections');
 		});
 	}
 
-	public function registerFullTextSearch(): void {
-		if (Util::getVersion()[0] < 16) {
+	public function registerFullTextSearch(IFullTextSearchManager $fullTextSearchManager, IEventDispatcher $eventDispatcher): void {
+		if (!$fullTextSearchManager->isAvailable()) {
 			return;
 		}
 
-		$c = $this->getContainer();
-		try {
-			// FIXME we should probably lazy load this
-			$this->fullTextSearchService = $c->query(FullTextSearchService::class);
-			$this->fullTextSearchManager = $c->query(IFullTextSearchManager::class);
-		} catch (Exception $e) {
-			return;
-		}
-
-		if (!$this->fullTextSearchManager->isAvailable()) {
-			return;
-		}
-
-		/** @var IEventDispatcher $eventDispatcher */
-		$eventDispatcher = $this->server->query(IEventDispatcher::class);
+		// FIXME move to addServiceListener
+		$server = $this->server;
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Card::onCreate', function (Event $e) {
-				$this->fullTextSearchService->onCardCreated($e);
+			'\OCA\Deck\Card::onCreate', function (Event $e) use ($server) {
+				$fullTextSearchService = $server->get(FullTextSearchService::class);
+				$fullTextSearchService->onCardCreated($e);
 			}
 		);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Card::onUpdate', function (Event $e) {
-				$this->fullTextSearchService->onCardUpdated($e);
+			'\OCA\Deck\Card::onUpdate', function (Event $e) use ($server) {
+				$fullTextSearchService = $server->get(FullTextSearchService::class);
+				$fullTextSearchService->onCardUpdated($e);
 			}
 		);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Card::onDelete', function (Event $e) {
-				$this->fullTextSearchService->onCardDeleted($e);
+			'\OCA\Deck\Card::onDelete', function (Event $e) use ($server) {
+				$fullTextSearchService = $server->get(FullTextSearchService::class);
+				$fullTextSearchService->onCardDeleted($e);
 			}
 		);
 		$eventDispatcher->addListener(
 			'\OCA\Deck\Board::onShareNew', function (Event $e) {
-				$this->fullTextSearchService->onBoardShares($e);
+				$fullTextSearchService = $server->get(FullTextSearchService::class);
+				$fullTextSearchService->onBoardShares($e);
 			}
 		);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Board::onShareEdit', function (Event $e) {
-				$this->fullTextSearchService->onBoardShares($e);
+			'\OCA\Deck\Board::onShareEdit', function (Event $e) use ($server) {
+				$fullTextSearchService = $server->get(FullTextSearchService::class);
+				$fullTextSearchService->onBoardShares($e);
 			}
 		);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Board::onShareDelete', function (Event $e) {
-				$this->fullTextSearchService->onBoardShares($e);
+			'\OCA\Deck\Board::onShareDelete', function (Event $e) use ($server) {
+				$fullTextSearchService = $server->get(FullTextSearchService::class);
+				$fullTextSearchService->onBoardShares($e);
 			}
 		);
 	}
