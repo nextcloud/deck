@@ -160,6 +160,7 @@ OC.L10N.register(
     "Add card" : "Dodaj kartę",
     "Archive all cards in this list" : "Zarchiwizuj wszystkie karty na tej liście",
     "Add a new card" : "Dodaj nową kartę",
+    "Card name" : "Nazwa karty",
     "Edit" : "Edycja",
     "Add a new tag" : "Dodaj nową etykietę",
     "title and color value must be provided" : "należy podać tytuł i kolor",

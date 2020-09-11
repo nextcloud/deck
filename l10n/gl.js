@@ -160,6 +160,7 @@ OC.L10N.register(
     "Add card" : "Engadir tarxeta",
     "Archive all cards in this list" : "Arquivar todas as tarxetas desta lista",
     "Add a new card" : "Engadir unha nova tarxeta",
+    "Card name" : "Nome da tarxeta",
     "Edit" : "Editar",
     "Add a new tag" : "Engadir unha nova etiqueta",
     "title and color value must be provided" : "debe indicar o título e o valor da cor",
