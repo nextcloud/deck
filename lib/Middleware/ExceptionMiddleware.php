@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Middleware;
 
+use OCA\Deck\Controller\PageController;
 use OCA\Deck\StatusException;
 use OCA\Deck\Exceptions\ConflictException;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -62,6 +63,10 @@ class ExceptionMiddleware extends Middleware {
 	 * @throws \Exception
 	 */
 	public function afterException($controller, $methodName, \Exception $exception) {
+		if (get_class($controller) === PageController::class) {
+			throw $exception;
+		}
+
 		if ($exception instanceof ConflictException) {
 			if ($this->config->getSystemValue('loglevel', Util::WARN) === Util::DEBUG) {
 				$this->logger->logException($exception);
