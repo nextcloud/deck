@@ -529,7 +529,7 @@ export default {
 			return moment(date).locale(this.locale).format('LLL')
 		},
 		parse(value) {
-			return moment(value, 'LLL', this.locale).toDate()
+			return moment(value).toDate()
 		},
 		showModal() {
 			this.$store.dispatch('setCardDetailsInModal', true)
