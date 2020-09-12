@@ -39,7 +39,7 @@
 		"@nextcloud/l10n": "^1.4.0",
 		"@nextcloud/moment": "^1.1.1",
 		"@nextcloud/router": "^1.2.0",
-		"@nextcloud/vue": "^2.6.1",
+		"@nextcloud/vue": "^2.6.5",
 		"@nextcloud/vue-dashboard": "^0.1.8",
 		"blueimp-md5": "^2.17.0",
 		"dompurify": "^2.0.15",
