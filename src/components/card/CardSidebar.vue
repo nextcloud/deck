@@ -117,6 +117,7 @@
 						type="datetime"
 						:minute-step="5"
 						:show-second="false"
+						:lang="lang"
 						:format="format"
 						:disabled="saving || !canEdit"
 						confirm />
@@ -219,7 +220,12 @@ import { formatFileSize } from '@nextcloud/files'
 import relativeDate from '../../mixins/relativeDate'
 import AttachmentList from './AttachmentList'
 import { generateUrl } from '@nextcloud/router'
-import { getLocale } from '@nextcloud/l10n'
+import {
+	getLocale,
+	getDayNamesMin,
+	getFirstDay,
+	getMonthNamesShort,
+} from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 
 const markdownIt = new MarkdownIt({
@@ -278,6 +284,16 @@ export default {
 			hasActivity: capabilities && capabilities.activity,
 			hasComments: !!OC.appswebroots['comments'],
 			modalShow: false,
+			lang: {
+				days: getDayNamesMin(),
+				months: getMonthNamesShort(),
+				formatLocale: {
+					firstDayOfWeek: getFirstDay() === 0 ? 7 : getFirstDay(),
+				},
+				placeholder: {
+					date: t('deck', 'Select Date'),
+				},
+			},
 			format: {
 				stringify: this.stringify,
 				parse: this.parse,
@@ -513,7 +529,7 @@ export default {
 			return moment(date).locale(this.locale).format('LLL')
 		},
 		parse(value) {
-			return moment(value, 'LLL', this.locale).toDate()
+			return moment(value).toDate()
 		},
 		showModal() {
 			this.$store.dispatch('setCardDetailsInModal', true)
