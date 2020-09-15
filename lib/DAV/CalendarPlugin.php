@@ -26,15 +26,19 @@ namespace OCA\Deck\DAV;
 use OCA\DAV\CalDAV\Integration\ExternalCalendar;
 use OCA\DAV\CalDAV\Integration\ICalendarProvider;
 use OCA\Deck\Db\Board;
+use OCA\Deck\Service\ConfigService;
 use Sabre\DAV\Exception\NotFound;
 
 class CalendarPlugin implements ICalendarProvider {
 
 	/** @var DeckCalendarBackend */
 	private $backend;
+	/** @var bool */
+	private $calendarIntegrationEnabled;
 
-	public function __construct(DeckCalendarBackend $backend) {
+	public function __construct(DeckCalendarBackend $backend, ConfigService $configService) {
 		$this->backend = $backend;
+		$this->calendarIntegrationEnabled = $configService->get('calendar');
 	}
 
 	public function getAppId(): string {
@@ -42,12 +46,20 @@ class CalendarPlugin implements ICalendarProvider {
 	}
 
 	public function fetchAllForCalendarHome(string $principalUri): array {
+		if (!$this->calendarIntegrationEnabled) {
+			return [];
+		}
+
 		return array_map(function (Board $board) use ($principalUri) {
 			return new Calendar($principalUri, 'board-' . $board->getId(), $board, $this->backend);
 		}, $this->backend->getBoards());
 	}
 
 	public function hasCalendarInCalendarHome(string $principalUri, string $calendarUri): bool {
+		if (!$this->calendarIntegrationEnabled) {
+			return false;
+		}
+
 		$boards = array_map(static function (Board $board) {
 			return 'board-' . $board->getId();
 		}, $this->backend->getBoards());
@@ -55,6 +67,10 @@ class CalendarPlugin implements ICalendarProvider {
 	}
 
 	public function getCalendarInCalendarHome(string $principalUri, string $calendarUri): ?ExternalCalendar {
+		if (!$this->calendarIntegrationEnabled) {
+			return null;
+		}
+
 		if ($this->hasCalendarInCalendarHome($principalUri, $calendarUri)) {
 			try {
 				$board = $this->backend->getBoard((int)str_replace('board-', '', $calendarUri));

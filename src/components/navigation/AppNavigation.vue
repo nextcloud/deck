@@ -52,14 +52,28 @@
 		<template #footer>
 			<AppNavigationSettings>
 				<div>
-					<input id="toggle-modal"
-						v-model="cardDetailsInModal"
-						type="checkbox"
-						class="checkbox">
-					<label for="toggle-modal">
-						{{ t('deck', 'Use modal card view') }}
-					</label>
-					<Multiselect v-model="groupLimit"
+					<div>
+						<input id="toggle-modal"
+							v-model="cardDetailsInModal"
+							type="checkbox"
+							class="checkbox">
+						<label for="toggle-modal">
+							{{ t('deck', 'Use modal card view') }}
+						</label>
+					</div>
+
+					<div>
+						<input id="toggle-calendar"
+							v-model="configCalendar"
+							type="checkbox"
+							class="checkbox">
+						<label for="toggle-calendar">
+							{{ t('deck', 'Show boards in calendar/tasks') }}
+						</label>
+					</div>
+
+					<Multiselect v-if="isAdmin"
+						v-model="groupLimit"
 						:class="{'icon-loading-small': groupLimitDisabled}"
 						open-direction="bottom"
 						:options="groups"
@@ -69,7 +83,9 @@
 						label="displayname"
 						track-by="id"
 						@input="updateConfig" />
-					<p>{{ t('deck', 'Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them.') }}</p>
+					<p v-if="isAdmin">
+						{{ t('deck', 'Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them.') }}
+					</p>
 				</div>
 			</AppNavigationSettings>
 		</template>
@@ -84,7 +100,8 @@ import { AppNavigation as AppNavigationVue, AppNavigationItem, AppNavigationSett
 import AppNavigationAddBoard from './AppNavigationAddBoard'
 import AppNavigationBoardCategory from './AppNavigationBoardCategory'
 import { loadState } from '@nextcloud/initial-state'
-import { generateUrl, generateOcsUrl } from '@nextcloud/router'
+import { generateOcsUrl } from '@nextcloud/router'
+import { getCurrentUser } from '@nextcloud/auth'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -123,8 +140,7 @@ export default {
 			'sharedBoards',
 		]),
 		isAdmin() {
-			// eslint-disable-next-line
-			return OC.isUserAdmin()
+			return !!getCurrentUser()?.isAdmin
 		},
 		cardDetailsInModal: {
 			get() {
@@ -134,15 +150,19 @@ export default {
 				this.$store.dispatch('setCardDetailsInModal', newValue)
 			},
 		},
+		configCalendar: {
+			get() {
+				return this.$store.getters.config('calendar')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { calendar: newValue })
+			},
+		},
 	},
 	beforeMount() {
 		if (this.isAdmin) {
-			axios.get(generateUrl('apps/deck/config')).then((response) => {
-				this.groupLimit = response.data.groupLimit
-				this.groupLimitDisabled = false
-			}, (error) => {
-				console.error('Error while loading groupLimit', error.response)
-			})
+			this.groupLimit = this.$store.getters.config('groupLimit')
+			this.groupLimitDisabled = false
 			axios.get(generateOcsUrl('cloud', 2) + 'groups').then((response) => {
 				this.groups = response.data.ocs.data.groups.reduce((obj, item) => {
 					obj.push({
@@ -157,15 +177,9 @@ export default {
 		}
 	},
 	methods: {
-		updateConfig() {
-			this.groupLimitDisabled = true
-			axios.post(generateUrl('apps/deck/config/groupLimit'), {
-				value: this.groupLimit,
-			}).then(() => {
-				this.groupLimitDisabled = false
-			}, (error) => {
-				console.error('Error while saving groupLimit', error.response)
-			})
+		async updateConfig() {
+			await this.$store.dispatch('setConfig', { groupLimit: this.groupLimit })
+			this.groupLimitDisabled = false
 		},
 	},
 }
