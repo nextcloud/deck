@@ -130,6 +130,7 @@ class BoardService {
 			return $this->boardsCache;
 		}
 		$complete = $this->getUserBoards($since);
+		$result = [];
 		/** @var Board $item */
 		foreach ($complete as &$item) {
 			$this->boardMapper->mapOwner($item);
@@ -152,7 +153,7 @@ class BoardService {
 			]);
 			$result[$item->getId()] = $item;
 		}
-		$this->boardsCache = $complete;
+		$this->boardsCache = $result;
 		return array_values($result);
 	}
 
@@ -189,6 +190,7 @@ class BoardService {
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
 		]);
 		$this->enrichWithUsers($board);
+		$this->boardsCache[$board->getId()] = $board;
 		return $board;
 	}
 
