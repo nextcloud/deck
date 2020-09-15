@@ -130,6 +130,7 @@ class BoardService {
 			return $this->boardsCache;
 		}
 		$complete = $this->getUserBoards($since);
+		$result = [];
 		/** @var Board $item */
 		foreach ($complete as &$item) {
 			$this->boardMapper->mapOwner($item);
@@ -152,7 +153,7 @@ class BoardService {
 			]);
 			$result[$item->getId()] = $item;
 		}
-		$this->boardsCache = $complete;
+		$this->boardsCache = $result;
 		return array_values($result);
 	}
 
@@ -189,6 +190,7 @@ class BoardService {
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
 		]);
 		$this->enrichWithUsers($board);
+		$this->boardsCache[$board->getId()] = $board;
 		return $board;
 	}
 
@@ -348,7 +350,7 @@ class BoardService {
 			throw new BadRequestException('board id must be a number');
 		}
 
-		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
 		if ($board->getDeletedAt() > 0) {
 			throw new BadRequestException('This board has already been deleted');
@@ -377,7 +379,7 @@ class BoardService {
 			throw new BadRequestException('board id must be a number');
 		}
 
-		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
 		$board->setDeletedAt(0);
 		$board = $this->boardMapper->update($board);
@@ -404,7 +406,7 @@ class BoardService {
 			throw new BadRequestException('id must be a number');
 		}
 
-		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
 		$delete = $this->boardMapper->delete($board);
 

@@ -26,9 +26,6 @@ return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 
-		['name' => 'Config#get', 'url' => '/config', 'verb' => 'GET'],
-		['name' => 'Config#setValue', 'url' => '/config/{key}', 'verb' => 'POST'],
-
 		// boards
 		['name' => 'board#index', 'url' => '/boards', 'verb' => 'GET'],
 		['name' => 'board#create', 'url' => '/boards', 'verb' => 'POST'],
@@ -125,17 +122,17 @@ return [
 		['name' => 'attachment_api#delete', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}', 'verb' => 'DELETE'],
 		['name' => 'attachment_api#restore', 'url' => '/api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId}/restore', 'verb' => 'PUT'],
 
-
-
 		['name' => 'board_api#preflighted_cors', 'url' => '/api/v1.0/{path}','verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
 	],
 	'ocs' => [
+		['name' => 'Config#get', 'url' => '/api/v1.0/config', 'verb' => 'GET'],
+		['name' => 'Config#setValue', 'url' => '/api/v1.0/config/{key}', 'verb' => 'POST'],
+
 		['name' => 'comments_api#list', 'url' => '/api/v1.0/cards/{cardId}/comments', 'verb' => 'GET'],
 		['name' => 'comments_api#create', 'url' => '/api/v1.0/cards/{cardId}/comments', 'verb' => 'POST'],
 		['name' => 'comments_api#update', 'url' => '/api/v1.0/cards/{cardId}/comments/{commentId}', 'verb' => 'PUT'],
 		['name' => 'comments_api#delete', 'url' => '/api/v1.0/cards/{cardId}/comments/{commentId}', 'verb' => 'DELETE'],
 
-		// dashboard
 		['name' => 'overview_api#upcomingCards', 'url' => '/api/v1.0/overview/upcoming', 'verb' => 'GET'],
 	]
 ];

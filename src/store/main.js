@@ -22,6 +22,7 @@
 
 import 'url-search-params-polyfill'
 
+import { loadState } from '@nextcloud/initial-state'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
@@ -56,6 +57,7 @@ export default new Vuex.Store({
 	},
 	strict: debug,
 	state: {
+		config: loadState('deck', 'config', {}),
 		showArchived: false,
 		navShown: true,
 		compactMode: localStorage.getItem('deck.compactMode') === 'true',
@@ -73,6 +75,9 @@ export default new Vuex.Store({
 		filter: { tags: [], users: [], due: '' },
 	},
 	getters: {
+		config: state => (key) => {
+			return state.config[key]
+		},
 		cardDetailsInModal: state => {
 			return state.cardDetailsInModal
 		},
@@ -133,6 +138,9 @@ export default new Vuex.Store({
 		},
 	},
 	mutations: {
+		SET_CONFIG(state, { key, value }) {
+			Vue.set(state.config, key, value)
+		},
 		setSearchQuery(state, searchQuery) {
 			state.searchQuery = searchQuery
 		},
@@ -287,6 +295,19 @@ export default new Vuex.Store({
 
 	},
 	actions: {
+		async setConfig({ commit }, config) {
+			for (const key in config) {
+				try {
+					await axios.post(generateOcsUrl(`apps/deck/api/v1.0/config`) + key, {
+						value: config[key],
+					})
+					commit('SET_CONFIG', { key, value: config[key] })
+				} catch (e) {
+					console.error(`Error while saving ${key}`, e.response)
+					throw e
+				}
+			}
+		},
 		setFilter({ commit }, filter) {
 			commit('SET_FILTER', filter)
 		},
