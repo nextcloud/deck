@@ -202,14 +202,14 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		$sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_stacks` WHERE id IN (SELECT stack_id FROM `*PREFIX*deck_cards` WHERE id = ?))';
 		$stmt = $this->execute($sql, [$cardId]);
 		$row = $stmt->fetch();
-		return ($row['owner'] === $userId);
+		return $row ? ($row['owner'] === $userId) : false;
 	}
 
 	public function findBoardId($cardId) {
 		$sql = 'SELECT id FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_stacks` WHERE id IN (SELECT stack_id FROM `*PREFIX*deck_cards` WHERE id = ?))';
 		$stmt = $this->execute($sql, [$cardId]);
 		$row = $stmt->fetch();
-		return $row['id'];
+		return $row ? $row['id'] : null;
 	}
 
 	public function mapOwner(Card &$card) {
