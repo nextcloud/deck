@@ -22,6 +22,8 @@
 
 <template>
 	<DashboardWidget :items="cards"
+		empty-content-icon="icon-deck"
+		:empty-content-message="t('deck', 'No upcoming cards')"
 		:show-more-text="t('deck', 'upcoming cards')"
 		:show-more-url="showMoreUrl"
 		:loading="loading"
@@ -44,21 +46,11 @@
 				</ul>
 			</a>
 		</template>
-		<template v-slot:empty-content>
-			<EmptyContent
-				id="deck-widget-empty-content"
-				icon="icon-deck">
-				<template #desc>
-					{{ t('deck', 'No upcoming cards') }}
-				</template>
-			</EmptyContent>
-		</template>
 	</DashboardWidget>
 </template>
 
 <script>
 import { DashboardWidget } from '@nextcloud/vue-dashboard'
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import { mapGetters } from 'vuex'
 import labelStyle from './../mixins/labelStyle'
 import DueDate from '../components/cards/badges/DueDate'
@@ -68,7 +60,6 @@ export default {
 	name: 'Dashboard',
 	components: {
 		DueDate,
-		EmptyContent,
 		DashboardWidget,
 	},
 	mixins: [ labelStyle ],
