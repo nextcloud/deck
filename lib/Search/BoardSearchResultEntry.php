@@ -35,7 +35,7 @@ class BoardSearchResultEntry extends SearchResultEntry {
 			'',
 			$board->getTitle(),
 			'',
-			$urlGenerator->linkToRoute('deck.page.index') . '#/board/' . $board->getId(),
+			$urlGenerator->linkToRouteAbsolute('deck.page.index') . '#/board/' . $board->getId(),
 			'icon-deck');
 	}
 }
