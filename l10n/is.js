@@ -135,6 +135,7 @@ OC.L10N.register(
     "Formatting help" : "Hjálp við að sníða",
     "Attachments" : "Viðhengi",
     "Comments" : "Athugasemdir",
+    "Select Date" : "Veldu dag",
     "Modified" : "Breytt",
     "Created" : "Búið til þann",
     "No comments yet. Begin the discussion!" : "Engar athugasemdir ennþá. Byrjaðu umræðuna!",

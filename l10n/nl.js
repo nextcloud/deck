@@ -189,6 +189,7 @@ OC.L10N.register(
     "Attachments" : "Bijlagen",
     "Comments" : "Reacties",
     "Choose attachment" : "Kies bijlage",
+    "Select Date" : "Selecteer datum",
     "Modified" : "Aangepast",
     "Created" : "Gemaakt",
     "No comments yet. Begin the discussion!" : "Nog geen reacties. Begin de discussie!",

@@ -25,6 +25,7 @@ OC.L10N.register(
     "Upload attachment" : "Прикачи прилог",
     "Description" : "Опис",
     "Comments" : "Коментари",
+    "Select Date" : "Избери датум",
     "Modified" : "Изменето",
     "Save" : "Зачувај",
     "Reply" : "Одговор",

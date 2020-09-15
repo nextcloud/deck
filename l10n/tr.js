@@ -188,6 +188,7 @@ OC.L10N.register(
     "Attachments" : "Ek dosyalar",
     "Comments" : "Açıklamalar",
     "Choose attachment" : "Ek dosyayı seçin",
+    "Select Date" : "Tarih Seçin",
     "Modified" : "Değiştirilme",
     "Created" : "Oluşturulma",
     "No comments yet. Begin the discussion!" : "Henüz bir yorum yapılmamış. Tartışmayı başlatın!",

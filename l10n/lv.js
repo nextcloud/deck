@@ -29,6 +29,7 @@ OC.L10N.register(
     "Description" : "Apraksts",
     "Attachments" : "Pielikumi",
     "Comments" : "Komentāri",
+    "Select Date" : "Izvēlieties datumu",
     "Modified" : "Mainīts",
     "Created" : "Izveidots",
     "Save" : "Saglabāt",

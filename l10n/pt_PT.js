@@ -37,6 +37,7 @@ OC.L10N.register(
     "Description" : "Descrição",
     "Attachments" : "Anexos",
     "Comments" : "Comentários",
+    "Select Date" : "Escolha a data",
     "Modified" : "Modificado",
     "Created" : "Criado",
     "Save" : "Guardar",

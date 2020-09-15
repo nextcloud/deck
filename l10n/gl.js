@@ -189,6 +189,7 @@ OC.L10N.register(
     "Attachments" : "Anexos",
     "Comments" : "Comentarios",
     "Choose attachment" : "Escoller o anexo",
+    "Select Date" : "Seleccione a data",
     "Modified" : "Modificado",
     "Created" : "Creado",
     "No comments yet. Begin the discussion!" : "Aínda non hai comentarios. Comece o debate!",

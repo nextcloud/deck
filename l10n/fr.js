@@ -188,6 +188,7 @@ OC.L10N.register(
     "Attachments" : "Pièces jointes",
     "Comments" : "Commentaires",
     "Choose attachment" : "Choisir une pièce jointe",
+    "Select Date" : "Sélectionnez une date",
     "Modified" : "Modifié",
     "Created" : "Créé",
     "No comments yet. Begin the discussion!" : "Aucun commentaire pour l'instant, démarrez la discussion !",

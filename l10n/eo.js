@@ -104,6 +104,7 @@ OC.L10N.register(
     "Formatting help" : "Helpo pri tekstaranĝo",
     "Attachments" : "Dosieraj aldonaĵoj",
     "Comments" : "Komentoj",
+    "Select Date" : "Elekti daton",
     "Modified" : "Modifita",
     "Created" : "Kreita",
     "Save" : "Konservi",

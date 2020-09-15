@@ -188,6 +188,7 @@ OC.L10N.register(
     "Attachments" : "Bilagor",
     "Comments" : "Kommentarer",
     "Choose attachment" : "Välj bilaga",
+    "Select Date" : "Välj datum",
     "Modified" : "Ändrad",
     "Created" : "Skapat",
     "No comments yet. Begin the discussion!" : "Inga kommentarer än. Börja diskussionen!",

@@ -109,6 +109,7 @@ OC.L10N.register(
     "Formatting help" : "Formateringshjelp",
     "Attachments" : "Vedlegg",
     "Comments" : "Kommentarer",
+    "Select Date" : "Velg dato",
     "Modified" : "Endret",
     "Created" : "Opprettet",
     "Save" : "Lagre",

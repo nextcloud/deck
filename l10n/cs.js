@@ -189,6 +189,7 @@ OC.L10N.register(
     "Attachments" : "Přílohy",
     "Comments" : "Komentáře",
     "Choose attachment" : "Zvolte přílohu",
+    "Select Date" : "Vybrat datum",
     "Modified" : "Změněno",
     "Created" : "Vytvořeno",
     "No comments yet. Begin the discussion!" : "Zatím bez komentářů. Zahajte diskuzi!",

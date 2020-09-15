@@ -74,6 +74,7 @@ OC.L10N.register(
     "Formatting help" : "서식 도움말",
     "Attachments" : "첨부파일",
     "Comments" : "댓글",
+    "Select Date" : "날짜 선택",
     "Modified" : "수정한 날짜",
     "Created" : "생성됨",
     "Save" : "저장",

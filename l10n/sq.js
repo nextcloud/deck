@@ -39,6 +39,7 @@ OC.L10N.register(
     "Formatting help" : "Ndihmë formatimi",
     "Attachments" : "Bashkangjitjet",
     "Comments" : "Komentet",
+    "Select Date" : "Zgjidhni Datën",
     "Modified" : "Modifikuar ",
     "Created" : "U krijua",
     "Save" : "Ruaj",

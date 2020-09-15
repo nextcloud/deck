@@ -116,6 +116,7 @@ OC.L10N.register(
     "Attachments" : "Вкладення",
     "Comments" : "Коментарі",
     "Choose attachment" : "Вибрати вкладення",
+    "Select Date" : "Вкажіть дату",
     "Modified" : "Змінено",
     "Created" : "Створено",
     "Save" : "Зберегти",

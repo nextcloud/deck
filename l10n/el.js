@@ -185,6 +185,7 @@ OC.L10N.register(
     "Attachments" : "Συνημμένα",
     "Comments" : "Σχόλια",
     "Choose attachment" : "Επιλογή συνημμένου",
+    "Select Date" : "Επέλεξε Ημέρα",
     "Modified" : "Τροποποιήθηκε",
     "Created" : "Δημιουργήθηκε",
     "No comments yet. Begin the discussion!" : "Χωρίς σχόλια ακόμη. Ξεκινήστε την συζήτηση!",

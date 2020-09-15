@@ -31,6 +31,7 @@ OC.L10N.register(
     "Formatting help" : "Ayuda de formato",
     "Attachments" : "Adjuntos",
     "Comments" : "Comentarios",
+    "Select Date" : "Seleccionar fecha",
     "Modified" : "Modificado",
     "Created" : "Creado",
     "Save" : "Guardar",

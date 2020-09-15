@@ -185,6 +185,7 @@ OC.L10N.register(
     "Attachments" : "Прилози",
     "Comments" : "Коментари",
     "Choose attachment" : "Одабери прилог",
+    "Select Date" : "Одаберите датум",
     "Modified" : "Измењен",
     "Created" : "Направљен",
     "No comments yet. Begin the discussion!" : "Нема још коментара. Започните дискусију!",

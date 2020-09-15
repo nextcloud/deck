@@ -109,6 +109,7 @@ OC.L10N.register(
     "Attachments" : "پیوست‌ها",
     "Comments" : "نظرات",
     "Choose attachment" : "انتخاب پیوست",
+    "Select Date" : "تاریخ را انتخاب کنید",
     "Modified" : "تغییر یافته",
     "Created" : "ایجاد شده",
     "No comments yet. Begin the discussion!" : "هنوز نظری وجود ندارد. بحثی را آغاز کنید!",

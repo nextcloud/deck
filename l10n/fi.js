@@ -135,6 +135,7 @@ OC.L10N.register(
     "Formatting help" : "Muotoiluapu",
     "Attachments" : "Liitteet",
     "Comments" : "Kommentit",
+    "Select Date" : "Valitse päivä",
     "Modified" : "Muokattu",
     "Created" : "Luotu",
     "No comments yet. Begin the discussion!" : "Ei vielä kommentteja. Aloita keskustelu!",

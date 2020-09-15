@@ -46,6 +46,7 @@ OC.L10N.register(
     "Description" : "描述",
     "Attachments" : "附件",
     "Comments" : "意見",
+    "Select Date" : "選擇日期",
     "Modified" : "已修改",
     "Created" : "已新增",
     "Save" : "儲存",

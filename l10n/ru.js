@@ -186,6 +186,7 @@ OC.L10N.register(
     "Attachments" : "Вложения",
     "Comments" : "Комментарии",
     "Choose attachment" : "Выберите вложение",
+    "Select Date" : "Выберите дату",
     "Modified" : "Изменено",
     "Created" : "Создано",
     "No comments yet. Begin the discussion!" : "Комментарии отсутствуют, начните обсуждение!",

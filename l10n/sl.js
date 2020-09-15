@@ -181,6 +181,7 @@ OC.L10N.register(
     "Attachments" : "Priloge",
     "Comments" : "Opombe",
     "Choose attachment" : "Izbor priloge",
+    "Select Date" : "Izbor datuma",
     "Modified" : "Spremenjeno",
     "Created" : "Ustvarjeno",
     "No comments yet. Begin the discussion!" : "Ni še odzivov, bodite prvi!",

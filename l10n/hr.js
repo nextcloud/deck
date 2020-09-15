@@ -180,6 +180,7 @@ OC.L10N.register(
     "Attachments" : "Privici",
     "Comments" : "Komentari",
     "Choose attachment" : "Odaberi privitak",
+    "Select Date" : "Odaberi datum",
     "Modified" : "Promijenjeno",
     "Created" : "Stvoreno",
     "No comments yet. Begin the discussion!" : "Nema komentara. Započnite raspravu!",

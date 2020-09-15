@@ -136,6 +136,7 @@ OC.L10N.register(
     "Attachments" : "קבצים מצורפים",
     "Comments" : "תגובות",
     "Choose attachment" : "בחירת קובץ מצורף",
+    "Select Date" : "בחירת תאריך",
     "Modified" : "מועד שינוי",
     "Created" : "מועד היצירה",
     "No comments yet. Begin the discussion!" : "אין עדיין הערות. אפשר להתחיל לדון!",

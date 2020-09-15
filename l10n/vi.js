@@ -67,6 +67,7 @@ OC.L10N.register(
     "Formatting help" : "Định dạng trợ giúp",
     "Attachments" : "Đính kèm",
     "Comments" : "Các bình luận",
+    "Select Date" : "Chọn ngày",
     "Modified" : "Thay đổi",
     "Created" : "Đã tạo",
     "Save" : "Lưu",

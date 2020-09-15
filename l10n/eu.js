@@ -186,6 +186,7 @@ OC.L10N.register(
     "Attachments" : "Eranskinak",
     "Comments" : "Iruzkinak",
     "Choose attachment" : "Aukeratu eranskina",
+    "Select Date" : "Hautatu data",
     "Modified" : "Aldatua",
     "Created" : "Sortua",
     "No comments yet. Begin the discussion!" : "Ez dago iruzkinik oraindik. Hasi eztabaidatzen!",

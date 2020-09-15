@@ -155,6 +155,7 @@ OC.L10N.register(
     "Attachments" : "Mellékletek",
     "Comments" : "Hozzászólások",
     "Choose attachment" : "Válasszon mellékletet",
+    "Select Date" : "Dátum kiválasztása",
     "Modified" : "Módosítva",
     "Created" : "Létrehozva",
     "No comments yet. Begin the discussion!" : "Még nincsenek hozzászólások. Kezdje el a beszélgetést!",

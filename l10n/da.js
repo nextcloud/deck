@@ -42,6 +42,7 @@ OC.L10N.register(
     "Formatting help" : "Hjælp til formatering",
     "Attachments" : "Vedhæftede filer",
     "Comments" : "Kommentarer",
+    "Select Date" : "Vælg dato",
     "Modified" : "Ændret",
     "Created" : "Oprettet",
     "Save" : "Gem",
