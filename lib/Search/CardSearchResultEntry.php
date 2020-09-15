@@ -33,6 +33,6 @@ use OCP\Search\SearchResultEntry;
 
 class CardSearchResultEntry extends SearchResultEntry {
 	public function __construct(Board $board, Stack $stack, Card $card, $urlGenerator) {
-		parent::__construct('', $card->getTitle(), $board->getTitle() . ' » ' . $stack->getTitle() , $urlGenerator->linkToRoute('deck.page.index') . '#/board/' . $board->getId() . '/card/' . $card->getId(), 'icon-deck');
+		parent::__construct('', $card->getTitle(), $board->getTitle() . ' » ' . $stack->getTitle() , $urlGenerator->linkToRouteAbsolute('deck.page.index') . '#/board/' . $board->getId() . '/card/' . $card->getId(), 'icon-deck');
 	}
 }
