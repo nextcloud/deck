@@ -26,11 +26,13 @@ use OCA\DAV\CalDAV\Integration\ExternalCalendar;
 use OCA\DAV\CalDAV\Plugin;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
+use Sabre\CalDAV\CalendarQueryValidator;
 use Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet;
 use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\PropPatch;
 use Sabre\VObject\InvalidDataException;
+use Sabre\VObject\Reader;
 
 class Calendar extends ExternalCalendar {
 
@@ -89,10 +91,28 @@ class Calendar extends ExternalCalendar {
 	}
 
 	public function calendarQuery(array $filters) {
-		// FIXME: In a real implementation this should actually filter
-		return array_map(function ($card) {
-			return $card->getCalendarPrefix() . '-' . $card->getId() . '.ics';
-		}, $this->children);
+		$result = [];
+		$objects = $this->getChildren();
+
+		foreach ($objects as $object) {
+			if ($this->validateFilterForObject($object, $filters)) {
+				$result[] = $object->getName();
+			}
+		}
+
+		return $result;
+	}
+
+	protected function validateFilterForObject($object, array $filters) {
+		$vObject = Reader::read($object->get());
+
+		$validator = new CalendarQueryValidator();
+		$result = $validator->validate($vObject, $filters);
+
+		// Destroy circular references so PHP will GC the object.
+		$vObject->destroy();
+
+		return $result;
 	}
 
 	public function createFile($name, $data = null) {
