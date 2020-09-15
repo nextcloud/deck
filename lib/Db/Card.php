@@ -24,6 +24,7 @@
 namespace OCA\Deck\Db;
 
 use DateTime;
+use DateTimeZone;
 use Sabre\VObject\Component\VCalendar;
 
 class Card extends RelationalEntity {
@@ -124,10 +125,10 @@ class Card extends RelationalEntity {
 		$event = $calendar->createComponent('VTODO');
 		$event->UID = 'deck-card-' . $this->getId();
 		if ($this->getDuedate()) {
-			$event->DTSTAMP = new \DateTime();
-			$event->DTSTART = new \DateTime($this->getDuedate());
-			$event->DTEND = new \DateTime($this->getDuedate());
-			$event->DURATION = "PT1H";
+			$creationDate = new DateTime();
+			$creationDate->setTimestamp($this->createdAt);
+			$event->DTSTAMP = $creationDate;
+			$event->DUE = new DateTime($this->getDuedate(true), new DateTimeZone('UTC'));
 		}
 		$event->add('RELATED-TO', 'deck-stack-' . $this->getStackId());
 
