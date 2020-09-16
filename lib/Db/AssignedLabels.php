@@ -34,6 +34,5 @@ class AssignedLabels extends RelationalEntity implements JsonSerializable {
 		$this->addType('id', 'integer');
 		$this->addType('cardId', 'integer');
 		$this->addType('labelId', 'integer');
-
 	}
 }

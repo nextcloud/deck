@@ -35,6 +35,7 @@ use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use \Test\TestCase;
+use OCP\IL10N;
 
 /**
  * Class StackServiceTest
@@ -70,6 +71,8 @@ class StackServiceTest extends TestCase {
 	private $changeHelper;
 	/** @var EventDispatcherInterface */
 	private $eventDispatcher;
+	private $l10n;
+	private $userId;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -85,6 +88,9 @@ class StackServiceTest extends TestCase {
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+		$this->l10n = $this->createMock(IL10N::class);
+		$this->userId = "admin";
+		
 
 		$this->stackService = new StackService(
 			$this->stackMapper,
@@ -98,7 +104,9 @@ class StackServiceTest extends TestCase {
 			$this->attachmentService,
 			$this->activityManager,
 			$this->eventDispatcher,
-			$this->changeHelper
+			$this->changeHelper,
+			$this->l10n,
+			$this->userId
 		);
 	}
 

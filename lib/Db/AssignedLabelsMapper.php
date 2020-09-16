@@ -29,7 +29,7 @@ use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
 
-class AssignedLabelsMapper extends DeckMapper  {
+class AssignedLabelsMapper extends DeckMapper {
 	private $cardMapper;
 	private $userManager;
 	/**
@@ -55,5 +55,4 @@ class AssignedLabelsMapper extends DeckMapper  {
 		$labels = $this->findEntities($sql, [$cardId]);
 		return $labels;
 	}
-
 }

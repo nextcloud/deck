@@ -425,7 +425,6 @@ class StackService {
 
 		$cards = $this->cardMapper->findAll($id);
 		foreach ($cards as $card) {
-
 			$newCard = new Card();
 			$newCard->setTitle($card->getTitle());
 			$newCard->setStackId($newStack->getId());
@@ -446,11 +445,9 @@ class StackService {
 			);
 
 			if ($boardId === $stack->getBoardId()) {
-
 				$assignedLabels = $this->assignedLabelsMapper->find($card->getId());
 				$newLabelArray = [];
 				foreach ($assignedLabels as $assignedLabel) {
-
 					$assignment = new AssignedLabels();
 					$assignment->setCardId($newCard->getId());
 					$assignment->setLabelId($assignedLabel->getLabelId());
@@ -472,9 +469,7 @@ class StackService {
 					$newUserArray[] = $assignment;
 				}
 				$newCard->setAssignedUsers($newUserArray);
-
 			}
-
 		}
 
 		$this->enrichStackWithCards($newStack);
