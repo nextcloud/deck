@@ -10,6 +10,7 @@ OC.L10N.register(
     "To review" : "Para revisar",
     "Action needed" : "Acción requerida",
     "Later" : "Después",
+    "copy" : "copiar",
     "Done" : "Terminado",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "El archivo cargado excede el valor establecido en la directiva upload_max_filesize en el archivo php.ini",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "El archivo cargado excede el valor especificado de la directiva MAX_FILE_SIZE en la forma de HTML",
@@ -50,6 +51,7 @@ OC.L10N.register(
     "New board title" : "Nuevo título del tablero",
     "Edit board" : "Editar el tablero",
     "Board details" : "Detalles del tablero",
+    "An error occurred" : "Se presentó un error",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana",
     "This week" : "Esta semana"
