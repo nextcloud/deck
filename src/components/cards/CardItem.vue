@@ -26,7 +26,7 @@
 
 <template>
 	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
-		<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'is-editing': editing}"
+		<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'is-editing': editing, 'card__editable': canEdit}"
 			tag="div"
 			class="card"
 			@click="openCard">
@@ -43,7 +43,7 @@
 					class="dragDisabled"
 					@keyup.esc="cancelEdit"
 					@submit.prevent="finishedEdit(card)">
-					<input v-model="copiedCard.title" type="text" autofocus>
+					<input v-model="copiedCard.title" v-focus type="text">
 					<input type="button" class="icon-confirm" @click="finishedEdit(card)">
 				</form>
 
@@ -57,7 +57,7 @@
 				class="labels"
 				@click="openCard">
 				<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)">
-					<span>{{ label.title }}</span>
+					<span @click="applyLabelFilter(label)">{{ label.title }}</span>
 				</li>
 			</transition-group>
 			<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
@@ -142,6 +142,9 @@ export default {
 		cancelEdit() {
 			this.editing = false
 		},
+		applyLabelFilter(label) {
+			this.$nextTick(() => this.$store.dispatch('toggleFilter', { tags: [label.id] }))
+		},
 	},
 }
 </script>
@@ -175,7 +178,7 @@ export default {
 			min-height: 44px;
 			form {
 				display: flex;
-				padding: 5px 7px;
+				padding: 3px 5px;
 				width: 100%;
 				input[type=text] {
 					flex-grow: 1;
@@ -188,9 +191,13 @@ export default {
 				font-size: 100%;
 				overflow-x: hidden;
 				word-wrap: break-word;
+				padding-left: 4px;
 				span {
 					cursor: text;
 				}
+			}
+			input[type=text] {
+				font-size: 100%;
 			}
 		}
 

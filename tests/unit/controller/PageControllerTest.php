@@ -24,40 +24,33 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\PermissionService;
 use OCP\IInitialStateService;
 use OCP\IL10N;
 use OCP\IRequest;
-use OCA\Deck\Db\Board;
-use OCP\IConfig;
 
 class PageControllerTest extends \Test\TestCase {
 	private $controller;
 	private $request;
 	private $l10n;
-	private $userId = 'john';
 	private $permissionService;
 	private $initialState;
-	private $config;
+	private $configService;
 
 	public function setUp(): void {
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->request = $this->createMock(IRequest::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
-		$this->config = $this->createMock(IConfig::class);
+		$this->configService = $this->createMock(ConfigService::class);
 		$this->initialState = $this->createMock(IInitialStateService::class);
 
 		$this->controller = new PageController(
-			'deck', $this->request, $this->permissionService, $this->initialState, $this->l10n, $this->userId
+			'deck', $this->request, $this->permissionService, $this->initialState, $this->configService
 		);
 	}
 
 	public function testIndex() {
-		$board = new Board();
-		$board->setTitle('Personal');
-		$board->setOwner($this->userId);
-		$board->setColor('317CCC');
-
 		$this->permissionService->expects($this->any())
 			->method('canCreate')
 			->willReturn(true);

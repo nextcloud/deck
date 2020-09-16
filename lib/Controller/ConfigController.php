@@ -23,90 +23,42 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Service\ConfigService;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\NotFoundResponse;
-use OCP\IConfig;
-use OCP\IGroup;
-use OCP\IGroupManager;
+use OCP\AppFramework\OCSController;
 use OCP\IRequest;
-use OCP\AppFramework\Controller;
 
-class ConfigController extends Controller {
-	private $config;
-	private $userId;
-	private $groupManager;
+class ConfigController extends OCSController {
+	private $configService;
 
 	public function __construct(
 		$AppName,
 		IRequest $request,
-		IConfig $config,
-		IGroupManager $groupManager,
-		$userId
+		ConfigService $configService
 		) {
 		parent::__construct($AppName, $request);
 
-		$this->userId = $userId;
-		$this->groupManager = $groupManager;
-		$this->config = $config;
+		$this->configService = $configService;
 	}
 
 	/**
 	 * @NoCSRFRequired
+	 * @NoAdminRequired
 	 */
-	public function get() {
-		$data = [
-			'groupLimit' => $this->getGroupLimit(),
-		];
-		return new DataResponse($data);
+	public function get(): DataResponse {
+		return new DataResponse($this->configService->getAll());
 	}
 
 	/**
 	 * @NoCSRFRequired
+	 * @NoAdminRequired
 	 */
-	public function setValue($key, $value) {
-		switch ($key) {
-			case 'groupLimit':
-				$result = $this->setGroupLimit($value);
-				break;
-		}
+	public function setValue(string $key, $value) {
+		$result = $this->configService->set($key, $value);
 		if ($result === null) {
 			return new NotFoundResponse();
 		}
 		return new DataResponse($result);
-	}
-
-	private function setGroupLimit($value) {
-		$groups = [];
-		foreach ($value as $group) {
-			$groups[] = $group['id'];
-		}
-		$data = implode(',', $groups);
-		$this->config->setAppValue($this->appName, 'groupLimit', $data);
-		return $groups;
-	}
-
-	private function getGroupLimitList() {
-		$value = $this->config->getAppValue($this->appName, 'groupLimit', '');
-		$groups = explode(',', $value);
-		if ($value === '') {
-			return [];
-		}
-		return $groups;
-	}
-
-	private function getGroupLimit() {
-		$groups = $this->getGroupLimitList();
-		$groups = array_map(function ($groupId) {
-			/** @var IGroup $groups */
-			$group = $this->groupManager->get($groupId);
-			if ($group === null) {
-				return null;
-			}
-			return [
-				'id' => $group->getGID(),
-				'displayname' => $group->getDisplayName(),
-			];
-		}, $groups);
-		return array_filter($groups);
 	}
 }

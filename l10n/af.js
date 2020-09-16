@@ -23,6 +23,7 @@ OC.L10N.register(
     "Due date" : "Sperdatum",
     "Description" : "Beskrywing",
     "Comments" : "Kommentare",
+    "Select Date" : "Kies Datum",
     "Modified" : "Gewysig",
     "Created" : "Geskep",
     "Save" : "Stoor",

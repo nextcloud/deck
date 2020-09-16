@@ -33,6 +33,7 @@ OC.L10N.register(
     "Description" : "Описание",
     "Attachments" : "Прикачени файлове",
     "Comments" : "Коментари",
+    "Select Date" : "Изберете дата",
     "Modified" : "Промяна",
     "Created" : "Създаден",
     "Save" : "Запазване",

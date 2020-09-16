@@ -20,6 +20,7 @@ OC.L10N.register(
     "File already exists" : "ფაილი უკვე არსებობს",
     "Do you want to overwrite it?" : "გსურთ მისი გადაწერა?",
     "Filter by tag" : "ფილტრი ტეგებით",
+    "Hide archived cards" : "არქივირებული ბარათების დამალვა",
     "Show archived cards" : "არქივირებული ბარათების ჩვენება",
     "Details" : "დეტალები",
     "Sharing" : "გაზიარება",

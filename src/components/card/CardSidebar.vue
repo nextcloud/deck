@@ -24,8 +24,19 @@
 	<AppSidebar v-if="currentBoard && currentCard && copiedCard"
 		:title="currentCard.title"
 		:subtitle="subtitle"
+		:title-editable.sync="titleEditable"
+		@update:title="updateTitle"
 		@close="closeSidebar">
-		<template #secondary-actions />
+		<template #secondary-actions>
+			<ActionButton v-if="cardDetailsInModal" icon="icon-menu-sidebar" @click.stop="showModal()">
+				{{ t('deck', 'Open in sidebar view') }}
+			</ActionButton>
+
+			<ActionButton v-else icon="icon-external" @click.stop="showModal()">
+				{{ t('deck', 'Open in bigger view') }}
+			</ActionButton>
+		</template>
+
 		<AppSidebarTab id="details"
 			:order="0"
 			:name="t('deck', 'Details')"
@@ -106,6 +117,7 @@
 						type="datetime"
 						:minute-step="5"
 						:show-second="false"
+						:lang="lang"
 						:format="format"
 						:disabled="saving || !canEdit"
 						confirm />
@@ -208,7 +220,12 @@ import { formatFileSize } from '@nextcloud/files'
 import relativeDate from '../../mixins/relativeDate'
 import AttachmentList from './AttachmentList'
 import { generateUrl } from '@nextcloud/router'
-import { getLocale } from '@nextcloud/l10n'
+import {
+	getLocale,
+	getDayNamesMin,
+	getFirstDay,
+	getMonthNamesShort,
+} from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 
 const markdownIt = new MarkdownIt({
@@ -253,6 +270,7 @@ export default {
 
 			saving: false,
 			markdownIt: null,
+			titleEditable: false,
 			descriptionEditing: false,
 			mdeConfig: {
 				autoDownloadFontAwesome: false,
@@ -266,6 +284,16 @@ export default {
 			hasActivity: capabilities && capabilities.activity,
 			hasComments: !!OC.appswebroots['comments'],
 			modalShow: false,
+			lang: {
+				days: getDayNamesMin(),
+				months: getMonthNamesShort(),
+				formatLocale: {
+					firstDayOfWeek: getFirstDay() === 0 ? 7 : getFirstDay(),
+				},
+				placeholder: {
+					date: t('deck', 'Select Date'),
+				},
+			},
 			format: {
 				stringify: this.stringify,
 				parse: this.parse,
@@ -275,6 +303,7 @@ export default {
 	computed: {
 		...mapState({
 			currentBoard: state => state.currentBoard,
+			cardDetailsInModal: state => state.cardDetailsInModal,
 		}),
 		...mapGetters(['canEdit', 'assignables']),
 		attachments() {
@@ -434,6 +463,12 @@ export default {
 			delete this.copiedCard.descriptionLastEdit
 			this.descriptionSaving = false
 		},
+		updateTitle(newTitle) {
+			this.$set(this.copiedCard, 'title', newTitle)
+			this.$store.dispatch('updateCardTitle', this.copiedCard).then(() => {
+				this.titleEditable = false
+			})
+		},
 		updateDescription() {
 			this.copiedCard.descriptionLastEdit = Date.now()
 			clearTimeout(this.descriptionSaveTimeout)
@@ -494,7 +529,10 @@ export default {
 			return moment(date).locale(this.locale).format('LLL')
 		},
 		parse(value) {
-			return moment(value, 'LLL', this.locale).toDate()
+			return moment(value).toDate()
+		},
+		showModal() {
+			this.$store.dispatch('setCardDetailsInModal', true)
 		},
 	},
 }
@@ -522,6 +560,42 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+
+	// FIXME: Obivously we should at some point not randomly reuse the sidebar component
+	// since this is not oficially supported
+	.modal__card .app-sidebar {
+		border: 0;
+		min-width: 100%;
+		position: relative;
+		top: 0;
+		left: 0;
+		right: 0;
+		max-width: 100%;
+		max-height: 100%;
+		&::v-deep {
+			.app-sidebar-header {
+				position: sticky;
+				top: 0;
+				z-index: 100;
+				background-color: var(--color-main-background);
+			}
+			.app-sidebar-tabs__nav {
+				position: sticky;
+				top: 87px;
+				margin: 0;
+				z-index: 100;
+				background-color: var(--color-main-background);
+			}
+
+			section {
+				min-height: auto;
+			}
+
+			#emptycontent, .emptycontent {
+				margin-top: 88px;
+			}
+		}
+	}
 
 	h5 {
 		border-bottom: 1px solid var(--color-border);

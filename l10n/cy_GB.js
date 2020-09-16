@@ -17,6 +17,7 @@ OC.L10N.register(
     "Title" : "Teitl",
     "Upload attachment" : "Llwytho atodiad",
     "Description" : "Disgrifiad",
+    "Select Date" : "Dewis Dyddiad",
     "Modified" : "Addaswyd",
     "Save" : "Cadw",
     "Update" : "Diweddaru",

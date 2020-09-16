@@ -85,7 +85,7 @@
 						type="text"
 						class="no-close"
 						:disabled="stateCardCreating"
-						placeholder="Add a new card"
+						:placeholder="t('deck', 'Card name')"
 						required
 						@keydown.esc="stopCardCreation">
 
@@ -165,7 +165,12 @@ export default {
 			showArchived: state => state.showArchived,
 		}),
 		cardsByStack() {
-			return this.$store.getters.cardsByStack(this.stack.id)
+			return this.$store.getters.cardsByStack(this.stack.id).filter((card) => {
+				if (this.showArchived) {
+					return card.archived
+				}
+				return !card.archived
+			})
 		},
 		dragHandleSelector() {
 			return this.canEdit ? null : '.no-drag'
@@ -319,7 +324,8 @@ export default {
 			margin-top: 0;
 			margin-bottom: 10px;
 			box-shadow: 0 0 3px var(--color-box-shadow);
-			border-radius: 3px;
+			border-radius: var(--border-radius-large);
+			overflow: hidden;
 		}
 
 		&.icon-loading-small:after,

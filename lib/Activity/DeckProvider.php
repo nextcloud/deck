@@ -130,8 +130,8 @@ class DeckProvider implements IProvider {
 			];
 
 			if (array_key_exists('board', $subjectParams)) {
-				$archivedParam = $subjectParams['card']['archived'] ? 'archived' : '';
-				$card['link'] = $this->deckUrl('/board/' . $subjectParams['board']['id'] . '/' . $archivedParam . '/card/' . $event->getObjectId());
+				$archivedParam = $subjectParams['card']['archived'] ? 'archived/' : '';
+				$card['link'] = $this->deckUrl('/board/' . $subjectParams['board']['id'] . '/' . $archivedParam . 'card/' . $event->getObjectId());
 			}
 			$params['card'] = $card;
 		}

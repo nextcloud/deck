@@ -22,6 +22,7 @@
 
 import 'url-search-params-polyfill'
 
+import { loadState } from '@nextcloud/initial-state'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
@@ -56,9 +57,11 @@ export default new Vuex.Store({
 	},
 	strict: debug,
 	state: {
+		config: loadState('deck', 'config', {}),
 		showArchived: false,
 		navShown: true,
 		compactMode: localStorage.getItem('deck.compactMode') === 'true',
+		cardDetailsInModal: localStorage.getItem('deck.cardDetailsInModal') === 'true',
 		sidebarShown: false,
 		currentBoard: null,
 		currentCard: null,
@@ -72,6 +75,12 @@ export default new Vuex.Store({
 		filter: { tags: [], users: [], due: '' },
 	},
 	getters: {
+		config: state => (key) => {
+			return state.config[key]
+		},
+		cardDetailsInModal: state => {
+			return state.cardDetailsInModal
+		},
 		getSearchQuery: state => {
 			return state.searchQuery
 		},
@@ -129,11 +138,32 @@ export default new Vuex.Store({
 		},
 	},
 	mutations: {
+		SET_CONFIG(state, { key, value }) {
+			Vue.set(state.config, key, value)
+		},
 		setSearchQuery(state, searchQuery) {
 			state.searchQuery = searchQuery
 		},
-		setFilter(state, filter) {
+		SET_FILTER(state, filter) {
 			Object.assign(state.filter, filter)
+		},
+		TOGGLE_FILTER(state, filter) {
+			Object.keys(filter).forEach((key) => {
+				switch (key) {
+				case 'due':
+					Vue.set(state.filter, key, filter.due)
+					break
+				default:
+					filter[key].forEach((item) => {
+						if (state.filter[key].indexOf(item) === -1) {
+							state.filter[key].push(item)
+						} else {
+							state.filter[key].splice(state.filter[key].indexOf(item), 1)
+						}
+					})
+					break
+				}
+			})
 		},
 		toggleShowArchived(state) {
 			state.showArchived = !state.showArchived
@@ -183,6 +213,10 @@ export default new Vuex.Store({
 		toggleCompactMode(state) {
 			state.compactMode = !state.compactMode
 			localStorage.setItem('deck.compactMode', state.compactMode)
+		},
+		setCardDetailsInModal(state) {
+			state.cardDetailsInModal = !state.cardDetailsInModal
+			localStorage.setItem('deck.cardDetailsInModal', state.cardDetailsInModal)
 		},
 		setBoards(state, boards) {
 			state.boards = boards
@@ -258,10 +292,27 @@ export default new Vuex.Store({
 				Vue.delete(state.currentBoard.acl, removeIndex)
 			}
 		},
+
 	},
 	actions: {
+		async setConfig({ commit }, config) {
+			for (const key in config) {
+				try {
+					await axios.post(generateOcsUrl(`apps/deck/api/v1.0/config`) + key, {
+						value: config[key],
+					})
+					commit('SET_CONFIG', { key, value: config[key] })
+				} catch (e) {
+					console.error(`Error while saving ${key}`, e.response)
+					throw e
+				}
+			}
+		},
 		setFilter({ commit }, filter) {
-			commit('setFilter', filter)
+			commit('SET_FILTER', filter)
+		},
+		toggleFilter({ commit }, filter) {
+			commit('TOGGLE_FILTER', filter)
 		},
 		async loadBoardById({ commit, dispatch }, boardId) {
 			const filterReset = { tags: [], users: [], due: '' }
@@ -367,6 +418,9 @@ export default new Vuex.Store({
 		},
 		toggleCompactMode({ commit }) {
 			commit('toggleCompactMode')
+		},
+		setCardDetailsInModal({ commit }, show) {
+			commit('setCardDetailsInModal', show)
 		},
 		setCurrentBoard({ commit }, board) {
 			commit('setCurrentBoard', board)

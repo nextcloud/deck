@@ -121,6 +121,10 @@ export default {
 		}
 	}
 
+	.card:not(.card__editable) .avatars {
+		margin-right: 10px;
+	}
+
 	.fade-enter-active, .fade-leave-active {
 		transition: opacity .125s;
 	}

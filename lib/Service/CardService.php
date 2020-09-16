@@ -116,6 +116,11 @@ class CardService {
 		return $cards;
 	}
 
+	public function search($boardIds, $term) {
+		$cards = $this->cardMapper->search($boardIds, $term);
+		return $cards;
+	}
+
 	/**
 	 * @param $cardId
 	 * @return \OCA\Deck\Db\RelationalEntity
@@ -137,6 +142,15 @@ class CardService {
 		$card->setAttachments($attachments);
 		$this->enrich($card);
 		return $card;
+	}
+
+	public function findCalendarEntries($boardId) {
+		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
+		$cards = $this->cardMapper->findCalendarEntries($boardId);
+		foreach ($cards as $card) {
+			$this->enrich($card);
+		}
+		return $cards;
 	}
 
 	/**

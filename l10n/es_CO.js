@@ -24,6 +24,7 @@ OC.L10N.register(
     "Cancel" : "Cancelar",
     "File already exists" : "El archivo ya existe",
     "Do you want to overwrite it?" : "¿Deseas sobre escribirlo?",
+    "Hide archived cards" : "Ocultar tarjetas archivadas",
     "Show archived cards" : "Mostrar tarjetas archivadas",
     "Details" : "Detalles",
     "Sharing" : "Compartiendo",
