@@ -214,6 +214,7 @@ OC.L10N.register(
     "Archived boards" : "Zarchiwizowane tablice",
     "Shared with you" : "Dzielone z Tobą",
     "Use modal card view" : "Użyj widoku karty modalnej",
+    "Show boards in calendar/tasks" : "Pokaż tablice w kalendarzu/zadaniach",
     "Limit deck usage of groups" : "Ogranicz użycie tablic dla grup",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ograniczenie Deck zablokuje użytkownikom z tych grup możliwość tworzenia własnych tablic. Użytkownicy nadal będą mogli pracować na tablicach, które zostały im udostępnione.",
     "New board title" : "Tytuł nowej tablicy",

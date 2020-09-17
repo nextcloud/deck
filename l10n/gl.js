@@ -214,6 +214,7 @@ OC.L10N.register(
     "Archived boards" : "Taboleiros arquivados",
     "Shared with you" : "Compartido con vostede",
     "Use modal card view" : "Usar a vista de tarxeta modal",
+    "Show boards in calendar/tasks" : "Amosar taboleiros no calendario/tarefas",
     "Limit deck usage of groups" : "Limitar o uso da plataforma a grupos",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitando Deck bloqueará os usuarios que non formen parte destes grupos, para crear os seus propios taboleiros. Os usuarios aínda así poderán traballar en taboleiros compartidos con eles.",
     "New board title" : "Novo título do taboleiro",
