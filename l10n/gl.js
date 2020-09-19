@@ -209,7 +209,7 @@ OC.L10N.register(
     "Move card" : "Mover a tarxeta",
     "Move card to another board" : "Mover a tarxeta a outro taboleiro",
     "Select a list" : "Seleccionar unha lista",
-    "seconds ago" : "segundos atrás",
+    "seconds ago" : "hai uns segundos",
     "All boards" : "Todos os taboleiros",
     "Archived boards" : "Taboleiros arquivados",
     "Shared with you" : "Compartido con vostede",

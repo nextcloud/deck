@@ -214,6 +214,7 @@ OC.L10N.register(
     "Archived boards" : "Gearchiveerde borden",
     "Shared with you" : "Deelde met jou",
     "Use modal card view" : "Gebruik modale kaartweergave",
+    "Show boards in calendar/tasks" : "Toon borden in agenda/taken",
     "Limit deck usage of groups" : "Beperk gebruik decks van groepen",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Het beperken van Deck verhindert dat gebruikers die niet lid zijn van die groepen hun eigen borden kunnen maken. gebruikers kunnen nog wel werken met de borden die met deze gebruikers zijn gedeeld.",
     "New board title" : "Nieuwe titel van bord",
