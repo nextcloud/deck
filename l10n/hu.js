@@ -98,6 +98,7 @@ OC.L10N.register(
     "Apply filter" : "Szűrő alkalmazása",
     "Filter by tag" : "Szűrés címke szerint",
     "Filter by assigned user" : "Szűrés hozzárendelt felhasználó szerint",
+    "Unassigned" : "Nem hozzárendelt",
     "Filter by due date" : "Szűrés határidő szerint",
     "Overdue" : "Lejárt",
     "Next 24 hours" : "Következő 24 óra",
