@@ -84,8 +84,8 @@
 						:disabled="stateCardCreating"
 						:placeholder="t('deck', 'Card name')"
 						required
+						pattern=".*\S+.*"
 						@keydown.esc="stopCardCreation">
-
 					<input v-show="!stateCardCreating"
 						class="icon-confirm"
 						type="submit"

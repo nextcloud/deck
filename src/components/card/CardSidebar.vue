@@ -227,6 +227,7 @@ import {
 	getMonthNamesShort,
 } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
+import { showError } from '@nextcloud/dialogs'
 
 const markdownIt = new MarkdownIt({
 	linkify: true,
@@ -464,6 +465,10 @@ export default {
 			this.descriptionSaving = false
 		},
 		updateTitle(newTitle) {
+			if (newTitle.trim === '') {
+				showError('Could not update card title')
+				return
+			}
 			this.$set(this.copiedCard, 'title', newTitle)
 			this.$store.dispatch('updateCardTitle', this.copiedCard).then(() => {
 				this.titleEditable = false
