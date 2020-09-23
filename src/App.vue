@@ -57,9 +57,9 @@ export default {
 			addButton: {
 				icon: 'icon-add',
 				classes: [],
-				text: t('deck', 'add board'),
+				text: t('deck', 'Create new board'),
 				edit: {
-					text: t('deck', 'add board'),
+					text: t('deck', 'new board'),
 					action: () => {
 					},
 					reset: () => {
