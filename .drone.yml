@@ -2,7 +2,7 @@ kind: pipeline
 name: checkers
 steps:
 - name: compatibility
-  image: nextcloudci/php7.2:php7.2-13
+  image: nextcloudci/php7.3:latest
   environment:
     APP_NAME: deck
     CORE_BRANCH: master
@@ -17,7 +17,7 @@ steps:
     - ./occ app:check-code $APP_NAME -c deprecation
     - cd apps/$APP_NAME/
 - name: syntax-php7.2
-  image: nextcloudci/php7.2:php7.2-13
+  image: nextcloudci/php7.2:latest
   environment:
     APP_NAME: deck
     CORE_BRANCH: master
@@ -35,7 +35,7 @@ steps:
     - composer install
     - ./vendor/bin/parallel-lint --exclude ./vendor/ .
 - name: syntax-php7.4
-  image: nextcloudci/php7.4:2
+  image: nextcloudci/php7.4:latest
   environment:
       APP_NAME: deck
       CORE_BRANCH: master
@@ -52,10 +52,10 @@ trigger:
     - push
 ---
 kind: pipeline
-name: unit-php7.2
+name: unit-php7.3
 steps:
-  - name: php7.2
-    image: nextcloudci/php7.2:php7.2-13
+  - name: php7.3
+    image: nextcloudci/php7.3:latest
     environment:
       APP_NAME: deck
       CORE_BRANCH: master
@@ -77,12 +77,11 @@ trigger:
   event:
     - pull_request
     - push
----
 kind: pipeline
-name: unit-php7.3
+name: unit-php7.4
 steps:
-  - name: php7.3
-    image: nextcloudci/php7.3:php7.3-5
+  - name: php7.4
+    image: nextcloudci/php7.4:latest
     environment:
       APP_NAME: deck
       CORE_BRANCH: master
@@ -109,7 +108,7 @@ kind: pipeline
 name: integration
 steps:
   - name: integration
-    image: nextcloudci/php7.2:php7.2-13
+    image: nextcloudci/php7.3:latest
     environment:
       APP_NAME: deck
       CORE_BRANCH: master
