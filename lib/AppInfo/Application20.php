@@ -36,6 +36,7 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
@@ -46,6 +47,7 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Comments\CommentsEntityEvent;
 use OCP\Comments\ICommentsManager;
@@ -84,8 +86,6 @@ class Application20 extends App implements IBootstrap {
 	}
 
 	public function boot(IBootContext $context): void {
-		Util::addStyle('deck', 'deck');
-
 		$context->injectFn(Closure::fromCallable([$this, 'registerUserGroupHooks']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEntity']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEventHandler']));
@@ -112,6 +112,8 @@ class Application20 extends App implements IBootstrap {
 
 		$context->registerSearchProvider(DeckProvider::class);
 		$context->registerDashboardWidget(DeckWidget::class);
+
+		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
 	}
 
 	public function registerNotifications(NotificationManager $notificationManager): void {
