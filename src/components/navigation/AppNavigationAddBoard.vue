@@ -21,7 +21,7 @@
   -->
 <template>
 	<AppNavigationItem v-if="!editing"
-		:title="t('deck', 'Add board')"
+		:title="t('deck', 'Create new board')"
 		icon="icon-add"
 		@click.prevent.stop="startCreateBoard" />
 	<div v-else class="board-create">
@@ -29,7 +29,7 @@
 			<div :style="{ backgroundColor: color }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
 		</ColorPicker>
 		<form @submit.prevent.stop="createBoard">
-			<input :placeholder="t('deck', 'Board name')" type="text" required>
+			<input :placeholder="t('deck', 'New board title')" type="text" required>
 			<input type="submit" value="" class="icon-confirm">
 			<Actions><ActionButton icon="icon-close" @click.stop.prevent="cancelEdit" /></Actions>
 		</form>
