@@ -43,8 +43,12 @@
 					class="dragDisabled"
 					@keyup.esc="cancelEdit"
 					@submit.prevent="finishedEdit(card)">
-					<input v-model="copiedCard.title" v-focus type="text">
-					<input type="button" class="icon-confirm" @click="finishedEdit(card)">
+					<input v-model="copiedCard.title"
+						v-focus
+						type="text"
+						required
+						pattern=".*\S+.*">
+					<input type="submit" value="" class="icon-confirm">
 				</form>
 
 				<DueDate v-if="!editing" :card="card" />
