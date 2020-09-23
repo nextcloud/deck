@@ -60,7 +60,7 @@
 				tag="ul"
 				class="labels"
 				@click="openCard">
-				<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)">
+				<li v-for="label in labelsSorted" :key="label.id" :style="labelStyle(label)">
 					<span @click="applyLabelFilter(label)">{{ label.title }}</span>
 				</li>
 			</transition-group>
@@ -126,7 +126,9 @@ export default {
 		currentCard() {
 			return this.card && this.$route && this.$route.params.cardId === this.card.id
 		},
-
+		labelsSorted() {
+			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+		},
 	},
 	methods: {
 		openCard() {
