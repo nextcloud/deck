@@ -466,7 +466,7 @@ export default {
 		},
 		updateTitle(newTitle) {
 			if (newTitle.trim === '') {
-				showError('Could not update card title')
+				showError(t('deck', 'The title cannot be empty.'))
 				return
 			}
 			this.$set(this.copiedCard, 'title', newTitle)
