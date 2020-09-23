@@ -39,11 +39,11 @@
 				v-click-outside="hideAddStack">
 				<Actions v-if="!isAddStackVisible">
 					<ActionButton icon="icon-add" @click.stop="showAddStack">
-						{{ t('deck', 'Add new list') }}
+						{{ t('deck', 'Add list') }}
 					</ActionButton>
 				</Actions>
 				<form v-else @submit.prevent="addNewStack()">
-					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add new list') }}</label>
+					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add list') }}</label>
 					<input id="new-stack-input-main"
 						v-model="newStackTitle"
 						v-focus
@@ -51,7 +51,7 @@
 						class="no-close"
 						:placeholder="t('deck', 'List name')"
 						required>
-					<input v-tooltip="t('deck', 'Add new list')"
+					<input v-tooltip="t('deck', 'Add list')"
 						class="icon-confirm"
 						type="submit"
 						value="">
