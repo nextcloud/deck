@@ -120,6 +120,7 @@
 						:lang="lang"
 						:format="format"
 						:disabled="saving || !canEdit"
+						:shortcuts="shortcuts"
 						confirm />
 					<Actions v-if="canEdit">
 						<ActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">
@@ -299,6 +300,23 @@ export default {
 				stringify: this.stringify,
 				parse: this.parse,
 			},
+			shortcuts: [
+				{
+					text: 'Today',
+					onClick() {
+						const date = new Date()
+						return date
+					},
+				},
+				{
+					text: 'Tomorrow',
+					onClick() {
+						const date = new Date()
+						date.setTime(date.getTime() + 3600 * 1000 * 24)
+						return date
+					},
+				},
+			],
 		}
 	},
 	computed: {
