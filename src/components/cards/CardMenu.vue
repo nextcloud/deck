@@ -75,6 +75,7 @@ import { mapGetters, mapState } from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
+import { showUndo } from '@nextcloud/dialogs'
 
 export default {
 	name: 'CardMenu',
@@ -129,6 +130,7 @@ export default {
 		},
 		deleteCard() {
 			this.$store.dispatch('deleteCard', this.card)
+			showUndo('undo', this.$store.dispatch('cardUndoDelete', this.card))
 		},
 		archiveUnarchiveCard() {
 			this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
