@@ -4,6 +4,7 @@ OC.L10N.register(
     "Finished" : "Završeno",
     "copy" : "kopiraj",
     "Done" : "Done",
+    "Add board" : "Dodaj tablu",
     "Cancel" : "Otkaži",
     "Details" : "Detalji",
     "Sharing" : "Deljenje",
