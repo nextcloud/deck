@@ -23,7 +23,7 @@
 <template>
 	<NcContent app-name="deck" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
 		<AppNavigation />
-		<NcAppContent>
+		<NcAppContent @click="clickCloseSidebar()">
 			<router-view />
 		</NcAppContent>
 
@@ -121,6 +121,11 @@ export default {
 	methods: {
 		hideModal() {
 			this.$router.push({ name: 'board' })
+		},
+		clickCloseSidebar() {
+			if (this.sidebarShown) {
+				this.$router.push({ name: 'board' })
+			}
 		},
 	},
 }

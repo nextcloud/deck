@@ -22,7 +22,6 @@
 
 <template>
 	<NcAppSidebar v-if="currentBoard && currentCard"
-		v-click-outside="closeSidebar"
 		:active="tabId"
 		:title="title"
 		:subtitle="subtitle"
