@@ -38,8 +38,6 @@
     "Personal planning and team project organization" : "التخطيط الشخصي و تنظيم مشروع الفريق",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "دك (Deck) هو أداة تنظيم باسلوب كانبان (kanban) تهدف إلى التخطيط الشخصي وتنظيم المشروع للفرق مع نيكست كلاود (Nextcloud).\n- 📥 إضافة مهامك إلى البطاقات وترتيبها\n- 📄 كتابة ملاحظات إضافية  باستخدام مارك داون (markdown)\n- 🔖 تعيين تسميات لتنظيم أفضل\n- 👥 شارك مع فريقك أو أصدقائك أو عائلتك\n- 📎 إرفاق الملفات وتضمينها بالوصف المستخدم فيه مارك داون (markdown)\n- 💬 ناقش مع فريقك باستخدام التعليقات\n- ⚡ تتبع التغييرات في تيار النشاط\n- 🚀 اجعل مشروعك منظماً",
     "Card details" : "تفاصيل البطاقة",
-    "Create new board" : "انشاء لوح جديد",
-    "new board" : "لوح جديد",
     "Select the board to link to a project" : "تحديد اللوح لربطه بمشروع",
     "Search by board title" : "بحث بواسطة عنوان اللوح",
     "Select board" : "حدد لوح",
@@ -55,7 +53,6 @@
     "This board is read only" : "هذا اللوح بوضع القراءة فقط",
     "Drop your files to upload" : "افلت الملفات لرفعها",
     "Archived cards" : "البطاقات المؤرشفة",
-    "Add new list" : "اضف قائمة جديدة",
     "List name" : "قامة اسماء",
     "Apply filter" : "تطبيق التصفية",
     "Filter by tag" : "تصفية بواسطة الوسم",
@@ -134,7 +131,6 @@
     "Archived boards" : "الالواح المؤرشفة",
     "Shared with you" : "شورك معك",
     "Limit deck usage of groups" : "استخدام دك   Deck محدود للمجاميع",
-    "New board title" : "عنوان لوح جديد",
     "Edit board" : "تعديل اللوح",
     "Board details" : "تفاصيل لوح",
     "An error occurred" : "طرأ هناك خطأ",
