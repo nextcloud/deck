@@ -32,6 +32,11 @@
 		</div>
 		<div v-if="overviewName" class="board-title">
 			<h2><a href="#">{{ overviewName }}</a></h2>
+			<Actions>
+				<ActionButton icon="icon-add" @click.stop="modalShow=true">
+					{{ t('deck', 'Add card') }}
+				</ActionButton>
+			</Actions>
 		</div>
 		<div v-if="board" class="board-actions">
 			<div v-if="canManage && !showArchived && !board.archived"
@@ -193,18 +198,54 @@
 				</Actions>
 			</div>
 		</div>
+
+		<Modal v-if="modalShow" :title="t('deck', 'Add card')" @close="modalShow=false">
+			<div class="modal__content">
+				<h3>{{ t('deck', 'Add card') }}</h3>
+				<Multiselect v-model="selectedBoard"
+					:placeholder="t('deck', 'Select a board')"
+					:options="boards"
+					:max-height="100"
+					label="title"
+					@select="loadStacksFromBoard" />
+				<Multiselect v-model="selectedStack"
+					:placeholder="t('deck', 'Select a list')"
+					:options="stacksFromBoard"
+					:max-height="100"
+					label="title" />
+
+				<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add card') }}</label>
+				<input id="new-stack-input-main"
+					ref="newCardInput"
+					v-model="newCardTitle"
+					v-focus
+					type="text"
+					class="no-close"
+					:placeholder="t('deck', 'Card name')">
+
+				<button :disabled="!addCardSetRequiredFields" class="primary" @click="addCard">
+					{{ t('deck', 'Add card') }}
+				</button>
+				<button @click="modalShow=false">
+					{{ t('deck', 'Cancel') }}
+				</button>
+			</div>
+		</Modal>
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Actions, ActionButton, Popover, Avatar } from '@nextcloud/vue'
+import { Modal, Multiselect, Actions, ActionButton, Popover, Avatar } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle'
+import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
+import { showError } from '@nextcloud/dialogs'
 
 export default {
 	name: 'Controls',
 	components: {
-		Actions, ActionButton, Popover, Avatar,
+		Actions, ActionButton, Popover, Avatar, Modal, Multiselect,
 	},
 	mixins: [ labelStyle ],
 	props: {
@@ -226,6 +267,12 @@ export default {
 			showArchived: false,
 			isAddStackVisible: false,
 			filter: { tags: [], users: [], due: '', unassigned: false },
+
+			modalShow: false,
+			selectedBoard: '',
+			selectedStack: '',
+			stacksFromBoard: [],
+			newCardTitle: '',
 		}
 	},
 
@@ -256,6 +303,15 @@ export default {
 		},
 		labelsSorted() {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+		},
+		boards() {
+			return this.$store.getters.boards
+		},
+		addCardSetRequiredFields() {
+			if (this.selectedBoard === '' || this.selectedStack === '' || this.newCardTitle.trim() === '') {
+				return false
+			}
+			return true
 		},
 	},
 	watch: {
@@ -314,11 +370,54 @@ export default {
 			this.$store.dispatch('setFilter', { ...filterReset })
 			this.filter = filterReset
 		},
+		async loadStacksFromBoard(selectedBoard) {
+			try {
+				const url = generateUrl('/apps/deck/stacks/' + selectedBoard.id)
+				const response = await axios.get(url)
+				this.stacksFromBoard = response.data
+			} catch (err) {
+				return err
+			}
+		},
+		async addCard() {
+			try {
+				await this.$store.dispatch('addCard', {
+					title: this.newCardTitle,
+					stackId: this.selectedStack.id,
+					boardId: this.selectedBoard.id,
+				})
+				this.newCardTitle = ''
+			} catch (e) {
+				showError('Could not create card: ' + e.response.data.message)
+			}
+			this.modalShow = false
+		},
 	},
 }
 </script>
 
 <style lang="scss" scoped>
+	#new-stack-input-main {
+		width: 100%;
+	}
+
+	.modal__content {
+		width: 25vw;
+		min-width: 250px;
+		min-height: 120px;
+		text-align: center;
+		margin: 20px 20px 100px 20px;
+
+		.multiselect {
+			margin-bottom: 10px;
+		}
+	}
+
+	.modal__content button {
+		float: right;
+		margin-top: 50px;
+	}
+
 	.controls {
 		display: flex;
 
