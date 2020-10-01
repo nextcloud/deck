@@ -78,8 +78,8 @@ class CardController extends Controller {
 	 * @param int $order
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function create($title, $stackId, $type = 'plain', $order = 999) {
-		return $this->cardService->create($title, $stackId, $type, $order, $this->userId);
+	public function create($title, $stackId, $type = 'plain', $order = 999, $description = '', $duedate = null) {
+		return $this->cardService->create($title, $stackId, $type, $order, $this->userId, $description, $duedate);
 	}
 
 	/**

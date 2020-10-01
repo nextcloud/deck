@@ -34,7 +34,7 @@
 			<h2><a href="#">{{ overviewName }}</a></h2>
 			<Actions>
 				<ActionButton icon="icon-add" @click.stop="modalShow=true">
-					{{ t('deck', 'Add card') }}
+					{{ t('deck', 'Add card on Today') }}
 				</ActionButton>
 			</Actions>
 		</div>
@@ -199,9 +199,9 @@
 			</div>
 		</div>
 
-		<Modal v-if="modalShow" :title="t('deck', 'Add card')" @close="modalShow=false">
+		<Modal v-if="modalShow" :title="t('deck', 'Add card on Today')" @close="modalShow=false">
 			<div class="modal__content">
-				<h3>{{ t('deck', 'Add card') }}</h3>
+				<h3>{{ t('deck', 'Add card on Today') }}</h3>
 				<Multiselect v-model="selectedBoard"
 					:placeholder="t('deck', 'Select a board')"
 					:options="boards"
@@ -214,7 +214,7 @@
 					:max-height="100"
 					label="title" />
 
-				<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add card') }}</label>
+				<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add card on Today') }}</label>
 				<input id="new-stack-input-main"
 					ref="newCardInput"
 					v-model="newCardTitle"
@@ -381,10 +381,13 @@ export default {
 		},
 		async addCard() {
 			try {
+				const today = new Date()
+				today.setHours(23, 59, 59, 999)
 				await this.$store.dispatch('addCard', {
 					title: this.newCardTitle,
 					stackId: this.selectedStack.id,
 					boardId: this.selectedBoard.id,
+					duedate: today.toISOString(),
 				})
 				this.newCardTitle = ''
 			} catch (e) {
