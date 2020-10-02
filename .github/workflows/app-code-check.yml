@@ -1,0 +1,55 @@
+name: PHP AppCode Check
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - stable*
+
+env:
+  APP_NAME: deck
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: ['7.4']
+        server-versions: ['master', 'stable18', 'stable19', 'stable20']
+
+    name: AppCode check php${{ matrix.php-versions }}-${{ matrix.server-versions }}
+    steps:
+      - name: Checkout server
+        uses: actions/checkout@v2
+        with:
+          repository: nextcloud/server
+          ref: ${{ matrix.server-versions }}
+
+      - name: Checkout submodules
+        shell: bash
+        run: |
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+
+      - name: Checkout app
+        uses: actions/checkout@v2
+        with:
+          path: apps/${{ env.APP_NAME }}
+
+      - name: Set up php ${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@v1
+        with:
+          php-version: ${{ matrix.php-versions }}
+          tools: phpunit
+          extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite
+
+      - name: Checkout app
+        uses: actions/checkout@v2
+        with:
+          path: apps/${{ env.APP_NAME }}
+
+      - name: App code check
+        run: php occ app:check-code ${{ env.APP_NAME }}
