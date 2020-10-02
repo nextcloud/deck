@@ -119,7 +119,7 @@ export default {
 
 				sharee.value = item.value
 				return sharee
-			})
+			}).slice(0, 10)
 		},
 		unallocatedSharees() {
 			return this.sharees.filter((sharee) => {
