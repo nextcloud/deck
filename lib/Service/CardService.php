@@ -415,8 +415,11 @@ class CardService {
 		if ($card->getArchived()) {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
+		$changes = new ChangeSet($card);
 		$card->setStackId($stackId);
 		$this->cardMapper->update($card);
+		$changes->setAfter($card);
+		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_CARD, $changes, ActivityManager::SUBJECT_CARD_UPDATE);
 
 		$cards = $this->cardMapper->findAll($stackId);
 		$result = [];

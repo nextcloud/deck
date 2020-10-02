@@ -240,9 +240,25 @@ class ActivityManager {
 	}
 
 	public function triggerEvent($objectType, $entity, $subject, $additionalParams = [], $author = null) {
+		if ($author === null) {
+			$author = $this->userId;
+		}
 		try {
 			$event = $this->createEvent($objectType, $entity, $subject, $additionalParams, $author);
 			if ($event !== null) {
+				$json = json_encode($event->getSubjectParameters());
+				if (mb_strlen($json) > 4000) {
+					$params = json_decode(json_encode($event->getSubjectParameters()), true);
+
+					$newContent = $params['after'];
+					unset($params['before'], $params['after'], $params['card']['description']);
+
+					$params['after'] = mb_substr($newContent, 0, 2000);
+					if (mb_strlen($newContent) > 2000) {
+						$params['after'] .= '...';
+					}
+					$event->setSubject($event->getSubject(), $params);
+				}
 				$this->sendToUsers($event);
 			}
 		} catch (\Exception $e) {
