@@ -107,11 +107,11 @@ class BoardService {
 		$this->userId = $userId;
 	}
 
-	public function getUserBoards(int $since = -1): array {
+	public function getUserBoards(int $since = -1, $includeArchived = true): array {
 		$userInfo = $this->getBoardPrerequisites();
-		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null, $since);
-		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null,  $since);
-		$circleBoards = $this->boardMapper->findAllByCircles($userInfo['user'], null, null,  $since);
+		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null, $since, $includeArchived);
+		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null, $since, $includeArchived);
+		$circleBoards = $this->boardMapper->findAllByCircles($userInfo['user'], null, null,  $since, $includeArchived);
 		$mergedBoards = array_merge($userBoards, $groupBoards, $circleBoards);
 		$result = [];
 		/** @var Board $item */
@@ -125,11 +125,11 @@ class BoardService {
 	/**
 	 * @return array
 	 */
-	public function findAll($since = -1, $details = null) {
+	public function findAll($since = -1, $details = null, $includeArchived = true) {
 		if ($this->boardsCache) {
 			return $this->boardsCache;
 		}
-		$complete = $this->getUserBoards($since);
+		$complete = $this->getUserBoards($since, $includeArchived);
 		$result = [];
 		/** @var Board $item */
 		foreach ($complete as &$item) {
