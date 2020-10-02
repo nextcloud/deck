@@ -59,7 +59,7 @@ class DeckCalendarBackend {
 	}
 
 	public function getBoards(): array {
-		return $this->boardService->findAll();
+		return $this->boardService->findAll(-1, null, false);
 	}
 
 	public function getBoard(int $id): Board {
