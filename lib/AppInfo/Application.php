@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\AppInfo;
 
-$version = \OC_Util::getVersion()[0];
+$version = \OCP\Util::getVersion()[0];
 if ($version >= 20) {
 	class Application extends Application20 {
 	}

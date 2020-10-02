@@ -24,7 +24,6 @@
 namespace OCA\Deck\AppInfo;
 
 use Exception;
-use OC_Util;
 use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Capabilities;
 use OCA\Deck\Collaboration\Resources\ResourceProvider;
@@ -172,7 +171,7 @@ class ApplicationLegacy extends App {
 	}
 
 	protected function registerCollaborationResources(): void {
-		$version = OC_Util::getVersion()[0];
+		$version = \OCP\Util::getVersion()[0];
 		if ($version < 16) {
 			return;
 		}

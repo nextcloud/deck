@@ -532,7 +532,7 @@ class BoardService {
 		$this->changeHelper->boardChanged($boardId);
 
 		// TODO: use the dispatched event for this
-		$version = \OC_Util::getVersion()[0];
+		$version = \OCP\Util::getVersion()[0];
 		if ($version >= 16) {
 			try {
 				$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
@@ -621,7 +621,7 @@ class BoardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $acl, ActivityManager::SUBJECT_BOARD_UNSHARE);
 		$this->changeHelper->boardChanged($acl->getBoardId());
 
-		$version = \OC_Util::getVersion()[0];
+		$version = \OCP\Util::getVersion()[0];
 		if ($version >= 16) {
 			try {
 				$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
