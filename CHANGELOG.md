@@ -1,31 +1,46 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.1.0 - unreleased
+## 1.1.0 - 2020-10-03
 
-### Merged PRs
+### Features
 
+* [#2115](https://github.com/nextcloud/deck/pull/2115) Dashboard widget for Nextcloud 20
+* [#1545](https://github.com/nextcloud/deck/pull/1545) Show cards in calendar/tasks app and make them available though CalDAV
+* [#2200](https://github.com/nextcloud/deck/pull/2200) Unified search implementation for Nextcloud 20
+* [#1934](https://github.com/nextcloud/deck/pull/1934) Upcoming cards overview @jakobroehrl
+* [#2047](https://github.com/nextcloud/deck/pull/2047) Show card details in modal @jakobroehrl
 * [#1853](https://github.com/nextcloud/deck/pull/1853) Archive all cards from stack @jakobroehrl
 * [#1865](https://github.com/nextcloud/deck/pull/1865) Add stack button on empty board @jakobroehrl
 * [#1926](https://github.com/nextcloud/deck/pull/1926) New filter: unassigned cards @jakobroehrl
-* [#1934](https://github.com/nextcloud/deck/pull/1934) Card dashboard @jakobroehrl
+
+### Bugfixes
+
 * [#2035](https://github.com/nextcloud/deck/pull/2035) Attach files in description @jakobroehrl
-* [#2047](https://github.com/nextcloud/deck/pull/2047) Show card details in modal @jakobroehrl
-* [#2115](https://github.com/nextcloud/deck/pull/2115) Dashboard panel @juliushaertl
 * [#2123](https://github.com/nextcloud/deck/pull/2123) Fix control tooltip @jakobroehrl
 * [#2144](https://github.com/nextcloud/deck/pull/2144) Fix nextcloud if install with dev dependencies @matchish
-* [#2157](https://github.com/nextcloud/deck/pull/2157) Build/webpack shared config @juliushaertl
-* [#2158](https://github.com/nextcloud/deck/pull/2158) Fix description in dark mode @juliushaertl
-* [#2169](https://github.com/nextcloud/deck/pull/2169) Bump webpack-merge from 5.0.9 to 5.1.0 @dependabot
-* [#2170](https://github.com/nextcloud/deck/pull/2170) Add lastModified date to boards API documentation @stefan-niedermann
+* [#2158](https://github.com/nextcloud/deck/pull/2158) Fix description in dark mode
 * [#2188](https://github.com/nextcloud/deck/pull/2188) CardBadges: Count checkboxes started with "+ [ ]" @joreiff
-* [#2200](https://github.com/nextcloud/deck/pull/2200) Unified search implementation @juliushaertl
-* [#2206](https://github.com/nextcloud/deck/pull/2206) Fix read-only sidebar (fixes #2033) @juliushaertl
-* [#2208](https://github.com/nextcloud/deck/pull/2208) Fix design, dark mode and keyboard navigation of the board list @juliushaertl
+* [#2206](https://github.com/nextcloud/deck/pull/2206) Fix read-only sidebar (fixes #2033)
+* [#2208](https://github.com/nextcloud/deck/pull/2208) Fix design, dark mode and keyboard navigation of the board list
 * [#2210](https://github.com/nextcloud/deck/pull/2210) Fix an incorrect/misleading message in lib/Service/BoardService.php @jordanbancino
-* [#2211](https://github.com/nextcloud/deck/pull/2211) Update incorrect field in API documentation (docs/API.md) @jordanbancino
-* [#2243](https://github.com/nextcloud/deck/pull/2243) Various smaller styling fixes @juliushaertl
-* [#2244](https://github.com/nextcloud/deck/pull/2244) Toggle filter on clicking card labels @juliushaertl
+* [#2243](https://github.com/nextcloud/deck/pull/2243) Various smaller styling fixes
+* [#2244](https://github.com/nextcloud/deck/pull/2244) Toggle filter on clicking card labels
+* [#2117](https://github.com/nextcloud/deck/pull/2117) Activity fixes
+* [#2255](https://github.com/nextcloud/deck/pull/2255) Use unified search events to apply on board filtering
+* [#2271](https://github.com/nextcloud/deck/pull/2271) Sort tags in filter @jakobroehrl
+* [#2318](https://github.com/nextcloud/deck/pull/2318) Card title: prevent space and no text @jakobroehrl
+* [#2319](https://github.com/nextcloud/deck/pull/2319) Move style loading to BeforeTemplateRenderedEvent
+* [#2320](https://github.com/nextcloud/deck/pull/2320) Consistent naming @jakobroehrl
+* [#2252](https://github.com/nextcloud/deck/pull/2252) Fix double slash in the deck activity links @baraksoa
+* [#2270](https://github.com/nextcloud/deck/pull/2270) Fix empty content view to align with other widgets
+* [#2275](https://github.com/nextcloud/deck/pull/2275) Wait for services to be registered before performing further setup that requires services
+* [#2278](https://github.com/nextcloud/deck/pull/2278) Fix wrong SQL queries @Chartman123
+* [#2279](https://github.com/nextcloud/deck/pull/2279) L10n:add translation to card placeholder @mjanssens
+* [#2282](https://github.com/nextcloud/deck/pull/2282) Duedate picker localization
+* [#2283](https://github.com/nextcloud/deck/pull/2283) Do not handle exceptions from page controller in the ExceptionMiddleware
+* [#2298](https://github.com/nextcloud/deck/pull/2298) Use absolute URLs for the search @nickvergessen
+
 
 
 ## 1.0.5 - 2020-07-15
