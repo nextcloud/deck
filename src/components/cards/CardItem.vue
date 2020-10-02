@@ -118,7 +118,7 @@ export default {
 				return this.$store.getters.canEdit
 			}
 			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
-			return board.permissions.PERMISSION_EDIT
+			return board ? board.permissions.PERMISSION_EDIT : false
 		},
 		card() {
 			return this.item ? this.item : this.$store.getters.cardById(this.id)
