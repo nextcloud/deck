@@ -117,8 +117,10 @@ import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
 
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
-import { showError } from '@nextcloud/dialogs'
+import { showError, showUndo } from '@nextcloud/dialogs'
 import CardItem from '../cards/CardItem'
+
+import '@nextcloud/dialogs/styles/toast.scss'
 
 export default {
 	name: 'Stack',
@@ -210,6 +212,7 @@ export default {
 		},
 		deleteStack(stack) {
 			this.$store.dispatch('deleteStack', stack)
+			showUndo(t('deck', 'List deleted'), () => this.$store.dispatch('stackUndoDelete', stack))
 		},
 		archiveAllCardsFromStack(stack) {
 
