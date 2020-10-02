@@ -2,9 +2,13 @@ language: php
 services:
     - mysql
 php:
+    - 7.2
     - 7.3
+    - 7.4
 env:
-    - CORE_BRANCH=master DB=mysql
+    - CORE_BRANCH=stable20 DB=mysql
+    - CORE_BRANCH=stable19 DB=mysql
+    - CORE_BRANCH=stable18 DB=mysql
 
 matrix:
   include:

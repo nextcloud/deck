@@ -5,7 +5,7 @@ steps:
   image: nextcloudci/php7.3:latest
   environment:
     APP_NAME: deck
-    CORE_BRANCH: master
+    CORE_BRANCH: stable20
     DB: sqlite
   commands:
     # Pre-setup steps
@@ -20,7 +20,7 @@ steps:
   image: nextcloudci/php7.2:latest
   environment:
     APP_NAME: deck
-    CORE_BRANCH: master
+    CORE_BRANCH: stable20
     DB: sqlite
   commands:
     - composer install
@@ -29,7 +29,7 @@ steps:
   image: nextcloudci/php7.3:php7.3-2
   environment:
     APP_NAME: deck
-    CORE_BRANCH: master
+    CORE_BRANCH: stable20
     DB: sqlite
   commands:
     - composer install
@@ -38,7 +38,7 @@ steps:
   image: nextcloudci/php7.4:latest
   environment:
       APP_NAME: deck
-      CORE_BRANCH: master
+      CORE_BRANCH: stable20
       DB: sqlite
   commands:
       - composer install
@@ -58,7 +58,7 @@ steps:
     image: nextcloudci/php7.3:latest
     environment:
       APP_NAME: deck
-      CORE_BRANCH: master
+      CORE_BRANCH: stable20
       DB: sqlite
     commands:
       # Pre-setup steps
@@ -84,7 +84,7 @@ steps:
     image: nextcloudci/php7.4:latest
     environment:
       APP_NAME: deck
-      CORE_BRANCH: master
+      CORE_BRANCH: stable20
       DB: sqlite
     commands:
       # Pre-setup steps
@@ -111,7 +111,7 @@ steps:
     image: nextcloudci/php7.3:latest
     environment:
       APP_NAME: deck
-      CORE_BRANCH: master
+      CORE_BRANCH: stable20
       DB: sqlite
     commands:
       # Pre-setup steps
