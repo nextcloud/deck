@@ -329,8 +329,8 @@ class DeckProvider implements IProvider {
 		if (array_key_exists('diff', $subjectParams) && $subjectParams['diff']) {
 			$diff = new Diff();
 			// Don't add diff as message since we are limited to 255 chars here
-			//$event->setMessage($subjectParams['after']);
-			$event->setParsedMessage('<pre class="visualdiff">' . $diff->render($subjectParams['before'], $subjectParams['after']) . '</pre>');
+			$event->setParsedMessage($subjectParams['after']);
+			//$event->setParsedMessage('<pre class="visualdiff">' . $diff->render($subjectParams['before'], $subjectParams['after']) . '</pre>');
 			return $params;
 		}
 		if (array_key_exists('before', $subjectParams)) {

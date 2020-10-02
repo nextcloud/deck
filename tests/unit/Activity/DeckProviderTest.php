@@ -287,7 +287,7 @@ class DeckProviderTest extends TestCase {
 		$this->assertEquals('test string Card', $event->getParsedSubject());
 		$this->assertEquals('test string {card}', $event->getRichSubject());
 		$this->assertEquals('BCD', $event->getMessage());
-		$this->assertEquals('<pre class="visualdiff"><del>A</del>BC<ins>D</ins></pre>', $event->getParsedMessage());
+		$this->assertEquals('BCD', $event->getParsedMessage());
 	}
 
 	public function testParseParamForBoard() {
