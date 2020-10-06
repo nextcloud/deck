@@ -97,13 +97,13 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		// FIXME: One moving to QBMapper we should allow filtering the boards probably by method chaining for additional where clauses
 		$sql = 'SELECT id, title, owner, color, archived, deleted_at, 0 as shared, last_modified FROM `*PREFIX*deck_boards` WHERE owner = ? AND last_modified > ?';
 		if (!$includeArchived) {
-			$sql .= ' AND NOT archived';
+			$sql .= ' AND NOT archived AND deleted_at = 0';
 		}
 		$sql .= ' UNION ' .
 			'SELECT boards.id, title, owner, color, archived, deleted_at, 1 as shared, last_modified FROM `*PREFIX*deck_boards` as boards ' .
 			'JOIN `*PREFIX*deck_board_acl` as acl ON boards.id=acl.board_id WHERE acl.participant=? AND acl.type=? AND boards.owner != ? AND last_modified > ?';
 		if (!$includeArchived) {
-			$sql .= ' AND NOT archived';
+			$sql .= ' AND NOT archived AND deleted_at = 0';
 		}
 		$entries = $this->findEntities($sql, [$userId, $since, $userId, Acl::PERMISSION_TYPE_USER, $userId, $since], $limit, $offset);
 		/* @var Board $entry */
@@ -142,7 +142,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		}
 		$sql .= ')';
 		if (!$includeArchived) {
-			$sql .= ' AND NOT archived';
+			$sql .= ' AND NOT archived AND deleted_at = 0';
 		}
 		$entries = $this->findEntities($sql, array_merge([$userId, Acl::PERMISSION_TYPE_GROUP], $groups), $limit, $offset);
 		/* @var Board $entry */
@@ -174,7 +174,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		}
 		$sql .= ')';
 		if (!$includeArchived) {
-			$sql .= ' AND NOT archived';
+			$sql .= ' AND NOT archived AND deleted_at = 0';
 		}
 		$entries = $this->findEntities($sql, array_merge([$userId, Acl::PERMISSION_TYPE_CIRCLE], $circles), $limit, $offset);
 		/* @var Board $entry */
