@@ -62,6 +62,8 @@ export default new Vuex.Store({
 		navShown: true,
 		compactMode: localStorage.getItem('deck.compactMode') === 'true',
 		cardDetailsInModal: localStorage.getItem('deck.cardDetailsInModal') === 'true',
+		lastBoardId: localStorage.getItem('deck.lastBoardId'),
+		lastListId: localStorage.getItem('deck.lastListId'),
 		sidebarShown: false,
 		currentBoard: null,
 		currentCard: null,
@@ -80,6 +82,12 @@ export default new Vuex.Store({
 		},
 		cardDetailsInModal: state => {
 			return state.cardDetailsInModal
+		},
+		lastBoardId: state => {
+			return state.lastBoardId
+		},
+		lastListId: state => {
+			return state.lastListId
 		},
 		getSearchQuery: state => {
 			return state.searchQuery
@@ -217,6 +225,12 @@ export default new Vuex.Store({
 		setCardDetailsInModal(state) {
 			state.cardDetailsInModal = !state.cardDetailsInModal
 			localStorage.setItem('deck.cardDetailsInModal', state.cardDetailsInModal)
+		},
+		storeLastBoardId(state, boardId) {
+			localStorage.setItem('deck.lastBoardId', boardId)
+		},
+		storeLastListId(state, listId) {
+			localStorage.setItem('deck.lastListId', listId)
 		},
 		setBoards(state, boards) {
 			state.boards = boards
@@ -421,6 +435,12 @@ export default new Vuex.Store({
 		},
 		setCardDetailsInModal({ commit }, show) {
 			commit('setCardDetailsInModal', show)
+		},
+		storeLastBoardId({ commit }, boardId) {
+			commit('storeLastBoardId', boardId)
+		},
+		storeLastListId({ commit }, listId) {
+			commit('storeLastListId', listId)
 		},
 		setCurrentBoard({ commit }, board) {
 			commit('setCurrentBoard', board)

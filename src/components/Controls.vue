@@ -201,6 +201,8 @@
 
 		<Modal v-if="modalShow" :title="t('deck', 'Add card on Today')" @close="modalShow=false">
 			<div class="modal__content">
+				{{ lastBoardId }}
+				{{ lastListId }}
 				<h3>{{ t('deck', 'Add card on Today') }}</h3>
 				<Multiselect v-model="selectedBoard"
 					:placeholder="t('deck', 'Select a board')"
@@ -280,6 +282,8 @@ export default {
 		...mapGetters([
 			'canEdit',
 			'canManage',
+			'lastBoardId',
+			'lastListId',
 		]),
 		...mapState({
 			compactMode: state => state.compactMode,
@@ -317,6 +321,15 @@ export default {
 	watch: {
 		board() {
 			this.clearFilter()
+		},
+		lastBoardId() {
+
+			if (this.lastBoardId === null || this.lastBoardId === 0) {
+				return
+			}
+			this.selectedBoard = this.boards.filter(board => {
+				return board.id === this.lastBoardId
+			})
 		},
 	},
 	methods: {
@@ -390,6 +403,8 @@ export default {
 					duedate: today.toISOString(),
 				})
 				this.newCardTitle = ''
+				this.$store.dispatch('storeLastListId', this.selectedStack.id)
+				this.$store.dispatch('storeLastBoardId', this.selectedBoard.id)
 			} catch (e) {
 				showError('Could not create card: ' + e.response.data.message)
 			}
