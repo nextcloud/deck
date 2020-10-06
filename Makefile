@@ -23,12 +23,15 @@ install-deps: install-deps-js
 install-deps-nodev: install-deps-js
 	composer install --no-dev
 
+autoloader:
+	composer dump-autoload
+
 install-deps-js:
 	npm ci
 
 build: clean-dist install-deps build-js
 
-release: clean-dist install-deps-nodev build-js
+release: clean-dist install-deps-nodev autoloader build-js
 
 build-js: install-deps-js
 	npm run build

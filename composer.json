@@ -1,31 +1,38 @@
 {
-    "name": "nextcloud/deck",
-    "type": "project",
-    "license": "AGPLv3",
-    "authors": [
-        {
-            "name": "Julius Härtl",
-            "email": "jus@bitgrid.net"
-        }
-    ],
-    "require": {
-        "cogpowered/finediff": "0.3.*"
-    },
-    "require-dev": {
-        "roave/security-advisories": "dev-master",
-        "christophwurst/nextcloud": "^17",
-        "jakub-onderka/php-parallel-lint": "^1.0.0",
-        "phpunit/phpunit": "^8",
-        "nextcloud/coding-standard": "^0.3.0",
-        "symfony/event-dispatcher": "^4.0"
-    },
-    "config": {
-        "optimize-autoloader": true,
-        "classmap-authoritative": true
-    },
-    "scripts": {
-        "lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
-        "cs:check": "php-cs-fixer fix --dry-run --diff",
-        "cs:fix": "php-cs-fixer fix"
-    }
+	"name": "nextcloud/deck",
+	"type": "project",
+	"license": "AGPLv3",
+	"authors": [
+		{
+			"name": "Julius Härtl",
+			"email": "jus@bitgrid.net"
+		}
+	],
+	"require": {
+		"cogpowered/finediff": "0.3.*"
+	},
+	"require-dev": {
+		"roave/security-advisories": "dev-master",
+		"christophwurst/nextcloud": "^17",
+		"jakub-onderka/php-parallel-lint": "^1.0.0",
+		"phpunit/phpunit": "^8",
+		"nextcloud/coding-standard": "^0.3.0",
+		"symfony/event-dispatcher": "^4.0"
+	},
+	"config": {
+		"optimize-autoloader": true,
+		"classmap-authoritative": true,
+		"vendor-dir": "composer",
+		"autoloader-suffix": "Deck"
+	},
+	"autoload" : {
+		"psr-4": {
+			"OCA\\Deck\\": "lib/"
+		}
+	},
+	"scripts": {
+		"lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
+		"cs:check": "php-cs-fixer fix --dry-run --diff",
+		"cs:fix": "php-cs-fixer fix"
+	}
 }
