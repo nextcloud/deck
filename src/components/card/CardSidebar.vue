@@ -179,7 +179,7 @@
 			<CardSidebarTabAttachments :card="currentCard" />
 		</AppSidebarTab>
 
-		<AppSidebarTab v-if="hasComments"
+		<AppSidebarTab
 			id="comments"
 			:order="2"
 			:name="t('deck', 'Comments')"
@@ -283,7 +283,6 @@ export default {
 			descriptionSaveTimeout: null,
 			descriptionSaving: false,
 			hasActivity: capabilities && capabilities.activity,
-			hasComments: !!OC.appswebroots['comments'],
 			modalShow: false,
 			lang: {
 				days: getDayNamesMin(),
