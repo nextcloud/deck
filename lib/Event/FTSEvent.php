@@ -42,7 +42,7 @@ class FTSEvent extends Event {
 	}
 
 	public function getArgument($key) {
-		if ($this->hasArgument($key)) {
+		if (isset($this->arguments[$key])) {
 			return $this->arguments[$key];
 		}
 
