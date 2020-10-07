@@ -102,7 +102,7 @@ export default {
 		formatedSharees() {
 			return this.unallocatedSharees.map(item => {
 				const sharee = {
-					user: item.label,
+					user: item.value.shareWith,
 					displayName: item.label,
 					icon: 'icon-user',
 					multiselectKey: item.shareType + ':' + item.primaryKey,
