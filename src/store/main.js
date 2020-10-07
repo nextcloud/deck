@@ -34,7 +34,6 @@ import comment from './comment'
 import trashbin from './trashbin'
 import attachment from './attachment'
 import overview from './overview'
-import debounce from 'lodash/debounce'
 Vue.use(Vuex)
 
 const apiClient = new BoardApi()
@@ -392,7 +391,7 @@ export default new Vuex.Store({
 			const boards = await apiClient.loadBoards()
 			commit('setBoards', boards)
 		},
-		loadSharees: debounce(function({ commit }, query) {
+		async loadSharees({ commit }, query) {
 			const params = new URLSearchParams()
 			if (typeof query === 'undefined') {
 				return
@@ -402,10 +401,9 @@ export default new Vuex.Store({
 			params.append('perPage', 20)
 			params.append('itemType', [0, 1, 7])
 
-			axios.get(generateOcsUrl('apps/files_sharing/api/v1') + 'sharees', { params }).then((response) => {
-				commit('setSharees', response.data.ocs.data)
-			})
-		}, 250),
+			const response = await axios.get(generateOcsUrl('apps/files_sharing/api/v1') + 'sharees', { params })
+			commit('setSharees', response.data.ocs.data)
+		},
 
 		setBoardFilter({ commmit }, filter) {
 			commmit('setBoardFilter', filter)
@@ -454,13 +452,11 @@ export default new Vuex.Store({
 		},
 
 		// acl actions
-		addAclToCurrentBoard({ dispatch, commit }, newAcl) {
+		async addAclToCurrentBoard({ dispatch, commit }, newAcl) {
 			newAcl.boardId = this.state.currentBoard.id
-			apiClient.addAcl(newAcl)
-				.then((returnAcl) => {
-					commit('addAclToCurrentBoard', returnAcl)
-					dispatch('refreshBoard', newAcl.boardId)
-				})
+			const result = await apiClient.addAcl(newAcl)
+			commit('addAclToCurrentBoard', result)
+			dispatch('refreshBoard', newAcl.boardId)
 		},
 		updateAclFromCurrentBoard({ commit }, acl) {
 			acl.boardId = this.state.currentBoard.id
