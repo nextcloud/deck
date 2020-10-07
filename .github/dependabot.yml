@@ -11,6 +11,18 @@ updates:
   reviewers:
   - juliushaertl
   - jakobroehrl
+- package-ecosystem: npm
+  directory: "/"
+  target_branch: "stable1.1"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  open-pull-requests-limit: 10
+  reviewers:
+  - juliushaertl
+  - jakobroehrl
 - package-ecosystem: composer
   directory: "/"
   schedule:
