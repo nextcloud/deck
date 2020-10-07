@@ -2,7 +2,7 @@ version: 2
 updates:
 - package-ecosystem: npm
   directory: "/"
-  target_branch: "master"
+  target-branch: "master"
   schedule:
     interval: weekly
     day: saturday
@@ -14,7 +14,7 @@ updates:
   - jakobroehrl
 - package-ecosystem: npm
   directory: "/"
-  target_branch: "stable1.1"
+  target-branch: "stable1.1"
   schedule:
     interval: weekly
     day: saturday
