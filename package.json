@@ -78,7 +78,7 @@
 		"@vue/test-utils": "^1.1.0",
 		"acorn": "^8.0.4",
 		"babel-eslint": "^10.1.0",
-		"babel-jest": "^26.3.0",
+		"babel-jest": "^26.5.2",
 		"babel-loader": "^8.1.0",
 		"css-loader": "^4.3.0",
 		"eslint": "^6.8.0",
