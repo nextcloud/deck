@@ -73,7 +73,7 @@
 		"@babel/preset-env": "^7.11.5",
 		"@nextcloud/browserslist-config": "^1.0.0",
 		"@nextcloud/eslint-config": "^2.1.0",
-		"@nextcloud/eslint-plugin": "^1.4.0",
+		"@nextcloud/eslint-plugin": "^1.5.0",
 		"@nextcloud/webpack-vue-config": "^1.4.1",
 		"@vue/test-utils": "^1.1.0",
 		"acorn": "^8.0.1",
