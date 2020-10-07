@@ -56,7 +56,7 @@
 		"vue-click-outside": "^1.1.0",
 		"vue-easymde": "^1.2.2",
 		"vue-infinite-loading": "^2.4.5",
-		"vue-router": "^3.4.4",
+		"vue-router": "^3.4.5",
 		"vue-smooth-dnd": "^0.8.1",
 		"vuex": "^3.5.1",
 		"vuex-router-sync": "^5.0.0"
