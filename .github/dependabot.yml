@@ -2,6 +2,7 @@ version: 2
 updates:
 - package-ecosystem: npm
   directory: "/"
+  target_branch: "master"
   schedule:
     interval: weekly
     day: saturday
