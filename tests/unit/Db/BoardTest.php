@@ -31,6 +31,7 @@ class BoardTest extends TestCase {
 			'acl' => [],
 			'archived' => false,
 			'users' => ['user1', 'user2'],
+			'settings' => [],
 		], $board->jsonSerialize());
 	}
 
@@ -50,6 +51,7 @@ class BoardTest extends TestCase {
 			'acl' => [],
 			'archived' => false,
 			'users' => [],
+			'settings' => [],
 		], $board->jsonSerialize());
 	}
 	public function testSetAcl() {
@@ -77,6 +79,7 @@ class BoardTest extends TestCase {
 			'archived' => false,
 			'shared' => 1,
 			'users' => [],
+			'settings' => [],
 		], $board->jsonSerialize());
 	}
 }

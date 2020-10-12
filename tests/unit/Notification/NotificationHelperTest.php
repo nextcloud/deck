@@ -24,30 +24,38 @@
 namespace OCA\Deck\Notification;
 
 use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\User;
+use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\PermissionService;
 use OCP\Comments\IComment;
+use OCP\IConfig;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class NotificationHelperTest extends \Test\TestCase {
 
-	/** @var CardMapper */
+	/** @var CardMapper|MockObject */
 	protected $cardMapper;
-	/** @var BoardMapper */
+	/** @var BoardMapper|MockObject */
 	protected $boardMapper;
-	/** @var PermissionService */
+	/** @var AssignedUsersMapper|MockObject  */
+	protected $assignedUsersMapper;
+	/** @var PermissionService|MockObject */
 	protected $permissionService;
-	/** @var IManager */
+	/** @var IConfig|MockObject */
+	protected $config;
+	/** @var IManager|MockObject */
 	protected $notificationManager;
-	/** @var IGroupManager */
+	/** @var IGroupManager|MockObject */
 	protected $groupManager;
 	/** @var string */
 	protected $currentUser;
@@ -58,14 +66,18 @@ class NotificationHelperTest extends \Test\TestCase {
 		parent::setUp();
 		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
+		$this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
+		$this->config = $this->createMock(IConfig::class);
 		$this->notificationManager = $this->createMock(IManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->currentUser = 'admin';
 		$this->notificationHelper = new NotificationHelper(
 			$this->cardMapper,
 			$this->boardMapper,
+			$this->assignedUsersMapper,
 			$this->permissionService,
+			$this->config,
 			$this->notificationManager,
 			$this->groupManager,
 			$this->currentUser
@@ -90,6 +102,19 @@ class NotificationHelperTest extends \Test\TestCase {
 	}
 
 	public function testSendCardDuedate() {
+		$this->config->expects($this->at(0))
+			->method('getUserValue')
+			->with('foo', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
+			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ALL);
+		$this->config->expects($this->at(1))
+			->method('getUserValue')
+			->with('bar', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
+			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ALL);
+		$this->config->expects($this->at(2))
+			->method('getUserValue')
+			->with('asd', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
+			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ALL);
+
 		$card = $this->createMock(Card::class);
 		$card->expects($this->at(0))
 			->method('__call')

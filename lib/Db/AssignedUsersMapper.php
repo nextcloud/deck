@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Db;
 
+use OCA\Deck\NotFoundException;
 use OCA\Deck\Service\CirclesService;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\QBMapper;
@@ -97,7 +98,7 @@ class AssignedUsersMapper extends QBMapper implements IPermissionMapper {
 	public function insert(Entity $entity): Entity {
 		$origin = $this->getOrigin($entity);
 		if ($origin === null) {
-			throw new \Exception('No origin found for assignment');
+			throw new NotFoundException('No origin found for assignment');
 		}
 		/** @var AssignedUsers $assignment */
 		$assignment = parent::insert($entity);

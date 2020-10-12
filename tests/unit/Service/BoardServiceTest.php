@@ -36,6 +36,7 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
+use OCP\IConfig;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IGroupManager;
@@ -80,6 +81,7 @@ class BoardServiceTest extends TestCase {
 		$this->aclMapper = $this->createMock(AclMapper::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->stackMapper = $this->createMock(StackMapper::class);
+		$this->config = $this->createMock(IConfig::class);
 		$this->labelMapper = $this->createMock(LabelMapper::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
@@ -93,6 +95,7 @@ class BoardServiceTest extends TestCase {
 		$this->service = new BoardService(
 			$this->boardMapper,
 			$this->stackMapper,
+			$this->config,
 			$this->l10n,
 			$this->labelMapper,
 			$this->aclMapper,

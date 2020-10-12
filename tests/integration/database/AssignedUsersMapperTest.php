@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Db;
 
+use OCA\Deck\NotFoundException;
 use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\StackService;
@@ -165,8 +166,8 @@ class AssignedUsersMapperTest extends \Test\TestCase {
 		$assignment->setCardId($this->cards[1]->getId());
 		$assignment->setParticipant('invalid-username');
 		$assignment->setType(AssignedUsers::TYPE_USER);
-		$actual = $this->assignedUsersMapper->insert($assignment);
-		$this->assertNull($actual);
+		$this->expectException(NotFoundException::class);
+		$this->assignedUsersMapper->insert($assignment);
 	}
 
 	/**
