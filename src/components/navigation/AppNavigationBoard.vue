@@ -50,19 +50,19 @@
 				icon="icon-clone"
 				:close-after-click="true"
 				@click="actionClone">
-				{{ t('deck', 'Clone board ') }}
+				{{ t('deck', 'Clone board') }}
 			</ActionButton>
 			<ActionButton v-if="canManage && board.archived && !showDueSettings"
 				icon="icon-archive"
 				:close-after-click="true"
 				@click="actionUnarchive">
-				{{ t('deck', 'Unarchive board ') }}
+				{{ t('deck', 'Unarchive board') }}
 			</ActionButton>
 			<ActionButton v-if="canManage && !board.archived && !showDueSettings"
 				icon="icon-archive"
 				:close-after-click="true"
 				@click="actionArchive">
-				{{ t('deck', 'Archive board ') }}
+				{{ t('deck', 'Archive board') }}
 			</ActionButton>
 
 			<ActionButton :icon="!showDueSettings ? 'icon-notifications-dark' : 'icon-view-previous' " @click="showDueSettings=!showDueSettings">
@@ -91,7 +91,7 @@
 				icon="icon-delete"
 				:close-after-click="true"
 				@click="actionDelete">
-				{{ t('deck', 'Delete board ') }}
+				{{ t('deck', 'Delete board') }}
 			</ActionButton>
 		</template>
 	</AppNavigationItem>
