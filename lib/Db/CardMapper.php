@@ -25,7 +25,6 @@ namespace OCA\Deck\Db;
 
 use Exception;
 use OCP\AppFramework\Db\Entity;
-
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
@@ -243,6 +242,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		$qb->select('id','title','duedate','notified')
 			->from('deck_cards')
 			->where($qb->expr()->lt('duedate', $qb->createFunction('NOW()')))
+			->andWhere($qb->expr()->eq('notified', $qb->createNamedParameter(false)))
 			->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
 			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		return $this->findEntities($qb);
