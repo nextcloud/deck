@@ -127,6 +127,8 @@ return [
 	'ocs' => [
 		['name' => 'Config#get', 'url' => '/api/v1.0/config', 'verb' => 'GET'],
 		['name' => 'Config#setValue', 'url' => '/api/v1.0/config/{key}', 'verb' => 'POST'],
+		['name' => 'Config#setBoardValue', 'url' => '/api/v1.0/config/board/{id}/{key}', 'verb' => 'POST'],
+
 
 		['name' => 'comments_api#list', 'url' => '/api/v1.0/cards/{cardId}/comments', 'verb' => 'GET'],
 		['name' => 'comments_api#create', 'url' => '/api/v1.0/cards/{cardId}/comments', 'verb' => 'POST'],

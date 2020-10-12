@@ -26,6 +26,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
+use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignedUsersMapper;
@@ -37,6 +38,7 @@ use OCA\Deck\Db\StackMapper;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IL10N;
 use OCA\Deck\Db\Board;
@@ -52,6 +54,8 @@ class BoardService {
 	private $stackMapper;
 	private $labelMapper;
 	private $aclMapper;
+	/** @var IConfig */
+	private $config;
 	private $l10n;
 	private $permissionService;
 	private $notificationHelper;
@@ -66,9 +70,11 @@ class BoardService {
 
 	private $boardsCache = null;
 
+
 	public function __construct(
 		BoardMapper $boardMapper,
 		StackMapper $stackMapper,
+		IConfig $config,
 		IL10N $l10n,
 		LabelMapper $labelMapper,
 		AclMapper $aclMapper,
@@ -85,6 +91,7 @@ class BoardService {
 		$this->boardMapper = $boardMapper;
 		$this->stackMapper = $stackMapper;
 		$this->labelMapper = $labelMapper;
+		$this->config = $config;
 		$this->aclMapper = $aclMapper;
 		$this->l10n = $l10n;
 		$this->permissionService = $permissionService;
@@ -151,6 +158,7 @@ class BoardService {
 				'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
 				'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
 			]);
+			$this->enrichWithBoardSettings($item);
 			$result[$item->getId()] = $item;
 		}
 		$this->boardsCache = $result;
@@ -190,6 +198,7 @@ class BoardService {
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
 		]);
 		$this->enrichWithUsers($board);
+		$this->enrichWithBoardSettings($board);
 		$this->boardsCache[$board->getId()] = $board;
 		return $board;
 	}
@@ -474,6 +483,14 @@ class BoardService {
 			$manage = $this->permissionService->userCan($acls, Acl::PERMISSION_MANAGE, $this->userId) && $manage;
 		}
 		return [$edit, $share, $manage];
+	}
+
+	public function enrichWithBoardSettings(Board $board) {
+		$settings = [
+			'notify-due' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $board->getId() . ':notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED),
+			'calendar' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $board->getId() . ':calendar', true),
+		];
+		$board->setSettings($settings);
 	}
 
 	/**

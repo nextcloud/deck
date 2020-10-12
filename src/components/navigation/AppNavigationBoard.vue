@@ -34,38 +34,64 @@
 			style="opacity: 0.5" />
 
 		<template v-if="!deleted" slot="actions">
-			<ActionButton v-if="canManage && !board.archived"
+			<ActionButton v-if="!showDueSettings"
+				icon="icon-more"
+				:close-after-click="true"
+				@click="actionDetails">
+				{{ t('deck', 'Board details') }}
+			</ActionButton>
+			<ActionButton v-if="canManage && !board.archived && !showDueSettings"
 				icon="icon-rename"
 				:close-after-click="true"
 				@click="actionEdit">
 				{{ t('deck', 'Edit board') }}
 			</ActionButton>
-			<ActionButton v-if="canManage && !board.archived"
+			<ActionButton v-if="canManage && !board.archived && !showDueSettings"
 				icon="icon-clone"
 				:close-after-click="true"
 				@click="actionClone">
 				{{ t('deck', 'Clone board ') }}
 			</ActionButton>
-			<ActionButton v-if="canManage && board.archived"
+			<ActionButton v-if="canManage && board.archived && !showDueSettings"
 				icon="icon-archive"
 				:close-after-click="true"
 				@click="actionUnarchive">
 				{{ t('deck', 'Unarchive board ') }}
 			</ActionButton>
-			<ActionButton v-if="canManage && !board.archived"
+			<ActionButton v-if="canManage && !board.archived && !showDueSettings"
 				icon="icon-archive"
 				:close-after-click="true"
 				@click="actionArchive">
 				{{ t('deck', 'Archive board ') }}
 			</ActionButton>
-			<ActionButton v-if="canManage"
+
+			<ActionButton :icon="!showDueSettings ? 'icon-notifications-dark' : 'icon-view-previous' " @click="showDueSettings=!showDueSettings">
+				{{ t('deck', 'Due date reminders') }}
+			</ActionButton>
+			<ActionRadio v-if="showDueSettings"
+				name="notification"
+				:checked="board.settings['notify-due'] === 'all'"
+				@change="updateSetting('notify-due', 'all')">
+				{{ t('deck', 'All cards') }}
+			</ActionRadio>
+			<ActionRadio v-if="showDueSettings"
+				name="notification"
+				:checked="board.settings['notify-due'] === 'assigned'"
+				@change="updateSetting('notify-due', 'assigned')">
+				{{ t('deck', 'Assigned cards') }}
+			</ActionRadio>
+			<ActionRadio v-if="showDueSettings"
+				name="notification"
+				:checked="board.settings['notify-due'] === 'off'"
+				@change="updateSetting('notify-due', 'off')">
+				{{ t('deck', 'No notifications') }}
+			</ActionRadio>
+
+			<ActionButton v-if="canManage && !showDueSettings"
 				icon="icon-delete"
 				:close-after-click="true"
 				@click="actionDelete">
 				{{ t('deck', 'Delete board ') }}
-			</ActionButton>
-			<ActionButton icon="icon-more" :close-after-click="true" @click="actionDetails">
-				{{ t('deck', 'Board details') }}
 			</ActionButton>
 		</template>
 	</AppNavigationItem>
@@ -82,7 +108,7 @@
 </template>
 
 <script>
-import { AppNavigationIconBullet, AppNavigationCounter, AppNavigationItem, ColorPicker, Actions, ActionButton } from '@nextcloud/vue'
+import { AppNavigationIconBullet, AppNavigationCounter, AppNavigationItem, ColorPicker, Actions, ActionButton, ActionRadio } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
 
 export default {
@@ -94,6 +120,7 @@ export default {
 		ColorPicker,
 		Actions,
 		ActionButton,
+		ActionRadio,
 	},
 	directives: {
 		ClickOutside,
@@ -114,6 +141,7 @@ export default {
 			undoTimeoutHandle: null,
 			editTitle: '',
 			editColor: '',
+			showDueSettings: false,
 		}
 	},
 	computed: {
@@ -229,6 +257,11 @@ export default {
 			const route = this.routeTo
 			route.name = 'board.details'
 			this.$router.push(route)
+		},
+		async updateSetting(key, value) {
+			const setting = {}
+			setting['board:' + this.board.id + ':' + key] = value
+			await this.$store.dispatch('setConfig', setting)
 		},
 	},
 	inject: [

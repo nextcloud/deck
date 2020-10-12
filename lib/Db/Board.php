@@ -37,6 +37,8 @@ class Board extends RelationalEntity {
 	protected $deletedAt = 0;
 	protected $lastModified = 0;
 
+	protected $settings = [];
+
 	public function __construct() {
 		$this->addType('id', 'integer');
 		$this->addType('shared', 'integer');
@@ -49,6 +51,7 @@ class Board extends RelationalEntity {
 		$this->addRelation('users');
 		$this->addRelation('permissions');
 		$this->addRelation('stacks');
+		$this->addRelation('settings');
 		$this->addResolvable('owner');
 		$this->shared = -1;
 	}
