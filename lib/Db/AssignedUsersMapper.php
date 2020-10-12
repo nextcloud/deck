@@ -21,27 +21,34 @@
  *
  */
 
+declare(strict_types=1);
 
 namespace OCA\Deck\Db;
 
+use OCA\Deck\Service\CirclesService;
 use OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\Db\QBMapper;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
 
-class AssignedUsersMapper extends DeckMapper implements IPermissionMapper {
-	private $cardMapper;
-	private $userManager;
-	/**
-	 * @var IGroupManager
-	 */
-	private $groupManager;
+class AssignedUsersMapper extends QBMapper implements IPermissionMapper {
 
-	public function __construct(IDBConnection $db, CardMapper $cardMapper, IUserManager $userManager, IGroupManager $groupManager) {
+	/** @var CardMapper */
+	private $cardMapper;
+	/** @var IUserManager */
+	private $userManager;
+	/** @var IGroupManager */
+	private $groupManager;
+	/** @var CirclesService */
+	private $circleService;
+
+	public function __construct(IDBConnection $db, CardMapper $cardMapper, IUserManager $userManager, IGroupManager $groupManager, CirclesService $circleService) {
 		parent::__construct($db, 'deck_assigned_users', AssignedUsers::class);
 		$this->cardMapper = $cardMapper;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
+		$this->circleService = $circleService;
 	}
 
 	/**
@@ -51,9 +58,12 @@ class AssignedUsersMapper extends DeckMapper implements IPermissionMapper {
 	 * @return array|Entity
 	 */
 	public function find($cardId) {
-		$sql = 'SELECT * FROM `*PREFIX*deck_assigned_users` ' .
-			'WHERE `card_id` = ?';
-		$users = $this->findEntities($sql, [$cardId]);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_assigned_users')
+			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId)));
+		/** @var AssignedUsers[] $users */
+		$users = $this->findEntities($qb);
 		foreach ($users as &$user) {
 			$this->mapParticipant($user);
 		}
@@ -61,9 +71,12 @@ class AssignedUsersMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	public function findByUserId($uid) {
-		$sql = 'SELECT * FROM `*PREFIX*deck_assigned_users` ' .
-			'WHERE `participant` = ?';
-		return $this->findEntities($sql, [$uid]);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_assigned_users')
+			->where($qb->expr()->eq('participant', $qb->createNamedParameter($uid)));
+		/** @var AssignedUsers[] $users */
+		return $this->findEntities($qb);
 	}
 
 
@@ -81,22 +94,41 @@ class AssignedUsersMapper extends DeckMapper implements IPermissionMapper {
 	 * @param Entity $entity
 	 * @return null|Entity
 	 */
-	public function insert(Entity $entity) {
+	public function insert(Entity $entity): Entity {
 		$origin = $this->getOrigin($entity);
-		if ($origin !== null) {
-			/** @var AssignedUsers $assignment */
-			$assignment = parent::insert($entity);
-			$this->mapParticipant($assignment);
-			return $assignment;
+		if ($origin === null) {
+			throw new \Exception('No origin found for assignment');
 		}
-		return null;
+		/** @var AssignedUsers $assignment */
+		$assignment = parent::insert($entity);
+		$this->mapParticipant($assignment);
+		return $assignment;
 	}
 
-	public function mapParticipant(AssignedUsers &$assignment) {
+	public function mapParticipant(AssignedUsers $assignment): void {
 		$self = $this;
 		$assignment->resolveRelation('participant', function () use (&$self, &$assignment) {
 			return $self->getOrigin($assignment);
 		});
+	}
+
+	public function isUserAssigned($cardId, $userId): bool {
+		$assignments = $this->find($cardId);
+		/** @var AssignedUsers $assignment */
+		foreach ($assignments as $assignment) {
+			$origin = $this->getOrigin($assignment);
+			if ($origin instanceof User && $assignment->getParticipant() === $userId) {
+				return true;
+			}
+			if ($origin instanceof Group && $this->groupManager->isInGroup($userId, $assignment->getParticipant())) {
+				return true;
+			}
+			if ($origin instanceof Circle && $this->circleService->isUserInCircle($assignment->getParticipant(), $userId)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private function getOrigin(AssignedUsers $assignment) {
@@ -109,7 +141,7 @@ class AssignedUsersMapper extends DeckMapper implements IPermissionMapper {
 			return $origin ? new Group($origin) : null;
 		}
 		if ($assignment->getType() === AssignedUsers::TYPE_CIRCLE) {
-			$origin = $this->groupManager->get($assignment->getParticipant());
+			$origin = $this->circleService->getCircle($assignment->getParticipant());
 			return $origin ? new Circle($origin) : null;
 		}
 		return null;
