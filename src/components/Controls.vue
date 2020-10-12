@@ -395,6 +395,7 @@ export default {
 		width: 250px;
 		max-height: 80vh;
 		overflow: auto;
+		padding: 8px;
 	}
 
 	.filter h3 {
