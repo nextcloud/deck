@@ -24,14 +24,18 @@
 namespace OCA\Deck\Notification;
 
 use DateTime;
+use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\AssignedUsersMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\User;
+use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\PermissionService;
 use OCP\Comments\IComment;
+use OCP\IConfig;
 use OCP\IGroupManager;
-use OCP\IUser;
 use OCP\Notification\IManager;
 
 class NotificationHelper {
@@ -40,8 +44,12 @@ class NotificationHelper {
 	protected $cardMapper;
 	/** @var BoardMapper */
 	protected $boardMapper;
+	/** @var AssignedUsersMapper */
+	protected $assignedUsersMapper;
 	/** @var PermissionService */
 	protected $permissionService;
+	/** @var IConfig */
+	protected $config;
 	/** @var IManager */
 	protected $notificationManager;
 	/** @var IGroupManager */
@@ -54,14 +62,18 @@ class NotificationHelper {
 	public function __construct(
 		CardMapper $cardMapper,
 		BoardMapper $boardMapper,
+		AssignedUsersMapper $assignedUsersMapper,
 		PermissionService $permissionService,
+		IConfig $config,
 		IManager $notificationManager,
 		IGroupManager $groupManager,
 		$userId
 	) {
 		$this->cardMapper = $cardMapper;
 		$this->boardMapper = $boardMapper;
+		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->permissionService = $permissionService;
+		$this->config = $config;
 		$this->notificationManager = $notificationManager;
 		$this->groupManager = $groupManager;
 		$this->currentUser = $userId;
@@ -83,18 +95,24 @@ class NotificationHelper {
 		// TODO: Once assigning users is possible, those should be notified instead of all users of the board
 		$boardId = $this->cardMapper->findBoardId($card->getId());
 		$board = $this->getBoard($boardId);
-		/** @var IUser $user */
+		/** @var User $user */
 		foreach ($this->permissionService->findUsers($boardId) as $user) {
-			$notification = $this->notificationManager->createNotification();
-			$notification
-				->setApp('deck')
-				->setUser((string) $user->getUID())
-				->setObject('card', $card->getId())
-				->setSubject('card-overdue', [
-					$card->getTitle(), $board->getTitle()
-				])
-				->setDateTime(new DateTime($card->getDuedate()));
-			$this->notificationManager->notify($notification);
+			$notificationSetting = $this->config->getUserValue($user->getUID(), Application::APP_ID, 'board:' . $boardId . ':notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_DEFAULT);
+			if (
+				$notificationSetting === ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ALL ||
+				($notificationSetting === ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED && $this->assignedUsersMapper->isUserAssigned($card->getId(), $user->getUID()))
+			) {
+				$notification = $this->notificationManager->createNotification();
+				$notification
+					->setApp('deck')
+					->setUser((string)$user->getUID())
+					->setObject('card', $card->getId())
+					->setSubject('card-overdue', [
+						$card->getTitle(), $board->getTitle()
+					])
+					->setDateTime(new DateTime($card->getDuedate()));
+				$this->notificationManager->notify($notification);
+			}
 		}
 		$this->cardMapper->markNotified($card);
 	}
