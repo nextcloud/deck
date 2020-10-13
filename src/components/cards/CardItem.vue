@@ -131,6 +131,13 @@ export default {
 			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 	},
+	watch: {
+		currentCard(newValue) {
+			if (newValue) {
+				this.$nextTick(() => this.$el.scrollIntoView())
+			}
+		},
+	},
 	methods: {
 		openCard() {
 			const boardId = this.card && this.card.boardId ? this.card.boardId : this.$route.params.id
