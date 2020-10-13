@@ -115,10 +115,10 @@ export default {
 		]),
 		canEdit() {
 			if (this.currentBoard) {
-				return this.$store.getters.canEdit
+				return !this.currentBoard.archived && this.$store.getters.canEdit
 			}
 			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
-			return board ? board.permissions.PERMISSION_EDIT : false
+			return board ? !board.archived && board.permissions.PERMISSION_EDIT : false
 		},
 		card() {
 			return this.item ? this.item : this.$store.getters.cardById(this.id)
@@ -212,10 +212,15 @@ export default {
 		.card-controls {
 			display: flex;
 			margin-left: $card-padding;
+			margin-right: $card-padding;
+
 			& > div {
 				display: flex;
 				max-height: 44px;
 			}
+		}
+		&.card__editable .card-controls {
+			margin-right: 0;
 		}
 	}
 
