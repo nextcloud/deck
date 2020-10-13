@@ -22,16 +22,16 @@
 
 <template>
 	<div class="controls">
-		<div id="app-navigation-toggle-custom" class="icon-menu" @click="toggleNav" />
-		<div v-if="board" class="board-title">
+		<div v-if="overviewName" class="board-title">
+			<div class="board-bullet icon-calendar-dark" />
+			<h2>{{ overviewName }}</h2>
+		</div>
+		<div v-else-if="board" class="board-title">
 			<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
-			<h2><a href="#">{{ board.title }}</a></h2>
+			<h2>{{ board.title }}</h2>
 			<p v-if="showArchived">
 				({{ t('deck', 'Archived cards') }})
 			</p>
-		</div>
-		<div v-if="overviewName" class="board-title">
-			<h2><a href="#">{{ overviewName }}</a></h2>
 		</div>
 		<div v-if="board" class="board-actions">
 			<div v-if="canManage && !showArchived && !board.archived"
@@ -321,6 +321,9 @@ export default {
 <style lang="scss" scoped>
 	.controls {
 		display: flex;
+		padding: 3px;
+		height: 44px;
+		padding-left: 44px;
 
 		.board-title {
 			display: flex;
@@ -337,7 +340,7 @@ export default {
 				height: 20px;
 				border: none;
 				border-radius: 50%;
-				background-color: #aaa;
+				background-color: transparent;
 				margin: 12px;
 				margin-left: -4px;
 			}
