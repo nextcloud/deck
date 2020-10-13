@@ -21,11 +21,11 @@
  -->
 
 <template>
-	<div id="content" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
-		<AppNavigation v-show="navShown" />
-		<div id="app-content">
+	<Content id="content" app-name="deck" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
+		<AppNavigation />
+		<AppContent>
 			<router-view />
-		</div>
+		</AppContent>
 
 		<Modal v-if="cardDetailsInModal && $route.params.cardId" :title="t('deck', 'Card details')" @close="hideModal()">
 			<div class="modal__content modal__card">
@@ -34,15 +34,16 @@
 		</Modal>
 
 		<router-view v-show="!cardDetailsInModal || !$route.params.cardId" name="sidebar" />
-	</div>
+	</Content>
 </template>
 
 <script>
 
 import { mapState } from 'vuex'
 import AppNavigation from './components/navigation/AppNavigation'
-import { Modal } from '@nextcloud/vue'
+import { Modal, Content, AppContent } from '@nextcloud/vue'
 import { BoardApi } from './services/BoardApi'
+import { emit, subscribe } from '@nextcloud/event-bus'
 
 const boardApi = new BoardApi()
 
@@ -51,6 +52,8 @@ export default {
 	components: {
 		AppNavigation,
 		Modal,
+		Content,
+		AppContent,
 	},
 	data() {
 		return {
@@ -90,6 +93,15 @@ export default {
 	created() {
 		this.$store.dispatch('loadBoards')
 		this.$store.dispatch('loadSharees')
+	},
+	mounted() {
+		// Set navigation to initial state and update in case it gets toggled
+		emit('toggle-navigation', { open: this.navShown, _initial: true })
+		this.$nextTick(() => {
+			subscribe('navigation-toggled', (navState) => {
+				this.$store.dispatch('toggleNav', navState.open)
+			})
+		})
 	},
 	methods: {
 		hideModal() {

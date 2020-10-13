@@ -58,7 +58,7 @@ export default new Vuex.Store({
 	state: {
 		config: loadState('deck', 'config', {}),
 		showArchived: false,
-		navShown: true,
+		navShown: localStorage.getItem('deck.navShown') === 'true',
 		compactMode: localStorage.getItem('deck.compactMode') === 'true',
 		cardDetailsInModal: localStorage.getItem('deck.cardDetailsInModal') === 'true',
 		sidebarShown: false,
@@ -203,8 +203,9 @@ export default new Vuex.Store({
 				return board.id !== b.id
 			})
 		},
-		toggleNav(state) {
-			state.navShown = !state.navShown
+		toggleNav(state, navState) {
+			state.navShown = navState
+			localStorage.setItem('deck.navShown', navState)
 		},
 		toggleSidebar(state) {
 			state.sidebarShown = !state.sidebarShown
@@ -408,8 +409,8 @@ export default new Vuex.Store({
 		setBoardFilter({ commmit }, filter) {
 			commmit('setBoardFilter', filter)
 		},
-		toggleNav({ commit }) {
-			commit('toggleNav')
+		toggleNav({ commit }, navState) {
+			commit('toggleNav', navState)
 		},
 		toggleSidebar({ commit }) {
 			commit('toggleSidebar')
