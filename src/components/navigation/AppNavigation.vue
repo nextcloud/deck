@@ -192,8 +192,4 @@ export default {
 			color: var(--color-text-light);
 		}
 	}
-
-	::v-deep .app-navigation-toggle {
-		display: none;
-	}
 </style>
