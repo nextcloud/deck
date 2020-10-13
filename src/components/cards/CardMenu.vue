@@ -106,7 +106,7 @@ export default {
 				return this.$store.getters.canEdit
 			}
 			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
-			return board.permissions.PERMISSION_EDIT
+			return !!board?.permissions?.PERMISSION_EDIT
 		},
 		isBoardAndStackChoosen() {
 			if (this.selectedBoard === '' || this.selectedStack === '') {

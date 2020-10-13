@@ -144,17 +144,19 @@ export default {
 		}
 	}
 
+	$avatar-offset: 12px;
+
 	.avatar-list {
 		float: right;
 		display: inline-flex;
-		padding-right: 8px;
+		padding-right: $avatar-offset;
 		flex-direction: row-reverse;
 		.avatardiv,
 		/deep/ .avatardiv {
 			width: 36px;
 			height: 36px;
 			box-sizing: content-box !important;
-			margin-right: -12px;
+			margin-right: -$avatar-offset;
 			transition: margin-right 0.2s ease-in-out;
 
 			&.icon-more {
