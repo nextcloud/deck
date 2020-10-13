@@ -29,9 +29,9 @@
 		<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'is-editing': editing, 'card__editable': canEdit}"
 			tag="div"
 			class="card"
-			@click.self="openCard">
+			@click="openCard">
 			<div class="card-upper">
-				<h3 v-if="isArchived || showArchived || !canEdit">
+				<h3 v-if="compactMode || isArchived || showArchived || !canEdit">
 					{{ card.title }}
 				</h3>
 				<h3 v-else-if="!editing">
@@ -41,6 +41,7 @@
 				<form v-if="editing"
 					v-click-outside="cancelEdit"
 					class="dragDisabled"
+					@click.stop
 					@keyup.esc="cancelEdit"
 					@submit.prevent="finishedEdit(card)">
 					<input v-model="copiedCard.title"
@@ -59,7 +60,7 @@
 				name="zoom"
 				tag="ul"
 				class="labels"
-				@click="openCard">
+				@click.stop="openCard">
 				<li v-for="label in labelsSorted" :key="label.id" :style="labelStyle(label)">
 					<span @click.stop="applyLabelFilter(label)">{{ label.title }}</span>
 				</li>
