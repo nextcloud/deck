@@ -203,15 +203,17 @@ export default {
 			.stack {
 				display: flex;
 				flex-direction: column;
+				position: relative;
 
 				.smooth-dnd-container.vertical {
 					flex-grow: 1;
 					display: flex;
 					flex-direction: column;
-					margin-top: 3px;
 					padding: $stack-spacing;
 					overflow-x: hidden;
 					overflow-y: auto;
+					padding-top: 15px;
+					margin-top: -10px;
 				}
 
 				.smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {

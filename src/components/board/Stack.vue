@@ -23,7 +23,7 @@
 
 <template>
 	<div class="stack">
-		<div v-click-outside="stopCardCreation" class="stack--header">
+		<div v-click-outside="stopCardCreation" class="stack--header" :class="{'stack--header--add': showAddCard }">
 			<transition name="fade" mode="out-in">
 				<h3 v-if="!canManage || isArchived">
 					{{ stack.title }}
@@ -277,12 +277,32 @@ export default {
 		position: sticky;
 		top: 0;
 		z-index: 100;
-		padding: 3px;
-		margin: 3px -3px;
-		margin-right: -10px;
-		margin-top: 0;
-		margin-bottom: 3px;
+		padding-left: $card-spacing;
 		cursor: grab;
+
+		// Smooth fade out of the cards at the top
+		&:before {
+			content: ' ';
+			display: block;
+			position: absolute;
+			background-image: linear-gradient(180deg, var(--color-main-background) 3px, transparent 100%);
+			width: 100%;
+			height: 25px;
+			top: 35px;
+			right: 6px;
+			z-index: 99;
+			transition: top var(--animation-slow);
+		}
+
+		&--add:before {
+			height: 80px;
+			background-image: linear-gradient(180deg, var(--color-main-background) 68px, transparent 100%);
+		}
+
+		& > * {
+			position: relative;
+			z-index: 100;
+		}
 
 		h3, form {
 			flex-grow: 1;
@@ -303,13 +323,13 @@ export default {
 	}
 
 	.stack--card-add {
-		position: sticky;
-		top: 52px;
 		height: 52px;
 		z-index: 100;
 		display: flex;
 		margin-left: 12px;
 		margin-right: 12px;
+		margin-top: 5px;
+		margin-bottom: 20px;
 		background-color: var(--color-main-background);
 
 		form {
