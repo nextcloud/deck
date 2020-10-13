@@ -181,7 +181,7 @@ export default {
 	}
 
 	.board {
-		margin-left: $board-spacing;
+		padding-left: $board-spacing;
 		position: relative;
 		height: calc(100% - 44px);
 		overflow-x: scroll;
