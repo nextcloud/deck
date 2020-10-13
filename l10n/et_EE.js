@@ -27,6 +27,7 @@ OC.L10N.register(
     "Reply" : "Vasta",
     "Update" : "Uuenda",
     "(group)" : "(grupp)",
+    "Delete card" : "Kustuta kaart",
     "seconds ago" : "sekundit tagasi",
     "Shared with you" : "Sinuga jagatud",
     "An error occurred" : "Tekkis tõrge",
