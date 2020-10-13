@@ -30,17 +30,17 @@
 				<ActionButton v-if="showArchived === false && isCurrentUserAssigned" icon="icon-user" @click="unassignCardFromMe()">
 					{{ t('deck', 'Unassign myself') }}
 				</ActionButton>
-				<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">
-					{{ showArchived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
-				</ActionButton>
-				<ActionButton v-if="showArchived === false" icon="icon-delete" @click="deleteCard()">
-					{{ t('deck', 'Delete card') }}
-				</ActionButton>
 				<ActionButton icon="icon-external" @click.stop="modalShow=true">
 					{{ t('deck', 'Move card') }}
 				</ActionButton>
 				<ActionButton icon="icon-settings-dark" @click="openCard">
 					{{ t('deck', 'Card details') }}
+				</ActionButton>
+				<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">
+					{{ showArchived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
+				</ActionButton>
+				<ActionButton v-if="showArchived === false" icon="icon-delete" @click="deleteCard()">
+					{{ t('deck', 'Delete card') }}
 				</ActionButton>
 			</Actions>
 		</div>
