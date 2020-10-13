@@ -7,10 +7,19 @@
 			:options="formatedSharees"
 			:user-select="true"
 			label="displayName"
+			:loading="isLoading || !!isSearching"
+			:disabled="isLoading"
 			track-by="multiselectKey"
 			:internal-search="true"
 			@input="clickAddAcl"
-			@search-change="asyncFind" />
+			@search-change="asyncFind">
+			<template #noOptions>
+				{{ isSearching ? t('deck', 'Searching for users, groups and circles ...') : t('deck', 'No participants found') }}
+			</template>
+			<template #noResult>
+				{{ isSearching ? t('deck', 'Searching for users, groups and circles ...') : t('deck', 'No participants found') }}
+			</template>
+		</Multiselect>
 
 		<ul
 			id="shareWithList"
@@ -63,6 +72,7 @@ import { Avatar, Multiselect, Actions, ActionButton, ActionCheckbox } from '@nex
 import { CollectionList } from 'nextcloud-vue-collections'
 import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
+import { showError } from '@nextcloud/dialogs'
 
 export default {
 	name: 'SharingTabSidebar',
@@ -83,6 +93,7 @@ export default {
 	data() {
 		return {
 			isLoading: false,
+			isSearching: false,
 			addAcl: null,
 			addAclForAPI: null,
 		}
@@ -137,13 +148,20 @@ export default {
 		this.asyncFind('')
 	},
 	methods: {
-		asyncFind(query) {
-			this.isLoading = true
-			this.$store.dispatch('loadSharees', query).then(response => {
-				this.isLoading = false
-			})
+		async asyncFind(query) {
+			// manual debounce to handle async searching more easily and have more control over the loading state
+			const timestamp = (new Date()).getTime()
+			if (!this.isSearching || timestamp > this.isSearching + 300) {
+				this.isSearching = timestamp
+				await this.$store.dispatch('loadSharees', query)
+
+				// only reset searching flag if the most recent search finished
+				if (this.isSearching === timestamp) {
+					this.isSearching = false
+				}
+			}
 		},
-		clickAddAcl() {
+		async clickAddAcl() {
 			this.addAclForAPI = {
 				type: this.addAcl.value.shareType,
 				participant: this.addAcl.value.shareWith,
@@ -151,7 +169,16 @@ export default {
 				permissionShare: false,
 				permissionManage: false,
 			}
-			this.$store.dispatch('addAclToCurrentBoard', this.addAclForAPI)
+			this.isLoading = true
+			try {
+				await this.$store.dispatch('addAclToCurrentBoard', this.addAclForAPI)
+			} catch (e) {
+				const errorMessage = t('deck', 'Failed to create share with {displayName}', { displayName: this.addAcl.displayName })
+				console.error(errorMessage, e)
+				showError(errorMessage)
+			}
+			this.addAcl = null
+			this.isLoading = false
 		},
 		clickEditAcl(acl) {
 			this.addAclForAPI = Object.assign({}, acl)
