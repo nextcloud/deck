@@ -195,7 +195,7 @@ export default {
 				margin: 12px $card-padding;
 				flex-grow: 1;
 				font-size: 100%;
-				overflow-x: hidden;
+				overflow: hidden;
 				word-wrap: break-word;
 				padding-left: 4px;
 				span {
