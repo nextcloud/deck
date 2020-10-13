@@ -162,6 +162,7 @@ export default {
 		]),
 		...mapState({
 			showArchived: state => state.showArchived,
+			cardDetailsInModal: state => state.cardDetailsInModal,
 		}),
 		cardsByStack() {
 			return this.$store.getters.cardsByStack(this.stack.id).filter((card) => {
@@ -248,7 +249,9 @@ export default {
 					this.$refs.newCardInput.focus()
 					this.animate = false
 				})
-				this.$router.push({ name: 'card', params: { cardId: newCard.id } })
+				if (!this.cardDetailsInModal) {
+					this.$router.push({ name: 'card', params: { cardId: newCard.id } })
+				}
 			} catch (e) {
 				showError('Could not create card: ' + e.response.data.message)
 			} finally {
