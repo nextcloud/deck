@@ -282,7 +282,6 @@ export default {
 		margin-right: -10px;
 		margin-top: 0;
 		margin-bottom: 3px;
-		background-color: var(--color-main-background-translucent);
 		cursor: grab;
 
 		h3, form {
