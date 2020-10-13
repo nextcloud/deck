@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## 1.1.1 - 2020-10-13
 
-## Bugfixes
+### Bugfixes
 
 * [#2364](https://github.com/nextcloud/deck/pull/2364) Use uid instead of displayname for sharee results
 * [#2365](https://github.com/nextcloud/deck/pull/2365) Comments do not depend on the comments app (@jakobroehrl)
