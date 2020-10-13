@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.1.1 - 2020-10-13
+
+## Bugfixes
+
+* [#2364](https://github.com/nextcloud/deck/pull/2364) Use uid instead of displayname for sharee results
+* [#2365](https://github.com/nextcloud/deck/pull/2365) Comments do not depend on the comments app (@jakobroehrl)
+* [#2395](https://github.com/nextcloud/deck/pull/2395) Fix failure if full text search app was enabled
+* [#2396](https://github.com/nextcloud/deck/pull/2396) Also exclude deleted items from calendar boards
+* [#2425](https://github.com/nextcloud/deck/pull/2425) Fix filter popover styling (@Flamenco)
+* [#2432](https://github.com/nextcloud/deck/pull/2432) Properly handle multiple shares in a row and refactor sharee loading
+
 ## 1.1.0 - 2020-10-03
 
 ### Features
