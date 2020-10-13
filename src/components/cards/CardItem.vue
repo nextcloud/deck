@@ -29,7 +29,7 @@
 		<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'is-editing': editing, 'card__editable': canEdit}"
 			tag="div"
 			class="card"
-			@click="openCard">
+			@click.self="openCard">
 			<div class="card-upper">
 				<h3 v-if="isArchived || showArchived || !canEdit">
 					{{ card.title }}
@@ -61,7 +61,7 @@
 				class="labels"
 				@click="openCard">
 				<li v-for="label in labelsSorted" :key="label.id" :style="labelStyle(label)">
-					<span @click="applyLabelFilter(label)">{{ label.title }}</span>
+					<span @click.stop="applyLabelFilter(label)">{{ label.title }}</span>
 				</li>
 			</transition-group>
 			<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
