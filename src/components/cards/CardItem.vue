@@ -172,6 +172,10 @@ export default {
 		background-color: var(--color-main-background);
 		margin-bottom: $card-spacing;
 
+		&::v-deep * {
+			cursor: pointer;
+		}
+
 		body.dark &, body.theme--dark & {
 			border: 2px solid var(--color-border);
 		}
