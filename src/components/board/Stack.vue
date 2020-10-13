@@ -309,17 +309,15 @@ export default {
 		height: 52px;
 		z-index: 100;
 		display: flex;
+		margin-left: 12px;
+		margin-right: 12px;
 		background-color: var(--color-main-background);
-		margin-left: -10px;
-		margin-right: -10px;
-		padding-top: 3px;
 
 		form {
 			display: flex;
 			width: 100%;
-			margin: 10px;
-			margin-top: 0;
-			margin-bottom: 10px;
+			margin: 0;
+			margin-right: 6px;
 			box-shadow: 0 0 3px var(--color-box-shadow);
 			border-radius: var(--border-radius-large);
 			overflow: hidden;

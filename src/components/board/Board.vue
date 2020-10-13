@@ -211,7 +211,7 @@ export default {
 					margin-top: 3px;
 					padding: $stack-spacing;
 					overflow-x: hidden;
-					overflow-y: scroll;
+					overflow-y: auto;
 				}
 
 				.smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {
