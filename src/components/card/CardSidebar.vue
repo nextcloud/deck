@@ -571,14 +571,16 @@ export default {
 	// FIXME: Obivously we should at some point not randomly reuse the sidebar component
 	// since this is not oficially supported
 	.modal__card .app-sidebar {
+		$modal-padding: 14px;
 		border: 0;
-		min-width: 100%;
+		min-width: calc(100% - #{$modal-padding*2});
 		position: relative;
 		top: 0;
 		left: 0;
 		right: 0;
-		max-width: 100%;
-		max-height: 100%;
+		max-width: calc(100% - #{$modal-padding*2});
+		padding: 14px;
+		max-height: calc(100% - #{$modal-padding*2});
 		&::v-deep {
 			.app-sidebar-header {
 				position: sticky;

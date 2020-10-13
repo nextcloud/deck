@@ -131,13 +131,6 @@ export default {
 			}
 		}
 	}
-</style>
-
-<style lang="scss">
-
-	.multiselect {
-		width: 100%;
-	}
 
 	.modal__card {
 		min-width: 320px;
@@ -146,4 +139,12 @@ export default {
 		min-height: 200px;
 		height: 80vh;
 	}
+</style>
+
+<style lang="scss">
+
+	.multiselect {
+		width: 100%;
+	}
+
 </style>
