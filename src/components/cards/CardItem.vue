@@ -134,7 +134,7 @@ export default {
 	watch: {
 		currentCard(newValue) {
 			if (newValue) {
-				this.$nextTick(() => this.$el.scrollIntoView())
+				this.$nextTick(() => this.$el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }))
 			}
 		},
 	},
