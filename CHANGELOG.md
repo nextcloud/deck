@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.1.2 - 2020-10-14
+
+### Bugfixes
+
+* [#2436](https://github.com/nextcloud/deck/pull/2436) Move most destructive actions in drop down menus to the bottom
+* [#2438](https://github.com/nextcloud/deck/pull/2438) Fix scrollable titles with Dyslexia font
+* [#2439](https://github.com/nextcloud/deck/pull/2439) Only remove card padding for editable cards
+* [#2442](https://github.com/nextcloud/deck/pull/2442) Move navigation toggle handling to @nextcloud/vue native one
+* [#2443](https://github.com/nextcloud/deck/pull/2443) Do not open the dialog automatically upon card creation, only upon click
+
 ## 1.1.1 - 2020-10-13
 
 ### Bugfixes
