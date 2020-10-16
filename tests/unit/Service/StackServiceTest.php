@@ -33,6 +33,7 @@ use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Db\AssignedLabelsMapper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use \Test\TestCase;
 use OCP\IL10N;
@@ -73,6 +74,7 @@ class StackServiceTest extends TestCase {
 	private $eventDispatcher;
 	private $l10n;
 	private $userId;
+	private $assignedLabelsMapper;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -90,6 +92,7 @@ class StackServiceTest extends TestCase {
 		$this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->userId = "admin";
+		$this->assignedLabelsMapper = $this->createMock(AssignedLabelsMapper::class);
 		
 
 		$this->stackService = new StackService(
@@ -106,7 +109,8 @@ class StackServiceTest extends TestCase {
 			$this->eventDispatcher,
 			$this->changeHelper,
 			$this->l10n,
-			$this->userId
+			$this->userId,
+			$this->assassignedLabelsMapper
 		);
 	}
 
