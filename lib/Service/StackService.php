@@ -398,7 +398,7 @@ class StackService {
 		}
 
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
-		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission(null, $id, Acl::PERMISSION_READ);
 
 		if ($this->boardService->isArchived(null, $boardId)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
@@ -413,6 +413,9 @@ class StackService {
 
 
 		$newStack = new Stack();
+
+		// TODO: Currently cloing is only possible on the same board. 
+		// If we change this and its possible to clone to other boards the 'copy' should be removed from title
 		$newStack->setTitle($stack->getTitle() . ' (' . $this->l10n->t('copy') . ')');
 		$newStack->setBoardId($boardId);
 		$newStack->setOrder(999);

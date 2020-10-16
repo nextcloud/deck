@@ -496,10 +496,10 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 #### Request parameters
 
-| Parameter | Type    | Description                              |
-| --------- | ------- | ---------------------------------------- |
-| boardId   | Integer | The id of the board the stack belongs to |
-| stackId   | Integer | The id of the stack                      |
+| Parameter | Type    | Description                                             |
+| --------- | ------- | ------------------------------------------------------- |
+| boardId   | Integer | The id of the board where the stack should be cloned to |
+| stackId   | Integer | The id of the stack                                     |
 
 #### Response
 It will return an object of the new stack containing the new cards as well.
