@@ -147,7 +147,7 @@ OC.L10N.register(
     "Deleted cards" : "Gelöschte Karten",
     "Share board with a user, group or circle …" : "Board mit Benutzer, Gruppe oder Kreis teilen…",
     "Searching for users, groups and circles ..." : "Suche nach Benutzern, Gruppen und Kreisen …",
-    "No participants found" : "Benötigt keine Übersetzung. Für iOS wird nur die formelle Übersetzung verwendet (de_DE).",
+    "No participants found" : "Keine Teilnehmer gefunden",
     "Board owner" : "Board-Besitzer",
     "(Group)" : "(Gruppe)",
     "(Circle)" : "(Kreis)",
