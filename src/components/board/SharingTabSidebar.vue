@@ -14,10 +14,10 @@
 			@input="clickAddAcl"
 			@search-change="asyncFind">
 			<template #noOptions>
-				{{ isSearching ? t('deck', 'Searching for users, groups and circles ...') : t('deck', 'No participants found') }}
+				{{ isSearching ? t('deck', 'Searching for users, groups and circles …') : t('deck', 'No participants found') }}
 			</template>
 			<template #noResult>
-				{{ isSearching ? t('deck', 'Searching for users, groups and circles ...') : t('deck', 'No participants found') }}
+				{{ isSearching ? t('deck', 'Searching for users, groups and circles …') : t('deck', 'No participants found') }}
 			</template>
 		</Multiselect>
 
