@@ -146,6 +146,7 @@ OC.L10N.register(
     "Undo" : "Razveljavi",
     "Deleted cards" : "Izbrisane naloge",
     "Share board with a user, group or circle …" : "Souporaba z uporabniki, skupinami ali krogi ...",
+    "No participants found" : "Ni zaznanih udeleženev",
     "Board owner" : "Lastnik zbirke",
     "(Group)" : "(Skupina)",
     "(Circle)" : "(Krog)",
