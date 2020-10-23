@@ -23,6 +23,7 @@ OC.L10N.register(
     "Edit" : "Уреди",
     "Title" : "Наслов",
     "Upload attachment" : "Прикачи прилог",
+    "Due date" : "До датум",
     "Description" : "Опис",
     "Comments" : "Коментари",
     "Select Date" : "Избери датум",
