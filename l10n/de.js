@@ -49,7 +49,7 @@ OC.L10N.register(
     "{user} has removed the tag {label} from card {card} in list {stack} on board {board}" : "{user} hat von der Karte {card} in der Liste {stack} auf dem Board {board} das Schlagwort {label} entfernt",
     "You have assigned {assigneduser} to card {card} on board {board}" : "Du hast {assigneduser} der Karte {card} auf dem Board {board} zugewiesen",
     "{user} has assigned {assigneduser} to card {card} on board {board}" : "{user} hat {assigneduser} der Karte {card} auf dem Board {board} zugewiesen",
-    "You have unassigned {assigneduser} from card {card} on board {board}" : "Du hast die Zuweisung von {assigneduser} zur Karte {card} auf dem Board  {board} aufgehoben",
+    "You have unassigned {assigneduser} from card {card} on board {board}" : "Du hast die Zuweisung von {assigneduser} zur Karte {card} auf dem Board {board} aufgehoben",
     "{user} has unassigned {assigneduser} from card {card} on board {board}" : "{user} hat die Zuweisung von {assigneduser} zur Karte {card} auf dem Board {board} aufgehoben",
     "You have moved the card {card} from list {stackBefore} to {stack}" : "Du hast die Karte {card} von der Liste {stackBefore} nach {stack} verschoben",
     "{user} has moved the card {card} from list {stackBefore} to {stack}" : "{user} hat die Karte {card} von der Liste {stackBefore} nach {stack} verschoben",
