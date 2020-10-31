@@ -121,6 +121,7 @@ OC.L10N.register(
     "Undo" : "撤消",
     "Deleted cards" : "已删除卡片",
     "Share board with a user, group or circle …" : "与一个用户，群组或圈子共享面板...",
+    "No participants found" : "未找到参与者",
     "Board owner" : "面板拥有者",
     "(Group)" : "（群组）",
     "(Circle)" : "（圈子）",
