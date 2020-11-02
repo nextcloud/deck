@@ -81,7 +81,7 @@ OC.L10N.register(
     "To review" : "Zu überprüfen",
     "Action needed" : "Handlung erforderlich",
     "Later" : "Später",
-    "copy" : "Kopieren",
+    "copy" : "Kopie",
     "To do" : "Offen",
     "Doing" : "In Arbeit",
     "Done" : "Erledigt",
