@@ -146,7 +146,6 @@ OC.L10N.register(
     "Undo" : "Cofnij",
     "Deleted cards" : "Usunięte karty",
     "Share board with a user, group or circle …" : "Udostępnij tablicę użytkownikowi, grupie lub kręgowi…",
-    "Searching for users, groups and circles ..." : "Szukam użytkowników, grup i kręgów…",
     "No participants found" : "Nie znaleziono uczestników",
     "Board owner" : "Właściciel tablicy",
     "(Group)" : "(Grupa)",

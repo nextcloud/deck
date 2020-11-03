@@ -146,7 +146,6 @@ OC.L10N.register(
     "Undo" : "Vrátit zpět",
     "Deleted cards" : "Smazané karty",
     "Share board with a user, group or circle …" : "Sdílet tabuli s uživatelem, skupinou nebo okruhem…",
-    "Searching for users, groups and circles ..." : "Hledání v uživatelích, skupinách a okruzích…",
     "No participants found" : "Nenalezeni žádní účastníci",
     "Board owner" : "Vlastník tabule",
     "(Group)" : "(Skupina)",

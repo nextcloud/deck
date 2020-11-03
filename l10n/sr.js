@@ -146,7 +146,6 @@ OC.L10N.register(
     "Undo" : "Опозови",
     "Deleted cards" : "Обрисане картице",
     "Share board with a user, group or circle …" : "Подели таблу са корисником, групом или кругом…",
-    "Searching for users, groups and circles ..." : "Претражујем кориснике, групе или кругове...",
     "No participants found" : "Нема нађених учесника",
     "Board owner" : "Власник табле",
     "(Group)" : "(група)",

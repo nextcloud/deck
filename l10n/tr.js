@@ -146,7 +146,6 @@ OC.L10N.register(
     "Undo" : "Geri al",
     "Deleted cards" : "Silinmiş kartlar",
     "Share board with a user, group or circle …" : "Panoyu kullanıcılar, gruplar ve çevrelerle paylaş …",
-    "Searching for users, groups and circles ..." : "Kullanıcılar, gruplar ve çevreler aranıyor ...",
     "No participants found" : "Herhangi bir katılımcı bulunamadı",
     "Board owner" : "Pano sahibi",
     "(Group)" : "(Grup)",
