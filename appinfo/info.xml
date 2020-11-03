@@ -36,6 +36,7 @@
         <database min-version="9.4">pgsql</database>
         <database>sqlite</database>
         <database min-version="5.5">mysql</database>
+        <database>oci</database>
         <nextcloud min-version="18" max-version="21" />
     </dependencies>
     <background-jobs>
