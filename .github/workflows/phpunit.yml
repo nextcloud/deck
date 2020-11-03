@@ -3,9 +3,6 @@ name: PHPUnit
 on:
   pull_request:
   push:
-    branches:
-      - master
-      - stable*
 
 env:
   APP_NAME: deck
@@ -256,7 +253,7 @@ jobs:
       - name: Set up php ${{ matrix.php-versions }}
         uses: "shivammathur/setup-php@v2"
         with:
-          php-version: "${{ matrix.php-version }}"
+          php-version: "${{ matrix.php-versions }}"
           extensions: mbstring, iconv, fileinfo, intl, oci8
           tools: phpunit:8.5.2
           coverage: none
