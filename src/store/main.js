@@ -138,7 +138,21 @@ export default new Vuex.Store({
 	},
 	mutations: {
 		SET_CONFIG(state, { key, value }) {
-			Vue.set(state.config, key, value)
+			const [scope, id, configKey] = key.split(':', 3)
+			let indexExisting = -1
+			switch (scope) {
+			case 'board':
+				indexExisting = state.boards.findIndex((b) => {
+					return id === '' + b.id
+				})
+
+				if (indexExisting > -1) {
+					Vue.set(state.boards[indexExisting].settings, configKey, value)
+				}
+				break
+			default:
+				Vue.set(state.config, key, value)
+			}
 		},
 		setSearchQuery(state, searchQuery) {
 			state.searchQuery = searchQuery

@@ -68,24 +68,28 @@
 			<ActionButton :icon="!showDueSettings ? 'icon-notifications-dark' : 'icon-view-previous' " @click="showDueSettings=!showDueSettings">
 				{{ t('deck', 'Due date reminders') }}
 			</ActionButton>
-			<ActionRadio v-if="showDueSettings"
+
+			<ActionButton v-if="showDueSettings"
 				name="notification"
-				:checked="board.settings['notify-due'] === 'all'"
-				@change="updateSetting('notify-due', 'all')">
+				icon="icon-sound"
+				:class="{ 'forced-active': board.settings['notify-due'] === 'all' }"
+				@click="updateSetting('notify-due', 'all')">
 				{{ t('deck', 'All cards') }}
-			</ActionRadio>
-			<ActionRadio v-if="showDueSettings"
+			</ActionButton>
+			<ActionButton v-if="showDueSettings"
 				name="notification"
-				:checked="board.settings['notify-due'] === 'assigned'"
-				@change="updateSetting('notify-due', 'assigned')">
+				icon="icon-user"
+				:class="{ 'forced-active': board.settings['notify-due'] === 'assigned' }"
+				@click="updateSetting('notify-due', 'assigned')">
 				{{ t('deck', 'Assigned cards') }}
-			</ActionRadio>
-			<ActionRadio v-if="showDueSettings"
+			</ActionButton>
+			<ActionButton v-if="showDueSettings"
 				name="notification"
-				:checked="board.settings['notify-due'] === 'off'"
-				@change="updateSetting('notify-due', 'off')">
+				icon="icon-sound-off"
+				:class="{ 'forced-active': board.settings['notify-due'] === 'off' }"
+				@click="updateSetting('notify-due', 'off')">
 				{{ t('deck', 'No notifications') }}
-			</ActionRadio>
+			</ActionButton>
 
 			<ActionButton v-if="canManage && !showDueSettings"
 				icon="icon-delete"
@@ -108,7 +112,7 @@
 </template>
 
 <script>
-import { AppNavigationIconBullet, AppNavigationCounter, AppNavigationItem, ColorPicker, Actions, ActionButton, ActionRadio } from '@nextcloud/vue'
+import { AppNavigationIconBullet, AppNavigationCounter, AppNavigationItem, ColorPicker, Actions, ActionButton } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
 
 export default {
@@ -120,7 +124,6 @@ export default {
 		ColorPicker,
 		Actions,
 		ActionButton,
-		ActionRadio,
 	},
 	directives: {
 		ClickOutside,
@@ -298,5 +301,9 @@ export default {
 			border-radius: 50%;
 			background-size: 14px;
 		}
+	}
+
+	.forced-active {
+		box-shadow: inset 4px 0 var(--color-primary-element);
 	}
 </style>
