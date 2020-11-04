@@ -631,7 +631,7 @@ class BoardService {
 		$acl = $this->aclMapper->find($id);
 		$this->boardMapper->mapAcl($acl);
 		if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
-			$assignements = $this->assignedUsersMapper->findByUserId($acl->getParticipant());
+			$assignements = $this->assignedUsersMapper->findByParticipant($acl->getParticipant());
 			foreach ($assignements as $assignement) {
 				$this->assignedUsersMapper->delete($assignement);
 			}

@@ -32,6 +32,7 @@ use OCP\AppFramework\Db\QBMapper;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
+use PDO;
 
 class AssignmentMapper extends QBMapper implements IPermissionMapper {
 
@@ -57,27 +58,27 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 	 * FIXME: rename this since it returns multiple entities otherwise the naming is confusing with Entity::find
 	 *
 	 * @param $cardId
-	 * @return array|Entity
+	 * @return Assignment[]
 	 */
-	public function find($cardId) {
+
+	public function find($cardId): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_assigned_users')
-			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId)));
-		/** @var Assignment[] $users */
+			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, PDO::PARAM_INT)));
 		$users = $this->findEntities($qb);
-		foreach ($users as &$user) {
+		foreach ($users as $user) {
 			$this->mapParticipant($user);
 		}
 		return $users;
 	}
 
-	public function findByUserId($uid) {
+	public function findByParticipant(string $participant, $type = Assignment::TYPE_USER): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_assigned_users')
-			->where($qb->expr()->eq('participant', $qb->createNamedParameter($uid)));
-		/** @var Assignment[] $users */
+			->where($qb->expr()->eq('participant', $qb->createNamedParameter($participant, PDO::PARAM_STR)))
+			->andWhere($qb->expr()->eq('type', $qb->createNamedParameter($type, PDO::PARAM_INT)));
 		return $this->findEntities($qb);
 	}
 
@@ -94,7 +95,7 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 	 * Check if user exists before assigning it to a card
 	 *
 	 * @param Entity $entity
-	 * @return null|Entity
+	 * @return null|Assignment
 	 * @throws NotFoundException
 	 */
 	public function insert(Entity $entity): Entity {
@@ -118,7 +119,6 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 
 	public function isUserAssigned($cardId, $userId): bool {
 		$assignments = $this->find($cardId);
-		/** @var Assignment $assignment */
 		foreach ($assignments as $assignment) {
 			$origin = $this->getOrigin($assignment);
 			if ($origin instanceof User && $assignment->getParticipant() === $userId) {
@@ -144,7 +144,7 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 			$origin = $this->groupManager->get($assignment->getParticipant());
 			return $origin ? new Group($origin) : null;
 		}
-		if ($assignment->getType() === AssignedUsers::TYPE_CIRCLE) {
+		if ($assignment->getType() === Assignment::TYPE_CIRCLE) {
 			$origin = $this->circleService->getCircle($assignment->getParticipant());
 			return $origin ? new Circle($origin) : null;
 		}
