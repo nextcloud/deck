@@ -22,10 +22,12 @@
 
 <template>
 	<AppSidebar v-if="currentBoard && currentCard && copiedCard"
-		:title="currentCard.title"
+		:title="title"
 		:subtitle="subtitle"
-		:title-editable.sync="titleEditable"
-		@update:title="updateTitle"
+		:title-editable="titleEditable"
+		@update:titleEditable="handleUpdateTitleEditable"
+		@update:title="handleUpdateTitle"
+		@submit-title="handleSubmitTitle"
 		@close="closeSidebar">
 		<template #secondary-actions>
 			<ActionButton v-if="cardDetailsInModal" icon="icon-menu-sidebar" @click.stop="showModal()">
@@ -272,6 +274,7 @@ export default {
 			saving: false,
 			markdownIt: null,
 			titleEditable: false,
+			titleEditing: '',
 			descriptionEditing: false,
 			mdeConfig: {
 				autoDownloadFontAwesome: false,
@@ -306,6 +309,9 @@ export default {
 			cardDetailsInModal: state => state.cardDetailsInModal,
 		}),
 		...mapGetters(['canEdit', 'assignables']),
+		title() {
+			return this.titleEditable ? this.titleEditing : this.currentCard.title
+		},
 		attachments() {
 			return [...this.$store.getters.attachmentsByCard(this.id)].sort((a, b) => b.id - a.id)
 		},
@@ -466,15 +472,23 @@ export default {
 			delete this.copiedCard.descriptionLastEdit
 			this.descriptionSaving = false
 		},
-		updateTitle(newTitle) {
-			if (newTitle.trim === '') {
+		handleUpdateTitleEditable(value) {
+			this.titleEditable = value
+			if (value) {
+				this.titleEditing = this.currentCard.title
+			}
+		},
+		handleUpdateTitle(value) {
+			this.titleEditing = value
+		},
+		handleSubmitTitle(value) {
+			if (value.trim === '') {
 				showError(t('deck', 'The title cannot be empty.'))
 				return
 			}
-			this.$set(this.copiedCard, 'title', newTitle)
-			this.$store.dispatch('updateCardTitle', this.copiedCard).then(() => {
-				this.titleEditable = false
-			})
+			this.$set(this.copiedCard, 'title', this.titleEditing)
+			this.titleEditable = false
+			this.$store.dispatch('updateCardTitle', this.copiedCard)
 		},
 		updateDescription() {
 			this.copiedCard.descriptionLastEdit = Date.now()
