@@ -146,6 +146,7 @@ OC.L10N.register(
     "Undo" : "Desfacer",
     "Deleted cards" : "Eliminar tarxetas",
     "Share board with a user, group or circle …" : "Compartir taboleiro cun usuario, grupo ou círculo…",
+    "Searching for users, groups and circles …" : "Buscando por usuarios, grupos e círculos…",
     "No participants found" : "Non se atoparon participantes",
     "Board owner" : "Propietariio do taboleiro",
     "(Group)" : "(grupo)",

@@ -146,6 +146,7 @@ OC.L10N.register(
     "Undo" : "Annulla",
     "Deleted cards" : "Schede eliminate",
     "Share board with a user, group or circle …" : "Condividi lavagna con un utente, gruppo o cerchia…",
+    "Searching for users, groups and circles …" : "Ricerca di utenti, gruppi e cerchie…",
     "No participants found" : "Nessun partecipante trovato",
     "Board owner" : "Proprietario della lavagna",
     "(Group)" : "(Gruppo)",

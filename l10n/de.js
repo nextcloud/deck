@@ -146,6 +146,7 @@ OC.L10N.register(
     "Undo" : "Rückgängig",
     "Deleted cards" : "Gelöschte Karten",
     "Share board with a user, group or circle …" : "Board mit Benutzer, Gruppe oder Kreis teilen…",
+    "Searching for users, groups and circles …" : "Suche nach Benutzern, Gruppen und Kreisen …",
     "No participants found" : "Keine Teilnehmer gefunden",
     "Board owner" : "Board-Besitzer",
     "(Group)" : "(Gruppe)",
