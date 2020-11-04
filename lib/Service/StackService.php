@@ -118,7 +118,7 @@ class StackService {
 		$stack = $this->stackMapper->find($stackId);
 		$cards = $this->cardMapper->findAll($stackId);
 		foreach ($cards as $cardIndex => $card) {
-			$assignedUsers = $this->assignedUsersMapper->find($card->getId());
+			$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
 			$card->setAssignedUsers($assignedUsers);
 			$card->setAttachmentCount($this->attachmentService->count($card->getId()));
 		}

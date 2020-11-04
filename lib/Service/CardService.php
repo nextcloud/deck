@@ -98,7 +98,7 @@ class CardService {
 	public function enrich($card) {
 		$cardId = $card->getId();
 		$this->cardMapper->mapOwner($card);
-		$card->setAssignedUsers($this->assignedUsersMapper->find($cardId));
+		$card->setAssignedUsers($this->assignedUsersMapper->findAll($cardId));
 		$card->setLabels($this->labelMapper->findAssignedLabelsForCard($cardId));
 		$card->setAttachmentCount($this->attachmentService->count($cardId));
 		$user = $this->userManager->get($this->currentUser);
@@ -136,7 +136,7 @@ class CardService {
 
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		$card = $this->cardMapper->find($cardId);
-		$assignedUsers = $this->assignedUsersMapper->find($card->getId());
+		$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
 		$attachments = $this->attachmentService->findAll($cardId, true);
 		$card->setAssignedUsers($assignedUsers);
 		$card->setAttachments($attachments);

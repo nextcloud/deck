@@ -107,14 +107,14 @@ class AssignmentMapperTest extends \Test\TestCase {
 	}
 
 	/**
-	 * @covers ::find
+	 * @covers ::findAll
 	 */
 	public function testFind() {
 		$uids = [];
 		$this->assignmentService->assignUser($this->cards[0]->getId(), self::TEST_USER1);
 		$this->assignmentService->assignUser($this->cards[0]->getId(), self::TEST_USER2);
 
-		$assignedUsers = $this->assignedUsersMapper->find($this->cards[0]->getId());
+		$assignedUsers = $this->assignedUsersMapper->findAll($this->cards[0]->getId());
 		foreach ($assignedUsers as $user) {
 			$uids[$user->getParticipant()] = $user;
 		}
@@ -152,7 +152,7 @@ class AssignmentMapperTest extends \Test\TestCase {
 		$assignment->setType(Assignment::TYPE_USER);
 		$this->assignedUsersMapper->insert($assignment);
 
-		$actual = $this->assignedUsersMapper->find($this->cards[1]->getId());
+		$actual = $this->assignedUsersMapper->findAll($this->cards[1]->getId());
 		$this->assertEquals(1, count($actual));
 		$this->assertEquals($this->cards[1]->getId(), $actual[0]->getCardId());
 		$this->assertEquals(self::TEST_USER4, $actual[0]->getParticipant());

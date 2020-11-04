@@ -55,13 +55,9 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * FIXME: rename this since it returns multiple entities otherwise the naming is confusing with Entity::find
-	 *
-	 * @param $cardId
 	 * @return Assignment[]
 	 */
-
-	public function find($cardId): array {
+	public function findAll(int $cardId): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_assigned_users')
