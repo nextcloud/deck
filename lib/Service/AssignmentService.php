@@ -27,8 +27,8 @@ use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
-use OCA\Deck\Db\AssignedUsers;
-use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\Assignment;
+use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Event\FTSEvent;
@@ -51,7 +51,7 @@ class AssignmentService {
 	 */
 	private $cardMapper;
 	/**
-	 * @var AssignedUsersMapper
+	 * @var AssignmentMapper
 	 */
 	private $assignedUsersMapper;
 	/**
@@ -78,7 +78,7 @@ class AssignmentService {
 	public function __construct(
 		PermissionService $permissionService,
 		CardMapper $cardMapper,
-		AssignedUsersMapper $assignedUsersMapper,
+		AssignmentMapper $assignedUsersMapper,
 		AclMapper $aclMapper,
 		NotificationHelper $notificationHelper,
 		ActivityManager $activityManager,
@@ -106,7 +106,7 @@ class AssignmentService {
 	 * @throws MultipleObjectsReturnedException
 	 * @throws DoesNotExistException
 	 */
-	public function assignUser($cardId, $userId, int $type = AssignedUsers::TYPE_USER) {
+	public function assignUser($cardId, $userId, int $type = Assignment::TYPE_USER) {
 		if (is_numeric($cardId) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
@@ -115,7 +115,7 @@ class AssignmentService {
 			throw new BadRequestException('user id must be provided');
 		}
 
-		if ($type !== AssignedUsers::TYPE_USER && $type !== AssignedUsers::TYPE_GROUP) {
+		if ($type !== Assignment::TYPE_USER && $type !== Assignment::TYPE_GROUP) {
 			throw new BadRequestException('Invalid type provided for assignemnt');
 		}
 
@@ -143,7 +143,7 @@ class AssignmentService {
 			$this->notificationHelper->sendCardAssigned($card, $userId);
 		}
 
-		$assignment = new AssignedUsers();
+		$assignment = new Assignment();
 		$assignment->setCardId($cardId);
 		$assignment->setParticipant($userId);
 		$assignment->setType($type);

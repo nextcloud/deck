@@ -28,7 +28,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
-use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Acl;
@@ -69,7 +69,7 @@ class CardService {
 		PermissionService $permissionService,
 		BoardService $boardService,
 		NotificationHelper $notificationHelper,
-		AssignedUsersMapper $assignedUsersMapper,
+		AssignmentMapper $assignedUsersMapper,
 		AttachmentService $attachmentService,
 		ActivityManager $activityManager,
 		ICommentsManager $commentsManager,
@@ -590,7 +590,7 @@ class CardService {
 	 */
 	public function findAllWithDue($userId) {
 		$cards = $this->cardMapper->findAllWithDue($userId);
-		
+
 		return $cards;
 	}
 
@@ -602,7 +602,7 @@ class CardService {
 	 */
 	public function findAssignedCards($userId) {
 		$cards = $this->cardMapper->findAssignedCards($userId);
-		
+
 		return $cards;
 	}
 }

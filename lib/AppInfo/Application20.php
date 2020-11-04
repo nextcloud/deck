@@ -33,7 +33,7 @@ use OCA\Deck\Collaboration\Resources\ResourceProviderCard;
 use OCA\Deck\Dashboard\DeckWidget;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
-use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
@@ -132,7 +132,7 @@ class Application20 extends App implements IBootstrap {
 				$aclMapper->delete($acl);
 			}
 			// delete existing user assignments
-			$assignmentMapper = $container->query(AssignedUsersMapper::class);
+			$assignmentMapper = $container->query(AssignmentMapper::class);
 			$assignments = $assignmentMapper->findByUserId($user->getUID());
 			foreach ($assignments as $assignment) {
 				$assignmentMapper->delete($assignment);

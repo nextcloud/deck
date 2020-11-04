@@ -27,8 +27,8 @@ use OC\L10N\L10N;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
-use OCA\Deck\Db\AssignedUsers;
-use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\Assignment;
+use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\ChangeHelper;
@@ -61,7 +61,7 @@ class BoardServiceTest extends TestCase {
 	private $permissionService;
 	/** @var NotificationHelper */
 	private $notificationHelper;
-	/** @var AssignedUsersMapper */
+	/** @var AssignmentMapper */
 	private $assignedUsersMapper;
 	/** @var IUserManager */
 	private $userManager;
@@ -85,7 +85,7 @@ class BoardServiceTest extends TestCase {
 		$this->labelMapper = $this->createMock(LabelMapper::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
-		$this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
+		$this->assignedUsersMapper = $this->createMock(AssignmentMapper::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
@@ -390,7 +390,7 @@ class BoardServiceTest extends TestCase {
 			->method('find')
 			->with(123)
 			->willReturn($acl);
-		$assignment = new AssignedUsers();
+		$assignment = new Assignment();
 		$assignment->setParticipant('admin');
 		$this->assignedUsersMapper->expects($this->once())
 			->method('findByUserId')

@@ -24,7 +24,7 @@
 namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
-use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\BoardMapper;
@@ -56,7 +56,7 @@ class StackServiceTest extends TestCase {
 	private $labelMapper;
 	/** @var \PHPUnit\Framework\MockObject\MockObject|PermissionService */
 	private $permissionService;
-	/** @var AssignedUsersMapper|\PHPUnit\Framework\MockObject\MockObject */
+	/** @var AssignmentMapper|\PHPUnit\Framework\MockObject\MockObject */
 	private $assignedUsersMapper;
 	/** @var AttachmentService|\PHPUnit\Framework\MockObject\MockObject */
 	private $attachmentService;
@@ -79,7 +79,7 @@ class StackServiceTest extends TestCase {
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->boardService = $this->createMock(BoardService::class);
 		$this->cardService = $this->createMock(CardService::class);
-		$this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
+		$this->assignedUsersMapper = $this->createMock(AssignmentMapper::class);
 		$this->attachmentService = $this->createMock(AttachmentService::class);
 		$this->labelMapper = $this->createMock(LabelMapper::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);

@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\Command;
 
-use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
@@ -53,7 +53,7 @@ class UserExportTest extends \Test\TestCase {
 		$this->boardService= $this->createMock(BoardService::class);
 		$this->stackMapper= $this->createMock(StackMapper::class);
 		$this->cardMapper= $this->createMock(CardMapper::class);
-		$this->assignedUserMapper= $this->createMock(AssignedUsersMapper::class);
+		$this->assignedUserMapper= $this->createMock(AssignmentMapper::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->userExport = new UserExport($this->boardMapper, $this->boardService, $this->stackMapper, $this->cardMapper, $this->assignedUserMapper, $this->userManager, $this->groupManager);

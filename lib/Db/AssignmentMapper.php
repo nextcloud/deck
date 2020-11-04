@@ -33,7 +33,7 @@ use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
 
-class AssignedUsersMapper extends QBMapper implements IPermissionMapper {
+class AssignmentMapper extends QBMapper implements IPermissionMapper {
 
 	/** @var CardMapper */
 	private $cardMapper;
@@ -45,7 +45,8 @@ class AssignedUsersMapper extends QBMapper implements IPermissionMapper {
 	private $circleService;
 
 	public function __construct(IDBConnection $db, CardMapper $cardMapper, IUserManager $userManager, IGroupManager $groupManager, CirclesService $circleService) {
-		parent::__construct($db, 'deck_assigned_users', AssignedUsers::class);
+		parent::__construct($db, 'deck_assigned_users', Assignment::class);
+
 		$this->cardMapper = $cardMapper;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
@@ -63,7 +64,7 @@ class AssignedUsersMapper extends QBMapper implements IPermissionMapper {
 		$qb->select('*')
 			->from('deck_assigned_users')
 			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId)));
-		/** @var AssignedUsers[] $users */
+		/** @var Assignment[] $users */
 		$users = $this->findEntities($qb);
 		foreach ($users as &$user) {
 			$this->mapParticipant($user);
@@ -76,7 +77,7 @@ class AssignedUsersMapper extends QBMapper implements IPermissionMapper {
 		$qb->select('*')
 			->from('deck_assigned_users')
 			->where($qb->expr()->eq('participant', $qb->createNamedParameter($uid)));
-		/** @var AssignedUsers[] $users */
+		/** @var Assignment[] $users */
 		return $this->findEntities($qb);
 	}
 
@@ -94,19 +95,21 @@ class AssignedUsersMapper extends QBMapper implements IPermissionMapper {
 	 *
 	 * @param Entity $entity
 	 * @return null|Entity
+	 * @throws NotFoundException
 	 */
 	public function insert(Entity $entity): Entity {
 		$origin = $this->getOrigin($entity);
 		if ($origin === null) {
 			throw new NotFoundException('No origin found for assignment');
 		}
-		/** @var AssignedUsers $assignment */
+
+		/** @var Assignment $assignment */
 		$assignment = parent::insert($entity);
 		$this->mapParticipant($assignment);
 		return $assignment;
 	}
 
-	public function mapParticipant(AssignedUsers $assignment): void {
+	public function mapParticipant(Assignment $assignment): void {
 		$self = $this;
 		$assignment->resolveRelation('participant', function () use (&$self, &$assignment) {
 			return $self->getOrigin($assignment);
@@ -115,7 +118,7 @@ class AssignedUsersMapper extends QBMapper implements IPermissionMapper {
 
 	public function isUserAssigned($cardId, $userId): bool {
 		$assignments = $this->find($cardId);
-		/** @var AssignedUsers $assignment */
+		/** @var Assignment $assignment */
 		foreach ($assignments as $assignment) {
 			$origin = $this->getOrigin($assignment);
 			if ($origin instanceof User && $assignment->getParticipant() === $userId) {
@@ -132,12 +135,12 @@ class AssignedUsersMapper extends QBMapper implements IPermissionMapper {
 		return false;
 	}
 
-	private function getOrigin(AssignedUsers $assignment) {
-		if ($assignment->getType() === AssignedUsers::TYPE_USER) {
+	private function getOrigin(Assignment $assignment) {
+		if ($assignment->getType() === Assignment::TYPE_USER) {
 			$origin = $this->userManager->get($assignment->getParticipant());
 			return $origin ? new User($origin) : null;
 		}
-		if ($assignment->getType() === AssignedUsers::TYPE_GROUP) {
+		if ($assignment->getType() === Assignment::TYPE_GROUP) {
 			$origin = $this->groupManager->get($assignment->getParticipant());
 			return $origin ? new Group($origin) : null;
 		}

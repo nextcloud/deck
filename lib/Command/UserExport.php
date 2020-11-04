@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\Command;
 
-use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\StackMapper;
@@ -48,7 +48,7 @@ class UserExport extends Command {
 								BoardService $boardService,
 								StackMapper $stackMapper,
 								CardMapper $cardMapper,
-								AssignedUsersMapper $assignedUsersMapper,
+								AssignmentMapper $assignedUsersMapper,
 								IUserManager $userManager,
 								IGroupManager $groupManager) {
 		parent::__construct();
