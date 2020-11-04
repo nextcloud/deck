@@ -35,19 +35,19 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($sql, [$boardId], $limit, $offset);
 	}
 
-	public function isOwner($userId, $aclId) {
+	public function isOwner($userId, $aclId): bool {
 		$sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_board_acl` WHERE id = ?)';
 		$stmt = $this->execute($sql, [$aclId]);
 		$row = $stmt->fetch();
 		return ($row['owner'] === $userId);
 	}
 
-	public function findBoardId($aclId) {
+	public function findBoardId($aclId): ?int {
 		$entity = $this->find($aclId);
 		return $entity->getBoardId();
 	}
 
-	public function findByParticipant($type, $participant) {
+	public function findByParticipant($type, $participant): array {
 		$sql = 'SELECT * from *PREFIX*deck_board_acl WHERE type = ? AND participant = ?';
 		return $this->findEntities($sql, [$type, $participant]);
 	}

@@ -156,7 +156,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	 * @param $id int|string unique entity identifier
 	 * @return boolean
 	 */
-	public function isOwner($userId, $id) {
+	public function isOwner($userId, $id): bool {
 		try {
 			$attachment = $this->find($id);
 			return $this->cardMapper->isOwner($userId, $attachment->getCardId());
@@ -172,7 +172,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	 * @param $id int|string unique entity identifier
 	 * @return int|null id of Board
 	 */
-	public function findBoardId($id) {
+	public function findBoardId($id): ?int {
 		try {
 			$attachment = $this->find($id);
 		} catch (\Exception $e) {

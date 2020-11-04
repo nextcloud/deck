@@ -220,12 +220,12 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		return parent::delete($entity);
 	}
 
-	public function isOwner($userId, $boardId) {
+	public function isOwner($userId, $boardId): bool {
 		$board = $this->find($boardId);
 		return ($board->getOwner() === $userId);
 	}
 
-	public function findBoardId($id) {
+	public function findBoardId($id): ?int {
 		return $id;
 	}
 

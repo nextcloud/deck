@@ -92,14 +92,14 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 		$stmt->execute();
 	}
 
-	public function isOwner($userId, $labelId) {
+	public function isOwner($userId, $labelId): bool {
 		$sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_labels` WHERE id = ?)';
 		$stmt = $this->execute($sql, [$labelId]);
 		$row = $stmt->fetch();
 		return ($row['owner'] === $userId);
 	}
 
-	public function findBoardId($labelId) {
+	public function findBoardId($labelId): ?int {
 		$entity = $this->find($labelId);
 		return $entity->getBoardId();
 	}

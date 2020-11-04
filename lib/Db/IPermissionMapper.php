@@ -33,7 +33,7 @@ interface IPermissionMapper {
 	 * @param $id int|string unique entity identifier
 	 * @return boolean
 	 */
-	public function isOwner($userId, $id);
+	public function isOwner($userId, $id): bool;
 
 	/**
 	 * Query boardId for Entity of given $id
@@ -41,5 +41,5 @@ interface IPermissionMapper {
 	 * @param $id int|string unique entity identifier
 	 * @return int|null id of Board
 	 */
-	public function findBoardId($id);
+	public function findBoardId($id): ?int;
 }
