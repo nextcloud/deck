@@ -23,8 +23,8 @@
 <template>
 	<div v-if="card" class="duedate">
 		<transition name="zoom">
-			<div v-if="card.duedate" :class="dueIcon">
-				<span>{{ relativeDate }}</span>
+			<div v-if="card.duedate" v-tooltip="card.dueDone ? relativeDate : null" :class="dueIcon">
+				<span v-if="!card.dueDone">{{ relativeDate }}</span>
 			</div>
 		</transition>
 	</div>
@@ -45,15 +45,15 @@ export default {
 		dueIcon() {
 			const days = Math.floor(moment(this.card.duedate).diff(this.$root.time, 'seconds') / 60 / 60 / 24)
 			if (days < 0) {
-				return 'icon-calendar due icon overdue'
+				return `due icon ${!this.card.dueDone ? 'icon-calendar overdue' : 'icon-checkmark'}`
 			}
 			if (days === 0) {
-				return 'icon-calendar-dark due icon now'
+				return `due icon ${!this.card.dueDone ? 'icon-calendar-dark now' : 'icon-checkmark'}`
 			}
 			if (days === 1) {
-				return 'icon-calendar-dark due icon next'
+				return `due icon ${!this.card.dueDone ? 'con-calendar-dark next' : 'icon-checkmark'}`
 			}
-			return 'icon-calendar-dark due icon'
+			return `due icon ${!this.card.dueDone ? 'icon-calendar-dark' : 'icon-checkmark'}`
 		},
 		relativeDate() {
 			const diff = moment(this.$root.time).diff(this.card.duedate, 'seconds')
@@ -86,6 +86,10 @@ export default {
 
 		.icon {
 			background-size: contain;
+		}
+
+		&.icon-checkmark {
+			width: 20px;
 		}
 
 		&.overdue {

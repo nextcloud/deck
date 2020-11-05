@@ -36,17 +36,19 @@ class Card extends RelationalEntity {
 	protected $lastModified;
 	protected $lastEditor;
 	protected $createdAt;
-	protected $labels;
-	protected $assignedUsers;
-	protected $attachments;
-	protected $attachmentCount;
 	protected $owner;
 	protected $order;
 	protected $archived = false;
 	protected $duedate;
 	protected $notified = false;
 	protected $deletedAt = 0;
+	protected $dueDone = false;
+
+	protected $labels;
+	protected $assignedUsers;
 	protected $commentsUnread = 0;
+	protected $attachments;
+	protected $attachmentCount = 0;
 
 	private $databaseType = 'sqlite';
 
@@ -64,6 +66,8 @@ class Card extends RelationalEntity {
 		$this->addType('archived', 'boolean');
 		$this->addType('notified', 'boolean');
 		$this->addType('deletedAt', 'integer');
+		$this->addType('dueDone', 'boolean');
+
 		$this->addRelation('labels');
 		$this->addRelation('assignedUsers');
 		$this->addRelation('attachments');

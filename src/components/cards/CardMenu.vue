@@ -24,22 +24,43 @@
 	<div v-if="card">
 		<div @click.stop.prevent>
 			<Actions v-if="canEdit && !isArchived">
-				<ActionButton v-if="showArchived === false && !isCurrentUserAssigned" icon="icon-user" @click="assignCardToMe()">
+				<ActionButton v-if="showArchived === false && !isCurrentUserAssigned"
+					icon="icon-user"
+					:close-after-click="true"
+					@click="assignCardToMe()">
 					{{ t('deck', 'Assign to me') }}
 				</ActionButton>
-				<ActionButton v-if="showArchived === false && isCurrentUserAssigned" icon="icon-user" @click="unassignCardFromMe()">
+				<ActionButton v-if="showArchived === false && isCurrentUserAssigned"
+					icon="icon-user"
+					:close-after-click="true"
+					@click="unassignCardFromMe()">
 					{{ t('deck', 'Unassign myself') }}
 				</ActionButton>
-				<ActionButton icon="icon-external" @click.stop="modalShow=true">
+				<ActionButton v-if="showArchived === false && card.duedate && !card.dueDone"
+					icon="icon-checkmark"
+					:close-after-click="true"
+					@click="toggleDoneState(true)">
+					{{ t('deck', 'Mark card as done') }}
+				</ActionButton>
+				<ActionButton v-if="showArchived === false && card.duedate && card.dueDone"
+					icon="icon-checkmark"
+					:close-after-click="true"
+					@click="toggleDoneState(false)">
+					{{ t('deck', 'Mark card as pending') }}
+				</ActionButton>
+				<ActionButton icon="icon-external" :close-after-click="true" @click.stop="modalShow=true">
 					{{ t('deck', 'Move card') }}
 				</ActionButton>
-				<ActionButton icon="icon-settings-dark" @click="openCard">
+				<ActionButton icon="icon-settings-dark" :close-after-click="true" @click="openCard">
 					{{ t('deck', 'Card details') }}
 				</ActionButton>
-				<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">
+				<ActionButton icon="icon-archive" :close-after-click="true" @click="archiveUnarchiveCard()">
 					{{ showArchived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
 				</ActionButton>
-				<ActionButton v-if="showArchived === false" icon="icon-delete" @click="deleteCard()">
+				<ActionButton v-if="showArchived === false"
+					icon="icon-delete"
+					:close-after-click="true"
+					@click="deleteCard()">
 					{{ t('deck', 'Delete card') }}
 				</ActionButton>
 			</Actions>
@@ -153,6 +174,9 @@ export default {
 					type: 0,
 				},
 			})
+		},
+		toggleDoneState(state) {
+			this.$store.dispatch('updateCardDueDone', { ...this.card, dueDone: state })
 		},
 		moveCard() {
 			this.copiedCard = Object.assign({}, this.card)

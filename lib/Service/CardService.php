@@ -261,7 +261,7 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function update($id, $title, $stackId, $type, $order = 0, $description = '', $owner, $duedate = null, $deletedAt = null, $archived = null) {
+	public function update($id, $title, $stackId, $type, $order = 0, $description = '', $owner, $duedate = null, ?int $deletedAt = null, ?bool $archived = null, ?bool $dueDone = null) {
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
@@ -319,6 +319,9 @@ class CardService {
 		}
 		if ($archived !== null) {
 			$card->setArchived($archived);
+		}
+		if ($dueDone !== null) {
+			$card->setDueDone($dueDone);
 		}
 
 
@@ -590,7 +593,7 @@ class CardService {
 	 */
 	public function findAllWithDue($userId) {
 		$cards = $this->cardMapper->findAllWithDue($userId);
-		
+
 		return $cards;
 	}
 
@@ -602,7 +605,7 @@ class CardService {
 	 */
 	public function findAssignedCards($userId) {
 		$cards = $this->cardMapper->findAssignedCards($userId);
-		
+
 		return $cards;
 	}
 }
