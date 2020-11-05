@@ -23,14 +23,14 @@
 
 <template>
 	<div class="stack">
-		<div v-click-outside="stopCardCreation" class="stack--header" :class="{'stack--header--add': showAddCard }">
+		<div v-click-outside="stopCardCreation" class="stack__header" :class="{'stack__header--add': showAddCard }">
 			<transition name="fade" mode="out-in">
 				<h3 v-if="!canManage || isArchived">
 					{{ stack.title }}
 				</h3>
 				<h3 v-else-if="!editing"
 					v-tooltip="stack.title"
-					class="stack--title"
+					class="stack__title"
 					@click="startEditing(stack)">
 					{{ stack.title }}
 				</h3>
@@ -71,7 +71,7 @@
 		</Modal>
 
 		<transition name="slide-top" appear>
-			<div v-if="showAddCard" class="stack--card-add">
+			<div v-if="showAddCard" class="stack__card-add">
 				<form :class="{ 'icon-loading-small': stateCardCreating }"
 					@submit.prevent.stop="clickAddCard()">
 					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
@@ -272,7 +272,7 @@ export default {
 		margin-right: $stack-spacing/2;
 	}
 
-	.stack--header {
+	.stack__header {
 		display: flex;
 		position: sticky;
 		top: 0;
@@ -315,14 +315,14 @@ export default {
 		}
 	}
 
-	.stack--title {
+	.stack__title {
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		max-width: calc($stack-width - 60px);
 	}
 
-	.stack--card-add {
+	.stack__card-add {
 		height: 52px;
 		z-index: 100;
 		display: flex;
