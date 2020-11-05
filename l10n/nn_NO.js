@@ -15,12 +15,12 @@ OC.L10N.register(
     "Delete" : "Ta bort",
     "Edit" : "Endra",
     "Title" : "Tittel",
-    "Description" : "Skildring",
     "Comments" : "Kommentarar",
     "Modified" : "Endra",
     "Created" : "Lagd",
     "Save" : "Lagre",
     "Update" : "Oppdater",
+    "Description" : "Skildring",
     "seconds ago" : "sekund sidan",
     "Shared with you" : "Shared with you",
     "Today" : "I dag"

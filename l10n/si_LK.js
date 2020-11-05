@@ -14,11 +14,11 @@ OC.L10N.register(
     "Delete" : "ඉවත් කරන්න",
     "Edit" : "සකසන්න",
     "Title" : "මාතෘකාව",
-    "Description" : "විස්තරය",
     "Comments" : "අදහස්",
     "Modified" : "වෙනස් කළ",
     "Save" : "සුරකින්න",
     "Update" : "යාවත්කාල කිරීම",
+    "Description" : "විස්තරය",
     "seconds ago" : "තත්පරයන්ට පෙර",
     "Shared with you" : "Shared with you",
     "Today" : "අද"

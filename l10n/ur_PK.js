@@ -9,9 +9,9 @@ OC.L10N.register(
     "Delete" : "حذف کریں",
     "Edit" : "تدوین کریں",
     "Title" : "عنوان",
-    "Description" : "تصریح",
     "Save" : "حفظ",
     "Reply" : "جواب",
+    "Description" : "تصریح",
     "seconds ago" : "سیکنڈز پہلے",
     "Shared with you" : "Shared with you",
     "Today" : "آج"

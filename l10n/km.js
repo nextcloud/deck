@@ -12,11 +12,11 @@ OC.L10N.register(
     "Delete" : "លុប",
     "Edit" : "កែប្រែ",
     "Title" : "ចំណងជើង",
-    "Description" : "ការ​អធិប្បាយ",
     "Modified" : "បាន​កែ​ប្រែ",
     "Save" : "រក្សាទុក",
     "Reply" : "ឆ្លើយតប",
     "Update" : "ធ្វើ​បច្ចុប្បន្នភាព",
+    "Description" : "ការ​អធិប្បាយ",
     "seconds ago" : "វិនាទី​មុន",
     "Shared with you" : "Shared with you",
     "Today" : "ថ្ងៃ​នេះ"

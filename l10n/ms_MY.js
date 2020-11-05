@@ -12,10 +12,10 @@ OC.L10N.register(
     "Delete" : "Padam",
     "Edit" : "Sunting",
     "Title" : "Judul",
-    "Description" : "Keterangan",
     "Modified" : "Dimodifikasi",
     "Save" : "Simpan",
     "Update" : "Kemaskini",
+    "Description" : "Keterangan",
     "Shared with you" : "Shared with you",
     "Today" : "Hari ini"
 },

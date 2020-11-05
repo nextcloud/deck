@@ -13,11 +13,11 @@ OC.L10N.register(
     "Delete" : "ئۆچۈر",
     "Edit" : "تەھرىر",
     "Title" : "ماۋزۇ",
-    "Description" : "چۈشەندۈرۈش",
     "Modified" : "ئۆزگەرتكەن",
     "Save" : "ساقلا",
     "Reply" : "جاۋاب قايتۇر",
     "Update" : "يېڭىلا",
+    "Description" : "چۈشەندۈرۈش",
     "Shared with you" : "Shared with you",
     "Today" : "بۈگۈن"
 },
