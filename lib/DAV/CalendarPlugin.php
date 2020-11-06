@@ -33,11 +33,14 @@ class CalendarPlugin implements ICalendarProvider {
 
 	/** @var DeckCalendarBackend */
 	private $backend;
+	/** @var ConfigService */
+	private $configService;
 	/** @var bool */
 	private $calendarIntegrationEnabled;
 
 	public function __construct(DeckCalendarBackend $backend, ConfigService $configService) {
 		$this->backend = $backend;
+		$this->configService = $configService;
 		$this->calendarIntegrationEnabled = $configService->get('calendar');
 	}
 
@@ -50,9 +53,12 @@ class CalendarPlugin implements ICalendarProvider {
 			return [];
 		}
 
+		$configService = $this->configService;
 		return array_map(function (Board $board) use ($principalUri) {
 			return new Calendar($principalUri, 'board-' . $board->getId(), $board, $this->backend);
-		}, $this->backend->getBoards());
+		}, array_filter($this->backend->getBoards(), function ($board) use ($configService) {
+			return $configService->isCalendarEnabled($board->getId());
+		}));
 	}
 
 	public function hasCalendarInCalendarHome(string $principalUri, string $calendarUri): bool {
