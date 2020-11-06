@@ -92,16 +92,27 @@ class NotificationHelper {
 			return;
 		}
 
-		// TODO: Once assigning users is possible, those should be notified instead of all users of the board
 		$boardId = $this->cardMapper->findBoardId($card->getId());
-		$board = $this->getBoard($boardId);
+		$board = $this->getBoard($boardId, false, true);
 		/** @var User $user */
 		foreach ($this->permissionService->findUsers($boardId) as $user) {
 			$notificationSetting = $this->config->getUserValue($user->getUID(), Application::APP_ID, 'board:' . $boardId . ':notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_DEFAULT);
-			if (
-				$notificationSetting === ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ALL ||
-				($notificationSetting === ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED && $this->assignedUsersMapper->isUserAssigned($card->getId(), $user->getUID()))
-			) {
+
+			if ($notificationSetting === ConfigService::SETTING_BOARD_NOTIFICATION_DUE_OFF) {
+				continue;
+			}
+
+			$shouldNotify = $notificationSetting === ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ALL;
+
+			if ($user->getUID() === $board->getOwner() && count($board->getAcl()) === 0) {
+				// Notify if all or assigned is configured for unshared boards
+				$shouldNotify = true;
+			} else if ($notificationSetting === ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED && $this->assignedUsersMapper->isUserAssigned($card->getId(), $user->getUID())) {
+				// Notify if the user is assigned and has the assigned setting selected
+				$shouldNotify = true;
+			}
+
+			if ($shouldNotify) {
 				$notification = $this->notificationManager->createNotification();
 				$notification
 					->setApp('deck')
@@ -187,9 +198,9 @@ class NotificationHelper {
 	 * @return Board
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 */
-	private function getBoard($boardId) {
+	private function getBoard($boardId, bool $withLabels = false, bool $withAcl = false) {
 		if (!array_key_exists($boardId, $this->boards)) {
-			$this->boards[$boardId] = $this->boardMapper->find($boardId);
+			$this->boards[$boardId] = $this->boardMapper->find($boardId, $withLabels, $withAcl);
 		}
 		return $this->boards[$boardId];
 	}

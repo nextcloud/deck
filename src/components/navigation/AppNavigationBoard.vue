@@ -65,13 +65,28 @@
 				{{ t('deck', 'Archive board') }}
 			</ActionButton>
 
-			<ActionButton :icon="!showDueSettings ? 'icon-notifications-dark' : 'icon-view-previous' " @click="showDueSettings=!showDueSettings">
+			<!-- Due date reminder settings -->
+
+			<ActionButton v-if="showDueSettings"
+				:icon="updateDueSetting ? 'icon-loading-small' : 'icon-view-previous'"
+				:disabled="updateDueSetting"
+				@click="showDueSettings=false">
 				{{ t('deck', 'Due date reminders') }}
+			</ActionButton>
+			<ActionButton v-else-if="board.acl.length > 0"
+				:title="t('deck', 'Due date reminders')"
+				:icon="dueDateReminderIcon"
+				@click="showDueSettings=true">
+				{{ dueDateReminderText }}
+			</ActionButton>
+			<ActionButton v-else :icon="board.settings['notify-due'] === 'off' ? 'icon-sound' : 'icon-sound-off'" @click="board.settings['notify-due'] === 'off' ? updateSetting('notify-due', 'all') : updateSetting('notify-due', 'off')">
+				{{ board.settings['notify-due'] === 'off' ? t('deck', 'Turn on due date reminders') : t('deck', 'Turn off due date reminders') }}
 			</ActionButton>
 
 			<ActionButton v-if="showDueSettings"
 				name="notification"
 				icon="icon-sound"
+				:disabled="updateDueSetting"
 				:class="{ 'forced-active': board.settings['notify-due'] === 'all' }"
 				@click="updateSetting('notify-due', 'all')">
 				{{ t('deck', 'All cards') }}
@@ -79,6 +94,7 @@
 			<ActionButton v-if="showDueSettings"
 				name="notification"
 				icon="icon-user"
+				:disabled="updateDueSetting"
 				:class="{ 'forced-active': board.settings['notify-due'] === 'assigned' }"
 				@click="updateSetting('notify-due', 'assigned')">
 				{{ t('deck', 'Assigned cards') }}
@@ -86,6 +102,7 @@
 			<ActionButton v-if="showDueSettings"
 				name="notification"
 				icon="icon-sound-off"
+				:disabled="updateDueSetting"
 				:class="{ 'forced-active': board.settings['notify-due'] === 'off' }"
 				@click="updateSetting('notify-due', 'off')">
 				{{ t('deck', 'No notifications') }}
@@ -145,6 +162,7 @@ export default {
 			editTitle: '',
 			editColor: '',
 			showDueSettings: false,
+			updateDueSetting: null,
 		}
 	},
 	computed: {
@@ -165,6 +183,26 @@ export default {
 		},
 		canManage() {
 			return this.board.permissions.PERMISSION_MANAGE
+		},
+		dueDateReminderIcon() {
+			if (this.board.settings['notify-due'] === 'all') {
+				return 'icon-sound'
+			} else if (this.board.settings['notify-due'] === 'assigned') {
+				return 'icon-user'
+			} else if (this.board.settings['notify-due'] === 'off') {
+				return 'icon-sound-off'
+			}
+			return ''
+		},
+		dueDateReminderText() {
+			if (this.board.settings['notify-due'] === 'all') {
+				return t('deck', 'All cards')
+			} else if (this.board.settings['notify-due'] === 'assigned') {
+				return t('deck', 'Only assigned cards')
+			} else if (this.board.settings['notify-due'] === 'off') {
+				return t('deck', 'No reminder')
+			}
+			return ''
 		},
 	},
 	watch: {},
@@ -262,9 +300,12 @@ export default {
 			this.$router.push(route)
 		},
 		async updateSetting(key, value) {
+			this.updateDueSetting = value
 			const setting = {}
 			setting['board:' + this.board.id + ':' + key] = value
 			await this.$store.dispatch('setConfig', setting)
+			this.showDueSettings = false
+			this.updateDueSetting = null
 		},
 	},
 	inject: [
