@@ -115,6 +115,10 @@ Returns an array of board items
         "deletedAt": 0,
         "id": 10,
         "lastModified": 1586269585,
+        "settings": {
+            "notify-due": "off",
+            "calendar": true
+        }
     }
 ]
 ```
@@ -951,6 +955,77 @@ For now only `deck_file` is supported as an attachment type.
 
 The following endpoints are available through the Nextcloud OCS endpoint, which is available at `/ocs/v2.php/apps/deck/api/v1.0/`. 
 This has the benefit that both the web UI as well as external integrations can use the same API.
+
+## Config
+
+Deck stores user and app configuration values globally and per board. The GET endpoint allows to fetch the current global configuration while board settings will be exposed through the board element on the regular API endpoints. 
+
+### GET /api/v1.0/config - Fetch app configuration values
+
+#### Response
+
+| Config key | Description | Value |
+| --- | --- |
+| calendar | Determines if the calendar/tasks integration through the CalDAV backend is enabled for the user (boolean) | 
+| groupLimit | Determines if creating new boards is limited to certain groups of the instance. The resulting output is an array of group objects with the id and the displayname (Admin only)|  
+
+```
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": {
+      "calendar": true,
+      "groupLimit": [
+        {
+          "id": "admin",
+          "displayname": "admin"
+        }
+      ]
+    }
+  }
+}
+
+```
+
+### POST /api/v1.0/config/{id}/{key} - Set a config value
+
+
+#### Request parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| id    | Integer | The id of the board                      |
+| key     | String | The config key to set, prefixed with `board:{boardId}:` for board specific settings |
+| value    | String | The value that should be stored for the config key |
+
+##### Board configuration
+
+| Key | Value |
+| --- | ----- |
+| notify-due | `off`, `assigned` or `all` |
+| calendar | Boolean |
+ 
+#### Example request
+
+```
+curl -X POST 'https://admin:admin@nextcloud.local/ocs/v2.php/apps/deck/api/v1.0/config/calendar' -H 'Accept: application/json' -H "Content-Type: application/json" -H 'OCS-APIRequest: true' --data-raw '{"value":false}'
+
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": false
+  }
+}
+
+```
 
 ## Comments
 
