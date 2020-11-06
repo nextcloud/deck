@@ -189,6 +189,44 @@ class AssignedUsersMapperTest extends \Test\TestCase {
 		$this->assertEquals('invalid-username', $assignment->resolveParticipant());
 	}
 
+	public function testIsUserAssigned() {
+		$assignment = new AssignedUsers();
+		$assignment->setCardId($this->cards[1]->getId());
+		$assignment->setParticipant(self::TEST_USER4);
+		$assignment->setType(AssignedUsers::TYPE_USER);
+		$this->assertFalse($this->assignedUsersMapper->isUserAssigned($this->cards[1]->getId(), self::TEST_USER4));
+
+		$assignment = $this->assignedUsersMapper->insert($assignment);
+		$actual = $this->assignedUsersMapper->isUserAssigned($this->cards[1]->getId(), self::TEST_USER4);
+		$this->assignedUsersMapper->delete($assignment);
+		$this->assertTrue($actual);
+
+		$this->assertFalse($this->assignedUsersMapper->isUserAssigned($this->cards[1]->getId(), self::TEST_USER4));
+	}
+
+	public function testIsUserAssignedGroup() {
+		$assignment = new AssignedUsers();
+		$assignment->setCardId($this->cards[1]->getId());
+		$assignment->setParticipant('group');
+		$assignment->setType(AssignedUsers::TYPE_GROUP);
+		$this->assertFalse($this->assignedUsersMapper->isUserAssigned($this->cards[1]->getId(), self::TEST_USER1));
+		$this->assertFalse($this->assignedUsersMapper->isUserAssigned($this->cards[1]->getId(), self::TEST_USER2));
+		$this->assertFalse($this->assignedUsersMapper->isUserAssigned($this->cards[1]->getId(), self::TEST_USER3));
+		$this->assertFalse($this->assignedUsersMapper->isUserAssigned($this->cards[1]->getId(), self::TEST_USER4));
+
+		$assignment = $this->assignedUsersMapper->insert($assignment);
+		$this->assertTrue($this->assignedUsersMapper->isUserAssigned($this->cards[1]->getId(), self::TEST_USER1));
+		$this->assertTrue($this->assignedUsersMapper->isUserAssigned($this->cards[1]->getId(), self::TEST_USER2));
+		$this->assertTrue($this->assignedUsersMapper->isUserAssigned($this->cards[1]->getId(), self::TEST_USER3));
+		$this->assertFalse($this->assignedUsersMapper->isUserAssigned($this->cards[1]->getId(), self::TEST_USER4));
+		$this->assignedUsersMapper->delete($assignment);
+
+		$this->assertFalse($this->assignedUsersMapper->isUserAssigned($this->cards[1]->getId(), self::TEST_USER1));
+		$this->assertFalse($this->assignedUsersMapper->isUserAssigned($this->cards[1]->getId(), self::TEST_USER2));
+		$this->assertFalse($this->assignedUsersMapper->isUserAssigned($this->cards[1]->getId(), self::TEST_USER3));
+		$this->assertFalse($this->assignedUsersMapper->isUserAssigned($this->cards[1]->getId(), self::TEST_USER4));
+	}
+
 	public function tearDown(): void {
 		$this->boardService->deleteForce($this->board->getId());
 		parent::tearDown();

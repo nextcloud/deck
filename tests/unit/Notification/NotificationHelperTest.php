@@ -41,6 +41,19 @@ use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 use PHPUnit\Framework\MockObject\MockObject;
 
+class DummyUser extends \OC\User\User {
+
+	private $uid;
+
+	public function __construct($uid) {
+		$this->uid = $uid;
+	}
+
+	public function getUID() {
+		return $this->uid;
+	}
+}
+
 class NotificationHelperTest extends \Test\TestCase {
 
 	/** @var CardMapper|MockObject */
@@ -115,34 +128,19 @@ class NotificationHelperTest extends \Test\TestCase {
 			->with('asd', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
 			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ALL);
 
-		$card = $this->createMock(Card::class);
-		$card->expects($this->at(0))
-			->method('__call')
-			->with('getNotified', [])
-			->willReturn(false);
-		$card->expects($this->at(1))
-			->method('__call')
-			->with('getId', [])
-			->willReturn(123);
-		for ($i=0; $i<3; $i++) {
-			$card->expects($this->at($i*3+2))
-				->method('__call')
-				->with('getId', [])
-				->willReturn(123);
-			$card->expects($this->at($i*3+3))
-				->method('__call', [])
-				->with('getTitle')
-				->willReturn('MyCardTitle');
-		}
+		$card = Card::fromParams([
+			'notified' => false,
+			'id' => 123,
+			'title' => 'MyCardTitle'
+		]);
 		$this->cardMapper->expects($this->once())
 			->method('findBoardId')
 			->with(123)
 			->willReturn(234);
-		$board = $this->createMock(Board::class);
-		$board->expects($this->any())
-			->method('__call')
-			->with('getTitle', [])
-			->willReturn('MyBoardTitle');
+		$board = Board::fromParams([
+			'id' => 123,
+			'title' => 'MyBoardTitle'
+		]);
 		$this->boardMapper->expects($this->once())
 			->method('find')
 			->with(234)
@@ -200,6 +198,188 @@ class NotificationHelperTest extends \Test\TestCase {
 		$this->notificationManager->expects($this->at(5))
 			->method('notify')
 			->with($n3);
+
+		$this->cardMapper->expects($this->once())
+			->method('markNotified')
+			->with($card);
+
+		$this->notificationHelper->sendCardDuedate($card);
+	}
+
+	public function testSendCardDuedateAssigned() {
+		$this->config->expects($this->at(0))
+			->method('getUserValue')
+			->with('foo', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
+			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED);
+		$this->config->expects($this->at(1))
+			->method('getUserValue')
+			->with('bar', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
+			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED);
+		$this->config->expects($this->at(2))
+			->method('getUserValue')
+			->with('asd', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
+			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED);
+
+		$users = [
+			new DummyUser('foo'), new DummyUser('bar'), new DummyUser('asd')
+		];
+		$card = Card::fromParams([
+			'notified' => false,
+			'id' => 123,
+			'title' => 'MyCardTitle'
+		]);
+		$card->setAssignedUsers([
+			new User($users[0])
+		]);
+		$this->cardMapper->expects($this->once())
+			->method('findBoardId')
+			->with(123)
+			->willReturn(234);
+		$board = Board::fromParams([
+			'id' => 123,
+			'title' => 'MyBoardTitle'
+		]);
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(234)
+			->willReturn($board);
+
+
+		$this->permissionService->expects($this->once())
+			->method('findUsers')
+			->with(234)
+			->willReturn($users);
+
+		$this->assignedUsersMapper->expects($this->exactly(3))
+			->method('isUserAssigned')
+			->willReturn(true);
+
+
+		$n1 = $this->createMock(INotification::class);
+		$n2 = $this->createMock(INotification::class);
+		$n3 = $this->createMock(INotification::class);
+
+		$n1->expects($this->once())->method('setApp')->with('deck')->willReturn($n1);
+		$n1->expects($this->once())->method('setUser')->with('foo')->willReturn($n1);
+		$n1->expects($this->once())->method('setObject')->with('card', 123)->willReturn($n1);
+		$n1->expects($this->once())->method('setSubject')->with('card-overdue', ['MyCardTitle', 'MyBoardTitle'])->willReturn($n1);
+		$n1->expects($this->once())->method('setDateTime')->willReturn($n1);
+
+		$n2->expects($this->once())->method('setApp')->with('deck')->willReturn($n2);
+		$n2->expects($this->once())->method('setUser')->with('bar')->willReturn($n2);
+		$n2->expects($this->once())->method('setObject')->with('card', 123)->willReturn($n2);
+		$n2->expects($this->once())->method('setSubject')->with('card-overdue', ['MyCardTitle', 'MyBoardTitle'])->willReturn($n2);
+		$n2->expects($this->once())->method('setDateTime')->willReturn($n2);
+
+		$n3->expects($this->once())->method('setApp')->with('deck')->willReturn($n3);
+		$n3->expects($this->once())->method('setUser')->with('asd')->willReturn($n3);
+		$n3->expects($this->once())->method('setObject')->with('card', 123)->willReturn($n3);
+		$n3->expects($this->once())->method('setSubject')->with('card-overdue', ['MyCardTitle', 'MyBoardTitle'])->willReturn($n3);
+		$n3->expects($this->once())->method('setDateTime')->willReturn($n3);
+
+		$this->notificationManager->expects($this->at(0))
+			->method('createNotification')
+			->willReturn($n1);
+		$this->notificationManager->expects($this->at(1))
+			->method('notify')
+			->with($n1);
+		$this->notificationManager->expects($this->at(2))
+			->method('createNotification')
+			->willReturn($n2);
+		$this->notificationManager->expects($this->at(3))
+			->method('notify')
+			->with($n2);
+		$this->notificationManager->expects($this->at(4))
+			->method('createNotification')
+			->willReturn($n3);
+		$this->notificationManager->expects($this->at(5))
+			->method('notify')
+			->with($n3);
+
+		$this->cardMapper->expects($this->once())
+			->method('markNotified')
+			->with($card);
+
+		$this->notificationHelper->sendCardDuedate($card);
+	}
+
+
+	public function testSendCardDuedateNever() {
+		$this->config->expects($this->at(0))
+			->method('getUserValue')
+			->with('foo', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
+			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED);
+		$this->config->expects($this->at(1))
+			->method('getUserValue')
+			->with('bar', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
+			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED);
+		$this->config->expects($this->at(2))
+			->method('getUserValue')
+			->with('asd', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
+			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_OFF);
+
+		$users = [
+			new DummyUser('foo'), new DummyUser('bar'), new DummyUser('asd')
+		];
+		$card = Card::fromParams([
+			'notified' => false,
+			'id' => 123,
+			'title' => 'MyCardTitle'
+		]);
+		$card->setAssignedUsers([
+			new User($users[0])
+		]);
+		$this->cardMapper->expects($this->once())
+			->method('findBoardId')
+			->with(123)
+			->willReturn(234);
+		$board = Board::fromParams([
+			'id' => 123,
+			'title' => 'MyBoardTitle'
+		]);
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->with(234)
+			->willReturn($board);
+
+
+		$this->permissionService->expects($this->once())
+			->method('findUsers')
+			->with(234)
+			->willReturn($users);
+
+		$this->assignedUsersMapper->expects($this->exactly(2))
+			->method('isUserAssigned')
+			->willReturn(true);
+
+
+		$n1 = $this->createMock(INotification::class);
+		$n2 = $this->createMock(INotification::class);
+
+		$n1->expects($this->once())->method('setApp')->with('deck')->willReturn($n1);
+		$n1->expects($this->once())->method('setUser')->with('foo')->willReturn($n1);
+		$n1->expects($this->once())->method('setObject')->with('card', 123)->willReturn($n1);
+		$n1->expects($this->once())->method('setSubject')->with('card-overdue', ['MyCardTitle', 'MyBoardTitle'])->willReturn($n1);
+		$n1->expects($this->once())->method('setDateTime')->willReturn($n1);
+
+		$n2->expects($this->once())->method('setApp')->with('deck')->willReturn($n2);
+		$n2->expects($this->once())->method('setUser')->with('bar')->willReturn($n2);
+		$n2->expects($this->once())->method('setObject')->with('card', 123)->willReturn($n2);
+		$n2->expects($this->once())->method('setSubject')->with('card-overdue', ['MyCardTitle', 'MyBoardTitle'])->willReturn($n2);
+		$n2->expects($this->once())->method('setDateTime')->willReturn($n2);
+
+		$this->notificationManager->expects($this->at(0))
+			->method('createNotification')
+			->willReturn($n1);
+		$this->notificationManager->expects($this->at(1))
+			->method('notify')
+			->with($n1);
+		$this->notificationManager->expects($this->at(2))
+			->method('createNotification')
+			->willReturn($n2);
+		$this->notificationManager->expects($this->at(3))
+			->method('notify')
+			->with($n2);
 
 		$this->cardMapper->expects($this->once())
 			->method('markNotified')
