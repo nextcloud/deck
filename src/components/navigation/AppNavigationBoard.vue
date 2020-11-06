@@ -34,81 +34,85 @@
 			style="opacity: 0.5" />
 
 		<template v-if="!deleted" slot="actions">
-			<ActionButton v-if="!showDueSettings"
-				icon="icon-more"
-				:close-after-click="true"
-				@click="actionDetails">
-				{{ t('deck', 'Board details') }}
-			</ActionButton>
-			<ActionButton v-if="canManage && !board.archived && !showDueSettings"
-				icon="icon-rename"
-				:close-after-click="true"
-				@click="actionEdit">
-				{{ t('deck', 'Edit board') }}
-			</ActionButton>
-			<ActionButton v-if="canManage && !board.archived && !showDueSettings"
-				icon="icon-clone"
-				:close-after-click="true"
-				@click="actionClone">
-				{{ t('deck', 'Clone board') }}
-			</ActionButton>
-			<ActionButton v-if="canManage && board.archived && !showDueSettings"
-				icon="icon-archive"
-				:close-after-click="true"
-				@click="actionUnarchive">
-				{{ t('deck', 'Unarchive board') }}
-			</ActionButton>
-			<ActionButton v-if="canManage && !board.archived && !showDueSettings"
-				icon="icon-archive"
-				:close-after-click="true"
-				@click="actionArchive">
-				{{ t('deck', 'Archive board') }}
-			</ActionButton>
+			<template v-if="!isDueSubmenuActive">
+				<ActionButton
+					icon="icon-more"
+					:close-after-click="true"
+					@click="actionDetails">
+					{{ t('deck', 'Board details') }}
+				</ActionButton>
+				<ActionButton v-if="canManage"
+					icon="icon-rename"
+					:close-after-click="true"
+					@click="actionEdit">
+					{{ t('deck', 'Edit board') }}
+				</ActionButton>
+				<ActionButton v-if="canManage"
+					icon="icon-clone"
+					:close-after-click="true"
+					@click="actionClone">
+					{{ t('deck', 'Clone board') }}
+				</ActionButton>
+				<ActionButton v-if="canManage"
+					icon="icon-archive"
+					:close-after-click="true"
+					@click="actionUnarchive">
+					{{ t('deck', 'Unarchive board') }}
+				</ActionButton>
+				<ActionButton v-if="canManage"
+					icon="icon-archive"
+					:close-after-click="true"
+					@click="actionArchive">
+					{{ t('deck', 'Archive board') }}
+				</ActionButton>
+
+				<ActionButton v-if="board.acl.length === 0" :icon="board.settings['notify-due'] === 'off' ? 'icon-sound' : 'icon-sound-off'" @click="board.settings['notify-due'] === 'off' ? updateSetting('notify-due', 'all') : updateSetting('notify-due', 'off')">
+					{{ board.settings['notify-due'] === 'off' ? t('deck', 'Turn on due date reminders') : t('deck', 'Turn off due date reminders') }}
+				</ActionButton>
+			</template>
 
 			<!-- Due date reminder settings -->
+			<template v-if="isDueSubmenuActive">
+				<ActionButton
+					:icon="updateDueSetting ? 'icon-loading-small' : 'icon-view-previous'"
+					:disabled="updateDueSetting"
+					@click="isDueSubmenuActive=false">
+					{{ t('deck', 'Due date reminders') }}
+				</ActionButton>
 
-			<ActionButton v-if="showDueSettings"
-				:icon="updateDueSetting ? 'icon-loading-small' : 'icon-view-previous'"
-				:disabled="updateDueSetting"
-				@click="showDueSettings=false">
-				{{ t('deck', 'Due date reminders') }}
-			</ActionButton>
+				<ActionButton
+					name="notification"
+					icon="icon-sound"
+					:disabled="updateDueSetting"
+					:class="{ 'forced-active': board.settings['notify-due'] === 'all' }"
+					@click="updateSetting('notify-due', 'all')">
+					{{ t('deck', 'All cards') }}
+				</ActionButton>
+				<ActionButton
+					name="notification"
+					icon="icon-user"
+					:disabled="updateDueSetting"
+					:class="{ 'forced-active': board.settings['notify-due'] === 'assigned' }"
+					@click="updateSetting('notify-due', 'assigned')">
+					{{ t('deck', 'Assigned cards') }}
+				</ActionButton>
+				<ActionButton
+					name="notification"
+					icon="icon-sound-off"
+					:disabled="updateDueSetting"
+					:class="{ 'forced-active': board.settings['notify-due'] === 'off' }"
+					@click="updateSetting('notify-due', 'off')">
+					{{ t('deck', 'No notifications') }}
+				</ActionButton>
+			</template>
 			<ActionButton v-else-if="board.acl.length > 0"
 				:title="t('deck', 'Due date reminders')"
 				:icon="dueDateReminderIcon"
-				@click="showDueSettings=true">
+				@click="isDueSubmenuActive=true">
 				{{ dueDateReminderText }}
 			</ActionButton>
-			<ActionButton v-else :icon="board.settings['notify-due'] === 'off' ? 'icon-sound' : 'icon-sound-off'" @click="board.settings['notify-due'] === 'off' ? updateSetting('notify-due', 'all') : updateSetting('notify-due', 'off')">
-				{{ board.settings['notify-due'] === 'off' ? t('deck', 'Turn on due date reminders') : t('deck', 'Turn off due date reminders') }}
-			</ActionButton>
 
-			<ActionButton v-if="showDueSettings"
-				name="notification"
-				icon="icon-sound"
-				:disabled="updateDueSetting"
-				:class="{ 'forced-active': board.settings['notify-due'] === 'all' }"
-				@click="updateSetting('notify-due', 'all')">
-				{{ t('deck', 'All cards') }}
-			</ActionButton>
-			<ActionButton v-if="showDueSettings"
-				name="notification"
-				icon="icon-user"
-				:disabled="updateDueSetting"
-				:class="{ 'forced-active': board.settings['notify-due'] === 'assigned' }"
-				@click="updateSetting('notify-due', 'assigned')">
-				{{ t('deck', 'Assigned cards') }}
-			</ActionButton>
-			<ActionButton v-if="showDueSettings"
-				name="notification"
-				icon="icon-sound-off"
-				:disabled="updateDueSetting"
-				:class="{ 'forced-active': board.settings['notify-due'] === 'off' }"
-				@click="updateSetting('notify-due', 'off')">
-				{{ t('deck', 'No notifications') }}
-			</ActionButton>
-
-			<ActionButton v-if="canManage && !showDueSettings"
+			<ActionButton v-if="canManage && !isDueSubmenuActive"
 				icon="icon-delete"
 				:close-after-click="true"
 				@click="actionDelete">
@@ -161,7 +165,7 @@ export default {
 			undoTimeoutHandle: null,
 			editTitle: '',
 			editColor: '',
-			showDueSettings: false,
+			isDueSubmenuActive: false,
 			updateDueSetting: null,
 		}
 	},
@@ -182,7 +186,7 @@ export default {
 			}
 		},
 		canManage() {
-			return this.board.permissions.PERMISSION_MANAGE
+			return this.board.permissions.PERMISSION_MANAGE && !this.board.archived
 		},
 		dueDateReminderIcon() {
 			if (this.board.settings['notify-due'] === 'all') {
@@ -304,7 +308,7 @@ export default {
 			const setting = {}
 			setting['board:' + this.board.id + ':' + key] = value
 			await this.$store.dispatch('setConfig', setting)
-			this.showDueSettings = false
+			this.isDueSubmenuActive = false
 			this.updateDueSetting = null
 		},
 	},
