@@ -194,6 +194,8 @@ export default {
 	.smooth-dnd-container.horizontal {
 		display: flex;
 		align-items: stretch;
+		height: 100%;
+
 		.smooth-dnd-draggable-wrapper::v-deep {
 			display: flex;
 			height: auto;
@@ -201,21 +203,17 @@ export default {
 			.stack {
 				display: flex;
 				flex-direction: column;
+				position: relative;
 
 				.smooth-dnd-container.vertical {
 					flex-grow: 1;
 					display: flex;
 					flex-direction: column;
-					padding: 0;
-					/**
-					 * Use this to scroll each stack individually
-					 * This currenly has the issue that the popover menu will be cut off
-					 */
-					/*
-					overflow-x: scroll;
-					height: calc(100vh - 50px - 44px * 2 - 30px);
-					max-height: calc(100vh - 50px - 44px * 2 - 30px);
-					*/
+					padding: $stack-spacing;
+					overflow-x: hidden;
+					overflow-y: auto;
+					padding-top: 15px;
+					margin-top: -10px;
 				}
 
 				.smooth-dnd-container.vertical > .smooth-dnd-draggable-wrapper {

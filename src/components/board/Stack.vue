@@ -23,14 +23,14 @@
 
 <template>
 	<div class="stack">
-		<div v-click-outside="stopCardCreation" class="stack--header">
+		<div v-click-outside="stopCardCreation" class="stack__header" :class="{'stack__header--add': showAddCard }">
 			<transition name="fade" mode="out-in">
 				<h3 v-if="!canManage || isArchived">
 					{{ stack.title }}
 				</h3>
 				<h3 v-else-if="!editing"
 					v-tooltip="stack.title"
-					class="stack--title"
+					class="stack__title"
 					@click="startEditing(stack)">
 					{{ stack.title }}
 				</h3>
@@ -71,7 +71,7 @@
 		</Modal>
 
 		<transition name="slide-top" appear>
-			<div v-if="showAddCard" class="stack--card-add">
+			<div v-if="showAddCard" class="stack__card-add">
 				<form :class="{ 'icon-loading-small': stateCardCreating }"
 					@submit.prevent.stop="clickAddCard()">
 					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
@@ -267,23 +267,42 @@ export default {
 	@import './../../css/variables';
 
 	.stack {
-		width: $stack-width;
-		margin-left: $stack-spacing;
-		margin-right: $stack-spacing;
+		width: $stack-width + $stack-spacing*3;
+		margin-left: $stack-spacing/2;
+		margin-right: $stack-spacing/2;
 	}
 
-	.stack--header {
+	.stack__header {
 		display: flex;
 		position: sticky;
 		top: 0;
 		z-index: 100;
-		padding: 3px;
-		margin: 3px -3px;
-		margin-right: -10px;
-		margin-top: 0;
-		margin-bottom: 3px;
-		background-color: var(--color-main-background-translucent);
+		padding-left: $card-spacing;
 		cursor: grab;
+
+		// Smooth fade out of the cards at the top
+		&:before {
+			content: ' ';
+			display: block;
+			position: absolute;
+			background-image: linear-gradient(180deg, var(--color-main-background) 3px, transparent 100%);
+			width: 100%;
+			height: 25px;
+			top: 35px;
+			right: 6px;
+			z-index: 99;
+			transition: top var(--animation-slow);
+		}
+
+		&--add:before {
+			height: 80px;
+			background-image: linear-gradient(180deg, var(--color-main-background) 68px, transparent 100%);
+		}
+
+		& > * {
+			position: relative;
+			z-index: 100;
+		}
 
 		h3, form {
 			flex-grow: 1;
@@ -296,30 +315,28 @@ export default {
 		}
 	}
 
-	.stack--title {
+	.stack__title {
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		max-width: calc($stack-width - 60px);
 	}
 
-	.stack--card-add {
-		position: sticky;
-		top: 52px;
+	.stack__card-add {
 		height: 52px;
 		z-index: 100;
 		display: flex;
+		margin-left: 12px;
+		margin-right: 12px;
+		margin-top: 5px;
+		margin-bottom: 20px;
 		background-color: var(--color-main-background);
-		margin-left: -10px;
-		margin-right: -10px;
-		padding-top: 3px;
 
 		form {
 			display: flex;
 			width: 100%;
-			margin: 10px;
-			margin-top: 0;
-			margin-bottom: 10px;
+			margin: 0;
+			margin-right: 6px;
 			box-shadow: 0 0 3px var(--color-box-shadow);
 			border-radius: var(--border-radius-large);
 			overflow: hidden;
@@ -337,10 +354,6 @@ export default {
 		input {
 			border: none;
 		}
-	}
-
-	.stack .smooth-dnd-container.vertical {
-		margin-top: 3px;
 	}
 
 	/**

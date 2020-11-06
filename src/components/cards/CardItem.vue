@@ -131,6 +131,13 @@ export default {
 			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 	},
+	watch: {
+		currentCard(newValue) {
+			if (newValue) {
+				this.$nextTick(() => this.$el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }))
+			}
+		},
+	},
 	methods: {
 		openCard() {
 			const boardId = this.card && this.card.boardId ? this.card.boardId : this.$route.params.id
@@ -160,10 +167,6 @@ export default {
 	@import './../../css/animations';
 	@import './../../css/variables';
 
-	.card:hover {
-		box-shadow: 0 0 5px 1px var(--color-box-shadow);
-	}
-
 	.card {
 		transition: box-shadow 0.1s ease-in-out;
 		box-shadow: 0 0 2px 0 var(--color-box-shadow);
@@ -180,8 +183,11 @@ export default {
 			border: 2px solid var(--color-border);
 		}
 
-		&.current-card {
+		&:hover {
 			box-shadow: 0 0 5px 0 var(--color-box-shadow);
+		}
+		&.current-card {
+			box-shadow: 0 0 5px 1px var(--color-box-shadow);
 		}
 
 		.card-upper {
