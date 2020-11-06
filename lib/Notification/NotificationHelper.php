@@ -107,7 +107,7 @@ class NotificationHelper {
 			if ($user->getUID() === $board->getOwner() && count($board->getAcl()) === 0) {
 				// Notify if all or assigned is configured for unshared boards
 				$shouldNotify = true;
-			} else if ($notificationSetting === ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED && $this->assignedUsersMapper->isUserAssigned($card->getId(), $user->getUID())) {
+			} elseif ($notificationSetting === ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED && $this->assignedUsersMapper->isUserAssigned($card->getId(), $user->getUID())) {
 				// Notify if the user is assigned and has the assigned setting selected
 				$shouldNotify = true;
 			}

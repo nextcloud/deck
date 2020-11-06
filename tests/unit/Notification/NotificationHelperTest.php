@@ -42,7 +42,6 @@ use OCP\Notification\INotification;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class DummyUser extends \OC\User\User {
-
 	private $uid;
 
 	public function __construct($uid) {
