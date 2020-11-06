@@ -81,7 +81,8 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		}
 
 		// make sure we only reset the notification flag if the duedate changes
-		if (in_array('duedate', $entity->getUpdatedFields(), true)) {
+		$updatedFields = $entity->getUpdatedFields();
+		if (isset($updatedFields['duedate']) && $updatedFields['duedate']) {
 			try {
 				/** @var Card $existing */
 				$existing = $this->find($entity->getId());
