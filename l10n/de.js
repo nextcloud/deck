@@ -238,7 +238,7 @@ OC.L10N.register(
     "Tomorrow" : "Morgen",
     "This week" : "Diese Woche",
     "No due" : "Kein Fälligkeitsdatum",
-    "No upcoming cards" : "Keine anstehende Karten",
+    "No upcoming cards" : "Keine anstehenden Karten",
     "upcoming cards" : "Anstehende Karten",
     "Link to a board" : "Mit einem Board verknüpfen",
     "Link to a card" : "Mit einer Karte verknüpfen",

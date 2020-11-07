@@ -146,6 +146,7 @@ OC.L10N.register(
     "Undo" : "Desfazer",
     "Deleted cards" : "Cartões excluídos",
     "Share board with a user, group or circle …" : "Compartilhar o painel com um usuário, grupo ou círculo...",
+    "Searching for users, groups and circles …" : "Procurando usuários, grupos e círculos ...",
     "No participants found" : "Nenhum participante encontrado",
     "Board owner" : "Proprietário do painel",
     "(Group)" : "(Grupo)",
