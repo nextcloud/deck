@@ -78,6 +78,7 @@ OC.L10N.register(
     "Undo" : "تراجع",
     "Deleted cards" : "البطاقات المحذوفة",
     "Share board with a user, group or circle …" : "مشاركة اللوح مع مستخدم،مجموعة او دائرة ..",
+    "Searching for users, groups and circles …" : "ابحث عن اعضاء، مجموعات أو حلقات ...",
     "Board owner" : "منشئ اللوح",
     "(Group)" : "(مجموعة)",
     "(Circle)" : "(دائرة)",
