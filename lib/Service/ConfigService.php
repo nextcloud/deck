@@ -27,12 +27,18 @@ declare(strict_types=1);
 namespace OCA\Deck\Service;
 
 use OCA\Deck\AppInfo\Application;
+use OCA\Deck\BadRequestException;
 use OCA\Deck\NoPermissionException;
 use OCP\IConfig;
 use OCP\IGroup;
 use OCP\IGroupManager;
 
 class ConfigService {
+	public const SETTING_BOARD_NOTIFICATION_DUE_OFF = 'off';
+	public const SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED = 'assigned';
+	public const SETTING_BOARD_NOTIFICATION_DUE_ALL = 'all';
+	public const SETTING_BOARD_NOTIFICATION_DUE_DEFAULT = self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED;
+
 	private $config;
 	private $userId;
 	private $groupManager;
@@ -49,19 +55,18 @@ class ConfigService {
 
 	public function getAll(): array {
 		$data = [
-			'calendar' => $this->get('calendar')
+			'calendar' => $this->isCalendarEnabled()
 		];
 		if ($this->groupManager->isAdmin($this->userId)) {
-			$data = [
-				'groupLimit' => $this->get('groupLimit'),
-			];
+			$data['groupLimit'] = $this->get('groupLimit');
 		}
 		return $data;
 	}
 
 	public function get($key) {
 		$result = null;
-		switch ($key) {
+		[$scope, $id] = explode(':', $key, 2);
+		switch ($scope) {
 			case 'groupLimit':
 				if (!$this->groupManager->isAdmin($this->userId)) {
 					throw new NoPermissionException('You must be admin to get the group limit');
@@ -75,9 +80,19 @@ class ConfigService {
 		return $result;
 	}
 
+	public function isCalendarEnabled(int $boardId = null): bool {
+		$defaultState = (bool)$this->config->getUserValue($this->userId, Application::APP_ID, 'calendar', true);
+		if ($boardId === null) {
+			return $defaultState;
+		}
+
+		return (bool)$this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $boardId . ':calendar', $defaultState);
+	}
+
 	public function set($key, $value) {
 		$result = null;
-		switch ($key) {
+		[$scope, $id] = explode(':', $key, 2);
+		switch ($scope) {
 			case 'groupLimit':
 				if (!$this->groupManager->isAdmin($this->userId)) {
 					throw new NoPermissionException('You must be admin to set the group limit');
@@ -88,6 +103,13 @@ class ConfigService {
 				$this->config->setUserValue($this->userId, Application::APP_ID, 'calendar', (int)$value);
 				$result = $value;
 				break;
+			case 'board':
+				[$boardId, $boardConfigKey] = explode(':', $key);
+				if ($boardConfigKey === 'notify-due' && !in_array($value, [self::SETTING_BOARD_NOTIFICATION_DUE_ALL, self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED, self::SETTING_BOARD_NOTIFICATION_DUE_OFF], true)) {
+					throw new BadRequestException('Board notification option must be one of: off, assigned, all');
+				}
+				$this->config->setUserValue($this->userId, Application::APP_ID, $key, $value);
+				$result = $value;
 		}
 		return $result;
 	}

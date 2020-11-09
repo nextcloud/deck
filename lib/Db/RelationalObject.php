@@ -57,4 +57,8 @@ class RelationalObject implements \JsonSerializable {
 			throw new \Exception('jsonSerialize is not implemented on ' . get_class($this));
 		}
 	}
+
+	public function getPrimaryKey(): string {
+		return $this->primaryKey;
+	}
 }
