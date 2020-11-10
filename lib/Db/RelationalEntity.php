@@ -80,6 +80,9 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 				$json[$property] = $value;
 			}
 		}
+		if ($reflection->hasMethod('getETag')) {
+			$json['ETag'] = $this->getETag();
+		}
 		return $json;
 	}
 

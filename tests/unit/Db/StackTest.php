@@ -33,7 +33,7 @@ class StackTest extends \Test\TestCase {
 		return $board;
 	}
 	public function testJsonSerialize() {
-		$board = $this->createStack();
+		$stack = $this->createStack();
 		$this->assertEquals([
 			'id' => 1,
 			'title' => "My Stack",
@@ -41,12 +41,13 @@ class StackTest extends \Test\TestCase {
 			'boardId' => 1,
 			'deletedAt' => 0,
 			'lastModified' => 0,
-		], $board->jsonSerialize());
+			'ETag' => $stack->getETag(),
+		], $stack->jsonSerialize());
 	}
 	public function testJsonSerializeWithCards() {
 		$cards = ["foo", "bar"];
-		$board = $this->createStack();
-		$board->setCards($cards);
+		$stack = $this->createStack();
+		$stack->setCards($cards);
 		$this->assertEquals([
 			'id' => 1,
 			'title' => "My Stack",
@@ -55,6 +56,7 @@ class StackTest extends \Test\TestCase {
 			'cards' => ["foo", "bar"],
 			'deletedAt' => 0,
 			'lastModified' => 0,
-		], $board->jsonSerialize());
+			'ETag' => $stack->getETag(),
+		], $stack->jsonSerialize());
 	}
 }
