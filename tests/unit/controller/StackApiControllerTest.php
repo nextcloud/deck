@@ -78,6 +78,7 @@ class StackApiControllerTest extends \Test\TestCase {
 
 		$expected = new DataResponse($stacks, HTTP::STATUS_OK);
 		$actual = $this->controller->index();
+		$actual->setETag(null);
 		$this->assertEquals($expected, $actual);
 	}
 
@@ -97,6 +98,7 @@ class StackApiControllerTest extends \Test\TestCase {
 			->willReturn($this->exampleStack['id']);
 
 		$expected = new DataResponse($stack, HTTP::STATUS_OK);
+		$expected->setETag($stack->getETag());
 		$actual = $this->controller->get();
 		$this->assertEquals($expected, $actual);
 	}

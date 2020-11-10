@@ -24,6 +24,7 @@
 namespace OCA\Deck\Activity;
 
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\Comments\CommentsEvent;
 use OCP\Comments\IComment;
@@ -40,10 +41,14 @@ class CommentEventHandler implements ICommentsEventHandler {
 	/** @var CardMapper */
 	private $cardMapper;
 
-	public function __construct(ActivityManager $activityManager, NotificationHelper $notificationHelper, CardMapper $cardMapper) {
+	/** @var ChangeHelper */
+	private $changeHelper;
+
+	public function __construct(ActivityManager $activityManager, NotificationHelper $notificationHelper, CardMapper $cardMapper, ChangeHelper $changeHelper) {
 		$this->notificationHelper = $notificationHelper;
 		$this->activityManager = $activityManager;
 		$this->cardMapper = $cardMapper;
+		$this->changeHelper = $changeHelper;
 	}
 
 	/**
@@ -53,6 +58,8 @@ class CommentEventHandler implements ICommentsEventHandler {
 		if ($event->getComment()->getObjectType() !== 'deckCard') {
 			return;
 		}
+
+		$this->changeHelper->cardChanged($event->getComment()->getObjectId());
 
 		$eventType = $event->getEvent();
 		if ($eventType === CommentsEvent::EVENT_ADD

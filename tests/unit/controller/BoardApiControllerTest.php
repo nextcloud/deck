@@ -72,7 +72,7 @@ class BoardApiControllerTest extends \Test\TestCase {
 
 		$expected = new DataResponse($boards, HTTP::STATUS_OK);
 		$actual = $this->controller->index();
-
+		$actual->setETag(null);
 		$this->assertEquals($expected, $actual);
 	}
 
@@ -90,6 +90,7 @@ class BoardApiControllerTest extends \Test\TestCase {
 			->will($this->returnValue($boardId));
 
 		$expected = new DataResponse($board, HTTP::STATUS_OK);
+		$expected->setETag($board->getETag());
 		$actual = $this->controller->get();
 		$this->assertEquals($expected, $actual);
 	}

@@ -36,4 +36,8 @@ class Label extends RelationalEntity {
 		$this->addType('cardId', 'integer');
 		$this->addType('lastModified', 'integer');
 	}
+
+	public function getETag() {
+		return md5((string)$this->getLastModified());
+	}
 }

@@ -24,6 +24,7 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\Board;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
@@ -72,7 +73,11 @@ class BoardApiController extends ApiController {
 			}
 			$boards = $this->boardService->findAll($date->getTimestamp(), $details);
 		}
-		return new DataResponse($boards, HTTP::STATUS_OK);
+		$response = new DataResponse($boards, HTTP::STATUS_OK);
+		$response->setETag(md5(json_encode(array_map(function (Board $board) {
+			return $board->getId() . '-' . $board->getETag();
+		}, $boards))));
+		return $response;
 	}
 
 	/**
@@ -85,7 +90,9 @@ class BoardApiController extends ApiController {
 	 */
 	public function get() {
 		$board = $this->boardService->find($this->request->getParam('boardId'));
-		return new DataResponse($board, HTTP::STATUS_OK);
+		$response = new DataResponse($board, HTTP::STATUS_OK);
+		$response->setETag($board->getEtag());
+		return $response;
 	}
 
 	/**

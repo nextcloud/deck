@@ -32,6 +32,7 @@ class BoardTest extends TestCase {
 			'archived' => false,
 			'users' => ['user1', 'user2'],
 			'settings' => [],
+			'ETag' => $board->getETag(),
 		], $board->jsonSerialize());
 	}
 
@@ -52,6 +53,7 @@ class BoardTest extends TestCase {
 			'archived' => false,
 			'users' => [],
 			'settings' => [],
+			'ETag' => $board->getETag(),
 		], $board->jsonSerialize());
 	}
 	public function testSetAcl() {
@@ -80,6 +82,7 @@ class BoardTest extends TestCase {
 			'shared' => 1,
 			'users' => [],
 			'settings' => [],
+			'ETag' => $board->getETag(),
 		], $board->jsonSerialize());
 	}
 }

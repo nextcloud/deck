@@ -83,7 +83,9 @@ class StackApiController extends ApiController {
 	 */
 	public function get() {
 		$stack = $this->stackService->find($this->request->getParam('stackId'));
-		return new DataResponse($stack, HTTP::STATUS_OK);
+		$response = new DataResponse($stack, HTTP::STATUS_OK);
+		$response->setETag($stack->getETag());
+		return $response;
 	}
 
 	/**

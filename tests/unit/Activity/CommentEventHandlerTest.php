@@ -25,6 +25,7 @@ namespace OCA\Deck\Activity;
 
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\Comments\CommentsEvent;
 use OCP\Comments\IComment;
@@ -45,10 +46,12 @@ class CommentEventHandlerTest extends TestCase {
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
 		$this->cardMapper = $this->createMock(CardMapper::class);
+		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->commentEventHandler = new CommentEventHandler(
 			$this->activityManager,
 			$this->notificationHelper,
-			$this->cardMapper
+			$this->cardMapper,
+			$this->changeHelper
 		);
 	}
 

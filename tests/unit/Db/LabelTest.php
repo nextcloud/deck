@@ -42,7 +42,8 @@ class LabelTest extends TestCase {
 			'boardId' => 123,
 			'cardId' => null,
 			'lastModified' => null,
-			'color' => '000000'
+			'color' => '000000',
+			'ETag' => $label->getETag(),
 		], $label->jsonSerialize());
 	}
 	public function testJsonSerializeCard() {
@@ -54,7 +55,8 @@ class LabelTest extends TestCase {
 			'boardId' => null,
 			'cardId' => 123,
 			'lastModified' => null,
-			'color' => '000000'
+			'color' => '000000',
+			'ETag' => $label->getETag(),
 		], $label->jsonSerialize());
 	}
 }

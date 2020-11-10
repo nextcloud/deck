@@ -69,6 +69,31 @@ curl -u admin:admin -X GET \
     -H "If-Modified-Since: Mon, 05 Nov 2018 09:28:00 GMT"
 ```
 
+### ETag
+
+An ETag header is returned in order to determine if further child elements have been updated for the following endpoints:
+
+- Fetch all user board `GET /api/v1.0/boards`
+- Fetch a single board `GET /api/v1.0/boards/{boardId}`
+- Fetch all stacks of a board `GET /api/v1.0/boards/{boardId}/stacks`
+- Fetch a single stacks of a board `GET /api/v1.0/boards/{boardId}/stacks/{stackId}`
+- Fetch a single card of a board `GET /api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}`
+- Fetch attachments of a card `GET /api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments`
+
+If a `If-None-Match` header is provided and the requested element has not changed a `304` Not Modified response will be returned. 
+
+Changes of child elements will propagate to their parents and also cause an update of the ETag which will be useful for determining if a sync is necessary on any client integration side. As an example, if a label is added to a card, the ETag of all related entities (the card, stack and board) will change.
+
+If available the ETag will also be part of JSON response objects as shown below for a card:
+
+```json
+{
+  "id": 81,
+  "ETag": "bdb10fa2d2aeda092a2b6b469454dc90",
+  "title": "Test card"
+}
+```
+
 # Changelog
 
 ## 1.0.0 (unreleased)

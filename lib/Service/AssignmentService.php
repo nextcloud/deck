@@ -148,7 +148,7 @@ class AssignmentService {
 		$assignment->setParticipant($userId);
 		$assignment->setType($type);
 		$assignment = $this->assignedUsersMapper->insert($assignment);
-		$this->changeHelper->cardChanged($cardId, false);
+		$this->changeHelper->cardChanged($cardId);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_USER_ASSIGN, ['assigneduser' => $userId]);
 
 		$this->eventDispatcher->dispatch(
@@ -185,7 +185,7 @@ class AssignmentService {
 				$assignment = $this->assignedUsersMapper->delete($assignment);
 				$card = $this->cardMapper->find($cardId);
 				$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_USER_UNASSIGN, ['assigneduser' => $userId]);
-				$this->changeHelper->cardChanged($cardId, false);
+				$this->changeHelper->cardChanged($cardId);
 
 				$this->eventDispatcher->dispatch(
 					'\OCA\Deck\Card::onUpdate', new FTSEvent(null, ['id' => $cardId, 'card' => $card])

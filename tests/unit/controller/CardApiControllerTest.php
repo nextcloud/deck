@@ -72,6 +72,7 @@ class CardApiControllerTest extends \Test\TestCase {
 			->willReturn($card);
 
 		$expected = new DataResponse($card, HTTP::STATUS_OK);
+		$expected->setETag($card->getETag());
 		$actual = $this->controller->get();
 		$this->assertEquals($expected, $actual);
 	}

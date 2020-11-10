@@ -84,6 +84,7 @@ class CardTest extends TestCase {
 			'deletedAt' => 0,
 			'commentsUnread' => 0,
 			'lastEditor' => null,
+			'ETag' => $card->getETag(),
 		], $card->jsonSerialize());
 	}
 	public function testJsonSerializeLabels() {
@@ -109,6 +110,7 @@ class CardTest extends TestCase {
 			'deletedAt' => 0,
 			'commentsUnread' => 0,
 			'lastEditor' => null,
+			'ETag' => $card->getETag(),
 		], $card->jsonSerialize());
 	}
 
@@ -144,6 +146,7 @@ class CardTest extends TestCase {
 			'deletedAt' => 0,
 			'commentsUnread' => 0,
 			'lastEditor' => null,
+			'ETag' => $card->getETag(),
 		], $card->jsonSerialize());
 	}
 }

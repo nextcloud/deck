@@ -64,7 +64,9 @@ class CardApiController extends ApiController {
 	 */
 	public function get() {
 		$card = $this->cardService->find($this->request->getParam('cardId'));
-		return new DataResponse($card, HTTP::STATUS_OK);
+		$response = new DataResponse($card, HTTP::STATUS_OK);
+		$response->setETag($card->getEtag());
+		return $response;
 	}
 
 	/**

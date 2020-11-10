@@ -65,4 +65,8 @@ class Stack extends RelationalEntity {
 	public function getCalendarPrefix(): string {
 		return 'stack';
 	}
+
+	public function getETag() {
+		return md5((string)$this->getLastModified());
+	}
 }
