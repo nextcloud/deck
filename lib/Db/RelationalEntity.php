@@ -83,6 +83,10 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 		return $json;
 	}
 
+	public function __toString(): string {
+		return (string)$this->getId();
+	}
+
 	/*
 	 * Resolve relational data from external methods
 	 *

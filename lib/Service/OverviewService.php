@@ -140,7 +140,7 @@ class OverviewService {
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null);
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null);
 		$circleBoards = $this->boardMapper->findAllByCircles($userInfo['user'], null, null);
-		return array_merge($userBoards, $groupBoards, $circleBoards);
+		return array_unique(array_merge($userBoards, $groupBoards, $circleBoards));
 	}
 
 	private function getBoardPrerequisites($userId): array {
