@@ -28,7 +28,7 @@
 		</AppContent>
 
 		<Modal
-			v-if="cardDetailsInModal && $route.params.cardId" 
+			v-if="cardDetailsInModal && $route.params.cardId"
 			:title="t('deck', 'Card details')"
 			:clear-view-delay="0"
 			@close="hideModal()">
