@@ -320,6 +320,7 @@ class AttachmentService {
 			if ($service->allowUndo()) {
 				$service->markAsDeleted($attachment);
 				$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_DELETE);
+				$this->changeHelper->cardChanged($attachment->getCardId());
 				return $this->attachmentMapper->update($attachment);
 			}
 			$service->delete($attachment);
