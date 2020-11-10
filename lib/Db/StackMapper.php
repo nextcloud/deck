@@ -67,14 +67,14 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 		return parent::delete($entity);
 	}
 
-	public function isOwner($userId, $stackId) {
+	public function isOwner($userId, $stackId): bool {
 		$sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_stacks` WHERE id = ?)';
 		$stmt = $this->execute($sql, [$stackId]);
 		$row = $stmt->fetch();
 		return ($row['owner'] === $userId);
 	}
 
-	public function findBoardId($stackId) {
+	public function findBoardId($stackId): ?int {
 		$entity = $this->find($stackId);
 		return $entity->getBoardId();
 	}

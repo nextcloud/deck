@@ -24,7 +24,7 @@
 namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
-use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
@@ -54,7 +54,7 @@ class CardServiceTest extends TestCase {
 	private $permissionService;
 	/** @var NotificationHelper */
 	private $notificationHelper;
-	/** @var AssignedUsersMapper|MockObject */
+	/** @var AssignmentMapper|MockObject */
 	private $assignedUsersMapper;
 	/** @var BoardService|MockObject */
 	private $boardService;
@@ -83,7 +83,7 @@ class CardServiceTest extends TestCase {
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->boardService = $this->createMock(BoardService::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
-		$this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
+		$this->assignedUsersMapper = $this->createMock(AssignmentMapper::class);
 		$this->attachmentService = $this->createMock(AttachmentService::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->commentsManager = $this->createMock(ICommentsManager::class);

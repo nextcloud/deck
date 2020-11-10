@@ -28,7 +28,7 @@ use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
-use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
@@ -62,7 +62,7 @@ class StackService {
 		PermissionService $permissionService,
 		BoardService $boardService,
 		CardService $cardService,
-		AssignedUsersMapper $assignedUsersMapper,
+		AssignmentMapper $assignedUsersMapper,
 		AttachmentService $attachmentService,
 		ActivityManager $activityManager,
 		EventDispatcherInterface $eventDispatcher,
@@ -118,7 +118,7 @@ class StackService {
 		$stack = $this->stackMapper->find($stackId);
 		$cards = $this->cardMapper->findAll($stackId);
 		foreach ($cards as $cardIndex => $card) {
-			$assignedUsers = $this->assignedUsersMapper->find($card->getId());
+			$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
 			$card->setAssignedUsers($assignedUsers);
 			$card->setAttachmentCount($this->attachmentService->count($card->getId()));
 		}

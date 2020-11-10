@@ -27,7 +27,7 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Service;
 
-use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCP\Comments\ICommentsManager;
@@ -45,7 +45,7 @@ class OverviewService {
 	private $labelMapper;
 	/** @var CardMapper */
 	private $cardMapper;
-	/** @var AssignedUsersMapper */
+	/** @var AssignmentMapper */
 	private $assignedUsersMapper;
 	/** @var IUserManager */
 	private $userManager;
@@ -60,7 +60,7 @@ class OverviewService {
 		BoardMapper $boardMapper,
 		LabelMapper $labelMapper,
 		CardMapper $cardMapper,
-		AssignedUsersMapper $assignedUsersMapper,
+		AssignmentMapper $assignedUsersMapper,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		ICommentsManager $commentsManager,
@@ -80,7 +80,7 @@ class OverviewService {
 		$cardId = $card->getId();
 
 		$this->cardMapper->mapOwner($card);
-		$card->setAssignedUsers($this->assignedUsersMapper->find($cardId));
+		$card->setAssignedUsers($this->assignedUsersMapper->findAll($cardId));
 		$card->setLabels($this->labelMapper->findAssignedLabelsForCard($cardId));
 		$card->setAttachmentCount($this->attachmentService->count($cardId));
 

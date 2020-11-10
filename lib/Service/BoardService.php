@@ -29,7 +29,7 @@ use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
-use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
@@ -80,7 +80,7 @@ class BoardService {
 		AclMapper $aclMapper,
 		PermissionService $permissionService,
 		NotificationHelper $notificationHelper,
-		AssignedUsersMapper $assignedUsersMapper,
+		AssignmentMapper $assignedUsersMapper,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		ActivityManager $activityManager,
@@ -631,7 +631,7 @@ class BoardService {
 		$acl = $this->aclMapper->find($id);
 		$this->boardMapper->mapAcl($acl);
 		if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
-			$assignements = $this->assignedUsersMapper->findByUserId($acl->getParticipant());
+			$assignements = $this->assignedUsersMapper->findByParticipant($acl->getParticipant());
 			foreach ($assignements as $assignement) {
 				$this->assignedUsersMapper->delete($assignement);
 			}

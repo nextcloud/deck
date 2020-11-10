@@ -26,8 +26,8 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\AclMapper;
-use OCA\Deck\Db\AssignedUsers;
-use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\Assignment;
+use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\NotFoundException;
@@ -49,7 +49,7 @@ class AssignmentServiceTest extends TestCase {
 	 */
 	private $cardMapper;
 	/**
-	 * @var MockObject|AssignedUsersMapper
+	 * @var MockObject|AssignmentMapper
 	 */
 	private $assignedUsersMapper;
 	/**
@@ -83,7 +83,7 @@ class AssignmentServiceTest extends TestCase {
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
-		$this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
+		$this->assignedUsersMapper = $this->createMock(AssignmentMapper::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
@@ -115,13 +115,13 @@ class AssignmentServiceTest extends TestCase {
 	public function testAssignUser() {
 		$assignments = [];
 		$this->assignedUsersMapper->expects($this->once())
-			->method('find')
+			->method('findAll')
 			->with(123)
 			->willReturn($assignments);
-		$assignment = new AssignedUsers();
+		$assignment = new Assignment();
 		$assignment->setCardId(123);
 		$assignment->setParticipant('admin');
-		$assignment->setType(AssignedUsers::TYPE_USER);
+		$assignment->setType(Assignment::TYPE_USER);
 		$this->cardMapper->expects($this->once())
 			->method('findBoardId')
 			->willReturn(1);
@@ -145,13 +145,13 @@ class AssignmentServiceTest extends TestCase {
 		$this->expectExceptionMessage('The user is not part of the board');
 		$assignments = [];
 		$this->assignedUsersMapper->expects($this->once())
-			->method('find')
+			->method('findAll')
 			->with(123)
 			->willReturn($assignments);
-		$assignment = new AssignedUsers();
+		$assignment = new Assignment();
 		$assignment->setCardId(123);
 		$assignment->setParticipant('admin');
-		$assignment->setType(AssignedUsers::TYPE_USER);
+		$assignment->setType(Assignment::TYPE_USER);
 		$this->cardMapper->expects($this->once())
 			->method('findBoardId')
 			->willReturn(1);
@@ -168,15 +168,15 @@ class AssignmentServiceTest extends TestCase {
 	public function testAssignUserExisting() {
 		$this->expectException(BadRequestException::class);
 		$this->expectExceptionMessage('The user is already assigned to the card');
-		$assignment = new AssignedUsers();
+		$assignment = new Assignment();
 		$assignment->setCardId(123);
 		$assignment->setParticipant('admin');
-		$assignment->setType(AssignedUsers::TYPE_USER);
+		$assignment->setType(Assignment::TYPE_USER);
 		$assignments = [
 			$assignment
 		];
 		$this->assignedUsersMapper->expects($this->once())
-			->method('find')
+			->method('findAll')
 			->with(123)
 			->willReturn($assignments);
 		$actual = $this->assignmentService->assignUser(123, 'admin');
@@ -184,15 +184,15 @@ class AssignmentServiceTest extends TestCase {
 	}
 
 	public function testUnassignUserExisting() {
-		$assignment = new AssignedUsers();
+		$assignment = new Assignment();
 		$assignment->setCardId(123);
 		$assignment->setParticipant('admin');
-		$assignment->setType(AssignedUsers::TYPE_USER);
+		$assignment->setType(Assignment::TYPE_USER);
 		$assignments = [
 			$assignment
 		];
 		$this->assignedUsersMapper->expects($this->once())
-			->method('find')
+			->method('findAll')
 			->with(123)
 			->willReturn($assignments);
 		$this->assignedUsersMapper->expects($this->once())
@@ -205,15 +205,15 @@ class AssignmentServiceTest extends TestCase {
 
 	public function testUnassignUserNotExisting() {
 		$this->expectException(NotFoundException::class);
-		$assignment = new AssignedUsers();
+		$assignment = new Assignment();
 		$assignment->setCardId(123);
 		$assignment->setParticipant('admin');
-		$assignment->setType(AssignedUsers::TYPE_USER);
+		$assignment->setType(Assignment::TYPE_USER);
 		$assignments = [
 			$assignment
 		];
 		$this->assignedUsersMapper->expects($this->once())
-			->method('find')
+			->method('findAll')
 			->with(123)
 			->willReturn($assignments);
 		$this->expectException(NotFoundException::class);

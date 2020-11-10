@@ -28,7 +28,7 @@ namespace OCA\Deck\Activity;
 use InvalidArgumentException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
-use OCA\Deck\Db\AssignedUsers;
+use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\Board;
@@ -471,7 +471,7 @@ class ActivityManager {
 					break;
 				case Attachment::class:
 				case Label::class:
-				case AssignedUsers::class:
+				case Assignment::class:
 					$objectId = $entity->getCardId();
 					break;
 				case IComment::class:

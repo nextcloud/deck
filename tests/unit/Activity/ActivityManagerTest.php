@@ -24,7 +24,7 @@
 namespace OCA\Deck\Activity;
 
 use OCA\Deck\Db\AclMapper;
-use OCA\Deck\Db\AssignedUsers;
+use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\Board;
@@ -210,7 +210,7 @@ class ActivityManagerTest extends TestCase {
 		$label = new Label();
 		$label->setCardId(3);
 		$label->setBoardId(1);
-		$assignedUser = new AssignedUsers();
+		$assignedUser = new Assignment();
 		$assignedUser->setCardId(3);
 
 		return [
