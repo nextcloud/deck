@@ -5,15 +5,15 @@
 
 Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.
 
-- :inbox_tray: Add your tasks to cards and put them in order
-- :page_facing_up: Write down additional notes in markdown
-- :bookmark: Assign labels for even better organization
-- :busts_in_silhouette: Share with your team, friends or family
-- :family: Integrates with the [Circles](https://github.com/nextcloud/circles) app!
-- :paperclip: Attach files and embed them in your markdown description
-- :speech_balloon: Discuss with your team using comments
-- :zap: Keep track of changes in the activity stream
-- :rocket: Get your project organized
+- Add your tasks to cards and put them in order
+- Write down additional notes in markdown
+- Assign labels for even better organization
+- Share with your team, friends or family
+- Integrates with the [Circles](https://github.com/nextcloud/circles) app!
+- Attach files and embed them in your markdown description
+- Discuss with your team using comments
+- Keep track of changes in the activity stream
+- Get your project organized
 
 ### Mobile apps
 

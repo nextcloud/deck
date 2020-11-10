@@ -23,9 +23,22 @@
 
 namespace OCA\Deck;
 
+use OCA\Deck\Service\PermissionService;
+use OCP\App\IAppManager;
 use OCP\Capabilities\ICapability;
 
 class Capabilities implements ICapability {
+
+	/** @var IAppManager */
+	private $appManager;
+	/**  @var PermissionService */
+	private $permissionService;
+
+
+	public function __construct(IAppManager $appManager, PermissionService $permissionService) {
+		$this->appManager = $appManager;
+		$this->permissionService = $permissionService;
+	}
 
 	/**
 	 * Function an app uses to return the capabilities
@@ -36,7 +49,8 @@ class Capabilities implements ICapability {
 	public function getCapabilities() {
 		return [
 			'deck' => [
-				'version' => \OC::$server->getAppManager()->getAppVersion('deck')
+				'version' => $this->appManager->getAppVersion('deck'),
+				'canCreateBoards' => $this->permissionService->canCreate()
 			]
 		];
 	}
