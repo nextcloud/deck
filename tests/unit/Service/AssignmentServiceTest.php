@@ -115,7 +115,7 @@ class AssignmentServiceTest extends TestCase {
 	public function testAssignUser() {
 		$assignments = [];
 		$this->assignedUsersMapper->expects($this->once())
-			->method('find')
+			->method('findAll')
 			->with(123)
 			->willReturn($assignments);
 		$assignment = new Assignment();
@@ -145,7 +145,7 @@ class AssignmentServiceTest extends TestCase {
 		$this->expectExceptionMessage('The user is not part of the board');
 		$assignments = [];
 		$this->assignedUsersMapper->expects($this->once())
-			->method('find')
+			->method('findAll')
 			->with(123)
 			->willReturn($assignments);
 		$assignment = new Assignment();
@@ -176,7 +176,7 @@ class AssignmentServiceTest extends TestCase {
 			$assignment
 		];
 		$this->assignedUsersMapper->expects($this->once())
-			->method('find')
+			->method('findAll')
 			->with(123)
 			->willReturn($assignments);
 		$actual = $this->assignmentService->assignUser(123, 'admin');
@@ -192,7 +192,7 @@ class AssignmentServiceTest extends TestCase {
 			$assignment
 		];
 		$this->assignedUsersMapper->expects($this->once())
-			->method('find')
+			->method('findAll')
 			->with(123)
 			->willReturn($assignments);
 		$this->assignedUsersMapper->expects($this->once())
@@ -213,7 +213,7 @@ class AssignmentServiceTest extends TestCase {
 			$assignment
 		];
 		$this->assignedUsersMapper->expects($this->once())
-			->method('find')
+			->method('findAll')
 			->with(123)
 			->willReturn($assignments);
 		$this->expectException(NotFoundException::class);

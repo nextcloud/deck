@@ -114,7 +114,7 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	public function isUserAssigned($cardId, $userId): bool {
-		$assignments = $this->find($cardId);
+		$assignments = $this->findAll($cardId);
 		foreach ($assignments as $assignment) {
 			$origin = $this->getOrigin($assignment);
 			if ($origin instanceof User && $assignment->getParticipant() === $userId) {
