@@ -46,8 +46,8 @@ OC.L10N.register(
     "seconds ago" : "hace segundos",
     "Archived boards" : "Tableros archivados",
     "Shared with you" : "Compartido con usted",
-    "Edit board" : "Editar el tablero",
     "Board details" : "Detalles del tablero",
+    "Edit board" : "Editar el tablero",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana",
     "This week" : "Esta semana"

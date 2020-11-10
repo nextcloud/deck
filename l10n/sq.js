@@ -48,8 +48,8 @@ OC.L10N.register(
     "seconds ago" : "sekonda më parë",
     "Archived boards" : "Borde të arkivuara",
     "Shared with you" : "E ndarë me ju",
-    "Edit board" : "Tabela e editimeve",
     "Board details" : "Detajet e Tabeles ",
+    "Edit board" : "Tabela e editimeve",
     "Today" : "Sot",
     "Tomorrow" : "Nesër",
     "This week" : "Këtë javë"

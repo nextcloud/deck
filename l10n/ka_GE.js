@@ -47,8 +47,8 @@ OC.L10N.register(
     "seconds ago" : "წამის წინ",
     "Archived boards" : "არქივირებული დაფები",
     "Shared with you" : "გაზიარებული თქვენთან",
-    "Edit board" : "დაფის შეცვლა",
     "Board details" : "დაფის დეტალები",
+    "Edit board" : "დაფის შეცვლა",
     "Today" : "დღეს",
     "Tomorrow" : "ხვალ",
     "This week" : "ამ კვირაში"

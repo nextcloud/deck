@@ -77,8 +77,8 @@ OC.L10N.register(
     "seconds ago" : "vài giây trước",
     "Archived boards" : "Dự án đã lưu trữ",
     "Shared with you" : "Đã chia sẻ với bạn",
-    "Edit board" : "Chỉnh sửa dự án",
     "Board details" : "Thông tin dự án",
+    "Edit board" : "Chỉnh sửa dự án",
     "An error occurred" : "Có lỗi đã xảy ra",
     "Today" : "Hôm nay",
     "Maximum file size of {size} exceeded" : "Đã vượt quá kích thước {size} tối đa tập tin"

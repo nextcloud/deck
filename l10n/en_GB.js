@@ -55,8 +55,8 @@ OC.L10N.register(
     "seconds ago" : "seconds ago",
     "Archived boards" : "Archived boards",
     "Shared with you" : "Shared with you",
-    "Edit board" : "Edit board",
     "Board details" : "Board details",
+    "Edit board" : "Edit board",
     "Today" : "Today",
     "Tomorrow" : "Tomorrow",
     "This week" : "This week"
