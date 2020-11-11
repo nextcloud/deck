@@ -39,7 +39,8 @@ class Version1000Date20200308073933 extends SimpleMigrationStep {
 			'notnull' => true,
 			'default' => 0
 		]);
-		$table->addIndex(['participant'], 'deck_assigned_users_idx_t');
+		//$table->addIndex(['participant'], 'deck_assigned_users_idx_t');
+		$table->addIndex(['type'], 'deck_assigned_users_idx_ty');
 
 		return $schema;
 	}
