@@ -119,15 +119,7 @@ class BoardService {
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null, $since, $includeArchived);
 		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null, $since, $includeArchived);
 		$circleBoards = $this->boardMapper->findAllByCircles($userInfo['user'], null, null,  $since, $includeArchived);
-		$mergedBoards = array_merge($userBoards, $groupBoards, $circleBoards);
-		$result = [];
-		/** @var Board $item */
-		foreach ($mergedBoards as &$item) {
-			if (!array_key_exists($item->getId(), $result)) {
-				$result[$item->getId()] = $item;
-			}
-		}
-		return array_values($result);
+		return array_unique(array_merge($userBoards, $groupBoards, $circleBoards));
 	}
 	/**
 	 * @return array
