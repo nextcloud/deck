@@ -45,10 +45,13 @@
 			</Actions>
 		</h5>
 
-		<div v-if="!descriptionEditing"
+		<div v-if="!descriptionEditing && hasDescription"
 			id="description-preview"
 			@click="clickedPreview"
 			v-html="renderedDescription" />
+		<p v-else-if="!descriptionEditing" class="placeholder" @click="showEditor()">
+			{{ t('deck', 'Write a description …') }}
+		</p>
 		<VueEasymde v-else
 			:key="card.id"
 			ref="markdownEditor"
@@ -109,6 +112,7 @@ export default {
 				autofocus: true,
 				autosave: { enabled: false, uniqueId: 'unique' },
 				toolbar: false,
+				placeholder: t('deck', 'Write a description …'),
 			},
 			descriptionSaveTimeout: null,
 			descriptionSaving: false,
@@ -142,6 +146,9 @@ export default {
 		},
 		renderedDescription() {
 			return markdownIt.render(this.card.description || '')
+		},
+		hasDescription() {
+			return this.card?.description?.trim?.() !== ''
 		},
 	},
 	methods: {
@@ -226,6 +233,11 @@ export default {
 	}
 }
 
+.placeholder {
+	color: var(--color-text-maxcontrast);
+	padding: 2px;
+}
+
 #description-preview {
 	min-height: 100px;
 
@@ -279,6 +291,10 @@ h5 {
 	padding: 0;
 	background-color: var(--color-main-background);
 	color: var(--color-main-text);
+}
+
+.CodeMirror-placeholder {
+	color: var(--color-text-maxcontrast);
 }
 
 .editor-preview,
