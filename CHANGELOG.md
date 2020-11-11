@@ -1,6 +1,36 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.0 - unreleased
+
+### Added
+
+* [#2430](https://github.com/nextcloud/deck/pull/2430) Due date notification setting per board @juliushaertl
+* [#2230](https://github.com/nextcloud/deck/pull/2230) Implement scrolling per stack @juliushaertl
+* [#1396](https://github.com/nextcloud/deck/pull/1396) API: Expose canCreateBoards through capabilities @juliushaertl
+* [#2245](https://github.com/nextcloud/deck/pull/2245) API: ETag support for API endpoints @juliushaertl
+
+### Fixed
+
+* [#2330](https://github.com/nextcloud/deck/pull/2330) Enhanced undo handling for deletions @jakobroehrl
+* [#2336](https://github.com/nextcloud/deck/pull/2336) Run unit tests on github actions @juliushaertl
+* [#2358](https://github.com/nextcloud/deck/pull/2358) Properly check if FTSEvent has an argument set @juliushaertl
+* [#2359](https://github.com/nextcloud/deck/pull/2359) Also exclude deleted items from calendar boards @juliushaertl
+* [#2361](https://github.com/nextcloud/deck/pull/2361) Comments do not depend on the comments app @jakobroehrl
+* [#2363](https://github.com/nextcloud/deck/pull/2363) Use uid instead of displayname for sharee results @juliushaertl
+* [#2367](https://github.com/nextcloud/deck/pull/2367) Properly handle multiple shares in a row and refactor sharee loading @juliushaertl
+* [#2404](https://github.com/nextcloud/deck/pull/2404) Update Controls.vue @Flamenco
+* [#2433](https://github.com/nextcloud/deck/pull/2433) Fix scrollable titles with Dyslexia font @juliushaertl
+* [#2434](https://github.com/nextcloud/deck/pull/2434) Move most destructive actions in drop down menus to the bottom @Nienzu
+* [#2435](https://github.com/nextcloud/deck/pull/2435) Do not open the dialog automatically upon card creation, only upon click @juliushaertl
+* [#2437](https://github.com/nextcloud/deck/pull/2437) Only remove card padding for editable cards @juliushaertl
+* [#2440](https://github.com/nextcloud/deck/pull/2440) Move navigation toggle handling to @nextcloud/vue native one @juliushaertl
+* [#2463](https://github.com/nextcloud/deck/pull/2463) Changed triple dots to ellipsis @rakekniven
+* [#2500](https://github.com/nextcloud/deck/pull/2500) Move details and description to dedicated component @juliushaertl
+* [#2517](https://github.com/nextcloud/deck/pull/2517) Filter out duplicate cards in overview @juliushaertl
+* [#2502](https://github.com/nextcloud/deck/pull/2502) Assignment code refactoring @juliushaertl
+
+
 ## 1.1.0 - 2020-10-03
 
 ### Features
