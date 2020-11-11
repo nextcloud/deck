@@ -27,7 +27,11 @@
 			<router-view />
 		</AppContent>
 
-		<Modal v-if="cardDetailsInModal && $route.params.cardId" :title="t('deck', 'Card details')" @close="hideModal()">
+		<Modal
+			v-if="cardDetailsInModal && $route.params.cardId"
+			:clear-view-delay="0"
+			:title="t('deck', 'Card details')"
+			@close="hideModal()">
 			<div class="modal__content modal__card">
 				<router-view name="sidebar" />
 			</div>
