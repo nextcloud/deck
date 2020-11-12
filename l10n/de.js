@@ -31,7 +31,7 @@ OC.L10N.register(
     "{user} has renamed the card {before} to {card}" : "{user} hat die Karte {before} in {card} umbenannt",
     "You have added a description to card {card} in list {stack} on board {board}" : "Du hast der Karte {card} in der Liste {stack} auf dem Board {board} eine Beschreibung hinzugefügt",
     "{user} has added a description to card {card} in list {stack} on board {board}" : "{user} hat der Karte {card} in der Liste {stack} auf dem Board {board} eine Beschreibung hinzugefügt",
-    "You have updated the description of card {card} in list {stack} on board {board}" : "Du hast die Beschreibung der Karte {card} in der Liste {stack} auf dem Board  {board} aktualisiert",
+    "You have updated the description of card {card} in list {stack} on board {board}" : "Du hast die Beschreibung der Karte {card} in der Liste {stack} auf dem Board {board} aktualisiert",
     "{user} has updated the description of the card {card} in list {stack} on board {board}" : "{user} hat die Beschreibung der Karte {card} in der Liste {stack} auf dem Board {board} aktualisiert",
     "You have archived card {card} in list {stack} on board {board}" : "Du hast die Karte {card} in der Liste {stack} auf dem Board {board} archiviert",
     "{user} has archived card {card} in list {stack} on board {board}" : "{user} hat die Karte {card} in der Liste {stack} auf dem Board {board} archiviert",

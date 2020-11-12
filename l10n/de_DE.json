@@ -24,7 +24,7 @@
     "You have created card {card} in list {stack} on board {board}" : "Sie haben die Karte {card} in der Liste {stack} auf dem Board {board} erstellt",
     "{user} has created card {card} in list {stack} on board {board}" : "{user} hat die Karte {card} in der Liste {stack} auf dem Board {board} erstellt",
     "You have deleted card {card} in list {stack} on board {board}" : "Sie haben die Karte {card} in der Liste {stack} auf dem Board {board} gelöscht",
-    "{user} has deleted card {card} in list {stack} on board {board}" : " {user} hat die Karte {card} in der Liste {stack} auf dem Board {board} gelöscht",
+    "{user} has deleted card {card} in list {stack} on board {board}" : "{user} hat die Karte {card} in der Liste {stack} auf dem Board {board} gelöscht",
     "You have renamed the card {before} to {card}" : "Sie haben die Karte {before} in {card} umbenannt",
     "{user} has renamed the card {before} to {card}" : "{user} hat die Karte {before} in {card} umbenannt",
     "You have added a description to card {card} in list {stack} on board {board}" : "Sie haben der Karte {card} in der Liste {stack} auf dem Board {board} eine Beschreibung hinzugefügt",
