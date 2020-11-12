@@ -85,6 +85,12 @@ class CardTest extends TestCase {
 			'commentsUnread' => 0,
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
+			'pctComplete' => null,
+			'timeToComplete' => null,
+			'timeToCompleteMinutes' => null,
+			'product' => null,
+			'component' => null,
+			'milestone' => null,
 		], $card->jsonSerialize());
 	}
 	public function testJsonSerializeLabels() {
@@ -111,6 +117,12 @@ class CardTest extends TestCase {
 			'commentsUnread' => 0,
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
+			'pctComplete' => null,
+			'timeToComplete' => null,
+			'timeToCompleteMinutes' => null,
+			'product' => null,
+			'component' => null,
+			'milestone' => null,
 		], $card->jsonSerialize());
 	}
 
@@ -147,6 +159,12 @@ class CardTest extends TestCase {
 			'commentsUnread' => 0,
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
+			'pctComplete' => null,
+			'timeToComplete' => null,
+			'timeToCompleteMinutes' => null,
+			'product' => null,
+			'component' => null,
+			'milestone' => null,
 		], $card->jsonSerialize());
 	}
 }

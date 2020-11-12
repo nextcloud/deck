@@ -47,6 +47,12 @@ class Card extends RelationalEntity {
 	protected $notified = false;
 	protected $deletedAt = 0;
 	protected $commentsUnread = 0;
+	protected $timeToComplete;
+	protected $timeToCompleteMinutes;
+	protected $milestone;
+	protected $product;
+	protected $component;
+	protected $pctComplete;
 
 	private $databaseType = 'sqlite';
 
@@ -64,6 +70,8 @@ class Card extends RelationalEntity {
 		$this->addType('archived', 'boolean');
 		$this->addType('notified', 'boolean');
 		$this->addType('deletedAt', 'integer');
+		$this->addType('timeToCompleteMinutes', 'integer');
+		$this->addType('pctComplete', 'integer');
 		$this->addRelation('labels');
 		$this->addRelation('assignedUsers');
 		$this->addRelation('attachments');
