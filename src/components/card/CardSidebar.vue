@@ -185,7 +185,7 @@ export default {
 				background-color: var(--color-main-background);
 			}
 
-			section {
+			section.app-sidebar__tab--active {
 				min-height: auto;
 				display: flex;
 				flex-direction: column;
