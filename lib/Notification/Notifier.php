@@ -28,6 +28,7 @@ use OCA\Deck\Db\CardMapper;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
+use OCP\Notification\AlreadyProcessedException;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
 
@@ -96,6 +97,9 @@ class Notifier implements INotifier {
 			case 'card-assigned':
 				$cardId = $notification->getObjectId();
 				$boardId = $this->cardMapper->findBoardId($cardId);
+				if (!$boardId) {
+					throw new AlreadyProcessedException();
+				}
 				$initiator = $this->userManager->get($params[2]);
 				if ($initiator !== null) {
 					$dn = $initiator->getDisplayName();
@@ -120,6 +124,9 @@ class Notifier implements INotifier {
 			case 'card-overdue':
 				$cardId = $notification->getObjectId();
 				$boardId = $this->cardMapper->findBoardId($cardId);
+				if (!$boardId) {
+					throw new AlreadyProcessedException();
+				}
 				$notification->setParsedSubject(
 					(string) $l->t('The card "%s" on "%s" has reached its due date.', $params)
 				);
@@ -128,6 +135,9 @@ class Notifier implements INotifier {
 			case 'card-comment-mentioned':
 				$cardId = $notification->getObjectId();
 				$boardId = $this->cardMapper->findBoardId($cardId);
+				if (!$boardId) {
+					throw new AlreadyProcessedException();
+				}
 				$initiator = $this->userManager->get($params[2]);
 				if ($initiator !== null) {
 					$dn = $initiator->getDisplayName();
@@ -154,6 +164,9 @@ class Notifier implements INotifier {
 				break;
 			case 'board-shared':
 				$boardId = $notification->getObjectId();
+				if (!$boardId) {
+					throw new AlreadyProcessedException();
+				}
 				$initiator = $this->userManager->get($params[1]);
 				if ($initiator !== null) {
 					$dn = $initiator->getDisplayName();

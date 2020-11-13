@@ -177,6 +177,10 @@ class NotifierTest extends \Test\TestCase {
 
 	/** @dataProvider dataPrepareCardAssigned */
 	public function testPrepareCardAssigned($withUserFound = true) {
+		$this->cardMapper->expects($this->once())
+			->method('findBoardId')
+			->willReturn(123);
+
 		/** @var INotification $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->once())
