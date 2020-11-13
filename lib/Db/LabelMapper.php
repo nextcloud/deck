@@ -23,7 +23,9 @@
 
 namespace OCA\Deck\Db;
 
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\IDBConnection;
 
 class LabelMapper extends DeckMapper implements IPermissionMapper {
@@ -100,7 +102,12 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	public function findBoardId($labelId): ?int {
-		$entity = $this->find($labelId);
-		return $entity->getBoardId();
+		try {
+			$entity = $this->find($labelId);
+			return $entity->getBoardId();
+		} catch (DoesNotExistException $e) {
+		} catch (MultipleObjectsReturnedException $e) {
+		}
+		return null;
 	}
 }

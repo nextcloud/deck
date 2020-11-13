@@ -23,6 +23,8 @@
 
 namespace OCA\Deck\Db;
 
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\IDBConnection;
 
 class AclMapper extends DeckMapper implements IPermissionMapper {
@@ -43,8 +45,12 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	public function findBoardId($aclId): ?int {
-		$entity = $this->find($aclId);
-		return $entity->getBoardId();
+		try {
+			$entity = $this->find($aclId);
+			return $entity->getBoardId();
+		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
+		}
+		return null;
 	}
 
 	public function findByParticipant($type, $participant): array {
