@@ -172,6 +172,10 @@ class CardService {
 			throw new BadRequestException('title must be provided');
 		}
 
+		if (mb_strlen($title) > Card::TITLE_MAX_LENGTH) {
+			throw new BadRequestException('The title cannot exceed 255 characters');
+		}
+
 		if (is_numeric($stackId) === false) {
 			throw new BadRequestException('stack id must be a number');
 		}
@@ -270,6 +274,10 @@ class CardService {
 			throw new BadRequestException('title must be provided');
 		}
 
+		if (mb_strlen($title) > Card::TITLE_MAX_LENGTH) {
+			throw new BadRequestException('The title cannot exceed 255 characters');
+		}
+
 		if (is_numeric($stackId) === false) {
 			throw new BadRequestException('stack id must be a number $$$');
 		}
@@ -359,6 +367,10 @@ class CardService {
 
 		if ($title === false || $title === null) {
 			throw new BadRequestException('title must be provided');
+		}
+
+		if (mb_strlen($title) > Card::TITLE_MAX_LENGTH) {
+			throw new BadRequestException('The title cannot exceed 255 characters');
 		}
 
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);

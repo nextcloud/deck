@@ -28,6 +28,8 @@ use DateTimeZone;
 use Sabre\VObject\Component\VCalendar;
 
 class Card extends RelationalEntity {
+	public const TITLE_MAX_LENGTH = 255;
+
 	protected $title;
 	protected $description;
 	protected $descriptionPrev;
