@@ -322,8 +322,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		$stmt = $this->db->prepare($sql);
 		$stmt->bindParam(1, $cardId, \PDO::PARAM_INT);
 		$stmt->execute();
-		$row = $stmt->fetch();
-		return $row['id'];
+		return $stmt->fetchColumn() ?? null;
 	}
 
 	public function mapOwner(Card &$card) {
