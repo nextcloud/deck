@@ -202,6 +202,7 @@ OC.L10N.register(
     "Edit description" : "Edytuj opis",
     "View description" : "Zobacz opis",
     "Add Attachment" : "Dodaj załącznik",
+    "Write a description …" : "Napisz opis…",
     "Choose attachment" : "Wybierz załącznik",
     "(group)" : "(grupa)",
     "(circle)" : "(krąg)",
