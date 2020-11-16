@@ -202,6 +202,7 @@ OC.L10N.register(
     "Edit description" : "Modifica descrizione",
     "View description" : "Visualizza descrizione",
     "Add Attachment" : "Aggiungi allegato",
+    "Write a description …" : "Scrivi una descrizione…",
     "Choose attachment" : "Scegli allegato",
     "(group)" : "(gruppo)",
     "(circle)" : "(cerchia)",

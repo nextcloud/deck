@@ -202,6 +202,7 @@ OC.L10N.register(
     "Edit description" : "Açıklamayı düzenle",
     "View description" : "Açıklamayı görüntüle",
     "Add Attachment" : "Dosya Ekle",
+    "Write a description …" : "Bir açıklama yazın …",
     "Choose attachment" : "Ek dosyayı seçin",
     "(group)" : "(grup)",
     "(circle)" : "(çevre)",
