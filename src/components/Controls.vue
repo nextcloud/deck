@@ -259,8 +259,10 @@ export default {
 		},
 	},
 	watch: {
-		board() {
-			this.clearFilter()
+		board(current, previous) {
+			if (current?.id !== previous?.id) {
+				this.clearFilter()
+			}
 		},
 	},
 	methods: {
