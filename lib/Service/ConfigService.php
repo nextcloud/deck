@@ -91,7 +91,7 @@ class ConfigService {
 
 	public function set($key, $value) {
 		$result = null;
-		[$scope, $id] = explode(':', $key, 2);
+		[$scope] = explode(':', $key, 2);
 		switch ($scope) {
 			case 'groupLimit':
 				if (!$this->groupManager->isAdmin($this->userId)) {
