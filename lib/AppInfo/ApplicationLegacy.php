@@ -114,7 +114,7 @@ class ApplicationLegacy extends App {
 			}
 			// delete existing user assignments
 			$assignmentMapper = $container->query(AssignmentMapper::class);
-			$assignments = $assignmentMapper->findByUserId($user->getUID());
+			$assignments = $assignmentMapper->findByParticipant($user->getUID());
 			foreach ($assignments as $assignment) {
 				$assignmentMapper->delete($assignment);
 			}
