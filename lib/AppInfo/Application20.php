@@ -133,7 +133,7 @@ class Application20 extends App implements IBootstrap {
 			}
 			// delete existing user assignments
 			$assignmentMapper = $container->query(AssignmentMapper::class);
-			$assignments = $assignmentMapper->findByUserId($user->getUID());
+			$assignments = $assignmentMapper->findByParticipant($user->getUID());
 			foreach ($assignments as $assignment) {
 				$assignmentMapper->delete($assignment);
 			}
