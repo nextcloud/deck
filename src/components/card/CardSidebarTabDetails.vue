@@ -117,7 +117,7 @@
 				type="deck-card" />
 		</div>
 
-		<Description :card="card" />
+		<Description :key="card.id" :card="card" />
 	</div>
 </template>
 
