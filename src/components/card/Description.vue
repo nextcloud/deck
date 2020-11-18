@@ -180,7 +180,7 @@ export default {
 				const clickedIndex = [...document.querySelector('#description-preview').querySelectorAll('input')].findIndex((li) => li.id === e.target.id)
 				const reg = /\[(X|\s|_|-)\]/ig
 				let nth = 0
-				const updatedDescription = this.description.replace(reg, (match, i, original) => {
+				const updatedDescription = this.card.description.replace(reg, (match, i, original) => {
 					let result = match
 					if ('' + nth++ === '' + clickedIndex) {
 						if (match.match(/^\[\s\]/i)) {
