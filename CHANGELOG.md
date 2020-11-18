@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.1 - 2020-11-18
+
+### Fixed
+
+* [#2570](https://github.com/nextcloud/deck/pull/2570) [#2571](https://github.com/nextcloud/deck/pull/2571) Fix error when deleting users @ksteinb
+* [#2573](https://github.com/nextcloud/deck/pull/2573) Fix issue where card description was changed on the wrong card when switching cards
+
 ## 1.2.0 - 2020-11-16
 
 ### Added
