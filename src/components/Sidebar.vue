@@ -21,12 +21,18 @@
   -->
 
 <template>
-	<router-view name="sidebar" />
+	<router-view v-if="visible" name="sidebar" />
 </template>
 
 <script>
 export default {
 	name: 'Sidebar',
+	props: {
+		visible: {
+			type: Boolean,
+			default: true,
+		},
+	},
 	methods: {
 		closeSidebar() {
 			this.$router.push({ name: 'board' })
