@@ -24,22 +24,31 @@
 	<div v-if="card">
 		<div @click.stop.prevent>
 			<Actions v-if="canEdit && !isArchived">
-				<ActionButton v-if="showArchived === false && !isCurrentUserAssigned" icon="icon-user" @click="assignCardToMe()">
+				<ActionButton v-if="showArchived === false && !isCurrentUserAssigned"
+					icon="icon-user"
+					:close-after-click="true"
+					@click="assignCardToMe()">
 					{{ t('deck', 'Assign to me') }}
 				</ActionButton>
-				<ActionButton v-if="showArchived === false && isCurrentUserAssigned" icon="icon-user" @click="unassignCardFromMe()">
+				<ActionButton v-if="showArchived === false && isCurrentUserAssigned"
+					icon="icon-user"
+					:close-after-click="true"
+					@click="unassignCardFromMe()">
 					{{ t('deck', 'Unassign myself') }}
 				</ActionButton>
-				<ActionButton icon="icon-external" @click.stop="modalShow=true">
+				<ActionButton icon="icon-external" :close-after-click="true" @click="modalShow=true">
 					{{ t('deck', 'Move card') }}
 				</ActionButton>
-				<ActionButton icon="icon-settings-dark" @click="openCard">
+				<ActionButton icon="icon-settings-dark" :close-after-click="true" @click="openCard">
 					{{ t('deck', 'Card details') }}
 				</ActionButton>
-				<ActionButton icon="icon-archive" @click="archiveUnarchiveCard()">
+				<ActionButton icon="icon-archive" :close-after-click="true" @click="archiveUnarchiveCard()">
 					{{ showArchived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
 				</ActionButton>
-				<ActionButton v-if="showArchived === false" icon="icon-delete" @click="deleteCard()">
+				<ActionButton v-if="showArchived === false"
+					icon="icon-delete"
+					:close-after-click="true"
+					@click="deleteCard()">
 					{{ t('deck', 'Delete card') }}
 				</ActionButton>
 			</Actions>
@@ -127,7 +136,8 @@ export default {
 	},
 	methods: {
 		openCard() {
-			this.$router.push({ name: 'card', params: { cardId: this.id } })
+			const boardId = this.card?.boardId ? this.card.boardId : this.$route.params.id
+			this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id } }).catch(() => {})
 		},
 		deleteCard() {
 			this.$store.dispatch('deleteCard', this.card)
