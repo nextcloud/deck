@@ -37,7 +37,7 @@
 			</div>
 		</Modal>
 
-		<router-view v-show="!cardDetailsInModal || !$route.params.cardId" name="sidebar" />
+		<router-view name="sidebar" :visible="!cardDetailsInModal || !$route.params.cardId" />
 	</Content>
 </template>
 
