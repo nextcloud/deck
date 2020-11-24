@@ -168,12 +168,13 @@ export default {
 		left: 0;
 		right: 0;
 		max-width: calc(100% - #{$modal-padding*2});
-		padding: 14px;
-		max-height: calc(100% - #{$modal-padding*2});
+		padding: 0 14px;
+		max-height: 100%;
 		&::v-deep {
 			.app-sidebar-header {
 				position: sticky;
 				top: 0;
+				padding-top: $modal-padding;
 				z-index: 100;
 				background-color: var(--color-main-background);
 			}
