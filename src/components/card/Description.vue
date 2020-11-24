@@ -113,6 +113,7 @@ export default {
 				autosave: { enabled: false, uniqueId: 'unique' },
 				toolbar: false,
 				placeholder: t('deck', 'Write a description …'),
+				previewImagesInEditor: false,
 			},
 			descriptionSaveTimeout: null,
 			descriptionSaving: false,
