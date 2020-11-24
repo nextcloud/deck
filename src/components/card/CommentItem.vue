@@ -196,7 +196,13 @@ export default {
 		}
 	}
 
-	.comment--content::v-deep a {
-		text-decoration: underline;
+	.comment--content::v-deep {
+		a {
+			text-decoration: underline;
+		}
+
+		p {
+			margin-bottom: 1em;
+		}
 	}
 </style>
