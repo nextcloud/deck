@@ -27,6 +27,7 @@
 		<div v-if="card.description && checkListCount > 0" class="card-tasks icon icon-checkmark">
 			{{ checkListCheckedCount }}/{{ checkListCount }}
 		</div>
+		<div v-else-if="card.description && checkListCount == 0" class="icon icon-description" />
 
 		<div v-if="card.attachmentCount > 0" class="icon-attach icon icon-attach-dark">
 			{{ card.attachmentCount }}
