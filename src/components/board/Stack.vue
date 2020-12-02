@@ -279,24 +279,32 @@ export default {
 		z-index: 100;
 		padding-left: $card-spacing;
 		cursor: grab;
+		min-height: 44px;
 
 		// Smooth fade out of the cards at the top
 		&:before {
 			content: ' ';
 			display: block;
 			position: absolute;
-			background-image: linear-gradient(180deg, var(--color-main-background) 3px, transparent 100%);
 			width: 100%;
-			height: 25px;
-			top: 35px;
-			right: 6px;
+			height: 20px;
+			top: 30px;
+			right: 10px;
 			z-index: 99;
 			transition: top var(--animation-slow);
+
+			background-image: linear-gradient(180deg, var(--color-main-background) 3px, rgba(255, 255, 255, 0) 100%);
+			body.theme--dark & {
+				background-image: linear-gradient(180deg, var(--color-main-background) 3px, rgba(0, 0, 0, 0) 100%);
+			}
 		}
 
 		&--add:before {
 			height: 80px;
-			background-image: linear-gradient(180deg, var(--color-main-background) 68px, transparent 100%);
+			background-image: linear-gradient(180deg, var(--color-main-background) 68px, rgba(255, 255, 255, 0) 100%);
+			body.theme--dark & {
+				background-image: linear-gradient(180deg, var(--color-main-background) 68px, rgba(0, 0, 0, 0) 100%);
+			}
 		}
 
 		& > * {
@@ -323,7 +331,9 @@ export default {
 	}
 
 	.stack__card-add {
-		height: 52px;
+		width: $stack-width;
+		height: 44px;
+		flex-shrink: 0;
 		z-index: 100;
 		display: flex;
 		margin-left: 12px;
@@ -336,10 +346,10 @@ export default {
 			display: flex;
 			width: 100%;
 			margin: 0;
-			margin-right: 6px;
 			box-shadow: 0 0 3px var(--color-box-shadow);
 			border-radius: var(--border-radius-large);
 			overflow: hidden;
+			padding: 2px;
 		}
 
 		&.icon-loading-small:after,
