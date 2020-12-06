@@ -202,6 +202,7 @@ OC.L10N.register(
     "Edit description" : "Bewerk beschrijving",
     "View description" : "Bekijk beschrijving",
     "Add Attachment" : "Toevoegen bijlage",
+    "Write a description …" : "Voeg een beschrijving toe ...",
     "Choose attachment" : "Kies bijlage",
     "(group)" : "(groep)",
     "(circle)" : "(kring)",
