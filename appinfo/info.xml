@@ -17,7 +17,7 @@
 - 🚀 Get your project organized
 
 </description>
-    <version>1.2.2</version>
+    <version>1.2.2-1</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
@@ -80,4 +80,11 @@
             <plugin>OCA\Deck\DAV\CalendarPlugin</plugin>
         </calendar-plugins>
     </sabre>
+
+    <collaboration>
+        <plugins>
+            <plugin type="collaborator-search" share-type="SHARE_TYPE_DECK">OCA\Deck\Sharing\DeckPlugin</plugin>
+        </plugins>
+    </collaboration>
+
 </info>
