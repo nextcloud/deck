@@ -26,7 +26,10 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\PermissionService;
+use OCA\Files\Event\LoadSidebar;
+use OCA\Viewer\Event\LoadViewer;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IInitialStateService;
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -34,23 +37,24 @@ use OCP\AppFramework\Controller;
 
 class PageController extends Controller {
 	private $permissionService;
-	private $userId;
-	private $l10n;
 	private $initialState;
 	private $configService;
+	private $eventDispatcher;
 
 	public function __construct(
 		$AppName,
 		IRequest $request,
 		PermissionService $permissionService,
 		IInitialStateService $initialStateService,
-		ConfigService $configService
+		ConfigService $configService,
+		IEventDispatcher $eventDispatcher
 		) {
 		parent::__construct($AppName, $request);
 
 		$this->permissionService = $permissionService;
 		$this->initialState = $initialStateService;
 		$this->configService = $configService;
+		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	/**
@@ -64,6 +68,11 @@ class PageController extends Controller {
 		$this->initialState->provideInitialState(Application::APP_ID, 'maxUploadSize', (int)\OCP\Util::uploadLimit());
 		$this->initialState->provideInitialState(Application::APP_ID, 'canCreate', $this->permissionService->canCreate());
 		$this->initialState->provideInitialState(Application::APP_ID, 'config', $this->configService->getAll());
+
+		$this->eventDispatcher->dispatchTyped(new LoadSidebar());
+		if (class_exists(LoadViewer::class)) {
+			$this->eventDispatcher->dispatchTyped(new LoadViewer());
+		}
 
 		$response = new TemplateResponse('deck', 'main');
 
