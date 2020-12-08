@@ -34,11 +34,15 @@ use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
+use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\Response;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\ICache;
 use OCP\ICacheFactory;
+use OCP\IDBConnection;
 use OCP\IL10N;
+use OCP\Share\IShare;
 
 class AttachmentService {
 	private $attachmentMapper;
@@ -57,20 +61,10 @@ class AttachmentService {
 	private $activityManager;
 	/** @var ChangeHelper */
 	private $changeHelper;
+	/** @var DeckShareProvider */
+	private $shareProvider;
 
-	/**
-	 * AttachmentService constructor.
-	 *
-	 * @param AttachmentMapper $attachmentMapper
-	 * @param CardMapper $cardMapper
-	 * @param PermissionService $permissionService
-	 * @param Application $application
-	 * @param ICacheFactory $cacheFactory
-	 * @param $userId
-	 * @param IL10N $l10n
-	 * @throws \OCP\AppFramework\QueryException
-	 */
-	public function __construct(AttachmentMapper $attachmentMapper, CardMapper $cardMapper, ChangeHelper $changeHelper, PermissionService $permissionService, Application $application, ICacheFactory $cacheFactory, $userId, IL10N $l10n, ActivityManager $activityManager) {
+	public function __construct(AttachmentMapper $attachmentMapper, CardMapper $cardMapper, ChangeHelper $changeHelper, PermissionService $permissionService, Application $application, ICacheFactory $cacheFactory, $userId, IL10N $l10n, ActivityManager $activityManager, DeckShareProvider $shareProvider) {
 		$this->attachmentMapper = $attachmentMapper;
 		$this->cardMapper = $cardMapper;
 		$this->permissionService = $permissionService;
@@ -80,6 +74,7 @@ class AttachmentService {
 		$this->l10n = $l10n;
 		$this->activityManager = $activityManager;
 		$this->changeHelper = $changeHelper;
+		$this->shareProvider = $shareProvider;
 
 		// Register shipped attachment services
 		// TODO: move this to a plugin based approach once we have different types of attachments
@@ -132,7 +127,35 @@ class AttachmentService {
 				// Ingore invalid attachment types when extending the data
 			}
 		}
-		return $attachments;
+
+		return array_merge($attachments, $this->getFilesAppAttachments($cardId));
+	}
+
+	private function getFilesAppAttachments($cardId) {
+		$userFolder = \OC::$server->getRootFolder()->getUserFolder($this->userId);
+		$shares = $this->shareProvider->getSharedWithByType($cardId, IShare::TYPE_DECK, -1, 0);
+		return array_map(function (IShare $share) use ($cardId, $userFolder) {
+			$file = $share->getNode();
+			$nodes = $userFolder->getById($file->getId());
+			$userNode = array_shift($nodes);
+			return [
+				// general attachment attributes
+				'cardId' => $cardId,
+				'type' => 'file',
+				'data' => $file->getName(),
+				'lastModified' => $file->getMTime(),
+				'createdAt' => $file->getMTime(),
+				'deletedAt' => 0,
+				// file type attributes
+				'fileid' => $file->getId(),
+				'path' => $userFolder->getRelativePath($userNode->getPath()),
+				'extendedData' => [
+					'filesize' => $file->getSize(),
+					'mimetype' => $file->getMimeType(),
+					'info' => pathinfo($file->getName())
+				]
+			];
+		}, $shares);
 	}
 
 	/**
@@ -150,6 +173,24 @@ class AttachmentService {
 			$count = count($this->attachmentMapper->findAll($cardId));
 			$this->cache->set('card-' . $cardId, $count);
 		}
+
+		/** @var IDBConnection $qb */
+		$db = \OC::$server->getDatabaseConnection();
+		$qb = $db->getQueryBuilder();
+		$qb->select($qb->createFunction('count(s.id)'))
+			->from('share', 's')
+			->andWhere($qb->expr()->eq('s.share_type', $qb->createNamedParameter(IShare::TYPE_DECK)))
+			->andWhere($qb->expr()->eq('s.share_with', $qb->createNamedParameter($cardId)))
+			->andWhere($qb->expr()->isNull('s.parent'))
+			->andWhere($qb->expr()->orX(
+				$qb->expr()->eq('s.item_type', $qb->createNamedParameter('file')),
+				$qb->expr()->eq('s.item_type', $qb->createNamedParameter('folder'))
+			));
+
+		$cursor = $qb->execute();
+		$count += $cursor->fetchColumn(0);
+		$cursor->closeCursor();
+
 		return $count;
 	}
 
