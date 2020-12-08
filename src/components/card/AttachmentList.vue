@@ -45,9 +45,10 @@
 			<li v-for="attachment in attachments"
 				:key="attachment.id"
 				class="attachment">
-				<a class="fileicon" :style="mimetypeForAttachment(attachment.extendedData.mimetype)" :href="attachmentUrl(attachment)" />
+				<a class="fileicon" :style="mimetypeForAttachment(attachment.extendedData.mimetype)"
+					 @click.prevent="showViewer(attachment)" />
 				<div class="details">
-					<a :href="attachmentUrl(attachment)" target="_blank">
+					<a @click.prevent="showViewer(attachment)">
 						<div class="filename">
 							<span class="basename">{{ attachment.data }}</span>
 						</div>
@@ -62,6 +63,12 @@
 					</ActionButton>
 				</Actions>
 				<Actions v-if="removable">
+					<ActionLink v-if="attachment.fileid" icon="icon-folder" :href="'/index.php/f/'+attachment.fileid">
+						{{ t('deck', 'Show in files') }}
+					</ActionLink>
+					<ActionButton icon="icon-delete">
+						{{ t('deck', 'Unshare file') }}
+					</ActionButton>
 					<ActionButton v-if="attachment.deletedAt === 0" icon="icon-delete" @click="$emit('deleteAttachment', attachment)">
 						{{ t('deck', 'Delete Attachment') }}
 					</ActionButton>
@@ -76,7 +83,7 @@
 </template>
 
 <script>
-import { Actions, ActionButton } from '@nextcloud/vue'
+import { Actions, ActionButton, ActionLink } from '@nextcloud/vue'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
 import relativeDate from '../../mixins/relativeDate'
 import { formatFileSize } from '@nextcloud/files'
@@ -91,6 +98,7 @@ export default {
 	components: {
 		Actions,
 		ActionButton,
+		ActionLink,
 		AttachmentDragAndDrop,
 	},
 	mixins: [relativeDate, attachmentUpload],
@@ -164,6 +172,9 @@ export default {
 		},
 		clickAddNewAttachmment() {
 			this.$refs.localAttachments.click()
+		},
+		showViewer(attachment) {
+			window.OCA.Viewer.open(attachment.path)
 		},
 	},
 }
