@@ -26,6 +26,7 @@ namespace OCA\Deck\AppInfo;
 use Closure;
 use Exception;
 use OC\EventDispatcher\SymfonyAdapter;
+use OC\Share20\ProviderFactory;
 use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Capabilities;
 use OCA\Deck\Collaboration\Resources\ResourceProvider;
@@ -43,6 +44,8 @@ use OCA\Deck\Notification\Notifier;
 use OCA\Deck\Search\DeckProvider;
 use OCA\Deck\Service\FullTextSearchService;
 use OCA\Deck\Service\PermissionService;
+use OCA\Deck\Sharing\DeckShareProvider;
+use OCA\Deck\Sharing\Listener;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -62,6 +65,8 @@ use OCP\IServerContainer;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Notification\IManager as NotificationManager;
+use OCP\Share\IManager;
+use OCP\Share\IProviderFactory;
 use OCP\Util;
 use Psr\Container\ContainerInterface;
 
@@ -92,6 +97,14 @@ class Application20 extends App implements IBootstrap {
 		$context->injectFn(Closure::fromCallable([$this, 'registerNotifications']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerFullTextSearch']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
+
+		$context->injectFn(function (IManager $shareManager) {
+			$shareManager->registerShareProvider(DeckShareProvider::class);
+		});
+
+		$context->injectFn(function (Listener $listener, IEventDispatcher $eventDispatcher) {
+			$listener->register($eventDispatcher);
+		});
 	}
 
 	public function register(IRegistrationContext $context): void {

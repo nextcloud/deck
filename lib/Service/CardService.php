@@ -29,6 +29,7 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\Db\AssignmentMapper;
+use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Acl;
@@ -116,12 +117,23 @@ class CardService {
 		return $cards;
 	}
 
-	public function search($boardIds, $term) {
-		$cards = $this->cardMapper->search($boardIds, $term);
-		return $cards;
+	public function search(string $term, int $limit = null, int $offset = null): array {
+		$boards = $this->boardService->getUserBoards();
+		$boardIds = array_map(static function (Board $board) {
+			return $board->getId();
+		}, $boards);
+		return $this->cardMapper->search($boardIds, $term, $limit, $offset);
 	}
 
-	/**
+	public function searchRaw(string $term, int $limit = null, int $offset = null): array {
+		$boards = $this->boardService->getUserBoards();
+		$boardIds = array_map(static function (Board $board) {
+			return $board->getId();
+		}, $boards);
+		return $this->cardMapper->searchRaw($boardIds, $term, $limit, $offset);
+	}
+
+		/**
 	 * @param $cardId
 	 * @return \OCA\Deck\Db\RelationalEntity
 	 * @throws \OCA\Deck\NoPermissionException
