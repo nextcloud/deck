@@ -216,7 +216,7 @@ OC.L10N.register(
     "Card deleted" : "Картицата е избришана",
     "seconds ago" : "пред неколку секунди",
     "All boards" : "Сите табли",
-    "Archived boards" : "Архивирај табла",
+    "Archived boards" : "Архивирани табли",
     "Shared with you" : "Споделено со тебе",
     "Use modal card view" : "Користи модуларен преглед",
     "Show boards in calendar/tasks" : "Прикажи ги таблите во календарнот",
