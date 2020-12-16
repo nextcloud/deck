@@ -27,18 +27,27 @@ declare(strict_types=1);
 namespace OCA\Deck\Sharing;
 
 
+use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\NoPermissionException;
+use OCA\Deck\Service\PermissionService;
+use OCP\AppFramework\OCS\OCSNotFoundException;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IURLGenerator;
 use OCP\Share\IShare;
 
 class ShareAPIHelper {
 
 	private $urlGenerator;
+	private $timeFactory;
 	private $cardMapper;
+	private $permissionService;
 
-	public function __construct(IURLGenerator $urlGenerator, CardMapper $cardMapper) {
+	public function __construct(IURLGenerator $urlGenerator, ITimeFactory $timeFactory, CardMapper $cardMapper, PermissionService $permissionService) {
 		$this->urlGenerator = $urlGenerator;
+		$this->timeFactory = $timeFactory;
 		$this->cardMapper = $cardMapper;
+		$this->permissionService = $permissionService;
 	}
 
 	public function formatShare(IShare $share): array {

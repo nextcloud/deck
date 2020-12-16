@@ -99,7 +99,9 @@ class Application20 extends App implements IBootstrap {
 		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
 
 		$context->injectFn(function (IManager $shareManager) {
-			$shareManager->registerShareProvider(DeckShareProvider::class);
+			if (method_exists($shareManager, 'registerShareProvider')) {
+				$shareManager->registerShareProvider(DeckShareProvider::class);
+			}
 		});
 
 		$context->injectFn(function (Listener $listener, IEventDispatcher $eventDispatcher) {
