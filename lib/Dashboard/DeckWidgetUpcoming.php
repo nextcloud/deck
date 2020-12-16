@@ -40,7 +40,7 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\Util;
 
-class DeckWidget implements IAPIWidget, IButtonWidget, IIconWidget {
+class DeckWidgetUpcoming implements IAPIWidget, IButtonWidget, IIconWidget {
 	private IL10N $l10n;
 	private OverviewService $dashboardService;
 	private IURLGenerator $urlGenerator;

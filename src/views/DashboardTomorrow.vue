@@ -21,70 +21,51 @@
   -->
 
 <template>
-	<div>
-		<NcDashboardWidget :items="cards"
-			empty-content-icon="icon-deck"
-			:empty-content-message="t('deck', 'No upcoming cards')"
-			:show-more-text="t('deck', 'upcoming cards')"
-			:loading="loading"
-			@hide="() => {}"
-			@markDone="() => {}">
-			<template #default="{ item }">
-				<a :key="item.id"
-					:href="cardLink(item)"
-					target="_blank"
-					class="card">
-					<div class="card--header">
-						<DueDate class="right" :card="item" />
-						<span class="title">{{ item.title }}</span>
-					</div>
-					<ul v-if="item.labels && item.labels.length"
-						class="labels">
-						<li v-for="label in item.labels" :key="label.id" :style="labelStyle(label)">
-							<span>{{ label.title }}</span>
-						</li>
-					</ul>
-				</a>
-			</template>
-		</NcDashboardWidget>
-		<div class="center-button">
-			<NcButton @click="toggleAddCardModel">
-				<template #icon>
-					<PlusIcon :size="20" />
-				</template>
-				{{ t('deck', 'New card') }}
-			</NcButton>
-			<NcModal v-if="showAddCardModal" class="card-selector" @close="toggleAddCardModel">
-				<CreateNewCardCustomPicker show-created-notice @cancel="toggleAddCardModel" />
-			</NcModal>
-		</div>
-	</div>
+	<DashboardWidget :items="cards"
+		empty-content-icon="icon-deck"
+		:empty-content-message="t('deck', 'No upcoming cards')"
+		:show-more-text="t('deck', 'upcoming cards tomorrow')"
+		:show-more-url="showMoreUrl"
+		:loading="loading"
+		@hide="() => {}"
+		@markDone="() => {}">
+		<template #default="{ item }">
+			<a :key="item.id"
+				:href="cardLink(item)"
+				target="_blank"
+				class="card">
+				<div class="card--header">
+					<DueDate class="right" :card="item" />
+					<span class="title">{{ item.title }}</span>
+				</div>
+				<ul v-if="item.labels && item.labels.length"
+					class="labels">
+					<li v-for="label in item.labels" :key="label.id" :style="labelStyle(label)">
+						<span>{{ label.title }}</span>
+					</li>
+				</ul>
+			</a>
+		</template>
+	</DashboardWidget>
 </template>
 
 <script>
-import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import { NcButton, NcDashboardWidget, NcModal } from '@nextcloud/vue'
+import { DashboardWidget } from '@nextcloud/vue-dashboard'
 import { mapGetters } from 'vuex'
 import labelStyle from './../mixins/labelStyle.js'
 import DueDate from '../components/cards/badges/DueDate.vue'
 import { generateUrl } from '@nextcloud/router'
-import CreateNewCardCustomPicker from './CreateNewCardCustomPicker.vue'
 
 export default {
-	name: 'Dashboard',
+	name: 'DashboardTomorrow',
 	components: {
-		CreateNewCardCustomPicker,
-		NcModal,
 		DueDate,
-		NcDashboardWidget,
-		NcButton,
-		PlusIcon,
+		DashboardWidget,
 	},
 	mixins: [labelStyle],
 	data() {
 		return {
 			loading: false,
-			showAddCardModal: false,
 		}
 	},
 	computed: {
@@ -92,15 +73,19 @@ export default {
 			'assignedCardsDashboard',
 		]),
 		cards() {
+			const tomorrow = new Date()
+			tomorrow.setDate(tomorrow.getDate() + 1)
 			const list = [
 				...this.assignedCardsDashboard,
 			].filter((card) => {
 				return card.duedate !== null
+			}).filter((card) => {
+				return (new Date(card.duedate)).getDate() === (new Date(tomorrow)).getDate()
 			})
 			list.sort((a, b) => {
 				return (new Date(a.duedate)).getTime() - (new Date(b.duedate)).getTime()
 			})
-			return list.slice(0, 5)
+			return list
 		},
 		cardLink() {
 			return (card) => {
@@ -117,23 +102,11 @@ export default {
 			this.loading = false
 		})
 	},
-	methods: {
-		toggleAddCardModel() {
-			this.showAddCardModal = !this.showAddCardModal
-		},
-	},
 }
 </script>
 
 <style lang="scss" scoped>
 	@import './../css/labels';
-
-	.center-button {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-top: 10px;
-	}
 
 	#deck-widget-empty-content {
 		text-align: center;
@@ -143,8 +116,9 @@ export default {
 	.card {
 		display: block;
 		border-radius: var(--border-radius-large);
-		padding: 5px 8px;
-		height: 70px;
+		padding: 8px;
+		height: 60px;
+
 		&:hover {
 			background-color: var(--color-background-hover);
 		}
@@ -157,22 +131,18 @@ export default {
 			text-overflow: ellipsis;
 			white-space: nowrap;
 			display: block;
-			position: relative;
-			top: 3px;
 		}
 	}
 
 	.labels {
 		margin-left: 0;
-		margin-top: 3px;
 	}
 
-	.duedate:deep {
+	.duedate::v-deep {
 		.due {
 			margin: 0 0 0 10px;
-			padding: 0px 4px;
+			padding: 2px 4px;
 			font-size: 90%;
-			margin-bottom: 7px;
 		}
 	}
 
