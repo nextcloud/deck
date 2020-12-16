@@ -22,9 +22,14 @@
 
 <template>
 	<AttachmentDragAndDrop :card-id="cardId" class="drop-upload--sidebar">
-		<button class="icon-upload" @click="clickAddNewAttachmment()">
-			{{ t('deck', 'Upload attachment') }}
-		</button>
+		<div class="button-group">
+			<button class="icon-upload" @click="uploadNewFile()">
+				{{ t('deck', 'Upload new files') }}
+			</button>
+			<button class="icon-folder" @click="shareFromFiles()">
+				{{ t('deck', 'Share from Files') }}
+			</button>
+		</div>
 		<input ref="localAttachments"
 			type="file"
 			style="display: none;"
@@ -45,8 +50,9 @@
 			<li v-for="attachment in attachments"
 				:key="attachment.id"
 				class="attachment">
-				<a class="fileicon" :style="mimetypeForAttachment(attachment.extendedData.mimetype)"
-					 @click.prevent="showViewer(attachment)" />
+				<a class="fileicon"
+					:style="mimetypeForAttachment(attachment)"
+					@click.prevent="showViewer(attachment)" />
 				<div class="details">
 					<a @click.prevent="showViewer(attachment)">
 						<div class="filename">
@@ -62,18 +68,18 @@
 						{{ t('deck', 'Add this attachment') }}
 					</ActionButton>
 				</Actions>
-				<Actions v-if="removable">
+				<Actions v-if="removable" :force-menu="true">
 					<ActionLink v-if="attachment.fileid" icon="icon-folder" :href="'/index.php/f/'+attachment.fileid">
 						{{ t('deck', 'Show in files') }}
 					</ActionLink>
-					<ActionButton icon="icon-delete">
+					<ActionButton v-if="attachment.fileid" icon="icon-delete">
 						{{ t('deck', 'Unshare file') }}
 					</ActionButton>
-					<ActionButton v-if="attachment.deletedAt === 0" icon="icon-delete" @click="$emit('deleteAttachment', attachment)">
+
+					<ActionButton v-if="!attachment.fileid && attachment.deletedAt === 0" icon="icon-delete" @click="$emit('deleteAttachment', attachment)">
 						{{ t('deck', 'Delete Attachment') }}
 					</ActionButton>
-
-					<ActionButton v-else icon="icon-history" @click="$emit('restoreAttachment', attachment)">
+					<ActionButton v-else-if="!attachment.fileid" icon="icon-history" @click="$emit('restoreAttachment', attachment)">
 						{{ t('deck', 'Restore Attachment') }}
 					</ActionButton>
 				</Actions>
@@ -91,7 +97,15 @@ import { generateUrl } from '@nextcloud/router'
 import { mapState } from 'vuex'
 import { loadState } from '@nextcloud/initial-state'
 import attachmentUpload from '../../mixins/attachmentUpload'
+import { getFilePickerBuilder } from '@nextcloud/dialogs'
 const maxUploadSizeState = loadState('deck', 'maxUploadSize')
+
+const picker = getFilePickerBuilder(t('deck', 'File to share'))
+	.setMultiSelect(false)
+	.setModal(true)
+	.setType(1)
+	.allowDirectories()
+	.build()
 
 export default {
 	name: 'AttachmentList',
@@ -131,13 +145,16 @@ export default {
 			return [...this.$store.getters.attachmentsByCard(this.cardId)].sort((a, b) => b.id - a.id)
 		},
 		mimetypeForAttachment() {
-			return (mimetype) => {
-				const url = OC.MimeType.getIconUrl(mimetype)
+			return (attachment) => {
+				const url = attachment.extendedData.hasPreview ? this.attachmentPreview(attachment) : OC.MimeType.getIconUrl(attachment.extendedData.mimetype)
 				const styles = {
 					'background-image': `url("${url}")`,
 				}
 				return styles
 			}
+		},
+		attachmentPreview() {
+			return (attachment) => (attachment.fileid ? generateUrl(`/core/preview?fileId=${attachment.fileid}&x=64&y=64&a=true`) : null)
 		},
 		attachmentUrl() {
 			return (attachment) => generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
@@ -159,8 +176,13 @@ export default {
 			}
 		},
 	},
-	created() {
-		this.$store.dispatch('fetchAttachments', this.cardId)
+	watch: {
+		cardId: {
+			immediate: true,
+			handler() {
+				this.$store.dispatch('fetchAttachments', this.cardId)
+			}
+		},
 	},
 	methods: {
 		handleUploadFile(event) {
@@ -170,11 +192,28 @@ export default {
 			}
 			event.target.value = ''
 		},
+		uploadNewFile() {
+			this.$refs.localAttachments.click()
+		},
+		shareFromFiles() {
+			picker.pick()
+				.then(async(path) => {
+					console.debug(`path ${path} selected for sharing`)
+					if (!path.startsWith('/')) {
+						throw new Error(t('files', 'Invalid path selected'))
+					}
+					// FIXME: Share file
+				})
+		},
 		clickAddNewAttachmment() {
 			this.$refs.localAttachments.click()
 		},
 		showViewer(attachment) {
-			window.OCA.Viewer.open(attachment.path)
+			if (window.OCA.Viewer.availableHandlers.map(handler => handler.mimes).flat().includes(attachment.extendedData.mimetype)) {
+				window.OCA.Viewer.open(attachment.path)
+				return
+			}
+			window.location = generateUrl('/f/' + attachment.fileid)
 		},
 	},
 }
@@ -182,9 +221,17 @@ export default {
 
 <style lang="scss" scoped>
 
-	.icon-upload {
-		padding-left: 35px;
-		background-position: 10px center;
+	.button-group {
+		display: flex;
+
+		.icon-upload, .icon-folder {
+			padding-left: 44px;
+			background-position: 16px center;
+			flex-grow: 1;
+			height: 44px;
+			margin-bottom: 12px;
+			text-align: left;
+		}
 	}
 
 	.attachment-list {

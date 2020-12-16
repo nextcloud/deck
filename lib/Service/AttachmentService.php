@@ -42,6 +42,7 @@ use OCP\ICache;
 use OCP\ICacheFactory;
 use OCP\IDBConnection;
 use OCP\IL10N;
+use OCP\IPreview;
 use OCP\Share\IShare;
 
 class AttachmentService {
@@ -132,9 +133,11 @@ class AttachmentService {
 	}
 
 	private function getFilesAppAttachments($cardId) {
+		/** @var IPreview $previewManager */
+		$previewManager = \OC::$server->get(IPreview::class);
 		$userFolder = \OC::$server->getRootFolder()->getUserFolder($this->userId);
 		$shares = $this->shareProvider->getSharedWithByType($cardId, IShare::TYPE_DECK, -1, 0);
-		return array_map(function (IShare $share) use ($cardId, $userFolder) {
+		return array_map(function (IShare $share) use ($cardId, $userFolder, $previewManager) {
 			$file = $share->getNode();
 			$nodes = $userFolder->getById($file->getId());
 			$userNode = array_shift($nodes);
@@ -152,7 +155,8 @@ class AttachmentService {
 				'extendedData' => [
 					'filesize' => $file->getSize(),
 					'mimetype' => $file->getMimeType(),
-					'info' => pathinfo($file->getName())
+					'info' => pathinfo($file->getName()),
+					'hasPreview' => $previewManager->isAvailable($file),
 				]
 			];
 		}, $shares);
