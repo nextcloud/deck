@@ -298,6 +298,10 @@ h5 {
 	color: var(--color-text-maxcontrast);
 }
 
+.CodeMirror-cursor {
+	border-left: 1px solid var(--color-main-text);
+}
+
 .editor-preview,
 .editor-statusbar {
 	display: none;
