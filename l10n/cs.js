@@ -202,7 +202,7 @@ OC.L10N.register(
     "Edit description" : "Upravit popis",
     "View description" : "Zobrazit popis",
     "Add Attachment" : "Přidat přílohu",
-    "Write a description …" : "Napiš popis …",
+    "Write a description …" : "Zadejte popis…",
     "Choose attachment" : "Zvolte přílohu",
     "(group)" : "(skupina)",
     "(circle)" : "(okruh)",
