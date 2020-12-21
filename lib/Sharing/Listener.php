@@ -28,6 +28,7 @@ namespace OCA\Deck\Sharing;
 
 
 use OC\Files\Filesystem;
+use OCA\Deck\Service\ConfigService;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Share\Events\VerifyMountPointEvent;
 use OCP\Share\IShare;
@@ -35,7 +36,13 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 
 class Listener {
 
-	public function __construct($userId) {
+	/** @var ConfigService */
+	private $configService;
+	/** @var string|null */
+	private $userId;
+
+	public function __construct(ConfigService $configService, $userId) {
+		$this->configService = $configService;
 		$this->userId = $userId;
 	}
 
@@ -99,15 +106,11 @@ class Listener {
 				}
 			}
 
-			$parent = $this->getAttachmentFolder();
+			$parent = $this->configService->getAttachmentFolder();
 			$event->setParent($parent);
 			if (!$event->getView()->is_dir($parent)) {
 				$event->getView()->mkdir($parent);
 			}
 		}
-	}
-
-	private function getAttachmentFolder() {
-		return \OC::$server->getConfig()->getUserValue($this->userId, 'deck', 'attachment_folder', '/Deck');
 	}
 }

@@ -69,17 +69,17 @@
 					</ActionButton>
 				</Actions>
 				<Actions v-if="removable" :force-menu="true">
-					<ActionLink v-if="attachment.fileid" icon="icon-folder" :href="'/index.php/f/'+attachment.fileid">
+					<ActionLink v-if="attachment.extendedData.fileid" icon="icon-folder" :href="'/index.php/f/'+attachment.extendedData.fileid">
 						{{ t('deck', 'Show in files') }}
 					</ActionLink>
-					<ActionButton v-if="attachment.fileid" icon="icon-delete">
+					<ActionButton v-if="attachment.extendedData.fileid" icon="icon-delete">
 						{{ t('deck', 'Unshare file') }}
 					</ActionButton>
 
-					<ActionButton v-if="!attachment.fileid && attachment.deletedAt === 0" icon="icon-delete" @click="$emit('deleteAttachment', attachment)">
+					<ActionButton v-if="!attachment.extendedData.fileid && attachment.deletedAt === 0" icon="icon-delete" @click="$emit('deleteAttachment', attachment)">
 						{{ t('deck', 'Delete Attachment') }}
 					</ActionButton>
-					<ActionButton v-else-if="!attachment.fileid" icon="icon-history" @click="$emit('restoreAttachment', attachment)">
+					<ActionButton v-else-if="!attachment.extendedData.fileid" icon="icon-history" @click="$emit('restoreAttachment', attachment)">
 						{{ t('deck', 'Restore Attachment') }}
 					</ActionButton>
 				</Actions>
@@ -89,11 +89,12 @@
 </template>
 
 <script>
+import axios from '@nextcloud/axios'
 import { Actions, ActionButton, ActionLink } from '@nextcloud/vue'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
 import relativeDate from '../../mixins/relativeDate'
 import { formatFileSize } from '@nextcloud/files'
-import { generateUrl } from '@nextcloud/router'
+import { generateUrl, generateOcsUrl } from '@nextcloud/router'
 import { mapState } from 'vuex'
 import { loadState } from '@nextcloud/initial-state'
 import attachmentUpload from '../../mixins/attachmentUpload'
@@ -154,7 +155,7 @@ export default {
 			}
 		},
 		attachmentPreview() {
-			return (attachment) => (attachment.fileid ? generateUrl(`/core/preview?fileId=${attachment.fileid}&x=64&y=64&a=true`) : null)
+			return (attachment) => (attachment.extendedData.fileid ? generateUrl(`/core/preview?fileId=${attachment.extendedData.fileid}&x=64&y=64&a=true`) : null)
 		},
 		attachmentUrl() {
 			return (attachment) => generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
@@ -202,7 +203,15 @@ export default {
 					if (!path.startsWith('/')) {
 						throw new Error(t('files', 'Invalid path selected'))
 					}
-					// FIXME: Share file
+
+					axios.post(generateOcsUrl('apps/files_sharing/api/v1', 2) + 'shares', {
+						path,
+						permissions: 19,
+						shareType: 12,
+						shareWith: '' + this.cardId,
+					}).then(() => {
+						this.$store.dispatch('fetchAttachments', this.cardId)
+					})
 				})
 		},
 		clickAddNewAttachmment() {
@@ -210,10 +219,10 @@ export default {
 		},
 		showViewer(attachment) {
 			if (window.OCA.Viewer.availableHandlers.map(handler => handler.mimes).flat().includes(attachment.extendedData.mimetype)) {
-				window.OCA.Viewer.open(attachment.path)
+				window.OCA.Viewer.open(attachment.extendedData.path)
 				return
 			}
-			window.location = generateUrl('/f/' + attachment.fileid)
+			window.location = generateUrl('/f/' + attachment.extendedData.fileid)
 		},
 	},
 }

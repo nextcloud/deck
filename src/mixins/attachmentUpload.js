@@ -45,7 +45,7 @@ export default {
 			this.$set(this.uploadQueue, file.name, { name: file.name, progress: 0 })
 			const bodyFormData = new FormData()
 			bodyFormData.append('cardId', this.cardId)
-			bodyFormData.append('type', 'deck_file')
+			bodyFormData.append('type', 'file')
 			bodyFormData.append('file', file)
 			await queue.add(async() => {
 				try {

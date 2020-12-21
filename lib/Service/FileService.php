@@ -40,6 +40,7 @@ use OCP\IConfig;
 use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
+use OCP\Share\IManager;
 
 class FileService implements IAttachmentService {
 	private $l10n;
@@ -57,7 +58,8 @@ class FileService implements IAttachmentService {
 		ILogger $logger,
 		IRootFolder $rootFolder,
 		IConfig $config,
-		AttachmentMapper $attachmentMapper
+		AttachmentMapper $attachmentMapper,
+		IManager $shareManager
 	) {
 		$this->l10n = $l10n;
 		$this->appData = $appData;
@@ -66,6 +68,7 @@ class FileService implements IAttachmentService {
 		$this->rootFolder = $rootFolder;
 		$this->config = $config;
 		$this->attachmentMapper = $attachmentMapper;
+		$this->shareManager = $shareManager;
 	}
 
 	/**

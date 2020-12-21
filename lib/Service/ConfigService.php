@@ -148,4 +148,8 @@ class ConfigService {
 		}, $groups);
 		return array_filter($groups);
 	}
+
+	public function getAttachmentFolder(): string {
+		return $this->config->getUserValue($this->userId, 'deck', 'attachment_folder', '/Deck');
+	}
 }
