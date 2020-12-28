@@ -182,7 +182,7 @@ export default {
 			immediate: true,
 			handler() {
 				this.$store.dispatch('fetchAttachments', this.cardId)
-			}
+			},
 		},
 	},
 	methods: {

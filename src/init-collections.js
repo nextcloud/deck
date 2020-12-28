@@ -24,9 +24,8 @@ import Vue from 'vue'
 
 import BoardSelector from './BoardSelector'
 import CardSelector from './CardSelector'
-
 import './../css/collections.css'
-
+import FileSharingPicker from './views/FileSharingPicker'
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken);
 // eslint-disable-next-line
@@ -34,7 +33,15 @@ __webpack_public_path__ = OC.linkTo('deck', 'js/');
 
 Vue.prototype.t = t
 Vue.prototype.n = n
-Vue.prototype.OC = OC;
+Vue.prototype.OC = OC
+
+window.addEventListener('DOMContentLoaded', () => {
+	if (OCA.Sharing && OCA.Sharing.ShareSearch) {
+		OCA.Sharing.ShareSearch.addNewResult(FileSharingPicker)
+	} else {
+		console.error('OCA.Sharing.ShareSearch not ready')
+	}
+});
 
 ((function(OCP) {
 
