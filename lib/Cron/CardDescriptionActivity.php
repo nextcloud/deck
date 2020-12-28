@@ -36,7 +36,7 @@ class CardDescriptionActivity extends Job {
 	private $cardMapper;
 
 	public function __construct(ActivityManager $activityManager, CardMapper $cardMapper) {
-		$this->activityManager  = $activityManager;
+		$this->activityManager = $activityManager;
 		$this->cardMapper = $cardMapper;
 	}
 

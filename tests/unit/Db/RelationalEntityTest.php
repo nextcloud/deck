@@ -36,7 +36,7 @@ class RelationalEntityTest extends \Test\TestCase {
 		$entity = new RelationalEntity();
 		$entity->foo = null;
 		$entity->setFoo('test');
-		$this->assertEquals(['foo'=>true], $entity->getUpdatedFields());
+		$this->assertEquals(['foo' => true], $entity->getUpdatedFields());
 	}
 
 	public function testJsonSerialize() {

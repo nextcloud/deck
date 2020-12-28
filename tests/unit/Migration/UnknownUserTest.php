@@ -109,7 +109,7 @@ class UnknownUserTest extends \Test\TestCase {
 
 
 	/** @return Acl */
-	public function getAcl($type=Acl::PERMISSION_TYPE_USER, $participant='admin', $boardId=123) {
+	public function getAcl($type = Acl::PERMISSION_TYPE_USER, $participant = 'admin', $boardId = 123) {
 		$acl = new Acl();
 		$acl->setParticipant($participant);
 		$acl->setType($type);

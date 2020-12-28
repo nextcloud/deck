@@ -246,7 +246,7 @@ class CardServiceTest extends TestCase {
 
 	private function getCards() {
 		$cards = [];
-		for ($i=0; $i<10; $i++) {
+		for ($i = 0; $i < 10; $i++) {
 			$cards[$i] = new Card();
 			$cards[$i]->setTitle($i);
 			$cards[$i]->setOrder($i);

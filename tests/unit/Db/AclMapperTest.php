@@ -74,7 +74,7 @@ class AclMapperTest extends MapperTestUtility {
 		}
 	}
 	/** @return Acl */
-	public function getAcl($type='user', $participant='admin', $edit=false, $share=false, $manage=false, $boardId=123) {
+	public function getAcl($type = 'user', $participant = 'admin', $edit = false, $share = false, $manage = false, $boardId = 123) {
 		$acl = new Acl();
 		$acl->setParticipant($participant);
 		$acl->setType('user');

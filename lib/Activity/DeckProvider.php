@@ -290,7 +290,7 @@ class DeckProvider implements IProvider {
 			try {
 				$comment = $this->commentsManager->get((int)$subjectParams['comment']);
 				$event->setParsedMessage($comment->getMessage());
-				$params['comment'] =[
+				$params['comment'] = [
 					'type' => 'highlight',
 					'id' => $subjectParams['comment'],
 					'name' => $comment->getMessage()

@@ -216,7 +216,7 @@ class PermissionServiceTest extends \Test\TestCase {
 	}
 
 	/** @dataProvider dataCheckPermission */
-	public function testCheckPermission($boardId, $permission, $result, $owner='foo') {
+	public function testCheckPermission($boardId, $permission, $result, $owner = 'foo') {
 		// Setup mapper
 		$mapper = $this->getMockBuilder(IPermissionMapper::class)->getMock();
 
@@ -245,7 +245,7 @@ class PermissionServiceTest extends \Test\TestCase {
 	}
 
 	/** @dataProvider dataCheckPermission */
-	public function testCheckPermissionWithoutMapper($boardId, $permission, $result, $owner='foo') {
+	public function testCheckPermissionWithoutMapper($boardId, $permission, $result, $owner = 'foo') {
 		$mapper = null;
 		$board = new Board();
 		$board->setId($boardId);
