@@ -115,7 +115,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 | Parameter | Type    | Description                  |
 | --------- | ------- | ---------------------------- |
-| options   | Bool    | **Optional** Enhance boards with details about labels, stacks and users |
+| details   | Bool    | **Optional** Enhance boards with details about labels, stacks and users |
 
 #### Response
 
