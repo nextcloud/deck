@@ -17,7 +17,8 @@
         "jakub-onderka/php-parallel-lint": "^1.0.0",
         "phpunit/phpunit": "^8",
         "nextcloud/coding-standard": "^0.4.0",
-        "symfony/event-dispatcher": "^4.0"
+        "symfony/event-dispatcher": "^4.0",
+        "vimeo/psalm": "^4.3"
     },
     "config": {
         "optimize-autoloader": true,
@@ -26,6 +27,8 @@
     "scripts": {
         "lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
         "cs:check": "php-cs-fixer fix --dry-run --diff",
-        "cs:fix": "php-cs-fixer fix"
+        "cs:fix": "php-cs-fixer fix",
+		"psalm": "psalm",
+		"psalm:fix": "psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType"
     }
 }
