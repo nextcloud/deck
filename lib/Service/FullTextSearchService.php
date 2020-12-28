@@ -161,6 +161,7 @@ class FullTextSearchService {
 	 * @return IIndexDocument
 	 */
 	public function generateIndexDocumentFromCard(Card $card): IIndexDocument {
+		/** @psalm-var IIndexDocument */
 		$document = new IndexDocument(DeckProvider::DECK_PROVIDER_ID, (string)$card->getId());
 
 		return $document;
@@ -193,6 +194,7 @@ class FullTextSearchService {
 	public function generateDocumentAccessFromCardId(int $cardId): IDocumentAccess {
 		$board = $this->getBoardFromCardId($cardId);
 
+		/** @psalm-var IDocumentAccess */
 		return new DocumentAccess($board->getOwner());
 	}
 

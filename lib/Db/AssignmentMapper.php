@@ -91,7 +91,7 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 	 * Check if user exists before assigning it to a card
 	 *
 	 * @param Entity $entity
-	 * @return null|Assignment
+	 * @return Assignment
 	 * @throws NotFoundException
 	 */
 	public function insert(Entity $entity): Entity {

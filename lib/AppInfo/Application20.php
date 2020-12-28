@@ -214,7 +214,7 @@ class Application20 extends App implements IBootstrap {
 			}
 		);
 		$eventDispatcher->addListener(
-			'\OCA\Deck\Board::onShareNew', function (Event $e) {
+			'\OCA\Deck\Board::onShareNew', function (Event $e) use ($server) {
 				$fullTextSearchService = $server->get(FullTextSearchService::class);
 				$fullTextSearchService->onBoardShares($e);
 			}

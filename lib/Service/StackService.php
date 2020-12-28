@@ -24,6 +24,7 @@
 
 namespace OCA\Deck\Service;
 
+use OC\EventDispatcher\SymfonyAdapter;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\BadRequestException;
@@ -36,7 +37,6 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\StatusException;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 class StackService {
@@ -50,8 +50,7 @@ class StackService {
 	private $assignedUsersMapper;
 	private $attachmentService;
 	private $activityManager;
-	/** @var EventDispatcherInterface */
-	private $eventDispatcher;
+	private $symfonyAdapter;
 	private $changeHelper;
 
 	public function __construct(
@@ -65,7 +64,7 @@ class StackService {
 		AssignmentMapper $assignedUsersMapper,
 		AttachmentService $attachmentService,
 		ActivityManager $activityManager,
-		EventDispatcherInterface $eventDispatcher,
+		SymfonyAdapter $eventDispatcher,
 		ChangeHelper $changeHelper
 	) {
 		$this->stackMapper = $stackMapper;
@@ -78,7 +77,7 @@ class StackService {
 		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->attachmentService = $attachmentService;
 		$this->activityManager = $activityManager;
-		$this->eventDispatcher = $eventDispatcher;
+		$this->symfonyAdapter = $eventDispatcher;
 		$this->changeHelper = $changeHelper;
 	}
 
@@ -226,7 +225,7 @@ class StackService {
 		);
 		$this->changeHelper->boardChanged($boardId);
 
-		$this->eventDispatcher->dispatch(
+		$this->symfonyAdapter->dispatch(
 			'\OCA\Deck\Stack::onCreate',
 			new GenericEvent(null, ['id' => $stack->getId(), 'stack' => $stack])
 		);
@@ -260,7 +259,7 @@ class StackService {
 		$this->changeHelper->boardChanged($stack->getBoardId());
 		$this->enrichStackWithCards($stack);
 
-		$this->eventDispatcher->dispatch(
+		$this->symfonyAdapter->dispatch(
 			'\OCA\Deck\Stack::onDelete', new GenericEvent(null, ['id' => $id, 'stack' => $stack])
 		);
 
@@ -315,7 +314,7 @@ class StackService {
 		);
 		$this->changeHelper->boardChanged($stack->getBoardId());
 
-		$this->eventDispatcher->dispatch(
+		$this->symfonyAdapter->dispatch(
 			'\OCA\Deck\Stack::onUpdate', new GenericEvent(null, ['id' => $id, 'stack' => $stack])
 		);
 

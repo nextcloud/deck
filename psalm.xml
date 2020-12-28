@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<psalm
+		errorLevel="4"
+		resolveFromConfigFile="true"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="https://getpsalm.org/schema/config"
+		xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+		errorBaseline="tests/psalm-baseline.xml"
+>
+	<projectFiles>
+		<directory name="lib" />
+		<ignoreFiles>
+			<directory name="vendor" />
+		</ignoreFiles>
+	</projectFiles>
+	<extraFiles>
+		<directory name="vendor" />
+		<ignoreFiles>
+			<directory name="vendor/phpunit/php-code-coverage" />
+			<directory name="vendor/vimeo" />
+		</ignoreFiles>
+	</extraFiles>
+	<issueHandlers>
+		<UndefinedMagicMethod>
+			<errorLevel type="suppress">
+				<referencedMethod name="/Db\\.*::.*/" />
+			</errorLevel>
+		</UndefinedMagicMethod>
+		<UndefinedInterfaceMethod>
+			<errorLevel type="suppress">
+				<!-- FIXME Deprecated event handling -->
+				<referencedMethod name="OCP\IUserManager::listen" />
+				<referencedMethod name="OCP\IGroupManager::listen" />
+			</errorLevel>
+		</UndefinedInterfaceMethod>
+		<UndefinedClass>
+			<errorLevel type="suppress">
+				<referencedClass name="OC\*" />
+				<referencedClass name="OC" />
+				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
+			</errorLevel>
+		</UndefinedClass>
+		<UndefinedDocblockClass>
+			<errorLevel type="suppress">
+				<referencedClass name="OC\*" />
+				<referencedClass name="Doctrine\DBAL\Schema\Schema" />
+				<referencedClass name="Doctrine\DBAL\Schema\SchemaException" />
+				<referencedClass name="Doctrine\DBAL\Driver\Statement" />
+				<referencedClass name="Doctrine\DBAL\Schema\Table" />
+				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
+			</errorLevel>
+		</UndefinedDocblockClass>
+	</issueHandlers>
+</psalm>

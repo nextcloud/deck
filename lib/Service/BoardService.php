@@ -24,6 +24,7 @@
 
 namespace OCA\Deck\Service;
 
+use OC\EventDispatcher\SymfonyAdapter;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\AppInfo\Application;
@@ -46,7 +47,6 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCP\IUserManager;
 use OCA\Deck\BadRequestException;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 class BoardService {
@@ -64,7 +64,6 @@ class BoardService {
 	private $groupManager;
 	private $userId;
 	private $activityManager;
-	/** @var EventDispatcherInterface */
 	private $eventDispatcher;
 	private $changeHelper;
 
@@ -84,7 +83,7 @@ class BoardService {
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		ActivityManager $activityManager,
-		EventDispatcherInterface $eventDispatcher,
+		SymfonyAdapter $eventDispatcher,
 		ChangeHelper $changeHelper,
 		$userId
 	) {
