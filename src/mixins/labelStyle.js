@@ -23,7 +23,7 @@
 import Color from './color'
 
 export default {
-	mixins: [ Color ],
+	mixins: [Color],
 	computed: {
 		labelStyle() {
 			return (label) => {

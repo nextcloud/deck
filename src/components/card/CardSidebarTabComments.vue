@@ -71,7 +71,7 @@ export default {
 		},
 	},
 	watch: {
-		'card': {
+		card: {
 			immediate: true,
 			handler() {
 				this.loadComments()

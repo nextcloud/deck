@@ -31,7 +31,7 @@ export class CardApi {
 	}
 
 	addCard(card) {
-		return axios.post(this.url(`/cards`), card)
+		return axios.post(this.url('/cards'), card)
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)

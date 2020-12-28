@@ -312,7 +312,7 @@ export default new Vuex.Store({
 		async setConfig({ commit }, config) {
 			for (const key in config) {
 				try {
-					await axios.post(generateOcsUrl(`apps/deck/api/v1.0/config`) + key, {
+					await axios.post(generateOcsUrl('apps/deck/api/v1.0/config') + key, {
 						value: config[key],
 					})
 					commit('SET_CONFIG', { key, value: config[key] })

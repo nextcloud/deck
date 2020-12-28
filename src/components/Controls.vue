@@ -206,7 +206,7 @@ export default {
 	components: {
 		Actions, ActionButton, Popover, Avatar,
 	},
-	mixins: [ labelStyle ],
+	mixins: [labelStyle],
 	props: {
 		board: {
 			type: Object,

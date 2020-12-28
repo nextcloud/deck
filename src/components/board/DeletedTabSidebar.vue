@@ -38,7 +38,7 @@ import relativeDate from '../../mixins/relativeDate'
 
 export default {
 	name: 'DeletedTabSidebar',
-	mixins: [ relativeDate ],
+	mixins: [relativeDate],
 	props: {
 		board: {
 			type: Object,

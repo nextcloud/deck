@@ -79,7 +79,7 @@ try {
 export default {
 	name: 'AttachmentDragAndDrop',
 	components: { Modal },
-	mixins: [ attachmentUpload ],
+	mixins: [attachmentUpload],
 	props: {
 		cardId: {
 			type: Number,

@@ -81,7 +81,7 @@ export class StackApi {
 	 * @returns {Promise}
 	 */
 	createStack(stack) {
-		return axios.post(this.url(`/stacks`), stack)
+		return axios.post(this.url('/stacks'), stack)
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)

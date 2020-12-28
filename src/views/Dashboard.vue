@@ -62,7 +62,7 @@ export default {
 		DueDate,
 		DashboardWidget,
 	},
-	mixins: [ labelStyle ],
+	mixins: [labelStyle],
 	data() {
 		return {
 			loading: false,
