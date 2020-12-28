@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "991369f912a370449c4bdd7fea2ae81a",
+    "content-hash": "4a3d65807490679a4de897a8643385bb",
     "packages": [
         {
             "name": "cogpowered/finediff",
@@ -225,25 +225,25 @@
         },
         {
             "name": "christophwurst/nextcloud",
-            "version": "v17.0.6",
+            "version": "v20.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChristophWurst/nextcloud_composer.git",
-                "reference": "5977d037f9d885713312016db3a9019ed6853955"
+                "reference": "a207b55848d1ac4c83a954eac90c07714bbdaaed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/5977d037f9d885713312016db3a9019ed6853955",
-                "reference": "5977d037f9d885713312016db3a9019ed6853955",
+                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/a207b55848d1ac4c83a954eac90c07714bbdaaed",
+                "reference": "a207b55848d1ac4c83a954eac90c07714bbdaaed",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1"
+                "php": "^7.2"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "17.0.0-dev"
+                    "dev-master": "20.0.0-dev"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -259,9 +259,9 @@
             "description": "Composer package containing Nextcloud's public API (classes, interfaces)",
             "support": {
                 "issues": "https://github.com/ChristophWurst/nextcloud_composer/issues",
-                "source": "https://github.com/ChristophWurst/nextcloud_composer/tree/v17.0.6"
+                "source": "https://github.com/ChristophWurst/nextcloud_composer/tree/v20.0.4"
             },
-            "time": "2020-04-27T12:43:22+00:00"
+            "time": "2020-12-23T12:42:07+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -947,59 +947,6 @@
             "time": "2020-12-24T11:14:44+00:00"
         },
         {
-            "name": "jakub-onderka/php-parallel-lint",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/JakubOnderka/PHP-Parallel-Lint.git",
-                "reference": "04fbd3f5fb1c83f08724aa58a23db90bd9086ee8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/JakubOnderka/PHP-Parallel-Lint/zipball/04fbd3f5fb1c83f08724aa58a23db90bd9086ee8",
-                "reference": "04fbd3f5fb1c83f08724aa58a23db90bd9086ee8",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "jakub-onderka/php-console-highlighter": "~0.3",
-                "nette/tester": "~1.3",
-                "squizlabs/php_codesniffer": "~2.7"
-            },
-            "suggest": {
-                "jakub-onderka/php-console-highlighter": "Highlight syntax in code snippet"
-            },
-            "bin": [
-                "parallel-lint"
-            ],
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "./"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-2-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Jakub Onderka",
-                    "email": "ahoj@jakubonderka.cz"
-                }
-            ],
-            "description": "This tool check syntax of PHP files about 20x faster than serial check.",
-            "homepage": "https://github.com/JakubOnderka/PHP-Parallel-Lint",
-            "support": {
-                "issues": "https://github.com/JakubOnderka/PHP-Parallel-Lint/issues",
-                "source": "https://github.com/JakubOnderka/PHP-Parallel-Lint/tree/master"
-            },
-            "abandoned": "php-parallel-lint/php-parallel-lint",
-            "time": "2018-02-24T15:31:20+00:00"
-        },
-        {
             "name": "myclabs/deep-copy",
             "version": "1.10.2",
             "source": {
@@ -1423,6 +1370,63 @@
                 "source": "https://github.com/PHP-CS-Fixer/diff/tree/v1.3.1"
             },
             "time": "2020-10-14T08:39:05+00:00"
+        },
+        {
+            "name": "php-parallel-lint/php-parallel-lint",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-parallel-lint/PHP-Parallel-Lint.git",
+                "reference": "474f18bc6cc6aca61ca40bfab55139de614e51ca"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-parallel-lint/PHP-Parallel-Lint/zipball/474f18bc6cc6aca61ca40bfab55139de614e51ca",
+                "reference": "474f18bc6cc6aca61ca40bfab55139de614e51ca",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=5.4.0"
+            },
+            "replace": {
+                "grogy/php-parallel-lint": "*",
+                "jakub-onderka/php-parallel-lint": "*"
+            },
+            "require-dev": {
+                "nette/tester": "^1.3 || ^2.0",
+                "php-parallel-lint/php-console-highlighter": "~0.3",
+                "squizlabs/php_codesniffer": "~3.0"
+            },
+            "suggest": {
+                "php-parallel-lint/php-console-highlighter": "Highlight syntax in code snippet"
+            },
+            "bin": [
+                "parallel-lint"
+            ],
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "./"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Jakub Onderka",
+                    "email": "ahoj@jakubonderka.cz"
+                }
+            ],
+            "description": "This tool check syntax of PHP files about 20x faster than serial check.",
+            "homepage": "https://github.com/php-parallel-lint/PHP-Parallel-Lint",
+            "support": {
+                "issues": "https://github.com/php-parallel-lint/PHP-Parallel-Lint/issues",
+                "source": "https://github.com/php-parallel-lint/PHP-Parallel-Lint/tree/master"
+            },
+            "time": "2020-04-04T12:18:32+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
