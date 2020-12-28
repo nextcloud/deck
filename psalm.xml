@@ -26,6 +26,13 @@
 				<referencedMethod name="/Db\\.*::.*/" />
 			</errorLevel>
 		</UndefinedMagicMethod>
+		<UndefinedInterfaceMethod>
+			<errorLevel type="suppress">
+				<!-- FIXME Deprecated event handling -->
+				<referencedMethod name="OCP\IUserManager::listen" />
+				<referencedMethod name="OCP\IGroupManager::listen" />
+			</errorLevel>
+		</UndefinedInterfaceMethod>
 		<UndefinedClass>
 			<errorLevel type="suppress">
 				<referencedClass name="OC\*" />

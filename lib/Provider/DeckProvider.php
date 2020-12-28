@@ -128,10 +128,8 @@ class DeckProvider implements IFullTextSearchProvider {
 	}
 
 
-	/**
-	 * @return ISearchTemplate
-	 */
 	public function getSearchTemplate(): ISearchTemplate {
+		/** @psalm-var ISearchTemplate */
 		$template = new SearchTemplate('icon-deck', 'icons');
 
 		return $template;
@@ -204,6 +202,7 @@ class DeckProvider implements IFullTextSearchProvider {
 	 * @throws MultipleObjectsReturnedException
 	 */
 	public function updateDocument(IIndex $index): IIndexDocument {
+		/** @psalm-var IIndexDocument */
 		$document = new IndexDocument(DeckProvider::DECK_PROVIDER_ID, $index->getDocumentId());
 		$document->setIndex($index);
 

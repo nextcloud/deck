@@ -106,7 +106,7 @@ class PermissionService {
 	/**
 	 * Get current user permissions for a board
 	 *
-	 * @param Board|Entity $board
+	 * @param Board $board
 	 * @return array|bool
 	 * @internal param $boardId
 	 */
@@ -170,10 +170,9 @@ class PermissionService {
 		try {
 			$board = $this->boardMapper->find($boardId);
 			return $board && $userId === $board->getOwner();
-		} catch (DoesNotExistException $e) {
-		} catch (MultipleObjectsReturnedException $e) {
-			return false;
+		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 		}
+		return false;
 	}
 
 	/**

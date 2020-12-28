@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Service;
 
+use OC\EventDispatcher\SymfonyAdapter;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Card;
@@ -84,7 +85,7 @@ class StackServiceTest extends TestCase {
 		$this->labelMapper = $this->createMock(LabelMapper::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
-		$this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+		$this->eventDispatcher = $this->createMock(SymfonyAdapter::class);
 
 		$this->stackService = new StackService(
 			$this->stackMapper,

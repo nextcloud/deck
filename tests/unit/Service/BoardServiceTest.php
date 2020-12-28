@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Service;
 
+use OC\EventDispatcher\SymfonyAdapter;
 use OC\L10N\L10N;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\Acl;
@@ -90,7 +91,7 @@ class BoardServiceTest extends TestCase {
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
-		$this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+		$this->eventDispatcher = $this->createMock(SymfonyAdapter::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
