@@ -60,7 +60,7 @@ const AtMention = {
 		const { user, displayName } = context.props
 		return createElement(
 			'span',
-			{ attrs: { 'data-at-embedded': true, 'contenteditable': false } },
+			{ attrs: { 'data-at-embedded': true, contenteditable: false } },
 			[createElement(UserBubble, { props: { user, displayName }, attrs: { 'data-mention-id': user } })]
 		)
 	},
@@ -76,7 +76,7 @@ export default {
 		CommentForm,
 		RichText,
 	},
-	mixins: [ relativeDate ],
+	mixins: [relativeDate],
 	props: {
 		comment: {
 			type: Object,

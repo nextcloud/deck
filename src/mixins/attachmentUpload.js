@@ -35,7 +35,7 @@ export default {
 		async onLocalAttachmentSelected(file) {
 			if (this.maxUploadSize > 0 && file.size > this.maxUploadSize) {
 				showError(
-					t('deck', `Failed to upload {name}`, { name: file.name }) + ' - '
+					t('deck', 'Failed to upload {name}', { name: file.name }) + ' - '
 						+ t('deck', 'Maximum file size of {size} exceeded', { size: formatFileSize(this.maxUploadSize) })
 				)
 				event.target.value = ''
@@ -49,7 +49,8 @@ export default {
 			bodyFormData.append('file', file)
 			await queue.add(async() => {
 				try {
-					await this.$store.dispatch('createAttachment', { cardId: this.cardId,
+					await this.$store.dispatch('createAttachment', {
+						cardId: this.cardId,
 						formData: bodyFormData,
 						onUploadProgress: (e) => {
 							const percentCompleted = Math.round((e.loaded * 100) / e.total)

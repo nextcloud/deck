@@ -63,7 +63,7 @@ export default {
 	components: {
 		RichText,
 	},
-	mixins: [ relativeDate ],
+	mixins: [relativeDate],
 	props: {
 		activity: {
 			type: Object,
