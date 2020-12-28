@@ -116,8 +116,8 @@ class StackServiceTest extends TestCase {
 
 
 		$actual = $this->stackService->findAll(123);
-		for ($stackId=0; $stackId<3; $stackId++) {
-			for ($cardId=0;$cardId<10;$cardId++) {
+		for ($stackId = 0; $stackId < 3; $stackId++) {
+			for ($cardId = 0;$cardId < 10;$cardId++) {
 				$this->assertEquals($actual[0]->getCards()[$cardId]->getId(), $cardId);
 				$this->assertEquals($actual[0]->getCards()[$cardId]->getStackId(), 222);
 				$this->assertEquals($actual[0]->getCards()[$cardId]->getLabels(), $this->getLabels()[$cardId]);
@@ -132,8 +132,8 @@ class StackServiceTest extends TestCase {
 		$this->cardMapper->expects($this->any())->method('findAllArchived')->willReturn($this->getCards(222));
 
 		$actual = $this->stackService->findAllArchived(123);
-		for ($stackId=0; $stackId<3; $stackId++) {
-			for ($cardId=0;$cardId<10;$cardId++) {
+		for ($stackId = 0; $stackId < 3; $stackId++) {
+			for ($cardId = 0;$cardId < 10;$cardId++) {
 				$this->assertEquals($actual[0]->getCards()[$cardId]->getId(), $cardId);
 				$this->assertEquals($actual[0]->getCards()[$cardId]->getStackId(), 222);
 				$this->assertEquals($actual[0]->getCards()[$cardId]->getLabels(), $this->getLabels()[$cardId]);
@@ -142,7 +142,7 @@ class StackServiceTest extends TestCase {
 	}
 
 	private function getLabels() {
-		for ($i=0;$i<10;$i++) {
+		for ($i = 0;$i < 10;$i++) {
 			$label1 = new Label();
 			$label1->setTitle('Important');
 			$label1->setCardId(1);
@@ -165,9 +165,9 @@ class StackServiceTest extends TestCase {
 		$s1->setBoardId(1);
 		return [$s1, $s2];
 	}
-	private function getCards($stackId=0) {
+	private function getCards($stackId = 0) {
 		$cards = [];
-		for ($i=0;$i<10;$i++) {
+		for ($i = 0;$i < 10;$i++) {
 			$cards[$i] = new Card();
 			$cards[$i]->setId($i);
 			$cards[$i]->setStackId($stackId);

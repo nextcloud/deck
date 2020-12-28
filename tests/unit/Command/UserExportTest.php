@@ -50,10 +50,10 @@ class UserExportTest extends \Test\TestCase {
 	public function setUp(): void {
 		parent::setUp();
 		$this->boardMapper = $this->createMock(BoardMapper::class);
-		$this->boardService= $this->createMock(BoardService::class);
-		$this->stackMapper= $this->createMock(StackMapper::class);
-		$this->cardMapper= $this->createMock(CardMapper::class);
-		$this->assignedUserMapper= $this->createMock(AssignmentMapper::class);
+		$this->boardService = $this->createMock(BoardService::class);
+		$this->stackMapper = $this->createMock(StackMapper::class);
+		$this->cardMapper = $this->createMock(CardMapper::class);
+		$this->assignedUserMapper = $this->createMock(AssignmentMapper::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->userExport = new UserExport($this->boardMapper, $this->boardService, $this->stackMapper, $this->cardMapper, $this->assignedUserMapper, $this->userManager, $this->groupManager);
@@ -104,13 +104,13 @@ class UserExportTest extends \Test\TestCase {
 			$this->getCard(2),
 			$this->getCard(3),
 		];
-		$this->cardMapper->expects($this->exactly(count($boards)*count($stacks)))
+		$this->cardMapper->expects($this->exactly(count($boards) * count($stacks)))
 			->method('findAllByStack')
 			->willReturn($cards);
-		$this->cardMapper->expects($this->exactly(count($boards)*count($stacks)*count($cards)))
+		$this->cardMapper->expects($this->exactly(count($boards) * count($stacks) * count($cards)))
 			->method('find')
 			->willReturn($cards[0]);
-		$this->assignedUserMapper->expects($this->exactly(count($boards)*count($stacks)*count($cards)))
+		$this->assignedUserMapper->expects($this->exactly(count($boards) * count($stacks) * count($cards)))
 			->method('find')
 			->willReturn([]);
 		$result = $this->invokePrivate($this->userExport, 'execute', [$input, $output]);

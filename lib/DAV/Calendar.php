@@ -204,7 +204,7 @@ class Calendar extends ExternalCalendar {
 	public function getProperties($properties) {
 		return [
 			'{DAV:}displayname' => 'Deck: ' . ($this->board ? $this->board->getTitle() : 'no board object provided'),
-			'{http://apple.com/ns/ical/}calendar-color'  => '#' . $this->board->getColor(),
+			'{http://apple.com/ns/ical/}calendar-color' => '#' . $this->board->getColor(),
 			'{' . Plugin::NS_CALDAV . '}supported-calendar-component-set' => new SupportedCalendarComponentSet(['VTODO']),
 		];
 	}

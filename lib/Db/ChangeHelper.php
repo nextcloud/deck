@@ -49,7 +49,7 @@ class ChangeHelper {
 		$time = time();
 		$etag = md5($time . microtime());
 		$this->cache->set(self::TYPE_BOARD . '-' . $boardId, $etag);
-		$sql  = 'UPDATE `*PREFIX*deck_boards` SET `last_modified` = ? WHERE `id` = ?';
+		$sql = 'UPDATE `*PREFIX*deck_boards` SET `last_modified` = ? WHERE `id` = ?';
 		$this->db->executeUpdate($sql, [$time, $boardId]);
 	}
 
