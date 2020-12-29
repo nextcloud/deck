@@ -218,11 +218,17 @@ export default {
 			this.$refs.localAttachments.click()
 		},
 		showViewer(attachment) {
-			if (window.OCA.Viewer.availableHandlers.map(handler => handler.mimes).flat().includes(attachment.extendedData.mimetype)) {
+			if (attachment.extendedData.fileid && window.OCA.Viewer.availableHandlers.map(handler => handler.mimes).flat().includes(attachment.extendedData.mimetype)) {
 				window.OCA.Viewer.open(attachment.extendedData.path)
 				return
 			}
-			window.location = generateUrl('/f/' + attachment.extendedData.fileid)
+
+			if (attachment.extendedData.fileid) {
+				window.location = generateUrl('/f/' + attachment.extendedData.fileid)
+				return
+			}
+
+			window.location = generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
 		},
 	},
 }
