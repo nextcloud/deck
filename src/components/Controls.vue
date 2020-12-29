@@ -58,14 +58,14 @@
 				</form>
 			</div>
 			<div class="board-action-buttons">
-				<Popover>
+				<Popover @show="filterVisible=true" @hide="filterVisible=false">
 					<Actions slot="trigger" :title="t('deck', 'Apply filter')">
 						<ActionButton v-if="isFilterActive" icon="icon-filter_set" />
 						<ActionButton v-else icon="icon-filter" />
 					</Actions>
 
 					<template>
-						<div class="filter">
+						<div class="filter" v-if="filterVisible">
 							<h3>{{ t('deck', 'Filter by tag') }}</h3>
 							<div v-for="label in labelsSorted" :key="label.id" class="filter--item">
 								<input
@@ -223,6 +223,7 @@ export default {
 		return {
 			newStackTitle: '',
 			stack: '',
+			filterVisible: false,
 			showArchived: false,
 			isAddStackVisible: false,
 			filter: { tags: [], users: [], due: '', unassigned: false },
