@@ -152,10 +152,16 @@ class AttachmentService {
 		$count = $this->cache->get('card-' . $cardId);
 		if (!$count) {
 			$count = count($this->attachmentMapper->findAll($cardId));
+
+			foreach (array_keys($this->services) as $attachmentType) {
+				$service = $this->getService($attachmentType);
+				if ($service instanceof ICustomAttachmentService) {
+					$count  += $service->getAttachmentCount($cardId);
+				}
+			}
+
 			$this->cache->set('card-' . $cardId, $count);
 		}
-
-
 
 		return $count;
 	}
