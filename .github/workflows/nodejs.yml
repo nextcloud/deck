@@ -21,6 +21,8 @@ jobs:
       run: |
         npm ci
     - name: build
+      env:
+        RELATIVE_CI_KEY: nextcloud/deck
       run: |
         mkdir -p js
         npm run build --if-present -- --profile --json | tail -n +6 > js/webpack-stats.json
