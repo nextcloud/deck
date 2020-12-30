@@ -107,6 +107,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'isArchived',
+			'boards',
 		]),
 		...mapState({
 			showArchived: state => state.showArchived,
@@ -124,11 +125,6 @@ export default {
 				return false
 			}
 			return true
-		},
-		boards() {
-			return this.$store.getters.boards.filter(board => {
-				return board.id !== this.currentBoard.id
-			})
 		},
 		isCurrentUserAssigned() {
 			return this.card.assignedUsers.find((item) => item.type === 0 && item.participant.uid === getCurrentUser()?.uid)
