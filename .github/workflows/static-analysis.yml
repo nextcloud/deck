@@ -1,6 +1,11 @@
 name: Static analysis
 
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - stable*
 
 jobs:
   static-psalm-analysis:
