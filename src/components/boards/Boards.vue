@@ -29,7 +29,7 @@
 					<div class="board-list-bullet" />
 				</div>
 				<div class="board-list-title-cell">
-					{{ t('deck', 'Title') }}
+					{{ t('deck', 'Board name') }}
 				</div>
 				<div class="board-list-avatars-cell">
 					{{ t('deck', 'Members') }}
