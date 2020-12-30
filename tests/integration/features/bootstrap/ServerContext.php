@@ -19,6 +19,14 @@ class ServerContext implements Context {
 	public static function addFilesToSkeleton() {
 	}
 
+	/**
+	 * @Given /^acting as user "([^"]*)"$/
+	 */
+	public function actingAsUser($user) {
+		$this->loggingInUsingWebAs($user);
+		$this->asAn($user);
+	}
+
 	public function getCookieJar(): CookieJar {
 		return $this->cookieJar;
 	}

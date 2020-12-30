@@ -57,6 +57,26 @@ class BoardContext implements Context {
 		]);
 	}
 
+	/**
+	 * @When shares the board with group :group
+	 */
+	public function sharesTheBoardWithGroup($group, TableNode $permissions = null) {
+		$defaults = [
+			'permissionEdit' => '0',
+			'permissionShare' => '0',
+			'permissionManage' => '0'
+		];
+		$tableRows = isset($permissions) ? $permissions->getRowsHash() : [];
+		$result = array_merge($defaults, $tableRows);
+		$this->sendJSONrequest('POST', '/index.php/apps/deck/boards/' . $this->board['id'] . '/acl', [
+			'type' => 1,
+			'participant' => $group,
+			'permissionEdit' => $result['permissionEdit'] === '1',
+			'permissionShare' => $result['permissionShare'] === '1',
+			'permissionManage' => $result['permissionManage'] === '1',
+		]);
+	}
+
 
 	/**
 	 * @When /^fetching the board list$/
@@ -118,5 +138,17 @@ class BoardContext implements Context {
 			'manage' => 'PERMISSION_MANAGE',
 		];
 		return $this->board['permissions'][$mapping[$permission]];
+	}
+
+	/**
+	 * @When /^share the file "([^"]*)" with the card$/
+	 */
+	public function shareWithTheCard($file) {
+		$table = new TableNode([
+			['path', $file],
+			['shareType', 12],
+			['shareWith', (string)$this->card['id']],
+		]);
+		$this->serverContext->creatingShare($table);
 	}
 }
