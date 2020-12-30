@@ -58,7 +58,7 @@
 							type="checkbox"
 							class="checkbox">
 						<label for="toggle-modal">
-							{{ t('deck', 'Use modal card view') }}
+							{{ t('deck', 'Use bigger card view') }}
 						</label>
 					</div>
 
