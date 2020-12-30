@@ -161,7 +161,7 @@ export default {
 			return (attachment) => generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
 		},
 		internalLink() {
-			return (attachment) => generateUrl('/index.php/f/' + attachment.extendedData.fileid)
+			return (attachment) => generateUrl('/f/' + attachment.extendedData.fileid)
 		},
 		formattedFileSize() {
 			return (filesize) => formatFileSize(filesize)
