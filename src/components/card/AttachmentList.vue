@@ -69,7 +69,7 @@
 					</ActionButton>
 				</Actions>
 				<Actions v-if="removable" :force-menu="true">
-					<ActionLink v-if="attachment.extendedData.fileid" icon="icon-folder" :href="'/index.php/f/'+attachment.extendedData.fileid">
+					<ActionLink v-if="attachment.extendedData.fileid" icon="icon-folder" :href="internalLink(attachment)">
 						{{ t('deck', 'Show in files') }}
 					</ActionLink>
 					<ActionButton v-if="attachment.extendedData.fileid" icon="icon-delete">
@@ -159,6 +159,9 @@ export default {
 		},
 		attachmentUrl() {
 			return (attachment) => generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
+		},
+		internalLink() {
+			return (attachment) => generateUrl('/index.php/f/' + attachment.extendedData.fileid)
 		},
 		formattedFileSize() {
 			return (filesize) => formatFileSize(filesize)
