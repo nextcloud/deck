@@ -19,6 +19,13 @@ const config = {
 			'node_modules',
 		],
 	},
+	stats: {
+		context: path.resolve(__dirname, 'src'),
+		assets: true,
+		entrypoints: true,
+		chunks: true,
+		modules: true
+	}
 }
 
 module.exports = merge(webpackConfig, config)
