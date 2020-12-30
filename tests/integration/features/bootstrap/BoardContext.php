@@ -2,9 +2,6 @@
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
-use GuzzleHttp\Client;
-use Behat\Gherkin\Node\PyStringNode;
-use GuzzleHttp\Exception\ClientException;
 use PHPUnit\Framework\Assert;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
@@ -29,7 +26,6 @@ class BoardContext implements Context {
 		]);
 		$this->response->getBody()->seek(0);
 		$this->board = json_decode((string)$this->response->getBody(), true);
-
 	}
 
 	/**
@@ -42,16 +38,22 @@ class BoardContext implements Context {
 	}
 
 	/**
-     * @When shares the board with user :user
-     */
-    public function sharesTheBoardWithUser($user)
-    {
+	 * @When shares the board with user :user
+	 */
+	public function sharesTheBoardWithUser($user, TableNode $permissions = null) {
+		$defaults = [
+			'permissionEdit' => '0',
+			'permissionShare' => '0',
+			'permissionManage' => '0'
+		];
+		$tableRows = isset($permissions) ? $permissions->getRowsHash() : [];
+		$result = array_merge($defaults, $tableRows);
 		$this->sendJSONrequest('POST', '/index.php/apps/deck/boards/' . $this->board['id'] . '/acl', [
 			'type' => 0,
 			'participant' => $user,
-			'permissionEdit' => true,
-			'permissionShare' => true,
-			'permissionManage' => true,
+			'permissionEdit' => $result['permissionEdit'] === '1',
+			'permissionShare' => $result['permissionShare'] === '1',
+			'permissionManage' => $result['permissionManage'] === '1',
 		]);
 	}
 
@@ -95,31 +97,26 @@ class BoardContext implements Context {
 	}
 
 	/**
-	 * @Given /^the current user should have read permissions on the board$/
+	 * @Then /^the current user should have "(read|edit|share|manage)" permissions on the board$/
 	 */
-	public function theCurrentUserShouldHaveReadPermissionsOnTheBoard() {
-		Assert::assertTrue($this->board['permissions']['PERMISSION_READ']);
+	public function theCurrentUserShouldHavePermissionsOnTheBoard($permission) {
+		Assert::assertTrue($this->getPermissionsValue($permission));
 	}
 
 	/**
-	 * @Given /^the current user should have write permissions on the board$/
+	 * @Then /^the current user should not have "(read|edit|share|manage)" permissions on the board$/
 	 */
-	public function theCurrentUserShouldHaveWritePermissionsOnTheBoard() {
-		Assert::assertTrue($this->board['permissions']['PERMISSION_EDIT']);
+	public function theCurrentUserShouldNotHavePermissionsOnTheBoard($permission) {
+		Assert::assertFalse($this->getPermissionsValue($permission));
 	}
 
-	/**
-	 * @Given /^the current user should have share permissions on the board$/
-	 */
-	public function theCurrentUserShouldHaveSharePermissionsOnTheBoard() {
-		Assert::assertTrue($this->board['permissions']['PERMISSION_SHARE']);
+	private function getPermissionsValue($permission) {
+		$mapping = [
+			'read' => 'PERMISSION_READ',
+			'edit' => 'PERMISSION_EDIT',
+			'share' => 'PERMISSION_SHARE',
+			'manage' => 'PERMISSION_MANAGE',
+		];
+		return $this->board['permissions'][$mapping[$permission]];
 	}
-
-	/**
-	 * @Given /^the current user should have manage permissions on the board$/
-	 */
-	public function theCurrentUserShouldHaveManagePermissionsOnTheBoard() {
-		Assert::assertTrue($this->board['permissions']['PERMISSION_MANAGE']);
-	}
-
 }

@@ -1,18 +1,14 @@
 <?php
 
-use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Client;
-use Behat\Gherkin\Node\PyStringNode;
-use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Exception\ClientException;
 use PHPUnit\Framework\Assert;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 trait RequestTrait {
-
 	private $baseUrl;
 	private $adminUser;
 	private $regularUser;
@@ -30,8 +26,7 @@ trait RequestTrait {
 	private $serverContext;
 
 	/** @BeforeScenario */
-	public function gatherContexts(BeforeScenarioScope $scope)
-	{
+	public function gatherContexts(BeforeScenarioScope $scope) {
 		$environment = $scope->getEnvironment();
 
 		$this->serverContext = $environment->getContext('ServerContext');
@@ -106,7 +101,6 @@ trait RequestTrait {
 	}
 
 	private function sendJSONrequest($method, $url, $data = []) {
-
 		$client = new Client;
 		try {
 			$this->response = $client->request(
