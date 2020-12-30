@@ -1,5 +1,4 @@
-<?php
-/**
+/*
  * @copyright Copyright (c) 2020 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
@@ -21,36 +20,15 @@
  *
  */
 
-declare(strict_types=1);
+import { subscribe } from '@nextcloud/event-bus'
+import { generateUrl } from '@nextcloud/router'
 
-
-namespace OCA\Deck\Listeners;
-
-use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
-use OCP\EventDispatcher\Event;
-use OCP\EventDispatcher\IEventListener;
-use OCP\IRequest;
-use OCP\Util;
-
-class BeforeTemplateRenderedListener implements IEventListener {
-	private $request;
-
-	public function __construct(IRequest $request) {
-		$this->request = $request;
+subscribe('calendar:handle-todo-click', ({ calendarId, taskId }) => {
+	const deckAppPrefix = 'app-generated--deck--board-'
+	if (calendarId.startsWith(deckAppPrefix)) {
+		const board = calendarId.substr(deckAppPrefix.length)
+		const card = taskId.substr('card-'.length).replace('.ics', '')
+		console.debug('[deck] Clicked task matches deck calendar pattern')
+		window.location = generateUrl(`apps/deck/#/board/${board}/card/${card}`)
 	}
-
-	public function handle(Event $event): void {
-		if (!($event instanceof BeforeTemplateRenderedEvent)) {
-			return;
-		}
-
-		if (!$event->isLoggedIn()) {
-			return;
-		}
-		Util::addStyle('deck', 'deck');
-
-		if (strpos($this->request->getPathInfo(), '/apps/calendar') === 0) {
-			Util::addScript('deck', 'calendar');
-		}
-	}
-}
+})
