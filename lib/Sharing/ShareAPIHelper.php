@@ -26,7 +26,6 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Sharing;
 
-
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\NoPermissionException;
@@ -37,7 +36,6 @@ use OCP\IURLGenerator;
 use OCP\Share\IShare;
 
 class ShareAPIHelper {
-
 	private $urlGenerator;
 	private $timeFactory;
 	private $cardMapper;

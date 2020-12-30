@@ -26,7 +26,6 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Sharing;
 
-
 use OC\Files\Filesystem;
 use OCA\Deck\Service\ConfigService;
 use OCP\EventDispatcher\IEventDispatcher;

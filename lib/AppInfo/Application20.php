@@ -26,7 +26,6 @@ namespace OCA\Deck\AppInfo;
 use Closure;
 use Exception;
 use OC\EventDispatcher\SymfonyAdapter;
-use OC\Share20\ProviderFactory;
 use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Capabilities;
 use OCA\Deck\Collaboration\Resources\ResourceProvider;
@@ -66,7 +65,6 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Notification\IManager as NotificationManager;
 use OCP\Share\IManager;
-use OCP\Share\IProviderFactory;
 use OCP\Util;
 use Psr\Container\ContainerInterface;
 

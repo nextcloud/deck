@@ -324,7 +324,7 @@ class BoardService {
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
 		]);
-		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $new_board, ActivityManager::SUBJECT_BOARD_CREATE);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $new_board, ActivityManager::SUBJECT_BOARD_CREATE, [], $userId);
 		$this->changeHelper->boardChanged($new_board->getId());
 
 		$this->eventDispatcher->dispatch(

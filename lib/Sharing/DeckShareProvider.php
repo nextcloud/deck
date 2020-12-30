@@ -26,7 +26,6 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Sharing;
 
-
 use OC\Files\Cache\Cache;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
@@ -60,7 +59,6 @@ interface IShareProviderBackend {
 }
 
 class DeckShareProvider implements \OCP\Share\IShareProvider {
-
 	public const DECK_FOLDER = '/Deck';
 	public const DECK_FOLDER_PLACEHOLDER = '/{DECK_PLACEHOLDER}';
 
@@ -117,7 +115,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		try {
 			$board = $this->boardMapper->find($boardId);
 			$valid &= !$board->getArchived();
-		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
+		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			$valid = false;
 		}
 
@@ -901,7 +899,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 		$types = [IShare::TYPE_DECK];
 		if ($currentAccess) {
-			 $types[] = self::SHARE_TYPE_DECK_USER;
+			$types[] = self::SHARE_TYPE_DECK_USER;
 		}
 
 		$qb->select('id', 'parent', 'share_type', 'share_with', 'file_source', 'file_target', 'permissions')

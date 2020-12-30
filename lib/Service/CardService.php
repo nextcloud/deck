@@ -133,7 +133,7 @@ class CardService {
 		return $this->cardMapper->searchRaw($boardIds, $term, $limit, $offset);
 	}
 
-		/**
+	/**
 	 * @param $cardId
 	 * @return \OCA\Deck\Db\RelationalEntity
 	 * @throws \OCA\Deck\NoPermissionException

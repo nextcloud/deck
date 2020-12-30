@@ -34,16 +34,11 @@ use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
-use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\Response;
-use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\ICache;
 use OCP\ICacheFactory;
-use OCP\IDBConnection;
 use OCP\IL10N;
-use OCP\IPreview;
-use OCP\Share\IShare;
 
 class AttachmentService {
 	private $attachmentMapper;
@@ -63,7 +58,7 @@ class AttachmentService {
 	/** @var ChangeHelper */
 	private $changeHelper;
 
-	public function __construct(AttachmentMapper $attachmentMapper, CardMapper $cardMapper, ChangeHelper $changeHelper, PermissionService $permissionService, Application $application, ICacheFactory $cacheFactory, $userId, IL10N $l10n, ActivityManager $activityManager, DeckShareProvider $shareProvider) {
+	public function __construct(AttachmentMapper $attachmentMapper, CardMapper $cardMapper, ChangeHelper $changeHelper, PermissionService $permissionService, Application $application, ICacheFactory $cacheFactory, $userId, IL10N $l10n, ActivityManager $activityManager) {
 		$this->attachmentMapper = $attachmentMapper;
 		$this->cardMapper = $cardMapper;
 		$this->permissionService = $permissionService;
@@ -156,7 +151,7 @@ class AttachmentService {
 			foreach (array_keys($this->services) as $attachmentType) {
 				$service = $this->getService($attachmentType);
 				if ($service instanceof ICustomAttachmentService) {
-					$count  += $service->getAttachmentCount($cardId);
+					$count += $service->getAttachmentCount($cardId);
 				}
 			}
 
@@ -212,7 +207,6 @@ class AttachmentService {
 			}
 
 			$service->extendData($attachment);
-
 		} catch (InvalidAttachmentType $e) {
 			// just store the data
 		}
@@ -259,7 +253,6 @@ class AttachmentService {
 		} catch (\Exception $e) {
 			throw new NotFoundException();
 		}
-
 	}
 
 	/**

@@ -24,25 +24,17 @@
 namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\Attachment;
-use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\StatusException;
 use OCA\Deck\Exceptions\ConflictException;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\FileDisplayResponse;
-use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\Http\StreamResponse;
 use OCP\Constants;
-use OCP\Files\IAppData;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
-use OCP\Files\NotPermittedException;
-use OCP\Files\SimpleFS\ISimpleFile;
-use OCP\Files\SimpleFS\ISimpleFolder;
-use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IL10N;
-use OCP\ILogger;
 use OCP\IPreview;
 use OCP\IRequest;
 use OCP\Share;
@@ -50,7 +42,6 @@ use OCP\Share\IManager;
 use OCP\Share\IShare;
 
 class FilesAppService implements IAttachmentService, ICustomAttachmentService {
-
 	private $request;
 	private $rootFolder;
 	private $shareProvider;
@@ -100,7 +91,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		}, $shares);
 	}
 
-	function getAttachmentCount(int $cardId): int {
+	public function getAttachmentCount(int $cardId): int {
 		/** @var IDBConnection $qb */
 		$db = \OC::$server->getDatabaseConnection();
 		$qb = $db->getQueryBuilder();
@@ -247,7 +238,6 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 				return;
 			}
 		}
-
 	}
 
 	public function allowUndo() {

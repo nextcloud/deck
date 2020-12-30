@@ -26,7 +26,6 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Service;
 
-
 /**
  * Interface to implement in case attachments are handled by a different backend than
  * then oc_deck_attachments table, e.g. for file sharing. When this interface is used
@@ -34,9 +33,7 @@ namespace OCA\Deck\Service;
  * table and it is up to the implementation to track attachment to card relation.
  */
 interface ICustomAttachmentService {
-
 	public function listAttachments(int $cardId): array;
 
 	public function getAttachmentCount(int $cardId): int;
-
 }
