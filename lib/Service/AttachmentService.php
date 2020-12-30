@@ -272,8 +272,19 @@ class AttachmentService {
 	 * @throws NoPermissionException
 	 */
 	public function update($attachmentId, $data) {
-		if (is_numeric($attachmentId) === false) {
-			throw new BadRequestException('attachment id must be a number');
+		if (!is_numeric($attachmentId)) {
+			[$type, $attachmentId] = explode(':', $attachmentId);
+
+			try {
+				$attachment = new Attachment();
+				$attachment->setId($attachmentId);
+				$attachment->setType($type);
+				$attachment->setData($data);
+				$service = $this->getService($type);
+				return $service->update($attachment);
+			} catch (\Exception $e) {
+				throw new NotFoundException();
+			}
 		}
 
 		if ($data === false || $data === null) {
@@ -321,8 +332,18 @@ class AttachmentService {
 	 * @throws BadRequestException
 	 */
 	public function delete($attachmentId) {
-		if (is_numeric($attachmentId) === false) {
-			throw new BadRequestException('attachment id must be a number');
+		if (!is_numeric($attachmentId)) {
+			[$type, $attachmentId] = explode(':', $attachmentId);
+
+			try {
+				$attachment = new Attachment();
+				$attachment->setId($attachmentId);
+				$attachment->setType($type);
+				$service = $this->getService($type);
+				return $service->delete($attachment);
+			} catch (\Exception $e) {
+				throw new NotFoundException();
+			}
 		}
 
 		try {
