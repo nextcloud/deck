@@ -37,12 +37,9 @@ class Listener {
 
 	/** @var ConfigService */
 	private $configService;
-	/** @var string|null */
-	private $userId;
 
-	public function __construct(ConfigService $configService, $userId) {
+	public function __construct(ConfigService $configService) {
 		$this->configService = $configService;
-		$this->userId = $userId;
 	}
 
 	public function register(IEventDispatcher $dispatcher): void {

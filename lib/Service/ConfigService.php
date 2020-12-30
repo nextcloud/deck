@@ -32,6 +32,7 @@ use OCA\Deck\NoPermissionException;
 use OCP\IConfig;
 use OCP\IGroup;
 use OCP\IGroupManager;
+use OCP\IUserSession;
 
 class ConfigService {
 	public const SETTING_BOARD_NOTIFICATION_DUE_OFF = 'off';
@@ -46,9 +47,10 @@ class ConfigService {
 	public function __construct(
 		IConfig $config,
 		IGroupManager $groupManager,
-		$userId
+		IUserSession $userSession
 	) {
-		$this->userId = $userId;
+		// Session is required here in order to make the tests properly inject the userId later on
+		$this->userId = $userSession->getUser() ? $userSession->getUser()->getUID() : null;
 		$this->groupManager = $groupManager;
 		$this->config = $config;
 	}
