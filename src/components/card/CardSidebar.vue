@@ -46,13 +46,6 @@
 			<CardSidebarTabDetails :card="currentCard" />
 		</AppSidebarTab>
 
-		<AppSidebarTab id="attachments"
-			:order="1"
-			:name="t('deck', 'Attachments')"
-			icon="icon-attach">
-			<CardSidebarTabAttachments :card="currentCard" />
-		</AppSidebarTab>
-
 		<AppSidebarTab
 			id="comments"
 			:order="2"
@@ -75,7 +68,6 @@
 import { ActionButton, AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 import CardSidebarTabDetails from './CardSidebarTabDetails'
-import CardSidebarTabAttachments from './CardSidebarTabAttachments'
 import CardSidebarTabComments from './CardSidebarTabComments'
 import CardSidebarTabActivity from './CardSidebarTabActivity'
 import relativeDate from '../../mixins/relativeDate'
@@ -90,7 +82,6 @@ export default {
 		AppSidebar,
 		AppSidebarTab,
 		ActionButton,
-		CardSidebarTabAttachments,
 		CardSidebarTabComments,
 		CardSidebarTabActivity,
 		CardSidebarTabDetails,

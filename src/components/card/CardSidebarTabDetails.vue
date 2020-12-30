@@ -117,6 +117,12 @@
 				type="deck-card" />
 		</div>
 
+		<AttachmentList
+			:card-id="card.id"
+			:removable="true"
+			@deleteAttachment="deleteAttachment"
+			@restoreAttachment="restoreAttachment" />
+
 		<Description :key="card.id" :card="card" />
 	</div>
 </template>
@@ -125,7 +131,7 @@
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
 import { Avatar, Actions, ActionButton, Multiselect, DatetimePicker } from '@nextcloud/vue'
-
+import AttachmentList from './AttachmentList'
 import { CollectionList } from 'nextcloud-vue-collections'
 import Color from '../../mixins/color'
 import {
@@ -146,6 +152,7 @@ export default {
 		ActionButton,
 		Avatar,
 		CollectionList,
+		AttachmentList,
 	},
 	mixins: [Color],
 	props: {
@@ -234,6 +241,12 @@ export default {
 		this.initialize()
 	},
 	methods: {
+		deleteAttachment(attachment) {
+			this.$store.dispatch('deleteAttachment', attachment)
+		},
+		restoreAttachment(attachment) {
+			this.$store.dispatch('restoreAttachment', attachment)
+		},
 		async initialize() {
 			if (!this.card) {
 				return
