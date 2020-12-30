@@ -17,7 +17,7 @@
 	"license": "agpl",
 	"private": true,
 	"scripts": {
-		"build": "NODE_ENV=production webpack --progress --hide-modules --config webpack.js",
+		"build": "NODE_ENV=production webpack --progress --config webpack.js",
 		"dev": "NODE_ENV=development webpack --progress --config webpack.js",
 		"watch": "NODE_ENV=development webpack --progress --watch --config webpack.js",
 		"lint": "eslint --ext .js,.vue src",
@@ -75,6 +75,7 @@
 		"@nextcloud/eslint-config": "^2.2.0",
 		"@nextcloud/eslint-plugin": "^1.5.0",
 		"@nextcloud/webpack-vue-config": "^1.4.1",
+		"@relative-ci/agent": "^1.4.0",
 		"@vue/test-utils": "^1.1.2",
 		"acorn": "^8.0.4",
 		"babel-eslint": "^10.1.0",

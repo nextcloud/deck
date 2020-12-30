@@ -22,5 +22,8 @@ jobs:
         npm ci
     - name: build
       run: |
-        npm run build --if-present
+        mkdir -p js
+        npm run build --if-present -- --profile --json | tail -n +6 > js/webpack-stats.json
+        npx relative-ci-agent
+
 
