@@ -1,4 +1,4 @@
-name: PHP AppCode Check
+name: Nextcloud app code check
 
 on:
   pull_request:

@@ -1,4 +1,4 @@
-name: PHPUnit
+name: Integration tests
 
 on:
   pull_request:
@@ -10,7 +10,6 @@ on:
 env:
   APP_NAME: deck
 
-
 jobs:
   integration:
     runs-on: ubuntu-latest
@@ -18,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['7.3', '7.4']
+        php-versions: ['7.4']
         databases: ['sqlite', 'mysql', 'pgsql']
         server-versions: ['master']
 
@@ -66,7 +65,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           tools: phpunit
-          extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, mysql, pdo_mysql, pgsql, pdo_pgsql
+          extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, mysql, pdo_mysql, pgsql, pdo_pgsql,
           coverage: none
 
       - name: Set up PHPUnit
@@ -85,10 +84,6 @@ jobs:
           ./occ app:enable --force ${{ env.APP_NAME }}
           php -S localhost:8080 &
 
-      - name: PHPUnit
-        working-directory: apps/${{ env.APP_NAME }}
-        run: ./vendor/phpunit/phpunit/phpunit -c tests/phpunit.xml
-
-      - name: PHPUnit integration
-        working-directory: apps/${{ env.APP_NAME }}
-        run: ./vendor/phpunit/phpunit/phpunit -c tests/phpunit.integration.xml
+      - name: Run behat
+        working-directory: apps/${{ env.APP_NAME }}/tests/integration
+        run: ./run.sh

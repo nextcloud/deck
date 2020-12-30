@@ -1,4 +1,4 @@
-name: Build app package
+name: Package build
 
 on:
   pull_request:

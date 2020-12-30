@@ -1,4 +1,4 @@
-name: Nightly build
+name: Package nightly
 
 on:
   push:
