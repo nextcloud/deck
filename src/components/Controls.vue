@@ -65,7 +65,7 @@
 					</Actions>
 
 					<template>
-						<div class="filter" v-if="filterVisible">
+						<div v-if="filterVisible" class="filter">
 							<h3>{{ t('deck', 'Filter by tag') }}</h3>
 							<div v-for="label in labelsSorted" :key="label.id" class="filter--item">
 								<input
