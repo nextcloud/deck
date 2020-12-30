@@ -80,11 +80,4 @@
             <plugin>OCA\Deck\DAV\CalendarPlugin</plugin>
         </calendar-plugins>
     </sabre>
-
-    <collaboration>
-        <plugins>
-            <plugin type="collaborator-search" share-type="SHARE_TYPE_DECK">OCA\Deck\Sharing\DeckPlugin</plugin>
-        </plugins>
-    </collaboration>
-
 </info>
