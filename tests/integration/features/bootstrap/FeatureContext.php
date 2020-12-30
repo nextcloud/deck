@@ -28,23 +28,7 @@ class FeatureContext implements Context {
 	 * @When Sending a :method to :url with JSON
 	 */
 	public function sendingAToWithJSON($method, $url, \Behat\Gherkin\Node\PyStringNode $data) {
-		$baseUrl = substr($this->baseUrl, 0, -5);
-
-		$client = new Client;
-		$request = $client->createRequest(
-			$method,
-			$baseUrl . $url,
-			[
-				'cookies' => $this->cookieJar,
-				'json' => json_decode($data)
-			]
-		);
-		$request->addHeader('requesttoken', $this->requestToken);
-		try {
-			$this->response = $client->send($request);
-		} catch (ClientException $e) {
-			$this->response = $e->getResponse();
-		}
+		$this->sendJSONrequest($method, $url, json_decode($data));
 	}
 
 
@@ -149,17 +133,18 @@ class FeatureContext implements Context {
 		$baseUrl = substr($this->baseUrl, 0, -5);
 
 		$client = new Client;
-		$request = $client->createRequest(
-			$method,
-			$baseUrl . $url,
-			[
-				'cookies' => $this->cookieJar,
-				'json' => $data
-			]
-		);
-		$request->addHeader('requesttoken', $this->requestToken);
 		try {
-			$this->response = $client->send($request);
+			$this->response = $client->request(
+				$method,
+				$baseUrl . $url,
+				[
+					'cookies' => $this->cookieJar,
+					'json' => $data,
+					'headers' => [
+						'requesttoken' => $this->requestToken
+					]
+				]
+			);
 		} catch (ClientException $e) {
 			$this->response = $e->getResponse();
 		}
