@@ -252,6 +252,7 @@ OC.L10N.register(
     "Link to a board" : "Povezava do zbirke",
     "Link to a card" : "Povezava do naloge",
     "Something went wrong" : "Prišlo je do napake ...",
+    "Failed to upload {name}" : "Pošiljanje {name} je spodletelo",
     "Maximum file size of {size} exceeded" : "Omejitev velikosti datoteke {size} je prekoračena."
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

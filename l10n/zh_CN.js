@@ -230,6 +230,7 @@ OC.L10N.register(
     "Link to a board" : "链接到一个面板",
     "Link to a card" : "链接到一张卡片",
     "Something went wrong" : "有地方出错了",
+    "Failed to upload {name}" : "未能上传 {name}",
     "Maximum file size of {size} exceeded" : "文件大小 {size} 超出最大限制"
 },
 "nplurals=1; plural=0;");

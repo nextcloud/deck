@@ -185,7 +185,7 @@ OC.L10N.register(
     "Assign to users" : "הקצאה למשתמשים",
     "Assign to users/groups/circles" : "הקצאה למשתמשים/קבוצות/מעגלים",
     "Assign a user to this card…" : "הקצאת משתמש לכרטיס זה…",
-    "Due date" : "מועד תפוגה",
+    "Due date" : "מועד יעד",
     "Set a due date" : "הגדרת תאריך יעד",
     "Remove due date" : "הסרת מועד התפוגה",
     "Select Date" : "בחירת תאריך",
@@ -195,7 +195,7 @@ OC.L10N.register(
     "In reply to" : "בתגובה אל",
     "Reply" : "תגובה",
     "Update" : "עדכון",
-    "Description" : "תיאוג",
+    "Description" : "תיאור",
     "(Unsaved)" : "(לא נשמר)",
     "(Saving…)" : "(מתבצעת שמירה…)",
     "Formatting help" : "עזרה בסידור בתבנית",
@@ -252,6 +252,7 @@ OC.L10N.register(
     "Link to a board" : "קישור ללוח",
     "Link to a card" : "קישור לכרטיס",
     "Something went wrong" : "משהו השתבש",
+    "Failed to upload {name}" : "העלאת {name} נכשלה",
     "Maximum file size of {size} exceeded" : "גודל הקבצים המרבי {size} הושג"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

@@ -237,7 +237,7 @@ OC.L10N.register(
     "No notifications" : "Geen meldingen",
     "Delete board" : "Verwijder bord",
     "Board {0} deleted" : "Bord {0} verwijderd",
-    "Only assigned cards" : "Enkel toegewezen kaarten",
+    "Only assigned cards" : "Uitsluitend toegewezen kaarten",
     "No reminder" : "Geen herinnering",
     "An error occurred" : "Er is een fout opgetreden",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Weet je zeker dat je bord {title} met wilt verwijderen? Dit verwijderd alle informatie van dit bord.",
@@ -252,6 +252,7 @@ OC.L10N.register(
     "Link to a board" : "Verbind met een bord",
     "Link to a card" : "Koppel met een kaart",
     "Something went wrong" : "Er ging iets verkeerd",
+    "Failed to upload {name}" : "Kon {name} niet uploaden",
     "Maximum file size of {size} exceeded" : "Maximale bestandsomvang van {size} overschreden"
 },
 "nplurals=2; plural=(n != 1);");

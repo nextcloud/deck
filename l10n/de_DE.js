@@ -252,6 +252,7 @@ OC.L10N.register(
     "Link to a board" : "Mit einem Board verknüpfen",
     "Link to a card" : "Mit einer Karte verknüpfen",
     "Something went wrong" : "Etwas ist schiefgelaufen",
+    "Failed to upload {name}" : "Fehler beim Hochladen von {name}",
     "Maximum file size of {size} exceeded" : "Maximale Dateigröße von {size} überschritten"
 },
 "nplurals=2; plural=(n != 1);");

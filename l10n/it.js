@@ -252,6 +252,7 @@ OC.L10N.register(
     "Link to a board" : "Collega a una lavagna",
     "Link to a card" : " Collega a una scheda",
     "Something went wrong" : "Qualcosa non ha funzionato",
+    "Failed to upload {name}" : "Caricamenti di {name} non riuscito",
     "Maximum file size of {size} exceeded" : "Dimensione massima dei file di {size} superata"
 },
 "nplurals=2; plural=(n != 1);");
