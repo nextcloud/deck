@@ -94,7 +94,6 @@ OC.L10N.register(
     "Delete" : "Forigi",
     "Add card" : "Aldoni karton",
     "Edit" : "Redakti",
-    "Title" : "Titolo",
     "Members" : "Membroj",
     "Upload attachment" : "Alŝuti dosieran aldonaĵon",
     "Attachments" : "Dosieraj aldonaĵoj",

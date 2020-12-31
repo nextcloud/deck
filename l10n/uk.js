@@ -92,7 +92,6 @@ OC.L10N.register(
     "Edit" : "Редагувати",
     "Add a new tag" : "Додати нову позначку",
     "title and color value must be provided" : "потрібно зазначити назву та колір",
-    "Title" : "Назва",
     "Members" : "Учасники",
     "Upload attachment" : "Завантажити вкладення",
     "Add this attachment" : "Долучити вкладення",

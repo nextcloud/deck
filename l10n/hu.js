@@ -132,7 +132,6 @@ OC.L10N.register(
     "Edit" : "Szerkesztés",
     "Add a new tag" : "Új címke hozzáadása",
     "title and color value must be provided" : "a cím és szín értékét meg kell adni",
-    "Title" : "Cím",
     "Members" : "Tagok",
     "Upload attachment" : "Melléklet feltöltése",
     "Add this attachment" : "E melléklet hozzáadása",

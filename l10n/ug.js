@@ -12,7 +12,6 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "ئۆچۈر",
     "Edit" : "تەھرىر",
-    "Title" : "ماۋزۇ",
     "Modified" : "ئۆزگەرتكەن",
     "Save" : "ساقلا",
     "Reply" : "جاۋاب قايتۇر",

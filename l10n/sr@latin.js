@@ -15,7 +15,6 @@ OC.L10N.register(
     "Delete" : "Obriši",
     "Add card" : "Dodaj karticu",
     "Edit" : "Uredi",
-    "Title" : "Naslov",
     "Attachments" : "Prilozi",
     "Due date" : "Rok",
     "Save" : "Sačuvaj",

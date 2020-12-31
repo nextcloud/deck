@@ -11,7 +11,6 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "លុប",
     "Edit" : "កែប្រែ",
-    "Title" : "ចំណងជើង",
     "Modified" : "បាន​កែ​ប្រែ",
     "Save" : "រក្សាទុក",
     "Reply" : "ឆ្លើយតប",

@@ -25,7 +25,6 @@ OC.L10N.register(
     "Can share" : "Може да споделя",
     "Delete" : "Изтриване",
     "Edit" : "Редакция",
-    "Title" : "Име",
     "Members" : "Членове",
     "Upload attachment" : "Качване",
     "Attachments" : "Прикачени файлове",

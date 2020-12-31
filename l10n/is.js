@@ -121,7 +121,6 @@ OC.L10N.register(
     "Add a new card" : "Bæta við nýju spjaldi",
     "Edit" : "Breyta",
     "title and color value must be provided" : "titill og litgildi verða að vera til staðar",
-    "Title" : "Titill",
     "Members" : "Meðlimir",
     "Upload attachment" : "Senda inn viðhengi",
     "Attachments" : "Viðhengi",

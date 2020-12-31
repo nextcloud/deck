@@ -30,7 +30,6 @@ OC.L10N.register(
     "Delete" : "წაშლა",
     "Add card" : "ბარათის დამატება",
     "Edit" : "შეცვლა",
-    "Title" : "სათაური",
     "Members" : "წევრები",
     "Upload attachment" : "დანართის ატვირთვა",
     "Comments" : "კომენტარები",

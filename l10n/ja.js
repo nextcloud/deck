@@ -157,7 +157,6 @@ OC.L10N.register(
     "Edit" : "編集",
     "Add a new tag" : "新しいタグを追加",
     "title and color value must be provided" : "タイトルと色の値を指定する必要があります",
-    "Title" : "タイトル",
     "Members" : "メンバー",
     "Upload attachment" : "添付ファイルをアップロードする",
     "Add this attachment" : "この添付ファイルを追加",

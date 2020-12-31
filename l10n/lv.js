@@ -23,7 +23,6 @@ OC.L10N.register(
     "Can share" : "Var koplietot",
     "Delete" : "Dzēst",
     "Edit" : "Rediģēt",
-    "Title" : "Amats",
     "Members" : "Biedri",
     "Attachments" : "Pielikumi",
     "Comments" : "Komentāri",

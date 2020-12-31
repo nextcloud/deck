@@ -39,7 +39,6 @@ OC.L10N.register(
     "Delete list" : "刪除清單",
     "Add card" : "增加卡片",
     "Edit" : "編輯",
-    "Title" : "標題",
     "Members" : "成員",
     "Upload attachment" : "上傳附件",
     "Attachments" : "附件",

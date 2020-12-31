@@ -11,7 +11,6 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Padam",
     "Edit" : "Sunting",
-    "Title" : "Judul",
     "Modified" : "Dimodifikasi",
     "Save" : "Simpan",
     "Update" : "Kemaskini",

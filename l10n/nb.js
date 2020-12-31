@@ -101,7 +101,6 @@ OC.L10N.register(
     "Delete list" : "Slett listen",
     "Add card" : "Legg til kort",
     "Edit" : "Rediger",
-    "Title" : "Tittel",
     "Members" : "Medlemmer",
     "Upload attachment" : "Last opp vedlegg",
     "Attachments" : "Vedlegg",

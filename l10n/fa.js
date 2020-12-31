@@ -91,7 +91,6 @@ OC.L10N.register(
     "Edit" : "ویرایش",
     "Add a new tag" : "افزودن یک برچسب جدید",
     "title and color value must be provided" : "نام و رنگ باید مشخص شود",
-    "Title" : "عنوان",
     "Members" : "اعضا",
     "Upload attachment" : "بارگذاری پیوست",
     "Add this attachment" : "افزودن این پیوست",

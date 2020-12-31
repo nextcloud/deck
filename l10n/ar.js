@@ -92,7 +92,6 @@ OC.L10N.register(
     "Edit" : "تعديل",
     "Add a new tag" : "إضافة وسم جديد",
     "title and color value must be provided" : "العنوان و قيمة اللون يجب تقديمها ",
-    "Title" : "العنوان",
     "Members" : "الاعضاء",
     "Upload attachment" : "رفع المرفقات",
     "Add this attachment" : "إضافة هذا المرفق",

@@ -67,7 +67,6 @@ OC.L10N.register(
     "Delete list" : "목록 지우기",
     "Add card" : "카드 추가",
     "Edit" : "편집",
-    "Title" : "직위",
     "Members" : "구성원",
     "Upload attachment" : "첨부 파일 업로드",
     "Attachments" : "첨부파일",

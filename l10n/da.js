@@ -34,7 +34,6 @@ OC.L10N.register(
     "Delete list" : "Slet liste",
     "Add card" : "Tilføj kort",
     "Edit" : "Redigér",
-    "Title" : "Titel",
     "Members" : "Medlemmer",
     "Upload attachment" : "Upload vedhæftning",
     "Attachments" : "Vedhæftede filer",

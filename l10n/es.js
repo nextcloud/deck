@@ -167,7 +167,7 @@ OC.L10N.register(
     "Edit" : "Editar",
     "Add a new tag" : "Añade una nueva etiqueta",
     "title and color value must be provided" : "Se debe indicar un valor para título y color ",
-    "Title" : "Título",
+    "Board name" : "Nombre del tablero",
     "Members" : "Miembros",
     "Upload attachment" : "Subir adjunto",
     "Add this attachment" : "Añadir este adjunto",
@@ -219,11 +219,9 @@ OC.L10N.register(
     "All boards" : "Todos los tableros",
     "Archived boards" : "Tableros archivados",
     "Shared with you" : "Compartido contigo",
-    "Use modal card view" : "Usar vista de tarjeta modal",
     "Show boards in calendar/tasks" : "Mostrar tableros en calendario/tareas",
     "Limit deck usage of groups" : "Limitar el uso de Deck a grupos",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitar Deck impedirá que usuarios que no formen parte de esos grupos creen sus propios tableros. Los usuarios todavía podrán trabajar en tableros que hayan sido compartidos con ellos.",
-    "Board name" : "Nombre del tablero",
     "Board details" : "Detalles del tablero",
     "Edit board" : "Editar tablero",
     "Clone board" : "Clonar tablero",
@@ -252,6 +250,7 @@ OC.L10N.register(
     "Link to a board" : "Enlace a un tablero",
     "Link to a card" : "Enlace a una tarjeta",
     "Something went wrong" : "Algo ha ido mal",
+    "Failed to upload {name}" : "Error al subir {name}",
     "Maximum file size of {size} exceeded" : "Tamaño máximo de archivo de {size} excedido"
 },
 "nplurals=2; plural=(n != 1);");

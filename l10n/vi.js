@@ -57,7 +57,6 @@ OC.L10N.register(
     "Add card" : "Thêm tác vụ",
     "Add a new card" : "Thêm một tác vụ mới",
     "Edit" : "Chỉnh sửa",
-    "Title" : "Tên",
     "Members" : "Thành viên",
     "Upload attachment" : "Tải lên một đính kèm",
     "Attachments" : "Đính kèm",

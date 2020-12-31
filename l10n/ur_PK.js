@@ -8,7 +8,6 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "حذف کریں",
     "Edit" : "تدوین کریں",
-    "Title" : "عنوان",
     "Save" : "حفظ",
     "Reply" : "جواب",
     "Description" : "تصریح",

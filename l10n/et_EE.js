@@ -17,7 +17,6 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Kustuta",
     "Edit" : "Redigeeri",
-    "Title" : "Pealkiri",
     "Comments" : "Kommentaarid",
     "Modified" : "Muudetud",
     "Created" : "Loodud",

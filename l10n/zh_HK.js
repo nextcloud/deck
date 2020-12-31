@@ -9,7 +9,6 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "刪除",
     "Edit" : "編輯",
-    "Title" : "標題",
     "Save" : "儲存",
     "Reply" : "回覆",
     "Update" : "更新",

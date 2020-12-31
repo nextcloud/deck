@@ -14,7 +14,6 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Läschen",
     "Edit" : "Änneren",
-    "Title" : "Titel",
     "Comments" : "Kommentarer",
     "Modified" : "Geännert",
     "Save" : "Späicheren",

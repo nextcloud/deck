@@ -29,7 +29,6 @@ OC.L10N.register(
     "Delete" : "Delete",
     "Add card" : "Shto kartë",
     "Edit" : "Edito",
-    "Title" : "Titulli",
     "Members" : "Anëtar",
     "Upload attachment" : "Ngarko bashkëngjitje",
     "Attachments" : "Bashkangjitjet",

@@ -15,7 +15,6 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "ลบ",
     "Edit" : "แก้ไข",
-    "Title" : "ชื่อเรื่อง",
     "Comments" : "ความคิดเห็น",
     "Modified" : "แก้ไขเมื่อ",
     "Due date" : "วันที่ครบกำหนด",

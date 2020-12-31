@@ -19,7 +19,6 @@ OC.L10N.register(
     "Can share" : "Kan deel",
     "Delete" : "Skrap",
     "Edit" : "Wysig",
-    "Title" : "Titel",
     "Comments" : "Kommentare",
     "Modified" : "Gewysig",
     "Created" : "Geskep",

@@ -161,7 +161,6 @@ OC.L10N.register(
     "Edit" : "Επεξεργασία",
     "Add a new tag" : "Προσθήκη νέας ετικέτας",
     "title and color value must be provided" : "ο τίτλος και η τιμή χρώματος πρέπει να παρέχονται",
-    "Title" : "Τίτλος",
     "Members" : "Μέλη",
     "Upload attachment" : "Μεταφόρτωση συνημμένων",
     "Add this attachment" : "Προσθήκη αυτού του συνημμένου",

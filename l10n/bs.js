@@ -12,7 +12,6 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Obriši",
     "Edit" : "Izmjeni",
-    "Title" : "Naslov",
     "Members" : "Članovi",
     "Comments" : "Komentari",
     "Modified" : "Izmijenjeno",

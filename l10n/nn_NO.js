@@ -14,7 +14,6 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Ta bort",
     "Edit" : "Endra",
-    "Title" : "Tittel",
     "Comments" : "Kommentarar",
     "Modified" : "Endra",
     "Created" : "Lagd",

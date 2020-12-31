@@ -25,7 +25,6 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Desaniciar",
     "Edit" : "Editar",
-    "Title" : "Títulu",
     "Members" : "Miembros",
     "Attachments" : "Axuntos",
     "Comments" : "Comentarios",

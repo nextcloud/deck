@@ -13,7 +13,6 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "ඉවත් කරන්න",
     "Edit" : "සකසන්න",
-    "Title" : "මාතෘකාව",
     "Comments" : "අදහස්",
     "Modified" : "වෙනස් කළ",
     "Save" : "සුරකින්න",
