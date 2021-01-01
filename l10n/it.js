@@ -219,6 +219,7 @@ OC.L10N.register(
     "All boards" : "Tutte le lavagne",
     "Archived boards" : "Lavagne archiviate",
     "Shared with you" : "Condiviso con te",
+    "Use bigger card view" : "Usa la vista con schede più grandi",
     "Show boards in calendar/tasks" : "Mostra le lavagne in calendario/attività",
     "Limit deck usage of groups" : "Limita utilizzo di Deck dei gruppi",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "La limitazione di Deck impedirà agli utenti che non fanno parte di tali gruppi di creare le proprie lavagne. Gli utenti saranno ancora in grado di lavorare sulle lavagne che sono state condivise con loro,",

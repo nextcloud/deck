@@ -219,6 +219,7 @@ OC.L10N.register(
     "All boards" : "Tüm panolar",
     "Archived boards" : "Arşivlenmiş panolar",
     "Shared with you" : "Sizinle paylaşıldı",
+    "Use bigger card view" : "Daha büyük kart görünümü kullanılsın",
     "Show boards in calendar/tasks" : "Takvimler ve görevlerde panolar görüntülensin",
     "Limit deck usage of groups" : "Tahtayı şu gruplar kullanabilsin",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Tahta kullanımı gruplar ile sınırlandığında belirtilen grupların üyesi olmayan kişiler kendi tahtalarını oluşturamaz. Bu kullanıcılar ancak kendileri ile paylaşılan tahtalar üzerinde çalışabilir.",
@@ -250,6 +251,7 @@ OC.L10N.register(
     "Link to a board" : "Bir pano ile ilişkilendir",
     "Link to a card" : "Bir kart ile ilişkilendir",
     "Something went wrong" : "Bir şeyler ters gitti",
+    "Failed to upload {name}" : "{name} yüklenemedi",
     "Maximum file size of {size} exceeded" : "{size} olan en büyük dosya boyutu sınırı aşıldı"
 },
 "nplurals=2; plural=(n > 1);");

@@ -197,6 +197,7 @@ OC.L10N.register(
     "All boards" : "全部面板",
     "Archived boards" : "已归档面板",
     "Shared with you" : "收到的共享",
+    "Use bigger card view" : "使用较大的卡片视图",
     "Show boards in calendar/tasks" : "在日历/任务中显示看板",
     "Limit deck usage of groups" : "限制群组的看板使用",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "非面板创建用户组的用户将不能使用受限看板。但用户仍然能够使用已共享给他们的面板工作。",
