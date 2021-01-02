@@ -217,6 +217,7 @@
     "All boards" : "Tots els taulers",
     "Archived boards" : "Taulers arxivats",
     "Shared with you" : "Us han compartit",
+    "Use bigger card view" : "Utilitza la visualització de targetes més gran",
     "Show boards in calendar/tasks" : "Mostra els taulers al calendari/tasques",
     "Limit deck usage of groups" : "Limitar l'ús del tauler de grups",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitant el Tauler bloquejarà la creació de taulers als usuaris que no són part d'aquests grups. Els usuaris podran seguir treballant en els taulers que hagin estat compartits amb ells.",
@@ -248,6 +249,7 @@
     "Link to a board" : "Enllaça a un tauler",
     "Link to a card" : "Enllaç una targeta",
     "Something went wrong" : "Alguna cosa ha anat malament",
+    "Failed to upload {name}" : "No s'ha pogut pujar {name}",
     "Maximum file size of {size} exceeded" : "S'ha superat la mida màxima per fitxer de {size}"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
