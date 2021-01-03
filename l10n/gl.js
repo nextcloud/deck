@@ -219,6 +219,7 @@ OC.L10N.register(
     "All boards" : "Todos os taboleiros",
     "Archived boards" : "Taboleiros arquivados",
     "Shared with you" : "Compartido con vostede",
+    "Use bigger card view" : "Usa a vista de tarxeta máis grande",
     "Show boards in calendar/tasks" : "Amosar taboleiros no calendario/tarefas",
     "Limit deck usage of groups" : "Limitar o uso da plataforma a grupos",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitando Deck bloqueará os usuarios que non formen parte destes grupos, para crear os seus propios taboleiros. Os usuarios aínda así poderán traballar en taboleiros compartidos con eles.",
@@ -250,6 +251,7 @@ OC.L10N.register(
     "Link to a board" : "Ligar a un taboleiro",
     "Link to a card" : "Ligar a unha tarxeta",
     "Something went wrong" : "Algo foi mal",
+    "Failed to upload {name}" : "Produciuse un fallo ao actualizar {name}",
     "Maximum file size of {size} exceeded" : "Excedeuse o tamaño máximo de ficheiro de {size}"
 },
 "nplurals=2; plural=(n != 1);");
