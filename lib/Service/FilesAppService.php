@@ -26,7 +26,6 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\StatusException;
-use OCA\Deck\Exceptions\ConflictException;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\FileDisplayResponse;
 use OCP\AppFramework\Http\StreamResponse;
@@ -50,6 +49,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	private $configService;
 	private $l10n;
 	private $preview;
+	private $permissionService;
 
 	public function __construct(
 		IRequest $request,
@@ -59,6 +59,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		ConfigService $configService,
 		DeckShareProvider $shareProvider,
 		IPreview $preview,
+		PermissionService $permissionService,
 		string $userId = null
 	) {
 		$this->request = $request;
@@ -72,15 +73,15 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	}
 
 	public function listAttachments(int $cardId): array {
-		$userFolder = $this->rootFolder->getUserFolder($this->userId);
 		$shares = $this->shareProvider->getSharedWithByType($cardId, IShare::TYPE_DECK, -1, 0);
+		$shares = array_filter($shares, function ($share) {
+			return $share->getPermissions() > 0;
+		});
 		return array_map(function (IShare $share) use ($cardId, $userFolder) {
 			$file = $share->getNode();
-			$nodes = $userFolder->getById($file->getId());
-			$file = array_shift($nodes);
 			$attachment = new Attachment();
 			$attachment->setType('file');
-			$attachment->setId($file->getId());
+			$attachment->setId($share->getId());
 			$attachment->setCardId($cardId);
 			$attachment->setCreatedBy($share->getSharedBy());
 			$attachment->setData($file->getName());
@@ -95,8 +96,11 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		/** @var IDBConnection $qb */
 		$db = \OC::$server->getDatabaseConnection();
 		$qb = $db->getQueryBuilder();
-		$qb->select($qb->createFunction('count(s.id)'))
+		$qb->select('s.id', 'f.fileid', 'f.path')
+			->selectAlias('st.id', 'storage_string_id')
 			->from('share', 's')
+			->leftJoin('s', 'filecache', 'f', $qb->expr()->eq('s.file_source', 'f.fileid'))
+			->leftJoin('f', 'storages', 'st', $qb->expr()->eq('f.storage', 'st.numeric_id'))
 			->andWhere($qb->expr()->eq('s.share_type', $qb->createNamedParameter(IShare::TYPE_DECK)))
 			->andWhere($qb->expr()->eq('s.share_with', $qb->createNamedParameter($cardId)))
 			->andWhere($qb->expr()->isNull('s.parent'))
@@ -105,16 +109,21 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 				$qb->expr()->eq('s.item_type', $qb->createNamedParameter('folder'))
 			));
 
+		$count = 0;
 		$cursor = $qb->execute();
-		$count = $cursor->fetchColumn(0);
+		while ($data = $cursor->fetch()) {
+			if ($this->shareProvider->isAccessibleResult($data)) {
+				$count++;
+			}
+		}
 		$cursor->closeCursor();
 		return $count;
 	}
 
 	public function extendData(Attachment $attachment) {
 		$userFolder = $this->rootFolder->getUserFolder($this->userId);
-		$nodes = $userFolder->getById($attachment->getId());
-		$file = array_shift($nodes);
+		$share = $this->shareProvider->getShareById($attachment->getId());
+		$file = $share->getNode();
 		$attachment->setExtendedData([
 			'path' => $userFolder->getRelativePath($file->getPath()),
 			'fileid' => $file->getId(),
@@ -128,10 +137,13 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	}
 
 	public function display(Attachment $attachment) {
-		$userFolder = $this->rootFolder->getUserFolder($this->userId);
-		$nodes = $userFolder->getById($attachment->getId());
-		$file = array_shift($nodes);
-		if ($file === null) {
+		try {
+			$share = $this->shareProvider->getShareById($attachment->getId());
+		} catch (Share\Exceptions\ShareNotFound $e) {
+			throw new NotFoundException('File not found');
+		}
+		$file = $share->getNode();
+		if ($file === null || $share->getSharedWith() !== (string)$attachment->getCardId()) {
 			throw new NotFoundException('File not found');
 		}
 		if (method_exists($file, 'fopen')) {
@@ -160,7 +172,6 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$userFolder = $this->rootFolder->getUserFolder($this->userId);
 		$folder = $userFolder->get($this->configService->getAttachmentFolder());
 
-		// FIXME: Add to docs that conflict handling is different here, no ConflictException will be thrown
 		$fileName = $folder->getNonExistingName($fileName);
 		$target = $folder->newFile($fileName);
 		$content = fopen($file['tmp_name'], 'rb');
@@ -178,9 +189,10 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$share->setSharedWith((string)$attachment->getCardId());
 		$share->setPermissions(Constants::PERMISSION_READ);
 		$share->setSharedBy($this->userId);
-		$this->shareManager->createShare($share);
-		$attachment->setId($target->getId());
+		$share = $this->shareManager->createShare($share);
+		$attachment->setId($share->getId());
 		$attachment->setData($target->getName());
+		return $attachment;
 	}
 
 	/**
@@ -214,13 +226,29 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	}
 
 	public function update(Attachment $attachment) {
-		// TODO: Implement update() method.
+		$share = $this->shareProvider->getShareById($attachment->getId());
+		$target = $share->getNode();
+		$file = $this->getUploadedFile();
+		$fileName = $file['name'];
+		$attachment->setData($fileName);
+
+		$content = fopen($file['tmp_name'], 'rb');
+		if ($content === false) {
+			throw new StatusException('Could not read file');
+		}
+		$target->putContent($content);
+		if (is_resource($content)) {
+			fclose($content);
+		}
+
+		$attachment->setLastModified(time());
+		return $attachment;
 	}
 
 	public function delete(Attachment $attachment) {
-		$userFolder = $this->rootFolder->getUserFolder($this->userId);
-		$nodes = $userFolder->getById($attachment->getId());
-		$file = array_shift($nodes);
+		$share = $this->shareProvider->getShareById($attachment->getId());
+		$file = $share->getNode();
+		$attachment->setData($file->getName());
 		if ($file === null) {
 			throw new NotFoundException('File not found');
 		}
@@ -230,14 +258,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 			return;
 		}
 
-		// FIXME: only with manage permissions
-		$shares = $this->shareProvider->getSharedWithByType($attachment->getCardId(), IShare::TYPE_DECK, -1, 0);
-		foreach ($shares as $share) {
-			if ($share->getNode()->getId() === $attachment->getId()) {
-				$this->shareManager->deleteShare($share);
-				return;
-			}
-		}
+		$this->shareManager->deleteFromSelf($share, $this->userId);
 	}
 
 	public function allowUndo() {

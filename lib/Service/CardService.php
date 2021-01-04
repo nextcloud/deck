@@ -150,6 +150,11 @@ class CardService {
 		$card = $this->cardMapper->find($cardId);
 		$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
 		$attachments = $this->attachmentService->findAll($cardId, true);
+		if (\OC::$server->getRequest()->getParam('apiVersion') === '1.0') {
+			$attachments = array_filter($attachments, function ($attachment) {
+				return $attachment->getType() === 'deck_file';
+			});
+		}
 		$card->setAssignedUsers($assignedUsers);
 		$card->setAttachments($attachments);
 		$this->enrich($card);

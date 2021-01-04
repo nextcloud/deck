@@ -810,7 +810,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		return $shares;
 	}
 
-	private function isAccessibleResult(array $data): bool {
+	public function isAccessibleResult(array $data): bool {
 		// exclude shares leading to deleted file entries
 		if ($data['fileid'] === null || $data['path'] === null) {
 			return false;

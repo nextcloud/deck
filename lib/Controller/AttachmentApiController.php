@@ -42,8 +42,13 @@ class AttachmentApiController extends ApiController {
 	 * @NoCSRFRequired
 	 *
 	 */
-	public function getAll() {
+	public function getAll($apiVersion) {
 		$attachment = $this->attachmentService->findAll($this->request->getParam('cardId'), true);
+		if ($apiVersion === '1.0') {
+			$attachment = array_filter($attachment, function ($attachment) {
+				return $attachment->getType() === 'deck_file';
+			});
+		}
 		return new DataResponse($attachment, HTTP::STATUS_OK);
 	}
 
@@ -53,8 +58,8 @@ class AttachmentApiController extends ApiController {
 	 * @NoCSRFRequired
 	 *
 	 */
-	public function display() {
-		return $this->attachmentService->display($this->request->getParam('attachmentId'));
+	public function display($cardId, $attachmentId, $type = 'deck_file') {
+		return $this->attachmentService->display($cardId, $attachmentId, $type);
 	}
 
 	/**
@@ -63,8 +68,8 @@ class AttachmentApiController extends ApiController {
 	 * @NoCSRFRequired
 	 *
 	 */
-	public function create($type, $data) {
-		$attachment = $this->attachmentService->create($this->request->getParam('cardId'), $type, $data);
+	public function create($cardId, $type, $data) {
+		$attachment = $this->attachmentService->create($cardId, $type, $data);
 		return new DataResponse($attachment, HTTP::STATUS_OK);
 	}
 
@@ -74,8 +79,8 @@ class AttachmentApiController extends ApiController {
 	 * @NoCSRFRequired
 	 *
 	 */
-	public function update($data) {
-		$attachment = $this->attachmentService->update($this->request->getParam('attachmentId'), $data);
+	public function update($cardId, $attachmentId, $data, $type = 'deck_file') {
+		$attachment = $this->attachmentService->update($cardId, $attachmentId, $data, $type);
 		return new DataResponse($attachment, HTTP::STATUS_OK);
 	}
 
@@ -85,8 +90,8 @@ class AttachmentApiController extends ApiController {
 	 * @NoCSRFRequired
 	 *
 	 */
-	public function delete() {
-		$attachment = $this->attachmentService->delete($this->request->getParam('attachmentId'));
+	public function delete($cardId, $attachmentId, $type = 'deck_file') {
+		$attachment = $this->attachmentService->delete($cardId, $attachmentId, $type);
 		return new DataResponse($attachment, HTTP::STATUS_OK);
 	}
 
@@ -96,8 +101,8 @@ class AttachmentApiController extends ApiController {
 	 * @NoCSRFRequired
 	 *
 	 */
-	public function restore() {
-		$attachment = $this->attachmentService->restore($this->request->getParam('attachmentId'));
+	public function restore($cardId, $attachmentId, $type = 'deck_file') {
+		$attachment = $this->attachmentService->restore($cardId, $attachmentId, $type);
 		return new DataResponse($attachment, HTTP::STATUS_OK);
 	}
 }
