@@ -1,6 +1,7 @@
 Feature: decks
 
   Background:
+    Given user "admin" exists
     Given user "user0" exists
 
   Scenario: Request the main frontend page
