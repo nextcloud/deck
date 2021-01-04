@@ -18,7 +18,7 @@ trait RequestTrait {
 
 	public function __construct($baseUrl, $admin = 'admin', $regular_user_password = '123456') {
 		$this->baseUrl = $baseUrl;
-		$this->adminUser = $admin;
+		$this->adminUser = $admin === 'admin' ? ['admin', 'admin'] : $admin;
 		$this->regularUser = $regular_user_password;
 	}
 
