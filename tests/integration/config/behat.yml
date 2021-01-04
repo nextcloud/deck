@@ -4,9 +4,11 @@ default:
       paths:
         - '%paths.base%/../features/'
       contexts:
-        - FeatureContext:
+        - ServerContext:
             baseUrl:  http://localhost:8080/index.php/ocs/
             admin:
               - admin
               - admin
             regular_user_password: 123456
+        - BoardContext:
+            baseUrl:  http://localhost:8080/

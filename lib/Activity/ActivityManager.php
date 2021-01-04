@@ -380,7 +380,7 @@ class ActivityManager {
 			case self::SUBJECT_ATTACHMENT_UPDATE:
 			case self::SUBJECT_ATTACHMENT_DELETE:
 			case self::SUBJECT_ATTACHMENT_RESTORE:
-				$subjectParams = $this->findDetailsForAttachment($entity->getId());
+				$subjectParams = $this->findDetailsForAttachment($entity);
 				break;
 			case self::SUBJECT_BOARD_SHARE:
 			case self::SUBJECT_BOARD_UNSHARE:
@@ -527,8 +527,7 @@ class ActivityManager {
 		];
 	}
 
-	private function findDetailsForAttachment($attachmentId) {
-		$attachment = $this->attachmentMapper->find($attachmentId);
+	private function findDetailsForAttachment($attachment) {
 		$data = $this->findDetailsForCard($attachment->getCardId());
 		return array_merge($data, ['attachment' => $attachment]);
 	}

@@ -32,7 +32,7 @@ export default {
 		}
 	},
 	methods: {
-		async onLocalAttachmentSelected(file) {
+		async onLocalAttachmentSelected(file, type) {
 			if (this.maxUploadSize > 0 && file.size > this.maxUploadSize) {
 				showError(
 					t('deck', 'Failed to upload {name}', { name: file.name }) + ' - '
@@ -45,7 +45,7 @@ export default {
 			this.$set(this.uploadQueue, file.name, { name: file.name, progress: 0 })
 			const bodyFormData = new FormData()
 			bodyFormData.append('cardId', this.cardId)
-			bodyFormData.append('type', 'deck_file')
+			bodyFormData.append('type', type)
 			bodyFormData.append('file', file)
 			await queue.add(async() => {
 				try {
@@ -63,7 +63,7 @@ export default {
 						this.overwriteAttachment = err.response.data.data
 						this.modalShow = true
 					} else {
-						showError(err.response.data.message)
+						showError(err.response.data ? err.response.data.message : 'Failed to upload file')
 					}
 				}
 				this.$delete(this.uploadQueue, file.name)
@@ -78,7 +78,7 @@ export default {
 			bodyFormData.append('file', this.file)
 			this.$store.dispatch('updateAttachment', {
 				cardId: this.cardId,
-				attachmentId: this.overwriteAttachment.id,
+				attachment: this.overwriteAttachment,
 				formData: bodyFormData,
 			})
 

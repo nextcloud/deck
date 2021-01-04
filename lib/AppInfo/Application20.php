@@ -43,6 +43,8 @@ use OCA\Deck\Notification\Notifier;
 use OCA\Deck\Search\DeckProvider;
 use OCA\Deck\Service\FullTextSearchService;
 use OCA\Deck\Service\PermissionService;
+use OCA\Deck\Sharing\DeckShareProvider;
+use OCA\Deck\Sharing\Listener;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -62,6 +64,7 @@ use OCP\IServerContainer;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Notification\IManager as NotificationManager;
+use OCP\Share\IManager;
 use OCP\Util;
 use Psr\Container\ContainerInterface;
 
@@ -92,6 +95,16 @@ class Application20 extends App implements IBootstrap {
 		$context->injectFn(Closure::fromCallable([$this, 'registerNotifications']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerFullTextSearch']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
+
+		$context->injectFn(function (IManager $shareManager) {
+			if (method_exists($shareManager, 'registerShareProvider')) {
+				$shareManager->registerShareProvider(DeckShareProvider::class);
+			}
+		});
+
+		$context->injectFn(function (Listener $listener, IEventDispatcher $eventDispatcher) {
+			$listener->register($eventDispatcher);
+		});
 	}
 
 	public function register(IRegistrationContext $context): void {

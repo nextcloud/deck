@@ -26,6 +26,7 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\PermissionService;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IInitialStateService;
 use OCP\IL10N;
 use OCP\IRequest;
@@ -37,6 +38,7 @@ class PageControllerTest extends \Test\TestCase {
 	private $permissionService;
 	private $initialState;
 	private $configService;
+	private $eventDispatcher;
 
 	public function setUp(): void {
 		$this->l10n = $this->createMock(IL10N::class);
@@ -44,9 +46,10 @@ class PageControllerTest extends \Test\TestCase {
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->configService = $this->createMock(ConfigService::class);
 		$this->initialState = $this->createMock(IInitialStateService::class);
+		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 
 		$this->controller = new PageController(
-			'deck', $this->request, $this->permissionService, $this->initialState, $this->configService
+			'deck', $this->request, $this->permissionService, $this->initialState, $this->configService, $this->eventDispatcher
 		);
 	}
 

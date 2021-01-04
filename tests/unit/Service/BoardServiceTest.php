@@ -123,20 +123,9 @@ class BoardServiceTest extends TestCase {
 		$b3 = new Board();
 		$b3->setId(3);
 		$this->boardMapper->expects($this->once())
-			->method('findAllByUser')
+			->method('findAllForUser')
 			->with('admin')
-			->willReturn([$b1, $b2]);
-		$this->stackMapper->expects($this->any())
-			->method('findAll')
-			->willReturn([]);
-		$this->boardMapper->expects($this->once())
-			->method('findAllByGroups')
-			->with('admin', ['a', 'b', 'c'])
-			->willReturn([$b2, $b3]);
-		$this->boardMapper->expects($this->once())
-			->method('findAllByCircles')
-			->with('admin')
-			->willReturn([]);
+			->willReturn([$b1, $b2, $b3]);
 		$user = $this->createMock(IUser::class);
 		$this->groupManager->method('getUserGroupIds')
 			->willReturn(['a', 'b', 'c']);

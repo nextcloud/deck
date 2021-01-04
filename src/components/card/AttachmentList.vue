@@ -22,17 +22,22 @@
 
 <template>
 	<AttachmentDragAndDrop :card-id="cardId" class="drop-upload--sidebar">
-		<button class="icon-upload" @click="clickAddNewAttachmment()">
-			{{ t('deck', 'Upload attachment') }}
-		</button>
-		<input ref="localAttachments"
+		<div class="button-group">
+			<button class="icon-upload" @click="uploadNewFile()">
+				{{ t('deck', 'Upload new files') }}
+			</button>
+			<button class="icon-folder" @click="shareFromFiles()">
+				{{ t('deck', 'Share from Files') }}
+			</button>
+		</div>
+		<input ref="filesAttachment"
 			type="file"
 			style="display: none;"
 			multiple
 			@change="handleUploadFile">
 		<ul class="attachment-list">
 			<li v-for="attachment in uploadQueue" :key="attachment.name" class="attachment">
-				<a class="fileicon" :style="mimetypeForAttachment('none')" />
+				<a class="fileicon" :style="mimetypeForAttachment()" />
 				<div class="details">
 					<a>
 						<div class="filename">
@@ -45,9 +50,11 @@
 			<li v-for="attachment in attachments"
 				:key="attachment.id"
 				class="attachment">
-				<a class="fileicon" :style="mimetypeForAttachment(attachment.extendedData.mimetype)" :href="attachmentUrl(attachment)" />
+				<a class="fileicon"
+					:style="mimetypeForAttachment(attachment)"
+					@click.prevent="showViewer(attachment)" />
 				<div class="details">
-					<a :href="attachmentUrl(attachment)" target="_blank">
+					<a @click.prevent="showViewer(attachment)">
 						<div class="filename">
 							<span class="basename">{{ attachment.data }}</span>
 						</div>
@@ -61,12 +68,18 @@
 						{{ t('deck', 'Add this attachment') }}
 					</ActionButton>
 				</Actions>
-				<Actions v-if="removable">
-					<ActionButton v-if="attachment.deletedAt === 0" icon="icon-delete" @click="$emit('deleteAttachment', attachment)">
-						{{ t('deck', 'Delete Attachment') }}
+				<Actions v-if="removable" :force-menu="true">
+					<ActionLink v-if="attachment.extendedData.fileid" icon="icon-folder" :href="internalLink(attachment)">
+						{{ t('deck', 'Show in files') }}
+					</ActionLink>
+					<ActionButton v-if="attachment.extendedData.fileid" icon="icon-delete" @click="unshareAttachment(attachment)">
+						{{ t('deck', 'Unshare file') }}
 					</ActionButton>
 
-					<ActionButton v-else icon="icon-history" @click="$emit('restoreAttachment', attachment)">
+					<ActionButton v-if="!attachment.extendedData.fileid && attachment.deletedAt === 0" icon="icon-delete" @click="$emit('deleteAttachment', attachment)">
+						{{ t('deck', 'Delete Attachment') }}
+					</ActionButton>
+					<ActionButton v-else-if="!attachment.extendedData.fileid" icon="icon-history" @click="$emit('restoreAttachment', attachment)">
 						{{ t('deck', 'Restore Attachment') }}
 					</ActionButton>
 				</Actions>
@@ -76,21 +89,31 @@
 </template>
 
 <script>
-import { Actions, ActionButton } from '@nextcloud/vue'
+import axios from '@nextcloud/axios'
+import { Actions, ActionButton, ActionLink } from '@nextcloud/vue'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
 import relativeDate from '../../mixins/relativeDate'
 import { formatFileSize } from '@nextcloud/files'
-import { generateUrl } from '@nextcloud/router'
+import { generateUrl, generateOcsUrl } from '@nextcloud/router'
 import { mapState } from 'vuex'
 import { loadState } from '@nextcloud/initial-state'
 import attachmentUpload from '../../mixins/attachmentUpload'
+import { getFilePickerBuilder } from '@nextcloud/dialogs'
 const maxUploadSizeState = loadState('deck', 'maxUploadSize')
+
+const picker = getFilePickerBuilder(t('deck', 'File to share'))
+	.setMultiSelect(false)
+	.setModal(true)
+	.setType(1)
+	.allowDirectories()
+	.build()
 
 export default {
 	name: 'AttachmentList',
 	components: {
 		Actions,
 		ActionButton,
+		ActionLink,
 		AttachmentDragAndDrop,
 	},
 	mixins: [relativeDate, attachmentUpload],
@@ -120,19 +143,28 @@ export default {
 	},
 	computed: {
 		attachments() {
-			return [...this.$store.getters.attachmentsByCard(this.cardId)].sort((a, b) => b.id - a.id)
+			return [...this.$store.getters.attachmentsByCard(this.cardId)].filter(attachment => attachment.deletedAt >= 0).sort((a, b) => b.id - a.id)
 		},
 		mimetypeForAttachment() {
-			return (mimetype) => {
-				const url = OC.MimeType.getIconUrl(mimetype)
+			return (attachment) => {
+				if (!attachment) {
+					return {}
+				}
+				const url = attachment.extendedData.hasPreview ? this.attachmentPreview(attachment) : OC.MimeType.getIconUrl(attachment.extendedData.mimetype)
 				const styles = {
 					'background-image': `url("${url}")`,
 				}
 				return styles
 			}
 		},
+		attachmentPreview() {
+			return (attachment) => (attachment.extendedData.fileid ? generateUrl(`/core/preview?fileId=${attachment.extendedData.fileid}&x=64&y=64&a=true`) : null)
+		},
 		attachmentUrl() {
 			return (attachment) => generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
+		},
+		internalLink() {
+			return (attachment) => generateUrl('/f/' + attachment.extendedData.fileid)
 		},
 		formattedFileSize() {
 			return (filesize) => formatFileSize(filesize)
@@ -151,19 +183,60 @@ export default {
 			}
 		},
 	},
-	created() {
-		this.$store.dispatch('fetchAttachments', this.cardId)
+	watch: {
+		cardId: {
+			immediate: true,
+			handler() {
+				this.$store.dispatch('fetchAttachments', this.cardId)
+			},
+		},
 	},
 	methods: {
 		handleUploadFile(event) {
 			const files = event.target.files ?? []
 			for (const file of files) {
-				this.onLocalAttachmentSelected(file)
+				this.onLocalAttachmentSelected(file, 'file')
 			}
 			event.target.value = ''
 		},
+		uploadNewFile() {
+			this.$refs.filesAttachment.click()
+		},
+		shareFromFiles() {
+			picker.pick()
+				.then(async(path) => {
+					console.debug(`path ${path} selected for sharing`)
+					if (!path.startsWith('/')) {
+						throw new Error(t('files', 'Invalid path selected'))
+					}
+
+					axios.post(generateOcsUrl('apps/files_sharing/api/v1', 2) + 'shares', {
+						path,
+						shareType: 12,
+						shareWith: '' + this.cardId,
+					}).then(() => {
+						this.$store.dispatch('fetchAttachments', this.cardId)
+					})
+				})
+		},
+		unshareAttachment(attachment) {
+			this.$store.dispatch('unshareAttachment', attachment)
+		},
 		clickAddNewAttachmment() {
 			this.$refs.localAttachments.click()
+		},
+		showViewer(attachment) {
+			if (attachment.extendedData.fileid && window.OCA.Viewer.availableHandlers.map(handler => handler.mimes).flat().includes(attachment.extendedData.mimetype)) {
+				window.OCA.Viewer.open(attachment.extendedData.path)
+				return
+			}
+
+			if (attachment.extendedData.fileid) {
+				window.location = generateUrl('/f/' + attachment.extendedData.fileid)
+				return
+			}
+
+			window.location = generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
 		},
 	},
 }
@@ -171,9 +244,17 @@ export default {
 
 <style lang="scss" scoped>
 
-	.icon-upload {
-		padding-left: 35px;
-		background-position: 10px center;
+	.button-group {
+		display: flex;
+
+		.icon-upload, .icon-folder {
+			padding-left: 44px;
+			background-position: 16px center;
+			flex-grow: 1;
+			height: 44px;
+			margin-bottom: 12px;
+			text-align: left;
+		}
 	}
 
 	.attachment-list {

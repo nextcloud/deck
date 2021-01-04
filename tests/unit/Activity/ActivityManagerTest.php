@@ -316,10 +316,6 @@ class ActivityManagerTest extends TestCase {
 		$stack->setBoardId(999);
 		$board = new Board();
 		$board->setId(999);
-		$this->attachmentMapper->expects($this->once())
-			->method('find')
-			->with(777)
-			->willReturn($attachment);
 		$this->cardMapper->expects($this->once())
 			->method('find')
 			->with(555)
@@ -340,7 +336,7 @@ class ActivityManagerTest extends TestCase {
 				'archived' => $card->getArchived()
 			],
 			'attachment' => $attachment
-		], $this->invokePrivate($this->activityManager, 'findDetailsForAttachment', [777]));
+		], $this->invokePrivate($this->activityManager, 'findDetailsForAttachment', [$attachment]));
 	}
 
 	public function invokePrivate(&$object, $methodName, array $parameters = []) {

@@ -58,18 +58,6 @@ class AttachmentService {
 	/** @var ChangeHelper */
 	private $changeHelper;
 
-	/**
-	 * AttachmentService constructor.
-	 *
-	 * @param AttachmentMapper $attachmentMapper
-	 * @param CardMapper $cardMapper
-	 * @param PermissionService $permissionService
-	 * @param Application $application
-	 * @param ICacheFactory $cacheFactory
-	 * @param $userId
-	 * @param IL10N $l10n
-	 * @throws \OCP\AppFramework\QueryException
-	 */
 	public function __construct(AttachmentMapper $attachmentMapper, CardMapper $cardMapper, ChangeHelper $changeHelper, PermissionService $permissionService, Application $application, ICacheFactory $cacheFactory, $userId, IL10N $l10n, ActivityManager $activityManager) {
 		$this->attachmentMapper = $attachmentMapper;
 		$this->cardMapper = $cardMapper;
@@ -84,6 +72,7 @@ class AttachmentService {
 		// Register shipped attachment services
 		// TODO: move this to a plugin based approach once we have different types of attachments
 		$this->registerAttachmentService('deck_file', FileService::class);
+		$this->registerAttachmentService('file', FilesAppService::class);
 	}
 
 	/**
@@ -124,6 +113,15 @@ class AttachmentService {
 		if ($withDeleted) {
 			$attachments = array_merge($attachments, $this->attachmentMapper->findToDelete($cardId, false));
 		}
+
+		foreach (array_keys($this->services) as $attachmentType) {
+			/** @var IAttachmentService $service */
+			$service = $this->getService($attachmentType);
+			if ($service instanceof ICustomAttachmentService) {
+				$attachments = array_merge($attachments, $service->listAttachments((int)$cardId));
+			}
+		}
+
 		foreach ($attachments as &$attachment) {
 			try {
 				$service = $this->getService($attachment->getType());
@@ -132,6 +130,7 @@ class AttachmentService {
 				// Ingore invalid attachment types when extending the data
 			}
 		}
+
 		return $attachments;
 	}
 
@@ -148,8 +147,17 @@ class AttachmentService {
 		$count = $this->cache->get('card-' . $cardId);
 		if (!$count) {
 			$count = count($this->attachmentMapper->findAll($cardId));
+
+			foreach (array_keys($this->services) as $attachmentType) {
+				$service = $this->getService($attachmentType);
+				if ($service instanceof ICustomAttachmentService) {
+					$count += $service->getAttachmentCount((int)$cardId);
+				}
+			}
+
 			$this->cache->set('card-' . $cardId, $count);
 		}
+
 		return $count;
 	}
 
@@ -189,21 +197,20 @@ class AttachmentService {
 		try {
 			$service = $this->getService($attachment->getType());
 			$service->create($attachment);
-		} catch (InvalidAttachmentType $e) {
-			// just store the data
-		}
-		if ($attachment->getData() === null) {
-			throw new StatusException($this->l10n->t('No data was provided to create an attachment.'));
-		}
-		$attachment = $this->attachmentMapper->insert($attachment);
 
-		// extend data so the frontend can use it properly after creating
-		try {
-			$service = $this->getService($attachment->getType());
+			if (!$service instanceof ICustomAttachmentService) {
+				if ($attachment->getData() === null) {
+					throw new StatusException($this->l10n->t('No data was provided to create an attachment.'));
+				}
+
+				$attachment = $this->attachmentMapper->insert($attachment);
+			}
+
 			$service->extendData($attachment);
 		} catch (InvalidAttachmentType $e) {
 			// just store the data
 		}
+
 		$this->changeHelper->cardChanged($attachment->getCardId());
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_CREATE);
 		return $attachment;
@@ -215,46 +222,69 @@ class AttachmentService {
 	 *
 	 * @param $attachmentId
 	 * @return Response
-	 * @throws BadRequestException
 	 * @throws NoPermissionException
 	 * @throws NotFoundException
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
-	public function display($attachmentId) {
-		if (is_numeric($attachmentId) === false) {
-			throw new BadRequestException('attachment id must be a number');
-		}
-
+	public function display($cardId, $attachmentId, $type = 'deck_file') {
 		try {
-			$attachment = $this->attachmentMapper->find($attachmentId);
-		} catch (\Exception $e) {
-			throw new NoPermissionException('Permission denied');
-		}
-		$this->permissionService->checkPermission($this->cardMapper, $attachment->getCardId(), Acl::PERMISSION_READ);
-
-		try {
-			$service = $this->getService($attachment->getType());
-			return $service->display($attachment);
+			$service = $this->getService($type);
 		} catch (InvalidAttachmentType $e) {
 			throw new NotFoundException();
 		}
+
+		if (!$service instanceof ICustomAttachmentService) {
+			try {
+				$attachment = $this->attachmentMapper->find($attachmentId);
+			} catch (\Exception $e) {
+				throw new NoPermissionException('Permission denied');
+			}
+			$this->permissionService->checkPermission($this->cardMapper, $attachment->getCardId(), Acl::PERMISSION_READ);
+
+			try {
+				$service = $this->getService($attachment->getType());
+			} catch (InvalidAttachmentType $e) {
+				throw new NotFoundException();
+			}
+		} else {
+			$attachment = new Attachment();
+			$attachment->setId($attachmentId);
+			$attachment->setType($type);
+			$attachment->setCardId($cardId);
+			$this->permissionService->checkPermission($this->cardMapper, $attachment->getCardId(), Acl::PERMISSION_READ);
+		}
+
+		return $service->display($attachment);
 	}
 
 	/**
 	 * Update an attachment with custom data
 	 *
 	 * @param $attachmentId
-	 * @param $request
+	 * @param $data
 	 * @return mixed
-	 * @throws \OCA\Deck\NoPermissionException
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
+	 * @throws NoPermissionException
 	 */
-	public function update($attachmentId, $data) {
-		if (is_numeric($attachmentId) === false) {
-			throw new BadRequestException('attachment id must be a number');
+	public function update($cardId, $attachmentId, $data, $type = 'deck_file') {
+		try {
+			$service = $this->getService($type);
+		} catch (InvalidAttachmentType $e) {
+			throw new NotFoundException();
+		}
+
+		if ($service instanceof ICustomAttachmentService) {
+			try {
+				$attachment = new Attachment();
+				$attachment->setId($attachmentId);
+				$attachment->setType($type);
+				$attachment->setData($data);
+				$attachment->setCardId($cardId);
+				$service->update($attachment);
+				$this->changeHelper->cardChanged($attachment->getCardId());
+				return $attachment;
+			} catch (\Exception $e) {
+				throw new NotFoundException();
+			}
 		}
 
 		if ($data === false || $data === null) {
@@ -279,12 +309,8 @@ class AttachmentService {
 		$attachment->setLastModified(time());
 		$this->attachmentMapper->update($attachment);
 		// extend data so the frontend can use it properly after creating
-		try {
-			$service = $this->getService($attachment->getType());
-			$service->extendData($attachment);
-		} catch (InvalidAttachmentType $e) {
-			// just store the data
-		}
+		$service->extendData($attachment);
+
 		$this->changeHelper->cardChanged($attachment->getCardId());
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_UPDATE);
 		return $attachment;
@@ -301,9 +327,23 @@ class AttachmentService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function delete($attachmentId) {
-		if (is_numeric($attachmentId) === false) {
-			throw new BadRequestException('attachment id must be a number');
+	public function delete($cardId, $attachmentId, $type = 'deck_file') {
+		try {
+			$service = $this->getService($type);
+		} catch (InvalidAttachmentType $e) {
+			throw new NotFoundException();
+		}
+
+		if ($service instanceof ICustomAttachmentService) {
+			$attachment = new Attachment();
+			$attachment->setId($attachmentId);
+			$attachment->setType($type);
+			$attachment->setCardId($cardId);
+			$service->extendData($attachment);
+			$service->delete($attachment);
+			$this->changeHelper->cardChanged($attachment->getCardId());
+			$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_DELETE);
+			return $attachment;
 		}
 
 		try {
@@ -315,25 +355,21 @@ class AttachmentService {
 		$this->permissionService->checkPermission($this->cardMapper, $attachment->getCardId(), Acl::PERMISSION_EDIT);
 		$this->cache->clear('card-' . $attachment->getCardId());
 
-		try {
-			$service = $this->getService($attachment->getType());
-			if ($service->allowUndo()) {
-				$service->markAsDeleted($attachment);
-				$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_DELETE);
-				$this->changeHelper->cardChanged($attachment->getCardId());
-				return $this->attachmentMapper->update($attachment);
-			}
-			$service->delete($attachment);
-		} catch (InvalidAttachmentType $e) {
-			// just delete without further action
+		if ($service->allowUndo()) {
+			$service->markAsDeleted($attachment);
+			$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_DELETE);
+			$this->changeHelper->cardChanged($attachment->getCardId());
+			return $this->attachmentMapper->update($attachment);
 		}
+		$service->delete($attachment);
+
 		$attachment = $this->attachmentMapper->delete($attachment);
 		$this->changeHelper->cardChanged($attachment->getCardId());
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_DELETE);
 		return $attachment;
 	}
 
-	public function restore($attachmentId) {
+	public function restore($cardId, $attachmentId, $type = 'deck_file') {
 		if (is_numeric($attachmentId) === false) {
 			throw new BadRequestException('attachment id must be a number');
 		}

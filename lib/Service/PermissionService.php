@@ -142,7 +142,7 @@ class PermissionService {
 		}
 
 		if ($permission === Acl::PERMISSION_SHARE && $this->shareManager->sharingDisabledForUser($this->userId)) {
-			return false;
+			throw new NoPermissionException('Permission denied');
 		}
 
 		if ($this->userIsBoardOwner($boardId, $userId)) {

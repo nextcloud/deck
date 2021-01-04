@@ -21,21 +21,37 @@
   -->
 
 <template>
-	<Modal :title="t('deck', 'Select the card to link to a project')" @close="close">
+	<Modal class="card-selector" @close="close">
 		<div id="modal-inner" :class="{ 'icon-loading': loading }">
+			<h3>{{ title }}</h3>
 			<Multiselect v-model="selectedBoard"
 				:placeholder="t('deck', 'Select a board')"
 				:options="boards"
+				:disabled="loading"
 				label="title"
-				@select="fetchCardsFromBoard" />
+				@select="fetchCardsFromBoard">
+				<template slot="singleLabel" slot-scope="props">
+					<span>
+						<span :style="{ 'backgroundColor': '#' + props.option.color }" class="board-bullet" />
+						<span>{{ props.option.title }}</span>
+					</span>
+				</template>
+				<template slot="option" slot-scope="props">
+					<span>
+						<span :style="{ 'backgroundColor': '#' + props.option.color }" class="board-bullet" />
+						<span>{{ props.option.title }}</span>
+					</span>
+				</template>
+			</Multiselect>
 
 			<Multiselect v-model="selectedCard"
 				:placeholder="t('deck', 'Select a card')"
 				:options="cardsFromBoard"
+				:disabled="loading || selectedBoard === ''"
 				label="title" />
 
 			<button :disabled="!isBoardAndStackChoosen" class="primary" @click="select">
-				{{ t('deck', 'Link to card') }}
+				{{ action }}
 			</button>
 			<button @click="close">
 				{{ t('deck', 'Cancel') }}
@@ -56,6 +72,16 @@ export default {
 		Modal,
 		Multiselect,
 	},
+	props: {
+		title: {
+			type: String,
+			default: t('deck', 'Select the card to link to a project'),
+		},
+		action: {
+			type: String,
+			default: t('deck', 'Link to card'),
+		},
+	},
 	data() {
 		return {
 			boards: [],
@@ -67,10 +93,7 @@ export default {
 	},
 	computed: {
 		isBoardAndStackChoosen() {
-			if (this.selectedBoard === '' || this.selectedCard === '') {
-				return false
-			}
-			return true
+			return !(this.selectedBoard === '' || this.selectedCard === '')
 		},
 	},
 	beforeMount() {
@@ -113,7 +136,12 @@ export default {
 		width: 90vw;
 		max-width: 400px;
 		padding: 20px;
-		height: 500px;
+		height: 200px;
+	}
+
+	.multiselect {
+		width: 100%;
+		margin-bottom: 10px;
 	}
 
 	ul {
@@ -129,10 +157,6 @@ export default {
 		background-color: var(--color-background-dark);
 	}
 
-	li.selected {
-		border: 1px solid var(--color-primary);
-	}
-
 	.board-bullet {
 		display: inline-block;
 		width: 12px;
@@ -142,12 +166,11 @@ export default {
 		cursor: pointer;
 	}
 
-	li > span,
-	.avatar {
-		vertical-align: middle;
-	}
-
 	button {
 		float: right;
+	}
+
+	.card-selector::v-deep .modal-container {
+		overflow: visible !important;
 	}
 </style>

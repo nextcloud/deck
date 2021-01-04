@@ -15,10 +15,8 @@ INSTALLED=$($OCC status | grep installed: | cut -d " " -f 5)
 if [ "$INSTALLED" == "true" ]; then
     $OCC app:enable deck
 else
-    if [ "$SCENARIO_TO_RUN" != "setup_features/setup.feature" ]; then
-        echo "Nextcloud instance needs to be installed" >&2
-        exit 1
-    fi
+	echo "Nextcloud instance needs to be installed" >&2
+	exit 1
 fi
 
 composer install
@@ -36,7 +34,7 @@ echo $PHPPID
 
 export TEST_SERVER_URL="http://localhost:$PORT/ocs/"
 
-vendor/bin/behat
+vendor/bin/behat $SCENARIO_TO_RUN
 RESULT=$?
 
 kill $PHPPID

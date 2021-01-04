@@ -4,18 +4,6 @@
     <TypeDoesNotContainType occurrences="1">
       <code>$message !== null</code>
     </TypeDoesNotContainType>
-    <UndefinedMagicMethod occurrences="9">
-      <code>getArchived</code>
-      <code>getBoardId</code>
-      <code>getBoardId</code>
-      <code>getBoardId</code>
-      <code>getBoardId</code>
-      <code>getCardId</code>
-      <code>getCardId</code>
-      <code>getStackId</code>
-      <code>getTitle</code>
-      <code>getTitle</code>
-    </UndefinedMagicMethod>
   </file>
   <file src="lib/Activity/DeckProvider.php">
     <InvalidScalarArgument occurrences="1">
@@ -28,23 +16,9 @@
     </DuplicateClass>
   </file>
   <file src="lib/AppInfo/Application20.php">
-    <UndefinedClass occurrences="1">
-      <code>IBootstrap</code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/AppInfo/ApplicationLegacy.php">
-    <UndefinedInterfaceMethod occurrences="2">
-      <code>listen</code>
-      <code>listen</code>
-    </UndefinedInterfaceMethod>
-  </file>
-  <file src="lib/Collaboration/Resources/ResourceProviderCard.php">
-    <UndefinedMagicMethod occurrences="4">
-      <code>getAcl</code>
-      <code>getOwner</code>
-      <code>getTitle</code>
-      <code>getTitle</code>
-    </UndefinedMagicMethod>
+    <RedundantCondition occurrences="1">
+      <code>method_exists($shareManager, 'registerShareProvider')</code>
+    </RedundantCondition>
   </file>
   <file src="lib/Command/UserExport.php">
     <ImplementedReturnTypeMismatch occurrences="1">
@@ -90,11 +64,9 @@
     </InvalidScalarArgument>
   </file>
   <file src="lib/Controller/PageController.php">
-    <MissingDependency occurrences="3">
-      <code>Application</code>
-      <code>Application</code>
-      <code>Application</code>
-    </MissingDependency>
+    <UndefinedClass occurrences="1">
+      <code>LoadSidebar</code>
+    </UndefinedClass>
   </file>
   <file src="lib/Controller/StackApiController.php">
     <RedundantCondition occurrences="1">
@@ -102,21 +74,6 @@
     </RedundantCondition>
     <UndefinedClass occurrences="1">
       <code>Util</code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/Cron/CardDescriptionActivity.php">
-    <UndefinedClass occurrences="1">
-      <code>Job</code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/Cron/DeleteCron.php">
-    <UndefinedClass occurrences="1">
-      <code>Job</code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/Cron/ScheduledNotifications.php">
-    <UndefinedClass occurrences="1">
-      <code>Job</code>
     </UndefinedClass>
   </file>
   <file src="lib/DAV/Calendar.php">
@@ -140,18 +97,6 @@
       <code>NotFound</code>
     </UndefinedClass>
   </file>
-  <file src="lib/Dashboard/DeckWidget.php">
-    <UndefinedClass occurrences="1">
-      <code>IWidget</code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/Db/Acl.php">
-    <UndefinedMagicMethod occurrences="3">
-      <code>getPermissionEdit</code>
-      <code>getPermissionManage</code>
-      <code>getPermissionShare</code>
-    </UndefinedMagicMethod>
-  </file>
   <file src="lib/Db/AclMapper.php">
     <ParamNameMismatch occurrences="1">
       <code>$aclId</code>
@@ -161,31 +106,11 @@
     <ParamNameMismatch occurrences="1">
       <code>$cardId</code>
     </ParamNameMismatch>
-    <UndefinedMagicMethod occurrences="9">
-      <code>getParticipant</code>
-      <code>getParticipant</code>
-      <code>getParticipant</code>
-      <code>getParticipant</code>
-      <code>getParticipant</code>
-      <code>getParticipant</code>
-      <code>getType</code>
-      <code>getType</code>
-      <code>getType</code>
-    </UndefinedMagicMethod>
   </file>
   <file src="lib/Db/AttachmentMapper.php">
-    <UndefinedMagicMethod occurrences="2">
-      <code>getCardId</code>
-      <code>getCardId</code>
-    </UndefinedMagicMethod>
     <UndefinedVariable occurrences="1">
       <code>$query</code>
     </UndefinedVariable>
-  </file>
-  <file src="lib/Db/Board.php">
-    <UndefinedMagicMethod occurrences="1">
-      <code>getLastModified</code>
-    </UndefinedMagicMethod>
   </file>
   <file src="lib/Db/BoardMapper.php">
     <ParamNameMismatch occurrences="1">
@@ -194,53 +119,20 @@
     <UndefinedClass occurrences="1">
       <code>\OCA\Circles\Api\v1\Circles</code>
     </UndefinedClass>
-    <UndefinedMagicMethod occurrences="2">
-      <code>setAcl</code>
-      <code>setLabels</code>
-    </UndefinedMagicMethod>
   </file>
   <file src="lib/Db/Card.php">
     <UndefinedClass occurrences="2">
       <code>VCalendar</code>
       <code>VCalendar</code>
     </UndefinedClass>
-    <UndefinedMagicMethod occurrences="9">
-      <code>getArchived</code>
-      <code>getArchived</code>
-      <code>getDescription</code>
-      <code>getLabels</code>
-      <code>getLabels</code>
-      <code>getLastModified</code>
-      <code>getLastModified</code>
-      <code>getStackId</code>
-      <code>getTitle</code>
-    </UndefinedMagicMethod>
   </file>
   <file src="lib/Db/CardMapper.php">
-    <ImplicitToStringCast occurrences="1">
-      <code>$qb-&gt;createNamedParameter($boardIds, IQueryBuilder::PARAM_INT_ARRAY)</code>
-    </ImplicitToStringCast>
     <InvalidScalarArgument occurrences="1">
       <code>$entity-&gt;getId()</code>
     </InvalidScalarArgument>
     <ParamNameMismatch occurrences="1">
       <code>$cardId</code>
     </ParamNameMismatch>
-    <UndefinedMagicMethod occurrences="13">
-      <code>getDescription</code>
-      <code>getDescription</code>
-      <code>getDuedate</code>
-      <code>setCreatedAt</code>
-      <code>setDatabaseType</code>
-      <code>setDatabaseType</code>
-      <code>setDescription</code>
-      <code>setDescription</code>
-      <code>setLabels</code>
-      <code>setLastModified</code>
-      <code>setLastModified</code>
-      <code>setNotified</code>
-      <code>setNotified</code>
-    </UndefinedMagicMethod>
   </file>
   <file src="lib/Db/ChangeHelper.php">
     <UndefinedThisPropertyAssignment occurrences="3">
@@ -269,69 +161,26 @@
       <code>\OCA\Circles\Model\Circle</code>
     </UndefinedDocblockClass>
   </file>
-  <file src="lib/Db/Label.php">
-    <UndefinedMagicMethod occurrences="1">
-      <code>getLastModified</code>
-    </UndefinedMagicMethod>
-  </file>
   <file src="lib/Db/LabelMapper.php">
     <ParamNameMismatch occurrences="1">
       <code>$labelId</code>
     </ParamNameMismatch>
-    <UndefinedMagicMethod occurrences="2">
-      <code>setLastModified</code>
-      <code>setLastModified</code>
-    </UndefinedMagicMethod>
-  </file>
-  <file src="lib/Db/RelationalEntity.php">
-    <UndefinedMagicMethod occurrences="1">
-      <code>getETag</code>
-    </UndefinedMagicMethod>
   </file>
   <file src="lib/Db/Stack.php">
     <UndefinedClass occurrences="2">
       <code>VCalendar</code>
       <code>VCalendar</code>
     </UndefinedClass>
-    <UndefinedMagicMethod occurrences="2">
-      <code>getLastModified</code>
-      <code>getTitle</code>
-    </UndefinedMagicMethod>
   </file>
   <file src="lib/Db/StackMapper.php">
     <ParamNameMismatch occurrences="1">
       <code>$stackId</code>
     </ParamNameMismatch>
-    <UndefinedMagicMethod occurrences="1">
-      <code>getBoardId</code>
-    </UndefinedMagicMethod>
-  </file>
-  <file src="lib/Listeners/BeforeTemplateRenderedListener.php">
-    <UndefinedClass occurrences="1">
-      <code>BeforeTemplateRenderedEvent</code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/Migration/UnknownUsers.php">
-    <UndefinedMagicMethod occurrences="4">
-      <code>getParticipant</code>
-      <code>getParticipant</code>
-      <code>getType</code>
-      <code>getType</code>
-    </UndefinedMagicMethod>
   </file>
   <file src="lib/Notification/NotificationHelper.php">
     <InvalidScalarArgument occurrences="1">
       <code>$board-&gt;getId()</code>
     </InvalidScalarArgument>
-    <MissingDependency occurrences="1">
-      <code>Application</code>
-    </MissingDependency>
-    <UndefinedMagicMethod occurrences="3">
-      <code>getTitle</code>
-      <code>getTitle</code>
-      <code>getTitle</code>
-      <code>getTitle</code>
-    </UndefinedMagicMethod>
   </file>
   <file src="lib/Notification/Notifier.php">
     <RedundantCast occurrences="7">
@@ -348,42 +197,12 @@
     <InvalidPropertyAssignmentValue occurrences="1">
       <code>[]</code>
     </InvalidPropertyAssignmentValue>
-    <UndefinedClass occurrences="2">
-      <code>IndexDocument</code>
-      <code>SearchTemplate</code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/Search/BoardSearchResultEntry.php">
-    <UndefinedClass occurrences="1">
-      <code>SearchResultEntry</code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/Search/CardSearchResultEntry.php">
-    <UndefinedClass occurrences="1">
-      <code>SearchResultEntry</code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/Search/DeckProvider.php">
-    <UndefinedClass occurrences="1">
-      <code>IProvider</code>
-    </UndefinedClass>
   </file>
   <file src="lib/Service/AssignmentService.php">
     <InvalidScalarArgument occurrences="2">
       <code>$cardId</code>
       <code>$cardId</code>
     </InvalidScalarArgument>
-    <UndefinedMagicMethod occurrences="9">
-      <code>getParticipant</code>
-      <code>getParticipant</code>
-      <code>getParticipant</code>
-      <code>getType</code>
-      <code>getType</code>
-      <code>getType</code>
-      <code>setCardId</code>
-      <code>setParticipant</code>
-      <code>setType</code>
-    </UndefinedMagicMethod>
     <UndefinedThisPropertyAssignment occurrences="1">
       <code>$this-&gt;currentUser</code>
     </UndefinedThisPropertyAssignment>
@@ -391,86 +210,11 @@
       <code>$this-&gt;currentUser</code>
     </UndefinedThisPropertyFetch>
   </file>
-  <file src="lib/Service/AttachmentService.php">
-    <MissingDependency occurrences="1">
-      <code>Application</code>
-    </MissingDependency>
-    <UndefinedMagicMethod occurrences="13">
-      <code>getCardId</code>
-      <code>getCardId</code>
-      <code>getCardId</code>
-      <code>getData</code>
-      <code>getType</code>
-      <code>getType</code>
-      <code>setCardId</code>
-      <code>setCreatedAt</code>
-      <code>setCreatedBy</code>
-      <code>setData</code>
-      <code>setLastModified</code>
-      <code>setLastModified</code>
-      <code>setType</code>
-    </UndefinedMagicMethod>
-  </file>
   <file src="lib/Service/BoardService.php">
-    <InvalidArgument occurrences="6">
-      <code>'\OCA\Deck\Board::onCreate'</code>
-      <code>'\OCA\Deck\Board::onDelete'</code>
-      <code>'\OCA\Deck\Board::onDelete'</code>
-      <code>'\OCA\Deck\Board::onShareEdit'</code>
-      <code>'\OCA\Deck\Board::onUpdate'</code>
-      <code>'\OCA\Deck\Board::onUpdate'</code>
-    </InvalidArgument>
-    <MissingDependency occurrences="3">
-      <code>Application</code>
-      <code>Application</code>
-      <code>Application</code>
-    </MissingDependency>
     <TooManyArguments occurrences="2">
       <code>findAll</code>
       <code>findAll</code>
     </TooManyArguments>
-    <UndefinedMagicMethod occurrences="40">
-      <code>getAcl</code>
-      <code>getAcl</code>
-      <code>getAcl</code>
-      <code>getBoardId</code>
-      <code>getBoardId</code>
-      <code>getBoardId</code>
-      <code>getBoardId</code>
-      <code>getParticipant</code>
-      <code>getType</code>
-      <code>setBoardId</code>
-      <code>setBoardId</code>
-      <code>setBoardId</code>
-      <code>setBoardId</code>
-      <code>setColor</code>
-      <code>setColor</code>
-      <code>setColor</code>
-      <code>setColor</code>
-      <code>setColor</code>
-      <code>setLabels</code>
-      <code>setOwner</code>
-      <code>setOwner</code>
-      <code>setParticipant</code>
-      <code>setPermissionEdit</code>
-      <code>setPermissionEdit</code>
-      <code>setPermissionManage</code>
-      <code>setPermissionManage</code>
-      <code>setPermissionShare</code>
-      <code>setPermissionShare</code>
-      <code>setPermissions</code>
-      <code>setPermissions</code>
-      <code>setPermissions</code>
-      <code>setPermissions</code>
-      <code>setSettings</code>
-      <code>setTitle</code>
-      <code>setTitle</code>
-      <code>setTitle</code>
-      <code>setTitle</code>
-      <code>setTitle</code>
-      <code>setTitle</code>
-      <code>setType</code>
-    </UndefinedMagicMethod>
   </file>
   <file src="lib/Service/CardService.php">
     <TooFewArguments occurrences="1">
@@ -479,52 +223,6 @@
     <UndefinedDocblockClass occurrences="1">
       <code>\OCP\AppFramework\Db\</code>
     </UndefinedDocblockClass>
-    <UndefinedMagicMethod occurrences="44">
-      <code>getArchived</code>
-      <code>getArchived</code>
-      <code>getArchived</code>
-      <code>getArchived</code>
-      <code>getArchived</code>
-      <code>getDescription</code>
-      <code>getDescription</code>
-      <code>getDescription</code>
-      <code>getDescriptionPrev</code>
-      <code>getDescriptionPrev</code>
-      <code>getLastEditor</code>
-      <code>getLastEditor</code>
-      <code>getLastEditor</code>
-      <code>getOrder</code>
-      <code>setArchived</code>
-      <code>setArchived</code>
-      <code>setArchived</code>
-      <code>setAssignedUsers</code>
-      <code>setAssignedUsers</code>
-      <code>setAttachmentCount</code>
-      <code>setAttachments</code>
-      <code>setCommentsUnread</code>
-      <code>setDeletedAt</code>
-      <code>setDeletedAt</code>
-      <code>setDescription</code>
-      <code>setDescription</code>
-      <code>setDescriptionPrev</code>
-      <code>setDescriptionPrev</code>
-      <code>setDuedate</code>
-      <code>setDuedate</code>
-      <code>setLabels</code>
-      <code>setLastEditor</code>
-      <code>setOrder</code>
-      <code>setOrder</code>
-      <code>setOwner</code>
-      <code>setOwner</code>
-      <code>setStackId</code>
-      <code>setStackId</code>
-      <code>setStackId</code>
-      <code>setTitle</code>
-      <code>setTitle</code>
-      <code>setTitle</code>
-      <code>setType</code>
-      <code>setType</code>
-    </UndefinedMagicMethod>
   </file>
   <file src="lib/Service/CirclesService.php">
     <UndefinedClass occurrences="2">
@@ -533,13 +231,6 @@
     </UndefinedClass>
   </file>
   <file src="lib/Service/CommentService.php">
-    <MissingDependency occurrences="5">
-      <code>Application</code>
-      <code>Application</code>
-      <code>Application</code>
-      <code>Application</code>
-      <code>Application</code>
-    </MissingDependency>
     <UndefinedThisPropertyAssignment occurrences="2">
       <code>$this-&gt;cardMapper</code>
       <code>$this-&gt;permissionService</code>
@@ -555,25 +246,7 @@
       <code>$this-&gt;permissionService</code>
     </UndefinedThisPropertyFetch>
   </file>
-  <file src="lib/Service/ConfigService.php">
-    <InvalidScalarArgument occurrences="1">
-      <code>(int)$value</code>
-    </InvalidScalarArgument>
-    <MissingDependency occurrences="7">
-      <code>Application</code>
-      <code>Application</code>
-      <code>Application</code>
-      <code>Application</code>
-      <code>Application</code>
-      <code>Application</code>
-      <code>Application</code>
-    </MissingDependency>
-  </file>
   <file src="lib/Service/DefaultBoardService.php">
-    <MissingDependency occurrences="2">
-      <code>Application</code>
-      <code>Application</code>
-    </MissingDependency>
     <TypeDoesNotContainNull occurrences="6">
       <code>$color === false || $color === null</code>
       <code>$color === null</code>
@@ -597,94 +270,46 @@
       <code>is_resource($content)</code>
       <code>is_resource($content)</code>
     </RedundantCondition>
-    <UndefinedMagicMethod occurrences="10">
-      <code>getCardId</code>
-      <code>getCardId</code>
-      <code>getCardId</code>
-      <code>getData</code>
-      <code>getData</code>
-      <code>setData</code>
-      <code>setData</code>
-      <code>setDeletedAt</code>
-      <code>setExtendedData</code>
-      <code>setLastModified</code>
-    </UndefinedMagicMethod>
   </file>
-  <file src="lib/Service/FullTextSearchService.php">
-    <UndefinedClass occurrences="2">
-      <code>DocumentAccess</code>
-      <code>IndexDocument</code>
-    </UndefinedClass>
-    <UndefinedMagicMethod occurrences="4">
-      <code>getDescription</code>
-      <code>getDescription</code>
-      <code>getTitle</code>
-      <code>getTitle</code>
-    </UndefinedMagicMethod>
-  </file>
-  <file src="lib/Service/LabelService.php">
-    <UndefinedMagicMethod occurrences="4">
-      <code>getBoardId</code>
-      <code>getBoardId</code>
-      <code>getBoardId</code>
-      <code>setBoardId</code>
-      <code>setColor</code>
-      <code>setColor</code>
-      <code>setTitle</code>
-      <code>setTitle</code>
-    </UndefinedMagicMethod>
-  </file>
-  <file src="lib/Service/OverviewService.php">
-    <UndefinedMagicMethod occurrences="4">
-      <code>setAssignedUsers</code>
-      <code>setAttachmentCount</code>
-      <code>setCommentsUnread</code>
-      <code>setLabels</code>
-    </UndefinedMagicMethod>
+  <file src="lib/Service/FilesAppService.php">
+    <MissingDependency occurrences="4">
+      <code>$this-&gt;rootFolder</code>
+      <code>$this-&gt;rootFolder</code>
+      <code>IRootFolder</code>
+      <code>Share\Exceptions\ShareNotFound</code>
+    </MissingDependency>
   </file>
   <file src="lib/Service/PermissionService.php">
     <UndefinedClass occurrences="2">
       <code>\OCA\Circles\Api\v1\Circles</code>
       <code>\OCA\Circles\Api\v1\Circles</code>
     </UndefinedClass>
-    <UndefinedMagicMethod occurrences="6">
-      <code>getAcl</code>
-      <code>getParticipant</code>
-      <code>getParticipant</code>
-      <code>getParticipant</code>
-      <code>getParticipant</code>
-      <code>getType</code>
-      <code>getType</code>
-      <code>getType</code>
-      <code>getType</code>
-      <code>getType</code>
-      <code>getType</code>
-    </UndefinedMagicMethod>
   </file>
   <file src="lib/Service/StackService.php">
-    <InvalidArgument occurrences="3">
-      <code>'\OCA\Deck\Stack::onCreate'</code>
-      <code>'\OCA\Deck\Stack::onDelete'</code>
-      <code>'\OCA\Deck\Stack::onUpdate'</code>
-    </InvalidArgument>
     <UndefinedClass occurrences="1">
       <code>BadRquestException</code>
     </UndefinedClass>
-    <UndefinedMagicMethod occurrences="14">
-      <code>getBoardId</code>
-      <code>getBoardId</code>
-      <code>getBoardId</code>
-      <code>getBoardId</code>
-      <code>getOrder</code>
-      <code>setBoardId</code>
-      <code>setBoardId</code>
-      <code>setCards</code>
-      <code>setDeletedAt</code>
-      <code>setDeletedAt</code>
-      <code>setOrder</code>
-      <code>setOrder</code>
-      <code>setTitle</code>
-      <code>setTitle</code>
-    </UndefinedMagicMethod>
+  </file>
+  <file src="lib/Sharing/DeckShareProvider.php">
+    <InvalidReturnStatement occurrences="1">
+      <code>$shares</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="1">
+      <code>getSharesInFolder</code>
+    </InvalidReturnType>
+    <MissingDependency occurrences="7">
+      <code>GenericShareException</code>
+      <code>GenericShareException</code>
+      <code>ShareNotFound</code>
+      <code>ShareNotFound</code>
+      <code>ShareNotFound</code>
+      <code>ShareNotFound</code>
+      <code>ShareNotFound</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Sharing/Listener.php">
+    <InvalidArgument occurrences="1">
+      <code>[self::class, 'listenPreShare']</code>
+    </InvalidArgument>
   </file>
 </files>

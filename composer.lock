@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4a3d65807490679a4de897a8643385bb",
+    "content-hash": "3172d27bd19b2a125db3197c495deda9",
     "packages": [
         {
             "name": "cogpowered/finediff",
@@ -225,25 +225,26 @@
         },
         {
             "name": "christophwurst/nextcloud",
-            "version": "v20.0.4",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChristophWurst/nextcloud_composer.git",
-                "reference": "a207b55848d1ac4c83a954eac90c07714bbdaaed"
+                "reference": "0c78518f688ea2ceb1e23ff2931e0e1db1b75ddd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/a207b55848d1ac4c83a954eac90c07714bbdaaed",
-                "reference": "a207b55848d1ac4c83a954eac90c07714bbdaaed",
+                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/0c78518f688ea2ceb1e23ff2931e0e1db1b75ddd",
+                "reference": "0c78518f688ea2ceb1e23ff2931e0e1db1b75ddd",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2"
+                "php": "^7.3 || ~8.0.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "20.0.0-dev"
+                    "dev-master": "21.0.0-dev"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -259,9 +260,9 @@
             "description": "Composer package containing Nextcloud's public API (classes, interfaces)",
             "support": {
                 "issues": "https://github.com/ChristophWurst/nextcloud_composer/issues",
-                "source": "https://github.com/ChristophWurst/nextcloud_composer/tree/v20.0.4"
+                "source": "https://github.com/ChristophWurst/nextcloud_composer/tree/master"
             },
-            "time": "2020-12-23T12:42:07+00:00"
+            "time": "2020-12-23T22:55:20+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -4893,9 +4894,10 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
-        "roave/security-advisories": 20
+        "roave/security-advisories": 20,
+        "christophwurst/nextcloud": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

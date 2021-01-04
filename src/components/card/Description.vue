@@ -140,7 +140,17 @@ export default {
 			}
 		},
 		attachmentUrl() {
-			return (attachment) => generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
+			return (attachment) => {
+				if (attachment.extendedData.fileid) {
+					return generateUrl('/f/' + attachment.extendedData.fileid)
+				}
+				return generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)
+			}
+		},
+		attachmentPreview() {
+			return (attachment) => (attachment.extendedData.fileid
+				? generateUrl(`/core/preview?fileId=${attachment.extendedData.fileid}&x=600&y=600&a=true`)
+				: generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`))
 		},
 		formattedFileSize() {
 			return (filesize) => formatFileSize(filesize)
@@ -169,12 +179,15 @@ export default {
 		addAttachment(attachment) {
 			const descString = this.$refs.markdownEditor.easymde.value()
 			let embed = ''
-			if (attachment.extendedData.mimetype.includes('image')) {
+			if ((attachment.type === 'file' && attachment.extendedData.hasPreview) || attachment.extendedData.mimetype.includes('image')) {
 				embed = '!'
 			}
-			const attachmentString = embed + '[📎 ' + attachment.data + '](' + this.attachmentUrl(attachment) + ')'
-			this.$refs.markdownEditor.easymde.value(descString + '\n' + attachmentString)
+			const attachmentString = embed + '[📎 ' + attachment.data + '](' + this.attachmentPreview(attachment) + ')'
+			const newContent = descString + '\n' + attachmentString
+			this.$refs.markdownEditor.easymde.value(newContent)
+			this.description = newContent
 			this.modalShow = false
+			this.updateDescription()
 		},
 		clickedPreview(e) {
 			if (e.target.getAttribute('type') === 'checkbox') {

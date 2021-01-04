@@ -50,7 +50,11 @@ class Capabilities implements ICapability {
 		return [
 			'deck' => [
 				'version' => $this->appManager->getAppVersion('deck'),
-				'canCreateBoards' => $this->permissionService->canCreate()
+				'canCreateBoards' => $this->permissionService->canCreate(),
+				'apiVersions' => [
+					'1.0',
+					'1.1'
+				]
 			]
 		];
 	}

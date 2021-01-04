@@ -113,13 +113,13 @@ class BoardService {
 		$this->userId = $userId;
 	}
 
-	public function getUserBoards(int $since = -1, $includeArchived = true): array {
-		$userInfo = $this->getBoardPrerequisites();
-		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null, $since, $includeArchived);
-		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null, $since, $includeArchived);
-		$circleBoards = $this->boardMapper->findAllByCircles($userInfo['user'], null, null,  $since, $includeArchived);
-		return array_unique(array_merge($userBoards, $groupBoards, $circleBoards));
+	/**
+	 * Get all boards that are shared with a user, their groups or circles
+	 */
+	public function getUserBoards(int $since = -1, bool $includeArchived = true): array {
+		return $this->boardMapper->findAllForUser($this->userId, $since, $includeArchived);
 	}
+
 	/**
 	 * @return array
 	 */
@@ -324,7 +324,7 @@ class BoardService {
 			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
 		]);
-		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $new_board, ActivityManager::SUBJECT_BOARD_CREATE);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $new_board, ActivityManager::SUBJECT_BOARD_CREATE, [], $userId);
 		$this->changeHelper->boardChanged($new_board->getId());
 
 		$this->eventDispatcher->dispatch(

@@ -149,7 +149,8 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 
 	public function queryCardsByBoards(array $boardIds): IQueryBuilder {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('c.*')
+		$qb->select('c.*', 's.board_id')
+			->selectAlias('s.title', 'stack_title')
 			->from('deck_cards', 'c')
 			->innerJoin('c', 'deck_stacks', 's', $qb->expr()->eq('s.id', 'c.stack_id'))
 			->andWhere($qb->expr()->in('s.board_id', $qb->createNamedParameter($boardIds, IQueryBuilder::PARAM_INT_ARRAY)));
@@ -277,6 +278,27 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			$qb->setFirstResult($offset);
 		}
 		return $this->findEntities($qb);
+	}
+
+	public function searchRaw($boardIds, $term, $limit = null, $offset = null) {
+		$qb = $this->queryCardsByBoards($boardIds);
+		$qb->andWhere($qb->expr()->eq('c.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		$qb->andWhere(
+			$qb->expr()->orX(
+				$qb->expr()->iLike('c.title', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($term) . '%')),
+				$qb->expr()->iLike('c.description', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($term) . '%'))
+			)
+		);
+		if ($limit !== null) {
+			$qb->setMaxResults($limit);
+		}
+		if ($offset !== null) {
+			$qb->setFirstResult($offset);
+		}
+		$result = $qb->execute();
+		$all = $result->fetchAll();
+		$result->closeCursor();
+		return $all;
 	}
 
 	public function delete(Entity $entity): Entity {

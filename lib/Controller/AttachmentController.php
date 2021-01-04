@@ -52,8 +52,13 @@ class AttachmentController extends Controller {
 	 * @return \OCP\AppFramework\Http\Response
 	 * @throws \OCA\Deck\NotFoundException
 	 */
-	public function display($attachmentId) {
-		return $this->attachmentService->display($attachmentId);
+	public function display($cardId, $attachmentId) {
+		if (strpos($attachmentId, ':') === false) {
+			$type = 'deck_file';
+		} else {
+			[$type, $attachmentId] = explode(':', $attachmentId);
+		}
+		return $this->attachmentService->display($cardId, $attachmentId, $type);
 	}
 
 	/**
@@ -70,21 +75,36 @@ class AttachmentController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 */
-	public function update($attachmentId) {
-		return $this->attachmentService->update($attachmentId, $this->request->getParam('data'));
+	public function update($cardId, $attachmentId) {
+		if (strpos($attachmentId, ':') === false) {
+			$type = 'deck_file';
+		} else {
+			[$type, $attachmentId] = explode(':', $attachmentId);
+		}
+		return $this->attachmentService->update($cardId, $attachmentId, $this->request->getParam('data'), $type);
 	}
 
 	/**
 	 * @NoAdminRequired
 	 */
-	public function delete($attachmentId) {
-		return $this->attachmentService->delete($attachmentId);
+	public function delete($cardId, $attachmentId) {
+		if (strpos($attachmentId, ':') === false) {
+			$type = 'deck_file';
+		} else {
+			[$type, $attachmentId] = explode(':', $attachmentId);
+		}
+		return $this->attachmentService->delete($cardId, $attachmentId, $type);
 	}
 
 	/**
 	 * @NoAdminRequired
 	 */
-	public function restore($attachmentId) {
-		return $this->attachmentService->restore($attachmentId);
+	public function restore($cardId, $attachmentId) {
+		if (strpos($attachmentId, ':') === false) {
+			$type = 'deck_file';
+		} else {
+			[$type, $attachmentId] = explode(':', $attachmentId);
+		}
+		return $this->attachmentService->restore($cardId, $attachmentId, $type);
 	}
 }

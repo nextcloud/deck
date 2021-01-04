@@ -85,6 +85,16 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		return $board;
 	}
 
+	public function findAllForUser(string $userId, int $since = -1, $includeArchived = true): array {
+		$groups = $this->groupManager->getUserGroupIds(
+			$this->userManager->get($userId)
+		);
+		$userBoards = $this->findAllByUser($userId, null, null, $since, $includeArchived);
+		$groupBoards = $this->findAllByGroups($userId, $groups,null, null, $since, $includeArchived);
+		$circleBoards = $this->findAllByCircles($userId, null, null,  $since, $includeArchived);
+		return array_unique(array_merge($userBoards, $groupBoards, $circleBoards));
+	}
+
 	/**
 	 * Find all boards for a given user
 	 *
