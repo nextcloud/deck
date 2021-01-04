@@ -270,7 +270,7 @@ class AttachmentServiceTest extends TestCase {
 			->method('display')
 			->with($attachment)
 			->willReturn($response);
-		$actual = $this->attachmentService->display(1);
+		$actual = $this->attachmentService->display(1, 1);
 		$this->assertEquals($response, $actual);
 	}
 
@@ -286,8 +286,8 @@ class AttachmentServiceTest extends TestCase {
 		$this->attachmentServiceImpl->expects($this->once())
 			->method('display')
 			->with($attachment)
-			->will($this->throwException(new InvalidAttachmentType('deck_file')));
-		$this->attachmentService->display(1);
+			->will($this->throwException(new NotFoundException('deck_file')));
+		$this->attachmentService->display(1, 1);
 	}
 	public function testUpdate() {
 		$attachment = $this->createAttachment('deck_file', 'file_name.jpg');
@@ -309,7 +309,7 @@ class AttachmentServiceTest extends TestCase {
 				$a->setExtendedData(['mime' => 'image/jpeg']);
 			});
 
-		$actual = $this->attachmentService->update(1, 'file_name.jpg');
+		$actual = $this->attachmentService->update(1, 1, 'file_name.jpg');
 
 		$expected->setExtendedData(['mime' => 'image/jpeg']);
 		$expected->setLastModified($attachment->getLastModified());
@@ -333,7 +333,7 @@ class AttachmentServiceTest extends TestCase {
 		$this->attachmentMapper->expects($this->once())
 			->method('delete')
 			->willReturn($attachment);
-		$actual = $this->attachmentService->delete(1);
+		$actual = $this->attachmentService->delete(1, 1);
 		$this->assertEquals($expected, $actual);
 	}
 
@@ -358,7 +358,7 @@ class AttachmentServiceTest extends TestCase {
 			->method('update')
 			->willReturn($attachment);
 		$expected->setDeletedAt(23);
-		$actual = $this->attachmentService->delete(1);
+		$actual = $this->attachmentService->delete(1, 1);
 		$this->assertEquals($expected, $actual);
 	}
 
@@ -378,7 +378,7 @@ class AttachmentServiceTest extends TestCase {
 			->method('update')
 			->willReturn($attachment);
 		$expected->setDeletedAt(0);
-		$actual = $this->attachmentService->restore(1);
+		$actual = $this->attachmentService->restore(1, 1);
 		$this->assertEquals($expected, $actual);
 	}
 
@@ -395,6 +395,6 @@ class AttachmentServiceTest extends TestCase {
 		$this->attachmentServiceImpl->expects($this->once())
 			->method('allowUndo')
 			->willReturn(false);
-		$actual = $this->attachmentService->restore(1);
+		$actual = $this->attachmentService->restore(1, 1);
 	}
 }

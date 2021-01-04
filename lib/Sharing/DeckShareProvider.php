@@ -114,7 +114,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 		try {
 			$board = $this->boardMapper->find($boardId);
-			$valid &= !$board->getArchived();
+			$valid = $valid && !$board->getArchived();
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			$valid = false;
 		}
@@ -234,7 +234,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	 */
 	private function createShareObject(array $data): IShare {
 		$share = $this->shareManager->newShare();
-		$share->setId((int)$data['id'])
+		$share->setId($data['id'])
 			->setShareType((int)$data['share_type'])
 			->setPermissions((int)$data['permissions'])
 			->setTarget($data['file_target'])
@@ -401,7 +401,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 		$qb->execute();
 
-		return $this->getShareById($share->getId(), $recipient);
+		return $this->getShareById((int)$share->getId(), $recipient);
 	}
 
 	/**
@@ -456,6 +456,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 	/**
 	 * @inheritDoc
+	 * @returns
 	 */
 	public function getSharesInFolder($userId, Folder $node, $reshares) {
 		$qb = $this->dbConnection->getQueryBuilder();
@@ -755,14 +756,13 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	/**
 	 * Get shared with the card
 	 *
-	 * @param string $userId get shares where this user is the recipient
+	 * @param int $cardId
 	 * @param int $shareType
-	 * @param Node|null $node
 	 * @param int $limit The max number of entries returned, -1 for all
 	 * @param int $offset
 	 * @return IShare[]
 	 */
-	public function getSharedWithByType(string $cardId, int $shareType, $limit, $offset): array {
+	public function getSharedWithByType(int $cardId, int $shareType, $limit, $offset): array {
 		/** @var IShare[] $shares */
 		$shares = [];
 

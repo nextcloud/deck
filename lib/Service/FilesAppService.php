@@ -77,11 +77,11 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$shares = array_filter($shares, function ($share) {
 			return $share->getPermissions() > 0;
 		});
-		return array_map(function (IShare $share) use ($cardId, $userFolder) {
+		return array_map(function (IShare $share) use ($cardId) {
 			$file = $share->getNode();
 			$attachment = new Attachment();
 			$attachment->setType('file');
-			$attachment->setId($share->getId());
+			$attachment->setId((int)$share->getId());
 			$attachment->setCardId($cardId);
 			$attachment->setCreatedBy($share->getSharedBy());
 			$attachment->setData($file->getName());
@@ -179,18 +179,16 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 			throw new StatusException('Could not read file');
 		}
 		$target->putContent($content);
-		if (is_resource($content)) {
-			fclose($content);
-		}
+		fclose($content);
 
 		$share = $this->shareManager->newShare();
 		$share->setNode($target);
-		$share->setShareType(Share::SHARE_TYPE_DECK);
+		$share->setShareType(ISHARE::TYPE_DECK);
 		$share->setSharedWith((string)$attachment->getCardId());
 		$share->setPermissions(Constants::PERMISSION_READ);
 		$share->setSharedBy($this->userId);
 		$share = $this->shareManager->createShare($share);
-		$attachment->setId($share->getId());
+		$attachment->setId((int)$share->getId());
 		$attachment->setData($target->getName());
 		return $attachment;
 	}
@@ -237,9 +235,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 			throw new StatusException('Could not read file');
 		}
 		$target->putContent($content);
-		if (is_resource($content)) {
-			fclose($content);
-		}
+		fclose($content);
 
 		$attachment->setLastModified(time());
 		return $attachment;
@@ -249,9 +245,6 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$share = $this->shareProvider->getShareById($attachment->getId());
 		$file = $share->getNode();
 		$attachment->setData($file->getName());
-		if ($file === null) {
-			throw new NotFoundException('File not found');
-		}
 
 		if ($file->getOwner() !== null && $file->getOwner()->getUID() === $this->userId) {
 			$file->delete();

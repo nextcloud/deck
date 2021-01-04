@@ -32,6 +32,7 @@ use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\Share\IShare;
 
@@ -40,12 +41,14 @@ class ShareAPIHelper {
 	private $timeFactory;
 	private $cardMapper;
 	private $permissionService;
+	private $l10n;
 
-	public function __construct(IURLGenerator $urlGenerator, ITimeFactory $timeFactory, CardMapper $cardMapper, PermissionService $permissionService) {
+	public function __construct(IURLGenerator $urlGenerator, ITimeFactory $timeFactory, CardMapper $cardMapper, PermissionService $permissionService, IL10N $l10n) {
 		$this->urlGenerator = $urlGenerator;
 		$this->timeFactory = $timeFactory;
 		$this->cardMapper = $cardMapper;
 		$this->permissionService = $permissionService;
+		$this->l10n = $l10n;
 	}
 
 	public function formatShare(IShare $share): array {
@@ -67,7 +70,7 @@ class ShareAPIHelper {
 				$expireDate = $this->parseDate($expireDate);
 				$share->setExpirationDate($expireDate);
 			} catch (\Exception $e) {
-				throw new OCSNotFoundException($this->l->t('Invalid date, date format must be YYYY-MM-DD'));
+				throw new OCSNotFoundException($this->l10n->t('Invalid date, date format must be YYYY-MM-DD'));
 			}
 		}
 	}
@@ -87,10 +90,6 @@ class ShareAPIHelper {
 		try {
 			$date = $this->timeFactory->getDateTime($expireDate);
 		} catch (\Exception $e) {
-			throw new \Exception('Invalid date. Format must be YYYY-MM-DD');
-		}
-
-		if ($date === false) {
 			throw new \Exception('Invalid date. Format must be YYYY-MM-DD');
 		}
 

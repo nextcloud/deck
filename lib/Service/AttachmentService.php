@@ -118,7 +118,7 @@ class AttachmentService {
 			/** @var IAttachmentService $service */
 			$service = $this->getService($attachmentType);
 			if ($service instanceof ICustomAttachmentService) {
-				$attachments = array_merge($attachments, $service->listAttachments($cardId));
+				$attachments = array_merge($attachments, $service->listAttachments((int)$cardId));
 			}
 		}
 
@@ -151,7 +151,7 @@ class AttachmentService {
 			foreach (array_keys($this->services) as $attachmentType) {
 				$service = $this->getService($attachmentType);
 				if ($service instanceof ICustomAttachmentService) {
-					$count += $service->getAttachmentCount($cardId);
+					$count += $service->getAttachmentCount((int)$cardId);
 				}
 			}
 
