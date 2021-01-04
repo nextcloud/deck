@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.3 - 2021-01-04
+
+### Fixed
+* [#2622](https://github.com/nextcloud/deck/pull/2622) Fix gradient and stack header spacing for safari
+* [#2626](https://github.com/nextcloud/deck/pull/2626) Adding a description icon to cards when they contain a description without any checkmarks @MonkeySon
+* [#2659](https://github.com/nextcloud/deck/pull/2659) Matching color of description cursor with text color @JonFStr
+* [#2676](https://github.com/nextcloud/deck/pull/2676) Only load filter view when shown
+* [#2680](https://github.com/nextcloud/deck/pull/2680) Do not try to add change data if it doesn't exist
+* [#2681](https://github.com/nextcloud/deck/pull/2681) Filter out deleted stacks from results
+* [#2685](https://github.com/nextcloud/deck/pull/2685) Show all boards in move card dialog @jakobroehrl
+* [#2687](https://github.com/nextcloud/deck/pull/2687) 3dots no opacity @jakobroehrl
+* [#2688](https://github.com/nextcloud/deck/pull/2688) Title > boardname @jakobroehrl
+* [#2689](https://github.com/nextcloud/deck/pull/2689) Modal > bigger view wording @jakobroehrl
+
 ## 1.2.2 - 2020-11-24
 
 ### Fixed
