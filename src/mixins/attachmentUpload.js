@@ -32,7 +32,7 @@ export default {
 		}
 	},
 	methods: {
-		async onLocalAttachmentSelected(file) {
+		async onLocalAttachmentSelected(file, type) {
 			if (this.maxUploadSize > 0 && file.size > this.maxUploadSize) {
 				showError(
 					t('deck', 'Failed to upload {name}', { name: file.name }) + ' - '
@@ -45,7 +45,7 @@ export default {
 			this.$set(this.uploadQueue, file.name, { name: file.name, progress: 0 })
 			const bodyFormData = new FormData()
 			bodyFormData.append('cardId', this.cardId)
-			bodyFormData.append('type', 'file')
+			bodyFormData.append('type', type)
 			bodyFormData.append('file', file)
 			await queue.add(async() => {
 				try {
