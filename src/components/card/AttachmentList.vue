@@ -39,10 +39,10 @@
 			multiple
 			@change="handleUploadFile">
 		<input ref="localAttachments"
-					 type="file"
-					 style="display: none;"
-					 multiple
-					 @change="handleLocalUploadFile">
+			type="file"
+			style="display: none;"
+			multiple
+			@change="handleLocalUploadFile">
 		<ul class="attachment-list">
 			<li v-for="attachment in uploadQueue" :key="attachment.name" class="attachment">
 				<a class="fileicon" :style="mimetypeForAttachment()" />
