@@ -6,6 +6,7 @@ const config = {
 	entry: {
 		collections: path.join(__dirname, 'src', 'init-collections.js'),
 		dashboard: path.join(__dirname, 'src', 'init-dashboard.js'),
+		calendar: path.join(__dirname, 'src', 'init-calendar.js'),
 	},
 	output: {
 		filename: '[name].js',
