@@ -23,6 +23,7 @@ class ServerContext implements Context {
 	 * @Given /^acting as user "([^"]*)"$/
 	 */
 	public function actingAsUser($user) {
+		$this->cookieJar = new CookieJar();
 		$this->loggingInUsingWebAs($user);
 		$this->asAn($user);
 	}
