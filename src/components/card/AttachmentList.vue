@@ -23,9 +23,6 @@
 <template>
 	<AttachmentDragAndDrop :card-id="cardId" class="drop-upload--sidebar">
 		<div class="button-group">
-			<button class="icon-upload" @click="uploadLocalFile()">
-				{{ t('deck', 'Upload local files') }}
-			</button>
 			<button class="icon-upload" @click="uploadNewFile()">
 				{{ t('deck', 'Upload new files') }}
 			</button>
@@ -38,11 +35,6 @@
 			style="display: none;"
 			multiple
 			@change="handleUploadFile">
-		<input ref="localAttachments"
-			type="file"
-			style="display: none;"
-			multiple
-			@change="handleLocalUploadFile">
 		<ul class="attachment-list">
 			<li v-for="attachment in uploadQueue" :key="attachment.name" class="attachment">
 				<a class="fileicon" :style="mimetypeForAttachment()" />
@@ -207,18 +199,8 @@ export default {
 			}
 			event.target.value = ''
 		},
-		handleLocalUploadFile(event) {
-			const files = event.target.files ?? []
-			for (const file of files) {
-				this.onLocalAttachmentSelected(file, 'deck_file')
-			}
-			event.target.value = ''
-		},
 		uploadNewFile() {
 			this.$refs.filesAttachment.click()
-		},
-		uploadLocalFile() {
-			this.$refs.localAttachments.click()
 		},
 		shareFromFiles() {
 			picker.pick()
