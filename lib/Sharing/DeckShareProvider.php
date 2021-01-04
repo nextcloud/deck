@@ -692,8 +692,6 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 				break;
 			}
 
-			// select s.id, dc.title, f.fileid, f.path from oc_share as s left join oc_filecache as f on s.file_source = f.fileid left join oc_storages as st on f.storage = st.numeric_id left join oc_deck_cards as dc on dc.id = s.share_with left join oc_deck_stacks as ds on dc.stack_id = ds.id inner join oc_deck_boards as db on ds.board_id = db.id WHERE db.id = 1;
-
 			$qb = $this->dbConnection->getQueryBuilder();
 			$qb->select('s.*',
 				'f.fileid', 'f.path', 'f.permissions AS f_permissions', 'f.storage', 'f.path_hash',
@@ -705,7 +703,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 				->orderBy('s.id')
 				->leftJoin('s', 'filecache', 'f', $qb->expr()->eq('s.file_source', 'f.fileid'))
 				->leftJoin('f', 'storages', 'st', $qb->expr()->eq('f.storage', 'st.numeric_id'))
-				->leftJoin('s', 'deck_cards', 'dc', $qb->expr()->eq('dc.id', 's.share_with'))
+				->leftJoin('s', 'deck_cards', 'dc', $qb->expr()->eq($qb->expr()->castColumn('dc.id', IQueryBuilder::PARAM_STR), 's.share_with'))
 				->leftJoin('dc', 'deck_stacks', 'ds', $qb->expr()->eq('dc.stack_id', 'ds.id'))
 				->leftJoin('ds', 'deck_boards', 'db', $qb->expr()->eq('ds.board_id', 'db.id'));
 
@@ -777,7 +775,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			->orderBy('s.id')
 			->leftJoin('s', 'filecache', 'f', $qb->expr()->eq('s.file_source', 'f.fileid'))
 			->leftJoin('f', 'storages', 'st', $qb->expr()->eq('f.storage', 'st.numeric_id'))
-			->leftJoin('s', 'deck_cards', 'dc', $qb->expr()->eq('dc.id', 's.share_with'));
+			->leftJoin('s', 'deck_cards', 'dc', $qb->expr()->eq($qb->expr()->castColumn('dc.id', IQueryBuilder::PARAM_STR), 's.share_with'));
 
 		if ($limit !== -1) {
 			$qb->setMaxResults($limit);
