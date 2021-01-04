@@ -47,10 +47,10 @@ export class AttachmentApi {
 		return response.data
 	}
 
-	async updateAttachment({ cardId, attachmentId, formData }) {
+	async updateAttachment({ cardId, attachment, formData }) {
 		const response = await axios({
 		   method: 'POST',
-		   url: this.url(`/cards/${cardId}/attachment/${attachmentId}`),
+		   url: this.url(`/cards/${cardId}/attachment/${attachment.type}:${attachment.id}`),
 		   data: formData,
 	   })
 	   return response.data
@@ -59,14 +59,14 @@ export class AttachmentApi {
 	async deleteAttachment(attachment) {
 		await axios({
 			method: 'DELETE',
-			url: this.url(`/cards/${attachment.cardId}/attachment/${attachment.id}`),
+			url: this.url(`/cards/${attachment.cardId}/attachment/${attachment.type}:${attachment.id}`),
 		})
 	}
 
 	async restoreAttachment(attachment) {
 		const response = await axios({
 			method: 'GET',
-			url: this.url(`/cards/${attachment.cardId}/attachment/${attachment.id}/restore`),
+			url: this.url(`/cards/${attachment.cardId}/attachment/${attachment.type}:${attachment.id}/restore`),
 		})
 		return response.data
 	}
@@ -74,7 +74,7 @@ export class AttachmentApi {
 	async displayAttachment(attachment) {
 		const response = await axios({
 			method: 'GET',
-			url: this.url(`/cards/${attachment.cardId}/attachment/${attachment.id}`),
+			url: this.url(`/cards/${attachment.cardId}/attachment/${attachment.type}:${attachment.id}`),
 		})
 		return response.data
 	}

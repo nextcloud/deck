@@ -52,21 +52,28 @@ export default {
 		},
 
 		updateAttachment(state, { cardId, attachment }) {
-			const existingIndex = state.attachments[attachment.cardId].findIndex(a => a.id === attachment.id)
+			const existingIndex = state.attachments[attachment.cardId].findIndex(a => a.id === attachment.id && a.type === attachment.type)
 			if (existingIndex !== -1) {
 				Vue.set(state.attachments[cardId], existingIndex, attachment)
 			}
 		},
 
 		deleteAttachment(state, deletedAttachment) {
-			const existingIndex = state.attachments[deletedAttachment.cardId].findIndex(a => a.id === deletedAttachment.id)
+			const existingIndex = state.attachments[deletedAttachment.cardId].findIndex(a => a.id === deletedAttachment.id && a.type === deletedAttachment.type)
+			if (existingIndex !== -1) {
+				state.attachments[deletedAttachment.cardId][existingIndex].deletedAt = Date.now() / 1000 | 0
+			}
+		},
+
+		unshareAttachment(state, deletedAttachment) {
+			const existingIndex = state.attachments[deletedAttachment.cardId].findIndex(a => a.id === deletedAttachment.id && a.type === deletedAttachment.type)
 			if (existingIndex !== -1) {
 				state.attachments[deletedAttachment.cardId][existingIndex].deletedAt = -1
 			}
 		},
 
 		restoreAttachment(state, restoredAttachment) {
-			const existingIndex = state.attachments[restoredAttachment.cardId].findIndex(a => a.id === restoredAttachment.id)
+			const existingIndex = state.attachments[restoredAttachment.cardId].findIndex(a => a.id === restoredAttachment.id && a.type === restoredAttachment.type)
 			if (existingIndex !== -1) {
 				state.attachments[restoredAttachment.cardId][existingIndex].deletedAt = 0
 			}
@@ -85,14 +92,20 @@ export default {
 			commit('cardIncreaseAttachmentCount', cardId)
 		},
 
-		async updateAttachment({ commit }, { cardId, attachmentId, formData }) {
-			const attachment = await apiClient.updateAttachment({ cardId, attachmentId, formData })
-			commit('updateAttachment', { cardId, attachment })
+		async updateAttachment({ commit }, { cardId, attachment, formData }) {
+			const result = await apiClient.updateAttachment({ cardId, attachment, formData })
+			commit('updateAttachment', { cardId, attachment: result })
 		},
 
 		async deleteAttachment({ commit }, attachment) {
 			await apiClient.deleteAttachment(attachment)
 			commit('deleteAttachment', attachment)
+			commit('cardDecreaseAttachmentCount', attachment.cardId)
+		},
+
+		async unshareAttachment({ commit }, attachment) {
+			await apiClient.deleteAttachment(attachment)
+			commit('unshareAttachment', attachment)
 			commit('cardDecreaseAttachmentCount', attachment.cardId)
 		},
 

@@ -37,7 +37,7 @@
 			@change="handleUploadFile">
 		<ul class="attachment-list">
 			<li v-for="attachment in uploadQueue" :key="attachment.name" class="attachment">
-				<a class="fileicon" :style="mimetypeForAttachment('none')" />
+				<a class="fileicon" :style="mimetypeForAttachment()" />
 				<div class="details">
 					<a>
 						<div class="filename">
@@ -72,7 +72,7 @@
 					<ActionLink v-if="attachment.extendedData.fileid" icon="icon-folder" :href="internalLink(attachment)">
 						{{ t('deck', 'Show in files') }}
 					</ActionLink>
-					<ActionButton v-if="attachment.extendedData.fileid" icon="icon-delete">
+					<ActionButton v-if="attachment.extendedData.fileid" icon="icon-delete" @click="unshareAttachment(attachment)">
 						{{ t('deck', 'Unshare file') }}
 					</ActionButton>
 
@@ -143,10 +143,13 @@ export default {
 	},
 	computed: {
 		attachments() {
-			return [...this.$store.getters.attachmentsByCard(this.cardId)].sort((a, b) => b.id - a.id)
+			return [...this.$store.getters.attachmentsByCard(this.cardId)].filter(attachment => attachment.deletedAt >= 0).sort((a, b) => b.id - a.id)
 		},
 		mimetypeForAttachment() {
 			return (attachment) => {
+				if (!attachment) {
+					return {}
+				}
 				const url = attachment.extendedData.hasPreview ? this.attachmentPreview(attachment) : OC.MimeType.getIconUrl(attachment.extendedData.mimetype)
 				const styles = {
 					'background-image': `url("${url}")`,
@@ -216,6 +219,9 @@ export default {
 						this.$store.dispatch('fetchAttachments', this.cardId)
 					})
 				})
+		},
+		unshareAttachment(attachment) {
+			this.$store.dispatch('unshareAttachment', attachment)
 		},
 		clickAddNewAttachmment() {
 			this.$refs.localAttachments.click()

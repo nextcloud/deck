@@ -78,7 +78,7 @@ export default {
 			bodyFormData.append('file', this.file)
 			this.$store.dispatch('updateAttachment', {
 				cardId: this.cardId,
-				attachmentId: this.overwriteAttachment.id,
+				attachment: this.overwriteAttachment,
 				formData: bodyFormData,
 			})
 
