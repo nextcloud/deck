@@ -37,6 +37,7 @@ use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\Constants;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Folder;
@@ -267,10 +268,25 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			$entryData['parent'] = $entryData['f_parent'];
 			$share->setNodeCacheEntry(Cache::cacheEntryFromData($entryData, \OC::$server->get(IMimeTypeLoader::class)));
 		}
-
 		return $share;
 	}
 
+	private function applyBoardPermission($share, $permissions) {
+		try {
+			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_EDIT);
+		} catch (NoPermissionException $e) {
+			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_UPDATE;
+			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_CREATE;
+			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_DELETE;
+		}
+
+		try {
+			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_SHARE);
+		} catch (NoPermissionException $e) {
+			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE;
+		}
+		$share->setPermissions($permissions);
+	}
 	/**
 	 * @inheritDoc
 	 */
@@ -629,7 +645,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			$stmt = $query->execute();
 
 			while ($data = $stmt->fetch()) {
-				$shareMap[$data['parent']]->setPermissions((int)$data['permissions']);
+				$this->applyBoardPermission($shareMap[$data['parent']], (int)$data['permissions']);
 				$shareMap[$data['parent']]->setTarget($data['file_target']);
 			}
 
@@ -740,7 +756,6 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 					$offset--;
 					continue;
 				}
-
 				$shares[] = $this->createShareObject($data);
 			}
 			$cursor->closeCursor();

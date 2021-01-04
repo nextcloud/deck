@@ -132,6 +132,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 			'mimetype' => $file->getMimeType(),
 			'info' => pathinfo($file->getName()),
 			'hasPreview' => $this->preview->isAvailable($file),
+			'permissions' => $share->getPermissions(),
 		]);
 		return $attachment;
 	}
@@ -170,7 +171,11 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$fileName = $file['name'];
 
 		$userFolder = $this->rootFolder->getUserFolder($this->userId);
-		$folder = $userFolder->get($this->configService->getAttachmentFolder());
+		try {
+			$folder = $userFolder->get($this->configService->getAttachmentFolder());
+		} catch (NotFoundException $e) {
+			$folder = $userFolder->newFolder($this->configService->getAttachmentFolder());
+		}
 
 		$fileName = $folder->getNonExistingName($fileName);
 		$target = $folder->newFile($fileName);

@@ -212,7 +212,6 @@ export default {
 
 					axios.post(generateOcsUrl('apps/files_sharing/api/v1', 2) + 'shares', {
 						path,
-						permissions: 19,
 						shareType: 12,
 						shareWith: '' + this.cardId,
 					}).then(() => {
