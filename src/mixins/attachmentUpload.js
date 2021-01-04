@@ -63,7 +63,7 @@ export default {
 						this.overwriteAttachment = err.response.data.data
 						this.modalShow = true
 					} else {
-						showError(err.response.data.message)
+						showError(err.response.data ? err.response.data.message : 'Failed to upload file')
 					}
 				}
 				this.$delete(this.uploadQueue, file.name)
