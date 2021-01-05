@@ -109,6 +109,7 @@ export default {
 	},
 	methods: {
 		handleDropFiles(event) {
+			event.dataTransfer.dropEffect = 'copy'
 			this.isDraggingOver = false
 			if (this.isReadOnly) {
 				return
