@@ -40,7 +40,6 @@ OC.L10N.register(
     "Add card" : "增加卡片",
     "Edit" : "編輯",
     "Members" : "成員",
-    "Upload attachment" : "上傳附件",
     "Attachments" : "附件",
     "Comments" : "意見",
     "Modified" : "已修改",

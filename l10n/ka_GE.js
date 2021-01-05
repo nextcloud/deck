@@ -31,7 +31,6 @@ OC.L10N.register(
     "Add card" : "ბარათის დამატება",
     "Edit" : "შეცვლა",
     "Members" : "წევრები",
-    "Upload attachment" : "დანართის ატვირთვა",
     "Comments" : "კომენტარები",
     "Modified" : "შეიცვალა",
     "Created" : "შექმნილია",

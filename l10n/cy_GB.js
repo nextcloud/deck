@@ -14,7 +14,6 @@ OC.L10N.register(
     "Can share" : "Can share",
     "Delete" : "Dileu",
     "Edit" : "Golygu",
-    "Upload attachment" : "Llwytho atodiad",
     "Modified" : "Addaswyd",
     "Select Date" : "Dewis Dyddiad",
     "Save" : "Cadw",

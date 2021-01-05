@@ -30,7 +30,6 @@ OC.L10N.register(
     "Add card" : "Shto kartë",
     "Edit" : "Edito",
     "Members" : "Anëtar",
-    "Upload attachment" : "Ngarko bashkëngjitje",
     "Attachments" : "Bashkangjitjet",
     "Comments" : "Komentet",
     "Modified" : "Modifikuar ",

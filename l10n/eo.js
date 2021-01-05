@@ -95,7 +95,6 @@ OC.L10N.register(
     "Add card" : "Aldoni karton",
     "Edit" : "Redakti",
     "Members" : "Membroj",
-    "Upload attachment" : "Alŝuti dosieran aldonaĵon",
     "Attachments" : "Dosieraj aldonaĵoj",
     "Comments" : "Komentoj",
     "Modified" : "Modifita",

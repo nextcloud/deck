@@ -35,7 +35,6 @@ OC.L10N.register(
     "Add card" : "Agregar tarjeta",
     "Edit" : "Editar",
     "Members" : "Miembros",
-    "Upload attachment" : "Cargar adjunto",
     "Comments" : "Comentarios",
     "Modified" : "Modificado",
     "Created" : "Creado",

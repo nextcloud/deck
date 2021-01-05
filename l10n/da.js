@@ -35,7 +35,6 @@ OC.L10N.register(
     "Add card" : "Tilføj kort",
     "Edit" : "Redigér",
     "Members" : "Medlemmer",
-    "Upload attachment" : "Upload vedhæftning",
     "Attachments" : "Vedhæftede filer",
     "Comments" : "Kommentarer",
     "Modified" : "Ændret",

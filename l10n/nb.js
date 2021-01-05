@@ -102,7 +102,6 @@ OC.L10N.register(
     "Add card" : "Legg til kort",
     "Edit" : "Rediger",
     "Members" : "Medlemmer",
-    "Upload attachment" : "Last opp vedlegg",
     "Attachments" : "Vedlegg",
     "Comments" : "Kommentarer",
     "Modified" : "Endret",

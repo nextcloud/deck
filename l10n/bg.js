@@ -26,7 +26,6 @@ OC.L10N.register(
     "Delete" : "Изтриване",
     "Edit" : "Редакция",
     "Members" : "Членове",
-    "Upload attachment" : "Качване",
     "Attachments" : "Прикачени файлове",
     "Comments" : "Коментари",
     "Modified" : "Промяна",
