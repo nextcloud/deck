@@ -115,7 +115,7 @@ export default {
 			}
 			const files = event.dataTransfer.files
 			for (const file of files) {
-				this.onLocalAttachmentSelected(file)
+				this.onLocalAttachmentSelected(file, 'file')
 			}
 			event.dataTransfer.value = ''
 		},
