@@ -93,6 +93,9 @@
     "Could not write file to disk" : "Nepavyko įrašyti failą į diską",
     "A PHP extension stopped the file upload" : "PHP plėtinys sustabdė failo įkėlimą",
     "No file uploaded or file size exceeds maximum of %s" : "Neįkeltas joks failas arba failo dydis viršija maksimalų %s dydį",
+    "Card not found" : "Kortelė nerasta",
+    "Path is already shared with this card" : "Kelias jau yra bendrinamas su šia kortele",
+    "Invalid date, date format must be YYYY-MM-DD" : "Netinkama data, datos formatas privalo būti MMMM-mm-dd",
     "Personal planning and team project organization" : "Asmeninis planavimas ir komandinių projektų organizavimas",
     "Card details" : "Išsamiau apie kortelę",
     "Add board" : "Pridėti lentą",
@@ -161,8 +164,11 @@
     "Board name" : "Lentos pavadinimas",
     "Members" : "Nariai",
     "Add this attachment" : "Pridėti šį priedą",
+    "Unshare file" : "Nustoti bendrinti failą",
     "Delete Attachment" : "Ištrinti priedą",
     "Restore Attachment" : "Atkurti priedą",
+    "Invalid path selected" : "Pasirinktas neteisingas kelias",
+    "Open in sidebar view" : "Atverti šoninės juostos rodinyje",
     "Open in bigger view" : "Atverti didesniame rodinyje",
     "Attachments" : "Priedai",
     "Comments" : "Komentarai",
@@ -207,6 +213,9 @@
     "Show boards in calendar/tasks" : "Rodyti darbus kalendoriuje/užduotyse",
     "Board details" : "Išsamiau apie lentą",
     "Edit board" : "Taisyti lentą",
+    "Clone board" : "Dubliuoti lentą",
+    "Unarchive board" : "Išarchyvuoti lentą",
+    "Archive board" : "Archyvuoti lentą",
     "Turn on due date reminders" : "Įjungti galutinio termino priminimus",
     "Turn off due date reminders" : "Išjungti galutinio termino priminimus",
     "Due date reminders" : "Galutinio termino priminimai",
@@ -226,6 +235,8 @@
     "Link to a board" : "Susieti su lenta",
     "Link to a card" : "Susieti su kortele",
     "Something went wrong" : "Kažkas nutiko",
-    "Maximum file size of {size} exceeded" : "Viršytas maksimalus {size} failo dydis"
+    "Maximum file size of {size} exceeded" : "Viršytas maksimalus {size} failo dydis",
+    "Error creating the share" : "Klaida kuriant viešinį",
+    "Share" : "Bendrinti"
 },"pluralForm" :"nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);"
 }
