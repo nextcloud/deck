@@ -70,7 +70,7 @@
 				</Actions>
 				<Actions v-if="removable" :force-menu="true">
 					<ActionLink v-if="attachment.extendedData.fileid" icon="icon-folder" :href="internalLink(attachment)">
-						{{ t('deck', 'Show in files') }}
+						{{ t('deck', 'Show in Files') }}
 					</ActionLink>
 					<ActionButton v-if="attachment.extendedData.fileid" icon="icon-delete" @click="unshareAttachment(attachment)">
 						{{ t('deck', 'Unshare file') }}
