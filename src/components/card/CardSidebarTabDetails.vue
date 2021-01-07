@@ -179,17 +179,43 @@ export default {
 			},
 			shortcuts: [
 				{
-					text: 'Today',
+					text: t('deck', 'Today'),
 					onClick() {
 						const date = new Date()
+						date.setDate(date.getDate())
+						date.setHours(23)
+						date.setMinutes(59)
+						return date
+						// new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59)
+					},
+				},
+				{
+					text: t('deck', 'Tomorrow'),
+					onClick() {
+						const date = new Date()
+						date.setDate(date.getDate() + 1)
+						date.setHours(23)
+						date.setMinutes(59)
 						return date
 					},
 				},
 				{
-					text: 'Tomorrow',
+					text: t('deck', 'Next week'),
 					onClick() {
 						const date = new Date()
-						date.setTime(date.getTime() + 3600 * 1000 * 24)
+						date.setDate(date.getDate() + 7)
+						date.setHours(23)
+						date.setMinutes(59)
+						return date
+					},
+				},
+				{
+					text: t('deck', 'Next month'),
+					onClick() {
+						const date = new Date()
+						date.setDate(date.getDate() + 30)
+						date.setHours(23)
+						date.setMinutes(59)
 						return date
 					},
 				},
@@ -334,8 +360,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-.section-wrapper::v-deep .mx-datepicker-main .mx-datepicker-popup {
+.section-wrapper::v-deep .mx-datepicker-main.mx-datepicker-popup {
 	left: 0 !important;
+}
+
+.section-wrapper::v-deep .mx-datepicker-main.mx-datepicker-popup.mx-datepicker-sidebar {
+	padding: 0 !important;
 }
 
 .section-wrapper {
