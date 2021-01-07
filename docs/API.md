@@ -1000,7 +1000,7 @@ Deck stores user and app configuration values globally and per board. The GET en
 
 #### Response
 
-| Config key | Description | Value |
+| Config key | Description |
 | --- | --- |
 | calendar | Determines if the calendar/tasks integration through the CalDAV backend is enabled for the user (boolean) | 
 | groupLimit | Determines if creating new boards is limited to certain groups of the instance. The resulting output is an array of group objects with the id and the displayname (Admin only)|  
