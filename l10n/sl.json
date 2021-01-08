@@ -95,6 +95,9 @@
     "Could not write file to disk" : "Ni mogoče zapisati datoteke na disk",
     "A PHP extension stopped the file upload" : "Razširitev PHP onemogoča pošiljanje datoteke",
     "No file uploaded or file size exceeds maximum of %s" : "Ali ni poslane datoteke ali pa velikost datoteke presega omejitev %s",
+    "Card not found" : "Naloge ni mogoče najti",
+    "Path is already shared with this card" : "Pot je že povezana s to nalogo",
+    "Invalid date, date format must be YYYY-MM-DD" : "Neveljaven zapis časa; biti mora v zapisu YYYY-MM-DD",
     "Personal planning and team project organization" : "Osebno načrtovanje nalog in organizacija skupinskih projektov",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Program Deck je orodje za osebno načrtovanje in projektno delo v slogu kanban, ki se izvrstno vključuje v okolje Nextcloud.\n\nOrodje omogoča:\n- 📥 dodajanje in urejanje nalog\n- 📄 zapis dodatnih opomb v zapisu markdown\n- 🔖 dodeljevanje oznak za lažje urejanje in iskanje\n- 👥 souporabo v skupini, s prijatelji ali družino\n- 📎 pripenjanje in vstavljanje datotek v opise\n- 💬 opombe k posamezni nalogi\n- ⚡ sledenje spremembam in dejavnosti\n- 🚀 Organizaciji projekta",
     "Card details" : "Podrobnosti naloge",
@@ -167,9 +170,14 @@
     "title and color value must be provided" : "navedena morata biti podatka naslova in barve",
     "Board name" : "Ime  zbirke",
     "Members" : "Člani",
+    "Upload new files" : "Pošlji nove datoteke",
+    "Share from Files" : "Poveži iz oblaka",
     "Add this attachment" : "Dodaj prilogo",
+    "Unshare file" : "Prekini souporabo",
     "Delete Attachment" : "Izbriši prilogo",
     "Restore Attachment" : "Obnovi prilogo",
+    "File to share" : "Datoteka za souporabo",
+    "Invalid path selected" : "Izbrana je neveljavna pot",
     "Open in sidebar view" : "Odpri v bočnem pogledu",
     "Open in bigger view" : "Odpri v povečanem pogledu",
     "Attachments" : "Priloge",
@@ -216,6 +224,7 @@
     "All boards" : "Vse zbirke",
     "Archived boards" : "Arhivirane zbirke",
     "Shared with you" : "V souporabi z vami",
+    "Use bigger card view" : "Uporabi povečan pogled nalog",
     "Show boards in calendar/tasks" : "Pokaži zbirke v koledarjem in med opravili",
     "Limit deck usage of groups" : "Omeji uporabo zbirk na skupine",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Omejevanje programa prepreči uporabnikom, ki niso del teh skupin, ustvarjanje novih zbirk. Uporabniki bodo še vedno lahko spreminjali zbirke, ki so jih dobili v souporabo.",
@@ -248,6 +257,7 @@
     "Link to a card" : "Povezava do naloge",
     "Something went wrong" : "Prišlo je do napake ...",
     "Failed to upload {name}" : "Pošiljanje {name} je spodletelo",
-    "Maximum file size of {size} exceeded" : "Omejitev velikosti datoteke {size} je prekoračena."
+    "Maximum file size of {size} exceeded" : "Omejitev velikosti datoteke {size} je prekoračena.",
+    "Error creating the share" : "Napaka ustvarjanja mesta souporabe"
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }

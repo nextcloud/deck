@@ -175,7 +175,6 @@ OC.L10N.register(
     "Upload new files" : "Subir nuevos archivos",
     "Share from Files" : "Compartir desde Archivos",
     "Add this attachment" : "Añadir este adjunto",
-    "Show in files" : "Mostrar en Archivos",
     "Unshare file" : "Dejar de compartir archivo",
     "Delete Attachment" : "Borrar adjunto",
     "Restore Attachment" : "Restaurar Adjunto",
@@ -261,6 +260,9 @@ OC.L10N.register(
     "Something went wrong" : "Algo ha ido mal",
     "Failed to upload {name}" : "Error al subir {name}",
     "Maximum file size of {size} exceeded" : "Tamaño máximo de archivo de {size} excedido",
-    "Error creating the share" : "Error creando el recurso compartido"
+    "Error creating the share" : "Error creando el recurso compartido",
+    "Share with a Deck card" : "Compartir con una tarjeta de Deck",
+    "Share {file} with a Deck card" : "Compartir {file} con una tarjeta de Deck",
+    "Share" : "Compartir"
 },
 "nplurals=2; plural=(n != 1);");

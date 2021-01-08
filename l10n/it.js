@@ -175,7 +175,6 @@ OC.L10N.register(
     "Upload new files" : "Carica nuovi file",
     "Share from Files" : "Condividi da File",
     "Add this attachment" : "Aggiungi questo allegato",
-    "Show in files" : "Mostra in File",
     "Unshare file" : "Rimozione condivisione del file",
     "Delete Attachment" : "Elimina allegato",
     "Restore Attachment" : "Ripristina allegato",
