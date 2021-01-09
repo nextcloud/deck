@@ -153,6 +153,7 @@ OC.L10N.register(
     "Upload new files" : "上传新文件",
     "Share from Files" : "从文件进行分享",
     "Add this attachment" : "添加此附件",
+    "Show in Files" : "显示在文件中",
     "Unshare file" : "取消分享文件",
     "Delete Attachment" : "删除附件",
     "Restore Attachment" : "恢复附件",
