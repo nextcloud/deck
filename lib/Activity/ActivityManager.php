@@ -402,6 +402,7 @@ class ActivityManager {
 		if ($subject === self::SUBJECT_CARD_UPDATE_STACKID) {
 			$subjectParams['stackBefore'] = $this->stackMapper->find($additionalParams['before']);
 			$subjectParams['stack'] = $this->stackMapper->find($additionalParams['after']);
+			unset($additionalParams['after'], $additionalParams['before']);
 		}
 
 		$subjectParams['author'] = $this->userId;
