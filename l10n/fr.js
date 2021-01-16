@@ -98,6 +98,7 @@ OC.L10N.register(
     "A PHP extension stopped the file upload" : "Une extension PHP a arrêté l'envoi du fichier",
     "No file uploaded or file size exceeds maximum of %s" : "Aucun fichier envoyé ou la taille du fichier dépasse le maximum de %s",
     "Card not found" : "Carte introuvable",
+    "Path is already shared with this card" : "Le chemin est déjà partagé avec cette carte",
     "Invalid date, date format must be YYYY-MM-DD" : "Date non valable, le format de la date doit être AAAA-MM-JJ",
     "Personal planning and team project organization" : "Agenda personnel et organisation projet",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck est un outil d'organisation de style kanban destiné à la planification personnelle et à l'organisation de projets pour les équipes intégrées à Nextcloud.\n\n\n- 📥 Ajoutez vos tâches à des cartes et organisez-les\n- 📄 Écrivez des notes supplémentaires en Markdown\n- 🔖 Affectez des étiquettes pour une organisation encore meilleure\n- 👥 Partagez avec votre équipe, vos amis ou votre famille\n- 📎 Attachez des fichiers et utilisez les dans vos descriptions en Markdown\n- 💬 Échangez avec votre équipe grâce aux commentaires\n- ⚡ Gardez un œil sur les modifications dans le flux d'activité\n- 🚀 Organisez vos projets",
@@ -172,9 +173,13 @@ OC.L10N.register(
     "Board name" : "Nom du tableau",
     "Members" : "Membres",
     "Upload new files" : "Téléverser de nouveaux fichiers",
+    "Share from Files" : "Partager vos fichiers déjà stockés",
     "Add this attachment" : "Ajouter cette pièce jointe",
+    "Unshare file" : "Ne plus partager le fichier",
     "Delete Attachment" : "Supprimer la pièce jointe",
     "Restore Attachment" : "Restaurer la pièce jointe",
+    "File to share" : "Fichier à partager",
+    "Invalid path selected" : "Chemin sélectionné non valide",
     "Open in sidebar view" : "Ouvrir dans la barre latérale",
     "Open in bigger view" : "Ouvrir dans la vue principale",
     "Attachments" : "Pièces jointes",
@@ -254,6 +259,8 @@ OC.L10N.register(
     "Link to a card" : "Relier à une carte",
     "Something went wrong" : "Quelque chose s'est mal passé",
     "Failed to upload {name}" : "Échec d'envoi de {name}",
-    "Maximum file size of {size} exceeded" : "Taille de fichier maximale de {size} dépassée"
+    "Maximum file size of {size} exceeded" : "Taille de fichier maximale de {size} dépassée",
+    "Error creating the share" : "Erreur lors de la création du partage",
+    "Share" : "Partager"
 },
 "nplurals=2; plural=(n > 1);");
