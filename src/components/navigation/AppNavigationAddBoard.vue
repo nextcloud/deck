@@ -39,7 +39,13 @@
 <script>
 import { ColorPicker, ActionButton, Actions, AppNavigationItem } from '@nextcloud/vue'
 
-const randomColor = () => '#' + ((1 << 24) * Math.random() | 0).toString(16)
+function randomColor() {
+	let randomHexColor = ((1 << 24) * Math.random() | 0).toString(16)
+	while (randomHexColor.length < 6) {
+		randomHexColor = '0' + randomHexColor
+	}
+	return '#' + randomHexColor
+}
 
 export default {
 	name: 'AppNavigationAddBoard',
