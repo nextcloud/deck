@@ -175,6 +175,7 @@ OC.L10N.register(
     "Upload new files" : "Pošlji nove datoteke",
     "Share from Files" : "Poveži iz oblaka",
     "Add this attachment" : "Dodaj prilogo",
+    "Show in Files" : "Poveži iz oblaka",
     "Unshare file" : "Prekini souporabo",
     "Delete Attachment" : "Izbriši prilogo",
     "Restore Attachment" : "Obnovi prilogo",
@@ -260,6 +261,8 @@ OC.L10N.register(
     "Something went wrong" : "Prišlo je do napake ...",
     "Failed to upload {name}" : "Pošiljanje {name} je spodletelo",
     "Maximum file size of {size} exceeded" : "Omejitev velikosti datoteke {size} je prekoračena.",
-    "Error creating the share" : "Napaka ustvarjanja mesta souporabe"
+    "Error creating the share" : "Napaka ustvarjanja mesta souporabe",
+    "Share with a Deck card" : "Poveži z nalogo Deck",
+    "Share {file} with a Deck card" : "Poveži datoteko {file} z nalogo Deck"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");
