@@ -143,7 +143,9 @@ class DeckProvider implements IProvider {
 		$params = $this->parseParamForLabel($subjectParams, $params);
 		$params = $this->parseParamForAssignedUser($subjectParams, $params);
 		$params = $this->parseParamForAcl($subjectParams, $params);
-		$params = $this->parseParamForChanges($subjectParams, $params, $event);
+		if ($subjectIdentifier !== ActivityManager::SUBJECT_CARD_UPDATE_STACKID) {
+			$params = $this->parseParamForChanges($subjectParams, $params, $event);
+		}
 		$params = $this->parseParamForComment($subjectParams, $params, $event);
 		$params = $this->parseParamForDuedate($subjectParams, $params, $event);
 
