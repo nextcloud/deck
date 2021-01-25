@@ -45,7 +45,6 @@ use OCP\Activity\IManager;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Comments\IComment;
-use OCP\IL10N;
 use OCP\IUser;
 use OCP\L10N\IFactory;
 
@@ -129,7 +128,6 @@ class ActivityManager {
 
 	/**
 	 * @param string $subjectIdentifier
-	 * @param $subjectIdentifier
 	 * @param array $subjectParams
 	 * @param bool $ownActivity
 	 * @return string
