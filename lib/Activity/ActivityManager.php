@@ -405,13 +405,12 @@ class ActivityManager {
 			unset($additionalParams['after'], $additionalParams['before']);
 		}
 
-		$subjectParams['author'] = $this->userId;
-
+		$subjectParams['author'] = $author === null ? $this->userId : $author;
 
 		$event = $this->manager->generateEvent();
 		$event->setApp('deck')
 			->setType($eventType)
-			->setAuthor($author === null ? $this->userId : $author)
+			->setAuthor($subjectParams['author'])
 			->setObject($objectType, (int)$object->getId(), $object->getTitle())
 			->setSubject($subject, array_merge($subjectParams, $additionalParams))
 			->setTimestamp(time());
