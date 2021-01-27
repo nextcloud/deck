@@ -26,6 +26,7 @@
 namespace OCA\Deck\Activity;
 
 use InvalidArgumentException;
+use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Assignment;
@@ -44,8 +45,8 @@ use OCP\Activity\IManager;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Comments\IComment;
-use OCP\IL10N;
 use OCP\IUser;
+use OCP\L10N\IFactory;
 
 class ActivityManager {
 	public const DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED = 'DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED';
@@ -57,7 +58,7 @@ class ActivityManager {
 	private $attachmentMapper;
 	private $aclMapper;
 	private $stackMapper;
-	private $l10n;
+	private $l10nFactory;
 
 	public const DECK_OBJECT_BOARD = 'deck_board';
 	public const DECK_OBJECT_CARD = 'deck_card';
@@ -111,7 +112,7 @@ class ActivityManager {
 		StackMapper $stackMapper,
 		AttachmentMapper $attachmentMapper,
 		AclMapper $aclMapper,
-		IL10N $l10n,
+		IFactory $l10nFactory,
 		$userId
 	) {
 		$this->manager = $manager;
@@ -121,117 +122,119 @@ class ActivityManager {
 		$this->stackMapper = $stackMapper;
 		$this->attachmentMapper = $attachmentMapper;
 		$this->aclMapper = $aclMapper;
-		$this->l10n = $l10n;
+		$this->l10nFactory = $l10nFactory;
 		$this->userId = $userId;
 	}
 
 	/**
-	 * @param $subjectIdentifier
+	 * @param string $subjectIdentifier
 	 * @param array $subjectParams
 	 * @param bool $ownActivity
 	 * @return string
 	 */
-	public function getActivityFormat($subjectIdentifier, $subjectParams = [], $ownActivity = false) {
+	public function getActivityFormat($language, $subjectIdentifier, $subjectParams = [], $ownActivity = false) {
 		$subject = '';
+		$l = $this->l10nFactory->get(Application::APP_ID, $language);
+
 		switch ($subjectIdentifier) {
 			case self::SUBJECT_BOARD_CREATE:
-				$subject = $ownActivity ? $this->l10n->t('You have created a new board {board}'): $this->l10n->t('{user} has created a new board {board}');
+				$subject = $ownActivity ? $l->t('You have created a new board {board}'): $l->t('{user} has created a new board {board}');
 				break;
 			case self::SUBJECT_BOARD_DELETE:
-				$subject = $ownActivity ? $this->l10n->t('You have deleted the board {board}') : $this->l10n->t('{user} has deleted the board {board}');
+				$subject = $ownActivity ? $l->t('You have deleted the board {board}') : $l->t('{user} has deleted the board {board}');
 				break;
 			case self::SUBJECT_BOARD_RESTORE:
-				$subject = $ownActivity ? $this->l10n->t('You have restored the board {board}') : $this->l10n->t('{user} has restored the board {board}');
+				$subject = $ownActivity ? $l->t('You have restored the board {board}') : $l->t('{user} has restored the board {board}');
 				break;
 			case self::SUBJECT_BOARD_SHARE:
-				$subject = $ownActivity ? $this->l10n->t('You have shared the board {board} with {acl}') : $this->l10n->t('{user} has shared the board {board} with {acl}');
+				$subject = $ownActivity ? $l->t('You have shared the board {board} with {acl}') : $l->t('{user} has shared the board {board} with {acl}');
 				break;
 			case self::SUBJECT_BOARD_UNSHARE:
-				$subject = $ownActivity ? $this->l10n->t('You have removed {acl} from the board {board}') : $this->l10n->t('{user} has removed {acl} from the board {board}');
+				$subject = $ownActivity ? $l->t('You have removed {acl} from the board {board}') : $l->t('{user} has removed {acl} from the board {board}');
 				break;
 			case self::SUBJECT_BOARD_UPDATE_TITLE:
-				$subject = $ownActivity ? $this->l10n->t('You have renamed the board {before} to {board}') : $this->l10n->t('{user} has renamed the board {before} to {board}');
+				$subject = $ownActivity ? $l->t('You have renamed the board {before} to {board}') : $l->t('{user} has renamed the board {before} to {board}');
 				break;
 			case self::SUBJECT_BOARD_UPDATE_ARCHIVED:
 				if (isset($subjectParams['after']) && $subjectParams['after']) {
-					$subject = $ownActivity ? $this->l10n->t('You have archived the board {board}') : $this->l10n->t('{user} has archived the board {before}');
+					$subject = $ownActivity ? $l->t('You have archived the board {board}') : $l->t('{user} has archived the board {before}');
 				} else {
-					$subject = $ownActivity ? $this->l10n->t('You have unarchived the board {board}') : $this->l10n->t('{user} has unarchived the board {before}');
+					$subject = $ownActivity ? $l->t('You have unarchived the board {board}') : $l->t('{user} has unarchived the board {before}');
 				}
 				break;
 			case self::SUBJECT_STACK_CREATE:
-				$subject = $ownActivity ? $this->l10n->t('You have created a new list {stack} on board {board}') : $this->l10n->t('{user} has created a new list {stack} on board {board}');
+				$subject = $ownActivity ? $l->t('You have created a new list {stack} on board {board}') : $l->t('{user} has created a new list {stack} on board {board}');
 				break;
 			case self::SUBJECT_STACK_UPDATE:
-				$subject = $ownActivity ? $this->l10n->t('You have created a new list {stack} on board {board}') : $this->l10n->t('{user} has created a new list {stack} on board {board}');
+				$subject = $ownActivity ? $l->t('You have created a new list {stack} on board {board}') : $l->t('{user} has created a new list {stack} on board {board}');
 				break;
 			case self::SUBJECT_STACK_UPDATE_TITLE:
-				$subject = $ownActivity ? $this->l10n->t('You have renamed list {before} to {stack} on board {board}') : $this->l10n->t('{user} has renamed list {before} to {stack} on board {board}');
+				$subject = $ownActivity ? $l->t('You have renamed list {before} to {stack} on board {board}') : $l->t('{user} has renamed list {before} to {stack} on board {board}');
 				break;
 			case self::SUBJECT_STACK_DELETE:
-				$subject = $ownActivity ? $this->l10n->t('You have deleted list {stack} on board {board}') : $this->l10n->t('{user} has deleted list {stack} on board {board}');
+				$subject = $ownActivity ? $l->t('You have deleted list {stack} on board {board}') : $l->t('{user} has deleted list {stack} on board {board}');
 				break;
 			case self::SUBJECT_CARD_CREATE:
-				$subject = $ownActivity ? $this->l10n->t('You have created card {card} in list {stack} on board {board}') : $this->l10n->t('{user} has created card {card} in list {stack} on board {board}');
+				$subject = $ownActivity ? $l->t('You have created card {card} in list {stack} on board {board}') : $l->t('{user} has created card {card} in list {stack} on board {board}');
 				break;
 			case self::SUBJECT_CARD_DELETE:
-				$subject = $ownActivity ? $this->l10n->t('You have deleted card {card} in list {stack} on board {board}') : $this->l10n->t('{user} has deleted card {card} in list {stack} on board {board}');
+				$subject = $ownActivity ? $l->t('You have deleted card {card} in list {stack} on board {board}') : $l->t('{user} has deleted card {card} in list {stack} on board {board}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_TITLE:
-				$subject = $ownActivity ? $this->l10n->t('You have renamed the card {before} to {card}') : $this->l10n->t('{user} has renamed the card {before} to {card}');
+				$subject = $ownActivity ? $l->t('You have renamed the card {before} to {card}') : $l->t('{user} has renamed the card {before} to {card}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_DESCRIPTION:
 				if (!isset($subjectParams['before'])) {
-					$subject = $ownActivity ? $this->l10n->t('You have added a description to card {card} in list {stack} on board {board}') : $this->l10n->t('{user} has added a description to card {card} in list {stack} on board {board}');
+					$subject = $ownActivity ? $l->t('You have added a description to card {card} in list {stack} on board {board}') : $l->t('{user} has added a description to card {card} in list {stack} on board {board}');
 				} else {
-					$subject = $ownActivity ? $this->l10n->t('You have updated the description of card {card} in list {stack} on board {board}') : $this->l10n->t('{user} has updated the description of the card {card} in list {stack} on board {board}');
+					$subject = $ownActivity ? $l->t('You have updated the description of card {card} in list {stack} on board {board}') : $l->t('{user} has updated the description of the card {card} in list {stack} on board {board}');
 				}
 				break;
 			case self::SUBJECT_CARD_UPDATE_ARCHIVE:
-				$subject = $ownActivity ? $this->l10n->t('You have archived card {card} in list {stack} on board {board}') : $this->l10n->t('{user} has archived card {card} in list {stack} on board {board}');
+				$subject = $ownActivity ? $l->t('You have archived card {card} in list {stack} on board {board}') : $l->t('{user} has archived card {card} in list {stack} on board {board}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_UNARCHIVE:
-				$subject = $ownActivity ? $this->l10n->t('You have unarchived card {card} in list {stack} on board {board}') : $this->l10n->t('{user} has unarchived card {card} in list {stack} on board {board}');
+				$subject = $ownActivity ? $l->t('You have unarchived card {card} in list {stack} on board {board}') : $l->t('{user} has unarchived card {card} in list {stack} on board {board}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_DUEDATE:
 				if (!isset($subjectParams['after'])) {
-					$subject = $ownActivity ? $this->l10n->t('You have removed the due date of card {card}') : $this->l10n->t('{user} has removed the due date of card {card}');
+					$subject = $ownActivity ? $l->t('You have removed the due date of card {card}') : $l->t('{user} has removed the due date of card {card}');
 				} elseif (!isset($subjectParams['before']) && isset($subjectParams['after'])) {
-					$subject = $ownActivity ? $this->l10n->t('You have set the due date of card {card} to {after}') : $this->l10n->t('{user} has set the due date of card {card} to {after}');
+					$subject = $ownActivity ? $l->t('You have set the due date of card {card} to {after}') : $l->t('{user} has set the due date of card {card} to {after}');
 				} else {
-					$subject = $ownActivity ? $this->l10n->t('You have updated the due date of card {card} to {after}') : $this->l10n->t('{user} has updated the due date of card {card} to {after}');
+					$subject = $ownActivity ? $l->t('You have updated the due date of card {card} to {after}') : $l->t('{user} has updated the due date of card {card} to {after}');
 				}
 
 				break;
 			case self::SUBJECT_LABEL_ASSIGN:
-				$subject = $ownActivity ? $this->l10n->t('You have added the tag {label} to card {card} in list {stack} on board {board}') : $this->l10n->t('{user} has added the tag {label} to card {card} in list {stack} on board {board}');
+				$subject = $ownActivity ? $l->t('You have added the tag {label} to card {card} in list {stack} on board {board}') : $l->t('{user} has added the tag {label} to card {card} in list {stack} on board {board}');
 				break;
 			case self::SUBJECT_LABEL_UNASSING:
-				$subject = $ownActivity ? $this->l10n->t('You have removed the tag {label} from card {card} in list {stack} on board {board}') : $this->l10n->t('{user} has removed the tag {label} from card {card} in list {stack} on board {board}');
+				$subject = $ownActivity ? $l->t('You have removed the tag {label} from card {card} in list {stack} on board {board}') : $l->t('{user} has removed the tag {label} from card {card} in list {stack} on board {board}');
 				break;
 			case self::SUBJECT_CARD_USER_ASSIGN:
-				$subject = $ownActivity ? $this->l10n->t('You have assigned {assigneduser} to card {card} on board {board}') : $this->l10n->t('{user} has assigned {assigneduser} to card {card} on board {board}');
+				$subject = $ownActivity ? $l->t('You have assigned {assigneduser} to card {card} on board {board}') : $l->t('{user} has assigned {assigneduser} to card {card} on board {board}');
 				break;
 			case self::SUBJECT_CARD_USER_UNASSIGN:
-				$subject = $ownActivity ? $this->l10n->t('You have unassigned {assigneduser} from card {card} on board {board}') : $this->l10n->t('{user} has unassigned {assigneduser} from card {card} on board {board}');
+				$subject = $ownActivity ? $l->t('You have unassigned {assigneduser} from card {card} on board {board}') : $l->t('{user} has unassigned {assigneduser} from card {card} on board {board}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_STACKID:
-				$subject = $ownActivity ? $this->l10n->t('You have moved the card {card} from list {stackBefore} to {stack}') : $this->l10n->t('{user} has moved the card {card} from list {stackBefore} to {stack}');
+				$subject = $ownActivity ? $l->t('You have moved the card {card} from list {stackBefore} to {stack}') : $l->t('{user} has moved the card {card} from list {stackBefore} to {stack}');
 				break;
 			case self::SUBJECT_ATTACHMENT_CREATE:
-				$subject = $ownActivity ? $this->l10n->t('You have added the attachment {attachment} to card {card}') : $this->l10n->t('{user} has added the attachment {attachment} to card {card}');
+				$subject = $ownActivity ? $l->t('You have added the attachment {attachment} to card {card}') : $l->t('{user} has added the attachment {attachment} to card {card}');
 				break;
 			case self::SUBJECT_ATTACHMENT_UPDATE:
-				$subject = $ownActivity ? $this->l10n->t('You have updated the attachment {attachment} on card {card}') : $this->l10n->t('{user} has updated the attachment {attachment} on card {card}');
+				$subject = $ownActivity ? $l->t('You have updated the attachment {attachment} on card {card}') : $l->t('{user} has updated the attachment {attachment} on card {card}');
 				break;
 			case self::SUBJECT_ATTACHMENT_DELETE:
-				$subject = $ownActivity ? $this->l10n->t('You have deleted the attachment {attachment} from card {card}') : $this->l10n->t('{user} has deleted the attachment {attachment} from card {card}');
+				$subject = $ownActivity ? $l->t('You have deleted the attachment {attachment} from card {card}') : $l->t('{user} has deleted the attachment {attachment} from card {card}');
 				break;
 			case self::SUBJECT_ATTACHMENT_RESTORE:
-				$subject = $ownActivity ? $this->l10n->t('You have restored the attachment {attachment} to card {card}') : $this->l10n->t('{user} has restored the attachment {attachment} to card {card}');
+				$subject = $ownActivity ? $l->t('You have restored the attachment {attachment} to card {card}') : $l->t('{user} has restored the attachment {attachment} to card {card}');
 				break;
 			case self::SUBJECT_CARD_COMMENT_CREATE:
-				$subject = $ownActivity ? $this->l10n->t('You have commented on card {card}') : $this->l10n->t('{user} has commented on card {card}');
+				$subject = $ownActivity ? $l->t('You have commented on card {card}') : $l->t('{user} has commented on card {card}');
 				break;
 			default:
 				break;

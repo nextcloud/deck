@@ -150,7 +150,7 @@ class DeckProvider implements IProvider {
 		$params = $this->parseParamForDuedate($subjectParams, $params, $event);
 
 		try {
-			$subject = $this->activityManager->getActivityFormat($subjectIdentifier, $subjectParams, $ownActivity);
+			$subject = $this->activityManager->getActivityFormat($language, $subjectIdentifier, $subjectParams, $ownActivity);
 			$this->setSubjects($event, $subject, $params);
 		} catch (\Exception $e) {
 		}
