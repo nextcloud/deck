@@ -77,7 +77,7 @@
 		"@nextcloud/webpack-vue-config": "^1.4.1",
 		"@relative-ci/agent": "^1.4.0",
 		"@vue/test-utils": "^1.1.2",
-		"acorn": "^8.0.4",
+		"acorn": "^8.0.5",
 		"babel-eslint": "^10.1.0",
 		"babel-jest": "^26.6.3",
 		"babel-loader": "^8.2.2",
