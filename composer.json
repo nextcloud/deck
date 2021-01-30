@@ -17,7 +17,7 @@
         "christophwurst/nextcloud": "dev-master",
         "phpunit/phpunit": "^8",
         "nextcloud/coding-standard": "^0.5.0",
-        "symfony/event-dispatcher": "^4.0",
+        "symfony/event-dispatcher": "^5.2",
         "vimeo/psalm": "^4.3",
         "php-parallel-lint/php-parallel-lint": "^1.2"
     },
