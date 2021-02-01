@@ -96,7 +96,7 @@ OC.L10N.register(
     "Missing a temporary folder" : "Brak folderu tymczasowego",
     "Could not write file to disk" : "Nie można zapisać pliku na dysk",
     "A PHP extension stopped the file upload" : "Rozszerzenie PHP zatrzymało wysyłanie pliku",
-    "No file uploaded or file size exceeds maximum of %s" : "Brak przesłanego pliku lub rozmiar pliku przekracza maksymalny limit %s",
+    "No file uploaded or file size exceeds maximum of %s" : "Brak wysłanego pliku lub rozmiar pliku przekracza maksymalny limit %s",
     "Card not found" : "Nie znaleziono karty",
     "Path is already shared with this card" : "Ścieżka jest już udostępniona dla tej karty",
     "Invalid date, date format must be YYYY-MM-DD" : "Nieprawidłowa data, format daty to RRRR-MM-DD",
