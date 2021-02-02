@@ -21,12 +21,11 @@
  */
 
 import Vue from 'vue'
+import { generateUrl } from '@nextcloud/router'
 
-import BoardSelector from './BoardSelector'
-import CardSelector from './CardSelector'
-import './../css/collections.css'
-import FileSharingPicker from './views/FileSharingPicker'
+import CardCreateDialog from './CardCreateDialog'
 import { buildSelector } from './helpers/selector'
+import './init-collections'
 
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken);
@@ -38,21 +37,26 @@ Vue.prototype.n = n
 Vue.prototype.OC = OC
 
 window.addEventListener('DOMContentLoaded', () => {
-	if (OCA.Sharing && OCA.Sharing.ShareSearch) {
-		OCA.Sharing.ShareSearch.addNewResult(FileSharingPicker)
-	} else {
-		console.error('OCA.Sharing.ShareSearch not ready')
+	if (!window.OCA?.Talk?.registerMessageAction) {
+		return
 	}
 
-	window.OCP.Collaboration.registerType('deck', {
-		action: () => buildSelector(BoardSelector),
-		typeString: t('deck', 'Link to a board'),
-		typeIconClass: 'icon-deck',
-	})
-
-	window.OCP.Collaboration.registerType('deck-card', {
-		action: () => buildSelector(CardSelector),
-		typeString: t('deck', 'Link to a card'),
-		typeIconClass: 'icon-deck',
+	window.OCA.Talk.registerMessageAction({
+		label: t('deck', 'Create a card'),
+		icon: 'icon-deck',
+		async callback({ message: { message, actorDisplayName }, metadata: { name: conversationName, token: conversationToken } }) {
+			const shortenedMessageCandidate = message.replace(/^(.{255}[^\s]*).*/, '$1')
+			const shortenedMessage = shortenedMessageCandidate === '' ? message.substr(0, 255) : shortenedMessageCandidate
+			try {
+				await buildSelector(CardCreateDialog, {
+					title: shortenedMessage,
+					description: message + '\n\n' + '['
+						+ t('deck', 'Message from {author} in {conversationName}', { author: actorDisplayName, conversationName })
+						+ '](' + generateUrl('/call/' + conversationToken) + ')',
+				})
+			} catch (e) {
+				console.debug('Card creation dialog was canceled')
+			}
+		},
 	})
 })
