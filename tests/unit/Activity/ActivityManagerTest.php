@@ -39,6 +39,7 @@ use OCP\Activity\IEvent;
 use OCP\Activity\IManager;
 use OCP\IL10N;
 use OCP\IUser;
+use OCP\L10N\IFactory;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
@@ -60,6 +61,8 @@ class ActivityManagerTest extends TestCase {
 	private $attachmentMapper;
 	/** @var AclMapper|MockObject */
 	private $aclMapper;
+	/** @var IFactory|MockObject */
+	private $l10nFactory;
 	/** @var IL10N|MockObject */
 	private $l10n;
 	/** @var string */
@@ -73,6 +76,7 @@ class ActivityManagerTest extends TestCase {
 		$this->stackMapper = $this->createMock(StackMapper::class);
 		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
 		$this->aclMapper = $this->createMock(AclMapper::class);
+		$this->l10nFactory = $this->createMock(IFactory::class);
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->activityManager = new ActivityManager(
 			$this->manager,
@@ -82,7 +86,7 @@ class ActivityManagerTest extends TestCase {
 			$this->stackMapper,
 			$this->attachmentMapper,
 			$this->aclMapper,
-			$this->l10n,
+			$this->l10nFactory,
 			$this->userId
 		);
 	}
@@ -94,17 +98,20 @@ class ActivityManagerTest extends TestCase {
 			->will($this->returnCallback(function ($s) {
 				return $s;
 			}));
+		$this->l10nFactory->method('get')
+			->with('deck', 'cz')
+			->willReturn($this->l10n);
 
 		foreach ($managerClass->getConstants() as $constant => $value) {
 			if (strpos($constant, 'SUBJECT') === 0) {
-				$format = $this->activityManager->getActivityFormat($value, [], false);
+				$format = $this->activityManager->getActivityFormat('cz', $value, [], false);
 				if ($format !== '') {
 					$this->assertStringContainsString('{user}', $format);
 				} else {
 					/** @noinspection ForgottenDebugOutputInspection */
 					print_r('No activity string found for '. $constant . PHP_EOL);
 				}
-				$format = $this->activityManager->getActivityFormat($value, [], true);
+				$format = $this->activityManager->getActivityFormat('cz', $value, [], true);
 				if ($format !== '') {
 					$this->assertStringStartsWith('You', $format);
 				} else {
