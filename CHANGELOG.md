@@ -20,6 +20,20 @@ All notable changes to this project will be documented in this file.
 * [#2688](https://github.com/nextcloud/deck/pull/2688) Title > boardname @jakobroehrl
 * [#2689](https://github.com/nextcloud/deck/pull/2689) Modal > bigger view wording @jakobroehrl
 
+## 1.3.0-beta2
+
+### Fixed
+* [#2700](https://github.com/nextcloud/deck/pull/2700) Attempt to copy file on dropping it to deck @juliushaertl
+* [#2701](https://github.com/nextcloud/deck/pull/2701) Fix uploading files by drag and drop @juliushaertl
+* [#2707](https://github.com/nextcloud/deck/pull/2707) L10n: Change to a capital letter @Valdnet
+* [#2712](https://github.com/nextcloud/deck/pull/2712) Docs: Fix table in section "GET /api/v1.0/config" @das-g
+* [#2716](https://github.com/nextcloud/deck/pull/2716) Remove repair step which is no longer needed as we cleanup properly @juliushaertl
+* [#2723](https://github.com/nextcloud/deck/pull/2723) Pad random color with leading zeroes @PVince81
+* [#2729](https://github.com/nextcloud/deck/pull/2729) Remove invalid activity parameters @nickvergessen
+* [#2750](https://github.com/nextcloud/deck/pull/2750) Fix deck activity emails not being translated @nickvergessen
+* [#2751](https://github.com/nextcloud/deck/pull/2751) Properly set author for activity events that are triggered by cron @juliushaertl
+
+
 ## 1.2.2 - 2020-11-24
 
 ### Fixed
