@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.4 - 2021-02-02
+
+### Fixed
+* [#2715](https://github.com/nextcloud/deck/pull/2715) Handle clicks on calendar entries
+* [#2752](https://github.com/nextcloud/deck/pull/2752) Remove invalid activity parameters
+* [#2755](https://github.com/nextcloud/deck/pull/2755) Properly set author for activity events that are triggered by cron
+* [#2757](https://github.com/nextcloud/deck/pull/2757) Remove repair step which is no longer needed as we cleanup properly
+* [#2758](https://github.com/nextcloud/deck/pull/2758) Fix deck activity emails not being translated
+
+
 ## 1.2.3 - 2021-01-04
 
 ### Fixed
