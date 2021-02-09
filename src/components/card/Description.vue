@@ -205,6 +205,7 @@ export default {
 			await this.$store.dispatch('updateCardDesc', { ...this.card, description: this.description })
 			this.descriptionLastEdit = 0
 			this.descriptionSaving = false
+			this.$emit('change', this.description)
 		},
 		updateDescription() {
 			this.descriptionLastEdit = Date.now()
