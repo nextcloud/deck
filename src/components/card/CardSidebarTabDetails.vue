@@ -117,7 +117,7 @@
 				type="deck-card" />
 		</div>
 
-		<Description :key="card.id" :card="card" />
+		<Description :key="card.id" :card="card" @change="descriptionChanged" />
 	</div>
 </template>
 
@@ -234,6 +234,9 @@ export default {
 		this.initialize()
 	},
 	methods: {
+		descriptionChanged(newDesc) {
+			this.copiedCard.description = newDesc
+		},
 		async initialize() {
 			if (!this.card) {
 				return
@@ -253,9 +256,6 @@ export default {
 			}
 		},
 
-		setDue() {
-			this.$store.dispatch('updateCardDue', this.copiedCard)
-		},
 		removeDue() {
 			this.copiedCard.duedate = null
 			this.$store.dispatch('updateCardDue', this.copiedCard)
