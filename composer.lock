@@ -1556,12 +1556,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "6a467b8989322d92aa1c8bf2bebcc6e5c2ba55c0"
+                "reference": "6759f2268deb9f329812679e9dcb2d0083b2a30b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/6a467b8989322d92aa1c8bf2bebcc6e5c2ba55c0",
-                "reference": "6a467b8989322d92aa1c8bf2bebcc6e5c2ba55c0",
+                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/6759f2268deb9f329812679e9dcb2d0083b2a30b",
+                "reference": "6759f2268deb9f329812679e9dcb2d0083b2a30b",
                 "shasum": ""
             },
             "require": {
@@ -1596,9 +1596,9 @@
             "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
             "support": {
                 "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
-                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.4.0"
+                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.x"
             },
-            "time": "2020-09-17T18:55:26+00:00"
+            "time": "2021-02-02T21:09:27+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -3222,12 +3222,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "356c70659d6b48595f9f275cd7c4de0d5544c49c"
+                "reference": "56d4c04ca6069c93857c7335a626dbe747fa82d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/356c70659d6b48595f9f275cd7c4de0d5544c49c",
-                "reference": "356c70659d6b48595f9f275cd7c4de0d5544c49c",
+                "url": "https://api.github.com/repos/symfony/console/zipball/56d4c04ca6069c93857c7335a626dbe747fa82d4",
+                "reference": "56d4c04ca6069c93857c7335a626dbe747fa82d4",
                 "shasum": ""
             },
             "require": {
@@ -3312,7 +3312,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-14T15:43:35+00:00"
+            "time": "2021-01-28T22:09:26+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -4447,12 +4447,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/service-contracts.git",
-                "reference": "cea83947622b432b60b809d14c7b42df9f0f5823"
+                "reference": "bf99754c6182a126968b1c2709d18548489f27eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/cea83947622b432b60b809d14c7b42df9f0f5823",
-                "reference": "cea83947622b432b60b809d14c7b42df9f0f5823",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/bf99754c6182a126968b1c2709d18548489f27eb",
+                "reference": "bf99754c6182a126968b1c2709d18548489f27eb",
                 "shasum": ""
             },
             "require": {
@@ -4465,7 +4465,6 @@
             "default-branch": true,
             "type": "library",
             "extra": {
-                "branch-version": "2.3",
                 "branch-alias": {
                     "dev-main": "2.3-dev"
                 },
@@ -4520,7 +4519,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-11T09:51:46+00:00"
+            "time": "2021-01-27T16:27:53+00:00"
         },
         {
             "name": "symfony/stopwatch",
@@ -4591,12 +4590,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "2f833cf54d5fe9646638c50778016a06b6fe1603"
+                "reference": "13c9099cdb470223b5863f7d11d17554b2dc6404"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/2f833cf54d5fe9646638c50778016a06b6fe1603",
-                "reference": "2f833cf54d5fe9646638c50778016a06b6fe1603",
+                "url": "https://api.github.com/repos/symfony/string/zipball/13c9099cdb470223b5863f7d11d17554b2dc6404",
+                "reference": "13c9099cdb470223b5863f7d11d17554b2dc6404",
                 "shasum": ""
             },
             "require": {
@@ -4667,7 +4666,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-12T14:28:55+00:00"
+            "time": "2021-01-26T09:33:05+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -4721,16 +4720,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "4.4.1",
+            "version": "4.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "9fd7a7d885b3a216cff8dec9d8c21a132f275224"
+                "reference": "257a1ca672a79dedc852be1285a7b97154646418"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/9fd7a7d885b3a216cff8dec9d8c21a132f275224",
-                "reference": "9fd7a7d885b3a216cff8dec9d8c21a132f275224",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/257a1ca672a79dedc852be1285a7b97154646418",
+                "reference": "257a1ca672a79dedc852be1285a7b97154646418",
                 "shasum": ""
             },
             "require": {
@@ -4819,26 +4818,26 @@
             ],
             "support": {
                 "issues": "https://github.com/vimeo/psalm/issues",
-                "source": "https://github.com/vimeo/psalm/tree/4.4.1"
+                "source": "https://github.com/vimeo/psalm/tree/4.5.1"
             },
-            "time": "2021-01-14T21:44:29+00:00"
+            "time": "2021-02-11T19:12:25+00:00"
         },
         {
             "name": "webmozart/assert",
-            "version": "1.9.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/webmozart/assert.git",
-                "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389"
+                "url": "https://github.com/webmozarts/assert.git",
+                "reference": "9c89b265ccc4092d58e66d72af5d343ee77a41ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
-                "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/9c89b265ccc4092d58e66d72af5d343ee77a41ae",
+                "reference": "9c89b265ccc4092d58e66d72af5d343ee77a41ae",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.3 || ^7.0 || ^8.0",
+                "php": "^7.2 || ^8.0",
                 "symfony/polyfill-ctype": "^1.8"
             },
             "conflict": {
@@ -4846,9 +4845,15 @@
                 "vimeo/psalm": "<3.9.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.36 || ^7.5.13"
+                "phpunit/phpunit": "^8.5.13"
             },
+            "default-branch": true,
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.10-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Webmozart\\Assert\\": "src/"
@@ -4871,10 +4876,10 @@
                 "validate"
             ],
             "support": {
-                "issues": "https://github.com/webmozart/assert/issues",
-                "source": "https://github.com/webmozart/assert/tree/master"
+                "issues": "https://github.com/webmozarts/assert/issues",
+                "source": "https://github.com/webmozarts/assert/tree/master"
             },
-            "time": "2020-07-08T17:02:28+00:00"
+            "time": "2021-01-18T12:52:36+00:00"
         },
         {
             "name": "webmozart/path-util",
