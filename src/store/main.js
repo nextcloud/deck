@@ -28,6 +28,7 @@ import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 import { BoardApi } from '../services/BoardApi'
+import actions from './actions'
 import stack from './stack'
 import card from './card'
 import comment from './comment'
@@ -47,6 +48,7 @@ export const BOARD_FILTERS = {
 
 export default new Vuex.Store({
 	modules: {
+		actions,
 		stack,
 		card,
 		comment,
