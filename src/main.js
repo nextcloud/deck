@@ -103,3 +103,40 @@ new Vue({
 	},
 	render: h => h(App),
 })
+
+if (!window.OCA.Deck) {
+	window.OCA.Deck = {}
+}
+
+/**
+ * @typedef {Object} CardRichObject
+ * @property {string} id
+ * @property {string} name
+ * @property {string} boardname
+ * @property {string} stackname
+ * @property {string} link
+ */
+
+/**
+ * @callback registerActionCallback
+ * @param {CardRichObject} card
+ */
+
+/**
+ * Frontend message API for adding actions to talk messages.
+ * @param {*} Object the wrapping object.
+ * @param {String} label the action label.
+ * @param {registerActionCallback} callback the callback function. This function will receive
+ * the card as a parameter and be triggered by a click on the
+ * action. The card parameter will be of the format of a rich object string
+ * type "deck-card"
+ * @param {String} icon the action label. E.g. "icon-reply"
+ */
+window.OCA.Deck.registerCardAction = ({ label, callback, icon }) => {
+	const cardAction = {
+		label,
+		callback,
+		icon,
+	}
+	store.dispatch('addCardAction', cardAction)
+}

@@ -33,9 +33,16 @@
 			<ActionButton v-if="cardDetailsInModal" icon="icon-menu-sidebar" @click.stop="showModal()">
 				{{ t('deck', 'Open in sidebar view') }}
 			</ActionButton>
-
 			<ActionButton v-else icon="icon-external" @click.stop="showModal()">
 				{{ t('deck', 'Open in bigger view') }}
+			</ActionButton>
+
+			<ActionButton v-for="action in cardActions"
+				:key="action.label"
+				:close-after-click="true"
+				:icon="action.icon"
+				@click="action.callback(cardRichObject)">
+				{{ action.label }}
 			</ActionButton>
 		</template>
 
@@ -73,6 +80,7 @@
 
 <script>
 import { ActionButton, AppSidebar, AppSidebarTab } from '@nextcloud/vue'
+import { generateUrl } from '@nextcloud/router'
 import { mapState, mapGetters } from 'vuex'
 import CardSidebarTabDetails from './CardSidebarTabDetails'
 import CardSidebarTabAttachments from './CardSidebarTabAttachments'
@@ -114,7 +122,7 @@ export default {
 			currentBoard: state => state.currentBoard,
 			cardDetailsInModal: state => state.cardDetailsInModal,
 		}),
-		...mapGetters(['canEdit', 'assignables']),
+		...mapGetters(['canEdit', 'assignables', 'cardActions', 'stackById']),
 		title() {
 			return this.titleEditable ? this.titleEditing : this.currentCard.title
 		},
@@ -123,6 +131,15 @@ export default {
 		},
 		subtitle() {
 			return t('deck', 'Modified') + ': ' + this.relativeDate(this.currentCard.lastModified * 1000) + ' ' + t('deck', 'Created') + ': ' + this.relativeDate(this.currentCard.createdAt * 1000)
+		},
+		cardRichObject() {
+			return {
+				id: '' + this.currentCard.id,
+				name: this.currentCard.title,
+				boardname: this.currentBoard.title,
+				stackname: this.stackById(this.currentCard.stackId)?.title,
+				link: window.location.protocol + '//' + window.location.host + generateUrl('/apps/deck/') + `#/board/${this.currentBoard.id}/card/${this.currentCard.id}`,
+			}
 		},
 	},
 	methods: {
