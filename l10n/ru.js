@@ -172,6 +172,7 @@ OC.L10N.register(
     "Board name" : "Название доски",
     "Members" : "Участники",
     "Upload new files" : "Передать на сервер новые файлы",
+    "Share from Files" : "Опубликовать из приложения Файлы",
     "Add this attachment" : "Добавить это вложение",
     "Show in Files" : "Показать в приложении Файлы",
     "Unshare file" : "Закрыть общий доступ к файлу",
@@ -260,6 +261,8 @@ OC.L10N.register(
     "Failed to upload {name}" : "Не удалось передать на сервер {name}",
     "Maximum file size of {size} exceeded" : "Превышен максимально разрешённый размер файла в  {size}",
     "Error creating the share" : "Не удалось опубликовать",
+    "Share with a Deck card" : "Опубликовать в приложении Карточки",
+    "Share {file} with a Deck card" : "Опубликовать «{file}» в приложении Карточки",
     "Share" : "Опубликовать"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");
