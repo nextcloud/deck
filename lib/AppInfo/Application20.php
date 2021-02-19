@@ -197,6 +197,10 @@ class Application20 extends App implements IBootstrap {
 		$resourceManager->registerResourceProvider(ResourceProviderCard::class);
 
 		$symfonyAdapter->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
+			if (strpos(\OC::$server->getRequest()->getPathInfo(), '/call/') === 0) {
+				// Talk integration has its own entrypoint which already includes collections handling
+				return;
+			}
 			Util::addScript('deck', 'collections');
 		});
 	}
