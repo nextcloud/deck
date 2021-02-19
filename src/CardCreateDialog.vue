@@ -58,7 +58,7 @@
 					type="text"
 					:placeholder="t('deck', 'Card title')"
 					:disabled="loading || !selectedStack">
-				<textarea v-model="description" :disabled="loading || !selectedStack" />
+				<textarea v-model="pendingDescription" :disabled="loading || !selectedStack" />
 				<div class="modal-buttons">
 					<button @click="close">
 						{{ t('deck', 'Cancel') }}
@@ -77,7 +77,7 @@
 				<EmptyContent v-else-if="created" icon="icon-checkmark">
 					{{ t('deck', '"{card}" was added to "{board}"', { card: pendingTitle, board: selectedBoard.title }) }}
 					<template #desc>
-						<button class="primary">
+						<button class="primary" @click="openNewCard">
 							{{ t('deck', 'Open card') }}
 						</button>
 						<button @click="close">
@@ -132,6 +132,7 @@ export default {
 			selectedBoard: '',
 			creating: false,
 			created: false,
+			newCard: null,
 		}
 	},
 	computed: {
@@ -171,16 +172,20 @@ export default {
 		},
 		async select() {
 			this.creating = true
-			await cardApi.addCard({
+			const response = await cardApi.addCard({
 				boardId: this.selectedBoard.id,
 				stackId: this.selectedStack.id,
 				title: this.pendingTitle,
 				description: this.pendingDescription,
 			})
+			this.newCard = response
 			this.creating = false
 			this.created = true
 			// We do not emit here since we want to give feedback to the user that the card was created
 			// this.$root.$emit('select', createdCard)
+		},
+		openNewCard() {
+			window.location = generateUrl('/apps/deck') + `#/board/${this.selectedBoard.id}/card/${this.newCard.id}`
 		},
 	},
 
