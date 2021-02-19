@@ -7,6 +7,7 @@ OC.L10N.register(
     "No file was uploaded" : "ගොනුවක් උඩුගත නොවුණි",
     "Missing a temporary folder" : "තාවකාලික ෆොල්ඩරයක් අතුරුදහන්",
     "Cancel" : "අවලංගු කරන්න",
+    "Details" : "විස්තර",
     "Sharing" : "හුවමාරු කිරීම",
     "Tags" : "ටැග",
     "Can edit" : "Can edit",
