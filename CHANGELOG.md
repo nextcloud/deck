@@ -1,24 +1,27 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.3.0 - unreleased
+## 1.3.0 - 2021-02-20
 
 ### Added
 * [#2638](https://github.com/nextcloud/deck/pull/2638) Sharing files to cards
 * [#2683](https://github.com/nextcloud/deck/pull/2683) Handle clicks on calendar entries
+* [#2810](https://github.com/nextcloud/deck/pull/2810) Register talk message action for creating deck cards (Requires Nextcloud Talk 11.1.0)
+* [#2700](https://github.com/nextcloud/deck/pull/2700) Attempt to copy file on dropping it to deck
+* [#2701](https://github.com/nextcloud/deck/pull/2701) Fix uploading files by drag and drop
+* [#2707](https://github.com/nextcloud/deck/pull/2707) L10n: Change to a capital letter @Valdnet
+* [#2772](https://github.com/nextcloud/deck/pull/2772) Add API to register card actions
 * Nextcloud 21 compatiblity
 
 ### Fixed
-* [#2622](https://github.com/nextcloud/deck/pull/2622) Fix gradient and stack header spacing for safari
-* [#2626](https://github.com/nextcloud/deck/pull/2626) Adding a description icon to cards when they contain a description without any checkmarks @MonkeySon
-* [#2659](https://github.com/nextcloud/deck/pull/2659) Matching color of description cursor with text color @JonFStr
-* [#2676](https://github.com/nextcloud/deck/pull/2676) Only load filter view when shown
-* [#2680](https://github.com/nextcloud/deck/pull/2680) Do not try to add change data if it doesn't exist
-* [#2681](https://github.com/nextcloud/deck/pull/2681) Filter out deleted stacks from results
-* [#2685](https://github.com/nextcloud/deck/pull/2685) Show all boards in move card dialog @jakobroehrl
-* [#2687](https://github.com/nextcloud/deck/pull/2687) 3dots no opacity @jakobroehrl
-* [#2688](https://github.com/nextcloud/deck/pull/2688) Title > boardname @jakobroehrl
-* [#2689](https://github.com/nextcloud/deck/pull/2689) Modal > bigger view wording @jakobroehrl
+* [#2712](https://github.com/nextcloud/deck/pull/2712) Docs: Fix table in section "GET /api/v1.0/config" @das-g
+* [#2716](https://github.com/nextcloud/deck/pull/2716) Remove repair step which is no longer needed as we cleanup properly
+* [#2723](https://github.com/nextcloud/deck/pull/2723) Pad random color with leading zeroes @PVince81
+* [#2729](https://github.com/nextcloud/deck/pull/2729) Remove invalid activity parameters @nickvergessen
+* [#2750](https://github.com/nextcloud/deck/pull/2750) Fix deck activity emails not being translated @nickvergessen
+* [#2751](https://github.com/nextcloud/deck/pull/2751) Properly set author for activity events that are triggered by cron
+* [#2796](https://github.com/nextcloud/deck/pull/2796) Install all needed php extensions
+* [#2817](https://github.com/nextcloud/deck/pull/2817) Fix issues when creating a card from a talk message
 
 ## 1.3.0-beta2
 
