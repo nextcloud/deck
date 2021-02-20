@@ -4689,16 +4689,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "4.6.0",
+            "version": "4.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "77feecb3707bd50378c21ae4d3fe9e320e6cea65"
+                "reference": "e93e532e4eaad6d68c4d7b606853800eaceccc72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/77feecb3707bd50378c21ae4d3fe9e320e6cea65",
-                "reference": "77feecb3707bd50378c21ae4d3fe9e320e6cea65",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/e93e532e4eaad6d68c4d7b606853800eaceccc72",
+                "reference": "e93e532e4eaad6d68c4d7b606853800eaceccc72",
                 "shasum": ""
             },
             "require": {
@@ -4716,7 +4716,7 @@
                 "ext-tokenizer": "*",
                 "felixfbecker/advanced-json-rpc": "^3.0.3",
                 "felixfbecker/language-server-protocol": "^1.4",
-                "netresearch/jsonmapper": "^1.0 || ^2.0 || ^3.0",
+                "netresearch/jsonmapper": "^1.0 || ^2.0 || ^3.0 || ^4.0",
                 "nikic/php-parser": "^4.10.1",
                 "openlss/lib-array2xml": "^1.0",
                 "php": "^7.1|^8",
@@ -4788,9 +4788,9 @@
             ],
             "support": {
                 "issues": "https://github.com/vimeo/psalm/issues",
-                "source": "https://github.com/vimeo/psalm/tree/4.6.0"
+                "source": "https://github.com/vimeo/psalm/tree/4.6.1"
             },
-            "time": "2021-02-15T20:32:35+00:00"
+            "time": "2021-02-17T21:54:11+00:00"
         },
         {
             "name": "webmozart/assert",
