@@ -32,6 +32,7 @@ OC.L10N.register(
     "Shared with you" : "Met u gedeel",
     "An error occurred" : "'n Fout het voorgekom",
     "Today" : "Vandag",
-    "Tomorrow" : "Môre"
+    "Tomorrow" : "Môre",
+    "This week" : "Vandeesweek"
 },
 "nplurals=2; plural=(n != 1);");
