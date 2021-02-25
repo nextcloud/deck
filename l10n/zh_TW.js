@@ -64,6 +64,7 @@ OC.L10N.register(
     "Tomorrow" : "明天",
     "This week" : "本週",
     "Link to a board" : "連結到佈告欄",
-    "Maximum file size of {size} exceeded" : "達到最大的檔案大小 {size} "
+    "Maximum file size of {size} exceeded" : "達到最大的檔案大小 {size} ",
+    "Error creating the share" : "建立分享時發生錯誤"
 },
 "nplurals=1; plural=0;");
