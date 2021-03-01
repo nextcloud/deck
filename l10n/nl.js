@@ -126,7 +126,7 @@ OC.L10N.register(
     "Overwrite file" : "Overschrijven bestand",
     "Keep existing file" : "Bewaar het al bestaande bestand",
     "This board is read only" : "Dit bord is alleen-lezen",
-    "Drop your files to upload" : "Zet uw bestanden hier neer om te uploaden",
+    "Drop your files to upload" : "Zet je bestanden hier neer om te uploaden",
     "Archived cards" : "Gearchiveerde kaarten",
     "Add list" : "Lijst toevoegen",
     "List name" : "Lijstnaam",
