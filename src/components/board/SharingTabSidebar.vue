@@ -73,6 +73,7 @@ import { CollectionList } from 'nextcloud-vue-collections'
 import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
+import { debounce } from 'lodash'
 
 export default {
 	name: 'SharingTabSidebar',
@@ -148,18 +149,13 @@ export default {
 		this.asyncFind('')
 	},
 	methods: {
+		debouncedFind: debounce(async function(query) {
+			this.isSearching = true
+			await this.$store.dispatch('loadSharees', query)
+			this.isSearching = false
+		}, 300),
 		async asyncFind(query) {
-			// manual debounce to handle async searching more easily and have more control over the loading state
-			const timestamp = (new Date()).getTime()
-			if (!this.isSearching || timestamp > this.isSearching + 300) {
-				this.isSearching = timestamp
-				await this.$store.dispatch('loadSharees', query)
-
-				// only reset searching flag if the most recent search finished
-				if (this.isSearching === timestamp) {
-					this.isSearching = false
-				}
-			}
+			await this.debouncedFind(query)
 		},
 		async clickAddAcl() {
 			this.addAclForAPI = {
