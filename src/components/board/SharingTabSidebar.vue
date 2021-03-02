@@ -10,7 +10,7 @@
 			:loading="isLoading || !!isSearching"
 			:disabled="isLoading"
 			track-by="multiselectKey"
-			:internal-search="true"
+			:internal-search="false"
 			@input="clickAddAcl"
 			@search-change="asyncFind">
 			<template #noOptions>
