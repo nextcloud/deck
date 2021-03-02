@@ -15,7 +15,7 @@ OC.L10N.register(
     "Reply" : "Respondre",
     "Update" : "Metre a jorn",
     "Description" : "Descripcion",
-    "seconds ago" : "i a qualques segondas",
+    "seconds ago" : "fa qualques segondas",
     "Shared with you" : "Shared with you",
     "Today" : "Uèi",
     "Tomorrow" : "Deman"
