@@ -31,6 +31,7 @@ use OCP\L10N\IFactory;
 use OCP\Notification\AlreadyProcessedException;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
+use OCP\Notification\IAction;
 
 class Notifier implements INotifier {
 	/** @var IFactory */
@@ -120,6 +121,7 @@ class Notifier implements INotifier {
 					]
 				);
 				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $cardId . '');
+				$notification = $this->addActionButton($notification, $l->t('View card'));
 				break;
 			case 'card-overdue':
 				$cardId = $notification->getObjectId();
@@ -131,6 +133,9 @@ class Notifier implements INotifier {
 					(string) $l->t('The card "%s" on "%s" has reached its due date.', $params)
 				);
 				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $cardId . '');
+				$notification = $this->addActionButton($notification, $l->t('View card'));
+				// $notification = $this->addActionButton($notification, $l->t('Set due to tomorrow'), false);
+				$notification = $this->addActionButtonChangeDueDate($notification, $l->t('Remove due date'), false);
 				break;
 			case 'card-comment-mentioned':
 				$cardId = $notification->getObjectId();
@@ -161,6 +166,7 @@ class Notifier implements INotifier {
 					$notification->setParsedMessage($notification->getMessageParameters()['message']);
 				}
 				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $cardId . '');
+				$notification = $this->addActionButton($notification, $l->t('View card'));
 				break;
 			case 'board-shared':
 				$boardId = $notification->getObjectId();
@@ -187,8 +193,34 @@ class Notifier implements INotifier {
 					]
 				);
 				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/');
+				$notification = $this->addActionButton($notification, $l->t('View board'));
 				break;
 		}
 		return $notification;
 	}
+
+	protected function addActionButton(INotification $notification, string $label, bool $primary = true): INotification {
+		$action = $notification->createAction();
+		$action->setLabel($label)
+			->setParsedLabel($label)
+			->setLink($notification->getLink(), IAction::TYPE_WEB)
+			->setPrimary($primary);
+
+		$notification->addParsedAction($action);
+
+		return $notification;
+	}
+
+	protected function addActionButtonChangeDueDate(INotification $notification, string $label, bool $primary = true): INotification {
+		$action = $notification->createAction();
+		$action->setLabel($label)
+			->setParsedLabel($label)
+			->setLink($notification->getLink(), IAction::TYPE_WEB)
+			->setPrimary($primary);
+
+		$notification->addParsedAction($action);
+
+		return $notification;
+	}
+
 }
