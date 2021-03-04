@@ -21,32 +21,40 @@
   -->
 
 <template>
-	<DashboardWidget :items="cards"
-		empty-content-icon="icon-deck"
-		:empty-content-message="t('deck', 'No upcoming cards')"
-		:show-more-text="t('deck', 'upcoming cards')"
-		:show-more-url="showMoreUrl"
-		:loading="loading"
-		@hide="() => {}"
-		@markDone="() => {}">
-		<template v-slot:default="{ item }">
-			<a :key="item.id"
-				:href="cardLink(item)"
-				target="_blank"
-				class="card">
-				<div class="card--header">
-					<DueDate class="right" :card="item" />
-					<span class="title">{{ item.title }}</span>
-				</div>
-				<ul v-if="item.labels && item.labels.length"
-					class="labels">
-					<li v-for="label in item.labels" :key="label.id" :style="labelStyle(label)">
-						<span>{{ label.title }}</span>
-					</li>
-				</ul>
-			</a>
-		</template>
-	</DashboardWidget>
+	<div>
+		<DashboardWidget :items="cards"
+			empty-content-icon="icon-deck"
+			:empty-content-message="t('deck', 'No upcoming cards')"
+			:show-more-text="t('deck', 'upcoming cards')"
+			:show-more-url="showMoreUrl"
+			:loading="loading"
+			@hide="() => {}"
+			@markDone="() => {}">
+			<template v-slot:default="{ item }">
+				<a :key="item.id"
+					:href="cardLink(item)"
+					target="_blank"
+					class="card">
+					<div class="card--header">
+						<DueDate class="right" :card="item" />
+						<span class="title">{{ item.title }}</span>
+					</div>
+					<ul v-if="item.labels && item.labels.length"
+						class="labels">
+						<li v-for="label in item.labels" :key="label.id" :style="labelStyle(label)">
+							<span>{{ label.title }}</span>
+						</li>
+					</ul>
+				</a>
+			</template>
+		</DashboardWidget>
+		<div class="center-button">
+			<button @click="toggleAddCardModel" @close="toggleAddCardModel">
+				{{ t('deck', 'Add card') }}
+			</button>
+			<CardCreateDialog v-if="showAddCardModal" />
+		</div>
+	</div>
 </template>
 
 <script>
@@ -55,17 +63,20 @@ import { mapGetters } from 'vuex'
 import labelStyle from './../mixins/labelStyle'
 import DueDate from '../components/cards/badges/DueDate'
 import { generateUrl } from '@nextcloud/router'
+import CardCreateDialog from '../CardCreateDialog'
 
 export default {
 	name: 'Dashboard',
 	components: {
 		DueDate,
 		DashboardWidget,
+		CardCreateDialog,
 	},
 	mixins: [labelStyle],
 	data() {
 		return {
 			loading: false,
+			showAddCardModal: false,
 		}
 	},
 	computed: {
@@ -97,6 +108,11 @@ export default {
 		this.$store.dispatch('loadUpcoming').then(() => {
 			this.loading = false
 		})
+	},
+	methods: {
+		toggleAddCardModel() {
+			this.showAddCardModal = !this.showAddCardModal
+		},
 	},
 }
 </script>
@@ -144,5 +160,9 @@ export default {
 
 	.right {
 		float: right;
+	}
+
+	.center-button {
+		text-align: center;
 	}
 </style>
