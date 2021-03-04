@@ -25,10 +25,10 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
-use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\AppFramework\Http\StreamResponse;
 use OCP\Files\Folder;
 use OCP\Files\IAppData;
+use OCP\Files\IMimeTypeDetector;
 use OCP\Files\IRootFolder;
 use OCP\Files\SimpleFS\ISimpleFile;
 use OCP\Files\SimpleFS\ISimpleFolder;
@@ -57,6 +57,8 @@ class FileServiceTest extends TestCase {
 	private $config;
 	/** @var AttachmentMapper|MockObject */
 	private $attachmentMapper;
+	/** @var IMimeTypeDetector|MockObject */
+	private $mimeTypeDetector;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -67,7 +69,8 @@ class FileServiceTest extends TestCase {
 		$this->rootFolder = $this->createMock(IRootFolder::class);
 		$this->config = $this->createMock(IConfig::class);
 		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
-		$this->fileService = new FileService($this->l10n, $this->appData, $this->request, $this->logger, $this->rootFolder, $this->config, $this->attachmentMapper);
+		$this->mimeTypeDetector = $this->createMock(IMimeTypeDetector::class);
+		$this->fileService = new FileService($this->l10n, $this->appData, $this->request, $this->logger, $this->rootFolder, $this->config, $this->attachmentMapper, $this->mimeTypeDetector);
 	}
 
 	public function mockGetFolder($cardId) {
@@ -268,51 +271,13 @@ class FileServiceTest extends TestCase {
 		$file->expects($this->any())
 			->method('fopen')
 			->willReturn('fileresource');
+		$this->mimeTypeDetector->expects($this->once())
+			->method('getSecureMimeType')
+			->willReturn('image/jpeg');
 		$actual = $this->fileService->display($attachment);
 		$expected = new StreamResponse('fileresource');
 		$expected->addHeader('Content-Type', 'image/jpeg');
-		$expected->addHeader('Content-Disposition', 'inline; filename="' . rawurldecode($file->getName()) . '"');
-		$policy = new ContentSecurityPolicy();
-		$policy->addAllowedObjectDomain('\'self\'');
-		$policy->addAllowedObjectDomain('blob:');
-		$policy->addAllowedMediaDomain('\'self\'');
-		$policy->addAllowedMediaDomain('blob:');
-		$expected->setContentSecurityPolicy($policy);
-		$this->assertEquals($expected, $actual);
-	}
-
-	public function testDisplayPdf() {
-		$this->config->expects($this->once())
-			->method('getSystemValue')
-			->willReturn('123');
-		$appDataFolder = $this->createMock(Folder::class);
-		$deckAppDataFolder = $this->createMock(Folder::class);
-		$cardFolder = $this->createMock(Folder::class);
-		$this->rootFolder->expects($this->once())->method('get')->willReturn($appDataFolder);
-		$appDataFolder->expects($this->once())->method('get')->willReturn($deckAppDataFolder);
-		$deckAppDataFolder->expects($this->once())->method('get')->willReturn($cardFolder);
-		$attachment = $this->getAttachment();
-		$file = $this->createMock(\OCP\Files\File::class);
-		$cardFolder->expects($this->once())->method('get')->willReturn($file);
-		$file->expects($this->any())
-			->method('getMimeType')
-			->willReturn('application/pdf');
-		$file->expects($this->any())
-			->method('getName')
-			->willReturn('file1');
-		$file->expects($this->any())
-			->method('fopen')
-			->willReturn('fileresource');
-		$actual = $this->fileService->display($attachment);
-		$expected = new StreamResponse('fileresource');
-		$expected->addHeader('Content-Disposition', 'inline; filename="' . rawurldecode($file->getName()) . '"');
-		$expected->addHeader('Content-Type', 'application/pdf');
-		$policy = new ContentSecurityPolicy();
-		$policy->addAllowedObjectDomain('\'self\'');
-		$policy->addAllowedObjectDomain('blob:');
-		$policy->addAllowedMediaDomain('\'self\'');
-		$policy->addAllowedMediaDomain('blob:');
-		$expected->setContentSecurityPolicy($policy);
+		$expected->addHeader('Content-Disposition', 'attachment; filename="' . rawurldecode($file->getName()) . '"');
 		$this->assertEquals($expected, $actual);
 	}
 
