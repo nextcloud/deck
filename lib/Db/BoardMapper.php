@@ -169,7 +169,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		}
 		$circles = array_map(function ($circle) {
 			return $circle->getUniqueId();
-		}, \OCA\Circles\Api\v1\Circles::joinedCircles('', true));
+		}, \OCA\Circles\Api\v1\Circles::joinedCircles($userId, true));
 		if (count($circles) === 0) {
 			return [];
 		}
