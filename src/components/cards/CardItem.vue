@@ -36,6 +36,7 @@
 			</div>
 			<div class="card-upper">
 				<h3 v-if="compactMode || isArchived || showArchived || !canEdit || standalone">
+					{{ attachments }}
 					{{ card.title }}
 				</h3>
 				<h3 v-else-if="!editing">
@@ -121,12 +122,16 @@ export default {
 		}),
 		...mapGetters([
 			'isArchived',
+
 		]),
 		board() {
 			return this.$store.getters.boardById(this?.stack?.boardId)
 		},
 		stack() {
 			return this.$store.getters.stackById(this?.card?.stackId)
+		},
+		attachments() {
+			return [...this.$store.getters.attachmentsByCard(this.currentCard.id)].filter(attachment => attachment.deletedAt >= 0)
 		},
 		canEdit() {
 			if (this.currentBoard) {

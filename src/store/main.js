@@ -311,6 +311,9 @@ export default new Vuex.Store({
 				Vue.delete(state.currentBoard.acl, removeIndex)
 			}
 		},
+		toggleCoverImages(state) {
+			state.coverImages = !state.coverImages
+		},
 
 	},
 	actions: {
@@ -495,6 +498,14 @@ export default new Vuex.Store({
 				.then((acl) => {
 					commit('deleteAclFromCurrentBoard', acl)
 					dispatch('loadBoardById', acl.boardId)
+				})
+		},
+		toggleCoverImages({ commit }, board) {
+			const boardCopy = JSON.parse(JSON.stringify(board))
+			boardCopy.coverImages = !boardCopy.coverImages
+			apiClient.updateBoard(boardCopy)
+				.then((board) => {
+					commit('toggleCoverImages', board)
 				})
 		},
 	},
