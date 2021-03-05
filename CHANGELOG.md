@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.3.1 - 2021-03-05
+
+### Fixed
+
+* [#2827](https://github.com/nextcloud/deck/pull/2827) Also include /apps/spreed urls in the listener for loading the talk integration
+* [#2844](https://github.com/nextcloud/deck/pull/2844) Search by mail on the board sharing input
+* [#2849](https://github.com/nextcloud/deck/pull/2849) Switch to Content-Disposition attachment and check for sane mimetypes
+* [#2859](https://github.com/nextcloud/deck/pull/2859) Properly pass the user to fetch circles when calling through occ
+
+
 ## 1.3.0 - 2021-02-20
 
 ### Added
