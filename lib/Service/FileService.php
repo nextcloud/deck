@@ -27,10 +27,9 @@ use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\StatusException;
 use OCA\Deck\Exceptions\ConflictException;
-use OCP\AppFramework\Http\ContentSecurityPolicy;
-use OCP\AppFramework\Http\FileDisplayResponse;
 use OCP\AppFramework\Http\StreamResponse;
 use OCP\Files\IAppData;
+use OCP\Files\IMimeTypeDetector;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
@@ -49,6 +48,7 @@ class FileService implements IAttachmentService {
 	private $rootFolder;
 	private $config;
 	private $attachmentMapper;
+	private $mimeTypeDetector;
 
 	public function __construct(
 		IL10N $l10n,
@@ -57,7 +57,8 @@ class FileService implements IAttachmentService {
 		ILogger $logger,
 		IRootFolder $rootFolder,
 		IConfig $config,
-		AttachmentMapper $attachmentMapper
+		AttachmentMapper $attachmentMapper,
+		IMimeTypeDetector $mimeTypeDetector
 	) {
 		$this->l10n = $l10n;
 		$this->appData = $appData;
@@ -66,6 +67,7 @@ class FileService implements IAttachmentService {
 		$this->rootFolder = $rootFolder;
 		$this->config = $config;
 		$this->attachmentMapper = $attachmentMapper;
+		$this->mimeTypeDetector = $mimeTypeDetector;
 	}
 
 	/**
@@ -225,27 +227,14 @@ class FileService implements IAttachmentService {
 
 	/**
 	 * @param Attachment $attachment
-	 * @return FileDisplayResponse|\OCP\AppFramework\Http\Response|StreamResponse
+	 * @return StreamResponse
 	 * @throws \Exception
 	 */
 	public function display(Attachment $attachment) {
 		$file = $this->getFileFromRootFolder($attachment);
-		if (method_exists($file, 'fopen')) {
-			$response = new StreamResponse($file->fopen('r'));
-			$response->addHeader('Content-Disposition', 'inline; filename="' . rawurldecode($file->getName()) . '"');
-		} else {
-			$response = new FileDisplayResponse($file);
-		}
-		// We need those since otherwise chrome won't show the PDF file with CSP rule object-src 'none'
-		// https://bugs.chromium.org/p/chromium/issues/detail?id=271452
-		$policy = new ContentSecurityPolicy();
-		$policy->addAllowedObjectDomain('\'self\'');
-		$policy->addAllowedObjectDomain('blob:');
-		$policy->addAllowedMediaDomain('\'self\'');
-		$policy->addAllowedMediaDomain('blob:');
-		$response->setContentSecurityPolicy($policy);
-
-		$response->addHeader('Content-Type', $file->getMimeType());
+		$response = new StreamResponse($file->fopen('rb'));
+		$response->addHeader('Content-Disposition', 'attachment; filename="' . rawurldecode($file->getName()) . '"');
+		$response->addHeader('Content-Type', $this->mimeTypeDetector->getSecureMimeType($file->getMimeType()));
 		return $response;
 	}
 
