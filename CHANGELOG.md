@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.5 - 2021-03-05
+
+### Fixed
+
+* [#2845](https://github.com/nextcloud/deck/pull/2845) Search by mail on the board sharing input
+* [#2850](https://github.com/nextcloud/deck/pull/2850) Switch to Content-Disposition attachment and check for sane mimetypes
+* [#2860](https://github.com/nextcloud/deck/pull/2860) Properly pass the user to fetch circles when calling through occ
+
 ## 1.2.4 - 2021-02-02
 
 ### Fixed
