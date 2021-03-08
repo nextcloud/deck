@@ -311,8 +311,12 @@ export default new Vuex.Store({
 				Vue.delete(state.currentBoard.acl, removeIndex)
 			}
 		},
-		toggleCoverImages(state) {
-			state.coverImages = !state.coverImages
+		toggleCoverImages(state, board) {
+			let currentBoard = state.boards.filter((b) => {
+				return board.id === b.id
+			})
+			currentBoard = currentBoard[0]
+			Vue.set(currentBoard, 'coverImages', board.coverImages)
 		},
 
 	},

@@ -32,7 +32,6 @@
 			slot="counter"
 			class="icon-shared"
 			style="opacity: 0.5" />
-
 		<template v-if="!deleted" slot="actions">
 			<template v-if="!isDueSubmenuActive">
 				<ActionButton
@@ -114,7 +113,7 @@
 			<ActionCheckbox v-if="canManage"
 				:checked="board.coverImages"
 				@change="actionToggleCoverImages">
-				{{ t('deck', 'Show cover images') }}
+				{{ t('deck', 'Show cover images') }} {{ board.coverImages }}
 			</ActionCheckbox>
 			<ActionButton v-if="canManage && !isDueSubmenuActive"
 				icon="icon-delete"
