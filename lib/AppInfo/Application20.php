@@ -45,6 +45,8 @@ use OCA\Deck\Service\FullTextSearchService;
 use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\Sharing\Listener;
+use OCA\Deck\Listeners\RegisterChecksListener;
+use OCA\Deck\Listeners\RegisterEntityListener;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -66,6 +68,8 @@ use OCP\IUserManager;
 use OCP\Notification\IManager as NotificationManager;
 use OCP\Share\IManager;
 use OCP\Util;
+use OCP\WorkflowEngine\Events\RegisterChecksEvent;
+use OCP\WorkflowEngine\Events\RegisterEntitiesEvent;
 use Psr\Container\ContainerInterface;
 
 class Application20 extends App implements IBootstrap {
@@ -127,6 +131,9 @@ class Application20 extends App implements IBootstrap {
 		$context->registerDashboardWidget(DeckWidget::class);
 
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
+
+		$context->registerEventListener(RegisterEntitiesEvent::class, RegisterEntityListener::class);
+		//$context->registerEventListener(RegisterChecksEvent::class, RegisterChecksListener::class);
 	}
 
 	public function registerNotifications(NotificationManager $notificationManager): void {

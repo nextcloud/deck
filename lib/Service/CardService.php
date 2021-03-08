@@ -35,6 +35,7 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\Event\FTSEvent;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Db\BoardMapper;
@@ -224,7 +225,8 @@ class CardService {
 		$card = $this->cardMapper->insert($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE);
 		$this->changeHelper->cardChanged($card->getId(), false);
-
+		$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($card));
+		
 		$this->eventDispatcher->dispatch(
 			'\OCA\Deck\Card::onCreate',
 			new FTSEvent(
