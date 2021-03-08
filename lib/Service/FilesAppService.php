@@ -174,7 +174,6 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 			throw new StatusException('Could not read file');
 		}
 		$target->putContent($content);
-		fclose($content);
 
 		$share = $this->shareManager->newShare();
 		$share->setNode($target);
