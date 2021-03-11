@@ -49,10 +49,10 @@
 			</template>
 		</DashboardWidget>
 		<div class="center-button">
-			<button @click="toggleAddCardModel" @close="toggleAddCardModel">
+			<button @click="toggleAddCardModel">
 				{{ t('deck', 'Add card') }}
 			</button>
-			<CardCreateDialog v-if="showAddCardModal" />
+			<CardCreateDialog v-if="showAddCardModal" @close="toggleAddCardModel" />
 		</div>
 	</div>
 </template>
