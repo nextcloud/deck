@@ -79,18 +79,10 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws DoesNotExistException
 	 */
-	public function find($id, $withLabels = false, $withAcl = false): Board {
-		if (!isset($this->boardCache[$id])) {
-			$qb = $this->db->getQueryBuilder();
-			$qb->select('*')
-				->from('deck_boards')
-				->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
-				->orderBy('id');
-			$this->boardCache[$id] = $this->findEntity($qb);
-		}
-
-		// FIXME is this necessary? it was NOT done with the old mapper
-		// $this->mapOwner($board);
+	public function find($id, $withLabels = false, $withAcl = false) {
+		$sql = 'SELECT id, title, owner, color, archived, deleted_at, last_modified, cover_images FROM `*PREFIX*deck_boards` ' .
+			'WHERE `id` = ?';
+		$board = $this->findEntity($sql, [$id]);
 
 		// Add labels
 		if ($withLabels && $this->boardCache[$id]->getLabels() === null) {
@@ -137,16 +129,9 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	 * @param null $offset
 	 * @return array
 	 */
-	public function findAllByUser(string $userId, ?int $limit = null, ?int $offset = null, ?int $since = null,
-								  bool $includeArchived = true, ?int $before = null, ?string $term = null) {
-		// FIXME this used to be a UNION to get boards owned by $userId and the user shares in one single query
-		// Is it possible with the query builder?
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
-			// this does not work in MySQL/PostgreSQL
-			//->selectAlias('0', 'shared')
-			->from('deck_boards', 'b')
-			->where($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+	public function findAllByUser($userId, $limit = null, $offset = null, $since = -1, $includeArchived = true) {
+		// FIXME: One moving to QBMapper we should allow filtering the boards probably by method chaining for additional where clauses
+		$sql = 'SELECT id, title, owner, color, archived, deleted_at, 0 as shared, last_modified, cover_images FROM `*PREFIX*deck_boards` WHERE owner = ? AND last_modified > ?';
 		if (!$includeArchived) {
 			$qb->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
 				->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
@@ -157,38 +142,9 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		if ($before !== null) {
 			$qb->andWhere($qb->expr()->lt('last_modified', $qb->createNamedParameter($before, IQueryBuilder::PARAM_INT)));
 		}
-		if ($term !== null) {
-			$qb->andWhere(
-				$qb->expr()->iLike(
-					'title',
-					$qb->createNamedParameter(
-						'%' . $this->db->escapeLikeParameter($term) . '%',
-						IQueryBuilder::PARAM_STR
-					)
-				)
-			);
-		}
-		$qb->orderBy('b.id');
-		if ($limit !== null) {
-			$qb->setMaxResults($limit);
-		}
-		if ($offset !== null) {
-			$qb->setFirstResult($offset);
-		}
-		$entries = $this->findEntities($qb);
-		foreach ($entries as $entry) {
-			$entry->setShared(0);
-		}
-
-		// shared with user
-		$qb->resetQueryParts();
-		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
-			//->selectAlias('1', 'shared')
-			->from('deck_boards', 'b')
-			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
-			->where($qb->expr()->eq('acl.participant', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
-			->andWhere($qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_USER, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->neq('b.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+		$sql .= ' UNION ' .
+			'SELECT boards.id, title, owner, color, archived, deleted_at, 1 as shared, last_modified, cover_images FROM `*PREFIX*deck_boards` as boards ' .
+			'JOIN `*PREFIX*deck_board_acl` as acl ON boards.id=acl.board_id WHERE acl.participant=? AND acl.type=? AND boards.owner != ? AND last_modified > ?';
 		if (!$includeArchived) {
 			$qb->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
 				->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
@@ -259,14 +215,8 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		if (count($groups) <= 0) {
 			return [];
 		}
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
-			//->selectAlias('2', 'shared')
-			->from('deck_boards', 'b')
-			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
-			->where($qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_GROUP, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->neq('b.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
-		$or = $qb->expr()->orx();
+		$sql = 'SELECT boards.id, title, owner, color, archived, deleted_at, 2 as shared, last_modified, cover_images FROM `*PREFIX*deck_boards` as boards ' .
+			'INNER JOIN `*PREFIX*deck_board_acl` as acl ON boards.id=acl.board_id WHERE owner != ? AND type=? AND (';
 		for ($i = 0, $iMax = count($groups); $i < $iMax; $i++) {
 			$or->add(
 				$qb->expr()->eq('acl.participant', $qb->createNamedParameter($groups[$i], IQueryBuilder::PARAM_STR))
@@ -325,14 +275,8 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			return [];
 		}
 
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
-			//->selectAlias('2', 'shared')
-			->from('deck_boards', 'b')
-			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
-			->where($qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_CIRCLE, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->neq('b.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
-		$or = $qb->expr()->orx();
+		$sql = 'SELECT boards.id, title, owner, color, archived, deleted_at, 2 as shared, last_modified, cover_images FROM `*PREFIX*deck_boards` as boards ' .
+			'INNER JOIN `*PREFIX*deck_board_acl` as acl ON boards.id=acl.board_id WHERE owner != ? AND type=? AND (';
 		for ($i = 0, $iMax = count($circles); $i < $iMax; $i++) {
 			$or->add(
 				$qb->expr()->eq('acl.participant', $qb->createNamedParameter($circles[$i], IQueryBuilder::PARAM_STR))
@@ -389,12 +333,9 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	public function findToDelete() {
 		// add buffer of 5 min
 		$timeLimit = time() - (60 * 5);
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
-			->from('deck_boards')
-			->where($qb->expr()->gt('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->lt('deleted_at', $qb->createNamedParameter($timeLimit, IQueryBuilder::PARAM_INT)));
-		return $this->findEntities($qb);
+		$sql = 'SELECT id, title, owner, color, archived, deleted_at, last_modified, cover_images FROM `*PREFIX*deck_boards` ' .
+			'WHERE `deleted_at` > 0 AND `deleted_at` < ?';
+		return $this->findEntities($sql, [$timeLimit]);
 	}
 
 	public function delete(/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */

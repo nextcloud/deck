@@ -37,7 +37,7 @@
 			<div class="card-upper">
 				<h3 v-if="compactMode || isArchived || showArchived || !canEdit || standalone">
 					{{ attachments }}
-			<div class="imageCover">
+			<div class="imageCover" v-if="currentBoard.coverImages">
 				<a class="fileicon" :style="mimetypeForAttachment(attachments[0])" />
 			</div>
 			<div class="card-upper">
