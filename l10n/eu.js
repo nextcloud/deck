@@ -109,6 +109,7 @@ OC.L10N.register(
     "Select a board" : "Hautatu mahai bat",
     "Select a list" : "Hautatu zerrenda bat",
     "Cancel" : "Utzi",
+    "Close" : "Itxi",
     "Select a card" : "Hautatu txartel bat",
     "Select the card to link to a project" : "Hautatu proiektu bati estekatzeko txartela",
     "Link to card" : "Estekatu txartelera",
