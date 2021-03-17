@@ -308,6 +308,13 @@ export default new Vuex.Store({
 				Vue.delete(state.currentBoard.acl, removeIndex)
 			}
 		},
+		toggleUpcoming_show_only_assigned_cards(state, board) {
+			let currentBoard = state.boards.filter((b) => {
+				return board.id === b.id
+			})
+			currentBoard = currentBoard[0]
+			Vue.set(currentBoard, 'upcoming_show_only_assigned_cards', board.upcoming_show_only_assigned_cards)
+		},
 
 	},
 	actions: {
@@ -488,6 +495,14 @@ export default new Vuex.Store({
 				.then((acl) => {
 					commit('deleteAclFromCurrentBoard', acl)
 					dispatch('loadBoardById', acl.boardId)
+				})
+		},
+		toggleUpcoming_show_only_assigned_cards({ commit }, board) {
+			const boardCopy = JSON.parse(JSON.stringify(board))
+			boardCopy.upcoming_show_only_assigned_cards = !boardCopy.upcoming_show_only_assigned_cards
+			apiClient.updateBoard(boardCopy)
+				.then((board) => {
+					commit('toggleUpcoming_show_only_assigned_cards', board)
 				})
 		},
 	},

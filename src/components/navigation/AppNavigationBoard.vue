@@ -112,6 +112,12 @@
 				{{ dueDateReminderText }}
 			</ActionButton>
 
+			<ActionCheckbox v-if="canManage"
+				:checked="board.upcoming_show_only_assigned_cards"
+				@change="actionToggleUpcoming_show_only_assigned_cards">
+				{{ t('deck', 'Show only cards assigned to me in upcoming view') }}
+			</ActionCheckbox>
+
 			<ActionButton v-if="canManage && !isDueSubmenuActive"
 				icon="icon-delete"
 				:close-after-click="true"
@@ -133,7 +139,7 @@
 </template>
 
 <script>
-import { AppNavigationIconBullet, AppNavigationCounter, AppNavigationItem, ColorPicker, Actions, ActionButton } from '@nextcloud/vue'
+import { AppNavigationIconBullet, AppNavigationCounter, AppNavigationItem, ColorPicker, Actions, ActionButton, ActionCheckbox } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
 
 export default {
@@ -145,6 +151,7 @@ export default {
 		ColorPicker,
 		Actions,
 		ActionButton,
+		ActionCheckbox,
 	},
 	directives: {
 		ClickOutside,
@@ -310,6 +317,9 @@ export default {
 			await this.$store.dispatch('setConfig', setting)
 			this.isDueSubmenuActive = false
 			this.updateDueSetting = null
+		},
+		actionToggleUpcoming_show_only_assigned_cards() {
+			this.$store.dispatch('toggleUpcoming_show_only_assigned_cards', this.board)
 		},
 	},
 	inject: [
