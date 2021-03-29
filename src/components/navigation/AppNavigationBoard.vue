@@ -235,9 +235,7 @@ export default {
 			try {
 				const newBoard = await this.$store.dispatch('cloneBoard', this.board)
 				this.loading = false
-				const route = this.routeTo
-				route.params.id = newBoard.id
-				this.$router.push(route)
+				this.$router.push({ name: 'board', params: { id: newBoard.id } })
 			} catch (e) {
 				OC.Notification.showTemporary(t('deck', 'An error occurred'))
 				console.error(e)
@@ -278,9 +276,7 @@ export default {
 			)
 		},
 		actionDetails() {
-			const route = this.routeTo
-			route.name = 'board.details'
-			this.$router.push(route)
+			this.$router.push({ name: 'board.details', params: { id: this.routeTo.id } })
 		},
 		applyEdit(e) {
 			this.editing = false
@@ -297,11 +293,6 @@ export default {
 		},
 		cancelEdit(e) {
 			this.editing = false
-		},
-		showSidebar() {
-			const route = this.routeTo
-			route.name = 'board.details'
-			this.$router.push(route)
 		},
 		async updateSetting(key, value) {
 			this.updateDueSetting = value
