@@ -50,7 +50,7 @@
 		"moment": "^2.29.1",
 		"nextcloud-vue-collections": "^0.9.0",
 		"p-queue": "^6.6.2",
-		"url-search-params-polyfill": "^8.1.0",
+		"url-search-params-polyfill": "^8.1.1",
 		"vue": "^2.6.12",
 		"vue-at": "^2.5.0-beta.2",
 		"vue-click-outside": "^1.1.0",
