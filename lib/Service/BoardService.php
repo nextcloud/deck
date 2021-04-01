@@ -511,7 +511,6 @@ class BoardService {
 		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
 
-		/* Notify users about the shared board */
 		$this->notificationHelper->sendBoardShared($boardId, $acl);
 
 		$newAcl = $this->aclMapper->insert($acl);
@@ -599,6 +598,9 @@ class BoardService {
 				$this->assignedUsersMapper->delete($assignement);
 			}
 		}
+
+		$this->notificationHelper->sendBoardShared($acl->getBoardId(), $acl);
+
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $acl, ActivityManager::SUBJECT_BOARD_UNSHARE);
 		$this->changeHelper->boardChanged($acl->getBoardId());
 

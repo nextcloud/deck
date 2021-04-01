@@ -382,7 +382,7 @@ class BoardServiceTest extends TestCase {
 		$assignment = new Assignment();
 		$assignment->setParticipant('admin');
 		$this->assignedUsersMapper->expects($this->once())
-			->method('findByUserId')
+			->method('findByParticipant')
 			->with('admin')
 			->willReturn([$assignment]);
 		$this->assignedUsersMapper->expects($this->once())

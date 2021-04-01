@@ -132,9 +132,15 @@ class BoardMapperTest extends MapperTestUtility {
 
 	public function testFindAll() {
 		$actual = $this->boardMapper->findAll();
-		$this->assertEquals($this->boards[0]->getId(), $actual[0]->getId());
-		$this->assertEquals($this->boards[1]->getId(), $actual[1]->getId());
-		$this->assertEquals($this->boards[2]->getId(), $actual[2]->getId());
+		$this->assertEquals(1, count(array_filter($actual, function ($card) {
+			return $card->getId() === $this->boards[0]->getId();
+		})));
+		$this->assertEquals(1, count(array_filter($actual, function ($card) {
+			return $card->getId() === $this->boards[1]->getId();
+		})));
+		$this->assertEquals(1, count(array_filter($actual, function ($card) {
+			return $card->getId() === $this->boards[2]->getId();
+		})));
 	}
 
 	public function testFindAllToDelete() {

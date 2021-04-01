@@ -9,18 +9,8 @@ use PHPUnit\Framework\Assert;
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 trait RequestTrait {
-	private $baseUrl;
-	private $adminUser;
-	private $regularUser;
-	private $cookieJar;
 
 	private $response;
-
-	public function __construct($baseUrl, $admin = 'admin', $regular_user_password = '123456') {
-		$this->baseUrl = $baseUrl;
-		$this->adminUser = $admin === 'admin' ? ['admin', 'admin'] : $admin;
-		$this->regularUser = $regular_user_password;
-	}
 
 	/** @var ServerContext */
 	private $serverContext;
@@ -105,12 +95,32 @@ trait RequestTrait {
 		try {
 			$this->response = $client->request(
 				$method,
-				$this->baseUrl . $url,
+				$this->severContext->getBaseUrl() . $url,
 				[
 					'cookies' => $this->serverContext->getCookieJar(),
 					'json' => $data,
 					'headers' => [
-						'requesttoken' => $this->serverContext->getReqestToken()
+						'requesttoken' => $this->serverContext->getReqestToken(),
+					]
+				]
+			);
+		} catch (ClientException $e) {
+			$this->response = $e->getResponse();
+		}
+	}
+
+	private function sendOCSRequest($method, $url, $data = []) {
+		$client = new Client;
+		try {
+			$this->response = $client->request(
+				$method,
+				$this->severContext->getBaseUrl() . $url,
+				[
+					'cookies' => $this->serverContext->getCookieJar(),
+					'json' => $data,
+					'headers' => [
+						'requesttoken' => $this->serverContext->getReqestToken(),
+						'OCS-APIRequest' => true,
 					]
 				]
 			);

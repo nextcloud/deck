@@ -25,9 +25,11 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\AssignmentMapper;
+use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
+use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
@@ -126,6 +128,17 @@ class CardServiceTest extends TestCase {
 		$this->userManager->expects($this->once())
 			->method('get')
 			->willReturn($user);
+		$this->commentsManager->expects($this->once())
+			->method('getNumberOfCommentsForObject')
+			->willReturn(0);
+		$boardMock = $this->createMock(Board::class);
+		$stackMock = $this->createMock(Stack::class);
+		$this->stackMapper->expects($this->any())
+			->method('find')
+			->willReturn($stackMock);
+		$this->boardService->expects($this->any())
+			->method('find')
+			->willReturn($boardMock);
 		$card = new Card();
 		$card->setId(1337);
 		$this->cardMapper->expects($this->any())
@@ -133,12 +146,14 @@ class CardServiceTest extends TestCase {
 			->with(123)
 			->willReturn($card);
 		$this->assignedUsersMapper->expects($this->any())
-			->method('find')
+			->method('findAll')
 			->with(1337)
 			->willReturn(['user1', 'user2']);
 		$cardExpected = new Card();
 		$cardExpected->setId(1337);
 		$cardExpected->setAssignedUsers(['user1', 'user2']);
+		$cardExpected->setRelatedBoard($boardMock);
+		$cardExpected->setRelatedStack($stackMock);
 		$this->assertEquals($cardExpected, $this->cardService->find(123));
 	}
 

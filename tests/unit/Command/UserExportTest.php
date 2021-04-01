@@ -111,7 +111,7 @@ class UserExportTest extends \Test\TestCase {
 			->method('find')
 			->willReturn($cards[0]);
 		$this->assignedUserMapper->expects($this->exactly(count($boards) * count($stacks) * count($cards)))
-			->method('find')
+			->method('findAll')
 			->willReturn([]);
 		$result = $this->invokePrivate($this->userExport, 'execute', [$input, $output]);
 	}

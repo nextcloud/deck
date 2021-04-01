@@ -29,7 +29,6 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\Db\AssignmentMapper;
-use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Acl;
@@ -108,6 +107,11 @@ class CardService {
 		$lastRead = $this->commentsManager->getReadMark('deckCard', (string)$card->getId(), $user);
 		$count = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId(), $lastRead);
 		$card->setCommentsUnread($count);
+		
+		$stack = $this->stackMapper->find($card->getStackId());
+		$board = $this->boardService->find($stack->getBoardId());
+		$card->setRelatedStack($stack);
+		$card->setRelatedBoard($board);
 	}
 
 	public function fetchDeleted($boardId) {
@@ -117,22 +121,6 @@ class CardService {
 			$this->enrich($card);
 		}
 		return $cards;
-	}
-
-	public function search(string $term, int $limit = null, int $offset = null): array {
-		$boards = $this->boardService->getUserBoards();
-		$boardIds = array_map(static function (Board $board) {
-			return $board->getId();
-		}, $boards);
-		return $this->cardMapper->search($boardIds, $term, $limit, $offset);
-	}
-
-	public function searchRaw(string $term, int $limit = null, int $offset = null): array {
-		$boards = $this->boardService->getUserBoards();
-		$boardIds = array_map(static function (Board $board) {
-			return $board->getId();
-		}, $boards);
-		return $this->cardMapper->searchRaw($boardIds, $term, $limit, $offset);
 	}
 
 	/**
