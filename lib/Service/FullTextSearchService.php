@@ -37,14 +37,10 @@ use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
-use OCA\Deck\Event\FTSEvent;
 use OCA\Deck\Provider\DeckProvider;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
-use OCP\FullTextSearch\Exceptions\FullTextSearchAppNotAvailableException;
-use OCP\FullTextSearch\IFullTextSearchManager;
 use OCP\FullTextSearch\Model\IDocumentAccess;
-use OCP\FullTextSearch\Model\IIndex;
 use OCP\FullTextSearch\Model\IIndexDocument;
 
 /**
@@ -63,97 +59,14 @@ class FullTextSearchService {
 
 	/** @var CardMapper */
 	private $cardMapper;
-
-	/** @var IFullTextSearchManager */
-	private $fullTextSearchManager;
-
-
-	/**
-	 * FullTextSearchService constructor.
-	 *
-	 * @param BoardMapper $boardMapper
-	 * @param StackMapper $stackMapper
-	 * @param CardMapper $cardMapper
-	 * @param IFullTextSearchManager $fullTextSearchManager
-	 */
+	
 	public function __construct(
-		BoardMapper $boardMapper, StackMapper $stackMapper, CardMapper $cardMapper,
-		IFullTextSearchManager $fullTextSearchManager
+		BoardMapper $boardMapper, StackMapper $stackMapper, CardMapper $cardMapper
 	) {
 		$this->boardMapper = $boardMapper;
 		$this->stackMapper = $stackMapper;
 		$this->cardMapper = $cardMapper;
-
-		$this->fullTextSearchManager = $fullTextSearchManager;
 	}
-
-
-	/**
-	 * @param FTSEvent $e
-	 */
-	public function onCardCreated(FTSEvent $e) {
-		$cardId = $e->getArgument('id');
-		$userId = $e->getArgument('userId');
-
-		try {
-			$this->fullTextSearchManager->createIndex(
-				DeckProvider::DECK_PROVIDER_ID, (string)$cardId, $userId, IIndex::INDEX_FULL
-			);
-		} catch (FullTextSearchAppNotAvailableException $e) {
-		}
-	}
-
-
-	/**
-	 * @param FTSEvent $e
-	 */
-	public function onCardUpdated(FTSEvent $e) {
-		$cardId = $e->getArgument('id');
-
-		try {
-			$this->fullTextSearchManager->updateIndexStatus(
-			DeckProvider::DECK_PROVIDER_ID, (string)$cardId, IIndex::INDEX_CONTENT
-		);
-		} catch (FullTextSearchAppNotAvailableException $e) {
-		}
-	}
-
-
-	/**
-	 * @param FTSEvent $e
-	 */
-	public function onCardDeleted(FTSEvent $e) {
-		$cardId = $e->getArgument('id');
-
-		try {
-			$this->fullTextSearchManager->updateIndexStatus(
-				DeckProvider::DECK_PROVIDER_ID, (string)$cardId, IIndex::INDEX_REMOVE
-			);
-		} catch (FullTextSearchAppNotAvailableException $e) {
-		}
-	}
-
-
-	/**
-	 * @param FTSEvent $e
-	 */
-	public function onBoardShares(FTSEvent $e) {
-		$boardId = (int)$e->getArgument('boardId');
-
-		$cards = array_map(
-			function (Card $item) {
-				return $item->getId();
-			},
-			$this->getCardsFromBoard($boardId)
-		);
-		try {
-			$this->fullTextSearchManager->updateIndexesStatus(
-				DeckProvider::DECK_PROVIDER_ID, $cards, IIndex::INDEX_META
-			);
-		} catch (FullTextSearchAppNotAvailableException $e) {
-		}
-	}
-
 
 	/**
 	 * @param Card $card
@@ -175,11 +88,9 @@ class FullTextSearchService {
 	 * @throws MultipleObjectsReturnedException
 	 */
 	public function fillIndexDocument(IIndexDocument $document) {
-		/** @var Card $card */
 		$card = $this->cardMapper->find((int)$document->getId());
-
-		$document->setTitle(($card->getTitle() === null) ? '' : $card->getTitle());
-		$document->setContent(($card->getDescription() === null) ? '' : $card->getDescription());
+		$document->setTitle(!empty($card->getTitle()) ? $card->getTitle() : '');
+		$document->setContent(!empty($card->getDescription()) ? $card->getDescription() : '');
 		$document->setAccess($this->generateDocumentAccessFromCardId((int)$card->getId()));
 	}
 

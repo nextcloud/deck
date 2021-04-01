@@ -1,6 +1,6 @@
 <?php
-/**
- * @copyright Copyright (c) 2020 Julius Härtl <jus@bitgrid.net>
+/*
+ * @copyright Copyright (c) 2021 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
  *
@@ -21,31 +21,10 @@
  *
  */
 
+declare(strict_types=1);
+
+
 namespace OCA\Deck\Event;
 
-use OCP\EventDispatcher\Event;
-
-/**
- * This is a class to keep compatibility for currently used events in full text search integration
- */
-class FTSEvent extends Event {
-
-	/**
-	 * @var array
-	 */
-	private $arguments;
-
-	public function __construct($subject, $arguments = []) {
-		parent::__construct();
-
-		$this->arguments = $arguments;
-	}
-
-	public function getArgument($key) {
-		if (isset($this->arguments[$key])) {
-			return $this->arguments[$key];
-		}
-
-		throw new \InvalidArgumentException(sprintf('Argument "%s" not found.', $key));
-	}
+class AclDeletedEvent extends AAclEvent {
 }

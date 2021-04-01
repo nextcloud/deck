@@ -24,7 +24,6 @@
 
 namespace OCA\Deck\Service;
 
-use OC\EventDispatcher\SymfonyAdapter;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\BadRequestException;
@@ -37,7 +36,6 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\StatusException;
-use Symfony\Component\EventDispatcher\GenericEvent;
 
 class StackService {
 	private $stackMapper;
@@ -64,7 +62,6 @@ class StackService {
 		AssignmentMapper $assignedUsersMapper,
 		AttachmentService $attachmentService,
 		ActivityManager $activityManager,
-		SymfonyAdapter $eventDispatcher,
 		ChangeHelper $changeHelper
 	) {
 		$this->stackMapper = $stackMapper;
@@ -77,7 +74,6 @@ class StackService {
 		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->attachmentService = $attachmentService;
 		$this->activityManager = $activityManager;
-		$this->symfonyAdapter = $eventDispatcher;
 		$this->changeHelper = $changeHelper;
 	}
 
@@ -225,11 +221,6 @@ class StackService {
 		);
 		$this->changeHelper->boardChanged($boardId);
 
-		$this->symfonyAdapter->dispatch(
-			'\OCA\Deck\Stack::onCreate',
-			new GenericEvent(null, ['id' => $stack->getId(), 'stack' => $stack])
-		);
-
 		return $stack;
 	}
 
@@ -258,10 +249,6 @@ class StackService {
 		);
 		$this->changeHelper->boardChanged($stack->getBoardId());
 		$this->enrichStackWithCards($stack);
-
-		$this->symfonyAdapter->dispatch(
-			'\OCA\Deck\Stack::onDelete', new GenericEvent(null, ['id' => $id, 'stack' => $stack])
-		);
 
 		return $stack;
 	}
@@ -313,10 +300,6 @@ class StackService {
 			ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_STACK_UPDATE
 		);
 		$this->changeHelper->boardChanged($stack->getBoardId());
-
-		$this->symfonyAdapter->dispatch(
-			'\OCA\Deck\Stack::onUpdate', new GenericEvent(null, ['id' => $id, 'stack' => $stack])
-		);
 
 		return $stack;
 	}

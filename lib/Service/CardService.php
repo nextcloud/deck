@@ -35,7 +35,9 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\StackMapper;
-use OCA\Deck\Event\FTSEvent;
+use OCA\Deck\Event\CardCreatedEvent;
+use OCA\Deck\Event\CardDeletedEvent;
+use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
@@ -222,15 +224,10 @@ class CardService {
 		$card->setDescription($description);
 		$card->setDuedate($duedate);
 		$card = $this->cardMapper->insert($card);
+		
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE);
 		$this->changeHelper->cardChanged($card->getId(), false);
-
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Card::onCreate',
-			new FTSEvent(
-				null, ['id' => $card->getId(), 'card' => $card, 'userId' => $owner, 'stackId' => $stackId]
-			)
-		);
+		$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($card));
 
 		return $card;
 	}
@@ -256,12 +253,10 @@ class CardService {
 		$card = $this->cardMapper->find($id);
 		$card->setDeletedAt(time());
 		$this->cardMapper->update($card);
+		
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_DELETE);
 		$this->changeHelper->cardChanged($card->getId(), false);
-
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Card::onDelete', new FTSEvent(null, ['id' => $id, 'card' => $card])
-		);
+		$this->eventDispatcher->dispatchTyped(new CardDeletedEvent($card));
 
 		return $card;
 	}
@@ -360,9 +355,7 @@ class CardService {
 		$card = $this->cardMapper->update($card);
 		$this->changeHelper->cardChanged($card->getId(), true);
 
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Card::onUpdate', new FTSEvent(null, ['id' => $id, 'card' => $card])
-		);
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 
 		return $card;
 	}
@@ -402,9 +395,7 @@ class CardService {
 		$this->changeHelper->cardChanged($card->getId(), false);
 		$update = $this->cardMapper->update($card);
 
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Card::onUpdate', new FTSEvent(null, ['id' => $id, 'card' => $card])
-		);
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 
 		return $update;
 	}
@@ -501,9 +492,7 @@ class CardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_ARCHIVE);
 		$this->changeHelper->cardChanged($id, false);
 
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Card::onUpdate', new FTSEvent(null, ['id' => $id, 'card' => $card])
-		);
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 
 		return $newCard;
 	}
@@ -532,9 +521,7 @@ class CardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_UNARCHIVE);
 		$this->changeHelper->cardChanged($id, false);
 
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Card::onUpdate', new FTSEvent(null, ['id' => $id, 'card' => $card])
-		);
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 
 		return $newCard;
 	}
@@ -570,9 +557,7 @@ class CardService {
 		$this->changeHelper->cardChanged($cardId);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_ASSIGN, ['label' => $label]);
 
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Card::onUpdate', new FTSEvent(null, ['id' => $cardId, 'card' => $card])
-		);
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 	}
 
 	/**
@@ -606,9 +591,7 @@ class CardService {
 		$this->changeHelper->cardChanged($cardId);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_UNASSING, ['label' => $label]);
 
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Card::onUpdate', new FTSEvent(null, ['id' => $cardId, 'card' => $card])
-		);
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 	}
 
 	/**

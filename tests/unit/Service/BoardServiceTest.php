@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Service;
 
-use OC\EventDispatcher\SymfonyAdapter;
 use OC\L10N\L10N;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\Acl;
@@ -37,11 +36,11 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IGroupManager;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use \Test\TestCase;
 
 class BoardServiceTest extends TestCase {
@@ -72,7 +71,7 @@ class BoardServiceTest extends TestCase {
 	private $activityManager;
 	/** @var ChangeHelper */
 	private $changeHelper;
-	/** @var EventDispatcherInterface */
+	/** @var IEventDispatcher */
 	private $eventDispatcher;
 	private $userId = 'admin';
 
@@ -91,7 +90,7 @@ class BoardServiceTest extends TestCase {
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
-		$this->eventDispatcher = $this->createMock(SymfonyAdapter::class);
+		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,

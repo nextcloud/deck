@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Service;
 
-use OC\EventDispatcher\SymfonyAdapter;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Card;
@@ -34,7 +33,6 @@ use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use \Test\TestCase;
 
 /**
@@ -69,8 +67,6 @@ class StackServiceTest extends TestCase {
 	private $activityManager;
 	/** @var ChangeHelper|\PHPUnit\Framework\MockObject\MockObject */
 	private $changeHelper;
-	/** @var EventDispatcherInterface */
-	private $eventDispatcher;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -85,7 +81,6 @@ class StackServiceTest extends TestCase {
 		$this->labelMapper = $this->createMock(LabelMapper::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
-		$this->eventDispatcher = $this->createMock(SymfonyAdapter::class);
 
 		$this->stackService = new StackService(
 			$this->stackMapper,
@@ -98,7 +93,6 @@ class StackServiceTest extends TestCase {
 			$this->assignedUsersMapper,
 			$this->attachmentService,
 			$this->activityManager,
-			$this->eventDispatcher,
 			$this->changeHelper
 		);
 	}

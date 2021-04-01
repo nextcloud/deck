@@ -31,7 +31,7 @@ use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
-use OCA\Deck\Event\FTSEvent;
+use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Notification\NotificationHelper;
@@ -151,9 +151,7 @@ class AssignmentService {
 		$this->changeHelper->cardChanged($cardId);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_USER_ASSIGN, ['assigneduser' => $userId]);
 
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Card::onUpdate', new FTSEvent(null, ['id' => $cardId, 'card' => $card])
-		);
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 
 		return $assignment;
 	}
@@ -187,9 +185,7 @@ class AssignmentService {
 				$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_USER_UNASSIGN, ['assigneduser' => $userId]);
 				$this->changeHelper->cardChanged($cardId);
 
-				$this->eventDispatcher->dispatch(
-					'\OCA\Deck\Card::onUpdate', new FTSEvent(null, ['id' => $cardId, 'card' => $card])
-				);
+				$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 
 				return $assignment;
 			}

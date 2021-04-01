@@ -23,11 +23,191 @@
 
 namespace OCA\Deck\AppInfo;
 
-$version = \OCP\Util::getVersion()[0];
-if ($version >= 20) {
-	class Application extends Application20 {
+use Closure;
+use Exception;
+use OC\EventDispatcher\SymfonyAdapter;
+use OCA\Deck\Activity\CommentEventHandler;
+use OCA\Deck\Capabilities;
+use OCA\Deck\Collaboration\Resources\ResourceProvider;
+use OCA\Deck\Collaboration\Resources\ResourceProviderCard;
+use OCA\Deck\Dashboard\DeckWidget;
+use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\AclMapper;
+use OCA\Deck\Db\AssignmentMapper;
+use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Event\AclCreatedEvent;
+use OCA\Deck\Event\AclDeletedEvent;
+use OCA\Deck\Event\AclUpdatedEvent;
+use OCA\Deck\Event\CardCreatedEvent;
+use OCA\Deck\Event\CardDeletedEvent;
+use OCA\Deck\Event\CardUpdatedEvent;
+use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
+use OCA\Deck\Listeners\FullTextSearchEventListener;
+use OCA\Deck\Middleware\DefaultBoardMiddleware;
+use OCA\Deck\Middleware\ExceptionMiddleware;
+use OCA\Deck\Notification\Notifier;
+use OCA\Deck\Search\DeckProvider;
+use OCA\Deck\Service\PermissionService;
+use OCA\Deck\Sharing\DeckShareProvider;
+use OCA\Deck\Sharing\Listener;
+use OCP\AppFramework\App;
+use OCP\AppFramework\Bootstrap\IBootContext;
+use OCP\AppFramework\Bootstrap\IBootstrap;
+use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
+use OCP\Collaboration\Resources\IProviderManager;
+use OCP\Comments\CommentsEntityEvent;
+use OCP\Comments\ICommentsManager;
+use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IConfig;
+use OCP\IDBConnection;
+use OCP\IGroup;
+use OCP\IGroupManager;
+use OCP\IServerContainer;
+use OCP\IUser;
+use OCP\IUserManager;
+use OCP\Notification\IManager as NotificationManager;
+use OCP\Share\IManager;
+use OCP\Util;
+use Psr\Container\ContainerInterface;
+
+class Application extends App implements IBootstrap {
+	public const APP_ID = 'deck';
+
+	public const COMMENT_ENTITY_TYPE = 'deckCard';
+
+	/** @var IServerContainer */
+	private $server;
+
+	public function __construct(array $urlParams = []) {
+		parent::__construct(self::APP_ID, $urlParams);
+
+		$this->server = \OC::$server;
 	}
-} else {
-	class Application extends ApplicationLegacy {
+
+	public function boot(IBootContext $context): void {
+		$context->injectFn(Closure::fromCallable([$this, 'registerUserGroupHooks']));
+		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEntity']));
+		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEventHandler']));
+		$context->injectFn(Closure::fromCallable([$this, 'registerNotifications']));
+		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
+
+		$context->injectFn(function (IManager $shareManager) {
+			if (method_exists($shareManager, 'registerShareProvider')) {
+				$shareManager->registerShareProvider(DeckShareProvider::class);
+			}
+		});
+
+		$context->injectFn(function (Listener $listener, IEventDispatcher $eventDispatcher) {
+			$listener->register($eventDispatcher);
+		});
+	}
+
+	public function register(IRegistrationContext $context): void {
+		if ((@include_once __DIR__ . '/../../vendor/autoload.php') === false) {
+			throw new Exception('Cannot include autoload. Did you run install dependencies using composer?');
+		}
+
+		$context->registerCapability(Capabilities::class);
+		$context->registerMiddleWare(ExceptionMiddleware::class);
+		$context->registerMiddleWare(DefaultBoardMiddleware::class);
+
+		$context->registerService('databaseType', static function (ContainerInterface $c) {
+			return $c->get(IConfig::class)->getSystemValue('dbtype', 'sqlite');
+		});
+		$context->registerService('database4ByteSupport', static function (ContainerInterface $c) {
+			return $c->get(IDBConnection::class)->supports4ByteText();
+		});
+
+		$context->registerSearchProvider(DeckProvider::class);
+		$context->registerDashboardWidget(DeckWidget::class);
+
+		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
+		
+		// Event listening for full text search indexing
+		$context->registerEventListener(CardCreatedEvent::class, FullTextSearchEventListener::class);
+		$context->registerEventListener(CardUpdatedEvent::class, FullTextSearchEventListener::class);
+		$context->registerEventListener(CardDeletedEvent::class, FullTextSearchEventListener::class);
+		$context->registerEventListener(AclCreatedEvent::class, FullTextSearchEventListener::class);
+		$context->registerEventListener(AclUpdatedEvent::class, FullTextSearchEventListener::class);
+		$context->registerEventListener(AclDeletedEvent::class, FullTextSearchEventListener::class);
+	}
+
+	public function registerNotifications(NotificationManager $notificationManager): void {
+		$notificationManager->registerNotifierService(Notifier::class);
+	}
+
+	private function registerUserGroupHooks(IUserManager $userManager, IGroupManager $groupManager): void {
+		$container = $this->getContainer();
+		// Delete user/group acl entries when they get deleted
+		$userManager->listen('\OC\User', 'postDelete', static function (IUser $user) use ($container) {
+			// delete existing acl entries for deleted user
+			/** @var AclMapper $aclMapper */
+			$aclMapper = $container->query(AclMapper::class);
+			$acls = $aclMapper->findByParticipant(Acl::PERMISSION_TYPE_USER, $user->getUID());
+			foreach ($acls as $acl) {
+				$aclMapper->delete($acl);
+			}
+			// delete existing user assignments
+			$assignmentMapper = $container->query(AssignmentMapper::class);
+			$assignments = $assignmentMapper->findByParticipant($user->getUID());
+			foreach ($assignments as $assignment) {
+				$assignmentMapper->delete($assignment);
+			}
+
+			/** @var BoardMapper $boardMapper */
+			$boardMapper = $container->query(BoardMapper::class);
+			$boards = $boardMapper->findAllByOwner($user->getUID());
+			foreach ($boards as $board) {
+				$boardMapper->delete($board);
+			}
+		});
+
+		$groupManager->listen('\OC\Group', 'postDelete', static function (IGroup $group) use ($container) {
+			/** @var AclMapper $aclMapper */
+			$aclMapper = $container->query(AclMapper::class);
+			$aclMapper->findByParticipant(Acl::PERMISSION_TYPE_GROUP, $group->getGID());
+			$acls = $aclMapper->findByParticipant(Acl::PERMISSION_TYPE_GROUP, $group->getGID());
+			foreach ($acls as $acl) {
+				$aclMapper->delete($acl);
+			}
+		});
+	}
+
+	public function registerCommentsEntity(IEventDispatcher $eventDispatcher): void {
+		$eventDispatcher->addListener(CommentsEntityEvent::EVENT_ENTITY, function (CommentsEntityEvent $event) {
+			$event->addEntityCollection(self::COMMENT_ENTITY_TYPE, function ($name) {
+				/** @var CardMapper */
+				$cardMapper = $this->getContainer()->get(CardMapper::class);
+				$permissionService = $this->getContainer()->get(PermissionService::class);
+
+				try {
+					return $permissionService->checkPermission($cardMapper, (int) $name, Acl::PERMISSION_READ);
+				} catch (\Exception $e) {
+					return false;
+				}
+			});
+		});
+	}
+
+	protected function registerCommentsEventHandler(ICommentsManager $commentsManager): void {
+		$commentsManager->registerEventHandler(function () {
+			return $this->getContainer()->query(CommentEventHandler::class);
+		});
+	}
+
+	protected function registerCollaborationResources(IProviderManager $resourceManager, SymfonyAdapter $symfonyAdapter): void {
+		$resourceManager->registerResourceProvider(ResourceProvider::class);
+		$resourceManager->registerResourceProvider(ResourceProviderCard::class);
+
+		$symfonyAdapter->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
+			if (strpos(\OC::$server->getRequest()->getPathInfo(), '/call/') === 0) {
+				// Talk integration has its own entrypoint which already includes collections handling
+				return;
+			}
+			Util::addScript('deck', 'collections');
+		});
 	}
 }
