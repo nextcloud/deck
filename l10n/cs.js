@@ -28,7 +28,7 @@ OC.L10N.register(
     "You have deleted card {card} in list {stack} on board {board}" : "Smazali jste kartu {card} ve sloupci {stack} na tabuli {board}",
     "{user} has deleted card {card} in list {stack} on board {board}" : "{user} smazal(a) kartu {card} ve sloupci {board} na tabuli {board}",
     "You have renamed the card {before} to {card}" : "Přejmenovali jste kartu {before} na {card}",
-    "{user} has renamed the card {before} to {card}" : "{user} přejmenoval(a) {before} na {card}",
+    "{user} has renamed the card {before} to {card}" : "{user} přejmenoval(a) kartu {before} na {card}",
     "You have added a description to card {card} in list {stack} on board {board}" : "Přidali jste popis ke kartě {card} ve sloupci {stack} na tabuli {board}",
     "{user} has added a description to card {card} in list {stack} on board {board}" : "{user} přidal(a) popis ke kartě {card} ve sloupci {stack} na tabuli {board}",
     "You have updated the description of card {card} in list {stack} on board {board}" : "Aktualizovali jste popis karty {card} ve sloupci {stack} na tabuli {board}",
