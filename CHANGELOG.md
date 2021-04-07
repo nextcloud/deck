@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.6 - 2021-04-07
+
+### Fixed
+* [#2925](https://github.com/nextcloud/deck/pull/2925) Avoid reusing the existing route object to make navigation work properly
+* [#2947](https://github.com/nextcloud/deck/pull/2947) Fix bug when saving the description
+
+
 ## 1.2.5 - 2021-03-05
 
 ### Fixed
