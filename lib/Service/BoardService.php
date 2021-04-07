@@ -510,11 +510,10 @@ class BoardService {
 		$acl->setPermissionEdit($edit);
 		$acl->setPermissionShare($share);
 		$acl->setPermissionManage($manage);
-
-		$this->notificationHelper->sendBoardShared($boardId, $acl);
-
 		$newAcl = $this->aclMapper->insert($acl);
+
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE);
+		$this->notificationHelper->sendBoardShared((int)$boardId, $acl);
 		$this->boardMapper->mapAcl($newAcl);
 		$this->changeHelper->boardChanged($boardId);
 
@@ -599,9 +598,8 @@ class BoardService {
 			}
 		}
 
-		$this->notificationHelper->sendBoardShared($acl->getBoardId(), $acl);
-
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $acl, ActivityManager::SUBJECT_BOARD_UNSHARE);
+		$this->notificationHelper->sendBoardShared($acl->getBoardId(), $acl, true);
 		$this->changeHelper->boardChanged($acl->getBoardId());
 
 		$version = \OCP\Util::getVersion()[0];
