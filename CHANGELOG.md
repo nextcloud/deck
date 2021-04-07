@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.3.2 - 2021-04-07
+
+### Fixed
+
+* [#2869](https://github.com/nextcloud/deck/pull/2869) Don't close tempfile as it is already done
+* [#2880](https://github.com/nextcloud/deck/pull/2880) Only extract additional attributes from query when doing a raw search
+* [#2924](https://github.com/nextcloud/deck/pull/2924) Avoid reusing the existing route object to make navigation work properly
+* [#2946](https://github.com/nextcloud/deck/pull/2946) Fix bug when saving the description
+
 ## 1.3.1 - 2021-03-05
 
 ### Fixed
