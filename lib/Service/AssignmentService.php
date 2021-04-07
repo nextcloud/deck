@@ -74,6 +74,8 @@ class AssignmentService {
 	 * @var IEventDispatcher
 	 */
 	private $eventDispatcher;
+	/** @var string|null */
+	private $currentUser;
 
 	public function __construct(
 		PermissionService $permissionService,
@@ -138,8 +140,7 @@ class AssignmentService {
 		}
 
 
-		if ($userId !== $this->currentUser) {
-			/* Notifyuser about the card assignment */
+		if ($type === Assignment::TYPE_USER && $userId !== $this->currentUser) {
 			$this->notificationHelper->sendCardAssigned($card, $userId);
 		}
 
@@ -185,6 +186,9 @@ class AssignmentService {
 				$assignment = $this->assignedUsersMapper->delete($assignment);
 				$card = $this->cardMapper->find($cardId);
 				$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_USER_UNASSIGN, ['assigneduser' => $userId]);
+				if ($type === Assignment::TYPE_USER && $userId !== $this->currentUser) {
+					$this->notificationHelper->markCardAssignedAsRead($card, $userId);
+				}
 				$this->changeHelper->cardChanged($cardId);
 
 				$this->eventDispatcher->dispatch(
