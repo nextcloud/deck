@@ -212,7 +212,7 @@ OC.L10N.register(
     "Reply" : "Risponde",
     "Update" : "Agiorna",
     "Description" : "Descritzione",
-    "(Unsaved)" : "(Non sarbada)",
+    "(Unsaved)" : "(Non sarvada)",
     "(Saving…)" : "(Sarbende…)",
     "Formatting help" : "Ghia pro sa formatatzione",
     "Edit description" : "Modìfica descritzione",
