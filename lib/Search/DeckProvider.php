@@ -78,7 +78,7 @@ class DeckProvider implements IProvider {
 		if (count($cardResults) < $query->getLimit()) {
 			return SearchResult::complete(
 				'Deck',
-				$results,
+				$results
 			);
 		}
 		

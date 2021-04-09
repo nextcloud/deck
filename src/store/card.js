@@ -21,6 +21,7 @@
  */
 
 import { CardApi } from './../services/CardApi'
+import moment from 'moment'
 import Vue from 'vue'
 
 const apiClient = new CardApi()
@@ -86,8 +87,90 @@ export default {
 						return true
 					}
 
-					return card.title.toLowerCase().includes(getters.getSearchQuery.toLowerCase())
-						|| card.description.toLowerCase().includes(getters.getSearchQuery.toLowerCase())
+					let hasMatch = true
+					const matches = getters.getSearchQuery.match(/(?:[^\s"]+|"[^"]*")+/g)
+
+					const filterOutQuotes = (q) => {
+						if (q[0] === '"' && q[q.length - 1] === '"') {
+							return q.substr(1, -1)
+						}
+						return q
+					}
+					for (const match of matches) {
+						let [filter, query] = match.indexOf(':') !== -1 ? match.split(/:(.+)/) : [null, match]
+
+						if (filter === 'title') {
+							hasMatch = hasMatch && card.title.toLowerCase().includes(filterOutQuotes(query).toLowerCase())
+						} else if (filter === 'description') {
+							hasMatch = hasMatch && card.description.toLowerCase().includes(filterOutQuotes(query).toLowerCase())
+						} else if (filter === 'list') {
+							const stack = this.getters.stackById(card.stackId)
+							if (!stack) {
+								return false
+							}
+							hasMatch = hasMatch && stack.title.toLowerCase().includes(filterOutQuotes(query).toLowerCase())
+						} else if (filter === 'tag') {
+							hasMatch = hasMatch && card.labels.findIndex((label) => label.title.toLowerCase().includes(filterOutQuotes(query).toLowerCase())) !== -1
+						} else if (filter === 'date') {
+							const datediffHour = ((new Date(card.duedate) - new Date()) / 3600 / 1000)
+							query = filterOutQuotes(query)
+							switch (query) {
+							case 'overdue':
+								hasMatch = hasMatch && (card.overdue === 3)
+								break
+							case 'today':
+								hasMatch = hasMatch && (datediffHour > 0 && datediffHour <= 24 && card.duedate !== null)
+								break
+							case 'week':
+								hasMatch = hasMatch && (datediffHour > 0 && datediffHour <= 7 * 24 && card.duedate !== null)
+								break
+							case 'month':
+								hasMatch = hasMatch && (datediffHour > 0 && datediffHour <= 30 * 24 && card.duedate !== null)
+								break
+							case 'none':
+								hasMatch = hasMatch && (card.duedate === null)
+								break
+							}
+
+							if (card.duedate === null || !hasMatch) {
+								return false
+							}
+							const comparator = query[0] + (query[1] === '=' ? '=' : '')
+							const isValidComparator = ['<', '<=', '>', '>='].indexOf(comparator) !== -1
+							const parsedCardDate = moment(card.duedate)
+							const parsedDate = moment(query.substr(isValidComparator ? comparator.length : 0))
+							switch (comparator) {
+							case '<':
+								hasMatch = hasMatch && parsedCardDate.isBefore(parsedDate)
+								break
+							case '<=':
+								hasMatch = hasMatch && parsedCardDate.isSameOrBefore(parsedDate)
+								break
+							case '>':
+								hasMatch = hasMatch && parsedCardDate.isAfter(parsedDate)
+								break
+							case '>=':
+								hasMatch = hasMatch && parsedCardDate.isSameOrAfter(parsedDate)
+								break
+							default:
+								hasMatch = hasMatch && parsedCardDate.isSame(parsedDate)
+								break
+							}
+
+						} else if (filter === 'assigned') {
+							hasMatch = hasMatch && card.assignedUsers.findIndex((assignment) => {
+								return assignment.participant.primaryKey.toLowerCase() === filterOutQuotes(query).toLowerCase()
+									|| assignment.participant.displayname.toLowerCase() === filterOutQuotes(query).toLowerCase()
+							}) !== -1
+						} else {
+							hasMatch = hasMatch && (card.title.toLowerCase().includes(filterOutQuotes(match).toLowerCase())
+								|| card.description.toLowerCase().includes(filterOutQuotes(match).toLowerCase()))
+						}
+						if (!hasMatch) {
+							return false
+						}
+					}
+					return true
 				})
 				.sort((a, b) => a.order - b.order || a.createdAt - b.createdAt)
 		},
@@ -210,7 +293,7 @@ export default {
 			}
 
 			const updatedCard = await apiClient[call](card)
-			commit('deleteCard', updatedCard)
+			commit('updateCard', updatedCard)
 		},
 		async assignCardToUser({ commit }, { card, assignee }) {
 			const user = await apiClient.assignUser(card.id, assignee.userId, assignee.type)
@@ -235,6 +318,15 @@ export default {
 		async updateCardDue({ commit }, card) {
 			const updatedCard = await apiClient.updateCard(card)
 			commit('updateCardProperty', { property: 'duedate', card: updatedCard })
+		},
+
+		addCardData({ commit }, cardData) {
+			const card = { ...cardData }
+			commit('addStack', card.relatedStack)
+			commit('addBoard', card.relatedBoard)
+			delete card.relatedStack
+			delete card.relatedBoard
+			commit('addCard', card)
 		},
 	},
 }

@@ -26,12 +26,16 @@
 
 <template>
 	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
-		<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'is-editing': editing, 'card__editable': canEdit}"
+		<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'is-editing': editing, 'card__editable': canEdit, 'card__archived': card.archived }"
 			tag="div"
 			class="card"
 			@click="openCard">
+			<div v-if="standalone" class="card-related">
+				<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
+				{{ board.title }} » {{ stack.title }}
+			</div>
 			<div class="card-upper">
-				<h3 v-if="compactMode || isArchived || showArchived || !canEdit">
+				<h3 v-if="compactMode || isArchived || showArchived || !canEdit || standalone">
 					{{ card.title }}
 				</h3>
 				<h3 v-else-if="!editing">
@@ -98,6 +102,10 @@ export default {
 			type: Object,
 			default: null,
 		},
+		standalone: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data() {
 		return {
@@ -114,6 +122,12 @@ export default {
 		...mapGetters([
 			'isArchived',
 		]),
+		board() {
+			return this.$store.getters.boardById(this?.stack?.boardId)
+		},
+		stack() {
+			return this.$store.getters.stackById(this?.card?.stackId)
+		},
 		canEdit() {
 			if (this.currentBoard) {
 				return !this.currentBoard.archived && this.$store.getters.canEdit
@@ -233,6 +247,9 @@ export default {
 		&.card__editable .card-controls {
 			margin-right: 0;
 		}
+		&.card__archived {
+			background-color: var(--color-background-dark);
+		}
 	}
 
 	.duedate {
@@ -242,6 +259,24 @@ export default {
 	.right {
 		display: flex;
 		align-items: flex-start;
+	}
+
+	.card-related {
+		display: flex;
+		padding: 12px;
+		padding-bottom: 0px;
+		color: var(--color-text-maxcontrast);
+
+		.board-bullet {
+			display: inline-block;
+			width: 12px;
+			height: 12px;
+			border: none;
+			border-radius: 50%;
+			background-color: transparent;
+			margin-top: 4px;
+			margin-right: 4px;
+		}
 	}
 
 	.compact {

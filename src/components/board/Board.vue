@@ -65,6 +65,7 @@
 				<p />
 			</div>
 		</transition>
+		<GlobalSearchResults />
 	</div>
 </template>
 
@@ -75,10 +76,12 @@ import { mapState, mapGetters } from 'vuex'
 import Controls from '../Controls'
 import Stack from './Stack'
 import { EmptyContent } from '@nextcloud/vue'
+import GlobalSearchResults from '../search/GlobalSearchResults'
 
 export default {
 	name: 'Board',
 	components: {
+		GlobalSearchResults,
 		Controls,
 		Container,
 		Draggable,
@@ -178,13 +181,17 @@ export default {
 		width: 100%;
 		height: 100%;
 		max-height: calc(100vh - 50px);
+		display: flex;
+		flex-direction: column;
 	}
 
 	.board {
 		padding-left: $board-spacing;
 		position: relative;
-		height: calc(100% - 44px);
-		overflow-x: scroll;
+		max-height: calc(100% - 44px);
+		overflow: hidden;
+		overflow-x: auto;
+		flex-grow: 1;
 	}
 
 	/**

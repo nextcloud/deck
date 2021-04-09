@@ -32,6 +32,9 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Search\CommentSearchResultEntry;
 use OCA\Deck\Search\FilterStringParser;
 use OCP\Comments\ICommentsManager;
+use OCP\IL10N;
+use OCP\IURLGenerator;
+use OCP\IUserManager;
 
 class SearchService {
 
@@ -45,19 +48,31 @@ class SearchService {
 	private $commentsManager;
 	/** @var FilterStringParser */
 	private $filterStringParser;
+	/** @var IUserManager */
+	private $userManager;
+	/** @var IL10N */
+	private $l10n;
+	/** @var IURLGenerator */
+	private $urlGenerator;
 
 	public function __construct(
 		BoardService $boardService,
 		CardMapper $cardMapper,
 		CardService $cardService,
 		ICommentsManager $commentsManager,
-		FilterStringParser $filterStringParser
+		FilterStringParser $filterStringParser,
+		IUserManager $userManager,
+		IL10N $l10n,
+		IURLGenerator $urlGenerator
 	) {
 		$this->boardService = $boardService;
 		$this->cardMapper = $cardMapper;
 		$this->cardService = $cardService;
 		$this->commentsManager = $commentsManager;
 		$this->filterStringParser = $filterStringParser;
+		$this->userManager = $userManager;
+		$this->l10n = $l10n;
+		$this->urlGenerator = $urlGenerator;
 	}
 
 	public function searchCards(string $term, int $limit = null, ?int $cursor = null): array {
@@ -89,7 +104,7 @@ class SearchService {
 		$matchedComments = $this->cardMapper->searchComments($boardIds, $this->filterStringParser->parse($term), $limit, $cursor);
 
 		$self = $this;
-		return array_filter(array_map(function ($cardRow) use ($self) {
+		return array_map(function ($cardRow) use ($self) {
 			$comment = $this->commentsManager->get($cardRow['comment_id']);
 			unset($cardRow['comment_id']);
 			$card = Card::fromRow($cardRow);
@@ -97,6 +112,6 @@ class SearchService {
 			$user = $this->userManager->get($comment->getActorId());
 			$displayName = $user ? $user->getDisplayName() : '';
 			return new CommentSearchResultEntry($comment->getId(), $comment->getMessage(), $displayName, $card, $this->urlGenerator, $this->l10n);
-		}, $matchedComments));
+		}, $matchedComments);
 	}
 }

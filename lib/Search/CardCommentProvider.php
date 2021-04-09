@@ -62,7 +62,7 @@ class CardCommentProvider implements IProvider {
 		if (count($results) < $query->getLimit()) {
 			return SearchResult::complete(
 				$this->l10n->t('Card comments'),
-				$results,
+				$results
 			);
 		}
 		
