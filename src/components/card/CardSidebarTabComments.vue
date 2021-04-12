@@ -49,6 +49,11 @@ export default {
 			type: Object,
 			default: undefined,
 		},
+		tabQuery: {
+			type: String,
+			required: false,
+			default: null,
+		},
 	},
 	data() {
 		return {

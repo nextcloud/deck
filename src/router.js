@@ -116,7 +116,7 @@ export default new Router({
 					},
 				},
 				{
-					path: 'card/:cardId',
+					path: 'card/:cardId/:tabId?/:tabQuery?',
 					name: 'card',
 					components: {
 						sidebar: CardSidebar,
@@ -130,6 +130,8 @@ export default new Router({
 						sidebar: (route) => {
 							return {
 								id: parseInt(route.params.cardId, 10),
+								tabId: route.params.tabId,
+								tabQuery: route.params.tabQuery,
 							}
 						},
 					},
