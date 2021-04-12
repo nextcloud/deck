@@ -276,7 +276,7 @@ export default {
 			)
 		},
 		actionDetails() {
-			this.$router.push({ name: 'board.details', params: { id: this.routeTo.id } })
+			this.$router.push({ name: 'board.details', params: { id: this.board.id } })
 		},
 		applyEdit(e) {
 			this.editing = false
