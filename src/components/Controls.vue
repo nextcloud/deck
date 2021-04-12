@@ -33,14 +33,14 @@
 				({{ t('deck', 'Archived cards') }})
 			</p>
 		</div>
-		<div v-if="board" class="board-actions">
+		<div class="board-actions">
 			<div v-if="searchQuery || true" class="deck-search">
 				<input type="search"
 					class="icon-search"
 					:value="searchQuery"
 					@input="$store.commit('setSearchQuery', $event.target.value)">
 			</div>
-			<div v-if="canManage && !showArchived && !board.archived"
+			<div v-if="board && canManage && !showArchived && !board.archived"
 				id="stack-add"
 				v-click-outside="hideAddStack">
 				<Actions v-if="!isAddStackVisible">
@@ -63,7 +63,7 @@
 						value="">
 				</form>
 			</div>
-			<div class="board-action-buttons">
+			<div v-if="board" class="board-action-buttons">
 				<Popover @show="filterVisible=true" @hide="filterVisible=false">
 					<Actions slot="trigger" :title="t('deck', 'Apply filter')">
 						<ActionButton v-if="isFilterActive" icon="icon-filter_set" />
