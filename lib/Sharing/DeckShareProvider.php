@@ -562,6 +562,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 	/**
 	 * @inheritDoc
+	 * @throws ShareNotFound
 	 */
 	public function getShareById($id, $recipientId = null) {
 		$qb = $this->dbConnection->getQueryBuilder();

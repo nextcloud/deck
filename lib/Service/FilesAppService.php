@@ -35,7 +35,7 @@ use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IPreview;
 use OCP\IRequest;
-use OCP\Share;
+use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager;
 use OCP\Share\IShare;
 
@@ -140,9 +140,10 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	}
 
 	public function display(Attachment $attachment) {
+		/** @psalm-suppress InvalidCatch */
 		try {
 			$share = $this->shareProvider->getShareById($attachment->getId());
-		} catch (Share\Exceptions\ShareNotFound $e) {
+		} catch (ShareNotFound $e) {
 			throw new NotFoundException('File not found');
 		}
 		$file = $share->getNode();

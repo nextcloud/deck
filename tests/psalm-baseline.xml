@@ -270,7 +270,7 @@
       <code>$this-&gt;rootFolder</code>
       <code>$this-&gt;rootFolder</code>
       <code>IRootFolder</code>
-      <code>Share\Exceptions\ShareNotFound</code>
+      <code>ShareNotFound</code>
     </MissingDependency>
   </file>
   <file src="lib/Service/PermissionService.php">
@@ -298,9 +298,10 @@
     <InvalidReturnType occurrences="1">
       <code>getSharesInFolder</code>
     </InvalidReturnType>
-    <MissingDependency occurrences="7">
+    <MissingDependency occurrences="8">
       <code>GenericShareException</code>
       <code>GenericShareException</code>
+      <code>ShareNotFound</code>
       <code>ShareNotFound</code>
       <code>ShareNotFound</code>
       <code>ShareNotFound</code>
