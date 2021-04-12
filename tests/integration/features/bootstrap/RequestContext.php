@@ -5,11 +5,12 @@ use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use PHPUnit\Framework\Assert;
+use Behat\Behat\Context\Context;
+use Psr\Http\Message\ResponseInterface;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-trait RequestTrait {
-
+class RequestContext implements Context {
 	private $response;
 
 	/** @var ServerContext */
@@ -20,6 +21,9 @@ trait RequestTrait {
 		$environment = $scope->getEnvironment();
 
 		$this->serverContext = $environment->getContext('ServerContext');
+	}
+
+	private function getBaseUrl() {
 	}
 
 	/**
@@ -90,12 +94,12 @@ trait RequestTrait {
 		}
 	}
 
-	private function sendJSONrequest($method, $url, $data = []) {
+	public function sendJSONrequest($method, $url, $data = []) {
 		$client = new Client;
 		try {
 			$this->response = $client->request(
 				$method,
-				$this->severContext->getBaseUrl() . $url,
+				rtrim($this->serverContext->getBaseUrl(), '/') . '/' . ltrim($url, '/'),
 				[
 					'cookies' => $this->serverContext->getCookieJar(),
 					'json' => $data,
@@ -109,23 +113,28 @@ trait RequestTrait {
 		}
 	}
 
-	private function sendOCSRequest($method, $url, $data = []) {
+	public function sendOCSRequest($method, $url, $data = []) {
 		$client = new Client;
 		try {
 			$this->response = $client->request(
 				$method,
-				$this->severContext->getBaseUrl() . $url,
+				rtrim($this->serverContext->getBaseUrl(), '/') . '/ocs/v2.php/' . ltrim($url, '/'),
 				[
 					'cookies' => $this->serverContext->getCookieJar(),
 					'json' => $data,
 					'headers' => [
 						'requesttoken' => $this->serverContext->getReqestToken(),
-						'OCS-APIRequest' => true,
+						'OCS-APIREQUEST' => 'true',
+						'Accept' => 'application/json'
 					]
 				]
 			);
 		} catch (ClientException $e) {
 			$this->response = $e->getResponse();
 		}
+	}
+
+	public function getResponse(): ResponseInterface {
+		return $this->response;
 	}
 }
