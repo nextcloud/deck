@@ -34,6 +34,12 @@
 			</p>
 		</div>
 		<div v-if="board" class="board-actions">
+			<div v-if="searchQuery || true" class="deck-search">
+				<input type="search"
+					class="icon-search"
+					:value="searchQuery"
+					@input="$store.commit('setSearchQuery', $event.target.value)">
+			</div>
 			<div v-if="canManage && !showArchived && !board.archived"
 				id="stack-add"
 				v-click-outside="hideAddStack">
@@ -237,6 +243,7 @@ export default {
 		]),
 		...mapState({
 			compactMode: state => state.compactMode,
+			searchQuery: state => state.searchQuery,
 		}),
 		detailsRoute() {
 			return {
@@ -371,6 +378,13 @@ export default {
 			width: 44px;
 			margin: 0 0 0 -1px;
 			background-color: transparent;
+		}
+	}
+
+	.deck-search {
+		input[type=search] {
+			background-position: 5px;
+			padding-left: 24px;
 		}
 	}
 
