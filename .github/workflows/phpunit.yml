@@ -87,9 +87,9 @@ jobs:
           mkdir data
 
           if [ "${{ matrix.databases }}" = "oci" ]; then
-            ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
-          else
             ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=XE --database-host=127.0.0.1 --database-port=1521 --database-user=autotest --database-pass=owncloud --admin-user admin --admin-pass admin
+          else
+            ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
           fi
           ./occ app:enable --force ${{ env.APP_NAME }}
           php -S localhost:8080 &
