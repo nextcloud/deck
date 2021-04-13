@@ -36,6 +36,7 @@ use OCA\Deck\Provider\DeckProvider;
 use OCA\Deck\Service\FullTextSearchService;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
+use OCP\FullTextSearch\Exceptions\FullTextSearchAppNotAvailableException;
 use OCP\FullTextSearch\IFullTextSearchManager;
 use OCP\FullTextSearch\Model\IIndex;
 use Psr\Container\ContainerInterface;
@@ -97,6 +98,8 @@ class FullTextSearchEventListener implements IEventListener {
 					DeckProvider::DECK_PROVIDER_ID, $cards, IIndex::INDEX_META
 				);
 			}
+		} catch (FullTextSearchAppNotAvailableException $e) {
+			// Skip silently if no full text search app is available
 		} catch (\Exception $e) {
 			$this->logger->error('Error when handling deck full text search event', ['exception' => $e]);
 		}

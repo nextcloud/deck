@@ -23,11 +23,16 @@
 
 namespace OCA\Deck\Db;
 
+use DateTime;
 use Exception;
+use OCA\Deck\AppInfo\Application;
+use OCA\Deck\Search\Query\SearchQuery;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\IGroupManager;
+use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Notification\IManager;
 
@@ -37,6 +42,8 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	private $labelMapper;
 	/** @var IUserManager */
 	private $userManager;
+	/** @var IGroupManager */
+	private $groupManager;
 	/** @var IManager */
 	private $notificationManager;
 	private $databaseType;
@@ -46,13 +53,15 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		IDBConnection $db,
 		LabelMapper $labelMapper,
 		IUserManager $userManager,
+		IGroupManager $groupManager,
 		IManager $notificationManager,
-		$databaseType = 'sqlite',
+		$databaseType = 'sqlite3',
 		$database4ByteSupport = true
 	) {
 		parent::__construct($db, 'deck_cards', Card::class);
 		$this->labelMapper = $labelMapper;
 		$this->userManager = $userManager;
+		$this->groupManager = $groupManager;
 		$this->notificationManager = $notificationManager;
 		$this->databaseType = $databaseType;
 		$this->database4ByteSupport = $database4ByteSupport;
@@ -117,7 +126,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			->addOrderBy('id');
 		/** @var Card $card */
 		$card = $this->findEntity($qb);
-		$labels = $this->labelMapper->findAssignedLabelsForCard($card->id);
+		$labels = $this->labelMapper->findAssignedLabelsForCard($card->getId());
 		$card->setLabels($labels);
 		$this->mapOwner($card);
 		return $card;
@@ -260,24 +269,208 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function search($boardIds, $term, $limit = null, $offset = null) {
+	public function search(array $boardIds, SearchQuery $query, int $limit = null, int $offset = null): array {
 		$qb = $this->queryCardsByBoards($boardIds);
-		$qb->andWhere($qb->expr()->eq('c.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
-		$qb->andWhere($qb->expr()->eq('s.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
-		$qb->andWhere(
-			$qb->expr()->orX(
-				$qb->expr()->iLike('c.title', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($term) . '%')),
-				$qb->expr()->iLike('c.description', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($term) . '%'))
-			)
-		);
+		$this->extendQueryByFilter($qb, $query);
+
+		if (count($query->getTextTokens()) > 0) {
+			$tokenMatching = $qb->expr()->andX(
+				...array_map(function (string $token) use ($qb) {
+					return $qb->expr()->orX(
+						$qb->expr()->iLike(
+							'c.title',
+							$qb->createNamedParameter('%' . $this->db->escapeLikeParameter($token) . '%', IQueryBuilder::PARAM_STR),
+							IQueryBuilder::PARAM_STR
+						),
+						$qb->expr()->iLike(
+							'c.description',
+							$qb->createNamedParameter('%' . $this->db->escapeLikeParameter($token) . '%', IQueryBuilder::PARAM_STR),
+							IQueryBuilder::PARAM_STR
+						)
+					);
+				}, $query->getTextTokens())
+			);
+			$qb->andWhere(
+				$tokenMatching
+			);
+		}
+
+		$qb->groupBy('c.id');
+		$qb->orderBy('c.last_modified', 'DESC');
 		if ($limit !== null) {
 			$qb->setMaxResults($limit);
 		}
 		if ($offset !== null) {
-			$qb->setFirstResult($offset);
+			$qb->andWhere($qb->expr()->lt('c.last_modified', $qb->createNamedParameter($offset, IQueryBuilder::PARAM_INT)));
 		}
-		return $this->findEntities($qb);
+
+		$result = $qb->execute();
+		$entities = [];
+		while ($row = $result->fetch()) {
+			$entities[] = Card::fromRow($row);
+		}
+		$result->closeCursor();
+		return $entities;
 	}
+
+	public function searchComments(array $boardIds, SearchQuery $query, int $limit = null, int $offset = null): array {
+		if (count($query->getTextTokens()) === 0) {
+			return [];
+		}
+		$qb = $this->queryCardsByBoards($boardIds);
+		$this->extendQueryByFilter($qb, $query);
+
+		$qb->innerJoin('c', 'comments', 'comments', $qb->expr()->andX(
+			$qb->expr()->eq('comments.object_id', 'c.id', IQueryBuilder::PARAM_STR),
+			$qb->expr()->eq('comments.object_type', $qb->createNamedParameter(Application::COMMENT_ENTITY_TYPE, IQueryBuilder::PARAM_STR))
+		));
+		$qb->selectAlias('comments.id', 'comment_id');
+
+		$tokenMatching = $qb->expr()->andX(
+			...array_map(function (string $token) use ($qb) {
+				return $qb->expr()->iLike(
+					'comments.message',
+					$qb->createNamedParameter('%' . $this->db->escapeLikeParameter($token) . '%', IQueryBuilder::PARAM_STR),
+					IQueryBuilder::PARAM_STR
+				);
+			}, $query->getTextTokens())
+		);
+		$qb->andWhere(
+			$tokenMatching
+		);
+
+		$qb->groupBy('comments.id');
+		$qb->orderBy('comments.id', 'DESC');
+		if ($limit !== null) {
+			$qb->setMaxResults($limit);
+		}
+		if ($offset !== null) {
+			$qb->andWhere($qb->expr()->lt('comments.id', $qb->createNamedParameter($offset, IQueryBuilder::PARAM_INT)));
+		}
+
+		$result = $qb->execute();
+		$entities = $result->fetchAll();
+		$result->closeCursor();
+		return $entities;
+	}
+
+	private function extendQueryByFilter(IQueryBuilder $qb, SearchQuery $query) {
+		$qb->andWhere($qb->expr()->eq('c.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		$qb->andWhere($qb->expr()->eq('s.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		$qb->innerJoin('s', 'deck_boards', 'b', $qb->expr()->eq('b.id', 's.board_id'));
+		$qb->andWhere($qb->expr()->eq('b.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+
+		foreach ($query->getTitle() as $title) {
+			$qb->andWhere($qb->expr()->iLike('c.title', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($title->getValue()) . '%', IQueryBuilder::PARAM_STR)));
+		}
+
+		foreach ($query->getDescription() as $description) {
+			$qb->andWhere($qb->expr()->iLike('c.description', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($description->getValue()) . '%', IQueryBuilder::PARAM_STR)));
+		}
+
+		foreach ($query->getStack() as $stack) {
+			$qb->andWhere($qb->expr()->iLike('s.title', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($stack->getValue()) . '%', IQueryBuilder::PARAM_STR)));
+		}
+
+		if (count($query->getTag())) {
+			foreach ($query->getTag() as $index => $tag) {
+				$qb->innerJoin('c', 'deck_assigned_labels', 'al' . $index, $qb->expr()->eq('c.id', 'al' . $index . '.card_id'));
+				$qb->innerJoin('al'. $index, 'deck_labels', 'l' . $index, $qb->expr()->eq('al' . $index . '.label_id', 'l' . $index . '.id'));
+				$qb->andWhere($qb->expr()->iLike('l' . $index . '.title', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($tag->getValue()) . '%', IQueryBuilder::PARAM_STR)));
+			}
+		}
+
+		foreach ($query->getDuedate() as $duedate) {
+			$dueDateColumn = $this->databaseType === 'sqlite3' ? $qb->createFunction('DATETIME(`c`.`duedate`)') : 'c.duedate';
+			$date = $duedate->getValue();
+			$supportedFilters = ['overdue', 'today', 'week', 'month', 'none'];
+			if (in_array($date, $supportedFilters, true)) {
+				$currentDate = new DateTime();
+				$rangeDate = new DateTime();
+				if ($date === 'overdue') {
+					$qb->andWhere($qb->expr()->lt($dueDateColumn, $this->dateTimeParameter($qb, $currentDate)));
+				} elseif ($date === 'today') {
+					$rangeDate = $rangeDate->add(new \DateInterval('P1D'));
+					$qb->andWhere($qb->expr()->gte($dueDateColumn, $this->dateTimeParameter($qb, $currentDate)));
+					$qb->andWhere($qb->expr()->lte($dueDateColumn, $this->dateTimeParameter($qb, $rangeDate)));
+				} elseif ($date === 'week') {
+					$rangeDate = $rangeDate->add(new \DateInterval('P7D'));
+					$qb->andWhere($qb->expr()->gte($dueDateColumn, $this->dateTimeParameter($qb, $currentDate)));
+					$qb->andWhere($qb->expr()->lte($dueDateColumn, $this->dateTimeParameter($qb, $rangeDate)));
+				} elseif ($date === 'month') {
+					$rangeDate = $rangeDate->add(new \DateInterval('P1M'));
+					$qb->andWhere($qb->expr()->gte($dueDateColumn, $this->dateTimeParameter($qb, $currentDate)));
+					$qb->andWhere($qb->expr()->lte($dueDateColumn, $this->dateTimeParameter($qb, $rangeDate)));
+				} else {
+					$qb->andWhere($qb->expr()->isNull('c.duedate'));
+				}
+			} else {
+				try {
+					$date = new DateTime($date);
+					if ($duedate->getComparator() === SearchQuery::COMPARATOR_LESS) {
+						$qb->andWhere($qb->expr()->lt($dueDateColumn, $this->dateTimeParameter($qb, $date)));
+					} elseif ($duedate->getComparator() === SearchQuery::COMPARATOR_LESS_EQUAL) {
+						// take the end of the day to include due dates at the same day (as datetime does't allow just setting the day)
+						$date->setTime(23, 59, 59);
+						$qb->andWhere($qb->expr()->lte($dueDateColumn, $this->dateTimeParameter($qb, $date)));
+					} elseif ($duedate->getComparator() === SearchQuery::COMPARATOR_MORE) {
+						// take the end of the day to exclude due dates at the same day (as datetime does't allow just setting the day)
+						$date->setTime(23, 59, 59);
+						$qb->andWhere($qb->expr()->gt($dueDateColumn, $this->dateTimeParameter($qb, $date)));
+					} elseif ($duedate->getComparator() === SearchQuery::COMPARATOR_MORE_EQUAL) {
+						$qb->andWhere($qb->expr()->gte($dueDateColumn, $this->dateTimeParameter($qb, $date)));
+					}
+				} catch (Exception $e) {
+					// Invalid date, ignoring
+				}
+			}
+		}
+
+		if (count($query->getAssigned()) > 0) {
+			foreach ($query->getAssigned() as $index => $assignment) {
+				$qb->innerJoin('c', 'deck_assigned_users', 'au' . $index, $qb->expr()->eq('c.id', 'au' . $index . '.card_id'));
+				$assignedQueryValue = $assignment->getValue();
+				$searchUsers = $this->userManager->searchDisplayName($assignment->getValue());
+				$users = array_filter($searchUsers, function (IUser $user) use ($assignedQueryValue) {
+					return (mb_strtolower($user->getDisplayName()) === mb_strtolower($assignedQueryValue) || $user->getUID() === $assignedQueryValue);
+				});
+				$groups = $this->groupManager->search($assignment->getValue());
+				foreach ($searchUsers as $user) {
+					$groups = array_merge($groups, $this->groupManager->getUserIdGroups($user->getUID()));
+				}
+
+				$assignmentSearches = [];
+				$hasAssignedMatches = false;
+				foreach ($users as $user) {
+					$hasAssignedMatches = true;
+					$assignmentSearches[] = $qb->expr()->andX(
+						$qb->expr()->eq('au' . $index . '.participant', $qb->createNamedParameter($user->getUID(), IQueryBuilder::PARAM_STR)),
+						$qb->expr()->eq('au' . $index . '.type', $qb->createNamedParameter(Assignment::TYPE_USER, IQueryBuilder::PARAM_INT))
+					);
+				}
+				foreach ($groups as $group) {
+					$hasAssignedMatches = true;
+					$assignmentSearches[] = $qb->expr()->andX(
+						$qb->expr()->eq('au' . $index . '.participant', $qb->createNamedParameter($group->getGID(), IQueryBuilder::PARAM_STR)),
+						$qb->expr()->eq('au' . $index . '.type', $qb->createNamedParameter(Assignment::TYPE_GROUP, IQueryBuilder::PARAM_INT))
+					);
+				}
+				if (!$hasAssignedMatches) {
+					return [];
+				}
+				$qb->andWhere($qb->expr()->orX(...$assignmentSearches));
+			}
+		}
+	}
+
+	private function dateTimeParameter(IQueryBuilder $qb, DateTime $dateTime) {
+		if ($this->databaseType === 'sqlite3') {
+			return $qb->createFunction('DATETIME("' . $dateTime->format('Y-m-d\TH:i:s') . '")');
+		}
+		return $qb->createNamedParameter($dateTime, IQueryBuilder::PARAM_DATE);
+	}
+	
+	
 
 	public function searchRaw($boardIds, $term, $limit = null, $offset = null) {
 		$qb = $this->queryCardsByBoards($boardIds)

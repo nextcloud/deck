@@ -49,6 +49,9 @@ class Card extends RelationalEntity {
 	protected $notified = false;
 	protected $deletedAt = 0;
 	protected $commentsUnread = 0;
+	
+	protected $relatedStack = null;
+	protected $relatedBoard = null;
 
 	private $databaseType = 'sqlite';
 
@@ -73,6 +76,9 @@ class Card extends RelationalEntity {
 		$this->addRelation('participants');
 		$this->addRelation('commentsUnread');
 		$this->addResolvable('owner');
+		
+		$this->addRelation('relatedStack');
+		$this->addRelation('relatedBoard');
 	}
 
 	public function setDatabaseType($type) {
@@ -119,6 +125,8 @@ class Card extends RelationalEntity {
 		$json['duedate'] = $this->getDuedate(true);
 		unset($json['notified']);
 		unset($json['descriptionPrev']);
+		unset($json['relatedStack']);
+		unset($json['relatedBoard']);
 		return $json;
 	}
 

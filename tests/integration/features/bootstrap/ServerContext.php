@@ -6,7 +6,14 @@ use GuzzleHttp\Cookie\CookieJar;
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 class ServerContext implements Context {
-	use WebDav;
+	use WebDav {
+		WebDav::__construct as private __tConstruct;
+	}
+
+	public function __construct($baseUrl) {
+		$this->rawBaseUrl = $baseUrl;
+		$this->__tConstruct($baseUrl . '/index.php/ocs/', ['admin', 'admin'], '123456');
+	}
 
 	/** @var string */
 	private $mappedUserId;
@@ -26,6 +33,10 @@ class ServerContext implements Context {
 		$this->cookieJar = new CookieJar();
 		$this->loggingInUsingWebAs($user);
 		$this->asAn($user);
+	}
+
+	public function getBaseUrl(): string {
+		return $this->rawBaseUrl;
 	}
 
 	public function getCookieJar(): CookieJar {

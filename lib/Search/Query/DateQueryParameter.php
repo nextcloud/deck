@@ -24,23 +24,15 @@
 declare(strict_types=1);
 
 
-use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+namespace OCA\Deck\Search\Query;
 
-require_once __DIR__ . '/../../vendor/autoload.php';
+class DateQueryParameter extends AQueryParameter {
+	/** @var string|null */
+	protected $value;
 
-
-trait RequestTrait {
-
-	/** @var RequestContext */
-	protected $requestContext;
-
-	/** @BeforeScenario */
-	public function gatherRequestTraitContext(BeforeScenarioScope $scope) {
-		$environment = $scope->getEnvironment();
-		$this->requestContext = $environment->getContext('RequestContext');
-	}
-
-	public function getResponse() {
-		return $this->requestContext->getResponse();
+	public function __construct(string $field, int $comparator, ?string $value) {
+		$this->field = $field;
+		$this->comparator = $comparator;
+		$this->value = $value;
 	}
 }

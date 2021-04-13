@@ -23,7 +23,7 @@
 <template>
 	<div v-if="card">
 		<div @click.stop.prevent>
-			<Actions v-if="canEdit && !isArchived">
+			<Actions>
 				<ActionButton v-if="showArchived === false && !isCurrentUserAssigned"
 					icon="icon-user"
 					:close-after-click="true"
@@ -43,7 +43,7 @@
 					{{ t('deck', 'Card details') }}
 				</ActionButton>
 				<ActionButton icon="icon-archive" :close-after-click="true" @click="archiveUnarchiveCard()">
-					{{ showArchived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
+					{{ card.archived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
 				</ActionButton>
 				<ActionButton v-if="showArchived === false"
 					icon="icon-delete"

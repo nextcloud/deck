@@ -47,6 +47,7 @@ use OCA\Deck\Listeners\FullTextSearchEventListener;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
+use OCA\Deck\Search\CardCommentProvider;
 use OCA\Deck\Search\DeckProvider;
 use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Sharing\DeckShareProvider;
@@ -95,9 +96,7 @@ class Application extends App implements IBootstrap {
 		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
 
 		$context->injectFn(function (IManager $shareManager) {
-			if (method_exists($shareManager, 'registerShareProvider')) {
-				$shareManager->registerShareProvider(DeckShareProvider::class);
-			}
+			$shareManager->registerShareProvider(DeckShareProvider::class);
 		});
 
 		$context->injectFn(function (Listener $listener, IEventDispatcher $eventDispatcher) {
@@ -122,6 +121,7 @@ class Application extends App implements IBootstrap {
 		});
 
 		$context->registerSearchProvider(DeckProvider::class);
+		$context->registerSearchProvider(CardCommentProvider::class);
 		$context->registerDashboardWidget(DeckWidget::class);
 
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);

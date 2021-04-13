@@ -22,6 +22,7 @@
 
 <template>
 	<AppSidebar v-if="currentBoard && currentCard"
+		:active="tabId"
 		:title="title"
 		:subtitle="subtitle"
 		:title-editable="titleEditable"
@@ -65,7 +66,7 @@
 			:order="2"
 			:name="t('deck', 'Comments')"
 			icon="icon-comment">
-			<CardSidebarTabComments :card="currentCard" />
+			<CardSidebarTabComments :card="currentCard" :tab-query="tabQuery" />
 		</AppSidebarTab>
 
 		<AppSidebarTab v-if="hasActivity"
@@ -108,6 +109,16 @@ export default {
 		id: {
 			type: Number,
 			required: true,
+		},
+		tabId: {
+			type: String,
+			required: false,
+			default: null,
+		},
+		tabQuery: {
+			type: String,
+			required: false,
+			default: null,
 		},
 	},
 	data() {

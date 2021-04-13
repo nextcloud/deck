@@ -24,7 +24,7 @@
 namespace OCA\Deck\Notification;
 
 use OCA\Deck\Db\Acl;
-use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
@@ -59,7 +59,7 @@ class NotificationHelperTest extends \Test\TestCase {
 	protected $cardMapper;
 	/** @var BoardMapper|MockObject */
 	protected $boardMapper;
-	/** @var AssignedUsersMapper|MockObject  */
+	/** @var AssignmentMapper|MockObject  */
 	protected $assignedUsersMapper;
 	/** @var PermissionService|MockObject */
 	protected $permissionService;
@@ -78,7 +78,7 @@ class NotificationHelperTest extends \Test\TestCase {
 		parent::setUp();
 		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
-		$this->assignedUsersMapper = $this->createMock(AssignedUsersMapper::class);
+		$this->assignedUsersMapper = $this->createMock(AssignmentMapper::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->config = $this->createMock(IConfig::class);
 		$this->notificationManager = $this->createMock(IManager::class);

@@ -91,6 +91,9 @@ export default new Vuex.Store({
 		boards: state => {
 			return state.boards
 		},
+		boardById: state => (id) => {
+			return state.boards.find((board) => board.id === id)
+		},
 		assignables: state => {
 			return [
 				...state.assignableUsers.map((user) => ({ ...user, type: 0 })),

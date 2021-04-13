@@ -73,6 +73,8 @@
 				</div>
 			</div>
 		</div>
+
+		<GlobalSearchResults />
 	</div>
 </template>
 
@@ -82,6 +84,7 @@ import Controls from '../Controls'
 import CardItem from '../cards/CardItem'
 import { mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
+import GlobalSearchResults from '../search/GlobalSearchResults'
 
 const FILTER_UPCOMING = 'upcoming'
 
@@ -92,6 +95,7 @@ const SUPPORTED_FILTERS = [
 export default {
 	name: 'Overview',
 	components: {
+		GlobalSearchResults,
 		Controls,
 		CardItem,
 	},
@@ -203,6 +207,8 @@ export default {
 	width: 100%;
 	height: 100%;
 	max-height: calc(100vh - 50px);
+	display: flex;
+	flex-direction: column;
 }
 
 .overview {

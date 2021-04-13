@@ -141,5 +141,7 @@ return [
 		['name' => 'comments_api#delete', 'url' => '/api/v{apiVersion}/cards/{cardId}/comments/{commentId}', 'verb' => 'DELETE'],
 
 		['name' => 'overview_api#upcomingCards', 'url' => '/api/v{apiVersion}/overview/upcoming', 'verb' => 'GET'],
+
+		['name' => 'search#search', 'url' => '/api/v{apiVersion}/search', 'verb' => 'GET'],
 	]
 ];

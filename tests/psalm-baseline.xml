@@ -10,11 +10,6 @@
       <code>(int)$subjectParams['comment']</code>
     </InvalidScalarArgument>
   </file>
-  <file src="lib/AppInfo/Application.php">
-    <RedundantCondition occurrences="1">
-      <code>method_exists($shareManager, 'registerShareProvider')</code>
-    </RedundantCondition>
-  </file>
   <file src="lib/Command/UserExport.php">
     <ImplementedReturnTypeMismatch occurrences="1">
       <code>void</code>
@@ -121,12 +116,16 @@
     </UndefinedClass>
   </file>
   <file src="lib/Db/CardMapper.php">
+    <InvalidArgument occurrences="1"/>
     <InvalidScalarArgument occurrences="1">
       <code>$entity-&gt;getId()</code>
     </InvalidScalarArgument>
     <ParamNameMismatch occurrences="1">
       <code>$cardId</code>
     </ParamNameMismatch>
+    <UndefinedInterfaceMethod occurrences="1">
+      <code>getUserIdGroups</code>
+    </UndefinedInterfaceMethod>
   </file>
   <file src="lib/Db/ChangeHelper.php">
     <UndefinedThisPropertyAssignment occurrences="3">
@@ -271,7 +270,7 @@
       <code>$this-&gt;rootFolder</code>
       <code>$this-&gt;rootFolder</code>
       <code>IRootFolder</code>
-      <code>Share\Exceptions\ShareNotFound</code>
+      <code>ShareNotFound</code>
     </MissingDependency>
   </file>
   <file src="lib/Service/PermissionService.php">
@@ -279,6 +278,13 @@
       <code>\OCA\Circles\Api\v1\Circles</code>
       <code>\OCA\Circles\Api\v1\Circles</code>
     </UndefinedClass>
+  </file>
+  <file src="lib/Service/SearchService.php">
+    <UndefinedThisPropertyFetch occurrences="3">
+      <code>$this-&gt;l10n</code>
+      <code>$this-&gt;urlGenerator</code>
+      <code>$this-&gt;userManager</code>
+    </UndefinedThisPropertyFetch>
   </file>
   <file src="lib/Service/StackService.php">
     <UndefinedClass occurrences="1">
@@ -292,9 +298,10 @@
     <InvalidReturnType occurrences="1">
       <code>getSharesInFolder</code>
     </InvalidReturnType>
-    <MissingDependency occurrences="7">
+    <MissingDependency occurrences="8">
       <code>GenericShareException</code>
       <code>GenericShareException</code>
+      <code>ShareNotFound</code>
       <code>ShareNotFound</code>
       <code>ShareNotFound</code>
       <code>ShareNotFound</code>

@@ -26,73 +26,59 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Search;
 
-use OCA\Deck\Db\Board;
-use OCA\Deck\Db\Card;
 use OCA\Deck\Service\SearchService;
-use OCP\IURLGenerator;
+use OCP\IL10N;
 use OCP\IUser;
 use OCP\Search\IProvider;
 use OCP\Search\ISearchQuery;
 use OCP\Search\SearchResult;
 
-class DeckProvider implements IProvider {
+class CardCommentProvider implements IProvider {
 
-	/**
-	 * @var SearchService
-	 */
+	/** @var SearchService */
 	private $searchService;
-	/**
-	 * @var IURLGenerator
-	 */
-	private $urlGenerator;
+	/** @var IL10N */
+	private $l10n;
 
 	public function __construct(
 		SearchService $searchService,
-		IURLGenerator $urlGenerator
+		IL10N $l10n
 	) {
 		$this->searchService = $searchService;
-		$this->urlGenerator = $urlGenerator;
+		$this->l10n = $l10n;
 	}
 
 	public function getId(): string {
-		return 'deck';
+		return 'deck-comment';
 	}
 
 	public function getName(): string {
-		return 'Deck';
+		return $this->l10n->t('Card comments');
 	}
 
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
 		$cursor = $query->getCursor() !== null ? (int)$query->getCursor() : null;
-		$boardResults = $this->searchService->searchBoards($query->getTerm(), $query->getLimit(), $cursor);
-		$cardResults = $this->searchService->searchCards($query->getTerm(), $query->getLimit(), $cursor);
-		$results = array_merge(
-			array_map(function (Board $board) {
-				return new BoardSearchResultEntry($board, $this->urlGenerator);
-			}, $boardResults),
-			array_map(function (Card $card) {
-				return new CardSearchResultEntry($card->getRelatedBoard(), $card->getRelatedStack(), $card, $this->urlGenerator);
-			}, $cardResults)
-		);
-
-		if (count($cardResults) < $query->getLimit()) {
+		$results = $this->searchService->searchComments($query->getTerm(), $query->getLimit(), $cursor);
+		if (count($results) < $query->getLimit()) {
 			return SearchResult::complete(
-				'Deck',
+				$this->l10n->t('Card comments'),
 				$results
 			);
 		}
 		
 		return SearchResult::paginated(
-			'Deck',
+			$this->l10n->t('Card comments'),
 			$results,
-			$cardResults[count($results) - 1]->getLastModified()
+			$results[count($results) - 1]->getCommentId()
 		);
 	}
 
 	public function getOrder(string $route, array $routeParameters): int {
+		// Negative value to force showing deck providers on first position if the app is opened
+		// This provider always has an order 1 higher than the default DeckProvider
 		if ($route === 'deck.Page.index') {
-			return -5;
+			return -4;
 		}
-		return 10;
+		return 11;
 	}
 }

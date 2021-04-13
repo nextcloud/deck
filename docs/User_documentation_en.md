@@ -69,3 +69,25 @@ The **sharing tab** allows you to add users or even groups to your boards.
 **Deleted objects** allows you to return previously deleted stacks or cards.  
 The **Timeline** allows you to see everything that happened in your boards. Everything!
 
+## Search
+
+Deck provides a global search either through the unified search in the Nextcloud header or with the inline search next to the board controls.
+This search allows advanced filtering of cards across all board of the logged in user.
+
+For example the search `project tag:ToDo assigned:alice assigned:bob` will return all cards where the card title or description contains project **and** the tag ToDo is set **and** the user alice is assigned **and** the user bob is assigned.
+
+### Supported search filters
+
+| Filter      | Operators         | Query                                                        |
+| ----------- | ----------------- | ------------------------------------------------------------ |
+| title       | `:`               | text token used for a case-insentitive search on the cards title |
+| description | `:`               | text token used for a case-insentitive search on the cards description |
+| list        | `:`               | text token used for a case-insentitive search on the cards list name |
+| tag         | `:`               | text token used for a case-insentitive search on the assigned tags |
+| date        | `:`               | 'overdue', 'today', 'week', 'month', 'none'                  |
+|             | `>` `<` `>=` `<=` | Compare the card due date to the passed date (see [supported date formats](https://www.php.net/manual/de/datetime.formats.php)) Card due dates are always considered UTC for comparison |
+| assigned    | `:`               | id or displayname of a user or group for a search on the assigned users or groups |
+
+Other text tokens will be used to perform a case-insensitive search on the card title and description
+
+In addition wuotes can be used to pass a query with spaces, e.g. `"Exact match with spaces"` or `title:"My card"`.
