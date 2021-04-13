@@ -24,7 +24,6 @@
 
 namespace OCA\Deck\Service;
 
-use OC\EventDispatcher\SymfonyAdapter;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\AppInfo\Application;
@@ -36,9 +35,13 @@ use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Event\AclCreatedEvent;
+use OCA\Deck\Event\AclDeletedEvent;
+use OCA\Deck\Event\AclUpdatedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IL10N;
@@ -47,7 +50,6 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCP\IUserManager;
 use OCA\Deck\BadRequestException;
-use Symfony\Component\EventDispatcher\GenericEvent;
 
 class BoardService {
 	private $boardMapper;
@@ -83,7 +85,7 @@ class BoardService {
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		ActivityManager $activityManager,
-		SymfonyAdapter $eventDispatcher,
+		IEventDispatcher $eventDispatcher,
 		ChangeHelper $changeHelper,
 		$userId
 	) {
@@ -327,13 +329,6 @@ class BoardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $new_board, ActivityManager::SUBJECT_BOARD_CREATE, [], $userId);
 		$this->changeHelper->boardChanged($new_board->getId());
 
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Board::onCreate',
-			new GenericEvent(
-				null, ['id' => $new_board->getId(), 'userId' => $userId, 'board' => $new_board]
-			)
-		);
-
 		return $new_board;
 	}
 
@@ -360,10 +355,6 @@ class BoardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_DELETE);
 		$this->changeHelper->boardChanged($board->getId());
 
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Board::onDelete', new GenericEvent(null, ['id' => $id])
-		);
-
 		return $board;
 	}
 
@@ -386,10 +377,6 @@ class BoardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_RESTORE);
 		$this->changeHelper->boardChanged($board->getId());
 
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Board::onUpdate', new GenericEvent(null, ['id' => $id, 'board' => $board])
-		);
-
 		return $board;
 	}
 
@@ -409,10 +396,6 @@ class BoardService {
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
 		$delete = $this->boardMapper->delete($board);
-
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Board::onDelete', new GenericEvent(null, ['id' => $id])
-		);
 
 		return $delete;
 	}
@@ -456,10 +439,6 @@ class BoardService {
 		$this->boardMapper->mapOwner($board);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_BOARD_UPDATE);
 		$this->changeHelper->boardChanged($board->getId());
-
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Board::onUpdate', new GenericEvent(null, ['id' => $id, 'board' => $board])
-		);
 
 		return $board;
 	}
@@ -541,18 +520,13 @@ class BoardService {
 		$this->changeHelper->boardChanged($boardId);
 
 		// TODO: use the dispatched event for this
-		$version = \OCP\Util::getVersion()[0];
-		if ($version >= 16) {
-			try {
-				$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
-				$resourceProvider->invalidateAccessCache($boardId);
-			} catch (\Exception $e) {
-			}
+		try {
+			$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+			$resourceProvider->invalidateAccessCache($boardId);
+		} catch (\Exception $e) {
 		}
 
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Board::onShareNew', new GenericEvent(null, ['id' => $newAcl->getId(), 'acl' => $newAcl, 'boardId' => $boardId])
-		);
+		$this->eventDispatcher->dispatchTyped(new AclCreatedEvent($acl));
 
 		return $newAcl;
 	}
@@ -597,9 +571,7 @@ class BoardService {
 		$board = $this->aclMapper->update($acl);
 		$this->changeHelper->boardChanged($acl->getBoardId());
 
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Board::onShareEdit', new GenericEvent(null, ['id' => $id, 'boardId' => $acl->getBoardId(), 'acl' => $acl])
-		);
+		$this->eventDispatcher->dispatchTyped(new AclUpdatedEvent($acl));
 
 		return $board;
 	}
@@ -640,9 +612,7 @@ class BoardService {
 		}
 		$delete = $this->aclMapper->delete($acl);
 
-		$this->eventDispatcher->dispatch(
-			'\OCA\Deck\Board::onShareDelete', new GenericEvent(null, ['id' => $id, 'boardId' => $acl->getBoardId(), 'acl' => $acl])
-		);
+		$this->eventDispatcher->dispatchTyped(new AclDeletedEvent($acl));
 
 		return $delete;
 	}
