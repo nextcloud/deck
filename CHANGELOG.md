@@ -1,7 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.3.0 - unreleased
+## 1.4.0 - 2021-04-13
+
+### Added
+
+* [#2934](https://github.com/nextcloud/deck/pull/2934) Advanced search queries (see [documentation](https://deck.readthedocs.io/en/latest/User_documentation_en/#search) for more details)
+* [#2933](https://github.com/nextcloud/deck/pull/2933) Move full text search to proper events
+
+### Fixed
+* [#2964](https://github.com/nextcloud/deck/pull/2964) Fix navigating to board details
+
+* Dependency updates
+
+## 1.3.0
 
 ### Added
 * [#2638](https://github.com/nextcloud/deck/pull/2638) Sharing files to cards
