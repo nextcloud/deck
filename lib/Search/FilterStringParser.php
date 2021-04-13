@@ -116,8 +116,10 @@ class FilterStringParser {
 	}
 
 	protected function removeQuotes(string $token): string {
-		$token = ($token[0] === '"' && $token[mb_strlen($token) - 1] === '"') ? mb_substr($token, 1, -1): $token;
-		$token = ($token[0] === '\'' && $token[mb_strlen($token) - 1] === '\'') ? mb_substr($token, 1, -1): $token;
+		if (mb_strlen($token) > 1) {
+			$token = ($token[0] === '"' && $token[mb_strlen($token) - 1] === '"') ? mb_substr($token, 1, -1) : $token;
+			$token = ($token[0] === '\'' && $token[mb_strlen($token) - 1] === '\'') ? mb_substr($token, 1, -1) : $token;
+		}
 		return $token;
 	}
 }

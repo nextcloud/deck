@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Db;
 
+use DateTime;
 use Exception;
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Search\Query\SearchQuery;
@@ -54,7 +55,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		IManager $notificationManager,
-		$databaseType = 'sqlite',
+		$databaseType = 'sqlite3',
 		$database4ByteSupport = true
 	) {
 		parent::__construct($db, 'deck_cards', Card::class);
@@ -380,48 +381,48 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		}
 
 		foreach ($query->getDuedate() as $duedate) {
+			$dueDateColumn = $this->databaseType === 'sqlite3' ? $qb->createFunction('DATETIME(`c`.`duedate`)') : 'c.duedate';
 			$date = $duedate->getValue();
 			$supportedFilters = ['overdue', 'today', 'week', 'month', 'none'];
 			if (in_array($date, $supportedFilters, true)) {
-				$currentDate = new \DateTime();
-				$rangeDate = new \DateTime();
+				$currentDate = new DateTime();
+				$rangeDate = new DateTime();
 				if ($date === 'overdue') {
-					$qb->andWhere($qb->expr()->lt('c.duedate', $qb->createNamedParameter($currentDate, IQueryBuilder::PARAM_DATE)));
+					$qb->andWhere($qb->expr()->lt($dueDateColumn, $this->dateTimeParameter($qb, $currentDate)));
 				} elseif ($date === 'today') {
-					$rangeDate->add(new \DateInterval('P1D'));
-					$qb->andWhere($qb->expr()->gte('c.duedate', $qb->createNamedParameter($currentDate, IQueryBuilder::PARAM_DATE)));
-					$qb->andWhere($qb->expr()->lte('c.duedate', $qb->createNamedParameter($rangeDate, IQueryBuilder::PARAM_DATE)));
+					$rangeDate = $rangeDate->add(new \DateInterval('P1D'));
+					$qb->andWhere($qb->expr()->gte($dueDateColumn, $this->dateTimeParameter($qb, $currentDate)));
+					$qb->andWhere($qb->expr()->lte($dueDateColumn, $this->dateTimeParameter($qb, $rangeDate)));
 				} elseif ($date === 'week') {
-					$rangeDate->add(new \DateInterval('P7D'));
-					$qb->andWhere($qb->expr()->gte('c.duedate', $qb->createNamedParameter($currentDate, IQueryBuilder::PARAM_DATE)));
-					$qb->andWhere($qb->expr()->lte('c.duedate', $qb->createNamedParameter($rangeDate, IQueryBuilder::PARAM_DATE)));
+					$rangeDate = $rangeDate->add(new \DateInterval('P7D'));
+					$qb->andWhere($qb->expr()->gte($dueDateColumn, $this->dateTimeParameter($qb, $currentDate)));
+					$qb->andWhere($qb->expr()->lte($dueDateColumn, $this->dateTimeParameter($qb, $rangeDate)));
 				} elseif ($date === 'month') {
-					$rangeDate->add(new \DateInterval('P1M'));
-					$qb->andWhere($qb->expr()->gte('c.duedate', $qb->createNamedParameter($currentDate, IQueryBuilder::PARAM_DATE)));
-					$qb->andWhere($qb->expr()->lte('c.duedate', $qb->createNamedParameter($rangeDate, IQueryBuilder::PARAM_DATE)));
+					$rangeDate = $rangeDate->add(new \DateInterval('P1M'));
+					$qb->andWhere($qb->expr()->gte($dueDateColumn, $this->dateTimeParameter($qb, $currentDate)));
+					$qb->andWhere($qb->expr()->lte($dueDateColumn, $this->dateTimeParameter($qb, $rangeDate)));
 				} else {
 					$qb->andWhere($qb->expr()->isNull('c.duedate'));
 				}
-			}
-
-			try {
-				$date = new \DateTime($date);
-				if ($duedate->getComparator() === SearchQuery::COMPARATOR_LESS) {
-					$qb->andWhere($qb->expr()->lt('c.duedate', $qb->createNamedParameter($date, IQueryBuilder::PARAM_DATE)));
-				} elseif ($duedate->getComparator() === SearchQuery::COMPARATOR_LESS_EQUAL) {
-					// take the end of the day to include due dates at the same day (as datetime does't allow just setting the day)
-					$date->setTime(23, 59, 59);
-					$qb->andWhere($qb->expr()->lte('c.duedate', $qb->createNamedParameter($date, IQueryBuilder::PARAM_DATE)));
-				} elseif ($duedate->getComparator() === SearchQuery::COMPARATOR_MORE) {
-					// take the end of the day to exclude due dates at the same day (as datetime does't allow just setting the day)
-					$date->setTime(23, 59, 59);
-					$qb->andWhere($qb->expr()->gt('c.duedate', $qb->createNamedParameter($date, IQueryBuilder::PARAM_DATE)));
-				} elseif ($duedate->getComparator() === SearchQuery::COMPARATOR_MORE_EQUAL) {
-					$qb->andWhere($qb->expr()->gte('c.duedate', $qb->createNamedParameter($date, IQueryBuilder::PARAM_DATE)));
+			} else {
+				try {
+					$date = new DateTime($date);
+					if ($duedate->getComparator() === SearchQuery::COMPARATOR_LESS) {
+						$qb->andWhere($qb->expr()->lt($dueDateColumn, $this->dateTimeParameter($qb, $date)));
+					} elseif ($duedate->getComparator() === SearchQuery::COMPARATOR_LESS_EQUAL) {
+						// take the end of the day to include due dates at the same day (as datetime does't allow just setting the day)
+						$date->setTime(23, 59, 59);
+						$qb->andWhere($qb->expr()->lte($dueDateColumn, $this->dateTimeParameter($qb, $date)));
+					} elseif ($duedate->getComparator() === SearchQuery::COMPARATOR_MORE) {
+						// take the end of the day to exclude due dates at the same day (as datetime does't allow just setting the day)
+						$date->setTime(23, 59, 59);
+						$qb->andWhere($qb->expr()->gt($dueDateColumn, $this->dateTimeParameter($qb, $date)));
+					} elseif ($duedate->getComparator() === SearchQuery::COMPARATOR_MORE_EQUAL) {
+						$qb->andWhere($qb->expr()->gte($dueDateColumn, $this->dateTimeParameter($qb, $date)));
+					}
+				} catch (Exception $e) {
+					// Invalid date, ignoring
 				}
-			} catch (Exception $e) {
-				// Invalid date, ignoring
-				continue;
 			}
 		}
 
@@ -460,6 +461,13 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 				$qb->andWhere($qb->expr()->orX(...$assignmentSearches));
 			}
 		}
+	}
+
+	private function dateTimeParameter(IQueryBuilder $qb, DateTime $dateTime) {
+		if ($this->databaseType === 'sqlite3') {
+			return $qb->createFunction('DATETIME("' . $dateTime->format('Y-m-d\TH:i:s') . '")');
+		}
+		return $qb->createNamedParameter($dateTime, IQueryBuilder::PARAM_DATE);
 	}
 	
 	

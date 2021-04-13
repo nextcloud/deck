@@ -36,7 +36,7 @@ class AQueryParameter {
 	protected $value;
 	
 	public function getValue() {
-		if (is_string($this->value)) {
+		if (is_string($this->value) && mb_strlen($this->value) > 1) {
 			$param = ($this->value[0] === '"' && $this->value[mb_strlen($this->value) - 1] === '"') ? mb_substr($this->value, 1, -1): $this->value;
 			return $param;
 		}
