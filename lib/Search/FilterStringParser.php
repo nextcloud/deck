@@ -47,11 +47,23 @@ class FilterStringParser {
 		if (empty($filter)) {
 			return $query;
 		}
-		$tokens = preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', $filter);
-		foreach ($tokens as $token) {
+		/**
+		 * Match search tokens that are separated by spaces
+		 * do not match spaces that are surrounded by single or double quotes
+		 * in order to still match quotes
+		 * e.g.:
+		 * - test
+		 * - test:query
+		 * - test:<123
+		 * - test:"1 2 3"
+		 * - test:>="2020-01-01"
+		 */
+		$searchQueryExpression = '/((\w+:(<|<=|>|>=)?)?("([^"\\\\]*(?:\\\\.[^"\\\\]*)*)"|\'([^\'\\\\]*(?:\\\\.[^\'\\\\]*)*)\')|[^\s]+)/';
+		preg_match_all($searchQueryExpression, $filter, $matches, PREG_SET_ORDER, 0);
+		foreach ($matches as $match) {
+			$token = $match[0];
 			if (!$this->parseFilterToken($query, $token)) {
-				$token = ($token[0] === '"' && $token[mb_strlen($token) - 1] === '"') ? mb_substr($token, 1, -1): $token;
-				$query->addTextToken($token);
+				$query->addTextToken($this->removeQuotes($token));
 			}
 		}
 
@@ -81,27 +93,31 @@ class FilterStringParser {
 						($orEquals ? SearchQuery::COMPARATOR_EQUAL : 0)
 					);
 				}
-				$value = ($value[0] === '"' && $value[mb_strlen($value) - 1] === '"') ? mb_substr($value, 1, -1): $value;
-
-				$query->addDuedate(new DateQueryParameter('date',	$comparator, $value));
+				$query->addDuedate(new DateQueryParameter('date', $comparator, $this->removeQuotes($value)));
 				return true;
 			case 'title':
-				$query->addTitle(new StringQueryParameter('title', SearchQuery::COMPARATOR_EQUAL, $param));
+				$query->addTitle(new StringQueryParameter('title', SearchQuery::COMPARATOR_EQUAL, $this->removeQuotes($param)));
 				return true;
 			case 'description':
-				$query->addDescription(new StringQueryParameter('description', SearchQuery::COMPARATOR_EQUAL, $param));
+				$query->addDescription(new StringQueryParameter('description', SearchQuery::COMPARATOR_EQUAL, $this->removeQuotes($param)));
 				return true;
 			case 'list':
-				$query->addStack(new StringQueryParameter('list', SearchQuery::COMPARATOR_EQUAL, $param));
+				$query->addStack(new StringQueryParameter('list', SearchQuery::COMPARATOR_EQUAL, $this->removeQuotes($param)));
 				return true;
 			case 'tag':
-				$query->addTag(new StringQueryParameter('tag', SearchQuery::COMPARATOR_EQUAL, $param));
+				$query->addTag(new StringQueryParameter('tag', SearchQuery::COMPARATOR_EQUAL, $this->removeQuotes($param)));
 				return true;
 			case 'assigned':
-				$query->addAssigned(new StringQueryParameter('assigned', SearchQuery::COMPARATOR_EQUAL, $param));
+				$query->addAssigned(new StringQueryParameter('assigned', SearchQuery::COMPARATOR_EQUAL, $this->removeQuotes($param)));
 				return true;
 		}
 
 		return false;
+	}
+
+	protected function removeQuotes(string $token): string {
+		$token = ($token[0] === '"' && $token[mb_strlen($token) - 1] === '"') ? mb_substr($token, 1, -1): $token;
+		$token = ($token[0] === '\'' && $token[mb_strlen($token) - 1] === '\'') ? mb_substr($token, 1, -1): $token;
+		return $token;
 	}
 }
