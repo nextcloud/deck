@@ -167,6 +167,7 @@ OC.L10N.register(
     "Archive all cards in this list" : "Artxibatu zerrenda honetako txartel guztiak",
     "Add a new card" : "Gehitu txartel berri bat",
     "Card name" : "Txartel izena",
+    "List deleted" : "Zerrenda ezabatua",
     "Edit" : "Editatu",
     "Add a new tag" : "Gehitu etiketa berri bat",
     "title and color value must be provided" : "izenburu eta kolore balioak hornitu behar dira",
