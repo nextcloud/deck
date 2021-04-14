@@ -306,6 +306,7 @@ h5 {
 	padding: 0;
 	background-color: var(--color-main-background);
 	color: var(--color-main-text);
+	width: 100%;
 }
 
 .CodeMirror-placeholder {
