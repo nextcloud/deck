@@ -22,7 +22,7 @@
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 
-const shareUrl = generateOcsUrl('apps/files_sharing/api/v1', 2) + 'shares'
+const shareUrl = generateOcsUrl('apps/files_sharing/api/v1/shares')
 
 const createShare = async function({ path, permissions, shareType, shareWith, publicUpload, password, sendPasswordByTalk, expireDate, label }) {
 	try {
