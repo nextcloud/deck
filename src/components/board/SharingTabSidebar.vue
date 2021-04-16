@@ -73,7 +73,7 @@ import { CollectionList } from 'nextcloud-vue-collections'
 import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 
 export default {
 	name: 'SharingTabSidebar',
