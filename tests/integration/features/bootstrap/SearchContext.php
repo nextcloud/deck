@@ -13,6 +13,7 @@ class SearchContext implements Context {
 	protected $boardContext;
 
 	private $searchResults;
+	private $unifiedSearchResult;
 
 	/** @BeforeScenario */
 	public function gatherContexts(BeforeScenarioScope $scope) {
@@ -30,6 +31,18 @@ class SearchContext implements Context {
 		$this->requestContext->getResponse()->getBody()->seek(0);
 		$data = (string)$this->getResponse()->getBody();
 		$this->searchResults = json_decode($data, true);
+	}
+
+	/**
+	 * @When /^searching for "([^"]*)" in comments in unified search$/
+	 * @param string $term
+	 * https://cloud.nextcloud.com/ocs/v2.php/search/providers/talk-conversations/search?term=an&from=%2Fapps%2Fdashboard%2F
+	 */
+	public function searchingForComments(string $term) {
+		$this->requestContext->sendOCSRequest('GET', '/search/providers/deck-comment/search?term=' . urlencode($term), []);
+		$this->requestContext->getResponse()->getBody()->seek(0);
+		$data = (string)$this->getResponse()->getBody();
+		$this->unifiedSearchResult = json_decode($data, true);
 	}
 
 	/**
@@ -77,5 +90,34 @@ class SearchContext implements Context {
 	 */
 	public function theCardIsNotFound($arg1) {
 		Assert::assertFalse($this->cardIsFound($arg1), 'Card can not be found');
+	}
+
+	/**
+	 * @Then /^the comment with "([^"]*)" is found$/
+	 */
+	public function theCommentWithIsFound($arg1) {
+		$ocsData = $this->unifiedSearchResult['ocs']['data']['entries'];
+		$found = null;
+		foreach ($ocsData as $result) {
+			if ($result['subline'] === $arg1) {
+				$found = $result;
+			}
+		}
+		Assert::assertNotNull($found, 'Comment was expected but was not found');
+		Assert::assertEquals('admin on Card with comment', $found['title']);
+	}
+
+	/**
+	 * @Then /^the comment with "([^"]*)" is not found$/
+	 */
+	public function theCommentWithIsNotFound($arg1) {
+		$ocsData = $this->unifiedSearchResult['ocs']['data']['entries'];
+		$found = null;
+		foreach ($ocsData as $result) {
+			if ($result['subline'] === $arg1) {
+				$found = $result;
+			}
+		}
+		Assert::assertNull($found, 'Comment was found but not expected');
 	}
 }
