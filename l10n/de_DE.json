@@ -61,7 +61,7 @@
     "{user} has restored the attachment {attachment} to card {card}" : "{user} hat den Anhang {attachment} der Karte {card} wiederhergestellt",
     "You have commented on card {card}" : "Sie haben die Karte {card} kommentiert",
     "{user} has commented on card {card}" : "{user} hat die Karte {card} kommentiert",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Eine <strong>Kartenbeschreibung</strong> wurde innerhalb der Deck-App geändert",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "Eine <strong>Kartenbeschreibung</strong> innerhalb der Deck-App wurde geändert",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Änderungen in der <strong>Deck-App</strong>",
     "A <strong>comment</strong> was created on a card" : "Ein <strong>Kommentar</strong> zu einer Karte wurde erstellt",
