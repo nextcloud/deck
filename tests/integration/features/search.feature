@@ -257,3 +257,10 @@ Feature: Searching for cards
     Then the card "Example task 1" is not found
     And the card "Labeled card" is not found
     And the card "Multi labeled card" is found
+
+  Scenario: Search for a card comment
+    Given create a card named "Card with comment"
+    And post a comment with content "My first comment" on the card
+    When searching for "My first comment" in comments in unified search
+    Then the comment with "My first comment" is found
+    Then the comment with "Any other" is not found

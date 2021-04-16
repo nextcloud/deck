@@ -321,7 +321,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		$this->extendQueryByFilter($qb, $query);
 
 		$qb->innerJoin('c', 'comments', 'comments', $qb->expr()->andX(
-			$qb->expr()->eq('comments.object_id', 'c.id', IQueryBuilder::PARAM_STR),
+			$qb->expr()->eq('comments.object_id', $qb->expr()->castColumn('c.id', IQueryBuilder::PARAM_STR)),
 			$qb->expr()->eq('comments.object_type', $qb->createNamedParameter(Application::COMMENT_ENTITY_TYPE, IQueryBuilder::PARAM_STR))
 		));
 		$qb->selectAlias('comments.id', 'comment_id');
@@ -339,7 +339,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			$tokenMatching
 		);
 
-		$qb->groupBy('comments.id');
+		$qb->groupBy('comments.id', 'c.id');
 		$qb->orderBy('comments.id', 'DESC');
 		if ($limit !== null) {
 			$qb->setMaxResults($limit);

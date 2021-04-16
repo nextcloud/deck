@@ -27,6 +27,10 @@ class BoardContext implements Context {
 		$this->serverContext = $environment->getContext('ServerContext');
 	}
 
+	public function getLastUsedCard() {
+		return $this->card;
+	}
+
 	/**
 	 * @Given /^creates a board named "([^"]*)" with color "([^"]*)"$/
 	 */
