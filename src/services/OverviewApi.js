@@ -26,7 +26,7 @@ import { generateOcsUrl } from '@nextcloud/router'
 export class OverviewApi {
 
 	url(url) {
-		return generateOcsUrl('apps/deck/api/v1.0') + url
+		return generateOcsUrl(`apps/deck/api/v1.0/${url}`)
 	}
 
 	get(filter) {

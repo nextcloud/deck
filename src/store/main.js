@@ -317,7 +317,7 @@ export default new Vuex.Store({
 		async setConfig({ commit }, config) {
 			for (const key in config) {
 				try {
-					await axios.post(generateOcsUrl('apps/deck/api/v1.0/config') + key, {
+					await axios.post(generateOcsUrl(`apps/deck/api/v1.0/config/${key}`), {
 						value: config[key],
 					})
 					commit('SET_CONFIG', { key, value: config[key] })
@@ -421,7 +421,7 @@ export default new Vuex.Store({
 			params.append('perPage', 20)
 			params.append('itemType', [0, 1, 4, 7])
 
-			const response = await axios.get(generateOcsUrl('apps/files_sharing/api/v1') + 'sharees', { params })
+			const response = await axios.get(generateOcsUrl('apps/files_sharing/api/v1/sharees'), { params })
 			commit('setSharees', response.data.ocs.data)
 		},
 

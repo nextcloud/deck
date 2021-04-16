@@ -163,7 +163,7 @@ export default {
 		if (this.isAdmin) {
 			this.groupLimit = this.$store.getters.config('groupLimit')
 			this.groupLimitDisabled = false
-			axios.get(generateOcsUrl('cloud', 2) + 'groups').then((response) => {
+			axios.get(generateOcsUrl('cloud/groups')).then((response) => {
 				this.groups = response.data.ocs.data.groups.reduce((obj, item) => {
 					obj.push({
 						id: item,

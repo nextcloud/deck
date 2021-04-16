@@ -84,7 +84,7 @@ export default {
 			params.append('object_id', '' + this.objectId)
 			params.append('limit', ACTIVITY_FETCH_LIMIT)
 
-			const response = await axios.get(generateOcsUrl('apps/activity/api/v2/activity') + this.filter + '?' + params)
+			const response = await axios.get(generateOcsUrl(`apps/activity/api/v2/activity/${this.filter}`) + '?' + params)
 			let activities = response.data.ocs.data
 			if (this.filter === 'deck') {
 				// We need to manually filter activities here, since currently we use two different types and there is no way

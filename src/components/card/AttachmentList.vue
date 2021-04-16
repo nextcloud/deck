@@ -210,7 +210,7 @@ export default {
 						throw new Error(t('files', 'Invalid path selected'))
 					}
 
-					axios.post(generateOcsUrl('apps/files_sharing/api/v1', 2) + 'shares', {
+					axios.post(generateOcsUrl('apps/files_sharing/api/v1/shares'), {
 						path,
 						shareType: 12,
 						shareWith: '' + this.cardId,
