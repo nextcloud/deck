@@ -8,4 +8,5 @@ default:
             baseUrl:  http://localhost:8080/
         - RequestContext
         - BoardContext
+        - CommentContext
         - SearchContext
