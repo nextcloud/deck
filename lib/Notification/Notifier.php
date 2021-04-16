@@ -25,6 +25,7 @@ namespace OCA\Deck\Notification;
 
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\StackMapper;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
@@ -41,6 +42,8 @@ class Notifier implements INotifier {
 	protected $userManager;
 	/** @var CardMapper */
 	protected $cardMapper;
+	/** @var StackMapper */
+	protected $stackMapper;
 	/** @var BoardMapper */
 	protected $boardMapper;
 
@@ -49,12 +52,14 @@ class Notifier implements INotifier {
 		IURLGenerator $url,
 		IUserManager $userManager,
 		CardMapper $cardMapper,
+		StackMapper $stackMapper,
 		BoardMapper $boardMapper
 	) {
 		$this->l10nFactory = $l10nFactory;
 		$this->url = $url;
 		$this->userManager = $userManager;
 		$this->cardMapper = $cardMapper;
+		$this->stackMapper = $stackMapper;
 		$this->boardMapper = $boardMapper;
 	}
 
@@ -100,6 +105,11 @@ class Notifier implements INotifier {
 				if (!$boardId) {
 					throw new AlreadyProcessedException();
 				}
+
+				$card = $this->cardMapper->find($cardId);
+				$stackId = $card->getStackId();
+				$stack = $this->stackMapper->find($stackId);
+
 				$initiator = $this->userManager->get($params[2]);
 				if ($initiator !== null) {
 					$dn = $initiator->getDisplayName();
@@ -110,8 +120,22 @@ class Notifier implements INotifier {
 					(string) $l->t('The card "%s" on "%s" has been assigned to you by %s.', [$params[0], $params[1], $dn])
 				);
 				$notification->setRichSubject(
-					(string) $l->t('{user} has assigned the card "%s" on "%s" to you.', [$params[0], $params[1]]),
+					$l->t('{user} has assigned the card {deck-card} on {deck-board} to you.'),
 					[
+						'deck-card' => [
+							'type' => 'deck-card',
+							'id' => $cardId,
+							'name' => $params[0],
+							'boardname' => $params[1],
+							'stackname' => $stack->getTitle(),
+							'link' => $this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $cardId . '',
+						],
+						'deck-board' => [
+							'type' => 'deck-board',
+							'id' => $boardId,
+							'name' => $params[1],
+							'link' => $this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId,
+						],
 						'user' => [
 							'type' => 'user',
 							'id' => $params[2],
@@ -127,8 +151,32 @@ class Notifier implements INotifier {
 				if (!$boardId) {
 					throw new AlreadyProcessedException();
 				}
+
+				$card = $this->cardMapper->find($cardId);
+				$stackId = $card->getStackId();
+				$stack = $this->stackMapper->find($stackId);
+
 				$notification->setParsedSubject(
 					(string) $l->t('The card "%s" on "%s" has reached its due date.', $params)
+				);
+				$notification->setRichSubject(
+					$l->t('The card {deck-card} on {deck-board} has reached its due date.'),
+					[
+						'deck-card' => [
+							'type' => 'deck-card',
+							'id' => $cardId,
+							'name' => $params[0],
+							'boardname' => $params[1],
+							'stackname' => $stack->getTitle(),
+							'link' => $this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $cardId . '',
+						],
+						'deck-board' => [
+							'type' => 'deck-board',
+							'id' => $boardId,
+							'name' => $params[1],
+							'link' => $this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId,
+						],
+					]
 				);
 				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $cardId . '');
 				break;
@@ -138,6 +186,11 @@ class Notifier implements INotifier {
 				if (!$boardId) {
 					throw new AlreadyProcessedException();
 				}
+
+				$card = $this->cardMapper->find($cardId);
+				$stackId = $card->getStackId();
+				$stack = $this->stackMapper->find($stackId);
+
 				$initiator = $this->userManager->get($params[2]);
 				if ($initiator !== null) {
 					$dn = $initiator->getDisplayName();
@@ -148,8 +201,16 @@ class Notifier implements INotifier {
 					(string) $l->t('%s has mentioned you in a comment on "%s".', [$dn, $params[0]])
 				);
 				$notification->setRichSubject(
-					(string) $l->t('{user} has mentioned you in a comment on "%s".', [$params[0]]),
+					$l->t('{user} has mentioned you in a comment on {deck-card}.'),
 					[
+						'deck-card' => [
+							'type' => 'deck-card',
+							'id' => $cardId,
+							'name' => $params[0],
+							'boardname' => $params[1],
+							'stackname' => $stack->getTitle(),
+							'link' => $this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $cardId . '',
+						],
 						'user' => [
 							'type' => 'user',
 							'id' => $params[2],
@@ -177,8 +238,14 @@ class Notifier implements INotifier {
 					(string) $l->t('The board "%s" has been shared with you by %s.', [$params[0], $dn])
 				);
 				$notification->setRichSubject(
-					(string) $l->t('{user} has shared the board %s with you.', [$params[0]]),
+					$l->t('{user} has shared {deck-board} with you.'),
 					[
+						'deck-board' => [
+							'type' => 'deck-board',
+							'id' => $boardId,
+							'name' => $params[0],
+							'link' => $this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId,
+						],
 						'user' => [
 							'type' => 'user',
 							'id' => $params[1],

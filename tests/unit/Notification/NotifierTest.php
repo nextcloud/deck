@@ -25,29 +25,33 @@ namespace OCA\Deck\Notification;
 
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\StackMapper;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class NotifierTest extends \Test\TestCase {
 
-	/** @var IFactory */
+	/** @var IFactory|MockObject */
 	protected $l10nFactory;
-	/** @var IURLGenerator */
+	/** @var IURLGenerator|MockObject */
 	protected $url;
-	/** @var IUserManager */
+	/** @var IUserManager|MockObject */
 	protected $userManager;
-	/** @var CardMapper */
+	/** @var CardMapper|MockObject */
 	protected $cardMapper;
+	/** @var StackMapper|MockObject */
+	protected $stackMapper;
 	/** @var BoardMapper */
 	protected $boardMapper;
+	/** @var IL10N|MockObject */
+	protected $l10n;
 	/** @var Notifier */
 	protected $notifier;
-	/** @var IL10N */
-	protected $l10n;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -55,12 +59,14 @@ class NotifierTest extends \Test\TestCase {
 		$this->url = $this->createMock(IURLGenerator::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->cardMapper = $this->createMock(CardMapper::class);
+		$this->stackMapper = $this->createMock(StackMapper::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->notifier = new Notifier(
 			$this->l10nFactory,
 			$this->url,
 			$this->userManager,
 			$this->cardMapper,
+			$this->stackMapper,
 			$this->boardMapper
 		);
 		$this->l10n = \OC::$server->getL10N('deck');
@@ -149,7 +155,7 @@ class NotifierTest extends \Test\TestCase {
 			->with($expectedMessage);
 		$notification->expects($this->once())
 			->method('setRichSubject')
-			->with('{user} has mentioned you in a comment on "Card title".');
+			->with('{user} has mentioned you in a comment on {deck-card}.');
 
 
 		$this->url->expects($this->once())
@@ -218,11 +224,25 @@ class NotifierTest extends \Test\TestCase {
 			->with($expectedMessage);
 		$notification->expects($this->once())
 			->method('setRichSubject')
-			->with('{user} has assigned the card "Card title" on "Board title" to you.', [
+			->with('{user} has assigned the card {deck-card} on {deck-board} to you.', [
 				'user' => [
 					'type' => 'user',
 					'id' => 'otheruser',
 					'name' => $dn,
+				],
+				'deck-card' => [
+					'type' => 'deck-card',
+					'id' => '123',
+					'name' => 'Card title',
+					'boardname' => 'Board title',
+					'stackname' => null,
+					'link' => '#/board/123/card/123',
+				],
+				'deck-board' => [
+					'type' => 'deck-board',
+					'id' => 123,
+					'name' => 'Board title',
+					'link' => '#/board/123',
 				]
 			]);
 
@@ -288,11 +308,17 @@ class NotifierTest extends \Test\TestCase {
 			->with($expectedMessage);
 		$notification->expects($this->once())
 			->method('setRichSubject')
-			->with('{user} has shared the board Board title with you.', [
+			->with('{user} has shared {deck-board} with you.', [
 				'user' => [
 					'type' => 'user',
 					'id' => 'otheruser',
 					'name' => $dn,
+				],
+				'deck-board' => [
+					'type' => 'deck-board',
+					'id' => 123,
+					'name' => 'Board title',
+					'link' => '#/board/123',
 				]
 			]);
 
