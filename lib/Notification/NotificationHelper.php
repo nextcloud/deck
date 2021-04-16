@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2017 Julius Härtl <jus@bitgrid.net>
  *
@@ -24,19 +27,24 @@
 namespace OCA\Deck\Notification;
 
 use DateTime;
+use Exception;
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\User;
 use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\PermissionService;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Comments\IComment;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\Notification\IManager;
+use OCP\Notification\INotification;
 
 class NotificationHelper {
 
@@ -80,10 +88,10 @@ class NotificationHelper {
 	}
 
 	/**
-	 * @param $card
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws DoesNotExistException
+	 * @throws Exception thrown on invalid due date
 	 */
-	public function sendCardDuedate($card) {
+	public function sendCardDuedate(Card $card): void {
 		// check if notification has already been sent
 		// ideally notifications should not be deleted once seen by the user so we can
 		// also deliver due date notifications for users who have been added later to a board
@@ -117,7 +125,7 @@ class NotificationHelper {
 				$notification
 					->setApp('deck')
 					->setUser((string)$user->getUID())
-					->setObject('card', $card->getId())
+					->setObject('card', (string)$card->getId())
 					->setSubject('card-overdue', [
 						$card->getTitle(), $board->getTitle()
 					])
@@ -128,25 +136,29 @@ class NotificationHelper {
 		$this->cardMapper->markNotified($card);
 	}
 
-	public function markDuedateAsRead($card) {
+	public function markDuedateAsRead(Card $card): void {
 		$notification = $this->notificationManager->createNotification();
 		$notification
 			->setApp('deck')
-			->setObject('card', $card->getId())
+			->setObject('card', (string)$card->getId())
 			->setSubject('card-overdue', []);
 		$this->notificationManager->markProcessed($notification);
 	}
 
-	public function sendCardAssigned($card, $userId) {
+	public function sendCardAssigned(Card $card, string $userId): void {
 		$boardId = $this->cardMapper->findBoardId($card->getId());
-		$board = $this->getBoard($boardId);
+		try {
+			$board = $this->getBoard($boardId);
+		} catch (Exception $e) {
+			return;
+		}
 
 		$notification = $this->notificationManager->createNotification();
 		$notification
 			->setApp('deck')
-			->setUser((string) $userId)
+			->setUser($userId)
 			->setDateTime(new DateTime())
-			->setObject('card', $card->getId())
+			->setObject('card', (string)$card->getId())
 				->setSubject('card-assigned', [
 					$card->getTitle(),
 					$board->getTitle(),
@@ -155,29 +167,56 @@ class NotificationHelper {
 		$this->notificationManager->notify($notification);
 	}
 
+	public function markCardAssignedAsRead(Card $card, string $userId): void {
+		$notification = $this->notificationManager->createNotification();
+		$notification
+			->setApp('deck')
+			->setUser($userId)
+			->setObject('card', (string)$card->getId())
+			->setSubject('card-assigned', []);
+		$this->notificationManager->markProcessed($notification);
+	}
+
 	/**
 	 * Send notifications that a board was shared with a user/group
-	 *
-	 * @param $boardId
-	 * @param Acl $acl
-	 * @throws \InvalidArgumentException
 	 */
-	public function sendBoardShared($boardId, $acl) {
-		$board = $this->getBoard($boardId);
+	public function sendBoardShared(int $boardId, Acl $acl, bool $markAsRead = false): void {
+		try {
+			$board = $this->getBoard($boardId);
+		} catch (Exception $e) {
+			return;
+		}
+
 		if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
 			$notification = $this->generateBoardShared($board, $acl->getParticipant());
-			$this->notificationManager->notify($notification);
+			if ($markAsRead) {
+				$this->notificationManager->markProcessed($notification);
+			} else {
+				$notification->setDateTime(new DateTime());
+				$this->notificationManager->notify($notification);
+			}
 		}
 		if ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
 			$group = $this->groupManager->get($acl->getParticipant());
+			if ($group === null) {
+				return;
+			}
 			foreach ($group->getUsers() as $user) {
+				if ($user->getUID() === $this->currentUser) {
+					continue;
+				}
 				$notification = $this->generateBoardShared($board, $user->getUID());
-				$this->notificationManager->notify($notification);
+				if ($markAsRead) {
+					$this->notificationManager->markProcessed($notification);
+				} else {
+					$notification->setDateTime(new DateTime());
+					$this->notificationManager->notify($notification);
+				}
 			}
 		}
 	}
 
-	public function sendMention(IComment $comment) {
+	public function sendMention(IComment $comment): void {
 		foreach ($comment->getMentions() as $mention) {
 			$card = $this->cardMapper->find($comment->getObjectId());
 			$boardId = $this->cardMapper->findBoardId($card->getId());
@@ -194,27 +233,22 @@ class NotificationHelper {
 	}
 
 	/**
-	 * @param $boardId
-	 * @return Board
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws DoesNotExistException
+	 * @throws MultipleObjectsReturnedException
 	 */
-	private function getBoard($boardId, bool $withLabels = false, bool $withAcl = false) {
+	private function getBoard(int $boardId, bool $withLabels = false, bool $withAcl = false): Board {
 		if (!array_key_exists($boardId, $this->boards)) {
 			$this->boards[$boardId] = $this->boardMapper->find($boardId, $withLabels, $withAcl);
 		}
 		return $this->boards[$boardId];
 	}
-
-	/**
-	 * @param Board $board
-	 */
-	private function generateBoardShared($board, $userId) {
+	
+	private function generateBoardShared(Board $board, string $userId): INotification {
 		$notification = $this->notificationManager->createNotification();
 		$notification
 			->setApp('deck')
-			->setUser((string) $userId)
-			->setDateTime(new DateTime())
-			->setObject('board', $board->getId())
+			->setUser($userId)
+			->setObject('board', (string)$board->getId())
 			->setSubject('board-shared', [$board->getTitle(), $this->currentUser]);
 		return $notification;
 	}
