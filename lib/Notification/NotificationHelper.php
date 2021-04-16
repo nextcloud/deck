@@ -202,6 +202,9 @@ class NotificationHelper {
 				return;
 			}
 			foreach ($group->getUsers() as $user) {
+				if ($user->getUID() === $this->currentUser) {
+					continue;
+				}
 				$notification = $this->generateBoardShared($board, $user->getUID());
 				if ($markAsRead) {
 					$this->notificationManager->markProcessed($notification);
