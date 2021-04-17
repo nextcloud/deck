@@ -5,7 +5,6 @@ OC.L10N.register(
     "Personal" : "პირადი",
     "The card \"%s\" on \"%s\" has reached its due date." : "ბარათმა \"%s\" \"%s\"-ზე მიაღწია დანიშნულ დროს.",
     "The board \"%s\" has been shared with you by %s." : "დაფა \"%s\" თქვენთან გაზიარდა %s-ისთვის.",
-    "{user} has shared the board %s with you." : "{user} მომხმარებელმა თქვენთან გააზიარა დაფა %s.",
     "Finished" : "დასრულდა",
     "To review" : "მიმოხილვისთვის",
     "Action needed" : "საჭიროა ქმედება",

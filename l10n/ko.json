@@ -4,7 +4,6 @@
     "Personal" : "개인",
     "The card \"%s\" on \"%s\" has reached its due date." : "카드 \"%s\"(\"%s\"에 있음)의 만료 날짜가 다가왔습니다.",
     "The board \"%s\" has been shared with you by %s." : "\"%s\" 게시판을 %s 님이 공유했습니다.",
-    "{user} has shared the board %s with you." : "{user} 님이 %s 게시판을 공유했습니다.",
     "Finished" : "완료됨",
     "To review" : "리뷰할 항목",
     "Action needed" : "동작 필요",

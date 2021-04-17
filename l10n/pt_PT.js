@@ -5,7 +5,6 @@ OC.L10N.register(
     "Personal" : "Pessoal",
     "The card \"%s\" on \"%s\" has reached its due date." : "O cartão \"%s\" em \"%s\" chegou a sua data de vencimento",
     "The board \"%s\" has been shared with you by %s." : "O quadro \"%s\" foi partilhado consigo por %s.",
-    "{user} has shared the board %s with you." : "{user} partilhou o quadro %s consigo.",
     "Finished" : "Terminado",
     "To review" : "A rever",
     "Action needed" : "Acção necessária",
