@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
@@ -18,14 +18,14 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Setup PHP
-      uses: shivammathur/setup-php@v1
+      uses: shivammathur/setup-php@v2
       with:
         php-version: '7.4'
         tools: composer
     - name: install dependencies
       run: |
-        wget https://github.com/ChristophWurst/krankerl/releases/download/v0.12.2/krankerl_0.12.2_amd64.deb
-        sudo dpkg -i krankerl_0.12.2_amd64.deb
+        wget https://github.com/ChristophWurst/krankerl/releases/download/v0.13.0/krankerl_0.13.0_amd64.deb
+        sudo dpkg -i krankerl_0.13.0_amd64.deb
     - name: package
       run: |
         uname -a
