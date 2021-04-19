@@ -415,6 +415,7 @@ export default new Vuex.Store({
 			params.append('format', 'json')
 			params.append('perPage', 20)
 			params.append('itemType', [0, 1, 4, 7])
+			params.append('lookup', false)
 
 			const response = await axios.get(generateOcsUrl('apps/files_sharing/api/v1') + 'sharees', { params })
 			commit('setSharees', response.data.ocs.data)
