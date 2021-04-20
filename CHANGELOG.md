@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.7
+
+### Fixed
+
+* [#2966](https://github.com/nextcloud/deck/pull/2966) Fix navigating to board details
+* [#2985](https://github.com/nextcloud/deck/pull/2985) Fix codemirror description width
+* [#2993](https://github.com/nextcloud/deck/pull/2993) Remove notification on unshare and add type hints
+* [#3007](https://github.com/nextcloud/deck/pull/3007) Only import debounce
+* [#3009](https://github.com/nextcloud/deck/pull/3009) Do not query the lookupserver when looking for sharees
+
+
 ## 1.2.6 - 2021-04-07
 
 ### Fixed
