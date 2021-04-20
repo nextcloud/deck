@@ -130,7 +130,8 @@ class NotificationHelperTest extends \Test\TestCase {
 		$card = Card::fromParams([
 			'notified' => false,
 			'id' => 123,
-			'title' => 'MyCardTitle'
+			'title' => 'MyCardTitle',
+			'duedate' => '2020-12-24'
 		]);
 		$this->cardMapper->expects($this->once())
 			->method('findBoardId')
@@ -225,7 +226,8 @@ class NotificationHelperTest extends \Test\TestCase {
 		$card = Card::fromParams([
 			'notified' => false,
 			'id' => 123,
-			'title' => 'MyCardTitle'
+			'title' => 'MyCardTitle',
+			'duedate' => '2020-12-24'
 		]);
 		$card->setAssignedUsers([
 			new User($users[0])
@@ -323,7 +325,8 @@ class NotificationHelperTest extends \Test\TestCase {
 		$card = Card::fromParams([
 			'notified' => false,
 			'id' => 123,
-			'title' => 'MyCardTitle'
+			'title' => 'MyCardTitle',
+			'duedate' => '2020-12-24'
 		]);
 		$card->setAssignedUsers([
 			new User($users[0])
@@ -470,7 +473,7 @@ class NotificationHelperTest extends \Test\TestCase {
 			->with(123)
 			->willReturn($board);
 		$user = $this->createMock(IUser::class);
-		$user->expects($this->once())
+		$user->expects($this->any())
 			->method('getUID')
 			->willReturn('userA');
 		$group = $this->createMock(IGroup::class);
