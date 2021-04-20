@@ -232,6 +232,7 @@ OC.L10N.register(
     "Edit board" : "Editatu mahaia",
     "Clone board" : "Klonatu taula",
     "Archive board" : "Artxibatu taula",
+    "All cards" : "Txartel guztiak",
     "No notifications" : "Jakinarazpenik ez",
     "Delete board" : "Ezabatu taula",
     "Board {0} deleted" : "{0} mahaia ezabatu da",

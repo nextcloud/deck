@@ -271,6 +271,7 @@ OC.L10N.register(
     "Link to a board" : "Povezava do zbirke",
     "Link to a card" : "Povezava do naloge",
     "Create a card" : "Ustvari nalogo",
+    "Message from {author} in {conversationName}" : "{author} objavi sporočilo v pogovoru {conversationName}",
     "Something went wrong" : "Prišlo je do napake ...",
     "Failed to upload {name}" : "Pošiljanje {name} je spodletelo",
     "Maximum file size of {size} exceeded" : "Omejitev velikosti datoteke {size} je prekoračena.",
