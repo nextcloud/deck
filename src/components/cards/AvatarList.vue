@@ -35,14 +35,14 @@
 				<Avatar v-if="user.type === 1"
 					:user="user.participant.uid"
 					:display-name="user.participant.displayname"
-					:tooltip-message="user.participant.displayname + ' ' + t('deck', '(group)')"
+					:tooltip-message="user.participant.displayname + ' ' + t('deck', '(Group)')"
 					:is-no-user="true"
 					:disable-="true"
 					:size="32" />
 				<Avatar v-if="user.type === 7"
 					:user="user.participant.uid"
 					:display-name="user.participant.displayname"
-					:tooltip-message="user.participant.displayname + ' ' + t('deck', '(circle)')"
+					:tooltip-message="user.participant.displayname + ' ' + t('deck', '(Circle)')"
 					:is-no-user="true"
 					:disable-="true"
 					:size="32" />
