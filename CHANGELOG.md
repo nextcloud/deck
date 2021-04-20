@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.4.1 - 2021-04-20
+
+### Fixed
+
+* [#2984](https://github.com/nextcloud/deck/pull/2984) Fix codemirror description width
+* [#2990](https://github.com/nextcloud/deck/pull/2990) Fix unified comments search with postgres
+* [#2994](https://github.com/nextcloud/deck/pull/2994) Remove notification on unshare and add type hints
+* [#3006](https://github.com/nextcloud/deck/pull/3006) Only import debounce
+* [#3008](https://github.com/nextcloud/deck/pull/3008) Do not query the lookupserver when looking for sharees
+
+
 ## 1.4.0 - 2021-04-13
 
 ### Added
