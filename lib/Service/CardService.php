@@ -240,6 +240,7 @@ class CardService {
 		$card->setDeletedAt(time());
 		$this->cardMapper->update($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_DELETE);
+		$this->notificationHelper->markDuedateAsRead($card);
 		$this->changeHelper->cardChanged($card->getId(), false);
 
 		$this->eventDispatcher->dispatch(
@@ -322,6 +323,15 @@ class CardService {
 		$card->setOrder($order);
 		$card->setOwner($owner);
 		$card->setDuedate($duedate);
+		$resetDuedateNotification = false;
+		if (
+			$card->getDuedate() === null ||
+			(new \DateTime($card->getDuedate())) != (new \DateTime($changes->getBefore()->getDuedate()))
+		) {
+			$card->setNotified(false);
+			$resetDuedateNotification = true;
+		}
+
 		if ($deletedAt !== null) {
 			$card->setDeletedAt($deletedAt);
 		}
@@ -341,6 +351,9 @@ class CardService {
 
 
 		$card = $this->cardMapper->update($card);
+		if ($resetDuedateNotification) {
+			$this->notificationHelper->markDuedateAsRead($card);
+		}
 		$this->changeHelper->cardChanged($card->getId(), true);
 
 		$this->eventDispatcher->dispatch(
