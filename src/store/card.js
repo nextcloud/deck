@@ -92,7 +92,7 @@ export default {
 
 					const filterOutQuotes = (q) => {
 						if (q[0] === '"' && q[q.length - 1] === '"') {
-							return q.substr(1, -1)
+							return q.substr(1, q.length - 2)
 						}
 						return q
 					}
