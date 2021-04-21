@@ -383,6 +383,10 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		foreach ($query->getDuedate() as $duedate) {
 			$dueDateColumn = $this->databaseType === 'sqlite3' ? $qb->createFunction('DATETIME(`c`.`duedate`)') : 'c.duedate';
 			$date = $duedate->getValue();
+			if ($date === "") {
+				$qb->andWhere($qb->expr()->isNotNull('c.duedate'));
+				continue;
+			}
 			$supportedFilters = ['overdue', 'today', 'week', 'month', 'none'];
 			if (in_array($date, $supportedFilters, true)) {
 				$currentDate = new DateTime();
@@ -430,6 +434,10 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			foreach ($query->getAssigned() as $index => $assignment) {
 				$qb->innerJoin('c', 'deck_assigned_users', 'au' . $index, $qb->expr()->eq('c.id', 'au' . $index . '.card_id'));
 				$assignedQueryValue = $assignment->getValue();
+				if ($assignedQueryValue === "") {
+					$qb->andWhere($qb->expr()->isNotNull('au' . $index . '.participant'));
+					continue;
+				}
 				$searchUsers = $this->userManager->searchDisplayName($assignment->getValue());
 				$users = array_filter($searchUsers, function (IUser $user) use ($assignedQueryValue) {
 					return (mb_strtolower($user->getDisplayName()) === mb_strtolower($assignedQueryValue) || $user->getUID() === $assignedQueryValue);
