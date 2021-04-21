@@ -224,7 +224,6 @@ OC.L10N.register(
     "Write a description …" : "Vpišite opis ...",
     "Choose attachment" : "Izbor priloge",
     "(group)" : "(skupina)",
-    "(circle)" : "(krog)",
     "Assign to me" : "Nalogo dodeli meni",
     "Unassign myself" : "Odstrani me z naloge",
     "Move card" : "Premakni nalogo",

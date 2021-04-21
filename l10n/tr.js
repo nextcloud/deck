@@ -224,7 +224,6 @@ OC.L10N.register(
     "Write a description …" : "Bir açıklama yazın …",
     "Choose attachment" : "Ek dosyayı seçin",
     "(group)" : "(grup)",
-    "(circle)" : "(çevre)",
     "Assign to me" : "Bana ata",
     "Unassign myself" : "Kendi atamamı kaldır",
     "Move card" : "Kartı taşı",

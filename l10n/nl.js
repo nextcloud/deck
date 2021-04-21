@@ -218,7 +218,6 @@ OC.L10N.register(
     "Write a description …" : "Voeg een beschrijving toe ...",
     "Choose attachment" : "Kies bijlage",
     "(group)" : "(groep)",
-    "(circle)" : "(kring)",
     "Assign to me" : "Aan mij toewijzen",
     "Unassign myself" : "Eigen toewijzing opheffen",
     "Move card" : "Verplaats kaart",

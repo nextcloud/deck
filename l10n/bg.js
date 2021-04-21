@@ -211,7 +211,6 @@ OC.L10N.register(
     "Write a description …" : "Напишете описание ...",
     "Choose attachment" : "Избор на прикачен файл",
     "(group)" : "(група)",
-    "(circle)" : "(кръг)",
     "Assign to me" : "Зачисляване към мен",
     "Unassign myself" : "Отмяна на зачисляването към мен",
     "Move card" : "Преместване на карта",

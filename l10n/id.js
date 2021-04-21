@@ -182,7 +182,6 @@ OC.L10N.register(
     "Add Attachment" : "Tambah Lampiran",
     "Choose attachment" : "Pilih lampiran",
     "(group)" : "(grup)",
-    "(circle)" : "(lingkaran)",
     "Assign to me" : "Tugaskan saya",
     "Move card" : "Pindahkan kartu",
     "Unarchive card" : "Memulihkan kartu",

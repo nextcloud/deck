@@ -218,7 +218,6 @@ OC.L10N.register(
     "Write a description …" : "Добавьте описание...",
     "Choose attachment" : "Выберите вложение",
     "(group)" : "(группа)",
-    "(circle)" : "(круг)",
     "Assign to me" : "Назначить себе",
     "Unassign myself" : "Отказаться от назначения",
     "Move card" : "Переместить карточку",

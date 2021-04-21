@@ -218,7 +218,6 @@ OC.L10N.register(
     "Write a description …" : "Napišite opis...",
     "Choose attachment" : "Odaberi privitak",
     "(group)" : "(grupa)",
-    "(circle)" : "(krug)",
     "Assign to me" : "Dodijeli meni",
     "Unassign myself" : "Ukloni sebe",
     "Move card" : "Premjesti karticu",

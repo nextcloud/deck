@@ -224,7 +224,6 @@ OC.L10N.register(
     "Write a description …" : "Zadejte popis…",
     "Choose attachment" : "Zvolte přílohu",
     "(group)" : "(skupina)",
-    "(circle)" : "(okruh)",
     "Assign to me" : "Přiřadit mě",
     "Unassign myself" : "Zrušit přiřazení sobě",
     "Move card" : "Přesunout kartu",

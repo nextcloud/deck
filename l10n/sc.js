@@ -218,7 +218,6 @@ OC.L10N.register(
     "Write a description …" : "Iscrie una descritzione ...",
     "Choose attachment" : "Sèbera un'alligongiadu",
     "(group)" : "(grupu)",
-    "(circle)" : "(tropa)",
     "Assign to me" : "Assigna a mie",
     "Unassign myself" : "Annulla s'assignatzione a mie",
     "Move card" : "Tràmuda ischeda",

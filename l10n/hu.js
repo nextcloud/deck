@@ -220,7 +220,6 @@ OC.L10N.register(
     "Write a description …" : "Leírás megadása",
     "Choose attachment" : "Válasszon mellékletet",
     "(group)" : "(csoport)",
-    "(circle)" : "(kör)",
     "Assign to me" : "Hozzám rendelés",
     "Unassign myself" : "Saját magam hozzárendelésének eltávolítása",
     "Move card" : "Kártya áthelyezése",

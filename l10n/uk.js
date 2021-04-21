@@ -122,7 +122,6 @@ OC.L10N.register(
     "Add Attachment" : "Долучити вкладення",
     "Choose attachment" : "Вибрати вкладення",
     "(group)" : "(група)",
-    "(circle)" : "(коло)",
     "Assign to me" : "Призначити мені",
     "Move card" : "Пересунути картку",
     "Unarchive card" : "Розархівувати картку",

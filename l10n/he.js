@@ -211,7 +211,6 @@ OC.L10N.register(
     "Write a description …" : "כתוב תיאור ...",
     "Choose attachment" : "בחירת קובץ מצורף",
     "(group)" : "(קבוצה)",
-    "(circle)" : "(מעגל)",
     "Assign to me" : "הקצאה אלי",
     "Unassign myself" : "לבטל את הקצאת עצמי",
     "Move card" : "העברת כרטיס",

@@ -117,7 +117,6 @@ OC.L10N.register(
     "Add Attachment" : "افزودن پیوست",
     "Choose attachment" : "انتخاب پیوست",
     "(group)" : "(گروه)",
-    "(circle)" : "(حلقه)",
     "Move card" : "انتقال کارت",
     "Archive card" : "کارت بایگانی",
     "Delete card" : "حذف کارت",

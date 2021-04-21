@@ -200,7 +200,6 @@ OC.L10N.register(
     "Add Attachment" : "Додај прилог",
     "Choose attachment" : "Одабери прилог",
     "(group)" : "(група)",
-    "(circle)" : "(круг)",
     "Assign to me" : "Додели мени",
     "Unassign myself" : "Склони са мене",
     "Move card" : "Премести картицу",

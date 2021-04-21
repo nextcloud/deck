@@ -202,7 +202,6 @@ OC.L10N.register(
     "Write a description …" : "Napíšte popis...",
     "Choose attachment" : "Vybrať prílohu",
     "(group)" : "(skupina)",
-    "(circle)" : "(okruh)",
     "Assign to me" : "Priradiť mne",
     "Unassign myself" : "Zrušiť priradenie mne",
     "Move card" : "Presunúť kartu",

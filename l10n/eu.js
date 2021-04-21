@@ -213,7 +213,6 @@ OC.L10N.register(
     "Write a description …" : "Idatzi deskribapen bat ...",
     "Choose attachment" : "Aukeratu eranskina",
     "(group)" : "(taldea)",
-    "(circle)" : "(zirkulua)",
     "Assign to me" : "Esleitu niri",
     "Unassign myself" : "Niri esleitzeari utzi",
     "Move card" : "Mugitu txartela",

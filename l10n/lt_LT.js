@@ -197,7 +197,6 @@ OC.L10N.register(
     "Add Attachment" : "Pridėti priedą",
     "Choose attachment" : "Pasirinkite priedą",
     "(group)" : "(grupė)",
-    "(circle)" : "(ratas)",
     "Assign to me" : "Priskirti sau",
     "Move card" : "Perkelti kortelę",
     "Unarchive card" : "Išarchyvuoti kortelę",

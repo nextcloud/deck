@@ -224,7 +224,6 @@ OC.L10N.register(
     "Write a description …" : "編寫描述……",
     "Choose attachment" : "選擇附件",
     "(group)" : "（群組）",
-    "(circle)" : "（小圈圈）",
     "Assign to me" : "分配給我",
     "Unassign myself" : "取消分配給我",
     "Move card" : "移動卡片",

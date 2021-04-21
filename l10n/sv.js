@@ -202,7 +202,6 @@ OC.L10N.register(
     "Write a description …" : "Ange en beskrivning ...",
     "Choose attachment" : "Välj bilaga",
     "(group)" : " (grupp)",
-    "(circle)" : "(cirkel)",
     "Assign to me" : "Tilldela till mig",
     "Unassign myself" : "Ta bort från mig själv",
     "Move card" : "Flytta kort",

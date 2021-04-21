@@ -220,7 +220,6 @@ OC.L10N.register(
     "Write a description …" : "説明を書く…",
     "Choose attachment" : "添付ファイルを選択",
     "(group)" : "(グループ)",
-    "(circle)" : "(サークル)",
     "Assign to me" : "自分に割り当てる",
     "Unassign myself" : "自分への割り当てを解除",
     "Move card" : "カードの移動",

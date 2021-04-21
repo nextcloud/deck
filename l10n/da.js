@@ -174,7 +174,6 @@ OC.L10N.register(
     "Write a description …" : "Tilføj en beskrivelse...",
     "Choose attachment" : "Vælg en vedhæftning",
     "(group)" : "(gruppe)",
-    "(circle)" : "(cirkel)",
     "Assign to me" : "Tildel til mig",
     "Unassign myself" : "Fjern mig selv",
     "Move card" : "Flyt kort",

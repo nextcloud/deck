@@ -223,7 +223,6 @@ OC.L10N.register(
     "Write a description …" : "كتابة وصف...",
     "Choose attachment" : "اختيار مرفق",
     "(group)" : "(مجموعة)",
-    "(circle)" : "(دائرة)",
     "Assign to me" : "ينسب لي",
     "Unassign myself" : "إلغاء تعييني ",
     "Move card" : "حرك البطاقة",

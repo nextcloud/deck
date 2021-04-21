@@ -220,7 +220,6 @@ OC.L10N.register(
     "Write a description …" : "Escriba unha descrición…",
     "Choose attachment" : "Escoller o anexo",
     "(group)" : "(grupo)",
-    "(circle)" : "(círculo)",
     "Assign to me" : "Asignarme",
     "Unassign myself" : "Desasignarme",
     "Move card" : "Mover a tarxeta",
