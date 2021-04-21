@@ -97,19 +97,34 @@ export default {
 						return q
 					}
 					for (const match of matches) {
-						let [filter, query] = match.indexOf(':') !== -1 ? match.split(/:(.+)/) : [null, match]
+						let [filter, query] = match.indexOf(':') !== -1 ? match.split(/:(.*)/) : [null, match]
+						const isEmptyQuery = typeof query === 'undefined' || filterOutQuotes(query) === ''
 
 						if (filter === 'title') {
+							if (isEmptyQuery) {
+								continue
+							}
 							hasMatch = hasMatch && card.title.toLowerCase().includes(filterOutQuotes(query).toLowerCase())
 						} else if (filter === 'description') {
+							if (isEmptyQuery) {
+								hasMatch = hasMatch && !!card.description
+								continue
+							}
 							hasMatch = hasMatch && card.description.toLowerCase().includes(filterOutQuotes(query).toLowerCase())
 						} else if (filter === 'list') {
-							const stack = this.getters.stackById(card.stackId)
+							if (isEmptyQuery) {
+								continue
+							}
+							const stack = getters.stackById(card.stackId)
 							if (!stack) {
 								return false
 							}
 							hasMatch = hasMatch && stack.title.toLowerCase().includes(filterOutQuotes(query).toLowerCase())
 						} else if (filter === 'tag') {
+							if (isEmptyQuery) {
+								hasMatch = hasMatch && card.labels.length > 0
+								continue
+							}
 							hasMatch = hasMatch && card.labels.findIndex((label) => label.title.toLowerCase().includes(filterOutQuotes(query).toLowerCase())) !== -1
 						} else if (filter === 'date') {
 							const datediffHour = ((new Date(card.duedate) - new Date()) / 3600 / 1000)
@@ -158,6 +173,10 @@ export default {
 							}
 
 						} else if (filter === 'assigned') {
+							if (isEmptyQuery) {
+								hasMatch = hasMatch && card.assignedUsers.length > 0
+								continue
+							}
 							hasMatch = hasMatch && card.assignedUsers.findIndex((assignment) => {
 								return assignment.participant.primaryKey.toLowerCase() === filterOutQuotes(query).toLowerCase()
 									|| assignment.participant.displayname.toLowerCase() === filterOutQuotes(query).toLowerCase()
