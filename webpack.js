@@ -16,10 +16,6 @@ const config = {
 	},
 	resolve: {
 		extensions: ['*', '.js', '.vue', '.json'],
-		modules: [
-			path.resolve(__dirname, 'node_modules'),
-			'node_modules',
-		],
 	},
 	stats: {
 		context: path.resolve(__dirname, 'src'),
