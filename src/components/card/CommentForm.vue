@@ -178,6 +178,7 @@ export default {
 
 	.comment-form__contenteditable {
 		word-break: break-word;
+		border-radius: var(--border-radius-large)
 	}
 
 	.atwho-wrap {

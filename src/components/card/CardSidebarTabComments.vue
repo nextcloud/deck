@@ -7,7 +7,11 @@
 			</span>
 		</div>
 
-		<CommentItem v-if="replyTo" :comment="replyTo" :reply="true" />
+		<CommentItem v-if="replyTo"
+			:comment="replyTo"
+			:reply="true"
+			:preview="true"
+			@cancel="cancelReply" />
 		<CommentForm v-model="newComment" @submit="createComment" />
 
 		<ul v-if="getCommentsForCard(card.id).length > 0" id="commentsFeed">
@@ -36,6 +40,7 @@ import CommentItem from './CommentItem'
 import CommentForm from './CommentForm'
 import InfiniteLoading from 'vue-infinite-loading'
 import { getCurrentUser } from '@nextcloud/auth'
+
 export default {
 	name: 'CardSidebarTabComments',
 	components: {
@@ -101,6 +106,7 @@ export default {
 			}
 		},
 		async loadComments() {
+			this.$store.dispatch('setReplyTo', null)
 			this.error = null
 			this.isLoading = true
 			try {
@@ -129,6 +135,9 @@ export default {
 			this.isLoading = true
 			await this.$store.dispatch('fetchMore', { cardId: this.card.id })
 			this.isLoading = false
+		},
+		cancelReply() {
+			this.$store.dispatch('setReplyTo', null)
 		},
 	},
 }
