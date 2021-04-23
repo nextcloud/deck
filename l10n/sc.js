@@ -158,7 +158,7 @@ OC.L10N.register(
     "No participants found" : "Perunu partetzipante agatadu",
     "Board owner" : "Mere lavagna",
     "(Group)" : "(Grupu)",
-    "(Circle)" : "(Tropa)",
+    "(Circle)" : "(Giru)",
     "Can edit" : "Faghet a modificare",
     "Can share" : "Faghet a cumpartzire",
     "Can manage" : "Faghet a gestire",
