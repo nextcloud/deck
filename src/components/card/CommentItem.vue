@@ -1,10 +1,22 @@
 <template>
-	<div v-if="reply" class="reply">
-		<span class="reply--hint">{{ t('deck', 'In reply to') }} <UserBubble :user="comment.actorId" :display-name="comment.actorDisplayName" /></span>
-		<RichText class="comment--content"
-			:text="richText(comment)"
-			:arguments="richArgs(comment)"
-			:autolink="true" />
+	<div v-if="reply" class="reply" :class="{ 'reply--preview': preview }">
+		<div class="reply--wrapper">
+			<div class="reply--header">
+				<div class="reply--hint">
+					{{ t('deck', 'In reply to') }}
+					<UserBubble :user="comment.actorId" :display-name="comment.actorDisplayName" />
+				</div>
+				<Actions v-if="preview" class="reply--cancel">
+					<ActionButton icon="icon-close" @click="$emit('cancel')">
+						{{ t('deck', 'Cancel reply') }}
+					</ActionButton>
+				</Actions>
+			</div>
+			<RichText class="comment--content"
+				:text="richText(comment)"
+				:arguments="richArgs(comment)"
+				:autolink="true" />
+		</div>
 	</div>
 	<li v-else class="comment">
 		<template>
@@ -14,13 +26,19 @@
 					{{ comment.actorDisplayName }}
 				</span>
 				<Actions v-show="!edit" :force-menu="true">
-					<ActionButton icon="icon-reply" @click="replyTo()">
+					<ActionButton icon="icon-reply" :close-after-click="true" @click="replyTo()">
 						{{ t('deck', 'Reply') }}
 					</ActionButton>
-					<ActionButton v-if="canEdit" icon="icon-rename" @click="showUpdateForm()">
+					<ActionButton v-if="canEdit"
+						icon="icon-rename"
+						:close-after-click="true"
+						@click="showUpdateForm()">
 						{{ t('deck', 'Update') }}
 					</ActionButton>
-					<ActionButton v-if="canEdit" icon="icon-delete" @click="deleteComment()">
+					<ActionButton v-if="canEdit"
+						icon="icon-delete"
+						:close-after-click="true"
+						@click="deleteComment()">
 						{{ t('deck', 'Delete') }}
 					</ActionButton>
 				</Actions>
@@ -83,6 +101,10 @@ export default {
 			default: undefined,
 		},
 		reply: {
+			type: Boolean,
+			default: false,
+		},
+		preview: {
 			type: Boolean,
 			default: false,
 		},
@@ -175,20 +197,41 @@ export default {
 	@import '../../css/comments';
 
 	.reply {
-		border-left: 3px solid var(--color-primary-element);
-		padding-left: 5px;
-		margin-left: 2px;
-		margin-bottom: 5px;
+		margin: 0 0 0 44px;
+
+		&.reply--preview {
+			margin: 4px 0;
+			padding: 8px;
+			background-color: var(--color-background-hover);
+			border-radius: var(--border-radius-large);
+
+			.reply--wrapper {
+				margin: 8px;
+			}
+
+			.reply--cancel {
+				margin-right: -12px;
+				margin-top: -12px;
+			}
+		}
+
+		.reply--wrapper {
+			border-left: 4px solid var(--color-border-dark);
+			padding-left: 8px;
+		}
 
 		&::v-deep .rich-text--wrapper {
 			margin-top: -3px;
-			color: var(--color-text-light);
+			color: var(--color-text-lighter);
+		}
+
+		.reply--header {
+			display: flex;
 		}
 
 		.reply--hint {
-			font-size: 0.9em;
 			color: var(--color-text-lighter);
-			vertical-align: top;
+			flex-grow: 1;
 		}
 
 		.comment--content {
