@@ -23,8 +23,8 @@
 		</ul>
 		<div v-else-if="isLoading" class="icon icon-loading" />
 		<div v-else class="emptycontent">
-			<div class="icon-comment" />
-			<p>{{ t('deck', 'No comments yet. Begin the discussion!') }}</p>
+			<div :class="{ 'icon-comment': !error, 'icon-error': error }" />
+			<p>{{ error || t('deck', 'No comments yet. Begin the discussion!') }}</p>
 		</div>
 	</div>
 </template>
@@ -60,6 +60,7 @@ export default {
 			newComment: '',
 			isLoading: false,
 			currentUser: getCurrentUser(),
+			error: null,
 		}
 	},
 	computed: {
@@ -85,19 +86,33 @@ export default {
 	},
 	methods: {
 		async infiniteHandler($state) {
-			await this.loadMore()
-			if (this.hasMoreComments(this.card.id)) {
-				$state.loaded()
-			} else {
+			this.error = null
+			try {
+				await this.loadMore()
+				if (this.hasMoreComments(this.card.id)) {
+					$state.loaded()
+				} else {
+					$state.complete()
+				}
+			} catch (e) {
+				console.error('Failed to fetch more comments during infinite loading', e)
+				this.error = t('deck', 'Failed to load comments')
 				$state.complete()
 			}
 		},
 		async loadComments() {
+			this.error = null
 			this.isLoading = true
-			await this.$store.dispatch('fetchComments', { cardId: this.card.id })
-			this.isLoading = false
-			if (this.card.commentsUnread > 0) {
-				await this.$store.dispatch('markCommentsAsRead', this.card.id)
+			try {
+				await this.$store.dispatch('fetchComments', { cardId: this.card.id })
+				this.isLoading = false
+				if (this.card.commentsUnread > 0) {
+					await this.$store.dispatch('markCommentsAsRead', this.card.id)
+				}
+			} catch (e) {
+				this.isLoading = false
+				console.error('Failed to fetch more comments during infinite loading', e)
+				this.error = t('deck', 'Failed to load comments')
 			}
 		},
 		async createComment(content) {
