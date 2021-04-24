@@ -23,6 +23,6 @@
 
 
 style('deck', 'globalstyles');
-script('deck', 'main');
+script('deck', 'deck-main');
 
 \OC::$server->getEventDispatcher()->dispatch('\OCP\Collaboration\Resources::loadAdditionalScripts');

@@ -207,7 +207,7 @@ class Application extends App implements IBootstrap {
 				// Talk integration has its own entrypoint which already includes collections handling
 				return;
 			}
-			Util::addScript('deck', 'collections');
+			Util::addScript('deck', 'deck-collections');
 		});
 	}
 }
