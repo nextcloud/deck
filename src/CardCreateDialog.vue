@@ -75,7 +75,7 @@
 					{{ t('deck', 'Creating the new card…') }}
 				</EmptyContent>
 				<EmptyContent v-else-if="created" icon="icon-checkmark">
-					{{ t('deck', '"{card}" was added to "{board}"', { card: pendingTitle, board: selectedBoard.title }) }}
+					{{ t('deck', 'Card "{card}" was added to "{board}"', { card: pendingTitle, board: selectedBoard.title }) }}
 					<template #desc>
 						<button class="primary" @click="openNewCard">
 							{{ t('deck', 'Open card') }}
