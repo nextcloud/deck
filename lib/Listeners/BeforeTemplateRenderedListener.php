@@ -51,11 +51,11 @@ class BeforeTemplateRenderedListener implements IEventListener {
 
 		$pathInfo = $this->request->getPathInfo();
 		if (strpos($pathInfo, '/apps/calendar') === 0) {
-			Util::addScript('deck', 'calendar');
+			Util::addScript('deck', 'deck-calendar');
 		}
 
 		if (strpos($pathInfo, '/call/') === 0 || strpos($pathInfo, '/apps/spreed') === 0) {
-			Util::addScript('deck', 'talk');
+			Util::addScript('deck', 'deck-talk');
 		}
 	}
 }

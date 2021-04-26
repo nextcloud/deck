@@ -1,4 +1,4 @@
-/*
+/**
  * @copyright Copyright (c) 2018 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
@@ -84,7 +84,7 @@ export default {
 		},
 		colorIsValid(hex) {
 
-			const re = new RegExp('[A-Fa-f0-9]{6}')
+			const re = /[A-Fa-f0-9]{6}/
 			if (re.test(hex)) {
 				return true
 			}

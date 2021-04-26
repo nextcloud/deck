@@ -29,7 +29,7 @@
 		:loading="loading"
 		@hide="() => {}"
 		@markDone="() => {}">
-		<template v-slot:default="{ item }">
+		<template #default="{ item }">
 			<a :key="item.id"
 				:href="cardLink(item)"
 				target="_blank"

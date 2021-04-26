@@ -28,11 +28,11 @@
 				:members="members"
 				name-key="uid"
 				:tab-select="true">
-				<template v-slot:item="s">
+				<template #item="s">
 					<Avatar class="atwho-li--avatar" :user="s.item.uid" :size="24" />
 					<span class="atwho-li--name" v-text="s.item.displayname" />
 				</template>
-				<template v-slot:embeddedItem="scope">
+				<template #embeddedItem="scope">
 					<span>
 						<UserBubble v-if="scope.current.uid"
 							:data-mention-id="scope.current.uid"

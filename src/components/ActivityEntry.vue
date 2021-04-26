@@ -79,7 +79,7 @@ export default {
 				parameters.after.name = moment(dateTime).format('L LTS')
 			}
 
-			Object.keys(parameters).map(function(key, index) {
+			Object.keys(parameters).forEach(function(key, index) {
 				const { type } = parameters[key]
 				switch (type) {
 				case 'highlight':

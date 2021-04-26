@@ -149,6 +149,9 @@ export default {
 	directives: {
 		ClickOutside,
 	},
+	inject: [
+		'boardApi',
+	],
 	props: {
 		board: {
 			type: Object,
@@ -303,9 +306,6 @@ export default {
 			this.updateDueSetting = null
 		},
 	},
-	inject: [
-		'boardApi',
-	],
 }
 </script>
 
