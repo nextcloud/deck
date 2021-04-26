@@ -72,7 +72,7 @@
 			</div>
 			<div v-else id="modal-inner">
 				<EmptyContent v-if="creating" icon="icon-loading">
-					{{ t('deck', 'Creating the new card…') }}
+					{{ t('deck', 'Creating the new card …') }}
 				</EmptyContent>
 				<EmptyContent v-else-if="created" icon="icon-checkmark">
 					{{ t('deck', 'Card "{card}" was added to "{board}"', { card: pendingTitle, board: selectedBoard.title }) }}
