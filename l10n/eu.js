@@ -110,7 +110,6 @@ OC.L10N.register(
     "Select a list" : "Hautatu zerrenda bat",
     "Card title" : "Txartelaren izenburua",
     "Cancel" : "Utzi",
-    "Creating the new card…" : "Txartel berria sortzen...",
     "Open card" : "Ireki txartela",
     "Close" : "Itxi",
     "Create card" : "Sortu txartela",

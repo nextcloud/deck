@@ -109,8 +109,6 @@ OC.L10N.register(
     "Select a list" : "Selecteer een lijst",
     "Card title" : "Kaarttitel",
     "Cancel" : "Annuleren",
-    "Creating the new card…" : "Aanmaken nieuwe kaart...",
-    "\"{card}\" was added to \"{board}\"" : "\"{card}\" is toegevoegd aan \"{board}\"",
     "Open card" : "Open kaard",
     "Close" : "Sluiten",
     "Create card" : "Aanmaken kaart",

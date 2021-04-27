@@ -115,8 +115,6 @@ OC.L10N.register(
     "Select a list" : "选择一个列表",
     "Card title" : "卡片标题",
     "Cancel" : "取消",
-    "Creating the new card…" : "正在创建新卡片…",
-    "\"{card}\" was added to \"{board}\"" : "卡片 \"{card}\" 被添加到看板 \"{board}\"",
     "Open card" : "打开卡片",
     "Close" : "关闭",
     "Create card" : "创建卡片",

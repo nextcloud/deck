@@ -109,8 +109,6 @@ OC.L10N.register(
     "Select a list" : "Seletziona un'elencu",
     "Card title" : "Tìtulu ischeda",
     "Cancel" : "Annulla",
-    "Creating the new card…" : "Creende un'ischeda noa...",
-    "\"{card}\" was added to \"{board}\"" : "\"{card}\" est istada agiunta a \"{board}\"",
     "Open card" : "Aberi ischeda",
     "Close" : "Serra",
     "Create card" : "Crea ischeda",

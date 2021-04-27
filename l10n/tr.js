@@ -115,8 +115,6 @@ OC.L10N.register(
     "Select a list" : "Bir liste seçin",
     "Card title" : "Kart başlığı",
     "Cancel" : "İptal",
-    "Creating the new card…" : "Yeni kart ekleniyor…",
-    "\"{card}\" was added to \"{board}\"" : "\"{card}\" kartı \"{board}\" panosuna eklendi",
     "Open card" : "Kartı aç",
     "Close" : "Kapat",
     "Create card" : "Kart ekle",

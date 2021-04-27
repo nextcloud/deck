@@ -109,8 +109,6 @@ OC.L10N.register(
     "Select a list" : "Избери листа",
     "Card title" : "Наслов на картицата",
     "Cancel" : "Откажи",
-    "Creating the new card…" : "Креирање нова картица...",
-    "\"{card}\" was added to \"{board}\"" : "\"{card}\" е додадена на \"{board}\"",
     "Open card" : "Отвори картица",
     "Close" : "Затвори",
     "Create card" : "Креирајте картица",

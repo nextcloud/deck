@@ -115,8 +115,6 @@ OC.L10N.register(
     "Select a list" : "Izbor seznama",
     "Card title" : "Naslov naloge",
     "Cancel" : "Prekliči",
-    "Creating the new card…" : "Poteka ustvarjanje nove naloge ...",
-    "\"{card}\" was added to \"{board}\"" : "Naloga »{card}« je dodana v zbirko »{board}«.",
     "Open card" : "Odpri nalogo",
     "Close" : "Zapri",
     "Create card" : "Ustvari nalogo",

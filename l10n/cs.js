@@ -115,8 +115,6 @@ OC.L10N.register(
     "Select a list" : "Vyberte sloupec",
     "Card title" : "Název karty",
     "Cancel" : "Storno",
-    "Creating the new card…" : "Vytváření nové karty…",
-    "\"{card}\" was added to \"{board}\"" : "„{card}“ bylo přidáno do „{board}“",
     "Open card" : "Otevřít kartu",
     "Close" : "Zavřít",
     "Create card" : "Vytvořit kartu",

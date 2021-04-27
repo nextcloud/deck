@@ -109,8 +109,6 @@ OC.L10N.register(
     "Select a list" : "Odaberi popis",
     "Card title" : "Naslov kartice",
     "Cancel" : "Odustani",
-    "Creating the new card…" : "Stvaranje nove kartice…",
-    "\"{card}\" was added to \"{board}\"" : "„{card}” je dodano na „{board}”",
     "Open card" : "Otvori karticu",
     "Close" : "Zatvori",
     "Create card" : "Stvori karticu",

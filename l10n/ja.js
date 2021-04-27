@@ -111,8 +111,6 @@ OC.L10N.register(
     "Select a list" : "リストを選択",
     "Card title" : "カードのタイトル",
     "Cancel" : "キャンセル",
-    "Creating the new card…" : "新しいカードを作成しています…",
-    "\"{card}\" was added to \"{board}\"" : "\"{board}\"に\"{card}\"を追加しました",
     "Open card" : "カードを開く",
     "Close" : "閉じる",
     "Create card" : "カードを作成",

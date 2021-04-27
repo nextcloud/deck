@@ -115,8 +115,6 @@ OC.L10N.register(
     "Select a list" : "اختر قائمة ",
     "Card title" : "عنوان البطاقة ",
     "Cancel" : "إلغاء",
-    "Creating the new card…" : "أنشى البطاقة الجديدة ",
-    "\"{card}\" was added to \"{board}\"" : "\"{بطاقة}\" تمت إضافتها في \"{اللوح}\"",
     "Open card" : "فتح البطاقة ",
     "Close" : "إغلاق",
     "Create card" : "أنشى بطاقة ",

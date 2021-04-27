@@ -111,8 +111,6 @@ OC.L10N.register(
     "Select a list" : "Válasszon listát",
     "Card title" : "Kártya címe",
     "Cancel" : "Mégse",
-    "Creating the new card…" : "Új kártya létrehozása",
-    "\"{card}\" was added to \"{board}\"" : "\"{card}\" hozzáadva ehhez: \"{board}\"",
     "Open card" : "Kártya megnyitása",
     "Close" : "Bezárás",
     "Create card" : "Kártya létrehozása",

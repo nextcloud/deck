@@ -115,8 +115,6 @@ OC.L10N.register(
     "Select a list" : "Выберите список",
     "Card title" : "Заголовок карточки",
     "Cancel" : "Отменить",
-    "Creating the new card…" : "Создание карточки…",
-    "\"{card}\" was added to \"{board}\"" : "«{card}» добавлена на доску «{board}»",
     "Open card" : "Открыть карточку",
     "Close" : "Закрыть",
     "Create card" : "Создать карточку",
