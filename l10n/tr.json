@@ -113,6 +113,8 @@
     "Select a list" : "Bir liste seçin",
     "Card title" : "Kart başlığı",
     "Cancel" : "İptal",
+    "Creating the new card …" : "Yeni kart ekleniyor …",
+    "Card \"{card}\" was added to \"{board}\"" : "\"{card}\" kartı \"{board}\" panosuna eklendi",
     "Open card" : "Kartı aç",
     "Close" : "Kapat",
     "Create card" : "Kart ekle",
