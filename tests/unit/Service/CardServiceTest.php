@@ -128,7 +128,7 @@ class CardServiceTest extends TestCase {
 		$this->userManager->expects($this->once())
 			->method('get')
 			->willReturn($user);
-		$this->commentsManager->expects($this->once())
+		$this->commentsManager->expects($this->any())
 			->method('getNumberOfCommentsForObject')
 			->willReturn(0);
 		$boardMock = $this->createMock(Board::class);
