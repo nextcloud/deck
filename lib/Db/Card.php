@@ -49,6 +49,7 @@ class Card extends RelationalEntity {
 	protected $notified = false;
 	protected $deletedAt = 0;
 	protected $commentsUnread = 0;
+	protected $commentsCount = 0;
 	
 	protected $relatedStack = null;
 	protected $relatedBoard = null;
@@ -75,6 +76,7 @@ class Card extends RelationalEntity {
 		$this->addRelation('attachmentCount');
 		$this->addRelation('participants');
 		$this->addRelation('commentsUnread');
+		$this->addRelation('commentsCount');
 		$this->addResolvable('owner');
 		
 		$this->addRelation('relatedStack');

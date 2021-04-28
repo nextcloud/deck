@@ -105,8 +105,10 @@ class CardService {
 		$card->setAttachmentCount($this->attachmentService->count($cardId));
 		$user = $this->userManager->get($this->currentUser);
 		$lastRead = $this->commentsManager->getReadMark('deckCard', (string)$card->getId(), $user);
-		$count = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId(), $lastRead);
-		$card->setCommentsUnread($count);
+		$countUnreadComments = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId(), $lastRead);
+		$countComments = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId());
+		$card->setCommentsUnread($countUnreadComments);
+		$card->setCommentsCount($countComments);
 		
 		$stack = $this->stackMapper->find($card->getStackId());
 		$board = $this->boardService->find($stack->getBoardId());
