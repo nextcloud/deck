@@ -222,6 +222,7 @@ OC.L10N.register(
     "Archive card" : "Artxibatu txartela",
     "Delete card" : "Ezabatu txartela",
     "Move card to another board" : "Mugitu txartela beste mahai batera",
+    "Card deleted" : "Txartela ezabatuta",
     "seconds ago" : "segundo lehenago",
     "All boards" : "Mahai guztiak",
     "Archived boards" : "Artxibatutako mahaiak",
