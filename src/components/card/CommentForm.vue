@@ -41,6 +41,7 @@
 					</span>
 				</template>
 				<div ref="contentEditable"
+					class="comment-form__contenteditable"
 					contenteditable
 					@keydown.enter="handleKeydown"
 					@paste="onPaste"
@@ -174,6 +175,11 @@ export default {
 
 <style scoped lang="scss">
 	@import '../../css/comments';
+
+	.comment-form__contenteditable {
+		word-break: break-word;
+		border-radius: var(--border-radius-large)
+	}
 
 	.atwho-wrap {
 		width: 100%;

@@ -7,7 +7,11 @@
 			</span>
 		</div>
 
-		<CommentItem v-if="replyTo" :comment="replyTo" :reply="true" />
+		<CommentItem v-if="replyTo"
+			:comment="replyTo"
+			:reply="true"
+			:preview="true"
+			@cancel="cancelReply" />
 		<CommentForm v-model="newComment" @submit="createComment" />
 
 		<ul v-if="getCommentsForCard(card.id).length > 0" id="commentsFeed">
@@ -23,8 +27,8 @@
 		</ul>
 		<div v-else-if="isLoading" class="icon icon-loading" />
 		<div v-else class="emptycontent">
-			<div class="icon-comment" />
-			<p>{{ t('deck', 'No comments yet. Begin the discussion!') }}</p>
+			<div :class="{ 'icon-comment': !error, 'icon-error': error }" />
+			<p>{{ error || t('deck', 'No comments yet. Begin the discussion!') }}</p>
 		</div>
 	</div>
 </template>
@@ -36,6 +40,7 @@ import CommentItem from './CommentItem'
 import CommentForm from './CommentForm'
 import InfiniteLoading from 'vue-infinite-loading'
 import { getCurrentUser } from '@nextcloud/auth'
+
 export default {
 	name: 'CardSidebarTabComments',
 	components: {
@@ -60,6 +65,7 @@ export default {
 			newComment: '',
 			isLoading: false,
 			currentUser: getCurrentUser(),
+			error: null,
 		}
 	},
 	computed: {
@@ -85,19 +91,34 @@ export default {
 	},
 	methods: {
 		async infiniteHandler($state) {
-			await this.loadMore()
-			if (this.hasMoreComments(this.card.id)) {
-				$state.loaded()
-			} else {
+			this.error = null
+			try {
+				await this.loadMore()
+				if (this.hasMoreComments(this.card.id)) {
+					$state.loaded()
+				} else {
+					$state.complete()
+				}
+			} catch (e) {
+				console.error('Failed to fetch more comments during infinite loading', e)
+				this.error = t('deck', 'Failed to load comments')
 				$state.complete()
 			}
 		},
 		async loadComments() {
+			this.$store.dispatch('setReplyTo', null)
+			this.error = null
 			this.isLoading = true
-			await this.$store.dispatch('fetchComments', { cardId: this.card.id })
-			this.isLoading = false
-			if (this.card.commentsUnread > 0) {
-				await this.$store.dispatch('markCommentsAsRead', this.card.id)
+			try {
+				await this.$store.dispatch('fetchComments', { cardId: this.card.id })
+				this.isLoading = false
+				if (this.card.commentsUnread > 0) {
+					await this.$store.dispatch('markCommentsAsRead', this.card.id)
+				}
+			} catch (e) {
+				this.isLoading = false
+				console.error('Failed to fetch more comments during infinite loading', e)
+				this.error = t('deck', 'Failed to load comments')
 			}
 		},
 		async createComment(content) {
@@ -114,6 +135,9 @@ export default {
 			this.isLoading = true
 			await this.$store.dispatch('fetchMore', { cardId: this.card.id })
 			this.isLoading = false
+		},
+		cancelReply() {
+			this.$store.dispatch('setReplyTo', null)
 		},
 	},
 }

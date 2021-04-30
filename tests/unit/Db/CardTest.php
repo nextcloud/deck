@@ -83,6 +83,7 @@ class CardTest extends TestCase {
 			'assignedUsers' => null,
 			'deletedAt' => 0,
 			'commentsUnread' => 0,
+			'commentsCount' => 0,
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
 		], $card->jsonSerialize());
@@ -109,6 +110,7 @@ class CardTest extends TestCase {
 			'assignedUsers' => null,
 			'deletedAt' => 0,
 			'commentsUnread' => 0,
+			'commentsCount' => 0,
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
 		], $card->jsonSerialize());
@@ -145,6 +147,7 @@ class CardTest extends TestCase {
 			'assignedUsers' => ['user1'],
 			'deletedAt' => 0,
 			'commentsUnread' => 0,
+			'commentsCount' => 0,
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
 		], $card->jsonSerialize());
