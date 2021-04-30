@@ -116,7 +116,7 @@ OC.L10N.register(
     "Select the card to link to a project" : "Seletzioan s'ischeda de collegare a unu progetu",
     "Link to card" : "Collega a un'ischeda",
     "File already exists" : "Cust'archìviu ddoe est giai",
-    "A file with the name {filename} already exists." : "Un'archìviu cun su nùmene de {filename} ddoe est giai.",
+    "A file with the name {filename} already exists." : "B'at giai un'archìviu cun su nùmene de {filename}.",
     "Do you want to overwrite it?" : "Ddu cheres subraiscrìere? ",
     "Overwrite file" : "Subraiscrie archìviu",
     "Keep existing file" : "Mantene s'archìviu chi ddoe est",
