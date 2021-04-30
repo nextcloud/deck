@@ -22,7 +22,13 @@
 
 <template>
 	<div v-if="card" class="badges">
-		<div v-if="card.commentsUnread > 0" class="icon icon-comment" />
+		<div v-if="card.commentsCount > 0"
+			v-tooltip="commentsHint"
+			class="icon icon-comment"
+			:class="{ 'icon-comment--unread': card.commentsUnread > 0 }"
+			@click.stop="openComments">
+			{{ card.commentsCount }}
+		</div>
 
 		<div v-if="card.description && checkListCount > 0" class="card-tasks icon icon-checkmark">
 			{{ checkListCheckedCount }}/{{ checkListCount }}
@@ -58,6 +64,21 @@ export default {
 		checkListCheckedCount() {
 			return (this.card.description.match(/^\s*([*+-]|(\d\.))\s+\[\s*x\s*\](.*)$/gim) || []).length
 		},
+		commentsHint() {
+			if (this.card.commentsUnread > 0) {
+				return t('deck', '{count} comments, {unread} unread', {
+					count: this.card.commentsCount,
+					unread: this.card.commentsUnread
+				})
+			}
+			return null
+		},
+	},
+	methods: {
+		openComments() {
+			const boardId = this.card && this.card.boardId ? this.card.boardId : this.$route.params.id
+			this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id, tabId: 'comments' } })
+		},
 	},
 }
 </script>
@@ -70,7 +91,7 @@ export default {
 
 		.icon {
 			opacity: 0.5;
-			padding: 12px 18px;
+			padding: 10px 20px;
 			padding-right: 4px;
 			margin-right: 5px;
 			background-position: left;
@@ -78,8 +99,8 @@ export default {
 			span {
 				margin-left: 18px;
 			}
-			&.icon-edit {
-				opacity: 0.5;
+			&.icon-comment--unread {
+				opacity: 1;
 			}
 		}
 	}

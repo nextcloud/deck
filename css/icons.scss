@@ -22,7 +22,9 @@
 .icon-activity {
 	@include icon-color('activity-dark', 'activity', $color-black);
 }
-
+.icon-comment--unread {
+	@include icon-color('comment', 'actions', $color-primary, 1, true);
+}
 
 .avatardiv.circles {
 	background: var(--color-primary);
