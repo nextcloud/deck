@@ -23,27 +23,25 @@
 
 declare(strict_types=1);
 
-
 namespace OCA\Deck\Search\Query;
 
-class AQueryParameter {
+use PHPUnit\Framework\TestCase;
 
-	/** @var string */
-	protected $field;
-	/** @var int */
-	protected $comparator;
-	/** @var mixed */
-	protected $value;
-	
-	public function getValue() {
-		if (is_string($this->value) && mb_strlen($this->value) > 1) {
-			$param = (mb_substr($this->value, 0, 1) === '"' && mb_substr($this->value, -1, 1) === '"') ? mb_substr($this->value, 1, -1): $this->value;
-			return $param;
-		}
-		return $this->value;
+class AQueryParameterTest extends TestCase {
+	public function dataValue() {
+		return [
+			['foo', 'foo'],
+			['spätial character', 'spätial character'],
+			['"spätial character"', 'spätial character'],
+			['"spätial "character"', 'spätial "character'],
+			['"spätial 🐘"', 'spätial 🐘'],
+			['\'spätial character\'', '\'spätial character\''],
+		];
 	}
-	
-	public function getComparator(): int {
-		return $this->comparator;
+
+	/** @dataProvider dataValue */
+	public function testValue($input, $expectedValue) {
+		$parameter = new StringQueryParameter('test', 0, $input);
+		$this->assertEquals($expectedValue, $parameter->getValue());
 	}
 }

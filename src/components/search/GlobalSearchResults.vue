@@ -22,7 +22,10 @@
 
 <template>
 	<div v-if="searchQuery!==''" class="global-search">
-		<h2><RichText :text="t('deck', 'Search for {searchQuery} in all boards')" :arguments="queryStringArgs" /></h2>
+		<h2>
+			<RichText :text="t('deck', 'Search for {searchQuery} in all boards')" :arguments="queryStringArgs" />
+			<div v-if="loading" class="icon-loading-small" />
+		</h2>
 		<Actions>
 			<ActionButton icon="icon-close" @click="$store.commit('setSearchQuery', '')" />
 		</Actions>
@@ -107,23 +110,38 @@ export default {
 		},
 	},
 	watch: {
-		searchQuery() {
+		async searchQuery() {
 			this.cursor = null
 			this.loading = true
-			this.search()
+			try {
+				await this.search()
+				this.loading = false
+			} catch (e) {
+				if (!axios.isCancel(e)) {
+					console.error('Search request failed', e)
+					this.loading = false
+				}
+			}
 		},
 	},
 	methods: {
-		infiniteHandler($state) {
+		async infiniteHandler($state) {
 			this.loading = true
-			this.search().then((data) => {
+			try {
+				const data = await this.search()
 				if (data.length) {
 					$state.loaded()
 				} else {
 					$state.complete()
 				}
 				this.loading = false
-			})
+			} catch (e) {
+				if (!axios.isCancel(e)) {
+					console.error('Search request failed', e)
+					$state.complete()
+					this.loading = false
+				}
+			}
 		},
 		async search() {
 			if (this.cancel) {
@@ -177,6 +195,13 @@ export default {
 		padding: 10px;
 	}
 
+	h2 > div {
+		display: inline-block;
+
+		&.icon-loading-small {
+			margin-right: 20px;
+		}
+	}
 	h2::v-deep span {
 		background-color: var(--color-background-dark);
 		padding: 3px;
