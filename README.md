@@ -14,6 +14,7 @@ Deck is a kanban style organization tool aimed at personal planning and project 
 - Discuss with your team using comments
 - Keep track of changes in the activity stream
 - Get your project organized
+- [Migrate](https://github.com/maxammann/trello-to-deck) from Trello
 
 ### Mobile apps
 
