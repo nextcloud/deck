@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.4.2 - 2021-05-03
+
+### Fixed
+
+* [#3030](https://github.com/nextcloud/deck/pull/3030) Proper error handling when fetching comments fails
+* [#3031](https://github.com/nextcloud/deck/pull/3031) Allow searching for filters without a query to match all that have a given filter set
+* [#3039](https://github.com/nextcloud/deck/pull/3039) Catch any error during circle detail fetching
+* [#3040](https://github.com/nextcloud/deck/pull/3040) Get attachment from the user node instead of the share source
+
 ## 1.4.1 - 2021-04-20
 
 ### Fixed
