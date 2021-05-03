@@ -25,6 +25,7 @@ namespace OCA\Deck\Db;
 
 use OCP\IGroupManager;
 use OCP\IUserManager;
+use Psr\Log\LoggerInterface;
 use Test\AppFramework\Db\MapperTestUtility;
 
 /**
@@ -54,7 +55,8 @@ class AclMapperTest extends MapperTestUtility {
 			$this->aclMapper,
 			\OC::$server->query(StackMapper::class),
 			$this->userManager,
-			$this->groupManager
+			$this->groupManager,
+			$this->createMock(LoggerInterface::class)
 		);
 
 		$this->boards = [
