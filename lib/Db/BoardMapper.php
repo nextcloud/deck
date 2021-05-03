@@ -28,6 +28,7 @@ use OCP\IDBConnection;
 use OCP\ILogger;
 use OCP\IUserManager;
 use OCP\IGroupManager;
+use Psr\Log\LoggerInterface;
 
 class BoardMapper extends DeckMapper implements IPermissionMapper {
 	private $labelMapper;
@@ -35,6 +36,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	private $stackMapper;
 	private $userManager;
 	private $groupManager;
+	private $logger;
 
 	private $circlesEnabled;
 
@@ -44,7 +46,8 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		AclMapper $aclMapper,
 		StackMapper $stackMapper,
 		IUserManager $userManager,
-		IGroupManager $groupManager
+		IGroupManager $groupManager,
+		LoggerInterface $logger
 	) {
 		parent::__construct($db, 'deck_boards', Board::class);
 		$this->labelMapper = $labelMapper;
@@ -52,6 +55,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		$this->stackMapper = $stackMapper;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
+		$this->logger = $logger;
 
 		$this->circlesEnabled = \OC::$server->getAppManager()->isEnabledForUser('circles');
 	}
@@ -238,7 +242,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 				if ($user !== null) {
 					return new User($user);
 				}
-				\OC::$server->getLogger()->debug('User ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
+				$this->logger->debug('User ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
 				return null;
 			}
 			if ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
@@ -246,7 +250,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 				if ($group !== null) {
 					return new Group($group);
 				}
-				\OC::$server->getLogger()->debug('Group ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
+				$this->logger->debug('Group ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
 				return null;
 			}
 			if ($acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
@@ -258,11 +262,12 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 					if ($circle) {
 						return new Circle($circle);
 					}
-				} catch (\Exception $e) {
+				} catch (\Throwable $e) {
+					$this->logger->error('Failed to get circle details when building ACL', ['exception' => $e]);
 				}
 				return null;
 			}
-			\OC::$server->getLogger()->log(ILogger::WARN, 'Unknown permission type for mapping acl ' . $acl->getId());
+			$this->logger->warning('Unknown permission type for mapping acl ' . $acl->getId());
 			return null;
 		});
 	}
