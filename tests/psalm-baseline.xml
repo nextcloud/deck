@@ -105,7 +105,8 @@
     <ParamNameMismatch occurrences="1">
       <code>$boardId</code>
     </ParamNameMismatch>
-    <UndefinedClass occurrences="1">
+    <UndefinedClass occurrences="2">
+      <code>\OCA\Circles\Api\v1\Circles</code>
       <code>\OCA\Circles\Api\v1\Circles</code>
     </UndefinedClass>
   </file>
@@ -170,20 +171,12 @@
       <code>$stackId</code>
     </ParamNameMismatch>
   </file>
-  <file src="lib/Notification/NotificationHelper.php">
-    <InvalidScalarArgument occurrences="1">
-      <code>$board-&gt;getId()</code>
-    </InvalidScalarArgument>
-  </file>
   <file src="lib/Notification/Notifier.php">
-    <RedundantCast occurrences="7">
+    <RedundantCast occurrences="4">
       <code>(string) $l-&gt;t('%s has mentioned you in a comment on "%s".', [$dn, $params[0]])</code>
       <code>(string) $l-&gt;t('The board "%s" has been shared with you by %s.', [$params[0], $dn])</code>
       <code>(string) $l-&gt;t('The card "%s" on "%s" has been assigned to you by %s.', [$params[0], $params[1], $dn])</code>
       <code>(string) $l-&gt;t('The card "%s" on "%s" has reached its due date.', $params)</code>
-      <code>(string) $l-&gt;t('{user} has assigned the card "%s" on "%s" to you.', [$params[0], $params[1]])</code>
-      <code>(string) $l-&gt;t('{user} has mentioned you in a comment on "%s".', [$params[0]])</code>
-      <code>(string) $l-&gt;t('{user} has shared the board %s with you.', [$params[0]])</code>
     </RedundantCast>
   </file>
   <file src="lib/Provider/DeckProvider.php">
@@ -196,12 +189,6 @@
       <code>$cardId</code>
       <code>$cardId</code>
     </InvalidScalarArgument>
-    <UndefinedThisPropertyAssignment occurrences="1">
-      <code>$this-&gt;currentUser</code>
-    </UndefinedThisPropertyAssignment>
-    <UndefinedThisPropertyFetch occurrences="1">
-      <code>$this-&gt;currentUser</code>
-    </UndefinedThisPropertyFetch>
   </file>
   <file src="lib/Service/BoardService.php">
     <TooManyArguments occurrences="2">
@@ -265,7 +252,6 @@
     </RedundantCondition>
   </file>
   <file src="lib/Service/FilesAppService.php">
-    <InvalidCatch occurrences="1"/>
     <MissingDependency occurrences="4">
       <code>$this-&gt;rootFolder</code>
       <code>$this-&gt;rootFolder</code>
@@ -278,13 +264,6 @@
       <code>\OCA\Circles\Api\v1\Circles</code>
       <code>\OCA\Circles\Api\v1\Circles</code>
     </UndefinedClass>
-  </file>
-  <file src="lib/Service/SearchService.php">
-    <UndefinedThisPropertyFetch occurrences="3">
-      <code>$this-&gt;l10n</code>
-      <code>$this-&gt;urlGenerator</code>
-      <code>$this-&gt;userManager</code>
-    </UndefinedThisPropertyFetch>
   </file>
   <file src="lib/Service/StackService.php">
     <UndefinedClass occurrences="1">
