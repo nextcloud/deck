@@ -245,6 +245,7 @@ OC.L10N.register(
     "Link to a board" : "Länka till en tavla",
     "Link to a card" : "Länka till ett kort",
     "Something went wrong" : "Något gick fel",
-    "Maximum file size of {size} exceeded" : "Maximal filstorlek på {size} överskriden"
+    "Maximum file size of {size} exceeded" : "Maximal filstorlek på {size} överskriden",
+    "Share" : "Dela"
 },
 "nplurals=2; plural=(n != 1);");
