@@ -15,11 +15,16 @@ Deck is a kanban style organization tool aimed at personal planning and project 
 - Keep track of changes in the activity stream
 - Get your project organized
 
+![Deck - Manage cards on your board](http://download.bitgrid.net/nextcloud/deck/screenshots/1.0/Deck-2.png)
+
 ### Mobile apps
 
-- The [Nextcloud Deck app for Android](https://github.com/stefan-niedermann/nextcloud-deck) is available in the [Google Play Store](https://play.google.com/store/apps/details?id=it.niedermann.nextcloud.deck.play) 
+- [Nextcloud Deck app for Android](https://github.com/stefan-niedermann/nextcloud-deck) - It is available in [F-Droid](https://f-droid.org/de/packages/it.niedermann.nextcloud.deck/) and the [Google Play Store](https://play.google.com/store/apps/details?id=it.niedermann.nextcloud.deck.play)
 
-![Deck - Manage cards on your board](http://download.bitgrid.net/nextcloud/deck/screenshots/1.0/Deck-2.png)
+### 3rd-Party Integrations
+
+- [trello-to-deck](https://github.com/maxammann/trello-to-deck) - Migrates cards from Trello
+- [mail2deck](https://github.com/newroco/mail2deck) - Provides an "email in" solution 
 
 ## Installation/Update
 
