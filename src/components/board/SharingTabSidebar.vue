@@ -213,7 +213,7 @@ export default {
 					confirmClasses: 'error',
 					cancel: t('deck', 'Cancel'),
 				},
-				async (result) => {
+				async(result) => {
 					if (result) {
 						try {
 							this.isLoading = true

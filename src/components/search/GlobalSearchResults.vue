@@ -71,7 +71,7 @@ const createCancelToken = () => axios.CancelToken.source()
 function search({ query, cursor }) {
 	const cancelToken = createCancelToken()
 
-	const request = async () => axios.get(generateOcsUrl('apps/deck/api/v1.0/search'), {
+	const request = async() => axios.get(generateOcsUrl('apps/deck/api/v1.0/search'), {
 		cancelToken: cancelToken.token,
 		params: {
 			term: query,

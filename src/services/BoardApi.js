@@ -38,7 +38,7 @@ export class BoardApi {
 	 * Updates a board.
 	 *
 	 * @param {Board} board the board object to update
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	updateBoard(board) {
 		return axios.put(this.url(`/boards/${board.id}`), board)
@@ -63,7 +63,7 @@ export class BoardApi {
 	 * @property {string} color
 	 * @param {BoardCreateObject} boardData The board data to send.
 	 *        color the hexadecimal color value formated /[0-9A-F]{6}/i
-	 * @return {Promise}
+	 * @returns {Promise}
 	 */
 	createBoard(boardData) {
 		return axios.post(this.url('/boards'), boardData)
@@ -147,6 +147,71 @@ export class BoardApi {
 		} catch (err) {
 			return err
 		}
+	}
+
+	exportBoard(board) {
+		return axios.get(this.url(`/boards/${board.id}/export`))
+			.then(
+				(response) => {
+					const fields = { title: t('deck', 'Card title'), description: t('deck', 'Description'), stackId: t('deck', 'List name'), labels: t('deck', 'Tags'), duedate: t('deck', 'Due date'), createdAt: t('deck', 'Created'), lastModified: t('deck', 'Modified') }
+					let row = ''
+					Object.keys(fields).forEach(field => {
+						row += '"' + fields[field] + '"' + '\t'
+					})
+
+					row = row.slice(0, -1)
+					let CSV = row + '\r\n'
+
+					response.data.stacks.forEach(stack => {
+						stack.cards.forEach(card => {
+							row = ''
+							Object.keys(fields).forEach(field => {
+								if (field === 'createdAt' || field === 'lastModified') {
+									const date = new Date(Number(card[field]) * 1000)
+									row += '"' + date.toLocaleDateString() + '"' + '\t'
+								} else if (field === 'stackId') {
+									row += '"' + stack.title + '"' + '\t'
+								} else if (field === 'labels') {
+									row += '"'
+									card[field].forEach(label => {
+										row += label.title + ', '
+									})
+									if (card[field].length > 0) {
+										row = row.slice(0, -1)
+									}
+									row += '"' + '\t'
+								} else {
+									row += '"' + card[field] + '"' + '\t'
+								}
+							})
+							row = row.slice(0, -1)
+							CSV += row + '\r\n'
+						})
+					})
+					let charCode = []
+					const byteArray = []
+					byteArray.push(255, 254)
+					for (let i = 0; i < CSV.length; ++i) {
+						charCode = CSV.charCodeAt(i)
+						byteArray.push(charCode & 0xff)
+						byteArray.push(charCode / 256 >>> 0)
+					}
+					const blob = new Blob([new Uint8Array(byteArray)], { type: 'text/csv;charset=UTF-16LE;' })
+					const blobUrl = URL.createObjectURL(blob)
+					const a = document.createElement('a')
+					a.href = blobUrl // 'data:' + data
+					a.download = response.data.title + '.csv'
+					a.click()
+					a.remove()
+					return Promise.resolve()
+				},
+				(err) => {
+					return Promise.reject(err)
+				}
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
 	}
 
 	// Label API Calls

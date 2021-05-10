@@ -169,4 +169,13 @@ class BoardController extends ApiController {
 
 		return new DataResponse([], HTTP::STATUS_UNAUTHORIZED);
 	}
+
+	/**
+	 * @NoAdminRequired
+	 * @param $boardId
+	 */
+	public function export($boardId) {
+
+		return $this->boardService->export($boardId);
+	}
 }

@@ -378,7 +378,7 @@ export default new Vuex.Store({
 		 * @param commit.commit
 		 * @param commit
 		 * @param board The board to update.
-		 * @return {Promise<void>}
+		 * @returns {Promise<void>}
 		 */
 		async updateBoard({ commit }, board) {
 			const storedBoard = await apiClient.updateBoard(board)

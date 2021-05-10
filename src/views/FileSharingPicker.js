@@ -46,7 +46,7 @@ export default {
 				ComponentVM.$destroy()
 				reject(new Error('Canceled'))
 			})
-			ComponentVM.$root.$on('select', async (id) => {
+			ComponentVM.$root.$on('select', async(id) => {
 				const result = await createShare({
 					path: self.fileInfo.path + '/' + self.fileInfo.name,
 					shareType: 12,

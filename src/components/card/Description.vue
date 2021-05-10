@@ -259,7 +259,7 @@ export default {
 		updateDescription() {
 			this.descriptionLastEdit = Date.now()
 			clearTimeout(this.descriptionSaveTimeout)
-			this.descriptionSaveTimeout = setTimeout(async () => {
+			this.descriptionSaveTimeout = setTimeout(async() => {
 				await this.saveDescription()
 			}, 2500)
 		},
