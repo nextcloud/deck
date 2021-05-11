@@ -63,8 +63,7 @@ use Psr\Container\NotFoundExceptionInterface;
 class BoardService {
 	private BoardMapper $boardMapper;
 	private StackMapper $stackMapper;
-	private LabelMapper $cardMapper;
-	private $labelMapper;
+	private LabelMapper $labelMapper;
 	private AclMapper $aclMapper;
 	private IConfig $config;
 	private IL10N $l10n;
