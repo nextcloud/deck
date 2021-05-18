@@ -128,7 +128,7 @@ class OverviewService {
 					$cardData = $card->jsonSerialize();
 					$cardData['boardId'] = $userBoard->getId();
 					return $cardData;
-				}, $this->cardMapper->findAssignedCards($userBoard->getId(), $userId));
+				}, $this->cardMapper->findToMeOrNotAssignedCards($userBoard->getId(), $userId));
 			}
 		}
 		return $findCards;

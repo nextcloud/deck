@@ -230,7 +230,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findAssignedCards($boardId, $username) {
+	public function findToMeOrNotAssignedCards($boardId, $username) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('c.*')
 			->from('deck_cards', 'c')
