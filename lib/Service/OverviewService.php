@@ -114,7 +114,7 @@ class OverviewService {
 			$service = $this;
 
 			if (count($userBoard->getAcl()) === 0) {
-				// get cards with due date
+				// private board: get cards with due date
 				$findCards[] = array_map(static function ($card) use ($service, $userBoard, $userId) {
 					$service->enrich($card, $userId);
 					$cardData = $card->jsonSerialize();
@@ -122,13 +122,13 @@ class OverviewService {
 					return $cardData;
 				}, $this->cardMapper->findAllWithDue($userBoard->getId()));
 			} else {
-				// get assigned cards
+				// shared board: get all my assigned or unassigned cards
 				$findCards[] = array_map(static function ($card) use ($service, $userBoard, $userId) {
 					$service->enrich($card, $userId);
 					$cardData = $card->jsonSerialize();
 					$cardData['boardId'] = $userBoard->getId();
 					return $cardData;
-				}, $this->cardMapper->findAssignedCards($userBoard->getId(), $userId));
+				}, $this->cardMapper->findToMeOrNotAssignedCards($userBoard->getId(), $userId));
 			}
 		}
 		return $findCards;

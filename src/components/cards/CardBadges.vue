@@ -68,7 +68,7 @@ export default {
 			if (this.card.commentsUnread > 0) {
 				return t('deck', '{count} comments, {unread} unread', {
 					count: this.card.commentsCount,
-					unread: this.card.commentsUnread
+					unread: this.card.commentsUnread,
 				})
 			}
 			return null
