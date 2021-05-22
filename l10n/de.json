@@ -75,6 +75,7 @@
     "{user} has mentioned you in a comment on {deck-card}." : "{user} hat Dich in einem Kommentar zu {deck-card} erwähnt.",
     "The board \"%s\" has been shared with you by %s." : "Das Board \"%s\" wurde von %s mit Dir geteilt.",
     "{user} has shared {deck-board} with you." : "{user} hat das Board {deck-board} mit Dir geteilt.",
+    "Card comments" : "Kommentare zur Karte",
     "%s on %s" : "%s von %s",
     "No data was provided to create an attachment." : "Es wurden keine Daten zum Erstellen eines Anhangs bereitgestellt.",
     "Finished" : "Abgeschlossen",
