@@ -5,11 +5,6 @@ OCC=${OC_PATH}occ
 SCENARIO_TO_RUN=$1
 HIDE_OC_LOGS=$2
 
-# Nextcloud integration tests composer
-(
-    cd ${OC_PATH}build/integration
-    composer install
-)
 INSTALLED=$($OCC status | grep installed: | cut -d " " -f 5)
 
 if [ "$INSTALLED" == "true" ]; then
@@ -24,11 +19,11 @@ composer dump-autoload
 
 # avoid port collision on jenkins - use $EXECUTOR_NUMBER
 if [ -z "$EXECUTOR_NUMBER" ]; then
-    EXECUTOR_NUMBER=0
+    EXECUTOR_NUMBER=1
 fi
 PORT=$((8080 + $EXECUTOR_NUMBER))
 echo $PORT
-php -S localhost:$PORT -t $OC_PATH &
+PHP_CLI_SERVER_WORKERS=10 php -S localhost:$PORT -t $OC_PATH &
 PHPPID=$!
 echo $PHPPID
 

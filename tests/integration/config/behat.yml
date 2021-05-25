@@ -1,12 +1,17 @@
 default:
+  autoload:
+    '': '%paths.base%/../features/bootstrap'
   suites:
     test:
       paths:
         - '%paths.base%/../features/'
       contexts:
-        - ServerContext:
-            baseUrl:  http://localhost:8080/
-        - RequestContext
+        - \JuliusHaertl\NextcloudBehat\Context\ServerContext:
+            servers:
+              default: http://localhost:8080
+        - \JuliusHaertl\NextcloudBehat\Context\SharingContext
+        - \JuliusHaertl\NextcloudBehat\Context\FilesContext
         - BoardContext
         - CommentContext
         - SearchContext
+        - PendingContext

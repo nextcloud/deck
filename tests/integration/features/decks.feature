@@ -5,10 +5,10 @@ Feature: decks
     Given user "user0" exists
 
   Scenario: Create a new board
-    Given Logging in using web as "admin"
+    Given Using web as user "admin"
     When creates a board named "MyBoard" with color "000000"
-    Then the response should have a status code "200"
-    And the response Content-Type should be "application/json; charset=utf-8"
+    Then the HTTP status code should be "200"
+    And the Content-Type should be "application/json; charset=utf-8"
     And the response should be a JSON array with the following mandatory values
       |key|value|
       |title|MyBoard|

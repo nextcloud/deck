@@ -21,26 +21,21 @@
  *
  */
 
-declare(strict_types=1);
-
-
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Behat\Behat\Context\Context;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
+class PendingContext implements Context {
 
-trait RequestTrait {
-
-	/** @var RequestContext */
-	protected $requestContext;
+	/** @var \JuliusHaertl\NextcloudBehat\Context\ServerContext */
+	private $serverContext;
 
 	/** @BeforeScenario */
-	public function gatherRequestTraitContext(BeforeScenarioScope $scope) {
+	public function gatherContexts(BeforeScenarioScope $scope) {
 		$environment = $scope->getEnvironment();
-		$this->requestContext = $environment->getContext('RequestContext');
+
+		$this->serverContext = $environment->getContext(\JuliusHaertl\NextcloudBehat\Context\ServerContext::class);
 	}
 
-	public function getResponse() {
-		return $this->requestContext->getResponse();
-	}
 }

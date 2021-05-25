@@ -3,12 +3,14 @@
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use PHPUnit\Framework\Assert;
+use JuliusHaertl\NextcloudBehat\Context\ServerContext;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 class SearchContext implements Context {
-	use RequestTrait;
 
+	/** @var ServerContext */
+	protected $serverContext;
 	/** @var BoardContext */
 	protected $boardContext;
 
@@ -19,6 +21,7 @@ class SearchContext implements Context {
 	public function gatherContexts(BeforeScenarioScope $scope) {
 		$environment = $scope->getEnvironment();
 
+		$this->serverContext = $environment->getContext(ServerContext::class);
 		$this->boardContext = $environment->getContext('BoardContext');
 	}
 	
@@ -27,10 +30,10 @@ class SearchContext implements Context {
 	 * @param string $term
 	 */
 	public function searchingFor(string $term) {
-		$this->requestContext->sendOCSRequest('GET', '/apps/deck/api/v1.0/search?term=' . urlencode($term), []);
-		$this->requestContext->getResponse()->getBody()->seek(0);
-		$data = (string)$this->getResponse()->getBody();
-		$this->searchResults = json_decode($data, true);
+		$this->serverContext->sendOCSRequest('GET', '/apps/deck/api/v1.0/search?term=' . urlencode($term), []);
+		$this->serverContext->getResponse()->getBody()->seek(0);
+		$data = (string)$this->serverContext->getResponse()->getBody();
+		$this->searchResults = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
 	}
 
 	/**
@@ -39,9 +42,9 @@ class SearchContext implements Context {
 	 * https://cloud.nextcloud.com/ocs/v2.php/search/providers/talk-conversations/search?term=an&from=%2Fapps%2Fdashboard%2F
 	 */
 	public function searchingForComments(string $term) {
-		$this->requestContext->sendOCSRequest('GET', '/search/providers/deck-comment/search?term=' . urlencode($term), []);
-		$this->requestContext->getResponse()->getBody()->seek(0);
-		$data = (string)$this->getResponse()->getBody();
+		$this->serverContext->sendOCSRequest('GET', '/search/providers/deck-comment/search?term=' . urlencode($term), []);
+		$this->serverContext->getResponse()->getBody()->seek(0);
+		$data = (string)$this->serverContext->getResponse()->getBody();
 		$this->unifiedSearchResult = json_decode($data, true);
 	}
 

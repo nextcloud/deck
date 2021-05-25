@@ -3,12 +3,13 @@
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
+use JuliusHaertl\NextcloudBehat\Context\ServerContext;
+use JuliusHaertl\NextcloudBehat\Context\SharingContext;
 use PHPUnit\Framework\Assert;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 class BoardContext implements Context {
-	use RequestTrait;
 
 	/** @var array Last board response */
 	private $board = null;
@@ -19,12 +20,16 @@ class BoardContext implements Context {
 
 	/** @var ServerContext */
 	private $serverContext;
+	/** @var SharingContext */
+	private $sharingContext;
 
 	/** @BeforeScenario */
 	public function gatherContexts(BeforeScenarioScope $scope) {
 		$environment = $scope->getEnvironment();
 
-		$this->serverContext = $environment->getContext('ServerContext');
+		$this->serverContext = $environment->getContext(ServerContext::class);
+		$this->sharingContext = $environment->getContext(SharingContext::class);
+
 	}
 
 	public function getLastUsedCard() {
@@ -35,21 +40,21 @@ class BoardContext implements Context {
 	 * @Given /^creates a board named "([^"]*)" with color "([^"]*)"$/
 	 */
 	public function createsABoardNamedWithColor($title, $color) {
-		$this->requestContext->sendJSONrequest('POST', '/index.php/apps/deck/boards', [
+		$this->serverContext->sendJSONrequest('POST', '/index.php/apps/deck/boards', [
 			'title' => $title,
 			'color' => $color
 		]);
-		$this->getResponse()->getBody()->seek(0);
-		$this->board = json_decode((string)$this->getResponse()->getBody(), true);
+		$this->serverContext->getResponse()->getBody()->seek(0);
+		$this->board = json_decode((string)$this->serverContext->getResponse()->getBody(), true);
 	}
 
 	/**
 	 * @When /^fetches the board named "([^"]*)"$/
 	 */
 	public function fetchesTheBoardNamed($boardName) {
-		$this->requestContext->sendJSONrequest('GET', '/index.php/apps/deck/boards/' . $this->board['id'], []);
-		$this->getResponse()->getBody()->seek(0);
-		$this->board = json_decode((string)$this->getResponse()->getBody(), true);
+		$this->serverContext->sendJSONrequest('GET', '/index.php/apps/deck/boards/' . $this->board['id'], []);
+		$this->serverContext->getResponse()->getBody()->seek(0);
+		$this->board = json_decode((string)$this->serverContext->getResponse()->getBody(), true);
 	}
 
 	/**
@@ -63,7 +68,7 @@ class BoardContext implements Context {
 		];
 		$tableRows = isset($permissions) ? $permissions->getRowsHash() : [];
 		$result = array_merge($defaults, $tableRows);
-		$this->requestContext->sendJSONrequest('POST', '/index.php/apps/deck/boards/' . $this->board['id'] . '/acl', [
+		$this->serverContext->sendJSONrequest('POST', '/index.php/apps/deck/boards/' . $this->board['id'] . '/acl', [
 			'type' => 0,
 			'participant' => $user,
 			'permissionEdit' => $result['permissionEdit'] === '1',
@@ -83,7 +88,7 @@ class BoardContext implements Context {
 		];
 		$tableRows = isset($permissions) ? $permissions->getRowsHash() : [];
 		$result = array_merge($defaults, $tableRows);
-		$this->requestContext->sendJSONrequest('POST', '/index.php/apps/deck/boards/' . $this->board['id'] . '/acl', [
+		$this->serverContext->sendJSONrequest('POST', '/index.php/apps/deck/boards/' . $this->board['id'] . '/acl', [
 			'type' => 1,
 			'participant' => $group,
 			'permissionEdit' => $result['permissionEdit'] === '1',
@@ -97,38 +102,38 @@ class BoardContext implements Context {
 	 * @When /^fetching the board list$/
 	 */
 	public function fetchingTheBoardList() {
-		$this->requestContext->sendJSONrequest('GET', '/index.php/apps/deck/boards');
+		$this->serverContext->sendJSONrequest('GET', '/index.php/apps/deck/boards');
 	}
 
 	/**
 	 * @When /^fetching the board with id "([^"]*)"$/
 	 */
 	public function fetchingTheBoardWithId($id) {
-		$this->requestContext->sendJSONrequest('GET', '/index.php/apps/deck/boards/' . $id);
+		$this->serverContext->sendJSONrequest('GET', '/index.php/apps/deck/boards/' . $id);
 	}
 
 	/**
 	 * @Given /^create a stack named "([^"]*)"$/
 	 */
 	public function createAStackNamed($name) {
-		$this->requestContext->sendJSONrequest('POST', '/index.php/apps/deck/stacks', [
+		$this->serverContext->sendJSONrequest('POST', '/index.php/apps/deck/stacks', [
 			'title' => $name,
 			'boardId' => $this->board['id']
 		]);
-		$this->requestContext->getResponse()->getBody()->seek(0);
-		$this->stack = json_decode((string)$this->getResponse()->getBody(), true);
+		$this->serverContext->getResponse()->getBody()->seek(0);
+		$this->stack = json_decode((string)$this->serverContext->getResponse()->getBody(), true);
 	}
 
 	/**
 	 * @Given /^create a card named "([^"]*)"$/
 	 */
 	public function createACardNamed($name) {
-		$this->requestContext->sendJSONrequest('POST', '/index.php/apps/deck/cards', [
+		$this->serverContext->sendJSONrequest('POST', '/index.php/apps/deck/cards', [
 			'title' => $name,
 			'stackId' => $this->stack['id']
 		]);
-		$this->requestContext->getResponse()->getBody()->seek(0);
-		$this->card = json_decode((string)$this->getResponse()->getBody(), true);
+		$this->serverContext->getResponse()->getBody()->seek(0);
+		$this->card = json_decode((string)$this->serverContext->getResponse()->getBody(), true);
 	}
 
 	/**
@@ -164,31 +169,31 @@ class BoardContext implements Context {
 			['shareType', 12],
 			['shareWith', (string)$this->card['id']],
 		]);
-		$this->serverContext->creatingShare($table);
+		$this->sharingContext->createAShareWith($table);
 	}
 
 	/**
 	 * @Given /^set the description to "([^"]*)"$/
 	 */
 	public function setTheDescriptionTo($description) {
-		$this->requestContext->sendJSONrequest('PUT', '/index.php/apps/deck/cards/' . $this->card['id'], array_merge(
+		$this->serverContext->sendJSONrequest('PUT', '/index.php/apps/deck/cards/' . $this->card['id'], array_merge(
 			$this->card,
 			['description' => $description]
 		));
-		$this->requestContext->getResponse()->getBody()->seek(0);
-		$this->card = json_decode((string)$this->getResponse()->getBody(), true);
+		$this->serverContext->getResponse()->getBody()->seek(0);
+		$this->card = json_decode((string)$this->serverContext->getResponse()->getBody(), true);
 	}
 
 	/**
 	 * @Given /^set the card attribute "([^"]*)" to "([^"]*)"$/
 	 */
 	public function setCardAttribute($attribute, $value) {
-		$this->requestContext->sendJSONrequest('PUT', '/index.php/apps/deck/cards/' . $this->card['id'], array_merge(
+		$this->serverContext->sendJSONrequest('PUT', '/index.php/apps/deck/cards/' . $this->card['id'], array_merge(
 			$this->card,
 			[$attribute => $value]
 		));
-		$this->requestContext->getResponse()->getBody()->seek(0);
-		$this->card = json_decode((string)$this->getResponse()->getBody(), true);
+		$this->serverContext->getResponse()->getBody()->seek(0);
+		$this->card = json_decode((string)$this->serverContext->getResponse()->getBody(), true);
 	}
 
 	/**
@@ -214,11 +219,11 @@ class BoardContext implements Context {
 	}
 
 	private function assignToCard($participant, $type) {
-		$this->requestContext->sendJSONrequest('POST', '/index.php/apps/deck/cards/' . $this->card['id'] .'/assign', [
+		$this->serverContext->sendJSONrequest('POST', '/index.php/apps/deck/cards/' . $this->card['id'] .'/assign', [
 			'userId' => $participant,
 			'type' => $type
 		]);
-		$this->requestContext->getResponse()->getBody()->seek(0);
+		$this->serverContext->getResponse()->getBody()->seek(0);
 	}
 
 	/**
@@ -229,7 +234,7 @@ class BoardContext implements Context {
 			return $label['title'] === $tag;
 		});
 		$label = array_shift($filteredLabels);
-		$this->requestContext->sendJSONrequest('POST', '/index.php/apps/deck/cards/' . $this->card['id'] .'/label/' . $label['id']);
-		$this->requestContext->getResponse()->getBody()->seek(0);
+		$this->serverContext->sendJSONrequest('POST', '/index.php/apps/deck/cards/' . $this->card['id'] .'/label/' . $label['id']);
+		$this->serverContext->getResponse()->getBody()->seek(0);
 	}
 }

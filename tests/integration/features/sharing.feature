@@ -19,12 +19,11 @@ Feature: File sharing
     And shares the board with user "user1"
     Then the HTTP status code should be "200"
 
-    Given using new dav path
     When User "user0" uploads file "../data/test.txt" to "/user0-file.txt"
     Then the HTTP status code should be "201"
     Given acting as user "user0"
     When share the file "/user0-file.txt" with the card
-    Then the OCS status code should be "100"
+    Then the OCS status code should be "200"
     And the HTTP status code should be "200"
 
     And as "user1" the file "/Deck/user0-file.txt" exists
@@ -40,12 +39,11 @@ Feature: File sharing
       | permissionManage | 1 |
     Then the HTTP status code should be "200"
 
-    Given using new dav path
     When User "user1" uploads file "../data/test.txt" to "/user1-file.txt"
     Then the HTTP status code should be "201"
     Given acting as user "user1"
     And share the file "/user1-file.txt" with the card
-    Then the OCS status code should be "100"
+    Then the OCS status code should be "200"
     And the HTTP status code should be "200"
 
     And as "user0" the file "/Deck/user1-file.txt" exists
@@ -59,13 +57,11 @@ Feature: File sharing
     And shares the board with user "user1"
     Then the HTTP status code should be "200"
 
-    Given using new dav path
+    Given acting as user "user1"
     When User "user1" uploads file "../data/test.txt" to "/user1-file.txt"
     Then the HTTP status code should be "201"
-    Given acting as user "user1"
-    And share the file "/user1-file.txt" with the card
+    When share the file "/user1-file.txt" with the card
     Then the OCS status code should be "404"
-    And the HTTP status code should be "200"
     And as "user0" the file "/Deck/user1-file.txt" does not exist
 
   Scenario: Share a file with a card by another user through a group
@@ -76,12 +72,11 @@ Feature: File sharing
     And shares the board with group "group1"
     Then the HTTP status code should be "200"
 
-    Given using new dav path
     When User "user0" uploads file "../data/test.txt" to "/user0-file2.txt"
     Then the HTTP status code should be "201"
     Given acting as user "user0"
     When share the file "/user0-file2.txt" with the card
-    Then the OCS status code should be "100"
+    Then the OCS status code should be "200"
     And the HTTP status code should be "200"
 
     And as "user2" the file "/Deck/user0-file2.txt" exists
@@ -95,12 +90,11 @@ Feature: File sharing
     And shares the board with group "group1"
     Then the HTTP status code should be "200"
 
-    Given using new dav path
     When User "user0" uploads file "../data/test.txt" to "/user0-file2.txt"
     Then the HTTP status code should be "201"
     Given acting as user "user0"
     When share the file "/user0-file2.txt" with the card
-    Then the OCS status code should be "100"
+    Then the OCS status code should be "200"
     And the HTTP status code should be "200"
 
     And as "user2" the file "/Deck/user0-file2.txt" exists
@@ -119,12 +113,11 @@ Feature: File sharing
     And shares the board with group "group1"
     Then the HTTP status code should be "200"
 
-    Given using new dav path
     When User "user0" uploads file "../data/test.txt" to "/user0-file2.txt"
     Then the HTTP status code should be "201"
     Given acting as user "user0"
     When share the file "/user0-file2.txt" with the card
-    Then the OCS status code should be "100"
+    Then the OCS status code should be "200"
     And the HTTP status code should be "200"
 
     And as "user2" the file "/Deck/user0-file2.txt" exists

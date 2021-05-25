@@ -3,7 +3,7 @@ Feature: Searching for cards
   Background:
     Given user "admin" exists
     Given user "user0" exists
-    Given Logging in using web as "admin"
+    Given Using web as user "admin"
     When creates a board named "MyBoard" with color "000000"
     When create a stack named "ToDo"
     And create a card named "Example task 1"
@@ -83,7 +83,7 @@ Feature: Searching for cards
     Then the card "Done task 2" is not found
 
   Scenario: Search on shared boards
-    Given Logging in using web as "user0"
+    Given Using web as user "user0"
     When searching for "task"
     Then the card "Example task 1" is found
     Then the card "Example task 2" is found
