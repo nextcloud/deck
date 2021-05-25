@@ -959,6 +959,7 @@ For now only `deck_file` is supported as an attachment type.
 
 ### DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Delete an attachment
 
+    
 #### Request parameters
 
 | Parameter    | Type    | Description                                   |

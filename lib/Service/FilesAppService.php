@@ -23,7 +23,10 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Attachment;
+use OCA\Deck\Db\CardMapper;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\StreamResponse;
@@ -38,6 +41,7 @@ use OCP\IRequest;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager;
 use OCP\Share\IShare;
+use Psr\Log\LoggerInterface;
 
 class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	private $request;
@@ -48,8 +52,10 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	private $configService;
 	private $l10n;
 	private $preview;
-	private $permissionService;
 	private $mimeTypeDetector;
+	private $permissionService;
+	private $cardMapper;
+	private $logger;
 
 	public function __construct(
 		IRequest $request,
@@ -59,8 +65,10 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		ConfigService $configService,
 		DeckShareProvider $shareProvider,
 		IPreview $preview,
-		PermissionService $permissionService,
 		IMimeTypeDetector $mimeTypeDetector,
+		PermissionService $permissionService,
+		CardMapper  $cardMapper,
+		LoggerInterface $logger,
 		string $userId = null
 	) {
 		$this->request = $request;
@@ -72,15 +80,20 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$this->userId = $userId;
 		$this->preview = $preview;
 		$this->mimeTypeDetector = $mimeTypeDetector;
+		$this->permissionService = $permissionService;
+		$this->cardMapper = $cardMapper;
+		$this->logger = $logger;
 	}
 
 	public function listAttachments(int $cardId): array {
 		$shares = $this->shareProvider->getSharedWithByType($cardId, IShare::TYPE_DECK, -1, 0);
-		$shares = array_filter($shares, function ($share) {
-			return $share->getPermissions() > 0;
-		});
-		return array_map(function (IShare $share) use ($cardId) {
-			$file = $share->getNode();
+		return array_filter(array_map(function (IShare $share) use ($cardId) {
+			try {
+				$file = $share->getNode();
+			} catch (NotFoundException $e) {
+				$this->logger->debug('Unable to find node for share with ID ' . $share->getId());
+				return null;
+			}
 			$attachment = new Attachment();
 			$attachment->setType('file');
 			$attachment->setId((int)$share->getId());
@@ -89,9 +102,9 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 			$attachment->setData($file->getName());
 			$attachment->setLastModified($file->getMTime());
 			$attachment->setCreatedAt($share->getShareTime()->getTimestamp());
-			$attachment->setDeletedAt(0);
+			$attachment->setDeletedAt($share->getPermissions() === 0 ? $share->getShareTime()->getTimestamp() : 0);
 			return $attachment;
-		}, $shares);
+		}, $shares));
 	}
 
 	public function getAttachmentCount(int $cardId): int {
@@ -144,6 +157,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	}
 
 	public function display(Attachment $attachment) {
+		// Problem: Folders
 		/** @psalm-suppress InvalidCatch */
 		try {
 			$share = $this->shareProvider->getShareById($attachment->getId());
@@ -164,6 +178,9 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	public function create(Attachment $attachment) {
 		$file = $this->getUploadedFile();
 		$fileName = $file['name'];
+
+		// get shares for current card
+		// check if similar filename already exists
 
 		$userFolder = $this->rootFolder->getUserFolder($this->userId);
 		try {
@@ -245,12 +262,16 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$file = $share->getNode();
 		$attachment->setData($file->getName());
 
-		if ($file->getOwner() !== null && $file->getOwner()->getUID() === $this->userId) {
-			$file->delete();
+		// Deleting a Nextcloud file attachment will remove the share to the card, keeping the source file untouched
+		// Opt-out of individual shares per user is no longer performed within deck but can still be done through the files app
+		$canEdit = $this->permissionService->checkPermission($this->cardMapper, $attachment->getCardId(), Acl::PERMISSION_EDIT);
+		$isFileOwner = $file->getOwner() !== null && $file->getOwner()->getUID() === $this->userId;
+		if ($isFileOwner || $canEdit) {
+			$this->shareManager->deleteShare($share);
 			return;
 		}
 
-		$this->shareManager->deleteFromSelf($share, $this->userId);
+		throw new NoPermissionException('No permission to remove the attachment from the card');
 	}
 
 	public function allowUndo() {
