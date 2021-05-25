@@ -193,6 +193,9 @@
       <code>$cardId</code>
     </InvalidScalarArgument>
   </file>
+  <file src="lib/Service/AttachmentService.php">
+    <InvalidCatch occurrences="1"/>
+  </file>
   <file src="lib/Service/BoardService.php">
     <TooManyArguments occurrences="2">
       <code>findAll</code>
