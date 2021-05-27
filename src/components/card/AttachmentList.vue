@@ -151,8 +151,13 @@ export default {
 			}
 		},
 	},
-	created() {
-		this.$store.dispatch('fetchAttachments', this.cardId)
+	watch: {
+		cardId: {
+			immediate: true,
+			handler() {
+				this.$store.dispatch('fetchAttachments', this.cardId)
+			},
+		},
 	},
 	methods: {
 		handleUploadFile(event) {
