@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.7.0@d4377c0baf3ffbf0b1ec6998e8d1be2a40971005">
+<files psalm-version="4.7.2@83a0325c0a95c0ab531d6b90c877068b464377b5">
   <file src="lib/Activity/ActivityManager.php">
     <TypeDoesNotContainType occurrences="1">
       <code>$message !== null</code>
@@ -197,9 +197,6 @@
     </TooManyArguments>
   </file>
   <file src="lib/Service/CardService.php">
-    <TooFewArguments occurrences="1">
-      <code>findAssignedCards</code>
-    </TooFewArguments>
     <UndefinedDocblockClass occurrences="1">
       <code>\OCP\AppFramework\Db\</code>
     </UndefinedDocblockClass>

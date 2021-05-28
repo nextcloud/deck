@@ -257,9 +257,9 @@ class CardService {
 	 * @param $title
 	 * @param $stackId
 	 * @param $type
-	 * @param $order
-	 * @param $description
 	 * @param $owner
+	 * @param $description
+	 * @param $order
 	 * @param $duedate
 	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
@@ -268,7 +268,7 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function update($id, $title, $stackId, $type, $order = 0, $description = '', $owner, $duedate = null, $deletedAt = null, $archived = null) {
+	public function update($id, $title, $stackId, $type, $owner, $description = '', $order = 0, $duedate = null, $deletedAt = null, $archived = null) {
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
