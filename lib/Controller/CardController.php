@@ -95,7 +95,7 @@ class CardController extends Controller {
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
 	public function update($id, $title, $stackId, $type, $order, $description, $duedate, $deletedAt) {
-		return $this->cardService->update($id, $title, $stackId, $type, $order, $description, $this->userId, $duedate, $deletedAt);
+		return $this->cardService->update($id, $title, $stackId, $type, $this->userId, $description, $order, $duedate, $deletedAt);
 	}
 
 	/**
