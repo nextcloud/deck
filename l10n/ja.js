@@ -197,7 +197,7 @@ OC.L10N.register(
     "Assign a tag to this card…" : "タグこのをカードに割り当てる…",
     "Assign to users" : "ユーザーに割り当てる",
     "Assign to users/groups/circles" : "ユーザー/グループ/サークルに割り当てる",
-    "Assign a user to this card…" : "このカードにユーザーに割り当てる…",
+    "Assign a user to this card…" : "このカードをユーザーに割り当てる…",
     "Due date" : "期限",
     "Set a due date" : "期限を設定",
     "Remove due date" : "期限を削除",
