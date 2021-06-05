@@ -227,7 +227,7 @@ export default {
 		},
 		showViewer(attachment) {
 			if (attachment.extendedData.fileid && window.OCA.Viewer.availableHandlers.map(handler => handler.mimes).flat().includes(attachment.extendedData.mimetype)) {
-				window.OCA.Viewer.open(attachment.extendedData.path)
+				window.OCA.Viewer.open({ path: attachment.extendedData.path })
 				return
 			}
 
