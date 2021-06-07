@@ -30,7 +30,7 @@
 			:loading="loading"
 			@hide="() => {}"
 			@markDone="() => {}">
-			<template v-slot:default="{ item }">
+			<template #default="{ item }">
 				<a :key="item.id"
 					:href="cardLink(item)"
 					target="_blank"
@@ -84,11 +84,17 @@ export default {
 			'assignedCardsDashboard',
 		]),
 		cards() {
-			const list = [
+			/* const list = [
 				...this.assignedCardsDashboard,
 			].filter((card) => {
 				return card.duedate !== null
-			})
+			}) */
+
+			const list = this.assignedCardsDashboard.slice(0, 6)
+				.filter((card) => {
+					return card.duedate !== null
+				})
+
 			list.sort((a, b) => {
 				return (new Date(a.duedate)).getTime() - (new Date(b.duedate)).getTime()
 			})

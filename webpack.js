@@ -11,7 +11,7 @@ const config = {
 	},
 	output: {
 		filename: '[name].js',
-		jsonpFunction: 'webpackJsonpOCADeck',
+		// jsonpFunction: 'webpackJsonpOCADeck',
 		chunkFilename: '[name].js?v=[contenthash]',
 	},
 	resolve: {
