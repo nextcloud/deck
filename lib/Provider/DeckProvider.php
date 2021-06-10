@@ -238,7 +238,7 @@ class DeckProvider implements IFullTextSearchProvider {
 	 *
 	 * @param ISearchRequest $request
 	 */
-	public function improveSearchRequest(ISearchRequest $request) {
+	public function improveSearchRequest(ISearchRequest $searchRequest) {
 	}
 
 
