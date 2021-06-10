@@ -44,9 +44,9 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 		return ($row['owner'] === $userId);
 	}
 
-	public function findBoardId($aclId): ?int {
+	public function findBoardId($id): ?int {
 		try {
-			$entity = $this->find($aclId);
+			$entity = $this->find($id);
 			return $entity->getBoardId();
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 		}

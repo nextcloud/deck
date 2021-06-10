@@ -75,9 +75,9 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 		return ($row['owner'] === $userId);
 	}
 
-	public function findBoardId($stackId): ?int {
+	public function findBoardId($id): ?int {
 		try {
-			$entity = $this->find($stackId);
+			$entity = $this->find($id);
 			return $entity->getBoardId();
 		} catch (DoesNotExistException $e) {
 		} catch (MultipleObjectsReturnedException $e) {

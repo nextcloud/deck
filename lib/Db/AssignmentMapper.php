@@ -83,8 +83,8 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 		return $this->cardMapper->isOwner($userId, $cardId);
 	}
 
-	public function findBoardId($cardId): ?int {
-		return $this->cardMapper->findBoardId($cardId);
+	public function findBoardId($id): ?int {
+		return $this->cardMapper->findBoardId($id);
 	}
 
 	/**
