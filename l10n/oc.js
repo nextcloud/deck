@@ -16,6 +16,7 @@ OC.L10N.register(
     "Edit" : "Modificar",
     "Upload new files" : "Enviar fichièrs novèls",
     "Save" : "Salvar",
+    "Cancel reply" : "Anullar la responsa",
     "Reply" : "Respondre",
     "Update" : "Metre a jorn",
     "Description" : "Descripcion",
