@@ -271,9 +271,9 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		return $share;
 	}
 
-	private function applyBoardPermission($share, $permissions) {
+	private function applyBoardPermission($share, $permissions, $userId) {
 		try {
-			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_EDIT);
+			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_EDIT, $userId);
 		} catch (NoPermissionException $e) {
 			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_UPDATE;
 			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_CREATE;
@@ -281,7 +281,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		}
 
 		try {
-			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_SHARE);
+			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_SHARE, $userId);
 		} catch (NoPermissionException $e) {
 			$permissions &= Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE;
 		}
@@ -646,7 +646,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			$stmt = $query->execute();
 
 			while ($data = $stmt->fetch()) {
-				$this->applyBoardPermission($shareMap[$data['parent']], (int)$data['permissions']);
+				$this->applyBoardPermission($shareMap[$data['parent']], (int)$data['permissions'], $userId);
 				$shareMap[$data['parent']]->setTarget($data['file_target']);
 			}
 
