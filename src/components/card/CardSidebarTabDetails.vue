@@ -186,7 +186,6 @@ export default {
 						date.setHours(23)
 						date.setMinutes(59)
 						return date
-						// new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59)
 					},
 				},
 				{
