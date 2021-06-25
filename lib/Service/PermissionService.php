@@ -268,7 +268,11 @@ class PermissionService {
 						continue;
 					}
 
-					foreach ($circle->getMembers() as $member) {
+					foreach ($circle->getInheritedMembers() as $member) {
+						if ($member->getUserType() !== 1) {
+							// deck currently only supports user members in circles
+							continue;
+						}
 						$user = $this->userManager->get($member->getUserId());
 						if ($user === null) {
 							$this->logger->info('No user found for circle member ' . $member->getUserId());
