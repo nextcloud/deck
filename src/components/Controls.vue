@@ -25,6 +25,12 @@
 		<div v-if="overviewName" class="board-title">
 			<div class="board-bullet icon-calendar-dark" />
 			<h2>{{ overviewName }}</h2>
+			<Actions>
+				<ActionButton icon="icon-add" @click="clickShowAddCardModel">
+					{{ t('deck', 'Add card') }}
+				</ActionButton>
+			</Actions>
+			<CardCreateDialog v-if="showAddCardModal" @close="clickHideAddCardModel" />
 		</div>
 		<div v-else-if="board" class="board-title">
 			<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
@@ -206,11 +212,12 @@
 import { mapState, mapGetters } from 'vuex'
 import { Actions, ActionButton, Popover, Avatar } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle'
+import CardCreateDialog from '../CardCreateDialog'
 
 export default {
 	name: 'Controls',
 	components: {
-		Actions, ActionButton, Popover, Avatar,
+		Actions, ActionButton, Popover, Avatar, CardCreateDialog,
 	},
 	mixins: [labelStyle],
 	props: {
@@ -233,6 +240,7 @@ export default {
 			showArchived: false,
 			isAddStackVisible: false,
 			filter: { tags: [], users: [], due: '', unassigned: false },
+			showAddCardModal: false,
 		}
 	},
 
@@ -317,6 +325,12 @@ export default {
 			const filterReset = { tags: [], users: [], due: '' }
 			this.$store.dispatch('setFilter', { ...filterReset })
 			this.filter = filterReset
+		},
+		clickShowAddCardModel() {
+			this.showAddCardModal = true
+		},
+		clickHideAddCardModel() {
+			this.showAddCardModal = false
 		},
 	},
 }

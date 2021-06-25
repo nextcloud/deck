@@ -36,8 +36,8 @@ class Circle extends RelationalObject {
 	public function getObjectSerialization() {
 		return [
 			'uid' => $this->object->getUniqueId(),
-			'displayname' => $this->object->getName(),
-			'typeString' => $this->object->getTypeString(),
+			'displayname' => $this->object->getDisplayName(),
+			'typeString' => '',
 			'circleOwner' => $this->object->getOwner(),
 			'type' => 7
 		];
