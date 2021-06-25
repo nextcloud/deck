@@ -32,7 +32,7 @@
 			</div>
 			<EmptyContent v-else-if="isEmpty" key="empty" icon="icon-deck">
 				{{ t('deck', 'No lists available') }}
-				<template #desc>
+				<template v-if="canManage" #desc>
 					{{ t('deck', 'Create a new list to add cards to this board') }}
 					<form @submit.prevent="addNewStack()">
 						<input id="new-stack-input-main"
@@ -110,6 +110,7 @@ export default {
 		}),
 		...mapGetters([
 			'canEdit',
+			'canManage',
 		]),
 		stacksByBoard() {
 			return this.$store.getters.stacksByBoard(this.board.id)
