@@ -76,7 +76,7 @@
 		"@nextcloud/webpack-vue-config": "^4.0.3",
 		"@relative-ci/agent": "^2.0.0",
 		"@vue/test-utils": "^1.2.1",
-		"jest": "^27.0.4",
+		"jest": "^27.0.5",
 		"jest-serializer-vue": "^2.0.2",
 		"vue-jest": "^3.0.7"
 	},
