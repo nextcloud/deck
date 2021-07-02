@@ -146,7 +146,7 @@ class PermissionServiceTest extends \Test\TestCase {
 	}
 
 	public function testUserIsBoardOwnerNull() {
-		$this->boardMapper->expects($this->once())->method('find')->willReturn(null);
+		$this->boardMapper->expects($this->once())->method('find')->willThrowException(new DoesNotExistException('board does not exist'));
 		$this->assertEquals(false, $this->service->userIsBoardOwner(123));
 	}
 
@@ -225,11 +225,8 @@ class PermissionServiceTest extends \Test\TestCase {
 		$board = new Board();
 		$board->setId($boardId);
 		$board->setOwner($owner);
+		$board->setAcl($this->getAcls($boardId));
 		$this->boardMapper->expects($this->any())->method('find')->willReturn($board);
-
-		// acl check
-		$acls = $this->getAcls($boardId);
-		$this->aclMapper->expects($this->any())->method('findAll')->willReturn($acls);
 
 		$this->shareManager->expects($this->any())
 			->method('sharingDisabledForUser')
@@ -250,14 +247,12 @@ class PermissionServiceTest extends \Test\TestCase {
 		$board = new Board();
 		$board->setId($boardId);
 		$board->setOwner($owner);
+		$board->setAcl($this->getAcls($boardId));
 		if ($boardId === null) {
 			$this->boardMapper->expects($this->any())->method('find')->willThrowException(new DoesNotExistException('not found'));
 		} else {
 			$this->boardMapper->expects($this->any())->method('find')->willReturn($board);
 		}
-		$acls = $this->getAcls($boardId);
-		$this->aclMapper->expects($this->any())->method('findAll')->willReturn($acls);
-
 
 		if ($result) {
 			$actual = $this->service->checkPermission($mapper, 1234, $permission);
