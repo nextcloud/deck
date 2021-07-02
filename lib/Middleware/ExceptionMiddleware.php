@@ -98,9 +98,7 @@ class ExceptionMiddleware extends Middleware {
 				'status' => 500,
 				'message' => $exception->getMessage()
 			];
-			if ($this->config->getSystemValue('loglevel', Util::WARN) === Util::DEBUG) {
-				$this->logger->logException($exception);
-			}
+			$this->logger->logException($exception);
 			if ($this->config->getSystemValue('debug', true) === true) {
 				$response['exception'] = (array) $exception;
 			}
