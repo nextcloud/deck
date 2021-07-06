@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Service;
 
+use OC\Cache\CappedMemoryCache;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Board;
@@ -61,6 +62,7 @@ class PermissionService {
 	private $users = [];
 
 	private $circlesEnabled = false;
+	private $boardCache;
 
 	public function __construct(
 		ILogger $logger,
@@ -80,6 +82,8 @@ class PermissionService {
 		$this->shareManager = $shareManager;
 		$this->config = $config;
 		$this->userId = $userId;
+
+		$this->boardCache = new CappedMemoryCache();
 
 		$this->circlesEnabled = \OC::$server->getAppManager()->isEnabledForUser('circles') &&
 			(version_compare(\OC::$server->getAppManager()->getAppVersion('circles'), '0.17.1') >= 0);
@@ -149,10 +153,13 @@ class PermissionService {
 			return true;
 		}
 
-		$acls = $this->aclMapper->findAll($boardId);
-		$result = $this->userCan($acls, $permission, $userId);
-		if ($result) {
-			return true;
+		try {
+			$acls = $this->getBoard($boardId)->getAcl();
+			$result = $this->userCan($acls, $permission, $userId);
+			if ($result) {
+				return true;
+			}
+		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 		}
 
 		// Throw NoPermission to not leak information about existing entries
@@ -168,11 +175,22 @@ class PermissionService {
 			$userId = $this->userId;
 		}
 		try {
-			$board = $this->boardMapper->find($boardId);
-			return $board && $userId === $board->getOwner();
+			$board = $this->getBoard($boardId);
+			return $userId === $board->getOwner();
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 		}
 		return false;
+	}
+
+	/**
+	 * @throws MultipleObjectsReturnedException
+	 * @throws DoesNotExistException
+	 */
+	private function getBoard($boardId): Board {
+		if (!isset($this->boardCache[$boardId])) {
+			$this->boardCache[$boardId] = $this->boardMapper->find($boardId, false, true);
+		}
+		return $this->boardCache[$boardId];
 	}
 
 	/**

@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Db;
 
+use OC\Cache\CappedMemoryCache;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IDBConnection;
 use OCP\IUserManager;
@@ -38,6 +39,8 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	private $logger;
 
 	private $circlesEnabled;
+
+	private $userBoardCache;
 
 	public function __construct(
 		IDBConnection $db,
@@ -55,6 +58,9 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->logger = $logger;
+
+		$this->userBoardCache = new CappedMemoryCache();
+
 
 		$this->circlesEnabled = \OC::$server->getAppManager()->isEnabledForUser('circles');
 	}
@@ -89,13 +95,21 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	public function findAllForUser(string $userId, int $since = -1, $includeArchived = true): array {
-		$groups = $this->groupManager->getUserGroupIds(
-			$this->userManager->get($userId)
-		);
-		$userBoards = $this->findAllByUser($userId, null, null, $since, $includeArchived);
-		$groupBoards = $this->findAllByGroups($userId, $groups,null, null, $since, $includeArchived);
-		$circleBoards = $this->findAllByCircles($userId, null, null,  $since, $includeArchived);
-		return array_unique(array_merge($userBoards, $groupBoards, $circleBoards));
+		$useCache = ($since === -1 && $includeArchived === true);
+		if (!isset($this->userBoardCache[$userId]) || !$useCache) {
+			$groups = $this->groupManager->getUserGroupIds(
+				$this->userManager->get($userId)
+			);
+			$userBoards = $this->findAllByUser($userId, null, null, $since, $includeArchived);
+			$groupBoards = $this->findAllByGroups($userId, $groups, null, null, $since, $includeArchived);
+			$circleBoards = $this->findAllByCircles($userId, null, null, $since, $includeArchived);
+			$allBoards = array_unique(array_merge($userBoards, $groupBoards, $circleBoards));
+			if ($useCache) {
+				$this->userBoardCache[$userId] = $allBoards;
+			}
+			return $allBoards;
+		}
+		return $this->userBoardCache[$userId];
 	}
 
 	/**
