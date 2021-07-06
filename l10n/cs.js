@@ -76,7 +76,7 @@ OC.L10N.register(
     "%s has mentioned you in a comment on \"%s\"." : "%s vás zmínil(a) v komentáři k „%s“.",
     "{user} has mentioned you in a comment on {deck-card}." : "{user} vás zmínil(a) v komentáři na kartě {deck-card}.",
     "The board \"%s\" has been shared with you by %s." : "Uživatel %s vám nasdílel(a) tabuli „%s“.",
-    "{user} has shared {deck-board} with you." : "{user} s vámi sdílel(a) tabuli {deck-board}.",
+    "{user} has shared {deck-board} with you." : "{user} vám nasdílel(a) tabuli {deck-board}.",
     "Card comments" : "Komentáře v kartách",
     "%s on %s" : "%s na %s",
     "No data was provided to create an attachment." : "Nebyla poskytnuta žádná data pro vytvoření přílohy.",
