@@ -3,7 +3,9 @@ OC.L10N.register(
     {
     "copy" : "copiar",
     "Done" : "Done",
+    "Create a new card" : "Crear una carta novèla",
     "Cancel" : "Anullar",
+    "Create card" : "Crear una carta",
     "Details" : "Detalhs",
     "Sharing" : "Partiment",
     "Tags" : "Etiquetas",
@@ -23,6 +25,7 @@ OC.L10N.register(
     "seconds ago" : "fa qualques segondas",
     "Shared with you" : "Shared with you",
     "Today" : "Uèi",
-    "Tomorrow" : "Deman"
+    "Tomorrow" : "Deman",
+    "Create a card" : "Crear una carta"
 },
 "nplurals=2; plural=(n > 1);");

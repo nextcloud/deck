@@ -1,7 +1,9 @@
 { "translations": {
     "copy" : "copiar",
     "Done" : "Done",
+    "Create a new card" : "Crear una carta novèla",
     "Cancel" : "Anullar",
+    "Create card" : "Crear una carta",
     "Details" : "Detalhs",
     "Sharing" : "Partiment",
     "Tags" : "Etiquetas",
@@ -21,6 +23,7 @@
     "seconds ago" : "fa qualques segondas",
     "Shared with you" : "Shared with you",
     "Today" : "Uèi",
-    "Tomorrow" : "Deman"
+    "Tomorrow" : "Deman",
+    "Create a card" : "Crear una carta"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }
