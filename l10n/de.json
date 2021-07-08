@@ -257,7 +257,7 @@
     "Only assigned cards" : "Nur zugewiesene Karten",
     "No reminder" : "Keine Erinnerung",
     "An error occurred" : "Es ist ein Fehler aufgetreten",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Möchtest Du wirklich dieses Board {title} mit all seinen Daten löschen?",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Möchtest Du wirklich das Board {title} mit all seinen Daten löschen?",
     "Delete the board?" : "Das Board löschen?",
     "Loading filtered view" : "Lade gefilterte Ansicht",
     "Today" : "Heute",
