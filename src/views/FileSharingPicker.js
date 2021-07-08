@@ -21,7 +21,6 @@
  */
 
 import Vue from 'vue'
-import CardSelector from '../CardSelector'
 import { createShare } from '../services/SharingApi'
 
 export default {
@@ -34,12 +33,12 @@ export default {
 			container.id = 'deck-board-select'
 			const body = document.getElementById('body-user')
 			body.append(container)
-			const SelectorView = Vue.extend(CardSelector)
-			const ComponentVM = new SelectorView({
-				propsData: {
+			const CardSelector = () => import('./../CardSelector')
+			const ComponentVM = new Vue({
+				render: (h) => h(CardSelector, {
 					title: t('deck', 'Share {file} with a Deck card', { file: decodeURIComponent(self.fileInfo.name) }),
 					action: t('deck', 'Share'),
-				},
+				}),
 			})
 			ComponentVM.$mount(container)
 			ComponentVM.$root.$on('close', () => {

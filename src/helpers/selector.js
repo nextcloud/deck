@@ -25,9 +25,8 @@ const buildSelector = (selector, propsData = {}) => {
 	return new Promise((resolve, reject) => {
 		const container = document.createElement('div')
 		document.getElementById('body-user').append(container)
-		const View = Vue.extend(selector)
-		const ComponentVM = new View({
-			propsData,
+		const ComponentVM = new Vue({
+			render: (h) => h(selector, propsData),
 		}).$mount(container)
 		ComponentVM.$root.$on('close', () => {
 			ComponentVM.$el.remove()
