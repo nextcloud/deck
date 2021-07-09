@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.4.3 - 2021-07-09
+
+### Fixed
+
+* [#3143](https://github.com/nextcloud/deck/pull/3143) Always pass user id in share provider
+* [#3153](https://github.com/nextcloud/deck/pull/3153) Only offer stack creation in emptycontent with proper permissions
+* [#3164](https://github.com/nextcloud/deck/pull/3164) Always log generic exceptions
+* [#3169](https://github.com/nextcloud/deck/pull/3169) Reduce duplicate queries when fetching user boards an permissions
+
+
 ## 1.4.2 - 2021-05-03
 
 ### Fixed
