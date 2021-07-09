@@ -22,8 +22,6 @@
 
 import Vue from 'vue'
 
-import BoardSelector from './BoardSelector'
-import CardSelector from './CardSelector'
 import './../css/collections.css'
 import FileSharingPicker from './views/FileSharingPicker'
 import { buildSelector } from './helpers/selector'
@@ -45,13 +43,19 @@ window.addEventListener('DOMContentLoaded', () => {
 	}
 
 	window.OCP.Collaboration.registerType('deck', {
-		action: () => buildSelector(BoardSelector),
+		action: () => {
+			const BoardSelector = () => import('./BoardSelector')
+			buildSelector(BoardSelector)
+		},
 		typeString: t('deck', 'Link to a board'),
 		typeIconClass: 'icon-deck',
 	})
 
 	window.OCP.Collaboration.registerType('deck-card', {
-		action: () => buildSelector(CardSelector),
+		action: () => {
+			const CardSelector = () => import('./CardSelector')
+			buildSelector(CardSelector)
+		},
 		typeString: t('deck', 'Link to a card'),
 		typeIconClass: 'icon-deck',
 	})
