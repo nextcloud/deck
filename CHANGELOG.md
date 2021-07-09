@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.8
+
+### Fixed
+
+* [#3090](https://github.com/nextcloud/deck/pull/3090) Always fetch attachments
+* [#3163](https://github.com/nextcloud/deck/pull/3163) Always log generic exceptions
+
+
 ## 1.2.7
 
 ### Fixed
@@ -157,31 +165,31 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 
-* [#2116](https://github.com/nextcloud/deck/pull/2116) Fix navigation layout issues @juliushaertl
-* [#2118](https://github.com/nextcloud/deck/pull/2118) Use proper parameter when handling attachments @juliushaertl
+* [#2116](https://github.com/nextcloud/deck/pull/2116) Fix navigation layout issues
+* [#2118](https://github.com/nextcloud/deck/pull/2118) Use proper parameter when handling attachments
 
 ## 1.0.4 - 2020-06-26
 
 ### Fixed
 
-* [#2062](https://github.com/nextcloud/deck/pull/2062) Fix saving card description after toggling checkboxes @juliushaertl
+* [#2062](https://github.com/nextcloud/deck/pull/2062) Fix saving card description after toggling checkboxes
 * [#2065](https://github.com/nextcloud/deck/pull/2065) Adding CSS rule for Markdown Blockquotes @reox
-* [#2059](https://github.com/nextcloud/deck/pull/2059) Fix fetching attachments on card change @juliushaertl
-* [#2060](https://github.com/nextcloud/deck/pull/2060) Use mixing for relative date in card sidebar @juliushaertl
+* [#2059](https://github.com/nextcloud/deck/pull/2059) Fix fetching attachments on card change
+* [#2060](https://github.com/nextcloud/deck/pull/2060) Use mixing for relative date in card sidebar
 
 
 ## 1.0.3 - 2020-06-19
 
 ### Fixed
 
-* [#2019](https://github.com/nextcloud/deck/pull/2019) Remove old global css rule @juliushaertl
-* [#2020](https://github.com/nextcloud/deck/pull/2020) Fix navigation issue with leftover nodes @juliushaertl
-* [#2021](https://github.com/nextcloud/deck/pull/2021) Fix description issues @juliushaertl
-* [#2022](https://github.com/nextcloud/deck/pull/2022) Fix replyto issues with the comments API @juliushaertl
-* [#2027](https://github.com/nextcloud/deck/pull/2027) Allow to unassign current user from card @juliushaertl
+* [#2019](https://github.com/nextcloud/deck/pull/2019) Remove old global css rule
+* [#2020](https://github.com/nextcloud/deck/pull/2020) Fix navigation issue with leftover nodes
+* [#2021](https://github.com/nextcloud/deck/pull/2021) Fix description issues
+* [#2022](https://github.com/nextcloud/deck/pull/2022) Fix replyto issues with the comments API
+* [#2027](https://github.com/nextcloud/deck/pull/2027) Allow to unassign current user from card
 * [#2029](https://github.com/nextcloud/deck/pull/2029) Fix wording : stack -> list @cloud2018
-* [#2032](https://github.com/nextcloud/deck/pull/2032) Force order by id as second sorting key @juliushaertl
-* [#2045](https://github.com/nextcloud/deck/pull/2045) Improve label styling @juliushaertl
+* [#2032](https://github.com/nextcloud/deck/pull/2032) Force order by id as second sorting key
+* [#2045](https://github.com/nextcloud/deck/pull/2045) Improve label styling
 * [#2010](https://github.com/nextcloud/deck/pull/2010) User documentation fixes @Nyco
 * [#1998](https://github.com/nextcloud/deck/pull/1998) Add Checklist explaination to the doc @4rnoP
 
