@@ -113,7 +113,7 @@
 			<ActionCheckbox v-if="canManage"
 				:checked="board.coverImages"
 				@change="actionToggleCoverImages">
-				{{ t('deck', 'Show cover images') }} {{ board.coverImages }}
+				{{ t('deck', 'Show cover images') }}
 			</ActionCheckbox>
 			<ActionButton v-if="canManage && !isDueSubmenuActive"
 				icon="icon-delete"

@@ -35,12 +35,13 @@
 				{{ board.title }} » {{ stack.title }}
 			</div>
 			<div class="card-upper">
-				<h3 v-if="compactMode || isArchived || showArchived || !canEdit || standalone">
-					{{ attachments }}
-			<div class="imageCover" v-if="currentBoard.coverImages">
-				<a class="fileicon" :style="mimetypeForAttachment(attachments[0])" />
-			</div>
-			<div class="card-upper">
+				<div v-if="currentBoard.coverImages && images.length" class="imageCover">
+					<div class="imageCard" :style="mimetypeForAttachment(images[0])">
+						<div v-if="loading" class="emptycontent">
+							<div class="icon icon-loading" />
+						</div>
+					</div>
+				</div>
 				<h3 v-if="compactMode || isArchived || showArchived || !canEdit">
 					{{ card.title }}
 				</h3>
@@ -118,7 +119,12 @@ export default {
 		return {
 			editing: false,
 			copiedCard: null,
+			images: null,
+			loading: false,
 		}
+	},
+	mounted() {
+		this.loadImages()
 	},
 	computed: {
 		...mapState({
@@ -135,9 +141,6 @@ export default {
 		},
 		stack() {
 			return this.$store.getters.stackById(this?.card?.stackId)
-		},
-		attachments() {
-			return [...this.$store.getters.attachmentsByCard(this.id)].filter(attachment => attachment.deletedAt >= 0)
 		},
 		canEdit() {
 			if (this.currentBoard) {
@@ -199,6 +202,12 @@ export default {
 		applyLabelFilter(label) {
 			this.$nextTick(() => this.$store.dispatch('toggleFilter', { tags: [label.id] }))
 		},
+		async loadImages() {
+			this.loading = true
+			await this.$store.dispatch('fetchAttachments', this.id)
+			this.loading = false
+			this.images = [...this.$store.getters.attachmentsByCard(this.id)].filter(attachment => attachment.deletedAt >= 0).sort((a, b) => b.id - a.id)
+		},
 	},
 }
 </script>
@@ -229,18 +238,12 @@ export default {
 		&.current-card {
 			box-shadow: 0 0 5px 1px var(--color-box-shadow);
 		}
-
-		.fileicon {
-			display: flex;
-			width: 260px;
-			height: 260px;
-			background-size: contain;
-			background-repeat: no-repeat;
-			margin-left: auto;
-			margin-right: auto;
-			border-radius: var(--border-radius-large);
+		.imageCard {
+			width: 272px;
+			height: 250px;
+			background-size: cover;
+			border-radius: var(--border-radius-large) var(--border-radius-large) 0 0 ;
 		}
-
 		.card-upper {
 			display: flex;
 			min-height: 44px;
