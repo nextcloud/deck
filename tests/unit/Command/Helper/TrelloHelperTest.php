@@ -31,6 +31,7 @@ use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\LabelService;
 use OCP\IDBConnection;
+use OCP\IL10N;
 use OCP\IUserManager;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -52,6 +53,8 @@ class TrelloHelperTest extends \Test\TestCase {
 	private $userManager;
 	/** @var TrelloHelper */
 	private $trelloHelper;
+	/** @var IL10N */
+	private $l10n;
 	public function setUp(): void {
 		parent::setUp();
 		$this->boardService = $this->createMock(BoardService::class);
@@ -62,6 +65,7 @@ class TrelloHelperTest extends \Test\TestCase {
 		$this->aclMapper = $this->createMock(AclMapper::class);
 		$this->connection = $this->createMock(IDBConnection::class);
 		$this->userManager = $this->createMock(IUserManager::class);
+		$this->l10n = $this->createMock(IL10N::class);
 		$this->trelloHelper = new TrelloHelper(
 			$this->boardService,
 			$this->labelService,
@@ -70,7 +74,8 @@ class TrelloHelperTest extends \Test\TestCase {
 			$this->assignmentMapper,
 			$this->aclMapper,
 			$this->connection,
-			$this->userManager
+			$this->userManager,
+			$this->l10n
 		);
 		$questionHelper = new QuestionHelper();
 		$command = new BoardImport($this->trelloHelper);
