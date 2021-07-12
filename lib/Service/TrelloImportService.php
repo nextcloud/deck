@@ -21,7 +21,7 @@
  *
  */
 
-namespace OCA\Deck\Command\Helper;
+namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
@@ -33,19 +33,16 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
-use OCA\Deck\Service\BoardService;
-use OCA\Deck\Service\LabelService;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IUser;
 use OCP\IUserManager;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
 
-class TrelloHelper extends ImportAbstract implements ImportInterface {
+class TrelloImportService extends AImportService {
 	/** @var BoardService */
 	private $boardService;
+	/** @var LabelService */
+	private $labelService;
 	/** @var StackMapper */
 	private $stackMapper;
 	/** @var CardMapper */
@@ -58,18 +55,10 @@ class TrelloHelper extends ImportAbstract implements ImportInterface {
 	private $connection;
 	/** @var IUserManager */
 	private $userManager;
-	/** @var Board */
-	private $board;
-	/** @var LabelService */
-	private $labelService;
 	/** @var IL10N */
 	private $l10n;
-	/**
-	 * Data object created from JSON of origin system
-	 *
-	 * @var \StdClass
-	 */
-	private $data;
+	/** @var Board */
+	private $board;
 	/**
 	 * Array of stacks
 	 *
@@ -86,6 +75,12 @@ class TrelloHelper extends ImportAbstract implements ImportInterface {
 	private $cards = [];
 	/** @var IUser[] */
 	private $members = [];
+	/**
+	 * Data object created from JSON of origin system
+	 *
+	 * @var \StdClass
+	 */
+	private $data;
 
 	public function __construct(
 		BoardService $boardService,
@@ -109,82 +104,30 @@ class TrelloHelper extends ImportAbstract implements ImportInterface {
 		$this->l10n = $l10n;
 	}
 
-	public function validate(InputInterface $input, OutputInterface $output): void {
-		$this->validateData($input, $output);
-		$this->validateSettings($input, $output);
-		$this->validateUsers();
-		$this->validateOwner();
+	public function setData(\stdClass $data) {
+		$this->data = $data;
 	}
 
-	public function import(InputInterface $input, OutputInterface $output): void {
-		$this->setUserId();
-		$output->writeln('Importing board...');
-		$this->importBoard();
-		$output->writeln('Assign users to board...');
-		$this->assignUsersToBoard();
-		$output->writeln('Importing labels...');
-		$this->importLabels();
-		$output->writeln('Importing stacks...');
-		$this->importStacks();
-		$output->writeln('Importing cards...');
-		$this->importCards();
+	public function getData() {
+		return $this->data;
 	}
 
-	private function assignUsersToBoard(): void {
-		foreach ($this->members as $member) {
-			$acl = new Acl();
-			$acl->setBoardId($this->board->getId());
-			$acl->setType(Acl::PERMISSION_TYPE_USER);
-			$acl->setParticipant($member->getUid());
-			$acl->setPermissionEdit(true);
-			$acl->setPermissionShare($member->getUID() === $this->getSetting('owner')->getUID());
-			$acl->setPermissionManage($member->getUID() === $this->getSetting('owner')->getUID());
-			$this->aclMapper->insert($acl);
-		}
-	}
-
-	private function validateData(InputInterface $input, OutputInterface $output): void {
-		$filename = $input->getOption('data');
-		if (!is_file($filename)) {
-			$helper = $this->getCommand()->getHelper('question');
-			$question = new Question(
-				'Please inform a valid data json file: ',
-				'data.json'
-			);
-			$question->setValidator(function ($answer) {
-				if (!is_file($answer)) {
-					throw new \RuntimeException(
-						'Data file not found'
-					);
-				}
-				return $answer;
-			});
-			$data = $helper->ask($input, $output, $question);
-			$input->setOption('data', $data);
-		}
-		$this->data = json_decode(file_get_contents($filename));
-		if (!$this->data) {
-			$output->writeln('<error>Is not a json file: ' . $filename . '</error>');
-			$this->validateData($input, $output);
-		}
-	}
-
-	private function validateOwner(): void {
-		$owner = $this->userManager->get($this->getSetting('owner'));
+	public function validateOwner(): void {
+		$owner = $this->userManager->get($this->getConfig('owner'));
 		if (!$owner) {
-			throw new \LogicException('Owner "' . $this->getSetting('owner') . '" not found on Nextcloud. Check setting json.');
+			throw new \LogicException('Owner "' . $this->getConfig('owner')->getUID() . '" not found on Nextcloud. Check setting json.');
 		}
-		$this->setSetting('owner', $owner);
+		$this->setConfig('owner', $owner);
 	}
 
 	/**
 	 * @return void
 	 */
-	private function validateUsers() {
-		if (empty($this->getSetting('uidRelation'))) {
+	public function validateUsers() {
+		if (empty($this->getConfig('uidRelation'))) {
 			return;
 		}
-		foreach ($this->getSetting('uidRelation') as $trelloUid => $nextcloudUid) {
+		foreach ($this->getConfig('uidRelation') as $trelloUid => $nextcloudUid) {
 			$user = array_filter($this->data->members, function ($u) use ($trelloUid) {
 				return $u->username === $trelloUid;
 			});
@@ -194,12 +137,28 @@ class TrelloHelper extends ImportAbstract implements ImportInterface {
 			if (!is_string($nextcloudUid)) {
 				throw new \LogicException('User on setting uidRelation must be a string');
 			}
-			$this->getSetting('uidRelation')->$trelloUid = $this->userManager->get($nextcloudUid);
-			if (!$this->getSetting('uidRelation')->$trelloUid) {
+			$this->getConfig('uidRelation')->$trelloUid = $this->userManager->get($nextcloudUid);
+			if (!$this->getConfig('uidRelation')->$trelloUid) {
 				throw new \LogicException('User on setting uidRelation not found: ' . $nextcloudUid);
 			}
 			$user = current($user);
-			$this->members[$user->id] = $this->getSetting('uidRelation')->$trelloUid;
+			$this->members[$user->id] = $this->getConfig('uidRelation')->$trelloUid;
+		}
+	}
+
+	public function assignUsersToBoard(): void {
+		foreach ($this->members as $member) {
+			if ($member->getUID() === $this->getConfig('owner')->getUID()) {
+				continue;
+			}
+			$acl = new Acl();
+			$acl->setBoardId($this->board->getId());
+			$acl->setType(Acl::PERMISSION_TYPE_USER);
+			$acl->setParticipant($member->getUID());
+			$acl->setPermissionEdit(false);
+			$acl->setPermissionShare(false);
+			$acl->setPermissionManage(false);
+			$this->aclMapper->insert($acl);
 		}
 	}
 
@@ -222,7 +181,7 @@ class TrelloHelper extends ImportAbstract implements ImportInterface {
 		return $checklist_string;
 	}
 
-	private function importCards(): void {
+	public function importCards(): void {
 		$checklists = [];
 		foreach ($this->data->checklists as $checklist) {
 			$checklists[$checklist->idCard][$checklist->id] = $this->formulateChecklistText($checklist);
@@ -247,7 +206,7 @@ class TrelloHelper extends ImportAbstract implements ImportInterface {
 			$card->setStackId($this->stacks[$trelloCard->idList]->getId());
 			$card->setType('plain');
 			$card->setOrder($trelloCard->idShort);
-			$card->setOwner($this->getSetting('owner')->getUID());
+			$card->setOwner($this->getConfig('owner')->getUID());
 			$card->setDescription($trelloCard->desc);
 			if ($trelloCard->due) {
 				$duedate = \DateTime::createFromFormat('Y-m-d\TH:i:s.v\Z', $trelloCard->due)
@@ -297,10 +256,10 @@ class TrelloHelper extends ImportAbstract implements ImportInterface {
 			}
 		);
 		foreach ($comments as $trelloComment) {
-			if (!empty($this->getSetting('uidRelation')->{$trelloComment->memberCreator->username})) {
-				$actor = $this->getSetting('uidRelation')->{$trelloComment->memberCreator->username}->getUID();
+			if (!empty($this->getConfig('uidRelation')->{$trelloComment->memberCreator->username})) {
+				$actor = $this->getConfig('uidRelation')->{$trelloComment->memberCreator->username}->getUID();
 			} else {
-				$actor = $this->getSetting('owner')->getUID();
+				$actor = $this->getConfig('owner')->getUID();
 			}
 			$message = $this->replaceUsernames($trelloComment->data->text);
 			$qb = $this->connection->getQueryBuilder();
@@ -329,7 +288,7 @@ class TrelloHelper extends ImportAbstract implements ImportInterface {
 	}
 
 	private function replaceUsernames($text) {
-		foreach ($this->getSetting('uidRelation') as $trello => $nextcloud) {
+		foreach ($this->getConfig('uidRelation') as $trello => $nextcloud) {
 			$text = str_replace($trello, $nextcloud->getUID(), $text);
 		}
 		return $text;
@@ -344,7 +303,7 @@ class TrelloHelper extends ImportAbstract implements ImportInterface {
 		}
 	}
 
-	private function importStacks(): void {
+	public function importStacks(): void {
 		$this->stacks = [];
 		foreach ($this->data->lists as $order => $list) {
 			$stack = new Stack();
@@ -386,15 +345,15 @@ class TrelloHelper extends ImportAbstract implements ImportInterface {
 		}
 	}
 
-	private function importBoard(): void {
+	public function importBoard(): void {
 		$this->board = $this->boardService->create(
 			$this->data->name,
-			$this->getSetting('owner')->getUID(),
-			$this->getSetting('color')
+			$this->getConfig('owner')->getUID(),
+			$this->getConfig('color')
 		);
 	}
 
-	private function importLabels(): void {
+	public function importLabels(): void {
 		$this->labels = [];
 		foreach ($this->data->labels as $label) {
 			if (empty($label->name)) {
@@ -411,7 +370,7 @@ class TrelloHelper extends ImportAbstract implements ImportInterface {
 		}
 	}
 
-	private function setUserId(): void {
+	public function setUserId(): void {
 		if (!property_exists($this->labelService, 'permissionService')) {
 			return;
 		}
@@ -425,6 +384,6 @@ class TrelloHelper extends ImportAbstract implements ImportInterface {
 
 		$propertyUserId = new \ReflectionProperty($permissionService, 'userId');
 		$propertyUserId->setAccessible(true);
-		$propertyUserId->setValue($permissionService, $this->getSetting('owner')->getUID());
+		$propertyUserId->setValue($permissionService, $this->getConfig('owner')->getUID());
 	}
 }

@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\Command;
 
-use OCA\Deck\Command\Helper\TrelloHelper;
+use OCA\Deck\Command\ImportHelper\TrelloHelper;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -55,12 +55,12 @@ class BoardImportTest extends \Test\TestCase {
 		$input->method('getOption')
 			->withConsecutive(
 				[$this->equalTo('system')],
-				[$this->equalTo('setting')],
+				[$this->equalTo('config')],
 				[$this->equalTo('data')]
 			)
 			->will($this->returnValueMap([
 				['system', 'trello'],
-				['setting', __DIR__ . '/fixtures/setting-trello.json'],
+				['config', __DIR__ . '/fixtures/config-trello.json'],
 				['data', __DIR__ . '/fixtures/data-trello.json']
 			]));
 		$output = $this->createMock(OutputInterface::class);
