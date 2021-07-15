@@ -25,33 +25,19 @@ namespace OCA\Deck\Service;
 
 use OC\Comments\Comment;
 use OCA\Deck\Db\Acl;
-use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
-use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Stack;
-use OCA\Deck\Db\StackMapper;
-use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IUser;
 use OCP\IUserManager;
 
 class BoardImportTrelloService extends ABoardImportService {
-	/** @var LabelService */
-	private $labelService;
-	/** @var StackMapper */
-	private $stackMapper;
-	/** @var CardMapper */
-	private $cardMapper;
 	/** @var AssignmentMapper */
 	private $assignmentMapper;
-	/** @var AclMapper */
-	private $aclMapper;
-	/** @var IDBConnection */
-	private $connection;
 	/** @var IUserManager */
 	private $userManager;
 	/** @var IL10N */
@@ -75,22 +61,12 @@ class BoardImportTrelloService extends ABoardImportService {
 
 	public function __construct(
 		BoardService $boardService,
-		LabelService $labelService,
-		StackMapper $stackMapper,
-		CardMapper $cardMapper,
 		AssignmentMapper $assignmentMapper,
-		AclMapper $aclMapper,
-		IDBConnection $connection,
 		IUserManager $userManager,
 		IL10N $l10n
 	) {
 		$this->boardService = $boardService;
-		$this->labelService = $labelService;
-		$this->stackMapper = $stackMapper;
-		$this->cardMapper = $cardMapper;
 		$this->assignmentMapper = $assignmentMapper;
-		$this->aclMapper = $aclMapper;
-		$this->connection = $connection;
 		$this->userManager = $userManager;
 		$this->l10n = $l10n;
 	}
@@ -221,11 +197,11 @@ class BoardImportTrelloService extends ABoardImportService {
 			return;
 		}
 		$trelloCard->desc .= "\n\n## {$this->l10n->t('Attachments')}\n";
-		$trelloCard->desc .= "| {$this->l10n->t('URL')} | {$this->l10n->t('Name')} | {$this->l10n->t('date')} |\n";
-		$trelloCard->desc .= "|---|---|---|\n";
+		$trelloCard->desc .= "| {$this->l10n->t('File')} | {$this->l10n->t('date')} |\n";
+		$trelloCard->desc .= "|---|---\n";
 		foreach ($trelloCard->attachments as $attachment) {
 			$name = $attachment->name === $attachment->url ? null : $attachment->name;
-			$trelloCard->desc .= "| {$attachment->url} | {$name} | {$attachment->date} |\n";
+			$trelloCard->desc .= "| [{$name}]({$attachment->url}) | {$attachment->date} |\n";
 		}
 		return $this;
 	}
@@ -237,7 +213,7 @@ class BoardImportTrelloService extends ABoardImportService {
 				$assignment->setCardId($this->cards[$trelloCard->id]->getId());
 				$assignment->setParticipant($this->members[$idMember]->getUID());
 				$assignment->setType(Assignment::TYPE_USER);
-				$assignment = $this->assignmentMapper->insert($assignment);
+				$this->getImportService()->insertAssignment($assignment);
 			}
 		}
 		return $this;
