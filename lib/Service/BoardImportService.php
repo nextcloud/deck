@@ -34,9 +34,10 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
+use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Exceptions\ConflictException;
 use OCA\Deck\NotFoundException;
-use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
 use OCP\Comments\NotFoundException as CommentNotFoundException;
 use OCP\IDBConnection;
@@ -105,39 +106,30 @@ class BoardImportService {
 	}
 
 	public function import(): void {
-		$this->validate();
-		$schemaPath = __DIR__ . '/fixtures/config-' . $system . '-schema.json';
-		$validator = new Validator();
-		$validator->validate(
-			$config,
-			(object)['$ref' => 'file://' . realpath($schemaPath)],
-			Constraint::CHECK_MODE_APPLY_DEFAULTS
-		);
-		if (!$validator->isValid()) {
-			throw new BadRequestException('invalid config');
+		try {
+			$this->importBoard();
+			$this->importAcl();
+			$this->importLabels();
+			$this->importStacks();
+			$this->importCards();
+			$this->assignCardsToLabels();
+			$this->importComments();
+			$this->importParticipants();
+		} catch (\Throwable $th) {
+			throw new BadRequestException($th->getMessage());
 		}
-
-		if (empty($data)) {
-			throw new BadRequestException('data must be provided');
-		}
-		$this->getImportService()->setData($data);
-		$this->getImportService()->import();
-		// return $newBoard;
 	}
 
-	public function validate(): self {
-		if (is_string($system) === false) {
-			throw new BadRequestException('system must be provided');
-		}
+	public function validate() {
+		$this->validateSystem();
+		$this->validateConfig();
+		$this->validateUsers();
+	}
 
-		if (!in_array($system, $this->getAllowedImportSystems())) {
-			throw new BadRequestException('not allowed system');
+	protected function validateSystem() {
+		if (!in_array($this->getSystem(), $this->getAllowedImportSystems())) {
+			throw new NotFoundException('Invalid system');
 		}
-
-		if (empty($config)) {
-			throw new BadRequestException('config must be provided');
-		}
-		return $this;
 	}
 
 	public function setSystem(string $system): self {
@@ -162,10 +154,11 @@ class BoardImportService {
 				}
 				return true;
 			});
-			$this->allowedSystems = array_map(function ($name) {
+			$allowedSystems = array_map(function ($name) {
 				preg_match('/\/BoardImport(?<system>\w+)Service\.php$/', $name, $matches);
 				return lcfirst($matches['system']);
 			}, $allowedSystems);
+			$this->allowedSystems = array_values($allowedSystems);
 		}
 		return $this->allowedSystems;
 	}
@@ -178,6 +171,10 @@ class BoardImportService {
 		}
 
 		return $this->systemInstance;
+	}
+
+	public function setImportSystem($instance) {
+		$this->systemInstance = $instance;
 	}
 
 	public function insertAssignment($assignment): self {
@@ -203,12 +200,14 @@ class BoardImportService {
 		foreach ($aclList as $acl) {
 			$this->aclMapper->insert($acl);
 		}
+		$this->getBoard()->setAcl($aclList);
 		return $this;
 	}
 
-	public function importLabels(): self {
-		$this->getImportSystem()->importLabels();
-		return $this;
+	public function importLabels(): array {
+		$labels = $this->getImportSystem()->importLabels();
+		$this->getBoard()->setLabels($labels);
+		return $labels;
 	}
 
 	public function createLabel($title, $color, $boardId): Label {
@@ -219,13 +218,17 @@ class BoardImportService {
 		return $this->labelMapper->insert($label);
 	}
 
-	public function importStacks(): self {
-		$stack = $this->getImportSystem()->getStacks();
-		foreach ($stack as $code => $stack) {
+	/**
+	 * @return Stack[]
+	 */
+	public function importStacks(): array {
+		$stacks = $this->getImportSystem()->getStacks();
+		foreach ($stacks as $code => $stack) {
 			$this->stackMapper->insert($stack);
 			$this->getImportSystem()->updateStack($code, $stack);
 		}
-		return $this;
+		$this->getBoard()->setStacks(array_values($stacks));
+		return $stacks;
 	}
 
 	public function importCards(): self {
@@ -255,7 +258,7 @@ class BoardImportService {
 		return $this;
 	}
 
-	public function insertComment($cardId, IComment $comment): IComment {
+	public function insertComment($cardId, $comment) {
 		$comment->setObject('deckCard', (string) $cardId);
 		$comment->setVerb('comment');
 		// Check if parent is a comment on the same card
@@ -338,10 +341,7 @@ class BoardImportService {
 	 * @return mixed
 	 */
 	public function getConfig(string $configName = null) {
-		if (!is_object($this->config)) {
-			return;
-		}
-		if (!$configName) {
+		if (!is_object($this->config) || !$configName) {
 			return $this->config;
 		}
 		if (!property_exists($this->config, $configName)) {
@@ -350,15 +350,41 @@ class BoardImportService {
 		return $this->config->$configName;
 	}
 
-	public function setConfigInstance(\stdClass $config): self {
+	public function setConfigInstance($config): self {
 		$this->config = $config;
 		return $this;
+	}
+
+	protected function validateConfig() {
+		$config = $this->getConfig();
+		if (empty($config)) {
+			throw new NotFoundException('Please inform a valid config json file');
+		}
+		if (is_string($config)) {
+			if (!is_file($config)) {
+				throw new NotFoundException('Please inform a valid config json file');
+			}
+			$config = json_decode(file_get_contents($config));
+		}
+		$schemaPath = __DIR__ . '/fixtures/config-' . $this->getSystem() . '-schema.json';
+		$validator = new Validator();
+		$newConfig = clone $config;
+		$validator->validate(
+			$newConfig,
+			(object)['$ref' => 'file://' . realpath($schemaPath)],
+			Constraint::CHECK_MODE_APPLY_DEFAULTS
+		);
+		if (!$validator->isValid()) {
+			throw new ConflictException('Invalid config file', $validator->getErrors());
+		}
+		$this->setConfigInstance($newConfig);
+		$this->validateOwner();
 	}
 
 	public function validateOwner(): self {
 		$owner = $this->userManager->get($this->getConfig('owner'));
 		if (!$owner) {
-			throw new \LogicException('Owner "' . $this->getConfigboardImportService->getConfig('owner')->getUID() . '" not found on Nextcloud. Check setting json.');
+			throw new \LogicException('Owner "' . $this->getConfig('owner')->getUID() . '" not found on Nextcloud. Check setting json.');
 		}
 		$this->setConfig('owner', $owner);
 		return $this;

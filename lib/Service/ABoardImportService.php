@@ -5,6 +5,7 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
+use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Stack;
 
 abstract class ABoardImportService {
@@ -34,9 +35,10 @@ abstract class ABoardImportService {
 
 	abstract public function importParticipants(): self;
 
-	abstract public function importComments(): self;
+	abstract public function importComments();
 
-	abstract public function importLabels(): self;
+	/** @return Label[] */
+	abstract public function importLabels(): array;
 
 	abstract public function assignCardsToLabels(): self;
 

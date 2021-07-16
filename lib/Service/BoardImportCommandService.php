@@ -1,10 +1,31 @@
 <?php
+/**
+ * @copyright Copyright (c) 2021 Vitor Mattos <vitor@php.rio>
+ *
+ * @author Vitor Mattos <vitor@php.rio>
+ *
+ * @license GNU AGPL version 3 or any later version
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
 namespace OCA\Deck\Service;
 
-use JsonSchema\Constraints\Constraint;
-use JsonSchema\Validator;
 use OCA\Deck\Command\BoardImport;
+use OCA\Deck\Exceptions\ConflictException;
+use OCA\Deck\NotFoundException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -60,16 +81,16 @@ class BoardImportCommandService extends BoardImportService {
 		return $this->output;
 	}
 
-	public function validate(): self {
-		$this->validateSystem();
-		$this->validateConfig();
+	public function validate() {
 		$this->validateData();
-		return $this;
+		parent::validate();
 	}
 
-	private function validateConfig(): void {
-		$configFile = $this->getInput()->getOption('config');
-		if (!is_file($configFile)) {
+	protected function validateConfig() {
+		try {
+			parent::validateConfig();
+			return;
+		} catch (NotFoundException $e) {
 			$helper = $this->getCommand()->getHelper('question');
 			$question = new Question(
 				'Please inform a valid config json file: ',
@@ -84,50 +105,39 @@ class BoardImportCommandService extends BoardImportService {
 				return $answer;
 			});
 			$configFile = $helper->ask($this->getInput(), $this->getOutput(), $question);
-			$this->getInput()->setOption('config', $configFile);
-		}
-
-		$config = json_decode(file_get_contents($configFile));
-		$system = $this->getSystem();
-		$schemaPath = __DIR__ . '/fixtures/config-' . $system . '-schema.json';
-		$validator = new Validator();
-		$validator->validate(
-			$config,
-			(object)['$ref' => 'file://' . realpath($schemaPath)],
-			Constraint::CHECK_MODE_APPLY_DEFAULTS
-		);
-		if (!$validator->isValid()) {
+			$this->setConfigInstance($configFile);
+		} catch (ConflictException $e) {
 			$this->getOutput()->writeln('<error>Invalid config file</error>');
 			$this->getOutput()->writeln(array_map(function ($v) {
 				return $v['message'];
-			}, $validator->getErrors()));
+			}, $e->getData()));
 			$this->getOutput()->writeln('Valid schema:');
+			$schemaPath = __DIR__ . '/fixtures/config-' . $this->getSystem() . '-schema.json';
 			$this->getOutput()->writeln(print_r(file_get_contents($schemaPath), true));
 			$this->getInput()->setOption('config', null);
-			$this->validateConfig($this->getInput(), $this->getOutput());
+			$this->setConfigInstance('');
 		}
-		$this->setConfigInstance($config);
-		$this->validateOwner();
+		parent::validateConfig();
+		return;
 	}
 
-	/**
-	 * @return void
-	 */
-	private function validateSystem(): self {
-		$system = $this->getInput()->getOption('system');
-		if (in_array($system, $this->getAllowedImportSystems())) {
-			return $this->setSystem($system);
+	protected function validateSystem() {
+		try {
+			parent::validateSystem();
+			return;
+		} catch (\Throwable $th) {
 		}
 		$helper = $this->getCommand()->getHelper('question');
 		$question = new ChoiceQuestion(
 			'Please inform a source system',
-			$this->allowedSystems,
+			$this->getAllowedImportSystems(),
 			0
 		);
 		$question->setErrorMessage('System %s is invalid.');
 		$system = $helper->ask($this->getInput(), $this->getOutput(), $question);
 		$this->getInput()->setOption('system', $system);
-		return $this->setSystem($system);
+		$this->setSystem($system);
+		return;
 	}
 
 	private function validateData(): self {
@@ -152,9 +162,8 @@ class BoardImportCommandService extends BoardImportService {
 		$this->setData(json_decode(file_get_contents($filename)));
 		if (!$this->getData()) {
 			$this->getOutput()->writeln('<error>Is not a json file: ' . $filename . '</error>');
-			$this->validateData($this->getInput(), $this->getOutput());
+			$this->validateData();
 		}
-		$this->validateUsers();
 		return $this;
 	}
 
