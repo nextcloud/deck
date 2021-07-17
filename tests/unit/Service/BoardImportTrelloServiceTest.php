@@ -22,6 +22,7 @@
  */
 namespace OCA\Deck\Service;
 
+use OCA\Deck\Db\Board;
 use OCP\IL10N;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -46,7 +47,7 @@ class BoardImportTrelloServiceTest extends \Test\TestCase {
 		$importService = $this->createMock(BoardImportService::class);
 		$this->service->setImportService($importService);
 		$actual = $this->service->validateUsers();
-		$this->assertInstanceOf(BoardImportTrelloService::class, $actual);
+		$this->assertNull($actual);
 	}
 
 	public function testValidateUsersWithInvalidUser() {
@@ -59,17 +60,7 @@ class BoardImportTrelloServiceTest extends \Test\TestCase {
 			]);
 		$importService
 			->method('getData')
-			->willReturn(json_decode(
-				<<<JSON
-				{
-					"members": [
-						{
-							"username": "othre_trello_user"
-						}
-					]
-				}
-				JSON
-			));
+			->willReturn(json_decode('{"members": [{"username": "othre_trello_user"}]}'));
 		$this->service->setImportService($importService);
 		$actual = $this->service->validateUsers();
 		$this->assertInstanceOf(BoardImportTrelloService::class, $actual);
@@ -85,17 +76,7 @@ class BoardImportTrelloServiceTest extends \Test\TestCase {
 			]);
 		$importService
 			->method('getData')
-			->willReturn(json_decode(
-				<<<JSON
-				{
-					"members": [
-						{
-							"username": "trello_user"
-						}
-					]
-				}
-				JSON
-			));
+			->willReturn(json_decode('{"members": [{"username": "trello_user"}]}'));
 		$this->service->setImportService($importService);
 		$actual = $this->service->validateUsers();
 		$this->assertInstanceOf(BoardImportTrelloService::class, $actual);
@@ -106,26 +87,10 @@ class BoardImportTrelloServiceTest extends \Test\TestCase {
 		$importService = $this->createMock(BoardImportService::class);
 		$importService
 			->method('getConfig')
-			->willReturn(json_decode(
-				<<<JSON
-				{
-					"trello_user": "nextcloud_user"
-				}
-				JSON
-			));
+			->willReturn(json_decode('{"trello_user": "nextcloud_user"}'));
 		$importService
 			->method('getData')
-			->willReturn(json_decode(
-				<<<JSON
-				{
-					"members": [
-						{
-							"username": "trello_user"
-						}
-					]
-				}
-				JSON
-			));
+			->willReturn(json_decode('{"members": [{"username": "trello_user"}]}'));
 		$this->service->setImportService($importService);
 		$actual = $this->service->validateUsers();
 		$this->assertInstanceOf(BoardImportTrelloService::class, $actual);
@@ -135,35 +100,53 @@ class BoardImportTrelloServiceTest extends \Test\TestCase {
 		$importService = $this->createMock(BoardImportService::class);
 		$importService
 			->method('getConfig')
-			->willReturn(json_decode(
-				<<<JSON
-				{
-					"trello_user": "nextcloud_user"
-				}
-				JSON
-			));
+			->willReturn(json_decode('{"trello_user": "nextcloud_user"}'));
 		$importService
 			->method('getData')
-			->willReturn(json_decode(
-				<<<JSON
-				{
-					"members": [
-						{
-							"id": "fakeid",
-							"username": "trello_user"
-						}
-					]
-				}
-				JSON
-			));
+			->willReturn(json_decode('{"members": [{"id": "fakeid", "username": "trello_user"}]}'));
 		$fakeUser = $this->createMock(IUser::class);
 		$this->userManager
-			// ->expects($this->once())
 			->method('get')
 			->with('nextcloud_user')
 			->willReturn($fakeUser);
 		$this->service->setImportService($importService);
 		$actual = $this->service->validateUsers();
-		$this->assertInstanceOf(BoardImportTrelloService::class, $actual);
+		$this->assertNull($actual);
+	}
+
+	public function testGetBoardWithSuccess() {
+		$importService = $this->createMock(BoardImportService::class);
+		$owner = $this->createMock(IUser::class);
+		$owner
+			->method('getUID')
+			->willReturn('owner');
+		$importService
+			->method('getConfig')
+			->withConsecutive(
+				['owner'],
+				['color']
+			)->willReturnonConsecutiveCalls(
+				$owner,
+				'000000'
+			);
+		$importService
+			->method('getData')
+			->willReturn(json_decode('{"name": "test"}'));
+		$this->service->setImportService($importService);
+		$actual = $this->service->getBoard();
+		$this->assertInstanceOf(Board::class, $actual);
+		$this->assertEquals('test', $actual->getTitle());
+		$this->assertEquals('owner', $actual->getOwner());
+		$this->assertEquals('000000', $actual->getColor());
+	}
+
+	public function testGetBoardWithInvalidName() {
+		$this->expectErrorMessage('Invalid name of board');
+		$importService = $this->createMock(BoardImportService::class);
+		$importService
+			->method('getData')
+			->willReturn(new \stdClass);
+		$this->service->setImportService($importService);
+		$this->service->getBoard();
 	}
 }

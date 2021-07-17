@@ -30,7 +30,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class BoardImport extends Command {
-	/** @var boardImportCommandService */
+	/** @var BoardImportCommandService */
 	private $boardImportCommandService;
 
 	public function __construct(

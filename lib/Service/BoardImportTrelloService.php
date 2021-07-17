@@ -31,6 +31,7 @@ use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Stack;
+use OCP\AppFramework\Db\Entity;
 use OCP\IL10N;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -47,9 +48,9 @@ class BoardImportTrelloService extends ABoardImportService {
 	 */
 	private $stacks = [];
 	/**
-	 * Array of labels
+	 * Array of Labels
 	 *
-	 * @var Label[]
+	 * @var Label[]|Entity[]
 	 */
 	private $labels = [];
 	/** @var Card[] */
@@ -65,15 +66,12 @@ class BoardImportTrelloService extends ABoardImportService {
 		$this->l10n = $l10n;
 	}
 
-	/**
-	 * @return self
-	 */
-	public function validateUsers(): self {
+	public function validateUsers(): void {
 		if (empty($this->getImportService()->getConfig('uidRelation'))) {
-			return $this;
+			return;
 		}
 		foreach ($this->getImportService()->getConfig('uidRelation') as $trelloUid => $nextcloudUid) {
-			$user = array_filter($this->getImportService()->getData()->members, function ($u) use ($trelloUid) {
+			$user = array_filter($this->getImportService()->getData()->members, function (\stdClass $u) use ($trelloUid) {
 				return $u->username === $trelloUid;
 			});
 			if (!$user) {
@@ -82,6 +80,7 @@ class BoardImportTrelloService extends ABoardImportService {
 			if (!is_string($nextcloudUid) && !is_numeric($nextcloudUid)) {
 				throw new \LogicException('User on setting uidRelation is invalid');
 			}
+			$nextcloudUid = (string) $nextcloudUid;
 			$this->getImportService()->getConfig('uidRelation')->$trelloUid = $this->userManager->get($nextcloudUid);
 			if (!$this->getImportService()->getConfig('uidRelation')->$trelloUid) {
 				throw new \LogicException('User on setting uidRelation not found: ' . $nextcloudUid);
@@ -89,7 +88,6 @@ class BoardImportTrelloService extends ABoardImportService {
 			$user = current($user);
 			$this->members[$user->id] = $this->getImportService()->getConfig('uidRelation')->$trelloUid;
 		}
-		return $this;
 	}
 
 	/**
@@ -113,7 +111,7 @@ class BoardImportTrelloService extends ABoardImportService {
 		return $return;
 	}
 
-	private function checklistItem($item): string {
+	private function checklistItem(\stdClass $item): string {
 		if (($item->state == 'incomplete')) {
 			$string_start = '- [ ]';
 		} else {
@@ -123,7 +121,7 @@ class BoardImportTrelloService extends ABoardImportService {
 		return $check_item_string;
 	}
 
-	private function formulateChecklistText($checklist): string {
+	private function formulateChecklistText(\stdClass $checklist): string {
 		$checklist_string = "\n\n## {$checklist->name}\n";
 		foreach ($checklist->checkItems as $item) {
 			$checklist_item_string = $this->checklistItem($item);
@@ -175,17 +173,13 @@ class BoardImportTrelloService extends ABoardImportService {
 		return $this->cards;
 	}
 
-	public function updateCard($id, Card $card): self {
+	public function updateCard(string $id, Card $card): void {
 		$this->cards[$id] = $card;
-		return $this;
 	}
 
-	/**
-	 * @return self
-	 */
-	private function appendAttachmentsToDescription($trelloCard): self {
+	private function appendAttachmentsToDescription(\stdClass $trelloCard): void {
 		if (empty($trelloCard->attachments)) {
-			return $this;
+			return;
 		}
 		$trelloCard->desc .= "\n\n## {$this->l10n->t('Attachments')}\n";
 		$trelloCard->desc .= "| {$this->l10n->t('File')} | {$this->l10n->t('date')} |\n";
@@ -194,10 +188,9 @@ class BoardImportTrelloService extends ABoardImportService {
 			$name = $attachment->name === $attachment->url ? null : $attachment->name;
 			$trelloCard->desc .= "| [{$name}]({$attachment->url}) | {$attachment->date} |\n";
 		}
-		return $this;
 	}
 
-	public function importParticipants(): self {
+	public function importParticipants(): void {
 		foreach ($this->getImportService()->getData()->cards as $trelloCard) {
 			foreach ($trelloCard->idMembers as $idMember) {
 				if (empty($this->members[$idMember])) {
@@ -210,14 +203,13 @@ class BoardImportTrelloService extends ABoardImportService {
 				$this->getImportService()->insertAssignment($assignment);
 			}
 		}
-		return $this;
 	}
 
-	public function importComments() {
+	public function importComments(): void {
 		foreach ($this->getImportService()->getData()->cards as $trelloCard) {
 			$comments = array_filter(
 				$this->getImportService()->getData()->actions,
-				function ($a) use ($trelloCard) {
+				function (\stdClass $a) use ($trelloCard) {
 					return $a->type === 'commentCard' && $a->data->card->id === $trelloCard->id;
 				}
 			);
@@ -235,21 +227,21 @@ class BoardImportTrelloService extends ABoardImportService {
 						\DateTime::createFromFormat('Y-m-d\TH:i:s.v\Z', $trelloComment->date)
 					);
 				$this->getImportService()->insertComment(
-					$this->cards[$trelloCard->id]->getId(),
+					(string) $this->cards[$trelloCard->id]->getId(),
 					$comment
 				);
 			}
 		}
 	}
 
-	private function replaceUsernames($text) {
+	private function replaceUsernames(string $text): string {
 		foreach ($this->getImportService()->getConfig('uidRelation') as $trello => $nextcloud) {
 			$text = str_replace($trello, $nextcloud->getUID(), $text);
 		}
 		return $text;
 	}
 
-	public function assignCardsToLabels(): self {
+	public function assignCardsToLabels(): void {
 		foreach ($this->getImportService()->getData()->cards as $trelloCard) {
 			foreach ($trelloCard->labels as $label) {
 				$this->getImportService()->assignCardToLabel(
@@ -258,7 +250,6 @@ class BoardImportTrelloService extends ABoardImportService {
 				);
 			}
 		}
-		return $this;
 	}
 
 	/**
@@ -279,12 +270,11 @@ class BoardImportTrelloService extends ABoardImportService {
 		return $return;
 	}
 
-	public function updateStack($id, $stack): self {
+	public function updateStack(string $id, Stack $stack): void {
 		$this->stacks[$id] = $stack;
-		return $this;
 	}
 
-	private function translateColor($color): string {
+	private function translateColor(string $color): string {
 		switch ($color) {
 			case 'red':
 				return 'ff0000';
@@ -313,7 +303,7 @@ class BoardImportTrelloService extends ABoardImportService {
 
 	public function getBoard(): Board {
 		$board = new Board();
-		if (!$this->getImportService()->getData()->name) {
+		if (empty($this->getImportService()->getData()->name)) {
 			throw new BadRequestException('Invalid name of board');
 		}
 		$board->setTitle($this->getImportService()->getData()->name);

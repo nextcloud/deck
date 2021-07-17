@@ -25,9 +25,11 @@ namespace OCA\Deck\Service;
 
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
+use OC\Comments\Comment;
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\AclMapper;
+use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
@@ -38,6 +40,7 @@ use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Exceptions\ConflictException;
 use OCA\Deck\NotFoundException;
+use OCP\AppFramework\Db\Entity;
 use OCP\Comments\ICommentsManager;
 use OCP\Comments\NotFoundException as CommentNotFoundException;
 use OCP\IDBConnection;
@@ -63,24 +66,29 @@ class BoardImportService {
 	/** @var ICommentsManager */
 	private $commentsManager;
 	/** @var string */
-	private $system;
-	/** @var ABoardImportService */
+	private $system = '';
+	/** @var null|ABoardImportService */
 	private $systemInstance;
 	/** @var string[] */
-	private $allowedSystems;
+	private $allowedSystems = [];
 	/**
 	 * Data object created from config JSON
 	 *
 	 * @var \stdClass
+	 * @psalm-suppress PropertyNotSetInConstructor
 	 */
 	public $config;
 	/**
 	 * Data object created from JSON of origin system
 	 *
 	 * @var \stdClass
+	 * @psalm-suppress PropertyNotSetInConstructor
 	 */
 	private $data;
-	/** @var Board */
+	/**
+	 * @var Board
+	 * @psalm-suppress PropertyNotSetInConstructor
+	 */
 	private $board;
 
 	public function __construct(
@@ -103,6 +111,7 @@ class BoardImportService {
 		$this->cardMapper = $cardMapper;
 		$this->assignmentMapper = $assignmentMapper;
 		$this->commentsManager = $commentsManager;
+		$this->setData(new \stdClass());
 	}
 
 	public function import(): void {
@@ -120,31 +129,35 @@ class BoardImportService {
 		}
 	}
 
-	public function validate() {
+	public function validate(): void {
 		$this->validateSystem();
 		$this->validateConfig();
 		$this->validateUsers();
 	}
 
-	protected function validateSystem() {
+	public function validateSystem(): void {
 		if (!in_array($this->getSystem(), $this->getAllowedImportSystems())) {
 			throw new NotFoundException('Invalid system');
 		}
 	}
 
-	public function setSystem(string $system): self {
+	/**
+	 * @param mixed $system
+	 * @return self
+	 */
+	public function setSystem($system): self {
 		$this->system = $system;
 		return $this;
 	}
 
-	public function getSystem() {
+	public function getSystem(): string {
 		return $this->system;
 	}
 
 	public function getAllowedImportSystems(): array {
 		if (!$this->allowedSystems) {
 			$allowedSystems = glob(__DIR__ . '/BoardImport*Service.php');
-			$allowedSystems = array_filter($allowedSystems, function ($name) {
+			$allowedSystems = array_filter($allowedSystems, function (string $name) {
 				$name = basename($name);
 				switch ($name) {
 					case 'ABoardImportService.php':
@@ -165,6 +178,9 @@ class BoardImportService {
 
 	public function getImportSystem(): ABoardImportService {
 		$systemClass = 'OCA\\Deck\\Service\\BoardImport' . ucfirst($this->getSystem()) . 'Service';
+		if (!$this->getSystem()) {
+			throw new NotFoundException('System to import not found');
+		}
 		if (!is_object($this->systemInstance)) {
 			$this->systemInstance = \OC::$server->get($systemClass);
 			$this->systemInstance->setImportService($this);
@@ -173,22 +189,21 @@ class BoardImportService {
 		return $this->systemInstance;
 	}
 
-	public function setImportSystem($instance) {
+	public function setImportSystem(ABoardImportService $instance): void {
 		$this->systemInstance = $instance;
 	}
 
-	public function insertAssignment($assignment): self {
+	public function insertAssignment(Assignment $assignment): self {
 		$this->assignmentMapper->insert($assignment);
 		return $this;
 	}
 
-	public function importBoard() {
+	public function importBoard(): void {
 		$board = $this->getImportSystem()->getBoard();
 		if ($board) {
 			$this->boardMapper->insert($board);
 			$this->board = $board;
 		}
-		return $this;
 	}
 
 	public function getBoard(): Board {
@@ -210,7 +225,7 @@ class BoardImportService {
 		return $labels;
 	}
 
-	public function createLabel($title, $color, $boardId): Label {
+	public function createLabel(string $title, string $color, int $boardId): Entity {
 		$label = new Label();
 		$label->setTitle($title);
 		$label->setColor($color);
@@ -240,6 +255,11 @@ class BoardImportService {
 		return $this;
 	}
 
+	/**
+	 * @param mixed $cardId
+	 * @param mixed $labelId
+	 * @return self
+	 */
 	public function assignCardToLabel($cardId, $labelId): self {
 		$this->cardMapper->assignLabel(
 			$cardId,
@@ -248,18 +268,16 @@ class BoardImportService {
 		return $this;
 	}
 
-	public function assignCardsToLabels(): self {
+	public function assignCardsToLabels(): void {
 		$this->getImportSystem()->assignCardsToLabels();
-		return $this;
 	}
 
-	public function importComments(): self {
+	public function importComments(): void {
 		$this->getImportSystem()->importComments();
-		return $this;
 	}
 
-	public function insertComment($cardId, $comment) {
-		$comment->setObject('deckCard', (string) $cardId);
+	public function insertComment(string $cardId, Comment $comment): void {
+		$comment->setObject('deckCard', $cardId);
 		$comment->setVerb('comment');
 		// Check if parent is a comment on the same card
 		if ($comment->getParentId() !== '0') {
@@ -298,7 +316,6 @@ class BoardImportService {
 			if ($affectedRows > 0) {
 				$comment->setId((string)$qb->getLastInsertId());
 			}
-			return $comment;
 		} catch (\InvalidArgumentException $e) {
 			throw new BadRequestException('Invalid input values');
 		} catch (CommentNotFoundException $e) {
@@ -306,16 +323,15 @@ class BoardImportService {
 		}
 	}
 
-	public function importParticipants() {
+	public function importParticipants(): void {
 		$this->getImportSystem()->importParticipants();
 	}
 
-	public function setData(\stdClass $data): self {
+	final public function setData(\stdClass $data): void {
 		$this->data = $data;
-		return $this;
 	}
 
-	public function getData() {
+	public function getData(): \stdClass {
 		return $this->data;
 	}
 
@@ -324,14 +340,13 @@ class BoardImportService {
 	 *
 	 * @param string $configName
 	 * @param mixed $value
-	 * @return self
+	 * @return void
 	 */
-	public function setConfig(string $configName, $value): self {
-		if (!$this->config) {
+	public function setConfig(string $configName, $value): void {
+		if (empty((array) $this->config)) {
 			$this->setConfigInstance(new \stdClass);
 		}
 		$this->config->$configName = $value;
-		return $this;
 	}
 
 	/**
@@ -341,32 +356,37 @@ class BoardImportService {
 	 * @return mixed
 	 */
 	public function getConfig(string $configName = null) {
-		if (!is_object($this->config) || !$configName) {
-			return $this->config;
-		}
 		if (!property_exists($this->config, $configName)) {
 			return;
 		}
 		return $this->config->$configName;
 	}
 
+	/**
+	 * @param mixed $config
+	 * @return self
+	 */
 	public function setConfigInstance($config): self {
-		$this->config = $config;
-		return $this;
-	}
-
-	protected function validateConfig() {
-		$config = $this->getConfig();
-		if (empty($config)) {
-			throw new NotFoundException('Please inform a valid config json file');
-		}
 		if (is_string($config)) {
 			if (!is_file($config)) {
 				throw new NotFoundException('Please inform a valid config json file');
 			}
 			$config = json_decode(file_get_contents($config));
+			if (!is_object($config)) {
+				throw new NotFoundException('Please inform a valid config json file');
+			}
 		}
-		$schemaPath = __DIR__ . '/fixtures/config-' . $this->getSystem() . '-schema.json';
+		$this->config = $config;
+		return $this;
+	}
+
+	public function getConfigInstance(): \stdClass {
+		return $this->config;
+	}
+
+	protected function validateConfig(): void {
+		$config = $this->getConfigInstance();
+		$schemaPath = $this->getJsonSchemaPath();
 		$validator = new Validator();
 		$newConfig = clone $config;
 		$validator->validate(
@@ -381,17 +401,19 @@ class BoardImportService {
 		$this->validateOwner();
 	}
 
-	public function validateOwner(): self {
+	public function getJsonSchemaPath(): string {
+		return __DIR__ . '/fixtures/config-' . $this->getSystem() . '-schema.json';
+	}
+
+	public function validateOwner(): void {
 		$owner = $this->userManager->get($this->getConfig('owner'));
 		if (!$owner) {
 			throw new \LogicException('Owner "' . $this->getConfig('owner')->getUID() . '" not found on Nextcloud. Check setting json.');
 		}
 		$this->setConfig('owner', $owner);
-		return $this;
 	}
 
-	public function validateUsers(): self {
+	public function validateUsers(): void {
 		$this->getImportSystem()->validateUsers();
-		return $this;
 	}
 }

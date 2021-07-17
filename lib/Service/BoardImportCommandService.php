@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Service;
 
-use OCA\Deck\Command\BoardImport;
 use OCA\Deck\Exceptions\ConflictException;
 use OCA\Deck\NotFoundException;
 use Symfony\Component\Console\Command\Command;
@@ -33,18 +32,21 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 
 class BoardImportCommandService extends BoardImportService {
-	/** @var Command */
-	private $command;
-	/** @var InputInterface */
-	private $input;
-	/** @var OutputInterface */
-	private $output;
 	/**
-	 * Data object created from config JSON
-	 *
-	 * @var \StdClass
+	 * @var Command
+	 * @psalm-suppress PropertyNotSetInConstructor
 	 */
-	public $config;
+	private $command;
+	/**
+	 * @var InputInterface
+	 * @psalm-suppress PropertyNotSetInConstructor
+	 */
+	private $input;
+	/**
+	 * @var OutputInterface
+	 * @psalm-suppress PropertyNotSetInConstructor
+	 */
+	private $output;
 
 	/**
 	 * Define Command instance
@@ -56,14 +58,11 @@ class BoardImportCommandService extends BoardImportService {
 		$this->command = $command;
 	}
 
-	/**
-	 * @return BoardImport
-	 */
-	public function getCommand() {
+	public function getCommand(): Command {
 		return $this->command;
 	}
 
-	public function setInput($input): self {
+	public function setInput(InputInterface $input): self {
 		$this->input = $input;
 		return $this;
 	}
@@ -72,7 +71,7 @@ class BoardImportCommandService extends BoardImportService {
 		return $this->input;
 	}
 
-	public function setOutput($output): self {
+	public function setOutput(OutputInterface $output): self {
 		$this->output = $output;
 		return $this;
 	}
@@ -81,12 +80,12 @@ class BoardImportCommandService extends BoardImportService {
 		return $this->output;
 	}
 
-	public function validate() {
+	public function validate(): void {
 		$this->validateData();
 		parent::validate();
 	}
 
-	protected function validateConfig() {
+	protected function validateConfig(): void {
 		try {
 			parent::validateConfig();
 			return;
@@ -96,7 +95,7 @@ class BoardImportCommandService extends BoardImportService {
 				'Please inform a valid config json file: ',
 				'config.json'
 			);
-			$question->setValidator(function ($answer) {
+			$question->setValidator(function (string $answer) {
 				if (!is_file($answer)) {
 					throw new \RuntimeException(
 						'config file not found'
@@ -108,7 +107,7 @@ class BoardImportCommandService extends BoardImportService {
 			$this->setConfigInstance($configFile);
 		} catch (ConflictException $e) {
 			$this->getOutput()->writeln('<error>Invalid config file</error>');
-			$this->getOutput()->writeln(array_map(function ($v) {
+			$this->getOutput()->writeln(array_map(function (array $v): string {
 				return $v['message'];
 			}, $e->getData()));
 			$this->getOutput()->writeln('Valid schema:');
@@ -121,7 +120,7 @@ class BoardImportCommandService extends BoardImportService {
 		return;
 	}
 
-	protected function validateSystem() {
+	public function validateSystem(): void {
 		try {
 			parent::validateSystem();
 			return;
@@ -142,13 +141,13 @@ class BoardImportCommandService extends BoardImportService {
 
 	private function validateData(): self {
 		$filename = $this->getInput()->getOption('data');
-		if (!is_file($filename)) {
+		if (!is_string($filename) || empty($filename) || !is_file($filename)) {
 			$helper = $this->getCommand()->getHelper('question');
 			$question = new Question(
 				'Please inform a valid data json file: ',
 				'data.json'
 			);
-			$question->setValidator(function ($answer) {
+			$question->setValidator(function (string $answer) {
 				if (!is_file($answer)) {
 					throw new \RuntimeException(
 						'Data file not found'

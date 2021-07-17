@@ -1,4 +1,25 @@
 <?php
+/**
+ * @copyright Copyright (c) 2021 Vitor Mattos <vitor@php.rio>
+ *
+ * @author Vitor Mattos <vitor@php.rio>
+ *
+ * @license GNU AGPL version 3 or any later version
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
 namespace OCA\Deck\Service;
 
@@ -29,24 +50,23 @@ abstract class ABoardImportService {
 	 */
 	abstract public function getCards(): array;
 
-	abstract public function updateStack(string $id, Stack $stack): self;
+	abstract public function updateStack(string $id, Stack $stack): void;
 
-	abstract public function updateCard(string $id, Card $card): self;
+	abstract public function updateCard(string $id, Card $card): void;
 
-	abstract public function importParticipants(): self;
+	abstract public function importParticipants(): void;
 
-	abstract public function importComments();
+	abstract public function importComments(): void;
 
 	/** @return Label[] */
 	abstract public function importLabels(): array;
 
-	abstract public function assignCardsToLabels(): self;
+	abstract public function assignCardsToLabels(): void;
 
-	abstract public function validateUsers(): self;
+	abstract public function validateUsers(): void;
 
-	public function setImportService($service): self {
+	public function setImportService(BoardImportService $service): void {
 		$this->boardImportService = $service;
-		return $this;
 	}
 
 	public function getImportService(): BoardImportService {
