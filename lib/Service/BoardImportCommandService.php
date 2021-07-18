@@ -48,14 +48,9 @@ class BoardImportCommandService extends BoardImportService {
 	 */
 	private $output;
 
-	/**
-	 * Define Command instance
-	 *
-	 * @param Command $command
-	 * @return void
-	 */
-	public function setCommand(Command $command): void {
+	public function setCommand(Command $command): self {
 		$this->command = $command;
+		return $this;
 	}
 
 	public function getCommand(): Command {
@@ -80,13 +75,19 @@ class BoardImportCommandService extends BoardImportService {
 		return $this->output;
 	}
 
-	public function validate(): void {
-		$this->validateData();
-		parent::validate();
-	}
-
 	protected function validateConfig(): void {
 		try {
+			$config = $this->getInput()->getOption('config');
+			if (is_string($config)) {
+				if (!is_file($config)) {
+					throw new NotFoundException('Please inform a valid config json file');
+				}
+				$config = json_decode(file_get_contents($config));
+				if (!$config instanceof \stdClass) {
+					throw new NotFoundException('Please inform a valid config json file');
+				}
+				$this->setConfigInstance($config);
+			}
 			parent::validateConfig();
 			return;
 		} catch (NotFoundException $e) {
@@ -104,7 +105,7 @@ class BoardImportCommandService extends BoardImportService {
 				return $answer;
 			});
 			$configFile = $helper->ask($this->getInput(), $this->getOutput(), $question);
-			$this->setConfigInstance($configFile);
+			$config = $this->getInput()->setOption('config', $configFile);
 		} catch (ConflictException $e) {
 			$this->getOutput()->writeln('<error>Invalid config file</error>');
 			$this->getOutput()->writeln(array_map(function (array $v): string {
@@ -114,7 +115,6 @@ class BoardImportCommandService extends BoardImportService {
 			$schemaPath = __DIR__ . '/fixtures/config-' . $this->getSystem() . '-schema.json';
 			$this->getOutput()->writeln(print_r(file_get_contents($schemaPath), true));
 			$this->getInput()->setOption('config', null);
-			$this->setConfigInstance('');
 		}
 		parent::validateConfig();
 		return;
@@ -139,34 +139,41 @@ class BoardImportCommandService extends BoardImportService {
 		return;
 	}
 
-	private function validateData(): self {
-		$filename = $this->getInput()->getOption('data');
-		if (!is_string($filename) || empty($filename) || !is_file($filename)) {
-			$helper = $this->getCommand()->getHelper('question');
-			$question = new Question(
-				'Please inform a valid data json file: ',
-				'data.json'
-			);
-			$question->setValidator(function (string $answer) {
-				if (!is_file($answer)) {
-					throw new \RuntimeException(
-						'Data file not found'
-					);
-				}
-				return $answer;
-			});
-			$data = $helper->ask($this->getInput(), $this->getOutput(), $question);
-			$this->getInput()->setOption('data', $data);
+	protected function validateData(): void {
+		$data = $this->getInput()->getOption('data');
+		if (is_string($data)) {
+			$data = json_decode(file_get_contents($data));
+			if ($data instanceof \stdClass) {
+				$this->setData($data);
+				return;
+			}
 		}
-		$this->setData(json_decode(file_get_contents($filename)));
-		if (!$this->getData()) {
-			$this->getOutput()->writeln('<error>Is not a json file: ' . $filename . '</error>');
-			$this->validateData();
-		}
-		return $this;
+		$helper = $this->getCommand()->getHelper('question');
+		$question = new Question(
+			'Please inform a valid data json file: ',
+			'data.json'
+		);
+		$question->setValidator(function (string $answer) {
+			if (!is_file($answer)) {
+				throw new \RuntimeException(
+					'Data file not found'
+				);
+			}
+			return $answer;
+		});
+		$data = $helper->ask($this->getInput(), $this->getOutput(), $question);
+		$this->getInput()->setOption('data', $data);
+		$this->validateData();
+	}
+
+	public function bootstrap(): void {
+		$this->setSystem($this->getInput()->getOption('system'));
+		parent::bootstrap();
 	}
 
 	public function import(): void {
+		$this->getOutput()->writeln('Starting import...');
+		$this->bootstrap();
 		$this->getOutput()->writeln('Importing board...');
 		$this->importBoard();
 		$this->getOutput()->writeln('Assign users to board...');
