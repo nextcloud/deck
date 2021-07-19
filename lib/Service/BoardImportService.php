@@ -25,22 +25,20 @@ namespace OCA\Deck\Service;
 
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
-use OC\Comments\Comment;
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\AclMapper;
-use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
-use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Exceptions\ConflictException;
 use OCA\Deck\NotFoundException;
 use OCP\AppFramework\Db\Entity;
+use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
 use OCP\Comments\NotFoundException as CommentNotFoundException;
 use OCP\IDBConnection;
@@ -87,7 +85,6 @@ class BoardImportService {
 	private $data;
 	/**
 	 * @var Board
-	 * @psalm-suppress PropertyNotSetInConstructor
 	 */
 	private $board;
 
@@ -111,6 +108,21 @@ class BoardImportService {
 		$this->cardMapper = $cardMapper;
 		$this->assignmentMapper = $assignmentMapper;
 		$this->commentsManager = $commentsManager;
+		$this->board = new Board();
+		$this->disableCommentsEvents();
+	}
+
+	private function disableCommentsEvents(): void {
+		if (defined('PHPUNIT_RUN')) {
+			return;
+		}
+		$propertyEventHandlers = new \ReflectionProperty($this->commentsManager, 'eventHandlers');
+		$propertyEventHandlers->setAccessible(true);
+		$propertyEventHandlers->setValue($this->commentsManager, []);
+
+		$propertyEventHandlerClosures = new \ReflectionProperty($this->commentsManager, 'eventHandlerClosures');
+		$propertyEventHandlerClosures->setAccessible(true);
+		$propertyEventHandlerClosures->setValue($this->commentsManager, []);
 	}
 
 	public function import(): void {
@@ -123,7 +135,7 @@ class BoardImportService {
 			$this->importCards();
 			$this->assignCardsToLabels();
 			$this->importComments();
-			$this->importParticipants();
+			$this->importCardAssignments();
 		} catch (\Throwable $th) {
 			throw new BadRequestException($th->getMessage());
 		}
@@ -171,25 +183,19 @@ class BoardImportService {
 	}
 
 	public function getImportSystem(): ABoardImportService {
-		$systemClass = 'OCA\\Deck\\Service\\BoardImport' . ucfirst($this->getSystem()) . 'Service';
 		if (!$this->getSystem()) {
 			throw new NotFoundException('System to import not found');
 		}
 		if (!is_object($this->systemInstance)) {
+			$systemClass = 'OCA\\Deck\\Service\\BoardImport' . ucfirst($this->getSystem()) . 'Service';
 			$this->systemInstance = \OC::$server->get($systemClass);
 			$this->systemInstance->setImportService($this);
 		}
-
 		return $this->systemInstance;
 	}
 
 	public function setImportSystem(ABoardImportService $instance): void {
 		$this->systemInstance = $instance;
-	}
-
-	public function insertAssignment(Assignment $assignment): self {
-		$this->assignmentMapper->insert($assignment);
-		return $this;
 	}
 
 	public function importBoard(): void {
@@ -200,23 +206,29 @@ class BoardImportService {
 		}
 	}
 
-	public function getBoard(): Board {
+	public function getBoard(bool $reset = false): Board {
+		if ($reset) {
+			$this->board = new Board();
+		}
 		return $this->board;
 	}
 
-	public function importAcl(): self {
+	public function importAcl(): void {
 		$aclList = $this->getImportSystem()->getAclList();
-		foreach ($aclList as $acl) {
+		foreach ($aclList as $code => $acl) {
 			$this->aclMapper->insert($acl);
+			$this->getImportSystem()->updateAcl($code, $acl);
 		}
 		$this->getBoard()->setAcl($aclList);
-		return $this;
 	}
 
-	public function importLabels(): array {
-		$labels = $this->getImportSystem()->importLabels();
+	public function importLabels(): void {
+		$labels = $this->getImportSystem()->getLabels();
+		foreach ($labels as $code => $label) {
+			$this->labelMapper->insert($label);
+			$this->getImportSystem()->updateLabel($code, $label);
+		}
 		$this->getBoard()->setLabels($labels);
-		return $labels;
 	}
 
 	public function createLabel(string $title, string $color, int $boardId): Entity {
@@ -227,26 +239,21 @@ class BoardImportService {
 		return $this->labelMapper->insert($label);
 	}
 
-	/**
-	 * @return Stack[]
-	 */
-	public function importStacks(): array {
+	public function importStacks(): void {
 		$stacks = $this->getImportSystem()->getStacks();
 		foreach ($stacks as $code => $stack) {
 			$this->stackMapper->insert($stack);
 			$this->getImportSystem()->updateStack($code, $stack);
 		}
 		$this->getBoard()->setStacks(array_values($stacks));
-		return $stacks;
 	}
 
-	public function importCards(): self {
+	public function importCards(): void {
 		$cards = $this->getImportSystem()->getCards();
 		foreach ($cards as $code => $card) {
 			$this->cardMapper->insert($card);
 			$this->getImportSystem()->updateCard($code, $card);
 		}
-		return $this;
 	}
 
 	/**
@@ -263,21 +270,36 @@ class BoardImportService {
 	}
 
 	public function assignCardsToLabels(): void {
-		$this->getImportSystem()->assignCardsToLabels();
+		$data = $this->getImportSystem()->getCardLabelAssignment();
+		foreach ($data as $cardId => $assignemnt) {
+			foreach ($assignemnt as $assignmentId => $labelId) {
+				$this->assignCardToLabel(
+					$cardId,
+					$labelId
+				);
+				$this->getImportSystem()->updateCardLabelsAssignment($cardId, $assignmentId, $labelId);
+			}
+		}
 	}
 
 	public function importComments(): void {
-		$this->getImportSystem()->importComments();
+		$allComments = $this->getImportSystem()->getComments();
+		foreach ($allComments as $cardId => $comments) {
+			foreach ($comments as $commentId => $comment) {
+				$this->insertComment($cardId, $comment);
+				$this->getImportSystem()->updateComment($cardId, $commentId, $comment);
+			}
+		}
 	}
 
-	public function insertComment(string $cardId, Comment $comment): void {
+	private function insertComment(string $cardId, IComment $comment): void {
 		$comment->setObject('deckCard', $cardId);
 		$comment->setVerb('comment');
 		// Check if parent is a comment on the same card
 		if ($comment->getParentId() !== '0') {
 			try {
-				$comment = $this->commentsManager->get($comment->getParentId());
-				if ($comment->getObjectType() !== Application::COMMENT_ENTITY_TYPE || $comment->getObjectId() !== $cardId) {
+				$parent = $this->commentsManager->get($comment->getParentId());
+				if ($parent->getObjectType() !== Application::COMMENT_ENTITY_TYPE || $parent->getObjectId() !== $cardId) {
 					throw new CommentNotFoundException();
 				}
 			} catch (CommentNotFoundException $e) {
@@ -286,30 +308,7 @@ class BoardImportService {
 		}
 
 		try {
-			$qb = $this->dbConn->getQueryBuilder();
-
-			$values = [
-				'parent_id' => $qb->createNamedParameter($comment->getParentId()),
-				'topmost_parent_id' => $qb->createNamedParameter($comment->getTopmostParentId()),
-				'children_count' => $qb->createNamedParameter($comment->getChildrenCount()),
-				'actor_type' => $qb->createNamedParameter($comment->getActorType()),
-				'actor_id' => $qb->createNamedParameter($comment->getActorId()),
-				'message' => $qb->createNamedParameter($comment->getMessage()),
-				'verb' => $qb->createNamedParameter($comment->getVerb()),
-				'creation_timestamp' => $qb->createNamedParameter($comment->getCreationDateTime(), 'datetime'),
-				'latest_child_timestamp' => $qb->createNamedParameter($comment->getLatestChildDateTime(), 'datetime'),
-				'object_type' => $qb->createNamedParameter($comment->getObjectType()),
-				'object_id' => $qb->createNamedParameter($comment->getObjectId()),
-				'reference_id' => $qb->createNamedParameter($comment->getReferenceId())
-			];
-	
-			$affectedRows = $qb->insert('comments')
-				->values($values)
-				->execute();
-	
-			if ($affectedRows > 0) {
-				$comment->setId((string)$qb->getLastInsertId());
-			}
+			$this->commentsManager->save($comment);
 		} catch (\InvalidArgumentException $e) {
 			throw new BadRequestException('Invalid input values');
 		} catch (CommentNotFoundException $e) {
@@ -317,8 +316,14 @@ class BoardImportService {
 		}
 	}
 
-	public function importParticipants(): void {
-		$this->getImportSystem()->importParticipants();
+	public function importCardAssignments(): void {
+		$allAssignments = $this->getImportSystem()->getCardAssignments();
+		foreach ($allAssignments as $cardId => $assignments) {
+			foreach ($assignments as $assignmentId => $assignment) {
+				$this->assignmentMapper->insert($assignment);
+				$this->getImportSystem()->updateCardAssignment($cardId, $assignmentId, $assignment);
+			}
+		}
 	}
 
 	public function setData(\stdClass $data): void {

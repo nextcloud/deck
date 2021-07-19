@@ -24,12 +24,12 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Service\BoardImportService;
-use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
-class BoardImportApiController extends ApiController {
+class BoardImportApiController extends OCSController {
 	/** @var BoardImportService */
 	private $boardImportService;
 	/** @var string */

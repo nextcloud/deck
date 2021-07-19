@@ -24,14 +24,38 @@
 namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Stack;
+use OCP\AppFramework\Db\Entity;
+use OCP\Comments\IComment;
 
 abstract class ABoardImportService {
 	/** @var BoardImportService */
 	private $boardImportService;
+	/** @var Stack[] */
+	protected $stacks = [];
+	/** @var Label[] */
+	protected $labels = [];
+	/** @var Card[] */
+	protected $cards = [];
+	/** @var Acl[] */
+	protected $acls = [];
+	/** @var IComment[][] */
+	protected $comments = [];
+	/** @var Assignment[] */
+	protected $assignments = [];
+	/** @var string[][] */
+	protected $labelCardAssignments = [];
+
+	/**
+	 * Configure import service
+	 *
+	 * @return void
+	 */
+	abstract public function bootstrap(): void;
 
 	abstract public function getBoard(): ?Board;
 
@@ -50,25 +74,47 @@ abstract class ABoardImportService {
 	 */
 	abstract public function getCards(): array;
 
-	abstract public function updateStack(string $id, Stack $stack): void;
+	abstract public function getCardAssignments(): array;
 
-	abstract public function updateCard(string $id, Card $card): void;
-
-	abstract public function importParticipants(): void;
-
-	abstract public function importComments(): void;
-
-	/** @return Label[] */
-	abstract public function importLabels(): array;
-
-	abstract public function assignCardsToLabels(): void;
+	abstract public function getCardLabelAssignment(): array;
 
 	/**
-	 * Configure import service
-	 *
-	 * @return void
+	 * @return IComment[][]|array
 	 */
-	abstract public function bootstrap(): void;
+	abstract public function getComments(): array;
+
+	/** @return Label[] */
+	abstract public function getLabels(): array;
+
+	abstract public function validateUsers(): void;
+
+	public function updateStack(string $id, Stack $stack): void {
+		$this->stacks[$id] = $stack;
+	}
+
+	public function updateCard(string $id, Card $card): void {
+		$this->cards[$id] = $card;
+	}
+
+	public function updateLabel(string $code, Label $label): void {
+		$this->labels[$code] = $label;
+	}
+
+	public function updateAcl(string $code, Acl $acl): void {
+		$this->acls[$code] = $acl;
+	}
+
+	public function updateComment(string $cardId, string $commentId, IComment $comment): void {
+		$this->comments[$cardId][$commentId] = $comment;
+	}
+
+	public function updateCardAssignment(string $cardId, string $assignmentId, Entity $assignment): void {
+		$this->assignments[$cardId][$assignmentId] = $assignment;
+	}
+
+	public function updateCardLabelsAssignment(string $cardId, string $assignmentId, string $assignment): void {
+		$this->labelCardAssignments[$cardId][$assignmentId] = $assignment;
+	}
 
 	public function setImportService(BoardImportService $service): void {
 		$this->boardImportService = $service;

@@ -114,10 +114,9 @@ class BoardImportCommandService extends BoardImportService {
 			$this->getOutput()->writeln('Valid schema:');
 			$schemaPath = __DIR__ . '/fixtures/config-' . $this->getSystem() . '-schema.json';
 			$this->getOutput()->writeln(print_r(file_get_contents($schemaPath), true));
-			$this->getInput()->setOption('config', null);
+			$this->getInput()->setOption('config', '');
 		}
-		parent::validateConfig();
-		return;
+		$this->validateConfig();
 	}
 
 	public function validateSystem(): void {
@@ -186,9 +185,9 @@ class BoardImportCommandService extends BoardImportService {
 		$this->importCards();
 		$this->getOutput()->writeln('Assign cards to labels...');
 		$this->assignCardsToLabels();
-		$this->getOutput()->writeln('Iporting comments...');
+		$this->getOutput()->writeln('Importing comments...');
 		$this->importComments();
-		$this->getOutput()->writeln('Iporting participants...');
-		$this->importParticipants();
+		$this->getOutput()->writeln('Importing participants...');
+		$this->importCardAssignments();
 	}
 }
