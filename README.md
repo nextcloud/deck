@@ -25,7 +25,8 @@ Deck is a kanban style organization tool aimed at personal planning and project 
 
 - [trello-to-deck](https://github.com/maxammann/trello-to-deck) - Migrates cards from Trello
 - [mail2deck](https://github.com/newroco/mail2deck) - Provides an "email in" solution 
-
+- [A-deck](https://github.com/leoossa/A-deck) - Chrome Extension that allows to create new card in selected stack based on current tab
+- 
 ## Installation/Update
 
 This app is supposed to work on the two latest Nextcloud versions.
