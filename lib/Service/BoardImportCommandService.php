@@ -126,19 +126,24 @@ class BoardImportCommandService extends BoardImportService {
 		} catch (\Throwable $th) {
 		}
 		$helper = $this->getCommand()->getHelper('question');
+		$allowedSystems = $this->getAllowedImportSystems();
+		$names = array_column($allowedSystems, 'name');
 		$question = new ChoiceQuestion(
 			'Please inform a source system',
-			$this->getAllowedImportSystems(),
+			$names,
 			0
 		);
 		$question->setErrorMessage('System %s is invalid.');
-		$system = $helper->ask($this->getInput(), $this->getOutput(), $question);
-		$this->getInput()->setOption('system', $system);
-		$this->setSystem($system);
+		$selectedName = $helper->ask($this->getInput(), $this->getOutput(), $question);
+		$className = $allowedSystems[array_flip($names)[$selectedName]]['internalName'];
+		$this->setSystem($className);
 		return;
 	}
 
 	protected function validateData(): void {
+		if (!$this->getImportSystem()->needValidateData()) {
+			return;
+		}
 		$data = $this->getInput()->getOption('data');
 		if (is_string($data)) {
 			$data = json_decode(file_get_contents($data));

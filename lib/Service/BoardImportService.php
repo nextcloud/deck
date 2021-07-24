@@ -67,7 +67,7 @@ class BoardImportService {
 	private $system = '';
 	/** @var null|ABoardImportService */
 	private $systemInstance;
-	/** @var string[] */
+	/** @var array */
 	private $allowedSystems = [];
 	/**
 	 * Data object created from config JSON
@@ -142,7 +142,9 @@ class BoardImportService {
 	}
 
 	public function validateSystem(): void {
-		if (!in_array($this->getSystem(), $this->getAllowedImportSystems())) {
+		$allowedSystems = $this->getAllowedImportSystems();
+		$allowedSystems = array_column($allowedSystems, 'internalName');
+		if (!in_array($this->getSystem(), $allowedSystems)) {
 			throw new NotFoundException('Invalid system');
 		}
 	}
@@ -173,9 +175,23 @@ class BoardImportService {
 				}
 				return true;
 			});
-			$allowedSystems = array_map(function ($name) {
-				preg_match('/\/BoardImport(?<system>\w+)Service\.php$/', $name, $matches);
-				return lcfirst($matches['system']);
+			$allowedSystems = array_map(function ($filename) {
+				preg_match('/\/(?<class>BoardImport(?<system>\w+)Service)\.php$/', $filename, $matches);
+				$className = 'OCA\Deck\Service\\'.$matches['class'];
+				if (!class_exists($className)) {
+					/** @psalm-suppress UnresolvableInclude */
+					require_once $name;
+				}
+				/** @psalm-suppress InvalidPropertyFetch */
+				$name = $className::$name;
+				if (empty($name)) {
+					$name = lcfirst($matches['system']);
+				}
+				return [
+					'name' => $name,
+					'class' => $className,
+					'internalName' => lcfirst($matches['system'])
+				];
 			}, $allowedSystems);
 			$this->allowedSystems = array_values($allowedSystems);
 		}

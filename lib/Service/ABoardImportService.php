@@ -33,8 +33,11 @@ use OCP\AppFramework\Db\Entity;
 use OCP\Comments\IComment;
 
 abstract class ABoardImportService {
+	/** @var string */
+	public static $name = '';
 	/** @var BoardImportService */
 	private $boardImportService;
+	protected $needValidateData = true;
 	/** @var Stack[] */
 	protected $stacks = [];
 	/** @var Label[] */
@@ -122,5 +125,9 @@ abstract class ABoardImportService {
 
 	public function getImportService(): BoardImportService {
 		return $this->boardImportService;
+	}
+
+	public function needValidateData(): bool {
+		return $this->needValidateData;
 	}
 }

@@ -45,6 +45,7 @@ class BoardImport extends Command {
 	 */
 	protected function configure() {
 		$allowedSystems = $this->boardImportCommandService->getAllowedImportSystems();
+		$names = array_column($allowedSystems, 'name');
 		$this
 			->setName('deck:import')
 			->setDescription('Import data')
@@ -52,8 +53,8 @@ class BoardImport extends Command {
 				'system',
 				null,
 				InputOption::VALUE_REQUIRED,
-				'Source system for import. Available options: ' . implode(', ', $allowedSystems) . '.',
-				'trello'
+				'Source system for import. Available options: ' . implode(', ', $names) . '.',
+				null
 			)
 			->addOption(
 				'config',
@@ -65,7 +66,7 @@ class BoardImport extends Command {
 			->addOption(
 				'data',
 				null,
-				InputOption::VALUE_REQUIRED,
+				InputOption::VALUE_OPTIONAL,
 				'Data file to import.',
 				'data.json'
 			)

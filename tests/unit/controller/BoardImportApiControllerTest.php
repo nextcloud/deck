@@ -50,16 +50,23 @@ class BoardImportApiControllerTest extends \Test\TestCase {
 	}
 
 	public function testGetAllowedSystems() {
+		$allowedSystems = [
+			[
+				'name' => '',
+				'class' => '',
+				'internalName' => 'trelloJson'
+			]
+		];
 		$this->boardImportService
 			->method('getAllowedImportSystems')
-			->willReturn(['trello']);
+			->willReturn($allowedSystems);
 		$actual = $this->controller->getAllowedSystems();
-		$expected = new DataResponse(['trello'], HTTP::STATUS_OK);
+		$expected = new DataResponse($allowedSystems, HTTP::STATUS_OK);
 		$this->assertEquals($expected, $actual);
 	}
 
 	public function testImport() {
-		$system = 'trello';
+		$system = 'trelloJson';
 		$config = [
 			'owner' => 'test'
 		];

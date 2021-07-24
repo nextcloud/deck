@@ -26,8 +26,8 @@ use OCP\IL10N;
 use OCP\IUser;
 use OCP\IUserManager;
 
-class BoardImportTrelloServiceTest extends \Test\TestCase {
-	/** @var BoardImportTrelloService */
+class BoardImportTrelloJsonServiceTest extends \Test\TestCase {
+	/** @var BoardImportTrelloJsonService */
 	private $service;
 	/** @var IUserManager */
 	private $userManager;
@@ -36,7 +36,7 @@ class BoardImportTrelloServiceTest extends \Test\TestCase {
 	public function setUp(): void {
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->l10n = $this->createMock(IL10N::class);
-		$this->service = new BoardImportTrelloService(
+		$this->service = new BoardImportTrelloJsonService(
 			$this->userManager,
 			$this->l10n
 		);
@@ -62,7 +62,7 @@ class BoardImportTrelloServiceTest extends \Test\TestCase {
 			->willReturn(json_decode('{"members": [{"username": "othre_trello_user"}]}'));
 		$this->service->setImportService($importService);
 		$actual = $this->service->validateUsers();
-		$this->assertInstanceOf(BoardImportTrelloService::class, $actual);
+		$this->assertInstanceOf(BoardImportTrelloJsonService::class, $actual);
 	}
 
 	public function testValidateUsersWithNotStringNextcloud() {
@@ -78,7 +78,7 @@ class BoardImportTrelloServiceTest extends \Test\TestCase {
 			->willReturn(json_decode('{"members": [{"username": "trello_user"}]}'));
 		$this->service->setImportService($importService);
 		$actual = $this->service->validateUsers();
-		$this->assertInstanceOf(BoardImportTrelloService::class, $actual);
+		$this->assertInstanceOf(BoardImportTrelloJsonService::class, $actual);
 	}
 
 	public function testValidateUsersWithNotFoundUser() {
@@ -92,7 +92,7 @@ class BoardImportTrelloServiceTest extends \Test\TestCase {
 			->willReturn(json_decode('{"members": [{"username": "trello_user"}]}'));
 		$this->service->setImportService($importService);
 		$actual = $this->service->validateUsers();
-		$this->assertInstanceOf(BoardImportTrelloService::class, $actual);
+		$this->assertInstanceOf(BoardImportTrelloJsonService::class, $actual);
 	}
 
 	public function testValidateUsersWithValidUsers() {
@@ -123,10 +123,10 @@ class BoardImportTrelloServiceTest extends \Test\TestCase {
 	public function testGetBoardWithSuccess() {
 		$importService = \OC::$server->get(BoardImportService::class);
 
-		$data = json_decode(file_get_contents(__DIR__ . '/../../data/data-trello.json'));
+		$data = json_decode(file_get_contents(__DIR__ . '/../../data/data-trelloJson.json'));
 		$importService->setData($data);
 
-		$configInstance = json_decode(file_get_contents(__DIR__ . '/../../data/config-trello.json'));
+		$configInstance = json_decode(file_get_contents(__DIR__ . '/../../data/config-trelloJson.json'));
 		$importService->setConfigInstance($configInstance);
 
 		$owner = $this->createMock(IUser::class);

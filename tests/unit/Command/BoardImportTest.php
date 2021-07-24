@@ -58,7 +58,7 @@ class BoardImportTest extends \Test\TestCase {
 				['config']
 			)
 			->will($this->returnValueMap([
-				['system', 'trello'],
+				['system', 'trelloJson'],
 				['config', null]
 			]));
 

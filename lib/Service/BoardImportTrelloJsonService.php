@@ -35,7 +35,9 @@ use OCP\IL10N;
 use OCP\IUser;
 use OCP\IUserManager;
 
-class BoardImportTrelloService extends ABoardImportService {
+class BoardImportTrelloJsonService extends ABoardImportService {
+	/** @var string */
+	public static $name = 'Trello JSON';
 	/** @var IUserManager */
 	private $userManager;
 	/** @var IL10N */
