@@ -37,6 +37,7 @@ abstract class ABoardImportService {
 	public static $name = '';
 	/** @var BoardImportService */
 	private $boardImportService;
+	/** @var bool */
 	protected $needValidateData = true;
 	/** @var Stack[] */
 	protected $stacks = [];

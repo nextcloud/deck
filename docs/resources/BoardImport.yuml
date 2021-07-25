@@ -5,13 +5,20 @@
 // {generate:true}
 
 [note: Classes used on board import. Methods just to illustrate. {bg:cornsilk}]
+
 [ApiController]<-[BoardImportApiController|+import();+getAllowedSystems();+getConfigSchema()]
 [BoardImportApiController]uses-.->[BoardImportService|+import();+bootstrap();+validateSystem();#validateConfig();#validateData();]
+
 [Command]<-[BoardImport|+boardImportCommandService|#configure();#execute(input,output)]
 [BoardImport]uses-.->[BoardImportCommandService|+bootstrap();+import();+validateSystem();#validateConfig();#validateData()]
 [BoardImportCommandService]->[BoardImportService]
-[BoardImportService]uses-.->[BoardImportTrelloService]
-[BoardImportTrelloService]uses-.->[BoardImportService]
+
+[BoardImportService]uses-.->[BoardImportTrelloApiService|+name:string]
+[BoardImportTrelloApiService]uses-.->[BoardImportService]
+[BoardImportTrelloApiService]implements-.-^[<<abstract>> ABoardImportService|#needValidateData:false|+needValidateData():bool]
+
+[BoardImportService]uses-.->[BoardImportTrelloJsonService|+name:string;#needValidateData:true]
+[BoardImportTrelloJsonService]uses-.->[BoardImportService]
 [BoardImportService]-[note: validateSystem is public because is used on Api. {bg:cornsilk}]
-[BoardImportTrelloService]-[note: To create an import to another system, create another class similar to this. {bg:cornsilk}]
-[BoardImportTrelloService]implements-.-^[<<abstract>> ABoardImportService]
+[BoardImportTrelloJsonService]-[note: To create an import to another system, create another class similar to this. {bg:cornsilk}]
+[BoardImportTrelloJsonService]implements-.-^[<<abstract>> ABoardImportService]

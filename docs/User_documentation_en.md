@@ -9,11 +9,14 @@ Project management, time management or ideation, Deck makes it easier for you to
 ## Using Deck
 Overall, Deck is easy to use. You can create boards, add users, share the Deck, work collaboratively and in real time.
 
-1. [Create my first board](#1-create-my-first-board)
-2. [Create stacks and cards](#2-create-stacks-and-cards)
-3. [Handle cards options](#3-handle-cards-options)
-4. [Archive old tasks](#4-archive-old-tasks)
-5. [Manage your board](#5-manage-your-board)
+- 1. [Create my first board](#1-create-my-first-board)
+- 2. [Create stacks and cards](#2-create-stacks-and-cards)
+- 3. [Handle cards options](#3-handle-cards-options)
+- 4. [Archive old tasks](#4-archive-old-tasks)
+- 5. [Manage your board](#5-manage-your-board)
+- 6. [Import boards](#6-import-boards)
+  - [Trello JSON](#trello-json)
+  - [Trello API](#trello-api)
 
 ### 1. Create my first board
 In this example, we're going to create a board and share it with an other nextcloud user.
@@ -68,6 +71,70 @@ The **sharing tab** allows you to add users or even groups to your boards.
 **Tags** allows you to modify the tags available for the cards.  
 **Deleted objects** allows you to return previously deleted stacks or cards.  
 The **Timeline** allows you to see everything that happened in your boards. Everything!
+
+### 6. Import boards
+
+Importing can be done using the API or the `occ` `deck:import` command.
+
+It is possible to import from the following sources:
+
+#### Trello JSON
+
+Steps:
+* Create the data file
+  * Access Trello
+  * go to the board you want to export
+  * Follow the steps in [Trello documentation](https://help.trello.com/article/747-exporting-data-from-trello-1) and export as JSON
+* Create the configuration file
+* Execute the import informing the import file path, data file and source as `Trello JSON`
+
+Create the configuration file respecting the [JSON Schema](https://github.com/nextcloud/deck/blob/master/lib/Service/fixtures/config-trelloJson-schema.json) for import `Trello JSON`
+
+Example configuration file:
+```json
+{
+    "owner": "admin",
+    "color": "0800fd",
+    "uidRelation": {
+        "johndoe": "johndoe"
+    }
+}
+```
+
+**Limitations**:
+
+Importing from a JSON file imports up to 1000 actions. To find out how many actions the board to be imported has, identify how many actions the JSON has.
+
+#### Trello API
+
+Import using API is recommended for boards with more than 1000 actions.
+
+Trello makes it possible to attach links to a card. Deck does not have this feature. Attachments and attachment links are added in a markdown table at the end of the description for every imported card that has attachments in Trello.
+
+* Get the API Key and API Token [here](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/#authentication-and-authorization)
+* Get the ID of the board you want to import by making a request to:
+https://api.trello.com/1/members/me/boards?key={yourKey}&token={yourToken}&fields=id,name
+
+  This ID you will use in the configuration file in the `board` property
+* Create the configuration file
+
+Create the configuration file respecting the [JSON Schema](https://github.com/nextcloud/deck/blob/master/lib/Service/fixtures/config-trelloApi-schema.json) for import `Trello JSON`
+
+Example configuration file:
+```json
+{
+    "owner": "admin",
+    "color": "0800fd",
+    "api": {
+        "key": "0cc175b9c0f1b6a831c399e269772661",
+        "token": "92eb5ffee6ae2fec3ad71c777531578f4a8a08f09d37b73795649038408b5f33"
+    },
+    "board": "8277e0910d750195b4487976",
+    "uidRelation": {
+        "johndoe": "johndoe"
+    }
+}
+```
 
 ## Search
 

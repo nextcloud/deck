@@ -111,6 +111,7 @@ class BoardImportTrelloJsonService extends ABoardImportService {
 				return $c->id;
 			}, $values);
 			$trelloComments = array_combine($keys, $values);
+			$trelloComments = $this->sortComments($trelloComments);
 			foreach ($trelloComments as $commentId => $trelloComment) {
 				$comment = new Comment();
 				if (!empty($this->getImportService()->getConfig('uidRelation')->{$trelloComment->memberCreator->username})) {
@@ -128,6 +129,18 @@ class BoardImportTrelloJsonService extends ABoardImportService {
 				$comments[$cardId][$commentId] = $comment;
 			}
 		}
+		return $comments;
+	}
+
+	private function sortComments(array $comments): array {
+		$comparison = function($a, $b) {
+			if ($a->date == $b->date) {
+				return 0;
+			}
+			return ($a->date < $b->date) ? -1 : 1;
+		};
+
+		usort($comments, $comparison);
 		return $comments;
 	}
 
@@ -221,7 +234,7 @@ class BoardImportTrelloJsonService extends ABoardImportService {
 			$cardsOnStack[] = $card;
 			$this->stacks[$trelloCard->idList]->setCards($cardsOnStack);
 			$card->setType('plain');
-			$card->setOrder($trelloCard->idShort);
+			$card->setOrder($trelloCard->pos);
 			$card->setOwner($this->getImportService()->getConfig('owner')->getUID());
 			$card->setDescription($trelloCard->desc);
 			if ($trelloCard->due) {

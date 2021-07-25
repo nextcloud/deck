@@ -6,20 +6,17 @@
             "properties": {
                 "key": {
                     "type": "string",
-                    "pattern": "^\\w{32}$"
+                    "pattern": "^[0-9a-fA-F]{32}$"
                 },
                 "token": {
                     "type": "string",
-                    "pattern": "^\\w{1,}$"
+                    "pattern": "^[0-9a-fA-F]{64}$"
                 }
             }
         },
-        "boards": {
-            "type": "array",
-            "items": {
-                "type": "string",
-                "pattern": "^\\w{1,}$"
-            }
+        "board": {
+            "type": "string",
+            "pattern": "^\\w{1,}$"
         },
         "uidRelation": {
             "type": "object",

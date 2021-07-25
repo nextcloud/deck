@@ -180,7 +180,7 @@ class BoardImportService {
 				$className = 'OCA\Deck\Service\\'.$matches['class'];
 				if (!class_exists($className)) {
 					/** @psalm-suppress UnresolvableInclude */
-					require_once $name;
+					require_once $className;
 				}
 				/** @psalm-suppress InvalidPropertyFetch */
 				$name = $className::$name;
