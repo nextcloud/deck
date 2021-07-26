@@ -75,7 +75,7 @@
 		"@nextcloud/stylelint-config": "^1.0.0-beta.0",
 		"@nextcloud/webpack-vue-config": "^4.1.0",
 		"@relative-ci/agent": "^2.0.0",
-		"@vue/test-utils": "^1.2.1",
+		"@vue/test-utils": "^1.2.2",
 		"jest": "^27.0.6",
 		"jest-serializer-vue": "^2.0.2",
 		"vue-jest": "^3.0.7"
