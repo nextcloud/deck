@@ -26,6 +26,7 @@ namespace OCA\Deck\Service;
 use OCP\Http\Client\IClient;
 use OCP\Http\Client\IClientService;
 use OCP\IL10N;
+use OCP\IURLGenerator;
 use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
 
@@ -44,11 +45,12 @@ class BoardImportTrelloApiService extends BoardImportTrelloJsonService {
 
 	public function __construct(
 		IUserManager $userManager,
+		IURLGenerator $urlGenerator,
 		IL10N $l10n,
 		LoggerInterface $logger,
 		IClientService $httpClientService
 	) {
-		parent::__construct($userManager, $l10n);
+		parent::__construct($userManager, $urlGenerator, $l10n);
 		$this->logger = $logger;
 		$this->httpClient = $httpClientService->newClient();
 	}

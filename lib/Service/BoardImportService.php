@@ -29,6 +29,8 @@ use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignmentMapper;
+use OCA\Deck\Db\Attachment;
+use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
@@ -61,6 +63,8 @@ class BoardImportService {
 	private $cardMapper;
 	/** @var AssignmentMapper */
 	private $assignmentMapper;
+	/** @var AttachmentMapper */
+	private $attachmentMapper;
 	/** @var ICommentsManager */
 	private $commentsManager;
 	/** @var string */
@@ -96,6 +100,7 @@ class BoardImportService {
 		LabelMapper $labelMapper,
 		StackMapper $stackMapper,
 		AssignmentMapper $assignmentMapper,
+		AttachmentMapper $attachmentMapper,
 		CardMapper $cardMapper,
 		ICommentsManager $commentsManager
 	) {
@@ -107,6 +112,7 @@ class BoardImportService {
 		$this->stackMapper = $stackMapper;
 		$this->cardMapper = $cardMapper;
 		$this->assignmentMapper = $assignmentMapper;
+		$this->attachmentMapper = $attachmentMapper;
 		$this->commentsManager = $commentsManager;
 		$this->board = new Board();
 		$this->disableCommentsEvents();
@@ -340,6 +346,24 @@ class BoardImportService {
 				$this->getImportSystem()->updateCardAssignment($cardId, $assignmentId, $assignment);
 			}
 		}
+	}
+
+	public function insertAttachment(Attachment $attachment, string $content): Attachment {
+		$service = \OC::$server->get(FileService::class);
+		$folder = $service->getFolder($attachment);
+
+		if ($folder->fileExists($attachment->getData())) {
+			$attachment = $this->attachmentMapper->findByData($attachment->getCardId(), $attachment->getData());
+			throw new ConflictException('File already exists.', $attachment);
+		}
+
+		$target = $folder->newFile($attachment->getData());
+		$target->putContent($content);
+
+		$attachment = $this->attachmentMapper->insert($attachment);
+
+		$service->extendData($attachment);
+		return $attachment;
 	}
 
 	public function setData(\stdClass $data): void {

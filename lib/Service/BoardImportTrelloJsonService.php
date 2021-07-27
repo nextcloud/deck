@@ -27,11 +27,14 @@ use OC\Comments\Comment;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Assignment;
+use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Stack;
+use OCP\Comments\IComment;
 use OCP\IL10N;
+use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 
@@ -40,6 +43,8 @@ class BoardImportTrelloJsonService extends ABoardImportService {
 	public static $name = 'Trello JSON';
 	/** @var IUserManager */
 	private $userManager;
+	/** @var IURLGenerator */
+	private $urlGenerator;
 	/** @var IL10N */
 	private $l10n;
 	/** @var IUser[] */
@@ -47,9 +52,11 @@ class BoardImportTrelloJsonService extends ABoardImportService {
 
 	public function __construct(
 		IUserManager $userManager,
+		IURLGenerator $urlGenerator,
 		IL10N $l10n
 	) {
 		$this->userManager = $userManager;
+		$this->urlGenerator = $urlGenerator;
 		$this->l10n = $l10n;
 	}
 
@@ -113,19 +120,48 @@ class BoardImportTrelloJsonService extends ABoardImportService {
 			$trelloComments = array_combine($keys, $values);
 			$trelloComments = $this->sortComments($trelloComments);
 			foreach ($trelloComments as $commentId => $trelloComment) {
+				$cardId = $this->cards[$trelloCard->id]->getId();
 				$comment = new Comment();
 				if (!empty($this->getImportService()->getConfig('uidRelation')->{$trelloComment->memberCreator->username})) {
 					$actor = $this->getImportService()->getConfig('uidRelation')->{$trelloComment->memberCreator->username}->getUID();
 				} else {
 					$actor = $this->getImportService()->getConfig('owner')->getUID();
 				}
+				$message = $this->replaceUsernames($trelloComment->data->text);
+				if (mb_strlen($message, 'UTF-8') > IComment::MAX_MESSAGE_LENGTH) {
+					$attachment = new Attachment();
+					$attachment->setCardId($cardId);
+					$attachment->setType('deck_file');
+					$attachment->setCreatedBy($actor);
+					$attachment->setLastModified(time());
+					$attachment->setCreatedAt(time());
+					$attachment->setData('comment_' . $commentId . '.md');
+					$attachment = $this->getImportService()->insertAttachment($attachment, $message);
+
+					$urlToDownloadAttachment = $this->urlGenerator->linkToRouteAbsolute(
+						'deck.attachment.display',
+						[
+							'cardId' => $cardId,
+							'attachmentId' => $attachment->getId()
+						]
+					);
+					$message = $this->l10n->t(
+						"This comment has more than %s characters.\n" .
+						"Added as an attachment to the card with name %s\n" .
+						"Accessible on URL: %s.",
+						[
+							IComment::MAX_MESSAGE_LENGTH,
+							'comment_' . $commentId . '.md',
+							$urlToDownloadAttachment
+						]
+					);
+				}
 				$comment
 					->setActor('users', $actor)
-					->setMessage($this->replaceUsernames($trelloComment->data->text), 0)
+					->setMessage($message)
 					->setCreationDateTime(
 						\DateTime::createFromFormat('Y-m-d\TH:i:s.v\Z', $trelloComment->date)
 					);
-				$cardId = $this->cards[$trelloCard->id]->getId();
 				$comments[$cardId][$commentId] = $comment;
 			}
 		}
@@ -133,7 +169,7 @@ class BoardImportTrelloJsonService extends ABoardImportService {
 	}
 
 	private function sortComments(array $comments): array {
-		$comparison = function($a, $b) {
+		$comparison = function (\stdClass $a, \stdClass $b): int {
 			if ($a->date == $b->date) {
 				return 0;
 			}

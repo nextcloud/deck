@@ -9,14 +9,13 @@ Project management, time management or ideation, Deck makes it easier for you to
 ## Using Deck
 Overall, Deck is easy to use. You can create boards, add users, share the Deck, work collaboratively and in real time.
 
-- 1. [Create my first board](#1-create-my-first-board)
-- 2. [Create stacks and cards](#2-create-stacks-and-cards)
-- 3. [Handle cards options](#3-handle-cards-options)
-- 4. [Archive old tasks](#4-archive-old-tasks)
-- 5. [Manage your board](#5-manage-your-board)
-- 6. [Import boards](#6-import-boards)
-  - [Trello JSON](#trello-json)
-  - [Trello API](#trello-api)
+1. [Create my first board](#1-create-my-first-board)
+2. [Create stacks and cards](#2-create-stacks-and-cards)
+3. [Handle cards options](#3-handle-cards-options)
+4. [Archive old tasks](#4-archive-old-tasks)
+5. [Manage your board](#5-manage-your-board)
+6. [Import boards](#6-import-boards)
+7. [Search](#7-search)
 
 ### 1. Create my first board
 In this example, we're going to create a board and share it with an other nextcloud user.
@@ -136,14 +135,14 @@ Example configuration file:
 }
 ```
 
-## Search
+### 7. Search
 
 Deck provides a global search either through the unified search in the Nextcloud header or with the inline search next to the board controls.
 This search allows advanced filtering of cards across all board of the logged in user.
 
 For example the search `project tag:ToDo assigned:alice assigned:bob` will return all cards where the card title or description contains project **and** the tag ToDo is set **and** the user alice is assigned **and** the user bob is assigned.
 
-### Supported search filters
+#### Supported search filters
 
 | Filter      | Operators         | Query                                                        |
 | ----------- | ----------------- | ------------------------------------------------------------ |

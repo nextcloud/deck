@@ -86,7 +86,7 @@ class FileService implements IAttachmentService {
 	 * @return ISimpleFolder
 	 * @throws NotPermittedException
 	 */
-	private function getFolder(Attachment $attachment) {
+	public function getFolder(Attachment $attachment) {
 		$folderName = 'file-card-' . (int)$attachment->getCardId();
 		try {
 			$folder = $this->appData->getFolder($folderName);
