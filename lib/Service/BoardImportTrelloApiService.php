@@ -71,7 +71,7 @@ class BoardImportTrelloApiService extends BoardImportTrelloJsonService {
 		$data->actions = $this->doRequest(
 			'/boards/' . $data->id . '/actions',
 			[
-				'filter' => 'commentCard',
+				'filter' => 'commentCard,createCard',
 				'fields=memberCreator,type,data,date',
 				'memberCreator_fields' => 'username',
 				'limit' => 1000

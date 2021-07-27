@@ -23,21 +23,26 @@
 namespace OCA\Deck\Service;
 
 use OCP\IL10N;
+use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 
 class BoardImportTrelloJsonServiceTest extends \Test\TestCase {
 	/** @var BoardImportTrelloJsonService */
 	private $service;
+	/** @var IURLGenerator */
+	private $urlGenerator;
 	/** @var IUserManager */
 	private $userManager;
 	/** @var IL10N */
 	private $l10n;
 	public function setUp(): void {
 		$this->userManager = $this->createMock(IUserManager::class);
+		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->service = new BoardImportTrelloJsonService(
 			$this->userManager,
+			$this->urlGenerator,
 			$this->l10n
 		);
 	}

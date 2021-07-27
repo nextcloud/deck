@@ -75,6 +75,8 @@ The **Timeline** allows you to see everything that happened in your boards. Ever
 
 Importing can be done using the API or the `occ` `deck:import` command.
 
+Comments with more than 1000 characters are placed as attached files to the card.
+
 It is possible to import from the following sources:
 
 #### Trello JSON

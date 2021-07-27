@@ -255,7 +255,7 @@ class BoardImportTrelloJsonService extends ABoardImportService {
 			$lastModified = \DateTime::createFromFormat('Y-m-d\TH:i:s.v\Z', $trelloCard->dateLastActivity);
 			$card->setLastModified($lastModified->format('Y-m-d H:i:s'));
 			if ($trelloCard->closed) {
-				$card->setDeletedAt($lastModified->format('U'));
+				$card->setArchived(true);
 			}
 			if ((count($trelloCard->idChecklists) !== 0)) {
 				foreach ($this->getImportService()->getData()->checklists[$trelloCard->id] as $checklist) {
@@ -272,6 +272,24 @@ class BoardImportTrelloJsonService extends ABoardImportService {
 			$card->setType('plain');
 			$card->setOrder($trelloCard->pos);
 			$card->setOwner($this->getImportService()->getConfig('owner')->getUID());
+
+			$lastModified = \DateTime::createFromFormat('Y-m-d\TH:i:s.v\Z', $trelloCard->dateLastActivity);
+			$card->setLastModified($lastModified->format('U'));
+
+			$createCardDate = array_filter(
+				$this->getImportService()->getData()->actions,
+				function (\stdClass $a) use ($trelloCard) {
+					return $a->type === 'createCard' && $a->data->card->id === $trelloCard->id;
+				}
+			);
+			$createCardDate = current($createCardDate);
+			$createCardDate = \DateTime::createFromFormat('Y-m-d\TH:i:s.v\Z', $createCardDate->date);
+			if ($createCardDate) {
+				$card->setCreatedAt($createCardDate->format('U'));
+			} else {
+				$card->setCreatedAt($lastModified->format('U'));
+			}
+
 			$card->setDescription($trelloCard->desc);
 			if ($trelloCard->due) {
 				$duedate = \DateTime::createFromFormat('Y-m-d\TH:i:s.v\Z', $trelloCard->due)
@@ -365,7 +383,7 @@ class BoardImportTrelloJsonService extends ABoardImportService {
 		$trelloCard->desc .= "| {$this->l10n->t('File')} | {$this->l10n->t('date')} |\n";
 		$trelloCard->desc .= "|---|---\n";
 		foreach ($trelloCard->attachments as $attachment) {
-			$name = $attachment->name === $attachment->url ? null : $attachment->name;
+			$name = mb_strlen($attachment->name, 'UTF-8') ? $attachment->name : $attachment->url;
 			$trelloCard->desc .= "| [{$name}]({$attachment->url}) | {$attachment->date} |\n";
 		}
 	}

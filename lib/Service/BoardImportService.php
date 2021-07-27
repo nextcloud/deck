@@ -273,7 +273,21 @@ class BoardImportService {
 	public function importCards(): void {
 		$cards = $this->getImportSystem()->getCards();
 		foreach ($cards as $code => $card) {
+			$createdAt = $card->getCreatedAt();
+			$lastModified = $card->getLastModified();
 			$this->cardMapper->insert($card);
+			$updateDate = false;
+			if ($createdAt && $createdAt !== $card->getCreatedAt()) {
+				$card->setCreatedAt($createdAt);
+				$updateDate = true;
+			}
+			if ($lastModified && $lastModified !== $card->getLastModified()) {
+				$card->setLastModified($lastModified);
+				$updateDate = true;
+			}
+			if ($updateDate) {
+				$this->cardMapper->update($card, false);
+			}
 			$this->getImportSystem()->updateCard($code, $card);
 		}
 	}

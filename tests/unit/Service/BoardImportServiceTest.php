@@ -27,6 +27,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
+use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
@@ -57,6 +58,8 @@ class BoardImportServiceTest extends \Test\TestCase {
 	private $cardMapper;
 	/** @var AssignmentMapper|MockObject */
 	private $assignmentMapper;
+	/** @var AttachmentMapper|MockObject */
+	private $attachmentMapper;
 	/** @var ICommentsManager|MockObject */
 	private $commentsManager;
 	/** @var BoardImportTrelloJsonService|MockObject */
@@ -70,8 +73,9 @@ class BoardImportServiceTest extends \Test\TestCase {
 		$this->aclMapper = $this->createMock(AclMapper::class);
 		$this->labelMapper = $this->createMock(LabelMapper::class);
 		$this->stackMapper = $this->createMock(StackMapper::class);
-		$this->cardMapper = $this->createMock(AssignmentMapper::class);
-		$this->assignmentMapper = $this->createMock(CardMapper::class);
+		$this->cardMapper = $this->createMock(CardMapper::class);
+		$this->assignmentMapper = $this->createMock(AssignmentMapper::class);
+		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
 		$this->commentsManager = $this->createMock(ICommentsManager::class);
 		$this->boardImportService = new BoardImportService(
 			$this->dbConn,
@@ -80,8 +84,9 @@ class BoardImportServiceTest extends \Test\TestCase {
 			$this->aclMapper,
 			$this->labelMapper,
 			$this->stackMapper,
-			$this->cardMapper,
 			$this->assignmentMapper,
+			$this->attachmentMapper,
+			$this->cardMapper,
 			$this->commentsManager
 		);
 
