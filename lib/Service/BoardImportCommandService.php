@@ -105,7 +105,7 @@ class BoardImportCommandService extends BoardImportService {
 				return $answer;
 			});
 			$configFile = $helper->ask($this->getInput(), $this->getOutput(), $question);
-			$config = $this->getInput()->setOption('config', $configFile);
+			$this->getInput()->setOption('config', $configFile);
 		} catch (ConflictException $e) {
 			$this->getOutput()->writeln('<error>Invalid config file</error>');
 			$this->getOutput()->writeln(array_map(function (array $v): string {

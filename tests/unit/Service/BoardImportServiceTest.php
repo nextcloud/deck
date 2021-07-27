@@ -67,7 +67,6 @@ class BoardImportServiceTest extends \Test\TestCase {
 	/** @var BoardImportService|MockObject */
 	private $boardImportService;
 	public function setUp(): void {
-		$this->dbConn = $this->createMock(IDBConnection::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->aclMapper = $this->createMock(AclMapper::class);
@@ -78,7 +77,6 @@ class BoardImportServiceTest extends \Test\TestCase {
 		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
 		$this->commentsManager = $this->createMock(ICommentsManager::class);
 		$this->boardImportService = new BoardImportService(
-			$this->dbConn,
 			$this->userManager,
 			$this->boardMapper,
 			$this->aclMapper,

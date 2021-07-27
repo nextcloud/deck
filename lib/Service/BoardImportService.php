@@ -34,21 +34,16 @@ use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
-use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Exceptions\ConflictException;
 use OCA\Deck\NotFoundException;
-use OCP\AppFramework\Db\Entity;
 use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
 use OCP\Comments\NotFoundException as CommentNotFoundException;
-use OCP\IDBConnection;
 use OCP\IUserManager;
 
 class BoardImportService {
-	/** @var IDBConnection */
-	protected $dbConn;
 	/** @var IUserManager */
 	private $userManager;
 	/** @var BoardMapper */
@@ -93,7 +88,6 @@ class BoardImportService {
 	private $board;
 
 	public function __construct(
-		IDBConnection $dbConn,
 		IUserManager $userManager,
 		BoardMapper $boardMapper,
 		AclMapper $aclMapper,
@@ -104,7 +98,6 @@ class BoardImportService {
 		CardMapper $cardMapper,
 		ICommentsManager $commentsManager
 	) {
-		$this->dbConn = $dbConn;
 		$this->userManager = $userManager;
 		$this->boardMapper = $boardMapper;
 		$this->aclMapper = $aclMapper;
@@ -251,14 +244,6 @@ class BoardImportService {
 			$this->getImportSystem()->updateLabel($code, $label);
 		}
 		$this->getBoard()->setLabels($labels);
-	}
-
-	public function createLabel(string $title, string $color, int $boardId): Entity {
-		$label = new Label();
-		$label->setTitle($title);
-		$label->setColor($color);
-		$label->setBoardId($boardId);
-		return $this->labelMapper->insert($label);
 	}
 
 	public function importStacks(): void {
