@@ -26,6 +26,8 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Service;
 
+use OCA\Circles\CirclesManager;
+use OCA\Circles\Model\Member;
 use OCP\App\IAppManager;
 
 /**
@@ -37,6 +39,10 @@ class CirclesService {
 
 	public function __construct(IAppManager $appManager) {
 		$this->circlesEnabled = $appManager->isEnabledForUser('circles');
+	}
+
+	public function isCirclesEnabled(): bool {
+		return $this->circlesEnabled;
 	}
 
 	public function getCircle($circleId) {
@@ -53,8 +59,13 @@ class CirclesService {
 		}
 
 		try {
-			\OCA\Circles\Api\v1\Circles::getMember($circleId, $userId, 1, true);
-			return true;
+			/** @var CirclesManager $circlesManager */
+			$circlesManager = \OC::$server->get(CirclesManager::class);
+			$federatedUser = $circlesManager->getFederatedUser($userId, Member::TYPE_USER);
+			$circlesManager->startSession($federatedUser);
+			$circle = $circlesManager->getCircle($circleId);
+			$member = $circle->getInitiator();
+			return $member !== null && $member->getLevel() >= Member::LEVEL_MEMBER;
 		} catch (\Exception $e) {
 		}
 		return false;
