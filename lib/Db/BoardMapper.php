@@ -28,7 +28,6 @@ use OCP\IDBConnection;
 use OCP\ILogger;
 use OCP\IUserManager;
 use OCP\IGroupManager;
-use Psr\Log\LoggerInterface;
 
 class BoardMapper extends DeckMapper implements IPermissionMapper {
 	private $labelMapper;
@@ -47,7 +46,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		StackMapper $stackMapper,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
-		LoggerInterface $logger
+		ILogger $logger
 	) {
 		parent::__construct($db, 'deck_boards', Board::class);
 		$this->labelMapper = $labelMapper;
