@@ -23,8 +23,8 @@
 /**
  * Board model
  *
- * @typedef {Object} Board
- * @property {String} title
+ * @typedef {object} Board
+ * @property {string} title
  * @property {boolean} archived
  * @property {number} shared 1 (shared) or 0 (not shared)
  */
@@ -32,8 +32,8 @@
 /**
  * Stack model
  *
- * @typedef {Object} Stack
- * @property {String} title
+ * @typedef {object} Stack
+ * @property {string} title
  * @property {number} boardId
  * @property {number} order
  */
@@ -41,15 +41,15 @@
 /**
  * Card model
  *
- * @typedef {Object} Card
- * @property {String} title
+ * @typedef {object} Card
+ * @property {string} title
  * @property {boolean} archived
  * @property {number} order
  */
 /**
  * Label model
  *
- * @typedef {Object} Label
- * @property {String} title
- * @property {String} color
+ * @typedef {object} Label
+ * @property {string} title
+ * @property {string} color
  */

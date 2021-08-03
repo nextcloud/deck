@@ -353,6 +353,7 @@ export default new Vuex.Store({
 		},
 
 		/**
+		 * @param commit.commit
 		 * @param commit
 		 * @param state
 		 * @param {Board} board
@@ -366,6 +367,7 @@ export default new Vuex.Store({
 				})
 		},
 		/**
+		 * @param commit.commit
 		 * @param commit
 		 * @param state
 		 * @param {Board} board
@@ -381,9 +383,10 @@ export default new Vuex.Store({
 		/**
 		 * Updates a board API side.
 		 *
+		 * @param commit.commit
 		 * @param commit
 		 * @param board The board to update.
-		 * @returns {Promise<void>}
+		 * @return {Promise<void>}
 		 */
 		async updateBoard({ commit }, board) {
 			const storedBoard = await apiClient.updateBoard(board)
