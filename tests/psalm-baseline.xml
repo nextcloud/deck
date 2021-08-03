@@ -260,7 +260,8 @@
     </RedundantCondition>
   </file>
   <file src="lib/Service/PermissionService.php">
-    <UndefinedClass occurrences="2">
+    <UndefinedClass occurrences="3">
+      <code>Member</code>
       <code>\OCA\Circles\Api\v1\Circles</code>
       <code>\OCA\Circles\Api\v1\Circles</code>
     </UndefinedClass>
