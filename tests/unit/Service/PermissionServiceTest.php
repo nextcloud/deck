@@ -35,6 +35,7 @@ use OCP\IConfig;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\ILogger;
+use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Share\IManager;
@@ -62,7 +63,9 @@ class PermissionServiceTest extends \Test\TestCase {
 
 	public function setUp(): void {
 		parent::setUp();
-		$this->logger = $this->request = $this->createMock(ILogger::class);
+		$this->logger = $this->createMock(ILogger::class);
+		$this->request = $this->createMock(IRequest::class);
+		$this->circlesService = $this->createMock(CirclesService::class);
 		$this->aclMapper = $this->createMock(AclMapper::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->userManager = $this->createMock(IUserManager::class);
@@ -72,6 +75,7 @@ class PermissionServiceTest extends \Test\TestCase {
 
 		$this->service = new PermissionService(
 			$this->logger,
+			$this->circlesService,
 			$this->aclMapper,
 			$this->boardMapper,
 			$this->userManager,
