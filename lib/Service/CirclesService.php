@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Service;
 
+use OCA\Circles\Api\v1\Circles;
 use OCP\App\IAppManager;
 
 /**
@@ -53,8 +54,8 @@ class CirclesService {
 		}
 
 		try {
-			\OCA\Circles\Api\v1\Circles::getMember($circleId, $userId, 1, true);
-			return true;
+			$member = \OCA\Circles\Api\v1\Circles::getMember($circleId, $userId, 1, true);
+			return $member->getLevel() >= Circles::LEVEL_MEMBER;
 		} catch (\Exception $e) {
 		}
 		return false;
