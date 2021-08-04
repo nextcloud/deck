@@ -24,6 +24,7 @@
 namespace OCA\Deck\Service;
 
 use OC\Cache\CappedMemoryCache;
+use OCA\Circles\Model\Member;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Board;
@@ -32,7 +33,6 @@ use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\IConfig;
 use OCP\IGroupManager;
@@ -212,8 +212,8 @@ class PermissionService {
 
 			if ($this->circlesEnabled && $acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
 				try {
-					\OCA\Circles\Api\v1\Circles::getMember($acl->getParticipant(), $this->userId, 1, true);
-					return $acl->getPermission($permission);
+					$member = \OCA\Circles\Api\v1\Circles::getMember($acl->getParticipant(), $this->userId, 1, true);
+					return $member->getLevel() >= Member::LEVEL_MEMBER && $acl->getPermission($permission);
 				} catch (\Exception $e) {
 					$this->logger->info('Member not found in circle that was accessed. This should not happen.');
 				}
