@@ -78,7 +78,7 @@ export class StackApi {
 
 	/**
 	 * @param {Stack} stack stack object to create
-	 * @returns {Promise}
+	 * @return {Promise}
 	 */
 	createStack(stack) {
 		return axios.post(this.url('/stacks'), stack)

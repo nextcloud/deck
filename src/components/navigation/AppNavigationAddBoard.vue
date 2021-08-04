@@ -39,6 +39,9 @@
 <script>
 import { ColorPicker, ActionButton, Actions, AppNavigationItem } from '@nextcloud/vue'
 
+/**
+ *
+ */
 function randomColor() {
 	let randomHexColor = ((1 << 24) * Math.random() | 0).toString(16)
 	while (randomHexColor.length < 6) {

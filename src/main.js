@@ -109,7 +109,7 @@ if (!window.OCA.Deck) {
 }
 
 /**
- * @typedef {Object} CardRichObject
+ * @typedef {object} CardRichObject
  * @property {string} id
  * @property {string} name
  * @property {string} boardname
@@ -124,13 +124,14 @@ if (!window.OCA.Deck) {
 
 /**
  * Frontend message API for adding actions to talk messages.
+ *
  * @param {*} Object the wrapping object.
- * @param {String} label the action label.
+ * @param {string} label the action label.
  * @param {registerActionCallback} callback the callback function. This function will receive
  * the card as a parameter and be triggered by a click on the
  * action. The card parameter will be of the format of a rich object string
  * type "deck-card"
- * @param {String} icon the action label. E.g. "icon-reply"
+ * @param {string} icon the action label. E.g. "icon-reply"
  */
 window.OCA.Deck.registerCardAction = ({ label, callback, icon }) => {
 	const cardAction = {

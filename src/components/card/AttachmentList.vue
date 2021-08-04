@@ -204,7 +204,7 @@ export default {
 		},
 		shareFromFiles() {
 			picker.pick()
-				.then(async(path) => {
+				.then(async (path) => {
 					console.debug(`path ${path} selected for sharing`)
 					if (!path.startsWith('/')) {
 						throw new Error(t('files', 'Invalid path selected'))

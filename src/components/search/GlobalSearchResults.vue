@@ -63,10 +63,15 @@ import { Actions, ActionButton } from '@nextcloud/vue'
 
 const createCancelToken = () => axios.CancelToken.source()
 
+/**
+ * @param root0
+ * @param root0.query
+ * @param root0.cursor
+ */
 function search({ query, cursor }) {
 	const cancelToken = createCancelToken()
 
-	const request = async() => axios.get(generateOcsUrl('apps/deck/api/v1.0/search'), {
+	const request = async () => axios.get(generateOcsUrl('apps/deck/api/v1.0/search'), {
 		cancelToken: cancelToken.token,
 		params: {
 			term: query,
