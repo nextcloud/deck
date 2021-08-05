@@ -308,6 +308,10 @@ class PermissionService {
 	}
 
 	public function canCreate() {
+		if ($this->userId === null) {
+			return false;
+		}
+
 		$groups = $this->getGroupLimitList();
 		if (count($groups) === 0) {
 			return true;
