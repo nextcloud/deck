@@ -59,6 +59,11 @@ export default {
 		Content,
 		AppContent,
 	},
+	provide() {
+		return {
+			boardApi,
+		}
+	},
 	data() {
 		return {
 			addButton: {
@@ -111,11 +116,6 @@ export default {
 		hideModal() {
 			this.$router.push({ name: 'board' })
 		},
-	},
-	provide() {
-		return {
-			boardApi,
-		}
 	},
 }
 </script>

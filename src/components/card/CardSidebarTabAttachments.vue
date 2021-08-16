@@ -24,8 +24,8 @@
 	<AttachmentList
 		:card-id="card.id"
 		:removable="true"
-		@deleteAttachment="deleteAttachment"
-		@restoreAttachment="restoreAttachment" />
+		@delete-attachment="deleteAttachment"
+		@restore-attachment="restoreAttachment" />
 </template>
 
 <script>
