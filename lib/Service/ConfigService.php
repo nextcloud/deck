@@ -59,7 +59,7 @@ class ConfigService {
 		$data = [
 			'calendar' => $this->isCalendarEnabled()
 		];
-		if ($this->groupManager->isAdmin($this->userId)) {
+		if (!is_null($this->userId) && $this->groupManager->isAdmin($this->userId)) {
 			$data['groupLimit'] = $this->get('groupLimit');
 		}
 		return $data;
