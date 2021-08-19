@@ -46,20 +46,29 @@ class ConfigService {
 
 	public function __construct(
 		IConfig $config,
-		IGroupManager $groupManager,
-		IUserSession $userSession
+		IGroupManager $groupManager
 	) {
-		// Session is required here in order to make the tests properly inject the userId later on
-		$this->userId = $userSession->getUser() ? $userSession->getUser()->getUID() : null;
 		$this->groupManager = $groupManager;
 		$this->config = $config;
 	}
 
+	public function getUserId() {
+		if (!$this->userId) {
+			$user = \OC::$server->get(IUserSession::class)->getUser();
+			$this->userId = $user ? $user->getUID() : null;
+		}
+		return $this->userId;
+	}
+
 	public function getAll(): array {
+		if ($this->getUserId() === null) {
+			return [];
+		}
+
 		$data = [
 			'calendar' => $this->isCalendarEnabled()
 		];
-		if ($this->groupManager->isAdmin($this->userId)) {
+		if ($this->groupManager->isAdmin($this->getUserId())) {
 			$data['groupLimit'] = $this->get('groupLimit');
 		}
 		return $data;
@@ -70,39 +79,50 @@ class ConfigService {
 		[$scope] = explode(':', $key, 2);
 		switch ($scope) {
 			case 'groupLimit':
-				if (!$this->groupManager->isAdmin($this->userId)) {
+				if ($this->getUserId() === null || !$this->groupManager->isAdmin($this->getUserId())) {
 					throw new NoPermissionException('You must be admin to get the group limit');
 				}
 				$result = $this->getGroupLimit();
 				break;
 			case 'calendar':
-				$result = (bool)$this->config->getUserValue($this->userId, Application::APP_ID, 'calendar', true);
+				if ($this->getUserId() === null) {
+					throw new NoPermissionException('Must be logged in to get the group limit');
+				}
+				$result = (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'calendar', true);
 				break;
 		}
 		return $result;
 	}
 
 	public function isCalendarEnabled(int $boardId = null): bool {
-		$defaultState = (bool)$this->config->getUserValue($this->userId, Application::APP_ID, 'calendar', true);
+		if ($this->getUserId() === null) {
+			throw new NoPermissionException('Must be logged in to access user config');
+		}
+
+		$defaultState = (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'calendar', true);
 		if ($boardId === null) {
 			return $defaultState;
 		}
 
-		return (bool)$this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $boardId . ':calendar', $defaultState);
+		return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'board:' . $boardId . ':calendar', $defaultState);
 	}
 
 	public function set($key, $value) {
+		if ($this->getUserId() === null) {
+			throw new NoPermissionException('Must be logged in to set user config');
+		}
+
 		$result = null;
 		[$scope] = explode(':', $key, 2);
 		switch ($scope) {
 			case 'groupLimit':
-				if (!$this->groupManager->isAdmin($this->userId)) {
+				if (!$this->groupManager->isAdmin($this->getUserId())) {
 					throw new NoPermissionException('You must be admin to set the group limit');
 				}
 				$result = $this->setGroupLimit($value);
 				break;
 			case 'calendar':
-				$this->config->setUserValue($this->userId, Application::APP_ID, 'calendar', (int)$value);
+				$this->config->setUserValue($this->getUserId(), Application::APP_ID, 'calendar', (string)$value);
 				$result = $value;
 				break;
 			case 'board':
@@ -110,7 +130,7 @@ class ConfigService {
 				if ($boardConfigKey === 'notify-due' && !in_array($value, [self::SETTING_BOARD_NOTIFICATION_DUE_ALL, self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED, self::SETTING_BOARD_NOTIFICATION_DUE_OFF], true)) {
 					throw new BadRequestException('Board notification option must be one of: off, assigned, all');
 				}
-				$this->config->setUserValue($this->userId, Application::APP_ID, $key, $value);
+				$this->config->setUserValue($this->getUserId(), Application::APP_ID, $key, (string)$value);
 				$result = $value;
 		}
 		return $result;
@@ -152,6 +172,10 @@ class ConfigService {
 	}
 
 	public function getAttachmentFolder(): string {
-		return $this->config->getUserValue($this->userId, 'deck', 'attachment_folder', '/Deck');
+		if ($this->getUserId() === null) {
+			throw new NoPermissionException('Must be logged in get the attachment folder');
+		}
+
+		return $this->config->getUserValue($this->getUserId(), 'deck', 'attachment_folder', '/Deck');
 	}
 }
