@@ -19,47 +19,45 @@
 		</div>
 	</div>
 	<li v-else class="comment">
-		<template>
-			<div class="comment--header">
-				<Avatar :user="comment.actorId" />
-				<span class="has-tooltip username">
-					{{ comment.actorDisplayName }}
-				</span>
-				<Actions v-show="!edit" :force-menu="true">
-					<ActionButton icon="icon-reply" :close-after-click="true" @click="replyTo()">
-						{{ t('deck', 'Reply') }}
-					</ActionButton>
-					<ActionButton v-if="canEdit"
-						icon="icon-rename"
-						:close-after-click="true"
-						@click="showUpdateForm()">
-						{{ t('deck', 'Update') }}
-					</ActionButton>
-					<ActionButton v-if="canEdit"
-						icon="icon-delete"
-						:close-after-click="true"
-						@click="deleteComment()">
-						{{ t('deck', 'Delete') }}
-					</ActionButton>
-				</Actions>
-				<Actions v-if="edit">
-					<ActionButton icon="icon-close" @click="hideUpdateForm" />
-				</Actions>
-				<div class="spacer" />
-				<div class="timestamp">
-					{{ relativeDate(comment.creationDateTime) }}
-				</div>
+		<div class="comment--header">
+			<Avatar :user="comment.actorId" />
+			<span class="has-tooltip username">
+				{{ comment.actorDisplayName }}
+			</span>
+			<Actions v-show="!edit" :force-menu="true">
+				<ActionButton icon="icon-reply" :close-after-click="true" @click="replyTo()">
+					{{ t('deck', 'Reply') }}
+				</ActionButton>
+				<ActionButton v-if="canEdit"
+					icon="icon-rename"
+					:close-after-click="true"
+					@click="showUpdateForm()">
+					{{ t('deck', 'Update') }}
+				</ActionButton>
+				<ActionButton v-if="canEdit"
+					icon="icon-delete"
+					:close-after-click="true"
+					@click="deleteComment()">
+					{{ t('deck', 'Delete') }}
+				</ActionButton>
+			</Actions>
+			<Actions v-if="edit">
+				<ActionButton icon="icon-close" @click="hideUpdateForm" />
+			</Actions>
+			<div class="spacer" />
+			<div class="timestamp">
+				{{ relativeDate(comment.creationDateTime) }}
 			</div>
-			<CommentItem v-if="comment.replyTo" :reply="true" :comment="comment.replyTo" />
-			<div v-show="!edit" ref="richTextElement">
-				<RichText
-					class="comment--content"
-					:text="richText(comment)"
-					:arguments="richArgs(comment)"
-					:autolink="true" />
-			</div>
-			<CommentForm v-if="edit" v-model="commentMsg" @submit="updateComment" />
-		</template>
+		</div>
+		<CommentItem v-if="comment.replyTo" :reply="true" :comment="comment.replyTo" />
+		<div v-show="!edit" ref="richTextElement">
+			<RichText
+				class="comment--content"
+				:text="richText(comment)"
+				:arguments="richArgs(comment)"
+				:autolink="true" />
+		</div>
+		<CommentForm v-if="edit" v-model="commentMsg" @submit="updateComment" />
 	</li>
 </template>
 

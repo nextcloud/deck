@@ -64,7 +64,7 @@
 					</a>
 				</div>
 				<Actions v-if="selectable">
-					<ActionButton icon="icon-confirm" @click="$emit('selectAttachment', attachment)">
+					<ActionButton icon="icon-confirm" @click="$emit('select-attachment', attachment)">
 						{{ t('deck', 'Add this attachment') }}
 					</ActionButton>
 				</Actions>
@@ -76,10 +76,10 @@
 						{{ t('deck', 'Unshare file') }}
 					</ActionButton>
 
-					<ActionButton v-if="!attachment.extendedData.fileid && attachment.deletedAt === 0" icon="icon-delete" @click="$emit('deleteAttachment', attachment)">
+					<ActionButton v-if="!attachment.extendedData.fileid && attachment.deletedAt === 0" icon="icon-delete" @click="$emit('delete-attachment', attachment)">
 						{{ t('deck', 'Delete Attachment') }}
 					</ActionButton>
-					<ActionButton v-else-if="!attachment.extendedData.fileid" icon="icon-history" @click="$emit('restoreAttachment', attachment)">
+					<ActionButton v-else-if="!attachment.extendedData.fileid" icon="icon-history" @click="$emit('restore-attachment', attachment)">
 						{{ t('deck', 'Restore Attachment') }}
 					</ActionButton>
 				</Actions>

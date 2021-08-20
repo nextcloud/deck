@@ -66,7 +66,7 @@
 				<AttachmentList
 					:card-id="card.id"
 					:selectable="true"
-					@selectAttachment="addAttachment" />
+					@select-attachment="addAttachment" />
 			</div>
 		</Modal>
 	</div>

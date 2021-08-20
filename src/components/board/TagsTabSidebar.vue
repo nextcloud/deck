@@ -43,24 +43,22 @@
 
 			<li v-if="addLabel" class="editing">
 				<!-- New Tag -->
-				<template>
-					<form class="label-form" @submit.prevent="clickAddLabel">
-						<ColorPicker class="color-picker-wrapper" :value="'#' + addLabelObj.color" @input="updateColor">
-							<div :style="{ backgroundColor: '#' + addLabelObj.color }" class="color0 icon-colorpicker" />
-						</ColorPicker>
-						<input v-model="addLabelObj.title" type="text">
-						<input v-tooltip="{content: missingDataLabel, show: !addLabelObjValidated, trigger: 'manual' }"
-							:disabled="!addLabelObjValidated"
-							type="submit"
-							value=""
-							class="icon-confirm">
-						<Actions>
-							<ActionButton icon="icon-close" @click="addLabel=false">
-								{{ t('deck', 'Cancel') }}
-							</ActionButton>
-						</Actions>
-					</form>
-				</template>
+				<form class="label-form" @submit.prevent="clickAddLabel">
+					<ColorPicker class="color-picker-wrapper" :value="'#' + addLabelObj.color" @input="updateColor">
+						<div :style="{ backgroundColor: '#' + addLabelObj.color }" class="color0 icon-colorpicker" />
+					</ColorPicker>
+					<input v-model="addLabelObj.title" type="text">
+					<input v-tooltip="{content: missingDataLabel, show: !addLabelObjValidated, trigger: 'manual' }"
+						:disabled="!addLabelObjValidated"
+						type="submit"
+						value=""
+						class="icon-confirm">
+					<Actions>
+						<ActionButton icon="icon-close" @click="addLabel=false">
+							{{ t('deck', 'Cancel') }}
+						</ActionButton>
+					</Actions>
+				</form>
 			</li>
 			<button v-if="canManage && !isArchived" @click="clickShowAddLabel()">
 				<span class="icon-add" />{{ t('deck', 'Add a new tag') }}
