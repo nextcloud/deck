@@ -35,6 +35,8 @@ class DeleteCronTest extends \Test\TestCase {
 
 	/** @var BoardMapper|\PHPUnit\Framework\MockObject\MockObject */
 	protected $boardMapper;
+    /** @var CardMapper|\PHPUnit\Framework\MockObject\MockObject */
+    protected $cardMapper;
 	/** @var AttachmentService|\PHPUnit\Framework\MockObject\MockObject */
 	private $attachmentService;
 	/** @var AttachmentMapper|\PHPUnit\Framework\MockObject\MockObject */
@@ -45,15 +47,22 @@ class DeleteCronTest extends \Test\TestCase {
 	public function setUp(): void {
 		parent::setUp();
 		$this->boardMapper = $this->createMock(BoardMapper::class);
+		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->attachmentService = $this->createMock(AttachmentService::class);
 		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
-		$this->deleteCron = new DeleteCron($this->boardMapper, $this->attachmentService, $this->attachmentMapper);
+		$this->deleteCron = new DeleteCron($this->boardMapper, $this->cardMapper, $this->attachmentService, $this->attachmentMapper);
 	}
 
 	protected function getBoard($id) {
 		$board = new Board();
 		$board->setId($id);
 		return $board;
+	}
+
+	protected function getCard($id) {
+		$card = new Card();
+		$card->setId($id);
+		return $card;
 	}
 
 	public function testDeleteCron() {
@@ -78,6 +87,14 @@ class DeleteCronTest extends \Test\TestCase {
 		$this->boardMapper->expects($this->at(4))
 			->method('delete')
 			->with($boards[3]);
+
+        $cards = [ $this->getBoard(10) ];
+        $this->cardMapper->expects($this->once())
+            ->method('findToDelete')
+            ->willReturn($cards);
+        $this->cardMapper->expects($this->once())
+            ->method('delete')
+            ->with($cards[0]);
 
 		$attachment = new Attachment();
 		$attachment->setType('deck_file');

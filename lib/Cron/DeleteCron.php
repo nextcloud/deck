@@ -34,13 +34,16 @@ class DeleteCron extends Job {
 
 	/** @var BoardMapper */
 	private $boardMapper;
+	/** @var CardMapper */
+	private $cardMapper;
 	/** @var AttachmentService */
 	private $attachmentService;
 	/** @var AttachmentMapper */
 	private $attachmentMapper;
 
-	public function __construct(BoardMapper $boardMapper, AttachmentService $attachmentService, AttachmentMapper $attachmentMapper) {
+	public function __construct(BoardMapper $boardMapper, CardMapper $cardMapper, AttachmentService $attachmentService, AttachmentMapper $attachmentMapper) {
 		$this->boardMapper = $boardMapper;
+		$this->cardMapper = $cardMapper;
 		$this->attachmentService = $attachmentService;
 		$this->attachmentMapper = $attachmentMapper;
 	}
@@ -54,6 +57,11 @@ class DeleteCron extends Job {
 		foreach ($boards as $board) {
 			$this->boardMapper->delete($board);
 		}
+
+		$cards = $this->cardMapper->findToDelete();
+        foreach ($cards as $card) {
+            $this->cardMapper->delete($card);
+        }
 
 		$attachments = $this->attachmentMapper->findToDelete();
 		foreach ($attachments as $attachment) {
