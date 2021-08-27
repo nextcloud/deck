@@ -1,7 +1,7 @@
 
 The REST API provides access for authenticated users to their data inside the Deck app. To get a better understanding of Decks data models and their relations, please have a look at the  [data structure](structure.md) documentation.
 
-# Prequisited
+# Prerequisites
 
 - All requests require a `OCS-APIRequest` HTTP header to be set to `true` and a `Content-Type` of `application/json`.
 - The API is located at https://nextcloud.local/index.php/apps/deck/api/v1.0
@@ -9,7 +9,7 @@ The REST API provides access for authenticated users to their data inside the De
 
 ## Naming
 
-- Board is the the project like grouping of tasks that can be shared to different users and groups
+- Board is the project like grouping of tasks that can be shared to different users and groups
 
 - Stack is the grouping of cards which is rendered in vertical columns in the UI
 
