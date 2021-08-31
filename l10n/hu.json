@@ -70,6 +70,7 @@
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "A(z) „%s” kártyát a(z) „%s” táblán %s hozzárendelte Önhöz.",
     "The card \"%s\" on \"%s\" has reached its due date." : "A(z) „%s” kártya a(z) „%s” táblán elérte a határidejét.",
     "%s has mentioned you in a comment on \"%s\"." : "%s megemlítette egy hozzászólásban ennél: „%s”.",
+    "{user} has mentioned you in a comment on {deck-card}." : "{user} megemlítette egy hozzászólásban a(z) {deck-card} kártyán.",
     "The board \"%s\" has been shared with you by %s." : "A(z) „%s” táblát %s osztotta meg Önnel.",
     "{user} has shared {deck-board} with you." : "{user} megosztotta a(z) {deck-board}-ot Önnel.",
     "Card comments" : "Kártya hozzászólásai",
