@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.5.1 - 2021-09-03
+
+### Fixed
+
+- #3224 Move circle checks to a unified service and improve member checks
+- #3231 Check for null value to avoid TypeError in the group manager
+- #3264 Defer obtaining the user session in the config service
+
+
 ## 1.5.0 - 2021-07-09
 
 ### Added
