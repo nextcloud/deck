@@ -73,16 +73,20 @@ class ConfigService {
 				if (!$this->groupManager->isAdmin($this->userId)) {
 					throw new NoPermissionException('You must be admin to get the group limit');
 				}
-				$result = $this->getGroupLimit();
-				break;
+				return $this->getGroupLimit();
 			case 'calendar':
-				$result = (bool)$this->config->getUserValue($this->userId, Application::APP_ID, 'calendar', true);
-				break;
+				if ($this->userId === null) {
+					return false;
+				}
+				return (bool)$this->config->getUserValue($this->userId, Application::APP_ID, 'calendar', true);
 		}
-		return $result;
 	}
 
 	public function isCalendarEnabled(int $boardId = null): bool {
+		if ($this->userId === null) {
+			return false;
+		}
+
 		$defaultState = (bool)$this->config->getUserValue($this->userId, Application::APP_ID, 'calendar', true);
 		if ($boardId === null) {
 			return $defaultState;
