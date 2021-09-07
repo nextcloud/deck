@@ -2,21 +2,26 @@
 	/* hide stuff */
 	#body-user {
 		#header,
-		div#app-navigation,
-		div.board-header-controls,
+		.app-navigation,
+		.app-sidebar,
+		.board-header-controls,
+		.board-actions,
 		#app-navigation-toggle,
 		#app-navigation-toggle-custom,
 		div#controls.ng-scope div.crumb:not(.title),
 		div#controls.ng-scope div.crumb a.bullet,
 		a.ng-binding + a,
 		div.card.create,
+		.stack__header .action-item,
 		button.card-options {
 			display: none !important;
 		}
+
 		#content {
 			margin: 0;
 			padding: 0;
 		}
+
 		#app-content {
 			margin: 0 !important;
 		}
@@ -73,6 +78,11 @@
 	@page {
 		size: A4 landscape;
 		margin: 2cm;
+	}
+
+	.board {
+		max-height: none !important;
+		overflow: visible !important;
 	}
 
 	div#innerBoard {
