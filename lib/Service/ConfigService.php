@@ -82,21 +82,18 @@ class ConfigService {
 				if ($this->getUserId() === null || !$this->groupManager->isAdmin($this->getUserId())) {
 					throw new NoPermissionException('You must be admin to get the group limit');
 				}
-				$result = $this->getGroupLimit();
-				break;
+				return $this->getGroupLimit();
 			case 'calendar':
 				if ($this->getUserId() === null) {
-					throw new NoPermissionException('Must be logged in to get the group limit');
+					return false;
 				}
-				$result = (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'calendar', true);
-				break;
+				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'calendar', true);
 		}
-		return $result;
 	}
 
 	public function isCalendarEnabled(int $boardId = null): bool {
 		if ($this->getUserId() === null) {
-			throw new NoPermissionException('Must be logged in to access user config');
+			return false;
 		}
 
 		$defaultState = (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'calendar', true);
