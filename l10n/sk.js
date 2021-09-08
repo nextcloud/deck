@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "Zdieľať zo Súborov",
     "Add this attachment" : "Pridať túto prílohu",
     "Show in Files" : "Zobraziť v Súboroch",
-    "Unshare file" : "Nezdieľať súbor",
     "Delete Attachment" : "Odstrániť prílohu",
     "Restore Attachment" : "Obnoviť prílohu",
     "File to share" : "Súbor na zdieľanie",
@@ -280,6 +279,7 @@ OC.L10N.register(
     "Error creating the share" : "Chyba pri vytváraní zdieľania",
     "Share with a Deck card" : "Zdieľať s kartou Deck",
     "Share {file} with a Deck card" : "Zdieľať {file} s kartou Deck",
-    "Share" : "Zdieľať"
+    "Share" : "Zdieľať",
+    "Unshare file" : "Nezdieľať súbor"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

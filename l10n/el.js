@@ -179,7 +179,6 @@ OC.L10N.register(
     "Share from Files" : "Κοινή χρήση από αρχεία",
     "Add this attachment" : "Προσθήκη αυτού του συνημμένου",
     "Show in Files" : "Εμφάνιση σε αρχεία",
-    "Unshare file" : "Κατάργηση κοινής χρήσης αρχείου",
     "Delete Attachment" : "Διαγραφή Συνημμένου",
     "Restore Attachment" : "Επαναφορά Συνημμένου",
     "File to share" : "Αρχείο για κοινή χρήση",
@@ -266,6 +265,7 @@ OC.L10N.register(
     "Error creating the share" : "Σφάλμα κατά τη δημιουργία της κοινοποίησης",
     "Share with a Deck card" : "Μοιραστείτε με μια κάρτα Deck",
     "Share {file} with a Deck card" : "Μοιραστείτε {αρχείο} με μια κάρτα Deck",
-    "Share" : "Μοιραστείτε"
+    "Share" : "Μοιραστείτε",
+    "Unshare file" : "Κατάργηση κοινής χρήσης αρχείου"
 },
 "nplurals=2; plural=(n != 1);");

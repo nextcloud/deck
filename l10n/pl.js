@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "Udostępnij z Plików",
     "Add this attachment" : "Dodaj ten załącznik",
     "Show in Files" : "Pokaż w Plikach",
-    "Unshare file" : "Zatrzymaj udostępnianie pliku",
     "Delete Attachment" : "Usuń załącznik",
     "Restore Attachment" : "Przywróć załącznik",
     "File to share" : "Plik do udostępnienia",
@@ -280,6 +279,7 @@ OC.L10N.register(
     "Error creating the share" : "Błąd podczas tworzenia udostępnienia",
     "Share with a Deck card" : "Udostępnij za pomocą karty Tablicy",
     "Share {file} with a Deck card" : "Udostępnij {file} za pomocą karty Tablicy",
-    "Share" : "Udostępnianie"
+    "Share" : "Udostępnianie",
+    "Unshare file" : "Zatrzymaj udostępnianie pliku"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

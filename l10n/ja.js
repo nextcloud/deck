@@ -181,7 +181,6 @@ OC.L10N.register(
     "Share from Files" : "ファイルから共有",
     "Add this attachment" : "この添付ファイルを追加",
     "Show in Files" : "ファイルに表示",
-    "Unshare file" : "ファイルの共有を解除する",
     "Delete Attachment" : "添付ファイルを削除",
     "Restore Attachment" : "添付ファイルを復元",
     "File to share" : "共有するファイル",
@@ -271,6 +270,7 @@ OC.L10N.register(
     "Error creating the share" : "共有の作成中にエラーが発生しました",
     "Share with a Deck card" : "デッキのカードで共有する",
     "Share {file} with a Deck card" : "{file}をデッキのカードで共有する",
-    "Share" : "共有"
+    "Share" : "共有",
+    "Unshare file" : "ファイルの共有を解除する"
 },
 "nplurals=1; plural=0;");

@@ -185,7 +185,6 @@
     "Share from Files" : "Dosyalardan paylaş",
     "Add this attachment" : "Bu dosyayı ekle",
     "Show in Files" : "Dosyalarda görüntüle",
-    "Unshare file" : "Dosyayı paylaşımdan kaldır",
     "Delete Attachment" : "Ek dosyasını sil",
     "Restore Attachment" : "Ek dosyasını geri yükle",
     "File to share" : "Paylaşılacak dosya",
@@ -278,6 +277,7 @@
     "Error creating the share" : "Paylaşım oluşturulurken sorun çıktı",
     "Share with a Deck card" : "Bir tahta kartı ile paylaş",
     "Share {file} with a Deck card" : "{file} dosyasını bir tahta kartı ile paylaş",
-    "Share" : "Paylaş"
+    "Share" : "Paylaş",
+    "Unshare file" : "Dosyayı paylaşımdan kaldır"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

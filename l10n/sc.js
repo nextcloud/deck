@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "Cumpartzi dae Archìvios",
     "Add this attachment" : "Agiunghe custu alligongiadu",
     "Show in Files" : "Mustra in Archìvios",
-    "Unshare file" : "Annulla cumpartzidura de s'archìviu",
     "Delete Attachment" : "Cantzella alligongiadu",
     "Restore Attachment" : "Riprìstina alligongiadu",
     "File to share" : "Archìviu de cumpartzire",
@@ -280,6 +279,7 @@ OC.L10N.register(
     "Error creating the share" : "Errore in sa creatzione de sa cumpatzidura",
     "Share with a Deck card" : "Cumpartzi cun un'ischeda deck",
     "Share {file} with a Deck card" : "Cumpartzi {file} cun un'ischeda de deck",
-    "Share" : "Cumpartzi"
+    "Share" : "Cumpartzi",
+    "Unshare file" : "Annulla cumpartzidura de s'archìviu"
 },
 "nplurals=2; plural=(n != 1);");

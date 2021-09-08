@@ -164,7 +164,6 @@ OC.L10N.register(
     "Board name" : "Lentos pavadinimas",
     "Members" : "Nariai",
     "Add this attachment" : "Pridėti šį priedą",
-    "Unshare file" : "Nustoti bendrinti failą",
     "Delete Attachment" : "Ištrinti priedą",
     "Restore Attachment" : "Atkurti priedą",
     "Invalid path selected" : "Pasirinktas neteisingas kelias",
@@ -236,6 +235,7 @@ OC.L10N.register(
     "Something went wrong" : "Kažkas nutiko",
     "Maximum file size of {size} exceeded" : "Viršytas maksimalus {size} failo dydis",
     "Error creating the share" : "Klaida kuriant viešinį",
-    "Share" : "Bendrinti"
+    "Share" : "Bendrinti",
+    "Unshare file" : "Nustoti bendrinti failą"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");

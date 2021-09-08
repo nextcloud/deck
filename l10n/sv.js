@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "Dela från Filer",
     "Add this attachment" : "Lägg till denna bilaga",
     "Show in Files" : "Visa i Filer",
-    "Unshare file" : "Sluta dela fil",
     "Delete Attachment" : "Ta bort bilaga",
     "Restore Attachment" : "Återställ bilaga",
     "File to share" : "Fil att dela",
@@ -280,6 +279,7 @@ OC.L10N.register(
     "Error creating the share" : "Kunde inte skapa delning",
     "Share with a Deck card" : "Dela med ett Kortlek-kort",
     "Share {file} with a Deck card" : "Dela {file} med ett Kortlek-kort",
-    "Share" : "Dela"
+    "Share" : "Dela",
+    "Unshare file" : "Sluta dela fil"
 },
 "nplurals=2; plural=(n != 1);");
