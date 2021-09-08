@@ -174,7 +174,6 @@ OC.L10N.register(
     "Share from Files" : "Споделяне от Файлове",
     "Add this attachment" : "Добавете този прикачен файл",
     "Show in Files" : "Показване във файлове",
-    "Unshare file" : "Прекратяване на споделянето на файла",
     "Delete Attachment" : "Изтриване на прикачен файл",
     "Restore Attachment" : "Възстановяване на прикачен файл",
     "File to share" : "Файл за споделяне",
@@ -260,6 +259,7 @@ OC.L10N.register(
     "Error creating the share" : "Грешка при създаване на споделяне",
     "Share with a Deck card" : "Споделяне с Deck карта",
     "Share {file} with a Deck card" : "Споделяне {file} с Deck карта",
-    "Share" : "Споделяне"
+    "Share" : "Споделяне",
+    "Unshare file" : "Прекратяване на споделянето на файла"
 },
 "nplurals=2; plural=(n != 1);");

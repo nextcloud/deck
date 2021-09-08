@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "Aus Dateien heraus teilen",
     "Add this attachment" : "Diesen Anhang anhängen",
     "Show in Files" : "In Dateien anzeigen",
-    "Unshare file" : "Datei nicht mehr teilen",
     "Delete Attachment" : "Anhang löschen",
     "Restore Attachment" : "Anhang wiederherstellen",
     "File to share" : "Zu teilende Datei",
@@ -280,6 +279,7 @@ OC.L10N.register(
     "Error creating the share" : "Fehler beim Erstellen der Freigabe",
     "Share with a Deck card" : "Mit einer Deck-Karte teilen",
     "Share {file} with a Deck card" : "{file} mit einer Deck-Karte teilen",
-    "Share" : "Freigeben"
+    "Share" : "Freigeben",
+    "Unshare file" : "Datei nicht mehr teilen"
 },
 "nplurals=2; plural=(n != 1);");

@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "Опубликовать из приложения «Файлы»",
     "Add this attachment" : "Добавить это вложение",
     "Show in Files" : "Показать в приложении «Файлы»",
-    "Unshare file" : "Закрыть общий доступ к файлу",
     "Delete Attachment" : "Удалить вложение",
     "Restore Attachment" : "Восстановить вложение",
     "File to share" : "Файл для публикации",
@@ -280,6 +279,7 @@ OC.L10N.register(
     "Error creating the share" : "Не удалось опубликовать",
     "Share with a Deck card" : "Опубликовать в приложении Карточки",
     "Share {file} with a Deck card" : "Опубликовать «{file}» в приложении Карточки",
-    "Share" : "Опубликовать"
+    "Share" : "Опубликовать",
+    "Unshare file" : "Закрыть общий доступ к файлу"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

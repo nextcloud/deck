@@ -137,7 +137,6 @@ OC.L10N.register(
     "Share from Files" : "Del fra Filer",
     "Add this attachment" : "Tilføj denne vedhæftning",
     "Show in Files" : "Vis i Filer",
-    "Unshare file" : "Stop deling af fil",
     "Delete Attachment" : "Slet vedhæftning",
     "Restore Attachment" : "Genskab vedhæftning",
     "File to share" : "Vælg fil til deling",
@@ -223,6 +222,7 @@ OC.L10N.register(
     "Error creating the share" : "Fejl ved skabelse af delt drev",
     "Share with a Deck card" : "Del med et Deck kort",
     "Share {file} with a Deck card" : "Del {file} med et Deck kort",
-    "Share" : "Del"
+    "Share" : "Del",
+    "Unshare file" : "Stop deling af fil"
 },
 "nplurals=2; plural=(n != 1);");

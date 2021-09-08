@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "Dijeli iz datoteka",
     "Add this attachment" : "Dodajte ovaj privitak",
     "Show in Files" : "Prikaži u datotekama",
-    "Unshare file" : "Prestani dijeliti datoteku",
     "Delete Attachment" : "Izbriši privitak",
     "Restore Attachment" : "Vrati privitak",
     "File to share" : "Datoteka za dijeljenje",
@@ -280,6 +279,7 @@ OC.L10N.register(
     "Error creating the share" : "Pogreška pri stvaranju dijeljenja",
     "Share with a Deck card" : "Dijeli s Deck karticom",
     "Share {file} with a Deck card" : "Dijeli {file} s Deck karticom",
-    "Share" : "Dijeli"
+    "Share" : "Dijeli",
+    "Unshare file" : "Prestani dijeliti datoteku"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

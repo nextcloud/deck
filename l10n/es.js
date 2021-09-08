@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "Compartir desde Archivos",
     "Add this attachment" : "Añadir este adjunto",
     "Show in Files" : "Mostrar en Archivos",
-    "Unshare file" : "Dejar de compartir archivo",
     "Delete Attachment" : "Borrar adjunto",
     "Restore Attachment" : "Restaurar Adjunto",
     "File to share" : "Archivo a compartir",
@@ -280,6 +279,7 @@ OC.L10N.register(
     "Error creating the share" : "Error creando el recurso compartido",
     "Share with a Deck card" : "Compartir con una tarjeta de Deck",
     "Share {file} with a Deck card" : "Compartir {file} con una tarjeta de Deck",
-    "Share" : "Compartir"
+    "Share" : "Compartir",
+    "Unshare file" : "Dejar de compartir archivo"
 },
 "nplurals=2; plural=(n != 1);");

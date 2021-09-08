@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "Partekatu Fitxategiak-etik",
     "Add this attachment" : "Gehitu eranskin hau",
     "Show in Files" : "Erakutsi fitxategietan",
-    "Unshare file" : "Utzi fitxategia partekatzen",
     "Delete Attachment" : "Ezabatu eranskina",
     "Restore Attachment" : "Berezarri eranskina",
     "File to share" : "Partekatzeko fitxategia",
@@ -280,6 +279,7 @@ OC.L10N.register(
     "Error creating the share" : "Errorea partekatzea sortzean",
     "Share with a Deck card" : "Partekatu Deck txartel baten bidez",
     "Share {file} with a Deck card" : "Partekatu {file} Deck txartel baten bidez",
-    "Share" : "Partekatu"
+    "Share" : "Partekatu",
+    "Unshare file" : "Utzi fitxategia partekatzen"
 },
 "nplurals=2; plural=(n != 1);");

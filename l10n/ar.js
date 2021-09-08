@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "مشاركة من الملفات",
     "Add this attachment" : "إضافة هذا المرفق",
     "Show in Files" : "عرض في الملفات ",
-    "Unshare file" : "عدم مشاركة الملف ",
     "Delete Attachment" : "مسح المرفق",
     "Restore Attachment" : "إستعادة المرفق",
     "File to share" : "ملف للمشاركة",
@@ -280,6 +279,7 @@ OC.L10N.register(
     "Error creating the share" : "خطأ في إنشاء المشاركة",
     "Share with a Deck card" : "مشاركة مع بطاقة Deck",
     "Share {file} with a Deck card" : "مشاركة الملف {file} مع بطاقة Deck",
-    "Share" : "مشاركة "
+    "Share" : "مشاركة ",
+    "Unshare file" : "عدم مشاركة الملف "
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

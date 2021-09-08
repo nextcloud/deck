@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "Sdílet ze Souborů",
     "Add this attachment" : "Přidat tuto přílohu",
     "Show in Files" : "Zobrazit v Souborech",
-    "Unshare file" : "Přestat sdílet soubor",
     "Delete Attachment" : "Smazat přílohu",
     "Restore Attachment" : "Obnovit přílohu",
     "File to share" : "Soubor ke sdílení",
@@ -280,6 +279,7 @@ OC.L10N.register(
     "Error creating the share" : "Chyba při vytváření sdílení",
     "Share with a Deck card" : "Sdílet s kartou aplikace Deck",
     "Share {file} with a Deck card" : "Sdílet {file} s kartou aplikace Deck",
-    "Share" : "Sdílet"
+    "Share" : "Sdílet",
+    "Unshare file" : "Přestat sdílet soubor"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

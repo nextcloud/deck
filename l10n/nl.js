@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "Delen vanuit Bestanden",
     "Add this attachment" : "Voeg deze bijlage toe",
     "Show in Files" : "Tonen in Bestanden",
-    "Unshare file" : "Bestand niet meer delen",
     "Delete Attachment" : "Verwijderen bijlage",
     "Restore Attachment" : "Herstellen bijlage",
     "File to share" : "Bestand om te delen",
@@ -280,6 +279,7 @@ OC.L10N.register(
     "Error creating the share" : "Fout bij aanmaken share",
     "Share with a Deck card" : "Delen met een Deck kaart",
     "Share {file} with a Deck card" : "Delen {file} met een Deck kaart",
-    "Share" : "Delen"
+    "Share" : "Delen",
+    "Unshare file" : "Bestand niet meer delen"
 },
 "nplurals=2; plural=(n != 1);");
