@@ -75,6 +75,7 @@
 <script>
 import MarkdownIt from 'markdown-it'
 import MarkdownItTaskLists from 'markdown-it-task-lists'
+import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
 import AttachmentList from './AttachmentList'
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import { formatFileSize } from '@nextcloud/files'
@@ -85,6 +86,13 @@ const markdownIt = new MarkdownIt({
 	linkify: true,
 })
 markdownIt.use(MarkdownItTaskLists, { enabled: true, label: true, labelAfter: true })
+
+markdownIt.use(MarkdownItLinkAttributes, {
+	attrs: {
+		target: '_blank',
+		rel: 'noreferrer noopener',
+	},
+})
 
 export default {
 	name: 'Description',
