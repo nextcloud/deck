@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.4.4
+
+### Fixed
+
+- #3301 Fix print style issues
+- #3307 Return false instead of throwing when getting calendar setting
+- #3227 Additional circle level check
+- #3304 Delete file shares through attachments API
+
 ## 1.4.3 - 2021-07-09
 
 ### Fixed

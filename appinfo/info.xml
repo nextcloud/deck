@@ -1,6 +1,5 @@
-<?xml version="1.0"?>
-<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+<?xml version="1.0" encoding="utf-8"?>
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
     <id>deck</id>
     <name>Deck</name>
     <summary>Personal planning and team project organization</summary>
@@ -17,12 +16,12 @@
 - 🚀 Get your project organized
 
 </description>
-    <version>1.4.3</version>
+    <version>1.4.4</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
     <types>
-        <dav />
+        <dav/>
     </types>
     <category>organization</category>
     <category>office</category>
@@ -36,7 +35,7 @@
         <database min-version="9.4">pgsql</database>
         <database>sqlite</database>
         <database min-version="5.5">mysql</database>
-        <nextcloud min-version="21" max-version="21" />
+        <nextcloud min-version="21" max-version="21"/>
     </dependencies>
     <background-jobs>
         <job>OCA\Deck\Cron\DeleteCron</job>
