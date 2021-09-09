@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.5.2
+
+### Fixed
+
+- #3300 Fix print style issues
+- #3303 Delete file shares through attachments API
+- #3306 Return false instead of throwing when getting calendar setting
+
 ## 1.5.1 - 2021-09-03
 
 ### Fixed
