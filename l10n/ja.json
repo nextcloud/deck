@@ -268,7 +268,6 @@
     "Error creating the share" : "共有の作成中にエラーが発生しました",
     "Share with a Deck card" : "デッキのカードで共有する",
     "Share {file} with a Deck card" : "{file}をデッキのカードで共有する",
-    "Share" : "共有",
-    "Unshare file" : "ファイルの共有を解除する"
+    "Share" : "共有"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

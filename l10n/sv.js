@@ -279,7 +279,6 @@ OC.L10N.register(
     "Error creating the share" : "Kunde inte skapa delning",
     "Share with a Deck card" : "Dela med ett Kortlek-kort",
     "Share {file} with a Deck card" : "Dela {file} med ett Kortlek-kort",
-    "Share" : "Dela",
-    "Unshare file" : "Sluta dela fil"
+    "Share" : "Dela"
 },
 "nplurals=2; plural=(n != 1);");

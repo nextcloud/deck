@@ -279,7 +279,6 @@ OC.L10N.register(
     "Error creating the share" : "Fout bij aanmaken share",
     "Share with a Deck card" : "Delen met een Deck kaart",
     "Share {file} with a Deck card" : "Delen {file} met een Deck kaart",
-    "Share" : "Delen",
-    "Unshare file" : "Bestand niet meer delen"
+    "Share" : "Delen"
 },
 "nplurals=2; plural=(n != 1);");

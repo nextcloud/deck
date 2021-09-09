@@ -259,7 +259,6 @@ OC.L10N.register(
     "Error creating the share" : "שגיאה ביצירת השיתוף",
     "Share with a Deck card" : "שיתוף עם כרטיס חפיסה",
     "Share {file} with a Deck card" : "שיתוף {file} עם כרטיס חפיסה",
-    "Share" : "שיתוף",
-    "Unshare file" : "ביטול שיתוף קובץ"
+    "Share" : "שיתוף"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

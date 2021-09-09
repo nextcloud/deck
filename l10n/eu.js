@@ -279,7 +279,6 @@ OC.L10N.register(
     "Error creating the share" : "Errorea partekatzea sortzean",
     "Share with a Deck card" : "Partekatu Deck txartel baten bidez",
     "Share {file} with a Deck card" : "Partekatu {file} Deck txartel baten bidez",
-    "Share" : "Partekatu",
-    "Unshare file" : "Utzi fitxategia partekatzen"
+    "Share" : "Partekatu"
 },
 "nplurals=2; plural=(n != 1);");

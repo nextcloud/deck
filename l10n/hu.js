@@ -185,8 +185,10 @@ OC.L10N.register(
     "Members" : "Tagok",
     "Upload new files" : "Új fájlok feltöltése",
     "Share from Files" : "Megosztás a Fájlokból",
+    "Pending share" : "Függőben lévő megosztás",
     "Add this attachment" : "E melléklet hozzáadása",
     "Show in Files" : "Megjelenítés a Fájlokban",
+    "Remove attachment" : "Melléklet eltávolítása",
     "Delete Attachment" : "Melléklet törlése",
     "Restore Attachment" : "Melléklet visszaállítása",
     "File to share" : "Fájl megosztása",
@@ -279,7 +281,6 @@ OC.L10N.register(
     "Error creating the share" : "Megosztás létrehozása sikertelen",
     "Share with a Deck card" : "Megosztás kártyával",
     "Share {file} with a Deck card" : "A(z) {file} megosztása egy kártyával",
-    "Share" : "Megosztás",
-    "Unshare file" : "Fájl megosztásának visszavonása"
+    "Share" : "Megosztás"
 },
 "nplurals=2; plural=(n != 1);");
