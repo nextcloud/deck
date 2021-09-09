@@ -278,7 +278,6 @@ OC.L10N.register(
     "Maximum file size of {size} exceeded" : "Omejitev velikosti datoteke {size} je prekoračena.",
     "Error creating the share" : "Napaka ustvarjanja mesta souporabe",
     "Share with a Deck card" : "Poveži z nalogo Deck",
-    "Share {file} with a Deck card" : "Poveži datoteko {file} z nalogo Deck",
-    "Unshare file" : "Prekini souporabo"
+    "Share {file} with a Deck card" : "Poveži datoteko {file} z nalogo Deck"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

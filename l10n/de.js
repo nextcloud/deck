@@ -279,7 +279,6 @@ OC.L10N.register(
     "Error creating the share" : "Fehler beim Erstellen der Freigabe",
     "Share with a Deck card" : "Mit einer Deck-Karte teilen",
     "Share {file} with a Deck card" : "{file} mit einer Deck-Karte teilen",
-    "Share" : "Freigeben",
-    "Unshare file" : "Datei nicht mehr teilen"
+    "Share" : "Freigeben"
 },
 "nplurals=2; plural=(n != 1);");

@@ -279,7 +279,6 @@ OC.L10N.register(
     "Error creating the share" : "خطأ في إنشاء المشاركة",
     "Share with a Deck card" : "مشاركة مع بطاقة Deck",
     "Share {file} with a Deck card" : "مشاركة الملف {file} مع بطاقة Deck",
-    "Share" : "مشاركة ",
-    "Unshare file" : "عدم مشاركة الملف "
+    "Share" : "مشاركة "
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

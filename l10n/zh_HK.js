@@ -185,8 +185,10 @@ OC.L10N.register(
     "Members" : "成員",
     "Upload new files" : "上傳新檔案",
     "Share from Files" : "從檔案進行分享",
+    "Pending share" : "等待分享",
     "Add this attachment" : "添加此附件",
     "Show in Files" : "顯示在檔案中",
+    "Remove attachment" : "移除附件",
     "Delete Attachment" : "刪除附件",
     "Restore Attachment" : "恢復附件",
     "File to share" : "要分享的檔案",
@@ -279,7 +281,6 @@ OC.L10N.register(
     "Error creating the share" : "創建分享出錯",
     "Share with a Deck card" : "用一張 Deck 卡片進行分享 ",
     "Share {file} with a Deck card" : "用一張 Deck 卡片分享 {file}",
-    "Share" : "分享",
-    "Unshare file" : "取消分享檔案"
+    "Share" : "分享"
 },
 "nplurals=1; plural=0;");

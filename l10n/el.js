@@ -265,7 +265,6 @@ OC.L10N.register(
     "Error creating the share" : "Σφάλμα κατά τη δημιουργία της κοινοποίησης",
     "Share with a Deck card" : "Μοιραστείτε με μια κάρτα Deck",
     "Share {file} with a Deck card" : "Μοιραστείτε {αρχείο} με μια κάρτα Deck",
-    "Share" : "Μοιραστείτε",
-    "Unshare file" : "Κατάργηση κοινής χρήσης αρχείου"
+    "Share" : "Μοιραστείτε"
 },
 "nplurals=2; plural=(n != 1);");

@@ -185,8 +185,10 @@ OC.L10N.register(
     "Members" : "Üyeler",
     "Upload new files" : "Yeni dosyaları yükle",
     "Share from Files" : "Dosyalardan paylaş",
+    "Pending share" : "Bekleyen paylaşım",
     "Add this attachment" : "Bu dosyayı ekle",
     "Show in Files" : "Dosyalarda görüntüle",
+    "Remove attachment" : "Ek dosyayı sil",
     "Delete Attachment" : "Ek dosyasını sil",
     "Restore Attachment" : "Ek dosyasını geri yükle",
     "File to share" : "Paylaşılacak dosya",
@@ -279,7 +281,6 @@ OC.L10N.register(
     "Error creating the share" : "Paylaşım oluşturulurken sorun çıktı",
     "Share with a Deck card" : "Bir tahta kartı ile paylaş",
     "Share {file} with a Deck card" : "{file} dosyasını bir tahta kartı ile paylaş",
-    "Share" : "Paylaş",
-    "Unshare file" : "Dosyayı paylaşımdan kaldır"
+    "Share" : "Paylaş"
 },
 "nplurals=2; plural=(n > 1);");

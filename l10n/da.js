@@ -222,7 +222,6 @@ OC.L10N.register(
     "Error creating the share" : "Fejl ved skabelse af delt drev",
     "Share with a Deck card" : "Del med et Deck kort",
     "Share {file} with a Deck card" : "Del {file} med et Deck kort",
-    "Share" : "Del",
-    "Unshare file" : "Stop deling af fil"
+    "Share" : "Del"
 },
 "nplurals=2; plural=(n != 1);");

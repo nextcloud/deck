@@ -279,7 +279,6 @@ OC.L10N.register(
     "Error creating the share" : "Error creando el recurso compartido",
     "Share with a Deck card" : "Compartir con una tarjeta de Deck",
     "Share {file} with a Deck card" : "Compartir {file} con una tarjeta de Deck",
-    "Share" : "Compartir",
-    "Unshare file" : "Dejar de compartir archivo"
+    "Share" : "Compartir"
 },
 "nplurals=2; plural=(n != 1);");

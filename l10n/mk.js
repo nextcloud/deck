@@ -266,7 +266,6 @@ OC.L10N.register(
     "Error creating the share" : "Грешка при креирање на споделување",
     "Share with a Deck card" : "Споделено со Deck картица",
     "Share {file} with a Deck card" : "Сподели {file} со Deck картица",
-    "Share" : "Сподели",
-    "Unshare file" : "Отстрани споделување на датотека"
+    "Share" : "Сподели"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");
