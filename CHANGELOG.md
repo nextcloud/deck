@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.4.5
+
+### Fixed
+
+- #3318 Additional check for stacks
+
+
 ## 1.4.4
 
 ### Fixed
