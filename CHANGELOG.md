@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.5.3
+
+### Fied
+
+- #3317 Additional check for stacks
+
+
 ## 1.5.2
 
 ### Fixed
