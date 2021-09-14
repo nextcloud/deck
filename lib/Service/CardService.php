@@ -596,16 +596,4 @@ class CardService {
 
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 	}
-
-	/**
-	 *
-	 * @return array
-	 * @throws \OCA\Deck\NoPermissionException
-	 * @throws BadRequestException
-	 */
-	public function findAllWithDue($userId) {
-		$cards = $this->cardMapper->findAllWithDue($userId);
-
-		return $cards;
-	}
 }
