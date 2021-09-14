@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+## 1.2.9
+
+### Other
+
+- #3319 Additional check for stacks
+- #3226 Additional circle level check
+
+
 ## 1.2.8
 
 ### Fixed
