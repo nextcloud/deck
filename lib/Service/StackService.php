@@ -114,6 +114,7 @@ class StackService {
 			throw new BadRequestException('stack id must be a number');
 		}
 
+		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_READ);
 		$stack = $this->stackMapper->find($stackId);
 		$cards = $this->cardMapper->findAll($stackId);
 		foreach ($cards as $cardIndex => $card) {
