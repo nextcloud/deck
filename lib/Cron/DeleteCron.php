@@ -58,10 +58,11 @@ class DeleteCron extends Job {
 			$this->boardMapper->delete($board);
 		}
 
-		$cards = $this->cardMapper->findToDelete();
-        foreach ($cards as $card) {
-            $this->cardMapper->delete($card);
-        }
+		$timeLimit = time() - (60 * 5); // 5 min buffer
+		$cards = $this->cardMapper->findToDelete($timeLimit, 500);
+		foreach ($cards as $card) {
+			$this->cardMapper->delete($card);
+		}
 
 		$attachments = $this->attachmentMapper->findToDelete();
 		foreach ($attachments as $attachment) {
