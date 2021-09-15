@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "Poveži iz oblaka",
     "Add this attachment" : "Dodaj prilogo",
     "Show in Files" : "Poveži iz oblaka",
-    "Unshare file" : "Prekini souporabo",
     "Delete Attachment" : "Izbriši prilogo",
     "Restore Attachment" : "Obnovi prilogo",
     "File to share" : "Datoteka za souporabo",

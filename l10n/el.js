@@ -179,7 +179,6 @@ OC.L10N.register(
     "Share from Files" : "Κοινή χρήση από αρχεία",
     "Add this attachment" : "Προσθήκη αυτού του συνημμένου",
     "Show in Files" : "Εμφάνιση σε αρχεία",
-    "Unshare file" : "Κατάργηση κοινής χρήσης αρχείου",
     "Delete Attachment" : "Διαγραφή Συνημμένου",
     "Restore Attachment" : "Επαναφορά Συνημμένου",
     "File to share" : "Αρχείο για κοινή χρήση",

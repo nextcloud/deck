@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "Partager vos fichiers déjà stockés",
     "Add this attachment" : "Ajouter cette pièce jointe",
     "Show in Files" : "Afficher dans Fichiers",
-    "Unshare file" : "Ne plus partager le fichier",
     "Delete Attachment" : "Supprimer la pièce jointe",
     "Restore Attachment" : "Restaurer la pièce jointe",
     "File to share" : "Fichier à partager",

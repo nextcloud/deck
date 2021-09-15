@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "Dijeli iz datoteka",
     "Add this attachment" : "Dodajte ovaj privitak",
     "Show in Files" : "Prikaži u datotekama",
-    "Unshare file" : "Prestani dijeliti datoteku",
     "Delete Attachment" : "Izbriši privitak",
     "Restore Attachment" : "Vrati privitak",
     "File to share" : "Datoteka za dijeljenje",

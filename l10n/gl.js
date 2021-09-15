@@ -181,7 +181,6 @@ OC.L10N.register(
     "Share from Files" : "Compartir dende «Ficheiros»",
     "Add this attachment" : "Engadir este anexo",
     "Show in Files" : "Amosar en Ficheiros",
-    "Unshare file" : "Deixar de compartir o ficheiro",
     "Delete Attachment" : "Eliminar o anexo",
     "Restore Attachment" : "Restaurar o anexo",
     "File to share" : "Ficheiro para compartir",

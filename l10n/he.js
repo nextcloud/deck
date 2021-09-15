@@ -174,7 +174,6 @@ OC.L10N.register(
     "Share from Files" : "שיתוף מקבצים",
     "Add this attachment" : "הוספת קובץ מצורף זה",
     "Show in Files" : "הצגה בקבצים",
-    "Unshare file" : "ביטול שיתוף קובץ",
     "Delete Attachment" : "מחיקת קובץ מצורף",
     "Restore Attachment" : "שחזור קובץ מצורף",
     "File to share" : "קובץ לשיתוף",

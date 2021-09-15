@@ -174,7 +174,6 @@ OC.L10N.register(
     "Share from Files" : "Споделяне от Файлове",
     "Add this attachment" : "Добавете този прикачен файл",
     "Show in Files" : "Показване във файлове",
-    "Unshare file" : "Прекратяване на споделянето на файла",
     "Delete Attachment" : "Изтриване на прикачен файл",
     "Restore Attachment" : "Възстановяване на прикачен файл",
     "File to share" : "Файл за споделяне",

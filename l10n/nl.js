@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "Delen vanuit Bestanden",
     "Add this attachment" : "Voeg deze bijlage toe",
     "Show in Files" : "Tonen in Bestanden",
-    "Unshare file" : "Bestand niet meer delen",
     "Delete Attachment" : "Verwijderen bijlage",
     "Restore Attachment" : "Herstellen bijlage",
     "File to share" : "Bestand om te delen",

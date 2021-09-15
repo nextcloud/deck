@@ -137,7 +137,6 @@ OC.L10N.register(
     "Share from Files" : "Del fra Filer",
     "Add this attachment" : "Tilføj denne vedhæftning",
     "Show in Files" : "Vis i Filer",
-    "Unshare file" : "Stop deling af fil",
     "Delete Attachment" : "Slet vedhæftning",
     "Restore Attachment" : "Genskab vedhæftning",
     "File to share" : "Vælg fil til deling",

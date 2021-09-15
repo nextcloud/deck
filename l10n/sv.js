@@ -187,7 +187,6 @@ OC.L10N.register(
     "Share from Files" : "Dela från Filer",
     "Add this attachment" : "Lägg till denna bilaga",
     "Show in Files" : "Visa i Filer",
-    "Unshare file" : "Sluta dela fil",
     "Delete Attachment" : "Ta bort bilaga",
     "Restore Attachment" : "Återställ bilaga",
     "File to share" : "Fil att dela",

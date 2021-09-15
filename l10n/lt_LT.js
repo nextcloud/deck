@@ -164,7 +164,6 @@ OC.L10N.register(
     "Board name" : "Lentos pavadinimas",
     "Members" : "Nariai",
     "Add this attachment" : "Pridėti šį priedą",
-    "Unshare file" : "Nustoti bendrinti failą",
     "Delete Attachment" : "Ištrinti priedą",
     "Restore Attachment" : "Atkurti priedą",
     "Invalid path selected" : "Pasirinktas neteisingas kelias",

@@ -35,6 +35,7 @@ use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\StatusException;
+use OCP\AppFramework\Db\IMapperException;
 use OCP\AppFramework\Http\Response;
 use OCP\ICache;
 use OCP\ICacheFactory;
@@ -320,14 +321,10 @@ class AttachmentService {
 	 * Either mark an attachment as deleted for later removal or just remove it depending
 	 * on the IAttachmentService implementation
 	 *
-	 * @param $attachmentId
-	 * @return \OCP\AppFramework\Db\Entity
-	 * @throws \OCA\Deck\NoPermissionException
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
-	 * @throws BadRequestException
+	 * @throws NoPermissionException
+	 * @throws NotFoundException
 	 */
-	public function delete($cardId, $attachmentId, $type = 'deck_file') {
+	public function delete(int $cardId, int $attachmentId, string $type = 'deck_file'): Attachment {
 		try {
 			$service = $this->getService($type);
 		} catch (InvalidAttachmentType $e) {
@@ -340,40 +337,32 @@ class AttachmentService {
 			$attachment->setType($type);
 			$attachment->setCardId($cardId);
 			$service->extendData($attachment);
-			$service->delete($attachment);
-			$this->changeHelper->cardChanged($attachment->getCardId());
-			$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_DELETE);
-			return $attachment;
+		} else {
+			try {
+				$attachment = $this->attachmentMapper->find($attachmentId);
+			} catch (IMapperException $e) {
+				throw new NoPermissionException('Permission denied');
+			}
 		}
-
-		try {
-			$attachment = $this->attachmentMapper->find($attachmentId);
-		} catch (\Exception $e) {
-			throw new NoPermissionException('Permission denied');
-		}
-
 		$this->permissionService->checkPermission($this->cardMapper, $attachment->getCardId(), Acl::PERMISSION_EDIT);
-		$this->cache->clear('card-' . $attachment->getCardId());
 
 		if ($service->allowUndo()) {
 			$service->markAsDeleted($attachment);
-			$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_DELETE);
-			$this->changeHelper->cardChanged($attachment->getCardId());
-			return $this->attachmentMapper->update($attachment);
+			$attachment = $this->attachmentMapper->update($attachment);
+		} else {
+			$service->delete($attachment);
+			if (!$service instanceof ICustomAttachmentService) {
+				$attachment = $this->attachmentMapper->delete($attachment);
+			}
 		}
-		$service->delete($attachment);
 
-		$attachment = $this->attachmentMapper->delete($attachment);
+		$this->cache->clear('card-' . $attachment->getCardId());
 		$this->changeHelper->cardChanged($attachment->getCardId());
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_DELETE);
 		return $attachment;
 	}
 
-	public function restore($cardId, $attachmentId, $type = 'deck_file') {
-		if (is_numeric($attachmentId) === false) {
-			throw new BadRequestException('attachment id must be a number');
-		}
-
+	public function restore(int $cardId, int $attachmentId, string $type = 'deck_file'): Attachment {
 		try {
 			$attachment = $this->attachmentMapper->find($attachmentId);
 		} catch (\Exception $e) {

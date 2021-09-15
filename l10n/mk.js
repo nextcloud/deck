@@ -179,7 +179,6 @@ OC.L10N.register(
     "Share from Files" : "Сподели од датотеките",
     "Add this attachment" : "Додади го овој прилог",
     "Show in Files" : "Прикажи во датотеките",
-    "Unshare file" : "Отстрани споделување на датотека",
     "Delete Attachment" : "Избриши прилог",
     "Restore Attachment" : "Врати прилог",
     "File to share" : "Датотека за споделување",
