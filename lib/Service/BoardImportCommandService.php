@@ -154,7 +154,7 @@ class BoardImportCommandService extends BoardImportService {
 		}
 		$helper = $this->getCommand()->getHelper('question');
 		$question = new Question(
-			'Please inform a valid data json file: ',
+			'Please provide a valid data json file: ',
 			'data.json'
 		);
 		$question->setValidator(function (string $answer) {
