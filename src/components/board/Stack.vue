@@ -43,8 +43,11 @@
 				</form>
 			</transition>
 			<Actions v-if="canManage && !isArchived" :force-menu="true">
-				<ActionButton icon="icon-archive" @click="modalArchivAllCardsShow=true">
+				<ActionButton v-if="!showArchived" icon="icon-archive" @click="modalArchivAllCardsShow=true">
 					{{ t('deck', 'Archive all cards') }}
+				</ActionButton>
+				<ActionButton v-if="showArchived" icon="icon-archive" @click="modalArchivAllCardsShow=true">
+					{{ t('deck', 'Unarchive all cards') }}
 				</ActionButton>
 				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete list') }}
@@ -59,10 +62,19 @@
 
 		<Modal v-if="modalArchivAllCardsShow" @close="modalArchivAllCardsShow=false">
 			<div class="modal__content">
-				<h3>{{ t('deck', 'Archive all cards in this list') }}</h3>
+				<h3 v-if="!showArchived">
+					{{ t('deck', 'Archive all cards in this list') }}
+				</h3>
+				<h3 v-else>
+					{{ t('deck', 'Unarchive all cards in this list') }}
+				</h3>
+
 				<progress :value="stackTransfer.current" :max="stackTransfer.total" />
-				<button class="primary" @click="archiveAllCardsFromStack(stack)">
+				<button v-if="!showArchived" class="primary" @click="setArchivedToAllCardsFromStack(stack, !showArchived)">
 					{{ t('deck', 'Archive all cards') }}
+				</button>
+				<button v-else class="primary" @click="setArchivedToAllCardsFromStack(stack, !showArchived)">
+					{{ t('deck', 'Unarchive all cards') }}
 				</button>
 				<button @click="modalArchivAllCardsShow=false">
 					{{ t('deck', 'Cancel') }}
@@ -222,12 +234,12 @@ export default {
 			this.$store.dispatch('deleteStack', stack)
 			showUndo(t('deck', 'List deleted'), () => this.$store.dispatch('stackUndoDelete', stack))
 		},
-		archiveAllCardsFromStack(stack) {
+		setArchivedToAllCardsFromStack(stack, isArchived) {
 
 			this.stackTransfer.total = this.cardsByStack.length
 			this.cardsByStack.forEach((card, index) => {
 				this.stackTransfer.current = index
-				this.$store.dispatch('archiveUnarchiveCard', { ...card, archived: true })
+				this.$store.dispatch('archiveUnarchiveCard', { ...card, archived: isArchived })
 			})
 			this.modalArchivAllCardsShow = false
 		},
