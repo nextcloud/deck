@@ -24,6 +24,14 @@
 <template>
 	<div class="stack">
 		<div v-click-outside="stopCardCreation" class="stack__header" :class="{'stack__header--add': showAddCard }">
+			<Actions v-if="canEdit">
+				<ActionButton
+					id="drag_indicator"
+					class="grab_button"
+					icon="icon-drag_indicator">
+					{{ t('deck', 'Drag') }}
+				</ActionButton>
+			</Actions>
 			<transition name="fade" mode="out-in">
 				<h3 v-if="!canManage || isArchived">
 					{{ stack.title }}
@@ -322,6 +330,10 @@ export default {
 			input[type=text] {
 				flex-grow: 1;
 			}
+		}
+
+		.grab_button:hover {
+			cursor: grabbing;
 		}
 	}
 

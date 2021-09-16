@@ -12,6 +12,15 @@
 @include icon-black-white('notifications-dark', 'deck', 1);
 @include icon-black-white('description', 'deck', 1);
 
+.icon-drag_indicator {
+	body.theme--light & {
+		@include icon-color('drag_indicator', 'deck', $color-black);
+	}
+	body.theme--dark & {
+		@include icon-color('drag_indicator', 'deck', $color-white);
+	}
+}
+
 .icon-toggle-compact-collapsed {
 	@include icon-color('toggle-view-expand', 'deck', $color-black);
 }
