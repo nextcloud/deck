@@ -202,7 +202,6 @@ export default {
 			.app-sidebar-header {
 				position: sticky;
 				top: 0;
-				padding-top: $modal-padding;
 				z-index: 100;
 				background-color: var(--color-main-background);
 			}
