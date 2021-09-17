@@ -80,17 +80,18 @@ class BoardImportCommandService extends BoardImportService {
 			$config = $this->getInput()->getOption('config');
 			if (is_string($config)) {
 				if (!is_file($config)) {
-					throw new NotFoundException('Please inform a valid config json file');
+					throw new NotFoundException('It\'s not a file.');
 				}
 				$config = json_decode(file_get_contents($config));
 				if (!$config instanceof \stdClass) {
-					throw new NotFoundException('Please inform a valid config json file');
+					throw new NotFoundException('Failed to parse JSON.');
 				}
 				$this->setConfigInstance($config);
 			}
 			parent::validateConfig();
 			return;
 		} catch (NotFoundException $e) {
+			$this->getOutput()->writeln('<error>' . $e->getMessage() . '</error>');
 			$helper = $this->getCommand()->getHelper('question');
 			$question = new Question(
 				'Please inform a valid config json file: ',
