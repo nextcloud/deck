@@ -32,8 +32,17 @@
 			<SharingTabSidebar :board="board" />
 		</AppSidebarTab>
 
-		<AppSidebarTab id="tags"
+		<!-- The id cannot simply be "settings" because that would apply some CSS breaking the layout -->
+		<AppSidebarTab v-if="canEdit"
+			id="board-settings"
 			:order="1"
+			:name="t('deck', 'Settings')"
+			icon="icon-settings">
+			<SettingsTabsSidebar :board="board" />
+		</AppSidebarTab>
+
+		<AppSidebarTab id="tags"
+			:order="2"
 			:name="t('deck', 'Tags')"
 			icon="icon-tag">
 			<TagsTabSidebar :board="board" />
@@ -41,7 +50,7 @@
 
 		<AppSidebarTab v-if="canEdit"
 			id="deleted"
-			:order="2"
+			:order="3"
 			:name="t('deck', 'Deleted items')"
 			icon="icon-delete">
 			<DeletedTabSidebar :board="board" />
@@ -49,7 +58,7 @@
 
 		<AppSidebarTab v-if="hasActivity"
 			id="activity"
-			:order="3"
+			:order="4"
 			:name="t('deck', 'Timeline')"
 			icon="icon-activity">
 			<TimelineTabSidebar :board="board" />
@@ -59,6 +68,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import SettingsTabsSidebar from './SettingsTabsSidebar'
 import SharingTabSidebar from './SharingTabSidebar'
 import TagsTabSidebar from './TagsTabSidebar'
 import DeletedTabSidebar from './DeletedTabSidebar'
@@ -72,6 +82,7 @@ export default {
 	components: {
 		AppSidebar,
 		AppSidebarTab,
+		SettingsTabsSidebar,
 		SharingTabSidebar,
 		TagsTabSidebar,
 		DeletedTabSidebar,

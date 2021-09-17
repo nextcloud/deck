@@ -31,7 +31,12 @@ use OCP\IRequest;
 
 class BoardController extends ApiController {
 	private $userId;
+
+	/**
+	 * @var BoardService
+	 */
 	private $boardService;
+
 	private $permissionService;
 
 	public function __construct($appName, IRequest $request, BoardService $boardService, PermissionService $permissionService, $userId) {
@@ -73,10 +78,11 @@ class BoardController extends ApiController {
 	 * @param $title
 	 * @param $color
 	 * @param $archived
+	 * @param $category
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function update($id, $title, $color, $archived) {
-		return $this->boardService->update($id, $title, $color, $archived);
+	public function update($id, $title, $color, $archived, $category = null) {
+		return $this->boardService->update($id, $title, $color, $archived, $category);
 	}
 
 	/**
@@ -150,7 +156,7 @@ class BoardController extends ApiController {
 	/**
 	 * @NoAdminRequired
 	 * @param $boardId
-	 * @return \OCP\Deck\DB\Board
+	 * @return \OCA\Deck\Db\Board
 	 */
 	public function clone($boardId) {
 		return $this->boardService->clone($boardId, $this->userId);

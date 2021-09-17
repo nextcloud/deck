@@ -411,7 +411,7 @@ class BoardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function update($id, $title, $color, $archived) {
+	public function update($id, $title, $color, $archived, $category) {
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('board id must be a number');
 		}
@@ -434,6 +434,7 @@ class BoardService {
 		$board->setTitle($title);
 		$board->setColor($color);
 		$board->setArchived($archived);
+		$board->setCategory(empty($category) ? null : $category);
 		$changes->setAfter($board);
 		$this->boardMapper->update($board); // operate on clone so we can check for updated fields
 		$this->boardMapper->mapOwner($board);
@@ -638,6 +639,7 @@ class BoardService {
 		$newBoard->setTitle($board->getTitle() . ' (' . $this->l10n->t('copy') . ')');
 		$newBoard->setOwner($userId);
 		$newBoard->setColor($board->getColor());
+		$newBoard->setCategory($board->getCategory());
 		$permissions = $this->permissionService->matchPermissions($board);
 		$newBoard->setPermissions([
 			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,

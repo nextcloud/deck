@@ -201,12 +201,13 @@ class BoardServiceTest extends TestCase {
 			->willReturn([
 				'admin' => 'admin',
 			]);
-		$b = $this->service->update(123, 'MyNewNameBoard', 'ffffff', false);
+		$b = $this->service->update(123, 'MyNewNameBoard', 'ffffff', false, 'TestCategory');
 
 		$this->assertEquals($b->getTitle(), 'MyNewNameBoard');
 		$this->assertEquals($b->getOwner(), 'admin');
 		$this->assertEquals($b->getColor(), 'ffffff');
 		$this->assertEquals($b->getArchived(), false);
+		$this->assertEquals($b->getCategory(), 'TestCategory');
 	}
 
 	public function testDelete() {
@@ -393,5 +394,54 @@ class BoardServiceTest extends TestCase {
 			->with($acl)
 			->willReturn(true);
 		$this->assertTrue($this->service->deleteAcl(123));
+	}
+
+	public function testClone(): void {
+		$board = $this->createBoard();
+		$expectedBoard = clone $board;
+		$expectedBoard->setId(42);
+		$expectedBoard->setTitle($board->getTitle() . ' (copy)');
+		$expectedBoard->setPermissions([
+			'PERMISSION_READ' => false,
+			'PERMISSION_EDIT' => false,
+			'PERMISSION_MANAGE' => false,
+			'PERMISSION_SHARE' => false,
+		]);
+
+		$this->boardMapper->method('find')
+			->with(23)
+			->willReturn($board);
+
+		$this->l10n->method('t')
+			->with('copy')
+			->willReturn('copy');
+
+		$this->labelMapper->method('findAll')
+			->with(23)
+			->willReturn([]);
+
+		$this->stackMapper->method('findAll')
+			->with(23)
+			->willreturn([]);
+
+		$this->boardMapper->method('insert')
+			->willReturnCallback(function ($boardToSave) use ($expectedBoard) {
+				$boardToSave->setId(42);
+				self::assertEquals($expectedBoard, $boardToSave);
+			});
+
+		$clonedBoard = $this->service->clone(23, 'admin');
+		self::assertEquals($expectedBoard, $clonedBoard);
+	}
+
+	private function createBoard(): Board {
+		$board = new Board();
+		$board->setId(23);
+		$board->setTitle('test board');
+		$board->setOwner('admin');
+		$board->setCategory('test category');
+		$board->setColor('ff0000');
+		$board->setDeletedAt(0);
+		return $board;
 	}
 }

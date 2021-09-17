@@ -118,11 +118,13 @@ class BoardApiController extends ApiController {
 	 * @params $title
 	 * @params $color
 	 * @params $archived
+	 * @params $category
 	 *
-	 * Update a board with the specified boardId, title and color, and archived state.
+	 * Update a board with the specified boardId.
 	 */
-	public function update($title, $color, $archived = false) {
-		$board = $this->boardService->update($this->request->getParam('boardId'), $title, $color, $archived);
+	public function update($title, $color, $archived = false, $category = null) {
+		$board = $this->boardService->
+			update($this->request->getParam('boardId'), $title, $color, $archived, $category);
 		return new DataResponse($board, HTTP::STATUS_OK);
 	}
 

@@ -106,9 +106,9 @@ class BoardControllerTest extends \Test\TestCase {
 	public function testUpdate() {
 		$this->boardService->expects($this->once())
 			->method('update')
-			->with(1, 2, 3, false)
+			->with(1, 2, 3, false, 'TestCategory')
 			->willReturn(1);
-		$this->assertEquals(1, $this->controller->update(1, 2, 3, false));
+		$this->assertEquals(1, $this->controller->update(1, 2, 3, false, 'TestCategory'));
 	}
 
 	public function testDelete() {

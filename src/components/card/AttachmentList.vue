@@ -22,7 +22,7 @@
 
 <template>
 	<AttachmentDragAndDrop :card-id="cardId" class="drop-upload--sidebar">
-		<div class="button-group" v-if="!isReadOnly">
+		<div v-if="!isReadOnly" class="button-group">
 			<button class="icon-upload" @click="uploadNewFile()">
 				{{ t('deck', 'Upload new files') }}
 			</button>

@@ -52,6 +52,7 @@ class BoardApiControllerTest extends \Test\TestCase {
 		$this->exampleBoard['id'] = 1;
 		$this->exampleBoard['title'] = 'titled';
 		$this->exampleBoard['color'] = '000000';
+		$this->exampleBoard['category'] = 'test category';
 
 		$this->deniedBoard['id'] = 2;
 		$this->deniedBoard['owner'] = 'someone else';
@@ -114,6 +115,7 @@ class BoardApiControllerTest extends \Test\TestCase {
 		$board->setId($this->exampleBoard['id']);
 		$board->setTitle($this->exampleBoard['title']);
 		$board->setColor($this->exampleBoard['color']);
+		$board->setCategory($this->exampleBoard['category']);
 		$this->boardService->expects($this->once())
 			->method('update')
 			->willReturn($board);
@@ -124,7 +126,12 @@ class BoardApiControllerTest extends \Test\TestCase {
 			->will($this->returnValue($this->exampleBoard['id']));
 
 		$expected = new DataResponse($board, HTTP::STATUS_OK);
-		$actual = $this->controller->update($this->exampleBoard['title'], $this->exampleBoard['color']);
+		$actual = $this->controller->update(
+			$this->exampleBoard['title'],
+			$this->exampleBoard['color'],
+			false,
+			$this->exampleBoard['category']
+		);
 		$this->assertEquals($expected, $actual);
 	}
 

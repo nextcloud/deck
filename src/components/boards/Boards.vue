@@ -57,6 +57,10 @@ export default {
 			type: String,
 			default: '',
 		},
+		navFilterCategory: {
+			type: String,
+			default: null,
+		},
 	},
 	computed: {
 		boardsSorted() {
@@ -72,6 +76,9 @@ export default {
 	watch: {
 		navFilter(value) {
 			this.$store.commit('setBoardFilter', value)
+		},
+		navFilterCategory(value) {
+			this.$store.commit('setBoardFilterCategory', value)
 		},
 	},
 }

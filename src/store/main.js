@@ -44,6 +44,7 @@ export const BOARD_FILTERS = {
 	ALL: '',
 	ARCHIVED: 'archived',
 	SHARED: 'shared',
+	CATEGORY: 'category',
 }
 
 export default new Vuex.Store({
@@ -70,6 +71,7 @@ export default new Vuex.Store({
 		sharees: [],
 		assignableUsers: [],
 		boardFilter: BOARD_FILTERS.ALL,
+		boardFilterCategory: null,
 		searchQuery: '',
 		activity: [],
 		activityLoadMore: true,
@@ -94,12 +96,55 @@ export default new Vuex.Store({
 		boardById: state => (id) => {
 			return state.boards.find((board) => board.id === id)
 		},
+		categories: state => {
+			const categories = []
+			state.boards.forEach((board) => {
+				if (board.category && !categories.includes(board.category)) {
+					categories.push(board.category)
+				}
+			})
+			return categories.sort()
+		},
 		assignables: state => {
 			return [
 				...state.assignableUsers.map((user) => ({ ...user, type: 0 })),
 				...state.currentBoard.acl.filter((acl) => acl.type === 1 && typeof acl.participant === 'object').map((group) => ({ ...group.participant, type: 1 })),
 				...state.currentBoard.acl.filter((acl) => acl.type === 7 && typeof acl.participant === 'object').map((circle) => ({ ...circle.participant, type: 7 })),
 			]
+		},
+		nonArchivedBoardCategories: state => {
+			const categories = []
+
+			state.boards.forEach(board => {
+				if (board.archived || board.deletedAt || !board.category) {
+					return
+				}
+
+				if (!categories.includes(board.category)) {
+					categories.push(board.category)
+				}
+			})
+
+			return categories.sort()
+		},
+		nonArchivedBoardsByCategory: state => {
+			const boards = {}
+
+			state.boards.forEach(board => {
+				if (board.archived || board.deletedAt || !board.category) {
+					return
+				}
+
+				boards[board.category] = boards[board.category] || []
+				boards[board.category].push(board)
+			})
+
+			return boards
+		},
+		nonArchivedUncategorisedBoards: state => {
+			return state.boards.filter(board => {
+				return board.archived === false && !board.deletedAt && !board.category
+			})
 		},
 		noneArchivedBoards: state => {
 			return state.boards.filter(board => {
@@ -117,11 +162,13 @@ export default new Vuex.Store({
 			})
 		},
 		filteredBoards: state => {
-			// filters the boards depending on the active filter
 			const boards = state.boards.filter(board => {
-				return (state.boardFilter === BOARD_FILTERS.ALL && board.archived === false)
+				return (state.boardFilter === BOARD_FILTERS.ALL && !board.category && board.archived === false)
 					|| (state.boardFilter === BOARD_FILTERS.ARCHIVED && board.archived === true)
 					|| (state.boardFilter === BOARD_FILTERS.SHARED && board.shared === 1)
+					|| (state.boardFilter === BOARD_FILTERS.CATEGORY
+						&& board.archived === false
+						&& board.category === state.boardFilterCategory)
 			})
 			return boards
 		},
@@ -254,6 +301,9 @@ export default new Vuex.Store({
 		},
 		setBoardFilter(state, filter) {
 			state.boardFilter = filter
+		},
+		setBoardFilterCategory(state, category) {
+			state.boardFilterCategory = category
 		},
 		setCurrentBoard(state, board) {
 			state.currentBoard = board
