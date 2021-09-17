@@ -21,6 +21,11 @@ ul {
 
 ul {
 	list-style-type: disc;
+
+	.task-list-item {
+		margin-left: -20px;
+		list-style-type: none;
+	}
 }
 
 h1 {
