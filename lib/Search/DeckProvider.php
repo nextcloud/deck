@@ -81,11 +81,11 @@ class DeckProvider implements IProvider {
 				$results
 			);
 		}
-		
+
 		return SearchResult::paginated(
 			'Deck',
 			$results,
-			$cardResults[count($results) - 1]->getLastModified()
+			$cardResults[count($cardResults) - 1]->getLastModified()
 		);
 	}
 
