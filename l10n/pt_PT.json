@@ -1,5 +1,5 @@
 { "translations": {
-    "Deck" : "Baralho",
+    "Deck" : "Quadro",
     "Personal" : "Pessoal",
     "The card \"%s\" on \"%s\" has reached its due date." : "O cartão \"%s\" em \"%s\" chegou a sua data de vencimento",
     "The board \"%s\" has been shared with you by %s." : "O quadro \"%s\" foi partilhado consigo por %s.",
