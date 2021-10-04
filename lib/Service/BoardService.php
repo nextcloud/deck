@@ -118,8 +118,9 @@ class BoardService {
 	/**
 	 * Get all boards that are shared with a user, their groups or circles
 	 */
-	public function getUserBoards(?int $since = null, bool $includeArchived = true, ?int $before = null): array {
-		return $this->boardMapper->findAllForUser($this->userId, $since, $includeArchived, $before);
+	public function getUserBoards(?int $since = null, bool $includeArchived = true, ?int $before = null,
+								  ?string $term = null): array {
+		return $this->boardMapper->findAllForUser($this->userId, $since, $includeArchived, $before, $term);
 	}
 
 	/**

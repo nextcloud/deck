@@ -94,15 +94,16 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		return $board;
 	}
 
-	public function findAllForUser(string $userId, ?int $since = null, bool $includeArchived = true, ?int $before = null): array {
-		$useCache = ($since === -1 && $includeArchived === true && $before === null);
+	public function findAllForUser(string $userId, ?int $since = null, bool $includeArchived = true, ?int $before = null,
+								   ?string $term = null): array {
+		$useCache = ($since === -1 && $includeArchived === true && $before === null && $term === null);
 		if (!isset($this->userBoardCache[$userId]) || !$useCache) {
 			$groups = $this->groupManager->getUserGroupIds(
 				$this->userManager->get($userId)
 			);
-			$userBoards = $this->findAllByUser($userId, null, null, $since, $includeArchived, $before);
-			$groupBoards = $this->findAllByGroups($userId, $groups, null, null, $since, $includeArchived, $before);
-			$circleBoards = $this->findAllByCircles($userId, null, null, $since, $includeArchived, $before);
+			$userBoards = $this->findAllByUser($userId, null, null, $since, $includeArchived, $before, $term);
+			$groupBoards = $this->findAllByGroups($userId, $groups, null, null, $since, $includeArchived, $before, $term);
+			$circleBoards = $this->findAllByCircles($userId, null, null, $since, $includeArchived, $before, $term);
 			$allBoards = array_unique(array_merge($userBoards, $groupBoards, $circleBoards));
 			if ($useCache) {
 				$this->userBoardCache[$userId] = $allBoards;
@@ -121,7 +122,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	 * @return array
 	 */
 	public function findAllByUser(string $userId, ?int $limit = null, ?int $offset = null, ?int $since = null,
-								  bool $includeArchived = true, ?int $before = null) {
+								  bool $includeArchived = true, ?int $before = null, ?string $term = null) {
 		// FIXME: One moving to QBMapper we should allow filtering the boards probably by method chaining for additional where clauses
 		$sql = 'SELECT id, title, owner, color, archived, deleted_at, 0 as shared, last_modified FROM `*PREFIX*deck_boards` WHERE owner = ?';
 		$params = [$userId];
@@ -135,6 +136,10 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		if ($before !== null) {
 			$sql .= ' AND last_modified < ?';
 			$params[] = $before;
+		}
+		if ($term !== null) {
+			$sql .= ' AND lower(title) LIKE ?';
+			$params[] = '%' . $term . '%';
 		}
 		$sql .= ' UNION ' .
 			'SELECT boards.id, title, owner, color, archived, deleted_at, 1 as shared, last_modified FROM `*PREFIX*deck_boards` as boards ' .
@@ -150,6 +155,10 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		if ($before !== null) {
 			$sql .= ' AND last_modified < ?';
 			$params[] = $before;
+		}
+		if ($term !== null) {
+			$sql .= ' AND lower(title) LIKE ?';
+			$params[] = '%' . $term . '%';
 		}
 		$entries = $this->findEntities($sql, $params, $limit, $offset);
 		/* @var Board $entry */
@@ -175,7 +184,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	 * @return array
 	 */
 	public function findAllByGroups(string $userId, array $groups, ?int $limit = null, ?int $offset = null, ?int $since = null,
-									bool $includeArchived = true, ?int $before = null) {
+									bool $includeArchived = true, ?int $before = null, ?string $term = null) {
 		if (count($groups) <= 0) {
 			return [];
 		}
@@ -201,6 +210,10 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 			$sql .= ' AND last_modified < ?';
 			$params[] = $before;
 		}
+		if ($term !== null) {
+			$sql .= ' AND lower(title) LIKE ?';
+			$params[] = '%' . $term . '%';
+		}
 		$entries = $this->findEntities($sql, $params, $limit, $offset);
 		/* @var Board $entry */
 		foreach ($entries as $entry) {
@@ -211,7 +224,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	public function findAllByCircles(string $userId, ?int $limit = null, ?int $offset = null, ?int $since = null,
-									 bool $includeArchived = true, ?int $before = null) {
+									 bool $includeArchived = true, ?int $before = null, ?string $term = null) {
 		if (!$this->circlesEnabled) {
 			return [];
 		}
@@ -243,6 +256,10 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		if ($before !== null) {
 			$sql .= ' AND last_modified < ?';
 			$params[] = $before;
+		}
+		if ($term !== null) {
+			$sql .= ' AND lower(title) LIKE ?';
+			$params[] = '%' . $term . '%';
 		}
 		$entries = $this->findEntities($sql, $params, $limit, $offset);
 		/* @var Board $entry */
