@@ -81,7 +81,7 @@ class SearchService {
 			return $board->getId();
 		}, $boards);
 		$matchedCards = $this->cardMapper->search($boardIds, $this->filterStringParser->parse($term), $limit, $cursor);
-		
+
 		$self = $this;
 		return array_map(function (Card $card) use ($self) {
 			$self->cardService->enrich($card);
@@ -91,9 +91,24 @@ class SearchService {
 
 	public function searchBoards(string $term, ?int $limit, ?int $cursor): array {
 		$boards = $this->boardService->getUserBoards();
-		return array_filter($boards, static function (Board $board) use ($term) {
-			return mb_stripos(mb_strtolower($board->getTitle()), mb_strtolower($term)) > -1;
+		// get boards that have a lastmodified date which is lower than the cursor
+		// and which match the search term
+		$filteredBoards = array_filter($boards, static function (Board $board) use ($term, $cursor) {
+			return (
+				($cursor === null || $board->getLastModified() < $cursor)
+				&& mb_stripos(mb_strtolower($board->getTitle()), mb_strtolower($term)) > -1
+			);
 		});
+		// sort the boards, recently modified first
+		usort($filteredBoards, function ($boardA, $boardB) {
+			$ta = $boardA->getLastModified();
+			$tb = $boardB->getLastModified();
+			return $ta === $tb
+				? 0
+				: ($ta > $tb ? -1 : 1);
+		});
+		// limit the number of results
+		return array_slice($filteredBoards, 0, $limit);
 	}
 
 	public function searchComments(string $term, ?int $limit = null, ?int $cursor = null): array {
