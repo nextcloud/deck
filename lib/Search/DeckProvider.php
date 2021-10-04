@@ -63,29 +63,52 @@ class DeckProvider implements IProvider {
 	}
 
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
-		$cursor = $query->getCursor() !== null ? (int)$query->getCursor() : null;
-		$boardResults = $this->searchService->searchBoards($query->getTerm(), $query->getLimit(), $cursor);
-		$cardResults = $this->searchService->searchCards($query->getTerm(), $query->getLimit(), $cursor);
-		$results = array_merge(
-			array_map(function (Board $board) {
-				return new BoardSearchResultEntry($board, $this->urlGenerator);
-			}, $boardResults),
-			array_map(function (Card $card) {
-				return new CardSearchResultEntry($card->getRelatedBoard(), $card->getRelatedStack(), $card, $this->urlGenerator);
-			}, $cardResults)
-		);
+		$cursor = $query->getCursor();
+		[$boardCursor, $cardCursor] = $this->parseCursor($cursor);
 
-		if (count($cardResults) < $query->getLimit()) {
+		$boardObjects = $this->searchService->searchBoards($query->getTerm(), $query->getLimit(), $boardCursor);
+		$boardResults = array_map(function (Board $board) {
+			return [
+				'object' => $board,
+				'entry' => new BoardSearchResultEntry($board, $this->urlGenerator)
+			];
+		}, $boardObjects);
+
+		$cardObjects = $this->searchService->searchCards($query->getTerm(), $query->getLimit(), $cardCursor);
+		$cardResults = array_map(function (Card $card) {
+			return [
+				'object' => $card,
+				'entry' => new CardSearchResultEntry($card->getRelatedBoard(), $card->getRelatedStack(), $card, $this->urlGenerator)
+			];
+		}, $cardObjects);
+
+		$results = array_merge($boardResults, $cardResults);
+
+		usort($results, function ($a, $b) {
+			$ta = $a['object']->getLastModified();
+			$tb = $b['object']->getLastModified();
+			return $ta === $tb
+				? 0
+				: ($ta > $tb ? -1 : 1);
+		});
+
+		$resultEntries = array_map(function (array $result) {
+			return $result['entry'];
+		}, $results);
+
+		// if both cards and boards results are less then the limit, we know we won't get more
+		if (count($resultEntries) < $query->getLimit()) {
 			return SearchResult::complete(
 				'Deck',
-				$results
+				$resultEntries
 			);
 		}
-		
+
+		$newCursor = $this->getNewCursor($boardObjects, $cardObjects);
 		return SearchResult::paginated(
 			'Deck',
-			$results,
-			$cardResults[count($results) - 1]->getLastModified()
+			$resultEntries,
+			$newCursor
 		);
 	}
 
@@ -94,5 +117,28 @@ class DeckProvider implements IProvider {
 			return -5;
 		}
 		return 10;
+	}
+
+	private function parseCursor(?string $cursor): array {
+		$boardCursor = null;
+		$cardCursor = null;
+		if ($cursor !== null) {
+			$splitCursor = explode('|', $cursor);
+			if (count($splitCursor) >= 2) {
+				$boardCursor = (int)$splitCursor[0] ?: null;
+				$cardCursor = (int)$splitCursor[1] ?: null;
+			}
+		}
+		return [$boardCursor, $cardCursor];
+	}
+
+	private function getNewCursor(array $boards, array $cards): string {
+		$boardTimestamps = array_map(function (Board $board) {
+			return $board->getLastModified();
+		}, $boards);
+		$cardTimestamps = array_map(function (Card $card) {
+			return $card->getLastModified();
+		}, $cards);
+		return (min($boardTimestamps) ?: '') . '|' . (min($cardTimestamps) ?: '');
 	}
 }
