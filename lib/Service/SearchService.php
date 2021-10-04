@@ -90,7 +90,7 @@ class SearchService {
 	}
 
 	public function searchBoards(string $term, ?int $limit, ?int $cursor): array {
-		$boards = $this->boardService->getUserBoards(-1, true, $cursor);
+		$boards = $this->boardService->getUserBoards(null, true, $cursor);
 		// get boards that have a lastmodified date which is lower than the cursor
 		// and which match the search term
 		$filteredBoards = array_filter($boards, static function (Board $board) use ($term, $cursor) {
