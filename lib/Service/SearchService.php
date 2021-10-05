@@ -90,25 +90,19 @@ class SearchService {
 	}
 
 	public function searchBoards(string $term, ?int $limit, ?int $cursor): array {
-		$boards = $this->boardService->getUserBoards();
-		// get boards that have a lastmodified date which is lower than the cursor
-		// and which match the search term
-		$filteredBoards = array_filter($boards, static function (Board $board) use ($term, $cursor) {
-			return (
-				($cursor === null || $board->getLastModified() < $cursor)
-				&& mb_stripos(mb_strtolower($board->getTitle()), mb_strtolower($term)) > -1
-			);
-		});
+		$boards = $this->boardService->getUserBoards(null, true, $cursor, mb_strtolower($term));
+
 		// sort the boards, recently modified first
-		usort($filteredBoards, function ($boardA, $boardB) {
+		usort($boards, function ($boardA, $boardB) {
 			$ta = $boardA->getLastModified();
 			$tb = $boardB->getLastModified();
 			return $ta === $tb
 				? 0
 				: ($ta > $tb ? -1 : 1);
 		});
+
 		// limit the number of results
-		return array_slice($filteredBoards, 0, $limit);
+		return array_slice($boards, 0, $limit);
 	}
 
 	public function searchComments(string $term, ?int $limit = null, ?int $cursor = null): array {
