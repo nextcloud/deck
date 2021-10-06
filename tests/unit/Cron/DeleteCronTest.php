@@ -35,8 +35,8 @@ class DeleteCronTest extends \Test\TestCase {
 
 	/** @var BoardMapper|\PHPUnit\Framework\MockObject\MockObject */
 	protected $boardMapper;
-    /** @var CardMapper|\PHPUnit\Framework\MockObject\MockObject */
-    protected $cardMapper;
+	/** @var CardMapper|\PHPUnit\Framework\MockObject\MockObject */
+	protected $cardMapper;
 	/** @var AttachmentService|\PHPUnit\Framework\MockObject\MockObject */
 	private $attachmentService;
 	/** @var AttachmentMapper|\PHPUnit\Framework\MockObject\MockObject */
@@ -88,13 +88,13 @@ class DeleteCronTest extends \Test\TestCase {
 			->method('delete')
 			->with($boards[3]);
 
-        $cards = [ $this->getBoard(10) ];
-        $this->cardMapper->expects($this->once())
-            ->method('findToDelete')
-            ->willReturn($cards);
-        $this->cardMapper->expects($this->once())
-            ->method('delete')
-            ->with($cards[0]);
+		$cards = [ $this->getBoard(10) ];
+		$this->cardMapper->expects($this->once())
+			->method('findToDelete')
+			->willReturn($cards);
+		$this->cardMapper->expects($this->once())
+			->method('delete')
+			->with($cards[0]);
 
 		$attachment = new Attachment();
 		$attachment->setType('deck_file');
