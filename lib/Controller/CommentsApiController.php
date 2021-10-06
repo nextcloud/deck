@@ -36,8 +36,10 @@ class CommentsApiController extends OCSController {
 	private $commentService;
 
 	public function __construct(
-		$appName, IRequest $request, $corsMethods = 'PUT, POST, GET, DELETE, PATCH', $corsAllowedHeaders = 'Authorization, Content-Type, Accept', $corsMaxAge = 1728000,
-		CommentService $commentService
+		string $appName,
+		IRequest $request,
+		CommentService $commentService,
+		string $corsMethods = 'PUT, POST, GET, DELETE, PATCH', string $corsAllowedHeaders = 'Authorization, Content-Type, Accept', int $corsMaxAge = 1728000
 	) {
 		parent::__construct($appName, $request, $corsMethods, $corsAllowedHeaders, $corsMaxAge);
 		$this->commentService = $commentService;
