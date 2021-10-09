@@ -2,7 +2,6 @@
 
 [![Build Status](https://travis-ci.org/nextcloud/deck.svg?branch=master)](https://travis-ci.org/nextcloud/deck) [![CodeCov](https://codecov.io/github/nextcloud/deck/coverage.svg?branch=master)](https://codecov.io/github/nextcloud/deck) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e403f723f42a4abd93b2cfe36cbd7eee)](https://www.codacy.com/app/juliushaertl/deck?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=nextcloud/deck&amp;utm_campaign=Badge_Grade) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nextcloud/deck/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/nextcloud/deck/?branch=master) [![#nextcloud-deck](https://img.shields.io/badge/IRC-%23nextcloud--deck%20on%20freenode-blue.svg)](https://webchat.freenode.net/?channels=nextcloud-deck)
 
-
 Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.
 
 - Add your tasks to cards and put them in order
@@ -26,7 +25,7 @@ Deck is a kanban style organization tool aimed at personal planning and project 
 - [trello-to-deck](https://github.com/maxammann/trello-to-deck) - Migrates cards from Trello
 - [mail2deck](https://github.com/newroco/mail2deck) - Provides an "email in" solution 
 - [A-deck](https://github.com/leoossa/A-deck) - Chrome Extension that allows to create new card in selected stack based on current tab
-- 
+
 ## Installation/Update
 
 This app is supposed to work on the two latest Nextcloud versions.
@@ -76,12 +75,11 @@ npx webpack-dev-server --config webpack.hot.js \
 With SSL:
 ```
 npx webpack-dev-server --config webpack.dev.js --https \
-	--cert ~/repos/nextcloud/nc-dev/data/ssl/nextcloud.local.crt \
+    --cert ~/repos/nextcloud/nc-dev/data/ssl/nextcloud.local.crt \
     --key ~/repos/nextcloud/nc-dev/data/ssl/nextcloud.local.key \
     --public nextcloud.local:3000 \
     --output-public-path 'https://nextcloud.local:3000/js/'
 ```
-
 
 ### Running tests
 You can use the provided Makefile to run all tests by using:

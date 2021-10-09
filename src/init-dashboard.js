@@ -25,8 +25,6 @@ import Vuex from 'vuex'
 
 import overview from './store/overview'
 
-import './css/dashboard.scss'
-
 import Dashboard from './views/Dashboard.vue'
 
 Vue.use(Vuex)
