@@ -53,6 +53,19 @@
 			<PopoverMenu :menu="popover" />
 			<slot />
 		</div>
+
+		<div class="avatar-print-list">
+			<div v-for="user in avatarUsers" :key="user.id" class="avatar-print-list-item">
+				<Avatar
+					class="avatar-print-list-avatar"
+					:user="user.participant.uid"
+					:display-name="user.participant.displayname"
+					:disable-menu="true"
+					:is-no-user="user.type !== 0"
+					:size="24" />
+				{{ user.participant.displayname }}
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -116,6 +129,15 @@ export default {
 				}),
 			]
 		},
+		avatarUsers() {
+			if (!this.users) {
+				return []
+			}
+
+			return this.users.filter((user) => {
+				return [0, 1, 7].includes(user.type)
+			})
+		},
 	},
 	methods: {
 		togglePopover() {
@@ -175,5 +197,27 @@ export default {
 	.popovermenu {
 		display: block;
 		margin: 40px -6px;
+	}
+
+	.avatar-print-list {
+		display: none;
+	}
+
+	@media print {
+		.avatar-list {
+			display: none;
+		}
+
+		.avatar-print-list-item {
+			align-items: center;
+			display: flex;
+			gap: 10px;
+			margin-bottom: 10px;
+		}
+
+		.avatar-print-list {
+			display: block;
+			padding-top: 5px;
+		}
 	}
 </style>

@@ -41,7 +41,7 @@
 
 		<AvatarList :users="card.assignedUsers" />
 
-		<CardMenu :card="card" />
+		<CardMenu class="card-menu" :card="card" />
 	</div>
 </template>
 <script>
@@ -149,5 +149,16 @@ export default {
 
 	.fade-enter, .fade-leave-to {
 		opacity: 0;
+	}
+
+	@media print {
+		.badges {
+			align-items: flex-start;
+			max-height: none !important;
+		}
+
+		.card-menu {
+			display: none;
+		}
 	}
 </style>
