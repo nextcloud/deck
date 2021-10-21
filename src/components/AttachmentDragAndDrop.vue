@@ -131,6 +131,12 @@ export default {
 		position: relative;
 	}
 
+	.attachments-drag-zone.drop-upload--sidebar {
+		display: flex;
+		flex-direction: column;
+		flex-basis: 100%;
+	}
+
 	.dragover {
 		position: absolute;
 		background: var(--color-primary-light);
