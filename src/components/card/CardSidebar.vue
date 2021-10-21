@@ -185,6 +185,13 @@ export default {
 
 <style lang="scss" scoped>
 
+	section.app-sidebar__tab--active {
+		min-height: auto;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
+
 	// FIXME: Obivously we should at some point not randomly reuse the sidebar component
 	// since this is not oficially supported
 	.modal__card .app-sidebar {
@@ -212,12 +219,6 @@ export default {
 				margin: 0;
 				z-index: 100;
 				background-color: var(--color-main-background);
-			}
-
-			section.app-sidebar__tab--active {
-				min-height: auto;
-				display: flex;
-				flex-direction: column;
 			}
 
 			#emptycontent, .emptycontent {
