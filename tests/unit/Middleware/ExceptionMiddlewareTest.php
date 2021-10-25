@@ -47,10 +47,12 @@ class ExceptionMiddlewareTest extends \Test\TestCase {
 	public function setUp(): void {
 		$this->logger = $this->createMock(ILogger::class);
 		$this->config = $this->createMock(IConfig::class);
+		$this->request = $this->createMock(IRequest::class);
 		$this->controller = $this->createMock(Controller::class);
 		$this->exceptionMiddleware = new ExceptionMiddleware(
 			$this->logger,
-			$this->config
+			$this->config,
+			$this->request
 		);
 	}
 
@@ -81,10 +83,11 @@ class ExceptionMiddlewareTest extends \Test\TestCase {
 	}
 
 	public function testAfterExceptionFail() {
+		$this->request->expects($this->any())->method('getId')->willReturn('abc123');
 		// BoardService $boardService, PermissionService $permissionService, $userId
 		$boardController = new BoardController('deck', $this->createMock(IRequest::class), $this->createMock(BoardService::class), $this->createMock(PermissionService::class), 'admin');
-		$result = $this->exceptionMiddleware->afterException($boardController, 'bar', new \Exception('failed hard'));
-		$this->assertEquals('failed hard', $result->getData()['message']);
+		$result = $this->exceptionMiddleware->afterException($boardController, 'bar', new \Exception('other exception message'));
+		$this->assertEquals('Internal server error: Please contact the server administrator if this error reappears multiple times, please include the request ID "abc123" below in your report.', $result->getData()['message']);
 		$this->assertEquals(500, $result->getData()['status']);
 	}
 }
