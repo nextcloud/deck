@@ -23,6 +23,12 @@
 
 namespace OCA\Deck;
 
+/**
+ * User facing exception that can be thrown with an error being reported to the frontend
+ * or consumers of the API
+ *
+ * This exception is catched in the ExceptionMiddleware
+ */
 class StatusException extends \Exception {
 	public function __construct($message) {
 		parent::__construct($message);
