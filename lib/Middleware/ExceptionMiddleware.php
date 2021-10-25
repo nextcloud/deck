@@ -32,6 +32,7 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\OCS\OCSException;
 use OCP\AppFramework\OCSController;
 use OCP\ILogger;
+use OCP\IRequest;
 use OCP\Util;
 use OCP\IConfig;
 
@@ -41,6 +42,8 @@ class ExceptionMiddleware extends Middleware {
 	private $logger;
 	/** @var IConfig */
 	private $config;
+	/** @var IRequest */
+	private $request;
 
 	/**
 	 * SharingMiddleware constructor.
@@ -48,9 +51,10 @@ class ExceptionMiddleware extends Middleware {
 	 * @param ILogger $logger
 	 * @param IConfig $config
 	 */
-	public function __construct(ILogger $logger, IConfig $config) {
+	public function __construct(ILogger $logger, IConfig $config, IRequest $request) {
 		$this->logger = $logger;
 		$this->config = $config;
+		$this->request = $request;
 	}
 
 	/**
@@ -67,43 +71,10 @@ class ExceptionMiddleware extends Middleware {
 			throw $exception;
 		}
 
-		if ($exception instanceof ConflictException) {
-			if ($this->config->getSystemValue('loglevel', Util::WARN) === Util::DEBUG) {
-				$this->logger->logException($exception);
-			}
-			return new JSONResponse([
-				'status' => $exception->getStatus(),
-				'message' => $exception->getMessage(),
-				'data' => $exception->getData(),
-			], $exception->getStatus());
-		}
-		
-		if ($exception instanceof StatusException) {
-			if ($this->config->getSystemValue('loglevel', Util::WARN) === Util::DEBUG) {
-				$this->logger->logException($exception);
-			}
-
-			if ($controller instanceof OCSController) {
-				$exception = new OCSException($exception->getMessage(), $exception->getStatus(), $exception);
-				throw $exception;
-			}
-			return new JSONResponse([
-				'status' => $exception->getStatus(),
-				'message' => $exception->getMessage()
-			], $exception->getStatus());
-		}
-
-		if (strpos(get_class($controller), 'OCA\\Deck\\Controller\\') === 0) {
-			$response = [
-				'status' => 500,
-				'message' => $exception->getMessage()
-			];
-			$this->logger->logException($exception);
-			if ($this->config->getSystemValue('debug', true) === true) {
-				$response['exception'] = (array) $exception;
-			}
-			return new JSONResponse($response, 500);
-		}
+		$debugMode = $this->config->getSystemValue('debug', false);
+		$exceptionMessage = $debugMode !== true
+			? 'Internal server error: Please contact the server administrator if this error reappears multiple times, please include the request ID "' . $this->request->getId() . '" below in your report.'
+			: $exception->getMessage();
 
 		// uncatched DoesNotExistExceptions will be thrown when the main entity is not found
 		// we return a 403 so we don't leak information over existing entries
@@ -113,6 +84,43 @@ class ExceptionMiddleware extends Middleware {
 				'status' => 403,
 				'message' => 'Permission denied'
 			], 403);
+		}
+		
+		if ($exception instanceof StatusException) {
+			if ($this->config->getSystemValue('loglevel', Util::WARN) === Util::DEBUG) {
+				$this->logger->logException($exception);
+			}
+
+			if ($exception instanceof ConflictException) {
+				return new JSONResponse([
+					'status' => $exception->getStatus(),
+					'message' => $exception->getMessage(),
+					'data' => $exception->getData(),
+				], $exception->getStatus());
+			}
+
+			if ($controller instanceof OCSController) {
+				$exception = new OCSException($exception->getMessage(), $exception->getStatus(), $exception);
+				throw $exception;
+			}
+
+			return new JSONResponse([
+				'status' => $exception->getStatus(),
+				'message' => $exception->getMessage(),
+			], $exception->getStatus());
+		}
+
+		if (strpos(get_class($controller), 'OCA\\Deck\\Controller\\') === 0) {
+			$response = [
+				'status' => 500,
+				'message' => $exceptionMessage,
+				'requestId' => $this->request->getId(),
+			];
+			$this->logger->logException($exception);
+			if ($debugMode === true) {
+				$response['exception'] = (array) $exception;
+			}
+			return new JSONResponse($response, 500);
 		}
 
 		throw $exception;
