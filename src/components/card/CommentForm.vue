@@ -26,7 +26,7 @@
 			<At ref="at"
 				v-model="commentText"
 				:members="members"
-				name-key="uid"
+				name-key="displayname"
 				:tab-select="true">
 				<template v-slot:item="s">
 					<Avatar class="atwho-li--avatar" :user="s.item.uid" :size="24" />
