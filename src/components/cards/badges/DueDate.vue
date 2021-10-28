@@ -23,7 +23,7 @@
 <template>
 	<div v-if="card" class="duedate">
 		<transition name="zoom">
-			<div v-if="card.duedate" :class="dueIcon">
+			<div v-if="card.duedate" :class="dueIcon" :title="absoluteDate">
 				<span>{{ relativeDate }}</span>
 			</div>
 		</transition>
@@ -62,14 +62,14 @@ export default {
 			}
 			return moment(this.card.duedate).fromNow()
 		},
-		dueDateTooltip() {
-			return moment(this.card.duedate).format('LLLL')
+		absoluteDate() {
+			return moment(this.card.duedate).format('L')
 		},
 	},
 }
 </script>
 
-<style lang="scss" coped>
+<style lang="scss" scoped>
 	.icon.due {
 		background-position: 4px center;
 		border-radius: 3px;
@@ -105,11 +105,26 @@ export default {
 			padding: 3px 4px;
 		}
 
+		&::before,
 		span {
 			margin-left: 20px;
 			white-space: nowrap;
 			text-overflow: ellipsis;
 			overflow: hidden;
+		}
+	}
+
+	@media print {
+		.icon.due {
+			background-color: transparent !important;
+
+			span {
+				display: none;
+			}
+
+			&::before {
+				content: attr(title);
+			}
 		}
 	}
 </style>

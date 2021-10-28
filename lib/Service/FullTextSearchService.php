@@ -59,7 +59,7 @@ class FullTextSearchService {
 
 	/** @var CardMapper */
 	private $cardMapper;
-	
+
 	public function __construct(
 		BoardMapper $boardMapper, StackMapper $stackMapper, CardMapper $cardMapper
 	) {
@@ -187,6 +187,6 @@ class FullTextSearchService {
 	 * @return Board[]
 	 */
 	private function getBoardsFromUser(string $userId): array {
-		return $this->boardMapper->findAllByUser($userId, null, null, -1);
+		return $this->boardMapper->findAllByUser($userId, null, null, null);
 	}
 }

@@ -125,7 +125,10 @@
 			<div :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
 		</ColorPicker>
 		<form @submit.prevent.stop="applyEdit">
-			<input v-model="editTitle" type="text" required>
+			<input v-model="editTitle"
+				v-focus
+				type="text"
+				required>
 			<input type="submit" value="" class="icon-confirm">
 			<Actions><ActionButton icon="icon-close" @click.stop.prevent="cancelEdit" /></Actions>
 		</form>

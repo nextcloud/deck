@@ -94,15 +94,16 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		return $board;
 	}
 
-	public function findAllForUser(string $userId, int $since = -1, $includeArchived = true): array {
-		$useCache = ($since === -1 && $includeArchived === true);
+	public function findAllForUser(string $userId, ?int $since = null, bool $includeArchived = true, ?int $before = null,
+								   ?string $term = null): array {
+		$useCache = ($since === -1 && $includeArchived === true && $before === null && $term === null);
 		if (!isset($this->userBoardCache[$userId]) || !$useCache) {
 			$groups = $this->groupManager->getUserGroupIds(
 				$this->userManager->get($userId)
 			);
-			$userBoards = $this->findAllByUser($userId, null, null, $since, $includeArchived);
-			$groupBoards = $this->findAllByGroups($userId, $groups, null, null, $since, $includeArchived);
-			$circleBoards = $this->findAllByCircles($userId, null, null, $since, $includeArchived);
+			$userBoards = $this->findAllByUser($userId, null, null, $since, $includeArchived, $before, $term);
+			$groupBoards = $this->findAllByGroups($userId, $groups, null, null, $since, $includeArchived, $before, $term);
+			$circleBoards = $this->findAllByCircles($userId, null, null, $since, $includeArchived, $before, $term);
 			$allBoards = array_unique(array_merge($userBoards, $groupBoards, $circleBoards));
 			if ($useCache) {
 				$this->userBoardCache[$userId] = $allBoards;
@@ -120,19 +121,46 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	 * @param null $offset
 	 * @return array
 	 */
-	public function findAllByUser($userId, $limit = null, $offset = null, $since = -1, $includeArchived = true) {
+	public function findAllByUser(string $userId, ?int $limit = null, ?int $offset = null, ?int $since = null,
+								  bool $includeArchived = true, ?int $before = null, ?string $term = null) {
 		// FIXME: One moving to QBMapper we should allow filtering the boards probably by method chaining for additional where clauses
-		$sql = 'SELECT id, title, owner, color, archived, deleted_at, 0 as shared, last_modified FROM `*PREFIX*deck_boards` WHERE owner = ? AND last_modified > ?';
+		$sql = 'SELECT id, title, owner, color, archived, deleted_at, 0 as shared, last_modified FROM `*PREFIX*deck_boards` WHERE owner = ?';
+		$params = [$userId];
 		if (!$includeArchived) {
 			$sql .= ' AND NOT archived AND deleted_at = 0';
+		}
+		if ($since !== null) {
+			$sql .= ' AND last_modified > ?';
+			$params[] = $since;
+		}
+		if ($before !== null) {
+			$sql .= ' AND last_modified < ?';
+			$params[] = $before;
+		}
+		if ($term !== null) {
+			$sql .= ' AND lower(title) LIKE ?';
+			$params[] = '%' . $term . '%';
 		}
 		$sql .= ' UNION ' .
 			'SELECT boards.id, title, owner, color, archived, deleted_at, 1 as shared, last_modified FROM `*PREFIX*deck_boards` as boards ' .
-			'JOIN `*PREFIX*deck_board_acl` as acl ON boards.id=acl.board_id WHERE acl.participant=? AND acl.type=? AND boards.owner != ? AND last_modified > ?';
+			'JOIN `*PREFIX*deck_board_acl` as acl ON boards.id=acl.board_id WHERE acl.participant=? AND acl.type=? AND boards.owner != ?';
+		array_push($params, $userId, Acl::PERMISSION_TYPE_USER, $userId);
 		if (!$includeArchived) {
 			$sql .= ' AND NOT archived AND deleted_at = 0';
 		}
-		$entries = $this->findEntities($sql, [$userId, $since, $userId, Acl::PERMISSION_TYPE_USER, $userId, $since], $limit, $offset);
+		if ($since !== null) {
+			$sql .= ' AND last_modified > ?';
+			$params[] = $since;
+		}
+		if ($before !== null) {
+			$sql .= ' AND last_modified < ?';
+			$params[] = $before;
+		}
+		if ($term !== null) {
+			$sql .= ' AND lower(title) LIKE ?';
+			$params[] = '%' . $term . '%';
+		}
+		$entries = $this->findEntities($sql, $params, $limit, $offset);
 		/* @var Board $entry */
 		foreach ($entries as $entry) {
 			$acl = $this->aclMapper->findAll($entry->id);
@@ -155,12 +183,14 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	 * @param null $offset
 	 * @return array
 	 */
-	public function findAllByGroups($userId, $groups, $limit = null, $offset = null, $since = -1,$includeArchived = true) {
+	public function findAllByGroups(string $userId, array $groups, ?int $limit = null, ?int $offset = null, ?int $since = null,
+									bool $includeArchived = true, ?int $before = null, ?string $term = null) {
 		if (count($groups) <= 0) {
 			return [];
 		}
 		$sql = 'SELECT boards.id, title, owner, color, archived, deleted_at, 2 as shared, last_modified FROM `*PREFIX*deck_boards` as boards ' .
 			'INNER JOIN `*PREFIX*deck_board_acl` as acl ON boards.id=acl.board_id WHERE owner != ? AND type=? AND (';
+		$params = [$userId, Acl::PERMISSION_TYPE_GROUP];
 		for ($i = 0, $iMax = count($groups); $i < $iMax; $i++) {
 			$sql .= 'acl.participant = ? ';
 			if (count($groups) > 1 && $i < count($groups) - 1) {
@@ -168,10 +198,23 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 			}
 		}
 		$sql .= ')';
+		array_push($params, ...$groups);
 		if (!$includeArchived) {
 			$sql .= ' AND NOT archived AND deleted_at = 0';
 		}
-		$entries = $this->findEntities($sql, array_merge([$userId, Acl::PERMISSION_TYPE_GROUP], $groups), $limit, $offset);
+		if ($since !== null) {
+			$sql .= ' AND last_modified > ?';
+			$params[] = $since;
+		}
+		if ($before !== null) {
+			$sql .= ' AND last_modified < ?';
+			$params[] = $before;
+		}
+		if ($term !== null) {
+			$sql .= ' AND lower(title) LIKE ?';
+			$params[] = '%' . $term . '%';
+		}
+		$entries = $this->findEntities($sql, $params, $limit, $offset);
 		/* @var Board $entry */
 		foreach ($entries as $entry) {
 			$acl = $this->aclMapper->findAll($entry->id);
@@ -180,7 +223,8 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		return $entries;
 	}
 
-	public function findAllByCircles($userId, $limit = null, $offset = null, $since = -1,$includeArchived = true) {
+	public function findAllByCircles(string $userId, ?int $limit = null, ?int $offset = null, ?int $since = null,
+									 bool $includeArchived = true, ?int $before = null, ?string $term = null) {
 		if (!$this->circlesEnabled) {
 			return [];
 		}
@@ -193,6 +237,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 
 		$sql = 'SELECT boards.id, title, owner, color, archived, deleted_at, 2 as shared, last_modified FROM `*PREFIX*deck_boards` as boards ' .
 			'INNER JOIN `*PREFIX*deck_board_acl` as acl ON boards.id=acl.board_id WHERE owner != ? AND type=? AND (';
+		$params = [$userId, Acl::PERMISSION_TYPE_CIRCLE];
 		for ($i = 0, $iMax = count($circles); $i < $iMax; $i++) {
 			$sql .= 'acl.participant = ? ';
 			if (count($circles) > 1 && $i < count($circles) - 1) {
@@ -200,10 +245,23 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 			}
 		}
 		$sql .= ')';
+		array_push($params, ...$circles);
 		if (!$includeArchived) {
 			$sql .= ' AND NOT archived AND deleted_at = 0';
 		}
-		$entries = $this->findEntities($sql, array_merge([$userId, Acl::PERMISSION_TYPE_CIRCLE], $circles), $limit, $offset);
+		if ($since !== null) {
+			$sql .= ' AND last_modified > ?';
+			$params[] = $since;
+		}
+		if ($before !== null) {
+			$sql .= ' AND last_modified < ?';
+			$params[] = $before;
+		}
+		if ($term !== null) {
+			$sql .= ' AND lower(title) LIKE ?';
+			$params[] = '%' . $term . '%';
+		}
+		$entries = $this->findEntities($sql, $params, $limit, $offset);
 		/* @var Board $entry */
 		foreach ($entries as $entry) {
 			$acl = $this->aclMapper->findAll($entry->id);
