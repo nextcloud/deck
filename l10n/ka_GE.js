@@ -35,6 +35,8 @@ OC.L10N.register(
     "Created" : "შექმნილია",
     "Due date" : "დროისთვის",
     "Remove due date" : "მოაშორეთ დანიშნულების დრო",
+    "Today" : "დღეს",
+    "Tomorrow" : "ხვალ",
     "Save" : "შენახვა",
     "Reply" : "პასუხი",
     "Update" : "განახლება",
@@ -46,8 +48,6 @@ OC.L10N.register(
     "Shared with you" : "გაზიარებული თქვენთან",
     "Board details" : "დაფის დეტალები",
     "Edit board" : "დაფის შეცვლა",
-    "Today" : "დღეს",
-    "Tomorrow" : "ხვალ",
     "This week" : "ამ კვირაში"
 },
 "nplurals=2; plural=(n!=1);");

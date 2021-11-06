@@ -12,8 +12,8 @@ OC.L10N.register(
     "Delete" : "﻿ಅಳಿಸಿ",
     "Edit" : "ಸಂಪಾದಿಸು",
     "Modified" : "﻿ಬದಲಾಯಿಸಿದ",
+    "Today" : "Today",
     "Save" : "﻿ಉಳಿಸಿ",
-    "Shared with you" : "Shared with you",
-    "Today" : "Today"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=2; plural=(n > 1);");

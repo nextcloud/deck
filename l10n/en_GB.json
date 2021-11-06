@@ -39,6 +39,8 @@
     "Created" : "Created",
     "Due date" : "Due date",
     "Remove due date" : "Remove due date",
+    "Today" : "Today",
+    "Tomorrow" : "Tomorrow",
     "Save" : "Save",
     "Reply" : "Reply",
     "Update" : "Update",
@@ -52,8 +54,6 @@
     "Shared with you" : "Shared with you",
     "Board details" : "Board details",
     "Edit board" : "Edit board",
-    "Today" : "Today",
-    "Tomorrow" : "Tomorrow",
     "This week" : "This week"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

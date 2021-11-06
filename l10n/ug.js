@@ -13,11 +13,11 @@ OC.L10N.register(
     "Delete" : "ئۆچۈر",
     "Edit" : "تەھرىر",
     "Modified" : "ئۆزگەرتكەن",
+    "Today" : "بۈگۈن",
     "Save" : "ساقلا",
     "Reply" : "جاۋاب قايتۇر",
     "Update" : "يېڭىلا",
     "Description" : "چۈشەندۈرۈش",
-    "Shared with you" : "Shared with you",
-    "Today" : "بۈگۈن"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=2; plural=(n != 1);");

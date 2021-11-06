@@ -31,6 +31,8 @@ OC.L10N.register(
     "Created" : "Creado",
     "Due date" : "Fecha de vencimiento",
     "Select Date" : "Seleccionar fecha",
+    "Today" : "Hoy",
+    "Tomorrow" : "Mañana",
     "Save" : "Guardar",
     "Reply" : "Responder",
     "Update" : "Actualizar",
@@ -45,8 +47,6 @@ OC.L10N.register(
     "Clone board" : "Clonar Tablero",
     "Delete board" : "Eliminar Tablero",
     "An error occurred" : "Ocurrió un error",
-    "Today" : "Hoy",
-    "Tomorrow" : "Mañana",
     "This week" : "Esta semana"
 },
 "nplurals=2; plural=(n != 1);");

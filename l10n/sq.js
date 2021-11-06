@@ -37,6 +37,8 @@ OC.L10N.register(
     "Due date" : "Data e vendosur",
     "Remove due date" : "Hiq datën e mbarimit",
     "Select Date" : "Zgjidhni Datën",
+    "Today" : "Sot",
+    "Tomorrow" : "Nesër",
     "Save" : "Ruaj",
     "Reply" : "Përgjigju",
     "Update" : "Përditëso",
@@ -48,8 +50,6 @@ OC.L10N.register(
     "Shared with you" : "E ndarë me ju",
     "Board details" : "Detajet e Tabeles ",
     "Edit board" : "Tabela e editimeve",
-    "Today" : "Sot",
-    "Tomorrow" : "Nesër",
     "This week" : "Këtë javë"
 },
 "nplurals=2; plural=(n != 1);");

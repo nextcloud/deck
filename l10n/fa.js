@@ -102,6 +102,8 @@ OC.L10N.register(
     "No comments yet. Begin the discussion!" : "هنوز نظری وجود ندارد. بحثی را آغاز کنید!",
     "Due date" : "موعد مقرر",
     "Select Date" : "تاریخ را انتخاب کنید",
+    "Today" : "Today",
+    "Tomorrow" : "فردا",
     "Save" : "ذخیره",
     "The comment cannot be empty." : "نظر نمی‌تواند خالی باشد.",
     "The comment cannot be longer than 1000 characters." : "نظر نمی‌تواند طولانی‌تر از ۱۰۰۰ حرف باشد.",
@@ -127,8 +129,6 @@ OC.L10N.register(
     "Shared with you" : "با شما به اشتراک گذاشته شده است",
     "Edit board" : "ویرایش تخته",
     "An error occurred" : "خطایی روی داد",
-    "Today" : "Today",
-    "Tomorrow" : "فردا",
     "This week" : "این هفته"
 },
 "nplurals=2; plural=(n > 1);");

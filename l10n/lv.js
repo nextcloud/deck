@@ -30,6 +30,8 @@ OC.L10N.register(
     "Created" : "Izveidots",
     "Due date" : "Izpildes datums",
     "Select Date" : "Izvēlieties datumu",
+    "Today" : "Šodien",
+    "Tomorrow" : "Rīt",
     "Save" : "Saglabāt",
     "Reply" : "Atbildēt",
     "Update" : "Atjaunināt",
@@ -38,8 +40,6 @@ OC.L10N.register(
     "seconds ago" : "sekundēm",
     "Shared with you" : "Koplietots ar tevi",
     "An error occurred" : "Gadījās kļūda",
-    "Today" : "Šodien",
-    "Tomorrow" : "Rīt",
     "This week" : "Šonedēļ"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

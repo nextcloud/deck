@@ -20,6 +20,8 @@ OC.L10N.register(
     "Edit" : "Editează",
     "Comments" : "Comentarii",
     "Modified" : "Modificat",
+    "Today" : "Azi",
+    "Tomorrow" : "Mâine",
     "Save" : "Salvează",
     "Reply" : "Răspunde",
     "Update" : "Actualizare",
@@ -27,8 +29,6 @@ OC.L10N.register(
     "(group)" : "(grup)",
     "seconds ago" : "secunde în urmă",
     "Shared with you" : "Partajat cu tine",
-    "Today" : "Azi",
-    "Tomorrow" : "Mâine",
     "This week" : "Săptămâna asta"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

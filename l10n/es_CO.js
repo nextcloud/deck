@@ -39,6 +39,8 @@ OC.L10N.register(
     "Created" : "Creado",
     "Due date" : "Fecha de vencimiento",
     "Remove due date" : "Eliminar fecha de expiración",
+    "Today" : "Hoy",
+    "Tomorrow" : "Mañana",
     "Save" : "Guardar",
     "Reply" : "Responder",
     "Update" : "Actualizar",
@@ -50,8 +52,6 @@ OC.L10N.register(
     "Shared with you" : "Compartido con usted",
     "Board details" : "Detalles del tablero",
     "Edit board" : "Editar el tablero",
-    "Today" : "Hoy",
-    "Tomorrow" : "Mañana",
     "This week" : "Esta semana"
 },
 "nplurals=2; plural=(n != 1);");

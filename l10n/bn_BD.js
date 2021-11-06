@@ -15,14 +15,14 @@ OC.L10N.register(
     "Delete" : "মুছে",
     "Edit" : "সম্পাদনা",
     "Modified" : "পরিবর্তিত",
+    "Today" : "আজ",
+    "Tomorrow" : "আগামীকাল",
     "Save" : "সংরক্ষণ",
     "Reply" : "জবাব",
     "Update" : "পরিবর্ধন",
     "Description" : "বিবরণ",
     "(group)" : "(গোষ্ঠি)",
     "seconds ago" : "সেকেন্ড পূর্বে",
-    "Shared with you" : "Shared with you",
-    "Today" : "আজ",
-    "Tomorrow" : "আগামীকাল"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=2; plural=(n != 1);");

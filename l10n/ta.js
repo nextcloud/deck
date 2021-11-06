@@ -14,11 +14,11 @@ OC.L10N.register(
     "Delete" : "நீக்குக",
     "Edit" : "தொகுக்க",
     "Modified" : "மாற்றப்பட்டது",
+    "Today" : "இன்று",
     "Save" : "சேமிக்க ",
     "Update" : "இற்றைப்படுத்தல்",
     "Description" : "விவரிப்பு",
     "seconds ago" : "செக்கன்களுக்கு முன்",
-    "Shared with you" : "Shared with you",
-    "Today" : "இன்று"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=2; plural=(n != 1);");
