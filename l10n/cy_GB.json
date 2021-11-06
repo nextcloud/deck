@@ -14,13 +14,13 @@
     "Edit" : "Golygu",
     "Modified" : "Addaswyd",
     "Select Date" : "Dewis Dyddiad",
+    "Today" : "Heddiw",
     "Save" : "Cadw",
     "Update" : "Diweddaru",
     "Description" : "Disgrifiad",
     "seconds ago" : "eiliad yn ôl",
     "Shared with you" : "Shared with you",
     "An error occurred" : "Digwyddodd gwall",
-    "Today" : "Heddiw",
     "This week" : "Wythnos yma"
 },"pluralForm" :"nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;"
 }

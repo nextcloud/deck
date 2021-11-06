@@ -12,10 +12,10 @@ OC.L10N.register(
     "Delete" : "Padam",
     "Edit" : "Sunting",
     "Modified" : "Dimodifikasi",
+    "Today" : "Hari ini",
     "Save" : "Simpan",
     "Update" : "Kemaskini",
     "Description" : "Keterangan",
-    "Shared with you" : "Shared with you",
-    "Today" : "Hari ini"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=1; plural=0;");

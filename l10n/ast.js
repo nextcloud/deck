@@ -30,6 +30,8 @@ OC.L10N.register(
     "Comments" : "Comentarios",
     "Modified" : "Modificóse'l",
     "Created" : "Creóse",
+    "Today" : "Güei",
+    "Tomorrow" : "Mañana",
     "Save" : "Guardar",
     "Reply" : "Rempuesta",
     "Update" : "Anovar",
@@ -37,8 +39,6 @@ OC.L10N.register(
     "(group)" : "(grupu)",
     "seconds ago" : "hai segundos",
     "Shared with you" : "Shared with you",
-    "Today" : "Güei",
-    "Tomorrow" : "Mañana",
     "This week" : "Esta selmana"
 },
 "nplurals=2; plural=(n != 1);");

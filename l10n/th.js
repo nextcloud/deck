@@ -18,14 +18,14 @@ OC.L10N.register(
     "Comments" : "ความคิดเห็น",
     "Modified" : "แก้ไขเมื่อ",
     "Due date" : "วันที่ครบกำหนด",
+    "Today" : "วันนี้",
+    "Tomorrow" : "วันพรุ่งนี้",
     "Save" : "บันทึก",
     "Reply" : "ตอบกลับ",
     "Update" : "อัพเดท",
     "Description" : "รายละเอียด",
     "(group)" : "(กลุ่ม)",
     "seconds ago" : "วินาที ก่อนหน้านี้",
-    "Shared with you" : "Shared with you",
-    "Today" : "วันนี้",
-    "Tomorrow" : "วันพรุ่งนี้"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=1; plural=0;");

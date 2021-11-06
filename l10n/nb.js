@@ -106,6 +106,8 @@ OC.L10N.register(
     "Due date" : "Forfallsdato",
     "Remove due date" : "Fjern forfallsdato",
     "Select Date" : "Velg dato",
+    "Today" : "I dag",
+    "Tomorrow" : "I morgen",
     "Save" : "Lagre",
     "Reply" : "Svar",
     "Update" : "Oppdater",
@@ -123,8 +125,6 @@ OC.L10N.register(
     "Board details" : "Forumseksjonsdetaljer",
     "Edit board" : "Rediger tavle",
     "An error occurred" : "En feil oppstod",
-    "Today" : "I dag",
-    "Tomorrow" : "I morgen",
     "This week" : "Denne uken",
     "Link to a board" : "Lenke til tavle",
     "Maximum file size of {size} exceeded" : "Maksimal størrelse for filer på {size} er overskredet"

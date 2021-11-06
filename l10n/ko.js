@@ -74,6 +74,8 @@ OC.L10N.register(
     "Due date" : "만료 날짜",
     "Remove due date" : "만료 날짜 삭제",
     "Select Date" : "날짜 선택",
+    "Today" : "오늘",
+    "Tomorrow" : "내일",
     "Save" : "저장",
     "Reply" : "답장",
     "Update" : "업데이트",
@@ -92,8 +94,6 @@ OC.L10N.register(
     "An error occurred" : "오류가 발생함",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "정말로 보드 {title}을 지우시겠습니까? 보드의 모든 데이터가 삭제됩니다.",
     "Delete the board?" : "보드를 삭제합니까?",
-    "Today" : "오늘",
-    "Tomorrow" : "내일",
     "This week" : "이번 주",
     "Something went wrong" : "잘못된 접근"
 },
