@@ -212,6 +212,8 @@ OC.L10N.register(
     "Select Date" : "Hautatu data",
     "Today" : "Gaur",
     "Tomorrow" : "Bihar",
+    "Next week" : "Hurrengo astea",
+    "Next month" : "Hurrengo hilabetea",
     "Save" : "Gorde",
     "The comment cannot be empty." : "Iruzkina ezin da hutsik egon.",
     "The comment cannot be longer than 1000 characters." : "Iruzkina ezin da 1000 karaktere baino luzeagoa izan.",

@@ -212,6 +212,8 @@ OC.L10N.register(
     "Select Date" : "Tarih Seçin",
     "Today" : "Bugün",
     "Tomorrow" : "Yarın",
+    "Next week" : "Sonraki hafta",
+    "Next month" : "Sonraki ay",
     "Save" : "Kaydet",
     "The comment cannot be empty." : "Yorum boş olamaz.",
     "The comment cannot be longer than 1000 characters." : "Yorum 1000 karakterden uzun olamaz.",

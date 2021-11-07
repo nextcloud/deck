@@ -210,6 +210,8 @@
     "Select Date" : "Vybrat datum",
     "Today" : "Dnes",
     "Tomorrow" : "Zítra",
+    "Next week" : "Příští týden",
+    "Next month" : "Příští měsíc",
     "Save" : "Uložit",
     "The comment cannot be empty." : "Komentář je třeba vyplnit.",
     "The comment cannot be longer than 1000 characters." : "Délka komentáře může být nejvýše 1 000 znaků.",
