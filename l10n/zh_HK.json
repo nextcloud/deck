@@ -210,6 +210,8 @@
     "Select Date" : "選擇日期",
     "Today" : "今日",
     "Tomorrow" : "明日",
+    "Next week" : "下星期",
+    "Next month" : "下個月",
     "Save" : "保存",
     "The comment cannot be empty." : "意見不能為空。",
     "The comment cannot be longer than 1000 characters." : "意見不能超過 1000 個字符。",

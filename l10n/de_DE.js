@@ -212,6 +212,8 @@ OC.L10N.register(
     "Select Date" : "Datum auswählen",
     "Today" : "Heute",
     "Tomorrow" : "Morgen",
+    "Next week" : "Nächste Woche",
+    "Next month" : "Nächsten Monat",
     "Save" : "Speichern",
     "The comment cannot be empty." : "Der Kommentar darf nicht leer sein.",
     "The comment cannot be longer than 1000 characters." : "Der Kommentar darf nicht länger als 1000 Zeichen sein.",
