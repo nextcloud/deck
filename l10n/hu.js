@@ -212,6 +212,8 @@ OC.L10N.register(
     "Select Date" : "Dátum kiválasztása",
     "Today" : "Ma",
     "Tomorrow" : "Holnap",
+    "Next week" : "Következő hét",
+    "Next month" : "Következő hónap",
     "Save" : "Mentés",
     "The comment cannot be empty." : "A hozzászólás nem lehet üres.",
     "The comment cannot be longer than 1000 characters." : "A megjegyzés nem lehet 1000 karakternél hosszabb.",
