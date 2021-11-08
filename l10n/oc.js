@@ -17,6 +17,8 @@ OC.L10N.register(
     "Delete" : "Suprimir",
     "Edit" : "Modificar",
     "Upload new files" : "Enviar fichièrs novèls",
+    "Today" : "Uèi",
+    "Tomorrow" : "Deman",
     "Save" : "Salvar",
     "Cancel reply" : "Anullar la responsa",
     "Reply" : "Respondre",
@@ -24,8 +26,6 @@ OC.L10N.register(
     "Description" : "Descripcion",
     "seconds ago" : "fa qualques segondas",
     "Shared with you" : "Shared with you",
-    "Today" : "Uèi",
-    "Tomorrow" : "Deman",
     "Create a card" : "Crear una carta"
 },
 "nplurals=2; plural=(n > 1);");

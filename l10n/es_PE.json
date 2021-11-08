@@ -32,6 +32,8 @@
     "Created" : "Creado",
     "Due date" : "Fecha de vencimiento",
     "Remove due date" : "Eliminar fecha de expiración",
+    "Today" : "Hoy",
+    "Tomorrow" : "Mañana",
     "Save" : "Guardar",
     "Reply" : "Responder",
     "Update" : "Actualizar",
@@ -43,8 +45,6 @@
     "Shared with you" : "Compartido con usted",
     "Board details" : "Detalles del tablero",
     "Edit board" : "Editar el tablero",
-    "Today" : "Hoy",
-    "Tomorrow" : "Mañana",
     "This week" : "Esta semana"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

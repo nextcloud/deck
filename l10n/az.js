@@ -15,14 +15,14 @@ OC.L10N.register(
     "Delete" : "Sil",
     "Edit" : "Dəyişiklik et",
     "Modified" : "Dəyişdirildi",
+    "Today" : "Bu gün",
+    "Tomorrow" : "Sabah",
     "Save" : "Saxla",
     "Reply" : "Cavab",
     "Update" : "Yenilənmə",
     "Description" : "Açıqlanma",
     "(group)" : "(qrup)",
     "seconds ago" : "saniyələr öncə",
-    "Shared with you" : "Shared with you",
-    "Today" : "Bu gün",
-    "Tomorrow" : "Sabah"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=2; plural=(n != 1);");

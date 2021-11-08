@@ -21,6 +21,8 @@ OC.L10N.register(
     "Modified" : "Muudetud",
     "Created" : "Loodud",
     "Due date" : "Tähtaeg",
+    "Today" : "Täna",
+    "Tomorrow" : "Homme",
     "Save" : "Salvesta",
     "Reply" : "Vasta",
     "Update" : "Uuenda",
@@ -29,8 +31,6 @@ OC.L10N.register(
     "Delete card" : "Kustuta kaart",
     "seconds ago" : "sekundit tagasi",
     "Shared with you" : "Sinuga jagatud",
-    "An error occurred" : "Tekkis tõrge",
-    "Today" : "Täna",
-    "Tomorrow" : "Homme"
+    "An error occurred" : "Tekkis tõrge"
 },
 "nplurals=2; plural=(n != 1);");

@@ -41,6 +41,8 @@ OC.L10N.register(
     "Created" : "Created",
     "Due date" : "Due date",
     "Remove due date" : "Remove due date",
+    "Today" : "Today",
+    "Tomorrow" : "Tomorrow",
     "Save" : "Save",
     "Reply" : "Reply",
     "Update" : "Update",
@@ -54,8 +56,6 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Board details" : "Board details",
     "Edit board" : "Edit board",
-    "Today" : "Today",
-    "Tomorrow" : "Tomorrow",
     "This week" : "This week"
 },
 "nplurals=2; plural=(n != 1);");

@@ -24,6 +24,8 @@ OC.L10N.register(
     "Comments" : "Сэтгэгдлүүд",
     "Modified" : "Өөрчлөгдсөн",
     "Created" : "Үүсгэсэн",
+    "Today" : "өнөөдөр",
+    "Tomorrow" : "маргааш",
     "Save" : "Хадгалах",
     "Reply" : "хариулт",
     "Update" : "Шинэчлэх",
@@ -31,8 +33,6 @@ OC.L10N.register(
     "(group)" : "(бүлэг)",
     "seconds ago" : "хоёрдахь өмнө",
     "Shared with you" : "тантай хуваалцсан",
-    "Today" : "өнөөдөр",
-    "Tomorrow" : "маргааш",
     "This week" : "7 хоног"
 },
 "nplurals=2; plural=(n != 1);");

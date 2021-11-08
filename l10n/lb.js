@@ -16,13 +16,13 @@ OC.L10N.register(
     "Edit" : "Änneren",
     "Comments" : "Kommentarer",
     "Modified" : "Geännert",
+    "Today" : "Haut",
+    "Tomorrow" : "Muer",
     "Save" : "Späicheren",
     "Reply" : "Äntwerten",
     "Update" : "Update",
     "Description" : "Beschreiwung",
     "seconds ago" : "Sekonnen hier",
-    "Shared with you" : "Mat dir gedeelt",
-    "Today" : "Haut",
-    "Tomorrow" : "Muer"
+    "Shared with you" : "Mat dir gedeelt"
 },
 "nplurals=2; plural=(n != 1);");

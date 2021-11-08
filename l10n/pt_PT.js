@@ -37,6 +37,8 @@ OC.L10N.register(
     "Created" : "Criado",
     "Due date" : "Data limite",
     "Select Date" : "Escolha a data",
+    "Today" : "Hoje",
+    "Tomorrow" : "Amanhã",
     "Save" : "Guardar",
     "Reply" : "Resposta",
     "Update" : "Atualizar",
@@ -50,8 +52,6 @@ OC.L10N.register(
     "Board details" : "Detalhes do quadro",
     "Edit board" : "Editar quadro",
     "An error occurred" : "Ocorreu um erro",
-    "Today" : "Hoje",
-    "Tomorrow" : "Amanhã",
     "This week" : "Esta semana"
 },
 "nplurals=2; plural=(n != 1);");
