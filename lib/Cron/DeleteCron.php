@@ -27,6 +27,7 @@ namespace OCA\Deck\Cron;
 use OC\BackgroundJob\Job;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\CardMapper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\Service\AttachmentService;
 
