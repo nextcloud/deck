@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.5.4
+
+### Fixed
+
+- #3378 Fix menu button position in card modal
+- #3392 Use displayname instead of uid for mentions (reopened against master)
+- #3361 Improve combined search @eneiluj
+- #3381 Extend drag-and-drop zone in card sidebar @Artem4590
+- #3366 Fix optional parameter order
+- #3407 Keep exceptions http response generic
+
+
 ## 1.5.3
 
 ### Fied
