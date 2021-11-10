@@ -173,7 +173,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			->andWhere($qb->expr()->lt('deleted_at', $qb->createNamedParameter($timeLimit, IQueryBuilder::PARAM_INT_ARRAY)))
 			->orderBy('deleted_at')
 			->setMaxResults($limit);
-		return $qb;
+		return $this->findEntities($qb);
 	}
 
 	public function findDeleted($boardId, $limit = null, $offset = null) {
