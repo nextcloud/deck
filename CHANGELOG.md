@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.4.6
+
+### Fixed
+
+- #3379 Fix menu button position in card modal
+- #3360 Improve combined search @eneiluj
+- #3367 Fix optional parameter order
+- #3393 Use displayname instead of uid for mentions
+- #3359 Rich object string parameters for notifications @juliushaertl
+- #3385 Extend drag-and-drop zone in card sidebar @Artem4590
+- #3408 Keep exceptions http response generic
+
+
 ## 1.4.5
 
 ### Fixed
