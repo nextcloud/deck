@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.10
+
+### Fixed
+
+- #3394 Use displayname instead of uid for mentions (reopened against master)
+
+### Other
+
+- #3409 Keep exceptions http response generic
+
 
 ## 1.2.9
 
