@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.2.11
+
+### Fixed
+
+- Fix release asset build
+
 ## 1.2.10
 
 ### Fixed
