@@ -1,6 +1,40 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.6.0-beta1
+
+### Added
+
+- #3177 Use async import for vue component on collections entrypoint @juliushaertl
+- #2791 Open description links in new tab @fm-sys
+- #3344 Improve combined search @eneiluj
+- #3362 Improve search performance @eneiluj
+- #2710 Due date shortcuts in the datepicker @jakobroehrl
+
+### Fixed
+
+- #3161 Reduce duplicate queries when fetching user boards an permissions @juliushaertl
+- #3151 Always log generic exceptions @juliushaertl
+- #3217 Move circle checks to a unified service and improve member checks @juliushaertl
+- #3225 Check for null value to avoid TypeError in the group manager @juliushaertl
+- #3263 Defer obtaining the user session in the config service  @juliushaertl
+- #3294 Fix print style issues @weeman1337
+- #3299 Return false instead of throwing when getting calendar setting @juliushaertl
+- #3298 Delete file shares through attachments API @juliushaertl
+- #3343 Fix search pagination cursor @eneiluj
+- #3326 add autofocus on board edit @weeman1337
+- #3323 Extend drag-and-drop zone in card sidebar @old-green-frog
+- #3364 Fix optional parameter order @juliushaertl
+- #3324 Fix menu button position in card modal @valerydmitrieva
+- #3391 Use displayname instead of uid for mentions (reopened against master) @kffl
+- #3316 Additional check for stacks @juliushaertl
+- #3357 Revert "Fix search pagination cursor" @juliushaertl
+- #3327 Do not show both bullets and checkboxes for checklists @Themanwhosmellslikesugar
+- #3375 Show absolute dates when printing @weeman1337
+- #3376 Print assignee names @weeman1337
+- #3384 Keep exceptions http response generic @juliushaertl
+
+
 ## 1.4.0 - 2021-04-13
 
 ### Added
