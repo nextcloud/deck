@@ -212,6 +212,8 @@ OC.L10N.register(
     "Select Date" : "Vybrať dátum",
     "Today" : "Dnes",
     "Tomorrow" : "Zajtra",
+    "Next week" : "Nasledujúci týždeň",
+    "Next month" : "Nasledujúci mesiac",
     "Save" : "Uložiť",
     "The comment cannot be empty." : "Komentár nemôže byť prázdny.",
     "The comment cannot be longer than 1000 characters." : "Komentár nemôže byť dlhší ako 1000 znakov.",
