@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.5.5
+
+- Fix release asset build
+
 ## 1.5.4
 
 ### Fixed
