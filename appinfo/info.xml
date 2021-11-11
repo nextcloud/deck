@@ -16,7 +16,7 @@
 - 🚀 Get your project organized
 
 </description>
-    <version>1.6.0-beta1</version>
+    <version>1.7.0-alpha1</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
@@ -34,8 +34,8 @@
         <php min-version="7.3"/>
         <database min-version="9.4">pgsql</database>
         <database>sqlite</database>
-        <database min-version="5.5">mysql</database>
-        <nextcloud min-version="23" max-version="23"/>
+        <database min-version="8.0">mysql</database>
+        <nextcloud min-version="24" max-version="24"/>
     </dependencies>
     <background-jobs>
         <job>OCA\Deck\Cron\DeleteCron</job>
