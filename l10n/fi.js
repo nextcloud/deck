@@ -184,6 +184,8 @@ OC.L10N.register(
     "Select Date" : "Valitse päivä",
     "Today" : "Tänään",
     "Tomorrow" : "Huomenna",
+    "Next week" : "Seuraava viikko",
+    "Next month" : "Seuraava kuukausi",
     "Save" : "Tallenna",
     "The comment cannot be empty." : "Kommentti ei voi olla tyhjä.",
     "The comment cannot be longer than 1000 characters." : "Kommentin on oltava alle 1000 merkkiä pitkä.",
