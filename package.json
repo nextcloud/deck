@@ -74,7 +74,7 @@
 		"@nextcloud/browserslist-config": "^2.2.0",
 		"@nextcloud/eslint-config": "^6.1.0",
 		"@nextcloud/stylelint-config": "^1.0.0-beta.0",
-		"@nextcloud/webpack-vue-config": "^4.1.2",
+		"@nextcloud/webpack-vue-config": "^4.1.4",
 		"@relative-ci/agent": "^3.0.0",
 		"@vue/test-utils": "^1.2.2",
 		"jest": "^27.3.1",
