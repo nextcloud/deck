@@ -46,10 +46,8 @@ use OCA\Deck\Validators\BoardServiceValidator;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IDBConnection;
-use OCP\IGroupManager;
 use OCP\IURLGenerator;
 use OCP\IUser;
-use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -73,14 +71,12 @@ class BoardServiceTest extends TestCase {
 	private $cardMapper;
 	/** @var PermissionService */
 	private $permissionService;
+	/** @var AssignmentService */
+	private $assignmentService;
 	/** @var NotificationHelper */
 	private $notificationHelper;
 	/** @var AssignmentMapper */
 	private $assignedUsersMapper;
-	/** @var IUserManager */
-	private $userManager;
-	/** @var IUserManager */
-	private $groupManager;
 	/** @var ActivityManager */
 	private $activityManager;
 	/** @var ChangeHelper */
@@ -103,14 +99,13 @@ class BoardServiceTest extends TestCase {
 		$this->aclMapper = $this->createMock(AclMapper::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->stackMapper = $this->createMock(StackMapper::class);
-		$this->config = $this->createMock(IConfig::class);
 		$this->cardMapper = $this->createMock(CardMapper::class);
+		$this->config = $this->createMock(IConfig::class);
 		$this->labelMapper = $this->createMock(LabelMapper::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
+		$this->assignmentService = $this->createMock(AssignmentService::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
 		$this->assignedUsersMapper = $this->createMock(AssignmentMapper::class);
-		$this->userManager = $this->createMock(IUserManager::class);
-		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
@@ -128,10 +123,9 @@ class BoardServiceTest extends TestCase {
 			$this->labelMapper,
 			$this->aclMapper,
 			$this->permissionService,
+			$this->assignmentService,
 			$this->notificationHelper,
 			$this->assignedUsersMapper,
-			$this->userManager,
-			$this->groupManager,
 			$this->activityManager,
 			$this->eventDispatcher,
 			$this->changeHelper,
@@ -157,12 +151,6 @@ class BoardServiceTest extends TestCase {
 			->method('findAllForUser')
 			->with('admin')
 			->willReturn([$b1, $b2, $b3]);
-		$user = $this->createMock(IUser::class);
-		$this->groupManager->method('getUserGroupIds')
-			->willReturn(['a', 'b', 'c']);
-		$this->userManager->method('get')
-			->with($this->userId)
-			->willReturn($user);
 
 		$result = $this->service->findAll();
 		sort($result);

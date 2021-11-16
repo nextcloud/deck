@@ -135,11 +135,11 @@ class BoardController extends ApiController {
 
 	/**
 	 * @NoAdminRequired
-	 * @param $boardId
-	 * @return Board
 	 */
-	public function clone($boardId) {
-		return $this->boardService->clone($boardId, $this->userId);
+	public function clone(int $boardId, bool $withCards = false, bool $withAssignments = false, bool $withLabels = false, bool $withDueDate = false, bool $moveCardsToLeftStack = false, bool $restoreArchivedCards = false): DataResponse {
+		return new DataResponse(
+			$this->boardService->clone($boardId, $this->userId, $withCards, $withAssignments, $withLabels, $withDueDate, $moveCardsToLeftStack, $restoreArchivedCards)
+		);
 	}
 
 	/**
