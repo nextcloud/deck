@@ -15,6 +15,8 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\AttachmentMapper;
+use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\IPermissionMapper;
@@ -28,6 +30,7 @@ use OCA\Deck\Event\AclCreatedEvent;
 use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\Event\AclUpdatedEvent;
 use OCA\Deck\Event\BoardUpdatedEvent;
+use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Validators\BoardServiceValidator;
@@ -78,6 +81,7 @@ class BoardService {
 		LabelMapper $labelMapper,
 		AclMapper $aclMapper,
 		PermissionService $permissionService,
+		AssignmentService $assignmentService,
 		NotificationHelper $notificationHelper,
 		AssignmentMapper $assignedUsersMapper,
 		IUserManager $userManager,
@@ -99,6 +103,7 @@ class BoardService {
 		$this->aclMapper = $aclMapper;
 		$this->l10n = $l10n;
 		$this->permissionService = $permissionService;
+		$this->assignmentService = $assignmentService;
 		$this->notificationHelper = $notificationHelper;
 		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->userManager = $userManager;
@@ -526,7 +531,7 @@ class BoardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function clone($id, $userId) {
+	public function clone($id, $userId, $withCards = false, $withAssignments = false, $withLabels = false, $withDueDate = false, $moveCardsToLeftStack = false, $restoreArchivedCards = false) {
 		$this->boardServiceValidator->check(compact('id', 'userId'));
 
 		if (!$this->permissionService->canCreate()) {
@@ -535,6 +540,7 @@ class BoardService {
 
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 
+		/** @var Board $board */
 		$board = $this->boardMapper->find($id);
 		$newBoard = new Board();
 		$newBoard->setTitle($board->getTitle() . ' (' . $this->l10n->t('copy') . ')');
@@ -548,6 +554,16 @@ class BoardService {
 			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
 		]);
 		$this->boardMapper->insert($newBoard);
+
+		foreach ($this->aclMapper->findAll($board->getId()) as $acl) {
+			$this->addAcl($newBoard->getId(),
+				$acl->getType(),
+				$acl->getParticipant(),
+				$acl->getPermissionEdit(),
+				$acl->getPermissionShare(),
+				$acl->getPermissionManage());
+		}
+
 
 		$labels = $this->labelMapper->findAll($id);
 		foreach ($labels as $label) {
@@ -565,6 +581,12 @@ class BoardService {
 			$newStack->setBoardId($newBoard->getId());
 			$this->stackMapper->insert($newStack);
 		}
+
+		if ($withCards) {
+			$this->cloneCards($board, $newBoard, $withAssignments, $withLabels, $withDueDate, $moveCardsToLeftStack, $restoreArchivedCards);
+		}
+
+		return $newBoard;
 
 		return $this->find($newBoard->getId());
 	}
@@ -668,6 +690,88 @@ class BoardService {
 
 		return $boards;
 	}
+
+    private function cloneCards(Board $board, Board $newBoard, $withAssignments = false, $withLabels = false, $withDueDate = false, $moveCardsToLeftStack = false, $restoreArchivedCards = false) {
+		// TODO: Undelete cards
+		// TODO: Copy attachments (or not?)
+		// TODO: Copy comments (or not?)
+		// TODO: Create Test
+		// TODO: Move to specified column
+
+		/** @var Stack[] $stacks */
+		$stacks = $this->stackMapper->findAll($board->getId());
+		usort($stacks, function (Stack $a, Stack $b) {
+			return $a->getOrder() - $b->getOrder();
+		});
+
+		/** @var Stack[] $newStacks */
+		$newStacks = $this->stackMapper->findAll($newBoard->getId());
+		usort($stacks, function (Stack $a, Stack $b) {
+			return $a->getOrder() - $b->getOrder();
+		});
+
+		$i = 0;
+		foreach ($stacks as $stack) {
+			$cards = $this->cardMapper->findAll($stack->getId());
+			$archivedCards = $this->cardMapper->findAllArchived($stack->getId());
+
+			/** @var Card[] $cards */
+			$cards = array_merge($cards, $archivedCards);
+
+			foreach ($cards as $card) {
+				$targetStackId = $moveCardsToLeftStack ? $newStacks[0]->getId() : $newStacks[$i]->getId();
+
+				// Create a cloned card.
+				$newCard = new Card();
+				$newCard->setTitle($card->getTitle());
+				$newCard->setDescription($card->getDescription());
+				$newCard->setStackId($targetStackId);
+				$newCard->setType($card->getType());
+				$newCard->setOwner($card->getOwner());
+				$newCard->setOrder($card->getOrder());
+				$newCard->setDuedate($withDueDate ? $card->getDuedate() : NULL);
+				$newCard->setArchived($restoreArchivedCards ? false : $card->getArchived());
+//				$newCard->setDeletedAt($card->getDeletedAt());
+//				$newCard->setCommentsUnread($card->getCommentsUnread());
+//				$newCard->setCommentsCount($card->getCommentsCount());
+
+				$newCard->setRelatedStack($targetStackId);
+				$newCard->setRelatedBoard($newBoard->getId());
+
+				// Persist the cloned card.
+				$newCard = $this->cardMapper->insert($newCard);
+
+
+				// Copy labels.
+				if ($withLabels) {
+					$labels = $this->labelMapper->findAssignedLabelsForCard($card->getId());
+
+					foreach ($labels as $label) {
+						$newLabel = $this->labelMapper->findLabelByTitle($newBoard->getId(), $label->getTitle());
+						$this->cardMapper->assignLabel($newCard->getId(), $newLabel->getId());
+					}
+				}
+
+
+				// Copy assignments.
+				if ($withAssignments) {
+					$assignments = $this->assignedUsersMapper->findAll($card->getId());
+
+					foreach ($assignments as $assignment) {
+						$this->assignmentService->assignUser($newCard->getId(), $assignment->getParticipant(), $assignment->getType());
+					}
+				}
+
+
+				// Copied from CardService because CardService cannot be injected due to cyclic dependencies.
+				$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE);
+				$this->changeHelper->cardChanged($card->getId(), false);
+				$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($card));
+			}
+
+			$i++;
+		}
+    }
 
 	private function enrichWithStacks($board, $since = -1) {
 		$stacks = $this->stackMapper->findAll($board->getId(), null, null, $since);
