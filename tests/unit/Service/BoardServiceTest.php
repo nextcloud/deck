@@ -52,7 +52,8 @@ use OCP\IUser;
 use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class BoardServiceTest extends TestCase {
+class BoardServiceTest extends TestCase
+{
 
 	/** @var BoardService */
 	private $service;
@@ -70,6 +71,8 @@ class BoardServiceTest extends TestCase {
 	private $cardMapper;
 	/** @var PermissionService */
 	private $permissionService;
+	/** @var AssignmentService */
+	private $assignmentService;
 	/** @var NotificationHelper */
 	private $notificationHelper;
 	/** @var AssignmentMapper */
@@ -100,10 +103,12 @@ class BoardServiceTest extends TestCase {
 		$this->aclMapper = $this->createMock(AclMapper::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->stackMapper = $this->createMock(StackMapper::class);
+		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->config = $this->createMock(IConfig::class);
 		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->labelMapper = $this->createMock(LabelMapper::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
+		$this->assignmentService = $this->createMock(AssignmentService::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
 		$this->assignedUsersMapper = $this->createMock(AssignmentMapper::class);
 		$this->userManager = $this->createMock(IUserManager::class);
@@ -125,6 +130,7 @@ class BoardServiceTest extends TestCase {
 			$this->labelMapper,
 			$this->aclMapper,
 			$this->permissionService,
+			$this->assignmentService,
 			$this->notificationHelper,
 			$this->assignedUsersMapper,
 			$this->userManager,
