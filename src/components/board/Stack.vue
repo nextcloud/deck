@@ -162,7 +162,6 @@ export default {
 		]),
 		...mapState({
 			showArchived: state => state.showArchived,
-			cardDetailsInModal: state => state.cardDetailsInModal,
 		}),
 		cardsByStack() {
 			return this.$store.getters.cardsByStack(this.stack.id).filter((card) => {
@@ -174,6 +173,14 @@ export default {
 		},
 		dragHandleSelector() {
 			return this.canEdit ? null : '.no-drag'
+		},
+		cardDetailsInModal: {
+			get() {
+				return this.$store.getters.config('cardDetailsInModal')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+			},
 		},
 	},
 

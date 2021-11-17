@@ -132,7 +132,6 @@ export default {
 	computed: {
 		...mapState({
 			currentBoard: state => state.currentBoard,
-			cardDetailsInModal: state => state.cardDetailsInModal,
 		}),
 		...mapGetters(['canEdit']),
 		attachments() {
