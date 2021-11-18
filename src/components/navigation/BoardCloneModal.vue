@@ -37,12 +37,22 @@
 			<CheckboxRadioSwitch v-if="withCards" :checked.sync="withDueDate">
 				{{ t('deck', 'Copy due dates') }}
 			</CheckboxRadioSwitch>
-			<CheckboxRadioSwitch v-if="withCards" :checked.sync="moveCardsToLeftStack">
-				{{ t('deck', 'Move all cards to the first stack') }}
-			</CheckboxRadioSwitch>
-			<CheckboxRadioSwitch v-if="withCards" :checked.sync="restoreArchivedCards">
-				{{ t('deck', 'Restore archived cards') }}
-			</CheckboxRadioSwitch>
+			<div v-if="withCards" class="accordion" :class="{ 'is-open': accordionOpen }">
+				<div class="accordion__toggle" @click="accordionOpen = !accordionOpen">
+					<span class="accordion__toggle__icon">
+						‣
+					</span>
+					{{ t('deck', 'Advanced options') }}
+				</div>
+				<div v-if="accordionOpen" class="accordion__content">
+					<CheckboxRadioSwitch v-if="withCards" :checked.sync="moveCardsToLeftStack">
+						{{ t('deck', 'Move all cards to the first stack') }}
+					</CheckboxRadioSwitch>
+					<CheckboxRadioSwitch v-if="withCards" :checked.sync="restoreArchivedCards">
+						{{ t('deck', 'Restore archived cards') }}
+					</CheckboxRadioSwitch>
+				</div>
+			</div>
 			<div class="modal__buttons">
 				<button @click="cancel">
 					{{ t('deck', 'Cancel') }}
@@ -79,6 +89,7 @@ export default {
 			withDueDate: true,
 			moveCardsToLeftStack: false,
 			restoreArchivedCards: false,
+			accordionOpen: false,
 		}
 	},
 	methods: {
@@ -115,5 +126,18 @@ export default {
 .modal__buttons {
 	text-align: end;
 	margin-top: .5em;
+}
+
+.accordion__toggle {
+	margin: .5em 0;
+	cursor: pointer;
+}
+
+.accordion__toggle__icon {
+	display: inline-block;
+}
+
+.accordion.is-open .accordion__toggle__icon {
+	transform: rotate(90deg);
 }
 </style>
