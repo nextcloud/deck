@@ -20,7 +20,7 @@
   -
   -->
 <template>
-	<Modal size="small" @close="close">
+	<Modal size="small" @close="close(false)">
 		<div class="modal__content">
 			<h2 class="modal__title">
 				{{ t('deck', 'Clone {boardTitle}', {boardTitle: boardTitle}) }}
