@@ -31,7 +31,7 @@
 				</NcActionButton>
 				<NcActionButton v-if="canCreate && !board.archived"
 					:close-after-click="true"
-					@click="actionClone">
+					@click="showCloneModal">
 					<template #icon>
 						<CloneIcon :size="20" decorative />
 					</template>
@@ -63,6 +63,20 @@
 					{{ board.settings['notify-due'] === 'off' ? t('deck', 'Turn on due date reminders') : t('deck', 'Turn off due date reminders') }}
 				</NcActionButton>
 			</template>
+		</AppNavigationItem>
+		<div v-else-if="editing" class="board-edit">
+			<ColorPicker class="app-navigation-entry-bullet-wrapper" :value="`#${board.color}`" @input="updateColor">
+				<div :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
+			</ColorPicker>
+			<form @submit.prevent.stop="applyEdit">
+				<input v-model="editTitle"
+					v-focus
+					type="text"
+					required>
+				<input type="submit" value="" class="icon-confirm">
+				<Actions><ActionButton icon="icon-close" @click.stop.prevent="cancelEdit" /></Actions>
+			</form>
+		</div>
 
 			<!-- Due date reminder settings -->
 			<template v-if="isDueSubmenuActive">
@@ -122,6 +136,7 @@
 			<input type="submit" value="" class="icon-confirm">
 			<NcActions><NcActionButton icon="icon-close" @click.stop.prevent="cancelEdit" /></NcActions>
 		</form>
+		<BoardCloneModal v-if="cloneModalOpen" :board-title="board.title" @close="onCloseCloneModal" />
 	</div>
 </template>
 
@@ -134,6 +149,7 @@ import AccountIcon from 'vue-material-design-icons/Account.vue'
 import { loadState } from '@nextcloud/initial-state'
 
 const canCreateState = loadState('deck', 'canCreate')
+import BoardCloneModal from './BoardCloneModal'
 
 export default {
 	name: 'AppNavigationBoard',
@@ -146,6 +162,7 @@ export default {
 		AccountIcon,
 		ArchiveIcon,
 		CloneIcon,
+		BoardCloneModal,
 	},
 	directives: {
 		ClickOutside,
@@ -172,6 +189,7 @@ export default {
 			isDueSubmenuActive: false,
 			updateDueSetting: null,
 			canCreate: canCreateState,
+			cloneModalOpen: false,
 		}
 	},
 	computed: {
@@ -312,6 +330,26 @@ export default {
 		},
 		actionExport() {
 			this.boardApi.exportBoard(this.board)
+		},
+		showCloneModal() {
+			this.cloneModalOpen = true
+		},
+		async onCloseCloneModal(data) {
+			this.cloneModalOpen = false
+			if (data) {
+				this.loading = true
+				try {
+					const newBoard = await this.$store.dispatch('cloneBoard', {
+						boardData: this.board,
+						settings: data,
+					})
+					this.loading = false
+					this.$router.push({ name: 'board', params: { id: newBoard.id } })
+				} catch (e) {
+					OC.Notification.showTemporary(t('deck', 'An error occurred'))
+					console.error(e)
+				}
+			}
 		},
 	},
 }
