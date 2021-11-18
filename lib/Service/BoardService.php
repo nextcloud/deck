@@ -4,6 +4,7 @@
  *
  * @author Julius Härtl <jus@bitgrid.net>
  * @author Maxence Lange <maxence@artificial-owl.com>
+ * @author Max Bachhuber <max.bachhuber@bahuma.io>
  *
  * @license GNU AGPL version 3 or any later version
  *
