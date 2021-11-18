@@ -26,16 +26,16 @@
 				{{ t('deck', 'Clone {boardTitle}', {boardTitle: boardTitle}) }}
 			</h2>
 			<CheckboxRadioSwitch :checked.sync="withCards">
-				{{ t('deck', 'Copy cards') }}
+				{{ t('deck', 'Clone cards') }}
 			</CheckboxRadioSwitch>
 			<CheckboxRadioSwitch v-if="withCards" :checked.sync="withAssignments">
-				{{ t('deck', 'Copy assignments') }}
+				{{ t('deck', 'Clone assignments') }}
 			</CheckboxRadioSwitch>
 			<CheckboxRadioSwitch v-if="withCards" :checked.sync="withLabels">
-				{{ t('deck', 'Copy labels') }}
+				{{ t('deck', 'Clone labels') }}
 			</CheckboxRadioSwitch>
 			<CheckboxRadioSwitch v-if="withCards" :checked.sync="withDueDate">
-				{{ t('deck', 'Copy due dates') }}
+				{{ t('deck', 'Clone due dates') }}
 			</CheckboxRadioSwitch>
 			<div v-if="withCards" class="accordion" :class="{ 'is-open': accordionOpen }">
 				<div class="accordion__toggle" @click="accordionOpen = !accordionOpen">
@@ -46,7 +46,7 @@
 				</div>
 				<div v-if="accordionOpen" class="accordion__content">
 					<CheckboxRadioSwitch v-if="withCards" :checked.sync="moveCardsToLeftStack">
-						{{ t('deck', 'Move all cards to the first stack') }}
+						{{ t('deck', 'Move all cards to the first list') }}
 					</CheckboxRadioSwitch>
 					<CheckboxRadioSwitch v-if="withCards" :checked.sync="restoreArchivedCards">
 						{{ t('deck', 'Restore archived cards') }}
