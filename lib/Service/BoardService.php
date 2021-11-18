@@ -706,12 +706,12 @@ class BoardService {
 		return $boards;
 	}
 
-    private function cloneCards(Board $board, Board $newBoard, $withAssignments = false, $withLabels = false, $withDueDate = false, $moveCardsToLeftStack = false, $restoreArchivedCards = false) {
+	private function cloneCards(Board $board, Board $newBoard, $withAssignments = false, $withLabels = false, $withDueDate = false, $moveCardsToLeftStack = false, $restoreArchivedCards = false) {
 		// TODO: Undelete cards
 		// TODO: Copy attachments (or not?)
 		// TODO: Copy comments (or not?)
 		// TODO: Create Test
-		// TODO: Move to specified column
+		// TODO: Move to specific column
 
 		/** @var Stack[] $stacks */
 		$stacks = $this->stackMapper->findAll($board->getId());
@@ -744,11 +744,8 @@ class BoardService {
 				$newCard->setType($card->getType());
 				$newCard->setOwner($card->getOwner());
 				$newCard->setOrder($card->getOrder());
-				$newCard->setDuedate($withDueDate ? $card->getDuedate() : NULL);
+				$newCard->setDuedate($withDueDate ? $card->getDuedate() : null);
 				$newCard->setArchived($restoreArchivedCards ? false : $card->getArchived());
-//				$newCard->setDeletedAt($card->getDeletedAt());
-//				$newCard->setCommentsUnread($card->getCommentsUnread());
-//				$newCard->setCommentsCount($card->getCommentsCount());
 
 				$newCard->setRelatedStack($targetStackId);
 				$newCard->setRelatedBoard($newBoard->getId());
@@ -786,7 +783,7 @@ class BoardService {
 
 			$i++;
 		}
-    }
+	}
 
 	private function enrichWithStacks($board, $since = -1) {
 		$stacks = $this->stackMapper->findAll($board->getId(), null, null, $since);

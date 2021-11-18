@@ -52,8 +52,7 @@ use OCP\IUser;
 use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class BoardServiceTest extends TestCase
-{
+class BoardServiceTest extends TestCase {
 
 	/** @var BoardService */
 	private $service;
