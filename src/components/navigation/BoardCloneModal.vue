@@ -74,9 +74,9 @@ export default {
 	data() {
 		return {
 			withCards: false,
-			withAssignments: false,
-			withLabels: false,
-			withDueDate: false,
+			withAssignments: true,
+			withLabels: true,
+			withDueDate: true,
 			moveCardsToLeftStack: false,
 			restoreArchivedCards: false,
 		}
