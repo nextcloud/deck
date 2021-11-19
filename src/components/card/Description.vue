@@ -57,7 +57,7 @@
 			ref="markdownEditor"
 			v-model="description"
 			:configs="mdeConfig"
-			@input="updateDescription"
+			@update:modelValue="updateDescription"
 			@blur="saveDescription" />
 
 		<Modal v-if="modalShow" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
