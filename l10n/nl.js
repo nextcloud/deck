@@ -135,7 +135,7 @@ OC.L10N.register(
     "Add list" : "Lijst toevoegen",
     "List name" : "Lijstnaam",
     "Apply filter" : "Filter toepassen",
-    "Filter by tag" : "Filter op label",
+    "Filter by tag" : "Filteren op label",
     "Filter by assigned user" : "Filter op toegewezen gebruiker",
     "Unassigned" : "Niet-toegewezen",
     "Filter by due date" : "Filter op vervaldatum",
