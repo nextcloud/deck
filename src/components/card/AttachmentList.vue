@@ -22,7 +22,7 @@
 
 <template>
 	<AttachmentDragAndDrop :card-id="cardId" class="drop-upload--sidebar">
-		<div class="button-group" v-if="!isReadOnly">
+		<div v-if="!isReadOnly" class="button-group">
 			<button class="icon-upload" @click="uploadNewFile()">
 				{{ t('deck', 'Upload new files') }}
 			</button>
@@ -79,6 +79,12 @@
 					<ActionLink v-if="attachment.extendedData.fileid" icon="icon-folder" :href="internalLink(attachment)">
 						{{ t('deck', 'Show in Files') }}
 					</ActionLink>
+					<ActionLink v-if="attachment.extendedData.fileid"
+						icon="icon-download"
+						:href="downloadLink(attachment)"
+						download>
+						{{ t('deck', 'Download') }}
+					</ActionLink>
 					<ActionButton v-if="attachment.extendedData.fileid && !isReadOnly" icon="icon-delete" @click="unshareAttachment(attachment)">
 						{{ t('deck', 'Remove attachment') }}
 					</ActionButton>
@@ -101,7 +107,8 @@ import { Actions, ActionButton, ActionLink } from '@nextcloud/vue'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
 import relativeDate from '../../mixins/relativeDate'
 import { formatFileSize } from '@nextcloud/files'
-import { generateUrl, generateOcsUrl } from '@nextcloud/router'
+import { getCurrentUser } from '@nextcloud/auth'
+import { generateUrl, generateOcsUrl, generateRemoteUrl } from '@nextcloud/router'
 import { mapState } from 'vuex'
 import { loadState } from '@nextcloud/initial-state'
 import attachmentUpload from '../../mixins/attachmentUpload'
@@ -173,6 +180,9 @@ export default {
 		},
 		internalLink() {
 			return (attachment) => generateUrl('/f/' + attachment.extendedData.fileid)
+		},
+		downloadLink() {
+			return (attachment) => generateRemoteUrl(`dav/files/${getCurrentUser().uid}/${attachment.extendedData.path}`)
 		},
 		formattedFileSize() {
 			return (filesize) => formatFileSize(filesize)
