@@ -138,7 +138,7 @@ class OverviewService {
 	private function findAllBoardsFromUser(string $userId): array {
 		$userInfo = $this->getBoardPrerequisites($userId);
 		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null);
-		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'],null, null);
+		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'], null, null);
 		$circleBoards = $this->boardMapper->findAllByCircles($userInfo['user'], null, null);
 		return array_unique(array_merge($userBoards, $groupBoards, $circleBoards));
 	}

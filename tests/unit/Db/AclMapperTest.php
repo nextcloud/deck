@@ -65,10 +65,10 @@ class AclMapperTest extends MapperTestUtility {
 			$this->boardMapper->insert($this->getBoard('MyBoard 3', 'user3'))
 		];
 		$this->acls = [
-			$this->aclMapper->insert($this->getAcl('user','user1', false, false, false, $this->boards[1]->getId())),
-			$this->aclMapper->insert($this->getAcl('user','user2', true, false, false, $this->boards[0]->getId())),
-			$this->aclMapper->insert($this->getAcl('user','user3', true, true, false, $this->boards[0]->getId())),
-			$this->aclMapper->insert($this->getAcl('user','user1', false, false, false, $this->boards[2]->getId()))
+			$this->aclMapper->insert($this->getAcl('user', 'user1', false, false, false, $this->boards[1]->getId())),
+			$this->aclMapper->insert($this->getAcl('user', 'user2', true, false, false, $this->boards[0]->getId())),
+			$this->aclMapper->insert($this->getAcl('user', 'user3', true, true, false, $this->boards[0]->getId())),
+			$this->aclMapper->insert($this->getAcl('user', 'user1', false, false, false, $this->boards[2]->getId()))
 		];
 
 		foreach ($this->acls as $acl) {
