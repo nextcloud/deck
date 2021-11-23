@@ -187,9 +187,11 @@ class BoardService {
 		/** @var Board $board */
 		$board = $this->boardMapper->find($boardId, true, true);
 		$this->boardMapper->mapOwner($board);
-		foreach ($board->getAcl() as &$acl) {
-			if ($acl !== null) {
-				$this->boardMapper->mapAcl($acl);
+		if ($board->getAcl() !== null) {
+			foreach ($board->getAcl() as $acl) {
+				if ($acl !== null) {
+					$this->boardMapper->mapAcl($acl);
+				}
 			}
 		}
 		$permissions = $this->permissionService->matchPermissions($board);

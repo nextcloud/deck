@@ -43,6 +43,8 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 
 	/** @var CappedMemoryCache */
 	private $userBoardCache;
+	/** @var CappedMemoryCache */
+	private $boardCache;
 
 	public function __construct(
 		IDBConnection $db,
@@ -64,6 +66,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		$this->logger = $logger;
 
 		$this->userBoardCache = new CappedMemoryCache();
+		$this->boardCache = new CappedMemoryCache();
 	}
 
 
@@ -76,23 +79,25 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	 * @throws DoesNotExistException
 	 */
 	public function find($id, $withLabels = false, $withAcl = false) {
-		$sql = 'SELECT id, title, owner, color, archived, deleted_at, last_modified FROM `*PREFIX*deck_boards` ' .
-			'WHERE `id` = ?';
-		$board = $this->findEntity($sql, [$id]);
+		if (!isset($this->boardCache[$id])) {
+			$sql = 'SELECT id, title, owner, color, archived, deleted_at, last_modified FROM `*PREFIX*deck_boards` ' .
+				'WHERE `id` = ?';
+			$this->boardCache[$id] = $this->findEntity($sql, [$id]);
+		}
 
 		// Add labels
-		if ($withLabels) {
+		if ($withLabels && $this->boardCache[$id]->getLabels() === null) {
 			$labels = $this->labelMapper->findAll($id);
-			$board->setLabels($labels);
+			$this->boardCache[$id]->setLabels($labels);
 		}
 
 		// Add acl
-		if ($withAcl) {
+		if ($withAcl && $this->boardCache[$id]->getAcl() === null) {
 			$acl = $this->aclMapper->findAll($id);
-			$board->setAcl($acl);
+			$this->boardCache[$id]->setAcl($acl);
 		}
 
-		return $board;
+		return $this->boardCache[$id];
 	}
 
 	public function findAllForUser(string $userId, int $since = -1, $includeArchived = true): array {
@@ -105,6 +110,9 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 			$groupBoards = $this->findAllByGroups($userId, $groups, null, null, $since, $includeArchived);
 			$circleBoards = $this->findAllByCircles($userId, null, null, $since, $includeArchived);
 			$allBoards = array_unique(array_merge($userBoards, $groupBoards, $circleBoards));
+			foreach ($allBoards as $board) {
+				$this->boardCache[$board->getId()] = $board;
+			}
 			if ($useCache) {
 				$this->userBoardCache[$userId] = $allBoards;
 			}

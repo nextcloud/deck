@@ -28,8 +28,10 @@ class Board extends RelationalEntity {
 	protected $owner;
 	protected $color;
 	protected $archived = false;
-	protected $labels = [];
-	protected $acl = [];
+	/** @var Label[]|null */
+	protected $labels = null;
+	/** @var Acl[]|null */
+	protected $acl = null;
 	protected $permissions = [];
 	protected $users = [];
 	protected $shared;
@@ -84,5 +86,15 @@ class Board extends RelationalEntity {
 
 	public function getETag() {
 		return md5((string)$this->getLastModified());
+	}
+
+	/** @returns Acl[]|null */
+	public function getAcl(): ?array {
+		return $this->acl;
+	}
+
+	/** @returns Label[]|null */
+	public function getLabels(): ?array {
+		return $this->labels;
 	}
 }
