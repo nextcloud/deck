@@ -42,7 +42,10 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 
 	private $circlesEnabled;
 
+	/** @var CappedMemoryCache */
 	private $userBoardCache;
+	/** @var CappedMemoryCache */
+	private $boardCache;
 
 	public function __construct(
 		IDBConnection $db,
@@ -62,7 +65,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		$this->logger = $logger;
 
 		$this->userBoardCache = new CappedMemoryCache();
-
+		$this->boardCache = new CappedMemoryCache();
 
 		$this->circlesEnabled = \OC::$server->getAppManager()->isEnabledForUser('circles');
 	}
@@ -77,29 +80,31 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	 * @throws DoesNotExistException
 	 */
 	public function find($id, $withLabels = false, $withAcl = false): Board {
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
-			->from('deck_boards')
-			->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
-			->orderBy('id');
-		$board = $this->findEntity($qb);
+		if (!isset($this->boardCache[$id])) {
+			$qb = $this->db->getQueryBuilder();
+			$qb->select('*')
+				->from('deck_boards')
+				->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
+				->orderBy('id');
+			$this->boardCache[$id] = $this->findEntity($qb);
+		}
 
 		// FIXME is this necessary? it was NOT done with the old mapper
 		// $this->mapOwner($board);
 
 		// Add labels
-		if ($withLabels) {
+		if ($withLabels && $this->boardCache[$id]->getLabels() === null) {
 			$labels = $this->labelMapper->findAll($id);
-			$board->setLabels($labels);
+			$this->boardCache[$id]->setLabels($labels);
 		}
 
 		// Add acl
-		if ($withAcl) {
+		if ($withAcl && $this->boardCache[$id]->getAcl() === null) {
 			$acl = $this->aclMapper->findAll($id);
-			$board->setAcl($acl);
+			$this->boardCache[$id]->setAcl($acl);
 		}
 
-		return $board;
+		return $this->boardCache[$id];
 	}
 
 	public function findAllForUser(string $userId, ?int $since = null, bool $includeArchived = true, ?int $before = null,
@@ -113,6 +118,9 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			$groupBoards = $this->findAllByGroups($userId, $groups, null, null, $since, $includeArchived, $before, $term);
 			$circleBoards = $this->findAllByCircles($userId, null, null, $since, $includeArchived, $before, $term);
 			$allBoards = array_unique(array_merge($userBoards, $groupBoards, $circleBoards));
+			foreach ($allBoards as $board) {
+				$this->boardCache[$board->getId()] = $board;
+			}
 			if ($useCache) {
 				$this->userBoardCache[$userId] = $allBoards;
 			}
