@@ -117,7 +117,7 @@ class PermissionService {
 	 */
 	public function matchPermissions(Board $board) {
 		$owner = $this->userIsBoardOwner($board->getId());
-		$acls = $board->getAcl();
+		$acls = $board->getAcl() ?? [];
 		return [
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
@@ -155,7 +155,7 @@ class PermissionService {
 		}
 
 		try {
-			$acls = $this->getBoard($boardId)->getAcl();
+			$acls = $this->getBoard($boardId)->getAcl() ?? [];
 			$result = $this->userCan($acls, $permission, $userId);
 			if ($result) {
 				return true;
