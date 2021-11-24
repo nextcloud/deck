@@ -127,6 +127,9 @@ class ResourceProviderCard implements IProvider {
 		if ($board->getOwner() === $user->getUID()) {
 			return true;
 		}
+		if ($board->getAcl() === null) {
+			return false;
+		}
 		return $this->permissionService->userCan($board->getAcl(), Acl::PERMISSION_READ, $user->getUID());
 	}
 

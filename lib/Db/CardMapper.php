@@ -30,6 +30,8 @@ use OCA\Deck\Search\Query\SearchQuery;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\ICache;
+use OCP\ICacheFactory;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUser;
@@ -46,6 +48,8 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	private $groupManager;
 	/** @var IManager */
 	private $notificationManager;
+	/** @var ICache */
+	private $cache;
 	private $databaseType;
 	private $database4ByteSupport;
 
@@ -55,6 +59,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		IManager $notificationManager,
+		ICacheFactory $cacheFactory,
 		$databaseType = 'sqlite3',
 		$database4ByteSupport = true
 	) {
@@ -63,6 +68,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
 		$this->notificationManager = $notificationManager;
+		$this->cache = $cacheFactory->createDistributed('deck-cardMapper');
 		$this->databaseType = $databaseType;
 		$this->database4ByteSupport = $database4ByteSupport;
 	}
@@ -75,7 +81,9 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			$description = preg_replace('/[\x{10000}-\x{10FFFF}]/u', "\xEF\xBF\xBD", $entity->getDescription());
 			$entity->setDescription($description);
 		}
-		return parent::insert($entity);
+		$entity = parent::insert($entity);
+		$this->cache->remove('findBoardId:' . $entity->getId());
+		return $entity;
 	}
 
 	public function update(Entity $entity, $updateModified = true): Entity {
@@ -106,6 +114,10 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 				$this->notificationManager->markProcessed($notification);
 			} catch (Exception $e) {
 			}
+		}
+		// Invalidate cache when the card may be moved to a different board
+		if (isset($updatedFields['stackId'])) {
+			$this->cache->remove('findBoardId:' . $entity->getId());
 		}
 		return parent::update($entity);
 	}
@@ -479,8 +491,8 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		}
 		return $qb->createNamedParameter($dateTime, IQueryBuilder::PARAM_DATE);
 	}
-	
-	
+
+
 
 	public function searchRaw($boardIds, $term, $limit = null, $offset = null) {
 		$qb = $this->queryCardsByBoards($boardIds)
@@ -506,9 +518,8 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	public function delete(Entity $entity): Entity {
-		// delete assigned labels
 		$this->labelMapper->deleteLabelAssignmentsForCard($entity->getId());
-		// delete card
+		$this->cache->remove('findBoardId:' . $entity->getId());
 		return parent::delete($entity);
 	}
 
@@ -547,11 +558,22 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	public function findBoardId($id): ?int {
-		$sql = 'SELECT id FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_stacks` WHERE id IN (SELECT stack_id FROM `*PREFIX*deck_cards` WHERE id = ?))';
-		$stmt = $this->db->prepare($sql);
-		$stmt->bindParam(1, $id, \PDO::PARAM_INT);
-		$stmt->execute();
-		return $stmt->fetchColumn() ?? null;
+		$result = $this->cache->get('findBoardId:' . $id);
+		if ($result === null) {
+			try {
+				$qb = $this->db->getQueryBuilder();
+				$qb->select('board_id')
+					->from('deck_stacks', 's')
+					->innerJoin('s', 'deck_cards', 'c', 'c.stack_id = s.id')
+					->where($qb->expr()->eq('c.id', $qb->createNamedParameter($id)));
+				$queryResult = $qb->executeQuery();
+				$result = $queryResult->fetchOne();
+			} catch (\Exception $e) {
+				$result = false;
+			}
+			$this->cache->set('findBoardId:' . $id, $result);
+		}
+		return $result !== false ? $result : null;
 	}
 
 	public function mapOwner(Card &$card) {
