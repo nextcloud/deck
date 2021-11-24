@@ -23,12 +23,35 @@ class BoardTest extends TestCase {
 			'title' => "My Board",
 			'owner' => "admin",
 			'color' => "000000",
-			'labels' => null,
+			'labels' => [],
 			'permissions' => [],
 			'stacks' => [],
 			'deletedAt' => 0,
 			'lastModified' => 0,
-			'acl' => null,
+			'acl' => [],
+			'archived' => false,
+			'users' => ['user1', 'user2'],
+			'settings' => [],
+			'ETag' => $board->getETag(),
+		], $board->jsonSerialize());
+	}
+
+	public function testUnfetchedValues() {
+		$board = $this->createBoard();
+		$board->setUsers(['user1', 'user2']);
+		self::assertNull($board->getAcl());
+		self::assertNull($board->getLabels());
+		$this->assertEquals([
+			'id' => 1,
+			'title' => "My Board",
+			'owner' => "admin",
+			'color' => "000000",
+			'labels' => [],
+			'permissions' => [],
+			'stacks' => [],
+			'deletedAt' => 0,
+			'lastModified' => 0,
+			'acl' => [],
 			'archived' => false,
 			'users' => ['user1', 'user2'],
 			'settings' => [],
@@ -49,7 +72,7 @@ class BoardTest extends TestCase {
 			'stacks' => [],
 			'deletedAt' => 0,
 			'lastModified' => 0,
-			'acl' => null,
+			'acl' => [],
 			'archived' => false,
 			'users' => [],
 			'settings' => [],
@@ -72,12 +95,12 @@ class BoardTest extends TestCase {
 			'title' => "My Board",
 			'owner' => "admin",
 			'color' => "000000",
-			'labels' => null,
+			'labels' => [],
 			'permissions' => [],
 			'stacks' => [],
 			'deletedAt' => 0,
 			'lastModified' => 0,
-			'acl' => null,
+			'acl' => [],
 			'archived' => false,
 			'shared' => 1,
 			'users' => [],
