@@ -188,6 +188,7 @@ OC.L10N.register(
     "Pending share" : "Чакащо споделяне",
     "Add this attachment" : "Добавете този прикачен файл",
     "Show in Files" : "Показване във файлове",
+    "Download" : "Изтегляне",
     "Remove attachment" : "Премахване на прикачен файл",
     "Delete Attachment" : "Изтриване на прикачен файл",
     "Restore Attachment" : "Възстановяване на прикачен файл",

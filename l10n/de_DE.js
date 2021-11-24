@@ -188,6 +188,7 @@ OC.L10N.register(
     "Pending share" : "Ausstehende Freigabe",
     "Add this attachment" : "Diesen Anhang anhängen",
     "Show in Files" : "In Dateien anzeigen",
+    "Download" : "Herunterladen",
     "Remove attachment" : "Anhang entfernen",
     "Delete Attachment" : "Anhang löschen",
     "Restore Attachment" : "Anhang wiederherstellen",
