@@ -188,6 +188,7 @@ OC.L10N.register(
     "Pending share" : "Oczekujące udostępnienie",
     "Add this attachment" : "Dodaj ten załącznik",
     "Show in Files" : "Pokaż w Plikach",
+    "Download" : "Pobierz",
     "Remove attachment" : "Usuń załącznik",
     "Delete Attachment" : "Usuń załącznik",
     "Restore Attachment" : "Przywróć załącznik",

@@ -188,6 +188,7 @@ OC.L10N.register(
     "Pending share" : "Partekatzeko zain",
     "Add this attachment" : "Gehitu eranskin hau",
     "Show in Files" : "Erakutsi fitxategietan",
+    "Download" : "Deskargatu",
     "Remove attachment" : "Kendu eranskina",
     "Delete Attachment" : "Ezabatu eranskina",
     "Restore Attachment" : "Berezarri eranskina",

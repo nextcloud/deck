@@ -188,6 +188,7 @@ OC.L10N.register(
     "Pending share" : "等待分享",
     "Add this attachment" : "添加此附件",
     "Show in Files" : "顯示在檔案中",
+    "Download" : "下載",
     "Remove attachment" : "移除附件",
     "Delete Attachment" : "刪除附件",
     "Restore Attachment" : "恢復附件",
