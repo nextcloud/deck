@@ -28,8 +28,10 @@ class Board extends RelationalEntity {
 	protected $owner;
 	protected $color;
 	protected $archived = false;
-	protected $labels = [];
-	protected $acl = [];
+	/** @var Label[]|null */
+	protected $labels = null;
+	/** @var Acl[]|null */
+	protected $acl = null;
 	protected $permissions = [];
 	protected $users = [];
 	protected $shared;
@@ -61,6 +63,10 @@ class Board extends RelationalEntity {
 		if ($this->shared === -1) {
 			unset($json['shared']);
 		}
+		// FIXME: Ideally the API responses should follow the internal data structure and return null if the labels/acls have not been fetched from the db
+		// however this would be a breaking change for consumers of the API
+		$json['acl'] = $this->acl ?? [];
+		$json['labels'] = $this->labels ?? [];
 		return $json;
 	}
 
@@ -84,5 +90,15 @@ class Board extends RelationalEntity {
 
 	public function getETag() {
 		return md5((string)$this->getLastModified());
+	}
+
+	/** @returns Acl[]|null */
+	public function getAcl(): ?array {
+		return $this->acl;
+	}
+
+	/** @returns Label[]|null */
+	public function getLabels(): ?array {
+		return $this->labels;
 	}
 }
