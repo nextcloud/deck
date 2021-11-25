@@ -188,6 +188,7 @@ OC.L10N.register(
     "Pending share" : "Čakajúce zdeľanie",
     "Add this attachment" : "Pridať túto prílohu",
     "Show in Files" : "Zobraziť v Súboroch",
+    "Download" : "Sťahovanie",
     "Remove attachment" : "Odstrániť prílohu",
     "Delete Attachment" : "Odstrániť prílohu",
     "Restore Attachment" : "Obnoviť prílohu",
