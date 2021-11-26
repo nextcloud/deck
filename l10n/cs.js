@@ -188,6 +188,7 @@ OC.L10N.register(
     "Pending share" : "Čekající sdílení",
     "Add this attachment" : "Přidat tuto přílohu",
     "Show in Files" : "Zobrazit v Souborech",
+    "Download" : "Stáhnout",
     "Remove attachment" : "Odebrat přílohu",
     "Delete Attachment" : "Smazat přílohu",
     "Restore Attachment" : "Obnovit přílohu",
