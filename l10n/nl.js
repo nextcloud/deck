@@ -188,6 +188,7 @@ OC.L10N.register(
     "Pending share" : "Share in afwachting",
     "Add this attachment" : "Voeg deze bijlage toe",
     "Show in Files" : "Tonen in Bestanden",
+    "Download" : "Download",
     "Remove attachment" : "Bijlage verwijderen",
     "Delete Attachment" : "Verwijderen bijlage",
     "Restore Attachment" : "Herstellen bijlage",

@@ -188,6 +188,7 @@ OC.L10N.register(
     "Pending share" : "Bekleyen paylaşım",
     "Add this attachment" : "Bu dosyayı ekle",
     "Show in Files" : "Dosyalarda görüntüle",
+    "Download" : "İndir",
     "Remove attachment" : "Ek dosyayı sil",
     "Delete Attachment" : "Ek dosyasını sil",
     "Restore Attachment" : "Ek dosyasını geri yükle",
