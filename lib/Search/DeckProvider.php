@@ -139,6 +139,6 @@ class DeckProvider implements IProvider {
 		$cardTimestamps = array_map(function (Card $card) {
 			return $card->getLastModified();
 		}, $cards);
-		return (min($boardTimestamps) ?: '') . '|' . (min($cardTimestamps) ?: '');
+		return (count($boardTimestamps) > 0 ? min($boardTimestamps) : '') . '|' . (count($cardTimestamps) > 0 ? min($cardTimestamps) : '');
 	}
 }
