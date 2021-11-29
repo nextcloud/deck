@@ -161,6 +161,7 @@ class BoardMapperTest extends MapperTestUtility {
 		$actual = $this->boardMapper->find($this->boards[0]->getId(), true, false);
 		/** @var Board $expected */
 		$expected = $this->boards[0];
+		$expected->setLabels([]);
 		$this->assertEquals($expected->getLabels(), $actual->getLabels());
 	}
 
