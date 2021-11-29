@@ -74,18 +74,14 @@ class Board extends RelationalEntity {
 	 * @param Label[] $labels
 	 */
 	public function setLabels($labels) {
-		foreach ($labels as $l) {
-			$this->labels[] = $l;
-		}
+		$this->labels = $labels;
 	}
 
 	/**
 	 * @param Acl[] $acl
 	 */
 	public function setAcl($acl) {
-		foreach ($acl as $a) {
-			$this->acl[] = $a;
-		}
+		$this->acl = $acl;
 	}
 
 	public function getETag() {
