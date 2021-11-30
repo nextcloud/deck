@@ -1,22 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.6.0-beta3
-
-- #3449 Cache most frequent queries
-- #3446 Switch to QBMapper in BoardMapper
-
-## 1.6.0-beta2
-
-### Fixed
-
-- #3433 Fix event name for updating the description
-
-
-## 1.6.0-beta1
+## 1.6.0
 
 ### Added
 
+- #3449 Cache most frequent queries
 - #3177 Use async import for vue component on collections entrypoint @juliushaertl
 - #2791 Open description links in new tab @fm-sys
 - #3344 Improve combined search @eneiluj
@@ -25,6 +14,11 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- #3446 Switch to QBMapper in BoardMapper
+- #3433 Fix event name for updating the description
+- #3463 Fix overview card listing
+- #3440 Allow to download an attachment without navigating to the files app
+- #3462 Fix cursor generation if no results are found
 - #3161 Reduce duplicate queries when fetching user boards an permissions @juliushaertl
 - #3151 Always log generic exceptions @juliushaertl
 - #3217 Move circle checks to a unified service and improve member checks @juliushaertl
