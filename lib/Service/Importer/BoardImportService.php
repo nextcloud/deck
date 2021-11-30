@@ -21,7 +21,7 @@
  *
  */
 
-namespace OCA\Deck\Service;
+namespace OCA\Deck\Service\Importer;
 
 use JsonSchema\Constraints\Constraint;
 use JsonSchema\Validator;
@@ -163,20 +163,10 @@ class BoardImportService {
 
 	public function getAllowedImportSystems(): array {
 		if (!$this->allowedSystems) {
-			$allowedSystems = glob(__DIR__ . '/BoardImport*Service.php');
-			$allowedSystems = array_filter($allowedSystems, function (string $name) {
-				$name = basename($name);
-				switch ($name) {
-					case 'ABoardImportService.php':
-					case 'BoardImportService.php':
-					case 'BoardImportCommandService.php':
-						return false;
-				}
-				return true;
-			});
+			$allowedSystems = glob(__DIR__ . '/Systems/*Service.php');
 			$allowedSystems = array_map(function ($filename) {
-				preg_match('/\/(?<class>BoardImport(?<system>\w+)Service)\.php$/', $filename, $matches);
-				$className = 'OCA\Deck\Service\\'.$matches['class'];
+				preg_match('/\/(?<class>(?<system>\w+)Service)\.php$/', $filename, $matches);
+				$className = 'OCA\Deck\Service\Importer\Systems\\'.$matches['class'];
 				if (!class_exists($className)) {
 					/** @psalm-suppress UnresolvableInclude */
 					require_once $className;

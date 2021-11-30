@@ -21,7 +21,7 @@
  *
  */
 
-namespace OCA\Deck\Service;
+namespace OCA\Deck\Service\Importer\Systems;
 
 use OCP\Http\Client\IClient;
 use OCP\Http\Client\IClientService;
@@ -30,7 +30,7 @@ use OCP\IURLGenerator;
 use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
 
-class BoardImportTrelloApiService extends BoardImportTrelloJsonService {
+class TrelloApiService extends TrelloJsonService {
 	/** @var string */
 	public static $name = 'Trello API';
 	protected $needValidateData = false;

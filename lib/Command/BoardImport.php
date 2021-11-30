@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\Command;
 
-use OCA\Deck\Service\BoardImportCommandService;
+use OCA\Deck\Service\Importer\BoardImportCommandService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

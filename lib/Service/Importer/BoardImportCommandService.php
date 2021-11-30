@@ -21,7 +21,7 @@
  *
  */
 
-namespace OCA\Deck\Service;
+namespace OCA\Deck\Service\Importer;
 
 use OCA\Deck\Exceptions\ConflictException;
 use OCA\Deck\NotFoundException;
@@ -80,7 +80,7 @@ class BoardImportCommandService extends BoardImportService {
 			$config = $this->getInput()->getOption('config');
 			if (is_string($config)) {
 				if (!is_file($config)) {
-					throw new NotFoundException('It\'s not a file.');
+					throw new NotFoundException('It\'s not a valid config file.');
 				}
 				$config = json_decode(file_get_contents($config));
 				if (!$config instanceof \stdClass) {
@@ -94,6 +94,7 @@ class BoardImportCommandService extends BoardImportService {
 			$this->getOutput()->writeln('<error>' . $e->getMessage() . '</error>');
 			$helper = $this->getCommand()->getHelper('question');
 			$question = new Question(
+				"<info>You can get more info on https://deck.readthedocs.io/en/latest/User_documentation_en/#6-import-boards</info>\n" .
 				'Please inform a valid config json file: ',
 				'config.json'
 			);

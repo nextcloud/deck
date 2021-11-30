@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\Command;
 
-use OCA\Deck\Service\BoardImportCommandService;
+use OCA\Deck\Service\Importer\BoardImportCommandService;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,7 +37,7 @@ class BoardImportTest extends \Test\TestCase {
 
 	public function setUp(): void {
 		parent::setUp();
-		$this->boardImportCommandService = $this->createMock(boardImportCommandService::class);
+		$this->boardImportCommandService = $this->createMock(BoardImportCommandService::class);
 		$this->boardImport = new BoardImport(
 			$this->boardImportCommandService
 		);

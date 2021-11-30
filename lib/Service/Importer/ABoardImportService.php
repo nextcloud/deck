@@ -21,7 +21,7 @@
  *
  */
 
-namespace OCA\Deck\Service;
+namespace OCA\Deck\Service\Importer;
 
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Assignment;

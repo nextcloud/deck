@@ -21,7 +21,7 @@
  *
  */
 
-namespace OCA\Deck\Service;
+namespace OCA\Deck\Service\Importer\Systems;
 
 use OC\Comments\Comment;
 use OCA\Deck\BadRequestException;
@@ -32,13 +32,14 @@ use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Stack;
+use OCA\Deck\Service\Importer\ABoardImportService;
 use OCP\Comments\IComment;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 
-class BoardImportTrelloJsonService extends ABoardImportService {
+class TrelloJsonService extends ABoardImportService {
 	/** @var string */
 	public static $name = 'Trello JSON';
 	/** @var IUserManager */

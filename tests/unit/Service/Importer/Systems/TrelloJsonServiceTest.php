@@ -20,19 +20,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-namespace OCA\Deck\Service;
+namespace OCA\Deck\Service\Importer\Systems;
 
+use OCA\Deck\Service\Importer\BoardImportService;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class BoardImportTrelloJsonServiceTest extends \Test\TestCase {
-	/** @var BoardImportTrelloJsonService */
+class TrelloJsonServiceTest extends \Test\TestCase {
+	/** @var TrelloJsonService */
 	private $service;
-	/** @var IURLGenerator */
+	/** @var IURLGenerator|MockObject */
 	private $urlGenerator;
-	/** @var IUserManager */
+	/** @var IUserManager|MockObject */
 	private $userManager;
 	/** @var IL10N */
 	private $l10n;
@@ -40,7 +42,7 @@ class BoardImportTrelloJsonServiceTest extends \Test\TestCase {
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->l10n = $this->createMock(IL10N::class);
-		$this->service = new BoardImportTrelloJsonService(
+		$this->service = new TrelloJsonService(
 			$this->userManager,
 			$this->urlGenerator,
 			$this->l10n
@@ -128,10 +130,10 @@ class BoardImportTrelloJsonServiceTest extends \Test\TestCase {
 	public function testGetBoardWithSuccess() {
 		$importService = \OC::$server->get(BoardImportService::class);
 
-		$data = json_decode(file_get_contents(__DIR__ . '/../../data/data-trelloJson.json'));
+		$data = json_decode(file_get_contents(__DIR__ . '/../../../../data/data-trelloJson.json'));
 		$importService->setData($data);
 
-		$configInstance = json_decode(file_get_contents(__DIR__ . '/../../data/config-trelloJson.json'));
+		$configInstance = json_decode(file_get_contents(__DIR__ . '/../../../../data/config-trelloJson.json'));
 		$importService->setConfigInstance($configInstance);
 
 		$owner = $this->createMock(IUser::class);

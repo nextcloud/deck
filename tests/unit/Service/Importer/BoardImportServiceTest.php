@@ -20,7 +20,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-namespace OCA\Deck\Service;
+namespace OCA\Deck\Service\Importer;
 
 use OC\Comments\Comment;
 use OCA\Deck\Db\Acl;
@@ -35,6 +35,7 @@ use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Service\Importer\Systems\TrelloJsonService;
 use OCP\Comments\ICommentsManager;
 use OCP\IDBConnection;
 use OCP\IUser;
@@ -62,8 +63,8 @@ class BoardImportServiceTest extends \Test\TestCase {
 	private $attachmentMapper;
 	/** @var ICommentsManager|MockObject */
 	private $commentsManager;
-	/** @var BoardImportTrelloJsonService|MockObject */
-	private $importTrelloJsonService;
+	/** @var TrelloJsonService|MockObject */
+	private $trelloJsonService;
 	/** @var BoardImportService|MockObject */
 	private $boardImportService;
 	public function setUp(): void {
@@ -90,14 +91,14 @@ class BoardImportServiceTest extends \Test\TestCase {
 
 		$this->boardImportService->setSystem('trelloJson');
 
-		$data = json_decode(file_get_contents(__DIR__ . '/../../data/data-trelloJson.json'));
+		$data = json_decode(file_get_contents(__DIR__ . '/../../../data/data-trelloJson.json'));
 		$this->boardImportService->setData($data);
 
-		$configInstance = json_decode(file_get_contents(__DIR__ . '/../../data/config-trelloJson.json'));
+		$configInstance = json_decode(file_get_contents(__DIR__ . '/../../../data/config-trelloJson.json'));
 		$this->boardImportService->setConfigInstance($configInstance);
 
-		$this->importTrelloJsonService = $this->createMock(BoardImportTrelloJsonService::class);
-		$this->boardImportService->setImportSystem($this->importTrelloJsonService);
+		$this->trelloJsonService = $this->createMock(TrelloJsonService::class);
+		$this->boardImportService->setImportSystem($this->trelloJsonService);
 
 		$owner = $this->createMock(IUser::class);
 		$owner
@@ -125,35 +126,35 @@ class BoardImportServiceTest extends \Test\TestCase {
 			->expects($this->once())
 			->method('insert');
 
-		$this->importTrelloJsonService
+		$this->trelloJsonService
 			->method('getAclList')
 			->willReturn([new Acl()]);
 		$this->aclMapper
 			->expects($this->once())
 			->method('insert');
 
-		$this->importTrelloJsonService
+		$this->trelloJsonService
 			->method('getLabels')
 			->willReturn([new Label()]);
 		$this->labelMapper
 			->expects($this->once())
 			->method('insert');
 
-		$this->importTrelloJsonService
+		$this->trelloJsonService
 			->method('getStacks')
 			->willReturn([new Stack()]);
 		$this->stackMapper
 			->expects($this->once())
 			->method('insert');
 
-		$this->importTrelloJsonService
+		$this->trelloJsonService
 			->method('getCards')
 			->willReturn([new Card()]);
 		$this->cardMapper
 			->expects($this->any())
 			->method('insert');
 
-		$this->importTrelloJsonService
+		$this->trelloJsonService
 			->method('getComments')
 			->willReturn([
 				'fakecardid' => [new Comment()]
@@ -162,7 +163,7 @@ class BoardImportServiceTest extends \Test\TestCase {
 			->expects($this->once())
 			->method('save');
 
-		$this->importTrelloJsonService
+		$this->trelloJsonService
 			->method('getCardAssignments')
 			->willReturn([
 				'fakecardid' => [new Assignment()]

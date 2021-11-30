@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\Controller;
 
-use OCA\Deck\Service\BoardImportService;
+use OCA\Deck\Service\Importer\BoardImportService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
