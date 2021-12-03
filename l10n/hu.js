@@ -188,6 +188,7 @@ OC.L10N.register(
     "Pending share" : "Függőben lévő megosztás",
     "Add this attachment" : "E melléklet hozzáadása",
     "Show in Files" : "Megjelenítés a Fájlokban",
+    "Download" : "Letöltés",
     "Remove attachment" : "Melléklet eltávolítása",
     "Delete Attachment" : "Melléklet törlése",
     "Restore Attachment" : "Melléklet visszaállítása",
