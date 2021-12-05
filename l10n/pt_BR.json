@@ -210,6 +210,8 @@
     "Select Date" : "Selecionar Data",
     "Today" : "Hoje",
     "Tomorrow" : "Amanhã",
+    "Next week" : "Próxima semana",
+    "Next month" : "Próximo mês",
     "Save" : "Salvar",
     "The comment cannot be empty." : "O comentário não pode zer vazio.",
     "The comment cannot be longer than 1000 characters." : "O comentário não pode ter mais que 1000 caracteres.",
