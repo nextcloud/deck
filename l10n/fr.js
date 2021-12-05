@@ -188,6 +188,7 @@ OC.L10N.register(
     "Pending share" : "Partage en attente",
     "Add this attachment" : "Ajouter cette pièce jointe",
     "Show in Files" : "Afficher dans Fichiers",
+    "Download" : "Télécharger",
     "Remove attachment" : "Supprimer la pièce jointe",
     "Delete Attachment" : "Supprimer la pièce jointe",
     "Restore Attachment" : "Restaurer la pièce jointe",
