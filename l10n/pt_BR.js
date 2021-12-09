@@ -188,6 +188,7 @@ OC.L10N.register(
     "Pending share" : "Compartilhamento pendente",
     "Add this attachment" : "Adicionar este anexo",
     "Show in Files" : "Mostrar em Arquivos",
+    "Download" : "Baixar",
     "Remove attachment" : "Remover anexo",
     "Delete Attachment" : "Excluir Anexo",
     "Restore Attachment" : "Restaurar Anexo",
