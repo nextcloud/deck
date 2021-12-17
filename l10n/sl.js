@@ -104,7 +104,6 @@ OC.L10N.register(
     "Path is already shared with this card" : "Pot je že povezana s to nalogo",
     "Invalid date, date format must be YYYY-MM-DD" : "Neveljaven zapis časa; biti mora v zapisu YYYY-MM-DD",
     "Personal planning and team project organization" : "Osebno načrtovanje nalog in organizacija skupinskih projektov",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Program Deck je orodje za osebno načrtovanje in projektno delo v slogu kanban, ki se izvrstno vključuje v okolje Nextcloud.\n\nOrodje omogoča:\n- 📥 dodajanje in urejanje nalog\n- 📄 zapis dodatnih opomb v zapisu markdown\n- 🔖 dodeljevanje oznak za lažje urejanje in iskanje\n- 👥 souporabo v skupini, s prijatelji ali družino\n- 📎 pripenjanje in vstavljanje datotek v opise\n- 💬 opombe k posamezni nalogi\n- ⚡ sledenje spremembam in dejavnosti\n- 🚀 Organizaciji projekta",
     "Card details" : "Podrobnosti naloge",
     "Add board" : "Dodaj zbirko",
     "Select the board to link to a project" : "Izberite zbirko za povezavo s projektom",
@@ -282,6 +281,7 @@ OC.L10N.register(
     "Maximum file size of {size} exceeded" : "Omejitev velikosti datoteke {size} je prekoračena.",
     "Error creating the share" : "Napaka ustvarjanja mesta souporabe",
     "Share with a Deck card" : "Poveži z nalogo Deck",
-    "Share {file} with a Deck card" : "Poveži datoteko {file} z nalogo Deck"
+    "Share {file} with a Deck card" : "Poveži datoteko {file} z nalogo Deck",
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Program Deck je orodje za osebno načrtovanje in projektno delo v slogu kanban, ki se izvrstno vključuje v okolje Nextcloud.\n\nOrodje omogoča:\n- 📥 dodajanje in urejanje nalog\n- 📄 zapis dodatnih opomb v zapisu markdown\n- 🔖 dodeljevanje oznak za lažje urejanje in iskanje\n- 👥 souporabo v skupini, s prijatelji ali družino\n- 📎 pripenjanje in vstavljanje datotek v opise\n- 💬 opombe k posamezni nalogi\n- ⚡ sledenje spremembam in dejavnosti\n- 🚀 Organizaciji projekta"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");
