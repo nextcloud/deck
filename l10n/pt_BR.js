@@ -104,7 +104,6 @@ OC.L10N.register(
     "Path is already shared with this card" : "O caminho já é compartilhado com este cartão",
     "Invalid date, date format must be YYYY-MM-DD" : "Data inválida, o formato da data deve ser AAAA-MM-DD",
     "Personal planning and team project organization" : "Planejamento pessoal e organização de projetos em equipe",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck é uma ferramenta de organização de estilo kanban destinada ao planejamento pessoal e organização para equipes integradas com o Nextcloud.\n\n\n- 📥 Adicione suas tarefas aos cartões e coloque-os em ordem\n- 📄 Insira notas adicionais em markdown\n- 🔖 Atribua etiquetas para melhorar a organização\n- 👥 Compartilhe com sua equipe, amigos ou familiares\n- 📎 Anexe arquivos e incorpore-os em sua descrição no markdown\n- 💬 Discuta com sua equipe usando os comentários\n- ⚡ Acompanhe as alterações no fluxo de atividades\n- 🚀 Mantenha seu projeto organizado",
     "Card details" : "Detalhes do cartão",
     "Add board" : "Adicionar painel",
     "Select the board to link to a project" : "Selecione o painel para vincular a um projeto",
@@ -284,6 +283,7 @@ OC.L10N.register(
     "Error creating the share" : "Erro ao criar o compartilhamento",
     "Share with a Deck card" : "Compartilhar com um cartão Deck",
     "Share {file} with a Deck card" : "Compartilhar {file} com um cartão Deck",
-    "Share" : "Compartilhar"
+    "Share" : "Compartilhar",
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck é uma ferramenta de organização de estilo kanban destinada ao planejamento pessoal e organização para equipes integradas com o Nextcloud.\n\n\n- 📥 Adicione suas tarefas aos cartões e coloque-os em ordem\n- 📄 Insira notas adicionais em markdown\n- 🔖 Atribua etiquetas para melhorar a organização\n- 👥 Compartilhe com sua equipe, amigos ou familiares\n- 📎 Anexe arquivos e incorpore-os em sua descrição no markdown\n- 💬 Discuta com sua equipe usando os comentários\n- ⚡ Acompanhe as alterações no fluxo de atividades\n- 🚀 Mantenha seu projeto organizado"
 },
 "nplurals=2; plural=(n > 1);");

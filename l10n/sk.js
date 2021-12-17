@@ -104,7 +104,6 @@ OC.L10N.register(
     "Path is already shared with this card" : "Cesta je už zdieľaná s touto kartou",
     "Invalid date, date format must be YYYY-MM-DD" : "Neplatný dátum, formát musí byť v tvare YYYY-MM-DD",
     "Personal planning and team project organization" : "Osobné plánovanie a organizácia tímových projektov",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Karty sú nástroj zacielený na osobné alebo projektové plánovanie tímov v štýle Kanban integrovaný do Nextcloud.\n\n\n- 📥 Zadávajte a usporadúvajte svoje úlohy do kariet\n- 📄 Zapisujte si dodatočné poznámky\n- 🔖 Priraďujte štítky pre ešte lepšiu organizáciu\n- 👥 Zdieľajte so svojim tímom, priateľmi alebo rodinou\n- 🚀 Dostaňte svoj projekt pod kontrolu",
     "Card details" : "Podrobnosti o karte",
     "Add board" : "Pridať nástenk",
     "Select the board to link to a project" : "Vybrať nástenku na vytvorenie odkazu ku projektu",
@@ -284,6 +283,7 @@ OC.L10N.register(
     "Error creating the share" : "Chyba pri vytváraní zdieľania",
     "Share with a Deck card" : "Zdieľať s kartou Deck",
     "Share {file} with a Deck card" : "Zdieľať {file} s kartou Deck",
-    "Share" : "Zdieľať"
+    "Share" : "Zdieľať",
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Karty sú nástroj zacielený na osobné alebo projektové plánovanie tímov v štýle Kanban integrovaný do Nextcloud.\n\n\n- 📥 Zadávajte a usporadúvajte svoje úlohy do kariet\n- 📄 Zapisujte si dodatočné poznámky\n- 🔖 Priraďujte štítky pre ešte lepšiu organizáciu\n- 👥 Zdieľajte so svojim tímom, priateľmi alebo rodinou\n- 🚀 Dostaňte svoj projekt pod kontrolu"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

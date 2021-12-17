@@ -104,7 +104,6 @@ OC.L10N.register(
     "Path is already shared with this card" : "Popis umístění už je touto kartou sdíleno",
     "Invalid date, date format must be YYYY-MM-DD" : "Neplatné datum – je třeba, aby formát data byl RRRR-MM-DD",
     "Personal planning and team project organization" : "Osobní plánování a organizování týmového projektu",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck je nástroj cílený na osobní nebo projektové plánování týmů v Kanban stylu, vestavěný v Nextcloud.\n\n\n- 📥 Zadávejte a uspořádávejte své úkoly do karet\n- 📄 Zapisujte si dodatečné poznámky \n- 🔖 Přiřazujte štítky pro ještě lepší organizaci\n- 👥 Sdílejte se svým týmem, přáteli nebo rodinou\n- 🚀 Dostaňte svůj projekt pod kontrolu",
     "Card details" : "Podrobnosti o kartě",
     "Add board" : "Přidat tabuli",
     "Select the board to link to a project" : "Vyberte tabuli kterou propojit s projektem",
@@ -284,6 +283,7 @@ OC.L10N.register(
     "Error creating the share" : "Chyba při vytváření sdílení",
     "Share with a Deck card" : "Sdílet s kartou aplikace Deck",
     "Share {file} with a Deck card" : "Sdílet {file} s kartou aplikace Deck",
-    "Share" : "Sdílet"
+    "Share" : "Sdílet",
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck je nástroj cílený na osobní nebo projektové plánování týmů v Kanban stylu, vestavěný v Nextcloud.\n\n\n- 📥 Zadávejte a uspořádávejte své úkoly do karet\n- 📄 Zapisujte si dodatečné poznámky \n- 🔖 Přiřazujte štítky pro ještě lepší organizaci\n- 👥 Sdílejte se svým týmem, přáteli nebo rodinou\n- 🚀 Dostaňte svůj projekt pod kontrolu"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");
