@@ -151,6 +151,7 @@ OC.L10N.register(
     "Undo" : "Atšaukti",
     "Deleted cards" : "Ištrintos kortelės",
     "Share board with a user, group or circle …" : "Bendrinti lentą su naudotoju, grupe ar ratu…",
+    "Searching for users, groups and circles …" : "Ieškoma naudotojų, grupių ir ratų…",
     "No participants found" : "Nerasta jokių dalyvių",
     "Board owner" : "Lentos savininkas",
     "(Group)" : "(Grupė)",
