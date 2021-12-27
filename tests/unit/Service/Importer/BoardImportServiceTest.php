@@ -35,8 +35,10 @@ use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Event\BoardImportGetAllowedEvent;
 use OCA\Deck\Service\Importer\Systems\TrelloJsonService;
 use OCP\Comments\ICommentsManager;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IDBConnection;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -63,6 +65,8 @@ class BoardImportServiceTest extends \Test\TestCase {
 	private $attachmentMapper;
 	/** @var ICommentsManager|MockObject */
 	private $commentsManager;
+	/** @var IEventDispatcher|MockObject */
+	private $eventDispatcher;
 	/** @var TrelloJsonService|MockObject */
 	private $trelloJsonService;
 	/** @var BoardImportService|MockObject */
@@ -77,6 +81,7 @@ class BoardImportServiceTest extends \Test\TestCase {
 		$this->assignmentMapper = $this->createMock(AssignmentMapper::class);
 		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
 		$this->commentsManager = $this->createMock(ICommentsManager::class);
+		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->boardImportService = new BoardImportService(
 			$this->userManager,
 			$this->boardMapper,
@@ -86,18 +91,33 @@ class BoardImportServiceTest extends \Test\TestCase {
 			$this->assignmentMapper,
 			$this->attachmentMapper,
 			$this->cardMapper,
-			$this->commentsManager
+			$this->commentsManager,
+			$this->eventDispatcher
 		);
 
 		$this->boardImportService->setSystem('trelloJson');
 
+		$this->eventDispatcher
+			->method('dispatchTyped')
+			->willReturnCallback(function (BoardImportGetAllowedEvent $event) {
+				$event->getService()->addAllowedImportSystem([
+					'name' => TrelloJsonService::$name,
+					'class' => TrelloJsonService::class,
+					'internalName' => 'trelloJson'
+				]);
+			});
+
 		$data = json_decode(file_get_contents(__DIR__ . '/../../../data/data-trelloJson.json'));
 		$this->boardImportService->setData($data);
 
-		$configInstance = json_decode(file_get_contents(__DIR__ . '/../../../data/config-trelloJson.json'));
+		$configFile = __DIR__ . '/../../../data/config-trelloJson.json';
+		$configInstance = json_decode(file_get_contents($configFile));
 		$this->boardImportService->setConfigInstance($configInstance);
 
 		$this->trelloJsonService = $this->createMock(TrelloJsonService::class);
+		$this->trelloJsonService
+			->method('getJsonSchemaPath')
+			->willReturn($configFile);
 		$this->boardImportService->setImportSystem($this->trelloJsonService);
 
 		$owner = $this->createMock(IUser::class);

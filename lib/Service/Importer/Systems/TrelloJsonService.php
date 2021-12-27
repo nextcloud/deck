@@ -65,6 +65,15 @@ class TrelloJsonService extends ABoardImportService {
 		$this->validateUsers();
 	}
 
+	public function getJsonSchemaPath(): string {
+		return implode(DIRECTORY_SEPARATOR, [
+			__DIR__,
+			'..',
+			'fixtures',
+			'config-trelloJson-schema.json',
+		]);
+	}
+
 	public function validateUsers(): void {
 		if (empty($this->getImportService()->getConfig('uidRelation'))) {
 			return;

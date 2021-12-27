@@ -36,11 +36,16 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Event\BoardImportGetAllowedEvent;
 use OCA\Deck\Exceptions\ConflictException;
 use OCA\Deck\NotFoundException;
+use OCA\Deck\Service\FileService;
+use OCA\Deck\Service\Importer\Systems\TrelloApiService;
+use OCA\Deck\Service\Importer\Systems\TrelloJsonService;
 use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
 use OCP\Comments\NotFoundException as CommentNotFoundException;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IUserManager;
 
 class BoardImportService {
@@ -62,6 +67,8 @@ class BoardImportService {
 	private $attachmentMapper;
 	/** @var ICommentsManager */
 	private $commentsManager;
+	/** @var IEventDispatcher */
+	private $eventDispatcher;
 	/** @var string */
 	private $system = '';
 	/** @var null|ABoardImportService */
@@ -96,7 +103,8 @@ class BoardImportService {
 		AssignmentMapper $assignmentMapper,
 		AttachmentMapper $attachmentMapper,
 		CardMapper $cardMapper,
-		ICommentsManager $commentsManager
+		ICommentsManager $commentsManager,
+		IEventDispatcher $eventDispatcher
 	) {
 		$this->userManager = $userManager;
 		$this->boardMapper = $boardMapper;
@@ -107,6 +115,7 @@ class BoardImportService {
 		$this->assignmentMapper = $assignmentMapper;
 		$this->attachmentMapper = $attachmentMapper;
 		$this->commentsManager = $commentsManager;
+		$this->eventDispatcher = $eventDispatcher;
 		$this->board = new Board();
 		$this->disableCommentsEvents();
 	}
@@ -161,29 +170,25 @@ class BoardImportService {
 		return $this->system;
 	}
 
+	public function addAllowedImportSystem($system): self {
+		$this->allowedSystems[] = $system;
+		return $this;
+	}
+
 	public function getAllowedImportSystems(): array {
 		if (!$this->allowedSystems) {
-			$allowedSystems = glob(__DIR__ . '/Systems/*Service.php');
-			$allowedSystems = array_map(function ($filename) {
-				preg_match('/\/(?<class>(?<system>\w+)Service)\.php$/', $filename, $matches);
-				$className = 'OCA\Deck\Service\Importer\Systems\\'.$matches['class'];
-				if (!class_exists($className)) {
-					/** @psalm-suppress UnresolvableInclude */
-					require_once $className;
-				}
-				/** @psalm-suppress InvalidPropertyFetch */
-				$name = $className::$name;
-				if (empty($name)) {
-					$name = lcfirst($matches['system']);
-				}
-				return [
-					'name' => $name,
-					'class' => $className,
-					'internalName' => lcfirst($matches['system'])
-				];
-			}, $allowedSystems);
-			$this->allowedSystems = array_values($allowedSystems);
+			$this->addAllowedImportSystem([
+				'name' => TrelloApiService::$name,
+				'class' => TrelloApiService::class,
+				'internalName' => 'TrelloApi'
+			]);
+			$this->addAllowedImportSystem([
+				'name' => TrelloJsonService::$name,
+				'class' => TrelloJsonService::class,
+				'internalName' => 'TrelloJson'
+			]);
 		}
+		$this->eventDispatcher->dispatchTyped(new BoardImportGetAllowedEvent($this));
 		return $this->allowedSystems;
 	}
 
@@ -192,7 +197,7 @@ class BoardImportService {
 			throw new NotFoundException('System to import not found');
 		}
 		if (!is_object($this->systemInstance)) {
-			$systemClass = 'OCA\\Deck\\Service\\BoardImport' . ucfirst($this->getSystem()) . 'Service';
+			$systemClass = 'OCA\\Deck\\Service\\Importer\\Systems\\' . ucfirst($this->getSystem()) . 'Service';
 			$this->systemInstance = \OC::$server->get($systemClass);
 			$this->systemInstance->setImportService($this);
 		}
@@ -421,7 +426,7 @@ class BoardImportService {
 	}
 
 	public function getJsonSchemaPath(): string {
-		return __DIR__ . '/fixtures/config-' . $this->getSystem() . '-schema.json';
+		return $this->getImportSystem()->getJsonSchemaPath();
 	}
 
 	public function validateOwner(): void {

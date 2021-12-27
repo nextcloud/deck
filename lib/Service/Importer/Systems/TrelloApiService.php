@@ -66,6 +66,15 @@ class TrelloApiService extends TrelloJsonService {
 		parent::bootstrap();
 	}
 
+	public function getJsonSchemaPath(): string {
+		return implode(DIRECTORY_SEPARATOR, [
+			__DIR__,
+			'..',
+			'fixtures',
+			'config-trelloApi-schema.json',
+		]);
+	}
+
 	private function populateActions(): void {
 		$data = $this->getImportService()->getData();
 		$data->actions = $this->doRequest(

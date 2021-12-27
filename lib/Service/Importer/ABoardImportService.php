@@ -92,6 +92,8 @@ abstract class ABoardImportService {
 
 	abstract public function validateUsers(): void;
 
+	abstract public function getJsonSchemaPath(): string;
+
 	public function updateStack(string $id, Stack $stack): void {
 		$this->stacks[$id] = $stack;
 	}
