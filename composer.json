@@ -22,7 +22,13 @@
 	},
 	"config": {
 		"optimize-autoloader": true,
-		"classmap-authoritative": true
+		"classmap-authoritative": true,
+		"allow-plugins": {
+			"composer/package-versions-deprecated": true
+		},
+		"platform": {
+			"php": "7.3"
+		}
 	},
 	"scripts": {
 		"lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
