@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Sharing;
 
+use Doctrine\DBAL\Platforms\MySQLPlatform;
 use OC\Files\Cache\Cache;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
@@ -710,6 +711,13 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			}
 
 			$qb = $this->dbConnection->getQueryBuilder();
+			// Avoid using implicit cast in order to make use of the index in the join on MySQL/MariaDB
+			// FIXME: Once >= Nextcloud 24 this can be dropped due to https://github.com/nextcloud/server/pull/30471
+			if ($this->dbConnection->getDatabasePlatform() instanceof MySQLPlatform) {
+				$cardIdExpression = $qb->createFunction('CAST(dc.id as CHAR)');
+			} else {
+				$cardIdExpression = $qb->expr()->castColumn('dc.id', IQueryBuilder::PARAM_STR);
+			}
 			$qb->select('s.*',
 				'f.fileid', 'f.path', 'f.permissions AS f_permissions', 'f.storage', 'f.path_hash',
 				'f.parent AS f_parent', 'f.name', 'f.mimetype', 'f.mimepart', 'f.size', 'f.mtime', 'f.storage_mtime',
@@ -720,7 +728,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 				->orderBy('s.id')
 				->leftJoin('s', 'filecache', 'f', $qb->expr()->eq('s.file_source', 'f.fileid'))
 				->leftJoin('f', 'storages', 'st', $qb->expr()->eq('f.storage', 'st.numeric_id'))
-				->leftJoin('s', 'deck_cards', 'dc', $qb->expr()->eq($qb->expr()->castColumn('dc.id', IQueryBuilder::PARAM_STR), 's.share_with'))
+				->leftJoin('s', 'deck_cards', 'dc', $qb->expr()->eq($cardIdExpression, 's.share_with'))
 				->leftJoin('dc', 'deck_stacks', 'ds', $qb->expr()->eq('dc.stack_id', 'ds.id'))
 				->leftJoin('ds', 'deck_boards', 'db', $qb->expr()->eq('ds.board_id', 'db.id'));
 
@@ -781,6 +789,13 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		$shares = [];
 
 		$qb = $this->dbConnection->getQueryBuilder();
+		// Avoid using implicit cast in order to make use of the index in the join on MySQL/MariaDB
+		// FIXME: Once >= Nextcloud 24 this can be dropped due to https://github.com/nextcloud/server/pull/30471
+		if ($this->dbConnection->getDatabasePlatform() instanceof MySQLPlatform) {
+			$cardIdExpression = $qb->createFunction('CAST(dc.id as CHAR)');
+		} else {
+			$cardIdExpression = $qb->expr()->castColumn('dc.id', IQueryBuilder::PARAM_STR);
+		}
 		$qb->select('s.*',
 			'f.fileid', 'f.path', 'f.permissions AS f_permissions', 'f.storage', 'f.path_hash',
 			'f.parent AS f_parent', 'f.name', 'f.mimetype', 'f.mimepart', 'f.size', 'f.mtime', 'f.storage_mtime',
@@ -791,7 +806,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			->orderBy('s.id')
 			->leftJoin('s', 'filecache', 'f', $qb->expr()->eq('s.file_source', 'f.fileid'))
 			->leftJoin('f', 'storages', 'st', $qb->expr()->eq('f.storage', 'st.numeric_id'))
-			->leftJoin('s', 'deck_cards', 'dc', $qb->expr()->eq($qb->expr()->castColumn('dc.id', IQueryBuilder::PARAM_STR), 's.share_with'));
+			->leftJoin('s', 'deck_cards', 'dc', $qb->expr()->eq($cardIdExpression, 's.share_with'));
 
 		if ($limit !== -1) {
 			$qb->setMaxResults($limit);
