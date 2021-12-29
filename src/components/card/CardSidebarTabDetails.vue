@@ -224,7 +224,6 @@ export default {
 	computed: {
 		...mapState({
 			currentBoard: state => state.currentBoard,
-			cardDetailsInModal: state => state.cardDetailsInModal,
 		}),
 		...mapGetters(['canEdit', 'assignables']),
 		formatedAssignables() {
@@ -249,6 +248,14 @@ export default {
 
 				return assignable
 			})
+		},
+		cardDetailsInModal: {
+			get() {
+				return this.$store.getters.config('cardDetailsInModal')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+			},
 		},
 		duedate: {
 			get() {

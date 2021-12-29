@@ -62,7 +62,6 @@ export default new Vuex.Store({
 		showArchived: false,
 		navShown: localStorage.getItem('deck.navShown') === 'true',
 		compactMode: localStorage.getItem('deck.compactMode') === 'true',
-		cardDetailsInModal: localStorage.getItem('deck.cardDetailsInModal') === 'true',
 		sidebarShown: false,
 		currentBoard: null,
 		currentCard: null,
@@ -78,9 +77,6 @@ export default new Vuex.Store({
 	getters: {
 		config: state => (key) => {
 			return state.config[key]
-		},
-		cardDetailsInModal: state => {
-			return state.cardDetailsInModal
 		},
 		getSearchQuery: state => {
 			return state.searchQuery
@@ -232,10 +228,6 @@ export default new Vuex.Store({
 		toggleCompactMode(state) {
 			state.compactMode = !state.compactMode
 			localStorage.setItem('deck.compactMode', state.compactMode)
-		},
-		setCardDetailsInModal(state) {
-			state.cardDetailsInModal = !state.cardDetailsInModal
-			localStorage.setItem('deck.cardDetailsInModal', state.cardDetailsInModal)
 		},
 		setBoards(state, boards) {
 			state.boards = boards
@@ -440,9 +432,6 @@ export default new Vuex.Store({
 		},
 		toggleCompactMode({ commit }) {
 			commit('toggleCompactMode')
-		},
-		setCardDetailsInModal({ commit }, show) {
-			commit('setCardDetailsInModal', show)
 		},
 		setCurrentBoard({ commit }, board) {
 			commit('setCurrentBoard', board)

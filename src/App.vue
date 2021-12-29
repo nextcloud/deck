@@ -88,7 +88,6 @@ export default {
 			navShown: state => state.navShown,
 			sidebarShownState: state => state.sidebarShown,
 			currentBoard: state => state.currentBoard,
-			cardDetailsInModal: state => state.cardDetailsInModal,
 		}),
 		// TODO: properly handle sidebar showing for route subview and board sidebar
 		sidebarRouterView() {
@@ -97,6 +96,14 @@ export default {
 		},
 		sidebarShown() {
 			return this.sidebarRouterView || this.sidebarShownState
+		},
+		cardDetailsInModal: {
+			get() {
+				return this.$store.getters.config('cardDetailsInModal')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+			},
 		},
 	},
 	created() {
