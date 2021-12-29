@@ -24,6 +24,7 @@
 namespace OCA\Deck\Db;
 
 use OC\Cache\CappedMemoryCache;
+use OCA\Deck\Service\CirclesService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IDBConnection;
 use OCP\IUserManager;
@@ -36,10 +37,10 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	private $stackMapper;
 	private $userManager;
 	private $groupManager;
+	private $circlesService;
 	private $logger;
 
-	private $circlesEnabled;
-
+	/** @var CappedMemoryCache */
 	private $userBoardCache;
 
 	public function __construct(
@@ -49,6 +50,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		StackMapper $stackMapper,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
+		CirclesService $circlesService,
 		LoggerInterface $logger
 	) {
 		parent::__construct($db, 'deck_boards', Board::class);
@@ -57,12 +59,10 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		$this->stackMapper = $stackMapper;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
+		$this->circlesService = $circlesService;
 		$this->logger = $logger;
 
 		$this->userBoardCache = new CappedMemoryCache();
-
-
-		$this->circlesEnabled = \OC::$server->getAppManager()->isEnabledForUser('circles');
 	}
 
 
@@ -181,12 +181,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	public function findAllByCircles($userId, $limit = null, $offset = null, $since = -1,$includeArchived = true) {
-		if (!$this->circlesEnabled) {
-			return [];
-		}
-		$circles = array_map(function ($circle) {
-			return $circle->getUniqueId();
-		}, \OCA\Circles\Api\v1\Circles::joinedCircles($userId, true));
+		$circles = $this->circlesService->getUserCircles($userId);
 		if (count($circles) === 0) {
 			return [];
 		}
@@ -277,11 +272,11 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 				return null;
 			}
 			if ($acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
-				if (!$this->circlesEnabled) {
+				if (!$this->circlesService->isCirclesEnabled()) {
 					return null;
 				}
 				try {
-					$circle = \OCA\Circles\Api\v1\Circles::detailsCircle($acl->getParticipant(), true);
+					$circle = $this->circlesService->getCircle($acl->getParticipant());
 					if ($circle) {
 						return new Circle($circle);
 					}
