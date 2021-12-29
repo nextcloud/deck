@@ -500,7 +500,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			);
 		}
 
-		$qb->innerJoin('s', 'filecache' ,'f', $qb->expr()->eq('s.file_source', 'f.fileid'));
+		$qb->innerJoin('s', 'filecache', 'f', $qb->expr()->eq('s.file_source', 'f.fileid'));
 		$qb->andWhere($qb->expr()->eq('f.parent', $qb->createNamedParameter($node->getId())));
 
 		$qb->orderBy('s.id');

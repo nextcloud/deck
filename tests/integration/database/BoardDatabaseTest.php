@@ -70,7 +70,7 @@ class BoardDatabaseTest extends \Test\TestCase {
 		$board->setOwner(self::TEST_USER1);
 		$board->setColor('000000');
 		$board->setLabels([]);
-		$created = $this->boardService->create('Test', self::TEST_USER1,  '000000');
+		$created = $this->boardService->create('Test', self::TEST_USER1, '000000');
 		$id = $created->getId();
 		$actual = $this->boardService->find($id);
 		$this->assertEquals($actual->getTitle(), $board->getTitle());

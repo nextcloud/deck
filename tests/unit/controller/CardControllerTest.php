@@ -98,11 +98,11 @@ class CardControllerTest extends TestCase {
 	}
 	public function testAssignLabel() {
 		$this->cardService->expects($this->once())->method('assignLabel');
-		$this->controller->assignLabel(1,2);
+		$this->controller->assignLabel(1, 2);
 	}
 	public function testRemoveLabel() {
 		$this->cardService->expects($this->once())->method('removeLabel');
-		$this->controller->removeLabel(1,2);
+		$this->controller->removeLabel(1, 2);
 	}
 
 	public function testReorder() {

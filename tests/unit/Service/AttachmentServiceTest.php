@@ -176,9 +176,9 @@ class AttachmentServiceTest extends TestCase {
 	public function testFindAll() {
 		$this->mockPermission(Acl::PERMISSION_READ);
 		$attachments = [
-			$this->createAttachment('deck_file','file1'),
-			$this->createAttachment('deck_file','file2'),
-			$this->createAttachment('deck_file_invalid','file3'),
+			$this->createAttachment('deck_file', 'file1'),
+			$this->createAttachment('deck_file', 'file2'),
+			$this->createAttachment('deck_file_invalid', 'file3'),
 		];
 		$this->attachmentMapper->expects($this->once())
 			->method('findAll')
@@ -197,14 +197,14 @@ class AttachmentServiceTest extends TestCase {
 	public function testFindAllWithDeleted() {
 		$this->mockPermission(Acl::PERMISSION_READ);
 		$attachments = [
-			$this->createAttachment('deck_file','file1'),
-			$this->createAttachment('deck_file','file2'),
-			$this->createAttachment('deck_file_invalid','file3'),
+			$this->createAttachment('deck_file', 'file1'),
+			$this->createAttachment('deck_file', 'file2'),
+			$this->createAttachment('deck_file_invalid', 'file3'),
 		];
 		$attachmentsDeleted = [
-			$this->createAttachment('deck_file','file4'),
-			$this->createAttachment('deck_file','file5'),
-			$this->createAttachment('deck_file_invalid','file6'),
+			$this->createAttachment('deck_file', 'file4'),
+			$this->createAttachment('deck_file', 'file5'),
+			$this->createAttachment('deck_file_invalid', 'file6'),
 		];
 		$this->attachmentMapper->expects($this->once())
 			->method('findAll')
