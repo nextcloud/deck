@@ -178,8 +178,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import './../../css/animations';
-	@import './../../css/variables';
+	@use './../../css/animations' as *;
+	@use './../../css/variables' as *;
+	@use './../../css/labels';
 
 	.card {
 		transition: box-shadow 0.1s ease-in-out;
@@ -232,7 +233,7 @@ export default {
 			}
 		}
 
-		@import './../../css/labels';
+		@include labels.labels;
 
 		.card-controls {
 			display: flex;

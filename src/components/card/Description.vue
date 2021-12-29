@@ -239,6 +239,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@use './../../css/markdown' as *;
 
 .modal__content {
 	width: 25vw;
@@ -265,7 +266,7 @@ export default {
 	min-height: 100px;
 
 	&::v-deep {
-		@import './../../css/markdown';
+		@include markdown;
 	}
 
 	&::v-deep input {

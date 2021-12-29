@@ -265,8 +265,7 @@ export default {
 <style lang="scss" scoped>
 
 	@use 'sass:math';
-
-	@import './../../css/variables';
+	@use './../../css/variables' as *;
 
 	.stack {
 		width: $stack-width + $stack-spacing * 3;
