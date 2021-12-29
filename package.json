@@ -22,8 +22,8 @@
 		"watch": "NODE_ENV=development webpack --progress --watch --config webpack.js",
 		"lint": "eslint --ext .js,.vue src",
 		"lint:fix": "eslint --ext .js,.vue src --fix",
-		"stylelint": "stylelint src",
-		"stylelint:fix": "stylelint src --fix",
+		"stylelint": "stylelint {src,css}/**/*.{html,vue,css,sass,scss,less}",
+		"stylelint:fix": "stylelint {src,css}/**/*.{html,vue,css,sass,scss,less} --fix",
 		"test": "jest",
 		"test:coverage": "jest --coverage"
 	},
