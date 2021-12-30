@@ -66,7 +66,11 @@
 					:placeholder="t('deck', 'Select a list')"
 					:options="stacksFromBoard"
 					:max-height="100"
-					label="title" />
+					label="title">
+					<span slot="noOptions">
+						{{ t('deck', 'List is empty') }}
+					</span>
+				</Multiselect>
 
 				<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">
 					{{ t('deck', 'Move card') }}
