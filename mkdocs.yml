@@ -11,4 +11,6 @@ pages:
         - Nextcloud API: API-Nextcloud.md
     - Developer documentation:
         - Data structure: structure.md
-
+        - Import documentation:
+            - Implement import: implement-import.md
+            - Class diagram: import-class-diagram.md
