@@ -1,11 +1,10 @@
 OC.L10N.register(
     "deck",
     {
-    "Deck" : "Baralho",
+    "Deck" : "Quadro",
     "Personal" : "Pessoal",
     "The card \"%s\" on \"%s\" has reached its due date." : "O cartão \"%s\" em \"%s\" chegou a sua data de vencimento",
     "The board \"%s\" has been shared with you by %s." : "O quadro \"%s\" foi partilhado consigo por %s.",
-    "{user} has shared the board %s with you." : "{user} partilhou o quadro %s consigo.",
     "Finished" : "Terminado",
     "To review" : "A rever",
     "Action needed" : "Acção necessária",
@@ -19,6 +18,7 @@ OC.L10N.register(
     "Add board" : "Arquivar cartão",
     "Cancel" : "Cancelar",
     "File already exists" : "O ficheiro já existe",
+    "Add card" : "Adicionar um cartão",
     "Hide archived cards" : "Esconder cartões arquivados",
     "Show archived cards" : "Mostrar cartões arquivados",
     "Details" : "Detalhes",
@@ -29,7 +29,6 @@ OC.L10N.register(
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Delete" : "Apagar",
-    "Add card" : "Adicionar um cartão",
     "Edit" : "Editar",
     "Members" : "Membros",
     "Attachments" : "Anexos",
@@ -38,6 +37,8 @@ OC.L10N.register(
     "Created" : "Criado",
     "Due date" : "Data limite",
     "Select Date" : "Escolha a data",
+    "Today" : "Hoje",
+    "Tomorrow" : "Amanhã",
     "Save" : "Guardar",
     "Reply" : "Resposta",
     "Update" : "Atualizar",
@@ -51,8 +52,6 @@ OC.L10N.register(
     "Board details" : "Detalhes do quadro",
     "Edit board" : "Editar quadro",
     "An error occurred" : "Ocorreu um erro",
-    "Today" : "Hoje",
-    "Tomorrow" : "Amanhã",
     "This week" : "Esta semana"
 },
 "nplurals=2; plural=(n != 1);");

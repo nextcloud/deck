@@ -17,11 +17,11 @@ OC.L10N.register(
     "Comments" : "Kommentarar",
     "Modified" : "Endra",
     "Created" : "Lagd",
+    "Today" : "I dag",
     "Save" : "Lagre",
     "Update" : "Oppdater",
     "Description" : "Skildring",
     "seconds ago" : "sekund sidan",
-    "Shared with you" : "Shared with you",
-    "Today" : "I dag"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=2; plural=(n != 1);");

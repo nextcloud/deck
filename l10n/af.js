@@ -24,6 +24,8 @@ OC.L10N.register(
     "Created" : "Geskep",
     "Due date" : "Sperdatum",
     "Select Date" : "Kies Datum",
+    "Today" : "Vandag",
+    "Tomorrow" : "Môre",
     "Save" : "Stoor",
     "Reply" : "Antwoord",
     "Update" : "Werk by",
@@ -31,8 +33,6 @@ OC.L10N.register(
     "seconds ago" : "sekondes gelede",
     "Shared with you" : "Met u gedeel",
     "An error occurred" : "'n Fout het voorgekom",
-    "Today" : "Vandag",
-    "Tomorrow" : "Môre",
     "This week" : "Vandeesweek"
 },
 "nplurals=2; plural=(n != 1);");

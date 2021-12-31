@@ -19,6 +19,8 @@
     "Modified" : "Muudetud",
     "Created" : "Loodud",
     "Due date" : "Tähtaeg",
+    "Today" : "Täna",
+    "Tomorrow" : "Homme",
     "Save" : "Salvesta",
     "Reply" : "Vasta",
     "Update" : "Uuenda",
@@ -27,8 +29,6 @@
     "Delete card" : "Kustuta kaart",
     "seconds ago" : "sekundit tagasi",
     "Shared with you" : "Sinuga jagatud",
-    "An error occurred" : "Tekkis tõrge",
-    "Today" : "Täna",
-    "Tomorrow" : "Homme"
+    "An error occurred" : "Tekkis tõrge"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

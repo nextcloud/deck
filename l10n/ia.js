@@ -23,6 +23,8 @@ OC.L10N.register(
     "Attachments" : "Attachamentos",
     "Comments" : "Commentarios",
     "Modified" : "Modificate",
+    "Today" : "Hodie",
+    "Tomorrow" : "Deman",
     "Save" : "Salveguardar",
     "Reply" : "Responder",
     "Update" : "Actualisation",
@@ -30,8 +32,6 @@ OC.L10N.register(
     "(group)" : "(gruppo)",
     "seconds ago" : "secundas passate",
     "Shared with you" : "Compartite con te",
-    "Today" : "Hodie",
-    "Tomorrow" : "Deman",
     "This week" : "Iste septimana"
 },
 "nplurals=2; plural=(n != 1);");

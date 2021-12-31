@@ -18,6 +18,7 @@ OC.L10N.register(
     "Cancel" : "Anullo",
     "File already exists" : "Skedari ekziston tashmë",
     "Do you want to overwrite it?" : "Doni ta rishkruani atë?",
+    "Add card" : "Shto kartë",
     "Hide archived cards" : "Fsheh kartat e arkivuara ",
     "Show archived cards" : "Trego kartat e arkivuara",
     "Details" : "Detajet",
@@ -27,7 +28,6 @@ OC.L10N.register(
     "Can edit" : "Can edit",
     "Can share" : "Mund të ndaj",
     "Delete" : "Delete",
-    "Add card" : "Shto kartë",
     "Edit" : "Edito",
     "Members" : "Anëtar",
     "Attachments" : "Bashkangjitjet",
@@ -37,6 +37,8 @@ OC.L10N.register(
     "Due date" : "Data e vendosur",
     "Remove due date" : "Hiq datën e mbarimit",
     "Select Date" : "Zgjidhni Datën",
+    "Today" : "Sot",
+    "Tomorrow" : "Nesër",
     "Save" : "Ruaj",
     "Reply" : "Përgjigju",
     "Update" : "Përditëso",
@@ -48,8 +50,6 @@ OC.L10N.register(
     "Shared with you" : "E ndarë me ju",
     "Board details" : "Detajet e Tabeles ",
     "Edit board" : "Tabela e editimeve",
-    "Today" : "Sot",
-    "Tomorrow" : "Nesër",
     "This week" : "Këtë javë"
 },
 "nplurals=2; plural=(n != 1);");

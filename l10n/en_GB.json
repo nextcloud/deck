@@ -3,7 +3,6 @@
     "Personal" : "Personal",
     "The card \"%s\" on \"%s\" has reached its due date." : "The card \"%s\" on \"%s\" has reached its due date.",
     "The board \"%s\" has been shared with you by %s." : "The board \"%s\" has been shared with you by %s.",
-    "{user} has shared the board %s with you." : "{user} has shared the board %s with you.",
     "Finished" : "Finished",
     "To review" : "To review",
     "Action needed" : "Action needed",
@@ -21,6 +20,7 @@
     "Cancel" : "Cancel",
     "File already exists" : "File already exists",
     "Do you want to overwrite it?" : "Do you want to overwrite it?",
+    "Add card" : "Add card",
     "Filter by tag" : "Filter by tag",
     "Hide archived cards" : "Hide archived cards",
     "Show archived cards" : "Show archived cards",
@@ -31,7 +31,6 @@
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Delete" : "Delete",
-    "Add card" : "Add card",
     "Edit" : "Edit",
     "Members" : "Members",
     "Attachments" : "Attachments",
@@ -40,6 +39,8 @@
     "Created" : "Created",
     "Due date" : "Due date",
     "Remove due date" : "Remove due date",
+    "Today" : "Today",
+    "Tomorrow" : "Tomorrow",
     "Save" : "Save",
     "Reply" : "Reply",
     "Update" : "Update",
@@ -53,8 +54,6 @@
     "Shared with you" : "Shared with you",
     "Board details" : "Board details",
     "Edit board" : "Edit board",
-    "Today" : "Today",
-    "Tomorrow" : "Tomorrow",
     "This week" : "This week"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
