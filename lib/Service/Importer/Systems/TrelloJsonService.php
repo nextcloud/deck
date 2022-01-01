@@ -157,7 +157,7 @@ class TrelloJsonService extends ABoardImportService {
 					);
 					$message = $this->l10n->t(
 						"This comment has more than %s characters.\n" .
-						"Added as an attachment to the card with name %s\n" .
+						"Added as an attachment to the card with name %s.\n" .
 						"Accessible on URL: %s.",
 						[
 							IComment::MAX_MESSAGE_LENGTH,
