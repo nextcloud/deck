@@ -100,6 +100,7 @@ OC.L10N.register(
     "Could not write file to disk" : "寫入硬碟失敗",
     "A PHP extension stopped the file upload" : "某個 PHP 擴充功能終止檔案的上傳",
     "No file uploaded or file size exceeds maximum of %s" : "沒有上傳檔案或檔案大小超過 %s 的最大值",
+    "This comment has more than %s characters.\nAdded as an attachment to the card with name %s\nAccessible on URL: %s." : "此評論超過%s個字符。\n作為附件添加到名稱為 %s 的卡片上\n訪問 URL 訪問：%s。",
     "Card not found" : "未找到卡片",
     "Path is already shared with this card" : "已和這張卡片分享了路徑",
     "Invalid date, date format must be YYYY-MM-DD" : "無效的日期，需為 YYYY-MM-DD 格式",
@@ -240,6 +241,7 @@ OC.L10N.register(
     "Archive card" : "封存卡片",
     "Delete card" : "刪除卡片",
     "Move card to another board" : "將卡片移到其他面板",
+    "List is empty" : "列表是空的",
     "Card deleted" : "卡片被刪除",
     "seconds ago" : "幾秒前",
     "All boards" : "全部面板",
@@ -285,6 +287,9 @@ OC.L10N.register(
     "Share with a Deck card" : "用一張 Deck 卡片進行分享 ",
     "Share {file} with a Deck card" : "用一張 Deck 卡片分享 {file}",
     "Share" : "分享",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck是一種看板式組織工具，旨在針對與Nextcloud集成的團隊進行個人計劃和項目組織。\n\n\n- 📥 增加您的任務到card和把它們整理好\n- 📄 寫下額外的筆記在markdown\n- 🔖 分配標籤以更好地組織您的工作\n- 👥 與您的團隊，朋友或家人分享\n- 📎 附加檔案並將其嵌入到您的 markdown 描述\n- 💬 使用意見與您的團隊討論\n- ⚡ 在活動流中跟踪更改\n- 🚀 讓您的項目井井有條"
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck是一種看板式組織工具，旨在針對與Nextcloud集成的團隊進行個人計劃和項目組織。\n\n\n- 📥 增加您的任務到card和把它們整理好\n- 📄 寫下額外的筆記在markdown\n- 🔖 分配標籤以更好地組織您的工作\n- 👥 與您的團隊，朋友或家人分享\n- 📎 附加檔案並將其嵌入到您的 markdown 描述\n- 💬 使用意見與您的團隊討論\n- ⚡ 在活動流中跟踪更改\n- 🚀 讓您的項目井井有條",
+    "Creating the new card…" : "正在建立新卡片...",
+    "\"{card}\" was added to \"{board}\"" : "\"{card}\" 已添加到 \"{board}\"",
+    "(circle)" : "（社交圈子）"
 },
 "nplurals=1; plural=0;");
