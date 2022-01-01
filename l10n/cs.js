@@ -100,6 +100,7 @@ OC.L10N.register(
     "Could not write file to disk" : "Soubor se nedaří se zapsat na úložiště",
     "A PHP extension stopped the file upload" : "PHP rozšíření zastavilo nahrávání souboru.",
     "No file uploaded or file size exceeds maximum of %s" : "Nebyl nahrán žádný soubor nebo jeho velikost přesáhla %s",
+    "This comment has more than %s characters.\nAdded as an attachment to the card with name %s\nAccessible on URL: %s." : "Tento komentář je delší než %s znaků.\nPřidán jako příloha ke kartě nazvané %s\nDostupné na URL: %s.",
     "Card not found" : "Karta nebyla nalezena",
     "Path is already shared with this card" : "Popis umístění už je touto kartou sdíleno",
     "Invalid date, date format must be YYYY-MM-DD" : "Neplatné datum – je třeba, aby formát data byl RRRR-MM-DD",
@@ -240,6 +241,7 @@ OC.L10N.register(
     "Archive card" : "Archivovat kartu",
     "Delete card" : "Smazat kartu",
     "Move card to another board" : "Přesunout kartu na jinou tabuli",
+    "List is empty" : "Seznam je prázdný",
     "Card deleted" : "Karta smazána",
     "seconds ago" : "před několika sekundami",
     "All boards" : "Všechny tabule",
@@ -285,6 +287,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Sdílet s kartou aplikace Deck",
     "Share {file} with a Deck card" : "Sdílet {file} s kartou aplikace Deck",
     "Share" : "Sdílet",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck je nástroj cílený na osobní nebo projektové plánování týmů v Kanban stylu, vestavěný v Nextcloud.\n\n\n- 📥 Zadávejte a uspořádávejte své úkoly do karet\n- 📄 Zapisujte si dodatečné poznámky \n- 🔖 Přiřazujte štítky pro ještě lepší organizaci\n- 👥 Sdílejte se svým týmem, přáteli nebo rodinou\n- 🚀 Dostaňte svůj projekt pod kontrolu"
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck je nástroj cílený na osobní nebo projektové plánování týmů v Kanban stylu, vestavěný v Nextcloud.\n\n\n- 📥 Zadávejte a uspořádávejte své úkoly do karet\n- 📄 Zapisujte si dodatečné poznámky \n- 🔖 Přiřazujte štítky pro ještě lepší organizaci\n- 👥 Sdílejte se svým týmem, přáteli nebo rodinou\n- 🚀 Dostaňte svůj projekt pod kontrolu",
+    "Creating the new card…" : "Vytváření nové karty…",
+    "\"{card}\" was added to \"{board}\"" : "„{card}“ bylo přidáno do „{board}“",
+    "(circle)" : "(okruh)"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

@@ -224,6 +224,7 @@ OC.L10N.register(
     "Archive card" : "Archyvuoti kortelę",
     "Delete card" : "Ištrinti kortelę",
     "Move card to another board" : "Perkelti kortelę į kitą lentą",
+    "List is empty" : "Sąrašas tuščias",
     "Card deleted" : "Kortelė ištrinta",
     "seconds ago" : "prieš keletą sekundžių",
     "All boards" : "Visos lentos",
@@ -257,6 +258,8 @@ OC.L10N.register(
     "Something went wrong" : "Kažkas nutiko",
     "Maximum file size of {size} exceeded" : "Viršytas maksimalus {size} failo dydis",
     "Error creating the share" : "Klaida kuriant viešinį",
-    "Share" : "Bendrinti"
+    "Share" : "Bendrinti",
+    "Creating the new card…" : "Kuriama nauja kortelė…",
+    "(circle)" : "(ratas)"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");
