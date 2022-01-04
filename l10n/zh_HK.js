@@ -100,7 +100,6 @@ OC.L10N.register(
     "Could not write file to disk" : "寫入硬碟失敗",
     "A PHP extension stopped the file upload" : "某個 PHP 擴充功能終止檔案的上傳",
     "No file uploaded or file size exceeds maximum of %s" : "沒有上傳檔案或檔案大小超過 %s 的最大值",
-    "This comment has more than %s characters.\nAdded as an attachment to the card with name %s\nAccessible on URL: %s." : "此評論超過%s個字符。\n作為附件添加到名稱為 %s 的卡片上\n訪問 URL 訪問：%s。",
     "Card not found" : "未找到卡片",
     "Path is already shared with this card" : "已和這張卡片分享了路徑",
     "Invalid date, date format must be YYYY-MM-DD" : "無效的日期，需為 YYYY-MM-DD 格式",
