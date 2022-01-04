@@ -98,7 +98,6 @@
     "Could not write file to disk" : "無法寫入硬碟",
     "A PHP extension stopped the file upload" : "一個 PHP 擴充功能終止檔案的上傳",
     "No file uploaded or file size exceeds maximum of %s" : "沒有上傳檔案或檔案超過上限 %s",
-    "This comment has more than %s characters.\nAdded as an attachment to the card with name %s\nAccessible on URL: %s." : "此評論多於 %s 個字元。\n作為附件新增至名為 %s 的卡片上\n可於此 URL 存取：%s。",
     "Card not found" : "找不到卡片",
     "Path is already shared with this card" : "路徑已與此卡片分享",
     "Invalid date, date format must be YYYY-MM-DD" : "無效的日期，日期格式必須為 YYYY-MM-DD",
