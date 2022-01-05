@@ -98,6 +98,7 @@
     "Could not write file to disk" : "Nie można zapisać pliku na dysk",
     "A PHP extension stopped the file upload" : "Rozszerzenie PHP zatrzymało wysyłanie pliku",
     "No file uploaded or file size exceeds maximum of %s" : "Brak wysłanego pliku lub rozmiar pliku przekracza maksymalny limit %s",
+    "This comment has more than %s characters.\nAdded as an attachment to the card with name %s.\nAccessible on URL: %s." : "Ten komentarz ma więcej niż %s znaków.\nDodany jako załącznik do karty o nazwie %s.\nDostępne pod adresem URL: %s.",
     "Card not found" : "Nie znaleziono karty",
     "Path is already shared with this card" : "Ścieżka jest już udostępniona dla tej karty",
     "Invalid date, date format must be YYYY-MM-DD" : "Nieprawidłowa data, format daty to RRRR-MM-DD",
