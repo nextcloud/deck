@@ -100,6 +100,7 @@ OC.L10N.register(
     "Could not write file to disk" : "Die Datei konnte nicht auf die Festplatte geschrieben werden",
     "A PHP extension stopped the file upload" : "Eine PHP-Erweiterung hat das Hochladen der Datei gestoppt",
     "No file uploaded or file size exceeds maximum of %s" : "Keine Datei hochgeladen oder die Dateigröße überschreitet %s",
+    "This comment has more than %s characters.\nAdded as an attachment to the card with name %s.\nAccessible on URL: %s." : "Dieser Kommentar hat mehr als %s Zeichen.\nAls Anhang der Karte mit dem Namen %s hinzugefügt.\nZugriff über die URL: %s.",
     "Card not found" : "Karte nicht gefunden",
     "Path is already shared with this card" : "Pfad wurde bereits mit dieser Karte geteilt",
     "Invalid date, date format must be YYYY-MM-DD" : "Ungültiges Datum, zulässiges Datumsformat: JJJJ-MM-TT",
