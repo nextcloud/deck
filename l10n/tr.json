@@ -98,6 +98,7 @@
     "Could not write file to disk" : "Dosya diske yazılamadı",
     "A PHP extension stopped the file upload" : "Bir PHP eklentisi dosyanın yüklenmesini engelledi",
     "No file uploaded or file size exceeds maximum of %s" : "Herhangi bir dosya yüklenmedi ya da %s olan en büyük dosya boyutu sınırı aşıldı",
+    "This comment has more than %s characters.\nAdded as an attachment to the card with name %s.\nAccessible on URL: %s." : "Bu yorum %s karakterden uzun.\nKarta %s adıyla ek dosya olarak eklendi.\nŞu adresten erişilebilir: %s.",
     "Card not found" : "Kart bulunamadı",
     "Path is already shared with this card" : "Bu yol bu kart ile zaten paylaşılmış",
     "Invalid date, date format must be YYYY-MM-DD" : "Tarih geçersiz. Tarih biçimi YYYY-AA-GG olmalıdır",
@@ -238,6 +239,7 @@
     "Archive card" : "Kartı arşivle",
     "Delete card" : "Kartı sil",
     "Move card to another board" : "Kartı başka bir panoya taşı",
+    "List is empty" : "Liste boş",
     "Card deleted" : "Kart silindi",
     "seconds ago" : "saniye önce",
     "All boards" : "Tüm panolar",
@@ -283,6 +285,9 @@
     "Share with a Deck card" : "Bir tahta kartı ile paylaş",
     "Share {file} with a Deck card" : "{file} dosyasını bir tahta kartı ile paylaş",
     "Share" : "Paylaş",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Tahta, Nextcloud ile bütünleştirilmiş takımlar için Kanban tarzında bir kişisel planlama ve proje yönetimi uygulamasıdır.\n\n\n- 📥 Görevleri kartlara ekleyerek sıralayabilirsiniz\n- 📄 Markdown ile biçimlendirilmiş notlar ekleyebilirsiniz\n- 🔖 Daha iyi düzenleme için etiketler atayabilirsiniz\n- 👥 Takımınız, arkadaşlarınız ya da aileniz ile paylaşabilirsiniz\n- 💬 Yorumları kullanarak konular üzerinde takımınız ile yazışabilirsiniz\n- ⚡ İşlem akışı ile değişiklikleri görebilirsiniz\n- 🚀 Projelerinizi düzenli tutarak izleyebilirsiniz"
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Tahta, Nextcloud ile bütünleştirilmiş takımlar için Kanban tarzında bir kişisel planlama ve proje yönetimi uygulamasıdır.\n\n\n- 📥 Görevleri kartlara ekleyerek sıralayabilirsiniz\n- 📄 Markdown ile biçimlendirilmiş notlar ekleyebilirsiniz\n- 🔖 Daha iyi düzenleme için etiketler atayabilirsiniz\n- 👥 Takımınız, arkadaşlarınız ya da aileniz ile paylaşabilirsiniz\n- 💬 Yorumları kullanarak konular üzerinde takımınız ile yazışabilirsiniz\n- ⚡ İşlem akışı ile değişiklikleri görebilirsiniz\n- 🚀 Projelerinizi düzenli tutarak izleyebilirsiniz",
+    "Creating the new card…" : "Yeni kart ekleniyor…",
+    "\"{card}\" was added to \"{board}\"" : "\"{card}\" kartı \"{board}\" panosuna eklendi",
+    "(circle)" : "(çevre)"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }
