@@ -19,6 +19,8 @@ OC.L10N.register(
     "Upload new files" : "Enviar fichièrs novèls",
     "Today" : "Uèi",
     "Tomorrow" : "Deman",
+    "Next week" : "Setmana seguenta",
+    "Next month" : "Mes seguent",
     "Save" : "Salvar",
     "Cancel reply" : "Anullar la responsa",
     "Reply" : "Respondre",

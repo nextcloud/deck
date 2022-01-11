@@ -96,7 +96,6 @@
     "Path is already shared with this card" : "Η διαδρομή κοινοποιείται ήδη σε αυτήν την κάρτα",
     "Invalid date, date format must be YYYY-MM-DD" : "Μη έγκυρη ημερομηνία, η μορφή ημερομηνίας πρέπει να είναι ΕΕΕΕ-ΜΜ-ΗΗ",
     "Personal planning and team project organization" : "Προσωπικός σχεδιασμός και ομαδική οργάνωση",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Το Deck είναι ένα εργαλείο οργάνωσης τύπου kanban με στόχο τον προσωπικό προγραμματισμό και την ομαδική  οργάνωση για ομάδες που έχουν ενσωματωθεί στο Nextcloud.\n\n\n- 📥 Προσθέστε τις εργασίες σας στις καρτέλες και βάλτε τες στη σειρά\n- 📄 Γράψτε τις πρόσθετες σημειώσεις\n- 🔖 Αντιστοιχίστε τις ετικέτες για ακόμη καλύτερη οργάνωση\n- 👥 Μοιραστείτε με την ομάδα, φίλους ή την οικογένειά σας\n- 📎 Συνδέστε αρχεία και ενσωματώστε τα στην περιγραφή\n- 💬 Συζητήστε με την ομάδα σας χρησιμοποιώντας σχόλια\n- ⚡ Παρακολουθήστε τις αλλαγές στη ροή δραστηριοτήτων\n- 🚀 Έχετε τα όλα οργανωμένα",
     "Card details" : "Λεπτομέρειες καρτέλας",
     "Add board" : "Προσθήκη πίνακα",
     "Select the board to link to a project" : "Επιλέξτε πίνακα και συνδέστε τον σε έργο",
@@ -263,6 +262,7 @@
     "Error creating the share" : "Σφάλμα κατά τη δημιουργία της κοινοποίησης",
     "Share with a Deck card" : "Μοιραστείτε με μια κάρτα Deck",
     "Share {file} with a Deck card" : "Μοιραστείτε {αρχείο} με μια κάρτα Deck",
-    "Share" : "Μοιραστείτε"
+    "Share" : "Μοιραστείτε",
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Το Deck είναι ένα εργαλείο οργάνωσης τύπου kanban με στόχο τον προσωπικό προγραμματισμό και την ομαδική  οργάνωση για ομάδες που έχουν ενσωματωθεί στο Nextcloud.\n\n\n- 📥 Προσθέστε τις εργασίες σας στις καρτέλες και βάλτε τες στη σειρά\n- 📄 Γράψτε τις πρόσθετες σημειώσεις\n- 🔖 Αντιστοιχίστε τις ετικέτες για ακόμη καλύτερη οργάνωση\n- 👥 Μοιραστείτε με την ομάδα, φίλους ή την οικογένειά σας\n- 📎 Συνδέστε αρχεία και ενσωματώστε τα στην περιγραφή\n- 💬 Συζητήστε με την ομάδα σας χρησιμοποιώντας σχόλια\n- ⚡ Παρακολουθήστε τις αλλαγές στη ροή δραστηριοτήτων\n- 🚀 Έχετε τα όλα οργανωμένα"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

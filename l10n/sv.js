@@ -104,7 +104,6 @@ OC.L10N.register(
     "Path is already shared with this card" : "Sökvägen är redan delad med detta kort",
     "Invalid date, date format must be YYYY-MM-DD" : "Ogiltigt datum, måste anges: ÅÅÅÅ-MM-DD",
     "Personal planning and team project organization" : "Personlig planering och projekthantering för teams",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck är en kanban-liknande projekt- och organiseringsapp för arbetsgrupper i Nextcloud.\n\n\n- 📥 Lägg till uppgifter på kort och ordna dem\n- 📄 Skriv anteckningar i markdown\n- 🔖 Tilldela etiketter för organisering\n- 👥 Dela med arbetsgruppen, vänner eller familj\n- 📎 Bifoga filer och bädda in dem i markdown-anteckningarna\n- 💬 Diskutera i arbetsgruppen genom kommentarer\n- ⚡ Håll koll på ändringar i aktivitetsflödet\n- 🚀 Börja organisera din arbetsgrupp nu!",
     "Card details" : "Kortdetaljer",
     "Add board" : "Lägg till tavla",
     "Select the board to link to a project" : "Välj tavla att länka till ett projekt",
@@ -279,6 +278,7 @@ OC.L10N.register(
     "Error creating the share" : "Kunde inte skapa delning",
     "Share with a Deck card" : "Dela med ett Deck-kort",
     "Share {file} with a Deck card" : "Dela {file} med ett Deck-kort",
-    "Share" : "Dela"
+    "Share" : "Dela",
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck är en kanban-liknande projekt- och organiseringsapp för arbetsgrupper i Nextcloud.\n\n\n- 📥 Lägg till uppgifter på kort och ordna dem\n- 📄 Skriv anteckningar i markdown\n- 🔖 Tilldela etiketter för organisering\n- 👥 Dela med arbetsgruppen, vänner eller familj\n- 📎 Bifoga filer och bädda in dem i markdown-anteckningarna\n- 💬 Diskutera i arbetsgruppen genom kommentarer\n- ⚡ Håll koll på ändringar i aktivitetsflödet\n- 🚀 Börja organisera din arbetsgrupp nu!"
 },
 "nplurals=2; plural=(n != 1);");
