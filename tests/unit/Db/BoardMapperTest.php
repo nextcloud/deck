@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Db;
 
+use OCA\Deck\Service\CirclesService;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
@@ -63,6 +64,7 @@ class BoardMapperTest extends MapperTestUtility {
 			\OC::$server->query(StackMapper::class),
 			$this->userManager,
 			$this->groupManager,
+			$this->createMock(CirclesService::class),
 			$this->createMock(LoggerInterface::class)
 		);
 		$this->aclMapper = \OC::$server->query(AclMapper::class);
