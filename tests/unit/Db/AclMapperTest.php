@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Db;
 
+use OCA\Deck\Service\CirclesService;
 use OCP\IGroupManager;
 use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
@@ -56,6 +57,7 @@ class AclMapperTest extends MapperTestUtility {
 			\OC::$server->query(StackMapper::class),
 			$this->userManager,
 			$this->groupManager,
+			$this->createMock(CirclesService::class),
 			$this->createMock(LoggerInterface::class)
 		);
 

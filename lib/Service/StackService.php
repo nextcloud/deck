@@ -35,6 +35,7 @@ use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\StatusException;
 
 class StackService {
@@ -142,7 +143,12 @@ class StackService {
 	}
 
 	public function findCalendarEntries($boardId) {
-		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
+		try {
+			$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
+		} catch (NoPermissionException $e) {
+			\OC::$server->getLogger()->error('Unable to check permission for a previously obtained board ' . $boardId, ['exception' => $e]);
+			return [];
+		}
 		return $this->stackMapper->findAll($boardId);
 	}
 

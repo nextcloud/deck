@@ -37,6 +37,7 @@ use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
@@ -154,7 +155,12 @@ class CardService {
 	}
 
 	public function findCalendarEntries($boardId) {
-		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
+		try {
+			$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
+		} catch (NoPermissionException $e) {
+			\OC::$server->getLogger()->error('Unable to check permission for a previously obtained board ' . $boardId, ['exception' => $e]);
+			return [];
+		}
 		$cards = $this->cardMapper->findCalendarEntries($boardId);
 		foreach ($cards as $card) {
 			$this->enrich($card);
