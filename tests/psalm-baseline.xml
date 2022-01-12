@@ -113,6 +113,7 @@
     </UndefinedClass>
   </file>
   <file src="lib/Db/CardMapper.php">
+    <InvalidArgument occurrences="1"/>
     <InvalidScalarArgument occurrences="1">
       <code>$entity-&gt;getId()</code>
     </InvalidScalarArgument>
@@ -250,10 +251,11 @@
     </RedundantCondition>
   </file>
   <file src="lib/Service/FilesAppService.php">
-    <MissingDependency occurrences="3">
+    <MissingDependency occurrences="4">
       <code>$this-&gt;rootFolder</code>
       <code>$this-&gt;rootFolder</code>
       <code>IRootFolder</code>
+      <code>ShareNotFound</code>
     </MissingDependency>
   </file>
   <file src="lib/Service/PermissionService.php">
@@ -266,6 +268,27 @@
     <UndefinedClass occurrences="1">
       <code>BadRquestException</code>
     </UndefinedClass>
+  </file>
+  <file src="lib/Sharing/DeckShareProvider.php">
+    <InvalidReturnStatement occurrences="1">
+      <code>$shares</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="1">
+      <code>getSharesInFolder</code>
+    </InvalidReturnType>
+    <InvalidThrow occurrences="1">
+      <code>throw new GenericShareException('Already shared', $this-&gt;l-&gt;t('Path is already shared with this card'), 403);</code>
+    </InvalidThrow>
+    <MissingDependency occurrences="8">
+      <code>GenericShareException</code>
+      <code>GenericShareException</code>
+      <code>ShareNotFound</code>
+      <code>ShareNotFound</code>
+      <code>ShareNotFound</code>
+      <code>ShareNotFound</code>
+      <code>ShareNotFound</code>
+      <code>ShareNotFound</code>
+    </MissingDependency>
   </file>
   <file src="lib/Sharing/Listener.php">
     <InvalidArgument occurrences="1">
