@@ -262,6 +262,8 @@ export default {
 
 #description-preview {
 	min-height: 100px;
+	width: auto;
+	overflow-x: auto;
 
 	&::v-deep {
 		@import './../../css/markdown';
