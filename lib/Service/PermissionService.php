@@ -280,14 +280,14 @@ class PermissionService {
 
 			if ($this->circlesService->isCirclesEnabled() && $acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
 				try {
-					$circle = \OCA\Circles\Api\v1\Circles::detailsCircle($acl->getParticipant(), true);
+					$circle = $this->circlesService->getCircle($acl->getParticipant());
 					if ($circle === null) {
 						$this->logger->info('No circle found for acl rule ' . $acl->getId());
 						continue;
 					}
 
 					foreach ($circle->getInheritedMembers() as $member) {
-						if ($member->getUserType() !== 1 || $member->getLevel() >= Member::LEVEL_MEMBER) {
+						if ($member->getUserType() !== 1 || $member->getLevel() < Member::LEVEL_MEMBER) {
 							// deck currently only supports user members in circles
 							continue;
 						}

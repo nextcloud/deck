@@ -105,10 +105,6 @@
     <ParamNameMismatch occurrences="1">
       <code>$boardId</code>
     </ParamNameMismatch>
-    <UndefinedClass occurrences="2">
-      <code>\OCA\Circles\Api\v1\Circles</code>
-      <code>\OCA\Circles\Api\v1\Circles</code>
-    </UndefinedClass>
   </file>
   <file src="lib/Db/Card.php">
     <UndefinedClass occurrences="2">
@@ -205,9 +201,11 @@
   </file>
   <file src="lib/Service/CirclesService.php">
     <UndefinedClass occurrences="1">
-      <code>\OCA\Circles\Api\v1\Circles</code>
+      <code>?Circle</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
+    <UndefinedDocblockClass occurrences="3">
+      <code>$circlesManager</code>
+      <code>$circlesManager</code>
       <code>$circlesManager</code>
     </UndefinedDocblockClass>
   </file>
@@ -262,8 +260,8 @@
   </file>
   <file src="lib/Service/PermissionService.php">
     <UndefinedClass occurrences="2">
+      <code>$circle</code>
       <code>Member</code>
-      <code>\OCA\Circles\Api\v1\Circles</code>
     </UndefinedClass>
   </file>
   <file src="lib/Service/StackService.php">
