@@ -203,6 +203,7 @@ OC.L10N.register(
     "Select Date" : "日付を選択",
     "Today" : "今日",
     "Tomorrow" : "明日",
+    "Next week" : "来週",
     "Next month" : "来月",
     "Save" : "保存",
     "The comment cannot be empty." : "コメントを空にすることはできません。",
