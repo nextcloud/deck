@@ -209,6 +209,7 @@ OC.L10N.register(
     "The comment cannot be empty." : "コメントを空にすることはできません。",
     "The comment cannot be longer than 1000 characters." : "コメントは1000文字を超えることはできません。",
     "In reply to" : "返信",
+    "Cancel reply" : "返信をキャンセル",
     "Reply" : "返信",
     "Update" : "更新",
     "Description" : "説明",
