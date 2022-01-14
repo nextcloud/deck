@@ -49,10 +49,15 @@ window.addEventListener('DOMContentLoaded', () => {
 			const shortenedMessage = shortenedMessageCandidate === '' ? message.substr(0, 255) : shortenedMessageCandidate
 			try {
 				await buildSelector(CardCreateDialog, {
-					title: shortenedMessage,
-					description: message + '\n\n' + '['
-						+ t('deck', 'Message from {author} in {conversationName}', { author: actorDisplayName, conversationName })
-						+ '](' + generateUrl('/call/' + conversationToken) + ')',
+					props: {
+						title: shortenedMessage,
+						description: message + '\n\n' + '['
+							+ t('deck', 'Message from {author} in {conversationName}', {
+								author: actorDisplayName,
+								conversationName,
+							})
+							+ '](' + window.location.protocol + '//' + window.location.host + generateUrl('/call/' + conversationToken) + ')',
+					},
 				})
 			} catch (e) {
 				console.debug('Card creation dialog was canceled')
