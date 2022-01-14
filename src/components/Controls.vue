@@ -239,6 +239,7 @@ export default {
 			isAddStackVisible: false,
 			filter: { tags: [], users: [], due: '', unassigned: false },
 			showAddCardModal: false,
+			defaultPageTitle: false,
 		}
 	},
 
@@ -266,10 +267,16 @@ export default {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 	},
+	beforeDestroy() {
+		this.setPageTitle('')
+	},
 	watch: {
 		board(current, previous) {
 			if (current?.id !== previous?.id) {
 				this.clearFilter()
+			}
+			if (current) {
+				this.setPageTitle(current.title)
 			}
 		},
 	},
@@ -329,6 +336,22 @@ export default {
 		},
 		clickHideAddCardModel() {
 			this.showAddCardModal = false
+		},
+		setPageTitle(title) {
+			if (this.defaultPageTitle === false) {
+				this.defaultPageTitle = window.document.title
+				if (this.defaultPageTitle.indexOf(' - Deck - ') !== -1) {
+					this.defaultPageTitle = this.defaultPageTitle.substring(this.defaultPageTitle.indexOf(' - Deck - ') + 3)
+				}
+				if (this.defaultPageTitle.indexOf('Deck - ') !== 0) {
+					this.defaultPageTitle = 'Deck - ' + this.defaultPageTitle
+				}
+			}
+			let newTitle = this.defaultPageTitle
+			if (title !== '') {
+				newTitle = `${title} - ${newTitle}`
+			}
+			window.document.title = newTitle
 		},
 	},
 }
