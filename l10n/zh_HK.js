@@ -92,7 +92,7 @@ OC.L10N.register(
     "Example Task 2" : "示例任務 2",
     "Example Task 1" : "示例任務 1",
     "The file was uploaded" : "檔案已上傳",
-    "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "上傳檔案的大小已超過 php.ini 中 upload_max_filesize 設置的值",
+    "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "上傳的檔案大小超過 php.ini 當中 upload_max_filesize 選項的限制",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "上傳的檔案大小超過 HTML 表單中 MAX_FILE_SIZE 的限制",
     "The file was only partially uploaded" : "檔案僅部分上傳",
     "No file was uploaded" : "沒有檔案被上傳",
