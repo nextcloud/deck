@@ -290,8 +290,8 @@ class StackService {
 			throw new BadRequestException('order must be a number');
 		}
 
-		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
-		if ($this->boardService->isArchived($this->stackMapper, $id)) {
+		$this->permissionService->checkPermission($this->stackMapper, $boardId, Acl::PERMISSION_MANAGE);
+		if ($this->boardService->isArchived($this->stackMapper, $boardId)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
 		$stack = $this->stackMapper->find($id);
