@@ -25,6 +25,7 @@
 		:active="tabId"
 		:title="title"
 		:subtitle="subtitle"
+		:subtitle-tooltip="subtitleTooltip"
 		:title-editable="titleEditable"
 		@update:titleEditable="handleUpdateTitleEditable"
 		@update:title="handleUpdateTitle"
@@ -88,8 +89,10 @@ import CardSidebarTabAttachments from './CardSidebarTabAttachments'
 import CardSidebarTabComments from './CardSidebarTabComments'
 import CardSidebarTabActivity from './CardSidebarTabActivity'
 import relativeDate from '../../mixins/relativeDate'
+import moment from '@nextcloud/moment'
 
 import { showError } from '@nextcloud/dialogs'
+import { getLocale } from '@nextcloud/l10n'
 
 const capabilities = window.OC.getCapabilities()
 
@@ -126,6 +129,7 @@ export default {
 			titleEditable: false,
 			titleEditing: '',
 			hasActivity: capabilities && capabilities.activity,
+			locale: getLocale(),
 		}
 	},
 	computed: {
@@ -141,6 +145,9 @@ export default {
 		},
 		subtitle() {
 			return t('deck', 'Modified') + ': ' + this.relativeDate(this.currentCard.lastModified * 1000) + ' ' + t('deck', 'Created') + ': ' + this.relativeDate(this.currentCard.createdAt * 1000)
+		},
+		subtitleTooltip() {
+			return t('deck', 'Modified') + ': ' + this.formatDate(this.currentCard.lastModified) + '\n' + t('deck', 'Created') + ': ' + this.formatDate(this.currentCard.createdAt)
 		},
 		cardRichObject() {
 			return {
@@ -188,6 +195,9 @@ export default {
 		},
 		closeModal() {
 			this.$store.dispatch('setConfig', { cardDetailsInModal: false })
+		},
+		formatDate(timestamp) {
+			return moment.unix(timestamp).locale(this.locale).format('LLLL')
 		},
 	},
 }
