@@ -334,4 +334,15 @@ h5 {
 #app-sidebar .app-sidebar-header__desc h4 {
 	font-size: 12px !important;
 }
+
+.vue-easymde .cm-s-easymde .cm-link {
+	color: var(--color-main-text);
+}
+
+.vue-easymde .cm-s-easymde .cm-string.cm-url,
+.vue-easymde .cm-s-easymde .cm-formatting.cm-link,
+.vue-easymde .cm-s-easymde .cm-formatting.cm-url,
+.vue-easymde .cm-s-easymde .cm-formatting.cm-image {
+	color: var(--color-text-maxcontrast);
+}
 </style>
