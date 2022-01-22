@@ -45,7 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	window.OCP.Collaboration.registerType('deck', {
 		action: () => {
 			const BoardSelector = () => import('./BoardSelector')
-			buildSelector(BoardSelector)
+			return buildSelector(BoardSelector)
 		},
 		typeString: t('deck', 'Link to a board'),
 		typeIconClass: 'icon-deck',
@@ -54,7 +54,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	window.OCP.Collaboration.registerType('deck-card', {
 		action: () => {
 			const CardSelector = () => import('./CardSelector')
-			buildSelector(CardSelector)
+			return buildSelector(CardSelector)
 		},
 		typeString: t('deck', 'Link to a card'),
 		typeIconClass: 'icon-deck',
