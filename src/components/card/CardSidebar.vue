@@ -25,13 +25,14 @@
 		:active="tabId"
 		:title="title"
 		:subtitle="subtitle"
+		:subtitle-tooltip="subtitleTooltip"
 		:title-editable="titleEditable"
 		@update:titleEditable="handleUpdateTitleEditable"
 		@update:title="handleUpdateTitle"
 		@submit-title="handleSubmitTitle"
 		@close="closeSidebar">
 		<template #secondary-actions>
-			<ActionButton v-if="cardDetailsInModal" icon="icon-menu-sidebar" @click.stop="showModal()">
+			<ActionButton v-if="cardDetailsInModal" icon="icon-menu-sidebar" @click.stop="closeModal()">
 				{{ t('deck', 'Open in sidebar view') }}
 			</ActionButton>
 			<ActionButton v-else icon="icon-external" @click.stop="showModal()">
@@ -88,8 +89,10 @@ import CardSidebarTabAttachments from './CardSidebarTabAttachments'
 import CardSidebarTabComments from './CardSidebarTabComments'
 import CardSidebarTabActivity from './CardSidebarTabActivity'
 import relativeDate from '../../mixins/relativeDate'
+import moment from '@nextcloud/moment'
 
 import { showError } from '@nextcloud/dialogs'
+import { getLocale } from '@nextcloud/l10n'
 
 const capabilities = window.OC.getCapabilities()
 
@@ -126,12 +129,12 @@ export default {
 			titleEditable: false,
 			titleEditing: '',
 			hasActivity: capabilities && capabilities.activity,
+			locale: getLocale(),
 		}
 	},
 	computed: {
 		...mapState({
 			currentBoard: state => state.currentBoard,
-			cardDetailsInModal: state => state.cardDetailsInModal,
 		}),
 		...mapGetters(['canEdit', 'assignables', 'cardActions', 'stackById']),
 		title() {
@@ -143,6 +146,9 @@ export default {
 		subtitle() {
 			return t('deck', 'Modified') + ': ' + this.relativeDate(this.currentCard.lastModified * 1000) + ' ' + t('deck', 'Created') + ': ' + this.relativeDate(this.currentCard.createdAt * 1000)
 		},
+		subtitleTooltip() {
+			return t('deck', 'Modified') + ': ' + this.formatDate(this.currentCard.lastModified) + '\n' + t('deck', 'Created') + ': ' + this.formatDate(this.currentCard.createdAt)
+		},
 		cardRichObject() {
 			return {
 				id: '' + this.currentCard.id,
@@ -151,6 +157,14 @@ export default {
 				stackname: this.stackById(this.currentCard.stackId)?.title,
 				link: window.location.protocol + '//' + window.location.host + generateUrl('/apps/deck/') + `#/board/${this.currentBoard.id}/card/${this.currentCard.id}`,
 			}
+		},
+		cardDetailsInModal: {
+			get() {
+				return this.$store.getters.config('cardDetailsInModal')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+			},
 		},
 	},
 	methods: {
@@ -177,7 +191,13 @@ export default {
 		},
 
 		showModal() {
-			this.$store.dispatch('setCardDetailsInModal', true)
+			this.$store.dispatch('setConfig', { cardDetailsInModal: true })
+		},
+		closeModal() {
+			this.$store.dispatch('setConfig', { cardDetailsInModal: false })
+		},
+		formatDate(timestamp) {
+			return moment.unix(timestamp).locale(this.locale).format('LLLL')
 		},
 	},
 }

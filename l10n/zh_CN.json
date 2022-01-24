@@ -102,7 +102,6 @@
     "Path is already shared with this card" : "已和这张卡片分享了路径",
     "Invalid date, date format must be YYYY-MM-DD" : "无效日期，日期格式必须为 YYYY-MM-DD",
     "Personal planning and team project organization" : "个人规划和团队项目安排",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "“看板”是 Nextcloud 集成的一款看板式任务管理工具，用于个人计划与项目安排。\n\n\n- 📥 将您的任务添加到卡片上，并将它们有序排列\n- 📄 将您的补充说明用markdown写下来\n- 🔖 利用指派标签更好地进行筹划\n- 👥 与您的团队，朋友或家人共享\n- 📎 附加文件并将它们嵌入到您的markdown说明中\n- 💬 用评论与您的团队讨论\n- ⚡ 在活动流中紧跟变化\n- 🚀 使您的项目井井有条",
     "Card details" : "卡片详情",
     "Add board" : "添加面板",
     "Select the board to link to a project" : "选择要链接到一个项目的面板",
@@ -186,6 +185,7 @@
     "Pending share" : "待分享",
     "Add this attachment" : "添加此附件",
     "Show in Files" : "在文件中显示",
+    "Download" : "下载",
     "Remove attachment" : "删除附件",
     "Delete Attachment" : "删除附件",
     "Restore Attachment" : "恢复附件",
@@ -237,6 +237,7 @@
     "Archive card" : "归档卡片",
     "Delete card" : "删除卡片",
     "Move card to another board" : "将卡片移到其他面板",
+    "List is empty" : "列表为空",
     "Card deleted" : "卡片被删除",
     "seconds ago" : "几秒前",
     "All boards" : "全部面板",
@@ -281,6 +282,10 @@
     "Error creating the share" : "创建分享出错",
     "Share with a Deck card" : "分享给一张看板卡片",
     "Share {file} with a Deck card" : "将{file}分享给一张看板卡片",
-    "Share" : "分享"
+    "Share" : "分享",
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "“看板”是 Nextcloud 集成的一款看板式任务管理工具，用于个人计划与项目安排。\n\n\n- 📥 将您的任务添加到卡片上，并将它们有序排列\n- 📄 将您的补充说明用markdown写下来\n- 🔖 利用指派标签更好地进行筹划\n- 👥 与您的团队，朋友或家人共享\n- 📎 附加文件并将它们嵌入到您的markdown说明中\n- 💬 用评论与您的团队讨论\n- ⚡ 在活动流中紧跟变化\n- 🚀 使您的项目井井有条",
+    "Creating the new card…" : "正在创建新卡片…",
+    "\"{card}\" was added to \"{board}\"" : "\"{card}\" 被添加到 \"{board}\"",
+    "(circle)" : "(圈子)"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

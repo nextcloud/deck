@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Db;
 
+use OCA\Deck\Service\CirclesService;
 use OCP\IGroupManager;
 use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
@@ -56,6 +57,7 @@ class AclMapperTest extends MapperTestUtility {
 			\OC::$server->query(StackMapper::class),
 			$this->userManager,
 			$this->groupManager,
+			$this->createMock(CirclesService::class),
 			$this->createMock(LoggerInterface::class)
 		);
 
@@ -65,10 +67,10 @@ class AclMapperTest extends MapperTestUtility {
 			$this->boardMapper->insert($this->getBoard('MyBoard 3', 'user3'))
 		];
 		$this->acls = [
-			$this->aclMapper->insert($this->getAcl('user','user1', false, false, false, $this->boards[1]->getId())),
-			$this->aclMapper->insert($this->getAcl('user','user2', true, false, false, $this->boards[0]->getId())),
-			$this->aclMapper->insert($this->getAcl('user','user3', true, true, false, $this->boards[0]->getId())),
-			$this->aclMapper->insert($this->getAcl('user','user1', false, false, false, $this->boards[2]->getId()))
+			$this->aclMapper->insert($this->getAcl('user', 'user1', false, false, false, $this->boards[1]->getId())),
+			$this->aclMapper->insert($this->getAcl('user', 'user2', true, false, false, $this->boards[0]->getId())),
+			$this->aclMapper->insert($this->getAcl('user', 'user3', true, true, false, $this->boards[0]->getId())),
+			$this->aclMapper->insert($this->getAcl('user', 'user1', false, false, false, $this->boards[2]->getId()))
 		];
 
 		foreach ($this->acls as $acl) {

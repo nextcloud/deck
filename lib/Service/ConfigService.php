@@ -66,7 +66,8 @@ class ConfigService {
 		}
 
 		$data = [
-			'calendar' => $this->isCalendarEnabled()
+			'calendar' => $this->isCalendarEnabled(),
+			'cardDetailsInModal' => $this->isCardDetailsInModal(),
 		];
 		if ($this->groupManager->isAdmin($this->getUserId())) {
 			$data['groupLimit'] = $this->get('groupLimit');
@@ -88,6 +89,11 @@ class ConfigService {
 					return false;
 				}
 				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'calendar', true);
+			case 'cardDetailsInModal':
+			  if ($this->getUserId() === null) {
+			  	return false;
+			  }
+				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardDetailsInModal', true);
 		}
 	}
 
@@ -96,12 +102,26 @@ class ConfigService {
 			return false;
 		}
 
-		$defaultState = (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'calendar', true);
+		$appConfigState = $this->config->getAppValue(Application::APP_ID, 'calendar', 'yes') === 'yes';
+		$defaultState = (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'calendar', $appConfigState);
 		if ($boardId === null) {
 			return $defaultState;
 		}
 
 		return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'board:' . $boardId . ':calendar', $defaultState);
+	}
+
+	public function isCardDetailsInModal(int $boardId = null): bool {
+		if ($this->getUserId() === null) {
+			return false;
+		}
+
+		$defaultState = (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardDetailsInModal', true);
+		if ($boardId === null) {
+			return $defaultState;
+		}
+
+		return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'board:' . $boardId . ':cardDetailsInModal', $defaultState);
 	}
 
 	public function set($key, $value) {
@@ -120,6 +140,10 @@ class ConfigService {
 				break;
 			case 'calendar':
 				$this->config->setUserValue($this->getUserId(), Application::APP_ID, 'calendar', (string)$value);
+				$result = $value;
+				break;
+			case 'cardDetailsInModal':
+				$this->config->setUserValue($this->getUserId(), Application::APP_ID, 'cardDetailsInModal', (string)$value);
 				$result = $value;
 				break;
 			case 'board':

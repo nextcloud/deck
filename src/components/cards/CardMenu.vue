@@ -58,7 +58,7 @@
 				<h3>{{ t('deck', 'Move card to another board') }}</h3>
 				<Multiselect v-model="selectedBoard"
 					:placeholder="t('deck', 'Select a board')"
-					:options="boards"
+					:options="activeBoards"
 					:max-height="100"
 					label="title"
 					@select="loadStacksFromBoard" />
@@ -66,7 +66,11 @@
 					:placeholder="t('deck', 'Select a list')"
 					:options="stacksFromBoard"
 					:max-height="100"
-					label="title" />
+					label="title">
+					<span slot="noOptions">
+						{{ t('deck', 'List is empty') }}
+					</span>
+				</Multiselect>
 
 				<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">
 					{{ t('deck', 'Move card') }}
@@ -129,6 +133,9 @@ export default {
 		isCurrentUserAssigned() {
 			return this.card.assignedUsers.find((item) => item.type === 0 && item.participant.uid === getCurrentUser()?.uid)
 		},
+		activeBoards() {
+			return this.$store.getters.boards.filter((item) => item.deletedAt === 0 && item.archived === false)
+		}
 	},
 	methods: {
 		openCard() {

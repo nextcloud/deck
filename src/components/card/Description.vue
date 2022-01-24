@@ -57,7 +57,7 @@
 			ref="markdownEditor"
 			v-model="description"
 			:configs="mdeConfig"
-			@input="updateDescription"
+			@update:modelValue="updateDescription"
 			@blur="saveDescription" />
 
 		<Modal v-if="modalShow" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
@@ -132,7 +132,6 @@ export default {
 	computed: {
 		...mapState({
 			currentBoard: state => state.currentBoard,
-			cardDetailsInModal: state => state.cardDetailsInModal,
 		}),
 		...mapGetters(['canEdit']),
 		attachments() {
@@ -263,6 +262,8 @@ export default {
 
 #description-preview {
 	min-height: 100px;
+	width: auto;
+	overflow-x: auto;
 
 	&::v-deep {
 		@import './../../css/markdown';
@@ -332,5 +333,16 @@ h5 {
 
 #app-sidebar .app-sidebar-header__desc h4 {
 	font-size: 12px !important;
+}
+
+.vue-easymde .cm-s-easymde .cm-link {
+	color: var(--color-main-text);
+}
+
+.vue-easymde .cm-s-easymde .cm-string.cm-url,
+.vue-easymde .cm-s-easymde .cm-formatting.cm-link,
+.vue-easymde .cm-s-easymde .cm-formatting.cm-url,
+.vue-easymde .cm-s-easymde .cm-formatting.cm-image {
+	color: var(--color-text-maxcontrast);
 }
 </style>

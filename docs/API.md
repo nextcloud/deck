@@ -96,10 +96,27 @@ If available the ETag will also be part of JSON response objects as shown below 
 
 # Changelog
 
-## 1.0.0 (unreleased)
+## API version 1.0
+
+- Deck >=1.0.0: The maximum length of the card title has been extended from 100 to 255 characters
+- Deck >=1.0.0: The API will now return a 400 Bad request response if the length limitation of a board, stack or card title is exceeded
+
+## API version 1.1
+
+This API version has become available with **Deck 1.3.0**.
 
 - The maximum length of the card title has been extended from 100 to 255 characters
 - The API will now return a 400 Bad request response if the length limitation of a board, stack or card title is exceeded
+- The attachments API endpoints will return other attachment types than deck_file
+  - Prior to Deck version v1.3.0 (API v1.0), attachments were stored within deck. For this type of attachments `deck_file` was used as the default type of attachments
+  - Starting with Deck version 1.3.0 (API v1.1) files are stored within the users regular Nextcloud files and the type `file` has been introduced for that
+
+## API version 1.2 (unreleased)
+
+- Endpoints for the new import functionality have been added:
+  - [GET /boards/import/getSystems - Import a board](#get-boardsimportgetsystems-import-a-board)
+  - [GET /boards/import/config/system/{schema} - Import a board](#get-boardsimportconfigsystemschema-import-a-board)
+  - [POST /boards/import - Import a board](#post-boardsimport-import-a-board)
 
 # Endpoints
 
@@ -927,7 +944,8 @@ The request can fail with a bad request response for the following reasons:
 | type      | String  | The type of the attachement                   |
 | file      | Binary  | File data to add as an attachment             |
 
-For now only `deck_file` is supported as an attachment type.
+- Prior to Deck version v1.3.0 (API v1.0), attachments were stored within deck. For this type of attachments `deck_file` was used as the default type of attachments
+- Starting with Deck version 1.3.0 (API v1.1) files are stored within the users regular Nextcloud files and the type `file` has been introduced for that
 
 #### Response
 
@@ -988,6 +1006,49 @@ For now only `deck_file` is supported as an attachment type.
 
 ##### 200 Success
 
+### GET /boards/import/getSystems - Import a board
+
+#### Request parameters
+
+| Parameter    | Type    | Description                                   |
+| ------------ | ------- | --------------------------------------------- |
+| system       | Integer | The system name. Example: trello              |
+
+#### Response
+
+Make a request to see the json schema of system
+
+```json
+{
+}
+```
+
+### GET /boards/import/config/system/{schema} - Import a board
+
+#### Request parameters
+
+#### Response
+
+```json
+[
+  "trello"
+]
+```
+
+### POST /boards/import - Import a board
+
+#### Request parameters
+
+| Parameter    | Type    | Description                                   |
+| ------------ | ------- | --------------------------------------------- |
+| system       | string  | The allowed name of system to import from     |
+| config       | Object  | The config object  (JSON)                     |
+| data         | Object  | The data object to import (JSON)              |
+
+#### Response
+
+##### 200 Success
+
 # OCS API
 
 The following endpoints are available through the Nextcloud OCS endpoint, which is available at `/ocs/v2.php/apps/deck/api/v1.0/`. 
@@ -1004,6 +1065,7 @@ Deck stores user and app configuration values globally and per board. The GET en
 | Config key | Description |
 | --- | --- |
 | calendar | Determines if the calendar/tasks integration through the CalDAV backend is enabled for the user (boolean) | 
+| cardDetailsInModal | Determines if the bigger view is used (boolean) | 
 | groupLimit | Determines if creating new boards is limited to certain groups of the instance. The resulting output is an array of group objects with the id and the displayname (Admin only)|  
 
 ```
@@ -1016,6 +1078,7 @@ Deck stores user and app configuration values globally and per board. The GET en
     },
     "data": {
       "calendar": true,
+      "cardDetailsInModal": true,
       "groupLimit": [
         {
           "id": "admin",
@@ -1045,6 +1108,7 @@ Deck stores user and app configuration values globally and per board. The GET en
 | --- | ----- |
 | notify-due | `off`, `assigned` or `all` |
 | calendar | Boolean |
+| cardDetailsInModal | Boolean |
  
 #### Example request
 

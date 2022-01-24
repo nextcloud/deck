@@ -19,13 +19,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2.4.0
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2.4.1
+      uses: actions/setup-node@v2.5.1
       with:
         node-version: ${{ matrix.node-version }}
     - name: Set up npm7
       run: npm i -g npm@7
     - name: Setup PHP
-      uses: shivammathur/setup-php@2.15.0
+      uses: shivammathur/setup-php@2.16.0
       with:
         php-version: '7.4'
         tools: composer

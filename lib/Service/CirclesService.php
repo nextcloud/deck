@@ -27,8 +27,11 @@ declare(strict_types=1);
 namespace OCA\Deck\Service;
 
 use OCA\Circles\CirclesManager;
+use OCA\Circles\Model\Circle;
 use OCA\Circles\Model\Member;
+use OCA\Circles\Model\Probes\CircleProbe;
 use OCP\App\IAppManager;
+use Throwable;
 
 /**
  * Wrapper around circles app API since it is not in a public namespace so we need to make sure that
@@ -45,15 +48,24 @@ class CirclesService {
 		return $this->circlesEnabled;
 	}
 
-	public function getCircle($circleId) {
+	public function getCircle(string $circleId): ?Circle {
 		if (!$this->circlesEnabled) {
 			return null;
 		}
 
-		return \OCA\Circles\Api\v1\Circles::detailsCircle($circleId, true);
+		try {
+
+			// Enforce current user condition since we always want the full list of members
+			/** @var CirclesManager $circlesManager */
+			$circlesManager = \OC::$server->get(CirclesManager::class);
+			$circlesManager->startSuperSession();
+			return $circlesManager->getCircle($circleId);
+		} catch (Throwable $e) {
+		}
+		return null;
 	}
 
-	public function isUserInCircle($circleId, $userId): bool {
+	public function isUserInCircle(string $circleId, string $userId): bool {
 		if (!$this->circlesEnabled) {
 			return false;
 		}
@@ -66,8 +78,32 @@ class CirclesService {
 			$circle = $circlesManager->getCircle($circleId);
 			$member = $circle->getInitiator();
 			return $member !== null && $member->getLevel() >= Member::LEVEL_MEMBER;
-		} catch (\Exception $e) {
+		} catch (Throwable $e) {
 		}
 		return false;
+	}
+
+	/**
+	 * @param string $userId
+	 * @return string[] circle single ids
+	 */
+	public function getUserCircles(string $userId): array {
+		if (!$this->circlesEnabled) {
+			return [];
+		}
+
+		try {
+			/** @var CirclesManager $circlesManager */
+			$circlesManager = \OC::$server->get(CirclesManager::class);
+			$federatedUser = $circlesManager->getFederatedUser($userId, Member::TYPE_USER);
+			$circlesManager->startSession($federatedUser);
+			$probe = new CircleProbe();
+			$probe->mustBeMember();
+			return array_map(function (Circle $circle) {
+				return $circle->getSingleId();
+			}, $circlesManager->getCircles($probe));
+		} catch (Throwable $e) {
+		}
+		return [];
 	}
 }

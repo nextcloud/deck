@@ -24,23 +24,28 @@
 namespace OCA\Deck\Db;
 
 use OC\Cache\CappedMemoryCache;
+use OCA\Deck\Service\CirclesService;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IUserManager;
 use OCP\IGroupManager;
 use Psr\Log\LoggerInterface;
 
-class BoardMapper extends DeckMapper implements IPermissionMapper {
+class BoardMapper extends QBMapper implements IPermissionMapper {
 	private $labelMapper;
 	private $aclMapper;
 	private $stackMapper;
 	private $userManager;
 	private $groupManager;
+	private $circlesService;
 	private $logger;
 
-	private $circlesEnabled;
-
+	/** @var CappedMemoryCache */
 	private $userBoardCache;
+	/** @var CappedMemoryCache */
+	private $boardCache;
 
 	public function __construct(
 		IDBConnection $db,
@@ -49,6 +54,7 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		StackMapper $stackMapper,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
+		CirclesService $circlesService,
 		LoggerInterface $logger
 	) {
 		parent::__construct($db, 'deck_boards', Board::class);
@@ -57,12 +63,11 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		$this->stackMapper = $stackMapper;
 		$this->userManager = $userManager;
 		$this->groupManager = $groupManager;
+		$this->circlesService = $circlesService;
 		$this->logger = $logger;
 
 		$this->userBoardCache = new CappedMemoryCache();
-
-
-		$this->circlesEnabled = \OC::$server->getAppManager()->isEnabledForUser('circles');
+		$this->boardCache = new CappedMemoryCache();
 	}
 
 
@@ -70,28 +75,36 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	 * @param $id
 	 * @param bool $withLabels
 	 * @param bool $withAcl
-	 * @return \OCP\AppFramework\Db\Entity
+	 * @return Board
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws DoesNotExistException
 	 */
-	public function find($id, $withLabels = false, $withAcl = false) {
-		$sql = 'SELECT id, title, owner, color, archived, deleted_at, last_modified FROM `*PREFIX*deck_boards` ' .
-			'WHERE `id` = ?';
-		$board = $this->findEntity($sql, [$id]);
+	public function find($id, $withLabels = false, $withAcl = false): Board {
+		if (!isset($this->boardCache[$id])) {
+			$qb = $this->db->getQueryBuilder();
+			$qb->select('*')
+				->from('deck_boards')
+				->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
+				->orderBy('id');
+			$this->boardCache[$id] = $this->findEntity($qb);
+		}
+
+		// FIXME is this necessary? it was NOT done with the old mapper
+		// $this->mapOwner($board);
 
 		// Add labels
-		if ($withLabels) {
+		if ($withLabels && $this->boardCache[$id]->getLabels() === null) {
 			$labels = $this->labelMapper->findAll($id);
-			$board->setLabels($labels);
+			$this->boardCache[$id]->setLabels($labels);
 		}
 
 		// Add acl
-		if ($withAcl) {
+		if ($withAcl && $this->boardCache[$id]->getAcl() === null) {
 			$acl = $this->aclMapper->findAll($id);
-			$board->setAcl($acl);
+			$this->boardCache[$id]->setAcl($acl);
 		}
 
-		return $board;
+		return $this->boardCache[$id];
 	}
 
 	public function findAllForUser(string $userId, ?int $since = null, bool $includeArchived = true, ?int $before = null,
@@ -105,6 +118,9 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 			$groupBoards = $this->findAllByGroups($userId, $groups, null, null, $since, $includeArchived, $before, $term);
 			$circleBoards = $this->findAllByCircles($userId, null, null, $since, $includeArchived, $before, $term);
 			$allBoards = array_unique(array_merge($userBoards, $groupBoards, $circleBoards));
+			foreach ($allBoards as $board) {
+				$this->boardCache[$board->getId()] = $board;
+			}
 			if ($useCache) {
 				$this->userBoardCache[$userId] = $allBoards;
 			}
@@ -123,44 +139,89 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	 */
 	public function findAllByUser(string $userId, ?int $limit = null, ?int $offset = null, ?int $since = null,
 								  bool $includeArchived = true, ?int $before = null, ?string $term = null) {
-		// FIXME: One moving to QBMapper we should allow filtering the boards probably by method chaining for additional where clauses
-		$sql = 'SELECT id, title, owner, color, archived, deleted_at, 0 as shared, last_modified FROM `*PREFIX*deck_boards` WHERE owner = ?';
-		$params = [$userId];
+		// FIXME this used to be a UNION to get boards owned by $userId and the user shares in one single query
+		// Is it possible with the query builder?
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
+			// this does not work in MySQL/PostgreSQL
+			//->selectAlias('0', 'shared')
+			->from('deck_boards', 'b')
+			->where($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		if (!$includeArchived) {
-			$sql .= ' AND NOT archived AND deleted_at = 0';
+			$qb->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
+				->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		}
 		if ($since !== null) {
-			$sql .= ' AND last_modified > ?';
-			$params[] = $since;
+			$qb->andWhere($qb->expr()->gt('last_modified', $qb->createNamedParameter($since, IQueryBuilder::PARAM_INT)));
 		}
 		if ($before !== null) {
-			$sql .= ' AND last_modified < ?';
-			$params[] = $before;
+			$qb->andWhere($qb->expr()->lt('last_modified', $qb->createNamedParameter($before, IQueryBuilder::PARAM_INT)));
 		}
 		if ($term !== null) {
-			$sql .= ' AND lower(title) LIKE ?';
-			$params[] = '%' . $term . '%';
+			$qb->andWhere(
+				$qb->expr()->iLike(
+					'title',
+					$qb->createNamedParameter(
+						'%' . $this->db->escapeLikeParameter($term) . '%',
+						IQueryBuilder::PARAM_STR
+					)
+				)
+			);
 		}
-		$sql .= ' UNION ' .
-			'SELECT boards.id, title, owner, color, archived, deleted_at, 1 as shared, last_modified FROM `*PREFIX*deck_boards` as boards ' .
-			'JOIN `*PREFIX*deck_board_acl` as acl ON boards.id=acl.board_id WHERE acl.participant=? AND acl.type=? AND boards.owner != ?';
-		array_push($params, $userId, Acl::PERMISSION_TYPE_USER, $userId);
+		$qb->orderBy('b.id');
+		if ($limit !== null) {
+			$qb->setMaxResults($limit);
+		}
+		if ($offset !== null) {
+			$qb->setFirstResult($offset);
+		}
+		$entries = $this->findEntities($qb);
+		foreach ($entries as $entry) {
+			$entry->setShared(0);
+		}
+
+		// shared with user
+		$qb->resetQueryParts();
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
+			//->selectAlias('1', 'shared')
+			->from('deck_boards', 'b')
+			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
+			->where($qb->expr()->eq('acl.participant', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
+			->andWhere($qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_USER, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->neq('b.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		if (!$includeArchived) {
-			$sql .= ' AND NOT archived AND deleted_at = 0';
+			$qb->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
+				->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		}
 		if ($since !== null) {
-			$sql .= ' AND last_modified > ?';
-			$params[] = $since;
+			$qb->andWhere($qb->expr()->gt('last_modified', $qb->createNamedParameter($since, IQueryBuilder::PARAM_INT)));
 		}
 		if ($before !== null) {
-			$sql .= ' AND last_modified < ?';
-			$params[] = $before;
+			$qb->andWhere($qb->expr()->lt('last_modified', $qb->createNamedParameter($before, IQueryBuilder::PARAM_INT)));
 		}
 		if ($term !== null) {
-			$sql .= ' AND lower(title) LIKE ?';
-			$params[] = '%' . $term . '%';
+			$qb->andWhere(
+				$qb->expr()->iLike(
+					'title',
+					$qb->createNamedParameter(
+						'%' . $this->db->escapeLikeParameter($term) . '%',
+						IQueryBuilder::PARAM_STR
+					)
+				)
+			);
 		}
-		$entries = $this->findEntities($sql, $params, $limit, $offset);
+		$qb->orderBy('b.id');
+		if ($limit !== null) {
+			$qb->setMaxResults($limit);
+		}
+		if ($offset !== null) {
+			$qb->setFirstResult($offset);
+		}
+		$sharedEntries = $this->findEntities($qb);
+		foreach ($sharedEntries as $entry) {
+			$entry->setShared(1);
+		}
+		$entries = array_merge($entries, $sharedEntries);
 		/* @var Board $entry */
 		foreach ($entries as $entry) {
 			$acl = $this->aclMapper->findAll($entry->id);
@@ -169,9 +230,19 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		return $entries;
 	}
 
-	public function findAllByOwner(string $userId, int $limit = null, int $offset = null) {
-		$sql = 'SELECT * FROM `*PREFIX*deck_boards` WHERE owner = ?';
-		return $this->findEntities($sql, [$userId], $limit, $offset);
+	public function findAllByOwner(string $userId, ?int $limit = null, ?int $offset = null) {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_boards')
+			->where($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
+			->orderBy('id');
+		if ($limit !== null) {
+			$qb->setMaxResults($limit);
+		}
+		if ($offset !== null) {
+			$qb->setFirstResult($offset);
+		}
+		return $this->findEntities($qb);
 	}
 
 	/**
@@ -188,33 +259,52 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		if (count($groups) <= 0) {
 			return [];
 		}
-		$sql = 'SELECT boards.id, title, owner, color, archived, deleted_at, 2 as shared, last_modified FROM `*PREFIX*deck_boards` as boards ' .
-			'INNER JOIN `*PREFIX*deck_board_acl` as acl ON boards.id=acl.board_id WHERE owner != ? AND type=? AND (';
-		$params = [$userId, Acl::PERMISSION_TYPE_GROUP];
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
+			//->selectAlias('2', 'shared')
+			->from('deck_boards', 'b')
+			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
+			->where($qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_GROUP, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->neq('b.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+		$or = $qb->expr()->orx();
 		for ($i = 0, $iMax = count($groups); $i < $iMax; $i++) {
-			$sql .= 'acl.participant = ? ';
-			if (count($groups) > 1 && $i < count($groups) - 1) {
-				$sql .= ' OR ';
-			}
+			$or->add(
+				$qb->expr()->eq('acl.participant', $qb->createNamedParameter($groups[$i], IQueryBuilder::PARAM_STR))
+			);
 		}
-		$sql .= ')';
-		array_push($params, ...$groups);
+		$qb->andWhere($or);
 		if (!$includeArchived) {
-			$sql .= ' AND NOT archived AND deleted_at = 0';
+			$qb->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
+				->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		}
 		if ($since !== null) {
-			$sql .= ' AND last_modified > ?';
-			$params[] = $since;
+			$qb->andWhere($qb->expr()->gt('last_modified', $qb->createNamedParameter($since, IQueryBuilder::PARAM_INT)));
 		}
 		if ($before !== null) {
-			$sql .= ' AND last_modified < ?';
-			$params[] = $before;
+			$qb->andWhere($qb->expr()->lt('last_modified', $qb->createNamedParameter($before, IQueryBuilder::PARAM_INT)));
 		}
 		if ($term !== null) {
-			$sql .= ' AND lower(title) LIKE ?';
-			$params[] = '%' . $term . '%';
+			$qb->andWhere(
+				$qb->expr()->iLike(
+					'title',
+					$qb->createNamedParameter(
+						'%' . $this->db->escapeLikeParameter($term) . '%',
+						IQueryBuilder::PARAM_STR
+					)
+				)
+			);
 		}
-		$entries = $this->findEntities($sql, $params, $limit, $offset);
+		$qb->orderBy('b.id');
+		if ($limit !== null) {
+			$qb->setMaxResults($limit);
+		}
+		if ($offset !== null) {
+			$qb->setFirstResult($offset);
+		}
+		$entries = $this->findEntities($qb);
+		foreach ($entries as $entry) {
+			$entry->setShared(2);
+		}
 		/* @var Board $entry */
 		foreach ($entries as $entry) {
 			$acl = $this->aclMapper->findAll($entry->id);
@@ -225,43 +315,57 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 
 	public function findAllByCircles(string $userId, ?int $limit = null, ?int $offset = null, ?int $since = null,
 									 bool $includeArchived = true, ?int $before = null, ?string $term = null) {
-		if (!$this->circlesEnabled) {
-			return [];
-		}
-		$circles = array_map(function ($circle) {
-			return $circle->getUniqueId();
-		}, \OCA\Circles\Api\v1\Circles::joinedCircles($userId, true));
+		$circles = $this->circlesService->getUserCircles($userId);
 		if (count($circles) === 0) {
 			return [];
 		}
 
-		$sql = 'SELECT boards.id, title, owner, color, archived, deleted_at, 2 as shared, last_modified FROM `*PREFIX*deck_boards` as boards ' .
-			'INNER JOIN `*PREFIX*deck_board_acl` as acl ON boards.id=acl.board_id WHERE owner != ? AND type=? AND (';
-		$params = [$userId, Acl::PERMISSION_TYPE_CIRCLE];
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
+			//->selectAlias('2', 'shared')
+			->from('deck_boards', 'b')
+			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
+			->where($qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_CIRCLE, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->neq('b.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+		$or = $qb->expr()->orx();
 		for ($i = 0, $iMax = count($circles); $i < $iMax; $i++) {
-			$sql .= 'acl.participant = ? ';
-			if (count($circles) > 1 && $i < count($circles) - 1) {
-				$sql .= ' OR ';
-			}
+			$or->add(
+				$qb->expr()->eq('acl.participant', $qb->createNamedParameter($circles[$i], IQueryBuilder::PARAM_STR))
+			);
 		}
-		$sql .= ')';
-		array_push($params, ...$circles);
+		$qb->andWhere($or);
 		if (!$includeArchived) {
-			$sql .= ' AND NOT archived AND deleted_at = 0';
+			$qb->andWhere($qb->expr()->eq('archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
+				->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		}
 		if ($since !== null) {
-			$sql .= ' AND last_modified > ?';
-			$params[] = $since;
+			$qb->andWhere($qb->expr()->gt('last_modified', $qb->createNamedParameter($since, IQueryBuilder::PARAM_INT)));
 		}
 		if ($before !== null) {
-			$sql .= ' AND last_modified < ?';
-			$params[] = $before;
+			$qb->andWhere($qb->expr()->lt('last_modified', $qb->createNamedParameter($before, IQueryBuilder::PARAM_INT)));
 		}
 		if ($term !== null) {
-			$sql .= ' AND lower(title) LIKE ?';
-			$params[] = '%' . $term . '%';
+			$qb->andWhere(
+				$qb->expr()->iLike(
+					'title',
+					$qb->createNamedParameter(
+						'%' . $this->db->escapeLikeParameter($term) . '%',
+						IQueryBuilder::PARAM_STR
+					)
+				)
+			);
 		}
-		$entries = $this->findEntities($sql, $params, $limit, $offset);
+		$qb->orderBy('b.id');
+		if ($limit !== null) {
+			$qb->setMaxResults($limit);
+		}
+		if ($offset !== null) {
+			$qb->setFirstResult($offset);
+		}
+		$entries = $this->findEntities($qb);
+		foreach ($entries as $entry) {
+			$entry->setShared(2);
+		}
 		/* @var Board $entry */
 		foreach ($entries as $entry) {
 			$acl = $this->aclMapper->findAll($entry->id);
@@ -270,21 +374,26 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		return $entries;
 	}
 
-	public function findAll() {
-		$sql = 'SELECT id from *PREFIX*deck_boards;';
-		return $this->findEntities($sql);
+	public function findAll(): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('id')
+			->from('deck_boards');
+		return $this->findEntities($qb);
 	}
 
 	public function findToDelete() {
 		// add buffer of 5 min
 		$timeLimit = time() - (60 * 5);
-		$sql = 'SELECT id, title, owner, color, archived, deleted_at, last_modified FROM `*PREFIX*deck_boards` ' .
-			'WHERE `deleted_at` > 0 AND `deleted_at` < ?';
-		return $this->findEntities($sql, [$timeLimit]);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
+			->from('deck_boards')
+			->where($qb->expr()->gt('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->lt('deleted_at', $qb->createNamedParameter($timeLimit, IQueryBuilder::PARAM_INT)));
+		return $this->findEntities($qb);
 	}
 
 	public function delete(/** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
-		\OCP\AppFramework\Db\Entity $entity) {
+		\OCP\AppFramework\Db\Entity $entity): \OCP\AppFramework\Db\Entity {
 		// delete acl
 		$acl = $this->aclMapper->findAll($entity->getId());
 		foreach ($acl as $item) {
@@ -335,11 +444,11 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 				return null;
 			}
 			if ($acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
-				if (!$this->circlesEnabled) {
+				if (!$this->circlesService->isCirclesEnabled()) {
 					return null;
 				}
 				try {
-					$circle = \OCA\Circles\Api\v1\Circles::detailsCircle($acl->getParticipant(), true);
+					$circle = $this->circlesService->getCircle($acl->getParticipant());
 					if ($circle) {
 						return new Circle($circle);
 					}

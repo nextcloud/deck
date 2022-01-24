@@ -36,6 +36,29 @@ class BoardTest extends TestCase {
 		], $board->jsonSerialize());
 	}
 
+	public function testUnfetchedValues() {
+		$board = $this->createBoard();
+		$board->setUsers(['user1', 'user2']);
+		self::assertNull($board->getAcl());
+		self::assertNull($board->getLabels());
+		$this->assertEquals([
+			'id' => 1,
+			'title' => "My Board",
+			'owner' => "admin",
+			'color' => "000000",
+			'labels' => [],
+			'permissions' => [],
+			'stacks' => [],
+			'deletedAt' => 0,
+			'lastModified' => 0,
+			'acl' => [],
+			'archived' => false,
+			'users' => ['user1', 'user2'],
+			'settings' => [],
+			'ETag' => $board->getETag(),
+		], $board->jsonSerialize());
+	}
+
 	public function testSetLabels() {
 		$board = $this->createBoard();
 		$board->setLabels(["foo", "bar"]);

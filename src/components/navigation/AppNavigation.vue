@@ -144,10 +144,10 @@ export default {
 		},
 		cardDetailsInModal: {
 			get() {
-				return this.$store.getters.cardDetailsInModal
+				return this.$store.getters.config('cardDetailsInModal')
 			},
 			set(newValue) {
-				this.$store.dispatch('setCardDetailsInModal', newValue)
+				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
 			},
 		},
 		configCalendar: {
