@@ -98,10 +98,12 @@
     "Could not write file to disk" : "Nem lehet a fájlt lemezre írni",
     "A PHP extension stopped the file upload" : "A PHP kiterjesztés megállította a fájl feltöltését",
     "No file uploaded or file size exceeds maximum of %s" : "Nincs fájl feltöltve, vagy a fájl meghaladja a maximumot: %s",
+    "This comment has more than %s characters.\nAdded as an attachment to the card with name %s.\nAccessible on URL: %s." : "Ez a megjegyzés több mint %s karakter hosszú.\nMellékletként lett hozzáadva a(z) %s nevű kártyához.\nEzen az URL-en érhető el: %s.",
     "Card not found" : "A kártya nem található",
     "Path is already shared with this card" : "Az útvonal már meg van osztva ezzel a kártyával",
     "Invalid date, date format must be YYYY-MM-DD" : "Érvénytelen dátum, a dátumnak YYYY-MM-DD formátumúnak kell lennie",
     "Personal planning and team project organization" : "Személyes tervezés és csapatos projektszervezés",
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "A Kártyák egy kanban-stílusú szervezőeszköz, amely a személyes tervezést és a csapatok projektszervezését célozza, a Nextcloudba integrálva.\n\n\n- 📥 Saját feladatok kártyákhoz adása, és azok sorrendezése\n- 📄 További jegyzetek leírása Markdownban\n- 🔖 Címkék hozzárendelése a még jobb rendszerezés miatt\n- 👥 Megosztás a csapattal, barátokkal vagy családdal\n- 📎 Fájlok hozzáadása mellékletként, vagy beágyazás a Markdown leírásba\n- 💬 Megbeszélés a csapattal hozzászólások használatával\n- ⚡ A változások követése a tevékenységnaplóban\n- 🚀 Rendszerezze a projektjét",
     "Card details" : "Kártya részletei",
     "Add board" : "Tábla hozzáadása",
     "Select the board to link to a project" : "Válasszon ki egy táblát, amely egy projektre fog hivatkozni",
@@ -237,6 +239,7 @@
     "Archive card" : "Kártya archiválása",
     "Delete card" : "Kártya törlése",
     "Move card to another board" : "Kártya áthelyezése egy másik táblára",
+    "List is empty" : "A lista üres",
     "Card deleted" : "Kártya törölve",
     "seconds ago" : "másodperce",
     "All boards" : "Az összes tábla",
@@ -282,6 +285,9 @@
     "Share with a Deck card" : "Megosztás kártyával",
     "Share {file} with a Deck card" : "A(z) {file} megosztása egy kártyával",
     "Share" : "Megosztás",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "A Kártyák egy kanban-stílusú szervezőeszköz, amely a személyes tervezést és a csapatok projektszervezését célozza, a Nextcloudba integrálva.\n\n\n- 📥 Saját feladatok kártyákhoz adása, és azok sorrendezése\n- 📄 További jegyzetek leírása markdownban\n- 🔖 Címkék hozzárendelése a még jobb rendszerezés miatt\n- 👥 Megosztás a csapattal, barátokkal vagy családdal\n- 📎 Fájlok hozzáadása mellékletként, vagy beágyazás a markdown leírásba\n- 💬 Megbeszélés a csapattal hozzászólások használatával\n- ⚡ A változások követése a tevékenységnaplóban\n- 🚀 Rendszerezze a projektjét"
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "A Kártyák egy kanban-stílusú szervezőeszköz, amely a személyes tervezést és a csapatok projektszervezését célozza, a Nextcloudba integrálva.\n\n\n- 📥 Saját feladatok kártyákhoz adása, és azok sorrendezése\n- 📄 További jegyzetek leírása markdownban\n- 🔖 Címkék hozzárendelése a még jobb rendszerezés miatt\n- 👥 Megosztás a csapattal, barátokkal vagy családdal\n- 📎 Fájlok hozzáadása mellékletként, vagy beágyazás a markdown leírásba\n- 💬 Megbeszélés a csapattal hozzászólások használatával\n- ⚡ A változások követése a tevékenységnaplóban\n- 🚀 Rendszerezze a projektjét",
+    "Creating the new card…" : "Új kártya létrehozása…",
+    "\"{card}\" was added to \"{board}\"" : "A(z) „{card}” hozzáadva a(z) „{board}” táblához",
+    "(circle)" : "(kör)"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
