@@ -28,7 +28,7 @@ import Boards from './components/boards/Boards'
 import Board from './components/board/Board'
 import Sidebar from './components/Sidebar'
 import BoardSidebar from './components/board/BoardSidebar'
-import CardSidebar from './components/card/CardSidebar'
+import CardModal from './components/card/CardModal'
 import Overview from './components/overview/Overview'
 
 Vue.use(Router)
@@ -119,7 +119,7 @@ export default new Router({
 					path: 'card/:cardId/:tabId?/:tabQuery?',
 					name: 'card',
 					components: {
-						sidebar: CardSidebar,
+						sidebar: CardModal,
 					},
 					props: {
 						default: (route) => {

@@ -160,7 +160,7 @@ export default {
 		width: 50vw;
 		max-width: 800px;
 		min-height: 200px;
-		height: 80vh;
+		height: auto;
 	}
 </style>
 
@@ -170,4 +170,7 @@ export default {
 		width: 100%;
 	}
 
+	.modal-wrapper--normal .modal-container{
+		width: 800px !important;
+	}
 </style>
