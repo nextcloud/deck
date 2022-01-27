@@ -31,7 +31,7 @@
 			</p>
 		</div>
 		<div class="tabs">
-			<div class="tab members">
+			<div class="tab members" :class="{active: 'members'}">
 				<i class="icon-user icon" />
 				Members
 			</div>
@@ -53,14 +53,8 @@
 			</div>
 		</div>
 		<div class="content">
-			<div class="description">
-				<h2>Description</h2>
-				<p>Write a description</p>
-			</div>
-			<div class="edit-btns">
-				<ActionButton icon="icon-info" class="action-btn" />
-				<ActionButton icon="icon-rename" class="action-btn" />
-			</div>
+			<MembersTab :card="currentCard" />
+			<Description :key="currentCard.id" :card="currentCard" @change="descriptionChanged" />
 		</div>
 		<div class="activities">
 			<h2 class="activities-title">
@@ -83,18 +77,20 @@
 </template>
 
 <script>
-import { ActionButton, Avatar } from '@nextcloud/vue'
+import { Avatar } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
 import { mapState, mapGetters } from 'vuex'
 import relativeDate from '../../mixins/relativeDate'
 import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
+import MembersTab from './MembersTab.vue'
+import Description from './Description.vue'
 
 const capabilities = window.OC.getCapabilities()
 
 export default {
 	name: 'CardModal',
-	components: { Avatar, ActionButton },
+	components: { Avatar, MembersTab, Description },
 	mixins: [relativeDate],
 	props: {
 		id: {
@@ -119,6 +115,7 @@ export default {
 			hasActivity: capabilities && capabilities.activity,
 			currentUser: getCurrentUser(),
 			comment: '',
+			activeTab: 'members',
 		}
 	},
 	computed: {
@@ -154,6 +151,9 @@ export default {
 		},
 	},
 	methods: {
+		descriptionChanged(newDesc) {
+			this.copiedCard.description = newDesc
+		},
 		handleUpdateTitleEditable(value) {
 			this.titleEditable = value
 			if (value) {
@@ -187,29 +187,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.icon-flash-black{
+.icon-flash-black {
 	background-image: url(../../../img/flash-black.svg);
 	width: 15px;
 	height: 15px;
 	margin-right: 5px;
 }
 
-.icon-plus{
+.icon-plus {
 	background-image: url(../../../img/plus.svg);
 	width: 15px;
 	height: 15px;
 	margin-right: 5px;
 }
 
-.log-item{
+.log-item {
 	display: flex;
 	justify-content: flex-start;
 	line-height: 45px;
 	align-items: center;
 }
 
-.activities{
-	&-title{
+.activities {
+	&-title {
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
@@ -219,33 +219,33 @@ export default {
 	margin-top: 100px;
 }
 
-.comment{
+.comment {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	&-input{
+	&-input {
 		width: 100%;
 		margin-left: 10px;
 	}
 }
 
-.container{
+.container {
 	padding: 20px;
 }
 
-.top{
-	&-title{
+.top {
+	&-title {
 		color: black;
 		font-size: 20px;
 		font-weight: bold;
 	}
-	&-modified{
+	&-modified {
 		color: #767676;
 		line-height: 40px;
 	}
 }
 
-.tabs{
+.tabs {
 	margin-top: 20px;
 	margin-bottom: 20px;
 	display: flex;
@@ -253,7 +253,7 @@ export default {
 	grid-gap: 30px;
 }
 
-.tab{
+.tab {
 	cursor: pointer;
 	font-weight: bold;
 	background-color: #ededed;
@@ -271,17 +271,23 @@ export default {
 	width: 100px;
 }
 
-.action-btn{
+.action-btn {
 	list-style: none;
 }
 
-.content{
-	display: flex;
-	justify-content: space-between;
-}
-
-.edit-btns{
+.edit-btns {
 	display: flex;
 	align-items: center;
+}
+
+.description {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 30px;
+}
+
+.active {
+	color: #409eff;
+	background-color: #ecf5ff;
 }
 </style>

@@ -282,7 +282,9 @@ h5 {
 	border-bottom: 1px solid var(--color-border);
 	margin-top: 20px;
 	margin-bottom: 5px;
-	color: var(--color-text-maxcontrast);
+	color: var(--color-main-text);
+	font-weight: bold;
+	font-size: 20px;
 
 	.icon-info {
 		display: inline-block;
