@@ -31,11 +31,11 @@
 			</p>
 		</div>
 		<div class="tabs">
-			<div class="tab members" :class="{active: 'members'}">
+			<div class="tab members" :class="{active: activeTab === 'members'}" @click="activeTab = 'members'">
 				<i class="icon-user icon" />
 				Members
 			</div>
-			<div class="tab tags">
+			<div class="tab tags" :class="{active: activeTab === 'tags'}" @click="activeTab = 'tags'">
 				<i class="icon icon-tag" />
 				Tags
 			</div>
@@ -53,7 +53,10 @@
 			</div>
 		</div>
 		<div class="content">
-			<MembersTab :card="currentCard" />
+			<div class="content-tabs">
+				<MembersTab :card="currentCard" @click="activeTab = 'members'" @active-tab="changeActiveTab" />
+				<TagsTab :card="currentCard" @click="activeTab = 'tags'" @active-tab="changeActiveTab" />
+			</div>
 			<Description :key="currentCard.id" :card="currentCard" @change="descriptionChanged" />
 		</div>
 		<div class="activities">
@@ -84,13 +87,14 @@ import relativeDate from '../../mixins/relativeDate'
 import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
 import MembersTab from './MembersTab.vue'
+import TagsTab from './TagsTab.vue'
 import Description from './Description.vue'
 
 const capabilities = window.OC.getCapabilities()
 
 export default {
 	name: 'CardModal',
-	components: { Avatar, MembersTab, Description },
+	components: { Avatar, MembersTab, Description, TagsTab },
 	mixins: [relativeDate],
 	props: {
 		id: {
@@ -179,14 +183,25 @@ export default {
 		showModal() {
 			this.$store.dispatch('setConfig', { cardDetailsInModal: true })
 		},
+
 		closeModal() {
 			this.$store.dispatch('setConfig', { cardDetailsInModal: false })
+		},
+
+		changeActiveTab(tab) {
+			this.activeTab = tab
 		},
 	},
 }
 </script>
 
 <style lang="scss" scoped>
+.content-tabs {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	align-items: center;
+}
+
 .icon-flash-black {
 	background-image: url(../../../img/flash-black.svg);
 	width: 15px;

@@ -32,16 +32,16 @@
 			</div>
 		</div>
 		<template v-else>
-			<div class="members" @click="showSelelectMembers = true">
+			<div class="members">
 				<Avatar v-for="option in assignedUsers"
 					:key="option.primaryKey"
 					:user="option.uid"
 					:display-name="option.displayname"
 					:is-no-user="option.isNoUser"
 					:size="32" />
-				<div class="button new select-member-btn">
+				<div class="button new select-member-btn" @click="selectMembers">
 					<span class="icon icon-add" />
-					<span class="hidden-visually"></span>
+					<span class="hidden-visually" />
 				</div>
 			</div>
 		</template>
@@ -109,6 +109,10 @@ export default {
 		this.initialize()
 	},
 	methods: {
+		selectMembers() {
+			this.showSelelectMembers = true
+			this.$emit('active-tab', 'members')
+		},
 		removeUserFromCard(user) {
 			this.$store.dispatch('removeUserFromCard', {
 				card: this.copiedCard,
