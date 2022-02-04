@@ -39,7 +39,7 @@
 				<i class="icon icon-tag" />
 				Tags
 			</div>
-			<div class="tab due-date">
+			<div class="tab due-date" :class="{active: activeTab === 'duedate'}" @click="activeTab = 'duedate'">
 				<i class="icon icon-calendar-dark" />
 				Due date
 			</div>
@@ -56,6 +56,7 @@
 			<div class="content-tabs">
 				<MembersTab :card="currentCard" @click="activeTab = 'members'" @active-tab="changeActiveTab" />
 				<TagsTab :card="currentCard" @click="activeTab = 'tags'" @active-tab="changeActiveTab" />
+				<DueDateTab :card="currentCard" @click="activeTab = 'duedate'" @active-tab="changeActiveTab" />
 			</div>
 			<Description :key="currentCard.id" :card="currentCard" @change="descriptionChanged" />
 		</div>
@@ -88,13 +89,14 @@ import { showError } from '@nextcloud/dialogs'
 import { getCurrentUser } from '@nextcloud/auth'
 import MembersTab from './MembersTab.vue'
 import TagsTab from './TagsTab.vue'
+import DueDateTab from './DueDateTab.vue'
 import Description from './Description.vue'
 
 const capabilities = window.OC.getCapabilities()
 
 export default {
 	name: 'CardModal',
-	components: { Avatar, MembersTab, Description, TagsTab },
+	components: { Avatar, MembersTab, Description, TagsTab, DueDateTab },
 	mixins: [relativeDate],
 	props: {
 		id: {
@@ -198,7 +200,7 @@ export default {
 <style lang="scss" scoped>
 .content-tabs {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: 1fr 2fr 1fr;
 	align-items: center;
 }
 

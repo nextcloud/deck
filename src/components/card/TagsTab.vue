@@ -1,6 +1,6 @@
 <template>
 	<div class="section-details">
-		<div v-if="showSelelectTags" @mouseleave="showSelelectTags = false">
+		<div v-if="showSelelectTags || card.labels.length <= 0" @mouseleave="showSelelectTags = false">
 			<Multiselect v-model="assignedLabels"
 				:multiple="true"
 				:disabled="!canEdit"
