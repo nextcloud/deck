@@ -70,7 +70,7 @@ OC.L10N.register(
     "Upcoming cards" : "برگه‌های آینده",
     "Personal" : "شخصی",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} برگه {deck-card} در {deck-board} را به شما اختصاص داده است.",
-    "The card {deck-card} on {deck-board} has reached its due date." : "برگ\nه {deck-card} در {deck-board} به تاریخ سررسید خود رسیده است.",
+    "The card {deck-card} on {deck-board} has reached its due date." : "برگه {deck-card} در {deck-board} به تاریخ سررسید خود رسیده است.",
     "{user} has mentioned you in a comment on {deck-card}." : "{user} از شما در نظری در {deck-card} نام برده است.",
     "{user} has shared {deck-board} with you." : "{user} {deck-board} را با شما به اشتراک گذاشته است.",
     "Card comments" : "برگهٔ نظر",
