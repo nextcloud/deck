@@ -13,6 +13,7 @@
 		</div>
 	</div>
 </template>
+
 <script>
 import { DatetimePicker } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
@@ -137,3 +138,9 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+.section-details {
+	margin-right: 5px;
+}
+</style>

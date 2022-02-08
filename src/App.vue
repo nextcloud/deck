@@ -157,8 +157,7 @@ export default {
 
 	.modal__card {
 		min-width: 320px;
-		width: 50vw;
-		max-width: 800px;
+		width: 100%;
 		min-height: 200px;
 		height: auto;
 	}
@@ -171,6 +170,7 @@ export default {
 	}
 
 	.modal-wrapper--normal .modal-container{
-		width: 800px !important;
+		width: 900px !important;
 	}
+
 </style>

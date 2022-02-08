@@ -43,7 +43,7 @@
 				<i class="icon icon-calendar-dark" />
 				Due date
 			</div>
-			<div class="tab project">
+			<div class="tab project" :class="{active: activeTab === 'project'}" @click="activeTab = 'project'">
 				<i class="icon icon-deck" />
 				Project
 			</div>
@@ -57,6 +57,7 @@
 				<MembersTab :card="currentCard" @click="activeTab = 'members'" @active-tab="changeActiveTab" />
 				<TagsTab :card="currentCard" @click="activeTab = 'tags'" @active-tab="changeActiveTab" />
 				<DueDateTab :card="currentCard" @click="activeTab = 'duedate'" @active-tab="changeActiveTab" />
+				<ProjectTab :card="currentCard" @click="activeTab = 'project'" @active-tab="changeActiveTab" />
 			</div>
 			<Description :key="currentCard.id" :card="currentCard" @change="descriptionChanged" />
 		</div>
@@ -64,17 +65,22 @@
 			<h2 class="activities-title">
 				<div class="icon-flash-black" /> Activities
 			</h2>
-			<div class="comment">
+			<div class="comments">
 				<Avatar :user="currentUser.uid" />
-				<input v-model="comment"
-					type="text"
-					:placeholder="t('deck', 'Leave a comment')"
-					class="comment-input">
+				<CommentForm v-model="newComment" @submit="createComment" />
 			</div>
 			<div class="activities-logs">
-				<p class="log-item">
-					<i class="icon-plus" /> You have created card Example Task 3 in list To do on board Personal
-				</p>
+				<CommentItem v-if="replyTo"
+					:comment="replyTo"
+					:reply="true"
+					:preview="true"
+					@cancel="cancelReply" />
+				<ul v-if="getCommentsForCard(currentCard.id).length > 0" id="commentsFeed">
+					<CommentItem v-for="comment in getCommentsForCard(currentCard.id)"
+						:key="comment.id"
+						:comment="comment"
+						@doReload="loadComments" />
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -91,12 +97,24 @@ import MembersTab from './MembersTab.vue'
 import TagsTab from './TagsTab.vue'
 import DueDateTab from './DueDateTab.vue'
 import Description from './Description.vue'
+import ProjectTab from './ProjectTab.vue'
+import CommentForm from './CommentForm'
+import CommentItem from './CommentItem'
 
 const capabilities = window.OC.getCapabilities()
 
 export default {
 	name: 'CardModal',
-	components: { Avatar, MembersTab, Description, TagsTab, DueDateTab },
+	components: {
+		Avatar,
+		MembersTab,
+		Description,
+		TagsTab,
+		DueDateTab,
+		ProjectTab,
+		CommentForm,
+		CommentItem,
+	},
 	mixins: [relativeDate],
 	props: {
 		id: {
@@ -116,6 +134,7 @@ export default {
 	},
 	data() {
 		return {
+			newComment: '',
 			titleEditable: false,
 			titleEditing: '',
 			hasActivity: capabilities && capabilities.activity,
@@ -125,8 +144,13 @@ export default {
 		}
 	},
 	computed: {
+		...mapGetters([
+			'getCommentsForCard',
+			'hasMoreComments',
+		]),
 		...mapState({
 			currentBoard: state => state.currentBoard,
+			replyTo: state => state.comment.replyTo,
 		}),
 		...mapGetters(['canEdit', 'assignables', 'cardActions', 'stackById']),
 		title() {
@@ -156,7 +180,39 @@ export default {
 			},
 		},
 	},
+	mounted() {
+		this.loadComments()
+	},
 	methods: {
+		cancelReply() {
+			this.$store.dispatch('setReplyTo', null)
+		},
+		async createComment(content) {
+			const commentObj = {
+				cardId: this.currentCard.id,
+				comment: content,
+			}
+			await this.$store.dispatch('createComment', commentObj)
+			this.$store.dispatch('setReplyTo', null)
+			this.newComment = ''
+			await this.loadComments()
+		},
+		async loadComments() {
+			this.$store.dispatch('setReplyTo', null)
+			this.error = null
+			this.isLoading = true
+			try {
+				await this.$store.dispatch('fetchComments', { cardId: this.currentCard.id })
+				this.isLoading = false
+				if (this.currentCard.commentsUnread > 0) {
+					await this.$store.dispatch('markCommentsAsRead', this.currentCard.id)
+				}
+			} catch (e) {
+				this.isLoading = false
+				console.error('Failed to fetch more comments during infinite loading', e)
+				this.error = t('deck', 'Failed to load comments')
+			}
+		},
 		descriptionChanged(newDesc) {
 			this.copiedCard.description = newDesc
 		},
@@ -200,8 +256,8 @@ export default {
 <style lang="scss" scoped>
 .content-tabs {
 	display: grid;
-	grid-template-columns: 1fr 2fr 1fr;
-	align-items: center;
+	grid-template-columns: 1fr 2fr 1fr 1fr;
+	align-items: flex-start;
 }
 
 .icon-flash-black {
@@ -236,13 +292,17 @@ export default {
 	margin-top: 100px;
 }
 
-.comment {
+.comments {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	&-input {
 		width: 100%;
 		margin-left: 10px;
+	}
+
+	.comment-form {
+		width: 95%;
 	}
 }
 
@@ -265,8 +325,8 @@ export default {
 .tabs {
 	margin-top: 20px;
 	margin-bottom: 20px;
-	display: flex;
-	justify-content: flex-start;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	grid-gap: 30px;
 }
 
