@@ -31,15 +31,15 @@
 			</p>
 		</div>
 		<div class="tabs">
-			<div class="tab members" :class="{active: activeTab === 'members'}" @click="activeTab = 'members'">
+			<div class="tab members" :class="{active: activeTab === 'default'}" @click="activeTab = 'default'">
 				<i class="icon-user icon" />
 				Members
 			</div>
-			<div class="tab tags" :class="{active: activeTab === 'tags'}" @click="activeTab = 'tags'">
+			<div class="tab tags" :class="{active: activeTab === 'default'}" @click="activeTab = 'default'">
 				<i class="icon icon-tag" />
 				Tags
 			</div>
-			<div class="tab due-date" :class="{active: activeTab === 'duedate'}" @click="activeTab = 'duedate'">
+			<div class="tab due-date" :class="{active: activeTab === 'default'}" @click="activeTab = 'default'">
 				<i class="icon icon-calendar-dark" />
 				Due date
 			</div>
@@ -47,17 +47,33 @@
 				<i class="icon icon-deck" />
 				Project
 			</div>
-			<div class="tab attachments">
+			<div class="tab attachments" :class="{active: activeTab === 'attachment'}" @click="activeTab = 'attachment'">
 				<i class="icon-attach icon icon-attach-dark" />
 				Attachments
 			</div>
 		</div>
 		<div class="content">
 			<div class="content-tabs">
-				<MembersTab :card="currentCard" @click="activeTab = 'members'" @active-tab="changeActiveTab" />
-				<TagsTab :card="currentCard" @click="activeTab = 'tags'" @active-tab="changeActiveTab" />
-				<DueDateTab :card="currentCard" @click="activeTab = 'duedate'" @active-tab="changeActiveTab" />
-				<ProjectTab :card="currentCard" @click="activeTab = 'project'" @active-tab="changeActiveTab" />
+				<MembersTab v-if="activeTab === 'default'"
+					:card="currentCard"
+					@click="activeTab = 'default'"
+					@active-tab="changeActiveTab" />
+				<TagsTab v-if="activeTab === 'default'"
+					:card="currentCard"
+					@click="activeTab = 'default'"
+					@active-tab="changeActiveTab" />
+				<DueDateTab v-if="activeTab === 'default'"
+					:card="currentCard"
+					@click="activeTab = 'default'"
+					@active-tab="changeActiveTab" />
+				<ProjectTab v-if="activeTab === 'project'"
+					:card="currentCard"
+					@click="activeTab = 'project'"
+					@active-tab="changeActiveTab" />
+				<AttachmentsTab v-if="activeTab === 'attachment'"
+					:card="currentCard"
+					@click="activeTab = 'attachment'"
+					@active-tab="changeActiveTab" />
 			</div>
 			<Description :key="currentCard.id" :card="currentCard" @change="descriptionChanged" />
 		</div>
@@ -76,9 +92,9 @@
 					:preview="true"
 					@cancel="cancelReply" />
 				<ul v-if="getCommentsForCard(currentCard.id).length > 0" id="commentsFeed">
-					<CommentItem v-for="comment in getCommentsForCard(currentCard.id)"
-						:key="comment.id"
-						:comment="comment"
+					<CommentItem v-for="cmt in getCommentsForCard(currentCard.id)"
+						:key="cmt.id"
+						:comment="cmt"
 						@doReload="loadComments" />
 				</ul>
 			</div>
@@ -98,6 +114,7 @@ import TagsTab from './TagsTab.vue'
 import DueDateTab from './DueDateTab.vue'
 import Description from './Description.vue'
 import ProjectTab from './ProjectTab.vue'
+import AttachmentsTab from './AttachmentsTab.vue'
 import CommentForm from './CommentForm'
 import CommentItem from './CommentItem'
 
@@ -112,6 +129,7 @@ export default {
 		TagsTab,
 		DueDateTab,
 		ProjectTab,
+		AttachmentsTab,
 		CommentForm,
 		CommentItem,
 	},
@@ -140,7 +158,7 @@ export default {
 			hasActivity: capabilities && capabilities.activity,
 			currentUser: getCurrentUser(),
 			comment: '',
-			activeTab: 'members',
+			activeTab: 'default',
 		}
 	},
 	computed: {
@@ -256,7 +274,7 @@ export default {
 <style lang="scss" scoped>
 .content-tabs {
 	display: grid;
-	grid-template-columns: 1fr 2fr 1fr 1fr;
+	grid-template-columns: 1fr 2fr 1fr;
 	align-items: flex-start;
 }
 
