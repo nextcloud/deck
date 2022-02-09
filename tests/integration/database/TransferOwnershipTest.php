@@ -3,8 +3,8 @@
 namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\Acl;
-use OCA\Deck\Db\AssignedUsers;
-use OCA\Deck\Db\AssignedUsersMapper;
+use OCA\Deck\Db\Assignment;
+use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
 
 /**
@@ -23,8 +23,8 @@ class TransferOwnershipTest extends \Test\TestCase {
 	protected $cardService;
 	/** @var StackService */
 	protected $stackService;
-	/** @var AssignedUsersMapper */
-	protected $assignedUsersMapper;
+	/** @var AssignmentMapper */
+	protected $assignmentMapper;
 	/** @var AssignmentService */
 	private $assignmentService;
 	/** @var Board */
@@ -55,7 +55,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 		$this->stackService = \OC::$server->query(StackService::class);
 		$this->cardService = \OC::$server->query(CardService::class);
 		$this->assignmentService = \OC::$server->query(AssignmentService::class);
-		$this->assignedUsersMapper = \OC::$server->query(AssignedUsersMapper::class);
+		$this->assignmentMapper = \OC::$server->query(AssignmentMapper::class);
 		$this->createBoardWithExampleData();
 	}
 
@@ -128,9 +128,9 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 */
 	public function testReassignCardToNewOwner() {
 		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2);
-		$assignedUsers = $this->assignedUsersMapper->find($this->cards[0]->getId());
+		$users = $this->assignmentMapper->findAll($this->cards[0]->getId());
 		$participantsUIDs = [];
-		foreach ($assignedUsers as $user) {
+		foreach ($users as $user) {
 			$participantsUIDs[] = $user->getParticipant();
 		}
 		$this->assertContains(self::TEST_USER_2, $participantsUIDs);
@@ -141,11 +141,11 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 * @covers ::transferOwnership
 	 */
 	public function testReassignCardToNewParticipantOnlyIfParticipantHasUserType() {
-		$this->assignmentService->assignUser($this->cards[1]->getId(), self::TEST_USER_1, AssignedUsers::TYPE_GROUP);
+		$this->assignmentService->assignUser($this->cards[1]->getId(), self::TEST_USER_1, Assignment::TYPE_GROUP);
 		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2);
-		$assignedUsers = $this->assignedUsersMapper->find($this->cards[1]->getId());
+		$users = $this->assignmentMapper->findAll($this->cards[1]->getId());
 		$participantsUIDs = [];
-		foreach ($assignedUsers as $user) {
+		foreach ($users as $user) {
 			$participantsUIDs[] = $user->getParticipant();
 		}
 		$this->assertContains(self::TEST_USER_1, $participantsUIDs);
@@ -196,7 +196,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 */
 	public function testTargetAlreadyParticipantOfCard() {
 		$this->expectNotToPerformAssertions();
-		$this->assignmentService->assignUser($this->cards[0]->getId(), self::TEST_USER_3, AssignedUsers::TYPE_USER);
+		$this->assignmentService->assignUser($this->cards[0]->getId(), self::TEST_USER_3, Assignment::TYPE_USER);
 		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_3);
 	}
 
