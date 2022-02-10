@@ -1,6 +1,6 @@
 <template>
-	<div class="section-details">
-		<div @click="$emit('active-tab', 'duedate')">
+	<div v-if="copiedCard" class="section-details">
+		<div @click="$emit('active-tab', 'default')">
 			<DatetimePicker v-model="duedate"
 				:placeholder="t('deck', 'Set a due date')"
 				type="datetime"
@@ -11,11 +11,16 @@
 				:shortcuts="shortcuts"
 				confirm />
 		</div>
+		<Actions v-if="canEdit">
+			<ActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">
+				{{ t('deck', 'Remove due date') }}
+			</ActionButton>
+		</Actions>
 	</div>
 </template>
 
 <script>
-import { DatetimePicker } from '@nextcloud/vue'
+import { DatetimePicker, Actions, ActionButton } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
 import Color from '../../mixins/color'
 import labelStyle from '../../mixins/labelStyle'
@@ -27,7 +32,7 @@ import {
 import moment from '@nextcloud/moment'
 
 export default {
-	components: { DatetimePicker },
+	components: { DatetimePicker, Actions, ActionButton },
 	mixins: [Color, labelStyle],
 	props: {
 		card: {
@@ -135,6 +140,10 @@ export default {
 
 			this.copiedCard = JSON.parse(JSON.stringify(this.card))
 		},
+		removeDue() {
+			this.copiedCard.duedate = null
+			this.$store.dispatch('updateCardDue', this.copiedCard)
+		},
 	},
 }
 </script>
@@ -142,5 +151,7 @@ export default {
 <style lang="scss" scoped>
 .section-details {
 	margin-right: 5px;
+	display: flex;
+	align-items: center;
 }
 </style>

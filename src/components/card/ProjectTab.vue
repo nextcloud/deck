@@ -1,6 +1,6 @@
 <template>
 	<div class="section-details">
-		<div class="section-wrapper" @click="$emit('active-tab', 'project')">
+		<div class="section-wrapper" @click="$emit('active-tab', 'default')">
 			<CollectionList v-if="card.id"
 				:id="`${card.id}`"
 				:name="card.title"

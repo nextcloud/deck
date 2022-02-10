@@ -170,6 +170,7 @@ export default {
 	padding: 9px;
 	align-items: center;
 	justify-content: center;
+	margin-left: 5px;
 }
 
 .section-details {

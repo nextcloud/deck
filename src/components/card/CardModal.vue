@@ -79,7 +79,7 @@
 		</div>
 		<div class="activities">
 			<h2 class="activities-title">
-				<div class="icon-flash-black" /> Activities
+				<div class="icon-flash-black" /> Activity
 			</h2>
 			<div class="comments">
 				<Avatar :user="currentUser.uid" />
@@ -285,6 +285,10 @@ export default {
 	margin-right: 5px;
 }
 
+.icon {
+	margin-right: 5px;
+}
+
 .icon-plus {
 	background-image: url(../../../img/plus.svg);
 	width: 15px;
@@ -359,7 +363,7 @@ export default {
 	flex-direction: row;
 	overflow: hidden;
 	padding: 10px 10px;
-	border-radius: 5px;
+	border-radius: 10px;
 	font-size: 85%;
 	margin-bottom: 3px;
 	margin-right: 5px;

@@ -5,7 +5,7 @@
 				:multiple="true"
 				:disabled="!canEdit"
 				:options="labelsSorted"
-				:placeholder="t('deck', 'Assign a tag to this card…')"
+				:placeholder="t('deck', 'Assign a tag to this card')"
 				:taggable="true"
 				label="title"
 				track-by="id"
@@ -74,7 +74,7 @@ export default {
 	methods: {
 		add() {
 			this.showSelelectTags = true
-			this.$emit('active-tab', 'tags')
+			this.$emit('active-tab', 'default')
 		},
 		async initialize() {
 			if (!this.card) {
@@ -136,5 +136,10 @@ export default {
 	height: 32px;
 	width: 32px;
 	padding: 5px 7px;
+}
+
+.tag {
+	padding: 0px 5px;
+	border-radius: 15px;
 }
 </style>
