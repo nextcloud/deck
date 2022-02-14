@@ -1,6 +1,8 @@
 <template>
-	<div v-if="copiedCard" class="section-details">
-		<div @click="$emit('active-tab', 'default')">
+	<div v-if="activeTab === 'duedate' || (copiedCard && copiedCard.duedate)"
+		v-show="!['project', 'attachment'].includes(activeTab)"
+		class="section-details">
+		<div @click="$emit('active-tab', 'duedate')">
 			<DatetimePicker v-model="duedate"
 				:placeholder="t('deck', 'Set a due date')"
 				type="datetime"
@@ -37,6 +39,10 @@ export default {
 	props: {
 		card: {
 			type: Object,
+			default: null,
+		},
+		activeTab: {
+			type: String,
 			default: null,
 		},
 	},
@@ -152,6 +158,17 @@ export default {
 .section-details {
 	margin-right: 5px;
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
+}
+</style>
+
+<style>
+.section-details .mx-input {
+	height: 36px !important;
+	margin: 0;
+}
+
+.section-details .action-item {
+	height: 30px !important;
 }
 </style>

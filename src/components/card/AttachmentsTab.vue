@@ -1,5 +1,5 @@
 <template>
-	<div class="section-details">
+	<div v-if="activeTab === 'attachment'" class="section-details">
 		<AttachmentList
 			:card-id="card.id"
 			:removable="true"
@@ -16,6 +16,10 @@ export default {
 	props: {
 		card: {
 			type: Object,
+			default: null,
+		},
+		activeTab: {
+			type: String,
 			default: null,
 		},
 	},

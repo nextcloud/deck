@@ -1,6 +1,6 @@
 <template>
-	<div class="section-details">
-		<div class="section-wrapper" @click="$emit('active-tab', 'default')">
+	<div v-if="activeTab === 'project'" class="section-details">
+		<div class="section-wrapper" @click="$emit('active-tab', 'project')">
 			<CollectionList v-if="card.id"
 				:id="`${card.id}`"
 				:name="card.title"
@@ -17,6 +17,10 @@ export default {
 	props: {
 		card: {
 			type: Object,
+			default: null,
+		},
+		activeTab: {
+			type: String,
 			default: null,
 		},
 	},

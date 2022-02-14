@@ -1,5 +1,7 @@
 <template>
-	<div class="section-details">
+	<div v-show="!['project', 'attachment'].includes(activeTab)"
+		v-if="activeTab === 'members' || (assignedUsers && assignedUsers.length > 0)"
+		class="section-details">
 		<div v-if="showSelelectMembers" @mouseleave="showSelelectMembers = false">
 			<Multiselect v-if="canEdit"
 				v-model="assignedUsers"
@@ -61,6 +63,10 @@ export default {
 	props: {
 		card: {
 			type: Object,
+			default: null,
+		},
+		activeTab: {
+			type: String,
 			default: null,
 		},
 	},
@@ -161,7 +167,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .select-member-btn {
 	box-sizing: border-box;
 	display: flex;
@@ -180,5 +186,11 @@ export default {
 .members {
 	display: flex;
 	align-items: center;
+}
+</style>
+
+<style>
+.members .multiselect__tags{
+	height: 34px !important;
 }
 </style>

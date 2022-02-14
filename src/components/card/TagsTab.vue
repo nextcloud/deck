@@ -1,5 +1,7 @@
 <template>
-	<div class="section-details">
+	<div v-show="!['project', 'attachment'].includes(activeTab)"
+		v-if="activeTab === 'tags' || card.labels.length > 0"
+		class="section-details">
 		<div v-if="showSelelectTags || card.labels.length <= 0" @mouseleave="showSelelectTags = false">
 			<Multiselect v-model="assignedLabels"
 				:multiple="true"
@@ -51,6 +53,10 @@ export default {
 			type: Object,
 			default: null,
 		},
+		activeTab: {
+			type: String,
+			default: null,
+		},
 	},
 	data() {
 		return {
@@ -74,7 +80,7 @@ export default {
 	methods: {
 		add() {
 			this.showSelelectTags = true
-			this.$emit('active-tab', 'default')
+			this.$emit('active-tab', 'tags')
 		},
 		async initialize() {
 			if (!this.card) {

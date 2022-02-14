@@ -21,56 +21,61 @@
   -->
 
 <template>
-	<div class="container">
+	<div v-if="currentCard" class="container">
 		<div class="top">
 			<h1 class="top-title">
-				Example task 3
+				{{ currentCard.title }}
 			</h1>
 			<p class="top-modified">
-				Modified: 2 days go. Created 3 days ago
+				{{ t('deck', 'Modified') }}: {{ currentCard.lastModified | fromNow }}. {{ t('deck', 'Created') }} {{ currentCard.createdAt | fromNow }}
 			</p>
 		</div>
 		<div class="tabs">
-			<div class="tab members" :class="{active: activeTab === 'default'}" @click="activeTab = 'default'">
+			<div class="tab members" :class="{active: activeTab === 'members'}" @click="activeTab = 'members'">
 				<i class="icon-user icon" />
-				Members
+				{{ t('deck', 'Members') }}
 			</div>
-			<div class="tab tags" :class="{active: activeTab === 'default'}" @click="activeTab = 'default'">
+			<div class="tab tags" :class="{active: activeTab === 'tags'}" @click="activeTab = 'tags'">
 				<i class="icon icon-tag" />
-				Tags
+				{{ t('deck', 'Tags') }}
 			</div>
-			<div class="tab due-date" :class="{active: activeTab === 'default'}" @click="activeTab = 'default'">
+			<div class="tab due-date" :class="{active: activeTab === 'duedate'}" @click="activeTab = 'duedate'">
 				<i class="icon icon-calendar-dark" />
-				Due date
+				{{ t('deck', 'Due date') }}
 			</div>
 			<div class="tab project" :class="{active: activeTab === 'project'}" @click="activeTab = 'project'">
 				<i class="icon icon-deck" />
-				Project
+				{{ t('deck', 'Project') }}
 			</div>
 			<div class="tab attachments" :class="{active: activeTab === 'attachment'}" @click="activeTab = 'attachment'">
 				<i class="icon-attach icon icon-attach-dark" />
-				Attachments
+				{{ t('deck', 'Attachments') }}
 			</div>
 		</div>
 		<div class="content">
 			<div class="content-tabs">
-				<MembersTab v-if="activeTab === 'default'"
+				<MembersTab
 					:card="currentCard"
-					@click="activeTab = 'default'"
+					:active-tab="activeTab"
+					@click="activeTab = 'members'"
 					@active-tab="changeActiveTab" />
-				<TagsTab v-if="activeTab === 'default'"
+				<TagsTab
+					:active-tab="activeTab"
 					:card="currentCard"
-					@click="activeTab = 'default'"
+					@click="activeTab = 'tags'"
 					@active-tab="changeActiveTab" />
-				<DueDateTab v-if="activeTab === 'default'"
+				<DueDateTab
+					:active-tab="activeTab"
 					:card="currentCard"
-					@click="activeTab = 'default'"
+					@click="activeTab = 'duedate'"
 					@active-tab="changeActiveTab" />
-				<ProjectTab v-if="activeTab === 'project'"
+				<ProjectTab
+					:active-tab="activeTab"
 					:card="currentCard"
 					@click="activeTab = 'project'"
 					@active-tab="changeActiveTab" />
-				<AttachmentsTab v-if="activeTab === 'attachment'"
+				<AttachmentsTab
+					:active-tab="activeTab"
 					:card="currentCard"
 					@click="activeTab = 'attachment'"
 					@active-tab="changeActiveTab" />
@@ -79,7 +84,7 @@
 		</div>
 		<div class="activities">
 			<h2 class="activities-title">
-				<div class="icon-flash-black" /> Activity
+				<div class="icon-activity" /> {{ t('deck', 'Activity') }}
 			</h2>
 			<div class="comments">
 				<Avatar :user="currentUser.uid" />
@@ -117,6 +122,7 @@ import ProjectTab from './ProjectTab.vue'
 import AttachmentsTab from './AttachmentsTab.vue'
 import CommentForm from './CommentForm'
 import CommentItem from './CommentItem'
+import moment from '@nextcloud/moment'
 
 const capabilities = window.OC.getCapabilities()
 
@@ -132,6 +138,11 @@ export default {
 		AttachmentsTab,
 		CommentForm,
 		CommentItem,
+	},
+	filters: {
+		fromNow(value) {
+			return moment.unix(value).fromNow()
+		},
 	},
 	mixins: [relativeDate],
 	props: {
@@ -158,7 +169,7 @@ export default {
 			hasActivity: capabilities && capabilities.activity,
 			currentUser: getCurrentUser(),
 			comment: '',
-			activeTab: 'default',
+			activeTab: null,
 		}
 	},
 	computed: {
@@ -278,7 +289,7 @@ export default {
 	align-items: flex-start;
 }
 
-.icon-flash-black {
+.icon-activity {
 	background-image: url(../../../img/flash-black.svg);
 	width: 15px;
 	height: 15px;
