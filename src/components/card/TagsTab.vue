@@ -1,6 +1,6 @@
 <template>
-	<div v-show="!['project', 'attachment'].includes(activeTab)"
-		v-if="activeTab === 'tags' || card.labels.length > 0"
+	<div v-if="activeTabs.includes('tags') || card.labels.length > 0"
+		v-show="!['project', 'attachment'].includes(currentTab)"
 		class="section-details">
 		<div v-if="showSelelectTags || card.labels.length <= 0" @mouseleave="showSelelectTags = false">
 			<Multiselect v-model="assignedLabels"
@@ -53,9 +53,13 @@ export default {
 			type: Object,
 			default: null,
 		},
-		activeTab: {
+		activeTabs: {
+			type: Array,
+			default: () => [],
+		},
+		currentTab: {
 			type: String,
-			default: null,
+			default: '',
 		},
 	},
 	data() {
@@ -74,8 +78,20 @@ export default {
 			return [...this.currentBoard.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 	},
+	watch: {
+		card(value) {
+			if (value.labels.length > 0) {
+				this.$emit('active-tab', 'tags')
+			} else {
+				this.$emit('remove-active-tab', 'tags')
+			}
+		},
+	},
 	mounted() {
 		this.initialize()
+		if (this.card.labels.length > 0) {
+			this.$emit('active-tab', 'tags')
+		}
 	},
 	methods: {
 		add() {
@@ -140,11 +156,11 @@ export default {
 
 .select-tag {
 	height: 32px;
-	width: 32px;
-	padding: 5px 7px;
+  width: 34px;
+  padding: 5px 8px;
 }
 
-.tag {
+.tag{
 	padding: 0px 5px;
 	border-radius: 15px;
 }

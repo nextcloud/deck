@@ -1,5 +1,5 @@
 <template>
-	<div v-if="activeTab === 'attachment'" class="section-details">
+	<div v-if="activeTabs.includes('attachment')" class="section-details">
 		<AttachmentList
 			:card-id="card.id"
 			:removable="true"
@@ -18,9 +18,9 @@ export default {
 			type: Object,
 			default: null,
 		},
-		activeTab: {
-			type: String,
-			default: null,
+		activeTabs: {
+			type: Array,
+			default: () => [],
 		},
 	},
 	data() {

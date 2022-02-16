@@ -1,6 +1,6 @@
 <template>
-	<div v-if="activeTab === 'duedate' || (copiedCard && copiedCard.duedate)"
-		v-show="!['project', 'attachment'].includes(activeTab)"
+	<div v-if="activeTabs.includes('duedate') || (copiedCard && copiedCard.duedate)"
+		v-show="!['project', 'attachment'].includes(currentTab)"
 		class="section-details">
 		<div @click="$emit('active-tab', 'duedate')">
 			<DatetimePicker v-model="duedate"
@@ -20,7 +20,6 @@
 		</Actions>
 	</div>
 </template>
-
 <script>
 import { DatetimePicker, Actions, ActionButton } from '@nextcloud/vue'
 import { mapState, mapGetters } from 'vuex'
@@ -41,9 +40,13 @@ export default {
 			type: Object,
 			default: null,
 		},
-		activeTab: {
+		activeTabs: {
+			type: Array,
+			default: () => [],
+		},
+		currentTab: {
 			type: String,
-			default: null,
+			default: '',
 		},
 	},
 	data() {
@@ -133,10 +136,20 @@ export default {
 	watch: {
 		card() {
 			this.initialize()
+			if (this.copiedCard.duedate) {
+				this.$emit('active-tab', 'duedate')
+			} else {
+				this.$emit('remove-active-tab', 'duedate')
+			}
 		},
 	},
 	mounted() {
 		this.initialize()
+		if (this.copiedCard.duedate) {
+			this.$emit('active-tab', 'duedate')
+		} else {
+			this.$emit('remove-active-tab', 'duedate')
+		}
 	},
 	methods: {
 		async initialize() {
@@ -155,7 +168,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.section-details {
+.section-details{
 	margin-right: 5px;
 	display: flex;
 	align-items: flex-start;
@@ -163,7 +176,7 @@ export default {
 </style>
 
 <style>
-.section-details .mx-input {
+.section-details .mx-input{
 	height: 36px !important;
 	margin: 0;
 }

@@ -1,6 +1,6 @@
 <template>
-	<div v-show="!['project', 'attachment'].includes(activeTab)"
-		v-if="activeTab === 'members' || (assignedUsers && assignedUsers.length > 0)"
+	<div v-if="activeTabs.includes('members') || (assignedUsers && assignedUsers.length > 0)"
+		v-show="!['project', 'attachment'].includes(currentTab)"
 		class="section-details">
 		<div v-if="showSelelectMembers" @mouseleave="showSelelectMembers = false">
 			<Multiselect v-if="canEdit"
@@ -65,9 +65,13 @@ export default {
 			type: Object,
 			default: null,
 		},
-		activeTab: {
+		activeTabs: {
+			type: Array,
+			default: () => [],
+		},
+		currentTab: {
 			type: String,
-			default: null,
+			default: '',
 		},
 	},
 	data() {
@@ -109,6 +113,13 @@ export default {
 	watch: {
 		card() {
 			this.initialize()
+		},
+		assignedUsers(value) {
+			if (value.length > 0) {
+				this.$emit('active-tab', 'members')
+			} else {
+				this.$emit('remove-active-tab', 'members')
+			}
 		},
 	},
 	mounted() {
@@ -172,8 +183,8 @@ export default {
 	box-sizing: border-box;
 	display: flex;
 	height: 32px;
-	width: 32px;
-	padding: 9px;
+	width: 34px;
+	padding: 5px 9px;
 	align-items: center;
 	justify-content: center;
 	margin-left: 5px;

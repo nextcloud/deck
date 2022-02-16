@@ -1,6 +1,6 @@
 <template>
-	<div v-if="activeTab === 'project'" class="section-details">
-		<div class="section-wrapper" @click="$emit('active-tab', 'project')">
+	<div v-if="activeTabs.includes('project')" class="section-details">
+		<div class="section-wrapper">
 			<CollectionList v-if="card.id"
 				:id="`${card.id}`"
 				:name="card.title"
@@ -19,20 +19,10 @@ export default {
 			type: Object,
 			default: null,
 		},
-		activeTab: {
-			type: String,
-			default: null,
+		activeTabs: {
+			type: Array,
+			default: () => [],
 		},
-	},
-	data() {
-		return {
-		}
-	},
-	computed: {
-	},
-	mounted() {
-	},
-	methods: {
 	},
 }
 </script>

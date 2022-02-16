@@ -31,23 +31,23 @@
 			</p>
 		</div>
 		<div class="tabs">
-			<div class="tab members" :class="{active: activeTab === 'members'}" @click="activeTab = 'members'">
+			<div class="tab members" :class="{active: activeTabs.includes('members')}" @click="changeActiveTab('members')">
 				<i class="icon-user icon" />
 				{{ t('deck', 'Members') }}
 			</div>
-			<div class="tab tags" :class="{active: activeTab === 'tags'}" @click="activeTab = 'tags'">
+			<div class="tab tags" :class="{active: activeTabs.includes('tags')}" @click="changeActiveTab('tags')">
 				<i class="icon icon-tag" />
 				{{ t('deck', 'Tags') }}
 			</div>
-			<div class="tab due-date" :class="{active: activeTab === 'duedate'}" @click="activeTab = 'duedate'">
+			<div class="tab due-date" :class="{active: activeTabs.includes('duedate')}" @click="changeActiveTab('duedate')">
 				<i class="icon icon-calendar-dark" />
 				{{ t('deck', 'Due date') }}
 			</div>
-			<div class="tab project" :class="{active: activeTab === 'project'}" @click="activeTab = 'project'">
+			<div class="tab project" :class="{active: activeTabs.includes('project')}" @click="changeActiveTab('project')">
 				<i class="icon icon-deck" />
 				{{ t('deck', 'Project') }}
 			</div>
-			<div class="tab attachments" :class="{active: activeTab === 'attachment'}" @click="activeTab = 'attachment'">
+			<div class="tab attachments" :class="{active: activeTabs.includes('attachment')}" @click="changeActiveTab('attachment')">
 				<i class="icon-attach icon icon-attach-dark" />
 				{{ t('deck', 'Attachments') }}
 			</div>
@@ -56,28 +56,36 @@
 			<div class="content-tabs">
 				<MembersTab
 					:card="currentCard"
-					:active-tab="activeTab"
-					@click="activeTab = 'members'"
-					@active-tab="changeActiveTab" />
+					:active-tabs="activeTabs"
+					:current-tab="currentTab"
+					@click="activeTabs.push('members')"
+					@active-tab="changeActiveTab"
+					@remove-active-tab="removeActiveTab" />
 				<TagsTab
-					:active-tab="activeTab"
+					:active-tabs="activeTabs"
 					:card="currentCard"
-					@click="activeTab = 'tags'"
-					@active-tab="changeActiveTab" />
+					:current-tab="currentTab"
+					@click="activeTabs.push('tags')"
+					@active-tab="changeActiveTab"
+					@remove-active-tab="removeActiveTab" />
 				<DueDateTab
-					:active-tab="activeTab"
+					:active-tabs="activeTabs"
 					:card="currentCard"
-					@click="activeTab = 'duedate'"
-					@active-tab="changeActiveTab" />
+					:current-tab="currentTab"
+					@click="activeTabs.push('duedate')"
+					@active-tab="changeActiveTab"
+					@remove-active-tab="removeActiveTab" />
 				<ProjectTab
-					:active-tab="activeTab"
+					:active-tabs="activeTabs"
 					:card="currentCard"
-					@click="activeTab = 'project'"
+					:current-tab="currentTab"
+					@click="activeTabs.push('project')"
 					@active-tab="changeActiveTab" />
 				<AttachmentsTab
-					:active-tab="activeTab"
+					:active-tabs="activeTabs"
 					:card="currentCard"
-					@click="activeTab = 'attachment'"
+					:current-tab="currentTab"
+					@click="activeTabs.push('attachment')"
 					@active-tab="changeActiveTab" />
 			</div>
 			<Description :key="currentCard.id" :card="currentCard" @change="descriptionChanged" />
@@ -86,29 +94,17 @@
 			<h2 class="activities-title">
 				<div class="icon-activity" /> {{ t('deck', 'Activity') }}
 			</h2>
-			<div class="comments">
-				<Avatar :user="currentUser.uid" />
-				<CommentForm v-model="newComment" @submit="createComment" />
-			</div>
-			<div class="activities-logs">
-				<CommentItem v-if="replyTo"
-					:comment="replyTo"
-					:reply="true"
-					:preview="true"
-					@cancel="cancelReply" />
-				<ul v-if="getCommentsForCard(currentCard.id).length > 0" id="commentsFeed">
-					<CommentItem v-for="cmt in getCommentsForCard(currentCard.id)"
-						:key="cmt.id"
-						:comment="cmt"
-						@doReload="loadComments" />
-				</ul>
-			</div>
+			<CardSidebarTabComments :card="currentCard" :tab-query="tabQuery" />
+			<ActivityList v-if="hasActivity"
+				filter="deck"
+				:object-id="currentBoard.id"
+				object-type="deck"
+				type="deck" />
 		</div>
 	</div>
 </template>
 
 <script>
-import { Avatar } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
 import { mapState, mapGetters } from 'vuex'
 import relativeDate from '../../mixins/relativeDate'
@@ -120,24 +116,23 @@ import DueDateTab from './DueDateTab.vue'
 import Description from './Description.vue'
 import ProjectTab from './ProjectTab.vue'
 import AttachmentsTab from './AttachmentsTab.vue'
-import CommentForm from './CommentForm'
-import CommentItem from './CommentItem'
+import CardSidebarTabComments from './CardSidebarTabComments'
 import moment from '@nextcloud/moment'
+import ActivityList from '../ActivityList'
 
 const capabilities = window.OC.getCapabilities()
 
 export default {
 	name: 'CardModal',
 	components: {
-		Avatar,
 		MembersTab,
 		Description,
 		TagsTab,
 		DueDateTab,
 		ProjectTab,
 		AttachmentsTab,
-		CommentForm,
-		CommentItem,
+		CardSidebarTabComments,
+		ActivityList,
 	},
 	filters: {
 		fromNow(value) {
@@ -169,7 +164,8 @@ export default {
 			hasActivity: capabilities && capabilities.activity,
 			currentUser: getCurrentUser(),
 			comment: '',
-			activeTab: null,
+			currentTab: null,
+			activeTabs: [],
 		}
 	},
 	computed: {
@@ -276,7 +272,20 @@ export default {
 		},
 
 		changeActiveTab(tab) {
-			this.activeTab = tab
+			this.currentTab = tab
+			this.activeTabs = this.activeTabs.filter((item) => !['project', 'attachment'].includes(item))
+
+			if (!this.activeTabs.includes(tab)) {
+				this.activeTabs.push(tab)
+			}
+
+		},
+
+		removeActiveTab(tab) {
+			const index = this.activeTabs.indexOf(tab)
+			if (index > -1) {
+				this.activeTabs = this.activeTabs.splice(index, 1)
+			}
 		},
 	},
 }
