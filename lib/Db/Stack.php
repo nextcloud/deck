@@ -45,7 +45,7 @@ class Stack extends RelationalEntity {
 		$this->cards = $cards;
 	}
 
-	public function jsonSerialize() {
+	public function jsonSerialize(): array {
 		$json = parent::jsonSerialize();
 		if (empty($this->cards)) {
 			unset($json['cards']);

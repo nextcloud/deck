@@ -50,7 +50,7 @@ class Card extends RelationalEntity {
 	protected $deletedAt = 0;
 	protected $commentsUnread = 0;
 	protected $commentsCount = 0;
-	
+
 	protected $relatedStack = null;
 	protected $relatedBoard = null;
 
@@ -78,7 +78,7 @@ class Card extends RelationalEntity {
 		$this->addRelation('commentsUnread');
 		$this->addRelation('commentsCount');
 		$this->addResolvable('owner');
-		
+
 		$this->addRelation('relatedStack');
 		$this->addRelation('relatedBoard');
 	}
@@ -98,7 +98,7 @@ class Card extends RelationalEntity {
 		return $dt->format('c');
 	}
 
-	public function jsonSerialize() {
+	public function jsonSerialize(): array {
 		$json = parent::jsonSerialize();
 		$json['overdue'] = self::DUEDATE_FUTURE;
 		$due = strtotime($this->duedate);
