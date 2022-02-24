@@ -25,23 +25,46 @@ namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\AppFramework\Db\QBMapper;
 use OCP\IDBConnection;
 
-class AclMapper extends DeckMapper implements IPermissionMapper {
+class AclMapper extends QBMapper implements IPermissionMapper {
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'deck_board_acl', Acl::class);
 	}
 
+	public function find($id): Acl {
+		$query = $this->db->getQueryBuilder();
+		$query->select('*')
+			->from($this->getTableName())
+			->where($query->expr()->eq('id', $query->createNamedParameter($id)));
+
+		return $this->findEntity($query);
+	}
+
 	public function findAll($boardId, $limit = null, $offset = null) {
-		$sql = 'SELECT id, board_id, type, participant, permission_edit, permission_share, permission_manage FROM `*PREFIX*deck_board_acl` WHERE `board_id` = ? ';
-		return $this->findEntities($sql, [$boardId], $limit, $offset);
+		$query = $this->db->getQueryBuilder();
+		$query->select('*')
+			->from($this->getTableName())
+			->where($query->expr()->eq('board_id', $query->createNamedParameter($boardId)))
+			->setMaxResults($limit)
+			->setFirstResult($offset);
+
+		return $this->findEntities($query);
 	}
 
 	public function isOwner($userId, $aclId): bool {
-		$sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_board_acl` WHERE id = ?)';
-		$stmt = $this->execute($sql, [$aclId]);
-		$row = $stmt->fetch();
-		return ($row['owner'] === $userId);
+		$query = $this->db->getQueryBuilder();
+		$query->select('owner')
+			->from('deck_boards', 'b')
+			->innerJoin('b', $this->getTableName(), 'a', $query->expr()->eq('b.id', 'a.board_id'))
+			->where($query->expr()->eq('a.id', $query->createNamedParameter($aclId)));
+
+		$cursor = $query->execute();
+		$row = $cursor->fetch();
+		$cursor->closeCursor();
+
+		return is_array($row) && $row['owner'] === $userId;
 	}
 
 	public function findBoardId($id): ?int {
@@ -53,8 +76,13 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 		return null;
 	}
 
-	public function findByParticipant($type, $participant): array {
-		$sql = 'SELECT * from *PREFIX*deck_board_acl WHERE type = ? AND participant = ?';
-		return $this->findEntities($sql, [$type, $participant]);
+	public function findByParticipant(int $type, string $participant): array {
+		$query = $this->db->getQueryBuilder();
+		$query->select('*')
+			->from($this->getTableName())
+			->where($query->expr()->eq('type', $query->createNamedParameter($type)))
+			->andWhere($query->expr()->eq('type', $query->createNamedParameter($participant)));
+
+		return $this->findEntities($query);
 	}
 }
