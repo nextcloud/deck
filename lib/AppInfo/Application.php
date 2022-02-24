@@ -26,6 +26,7 @@ namespace OCA\Deck\AppInfo;
 use Closure;
 use Exception;
 use OC\EventDispatcher\SymfonyAdapter;
+use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Capabilities;
 use OCA\Deck\Collaboration\Resources\ResourceProvider;
@@ -43,7 +44,9 @@ use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
+use OCA\Deck\Listeners\CircleEventListener;
 use OCA\Deck\Listeners\FullTextSearchEventListener;
+use OCA\Deck\Listeners\ResourceListener;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
@@ -143,6 +146,12 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(AclCreatedEvent::class, FullTextSearchEventListener::class);
 		$context->registerEventListener(AclUpdatedEvent::class, FullTextSearchEventListener::class);
 		$context->registerEventListener(AclDeletedEvent::class, FullTextSearchEventListener::class);
+
+		// Handling cache invalidation for collections
+		$context->registerEventListener(AclCreatedEvent::class, ResourceListener::class);
+		$context->registerEventListener(AclDeletedEvent::class, ResourceListener::class);
+
+		$context->registerEventListener(CircleDestroyedEvent::class, CircleEventListener::class);
 	}
 
 	public function registerNotifications(NotificationManager $notificationManager): void {

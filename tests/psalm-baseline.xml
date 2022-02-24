@@ -116,12 +116,6 @@
       <code>$schemaClosure</code>
     </MoreSpecificImplementedParamType>
   </file>
-  <file src="lib/Service/AssignmentService.php">
-    <InvalidScalarArgument occurrences="2">
-      <code>$cardId</code>
-      <code>$cardId</code>
-    </InvalidScalarArgument>
-  </file>
   <file src="lib/Service/AttachmentService.php">
     <InvalidCatch occurrences="1"/>
   </file>
@@ -141,11 +135,6 @@
       <code>is_resource($content)</code>
       <code>is_resource($content)</code>
     </RedundantCondition>
-  </file>
-  <file src="lib/Service/StackService.php">
-    <UndefinedClass occurrences="1">
-      <code>BadRquestException</code>
-    </UndefinedClass>
   </file>
   <file src="lib/Sharing/Listener.php">
     <InvalidArgument occurrences="1">
