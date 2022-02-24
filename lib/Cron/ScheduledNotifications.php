@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\Cron;
 
-use OC\BackgroundJob\Job;
+use OCP\BackgroundJob\Job;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Notification\NotificationHelper;
