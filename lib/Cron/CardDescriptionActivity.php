@@ -24,7 +24,7 @@
 
 namespace OCA\Deck\Cron;
 
-use OC\BackgroundJob\Job;
+use OCP\BackgroundJob\Job;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\CardMapper;
 
