@@ -84,5 +84,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Print styleling config
+        run: npx stylelint --print-config src
+
       - name: Lint
         run: npm run stylelint
