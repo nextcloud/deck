@@ -84,8 +84,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install dependencies
-        run: npm ls -a
-
       - name: Lint
         run: npm run stylelint
