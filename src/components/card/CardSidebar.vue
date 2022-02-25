@@ -217,12 +217,12 @@ export default {
 	.modal__card .app-sidebar {
 		$modal-padding: 14px;
 		border: 0;
-		min-width: calc(100% - #{$modal-padding*2});
+		min-width: calc(100% - #{$modal-padding * 2});
 		position: relative;
 		top: 0;
 		left: 0;
 		right: 0;
-		max-width: calc(100% - #{$modal-padding*2});
+		max-width: calc(100% - #{$modal-padding * 2});
 		padding: 0 14px;
 		max-height: 100%;
 		&::v-deep {
