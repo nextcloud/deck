@@ -98,6 +98,7 @@
 			group-name="stack"
 			non-drag-area-selector=".dragDisabled"
 			:drag-handle-selector="dragHandleSelector"
+			:drag-begin-delay="200"
 			@should-accept-drop="canEdit"
 			@drop="($event) => onDropCard(stack.id, $event)">
 			<Draggable v-for="card in cardsByStack" :key="card.id">

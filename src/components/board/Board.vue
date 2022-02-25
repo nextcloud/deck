@@ -53,6 +53,7 @@
 				<Container lock-axix="y"
 					orientation="horizontal"
 					:drag-handle-selector="dragHandleSelector"
+					:drag-begin-delay="200"
 					@drop="onDropStack">
 					<Draggable v-for="stack in stacksByBoard" :key="stack.id">
 						<Stack :stack="stack" />
