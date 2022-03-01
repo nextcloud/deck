@@ -243,8 +243,6 @@ export default {
 
 	&::v-deep .attachment-list {
 		flex-shrink: 1;
-		overflow: scroll;
-		max-height: 50vh;
 	}
 }
 
