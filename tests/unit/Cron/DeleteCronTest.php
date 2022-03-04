@@ -66,18 +66,14 @@ class DeleteCronTest extends \Test\TestCase {
 		$this->boardMapper->expects($this->once())
 			->method('findToDelete')
 			->willReturn($boards);
-		$this->boardMapper->expects($this->at(1))
+		$this->boardMapper->expects($this->exactly(count($boards)))
 			->method('delete')
-			->with($boards[0]);
-		$this->boardMapper->expects($this->at(2))
-			->method('delete')
-			->with($boards[1]);
-		$this->boardMapper->expects($this->at(3))
-			->method('delete')
-			->with($boards[2]);
-		$this->boardMapper->expects($this->at(4))
-			->method('delete')
-			->with($boards[3]);
+			->withConsecutive(
+				[$boards[0]],
+				[$boards[1]],
+				[$boards[2]],
+				[$boards[3]]
+			);
 
 		$attachment = new Attachment();
 		$attachment->setType('deck_file');

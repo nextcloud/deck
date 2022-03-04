@@ -300,22 +300,41 @@ class BoardServiceTest extends TestCase {
 		$existingAcl->setPermissionEdit($currentUserAcl[0]);
 		$existingAcl->setPermissionShare($currentUserAcl[1]);
 		$existingAcl->setPermissionManage($currentUserAcl[2]);
-		$this->permissionService->expects($this->at(0))
-			->method('checkPermission')
-			->with($this->boardMapper, 123, Acl::PERMISSION_SHARE, null);
+
 		if ($currentUserAcl[2]) {
-			$this->permissionService->expects($this->at(1))
+			$this->permissionService->expects($this->exactly(2))
 				->method('checkPermission')
-				->with($this->boardMapper, 123, Acl::PERMISSION_MANAGE, null);
+				->withConsecutive(
+					[$this->boardMapper, 123, Acl::PERMISSION_SHARE, null],
+					[$this->boardMapper, 123, Acl::PERMISSION_MANAGE, null]	
+				);
 		} else {
 			$this->aclMapper->expects($this->once())
 				->method('findAll')
 				->willReturn([$existingAcl]);
-			$this->permissionService->expects($this->at(1))
+
+			$this->permissionService->expects($this->exactly(2))
 				->method('checkPermission')
-				->with($this->boardMapper, 123, Acl::PERMISSION_MANAGE, null)
-				->willThrowException(new NoPermissionException('No permission'));
-			$this->permissionService->expects($this->at(2))
+				->withConsecutive(
+					[$this->boardMapper, 123, Acl::PERMISSION_SHARE, null],
+					[$this->boardMapper, 123, Acl::PERMISSION_MANAGE, null]
+				)
+				->will(
+					$this->onConsecutiveCalls(
+						true,
+						$this->throwException(new NoPermissionException('No permission'))
+					)
+				);
+
+			$this->permissionService->expects($this->exactly(3))
+				->method('userCan')
+				->willReturnOnConsecutiveCalls(
+					$currentUserAcl[0], 
+					$currentUserAcl[1], 
+					$currentUserAcl[2]
+				);
+
+			/* $this->permissionService->expects($this->at(2))
 				->method('userCan')
 				->willReturn($currentUserAcl[0]);
 			$this->permissionService->expects($this->at(3))
@@ -323,7 +342,7 @@ class BoardServiceTest extends TestCase {
 				->willReturn($currentUserAcl[1]);
 			$this->permissionService->expects($this->at(4))
 				->method('userCan')
-				->willReturn($currentUserAcl[2]);
+				->willReturn($currentUserAcl[2]); */
 		}
 
 		$user = $this->createMock(IUser::class);

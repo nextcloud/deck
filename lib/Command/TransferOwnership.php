@@ -33,7 +33,7 @@ final class TransferOwnership extends Command {
 			);
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$owner = $input->getArgument('owner');
 		$newOwner = $input->getArgument('newOwner');
 
@@ -42,5 +42,7 @@ final class TransferOwnership extends Command {
 		$this->boardService->transferOwnership($owner, $newOwner);
 
 		$output->writeln("Transfer deck boards from $owner to $newOwner completed");
+
+		return 0;
 	}
 }
