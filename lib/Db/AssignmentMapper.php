@@ -148,11 +148,12 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	/**
+	 * @psalm-suppress InvalidScalarArgument
 	 * @param $ownerId
 	 * @param $newOwnerId
 	 * @return void
 	 */
-	public function transferOwnership($ownerId, $newOwnerId) {
+	public function transferOwnership(string $ownerId, string $newOwnerId) {
 		$params = [
 			'newOwner' => $newOwnerId,
 			'type' => Assignment::TYPE_USER

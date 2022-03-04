@@ -169,18 +169,15 @@ class ActivityManagerTest extends TestCase {
 			$this->mockUser('user2'),
 		];
 		$event = $this->createMock(IEvent::class);
-		$event->expects($this->at(0))
+		$event->expects($this->once())
 			->method('getObjectType')
 			->willReturn($objectType);
-		$event->expects($this->at(0))
+		$event->expects($this->once())
 			->method('getObjectId')
 			->willReturn(1);
-		$event->expects($this->at(2))
+		$event->expects($this->exactly(2))
 			->method('setAffectedUser')
-			->with('user1');
-		$event->expects($this->at(3))
-			->method('setAffectedUser')
-			->with('user2');
+			->withConsecutive(['user1'], ['user2']);
 		$mapper = null;
 		switch ($objectType) {
 			case ActivityManager::DECK_OBJECT_BOARD:
@@ -196,10 +193,7 @@ class ActivityManagerTest extends TestCase {
 		$this->permissionService->expects($this->once())
 			->method('findUsers')
 			->willReturn($users);
-		$this->manager->expects($this->at(0))
-			->method('publish')
-			->with($event);
-		$this->manager->expects($this->at(1))
+		$this->manager->expects($this->exactly(2))
 			->method('publish')
 			->with($event);
 		$this->invokePrivate($this->activityManager, 'sendToUsers', [$event]);
