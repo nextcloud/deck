@@ -110,8 +110,22 @@ class AttachmentServiceTest extends TestCase {
 		$this->cache = $this->createMock(ICache::class);
 		$this->cacheFactory->expects($this->any())->method('createDistributed')->willReturn($this->cache);
 
-		$this->appContainer->expects($this->at(0))->method('query')->with(FileService::class)->willReturn($this->attachmentServiceImpl);
-		$this->appContainer->expects($this->at(1))->method('query')->with(FilesAppService::class)->willReturn($this->filesAppServiceImpl);
+		$this->appContainer->expects($this->exactly(2))
+			->method('query')
+			->withConsecutive(
+				[FileService::class],
+				[FilesAppService::class]
+			)
+			->willReturnOnConsecutiveCalls($this->attachmentServiceImpl, $this->filesAppServiceImpl);
+
+		/* $this->appContainer->expects($this->at(0))
+			->method('query')
+			->with(FileService::class)
+			->willReturn($this->attachmentServiceImpl);
+		$this->appContainer->expects($this->at(1))
+			->method('query')
+			->with(FilesAppService::class)
+			->willReturn($this->filesAppServiceImpl); */
 
 		$this->application->expects($this->any())
 			->method('getContainer')
@@ -129,9 +143,27 @@ class AttachmentServiceTest extends TestCase {
 		$fileServiceMock = $this->createMock(FileService::class);
 		$fileAppServiceMock = $this->createMock(FilesAppService::class);
 
-		$appContainer->expects($this->at(0))->method('query')->with(FileService::class)->willReturn($fileServiceMock);
-		$appContainer->expects($this->at(1))->method('query')->with(FilesAppService::class)->willReturn($fileAppServiceMock);
-		$appContainer->expects($this->at(2))->method('query')->with(MyAttachmentService::class)->willReturn(new MyAttachmentService());
+		$appContainer->expects($this->exactly(3))
+			->method('query')
+			->withConsecutive(
+				[FileService::class],
+				[FilesAppService::class],
+				[MyAttachmentService::class]
+			)
+			->willReturnOnConsecutiveCalls($fileServiceMock, $fileAppServiceMock, new MyAttachmentService());
+
+		/* $appContainer->expects($this->at(0))
+			->method('query')
+			->with(FileService::class)
+			->willReturn($fileServiceMock);
+		$appContainer->expects($this->at(1))
+			->method('query')
+			->with(FilesAppService::class)
+			->willReturn($fileAppServiceMock);
+		$appContainer->expects($this->at(2))
+			->method('query')
+			->with(MyAttachmentService::class)
+			->willReturn(new MyAttachmentService()); */
 
 		$application->expects($this->any())
 			->method('getContainer')
@@ -148,12 +180,32 @@ class AttachmentServiceTest extends TestCase {
 		$appContainer = $this->createMock(IAppContainer::class);
 		$fileServiceMock = $this->createMock(FileService::class);
 		$fileAppServiceMock = $this->createMock(FilesAppService::class);
-		$appContainer->expects($this->at(0))->method('query')->with(FileService::class)->willReturn($fileServiceMock);
-		$appContainer->expects($this->at(1))->method('query')->with(FilesAppService::class)->willReturn($fileAppServiceMock);
-		$appContainer->expects($this->at(2))->method('query')->with(MyAttachmentService::class)->willReturn(new MyAttachmentService());
+
+		$appContainer->expects($this->exactly(3))
+			->method('query')
+			->withConsecutive(
+				[FileService::class],
+				[FilesAppService::class],
+				[MyAttachmentService::class]
+			)
+			->willReturnOnConsecutiveCalls($fileServiceMock, $fileAppServiceMock, new MyAttachmentService());
+
+		/* $appContainer->expects($this->at(0))
+			->method('query')
+			->with(FileService::class)
+			->willReturn($fileServiceMock);
+		$appContainer->expects($this->at(1))
+			->method('query')
+			->with(FilesAppService::class)
+			->willReturn($fileAppServiceMock);
+		$appContainer->expects($this->at(2))
+			->method('query')
+			->with(MyAttachmentService::class)
+			->willReturn(new MyAttachmentService()); */
 		$application->expects($this->any())
 			->method('getContainer')
 			->willReturn($appContainer);
+
 		$attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->changeHelper, $this->permissionService, $application, $this->cacheFactory, $this->userId, $this->l10n, $this->activityManager);
 		$attachmentService->registerAttachmentService('custom', MyAttachmentService::class);
 		$attachmentService->getService('deck_file_invalid');
@@ -185,12 +237,19 @@ class AttachmentServiceTest extends TestCase {
 			->with(123)
 			->willReturn($attachments);
 
-		$this->attachmentServiceImpl->expects($this->at(0))
+		$this->attachmentServiceImpl->expects($this->exactly(2))
+			->method('extendData')
+			->withConsecutive(
+				[$attachments[0]], 
+				[$attachments[1]]
+			);
+
+		/* $this->attachmentServiceImpl->expects($this->at(0))
 			->method('extendData')
 			->with($attachments[0]);
 		$this->attachmentServiceImpl->expects($this->at(1))
 			->method('extendData')
-			->with($attachments[1]);
+			->with($attachments[1]); */
 		$this->assertEquals($attachments, $this->attachmentService->findAll(123, false));
 	}
 
@@ -215,12 +274,21 @@ class AttachmentServiceTest extends TestCase {
 			->with(123, false)
 			->willReturn($attachmentsDeleted);
 
-		$this->attachmentServiceImpl->expects($this->at(0))
+		$this->attachmentServiceImpl->expects($this->exactly(4))
+			->method('extendData')
+			->withConsecutive(
+				[$attachments[0]], 
+				[$attachments[1]],
+				[$attachmentsDeleted[0]],
+				[$attachmentsDeleted[1]]
+			);
+
+		/* $this->attachmentServiceImpl->expects($this->at(0))
 			->method('extendData')
 			->with($attachments[0]);
 		$this->attachmentServiceImpl->expects($this->at(1))
 			->method('extendData')
-			->with($attachments[1]);
+			->with($attachments[1]); */
 		$this->assertEquals(array_merge($attachments, $attachmentsDeleted), $this->attachmentService->findAll(123, true));
 	}
 
