@@ -318,4 +318,25 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 		$stmt = $this->db->executeQuery($sql, $params);
 		$stmt->closeCursor();
 	}
+
+	/**
+	 * Reset Cache for a 
+	 * given board or a given user
+	 * 
+	 * @param int|null $boardId
+	 * @param int|null $userId
+	 */
+	public function flushCache(?int $boardId = null, ?string $userId = null)
+	{
+		if ($boardId) {
+			unset($this->boardCache[$boardId]);
+		} else {
+			$this->boardCache = null;
+		}
+		if ($userId) {
+			unset($this->userBoardCache[$userId]);
+		} else {
+			$this->userBoardCache = null;
+		}
+	}
 }

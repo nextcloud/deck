@@ -82,7 +82,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 */
 	public function testTransferBoardOwnership() {
 		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2);
-		$this->invokePrivate($this->boardService, 'clearBoardsCache');
+		/* $this->invokePrivate($this->boardService, 'clearBoardsCache'); */
 		$board = $this->boardService->find($this->board->getId());
 		$boardOwner = $board->getOwner();
 		$this->assertEquals(self::TEST_USER_2, $boardOwner);
