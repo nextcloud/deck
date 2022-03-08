@@ -182,7 +182,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 
 		// shared with user
 		$qb->resetQueryParts();
-		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
+		$qb->selectDistinct('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
 			//->selectAlias('1', 'shared')
 			->from('deck_boards', 'b')
 			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
@@ -489,5 +489,26 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		$sql = "UPDATE `*PREFIX*{$this->tableName}` SET `owner` = :newOwner WHERE `owner` = :owner";
 		$stmt = $this->db->executeQuery($sql, $params);
 		$stmt->closeCursor();
+	}
+
+	/**
+	 * Reset Cache for a 
+	 * given board or a given user
+	 * 
+	 * @param int|null $boardId
+	 * @param int|null $userId
+	 */
+	public function flushCache(?int $boardId = null, ?string $userId = null)
+	{
+		if ($boardId) {
+			unset($this->boardCache[$boardId]);
+		} else {
+			$this->boardCache = null;
+		}
+		if ($userId) {
+			unset($this->userBoardCache[$userId]);
+		} else {
+			$this->userBoardCache = null;
+		}
 	}
 }
