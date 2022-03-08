@@ -528,6 +528,9 @@ class BoardService {
 		$this->boardMapper->mapAcl($newAcl);
 		$this->changeHelper->boardChanged($boardId);
 
+		$board = $this->find($boardId);
+		$this->clearBoardFromCache($board);
+
 		// TODO: use the dispatched event for this
 		try {
 			$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
@@ -681,6 +684,7 @@ class BoardService {
 	public function transferOwnership(string $owner, string $newOwner): void {
 		$boards = $this->boardMapper->findAllByUser($owner);
 		foreach ($boards as $board) {
+			$this->clearBoardFromCache($board);
 			$this->aclMapper->transferOwnership($board->getId(), $owner, $newOwner);
 		}
 		$this->boardMapper->transferOwnership($owner, $newOwner);
@@ -722,5 +726,19 @@ class BoardService {
 
 	private function clearBoardsCache() {
 		$this->boardsCache = null;
+	}
+
+	/**
+	 * Clean a given board data
+	 * from the Cache
+	 * 
+	 * @param OCA\Deck\Db\Board $board
+	 */
+	private function clearBoardFromCache(Board $board) {
+		$boardId = $board->getId();
+		$boardOwnerId = $board->getOwner();
+
+		$this->boardMapper->flushCache($boardId, $boardOwnerId);
+		unset($this->boardsCache[$boardId]);
 	}
 }
