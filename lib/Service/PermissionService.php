@@ -213,7 +213,9 @@ class PermissionService {
 
 			if ($this->circlesService->isCirclesEnabled() && $acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
 				try {
-					return $this->circlesService->isUserInCircle($acl->getParticipant(), $userId) && $acl->getPermission($permission);
+					if ($this->circlesService->isUserInCircle($acl->getParticipant(), $userId) && $acl->getPermission($permission)) {
+						return true;
+					}
 				} catch (\Exception $e) {
 					$this->logger->info('Member not found in circle that was accessed. This should not happen.');
 				}
