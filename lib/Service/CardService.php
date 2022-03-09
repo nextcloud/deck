@@ -46,6 +46,7 @@ use OCA\Deck\BadRequestException;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IUserManager;
+use OCP\IURLGenerator;
 
 class CardService {
 	private $cardMapper;
@@ -63,6 +64,7 @@ class CardService {
 	private $changeHelper;
 	private $eventDispatcher;
 	private $userManager;
+	private $urlGenerator;
 
 	public function __construct(
 		CardMapper $cardMapper,
@@ -79,6 +81,7 @@ class CardService {
 		IUserManager $userManager,
 		ChangeHelper $changeHelper,
 		IEventDispatcher $eventDispatcher,
+		IURLGenerator $urlGenerator,
 		$userId
 	) {
 		$this->cardMapper = $cardMapper;
@@ -96,6 +99,7 @@ class CardService {
 		$this->changeHelper = $changeHelper;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->currentUser = $userId;
+		$this->urlGenerator = $urlGenerator;
 	}
 
 	public function enrich($card) {
@@ -601,5 +605,15 @@ class CardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_LABEL_UNASSING, ['label' => $label]);
 
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+	}
+
+	public function getCardUrl($cardId) {
+		$boardId = $this->cardMapper->findBoardId($cardId);
+
+		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . "#/board/$boardId/card/$cardId";
+	}
+
+	public function getRedirectUrlForCard($cardId) {
+		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . "card/$cardId";
 	}
 }

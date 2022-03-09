@@ -34,12 +34,20 @@ use OCP\IInitialStateService;
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Controller;
+use OCA\Deck\Db\CardMapper;
+use OCP\IURLGenerator;
+use \OCP\AppFramework\Http\RedirectResponse;
+use OCA\Deck\Db\Acl;
+use OCA\Deck\Service\CardService;
 
 class PageController extends Controller {
 	private $permissionService;
 	private $initialState;
 	private $configService;
 	private $eventDispatcher;
+	private $cardMapper;
+	private $urlGenerator;
+	private $cardService;
 
 	public function __construct(
 		$AppName,
@@ -47,7 +55,10 @@ class PageController extends Controller {
 		PermissionService $permissionService,
 		IInitialStateService $initialStateService,
 		ConfigService $configService,
-		IEventDispatcher $eventDispatcher
+		IEventDispatcher $eventDispatcher,
+		CardMapper $cardMapper,
+		IURLGenerator $urlGenerator,
+		CardService $cardService
 		) {
 		parent::__construct($AppName, $request);
 
@@ -55,6 +66,9 @@ class PageController extends Controller {
 		$this->initialState = $initialStateService;
 		$this->configService = $configService;
 		$this->eventDispatcher = $eventDispatcher;
+		$this->cardMapper = $cardMapper;
+		$this->urlGenerator = $urlGenerator;
+		$this->cardService = $cardService;
 	}
 
 	/**
@@ -84,5 +98,18 @@ class PageController extends Controller {
 		}
 
 		return $response;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 */
+	public function redirectToCard($cardId): RedirectResponse {
+		try {
+			$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
+			return new RedirectResponse($this->cardService->getCardUrl($cardId));
+		} catch (\Exception $e) {
+			return new RedirectResponse($this->urlGenerator->linkToRouteAbsolute('deck.page.index'));
+		}
 	}
 }
