@@ -35,6 +35,7 @@ use OCP\IConfig;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
+use OCA\Deck\Service\CardService;
 
 class DeckProvider implements IProvider {
 
@@ -52,8 +53,10 @@ class DeckProvider implements IProvider {
 	private $l10nFactory;
 	/** @var IConfig */
 	private $config;
+	/** @var CardService */
+	private $cardService;
 
-	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, IUserManager $userManager, ICommentsManager $commentsManager, IFactory $l10n, IConfig $config, $userId) {
+	public function __construct(IURLGenerator $urlGenerator, ActivityManager $activityManager, IUserManager $userManager, ICommentsManager $commentsManager, IFactory $l10n, IConfig $config, $userId, CardService $cardService) {
 		$this->userId = $userId;
 		$this->urlGenerator = $urlGenerator;
 		$this->activityManager = $activityManager;
@@ -61,6 +64,7 @@ class DeckProvider implements IProvider {
 		$this->userManager = $userManager;
 		$this->l10nFactory = $l10n;
 		$this->config = $config;
+		$this->cardService = $cardService;
 	}
 
 	/**
@@ -131,7 +135,7 @@ class DeckProvider implements IProvider {
 
 			if (array_key_exists('board', $subjectParams)) {
 				$archivedParam = $subjectParams['card']['archived'] ? 'archived/' : '';
-				$card['link'] = $this->deckUrl('/board/' . $subjectParams['board']['id'] . '/' . $archivedParam . 'card/' . $event->getObjectId());
+				$card['link'] = $this->cardService->getRedirectUrlForCard($event->getObjectId());
 			}
 			$params['card'] = $card;
 		}
