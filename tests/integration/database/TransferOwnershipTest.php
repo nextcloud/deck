@@ -6,6 +6,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
+use OCA\Deck\Db\Card;
 
 /**
  * @group DB
@@ -86,6 +87,25 @@ class TransferOwnershipTest extends \Test\TestCase {
 		$board = $this->boardService->find($this->board->getId());
 		$boardOwner = $board->getOwner();
 		$this->assertEquals(self::TEST_USER_2, $boardOwner);
+	}
+
+	/**
+	 * @covers ::transferOwnership
+	 */
+	public function testTransferBoardOwnershipWithData()
+	{
+		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2);
+		$board = $this->boardService->find($this->board->getId());
+
+		$boardOwner = $board->getOwner();
+		$this->assertEquals(self::TEST_USER_2, $boardOwner);
+
+		$cards = $this->cards;
+		$newOwnerOwnsTheCards = (bool)array_product(array_filter($cards, function (Card $card) {
+			$cardUpdated = $this->cardService->find($card->getId());
+			return $cardUpdated->getOwner() === self::TEST_USER_2;
+		}));
+		$this->assertTrue($newOwnerOwnsTheCards);		
 	}
 
 	/**
