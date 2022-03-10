@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.4.8
+
+### Fixed
+
+- Fix cursor generation if no results are found [#3461](https://api.github.com/repos/nextcloud/deck/pulls/3461)
+- Allow to download an attachment without navigating to the files app [#3442](https://api.github.com/repos/nextcloud/deck/pulls/3442)
+- Exclude deleted boards in the selection for target [#3525](https://api.github.com/repos/nextcloud/deck/pulls/3525)
+- Make insert attachment buttom easy to click [#3616](https://api.github.com/repos/nextcloud/deck/pulls/3616)
+- Fix confusion between stackId and boardId in StackService [#3545](https://api.github.com/repos/nextcloud/deck/pulls/3545)
+
 ## 1.4.7
 
 ### Fixed
