@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.5.6
+
+### Fixed
+
+- Allow to download an attachment without navigating to the files app [#3441](https://api.github.com/repos/nextcloud/deck/pulls/3441)
+- Fix CalDAV blocking and modernize circles API usage [#3527](https://api.github.com/repos/nextcloud/deck/pulls/3527)
+- CardApiController: Fix order of optional parameters [#3521](https://api.github.com/repos/nextcloud/deck/pulls/3521)
+- Fix cursor generation if no results are found [#3460](https://api.github.com/repos/nextcloud/deck/pulls/3460)
+- Exclude deleted boards in the selection for target [#3524](https://api.github.com/repos/nextcloud/deck/pulls/3524)
+- Generate fixed link for activity emails [#3627](https://api.github.com/repos/nextcloud/deck/pulls/3627)
+- Make insert attachment buttom easy to click [#3615](https://api.github.com/repos/nextcloud/deck/pulls/3615)
+- Fix confusion between stackId and boardId in StackService [#3544](https://api.github.com/repos/nextcloud/deck/pulls/3544)
+
 ## 1.5.5
 
 - Fix release asset build
