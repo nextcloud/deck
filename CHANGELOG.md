@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.6.1
+
+### Fixed
+
+- Exclude deleted boards in the selection for target [#3523](https://api.github.com/repos/nextcloud/deck/pulls/3523)
+- CardApiController: Fix order of optional parameters [#3520](https://api.github.com/repos/nextcloud/deck/pulls/3520)
+- Fix cursor generation if no results are found [#3462](https://api.github.com/repos/nextcloud/deck/pulls/3462)
+- Fix CalDAV blocking and modernize circles API usage [#3526](https://api.github.com/repos/nextcloud/deck/pulls/3526)
+- Fix overview card listing [#3463](https://api.github.com/repos/nextcloud/deck/pulls/3463)
+- Generate fixed link for activity emails [#3626](https://api.github.com/repos/nextcloud/deck/pulls/3626)
+- return the selector for collections [#3618](https://api.github.com/repos/nextcloud/deck/pulls/3618)
+- Fix confusion between stackId and boardId in StackService [#3543](https://api.github.com/repos/nextcloud/deck/pulls/3543)
+- Fix talk integration [#3537](https://api.github.com/repos/nextcloud/deck/pulls/3537)
+- Make insert attachment buttom easy to click [#3614](https://api.github.com/repos/nextcloud/deck/pulls/3614)
+
 ## 1.6.0
 
 ### Added
