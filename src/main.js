@@ -63,6 +63,17 @@ Vue.config.errorHandler = (err, vm, info) => {
 	console.error(err)
 }
 
+// TODO: remove when we have a proper fileinfo standalone library
+// original scripts are loaded from
+// https://github.com/nextcloud/server/blob/5bf3d1bb384da56adbf205752be8f840aac3b0c5/lib/private/legacy/template.php#L120-L122
+window.addEventListener('DOMContentLoaded', () => {
+	if (!window.OCA.Files) {
+		window.OCA.Files = {}
+	}
+	// register unused client for the sidebar to have access to its parser methods
+	Object.assign(window.OCA.Files, { App: { fileList: { filesClient: OC.Files.getClient() } } }, window.OCA.Files)
+})
+
 /* eslint-disable-next-line no-new */
 new Vue({
 	el: '#content',
