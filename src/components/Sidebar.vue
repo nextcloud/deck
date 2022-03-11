@@ -45,4 +45,7 @@ export default {
 	#app-sidebar .icon-close {
 		z-index: 100;
 	}
+	.app-deck .app-sidebar {
+		z-index: 20000 !important;
+	}
 </style>
