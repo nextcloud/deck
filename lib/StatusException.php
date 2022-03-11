@@ -31,7 +31,7 @@ namespace OCA\Deck;
  */
 class StatusException extends \Exception {
 	public function __construct($message) {
-		parent::__construct($message);
+		parent::__construct($message ?? '');
 	}
 
 	public function getStatus() {

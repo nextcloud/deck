@@ -101,19 +101,18 @@ class Card extends RelationalEntity {
 	public function jsonSerialize(): array {
 		$json = parent::jsonSerialize();
 		$json['overdue'] = self::DUEDATE_FUTURE;
-		$due = strtotime($this->duedate);
-
-		$today = new DateTime();
-		$today->setTime(0, 0);
-
-		$match_date = new DateTime($this->duedate);
-
-		$match_date->setTime(0, 0);
-
-		$diff = $today->diff($match_date);
-		$diffDays = (integer) $diff->format('%R%a'); // Extract days count in interval
-
+		$due = $this->duedate ? strtotime($this->duedate) : false;
 		if ($due !== false) {
+			$today = new DateTime();
+			$today->setTime(0, 0);
+
+			$match_date = new DateTime($this->duedate);
+
+			$match_date->setTime(0, 0);
+
+			$diff = $today->diff($match_date);
+			$diffDays = (integer) $diff->format('%R%a'); // Extract days count in interval
+
 			if ($diffDays === 1) {
 				$json['overdue'] = self::DUEDATE_NEXT;
 			}
