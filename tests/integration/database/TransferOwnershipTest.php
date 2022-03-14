@@ -82,8 +82,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 * @covers ::transferOwnership
 	 */
 	public function testTransferBoardOwnership() {
-		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2);
-		/* $this->invokePrivate($this->boardService, 'clearBoardsCache'); */
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2));
 		$board = $this->boardService->find($this->board->getId());
 		$boardOwner = $board->getOwner();
 		$this->assertEquals(self::TEST_USER_2, $boardOwner);
@@ -93,7 +92,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 * @covers ::transferOwnership
 	 */
 	public function testTransferBoardOwnershipWithData() {
-		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2);
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2));
 		$board = $this->boardService->find($this->board->getId());
 
 		$boardOwner = $board->getOwner();
@@ -111,7 +110,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 * @covers ::transferOwnership
 	 */
 	public function testTransferACLOwnership() {
-		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2);
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2));
 		$board = $this->boardService->find($this->board->getId());
 		$acl = $board->getAcl();
 		// Check if old owner is no longer in ACL
@@ -124,7 +123,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 * @covers ::transferOwnership
 	 */
 	public function testNoTransferAclOwnershipIfGroupType() {
-		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2);
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2));
 		$board = $this->boardService->find($this->board->getId());
 		$acl = $board->getAcl();
 		$isGroupInAcl = (bool)array_filter($acl, function ($item) {
@@ -136,7 +135,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 * @covers ::transferOwnership
 	 */
 	public function testTransferCardOwnership() {
-		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2, true);
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2, true));
 		$card = $this->cardService->find($this->cards[0]->getId());
 		$cardOwner = $card->getOwner();
 		$this->assertEquals(self::TEST_USER_2, $cardOwner);
@@ -146,7 +145,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 * @covers ::transferOwnership
 	 */
 	public function testTransferPreserveCardOwnership() {
-		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2, false);
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2, false));
 		$card = $this->cardService->find($this->cards[0]->getId());
 		$cardOwner = $card->getOwner();
 		$this->assertEquals(self::TEST_USER_1, $cardOwner);
@@ -156,7 +155,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 * @covers ::transferOwnership
 	 */
 	public function testReassignCardToNewOwner() {
-		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2, true);
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2, true));
 		$participantsUIDs = array_map(function ($user) {
 			return $user->getParticipant();
 		}, $this->assignmentMapper->findAll($this->cards[0]->getId()));
@@ -168,7 +167,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 * @covers ::transferOwnership
 	 */
 	public function testNoReassignCardToNewOwner() {
-		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2, false);
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2, false));
 		$participantsUIDs = array_map(function ($user) {
 			return $user->getParticipant();
 		}, $this->assignmentMapper->findAll($this->cards[0]->getId()));
@@ -181,7 +180,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 */
 	public function testReassignCardToNewParticipantOnlyIfParticipantHasUserType() {
 		$this->assignmentService->assignUser($this->cards[1]->getId(), self::TEST_USER_1, Assignment::TYPE_GROUP);
-		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2);
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2));
 		$participantsUIDs = array_map(function ($user) {
 			return $user->getParticipant();
 		}, $this->assignmentMapper->findAll($this->cards[1]->getId()));
@@ -194,14 +193,14 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 */
 	public function testTargetAlreadyParticipantOfBoard() {
 		$this->expectNotToPerformAssertions();
-		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_3);
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_3));
 	}
 
 	/**
 	 * @covers ::transferOwnership
 	 */
 	public function testDontRemoveTargetFromAcl() {
-		$this->boardService->transferOwnership(self::TEST_USER_2, self::TEST_USER_3);
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_2, self::TEST_USER_3));
 		$board = $this->boardService->find($this->board->getId());
 		$acl = $board->getAcl();
 		$isOwnerInAcl = (bool)array_filter($acl, function ($item) {
@@ -215,7 +214,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 */
 	public function testMergePermissions() {
 		$this->boardService->addAcl($this->board->getId(), Acl::PERMISSION_TYPE_USER, self::TEST_USER_2, true, false, true);
-		$this->boardService->transferOwnership(self::TEST_USER_2, self::TEST_USER_3);
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_2, self::TEST_USER_3));
 		$board = $this->boardService->find($this->board->getId());
 		$acl = $board->getAcl();
 		$isMerged = (bool)array_filter($acl, function ($item) {
@@ -234,7 +233,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 	public function testTargetAlreadyParticipantOfCard() {
 		$this->expectNotToPerformAssertions();
 		$this->assignmentService->assignUser($this->cards[0]->getId(), self::TEST_USER_3, Assignment::TYPE_USER);
-		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_3);
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_3));
 	}
 
 	/**
