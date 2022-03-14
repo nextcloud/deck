@@ -157,11 +157,9 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 */
 	public function testReassignCardToNewOwner() {
 		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2, true);
-		$users = $this->assignmentMapper->findAll($this->cards[0]->getId());
-		$participantsUIDs = [];
-		foreach ($users as $user) {
-			$participantsUIDs[] = $user->getParticipant();
-		}
+		$participantsUIDs = array_map(function ($user) {
+			return $user->getParticipant();
+		}, $this->assignmentMapper->findAll($this->cards[0]->getId()));
 		$this->assertContains(self::TEST_USER_2, $participantsUIDs);
 		$this->assertNotContains(self::TEST_USER_1, $participantsUIDs);
 	}
@@ -171,11 +169,9 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 */
 	public function testNoReassignCardToNewOwner() {
 		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2, false);
-		$users = $this->assignmentMapper->findAll($this->cards[0]->getId());
-		$participantsUIDs = [];
-		foreach ($users as $user) {
-			$participantsUIDs[] = $user->getParticipant();
-		}
+		$participantsUIDs = array_map(function ($user) {
+			return $user->getParticipant();
+		}, $this->assignmentMapper->findAll($this->cards[0]->getId()));
 		$this->assertContains(self::TEST_USER_1, $participantsUIDs);
 		$this->assertNotContains(self::TEST_USER_2, $participantsUIDs);
 	}
@@ -186,11 +182,9 @@ class TransferOwnershipTest extends \Test\TestCase {
 	public function testReassignCardToNewParticipantOnlyIfParticipantHasUserType() {
 		$this->assignmentService->assignUser($this->cards[1]->getId(), self::TEST_USER_1, Assignment::TYPE_GROUP);
 		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2);
-		$users = $this->assignmentMapper->findAll($this->cards[1]->getId());
-		$participantsUIDs = [];
-		foreach ($users as $user) {
-			$participantsUIDs[] = $user->getParticipant();
-		}
+		$participantsUIDs = array_map(function ($user) {
+			return $user->getParticipant();
+		}, $this->assignmentMapper->findAll($this->cards[1]->getId()));
 		$this->assertContains(self::TEST_USER_1, $participantsUIDs);
 		$this->assertNotContains(self::TEST_USER_2, $participantsUIDs);
 	}
@@ -241,6 +235,47 @@ class TransferOwnershipTest extends \Test\TestCase {
 		$this->expectNotToPerformAssertions();
 		$this->assignmentService->assignUser($this->cards[0]->getId(), self::TEST_USER_3, Assignment::TYPE_USER);
 		$this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_3);
+	}
+
+	/**
+	 * @covers ::transferOwnership
+	 */
+	public function testTransferSingleBoardAssignment() {
+		// Arrange separate board next to the one being transferred
+		$board = $this->boardService->create('Test 2', self::TEST_USER_1, '000000');
+		$id = $board->getId();
+		$this->boardService->addAcl($id, Acl::PERMISSION_TYPE_USER, self::TEST_USER_1, true, true, true);
+		$this->boardService->addAcl($id, Acl::PERMISSION_TYPE_GROUP, self::TEST_GROUP, true, true, true);
+		$this->boardService->addAcl($id, Acl::PERMISSION_TYPE_USER, self::TEST_USER_3, false, true, false);
+		$stacks[] = $this->stackService->create('Stack A', $id, 1);
+		$stacks[] = $this->stackService->create('Stack B', $id, 1);
+		$stacks[] = $this->stackService->create('Stack C', $id, 1);
+		$cards[] = $this->cardService->create('Card 1', $stacks[0]->getId(), 'text', 0, self::TEST_USER_1);
+		$cards[] = $this->cardService->create('Card 2', $stacks[0]->getId(), 'text', 0, self::TEST_USER_1);
+		$this->assignmentService->assignUser($cards[0]->getId(), self::TEST_USER_1);
+
+		// Act
+		$this->boardService->transferBoardOwnership($this->board->getId(), self::TEST_USER_2, true);
+
+		// Assert that the selected board was transferred
+		$card = $this->cardService->find($this->cards[0]->getId());
+		$this->assertEquals(self::TEST_USER_2, $card->getOwner());
+
+		$participantsUIDs = array_map(function ($assignment) {
+			return $assignment->getParticipant();
+		}, $this->assignmentMapper->findAll($this->cards[0]->getId()));
+		$this->assertContains(self::TEST_USER_2, $participantsUIDs);
+		$this->assertNotContains(self::TEST_USER_1, $participantsUIDs);
+
+		// Assert that other board remained unchanged
+		$card = $this->cardService->find($cards[0]->getId());
+		$this->assertEquals(self::TEST_USER_1, $card->getOwner());
+
+		$participantsUIDs = array_map(function ($assignment) {
+			return $assignment->getParticipant();
+		}, $this->assignmentMapper->findAll($cards[0]->getId()));
+		$this->assertContains(self::TEST_USER_1, $participantsUIDs);
+		$this->assertNotContains(self::TEST_USER_2, $participantsUIDs);
 	}
 
 	public function tearDown(): void {
