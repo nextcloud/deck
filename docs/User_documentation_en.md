@@ -159,8 +159,22 @@ For example the search `project tag:ToDo assigned:alice assigned:bob` will retur
 
 Other text tokens will be used to perform a case-insensitive search on the card title and description
 
-In addition wuotes can be used to pass a query with spaces, e.g. `"Exact match with spaces"` or `title:"My card"`.
+In addition, quotes can be used to pass a query with spaces, e.g. `"Exact match with spaces"` or `title:"My card"`.
 
 ### 8. New owner for the deck entities
 You can transfer ownership of boards, cards, etc to a new user, using `occ` command `deck:transfer-ownership`  
-`$ php occ deck:transfer-ownership owner newOwner`
+
+```bash
+php occ deck:transfer-ownership owner newOwner
+```
+
+The transfer will preserve card details linked to the old owner, which can also be remapped by using the `--remap` option on the occ command.
+```bash
+php occ deck:transfer-ownership --remap owner newOwner
+```
+
+Individual boards can be transferred by adding the id of the board to the command:
+
+```bash
+php occ deck:transfer-ownership owner newOwner 123
+```
