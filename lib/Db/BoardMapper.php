@@ -477,25 +477,23 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param $ownerId
-	 * @param $newOwnerId
-	 * @return void
+	 * @throws \OCP\DB\Exception
 	 */
-	public function transferOwnership($ownerId, $newOwnerId) {
-		$params = [
-			'owner' => $ownerId,
-			'newOwner' => $newOwnerId
-		];
-		$sql = "UPDATE `*PREFIX*{$this->tableName}` SET `owner` = :newOwner WHERE `owner` = :owner";
-		$stmt = $this->db->executeQuery($sql, $params);
-		$stmt->closeCursor();
+	public function transferOwnership(string $ownerId, string $newOwnerId, $boardId = null): void {
+		$qb = $this->db->getQueryBuilder();
+		$qb->update('deck_boards')
+			->set('owner', $qb->createNamedParameter($newOwnerId, IQueryBuilder::PARAM_STR))
+			->where($qb->expr()->eq('owner', $qb->createNamedParameter($ownerId, IQueryBuilder::PARAM_STR)));
+		if ($boardId !== null) {
+			$qb->andWhere($qb->expr()->eq('id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)));
+		}
+		$qb->executeStatement();
 	}
 
 	/**
 	 * Reset cache for a given board or a given user
 	 */
-	public function flushCache(?int $boardId = null, ?string $userId = null)
-	{
+	public function flushCache(?int $boardId = null, ?string $userId = null) {
 		if ($boardId) {
 			unset($this->boardCache[$boardId]);
 		} else {

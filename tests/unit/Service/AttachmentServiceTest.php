@@ -240,7 +240,7 @@ class AttachmentServiceTest extends TestCase {
 		$this->attachmentServiceImpl->expects($this->exactly(2))
 			->method('extendData')
 			->withConsecutive(
-				[$attachments[0]], 
+				[$attachments[0]],
 				[$attachments[1]]
 			);
 
@@ -277,7 +277,7 @@ class AttachmentServiceTest extends TestCase {
 		$this->attachmentServiceImpl->expects($this->exactly(4))
 			->method('extendData')
 			->withConsecutive(
-				[$attachments[0]], 
+				[$attachments[0]],
 				[$attachments[1]],
 				[$attachmentsDeleted[0]],
 				[$attachmentsDeleted[1]]

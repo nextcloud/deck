@@ -63,7 +63,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	 * @param $newOwnerId
 	 * @return void
 	 */
-	public function transferOwnership($boardId, $ownerId, $newOwnerId) {
+	public function transferOwnership($boardId, $newOwnerId) {
 		$params = [
 			'newOwner' => $newOwnerId,
 			'type' => Acl::PERMISSION_TYPE_USER,
