@@ -726,10 +726,7 @@ class BoardService {
 	}
 
 	/**
-	 * Clean a given board data
-	 * from the Cache
-	 *
-	 * @param OCA\Deck\Db\Board $board
+	 * Clean a given board data from the Cache
 	 */
 	private function clearBoardFromCache(Board $board) {
 		$boardId = $board->getId();
