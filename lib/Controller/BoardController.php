@@ -155,4 +155,15 @@ class BoardController extends ApiController {
 	public function clone($boardId) {
 		return $this->boardService->clone($boardId, $this->userId);
 	}
+
+	/**
+	 * @NoAdminRequired
+	 * @param $boardId
+	 * @param $owner
+	 * @param $newOwner
+	 * * @return null|void
+	 */
+	public function transferOwner($boardId, $owner, $newOwner) {
+		return $this->boardService->transferOwnership($owner, $newOwner);
+	}
 }

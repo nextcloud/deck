@@ -743,6 +743,12 @@ class BoardService {
 		$this->boardsCache = null;
 	}
 
+	private function getBoardOwner($boardId) {
+		$board = $this->boardMapper->find($boardId);
+
+		return $board->getOwner();
+	}
+
 	/**
 	 * Clean a given board data from the Cache
 	 */
