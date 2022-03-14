@@ -528,7 +528,7 @@ class BoardService {
 		$this->boardMapper->mapAcl($newAcl);
 		$this->changeHelper->boardChanged($boardId);
 
-		$board = $this->find($boardId);
+		$board = $this->boardMapper->find($boardId);
 		$this->clearBoardFromCache($board);
 
 		// TODO: use the dispatched event for this
@@ -731,7 +731,7 @@ class BoardService {
 	/**
 	 * Clean a given board data
 	 * from the Cache
-	 * 
+	 *
 	 * @param OCA\Deck\Db\Board $board
 	 */
 	private function clearBoardFromCache(Board $board) {

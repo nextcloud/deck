@@ -154,7 +154,7 @@ class BoardServiceTest extends TestCase {
 			->method('find')
 			->with(1)
 			->willReturn($b1);
-		$this->permissionService->expects($this->once())
+		$this->permissionService->expects($this->any())
 			->method('findUsers')
 			->willReturn([
 				'admin' => 'admin',
@@ -258,6 +258,11 @@ class BoardServiceTest extends TestCase {
 			->method('insert')
 			->with($acl)
 			->willReturn($acl);
+		$this->permissionService->expects($this->any())
+			->method('findUsers')
+			->willReturn([
+				'admin' => 'admin',
+			]);
 		$this->assertEquals($acl, $this->service->addAcl(
 			123, 'user', 'admin', true, true, true
 		));
@@ -306,7 +311,7 @@ class BoardServiceTest extends TestCase {
 				->method('checkPermission')
 				->withConsecutive(
 					[$this->boardMapper, 123, Acl::PERMISSION_SHARE, null],
-					[$this->boardMapper, 123, Acl::PERMISSION_MANAGE, null]	
+					[$this->boardMapper, 123, Acl::PERMISSION_MANAGE, null]
 				);
 		} else {
 			$this->aclMapper->expects($this->once())
@@ -329,20 +334,10 @@ class BoardServiceTest extends TestCase {
 			$this->permissionService->expects($this->exactly(3))
 				->method('userCan')
 				->willReturnOnConsecutiveCalls(
-					$currentUserAcl[0], 
-					$currentUserAcl[1], 
+					$currentUserAcl[0],
+					$currentUserAcl[1],
 					$currentUserAcl[2]
 				);
-
-			/* $this->permissionService->expects($this->at(2))
-				->method('userCan')
-				->willReturn($currentUserAcl[0]);
-			$this->permissionService->expects($this->at(3))
-				->method('userCan')
-				->willReturn($currentUserAcl[1]);
-			$this->permissionService->expects($this->at(4))
-				->method('userCan')
-				->willReturn($currentUserAcl[2]); */
 		}
 
 		$user = $this->createMock(IUser::class);
@@ -357,6 +352,11 @@ class BoardServiceTest extends TestCase {
 		$acl->resolveRelation('participant', function ($participant) use (&$user) {
 			return null;
 		});
+		$this->permissionService->expects($this->any())
+			->method('findUsers')
+			->willReturn([
+				'admin' => 'admin',
+			]);
 		$this->notificationHelper->expects($this->once())
 			->method('sendBoardShared');
 		$expected = clone $acl;

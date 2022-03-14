@@ -182,7 +182,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 
 		// shared with user
 		$qb->resetQueryParts();
-		$qb->selectDistinct('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
 			//->selectAlias('1', 'shared')
 			->from('deck_boards', 'b')
 			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
@@ -492,9 +492,9 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * Reset Cache for a 
+	 * Reset Cache for a
 	 * given board or a given user
-	 * 
+	 *
 	 * @param int|null $boardId
 	 * @param int|null $userId
 	 */
