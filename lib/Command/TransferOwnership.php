@@ -77,12 +77,14 @@ final class TransferOwnership extends Command {
 
 		if ($boardId) {
 			$this->boardService->transferBoardOwnership($boardId, $newOwner, $remapAssignment);
-			$output->writeln("Board " . $board->getTitle() . " from ". $board->getOwner() ." transferred to $newOwner completed");
+			$output->writeln("<info>Board " . $board->getTitle() . " from ". $board->getOwner() ." transferred to $newOwner completed</info>");
 			return 0;
 		}
 
-		$this->boardService->transferOwnership($owner, $newOwner, $remapAssignment);
-		$output->writeln("All boards from $owner to $newOwner transferred");
+		foreach ($this->boardService->transferOwnership($owner, $newOwner, $remapAssignment) as $board) {
+			$output->writeln(" - " . $board->getTitle() . " transferred");
+		}
+		$output->writeln("<info>All boards from $owner to $newOwner transferred</info>");
 
 		return 0;
 	}
