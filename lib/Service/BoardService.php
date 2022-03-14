@@ -678,15 +678,33 @@ class BoardService {
 		return $newBoard;
 	}
 
-	public function transferOwnership(string $owner, string $newOwner): void {
+	public function transferBoardOwnership(int $boardId, string $newOwner, $changeContent = false): void {
+		$board = $this->boardMapper->find($boardId);
+		$previousOwner = $board->getOwner();
+		$this->clearBoardFromCache($board);
+		$this->aclMapper->transferOwnership($boardId, $newOwner);
+		$this->boardMapper->transferOwnership($previousOwner, $newOwner, $boardId);
+
+		// Optionally also change user assignments and card owner information
+		if ($changeContent) {
+			$this->assignedUsersMapper->transferOwnership($previousOwner, $newOwner, $boardId);
+			$this->cardMapper->transferOwnership($previousOwner, $newOwner, $boardId);
+		}
+	}
+
+	public function transferOwnership(string $owner, string $newOwner, $changeContent = false): void {
 		$boards = $this->boardMapper->findAllByUser($owner);
 		foreach ($boards as $board) {
 			$this->clearBoardFromCache($board);
-			$this->aclMapper->transferOwnership($board->getId(), $owner, $newOwner);
+			$this->aclMapper->transferOwnership($board->getId(), $newOwner);
 		}
 		$this->boardMapper->transferOwnership($owner, $newOwner);
-		$this->assignedUsersMapper->transferOwnership($owner, $newOwner);
-		$this->cardMapper->transferOwnership($owner, $newOwner);
+
+		// Optionally also change user assignments and card owner information
+		if ($changeContent) {
+			$this->assignedUsersMapper->transferOwnership($owner, $newOwner);
+			$this->cardMapper->transferOwnership($owner, $newOwner);
+		}
 	}
 
 	private function enrichWithStacks($board, $since = -1) {

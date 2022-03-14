@@ -565,12 +565,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		});
 	}
 
-	/**
-	 * @param $ownerId
-	 * @param $newOwnerId
-	 * @return void
-	 */
-	public function transferOwnership($ownerId, $newOwnerId) {
+	public function transferOwnership(string $ownerId, string $newOwnerId, int $boardId = null): void {
 		$params = [
 			'owner' => $ownerId,
 			'newOwner' => $newOwnerId
