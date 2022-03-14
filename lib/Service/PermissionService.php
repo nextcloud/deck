@@ -241,6 +241,7 @@ class PermissionService {
 		if (array_key_exists((string) $boardId, $this->users) && !$refresh) {
 			return $this->users[(string) $boardId];
 		}
+
 		try {
 			$board = $this->boardMapper->find($boardId);
 		} catch (DoesNotExistException $e) {

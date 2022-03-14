@@ -320,9 +320,9 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * Reset Cache for a 
+	 * Reset Cache for a
 	 * given board or a given user
-	 * 
+	 *
 	 * @param int|null $boardId
 	 * @param int|null $userId
 	 */
