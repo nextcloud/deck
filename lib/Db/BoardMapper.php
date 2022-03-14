@@ -492,11 +492,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * Reset Cache for a
-	 * given board or a given user
-	 *
-	 * @param int|null $boardId
-	 * @param int|null $userId
+	 * Reset cache for a given board or a given user
 	 */
 	public function flushCache(?int $boardId = null, ?string $userId = null)
 	{

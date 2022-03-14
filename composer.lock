@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c3c765fb5379719b5ab8824e9fbb03f9",
+    "content-hash": "33c2fe0cccf29841e021001c6430310a",
     "packages": [
         {
             "name": "cogpowered/finediff",
@@ -301,25 +301,29 @@
         },
         {
             "name": "christophwurst/nextcloud",
-            "version": "v21.0.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChristophWurst/nextcloud_composer.git",
-                "reference": "41e1476b4aed5bce7371895054049eca353729c5"
+                "reference": "cd35b7f4519d9b1c836443ec5dcd973d7f0f9cdd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/41e1476b4aed5bce7371895054049eca353729c5",
-                "reference": "41e1476b4aed5bce7371895054049eca353729c5",
+                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/cd35b7f4519d9b1c836443ec5dcd973d7f0f9cdd",
+                "reference": "cd35b7f4519d9b1c836443ec5dcd973d7f0f9cdd",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.3 || ~8.0.0"
+                "php": "^7.4 || ~8.0 || ~8.1",
+                "psr/container": "^1.0",
+                "psr/event-dispatcher": "^1.0",
+                "psr/log": "^1.1"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "21.0.0-dev"
+                    "dev-master": "24.0.0-dev"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -335,9 +339,9 @@
             "description": "Composer package containing Nextcloud's public API (classes, interfaces)",
             "support": {
                 "issues": "https://github.com/ChristophWurst/nextcloud_composer/issues",
-                "source": "https://github.com/ChristophWurst/nextcloud_composer/tree/v21.0.0"
+                "source": "https://github.com/ChristophWurst/nextcloud_composer/tree/master"
             },
-            "time": "2021-03-01T08:42:25+00:00"
+            "time": "2022-03-11T01:33:55+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -2303,6 +2307,56 @@
                 "source": "https://github.com/php-fig/container/tree/1.1.2"
             },
             "time": "2021-11-05T16:50:12+00:00"
+        },
+        {
+            "name": "psr/event-dispatcher",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/event-dispatcher.git",
+                "reference": "dbefd12671e8a14ec7f180cab83036ed26714bb0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/event-dispatcher/zipball/dbefd12671e8a14ec7f180cab83036ed26714bb0",
+                "reference": "dbefd12671e8a14ec7f180cab83036ed26714bb0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\EventDispatcher\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Standard interfaces for event handling.",
+            "keywords": [
+                "events",
+                "psr",
+                "psr-14"
+            ],
+            "support": {
+                "issues": "https://github.com/php-fig/event-dispatcher/issues",
+                "source": "https://github.com/php-fig/event-dispatcher/tree/1.0.0"
+            },
+            "time": "2019-01-08T18:20:26+00:00"
         },
         {
             "name": "psr/log",
