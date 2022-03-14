@@ -685,28 +685,38 @@ class BoardService {
 		$board = $this->boardMapper->find($boardId);
 		$previousOwner = $board->getOwner();
 		$this->clearBoardFromCache($board);
-		$this->aclMapper->transferOwnership($boardId, $newOwner);
+		$this->aclMapper->deleteParticipantFromBoard($boardId, Acl::PERMISSION_TYPE_USER, $newOwner);
 		$this->boardMapper->transferOwnership($previousOwner, $newOwner, $boardId);
 
 		// Optionally also change user assignments and card owner information
 		if ($changeContent) {
-			$this->assignedUsersMapper->transferOwnership($previousOwner, $newOwner, $boardId);
-			$this->cardMapper->transferOwnership($previousOwner, $newOwner, $boardId);
+			$this->assignedUsersMapper->remapAssignedUser($boardId, $previousOwner, $newOwner);
+			$this->cardMapper->remapCardOwner($boardId, $previousOwner, $newOwner);
 		}
 	}
 
 	public function transferOwnership(string $owner, string $newOwner, $changeContent = false): void {
-		$boards = $this->boardMapper->findAllByUser($owner);
-		foreach ($boards as $board) {
-			$this->clearBoardFromCache($board);
-			$this->aclMapper->transferOwnership($board->getId(), $newOwner);
-		}
-		$this->boardMapper->transferOwnership($owner, $newOwner);
+		\OC::$server->getDatabaseConnection()->beginTransaction();
+		try {
+			$boards = $this->boardMapper->findAllByUser($owner);
+			foreach ($boards as $board) {
+				$this->clearBoardFromCache($board);
+			}
 
-		// Optionally also change user assignments and card owner information
-		if ($changeContent) {
-			$this->assignedUsersMapper->transferOwnership($owner, $newOwner);
-			$this->cardMapper->transferOwnership($owner, $newOwner);
+			$this->boardMapper->transferOwnership($owner, $newOwner);
+			// Optionally also change user assignments and card owner information
+			if ($changeContent) {
+				foreach ($boards as $board) {
+					$this->clearBoardFromCache($board);
+					$this->aclMapper->deleteParticipantFromBoard($board->getId(), Acl::PERMISSION_TYPE_USER, $newOwner);
+					$this->assignedUsersMapper->remapAssignedUser($board->getId(), $owner, $newOwner);
+					$this->cardMapper->remapCardOwner($board->getId(), $owner, $newOwner);
+				}
+			}
+
+			\OC::$server->getDatabaseConnection()->commit();
+		} catch (\Throwable $e) {
+			\OC::$server->getDatabaseConnection()->rollBack();
 		}
 	}
 

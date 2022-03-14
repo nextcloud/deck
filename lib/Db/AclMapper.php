@@ -25,6 +25,7 @@ namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 class AclMapper extends DeckMapper implements IPermissionMapper {
@@ -59,23 +60,14 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param $ownerId
-	 * @param $newOwnerId
-	 * @return void
+	 * @throws \OCP\DB\Exception
 	 */
-	public function transferOwnership($boardId, $newOwnerId) {
-		$params = [
-			'newOwner' => $newOwnerId,
-			'type' => Acl::PERMISSION_TYPE_USER,
-			'boardId' => $boardId
-		];
-
-		// Drop existing ACL rules for the new owner
-		$sql = "DELETE FROM `{$this->tableName}` 
-                    WHERE `participant` = :newOwner 
-                        AND `type` = :type 
-                        AND `board_id` = :boardId";
-		$stmt = $this->execute($sql, $params);
-		$stmt->closeCursor();
+	public function deleteParticipantFromBoard(int $boardId, int $type, string $participant): void {
+		$qb = $this->db->getQueryBuilder();
+		$qb->delete('deck_board_acl')
+			->where($qb->expr()->eq('type', $qb->createNamedParameter($type, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('participant', $qb->createNamedParameter($participant, IQueryBuilder::PARAM_STR)))
+			->andWhere($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)));
+		$qb->executeStatement();
 	}
 }

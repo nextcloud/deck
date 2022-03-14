@@ -29,6 +29,7 @@ use OCA\Deck\NotFoundException;
 use OCA\Deck\Service\CirclesService;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
@@ -147,26 +148,38 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 		return null;
 	}
 
-	/**
-	 * @psalm-suppress InvalidScalarArgument
-	 * @param $ownerId
-	 * @param $newOwnerId
-	 * @return void
-	 */
-	public function transferOwnership(string $ownerId, string $newOwnerId, int $boardId = null) {
-		$params = [
-			'owner' => $ownerId,
-			'newOwner' => $newOwnerId,
-			'type' => Assignment::TYPE_USER
-		];
-		$qb = $this->db->getQueryBuilder();
-		$sql = "DELETE FROM `*PREFIX*{$this->tableName}`  WHERE `participant` = :newOwner AND `type`= :type AND id IN 
-			(SELECT id FROM `*PREFIX*{$this->tableName}`  WHERE `participant` = :owner)";
-		$stmt = $this->db->executeQuery($sql, $params);
-		$stmt->closeCursor();
+	public function remapAssignedUser(int $boardId, string $userId, string $newUserId): void {
+		$subQuery = $this->db->getQueryBuilder();
+		$subQuery->selectAlias('a.id', 'id')
+			->from('deck_assigned_users', 'a')
+			->innerJoin('a', 'deck_cards', 'c', 'c.id = a.card_id')
+			->innerJoin('c', 'deck_stacks', 's', 's.id = c.stack_id')
+			->where($subQuery->expr()->eq('a.type', $subQuery->createNamedParameter(Assignment::TYPE_USER, IQueryBuilder::PARAM_INT)))
+			->andWhere($subQuery->expr()->eq('a.participant', $subQuery->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
+			->andWhere($subQuery->expr()->eq('s.board_id', $subQuery->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->setMaxResults(1000);
 
-		$sql = "UPDATE `*PREFIX*{$this->tableName}`  SET `participant` = :newOwner WHERE `participant` = :owner AND `type`= :type";
-		$stmt = $this->db->executeQuery($sql, $params);
-		$stmt->closeCursor();
+		$qb = $this->db->getQueryBuilder();
+		$qb->update('deck_assigned_users')
+			->set('participant', $qb->createParameter('participant'))
+			->where($qb->expr()->in('id', $qb->createParameter('ids')));
+
+		$moreResults = true;
+		do {
+			$result = $subQuery->executeQuery();
+			$ids = array_map(function ($item) {
+				return $item['id'];
+			}, $result->fetchAll());
+
+			if (count($ids) === 0 || $result->rowCount() === 0) {
+				$moreResults = false;
+			}
+
+			$qb->setParameter('participant', $newUserId, IQueryBuilder::PARAM_STR);
+			$qb->setParameter('ids', $ids, IQueryBuilder::PARAM_INT_ARRAY);
+			$qb->executeStatement();
+		} while ($moreResults === true);
+
+		$result->closeCursor();
 	}
 }
