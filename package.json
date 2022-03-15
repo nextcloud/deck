@@ -113,6 +113,10 @@
 		"webpack-dev-server": "^3.11.2",
 		"webpack-merge": "^5.7.3"
 	},
+	"engines": {
+		"node": "^14.0.0",
+		"npm": "^7.0.0"
+	},
 	"jest": {
 		"moduleFileExtensions": [
 			"js",
