@@ -53,7 +53,7 @@
 					<ActionCheckbox v-if="canManage" :checked="acl.permissionManage" @change="clickManageAcl(acl)">
 						{{ t('deck', 'Can manage') }}
 					</ActionCheckbox>
-					<ActionCheckbox v-if="canManage" :checked="acl.owner" @change="clickTranserOwner(acl.participant.uid)">
+					<ActionCheckbox v-if="isCurrentUser(board.owner.uid)" :checked="acl.owner" @change="clickTransferOwner(acl.participant.uid)">
 						{{ t('deck', 'Owner') }}
 					</ActionCheckbox>
 					<ActionButton v-if="canManage" icon="icon-delete" @click="clickDeleteAcl(acl)">
@@ -198,7 +198,7 @@ export default {
 		clickDeleteAcl(acl) {
 			this.$store.dispatch('deleteAclFromCurrentBoard', acl)
 		},
-		clickTranserOwner(newOwner) {
+		clickTransferOwner(newOwner) {
 			OC.dialogs.confirmDestructive(
 				t('deck', 'Are you sure you want to transfer the board {title} for {user} ?', { title: this.board.title, user: newOwner }),
 				t('deck', 'Transfer the board.'),
@@ -214,8 +214,7 @@ export default {
 							this.isLoading = true
 							await this.$store.dispatch('transferOwnership', {
 								boardId: this.board.id,
-								newOwner,
-								owner: this.board.owner.uid,
+								newOwner
 							})
 							const successMessage = t('deck', 'Transfer the board for {user} successfully', { user: newOwner })
 							showSuccess(successMessage)
