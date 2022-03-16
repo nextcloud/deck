@@ -27,6 +27,8 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\ApiController;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
 class BoardController extends ApiController {
@@ -163,7 +165,11 @@ class BoardController extends ApiController {
 	 * @param $newOwner
 	 * * @return null|void
 	 */
-	public function transferOwner($boardId, $owner, $newOwner) {
-		return $this->boardService->transferOwnership($owner, $newOwner);
+	public function transferOwner(int $boardId, string $newOwner): DataResponse {
+		if ($this->permissionService->userIsBoardOwner($boardId, $this->userId)) {
+			return new DataResponse($this->boardService->transferBoardOwnership($boardId, $newOwner), HTTP::STATUS_OK);
+		}
+
+		return new DataResponse([], HTTP::STATUS_UNAUTHORIZED);
 	}
 }
