@@ -239,6 +239,7 @@ OC.L10N.register(
     "Archive card" : "Archivar tarjeta",
     "Delete card" : "Eliminar tarjeta",
     "Move card to another board" : "Mover la tarjeta a otro tablero",
+    "List is empty" : "La lista está vacía",
     "Card deleted" : "Tarjeta borrada",
     "seconds ago" : "hace unos segundos",
     "All boards" : "Todos los tableros",
