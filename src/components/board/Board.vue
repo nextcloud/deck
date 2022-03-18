@@ -77,6 +77,7 @@ import Controls from '../Controls'
 import Stack from './Stack'
 import { EmptyContent } from '@nextcloud/vue'
 import GlobalSearchResults from '../search/GlobalSearchResults'
+import { showError } from '../../helpers/errors'
 
 export default {
 	name: 'Board',
@@ -139,6 +140,7 @@ export default {
 				await this.$store.dispatch('loadStacks', this.id)
 			} catch (e) {
 				console.error(e)
+				showError(e)
 			}
 			this.loading = false
 		},
