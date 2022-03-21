@@ -43,6 +43,7 @@ use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Test\TestCase;
+use OCP\IURLGenerator;
 
 class CardServiceTest extends TestCase {
 
@@ -76,6 +77,9 @@ class CardServiceTest extends TestCase {
 	/** @var ChangeHelper|MockObject */
 	private $changeHelper;
 
+	/** @var IURLGenerator|MockObject */
+	private $urlGenerator;
+
 	public function setUp(): void {
 		parent::setUp();
 		$this->cardMapper = $this->createMock(CardMapper::class);
@@ -92,6 +96,7 @@ class CardServiceTest extends TestCase {
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
+		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->cardService = new CardService(
 			$this->cardMapper,
 			$this->stackMapper,
@@ -107,6 +112,7 @@ class CardServiceTest extends TestCase {
 			$this->userManager,
 			$this->changeHelper,
 			$this->eventDispatcher,
+			$this->urlGenerator,
 			'user1'
 		);
 	}

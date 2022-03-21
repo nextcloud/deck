@@ -25,5 +25,5 @@ jobs:
       # Nextcloud bot approve and merge request
       - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
-          target: patch
+          target: minor
           github-token: ${{ secrets.DEPENDABOT_AUTOMERGE_TOKEN }}

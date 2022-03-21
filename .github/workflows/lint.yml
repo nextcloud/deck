@@ -17,9 +17,9 @@ jobs:
 
     name: php${{ matrix.php-versions }} lint
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
       - name: Set up php${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@2.16.0
+        uses: shivammathur/setup-php@2.17.1
         with:
           php-version: ${{ matrix.php-versions }}
           coverage: none
@@ -31,9 +31,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2.4.0
+      uses: actions/checkout@v3
     - name: Set up php
-      uses: shivammathur/setup-php@2.16.0
+      uses: shivammathur/setup-php@2.17.1
       with:
         php-version: 7.4
         coverage: none
@@ -50,9 +50,9 @@ jobs:
         node-version: [14.x]
 
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
       - name: Use node ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.5.1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
       - name: Set up npm7
@@ -71,10 +71,10 @@ jobs:
 
     name: stylelint node${{ matrix.node-version }}
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
 
       - name: Set up node ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.5.1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 

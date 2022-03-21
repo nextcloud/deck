@@ -24,13 +24,14 @@
 
 namespace OCA\Deck\Cron;
 
-use OC\BackgroundJob\Job;
+use OCP\BackgroundJob\TimedJob;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\Service\AttachmentService;
+use OCP\BackgroundJob\IJob;
 
-class DeleteCron extends Job {
+class DeleteCron extends TimedJob {
 
 	/** @var BoardMapper */
 	private $boardMapper;
@@ -43,6 +44,9 @@ class DeleteCron extends Job {
 		$this->boardMapper = $boardMapper;
 		$this->attachmentService = $attachmentService;
 		$this->attachmentMapper = $attachmentMapper;
+
+		$this->setInterval(60 * 60 * 24);
+		$this->setTimeSensitivity(IJob::TIME_INSENSITIVE);
 	}
 
 	/**
