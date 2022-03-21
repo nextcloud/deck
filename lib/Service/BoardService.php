@@ -24,6 +24,7 @@
 
 namespace OCA\Deck\Service;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\AppInfo\Application;
@@ -694,6 +695,11 @@ class BoardService {
 			if ($changeContent) {
 				$this->assignedUsersMapper->remapAssignedUser($boardId, $previousOwner, $newOwner);
 				$this->cardMapper->remapCardOwner($boardId, $previousOwner, $newOwner);
+			} else {
+				try {
+					$this->addAcl($boardId, Acl::PERMISSION_TYPE_USER, $previousOwner, true, true, true);
+				} catch (UniqueConstraintViolationException $e) {
+				}
 			}
 			\OC::$server->getDatabaseConnection()->commit();
 			return $this->boardMapper->find($boardId);
@@ -706,7 +712,9 @@ class BoardService {
 	public function transferOwnership(string $owner, string $newOwner, bool $changeContent = false): \Generator {
 		$boards = $this->boardMapper->findAllByUser($owner);
 		foreach ($boards as $board) {
-			yield $this->transferBoardOwnership($board->getId(), $newOwner, $changeContent);
+			if ($board->getOwner() === $owner) {
+				yield $this->transferBoardOwnership($board->getId(), $newOwner, $changeContent);
+			}
 		}
 	}
 

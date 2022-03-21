@@ -64,7 +64,6 @@ class TransferOwnershipTest extends \Test\TestCase {
 		$stacks = [];
 		$board = $this->boardService->create('Test', self::TEST_USER_1, '000000');
 		$id = $board->getId();
-		$this->boardService->addAcl($id, Acl::PERMISSION_TYPE_USER, self::TEST_USER_1, true, true, true);
 		$this->boardService->addAcl($id, Acl::PERMISSION_TYPE_GROUP, self::TEST_GROUP, true, true, true);
 		$this->boardService->addAcl($id, Acl::PERMISSION_TYPE_USER, self::TEST_USER_3, false, true, false);
 		$stacks[] = $this->stackService->create('Stack A', $id, 1);
@@ -110,13 +109,20 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 * @covers ::transferOwnership
 	 */
 	public function testTransferACLOwnership() {
-		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2));
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2, true));
 		$board = $this->boardService->find($this->board->getId());
 		$acl = $board->getAcl();
-		// Check if old owner is no longer in ACL
-		$this->assertTrue((bool)array_filter($acl, function ($item) {
-			return $item->getParticipant() === self::TEST_USER_1 && $item->getType() === Acl::PERMISSION_TYPE_USER;
-		}));
+		$this->assertBoardDoesNotHaveAclUser($board, self::TEST_USER_1);
+	}
+
+	/**
+	 * @covers ::transferOwnership
+	 */
+	public function testTransferACLOwnershipPreserveOwner() {
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2, false));
+		$board = $this->boardService->find($this->board->getId());
+		$acl = $board->getAcl();
+		$this->assertBoardHasAclUser($board, self::TEST_USER_1);
 	}
 
 	/**
@@ -196,17 +202,41 @@ class TransferOwnershipTest extends \Test\TestCase {
 		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_3));
 	}
 
+	private function assertBoardHasAclUser($board, $userId) {
+		$hasUser = (bool)array_filter($board->getAcl(), function ($item) use ($userId) {
+			return $item->getParticipant() === $userId && $item->getType() === Acl::PERMISSION_TYPE_USER;
+		});
+		self::assertTrue($hasUser, 'user ' . $userId . ' should be in the board acl list');
+	}
+
+	private function assertBoardDoesNotHaveAclUser($board, $userId) {
+		$hasUser = (bool)array_filter($board->getAcl(), function ($item) use ($userId) {
+			return $item->getParticipant() === $userId && $item->getType() === Acl::PERMISSION_TYPE_USER;
+		});
+		self::assertFalse($hasUser, 'user ' . $userId . ' should not be in the board acl list');
+	}
+
 	/**
 	 * @covers ::transferOwnership
 	 */
-	public function testDontRemoveTargetFromAcl() {
-		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_2, self::TEST_USER_3));
+	public function testDontRemoveOldOwnerFromAcl() {
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2));
 		$board = $this->boardService->find($this->board->getId());
-		$acl = $board->getAcl();
-		$isOwnerInAcl = (bool)array_filter($acl, function ($item) {
-			return $item->getParticipant() === self::TEST_USER_3 && $item->getType() === Acl::PERMISSION_TYPE_USER;
-		});
-		$this->assertTrue($isOwnerInAcl);
+
+		$this->assertBoardDoesNotHaveAclUser($board, self::TEST_USER_2);
+		$this->assertBoardHasAclUser($board, self::TEST_USER_3);
+		$this->assertBoardHasAclUser($board, self::TEST_USER_1);
+	}
+
+	/**
+	 * @covers ::transferOwnership
+	 */
+	public function testRemoveOldOwnerFromAclForChange() {
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_2, true));
+		$board = $this->boardService->find($this->board->getId());
+		$this->assertBoardDoesNotHaveAclUser($board, self::TEST_USER_2);
+		$this->assertBoardHasAclUser($board, self::TEST_USER_3);
+		$this->assertBoardDoesNotHaveAclUser($board, self::TEST_USER_1);
 	}
 
 	/**
@@ -214,7 +244,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 	 */
 	public function testMergePermissions() {
 		$this->boardService->addAcl($this->board->getId(), Acl::PERMISSION_TYPE_USER, self::TEST_USER_2, true, false, true);
-		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_2, self::TEST_USER_3));
+		iterator_to_array($this->boardService->transferOwnership(self::TEST_USER_1, self::TEST_USER_3));
 		$board = $this->boardService->find($this->board->getId());
 		$acl = $board->getAcl();
 		$isMerged = (bool)array_filter($acl, function ($item) {
