@@ -166,12 +166,12 @@ export default {
 	},
 }
 </script>
-
 <style lang="scss" scoped>
 .section-details{
 	margin-right: 5px;
 	display: flex;
 	align-items: flex-start;
+	margin-top: 10px;
 }
 </style>
 

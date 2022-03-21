@@ -7,7 +7,6 @@
 			@restore-attachment="restoreAttachment" />
 	</div>
 </template>
-
 <script>
 import AttachmentList from './AttachmentList'
 

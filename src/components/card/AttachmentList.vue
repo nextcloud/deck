@@ -269,7 +269,7 @@ export default {
 			padding-left: 44px;
 			background-position: 16px center;
 			flex-grow: 1;
-			height: 44px;
+			height: auto;
 			margin-bottom: 12px;
 			text-align: left;
 		}

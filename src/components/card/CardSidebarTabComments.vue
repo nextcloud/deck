@@ -26,8 +26,7 @@
 			</InfiniteLoading>
 		</ul>
 		<div v-else-if="isLoading" class="icon icon-loading" />
-		<div v-else class="emptycontent">
-			<div :class="{ 'icon-comment': !error, 'icon-error': error }" />
+		<div v-else>
 			<p>{{ error || t('deck', 'No comments yet. Begin the discussion!') }}</p>
 		</div>
 	</div>

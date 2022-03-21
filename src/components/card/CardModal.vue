@@ -53,7 +53,7 @@
 			</div>
 		</div>
 		<div class="content">
-			<div class="content-tabs">
+			<div :class="[currentCard.labels.length > 3 ? 'content-two-tabs' : 'content-three-tabs']">
 				<MembersTab
 					:card="currentCard"
 					:active-tabs="activeTabs"
@@ -91,15 +91,22 @@
 			<Description :key="currentCard.id" :card="currentCard" @change="descriptionChanged" />
 		</div>
 		<div class="activities">
-			<h2 class="activities-title">
-				<div class="icon-activity" /> {{ t('deck', 'Activity') }}
-			</h2>
-			<CardSidebarTabComments :card="currentCard" :tab-query="tabQuery" />
-			<ActivityList v-if="hasActivity"
-				filter="deck"
-				:object-id="currentBoard.id"
-				object-type="deck"
-				type="deck" />
+			<div class="activities-header">
+				<div class="activities-title">
+					<i class="icon-activity" /> {{ t('deck', 'Activity') }}
+				</div>
+				<div class="show-details-btn" @click="showDetails = !showDetails">
+					{{ showDetails ? t('deck', 'Hide details') : t('deck', 'Show details') }}
+				</div>
+			</div>
+			<template v-if="showDetails">
+				<CardSidebarTabComments :card="currentCard" :tab-query="tabQuery" />
+				<ActivityList v-if="hasActivity"
+					filter="deck"
+					:object-id="currentBoard.id"
+					object-type="deck"
+					type="deck" />
+			</template>
 		</div>
 	</div>
 </template>
@@ -166,6 +173,7 @@ export default {
 			comment: '',
 			currentTab: null,
 			activeTabs: [],
+			showDetails: false,
 		}
 	},
 	computed: {
@@ -292,10 +300,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.content-tabs {
+.show-details-btn {
+	cursor: pointer;
+	text-decoration: underline;
+	color: var(--color-text-maxcontrast);
+}
+
+.activities-header{
+	display: flex;
+	justify-content: space-between;
+}
+
+.content-two-tabs, .content-three-tabs {
 	display: grid;
-	grid-template-columns: 1fr 2fr 1fr;
 	align-items: flex-start;
+}
+
+.content-two-tabs {
+	grid-template-columns: 1fr 2fr;
+}
+
+.content-three-tabs {
+	grid-template-columns: 1fr 2fr 1fr;
 }
 
 .icon-activity {
@@ -324,7 +350,7 @@ export default {
 }
 
 .activities {
-	&-title {
+	&-title{
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
@@ -338,12 +364,12 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	&-input {
+	&-input{
 		width: 100%;
 		margin-left: 10px;
 	}
 
-	.comment-form {
+	.comment-form{
 		width: 95%;
 	}
 }
@@ -366,10 +392,8 @@ export default {
 
 .tabs {
 	margin-top: 20px;
-	margin-bottom: 20px;
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-	grid-gap: 30px;
+	margin-bottom: 5px;
+	display: flex;
 }
 
 .tab {
@@ -382,12 +406,11 @@ export default {
 	display: flex;
 	flex-direction: row;
 	overflow: hidden;
-	padding: 10px 10px;
+	padding: 10px 20px;
 	border-radius: 10px;
 	font-size: 85%;
 	margin-bottom: 3px;
-	margin-right: 5px;
-	width: 100px;
+	margin-right: 15px;
 }
 
 .action-btn {

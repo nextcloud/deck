@@ -192,6 +192,7 @@ export default {
 
 .section-details {
 	width: 100%;
+	margin-top: 10px;
 }
 
 .members {

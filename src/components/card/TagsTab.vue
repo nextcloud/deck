@@ -144,7 +144,7 @@ export default {
 	align-items: center;
 
 	&-item {
-		border-radius: 5px;
+		border-radius: 15px;
 		margin-right: 5px;
 		min-width: 110px;
 		height: 32px;
@@ -156,12 +156,16 @@ export default {
 
 .select-tag {
 	height: 32px;
-  width: 34px;
-  padding: 5px 8px;
+	width: 34px;
+	padding: 5px 8px;
 }
 
 .tag{
 	padding: 0px 5px;
 	border-radius: 15px;
+}
+
+.section-details{
+	margin-top: 10px;
 }
 </style>
