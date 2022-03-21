@@ -53,7 +53,7 @@
 					<ActionCheckbox v-if="canManage" :checked="acl.permissionManage" @change="clickManageAcl(acl)">
 						{{ t('deck', 'Can manage') }}
 					</ActionCheckbox>
-					<ActionCheckbox v-if="isCurrentUser(board.owner.uid)" :checked="acl.owner" @change="clickTransferOwner(acl.participant.uid)">
+					<ActionCheckbox v-if="acl.type === 0 && isCurrentUser(board.owner.uid)" :checked="acl.owner" @change="clickTransferOwner(acl.participant.uid)">
 						{{ t('deck', 'Owner') }}
 					</ActionCheckbox>
 					<ActionButton v-if="canManage" icon="icon-delete" @click="clickDeleteAcl(acl)">
