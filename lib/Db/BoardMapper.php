@@ -26,6 +26,7 @@ namespace OCA\Deck\Db;
 use OC\Cache\CappedMemoryCache;
 use OCA\Deck\Service\CirclesService;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IUserManager;
 use OCP\IGroupManager;
