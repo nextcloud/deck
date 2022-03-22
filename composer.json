@@ -14,7 +14,7 @@
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
-		"christophwurst/nextcloud": "^21@dev",
+		"christophwurst/nextcloud": "dev-master",
 		"phpunit/phpunit": "^9",
 		"nextcloud/coding-standard": "^1.0.0",
 		"symfony/event-dispatcher": "^4.0",
