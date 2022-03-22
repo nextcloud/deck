@@ -263,6 +263,9 @@ class BoardServiceTest extends TestCase {
 			->willReturn([
 				'admin' => 'admin',
 			]);
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->willReturn(new Board());
 		$this->assertEquals($acl, $this->service->addAcl(
 			123, 'user', 'admin', true, true, true
 		));
@@ -352,6 +355,9 @@ class BoardServiceTest extends TestCase {
 		$acl->resolveRelation('participant', function ($participant) use (&$user) {
 			return null;
 		});
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->willReturn(new Board());
 		$this->permissionService->expects($this->any())
 			->method('findUsers')
 			->willReturn([

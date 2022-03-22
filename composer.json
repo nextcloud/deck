@@ -13,14 +13,17 @@
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
-		"christophwurst/nextcloud": "^21@dev",
-		"phpunit/phpunit": "^9",
+		"christophwurst/nextcloud": "^22@dev",
+		"phpunit/phpunit": "^8",
 		"nextcloud/coding-standard": "^0.5.0",
 		"symfony/event-dispatcher": "^4.0",
 		"vimeo/psalm": "^4.3",
 		"php-parallel-lint/php-parallel-lint": "^1.2"
 	},
 	"config": {
+		"platform": {
+			"php": "7.3"
+		},
 		"optimize-autoloader": true,
 		"classmap-authoritative": true
 	},
