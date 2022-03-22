@@ -323,11 +323,6 @@ class BoardMapper extends DeckMapper implements IPermissionMapper {
 	 * Reset cache for a given board or a given user
 	 */
 	public function flushCache(?int $boardId = null, ?string $userId = null) {
-		if ($boardId) {
-			unset($this->boardCache[$boardId]);
-		} else {
-			$this->boardCache = null;
-		}
 		if ($userId) {
 			unset($this->userBoardCache[$userId]);
 		} else {
