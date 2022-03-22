@@ -31,7 +31,6 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\Attachment;
-use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
@@ -50,12 +49,15 @@ use OCP\L10N\IFactory;
 
 class ActivityManager {
 	public const DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED = 'DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED';
+
+	public const SUBJECT_PARAMS_MAX_LENGTH = 4000;
+	public const SHORTENED_DESCRIPTION_MAX_LENGTH = 2000;
+
 	private $manager;
 	private $userId;
 	private $permissionService;
 	private $boardMapper;
 	private $cardMapper;
-	private $attachmentMapper;
 	private $aclMapper;
 	private $stackMapper;
 	private $l10nFactory;
@@ -110,7 +112,6 @@ class ActivityManager {
 		BoardMapper $boardMapper,
 		CardMapper $cardMapper,
 		StackMapper $stackMapper,
-		AttachmentMapper $attachmentMapper,
 		AclMapper $aclMapper,
 		IFactory $l10nFactory,
 		$userId
@@ -120,7 +121,6 @@ class ActivityManager {
 		$this->boardMapper = $boardMapper;
 		$this->cardMapper = $cardMapper;
 		$this->stackMapper = $stackMapper;
-		$this->attachmentMapper = $attachmentMapper;
 		$this->aclMapper = $aclMapper;
 		$this->l10nFactory = $l10nFactory;
 		$this->userId = $userId;
@@ -249,19 +249,6 @@ class ActivityManager {
 		try {
 			$event = $this->createEvent($objectType, $entity, $subject, $additionalParams, $author);
 			if ($event !== null) {
-				$json = json_encode($event->getSubjectParameters());
-				if (mb_strlen($json) > 4000) {
-					$params = json_decode(json_encode($event->getSubjectParameters()), true);
-
-					$newContent = $params['after'];
-					unset($params['before'], $params['after'], $params['card']['description']);
-
-					$params['after'] = mb_substr($newContent, 0, 2000);
-					if (mb_strlen($newContent) > 2000) {
-						$params['after'] .= '...';
-					}
-					$event->setSubject($event->getSubject(), $params);
-				}
 				$this->sendToUsers($event);
 			}
 		} catch (\Exception $e) {
@@ -410,12 +397,31 @@ class ActivityManager {
 
 		$subjectParams['author'] = $author === null ? $this->userId : $author;
 
+		$subjectParams = array_merge($subjectParams, $additionalParams);
+		$json = json_encode($subjectParams);
+		if (mb_strlen($json) > self::SUBJECT_PARAMS_MAX_LENGTH) {
+			$params = json_decode(json_encode($subjectParams), true);
+
+			if ($subject === self::SUBJECT_CARD_UPDATE_DESCRIPTION && isset($params['after'])) {
+				$newContent = $params['after'];
+				unset($params['before'], $params['after'], $params['card']['description']);
+
+				$params['after'] = mb_substr($newContent, 0, self::SHORTENED_DESCRIPTION_MAX_LENGTH);
+				if (mb_strlen($newContent) > self::SHORTENED_DESCRIPTION_MAX_LENGTH) {
+					$params['after'] .= '...';
+				}
+				$subjectParams = $params;
+			} else {
+				throw new \Exception('Subject parameters too long');
+			}
+		}
+
 		$event = $this->manager->generateEvent();
 		$event->setApp('deck')
 			->setType($eventType)
 			->setAuthor($subjectParams['author'])
 			->setObject($objectType, (int)$object->getId(), $object->getTitle())
-			->setSubject($subject, array_merge($subjectParams, $additionalParams))
+			->setSubject($subject, $subjectParams)
 			->setTimestamp(time());
 
 		if ($message !== null) {
