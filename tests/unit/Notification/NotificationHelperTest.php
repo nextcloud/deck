@@ -124,7 +124,7 @@ class NotificationHelperTest extends \Test\TestCase {
 			->withConsecutive(
 				[$param1[0], $param2, $param3, $DUE_ASSIGNED],
 				[$param1[1], $param2, $param3, $DUE_ASSIGNED],
-				[$param1[2], $param2, $param3, $DUE_ASSIGNED],
+				[$param1[2], $param2, $param3, $DUE_ASSIGNED]
 			)
 			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ALL);
 
