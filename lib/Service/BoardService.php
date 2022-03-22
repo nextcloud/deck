@@ -521,7 +521,7 @@ class BoardService {
 		$acl->setPermissionManage($manage);
 		$newAcl = $this->aclMapper->insert($acl);
 
-		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE, [], $this->userId);
 		$this->notificationHelper->sendBoardShared((int)$boardId, $acl);
 		$this->boardMapper->mapAcl($newAcl);
 		$this->changeHelper->boardChanged($boardId);
@@ -686,17 +686,18 @@ class BoardService {
 			$previousOwner = $board->getOwner();
 			$this->clearBoardFromCache($board);
 			$this->aclMapper->deleteParticipantFromBoard($boardId, Acl::PERMISSION_TYPE_USER, $newOwner);
+			if (!$changeContent) {
+				try {
+					$this->addAcl($boardId, Acl::PERMISSION_TYPE_USER, $previousOwner, true, true, true);
+				} catch (UniqueConstraintViolationException $e) {
+				}
+			}
 			$this->boardMapper->transferOwnership($previousOwner, $newOwner, $boardId);
 
 			// Optionally also change user assignments and card owner information
 			if ($changeContent) {
 				$this->assignedUsersMapper->remapAssignedUser($boardId, $previousOwner, $newOwner);
 				$this->cardMapper->remapCardOwner($boardId, $previousOwner, $newOwner);
-			} else {
-				try {
-					$this->addAcl($boardId, Acl::PERMISSION_TYPE_USER, $previousOwner, true, true, true);
-				} catch (UniqueConstraintViolationException $e) {
-				}
 			}
 			\OC::$server->getDatabaseConnection()->commit();
 			return $this->boardMapper->find($boardId);
