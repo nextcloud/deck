@@ -131,7 +131,7 @@ export default {
 		},
 		activeBoards() {
 			return this.$store.getters.boards.filter((item) => item.deletedAt === 0 && item.archived === false)
-		}
+		},
 	},
 	methods: {
 		openCard() {
