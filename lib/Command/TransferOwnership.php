@@ -2,7 +2,9 @@
 
 namespace OCA\Deck\Command;
 
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\PermissionService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -13,12 +15,16 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 final class TransferOwnership extends Command {
 	protected $boardService;
+	protected $boardMapper;
+	protected $permissionService;
 	protected $questionHelper;
 
-	public function __construct(BoardService $boardService, QuestionHelper $questionHelper) {
+	public function __construct(BoardService $boardService, BoardMapper $boardMapper, PermissionService $permissionService, QuestionHelper $questionHelper) {
 		parent::__construct();
 
 		$this->boardService = $boardService;
+		$this->boardMapper = $boardMapper;
+		$this->permissionService = $permissionService;
 		$this->questionHelper = $questionHelper;
 	}
 
@@ -57,7 +63,15 @@ final class TransferOwnership extends Command {
 
 		$remapAssignment = $input->getOption('remap');
 
-		$board = $boardId ? $this->boardService->find($boardId) : null;
+		$this->boardService->setUserId($owner);
+		$this->permissionService->setUserId($owner);
+
+		try {
+			$board = $boardId ? $this->boardMapper->find($boardId) : null;
+		} catch (\Exception $e) {
+			$output->writeln("Could not find a board for the provided id.");
+			return 1;
+		}
 
 		if ($boardId !== null && $board->getOwner() !== $owner) {
 			$output->writeln("$owner is not the owner of the board $boardId (" . $board->getTitle() . ")");

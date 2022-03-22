@@ -161,10 +161,6 @@ class BoardController extends ApiController {
 
 	/**
 	 * @NoAdminRequired
-	 * @param $boardId
-	 * @param $owner
-	 * @param $newOwner
-	 * * @return null|void
 	 */
 	public function transferOwner(int $boardId, string $newOwner): DataResponse {
 		if ($this->permissionService->userIsBoardOwner($boardId, $this->userId)) {
