@@ -200,7 +200,7 @@ export default {
 		},
 		clickTransferOwner(newOwner) {
 			OC.dialogs.confirmDestructive(
-				t('deck', 'Are you sure you want to transfer the board {title} for {user} ?', { title: this.board.title, user: newOwner }),
+				t('deck', 'Are you sure you want to transfer the board {title} for {user}?', { title: this.board.title, user: newOwner }),
 				t('deck', 'Transfer the board.'),
 				{
 					type: OC.dialogs.YES_NO_BUTTONS,
