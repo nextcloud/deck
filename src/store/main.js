@@ -26,7 +26,7 @@ import { loadState } from '@nextcloud/initial-state'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
-import { generateOcsUrl } from '@nextcloud/router'
+import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 import { BoardApi } from '../services/BoardApi'
 import actions from './actions'
 import stack from './stack'
@@ -485,6 +485,12 @@ export default new Vuex.Store({
 					commit('deleteAclFromCurrentBoard', acl)
 					dispatch('loadBoardById', acl.boardId)
 				})
+		},
+		async transferOwnership({ commit }, { boardId, owner, newOwner }) {
+			await axios.put(generateUrl(`apps/deck/boards/${boardId}/transferOwner`), {
+				owner,
+				newOwner,
+			})
 		},
 	},
 })

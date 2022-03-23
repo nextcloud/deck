@@ -241,6 +241,7 @@ class PermissionService {
 		if (array_key_exists((string) $boardId, $this->users) && !$refresh) {
 			return $this->users[(string) $boardId];
 		}
+
 		try {
 			$board = $this->boardMapper->find($boardId);
 		} catch (DoesNotExistException $e) {
@@ -331,5 +332,14 @@ class PermissionService {
 			return [];
 		}
 		return $groups;
+	}
+
+	/**
+	 * Set a different user than the current one, e.g. when no user is available in occ
+	 *
+	 * @param string $userId
+	 */
+	public function setUserId(string $userId): void {
+		$this->userId = $userId;
 	}
 }
