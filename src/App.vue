@@ -171,6 +171,8 @@ export default {
 
 	.modal-wrapper--normal .modal-container{
 		width: 900px !important;
+		height: 800px !important;
+		overflow-y: hidden !important;
 	}
 
 </style>

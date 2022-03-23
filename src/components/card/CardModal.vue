@@ -21,35 +21,37 @@
   -->
 
 <template>
-	<div v-if="currentCard" class="container">
-		<div class="top">
-			<h1 class="top-title">
-				{{ currentCard.title }}
-			</h1>
-			<p class="top-modified">
-				{{ t('deck', 'Modified') }}: {{ currentCard.lastModified | fromNow }}. {{ t('deck', 'Created') }} {{ currentCard.createdAt | fromNow }}
-			</p>
-		</div>
-		<div class="tabs">
-			<div class="tab members" :class="{active: activeTabs.includes('members')}" @click="changeActiveTab('members')">
-				<i class="icon-user icon" />
-				{{ t('deck', 'Members') }}
+	<div v-if="currentCard" ref="modalContainer" class="container">
+		<div :class="{defaultTop: scrollPosition < 100, fixedTop: scrollPosition > 100}">
+			<div class="top">
+				<h1 class="top-title">
+					{{ currentCard.title }}
+				</h1>
+				<p class="top-modified">
+					{{ t('deck', 'Modified') }}: {{ currentCard.lastModified | fromNow }}. {{ t('deck', 'Created') }} {{ currentCard.createdAt | fromNow }}
+				</p>
 			</div>
-			<div class="tab tags" :class="{active: activeTabs.includes('tags')}" @click="changeActiveTab('tags')">
-				<i class="icon icon-tag" />
-				{{ t('deck', 'Tags') }}
-			</div>
-			<div class="tab due-date" :class="{active: activeTabs.includes('duedate')}" @click="changeActiveTab('duedate')">
-				<i class="icon icon-calendar-dark" />
-				{{ t('deck', 'Due date') }}
-			</div>
-			<div class="tab project" :class="{active: activeTabs.includes('project')}" @click="changeActiveTab('project')">
-				<i class="icon icon-deck" />
-				{{ t('deck', 'Project') }}
-			</div>
-			<div class="tab attachments" :class="{active: activeTabs.includes('attachment')}" @click="changeActiveTab('attachment')">
-				<i class="icon-attach icon icon-attach-dark" />
-				{{ t('deck', 'Attachments') }}
+			<div class="tabs">
+				<div class="tab members" :class="{active: activeTabs.includes('members')}" @click="changeActiveTab('members')">
+					<i class="icon-user icon" />
+					{{ t('deck', 'Members') }}
+				</div>
+				<div class="tab tags" :class="{active: activeTabs.includes('tags')}" @click="changeActiveTab('tags')">
+					<i class="icon icon-tag" />
+					{{ t('deck', 'Tags') }}
+				</div>
+				<div class="tab due-date" :class="{active: activeTabs.includes('duedate')}" @click="changeActiveTab('duedate')">
+					<i class="icon icon-calendar-dark" />
+					{{ t('deck', 'Due date') }}
+				</div>
+				<div class="tab project" :class="{active: activeTabs.includes('project')}" @click="changeActiveTab('project')">
+					<i class="icon icon-deck" />
+					{{ t('deck', 'Project') }}
+				</div>
+				<div class="tab attachments" :class="{active: activeTabs.includes('attachment')}" @click="changeActiveTab('attachment')">
+					<i class="icon-attach icon icon-attach-dark" />
+					{{ t('deck', 'Attachments') }}
+				</div>
 			</div>
 		</div>
 		<div class="content">
@@ -174,6 +176,7 @@ export default {
 			currentTab: null,
 			activeTabs: [],
 			showDetails: false,
+			scrollPosition: null,
 		}
 	},
 	computed: {
@@ -214,8 +217,12 @@ export default {
 		},
 	},
 	mounted() {
+		this.$nextTick(() => {
+			this.$refs.modalContainer.addEventListener('scroll', this.onScroll)
+		})
 		this.loadComments()
 	},
+
 	methods: {
 		cancelReply() {
 			this.$store.dispatch('setReplyTo', null)
@@ -266,19 +273,15 @@ export default {
 			this.titleEditable = false
 			this.$store.dispatch('updateCardTitle', { ...this.currentCard, title: this.titleEditing })
 		},
-
 		closeSidebar() {
 			this.$router.push({ name: 'board' })
 		},
-
 		showModal() {
 			this.$store.dispatch('setConfig', { cardDetailsInModal: true })
 		},
-
 		closeModal() {
 			this.$store.dispatch('setConfig', { cardDetailsInModal: false })
 		},
-
 		changeActiveTab(tab) {
 			this.currentTab = tab
 			this.activeTabs = this.activeTabs.filter((item) => !['project', 'attachment'].includes(item))
@@ -288,12 +291,14 @@ export default {
 			}
 
 		},
-
 		removeActiveTab(tab) {
 			const index = this.activeTabs.indexOf(tab)
 			if (index > -1) {
 				this.activeTabs = this.activeTabs.splice(index, 1)
 			}
+		},
+		onScroll() {
+			this.scrollPosition = this.$refs.modalContainer.scrollTop
 		},
 	},
 }
@@ -358,6 +363,13 @@ export default {
 		font-weight: bold;
 	}
 	margin-top: 100px;
+	padding-left: 20px !important;
+	padding-right: 20px !important;
+}
+
+.content{
+	padding-left: 20px;
+	padding-right: 20px;
 }
 
 .comments {
@@ -375,10 +387,12 @@ export default {
 }
 
 .container {
-	padding: 20px;
+	overflow-y: scroll;
+	height: 800px;
 }
 
 .top {
+	padding: 20px 20px 0px 20px;
 	&-title {
 		color: black;
 		font-size: 20px;
@@ -391,6 +405,8 @@ export default {
 }
 
 .tabs {
+	padding-left: 20px;
+	padding-right: 20px;
 	margin-top: 20px;
 	margin-bottom: 5px;
 	display: flex;
@@ -431,5 +447,14 @@ export default {
 .active {
 	color: #409eff;
 	background-color: #ecf5ff;
+}
+
+.fixedTop {
+	position: sticky;
+	top: 0;
+	background-color: #ffffff;
+	z-index: 1000;
+	margin-top: 0px;
+	padding-bottom: 5px;
 }
 </style>
