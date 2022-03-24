@@ -75,7 +75,7 @@ export default {
 			const subject = this.activity.subject_rich[0]
 			const parameters = JSON.parse(JSON.stringify(this.activity.subject_rich[1]))
 			if (parameters.after && typeof parameters.after.id === 'string' && parameters.after.id.startsWith('dt:')) {
-				const dateTime = parameters.after.id.substr(3)
+				const dateTime = parameters.after.id.slice(3)
 				parameters.after.name = moment(dateTime).format('L LTS')
 			}
 
