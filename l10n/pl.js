@@ -173,6 +173,7 @@ OC.L10N.register(
     "Owner" : "Właściciel",
     "Delete" : "Usuń",
     "Failed to create share with {displayName}" : "Nie udało się utworzyć udostępnienia dla {displayName}",
+    "Are you sure you want to transfer the board {title} for {user}?" : "Czy na pewno chcesz przenieść tablicę {title} dla {user}?",
     "Transfer the board." : "Przeniesienie tablicy.",
     "Transfer" : "Przenieś",
     "Transfer the board for {user} successfully" : "Przeniesienie tablicy dla {user} pomyślne",

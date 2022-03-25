@@ -173,6 +173,7 @@ OC.L10N.register(
     "Owner" : "所有者",
     "Delete" : "刪除",
     "Failed to create share with {displayName}" : "無法為 {displayName} 創建分享",
+    "Are you sure you want to transfer the board {title} for {user}?" : "您想要轉移 {user} 的面板 {title} 嗎？",
     "Transfer the board." : "轉移面板。",
     "Transfer" : "轉移",
     "Transfer the board for {user} successfully" : "轉移 {user} 的面板成功",
