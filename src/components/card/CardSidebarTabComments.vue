@@ -1,19 +1,16 @@
 <template>
 	<div>
-		<div class="comment--header">
-			<Avatar :user="currentUser.uid" />
-			<span class="has-tooltip username">
-				{{ currentUser.displayName }}
-			</span>
+		<div class="comment-wrapper">
+			<div class="comment--header">
+				<Avatar :user="currentUser.uid" />
+			</div>
+			<CommentItem v-if="replyTo"
+				:comment="replyTo"
+				:reply="true"
+				:preview="true"
+				@cancel="cancelReply" />
+			<CommentForm v-model="newComment" @submit="createComment" />
 		</div>
-
-		<CommentItem v-if="replyTo"
-			:comment="replyTo"
-			:reply="true"
-			:preview="true"
-			@cancel="cancelReply" />
-		<CommentForm v-model="newComment" @submit="createComment" />
-
 		<ul v-if="getCommentsForCard(card.id).length > 0" id="commentsFeed">
 			<CommentItem v-for="comment in getCommentsForCard(card.id)"
 				:key="comment.id"
