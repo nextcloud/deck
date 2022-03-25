@@ -171,6 +171,7 @@
     "Owner" : "Sahibi",
     "Delete" : "Sil",
     "Failed to create share with {displayName}" : "{displayName} ile paylaşılamadı",
+    "Are you sure you want to transfer the board {title} for {user}?" : "{title} panosunu {user} kullanıcısına aktarmak istediğinize emin misiniz?",
     "Transfer the board." : "Panoyu aktar.",
     "Transfer" : "Aktar",
     "Transfer the board for {user} successfully" : "Pano {user} kullanıcısına aktarıldı",
