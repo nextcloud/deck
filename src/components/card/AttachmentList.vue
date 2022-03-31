@@ -234,6 +234,7 @@ export default {
 						shareWith: '' + this.cardId,
 					}).then(() => {
 						this.$store.dispatch('fetchAttachments', this.cardId)
+						this.$store.commit('cardIncreaseAttachmentCount', this.cardId)
 					})
 				})
 		},
