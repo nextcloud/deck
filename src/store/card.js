@@ -264,6 +264,9 @@ export default {
 				Vue.set(state.cards[existingIndex], 'attachmentCount', state.cards[existingIndex].attachmentCount - 1)
 			}
 		},
+		addNewCard(state, card) {
+			state.cards.push(card)
+		},
 	},
 	actions: {
 		async addCard({ commit }, card) {
