@@ -53,8 +53,8 @@
 			</div>
 
 			<div class="dashboard-column">
-				<h3>{{ t('deck', 'This week') }}</h3>
-				<div v-for="card in cardsByDueDate.thisWeek" :key="card.id">
+				<h3>{{ t('deck', 'Next 7 days') }}</h3>
+				<div v-for="card in cardsByDueDate.nextSevenDays" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
@@ -160,7 +160,7 @@ export default {
 				overdue: [],
 				today: [],
 				tomorrow: [],
-				thisWeek: [],
+				nextSevenDays: [],
 				later: [],
 			}
 			dataset.forEach(card => {
@@ -180,7 +180,7 @@ export default {
 						all.tomorrow.push(card)
 					}
 					if (hours >= (48 - currentHour) && hours < (24 * 7)) {
-						all.thisWeek.push(card)
+						all.nextSevenDays.push(card)
 					}
 					if (hours >= (24 * 7)) {
 						all.later.push(card)
