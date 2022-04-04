@@ -45,7 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		label: t('deck', 'Create a card'),
 		icon: 'icon-deck',
 		async callback({ message: { message, messageParameters, actorDisplayName }, metadata: { name: conversationName, token: conversationToken } }) {
-			const parsedMessage = message.replace(/{[a-z0-9-_]+}/gi, function (parameter) {
+			const parsedMessage = message.replace(/{[a-z0-9-_]+}/gi, function(parameter) {
 				const parameterName = parameter.substr(1, parameter.length - 2)
 
 				if (messageParameters[parameterName]) {
@@ -61,7 +61,7 @@ window.addEventListener('DOMContentLoaded', () => {
 				}
 
 				// Do not replace so insert with curly braces again
-				return parameter;
+				return parameter
 			})
 
 			const shortenedMessageCandidate = parsedMessage.replace(/^(.{255}[^\s]*).*/, '$1')
