@@ -47,9 +47,11 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IL10N;
+use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
+use OCA\Deck\Event\CardCreatedEvent;
 use OCP\IUserManager;
 use OCA\Deck\BadRequestException;
 use OCP\IURLGenerator;
@@ -673,13 +675,37 @@ class BoardService {
 
 		$stacks = $this->stackMapper->findAll($id);
 		foreach ($stacks as $stack) {
-			$newStack = new Stack();
-			$newStack->setTitle($stack->getTitle());
-			$newStack->setBoardId($newBoard->getId());
-			$this->stackMapper->insert($newStack);
+			$this->cloneStack($stack, $newBoard->getId());
 		}
 
 		return $newBoard;
+	}
+
+	private function cloneStack($stack, $newBoardId)
+	{
+		$newStack = new Stack();
+		$newStack->setTitle($stack->getTitle());
+		$newStack->setBoardId($newBoardId);
+		$insertedStack = $this->stackMapper->insert($newStack);
+		$cards = $this->cardMapper->findAll($stack->getId());
+
+		foreach ($cards as $card) {
+			$newCard = new Card();
+			$newCard->setTitle($card->getTitle());
+			$newCard->setStackId($insertedStack->getId());
+			$newCard->setType($card->getType());
+			$newCard->setOrder($card->getOrder());
+			$newCard->setOwner($card->getOwner());
+			$newCard->setDescription($card->getDescription());
+			$newCard->setDuedate($card->getDuedate());
+			$newCard = $this->cardMapper->insert($newCard);
+
+			$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_CREATE);
+			$this->changeHelper->cardChanged($newCard->getId(), false);
+			$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($newCard));
+		}
+
+		return $stack;
 	}
 
 	public function transferBoardOwnership(int $boardId, string $newOwner, bool $changeContent = false): Board {
