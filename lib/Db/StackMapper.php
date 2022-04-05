@@ -25,6 +25,7 @@ namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\Db\IMapperException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\IDBConnection;
 
@@ -46,6 +47,24 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 		$sql = 'SELECT * FROM `*PREFIX*deck_stacks` ' .
 			'WHERE `id` = ?';
 		return $this->findEntity($sql, [$id]);
+	}
+
+	/**
+	 * @param $cardId
+	 * @return Stack|null
+	 */
+	public function findStackFromCardId($cardId): ?Stack {
+		$sql = <<<SQL
+SELECT s.* 
+FROM `*PREFIX*deck_stacks` as `s`
+INNER JOIN `*PREFIX*deck_cards` as `c` ON s.id = c.stack_id
+WHERE c.id = ?
+SQL;
+		try {
+			return $this->findEntity($sql, [$cardId]);
+		} catch (IMapperException $e) {
+			return null;
+		}
 	}
 
 

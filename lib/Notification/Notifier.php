@@ -101,14 +101,11 @@ class Notifier implements INotifier {
 		switch ($notification->getSubject()) {
 			case 'card-assigned':
 				$cardId = $notification->getObjectId();
-				$boardId = $this->cardMapper->findBoardId($cardId);
+				$stack = $this->stackMapper->findStackFromCardId($cardId);
+				$boardId = $stack ? $stack->getBoardId() : null;
 				if (!$boardId) {
 					throw new AlreadyProcessedException();
 				}
-
-				$card = $this->cardMapper->find($cardId);
-				$stackId = $card->getStackId();
-				$stack = $this->stackMapper->find($stackId);
 
 				$initiator = $this->userManager->get($params[2]);
 				if ($initiator !== null) {
@@ -147,14 +144,11 @@ class Notifier implements INotifier {
 				break;
 			case 'card-overdue':
 				$cardId = $notification->getObjectId();
-				$boardId = $this->cardMapper->findBoardId($cardId);
+				$stack = $this->stackMapper->findStackFromCardId($cardId);
+				$boardId = $stack ? $stack->getBoardId() : null;
 				if (!$boardId) {
 					throw new AlreadyProcessedException();
 				}
-
-				$card = $this->cardMapper->find($cardId);
-				$stackId = $card->getStackId();
-				$stack = $this->stackMapper->find($stackId);
 
 				$notification->setParsedSubject(
 					(string) $l->t('The card "%s" on "%s" has reached its due date.', $params)
@@ -182,14 +176,11 @@ class Notifier implements INotifier {
 				break;
 			case 'card-comment-mentioned':
 				$cardId = $notification->getObjectId();
-				$boardId = $this->cardMapper->findBoardId($cardId);
+				$stack = $this->stackMapper->findStackFromCardId($cardId);
+				$boardId = $stack ? $stack->getBoardId() : null;
 				if (!$boardId) {
 					throw new AlreadyProcessedException();
 				}
-
-				$card = $this->cardMapper->find($cardId);
-				$stackId = $card->getStackId();
-				$stack = $this->stackMapper->find($stackId);
 
 				$initiator = $this->userManager->get($params[2]);
 				if ($initiator !== null) {
