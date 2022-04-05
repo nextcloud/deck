@@ -181,6 +181,7 @@ class StackService {
 				if (array_key_exists($card->id, $labels)) {
 					$cards[$cardIndex]->setLabels($labels[$card->id]);
 				}
+				$cards[$cardIndex]->setAttachmentCount($this->attachmentService->count($card->getId()));
 			}
 			$stacks[$stackIndex]->setCards($cards);
 		}
