@@ -62,9 +62,10 @@ WHERE c.id = ?
 SQL;
 		try {
 			return $this->findEntity($sql, [$cardId]);
-		} catch (IMapperException $e) {
-			return null;
+		} catch (MultipleObjectsReturnedException|DoesNotExistException $e) {
 		}
+
+		return null;
 	}
 
 
