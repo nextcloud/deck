@@ -24,6 +24,7 @@
 
 namespace OCA\Deck\Cron;
 
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\BoardMapper;
@@ -40,7 +41,8 @@ class DeleteCron extends TimedJob {
 	/** @var AttachmentMapper */
 	private $attachmentMapper;
 
-	public function __construct(BoardMapper $boardMapper, AttachmentService $attachmentService, AttachmentMapper $attachmentMapper) {
+	public function __construct(ITimeFactory $time, BoardMapper $boardMapper, AttachmentService $attachmentService, AttachmentMapper $attachmentMapper) {
+		parent::__construct($time);
 		$this->boardMapper = $boardMapper;
 		$this->attachmentService = $attachmentService;
 		$this->attachmentMapper = $attachmentMapper;

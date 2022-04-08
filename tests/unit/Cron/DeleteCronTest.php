@@ -30,24 +30,30 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\Service\AttachmentService;
 use OCA\Deck\Service\IAttachmentService;
+use OCP\AppFramework\Utility\ITimeFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use Test\TestCase;
 
-class DeleteCronTest extends \Test\TestCase {
+class DeleteCronTest extends TestCase {
 
-	/** @var BoardMapper|\PHPUnit\Framework\MockObject\MockObject */
+	/** @var ITimeFactory|MockObject */
+	private $timeFactory;
+	/** @var BoardMapper|MockObject */
 	protected $boardMapper;
-	/** @var AttachmentService|\PHPUnit\Framework\MockObject\MockObject */
+	/** @var AttachmentService|MockObject */
 	private $attachmentService;
-	/** @var AttachmentMapper|\PHPUnit\Framework\MockObject\MockObject */
+	/** @var AttachmentMapper|MockObject */
 	private $attachmentMapper;
 	/** @var DeleteCron */
 	protected $deleteCron;
 
 	public function setUp(): void {
 		parent::setUp();
+		$this->timeFactory = $this->createMock(ITimeFactory::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->attachmentService = $this->createMock(AttachmentService::class);
 		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
-		$this->deleteCron = new DeleteCron($this->boardMapper, $this->attachmentService, $this->attachmentMapper);
+		$this->deleteCron = new DeleteCron($this->timeFactory, $this->boardMapper, $this->attachmentService, $this->attachmentMapper);
 	}
 
 	protected function getBoard($id) {
