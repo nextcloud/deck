@@ -114,7 +114,7 @@ class CardService {
 		$countComments = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId());
 		$card->setCommentsUnread($countUnreadComments);
 		$card->setCommentsCount($countComments);
-		
+
 		$stack = $this->stackMapper->find($card->getStackId());
 		$board = $this->boardService->find($stack->getBoardId());
 		$card->setRelatedStack($stack);
@@ -224,7 +224,7 @@ class CardService {
 		$card->setDescription($description);
 		$card->setDuedate($duedate);
 		$card = $this->cardMapper->insert($card);
-		
+
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE);
 		$this->changeHelper->cardChanged($card->getId(), false);
 		$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($card));
@@ -253,7 +253,7 @@ class CardService {
 		$card = $this->cardMapper->find($id);
 		$card->setDeletedAt(time());
 		$this->cardMapper->update($card);
-		
+
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_DELETE);
 		$this->notificationHelper->markDuedateAsRead($card);
 		$this->changeHelper->cardChanged($card->getId(), false);
@@ -338,7 +338,7 @@ class CardService {
 		$resetDuedateNotification = false;
 		if (
 			$card->getDuedate() === null ||
-			(new \DateTime($card->getDuedate())) != (new \DateTime($changes->getBefore()->getDuedate()))
+			(new \DateTime($card->getDuedate())) != (new \DateTime($changes->getBefore()->getDuedate() ?? ''))
 		) {
 			$card->setNotified(false);
 			$resetDuedateNotification = true;

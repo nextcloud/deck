@@ -50,7 +50,7 @@ class Card extends RelationalEntity {
 	protected $deletedAt = 0;
 	protected $commentsUnread = 0;
 	protected $commentsCount = 0;
-	
+
 	protected $relatedStack = null;
 	protected $relatedBoard = null;
 
@@ -78,7 +78,7 @@ class Card extends RelationalEntity {
 		$this->addRelation('commentsUnread');
 		$this->addRelation('commentsCount');
 		$this->addResolvable('owner');
-		
+
 		$this->addRelation('relatedStack');
 		$this->addRelation('relatedBoard');
 	}
@@ -98,22 +98,21 @@ class Card extends RelationalEntity {
 		return $dt->format('c');
 	}
 
-	public function jsonSerialize() {
+	public function jsonSerialize(): array {
 		$json = parent::jsonSerialize();
 		$json['overdue'] = self::DUEDATE_FUTURE;
-		$due = strtotime($this->duedate);
-
-		$today = new DateTime();
-		$today->setTime(0, 0);
-
-		$match_date = new DateTime($this->duedate);
-
-		$match_date->setTime(0, 0);
-
-		$diff = $today->diff($match_date);
-		$diffDays = (integer) $diff->format('%R%a'); // Extract days count in interval
-
+		$due = $this->duedate ? strtotime($this->duedate) : false;
 		if ($due !== false) {
+			$today = new DateTime();
+			$today->setTime(0, 0);
+
+			$match_date = new DateTime($this->duedate);
+
+			$match_date->setTime(0, 0);
+
+			$diff = $today->diff($match_date);
+			$diffDays = (integer) $diff->format('%R%a'); // Extract days count in interval
+
 			if ($diffDays === 1) {
 				$json['overdue'] = self::DUEDATE_NEXT;
 			}
