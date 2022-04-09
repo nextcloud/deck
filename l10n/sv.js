@@ -270,7 +270,6 @@ OC.L10N.register(
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Är du säker på att du vill radera tavla {title}? Detta kommer att radera all information från denna tavla.",
     "Delete the board?" : "Ta bort tavlan?",
     "Loading filtered view" : "Laddar filtrerad vy",
-    "This week" : "Denna vecka",
     "No due" : "Inget slut",
     "Search for {searchQuery} in all boards" : "Sök efter {searchQuery} i alla tavlor",
     "No results found" : "Inga resultat funna",
@@ -290,6 +289,7 @@ OC.L10N.register(
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck är en kanban-liknande projekt- och organiseringsapp för arbetsgrupper i Nextcloud.\n\n\n- 📥 Lägg till uppgifter på kort och ordna dem\n- 📄 Skriv anteckningar i markdown\n- 🔖 Tilldela etiketter för organisering\n- 👥 Dela med arbetsgruppen, vänner eller familj\n- 📎 Bifoga filer och bädda in dem i markdown-anteckningarna\n- 💬 Diskutera i arbetsgruppen genom kommentarer\n- ⚡ Håll koll på ändringar i aktivitetsflödet\n- 🚀 Börja organisera din arbetsgrupp nu!",
     "Creating the new card…" : "Skapar det nya kortet...",
     "\"{card}\" was added to \"{board}\"" : "\"{card}\" lades till i \"{board}\"",
-    "(circle)" : "(cirkel)"
+    "(circle)" : "(cirkel)",
+    "This week" : "Denna vecka"
 },
 "nplurals=2; plural=(n != 1);");
