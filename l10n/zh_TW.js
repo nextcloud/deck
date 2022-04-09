@@ -276,7 +276,6 @@ OC.L10N.register(
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "您確定要刪除佈告欄 {title} 嗎？這將會刪除所有此佈告欄的資料。",
     "Delete the board?" : "刪除佈告欄？",
     "Loading filtered view" : "正在載入過濾的檢視",
-    "This week" : "本週",
     "No due" : "無到期日",
     "Search for {searchQuery} in all boards" : "在所有佈告欄中搜尋 {searchQuery}",
     "No results found" : "找不到結果",
@@ -296,6 +295,7 @@ OC.L10N.register(
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck 是一套看板式組織工具，提供與 Nextcloud 整合的個人規劃與團隊專案組織功能。\n\n\n- 📥 將您的工作項目新增到卡片中，並將它們按順序排列\n- 📄 以 Markdown 編寫額外的註釋\n- 🔖 分配標籤讓組織更方便\n- 👥 與您的團隊、朋友與家人分享\n- 📎 附上檔案並將其嵌入到您的 Markdown 描述中\n- 💬 使用留言與您的團隊討論\n- ⚡ 追蹤活動流程中的變動\n- 🚀 整理好您的專案",
     "Creating the new card…" : "正在建立新卡片……",
     "\"{card}\" was added to \"{board}\"" : "「{card}」已新增至「{board}」",
-    "(circle)" : "(circle)"
+    "(circle)" : "(circle)",
+    "This week" : "本週"
 },
 "nplurals=1; plural=0;");
