@@ -26,7 +26,7 @@ OC.L10N.register(
     "Update" : "යාවත්කාල",
     "Description" : "විස්තරය",
     "seconds ago" : "තත්පර කිහිපයකට පෙර",
-    "This week" : "මෙම සතිය",
-    "Share" : "බෙදාගන්න"
+    "Share" : "බෙදාගන්න",
+    "This week" : "මෙම සතිය"
 },
 "nplurals=2; plural=(n != 1);");

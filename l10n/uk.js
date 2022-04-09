@@ -140,10 +140,10 @@ OC.L10N.register(
     "Board {0} deleted" : "Дошку {0} вилучено",
     "An error occurred" : "Виникла помилка",
     "Delete the board?" : "Вилучити дошку?",
-    "This week" : "Цього тижня",
     "Link to a board" : "Прив'язати до дошки",
     "Link to a card" : "Прив'язати до картки",
     "Something went wrong" : "От халепа!",
-    "Maximum file size of {size} exceeded" : "Досягнуто максимальний розмір файлу {size}"
+    "Maximum file size of {size} exceeded" : "Досягнуто максимальний розмір файлу {size}",
+    "This week" : "Цього тижня"
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");

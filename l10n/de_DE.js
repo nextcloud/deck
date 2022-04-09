@@ -276,7 +276,6 @@ OC.L10N.register(
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Möchten Sie wirklich dieses Board {title} mit all seinen Daten löschen?",
     "Delete the board?" : "Das Board löschen?",
     "Loading filtered view" : "Lade gefilterte Ansicht",
-    "This week" : "Diese Woche",
     "No due" : "Kein Fälligkeitsdatum",
     "Search for {searchQuery} in all boards" : "Suche nach {searchQuery} in allen Boards",
     "No results found" : "Keine Ergebnisse gefunden",
@@ -296,6 +295,7 @@ OC.L10N.register(
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck ist ein Organisationstool im Kanban-Stil für die persönliche Planung und Projektorganisation von Teams, die in Nextcloud integriert sind.\n\n\n- 📥 Fügen Sie Ihre Aufgaben zu den Karten hinzu und ordnen Sie diese\n- 📄 Zusätzliche Hinweise in der Abschrift notieren\n- 🔖 Zuweisen von Schlagworten für noch bessere Organisation\n- 👥 Teilen Sie mit Ihrem Team, Ihren Freunden oder Ihrer Familie\n- 📎 Fügen Sie Dateien hinzu und verwende diese in Ihren Markdown-Beschreibungen\n- 💬 Diskutieren Sie mit Ihrem Team mit Kommentaren\n- ⚡ Behalten Sie Überblick über Änderungen mit dem Aktivitäten-Stream\n- 🚀 Organisieren Sie Ihr Projekt",
     "Creating the new card…" : "Neue Karte wird erstellt …",
     "\"{card}\" was added to \"{board}\"" : "\"{card}\" wurde \"{board}\" hinzugefügt",
-    "(circle)" : "(Kreis)"
+    "(circle)" : "(Kreis)",
+    "This week" : "Diese Woche"
 },
 "nplurals=2; plural=(n != 1);");

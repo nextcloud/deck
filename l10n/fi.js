@@ -231,7 +231,6 @@ OC.L10N.register(
     "No reminder" : "Ei muistutusta",
     "An error occurred" : "Tapahtui virhe",
     "Delete the board?" : "Poistetaanko tämä taulu?",
-    "This week" : "Tällä viikolla",
     "Search for {searchQuery} in all boards" : "Hae ehtoja {searchQuery} kaikilta tauluilta",
     "No results found" : "Ei tuloksia",
     "No upcoming cards" : "Ei tulevia kortteja",
@@ -245,6 +244,7 @@ OC.L10N.register(
     "Error creating the share" : "Virhe jakoa luotaessa",
     "Share" : "Jaa",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Pakka on Nextcloudissa työtään hallinnoivien tiimien käyttöön tarkoitettu kanban-tyyppinen organisointityökalu.\n\n\n- 📥 Lisää tehtävät korteille ja järjestele ne mielesi mukaan\n- 📄 Kirjoita lisätietoja markdown-kielellä\n- 🔖 Määritä tunnisteita helpottaaksesi hallintaa\n- 👥 Jaa tiimin, perheen tai kavereiden kanssa\n- 📎 Lisää tiedostoja ja upota ne lisätietoihin\n- 💬 Keskustele tiimisi kanssa kommenteilla\n- ⚡ Pidä kirjaa muutoksista tapahtumavirran avulla\n- 🚀 Pidä projektisi hallinnassa",
-    "(circle)" : "(piiri)"
+    "(circle)" : "(piiri)",
+    "This week" : "Tällä viikolla"
 },
 "nplurals=2; plural=(n != 1);");
