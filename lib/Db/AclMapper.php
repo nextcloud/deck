@@ -34,7 +34,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	 * @param IDBConnection $db
 	 */
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'deck_board_acl', Board::class);
+		parent::__construct($db, 'deck_board_acl', Acl::class);
 	}
 
 	/**
@@ -46,7 +46,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	 */
 	public function findAll($boardId, $limit = null, $offset = null) {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
+		$qb->select('id', 'board_id', 'type', 'participant', 'permission_edit', 'permission_share', 'permission_manage')
 			->from('deck_board_acl')
 			->where($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
 			->setMaxResults($limit)
@@ -63,11 +63,10 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	 */
 	public function isOwner($userId, $aclId): bool {
 		$qb = $this->db->getQueryBuilder();
-
-		$qb->select('owner')
-			->from($this->getTableName())
+		$qb->select('*')
+			->from($this->getTableName(), 'acl')
 			->innerJoin('acl', 'deck_boards','b', 'acl.board_id = b.id')
-			->where($qb->expr()->eq('owner.id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_INT)))
+			->where($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
 			->andWhere($qb->expr()->eq('acl.id', $qb->createNamedParameter($aclId, IQueryBuilder::PARAM_INT)));
 
 		return $qb->executeQuery()->rowCount() > 0;
