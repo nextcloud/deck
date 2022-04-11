@@ -54,10 +54,7 @@ class ScheduledNoificationsTest extends \Test\TestCase {
 		$this->cardMapper->expects($this->once())
 			->method('findOverdue')
 			->willReturn($cards);
-		$this->notificationHelper->expects($this->at(0))
-			->method('sendCardDuedate')
-			->with($c1);
-		$this->notificationHelper->expects($this->at(1))
+		$this->notificationHelper->expects($this->exactly(2))
 			->method('sendCardDuedate')
 			->with($c1);
 		$this->scheduledNotifications->run(null);

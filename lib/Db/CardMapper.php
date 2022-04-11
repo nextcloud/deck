@@ -564,4 +564,47 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			return null;
 		});
 	}
+
+	public function transferOwnership(string $ownerId, string $newOwnerId, int $boardId = null): void {
+		$params = [
+			'owner' => $ownerId,
+			'newOwner' => $newOwnerId
+		];
+		$sql = "UPDATE `*PREFIX*{$this->tableName}`  SET `owner` = :newOwner WHERE `owner` = :owner";
+		$stmt = $this->db->executeQuery($sql, $params);
+		$stmt->closeCursor();
+	}
+
+	public function remapCardOwner(int $boardId, string $userId, string $newUserId): void {
+		$subQuery = $this->db->getQueryBuilder();
+		$subQuery->selectAlias('c.id', 'id')
+			->from('deck_cards', 'c')
+			->innerJoin('c', 'deck_stacks', 's', 's.id = c.stack_id')
+			->where($subQuery->expr()->eq('c.owner', $subQuery->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
+			->andWhere($subQuery->expr()->eq('s.board_id', $subQuery->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->setMaxResults(1000);
+
+		$qb = $this->db->getQueryBuilder();
+		$qb->update('deck_cards')
+			->set('owner', $qb->createParameter('owner'))
+			->where($qb->expr()->in('id', $qb->createParameter('ids')));
+
+		$moreResults = true;
+		do {
+			$result = $subQuery->executeQuery();
+			$ids = array_map(function ($item) {
+				return $item['id'];
+			}, $result->fetchAll());
+
+			if (count($ids) === 0 || $result->rowCount() === 0) {
+				$moreResults = false;
+			}
+
+			$qb->setParameter('owner', $newUserId, IQueryBuilder::PARAM_STR);
+			$qb->setParameter('ids', $ids, IQueryBuilder::PARAM_INT_ARRAY);
+			$qb->executeStatement();
+		} while ($moreResults === true);
+
+		$result->closeCursor();
+	}
 }

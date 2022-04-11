@@ -25,6 +25,7 @@ namespace OCA\Deck\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 class AclMapper extends DeckMapper implements IPermissionMapper {
@@ -56,5 +57,17 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	public function findByParticipant($type, $participant): array {
 		$sql = 'SELECT * from *PREFIX*deck_board_acl WHERE type = ? AND participant = ?';
 		return $this->findEntities($sql, [$type, $participant]);
+	}
+
+	/**
+	 * @throws \OCP\DB\Exception
+	 */
+	public function deleteParticipantFromBoard(int $boardId, int $type, string $participant): void {
+		$qb = $this->db->getQueryBuilder();
+		$qb->delete('deck_board_acl')
+			->where($qb->expr()->eq('type', $qb->createNamedParameter($type, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('participant', $qb->createNamedParameter($participant, IQueryBuilder::PARAM_STR)))
+			->andWhere($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)));
+		$qb->executeStatement();
 	}
 }

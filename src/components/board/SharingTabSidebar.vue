@@ -53,6 +53,9 @@
 					<ActionCheckbox v-if="canManage" :checked="acl.permissionManage" @change="clickManageAcl(acl)">
 						{{ t('deck', 'Can manage') }}
 					</ActionCheckbox>
+					<ActionCheckbox v-if="acl.type === 0 && isCurrentUser(board.owner.uid)" :checked="acl.owner" @change="clickTransferOwner(acl.participant.uid)">
+						{{ t('deck', 'Owner') }}
+					</ActionCheckbox>
 					<ActionButton v-if="canManage" icon="icon-delete" @click="clickDeleteAcl(acl)">
 						{{ t('deck', 'Delete') }}
 					</ActionButton>
@@ -72,7 +75,7 @@ import { Avatar, Multiselect, Actions, ActionButton, ActionCheckbox } from '@nex
 import { CollectionList } from 'nextcloud-vue-collections'
 import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
-import { showError } from '@nextcloud/dialogs'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import debounce from 'lodash/debounce'
 
 export default {
@@ -97,6 +100,7 @@ export default {
 			isSearching: false,
 			addAcl: null,
 			addAclForAPI: null,
+			newOwner: null,
 		}
 	},
 	computed: {
@@ -193,6 +197,38 @@ export default {
 		},
 		clickDeleteAcl(acl) {
 			this.$store.dispatch('deleteAclFromCurrentBoard', acl)
+		},
+		clickTransferOwner(newOwner) {
+			OC.dialogs.confirmDestructive(
+				t('deck', 'Are you sure you want to transfer the board {title} for {user} ?', { title: this.board.title, user: newOwner }),
+				t('deck', 'Transfer the board.'),
+				{
+					type: OC.dialogs.YES_NO_BUTTONS,
+					confirm: t('deck', 'Transfer'),
+					confirmClasses: 'error',
+					cancel: t('deck', 'Cancel'),
+				},
+				async(result) => {
+					if (result) {
+						try {
+							this.isLoading = true
+							await this.$store.dispatch('transferOwnership', {
+								boardId: this.board.id,
+								newOwner,
+							})
+							const successMessage = t('deck', 'Transfer the board for {user} successfully', { user: newOwner })
+							showSuccess(successMessage)
+							this.$router.push({ name: 'main' })
+						} catch (e) {
+							const errorMessage = t('deck', 'Failed to transfer the board for {user}', { user: newOwner.user })
+							showError(errorMessage)
+						} finally {
+							this.isLoading = false
+						}
+					}
+				},
+				true
+			)
 		},
 	},
 }

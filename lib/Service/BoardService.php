@@ -24,12 +24,14 @@
 
 namespace OCA\Deck\Service;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignmentMapper;
+use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
@@ -69,6 +71,8 @@ class BoardService {
 	private $activityManager;
 	private $eventDispatcher;
 	private $changeHelper;
+	private $cardMapper;
+
 	private $boardsCache = null;
 	private $urlGenerator;
 
@@ -83,6 +87,7 @@ class BoardService {
 		PermissionService $permissionService,
 		NotificationHelper $notificationHelper,
 		AssignmentMapper $assignedUsersMapper,
+		CardMapper $cardMapper,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		ActivityManager $activityManager,
@@ -107,6 +112,7 @@ class BoardService {
 		$this->changeHelper = $changeHelper;
 		$this->userId = $userId;
 		$this->urlGenerator = $urlGenerator;
+		$this->cardMapper = $cardMapper;
 	}
 
 	/**
@@ -515,10 +521,13 @@ class BoardService {
 		$acl->setPermissionManage($manage);
 		$newAcl = $this->aclMapper->insert($acl);
 
-		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE, [], $this->userId);
 		$this->notificationHelper->sendBoardShared((int)$boardId, $acl);
 		$this->boardMapper->mapAcl($newAcl);
 		$this->changeHelper->boardChanged($boardId);
+
+		$board = $this->boardMapper->find($boardId);
+		$this->clearBoardFromCache($board);
 
 		// TODO: use the dispatched event for this
 		try {
@@ -670,6 +679,43 @@ class BoardService {
 		return $newBoard;
 	}
 
+	public function transferBoardOwnership(int $boardId, string $newOwner, bool $changeContent = false): Board {
+		\OC::$server->getDatabaseConnection()->beginTransaction();
+		try {
+			$board = $this->boardMapper->find($boardId);
+			$previousOwner = $board->getOwner();
+			$this->clearBoardFromCache($board);
+			$this->aclMapper->deleteParticipantFromBoard($boardId, Acl::PERMISSION_TYPE_USER, $newOwner);
+			if (!$changeContent) {
+				try {
+					$this->addAcl($boardId, Acl::PERMISSION_TYPE_USER, $previousOwner, true, true, true);
+				} catch (UniqueConstraintViolationException $e) {
+				}
+			}
+			$this->boardMapper->transferOwnership($previousOwner, $newOwner, $boardId);
+
+			// Optionally also change user assignments and card owner information
+			if ($changeContent) {
+				$this->assignedUsersMapper->remapAssignedUser($boardId, $previousOwner, $newOwner);
+				$this->cardMapper->remapCardOwner($boardId, $previousOwner, $newOwner);
+			}
+			\OC::$server->getDatabaseConnection()->commit();
+			return $this->boardMapper->find($boardId);
+		} catch (\Throwable $e) {
+			\OC::$server->getDatabaseConnection()->rollBack();
+			throw $e;
+		}
+	}
+
+	public function transferOwnership(string $owner, string $newOwner, bool $changeContent = false): \Generator {
+		$boards = $this->boardMapper->findAllByUser($owner);
+		foreach ($boards as $board) {
+			if ($board->getOwner() === $owner) {
+				yield $this->transferBoardOwnership($board->getId(), $newOwner, $changeContent);
+			}
+		}
+	}
+
 	private function enrichWithStacks($board, $since = -1) {
 		$stacks = $this->stackMapper->findAll($board->getId(), null, null, $since);
 
@@ -700,5 +746,20 @@ class BoardService {
 
 	public function getBoardUrl($endpoint) {
 		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . '#' . $endpoint;
+	}
+
+	private function clearBoardsCache() {
+		$this->boardsCache = null;
+	}
+
+	/**
+	 * Clean a given board data from the Cache
+	 */
+	private function clearBoardFromCache(Board $board) {
+		$boardId = $board->getId();
+		$boardOwnerId = $board->getOwner();
+
+		$this->boardMapper->flushCache($boardId, $boardOwnerId);
+		unset($this->boardsCache[$boardId]);
 	}
 }

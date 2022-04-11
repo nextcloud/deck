@@ -8,13 +8,18 @@
 			"email": "jus@bitgrid.net"
 		}
 	],
+	"config": {
+		"platform": {
+			"php": "7.3"
+		}
+	},
 	"require": {
 		"cogpowered/finediff": "0.3.*"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
-		"christophwurst/nextcloud": "^21@dev",
-		"phpunit/phpunit": "^9",
+		"christophwurst/nextcloud": "^22@dev",
+		"phpunit/phpunit": "^8",
 		"nextcloud/coding-standard": "^0.5.0",
 		"symfony/event-dispatcher": "^4.0",
 		"vimeo/psalm": "^4.3",
