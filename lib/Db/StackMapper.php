@@ -48,6 +48,25 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntity($sql, [$id]);
 	}
 
+	/**
+	 * @param $cardId
+	 * @return Stack|null
+	 */
+	public function findStackFromCardId($cardId): ?Stack {
+		$sql = <<<SQL
+SELECT s.* 
+FROM `*PREFIX*deck_stacks` as `s`
+INNER JOIN `*PREFIX*deck_cards` as `c` ON s.id = c.stack_id
+WHERE c.id = ?
+SQL;
+		try {
+			return $this->findEntity($sql, [$cardId]);
+		} catch (MultipleObjectsReturnedException|DoesNotExistException $e) {
+		}
+
+		return null;
+	}
+
 
 	public function findAll($boardId, $limit = null, $offset = null) {
 		$sql = 'SELECT * FROM `*PREFIX*deck_stacks` WHERE `board_id` = ? AND deleted_at = 0 ORDER BY `order`, `id`';

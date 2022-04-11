@@ -25,6 +25,13 @@ namespace OCA\Deck\Db;
 
 use Sabre\VObject\Component\VCalendar;
 
+/**
+ * @method int getId()
+ * @method int getBoardId()
+ * @method int getDeletedAt()
+ * @method int getLastModified()
+ * @method int getOrder()
+ */
 class Stack extends RelationalEntity {
 	protected $title;
 	protected $boardId;
