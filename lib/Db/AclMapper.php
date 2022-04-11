@@ -34,7 +34,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	 * @param IDBConnection $db
 	 */
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, 'deck_boards', Board::class);
+		parent::__construct($db, 'deck_board_acl', Board::class);
 	}
 
 	/**
@@ -47,7 +47,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	public function findAll($boardId, $limit = null, $offset = null) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
-			->from($this->getTableName())
+			->from('deck_board_acl')
 			->where($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
 			->setMaxResults($limit)
 			->setFirstResult($offset);

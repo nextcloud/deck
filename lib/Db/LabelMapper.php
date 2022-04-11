@@ -75,7 +75,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	 */
 	public function findAssignedLabelsForCard($cardId, $limit = null, $offset = null): array {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('l.*,card_id')
+		$qb->select('l.*', 'card_id')
 			->from($this->getTableName(), 'l')
 			->innerJoin('l', 'deck_assigned_labels', 'al', 'l.id = al.label_id')
 			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
@@ -95,7 +95,8 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	 */
 	public function findAssignedLabelsForBoard($boardId, $limit = null, $offset = null): array {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('c.id as card_id', 'l.id as id', 'l.title as title', 'l.color as color')
+		$qb->select('l.id as id', 'l.title as title', 'l.color as color')
+			->selectAlias('c.id', 'card_id')
 			->from($this->getTableName(), 'l')
 			->innerJoin('l', 'deck_assigned_labels', 'al', 'al.label_id = l.id')
 			->innerJoin('l', 'deck_cards', 'c', 'al.card_id = c.id')
