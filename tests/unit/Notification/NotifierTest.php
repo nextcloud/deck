@@ -345,11 +345,11 @@ class NotifierTest extends \Test\TestCase {
 	 * @return Stack|MockObject
 	 */
 	private function buildMockStack(int $boardId = 999) {
-		$mock_stack = $this->getMockBuilder(Stack::class)
+		$mockStack = $this->getMockBuilder(Stack::class)
 			->addMethods(['getBoardId'])
 			->getMock();
 
-		$mock_stack->method('getBoardId')->willReturn($boardId);
-		return $mock_stack;
+		$mockStack->method('getBoardId')->willReturn($boardId);
+		return $mockStack;
 	}
 }
