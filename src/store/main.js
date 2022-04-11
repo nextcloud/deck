@@ -497,9 +497,8 @@ export default new Vuex.Store({
 					dispatch('loadBoardById', acl.boardId)
 				})
 		},
-		async transferOwnership({ commit }, { boardId, owner, newOwner }) {
+		async transferOwnership({ commit }, { boardId, newOwner }) {
 			await axios.put(generateUrl(`apps/deck/boards/${boardId}/transferOwner`), {
-				owner,
 				newOwner,
 			})
 		},
