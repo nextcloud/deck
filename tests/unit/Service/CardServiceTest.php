@@ -160,6 +160,7 @@ class CardServiceTest extends TestCase {
 		$cardExpected->setAssignedUsers(['user1', 'user2']);
 		$cardExpected->setRelatedBoard($boardMock);
 		$cardExpected->setRelatedStack($stackMock);
+		$cardExpected->setLabels([]);
 		$this->assertEquals($cardExpected, $this->cardService->find(123));
 	}
 

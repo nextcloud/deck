@@ -420,7 +420,7 @@ class BoardServiceTest extends TestCase {
 		$this->aclMapper->expects($this->once())
 			->method('delete')
 			->with($acl)
-			->willReturn(true);
+			->willReturn($acl);
 		$this->assertTrue($this->service->deleteAcl(123));
 	}
 }

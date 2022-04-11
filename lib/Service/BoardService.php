@@ -625,11 +625,9 @@ class BoardService {
 			} catch (\Exception $e) {
 			}
 		}
-		$delete = $this->aclMapper->delete($acl);
 
 		$this->eventDispatcher->dispatchTyped(new AclDeletedEvent($acl));
-
-		return $delete;
+		return (bool) $this->aclMapper->delete($acl);
 	}
 
 	/**
