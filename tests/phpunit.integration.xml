@@ -1,15 +1,16 @@
-<phpunit bootstrap="bootstrap.php" colors="true">
-	<testsuites>
-		<testsuite name="integration-database">
-			<directory>./integration/database</directory>
-		</testsuite>
-		<testsuite name="integration-app">
-			<directory>./integration/app</directory>
-		</testsuite>
-	</testsuites>
-	<filter>
-		<whitelist>
-			<directory suffix=".php">./../lib</directory>
-		</whitelist>
-	</filter>
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="bootstrap.php" colors="true" convertDeprecationsToExceptions="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory suffix=".php">./../lib</directory>
+    </include>
+  </coverage>
+  <testsuites>
+    <testsuite name="integration-database">
+      <directory>./integration/database</directory>
+    </testsuite>
+    <testsuite name="integration-app">
+      <directory>./integration/app</directory>
+    </testsuite>
+  </testsuites>
 </phpunit>
