@@ -195,7 +195,7 @@ class StackServiceTest extends TestCase {
 	}
 
 	public function testUpdate() {
-		$this->permissionService->expects($this->once())->method('checkPermission');
+		$this->permissionService->expects($this->exactly(2))->method('checkPermission');
 		$stack = new Stack();
 		$this->stackMapper->expects($this->once())->method('find')->willReturn($stack);
 		$this->stackMapper->expects($this->once())->method('update')->willReturn($stack);

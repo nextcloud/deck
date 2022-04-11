@@ -11,19 +11,6 @@ updates:
   open-pull-requests-limit: 10
   reviewers:
   - juliushaertl
-  - jakobroehrl
-#- package-ecosystem: npm
-#  directory: "/"
-#  target-branch: "stable1.1"
-#  schedule:
-#    interval: weekly
-#    day: saturday
-#    time: "03:00"
-#    timezone: Europe/Paris
-#  open-pull-requests-limit: 10
-#  reviewers:
-#  - juliushaertl
-#  - jakobroehrl
 - package-ecosystem: composer
   directory: "/"
   schedule:
@@ -34,11 +21,16 @@ updates:
   open-pull-requests-limit: 10
   reviewers:
   - juliushaertl
-  ignore:
-  - dependency-name: christophwurst/nextcloud
-    versions:
-    - "< 16"
-    - ">= 15.a"
+- package-ecosystem: composer
+  directory: "/tests/integration"
+  schedule:
+    interval: weekly
+    day: saturday
+    time: "03:00"
+    timezone: Europe/Paris
+  open-pull-requests-limit: 10
+  reviewers:
+  - juliushaertl
 - package-ecosystem: github-actions
   directory: "/"
   schedule:

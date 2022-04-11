@@ -274,7 +274,6 @@
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Czy na pewno chcesz usunąć tablicę {title}? Spowoduje to usunięcie wszystkich danych z tej tablicy.",
     "Delete the board?" : "Usunąć tablicę?",
     "Loading filtered view" : "Wczytywanie przefiltrowanego widoku",
-    "This week" : "W tym tygodniu",
     "No due" : "Bez ważności",
     "Search for {searchQuery} in all boards" : "Wyszukaj dla {searchQuery} na wszystkich tablicach",
     "No results found" : "Nie znaleziono wyników",
@@ -294,6 +293,7 @@
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Tablica to narzędzie organizacyjne w stylu kanban, którego celem jest osobiste planowanie i organizacja projektu dla zespołów zintegrowanych z Nextcloud.\n\n\n- 📥 Dodaj swoje zadania do kart i porządkuj je\n- 📄 Zapisuj dodatkowe notatki w Markdown\n- 🔖 Przypisuj etykiety dla jeszcze lepszej organizacji\n- 👥 Współdziel ze swoim zespołem, przyjaciółmi lub rodziną\n- 📎 Dołączaj pliki i umieszczaj je w opisie Markdown\n- 💬 Porozmawiaj ze swoim zespołem za pomocą komentarzy\n- ⚡ Śledź zmiany w strumieniu aktywności\n- 🚀 Organizuj swój projekt",
     "Creating the new card…" : "Tworzę nową kartę…",
     "\"{card}\" was added to \"{board}\"" : "\"{card}\" została dodana do \"{board}\"",
-    "(circle)" : "(krąg)"
+    "(circle)" : "(krąg)",
+    "This week" : "W tym tygodniu"
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }

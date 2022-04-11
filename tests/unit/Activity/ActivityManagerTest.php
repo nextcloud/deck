@@ -103,15 +103,13 @@ class ActivityManagerTest extends TestCase {
 				if ($format !== '') {
 					$this->assertStringContainsString('{user}', $format);
 				} else {
-					/** @noinspection ForgottenDebugOutputInspection */
-					print_r('No activity string found for '. $constant . PHP_EOL);
+					self::addWarning('No activity string found for '. $constant);
 				}
 				$format = $this->activityManager->getActivityFormat('cz', $value, [], true);
 				if ($format !== '') {
 					$this->assertStringStartsWith('You', $format);
 				} else {
-					/** @noinspection ForgottenDebugOutputInspection */
-					print_r('No own activity string found for '. $constant . PHP_EOL);
+					self::addWarning('No own activity string found for '. $constant);
 				}
 			}
 		}

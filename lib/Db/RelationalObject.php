@@ -23,7 +23,9 @@
 
 namespace OCA\Deck\Db;
 
-class RelationalObject implements \JsonSerializable {
+use JsonSerializable;
+
+class RelationalObject implements JsonSerializable {
 	protected $primaryKey;
 	protected $object;
 
@@ -38,7 +40,7 @@ class RelationalObject implements \JsonSerializable {
 		$this->object = $object;
 	}
 
-	public function jsonSerialize() {
+	public function jsonSerialize(): array {
 		return array_merge(
 			['primaryKey' => $this->primaryKey],
 			$this->getObjectSerialization()
@@ -51,8 +53,8 @@ class RelationalObject implements \JsonSerializable {
 	 * @throws \Exception
 	 */
 	public function getObjectSerialization() {
-		if ($this->object instanceof \JsonSerializable) {
-			$this->object->jsonSerialize();
+		if ($this->object instanceof JsonSerializable) {
+			return $this->object->jsonSerialize();
 		} else {
 			throw new \Exception('jsonSerialize is not implemented on ' . get_class($this));
 		}

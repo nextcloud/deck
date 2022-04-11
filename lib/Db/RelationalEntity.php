@@ -63,7 +63,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 	 * @return array serialized data
 	 * @throws \ReflectionException
 	 */
-	public function jsonSerialize() {
+	public function jsonSerialize(): array {
 		$properties = get_object_vars($this);
 		$reflection = new \ReflectionClass($this);
 		$json = [];

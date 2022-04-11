@@ -257,7 +257,6 @@ OC.L10N.register(
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "このボード{title}を削除してもよろしいですか？この操作はこのボードのデータすべてを削除します。",
     "Delete the board?" : "ボードを削除しますか？",
     "Loading filtered view" : "フィルタされたビューを読み込み中",
-    "This week" : "今週",
     "No due" : "日付なし",
     "Search for {searchQuery} in all boards" : "すべてのボードで{searchQuery}を検索します",
     "No results found" : "結果が見つかりません",
@@ -274,6 +273,7 @@ OC.L10N.register(
     "Share with a Deck card" : "デッキのカードで共有する",
     "Share {file} with a Deck card" : "{file}をデッキのカードで共有する",
     "Share" : "共有",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "DeckはNextcloudと統合した、チームの個人計画とプロジェクトの組織化を目的としたカンバンスタイルの組織ツールです。\n\n\n- 📥 タスクをカードに追加して整理する\n- 📄 マークダウンで追加のメモを書き留めます\n- 🔖 より良い組織のためにラベルを割り当てる\n- 👥 あなたのチーム、友人、家族と共有する\n- 📎 ファイルを添付してマークダウンの説明に埋め込む\n- 💬 コメントを使ってあなたのチームと話し合う\n- ⚡ アクティビティの流れの変化を追跡する\n- 🚀 プロジェクトを整理する"
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "DeckはNextcloudと統合した、チームの個人計画とプロジェクトの組織化を目的としたカンバンスタイルの組織ツールです。\n\n\n- 📥 タスクをカードに追加して整理する\n- 📄 マークダウンで追加のメモを書き留めます\n- 🔖 より良い組織のためにラベルを割り当てる\n- 👥 あなたのチーム、友人、家族と共有する\n- 📎 ファイルを添付してマークダウンの説明に埋め込む\n- 💬 コメントを使ってあなたのチームと話し合う\n- ⚡ アクティビティの流れの変化を追跡する\n- 🚀 プロジェクトを整理する",
+    "This week" : "今週"
 },
 "nplurals=1; plural=0;");
