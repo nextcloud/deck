@@ -296,6 +296,7 @@ OC.L10N.register(
     "Creating the new card…" : "Új kártya létrehozása…",
     "\"{card}\" was added to \"{board}\"" : "A(z) „{card}” hozzáadva a(z) „{board}” táblához",
     "(circle)" : "(kör)",
-    "This week" : "Ez a hét"
+    "This week" : "Ez a hét",
+    "Are you sure you want to transfer the board {title} for {user} ?" : "Biztos, hogy átadja a(z) {board} tábla tulajdonjogát {user} számára?"
 },
 "nplurals=2; plural=(n != 1);");
