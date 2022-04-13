@@ -296,6 +296,7 @@ OC.L10N.register(
     "Creating the new card…" : "正在建立新卡片……",
     "\"{card}\" was added to \"{board}\"" : "「{card}」已新增至「{board}」",
     "(circle)" : "(circle)",
-    "This week" : "本週"
+    "This week" : "本週",
+    "Are you sure you want to transfer the board {title} for {user} ?" : "您想要轉移 {user} 的看板 {title} 嗎？"
 },
 "nplurals=1; plural=0;");

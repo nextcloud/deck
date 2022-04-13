@@ -296,6 +296,7 @@ OC.L10N.register(
     "Creating the new card…" : "Criando o novo cartão…",
     "\"{card}\" was added to \"{board}\"" : "\"{card}\" foi adicionado a \"{board}\"",
     "(circle)" : "(círculo)",
-    "This week" : "Esta semana"
+    "This week" : "Esta semana",
+    "Are you sure you want to transfer the board {title} for {user} ?" : "Tem certeza de que deseja transferir o quadro {title} para {user}?"
 },
 "nplurals=2; plural=(n > 1);");
