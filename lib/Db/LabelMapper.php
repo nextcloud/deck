@@ -36,7 +36,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param int $boardId
+	 * @param numeric $boardId
 	 * @param int|null $limit
 	 * @param int|null $offset
 	 * @return Label[]
@@ -65,7 +65,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param int $cardId
+	 * @param numeric $cardId
 	 * @param int|null $limit
 	 * @param int|null $offset
 	 * @return Label[]
@@ -85,7 +85,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param int $boardId
+	 * @param numeric $boardId
 	 * @param int|null $limit
 	 * @param int|null $offset
 	 * @return Label[]
@@ -130,7 +130,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param int $boardId
+	 * @param numeric $boardId
 	 * @return array
 	 * @throws \OCP\DB\Exception
 	 */
@@ -147,7 +147,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param int $labelId
+	 * @param numeric $labelId
 	 * @return void
 	 * @throws \OCP\DB\Exception
 	 */
@@ -159,7 +159,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param int $cardId
+	 * @param numeric $cardId
 	 * @return void
 	 * @throws \OCP\DB\Exception
 	 */
@@ -172,7 +172,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 
 	/**
 	 * @param string $userId
-	 * @param int $labelId
+	 * @param numeric $labelId
 	 * @return bool
 	 * @throws \OCP\DB\Exception
 	 */
@@ -188,7 +188,7 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param int $id
+	 * @param numeric $id
 	 * @return int|null
 	 */
 	public function findBoardId($id): ?int {

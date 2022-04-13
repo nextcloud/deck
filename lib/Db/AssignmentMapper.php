@@ -55,9 +55,6 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 		$this->circleService = $circleService;
 	}
 
-	/**
-	 * @return Assignment[]
-	 */
 	public function findAll(int $cardId): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')

@@ -35,7 +35,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param int $boardId
+	 * @param numeric $boardId
 	 * @param int|null $limit
 	 * @param int|null $offset
 	 * @return Acl[]
@@ -53,8 +53,8 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param int $userId
-	 * @param int $aclId
+	 * @param numeric $userId
+	 * @param numeric $aclId
 	 * @return bool
 	 * @throws \OCP\DB\Exception
 	 */
@@ -70,7 +70,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param int $id
+	 * @param numeric $id
 	 * @return int|null
 	 */
 	public function findBoardId($id): ?int {

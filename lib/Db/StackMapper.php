@@ -39,7 +39,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 
 
 	/**
-	 * @param int $id
+	 * @param numeric $id
 	 * @return Stack
 	 * @throws DoesNotExistException
 	 * @throws MultipleObjectsReturnedException
@@ -75,7 +75,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param int $boardId
+	 * @param numeric $boardId
 	 * @param int|null $limit
 	 * @param int|null $offset
 	 * @return Stack[]
@@ -94,7 +94,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param int $boardId
+	 * @param numeric $boardId
 	 * @param int|null $limit
 	 * @param int|null $offset
 	 * @return Stack[]
@@ -124,8 +124,8 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param int $userId
-	 * @param int $stackId
+	 * @param numeric $userId
+	 * @param numeric $stackId
 	 * @return bool
 	 * @throws \OCP\DB\Exception
 	 */
@@ -141,7 +141,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param $id
+	 * @param numeric $id
 	 * @return int|null
 	 * @throws \OCP\DB\Exception
 	 */
