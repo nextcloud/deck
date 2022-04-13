@@ -30,7 +30,6 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 class LabelMapper extends DeckMapper implements IPermissionMapper {
-
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'deck_labels', Label::class);
 	}
@@ -180,11 +179,11 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('l.id')
 			->from($this->getTableName(), 'l')
-			->innerJoin('l', 'deck_boards' , 'b', 'l.board_id = b.id')
+			->innerJoin('l', 'deck_boards', 'b', 'l.board_id = b.id')
 			->where($qb->expr()->eq('l.id', $qb->createNamedParameter($labelId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('b.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 
-        return count($qb->executeQuery()->fetchAll()) > 0;
+		return count($qb->executeQuery()->fetchAll()) > 0;
 	}
 
 	/**

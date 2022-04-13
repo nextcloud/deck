@@ -137,7 +137,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 			->where($qb->expr()->eq('s.id', $qb->createNamedParameter($stackId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 
-        return count($qb->executeQuery()->fetchAll()) > 0;
+		return count($qb->executeQuery()->fetchAll()) > 0;
 	}
 
 	/**

@@ -29,7 +29,6 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 class AclMapper extends DeckMapper implements IPermissionMapper {
-
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'deck_board_acl', Acl::class);
 	}
@@ -62,7 +61,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('acl.id')
 			->from($this->getTableName(), 'acl')
-			->innerJoin('acl', 'deck_boards','b', 'acl.board_id = b.id')
+			->innerJoin('acl', 'deck_boards', 'b', 'acl.board_id = b.id')
 			->where($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
 			->andWhere($qb->expr()->eq('acl.id', $qb->createNamedParameter($aclId, IQueryBuilder::PARAM_INT)));
 

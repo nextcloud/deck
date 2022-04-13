@@ -30,7 +30,6 @@ use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IUserManager;
-use PDO;
 
 class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	private $cardMapper;
