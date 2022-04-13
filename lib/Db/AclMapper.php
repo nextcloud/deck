@@ -63,13 +63,13 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 	 */
 	public function isOwner($userId, $aclId): bool {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
+		$qb->select('acl.id')
 			->from($this->getTableName(), 'acl')
 			->innerJoin('acl', 'deck_boards','b', 'acl.board_id = b.id')
 			->where($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
 			->andWhere($qb->expr()->eq('acl.id', $qb->createNamedParameter($aclId, IQueryBuilder::PARAM_INT)));
 
-		return $qb->executeQuery()->rowCount() > 0;
+		return count($qb->executeQuery()->fetchAll()) > 0;
 	}
 
 	/**

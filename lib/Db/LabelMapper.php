@@ -180,13 +180,13 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	 */
 	public function isOwner($userId, $labelId): bool {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
+		$qb->select('l.id')
 			->from($this->getTableName(), 'l')
 			->innerJoin('l', 'deck_boards' , 'b', 'l.board_id = b.id')
 			->where($qb->expr()->eq('l.id', $qb->createNamedParameter($labelId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('b.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 
-		return $qb->executeQuery()->rowCount() > 0;
+        return count($qb->executeQuery()->fetchAll()) > 0;
 	}
 
 	/**

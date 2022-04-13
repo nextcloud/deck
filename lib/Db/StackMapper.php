@@ -131,13 +131,13 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	 */
 	public function isOwner($userId, $stackId): bool {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
+		$qb->select('s.id')
 			->from($this->getTableName(), 's')
 			->innerJoin('s', 'deck_boards', 'b', 'b.id = s.board_id')
 			->where($qb->expr()->eq('s.id', $qb->createNamedParameter($stackId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 
-		return $qb->executeQuery()->rowCount() > 0;
+        return count($qb->executeQuery()->fetchAll()) > 0;
 	}
 
 	/**
