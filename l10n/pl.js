@@ -296,6 +296,7 @@ OC.L10N.register(
     "Creating the new card…" : "Tworzę nową kartę…",
     "\"{card}\" was added to \"{board}\"" : "\"{card}\" została dodana do \"{board}\"",
     "(circle)" : "(krąg)",
-    "This week" : "W tym tygodniu"
+    "This week" : "W tym tygodniu",
+    "Are you sure you want to transfer the board {title} for {user} ?" : "Czy na pewno chcesz przenieść tablicę {title} dla {user}?"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");
