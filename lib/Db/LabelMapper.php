@@ -30,9 +30,7 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 class LabelMapper extends DeckMapper implements IPermissionMapper {
-	/**
-	 * @param IDBConnection $db
-	 */
+
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'deck_labels', Label::class);
 	}

@@ -30,9 +30,6 @@ use OCP\IDBConnection;
 
 class AclMapper extends DeckMapper implements IPermissionMapper {
 
-	/**
-	 * @param IDBConnection $db
-	 */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'deck_board_acl', Acl::class);
 	}
