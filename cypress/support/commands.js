@@ -24,7 +24,8 @@
  Cypress.env('baseUrl', url)
  
  Cypress.Commands.add('login', (user, password, route = '/apps/deck/') => {
-	cy.session(user, function () {
+	let session = `${user}-${Date.now()}` 
+	cy.session(session, function () {
 		cy.visit(route)
 		cy.get('input[name=user]').type(user)
 		cy.get('input[name=password]').type(password)
@@ -74,5 +75,41 @@
 	 }).then(response => {
 		 cy.log(`Updated user ${user} ${key} to ${value}`, response.status)
 	 })
+ })
+
+ Cypress.Commands.add('deckCreateBoard', ({ user, password }, title) => {
+	cy.login(user, password)
+	
+	cy.get('.app-navigation button.app-navigation-toggle').click()
+	cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
+		.eq(1)
+		.find('a')
+		.first()
+		.click({force: true})
+
+	cy.get('.board-create form input[type=text]')
+		.type(title, {force: true})
+
+	cy.get('.board-create form input[type=submit]')
+		.first()
+		.click({force: true})
+ })
+
+ Cypress.Commands.add('deckCreateList', ({ user, password }, title) => {
+	cy.login(user, password)
+	
+	cy.get('.app-navigation button.app-navigation-toggle').click()
+	cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
+		.eq(1)
+		.find('.app-navigation-entry__children .app-navigation-entry a.app-navigation-entry-link')
+		.first()
+		.click({force: true})
+
+	cy.get('#stack-add button').first().click()
+	cy.get('#stack-add form input#new-stack-input-main')
+		.type(title)
+	cy.get('#stack-add form input[type=submit]')
+		.first()
+		.click()
  })
  

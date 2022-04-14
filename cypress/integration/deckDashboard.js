@@ -2,13 +2,14 @@ import { randHash } from '../utils'
 const randUser = randHash()
 
 describe('Deck dashboard', function() {
+	const password = 'pass123'
+
 	before(function () {
-		// Create a user
-		cy.nextcloudCreateUser(randUser, 'pass123')
+		cy.nextcloudCreateUser(randUser, password)
 	})
 
 	beforeEach(function() {
-		cy.login(randUser, 'pass123')
+		cy.login(randUser, password)
 	})
 
 	it('Can show the right title on the dashboard', function() {
@@ -26,20 +27,4 @@ describe('Deck dashboard', function() {
 			.first()
 			.contains('Personal')
 	}) */
-
-	it('Can create a board', function () {
-		cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
-			.eq(1)
-			.find('a')
-			.first()
-			.click({force: true})
-
-		cy.get('.board-create form input[type=text]')
-			.type('Test', {force: true})
-
-		cy.get('.board-create form input[type=submit]')
-			.first()
-			.click({force: true})
-
-	})
 })
