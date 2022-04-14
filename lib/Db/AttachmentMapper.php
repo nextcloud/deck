@@ -60,7 +60,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	public function find($id) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
-			->from('deck_attachment')
+			->from($this->getTableName())
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
 		return $this->findEntity($qb);
@@ -77,7 +77,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	public function findByData($cardId, $data) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
-				->from('deck_attachment')
+				->from($this->getTableName())
 				->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
 				->andWhere($qb->expr()->eq('data', $qb->createNamedParameter($data, IQueryBuilder::PARAM_STR)));
 
@@ -92,7 +92,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	public function findAll($cardId) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
-			->from('deck_attachment')
+			->from($this->getTableName())
 			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 
@@ -110,7 +110,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 		$timeLimit = time() - (60 * 5);
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
-			->from('deck_attachment')
+			->from($this->getTableName())
 			->where($qb->expr()->gt('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		if ($withOffset) {
 			$qb
