@@ -172,7 +172,6 @@ export default {
 		},
 		async moveCard() {
 			this.copiedCard = Object.assign({}, this.card)
-			const boardId = this.card?.boardId ? this.card.boardId : this.$route.params.id
 			this.copiedCard.stackId = this.selectedStack.id
 			this.$store.dispatch('moveCard', this.copiedCard)
 			if (parseInt(this.boardId) === parseInt(this.selectedStack.boardId)) {
