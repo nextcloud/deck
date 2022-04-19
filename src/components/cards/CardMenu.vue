@@ -135,6 +135,10 @@ export default {
 		},
 		activeBoards() {
 			return this.$store.getters.boards.filter((item) => item.deletedAt === 0 && item.archived === false)
+		},
+
+		boardId() {
+			return this.card?.boardId ? this.card.boardId : this.$route.params.id
 		}
 	},
 	methods: {
@@ -169,10 +173,9 @@ export default {
 		},
 		async moveCard() {
 			this.copiedCard = Object.assign({}, this.card)
-			const boardId = this.card?.boardId ? this.card.boardId : this.$route.params.id
 			this.copiedCard.stackId = this.selectedStack.id
 			this.$store.dispatch('moveCard', this.copiedCard)
-			if (parseInt(boardId) === parseInt(this.selectedStack.boardId)) {
+			if (parseInt(this.boardId) === parseInt(this.selectedStack.boardId)) {
 				await this.$store.commit('addNewCard', { ...this.copiedCard })
 			}
 			this.modalShow = false
