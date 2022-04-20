@@ -23,17 +23,15 @@
 
 namespace OCA\Deck\Db;
 
-use OCP\AppFramework\Db\Mapper;
+use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 
 /**
  * Class DeckMapper
  *
  * @package OCA\Deck\Db
- * @deprecated use QBMapper
- *
- * TODO: Move to QBMapper once Nextcloud 14 is a minimum requirement
  */
-class DeckMapper extends Mapper {
+class DeckMapper extends QBMapper {
 
 	/**
 	 * @param $id
@@ -42,11 +40,11 @@ class DeckMapper extends Mapper {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function find($id) {
-		$sql = 'SELECT * FROM `' . $this->tableName . '` ' . 'WHERE `id` = ?';
-		return $this->findEntity($sql, [$id]);
-	}
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
-	protected function execute($sql, array $params = [], $limit = null, $offset = null) {
-		return parent::execute($sql, $params, $limit, $offset);
+		return $this->findEntity($qb);
 	}
 }

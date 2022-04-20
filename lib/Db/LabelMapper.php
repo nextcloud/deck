@@ -26,6 +26,7 @@ namespace OCA\Deck\Db;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 class LabelMapper extends DeckMapper implements IPermissionMapper {
@@ -33,41 +34,105 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 		parent::__construct($db, 'deck_labels', Label::class);
 	}
 
-	public function findAll($boardId, $limit = null, $offset = null) {
-		$sql = 'SELECT * FROM `*PREFIX*deck_labels` WHERE `board_id` = ? ORDER BY `id`';
-		return $this->findEntities($sql, [$boardId], $limit, $offset);
+	/**
+	 * @param numeric $boardId
+	 * @param int|null $limit
+	 * @param int|null $offset
+	 * @return Label[]
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findAll($boardId, $limit = null, $offset = null): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->setMaxResults($limit)
+			->setFirstResult($offset);
+		return $this->findEntities($qb);
 	}
 
-	public function delete(\OCP\AppFramework\Db\Entity $entity) {
+	/**
+	 * @param Entity $entity
+	 * @return Entity
+	 * @throws \OCP\DB\Exception
+	 */
+	public function delete(Entity $entity): Entity {
 		// delete assigned labels
 		$this->deleteLabelAssignments($entity->getId());
 		// delete label
 		return parent::delete($entity);
 	}
 
-	public function findAssignedLabelsForCard($cardId, $limit = null, $offset = null) {
-		$sql = 'SELECT l.*,card_id FROM `*PREFIX*deck_assigned_labels` as al INNER JOIN *PREFIX*deck_labels as l ON l.id = al.label_id WHERE `card_id` = ? ORDER BY l.id';
-		return $this->findEntities($sql, [$cardId], $limit, $offset);
-	}
-	public function findAssignedLabelsForBoard($boardId, $limit = null, $offset = null) {
-		$sql = 'SELECT c.id as card_id, l.id as id, l.title as title, l.color as color FROM `*PREFIX*deck_cards` as c ' .
-			' INNER JOIN `*PREFIX*deck_assigned_labels` as al ON al.card_id = c.id INNER JOIN `*PREFIX*deck_labels` as l ON  al.label_id = l.id WHERE board_id=? ORDER BY l.id';
-		return $this->findEntities($sql, [$boardId], $limit, $offset);
+	/**
+	 * @param numeric $cardId
+	 * @param int|null $limit
+	 * @param int|null $offset
+	 * @return Label[]
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findAssignedLabelsForCard($cardId, $limit = null, $offset = null): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('l.*', 'card_id')
+			->from($this->getTableName(), 'l')
+			->innerJoin('l', 'deck_assigned_labels', 'al', 'l.id = al.label_id')
+			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
+			->orderBy('l.id')
+			->setMaxResults($limit)
+			->setFirstResult($offset);
+
+		return $this->findEntities($qb);
 	}
 
-	public function insert(Entity $entity) {
+	/**
+	 * @param numeric $boardId
+	 * @param int|null $limit
+	 * @param int|null $offset
+	 * @return Label[]
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findAssignedLabelsForBoard($boardId, $limit = null, $offset = null): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('l.id as id', 'l.title as title', 'l.color as color')
+			->selectAlias('c.id', 'card_id')
+			->from($this->getTableName(), 'l')
+			->innerJoin('l', 'deck_assigned_labels', 'al', 'al.label_id = l.id')
+			->innerJoin('l', 'deck_cards', 'c', 'al.card_id = c.id')
+			->where($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->orderBy('l.id')
+			->setMaxResults($limit)
+			->setFirstResult($offset);
+
+		return $this->findEntities($qb);
+	}
+
+	/**
+	 * @param Entity $entity
+	 * @return Entity
+	 * @throws \OCP\DB\Exception
+	 */
+	public function insert(Entity $entity): Entity {
 		$entity->setLastModified(time());
 		return parent::insert($entity);
 	}
 
-	public function update(Entity $entity, $updateModified = true) {
+	/**
+	 * @param Entity $entity
+	 * @param bool $updateModified
+	 * @return Entity
+	 * @throws \OCP\DB\Exception
+	 */
+	public function update(Entity $entity, $updateModified = true): Entity {
 		if ($updateModified) {
 			$entity->setLastModified(time());
 		}
 		return parent::update($entity);
 	}
 
-
+	/**
+	 * @param numeric $boardId
+	 * @return array
+	 * @throws \OCP\DB\Exception
+	 */
 	public function getAssignedLabelsForBoard($boardId) {
 		$labels = $this->findAssignedLabelsForBoard($boardId);
 		$result = [];
@@ -80,27 +145,51 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 		return $result;
 	}
 
+	/**
+	 * @param numeric $labelId
+	 * @return void
+	 * @throws \OCP\DB\Exception
+	 */
 	public function deleteLabelAssignments($labelId) {
-		$sql = 'DELETE FROM `*PREFIX*deck_assigned_labels` WHERE label_id = ?';
-		$stmt = $this->db->prepare($sql);
-		$stmt->bindParam(1, $labelId, \PDO::PARAM_INT, 0);
-		$stmt->execute();
+		$qb = $this->db->getQueryBuilder();
+		$qb->delete('deck_assigned_labels')
+			->where($qb->expr()->eq('label_id', $qb->createNamedParameter($labelId, IQueryBuilder::PARAM_INT)));
+		$qb->executeStatement();
 	}
 
+	/**
+	 * @param numeric $cardId
+	 * @return void
+	 * @throws \OCP\DB\Exception
+	 */
 	public function deleteLabelAssignmentsForCard($cardId) {
-		$sql = 'DELETE FROM `*PREFIX*deck_assigned_labels` WHERE card_id = ?';
-		$stmt = $this->db->prepare($sql);
-		$stmt->bindParam(1, $cardId, \PDO::PARAM_INT, 0);
-		$stmt->execute();
+		$qb = $this->db->getQueryBuilder();
+		$qb->delete('deck_assigned_labels')
+			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)));
+		$qb->executeStatement();
 	}
 
+	/**
+	 * @param string $userId
+	 * @param numeric $labelId
+	 * @return bool
+	 * @throws \OCP\DB\Exception
+	 */
 	public function isOwner($userId, $labelId): bool {
-		$sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_labels` WHERE id = ?)';
-		$stmt = $this->execute($sql, [$labelId]);
-		$row = $stmt->fetch();
-		return ($row['owner'] === $userId);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('l.id')
+			->from($this->getTableName(), 'l')
+			->innerJoin('l', 'deck_boards', 'b', 'l.board_id = b.id')
+			->where($qb->expr()->eq('l.id', $qb->createNamedParameter($labelId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('b.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+
+		return count($qb->executeQuery()->fetchAll()) > 0;
 	}
 
+	/**
+	 * @param numeric $id
+	 * @return int|null
+	 */
 	public function findBoardId($id): ?int {
 		try {
 			$entity = $this->find($id);

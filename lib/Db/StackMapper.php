@@ -26,6 +26,7 @@ namespace OCA\Deck\Db;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 class StackMapper extends DeckMapper implements IPermissionMapper {
@@ -38,62 +39,112 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 
 
 	/**
-	 * @param $id
-	 * @throws MultipleObjectsReturnedException
+	 * @param numeric $id
+	 * @return Stack
 	 * @throws DoesNotExistException
+	 * @throws MultipleObjectsReturnedException
+	 * @throws \OCP\DB\Exception
 	 */
 	public function find($id): Stack {
-		$sql = 'SELECT * FROM `*PREFIX*deck_stacks` ' .
-			'WHERE `id` = ?';
-		return $this->findEntity($sql, [$id]);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+
+		return $this->findEntity($qb);
 	}
 
 	/**
 	 * @param $cardId
 	 * @return Stack|null
+	 * @throws \OCP\DB\Exception
 	 */
 	public function findStackFromCardId($cardId): ?Stack {
-		$sql = <<<SQL
-SELECT s.* 
-FROM `*PREFIX*deck_stacks` as `s`
-INNER JOIN `*PREFIX*deck_cards` as `c` ON s.id = c.stack_id
-WHERE c.id = ?
-SQL;
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->getTableName(), 's')
+			->innerJoin('s', 'deck_cards', 'c', 's.id = c.stack_id')
+			->where($qb->expr()->eq('c.id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)));
+
 		try {
-			return $this->findEntity($sql, [$cardId]);
+			return $this->findEntity($qb);
 		} catch (MultipleObjectsReturnedException|DoesNotExistException $e) {
 		}
 
 		return null;
 	}
 
+	/**
+	 * @param numeric $boardId
+	 * @param int|null $limit
+	 * @param int|null $offset
+	 * @return Stack[]
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findAll($boardId, $limit = null, $offset = null): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->setFirstResult($offset)
+			->setMaxResults($limit);
 
-	public function findAll($boardId, $limit = null, $offset = null) {
-		$sql = 'SELECT * FROM `*PREFIX*deck_stacks` WHERE `board_id` = ? AND deleted_at = 0 ORDER BY `order`, `id`';
-		return $this->findEntities($sql, [$boardId], $limit, $offset);
+		return $this->findEntities($qb);
 	}
 
-
+	/**
+	 * @param numeric $boardId
+	 * @param int|null $limit
+	 * @param int|null $offset
+	 * @return Stack[]
+	 * @throws \OCP\DB\Exception
+	 */
 	public function findDeleted($boardId, $limit = null, $offset = null) {
-		$sql = 'SELECT * FROM `*PREFIX*deck_stacks` s
-	  WHERE `s`.`board_id` = ? AND NOT s.deleted_at = 0';
-		return $this->findEntities($sql, [$boardId], $limit, $offset);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->neq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->setFirstResult($offset)
+			->setMaxResults($limit);
+
+		return $this->findEntities($qb);
 	}
 
-
-	public function delete(Entity $entity) {
+	/**
+	 * @param Entity $entity
+	 * @return Entity
+	 * @throws \OCP\DB\Exception
+	 */
+	public function delete(Entity $entity): Entity {
 		// delete cards on stack
 		$this->cardMapper->deleteByStack($entity->getId());
 		return parent::delete($entity);
 	}
 
+	/**
+	 * @param numeric $userId
+	 * @param numeric $stackId
+	 * @return bool
+	 * @throws \OCP\DB\Exception
+	 */
 	public function isOwner($userId, $stackId): bool {
-		$sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_stacks` WHERE id = ?)';
-		$stmt = $this->execute($sql, [$stackId]);
-		$row = $stmt->fetch();
-		return ($row['owner'] === $userId);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('s.id')
+			->from($this->getTableName(), 's')
+			->innerJoin('s', 'deck_boards', 'b', 'b.id = s.board_id')
+			->where($qb->expr()->eq('s.id', $qb->createNamedParameter($stackId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+
+		return count($qb->executeQuery()->fetchAll()) > 0;
 	}
 
+	/**
+	 * @param numeric $id
+	 * @return int|null
+	 * @throws \OCP\DB\Exception
+	 */
 	public function findBoardId($id): ?int {
 		try {
 			$entity = $this->find($id);
