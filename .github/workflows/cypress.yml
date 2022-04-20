@@ -9,7 +9,7 @@ on:
 
 env:
   APP_NAME: deck
-  CYPRESS_baseUrl: http://localhost:8081/index.php
+  CYPRESS_baseUrl: http://nextcloud.local/index.php/
 
 jobs:
   cypress:
@@ -26,6 +26,9 @@ jobs:
         server-versions: [ 'master' ]
 
     steps:
+      - name: Setup custom host for nextcloud 
+        run: echo "127.0.0.1 nextcloud.local" | sudo tee -a /etc/hosts
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
