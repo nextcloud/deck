@@ -39,6 +39,7 @@
 				<referencedClass name="OC\*" />
 				<referencedClass name="OC" />
 				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
+				<referencedClass name="Doctrine\DBAL\Platforms\MySQLPlatform" />
 			</errorLevel>
 		</UndefinedClass>
 		<UndefinedDocblockClass>
@@ -48,6 +49,8 @@
 				<referencedClass name="Doctrine\DBAL\Schema\SchemaException" />
 				<referencedClass name="Doctrine\DBAL\Driver\Statement" />
 				<referencedClass name="Doctrine\DBAL\Schema\Table" />
+				<referencedClass name="Doctrine\DBAL\Platforms\AbstractPlatform" />
+				<referencedClass name="Doctrine\DBAL\Platforms\MySQLPlatform" />
 				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
 			</errorLevel>
 		</UndefinedDocblockClass>
