@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.16.1@aa7e400908833b10c0333861f86cd48c510b60eb">
+<files psalm-version="4.22.0@fc2c6ab4d5fa5d644d8617089f012f3bb84b8703">
   <file src="lib/Activity/ActivityManager.php">
     <TypeDoesNotContainType occurrences="1">
       <code>$message !== null</code>
@@ -9,17 +9,6 @@
     <InvalidScalarArgument occurrences="1">
       <code>(int)$subjectParams['comment']</code>
     </InvalidScalarArgument>
-  </file>
-  <file src="lib/AppInfo/Application.php">
-    <InvalidArgument occurrences="7">
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-    </InvalidArgument>
   </file>
   <file src="lib/Command/UserExport.php">
     <ImplementedReturnTypeMismatch occurrences="1">
@@ -48,11 +37,6 @@
     <UndefinedThisPropertyFetch occurrences="1">
       <code>$this-&gt;userId</code>
     </UndefinedThisPropertyFetch>
-  </file>
-  <file src="lib/Controller/BoardController.php">
-    <UndefinedDocblockClass occurrences="1">
-      <code>\OCP\Deck\DB\Board</code>
-    </UndefinedDocblockClass>
   </file>
   <file src="lib/Controller/CommentsApiController.php">
     <InvalidScalarArgument occurrences="6">
@@ -106,11 +90,6 @@
     <ParamNameMismatch occurrences="1">
       <code>$cardId</code>
     </ParamNameMismatch>
-  </file>
-  <file src="lib/Db/AttachmentMapper.php">
-    <UndefinedVariable occurrences="1">
-      <code>$query</code>
-    </UndefinedVariable>
   </file>
   <file src="lib/Db/BoardMapper.php">
     <ParamNameMismatch occurrences="1">
@@ -183,6 +162,11 @@
     <ParamNameMismatch occurrences="1">
       <code>$stackId</code>
     </ParamNameMismatch>
+  </file>
+  <file src="lib/Migration/Version10800Date20220422061816.php">
+    <MoreSpecificImplementedParamType occurrences="1">
+      <code>$schemaClosure</code>
+    </MoreSpecificImplementedParamType>
   </file>
   <file src="lib/Notification/Notifier.php">
     <RedundantCast occurrences="4">
