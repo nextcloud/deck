@@ -38,11 +38,6 @@
       <code>$this-&gt;userId</code>
     </UndefinedThisPropertyFetch>
   </file>
-  <file src="lib/Controller/BoardController.php">
-    <UndefinedDocblockClass occurrences="1">
-      <code>\OCP\Deck\DB\Board</code>
-    </UndefinedDocblockClass>
-  </file>
   <file src="lib/Controller/CommentsApiController.php">
     <InvalidScalarArgument occurrences="6">
       <code>$cardId</code>
@@ -95,11 +90,6 @@
     <ParamNameMismatch occurrences="1">
       <code>$cardId</code>
     </ParamNameMismatch>
-  </file>
-  <file src="lib/Db/AttachmentMapper.php">
-    <UndefinedVariable occurrences="1">
-      <code>$query</code>
-    </UndefinedVariable>
   </file>
   <file src="lib/Db/BoardMapper.php">
     <ParamNameMismatch occurrences="1">
@@ -165,6 +155,11 @@
     <ParamNameMismatch occurrences="1">
       <code>$stackId</code>
     </ParamNameMismatch>
+  </file>
+  <file src="lib/Migration/Version10800Date20220422061816.php">
+    <MoreSpecificImplementedParamType occurrences="1">
+      <code>$schemaClosure</code>
+    </MoreSpecificImplementedParamType>
   </file>
   <file src="lib/Notification/Notifier.php">
     <RedundantCast occurrences="4">
