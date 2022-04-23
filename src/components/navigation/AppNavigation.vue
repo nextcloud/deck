@@ -23,26 +23,22 @@
 <template>
 	<AppNavigationVue :class="{'icon-loading': loading}">
 		<template #list>
-			<AppNavigationItem
-				:title="t('deck', 'Upcoming cards')"
+			<AppNavigationItem :title="t('deck', 'Upcoming cards')"
 				icon="icon-calendar-dark"
 				:exact="true"
 				to="/" />
-			<AppNavigationBoardCategory
-				id="deck-navigation-all"
+			<AppNavigationBoardCategory id="deck-navigation-all"
 				to="/board"
 				:text="t('deck', 'All boards')"
 				:boards="noneArchivedBoards"
 				:open-on-add-boards="true"
 				icon="icon-deck" />
-			<AppNavigationBoardCategory
-				id="deck-navigation-archived"
+			<AppNavigationBoardCategory id="deck-navigation-archived"
 				to="/board/archived"
 				:text="t('deck', 'Archived boards')"
 				:boards="archivedBoards"
 				icon="icon-archive" />
-			<AppNavigationBoardCategory
-				id="deck-navigation-shared"
+			<AppNavigationBoardCategory id="deck-navigation-shared"
 				to="/board/shared"
 				:text="t('deck', 'Shared with you')"
 				:boards="sharedBoards"

@@ -79,8 +79,7 @@
 					<div v-if="filterVisible" class="filter">
 						<h3>{{ t('deck', 'Filter by tag') }}</h3>
 						<div v-for="label in labelsSorted" :key="label.id" class="filter--item">
-							<input
-								:id="label.id"
+							<input :id="label.id"
 								v-model="filter.tags"
 								type="checkbox"
 								class="checkbox"
@@ -91,8 +90,7 @@
 
 						<h3>{{ t('deck', 'Filter by assigned user') }}</h3>
 						<div class="filter--item">
-							<input
-								id="unassigned"
+							<input id="unassigned"
 								v-model="filter.unassigned"
 								type="checkbox"
 								class="checkbox"
@@ -102,8 +100,7 @@
 							<label for="unassigned">{{ t('deck', 'Unassigned') }}</label>
 						</div>
 						<div v-for="user in board.users" :key="user.uid" class="filter--item">
-							<input
-								:id="user.uid"
+							<input :id="user.uid"
 								v-model="filter.users"
 								type="checkbox"
 								class="checkbox"
@@ -115,8 +112,7 @@
 						<h3>{{ t('deck', 'Filter by due date') }}</h3>
 
 						<div class="filter--item">
-							<input
-								id="overdue"
+							<input id="overdue"
 								v-model="filter.due"
 								type="radio"
 								class="radio"
@@ -127,8 +123,7 @@
 						</div>
 
 						<div class="filter--item">
-							<input
-								id="dueToday"
+							<input id="dueToday"
 								v-model="filter.due"
 								type="radio"
 								class="radio"
@@ -139,8 +134,7 @@
 						</div>
 
 						<div class="filter--item">
-							<input
-								id="dueWeek"
+							<input id="dueWeek"
 								v-model="filter.due"
 								type="radio"
 								class="radio"
@@ -151,8 +145,7 @@
 						</div>
 
 						<div class="filter--item">
-							<input
-								id="dueMonth"
+							<input id="dueMonth"
 								v-model="filter.due"
 								type="radio"
 								class="radio"
@@ -163,8 +156,7 @@
 						</div>
 
 						<div class="filter--item">
-							<input
-								id="noDue"
+							<input id="noDue"
 								v-model="filter.due"
 								type="radio"
 								class="radio"
@@ -181,8 +173,7 @@
 				</Popover>
 
 				<Actions>
-					<ActionButton
-						icon="icon-archive"
+					<ActionButton icon="icon-archive"
 						@click="toggleShowArchived">
 						{{ showArchived ? t('deck', 'Hide archived cards') : t('deck', 'Show archived cards') }}
 					</ActionButton>

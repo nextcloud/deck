@@ -51,8 +51,7 @@
 		</div>
 		<CommentItem v-if="comment.replyTo" :reply="true" :comment="comment.replyTo" />
 		<div v-show="!edit" ref="richTextElement">
-			<RichText
-				class="comment--content"
+			<RichText class="comment--content"
 				:text="richText(comment)"
 				:arguments="richArgs(comment)"
 				:autolink="true" />

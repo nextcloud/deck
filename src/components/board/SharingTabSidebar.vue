@@ -1,7 +1,6 @@
 <template>
 	<div>
-		<Multiselect
-			v-if="canShare"
+		<Multiselect v-if="canShare"
 			v-model="addAcl"
 			:placeholder="t('deck', 'Share board with a user, group or circle …')"
 			:options="formatedSharees"
@@ -21,8 +20,7 @@
 			</template>
 		</Multiselect>
 
-		<ul
-			id="shareWithList"
+		<ul id="shareWithList"
 			class="shareWithList">
 			<li>
 				<Avatar :user="board.owner.uid" />
