@@ -176,7 +176,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user}?" : "Möchten Sie wirklich Das Board {title} an {user} übertragen?",
     "Transfer the board." : "Board übertragen.",
     "Transfer" : "Übertragen",
-    "Transfer the board for {user} successfully" : "Das Board wurde erfolgreich an {user} übertragen",
+    "Transfer the board for {user} successfully" : "Das Board wurde an {user} übertragen",
     "Failed to transfer the board for {user}" : "Board konnte nicht an {user} übertragen werden",
     "Add a new list" : "Eine neue Liste hinzufügen",
     "Archive all cards" : "Alle Karten archivieren",
