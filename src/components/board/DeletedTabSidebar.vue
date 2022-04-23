@@ -8,8 +8,7 @@
 					<span>{{ deletedStack.title }}</span>
 					<span class="timestamp">{{ relativeDate(deletedStack.deletedAt*1000) }}</span>
 				</div>
-				<button
-					:title="t('settings', 'Undo')"
+				<button :title="t('settings', 'Undo')"
 					class="app-navigation-entry-deleted-button icon-history"
 					@click="stackUndoDelete(deletedStack)" />
 			</li>
@@ -23,8 +22,7 @@
 					<span>{{ deletedCard.title }}</span>
 					<span class="timestamp">{{ relativeDate(deletedCard.deletedAt*1000) }}</span>
 				</div>
-				<button
-					:title="t('settings', 'Undo')"
+				<button :title="t('settings', 'Undo')"
 					class="app-navigation-entry-deleted-button icon-history"
 					@click="cardUndoDelete(deletedCard)" />
 			</li>
