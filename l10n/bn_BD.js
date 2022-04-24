@@ -7,13 +7,16 @@ OC.L10N.register(
     "No file was uploaded" : "কোন ফাইল আপলোড করা হয় নি",
     "Missing a temporary folder" : "অস্থায়ী ফোল্ডারটি হারানো গিয়েছে",
     "Cancel" : "বাতির",
+    "Close" : "বন্ধ",
     "Details" : "বিসতারিত",
     "Sharing" : "ভাগাভাগিরত",
     "Tags" : "ট্যাগ",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
+    "Owner" : "Owner",
     "Delete" : "মুছে",
     "Edit" : "সম্পাদনা",
+    "Download" : "ডাউনলোড",
     "Modified" : "পরিবর্তিত",
     "Today" : "আজ",
     "Tomorrow" : "আগামীকাল",
@@ -23,6 +26,7 @@ OC.L10N.register(
     "Description" : "বিবরণ",
     "(group)" : "(গোষ্ঠি)",
     "seconds ago" : "সেকেন্ড পূর্বে",
-    "Shared with you" : "Shared with you"
+    "Shared with you" : "Shared with you",
+    "Share" : "ভাগাভাগি কর"
 },
 "nplurals=2; plural=(n != 1);");

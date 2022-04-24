@@ -1,0 +1,28 @@
+OC.L10N.register(
+    "deck",
+    {
+    "Personal" : "ສ່ວນບຸກຄົນ",
+    "Finished" : "ສຳເລັດ",
+    "Done" : "ສໍາເລັດ",
+    "Cancel" : "ຍົກເລີກ",
+    "Close" : "ປິດ",
+    "Details" : "ລາຍລະອຽດ",
+    "Sharing" : "ການແບ່ງປັນ",
+    "Tags" : "ປ້າຍກຳກັບ",
+    "Can edit" : "ແກ້ໄຂໄດ້",
+    "Can share" : "ແບ່ງປັນໄດ້",
+    "Owner" : "ເຈົ້າຂອງ",
+    "Delete" : "ລຶບ",
+    "Edit" : "ແກ້ໄຂ",
+    "Download" : "ດາວໂຫລດ",
+    "Comments" : "ຄໍາເຫັນ",
+    "Modified" : "\"{name}\" ແມ່ນຊື່ໄຟລ໌ທີ່ບໍ່ຖືກຕ້ອງ.",
+    "Today" : "ມື້ນີ້",
+    "Save" : "ບັນທຶກ",
+    "seconds ago" : "ວິນາທີຜ່ານມາ",
+    "Shared with you" : "ແບ່ງປັບກັບທ່ານ",
+    "No notifications" : "ບໍ່ມີການແຈ້ງເຕືອນ",
+    "Share" : "ແບ່ງປັນ",
+    "This week" : "ທິດນີ້"
+},
+"nplurals=1; plural=0;");

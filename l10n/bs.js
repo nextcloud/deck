@@ -7,12 +7,15 @@ OC.L10N.register(
     "No file was uploaded" : "Nijedna datoteka nije učitana.",
     "Missing a temporary folder" : "Nedostaje privremeni direktorij.",
     "Cancel" : "Otkaži",
+    "Close" : "Zatvori",
     "Sharing" : "Dijeljenje",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
+    "Owner" : "Vlasnik",
     "Delete" : "Obriši",
     "Edit" : "Izmjeni",
     "Members" : "Članovi",
+    "Download" : "Preuzmi",
     "Comments" : "Komentari",
     "Modified" : "Izmijenjeno",
     "Today" : "Danas",
@@ -21,6 +24,7 @@ OC.L10N.register(
     "Update" : "Ažuriraj",
     "Description" : "Opis",
     "Shared with you" : "Shared with you",
-    "Maximum file size of {size} exceeded" : "Maksimalna veličina datoteke prekoračena"
+    "Maximum file size of {size} exceeded" : "Maksimalna veličina datoteke prekoračena",
+    "Share" : "Podjeli"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

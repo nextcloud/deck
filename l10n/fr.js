@@ -173,6 +173,7 @@ OC.L10N.register(
     "Owner" : "Propriétaire",
     "Delete" : "Supprimer",
     "Failed to create share with {displayName}" : "Échec de la création du partage avec {displayName}",
+    "Transfer" : "Transfert",
     "Add a new list" : "Ajouter une nouvelle liste",
     "Archive all cards" : "Archiver toutes les cartes",
     "Delete list" : "Supprimer la liste",
