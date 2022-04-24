@@ -5,8 +5,10 @@
     "To review" : "Дахин хянах",
     "Action needed" : "Үйлдэл шаардлагатай",
     "Later" : "Хойшлуулах",
+    "copy" : "Хуулах ",
     "Done" : "Хийсэн",
     "Cancel" : "болиулах",
+    "Close" : "Хаах",
     "Hide archived cards" : "Архивлагдсан картуудыг нуух",
     "Show archived cards" : "Архивлагдсан картуудыг харах",
     "Details" : "Дэлгэрэнгүй",
@@ -15,9 +17,11 @@
     "Undo" : "буцах",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
+    "Owner" : "Эзэмшигч",
     "Delete" : "Устгах",
     "Edit" : "Засварлах",
     "Members" : "Гишүүд",
+    "Download" : "Татах",
     "Attachments" : "Хавсралт",
     "Comments" : "Сэтгэгдлүүд",
     "Modified" : "Өөрчлөгдсөн",
@@ -31,6 +35,8 @@
     "(group)" : "(бүлэг)",
     "seconds ago" : "хоёрдахь өмнө",
     "Shared with you" : "тантай хуваалцсан",
+    "No notifications" : "Мэдэгдэл байхгүй",
+    "Share" : "Түгээх",
     "This week" : "7 хоног"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
