@@ -9,15 +9,18 @@
     "No file was uploaded" : "Nulle file esseva incargate",
     "Missing a temporary folder" : "Il manca un dossier temporari",
     "Cancel" : "Cancellar",
+    "Close" : "Clauder",
     "Details" : "Detalios",
     "Sharing" : "Compartente",
     "Tags" : "Etiquettas",
     "Undo" : "Disfacer",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
+    "Owner" : "Owner",
     "Delete" : "Deler",
     "Edit" : "Modificar",
     "Members" : "Membros",
+    "Download" : "Discargar",
     "Attachments" : "Attachamentos",
     "Comments" : "Commentarios",
     "Modified" : "Modificate",
@@ -30,6 +33,8 @@
     "(group)" : "(gruppo)",
     "seconds ago" : "secundas passate",
     "Shared with you" : "Compartite con te",
+    "No notifications" : "Nulle notificationes",
+    "Share" : "Compartir",
     "This week" : "Iste septimana"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

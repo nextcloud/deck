@@ -160,8 +160,10 @@
     "Can edit" : "編集可能",
     "Can share" : "共有可能",
     "Can manage" : "管理可能",
+    "Owner" : "所有者",
     "Delete" : "削除",
     "Failed to create share with {displayName}" : "{displayName}との共有の作成に失敗しました",
+    "Transfer" : "転送",
     "Add a new list" : "新しいリストを追加",
     "Archive all cards" : "すべてのカードをアーカイブする",
     "Delete list" : "リストを削除",
@@ -272,6 +274,9 @@
     "Share {file} with a Deck card" : "{file}をデッキのカードで共有する",
     "Share" : "共有",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "DeckはNextcloudと統合した、チームの個人計画とプロジェクトの組織化を目的としたカンバンスタイルの組織ツールです。\n\n\n- 📥 タスクをカードに追加して整理する\n- 📄 マークダウンで追加のメモを書き留めます\n- 🔖 より良い組織のためにラベルを割り当てる\n- 👥 あなたのチーム、友人、家族と共有する\n- 📎 ファイルを添付してマークダウンの説明に埋め込む\n- 💬 コメントを使ってあなたのチームと話し合う\n- ⚡ アクティビティの流れの変化を追跡する\n- 🚀 プロジェクトを整理する",
+    "Creating the new card…" : "新しいカードを作成しています…",
+    "\"{card}\" was added to \"{board}\"" : "\"{board}\"に\"{card}\"を追加しました",
+    "(circle)" : "(サークル)",
     "This week" : "今週"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

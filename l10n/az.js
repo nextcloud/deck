@@ -7,13 +7,16 @@ OC.L10N.register(
     "No file was uploaded" : "Heç bir fayl yüklənilmədi",
     "Missing a temporary folder" : "Müvəqqəti qovluq çatışmır",
     "Cancel" : "Dayandır",
+    "Close" : "Bağla",
     "Details" : "Detallar",
     "Sharing" : "Paylaşılır",
     "Tags" : "Işarələr",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
+    "Owner" : "Owner",
     "Delete" : "Sil",
     "Edit" : "Dəyişiklik et",
+    "Download" : "Yüklə",
     "Modified" : "Dəyişdirildi",
     "Today" : "Bu gün",
     "Tomorrow" : "Sabah",
@@ -23,6 +26,7 @@ OC.L10N.register(
     "Description" : "Açıqlanma",
     "(group)" : "(qrup)",
     "seconds ago" : "saniyələr öncə",
-    "Shared with you" : "Shared with you"
+    "Shared with you" : "Shared with you",
+    "Share" : "Paylaş"
 },
 "nplurals=2; plural=(n != 1);");
