@@ -5,21 +5,27 @@
     "No file was uploaded" : "Ingen filer vart lasta opp",
     "Missing a temporary folder" : "Manglar ei mellombels mappe",
     "Cancel" : "Avbryt",
+    "Close" : "Lukk",
     "Details" : "Detaljar",
     "Sharing" : "Deling",
     "Tags" : "Emneord",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
+    "Owner" : "Owner",
     "Delete" : "Ta bort",
     "Edit" : "Endra",
+    "Download" : "Last ned",
     "Comments" : "Kommentarar",
     "Modified" : "Endra",
     "Created" : "Lagd",
     "Today" : "I dag",
     "Save" : "Lagre",
+    "Cancel reply" : "Avbryt svar",
+    "Reply" : "Svare",
     "Update" : "Oppdater",
     "Description" : "Skildring",
     "seconds ago" : "sekund sidan",
-    "Shared with you" : "Shared with you"
+    "Shared with you" : "Shared with you",
+    "Share" : "Del"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -223,6 +223,7 @@ OC.L10N.register(
     "Board details" : "Taulun tiedot",
     "Edit board" : "Muokkaa taulua",
     "Clone board" : "Monista taulu",
+    "Unarchive board" : "Kumoa taulun arkistointi",
     "Archive board" : "Arkistoi taulu",
     "All cards" : "Kaikki kortit",
     "No notifications" : "Ei ilmoituksia",

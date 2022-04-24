@@ -10,13 +10,17 @@
     "Missing a temporary folder" : "Ontbrekende tydelike gids",
     "A PHP extension stopped the file upload" : "’n PHP-uitbreiding het die oplaai gestaak",
     "Cancel" : "Kanselleer",
+    "Close" : "Sluit",
     "File already exists" : "Lêer bestaan reeds",
     "Details" : "Besonderhede",
     "Tags" : "Etikette",
+    "No participants found" : "Geen deelnemers gevind",
     "Can edit" : "Kan redigeer",
     "Can share" : "Kan deel",
+    "Owner" : "Eienaar",
     "Delete" : "Skrap",
     "Edit" : "Wysig",
+    "Download" : "Laai af",
     "Comments" : "Kommentare",
     "Modified" : "Gewysig",
     "Created" : "Geskep",
@@ -30,7 +34,9 @@
     "Description" : "Beskrywing",
     "seconds ago" : "sekondes gelede",
     "Shared with you" : "Met u gedeel",
+    "No notifications" : "Geen kennisgewings",
     "An error occurred" : "'n Fout het voorgekom",
+    "Share" : "Deel",
     "This week" : "Vandeesweek"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

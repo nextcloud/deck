@@ -2,11 +2,14 @@
     "Personal" : "Անձնական",
     "Done" : "Done",
     "Cancel" : "ընդհատել",
+    "Close" : "Փակել",
     "Details" : "Մանրամասներ",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
+    "Owner" : "Owner",
     "Delete" : "հեռացնել",
     "Edit" : "մշակել",
+    "Download" : "Ներբեռնել",
     "Comments" : "Կարծիքներ",
     "Modified" : "Փոփոխված",
     "Today" : "այսօր",
@@ -15,6 +18,7 @@
     "Description" : "Նկարագրություն",
     "seconds ago" : "վրկ. առաջ",
     "Shared with you" : "Shared with you",
+    "Share" : "Կիսվել",
     "This week" : "այս շաբաթ"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

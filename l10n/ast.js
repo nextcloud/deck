@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Deck" : "Deck",
     "Personal" : "Personal",
+    "%s on %s" : "%s en %s",
     "Finished" : "Finó",
     "Action needed" : "Precísase aición",
     "Later" : "Más sero",
@@ -14,7 +15,9 @@ OC.L10N.register(
     "Missing a temporary folder" : "Falta un direutoriu temporal",
     "Could not write file to disk" : "Nun pudo escribise nel discu'l ficheru",
     "A PHP extension stopped the file upload" : "Una estensión de PHP paró la xuba de ficheros",
+    "Invalid date, date format must be YYYY-MM-DD" : "Data non válida, el formatu ha ser AAAA-MM-DD",
     "Cancel" : "Encaboxar",
+    "Close" : "Zarrar",
     "File already exists" : "Yá esiste'l ficheru",
     "Show archived cards" : "Amosar tarxetes archivaes",
     "Details" : "Detalles",
@@ -23,9 +26,11 @@ OC.L10N.register(
     "Undo" : "Desfacer",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
+    "Owner" : "Owner",
     "Delete" : "Desaniciar",
     "Edit" : "Editar",
     "Members" : "Miembros",
+    "Download" : "Baxar",
     "Attachments" : "Axuntos",
     "Comments" : "Comentarios",
     "Modified" : "Modificóse'l",
@@ -39,6 +44,8 @@ OC.L10N.register(
     "(group)" : "(grupu)",
     "seconds ago" : "hai segundos",
     "Shared with you" : "Shared with you",
+    "No notifications" : "Ensin avisos",
+    "Share" : "Share",
     "This week" : "Esta selmana"
 },
 "nplurals=2; plural=(n != 1);");

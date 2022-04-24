@@ -173,7 +173,7 @@ OC.L10N.register(
     "Owner" : "Besitzer",
     "Delete" : "Löschen",
     "Failed to create share with {displayName}" : "Fehler beim Erstellen der Freigabe mit dem Namen {displayName}",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Möchten Sie wirklich Das Board {title} an {user} übertragen?",
+    "Are you sure you want to transfer the board {title} for {user}?" : "Möchten Sie wirklich das Board {title} an {user} übertragen?",
     "Transfer the board." : "Board übertragen.",
     "Transfer" : "Übertragen",
     "Transfer the board for {user} successfully" : "Das Board wurde an {user} übertragen",
@@ -297,6 +297,6 @@ OC.L10N.register(
     "\"{card}\" was added to \"{board}\"" : "\"{card}\" wurde \"{board}\" hinzugefügt",
     "(circle)" : "(Kreis)",
     "This week" : "Diese Woche",
-    "Are you sure you want to transfer the board {title} for {user} ?" : "Möchten Sie wirklich Das Board {title} an {user} übertragen?"
+    "Are you sure you want to transfer the board {title} for {user} ?" : "Möchten Sie wirklich das Board {title} an {user} übertragen?"
 },
 "nplurals=2; plural=(n != 1);");

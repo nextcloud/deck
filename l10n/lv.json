@@ -7,7 +7,9 @@
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Augšupielādētā datne pārsniedz MAX_FILE_SIZE norādi, kas ir norādīta HTML formā",
     "No file was uploaded" : "Neviena datne netika augšupielādēta",
     "Missing a temporary folder" : "Trūkst pagaidu mapes",
+    "Invalid date, date format must be YYYY-MM-DD" : "Nederīgs datums, datuma formātam jābūt YYYY-MM-DD",
     "Cancel" : "Atcelt",
+    "Close" : "Aizvērt",
     "File already exists" : "Datne jau pastāv",
     "Do you want to overwrite it?" : "Vai tu gribi pārrakstīt to?",
     "Hide archived cards" : "Slēpt arhivētās kartes",
@@ -19,9 +21,12 @@
     "(Group)" : "(Grupa)",
     "Can edit" : "Var rediģēt",
     "Can share" : "Var koplietot",
+    "Owner" : "Īpašnieks",
     "Delete" : "Dzēst",
     "Edit" : "Rediģēt",
     "Members" : "Biedri",
+    "Download" : "Lejupielādēt",
+    "File to share" : "Kopīgojamā datne",
     "Attachments" : "Pielikumi",
     "Comments" : "Komentāri",
     "Modified" : "Mainīts",
@@ -37,7 +42,9 @@
     "(group)" : "(grupa)",
     "seconds ago" : "sekundēm",
     "Shared with you" : "Koplietots ar tevi",
+    "No notifications" : "Nav paziņojumu",
     "An error occurred" : "Gadījās kļūda",
+    "Share" : "Koplietot",
     "This week" : "Šonedēļ"
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);"
 }

@@ -7,13 +7,16 @@ OC.L10N.register(
     "No file was uploaded" : "Et ass kee Fichier ropgeluede ginn",
     "Missing a temporary folder" : "Et feelt en temporären Dossier",
     "Cancel" : "Ofbriechen",
+    "Close" : "Zoumaachen",
     "Details" : "Detailer",
     "Sharing" : "Gedeelt",
     "Tags" : "Tags",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
+    "Owner" : "Owner",
     "Delete" : "Läschen",
     "Edit" : "Änneren",
+    "Download" : "Eroflueden",
     "Comments" : "Kommentarer",
     "Modified" : "Geännert",
     "Today" : "Haut",
@@ -23,6 +26,7 @@ OC.L10N.register(
     "Update" : "Update",
     "Description" : "Beschreiwung",
     "seconds ago" : "Sekonnen hier",
-    "Shared with you" : "Mat dir gedeelt"
+    "Shared with you" : "Mat dir gedeelt",
+    "Share" : "Deelen"
 },
 "nplurals=2; plural=(n != 1);");
