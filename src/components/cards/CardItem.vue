@@ -74,6 +74,7 @@
 					<span @click.stop="applyLabelFilter(label)">{{ label.title }}</span>
 				</li>
 			</transition-group>
+
 			<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
 				<CardBadges :card="card" />
 			</div>

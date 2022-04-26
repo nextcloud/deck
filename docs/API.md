@@ -1066,6 +1066,7 @@ Deck stores user and app configuration values globally and per board. The GET en
 | --- | --- |
 | calendar | Determines if the calendar/tasks integration through the CalDAV backend is enabled for the user (boolean) | 
 | cardDetailsInModal | Determines if the bigger view is used (boolean) | 
+| cardIdBadge | Determines if the ID badges are displayed on cards (boolean) | 
 | groupLimit | Determines if creating new boards is limited to certain groups of the instance. The resulting output is an array of group objects with the id and the displayname (Admin only)|  
 
 ```
@@ -1079,6 +1080,7 @@ Deck stores user and app configuration values globally and per board. The GET en
     "data": {
       "calendar": true,
       "cardDetailsInModal": true,
+      "cardIdBadge": true,
       "groupLimit": [
         {
           "id": "admin",
@@ -1109,6 +1111,7 @@ Deck stores user and app configuration values globally and per board. The GET en
 | notify-due | `off`, `assigned` or `all` |
 | calendar | Boolean |
 | cardDetailsInModal | Boolean |
+| cardIdBadge | Boolean |
  
 #### Example request
 
