@@ -9,7 +9,7 @@ on:
 
 env:
   APP_NAME: deck
-  CYPRESS_baseUrl: http://nextcloud.local/index.php/
+  CYPRESS_baseUrl: http://nextcloud.local/index.php
 
 jobs:
   cypress:
@@ -26,8 +26,10 @@ jobs:
         server-versions: [ 'master' ]
 
     steps:
-      - name: Setup custom host for nextcloud 
-        run: echo "localhost nextcloud.local" | sudo tee -a /etc/hosts
+      - name: Set up custom host for nextcloud 
+        run: |
+            sudo echo "127.0.0.1 nextcloud.local" | sudo tee -a /etc/hosts
+            cat /etc/hosts
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
@@ -73,13 +75,13 @@ jobs:
           php occ config:system:set memcache.local --value="\\OC\\Memcache\\APCu"
           php occ config:system:set debug --value=true --type=boolean
           php -f index.php
-          php -S 0.0.0.0:80 &
+          sudo php -S 0.0.0.0:80 &
           export OC_PASS=1234561
           php occ user:add --password-from-env user1
           php occ user:add --password-from-env user2
           php occ app:enable deck
           php occ app:list
-          curl -v http://localhost/index.php/login
+          curl -v http://nextcloud.local/index.php/login
           cat data/nextcloud.log
 
       - name: Cypress run
