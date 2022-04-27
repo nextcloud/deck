@@ -137,16 +137,17 @@ class AttachmentService {
 
 	/**
 	 * @param $cardId
+	 * @param bool $update | Force the update of the cached values 
 	 * @return int|mixed
 	 * @throws BadRequestException
 	 */
-	public function count($cardId) {
+	public function count($cardId, $update = false) {
 		if (is_numeric($cardId) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
 
 		$count = $this->cache->get('card-' . $cardId);
-		if (!$count) {
+		if ($update OR !$count) {
 			$count = count($this->attachmentMapper->findAll($cardId));
 
 			foreach (array_keys($this->services) as $attachmentType) {
