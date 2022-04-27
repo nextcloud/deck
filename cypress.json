@@ -1,7 +1,7 @@
 {
   "baseUrl": "http://nextcloud.local/index.php",
-  "projectId": "hx9gqy",
+  "projectId": "1s7wkc",
   "viewportWidth": 1280,
   "viewportHeight": 720,
-  "experimentalSessionSupport": true
+  "experimentalSessionAndOrigin": true
 }
