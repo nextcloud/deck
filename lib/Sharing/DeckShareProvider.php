@@ -35,6 +35,7 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\PermissionService;
+use OCA\Deck\Service\AttachmentService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -76,16 +77,29 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	private $cardMapper;
 	/** @var PermissionService */
 	private $permissionService;
+	/** @var AttachmentService */
+	private $attachmentService;
 	/** @var ITimeFactory */
 	private $timeFactory;
 	private $l;
 
-	public function __construct(IDBConnection $connection, IManager $shareManager, ISecureRandom $secureRandom, BoardMapper $boardMapper, CardMapper $cardMapper, PermissionService $permissionService, IL10N $l) {
+	public function __construct(
+		IDBConnection $connection, 
+		IManager $shareManager, 
+		ISecureRandom $secureRandom, 
+		BoardMapper $boardMapper, 
+		CardMapper $cardMapper, 
+		AttachmentService $attachmentService,
+		PermissionService $permissionService, 
+		IL10N $l
+	) {
 		$this->dbConnection = $connection;
 		$this->shareManager = $shareManager;
 		$this->boardMapper = $boardMapper;
 		$this->cardMapper = $cardMapper;
+		$this->attachmentService = $attachmentService;
 		$this->permissionService = $permissionService;
+
 		$this->l = $l;
 		$this->timeFactory = \OC::$server->get(ITimeFactory::class);
 	}
@@ -152,6 +166,8 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			$share->getExpirationDate()
 		);
 		$data = $this->getRawShare($shareId);
+
+		$this->attachmentService->count($cardId, true);
 
 		return $this->createShareObject($data);
 	}
