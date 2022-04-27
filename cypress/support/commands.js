@@ -19,28 +19,28 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
+
  const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
  Cypress.env('baseUrl', url)
- 
+
  Cypress.Commands.add('login', (user, password, route = '/apps/deck/') => {
-	let session = `${user}-${Date.now()}` 
+	let session = `${user}-${Date.now()}`
 	cy.session(session, function () {
 		cy.visit(route)
 		cy.get('input[name=user]').type(user)
 		cy.get('input[name=password]').type(password)
-		cy.get('#submit-wrapper input[type=submit]').click()
+		cy.get('.submit-wrapper input[type=submit]').click()
 		cy.url().should('include', route)
 	})
 	// in case the session already existed but we are on a different route...
 	cy.visit(route)
 })
- 
+
  Cypress.Commands.add('logout', (route = '/') => {
 	 cy.session('_guest', function () {
 	 })
  })
- 
+
  Cypress.Commands.add('nextcloudCreateUser', (user, password) => {
 	 cy.clearCookies()
 	 cy.request({
@@ -60,7 +60,7 @@
 		 cy.log(`Created user ${user}`, response.status)
 	 })
  })
- 
+
  Cypress.Commands.add('nextcloudUpdateUser', (user, password, key, value) => {
 	 cy.request({
 		 method: 'PUT',
@@ -79,7 +79,7 @@
 
  Cypress.Commands.add('deckCreateBoard', ({ user, password }, title) => {
 	cy.login(user, password)
-	
+
 	cy.get('.app-navigation button.app-navigation-toggle').click()
 	cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
 		.eq(1)
@@ -97,7 +97,7 @@
 
  Cypress.Commands.add('deckCreateList', ({ user, password }, title) => {
 	cy.login(user, password)
-	
+
 	cy.get('.app-navigation button.app-navigation-toggle').click()
 	cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
 		.eq(1)
@@ -112,4 +112,4 @@
 		.first()
 		.click()
  })
- 
+
