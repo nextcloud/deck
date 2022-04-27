@@ -50,7 +50,7 @@ export default {
 
 				if (users.length > 0) {
 					users.forEach((user) => {
-						if (card.assignedUsers.findIndex((u) => u.participant.uid === user) === -1) {
+						if (!card?.assignedUsers || card.assignedUsers.findIndex((u) => u.participant.uid === user) === -1) {
 							allUsersMatch = false
 						}
 					})
