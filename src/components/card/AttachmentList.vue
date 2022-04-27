@@ -109,7 +109,7 @@ import relativeDate from '../../mixins/relativeDate'
 import { formatFileSize } from '@nextcloud/files'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl, generateOcsUrl, generateRemoteUrl } from '@nextcloud/router'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { loadState } from '@nextcloud/initial-state'
 import attachmentUpload from '../../mixins/attachmentUpload'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
@@ -205,11 +205,14 @@ export default {
 		cardId: {
 			immediate: true,
 			handler() {
-				this.$store.dispatch('fetchAttachments', this.cardId)
+				this.fetchAttachments(this.cardId)
 			},
 		},
 	},
 	methods: {
+		...mapActions([
+			"fetchAttachments",
+		]),
 		handleUploadFile(event) {
 			const files = event.target.files ?? []
 			for (const file of files) {
@@ -233,8 +236,7 @@ export default {
 						shareType: 12,
 						shareWith: '' + this.cardId,
 					}).then(() => {
-						this.$store.dispatch('fetchAttachments', this.cardId)
-						this.$store.commit('cardIncreaseAttachmentCount', this.cardId)
+						this.fetchAttachments(this.cardId)
 					})
 				})
 		},
