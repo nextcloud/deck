@@ -324,6 +324,12 @@ h5 {
 	border-left: 1px solid var(--color-main-text);
 }
 
+.CodeMirror-selected,
+.CodeMirror-line::selection, .CodeMirror-line>span::selection, .CodeMirror-line>span>span::selection {
+	background: var(--color-primary-element) !important;
+	color: var(--color-primary-text) !important;
+}
+
 .editor-preview,
 .editor-statusbar {
 	display: none;
