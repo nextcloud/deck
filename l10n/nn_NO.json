@@ -15,6 +15,7 @@
     "Delete" : "Ta bort",
     "Edit" : "Endra",
     "Download" : "Last ned",
+    "Remove attachment" : "Fjern vedlegg",
     "Comments" : "Kommentarar",
     "Modified" : "Endra",
     "Created" : "Lagd",
@@ -26,6 +27,7 @@
     "Description" : "Skildring",
     "seconds ago" : "sekund sidan",
     "Shared with you" : "Shared with you",
+    "An error occurred" : "Det oppstod ein feil.",
     "Share" : "Del"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
