@@ -225,6 +225,8 @@ export default {
 		max-width: calc(100% - #{$modal-padding*2});
 		padding: 0 14px;
 		max-height: 100%;
+		overflow: initial;
+
 		&::v-deep {
 			.app-sidebar-header {
 				position: sticky;
@@ -238,6 +240,10 @@ export default {
 				margin: 0;
 				z-index: 100;
 				background-color: var(--color-main-background);
+			}
+
+			.app-sidebar__tab {
+				overflow: initial;
 			}
 
 			#emptycontent, .emptycontent {
