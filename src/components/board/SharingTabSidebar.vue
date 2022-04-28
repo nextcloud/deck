@@ -200,7 +200,7 @@ export default {
 		},
 		clickTransferOwner(newOwner) {
 			OC.dialogs.confirmDestructive(
-				t('deck', 'Are you sure you want to transfer the board {title} for {user}?', { title: this.board.title, user: newOwner }),
+				t('deck', 'Are you sure you want to transfer the board {title} to {user}?', { title: this.board.title, user: newOwner }),
 				t('deck', 'Transfer the board.'),
 				{
 					type: OC.dialogs.YES_NO_BUTTONS,
@@ -216,11 +216,11 @@ export default {
 								boardId: this.board.id,
 								newOwner
 							})
-							const successMessage = t('deck', 'Transfer the board for {user} successfully', { user: newOwner })
+							const successMessage = t('deck', 'The board has been transferred to {user}', { user: newOwner })
 							showSuccess(successMessage)
 							this.$router.push({ name: 'main' })
 						} catch (e) {
-							const errorMessage = t('deck', 'Failed to transfer the board for {user}', { user: newOwner.user })
+							const errorMessage = t('deck', 'Failed to transfer the board to {user}', { user: newOwner.user })
 							showError(errorMessage)
 						} finally {
 							this.isLoading = false
