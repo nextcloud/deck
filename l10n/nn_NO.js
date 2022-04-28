@@ -17,6 +17,7 @@ OC.L10N.register(
     "Delete" : "Ta bort",
     "Edit" : "Endra",
     "Download" : "Last ned",
+    "Remove attachment" : "Fjern vedlegg",
     "Comments" : "Kommentarar",
     "Modified" : "Endra",
     "Created" : "Lagd",
@@ -28,6 +29,7 @@ OC.L10N.register(
     "Description" : "Skildring",
     "seconds ago" : "sekund sidan",
     "Shared with you" : "Shared with you",
+    "An error occurred" : "Det oppstod ein feil.",
     "Share" : "Del"
 },
 "nplurals=2; plural=(n != 1);");
