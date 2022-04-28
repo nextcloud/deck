@@ -186,7 +186,7 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadrequestException
 	 */
-	public function create($title, $stackId, $type, $order, $owner, $description = '', $duedate = null) {
+	public function create($title, $stackId, $type, $order, $owner, $description = '', $duedate = null, $valuecard = null) {
 		if ($title === 'false' || $title === null) {
 			throw new BadRequestException('title must be provided');
 		}
@@ -223,6 +223,7 @@ class CardService {
 		$card->setOwner($owner);
 		$card->setDescription($description);
 		$card->setDuedate($duedate);
+		$card->setValuecard($valuecard);
 		$card = $this->cardMapper->insert($card);
 
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE);
@@ -278,7 +279,7 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function update($id, $title, $stackId, $type, $owner, $description = '', $order = 0, $duedate = null, $deletedAt = null, $archived = null) {
+	public function update($id, $title, $stackId, $type, $owner, $description = '', $order = 0, $duedate = null, $deletedAt = null, $archived = null, $valuecard = null) {
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
@@ -335,6 +336,7 @@ class CardService {
 		$card->setOrder($order);
 		$card->setOwner($owner);
 		$card->setDuedate($duedate);
+		$card->setValuecard($valuecard);
 		$resetDuedateNotification = false;
 		if (
 			$card->getDuedate() === null ||

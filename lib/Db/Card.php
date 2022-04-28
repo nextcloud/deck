@@ -50,6 +50,7 @@ class Card extends RelationalEntity {
 	protected $deletedAt = 0;
 	protected $commentsUnread = 0;
 	protected $commentsCount = 0;
+	protected $valuecard;
 
 	protected $relatedStack = null;
 	protected $relatedBoard = null;
@@ -70,6 +71,7 @@ class Card extends RelationalEntity {
 		$this->addType('archived', 'boolean');
 		$this->addType('notified', 'boolean');
 		$this->addType('deletedAt', 'integer');
+		$this->addType('valuecard', 'integer');
 		$this->addRelation('labels');
 		$this->addRelation('assignedUsers');
 		$this->addRelation('attachments');
@@ -96,6 +98,13 @@ class Card extends RelationalEntity {
 			return $dt->format('Y-m-d H:i:s');
 		}
 		return $dt->format('c');
+	}
+
+	public function getValuecard() {
+		if ($this->valuecard === null) {
+			return null;
+		}
+		return $this->valuecard;
 	}
 
 	public function jsonSerialize(): array {

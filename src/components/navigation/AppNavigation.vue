@@ -52,6 +52,15 @@
 		<template #footer>
 			<AppNavigationSettings>
 				<div>
+					<div class="value-unit">
+						<label for="set-value-unit">
+							{{ t('deck', 'Set value unit') }}
+						</label>
+						<input id="set-value-unit"
+							v-model="configValueUnit"
+							type="text">
+					</div>
+
 					<div>
 						<input id="toggle-modal"
 							v-model="cardDetailsInModal"
@@ -158,6 +167,14 @@ export default {
 				this.$store.dispatch('setConfig', { calendar: newValue })
 			},
 		},
+		configValueUnit: {
+			get() {
+				return this.$store.getters.config('valueUnit')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { valueUnit: newValue })
+			},
+		},
 	},
 	beforeMount() {
 		if (this.isAdmin) {
@@ -191,5 +208,11 @@ export default {
 			margin-bottom: 20px;
 			color: var(--color-text-light);
 		}
+	}
+
+	.value-unit {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 	}
 </style>

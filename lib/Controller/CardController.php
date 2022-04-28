@@ -78,8 +78,8 @@ class CardController extends Controller {
 	 * @param int $order
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function create($title, $stackId, $type = 'plain', $order = 999, string $description = '') {
-		return $this->cardService->create($title, $stackId, $type, $order, $this->userId, $description);
+	public function create($title, $stackId, $type = 'plain', $order = 999, string $description = '', $valuecard = null) {
+		return $this->cardService->create($title, $stackId, $type, $order, $this->userId, $description, null, $valuecard);
 	}
 
 	/**
@@ -94,8 +94,8 @@ class CardController extends Controller {
 	 * @param $deletedAt
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function update($id, $title, $stackId, $type, $order, $description, $duedate, $deletedAt) {
-		return $this->cardService->update($id, $title, $stackId, $type, $this->userId, $description, $order, $duedate, $deletedAt);
+	public function update($id, $title, $stackId, $type, $order, $description, $duedate, $deletedAt, $valuecard) {
+		return $this->cardService->update($id, $title, $stackId, $type, $this->userId, $description, $order, $duedate, $deletedAt, null, $valuecard);
 	}
 
 	/**

@@ -112,6 +112,18 @@
 		</div>
 
 		<div class="section-wrapper">
+			<div v-tooltip="t('deck', 'Value of card')" class="section-label icon-edit">
+				<span class="hidden-visually">{{ t('deck', 'Value of card') }}</span>
+			</div>
+			<div class="section-details">
+				<input v-model="valuecard"
+					:disabled="!canEdit"
+					type="text"
+					:placeholder="t('deck', 'Set a value')">
+			</div>
+		</div>
+
+		<div class="section-wrapper">
 			<CollectionList v-if="card.id"
 				:id="`${card.id}`"
 				:name="card.title"
@@ -266,6 +278,19 @@ export default {
 				await this.$store.dispatch('updateCardDue', {
 					...this.copiedCard,
 					duedate: val ? (new Date(val)).toISOString() : null,
+				})
+				this.saving = false
+			},
+		},
+		valuecard: {
+			get() {
+				return this.card.valuecard
+			},
+			async set(val) {
+				this.saving = true
+				await this.$store.dispatch('updateValue', {
+					...this.copiedCard,
+					valuecard: parseInt(val),
 				})
 				this.saving = false
 			},

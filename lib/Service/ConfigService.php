@@ -68,6 +68,7 @@ class ConfigService {
 		$data = [
 			'calendar' => $this->isCalendarEnabled(),
 			'cardDetailsInModal' => $this->isCardDetailsInModal(),
+			'valueUnit' => $this->get('valueUnit')
 		];
 		if ($this->groupManager->isAdmin($this->getUserId())) {
 			$data['groupLimit'] = $this->get('groupLimit');
@@ -79,6 +80,8 @@ class ConfigService {
 		$result = null;
 		[$scope] = explode(':', $key, 2);
 		switch ($scope) {
+			case 'valueUnit':
+				return $this->getValueUnit();
 			case 'groupLimit':
 				if ($this->getUserId() === null || !$this->groupManager->isAdmin($this->getUserId())) {
 					throw new NoPermissionException('You must be admin to get the group limit');
@@ -132,6 +135,9 @@ class ConfigService {
 		$result = null;
 		[$scope] = explode(':', $key, 2);
 		switch ($scope) {
+			case 'valueUnit':
+				$result = $this->setValueUnit($value);
+				break;
 			case 'groupLimit':
 				if (!$this->groupManager->isAdmin($this->getUserId())) {
 					throw new NoPermissionException('You must be admin to set the group limit');
@@ -174,6 +180,15 @@ class ConfigService {
 			return [];
 		}
 		return $groups;
+	}
+
+	private function setValueUnit($value) {
+		$this->config->setAppValue(Application::APP_ID, 'valueUnit', $value);
+		return $value;
+	}
+
+	private function getValueUnit() {
+		return $this->config->getAppValue(Application::APP_ID, 'valueUnit', '$');
 	}
 
 	private function getGroupLimit() {

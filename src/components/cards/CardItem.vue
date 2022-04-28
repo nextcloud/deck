@@ -70,6 +70,9 @@
 				</li>
 			</transition-group>
 			<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
+				<div v-show="card.valuecard !== null" class="value">
+					{{ valueUnit }}{{ card.valuecard }}
+				</div>
 				<CardBadges :card="card" />
 			</div>
 		</div>
@@ -143,6 +146,11 @@ export default {
 		},
 		labelsSorted() {
 			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+		},
+		valueUnit: {
+			get() {
+				return this.$store.getters.config('valueUnit')
+			},
 		},
 	},
 	watch: {
@@ -298,6 +306,13 @@ export default {
 			height: 6px;
 			font-size: 0;
 			color: transparent;
+		}
+		&-item {
+			align-items: center;
+
+			.value {
+				color: var(--color-text-maxcontrast);
+			}
 		}
 	}
 </style>

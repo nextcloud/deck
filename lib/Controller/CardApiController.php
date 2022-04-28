@@ -81,8 +81,8 @@ class CardApiController extends ApiController {
 	 *
 	 * Get a specific card.
 	 */
-	public function create($title, $type = 'plain', $order = 999, $description = '', $duedate = null) {
-		$card = $this->cardService->create($title, $this->request->getParam('stackId'), $type, $order, $this->userId, $description, $duedate);
+	public function create($title, $type = 'plain', $order = 999, $description = '', $duedate = null, $valuecard = null) {
+		$card = $this->cardService->create($title, $this->request->getParam('stackId'), $type, $order, $this->userId, $description, $duedate, $valuecard);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 
@@ -94,8 +94,8 @@ class CardApiController extends ApiController {
 	 *
 	 * Update a card
 	 */
-	public function update($title, $type, $owner, $description = '', $order = 0, $duedate = null, $archived = null) {
-		$card = $this->cardService->update($this->request->getParam('cardId'), $title, $this->request->getParam('stackId'), $type, $owner, $description, $order, $duedate, 0, $archived);
+	public function update($title, $type, $owner, $description = '', $order = 0, $duedate = null, $archived = null, $valuecard = null) {
+		$card = $this->cardService->update($this->request->getParam('cardId'), $title, $this->request->getParam('stackId'), $type, $owner, $description, $order, $duedate, 0, $archived, $valuecard);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 

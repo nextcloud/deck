@@ -57,6 +57,18 @@
 			</Actions>
 		</div>
 
+		<div class="stack__value">
+			<div v-if="showSumOfValues && getSumOfValues" v-tooltip="t('deck', 'Sum')" @click="toggleValue()">
+				{{ valueUnit }}{{ getSumOfValues }}
+			</div>
+			<div v-if="!showSumOfValues && getSumOfValues"
+				v-tooltip="t('deck', 'Average')"
+				class="avg"
+				@click="toggleValue()">
+				{{ valueUnit }}{{ getAvgOfValues }}
+			</div>
+		</div>
+
 		<Modal v-if="modalArchivAllCardsShow" @close="modalArchivAllCardsShow=false">
 			<div class="modal__content">
 				<h3>{{ t('deck', 'Archive all cards in this list') }}</h3>
@@ -152,6 +164,7 @@ export default {
 				total: 0,
 				current: null,
 			},
+			showSumOfValues: true,
 		}
 	},
 	computed: {
@@ -171,6 +184,19 @@ export default {
 				return !card.archived
 			})
 		},
+		getSumOfValues() {
+			return this.cardsByStack.reduce((prev, cur) => {
+				prev += cur.valuecard
+				return prev
+			}, 0) || 0
+		},
+		getAvgOfValues() {
+			const sum = this.cardsByStack.reduce((prev, cur) => {
+				prev += cur.valuecard
+				return prev
+			}, 0)
+			return parseInt(Math.round(sum / this.cardsByStack.length)) || 0
+		},
 		dragHandleSelector() {
 			return this.canEdit ? null : '.no-drag'
 		},
@@ -180,6 +206,11 @@ export default {
 			},
 			set(newValue) {
 				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+			},
+		},
+		valueUnit: {
+			get() {
+				return this.$store.getters.config('valueUnit')
 			},
 		},
 	},
@@ -217,6 +248,9 @@ export default {
 			return index => {
 				return this.cardsByStack[index]
 			}
+		},
+		toggleValue() {
+			this.showSumOfValues = !this.showSumOfValues
 		},
 		deleteStack(stack) {
 			this.$store.dispatch('deleteStack', stack)
@@ -329,6 +363,23 @@ export default {
 			input[type=text] {
 				flex-grow: 1;
 			}
+		}
+	}
+
+	.stack__value {
+		display: flex;
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		padding-left: $card-spacing;
+		cursor: grab;
+
+		* {
+			cursor: pointer;
+		}
+
+		.avg {
+			color: var(--color-warning);
 		}
 	}
 
