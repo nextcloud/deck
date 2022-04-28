@@ -85,6 +85,7 @@ class CardTest extends TestCase {
 			'commentsUnread' => 0,
 			'commentsCount' => 0,
 			'lastEditor' => null,
+			'valuecard' => null,
 			'ETag' => $card->getETag(),
 		], $card->jsonSerialize());
 	}
@@ -112,6 +113,7 @@ class CardTest extends TestCase {
 			'commentsUnread' => 0,
 			'commentsCount' => 0,
 			'lastEditor' => null,
+			'valuecard' => null,
 			'ETag' => $card->getETag(),
 		], $card->jsonSerialize());
 	}
@@ -149,6 +151,7 @@ class CardTest extends TestCase {
 			'commentsUnread' => 0,
 			'commentsCount' => 0,
 			'lastEditor' => null,
+			'valuecard' => null,
 			'ETag' => $card->getETag(),
 		], $card->jsonSerialize());
 	}
