@@ -267,9 +267,6 @@ export default {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 	},
-	beforeDestroy() {
-		this.setPageTitle('')
-	},
 	watch: {
 		board(current, previous) {
 			if (current?.id !== previous?.id) {
@@ -279,6 +276,9 @@ export default {
 				this.setPageTitle(current.title)
 			}
 		},
+	},
+	beforeDestroy() {
+		this.setPageTitle('')
 	},
 	methods: {
 		beforeSetFilter(e) {

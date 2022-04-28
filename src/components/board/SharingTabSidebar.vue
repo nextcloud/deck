@@ -214,7 +214,7 @@ export default {
 							this.isLoading = true
 							await this.$store.dispatch('transferOwnership', {
 								boardId: this.board.id,
-								newOwner
+								newOwner,
 							})
 							const successMessage = t('deck', 'The board has been transferred to {user}', { user: newOwner })
 							showSuccess(successMessage)

@@ -312,6 +312,7 @@ export default {
 
 			.value {
 				color: var(--color-text-maxcontrast);
+				width: 100%;
 			}
 		}
 	}

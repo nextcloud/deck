@@ -112,7 +112,7 @@
 		</div>
 
 		<div class="section-wrapper">
-			<div v-tooltip="t('deck', 'Value of card')" class="section-label icon-edit">
+			<div v-tooltip="t('deck', 'Value of card')" class="section-label icon-diamond">
 				<span class="hidden-visually">{{ t('deck', 'Value of card') }}</span>
 			</div>
 			<div class="section-details">

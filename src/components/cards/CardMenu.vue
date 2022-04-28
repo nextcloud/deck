@@ -139,7 +139,7 @@ export default {
 
 		boardId() {
 			return this.card?.boardId ? this.card.boardId : this.$route.params.id
-		}
+		},
 	},
 	methods: {
 		openCard() {
