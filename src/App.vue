@@ -30,6 +30,7 @@
 		<Modal v-if="cardDetailsInModal && $route.params.cardId"
 			:clear-view-delay="0"
 			:title="t('deck', 'Card details')"
+			size="large"
 			@close="hideModal()">
 			<div class="modal__content modal__card">
 				<router-view name="sidebar" />
@@ -152,14 +153,6 @@ export default {
 				min-width: 0;
 			}
 		}
-	}
-
-	.modal__card {
-		min-width: 320px;
-		width: 50vw;
-		max-width: 800px;
-		min-height: 200px;
-		height: 80vh;
 	}
 </style>
 
