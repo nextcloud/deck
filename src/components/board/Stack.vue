@@ -57,15 +57,19 @@
 			</Actions>
 		</div>
 
+		<div class="stack__break" />
+
 		<div class="stack__value">
 			<div v-if="showSumOfValues && getSumOfValues" v-tooltip="t('deck', 'Sum')" @click="toggleValue()">
 				{{ valueUnit }}{{ getSumOfValues }}
+				<span class="value__description">({{ t('deck', 'sum') }})</span>
 			</div>
 			<div v-if="!showSumOfValues && getSumOfValues"
 				v-tooltip="t('deck', 'Average')"
 				class="avg"
 				@click="toggleValue()">
 				{{ valueUnit }}{{ getAvgOfValues }}
+				<span class="value__description">({{ t('deck', 'avg') }})</span>
 			</div>
 		</div>
 
@@ -366,20 +370,32 @@ export default {
 		}
 	}
 
+	.stack__break {
+		height: 1px;
+		border-bottom: 1px solid var(--color-box-shadow);
+		opacity: .5;
+		margin: 0px $card-spacing;
+	}
+
 	.stack__value {
 		display: flex;
 		position: sticky;
 		top: 0;
 		z-index: 100;
-		padding-left: $card-spacing;
+		padding: $card-spacing;
 		cursor: grab;
+		color: var(--color-success);
 
 		* {
 			cursor: pointer;
 		}
 
+		.value__description {
+			font-size: 70%;
+		}
+
 		.avg {
-			color: var(--color-warning);
+			color: var(--color-primary);
 		}
 	}
 
