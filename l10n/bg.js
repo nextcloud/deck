@@ -173,11 +173,8 @@ OC.L10N.register(
     "Owner" : "Собственик",
     "Delete" : "Изтриване",
     "Failed to create share with {displayName}" : "Създаването на споделяне с {displayName} не бе успешно",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Сигурни ли сте че искате да прехвърлите таблото {title} на {user}?",
     "Transfer the board." : "Прехвърлете таблото.",
     "Transfer" : "Прехвърляне",
-    "Transfer the board for {user} successfully" : "Успешно прехвърляне на таблото към {user} ",
-    "Failed to transfer the board for {user}" : "Неуспешно прехвърляне на таблото към {user}",
     "Add a new list" : "Добавяне на нов списък",
     "Archive all cards" : "Архивира всички карти",
     "Delete list" : "Изтрива списък",
@@ -297,6 +294,8 @@ OC.L10N.register(
     "\"{card}\" was added to \"{board}\"" : " \"{card}\" беше добавен към \"{board}\"",
     "(circle)" : "(кръг)",
     "This week" : "Тази седмица",
-    "Are you sure you want to transfer the board {title} for {user} ?" : "Сигурни ли сте че искате да прехвърлите таблото {title} на {user}?"
+    "Are you sure you want to transfer the board {title} for {user} ?" : "Сигурни ли сте че искате да прехвърлите таблото {title} на {user}?",
+    "Transfer the board for {user} successfully" : "Успешно прехвърляне на таблото към {user} ",
+    "Failed to transfer the board for {user}" : "Неуспешно прехвърляне на таблото към {user}"
 },
 "nplurals=2; plural=(n != 1);");

@@ -173,11 +173,8 @@ OC.L10N.register(
     "Owner" : "Proprietário",
     "Delete" : "Excluir",
     "Failed to create share with {displayName}" : "Falha ao criar compartilhamento com {displayName}",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Tem certeza de que deseja transferir o quadro {title} para {user}?",
     "Transfer the board." : "Transfira a reunião.",
     "Transfer" : "Transferir",
-    "Transfer the board for {user} successfully" : "Transferida a reunião para {user} com sucesso",
-    "Failed to transfer the board for {user}" : "Falha ao transferir a reunião para {user}",
     "Add a new list" : "Adicionar nova lista",
     "Archive all cards" : "Arquivar todos os cartões",
     "Delete list" : "Excluir lista",
@@ -297,6 +294,8 @@ OC.L10N.register(
     "\"{card}\" was added to \"{board}\"" : "\"{card}\" foi adicionado a \"{board}\"",
     "(circle)" : "(círculo)",
     "This week" : "Esta semana",
-    "Are you sure you want to transfer the board {title} for {user} ?" : "Tem certeza de que deseja transferir o quadro {title} para {user}?"
+    "Are you sure you want to transfer the board {title} for {user} ?" : "Tem certeza de que deseja transferir o quadro {title} para {user}?",
+    "Transfer the board for {user} successfully" : "Transferida a reunião para {user} com sucesso",
+    "Failed to transfer the board for {user}" : "Falha ao transferir a reunião para {user}"
 },
 "nplurals=2; plural=(n > 1);");

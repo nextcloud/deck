@@ -173,11 +173,8 @@ OC.L10N.register(
     "Owner" : "擁有者",
     "Delete" : "刪除",
     "Failed to create share with {displayName}" : "無法建立與 {displayName} 的分享",
-    "Are you sure you want to transfer the board {title} for {user}?" : "您想要轉移 {user} 的看板 {title} 嗎？",
     "Transfer the board." : "轉移看板。",
     "Transfer" : "轉移",
-    "Transfer the board for {user} successfully" : "轉移 {user} 的看板成功",
-    "Failed to transfer the board for {user}" : "轉移 {user} 的看板失敗",
     "Add a new list" : "新增列表",
     "Archive all cards" : "封存所有卡片",
     "Delete list" : "刪除列表",
@@ -297,6 +294,8 @@ OC.L10N.register(
     "\"{card}\" was added to \"{board}\"" : "「{card}」已新增至「{board}」",
     "(circle)" : "(circle)",
     "This week" : "本週",
-    "Are you sure you want to transfer the board {title} for {user} ?" : "您想要轉移 {user} 的看板 {title} 嗎？"
+    "Are you sure you want to transfer the board {title} for {user} ?" : "您想要轉移 {user} 的看板 {title} 嗎？",
+    "Transfer the board for {user} successfully" : "轉移 {user} 的看板成功",
+    "Failed to transfer the board for {user}" : "轉移 {user} 的看板失敗"
 },
 "nplurals=1; plural=0;");
