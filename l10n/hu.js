@@ -173,11 +173,8 @@ OC.L10N.register(
     "Owner" : "Tulajdonos",
     "Delete" : "Törlés",
     "Failed to create share with {displayName}" : "Nem lehet létrehozni a következő megosztást: {displayName}",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Biztos, hogy átadja a(z) {board} tábla tulajdonjogát {user} számára?",
     "Transfer the board." : "A tábla átadása.",
     "Transfer" : "Átadás",
-    "Transfer the board for {user} successfully" : "A tábla átadása {user} számára sikeres",
-    "Failed to transfer the board for {user}" : "A tábla átadása {user} számára sikertelen",
     "Add a new list" : "Új lista hozzáadása",
     "Archive all cards" : "Az összes kártya archiválása",
     "Delete list" : "Lista törlése",
@@ -297,6 +294,8 @@ OC.L10N.register(
     "\"{card}\" was added to \"{board}\"" : "A(z) „{card}” hozzáadva a(z) „{board}” táblához",
     "(circle)" : "(kör)",
     "This week" : "Ez a hét",
-    "Are you sure you want to transfer the board {title} for {user} ?" : "Biztos, hogy átadja a(z) {board} tábla tulajdonjogát {user} számára?"
+    "Are you sure you want to transfer the board {title} for {user} ?" : "Biztos, hogy átadja a(z) {board} tábla tulajdonjogát {user} számára?",
+    "Transfer the board for {user} successfully" : "A tábla átadása {user} számára sikeres",
+    "Failed to transfer the board for {user}" : "A tábla átadása {user} számára sikertelen"
 },
 "nplurals=2; plural=(n != 1);");

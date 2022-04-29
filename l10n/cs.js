@@ -173,11 +173,8 @@ OC.L10N.register(
     "Owner" : "Vlastník",
     "Delete" : "Smazat",
     "Failed to create share with {displayName}" : "Nepodařilo se vytvořit sdílení s {displayName}",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Opravdu chcete předat vlastnictví tabule {title} uživateli {user}?",
     "Transfer the board." : "Předat vlastnictví tabule.",
     "Transfer" : "Předat vlastnictví",
-    "Transfer the board for {user} successfully" : "Předání vlastnictví tabule uživateli {user} úspěšné",
-    "Failed to transfer the board for {user}" : "Nepodařilo se předat vlastnictví tabule uživateli {user}",
     "Add a new list" : "Přidat nový sloupec",
     "Archive all cards" : "Archivovat všechny karty",
     "Delete list" : "Smazat seznam",
@@ -297,6 +294,8 @@ OC.L10N.register(
     "\"{card}\" was added to \"{board}\"" : "„{card}“ bylo přidáno do „{board}“",
     "(circle)" : "(okruh)",
     "This week" : "Tento týden",
-    "Are you sure you want to transfer the board {title} for {user} ?" : "Opravdu chcete předat vlastnictví tabule {title} uživateli {user}?"
+    "Are you sure you want to transfer the board {title} for {user} ?" : "Opravdu chcete předat vlastnictví tabule {title} uživateli {user}?",
+    "Transfer the board for {user} successfully" : "Předání vlastnictví tabule uživateli {user} úspěšné",
+    "Failed to transfer the board for {user}" : "Nepodařilo se předat vlastnictví tabule uživateli {user}"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");
