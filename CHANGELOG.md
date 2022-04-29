@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.7.0-rc.1
+
+### Fixed
+
+- Show cards after moving into another list [#3736](https://github.com/nextcloud/deck/pull/3736)
+- Fix paramter replacements when creating deck cards from talk messages @nickvergessen [#3683](https://github.com/nextcloud/deck/pull/3683)
+- Fix hidden attachment icon on archived cards [#3733](https://github.com/nextcloud/deck/pull/3733)
+- Adapt the card modal to upstream changes [#3764](https://github.com/nextcloud/deck/pull/3764)
+- Fix text selection in dark mode and modal view [#3765](https://github.com/nextcloud/deck/pull/3765)
+- Add missing indices [#3754](https://github.com/nextcloud/deck/pull/3754)
 
 ## 1.7.0-beta.1
 
