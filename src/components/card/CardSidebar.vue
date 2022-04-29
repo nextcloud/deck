@@ -205,6 +205,8 @@ export default {
 		max-width: calc(100% - #{$modal-padding*2});
 		padding: 0 14px;
 		max-height: 100%;
+		user-select: text;
+		-webkit-user-select: text;
 		&::v-deep {
 			.app-sidebar-header {
 				position: sticky;
