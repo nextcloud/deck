@@ -21,8 +21,7 @@
   -->
 
 <template>
-	<AttachmentList
-		:card-id="card.id"
+	<AttachmentList :card-id="card.id"
 		:removable="true"
 		@delete-attachment="deleteAttachment"
 		@restore-attachment="restoreAttachment" />

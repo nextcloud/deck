@@ -35,8 +35,7 @@
 
 		<template v-if="!deleted" slot="actions">
 			<template v-if="!isDueSubmenuActive">
-				<ActionButton
-					icon="icon-info"
+				<ActionButton icon="icon-info"
 					:close-after-click="true"
 					@click="actionDetails">
 					{{ t('deck', 'Board details') }}
@@ -73,31 +72,27 @@
 
 			<!-- Due date reminder settings -->
 			<template v-if="isDueSubmenuActive">
-				<ActionButton
-					:icon="updateDueSetting ? 'icon-loading-small' : 'icon-view-previous'"
+				<ActionButton :icon="updateDueSetting ? 'icon-loading-small' : 'icon-view-previous'"
 					:disabled="updateDueSetting"
 					@click="isDueSubmenuActive=false">
 					{{ t('deck', 'Due date reminders') }}
 				</ActionButton>
 
-				<ActionButton
-					name="notification"
+				<ActionButton name="notification"
 					icon="icon-sound"
 					:disabled="updateDueSetting"
 					:class="{ 'forced-active': board.settings['notify-due'] === 'all' }"
 					@click="updateSetting('notify-due', 'all')">
 					{{ t('deck', 'All cards') }}
 				</ActionButton>
-				<ActionButton
-					name="notification"
+				<ActionButton name="notification"
 					icon="icon-user"
 					:disabled="updateDueSetting"
 					:class="{ 'forced-active': board.settings['notify-due'] === 'assigned' }"
 					@click="updateSetting('notify-due', 'assigned')">
 					{{ t('deck', 'Assigned cards') }}
 				</ActionButton>
-				<ActionButton
-					name="notification"
+				<ActionButton name="notification"
 					icon="icon-sound-off"
 					:disabled="updateDueSetting"
 					:class="{ 'forced-active': board.settings['notify-due'] === 'off' }"

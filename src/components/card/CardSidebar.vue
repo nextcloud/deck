@@ -62,8 +62,7 @@
 			<CardSidebarTabAttachments :card="currentCard" />
 		</AppSidebarTab>
 
-		<AppSidebarTab
-			id="comments"
+		<AppSidebarTab id="comments"
 			:order="2"
 			:name="t('deck', 'Comments')"
 			icon="icon-comment">

@@ -27,8 +27,7 @@
 			<router-view />
 		</AppContent>
 
-		<Modal
-			v-if="cardDetailsInModal && $route.params.cardId"
+		<Modal v-if="cardDetailsInModal && $route.params.cardId"
 			:clear-view-delay="0"
 			:title="t('deck', 'Card details')"
 			@close="hideModal()">

@@ -27,17 +27,14 @@
 		@drop.prevent="handleDropFiles">
 		<slot />
 		<transition name="fade" mode="out-in">
-			<div
-				v-show="isDraggingOver"
+			<div v-show="isDraggingOver"
 				class="dragover">
 				<div class="drop-hint">
-					<div
-						class="drop-hint__icon"
+					<div class="drop-hint__icon"
 						:class="{
 							'icon-upload' : !isReadOnly,
 							'icon-error' : isReadOnly}" />
-					<h2
-						class="drop-hint__text">
+					<h2 class="drop-hint__text">
 						{{ dropHintText }}
 					</h2>
 				</div>

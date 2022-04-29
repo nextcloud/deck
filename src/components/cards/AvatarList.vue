@@ -56,8 +56,7 @@
 
 		<div class="avatar-print-list">
 			<div v-for="user in avatarUsers" :key="user.id" class="avatar-print-list-item">
-				<Avatar
-					class="avatar-print-list-avatar"
+				<Avatar class="avatar-print-list-avatar"
 					:user="user.participant.uid"
 					:display-name="user.participant.displayname"
 					:disable-menu="true"

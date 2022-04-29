@@ -63,8 +63,7 @@
 		<Modal v-if="modalShow" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
 			<div class="modal__content">
 				<h3>{{ t('deck', 'Choose attachment') }}</h3>
-				<AttachmentList
-					:card-id="card.id"
+				<AttachmentList :card-id="card.id"
 					:selectable="true"
 					@select-attachment="addAttachment" />
 			</div>

@@ -18,8 +18,7 @@
 				</linearGradient>
 			</defs>
 		</svg>
-		<svg
-			class="card-placeholder__placeholder"
+		<svg class="card-placeholder__placeholder"
 			:class="{ 'standalone': standalone }"
 			xmlns="http://www.w3.org/2000/svg"
 			fill="url(#card-placeholder__gradient)">
