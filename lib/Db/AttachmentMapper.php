@@ -67,13 +67,13 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 		$row = $cursor->fetch(PDO::FETCH_ASSOC);
 		if ($row === false) {
 			$cursor->closeCursor();
-			throw new DoesNotExistException('Did expect one result but found none when executing' . $qb);
+			throw new DoesNotExistException('Did expect one result but found none when executing query: ' . $qb->getSQL());
 		}
 
 		$row2 = $cursor->fetch();
 		$cursor->closeCursor();
 		if ($row2 !== false) {
-			throw new MultipleObjectsReturnedException('Did not expect more than one result when executing' . $query);
+			throw new MultipleObjectsReturnedException('Did not expect more than one result when executing query: ' . $qb->getSQL());
 		}
 
 		return $this->mapRowToEntity($row);
@@ -89,7 +89,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 		$row = $cursor->fetch(PDO::FETCH_ASSOC);
 		if ($row === false) {
 			$cursor->closeCursor();
-			throw new DoesNotExistException('Did expect one result but found none when executing' . $qb);
+			throw new DoesNotExistException('Did expect one result but found none when executing query: ' . $qb->getSQL());
 		}
 		$cursor->closeCursor();
 		return $this->mapRowToEntity($row);
