@@ -173,11 +173,8 @@ OC.L10N.register(
     "Owner" : "Jabea",
     "Delete" : "Ezabatu",
     "Failed to create share with {displayName}" : "Ezin izan da {displayName}-(r)ekin partekatzea sortu",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Ziur {title} taula transferitu nahi duzula {user}?",
     "Transfer the board." : "Transferitu panela.",
     "Transfer" : "Transferitu",
-    "Transfer the board for {user} successfully" : "Transferitu {user}-ren panela behar bezala",
-    "Failed to transfer the board for {user}" : "Ezin izan da transferitu {user}-ren panela",
     "Add a new list" : "Gehitu zerrenda berria",
     "Archive all cards" : "Artxibatu txartel guztiak",
     "Delete list" : "Zerrenda ezabatu",
@@ -297,6 +294,8 @@ OC.L10N.register(
     "\"{card}\" was added to \"{board}\"" : "\"{card}\" \"{board}\"-n gehitu da",
     "(circle)" : "(zirkulua)",
     "This week" : "Aste honetan",
-    "Are you sure you want to transfer the board {title} for {user} ?" : "Ziur {title} transferitu nahi duzula {user}-en panela ?"
+    "Are you sure you want to transfer the board {title} for {user} ?" : "Ziur {title} transferitu nahi duzula {user}-en panela ?",
+    "Transfer the board for {user} successfully" : "Transferitu {user}-ren panela behar bezala",
+    "Failed to transfer the board for {user}" : "Ezin izan da transferitu {user}-ren panela"
 },
 "nplurals=2; plural=(n != 1);");
