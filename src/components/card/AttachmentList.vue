@@ -211,7 +211,7 @@ export default {
 	},
 	methods: {
 		...mapActions([
-			"fetchAttachments",
+			'fetchAttachments',
 		]),
 		handleUploadFile(event) {
 			const files = event.target.files ?? []
