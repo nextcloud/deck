@@ -173,11 +173,8 @@ OC.L10N.register(
     "Owner" : "Sahibi",
     "Delete" : "Sil",
     "Failed to create share with {displayName}" : "{displayName} ile paylaşılamadı",
-    "Are you sure you want to transfer the board {title} for {user}?" : "{title} panosunu {user} kullanıcısına aktarmak istediğinize emin misiniz?",
     "Transfer the board." : "Panoyu aktar.",
     "Transfer" : "Aktar",
-    "Transfer the board for {user} successfully" : "Pano {user} kullanıcısına aktarıldı",
-    "Failed to transfer the board for {user}" : "Pano {user} kullanıcısına aktarılamadı",
     "Add a new list" : "Yeni liste ekle",
     "Archive all cards" : "Tüm kartları arşivle",
     "Delete list" : "Listeyi sil",
@@ -297,6 +294,8 @@ OC.L10N.register(
     "\"{card}\" was added to \"{board}\"" : "\"{card}\" kartı \"{board}\" panosuna eklendi",
     "(circle)" : "(çevre)",
     "This week" : "Bu hafta",
-    "Are you sure you want to transfer the board {title} for {user} ?" : "{title} panosunu {user} kullanıcısına aktarmak istediğinize emin misiniz?"
+    "Are you sure you want to transfer the board {title} for {user} ?" : "{title} panosunu {user} kullanıcısına aktarmak istediğinize emin misiniz?",
+    "Transfer the board for {user} successfully" : "Pano {user} kullanıcısına aktarıldı",
+    "Failed to transfer the board for {user}" : "Pano {user} kullanıcısına aktarılamadı"
 },
 "nplurals=2; plural=(n > 1);");
