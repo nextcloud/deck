@@ -1,6 +1,30 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.5.7
+
+### Added
+
+- Transfer ownership @juliushaertl [#3665](https://github.com/nextcloud/deck/pull/3665)
+
+### Fixed
+
+- Fix: Check all circle shares for permissions [#3721](https://github.com/nextcloud/deck/pull/3721)
+- Add a missing translation - not found in transifex [#3707](https://github.com/nextcloud/deck/pull/3707)
+- 🐛 Fix missing files sidebar [#3642](https://github.com/nextcloud/deck/pull/3642)
+- [stable23] Use explicit cast to make use of index [#3731](https://github.com/nextcloud/deck/pull/3731)
+- Fix hidden attachment icon on archived cards [#3735](https://github.com/nextcloud/deck/pull/3735)
+- [stable23] Sort boards non case sensitive [#3739](https://github.com/nextcloud/deck/pull/3739)
+- add autofocus on board edit #3326 @juliushaertl [#3743](https://github.com/nextcloud/deck/pull/3743)
+- Fix paramter replacements when creating deck cards from talk messages @juliushaertl [#3742](https://github.com/nextcloud/deck/pull/3742)
+- Fix text selection in dark mode and modal view [#3767](https://github.com/nextcloud/deck/pull/3767)
+
+### Other
+
+- Properly check for the stack AND setting board permissions [#3714](https://github.com/nextcloud/deck/pull/3714)
+- Add missing indices [#3756](https://github.com/nextcloud/deck/pull/3756)
+
+
 ## 1.5.6
 
 ### Fixed
