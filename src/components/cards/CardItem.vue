@@ -59,9 +59,6 @@
 				<DueDate v-if="!editing" :card="card" />
 
 				<CardMenu v-if="!editing && compactMode" :card="card" class="right" />
-				<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
-					<CardBadges :card="card" />
-				</div>
 			</div>
 			<transition-group v-if="card.labels && card.labels.length"
 				name="zoom"
@@ -78,6 +75,7 @@
 						{{ valueUnit }}{{ card.valuecard }}
 					</div>
 				</div>
+				<CardBadges :card="card" />
 			</div>
 		</div>
 	</AttachmentDragAndDrop>
@@ -316,13 +314,14 @@ export default {
 
 			.value {
 				color: var(--color-text-maxcontrast);
+				width: 100%;
 				height: 44px;
 				align-items: center;
 
 				.tag {
 					padding: 0 10px;
 					border-radius: 5px;
-					background-color: $color-text-value;
+					background-color: $color-value-card-background;
 					font-size: 80%;
 				}
 			}

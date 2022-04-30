@@ -86,8 +86,8 @@ export default {
 <style lang="scss" scoped>
 	.badges {
 		display: flex;
-		width: 100%;
-		flex-grow: 1;
+		width: auto;
+		flex-grow: 0;
 
 		.icon {
 			opacity: 0.5;
