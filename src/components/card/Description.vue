@@ -115,6 +115,7 @@ export default {
 	},
 	data() {
 		return {
+			keyExitState: 0,
 			description: '',
 			markdownIt: null,
 			descriptionEditing: false,
@@ -180,8 +181,33 @@ export default {
 			}
 			this.descriptionEditing = true
 			this.description = this.card.description
+
+			// Has to start after the Editor is fully loaded. This shouldn't take longer than 1/4 second
+			setTimeout(() => {
+				this.$refs.markdownEditor.easymde.codemirror.on('keydown', (a, b) => {
+
+					if (this.keyExitState === 0 && (b.key === 'Meta' || b.key === 'Alt')) {
+						this.keyExitState = 1
+					}
+					if (this.keyExitState === 1 && b.key === 'Enter') {
+						this.keyExitState = 0
+						this.$refs.markdownEditor.easymde.codemirror.off('keydown', undefined)
+						this.$refs.markdownEditor.easymde.codemirror.off('keyup', undefined)
+						this.hideEditor()
+					}
+				})
+				this.$refs.markdownEditor.easymde.codemirror.on('keyup', (a, b) => {
+					if (b.key === 'Meta' || b.key === 'Control') {
+						this.keyExitState = 0
+					}
+
+				})
+			}, 250)
+
 		},
 		hideEditor() {
+			this.$refs.markdownEditor.easymde.codemirror.off('keydown', undefined)
+			this.$refs.markdownEditor.easymde.codemirror.off('keyup', undefined)
 			this.descriptionEditing = false
 		},
 		showAttachmentModal() {
