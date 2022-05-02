@@ -676,7 +676,7 @@ class BoardService {
 			$this->stackMapper->insert($newStack);
 		}
 
-		return $newBoard;
+		return $this->find($newBoard->getId());
 	}
 
 	public function transferBoardOwnership(int $boardId, string $newOwner, bool $changeContent = false): Board {
