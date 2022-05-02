@@ -35,7 +35,7 @@ jobs:
         run: git config --global --add safe.directory /github/workspace
 
       - name: Automatic Rebase
-        uses: cirrus-actions/rebase@1.5
+        uses: cirrus-actions/rebase@1.6
         env:
           GITHUB_TOKEN: ${{ secrets.COMMAND_BOT_PAT }}
 
