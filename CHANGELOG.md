@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 
-## 1.7.0-beta.1
+## 1.7.0
 
 ### Added
 
@@ -46,6 +46,13 @@ All notable changes to this project will be documented in this file.
 - Properly check for the stack AND setting board permissions @juliushaertl [#3670](https://github.com/nextcloud/deck/pull/3670)
 - Replace deprecated String.prototype.substr() @CommanderRoot [#3669](https://github.com/nextcloud/deck/pull/3669)
 - Dependency updates
+- Show cards after moving into another list [#3736](https://github.com/nextcloud/deck/pull/3736)
+- Fix paramter replacements when creating deck cards from talk messages @nickvergessen [#3683](https://github.com/nextcloud/deck/pull/3683)
+- Fix hidden attachment icon on archived cards [#3733](https://github.com/nextcloud/deck/pull/3733)
+- Adapt the card modal to upstream changes [#3764](https://github.com/nextcloud/deck/pull/3764)
+- Fix text selection in dark mode and modal view [#3765](https://github.com/nextcloud/deck/pull/3765)
+- Add missing indices [#3754](https://github.com/nextcloud/deck/pull/3754)
+
 
 ## 1.6.0-beta1
 
