@@ -293,12 +293,10 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "{file} mit einer Deck-Karte teilen",
     "Share" : "Freigeben",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck ist ein Organisationstool im Kanban-Stil für die persönliche Planung und Projektorganisation von Teams, die in Nextcloud integriert sind.\n\n\n- 📥 Füge Deine Aufgaben zu den Karten hinzu und ordne diese\n- 📄 Zusätzliche Hinweise in der Abschrift notieren\n- 🔖 Zuweisen von Schlagworten für noch bessere Organisation\n- 👥 Teile mit Deinem Team, Freunden oder der Familie\n- 📎 Füge Dateien hinzu und verwende diese in Deinen Markdown-Beschreibungen\n- 💬 Diskutiere mit Deinem Team mit Kommentaren\n- ⚡ Behalte Überblick über Änderungen mit dem Aktivitäten-Stream\n- 🚀 Organisiere Dein Projekt",
-    "Creating the new card…" : "Neue Karte wird erstellt …",
-    "\"{card}\" was added to \"{board}\"" : "Karte \"{card}\" wurde zu Board \"{board}\" hinzugefügt",
-    "(circle)" : "(Kreis)",
-    "This week" : "Diese Woche",
     "Are you sure you want to transfer the board {title} for {user} ?" : "Möchtest Du wirklich das Board {title} an {user} übertragen?",
     "Transfer the board for {user} successfully" : "Das Board wurde erfolgreich an {user} übertragen",
-    "Failed to transfer the board for {user}" : "Board konnte nicht an {user} übertragen werden"
+    "Failed to transfer the board for {user}" : "Board konnte nicht an {user} übertragen werden",
+    "This week" : "Diese Woche",
+    "Are you sure you want to transfer the board {title} for {user}?" : "Möchtest Du wirklich das Board {title} an {user} übertragen?"
 },
 "nplurals=2; plural=(n != 1);");

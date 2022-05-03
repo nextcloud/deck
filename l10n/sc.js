@@ -285,9 +285,6 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Cumpartzi {file} cun un'ischeda de deck",
     "Share" : "Cumpartzi",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck est unu trastu de organizatzione a sa moda de kanban destinadu a sa pranificatzione personale e a s'organizatzione de progetos in iscuadra integradu cun Nextcloud\n\n- 📥  Agiunghe is atividades tuas a is ischedas e mantene·ddas ordinadas\n- 📄 Iscrie notas in agiunta in markdown\n- 🔖 Assigna etichetas pro t'organizare mègius ancora\n- 👥 Cumpatzi cun s'iscuadra tua, famìlia e amigos\n- 📎 Aligongia archìvios e integra·ddos in sa descritzione tua in markdown\n- 💬 Chistiona cun s'iscuadra tua impreende is cummentos\n- ⚡ Mantene su rastru de is cummentos tuos in su flussu de atividades\n- 🚀 Organiza su progetu tuo",
-    "Creating the new card…" : "Creende un'ischeda noa...",
-    "\"{card}\" was added to \"{board}\"" : "\"{card}\" est istada agiunta a \"{board}\"",
-    "(circle)" : "(tropa)",
     "This week" : "Custa chida"
 },
 "nplurals=2; plural=(n != 1);");
