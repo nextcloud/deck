@@ -32,6 +32,7 @@ use Sabre\VObject\Component\VCalendar;
  * @method string getDescription()
  * @method string getDescriptionPrev()
  * @method int getStackId()
+ * @method int getOrder()
  * @method int getLastModified()
  * @method int getCreatedAt()
  * @method bool getArchived()
@@ -40,7 +41,7 @@ use Sabre\VObject\Component\VCalendar;
  * @method void setLabels(Label[] $labels)
  * @method null|Label[] getLabels()
  *
- * @method void setAssignedUsers(User[] $users)
+ * @method void setAssignedUsers(Assignment[] $users)
  * @method null|User[] getAssignedUsers()
  *
  * @method void setAttachments(Attachment[] $attachments)
@@ -55,8 +56,8 @@ use Sabre\VObject\Component\VCalendar;
  * @method void setCommentsCount(int $count)
  * @method null|int getCommentsCount()
  *
- * @method void setOwner(User $user)
- * @method null|User getOwner()
+ * @method void setOwner(string $user)
+ * @method null|string getOwner()
  *
  * @method void setRelatedStack(Stack $stack)
  * @method null|Stack getRelatedStack()
@@ -91,7 +92,7 @@ class Card extends RelationalEntity {
 	protected $relatedStack = null;
 	protected $relatedBoard = null;
 
-	private $databaseType = 'sqlite';
+	protected $databaseType = 'sqlite';
 
 	public const DUEDATE_FUTURE = 0;
 	public const DUEDATE_NEXT = 1;
@@ -133,39 +134,6 @@ class Card extends RelationalEntity {
 			return $dt->format('Y-m-d H:i:s');
 		}
 		return $dt->format('c');
-	}
-
-	public function jsonSerialize(): array {
-		$json = parent::jsonSerialize();
-		$json['overdue'] = self::DUEDATE_FUTURE;
-		$due = $this->duedate ? strtotime($this->duedate) : false;
-		if ($due !== false) {
-			$today = new DateTime();
-			$today->setTime(0, 0);
-
-			$match_date = new DateTime($this->duedate);
-
-			$match_date->setTime(0, 0);
-
-			$diff = $today->diff($match_date);
-			$diffDays = (integer) $diff->format('%R%a'); // Extract days count in interval
-
-			if ($diffDays === 1) {
-				$json['overdue'] = self::DUEDATE_NEXT;
-			}
-			if ($diffDays === 0) {
-				$json['overdue'] = self::DUEDATE_NOW;
-			}
-			if ($diffDays < 0) {
-				$json['overdue'] = self::DUEDATE_OVERDUE;
-			}
-		}
-		$json['duedate'] = $this->getDuedate(true);
-		unset($json['notified']);
-		unset($json['descriptionPrev']);
-		unset($json['relatedStack']);
-		unset($json['relatedBoard']);
-		return $json;
 	}
 
 	public function getCalendarObject(): VCalendar {

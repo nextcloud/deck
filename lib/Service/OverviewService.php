@@ -119,7 +119,7 @@ class OverviewService {
 			$foundCards[] = array_map(
 				function (Card $card) use ($userBoard, $userId) {
 					$this->enrich($card, $userId);
-					return new CardDetails($card, $userBoard);
+					return (new CardDetails($card, $userBoard))->jsonSerialize();
 				},
 				$cards
 			);
