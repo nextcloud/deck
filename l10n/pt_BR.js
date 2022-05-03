@@ -290,12 +290,10 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Compartilhar {file} com um cartão Deck",
     "Share" : "Compartilhar",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck é uma ferramenta de organização de estilo kanban destinada ao planejamento pessoal e organização para equipes integradas com o Nextcloud.\n\n\n- 📥 Adicione suas tarefas aos cartões e coloque-os em ordem\n- 📄 Insira notas adicionais em markdown\n- 🔖 Atribua etiquetas para melhorar a organização\n- 👥 Compartilhe com sua equipe, amigos ou familiares\n- 📎 Anexe arquivos e incorpore-os em sua descrição no markdown\n- 💬 Discuta com sua equipe usando os comentários\n- ⚡ Acompanhe as alterações no fluxo de atividades\n- 🚀 Mantenha seu projeto organizado",
-    "Creating the new card…" : "Criando o novo cartão…",
-    "\"{card}\" was added to \"{board}\"" : "\"{card}\" foi adicionado a \"{board}\"",
-    "(circle)" : "(círculo)",
-    "This week" : "Esta semana",
     "Are you sure you want to transfer the board {title} for {user} ?" : "Tem certeza de que deseja transferir o quadro {title} para {user}?",
     "Transfer the board for {user} successfully" : "Transferida a reunião para {user} com sucesso",
-    "Failed to transfer the board for {user}" : "Falha ao transferir a reunião para {user}"
+    "Failed to transfer the board for {user}" : "Falha ao transferir a reunião para {user}",
+    "This week" : "Esta semana",
+    "Are you sure you want to transfer the board {title} for {user}?" : "Tem certeza de que deseja transferir o quadro {title} para {user}?"
 },
 "nplurals=2; plural=(n > 1);");
