@@ -173,11 +173,8 @@ OC.L10N.register(
     "Owner" : "Vlastník",
     "Delete" : "Smazat",
     "Failed to create share with {displayName}" : "Nepodařilo se vytvořit sdílení s {displayName}",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Opravdu chcete předat vlastnictví tabule {title} uživateli {user}?",
     "Transfer the board." : "Předat vlastnictví tabule.",
     "Transfer" : "Předat vlastnictví",
-    "Transfer the board for {user} successfully" : "Předání vlastnictví tabule uživateli {user} úspěšné",
-    "Failed to transfer the board for {user}" : "Nepodařilo se předat vlastnictví tabule uživateli {user}",
     "Add a new list" : "Přidat nový sloupec",
     "Archive all cards" : "Archivovat všechny karty",
     "Delete list" : "Smazat seznam",
@@ -293,10 +290,10 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Sdílet {file} s kartou aplikace Deck",
     "Share" : "Sdílet",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck je nástroj cílený na osobní nebo projektové plánování týmů v Kanban stylu, vestavěný v Nextcloud.\n\n\n- 📥 Zadávejte a uspořádávejte své úkoly do karet\n- 📄 Zapisujte si dodatečné poznámky \n- 🔖 Přiřazujte štítky pro ještě lepší organizaci\n- 👥 Sdílejte se svým týmem, přáteli nebo rodinou\n- 🚀 Dostaňte svůj projekt pod kontrolu",
-    "Creating the new card…" : "Vytváření nové karty…",
-    "\"{card}\" was added to \"{board}\"" : "„{card}“ bylo přidáno do „{board}“",
-    "(circle)" : "(okruh)",
+    "Are you sure you want to transfer the board {title} for {user} ?" : "Opravdu chcete předat vlastnictví tabule {title} uživateli {user}?",
+    "Transfer the board for {user} successfully" : "Předání vlastnictví tabule uživateli {user} úspěšné",
+    "Failed to transfer the board for {user}" : "Nepodařilo se předat vlastnictví tabule uživateli {user}",
     "This week" : "Tento týden",
-    "Are you sure you want to transfer the board {title} for {user} ?" : "Opravdu chcete předat vlastnictví tabule {title} uživateli {user}?"
+    "Are you sure you want to transfer the board {title} for {user}?" : "Opravdu chcete předat vlastnictví tabule {title} uživateli {user}?"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

@@ -171,11 +171,11 @@
     "Owner" : "Besitzer",
     "Delete" : "Löschen",
     "Failed to create share with {displayName}" : "Fehler beim Erstellen der Freigabe mit dem Namen {displayName}",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Möchten Sie wirklich Das Board {title} an {user} übertragen?",
+    "Are you sure you want to transfer the board {title} to {user}?" : "Möchten Sie wirklich das Board {title} auf {user} übertragen?",
     "Transfer the board." : "Board übertragen.",
     "Transfer" : "Übertragen",
-    "Transfer the board for {user} successfully" : "Das Board wurde erfolgreich an {user} übertragen",
-    "Failed to transfer the board for {user}" : "Board konnte nicht an {user} übertragen werden",
+    "The board has been transferred to {user}" : "Das Board wurde auf {user} übertragen",
+    "Failed to transfer the board to {user}" : "Das Board konnte nicht auf {user} übertragen werden",
     "Add a new list" : "Eine neue Liste hinzufügen",
     "Archive all cards" : "Alle Karten archivieren",
     "Delete list" : "Liste löschen",
@@ -291,10 +291,10 @@
     "Share {file} with a Deck card" : "{file} mit einer Deck-Karte teilen",
     "Share" : "Freigeben",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck ist ein Organisationstool im Kanban-Stil für die persönliche Planung und Projektorganisation von Teams, die in Nextcloud integriert sind.\n\n\n- 📥 Fügen Sie Ihre Aufgaben zu den Karten hinzu und ordnen Sie diese\n- 📄 Zusätzliche Hinweise in der Abschrift notieren\n- 🔖 Zuweisen von Schlagworten für noch bessere Organisation\n- 👥 Teilen Sie mit Ihrem Team, Ihren Freunden oder Ihrer Familie\n- 📎 Fügen Sie Dateien hinzu und verwende diese in Ihren Markdown-Beschreibungen\n- 💬 Diskutieren Sie mit Ihrem Team mit Kommentaren\n- ⚡ Behalten Sie Überblick über Änderungen mit dem Aktivitäten-Stream\n- 🚀 Organisieren Sie Ihr Projekt",
-    "Creating the new card…" : "Neue Karte wird erstellt …",
-    "\"{card}\" was added to \"{board}\"" : "\"{card}\" wurde \"{board}\" hinzugefügt",
-    "(circle)" : "(Kreis)",
+    "Are you sure you want to transfer the board {title} for {user} ?" : "Möchten Sie wirklich das Board {title} an {user} übertragen?",
+    "Transfer the board for {user} successfully" : "Das Board wurde an {user} übertragen",
+    "Failed to transfer the board for {user}" : "Board konnte nicht an {user} übertragen werden",
     "This week" : "Diese Woche",
-    "Are you sure you want to transfer the board {title} for {user} ?" : "Möchten Sie wirklich Das Board {title} an {user} übertragen?"
+    "Are you sure you want to transfer the board {title} for {user}?" : "Möchten Sie wirklich das Board {title} an {user} übertragen?"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -4,11 +4,14 @@ OC.L10N.register(
     "Personal" : "Անձնական",
     "Done" : "Done",
     "Cancel" : "ընդհատել",
+    "Close" : "Փակել",
     "Details" : "Մանրամասներ",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
+    "Owner" : "Owner",
     "Delete" : "հեռացնել",
     "Edit" : "մշակել",
+    "Download" : "Ներբեռնել",
     "Comments" : "Կարծիքներ",
     "Modified" : "Փոփոխված",
     "Today" : "այսօր",
@@ -17,6 +20,7 @@ OC.L10N.register(
     "Description" : "Նկարագրություն",
     "seconds ago" : "վրկ. առաջ",
     "Shared with you" : "Shared with you",
+    "Share" : "Կիսվել",
     "This week" : "այս շաբաթ"
 },
 "nplurals=2; plural=(n != 1);");

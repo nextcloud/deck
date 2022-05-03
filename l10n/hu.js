@@ -173,11 +173,8 @@ OC.L10N.register(
     "Owner" : "Tulajdonos",
     "Delete" : "Törlés",
     "Failed to create share with {displayName}" : "Nem lehet létrehozni a következő megosztást: {displayName}",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Biztos, hogy átadja a(z) {board} tábla tulajdonjogát {user} számára?",
     "Transfer the board." : "A tábla átadása.",
     "Transfer" : "Átadás",
-    "Transfer the board for {user} successfully" : "A tábla átadása {user} számára sikeres",
-    "Failed to transfer the board for {user}" : "A tábla átadása {user} számára sikertelen",
     "Add a new list" : "Új lista hozzáadása",
     "Archive all cards" : "Az összes kártya archiválása",
     "Delete list" : "Lista törlése",
@@ -293,10 +290,10 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "A(z) {file} megosztása egy kártyával",
     "Share" : "Megosztás",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "A Kártyák egy kanban-stílusú szervezőeszköz, amely a személyes tervezést és a csapatok projektszervezését célozza, a Nextcloudba integrálva.\n\n\n- 📥 Saját feladatok kártyákhoz adása, és azok sorrendezése\n- 📄 További jegyzetek leírása markdownban\n- 🔖 Címkék hozzárendelése a még jobb rendszerezés miatt\n- 👥 Megosztás a csapattal, barátokkal vagy családdal\n- 📎 Fájlok hozzáadása mellékletként, vagy beágyazás a markdown leírásba\n- 💬 Megbeszélés a csapattal hozzászólások használatával\n- ⚡ A változások követése a tevékenységnaplóban\n- 🚀 Rendszerezze a projektjét",
-    "Creating the new card…" : "Új kártya létrehozása…",
-    "\"{card}\" was added to \"{board}\"" : "A(z) „{card}” hozzáadva a(z) „{board}” táblához",
-    "(circle)" : "(kör)",
+    "Are you sure you want to transfer the board {title} for {user} ?" : "Biztos, hogy átadja a(z) {board} tábla tulajdonjogát {user} számára?",
+    "Transfer the board for {user} successfully" : "A tábla átadása {user} számára sikeres",
+    "Failed to transfer the board for {user}" : "A tábla átadása {user} számára sikertelen",
     "This week" : "Ez a hét",
-    "Are you sure you want to transfer the board {title} for {user} ?" : "Biztos, hogy átadja a(z) {board} tábla tulajdonjogát {user} számára?"
+    "Are you sure you want to transfer the board {title} for {user}?" : "Biztos, hogy átadja a(z) {board} tábla tulajdonjogát {user} számára?"
 },
 "nplurals=2; plural=(n != 1);");
