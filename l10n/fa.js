@@ -256,7 +256,6 @@ OC.L10N.register(
     "No results found" : "هیچ نتیجه ای یافت نشد",
     "Error creating the share" : "خطایی در ایجاد اشتراک",
     "Share" : "هم‌رسانی",
-    "(circle)" : "(حلقه)",
     "This week" : "این هفته"
 },
 "nplurals=2; plural=(n > 1);");

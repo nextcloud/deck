@@ -293,12 +293,10 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "用一張 Deck 卡片分享 {file}",
     "Share" : "分享",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck是一種看板式組織工具，旨在針對與Nextcloud集成的團隊進行個人計劃和項目組織。\n\n\n- 📥 增加您的任務到card和把它們整理好\n- 📄 寫下額外的筆記在markdown\n- 🔖 分配標籤以更好地組織您的工作\n- 👥 與您的團隊，朋友或家人分享\n- 📎 附加檔案並將其嵌入到您的 markdown 描述\n- 💬 使用意見與您的團隊討論\n- ⚡ 在活動流中跟踪更改\n- 🚀 讓您的項目井井有條",
-    "Creating the new card…" : "正在建立新卡片...",
-    "\"{card}\" was added to \"{board}\"" : "\"{card}\" 已添加到 \"{board}\"",
-    "(circle)" : "（社交圈子）",
-    "This week" : "本星期",
     "Are you sure you want to transfer the board {title} for {user} ?" : "您想要轉移 {user} 的面板 {title} 嗎？",
     "Transfer the board for {user} successfully" : "轉移 {user} 的面板成功",
-    "Failed to transfer the board for {user}" : "轉移 {user} 的面板失敗"
+    "Failed to transfer the board for {user}" : "轉移 {user} 的面板失敗",
+    "This week" : "本星期",
+    "Are you sure you want to transfer the board {title} for {user}?" : "您想要轉移 {user} 的面板 {title} 嗎？"
 },
 "nplurals=1; plural=0;");
