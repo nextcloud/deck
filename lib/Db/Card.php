@@ -27,6 +27,43 @@ use DateTime;
 use DateTimeZone;
 use Sabre\VObject\Component\VCalendar;
 
+/**
+ * @method string getTitle()
+ * @method string getDescription()
+ * @method string getDescriptionPrev()
+ * @method int getStackId()
+ * @method int getLastModified()
+ * @method int getCreatedAt()
+ * @method bool getArchived()
+ * @method bool getNotified()
+ *
+ * @method void setLabels(Label[] $labels)
+ * @method null|Label[] getLabels()
+ *
+ * @method void setAssignedUsers(User[] $users)
+ * @method null|User[] getAssignedUsers()
+ *
+ * @method void setAttachments(Attachment[] $attachments)
+ * @method null|Attachment[] getAttachments()
+ *
+ * @method void setAttachmentCount(int $count)
+ * @method null|int getAttachmentCount()
+ *
+ * @method void setCommentsUnread(int $count)
+ * @method null|int getCommentsUnread()
+ *
+ * @method void setCommentsCount(int $count)
+ * @method null|int getCommentsCount()
+ *
+ * @method void setOwner(User $user)
+ * @method null|User getOwner()
+ *
+ * @method void setRelatedStack(Stack $stack)
+ * @method null|Stack getRelatedStack()
+ *
+ * @method void setRelatedBoard(Board $board)
+ * @method null|Board getRelatedBoard()
+ */
 class Card extends RelationalEntity {
 	public const TITLE_MAX_LENGTH = 255;
 
