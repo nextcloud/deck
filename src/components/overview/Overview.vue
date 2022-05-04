@@ -31,44 +31,44 @@
 		</div>
 
 		<div v-else-if="isValidFilter" class="overview">
-			<div v-if="cardsByDueDate.overdue.length > 0" class="dashboard-column">
+			<div v-if="this.assignedCardsDashboard.length > 0" class="dashboard-column">
 				<h3>{{ t('deck', 'Overdue') }}</h3>
-				<div v-for="card in cardsByDueDate.overdue" :key="card.id">
+				<div v-for="card in this.assignedCardsDashboard.overdue" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h3>{{ t('deck', 'Today') }}</h3>
-				<div v-for="card in cardsByDueDate.today" :key="card.id">
+				<div v-for="card in this.assignedCardsDashboard.today" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h3>{{ t('deck', 'Tomorrow') }}</h3>
-				<div v-for="card in cardsByDueDate.tomorrow" :key="card.id">
+				<div v-for="card in this.assignedCardsDashboard.tomorrow" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h3>{{ t('deck', 'Next 7 days') }}</h3>
-				<div v-for="card in cardsByDueDate.nextSevenDays" :key="card.id">
+				<div v-for="card in this.assignedCardsDashboard.nextSevenDays" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h3>{{ t('deck', 'Later') }}</h3>
-				<div v-for="card in cardsByDueDate.later" :key="card.id">
+				<div v-for="card in this.assignedCardsDashboard.later" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h3>{{ t('deck', 'No due') }}</h3>
-				<div v-for="card in cardsByDueDate.nodue" :key="card.id">
+				<div v-for="card in this.assignedCardsDashboard.nodue" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
@@ -83,7 +83,6 @@
 import Controls from '../Controls.vue'
 import CardItem from '../cards/CardItem.vue'
 import { mapGetters } from 'vuex'
-import moment from '@nextcloud/moment'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 
 const FILTER_UPCOMING = 'upcoming'
@@ -125,13 +124,6 @@ export default {
 		...mapGetters([
 			'assignedCardsDashboard',
 		]),
-		cardsByDueDate() {
-			switch (this.filter) {
-			case FILTER_UPCOMING:
-				return this.groupByDue(this.assignedCardsDashboard)
-			}
-			return null
-		},
 	},
 	watch: {
 		'$route.params.filter'() {
@@ -152,47 +144,6 @@ export default {
 				console.error(e)
 			}
 			this.loading = false
-		},
-
-		groupByDue(dataset) {
-			const all = {
-				nodue: [],
-				overdue: [],
-				today: [],
-				tomorrow: [],
-				nextSevenDays: [],
-				later: [],
-			}
-			dataset.forEach(card => {
-				if (card.duedate === null) {
-					all.nodue.push(card)
-				} else {
-					const hours = Math.floor(moment(card.duedate).diff(this.$root.time, 'seconds') / 60 / 60)
-					const d = new Date()
-					const currentHour = d.getHours()
-					if (hours < 0) {
-						all.overdue.push(card)
-					}
-					if (hours >= 0 && hours < (24 - currentHour)) {
-						all.today.push(card)
-					}
-					if (hours >= (24 - currentHour) && hours < (48 - currentHour)) {
-						all.tomorrow.push(card)
-					}
-					if (hours >= (48 - currentHour) && hours < (24 * 7)) {
-						all.nextSevenDays.push(card)
-					}
-					if (hours >= (24 * 7)) {
-						all.later.push(card)
-					}
-				}
-			})
-			Object.keys(all).forEach((list) => {
-				all[list] = all[list].sort((a, b) => {
-					return (new Date(a.duedate)).getTime() - (new Date(b.duedate)).getTime()
-				})
-			})
-			return all
 		},
 	},
 

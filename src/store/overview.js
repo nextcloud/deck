@@ -43,12 +43,14 @@ export default {
 	actions: {
 		async loadUpcoming({ commit }) {
 			commit('setCurrentBoard', null)
-			const assignedCards = await apiClient.get('upcoming')
-			const assignedCardsFlat = assignedCards.flat()
-			for (const i in assignedCardsFlat) {
-				commit('addCard', assignedCardsFlat[i])
+			const upcommingCards = await apiClient.get('upcoming')
+
+			for (const dueStatus in upcommingCards) {
+				for (const idx in upcommingCards[dueStatus]) {
+					commit('addCard', upcommingCards[dueStatus][idx])
+				}
 			}
-			commit('setAssignedCards', assignedCardsFlat)
+			commit('setAssignedCards', upcommingCards)
 		},
 	},
 }
