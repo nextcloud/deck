@@ -92,7 +92,7 @@ class Card extends RelationalEntity {
 	protected $relatedStack = null;
 	protected $relatedBoard = null;
 
-	protected $databaseType = 'sqlite';
+	private $databaseType = 'sqlite';
 
 	public const DUEDATE_FUTURE = 0;
 	public const DUEDATE_NEXT = 1;
