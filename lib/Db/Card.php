@@ -125,15 +125,18 @@ class Card extends RelationalEntity {
 		$this->databaseType = $type;
 	}
 
-	public function getDuedate($isoFormat = false) {
-		if ($this->duedate === null) {
-			return null;
-		}
-		$dt = new DateTime($this->duedate);
+	public function getDueDateTime(): ?DateTime {
+		return $this->duedate ? new DateTime($this->duedate) : null;
+	}
+
+	public function getDuedate($isoFormat = false): ?string {
+		$dt = $this->getDueDateTime();
+		$format = 'c';
 		if (!$isoFormat && $this->databaseType === 'mysql') {
-			return $dt->format('Y-m-d H:i:s');
+			$format = 'Y-m-d H:i:s';
 		}
-		return $dt->format('c');
+
+		return $dt ? $dt->format($format) : null;
 	}
 
 	public function getCalendarObject(): VCalendar {

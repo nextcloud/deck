@@ -59,7 +59,7 @@ class CardDetails extends Card
 		$today = new DateTime();
 		$today->setTime(0, 0);
 
-		$match_date = new DateTime($this->getDuedate());
+		$match_date = $this->getDueDateTime() ?? new DateTime();
 		$match_date->setTime(0, 0);
 
 		$diff = $today->diff($match_date);
