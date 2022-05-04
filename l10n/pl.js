@@ -293,12 +293,10 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Udostępnij {file} za pomocą karty Tablicy",
     "Share" : "Udostępnianie",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Tablica to narzędzie organizacyjne w stylu kanban, którego celem jest osobiste planowanie i organizacja projektu dla zespołów zintegrowanych z Nextcloud.\n\n\n- 📥 Dodaj swoje zadania do kart i porządkuj je\n- 📄 Zapisuj dodatkowe notatki w Markdown\n- 🔖 Przypisuj etykiety dla jeszcze lepszej organizacji\n- 👥 Współdziel ze swoim zespołem, przyjaciółmi lub rodziną\n- 📎 Dołączaj pliki i umieszczaj je w opisie Markdown\n- 💬 Porozmawiaj ze swoim zespołem za pomocą komentarzy\n- ⚡ Śledź zmiany w strumieniu aktywności\n- 🚀 Organizuj swój projekt",
-    "Creating the new card…" : "Tworzę nową kartę…",
-    "\"{card}\" was added to \"{board}\"" : "\"{card}\" została dodana do \"{board}\"",
-    "(circle)" : "(krąg)",
-    "This week" : "W tym tygodniu",
     "Are you sure you want to transfer the board {title} for {user} ?" : "Czy na pewno chcesz przenieść tablicę {title} dla {user}?",
     "Transfer the board for {user} successfully" : "Przeniesienie tablicy dla {user} pomyślne",
-    "Failed to transfer the board for {user}" : "Nie udało się przenieść tablicy dla {user}"
+    "Failed to transfer the board for {user}" : "Nie udało się przenieść tablicy dla {user}",
+    "This week" : "W tym tygodniu",
+    "Are you sure you want to transfer the board {title} for {user}?" : "Czy na pewno chcesz przenieść tablicę {title} dla {user}?"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

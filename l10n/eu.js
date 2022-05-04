@@ -290,12 +290,10 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Partekatu {file} Deck txartel baten bidez",
     "Share" : "Partekatu",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck aplikazioa plangintza pertsonalera eta proiektuen antolaketara zuzenduta dagoen Nextcloudekin integratutako kanban moduko tresna bat da.\n\n\n- 📥 Gehitu atazak txarteletan eta ordenatu\n- 📄 Idatzi ohar gehigarriak markdown erabiliz\n- 🔖 Esleitu etiketak antolaketa are gehiago hobetzeko\n- 👥 Partekatu zure talde, lagun edo familiarekin\n- 📎 Erantsi fitxategiak eta kapsulatu zure markdown deskribapenean\n- 💬 Eztabaidatu zure taldearekin iruzkinak erabiliz\n- ⚡ Egin aldaketen jarraipena jarduera jarioa erabiliz\n- 🚀 Antolatu zure proiektua",
-    "Creating the new card…" : "Txartel berria sortzen...",
-    "\"{card}\" was added to \"{board}\"" : "\"{card}\" \"{board}\"-n gehitu da",
-    "(circle)" : "(zirkulua)",
-    "This week" : "Aste honetan",
     "Are you sure you want to transfer the board {title} for {user} ?" : "Ziur {title} transferitu nahi duzula {user}-en panela ?",
     "Transfer the board for {user} successfully" : "Transferitu {user}-ren panela behar bezala",
-    "Failed to transfer the board for {user}" : "Ezin izan da transferitu {user}-ren panela"
+    "Failed to transfer the board for {user}" : "Ezin izan da transferitu {user}-ren panela",
+    "This week" : "Aste honetan",
+    "Are you sure you want to transfer the board {title} for {user}?" : "Ziur {title} taula transferitu nahi duzula {user}?"
 },
 "nplurals=2; plural=(n != 1);");
