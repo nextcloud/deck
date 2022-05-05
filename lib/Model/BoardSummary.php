@@ -24,11 +24,10 @@ namespace OCA\Deck\Model;
 
 use OCA\Deck\Db\Board;
 
-class BoardSummary extends Board
-{
+class BoardSummary extends Board {
 	private Board $board;
 
-	public function __construct(Board $board = null) {
+	public function __construct(Board $board) {
 		parent::__construct();
 		$this->board = $board;
 	}
@@ -40,7 +39,7 @@ class BoardSummary extends Board
 		];
 	}
 
-	protected function getter($name) {
-		return $this->board->getter($name);
+	public function __call($name, $arguments) {
+		return $this->board->__call($name, $arguments);
 	}
 }

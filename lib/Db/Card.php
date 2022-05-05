@@ -92,7 +92,7 @@ class Card extends RelationalEntity {
 	protected $relatedStack = null;
 	protected $relatedBoard = null;
 
-	protected $databaseType = 'sqlite';
+	private $databaseType = 'sqlite';
 
 	public const DUEDATE_FUTURE = 0;
 	public const DUEDATE_NEXT = 1;
@@ -108,6 +108,7 @@ class Card extends RelationalEntity {
 		$this->addType('archived', 'boolean');
 		$this->addType('notified', 'boolean');
 		$this->addType('deletedAt', 'integer');
+		$this->addType('duedate', 'string');
 		$this->addRelation('labels');
 		$this->addRelation('assignedUsers');
 		$this->addRelation('attachments');

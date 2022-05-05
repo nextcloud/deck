@@ -26,8 +26,7 @@ use DateTime;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
 
-class CardDetails extends Card
-{
+class CardDetails extends Card {
 	private Card $card;
 	private ?Board $board;
 
@@ -42,14 +41,10 @@ class CardDetails extends Card
 	}
 
 	public function jsonSerialize(array $extras = []): array {
-		$array = parent::jsonSerialize();
+		$array = $this->card->jsonSerialize();
+		unset($array['notified'], $array['descriptionPrev'], $array['relatedStack'], $array['relatedBoard']);
+
 		$array['overdue'] = $this->getDueStatus();
-
-		unset($array['notified']);
-		unset($array['descriptionPrev']);
-		unset($array['relatedStack']);
-		unset($array['relatedBoard']);
-
 		$this->appendBoardDetails($array);
 
 		return $array;
@@ -59,23 +54,27 @@ class CardDetails extends Card
 		$today = new DateTime();
 		$today->setTime(0, 0);
 
-		$match_date = $this->getDueDateTime() ?? new DateTime();
+		$match_date = $this->card->getDueDateTime();
+		if (!$match_date) {
+			return Card::DUEDATE_FUTURE;
+		}
 		$match_date->setTime(0, 0);
 
 		$diff = $today->diff($match_date);
-		$diffDays = (integer) $diff->format('%R%a'); // Extract days count in interval
+		$diffDays = (int) $diff->format('%R%a'); // Extract days count in interval
+
 
 		if ($diffDays === 1) {
-			return static::DUEDATE_NEXT;
+			return Card::DUEDATE_NEXT;
 		}
 		if ($diffDays === 0) {
-			return static::DUEDATE_NOW;
+			return Card::DUEDATE_NOW;
 		}
 		if ($diffDays < 0) {
-			return static::DUEDATE_OVERDUE;
+			return Card::DUEDATE_OVERDUE;
 		}
 
-		return static::DUEDATE_FUTURE;
+		return Card::DUEDATE_FUTURE;
 	}
 
 	private function appendBoardDetails(&$array): void {
@@ -87,7 +86,7 @@ class CardDetails extends Card
 		$array['board'] = (new BoardSummary($this->board))->jsonSerialize();
 	}
 
-	protected function getter($name) {
-		return $this->card->getter($name);
+	public function __call($name, $arguments) {
+		return $this->card->__call($name, $arguments);
 	}
 }

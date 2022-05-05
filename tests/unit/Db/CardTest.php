@@ -25,6 +25,7 @@ namespace OCA\Deck\Db;
 
 use DateInterval;
 use DateTime;
+use OCA\Deck\Model\CardDetails;
 use Test\TestCase;
 
 class CardTest extends TestCase {
@@ -59,7 +60,7 @@ class CardTest extends TestCase {
 	public function testDuedate(DateTime $duedate, $state) {
 		$card = $this->createCard();
 		$card->setDuedate($duedate->format('Y-m-d H:i:s'));
-		$this->assertEquals($state, $card->jsonSerialize()['overdue']);
+		$this->assertEquals($state, (new CardDetails($card))->jsonSerialize()['overdue']);
 	}
 
 	public function testJsonSerialize() {
@@ -86,7 +87,7 @@ class CardTest extends TestCase {
 			'commentsCount' => 0,
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
-		], $card->jsonSerialize());
+		], (new CardDetails($card))->jsonSerialize());
 	}
 	public function testJsonSerializeLabels() {
 		$card = $this->createCard();
@@ -113,7 +114,7 @@ class CardTest extends TestCase {
 			'commentsCount' => 0,
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
-		], $card->jsonSerialize());
+		], (new CardDetails($card))->jsonSerialize());
 	}
 
 	public function testMysqlDateFallback() {
@@ -150,6 +151,6 @@ class CardTest extends TestCase {
 			'commentsCount' => 0,
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
-		], $card->jsonSerialize());
+		], (new CardDetails($card))->jsonSerialize());
 	}
 }
