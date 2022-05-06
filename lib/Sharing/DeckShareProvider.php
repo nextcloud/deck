@@ -28,16 +28,14 @@ namespace OCA\Deck\Sharing;
 
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use OC\Files\Cache\Cache;
+use OCA\Deck\Cache\AttachmentCacheHelper;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\User;
-use OCA\Deck\BadRequestException;
 use OCA\Deck\NoPermissionException;
-use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\Service\PermissionService;
-use OCA\Deck\Service\IAttachmentService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -47,8 +45,6 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Folder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\Node;
-use OCP\ICache;
-use OCP\ICacheFactory;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\Share\Exceptions\GenericShareException;
@@ -70,14 +66,12 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 	public const SHARE_TYPE_DECK_USER = IShare::TYPE_DECK_USER;
 
-	/** @var IAttachmentService[] */
-	private $services = [];
 	/** @var IDBConnection */
 	private $dbConnection;
 	/** @var IManager */
 	private $shareManager;
-	/** @var DeckShareFileCountHelper */
-	private $deckShareFileCountHelper;
+	/** @var AttachmentCacheHelper */
+	private $attachmentCacheHelper;
 	/** @var BoardMapper */
 	private $boardMapper;
 	/** @var CardMapper */
@@ -85,9 +79,8 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	/** @var PermissionService */
 	private $permissionService;
 	/** @var ITimeFactory */
-	/** @var ICache */
-	private $cache;
 	private $timeFactory;
+	/** @var IL10N */
 	private $l;
 
 	public function __construct(
@@ -96,20 +89,18 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		BoardMapper $boardMapper,
 		CardMapper $cardMapper,
 		PermissionService $permissionService,
-		ICacheFactory $cacheFactory,
-		DeckShareFileCountHelper $deckShareFileCountHelper,
+		AttachmentCacheHelper $attachmentCacheHelper,
 		IL10N $l
 	) {
 		$this->dbConnection = $connection;
 		$this->shareManager = $shareManager;
 		$this->boardMapper = $boardMapper;
 		$this->cardMapper = $cardMapper;
-		$this->deckShareFileCountHelper = $deckShareFileCountHelper;
+		$this->attachmentCacheHelper = $attachmentCacheHelper;
 		$this->permissionService = $permissionService;
 
 		$this->l = $l;
 		$this->timeFactory = \OC::$server->get(ITimeFactory::class);
-		$this->cache = $cacheFactory->createDistributed('deck-card-attachments-');
 	}
 
 	public static function register(IEventDispatcher $dispatcher): void {
@@ -174,37 +165,10 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			$share->getExpirationDate()
 		);
 		$data = $this->getRawShare($shareId);
-		$this->updateCardAttachmentsCountCache($cardId);
+
+		$this->attachmentCacheHelper->clearAttachmentCount((int)$cardId);
 
 		return $this->createShareObject($data);
-	}
-
-	/**
-	 * @param $cardId
-	 * @return int|mixed
-	 * @throws BadRequestException
-	 */
-	private function updateCardAttachmentsCountCache($cardId) {
-		if (is_numeric($cardId) === false) {
-			throw new BadRequestException('card id must be a number');
-		}
-
-		$count = $this->deckShareFileCountHelper->getAttachmentCount($cardId);
-		$this->cache->set('card-' . $cardId, $count);
-
-		return $count;
-	}
-
-	/**
-	 * @param string $type
-	 * @return IAttachmentService
-	 * @throws InvalidAttachmentType
-	 */
-	public function getService($type) {
-		if (isset($this->services[$type])) {
-			return $this->services[$type];
-		}
-		throw new InvalidAttachmentType($type);
 	}
 
 	/**
@@ -391,6 +355,8 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		$qb->orWhere($qb->expr()->eq('parent', $qb->createNamedParameter($share->getId())));
 
 		$qb->execute();
+
+		$this->attachmentCacheHelper->clearAttachmentCount((int)$share->getSharedWith());
 	}
 
 	/**

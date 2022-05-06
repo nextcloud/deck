@@ -34,11 +34,10 @@ use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
+use OCA\Deck\Cache\AttachmentCacheHelper;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\Db\IMapperException;
 use OCP\AppFramework\Http\Response;
-use OCP\ICache;
-use OCP\ICacheFactory;
 use OCP\IL10N;
 
 class AttachmentService {
@@ -49,9 +48,10 @@ class AttachmentService {
 
 	/** @var IAttachmentService[] */
 	private $services = [];
+	/** @var Application */
 	private $application;
-	/** @var ICache */
-	private $cache;
+	/** @var AttachmentCacheHelper */
+	private $attachmentCacheHelper;
 	/** @var IL10N */
 	private $l10n;
 	/** @var ActivityManager */
@@ -59,13 +59,13 @@ class AttachmentService {
 	/** @var ChangeHelper */
 	private $changeHelper;
 
-	public function __construct(AttachmentMapper $attachmentMapper, CardMapper $cardMapper, ChangeHelper $changeHelper, PermissionService $permissionService, Application $application, ICacheFactory $cacheFactory, $userId, IL10N $l10n, ActivityManager $activityManager) {
+	public function __construct(AttachmentMapper $attachmentMapper, CardMapper $cardMapper, ChangeHelper $changeHelper, PermissionService $permissionService, Application $application, AttachmentCacheHelper $attachmentCacheHelper, $userId, IL10N $l10n, ActivityManager $activityManager) {
 		$this->attachmentMapper = $attachmentMapper;
 		$this->cardMapper = $cardMapper;
 		$this->permissionService = $permissionService;
 		$this->userId = $userId;
 		$this->application = $application;
-		$this->cache = $cacheFactory->createDistributed('deck-card-attachments-');
+		$this->attachmentCacheHelper = $attachmentCacheHelper;
 		$this->l10n = $l10n;
 		$this->activityManager = $activityManager;
 		$this->changeHelper = $changeHelper;
@@ -137,17 +137,18 @@ class AttachmentService {
 
 	/**
 	 * @param $cardId
-	 * @param bool $update | Force the update of the cached values
 	 * @return int|mixed
 	 * @throws BadRequestException
+	 * @throws InvalidAttachmentType
+	 * @throws \OCP\DB\Exception
 	 */
-	public function count($cardId, $update = false) {
+	public function count($cardId) {
 		if (is_numeric($cardId) === false) {
 			throw new BadRequestException('card id must be a number');
 		}
 
-		$count = $this->cache->get('card-' . $cardId);
-		if ($update || !$count) {
+		$count = $this->attachmentCacheHelper->getAttachmentCount((int)$cardId);
+		if ($count === null) {
 			$count = count($this->attachmentMapper->findAll($cardId));
 
 			foreach (array_keys($this->services) as $attachmentType) {
@@ -157,7 +158,7 @@ class AttachmentService {
 				}
 			}
 
-			$this->cache->set('card-' . $cardId, $count);
+			$this->attachmentCacheHelper->setAttachmentCount((int)$cardId, $count);
 		}
 
 		return $count;
@@ -187,7 +188,7 @@ class AttachmentService {
 
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 
-		$this->cache->clear('card-' . $cardId);
+		$this->attachmentCacheHelper->clearAttachmentCount((int)$cardId);
 		$attachment = new Attachment();
 		$attachment->setCardId($cardId);
 		$attachment->setType($type);
@@ -299,7 +300,7 @@ class AttachmentService {
 		}
 
 		$this->permissionService->checkPermission($this->cardMapper, $attachment->getCardId(), Acl::PERMISSION_EDIT);
-		$this->cache->clear('card-' . $attachment->getCardId());
+		$this->attachmentCacheHelper->clearAttachmentCount($cardId);
 
 		$attachment->setData($data);
 		try {
@@ -357,7 +358,7 @@ class AttachmentService {
 			}
 		}
 
-		$this->cache->clear('card-' . $attachment->getCardId());
+		$this->attachmentCacheHelper->clearAttachmentCount($cardId);
 		$this->changeHelper->cardChanged($attachment->getCardId());
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $attachment, ActivityManager::SUBJECT_ATTACHMENT_DELETE);
 		return $attachment;
@@ -371,7 +372,7 @@ class AttachmentService {
 		}
 
 		$this->permissionService->checkPermission($this->cardMapper, $attachment->getCardId(), Acl::PERMISSION_EDIT);
-		$this->cache->clear('card-' . $attachment->getCardId());
+		$this->attachmentCacheHelper->clearAttachmentCount($cardId);
 
 		try {
 			$service = $this->getService($attachment->getType());
