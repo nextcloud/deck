@@ -30,11 +30,13 @@ use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Model\CardDetails;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\StatusException;
 
@@ -84,9 +86,13 @@ class StackService {
 			return;
 		}
 
-		foreach ($cards as $card) {
-			$this->cardService->enrich($card);
-		}
+		$cards = array_map(
+			function (Card $card): CardDetails {
+				$this->cardService->enrich($card);
+				return new CardDetails($card);
+			},
+			$cards
+		);
 
 		$stack->setCards($cards);
 	}
@@ -112,12 +118,18 @@ class StackService {
 
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_READ);
 		$stack = $this->stackMapper->find($stackId);
-		$cards = $this->cardMapper->findAll($stackId);
-		foreach ($cards as $cardIndex => $card) {
-			$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
-			$card->setAssignedUsers($assignedUsers);
-			$card->setAttachmentCount($this->attachmentService->count($card->getId()));
-		}
+
+		$cards = array_map(
+			function (Card $card): CardDetails {
+				$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
+				$card->setAssignedUsers($assignedUsers);
+				$card->setAttachmentCount($this->attachmentService->count($card->getId()));
+
+				return new CardDetails($card);
+			},
+			$this->cardMapper->findAll($stackId)
+		);
+
 		$stack->setCards($cards);
 
 		return $stack;
