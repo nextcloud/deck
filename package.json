@@ -45,7 +45,7 @@
 		"blueimp-md5": "^2.19.0",
 		"dompurify": "^2.3.6",
 		"lodash": "^4.17.21",
-		"markdown-it": "^13.0.0",
+		"markdown-it": "^13.0.1",
 		"markdown-it-task-lists": "^2.1.1",
 		"markdown-it-link-attributes": "^4.0.0",
 		"moment": "^2.29.3",
