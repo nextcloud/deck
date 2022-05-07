@@ -49,7 +49,7 @@
 		"markdown-it-task-lists": "^2.1.1",
 		"markdown-it-link-attributes": "^4.0.0",
 		"moment": "^2.29.3",
-		"nextcloud-vue-collections": "^0.9.0",
+		"nextcloud-vue-collections": "^0.10.0",
 		"p-queue": "^6.6.2",
 		"url-search-params-polyfill": "^8.1.1",
 		"vue": "^2.6.14",
