@@ -23,6 +23,14 @@
 
 namespace OCA\Deck\Db;
 
+/**
+ * @method int getId()
+ * @method string getTitle()
+ * @method int getShared()
+ * @method bool getArchived()
+ * @method int getDeletedAt()
+ * @method int getLastModified()
+ */
 class Board extends RelationalEntity {
 	protected $title;
 	protected $owner;

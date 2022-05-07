@@ -61,7 +61,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	 */
 	public function findStackFromCardId($cardId): ?Stack {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
+		$qb->select('s.*')
 			->from($this->getTableName(), 's')
 			->innerJoin('s', 'deck_cards', 'c', 's.id = c.stack_id')
 			->where($qb->expr()->eq('c.id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)));

@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Card;
+use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Service\SearchService;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
@@ -50,9 +51,12 @@ class SearchController extends OCSController {
 	public function search(string $term, ?int $limit = null, ?int $cursor = null): DataResponse {
 		$cards = $this->searchService->searchCards($term, $limit, $cursor);
 		return new DataResponse(array_map(function (Card $card) {
-			$json = $card->jsonSerialize();
+			$board = $card->getRelatedBoard();
+			$json = (new CardDetails($card, $board))->jsonSerialize();
+
+			$json['relatedBoard'] = $board;
 			$json['relatedStack'] = $card->getRelatedStack();
-			$json['relatedBoard'] = $card->getRelatedBoard();
+
 			return $json;
 		}, $cards));
 	}
