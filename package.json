@@ -45,12 +45,7 @@
 		"blueimp-md5": "^2.19.0",
 		"dompurify": "^2.3.6",
 		"lodash": "^4.17.21",
-<<<<<<< HEAD
 		"markdown-it": "^13.0.1",
-		"markdown-it-task-lists": "^2.1.1",
-=======
-		"markdown-it": "^13.0.0",
->>>>>>> ea1ccdb2 (fix: cypress issues)
 		"markdown-it-link-attributes": "^4.0.0",
 		"markdown-it-task-lists": "^2.1.1",
 		"moment": "^2.29.3",
@@ -82,21 +77,10 @@
 		"@nextcloud/webpack-vue-config": "^5.1.0",
 		"@relative-ci/agent": "^3.1.3",
 		"@vue/test-utils": "^1.3.0",
-<<<<<<< HEAD
-		"jest": "^28.1.0",
-=======
 		"cypress": "^9.6.0",
-		"jest": "^27.5.1",
->>>>>>> ea1ccdb2 (fix: cypress issues)
+		"jest": "^28.1.0",
 		"jest-serializer-vue": "^2.0.2",
-		"node-polyfill-webpack-plugin": "^1.1.4",
-		"postcss-html": "^1.4.1",
-		"stylelint": "^14.7.1",
-		"stylelint-config-recommended-scss": "^6.0.0",
-		"stylelint-config-recommended-vue": "^1.4.0",
-		"stylelint-webpack-plugin": "^3.2.0",
-		"vue-jest": "^3.0.7",
-		"webpack": "^5.72.0"
+		"vue-jest": "^3.0.7"
 	},
 	"jest": {
 		"moduleFileExtensions": [
