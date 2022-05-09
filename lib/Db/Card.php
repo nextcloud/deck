@@ -158,11 +158,14 @@ class Card extends RelationalEntity {
 		return $calendar;
 	}
 
-	public function getDaysUntilDue(): int {
+	public function getDaysUntilDue(): ?int {
 		$today = new DateTime();
-		$today->setTime(0, 0);
+		$match_date = $this->getDuedate();
+		if ($match_date === null) {
+			return null;
+		}
 
-		$match_date = $this->getDueDateTime() ?? new DateTime();
+		$today->setTime(0, 0);
 		$match_date->setTime(0, 0);
 
 		$diff = $today->diff($match_date);

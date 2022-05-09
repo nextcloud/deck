@@ -108,7 +108,7 @@ class OverviewService {
 				$diffDays = $card->getDaysUntilDue();
 
 				$key = 'later';
-				if ($card->getDuedate() === null) {
+				if ($diffDays === null) {
 					$key = 'nodue';
 				} elseif ($diffDays < 0) {
 					$key = 'overdue';

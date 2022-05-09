@@ -25,8 +25,7 @@ namespace OCA\Deck\Model;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
 
-class CardDetails extends Card
-{
+class CardDetails extends Card {
 	private Card $card;
 	private ?Board $board;
 
@@ -60,18 +59,18 @@ class CardDetails extends Card
 
 	private function getDueStatus(): int {
 		$diffDays = $this->getDaysUntilDue();
+		if ($diffDays === null || $diffDays > 1) {
+			return static::DUEDATE_FUTURE;
+		}
 		if ($diffDays === 1) {
 			return static::DUEDATE_NEXT;
 		}
 		if ($diffDays === 0) {
 			return static::DUEDATE_NOW;
 		}
-		if ($diffDays < 0) {
-			return static::DUEDATE_OVERDUE;
-		}
 
-        return static::DUEDATE_FUTURE;
-    }
+		return static::DUEDATE_OVERDUE;
+	}
 
 	private function appendBoardDetails(&$array): void {
 		if (!$this->board) {
@@ -83,8 +82,8 @@ class CardDetails extends Card
 	}
 
 	protected function getter($name) {
-        return $this->card->getter($name);
-    }
+		return $this->card->getter($name);
+	}
 	public function __call($name, $arguments) {
 		return $this->card->__call($name, $arguments);
 	}
