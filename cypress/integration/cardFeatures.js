@@ -21,10 +21,8 @@ describe('Card', function () {
 
         cy.get('.app-navigation button.app-navigation-toggle').click()
         cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
-            .eq(1)
-            .find('.app-navigation-entry__children .app-navigation-entry a.app-navigation-entry-link')
-            .first()
-            .click({force: true})
+            .eq(1).find('.app-navigation-entry__children .app-navigation-entry a.app-navigation-entry-link')
+            .first().click({force: true})
 
         cy.get('.board .stack').eq(0).within(() => {
             cy.get('button.action-item.action-item--single.icon-add')

@@ -163,8 +163,8 @@ export default {
 
 <style lang="scss" scoped>
 
-	@import '../../css/animations.scss';
-	@import '../../css/variables.scss';
+	@import '../../css/animations';
+	@import '../../css/variables';
 
 	form {
 		text-align: center;

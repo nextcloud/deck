@@ -80,7 +80,14 @@
 		"@vue/test-utils": "^1.3.0",
 		"jest": "^28.1.0",
 		"jest-serializer-vue": "^2.0.2",
-		"vue-jest": "^3.0.7"
+		"node-polyfill-webpack-plugin": "^1.1.4",
+		"postcss-html": "^1.4.1",
+		"stylelint": "^14.7.1",
+		"stylelint-config-recommended-scss": "^6.0.0",
+		"stylelint-config-recommended-vue": "^1.4.0",
+		"stylelint-webpack-plugin": "^3.2.0",
+		"vue-jest": "^3.0.7",
+		"webpack": "^5.72.0"
 	},
 	"jest": {
 		"moduleFileExtensions": [

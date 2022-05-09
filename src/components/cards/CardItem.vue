@@ -232,6 +232,7 @@ export default {
 			}
 		}
 
+		/* stylelint-disable-next-line no-invalid-position-at-import-rule */
 		@import './../../css/labels';
 
 		.card-controls {

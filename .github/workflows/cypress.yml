@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - name: Setup custom host for nextcloud 
-        run: echo "127.0.0.1 nextcloud.local" | sudo tee -a /etc/hosts
+        run: echo "localhost nextcloud.local" | sudo tee -a /etc/hosts
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
@@ -73,13 +73,13 @@ jobs:
           php occ config:system:set memcache.local --value="\\OC\\Memcache\\APCu"
           php occ config:system:set debug --value=true --type=boolean
           php -f index.php
-          php -S 0.0.0.0:8081 &
+          php -S 0.0.0.0:80 &
           export OC_PASS=1234561
           php occ user:add --password-from-env user1
           php occ user:add --password-from-env user2
           php occ app:enable deck
           php occ app:list
-          curl -v http://localhost:8081/index.php/login
+          curl -v http://localhost/index.php/login
           cat data/nextcloud.log
 
       - name: Cypress run
