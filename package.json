@@ -43,12 +43,16 @@
 		"@nextcloud/vue": "^5.3.1",
 		"@nextcloud/vue-dashboard": "^2.0.1",
 		"blueimp-md5": "^2.19.0",
-		"cypress": "^9.5.3",
 		"dompurify": "^2.3.6",
 		"lodash": "^4.17.21",
+<<<<<<< HEAD
 		"markdown-it": "^13.0.1",
 		"markdown-it-task-lists": "^2.1.1",
+=======
+		"markdown-it": "^13.0.0",
+>>>>>>> ea1ccdb2 (fix: cypress issues)
 		"markdown-it-link-attributes": "^4.0.0",
+		"markdown-it-task-lists": "^2.1.1",
 		"moment": "^2.29.3",
 		"nextcloud-vue-collections": "^0.10.0",
 		"p-queue": "^6.6.2",
@@ -78,7 +82,12 @@
 		"@nextcloud/webpack-vue-config": "^5.1.0",
 		"@relative-ci/agent": "^3.1.3",
 		"@vue/test-utils": "^1.3.0",
+<<<<<<< HEAD
 		"jest": "^28.1.0",
+=======
+		"cypress": "^9.6.0",
+		"jest": "^27.5.1",
+>>>>>>> ea1ccdb2 (fix: cypress issues)
 		"jest-serializer-vue": "^2.0.2",
 		"node-polyfill-webpack-plugin": "^1.1.4",
 		"postcss-html": "^1.4.1",

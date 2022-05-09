@@ -26,11 +26,6 @@ jobs:
         server-versions: [ 'master' ]
 
     steps:
-      - name: Set up custom host for nextcloud
-        run: |
-            sudo echo "127.0.0.1 nextcloud.local" | sudo tee -a /etc/hosts
-            cat /etc/hosts
-
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:

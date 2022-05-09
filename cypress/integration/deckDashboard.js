@@ -18,12 +18,16 @@ describe('Deck dashboard', function() {
         	.should('have.text', 'Upcoming cards')
 	})
 
-	/* it('Can see the default "Personal Board" created for user by default', function () {
-		cy.get('.app-navigation button.app-navigation-toggle')
-			.click()
+	it('Can see the default "Personal Board" created for user by default', function () {
+		const defaultBoard = 'Personal'
+
+		cy.get('.app-navigation button.app-navigation-toggle').click()
 		
-		cy.get('.app-navigation__list .app-navigation-entry__children .app-navigation-entry')
+		cy.get('.app-navigation__list .app-navigation-entry')
+			.eq(1)
+			.find('ul.app-navigation-entry__children li.app-navigation-entry')
 			.first()
-			.contains('Personal')
-	}) */
+			.contains(defaultBoard)
+			.should('be.visible')
+	})
 })

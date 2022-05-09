@@ -20,8 +20,8 @@ describe('Stack', function () {
         
         cy.get('.app-navigation button.app-navigation-toggle').click()
         cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
-            .eq(1)
-            .find('.app-navigation-entry__children .app-navigation-entry a.app-navigation-entry-link')
+            .eq(3)
+            .find('a.app-navigation-entry-link')
             .first().click({force: true})
 
         cy.get('#stack-add button').first().click()
