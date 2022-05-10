@@ -76,6 +76,10 @@ jobs:
           php occ user:add --password-from-env user2
           php occ app:enable deck
           php occ app:list
+          composer install
+          cd apps/deck
+          composer install
+          cd ../../
           curl -v http://localhost:8081/index.php/login
           cat data/nextcloud.log
 
