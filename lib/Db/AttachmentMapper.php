@@ -73,7 +73,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 		$row2 = $cursor->fetch();
 		$cursor->closeCursor();
 		if ($row2 !== false) {
-			throw new MultipleObjectsReturnedException('Did not expect more than one result when executing' . $query);
+			throw new MultipleObjectsReturnedException('Did not expect more than one result when executing' . $qb);
 		}
 
 		return $this->mapRowToEntity($row);
