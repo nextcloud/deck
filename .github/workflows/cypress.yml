@@ -79,6 +79,8 @@ jobs:
           composer install
           cd apps/deck
           composer install
+          npm install
+          npm run build
           cd ../../
           curl -v http://localhost:8081/index.php/login
           cat data/nextcloud.log
