@@ -249,8 +249,8 @@ export default {
 			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
 				Vue.set(state.cards[existingIndex], property, card[property])
+				Vue.set(state.cards[existingIndex], 'lastModified', Date.now() / 1000)
 			}
-			Vue.set(state.cards[existingIndex], 'lastModified', Date.now() / 1000)
 		},
 		cardIncreaseAttachmentCount(state, cardId) {
 			const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
