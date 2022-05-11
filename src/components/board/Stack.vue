@@ -276,7 +276,7 @@ export default {
 	@import './../../css/variables';
 
 	.stack {
-		width: $stack-width + $stack-spacing*3;
+		width: $stack-width + $stack-spacing * 3;
 		margin-left: math.div($stack-spacing, 2);
 		margin-right: math.div($stack-spacing, 2);
 	}
