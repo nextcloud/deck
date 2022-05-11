@@ -32,7 +32,6 @@ use OCA\Deck\NoPermissionException;
 use OCP\IConfig;
 use OCP\IGroup;
 use OCP\IGroupManager;
-use OCP\IUserSession;
 
 class ConfigService {
 	public const SETTING_BOARD_NOTIFICATION_DUE_OFF = 'off';
@@ -40,23 +39,21 @@ class ConfigService {
 	public const SETTING_BOARD_NOTIFICATION_DUE_ALL = 'all';
 	public const SETTING_BOARD_NOTIFICATION_DUE_DEFAULT = self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED;
 
-	private $config;
-	private $userId;
-	private $groupManager;
+	private IConfig $config;
+	private ?string $userId;
+	private IGroupManager $groupManager;
 
 	public function __construct(
 		IConfig $config,
-		IGroupManager $groupManager
+		IGroupManager $groupManager,
+		?string $userId
 	) {
 		$this->groupManager = $groupManager;
 		$this->config = $config;
+		$this->userId = $userId;
 	}
 
-	public function getUserId() {
-		if (!$this->userId) {
-			$user = \OC::$server->get(IUserSession::class)->getUser();
-			$this->userId = $user ? $user->getUID() : null;
-		}
+	public function getUserId(): ?string {
 		return $this->userId;
 	}
 
@@ -75,8 +72,11 @@ class ConfigService {
 		return $data;
 	}
 
-	public function get($key) {
-		$result = null;
+	/**
+	 * @return bool|array{id: string, displayname: string}[]
+	 * @throws NoPermissionException
+	 */
+	public function get(string $key) {
 		[$scope] = explode(':', $key, 2);
 		switch ($scope) {
 			case 'groupLimit':
@@ -90,11 +90,12 @@ class ConfigService {
 				}
 				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'calendar', true);
 			case 'cardDetailsInModal':
-			  if ($this->getUserId() === null) {
-			  	return false;
-			  }
+				if ($this->getUserId() === null) {
+					return false;
+				}
 				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardDetailsInModal', true);
 		}
+		return false;
 	}
 
 	public function isCalendarEnabled(int $boardId = null): bool {
@@ -157,7 +158,10 @@ class ConfigService {
 		return $result;
 	}
 
-	private function setGroupLimit($value) {
+	/**
+	 * @return string[]
+	 */
+	private function setGroupLimit(array $value): array {
 		$groups = [];
 		foreach ($value as $group) {
 			$groups[] = $group['id'];
@@ -167,7 +171,7 @@ class ConfigService {
 		return $groups;
 	}
 
-	private function getGroupLimitList() {
+	private function getGroupLimitList(): array {
 		$value = $this->config->getAppValue(Application::APP_ID, 'groupLimit', '');
 		$groups = explode(',', $value);
 		if ($value === '') {
@@ -176,9 +180,10 @@ class ConfigService {
 		return $groups;
 	}
 
+	/** @return array{id: string, displayname: string}[] */
 	private function getGroupLimit() {
 		$groups = $this->getGroupLimitList();
-		$groups = array_map(function ($groupId) {
+		$groups = array_map(function (string $groupId): ?array {
 			/** @var IGroup $groups */
 			$group = $this->groupManager->get($groupId);
 			if ($group === null) {

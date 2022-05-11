@@ -24,8 +24,10 @@
 namespace OCA\Deck\Db;
 
 use OCA\Deck\Service\CirclesService;
+use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
+use OCP\Server;
 use Psr\Log\LoggerInterface;
 use Test\AppFramework\Db\MapperTestUtility;
 
@@ -46,15 +48,15 @@ class AclMapperTest extends MapperTestUtility {
 	public function setup(): void {
 		parent::setUp();
 
-		$this->dbConnection = \OC::$server->getDatabaseConnection();
+		$this->dbConnection = Server::get(IDBConnection::class);
 		$this->aclMapper = new AclMapper($this->dbConnection);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
 		$this->boardMapper = new BoardMapper(
 			$this->dbConnection,
-			\OC::$server->query(LabelMapper::class),
+			Server::get(LabelMapper::class),
 			$this->aclMapper,
-			\OC::$server->query(StackMapper::class),
+			Server::get(StackMapper::class),
 			$this->userManager,
 			$this->groupManager,
 			$this->createMock(CirclesService::class),

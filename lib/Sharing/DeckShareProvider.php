@@ -65,22 +65,16 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 	public const SHARE_TYPE_DECK_USER = IShare::TYPE_DECK_USER;
 
-	/** @var IDBConnection */
-	private $dbConnection;
-	/** @var IManager */
-	private $shareManager;
-	/** @var AttachmentCacheHelper */
-	private $attachmentCacheHelper;
-	/** @var BoardMapper */
-	private $boardMapper;
-	/** @var CardMapper */
-	private $cardMapper;
-	/** @var PermissionService */
-	private $permissionService;
-	/** @var ITimeFactory */
-	private $timeFactory;
-	/** @var IL10N */
-	private $l;
+	private IDBConnection $dbConnection;
+	private IManager $shareManager;
+	private AttachmentCacheHelper $attachmentCacheHelper;
+	private BoardMapper $boardMapper;
+	private CardMapper $cardMapper;
+	private PermissionService $permissionService;
+	private ITimeFactory $timeFactory;
+	private IL10N $l;
+	private IMimeTypeLoader $mimeTypeLoader;
+	private ?string $userId;
 
 	public function __construct(
 		IDBConnection $connection,
@@ -89,7 +83,10 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		CardMapper $cardMapper,
 		PermissionService $permissionService,
 		AttachmentCacheHelper $attachmentCacheHelper,
-		IL10N $l
+		IL10N $l,
+		ITimeFactory $timeFactory,
+		IMimeTypeLoader $mimeTypeLoader,
+		?string $userId
 	) {
 		$this->dbConnection = $connection;
 		$this->shareManager = $shareManager;
@@ -97,9 +94,10 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		$this->cardMapper = $cardMapper;
 		$this->attachmentCacheHelper = $attachmentCacheHelper;
 		$this->permissionService = $permissionService;
-
 		$this->l = $l;
-		$this->timeFactory = \OC::$server->get(ITimeFactory::class);
+		$this->timeFactory = $timeFactory;
+		$this->mimeTypeLoader = $mimeTypeLoader;
+		$this->userId = $userId;
 	}
 
 	public static function register(IEventDispatcher $dispatcher): void {
@@ -207,13 +205,13 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			->setValue('file_target', $qb->createNamedParameter($target))
 			->setValue('permissions', $qb->createNamedParameter($permissions))
 			->setValue('token', $qb->createNamedParameter($token))
-			->setValue('stime', $qb->createNamedParameter(\OC::$server->get(ITimeFactory::class)->getTime()));
+			->setValue('stime', $qb->createNamedParameter($this->timeFactory->getTime()));
 
 		if ($expirationDate !== null) {
 			$qb->setValue('expiration', $qb->createNamedParameter($expirationDate, 'datetime'));
 		}
 
-		$qb->execute();
+		$qb->executeStatement();
 
 		return $qb->getLastInsertId();
 	}
@@ -281,7 +279,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			$entryData = $data;
 			$entryData['permissions'] = $entryData['f_permissions'];
 			$entryData['parent'] = $entryData['f_parent'];
-			$share->setNodeCacheEntry(Cache::cacheEntryFromData($entryData, \OC::$server->get(IMimeTypeLoader::class)));
+			$share->setNodeCacheEntry(Cache::cacheEntryFromData($entryData, $this->mimeTypeLoader));
 		}
 		return $share;
 	}
@@ -474,14 +472,14 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 					'file_target' => $qb->createNamedParameter($share->getTarget()),
 					'permissions' => $qb->createNamedParameter($share->getPermissions()),
 					'stime' => $qb->createNamedParameter($share->getShareTime()->getTimestamp()),
-				])->execute();
+				])->executeStatement();
 		} else {
 			// Already a userroom share. Update it.
 			$qb = $this->dbConnection->getQueryBuilder();
 			$qb->update('share')
 				->set('file_target', $qb->createNamedParameter($share->getTarget()))
 				->where($qb->expr()->eq('id', $qb->createNamedParameter($data['id'])))
-				->execute();
+				->executeStatement();
 		}
 
 		return $share;
@@ -821,7 +819,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 				$qb->expr()->eq('s.item_type', $qb->createNamedParameter('folder'))
 			));
 
-		$cursor = $qb->execute();
+		$cursor = $qb->executeQuery();
 		while ($data = $cursor->fetch()) {
 			if (!$this->isAccessibleResult($data)) {
 				continue;
@@ -836,9 +834,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		}
 		$cursor->closeCursor();
 
-		$shares = $this->resolveSharesForRecipient($shares, \OC::$server->getUserSession()->getUser()->getUID());
-
-		return $shares;
+		return $this->resolveSharesForRecipient($shares, $this->userId);
 	}
 
 	public function isAccessibleResult(array $data): bool {
@@ -941,7 +937,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 				$qb->expr()->eq('item_type', $qb->createNamedParameter('file')),
 				$qb->expr()->eq('item_type', $qb->createNamedParameter('folder'))
 			));
-		$cursor = $qb->execute();
+		$cursor = $qb->executeQuery();
 
 		$users = [];
 		while ($row = $cursor->fetch()) {

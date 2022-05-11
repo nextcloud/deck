@@ -38,9 +38,11 @@ use OCA\Deck\StatusException;
 use OCP\Activity\IEvent;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Test\TestCase;
 use OCP\IURLGenerator;
@@ -76,9 +78,12 @@ class CardServiceTest extends TestCase {
 	private $eventDispatcher;
 	/** @var ChangeHelper|MockObject */
 	private $changeHelper;
-
 	/** @var IURLGenerator|MockObject */
 	private $urlGenerator;
+	/** @var IRequest|MockObject */
+	private $request;
+	/** @var LoggerInterface|MockObject */
+	private $logger;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -97,6 +102,11 @@ class CardServiceTest extends TestCase {
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
+		$this->request = $this->createMock(IRequest::class);
+
+		$this->logger->expects($this->any())->method('error');
+
 		$this->cardService = new CardService(
 			$this->cardMapper,
 			$this->stackMapper,
@@ -113,6 +123,8 @@ class CardServiceTest extends TestCase {
 			$this->changeHelper,
 			$this->eventDispatcher,
 			$this->urlGenerator,
+			$this->logger,
+			$this->request,
 			'user1'
 		);
 	}

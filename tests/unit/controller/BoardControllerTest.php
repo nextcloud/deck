@@ -167,7 +167,7 @@ class BoardControllerTest extends \Test\TestCase {
 		$this->boardService->expects($this->once())
 			->method('deleteAcl')
 			->with(1)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->deleteAcl(1));
+			->willReturn(true);
+		$this->assertEquals(true, $this->controller->deleteAcl(1));
 	}
 }

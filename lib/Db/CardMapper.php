@@ -563,10 +563,10 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		$qb->execute();
 	}
 
-	public function isOwner($userId, $cardId): bool {
+	public function isOwner($userId, $id): bool {
 		$sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_stacks` WHERE id IN (SELECT stack_id FROM `*PREFIX*deck_cards` WHERE id = ?))';
 		$stmt = $this->db->prepare($sql);
-		$stmt->bindParam(1, $cardId, \PDO::PARAM_INT, 0);
+		$stmt->bindParam(1, $id, \PDO::PARAM_INT, 0);
 		$stmt->execute();
 		$row = $stmt->fetch();
 		return ($row['owner'] === $userId);

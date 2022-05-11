@@ -44,18 +44,19 @@ use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
 
 class FilesAppService implements IAttachmentService, ICustomAttachmentService {
-	private $request;
-	private $rootFolder;
-	private $shareProvider;
-	private $shareManager;
-	private $userId;
-	private $configService;
-	private $l10n;
-	private $preview;
-	private $mimeTypeDetector;
-	private $permissionService;
-	private $cardMapper;
-	private $logger;
+	private IRequest $request;
+	private IRootFolder $rootFolder;
+	private DeckShareProvider $shareProvider;
+	private IManager $shareManager;
+	private ?string $userId;
+	private ConfigService $configService;
+	private IL10N $l10n;
+	private IPreview $preview;
+	private IMimeTypeDetector $mimeTypeDetector;
+	private PermissionService $permissionService;
+	private CardMapper $cardMapper;
+	private LoggerInterface $logger;
+	private IDBConnection $connection;
 
 	public function __construct(
 		IRequest $request,
@@ -69,7 +70,8 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		PermissionService $permissionService,
 		CardMapper  $cardMapper,
 		LoggerInterface $logger,
-		string $userId = null
+		IDBConnection $connection,
+		?string $userId
 	) {
 		$this->request = $request;
 		$this->l10n = $l10n;
@@ -83,6 +85,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$this->permissionService = $permissionService;
 		$this->cardMapper = $cardMapper;
 		$this->logger = $logger;
+		$this->connection = $connection;
 	}
 
 	public function listAttachments(int $cardId): array {
@@ -108,9 +111,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	}
 
 	public function getAttachmentCount(int $cardId): int {
-		/** @var IDBConnection $qb */
-		$db = \OC::$server->getDatabaseConnection();
-		$qb = $db->getQueryBuilder();
+		$qb = $this->connection->getQueryBuilder();
 		$qb->select('s.id', 'f.fileid', 'f.path')
 			->selectAlias('st.id', 'storage_string_id')
 			->from('share', 's')
@@ -125,7 +126,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 			));
 
 		$count = 0;
-		$cursor = $qb->execute();
+		$cursor = $qb->executeQuery();
 		while ($data = $cursor->fetch()) {
 			if ($this->shareProvider->isAccessibleResult($data)) {
 				$count++;

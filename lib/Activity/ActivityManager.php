@@ -45,7 +45,9 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Comments\IComment;
 use OCP\IUser;
+use OCP\Server;
 use OCP\L10N\IFactory;
+use Psr\Log\LoggerInterface;
 
 class ActivityManager {
 	public const DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED = 'DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED';
@@ -53,14 +55,14 @@ class ActivityManager {
 	public const SUBJECT_PARAMS_MAX_LENGTH = 4000;
 	public const SHORTENED_DESCRIPTION_MAX_LENGTH = 2000;
 
-	private $manager;
-	private $userId;
-	private $permissionService;
-	private $boardMapper;
-	private $cardMapper;
-	private $aclMapper;
-	private $stackMapper;
-	private $l10nFactory;
+	private IManager $manager;
+	private ?string $userId;
+	private PermissionService $permissionService;
+	private BoardMapper $boardMapper;
+	private CardMapper $cardMapper;
+	private AclMapper $aclMapper;
+	private StackMapper $stackMapper;
+	private IFactory $l10nFactory;
 
 	public const DECK_OBJECT_BOARD = 'deck_board';
 	public const DECK_OBJECT_CARD = 'deck_card';
@@ -114,7 +116,7 @@ class ActivityManager {
 		StackMapper $stackMapper,
 		AclMapper $aclMapper,
 		IFactory $l10nFactory,
-		$userId
+		?string $userId
 	) {
 		$this->manager = $manager;
 		$this->permissionService = $permissionsService;
@@ -310,10 +312,10 @@ class ActivityManager {
 		try {
 			$object = $this->findObjectForEntity($objectType, $entity);
 		} catch (DoesNotExistException $e) {
-			\OC::$server->getLogger()->error('Could not create activity entry for ' . $subject . '. Entity not found.', (array)$entity);
+			Server::get(LoggerInterface::class)->error('Could not create activity entry for ' . $subject . '. Entity not found.', (array)$entity);
 			return null;
 		} catch (MultipleObjectsReturnedException $e) {
-			\OC::$server->getLogger()->error('Could not create activity entry for ' . $subject . '. Entity not found.', (array)$entity);
+			Server::get(LoggerInterface::class)->error('Could not create activity entry for ' . $subject . '. Entity not found.', (array)$entity);
 			return null;
 		}
 

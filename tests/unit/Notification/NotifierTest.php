@@ -33,6 +33,7 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
+use OCP\Server;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class NotifierTest extends \Test\TestCase {
@@ -70,7 +71,7 @@ class NotifierTest extends \Test\TestCase {
 			$this->stackMapper,
 			$this->boardMapper
 		);
-		$this->l10n = \OC::$server->getL10N('deck');
+		$this->l10n = Server::get(IFactory::class)->get('deck');
 		$this->l10nFactory->expects($this->once())
 			->method('get')
 			->willReturn($this->l10n);
@@ -78,7 +79,7 @@ class NotifierTest extends \Test\TestCase {
 
 	public function testPrepareWrongApp() {
 		$this->expectException(\InvalidArgumentException::class);
-		/** @var INotification $notification */
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->once())
 			->method('getApp')
@@ -88,7 +89,7 @@ class NotifierTest extends \Test\TestCase {
 	}
 
 	public function testPrepareCardOverdue() {
-		/** @var INotification $notification */
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->once())
 			->method('getApp')
@@ -131,7 +132,7 @@ class NotifierTest extends \Test\TestCase {
 	}
 
 	public function testPrepareCardCommentMentioned() {
-		/** @var INotification $notification */
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->once())
 			->method('getApp')
@@ -188,7 +189,7 @@ class NotifierTest extends \Test\TestCase {
 			->method('findStackFromCardId')
 			->willReturn($this->buildMockStack(123));
 
-		/** @var INotification $notification */
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->once())
 			->method('getApp')
@@ -272,7 +273,7 @@ class NotifierTest extends \Test\TestCase {
 
 	/** @dataProvider dataPrepareBoardShared */
 	public function testPrepareBoardShared($withUserFound = true) {
-		/** @var INotification $notification */
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->once())
 			->method('getApp')
