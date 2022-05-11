@@ -36,8 +36,6 @@ use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\IAppContainer;
-use OCP\ICache;
-use OCP\ICacheFactory;
 use OCP\IL10N;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
