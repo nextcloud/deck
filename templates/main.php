@@ -21,6 +21,4 @@
  *
  */
 
-
-OCP\Util::addStyle('deck', 'globalstyles');
-OCP\Util::addScript('deck', 'deck-main');
+script('deck', 'deck-main');
