@@ -71,10 +71,11 @@
 			</div>
 			<div v-if="board" class="board-action-buttons">
 				<Popover @show="filterVisible=true" @hide="filterVisible=false">
-					<Actions slot="trigger" :title="t('deck', 'Apply filter')">
-						<ActionButton v-if="isFilterActive" icon="icon-filter_set" />
-						<ActionButton v-else icon="icon-filter" />
-					</Actions>
+					<!-- We cannot use Actions here are the popover trigger does not update on reactive icons -->
+					<button slot="trigger" :title="t('deck', 'Apply filter')" class="filter-button">
+						<FilterIcon v-if="isFilterActive" :size="20" decorative />
+						<FilterOffIcon v-else :size="20" decorative />
+					</button>
 
 					<div v-if="filterVisible" class="filter">
 						<h3>{{ t('deck', 'Filter by tag') }}</h3>
@@ -173,18 +174,20 @@
 				</Popover>
 
 				<Actions>
-					<ActionButton icon="icon-archive"
-						@click="toggleShowArchived">
+					<ActionButton @click="toggleShowArchived">
+						<template #icon>
+							<ArchiveIcon :size="20" decorative />
+						</template>
 						{{ showArchived ? t('deck', 'Hide archived cards') : t('deck', 'Show archived cards') }}
 					</ActionButton>
 					<ActionButton v-if="compactMode"
-						icon="icon-toggle-compact-collapsed"
 						@click="toggleCompactMode">
+						<ArrowExpandVerticalIcon slot="icon" :size="20" decorative />
 						{{ t('deck', 'Toggle compact mode') }}
 					</ActionButton>
 					<ActionButton v-else
-						icon="icon-toggle-compact-expanded"
 						@click="toggleCompactMode">
+						<ArrowCollapseVerticalIcon slot="icon" :size="20" decorative />
 						{{ t('deck', 'Toggle compact mode') }}
 					</ActionButton>
 				</Actions>
@@ -202,11 +205,25 @@ import { mapState, mapGetters } from 'vuex'
 import { Actions, ActionButton, Popover, Avatar } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle'
 import CardCreateDialog from '../CardCreateDialog'
+import ArchiveIcon from 'vue-material-design-icons/Archive'
+import FilterIcon from 'vue-material-design-icons/Filter'
+import FilterOffIcon from 'vue-material-design-icons/FilterOff'
+import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVertical'
+import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertical'
 
 export default {
 	name: 'Controls',
 	components: {
-		Actions, ActionButton, Popover, Avatar, CardCreateDialog,
+		Actions,
+		ActionButton,
+		Popover,
+		Avatar,
+		CardCreateDialog,
+		ArchiveIcon,
+		FilterIcon,
+		FilterOffIcon,
+		ArrowCollapseVerticalIcon,
+		ArrowExpandVerticalIcon,
 	},
 	mixins: [labelStyle],
 	props: {
@@ -249,10 +266,7 @@ export default {
 			}
 		},
 		isFilterActive() {
-			if (this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '') {
-				return true
-			}
-			return false
+			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== ''
 		},
 		labelsSorted() {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
@@ -441,6 +455,17 @@ export default {
 	.filter h3 {
 		margin-top: 0px;
 		margin-bottom: 5px;
+	}
+
+	.filter-button {
+	  padding: 0;
+	  border-radius: 50%;
+	  width: 44px;
+	  height: 44px;
+
+		&:hover, &:focus {
+			background-color: rgba(127,127,127,0.25) !important;
+		}
 	}
 </style>
 <style lang="scss">
