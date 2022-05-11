@@ -21,8 +21,7 @@ describe('Deck dashboard', function() {
 	it('Can see the default "Personal Board" created for user by default', function () {
 		const defaultBoard = 'Personal'
 
-		cy.get('.app-navigation button.app-navigation-toggle').click()
-		
+		cy.openLeftSidebar()
 		cy.get('.app-navigation__list .app-navigation-entry')
 			.eq(1)
 			.find('ul.app-navigation-entry__children li.app-navigation-entry')

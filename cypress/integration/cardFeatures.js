@@ -19,7 +19,7 @@ describe('Card', function () {
     it('Can add a card', function () {
         let card = 'Card 1'
 
-        cy.get('.app-navigation button.app-navigation-toggle').click()
+        cy.openLeftSidebar()
         cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
             .eq(3).find('a.app-navigation-entry-link')
             .first().click({force: true})

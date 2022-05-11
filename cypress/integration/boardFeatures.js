@@ -21,7 +21,7 @@ describe('Board', function () {
         }).as('createBoardRequest')
             
         // Click "Add board"
-        cy.get('.app-navigation button.app-navigation-toggle').click()
+        cy.openLeftSidebar()
         cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
             .eq(3).find('a').first().click({force: true})
 
