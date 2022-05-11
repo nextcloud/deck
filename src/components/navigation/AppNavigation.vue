@@ -36,8 +36,11 @@
 			<AppNavigationBoardCategory id="deck-navigation-archived"
 				to="/board/archived"
 				:text="t('deck', 'Archived boards')"
-				:boards="archivedBoards"
-				icon="icon-archive" />
+				:boards="archivedBoards">
+				<template #icon>
+					<ArchiveIcon :size="20" decorative />
+				</template>
+			</AppNavigationBoardCategory>
 			<AppNavigationBoardCategory id="deck-navigation-shared"
 				to="/board/shared"
 				:text="t('deck', 'Shared with you')"
@@ -98,6 +101,7 @@ import AppNavigationBoardCategory from './AppNavigationBoardCategory'
 import { loadState } from '@nextcloud/initial-state'
 import { generateOcsUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
+import ArchiveIcon from 'vue-material-design-icons/Archive'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -110,6 +114,7 @@ export default {
 		AppNavigationBoardCategory,
 		Multiselect,
 		AppNavigationItem,
+		ArchiveIcon,
 	},
 	directives: {
 		ClickOutside,

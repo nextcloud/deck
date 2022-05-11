@@ -57,8 +57,10 @@
 
 		<AppSidebarTab id="attachments"
 			:order="1"
-			:name="t('deck', 'Attachments')"
-			icon="icon-attach">
+			:name="t('deck', 'Attachments')">
+			<template #icon>
+				<AttachmentIcon size="20" decorative />
+			</template>
 			<CardSidebarTabAttachments :card="currentCard" />
 		</AppSidebarTab>
 
@@ -89,6 +91,7 @@ import CardSidebarTabComments from './CardSidebarTabComments'
 import CardSidebarTabActivity from './CardSidebarTabActivity'
 import relativeDate from '../../mixins/relativeDate'
 import moment from '@nextcloud/moment'
+import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
 
 import { showError } from '@nextcloud/dialogs'
 import { getLocale } from '@nextcloud/l10n'
@@ -105,6 +108,7 @@ export default {
 		CardSidebarTabComments,
 		CardSidebarTabActivity,
 		CardSidebarTabDetails,
+		AttachmentIcon,
 	},
 	mixins: [relativeDate],
 	props: {

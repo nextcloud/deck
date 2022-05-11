@@ -43,7 +43,10 @@
 				</form>
 			</transition>
 			<Actions v-if="canManage && !isArchived" :force-menu="true">
-				<ActionButton icon="icon-archive" @click="modalArchivAllCardsShow=true">
+				<ActionButton @click="modalArchivAllCardsShow=true">
+					<template #icon>
+						<ArchiveIcon decorative />
+					</template>
 					{{ t('deck', 'Archive all cards') }}
 				</ActionButton>
 				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
@@ -121,6 +124,7 @@ import { showError, showUndo } from '@nextcloud/dialogs'
 import CardItem from '../cards/CardItem'
 
 import '@nextcloud/dialogs/styles/toast.scss'
+import ArchiveIcon from 'vue-material-design-icons/Archive'
 
 export default {
 	name: 'Stack',
@@ -131,6 +135,7 @@ export default {
 		Container,
 		Draggable,
 		Modal,
+		ArchiveIcon,
 	},
 
 	props: {

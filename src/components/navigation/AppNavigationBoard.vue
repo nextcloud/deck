@@ -47,21 +47,27 @@
 					{{ t('deck', 'Edit board') }}
 				</ActionButton>
 				<ActionButton v-if="canManage && !board.archived"
-					icon="icon-clone"
 					:close-after-click="true"
 					@click="actionClone">
+					<template #icon>
+						<CloneIcon :size="20" decorative />
+					</template>
 					{{ t('deck', 'Clone board') }}
 				</ActionButton>
 				<ActionButton v-if="canManage && board.archived"
-					icon="icon-archive"
 					:close-after-click="true"
 					@click="actionUnarchive">
+					<template #icon>
+						<ArchiveIcon :size="20" decorative />
+					</template>
 					{{ t('deck', 'Unarchive board') }}
 				</ActionButton>
 				<ActionButton v-else-if="canManage && !board.archived"
-					icon="icon-archive"
 					:close-after-click="true"
 					@click="actionArchive">
+					<template #icon>
+						<ArchiveIcon :size="20" decorative />
+					</template>
 					{{ t('deck', 'Archive board') }}
 				</ActionButton>
 
@@ -133,6 +139,8 @@
 <script>
 import { AppNavigationIconBullet, AppNavigationCounter, AppNavigationItem, ColorPicker, Actions, ActionButton } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
+import ArchiveIcon from 'vue-material-design-icons/Archive'
+import CloneIcon from 'vue-material-design-icons/ContentDuplicate'
 
 export default {
 	name: 'AppNavigationBoard',
@@ -143,6 +151,8 @@ export default {
 		ColorPicker,
 		Actions,
 		ActionButton,
+		ArchiveIcon,
+		CloneIcon,
 	},
 	directives: {
 		ClickOutside,

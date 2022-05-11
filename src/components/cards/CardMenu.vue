@@ -40,9 +40,13 @@
 					{{ t('deck', 'Move card') }}
 				</ActionButton>
 				<ActionButton icon="icon-settings-dark" :close-after-click="true" @click="openCard">
+					<CardBulletedIcon slot="icon" :size="20" decorative />
 					{{ t('deck', 'Card details') }}
 				</ActionButton>
-				<ActionButton icon="icon-archive" :close-after-click="true" @click="archiveUnarchiveCard()">
+				<ActionButton :close-after-click="true" @click="archiveUnarchiveCard()">
+					<template #icon>
+						<ArchiveIcon :size="20" decorative />
+					</template>
 					{{ card.archived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
 				</ActionButton>
 				<ActionButton v-if="showArchived === false"
@@ -90,10 +94,12 @@ import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showUndo } from '@nextcloud/dialogs'
 import '@nextcloud/dialogs/styles/toast.scss'
+import ArchiveIcon from 'vue-material-design-icons/Archive'
+import CardBulletedIcon from 'vue-material-design-icons/CardBulleted'
 
 export default {
 	name: 'CardMenu',
-	components: { Actions, ActionButton, Modal, Multiselect },
+	components: { Actions, ActionButton, Modal, Multiselect, ArchiveIcon, CardBulletedIcon },
 	props: {
 		card: {
 			type: Object,
