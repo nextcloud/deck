@@ -59,10 +59,10 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import SharingTabSidebar from './SharingTabSidebar'
-import TagsTabSidebar from './TagsTabSidebar'
-import DeletedTabSidebar from './DeletedTabSidebar'
-import TimelineTabSidebar from './TimelineTabSidebar'
+import SharingTabSidebar from './SharingTabSidebar.vue'
+import TagsTabSidebar from './TagsTabSidebar.vue'
+import DeletedTabSidebar from './DeletedTabSidebar.vue'
+import TimelineTabSidebar from './TimelineTabSidebar.vue'
 import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 
 const capabilities = window.OC.getCapabilities()

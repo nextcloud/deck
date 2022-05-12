@@ -63,7 +63,7 @@
 
 <script>
 import { Modal } from '@nextcloud/vue'
-import attachmentUpload from '../mixins/attachmentUpload'
+import attachmentUpload from '../mixins/attachmentUpload.js'
 import { loadState } from '@nextcloud/initial-state'
 
 let maxUploadSizeState

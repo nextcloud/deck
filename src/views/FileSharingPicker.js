@@ -21,7 +21,7 @@
  */
 
 import Vue from 'vue'
-import { createShare } from '../services/SharingApi'
+import { createShare } from '../services/SharingApi.js'
 
 export default {
 	icon: 'icon-deck',
@@ -33,7 +33,7 @@ export default {
 			container.id = 'deck-board-select'
 			const body = document.getElementById('body-user')
 			body.append(container)
-			const CardSelector = () => import('./../CardSelector')
+			const CardSelector = () => import('./../CardSelector.vue')
 			const ComponentVM = new Vue({
 				render: (h) => h(CardSelector, {
 					title: t('deck', 'Share {file} with a Deck card', { file: decodeURIComponent(self.fileInfo.name) }),

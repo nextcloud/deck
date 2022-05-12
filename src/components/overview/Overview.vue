@@ -80,11 +80,11 @@
 
 <script>
 
-import Controls from '../Controls'
-import CardItem from '../cards/CardItem'
+import Controls from '../Controls.vue'
+import CardItem from '../cards/CardItem.vue'
 import { mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
-import GlobalSearchResults from '../search/GlobalSearchResults'
+import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 
 const FILTER_UPCOMING = 'upcoming'
 

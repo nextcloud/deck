@@ -30,7 +30,9 @@
 			</div>
 		</div>
 		<!-- FIXME ins/del tags do no longer work with activity so we should get rid of that -->
+		<!-- eslint-disable vue/no-v-html -->
 		<p v-if="activity.message" class="activity--message" v-html="sanitizedMessage" />
+		<!-- eslint-enable -->
 	</div>
 </template>
 
@@ -39,7 +41,7 @@ import RichText from '@juliushaertl/vue-richtext'
 import { UserBubble } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import DOMPurify from 'dompurify'
-import relativeDate from '../mixins/relativeDate'
+import relativeDate from '../mixins/relativeDate.js'
 
 const InternalLink = {
 	name: 'InternalLink',

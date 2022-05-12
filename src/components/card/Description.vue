@@ -48,10 +48,12 @@
 			</Actions>
 		</h5>
 
+		<!-- eslint-disable vue/no-v-html -->
 		<div v-if="!descriptionEditing && hasDescription"
 			id="description-preview"
 			@click="clickedPreview"
 			v-html="renderedDescription" />
+		<!-- eslint-enable -->
 		<p v-else-if="!descriptionEditing" class="placeholder" @click="showEditor()">
 			{{ t('deck', 'Write a description …') }}
 		</p>
@@ -78,7 +80,7 @@
 import MarkdownIt from 'markdown-it'
 import MarkdownItTaskLists from 'markdown-it-task-lists'
 import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
-import AttachmentList from './AttachmentList'
+import AttachmentList from './AttachmentList.vue'
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'

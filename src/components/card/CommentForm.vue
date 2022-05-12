@@ -65,7 +65,7 @@
 import { mapState } from 'vuex'
 import { UserBubble, Avatar } from '@nextcloud/vue'
 import At from 'vue-at'
-import { rawToParsed } from '../../helpers/mentions'
+import { rawToParsed } from '../../helpers/mentions.js'
 
 export default {
 	name: 'CommentForm',

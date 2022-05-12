@@ -79,12 +79,12 @@
 <script>
 import ClickOutside from 'vue-click-outside'
 import { mapState, mapGetters } from 'vuex'
-import CardBadges from './CardBadges'
-import Color from '../../mixins/color'
-import labelStyle from '../../mixins/labelStyle'
-import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
-import CardMenu from './CardMenu'
-import DueDate from './badges/DueDate'
+import CardBadges from './CardBadges.vue'
+import Color from '../../mixins/color.js'
+import labelStyle from '../../mixins/labelStyle.js'
+import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
+import CardMenu from './CardMenu.vue'
+import DueDate from './badges/DueDate.vue'
 
 export default {
 	name: 'CardItem',

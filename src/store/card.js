@@ -20,7 +20,7 @@
  *
  */
 
-import { CardApi } from './../services/CardApi'
+import { CardApi } from './../services/CardApi.js'
 import moment from 'moment'
 import Vue from 'vue'
 

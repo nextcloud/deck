@@ -84,17 +84,16 @@
 <script>
 import { ActionButton, AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
-import { mapState, mapGetters } from 'vuex'
-import CardSidebarTabDetails from './CardSidebarTabDetails'
-import CardSidebarTabAttachments from './CardSidebarTabAttachments'
-import CardSidebarTabComments from './CardSidebarTabComments'
-import CardSidebarTabActivity from './CardSidebarTabActivity'
-import relativeDate from '../../mixins/relativeDate'
-import moment from '@nextcloud/moment'
-import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
-
 import { showError } from '@nextcloud/dialogs'
 import { getLocale } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
+import { mapState, mapGetters } from 'vuex'
+import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
+import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
+import CardSidebarTabAttachments from './CardSidebarTabAttachments.vue'
+import CardSidebarTabComments from './CardSidebarTabComments.vue'
+import CardSidebarTabActivity from './CardSidebarTabActivity.vue'
+import relativeDate from '../../mixins/relativeDate.js'
 
 const capabilities = window.OC.getCapabilities()
 

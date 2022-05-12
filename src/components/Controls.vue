@@ -203,8 +203,8 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { Actions, ActionButton, Popover, Avatar } from '@nextcloud/vue'
-import labelStyle from '../mixins/labelStyle'
-import CardCreateDialog from '../CardCreateDialog'
+import labelStyle from '../mixins/labelStyle.js'
+import CardCreateDialog from '../CardCreateDialog.vue'
 import ArchiveIcon from 'vue-material-design-icons/Archive'
 import FilterIcon from 'vue-material-design-icons/Filter'
 import FilterOffIcon from 'vue-material-design-icons/FilterOff'

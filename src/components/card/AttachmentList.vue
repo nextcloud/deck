@@ -104,15 +104,16 @@
 <script>
 import axios from '@nextcloud/axios'
 import { Actions, ActionButton, ActionLink } from '@nextcloud/vue'
-import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
-import relativeDate from '../../mixins/relativeDate'
 import { formatFileSize } from '@nextcloud/files'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl, generateOcsUrl, generateRemoteUrl } from '@nextcloud/router'
 import { mapState, mapActions } from 'vuex'
 import { loadState } from '@nextcloud/initial-state'
-import attachmentUpload from '../../mixins/attachmentUpload'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
+import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
+import relativeDate from '../../mixins/relativeDate.js'
+import attachmentUpload from '../../mixins/attachmentUpload.js'
+
 const maxUploadSizeState = loadState('deck', 'maxUploadSize')
 
 const picker = getFilePickerBuilder(t('deck', 'File to share'))

@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import AppNavigationBoard from './AppNavigationBoard'
+import AppNavigationBoard from './AppNavigationBoard.vue'
 import { AppNavigationItem } from '@nextcloud/vue'
 
 export default {

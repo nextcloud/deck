@@ -21,9 +21,9 @@
  */
 
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Vuex, { Store } from 'vuex'
 
-import overview from './store/overview'
+import overview from './store/overview.js'
 
 import './css/dashboard.scss'
 
@@ -33,7 +33,7 @@ Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
 
-const store = new Vuex.Store({
+const store = new Store({
 	modules: {
 		overview,
 	},

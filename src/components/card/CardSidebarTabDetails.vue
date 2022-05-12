@@ -128,14 +128,14 @@ import moment from '@nextcloud/moment'
 import { Avatar, Actions, ActionButton, Multiselect, DatetimePicker } from '@nextcloud/vue'
 
 import { CollectionList } from 'nextcloud-vue-collections'
-import Color from '../../mixins/color'
+import Color from '../../mixins/color.js'
 import {
 	getLocale,
 	getDayNamesMin,
 	getFirstDay,
 	getMonthNamesShort,
 } from '@nextcloud/l10n'
-import Description from './Description'
+import Description from './Description.vue'
 
 export default {
 	name: 'CardSidebarTabDetails',

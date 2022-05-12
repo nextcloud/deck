@@ -96,7 +96,7 @@ import Modal from '@nextcloud/vue/dist/Components/Modal'
 import Multiselect from '@nextcloud/vue/dist/Components/Multiselect'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import axios from '@nextcloud/axios'
-import { CardApi } from './services/CardApi'
+import { CardApi } from './services/CardApi.js'
 
 const cardApi = new CardApi()
 
