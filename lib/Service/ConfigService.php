@@ -32,6 +32,7 @@ use OCA\Deck\NoPermissionException;
 use OCP\IConfig;
 use OCP\IGroup;
 use OCP\IGroupManager;
+use OCP\IUserSession;
 
 class ConfigService {
 	public const SETTING_BOARD_NOTIFICATION_DUE_OFF = 'off';
@@ -40,20 +41,25 @@ class ConfigService {
 	public const SETTING_BOARD_NOTIFICATION_DUE_DEFAULT = self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED;
 
 	private IConfig $config;
-	private ?string $userId;
+	private ?string $userId = null;
 	private IGroupManager $groupManager;
 
 	public function __construct(
 		IConfig $config,
-		IGroupManager $groupManager,
-		?string $userId
+		IGroupManager $groupManager
 	) {
 		$this->groupManager = $groupManager;
 		$this->config = $config;
-		$this->userId = $userId;
 	}
 
 	public function getUserId(): ?string {
+		if (!$this->userId) {
+			// We cannot use DI for the userId or UserSession as the ConfigService
+			// is initiated too early before the session is actually loaded
+			$user = \OCP\Server::get(IUserSession::class)->getUser();
+			$this->userId = $user ? $user->getUID() : null;
+		}
+
 		return $this->userId;
 	}
 
