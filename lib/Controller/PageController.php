@@ -29,6 +29,7 @@ use OCA\Deck\Service\PermissionService;
 use OCA\Files\Event\LoadSidebar;
 use OCA\Viewer\Event\LoadViewer;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
+use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent as CollaborationResourcesEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IInitialStateService;
@@ -88,6 +89,7 @@ class PageController extends Controller {
 		$this->initialState->provideInitialState(Application::APP_ID, 'config', $this->configService->getAll());
 
 		$this->eventDispatcher->dispatchTyped(new LoadSidebar());
+		$this->eventDispatcher->dispatchTyped(new CollaborationResourcesEvent());
 		if (class_exists(LoadViewer::class)) {
 			$this->eventDispatcher->dispatchTyped(new LoadViewer());
 		}
