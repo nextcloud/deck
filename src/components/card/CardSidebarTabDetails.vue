@@ -388,9 +388,11 @@ export default {
 
 	.section-details {
 		flex-grow: 1;
+		display: flex;
+		flex-wrap: wrap;
 
 		button.action-item--single {
-			margin-top: -6px;
+			margin-top: -3px;
 		}
 	}
 }
