@@ -28,6 +28,7 @@ namespace OCA\Deck\Sharing;
 
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use OC\Files\Cache\Cache;
+use OCA\Deck\Cache\AttachmentCacheHelper;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
@@ -46,7 +47,6 @@ use OCP\Files\IMimeTypeLoader;
 use OCP\Files\Node;
 use OCP\IDBConnection;
 use OCP\IL10N;
-use OCP\Security\ISecureRandom;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
 use OCP\Share\IManager;
@@ -70,6 +70,8 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	private $dbConnection;
 	/** @var IManager */
 	private $shareManager;
+	/** @var AttachmentCacheHelper */
+	private $attachmentCacheHelper;
 	/** @var BoardMapper */
 	private $boardMapper;
 	/** @var CardMapper */
@@ -78,14 +80,25 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	private $permissionService;
 	/** @var ITimeFactory */
 	private $timeFactory;
+	/** @var IL10N */
 	private $l;
 
-	public function __construct(IDBConnection $connection, IManager $shareManager, ISecureRandom $secureRandom, BoardMapper $boardMapper, CardMapper $cardMapper, PermissionService $permissionService, IL10N $l) {
+	public function __construct(
+		IDBConnection $connection,
+		IManager $shareManager,
+		BoardMapper $boardMapper,
+		CardMapper $cardMapper,
+		PermissionService $permissionService,
+		AttachmentCacheHelper $attachmentCacheHelper,
+		IL10N $l
+	) {
 		$this->dbConnection = $connection;
 		$this->shareManager = $shareManager;
 		$this->boardMapper = $boardMapper;
 		$this->cardMapper = $cardMapper;
+		$this->attachmentCacheHelper = $attachmentCacheHelper;
 		$this->permissionService = $permissionService;
+
 		$this->l = $l;
 		$this->timeFactory = \OC::$server->get(ITimeFactory::class);
 	}
@@ -152,6 +165,8 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			$share->getExpirationDate()
 		);
 		$data = $this->getRawShare($shareId);
+
+		$this->attachmentCacheHelper->clearAttachmentCount((int)$cardId);
 
 		return $this->createShareObject($data);
 	}
@@ -340,6 +355,8 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		$qb->orWhere($qb->expr()->eq('parent', $qb->createNamedParameter($share->getId())));
 
 		$qb->execute();
+
+		$this->attachmentCacheHelper->clearAttachmentCount((int)$share->getSharedWith());
 	}
 
 	/**
