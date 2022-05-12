@@ -252,6 +252,12 @@ export default {
 			}
 			Vue.set(state.cards[existingIndex], 'lastModified', Date.now() / 1000)
 		},
+		cardSetAttachmentCount(state, { cardId, count }) {
+			const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
+			if (existingIndex !== -1) {
+				Vue.set(state.cards[existingIndex], 'attachmentCount', count)
+			}
+		},
 		cardIncreaseAttachmentCount(state, cardId) {
 			const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
 			if (existingIndex !== -1) {
