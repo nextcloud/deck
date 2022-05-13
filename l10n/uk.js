@@ -124,6 +124,7 @@ OC.L10N.register(
     "Next month" : "Наступний місяць",
     "Save" : "Зберегти",
     "In reply to" : "У відповідь",
+    "Cancel reply" : "Скасувати відповідь",
     "Reply" : "Відповісти",
     "Update" : "Оновлення",
     "Description" : "Опис",
