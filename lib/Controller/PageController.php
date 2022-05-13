@@ -30,6 +30,7 @@ use OCA\Files\Event\LoadSidebar;
 use OCA\Viewer\Event\LoadViewer;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IConfig;
 use OCP\IInitialStateService;
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -41,16 +42,17 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Service\CardService;
 
 class PageController extends Controller {
-	private $permissionService;
-	private $initialState;
-	private $configService;
-	private $eventDispatcher;
-	private $cardMapper;
-	private $urlGenerator;
-	private $cardService;
+	private PermissionService $permissionService;
+	private IInitialStateService $initialState;
+	private ConfigService $configService;
+	private IEventDispatcher $eventDispatcher;
+	private CardMapper $cardMapper;
+	private IURLGenerator $urlGenerator;
+	private CardService $cardService;
+	private IConfig $config;
 
 	public function __construct(
-		$AppName,
+		string $AppName,
 		IRequest $request,
 		PermissionService $permissionService,
 		IInitialStateService $initialStateService,
@@ -58,7 +60,8 @@ class PageController extends Controller {
 		IEventDispatcher $eventDispatcher,
 		CardMapper $cardMapper,
 		IURLGenerator $urlGenerator,
-		CardService $cardService
+		CardService $cardService,
+		IConfig $config
 		) {
 		parent::__construct($AppName, $request);
 
@@ -69,6 +72,7 @@ class PageController extends Controller {
 		$this->cardMapper = $cardMapper;
 		$this->urlGenerator = $urlGenerator;
 		$this->cardService = $cardService;
+		$this->config = $config;
 	}
 
 	/**
@@ -90,7 +94,7 @@ class PageController extends Controller {
 
 		$response = new TemplateResponse('deck', 'main');
 
-		if (\OC::$server->getConfig()->getSystemValueBool('debug', false)) {
+		if ($this->config->getSystemValueBool('debug', false)) {
 			$csp = new ContentSecurityPolicy();
 			$csp->addAllowedConnectDomain('*');
 			$csp->addAllowedScriptDomain('*');

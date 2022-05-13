@@ -31,6 +31,7 @@ use OCA\Deck\Service\PermissionService;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IInitialStateService;
 use OCP\IRequest;
+use OCP\IConfig;
 use OCP\IURLGenerator;
 use PHPUnit\Framework\TestCase;
 
@@ -53,6 +54,8 @@ class PageControllerTest extends TestCase {
 	 * @var mixed|CardService|\PHPUnit\Framework\MockObject\MockObject
 	 */
 	private $cardService;
+	/** @var IConfig|\PHPUnit\Framework\MockObject\MockObject */
+	private $config;
 
 	public function setUp(): void {
 		$this->request = $this->createMock(IRequest::class);
@@ -63,6 +66,7 @@ class PageControllerTest extends TestCase {
 		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->cardService = $this->createMock(CardService::class);
+		$this->config = $this->createMock(IConfig::class);
 
 		$this->controller = new PageController(
 			'deck',
@@ -73,7 +77,8 @@ class PageControllerTest extends TestCase {
 			$this->eventDispatcher,
 			$this->cardMapper,
 			$this->urlGenerator,
-			$this->cardService
+			$this->cardService,
+			$this->config
 		);
 	}
 

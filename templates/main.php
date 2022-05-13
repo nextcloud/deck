@@ -22,7 +22,8 @@
  */
 
 
-style('deck', 'globalstyles');
-script('deck', 'deck-main');
+OCP\Util::addStyle('deck', 'globalstyles');
+OCP\Util::addScript('deck', 'deck-main');
 
-\OC::$server->getEventDispatcher()->dispatch('\OCP\Collaboration\Resources::loadAdditionalScripts');
+\OCP\Server::get(\OC\EventDispatcher\SymfonyAdapter::class)
+	->dispatch('\OCP\Collaboration\Resources::loadAdditionalScripts');

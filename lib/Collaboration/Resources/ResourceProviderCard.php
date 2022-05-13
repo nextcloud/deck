@@ -37,24 +37,16 @@ use OCP\Collaboration\Resources\IResource;
 use OCP\Collaboration\Resources\ResourceException;
 use OCP\IURLGenerator;
 use OCP\IUser;
+use OCP\Server;
 
 class ResourceProviderCard implements IProvider {
 	public const RESOURCE_TYPE = 'deck-card';
 
-	/** @var CardMapper */
-	private $cardMapper;
-
-	/** @var BoardMapper */
-	private $boardMapper;
-
-	/** @var PermissionService */
-	private $permissionService;
-
-	/** @var IURLGenerator */
-	private $urlGenerator;
-
-	/** @var array */
-	protected $nodes = [];
+	private CardMapper $cardMapper;
+	private BoardMapper $boardMapper;
+	private PermissionService $permissionService;
+	private IURLGenerator $urlGenerator;
+	protected array $nodes = [];
 
 	public function __construct(CardMapper $cardMapper, BoardMapper $boardMapper, PermissionService $permissionService, IURLGenerator $urlGenerator) {
 		$this->cardMapper = $cardMapper;
@@ -147,7 +139,7 @@ class ResourceProviderCard implements IProvider {
 	public function invalidateAccessCache($cardId = null) {
 		try {
 			/** @var IManager $resourceManager */
-			$resourceManager = \OC::$server->query(IManager::class);
+			$resourceManager = Server::get(IManager::class);
 		} catch (QueryException $e) {
 		}
 		if ($cardId !== null) {

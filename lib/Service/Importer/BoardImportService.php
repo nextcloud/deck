@@ -47,34 +47,22 @@ use OCP\Comments\ICommentsManager;
 use OCP\Comments\NotFoundException as CommentNotFoundException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IUserManager;
+use OCP\Server;
 
 class BoardImportService {
-	/** @var IUserManager */
-	private $userManager;
-	/** @var BoardMapper */
-	private $boardMapper;
-	/** @var AclMapper */
-	private $aclMapper;
-	/** @var LabelMapper */
-	private $labelMapper;
-	/** @var StackMapper */
-	private $stackMapper;
-	/** @var CardMapper */
-	private $cardMapper;
-	/** @var AssignmentMapper */
-	private $assignmentMapper;
-	/** @var AttachmentMapper */
-	private $attachmentMapper;
-	/** @var ICommentsManager */
-	private $commentsManager;
-	/** @var IEventDispatcher */
-	private $eventDispatcher;
-	/** @var string */
-	private $system = '';
-	/** @var null|ABoardImportService */
-	private $systemInstance;
-	/** @var array */
-	private $allowedSystems = [];
+	private IUserManager $userManager;
+	private BoardMapper $boardMapper;
+	private AclMapper $aclMapper;
+	private LabelMapper $labelMapper;
+	private StackMapper $stackMapper;
+	private CardMapper $cardMapper;
+	private AssignmentMapper $assignmentMapper;
+	private AttachmentMapper $attachmentMapper;
+	private ICommentsManager $commentsManager;
+	private IEventDispatcher $eventDispatcher;
+	private string $system = '';
+	private ?ABoardImportService $systemInstance;
+	private array $allowedSystems = [];
 	/**
 	 * Data object created from config JSON
 	 *
@@ -89,10 +77,7 @@ class BoardImportService {
 	 * @psalm-suppress PropertyNotSetInConstructor
 	 */
 	private $data;
-	/**
-	 * @var Board
-	 */
-	private $board;
+	private Board $board;
 
 	public function __construct(
 		IUserManager $userManager,
@@ -198,7 +183,7 @@ class BoardImportService {
 		}
 		if (!is_object($this->systemInstance)) {
 			$systemClass = 'OCA\\Deck\\Service\\Importer\\Systems\\' . ucfirst($this->getSystem()) . 'Service';
-			$this->systemInstance = \OC::$server->get($systemClass);
+			$this->systemInstance = Server::get($systemClass);
 			$this->systemInstance->setImportService($this);
 		}
 		return $this->systemInstance;
@@ -343,7 +328,7 @@ class BoardImportService {
 	}
 
 	public function insertAttachment(Attachment $attachment, string $content): Attachment {
-		$service = \OC::$server->get(FileService::class);
+		$service = Server::get(FileService::class);
 		$folder = $service->getFolder($attachment);
 
 		if ($folder->fileExists($attachment->getData())) {

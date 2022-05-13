@@ -24,7 +24,6 @@
 
 namespace OCA\Deck\Service;
 
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\AppInfo\Application;
@@ -45,37 +44,38 @@ use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
+use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IL10N;
+use OCP\DB\Exception as DbException;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCP\IUserManager;
 use OCA\Deck\BadRequestException;
 use OCP\IURLGenerator;
+use OCP\Server;
 
 class BoardService {
-	private $boardMapper;
-	private $stackMapper;
-	private $labelMapper;
-	private $aclMapper;
-	/** @var IConfig */
-	private $config;
-	private $l10n;
-	private $permissionService;
-	private $notificationHelper;
-	private $assignedUsersMapper;
-	private $userManager;
-	private $groupManager;
-	private $userId;
-	private $activityManager;
-	private $eventDispatcher;
-	private $changeHelper;
-	private $cardMapper;
-
-	private $boardsCache = null;
-	private $urlGenerator;
-
+	private BoardMapper $boardMapper;
+	private StackMapper $stackMapper;
+	private LabelMapper $labelMapper;
+	private AclMapper $aclMapper;
+	private IConfig $config;
+	private IL10N $l10n;
+	private PermissionService $permissionService;
+	private NotificationHelper $notificationHelper;
+	private AssignmentMapper $assignedUsersMapper;
+	private IUserManager $userManager;
+	private IGroupManager $groupManager;
+	private ?string $userId;
+	private ActivityManager $activityManager;
+	private IEventDispatcher $eventDispatcher;
+	private ChangeHelper $changeHelper;
+	private CardMapper $cardMapper;
+	private ?array $boardsCache = null;
+	private IURLGenerator $urlGenerator;
+	private IDBConnection $connection;
 
 	public function __construct(
 		BoardMapper $boardMapper,
@@ -94,7 +94,8 @@ class BoardService {
 		IEventDispatcher $eventDispatcher,
 		ChangeHelper $changeHelper,
 		IURLGenerator $urlGenerator,
-		$userId
+		IDBConnection $connection,
+		?string $userId
 	) {
 		$this->boardMapper = $boardMapper;
 		$this->stackMapper = $stackMapper;
@@ -113,6 +114,7 @@ class BoardService {
 		$this->userId = $userId;
 		$this->urlGenerator = $urlGenerator;
 		$this->cardMapper = $cardMapper;
+		$this->connection = $connection;
 	}
 
 	/**
@@ -534,7 +536,7 @@ class BoardService {
 
 		// TODO: use the dispatched event for this
 		try {
-			$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+			$resourceProvider = Server::get(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
 			$resourceProvider->invalidateAccessCache($boardId);
 		} catch (\Exception $e) {
 		}
@@ -590,18 +592,12 @@ class BoardService {
 	}
 
 	/**
-	 * @param $id
-	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws DoesNotExistException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function deleteAcl($id) {
-		if (is_numeric($id) === false) {
-			throw new BadRequestException('id must be a number');
-		}
-
+	public function deleteAcl(int $id): bool {
 		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_SHARE);
 		/** @var Acl $acl */
 		$acl = $this->aclMapper->find($id);
@@ -620,7 +616,7 @@ class BoardService {
 		$version = \OCP\Util::getVersion()[0];
 		if ($version >= 16) {
 			try {
-				$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+				$resourceProvider = Server::get(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
 				$resourceProvider->invalidateAccessCache($acl->getBoardId());
 			} catch (\Exception $e) {
 			}
@@ -681,7 +677,7 @@ class BoardService {
 	}
 
 	public function transferBoardOwnership(int $boardId, string $newOwner, bool $changeContent = false): Board {
-		\OC::$server->getDatabaseConnection()->beginTransaction();
+		$this->connection->beginTransaction();
 		try {
 			$board = $this->boardMapper->find($boardId);
 			$previousOwner = $board->getOwner();
@@ -690,7 +686,10 @@ class BoardService {
 			if (!$changeContent) {
 				try {
 					$this->addAcl($boardId, Acl::PERMISSION_TYPE_USER, $previousOwner, true, true, true);
-				} catch (UniqueConstraintViolationException $e) {
+				} catch (DbException $e) {
+					if ($e->getReason() !== DbException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+						throw $e;
+					}
 				}
 			}
 			$this->boardMapper->transferOwnership($previousOwner, $newOwner, $boardId);
@@ -700,10 +699,10 @@ class BoardService {
 				$this->assignedUsersMapper->remapAssignedUser($boardId, $previousOwner, $newOwner);
 				$this->cardMapper->remapCardOwner($boardId, $previousOwner, $newOwner);
 			}
-			\OC::$server->getDatabaseConnection()->commit();
+			$this->connection->commit();
 			return $this->boardMapper->find($boardId);
 		} catch (\Throwable $e) {
-			\OC::$server->getDatabaseConnection()->rollBack();
+			$this->connection->rollBack();
 			throw $e;
 		}
 	}

@@ -45,26 +45,30 @@ use OCA\Deck\StatusException;
 use OCA\Deck\BadRequestException;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IRequest;
 use OCP\IUserManager;
 use OCP\IURLGenerator;
+use Psr\Log\LoggerInterface;
 
 class CardService {
-	private $cardMapper;
-	private $stackMapper;
-	private $boardMapper;
-	private $labelMapper;
-	private $permissionService;
-	private $boardService;
-	private $notificationHelper;
-	private $assignedUsersMapper;
-	private $attachmentService;
-	private $currentUser;
-	private $activityManager;
-	private $commentsManager;
-	private $changeHelper;
-	private $eventDispatcher;
-	private $userManager;
-	private $urlGenerator;
+	private CardMapper $cardMapper;
+	private StackMapper $stackMapper;
+	private BoardMapper $boardMapper;
+	private LabelMapper $labelMapper;
+	private PermissionService $permissionService;
+	private BoardService $boardService;
+	private NotificationHelper $notificationHelper;
+	private AssignmentMapper $assignedUsersMapper;
+	private AttachmentService $attachmentService;
+	private ?string $currentUser;
+	private ActivityManager $activityManager;
+	private ICommentsManager $commentsManager;
+	private ChangeHelper $changeHelper;
+	private IEventDispatcher $eventDispatcher;
+	private IUserManager $userManager;
+	private IURLGenerator $urlGenerator;
+	private LoggerInterface $logger;
+	private IRequest $request;
 
 	public function __construct(
 		CardMapper $cardMapper,
@@ -82,7 +86,9 @@ class CardService {
 		ChangeHelper $changeHelper,
 		IEventDispatcher $eventDispatcher,
 		IURLGenerator $urlGenerator,
-		$userId
+		LoggerInterface $logger,
+		IRequest $request,
+		?string $userId
 	) {
 		$this->cardMapper = $cardMapper;
 		$this->stackMapper = $stackMapper;
@@ -100,6 +106,8 @@ class CardService {
 		$this->eventDispatcher = $eventDispatcher;
 		$this->currentUser = $userId;
 		$this->urlGenerator = $urlGenerator;
+		$this->logger = $logger;
+		$this->request = $request;
 	}
 
 	public function enrich($card) {
@@ -131,23 +139,18 @@ class CardService {
 	}
 
 	/**
-	 * @param $cardId
 	 * @return \OCA\Deck\Db\RelationalEntity
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function find($cardId) {
-		if (is_numeric($cardId) === false) {
-			throw new BadRequestException('card id must be a number');
-		}
-
+	public function find(int $cardId) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		$card = $this->cardMapper->find($cardId);
 		$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
 		$attachments = $this->attachmentService->findAll($cardId, true);
-		if (\OC::$server->getRequest()->getParam('apiVersion') === '1.0') {
+		if ($this->request->getParam('apiVersion') === '1.0') {
 			$attachments = array_filter($attachments, function ($attachment) {
 				return $attachment->getType() === 'deck_file';
 			});
@@ -162,7 +165,7 @@ class CardService {
 		try {
 			$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		} catch (NoPermissionException $e) {
-			\OC::$server->getLogger()->error('Unable to check permission for a previously obtained board ' . $boardId, ['exception' => $e]);
+			$this->logger->error('Unable to check permission for a previously obtained board ' . $boardId, ['exception' => $e]);
 			return [];
 		}
 		$cards = $this->cardMapper->findCalendarEntries($boardId);
@@ -486,7 +489,7 @@ class CardService {
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
-	 * @throws \OCP\AppFramework\Db\
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
 	public function archive($id) {

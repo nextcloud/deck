@@ -40,20 +40,14 @@ use OutOfBoundsException;
 use function is_numeric;
 
 class CommentService {
+	private ICommentsManager $commentsManager;
+	private IUserManager $userManager;
+	private CardMapper $cardMapper;
+	private PermissionService $permissionService;
+	private ILogger $logger;
+	private ?string $userId;
 
-	/**
-	 * @var ICommentsManager
-	 */
-	private $commentsManager;
-	/**
-	 * @var IUserManager
-	 */
-	private $userManager;
-	/** @var ILogger */
-	private $logger;
-	private $userId;
-
-	public function __construct(ICommentsManager $commentsManager, PermissionService $permissionService, CardMapper $cardMapper, IUserManager $userManager, ILogger $logger, $userId) {
+	public function __construct(ICommentsManager $commentsManager, PermissionService $permissionService, CardMapper $cardMapper, IUserManager $userManager, ILogger $logger, ?string $userId) {
 		$this->commentsManager = $commentsManager;
 		$this->permissionService = $permissionService;
 		$this->cardMapper = $cardMapper;

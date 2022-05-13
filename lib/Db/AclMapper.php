@@ -53,11 +53,12 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 
 	/**
 	 * @param numeric $userId
-	 * @param numeric $aclId
+	 * @param numeric $id
 	 * @return bool
 	 * @throws \OCP\DB\Exception
 	 */
-	public function isOwner($userId, $aclId): bool {
+	public function isOwner($userId, $id): bool {
+		$aclId = $id;
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('acl.id')
 			->from($this->getTableName(), 'acl')

@@ -39,19 +39,21 @@ use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Model\CardDetails;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\StatusException;
+use Psr\Log\LoggerInterface;
 
 class StackService {
-	private $stackMapper;
-	private $cardMapper;
-	private $boardMapper;
-	private $labelMapper;
-	private $permissionService;
-	private $boardService;
-	private $cardService;
-	private $assignedUsersMapper;
-	private $attachmentService;
-	private $activityManager;
-	private $changeHelper;
+	private StackMapper $stackMapper;
+	private CardMapper $cardMapper;
+	private BoardMapper $boardMapper;
+	private LabelMapper $labelMapper;
+	private PermissionService $permissionService;
+	private BoardService $boardService;
+	private CardService $cardService;
+	private AssignmentMapper $assignedUsersMapper;
+	private AttachmentService $attachmentService;
+	private ActivityManager $activityManager;
+	private ChangeHelper $changeHelper;
+	private LoggerInterface $logger;
 
 	public function __construct(
 		StackMapper $stackMapper,
@@ -64,7 +66,8 @@ class StackService {
 		AssignmentMapper $assignedUsersMapper,
 		AttachmentService $attachmentService,
 		ActivityManager $activityManager,
-		ChangeHelper $changeHelper
+		ChangeHelper $changeHelper,
+		LoggerInterface $logger
 	) {
 		$this->stackMapper = $stackMapper;
 		$this->boardMapper = $boardMapper;
@@ -77,6 +80,7 @@ class StackService {
 		$this->attachmentService = $attachmentService;
 		$this->activityManager = $activityManager;
 		$this->changeHelper = $changeHelper;
+		$this->logger = $logger;
 	}
 
 	private function enrichStackWithCards($stack, $since = -1) {
@@ -158,7 +162,7 @@ class StackService {
 		try {
 			$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
 		} catch (NoPermissionException $e) {
-			\OC::$server->getLogger()->error('Unable to check permission for a previously obtained board ' . $boardId, ['exception' => $e]);
+			$this->logger->error('Unable to check permission for a previously obtained board ' . $boardId, ['exception' => $e]);
 			return [];
 		}
 		return $this->stackMapper->findAll($boardId);

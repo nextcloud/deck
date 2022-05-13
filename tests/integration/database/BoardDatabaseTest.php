@@ -21,6 +21,12 @@
  *
  */
 
+use OCA\Deck\Db\Board;
+use OCA\Deck\Service\BoardService;
+use OCP\IGroupManager;
+use OCP\IUserSession;
+use OCP\Server;
+
 /**
  * @group DB
  */
@@ -31,7 +37,7 @@ class BoardDatabaseTest extends \Test\TestCase {
 	public const TEST_USER4 = "test-share-user4";
 	public const TEST_GROUP1 = "test-share-group1";
 
-	/** @var \OCA\Deck\Service\BoardService */
+	/** @var BoardService */
 	private $boardService;
 
 	public static function setUpBeforeClass(): void {
@@ -57,15 +63,15 @@ class BoardDatabaseTest extends \Test\TestCase {
 		$groupBackend->addToGroup(self::TEST_USER3, 'group2');
 		$groupBackend->addToGroup(self::TEST_USER4, 'group3');
 		$groupBackend->addToGroup(self::TEST_USER2, self::TEST_GROUP1);
-		\OC::$server->getGroupManager()->addBackend($groupBackend);
+		Server::get(IGroupManager::class)->addBackend($groupBackend);
 	}
 	public function setUp(): void {
 		parent::setUp();
-		\OC::$server->getUserSession()->login(self::TEST_USER1, self::TEST_USER1);
-		$this->boardService = \OC::$server->query("\OCA\Deck\Service\BoardService");
+		Server::get(IUserSession::class)->login(self::TEST_USER1, self::TEST_USER1);
+		$this->boardService = Server::get(BoardService::class);
 	}
 	public function testCreate() {
-		$board = new \OCA\Deck\Db\Board();
+		$board = new Board();
 		$board->setTitle('Test');
 		$board->setOwner(self::TEST_USER1);
 		$board->setColor('000000');

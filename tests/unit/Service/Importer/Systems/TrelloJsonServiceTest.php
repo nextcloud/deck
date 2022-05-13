@@ -27,11 +27,11 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\Server;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class TrelloJsonServiceTest extends \Test\TestCase {
-	/** @var TrelloJsonService */
-	private $service;
+	private TrelloJsonService $service;
 	/** @var IURLGenerator|MockObject */
 	private $urlGenerator;
 	/** @var IUserManager|MockObject */
@@ -128,7 +128,7 @@ class TrelloJsonServiceTest extends \Test\TestCase {
 	}
 
 	public function testGetBoardWithSuccess() {
-		$importService = \OC::$server->get(BoardImportService::class);
+		$importService = Server::get(BoardImportService::class);
 
 		$data = json_decode(file_get_contents(__DIR__ . '/../../../../data/data-trelloJson.json'));
 		$importService->setData($data);
