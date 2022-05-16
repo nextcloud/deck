@@ -24,9 +24,9 @@ Deck is a kanban style organization tool aimed at personal planning and project 
 ### 3rd-Party Integrations
 
 - [trello-to-deck](https://github.com/maxammann/trello-to-deck) - Migrates cards from Trello
-- [mail2deck](https://github.com/newroco/mail2deck) - Provides an "email in" solution 
+- [mail2deck](https://github.com/newroco/mail2deck) - Provides an "email in" solution
 - [A-deck](https://github.com/leoossa/A-deck) - Chrome Extension that allows to create new card in selected stack based on current tab
- 
+
 ## Installation/Update
 
 This app is supposed to work on the two latest Nextcloud versions.
@@ -51,6 +51,17 @@ Please make sure you have installed the following dependencies: `make, which, ta
 ### Install the nightly builds
 
 Instead of setting everything up manually, you can just [download the nightly build](https://github.com/nextcloud/deck/releases/tag/nightly) instead. These builds are updated every 24 hours, and are pre-configured with all the needed dependencies.
+
+## Performance limitations
+
+Deck is not yet ready for intensive usage.
+A lot of database queries are generated when the number of boards, cards and attachments is high.
+For example, a user having access to 13 boards, with each board having on average 100 cards,
+and each card having on average 5 attachments,
+would generate 6500 database queries when doing the file related queries
+which would increase the page loading time significantly.
+
+Improvements on Nextcloud server and Deck itself will improve the situation.
 
 ## Developing
 
