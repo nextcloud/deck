@@ -135,6 +135,7 @@ OC.L10N.register(
     "Archived cards" : "已存檔卡片",
     "Add list" : "添加清單",
     "List name" : "清單名稱",
+    "Active filters" : "有效的過濾器",
     "Apply filter" : "應用過濾器",
     "Filter by tag" : "以標籤過濾",
     "Filter by assigned user" : "以指派用戶過濾",
