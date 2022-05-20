@@ -135,6 +135,7 @@ OC.L10N.register(
     "Archived cards" : "Arşivlenmiş kartlar",
     "Add list" : "Liste ekle",
     "List name" : "Liste adı",
+    "Active filters" : "Etkin süzgeçler",
     "Apply filter" : "Süzgeci uygula",
     "Filter by tag" : "Etikete göre süz",
     "Filter by assigned user" : "Atanmış kullanıcıya göre süz",
