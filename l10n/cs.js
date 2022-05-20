@@ -135,6 +135,7 @@ OC.L10N.register(
     "Archived cards" : "Archivované karty",
     "Add list" : "Přidat seznam",
     "List name" : "Název seznamu",
+    "Active filters" : "Zapnuté filtry",
     "Apply filter" : "Uplatnit filtr",
     "Filter by tag" : "Filtrovat podle příznaků",
     "Filter by assigned user" : "Filtrovat podle uživatele, který je úkolem pověřen",
