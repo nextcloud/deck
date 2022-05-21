@@ -135,6 +135,7 @@ OC.L10N.register(
     "Archived cards" : "Archivált kártyák",
     "Add list" : "Lista hozzáadása",
     "List name" : "Listanév",
+    "Active filters" : "Aktív szűrők",
     "Apply filter" : "Szűrő alkalmazása",
     "Filter by tag" : "Szűrés címke szerint",
     "Filter by assigned user" : "Szűrés hozzárendelt felhasználó szerint",
