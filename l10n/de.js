@@ -135,6 +135,7 @@ OC.L10N.register(
     "Archived cards" : "Archivierte Karten",
     "Add list" : "Liste hinzufügen",
     "List name" : "Listenname",
+    "Active filters" : "Aktive Filter",
     "Apply filter" : "Filter anwenden",
     "Filter by tag" : "Nach Schlagwort filtern",
     "Filter by assigned user" : "Nach zugewiesenem Benutzer filtern",
