@@ -299,4 +299,4 @@ OC.L10N.register(
     "This week" : "Esta semana",
     "Are you sure you want to transfer the board {title} for {user}?" : "Tem certeza de que deseja transferir o quadro {title} para {user}?"
 },
-"nplurals=2; plural=(n > 1);");
+"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

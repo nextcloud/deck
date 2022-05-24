@@ -296,5 +296,5 @@
     "Failed to transfer the board for {user}" : "Falha ao transferir a reunião para {user}",
     "This week" : "Esta semana",
     "Are you sure you want to transfer the board {title} for {user}?" : "Tem certeza de que deseja transferir o quadro {title} para {user}?"
-},"pluralForm" :"nplurals=2; plural=(n > 1);"
+},"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
