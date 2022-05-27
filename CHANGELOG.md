@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.5.8
+
+### Fixed
+- Align Duedate-delete icon properly - fixes nextcloud/deck#3791 [#3817](https://github.com/nextcloud/deck/pull/3817)
+- Increase file count after sharing [#3806](https://github.com/nextcloud/deck/pull/3806)
+- Show cards after moving into another list [#3794](https://github.com/nextcloud/deck/pull/3794)
+- Fetch full board data after cloning [#3781](https://github.com/nextcloud/deck/pull/3781)
+
+
 ## 1.5.7
 
 ### Added
