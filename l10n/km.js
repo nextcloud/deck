@@ -2,6 +2,7 @@ OC.L10N.register(
     "deck",
     {
     "Personal" : "ផ្ទាល់​ខ្លួន",
+    "copy" : "ចម្លង",
     "Done" : "Done",
     "Cancel" : "បោះបង់",
     "Close" : "បិទ",
