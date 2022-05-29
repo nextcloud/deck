@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.6.3
+
+### Fixed
+
+- Align Duedate-delete icon properly - fixes nextcloud/deck#3791 [#3816](https://github.com/nextcloud/deck/pull/3816)
+- Increase file count after sharing [#3805](https://github.com/nextcloud/deck/pull/3805)
+- Show cards after moving into another list [#3795](https://github.com/nextcloud/deck/pull/3795)
+- Fetch full board data after cloning [#3780](https://github.com/nextcloud/deck/pull/3780)
+- Handle qb mapper exception messages properly [#3770](https://github.com/nextcloud/deck/pull/3770)
+
 ## 1.6.2
 
 ### Added
