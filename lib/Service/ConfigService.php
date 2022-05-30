@@ -96,7 +96,8 @@ class ConfigService {
 			return false;
 		}
 
-		$defaultState = (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'calendar', true);
+		$appConfigState = $this->config->getAppValue(Application::APP_ID, 'calendar', 'yes') === 'yes';
+		$defaultState = (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'calendar', $appConfigState);
 		if ($boardId === null) {
 			return $defaultState;
 		}
