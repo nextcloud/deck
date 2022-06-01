@@ -6,6 +6,7 @@
 name: Build and publish app release
 
 on:
+  pull_request:
   release:
     types: [published]
 
@@ -16,8 +17,6 @@ jobs:
   build_and_publish:
     runs-on: ubuntu-latest
 
-    # Only allowed to be run on nextcloud-releases repositories
-    if: ${{ github.repository_owner == 'nextcloud-releases' }}
 
     steps:
       - name: Check actor permission
@@ -131,21 +130,3 @@ jobs:
           # Rebuilding archive
           cd ${{ env.APP_NAME }}/build/artifacts
           tar -zcvf ${{ env.APP_NAME }}.tar.gz ${{ env.APP_NAME }}
-
-      - name: Attach tarball to github release
-        uses: svenstaro/upload-release-action@v2
-        id: attach_to_release
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.APP_NAME }}/build/artifacts/${{ env.APP_NAME }}.tar.gz
-          asset_name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}.tar.gz
-          tag: ${{ github.ref }}
-          overwrite: true
-
-      - name: Upload app to Nextcloud appstore
-        uses: nextcloud-releases/nextcloud-appstore-push-action@v1
-        with:
-          app_name: ${{ env.APP_NAME }}
-          appstore_token: ${{ secrets.APPSTORE_TOKEN }}
-          download_url: ${{ steps.attach_to_release.outputs.browser_download_url }}
-          app_private_key: ${{ secrets.APP_PRIVATE_KEY }}
