@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set up php${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@2.18.1
+        uses: shivammathur/setup-php@2.19.0
         with:
           php-version: ${{ matrix.php-versions }}
           coverage: none
@@ -33,7 +33,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Set up php
-      uses: shivammathur/setup-php@2.18.1
+      uses: shivammathur/setup-php@2.19.0
       with:
         php-version: 7.4
         coverage: none
