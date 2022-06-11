@@ -36,10 +36,10 @@
 			</div>
 			<div class="card-upper">
 				<h3 v-if="compactMode || isArchived || showArchived || !canEdit || standalone">
-					{{ card.title }}
+					{{ card.id + '# ' + card.title }}
 				</h3>
 				<h3 v-else-if="!editing">
-					<span @click.stop="startEditing(card)">{{ card.title }}</span>
+					<span @click.stop="startEditing(card)">{{ card.id + '# ' + card.title }}</span>
 				</h3>
 
 				<form v-if="editing"
