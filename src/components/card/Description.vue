@@ -74,7 +74,7 @@
 
 <script>
 import MarkdownIt from 'markdown-it'
-import MarkdownItTaskLists from 'markdown-it-task-lists'
+import MarkdownItTaskCheckbox from 'markdown-it-task-checkbox'
 import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
 import AttachmentList from './AttachmentList'
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
@@ -85,7 +85,7 @@ import { mapState, mapGetters } from 'vuex'
 const markdownIt = new MarkdownIt({
 	linkify: true,
 })
-markdownIt.use(MarkdownItTaskLists, { enabled: true, label: true, labelAfter: true })
+markdownIt.use(MarkdownItTaskCheckbox, { disabled: false, idPrefix: 'task-item-', ulClass: 'contains-task-list' })
 
 markdownIt.use(MarkdownItLinkAttributes, {
 	attrs: {
