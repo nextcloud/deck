@@ -22,46 +22,61 @@ declare(strict_types=1);
  */
 
 namespace OCA\Circles\Model {
-    class Member {
-        public const LEVEL_NONE = 0;
-        public const LEVEL_MEMBER = 1;
-        public const LEVEL_MODERATOR = 4;
-        public const LEVEL_ADMIN = 8;
-        public const LEVEL_OWNER = 9;
+	class Member {
+		public const LEVEL_NONE = 0;
+		public const LEVEL_MEMBER = 1;
+		public const LEVEL_MODERATOR = 4;
+		public const LEVEL_ADMIN = 8;
+		public const LEVEL_OWNER = 9;
 
-        public const TYPE_SINGLE = 0;
-        public const TYPE_USER = 1;
-        public const TYPE_GROUP = 2;
-        public const TYPE_MAIL = 4;
-        public const TYPE_CONTACT = 8;
-        public const TYPE_CIRCLE = 16;
-        public const TYPE_APP = 10000;
+		public const TYPE_SINGLE = 0;
+		public const TYPE_USER = 1;
+		public const TYPE_GROUP = 2;
+		public const TYPE_MAIL = 4;
+		public const TYPE_CONTACT = 8;
+		public const TYPE_CIRCLE = 16;
+		public const TYPE_APP = 10000;
 
-        public const ALLOWING_ALL_TYPES = 31;
+		public const ALLOWING_ALL_TYPES = 31;
 
-        public const APP_CIRCLES = 10001;
-        public const APP_OCC = 10002;
-        public const APP_DEFAULT = 11000;
-    }
+		public const APP_CIRCLES = 10001;
+		public const APP_OCC = 10002;
+		public const APP_DEFAULT = 11000;
 
-    class Circle {
-        public function getUniqueId(): string {}
-        public function getDisplayName(): string {}
-        public function getOwner(): string {}
-        public function getSingleId(): string {}
-        public function getInheritedMembers(): array {}
-    }
+		public function getLevel(): int {}
+	}
+
+	class Circle {
+		public function getUniqueId(): string {}
+		public function getDisplayName(): string {}
+		public function getOwner(): string {}
+		public function getSingleId(): string {}
+		public function getInheritedMembers(): array {}
+		public function getInitiator(): Member {}
+	}
+
+	class FederatedUser {
+	}
 }
 
 namespace OCA\Circles\Model\Probes {
-    class CircleProble {
-        public function __construct() {}
-    }
+	class CircleProbe {
+		public function __construct() {}
+		public function mustBeMember(bool $must = true): self {}
+	}
 }
 
 namespace OCA\Circles {
-    class CirclesManager {
-    }
+	use OCA\Circles\Model\Circle;
+	use OCA\Circles\Model\FederatedUser;
+	use OCA\Circles\Model\Probes\CircleProbe;
+	class CirclesManager {
+		public function startSuperSession(): void {}
+		public function startSession(?FederatedUser $federatedUser = null): void {}
+		public function getCircles(?CircleProbe $probe = null): array {}
+		public function getCircle(string $singleId, ?CircleProbe $probe = null): Circle {}
+		public function getFederatedUser(string $federatedId, int $type = Member::TYPE_SINGLE): FederatedUser {}
+	}
 }
 
 namespace {
@@ -328,10 +343,10 @@ namespace OC\Files\Mount {
 		protected $class;
 		protected $storageId;
 		protected $rootId = null;
-	
+
 		/** @var int|null */
 		protected $mountId;
-	
+
 		/**
 		 * @param string|\OCP\Files\Storage\IStorage $storage
 		 * @param string $mountpoint
@@ -344,7 +359,7 @@ namespace OC\Files\Mount {
 		public function __construct($storage, $mountpoint, $arguments = null, $loader = null, $mountOptions = null, $mountId = null) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * get complete path to the mount point, relative to data/
 		 *
@@ -353,7 +368,7 @@ namespace OC\Files\Mount {
 		public function getMountPoint() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * Sets the mount point path, relative to data/
 		 *
@@ -362,28 +377,28 @@ namespace OC\Files\Mount {
 		public function setMountPoint($mountPoint) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @return \OCP\Files\Storage\IStorage
 		 */
 		public function getStorage() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @return string
 		 */
 		public function getStorageId() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @return int
 		 */
 		public function getNumericStorageId() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @param string $path
 		 * @return string
@@ -391,14 +406,14 @@ namespace OC\Files\Mount {
 		public function getInternalPath($path) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @param callable $wrapper
 		 */
 		public function wrapStorage($wrapper) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * Get a mount option
 		 *
@@ -409,7 +424,7 @@ namespace OC\Files\Mount {
 		public function getOption($name, $default) {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * Get all options for the mount
 		 *
@@ -418,18 +433,18 @@ namespace OC\Files\Mount {
 		public function getOptions() {
 			throw new \Exception('stub');
 		}
-	
+
 		/**
 		 * @return int
 		 */
 		public function getStorageRootId() {
 			throw new \Exception('stub');
 		}
-	
+
 		public function getMountId() {
 			throw new \Exception('stub');
 		}
-	
+
 		public function getMountType() {
 			throw new \Exception('stub');
 		}

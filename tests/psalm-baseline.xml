@@ -127,7 +127,9 @@
     </TooManyArguments>
   </file>
   <file src="lib/Service/CirclesService.php">
-    <UndefinedClass occurrences="1"/>
+    <RedundantCondition occurrences="1">
+      <code>$member !== null</code>
+    </RedundantCondition>
   </file>
   <file src="lib/Service/FileService.php">
     <RedundantCondition occurrences="2">
