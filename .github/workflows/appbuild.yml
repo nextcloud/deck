@@ -1,7 +1,11 @@
 name: Package build
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
+      - master
+      - stable*
 
 jobs:
   build:
