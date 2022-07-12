@@ -106,6 +106,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		dragging: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data() {
 		return {
@@ -154,6 +158,9 @@ export default {
 	},
 	methods: {
 		openCard() {
+			if (this.dragging) {
+			  return
+			}
 			const boardId = this.card && this.card.boardId ? this.card.boardId : this.$route.params.id
 			this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id } }).catch(() => {})
 		},
@@ -171,6 +178,9 @@ export default {
 			this.editing = false
 		},
 		applyLabelFilter(label) {
+			if (this.dragging) {
+				return
+			}
 			this.$nextTick(() => this.$store.dispatch('toggleFilter', { tags: [label.id] }))
 		},
 	},
