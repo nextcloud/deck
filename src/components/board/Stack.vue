@@ -99,12 +99,14 @@
 			non-drag-area-selector=".dragDisabled"
 			:drag-handle-selector="dragHandleSelector"
 			@should-accept-drop="canEdit"
+			@drag-start="draggingCard = true"
+			@drag-end="draggingCard = false"
 			@drop="($event) => onDropCard(stack.id, $event)">
 			<Draggable v-for="card in cardsByStack" :key="card.id">
 				<transition :appear="animate && !card.animated && (card.animated=true)"
 					:appear-class="'zoom-appear-class'"
 					:appear-active-class="'zoom-appear-active-class'">
-					<CardItem :id="card.id" />
+					<CardItem :id="card.id" :dragging="draggingCard" />
 				</transition>
 			</Draggable>
 		</Container>
@@ -142,6 +144,7 @@ export default {
 	data() {
 		return {
 			editing: false,
+			draggingCard: false,
 			copiedStack: '',
 			newCardTitle: '',
 			showAddCard: false,
