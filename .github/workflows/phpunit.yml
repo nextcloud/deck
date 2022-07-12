@@ -2,6 +2,14 @@ name: PHPUnit
 
 on:
   pull_request:
+    paths:
+      - '.github/workflows/phpunit.yml'
+      - 'appinfo/**'
+      - 'lib/**'
+      - 'templates/**'
+      - 'tests/**'
+      - 'composer.json'
+      - 'composer.lock'
   push:
     branches:
       - master
