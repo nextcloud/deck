@@ -44,6 +44,7 @@ OC.L10N.register(
     "Delete list" : "Șterge lista",
     "Edit" : "Editează",
     "Download" : "Descărcare",
+    "Invalid path selected" : "Calea selectată este invalidă",
     "Attachments" : "Atașamente ",
     "Comments" : "Comentarii",
     "Modified" : "Modificat",
