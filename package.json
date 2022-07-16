@@ -52,7 +52,7 @@
 		"nextcloud-vue-collections": "^0.10.0",
 		"p-queue": "^7.2.0",
 		"url-search-params-polyfill": "^8.1.1",
-		"vue": "^2.7.3",
+		"vue": "^2.7.6",
 		"vue-at": "^2.5.0-beta.2",
 		"vue-click-outside": "^1.1.0",
 		"vue-easymde": "^2.0.0",
@@ -81,7 +81,7 @@
 		"jest": "^28.1.2",
 		"jest-serializer-vue": "^2.0.2",
 		"vue-jest": "^3.0.7",
-		"vue-template-compiler": "^2.7.3"
+		"vue-template-compiler": "^2.7.6"
 	},
 	"jest": {
 		"moduleFileExtensions": [
