@@ -23,15 +23,22 @@
 
 <template>
 	<div class="stack">
-		<div v-click-outside="stopCardCreation" class="stack__header" :class="{'stack__header--add': showAddCard }">
+		<div v-click-outside="stopCardCreation"
+			class="stack__header"
+			:class="{'stack__header--add': showAddCard }"
+			tabindex="0"
+			:aria-label="stack.title">
 			<transition name="fade" mode="out-in">
 				<h3 v-if="!canManage || isArchived">
 					{{ stack.title }}
 				</h3>
 				<h3 v-else-if="!editing"
 					v-tooltip="stack.title"
+					tabindex="0"
+					:aria-label="stack.title"
 					class="stack__title"
-					@click="startEditing(stack)">
+					@click="startEditing(stack)"
+					@keydown.enter="startEditing(stack)">
 					{{ stack.title }}
 				</h3>
 				<form v-else @submit.prevent="finishedEdit(stack)">
@@ -328,36 +335,47 @@ export default {
 			flex-grow: 1;
 			display: flex;
 			cursor: inherit;
+			margin: 0;
 
 			input[type=text] {
 				flex-grow: 1;
 			}
 		}
-	}
 
-	.stack__title {
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		max-width: calc($stack-width - 60px);
+		h3.stack__title {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			max-width: calc($stack-width - 60px);
+			border-radius: 3px;
+			margin: 6px;
+			padding: 4px 4px;
+
+			&:focus {
+				outline: 2px solid var(--color-border-dark);
+				border-radius: 3px;
+			}
+		}
+
+		form {
+			margin: 2px 0;
+		}
 	}
 
 	.stack__card-add {
-		width: $stack-width;
 		height: 44px;
 		flex-shrink: 0;
 		z-index: 100;
 		display: flex;
-		margin-left: 12px;
-		margin-right: 12px;
 		margin-top: 5px;
 		margin-bottom: 20px;
 		background-color: var(--color-main-background);
 
 		form {
 			display: flex;
+			margin-left: 12px;
+			margin-right: 12px;
 			width: 100%;
-			margin: 0;
 			box-shadow: 0 0 3px var(--color-box-shadow);
 			border-radius: var(--border-radius-large);
 			overflow: hidden;

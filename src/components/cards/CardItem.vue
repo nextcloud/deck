@@ -35,14 +35,18 @@
 				{{ board.title }} » {{ stack.title }}
 			</div>
 			<div class="card-upper">
-				<h3 v-if="compactMode || isArchived || showArchived || !canEdit || standalone">
+				<h3 v-if="inlineEditingBlocked">
 					{{ card.title }}
 				</h3>
-				<h3 v-else-if="!editing">
-					<span @click.stop="startEditing(card)">{{ card.title }}</span>
+				<h3 v-else-if="!editing"
+					tabindex="0"
+					class="editable"
+					:aria-label="t('deck', 'Edit card title')"
+					@click.stop="startEditing(card)"
+					@keydown.enter.stop.prevent="startEditing(card)">
+					{{ card.title }}
 				</h3>
-
-				<form v-if="editing"
+				<form v-else-if="editing"
 					v-click-outside="cancelEdit"
 					class="dragDisabled"
 					@click.stop
@@ -139,6 +143,9 @@ export default {
 			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
 			return board ? !board.archived && board.permissions.PERMISSION_EDIT : false
 		},
+		inlineEditingBlocked() {
+			return this.compactMode || this.isArchived || this.showArchived || !this.canEdit || this.standalone
+		},
 		card() {
 			return this.item ? this.item : this.$store.getters.cardById(this.id)
 		},
@@ -227,14 +234,20 @@ export default {
 
 			}
 			h3 {
-				margin: 12px $card-padding;
+				margin: 5px $card-padding;
+				padding: 6px;
 				flex-grow: 1;
 				font-size: 100%;
 				overflow: hidden;
 				word-wrap: break-word;
 				padding-left: 4px;
-				span {
+				&.editable {
 					cursor: text;
+
+					&:focus {
+						outline: 2px solid var(--color-border-dark);
+						border-radius: 3px;
+					}
 				}
 			}
 			input[type=text] {
