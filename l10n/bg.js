@@ -241,6 +241,7 @@ OC.L10N.register(
     "Choose attachment" : "Избор на прикачен файл",
     "(group)" : "(група)",
     "{count} comments, {unread} unread" : "{count} коментари, {unread} непрочетени",
+    "Edit card title" : "Редактиране на заглавието на карта",
     "Assign to me" : "Зачисляване към мен",
     "Unassign myself" : "Отмяна на зачисляването към мен",
     "Move card" : "Преместване на карта",
