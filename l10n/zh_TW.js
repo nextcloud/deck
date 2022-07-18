@@ -241,6 +241,7 @@ OC.L10N.register(
     "Choose attachment" : "選擇附件",
     "(group)" : "（群組）",
     "{count} comments, {unread} unread" : "{count} 則留言，{unread} 則未讀",
+    "Edit card title" : "編輯卡片標題",
     "Assign to me" : "分配給我",
     "Unassign myself" : "取消分配給我",
     "Move card" : "移動卡片",

@@ -241,6 +241,7 @@ OC.L10N.register(
     "Choose attachment" : "Ek dosyayı seçin",
     "(group)" : "(grup)",
     "{count} comments, {unread} unread" : "{count} yorum, {unread} okunmamış",
+    "Edit card title" : "Kart başlığını düzenle",
     "Assign to me" : "Bana ata",
     "Unassign myself" : "Kendi atamamı kaldır",
     "Move card" : "Kartı taşı",
