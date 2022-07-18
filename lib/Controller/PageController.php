@@ -94,7 +94,10 @@ class PageController extends Controller {
 			$this->eventDispatcher->dispatchTyped(new LoadViewer());
 		}
 
-		$response = new TemplateResponse('deck', 'main');
+		$response = new TemplateResponse('deck', 'main', [
+			'id-app-content' => '#app-content-vue',
+			'id-app-navigation' => '#app-navigation-vue',
+		]);
 
 		if ($this->config->getSystemValueBool('debug', false)) {
 			$csp = new ContentSecurityPolicy();
