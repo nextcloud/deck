@@ -241,6 +241,7 @@ OC.L10N.register(
     "Choose attachment" : "Zvolte přílohu",
     "(group)" : "(skupina)",
     "{count} comments, {unread} unread" : "{count} komentářů, {unread} nepřečtených",
+    "Edit card title" : "Upravit nadpis karty",
     "Assign to me" : "Přiřadit mě",
     "Unassign myself" : "Zrušit přiřazení sobě",
     "Move card" : "Přesunout kartu",

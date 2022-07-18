@@ -241,6 +241,7 @@ OC.L10N.register(
     "Choose attachment" : "Escoger adjunto",
     "(group)" : "(grupo)",
     "{count} comments, {unread} unread" : "{count} comentarios, {unread} sin leer",
+    "Edit card title" : "Editar el título de la tarjeta",
     "Assign to me" : "Asignarme a mí",
     "Unassign myself" : "Desasignarme a mí mismo",
     "Move card" : "Mover tarjeta",
