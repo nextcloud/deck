@@ -241,6 +241,7 @@ OC.L10N.register(
     "Choose attachment" : "Aukeratu eranskina",
     "(group)" : "(taldea)",
     "{count} comments, {unread} unread" : "{count} iruzkin, {unread} irakurri gabe",
+    "Edit card title" : "Editatu txartelaren izenburua",
     "Assign to me" : "Esleitu niri",
     "Unassign myself" : "Niri esleitzeari utzi",
     "Move card" : "Mugitu txartela",
