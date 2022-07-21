@@ -46,7 +46,7 @@
 			<AppNavigationAddBoard v-if="canCreate" />
 		</template>
 		<template #footer>
-			<AppNavigationSettings>
+			<AppNavigationSettings :title="t('deck', 'Deck settings')">
 				<div>
 					<div>
 						<input id="toggle-modal"
