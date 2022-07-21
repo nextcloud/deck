@@ -241,6 +241,7 @@ OC.L10N.register(
     "Choose attachment" : "Válasszon mellékletet",
     "(group)" : "(csoport)",
     "{count} comments, {unread} unread" : "{count} hozzászólás, {unread} olvasatlan",
+    "Edit card title" : "Kártyacím szerkesztése",
     "Assign to me" : "Hozzám rendelés",
     "Unassign myself" : "Saját magam hozzárendelésének eltávolítása",
     "Move card" : "Kártya áthelyezése",
