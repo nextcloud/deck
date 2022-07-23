@@ -255,6 +255,7 @@ OC.L10N.register(
     "All boards" : "Todos os painéis",
     "Archived boards" : "Painéis arquivados",
     "Shared with you" : "Compartilhado com você",
+    "Deck settings" : "Configurações do Deck",
     "Use bigger card view" : "Use uma exibição de cartão maior",
     "Show boards in calendar/tasks" : "Mostrar painéis em calendários/tarefas",
     "Limit deck usage of groups" : "Limitar o uso de grupos no deck",

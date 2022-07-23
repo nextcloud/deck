@@ -255,6 +255,7 @@ OC.L10N.register(
     "All boards" : "Az összes tábla",
     "Archived boards" : "Archivált táblák",
     "Shared with you" : "Megosztva Önnel",
+    "Deck settings" : "Kártyák beállításai",
     "Use bigger card view" : "Nagyobb kártyanézet használata",
     "Show boards in calendar/tasks" : "Táblák megjelenítése a naptárak/teendők között",
     "Limit deck usage of groups" : "A kártyák használatának csoportokra korlátozása",

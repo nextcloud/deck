@@ -255,6 +255,7 @@ OC.L10N.register(
     "All boards" : "Všechny tabule",
     "Archived boards" : "Archivované tabule",
     "Shared with you" : "Sdíleno s vámi",
+    "Deck settings" : "Nastavení pro Deck",
     "Use bigger card view" : "Použít větší zobrazení karet",
     "Show boards in calendar/tasks" : "Zobrazit tabule v kalendáři/úkolech",
     "Limit deck usage of groups" : "Omezit využití deck na skupiny",
