@@ -255,6 +255,7 @@ OC.L10N.register(
     "All boards" : "Tüm panolar",
     "Archived boards" : "Arşivlenmiş panolar",
     "Shared with you" : "Sizinle paylaşıldı",
+    "Deck settings" : "Tahta ayarları",
     "Use bigger card view" : "Daha büyük kart görünümü kullanılsın",
     "Show boards in calendar/tasks" : "Takvimler ve görevlerde panolar görüntülensin",
     "Limit deck usage of groups" : "Tahtayı şu gruplar kullanabilsin",
