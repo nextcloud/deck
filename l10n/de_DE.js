@@ -255,7 +255,7 @@ OC.L10N.register(
     "All boards" : "Alle Boards",
     "Archived boards" : "Archivierte Boards",
     "Shared with you" : "Mit Ihnen geteilt",
-    "Deck settings" : "Deck Einstellungen",
+    "Deck settings" : "Deck-Einstellungen",
     "Use bigger card view" : "Größere Kartenansicht verwenden",
     "Show boards in calendar/tasks" : "Board in Kalender/Aufgaben anzeigen",
     "Limit deck usage of groups" : "Nutzung auf Gruppen einschränken",
