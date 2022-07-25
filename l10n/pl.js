@@ -255,6 +255,7 @@ OC.L10N.register(
     "All boards" : "Wszystkie tablice",
     "Archived boards" : "Zarchiwizowane tablice",
     "Shared with you" : "Udostępnione Tobie",
+    "Deck settings" : "Ustawienia Tablicy",
     "Use bigger card view" : "Użyj większego widoku karty",
     "Show boards in calendar/tasks" : "Pokaż tablice w kalendarzu/zadaniach",
     "Limit deck usage of groups" : "Ogranicz użycie tablic dla grup",
