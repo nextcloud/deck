@@ -39,7 +39,10 @@
 				</ActionButton>
 			</Actions>
 			<Actions v-if="canEdit">
-				<ActionButton v-if="descriptionEditing" icon="icon-attach" @click="showAttachmentModal()">
+				<ActionButton v-if="descriptionEditing" @click="showAttachmentModal()">
+					<template #icon>
+						<PaperclipIcon :size="24" decorative />
+					</template>
 					{{ t('deck', 'Add Attachment') }}
 				</ActionButton>
 			</Actions>
@@ -80,6 +83,7 @@ import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
 import { mapState, mapGetters } from 'vuex'
+import PaperclipIcon from 'vue-material-design-icons/Paperclip'
 
 const markdownIt = new MarkdownIt({
 	linkify: true,
@@ -101,6 +105,7 @@ export default {
 		ActionButton,
 		Modal,
 		AttachmentList,
+		PaperclipIcon,
 	},
 	props: {
 		card: {

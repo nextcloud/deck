@@ -31,6 +31,7 @@
 					:user="user.participant.uid"
 					:display-name="user.participant.displayname"
 					:disable-menu="true"
+					:show-user-status="false"
 					:size="32" />
 				<Avatar v-if="user.type === 1"
 					:user="user.participant.uid"

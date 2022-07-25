@@ -42,7 +42,6 @@
 </template>
 
 <script>
-
 import { mapState } from 'vuex'
 import AppNavigation from './components/navigation/AppNavigation'
 import { Modal, Content, AppContent } from '@nextcloud/vue'
@@ -157,6 +156,37 @@ export default {
 </style>
 
 <style lang="scss">
+	@import "../css/print";
+
+	.icon-activity {
+		background-image: url(../img/activity-dark.svg);
+
+		body[data-theme-dark] & {
+			background-image: url(../img/activity.svg);
+		}
+	}
+
+	.avatardiv.circles {
+		background: var(--color-primary);
+	}
+
+	.icon-circles {
+		background-image: url(../img/circles-dark.svg);
+		opacity: 1;
+		background-size: 20px;
+		background-position: center center;
+	}
+
+	.icon-circles-white, .icon-circles.icon-white {
+		background-image: url(../img/circles.svg);
+		opacity: 1;
+		background-size: 20px;
+		background-position: center center;
+	}
+
+	.icon-colorpicker {
+		background-image: url('../img/color_picker.svg');
+	}
 
 	.multiselect {
 		width: 100%;

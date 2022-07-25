@@ -1,0 +1,16 @@
+.icon-deck {
+  background-image: url(../img/deck-dark.svg);
+}
+
+.icon-deck-white, .icon-deck.icon-white {
+  background-image: url(../img/deck.svg);
+}
+
+body[data-theme-dark] .icon-deck {
+  background-image: url(../img/deck.svg);
+}
+
+body[data-theme-dark] .icon-deck-white,
+body[data-theme-dark] .icon-deck.icon-white {
+  background-image: url(../img/deck-dark.svg);
+}
