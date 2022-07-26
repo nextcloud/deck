@@ -98,6 +98,7 @@ class FileServiceTest extends TestCase {
 		$attachment = new Attachment();
 		$attachment->setId(1);
 		$attachment->setCardId(123);
+		$attachment->setData('Filename.md');
 		return $attachment;
 	}
 
