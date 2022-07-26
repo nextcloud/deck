@@ -218,7 +218,7 @@ class StackService {
 	 * @throws BadRequestException
 	 */
 	public function create($title, $boardId, $order) {
-		if ($title === false || $title === null) {
+		if ($title === false || $title === null || mb_strlen($title) === 0) {
 			throw new BadRequestException('title must be provided');
 		}
 
@@ -295,7 +295,7 @@ class StackService {
 			throw new BadRequestException('stack id must be a number');
 		}
 
-		if ($title === false || $title === null) {
+		if ($title === false || $title === null || mb_strlen($title) === 0) {
 			throw new BadRequestException('title must be provided');
 		}
 
