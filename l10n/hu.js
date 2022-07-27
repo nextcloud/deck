@@ -240,6 +240,7 @@ OC.L10N.register(
     "Write a description …" : "Leírás megadása…",
     "Choose attachment" : "Válasszon mellékletet",
     "(group)" : "(csoport)",
+    "Todo items" : "Teendő elemek",
     "{count} comments, {unread} unread" : "{count} hozzászólás, {unread} olvasatlan",
     "Edit card title" : "Kártyacím szerkesztése",
     "Assign to me" : "Hozzám rendelés",
