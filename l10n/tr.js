@@ -240,6 +240,7 @@ OC.L10N.register(
     "Write a description …" : "Bir açıklama yazın …",
     "Choose attachment" : "Ek dosyayı seçin",
     "(group)" : "(grup)",
+    "Todo items" : "Yapılacak iş ögeleri",
     "{count} comments, {unread} unread" : "{count} yorum, {unread} okunmamış",
     "Edit card title" : "Kart başlığını düzenle",
     "Assign to me" : "Bana ata",
