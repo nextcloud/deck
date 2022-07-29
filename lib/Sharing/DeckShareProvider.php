@@ -489,7 +489,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	 * @inheritDoc
 	 * @returns
 	 */
-	public function getSharesInFolder($userId, Folder $node, $reshares) {
+	public function getSharesInFolder($userId, Folder $node, $reshares, $shallow = true) {
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->select('*')
 			->from('share', 's')
@@ -516,7 +516,11 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		}
 
 		$qb->innerJoin('s', 'filecache', 'f', $qb->expr()->eq('s.file_source', 'f.fileid'));
-		$qb->andWhere($qb->expr()->eq('f.parent', $qb->createNamedParameter($node->getId())));
+		if ($shallow) {
+			$qb->andWhere($qb->expr()->eq('f.parent', $qb->createNamedParameter($node->getId())));
+		} else {
+			$qb->andWhere($qb->expr()->like('f.path', $qb->createNamedParameter($this->dbConnection->escapeLikeParameter($node->getInternalPath()) . '/%')));
+		}
 
 		$qb->orderBy('s.id');
 
