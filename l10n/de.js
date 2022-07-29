@@ -123,7 +123,7 @@ OC.L10N.register(
     "Create card" : "Karte erstellen",
     "Select a card" : "Eine Karte auswählen",
     "Select the card to link to a project" : "Wähle die Karte aus, um diese mit einem Projekt zu verknüpfen",
-    "Link to card" : "Mit einer Karte verknüpfen",
+    "Link to card" : "Mit dieser Karte verknüpfen",
     "File already exists" : "Datei bereits vorhanden",
     "A file with the name {filename} already exists." : "Eine Datei mit diesem Namen {filename} existiert bereits.",
     "Do you want to overwrite it?" : "Möchtest Du überschreiben?",
