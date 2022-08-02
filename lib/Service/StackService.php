@@ -30,26 +30,30 @@ use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Model\CardDetails;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\StatusException;
+use Psr\Log\LoggerInterface;
 
 class StackService {
-	private $stackMapper;
-	private $cardMapper;
-	private $boardMapper;
-	private $labelMapper;
-	private $permissionService;
-	private $boardService;
-	private $cardService;
-	private $assignedUsersMapper;
-	private $attachmentService;
-	private $activityManager;
-	private $changeHelper;
+	private StackMapper $stackMapper;
+	private CardMapper $cardMapper;
+	private BoardMapper $boardMapper;
+	private LabelMapper $labelMapper;
+	private PermissionService $permissionService;
+	private BoardService $boardService;
+	private CardService $cardService;
+	private AssignmentMapper $assignedUsersMapper;
+	private AttachmentService $attachmentService;
+	private ActivityManager $activityManager;
+	private ChangeHelper $changeHelper;
+	private LoggerInterface $logger;
 
 	public function __construct(
 		StackMapper $stackMapper,
@@ -62,7 +66,8 @@ class StackService {
 		AssignmentMapper $assignedUsersMapper,
 		AttachmentService $attachmentService,
 		ActivityManager $activityManager,
-		ChangeHelper $changeHelper
+		ChangeHelper $changeHelper,
+		LoggerInterface $logger
 	) {
 		$this->stackMapper = $stackMapper;
 		$this->boardMapper = $boardMapper;
@@ -75,6 +80,7 @@ class StackService {
 		$this->attachmentService = $attachmentService;
 		$this->activityManager = $activityManager;
 		$this->changeHelper = $changeHelper;
+		$this->logger = $logger;
 	}
 
 	private function enrichStackWithCards($stack, $since = -1) {
@@ -84,9 +90,13 @@ class StackService {
 			return;
 		}
 
-		foreach ($cards as $card) {
-			$this->cardService->enrich($card);
-		}
+		$cards = array_map(
+			function (Card $card): CardDetails {
+				$this->cardService->enrich($card);
+				return new CardDetails($card);
+			},
+			$cards
+		);
 
 		$stack->setCards($cards);
 	}
@@ -112,12 +122,18 @@ class StackService {
 
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_READ);
 		$stack = $this->stackMapper->find($stackId);
-		$cards = $this->cardMapper->findAll($stackId);
-		foreach ($cards as $cardIndex => $card) {
-			$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
-			$card->setAssignedUsers($assignedUsers);
-			$card->setAttachmentCount($this->attachmentService->count($card->getId()));
-		}
+
+		$cards = array_map(
+			function (Card $card): CardDetails {
+				$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
+				$card->setAssignedUsers($assignedUsers);
+				$card->setAttachmentCount($this->attachmentService->count($card->getId()));
+
+				return new CardDetails($card);
+			},
+			$this->cardMapper->findAll($stackId)
+		);
+
 		$stack->setCards($cards);
 
 		return $stack;
@@ -146,7 +162,7 @@ class StackService {
 		try {
 			$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_READ);
 		} catch (NoPermissionException $e) {
-			\OC::$server->getLogger()->error('Unable to check permission for a previously obtained board ' . $boardId, ['exception' => $e]);
+			$this->logger->error('Unable to check permission for a previously obtained board ' . $boardId, ['exception' => $e]);
 			return [];
 		}
 		return $this->stackMapper->findAll($boardId);
@@ -181,6 +197,7 @@ class StackService {
 				if (array_key_exists($card->id, $labels)) {
 					$cards[$cardIndex]->setLabels($labels[$card->id]);
 				}
+				$cards[$cardIndex]->setAttachmentCount($this->attachmentService->count($card->getId()));
 			}
 			$stacks[$stackIndex]->setCards($cards);
 		}
@@ -201,7 +218,7 @@ class StackService {
 	 * @throws BadRequestException
 	 */
 	public function create($title, $boardId, $order) {
-		if ($title === false || $title === null) {
+		if ($title === false || $title === null || mb_strlen($title) === 0) {
 			throw new BadRequestException('title must be provided');
 		}
 
@@ -278,7 +295,7 @@ class StackService {
 			throw new BadRequestException('stack id must be a number');
 		}
 
-		if ($title === false || $title === null) {
+		if ($title === false || $title === null || mb_strlen($title) === 0) {
 			throw new BadRequestException('title must be provided');
 		}
 
@@ -290,10 +307,13 @@ class StackService {
 			throw new BadRequestException('order must be a number');
 		}
 
-		$this->permissionService->checkPermission($this->stackMapper, $boardId, Acl::PERMISSION_MANAGE);
-		if ($this->boardService->isArchived($this->stackMapper, $boardId)) {
+		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
+		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_MANAGE);
+
+		if ($this->boardService->isArchived($this->stackMapper, $id)) {
 			throw new StatusException('Operation not allowed. This board is archived.');
 		}
+
 		$stack = $this->stackMapper->find($id);
 		$changes = new ChangeSet($stack);
 		$stack->setTitle($title);

@@ -5,18 +5,22 @@
     "No file was uploaded" : "எந்த கோப்பும் பதிவேற்றப்படவில்லை",
     "Missing a temporary folder" : "ஒரு தற்காலிகமான கோப்புறையை காணவில்லை",
     "Cancel" : "இரத்து செய்க",
+    "Close" : "மூடுக",
     "Details" : "விவரங்கள்",
     "Tags" : "சீட்டுகள்",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
+    "Owner" : "Owner",
     "Delete" : "நீக்குக",
     "Edit" : "தொகுக்க",
+    "Download" : "பதிவிறக்குக",
     "Modified" : "மாற்றப்பட்டது",
     "Today" : "இன்று",
     "Save" : "சேமிக்க ",
     "Update" : "இற்றைப்படுத்தல்",
     "Description" : "விவரிப்பு",
     "seconds ago" : "செக்கன்களுக்கு முன்",
-    "Shared with you" : "Shared with you"
+    "Shared with you" : "Shared with you",
+    "Share" : "பகிர்வு"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

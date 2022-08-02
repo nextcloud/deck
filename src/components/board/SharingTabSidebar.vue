@@ -1,7 +1,6 @@
 <template>
 	<div>
-		<Multiselect
-			v-if="canShare"
+		<Multiselect v-if="canShare"
 			v-model="addAcl"
 			:placeholder="t('deck', 'Share board with a user, group or circle …')"
 			:options="formatedSharees"
@@ -21,8 +20,7 @@
 			</template>
 		</Multiselect>
 
-		<ul
-			id="shareWithList"
+		<ul id="shareWithList"
 			class="shareWithList">
 			<li>
 				<Avatar :user="board.owner.uid" />
@@ -200,7 +198,7 @@ export default {
 		},
 		clickTransferOwner(newOwner) {
 			OC.dialogs.confirmDestructive(
-				t('deck', 'Are you sure you want to transfer the board {title} for {user}?', { title: this.board.title, user: newOwner }),
+				t('deck', 'Are you sure you want to transfer the board {title} to {user}?', { title: this.board.title, user: newOwner }),
 				t('deck', 'Transfer the board.'),
 				{
 					type: OC.dialogs.YES_NO_BUTTONS,
@@ -214,13 +212,13 @@ export default {
 							this.isLoading = true
 							await this.$store.dispatch('transferOwnership', {
 								boardId: this.board.id,
-								newOwner
+								newOwner,
 							})
-							const successMessage = t('deck', 'Transfer the board for {user} successfully', { user: newOwner })
+							const successMessage = t('deck', 'The board has been transferred to {user}', { user: newOwner })
 							showSuccess(successMessage)
 							this.$router.push({ name: 'main' })
 						} catch (e) {
-							const errorMessage = t('deck', 'Failed to transfer the board for {user}', { user: newOwner.user })
+							const errorMessage = t('deck', 'Failed to transfer the board to {user}', { user: newOwner.user })
 							showError(errorMessage)
 						} finally {
 							this.isLoading = false

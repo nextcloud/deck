@@ -173,7 +173,6 @@ OC.L10N.register(
     "Owner" : "Κάτοχος",
     "Delete" : "Διαγραφή",
     "Failed to create share with {displayName}" : "Αποτυχία δημιουργίας κοινής χρήσης με το {displayName}",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Είστε σίγουροι ότι θέλετε να μεταφέρετε τον πίνακα  {title} για {user}?  ",
     "Transfer" : "Μεταφορά",
     "Add a new list" : "Προσθήκη νέας λίστας",
     "Archive all cards" : "Αρχειοθέτηση όλων των καρτελών.",
@@ -290,9 +289,7 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Μοιραστείτε το {file} με μια καρτέλα Deck",
     "Share" : "Μοιραστείτε",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Το Deck είναι ένα εργαλείο οργάνωσης τύπου kanban με στόχο τον προσωπικό προγραμματισμό και την  οργάνωση έργων για ομάδες που έχουν ενσωματωθεί στο Nextcloud.\n\n\n- 📥 Προσθέστε τις εργασίες σας στις καρτέλες και βάλτε τες στη σειρά\n- 📄 Γράψτε τις πρόσθετες σημειώσεις\n- 🔖 Αντιστοιχίστε τις ετικέτες για ακόμη καλύτερη οργάνωση\n- 👥 Μοιραστείτε με την ομάδα, φίλους ή την οικογένειά σας\n- 📎 Συνδέστε αρχεία και ενσωματώστε τα στην περιγραφή\n- 💬 Συζητήστε με την ομάδα σας χρησιμοποιώντας σχόλια\n- ⚡ Παρακολουθήστε τις αλλαγές στη ροή δραστηριοτήτων\n- 🚀 Έχετε τα όλα οργανωμένα",
-    "Creating the new card…" : "Δημιουργία νέας καρτέλας...",
-    "\"{card}\" was added to \"{board}\"" : "\"{card}\" προστέθηκε στο \"{board}\"",
-    "(circle)" : "(κύκλος)",
-    "This week" : "Αυτή την εβδομάδα"
+    "This week" : "Αυτή την εβδομάδα",
+    "Are you sure you want to transfer the board {title} for {user}?" : "Είστε σίγουροι ότι θέλετε να μεταφέρετε τον πίνακα  {title} για {user}?  "
 },
 "nplurals=2; plural=(n != 1);");

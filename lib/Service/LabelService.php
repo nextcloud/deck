@@ -91,12 +91,10 @@ class LabelService {
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
 
 		$boardLabels = $this->labelMapper->findAll($boardId);
-		if (\is_array($boardLabels)) {
-			foreach ($boardLabels as $boardLabel) {
-				if ($boardLabel->getTitle() === $title) {
-					throw new BadRequestException('title must be unique');
-					break;
-				}
+		foreach ($boardLabels as $boardLabel) {
+			if ($boardLabel->getTitle() === $title) {
+				throw new BadRequestException('title must be unique');
+				break;
 			}
 		}
 
@@ -163,15 +161,13 @@ class LabelService {
 		$label = $this->find($id);
 
 		$boardLabels = $this->labelMapper->findAll($label->getBoardId());
-		if (\is_array($boardLabels)) {
-			foreach ($boardLabels as $boardLabel) {
-				if ($boardLabel->getId() === $label->getId()) {
-					continue;
-				}
-				if ($boardLabel->getTitle() === $title) {
-					throw new BadRequestException('title must be unique');
-					break;
-				}
+		foreach ($boardLabels as $boardLabel) {
+			if ($boardLabel->getId() === $label->getId()) {
+				continue;
+			}
+			if ($boardLabel->getTitle() === $title) {
+				throw new BadRequestException('title must be unique');
+				break;
 			}
 		}
 

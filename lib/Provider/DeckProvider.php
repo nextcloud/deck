@@ -54,22 +54,11 @@ use OCP\IURLGenerator;
 class DeckProvider implements IFullTextSearchProvider {
 	public const DECK_PROVIDER_ID = 'deck';
 
-
-	/** @var IL10N */
-	private $l10n;
-
-	/** @var IUrlGenerator */
-	private $urlGenerator;
-
-	/** @var FullTextSearchService */
-	private $fullTextSearchService;
-
-
-	/** @var IRunner */
-	private $runner;
-
-	/** @var IIndexOptions */
-	private $indexOptions = [];
+	private IL10N $l10n;
+	private IUrlGenerator $urlGenerator;
+	private FullTextSearchService $fullTextSearchService;
+	private ?IRunner $runner = null;
+	private ?IIndexOptions $indexOptions = null;
 
 
 	/**

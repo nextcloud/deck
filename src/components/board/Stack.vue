@@ -23,19 +23,29 @@
 
 <template>
 	<div class="stack">
-		<div v-click-outside="stopCardCreation" class="stack__header" :class="{'stack__header--add': showAddCard }">
+		<div v-click-outside="stopCardCreation"
+			class="stack__header"
+			:class="{'stack__header--add': showAddCard }"
+			tabindex="0"
+			:aria-label="stack.title">
 			<transition name="fade" mode="out-in">
 				<h3 v-if="!canManage || isArchived">
 					{{ stack.title }}
 				</h3>
 				<h3 v-else-if="!editing"
 					v-tooltip="stack.title"
+					tabindex="0"
+					:aria-label="stack.title"
 					class="stack__title"
-					@click="startEditing(stack)">
+					@click="startEditing(stack)"
+					@keydown.enter="startEditing(stack)">
 					{{ stack.title }}
 				</h3>
 				<form v-else @submit.prevent="finishedEdit(stack)">
-					<input v-model="copiedStack.title" v-focus type="text">
+					<input v-model="copiedStack.title"
+						v-focus
+						type="text"
+						required="required">
 					<input v-tooltip="t('deck', 'Add a new list')"
 						class="icon-confirm"
 						type="submit"
@@ -44,9 +54,15 @@
 			</transition>
 			<Actions v-if="canManage && !isArchived" :force-menu="true">
 				<ActionButton v-if="!showArchived" icon="icon-archive" @click="modalArchivAllCardsShow=true">
+					<template #icon>
+						<ArchiveIcon decorative />
+					</template>
 					{{ t('deck', 'Archive all cards') }}
 				</ActionButton>
-				<ActionButton v-if="showArchived" icon="icon-archive" @click="modalArchivAllCardsShow=true">
+				<ActionButton v-if="showArchived" @click="modalArchivAllCardsShow=true">
+          <template #icon>
+						<ArchiveIcon decorative />
+					</template>
 					{{ t('deck', 'Unarchive all cards') }}
 				</ActionButton>
 				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
@@ -111,12 +127,14 @@
 			non-drag-area-selector=".dragDisabled"
 			:drag-handle-selector="dragHandleSelector"
 			@should-accept-drop="canEdit"
+			@drag-start="draggingCard = true"
+			@drag-end="draggingCard = false"
 			@drop="($event) => onDropCard(stack.id, $event)">
 			<Draggable v-for="card in cardsByStack" :key="card.id">
 				<transition :appear="animate && !card.animated && (card.animated=true)"
 					:appear-class="'zoom-appear-class'"
 					:appear-active-class="'zoom-appear-active-class'">
-					<CardItem :id="card.id" />
+					<CardItem :id="card.id" :dragging="draggingCard" />
 				</transition>
 			</Draggable>
 		</Container>
@@ -133,6 +151,7 @@ import { showError, showUndo } from '@nextcloud/dialogs'
 import CardItem from '../cards/CardItem'
 
 import '@nextcloud/dialogs/styles/toast.scss'
+import ArchiveIcon from 'vue-material-design-icons/Archive'
 
 export default {
 	name: 'Stack',
@@ -143,6 +162,7 @@ export default {
 		Container,
 		Draggable,
 		Modal,
+		ArchiveIcon,
 	},
 
 	props: {
@@ -154,6 +174,7 @@ export default {
 	data() {
 		return {
 			editing: false,
+			draggingCard: false,
 			copiedStack: '',
 			newCardTitle: '',
 			showAddCard: false,
@@ -288,7 +309,7 @@ export default {
 	@import './../../css/variables';
 
 	.stack {
-		width: $stack-width + $stack-spacing*3;
+		width: $stack-width + $stack-spacing * 3;
 		margin-left: math.div($stack-spacing, 2);
 		margin-right: math.div($stack-spacing, 2);
 	}
@@ -337,36 +358,47 @@ export default {
 			flex-grow: 1;
 			display: flex;
 			cursor: inherit;
+			margin: 0;
 
 			input[type=text] {
 				flex-grow: 1;
 			}
 		}
-	}
 
-	.stack__title {
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		max-width: calc($stack-width - 60px);
+		h3.stack__title {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			max-width: calc($stack-width - 60px);
+			border-radius: 3px;
+			margin: 6px;
+			padding: 4px 4px;
+
+			&:focus {
+				outline: 2px solid var(--color-border-dark);
+				border-radius: 3px;
+			}
+		}
+
+		form {
+			margin: 2px 0;
+		}
 	}
 
 	.stack__card-add {
-		width: $stack-width;
 		height: 44px;
 		flex-shrink: 0;
 		z-index: 100;
 		display: flex;
-		margin-left: 12px;
-		margin-right: 12px;
 		margin-top: 5px;
 		margin-bottom: 20px;
 		background-color: var(--color-main-background);
 
 		form {
 			display: flex;
+			margin-left: 12px;
+			margin-right: 12px;
 			width: 100%;
-			margin: 0;
 			box-shadow: 0 0 3px var(--color-box-shadow);
 			border-radius: var(--border-radius-large);
 			overflow: hidden;

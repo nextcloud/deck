@@ -35,8 +35,7 @@
 
 		<template v-if="!deleted" slot="actions">
 			<template v-if="!isDueSubmenuActive">
-				<ActionButton
-					icon="icon-info"
+				<ActionButton icon="icon-info"
 					:close-after-click="true"
 					@click="actionDetails">
 					{{ t('deck', 'Board details') }}
@@ -48,21 +47,27 @@
 					{{ t('deck', 'Edit board') }}
 				</ActionButton>
 				<ActionButton v-if="canManage && !board.archived"
-					icon="icon-clone"
 					:close-after-click="true"
 					@click="actionClone">
+					<template #icon>
+						<CloneIcon :size="20" decorative />
+					</template>
 					{{ t('deck', 'Clone board') }}
 				</ActionButton>
 				<ActionButton v-if="canManage && board.archived"
-					icon="icon-archive"
 					:close-after-click="true"
 					@click="actionUnarchive">
+					<template #icon>
+						<ArchiveIcon :size="20" decorative />
+					</template>
 					{{ t('deck', 'Unarchive board') }}
 				</ActionButton>
 				<ActionButton v-else-if="canManage && !board.archived"
-					icon="icon-archive"
 					:close-after-click="true"
 					@click="actionArchive">
+					<template #icon>
+						<ArchiveIcon :size="20" decorative />
+					</template>
 					{{ t('deck', 'Archive board') }}
 				</ActionButton>
 
@@ -73,31 +78,27 @@
 
 			<!-- Due date reminder settings -->
 			<template v-if="isDueSubmenuActive">
-				<ActionButton
-					:icon="updateDueSetting ? 'icon-loading-small' : 'icon-view-previous'"
+				<ActionButton :icon="updateDueSetting ? 'icon-loading-small' : 'icon-view-previous'"
 					:disabled="updateDueSetting"
 					@click="isDueSubmenuActive=false">
 					{{ t('deck', 'Due date reminders') }}
 				</ActionButton>
 
-				<ActionButton
-					name="notification"
+				<ActionButton name="notification"
 					icon="icon-sound"
 					:disabled="updateDueSetting"
 					:class="{ 'forced-active': board.settings['notify-due'] === 'all' }"
 					@click="updateSetting('notify-due', 'all')">
 					{{ t('deck', 'All cards') }}
 				</ActionButton>
-				<ActionButton
-					name="notification"
+				<ActionButton name="notification"
 					icon="icon-user"
 					:disabled="updateDueSetting"
 					:class="{ 'forced-active': board.settings['notify-due'] === 'assigned' }"
 					@click="updateSetting('notify-due', 'assigned')">
 					{{ t('deck', 'Assigned cards') }}
 				</ActionButton>
-				<ActionButton
-					name="notification"
+				<ActionButton name="notification"
 					icon="icon-sound-off"
 					:disabled="updateDueSetting"
 					:class="{ 'forced-active': board.settings['notify-due'] === 'off' }"
@@ -138,6 +139,8 @@
 <script>
 import { AppNavigationIconBullet, AppNavigationCounter, AppNavigationItem, ColorPicker, Actions, ActionButton } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
+import ArchiveIcon from 'vue-material-design-icons/Archive'
+import CloneIcon from 'vue-material-design-icons/ContentDuplicate'
 
 export default {
 	name: 'AppNavigationBoard',
@@ -148,6 +151,8 @@ export default {
 		ColorPicker,
 		Actions,
 		ActionButton,
+		ArchiveIcon,
+		CloneIcon,
 	},
 	directives: {
 		ClickOutside,

@@ -1,0 +1,9 @@
+.icon-deck {
+	background-image: url(../img/deck-dark.svg);
+	filter: var(--background-invert-if-dark);
+}
+
+.icon-deck-white, .icon-deck.icon-white {
+	background-image: url(../img/deck.svg);
+	filter: var(--background-invert-if-dark);
+}

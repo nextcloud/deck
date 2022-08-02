@@ -1,7 +1,11 @@
 name: Package build
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
+      - master
+      - stable*
 
 jobs:
   build:
@@ -20,7 +24,7 @@ jobs:
     - name: Set up npm7
       run: npm i -g npm@7
     - name: Setup PHP
-      uses: shivammathur/setup-php@2.18.0
+      uses: shivammathur/setup-php@2.21.1
       with:
         php-version: '7.4'
         tools: composer

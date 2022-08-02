@@ -39,7 +39,10 @@
 				</ActionButton>
 			</Actions>
 			<Actions v-if="canEdit">
-				<ActionButton v-if="descriptionEditing" icon="icon-attach" @click="showAttachmentModal()">
+				<ActionButton v-if="descriptionEditing" @click="showAttachmentModal()">
+					<template #icon>
+						<PaperclipIcon :size="24" decorative />
+					</template>
 					{{ t('deck', 'Add Attachment') }}
 				</ActionButton>
 			</Actions>
@@ -63,8 +66,7 @@
 		<Modal v-if="modalShow" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
 			<div class="modal__content">
 				<h3>{{ t('deck', 'Choose attachment') }}</h3>
-				<AttachmentList
-					:card-id="card.id"
+				<AttachmentList :card-id="card.id"
 					:selectable="true"
 					@select-attachment="addAttachment" />
 			</div>
@@ -74,18 +76,19 @@
 
 <script>
 import MarkdownIt from 'markdown-it'
-import MarkdownItTaskLists from 'markdown-it-task-lists'
+import MarkdownItTaskCheckbox from 'markdown-it-task-checkbox'
 import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
 import AttachmentList from './AttachmentList'
 import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
 import { mapState, mapGetters } from 'vuex'
+import PaperclipIcon from 'vue-material-design-icons/Paperclip'
 
 const markdownIt = new MarkdownIt({
 	linkify: true,
 })
-markdownIt.use(MarkdownItTaskLists, { enabled: true, label: true, labelAfter: true })
+markdownIt.use(MarkdownItTaskCheckbox, { disabled: false, idPrefix: 'task-item-', ulClass: 'contains-task-list' })
 
 markdownIt.use(MarkdownItLinkAttributes, {
 	attrs: {
@@ -102,6 +105,7 @@ export default {
 		ActionButton,
 		Modal,
 		AttachmentList,
+		PaperclipIcon,
 	},
 	props: {
 		card: {
@@ -264,6 +268,7 @@ export default {
 	overflow-x: auto;
 
 	&::v-deep {
+		/* stylelint-disable-next-line no-invalid-position-at-import-rule */
 		@import './../../css/markdown';
 	}
 
@@ -322,6 +327,12 @@ h5 {
 
 .CodeMirror-cursor {
 	border-left: 1px solid var(--color-main-text);
+}
+
+.CodeMirror-selected,
+.CodeMirror-line::selection, .CodeMirror-line>span::selection, .CodeMirror-line>span>span::selection {
+	background: var(--color-primary-element) !important;
+	color: var(--color-primary-text) !important;
 }
 
 .editor-preview,

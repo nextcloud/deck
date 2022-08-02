@@ -55,9 +55,6 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 		$this->circleService = $circleService;
 	}
 
-	/**
-	 * @return Assignment[]
-	 */
 	public function findAll(int $cardId): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
@@ -80,8 +77,8 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 	}
 
 
-	public function isOwner($userId, $cardId): bool {
-		return $this->cardMapper->isOwner($userId, $cardId);
+	public function isOwner($userId, $id): bool {
+		return $this->cardMapper->isOwner($userId, $id);
 	}
 
 	public function findBoardId($id): ?int {

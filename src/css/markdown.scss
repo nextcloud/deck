@@ -25,6 +25,10 @@ ul {
 	.task-list-item {
 		margin-left: -20px;
 		list-style-type: none;
+
+		ul {
+			padding-left: 20px;
+		}
 	}
 }
 

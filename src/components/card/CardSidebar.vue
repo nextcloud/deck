@@ -57,13 +57,14 @@
 
 		<AppSidebarTab id="attachments"
 			:order="1"
-			:name="t('deck', 'Attachments')"
-			icon="icon-attach">
+			:name="t('deck', 'Attachments')">
+			<template #icon>
+				<AttachmentIcon size="20" decorative />
+			</template>
 			<CardSidebarTabAttachments :card="currentCard" />
 		</AppSidebarTab>
 
-		<AppSidebarTab
-			id="comments"
+		<AppSidebarTab id="comments"
 			:order="2"
 			:name="t('deck', 'Comments')"
 			icon="icon-comment">
@@ -90,6 +91,7 @@ import CardSidebarTabComments from './CardSidebarTabComments'
 import CardSidebarTabActivity from './CardSidebarTabActivity'
 import relativeDate from '../../mixins/relativeDate'
 import moment from '@nextcloud/moment'
+import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
 
 import { showError } from '@nextcloud/dialogs'
 import { getLocale } from '@nextcloud/l10n'
@@ -106,6 +108,7 @@ export default {
 		CardSidebarTabComments,
 		CardSidebarTabActivity,
 		CardSidebarTabDetails,
+		AttachmentIcon,
 	},
 	mixins: [relativeDate],
 	props: {
@@ -217,14 +220,18 @@ export default {
 	.modal__card .app-sidebar {
 		$modal-padding: 14px;
 		border: 0;
-		min-width: calc(100% - #{$modal-padding*2});
+		min-width: calc(100% - #{$modal-padding * 2});
 		position: relative;
 		top: 0;
 		left: 0;
 		right: 0;
-		max-width: calc(100% - #{$modal-padding*2});
+		max-width: calc(100% - #{$modal-padding * 2});
 		padding: 0 14px;
 		max-height: 100%;
+		overflow: initial;
+		user-select: text;
+		-webkit-user-select: text;
+
 		&::v-deep {
 			.app-sidebar-header {
 				position: sticky;
@@ -238,6 +245,10 @@ export default {
 				margin: 0;
 				z-index: 100;
 				background-color: var(--color-main-background);
+			}
+
+			.app-sidebar__tab {
+				overflow: initial;
 			}
 
 			#emptycontent, .emptycontent {

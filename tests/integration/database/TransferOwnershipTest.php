@@ -7,6 +7,10 @@ use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
+use OCP\IGroupManager;
+use OCP\IUserManager;
+use OCP\IUserSession;
+use OCP\Server;
 
 /**
  * @group DB
@@ -38,7 +42,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 
 		$backend = new \Test\Util\User\Dummy();
 		\OC_User::useBackend($backend);
-		\OC::$server->getUserManager()->registerBackend($backend);
+		Server::get(IUserManager::class)->registerBackend($backend);
 		$backend->createUser(self::TEST_USER_1, self::TEST_USER_1);
 		$backend->createUser(self::TEST_USER_2, self::TEST_USER_2);
 		$backend->createUser(self::TEST_USER_3, self::TEST_USER_3);
@@ -46,17 +50,17 @@ class TransferOwnershipTest extends \Test\TestCase {
 		$groupBackend = new \Test\Util\Group\Dummy();
 		$groupBackend->createGroup(self::TEST_GROUP);
 		$groupBackend->addToGroup(self::TEST_USER_1, self::TEST_GROUP);
-		\OC::$server->getGroupManager()->addBackend($groupBackend);
+		Server::get(IGroupManager::class)->addBackend($groupBackend);
 	}
 
 	public function setUp(): void {
 		parent::setUp();
-		\OC::$server->getUserSession()->login(self::TEST_USER_1, self::TEST_USER_1);
-		$this->boardService = \OC::$server->query(BoardService::class);
-		$this->stackService = \OC::$server->query(StackService::class);
-		$this->cardService = \OC::$server->query(CardService::class);
-		$this->assignmentService = \OC::$server->query(AssignmentService::class);
-		$this->assignmentMapper = \OC::$server->query(AssignmentMapper::class);
+		Server::get(IUserSession::class)->login(self::TEST_USER_1, self::TEST_USER_1);
+		$this->boardService = Server::get(BoardService::class);
+		$this->stackService = Server::get(StackService::class);
+		$this->cardService = Server::get(CardService::class);
+		$this->assignmentService = Server::get(AssignmentService::class);
+		$this->assignmentMapper = Server::get(AssignmentMapper::class);
 		$this->createBoardWithExampleData();
 	}
 

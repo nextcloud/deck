@@ -70,130 +70,135 @@
 				</form>
 			</div>
 			<div v-if="board" class="board-action-buttons">
-				<Popover @show="filterVisible=true" @hide="filterVisible=false">
-					<Actions slot="trigger" :title="t('deck', 'Apply filter')">
-						<ActionButton v-if="isFilterActive" icon="icon-filter_set" />
-						<ActionButton v-else icon="icon-filter" />
-					</Actions>
-
-					<div v-if="filterVisible" class="filter">
-						<h3>{{ t('deck', 'Filter by tag') }}</h3>
-						<div v-for="label in labelsSorted" :key="label.id" class="filter--item">
-							<input
-								:id="label.id"
-								v-model="filter.tags"
-								type="checkbox"
-								class="checkbox"
-								:value="label.id"
-								@change="setFilter">
-							<label :for="label.id"><span class="label" :style="labelStyle(label)">{{ label.title }}</span></label>
-						</div>
-
-						<h3>{{ t('deck', 'Filter by assigned user') }}</h3>
-						<div class="filter--item">
-							<input
-								id="unassigned"
-								v-model="filter.unassigned"
-								type="checkbox"
-								class="checkbox"
-								value="unassigned"
-								@change="setFilter"
-								@click="beforeSetFilter">
-							<label for="unassigned">{{ t('deck', 'Unassigned') }}</label>
-						</div>
-						<div v-for="user in board.users" :key="user.uid" class="filter--item">
-							<input
-								:id="user.uid"
-								v-model="filter.users"
-								type="checkbox"
-								class="checkbox"
-								:value="user.uid"
-								@change="setFilter">
-							<label :for="user.uid"><Avatar :user="user.uid" :size="24" :disable-menu="true" /> {{ user.displayname }}</label>
-						</div>
-
-						<h3>{{ t('deck', 'Filter by due date') }}</h3>
-
-						<div class="filter--item">
-							<input
-								id="overdue"
-								v-model="filter.due"
-								type="radio"
-								class="radio"
-								value="overdue"
-								@change="setFilter"
-								@click="beforeSetFilter">
-							<label for="overdue">{{ t('deck', 'Overdue') }}</label>
-						</div>
-
-						<div class="filter--item">
-							<input
-								id="dueToday"
-								v-model="filter.due"
-								type="radio"
-								class="radio"
-								value="dueToday"
-								@change="setFilter"
-								@click="beforeSetFilter">
-							<label for="dueToday">{{ t('deck', 'Next 24 hours') }}</label>
-						</div>
-
-						<div class="filter--item">
-							<input
-								id="dueWeek"
-								v-model="filter.due"
-								type="radio"
-								class="radio"
-								value="dueWeek"
-								@change="setFilter"
-								@click="beforeSetFilter">
-							<label for="dueWeek">{{ t('deck', 'Next 7 days') }}</label>
-						</div>
-
-						<div class="filter--item">
-							<input
-								id="dueMonth"
-								v-model="filter.due"
-								type="radio"
-								class="radio"
-								value="dueMonth"
-								@change="setFilter"
-								@click="beforeSetFilter">
-							<label for="dueMonth">{{ t('deck', 'Next 30 days') }}</label>
-						</div>
-
-						<div class="filter--item">
-							<input
-								id="noDue"
-								v-model="filter.due"
-								type="radio"
-								class="radio"
-								value="noDue"
-								@change="setFilter"
-								@click="beforeSetFilter">
-							<label for="noDue">{{ t('deck', 'No due date') }}</label>
-						</div>
-
-						<Button :disabled="!isFilterActive" @click="clearFilter">
-							{{ t('deck', 'Clear filter') }}
+				<div class="board-action-buttons__filter">
+					<Popover container=".board-action-buttons__filter"
+						:placement="'bottom-end'"
+						:aria-label="t('deck', 'Active filters')"
+						@show="filterVisible=true"
+						@hide="filterVisible=false">
+						<!-- We cannot use Actions here are the popover trigger does not update on reactive icons -->
+						<Button slot="trigger"
+							:title="t('deck', 'Apply filter')"
+							class="filter-button"
+							type="tertiary-no-background">
+							<template #icon>
+								<FilterIcon v-if="isFilterActive" :size="20" decorative />
+								<FilterOffIcon v-else :size="20" decorative />
+							</template>
 						</Button>
-					</div>
-				</Popover>
+
+						<div v-if="filterVisible" class="filter">
+							<h3>{{ t('deck', 'Filter by tag') }}</h3>
+							<div v-for="label in labelsSorted" :key="label.id" class="filter--item">
+								<input :id="label.id"
+									v-model="filter.tags"
+									type="checkbox"
+									class="checkbox"
+									:value="label.id"
+									@change="setFilter">
+								<label :for="label.id"><span class="label" :style="labelStyle(label)">{{ label.title }}</span></label>
+							</div>
+
+							<h3>{{ t('deck', 'Filter by assigned user') }}</h3>
+							<div class="filter--item">
+								<input id="unassigned"
+									v-model="filter.unassigned"
+									type="checkbox"
+									class="checkbox"
+									value="unassigned"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="unassigned">{{ t('deck', 'Unassigned') }}</label>
+							</div>
+							<div v-for="user in board.users" :key="user.uid" class="filter--item">
+								<input :id="user.uid"
+									v-model="filter.users"
+									type="checkbox"
+									class="checkbox"
+									:value="user.uid"
+									@change="setFilter">
+								<label :for="user.uid"><Avatar :user="user.uid" :size="24" :disable-menu="true" /> {{ user.displayname }}</label>
+							</div>
+
+							<h3>{{ t('deck', 'Filter by due date') }}</h3>
+
+							<div class="filter--item">
+								<input id="overdue"
+									v-model="filter.due"
+									type="radio"
+									class="radio"
+									value="overdue"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="overdue">{{ t('deck', 'Overdue') }}</label>
+							</div>
+
+							<div class="filter--item">
+								<input id="dueToday"
+									v-model="filter.due"
+									type="radio"
+									class="radio"
+									value="dueToday"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="dueToday">{{ t('deck', 'Next 24 hours') }}</label>
+							</div>
+
+							<div class="filter--item">
+								<input id="dueWeek"
+									v-model="filter.due"
+									type="radio"
+									class="radio"
+									value="dueWeek"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="dueWeek">{{ t('deck', 'Next 7 days') }}</label>
+							</div>
+
+							<div class="filter--item">
+								<input id="dueMonth"
+									v-model="filter.due"
+									type="radio"
+									class="radio"
+									value="dueMonth"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="dueMonth">{{ t('deck', 'Next 30 days') }}</label>
+							</div>
+
+							<div class="filter--item">
+								<input id="noDue"
+									v-model="filter.due"
+									type="radio"
+									class="radio"
+									value="noDue"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="noDue">{{ t('deck', 'No due date') }}</label>
+							</div>
+
+							<Button :disabled="!isFilterActive" :wide="true" @click="clearFilter">
+								{{ t('deck', 'Clear filter') }}
+							</Button>
+						</div>
+					</Popover>
+				</div>
 
 				<Actions>
-					<ActionButton
-						icon="icon-archive"
-						@click="toggleShowArchived">
+					<ActionButton @click="toggleShowArchived">
+						<template #icon>
+							<ArchiveIcon :size="20" decorative />
+						</template>
 						{{ showArchived ? t('deck', 'Hide archived cards') : t('deck', 'Show archived cards') }}
 					</ActionButton>
 					<ActionButton v-if="compactMode"
-						icon="icon-toggle-compact-collapsed"
 						@click="toggleCompactMode">
+						<ArrowExpandVerticalIcon slot="icon" :size="20" decorative />
 						{{ t('deck', 'Toggle compact mode') }}
 					</ActionButton>
 					<ActionButton v-else
-						icon="icon-toggle-compact-expanded"
 						@click="toggleCompactMode">
+						<ArrowCollapseVerticalIcon slot="icon" :size="20" decorative />
 						{{ t('deck', 'Toggle compact mode') }}
 					</ActionButton>
 				</Actions>
@@ -208,14 +213,29 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Actions, ActionButton, Popover, Avatar } from '@nextcloud/vue'
+import { Actions, ActionButton, Avatar, Button, Popover } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle'
 import CardCreateDialog from '../CardCreateDialog'
+import ArchiveIcon from 'vue-material-design-icons/Archive'
+import FilterIcon from 'vue-material-design-icons/Filter'
+import FilterOffIcon from 'vue-material-design-icons/FilterOff'
+import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVertical'
+import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertical'
 
 export default {
 	name: 'Controls',
 	components: {
-		Actions, ActionButton, Popover, Avatar, CardCreateDialog,
+		Actions,
+		ActionButton,
+		Button,
+		Popover,
+		Avatar,
+		CardCreateDialog,
+		ArchiveIcon,
+		FilterIcon,
+		FilterOffIcon,
+		ArrowCollapseVerticalIcon,
+		ArrowExpandVerticalIcon,
 	},
 	mixins: [labelStyle],
 	props: {
@@ -258,17 +278,11 @@ export default {
 			}
 		},
 		isFilterActive() {
-			if (this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '') {
-				return true
-			}
-			return false
+			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== ''
 		},
 		labelsSorted() {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
-	},
-	beforeDestroy() {
-		this.setPageTitle('')
 	},
 	watch: {
 		board(current, previous) {
@@ -279,6 +293,9 @@ export default {
 				this.setPageTitle(current.title)
 			}
 		},
+	},
+	beforeDestroy() {
+		this.setPageTitle('')
 	},
 	methods: {
 		beforeSetFilter(e) {
@@ -408,12 +425,6 @@ export default {
 
 	.board-action-buttons {
 		display: flex;
-		button {
-			border: 0;
-			width: 44px;
-			margin: 0 0 0 -1px;
-			background-color: transparent;
-		}
 	}
 
 	.deck-search {
@@ -441,8 +452,9 @@ export default {
 	}
 
 	.filter {
-		width: 250px;
-		max-height: 80vh;
+		width: 240px;
+		max-height: calc(100vh - 150px);
+		position: relative;
 		overflow: auto;
 		padding: 8px;
 	}
@@ -451,8 +463,23 @@ export default {
 		margin-top: 0px;
 		margin-bottom: 5px;
 	}
+
+	.filter-button {
+	  padding: 0;
+	  border-radius: 50%;
+	  width: 44px;
+	  height: 44px;
+
+		&:hover, &:focus {
+			background-color: rgba(127,127,127,0.25) !important;
+		}
+	}
 </style>
 <style lang="scss">
+	.popover:focus {
+		outline: 2px solid var(--color-main-text);
+	}
+
 	.tooltip-inner.popover-inner {
 		text-align: left;
 	}

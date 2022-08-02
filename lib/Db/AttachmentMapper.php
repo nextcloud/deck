@@ -30,7 +30,6 @@ use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IUserManager;
-use PDO;
 
 class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	private $cardMapper;
@@ -52,70 +51,53 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param $id
-	 * @return Entity|Attachment
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @param int $id
+	 * @return Attachment
+	 * @throws DoesNotExistException
+	 * @throws MultipleObjectsReturnedException
+	 * @throws \OCP\DB\Exception
 	 */
 	public function find($id) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
-			->from('deck_attachment')
+			->from($this->getTableName())
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
-		$cursor = $qb->execute();
-		$row = $cursor->fetch(PDO::FETCH_ASSOC);
-		if ($row === false) {
-			$cursor->closeCursor();
-			throw new DoesNotExistException('Did expect one result but found none when executing' . $qb);
-		}
-
-		$row2 = $cursor->fetch();
-		$cursor->closeCursor();
-		if ($row2 !== false) {
-			throw new MultipleObjectsReturnedException('Did not expect more than one result when executing' . $query);
-		}
-
-		return $this->mapRowToEntity($row);
-	}
-
-	public function findByData($cardId, $data) {
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
-				->from('deck_attachment')
-				->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
-				->andWhere($qb->expr()->eq('data', $qb->createNamedParameter($data, IQueryBuilder::PARAM_STR)));
-		$cursor = $qb->execute();
-		$row = $cursor->fetch(PDO::FETCH_ASSOC);
-		if ($row === false) {
-			$cursor->closeCursor();
-			throw new DoesNotExistException('Did expect one result but found none when executing' . $qb);
-		}
-		$cursor->closeCursor();
-		return $this->mapRowToEntity($row);
+		return $this->findEntity($qb);
 	}
 
 	/**
-	 * Find all attachments for a card
-	 *
+	 * @param int $cardId
+	 * @param string $data
+	 * @return Attachment
+	 * @throws DoesNotExistException
+	 * @throws MultipleObjectsReturnedException
+	 * @throws \OCP\DB\Exception
+	 */
+	public function findByData($cardId, $data) {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+				->from($this->getTableName())
+				->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
+				->andWhere($qb->expr()->eq('data', $qb->createNamedParameter($data, IQueryBuilder::PARAM_STR)));
+
+		return $this->findEntity($qb);
+	}
+
+	/**
 	 * @param $cardId
-	 * @return array
+	 * @return Entity[]
+	 * @throws \OCP\DB\Exception
 	 */
 	public function findAll($cardId) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
-			->from('deck_attachment')
+			->from($this->getTableName())
 			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 
 
-		$entities = [];
-		$cursor = $qb->execute();
-		while ($row = $cursor->fetch()) {
-			$entities[] = $this->mapRowToEntity($row);
-		}
-		$cursor->closeCursor();
-		return $entities;
+		return $this->findEntities($qb);
 	}
 
 	/**
@@ -128,7 +110,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 		$timeLimit = time() - (60 * 5);
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
-			->from('deck_attachment')
+			->from($this->getTableName())
 			->where($qb->expr()->gt('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		if ($withOffset) {
 			$qb
@@ -139,13 +121,7 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 				->andWhere($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)));
 		}
 
-		$entities = [];
-		$cursor = $qb->execute();
-		while ($row = $cursor->fetch()) {
-			$entities[] = $this->mapRowToEntity($row);
-		}
-		$cursor->closeCursor();
-		return $entities;
+		return $this->findEntities($qb);
 	}
 
 

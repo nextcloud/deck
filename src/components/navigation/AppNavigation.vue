@@ -23,26 +23,25 @@
 <template>
 	<AppNavigationVue :class="{'icon-loading': loading}">
 		<template #list>
-			<AppNavigationItem
-				:title="t('deck', 'Upcoming cards')"
+			<AppNavigationItem :title="t('deck', 'Upcoming cards')"
 				icon="icon-calendar-dark"
 				:exact="true"
 				to="/" />
-			<AppNavigationBoardCategory
-				id="deck-navigation-all"
+			<AppNavigationBoardCategory id="deck-navigation-all"
 				to="/board"
 				:text="t('deck', 'All boards')"
 				:boards="noneArchivedBoards"
 				:open-on-add-boards="true"
 				icon="icon-deck" />
-			<AppNavigationBoardCategory
-				id="deck-navigation-archived"
+			<AppNavigationBoardCategory id="deck-navigation-archived"
 				to="/board/archived"
 				:text="t('deck', 'Archived boards')"
-				:boards="archivedBoards"
-				icon="icon-archive" />
-			<AppNavigationBoardCategory
-				id="deck-navigation-shared"
+				:boards="archivedBoards">
+				<template #icon>
+					<ArchiveIcon :size="20" decorative />
+				</template>
+			</AppNavigationBoardCategory>
+			<AppNavigationBoardCategory id="deck-navigation-shared"
 				to="/board/shared"
 				:text="t('deck', 'Shared with you')"
 				:boards="sharedBoards"
@@ -50,7 +49,7 @@
 			<AppNavigationAddBoard v-if="canCreate" />
 		</template>
 		<template #footer>
-			<AppNavigationSettings>
+			<AppNavigationSettings :title="t('deck', 'Deck settings')">
 				<div>
 					<div>
 						<input id="toggle-modal"
@@ -102,6 +101,7 @@ import AppNavigationBoardCategory from './AppNavigationBoardCategory'
 import { loadState } from '@nextcloud/initial-state'
 import { generateOcsUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
+import ArchiveIcon from 'vue-material-design-icons/Archive'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -114,6 +114,7 @@ export default {
 		AppNavigationBoardCategory,
 		Multiselect,
 		AppNavigationItem,
+		ArchiveIcon,
 	},
 	directives: {
 		ClickOutside,

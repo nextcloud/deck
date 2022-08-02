@@ -21,6 +21,7 @@
  */
 import { showError } from '@nextcloud/dialogs'
 import { formatFileSize } from '@nextcloud/files'
+// eslint-disable-next-line import/no-unresolved, node/no-missing-import
 import PQueue from 'p-queue'
 
 const queue = new PQueue({ concurrency: 2 })

@@ -27,6 +27,44 @@ use DateTime;
 use DateTimeZone;
 use Sabre\VObject\Component\VCalendar;
 
+/**
+ * @method string getTitle()
+ * @method string getDescription()
+ * @method string getDescriptionPrev()
+ * @method int getStackId()
+ * @method int getOrder()
+ * @method int getLastModified()
+ * @method int getCreatedAt()
+ * @method bool getArchived()
+ * @method bool getNotified()
+ *
+ * @method void setLabels(Label[] $labels)
+ * @method null|Label[] getLabels()
+ *
+ * @method void setAssignedUsers(Assignment[] $users)
+ * @method null|User[] getAssignedUsers()
+ *
+ * @method void setAttachments(Attachment[] $attachments)
+ * @method null|Attachment[] getAttachments()
+ *
+ * @method void setAttachmentCount(int $count)
+ * @method null|int getAttachmentCount()
+ *
+ * @method void setCommentsUnread(int $count)
+ * @method null|int getCommentsUnread()
+ *
+ * @method void setCommentsCount(int $count)
+ * @method null|int getCommentsCount()
+ *
+ * @method void setOwner(string $user)
+ * @method null|string getOwner()
+ *
+ * @method void setRelatedStack(Stack $stack)
+ * @method null|Stack getRelatedStack()
+ *
+ * @method void setRelatedBoard(Board $board)
+ * @method null|Board getRelatedBoard()
+ */
 class Card extends RelationalEntity {
 	public const TITLE_MAX_LENGTH = 255;
 
@@ -70,6 +108,7 @@ class Card extends RelationalEntity {
 		$this->addType('archived', 'boolean');
 		$this->addType('notified', 'boolean');
 		$this->addType('deletedAt', 'integer');
+		$this->addType('duedate', 'string');
 		$this->addRelation('labels');
 		$this->addRelation('assignedUsers');
 		$this->addRelation('attachments');
@@ -87,48 +126,18 @@ class Card extends RelationalEntity {
 		$this->databaseType = $type;
 	}
 
-	public function getDuedate($isoFormat = false) {
-		if ($this->duedate === null) {
-			return null;
-		}
-		$dt = new DateTime($this->duedate);
-		if (!$isoFormat && $this->databaseType === 'mysql') {
-			return $dt->format('Y-m-d H:i:s');
-		}
-		return $dt->format('c');
+	public function getDueDateTime(): ?DateTime {
+		return $this->duedate ? new DateTime($this->duedate) : null;
 	}
 
-	public function jsonSerialize(): array {
-		$json = parent::jsonSerialize();
-		$json['overdue'] = self::DUEDATE_FUTURE;
-		$due = $this->duedate ? strtotime($this->duedate) : false;
-		if ($due !== false) {
-			$today = new DateTime();
-			$today->setTime(0, 0);
-
-			$match_date = new DateTime($this->duedate);
-
-			$match_date->setTime(0, 0);
-
-			$diff = $today->diff($match_date);
-			$diffDays = (integer) $diff->format('%R%a'); // Extract days count in interval
-
-			if ($diffDays === 1) {
-				$json['overdue'] = self::DUEDATE_NEXT;
-			}
-			if ($diffDays === 0) {
-				$json['overdue'] = self::DUEDATE_NOW;
-			}
-			if ($diffDays < 0) {
-				$json['overdue'] = self::DUEDATE_OVERDUE;
-			}
+	public function getDuedate($isoFormat = false): ?string {
+		$dt = $this->getDueDateTime();
+		$format = 'c';
+		if (!$isoFormat && $this->databaseType === 'mysql') {
+			$format = 'Y-m-d H:i:s';
 		}
-		$json['duedate'] = $this->getDuedate(true);
-		unset($json['notified']);
-		unset($json['descriptionPrev']);
-		unset($json['relatedStack']);
-		unset($json['relatedBoard']);
-		return $json;
+
+		return $dt ? $dt->format($format) : null;
 	}
 
 	public function getCalendarObject(): VCalendar {

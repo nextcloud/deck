@@ -2,6 +2,14 @@ name: Integration tests
 
 on:
   pull_request:
+    paths:
+      - '.github/workflows/integration.yml'
+      - 'appinfo/**'
+      - 'lib/**'
+      - 'templates/**'
+      - 'tests/**'
+      - 'composer.json'
+      - 'composer.lock'
   push:
     branches:
       - master
@@ -62,7 +70,7 @@ jobs:
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@2.18.0
+        uses: shivammathur/setup-php@2.21.1
         with:
           php-version: ${{ matrix.php-versions }}
           tools: phpunit

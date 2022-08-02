@@ -1,6 +1,59 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+## 1.7.0
+
+### Added
+
+- Transfer ownership @matchish @luka-nextcloud @juliushaertl [#2496](https://github.com/nextcloud/deck/pull/2496)
+- Import from trello via CLI @vitormattos [#3182](https://github.com/nextcloud/deck/pull/3182)
+- Add app config to toggle the default calendar setting as an admin @juliushaertl [#3528](https://github.com/nextcloud/deck/pull/3528)
+- Show board name in browser title @luka-nextcloud [#3499](https://github.com/nextcloud/deck/pull/3499)
+- Move DeleteCron to be time insensitive @juliushaertl [#3599](https://github.com/nextcloud/deck/pull/3599)
+- 🚸 Shows error on board fetchData @vinicius73 [#3653](https://github.com/nextcloud/deck/pull/3653)
+- Add support for PHP 8.1 @juliushaertl [#3601](https://github.com/nextcloud/deck/pull/3601)
+- Nextcloud 24 compatibility
+
+### Fixed
+
+- CardApiController: Fix order of optional parameters @simonspa [#3512](https://github.com/nextcloud/deck/pull/3512)
+- Exclude deleted boards in the selection for target @luka-nextcloud [#3502](https://github.com/nextcloud/deck/pull/3502)
+- Fix CalDAV blocking and modernize circles API usage @juliushaertl [#3500](https://github.com/nextcloud/deck/pull/3500)
+- Timestamps on created and modified at values @luka-nextcloud [#3532](https://github.com/nextcloud/deck/pull/3532)
+- return the selector for collections @dartcafe [#3552](https://github.com/nextcloud/deck/pull/3552)
+- Generate fixed link for activity emails @luka-nextcloud [#3611](https://github.com/nextcloud/deck/pull/3611)
+- 🐛 Fix missing files sidebar @vinicius73 [#3635](https://github.com/nextcloud/deck/pull/3635)
+- Handle description shortening more gracefully @juliushaertl [#3650](https://github.com/nextcloud/deck/pull/3650)
+- Sort boards non case sensitive @Ben-Ro [#3560](https://github.com/nextcloud/deck/pull/3560)
+- Remove unused argument from transfer ownership @juliushaertl [#3712](https://github.com/nextcloud/deck/pull/3712)
+- Fix: Check all circle shares for permissions @bink [#3625](https://github.com/nextcloud/deck/pull/3625)
+- Extend API changelog @juliushaertl [#3522](https://github.com/nextcloud/deck/pull/3522)
+- Fix talk integration @nickvergessen [#3529](https://github.com/nextcloud/deck/pull/3529)
+- Fix confusion between stackId and boardId in StackService @eneiluj [#3541](https://github.com/nextcloud/deck/pull/3541)
+- Add horizontal scrollbar into the large table inside description @luka-nextcloud [#3531](https://github.com/nextcloud/deck/pull/3531)
+- Make links in markdown note bolder @luka-nextcloud [#3530](https://github.com/nextcloud/deck/pull/3530)
+- Update master php testing versions @nickvergessen [#3561](https://github.com/nextcloud/deck/pull/3561)
+- Update master php enviroment @nickvergessen [#3582](https://github.com/nextcloud/deck/pull/3582)
+- Make insert attachment buttom easy to click @luka-nextcloud [#3612](https://github.com/nextcloud/deck/pull/3612)
+- Remove extra bullet @elitejake [#3613](https://github.com/nextcloud/deck/pull/3613)
+- l10n: Delete space @Valdnet [#3666](https://github.com/nextcloud/deck/pull/3666)
+- Update master php testing versions @nickvergessen [#3688](https://github.com/nextcloud/deck/pull/3688)
+- Fix wording to represent the code behavior @q-wertz [#3685](https://github.com/nextcloud/deck/pull/3685)
+- Fix cron jobs @nickvergessen [#3689](https://github.com/nextcloud/deck/pull/3689)
+- Update master php testing versions @nickvergessen [#3695](https://github.com/nextcloud/deck/pull/3695)
+- Optimise queries when preparing card related notifications @Raudius [#3690](https://github.com/nextcloud/deck/pull/3690)
+- Properly check for the stack AND setting board permissions @juliushaertl [#3670](https://github.com/nextcloud/deck/pull/3670)
+- Replace deprecated String.prototype.substr() @CommanderRoot [#3669](https://github.com/nextcloud/deck/pull/3669)
+- Dependency updates
+- Show cards after moving into another list [#3736](https://github.com/nextcloud/deck/pull/3736)
+- Fix paramter replacements when creating deck cards from talk messages @nickvergessen [#3683](https://github.com/nextcloud/deck/pull/3683)
+- Fix hidden attachment icon on archived cards [#3733](https://github.com/nextcloud/deck/pull/3733)
+- Adapt the card modal to upstream changes [#3764](https://github.com/nextcloud/deck/pull/3764)
+- Fix text selection in dark mode and modal view [#3765](https://github.com/nextcloud/deck/pull/3765)
+- Add missing indices [#3754](https://github.com/nextcloud/deck/pull/3754)
+
+
 ## 1.6.0-beta1
 
 ### Added

@@ -42,9 +42,9 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	private $circlesService;
 	private $logger;
 
-	/** @var CappedMemoryCache */
+	/** @var CappedMemoryCache<Board[]> */
 	private $userBoardCache;
-	/** @var CappedMemoryCache */
+	/** @var CappedMemoryCache<Board> */
 	private $boardCache;
 
 	public function __construct(
@@ -131,14 +131,9 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 
 	/**
 	 * Find all boards for a given user
-	 *
-	 * @param $userId
-	 * @param null $limit
-	 * @param null $offset
-	 * @return array
 	 */
 	public function findAllByUser(string $userId, ?int $limit = null, ?int $offset = null, ?int $since = null,
-								  bool $includeArchived = true, ?int $before = null, ?string $term = null) {
+								  bool $includeArchived = true, ?int $before = null, ?string $term = null): array {
 		// FIXME this used to be a UNION to get boards owned by $userId and the user shares in one single query
 		// Is it possible with the query builder?
 		$qb = $this->db->getQueryBuilder();
@@ -247,15 +242,9 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 
 	/**
 	 * Find all boards for a given user
-	 *
-	 * @param $userId
-	 * @param $groups
-	 * @param null $limit
-	 * @param null $offset
-	 * @return array
 	 */
 	public function findAllByGroups(string $userId, array $groups, ?int $limit = null, ?int $offset = null, ?int $since = null,
-									bool $includeArchived = true, ?int $before = null, ?string $term = null) {
+									bool $includeArchived = true, ?int $before = null, ?string $term = null): array {
 		if (count($groups) <= 0) {
 			return [];
 		}
@@ -414,8 +403,8 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		return parent::delete($entity);
 	}
 
-	public function isOwner($userId, $boardId): bool {
-		$board = $this->find($boardId);
+	public function isOwner($userId, $id): bool {
+		$board = $this->find($id);
 		return ($board->getOwner() === $userId);
 	}
 

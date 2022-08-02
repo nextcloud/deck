@@ -27,10 +27,10 @@
 			<router-view />
 		</AppContent>
 
-		<Modal
-			v-if="cardDetailsInModal && $route.params.cardId"
+		<Modal v-if="cardDetailsInModal && $route.params.cardId"
 			:clear-view-delay="0"
 			:title="t('deck', 'Card details')"
+			size="large"
 			@close="hideModal()">
 			<div class="modal__content modal__card">
 				<router-view name="sidebar" />
@@ -42,7 +42,6 @@
 </template>
 
 <script>
-
 import { mapState } from 'vuex'
 import AppNavigation from './components/navigation/AppNavigation'
 import { Modal, Content, AppContent } from '@nextcloud/vue'
@@ -154,17 +153,40 @@ export default {
 			}
 		}
 	}
-
-	.modal__card {
-		min-width: 320px;
-		width: 50vw;
-		max-width: 800px;
-		min-height: 200px;
-		height: 80vh;
-	}
 </style>
 
 <style lang="scss">
+	@import "../css/print";
+
+	.icon-activity {
+		background-image: url(../img/activity-dark.svg);
+
+		body[data-theme-dark] & {
+			background-image: url(../img/activity.svg);
+		}
+	}
+
+	.avatardiv.circles {
+		background: var(--color-primary);
+	}
+
+	.icon-circles {
+		background-image: url(../img/circles-dark.svg);
+		opacity: 1;
+		background-size: 20px;
+		background-position: center center;
+	}
+
+	.icon-circles-white, .icon-circles.icon-white {
+		background-image: url(../img/circles.svg);
+		opacity: 1;
+		background-size: 20px;
+		background-position: center center;
+	}
+
+	.icon-colorpicker {
+		background-image: url('../img/color_picker.svg');
+	}
 
 	.multiselect {
 		width: 100%;

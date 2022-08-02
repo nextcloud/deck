@@ -27,6 +27,7 @@ use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Service\BoardService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
@@ -101,7 +102,9 @@ class UserExport extends Command {
 					$fullCard = $this->cardMapper->find($card->getId());
 					$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
 					$fullCard->setAssignedUsers($assignedUsers);
-					$data[$board->getId()]['stacks'][$stack->getId()]['cards'][] = (array)$fullCard->jsonSerialize();
+
+					$cardDetails = new CardDetails($fullCard, $fullBoard);
+					$data[$board->getId()]['stacks'][$stack->getId()]['cards'][] = $cardDetails->jsonSerialize();
 				}
 			}
 		}

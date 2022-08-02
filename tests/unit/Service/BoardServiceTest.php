@@ -39,9 +39,11 @@ use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
+use OCP\IDBConnection;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IGroupManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use \Test\TestCase;
 use OCP\IURLGenerator;
 
@@ -80,6 +82,8 @@ class BoardServiceTest extends TestCase {
 	private $userId = 'admin';
 	/** @var IURLGenerator */
 	private $urlGenerator;
+	/** @var IDBConnection|MockObject */
+	private $connection;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -99,6 +103,7 @@ class BoardServiceTest extends TestCase {
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
+		$this->connection = $this->createMock(IDBConnection::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -117,6 +122,7 @@ class BoardServiceTest extends TestCase {
 			$this->eventDispatcher,
 			$this->changeHelper,
 			$this->urlGenerator,
+			$this->connection,
 			$this->userId
 		);
 
@@ -420,7 +426,7 @@ class BoardServiceTest extends TestCase {
 		$this->aclMapper->expects($this->once())
 			->method('delete')
 			->with($acl)
-			->willReturn(true);
+			->willReturn($acl);
 		$this->assertTrue($this->service->deleteAcl(123));
 	}
 }

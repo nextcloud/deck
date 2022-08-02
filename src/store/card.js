@@ -92,7 +92,7 @@ export default {
 
 					const filterOutQuotes = (q) => {
 						if (q[0] === '"' && q[q.length - 1] === '"') {
-							return q.substr(1, q.length - 2)
+							return q.slice(1, -1)
 						}
 						return q
 					}
@@ -153,7 +153,7 @@ export default {
 							const comparator = query[0] + (query[1] === '=' ? '=' : '')
 							const isValidComparator = ['<', '<=', '>', '>='].indexOf(comparator) !== -1
 							const parsedCardDate = moment(card.duedate)
-							const parsedDate = moment(query.substr(isValidComparator ? comparator.length : 0))
+							const parsedDate = moment(query.slice(isValidComparator ? comparator.length : 0))
 							switch (comparator) {
 							case '<':
 								hasMatch = hasMatch && parsedCardDate.isBefore(parsedDate)
@@ -249,8 +249,14 @@ export default {
 			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
 				Vue.set(state.cards[existingIndex], property, card[property])
+				Vue.set(state.cards[existingIndex], 'lastModified', Date.now() / 1000)
 			}
-			Vue.set(state.cards[existingIndex], 'lastModified', Date.now() / 1000)
+		},
+		cardSetAttachmentCount(state, { cardId, count }) {
+			const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
+			if (existingIndex !== -1) {
+				Vue.set(state.cards[existingIndex], 'attachmentCount', count)
+			}
 		},
 		cardIncreaseAttachmentCount(state, cardId) {
 			const existingIndex = state.cards.findIndex(_card => _card.id === cardId)
@@ -263,6 +269,9 @@ export default {
 			if (existingIndex !== -1) {
 				Vue.set(state.cards[existingIndex], 'attachmentCount', state.cards[existingIndex].attachmentCount - 1)
 			}
+		},
+		addNewCard(state, card) {
+			state.cards.push(card)
 		},
 	},
 	actions: {

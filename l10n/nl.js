@@ -170,8 +170,10 @@ OC.L10N.register(
     "Can edit" : "Kan bewerken",
     "Can share" : "Kan delen",
     "Can manage" : "Kan beheren",
+    "Owner" : "Eigenaar",
     "Delete" : "Verwijderen",
     "Failed to create share with {displayName}" : "Delen met {displayName} mislukt",
+    "Transfer" : "Overdracht",
     "Add a new list" : "Voeg een nieuwe lijst toe",
     "Archive all cards" : "Alle kaarten archiveren",
     "Delete list" : "Lijst verwijderen",
@@ -287,9 +289,6 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Delen {file} met een Deck kaart",
     "Share" : "Delen",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck is een soort kanban organisatietool gericht op persoonlijke planning en projectorganisatie voor teams geïntegreerd in Nextcloud.\n\n\n- 📥 Voeg taken toe aan kaarten en sorteer ze\n- 📄 Schrijf extra notities in markdown\n- 🔖 Ken labels toe voor betere organisatie\n- 👥 Deel met je team, vrienden of familie\n- 📎 Voeg bestanden toe en plaats ze in je markdown beschrijving\n- 💬 Discussieer binnen je team met reacties\n- ⚡ Volg de wijzigingen in het activiteiten kanaal\n- 🚀 Organiseer je project",
-    "Creating the new card…" : "Aanmaken nieuwe kaart...",
-    "\"{card}\" was added to \"{board}\"" : "\"{card}\" is toegevoegd aan \"{board}\"",
-    "(circle)" : "(circle)",
     "This week" : "Deze week"
 },
 "nplurals=2; plural=(n != 1);");

@@ -133,6 +133,7 @@
     "Archived cards" : "Cartes archivées",
     "Add list" : "Ajouter une liste",
     "List name" : "Nom de la liste",
+    "Active filters" : "Filtres actifs",
     "Apply filter" : "Filtrer",
     "Filter by tag" : "Filtrer par étiquette",
     "Filter by assigned user" : "Filtrer par utilisateur",
@@ -171,6 +172,11 @@
     "Owner" : "Propriétaire",
     "Delete" : "Supprimer",
     "Failed to create share with {displayName}" : "Échec de la création du partage avec {displayName}",
+    "Are you sure you want to transfer the board {title} to {user}?" : "Êtes-vous sûr de vouloir transférer le tableau {title} à {user} ?",
+    "Transfer the board." : "Transférer le tableau",
+    "Transfer" : "Transfert",
+    "The board has been transferred to {user}" : "Le tableau a été transféré à {user}",
+    "Failed to transfer the board to {user}" : "Échec du transfert du tableau à {user}",
     "Add a new list" : "Ajouter une nouvelle liste",
     "Archive all cards" : "Archiver toutes les cartes",
     "Delete list" : "Supprimer la liste",
@@ -286,9 +292,10 @@
     "Share {file} with a Deck card" : "Partager {file} avec Deck en tant que carte",
     "Share" : "Partager",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck est un outil d'organisation de style kanban destiné à la planification personnelle et à l'organisation de projets pour les équipes intégrées à Nextcloud.\n\n\n- 📥 Ajoutez vos tâches à des cartes et organisez-les\n- 📄 Écrivez des notes supplémentaires en Markdown\n- 🔖 Affectez des étiquettes pour une organisation encore meilleure\n- 👥 Partagez avec votre équipe, vos amis ou votre famille\n- 📎 Attachez des fichiers et utilisez les dans vos descriptions en Markdown\n- 💬 Échangez avec votre équipe grâce aux commentaires\n- ⚡ Gardez un œil sur les modifications dans le flux d'activité\n- 🚀 Organisez vos projets",
-    "Creating the new card…" : "Création de la nouvelle carte…",
-    "\"{card}\" was added to \"{board}\"" : "La carte \"{card}\" a été ajoutée au tableau \"{board}\"",
-    "(circle)" : "(cercle)",
-    "This week" : "Cette semaine"
-},"pluralForm" :"nplurals=2; plural=(n > 1);"
+    "Are you sure you want to transfer the board {title} for {user} ?" : "Êtes-vous sûr de vouloir transférer le tableau {title} pour {user} ?",
+    "Transfer the board for {user} successfully" : "Transfert du tableau pour {user} avec succès",
+    "Failed to transfer the board for {user}" : "Échec du transfert du tableau pour {user}",
+    "This week" : "Cette semaine",
+    "Are you sure you want to transfer the board {title} for {user}?" : "Êtes-vous sûr de vouloir transférer le tableau {title} pour {user} ?"
+},"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
