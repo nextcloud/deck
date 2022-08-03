@@ -240,6 +240,7 @@ OC.L10N.register(
     "Write a description …" : "Napisz opis…",
     "Choose attachment" : "Wybierz załącznik",
     "(group)" : "(grupa)",
+    "Todo items" : "Do zrobienia",
     "{count} comments, {unread} unread" : "Komentarze: {count}, nieprzeczytane: {unread}",
     "Edit card title" : "Edytuj nazwę karty",
     "Assign to me" : "Przydziel do mnie",
