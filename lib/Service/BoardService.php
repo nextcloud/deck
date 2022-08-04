@@ -457,9 +457,13 @@ class BoardService {
 	public function enrichWithActiveSessions(Board $board) {
 		$sessions = $this->sessionMapper->findAllActive($board->getId());
 		
-		$board->setActiveSessions(array_unique(array_map(function (Session $session) {
-			return $session->getUserId();
-		}, $sessions)));
+		$board->setActiveSessions(array_values(
+			array_unique(
+				array_map(function (Session $session) {
+					return $session->getUserId();
+				}, $sessions)
+			)
+		));
 	}
 
 	/**
