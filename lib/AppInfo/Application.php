@@ -46,6 +46,7 @@ use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
 use OCA\Deck\Listeners\ParticipantCleanupListener;
 use OCA\Deck\Listeners\FullTextSearchEventListener;
 use OCA\Deck\Listeners\ResourceListener;
+use OCA\Deck\Listeners\LiveUpdateListener;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
@@ -53,10 +54,8 @@ use OCA\Deck\Reference\CardReferenceProvider;
 use OCA\Deck\Search\CardCommentProvider;
 use OCA\Deck\Search\DeckProvider;
 use OCA\Deck\Service\PermissionService;
-use OCA\Deck\Service\SessionService;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\Sharing\Listener;
-use OCA\NotifyPush\Queue\IQueue;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -100,7 +99,6 @@ class Application extends App implements IBootstrap {
 		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEventHandler']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerNotifications']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
-		$context->injectFn(Closure::fromCallable([$this, 'registerSessionListener']));
 
 		$context->injectFn(function (IManager $shareManager) {
 			$shareManager->registerShareProvider(DeckShareProvider::class);
@@ -152,6 +150,10 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(UserDeletedEvent::class, ParticipantCleanupListener::class);
 		$context->registerEventListener(GroupDeletedEvent::class, ParticipantCleanupListener::class);
 		$context->registerEventListener(CircleDestroyedEvent::class, ParticipantCleanupListener::class);
+
+		// Event listening for realtime updates via notify_push
+		$context->registerEventListener(SessionCreatedEvent::class, LiveUpdateListener::class);
+		$context->registerEventListener(SessionClosedEvent::class, LiveUpdateListener::class);
 	}
 
 	public function registerNotifications(NotificationManager $notificationManager): void {
@@ -191,35 +193,6 @@ class Application extends App implements IBootstrap {
 				return;
 			}
 			Util::addScript('deck', 'deck-collections');
-		});
-	}
-
-	protected function registerSessionListener(IEventDispatcher $eventDispatcher): void {
-		$container = $this->getContainer();
-
-		try {
-			$queue = $container->get(IQueue::class);
-		} catch (\Exception $e) {
-			// most likely notify_push is not installed.
-			return;
-		}
-
-		// if SessionService is injected via function parameters, tests throw following error:
-		// "OCA\Deck\NoPermissionException: Creating boards has been disabled for your account."
-		// doing it this way it somehow works
-		$sessionService = $container->get(SessionService::class);
-
-		
-		$eventDispatcher->addListener(SessionCreatedEvent::class, function (SessionCreatedEvent $event) use ($sessionService, $queue) {
-			$sessionService->notifyAllSessions($queue, $event->getBoardId(), "DeckBoardUpdate", $event->getUserId(), [
-				"id" => $event->getBoardId()
-			]);
-		});
-
-		$eventDispatcher->addListener(SessionClosedEvent::class, function (SessionClosedEvent $event) use ($sessionService, $queue) {
-			$sessionService->notifyAllSessions($queue, $event->getBoardId(), "DeckBoardUpdate", $event->getUserId(), [
-				"id" => $event->getBoardId()
-			]);
 		});
 	}
 }

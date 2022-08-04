@@ -66,6 +66,9 @@ class SessionService {
 		return $session;
 	}
 
+	/**
+	 * @throws DoesNotExistException
+	 */
 	public function syncSession(int $boardId, string $token) {
 		$session = $this->sessionMapper->find($boardId, $this->userId, $token);
 		$session->setLastContact($this->timeFactory->getTime());
