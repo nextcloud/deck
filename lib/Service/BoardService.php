@@ -34,6 +34,8 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
+use OCA\Deck\Db\Session;
+use OCA\Deck\Db\SessionMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Event\AclCreatedEvent;
@@ -81,6 +83,7 @@ class BoardService {
 	private IURLGenerator $urlGenerator;
 	private IDBConnection $connection;
 	private BoardServiceValidator $boardServiceValidator;
+	private SessionMapper $sessionMapper;
 
 	public function __construct(
 		BoardMapper $boardMapper,
@@ -101,6 +104,7 @@ class BoardService {
 		IURLGenerator $urlGenerator,
 		IDBConnection $connection,
 		BoardServiceValidator $boardServiceValidator,
+		SessionMapper $sessionMapper,
 		?string $userId
 	) {
 		$this->boardMapper = $boardMapper;
@@ -122,6 +126,7 @@ class BoardService {
 		$this->urlGenerator = $urlGenerator;
 		$this->connection = $connection;
 		$this->boardServiceValidator = $boardServiceValidator;
+		$this->sessionMapper = $sessionMapper;
 	}
 
 	/**
@@ -214,6 +219,7 @@ class BoardService {
 		]);
 		$this->enrichWithUsers($board);
 		$this->enrichWithBoardSettings($board);
+		$this->enrichWithActiveSessions($board);
 		$this->boardsCache[$board->getId()] = $board;
 		return $board;
 	}
@@ -446,6 +452,14 @@ class BoardService {
 			'calendar' => $this->config->getUserValue($this->userId, Application::APP_ID, 'board:' . $board->getId() . ':calendar', $globalCalendarConfig),
 		];
 		$board->setSettings($settings);
+	}
+
+	public function enrichWithActiveSessions(Board $board) {
+		$sessions = $this->sessionMapper->findAllActive($board->getId());
+		
+		$board->setActiveSessions(array_unique(array_map(function (Session $session) {
+			return $session->getUserId();
+		}, $sessions)));
 	}
 
 	/**

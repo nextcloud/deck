@@ -44,6 +44,7 @@ class Board extends RelationalEntity {
 	protected $users = [];
 	protected $shared;
 	protected $stacks = [];
+	protected $activeSessions = [];
 	protected $deletedAt = 0;
 	protected $lastModified = 0;
 
@@ -59,6 +60,7 @@ class Board extends RelationalEntity {
 		$this->addRelation('acl');
 		$this->addRelation('shared');
 		$this->addRelation('users');
+		$this->addRelation('activeSessions');
 		$this->addRelation('permissions');
 		$this->addRelation('stacks');
 		$this->addRelation('settings');

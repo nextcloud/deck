@@ -82,6 +82,11 @@ return [
 		['name' => 'label#update', 'url' => '/labels/{labelId}', 'verb' => 'PUT'],
 		['name' => 'label#delete', 'url' => '/labels/{labelId}', 'verb' => 'DELETE'],
 
+		// sessions
+		['name' => 'Session#create', 'url' => '/session/create', 'verb' => 'PUT'],
+		['name' => 'Session#sync', 'url' => '/session/sync', 'verb' => 'POST'],
+		['name' => 'Session#close', 'url' => '/session/close', 'verb' => 'POST'],
+
 		// api
 		['name' => 'board_api#index', 'url' => '/api/v{apiVersion}/boards', 'verb' => 'GET'],
 		['name' => 'board_api#get', 'url' => '/api/v{apiVersion}/boards/{boardId}', 'verb' => 'GET'],

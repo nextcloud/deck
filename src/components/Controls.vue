@@ -40,6 +40,8 @@
 			</p>
 		</div>
 		<div class="board-actions">
+			<SessionList v-if="isNotifyPushEnabled && board && board.activeSessions"
+				:sessions="board.activeSessions" />
 			<div v-if="searchQuery || true" class="deck-search">
 				<input type="search"
 					class="icon-search"
@@ -224,6 +226,8 @@ import FilterIcon from 'vue-material-design-icons/Filter.vue'
 import FilterOffIcon from 'vue-material-design-icons/FilterOff.vue'
 import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVertical.vue'
 import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertical.vue'
+import SessionList from './SessionList'
+import { isNotifyPushEnabled } from '../listeners'
 
 export default {
 	name: 'Controls',
@@ -239,6 +243,7 @@ export default {
 		FilterOffIcon,
 		ArrowCollapseVerticalIcon,
 		ArrowExpandVerticalIcon,
+		SessionList,
 	},
 	mixins: [labelStyle],
 	props: {
@@ -285,6 +290,9 @@ export default {
 		},
 		labelsSorted() {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+		},
+		isNotifyPushEnabled() {
+			return isNotifyPushEnabled()
 		},
 	},
 	watch: {

@@ -40,6 +40,8 @@ use OCA\Deck\Event\AclUpdatedEvent;
 use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
+use OCA\Deck\Event\SessionClosedEvent;
+use OCA\Deck\Event\SessionCreatedEvent;
 use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
 use OCA\Deck\Listeners\ParticipantCleanupListener;
 use OCA\Deck\Listeners\FullTextSearchEventListener;
@@ -51,8 +53,10 @@ use OCA\Deck\Reference\CardReferenceProvider;
 use OCA\Deck\Search\CardCommentProvider;
 use OCA\Deck\Search\DeckProvider;
 use OCA\Deck\Service\PermissionService;
+use OCA\Deck\Service\SessionService;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\Sharing\Listener;
+use OCA\NotifyPush\Queue\IQueue;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -96,6 +100,7 @@ class Application extends App implements IBootstrap {
 		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEventHandler']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerNotifications']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
+		$context->injectFn(Closure::fromCallable([$this, 'registerSessionListener']));
 
 		$context->injectFn(function (IManager $shareManager) {
 			$shareManager->registerShareProvider(DeckShareProvider::class);
@@ -186,6 +191,35 @@ class Application extends App implements IBootstrap {
 				return;
 			}
 			Util::addScript('deck', 'deck-collections');
+		});
+	}
+
+	protected function registerSessionListener(IEventDispatcher $eventDispatcher): void {
+		$container = $this->getContainer();
+
+		try {
+			$queue = $container->get(IQueue::class);
+		} catch (\Exception $e) {
+			// most likely notify_push is not installed.
+			return;
+		}
+
+		// if SessionService is injected via function parameters, tests throw following error:
+		// "OCA\Deck\NoPermissionException: Creating boards has been disabled for your account."
+		// doing it this way it somehow works
+		$sessionService = $container->get(SessionService::class);
+
+		
+		$eventDispatcher->addListener(SessionCreatedEvent::class, function (SessionCreatedEvent $event) use ($sessionService, $queue) {
+			$sessionService->notifyAllSessions($queue, $event->getBoardId(), "DeckBoardUpdate", $event->getUserId(), [
+				"id" => $event->getBoardId()
+			]);
+		});
+
+		$eventDispatcher->addListener(SessionClosedEvent::class, function (SessionClosedEvent $event) use ($sessionService, $queue) {
+			$sessionService->notifyAllSessions($queue, $event->getBoardId(), "DeckBoardUpdate", $event->getUserId(), [
+				"id" => $event->getBoardId()
+			]);
 		});
 	}
 }

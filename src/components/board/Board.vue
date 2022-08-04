@@ -81,6 +81,8 @@ import Stack from './Stack.vue'
 import { NcEmptyContent } from '@nextcloud/vue'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 import { showError } from '../../helpers/errors.js'
+import { sessionApi } from '../../services/SessionApi'
+import { isNotifyPushEnabled } from '../../listeners'
 
 export default {
 	name: 'Board',
@@ -128,13 +130,51 @@ export default {
 		},
 	},
 	watch: {
-		id: 'fetchData',
+		id(newValue, oldValue) {
+			if (oldValue) {
+				// close old session
+				sessionApi.closeSession(oldValue, this.token)
+				this.token = null
+			}
+			// create new session
+			this.ensureSession(newValue)
+
+			this.fetchData()
+		},
 		showArchived() {
 			this.fetchData()
 		},
 	},
 	created() {
+		if (isNotifyPushEnabled()) {
+			// create a session
+			this.ensureSession()
+		}
+
 		this.fetchData()
+
+		if (isNotifyPushEnabled()) {
+			// regularly let the server know that we are still here
+			this.sessionInterval = setInterval(() => {
+				this.ensureSession()
+			}, 25 * 1000)
+
+			// we don't get events pushed for sessions that have expired,
+			// so we poll the list of sessions every minute when there
+			// are other sessions active
+			this.refreshInterval = setInterval(() => {
+				if (this.board?.activeSessions?.length) {
+					this.refreshData()
+				}
+			}, 60 * 1000)
+		}
+	},
+	beforeDestroy() {
+		if (isNotifyPushEnabled()) {
+			sessionApi.closeSession(this.id, this.token)
+			clearInterval(this.sessionInterval)
+			clearInterval(this.refreshInterval)
+		}
 	},
 	methods: {
 		async fetchData() {
@@ -147,6 +187,32 @@ export default {
 				showError(e)
 			}
 			this.loading = false
+		},
+
+		async ensureSession(boardId = this.id) {
+			if (this.token) {
+				try {
+					await sessionApi.syncSession(boardId, this.token)
+				} catch (err) {
+					// session probably expired, let's try again
+					// with a fresh session
+					this.token = null
+					setTimeout(() => {
+						this.ensureSession()
+					}, 100)
+				}
+			} else {
+				try {
+					const res = await sessionApi.createSession(boardId)
+					this.token = res.token
+				} catch (err) {
+					showError(err)
+				}
+			}
+		},
+
+		async refreshData() {
+			await this.$store.dispatch('refreshBoard', this.id)
 		},
 
 		onDropStack({ removedIndex, addedIndex }) {
