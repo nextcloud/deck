@@ -21,11 +21,22 @@
   -->
 
 <template>
-	<div>
+	<div @paste="onPaste">
 		<h5>
 			{{ t('deck', 'Description') }}
 			<span v-if="descriptionLastEdit && !descriptionSaving">{{ t('deck', '(Unsaved)') }}</span>
 			<span v-if="descriptionSaving">{{ t('deck', '(Saving…)') }}</span>
+			<span v-for="attachment in uploadQueue" :key="attachment.name" class="attachment">
+				<a class="fileicon" :style="mimetypeForAttachment()" />
+				<div class="details">
+					<a>
+						<div class="filename">
+							<span class="basename">{{ attachment.name }}</span>
+						</div>
+						<progress :value="attachment.progress" max="100" />
+					</a>
+				</div>
+			</span>
 			<a v-tooltip="t('deck', 'Formatting help')"
 				href="https://deck.readthedocs.io/en/latest/Markdown/"
 				target="_blank"
@@ -83,6 +94,7 @@ import { Actions, ActionButton, Modal } from '@nextcloud/vue'
 import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
 import { mapState, mapGetters } from 'vuex'
+import attachmentUpload from '../../mixins/attachmentUpload'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip'
 
 const markdownIt = new MarkdownIt({
@@ -107,6 +119,8 @@ export default {
 		AttachmentList,
 		PaperclipIcon,
 	},
+	mixins: [attachmentUpload],
+
 	props: {
 		card: {
 			type: Object,
@@ -131,6 +145,7 @@ export default {
 			descriptionSaving: false,
 			descriptionLastEdit: 0,
 			modalShow: false,
+			lastPasteImageCursor: null,
 		}
 	},
 	computed: {
@@ -238,6 +253,65 @@ export default {
 				await this.saveDescription()
 			}, 2500)
 		},
+		async addLastAttachmmentOnCursor() {
+			const attachementLength = this.$store.getters.attachmentsByCard(this.card.id).length
+			if (attachementLength === 0) return
+
+			const attachment = this.$store.getters.attachmentsByCard(this.card.id)[attachementLength - 1]
+			const descStringLines = this.$refs.markdownEditor.easymde.value().split('\n')
+			const cursor = this.lastPasteImageCursor === null ? this.$refs.markdownEditor.easymde.codemirror.getCursor() : this.lastPasteImageCursor
+			let embed = ''
+			if ((attachment.type === 'file' && attachment.extendedData.hasPreview) || attachment.extendedData.mimetype.includes('image')) {
+				embed = '!'
+			}
+
+			const attachmentString = embed + '[📎 ' + attachment.data + '](' + this.attachmentPreview(attachment) + ')'
+			let lineUpatedLength = 0
+			for (let i = 0; i < descStringLines.length; i++) {
+				if (i === cursor.line) {
+					descStringLines[i] = descStringLines[i].substring(0, cursor.ch) + attachmentString + descStringLines[i].substring(cursor.ch)
+					lineUpatedLength = descStringLines[i].length
+					break
+				}
+			}
+			const newContent = descStringLines.join('\n')
+			this.$refs.markdownEditor.easymde.value(newContent)
+			this.description = newContent
+			this.modalShow = false
+			this.updateDescription()
+
+			if (lineUpatedLength > 0) {
+				await this.$nextTick()
+				this.lastPasteImageCursor = { line: cursor.line, ch: lineUpatedLength }
+				this.$refs.markdownEditor.easymde.codemirror.focus()
+				this.$refs.markdownEditor.easymde.codemirror.setCursor({ line: cursor.line, ch: lineUpatedLength })
+			}
+
+		},
+		onPaste() {
+			if (!this.descriptionEditing) return
+
+			const clipboardData = event.clipboardData
+			let files = []
+			if (clipboardData.files && clipboardData.files.length > 0) {
+				files = clipboardData.files
+			} else if (clipboardData.items && clipboardData.items.length > 0) {
+				for (let i = 0; i < clipboardData.items.length; i++) {
+					if (clipboardData.items[i].kind === 'file') {
+						files.push(clipboardData.items[i].getAsFile())
+					}
+				}
+			}
+
+			if (files.length === 0) return
+
+			this.loading = true
+			this.lastPasteImageCursor = null
+			event.preventDefault()
+			for (const file of files) {
+				this.onLocalAttachmentSelected(file, 'file').then(this.addLastAttachmmentOnCursor)
+			}
+		}
 	},
 }
 </script>
