@@ -170,6 +170,7 @@ OC.L10N.register(
     "Archive board" : "Setja borð í geymslu",
     "No notifications" : "Engar tilkynningar",
     "Delete board" : "Eyða borði",
+    "No reminder" : "Engin áminning",
     "An error occurred" : "Villa kom upp",
     "No results found" : "Engar niðurstöður fundust",
     "Link to a board" : "Tengill við borð",
