@@ -139,6 +139,7 @@ OC.L10N.register(
     "Archive board" : "Arkiver tavle",
     "No notifications" : "Ingen varsler",
     "Delete board" : "Slett tavle",
+    "No reminder" : "Ingen varsel",
     "An error occurred" : "En feil oppstod",
     "Link to a board" : "Lenke til tavle",
     "Maximum file size of {size} exceeded" : "Maksimal størrelse for filer på {size} er overskredet",
