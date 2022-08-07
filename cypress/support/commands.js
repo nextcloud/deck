@@ -29,7 +29,7 @@ Cypress.Commands.add("login", (user, password, route = "/apps/deck/") => {
 		cy.visit(route);
 		cy.get("input[name=user]").type(user);
 		cy.get("input[name=password]").type(password);
-		cy.get(".submit-wrapper input[type=submit]").click();
+		cy.get("form[name=login] [type=submit]").click();
 		cy.url().should("include", route);
 	});
 	// in case the session already existed but we are on a different route...
