@@ -255,7 +255,9 @@ export default {
 		},
 		async addLastAttachmmentOnCursor() {
 			const attachementLength = this.$store.getters.attachmentsByCard(this.card.id).length
-			if (attachementLength === 0) return
+			if (attachementLength === 0) {
+				return
+			}
 
 			const attachment = this.$store.getters.attachmentsByCard(this.card.id)[attachementLength - 1]
 			const descStringLines = this.$refs.markdownEditor.easymde.value().split('\n')
@@ -289,7 +291,9 @@ export default {
 
 		},
 		onPaste() {
-			if (!this.descriptionEditing) return
+			if (!this.descriptionEditing) {
+				return
+			}
 
 			const clipboardData = event.clipboardData
 			let files = []
@@ -303,7 +307,9 @@ export default {
 				}
 			}
 
-			if (files.length === 0) return
+			if (files.length === 0) {
+				return
+			}
 
 			this.loading = true
 			this.lastPasteImageCursor = null
