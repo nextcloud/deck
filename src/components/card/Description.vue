@@ -187,6 +187,9 @@ export default {
 		hasDescription() {
 			return this.card?.description?.trim?.() !== ''
 		},
+		cardId() {
+			return this.card.id
+		}
 	},
 	methods: {
 		showEditor() {
