@@ -154,6 +154,7 @@ OC.L10N.register(
     "Archive board" : "Arquivar quadro",
     "No notifications" : "Sem notificações",
     "Delete board" : "Eliminar quadro",
+    "No reminder" : "Nenhum lembrete",
     "An error occurred" : "Ocorreu um erro",
     "Share" : "Partilhar",
     "This week" : "Esta semana"
