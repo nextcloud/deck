@@ -53,7 +53,7 @@
     "p-queue": "^7.3.0",
     "url-search-params-polyfill": "^8.1.1",
     "vue": "^2.7.8",
-    "vue-at": "^2.5.0-beta.2",
+    "vue-at": "^2.5.0",
     "vue-click-outside": "^1.1.0",
     "vue-easymde": "^2.0.0",
     "vue-infinite-loading": "^2.4.5",
