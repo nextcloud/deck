@@ -46,7 +46,7 @@
     "dompurify": "^2.3.10",
     "lodash": "^4.17.21",
     "markdown-it": "^13.0.1",
-    "markdown-it-link-attributes": "^4.0.0",
+    "markdown-it-link-attributes": "^4.0.1",
     "markdown-it-task-checkbox": "^1.0.6",
     "moment": "^2.29.4",
     "nextcloud-vue-collections": "^0.10.0",
