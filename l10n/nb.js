@@ -96,6 +96,7 @@ OC.L10N.register(
     "Timeline" : "Tidslinje",
     "Undo" : "Angre",
     "Deleted cards" : "Slettede kort",
+    "(Group)" : "(Gruppe)",
     "Can edit" : "Kan redigere",
     "Can share" : "Kan dele",
     "Owner" : "Eier",
