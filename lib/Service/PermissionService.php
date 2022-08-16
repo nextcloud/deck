@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\Service;
 
-use OC\Cache\CappedMemoryCache;
+use OCP\Cache\CappedMemoryCache;
 use OCA\Circles\Model\Member;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
@@ -33,7 +33,6 @@ use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\IConfig;
 use OCP\IGroupManager;
@@ -64,7 +63,8 @@ class PermissionService {
 	/** @var array */
 	private $users = [];
 
-	private $boardCache;
+	private CappedMemoryCache $boardCache;
+	private CappedMemoryCache $permissionCache;
 
 	public function __construct(
 		ILogger $logger,
@@ -88,6 +88,7 @@ class PermissionService {
 		$this->userId = $userId;
 
 		$this->boardCache = new CappedMemoryCache();
+		$this->permissionCache = new CappedMemoryCache();
 	}
 
 	/**
@@ -97,15 +98,21 @@ class PermissionService {
 	 * @return bool|array
 	 */
 	public function getPermissions($boardId) {
+		if ($cached = $this->permissionCache->get($boardId)) {
+			return $cached;
+		}
+
 		$owner = $this->userIsBoardOwner($boardId);
 		$acls = $this->aclMapper->findAll($boardId);
-		return [
+		$permissions = [
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
 			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE),
 			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE))
 				&& (!$this->shareManager->sharingDisabledForUser($this->userId))
 		];
+		$this->permissionCache->set($boardId, $permissions);
+		return $permissions;
 	}
 
 	/**
@@ -343,5 +350,6 @@ class PermissionService {
 	 */
 	public function setUserId(string $userId): void {
 		$this->userId = $userId;
+		$this->permissionCache->clear();
 	}
 }
