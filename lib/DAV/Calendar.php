@@ -52,12 +52,6 @@ class Calendar extends ExternalCalendar {
 		$this->board = $board;
 
 		$this->principalUri = $principalUri;
-
-		if ($board) {
-			$this->children = $this->backend->getChildren($board->getId());
-		} else {
-			$this->children = [];
-		}
 	}
 
 	public function getOwner() {
@@ -122,7 +116,7 @@ class Calendar extends ExternalCalendar {
 	public function getChild($name) {
 		if ($this->childExists($name)) {
 			$card = array_values(array_filter(
-				$this->children,
+				$this->getBackendChildren(),
 				function ($card) use (&$name) {
 					return $card->getCalendarPrefix() . '-' . $card->getId() . '.ics' === $name;
 				}
@@ -137,7 +131,7 @@ class Calendar extends ExternalCalendar {
 	public function getChildren() {
 		$childNames = array_map(function ($card) {
 			return $card->getCalendarPrefix() . '-' . $card->getId() . '.ics';
-		}, $this->children);
+		}, $this->getBackendChildren());
 
 		$children = [];
 
@@ -148,9 +142,23 @@ class Calendar extends ExternalCalendar {
 		return $children;
 	}
 
+	private function getBackendChildren() {
+		if ($this->children) {
+			return $this->children;
+		}
+
+		if ($this->board) {
+			$this->children = $this->backend->getChildren($this->board->getId());
+		} else {
+			$this->children = [];
+		}
+
+		return $this->children;
+	}
+
 	public function childExists($name) {
 		return count(array_filter(
-			$this->children,
+			$this->getBackendChildren(),
 			function ($card) use (&$name) {
 				return $card->getCalendarPrefix() . '-' . $card->getId() . '.ics' === $name;
 			}
