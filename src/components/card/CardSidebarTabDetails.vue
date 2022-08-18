@@ -111,7 +111,7 @@
 			</div>
 		</div>
 
-		<div class="section-wrapper">
+		<div v-if="projectsEnabled" class="section-wrapper">
 			<CollectionList v-if="card.id"
 				:id="`${card.id}`"
 				:name="card.title"
@@ -126,6 +126,7 @@
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
 import { Avatar, Actions, ActionButton, Multiselect, DatetimePicker } from '@nextcloud/vue'
+import { loadState } from '@nextcloud/initial-state'
 
 import { CollectionList } from 'nextcloud-vue-collections'
 import Color from '../../mixins/color'
@@ -163,6 +164,7 @@ export default {
 			copiedCard: null,
 			assignedLabels: null,
 			locale: getLocale(),
+			projectsEnabled: loadState('core', 'projects_enabled', false),
 			lang: {
 				days: getDayNamesMin(),
 				months: getMonthNamesShort(),

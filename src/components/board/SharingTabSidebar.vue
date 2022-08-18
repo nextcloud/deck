@@ -61,7 +61,7 @@
 			</li>
 		</ul>
 
-		<CollectionList v-if="board.id"
+		<CollectionList v-if="projectsEnabled && board.id"
 			:id="`${board.id}`"
 			:name="board.title"
 			type="deck" />
@@ -74,6 +74,7 @@ import { CollectionList } from 'nextcloud-vue-collections'
 import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError, showSuccess } from '@nextcloud/dialogs'
+import { loadState } from '@nextcloud/initial-state'
 import debounce from 'lodash/debounce'
 
 export default {
@@ -99,6 +100,7 @@ export default {
 			addAcl: null,
 			addAclForAPI: null,
 			newOwner: null,
+			projectsEnabled: loadState('core', 'projects_enabled', false),
 		}
 	},
 	computed: {
