@@ -203,8 +203,11 @@
 					</ActionButton>
 				</Actions>
 				<!-- FIXME: ActionRouter currently doesn't work as an inline action -->
-				<Actions :title="t('deck', 'Details')">
-					<ActionButton icon="icon-menu-sidebar" @click="toggleDetailsView" />
+				<Actions>
+					<ActionButton icon="icon-menu-sidebar"
+						:aria-label="t('deck', 'Open details')"
+						:title="t('deck', 'Details')"
+						@click="toggleDetailsView" />
 				</Actions>
 			</div>
 		</div>
