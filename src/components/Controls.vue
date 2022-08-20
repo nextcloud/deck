@@ -380,7 +380,7 @@ export default {
 <style lang="scss" scoped>
 	.controls {
 		display: flex;
-		padding: 3px;
+		margin: 5px;
 		height: 44px;
 		padding-left: 44px;
 
@@ -431,6 +431,9 @@ export default {
 	}
 
 	.deck-search {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		input[type=search] {
 			background-position: 5px;
 			padding-left: 24px;

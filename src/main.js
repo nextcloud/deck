@@ -76,8 +76,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
 /* eslint-disable-next-line no-new */
 new Vue({
-	name: 'Deck',
 	el: '#content',
+	// eslint-disable-next-line vue/match-component-file-name
+	name: 'Deck',
 	router,
 	store,
 	data() {
