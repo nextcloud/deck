@@ -4,13 +4,13 @@
 			<div class="reply--header">
 				<div class="reply--hint">
 					{{ t('deck', 'In reply to') }}
-					<UserBubble :user="comment.actorId" :display-name="comment.actorDisplayName" />
+					<NcUserBubble :user="comment.actorId" :display-name="comment.actorDisplayName" />
 				</div>
-				<Actions v-if="preview" class="reply--cancel">
-					<ActionButton icon="icon-close" @click="$emit('cancel')">
+				<NcActions v-if="preview" class="reply--cancel">
+					<NcActionButton icon="icon-close" @click="$emit('cancel')">
 						{{ t('deck', 'Cancel reply') }}
-					</ActionButton>
-				</Actions>
+					</NcActionButton>
+				</NcActions>
 			</div>
 			<RichText class="comment--content"
 				:text="richText(comment)"
@@ -20,33 +20,33 @@
 	</div>
 	<li v-else class="comment">
 		<div class="comment--header">
-			<Avatar :user="comment.actorId" />
+			<NcAvatar :user="comment.actorId" />
 			<span class="has-tooltip username">
 				{{ comment.actorDisplayName }}
 			</span>
-			<Actions v-show="!edit" :force-menu="true">
-				<ActionButton :close-after-click="true" @click="replyTo()">
+			<NcActions v-show="!edit" :force-menu="true">
+				<NcActionButton :close-after-click="true" @click="replyTo()">
 					<template #icon>
 						<ReplyIcon decorative />
 					</template>
 					{{ t('deck', 'Reply') }}
-				</ActionButton>
-				<ActionButton v-if="canEdit"
+				</NcActionButton>
+				<NcActionButton v-if="canEdit"
 					icon="icon-rename"
 					:close-after-click="true"
 					@click="showUpdateForm()">
 					{{ t('deck', 'Update') }}
-				</ActionButton>
-				<ActionButton v-if="canEdit"
+				</NcActionButton>
+				<NcActionButton v-if="canEdit"
 					icon="icon-delete"
 					:close-after-click="true"
 					@click="deleteComment()">
 					{{ t('deck', 'Delete') }}
-				</ActionButton>
-			</Actions>
-			<Actions v-if="edit">
-				<ActionButton icon="icon-close" @click="hideUpdateForm" />
-			</Actions>
+				</NcActionButton>
+			</NcActions>
+			<NcActions v-if="edit">
+				<NcActionButton icon="icon-close" @click="hideUpdateForm" />
+			</NcActions>
 			<div class="spacer" />
 			<div class="timestamp">
 				{{ relativeDate(comment.creationDateTime) }}
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { Avatar, Actions, ActionButton, UserBubble } from '@nextcloud/vue'
+import { NcAvatar, NcActions, NcActionButton, NcUserBubble } from '@nextcloud/vue'
 import RichText from '@juliushaertl/vue-richtext'
 import CommentForm from './CommentForm'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -80,7 +80,7 @@ const AtMention = {
 		return createElement(
 			'span',
 			{ attrs: { 'data-at-embedded': true, contenteditable: false } },
-			[createElement(UserBubble, { props: { user, displayName }, attrs: { 'data-mention-id': user } })]
+			[createElement(NcUserBubble, { props: { user, displayName }, attrs: { 'data-mention-id': user } })]
 		)
 	},
 }
@@ -88,10 +88,10 @@ const AtMention = {
 export default {
 	name: 'CommentItem',
 	components: {
-		Avatar,
-		UserBubble,
-		Actions,
-		ActionButton,
+		NcAvatar,
+		NcUserBubble,
+		NcActions,
+		NcActionButton,
 		CommentForm,
 		RichText,
 		ReplyIcon,

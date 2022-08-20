@@ -27,7 +27,7 @@
 				<span class="hidden-visually">{{ t('deck', 'Tags') }}</span>
 			</div>
 			<div class="section-details">
-				<Multiselect v-model="assignedLabels"
+				<NcMultiselect v-model="assignedLabels"
 					:multiple="true"
 					:disabled="!canEdit"
 					:options="labelsSorted"
@@ -47,7 +47,7 @@
 							{{ scope.option.title }}
 						</div>
 					</template>
-				</Multiselect>
+				</NcMultiselect>
 			</div>
 		</div>
 
@@ -56,7 +56,7 @@
 				<span class="hidden-visually">{{ t('deck', 'Assign to users/groups/circles') }}</span>
 			</div>
 			<div class="section-details">
-				<Multiselect v-if="canEdit"
+				<NcMultiselect v-if="canEdit"
 					v-model="assignedUsers"
 					:multiple="true"
 					:options="formatedAssignables"
@@ -69,16 +69,16 @@
 					@remove="removeUserFromCard">
 					<template #tag="scope">
 						<div class="avatarlist--inline">
-							<Avatar :user="scope.option.uid"
+							<NcAvatar :user="scope.option.uid"
 								:display-name="scope.option.displayname"
 								:size="24"
 								:is-no-user="scope.option.isNoUser"
 								:disable-menu="true" />
 						</div>
 					</template>
-				</Multiselect>
+				</NcMultiselect>
 				<div v-else class="avatar-list--readonly">
-					<Avatar v-for="option in assignedUsers"
+					<NcAvatar v-for="option in assignedUsers"
 						:key="option.primaryKey"
 						:user="option.uid"
 						:display-name="option.displayname"
@@ -93,7 +93,7 @@
 				<span class="hidden-visually">{{ t('deck', 'Due date') }}</span>
 			</div>
 			<div class="section-details">
-				<DatetimePicker v-model="duedate"
+				<NcDatetimePicker v-model="duedate"
 					:placeholder="t('deck', 'Set a due date')"
 					type="datetime"
 					:minute-step="5"
@@ -103,11 +103,11 @@
 					:disabled="saving || !canEdit"
 					:shortcuts="shortcuts"
 					confirm />
-				<Actions v-if="canEdit">
-					<ActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">
+				<NcActions v-if="canEdit">
+					<NcActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">
 						{{ t('deck', 'Remove due date') }}
-					</ActionButton>
-				</Actions>
+					</NcActionButton>
+				</NcActions>
 			</div>
 		</div>
 
@@ -125,7 +125,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
-import { Avatar, Actions, ActionButton, Multiselect, DatetimePicker } from '@nextcloud/vue'
+import { NcAvatar, NcActions, NcActionButton, NcMultiselect, NcDatetimePicker } from '@nextcloud/vue'
 import { loadState } from '@nextcloud/initial-state'
 
 import { CollectionList } from 'nextcloud-vue-collections'
@@ -142,11 +142,11 @@ export default {
 	name: 'CardSidebarTabDetails',
 	components: {
 		Description,
-		Multiselect,
-		DatetimePicker,
-		Actions,
-		ActionButton,
-		Avatar,
+		NcMultiselect,
+		NcDatetimePicker,
+		NcActions,
+		NcActionButton,
+		NcAvatar,
 		CollectionList,
 	},
 	mixins: [Color],

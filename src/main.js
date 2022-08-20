@@ -76,6 +76,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 /* eslint-disable-next-line no-new */
 new Vue({
+	name: 'Deck',
 	el: '#content',
 	router,
 	store,

@@ -43,13 +43,13 @@
 			<span>{{ card.attachmentCount }}</span>
 		</div>
 
-		<AvatarList :users="card.assignedUsers" />
+		<NcAvatarList :users="card.assignedUsers" />
 
 		<CardMenu class="card-menu" :card="card" />
 	</div>
 </template>
 <script>
-import AvatarList from './AvatarList'
+import NcAvatarList from './AvatarList'
 import CardMenu from './CardMenu'
 import TextIcon from 'vue-material-design-icons/Text.vue'
 import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
@@ -59,7 +59,7 @@ import CommentUnreadIcon from 'vue-material-design-icons/CommentAccount.vue'
 
 export default {
 	name: 'CardBadges',
-	components: { AvatarList, CardMenu, TextIcon, AttachmentIcon, CheckmarkIcon, CommentIcon, CommentUnreadIcon },
+	components: { NcAvatarList, CardMenu, TextIcon, AttachmentIcon, CheckmarkIcon, CommentIcon, CommentUnreadIcon },
 	props: {
 		card: {
 			type: Object,

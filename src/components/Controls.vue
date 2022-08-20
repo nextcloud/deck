@@ -25,11 +25,11 @@
 		<div v-if="overviewName" class="board-title">
 			<div class="board-bullet icon-calendar-dark" />
 			<h2>{{ overviewName }}</h2>
-			<Actions>
-				<ActionButton icon="icon-add" @click="clickShowAddCardModel">
+			<NcActions>
+				<NcActionButton icon="icon-add" @click="clickShowAddCardModel">
 					{{ t('deck', 'Add card') }}
-				</ActionButton>
-			</Actions>
+				</NcActionButton>
+			</NcActions>
 			<CardCreateDialog v-if="showAddCardModal" @close="clickHideAddCardModel" />
 		</div>
 		<div v-else-if="board" class="board-title">
@@ -49,11 +49,11 @@
 			<div v-if="board && canManage && !showArchived && !board.archived"
 				id="stack-add"
 				v-click-outside="hideAddStack">
-				<Actions v-if="!isAddStackVisible">
-					<ActionButton icon="icon-add" @click.stop="showAddStack">
+				<NcActions v-if="!isAddStackVisible">
+					<NcActionButton icon="icon-add" @click.stop="showAddStack">
 						{{ t('deck', 'Add list') }}
-					</ActionButton>
-				</Actions>
+					</NcActionButton>
+				</NcActions>
 				<form v-else @submit.prevent="addNewStack()">
 					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add list') }}</label>
 					<input id="new-stack-input-main"
@@ -71,13 +71,13 @@
 			</div>
 			<div v-if="board" class="board-action-buttons">
 				<div class="board-action-buttons__filter">
-					<Popover container=".board-action-buttons__filter"
+					<NcPopover container=".board-action-buttons__filter"
 						:placement="'bottom-end'"
 						:aria-label="t('deck', 'Active filters')"
 						@show="filterVisible=true"
 						@hide="filterVisible=false">
-						<!-- We cannot use Actions here are the popover trigger does not update on reactive icons -->
-						<Button slot="trigger"
+						<!-- We cannot use NcActions here are the popover trigger does not update on reactive icons -->
+						<NcButton slot="trigger"
 							:title="t('deck', 'Apply filter')"
 							class="filter-button"
 							type="tertiary-no-background">
@@ -85,7 +85,7 @@
 								<FilterIcon v-if="isFilterActive" :size="20" decorative />
 								<FilterOffIcon v-else :size="20" decorative />
 							</template>
-						</Button>
+						</NcButton>
 
 						<div v-if="filterVisible" class="filter">
 							<h3>{{ t('deck', 'Filter by tag') }}</h3>
@@ -117,7 +117,7 @@
 									class="checkbox"
 									:value="user.uid"
 									@change="setFilter">
-								<label :for="user.uid"><Avatar :user="user.uid" :size="24" :disable-menu="true" /> {{ user.displayname }}</label>
+								<label :for="user.uid"><NcAvatar :user="user.uid" :size="24" :disable-menu="true" /> {{ user.displayname }}</label>
 							</div>
 
 							<h3>{{ t('deck', 'Filter by due date') }}</h3>
@@ -177,38 +177,38 @@
 								<label for="noDue">{{ t('deck', 'No due date') }}</label>
 							</div>
 
-							<Button :disabled="!isFilterActive" :wide="true" @click="clearFilter">
+							<NcButton :disabled="!isFilterActive" :wide="true" @click="clearFilter">
 								{{ t('deck', 'Clear filter') }}
-							</Button>
+							</NcButton>
 						</div>
-					</Popover>
+					</NcPopover>
 				</div>
 
-				<Actions>
-					<ActionButton @click="toggleShowArchived">
+				<NcActions>
+					<NcActionButton @click="toggleShowArchived">
 						<template #icon>
 							<ArchiveIcon :size="20" decorative />
 						</template>
 						{{ showArchived ? t('deck', 'Hide archived cards') : t('deck', 'Show archived cards') }}
-					</ActionButton>
-					<ActionButton v-if="compactMode"
+					</NcActionButton>
+					<NcActionButton v-if="compactMode"
 						@click="toggleCompactMode">
 						<ArrowExpandVerticalIcon slot="icon" :size="20" decorative />
 						{{ t('deck', 'Toggle compact mode') }}
-					</ActionButton>
-					<ActionButton v-else
+					</NcActionButton>
+					<NcActionButton v-else
 						@click="toggleCompactMode">
 						<ArrowCollapseVerticalIcon slot="icon" :size="20" decorative />
 						{{ t('deck', 'Toggle compact mode') }}
-					</ActionButton>
-				</Actions>
-				<!-- FIXME: ActionRouter currently doesn't work as an inline action -->
-				<Actions>
-					<ActionButton icon="icon-menu-sidebar"
+					</NcActionButton>
+				</NcActions>
+				<!-- FIXME: NcActionRouter currently doesn't work as an inline action -->
+				<NcActions>
+					<NcActionButton icon="icon-menu-sidebar"
 						:aria-label="t('deck', 'Open details')"
 						:title="t('deck', 'Details')"
 						@click="toggleDetailsView" />
-				</Actions>
+				</NcActions>
 			</div>
 		</div>
 	</div>
@@ -216,7 +216,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Actions, ActionButton, Avatar, Button, Popover } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcAvatar, NcButton, NcPopover } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle'
 import CardCreateDialog from '../CardCreateDialog'
 import ArchiveIcon from 'vue-material-design-icons/Archive'
@@ -228,11 +228,11 @@ import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertic
 export default {
 	name: 'Controls',
 	components: {
-		Actions,
-		ActionButton,
-		Button,
-		Popover,
-		Avatar,
+		NcActions,
+		NcActionButton,
+		NcButton,
+		NcPopover,
+		NcAvatar,
 		CardCreateDialog,
 		ArchiveIcon,
 		FilterIcon,

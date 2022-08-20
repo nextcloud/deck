@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<DashboardWidget :items="cards"
+		<NcDashboardWidget :items="cards"
 			empty-content-icon="icon-deck"
 			:empty-content-message="t('deck', 'No upcoming cards')"
 			:show-more-text="t('deck', 'upcoming cards')"
@@ -46,7 +46,7 @@
 					</ul>
 				</a>
 			</template>
-		</DashboardWidget>
+		</NcDashboardWidget>
 		<div class="center-button">
 			<button @click="toggleAddCardModel">
 				{{ t('deck', 'Add card') }}
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { DashboardWidget } from '@nextcloud/vue-dashboard'
+import { NcDashboardWidget } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import labelStyle from './../mixins/labelStyle'
 import DueDate from '../components/cards/badges/DueDate'
@@ -68,7 +68,7 @@ export default {
 	name: 'Dashboard',
 	components: {
 		DueDate,
-		DashboardWidget,
+		NcDashboardWidget,
 		CardCreateDialog,
 	},
 	mixins: [labelStyle],

@@ -29,12 +29,12 @@
 				name-key="displayname"
 				:tab-select="true">
 				<template #item="s">
-					<Avatar class="atwho-li--avatar" :user="s.item.uid" :size="24" />
+					<NcAvatar class="atwho-li--avatar" :user="s.item.uid" :size="24" />
 					<span class="atwho-li--name" v-text="s.item.displayname" />
 				</template>
 				<template #embeddedItem="scope">
 					<span>
-						<UserBubble v-if="scope.current.uid"
+						<NcUserBubble v-if="scope.current.uid"
 							:data-mention-id="scope.current.uid"
 							:user="scope.current.uid"
 							:display-name="scope.current.displayname" />
@@ -63,7 +63,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { UserBubble, Avatar } from '@nextcloud/vue'
+import { NcUserBubble, NcAvatar } from '@nextcloud/vue'
 import At from 'vue-at'
 import { rawToParsed } from '../../helpers/mentions'
 
@@ -71,8 +71,8 @@ export default {
 	name: 'CommentForm',
 	components: {
 		At,
-		Avatar,
-		UserBubble,
+		NcAvatar,
+		NcUserBubble,
 	},
 	props: {
 		value: {
