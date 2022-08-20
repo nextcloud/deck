@@ -147,6 +147,7 @@ OC.L10N.register(
     "Hide archived cards" : "隐藏已归档卡片",
     "Show archived cards" : "显示已归档卡片",
     "Toggle compact mode" : "切换简洁模式",
+    "Open details" : "打开详情",
     "Details" : "详情",
     "Loading board" : "正在加载面板",
     "No lists available" : "无列表可用",

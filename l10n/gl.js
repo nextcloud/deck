@@ -141,6 +141,7 @@ OC.L10N.register(
     "Hide archived cards" : "Agochar as tarxetas arquivadas",
     "Show archived cards" : "Amosar as tarxetas arquivadas",
     "Toggle compact mode" : "Alternar o modo compacto",
+    "Open details" : "Abrir detalles",
     "Details" : "Detalles",
     "Loading board" : "Cargando o taboleiro",
     "No lists available" : "Non hai listas dispoñíbeis",

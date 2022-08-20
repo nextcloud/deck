@@ -147,6 +147,7 @@ OC.L10N.register(
     "Hide archived cards" : "Amaga les targetes arxivades",
     "Show archived cards" : "Mostra les targetes arxivades",
     "Toggle compact mode" : "Commuta el mode compacte",
+    "Open details" : "Obre els detalls",
     "Details" : "Detalls",
     "Loading board" : "S'està carregant el tauler",
     "No lists available" : "No hi ha cap llista disponible",
