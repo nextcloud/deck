@@ -150,6 +150,7 @@ OC.L10N.register(
     "Hide archived cards" : "Ocultar cartões arquivados",
     "Show archived cards" : "Exibir cartões arquivados",
     "Toggle compact mode" : "Alternar para modo compacto",
+    "Open details" : "Abrir detalhes",
     "Details" : "Detalhes",
     "Loading board" : "Carregando painel",
     "No lists available" : "Nenhuma lista disponível",

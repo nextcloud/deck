@@ -150,6 +150,7 @@ OC.L10N.register(
     "Hide archived cards" : "Skryť archivované karty",
     "Show archived cards" : "Zobraziť archivované karty",
     "Toggle compact mode" : "Vyp/zap. kompaktný režim",
+    "Open details" : "Otvoriť detaily",
     "Details" : "Podrobnosti",
     "Loading board" : "Načítanie nástenky",
     "No lists available" : "Nie sú k dispozícii žiadne zoznamy",

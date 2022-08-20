@@ -150,6 +150,7 @@ OC.L10N.register(
     "Hide archived cards" : "Скрыть архивные карточки",
     "Show archived cards" : "Просмотреть или скрыть архивные карточки",
     "Toggle compact mode" : "Выбор компактного или обычного режима просмотра",
+    "Open details" : "Открыть подробности",
     "Details" : "Свойства",
     "Loading board" : "Загрузка доски",
     "No lists available" : "Нет ни одного списка",

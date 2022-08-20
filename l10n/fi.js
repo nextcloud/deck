@@ -128,6 +128,7 @@ OC.L10N.register(
     "Hide archived cards" : "Piilota arkistoidut kortit",
     "Show archived cards" : "Näytä arkistoidut kortit",
     "Toggle compact mode" : "Käytä kompaktia tilaa",
+    "Open details" : "Avaa yksityiskohdat",
     "Details" : "Tiedot",
     "Loading board" : "Ladataan taulua",
     "No lists available" : "Ei listoja saatavilla",

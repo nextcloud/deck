@@ -149,6 +149,7 @@ OC.L10N.register(
     "Hide archived cards" : "Απόκρυψη καρτελών που αρχειοθετήθηκαν",
     "Show archived cards" : "Εμφάνιση καρτελών που αρχειοθετήθηκαν",
     "Toggle compact mode" : "Εναλλαγή λειτουργίας μικρού μεγέθους",
+    "Open details" : "Άνοιγμα λεπτομερειών",
     "Details" : "Λεπτομέρειες",
     "Loading board" : "Φόρτωση πίνακα",
     "No lists available" : "Δεν υπάρχουν διαθέσιμες λίστες",
