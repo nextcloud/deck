@@ -150,6 +150,7 @@ OC.L10N.register(
     "Hide archived cards" : "Ezkutatu artxibatutako txartelak",
     "Show archived cards" : "Erakutsi artxibatutako txartelak",
     "Toggle compact mode" : "Txandakatu modu trinkoa",
+    "Open details" : "Ireki xehetasunak",
     "Details" : "Xehetasunak",
     "Loading board" : "Taula kargatzen",
     "No lists available" : "Ez dago zerrendarik eskuragarri",

@@ -150,6 +150,7 @@ OC.L10N.register(
     "Hide archived cards" : "Arşivlenmiş kartları gizle",
     "Show archived cards" : "Arşivlenmiş kartları görüntüle",
     "Toggle compact mode" : "Sıkışık kipi değiştir",
+    "Open details" : "Ayrıntıları aç",
     "Details" : "Ayrıntılar",
     "Loading board" : "Pano yükleniyor",
     "No lists available" : "Kullanılabilecek bir liste yok",

@@ -99,6 +99,7 @@ OC.L10N.register(
     "Hide archived cards" : "Skjul arkiverede kort",
     "Show archived cards" : "Vis arkiverede kort",
     "Toggle compact mode" : "Slå kompakt tilstand til/fra",
+    "Open details" : "Mere information",
     "Details" : "Detaljer",
     "Loading board" : "Indlæser tavle",
     "No lists available" : "Ingen kolonner tilgængelige",

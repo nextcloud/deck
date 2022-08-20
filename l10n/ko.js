@@ -61,6 +61,7 @@ OC.L10N.register(
     "No due date" : "기한 없음",
     "Hide archived cards" : "보관된 카드 숨기기",
     "Show archived cards" : "보관된 카드 보기",
+    "Open details" : "자세한 정보 열기",
     "Details" : "세부사항",
     "Sharing" : "공유",
     "Tags" : "태그",

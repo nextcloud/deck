@@ -136,6 +136,7 @@ OC.L10N.register(
     "Hide archived cards" : "הסתרת כרטיסים בארכיון",
     "Show archived cards" : "הצגת כרטיסים בארכיון",
     "Toggle compact mode" : "החלפת מצב חסכוני",
+    "Open details" : "פתיחת פרטים",
     "Details" : "פרטים",
     "Loading board" : "הלוח נטען",
     "No lists available" : "אין רשימות זמינות",

@@ -150,6 +150,7 @@ OC.L10N.register(
     "Hide archived cards" : "Archivierte Karten ausblenden",
     "Show archived cards" : "Archivierte Karten anzeigen",
     "Toggle compact mode" : "Kompaktmodus umschalten",
+    "Open details" : "Details öffnen",
     "Details" : "Details",
     "Loading board" : "Lade Board",
     "No lists available" : "Keine Listen verfügbar",
