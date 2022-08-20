@@ -16,6 +16,7 @@ OC.L10N.register(
     "Do you want to overwrite it?" : "Vai tu gribi pārrakstīt to?",
     "Hide archived cards" : "Slēpt arhivētās kartes",
     "Show archived cards" : "Rādīt arhivētās kartes",
+    "Open details" : "Atvērt detaļas",
     "Details" : "Detaļas",
     "Sharing" : "Koplietošana",
     "Tags" : "Birkas",

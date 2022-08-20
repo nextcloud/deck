@@ -24,6 +24,7 @@ OC.L10N.register(
     "Add card" : "Shto kartë",
     "Hide archived cards" : "Fsheh kartat e arkivuara ",
     "Show archived cards" : "Trego kartat e arkivuara",
+    "Open details" : "Hapni detajet",
     "Details" : "Detajet",
     "Sharing" : "Ndarje",
     "Tags" : "Etiketa",

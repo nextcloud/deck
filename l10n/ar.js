@@ -147,6 +147,7 @@ OC.L10N.register(
     "Hide archived cards" : "إخفاء البطاقات المؤرشفة ",
     "Show archived cards" : "اظهر البطاقات المؤرشفة",
     "Toggle compact mode" : "تبديل النمط المضغوط",
+    "Open details" : "افتح التفاصيل",
     "Details" : "التفاصيل",
     "Loading board" : "جارِ تحميل اللوح..",
     "No lists available" : "لا يوجد قائمة متاحه ",

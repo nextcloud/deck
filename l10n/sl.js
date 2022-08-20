@@ -147,6 +147,7 @@ OC.L10N.register(
     "Hide archived cards" : "Skrij arhivirane naloge",
     "Show archived cards" : "Prikaži arhivirane naloge",
     "Toggle compact mode" : "Preklopi način prikaza",
+    "Open details" : "Odpri podrobnosti",
     "Details" : "Podrobnosti",
     "Loading board" : "Poteka nalaganje zbirke",
     "No lists available" : "Ni razpoložljivih seznamov",
