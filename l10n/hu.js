@@ -150,7 +150,7 @@ OC.L10N.register(
     "Hide archived cards" : "Archivált kártyák elrejtése",
     "Show archived cards" : "Archivált kártyák megjelenítése",
     "Toggle compact mode" : "Kompakt mód be/ki",
-    "Open details" : "Részletek megjelenítése",
+    "Open details" : "Részletek megnyitása",
     "Details" : "Részletek",
     "Loading board" : "Tábla betöltése",
     "No lists available" : "Nincs elérhető lista",

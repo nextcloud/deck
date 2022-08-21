@@ -101,6 +101,7 @@ OC.L10N.register(
     "Hide archived cards" : "Fela spjöld í geymslu",
     "Show archived cards" : "Sýna spjöld í geymslu",
     "Toggle compact mode" : "Víxla þjöppuðum ham af/á",
+    "Open details" : "Opna nánari upplýsingar",
     "Details" : "Details",
     "Loading board" : "Hleð inn borði",
     "Board not found" : "Borð fannst ekki",
