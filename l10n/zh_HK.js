@@ -150,6 +150,7 @@ OC.L10N.register(
     "Hide archived cards" : "隱藏已存檔的卡片",
     "Show archived cards" : "顯示已存檔的卡片",
     "Toggle compact mode" : "切換簡潔模式",
+    "Open details" : "開啟細節",
     "Details" : "詳情",
     "Loading board" : "正在加載面板",
     "No lists available" : "無清單可用",
