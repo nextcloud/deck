@@ -193,6 +193,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			->from('deck_cards', 'c')
 			->join('c', 'deck_stacks', 's', 's.id = c.stack_id')
 			->where($qb->expr()->eq('s.board_id', $qb->createNamedParameter($boardId)))
+			->andWhere($qb->expr()->eq('c.archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
 			->andWhere($qb->expr()->eq('c.deleted_at', $qb->createNamedParameter('0')))
 			->orderBy('c.duedate')
 			->setMaxResults($limit)
