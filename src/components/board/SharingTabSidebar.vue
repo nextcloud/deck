@@ -61,6 +61,10 @@
 			</li>
 		</ul>
 
+		<NcRelatedResourcesPanel v-if="board.id"
+			provider-id="deck"
+			:item-id="board.id" />
+
 		<CollectionList v-if="projectsEnabled && board.id"
 			:id="`${board.id}`"
 			:name="board.title"
@@ -69,7 +73,7 @@
 </template>
 
 <script>
-import { NcAvatar, NcMultiselect, NcActions, NcActionButton, ActionCheckbox } from '@nextcloud/vue'
+import { NcAvatar, NcMultiselect, NcActions, NcActionButton, ActionCheckbox, NcRelatedResourcesPanel } from '@nextcloud/vue'
 import { CollectionList } from 'nextcloud-vue-collections'
 import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -86,6 +90,7 @@ export default {
 		ActionCheckbox,
 		NcMultiselect,
 		CollectionList,
+		NcRelatedResourcesPanel,
 	},
 	props: {
 		board: {
