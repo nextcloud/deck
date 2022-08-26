@@ -59,7 +59,7 @@
 			:order="1"
 			:name="t('deck', 'Attachments')">
 			<template #icon>
-				<AttachmentIcon size="20" decorative />
+				<AttachmentIcon :size="20" decorative />
 			</template>
 			<CardSidebarTabAttachments :card="currentCard" />
 		</NcAppSidebarTab>

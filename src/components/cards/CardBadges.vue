@@ -26,8 +26,8 @@
 			v-tooltip="commentsHint"
 			class="icon-badge"
 			@click.stop="openComments">
-			<CommentUnreadIcon v-if="card.commentsUnread > 0" size="16" />
-			<CommentIcon v-else size="16" />
+			<CommentUnreadIcon v-if="card.commentsUnread > 0" :size="16" />
+			<CommentIcon v-else :size="16" />
 			<span>{{ card.commentsCount }}</span>
 		</div>
 
@@ -36,10 +36,10 @@
 			<span>{{ checkListCheckedCount }}/{{ checkListCount }}</span>
 		</div>
 
-		<TextIcon v-else-if="card.description.trim() && checkListCount == 0" size="16" decorative />
+		<TextIcon v-else-if="card.description.trim() && checkListCount == 0" :size="16" decorative />
 
 		<div v-if="card.attachmentCount > 0" class="icon-badge">
-			<AttachmentIcon size="16" />
+			<AttachmentIcon :size="16" />
 			<span>{{ card.attachmentCount }}</span>
 		</div>
 
