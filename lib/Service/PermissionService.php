@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\Service;
 
-use OCP\Cache\CappedMemoryCache;
+use OC\Cache\CappedMemoryCache;
 use OCA\Circles\Model\Member;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
@@ -63,8 +63,8 @@ class PermissionService {
 	/** @var array */
 	private $users = [];
 
-	private CappedMemoryCache $boardCache;
-	private CappedMemoryCache $permissionCache;
+	private $boardCache;
+	private $permissionCache;
 
 	public function __construct(
 		ILogger $logger,
