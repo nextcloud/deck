@@ -35,6 +35,7 @@ OC.L10N.register(
     "Could not write file to disk" : "Неможливо записати файл на диск",
     "A PHP extension stopped the file upload" : "Розширення PHP призупинило завантаження файлу",
     "Card not found" : "Картку не знайдено",
+    "Invalid date, date format must be YYYY-MM-DD" : "Недійсна дата, формат дати має бути РРРР-ММ-ДД",
     "Card details" : "Деталі картки",
     "Add board" : "Додати дошку",
     "Select the board to link to a project" : "Виберіть дошку для прив'зки до проєкту",
