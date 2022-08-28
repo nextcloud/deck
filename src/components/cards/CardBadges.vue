@@ -26,8 +26,8 @@
 			v-tooltip="commentsHint"
 			class="icon-badge"
 			@click.stop="openComments">
-			<CommentUnreadIcon v-if="card.commentsUnread > 0" size="16" />
-			<CommentIcon v-else size="16" />
+			<CommentUnreadIcon v-if="card.commentsUnread > 0" :size="16" />
+			<CommentIcon v-else :size="16" />
 			<span>{{ card.commentsCount }}</span>
 		</div>
 
@@ -36,20 +36,20 @@
 			<span>{{ checkListCheckedCount }}/{{ checkListCount }}</span>
 		</div>
 
-		<TextIcon v-else-if="card.description.trim() && checkListCount == 0" size="16" decorative />
+		<TextIcon v-else-if="card.description.trim() && checkListCount == 0" :size="16" decorative />
 
 		<div v-if="card.attachmentCount > 0" class="icon-badge">
-			<AttachmentIcon size="16" />
+			<AttachmentIcon :size="16" />
 			<span>{{ card.attachmentCount }}</span>
 		</div>
 
-		<AvatarList :users="card.assignedUsers" />
+		<NcAvatarList :users="card.assignedUsers" />
 
 		<CardMenu class="card-menu" :card="card" />
 	</div>
 </template>
 <script>
-import AvatarList from './AvatarList'
+import NcAvatarList from './AvatarList'
 import CardMenu from './CardMenu'
 import TextIcon from 'vue-material-design-icons/Text.vue'
 import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
@@ -59,7 +59,7 @@ import CommentUnreadIcon from 'vue-material-design-icons/CommentAccount.vue'
 
 export default {
 	name: 'CardBadges',
-	components: { AvatarList, CardMenu, TextIcon, AttachmentIcon, CheckmarkIcon, CommentIcon, CommentUnreadIcon },
+	components: { NcAvatarList, CardMenu, TextIcon, AttachmentIcon, CheckmarkIcon, CommentIcon, CommentUnreadIcon },
 	props: {
 		card: {
 			type: Object,

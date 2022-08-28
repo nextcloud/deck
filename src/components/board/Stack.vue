@@ -52,25 +52,25 @@
 						value="">
 				</form>
 			</transition>
-			<Actions v-if="canManage && !isArchived" :force-menu="true">
-				<ActionButton @click="modalArchivAllCardsShow=true">
+			<NcActions v-if="canManage && !isArchived" :force-menu="true">
+				<NcActionButton @click="modalArchivAllCardsShow=true">
 					<template #icon>
 						<ArchiveIcon decorative />
 					</template>
 					{{ t('deck', 'Archive all cards') }}
-				</ActionButton>
-				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
+				</NcActionButton>
+				<NcActionButton icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete list') }}
-				</ActionButton>
-			</Actions>
-			<Actions v-if="canEdit && !showArchived && !isArchived">
-				<ActionButton icon="icon-add" @click.stop="showAddCard=true">
+				</NcActionButton>
+			</NcActions>
+			<NcActions v-if="canEdit && !showArchived && !isArchived">
+				<NcActionButton icon="icon-add" @click.stop="showAddCard=true">
 					{{ t('deck', 'Add card') }}
-				</ActionButton>
-			</Actions>
+				</NcActionButton>
+			</NcActions>
 		</div>
 
-		<Modal v-if="modalArchivAllCardsShow" @close="modalArchivAllCardsShow=false">
+		<NcModal v-if="modalArchivAllCardsShow" @close="modalArchivAllCardsShow=false">
 			<div class="modal__content">
 				<h3>{{ t('deck', 'Archive all cards in this list') }}</h3>
 				<progress :value="stackTransfer.current" :max="stackTransfer.total" />
@@ -81,7 +81,7 @@
 					{{ t('deck', 'Cancel') }}
 				</button>
 			</div>
-		</Modal>
+		</NcModal>
 
 		<transition name="slide-top" appear>
 			<div v-if="showAddCard" class="stack__card-add">
@@ -131,7 +131,7 @@
 import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
 
-import { Actions, ActionButton, Modal } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { showError, showUndo } from '@nextcloud/dialogs'
 import CardItem from '../cards/CardItem'
 
@@ -141,12 +141,12 @@ import ArchiveIcon from 'vue-material-design-icons/Archive'
 export default {
 	name: 'Stack',
 	components: {
-		Actions,
-		ActionButton,
+		NcActions,
+		NcActionButton,
 		CardItem,
 		Container,
 		Draggable,
-		Modal,
+		NcModal,
 		ArchiveIcon,
 	},
 

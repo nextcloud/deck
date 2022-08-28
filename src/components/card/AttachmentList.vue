@@ -70,12 +70,12 @@
 						</div>
 					</a>
 				</div>
-				<Actions v-if="selectable">
-					<ActionButton icon="icon-confirm" @click="$emit('select-attachment', attachment)">
+				<NcActions v-if="selectable">
+					<NcActionButton icon="icon-confirm" @click="$emit('select-attachment', attachment)">
 						{{ t('deck', 'Add this attachment') }}
-					</ActionButton>
-				</Actions>
-				<Actions v-if="removable && !isReadOnly" :force-menu="true">
+					</NcActionButton>
+				</NcActions>
+				<NcActions v-if="removable && !isReadOnly" :force-menu="true">
 					<ActionLink v-if="attachment.extendedData.fileid" icon="icon-folder" :href="internalLink(attachment)">
 						{{ t('deck', 'Show in Files') }}
 					</ActionLink>
@@ -85,17 +85,17 @@
 						download>
 						{{ t('deck', 'Download') }}
 					</ActionLink>
-					<ActionButton v-if="attachment.extendedData.fileid && !isReadOnly" icon="icon-delete" @click="unshareAttachment(attachment)">
+					<NcActionButton v-if="attachment.extendedData.fileid && !isReadOnly" icon="icon-delete" @click="unshareAttachment(attachment)">
 						{{ t('deck', 'Remove attachment') }}
-					</ActionButton>
+					</NcActionButton>
 
-					<ActionButton v-if="!attachment.extendedData.fileid && attachment.deletedAt === 0" icon="icon-delete" @click="$emit('delete-attachment', attachment)">
+					<NcActionButton v-if="!attachment.extendedData.fileid && attachment.deletedAt === 0" icon="icon-delete" @click="$emit('delete-attachment', attachment)">
 						{{ t('deck', 'Delete Attachment') }}
-					</ActionButton>
-					<ActionButton v-else-if="!attachment.extendedData.fileid" icon="icon-history" @click="$emit('restore-attachment', attachment)">
+					</NcActionButton>
+					<NcActionButton v-else-if="!attachment.extendedData.fileid" icon="icon-history" @click="$emit('restore-attachment', attachment)">
 						{{ t('deck', 'Restore Attachment') }}
-					</ActionButton>
-				</Actions>
+					</NcActionButton>
+				</NcActions>
 			</li>
 		</ul>
 	</AttachmentDragAndDrop>
@@ -103,7 +103,7 @@
 
 <script>
 import axios from '@nextcloud/axios'
-import { Actions, ActionButton, ActionLink } from '@nextcloud/vue'
+import { NcActions, NcActionButton, ActionLink } from '@nextcloud/vue'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
 import relativeDate from '../../mixins/relativeDate'
 import { formatFileSize } from '@nextcloud/files'
@@ -125,8 +125,8 @@ const picker = getFilePickerBuilder(t('deck', 'File to share'))
 export default {
 	name: 'AttachmentList',
 	components: {
-		Actions,
-		ActionButton,
+		NcActions,
+		NcActionButton,
 		ActionLink,
 		AttachmentDragAndDrop,
 	},

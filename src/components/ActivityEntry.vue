@@ -36,7 +36,7 @@
 
 <script>
 import RichText from '@juliushaertl/vue-richtext'
-import { UserBubble } from '@nextcloud/vue'
+import { NcUserBubble } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import DOMPurify from 'dompurify'
 import relativeDate from '../mixins/relativeDate'
@@ -93,7 +93,7 @@ export default {
 					break
 				case 'user':
 					parameters[key] = {
-						component: UserBubble,
+						component: NcUserBubble,
 						props: {
 							user: parameters[key].id,
 							displayName: parameters[key].name,

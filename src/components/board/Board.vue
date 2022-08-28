@@ -30,7 +30,7 @@
 				<h2>{{ t('deck', 'Loading board') }}</h2>
 				<p />
 			</div>
-			<EmptyContent v-else-if="isEmpty" key="empty" icon="icon-deck">
+			<NcEmptyContent v-else-if="isEmpty" key="empty" icon="icon-deck">
 				{{ t('deck', 'No lists available') }}
 				<template v-if="canManage" #desc>
 					{{ t('deck', 'Create a new list to add cards to this board') }}
@@ -48,7 +48,7 @@
 							value="">
 					</form>
 				</template>
-			</EmptyContent>
+			</NcEmptyContent>
 			<div v-else-if="!isEmpty && !loading" key="board" class="board">
 				<Container lock-axix="y"
 					orientation="horizontal"
@@ -75,7 +75,7 @@ import { Container, Draggable } from 'vue-smooth-dnd'
 import { mapState, mapGetters } from 'vuex'
 import Controls from '../Controls'
 import Stack from './Stack'
-import { EmptyContent } from '@nextcloud/vue'
+import { NcEmptyContent } from '@nextcloud/vue'
 import GlobalSearchResults from '../search/GlobalSearchResults'
 import { showError } from '../../helpers/errors'
 
@@ -87,7 +87,7 @@ export default {
 		Container,
 		Draggable,
 		Stack,
-		EmptyContent,
+		NcEmptyContent,
 	},
 	inject: [
 		'boardApi',

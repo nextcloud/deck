@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<Multiselect v-if="canShare"
+		<NcMultiselect v-if="canShare"
 			v-model="addAcl"
 			:placeholder="t('deck', 'Share board with a user, group or circle …')"
 			:options="formatedSharees"
@@ -18,12 +18,12 @@
 			<template #noResult>
 				{{ isSearching ? t('deck', 'Searching for users, groups and circles …') : t('deck', 'No participants found') }}
 			</template>
-		</Multiselect>
+		</NcMultiselect>
 
 		<ul id="shareWithList"
 			class="shareWithList">
 			<li>
-				<Avatar :user="board.owner.uid" />
+				<NcAvatar :user="board.owner.uid" />
 				<span class="has-tooltip username">
 					{{ board.owner.displayname }}
 					<span v-if="!isCurrentUser(board.owner.uid)" class="board-owner-label">
@@ -32,7 +32,7 @@
 				</span>
 			</li>
 			<li v-for="acl in board.acl" :key="acl.id">
-				<Avatar v-if="acl.type===0" :user="acl.participant.uid" />
+				<NcAvatar v-if="acl.type===0" :user="acl.participant.uid" />
 				<div v-if="acl.type===1" class="avatardiv icon icon-group" />
 				<div v-if="acl.type===7" class="avatardiv icon icon-circles" />
 				<span class="has-tooltip username">
@@ -44,7 +44,7 @@
 				<ActionCheckbox v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0) && (canManage || (canEdit && canShare))" :checked="acl.permissionEdit" @change="clickEditAcl(acl)">
 					{{ t('deck', 'Can edit') }}
 				</ActionCheckbox>
-				<Actions v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0)" :force-menu="true">
+				<NcActions v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0)" :force-menu="true">
 					<ActionCheckbox v-if="canManage || canShare" :checked="acl.permissionShare" @change="clickShareAcl(acl)">
 						{{ t('deck', 'Can share') }}
 					</ActionCheckbox>
@@ -54,10 +54,10 @@
 					<ActionCheckbox v-if="acl.type === 0 && isCurrentUser(board.owner.uid)" :checked="acl.owner" @change="clickTransferOwner(acl.participant.uid)">
 						{{ t('deck', 'Owner') }}
 					</ActionCheckbox>
-					<ActionButton v-if="canManage" icon="icon-delete" @click="clickDeleteAcl(acl)">
+					<NcActionButton v-if="canManage" icon="icon-delete" @click="clickDeleteAcl(acl)">
 						{{ t('deck', 'Delete') }}
-					</ActionButton>
-				</Actions>
+					</NcActionButton>
+				</NcActions>
 			</li>
 		</ul>
 
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { Avatar, Multiselect, Actions, ActionButton, ActionCheckbox } from '@nextcloud/vue'
+import { NcAvatar, NcMultiselect, NcActions, NcActionButton, ActionCheckbox } from '@nextcloud/vue'
 import { CollectionList } from 'nextcloud-vue-collections'
 import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -80,11 +80,11 @@ import debounce from 'lodash/debounce'
 export default {
 	name: 'SharingTabSidebar',
 	components: {
-		Avatar,
-		Actions,
-		ActionButton,
+		NcAvatar,
+		NcActions,
+		NcActionButton,
 		ActionCheckbox,
-		Multiselect,
+		NcMultiselect,
 		CollectionList,
 	},
 	props: {
