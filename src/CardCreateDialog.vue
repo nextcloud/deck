@@ -137,7 +137,7 @@ export default {
 	},
 	computed: {
 		isBoardAndStackChoosen() {
-			return !(this.selectedBoard === '')
+			return !(this.selectedBoard === '' || this.selectedStack === '')
 		},
 	},
 	beforeMount() {
