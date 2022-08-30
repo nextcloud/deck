@@ -1,6 +1,45 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.8.0-beta.1
+### Enhancements
+
+- Nextcloud 25 compatibility
+- Performance improvements
+  - Use capped memory cache for board permissions @juliushaertl [#3980](https://github.com/nextcloud/deck/pull/3980)
+  - Improve CalDAV integration performance @juliushaertl [#3982](https://github.com/nextcloud/deck/pull/3982)
+  - Simpify query for getting shared files @juliushaertl [#3983](https://github.com/nextcloud/deck/pull/3983)
+- Accessibility improvements
+  - Add a11y label for sidebar button @marcelklehr [#3986](https://github.com/nextcloud/deck/pull/3986)
+  - Improve filter popover accessibility @juliushaertl [#3820](https://github.com/nextcloud/deck/pull/3820)
+  - Set ids to skip to content/navigation @juliushaertl [#3924](https://github.com/nextcloud/deck/pull/3924)
+  - Invert icons properly in dark mode @juliushaertl [#3939](https://github.com/nextcloud/deck/pull/3939)
+- Bump dependencies
+
+### Fixed
+
+- set last modified when the card was found. Fixes #3763 @ylebre [#3796](https://github.com/nextcloud/deck/pull/3796)
+- Increase file count after sharing @luka-nextcloud [#3682](https://github.com/nextcloud/deck/pull/3682)
+- Align Duedate-delete icon properly - fixes nextcloud/deck#3791 @Ben-Ro [#3811](https://github.com/nextcloud/deck/pull/3811)
+- Fix for issue #3637 @flummer [#3833](https://github.com/nextcloud/deck/pull/3833)
+- Switch to 'markdown-it-task-checkbox' for rendering of task lists @q-wertz [#3898](https://github.com/nextcloud/deck/pull/3898)
+- Make rename functions accessibly by keyboard navigation @juliushaertl [#3813](https://github.com/nextcloud/deck/pull/3813)
+- Prevent opening card and applyLabelFilter on card drag end @eneiluj [#3916](https://github.com/nextcloud/deck/pull/3916)
+- Inserted required property in the rename list field, to prevent the l… @mstolf [#3862](https://github.com/nextcloud/deck/pull/3862)
+- Fix share provider for master changes @nickvergessen [#3942](https://github.com/nextcloud/deck/pull/3942)
+- Fetch attachment folder for the correct user during cron job @juliushaertl [#3952](https://github.com/nextcloud/deck/pull/3952)
+- Fix z-index for deck sidebar @Raudius [#3884](https://github.com/nextcloud/deck/pull/3884)
+
+### Other
+
+- Switch from OC::$server->get to OCP\Server::get @CarlSchwan [#3801](https://github.com/nextcloud/deck/pull/3801)
+- Add performance section in README @eneiluj [#3830](https://github.com/nextcloud/deck/pull/3830)
+- Fix static analysis by stubbing more circle methods @juliushaertl [#3900](https://github.com/nextcloud/deck/pull/3900)
+- fix(docs): fix links to JSON schemas for Trello @wiktor2200 [#3872](https://github.com/nextcloud/deck/pull/3872)
+- Move to OCP\Collaboration\Resources\LoadAdditionalScriptsEvent @juliushaertl [#3818](https://github.com/nextcloud/deck/pull/3818)
+- Rename settings to deck settings @PVince81 [#3928](https://github.com/nextcloud/deck/pull/3928)
+- SCSS cleanup @juliushaertl [#3803](https://github.com/nextcloud/deck/pull/3803)
+- Hide deprecated projects in sidebar and card details by default @Pytal [#3984](https://github.com/nextcloud/deck/pull/3984)
 
 ## 1.7.0
 
