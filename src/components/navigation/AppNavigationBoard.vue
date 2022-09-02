@@ -262,7 +262,7 @@ export default {
 		},
 		actionDelete() {
 			OC.dialogs.confirmDestructive(
-				t('deck', 'Are you sure you want to delete the board {title}? This will delete all the data of this board.', { title: this.board.title }),
+				t('deck', 'Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards.', { title: this.board.title }),
 				t('deck', 'Delete the board?'),
 				{
 					type: OC.dialogs.YES_NO_BUTTONS,
