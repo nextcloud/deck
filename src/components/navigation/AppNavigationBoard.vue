@@ -25,6 +25,7 @@
 		:loading="loading"
 		:to="routeTo"
 		:undo="deleted"
+		:menu-placement="'auto'"
 		@undo="unDelete">
 		<NcAppNavigationIconBullet slot="icon" :color="board.color" />
 

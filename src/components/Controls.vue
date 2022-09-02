@@ -436,7 +436,7 @@ export default {
 		justify-content: center;
 		input[type=search] {
 			background-position: 5px;
-			padding-left: 24px;
+			padding-left: 24px !important;
 		}
 	}
 
