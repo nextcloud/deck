@@ -257,7 +257,6 @@ OC.L10N.register(
     "Only assigned cards" : "Só as tarxetas asignadas",
     "No reminder" : "Non hai lembretes",
     "An error occurred" : "Produciuse un erro",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Confirma que quere eliminar o taboleiro {title}? Isto eliminará todos os datos deste taboleiro.",
     "Delete the board?" : "Eliminar o taboleiro?",
     "Loading filtered view" : "Cargando a vista filtrada",
     "No due" : "Sen caducidade",
@@ -277,6 +276,7 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Compartir {file} cunha tarxeta Deck",
     "Share" : "Compartir",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck é unha ferramenta de organización de estilo kanban dirixida a planificación persoal e organización de proxectos para equipos integrados con Nextcloud. \n\n\n- 📥 Engada as súas tarefas ás tarxetas e fagas ordenadas\n- 📄 Escriba notas adicionais en markdown\n- 🔖 Asigne etiquetas para unha mellor organización\n- 👥 Comparta co seu equipo, amigos ou a súa familia\n- 📎 Anexe ficheiros e insíraos na súa descrición de markdown\n- 💬 Debata co seu equipo usando os comentarios\n- ⚡ Faga un seguimento dos cambios no fluxo de actividade\n- 🚀 Teña o seu proxecto organizado",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Confirma que quere eliminar o taboleiro {title}? Isto eliminará todos os datos deste taboleiro.",
     "This week" : "Esta semana"
 },
 "nplurals=2; plural=(n != 1);");

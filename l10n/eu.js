@@ -278,7 +278,6 @@ OC.L10N.register(
     "Only assigned cards" : "Bakarrik esleitutako txartelak",
     "No reminder" : "Abisurik ez",
     "An error occurred" : "Errore bat gertatu da",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Ziur zaude «{title}» taula ezabatu nahi duzula? Honek taula honen datu guztiak ezabatuko ditu.",
     "Delete the board?" : "Taula ezabatu?",
     "Loading filtered view" : "Kargatzen iragazitako ikuspegia",
     "No due" : "Epemugarik ez",
@@ -301,6 +300,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user} ?" : "Ziur {title} transferitu nahi duzula {user}-en panela ?",
     "Transfer the board for {user} successfully" : "Transferitu {user}-ren panela behar bezala",
     "Failed to transfer the board for {user}" : "Ezin izan da transferitu {user}-ren panela",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Ziur zaude «{title}» taula ezabatu nahi duzula? Honek taula honen datu guztiak ezabatuko ditu.",
     "This week" : "Aste honetan",
     "Are you sure you want to transfer the board {title} for {user}?" : "Ziur {title} taula transferitu nahi duzula {user}?"
 },

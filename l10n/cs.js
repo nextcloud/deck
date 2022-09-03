@@ -278,7 +278,6 @@ OC.L10N.register(
     "Only assigned cards" : "Pouze přiřazené karty",
     "No reminder" : "Bez připomínky",
     "An error occurred" : "Došlo k chybě",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Opravdu chcete tabuly {title} smazat? Toto smaže veškerá data této tabule.",
     "Delete the board?" : "Smazat tabuli?",
     "Loading filtered view" : "Načítání filtrovaného pohledu",
     "No due" : "Žádný termín",
@@ -301,6 +300,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user} ?" : "Opravdu chcete předat vlastnictví tabule {title} uživateli {user}?",
     "Transfer the board for {user} successfully" : "Předání vlastnictví tabule uživateli {user} úspěšné",
     "Failed to transfer the board for {user}" : "Nepodařilo se předat vlastnictví tabule uživateli {user}",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Opravdu chcete tabuly {title} smazat? Toto smaže veškerá data této tabule.",
     "This week" : "Tento týden",
     "Are you sure you want to transfer the board {title} for {user}?" : "Opravdu chcete předat vlastnictví tabule {title} uživateli {user}?"
 },
