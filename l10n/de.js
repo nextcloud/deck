@@ -278,7 +278,6 @@ OC.L10N.register(
     "Only assigned cards" : "Nur zugewiesene Karten",
     "No reminder" : "Keine Erinnerung",
     "An error occurred" : "Es ist ein Fehler aufgetreten",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Möchtest du wirklich das Board {title} mit all seinen Daten löschen?",
     "Delete the board?" : "Das Board löschen?",
     "Loading filtered view" : "Lade gefilterte Ansicht",
     "No due" : "Kein Fälligkeitsdatum",
@@ -301,6 +300,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user} ?" : "Möchtest du wirklich das Board {title} an {user} übertragen?",
     "Transfer the board for {user} successfully" : "Das Board wurde erfolgreich an {user} übertragen",
     "Failed to transfer the board for {user}" : "Board konnte nicht an {user} übertragen werden",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Möchtest du wirklich das Board {title} mit all seinen Daten löschen?",
     "This week" : "Diese Woche",
     "Are you sure you want to transfer the board {title} for {user}?" : "Möchtest du wirklich das Board {title} an {user} übertragen?"
 },

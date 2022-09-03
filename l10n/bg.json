@@ -275,7 +275,6 @@
     "Only assigned cards" : "Само зачислените карти",
     "No reminder" : "Няма напомняне",
     "An error occurred" : "Възникна грешка",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Сигурни ли сте, че искате да изтриете таблото {title}? Това ще изтрие всички данни на това табло.",
     "Delete the board?" : "Изтриване на таблото?",
     "Loading filtered view" : "Зареждане на филтриран изглед",
     "No due" : "Не се дължи",
@@ -298,6 +297,7 @@
     "Are you sure you want to transfer the board {title} for {user} ?" : "Сигурни ли сте че искате да прехвърлите таблото {title} на {user}?",
     "Transfer the board for {user} successfully" : "Успешно прехвърляне на таблото към {user} ",
     "Failed to transfer the board for {user}" : "Неуспешно прехвърляне на таблото към {user}",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Сигурни ли сте, че искате да изтриете таблото {title}? Това ще изтрие всички данни на това табло.",
     "This week" : "Тази седмица",
     "Are you sure you want to transfer the board {title} for {user}?" : "Сигурни ли сте че искате да прехвърлите таблото {title} на {user}?"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

@@ -268,7 +268,6 @@ OC.L10N.register(
     "Only assigned cards" : "Només les targetes assignades",
     "No reminder" : "Sense recordatoris",
     "An error occurred" : "S'ha produït un error",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Esteu segur que voleu suprimir el tauler {title}? Això eliminarà totes les dades d'aquest tauler.",
     "Delete the board?" : "Voleu suprimir el tauler?",
     "Loading filtered view" : "S'està carregant la visualització filtrada",
     "No due" : "Sense venciment",
@@ -288,6 +287,7 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Compartir {file} amb una targeta de Deck",
     "Share" : "Compartir",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Tauler és una eina d'organització a l'estil kanban dirigida a la planificació personal i a l'organització de projectes per equips integrada a Nextcloud.\n\n\n- 📥 Afegiu les tasques en targetes i poseu-les en ordre\n- 📄 Apunteu notes addicionals en markdown\n- 🔖 Assigneu etiquetes per una organització encara millor\n- 👥 Compartiu amb el vostre equip, família o amics\n- 📎 Adjunteu fitxers i encasteu-los en la descripció en markdown\n- 💬 Debateu amb el vostre equip fent servir comentaris\n- ⚡ Mantingueu el seguiment de canvis al flux d'activitat\n- 🚀 Tingueu el vostre projecte organitzat",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Esteu segur que voleu suprimir el tauler {title}? Això eliminarà totes les dades d'aquest tauler.",
     "This week" : "Aquesta setmana"
 },
 "nplurals=2; plural=(n != 1);");

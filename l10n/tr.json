@@ -276,7 +276,6 @@
     "Only assigned cards" : "Yalnızca atanmış kartlar",
     "No reminder" : "Anımsatıcı yok",
     "An error occurred" : "Bir sorun çıktı",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "{title} panosunu silmek istediğinize emin misiniz? Bu işlem, bu panodaki tüm verileri silecek.",
     "Delete the board?" : "Pano silinsin mi?",
     "Loading filtered view" : "Süzülmüş görünüm yükleniyor",
     "No due" : "Bitiş yok",
@@ -299,6 +298,7 @@
     "Are you sure you want to transfer the board {title} for {user} ?" : "{title} panosunu {user} kullanıcısına aktarmak istediğinize emin misiniz?",
     "Transfer the board for {user} successfully" : "Pano {user} kullanıcısına aktarıldı",
     "Failed to transfer the board for {user}" : "Pano {user} kullanıcısına aktarılamadı",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "{title} panosunu silmek istediğinize emin misiniz? Bu işlem, bu panodaki tüm verileri silecek.",
     "This week" : "Bu hafta",
     "Are you sure you want to transfer the board {title} for {user}?" : "{title} panosunu {user} kullanıcısına aktarmak istediğinize emin misiniz?"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"

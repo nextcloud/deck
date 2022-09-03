@@ -278,7 +278,6 @@ OC.L10N.register(
     "Only assigned cards" : "Csak hozzárendelt kártyák",
     "No reminder" : "Nincs emlékeztető",
     "An error occurred" : "Hiba történt",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Biztos, hogy törli a(z) {title} táblát? Ez törölni fogja a tábla összes adatát.",
     "Delete the board?" : "Törli a táblát?",
     "Loading filtered view" : "Szűrt nézet betöltése",
     "No due" : "Nincs határidő",
@@ -301,6 +300,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user} ?" : "Biztos, hogy átadja a(z) {board} tábla tulajdonjogát {user} számára?",
     "Transfer the board for {user} successfully" : "A tábla átadása {user} számára sikeres",
     "Failed to transfer the board for {user}" : "A tábla átadása {user} számára sikertelen",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Biztos, hogy törli a(z) {title} táblát? Ez törölni fogja a tábla összes adatát.",
     "This week" : "Ez a hét",
     "Are you sure you want to transfer the board {title} for {user}?" : "Biztos, hogy átadja a(z) {board} tábla tulajdonjogát {user} számára?"
 },
