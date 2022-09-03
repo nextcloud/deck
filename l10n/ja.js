@@ -275,7 +275,6 @@ OC.L10N.register(
     "Only assigned cards" : "割り当てられたカードのみ",
     "No reminder" : "リマインダーなし",
     "An error occurred" : "エラーが発生しました",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "このボード{title}を削除してもよろしいですか？この操作はこのボードのデータすべてを削除します。",
     "Delete the board?" : "ボードを削除しますか？",
     "Loading filtered view" : "フィルタされたビューを読み込み中",
     "No due" : "日付なし",
@@ -298,6 +297,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user} ?" : "本当に、 {user} のボード {title} を転送してもよろしいですか？",
     "Transfer the board for {user} successfully" : "{user} のボードの転送に成功しました",
     "Failed to transfer the board for {user}" : "{user} のボードの転送に失敗しました",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "このボード{title}を削除してもよろしいですか？この操作はこのボードのデータすべてを削除します。",
     "This week" : "今週",
     "Are you sure you want to transfer the board {title} for {user}?" : "本当に、 {user} のボード {title} を転送してもよろしいですか？"
 },

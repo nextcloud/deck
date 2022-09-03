@@ -275,7 +275,6 @@ OC.L10N.register(
     "Only assigned cards" : "Только для назначенных карточек",
     "No reminder" : "Не напоминать",
     "An error occurred" : "Произошла ошибка",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Подтвердите удаление доски «{title}»; это действие приведёт к удалению также все данных, принадлежащих этой доске.",
     "Delete the board?" : "Удалить доску?",
     "Loading filtered view" : "Выполняется отбор",
     "No due" : "Без назначенной даты",
@@ -298,6 +297,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user} ?" : "Вы уверены, что хотите передать доску {title} для {user}?",
     "Transfer the board for {user} successfully" : "Передача доски для {user} выполнена успешно",
     "Failed to transfer the board for {user}" : "Не удалось передать доску для {user}",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Подтвердите удаление доски «{title}»; это действие приведёт к удалению также все данных, принадлежащих этой доске.",
     "This week" : "Эта неделя",
     "Are you sure you want to transfer the board {title} for {user}?" : "Вы уверены, что хотите передать доску {title} для {user}?"
 },

@@ -278,7 +278,6 @@ OC.L10N.register(
     "Only assigned cards" : "僅已分配的卡片",
     "No reminder" : "無提醒",
     "An error occurred" : "發生錯誤",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "您確定要刪除佈告欄 {title} 嗎？這將會刪除所有此佈告欄的資料。",
     "Delete the board?" : "刪除佈告欄？",
     "Loading filtered view" : "正在載入過濾的檢視",
     "No due" : "無到期日",
@@ -301,6 +300,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user} ?" : "您想要轉移 {user} 的看板 {title} 嗎？",
     "Transfer the board for {user} successfully" : "轉移 {user} 的看板成功",
     "Failed to transfer the board for {user}" : "轉移 {user} 的看板失敗",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "您確定要刪除佈告欄 {title} 嗎？這將會刪除所有此佈告欄的資料。",
     "This week" : "本週",
     "Are you sure you want to transfer the board {title} for {user}?" : "您想要轉移 {user} 的看板 {title} 嗎？"
 },

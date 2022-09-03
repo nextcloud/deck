@@ -278,7 +278,6 @@ OC.L10N.register(
     "Only assigned cards" : "Apenas cartões atribuídos",
     "No reminder" : "Nenhum lembrete",
     "An error occurred" : "Ocorreu um erro",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Deseja realmente excluir o painel {title}? Isto excluirá todos os dados deste painel.",
     "Delete the board?" : "Excluir o painel?",
     "Loading filtered view" : "Carregando exibição filtrada",
     "No due" : "Sem vencimento",
@@ -301,6 +300,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user} ?" : "Tem certeza de que deseja transferir o quadro {title} para {user}?",
     "Transfer the board for {user} successfully" : "Transferida a reunião para {user} com sucesso",
     "Failed to transfer the board for {user}" : "Falha ao transferir a reunião para {user}",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Deseja realmente excluir o painel {title}? Isto excluirá todos os dados deste painel.",
     "This week" : "Esta semana",
     "Are you sure you want to transfer the board {title} for {user}?" : "Tem certeza de que deseja transferir o quadro {title} para {user}?"
 },

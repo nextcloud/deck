@@ -254,7 +254,6 @@ OC.L10N.register(
     "Only assigned cards" : "Само доделени картици",
     "No reminder" : "Нема потсетник",
     "An error occurred" : "Настана грешка",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Дали сте сигурени дека сакате да ја избришете оваа табла {title}? Ова ќе ги избрише и сите податоци на таблата.",
     "Delete the board?" : "Бришење на таблата?",
     "Loading filtered view" : "Вчитување на филтриран поглед",
     "No due" : "Не истекува",
@@ -273,6 +272,7 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Сподели {file} со Deck картица",
     "Share" : "Сподели",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Дали сте сигурени дека сакате да ја избришете оваа табла {title}? Ова ќе ги избрише и сите податоци на таблата.",
     "This week" : "Оваа недела"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");
