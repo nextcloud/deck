@@ -278,7 +278,6 @@ OC.L10N.register(
     "Only assigned cards" : "Tylko przydzielone karty",
     "No reminder" : "Bez przypomnienia",
     "An error occurred" : "Wystąpił błąd",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Czy na pewno chcesz usunąć tablicę {title}? Spowoduje to usunięcie wszystkich danych z tej tablicy.",
     "Delete the board?" : "Usunąć tablicę?",
     "Loading filtered view" : "Wczytywanie przefiltrowanego widoku",
     "No due" : "Bez ważności",
@@ -301,6 +300,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user} ?" : "Czy na pewno chcesz przenieść tablicę {title} dla {user}?",
     "Transfer the board for {user} successfully" : "Przeniesienie tablicy dla {user} pomyślne",
     "Failed to transfer the board for {user}" : "Nie udało się przenieść tablicy dla {user}",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Czy na pewno chcesz usunąć tablicę {title}? Spowoduje to usunięcie wszystkich danych z tej tablicy.",
     "This week" : "W tym tygodniu",
     "Are you sure you want to transfer the board {title} for {user}?" : "Czy na pewno chcesz przenieść tablicę {title} dla {user}?"
 },

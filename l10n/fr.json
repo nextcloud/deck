@@ -240,6 +240,7 @@
     "Choose attachment" : "Choisir une pièce jointe",
     "(group)" : "(groupe)",
     "{count} comments, {unread} unread" : "{count} commentaires, {unread} non lus",
+    "Edit card title" : "Modifier le titre de la carte",
     "Assign to me" : "Me l'assigner",
     "Unassign myself" : "Me le désassigner",
     "Move card" : "Déplacer la carte",
@@ -253,6 +254,7 @@
     "All boards" : "Tous les tableaux",
     "Archived boards" : "Tableaux archivés",
     "Shared with you" : "Partagés avec vous",
+    "Deck settings" : "Paramètres de Deck",
     "Use bigger card view" : "Utiliser la vue large des cartes",
     "Show boards in calendar/tasks" : "Afficher les tableaux dans les agendas/tâches",
     "Limit deck usage of groups" : "Limiter l'utilisation du tableau aux groupes",
@@ -273,7 +275,6 @@
     "Only assigned cards" : "Uniquement les cartes assignées",
     "No reminder" : "Aucun rappel",
     "An error occurred" : "Une erreur est survenue",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Êtes-vous certain de vouloir supprimer le tableau {title} ? Cela supprimera l'ensemble des données de ce tableau.",
     "Delete the board?" : "Supprimer le tableau ?",
     "Loading filtered view" : "Chargement de la vue filtrée",
     "No due" : "Sans échéance",
@@ -296,6 +297,7 @@
     "Are you sure you want to transfer the board {title} for {user} ?" : "Êtes-vous sûr de vouloir transférer le tableau {title} pour {user} ?",
     "Transfer the board for {user} successfully" : "Transfert du tableau pour {user} avec succès",
     "Failed to transfer the board for {user}" : "Échec du transfert du tableau pour {user}",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Êtes-vous certain de vouloir supprimer le tableau {title} ? Cela supprimera l'ensemble des données de ce tableau.",
     "This week" : "Cette semaine",
     "Are you sure you want to transfer the board {title} for {user}?" : "Êtes-vous sûr de vouloir transférer le tableau {title} pour {user} ?"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"

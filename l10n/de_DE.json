@@ -276,7 +276,6 @@
     "Only assigned cards" : "Nur zugewiesene Karten",
     "No reminder" : "Keine Erinnerung",
     "An error occurred" : "Es ist ein Fehler aufgetreten",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Möchten Sie wirklich dieses Board {title} mit all seinen Daten löschen?",
     "Delete the board?" : "Das Board löschen?",
     "Loading filtered view" : "Lade gefilterte Ansicht",
     "No due" : "Kein Fälligkeitsdatum",
@@ -299,6 +298,7 @@
     "Are you sure you want to transfer the board {title} for {user} ?" : "Möchten Sie wirklich das Board {title} an {user} übertragen?",
     "Transfer the board for {user} successfully" : "Das Board wurde an {user} übertragen",
     "Failed to transfer the board for {user}" : "Board konnte nicht an {user} übertragen werden",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Möchten Sie wirklich dieses Board {title} mit all seinen Daten löschen?",
     "This week" : "Diese Woche",
     "Are you sure you want to transfer the board {title} for {user}?" : "Möchten Sie wirklich das Board {title} an {user} übertragen?"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

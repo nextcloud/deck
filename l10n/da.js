@@ -214,7 +214,6 @@ OC.L10N.register(
     "Only assigned cards" : "Kun tildelte kort",
     "No reminder" : "Ingen påmindelse",
     "An error occurred" : "Der var en fejl",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Er du sikker på du vil slette tavlen {title}? Dette vil slette alt data på tavlen.",
     "Delete the board?" : "Slet tavlen?",
     "Loading filtered view" : "Indlæser filtreret visning",
     "No due" : "Ikke forfalden",
@@ -230,6 +229,7 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Del {file} med et Deck kort",
     "Share" : "Del",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck er et kanban inspireret organisations værktøj rettet mod personlig planlægning og projekt organisering for teams integreret med Nextcloud.\n\n\n- 📥 Tilføj dine opgaver til kort og organisér dem\n- 📄 Tilføj noter til dine opgaver i markdown\n- 🔖 Tilføj mærkater for endnu bedre organisering\n- 👥 Del med dit team, dine venner eller familie\n- 📎 Vedhæft filer og indfør dem i din markdown beskrivelse\n- 💬 Diskutér med dit team ved hjælp af kommentarer\n- ⚡ Hold øje med ændringer i aktivitets strømmen\n- 🚀 Få dit projekt organiseret!",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Er du sikker på du vil slette tavlen {title}? Dette vil slette alt data på tavlen.",
     "This week" : "Denne uge"
 },
 "nplurals=2; plural=(n != 1);");
