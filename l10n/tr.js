@@ -278,6 +278,7 @@ OC.L10N.register(
     "Only assigned cards" : "Yalnızca atanmış kartlar",
     "No reminder" : "Anımsatıcı yok",
     "An error occurred" : "Bir sorun çıktı",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "{title} panosunu silmek istediğinize emin misiniz? Bu işlem, bu panodaki ve arşivlenmiş kartlarındaki tüm verileri silecek.",
     "Delete the board?" : "Pano silinsin mi?",
     "Loading filtered view" : "Süzülmüş görünüm yükleniyor",
     "No due" : "Bitiş yok",
