@@ -278,6 +278,7 @@ OC.L10N.register(
     "Only assigned cards" : "Pouze přiřazené karty",
     "No reminder" : "Bez připomínky",
     "An error occurred" : "Došlo k chybě",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Opravdu chcete tabuli {title} smazat? Toto smaže veškerá data této tabule, včetně archivovaných karet.",
     "Delete the board?" : "Smazat tabuli?",
     "Loading filtered view" : "Načítání filtrovaného pohledu",
     "No due" : "Žádný termín",
