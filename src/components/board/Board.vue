@@ -162,10 +162,6 @@ export default {
 			this.loading = false
 		},
 
-		async refreshData() {
-			await this.$store.dispatch('refreshBoard', this.id)
-		},
-
 		onDropStack({ removedIndex, addedIndex }) {
 			this.$store.dispatch('orderStack', { stack: this.stacksByBoard[removedIndex], removedIndex, addedIndex })
 		},
