@@ -93,7 +93,7 @@ export function createSession(boardId) {
 	}
 
 	// periodically notify the server that we are still here
-	const interval = setInterval(ensureSession, SESSION_INTERVAL * 1000)
+	let interval = setInterval(ensureSession, SESSION_INTERVAL * 1000)
 
 	// close session when
 	const visibilitychangeListener = () => {
@@ -101,6 +101,9 @@ export function createSession(boardId) {
 			sessionApi.closeSessionViaBeacon(boardId, token)
 			tokenPromise = null
 			token = null
+
+			// stop session refresh interval
+			clearInterval(interval)
 		} else {
 			// tab is back in focus or was restored from the bfcache
 			ensureSession()
@@ -108,6 +111,9 @@ export function createSession(boardId) {
 			// we must assume that the websocket connection was
 			// paused and we have missed updates in the meantime.
 			triggerDeckReload()
+
+			// restart session refresh interval
+			interval = setInterval(ensureSession, SESSION_INTERVAL * 1000)
 		}
 	}
 	document.addEventListener('visibilitychange', visibilitychangeListener)
