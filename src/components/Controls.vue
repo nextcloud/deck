@@ -268,6 +268,7 @@ export default {
 			filter: { tags: [], users: [], due: '', unassigned: false },
 			showAddCardModal: false,
 			defaultPageTitle: false,
+			isNotifyPushEnabled: isNotifyPushEnabled(),
 		}
 	},
 
@@ -290,9 +291,6 @@ export default {
 		},
 		labelsSorted() {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
-		},
-		isNotifyPushEnabled() {
-			return isNotifyPushEnabled()
 		},
 	},
 	watch: {
