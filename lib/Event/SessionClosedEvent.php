@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2022, chandi Langecker (git@chandi.it)
  *
@@ -29,7 +32,7 @@ class SessionClosedEvent extends Event {
 	private $boardId;
 	private $userId;
 	
-	public function __construct($boardId, $userId) {
+	public function __construct(int $boardId, string $userId) {
 		parent::__construct();
 
 		$this->boardId = $boardId;
