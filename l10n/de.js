@@ -278,6 +278,7 @@ OC.L10N.register(
     "Only assigned cards" : "Nur zugewiesene Karten",
     "No reminder" : "Keine Erinnerung",
     "An error occurred" : "Es ist ein Fehler aufgetreten",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Möchtest du wirklich das Board {title} mit all seinen Daten einschließlich der archivierten Karten löschen?",
     "Delete the board?" : "Das Board löschen?",
     "Loading filtered view" : "Lade gefilterte Ansicht",
     "No due" : "Kein Fälligkeitsdatum",
