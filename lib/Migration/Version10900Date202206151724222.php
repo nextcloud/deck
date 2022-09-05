@@ -26,6 +26,7 @@ namespace OCA\Deck\Migration;
 
 use Closure;
 use OCP\DB\ISchemaWrapper;
+use OCP\DB\Types;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
@@ -35,23 +36,23 @@ class Version10900Date202206151724222 extends SimpleMigrationStep {
 
 		if (!$schema->hasTable('deck_sessions')) {
 			$table = $schema->createTable('deck_sessions');
-			$table->addColumn('id', 'integer', [
+			$table->addColumn('id', Types::INTEGER, [
 				'autoincrement' => true,
 				'notnull' => true,
 				'unsigned' => true,
 			]);
-			$table->addColumn('user_id', 'string', [
+			$table->addColumn('user_id', Types::STRING, [
 				'notnull' => false,
 				'length' => 64,
 			]);
-			$table->addColumn('board_id', 'integer', [
+			$table->addColumn('board_id', Types::INTEGER, [
 				'notnull' => false,
 			]);
-			$table->addColumn('token', 'string', [
+			$table->addColumn('token', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,
 			]);
-			$table->addColumn('last_contact', 'integer', [
+			$table->addColumn('last_contact', Types::INTEGER, [
 				'notnull' => true,
 				'length' => 20,
 				'unsigned' => true,
