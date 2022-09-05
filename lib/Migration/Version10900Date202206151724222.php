@@ -58,8 +58,8 @@ class Version10900Date202206151724222 extends SimpleMigrationStep {
 				'unsigned' => true,
 			]);
 			$table->setPrimaryKey(['id']);
+			$table->addIndex(['board_id'], 'rd_session_board_id_idx');
 			$table->addIndex(['token'], 'rd_session_token_idx');
-			$table->addIndex(['last_contact'], 'ts_lastcontact');
 		}
 		return $schema;
 	}

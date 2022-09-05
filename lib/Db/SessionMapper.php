@@ -38,9 +38,7 @@ class SessionMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 		$result = $qb->select('*')
 			->from($this->getTableName())
-			->where($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId)))
-			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($userId)))
-			->andWhere($qb->expr()->eq('token', $qb->createNamedParameter($token)))
+			->where($qb->expr()->eq('token', $qb->createNamedParameter($token)))
 			->andWhere($qb->expr()->gt('last_contact', $qb->createNamedParameter(time() - SessionService::SESSION_VALID_TIME)))
 			->executeQuery();
 
@@ -49,7 +47,11 @@ class SessionMapper extends QBMapper {
 		if ($data === false) {
 			throw new DoesNotExistException('Session is invalid');
 		}
-		return Session::fromRow($data);
+		$session = Session::fromRow($data);
+		if ($session->getUserId() != $userId || $session->getBoardId() != $boardId) {
+			throw new DoesNotExistException('Session is invalid');
+		}
+		return $session;
 	}
 
 	public function findAllActive($boardId) {
