@@ -227,7 +227,7 @@ import FilterOffIcon from 'vue-material-design-icons/FilterOff.vue'
 import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVertical.vue'
 import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertical.vue'
 import SessionList from './SessionList'
-import { isNotifyPushEnabled } from '../listeners'
+import { isNotifyPushEnabled } from '../sessions'
 
 export default {
 	name: 'Controls',

@@ -80,6 +80,7 @@ class SessionController extends ApiController {
 	/**
 	 * delete a session if existing
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 * @param $boardId
 	 * @return bool
 	 */

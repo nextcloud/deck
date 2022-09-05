@@ -40,6 +40,18 @@ export class SessionApi {
 		return await axios.post(this.url('/session/close'), { boardId, token })
 	}
 
+	async closeSessionViaBeacon(boardId, token) {
+		const body = {
+			boardId,
+			token,
+		}
+		const headers = {
+			type: 'application/json',
+		}
+		const blob = new Blob([JSON.stringify(body)], headers)
+		navigator.sendBeacon(this.url('/session/close'), blob)
+	}
+
 }
 
 export const sessionApi = new SessionApi()

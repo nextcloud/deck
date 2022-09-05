@@ -31,7 +31,7 @@ import { subscribe } from '@nextcloud/event-bus'
 import { Tooltip } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
 import './models/index.js'
-import './listeners'
+import './sessions.js'
 
 // the server snap.js conflicts with vertical scrolling so we disable it
 document.body.setAttribute('data-snap-ignore', 'true')
