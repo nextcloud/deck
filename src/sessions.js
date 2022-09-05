@@ -22,7 +22,7 @@ import { listen } from '@nextcloud/notify_push'
 import { sessionApi } from './services/SessionApi'
 import store from './store/main'
 
-const SESSION_INTERVAL = 25 // in seconds
+const SESSION_INTERVAL = 90 // in seconds
 
 let hasPush = false
 

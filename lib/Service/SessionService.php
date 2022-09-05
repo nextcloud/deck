@@ -35,7 +35,7 @@ use OCA\NotifyPush\Queue\IQueue;
 use OCP\Security\ISecureRandom;
 
 class SessionService {
-	public const SESSION_VALID_TIME = 30;
+	public const SESSION_VALID_TIME = 92;
 
 	private SessionMapper $sessionMapper;
 	private ITimeFactory $timeFactory;
