@@ -278,6 +278,7 @@ OC.L10N.register(
     "Only assigned cards" : "Csak hozzárendelt kártyák",
     "No reminder" : "Nincs emlékeztető",
     "An error occurred" : "Hiba történt",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Biztos, hogy törli a(z) {title} táblát? Ez törölni fogja a tábla összes adatát, köztük az archivált kártyákat is.",
     "Delete the board?" : "Törli a táblát?",
     "Loading filtered view" : "Szűrt nézet betöltése",
     "No due" : "Nincs határidő",

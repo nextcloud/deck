@@ -276,6 +276,7 @@
     "Only assigned cards" : "Tylko przydzielone karty",
     "No reminder" : "Bez przypomnienia",
     "An error occurred" : "Wystąpił błąd",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Czy na pewno chcesz usunąć tablicę {title}? Spowoduje to usunięcie wszystkich danych z tej tablicy łącznie z zarchiwizowanymi kartami.",
     "Delete the board?" : "Usunąć tablicę?",
     "Loading filtered view" : "Wczytywanie przefiltrowanego widoku",
     "No due" : "Bez ważności",
