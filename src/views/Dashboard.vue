@@ -48,21 +48,26 @@
 			</template>
 		</NcDashboardWidget>
 		<div class="center-button">
-			<button @click="toggleAddCardModel">
+			<NcButton @click="toggleAddCardModel">
+				<template #icon>
+					<PlusIcon :size="20" />
+				</template>
 				{{ t('deck', 'Add card') }}
-			</button>
+			</NcButton>
 			<CardCreateDialog v-if="showAddCardModal" @close="toggleAddCardModel" />
 		</div>
 	</div>
 </template>
 
 <script>
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import { NcDashboardWidget } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import labelStyle from './../mixins/labelStyle.js'
 import DueDate from '../components/cards/badges/DueDate.vue'
 import { generateUrl } from '@nextcloud/router'
 import CardCreateDialog from '../CardCreateDialog.vue'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 
 export default {
 	name: 'Dashboard',
@@ -70,6 +75,8 @@ export default {
 		DueDate,
 		NcDashboardWidget,
 		CardCreateDialog,
+		NcButton,
+		PlusIcon,
 	},
 	mixins: [labelStyle],
 	data() {
@@ -120,7 +127,10 @@ export default {
 	@import './../css/labels';
 
 	.center-button {
-		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 8px;
 	}
 
 	#deck-widget-empty-content {
