@@ -217,13 +217,13 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { NcActions, NcActionButton, NcAvatar, NcButton, NcPopover } from '@nextcloud/vue'
-import labelStyle from '../mixins/labelStyle'
-import CardCreateDialog from '../CardCreateDialog'
-import ArchiveIcon from 'vue-material-design-icons/Archive'
-import FilterIcon from 'vue-material-design-icons/Filter'
-import FilterOffIcon from 'vue-material-design-icons/FilterOff'
-import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVertical'
-import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertical'
+import labelStyle from '../mixins/labelStyle.js'
+import CardCreateDialog from '../CardCreateDialog.vue'
+import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
+import FilterIcon from 'vue-material-design-icons/Filter.vue'
+import FilterOffIcon from 'vue-material-design-icons/FilterOff.vue'
+import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVertical.vue'
+import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertical.vue'
 
 export default {
 	name: 'Controls',

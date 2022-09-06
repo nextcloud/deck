@@ -70,7 +70,7 @@
 <script>
 
 import { mapGetters } from 'vuex'
-import Color from '../../mixins/color'
+import Color from '../../mixins/color.js'
 import { NcColorPicker, NcActions, NcActionButton } from '@nextcloud/vue'
 
 export default {

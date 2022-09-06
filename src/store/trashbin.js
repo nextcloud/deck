@@ -20,8 +20,8 @@
  *
  */
 
-import { StackApi } from '../services/StackApi'
-import { CardApi } from '../services/CardApi'
+import { StackApi } from '../services/StackApi.js'
+import { CardApi } from '../services/CardApi.js'
 
 const stackApi = new StackApi()
 const cardApi = new CardApi()

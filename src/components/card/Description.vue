@@ -78,7 +78,7 @@
 import MarkdownIt from 'markdown-it'
 import MarkdownItTaskCheckbox from 'markdown-it-task-checkbox'
 import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
-import AttachmentList from './AttachmentList'
+import AttachmentList from './AttachmentList.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'

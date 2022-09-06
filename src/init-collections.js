@@ -23,8 +23,8 @@
 import Vue from 'vue'
 
 import './../css/collections.css'
-import FileSharingPicker from './views/FileSharingPicker'
-import { buildSelector } from './helpers/selector'
+import FileSharingPicker from './views/FileSharingPicker.js'
+import { buildSelector } from './helpers/selector.js'
 
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken);
@@ -44,7 +44,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	window.OCP.Collaboration.registerType('deck', {
 		action: () => {
-			const BoardSelector = () => import('./BoardSelector')
+			const BoardSelector = () => import('./BoardSelector.vue')
 			return buildSelector(BoardSelector)
 		},
 		typeString: t('deck', 'Link to a board'),
@@ -53,7 +53,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	window.OCP.Collaboration.registerType('deck-card', {
 		action: () => {
-			const CardSelector = () => import('./CardSelector')
+			const CardSelector = () => import('./CardSelector.vue')
 			return buildSelector(CardSelector)
 		},
 		typeString: t('deck', 'Link to a card'),

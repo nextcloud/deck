@@ -49,8 +49,8 @@
 	</div>
 </template>
 <script>
-import NcAvatarList from './AvatarList'
-import CardMenu from './CardMenu'
+import NcAvatarList from './AvatarList.vue'
+import CardMenu from './CardMenu.vue'
 import TextIcon from 'vue-material-design-icons/Text.vue'
 import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
 import CheckmarkIcon from 'vue-material-design-icons/CheckboxMarked.vue'

@@ -133,10 +133,10 @@ import { Container, Draggable } from 'vue-smooth-dnd'
 
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { showError, showUndo } from '@nextcloud/dialogs'
-import CardItem from '../cards/CardItem'
+import CardItem from '../cards/CardItem.vue'
 
 import '@nextcloud/dialogs/styles/toast.scss'
-import ArchiveIcon from 'vue-material-design-icons/Archive'
+import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 
 export default {
 	name: 'Stack',

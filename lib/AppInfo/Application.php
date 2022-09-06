@@ -36,7 +36,6 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
-use OCA\Deck\Db\User;
 use OCA\Deck\Event\AclCreatedEvent;
 use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\Event\AclUpdatedEvent;
@@ -48,6 +47,7 @@ use OCA\Deck\Listeners\FullTextSearchEventListener;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
+use OCA\Deck\Reference\CardReferenceProvider;
 use OCA\Deck\Search\CardCommentProvider;
 use OCA\Deck\Search\DeckProvider;
 use OCA\Deck\Service\PermissionService;
@@ -58,6 +58,7 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
+use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Comments\CommentsEntityEvent;
 use OCP\Comments\ICommentsManager;
@@ -83,6 +84,14 @@ class Application extends App implements IBootstrap {
 
 	public function __construct(array $urlParams = []) {
 		parent::__construct(self::APP_ID, $urlParams);
+
+		// TODO move this back to ::register after fixing the autoload issue
+		// (and use a listener class)
+		$container = $this->getContainer();
+		$eventDispatcher = $container->get(IEventDispatcher::class);
+		$eventDispatcher->addListener(RenderReferenceEvent::class, function () {
+			Util::addScript(self::APP_ID, self::APP_ID . '-card-reference');
+		});
 	}
 
 	public function boot(IBootContext $context): void {
@@ -121,8 +130,12 @@ class Application extends App implements IBootstrap {
 		$context->registerSearchProvider(CardCommentProvider::class);
 		$context->registerDashboardWidget(DeckWidget::class);
 
+		// reference widget
+		$context->registerReferenceProvider(CardReferenceProvider::class);
+		// $context->registerEventListener(RenderReferenceEvent::class, CardReferenceListener::class);
+
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
-		
+
 		// Event listening for full text search indexing
 		$context->registerEventListener(CardCreatedEvent::class, FullTextSearchEventListener::class);
 		$context->registerEventListener(CardUpdatedEvent::class, FullTextSearchEventListener::class);
