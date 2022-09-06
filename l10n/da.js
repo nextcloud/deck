@@ -221,6 +221,7 @@ OC.L10N.register(
     "upcoming cards" : "kommende kort",
     "Link to a board" : "Link til tavle",
     "Link to a card" : "Link til et kort",
+    "Message from {author} in {conversationName}" : "Besked fra {author} i {conversationName}",
     "Something went wrong" : "Noget gik galt",
     "Failed to upload {name}" : "Kunne ikke uploade {name}",
     "Maximum file size of {size} exceeded" : "Maksimal fil størrelse {size} overskredet",
