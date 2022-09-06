@@ -31,16 +31,18 @@ use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Service\OverviewService;
 use OCP\Dashboard\IAPIWidget;
+use OCP\Dashboard\IButtonWidget;
+use OCP\Dashboard\IIconWidget;
+use OCP\Dashboard\Model\WidgetButton;
 use OCP\Dashboard\Model\WidgetItem;
 use OCP\IDateTimeFormatter;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\Util;
 
-class DeckWidget implements IAPIWidget {
+class DeckWidget implements IAPIWidget, IButtonWidget, IIconWidget {
 
 	private IL10N $l10n;
-	private ?string $userId;
 	private OverviewService $dashboardService;
 	private IURLGenerator $urlGenerator;
 	private IDateTimeFormatter $dateTimeFormatter;
@@ -48,10 +50,8 @@ class DeckWidget implements IAPIWidget {
 	public function __construct(IL10N $l10n,
 		OverviewService $dashboardService,
 		IDateTimeFormatter $dateTimeFormatter,
-		IURLGenerator $urlGenerator,
-		?string $userId) {
+		IURLGenerator $urlGenerator) {
 		$this->l10n = $l10n;
-		$this->userId = $userId;
 		$this->dashboardService = $dashboardService;
 		$this->urlGenerator = $urlGenerator;
 		$this->dateTimeFormatter = $dateTimeFormatter;
@@ -88,8 +88,19 @@ class DeckWidget implements IAPIWidget {
 	/**
 	 * @inheritDoc
 	 */
+	public function getIconUrl(): string {
+		return $this->urlGenerator->getAbsoluteURL(
+			$this->urlGenerator->imagePath(Application::APP_ID, 'deck-dark.svg')
+		);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
 	public function getUrl(): ?string {
-		return null;
+		return $this->urlGenerator->getAbsoluteURL(
+			$this->urlGenerator->linkToRoute(Application::APP_ID . '.page.index')
+		);
 	}
 
 	/**
@@ -103,7 +114,7 @@ class DeckWidget implements IAPIWidget {
 	 * @inheritDoc
 	 */
 	public function getItems(string $userId, ?string $since = null, int $limit = 7): array {
-		$upcomingCards = $this->dashboardService->findUpcomingCards($this->userId);
+		$upcomingCards = $this->dashboardService->findUpcomingCards($userId);
 		$nowTimestamp = (new Datetime())->getTimestamp();
 		$upcomingCards = array_filter($upcomingCards, static function(array $card) use ($nowTimestamp) {
 			if ($card['duedate']) {
@@ -141,5 +152,27 @@ class DeckWidget implements IAPIWidget {
 				$card['duedate']
 			);
 		}, $upcomingCards);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getWidgetButtons(string $userId): array {
+		return [
+			new WidgetButton(
+				WidgetButton::TYPE_NEW,
+				$this->urlGenerator->getAbsoluteURL(
+					$this->urlGenerator->linkToRoute(Application::APP_ID . '.page.index')
+				),
+				$this->l10n->t('Add card')
+			),
+			new WidgetButton(
+				WidgetButton::TYPE_MORE,
+				$this->urlGenerator->getAbsoluteURL(
+					$this->urlGenerator->linkToRoute(Application::APP_ID . '.page.index')
+				),
+				$this->l10n->t('Add card')
+			),
+		];
 	}
 }
