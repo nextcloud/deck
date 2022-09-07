@@ -116,10 +116,11 @@ class DeckWidget implements IAPIWidget, IButtonWidget, IIconWidget {
 	public function getItems(string $userId, ?string $since = null, int $limit = 7): array {
 		$upcomingCards = $this->dashboardService->findUpcomingCards($userId);
 		$nowTimestamp = (new Datetime())->getTimestamp();
-		$upcomingCards = array_filter($upcomingCards, static function(array $card) use ($nowTimestamp) {
+		$sinceTimestamp = $since !== null ? (new Datetime($since))->getTimestamp() : null;
+		$upcomingCards = array_filter($upcomingCards, static function(array $card) use ($nowTimestamp, $sinceTimestamp) {
 			if ($card['duedate']) {
 				$ts = (new Datetime($card['duedate']))->getTimestamp();
-				return $ts > $nowTimestamp;
+				return $ts > $nowTimestamp && ($sinceTimestamp === null || $ts > $sinceTimestamp);
 			}
 			return false;
 		});
