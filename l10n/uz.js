@@ -7,6 +7,7 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Close" : "Close",
     "Details" : "Details",
+    "Sharing" : "Ulashish",
     "Tags" : "Tags",
     "Can edit" : "Can edit",
     "Owner" : "Owner",
