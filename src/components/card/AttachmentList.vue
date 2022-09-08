@@ -63,7 +63,7 @@
 						<div v-if="attachment.deletedAt === 0">
 							<span class="filesize">{{ formattedFileSize(attachment.extendedData.filesize) }}</span>
 							<span class="filedate">{{ relativeDate(attachment.createdAt*1000) }}</span>
-							<span class="filedate">{{ attachment.createdBy }}</span>
+							<span class="filedate">{{ attachment.extendedData.attachmentCreator.displayName }}</span>
 						</div>
 						<div v-else>
 							<span class="attachment--info">{{ t('deck', 'Pending share') }}</span>
