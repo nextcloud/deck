@@ -155,6 +155,7 @@
     "Delete board" : "Вилучити дошку",
     "Board {0} deleted" : "Дошку {0} вилучено",
     "An error occurred" : "Виникла помилка",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Ви впевнені, що хочете видалити дошку {title}? Це призведе до видалення всіх даних цієї дошки, включаючи архівні картки.",
     "Delete the board?" : "Вилучити дошку?",
     "Link to a board" : "Прив'язати до дошки",
     "Link to a card" : "Прив'язати до картки",
