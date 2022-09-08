@@ -41,7 +41,6 @@ use OCP\IURLGenerator;
 use OCP\Util;
 
 class DeckWidget implements IAPIWidget, IButtonWidget, IIconWidget {
-
 	private IL10N $l10n;
 	private OverviewService $dashboardService;
 	private IURLGenerator $urlGenerator;
@@ -117,14 +116,14 @@ class DeckWidget implements IAPIWidget, IButtonWidget, IIconWidget {
 		$upcomingCards = $this->dashboardService->findUpcomingCards($userId);
 		$nowTimestamp = (new Datetime())->getTimestamp();
 		$sinceTimestamp = $since !== null ? (new Datetime($since))->getTimestamp() : null;
-		$upcomingCards = array_filter($upcomingCards, static function(array $card) use ($nowTimestamp, $sinceTimestamp) {
+		$upcomingCards = array_filter($upcomingCards, static function (array $card) use ($nowTimestamp, $sinceTimestamp) {
 			if ($card['duedate']) {
 				$ts = (new Datetime($card['duedate']))->getTimestamp();
 				return $ts > $nowTimestamp && ($sinceTimestamp === null || $ts > $sinceTimestamp);
 			}
 			return false;
 		});
-		usort($upcomingCards, static function($a, $b) {
+		usort($upcomingCards, static function ($a, $b) {
 			$a = new Datetime($a['duedate']);
 			$ta = $a->getTimestamp();
 			$b = new Datetime($b['duedate']);
@@ -134,13 +133,13 @@ class DeckWidget implements IAPIWidget, IButtonWidget, IIconWidget {
 		$upcomingCards = array_slice($upcomingCards, 0, $limit);
 		$urlGenerator = $this->urlGenerator;
 		$dateTimeFormatter = $this->dateTimeFormatter;
-		return array_map(static function(array $card) use ($urlGenerator, $dateTimeFormatter) {
+		return array_map(static function (array $card) use ($urlGenerator, $dateTimeFormatter) {
 			$formattedDueDate = $dateTimeFormatter->formatDateTime(new DateTime($card['duedate']));
 			return new WidgetItem(
 				$card['title'] . ' (' . $formattedDueDate . ')',
 				implode(
 					', ',
-					array_map(static function(Label $label) {
+					array_map(static function (Label $label) {
 						return $label->jsonSerialize()['title'];
 					}, $card['labels'])
 				),
@@ -161,18 +160,11 @@ class DeckWidget implements IAPIWidget, IButtonWidget, IIconWidget {
 	public function getWidgetButtons(string $userId): array {
 		return [
 			new WidgetButton(
-				WidgetButton::TYPE_NEW,
-				$this->urlGenerator->getAbsoluteURL(
-					$this->urlGenerator->linkToRoute(Application::APP_ID . '.page.index')
-				),
-				$this->l10n->t('Add card')
-			),
-			new WidgetButton(
 				WidgetButton::TYPE_MORE,
 				$this->urlGenerator->getAbsoluteURL(
 					$this->urlGenerator->linkToRoute(Application::APP_ID . '.page.index')
 				),
-				$this->l10n->t('Add card')
+				$this->l10n->t('Load more')
 			),
 		];
 	}
