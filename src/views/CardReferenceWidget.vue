@@ -21,36 +21,32 @@
 
 <template>
 	<div class="deck-card-reference">
-		<h3>
-			<DeckIcon :size="20" class="icon" />
-			<a v-tooltip.top="{ content: boardTooltip }"
-				:href="boardLink"
-				target="_blank"
-				class="link">
-				{{ board.title }}
-			</a>
-			<a v-tooltip.top="{ content: stackTooltip }"
-				:href="boardLink"
-				target="_blank"
-				class="link">
-				/ {{ stack.title }}
-			</a>
-		</h3>
 		<div class="line">
-			<a :href="cardLink"
-				:title="cardTooltip"
-				target="_blank"
-				class="link">
-				{{ card.title }}
-			</a>
-			<div class="spacer" />
-			<span v-show="dueDate"
+			<DeckIcon :size="20" class="title-icon" />
+			<strong>
+				<a :href="cardLink"
+					:title="cardTooltip"
+					target="_blank"
+					class="link">
+					{{ card.title }}
+				</a>
+			</strong>
+			<div v-if="dueDate" class="spacer" />
+			<span v-if="dueDate"
 				v-tooltip.top="{ content: formattedDueDate }"
 				class="due-date">
 				<CalendarBlankIcon :size="20"
 					class="icon" />
 				{{ dueDate }}
 			</span>
+		</div>
+		<div class="line">
+			<a v-tooltip.top="{ content: stackTooltip }"
+				:href="boardLink"
+				target="_blank"
+				class="link">
+				{{ t('deck', '{stack} in {board}', { stack: stack.title, board: board.title }) }}
+			</a>
 		</div>
 		<div>
 			<transition-group v-if="card.labels && card.labels.length"
@@ -65,12 +61,16 @@
 		</div>
 		<div class="line description-assignees">
 			<TextIcon v-if="card.description" :size="20" class="icon" />
-			<div class="description"
+			<div v-if="card.description"
+				class="description"
 				:title="card.description">
 				{{ card.description }}
 			</div>
-			<div class="spacer" />
-			<AvatarList :users="card.assignedUsers" class="card-assignees" />
+			<div v-if="card.assignedUsers .length > 0"
+				class="spacer" />
+			<AvatarList v-if="card.assignedUsers .length > 0"
+				:users="card.assignedUsers"
+				class="card-assignees" />
 		</div>
 	</div>
 </template>
@@ -142,9 +142,6 @@ export default {
 				nbComments: this.card.commentsCount,
 			})
 		},
-		boardTooltip() {
-			return t('deck', 'Owned by {dn}', { dn: this.board.owner.displayname })
-		},
 		stackTooltip() {
 			return t('deck', '{nbCards} cards', { nbCards: this.stack.cards.length })
 		},
@@ -177,18 +174,7 @@ export default {
 	white-space: normal;
 	padding: 12px;
 
-	h3 {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin: 0 0 8px 0;
-		font-weight: bold;
-		.icon {
-			margin-right: 8px;
-		}
-	}
-
-	.link:hover {
+	.link {
 		text-decoration: underline;
 	}
 
@@ -197,6 +183,9 @@ export default {
 		align-items: center;
 		.icon {
 			margin-right: 4px;
+		}
+		.title-icon {
+			margin-right: 8px;
 		}
 	}
 
