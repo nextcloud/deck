@@ -24,6 +24,10 @@ namespace OCA\Deck\Reference;
 
 use OC\Collaboration\Reference\Reference;
 use OCA\Deck\AppInfo\Application;
+use OCA\Deck\Db\Assignment;
+use OCA\Deck\Db\Attachment;
+use OCA\Deck\Db\Label;
+use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\StackService;
@@ -67,14 +71,20 @@ class CardReferenceProvider implements IReferenceProvider {
 	 */
 	public function resolveReference(string $referenceText): ?IReference {
 		if ($this->matchReference($referenceText)) {
-			$cardIds = $this->getBoardCardId($referenceText);
-			if ($cardIds !== null) {
-				[$boardId, $cardId] = $cardIds;
-				$card = $this->cardService->find((int) $cardId);
-				$board = $this->boardService->find((int) $boardId);
-				$stack = $this->stackService->find((int) $card->jsonSerialize()['stackId']);
+			$ids = $this->getBoardCardId($referenceText);
+			if ($ids !== null) {
+				[$boardId, $cardId] = $ids;
+				$card = $this->cardService->find((int) $cardId)->jsonSerialize();
+				$board = $this->boardService->find((int) $boardId)->jsonSerialize();
+				$stack = $this->stackService->find((int) $card['stackId'])->jsonSerialize();
+
+				$card = $this->sanitizeSerializedCard($card);
+				$board = $this->sanitizeSerializedBoard($board);
+				$stack = $this->sanitizeSerializedStack($stack);
+
 				$reference = new Reference($referenceText);
 				$reference->setRichObject(Application::APP_ID . '-card', [
+					'id' => $boardId . '/' . $cardId,
 					'card' => $card,
 					'board' => $board,
 					'stack' => $stack,
@@ -84,6 +94,44 @@ class CardReferenceProvider implements IReferenceProvider {
 		}
 
 		return null;
+	}
+
+	private function sanitizeSerializedStack(array $stack): array {
+		$stack['cards'] = array_map(function (CardDetails $cardDetails) {
+			$result = $cardDetails->jsonSerialize();
+			unset($result['assignedUsers']);
+			return $result;
+		}, $stack['cards']);
+
+		return $stack;
+	}
+
+	private function sanitizeSerializedBoard(array $board): array {
+		unset($board['labels']);
+		$board['owner'] = $board['owner']->jsonSerialize();
+		unset($board['acl']);
+		unset($board['users']);
+
+		return $board;
+	}
+
+	private function sanitizeSerializedCard(array $card): array {
+		$card['labels'] = array_map(function (Label $label) {
+			return $label->jsonSerialize();
+		}, $card['labels']);
+		$card['assignedUsers'] = array_map(function (Assignment $assignment) {
+			$result = $assignment->jsonSerialize();
+			$result['participant'] = $result['participant']->jsonSerialize();
+			return $result;
+		}, $card['assignedUsers']);
+		$card['owner'] = $card['owner']->jsonSerialize();
+		unset($card['relatedStack']);
+		unset($card['relatedBoard']);
+		$card['attachments'] = array_map(function (Attachment $attachment) {
+			return $attachment->jsonSerialize();
+		}, $card['attachments']);
+
+		return $card;
 	}
 
 	private function getBoardCardId(string $url): ?array {
@@ -104,10 +152,16 @@ class CardReferenceProvider implements IReferenceProvider {
 	}
 
 	public function getCachePrefix(string $referenceId): string {
+		$ids = $this->getBoardCardId($referenceId);
+		if ($ids !== null) {
+			[$boardId, $cardId] = $ids;
+			return $boardId . '/' . $cardId;
+		}
+
 		return $referenceId;
 	}
 
 	public function getCacheKey(string $referenceId): ?string {
-		return null;
+		return $this->userId ?? '';
 	}
 }
