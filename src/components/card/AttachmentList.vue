@@ -104,14 +104,14 @@
 <script>
 import axios from '@nextcloud/axios'
 import { NcActions, NcActionButton, ActionLink } from '@nextcloud/vue'
-import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
-import relativeDate from '../../mixins/relativeDate'
+import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
+import relativeDate from '../../mixins/relativeDate.js'
 import { formatFileSize } from '@nextcloud/files'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl, generateOcsUrl, generateRemoteUrl } from '@nextcloud/router'
 import { mapState, mapActions } from 'vuex'
 import { loadState } from '@nextcloud/initial-state'
-import attachmentUpload from '../../mixins/attachmentUpload'
+import attachmentUpload from '../../mixins/attachmentUpload.js'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
 const maxUploadSizeState = loadState('deck', 'maxUploadSize')
 

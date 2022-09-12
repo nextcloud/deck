@@ -20,9 +20,9 @@
  *
  */
 import Vue from 'vue'
-import App from './App'
-import router from './router'
-import store from './store/main'
+import App from './App.vue'
+import router from './router.js'
+import store from './store/main.js'
 import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { generateFilePath } from '@nextcloud/router'
@@ -30,7 +30,7 @@ import { showError } from '@nextcloud/dialogs'
 import { subscribe } from '@nextcloud/event-bus'
 import { Tooltip } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
-import './models'
+import './models/index.js'
 
 // the server snap.js conflicts with vertical scrolling so we disable it
 document.body.setAttribute('data-snap-ignore', 'true')

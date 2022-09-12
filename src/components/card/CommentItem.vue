@@ -66,10 +66,10 @@
 <script>
 import { NcAvatar, NcActions, NcActionButton, NcUserBubble } from '@nextcloud/vue'
 import RichText from '@juliushaertl/vue-richtext'
-import CommentForm from './CommentForm'
+import CommentForm from './CommentForm.vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import md5 from 'blueimp-md5'
-import relativeDate from '../../mixins/relativeDate'
+import relativeDate from '../../mixins/relativeDate.js'
 import ReplyIcon from 'vue-material-design-icons/Reply'
 
 const AtMention = {

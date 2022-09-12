@@ -73,11 +73,11 @@
 
 import { Container, Draggable } from 'vue-smooth-dnd'
 import { mapState, mapGetters } from 'vuex'
-import Controls from '../Controls'
-import Stack from './Stack'
+import Controls from '../Controls.vue'
+import Stack from './Stack.vue'
 import { NcEmptyContent } from '@nextcloud/vue'
-import GlobalSearchResults from '../search/GlobalSearchResults'
-import { showError } from '../../helpers/errors'
+import GlobalSearchResults from '../search/GlobalSearchResults.vue'
+import { showError } from '../../helpers/errors.js'
 
 export default {
 	name: 'Board',

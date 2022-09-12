@@ -43,9 +43,9 @@
 
 <script>
 import { mapState } from 'vuex'
-import AppNavigation from './components/navigation/AppNavigation'
+import AppNavigation from './components/navigation/AppNavigation.vue'
 import { NcModal, NcContent, NcAppContent } from '@nextcloud/vue'
-import { BoardApi } from './services/BoardApi'
+import { BoardApi } from './services/BoardApi.js'
 import { emit, subscribe } from '@nextcloud/event-bus'
 
 const boardApi = new BoardApi()

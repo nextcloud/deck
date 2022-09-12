@@ -59,10 +59,10 @@
 <script>
 import { NcDashboardWidget } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
-import labelStyle from './../mixins/labelStyle'
-import DueDate from '../components/cards/badges/DueDate'
+import labelStyle from './../mixins/labelStyle.js'
+import DueDate from '../components/cards/badges/DueDate.vue'
 import { generateUrl } from '@nextcloud/router'
-import CardCreateDialog from '../CardCreateDialog'
+import CardCreateDialog from '../CardCreateDialog.vue'
 
 export default {
 	name: 'Dashboard',

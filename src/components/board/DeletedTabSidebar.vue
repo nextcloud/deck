@@ -32,7 +32,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import relativeDate from '../../mixins/relativeDate'
+import relativeDate from '../../mixins/relativeDate.js'
 
 export default {
 	name: 'DeletedTabSidebar',
