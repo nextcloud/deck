@@ -117,6 +117,7 @@
     "Delete board" : "Xóa dự án",
     "No reminder" : "Không có nhắc hẹn",
     "An error occurred" : "Có lỗi đã xảy ra",
+    "{stack} in {board}" : "{stack} trong {board}",
     "Maximum file size of {size} exceeded" : "Đã vượt quá kích thước {size} tối đa tập tin",
     "Share" : "Chia sẻ",
     "This week" : "Tuần này"

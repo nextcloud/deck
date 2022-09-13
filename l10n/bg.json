@@ -282,6 +282,7 @@
     "No due" : "Не се дължи",
     "Search for {searchQuery} in all boards" : "Търсене на {searchQuery} във всички табла",
     "No results found" : "Няма намерени резултати",
+    "{stack} in {board}" : "{stack} в {board}",
     "No upcoming cards" : "Няма предстоящи карти",
     "upcoming cards" : "предстоящи карти",
     "Link to a board" : "Линк към табло",

@@ -271,6 +271,7 @@ OC.L10N.register(
     "No due" : "Nema nezavršenih",
     "Search for {searchQuery} in all boards" : "Traži {searchQuery} na svim pločama",
     "No results found" : "Nema rezultata",
+    "{stack} in {board}" : "{stack} u {board}",
     "No upcoming cards" : "Nema nadolazećih kartica",
     "upcoming cards" : "nadolazeće kartice",
     "Link to a board" : "Poveznica na ploču",

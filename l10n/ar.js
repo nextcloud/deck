@@ -270,6 +270,7 @@ OC.L10N.register(
     "No due" : "غير محدد",
     "Search for {searchQuery} in all boards" : "البحث عن {searchQuery} في جميع اللوح",
     "No results found" : "لا يتم العثور على أي نتائج ",
+    "{stack} in {board}" : "{stack} في  {board}",
     "No upcoming cards" : "لا يوجد بطاقات قادمة ",
     "upcoming cards" : "البطاقات القادمة",
     "Link to a board" : "ربط بلوح",

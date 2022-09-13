@@ -280,6 +280,7 @@ OC.L10N.register(
     "No due" : "Без назначенной даты",
     "Search for {searchQuery} in all boards" : "Искать {searchQuery} на всех досках",
     "No results found" : "Результаты отсутствуют",
+    "{stack} in {board}" : "«{stack}» с доски «{board}»",
     "No upcoming cards" : "Отсутствуют карточки, ожидающие выполнения",
     "upcoming cards" : "карточки, ожидающие выполнения",
     "Link to a board" : "Ссылка на доску",
