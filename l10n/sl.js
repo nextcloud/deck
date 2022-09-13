@@ -272,6 +272,7 @@ OC.L10N.register(
     "No due" : "Ni datuma preteka",
     "Search for {searchQuery} in all boards" : "Poišči {searchQuery} med vsemi zbirkami nalog.",
     "No results found" : "Ni najdenih zadetkov",
+    "{stack} in {board}" : "{stack} v {board}",
     "No upcoming cards" : "Ni prihajajočih nalog",
     "upcoming cards" : "prihajajoče naloge",
     "Link to a board" : "Povezava do zbirke",

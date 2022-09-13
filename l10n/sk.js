@@ -276,6 +276,7 @@ OC.L10N.register(
     "No due" : "Žiadny termín dokončenia",
     "Search for {searchQuery} in all boards" : "Vyhľadať {searchQuery} na všetkých plochách",
     "No results found" : "Neboli nájdené žiadne výsledky",
+    "{stack} in {board}" : "{stack} v {board}",
     "No upcoming cards" : "Žiadne nadchádzajúce karty",
     "upcoming cards" : "nadchádzajúce karty",
     "Link to a board" : "Odkaz na nástenku",

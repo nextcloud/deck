@@ -273,6 +273,7 @@
     "No due" : "Χωρίς λήξη",
     "Search for {searchQuery} in all boards" : "Αναζήτηση για {searchQuery} σε όλους τους πίνακες",
     "No results found" : "Δεν βρέθηκαν αποτελέσματα",
+    "{stack} in {board}" : "{stack} στο {board}",
     "No upcoming cards" : "Δεν υπάρχουν επερχόμενες καρτέλες",
     "upcoming cards" : "επερχόμενες καρτέλες",
     "Link to a board" : "Σύνδεσμος στον πίνακα",

@@ -270,6 +270,7 @@ OC.L10N.register(
     "No due" : "Peruna iscadèntzia",
     "Search for {searchQuery} in all boards" : "Chirca {searchQuery} in totu is lavagnas",
     "No results found" : "Perunu resurtadu agatadu",
+    "{stack} in {board}" : "{stack} in {board}",
     "No upcoming cards" : "Peruna ischeda abarrada",
     "upcoming cards" : "ischedas abarradas",
     "Link to a board" : "Collega a una tabella",

@@ -275,6 +275,7 @@ OC.L10N.register(
     "No due" : "Geen vervallen",
     "Search for {searchQuery} in all boards" : "Zoek naar {searchQuery} in alle borden",
     "No results found" : "Geen resultaten gevonden",
+    "{stack} in {board}" : "{stack} in {board}",
     "No upcoming cards" : "Geen aanstaande kaarten",
     "upcoming cards" : "Aanstaande kaarten",
     "Link to a board" : "Verbind met een bord",

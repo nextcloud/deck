@@ -281,6 +281,7 @@ OC.L10N.register(
     "No due" : "Sin finalizar",
     "Search for {searchQuery} in all boards" : "Buscar {searchQuery} en todos los tableros",
     "No results found" : "No se encontraron resultados",
+    "{stack} in {board}" : "{stack} en {board}",
     "No upcoming cards" : "No hay tarjetas próximas",
     "upcoming cards" : "próximas tarjetas",
     "Link to a board" : "Enlace a un tablero",
