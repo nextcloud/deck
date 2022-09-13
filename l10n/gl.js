@@ -262,6 +262,7 @@ OC.L10N.register(
     "No due" : "Sen caducidade",
     "Search for {searchQuery} in all boards" : "Resultados de busca para {searchQuery} en todos os taboleiros",
     "No results found" : "Non se atoparon resultados",
+    "{stack} in {board}" : "{stack} en {board}",
     "No upcoming cards" : "Non hai tarxetas próximas",
     "upcoming cards" : "tarxetas próximas",
     "Link to a board" : "Ligar a un taboleiro",

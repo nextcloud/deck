@@ -280,6 +280,7 @@ OC.L10N.register(
     "No due" : "日付なし",
     "Search for {searchQuery} in all boards" : "すべてのボードで{searchQuery}を検索します",
     "No results found" : "結果が見つかりません",
+    "{stack} in {board}" : "{board} 内の {stack}",
     "No upcoming cards" : "今後のカードはありません",
     "upcoming cards" : "今後のカード",
     "Link to a board" : "ボードへのリンク",

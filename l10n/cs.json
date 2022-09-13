@@ -282,6 +282,7 @@
     "No due" : "Žádný termín",
     "Search for {searchQuery} in all boards" : "Hledat {searchQuery} na všech tabulích",
     "No results found" : "Nenalezeny žádné výsledky",
+    "{stack} in {board}" : "{stack} v {board}",
     "No upcoming cards" : "Žádné nadcházející karty",
     "upcoming cards" : "nadcházející karty",
     "Link to a board" : "Propojit s tabulí",

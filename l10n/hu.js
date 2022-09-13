@@ -284,6 +284,7 @@ OC.L10N.register(
     "No due" : "Nincs határidő",
     "Search for {searchQuery} in all boards" : "Keresés a(z) {searchQuery} kifejezésre az összes táblában",
     "No results found" : "Nincs találat",
+    "{stack} in {board}" : "{stack} itt: {board}",
     "No upcoming cards" : "Nincsenek közelgő kártyák",
     "upcoming cards" : "közelgő kártyák",
     "Link to a board" : "Hivatkozás egy táblához",

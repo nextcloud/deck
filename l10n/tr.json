@@ -282,6 +282,7 @@
     "No due" : "Bitiş yok",
     "Search for {searchQuery} in all boards" : "Tüm panolarda {searchQuery} için sonuçlar",
     "No results found" : "Herhangi bir sonuç bulunamadı",
+    "{stack} in {board}" : "{stack} {board} panosunda",
     "No upcoming cards" : "Yaklaşan bir kart yok",
     "upcoming cards" : "yaklaşan kartlar",
     "Link to a board" : "Bir pano ile ilişkilendir",
