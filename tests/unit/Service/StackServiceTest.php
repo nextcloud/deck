@@ -33,6 +33,7 @@ use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Validators\StackServiceValidator;
 use Psr\Log\LoggerInterface;
 use \Test\TestCase;
 
@@ -70,6 +71,8 @@ class StackServiceTest extends TestCase {
 	private $changeHelper;
 	/** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
 	private $logger;
+	/** @var StackServiceValidator|\PHPUnit\Framework\MockObject\MockObject */
+	private $stackServiceValidator;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -85,6 +88,7 @@ class StackServiceTest extends TestCase {
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
+		$this->stackServiceValidator = $this->createMock(StackServiceValidator::class);
 
 		$this->stackService = new StackService(
 			$this->stackMapper,
@@ -98,7 +102,8 @@ class StackServiceTest extends TestCase {
 			$this->attachmentService,
 			$this->activityManager,
 			$this->changeHelper,
-			$this->logger
+			$this->logger,
+			$this->stackServiceValidator
 		);
 	}
 
