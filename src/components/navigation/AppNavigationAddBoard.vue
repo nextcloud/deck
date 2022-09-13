@@ -70,9 +70,9 @@ export default {
 		startCreateBoard(e) {
 			this.editing = true
 		},
-		createBoard(e) {
+		async createBoard(e) {
 			const title = e.currentTarget.childNodes[0].value
-			this.$store.dispatch('createBoard', {
+			await this.$store.dispatch('createBoard', {
 				title,
 				color: this.color.substring(1),
 			})
