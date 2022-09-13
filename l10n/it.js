@@ -275,6 +275,7 @@ OC.L10N.register(
     "No due" : "Nessuna scadenza",
     "Search for {searchQuery} in all boards" : "Risultato di ricerca per \"{search}\" in tutte le lavagne",
     "No results found" : "Nessun risultato trovato",
+    "{stack} in {board}" : "{stack} in {board}",
     "No upcoming cards" : "Nessuna scheda rimasta",
     "upcoming cards" : "prossime schede",
     "Link to a board" : "Collega a una lavagna",

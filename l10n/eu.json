@@ -281,6 +281,7 @@
     "No due" : "Epemugarik ez",
     "Search for {searchQuery} in all boards" : "Bilatu {searchQuery} taula guztietan",
     "No results found" : "Ez da emaitzarik aurkitu",
+    "{stack} in {board}" : "{stack} {board}-(e)n",
     "No upcoming cards" : "Ez dago hurrengo txartelik",
     "upcoming cards" : "hurrengo txartelak",
     "Link to a board" : "Estekatu taula batera",

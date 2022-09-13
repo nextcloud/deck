@@ -284,6 +284,7 @@ OC.L10N.register(
     "No due" : "Bez ważności",
     "Search for {searchQuery} in all boards" : "Wyszukaj dla {searchQuery} na wszystkich tablicach",
     "No results found" : "Nie znaleziono wyników",
+    "{stack} in {board}" : "{stack} na {board}",
     "No upcoming cards" : "Brak nadchodzących kart",
     "upcoming cards" : "nadchodzące karty",
     "Link to a board" : "Link do tablicy",

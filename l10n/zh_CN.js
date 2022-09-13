@@ -273,6 +273,7 @@ OC.L10N.register(
     "No due" : "没有到期的",
     "Search for {searchQuery} in all boards" : "在所有看板中搜索 {searchQuery}",
     "No results found" : "未找到结果",
+    "{stack} in {board}" : "{stack} 于 {board}",
     "No upcoming cards" : "没有即将到来的卡片",
     "upcoming cards" : "即将到来的卡片",
     "Link to a board" : "链接到一个面板",

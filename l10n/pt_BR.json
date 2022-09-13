@@ -281,6 +281,7 @@
     "No due" : "Sem vencimento",
     "Search for {searchQuery} in all boards" : "Pesquisar por {searchQuery} em todos os painéis",
     "No results found" : "Nenhum resultado encontrado",
+    "{stack} in {board}" : "{stack} de {board}",
     "No upcoming cards" : "Não há mais cartões",
     "upcoming cards" : "próximos cartões",
     "Link to a board" : "Linkar a um painel",

@@ -283,6 +283,7 @@ OC.L10N.register(
     "No due" : "Sans échéance",
     "Search for {searchQuery} in all boards" : "Rechercher {searchQuery} dans tous les tableaux",
     "No results found" : "Aucun résultat",
+    "{stack} in {board}" : "{stack} dans {board}",
     "No upcoming cards" : "Pas de cartes à venir",
     "upcoming cards" : "cartes à venir",
     "Link to a board" : "Relier à un tableau",
