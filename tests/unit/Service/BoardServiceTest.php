@@ -44,6 +44,7 @@ use OCP\IUserManager;
 use OCP\IGroupManager;
 use \Test\TestCase;
 use OCP\IURLGenerator;
+use OCA\Deck\Validators\BoardServiceValidator;
 
 class BoardServiceTest extends TestCase {
 
@@ -80,6 +81,8 @@ class BoardServiceTest extends TestCase {
 	private $userId = 'admin';
 	/** @var IURLGenerator */
 	private $urlGenerator;
+	/** @var BoardServiceValidator */
+	private $boardServiceValidator;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -99,6 +102,7 @@ class BoardServiceTest extends TestCase {
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
+		$this->boardServiceValidator = $this->createMock(BoardServiceValidator::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -117,6 +121,7 @@ class BoardServiceTest extends TestCase {
 			$this->eventDispatcher,
 			$this->changeHelper,
 			$this->urlGenerator,
+			$this->boardServiceValidator,
 			$this->userId
 		);
 
