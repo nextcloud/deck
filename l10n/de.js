@@ -289,7 +289,7 @@ OC.L10N.register(
     "{nbCards} cards" : "{nbCards} Karten",
     "No upcoming cards" : "Keine anstehenden Karten",
     "upcoming cards" : "Anstehende Karten",
-    "Due on {date}" : "Fällig am",
+    "Due on {date}" : "Fällig am {date}",
     "Link to a board" : "Mit einem Board verknüpfen",
     "Link to a card" : "Mit einer Karte verknüpfen",
     "Create a card" : "Eine Karte erstellen",
