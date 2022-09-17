@@ -42,7 +42,7 @@
     "@nextcloud/router": "^2.0.0",
     "@nextcloud/vue": "^6.0.0-beta.4",
     "@nextcloud/vue-dashboard": "^2.0.1",
-    "@nextcloud/vue-richtext": "^2.0.0",
+    "@nextcloud/vue-richtext": "^2.0.1",
     "blueimp-md5": "^2.19.0",
     "dompurify": "^2.4.0",
     "lodash": "^4.17.21",
