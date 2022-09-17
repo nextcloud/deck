@@ -245,7 +245,7 @@ OC.L10N.register(
     "{count} comments, {unread} unread" : "{count} commentaires, {unread} non lus",
     "Edit card title" : "Modifier le titre de la carte",
     "Assign to me" : "Me l'assigner",
-    "Unassign myself" : "Me le désassigner",
+    "Unassign myself" : "Me désassigner",
     "Move card" : "Déplacer la carte",
     "Unarchive card" : "Sortir la carte des archives",
     "Archive card" : "Archiver la carte",
