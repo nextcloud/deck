@@ -118,6 +118,7 @@ OC.L10N.register(
     "Details" : "Detalhes",
     "Sharing" : "Partilha",
     "Tags" : "Etiquetas",
+    "Timeline" : "Linha do tempo",
     "Undo" : "Desfazer",
     "(Group)" : "(Grupo)",
     "Can edit" : "Can edit",
