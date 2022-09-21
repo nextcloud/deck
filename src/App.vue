@@ -21,7 +21,7 @@
  -->
 
 <template>
-	<NcContent id="content" app-name="deck" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
+	<NcContent app-name="deck" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
 		<AppNavigation />
 		<NcAppContent>
 			<router-view />
@@ -128,7 +128,7 @@ export default {
 
 <style lang="scss" scoped>
 
-	#content {
+	#content-vue {
 		#app-content {
 			transition: margin-left 100ms ease;
 			position: relative;
@@ -156,7 +156,7 @@ export default {
 </style>
 
 <style lang="scss">
-	@import "../css/print";
+	@import '../css/print';
 
 	.icon-activity {
 		background-image: url(../img/activity-dark.svg);

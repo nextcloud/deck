@@ -198,7 +198,7 @@ export default {
 		margin: 8px 0;
 	}
 
-  .description-assignees {
+	.description-assignees {
 		width: 100%;
 		display: flex;
 		align-items: center;
@@ -215,7 +215,7 @@ export default {
 			height: 36px;
 			flex-grow: unset;
 		}
-  }
+	}
 
 	.spacer {
 		flex-grow: 1;
