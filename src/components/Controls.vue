@@ -471,10 +471,10 @@ export default {
 	}
 
 	.filter-button {
-	  padding: 0;
-	  border-radius: 50%;
-	  width: 44px;
-	  height: 44px;
+		padding: 0;
+		border-radius: 50%;
+		width: 44px;
+		height: 44px;
 
 		&:hover, &:focus {
 			background-color: rgba(127,127,127,0.25) !important;
