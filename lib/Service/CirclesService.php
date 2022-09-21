@@ -40,6 +40,8 @@ use Throwable;
 class CirclesService {
 	private $circlesEnabled;
 
+	private $userCircleCache = [];
+
 	public function __construct(IAppManager $appManager) {
 		$this->circlesEnabled = $appManager->isEnabledForUser('circles');
 	}
@@ -70,6 +72,10 @@ class CirclesService {
 			return false;
 		}
 
+		if (isset($this->userCircleCache[$circleId][$userId])) {
+			return $this->userCircleCache[$circleId][$userId];
+		}
+
 		try {
 			/** @var CirclesManager $circlesManager */
 			$circlesManager = \OC::$server->get(CirclesManager::class);
@@ -77,7 +83,14 @@ class CirclesService {
 			$circlesManager->startSession($federatedUser);
 			$circle = $circlesManager->getCircle($circleId);
 			$member = $circle->getInitiator();
-			return $member !== null && $member->getLevel() >= Member::LEVEL_MEMBER;
+			$isUserInCircle = $member !== null && $member->getLevel() >= Member::LEVEL_MEMBER;
+
+			if (!isset($this->userCircleCache[$circleId])) {
+				$this->userCircleCache[$circleId] = [];
+			}
+			$this->userCircleCache[$circleId][$userId] = $isUserInCircle;
+
+			return $isUserInCircle;
 		} catch (Throwable $e) {
 		}
 		return false;
