@@ -76,15 +76,15 @@
 					</NcActionButton>
 				</NcActions>
 				<NcActions v-if="removable && !isReadOnly" :force-menu="true">
-					<ActionLink v-if="attachment.extendedData.fileid" icon="icon-folder" :href="internalLink(attachment)">
+					<NcActionLink v-if="attachment.extendedData.fileid" icon="icon-folder" :href="internalLink(attachment)">
 						{{ t('deck', 'Show in Files') }}
-					</ActionLink>
-					<ActionLink v-if="attachment.extendedData.fileid"
+					</NcActionLink>
+					<NcActionLink v-if="attachment.extendedData.fileid"
 						icon="icon-download"
 						:href="downloadLink(attachment)"
 						download>
 						{{ t('deck', 'Download') }}
-					</ActionLink>
+					</NcActionLink>
 					<NcActionButton v-if="attachment.extendedData.fileid && !isReadOnly" icon="icon-delete" @click="unshareAttachment(attachment)">
 						{{ t('deck', 'Remove attachment') }}
 					</NcActionButton>
@@ -103,7 +103,7 @@
 
 <script>
 import axios from '@nextcloud/axios'
-import { NcActions, NcActionButton, ActionLink } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcActionLink } from '@nextcloud/vue'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
 import relativeDate from '../../mixins/relativeDate.js'
 import { formatFileSize } from '@nextcloud/files'
@@ -127,7 +127,7 @@ export default {
 	components: {
 		NcActions,
 		NcActionButton,
-		ActionLink,
+		NcActionLink,
 		AttachmentDragAndDrop,
 	},
 	mixins: [relativeDate, attachmentUpload],
