@@ -62,9 +62,14 @@
 		<div class="line description-assignees">
 			<TextIcon v-if="card.description" :size="20" class="icon" />
 			<div v-if="card.description"
-				class="description"
-				:title="card.description">
-				{{ card.description }}
+				:class="{
+					'description': true,
+					'short-description': shortDescription,
+				}">
+				<RichText v-tooltip.top="{ content: shortDescription ? t('deck', 'Click to expand description') : undefined }"
+					:text="card.description"
+					:use-markdown="true"
+					@click.native="shortDescription = !shortDescription" />
 			</div>
 			<div v-if="card.assignedUsers .length > 0"
 				class="spacer" />
@@ -83,6 +88,7 @@ import DeckIcon from '../components/icons/DeckIcon.vue'
 import AvatarList from '../components/cards/AvatarList.vue'
 import labelStyle from '../mixins/labelStyle.js'
 
+import { RichText } from '@nextcloud/vue-richtext'
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 
@@ -94,6 +100,7 @@ export default {
 		DeckIcon,
 		CalendarBlankIcon,
 		TextIcon,
+		RichText,
 	},
 
 	mixins: [labelStyle],
@@ -115,6 +122,7 @@ export default {
 
 	data() {
 		return {
+			shortDescription: true,
 		}
 	},
 
@@ -176,6 +184,8 @@ export default {
 
 	.link {
 		text-decoration: underline;
+		color: var(--color-main-text) !important;
+		padding: 0 !important;
 	}
 
 	.line {
@@ -201,13 +211,22 @@ export default {
 	.description-assignees {
 		width: 100%;
 		display: flex;
-		align-items: center;
+		align-items: start;
+
+		.icon {
+			align-self: start;
+			margin-top: 8px;
+		}
 
 		.description {
-			text-overflow: ellipsis;
-			overflow: hidden;
-			white-space: nowrap;
 			margin-right: 8px;
+			padding-top: 6px;
+			max-height: 250px;
+			overflow: scroll;
+			&.short-description {
+				max-height: 25px;
+				overflow: hidden;
+			}
 		}
 
 		.card-assignees {
