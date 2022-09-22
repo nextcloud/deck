@@ -68,6 +68,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "Canvis a l'<strong>aplicació Targetes</strong>",
     "A <strong>comment</strong> was created on a card" : "S'ha afegit un <strong>comentari</strong> a una targeta",
     "Upcoming cards" : "Pròximes targetes",
+    "Load more" : "Carrega'n més",
     "Personal" : "Personal",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "La targeta \"%s\" sobre \"%s\" se us ha assignat per %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} us ha assignat la targeta {deck-card} a {deck-board}.",

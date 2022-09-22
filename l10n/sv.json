@@ -66,6 +66,7 @@
     "Changes in the <strong>Deck app</strong>" : "Ändringar i <strong>Deck-appen</strong>",
     "A <strong>comment</strong> was created on a card" : "En <strong>kommentar</strong> skapades på ett kort",
     "Upcoming cards" : "Kommande kort",
+    "Load more" : "Ladda mer",
     "Personal" : "Personlig",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Kortet \"%s\" på \"%s\" har tilldelats dig av %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} har tilldelat kortet {deck-card} från {deck-board} till dig.",

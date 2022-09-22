@@ -66,6 +66,7 @@
     "Changes in the <strong>Deck app</strong>" : "<strong>Deck 應用程式</strong>中的變更",
     "A <strong>comment</strong> was created on a card" : "已在卡片上建立了<strong>留言</strong>",
     "Upcoming cards" : "接下來的卡片",
+    "Load more" : "載入更多",
     "Personal" : "個人",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "卡片「%s」位於「%s」已由 %s 分配給您。",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} 已將位於 {deck-board} 的 {deck-card} 卡片分配給您。",

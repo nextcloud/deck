@@ -66,6 +66,7 @@
     "Changes in the <strong>Deck app</strong>" : "Spremembe v programu <strong>Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "Nalogi je dodana nova <strong>opomba</strong>",
     "Upcoming cards" : "Prihajajoče naloge",
+    "Load more" : "Naloži več",
     "Personal" : "Osebno",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Nalogo »%s« na »%s« vam dodeli %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} vam dodeli nalogo »{deck-card}« na »{deck-board}«.",

@@ -68,6 +68,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "Zmiany w <strong>aplikacji Tablica</strong>",
     "A <strong>comment</strong> was created on a card" : "Na karcie utworzono <strong>komentarz</strong>",
     "Upcoming cards" : "Nadchodzące karty",
+    "Load more" : "Wczytaj więcej",
     "Personal" : "Osobiste",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Karta \"%s\" na \"%s\" została przydzielona Tobie przez %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} przydzielił Tobie kartę {deck-card} na {deck-board}.",

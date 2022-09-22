@@ -68,6 +68,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "Αλλαγές στην <strong>εφαρμογή Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "Ένα <strong>σχόλιο</strong> δημιουργήθηκε σε μια καρτέλα",
     "Upcoming cards" : "Επερχόμενες καρτέλες",
+    "Load more" : "Φόρτωση περισσότερων",
     "Personal" : "Προσωπικά",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Η καρτέλα \"%s\" του \"%s\" ανατέθηκε σε εσάς από τον %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "Ο/Η {user} έχει αναθέσει την καρτέλα {deck-card} του πίνακα {deck-board} σε εσάς.",

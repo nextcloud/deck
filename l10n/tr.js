@@ -68,6 +68,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "<strong>Tahta uygulamasındaki</strong> değişiklikler",
     "A <strong>comment</strong> was created on a card" : "Bir kart için bir <strong>yorum</strong> yapıldı",
     "Upcoming cards" : "Yaklaşan kartlar",
+    "Load more" : "Diğerlerini yükle",
     "Personal" : "Kişisel",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "\"%s\" kartı \"%s\" zamanında %s tarafından size atandı.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user}, {deck-board} panosundaki {deck-card} kartını size atadı.",

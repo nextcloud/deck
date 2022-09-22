@@ -4,6 +4,7 @@ OC.L10N.register(
     "You have created a new board {board}" : "새로운 보드{board}를 만들었습니다.",
     "Deck" : "덱",
     "Upcoming cards" : "다음 카드들",
+    "Load more" : "더 불러오기",
     "Personal" : "개인",
     "The card \"%s\" on \"%s\" has reached its due date." : "카드 \"%s\"(\"%s\"에 있음)의 만료 날짜가 다가왔습니다.",
     "The board \"%s\" has been shared with you by %s." : "\"%s\" 게시판을 %s 님이 공유했습니다.",

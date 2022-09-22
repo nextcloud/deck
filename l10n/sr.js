@@ -68,6 +68,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "Измене у <strong>Deck апликацији</strong>",
     "A <strong>comment</strong> was created on a card" : "Направљен је <strong>коментар</strong> на картици",
     "Upcoming cards" : "Предстојеће картице",
+    "Load more" : "Учитај још",
     "Personal" : "Лично",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Корисник %s Вам је доделио картицу „%s“ са табле „%s“.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Картици „%s“ на табли „%s“ је истекао рок.",

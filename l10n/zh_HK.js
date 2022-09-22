@@ -68,6 +68,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "<strong>Deck 應用程式</strong>中的改變",
     "A <strong>comment</strong> was created on a card" : "卡片上創建了一個 <strong>意見</strong>",
     "Upcoming cards" : "快將到期的卡片",
+    "Load more" : "載入更多",
     "Personal" : "個人",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "%s 已將 “%s” 中的卡片 “%s” 指派給您。",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} 已將 {deck-board} 中的卡片 {deck-card} 指派給您。",
