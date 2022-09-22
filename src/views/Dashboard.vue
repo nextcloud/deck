@@ -61,13 +61,12 @@
 
 <script>
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import { NcDashboardWidget } from '@nextcloud/vue'
+import { NcButton, NcDashboardWidget } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import labelStyle from './../mixins/labelStyle.js'
 import DueDate from '../components/cards/badges/DueDate.vue'
 import { generateUrl } from '@nextcloud/router'
 import CardCreateDialog from '../CardCreateDialog.vue'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 
 export default {
 	name: 'Dashboard',
