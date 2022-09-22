@@ -179,6 +179,10 @@ export default {
 
 .deck-card-reference {
 	width: 100%;
+	// needed for the specific case of Text
+	.editor__content & {
+		width: calc(100% - 24px);
+	}
 	white-space: normal;
 	padding: 12px;
 
