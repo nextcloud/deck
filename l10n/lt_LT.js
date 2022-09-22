@@ -66,6 +66,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "Pakeitimai <strong>Darbų programėlėje</strong>",
     "A <strong>comment</strong> was created on a card" : "Kortelėje buvo sukurtas <strong>komentaras</strong>",
     "Upcoming cards" : "Artėjančios kortelės",
+    "Load more" : "Įkelti daugiau",
     "Personal" : "Asmeniniai",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Kortelę \"%s\" ties \"%s\" priskyrė jums %s.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Kortelė „%s“, esanti lentoje „%s“, pasiekė savo galutinį terminą.",

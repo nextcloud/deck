@@ -66,6 +66,7 @@
     "Changes in the <strong>Deck app</strong>" : "Cambios en la <strong>app Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "Un <strong>comment</strong> ha sido creado en una tarjeta",
     "Upcoming cards" : "Próximas tarjetas",
+    "Load more" : "Cargar más",
     "Personal" : "Personal",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "La tarjeta \"%s\" en \"%s\" te ha sido asignada por %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} te ha asigando la tarjeta {deck-card} de {deck-board} a ti.",

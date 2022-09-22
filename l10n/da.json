@@ -29,6 +29,7 @@
     "{user} has renamed the card {before} to {card}" : "{user} har omdøbt kortet {before} til {card}",
     "Deck" : "Deck",
     "Upcoming cards" : "Kommende kort",
+    "Load more" : "Hent flere",
     "Personal" : "Personligt",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Kortet \"%s\" på \"%s\" er blevet tildelt dig af %s.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Kortet \"%s\" på \"%s\" har nået sin forfaldsdato.",

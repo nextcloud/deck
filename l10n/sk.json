@@ -66,6 +66,7 @@
     "Changes in the <strong>Deck app</strong>" : "Zmeny v apke <strong>Nástenka</strong>",
     "A <strong>comment</strong> was created on a card" : "Na karte bol vytvorený <strong>komentár</strong>. ",
     "Upcoming cards" : "Nadchádzajúce karty",
+    "Load more" : "Načítať viac",
     "Personal" : "Osobné",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Používateľ %s vám priradil kartu „%s“ na „%s“.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} vám priradil kartu {deck-card} na {deck-board}.",

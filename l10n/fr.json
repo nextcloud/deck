@@ -66,6 +66,7 @@
     "Changes in the <strong>Deck app</strong>" : "Modifications dans <strong>Deck app</strong>",
     "A <strong>comment</strong> was created on a card" : "Un  <strong>commentaire</strong> a été créé sur une carte",
     "Upcoming cards" : "Cartes à venir",
+    "Load more" : "Charger d'avantage",
     "Personal" : "Personnel",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "La carte \"%s\" de \"%s\" vous a été assignée par %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} vous a attribué la carte {deck-card} du tableau {deck-board}.",
