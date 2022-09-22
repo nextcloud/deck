@@ -56,6 +56,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "Muutokset <strong>Pakka-sovelluksessa</strong>",
     "A <strong>comment</strong> was created on a card" : "<strong>Kommentti</strong> luotiin kortille",
     "Upcoming cards" : "Tulevat kortit",
+    "Load more" : "Lataa lisää",
     "Personal" : "Henkilökohtainen",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Kortti \"%s\" taululla \"%s\" on asetettu sinulle käyttäjän %s toimesta.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Kortin \"%s\" on \"%s\" eräpäivä on tullut vastaan.",

@@ -66,6 +66,7 @@
     "Changes in the <strong>Deck app</strong>" : "Промени в <strong>приложението Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "На картата е създаден <strong>коментар</strong>",
     "Upcoming cards" : "Предстоящи карти",
+    "Load more" : "Зареждане на още",
     "Personal" : "Лични",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Картата \"%s\" на \"%s\" Ви е била възложена от %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} е възложил картата {deck-card} на {deck-board} на Вас.",

@@ -66,6 +66,7 @@
     "Changes in the <strong>Deck app</strong>" : "Změny v <strong>aplikaci Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "Na kartě byl vytvořen <strong>komentář</strong>",
     "Upcoming cards" : "Nadcházející karty",
+    "Load more" : "Načíst více",
     "Personal" : "Osobní",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Kartu „%s“ na „%s“ vám přiřadil(a) %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} vám přiřadil(a) kartu {deck-card} na tabuli {deck-board}.",

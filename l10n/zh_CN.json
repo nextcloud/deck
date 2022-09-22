@@ -66,6 +66,7 @@
     "Changes in the <strong>Deck app</strong>" : "<strong>看板应用</strong>中的改变",
     "A <strong>comment</strong> was created on a card" : "卡片上创建了一个 <strong>评论</strong>",
     "Upcoming cards" : "即将到来的卡片",
+    "Load more" : "加载更多",
     "Personal" : "个人",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "卡片  \"%s\" （在 \"%s\" 中）已由%s指派给您。",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} 已将卡片 {deck-card}， 其位于 {deck-board} ，分配给了你",

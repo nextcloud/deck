@@ -66,6 +66,7 @@
     "Changes in the <strong>Deck app</strong>" : "<strong>Deck</strong> aplikazioan aldaketak",
     "A <strong>comment</strong> was created on a card" : "<strong>Iruzkin bat</strong> sortu da txartel batean",
     "Upcoming cards" : "Hurrengo txartelak",
+    "Load more" : "Kargatu gehiago",
     "Personal" : "Pertsonala",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "\"%s\" txartela \"%s\"-n %sk esleitu zaizu.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user}-k {deck-board}-ko  {deck-card} txartela esleitu dizu.",

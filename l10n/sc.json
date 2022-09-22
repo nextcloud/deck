@@ -66,6 +66,7 @@
     "Changes in the <strong>Deck app</strong>" : "Càmbios in <strong> s'aplicatzione Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "Unu <strong>cummentu</strong> est istadu creadu in s'ischeda",
     "Upcoming cards" : "Ischedas imbenientes",
+    "Load more" : "Càrriga àteru",
     "Personal" : "Personale",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "S'ischeda \"%s\" in \"%s\" s'est istadu assignadu dae %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} t'at assignadu s'ischeda {deck-card} in {deck-board}.",

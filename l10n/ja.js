@@ -68,6 +68,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "<strong>デッキアプリ</strong>に変更があったとき",
     "A <strong>comment</strong> was created on a card" : "カードに<strong>コメント</strong>が作成されたとき",
     "Upcoming cards" : "今後のカード",
+    "Load more" : "さらに読み込む",
     "Personal" : "個人",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "カード \"%s\"(\"%s\"に所属)が%sによってあなたに割り当てられました。",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} さんが、{deck-board} で、あなたにカード「{deck-card}」を割り当てました。",

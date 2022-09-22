@@ -66,6 +66,7 @@
     "Changes in the <strong>Deck app</strong>" : "Változások a <strong>Kártyák alkalmazásban</strong>",
     "A <strong>comment</strong> was created on a card" : "Egy <strong>hozzászólás</strong> lett létrehozva egy kártyán",
     "Upcoming cards" : "Közelgő kártyák",
+    "Load more" : "Továbbiak betöltése",
     "Personal" : "Személyes",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "A(z) „%s” kártyát a(z) „%s” táblán %s hozzárendelte Önhöz.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} hozzárendelte Önhöz a(z) {deck-board} táblán lévő {deck-card} kártyát.",

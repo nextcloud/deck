@@ -68,6 +68,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "Alterações na aplicação Quadro",
     "A <strong>comment</strong> was created on a card" : "Um <strong>comentário</strong> foi criado num cartão",
     "Upcoming cards" : "Próximos cartões",
+    "Load more" : "Carregar mais",
     "Personal" : "Pessoal",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "O cartão \"%s\" em \"%s\" foi-lhe vinculado por %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{usuário} atribuiu-lhe o cartão {deck-card} no {deck-board}.",
