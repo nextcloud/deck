@@ -68,6 +68,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "Wijzigingen in de <strong>Deck app</strong>",
     "A <strong>comment</strong> was created on a card" : "Er is <strong>commentaar </strong> gegeven op een card",
     "Upcoming cards" : "Aanstaande kaarten",
+    "Load more" : "Laad meer",
     "Personal" : "Persoonlijk",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "De kaart \"%s\" op \"%s\" is aan jou toegewezen door %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} heeft kaart {deck-card} op {deck-board} aan jou toegewezen.",

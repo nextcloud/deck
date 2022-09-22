@@ -66,6 +66,7 @@
     "Changes in the <strong>Deck app</strong>" : "Изменения в <strong>приложении Карточки</strong>",
     "A <strong>comment</strong> was created on a card" : "Добавлен <strong>комментарий</strong> к карточке",
     "Upcoming cards" : "Ожидающие выполнения",
+    "Load more" : "Загрузить больше",
     "Personal" : "Личное",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Вам назначена карточка «%s» с рабочей доски «%s»  пользователем %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} назначил Вам карточку {deck-card} из {deck-board}.",

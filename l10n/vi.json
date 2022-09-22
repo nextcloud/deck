@@ -17,6 +17,7 @@
     "{user} has renamed the card {before} to {card}" : "{user} đã thay đổi tên của tác vụ {before} thành {card}",
     "Deck" : "Kế hoạch",
     "Upcoming cards" : "Thẻ sắp đến",
+    "Load more" : "Tải thêm",
     "Personal" : "Cá nhân",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Tác vụ \"%s\" trong \"%s\" đã được phân công cho bạn bởi  %s.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Tác vụ \"%s\" trong \"%s\" đã đến ngày hạn chót.",

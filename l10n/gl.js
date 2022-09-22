@@ -68,6 +68,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "Cambios na <strong>aplicación Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "Creouse un <strong>comentario</strong> nunha tarxeta",
     "Upcoming cards" : "Tarxetas próximas",
+    "Load more" : "Cargar máis",
     "Personal" : "Persoal",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "A tarxeta «%s» en «%s» foi asignada a vostede por %s.",
     "The card \"%s\" on \"%s\" has reached its due date." : "A tarxeta «%s» en «%s» chegou á súa data de caducidade.",

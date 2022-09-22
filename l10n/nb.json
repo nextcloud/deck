@@ -37,6 +37,7 @@
     "A <strong>card description</strong> inside the Deck app has been changed" : "En <strong>kort beskrivelse</strong>i Stokk-appen er endret",
     "Deck" : "Stokk",
     "Changes in the <strong>Deck app</strong>" : "Endringer i <strong>Stokk-appen</strong>",
+    "Load more" : "Last mer",
     "Personal" : "Personlig",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Kortet \"%s\" på \"%s\" er endret til deg av %s.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Kortet \"%s\" på \"%s\" har nådd sin utløpsdato.",
