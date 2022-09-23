@@ -279,6 +279,7 @@ OC.L10N.register(
     "Only assigned cards" : "Bakarrik esleitutako txartelak",
     "No reminder" : "Abisurik ez",
     "An error occurred" : "Errore bat gertatu da",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Ziur zaude {title} taula ezabatu nahi duzula? Honek taula honen datu guztiak ezabatuko ditu, artxibatutako kartak barne.",
     "Delete the board?" : "Taula ezabatu?",
     "Loading filtered view" : "Kargatzen iragazitako ikuspegia",
     "No due" : "Epemugarik ez",
