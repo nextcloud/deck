@@ -62,8 +62,7 @@
 
 <script>
 import { generateUrl } from '@nextcloud/router'
-import NcModal from '@nextcloud/vue/dist/Components/NcModal'
-import NcMultiselect from '@nextcloud/vue/dist/Components/NcMultiselect'
+import { NcModal, NcMultiselect } from '@nextcloud/vue'
 import axios from '@nextcloud/axios'
 
 export default {

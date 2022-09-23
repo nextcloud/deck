@@ -41,7 +41,7 @@
 	</NcModal>
 </template>
 <script>
-import NcModal from '@nextcloud/vue/dist/Components/NcModal'
+import { NcModal } from '@nextcloud/vue'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 

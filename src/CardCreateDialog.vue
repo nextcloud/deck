@@ -92,9 +92,7 @@
 
 <script>
 import { generateUrl } from '@nextcloud/router'
-import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
-import NcMultiselect from '@nextcloud/vue/dist/Components/NcMultiselect.js'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+import { NcModal, NcMultiselect, NcEmptyContent } from '@nextcloud/vue'
 import axios from '@nextcloud/axios'
 import { CardApi } from './services/CardApi.js'
 

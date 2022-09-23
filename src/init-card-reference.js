@@ -20,7 +20,7 @@
  */
 
 import { registerWidget } from '@nextcloud/vue-richtext'
-import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
+import { Tooltip } from '@nextcloud/vue'
 import Vue from 'vue'
 import CardReferenceWidget from './views/CardReferenceWidget.vue'
 
