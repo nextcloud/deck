@@ -81,7 +81,7 @@ class CardReferenceProvider implements IReferenceProvider {
 				$card = $this->sanitizeSerializedCard($card);
 				$board = $this->sanitizeSerializedBoard($board);
 				$stack = $this->sanitizeSerializedStack($stack);
-
+				/** @var IReference $reference */
 				$reference = new Reference($referenceText);
 				$reference->setRichObject(Application::APP_ID . '-card', [
 					'id' => $boardId . '/' . $cardId,
