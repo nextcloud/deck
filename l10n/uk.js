@@ -16,6 +16,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "Зміни у застосунку <strong>Колода</strong>",
     "Load more" : "Більше",
     "Personal" : "Особисте",
+    "%s on %s" : "%s на %s",
     "Finished" : "Завершено",
     "To review" : "На перегляд",
     "Action needed" : "Потребує дій",
@@ -165,6 +166,7 @@ OC.L10N.register(
     "Link to a card" : "Прив'язати до картки",
     "Something went wrong" : "От халепа!",
     "Maximum file size of {size} exceeded" : "Досягнуто максимальний розмір файлу {size}",
+    "Error creating the share" : "Помилка створення спільного доступу",
     "Share" : "Поділитися",
     "This week" : "Цього тижня"
 },
