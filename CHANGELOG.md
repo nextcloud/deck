@@ -1,6 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.8.0-beta.2
+
+### Added
+
+- Implement card reference widget @eneiluj [#4031](https://github.com/nextcloud/deck/pull/4031)
+- Implement new dashboard widget interfaces @eneiluj [#4033](https://github.com/nextcloud/deck/pull/4033)
+- Add related resources panel to board sharing tab sidebar @Pytal [#4000](https://github.com/nextcloud/deck/pull/4000)
+
+### Fixed
+
+- Fix attachment creator name: show display name @eneiluj [#4036](https://github.com/nextcloud/deck/pull/4036)
+- Fix reference provider when caching @eneiluj [#4056](https://github.com/nextcloud/deck/pull/4056)
+- Use global import for nextcloud-vue [#4072](https://github.com/nextcloud/deck/pull/4072)
+- Disable Create card button while no stack is chosen @icewind1991 [#4014](https://github.com/nextcloud/deck/pull/4014)
+
+
 ## 1.8.0-beta.1
 ### Enhancements
 
