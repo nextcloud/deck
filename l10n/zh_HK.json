@@ -284,6 +284,7 @@
     "Search for {searchQuery} in all boards" : "在所有面板中搜索 {searchQuery}",
     "No results found" : "沒有結果",
     "{stack} in {board}" : "{board} 中的 {stack}",
+    "Click to expand description" : "點擊展開描述",
     "* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments" : "* 創建於 {created}\n* 最後修改於 {lastMod}\n* {nbAttachments} 個附件\n* {nbComments} 則留言",
     "{nbCards} cards" : "{nbCards} 張卡片",
     "No upcoming cards" : "沒有快將到期的卡片",
