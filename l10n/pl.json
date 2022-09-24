@@ -284,6 +284,7 @@
     "Search for {searchQuery} in all boards" : "Wyszukaj dla {searchQuery} na wszystkich tablicach",
     "No results found" : "Nie znaleziono wyników",
     "{stack} in {board}" : "{stack} na {board}",
+    "Click to expand description" : "Kliknij, aby rozwinąć opis",
     "* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments" : "* Utworzono {created}\n* Ostatnia modyfikacja {lastMod}\n* Załączniki {nbAttachments}\n* Komentarze {nbComments}",
     "{nbCards} cards" : "Karty {nbCards}",
     "No upcoming cards" : "Brak nadchodzących kart",
