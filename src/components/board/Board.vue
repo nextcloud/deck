@@ -53,9 +53,11 @@
 				<Container lock-axix="y"
 					orientation="horizontal"
 					:drag-handle-selector="dragHandleSelector"
+					@drag-start="draggingStack = true"
+					@drag-end="draggingStack = false"
 					@drop="onDropStack">
 					<Draggable v-for="stack in stacksByBoard" :key="stack.id">
-						<Stack :stack="stack" />
+						<Stack :stack="stack" :dragging="draggingStack" />
 					</Draggable>
 				</Container>
 			</div>
@@ -100,6 +102,7 @@ export default {
 	},
 	data() {
 		return {
+			draggingStack: false,
 			loading: true,
 			newStackTitle: '',
 		}

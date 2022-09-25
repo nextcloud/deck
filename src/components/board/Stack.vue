@@ -171,6 +171,10 @@ export default {
 		ClickOutside,
 	},
 	props: {
+		dragging: {
+			type: Boolean,
+			default: false,
+		},
 		stack: {
 			type: Object,
 			default: undefined,
@@ -270,6 +274,10 @@ export default {
 			this.modalArchivAllCardsShow = false
 		},
 		startEditing(stack) {
+			if (this.dragging) {
+			  return
+			}
+
 			this.copiedStack = Object.assign({}, stack)
 			this.editing = true
 		},
