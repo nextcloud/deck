@@ -120,7 +120,7 @@ export default {
 			return this.$store.getters.stacksByBoard(this.board.id)
 		},
 		dragHandleSelector() {
-			return this.canEdit ? null : '.no-drag'
+			return this.canEdit ? '.stack__title' : '.no-drag'
 		},
 		isEmpty() {
 			return this.stacksByBoard.length === 0

@@ -25,7 +25,7 @@
 	<div class="stack">
 		<div v-click-outside="stopCardCreation"
 			class="stack__header"
-			:class="{'stack__header--add': showAddCard }"
+			:class="{'stack__header--add': showAddCard}"
 			tabindex="0"
 			:aria-label="stack.title">
 			<transition name="fade" mode="out-in">
@@ -390,7 +390,7 @@ export default {
 			margin: 6px;
 			padding: 4px 4px;
 
-			&:focus {
+			&:focus-visible {
 				outline: 2px solid var(--color-border-dark);
 				border-radius: 3px;
 			}
