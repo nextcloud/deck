@@ -41,7 +41,10 @@
 					@keydown.enter="startEditing(stack)">
 					{{ stack.title }}
 				</h3>
-				<form v-else @submit.prevent="finishedEdit(stack)">
+				<form v-else-if="editing"
+					v-click-outside="cancelEdit"
+					@submit.prevent="finishedEdit(stack)"
+					@keyup.esc="cancelEdit">
 					<input v-model="copiedStack.title"
 						v-focus
 						type="text"
@@ -142,7 +145,7 @@
 </template>
 
 <script>
-
+import ClickOutside from 'vue-click-outside'
 import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
 
@@ -164,7 +167,9 @@ export default {
 		NcModal,
 		ArchiveIcon,
 	},
-
+	directives: {
+		ClickOutside,
+	},
 	props: {
 		stack: {
 			type: Object,
@@ -272,6 +277,9 @@ export default {
 			if (this.copiedStack.title !== stack.title) {
 				this.$store.dispatch('updateStack', this.copiedStack)
 			}
+			this.editing = false
+		},
+		cancelEdit() {
 			this.editing = false
 		},
 		async clickAddCard() {
