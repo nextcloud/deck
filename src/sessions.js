@@ -19,8 +19,8 @@
  */
 
 import { listen } from '@nextcloud/notify_push'
-import { sessionApi } from './services/SessionApi'
-import store from './store/main'
+import { sessionApi } from './services/SessionApi.js'
+import store from './store/main.js'
 
 const SESSION_INTERVAL = 90 // in seconds
 
