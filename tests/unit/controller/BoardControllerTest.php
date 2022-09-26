@@ -164,10 +164,14 @@ class BoardControllerTest extends \Test\TestCase {
 	}
 
 	public function testDeleteAcl() {
+		$acl = $this->getMockBuilder(Acl::class)
+			->disableOriginalConstructor()
+			->getMock();
+
 		$this->boardService->expects($this->once())
 			->method('deleteAcl')
 			->with(1)
-			->willReturn(true);
-		$this->assertEquals(true, $this->controller->deleteAcl(1));
+			->willReturn($acl);
+		$this->assertEquals($acl, $this->controller->deleteAcl(1));
 	}
 }

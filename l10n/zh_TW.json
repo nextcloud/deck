@@ -284,6 +284,7 @@
     "Search for {searchQuery} in all boards" : "在所有佈告欄中搜尋 {searchQuery}",
     "No results found" : "找不到結果",
     "{stack} in {board}" : "{stack} 於 {board}",
+    "Click to expand description" : "點擊展開描述",
     "* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments" : "* 建立於 {created}\n* 最後修改於 {lastMod}\n* {nbAttachments} 個附件\n* {nbComments} 則留言",
     "{nbCards} cards" : "{nbCards} 張卡片",
     "No upcoming cards" : "無接下來的卡片",

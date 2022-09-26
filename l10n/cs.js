@@ -286,6 +286,7 @@ OC.L10N.register(
     "Search for {searchQuery} in all boards" : "Hledat {searchQuery} na všech tabulích",
     "No results found" : "Nenalezeny žádné výsledky",
     "{stack} in {board}" : "{stack} v {board}",
+    "Click to expand description" : "Popis rozbalíte kliknutím",
     "* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments" : "* Vytvořeno {created}\n* Naposledy upraveno {lastMod}\n* {nbAttachments} příloh\n* {nbComments} komentářů",
     "{nbCards} cards" : "{nbCards} karet",
     "No upcoming cards" : "Žádné nadcházející karty",

@@ -20,7 +20,7 @@
  */
 
 import { registerWidget } from '@nextcloud/vue-richtext'
-import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
+import { Tooltip } from '@nextcloud/vue'
 import Vue from 'vue'
 import CardReferenceWidget from './views/CardReferenceWidget.vue'
 
@@ -36,7 +36,6 @@ registerWidget('deck-card', (el, { richObjectType, richObject, accessible }) => 
 	// trick to change the wrapper element size, otherwise it always is 100%
 	// which is not very nice with a simple card
 	el.parentNode.style['max-width'] = '400px'
-	el.parentNode.style['min-width'] = '200px'
 	el.parentNode.style['margin-left'] = '0'
 	el.parentNode.style['margin-right'] = '0'
 

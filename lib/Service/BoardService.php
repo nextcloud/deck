@@ -42,6 +42,7 @@ use OCA\Deck\Event\AclUpdatedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -55,6 +56,8 @@ use OCP\IUserManager;
 use OCA\Deck\BadRequestException;
 use OCP\IURLGenerator;
 use OCP\Server;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class BoardService {
 	private BoardMapper $boardMapper;
@@ -592,12 +595,14 @@ class BoardService {
 	}
 
 	/**
+	 * @throws DbException
 	 * @throws DoesNotExistException
-	 * @throws \OCA\Deck\NoPermissionException
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
-	 * @throws BadRequestException
+	 * @throws NoPermissionException
+	 * @throws MultipleObjectsReturnedException
+	 * @throws ContainerExceptionInterface
+	 * @throws NotFoundExceptionInterface
 	 */
-	public function deleteAcl(int $id): bool {
+	public function deleteAcl(int $id): ?Acl {
 		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_SHARE);
 		/** @var Acl $acl */
 		$acl = $this->aclMapper->find($id);
@@ -622,8 +627,10 @@ class BoardService {
 			}
 		}
 
+		$deletedAcl = $this->aclMapper->delete($acl);
 		$this->eventDispatcher->dispatchTyped(new AclDeletedEvent($acl));
-		return (bool) $this->aclMapper->delete($acl);
+
+		return $deletedAcl;
 	}
 
 	/**

@@ -41,9 +41,9 @@
 					<span v-if="acl.type===7">{{ t('deck', '(Circle)') }}</span>
 				</span>
 
-				<ActionCheckbox v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0) && (canManage || (canEdit && canShare))" :checked="acl.permissionEdit" @change="clickEditAcl(acl)">
+				<NcActionCheckbox v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0) && (canManage || (canEdit && canShare))" :checked="acl.permissionEdit" @change="clickEditAcl(acl)">
 					{{ t('deck', 'Can edit') }}
-				</ActionCheckbox>
+				</NcActionCheckbox>
 				<NcActions v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0)" :force-menu="true">
 					<ActionCheckbox v-if="canManage || canShare" :checked="acl.permissionShare" @change="clickShareAcl(acl)">
 						{{ t('deck', 'Can share') }}
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { NcAvatar, NcMultiselect, NcActions, NcActionButton, ActionCheckbox, NcRelatedResourcesPanel } from '@nextcloud/vue'
+import { NcAvatar, NcMultiselect, NcActions, NcActionButton, NcActionCheckbox, NcRelatedResourcesPanel } from '@nextcloud/vue'
 import { CollectionList } from 'nextcloud-vue-collections'
 import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -87,7 +87,7 @@ export default {
 		NcAvatar,
 		NcActions,
 		NcActionButton,
-		ActionCheckbox,
+		NcActionCheckbox,
 		NcMultiselect,
 		CollectionList,
 		NcRelatedResourcesPanel,

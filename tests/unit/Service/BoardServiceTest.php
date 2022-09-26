@@ -427,6 +427,6 @@ class BoardServiceTest extends TestCase {
 			->method('delete')
 			->with($acl)
 			->willReturn($acl);
-		$this->assertTrue($this->service->deleteAcl(123));
+		$this->assertEquals($acl, $this->service->deleteAcl(123));
 	}
 }
