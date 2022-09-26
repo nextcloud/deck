@@ -19,6 +19,7 @@ OC.L10N.register(
     "{user} has renamed the card {before} to {card}" : "{user} đã thay đổi tên của tác vụ {before} thành {card}",
     "Deck" : "Kế hoạch",
     "Upcoming cards" : "Thẻ sắp đến",
+    "Load more" : "Tải thêm",
     "Personal" : "Cá nhân",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Tác vụ \"%s\" trong \"%s\" đã được phân công cho bạn bởi  %s.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Tác vụ \"%s\" trong \"%s\" đã đến ngày hạn chót.",
@@ -119,6 +120,7 @@ OC.L10N.register(
     "Delete board" : "Xóa dự án",
     "No reminder" : "Không có nhắc hẹn",
     "An error occurred" : "Có lỗi đã xảy ra",
+    "{stack} in {board}" : "{stack} trong {board}",
     "Maximum file size of {size} exceeded" : "Đã vượt quá kích thước {size} tối đa tập tin",
     "Share" : "Chia sẻ",
     "This week" : "Tuần này"

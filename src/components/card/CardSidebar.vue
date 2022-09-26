@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<AppSidebar v-if="currentBoard && currentCard"
+	<NcAppSidebar v-if="currentBoard && currentCard"
 		:active="tabId"
 		:title="title"
 		:subtitle="subtitle"
@@ -32,64 +32,64 @@
 		@submit-title="handleSubmitTitle"
 		@close="closeSidebar">
 		<template #secondary-actions>
-			<ActionButton v-if="cardDetailsInModal" icon="icon-menu-sidebar" @click.stop="closeModal()">
+			<NcActionButton v-if="cardDetailsInModal" icon="icon-menu-sidebar" @click.stop="closeModal()">
 				{{ t('deck', 'Open in sidebar view') }}
-			</ActionButton>
-			<ActionButton v-else icon="icon-external" @click.stop="showModal()">
+			</NcActionButton>
+			<NcActionButton v-else icon="icon-external" @click.stop="showModal()">
 				{{ t('deck', 'Open in bigger view') }}
-			</ActionButton>
+			</NcActionButton>
 
-			<ActionButton v-for="action in cardActions"
+			<NcActionButton v-for="action in cardActions"
 				:key="action.label"
 				:close-after-click="true"
 				:icon="action.icon"
 				@click="action.callback(cardRichObject)">
 				{{ action.label }}
-			</ActionButton>
+			</NcActionButton>
 		</template>
 
-		<AppSidebarTab id="details"
+		<NcAppSidebarTab id="details"
 			:order="0"
 			:name="t('deck', 'Details')"
 			icon="icon-home">
 			<CardSidebarTabDetails :card="currentCard" />
-		</AppSidebarTab>
+		</NcAppSidebarTab>
 
-		<AppSidebarTab id="attachments"
+		<NcAppSidebarTab id="attachments"
 			:order="1"
 			:name="t('deck', 'Attachments')">
 			<template #icon>
-				<AttachmentIcon size="20" decorative />
+				<AttachmentIcon :size="20" decorative />
 			</template>
 			<CardSidebarTabAttachments :card="currentCard" />
-		</AppSidebarTab>
+		</NcAppSidebarTab>
 
-		<AppSidebarTab id="comments"
+		<NcAppSidebarTab id="comments"
 			:order="2"
 			:name="t('deck', 'Comments')"
 			icon="icon-comment">
 			<CardSidebarTabComments :card="currentCard" :tab-query="tabQuery" />
-		</AppSidebarTab>
+		</NcAppSidebarTab>
 
-		<AppSidebarTab v-if="hasActivity"
+		<NcAppSidebarTab v-if="hasActivity"
 			id="timeline"
 			:order="3"
 			:name="t('deck', 'Timeline')"
 			icon="icon-activity">
 			<CardSidebarTabActivity :card="currentCard" />
-		</AppSidebarTab>
-	</AppSidebar>
+		</NcAppSidebarTab>
+	</NcAppSidebar>
 </template>
 
 <script>
-import { ActionButton, AppSidebar, AppSidebarTab } from '@nextcloud/vue'
+import { NcActionButton, NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
 import { mapState, mapGetters } from 'vuex'
-import CardSidebarTabDetails from './CardSidebarTabDetails'
-import CardSidebarTabAttachments from './CardSidebarTabAttachments'
-import CardSidebarTabComments from './CardSidebarTabComments'
-import CardSidebarTabActivity from './CardSidebarTabActivity'
-import relativeDate from '../../mixins/relativeDate'
+import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
+import CardSidebarTabAttachments from './CardSidebarTabAttachments.vue'
+import CardSidebarTabComments from './CardSidebarTabComments.vue'
+import CardSidebarTabActivity from './CardSidebarTabActivity.vue'
+import relativeDate from '../../mixins/relativeDate.js'
 import moment from '@nextcloud/moment'
 import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
 
@@ -101,9 +101,9 @@ const capabilities = window.OC.getCapabilities()
 export default {
 	name: 'CardSidebar',
 	components: {
-		AppSidebar,
-		AppSidebarTab,
-		ActionButton,
+		NcAppSidebar,
+		NcAppSidebarTab,
+		NcActionButton,
 		CardSidebarTabAttachments,
 		CardSidebarTabComments,
 		CardSidebarTabActivity,

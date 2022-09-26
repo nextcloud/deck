@@ -66,6 +66,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "Pakeitimai <strong>Darbų programėlėje</strong>",
     "A <strong>comment</strong> was created on a card" : "Kortelėje buvo sukurtas <strong>komentaras</strong>",
     "Upcoming cards" : "Artėjančios kortelės",
+    "Load more" : "Įkelti daugiau",
     "Personal" : "Asmeniniai",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Kortelę \"%s\" ties \"%s\" priskyrė jums %s.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Kortelė „%s“, esanti lentoje „%s“, pasiekė savo galutinį terminą.",
@@ -253,7 +254,6 @@ OC.L10N.register(
     "Only assigned cards" : "Tik priskirtos kortelės",
     "No reminder" : "Jokio priminimo",
     "An error occurred" : "Įvyko klaida",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Ar tikrai norite ištrinti lentą, pavadinimu {title}? Tai ištrins visus šios lentos duomenis.",
     "Delete the board?" : "Ištrinti lentą?",
     "No due" : "Be galutinio termino",
     "No results found" : "Nerasta jokių rezultatų",
@@ -264,6 +264,7 @@ OC.L10N.register(
     "Maximum file size of {size} exceeded" : "Viršytas maksimalus {size} failo dydis",
     "Error creating the share" : "Klaida kuriant viešinį",
     "Share" : "Bendrinti",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Ar tikrai norite ištrinti lentą, pavadinimu {title}? Tai ištrins visus šios lentos duomenis.",
     "This week" : "Šią savaitę"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");

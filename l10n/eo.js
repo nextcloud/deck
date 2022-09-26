@@ -81,6 +81,7 @@ OC.L10N.register(
     "Hide archived cards" : "Kaŝi arĥivigitajn kartojn",
     "Show archived cards" : "Montri arĥivigitajn kartojn",
     "Toggle compact mode" : "Baskuligi densigan vidon",
+    "Open details" : "Montri detalojn",
     "Details" : "Detaloj",
     "Sharing" : "Kunhavigo",
     "Tags" : "Etikedoj",

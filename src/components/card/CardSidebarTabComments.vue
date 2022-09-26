@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="comment--header">
-			<Avatar :user="currentUser.uid" />
+			<NcAvatar :user="currentUser.uid" />
 			<span class="has-tooltip username">
 				{{ currentUser.displayName }}
 			</span>
@@ -35,16 +35,16 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Avatar } from '@nextcloud/vue'
-import CommentItem from './CommentItem'
-import CommentForm from './CommentForm'
+import { NcAvatar } from '@nextcloud/vue'
+import CommentItem from './CommentItem.vue'
+import CommentForm from './CommentForm.vue'
 import InfiniteLoading from 'vue-infinite-loading'
 import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
 	name: 'CardSidebarTabComments',
 	components: {
-		Avatar,
+		NcAvatar,
 		CommentItem,
 		CommentForm,
 		InfiniteLoading,

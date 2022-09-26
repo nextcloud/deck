@@ -634,8 +634,8 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		$start = 0;
 		while (true) {
 			/** @var IShare[] $shareSlice */
-			$shareSlice = array_slice($shares, $start, 100);
-			$start += 100;
+			$shareSlice = array_slice($shares, $start, 1000);
+			$start += 1000;
 
 			if ($shareSlice === []) {
 				break;
@@ -714,15 +714,15 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	 * @return IShare[]
 	 */
 	public function getSharedWith($userId, $shareType, $node, $limit, $offset): array {
-		$allBoards = $this->boardMapper->findAllForUser($userId);
+		$allBoards = $this->boardMapper->findBoardIds($userId);
 
 		/** @var IShare[] $shares */
 		$shares = [];
 
 		$start = 0;
 		while (true) {
-			$boards = array_slice($allBoards, $start, 100);
-			$start += 100;
+			$boards = array_slice($allBoards, $start, 1000);
+			$start += 1000;
 
 			if ($boards === []) {
 				break;
@@ -751,10 +751,6 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			if ($node !== null) {
 				$qb->andWhere($qb->expr()->eq('s.file_source', $qb->createNamedParameter($node->getId())));
 			}
-
-			$boards = array_map(function (Board $board) {
-				return $board->getId();
-			}, $boards);
 
 			$qb->andWhere($qb->expr()->eq('s.share_type', $qb->createNamedParameter(IShare::TYPE_DECK)))
 				->andWhere($qb->expr()->in('db.id', $qb->createNamedParameter(

@@ -14,6 +14,7 @@ OC.L10N.register(
     "Cancel" : "Kanselleer",
     "Close" : "Sluit",
     "File already exists" : "Lêer bestaan reeds",
+    "Open details" : "Open besonderhede",
     "Details" : "Besonderhede",
     "Tags" : "Etikette",
     "No participants found" : "Geen deelnemers gevind",

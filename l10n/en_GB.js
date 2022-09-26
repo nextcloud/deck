@@ -35,6 +35,7 @@ OC.L10N.register(
     "Overdue" : "Overdue",
     "Hide archived cards" : "Hide archived cards",
     "Show archived cards" : "Show archived cards",
+    "Open details" : "Open details",
     "Details" : "Details",
     "Sharing" : "Sharing",
     "Tags" : "Tags",

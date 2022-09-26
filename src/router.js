@@ -23,13 +23,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import { generateUrl } from '@nextcloud/router'
-import { BOARD_FILTERS } from './store/main'
-import Boards from './components/boards/Boards'
-import Board from './components/board/Board'
-import Sidebar from './components/Sidebar'
-import BoardSidebar from './components/board/BoardSidebar'
-import CardSidebar from './components/card/CardSidebar'
-import Overview from './components/overview/Overview'
+import { BOARD_FILTERS } from './store/main.js'
+import Boards from './components/boards/Boards.vue'
+import Board from './components/board/Board.vue'
+import Sidebar from './components/Sidebar.vue'
+import BoardSidebar from './components/board/BoardSidebar.vue'
+import CardSidebar from './components/card/CardSidebar.vue'
+import Overview from './components/overview/Overview.vue'
 
 Vue.use(Router)
 

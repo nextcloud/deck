@@ -101,7 +101,7 @@ class Listener {
 				}
 			}
 
-			$parent = $this->configService->getAttachmentFolder();
+			$parent = $this->configService->getAttachmentFolder($userId);
 			$event->setParent($parent);
 			if (!$event->getView()->is_dir($parent)) {
 				$event->getView()->mkdir($parent);

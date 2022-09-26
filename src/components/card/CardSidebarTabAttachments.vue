@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import AttachmentList from './AttachmentList'
+import AttachmentList from './AttachmentList.vue'
 export default {
 	name: 'CardSidebarTabAttachments',
 	components: {
