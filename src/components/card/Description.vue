@@ -35,22 +35,22 @@
 				href="https://deck.readthedocs.io/en/latest/Markdown/"
 				target="_blank"
 				class="icon icon-info" />
-			<Actions v-if="canEdit">
+			<NcActions v-if="canEdit">
 				<ActionButton v-if="!descriptionEditing" icon="icon-rename" @click="showEditor()">
 					{{ t('deck', 'Edit description') }}
 				</ActionButton>
 				<ActionButton v-else icon="icon-toggle" @click="hideEditor()">
 					{{ t('deck', 'View description') }}
 				</ActionButton>
-			</Actions>
-			<Actions v-if="canEdit">
+			</NcActions>
+			<NcActions v-if="canEdit">
 				<ActionButton v-if="descriptionEditing" @click="showAttachmentModal()">
 					<template #icon>
 						<PaperclipIcon :size="24" decorative />
 					</template>
 					{{ t('deck', 'Add Attachment') }}
 				</ActionButton>
-			</Actions>
+			</NcActions>
 		</h5>
 
 		<div
@@ -70,7 +70,7 @@
 			@update:modelValue="updateDescription"
 			@blur="saveDescription" />
 
-		<Modal v-if="modalShow" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
+		<NcModal v-if="modalShow" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
 			<div class="modal__content">
 				<h3>{{ t('deck', 'Choose attachment') }}</h3>
 				<AttachmentList
@@ -78,7 +78,7 @@
 					:selectable="true"
 					@select-attachment="addAttachment" />
 			</div>
-		</Modal>
+		</NcModal>
 	</div>
 </template>
 
@@ -88,7 +88,7 @@ import MarkdownItTaskCheckbox from 'markdown-it-task-checkbox'
 import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
 import AttachmentList from './AttachmentList'
 import AttachmentUploadProgress from './AttachmentUploadProgress'
-import { Actions, ActionButton, Modal } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
 import { mapState, mapGetters } from 'vuex'
@@ -111,9 +111,9 @@ export default {
 	name: 'Description',
 	components: {
 		VueEasymde: () => import('vue-easymde/dist/VueEasyMDE.common'),
-		Actions,
-		ActionButton,
-		Modal,
+		NcActions,
+		NcActionButton,
+		NcModal,
 		AttachmentList,
 		PaperclipIcon,
 		AttachmentUploadProgress,
