@@ -36,20 +36,20 @@
 				target="_blank"
 				class="icon icon-info" />
 			<NcActions v-if="canEdit">
-				<ActionButton v-if="!descriptionEditing" icon="icon-rename" @click="showEditor()">
+				<NcActionButton v-if="!descriptionEditing" icon="icon-rename" @click="showEditor()">
 					{{ t('deck', 'Edit description') }}
-				</ActionButton>
-				<ActionButton v-else icon="icon-toggle" @click="hideEditor()">
+				</NcActionButton>
+				<NcActionButton v-else icon="icon-toggle" @click="hideEditor()">
 					{{ t('deck', 'View description') }}
-				</ActionButton>
+				</NcActionButton>
 			</NcActions>
 			<NcActions v-if="canEdit">
-				<ActionButton v-if="descriptionEditing" @click="showAttachmentModal()">
+				<NcActionButton v-if="descriptionEditing" @click="showAttachmentModal()">
 					<template #icon>
 						<PaperclipIcon :size="24" decorative />
 					</template>
 					{{ t('deck', 'Add Attachment') }}
-				</ActionButton>
+				</NcActionButton>
 			</NcActions>
 		</h5>
 
@@ -86,7 +86,7 @@
 import MarkdownIt from 'markdown-it'
 import MarkdownItTaskCheckbox from 'markdown-it-task-checkbox'
 import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
-import AttachmentList from './AttachmentList'
+import AttachmentList from './AttachmentList.vue'
 import AttachmentUploadProgress from './AttachmentUploadProgress'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { formatFileSize } from '@nextcloud/files'
