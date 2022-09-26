@@ -1049,6 +1049,81 @@ Make a request to see the json schema of system
 
 ##### 200 Success
 
+## Sessions
+
+### PUT /sessions/create - creates a new session
+
+#### Request body
+
+| Parameter | Type    | Description                                          |
+| --------- | ------- | ---------------------------------------------------- |
+| boardId   | Integer | The id of the opened board |
+
+```json
+{
+  "boardId": 123
+}
+```
+
+
+#### Response
+
+##### 200 Success
+
+```json
+{
+  "token":"LCGVgzFZBTMXPfcSVuWmrqLR0j8ZG5o1PpVLeHgTHZ5+4jOJNxlzUZ6ZfPbTTpqB"
+}
+```
+
+
+### POST /sessions/sync - notifies the server, that the session is still open
+
+#### Request body
+
+| Parameter | Type    | Description                                          |
+| --------- | ------- | ---------------------------------------------------- |
+| boardId   | Integer | The id of the opened board |
+| token     | String  | The session token from the /sessions/create response |
+
+```json
+{
+  "boardId": 123,
+  "token":"LCGVgzFZBTMXPfcSVuWmrqLR0j8ZG5o1PpVLeHgTHZ5+4jOJNxlzUZ6ZfPbTTpqB"
+}
+```
+
+#### Response
+
+##### 200 Success
+(empty response)
+
+##### 404 Not Found
+the provided token is invalid or expired
+
+
+### POST /sessions/close - closes the session
+
+#### Request body
+
+| Parameter | Type    | Description                                          |
+| --------- | ------- | ---------------------------------------------------- |
+| boardId   | Integer | The id of the opened board                           |
+| token     | String  | The session token from the /sessions/create response |
+
+```json
+{
+  "boardId": 123,
+  "token":"LCGVgzFZBTMXPfcSVuWmrqLR0j8ZG5o1PpVLeHgTHZ5+4jOJNxlzUZ6ZfPbTTpqB"
+}
+```
+
+#### Response
+
+##### 200 Success
+(empty response)
+
+
 # OCS API
 
 The following endpoints are available through the Nextcloud OCS endpoint, which is available at `/ocs/v2.php/apps/deck/api/v1.0/`. 

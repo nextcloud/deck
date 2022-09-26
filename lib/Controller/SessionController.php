@@ -73,7 +73,7 @@ class SessionController extends ApiController {
 			$this->sessionService->syncSession($boardId, $token);
 			return new DataResponse([]);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse([], 403);
+			return new DataResponse([], 404);
 		}
 	}
 
