@@ -40,8 +40,8 @@
 			</p>
 		</div>
 		<div class="board-actions">
-			<SessionList v-if="isNotifyPushEnabled && board && board.activeSessions"
-				:sessions="board.activeSessions" />
+			<SessionList v-if="isNotifyPushEnabled && presentUsers.length"
+				:sessions="presentUsers" />
 			<div v-if="searchQuery || true" class="deck-search">
 				<input type="search"
 					class="icon-search"
@@ -291,6 +291,11 @@ export default {
 		},
 		labelsSorted() {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+		},
+		presentUsers() {
+			if (!this.board) return []
+			// get user object including displayname from the list of all users with acces
+			return this.board.users.filter((user) => this.board.activeSessions.includes(user.uid))
 		},
 	},
 	watch: {

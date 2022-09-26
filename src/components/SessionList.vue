@@ -20,31 +20,30 @@
  * -->
 
 <template>
-	<div class="session-list">
-		<button slot="trigger"
-			v-tooltip.bottom="t('text', 'Active people')"
-			class="avatar-list">
-			<div v-for="session in sessionsVisible"
-				:key="session"
-				class="avatar-wrapper"
-				:style="sessionAvatarStyle">
-				<Avatar :user="session"
-					:disable-menu="true"
-					:show-user-status="false"
-					:disable-tooltip="true"
-					:size="size" />
-			</div>
-		</button>
+	<div v-tooltip.bottom="t('text', 'Currently present people')"
+		class="avatar-list">
+		<div v-for="session in sessionsVisible"
+			:key="session.uid"
+			class="avatar-wrapper"
+			:style="sessionAvatarStyle">
+			<NcAvatar :user="session.uid"
+				:display-name="session.displayname"
+				:disable-menu="true"
+				:show-user-status="false"
+				:disable-tooltip="true"
+				:size="size" />
+		</div>
 	</div>
 </template>
 
 <script>
-import { Avatar, Tooltip } from '@nextcloud/vue'
+import NcAvatar from '@nextcloud/vue/dist/Components/NcAvatar'
+import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 
 export default {
 	name: 'SessionList',
 	components: {
-		Avatar,
+		NcAvatar,
 	},
 	directives: {
 		tooltip: Tooltip,
@@ -75,14 +74,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.session-list {
+
+.avatar-list {
+	min-height: 44px;
+	align-items: center;
 	padding-left: 0.5em;
 	padding-right: 0.5em;
-}
-.avatar-list {
 	border: none;
 	background-color: var(--color-main-background);
-	padding: 0;
 	margin: 0;
 	padding-left: 6px;
 	display: inline-flex;
