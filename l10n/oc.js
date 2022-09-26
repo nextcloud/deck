@@ -52,6 +52,7 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "No notifications" : "Cap de notificacion",
     "An error occurred" : "Una error s’es producha",
+    "{stack} in {board}" : "{stack} dins {board}",
     "Create a card" : "Crear una carta",
     "Share" : "Partejar",
     "This week" : "Aquesta setmana"

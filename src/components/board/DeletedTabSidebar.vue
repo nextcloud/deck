@@ -32,7 +32,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import relativeDate from '../../mixins/relativeDate'
+import relativeDate from '../../mixins/relativeDate.js'
 
 export default {
 	name: 'DeletedTabSidebar',
@@ -86,8 +86,6 @@ export default {
 
 		li {
 			display: flex;
-			height: 44px;
-
 			&:hover, &:active, &.focus {
 				button {
 					opacity: 1;
@@ -106,7 +104,10 @@ export default {
 		.title {
 			flex-grow: 2;
 			padding: 3px 0px;
-
+			> span:not(.timestamp) {
+				line-height: 1.2em;
+				margin-bottom: 5px;
+			}
 			.timestamp {
 				font-size: 0.9em;
 				color: var(--color-text-lighter);

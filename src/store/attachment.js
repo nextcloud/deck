@@ -20,7 +20,7 @@
  *
  */
 
-import { AttachmentApi } from './../services/AttachmentApi'
+import { AttachmentApi } from './../services/AttachmentApi.js'
 import Vue from 'vue'
 
 const apiClient = new AttachmentApi()

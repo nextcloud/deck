@@ -23,50 +23,50 @@
 <template>
 	<div v-if="card">
 		<div @click.stop.prevent>
-			<Actions>
-				<ActionButton v-if="showArchived === false && !isCurrentUserAssigned"
+			<NcActions>
+				<NcActionButton v-if="showArchived === false && !isCurrentUserAssigned"
 					icon="icon-user"
 					:close-after-click="true"
 					@click="assignCardToMe()">
 					{{ t('deck', 'Assign to me') }}
-				</ActionButton>
-				<ActionButton v-if="showArchived === false && isCurrentUserAssigned"
+				</NcActionButton>
+				<NcActionButton v-if="showArchived === false && isCurrentUserAssigned"
 					icon="icon-user"
 					:close-after-click="true"
 					@click="unassignCardFromMe()">
 					{{ t('deck', 'Unassign myself') }}
-				</ActionButton>
-				<ActionButton icon="icon-external" :close-after-click="true" @click="modalShow=true">
+				</NcActionButton>
+				<NcActionButton icon="icon-external" :close-after-click="true" @click="modalShow=true">
 					{{ t('deck', 'Move card') }}
-				</ActionButton>
-				<ActionButton icon="icon-settings-dark" :close-after-click="true" @click="openCard">
+				</NcActionButton>
+				<NcActionButton icon="icon-settings-dark" :close-after-click="true" @click="openCard">
 					<CardBulletedIcon slot="icon" :size="20" decorative />
 					{{ t('deck', 'Card details') }}
-				</ActionButton>
-				<ActionButton :close-after-click="true" @click="archiveUnarchiveCard()">
+				</NcActionButton>
+				<NcActionButton :close-after-click="true" @click="archiveUnarchiveCard()">
 					<template #icon>
 						<ArchiveIcon :size="20" decorative />
 					</template>
 					{{ card.archived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
-				</ActionButton>
-				<ActionButton v-if="showArchived === false"
+				</NcActionButton>
+				<NcActionButton v-if="showArchived === false"
 					icon="icon-delete"
 					:close-after-click="true"
 					@click="deleteCard()">
 					{{ t('deck', 'Delete card') }}
-				</ActionButton>
-			</Actions>
+				</NcActionButton>
+			</NcActions>
 		</div>
-		<Modal v-if="modalShow" :title="t('deck', 'Move card to another board')" @close="modalShow=false">
+		<NcModal v-if="modalShow" :title="t('deck', 'Move card to another board')" @close="modalShow=false">
 			<div class="modal__content">
 				<h3>{{ t('deck', 'Move card to another board') }}</h3>
-				<Multiselect v-model="selectedBoard"
+				<NcMultiselect v-model="selectedBoard"
 					:placeholder="t('deck', 'Select a board')"
 					:options="activeBoards"
 					:max-height="100"
 					label="title"
 					@select="loadStacksFromBoard" />
-				<Multiselect v-model="selectedStack"
+				<NcMultiselect v-model="selectedStack"
 					:placeholder="t('deck', 'Select a list')"
 					:options="stacksFromBoard"
 					:max-height="100"
@@ -74,7 +74,7 @@
 					<span slot="noOptions">
 						{{ t('deck', 'List is empty') }}
 					</span>
-				</Multiselect>
+				</NcMultiselect>
 
 				<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">
 					{{ t('deck', 'Move card') }}
@@ -83,11 +83,11 @@
 					{{ t('deck', 'Cancel') }}
 				</button>
 			</div>
-		</Modal>
+		</NcModal>
 	</div>
 </template>
 <script>
-import { Modal, Actions, ActionButton, Multiselect } from '@nextcloud/vue'
+import { NcModal, NcActions, NcActionButton, NcMultiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
@@ -99,7 +99,7 @@ import CardBulletedIcon from 'vue-material-design-icons/CardBulleted'
 
 export default {
 	name: 'CardMenu',
-	components: { Actions, ActionButton, Modal, Multiselect, ArchiveIcon, CardBulletedIcon },
+	components: { NcActions, NcActionButton, NcModal, NcMultiselect, ArchiveIcon, CardBulletedIcon },
 	props: {
 		card: {
 			type: Object,

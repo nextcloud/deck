@@ -22,7 +22,7 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { OverviewApi } from '../services/OverviewApi'
+import { OverviewApi } from '../services/OverviewApi.js'
 Vue.use(Vuex)
 
 const apiClient = new OverviewApi()

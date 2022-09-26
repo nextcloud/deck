@@ -23,7 +23,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import overview from './store/overview'
+import overview from './store/overview.js'
 
 import './css/dashboard.scss'
 

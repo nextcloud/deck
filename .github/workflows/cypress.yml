@@ -27,14 +27,14 @@ jobs:
 
     steps:
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
       - name: Set up npm7
         run: npm i -g npm@7
 
       - name: Checkout server
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: nextcloud/server
           ref: ${{ matrix.server-versions }}
@@ -47,12 +47,12 @@ jobs:
           git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
       - name: Checkout ${{ env.APP_NAME }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@2.21.1
+        uses: shivammathur/setup-php@2.21.2
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, zip, gd, apcu

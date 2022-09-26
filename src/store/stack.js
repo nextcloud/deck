@@ -21,8 +21,8 @@
  */
 
 import Vue from 'vue'
-import { StackApi } from './../services/StackApi'
-import applyOrderToArray from './../helpers/applyOrderToArray'
+import { StackApi } from './../services/StackApi.js'
+import applyOrderToArray from './../helpers/applyOrderToArray.js'
 
 const apiClient = new StackApi()
 

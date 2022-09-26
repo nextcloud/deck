@@ -21,57 +21,57 @@
   -->
 
 <template>
-	<AppSidebar v-if="board != null"
+	<NcAppSidebar v-if="board != null"
 		:actions="[]"
 		:title="board.title"
 		@close="closeSidebar">
-		<AppSidebarTab id="sharing"
+		<NcAppSidebarTab id="sharing"
 			:order="0"
 			:name="t('deck', 'Sharing')"
 			icon="icon-shared">
 			<SharingTabSidebar :board="board" />
-		</AppSidebarTab>
+		</NcAppSidebarTab>
 
-		<AppSidebarTab id="tags"
+		<NcAppSidebarTab id="tags"
 			:order="1"
 			:name="t('deck', 'Tags')"
 			icon="icon-tag">
 			<TagsTabSidebar :board="board" />
-		</AppSidebarTab>
+		</NcAppSidebarTab>
 
-		<AppSidebarTab v-if="canEdit"
+		<NcAppSidebarTab v-if="canEdit"
 			id="deleted"
 			:order="2"
 			:name="t('deck', 'Deleted items')"
 			icon="icon-delete">
 			<DeletedTabSidebar :board="board" />
-		</AppSidebarTab>
+		</NcAppSidebarTab>
 
-		<AppSidebarTab v-if="hasActivity"
+		<NcAppSidebarTab v-if="hasActivity"
 			id="activity"
 			:order="3"
 			:name="t('deck', 'Timeline')"
 			icon="icon-activity">
 			<TimelineTabSidebar :board="board" />
-		</AppSidebarTab>
-	</AppSidebar>
+		</NcAppSidebarTab>
+	</NcAppSidebar>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import SharingTabSidebar from './SharingTabSidebar'
-import TagsTabSidebar from './TagsTabSidebar'
-import DeletedTabSidebar from './DeletedTabSidebar'
-import TimelineTabSidebar from './TimelineTabSidebar'
-import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
+import SharingTabSidebar from './SharingTabSidebar.vue'
+import TagsTabSidebar from './TagsTabSidebar.vue'
+import DeletedTabSidebar from './DeletedTabSidebar.vue'
+import TimelineTabSidebar from './TimelineTabSidebar.vue'
+import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 
 const capabilities = window.OC.getCapabilities()
 
 export default {
 	name: 'BoardSidebar',
 	components: {
-		AppSidebar,
-		AppSidebarTab,
+		NcAppSidebar,
+		NcAppSidebarTab,
 		SharingTabSidebar,
 		TagsTabSidebar,
 		DeletedTabSidebar,

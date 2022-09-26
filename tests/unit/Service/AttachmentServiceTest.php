@@ -37,6 +37,7 @@ use OCA\Deck\NotFoundException;
 use OCP\AppFramework\Http\Response;
 use OCP\AppFramework\IAppContainer;
 use OCP\IL10N;
+use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
@@ -60,6 +61,8 @@ class MyAttachmentService implements IAttachmentService {
 
 class AttachmentServiceTest extends TestCase {
 
+	/** @var IUserManager|MockObject */
+	private $userManager;
 	/** @var AttachmentMapper|MockObject */
 	private $attachmentMapper;
 	/** @var CardMapper|MockObject */
@@ -98,6 +101,7 @@ class AttachmentServiceTest extends TestCase {
 
 		$this->appContainer = $this->createMock(IAppContainer::class);
 
+		$this->userManager = $this->createMock(IUserManager::class);
 		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
 		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
@@ -126,6 +130,7 @@ class AttachmentServiceTest extends TestCase {
 		$this->attachmentService = new AttachmentService(
 			$this->attachmentMapper,
 			$this->cardMapper,
+			$this->userManager,
 			$this->changeHelper,
 			$this->permissionService,
 			$this->application,
@@ -158,7 +163,7 @@ class AttachmentServiceTest extends TestCase {
 		$application->expects($this->any())
 			->method('getContainer')
 			->willReturn($appContainer);
-		$attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->changeHelper, $this->permissionService, $application, $this->attachmentCacheHelper, $this->userId, $this->l10n, $this->activityManager);
+		$attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->userManager, $this->changeHelper, $this->permissionService, $application, $this->attachmentCacheHelper, $this->userId, $this->l10n, $this->activityManager);
 		$attachmentService->registerAttachmentService('custom', MyAttachmentService::class);
 		$this->assertEquals($fileServiceMock, $attachmentService->getService('deck_file'));
 		$this->assertEquals(MyAttachmentService::class, get_class($attachmentService->getService('custom')));
@@ -188,7 +193,7 @@ class AttachmentServiceTest extends TestCase {
 			->method('getContainer')
 			->willReturn($appContainer);
 
-		$attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->changeHelper, $this->permissionService, $application, $this->attachmentCacheHelper, $this->userId, $this->l10n, $this->activityManager);
+		$attachmentService = new AttachmentService($this->attachmentMapper, $this->cardMapper, $this->userManager, $this->changeHelper, $this->permissionService, $application, $this->attachmentCacheHelper, $this->userId, $this->l10n, $this->activityManager);
 		$attachmentService->registerAttachmentService('custom', MyAttachmentService::class);
 		$attachmentService->getService('deck_file_invalid');
 	}
@@ -296,7 +301,14 @@ class AttachmentServiceTest extends TestCase {
 
 		$actual = $this->attachmentService->create(123, 'deck_file', 'file_name.jpg');
 
-		$expected->setExtendedData(['mime' => 'image/jpeg']);
+		$expected->setExtendedData([
+			'mime' => 'image/jpeg',
+			'attachmentCreator' => [
+				'displayName' => '',
+				'id' => '',
+				'email' => null,
+			],
+		]);
 		$this->assertEquals($expected, $actual);
 	}
 
@@ -353,7 +365,14 @@ class AttachmentServiceTest extends TestCase {
 
 		$actual = $this->attachmentService->update(1, 1, 'file_name.jpg');
 
-		$expected->setExtendedData(['mime' => 'image/jpeg']);
+		$expected->setExtendedData([
+			'mime' => 'image/jpeg',
+			'attachmentCreator' => [
+				'displayName' => '',
+				'id' => '',
+				'email' => null,
+			],
+		]);
 		$expected->setLastModified($attachment->getLastModified());
 		$this->assertEquals($expected, $actual);
 	}

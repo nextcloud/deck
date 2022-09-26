@@ -62,7 +62,7 @@ jobs:
           auth_header="$(git config --local --get http.https://github.com/.extraheader)"
           git submodule sync --recursive
           git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
-          cd build/integration && composer require --dev phpunit/phpunit:~8
+          cd build/integration && composer require --dev phpunit/phpunit:~9
 
       - name: Checkout app
         uses: actions/checkout@v3
@@ -70,7 +70,7 @@ jobs:
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@2.21.1
+        uses: shivammathur/setup-php@2.21.2
         with:
           php-version: ${{ matrix.php-versions }}
           tools: phpunit

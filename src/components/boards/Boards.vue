@@ -43,8 +43,8 @@
 
 <script>
 
-import BoardItem from './BoardItem'
-import Controls from '../Controls'
+import BoardItem from './BoardItem.vue'
+import Controls from '../Controls.vue'
 
 export default {
 	name: 'Boards',

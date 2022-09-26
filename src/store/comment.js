@@ -20,7 +20,7 @@
  *
  */
 
-import { CommentApi } from '../services/CommentApi'
+import { CommentApi } from '../services/CommentApi.js'
 import Vue from 'vue'
 
 const apiClient = new CommentApi()

@@ -66,6 +66,7 @@
     "Changes in the <strong>Deck app</strong>" : "Spremembe v programu <strong>Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "Nalogi je dodana nova <strong>opomba</strong>",
     "Upcoming cards" : "Prihajajoče naloge",
+    "Load more" : "Naloži več",
     "Personal" : "Osebno",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Nalogo »%s« na »%s« vam dodeli %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} vam dodeli nalogo »{deck-card}« na »{deck-board}«.",
@@ -145,6 +146,7 @@
     "Hide archived cards" : "Skrij arhivirane naloge",
     "Show archived cards" : "Prikaži arhivirane naloge",
     "Toggle compact mode" : "Preklopi način prikaza",
+    "Open details" : "Odpri podrobnosti",
     "Details" : "Podrobnosti",
     "Loading board" : "Poteka nalaganje zbirke",
     "No lists available" : "Ni razpoložljivih seznamov",
@@ -264,12 +266,12 @@
     "Only assigned cards" : "Le dodeljene naloge",
     "No reminder" : "Ni vpisanih opomnikov",
     "An error occurred" : "Prišlo je do napake.",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Ali ste prepričani, da želite izbrisati zbirko »{title}«? S tem boste izbrisali tudi vse podatke zbirke.",
     "Delete the board?" : "Ali želite izbrisati zbirko?",
     "Loading filtered view" : "Poteka nalaganje filtriranega pogleda",
     "No due" : "Ni datuma preteka",
     "Search for {searchQuery} in all boards" : "Poišči {searchQuery} med vsemi zbirkami nalog.",
     "No results found" : "Ni najdenih zadetkov",
+    "{stack} in {board}" : "{stack} v {board}",
     "No upcoming cards" : "Ni prihajajočih nalog",
     "upcoming cards" : "prihajajoče naloge",
     "Link to a board" : "Povezava do zbirke",
@@ -284,6 +286,7 @@
     "Share {file} with a Deck card" : "Poveži datoteko {file} z nalogo Deck",
     "Share" : "Souporaba",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Program Deck je orodje za osebno načrtovanje in projektno delo v slogu kanban, ki se izvrstno vključuje v okolje Nextcloud.\n\nOrodje omogoča:\n- 📥 dodajanje in urejanje nalog\n- 📄 zapis dodatnih opomb v zapisu markdown\n- 🔖 dodeljevanje oznak za lažje urejanje in iskanje\n- 👥 souporabo v skupini, s prijatelji ali družino\n- 📎 pripenjanje in vstavljanje datotek v opise\n- 💬 opombe k posamezni nalogi\n- ⚡ sledenje spremembam in dejavnosti\n- 🚀 Organizaciji projekta",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Ali ste prepričani, da želite izbrisati zbirko »{title}«? S tem boste izbrisali tudi vse podatke zbirke.",
     "This week" : "Ta teden"
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }
