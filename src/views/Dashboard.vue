@@ -129,7 +129,7 @@ export default {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-top: 8px;
+		margin-top: 10px;
 	}
 
 	#deck-widget-empty-content {
