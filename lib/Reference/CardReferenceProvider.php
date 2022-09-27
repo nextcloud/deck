@@ -22,7 +22,6 @@
 
 namespace OCA\Deck\Reference;
 
-use OC\Collaboration\Reference\Reference;
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\Attachment;
@@ -33,6 +32,7 @@ use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\StackService;
 use OCP\Collaboration\Reference\IReference;
 use OCP\Collaboration\Reference\IReferenceProvider;
+use OCP\Collaboration\Reference\Reference;
 use OCP\IURLGenerator;
 
 class CardReferenceProvider implements IReferenceProvider {
