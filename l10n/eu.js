@@ -287,6 +287,7 @@ OC.L10N.register(
     "No results found" : "Ez da emaitzarik aurkitu",
     "{stack} in {board}" : "{stack} {board}-(e)n",
     "Click to expand description" : "Egin klik deskribapena handitzeko",
+    "* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments" : "* Sorrera-data {created}\n* Azken aldaketa data {lastMod}\n* {nbAttachments} eranskin\n* {nbComments} iruzkin",
     "{nbCards} cards" : "{nbCards} karta",
     "No upcoming cards" : "Ez dago hurrengo txartelik",
     "upcoming cards" : "hurrengo txartelak",

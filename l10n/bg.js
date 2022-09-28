@@ -286,6 +286,7 @@ OC.L10N.register(
     "Search for {searchQuery} in all boards" : "Търсене на {searchQuery} във всички табла",
     "No results found" : "Няма намерени резултати",
     "{stack} in {board}" : "{stack} в {board}",
+    "Click to expand description" : "Кликване за разширяване на описанието",
     "* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments" : "* Създаден на {created}\n* Последна промяна на {lastMod} \n* {nbAttachments} прикачени файлове \n* {nbComments} коментара",
     "{nbCards} cards" : "{nbCards} карти",
     "No upcoming cards" : "Няма предстоящи карти",
