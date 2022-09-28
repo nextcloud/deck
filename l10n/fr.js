@@ -286,6 +286,7 @@ OC.L10N.register(
     "Search for {searchQuery} in all boards" : "Rechercher {searchQuery} dans tous les tableaux",
     "No results found" : "Aucun résultat",
     "{stack} in {board}" : "{stack} dans {board}",
+    "Click to expand description" : "Cliquer pour visualiser la description",
     "* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments" : "* Créée le {created}\n* Dernière modification le {lastMod}\n* {nbAttachments} pièces jointes\n* {nbComments} commentaires",
     "{nbCards} cards" : "{nbCards} cartes",
     "No upcoming cards" : "Pas de cartes à venir",
