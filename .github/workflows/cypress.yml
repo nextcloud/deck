@@ -77,7 +77,7 @@ jobs:
           php occ app:enable deck
           php occ app:list
           cd apps/deck
-          composer install
+          composer install --no-dev
           npm ci
           npm run build
           cd ../../
