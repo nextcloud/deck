@@ -13,12 +13,12 @@
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
-		"christophwurst/nextcloud": "^22@dev",
 		"phpunit/phpunit": "^8",
 		"nextcloud/coding-standard": "^0.5.0",
 		"symfony/event-dispatcher": "^4.0",
 		"vimeo/psalm": "^4.3",
-		"php-parallel-lint/php-parallel-lint": "^1.2"
+		"php-parallel-lint/php-parallel-lint": "^1.2",
+		"nextcloud/ocp": "dev-stable23"
 	},
 	"config": {
 		"platform": {
@@ -39,5 +39,10 @@
 		],
 		"test:unit": "phpunit -c tests/phpunit.xml",
 		"test:integration": "phpunit -c tests/phpunit.integration.xml && cd tests/integration && ./run.sh"
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"OCP\\": "vendor/nextcloud/ocp/OCP"
+		}
 	}
 }
