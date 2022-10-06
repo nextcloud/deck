@@ -32,6 +32,10 @@ class BoardContext implements Context {
 		return $this->card;
 	}
 
+	public function getLastUsedBoard() {
+		return $this->board;
+	}
+
 	/**
 	 * @Given /^creates a board with example content$/
 	 */
@@ -57,7 +61,21 @@ class BoardContext implements Context {
 	 * @When /^fetches the board named "([^"]*)"$/
 	 */
 	public function fetchesTheBoardNamed($boardName) {
-		$this->requestContext->sendJSONrequest('GET', '/index.php/apps/deck/boards/' . $this->board['id'], []);
+		$id = null;
+		if (!$this->board || $boardName != $this->board['title']) {
+			$this->requestContext->sendJSONrequest('GET', '/index.php/apps/deck/boards', []);
+			$boards = json_decode((string)$this->getResponse()->getBody(), true);
+			foreach ($boards as $board) {
+				if ($board['title'] == $boardName) {
+					$id = $board['id'];
+					break;
+				}
+			}
+			Assert::assertNotNull($id, "Could not find board named ".$boardName);
+		} else {
+			$id = $this->board['id'];
+		}
+		$this->requestContext->sendJSONrequest('GET', '/index.php/apps/deck/boards/' . $id, []);
 		$this->getResponse()->getBody()->seek(0);
 		$this->board = json_decode((string)$this->getResponse()->getBody(), true);
 	}

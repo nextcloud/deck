@@ -47,4 +47,8 @@ class ServerContext implements Context {
 	public function getReqestToken(): string {
 		return $this->requestToken;
 	}
+
+	public function getCurrentUser(): string {
+		return $this->currentUser;
+	}
 }
