@@ -65,7 +65,7 @@ class BoardContext implements Context {
 		if (!$this->board || $boardName != $this->board['title']) {
 			$this->requestContext->sendJSONrequest('GET', '/index.php/apps/deck/boards', []);
 			$boards = json_decode((string)$this->getResponse()->getBody(), true);
-			foreach ($boards as $board) {
+			foreach (array_reverse($boards) as $board) {
 				if ($board['title'] == $boardName) {
 					$id = $board['id'];
 					break;
