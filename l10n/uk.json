@@ -51,7 +51,7 @@
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Розмір вивантаженого файлу перевищує директиву MAX_FILE_SIZE вказану в HTML формі",
     "The file was only partially uploaded" : "Файл завантажено лише частково",
     "No file was uploaded" : "Не вивантажено жодного файлу",
-    "Missing a temporary folder" : "Відсутня тека для тимчасових файлів",
+    "Missing a temporary folder" : "Відсутній каталог тимчасових файлів",
     "Could not write file to disk" : "Неможливо записати файл на диск",
     "A PHP extension stopped the file upload" : "Розширення PHP призупинило завантаження файлу",
     "No file uploaded or file size exceeds maximum of %s" : "Немає завантажених файлів або розмір файлу перевищує максимум %s",
