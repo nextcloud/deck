@@ -39,7 +39,7 @@ class SessionService {
 
 	private SessionMapper $sessionMapper;
 	private ITimeFactory $timeFactory;
-	private string|null $userId;
+	private $userId;
 	private IEventDispatcher $eventDispatcher;
 	private ISecureRandom $secureRandom;
 
