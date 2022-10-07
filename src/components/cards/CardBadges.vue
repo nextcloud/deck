@@ -36,7 +36,7 @@
 			<span>{{ checkListCheckedCount }}/{{ checkListCount }}</span>
 		</div>
 
-		<TextIcon v-else-if="card.description.trim() && checkListCount == 0" :size="16" decorative />
+		<TextIcon v-else-if="card.description && card.description.trim() && checkListCount == 0" :size="16" decorative />
 
 		<div v-if="card.attachmentCount > 0" class="icon-badge">
 			<AttachmentIcon :size="16" />
