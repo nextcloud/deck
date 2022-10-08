@@ -150,7 +150,7 @@ OC.L10N.register(
     "Clear filter" : "Supprimer le filtre",
     "Hide archived cards" : "Masquer les cartes archivées",
     "Show archived cards" : "Afficher les cartes archivées",
-    "Toggle compact mode" : "Activer / Désactiver l'affichage compact",
+    "Toggle compact mode" : "Activer/Désactiver l'affichage compact",
     "Open details" : "Ouvrir les détails",
     "Details" : "Détails",
     "Loading board" : "Chargement du tableau…",
