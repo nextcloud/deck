@@ -33,7 +33,6 @@ use OCP\AppFramework\OCS\OCSException;
 use OCP\AppFramework\OCSController;
 use OCP\ILogger;
 use OCP\IRequest;
-use OCP\Util;
 use OCP\IConfig;
 
 class ExceptionMiddleware extends Middleware {
@@ -85,9 +84,9 @@ class ExceptionMiddleware extends Middleware {
 				'message' => 'Permission denied'
 			], 403);
 		}
-		
+
 		if ($exception instanceof StatusException) {
-			if ($this->config->getSystemValue('loglevel', Util::WARN) === Util::DEBUG) {
+			if ($this->config->getSystemValue('loglevel', ILogger::WARN) === ILogger::DEBUG) {
 				$this->logger->logException($exception);
 			}
 

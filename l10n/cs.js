@@ -138,7 +138,7 @@ OC.L10N.register(
     "List name" : "Název seznamu",
     "Active filters" : "Zapnuté filtry",
     "Apply filter" : "Uplatnit filtr",
-    "Filter by tag" : "Filtrovat podle příznaků",
+    "Filter by tag" : "Filtrovat podle štítku",
     "Filter by assigned user" : "Filtrovat podle uživatele, který je úkolem pověřen",
     "Unassigned" : "Nepřiřazeno",
     "Filter by due date" : "Filtrovat podle termínu",
