@@ -29,12 +29,12 @@ use OCP\IGroupManager;
 use OCP\IUserManager;
 use OCP\Server;
 use Psr\Log\LoggerInterface;
-use Test\AppFramework\Db\MapperTestUtility;
+use Test\TestCase;
 
 /**
  * @group DB
  */
-class BoardMapperTest extends MapperTestUtility {
+class BoardMapperTest extends TestCase {
 
 	/** @var IDBConnection */
 	private $dbConnection;
