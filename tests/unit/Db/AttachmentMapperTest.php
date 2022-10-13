@@ -27,12 +27,12 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IDBConnection;
 use OCP\IUserManager;
 use OCP\Server;
-use Test\AppFramework\Db\MapperTestUtility;
+use Test\TestCase;
 
 /**
  * @group DB
  */
-class AttachmentMapperTest extends MapperTestUtility {
+class AttachmentMapperTest extends TestCase {
 
 	/** @var IDBConnection */
 	private $dbConnection;
