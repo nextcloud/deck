@@ -352,6 +352,7 @@ class StackService {
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
 		$stackToSort = $this->stackMapper->find($id);
 		$stacks = $this->stackMapper->findAll($stackToSort->getBoardId());
+		usort($stacks, static fn (Stack $stackA, Stack $stackB) => $stackA->getOrder() - $stackB->getOrder());
 		$result = [];
 		$i = 0;
 		foreach ($stacks as $stack) {
