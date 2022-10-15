@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
-    "@babel/runtime": "^7.19.0",
+    "@babel/runtime": "^7.19.4",
     "@juliushaertl/vue-richtext": "^1.0.1",
     "@nextcloud/auth": "^2.0.0",
     "@nextcloud/axios": "^2.1.0",
