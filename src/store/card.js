@@ -330,7 +330,7 @@ export default {
 			}
 
 			const updatedCard = await apiClient[call](card)
-			commit('updateCard', updatedCard)
+			commit('updateCardProperty', { property: 'done', card: updatedCard })
 		},
 		async assignCardToUser({ commit }, { card, assignee }) {
 			const user = await apiClient.assignUser(card.id, assignee.userId, assignee.type)
