@@ -24,7 +24,7 @@
 	<div v-if="card" class="done">
 		<transition name="zoom">
 			<div v-if="card.done" class="icon-checkmark done-text icon">
-				<span>{{t('deck', 'Done')}}</span>
+				<span>{{ t('deck', 'Done') }}</span>
 			</div>
 		</transition>
 	</div>
