@@ -65,6 +65,11 @@ Improvements on Nextcloud server and Deck itself will improve the situation.
 
 ## Developing
 
+### Nextcloud environment
+
+You need to setup a [development environment](https://docs.nextcloud.com/server/latest/developer_manual//getting_started/devenv.html) of the current nextcloud version. You can also alternatively install & run the [nextcloud docker container](https://github.com/juliushaertl/nextcloud-docker-dev).
+After the finished installation, you can clone the deck project directly in the `/[nextcloud-docker-dev-dir]/workspace/server/apps/` folder. 
+
 ### PHP
 
 Nothing to prepare, just dig into the code.
