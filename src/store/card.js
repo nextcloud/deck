@@ -323,6 +323,15 @@ export default {
 			const updatedCard = await apiClient[call](card)
 			commit('updateCard', updatedCard)
 		},
+		async changeCardDoneStatus({ commit }, card) {
+			let call = 'markCardAsDone'
+			if (card.done === false) {
+				call = 'markCardAsUndone'
+			}
+
+			const updatedCard = await apiClient[call](card)
+			commit('updateCard', updatedCard)
+		},
 		async assignCardToUser({ commit }, { card, assignee }) {
 			const user = await apiClient.assignUser(card.id, assignee.userId, assignee.type)
 			commit('assignCardToUser', user)

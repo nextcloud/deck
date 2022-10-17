@@ -45,6 +45,9 @@
 				<ActionButton icon="icon-archive" :close-after-click="true" @click="archiveUnarchiveCard()">
 					{{ card.archived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
 				</ActionButton>
+				<ActionButton icon="icon-checkmark" :close-after-click="true" @click="changeCardDoneStatus()">
+					{{ card.done ? t('deck', 'Mark as not done') : t('deck', 'Mark as done') }}
+				</ActionButton>
 				<ActionButton v-if="showArchived === false"
 					icon="icon-delete"
 					:close-after-click="true"
@@ -149,6 +152,9 @@ export default {
 		deleteCard() {
 			this.$store.dispatch('deleteCard', this.card)
 			showUndo(t('deck', 'Card deleted'), () => this.$store.dispatch('cardUndoDelete', this.card))
+		},
+		changeCardDoneStatus() {
+			this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })
 		},
 		archiveUnarchiveCard() {
 			this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })

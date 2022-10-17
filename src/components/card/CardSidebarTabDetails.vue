@@ -23,6 +23,19 @@
 <template>
 	<div v-if="copiedCard">
 		<div class="section-wrapper">
+			<div class="section-details">
+				<div class="button-group">
+					<button class="icon-checkmark" @click="changeCardDoneStatus()">
+						{{ card.done ? t('deck', 'Mark as not done') : t('deck', 'Mark as done') }}
+					</button>
+					<button class="icon-archive" @click="archiveUnarchiveCard()">
+						{{ card.archived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="section-wrapper">
 			<div v-tooltip="t('deck', 'Tags')" class="section-label icon-tag">
 				<span class="hidden-visually">{{ t('deck', 'Tags') }}</span>
 			</div>
@@ -93,21 +106,31 @@
 				<span class="hidden-visually">{{ t('deck', 'Due date') }}</span>
 			</div>
 			<div class="section-details">
-				<DatetimePicker v-model="duedate"
+				<DatetimePicker v-if="(!copiedCard.duedate && !card.done) || copiedCard.duedate"
+					v-model="duedate"
 					:placeholder="t('deck', 'Set a due date')"
 					type="datetime"
 					:minute-step="5"
 					:show-second="false"
 					:lang="lang"
 					:formatter="format"
-					:disabled="saving || !canEdit"
+					:disabled="saving || !canEdit || card.done"
 					:shortcuts="shortcuts"
 					confirm />
 				<Actions v-if="canEdit">
-					<ActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">
+					<ActionButton v-if="copiedCard.duedate && !card.done" icon="icon-delete" @click="removeDue()">
 						{{ t('deck', 'Remove due date') }}
 					</ActionButton>
 				</Actions>
+
+				<div class="done">
+					<div v-if="!copiedCard.duedate && card.done" class="no-due">
+						{{ t('deck', 'No due date') }}
+					</div>
+					<div v-if="card.done" class="done-label">
+						{{ t('deck', 'Done') }}
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -287,6 +310,12 @@ export default {
 		descriptionChanged(newDesc) {
 			this.copiedCard.description = newDesc
 		},
+		changeCardDoneStatus() {
+			this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })
+		},
+		archiveUnarchiveCard() {
+			this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
+		},
 		async initialize() {
 			if (!this.card) {
 				return
@@ -394,6 +423,53 @@ export default {
 		button.action-item--single {
 			margin-top: -3px;
 		}
+	}
+}
+
+.button-group {
+
+	width: 100%;
+	display: flex;
+
+	.icon-checkmark,
+	.icon-archive {
+		padding-left: 44px;
+		background-position: 16px center;
+		flex-grow: 1;
+		flex-basis: 50%;
+		height: 44px;
+		margin-bottom: 12px;
+		margin: 5px;
+		text-align: left;
+	}
+}
+
+.done{
+	display: flex;
+	.no-due{
+		height: 30px;
+		padding: 3px 4px;
+		font-size: 90%;
+		align-items: center;
+		flex-shrink: 1;
+		z-index: 2;
+		color: var(--color-primary-text);
+	}
+
+	.done-label {
+		background-position: 4px center;
+		background-color: var(--color-success);
+		border-radius: 3px;
+		margin: auto 0;
+		margin-left: 5px;
+		height: 30px;
+		padding: 3px 4px;
+		font-size: 90%;
+		display: flex;
+		align-items: center;
+		flex-shrink: 1;
+		z-index: 2;
+		color: var(--color-primary-text);
 	}
 }
 

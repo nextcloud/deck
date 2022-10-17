@@ -45,6 +45,7 @@ class Card extends RelationalEntity {
 	protected $owner;
 	protected $order;
 	protected $archived = false;
+	protected $done = false;
 	protected $duedate;
 	protected $notified = false;
 	protected $deletedAt = 0;
@@ -61,13 +62,15 @@ class Card extends RelationalEntity {
 	public const DUEDATE_NOW = 2;
 	public const DUEDATE_OVERDUE = 3;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->addType('id', 'integer');
 		$this->addType('stackId', 'integer');
 		$this->addType('order', 'integer');
 		$this->addType('lastModified', 'integer');
 		$this->addType('createdAt', 'integer');
 		$this->addType('archived', 'boolean');
+		$this->addType('done', 'boolean');
 		$this->addType('notified', 'boolean');
 		$this->addType('deletedAt', 'integer');
 		$this->addRelation('labels');

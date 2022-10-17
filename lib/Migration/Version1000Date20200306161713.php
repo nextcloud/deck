@@ -134,6 +134,10 @@ class Version1000Date20200306161713 extends SimpleMigrationStep {
 				'notnull' => false,
 				'length' => 8,
 			]);
+			$table->addColumn('done', 'boolean', [
+				'notnull' => false,
+				'default' => false,
+			]);
 			$table->addColumn('archived', 'boolean', [
 				'notnull' => false,
 				'default' => false,

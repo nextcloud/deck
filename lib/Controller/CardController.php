@@ -92,10 +92,12 @@ class CardController extends Controller {
 	 * @param $description
 	 * @param $duedate
 	 * @param $deletedAt
+	 * @param $archived
+	 * @param $done
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function update($id, $title, $stackId, $type, $order, $description, $duedate, $deletedAt) {
-		return $this->cardService->update($id, $title, $stackId, $type, $this->userId, $description, $order, $duedate, $deletedAt);
+	public function update($id, $title, $stackId, $type, $order, $description, $duedate, $deletedAt, $archived, $done) {
+		return $this->cardService->update($id, $title, $stackId, $type, $this->userId, $description, $order, $duedate, $deletedAt, $archived, $done);
 	}
 
 	/**
@@ -132,6 +134,26 @@ class CardController extends Controller {
 	 */
 	public function unarchive($cardId) {
 		return $this->cardService->unarchive($cardId);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @param $cardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
+	public function done($cardId)
+	{
+		return $this->cardService->done($cardId);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @param $cardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
+	public function undone($cardId)
+	{
+		return $this->cardService->undone($cardId);
 	}
 
 	/**
