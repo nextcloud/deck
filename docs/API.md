@@ -601,6 +601,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
    "owner":"admin",
    "order":999,
    "archived":false,
+   "done":false,
    "duedate": "2019-12-24T19:29:30+00:00",
    "deletedAt":0,
    "commentsUnread":0,
