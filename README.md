@@ -71,7 +71,7 @@ Nothing to prepare, just dig into the code.
 
 ### JavaScript
 
-This requires at least Node 14 and npm 7 to be installed.
+This requires at least Node 16 and npm 7 to be installed.
 
 Deck requires running a `make build-js` to install npm dependencies and build the JavaScript code using webpack. While developing you can also use `make watch` to rebuild everytime the code changes.
 
