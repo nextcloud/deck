@@ -96,7 +96,7 @@ jobs:
           npm_package_name: ${{ env.APP_NAME }}
 
       - name: Upload test failure screenshots
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: Upload screenshots
@@ -104,7 +104,7 @@ jobs:
           retention-days: 5
 
       - name: Upload nextcloud logs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: Upload nextcloud log
