@@ -337,7 +337,7 @@ class CardService {
 		$card->setType($type);
 		$card->setOrder($order);
 		$card->setOwner($owner);
-		$card->setDuedate(new \DateTime($duedate));
+		$card->setDuedate($duedate ? new \DateTime($duedate) : null);
 		$resetDuedateNotification = false;
 		if (
 			$card->getDuedate() === null ||
