@@ -55,6 +55,7 @@
 					<input v-model="copiedCard.title"
 						v-focus
 						type="text"
+						autocomplete="off"
 						required
 						pattern=".*\S+.*">
 					<input type="submit" value="" class="icon-confirm">
