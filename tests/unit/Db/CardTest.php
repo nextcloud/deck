@@ -117,14 +117,6 @@ class CardTest extends TestCase {
 		], (new CardDetails($card))->jsonSerialize());
 	}
 
-	public function testMysqlDateFallback() {
-		$date = new DateTime();
-		$card = new Card();
-		$card->setDuedate($date->format('c'));
-		$card->setDatabaseType('mysql');
-		$this->assertEquals($date->format('Y-m-d H:i:s'), $card->getDuedate(false));
-	}
-
 	public function testJsonSerializeAsignedUsers() {
 		$card = $this->createCard();
 		$card->setAssignedUsers([ 'user1' ]);
