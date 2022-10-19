@@ -60,6 +60,7 @@
 			ref="markdownEditor"
 			v-model="description"
 			:configs="mdeConfig"
+			@initialized="addKeyListeners"
 			@update:modelValue="updateDescription"
 			@blur="saveDescription" />
 
@@ -115,6 +116,7 @@ export default {
 	},
 	data() {
 		return {
+			keyExitState: 0,
 			description: '',
 			markdownIt: null,
 			descriptionEditing: false,
@@ -174,14 +176,37 @@ export default {
 		},
 	},
 	methods: {
+		addKeyListeners() {
+			this.$refs.markdownEditor.easymde.codemirror.on('keydown', (a, b) => {
+
+				if (this.keyExitState === 0 && (b.key === 'Meta' || b.key === 'Alt')) {
+					this.keyExitState = 1
+				}
+				if (this.keyExitState === 1 && b.key === 'Enter') {
+					this.keyExitState = 0
+					this.$refs.markdownEditor.easymde.codemirror.off('keydown', undefined)
+					this.$refs.markdownEditor.easymde.codemirror.off('keyup', undefined)
+					this.hideEditor()
+				}
+			})
+			this.$refs.markdownEditor.easymde.codemirror.on('keyup', (a, b) => {
+				if (b.key === 'Meta' || b.key === 'Control') {
+					this.keyExitState = 0
+				}
+
+			})
+		},
 		showEditor() {
 			if (!this.canEdit) {
 				return
 			}
 			this.descriptionEditing = true
 			this.description = this.card.description
+
 		},
 		hideEditor() {
+			this.$refs.markdownEditor.easymde.codemirror.off('keydown', undefined)
+			this.$refs.markdownEditor.easymde.codemirror.off('keyup', undefined)
 			this.descriptionEditing = false
 		},
 		showAttachmentModal() {
