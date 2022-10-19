@@ -1,24 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.8.0-beta.2
+## 1.8.0
 
 ### Added
-
-- Implement card reference widget @eneiluj [#4031](https://github.com/nextcloud/deck/pull/4031)
-- Implement new dashboard widget interfaces @eneiluj [#4033](https://github.com/nextcloud/deck/pull/4033)
-- Add related resources panel to board sharing tab sidebar @Pytal [#4000](https://github.com/nextcloud/deck/pull/4000)
-
-### Fixed
-
-- Fix attachment creator name: show display name @eneiluj [#4036](https://github.com/nextcloud/deck/pull/4036)
-- Fix reference provider when caching @eneiluj [#4056](https://github.com/nextcloud/deck/pull/4056)
-- Use global import for nextcloud-vue [#4072](https://github.com/nextcloud/deck/pull/4072)
-- Disable Create card button while no stack is chosen @icewind1991 [#4014](https://github.com/nextcloud/deck/pull/4014)
-
-
-## 1.8.0-beta.1
-### Enhancements
 
 - Nextcloud 25 compatibility
 - Performance improvements
@@ -30,10 +15,26 @@ All notable changes to this project will be documented in this file.
   - Improve filter popover accessibility @juliushaertl [#3820](https://github.com/nextcloud/deck/pull/3820)
   - Set ids to skip to content/navigation @juliushaertl [#3924](https://github.com/nextcloud/deck/pull/3924)
   - Invert icons properly in dark mode @juliushaertl [#3939](https://github.com/nextcloud/deck/pull/3939)
-- Bump dependencies
+- Implement card reference widget @eneiluj [#4031](https://github.com/nextcloud/deck/pull/4031)
+- Implement new dashboard widget interfaces @eneiluj [#4033](https://github.com/nextcloud/deck/pull/4033)
+- Add related resources panel to board sharing tab sidebar @Pytal [#4000](https://github.com/nextcloud/deck/pull/4000)
 
 ### Fixed
 
+- Fix sorting stacks [#4116](https://github.com/nextcloud/deck/pull/4116)
+- Fix issue with duedate format [#4140](https://github.com/nextcloud/deck/pull/4140)
+- Fix missing icon for activity rendering [#4090](https://github.com/nextcloud/deck/pull/4090)
+- disables autocomplete on card creation [#4142](https://github.com/nextcloud/deck/pull/4142)
+- Set event link also for notifications that get emitted from activities [#4117](https://github.com/nextcloud/deck/pull/4117)
+- Fix attachment creator name: show display name @eneiluj [#4036](https://github.com/nextcloud/deck/pull/4036)
+- Fix reference provider when caching @eneiluj [#4056](https://github.com/nextcloud/deck/pull/4056)
+- Use global import for nextcloud-vue [#4072](https://github.com/nextcloud/deck/pull/4072)
+- Disable Create card button while no stack is chosen @icewind1991 [#4014](https://github.com/nextcloud/deck/pull/4014)
+- Adjust testing matrix for Nextcloud 25 on stable25 @nickvergessen [#4068](https://github.com/nextcloud/deck/pull/4068)
+- Fix Card menu not displaying when description is not set  @marcelklehr [#4105](https://github.com/nextcloud/deck/pull/4105)
+- Reference widget adjustments for Text [#4075](https://github.com/nextcloud/deck/pull/4075)
+- use OCP\Collaboration\Reference\Reference [#4078](https://github.com/nextcloud/deck/pull/4078)
+- Cache user membership for circles [#4141](https://github.com/nextcloud/deck/pull/4141)
 - set last modified when the card was found. Fixes #3763 @ylebre [#3796](https://github.com/nextcloud/deck/pull/3796)
 - Increase file count after sharing @luka-nextcloud [#3682](https://github.com/nextcloud/deck/pull/3682)
 - Align Duedate-delete icon properly - fixes nextcloud/deck#3791 @Ben-Ro [#3811](https://github.com/nextcloud/deck/pull/3811)
