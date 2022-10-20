@@ -40,6 +40,9 @@ use OCP\AppFramework\Db\IMapperException;
 use OCP\AppFramework\Http\Response;
 use OCP\IL10N;
 use OCP\IUserManager;
+use OCP\Server;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Log\LoggerInterface;
 
 class AttachmentService {
 	private $attachmentMapper;
@@ -94,7 +97,16 @@ class AttachmentService {
 	 * @throws \OCP\AppFramework\QueryException
 	 */
 	public function registerAttachmentService($type, $class) {
-		$this->services[$type] = $this->application->getContainer()->query($class);
+		try {
+			$this->services[$type] = $this->application->getContainer()->query($class);
+		} catch (\Throwable $e) {
+			if (!$e instanceof ContainerExceptionInterface) {
+				Server::get(LoggerInterface::class)->error(
+					$e->getMessage(),
+					['exception' => $e]
+				);
+			}
+		}
 	}
 
 	/**

@@ -75,7 +75,9 @@ use OCP\Notification\IManager as NotificationManager;
 use OCP\Share\IManager;
 use OCP\User\Events\UserDeletedEvent;
 use OCP\Util;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 class Application extends App implements IBootstrap {
 	public const APP_ID = 'deck';
@@ -102,7 +104,16 @@ class Application extends App implements IBootstrap {
 		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
 
 		$context->injectFn(function (IManager $shareManager) {
-			$shareManager->registerShareProvider(DeckShareProvider::class);
+			try {
+				$shareManager->registerShareProvider(DeckShareProvider::class);
+			} catch (\Throwable $e) {
+				if (!$e instanceof ContainerExceptionInterface) {
+					Server::get(LoggerInterface::class)->error(
+						$e->getMessage(),
+						['exception' => $e]
+					);
+				}
+			}
 		});
 
 		$context->injectFn(function (Listener $listener, IEventDispatcher $eventDispatcher) {
