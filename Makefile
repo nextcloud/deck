@@ -30,6 +30,16 @@ build: clean-dist install-deps build-js
 
 release: clean-dist install-deps-nodev build-js
 
+lint: lint-js lint-php
+
+lint-js:
+	npm run lint
+	npm run stylelint
+
+lint-php:
+	composer run lint 1>/dev/null
+	composer run cs:check
+
 build-js: install-deps-js
 	npm run build
 
