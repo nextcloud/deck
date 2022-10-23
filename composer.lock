@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "33c2fe0cccf29841e021001c6430310a",
+    "content-hash": "f7fb2bd697e7cc438b56c87c3d1f5574",
     "packages": [
         {
             "name": "cogpowered/finediff",
@@ -1233,6 +1233,49 @@
                 "source": "https://github.com/nextcloud/coding-standard/tree/v1.0.0"
             },
             "time": "2021-11-10T08:44:10+00:00"
+        },
+        {
+            "name": "nextcloud/ocp",
+            "version": "dev-stable25",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nextcloud-deps/ocp.git",
+                "reference": "a11e9d9784052363158c97904062daa855518505"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/a11e9d9784052363158c97904062daa855518505",
+                "reference": "a11e9d9784052363158c97904062daa855518505",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4 || ~8.0 || ~8.1",
+                "psr/container": "^1.1.1",
+                "psr/event-dispatcher": "^1.0",
+                "psr/log": "^1.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "26.0.0-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "AGPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Christoph Wurst",
+                    "email": "christoph@winzerhof-wurst.at"
+                }
+            ],
+            "description": "Composer package containing Nextcloud's public API (classes, interfaces)",
+            "support": {
+                "issues": "https://github.com/nextcloud-deps/ocp/issues",
+                "source": "https://github.com/nextcloud-deps/ocp/tree/stable25"
+            },
+            "time": "2022-10-20T00:52:59+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -5392,7 +5435,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "roave/security-advisories": 20,
-        "christophwurst/nextcloud": 20
+        "christophwurst/nextcloud": 20,
+        "nextcloud/ocp": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
