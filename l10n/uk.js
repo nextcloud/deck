@@ -170,6 +170,7 @@ OC.L10N.register(
     "All boards" : "Усі дошки",
     "Archived boards" : "Архівні дошки",
     "Shared with you" : "Вам надано доступ",
+    "Show boards in calendar/tasks" : "Показувати дошки в календарі та завданнях",
     "Limit deck usage of groups" : "Обмежити доступ до колоди для груп",
     "Board details" : "Деталі дошки",
     "Edit board" : "Редагувати дошку",
