@@ -79,7 +79,7 @@ jobs:
 
       - name: Set up PHPUnit
         working-directory: apps/${{ env.APP_NAME }}
-        run: composer i
+        run: composer i --no-dev
 
       - name: Set up Nextcloud
         run: |

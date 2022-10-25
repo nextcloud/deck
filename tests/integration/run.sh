@@ -19,8 +19,7 @@ else
 	exit 1
 fi
 
-composer install --no-dev
-composer dump-autoload
+composer install
 
 # avoid port collision on jenkins - use $EXECUTOR_NUMBER
 if [ -z "$EXECUTOR_NUMBER" ]; then
