@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.8.1
+
+### Fixed
+
+ - Fix Duedate activity @nickvergessen [#4155](https://github.com/nextcloud/deck/pull/4155)
+
 ## 1.8.0
 
 ### Added
@@ -479,7 +485,7 @@ Android app team for helping to improve our REST API:
 - Fix comment activities on Nextcloud 15
 - Fix issues with Edge
 - API: Fix numeric types that were returned as strings
-- API: Fix If-Modified-Since header parsing  
+- API: Fix If-Modified-Since header parsing
 
 
 ## 0.5.1 - 2018-12-05
@@ -606,7 +612,7 @@ Android app team for helping to improve our REST API:
 ### Fixed
 - Various frontend fixes
 - Fix sidebar drag issues
-- Improvements for IE11 
+- Improvements for IE11
 - Fix bug when draging a card to an empty stack
 
 ## 0.2.1 - 2017-07-04
@@ -680,7 +686,7 @@ Android app team for helping to improve our REST API:
 
 ### Fixed
 - Various styling improvements
-- Fix problems with MySQL and PostgreSQL 
+- Fix problems with MySQL and PostgreSQL
 - Select first color by default when creating boards
 - Fix error when changing board permissions
 
@@ -688,9 +694,9 @@ Android app team for helping to improve our REST API:
 
 ### Added
 - Sharing boards with other users
-- Create and manage boards 
+- Create and manage boards
 - Sort cards on stacks by drag-and-drop
 - Assign labels
 - Markdown notes for each card
-- Archive cards 
+- Archive cards
 
