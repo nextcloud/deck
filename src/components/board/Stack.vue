@@ -52,20 +52,20 @@
 						value="">
 				</form>
 			</transition>
-			<Actions v-if="canManage && !isArchived" :force-menu="true">
-				<ActionButton v-if="!showArchived" icon="icon-archive" @click="modalArchivAllCardsShow=true">
+			<NcActions v-if="canManage && !isArchived" :force-menu="true">
+				<NcActionButton v-if="!showArchived" icon="icon-archive" @click="modalArchivAllCardsShow=true">
 					<template #icon>
 						<ArchiveIcon decorative />
 					</template>
 					{{ t('deck', 'Archive all cards') }}
-				</ActionButton>
-				<ActionButton v-if="showArchived" @click="modalArchivAllCardsShow=true">
-          <template #icon>
+				</NcActionButton>
+				<NcActionButton v-if="showArchived" @click="modalArchivAllCardsShow=true">
+					<template #icon>
 						<ArchiveIcon decorative />
 					</template>
 					{{ t('deck', 'Unarchive all cards') }}
-				</ActionButton>
-				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
+				</NcActionButton>
+				<NcActionButton icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete list') }}
 				</NcActionButton>
 			</NcActions>
