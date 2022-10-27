@@ -1,6 +1,24 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.7.2
+
+### Fixed
+
+- Cache user membership for circles [#4132](https://github.com/nextcloud/deck/pull/4132)
+- Set event link also for notifications that get emitted from activities [#4118](https://github.com/nextcloud/deck/pull/4118)
+- Fix Card menu not displaying when description is not set [#4103](https://github.com/nextcloud/deck/pull/4103)
+- disable Create card button while no stack is chosen [#4019](https://github.com/nextcloud/deck/pull/4019)
+- to nextcloud/OCP package in stable24 [#4093](https://github.com/nextcloud/deck/pull/4093)
+- Fix attachment creator name: show display name [#4037](https://github.com/nextcloud/deck/pull/4037)
+- Use capped memory cache for board permissions [#3997](https://github.com/nextcloud/deck/pull/3997)
+- Improve CalDAV integration performance [#3995](https://github.com/nextcloud/deck/pull/3995)
+- Fetch attachment folder for the correct user during cron job [#3959](https://github.com/nextcloud/deck/pull/3959)
+- Switch to 'markdown-it-task-checkbox' for rendering of task lists [#3925](https://github.com/nextcloud/deck/pull/3925)
+- Prevent opening card and applyLabelFilter on card drag end [#3917](https://github.com/nextcloud/deck/pull/3917)
+- Fix for issue #3637 [#3901](https://github.com/nextcloud/deck/pull/3901)
+- Fix z-index for deck sidebar [#3885](https://github.com/nextcloud/deck/pull/3885)
+
 ## 1.7.1
 
 ### Fixed
