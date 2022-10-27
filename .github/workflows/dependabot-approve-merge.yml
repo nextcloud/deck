@@ -8,13 +8,20 @@ name: Dependabot
 on:
   pull_request_target:
     branches:
+      - main
       - master
       - stable*
+
+permissions:
+  contents: read
 
 jobs:
   auto-approve-merge:
     if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
+    permissions:
+      # for hmarr/auto-approve-action to approve PRs
+      pull-requests: write 
 
     steps:
       # Github actions bot approve
@@ -25,5 +32,5 @@ jobs:
       # Nextcloud bot approve and merge request
       - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
-          target: patch
+          target: minor
           github-token: ${{ secrets.DEPENDABOT_AUTOMERGE_TOKEN }}

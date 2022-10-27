@@ -40,9 +40,9 @@ class ConfigService {
 	public const SETTING_BOARD_NOTIFICATION_DUE_ALL = 'all';
 	public const SETTING_BOARD_NOTIFICATION_DUE_DEFAULT = self::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED;
 
-	private $config;
-	private $userId;
-	private $groupManager;
+	private IConfig $config;
+	private ?string $userId = null;
+	private IGroupManager $groupManager;
 
 	public function __construct(
 		IConfig $config,
@@ -52,11 +52,14 @@ class ConfigService {
 		$this->config = $config;
 	}
 
-	public function getUserId() {
+	public function getUserId(): ?string {
 		if (!$this->userId) {
-			$user = \OC::$server->get(IUserSession::class)->getUser();
+			// We cannot use DI for the userId or UserSession as the ConfigService
+			// is initiated too early before the session is actually loaded
+			$user = \OCP\Server::get(IUserSession::class)->getUser();
 			$this->userId = $user ? $user->getUID() : null;
 		}
+
 		return $this->userId;
 	}
 
@@ -75,8 +78,11 @@ class ConfigService {
 		return $data;
 	}
 
-	public function get($key) {
-		$result = null;
+	/**
+	 * @return bool|array{id: string, displayname: string}[]
+	 * @throws NoPermissionException
+	 */
+	public function get(string $key) {
 		[$scope] = explode(':', $key, 2);
 		switch ($scope) {
 			case 'groupLimit':
@@ -90,11 +96,12 @@ class ConfigService {
 				}
 				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'calendar', true);
 			case 'cardDetailsInModal':
-			  if ($this->getUserId() === null) {
-			  	return false;
-			  }
+				if ($this->getUserId() === null) {
+					return false;
+				}
 				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardDetailsInModal', true);
 		}
+		return false;
 	}
 
 	public function isCalendarEnabled(int $boardId = null): bool {
@@ -157,7 +164,10 @@ class ConfigService {
 		return $result;
 	}
 
-	private function setGroupLimit($value) {
+	/**
+	 * @return string[]
+	 */
+	private function setGroupLimit(array $value): array {
 		$groups = [];
 		foreach ($value as $group) {
 			$groups[] = $group['id'];
@@ -167,7 +177,7 @@ class ConfigService {
 		return $groups;
 	}
 
-	private function getGroupLimitList() {
+	private function getGroupLimitList(): array {
 		$value = $this->config->getAppValue(Application::APP_ID, 'groupLimit', '');
 		$groups = explode(',', $value);
 		if ($value === '') {
@@ -176,9 +186,10 @@ class ConfigService {
 		return $groups;
 	}
 
+	/** @return array{id: string, displayname: string}[] */
 	private function getGroupLimit() {
 		$groups = $this->getGroupLimitList();
-		$groups = array_map(function ($groupId) {
+		$groups = array_map(function (string $groupId): ?array {
 			/** @var IGroup $groups */
 			$group = $this->groupManager->get($groupId);
 			if ($group === null) {
@@ -192,11 +203,11 @@ class ConfigService {
 		return array_filter($groups);
 	}
 
-	public function getAttachmentFolder(): string {
+	public function getAttachmentFolder(string $userId = null): string {
 		if ($this->getUserId() === null) {
 			throw new NoPermissionException('Must be logged in get the attachment folder');
 		}
 
-		return $this->config->getUserValue($this->getUserId(), 'deck', 'attachment_folder', '/Deck');
+		return $this->config->getUserValue($userId ?? $this->getUserId(), 'deck', 'attachment_folder', '/Deck');
 	}
 }

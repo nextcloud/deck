@@ -1,6 +1,98 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.8.0-beta.1
+### Enhancements
+
+- Nextcloud 25 compatibility
+- Performance improvements
+  - Use capped memory cache for board permissions @juliushaertl [#3980](https://github.com/nextcloud/deck/pull/3980)
+  - Improve CalDAV integration performance @juliushaertl [#3982](https://github.com/nextcloud/deck/pull/3982)
+  - Simpify query for getting shared files @juliushaertl [#3983](https://github.com/nextcloud/deck/pull/3983)
+- Accessibility improvements
+  - Add a11y label for sidebar button @marcelklehr [#3986](https://github.com/nextcloud/deck/pull/3986)
+  - Improve filter popover accessibility @juliushaertl [#3820](https://github.com/nextcloud/deck/pull/3820)
+  - Set ids to skip to content/navigation @juliushaertl [#3924](https://github.com/nextcloud/deck/pull/3924)
+  - Invert icons properly in dark mode @juliushaertl [#3939](https://github.com/nextcloud/deck/pull/3939)
+- Bump dependencies
+
+### Fixed
+
+- set last modified when the card was found. Fixes #3763 @ylebre [#3796](https://github.com/nextcloud/deck/pull/3796)
+- Increase file count after sharing @luka-nextcloud [#3682](https://github.com/nextcloud/deck/pull/3682)
+- Align Duedate-delete icon properly - fixes nextcloud/deck#3791 @Ben-Ro [#3811](https://github.com/nextcloud/deck/pull/3811)
+- Fix for issue #3637 @flummer [#3833](https://github.com/nextcloud/deck/pull/3833)
+- Switch to 'markdown-it-task-checkbox' for rendering of task lists @q-wertz [#3898](https://github.com/nextcloud/deck/pull/3898)
+- Make rename functions accessibly by keyboard navigation @juliushaertl [#3813](https://github.com/nextcloud/deck/pull/3813)
+- Prevent opening card and applyLabelFilter on card drag end @eneiluj [#3916](https://github.com/nextcloud/deck/pull/3916)
+- Inserted required property in the rename list field, to prevent the l… @mstolf [#3862](https://github.com/nextcloud/deck/pull/3862)
+- Fix share provider for master changes @nickvergessen [#3942](https://github.com/nextcloud/deck/pull/3942)
+- Fetch attachment folder for the correct user during cron job @juliushaertl [#3952](https://github.com/nextcloud/deck/pull/3952)
+- Fix z-index for deck sidebar @Raudius [#3884](https://github.com/nextcloud/deck/pull/3884)
+
+### Other
+
+- Switch from OC::$server->get to OCP\Server::get @CarlSchwan [#3801](https://github.com/nextcloud/deck/pull/3801)
+- Add performance section in README @eneiluj [#3830](https://github.com/nextcloud/deck/pull/3830)
+- Fix static analysis by stubbing more circle methods @juliushaertl [#3900](https://github.com/nextcloud/deck/pull/3900)
+- fix(docs): fix links to JSON schemas for Trello @wiktor2200 [#3872](https://github.com/nextcloud/deck/pull/3872)
+- Move to OCP\Collaboration\Resources\LoadAdditionalScriptsEvent @juliushaertl [#3818](https://github.com/nextcloud/deck/pull/3818)
+- Rename settings to deck settings @PVince81 [#3928](https://github.com/nextcloud/deck/pull/3928)
+- SCSS cleanup @juliushaertl [#3803](https://github.com/nextcloud/deck/pull/3803)
+- Hide deprecated projects in sidebar and card details by default @Pytal [#3984](https://github.com/nextcloud/deck/pull/3984)
+
+## 1.7.0
+
+### Added
+
+- Transfer ownership @matchish @luka-nextcloud @juliushaertl [#2496](https://github.com/nextcloud/deck/pull/2496)
+- Import from trello via CLI @vitormattos [#3182](https://github.com/nextcloud/deck/pull/3182)
+- Add app config to toggle the default calendar setting as an admin @juliushaertl [#3528](https://github.com/nextcloud/deck/pull/3528)
+- Show board name in browser title @luka-nextcloud [#3499](https://github.com/nextcloud/deck/pull/3499)
+- Move DeleteCron to be time insensitive @juliushaertl [#3599](https://github.com/nextcloud/deck/pull/3599)
+- 🚸 Shows error on board fetchData @vinicius73 [#3653](https://github.com/nextcloud/deck/pull/3653)
+- Add support for PHP 8.1 @juliushaertl [#3601](https://github.com/nextcloud/deck/pull/3601)
+- Nextcloud 24 compatibility
+
+### Fixed
+
+- CardApiController: Fix order of optional parameters @simonspa [#3512](https://github.com/nextcloud/deck/pull/3512)
+- Exclude deleted boards in the selection for target @luka-nextcloud [#3502](https://github.com/nextcloud/deck/pull/3502)
+- Fix CalDAV blocking and modernize circles API usage @juliushaertl [#3500](https://github.com/nextcloud/deck/pull/3500)
+- Timestamps on created and modified at values @luka-nextcloud [#3532](https://github.com/nextcloud/deck/pull/3532)
+- return the selector for collections @dartcafe [#3552](https://github.com/nextcloud/deck/pull/3552)
+- Generate fixed link for activity emails @luka-nextcloud [#3611](https://github.com/nextcloud/deck/pull/3611)
+- 🐛 Fix missing files sidebar @vinicius73 [#3635](https://github.com/nextcloud/deck/pull/3635)
+- Handle description shortening more gracefully @juliushaertl [#3650](https://github.com/nextcloud/deck/pull/3650)
+- Sort boards non case sensitive @Ben-Ro [#3560](https://github.com/nextcloud/deck/pull/3560)
+- Remove unused argument from transfer ownership @juliushaertl [#3712](https://github.com/nextcloud/deck/pull/3712)
+- Fix: Check all circle shares for permissions @bink [#3625](https://github.com/nextcloud/deck/pull/3625)
+- Extend API changelog @juliushaertl [#3522](https://github.com/nextcloud/deck/pull/3522)
+- Fix talk integration @nickvergessen [#3529](https://github.com/nextcloud/deck/pull/3529)
+- Fix confusion between stackId and boardId in StackService @eneiluj [#3541](https://github.com/nextcloud/deck/pull/3541)
+- Add horizontal scrollbar into the large table inside description @luka-nextcloud [#3531](https://github.com/nextcloud/deck/pull/3531)
+- Make links in markdown note bolder @luka-nextcloud [#3530](https://github.com/nextcloud/deck/pull/3530)
+- Update master php testing versions @nickvergessen [#3561](https://github.com/nextcloud/deck/pull/3561)
+- Update master php enviroment @nickvergessen [#3582](https://github.com/nextcloud/deck/pull/3582)
+- Make insert attachment buttom easy to click @luka-nextcloud [#3612](https://github.com/nextcloud/deck/pull/3612)
+- Remove extra bullet @elitejake [#3613](https://github.com/nextcloud/deck/pull/3613)
+- l10n: Delete space @Valdnet [#3666](https://github.com/nextcloud/deck/pull/3666)
+- Update master php testing versions @nickvergessen [#3688](https://github.com/nextcloud/deck/pull/3688)
+- Fix wording to represent the code behavior @q-wertz [#3685](https://github.com/nextcloud/deck/pull/3685)
+- Fix cron jobs @nickvergessen [#3689](https://github.com/nextcloud/deck/pull/3689)
+- Update master php testing versions @nickvergessen [#3695](https://github.com/nextcloud/deck/pull/3695)
+- Optimise queries when preparing card related notifications @Raudius [#3690](https://github.com/nextcloud/deck/pull/3690)
+- Properly check for the stack AND setting board permissions @juliushaertl [#3670](https://github.com/nextcloud/deck/pull/3670)
+- Replace deprecated String.prototype.substr() @CommanderRoot [#3669](https://github.com/nextcloud/deck/pull/3669)
+- Dependency updates
+- Show cards after moving into another list [#3736](https://github.com/nextcloud/deck/pull/3736)
+- Fix paramter replacements when creating deck cards from talk messages @nickvergessen [#3683](https://github.com/nextcloud/deck/pull/3683)
+- Fix hidden attachment icon on archived cards [#3733](https://github.com/nextcloud/deck/pull/3733)
+- Adapt the card modal to upstream changes [#3764](https://github.com/nextcloud/deck/pull/3764)
+- Fix text selection in dark mode and modal view [#3765](https://github.com/nextcloud/deck/pull/3765)
+- Add missing indices [#3754](https://github.com/nextcloud/deck/pull/3754)
+
+
 ## 1.6.0-beta1
 
 ### Added

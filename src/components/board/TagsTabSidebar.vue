@@ -5,59 +5,59 @@
 				<!-- Edit Tag -->
 				<template v-if="editingLabelId === label.id">
 					<form class="label-form" @submit.prevent="updateLabel(label)">
-						<ColorPicker class="color-picker-wrapper" :value="'#' + editingLabel.color" @input="updateColor">
+						<NcColorPicker class="color-picker-wrapper" :value="'#' + editingLabel.color" @input="updateColor">
 							<div :style="{ backgroundColor: '#' + editingLabel.color }" class="color0 icon-colorpicker" />
-						</ColorPicker>
+						</NcColorPicker>
 						<input v-model="editingLabel.title" type="text">
 						<input v-tooltip="{content: missingDataLabel, show: !editLabelObjValidated, trigger: 'manual' }"
 							:disabled="!editLabelObjValidated"
 							type="submit"
 							value=""
 							class="icon-confirm">
-						<Actions>
-							<ActionButton v-tooltip="{content: missingDataLabel, show: !editLabelObjValidated, trigger: 'manual' }"
+						<NcActions>
+							<NcActionButton v-tooltip="{content: missingDataLabel, show: !editLabelObjValidated, trigger: 'manual' }"
 								:disabled="!editLabelObjValidated"
 								icon="icon-close"
 								@click="editingLabelId = null">
 								{{ t('deck', 'Cancel') }}
-							</ActionButton>
-						</Actions>
+							</NcActionButton>
+						</NcActions>
 					</form>
 				</template>
 				<template v-else>
 					<div class="label-title" @click="clickEdit(label)">
 						<span :style="{ backgroundColor: `#${label.color}`, color: textColor(label.color) }">{{ label.title }}</span>
 					</div>
-					<Actions v-if="canManage && !isArchived">
-						<ActionButton icon="icon-rename" @click="clickEdit(label)">
+					<NcActions v-if="canManage && !isArchived">
+						<NcActionButton icon="icon-rename" @click="clickEdit(label)">
 							{{ t('deck', 'Edit') }}
-						</ActionButton>
-					</Actions>
-					<Actions v-if="canManage && !isArchived">
-						<ActionButton icon="icon-delete" @click="deleteLabel(label.id)">
+						</NcActionButton>
+					</NcActions>
+					<NcActions v-if="canManage && !isArchived">
+						<NcActionButton icon="icon-delete" @click="deleteLabel(label.id)">
 							{{ t('deck', 'Delete') }}
-						</ActionButton>
-					</Actions>
+						</NcActionButton>
+					</NcActions>
 				</template>
 			</li>
 
 			<li v-if="addLabel" class="editing">
 				<!-- New Tag -->
 				<form class="label-form" @submit.prevent="clickAddLabel">
-					<ColorPicker class="color-picker-wrapper" :value="'#' + addLabelObj.color" @input="updateColor">
+					<NcColorPicker class="color-picker-wrapper" :value="'#' + addLabelObj.color" @input="updateColor">
 						<div :style="{ backgroundColor: '#' + addLabelObj.color }" class="color0 icon-colorpicker" />
-					</ColorPicker>
+					</NcColorPicker>
 					<input v-model="addLabelObj.title" type="text">
 					<input v-tooltip="{content: missingDataLabel, show: !addLabelObjValidated, trigger: 'manual' }"
 						:disabled="!addLabelObjValidated"
 						type="submit"
 						value=""
 						class="icon-confirm">
-					<Actions>
-						<ActionButton icon="icon-close" @click="addLabel=false">
+					<NcActions>
+						<NcActionButton icon="icon-close" @click="addLabel=false">
 							{{ t('deck', 'Cancel') }}
-						</ActionButton>
-					</Actions>
+						</NcActionButton>
+					</NcActions>
 				</form>
 			</li>
 			<button v-if="canManage && !isArchived" @click="clickShowAddLabel()">
@@ -70,15 +70,15 @@
 <script>
 
 import { mapGetters } from 'vuex'
-import Color from '../../mixins/color'
-import { ColorPicker, Actions, ActionButton } from '@nextcloud/vue'
+import Color from '../../mixins/color.js'
+import { NcColorPicker, NcActions, NcActionButton } from '@nextcloud/vue'
 
 export default {
 	name: 'TagsTabSidebar',
 	components: {
-		ColorPicker,
-		Actions,
-		ActionButton,
+		NcColorPicker,
+		NcActions,
+		NcActionButton,
 	},
 	mixins: [Color],
 	data() {

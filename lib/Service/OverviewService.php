@@ -30,31 +30,20 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Model\CardDetails;
 use OCP\Comments\ICommentsManager;
-use OCP\IGroupManager;
-use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCP\IUserManager;
 
 class OverviewService {
-
-	/** @var BoardMapper */
-	private $boardMapper;
-	/** @var LabelMapper */
-	private $labelMapper;
-	/** @var CardMapper */
-	private $cardMapper;
-	/** @var AssignmentMapper */
-	private $assignedUsersMapper;
-	/** @var IUserManager */
-	private $userManager;
-	/** @var IGroupManager */
-	private $groupManager;
-	/** @var ICommentsManager */
-	private $commentsManager;
-	/** @var AttachmentService */
-	private $attachmentService;
+	private BoardMapper $boardMapper;
+	private LabelMapper $labelMapper;
+	private CardMapper $cardMapper;
+	private AssignmentMapper $assignedUsersMapper;
+	private IUserManager $userManager;
+	private ICommentsManager $commentsManager;
+	private AttachmentService $attachmentService;
 
 	public function __construct(
 		BoardMapper $boardMapper,
@@ -62,7 +51,6 @@ class OverviewService {
 		CardMapper $cardMapper,
 		AssignmentMapper $assignedUsersMapper,
 		IUserManager $userManager,
-		IGroupManager $groupManager,
 		ICommentsManager $commentsManager,
 		AttachmentService $attachmentService
 	) {
@@ -71,7 +59,6 @@ class OverviewService {
 		$this->cardMapper = $cardMapper;
 		$this->assignedUsersMapper = $assignedUsersMapper;
 		$this->userManager = $userManager;
-		$this->groupManager = $groupManager;
 		$this->commentsManager = $commentsManager;
 		$this->attachmentService = $attachmentService;
 	}
@@ -93,62 +80,37 @@ class OverviewService {
 	}
 
 	public function findAllWithDue(string $userId): array {
-		$userBoards = $this->findAllBoardsFromUser($userId);
+		$userBoards = $this->boardMapper->findAllForUser($userId);
 		$allDueCards = [];
 		foreach ($userBoards as $userBoard) {
-			$service = $this;
-			$allDueCards[] = array_map(static function ($card) use ($service, $userBoard, $userId) {
-				$service->enrich($card, $userId);
-				$cardData = $card->jsonSerialize();
-				$cardData['boardId'] = $userBoard->getId();
-				return $cardData;
+			$allDueCards[] = array_map(function ($card) use ($userBoard, $userId) {
+				$this->enrich($card, $userId);
+				return (new CardDetails($card, $userBoard))->jsonSerialize();
 			}, $this->cardMapper->findAllWithDue($userBoard->getId()));
 		}
-		return $allDueCards;
+		return array_merge(...$allDueCards);
 	}
 
 	public function findUpcomingCards(string $userId): array {
-		$userBoards = $this->findAllBoardsFromUser($userId);
-		$findCards = [];
+		$userBoards = $this->boardMapper->findAllForUser($userId);
+		$foundCards = [];
 		foreach ($userBoards as $userBoard) {
-			$service = $this;
-
 			if (count($userBoard->getAcl()) === 0) {
 				// private board: get cards with due date
-				$findCards[] = array_map(static function ($card) use ($service, $userBoard, $userId) {
-					$service->enrich($card, $userId);
-					$cardData = $card->jsonSerialize();
-					$cardData['boardId'] = $userBoard->getId();
-					return $cardData;
-				}, $this->cardMapper->findAllWithDue($userBoard->getId()));
+				$cards = $this->cardMapper->findAllWithDue($userBoard->getId());
 			} else {
 				// shared board: get all my assigned or unassigned cards
-				$findCards[] = array_map(static function ($card) use ($service, $userBoard, $userId) {
-					$service->enrich($card, $userId);
-					$cardData = $card->jsonSerialize();
-					$cardData['boardId'] = $userBoard->getId();
-					return $cardData;
-				}, $this->cardMapper->findToMeOrNotAssignedCards($userBoard->getId(), $userId));
+				$cards = $this->cardMapper->findToMeOrNotAssignedCards($userBoard->getId(), $userId);
 			}
+
+			$foundCards[] = array_map(
+				function (Card $card) use ($userBoard, $userId) {
+					$this->enrich($card, $userId);
+					return (new CardDetails($card, $userBoard))->jsonSerialize();
+				},
+				$cards
+			);
 		}
-		return $findCards;
-	}
-
-	// FIXME: This is duplicate code with the board service
-	private function findAllBoardsFromUser(string $userId): array {
-		$userInfo = $this->getBoardPrerequisites($userId);
-		$userBoards = $this->boardMapper->findAllByUser($userInfo['user'], null, null);
-		$groupBoards = $this->boardMapper->findAllByGroups($userInfo['user'], $userInfo['groups'], null, null);
-		$circleBoards = $this->boardMapper->findAllByCircles($userInfo['user'], null, null);
-		return array_unique(array_merge($userBoards, $groupBoards, $circleBoards));
-	}
-
-	private function getBoardPrerequisites($userId): array {
-		$user = $this->userManager->get($userId);
-		$groups = $user !== null ? $this->groupManager->getUserGroupIds($user) : [];
-		return [
-			'user' => $userId,
-			'groups' => $groups
-		];
+		return array_merge(...$foundCards);
 	}
 }

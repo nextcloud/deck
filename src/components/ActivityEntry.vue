@@ -36,10 +36,10 @@
 
 <script>
 import RichText from '@juliushaertl/vue-richtext'
-import { UserBubble } from '@nextcloud/vue'
+import { NcUserBubble } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import DOMPurify from 'dompurify'
-import relativeDate from '../mixins/relativeDate'
+import relativeDate from '../mixins/relativeDate.js'
 
 const InternalLink = {
 	name: 'InternalLink',
@@ -75,7 +75,7 @@ export default {
 			const subject = this.activity.subject_rich[0]
 			const parameters = JSON.parse(JSON.stringify(this.activity.subject_rich[1]))
 			if (parameters.after && typeof parameters.after.id === 'string' && parameters.after.id.startsWith('dt:')) {
-				const dateTime = parameters.after.id.substr(3)
+				const dateTime = parameters.after.id.slice(3)
 				parameters.after.name = moment(dateTime).format('L LTS')
 			}
 
@@ -93,7 +93,7 @@ export default {
 					break
 				case 'user':
 					parameters[key] = {
-						component: UserBubble,
+						component: NcUserBubble,
 						props: {
 							user: parameters[key].id,
 							displayName: parameters[key].name,

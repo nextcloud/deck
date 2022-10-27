@@ -23,6 +23,14 @@
 
 namespace OCA\Deck\Db;
 
+/**
+ * @method int getId()
+ * @method string getTitle()
+ * @method int getShared()
+ * @method bool getArchived()
+ * @method int getDeletedAt()
+ * @method int getLastModified()
+ */
 class Board extends RelationalEntity {
 	protected $title;
 	protected $owner;
@@ -58,7 +66,7 @@ class Board extends RelationalEntity {
 		$this->shared = -1;
 	}
 
-	public function jsonSerialize() {
+	public function jsonSerialize(): array {
 		$json = parent::jsonSerialize();
 		if ($this->shared === -1) {
 			unset($json['shared']);

@@ -38,11 +38,14 @@ use OCA\Deck\StatusException;
 use OCP\Activity\IEvent;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Test\TestCase;
+use OCP\IURLGenerator;
 
 class CardServiceTest extends TestCase {
 
@@ -75,6 +78,12 @@ class CardServiceTest extends TestCase {
 	private $eventDispatcher;
 	/** @var ChangeHelper|MockObject */
 	private $changeHelper;
+	/** @var IURLGenerator|MockObject */
+	private $urlGenerator;
+	/** @var IRequest|MockObject */
+	private $request;
+	/** @var LoggerInterface|MockObject */
+	private $logger;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -92,6 +101,12 @@ class CardServiceTest extends TestCase {
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
+		$this->urlGenerator = $this->createMock(IURLGenerator::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
+		$this->request = $this->createMock(IRequest::class);
+
+		$this->logger->expects($this->any())->method('error');
+
 		$this->cardService = new CardService(
 			$this->cardMapper,
 			$this->stackMapper,
@@ -107,6 +122,9 @@ class CardServiceTest extends TestCase {
 			$this->userManager,
 			$this->changeHelper,
 			$this->eventDispatcher,
+			$this->urlGenerator,
+			$this->logger,
+			$this->request,
 			'user1'
 		);
 	}
@@ -154,6 +172,7 @@ class CardServiceTest extends TestCase {
 		$cardExpected->setAssignedUsers(['user1', 'user2']);
 		$cardExpected->setRelatedBoard($boardMock);
 		$cardExpected->setRelatedStack($stackMock);
+		$cardExpected->setLabels([]);
 		$this->assertEquals($cardExpected, $this->cardService->find(123));
 	}
 
@@ -202,7 +221,7 @@ class CardServiceTest extends TestCase {
 		$this->assertEquals('text', $actual->getType());
 		$this->assertEquals(999, $actual->getOrder());
 		$this->assertEquals('foo', $actual->getDescription());
-		$this->assertEquals('2017-01-01T00:00:00+00:00', $actual->getDuedate());
+		$this->assertEquals(new \DateTime('2017-01-01T00:00:00+00:00'), $actual->getDuedate());
 	}
 
 	public function testUpdateArchived() {

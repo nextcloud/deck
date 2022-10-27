@@ -21,32 +21,31 @@
  -->
 
 <template>
-	<Content id="content" app-name="deck" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
+	<NcContent app-name="deck" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
 		<AppNavigation />
-		<AppContent>
+		<NcAppContent>
 			<router-view />
-		</AppContent>
+		</NcAppContent>
 
-		<Modal
-			v-if="cardDetailsInModal && $route.params.cardId"
+		<NcModal v-if="cardDetailsInModal && $route.params.cardId"
 			:clear-view-delay="0"
 			:title="t('deck', 'Card details')"
+			size="large"
 			@close="hideModal()">
 			<div class="modal__content modal__card">
 				<router-view name="sidebar" />
 			</div>
-		</Modal>
+		</NcModal>
 
 		<router-view name="sidebar" :visible="!cardDetailsInModal || !$route.params.cardId" />
-	</Content>
+	</NcContent>
 </template>
 
 <script>
-
 import { mapState } from 'vuex'
-import AppNavigation from './components/navigation/AppNavigation'
-import { Modal, Content, AppContent } from '@nextcloud/vue'
-import { BoardApi } from './services/BoardApi'
+import AppNavigation from './components/navigation/AppNavigation.vue'
+import { NcModal, NcContent, NcAppContent } from '@nextcloud/vue'
+import { BoardApi } from './services/BoardApi.js'
 import { emit, subscribe } from '@nextcloud/event-bus'
 
 const boardApi = new BoardApi()
@@ -55,9 +54,9 @@ export default {
 	name: 'App',
 	components: {
 		AppNavigation,
-		Modal,
-		Content,
-		AppContent,
+		NcModal,
+		NcContent,
+		NcAppContent,
 	},
 	provide() {
 		return {
@@ -129,7 +128,7 @@ export default {
 
 <style lang="scss" scoped>
 
-	#content {
+	#content-vue {
 		#app-content {
 			transition: margin-left 100ms ease;
 			position: relative;
@@ -154,17 +153,40 @@ export default {
 			}
 		}
 	}
-
-	.modal__card {
-		min-width: 320px;
-		width: 50vw;
-		max-width: 800px;
-		min-height: 200px;
-		height: 80vh;
-	}
 </style>
 
 <style lang="scss">
+	@import '../css/print';
+
+	.icon-activity {
+		background-image: url(../img/activity-dark.svg);
+
+		body[data-theme-dark] & {
+			background-image: url(../img/activity.svg);
+		}
+	}
+
+	.avatardiv.circles {
+		background: var(--color-primary);
+	}
+
+	.icon-circles {
+		background-image: url(../img/circles-dark.svg);
+		opacity: 1;
+		background-size: 20px;
+		background-position: center center;
+	}
+
+	.icon-circles-white, .icon-circles.icon-white {
+		background-image: url(../img/circles.svg);
+		opacity: 1;
+		background-size: 20px;
+		background-position: center center;
+	}
+
+	.icon-colorpicker {
+		background-image: url('../img/color_picker.svg');
+	}
 
 	.multiselect {
 		width: 100%;

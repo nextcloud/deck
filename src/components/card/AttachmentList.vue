@@ -63,39 +63,39 @@
 						<div v-if="attachment.deletedAt === 0">
 							<span class="filesize">{{ formattedFileSize(attachment.extendedData.filesize) }}</span>
 							<span class="filedate">{{ relativeDate(attachment.createdAt*1000) }}</span>
-							<span class="filedate">{{ attachment.createdBy }}</span>
+							<span class="filedate">{{ attachment.extendedData.attachmentCreator.displayName }}</span>
 						</div>
 						<div v-else>
 							<span class="attachment--info">{{ t('deck', 'Pending share') }}</span>
 						</div>
 					</a>
 				</div>
-				<Actions v-if="selectable">
-					<ActionButton icon="icon-confirm" @click="$emit('select-attachment', attachment)">
+				<NcActions v-if="selectable">
+					<NcActionButton icon="icon-confirm" @click="$emit('select-attachment', attachment)">
 						{{ t('deck', 'Add this attachment') }}
-					</ActionButton>
-				</Actions>
-				<Actions v-if="removable && !isReadOnly" :force-menu="true">
-					<ActionLink v-if="attachment.extendedData.fileid" icon="icon-folder" :href="internalLink(attachment)">
+					</NcActionButton>
+				</NcActions>
+				<NcActions v-if="removable && !isReadOnly" :force-menu="true">
+					<NcActionLink v-if="attachment.extendedData.fileid" icon="icon-folder" :href="internalLink(attachment)">
 						{{ t('deck', 'Show in Files') }}
-					</ActionLink>
-					<ActionLink v-if="attachment.extendedData.fileid"
+					</NcActionLink>
+					<NcActionLink v-if="attachment.extendedData.fileid"
 						icon="icon-download"
 						:href="downloadLink(attachment)"
 						download>
 						{{ t('deck', 'Download') }}
-					</ActionLink>
-					<ActionButton v-if="attachment.extendedData.fileid && !isReadOnly" icon="icon-delete" @click="unshareAttachment(attachment)">
+					</NcActionLink>
+					<NcActionButton v-if="attachment.extendedData.fileid && !isReadOnly" icon="icon-delete" @click="unshareAttachment(attachment)">
 						{{ t('deck', 'Remove attachment') }}
-					</ActionButton>
+					</NcActionButton>
 
-					<ActionButton v-if="!attachment.extendedData.fileid && attachment.deletedAt === 0" icon="icon-delete" @click="$emit('delete-attachment', attachment)">
+					<NcActionButton v-if="!attachment.extendedData.fileid && attachment.deletedAt === 0" icon="icon-delete" @click="$emit('delete-attachment', attachment)">
 						{{ t('deck', 'Delete Attachment') }}
-					</ActionButton>
-					<ActionButton v-else-if="!attachment.extendedData.fileid" icon="icon-history" @click="$emit('restore-attachment', attachment)">
+					</NcActionButton>
+					<NcActionButton v-else-if="!attachment.extendedData.fileid" icon="icon-history" @click="$emit('restore-attachment', attachment)">
 						{{ t('deck', 'Restore Attachment') }}
-					</ActionButton>
-				</Actions>
+					</NcActionButton>
+				</NcActions>
 			</li>
 		</ul>
 	</AttachmentDragAndDrop>
@@ -103,15 +103,15 @@
 
 <script>
 import axios from '@nextcloud/axios'
-import { Actions, ActionButton, ActionLink } from '@nextcloud/vue'
-import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
-import relativeDate from '../../mixins/relativeDate'
+import { NcActions, NcActionButton, NcActionLink } from '@nextcloud/vue'
+import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
+import relativeDate from '../../mixins/relativeDate.js'
 import { formatFileSize } from '@nextcloud/files'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl, generateOcsUrl, generateRemoteUrl } from '@nextcloud/router'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { loadState } from '@nextcloud/initial-state'
-import attachmentUpload from '../../mixins/attachmentUpload'
+import attachmentUpload from '../../mixins/attachmentUpload.js'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
 const maxUploadSizeState = loadState('deck', 'maxUploadSize')
 
@@ -125,9 +125,9 @@ const picker = getFilePickerBuilder(t('deck', 'File to share'))
 export default {
 	name: 'AttachmentList',
 	components: {
-		Actions,
-		ActionButton,
-		ActionLink,
+		NcActions,
+		NcActionButton,
+		NcActionLink,
 		AttachmentDragAndDrop,
 	},
 	mixins: [relativeDate, attachmentUpload],
@@ -205,11 +205,14 @@ export default {
 		cardId: {
 			immediate: true,
 			handler() {
-				this.$store.dispatch('fetchAttachments', this.cardId)
+				this.fetchAttachments(this.cardId)
 			},
 		},
 	},
 	methods: {
+		...mapActions([
+			'fetchAttachments',
+		]),
 		handleUploadFile(event) {
 			const files = event.target.files ?? []
 			for (const file of files) {
@@ -233,7 +236,7 @@ export default {
 						shareType: 12,
 						shareWith: '' + this.cardId,
 					}).then(() => {
-						this.$store.dispatch('fetchAttachments', this.cardId)
+						this.fetchAttachments(this.cardId)
 					})
 				})
 		},

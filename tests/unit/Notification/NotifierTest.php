@@ -25,6 +25,7 @@ namespace OCA\Deck\Notification;
 
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCP\IL10N;
 use OCP\IURLGenerator;
@@ -32,6 +33,7 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
+use OCP\Server;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class NotifierTest extends \Test\TestCase {
@@ -69,7 +71,7 @@ class NotifierTest extends \Test\TestCase {
 			$this->stackMapper,
 			$this->boardMapper
 		);
-		$this->l10n = \OC::$server->getL10N('deck');
+		$this->l10n = Server::get(IFactory::class)->get('deck');
 		$this->l10nFactory->expects($this->once())
 			->method('get')
 			->willReturn($this->l10n);
@@ -77,7 +79,7 @@ class NotifierTest extends \Test\TestCase {
 
 	public function testPrepareWrongApp() {
 		$this->expectException(\InvalidArgumentException::class);
-		/** @var INotification $notification */
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->once())
 			->method('getApp')
@@ -87,7 +89,7 @@ class NotifierTest extends \Test\TestCase {
 	}
 
 	public function testPrepareCardOverdue() {
-		/** @var INotification $notification */
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->once())
 			->method('getApp')
@@ -103,9 +105,9 @@ class NotifierTest extends \Test\TestCase {
 		$notification->expects($this->once())
 			->method('getObjectId')
 			->willReturn('123');
-		$this->cardMapper->expects($this->once())
-			->method('findBoardId')
-			->willReturn(999);
+		$this->stackMapper->expects($this->once())
+			->method('findStackFromCardId')
+			->willReturn($this->buildMockStack());
 		$expectedMessage = 'The card "Card title" on "Board title" has reached its due date.';
 		$notification->expects($this->once())
 			->method('setParsedSubject')
@@ -130,7 +132,7 @@ class NotifierTest extends \Test\TestCase {
 	}
 
 	public function testPrepareCardCommentMentioned() {
-		/** @var INotification $notification */
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->once())
 			->method('getApp')
@@ -146,9 +148,9 @@ class NotifierTest extends \Test\TestCase {
 		$notification->expects($this->once())
 			->method('getObjectId')
 			->willReturn('123');
-		$this->cardMapper->expects($this->once())
-			->method('findBoardId')
-			->willReturn(999);
+		$this->stackMapper->expects($this->once())
+			->method('findStackFromCardId')
+			->willReturn($this->buildMockStack());
 		$expectedMessage = 'admin has mentioned you in a comment on "Card title".';
 		$notification->expects($this->once())
 			->method('setParsedSubject')
@@ -183,11 +185,11 @@ class NotifierTest extends \Test\TestCase {
 
 	/** @dataProvider dataPrepareCardAssigned */
 	public function testPrepareCardAssigned($withUserFound = true) {
-		$this->cardMapper->expects($this->once())
-			->method('findBoardId')
-			->willReturn(123);
+		$this->stackMapper->expects($this->once())
+			->method('findStackFromCardId')
+			->willReturn($this->buildMockStack(123));
 
-		/** @var INotification $notification */
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->once())
 			->method('getApp')
@@ -271,7 +273,7 @@ class NotifierTest extends \Test\TestCase {
 
 	/** @dataProvider dataPrepareBoardShared */
 	public function testPrepareBoardShared($withUserFound = true) {
-		/** @var INotification $notification */
+		/** @var INotification|MockObject $notification */
 		$notification = $this->createMock(INotification::class);
 		$notification->expects($this->once())
 			->method('getApp')
@@ -337,5 +339,18 @@ class NotifierTest extends \Test\TestCase {
 		$actualNotification = $this->notifier->prepare($notification, 'en_US');
 
 		$this->assertEquals($notification, $actualNotification);
+	}
+
+	/**
+	 * @param int $boardId
+	 * @return Stack|MockObject
+	 */
+	private function buildMockStack(int $boardId = 999) {
+		$mockStack = $this->getMockBuilder(Stack::class)
+			->addMethods(['getBoardId'])
+			->getMock();
+
+		$mockStack->method('getBoardId')->willReturn($boardId);
+		return $mockStack;
 	}
 }

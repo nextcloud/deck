@@ -2,6 +2,14 @@ name: Integration tests
 
 on:
   pull_request:
+    paths:
+      - '.github/workflows/integration.yml'
+      - 'appinfo/**'
+      - 'lib/**'
+      - 'templates/**'
+      - 'tests/**'
+      - 'composer.json'
+      - 'composer.lock'
   push:
     branches:
       - master
@@ -25,7 +33,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres
+        image: postgres:14
         ports:
           - 4445:5432/tcp
         env:
@@ -43,7 +51,7 @@ jobs:
 
     steps:
       - name: Checkout server
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           repository: nextcloud/server
           ref: ${{ matrix.server-versions }}
@@ -54,14 +62,15 @@ jobs:
           auth_header="$(git config --local --get http.https://github.com/.extraheader)"
           git submodule sync --recursive
           git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+          cd build/integration && composer require --dev phpunit/phpunit:~9
 
       - name: Checkout app
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@2.16.0
+        uses: shivammathur/setup-php@2.21.2
         with:
           php-version: ${{ matrix.php-versions }}
           tools: phpunit
@@ -70,7 +79,7 @@ jobs:
 
       - name: Set up PHPUnit
         working-directory: apps/${{ env.APP_NAME }}
-        run: composer i
+        run: composer i --no-dev
 
       - name: Set up Nextcloud
         run: |

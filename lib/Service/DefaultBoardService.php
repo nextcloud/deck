@@ -88,18 +88,6 @@ class DefaultBoardService {
 	 * @throws BadRequestException
 	 */
 	public function createDefaultBoard(string $title, string $userId, string $color) {
-		if ($title === false || $title === null) {
-			throw new BadRequestException('title must be provided');
-		}
-
-		if ($userId === false || $userId === null) {
-			throw new BadRequestException('userId must be provided');
-		}
-
-		if ($color === false || $color === null) {
-			throw new BadRequestException('color must be provided');
-		}
-
 		$defaultBoard = $this->boardService->create($title, $userId, $color);
 		$defaultStacks = [];
 		$defaultCards = [];

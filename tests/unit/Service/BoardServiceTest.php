@@ -31,6 +31,7 @@ use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\StackMapper;
@@ -38,10 +39,13 @@ use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
+use OCP\IDBConnection;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IGroupManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use \Test\TestCase;
+use OCP\IURLGenerator;
 
 class BoardServiceTest extends TestCase {
 
@@ -57,6 +61,8 @@ class BoardServiceTest extends TestCase {
 	private $boardMapper;
 	/** @var StackMapper */
 	private $stackMapper;
+	/** @var CardMapper */
+	private $cardMapper;
 	/** @var PermissionService */
 	private $permissionService;
 	/** @var NotificationHelper */
@@ -74,6 +80,10 @@ class BoardServiceTest extends TestCase {
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
 	private $userId = 'admin';
+	/** @var IURLGenerator */
+	private $urlGenerator;
+	/** @var IDBConnection|MockObject */
+	private $connection;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -82,6 +92,7 @@ class BoardServiceTest extends TestCase {
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->stackMapper = $this->createMock(StackMapper::class);
 		$this->config = $this->createMock(IConfig::class);
+		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->labelMapper = $this->createMock(LabelMapper::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
@@ -91,6 +102,8 @@ class BoardServiceTest extends TestCase {
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
+		$this->urlGenerator = $this->createMock(IURLGenerator::class);
+		$this->connection = $this->createMock(IDBConnection::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -102,11 +115,14 @@ class BoardServiceTest extends TestCase {
 			$this->permissionService,
 			$this->notificationHelper,
 			$this->assignedUsersMapper,
+			$this->cardMapper,
 			$this->userManager,
 			$this->groupManager,
 			$this->activityManager,
 			$this->eventDispatcher,
 			$this->changeHelper,
+			$this->urlGenerator,
+			$this->connection,
 			$this->userId
 		);
 
@@ -144,7 +160,7 @@ class BoardServiceTest extends TestCase {
 			->method('find')
 			->with(1)
 			->willReturn($b1);
-		$this->permissionService->expects($this->once())
+		$this->permissionService->expects($this->any())
 			->method('findUsers')
 			->willReturn([
 				'admin' => 'admin',
@@ -248,6 +264,11 @@ class BoardServiceTest extends TestCase {
 			->method('insert')
 			->with($acl)
 			->willReturn($acl);
+		$this->permissionService->expects($this->any())
+			->method('findUsers')
+			->willReturn([
+				'admin' => 'admin',
+			]);
 		$this->assertEquals($acl, $this->service->addAcl(
 			123, 'user', 'admin', true, true, true
 		));
@@ -290,30 +311,39 @@ class BoardServiceTest extends TestCase {
 		$existingAcl->setPermissionEdit($currentUserAcl[0]);
 		$existingAcl->setPermissionShare($currentUserAcl[1]);
 		$existingAcl->setPermissionManage($currentUserAcl[2]);
-		$this->permissionService->expects($this->at(0))
-			->method('checkPermission')
-			->with($this->boardMapper, 123, Acl::PERMISSION_SHARE, null);
+
 		if ($currentUserAcl[2]) {
-			$this->permissionService->expects($this->at(1))
+			$this->permissionService->expects($this->exactly(2))
 				->method('checkPermission')
-				->with($this->boardMapper, 123, Acl::PERMISSION_MANAGE, null);
+				->withConsecutive(
+					[$this->boardMapper, 123, Acl::PERMISSION_SHARE, null],
+					[$this->boardMapper, 123, Acl::PERMISSION_MANAGE, null]
+				);
 		} else {
 			$this->aclMapper->expects($this->once())
 				->method('findAll')
 				->willReturn([$existingAcl]);
-			$this->permissionService->expects($this->at(1))
+
+			$this->permissionService->expects($this->exactly(2))
 				->method('checkPermission')
-				->with($this->boardMapper, 123, Acl::PERMISSION_MANAGE, null)
-				->willThrowException(new NoPermissionException('No permission'));
-			$this->permissionService->expects($this->at(2))
+				->withConsecutive(
+					[$this->boardMapper, 123, Acl::PERMISSION_SHARE, null],
+					[$this->boardMapper, 123, Acl::PERMISSION_MANAGE, null]
+				)
+				->will(
+					$this->onConsecutiveCalls(
+						true,
+						$this->throwException(new NoPermissionException('No permission'))
+					)
+				);
+
+			$this->permissionService->expects($this->exactly(3))
 				->method('userCan')
-				->willReturn($currentUserAcl[0]);
-			$this->permissionService->expects($this->at(3))
-				->method('userCan')
-				->willReturn($currentUserAcl[1]);
-			$this->permissionService->expects($this->at(4))
-				->method('userCan')
-				->willReturn($currentUserAcl[2]);
+				->willReturnOnConsecutiveCalls(
+					$currentUserAcl[0],
+					$currentUserAcl[1],
+					$currentUserAcl[2]
+				);
 		}
 
 		$user = $this->createMock(IUser::class);
@@ -328,6 +358,11 @@ class BoardServiceTest extends TestCase {
 		$acl->resolveRelation('participant', function ($participant) use (&$user) {
 			return null;
 		});
+		$this->permissionService->expects($this->any())
+			->method('findUsers')
+			->willReturn([
+				'admin' => 'admin',
+			]);
 		$this->notificationHelper->expects($this->once())
 			->method('sendBoardShared');
 		$expected = clone $acl;
@@ -391,7 +426,7 @@ class BoardServiceTest extends TestCase {
 		$this->aclMapper->expects($this->once())
 			->method('delete')
 			->with($acl)
-			->willReturn(true);
-		$this->assertTrue($this->service->deleteAcl(123));
+			->willReturn($acl);
+		$this->assertEquals($acl, $this->service->deleteAcl(123));
 	}
 }

@@ -29,25 +29,40 @@ use OCA\Deck\Service\PermissionService;
 use OCA\Files\Event\LoadSidebar;
 use OCA\Viewer\Event\LoadViewer;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
+use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent as CollaborationResourcesEvent;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IConfig;
 use OCP\IInitialStateService;
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Controller;
+use OCA\Deck\Db\CardMapper;
+use OCP\IURLGenerator;
+use \OCP\AppFramework\Http\RedirectResponse;
+use OCA\Deck\Db\Acl;
+use OCA\Deck\Service\CardService;
 
 class PageController extends Controller {
-	private $permissionService;
-	private $initialState;
-	private $configService;
-	private $eventDispatcher;
+	private PermissionService $permissionService;
+	private IInitialStateService $initialState;
+	private ConfigService $configService;
+	private IEventDispatcher $eventDispatcher;
+	private CardMapper $cardMapper;
+	private IURLGenerator $urlGenerator;
+	private CardService $cardService;
+	private IConfig $config;
 
 	public function __construct(
-		$AppName,
+		string $AppName,
 		IRequest $request,
 		PermissionService $permissionService,
 		IInitialStateService $initialStateService,
 		ConfigService $configService,
-		IEventDispatcher $eventDispatcher
+		IEventDispatcher $eventDispatcher,
+		CardMapper $cardMapper,
+		IURLGenerator $urlGenerator,
+		CardService $cardService,
+		IConfig $config
 		) {
 		parent::__construct($AppName, $request);
 
@@ -55,6 +70,10 @@ class PageController extends Controller {
 		$this->initialState = $initialStateService;
 		$this->configService = $configService;
 		$this->eventDispatcher = $eventDispatcher;
+		$this->cardMapper = $cardMapper;
+		$this->urlGenerator = $urlGenerator;
+		$this->cardService = $cardService;
+		$this->config = $config;
 	}
 
 	/**
@@ -70,13 +89,17 @@ class PageController extends Controller {
 		$this->initialState->provideInitialState(Application::APP_ID, 'config', $this->configService->getAll());
 
 		$this->eventDispatcher->dispatchTyped(new LoadSidebar());
+		$this->eventDispatcher->dispatchTyped(new CollaborationResourcesEvent());
 		if (class_exists(LoadViewer::class)) {
 			$this->eventDispatcher->dispatchTyped(new LoadViewer());
 		}
 
-		$response = new TemplateResponse('deck', 'main');
+		$response = new TemplateResponse('deck', 'main', [
+			'id-app-content' => '#app-content-vue',
+			'id-app-navigation' => '#app-navigation-vue',
+		]);
 
-		if (\OC::$server->getConfig()->getSystemValueBool('debug', false)) {
+		if ($this->config->getSystemValueBool('debug', false)) {
 			$csp = new ContentSecurityPolicy();
 			$csp->addAllowedConnectDomain('*');
 			$csp->addAllowedScriptDomain('*');
@@ -84,5 +107,18 @@ class PageController extends Controller {
 		}
 
 		return $response;
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 */
+	public function redirectToCard($cardId): RedirectResponse {
+		try {
+			$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
+			return new RedirectResponse($this->cardService->getCardUrl($cardId));
+		} catch (\Exception $e) {
+			return new RedirectResponse($this->urlGenerator->linkToRouteAbsolute('deck.page.index'));
+		}
 	}
 }

@@ -22,7 +22,7 @@
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
-import './../models'
+import '../models/index.js'
 
 export class StackApi {
 

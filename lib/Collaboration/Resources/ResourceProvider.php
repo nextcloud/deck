@@ -32,20 +32,23 @@ use OCP\AppFramework\QueryException;
 use OCP\Collaboration\Resources\IManager;
 use OCP\Collaboration\Resources\IProvider;
 use OCP\Collaboration\Resources\IResource;
+use OCP\IURLGenerator;
 use OCP\IUser;
+use OCP\Server;
 
 class ResourceProvider implements IProvider {
 	public const RESOURCE_TYPE = 'deck';
 
-	private $boardMapper;
-	private $permissionService;
+	private BoardMapper $boardMapper;
+	private PermissionService $permissionService;
+	private IURLGenerator $urlGenerator;
 
-	/** @var array */
-	protected $nodes = [];
+	protected array $nodes = [];
 
-	public function __construct(BoardMapper $boardMapper, PermissionService $permissionService) {
+	public function __construct(BoardMapper $boardMapper, PermissionService $permissionService, IURLGenerator $urlGenerator) {
 		$this->boardMapper = $boardMapper;
 		$this->permissionService = $permissionService;
+		$this->urlGenerator = $urlGenerator;
 	}
 
 	/**
@@ -70,14 +73,14 @@ class ResourceProvider implements IProvider {
 	 */
 	public function getResourceRichObject(IResource $resource): array {
 		$board = $this->getBoard($resource);
-		$link = \OC::$server->getURLGenerator()->linkToRoute('deck.page.index') . '#/board/' . $resource->getId();
+		$link = $this->urlGenerator->linkToRoute('deck.page.index') . '#/board/' . $resource->getId();
 
 		return [
 			'type' => self::RESOURCE_TYPE,
 			'id' => $resource->getId(),
 			'name' => $board->getTitle(),
 			'link' => $link,
-			'iconUrl' => \OC::$server->getURLGenerator()->imagePath('deck', 'deck-dark.svg')
+			'iconUrl' => $this->urlGenerator->imagePath('deck', 'deck-dark.svg')
 		];
 	}
 
@@ -118,7 +121,7 @@ class ResourceProvider implements IProvider {
 	public function invalidateAccessCache($boardId = null) {
 		try {
 			/** @var IManager $resourceManager */
-			$resourceManager = \OC::$server->query(IManager::class);
+			$resourceManager = Server::get(IManager::class);
 		} catch (QueryException $e) {
 		}
 		if ($boardId !== null) {

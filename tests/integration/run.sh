@@ -20,13 +20,12 @@ else
 fi
 
 composer install
-composer dump-autoload
 
 # avoid port collision on jenkins - use $EXECUTOR_NUMBER
 if [ -z "$EXECUTOR_NUMBER" ]; then
     EXECUTOR_NUMBER=0
 fi
-PORT=$((8080 + $EXECUTOR_NUMBER))
+PORT=$((9090 + $EXECUTOR_NUMBER))
 echo $PORT
 php -S localhost:$PORT -t $OC_PATH &
 PHPPID=$!

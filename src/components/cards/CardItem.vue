@@ -35,14 +35,18 @@
 				{{ board.title }} » {{ stack.title }}
 			</div>
 			<div class="card-upper">
-				<h3 v-if="compactMode || isArchived || showArchived || !canEdit || standalone">
+				<h3 v-if="inlineEditingBlocked">
 					{{ card.title }}
 				</h3>
-				<h3 v-else-if="!editing">
-					<span @click.stop="startEditing(card)">{{ card.title }}</span>
+				<h3 v-else-if="!editing"
+					tabindex="0"
+					class="editable"
+					:aria-label="t('deck', 'Edit card title')"
+					@click.stop="startEditing(card)"
+					@keydown.enter.stop.prevent="startEditing(card)">
+					{{ card.title }}
 				</h3>
-
-				<form v-if="editing"
+				<form v-else-if="editing"
 					v-click-outside="cancelEdit"
 					class="dragDisabled"
 					@click.stop
@@ -51,6 +55,7 @@
 					<input v-model="copiedCard.title"
 						v-focus
 						type="text"
+						autocomplete="off"
 						required
 						pattern=".*\S+.*">
 					<input type="submit" value="" class="icon-confirm">
@@ -79,12 +84,12 @@
 <script>
 import ClickOutside from 'vue-click-outside'
 import { mapState, mapGetters } from 'vuex'
-import CardBadges from './CardBadges'
-import Color from '../../mixins/color'
-import labelStyle from '../../mixins/labelStyle'
-import AttachmentDragAndDrop from '../AttachmentDragAndDrop'
-import CardMenu from './CardMenu'
-import DueDate from './badges/DueDate'
+import CardBadges from './CardBadges.vue'
+import Color from '../../mixins/color.js'
+import labelStyle from '../../mixins/labelStyle.js'
+import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
+import CardMenu from './CardMenu.vue'
+import DueDate from './badges/DueDate.vue'
 
 export default {
 	name: 'CardItem',
@@ -103,6 +108,10 @@ export default {
 			default: null,
 		},
 		standalone: {
+			type: Boolean,
+			default: false,
+		},
+		dragging: {
 			type: Boolean,
 			default: false,
 		},
@@ -135,6 +144,9 @@ export default {
 			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
 			return board ? !board.archived && board.permissions.PERMISSION_EDIT : false
 		},
+		inlineEditingBlocked() {
+			return this.compactMode || this.isArchived || this.showArchived || !this.canEdit || this.standalone
+		},
 		card() {
 			return this.item ? this.item : this.$store.getters.cardById(this.id)
 		},
@@ -154,6 +166,9 @@ export default {
 	},
 	methods: {
 		openCard() {
+			if (this.dragging) {
+			  return
+			}
 			const boardId = this.card && this.card.boardId ? this.card.boardId : this.$route.params.id
 			this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id } }).catch(() => {})
 		},
@@ -171,6 +186,9 @@ export default {
 			this.editing = false
 		},
 		applyLabelFilter(label) {
+			if (this.dragging) {
+				return
+			}
 			this.$nextTick(() => this.$store.dispatch('toggleFilter', { tags: [label.id] }))
 		},
 	},
@@ -217,14 +235,20 @@ export default {
 
 			}
 			h3 {
-				margin: 12px $card-padding;
+				margin: 5px $card-padding;
+				padding: 6px;
 				flex-grow: 1;
 				font-size: 100%;
 				overflow: hidden;
 				word-wrap: break-word;
 				padding-left: 4px;
-				span {
+				&.editable {
 					cursor: text;
+
+					&:focus {
+						outline: 2px solid var(--color-border-dark);
+						border-radius: 3px;
+					}
 				}
 			}
 			input[type=text] {
@@ -232,6 +256,7 @@ export default {
 			}
 		}
 
+		/* stylelint-disable-next-line no-invalid-position-at-import-rule */
 		@import './../../css/labels';
 
 		.card-controls {

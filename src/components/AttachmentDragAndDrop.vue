@@ -27,24 +27,21 @@
 		@drop.prevent="handleDropFiles">
 		<slot />
 		<transition name="fade" mode="out-in">
-			<div
-				v-show="isDraggingOver"
+			<div v-show="isDraggingOver"
 				class="dragover">
 				<div class="drop-hint">
-					<div
-						class="drop-hint__icon"
+					<div class="drop-hint__icon"
 						:class="{
 							'icon-upload' : !isReadOnly,
 							'icon-error' : isReadOnly}" />
-					<h2
-						class="drop-hint__text">
+					<h2 class="drop-hint__text">
 						{{ dropHintText }}
 					</h2>
 				</div>
 			</div>
 		</transition>
 
-		<Modal v-if="modalShow" :title="t('deck', 'File already exists')" @close="modalShow=false">
+		<NcModal v-if="modalShow" :title="t('deck', 'File already exists')" @close="modalShow=false">
 			<div class="modal__content">
 				<h2>{{ t('deck', 'File already exists') }}</h2>
 				<p>
@@ -60,13 +57,13 @@
 					{{ t('deck', 'Keep existing file') }}
 				</button>
 			</div>
-		</Modal>
+		</NcModal>
 	</div>
 </template>
 
 <script>
-import { Modal } from '@nextcloud/vue'
-import attachmentUpload from '../mixins/attachmentUpload'
+import { NcModal } from '@nextcloud/vue'
+import attachmentUpload from '../mixins/attachmentUpload.js'
 import { loadState } from '@nextcloud/initial-state'
 
 let maxUploadSizeState
@@ -78,7 +75,7 @@ try {
 
 export default {
 	name: 'AttachmentDragAndDrop',
-	components: { Modal },
+	components: { NcModal },
 	mixins: [attachmentUpload],
 	props: {
 		cardId: {

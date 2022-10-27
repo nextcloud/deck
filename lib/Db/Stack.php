@@ -25,6 +25,13 @@ namespace OCA\Deck\Db;
 
 use Sabre\VObject\Component\VCalendar;
 
+/**
+ * @method int getId()
+ * @method int getBoardId()
+ * @method int getDeletedAt()
+ * @method int getLastModified()
+ * @method int getOrder()
+ */
 class Stack extends RelationalEntity {
 	protected $title;
 	protected $boardId;
@@ -45,7 +52,7 @@ class Stack extends RelationalEntity {
 		$this->cards = $cards;
 	}
 
-	public function jsonSerialize() {
+	public function jsonSerialize(): array {
 		$json = parent::jsonSerialize();
 		if (empty($this->cards)) {
 			unset($json['cards']);

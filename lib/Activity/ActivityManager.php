@@ -31,7 +31,6 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\Attachment;
-use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
@@ -46,19 +45,24 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Comments\IComment;
 use OCP\IUser;
+use OCP\Server;
 use OCP\L10N\IFactory;
+use Psr\Log\LoggerInterface;
 
 class ActivityManager {
 	public const DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED = 'DECK_NOAUTHOR_COMMENT_SYSTEM_ENFORCED';
-	private $manager;
-	private $userId;
-	private $permissionService;
-	private $boardMapper;
-	private $cardMapper;
-	private $attachmentMapper;
-	private $aclMapper;
-	private $stackMapper;
-	private $l10nFactory;
+
+	public const SUBJECT_PARAMS_MAX_LENGTH = 4000;
+	public const SHORTENED_DESCRIPTION_MAX_LENGTH = 2000;
+
+	private IManager $manager;
+	private ?string $userId;
+	private PermissionService $permissionService;
+	private BoardMapper $boardMapper;
+	private CardMapper $cardMapper;
+	private AclMapper $aclMapper;
+	private StackMapper $stackMapper;
+	private IFactory $l10nFactory;
 
 	public const DECK_OBJECT_BOARD = 'deck_board';
 	public const DECK_OBJECT_CARD = 'deck_card';
@@ -110,17 +114,15 @@ class ActivityManager {
 		BoardMapper $boardMapper,
 		CardMapper $cardMapper,
 		StackMapper $stackMapper,
-		AttachmentMapper $attachmentMapper,
 		AclMapper $aclMapper,
 		IFactory $l10nFactory,
-		$userId
+		?string $userId
 	) {
 		$this->manager = $manager;
 		$this->permissionService = $permissionsService;
 		$this->boardMapper = $boardMapper;
 		$this->cardMapper = $cardMapper;
 		$this->stackMapper = $stackMapper;
-		$this->attachmentMapper = $attachmentMapper;
 		$this->aclMapper = $aclMapper;
 		$this->l10nFactory = $l10nFactory;
 		$this->userId = $userId;
@@ -249,19 +251,6 @@ class ActivityManager {
 		try {
 			$event = $this->createEvent($objectType, $entity, $subject, $additionalParams, $author);
 			if ($event !== null) {
-				$json = json_encode($event->getSubjectParameters());
-				if (mb_strlen($json) > 4000) {
-					$params = json_decode(json_encode($event->getSubjectParameters()), true);
-
-					$newContent = $params['after'];
-					unset($params['before'], $params['after'], $params['card']['description']);
-
-					$params['after'] = mb_substr($newContent, 0, 2000);
-					if (mb_strlen($newContent) > 2000) {
-						$params['after'] .= '...';
-					}
-					$event->setSubject($event->getSubject(), $params);
-				}
 				$this->sendToUsers($event);
 			}
 		} catch (\Exception $e) {
@@ -323,10 +312,10 @@ class ActivityManager {
 		try {
 			$object = $this->findObjectForEntity($objectType, $entity);
 		} catch (DoesNotExistException $e) {
-			\OC::$server->getLogger()->error('Could not create activity entry for ' . $subject . '. Entity not found.', (array)$entity);
+			Server::get(LoggerInterface::class)->error('Could not create activity entry for ' . $subject . '. Entity not found.', (array)$entity);
 			return null;
 		} catch (MultipleObjectsReturnedException $e) {
-			\OC::$server->getLogger()->error('Could not create activity entry for ' . $subject . '. Entity not found.', (array)$entity);
+			Server::get(LoggerInterface::class)->error('Could not create activity entry for ' . $subject . '. Entity not found.', (array)$entity);
 			return null;
 		}
 
@@ -378,7 +367,15 @@ class ActivityManager {
 			case self::SUBJECT_CARD_USER_ASSIGN:
 			case self::SUBJECT_CARD_USER_UNASSIGN:
 				$subjectParams = $this->findDetailsForCard($entity->getId(), $subject);
-				break;
+
+				if (isset($additionalParams['after']) && $additionalParams['after'] instanceof \DateTimeInterface) {
+					$additionalParams['after'] = $additionalParams['after']->format('c');
+				}
+				if (isset($additionalParams['before']) && $additionalParams['before'] instanceof \DateTimeInterface) {
+					$additionalParams['before'] = $additionalParams['before']->format('c');
+				}
+
+			break;
 			case self::SUBJECT_ATTACHMENT_CREATE:
 			case self::SUBJECT_ATTACHMENT_UPDATE:
 			case self::SUBJECT_ATTACHMENT_DELETE:
@@ -410,12 +407,31 @@ class ActivityManager {
 
 		$subjectParams['author'] = $author === null ? $this->userId : $author;
 
+		$subjectParams = array_merge($subjectParams, $additionalParams);
+		$json = json_encode($subjectParams);
+		if (mb_strlen($json) > self::SUBJECT_PARAMS_MAX_LENGTH) {
+			$params = json_decode(json_encode($subjectParams), true);
+
+			if ($subject === self::SUBJECT_CARD_UPDATE_DESCRIPTION && isset($params['after'])) {
+				$newContent = $params['after'];
+				unset($params['before'], $params['after'], $params['card']['description']);
+
+				$params['after'] = mb_substr($newContent, 0, self::SHORTENED_DESCRIPTION_MAX_LENGTH);
+				if (mb_strlen($newContent) > self::SHORTENED_DESCRIPTION_MAX_LENGTH) {
+					$params['after'] .= '...';
+				}
+				$subjectParams = $params;
+			} else {
+				throw new \Exception('Subject parameters too long');
+			}
+		}
+
 		$event = $this->manager->generateEvent();
 		$event->setApp('deck')
 			->setType($eventType)
 			->setAuthor($subjectParams['author'])
 			->setObject($objectType, (int)$object->getId(), $object->getTitle())
-			->setSubject($subject, array_merge($subjectParams, $additionalParams))
+			->setSubject($subject, $subjectParams)
 			->setTimestamp(time());
 
 		if ($message !== null) {

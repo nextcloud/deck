@@ -63,7 +63,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 	 * @return array serialized data
 	 * @throws \ReflectionException
 	 */
-	public function jsonSerialize() {
+	public function jsonSerialize(): array {
 		$properties = get_object_vars($this);
 		$reflection = new \ReflectionClass($this);
 		$json = [];
@@ -72,6 +72,9 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 				$propertyReflection = $reflection->getProperty($property);
 				if (!$propertyReflection->isPrivate() && !in_array($property, $this->_resolvedProperties, true)) {
 					$json[$property] = $this->getter($property);
+					if ($json[$property] instanceof \DateTimeInterface) {
+						$json[$property] = $json[$property]->format('c');
+					}
 				}
 			}
 		}

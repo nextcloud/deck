@@ -25,6 +25,7 @@
 return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+		['name' => 'page#redirectToCard', 'url' => '/card/{cardId}', 'verb' => 'GET'],
 
 		// boards
 		['name' => 'board#index', 'url' => '/boards', 'verb' => 'GET'],
@@ -38,6 +39,7 @@ return [
 		['name' => 'board#updateAcl', 'url' => '/boards/{boardId}/acl/{aclId}', 'verb' => 'PUT'],
 		['name' => 'board#deleteAcl', 'url' => '/boards/{boardId}/acl/{aclId}', 'verb' => 'DELETE'],
 		['name' => 'board#clone', 'url' => '/boards/{boardId}/clone', 'verb' => 'POST'],
+		['name' => 'board#transferOwner', 'url' => '/boards/{boardId}/transferOwner', 'verb' => 'PUT'],
 
 		// stacks
 		['name' => 'stack#index', 'url' => '/stacks/{boardId}', 'verb' => 'GET'],

@@ -53,8 +53,8 @@
 			</div>
 
 			<div class="dashboard-column">
-				<h3>{{ t('deck', 'This week') }}</h3>
-				<div v-for="card in cardsByDueDate.thisWeek" :key="card.id">
+				<h3>{{ t('deck', 'Next 7 days') }}</h3>
+				<div v-for="card in cardsByDueDate.nextSevenDays" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
@@ -80,11 +80,11 @@
 
 <script>
 
-import Controls from '../Controls'
-import CardItem from '../cards/CardItem'
+import Controls from '../Controls.vue'
+import CardItem from '../cards/CardItem.vue'
 import { mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
-import GlobalSearchResults from '../search/GlobalSearchResults'
+import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 
 const FILTER_UPCOMING = 'upcoming'
 
@@ -160,7 +160,7 @@ export default {
 				overdue: [],
 				today: [],
 				tomorrow: [],
-				thisWeek: [],
+				nextSevenDays: [],
 				later: [],
 			}
 			dataset.forEach(card => {
@@ -180,7 +180,7 @@ export default {
 						all.tomorrow.push(card)
 					}
 					if (hours >= (48 - currentHour) && hours < (24 * 7)) {
-						all.thisWeek.push(card)
+						all.nextSevenDays.push(card)
 					}
 					if (hours >= (24 * 7)) {
 						all.later.push(card)

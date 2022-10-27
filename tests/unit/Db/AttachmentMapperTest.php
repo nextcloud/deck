@@ -26,12 +26,13 @@ namespace OCA\Deck\Db;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IDBConnection;
 use OCP\IUserManager;
-use Test\AppFramework\Db\MapperTestUtility;
+use OCP\Server;
+use Test\TestCase;
 
 /**
  * @group DB
  */
-class AttachmentMapperTest extends MapperTestUtility {
+class AttachmentMapperTest extends TestCase {
 
 	/** @var IDBConnection */
 	private $dbConnection;
@@ -52,7 +53,7 @@ class AttachmentMapperTest extends MapperTestUtility {
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->cardMapper = $this->createMock(CardMapper::class);
 
-		$this->dbConnection = \OC::$server->getDatabaseConnection();
+		$this->dbConnection = Server::get(IDBConnection::class);
 		$this->attachmentMapper = new AttachmentMapper(
 			$this->dbConnection,
 			$this->cardMapper,

@@ -1,11 +1,8 @@
-/*
- * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
+<?php
+/**
+ * @copyright Copyright (c) 2022 Raul Ferreira Fuentes <raul@nextcloud.com>
  *
- * @author Julius Härtl <jus@bitgrid.net>
- * @author Artem Anufrij <artem.anufrij@live.de>
- * @author Marin Treselj <marin@pixelipo.com>
- * @author Oskar Kurz <oskar.kurz@gmail.com>
- * @author Ryan Fletcher <ryan.fletcher@codepassion.ca>
+ * @author Raul Ferreira Fuentes <raul@nextcloud.com>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -23,6 +20,26 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+namespace OCA\Deck\Model;
 
-@import 'icons';
-@import 'print';
+use OCA\Deck\Db\Board;
+
+class BoardSummary extends Board {
+	private Board $board;
+
+	public function __construct(Board $board) {
+		parent::__construct();
+		$this->board = $board;
+	}
+
+	public function jsonSerialize(): array {
+		return [
+			'id' => $this->getId(),
+			'title' => $this->getTitle()
+		];
+	}
+
+	public function __call($name, $arguments) {
+		return $this->board->__call($name, $arguments);
+	}
+}

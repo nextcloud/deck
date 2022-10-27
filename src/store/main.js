@@ -26,15 +26,15 @@ import { loadState } from '@nextcloud/initial-state'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
-import { generateOcsUrl } from '@nextcloud/router'
-import { BoardApi } from '../services/BoardApi'
-import actions from './actions'
-import stack from './stack'
-import card from './card'
-import comment from './comment'
-import trashbin from './trashbin'
-import attachment from './attachment'
-import overview from './overview'
+import { generateOcsUrl, generateUrl } from '@nextcloud/router'
+import { BoardApi } from '../services/BoardApi.js'
+import actions from './actions.js'
+import stack from './stack.js'
+import card from './card.js'
+import comment from './comment.js'
+import trashbin from './trashbin.js'
+import attachment from './attachment.js'
+import overview from './overview.js'
 Vue.use(Vuex)
 
 const apiClient = new BoardApi()
@@ -485,6 +485,11 @@ export default new Vuex.Store({
 					commit('deleteAclFromCurrentBoard', acl)
 					dispatch('loadBoardById', acl.boardId)
 				})
+		},
+		async transferOwnership({ commit }, { boardId, newOwner }) {
+			await axios.put(generateUrl(`apps/deck/boards/${boardId}/transferOwner`), {
+				newOwner,
+			})
 		},
 	},
 })

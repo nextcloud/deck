@@ -23,7 +23,8 @@
 
 namespace OCA\Deck\Cron;
 
-use OC\BackgroundJob\Job;
+use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\Job;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Notification\NotificationHelper;
@@ -40,10 +41,12 @@ class ScheduledNotifications extends Job {
 	protected $logger;
 
 	public function __construct(
+		ITimeFactory $time,
 		CardMapper $cardMapper,
 		NotificationHelper $notificationHelper,
 		ILogger $logger
 	) {
+		parent::__construct($time);
 		$this->cardMapper = $cardMapper;
 		$this->notificationHelper = $notificationHelper;
 		$this->logger = $logger;

@@ -8,8 +8,7 @@
 					<span>{{ deletedStack.title }}</span>
 					<span class="timestamp">{{ relativeDate(deletedStack.deletedAt*1000) }}</span>
 				</div>
-				<button
-					:title="t('settings', 'Undo')"
+				<button :title="t('settings', 'Undo')"
 					class="app-navigation-entry-deleted-button icon-history"
 					@click="stackUndoDelete(deletedStack)" />
 			</li>
@@ -23,8 +22,7 @@
 					<span>{{ deletedCard.title }}</span>
 					<span class="timestamp">{{ relativeDate(deletedCard.deletedAt*1000) }}</span>
 				</div>
-				<button
-					:title="t('settings', 'Undo')"
+				<button :title="t('settings', 'Undo')"
 					class="app-navigation-entry-deleted-button icon-history"
 					@click="cardUndoDelete(deletedCard)" />
 			</li>
@@ -34,7 +32,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import relativeDate from '../../mixins/relativeDate'
+import relativeDate from '../../mixins/relativeDate.js'
 
 export default {
 	name: 'DeletedTabSidebar',
@@ -88,8 +86,6 @@ export default {
 
 		li {
 			display: flex;
-			height: 44px;
-
 			&:hover, &:active, &.focus {
 				button {
 					opacity: 1;
@@ -108,7 +104,10 @@ export default {
 		.title {
 			flex-grow: 2;
 			padding: 3px 0px;
-
+			> span:not(.timestamp) {
+				line-height: 1.2em;
+				margin-bottom: 5px;
+			}
 			.timestamp {
 				font-size: 0.9em;
 				color: var(--color-text-lighter);

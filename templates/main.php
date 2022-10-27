@@ -21,8 +21,4 @@
  *
  */
 
-
-style('deck', 'globalstyles');
 script('deck', 'deck-main');
-
-\OC::$server->getEventDispatcher()->dispatch('\OCP\Collaboration\Resources::loadAdditionalScripts');

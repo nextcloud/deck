@@ -30,6 +30,7 @@ use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignmentMapper;
+use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
@@ -41,36 +42,43 @@ use OCA\Deck\Event\AclUpdatedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
+use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IL10N;
+use OCP\DB\Exception as DbException;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCP\IUserManager;
 use OCA\Deck\BadRequestException;
+use OCP\IURLGenerator;
+use OCP\Server;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class BoardService {
-	private $boardMapper;
-	private $stackMapper;
-	private $labelMapper;
-	private $aclMapper;
-	/** @var IConfig */
-	private $config;
-	private $l10n;
-	private $permissionService;
-	private $notificationHelper;
-	private $assignedUsersMapper;
-	private $userManager;
-	private $groupManager;
-	private $userId;
-	private $activityManager;
-	private $eventDispatcher;
-	private $changeHelper;
-
-	private $boardsCache = null;
-
+	private BoardMapper $boardMapper;
+	private StackMapper $stackMapper;
+	private LabelMapper $labelMapper;
+	private AclMapper $aclMapper;
+	private IConfig $config;
+	private IL10N $l10n;
+	private PermissionService $permissionService;
+	private NotificationHelper $notificationHelper;
+	private AssignmentMapper $assignedUsersMapper;
+	private IUserManager $userManager;
+	private IGroupManager $groupManager;
+	private ?string $userId;
+	private ActivityManager $activityManager;
+	private IEventDispatcher $eventDispatcher;
+	private ChangeHelper $changeHelper;
+	private CardMapper $cardMapper;
+	private ?array $boardsCache = null;
+	private IURLGenerator $urlGenerator;
+	private IDBConnection $connection;
 
 	public function __construct(
 		BoardMapper $boardMapper,
@@ -82,12 +90,15 @@ class BoardService {
 		PermissionService $permissionService,
 		NotificationHelper $notificationHelper,
 		AssignmentMapper $assignedUsersMapper,
+		CardMapper $cardMapper,
 		IUserManager $userManager,
 		IGroupManager $groupManager,
 		ActivityManager $activityManager,
 		IEventDispatcher $eventDispatcher,
 		ChangeHelper $changeHelper,
-		$userId
+		IURLGenerator $urlGenerator,
+		IDBConnection $connection,
+		?string $userId
 	) {
 		$this->boardMapper = $boardMapper;
 		$this->stackMapper = $stackMapper;
@@ -104,6 +115,9 @@ class BoardService {
 		$this->eventDispatcher = $eventDispatcher;
 		$this->changeHelper = $changeHelper;
 		$this->userId = $userId;
+		$this->urlGenerator = $urlGenerator;
+		$this->cardMapper = $cardMapper;
+		$this->connection = $connection;
 	}
 
 	/**
@@ -515,14 +529,17 @@ class BoardService {
 		$acl->setPermissionManage($manage);
 		$newAcl = $this->aclMapper->insert($acl);
 
-		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE, [], $this->userId);
 		$this->notificationHelper->sendBoardShared((int)$boardId, $acl);
 		$this->boardMapper->mapAcl($newAcl);
 		$this->changeHelper->boardChanged($boardId);
 
+		$board = $this->boardMapper->find($boardId);
+		$this->clearBoardFromCache($board);
+
 		// TODO: use the dispatched event for this
 		try {
-			$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+			$resourceProvider = Server::get(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
 			$resourceProvider->invalidateAccessCache($boardId);
 		} catch (\Exception $e) {
 		}
@@ -578,18 +595,14 @@ class BoardService {
 	}
 
 	/**
-	 * @param $id
-	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws DbException
 	 * @throws DoesNotExistException
-	 * @throws \OCA\Deck\NoPermissionException
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
-	 * @throws BadRequestException
+	 * @throws NoPermissionException
+	 * @throws MultipleObjectsReturnedException
+	 * @throws ContainerExceptionInterface
+	 * @throws NotFoundExceptionInterface
 	 */
-	public function deleteAcl($id) {
-		if (is_numeric($id) === false) {
-			throw new BadRequestException('id must be a number');
-		}
-
+	public function deleteAcl(int $id): ?Acl {
 		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_SHARE);
 		/** @var Acl $acl */
 		$acl = $this->aclMapper->find($id);
@@ -608,16 +621,16 @@ class BoardService {
 		$version = \OCP\Util::getVersion()[0];
 		if ($version >= 16) {
 			try {
-				$resourceProvider = \OC::$server->query(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
+				$resourceProvider = Server::get(\OCA\Deck\Collaboration\Resources\ResourceProvider::class);
 				$resourceProvider->invalidateAccessCache($acl->getBoardId());
 			} catch (\Exception $e) {
 			}
 		}
-		$delete = $this->aclMapper->delete($acl);
 
+		$deletedAcl = $this->aclMapper->delete($acl);
 		$this->eventDispatcher->dispatchTyped(new AclDeletedEvent($acl));
 
-		return $delete;
+		return $deletedAcl;
 	}
 
 	/**
@@ -667,7 +680,47 @@ class BoardService {
 			$this->stackMapper->insert($newStack);
 		}
 
-		return $newBoard;
+		return $this->find($newBoard->getId());
+	}
+
+	public function transferBoardOwnership(int $boardId, string $newOwner, bool $changeContent = false): Board {
+		$this->connection->beginTransaction();
+		try {
+			$board = $this->boardMapper->find($boardId);
+			$previousOwner = $board->getOwner();
+			$this->clearBoardFromCache($board);
+			$this->aclMapper->deleteParticipantFromBoard($boardId, Acl::PERMISSION_TYPE_USER, $newOwner);
+			if (!$changeContent) {
+				try {
+					$this->addAcl($boardId, Acl::PERMISSION_TYPE_USER, $previousOwner, true, true, true);
+				} catch (DbException $e) {
+					if ($e->getReason() !== DbException::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+						throw $e;
+					}
+				}
+			}
+			$this->boardMapper->transferOwnership($previousOwner, $newOwner, $boardId);
+
+			// Optionally also change user assignments and card owner information
+			if ($changeContent) {
+				$this->assignedUsersMapper->remapAssignedUser($boardId, $previousOwner, $newOwner);
+				$this->cardMapper->remapCardOwner($boardId, $previousOwner, $newOwner);
+			}
+			$this->connection->commit();
+			return $this->boardMapper->find($boardId);
+		} catch (\Throwable $e) {
+			$this->connection->rollBack();
+			throw $e;
+		}
+	}
+
+	public function transferOwnership(string $owner, string $newOwner, bool $changeContent = false): \Generator {
+		$boards = $this->boardMapper->findAllByUser($owner);
+		foreach ($boards as $board) {
+			if ($board->getOwner() === $owner) {
+				yield $this->transferBoardOwnership($board->getId(), $newOwner, $changeContent);
+			}
+		}
 	}
 
 	private function enrichWithStacks($board, $since = -1) {
@@ -696,5 +749,24 @@ class BoardService {
 			return;
 		}
 		$board->setUsers(array_values($boardUsers));
+	}
+
+	public function getBoardUrl($endpoint) {
+		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . '#' . $endpoint;
+	}
+
+	private function clearBoardsCache() {
+		$this->boardsCache = null;
+	}
+
+	/**
+	 * Clean a given board data from the Cache
+	 */
+	private function clearBoardFromCache(Board $board) {
+		$boardId = $board->getId();
+		$boardOwnerId = $board->getOwner();
+
+		$this->boardMapper->flushCache($boardId, $boardOwnerId);
+		unset($this->boardsCache[$boardId]);
 	}
 }

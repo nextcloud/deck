@@ -47,6 +47,7 @@ use OCA\Deck\Listeners\FullTextSearchEventListener;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
+use OCA\Deck\Reference\CardReferenceProvider;
 use OCA\Deck\Search\CardCommentProvider;
 use OCA\Deck\Search\DeckProvider;
 use OCA\Deck\Service\PermissionService;
@@ -57,20 +58,22 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
+use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Comments\CommentsEntityEvent;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IConfig;
 use OCP\IDBConnection;
-use OCP\IGroup;
 use OCP\IGroupManager;
-use OCP\IServerContainer;
-use OCP\IUser;
+use OCP\IRequest;
+use OCP\Server;
 use OCP\IUserManager;
 use OCP\Notification\IManager as NotificationManager;
 use OCP\Share\IManager;
+use OCP\User\Events\UserDeletedEvent;
 use OCP\Util;
 use Psr\Container\ContainerInterface;
 
@@ -79,13 +82,16 @@ class Application extends App implements IBootstrap {
 
 	public const COMMENT_ENTITY_TYPE = 'deckCard';
 
-	/** @var IServerContainer */
-	private $server;
-
 	public function __construct(array $urlParams = []) {
 		parent::__construct(self::APP_ID, $urlParams);
 
-		$this->server = \OC::$server;
+		// TODO move this back to ::register after fixing the autoload issue
+		// (and use a listener class)
+		$container = $this->getContainer();
+		$eventDispatcher = $container->get(IEventDispatcher::class);
+		$eventDispatcher->addListener(RenderReferenceEvent::class, function () {
+			Util::addScript(self::APP_ID, self::APP_ID . '-card-reference');
+		});
 	}
 
 	public function boot(IBootContext $context): void {
@@ -124,8 +130,12 @@ class Application extends App implements IBootstrap {
 		$context->registerSearchProvider(CardCommentProvider::class);
 		$context->registerDashboardWidget(DeckWidget::class);
 
+		// reference widget
+		$context->registerReferenceProvider(CardReferenceProvider::class);
+		// $context->registerEventListener(RenderReferenceEvent::class, CardReferenceListener::class);
+
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
-		
+
 		// Event listening for full text search indexing
 		$context->registerEventListener(CardCreatedEvent::class, FullTextSearchEventListener::class);
 		$context->registerEventListener(CardUpdatedEvent::class, FullTextSearchEventListener::class);
@@ -141,33 +151,43 @@ class Application extends App implements IBootstrap {
 
 	private function registerUserGroupHooks(IUserManager $userManager, IGroupManager $groupManager): void {
 		$container = $this->getContainer();
+		/** @var IEventDispatcher $eventDispatcher */
+		$eventDispatcher = $container->get(IEventDispatcher::class);
 		// Delete user/group acl entries when they get deleted
-		$userManager->listen('\OC\User', 'postDelete', static function (IUser $user) use ($container) {
+		$eventDispatcher->addListener(UserDeletedEvent::class, static function (Event $event) use ($container): void {
+			if (!($event instanceof UserDeletedEvent)) {
+				return;
+			}
+			$user = $event->getUser();
 			// delete existing acl entries for deleted user
 			/** @var AclMapper $aclMapper */
-			$aclMapper = $container->query(AclMapper::class);
+			$aclMapper = $container->get(AclMapper::class);
 			$acls = $aclMapper->findByParticipant(Acl::PERMISSION_TYPE_USER, $user->getUID());
 			foreach ($acls as $acl) {
 				$aclMapper->delete($acl);
 			}
 			// delete existing user assignments
-			$assignmentMapper = $container->query(AssignmentMapper::class);
+			$assignmentMapper = $container->get(AssignmentMapper::class);
 			$assignments = $assignmentMapper->findByParticipant($user->getUID());
 			foreach ($assignments as $assignment) {
 				$assignmentMapper->delete($assignment);
 			}
 
 			/** @var BoardMapper $boardMapper */
-			$boardMapper = $container->query(BoardMapper::class);
+			$boardMapper = $container->get(BoardMapper::class);
 			$boards = $boardMapper->findAllByOwner($user->getUID());
 			foreach ($boards as $board) {
 				$boardMapper->delete($board);
 			}
 		});
 
-		$groupManager->listen('\OC\Group', 'postDelete', static function (IGroup $group) use ($container) {
+		$eventDispatcher->addListener(GroupDeletedEvent::class, static function (Event $event) use ($container): void {
+			if (!($event instanceof GroupDeletedEvent)) {
+				return;
+			}
+			$group = $event->getGroup();
 			/** @var AclMapper $aclMapper */
-			$aclMapper = $container->query(AclMapper::class);
+			$aclMapper = $container->get(AclMapper::class);
 			$aclMapper->findByParticipant(Acl::PERMISSION_TYPE_GROUP, $group->getGID());
 			$acls = $aclMapper->findByParticipant(Acl::PERMISSION_TYPE_GROUP, $group->getGID());
 			foreach ($acls as $acl) {
@@ -181,6 +201,7 @@ class Application extends App implements IBootstrap {
 			$event->addEntityCollection(self::COMMENT_ENTITY_TYPE, function ($name) {
 				/** @var CardMapper */
 				$cardMapper = $this->getContainer()->get(CardMapper::class);
+				/** @var PermissionService $permissionService */
 				$permissionService = $this->getContainer()->get(PermissionService::class);
 
 				try {
@@ -203,7 +224,7 @@ class Application extends App implements IBootstrap {
 		$resourceManager->registerResourceProvider(ResourceProviderCard::class);
 
 		$symfonyAdapter->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
-			if (strpos(\OC::$server->getRequest()->getPathInfo(), '/call/') === 0) {
+			if (strpos(Server::get(IRequest::class)->getPathInfo(), '/call/') === 0) {
 				// Talk integration has its own entrypoint which already includes collections handling
 				return;
 			}

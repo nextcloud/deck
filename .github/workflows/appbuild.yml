@@ -1,7 +1,11 @@
 name: Package build
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
+      - master
+      - stable*
 
 jobs:
   build:
@@ -12,15 +16,15 @@ jobs:
         node-version: [14.x]
 
     steps:
-    - uses: actions/checkout@v2.4.0
+    - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2.5.1
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
     - name: Set up npm7
       run: npm i -g npm@7
     - name: Setup PHP
-      uses: shivammathur/setup-php@2.16.0
+      uses: shivammathur/setup-php@2.21.2
       with:
         php-version: '7.4'
         tools: composer
@@ -33,7 +37,7 @@ jobs:
         uname -a
         RUST_BACKTRACE=1 krankerl --version
         RUST_BACKTRACE=1 krankerl package
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: Deck app tarball
         path: build/artifacts/deck.tar.gz

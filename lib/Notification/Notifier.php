@@ -101,14 +101,11 @@ class Notifier implements INotifier {
 		switch ($notification->getSubject()) {
 			case 'card-assigned':
 				$cardId = $notification->getObjectId();
-				$boardId = $this->cardMapper->findBoardId($cardId);
+				$stack = $this->stackMapper->findStackFromCardId($cardId);
+				$boardId = $stack ? $stack->getBoardId() : null;
 				if (!$boardId) {
 					throw new AlreadyProcessedException();
 				}
-
-				$card = $this->cardMapper->find($cardId);
-				$stackId = $card->getStackId();
-				$stack = $this->stackMapper->find($stackId);
 
 				$initiator = $this->userManager->get($params[2]);
 				if ($initiator !== null) {
@@ -117,7 +114,7 @@ class Notifier implements INotifier {
 					$dn = $params[2];
 				}
 				$notification->setParsedSubject(
-					(string) $l->t('The card "%s" on "%s" has been assigned to you by %s.', [$params[0], $params[1], $dn])
+					$l->t('The card "%s" on "%s" has been assigned to you by %s.', [$params[0], $params[1], $dn])
 				);
 				$notification->setRichSubject(
 					$l->t('{user} has assigned the card {deck-card} on {deck-board} to you.'),
@@ -147,17 +144,14 @@ class Notifier implements INotifier {
 				break;
 			case 'card-overdue':
 				$cardId = $notification->getObjectId();
-				$boardId = $this->cardMapper->findBoardId($cardId);
+				$stack = $this->stackMapper->findStackFromCardId($cardId);
+				$boardId = $stack ? $stack->getBoardId() : null;
 				if (!$boardId) {
 					throw new AlreadyProcessedException();
 				}
 
-				$card = $this->cardMapper->find($cardId);
-				$stackId = $card->getStackId();
-				$stack = $this->stackMapper->find($stackId);
-
 				$notification->setParsedSubject(
-					(string) $l->t('The card "%s" on "%s" has reached its due date.', $params)
+					$l->t('The card "%s" on "%s" has reached its due date.', $params)
 				);
 				$notification->setRichSubject(
 					$l->t('The card {deck-card} on {deck-board} has reached its due date.'),
@@ -182,14 +176,11 @@ class Notifier implements INotifier {
 				break;
 			case 'card-comment-mentioned':
 				$cardId = $notification->getObjectId();
-				$boardId = $this->cardMapper->findBoardId($cardId);
+				$stack = $this->stackMapper->findStackFromCardId($cardId);
+				$boardId = $stack ? $stack->getBoardId() : null;
 				if (!$boardId) {
 					throw new AlreadyProcessedException();
 				}
-
-				$card = $this->cardMapper->find($cardId);
-				$stackId = $card->getStackId();
-				$stack = $this->stackMapper->find($stackId);
 
 				$initiator = $this->userManager->get($params[2]);
 				if ($initiator !== null) {
@@ -198,7 +189,7 @@ class Notifier implements INotifier {
 					$dn = $params[2];
 				}
 				$notification->setParsedSubject(
-					(string) $l->t('%s has mentioned you in a comment on "%s".', [$dn, $params[0]])
+					$l->t('%s has mentioned you in a comment on "%s".', [$dn, $params[0]])
 				);
 				$notification->setRichSubject(
 					$l->t('{user} has mentioned you in a comment on {deck-card}.'),
@@ -235,7 +226,7 @@ class Notifier implements INotifier {
 					$dn = $params[1];
 				}
 				$notification->setParsedSubject(
-					(string) $l->t('The board "%s" has been shared with you by %s.', [$params[0], $dn])
+					$l->t('The board "%s" has been shared with you by %s.', [$params[0], $dn])
 				);
 				$notification->setRichSubject(
 					$l->t('{user} has shared {deck-board} with you.'),

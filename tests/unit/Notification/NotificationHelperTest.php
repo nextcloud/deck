@@ -114,17 +114,18 @@ class NotificationHelperTest extends \Test\TestCase {
 	}
 
 	public function testSendCardDuedate() {
-		$this->config->expects($this->at(0))
+		$param1 = ['foo', 'bar', 'asd'];
+		$param2 = 'deck';
+		$param3 = 'board:234:notify-due';
+		$DUE_ASSIGNED = ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED;
+
+		$this->config->expects($this->exactly(3))
 			->method('getUserValue')
-			->with('foo', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
-			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ALL);
-		$this->config->expects($this->at(1))
-			->method('getUserValue')
-			->with('bar', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
-			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ALL);
-		$this->config->expects($this->at(2))
-			->method('getUserValue')
-			->with('asd', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
+			->withConsecutive(
+				[$param1[0], $param2, $param3, $DUE_ASSIGNED],
+				[$param1[1], $param2, $param3, $DUE_ASSIGNED],
+				[$param1[2], $param2, $param3, $DUE_ASSIGNED],
+			)
 			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ALL);
 
 		$card = Card::fromParams([
@@ -180,24 +181,12 @@ class NotificationHelperTest extends \Test\TestCase {
 		$n3->expects($this->once())->method('setSubject')->with('card-overdue', ['MyCardTitle', 'MyBoardTitle'])->willReturn($n3);
 		$n3->expects($this->once())->method('setDateTime')->willReturn($n3);
 
-		$this->notificationManager->expects($this->at(0))
+		$this->notificationManager->expects($this->exactly(3))
 			->method('createNotification')
-			->willReturn($n1);
-		$this->notificationManager->expects($this->at(1))
+			->willReturnOnConsecutiveCalls($n1, $n2, $n3);
+		$this->notificationManager->expects($this->exactly(3))
 			->method('notify')
-			->with($n1);
-		$this->notificationManager->expects($this->at(2))
-			->method('createNotification')
-			->willReturn($n2);
-		$this->notificationManager->expects($this->at(3))
-			->method('notify')
-			->with($n2);
-		$this->notificationManager->expects($this->at(4))
-			->method('createNotification')
-			->willReturn($n3);
-		$this->notificationManager->expects($this->at(5))
-			->method('notify')
-			->with($n3);
+			->withConsecutive([$n1], [$n2], [$n3]);
 
 		$this->cardMapper->expects($this->once())
 			->method('markNotified')
@@ -207,18 +196,19 @@ class NotificationHelperTest extends \Test\TestCase {
 	}
 
 	public function testSendCardDuedateAssigned() {
-		$this->config->expects($this->at(0))
+		$param1 = ['foo', 'bar', 'asd'];
+		$param2 = 'deck';
+		$param3 = 'board:234:notify-due';
+		$DUE_ASSIGNED = ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED;
+
+		$this->config->expects($this->exactly(3))
 			->method('getUserValue')
-			->with('foo', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
-			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED);
-		$this->config->expects($this->at(1))
-			->method('getUserValue')
-			->with('bar', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
-			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED);
-		$this->config->expects($this->at(2))
-			->method('getUserValue')
-			->with('asd', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
-			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED);
+			->withConsecutive(
+				[$param1[0], $param2, $param3, $DUE_ASSIGNED],
+				[$param1[1], $param2, $param3, $DUE_ASSIGNED],
+				[$param1[2], $param2, $param3, $DUE_ASSIGNED]
+			)
+			->willReturn($DUE_ASSIGNED);
 
 		$users = [
 			new DummyUser('foo'), new DummyUser('bar'), new DummyUser('asd')
@@ -278,24 +268,12 @@ class NotificationHelperTest extends \Test\TestCase {
 		$n3->expects($this->once())->method('setSubject')->with('card-overdue', ['MyCardTitle', 'MyBoardTitle'])->willReturn($n3);
 		$n3->expects($this->once())->method('setDateTime')->willReturn($n3);
 
-		$this->notificationManager->expects($this->at(0))
+		$this->notificationManager->expects($this->exactly(3))
 			->method('createNotification')
-			->willReturn($n1);
-		$this->notificationManager->expects($this->at(1))
+			->willReturnOnConsecutiveCalls($n1, $n2, $n3);
+		$this->notificationManager->expects($this->exactly(3))
 			->method('notify')
-			->with($n1);
-		$this->notificationManager->expects($this->at(2))
-			->method('createNotification')
-			->willReturn($n2);
-		$this->notificationManager->expects($this->at(3))
-			->method('notify')
-			->with($n2);
-		$this->notificationManager->expects($this->at(4))
-			->method('createNotification')
-			->willReturn($n3);
-		$this->notificationManager->expects($this->at(5))
-			->method('notify')
-			->with($n3);
+			->withConsecutive([$n1], [$n2], [$n3]);
 
 		$this->cardMapper->expects($this->once())
 			->method('markNotified')
@@ -306,18 +284,20 @@ class NotificationHelperTest extends \Test\TestCase {
 
 
 	public function testSendCardDuedateNever() {
-		$this->config->expects($this->at(0))
+		$param1 = ['foo', 'bar', 'asd'];
+		$param2 = 'deck';
+		$param3 = 'board:234:notify-due';
+		$DUE_ASSIGNED = ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED;
+		$DUE_OFF = ConfigService::SETTING_BOARD_NOTIFICATION_DUE_OFF;
+
+		$this->config->expects($this->exactly(3))
 			->method('getUserValue')
-			->with('foo', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
-			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED);
-		$this->config->expects($this->at(1))
-			->method('getUserValue')
-			->with('bar', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
-			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED);
-		$this->config->expects($this->at(2))
-			->method('getUserValue')
-			->with('asd', 'deck', 'board:234:notify-due', ConfigService::SETTING_BOARD_NOTIFICATION_DUE_ASSIGNED)
-			->willReturn(ConfigService::SETTING_BOARD_NOTIFICATION_DUE_OFF);
+			->withConsecutive(
+				[$param1[0], $param2, $param3, $DUE_ASSIGNED],
+				[$param1[1], $param2, $param3, $DUE_ASSIGNED],
+				[$param1[2], $param2, $param3, $DUE_ASSIGNED]
+			)
+			->willReturnOnConsecutiveCalls($DUE_ASSIGNED, $DUE_ASSIGNED, $DUE_OFF);
 
 		$users = [
 			new DummyUser('foo'), new DummyUser('bar'), new DummyUser('asd')
@@ -370,18 +350,12 @@ class NotificationHelperTest extends \Test\TestCase {
 		$n2->expects($this->once())->method('setSubject')->with('card-overdue', ['MyCardTitle', 'MyBoardTitle'])->willReturn($n2);
 		$n2->expects($this->once())->method('setDateTime')->willReturn($n2);
 
-		$this->notificationManager->expects($this->at(0))
+		$this->notificationManager->expects($this->exactly(2))
 			->method('createNotification')
-			->willReturn($n1);
-		$this->notificationManager->expects($this->at(1))
+			->willReturnOnConsecutiveCalls($n1, $n2);
+		$this->notificationManager->expects($this->exactly(2))
 			->method('notify')
-			->with($n1);
-		$this->notificationManager->expects($this->at(2))
-			->method('createNotification')
-			->willReturn($n2);
-		$this->notificationManager->expects($this->at(3))
-			->method('notify')
-			->with($n2);
+			->withConsecutive([$n1], [$n2]);
 
 		$this->cardMapper->expects($this->once())
 			->method('markNotified')
@@ -423,10 +397,10 @@ class NotificationHelperTest extends \Test\TestCase {
 		$notification->expects($this->once())->method('setSubject')->with('card-assigned', ['MyCardTitle', 'MyBoardTitle', 'admin'])->willReturn($notification);
 		$notification->expects($this->once())->method('setDateTime')->willReturn($notification);
 
-		$this->notificationManager->expects($this->at(0))
+		$this->notificationManager->expects($this->once())
 			->method('createNotification')
 			->willReturn($notification);
-		$this->notificationManager->expects($this->at(1))
+		$this->notificationManager->expects($this->once())
 			->method('notify')
 			->with($notification);
 
@@ -451,10 +425,10 @@ class NotificationHelperTest extends \Test\TestCase {
 		$notification->expects($this->once())->method('setSubject')->with('board-shared', ['MyBoardTitle', 'admin'])->willReturn($notification);
 		$notification->expects($this->once())->method('setDateTime')->willReturn($notification);
 
-		$this->notificationManager->expects($this->at(0))
+		$this->notificationManager->expects($this->once())
 			->method('createNotification')
 			->willReturn($notification);
-		$this->notificationManager->expects($this->at(1))
+		$this->notificationManager->expects($this->once())
 			->method('notify')
 			->with($notification);
 
@@ -490,10 +464,10 @@ class NotificationHelperTest extends \Test\TestCase {
 		$notification->expects($this->once())->method('setSubject')->with('board-shared', ['MyBoardTitle', 'admin'])->willReturn($notification);
 		$notification->expects($this->once())->method('setDateTime')->willReturn($notification);
 
-		$this->notificationManager->expects($this->at(0))
+		$this->notificationManager->expects($this->once())
 			->method('createNotification')
 			->willReturn($notification);
-		$this->notificationManager->expects($this->at(1))
+		$this->notificationManager->expects($this->once())
 			->method('notify')
 			->with($notification);
 
@@ -540,19 +514,12 @@ class NotificationHelperTest extends \Test\TestCase {
 		$notification2->expects($this->once())->method('setSubject')->with('card-comment-mentioned', ['MyCard', 1, 'admin'])->willReturn($notification2);
 		$notification2->expects($this->once())->method('setDateTime')->willReturn($notification2);
 
-		$this->notificationManager->expects($this->at(0))
+		$this->notificationManager->expects($this->exactly(2))
 			->method('createNotification')
-			->willReturn($notification1);
-		$this->notificationManager->expects($this->at(1))
+			->willReturnOnConsecutiveCalls($notification1, $notification2);
+		$this->notificationManager->expects($this->exactly(2))
 			->method('notify')
-			->with($notification1);
-
-		$this->notificationManager->expects($this->at(2))
-			->method('createNotification')
-			->willReturn($notification2);
-		$this->notificationManager->expects($this->at(3))
-			->method('notify')
-			->with($notification2);
+			->withConsecutive([$notification1], [$notification2]);
 
 		$this->notificationHelper->sendMention($comment);
 	}

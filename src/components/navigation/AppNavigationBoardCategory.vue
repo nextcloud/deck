@@ -20,25 +20,27 @@
   -
   -->
 <template>
-	<AppNavigationItem v-if="boards.length > 0"
+	<NcAppNavigationItem v-if="boards.length > 0"
 		:title="text"
-		:icon="icon"
 		:to="to"
 		:exact="true"
 		:allow-collapse="collapsible"
 		:open="opened">
 		<AppNavigationBoard v-for="board in boardsSorted" :key="board.id" :board="board" />
-	</AppNavigationItem>
+		<template #icon>
+			<slot name="icon" />
+		</template>
+	</NcAppNavigationItem>
 </template>
 
 <script>
-import AppNavigationBoard from './AppNavigationBoard'
-import { AppNavigationItem } from '@nextcloud/vue'
+import AppNavigationBoard from './AppNavigationBoard.vue'
+import { NcAppNavigationItem } from '@nextcloud/vue'
 
 export default {
 	name: 'AppNavigationBoardCategory',
 	components: {
-		AppNavigationItem,
+		NcAppNavigationItem,
 		AppNavigationBoard,
 	},
 	props: {
@@ -51,10 +53,6 @@ export default {
 			required: true,
 		},
 		text: {
-			type: String,
-			required: true,
-		},
-		icon: {
 			type: String,
 			required: true,
 		},
@@ -78,7 +76,7 @@ export default {
 	},
 	computed: {
 		boardsSorted() {
-			return [...this.boards].sort((a, b) => (a.title < b.title) ? -1 : 1)
+			return [...this.boards].sort((a, b) => a.title.localeCompare(b.title))
 		},
 		collapsible() {
 			return this.boards.length > 0

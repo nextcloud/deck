@@ -16,6 +16,7 @@ Overall, Deck is easy to use. You can create boards, add users, share the Deck, 
 5. [Manage your board](#5-manage-your-board)
 6. [Import boards](#6-import-boards)
 7. [Search](#7-search)
+8. [New owner for the deck entities](#8-new-owner-for-the-deck-entities)
 
 ### 1. Create my first board
 In this example, we're going to create a board and share it with an other nextcloud user.
@@ -89,7 +90,7 @@ Steps:
 * Create the configuration file
 * Execute the import informing the import file path, data file and source as `Trello JSON`
 
-Create the configuration file respecting the [JSON Schema](https://github.com/nextcloud/deck/blob/master/lib/Service/fixtures/config-trelloJson-schema.json) for import `Trello JSON`
+Create the configuration file respecting the [JSON Schema](https://github.com/nextcloud/deck/blob/master/lib/Service/Importer/fixtures/config-trelloJson-schema.json) for import `Trello JSON`
 
 Example configuration file:
 ```json
@@ -119,7 +120,7 @@ https://api.trello.com/1/members/me/boards?key={yourKey}&token={yourToken}&field
   This ID you will use in the configuration file in the `board` property
 * Create the configuration file
 
-Create the configuration file respecting the [JSON Schema](https://github.com/nextcloud/deck/blob/master/lib/Service/fixtures/config-trelloApi-schema.json) for import `Trello JSON`
+Create the configuration file respecting the [JSON Schema](https://github.com/nextcloud/deck/blob/master/lib/Service/Importer/fixtures/config-trelloApi-schema.json) for import `Trello JSON`
 
 Example configuration file:
 ```json
@@ -158,4 +159,22 @@ For example the search `project tag:ToDo assigned:alice assigned:bob` will retur
 
 Other text tokens will be used to perform a case-insensitive search on the card title and description
 
-In addition wuotes can be used to pass a query with spaces, e.g. `"Exact match with spaces"` or `title:"My card"`.
+In addition, quotes can be used to pass a query with spaces, e.g. `"Exact match with spaces"` or `title:"My card"`.
+
+### 8. New owner for the deck entities
+You can transfer ownership of boards, cards, etc to a new user, using `occ` command `deck:transfer-ownership`
+
+```bash
+php occ deck:transfer-ownership previousOwner newOwner
+```
+
+The transfer will preserve card details linked to the old owner, which can also be remapped by using the `--remap` option on the occ command.
+```bash
+php occ deck:transfer-ownership --remap previousOwner newOwner
+```
+
+Individual boards can be transferred by adding the id of the board to the command:
+
+```bash
+php occ deck:transfer-ownership previousOwner newOwner 123
+```

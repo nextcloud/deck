@@ -29,14 +29,13 @@ namespace OCA\Deck\Sharing;
 use OC\Files\Filesystem;
 use OCA\Deck\Service\ConfigService;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Server;
 use OCP\Share\Events\VerifyMountPointEvent;
 use OCP\Share\IShare;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 class Listener {
-
-	/** @var ConfigService */
-	private $configService;
+	private ConfigService $configService;
 
 	public function __construct(ConfigService $configService) {
 		$this->configService = $configService;
@@ -52,13 +51,13 @@ class Listener {
 
 	public static function listenPreShare(GenericEvent $event): void {
 		/** @var self $listener */
-		$listener = \OC::$server->query(self::class);
+		$listener = Server::get(self::class);
 		$listener->overwriteShareTarget($event);
 	}
 
 	public static function listenVerifyMountPointEvent(VerifyMountPointEvent $event): void {
 		/** @var self $listener */
-		$listener = \OC::$server->query(self::class);
+		$listener = Server::get(self::class);
 		$listener->overwriteMountPoint($event);
 	}
 
@@ -102,7 +101,7 @@ class Listener {
 				}
 			}
 
-			$parent = $this->configService->getAttachmentFolder();
+			$parent = $this->configService->getAttachmentFolder($userId);
 			$event->setParent($parent);
 			if (!$event->getView()->is_dir($parent)) {
 				$event->getView()->mkdir($parent);

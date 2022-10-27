@@ -16,7 +16,7 @@
 - 🚀 Get your project organized
 
 </description>
-    <version>1.7.0-alpha1</version>
+    <version>1.9.0-beta.1</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
@@ -31,11 +31,10 @@
     <screenshot>https://download.bitgrid.net/nextcloud/deck/screenshots/1.0/Deck-1.png</screenshot>
     <screenshot>https://download.bitgrid.net/nextcloud/deck/screenshots/1.0/Deck-2.png</screenshot>
     <dependencies>
-        <php min-version="7.3"/>
         <database min-version="9.4">pgsql</database>
         <database>sqlite</database>
         <database min-version="8.0">mysql</database>
-        <nextcloud min-version="24" max-version="24"/>
+        <nextcloud min-version="26" max-version="26"/>
     </dependencies>
     <background-jobs>
         <job>OCA\Deck\Cron\DeleteCron</job>
@@ -45,6 +44,7 @@
     <commands>
         <command>OCA\Deck\Command\UserExport</command>
         <command>OCA\Deck\Command\BoardImport</command>
+        <command>OCA\Deck\Command\TransferOwnership</command>
     </commands>
     <activity>
         <settings>

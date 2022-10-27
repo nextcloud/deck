@@ -27,6 +27,44 @@ use DateTime;
 use DateTimeZone;
 use Sabre\VObject\Component\VCalendar;
 
+/**
+ * @method string getTitle()
+ * @method string getDescription()
+ * @method string getDescriptionPrev()
+ * @method int getStackId()
+ * @method int getOrder()
+ * @method int getLastModified()
+ * @method int getCreatedAt()
+ * @method bool getArchived()
+ * @method bool getNotified()
+ *
+ * @method void setLabels(Label[] $labels)
+ * @method null|Label[] getLabels()
+ *
+ * @method void setAssignedUsers(Assignment[] $users)
+ * @method null|User[] getAssignedUsers()
+ *
+ * @method void setAttachments(Attachment[] $attachments)
+ * @method null|Attachment[] getAttachments()
+ *
+ * @method void setAttachmentCount(int $count)
+ * @method null|int getAttachmentCount()
+ *
+ * @method void setCommentsUnread(int $count)
+ * @method null|int getCommentsUnread()
+ *
+ * @method void setCommentsCount(int $count)
+ * @method null|int getCommentsCount()
+ *
+ * @method void setOwner(string $user)
+ * @method null|string getOwner()
+ *
+ * @method void setRelatedStack(Stack $stack)
+ * @method null|Stack getRelatedStack()
+ *
+ * @method void setRelatedBoard(Board $board)
+ * @method null|Board getRelatedBoard()
+ */
 class Card extends RelationalEntity {
 	public const TITLE_MAX_LENGTH = 255;
 
@@ -50,7 +88,7 @@ class Card extends RelationalEntity {
 	protected $deletedAt = 0;
 	protected $commentsUnread = 0;
 	protected $commentsCount = 0;
-	
+
 	protected $relatedStack = null;
 	protected $relatedBoard = null;
 
@@ -70,6 +108,7 @@ class Card extends RelationalEntity {
 		$this->addType('archived', 'boolean');
 		$this->addType('notified', 'boolean');
 		$this->addType('deletedAt', 'integer');
+		$this->addType('duedate', 'datetime');
 		$this->addRelation('labels');
 		$this->addRelation('assignedUsers');
 		$this->addRelation('attachments');
@@ -78,58 +117,13 @@ class Card extends RelationalEntity {
 		$this->addRelation('commentsUnread');
 		$this->addRelation('commentsCount');
 		$this->addResolvable('owner');
-		
+
 		$this->addRelation('relatedStack');
 		$this->addRelation('relatedBoard');
 	}
 
 	public function setDatabaseType($type) {
 		$this->databaseType = $type;
-	}
-
-	public function getDuedate($isoFormat = false) {
-		if ($this->duedate === null) {
-			return null;
-		}
-		$dt = new DateTime($this->duedate);
-		if (!$isoFormat && $this->databaseType === 'mysql') {
-			return $dt->format('Y-m-d H:i:s');
-		}
-		return $dt->format('c');
-	}
-
-	public function jsonSerialize() {
-		$json = parent::jsonSerialize();
-		$json['overdue'] = self::DUEDATE_FUTURE;
-		$due = strtotime($this->duedate);
-
-		$today = new DateTime();
-		$today->setTime(0, 0);
-
-		$match_date = new DateTime($this->duedate);
-
-		$match_date->setTime(0, 0);
-
-		$diff = $today->diff($match_date);
-		$diffDays = (integer) $diff->format('%R%a'); // Extract days count in interval
-
-		if ($due !== false) {
-			if ($diffDays === 1) {
-				$json['overdue'] = self::DUEDATE_NEXT;
-			}
-			if ($diffDays === 0) {
-				$json['overdue'] = self::DUEDATE_NOW;
-			}
-			if ($diffDays < 0) {
-				$json['overdue'] = self::DUEDATE_OVERDUE;
-			}
-		}
-		$json['duedate'] = $this->getDuedate(true);
-		unset($json['notified']);
-		unset($json['descriptionPrev']);
-		unset($json['relatedStack']);
-		unset($json['relatedBoard']);
-		return $json;
 	}
 
 	public function getCalendarObject(): VCalendar {
@@ -140,7 +134,7 @@ class Card extends RelationalEntity {
 			$creationDate = new DateTime();
 			$creationDate->setTimestamp($this->createdAt);
 			$event->DTSTAMP = $creationDate;
-			$event->DUE = new DateTime($this->getDuedate(true), new DateTimeZone('UTC'));
+			$event->DUE = new DateTime($this->getDuedate()->format('c'), new DateTimeZone('UTC'));
 		}
 		$event->add('RELATED-TO', 'deck-stack-' . $this->getStackId());
 

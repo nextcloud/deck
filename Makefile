@@ -30,6 +30,16 @@ build: clean-dist install-deps build-js
 
 release: clean-dist install-deps-nodev build-js
 
+lint: lint-js lint-php
+
+lint-js:
+	npm run lint
+	npm run stylelint
+
+lint-php:
+	composer run lint 1>/dev/null
+	composer run cs:check
+
 build-js: install-deps-js
 	npm run build
 
@@ -50,8 +60,7 @@ ifeq (, $(shell which phpunit 2> /dev/null))
 	php $(build_tools_directory)/phpunit.phar -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
 	php $(build_tools_directory)/phpunit.phar -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
 else
-	phpunit -c tests/phpunit.xml --coverage-clover build/php-unit.coverage.xml
-	phpunit -c tests/phpunit.integration.xml --coverage-clover build/php-integration.coverage.xml
+	phpunit -c tests/phpunit.integration.xml --testsuite=integration-database --coverage-clover build/php-integration.coverage.xml
 endif
 
 test-integration:

@@ -33,8 +33,8 @@
 			{{ board.title }}
 		</div>
 		<div class="board-list-avatars-cell" title="">
-			<Avatar :user="board.owner.uid" :display-name="board.owner.displayname" class="board-list-avatar" />
-			<Avatar v-for="user in limitedAcl"
+			<NcAvatar :user="board.owner.uid" :display-name="board.owner.displayname" class="board-list-avatar" />
+			<NcAvatar v-for="user in limitedAcl"
 				:key="user.id"
 				:user="user.participant.uid"
 				:display-name="user.participant.displayname"
@@ -46,12 +46,12 @@
 </template>
 
 <script>
-import { Avatar } from '@nextcloud/vue'
+import { NcAvatar } from '@nextcloud/vue'
 
 export default {
 	name: 'BoardItem',
 	components: {
-		Avatar,
+		NcAvatar,
 	},
 	props: {
 		board: {

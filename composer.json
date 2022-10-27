@@ -14,12 +14,12 @@
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
-		"christophwurst/nextcloud": "^21@dev",
 		"phpunit/phpunit": "^9",
 		"nextcloud/coding-standard": "^1.0.0",
 		"symfony/event-dispatcher": "^4.0",
 		"vimeo/psalm": "^4.3",
-		"php-parallel-lint/php-parallel-lint": "^1.2"
+		"php-parallel-lint/php-parallel-lint": "^1.2",
+		"nextcloud/ocp": "dev-master"
 	},
 	"config": {
 		"optimize-autoloader": true,
@@ -28,7 +28,7 @@
 			"composer/package-versions-deprecated": true
 		},
 		"platform": {
-			"php": "7.3"
+			"php": "7.4"
 		}
 	},
 	"scripts": {
@@ -36,6 +36,7 @@
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"cs:fix": "php-cs-fixer fix",
 		"psalm": "psalm",
+		"psalm:update-baseline": "psalm --update-baseline",
 		"psalm:fix": "psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType",
 		"test": [
 			"@test:unit",
@@ -43,5 +44,10 @@
 		],
 		"test:unit": "phpunit -c tests/phpunit.xml",
 		"test:integration": "phpunit -c tests/phpunit.integration.xml && cd tests/integration && ./run.sh"
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"OCP\\": "vendor/nextcloud/ocp/OCP"
+		}
 	}
 }

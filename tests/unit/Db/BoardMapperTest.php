@@ -27,13 +27,14 @@ use OCA\Deck\Service\CirclesService;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
+use OCP\Server;
 use Psr\Log\LoggerInterface;
-use Test\AppFramework\Db\MapperTestUtility;
+use Test\TestCase;
 
 /**
  * @group DB
  */
-class BoardMapperTest extends MapperTestUtility {
+class BoardMapperTest extends TestCase {
 
 	/** @var IDBConnection */
 	private $dbConnection;
@@ -56,19 +57,19 @@ class BoardMapperTest extends MapperTestUtility {
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
 
-		$this->dbConnection = \OC::$server->getDatabaseConnection();
+		$this->dbConnection = Server::get(IDBConnection::class);
 		$this->boardMapper = new BoardMapper(
 			$this->dbConnection,
-			\OC::$server->query(LabelMapper::class),
-			\OC::$server->query(AclMapper::class),
-			\OC::$server->query(StackMapper::class),
+			Server::get(LabelMapper::class),
+			Server::get(AclMapper::class),
+			Server::get(StackMapper::class),
 			$this->userManager,
 			$this->groupManager,
 			$this->createMock(CirclesService::class),
 			$this->createMock(LoggerInterface::class)
 		);
-		$this->aclMapper = \OC::$server->query(AclMapper::class);
-		$this->labelMapper = \OC::$server->query(LabelMapper::class);
+		$this->aclMapper = Server::get(AclMapper::class);
+		$this->labelMapper = Server::get(LabelMapper::class);
 
 		$this->boards = [
 			$this->boardMapper->insert($this->getBoard('MyBoard 1', 'user1')),
@@ -89,8 +90,7 @@ class BoardMapperTest extends MapperTestUtility {
 			$board->resetUpdatedFields();
 		}
 	}
-	/** @return Acl */
-	public function getAcl($type = 'user', $participant = 'admin', $edit = false, $share = false, $manage = false, $boardId = 123) {
+	public function getAcl($type = 'user', $participant = 'admin', $edit = false, $share = false, $manage = false, $boardId = 123): ACL {
 		$acl = new Acl();
 		$acl->setParticipant($participant);
 		$acl->setType('user');
@@ -101,8 +101,7 @@ class BoardMapperTest extends MapperTestUtility {
 		return $acl;
 	}
 
-	/** @return Board */
-	public function getBoard($title, $owner) {
+	public function getBoard($title, $owner): Board {
 		$board = new Board();
 		$board->setTitle($title);
 		$board->setOwner($owner);

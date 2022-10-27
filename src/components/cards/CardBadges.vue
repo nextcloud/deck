@@ -24,33 +24,42 @@
 	<div v-if="card" class="badges">
 		<div v-if="card.commentsCount > 0"
 			v-tooltip="commentsHint"
-			class="icon icon-comment"
-			:class="{ 'icon-comment--unread': card.commentsUnread > 0 }"
+			class="icon-badge"
 			@click.stop="openComments">
-			{{ card.commentsCount }}
+			<CommentUnreadIcon v-if="card.commentsUnread > 0" :size="16" />
+			<CommentIcon v-else :size="16" />
+			<span>{{ card.commentsCount }}</span>
 		</div>
 
-		<div v-if="card.description && checkListCount > 0" class="card-tasks icon icon-checkmark">
-			{{ checkListCheckedCount }}/{{ checkListCount }}
-		</div>
-		<div v-else-if="card.description.trim() && checkListCount == 0" class="icon icon-description" />
-
-		<div v-if="card.attachmentCount > 0" class="icon-attach icon icon-attach-dark">
-			{{ card.attachmentCount }}
+		<div v-if="card.description && checkListCount > 0" class="icon-badge">
+			<CheckmarkIcon :size="16" :title="t('deck', 'Todo items')" />
+			<span>{{ checkListCheckedCount }}/{{ checkListCount }}</span>
 		</div>
 
-		<AvatarList :users="card.assignedUsers" />
+		<TextIcon v-else-if="card.description && card.description.trim() && checkListCount == 0" :size="16" decorative />
+
+		<div v-if="card.attachmentCount > 0" class="icon-badge">
+			<AttachmentIcon :size="16" />
+			<span>{{ card.attachmentCount }}</span>
+		</div>
+
+		<NcAvatarList :users="card.assignedUsers" />
 
 		<CardMenu class="card-menu" :card="card" />
 	</div>
 </template>
 <script>
-import AvatarList from './AvatarList'
-import CardMenu from './CardMenu'
+import NcAvatarList from './AvatarList.vue'
+import CardMenu from './CardMenu.vue'
+import TextIcon from 'vue-material-design-icons/Text.vue'
+import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
+import CheckmarkIcon from 'vue-material-design-icons/CheckboxMarked.vue'
+import CommentIcon from 'vue-material-design-icons/Comment.vue'
+import CommentUnreadIcon from 'vue-material-design-icons/CommentAccount.vue'
 
 export default {
 	name: 'CardBadges',
-	components: { AvatarList, CardMenu },
+	components: { NcAvatarList, CardMenu, TextIcon, AttachmentIcon, CheckmarkIcon, CommentIcon, CommentUnreadIcon },
 	props: {
 		card: {
 			type: Object,
@@ -89,18 +98,13 @@ export default {
 		width: 100%;
 		flex-grow: 1;
 
-		.icon {
-			opacity: 0.5;
-			padding: 10px 20px;
-			padding-right: 4px;
-			margin-right: 5px;
-			background-position: left;
-			background-size: 16px;
+		.icon-badge {
+			opacity: .7;
+			display: flex;
+			margin-right: 2px;
+
 			span {
-				margin-left: 18px;
-			}
-			&.icon-comment--unread {
-				opacity: 1;
+				padding: 10px 2px;
 			}
 		}
 	}

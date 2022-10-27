@@ -20,134 +20,140 @@
   -
   -->
 <template>
-	<AppNavigationItem v-if="!editing"
+	<NcAppNavigationItem v-if="!editing"
 		:title="!deleted ? board.title : undoText"
 		:loading="loading"
 		:to="routeTo"
 		:undo="deleted"
+		:menu-placement="'auto'"
 		@undo="unDelete">
-		<AppNavigationIconBullet slot="icon" :color="board.color" />
+		<NcAppNavigationIconBullet slot="icon" :color="board.color" />
 
-		<AppNavigationCounter v-if="board.acl.length"
+		<NcAppNavigationCounter v-if="board.acl.length"
 			slot="counter"
 			class="icon-shared"
 			style="opacity: 0.5" />
 
 		<template v-if="!deleted" slot="actions">
 			<template v-if="!isDueSubmenuActive">
-				<ActionButton
-					icon="icon-info"
+				<NcActionButton icon="icon-info"
 					:close-after-click="true"
 					@click="actionDetails">
 					{{ t('deck', 'Board details') }}
-				</ActionButton>
-				<ActionButton v-if="canManage && !board.archived"
+				</NcActionButton>
+				<NcActionButton v-if="canManage && !board.archived"
 					icon="icon-rename"
 					:close-after-click="true"
 					@click="actionEdit">
 					{{ t('deck', 'Edit board') }}
-				</ActionButton>
-				<ActionButton v-if="canManage && !board.archived"
-					icon="icon-clone"
+				</NcActionButton>
+				<NcActionButton v-if="canManage && !board.archived"
 					:close-after-click="true"
 					@click="actionClone">
+					<template #icon>
+						<CloneIcon :size="20" decorative />
+					</template>
 					{{ t('deck', 'Clone board') }}
-				</ActionButton>
-				<ActionButton v-if="canManage && board.archived"
-					icon="icon-archive"
+				</NcActionButton>
+				<NcActionButton v-if="canManage && board.archived"
 					:close-after-click="true"
 					@click="actionUnarchive">
+					<template #icon>
+						<ArchiveIcon :size="20" decorative />
+					</template>
 					{{ t('deck', 'Unarchive board') }}
-				</ActionButton>
-				<ActionButton v-else-if="canManage && !board.archived"
-					icon="icon-archive"
+				</NcActionButton>
+				<NcActionButton v-else-if="canManage && !board.archived"
 					:close-after-click="true"
 					@click="actionArchive">
+					<template #icon>
+						<ArchiveIcon :size="20" decorative />
+					</template>
 					{{ t('deck', 'Archive board') }}
-				</ActionButton>
+				</NcActionButton>
 
-				<ActionButton v-if="!board.archived && board.acl.length === 0" :icon="board.settings['notify-due'] === 'off' ? 'icon-sound' : 'icon-sound-off'" @click="board.settings['notify-due'] === 'off' ? updateSetting('notify-due', 'all') : updateSetting('notify-due', 'off')">
+				<NcActionButton v-if="!board.archived && board.acl.length === 0" :icon="board.settings['notify-due'] === 'off' ? 'icon-sound' : 'icon-sound-off'" @click="board.settings['notify-due'] === 'off' ? updateSetting('notify-due', 'all') : updateSetting('notify-due', 'off')">
 					{{ board.settings['notify-due'] === 'off' ? t('deck', 'Turn on due date reminders') : t('deck', 'Turn off due date reminders') }}
-				</ActionButton>
+				</NcActionButton>
 			</template>
 
 			<!-- Due date reminder settings -->
 			<template v-if="isDueSubmenuActive">
-				<ActionButton
-					:icon="updateDueSetting ? 'icon-loading-small' : 'icon-view-previous'"
+				<NcActionButton :icon="updateDueSetting ? 'icon-loading-small' : 'icon-view-previous'"
 					:disabled="updateDueSetting"
 					@click="isDueSubmenuActive=false">
 					{{ t('deck', 'Due date reminders') }}
-				</ActionButton>
+				</NcActionButton>
 
-				<ActionButton
-					name="notification"
+				<NcActionButton name="notification"
 					icon="icon-sound"
 					:disabled="updateDueSetting"
 					:class="{ 'forced-active': board.settings['notify-due'] === 'all' }"
 					@click="updateSetting('notify-due', 'all')">
 					{{ t('deck', 'All cards') }}
-				</ActionButton>
-				<ActionButton
-					name="notification"
+				</NcActionButton>
+				<NcActionButton name="notification"
 					icon="icon-user"
 					:disabled="updateDueSetting"
 					:class="{ 'forced-active': board.settings['notify-due'] === 'assigned' }"
 					@click="updateSetting('notify-due', 'assigned')">
 					{{ t('deck', 'Assigned cards') }}
-				</ActionButton>
-				<ActionButton
-					name="notification"
+				</NcActionButton>
+				<NcActionButton name="notification"
 					icon="icon-sound-off"
 					:disabled="updateDueSetting"
 					:class="{ 'forced-active': board.settings['notify-due'] === 'off' }"
 					@click="updateSetting('notify-due', 'off')">
 					{{ t('deck', 'No notifications') }}
-				</ActionButton>
+				</NcActionButton>
 			</template>
-			<ActionButton v-else-if="!board.archived && board.acl.length > 0"
+			<NcActionButton v-else-if="!board.archived && board.acl.length > 0"
 				:title="t('deck', 'Due date reminders')"
 				:icon="dueDateReminderIcon"
 				@click="isDueSubmenuActive=true">
 				{{ dueDateReminderText }}
-			</ActionButton>
+			</NcActionButton>
 
-			<ActionButton v-if="canManage && !isDueSubmenuActive"
+			<NcActionButton v-if="canManage && !isDueSubmenuActive"
 				icon="icon-delete"
 				:close-after-click="true"
 				@click="actionDelete">
 				{{ t('deck', 'Delete board') }}
-			</ActionButton>
+			</NcActionButton>
 		</template>
-	</AppNavigationItem>
+	</NcAppNavigationItem>
 	<div v-else-if="editing" class="board-edit">
-		<ColorPicker class="app-navigation-entry-bullet-wrapper" :value="`#${board.color}`" @input="updateColor">
+		<NcColorPicker class="app-navigation-entry-bullet-wrapper" :value="`#${board.color}`" @input="updateColor">
 			<div :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
-		</ColorPicker>
+		</NcColorPicker>
 		<form @submit.prevent.stop="applyEdit">
 			<input v-model="editTitle"
 				v-focus
 				type="text"
 				required>
 			<input type="submit" value="" class="icon-confirm">
-			<Actions><ActionButton icon="icon-close" @click.stop.prevent="cancelEdit" /></Actions>
+			<NcActions><NcActionButton icon="icon-close" @click.stop.prevent="cancelEdit" /></NcActions>
 		</form>
 	</div>
 </template>
 
 <script>
-import { AppNavigationIconBullet, AppNavigationCounter, AppNavigationItem, ColorPicker, Actions, ActionButton } from '@nextcloud/vue'
+import { NcAppNavigationIconBullet, NcAppNavigationCounter, NcAppNavigationItem, NcColorPicker, NcActions, NcActionButton } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
+import ArchiveIcon from 'vue-material-design-icons/Archive'
+import CloneIcon from 'vue-material-design-icons/ContentDuplicate'
 
 export default {
 	name: 'AppNavigationBoard',
 	components: {
-		AppNavigationIconBullet,
-		AppNavigationCounter,
-		AppNavigationItem,
-		ColorPicker,
-		Actions,
-		ActionButton,
+		NcAppNavigationIconBullet,
+		NcAppNavigationCounter,
+		NcAppNavigationItem,
+		NcColorPicker,
+		NcActions,
+		NcActionButton,
+		ArchiveIcon,
+		CloneIcon,
 	},
 	directives: {
 		ClickOutside,
@@ -257,7 +263,7 @@ export default {
 		},
 		actionDelete() {
 			OC.dialogs.confirmDestructive(
-				t('deck', 'Are you sure you want to delete the board {title}? This will delete all the data of this board.', { title: this.board.title }),
+				t('deck', 'Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards.', { title: this.board.title }),
 				t('deck', 'Delete the board?'),
 				{
 					type: OC.dialogs.YES_NO_BUTTONS,

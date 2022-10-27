@@ -26,38 +26,41 @@ namespace OCA\Deck\Cron;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Notification\NotificationHelper;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\ILogger;
+use PHPUnit\Framework\MockObject\MockObject;
+use Test\TestCase;
 
-class ScheduledNoificationsTest extends \Test\TestCase {
+class ScheduledNoificationsTest extends TestCase {
 
-	/** @var CardMapper|\PHPUnit\Framework\MockObject\MockObject */
+	/** @var ITimeFactory|MockObject */
+	protected $timeFactory;
+	/** @var CardMapper|MockObject */
 	protected $cardMapper;
-	/** @var NotificationHelper|\PHPUnit\Framework\MockObject\MockObject */
+	/** @var NotificationHelper|MockObject */
 	protected $notificationHelper;
-	/** @var ILogger|\PHPUnit\Framework\MockObject\MockObject */
+	/** @var ILogger|MockObject */
 	protected $logger;
 	/** @var ScheduledNotifications */
 	protected $scheduledNotifications;
 
 	public function setUp(): void {
 		parent::setUp();
+		$this->timeFactory = $this->createMock(ITimeFactory::class);
 		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
 		$this->logger = $this->createMock(ILogger::class);
-		$this->scheduledNotifications = new ScheduledNotifications($this->cardMapper, $this->notificationHelper, $this->logger);
+		$this->scheduledNotifications = new ScheduledNotifications($this->timeFactory, $this->cardMapper, $this->notificationHelper, $this->logger);
 	}
 
-	public function testDeleteCron() {
+	public function testScheduledCron() {
 		$c1 = new Card();
 		$c2 = new Card();
 		$cards = [$c1, $c2];
 		$this->cardMapper->expects($this->once())
 			->method('findOverdue')
 			->willReturn($cards);
-		$this->notificationHelper->expects($this->at(0))
-			->method('sendCardDuedate')
-			->with($c1);
-		$this->notificationHelper->expects($this->at(1))
+		$this->notificationHelper->expects($this->exactly(2))
 			->method('sendCardDuedate')
 			->with($c1);
 		$this->scheduledNotifications->run(null);

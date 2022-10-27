@@ -24,9 +24,9 @@ Deck is a kanban style organization tool aimed at personal planning and project 
 ### 3rd-Party Integrations
 
 - [trello-to-deck](https://github.com/maxammann/trello-to-deck) - Migrates cards from Trello
-- [mail2deck](https://github.com/newroco/mail2deck) - Provides an "email in" solution 
+- [mail2deck](https://github.com/newroco/mail2deck) - Provides an "email in" solution
 - [A-deck](https://github.com/leoossa/A-deck) - Chrome Extension that allows to create new card in selected stack based on current tab
-- 
+
 ## Installation/Update
 
 This app is supposed to work on the two latest Nextcloud versions.
@@ -52,13 +52,31 @@ Please make sure you have installed the following dependencies: `make, which, ta
 
 Instead of setting everything up manually, you can just [download the nightly build](https://github.com/nextcloud/deck/releases/tag/nightly) instead. These builds are updated every 24 hours, and are pre-configured with all the needed dependencies.
 
+## Performance limitations
+
+Deck is not yet ready for intensive usage.
+A lot of database queries are generated when the number of boards, cards and attachments is high.
+For example, a user having access to 13 boards, with each board having on average 100 cards,
+and each card having on average 5 attachments,
+would generate 6500 database queries when doing the file related queries
+which would increase the page loading time significantly.
+
+Improvements on Nextcloud server and Deck itself will improve the situation.
+
 ## Developing
+
+### Nextcloud environment
+
+You need to setup a [development environment](https://docs.nextcloud.com/server/latest/developer_manual//getting_started/devenv.html) of the current nextcloud version. You can also alternatively install & run the [nextcloud docker container](https://github.com/juliushaertl/nextcloud-docker-dev).
+After the finished installation, you can clone the deck project directly in the `/[nextcloud-docker-dev-dir]/workspace/server/apps/` folder. 
 
 ### PHP
 
 Nothing to prepare, just dig into the code.
 
 ### JavaScript
+
+This requires at least Node 16 and npm 7 to be installed.
 
 Deck requires running a `make build-js` to install npm dependencies and build the JavaScript code using webpack. While developing you can also use `make watch` to rebuild everytime the code changes.
 

@@ -34,7 +34,7 @@ class AppTest extends TestCase {
 
 	public function setUp(): void {
 		parent::setUp();
-		$this->app = new \OCA\Deck\AppInfo\Application();
+		$this->app = \OCP\Server::get(\OCA\Deck\AppInfo\Application::class);
 		$this->container = $this->app->getContainer();
 	}
 

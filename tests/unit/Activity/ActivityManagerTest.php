@@ -26,7 +26,6 @@ namespace OCA\Deck\Activity;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\Attachment;
-use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
@@ -41,7 +40,7 @@ use OCP\IL10N;
 use OCP\IUser;
 use OCP\L10N\IFactory;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ActivityManagerTest extends TestCase {
 
@@ -57,8 +56,6 @@ class ActivityManagerTest extends TestCase {
 	private $cardMapper;
 	/** @var StackMapper|MockObject */
 	private $stackMapper;
-	/** @var AttachmentMapper|MockObject */
-	private $attachmentMapper;
 	/** @var AclMapper|MockObject */
 	private $aclMapper;
 	/** @var IFactory|MockObject */
@@ -74,7 +71,6 @@ class ActivityManagerTest extends TestCase {
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->stackMapper = $this->createMock(StackMapper::class);
-		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);
 		$this->aclMapper = $this->createMock(AclMapper::class);
 		$this->l10nFactory = $this->createMock(IFactory::class);
 		$this->l10n = $this->createMock(IL10N::class);
@@ -84,7 +80,6 @@ class ActivityManagerTest extends TestCase {
 			$this->boardMapper,
 			$this->cardMapper,
 			$this->stackMapper,
-			$this->attachmentMapper,
 			$this->aclMapper,
 			$this->l10nFactory,
 			$this->userId
@@ -93,7 +88,7 @@ class ActivityManagerTest extends TestCase {
 
 	public function testGetActivityFormatOwn() {
 		$managerClass = new \ReflectionClass(ActivityManager::class);
-		$this->l10n->expects($this->any())
+		$this->l10n->expects(self::any())
 			->method('t')
 			->will($this->returnCallback(function ($s) {
 				return $s;
@@ -108,40 +103,172 @@ class ActivityManagerTest extends TestCase {
 				if ($format !== '') {
 					$this->assertStringContainsString('{user}', $format);
 				} else {
-					/** @noinspection ForgottenDebugOutputInspection */
-					print_r('No activity string found for '. $constant . PHP_EOL);
+					self::addWarning('No activity string found for '. $constant);
 				}
 				$format = $this->activityManager->getActivityFormat('cz', $value, [], true);
 				if ($format !== '') {
 					$this->assertStringStartsWith('You', $format);
 				} else {
-					/** @noinspection ForgottenDebugOutputInspection */
-					print_r('No own activity string found for '. $constant . PHP_EOL);
+					self::addWarning('No own activity string found for '. $constant);
 				}
 			}
 		}
 	}
 
+	private function expectEventCreation($subject, $subjectParams) {
+		$event = $this->createMock(IEvent::class);
+		$this->manager->expects(self::once())
+			->method('generateEvent')
+			->willReturn($event);
+		$event->expects(self::once())->method('setApp')->willReturn($event);
+		$event->expects(self::once())->method('setType')->willReturn($event);
+		$event->expects(self::once())->method('setAuthor')->willReturn($event);
+		$event->expects(self::once())->method('setObject')->willReturn($event);
+		$event->expects(self::once())->method('setSubject')->with($subject, $subjectParams)->willReturn($event);
+		$event->expects(self::once())->method('setTimestamp')->willReturn($event);
+		return $event;
+	}
+
 	public function testCreateEvent() {
 		$board = new Board();
 		$board->setTitle('');
-		$this->boardMapper->expects($this->once())
+		$this->boardMapper->expects(self::once())
 			->method('find')
 			->willReturn($board);
-		$event = $this->createMock(IEvent::class);
-		$this->manager->expects($this->once())
-			->method('generateEvent')
-			->willReturn($event);
-		$event->expects($this->once())->method('setApp')->willReturn($event);
-		$event->expects($this->once())->method('setType')->willReturn($event);
-		$event->expects($this->once())->method('setAuthor')->willReturn($event);
-		$event->expects($this->once())->method('setObject')->willReturn($event);
-		$event->expects($this->once())->method('setSubject')->willReturn($event);
-		$event->expects($this->once())->method('setTimestamp')->willReturn($event);
+		$event = $this->expectEventCreation(ActivityManager::SUBJECT_BOARD_CREATE, [
+			'author' => 'admin'
+		]);
 		$actual = $this->invokePrivate($this->activityManager, 'createEvent', [
 			ActivityManager::DECK_OBJECT_BOARD,
 			$board,
 			ActivityManager::SUBJECT_BOARD_CREATE
+		]);
+		$this->assertEquals($event, $actual);
+	}
+
+	public function testCreateEventDescription() {
+		$board = new Board();
+		$board->setTitle('');
+		$this->boardMapper->expects(self::once())
+			->method('find')
+			->willReturn($board);
+
+		$card = Card::fromRow([
+			'id' => 123,
+			'title' => 'My card',
+			'description' => str_repeat('A', 1000),
+		]);
+		$this->cardMapper->expects(self::any())
+			->method('find')
+			->willReturn($card);
+
+		$stack = Stack::fromRow([]);
+		$this->stackMapper->expects(self::any())
+			->method('find')
+			->willReturn($stack);
+
+		$expectedCard = $card->jsonSerialize();
+		unset($expectedCard['description']);
+		$event = $this->expectEventCreation(ActivityManager::SUBJECT_CARD_UPDATE_DESCRIPTION, [
+			'card' => $expectedCard,
+			'stack' => $stack->jsonSerialize(),
+			'board' => $board->jsonSerialize(),
+			'diff' => true,
+			'author' => 'admin',
+			'after' => str_repeat('C', 2000),
+		]);
+
+		$actual = $this->invokePrivate($this->activityManager, 'createEvent', [
+			ActivityManager::DECK_OBJECT_CARD,
+			$card,
+			ActivityManager::SUBJECT_CARD_UPDATE_DESCRIPTION,
+			[
+				'before' => str_repeat('B', 2000),
+				'after' => str_repeat('C', 2000)
+			],
+		]);
+		$this->assertEquals($event, $actual);
+	}
+
+	public function testCreateEventLongDescription() {
+		$board = new Board();
+		$board->setTitle('');
+		$this->boardMapper->expects(self::once())
+			->method('find')
+			->willReturn($board);
+
+		$card = new Card();
+		$card->setDescription(str_repeat('A', 5000));
+		$card->setTitle('My card');
+		$card->setId(123);
+		$this->cardMapper->expects(self::any())
+			->method('find')
+			->willReturn($card);
+
+		$stack = new Stack();
+		$this->stackMapper->expects(self::any())
+			->method('find')
+			->willReturn($stack);
+
+		$expectedCard = $card->jsonSerialize();
+		unset($expectedCard['description']);
+		$event = $this->expectEventCreation(ActivityManager::SUBJECT_CARD_UPDATE_DESCRIPTION, [
+			'card' => $expectedCard,
+			'stack' => $stack->jsonSerialize(),
+			'board' => $board->jsonSerialize(),
+			'diff' => true,
+			'author' => 'admin',
+			'after' => str_repeat('C', 2000) . '...',
+		]);
+
+		$actual = $this->invokePrivate($this->activityManager, 'createEvent', [
+			ActivityManager::DECK_OBJECT_CARD,
+			$card,
+			ActivityManager::SUBJECT_CARD_UPDATE_DESCRIPTION,
+			[
+				'before' => str_repeat('B', 5000),
+				'after' => str_repeat('C', 5000)
+			],
+		]);
+		$this->assertEquals($event, $actual);
+	}
+
+	public function testCreateEventLabel() {
+		$board = Board::fromRow([
+			'title' => 'My board'
+		]);
+		$this->boardMapper->expects(self::once())
+			->method('find')
+			->willReturn($board);
+
+		$card = Card::fromParams([]);
+		$card->setDescription(str_repeat('A', 5000));
+		$card->setTitle('My card');
+		$card->setId(123);
+		$this->cardMapper->expects(self::any())
+			->method('find')
+			->willReturn($card);
+
+		$stack = Stack::fromParams([]);
+		$this->stackMapper->expects(self::any())
+			->method('find')
+			->willReturn($stack);
+
+		$event = $this->expectEventCreation(ActivityManager::SUBJECT_CARD_UPDATE_TITLE, [
+			'card' => [
+				'id' => 123,
+				'title' => 'My card',
+				'archived' => false,
+			],
+			'stack' => $stack,
+			'board' => $board,
+			'author' => 'admin',
+		]);
+
+		$actual = $this->invokePrivate($this->activityManager, 'createEvent', [
+			ActivityManager::DECK_OBJECT_CARD,
+			$card,
+			ActivityManager::SUBJECT_CARD_UPDATE_TITLE
 		]);
 		$this->assertEquals($event, $actual);
 	}
@@ -155,7 +282,7 @@ class ActivityManagerTest extends TestCase {
 
 	private function mockUser($uid) {
 		$user = $this->createMock(IUser::class);
-		$user->expects($this->any())
+		$user->expects(self::any())
 			->method('getUID')
 			->willReturn($uid);
 		return $user;
@@ -169,18 +296,21 @@ class ActivityManagerTest extends TestCase {
 			$this->mockUser('user2'),
 		];
 		$event = $this->createMock(IEvent::class);
-		$event->expects($this->at(0))
+
+		$event->expects(self::once())
 			->method('getObjectType')
 			->willReturn($objectType);
-		$event->expects($this->at(0))
+		$event->expects(self::once())
 			->method('getObjectId')
 			->willReturn(1);
-		$event->expects($this->at(2))
+		$event->expects(self::exactly(2))
 			->method('setAffectedUser')
-			->with('user1');
-		$event->expects($this->at(3))
-			->method('setAffectedUser')
-			->with('user2');
+			->withConsecutive(
+				['user1'],
+				['user2'],
+			)
+			->willReturnSelf();
+
 		$mapper = null;
 		switch ($objectType) {
 			case ActivityManager::DECK_OBJECT_BOARD:
@@ -190,16 +320,14 @@ class ActivityManagerTest extends TestCase {
 				$mapper = $this->cardMapper;
 				break;
 		}
-		$mapper->expects($this->once())
+		$mapper->expects(self::once())
 			->method('findBoardId')
 			->willReturn(123);
-		$this->permissionService->expects($this->once())
+		$this->permissionService->expects(self::once())
 			->method('findUsers')
 			->willReturn($users);
-		$this->manager->expects($this->at(0))
-			->method('publish')
-			->with($event);
-		$this->manager->expects($this->at(1))
+
+		$this->manager->expects(self::exactly(2))
 			->method('publish')
 			->with($event);
 		$this->invokePrivate($this->activityManager, 'sendToUsers', [$event]);
@@ -243,14 +371,14 @@ class ActivityManagerTest extends TestCase {
 		$card->setId(3);
 		$expected = null;
 		if ($objectType === ActivityManager::DECK_OBJECT_BOARD) {
-			$this->boardMapper->expects($this->once())
+			$this->boardMapper->expects(self::once())
 				->method('find')
 				->with(1)
 				->willReturn($board);
 			$expected = $board;
 		}
 		if ($objectType === ActivityManager::DECK_OBJECT_CARD) {
-			$this->cardMapper->expects($this->once())
+			$this->cardMapper->expects(self::once())
 				->method('find')
 				->with(3)
 				->willReturn($card);
@@ -266,11 +394,11 @@ class ActivityManagerTest extends TestCase {
 		$stack->setBoardId(999);
 		$board = new Board();
 		$board->setId(999);
-		$this->stackMapper->expects($this->once())
+		$this->stackMapper->expects(self::once())
 			->method('find')
 			->with(123)
 			->willReturn($stack);
-		$this->boardMapper->expects($this->once())->method('find')
+		$this->boardMapper->expects(self::once())->method('find')
 			->with(999)
 			->willReturn($board);
 		$this->assertEquals([
@@ -289,15 +417,15 @@ class ActivityManagerTest extends TestCase {
 		$stack->setBoardId(999);
 		$board = new Board();
 		$board->setId(999);
-		$this->cardMapper->expects($this->once())
+		$this->cardMapper->expects(self::once())
 			->method('find')
 			->with(555)
 			->willReturn($card);
-		$this->stackMapper->expects($this->once())
+		$this->stackMapper->expects(self::once())
 			->method('find')
 			->with(123)
 			->willReturn($stack);
-		$this->boardMapper->expects($this->once())->method('find')
+		$this->boardMapper->expects(self::once())->method('find')
 			->with(999)
 			->willReturn($board);
 		$this->assertEquals([
@@ -323,15 +451,15 @@ class ActivityManagerTest extends TestCase {
 		$stack->setBoardId(999);
 		$board = new Board();
 		$board->setId(999);
-		$this->cardMapper->expects($this->once())
+		$this->cardMapper->expects(self::once())
 			->method('find')
 			->with(555)
 			->willReturn($card);
-		$this->stackMapper->expects($this->once())
+		$this->stackMapper->expects(self::once())
 			->method('find')
 			->with(123)
 			->willReturn($stack);
-		$this->boardMapper->expects($this->once())->method('find')
+		$this->boardMapper->expects(self::once())->method('find')
 			->with(999)
 			->willReturn($board);
 		$this->assertEquals([

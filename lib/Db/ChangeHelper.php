@@ -24,6 +24,7 @@
 namespace OCA\Deck\Db;
 
 use OCP\ICacheFactory;
+use OCP\ICache;
 use OCP\IDBConnection;
 use OCP\IRequest;
 
@@ -31,13 +32,16 @@ class ChangeHelper {
 	public const TYPE_BOARD = 'boardChanged';
 	public const TYPE_CARD = 'cardChanged';
 
-	private $db;
+	private IDBConnection $db;
+	private ICache $cache;
+	private IRequest $request;
+	private ?string $userId;
 
 	public function __construct(
 		IDBConnection $db,
 		ICacheFactory $cacheFactory,
 		IRequest $request,
-		$userId
+		?string $userId
 	) {
 		$this->db = $db;
 		$this->cache = $cacheFactory->createDistributed('deck_changes');

@@ -2,6 +2,14 @@ name: PHPUnit
 
 on:
   pull_request:
+    paths:
+      - '.github/workflows/phpunit.yml'
+      - 'appinfo/**'
+      - 'lib/**'
+      - 'templates/**'
+      - 'tests/**'
+      - 'composer.json'
+      - 'composer.lock'
   push:
     branches:
       - master
@@ -18,7 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['7.3', '7.4']
+        php-versions: ['7.4', '8.0', '8.1']
         databases: ['sqlite', 'mysql', 'pgsql']
         server-versions: ['master']
 
@@ -26,7 +34,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres
+        image: postgres:14
         ports:
           - 4445:5432/tcp
         env:
@@ -44,7 +52,7 @@ jobs:
 
     steps:
       - name: Checkout server
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           repository: nextcloud/server
           ref: ${{ matrix.server-versions }}
@@ -57,12 +65,12 @@ jobs:
           git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
       - name: Checkout app
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@2.16.0
+        uses: shivammathur/setup-php@2.21.2
         with:
           php-version: ${{ matrix.php-versions }}
           tools: phpunit

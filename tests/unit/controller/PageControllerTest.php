@@ -24,32 +24,61 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\PermissionService;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IInitialStateService;
-use OCP\IL10N;
 use OCP\IRequest;
+use OCP\IConfig;
+use OCP\IURLGenerator;
+use PHPUnit\Framework\TestCase;
 
-class PageControllerTest extends \Test\TestCase {
+class PageControllerTest extends TestCase {
 	private $controller;
 	private $request;
-	private $l10n;
 	private $permissionService;
 	private $initialState;
 	private $configService;
 	private $eventDispatcher;
+	/**
+	 * @var mixed|CardMapper|\PHPUnit\Framework\MockObject\MockObject
+	 */
+	private $cardMapper;
+	/**
+	 * @var mixed|IURLGenerator|\PHPUnit\Framework\MockObject\MockObject
+	 */
+	private $urlGenerator;
+	/**
+	 * @var mixed|CardService|\PHPUnit\Framework\MockObject\MockObject
+	 */
+	private $cardService;
+	/** @var IConfig|\PHPUnit\Framework\MockObject\MockObject */
+	private $config;
 
 	public function setUp(): void {
-		$this->l10n = $this->createMock(IL10N::class);
 		$this->request = $this->createMock(IRequest::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->configService = $this->createMock(ConfigService::class);
 		$this->initialState = $this->createMock(IInitialStateService::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
+		$this->cardMapper = $this->createMock(CardMapper::class);
+		$this->urlGenerator = $this->createMock(IURLGenerator::class);
+		$this->cardService = $this->createMock(CardService::class);
+		$this->config = $this->createMock(IConfig::class);
 
 		$this->controller = new PageController(
-			'deck', $this->request, $this->permissionService, $this->initialState, $this->configService, $this->eventDispatcher
+			'deck',
+			$this->request,
+			$this->permissionService,
+			$this->initialState,
+			$this->configService,
+			$this->eventDispatcher,
+			$this->cardMapper,
+			$this->urlGenerator,
+			$this->cardService,
+			$this->config
 		);
 	}
 

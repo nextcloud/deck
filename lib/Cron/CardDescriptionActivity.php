@@ -24,7 +24,8 @@
 
 namespace OCA\Deck\Cron;
 
-use OC\BackgroundJob\Job;
+use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\Job;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\CardMapper;
 
@@ -35,7 +36,8 @@ class CardDescriptionActivity extends Job {
 	/** @var CardMapper */
 	private $cardMapper;
 
-	public function __construct(ActivityManager $activityManager, CardMapper $cardMapper) {
+	public function __construct(ITimeFactory $time, ActivityManager $activityManager, CardMapper $cardMapper) {
+		parent::__construct($time);
 		$this->activityManager = $activityManager;
 		$this->cardMapper = $cardMapper;
 	}

@@ -20,7 +20,7 @@
  *
  */
 
-import { AttachmentApi } from './../services/AttachmentApi'
+import { AttachmentApi } from './../services/AttachmentApi.js'
 import Vue from 'vue'
 
 const apiClient = new AttachmentApi()
@@ -84,6 +84,7 @@ export default {
 		async fetchAttachments({ commit }, cardId) {
 			const attachments = await apiClient.fetchAttachments(cardId)
 			commit('createAttachments', { cardId, attachments })
+			commit('cardSetAttachmentCount', { cardId, count: attachments.length })
 		},
 
 		async createAttachment({ commit }, { cardId, formData, onUploadProgress }) {

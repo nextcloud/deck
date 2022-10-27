@@ -21,11 +21,11 @@
   -->
 
 <template>
-	<Modal class="card-selector" @close="close">
+	<NcModal class="card-selector" @close="close">
 		<div class="modal-scroller">
 			<div v-if="!creating && !created" id="modal-inner" :class="{ 'icon-loading': loading }">
 				<h3>{{ t('deck', 'Create a new card') }}</h3>
-				<Multiselect v-model="selectedBoard"
+				<NcMultiselect v-model="selectedBoard"
 					:placeholder="t('deck', 'Select a board')"
 					:options="boards"
 					:disabled="loading"
@@ -44,9 +44,9 @@
 							<span>{{ props.option.title }}</span>
 						</span>
 					</template>
-				</Multiselect>
+				</NcMultiselect>
 
-				<Multiselect v-model="selectedStack"
+				<NcMultiselect v-model="selectedStack"
 					:placeholder="t('deck', 'Select a list')"
 					:options="stacksFromBoard"
 					:max-height="100"
@@ -71,10 +71,10 @@
 				</div>
 			</div>
 			<div v-else id="modal-inner">
-				<EmptyContent v-if="creating" icon="icon-loading">
+				<NcEmptyContent v-if="creating" icon="icon-loading">
 					{{ t('deck', 'Creating the new card …') }}
-				</EmptyContent>
-				<EmptyContent v-else-if="created" icon="icon-checkmark">
+				</NcEmptyContent>
+				<NcEmptyContent v-else-if="created" icon="icon-checkmark">
 					{{ t('deck', 'Card "{card}" was added to "{board}"', { card: pendingTitle, board: selectedBoard.title }) }}
 					<template #desc>
 						<button class="primary" @click="openNewCard">
@@ -84,28 +84,26 @@
 							{{ t('deck', 'Close') }}
 						</button>
 					</template>
-				</EmptyContent>
+				</NcEmptyContent>
 			</div>
 		</div>
-	</Modal>
+	</NcModal>
 </template>
 
 <script>
 import { generateUrl } from '@nextcloud/router'
-import Modal from '@nextcloud/vue/dist/Components/Modal'
-import Multiselect from '@nextcloud/vue/dist/Components/Multiselect'
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
+import { NcModal, NcMultiselect, NcEmptyContent } from '@nextcloud/vue'
 import axios from '@nextcloud/axios'
-import { CardApi } from './services/CardApi'
+import { CardApi } from './services/CardApi.js'
 
 const cardApi = new CardApi()
 
 export default {
 	name: 'CardCreateDialog',
 	components: {
-		EmptyContent,
-		Modal,
-		Multiselect,
+		NcEmptyContent,
+		NcModal,
+		NcMultiselect,
 	},
 	props: {
 		title: {
@@ -137,7 +135,7 @@ export default {
 	},
 	computed: {
 		isBoardAndStackChoosen() {
-			return !(this.selectedBoard === '')
+			return !(this.selectedBoard === '' || this.selectedStack === '')
 		},
 	},
 	beforeMount() {

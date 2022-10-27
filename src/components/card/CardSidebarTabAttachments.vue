@@ -21,15 +21,14 @@
   -->
 
 <template>
-	<AttachmentList
-		:card-id="card.id"
+	<AttachmentList :card-id="card.id"
 		:removable="true"
 		@delete-attachment="deleteAttachment"
 		@restore-attachment="restoreAttachment" />
 </template>
 
 <script>
-import AttachmentList from './AttachmentList'
+import AttachmentList from './AttachmentList.vue'
 export default {
 	name: 'CardSidebarTabAttachments',
 	components: {
