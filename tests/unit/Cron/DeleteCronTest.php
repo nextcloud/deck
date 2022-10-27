@@ -27,6 +27,7 @@ use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\Service\AttachmentService;
@@ -91,7 +92,7 @@ class DeleteCronTest extends TestCase {
 				[$boards[3]]
 			);
 
-		$cards = [ $this->getBoard(10) ];
+		$cards = [ $this->getCard(10) ];
 		$this->cardMapper->expects($this->once())
 			->method('findToDelete')
 			->willReturn($cards);
