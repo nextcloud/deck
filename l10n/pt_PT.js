@@ -68,6 +68,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "Alterações na aplicação Quadro",
     "A <strong>comment</strong> was created on a card" : "Um <strong>comentário</strong> foi criado num cartão",
     "Upcoming cards" : "Próximos cartões",
+    "Load more" : "Carregar mais",
     "Personal" : "Pessoal",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "O cartão \"%s\" em \"%s\" foi-lhe vinculado por %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{usuário} atribuiu-lhe o cartão {deck-card} no {deck-board}.",
@@ -118,6 +119,7 @@ OC.L10N.register(
     "Details" : "Detalhes",
     "Sharing" : "Partilha",
     "Tags" : "Etiquetas",
+    "Timeline" : "Linha do tempo",
     "Undo" : "Desfazer",
     "(Group)" : "(Grupo)",
     "Can edit" : "Can edit",
@@ -154,6 +156,7 @@ OC.L10N.register(
     "Archive board" : "Arquivar quadro",
     "No notifications" : "Sem notificações",
     "Delete board" : "Eliminar quadro",
+    "No reminder" : "Nenhum lembrete",
     "An error occurred" : "Ocorreu um erro",
     "Share" : "Partilhar",
     "This week" : "Esta semana"

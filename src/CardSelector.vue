@@ -21,10 +21,10 @@
   -->
 
 <template>
-	<Modal class="card-selector" @close="close">
+	<NcModal class="card-selector" @close="close">
 		<div id="modal-inner" :class="{ 'icon-loading': loading }">
 			<h3>{{ title }}</h3>
-			<Multiselect v-model="selectedBoard"
+			<NcMultiselect v-model="selectedBoard"
 				:placeholder="t('deck', 'Select a board')"
 				:options="boards"
 				:disabled="loading"
@@ -42,9 +42,9 @@
 						<span>{{ props.option.title }}</span>
 					</span>
 				</template>
-			</Multiselect>
+			</NcMultiselect>
 
-			<Multiselect v-model="selectedCard"
+			<NcMultiselect v-model="selectedCard"
 				:placeholder="t('deck', 'Select a card')"
 				:options="cardsFromBoard"
 				:disabled="loading || selectedBoard === ''"
@@ -57,20 +57,19 @@
 				{{ t('deck', 'Cancel') }}
 			</button>
 		</div>
-	</Modal>
+	</NcModal>
 </template>
 
 <script>
 import { generateUrl } from '@nextcloud/router'
-import Modal from '@nextcloud/vue/dist/Components/Modal'
-import Multiselect from '@nextcloud/vue/dist/Components/Multiselect'
+import { NcModal, NcMultiselect } from '@nextcloud/vue'
 import axios from '@nextcloud/axios'
 
 export default {
 	name: 'CardSelector',
 	components: {
-		Modal,
-		Multiselect,
+		NcModal,
+		NcMultiselect,
 	},
 	props: {
 		title: {

@@ -20,24 +20,24 @@
   -
   -->
 <template>
-	<AppNavigationItem v-if="!editing"
+	<NcAppNavigationItem v-if="!editing"
 		:title="t('deck', 'Add board')"
 		icon="icon-add"
 		@click.prevent.stop="startCreateBoard" />
 	<div v-else class="board-create">
-		<ColorPicker v-model="color" class="app-navigation-entry-bullet-wrapper">
+		<NcColorPicker v-model="color" class="app-navigation-entry-bullet-wrapper">
 			<div :style="{ backgroundColor: color }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
-		</ColorPicker>
+		</NcColorPicker>
 		<form @submit.prevent.stop="createBoard">
 			<input :placeholder="t('deck', 'Board name')" type="text" required>
 			<input type="submit" value="" class="icon-confirm">
-			<Actions><ActionButton icon="icon-close" @click.stop.prevent="cancelEdit" /></Actions>
+			<NcActions><NcActionButton icon="icon-close" @click.stop.prevent="cancelEdit" /></NcActions>
 		</form>
 	</div>
 </template>
 
 <script>
-import { ColorPicker, ActionButton, Actions, AppNavigationItem } from '@nextcloud/vue'
+import { NcColorPicker, NcActionButton, NcActions, NcAppNavigationItem } from '@nextcloud/vue'
 
 /**
  *
@@ -52,7 +52,7 @@ function randomColor() {
 
 export default {
 	name: 'AppNavigationAddBoard',
-	components: { ColorPicker, AppNavigationItem, ActionButton, Actions },
+	components: { NcColorPicker, NcAppNavigationItem, NcActionButton, NcActions },
 	directives: {},
 	props: {},
 	data() {

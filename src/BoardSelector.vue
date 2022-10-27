@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<Modal @close="close">
+	<NcModal @close="close">
 		<div id="modal-inner" :class="{ 'icon-loading': loading }">
 			<h1>{{ t('deck', 'Select the board to link to a project') }}</h1>
 			<input v-model="filter" type="text" :placeholder="t('deck', 'Search by board title')">
@@ -38,17 +38,17 @@
 				{{ t('deck', 'Select board') }}
 			</button>
 		</div>
-	</Modal>
+	</NcModal>
 </template>
 <script>
-import Modal from '@nextcloud/vue/dist/Components/Modal'
+import { NcModal } from '@nextcloud/vue'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 
 export default {
 	name: 'BoardSelector',
 	components: {
-		Modal,
+		NcModal,
 	},
 	data() {
 		return {

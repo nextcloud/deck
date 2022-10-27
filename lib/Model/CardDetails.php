@@ -54,7 +54,7 @@ class CardDetails extends Card {
 		$today = new DateTime();
 		$today->setTime(0, 0);
 
-		$match_date = $this->card->getDueDateTime();
+		$match_date = $this->card->getDuedate();
 		if (!$match_date) {
 			return Card::DUEDATE_FUTURE;
 		}

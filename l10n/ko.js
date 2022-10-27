@@ -4,6 +4,7 @@ OC.L10N.register(
     "You have created a new board {board}" : "새로운 보드{board}를 만들었습니다.",
     "Deck" : "덱",
     "Upcoming cards" : "다음 카드들",
+    "Load more" : "더 불러오기",
     "Personal" : "개인",
     "The card \"%s\" on \"%s\" has reached its due date." : "카드 \"%s\"(\"%s\"에 있음)의 만료 날짜가 다가왔습니다.",
     "The board \"%s\" has been shared with you by %s." : "\"%s\" 게시판을 %s 님이 공유했습니다.",
@@ -61,6 +62,7 @@ OC.L10N.register(
     "No due date" : "기한 없음",
     "Hide archived cards" : "보관된 카드 숨기기",
     "Show archived cards" : "보관된 카드 보기",
+    "Open details" : "자세한 정보 열기",
     "Details" : "세부사항",
     "Sharing" : "공유",
     "Tags" : "태그",
@@ -117,11 +119,11 @@ OC.L10N.register(
     "Delete board" : "게시판 삭제",
     "No reminder" : "알림 없음",
     "An error occurred" : "오류가 발생함",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "정말로 보드 {title}을 지우시겠습니까? 보드의 모든 데이터가 삭제됩니다.",
     "Delete the board?" : "보드를 삭제합니까?",
     "No results found" : "결과 없음",
     "Something went wrong" : "잘못된 접근",
     "Share" : "공유",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "정말로 보드 {title}을 지우시겠습니까? 보드의 모든 데이터가 삭제됩니다.",
     "This week" : "이번 주"
 },
 "nplurals=1; plural=0;");

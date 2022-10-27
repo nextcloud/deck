@@ -23,9 +23,9 @@
 import Vue from 'vue'
 import { generateUrl } from '@nextcloud/router'
 
-import CardCreateDialog from './CardCreateDialog'
-import { buildSelector } from './helpers/selector'
-import './init-collections'
+import CardCreateDialog from './CardCreateDialog.vue'
+import { buildSelector } from './helpers/selector.js'
+import './init-collections.js'
 
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken);

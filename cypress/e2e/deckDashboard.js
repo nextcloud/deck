@@ -4,7 +4,7 @@ const randUser = randHash()
 describe('Deck dashboard', function() {
 	const password = 'pass123'
 
-	before(function () {
+	before(function() {
 		cy.nextcloudCreateUser(randUser, password)
 	})
 
@@ -18,13 +18,12 @@ describe('Deck dashboard', function() {
         	.should('have.text', 'Upcoming cards')
 	})
 
-	it('Can see the default "Personal Board" created for user by default', function () {
+	it('Can see the default "Personal Board" created for user by default', function() {
 		const defaultBoard = 'Personal'
 
 		cy.openLeftSidebar()
-		cy.get('.app-navigation__list .app-navigation-entry')
-			.eq(1)
-			.find('ul.app-navigation-entry__children li.app-navigation-entry')
+		cy.get('.app-navigation-entry-wrapper[icon=icon-deck]')
+			.find('ul.app-navigation-entry__children .app-navigation-entry:contains(' + defaultBoard + ')')
 			.first()
 			.contains(defaultBoard)
 			.should('be.visible')

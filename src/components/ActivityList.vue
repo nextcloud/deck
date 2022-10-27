@@ -37,7 +37,7 @@
 <script>
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
-import ActivityEntry from './ActivityEntry'
+import ActivityEntry from './ActivityEntry.vue'
 import InfiniteLoading from 'vue-infinite-loading'
 
 const ACTIVITY_FETCH_LIMIT = 50

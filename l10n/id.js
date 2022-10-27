@@ -96,6 +96,7 @@ OC.L10N.register(
     "Invalid date, date format must be YYYY-MM-DD" : "Tanggal salah, format tanggal harus TTTT-BB-HH",
     "Personal planning and team project organization" : "Perencanaan pribadi dan pengelolaan proyek tim",
     "Card details" : "Detail kartu",
+    "Add board" : "Tambah papan",
     "Select the board to link to a project" : "Pilih papan untuk ditautkan ke proyek",
     "Search by board title" : "Cari berdasarkan judul papan",
     "Select board" : "Pilih papan",
@@ -212,7 +213,6 @@ OC.L10N.register(
     "Delete board" : "Hapus papan",
     "Board {0} deleted" : "{0} papan terhapus",
     "An error occurred" : "Terjadi kesalahan",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Apakah Anda yakin ingin menghapus papan {title}? Aksi ini akan menghapus seluruh data pada papan ini.",
     "Delete the board?" : "Hapus papan?",
     "Link to a board" : "Tautan ke papan",
     "Link to a card" : "Tautan ke kartu",
@@ -220,6 +220,7 @@ OC.L10N.register(
     "Maximum file size of {size} exceeded" : "Melampaui batas ukuran maksimal {size}",
     "Share" : "Bagikan",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Longgok adalah alat pengelolaan bergaya kanban yang dapat digunakan untuk perencanaan pribadi dan pengelolaan proyek bagi tim yang terintegrasi dengan Nextcloud.\n\n\n- 📥 Tambah tugas Anda dalam bentuk kartu berurutan\n- 📄 Tulis catatan dalam format Markdown\n- 🔖 Sematkan label untuk pengelompokan yang lebih baik\n- 👥 Bagikan dengan anggota tim, teman atau keluarga\n- 📎 Lampirkan berkas dan sematkan dalam deskripsi Markdown\n- 💬 Diskusikan dengan tim melalui komentar\n- ⚡ Lacak setiap perubahan pada aliran aktivitas\n- 🚀 Buat proyek Anda terkelola",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Apakah Anda yakin ingin menghapus papan {title}? Aksi ini akan menghapus seluruh data pada papan ini.",
     "This week" : "Pekan ini"
 },
 "nplurals=1; plural=0;");

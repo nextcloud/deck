@@ -67,16 +67,16 @@
 				</ActionButton>
 				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete list') }}
-				</ActionButton>
-			</Actions>
-			<Actions v-if="canEdit && !showArchived && !isArchived">
-				<ActionButton icon="icon-add" @click.stop="showAddCard=true">
+				</NcActionButton>
+			</NcActions>
+			<NcActions v-if="canEdit && !showArchived && !isArchived">
+				<NcActionButton icon="icon-add" @click.stop="showAddCard=true">
 					{{ t('deck', 'Add card') }}
-				</ActionButton>
-			</Actions>
+				</NcActionButton>
+			</NcActions>
 		</div>
 
-		<Modal v-if="modalArchivAllCardsShow" @close="modalArchivAllCardsShow=false">
+		<NcModal v-if="modalArchivAllCardsShow" @close="modalArchivAllCardsShow=false">
 			<div class="modal__content">
 				<h3 v-if="!showArchived">
 					{{ t('deck', 'Archive all cards in this list') }}
@@ -96,7 +96,7 @@
 					{{ t('deck', 'Cancel') }}
 				</button>
 			</div>
-		</Modal>
+		</NcModal>
 
 		<transition name="slide-top" appear>
 			<div v-if="showAddCard" class="stack__card-add">
@@ -146,22 +146,22 @@
 import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
 
-import { Actions, ActionButton, Modal } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { showError, showUndo } from '@nextcloud/dialogs'
-import CardItem from '../cards/CardItem'
+import CardItem from '../cards/CardItem.vue'
 
 import '@nextcloud/dialogs/styles/toast.scss'
-import ArchiveIcon from 'vue-material-design-icons/Archive'
+import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 
 export default {
 	name: 'Stack',
 	components: {
-		Actions,
-		ActionButton,
+		NcActions,
+		NcActionButton,
 		CardItem,
 		Container,
 		Draggable,
-		Modal,
+		NcModal,
 		ArchiveIcon,
 	},
 

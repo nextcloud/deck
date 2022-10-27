@@ -68,6 +68,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "שינויים ל<strong>יישומון החבילה</strong>",
     "A <strong>comment</strong> was created on a card" : "נוצרה <strong>הערה</strong> על כרטיס",
     "Upcoming cards" : "כרטיסים עתידיים",
+    "Load more" : "לטעון עוד",
     "Personal" : "אישי",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "הכרטיס \"%s\" שב־„%s” הוקצה אליך על ידי %s.",
     "The card \"%s\" on \"%s\" has reached its due date." : "הכרטיס „%s” שתחת „%s” הגיע למועד התפוגה שלו.",
@@ -136,6 +137,7 @@ OC.L10N.register(
     "Hide archived cards" : "הסתרת כרטיסים בארכיון",
     "Show archived cards" : "הצגת כרטיסים בארכיון",
     "Toggle compact mode" : "החלפת מצב חסכוני",
+    "Open details" : "פתיחת פרטים",
     "Details" : "פרטים",
     "Loading board" : "הלוח נטען",
     "No lists available" : "אין רשימות זמינות",
@@ -251,7 +253,6 @@ OC.L10N.register(
     "Only assigned cards" : "רק כרטיסים שהוקצו",
     "No reminder" : "אין תזכורת",
     "An error occurred" : "אירעה שגיאה",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "למחוק את הלוח {title}? פעולה זו תמחק את כל הנתונים של הלוח הזה.",
     "Delete the board?" : "למחוק את הלוח הזה?",
     "Loading filtered view" : "טוען תצוגה מסוננת",
     "No due" : "אין תאריך יעד",
@@ -268,6 +269,7 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "שיתוף {file} עם כרטיס חפיסה",
     "Share" : "שיתוף",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck הוא כלי ארגון בסגנון kanban המכוון לתכנון אישי ולארגון פרויקטים עבור צוותים המשולבים ב- Nextcloud.\n\n\n- 📥 הוסף את המשימות שלך לכרטיסים וסדר אותן\n- 📄 רשמו הערות נוספות ב-markdown\n- 🔖הקצה תוויות לארגון טוב עוד יותר\n- 👥 שתף עם הצוות שלך, חברים, או משפחה\n- 📎 צרף קבצים והטמע אותם בתיאור ה-markdown שלך\n- 💬 שוחח עם הצוות שלך באמצעות הערות\n- ⚡ עקוב אחר שינויים בזרם הפעילות\n- 🚀 ארגנו את הפרויקט שלכם",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "למחוק את הלוח {title}? פעולה זו תמחק את כל הנתונים של הלוח הזה.",
     "This week" : "השבוע"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

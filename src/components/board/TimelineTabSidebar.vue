@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import ActivityList from '../ActivityList'
+import ActivityList from '../ActivityList.vue'
 
 export default {
 	name: 'TimelineTabSidebar',
