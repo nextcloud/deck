@@ -98,7 +98,7 @@ OC.L10N.register(
     "Details" : "Деталі",
     "Loading board" : "Завантаження дошки",
     "Board not found" : "Дошку не знайдено",
-    "Sharing" : "Поділитись",
+    "Sharing" : "Поділитися",
     "Tags" : "Теги",
     "Deleted items" : "Вилучені елементи",
     "Timeline" : "Дії",
