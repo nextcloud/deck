@@ -14,7 +14,6 @@
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
-		"christophwurst/nextcloud": "dev-master",
 		"phpunit/phpunit": "^9",
 		"nextcloud/coding-standard": "^1.0.0",
 		"symfony/event-dispatcher": "^4.0",
@@ -45,5 +44,10 @@
 		],
 		"test:unit": "phpunit -c tests/phpunit.xml",
 		"test:integration": "phpunit -c tests/phpunit.integration.xml && cd tests/integration && ./run.sh"
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"OCP\\": "vendor/nextcloud/ocp/OCP"
+		}
 	}
 }
