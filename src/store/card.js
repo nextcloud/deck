@@ -183,7 +183,7 @@ export default {
 							}) !== -1
 						} else {
 							hasMatch = hasMatch && (card.title.toLowerCase().includes(filterOutQuotes(match).toLowerCase())
-								|| card.description.toLowerCase().includes(filterOutQuotes(match).toLowerCase()))
+								|| card.description.toLowerCase().includes(filterOutQuotes(match).toLowerCase()) || card.id === parseInt(filterOutQuotes(match)))
 						}
 						if (!hasMatch) {
 							return false

@@ -22,6 +22,7 @@
 
 <template>
 	<div v-if="card" class="badges">
+		<CardId v-if="idBadge" class="icon-badge" :card="card" />
 		<div v-if="card.commentsCount > 0"
 			v-tooltip="commentsHint"
 			class="icon-badge"
@@ -50,6 +51,7 @@
 </template>
 <script>
 import NcAvatarList from './AvatarList.vue'
+import CardId from './badges/CardId.vue'
 import CardMenu from './CardMenu.vue'
 import TextIcon from 'vue-material-design-icons/Text.vue'
 import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
@@ -59,7 +61,7 @@ import CommentUnreadIcon from 'vue-material-design-icons/CommentAccount.vue'
 
 export default {
 	name: 'CardBadges',
-	components: { NcAvatarList, CardMenu, TextIcon, AttachmentIcon, CheckmarkIcon, CommentIcon, CommentUnreadIcon },
+	components: { NcAvatarList, CardMenu, TextIcon, AttachmentIcon, CheckmarkIcon, CommentIcon, CommentUnreadIcon, CardId },
 	props: {
 		card: {
 			type: Object,
@@ -82,6 +84,9 @@ export default {
 			}
 			return null
 		},
+		idBadge() {
+			return this.$store.getters.config('cardIdBadge')
+		},
 	},
 	methods: {
 		openComments() {
@@ -103,7 +108,8 @@ export default {
 			display: flex;
 			margin-right: 2px;
 
-			span {
+			span,
+			&::v-deep span {
 				padding: 10px 2px;
 			}
 		}

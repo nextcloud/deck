@@ -73,6 +73,16 @@
 					</div>
 
 					<div>
+						<input id="toggle-idbadge"
+							v-model="cardIdBadge"
+							type="checkbox"
+							class="checkbox">
+						<label for="toggle-idbadge">
+							{{ t('deck', 'Show card ID badge') }}
+						</label>
+					</div>
+
+					<div>
 						<input id="toggle-calendar"
 							v-model="configCalendar"
 							type="checkbox"
@@ -166,6 +176,14 @@ export default {
 			},
 			set(newValue) {
 				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
+			},
+		},
+		cardIdBadge: {
+			get() {
+				return this.$store.getters.config('cardIdBadge')
+			},
+			set(newValue) {
+				this.$store.dispatch('setConfig', { cardIdBadge: newValue })
 			},
 		},
 		configCalendar: {

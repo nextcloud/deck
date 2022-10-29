@@ -71,6 +71,7 @@ class ConfigService {
 		$data = [
 			'calendar' => $this->isCalendarEnabled(),
 			'cardDetailsInModal' => $this->isCardDetailsInModal(),
+			'cardIdBadge' => $this->isCardIdBadgeEnabled()
 		];
 		if ($this->groupManager->isAdmin($this->getUserId())) {
 			$data['groupLimit'] = $this->get('groupLimit');
@@ -100,6 +101,11 @@ class ConfigService {
 					return false;
 				}
 				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardDetailsInModal', true);
+			case 'cardIdBadge':
+				if ($this->getUserId() === null) {
+					return false;
+				}
+				return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardIdBadge', false);
 		}
 		return false;
 	}
@@ -131,6 +137,16 @@ class ConfigService {
 		return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'board:' . $boardId . ':cardDetailsInModal', $defaultState);
 	}
 
+	public function isCardIdBadgeEnabled(): bool {
+		if ($this->getUserId() === null) {
+			return false;
+		}
+		$appConfigState = $this->config->getAppValue(Application::APP_ID, 'cardIdBadge', 'yes') === 'no';
+		$defaultState = (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardIdBadge', $appConfigState);
+
+		return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'cardIdBadge', $defaultState);
+	}
+
 	public function set($key, $value) {
 		if ($this->getUserId() === null) {
 			throw new NoPermissionException('Must be logged in to set user config');
@@ -151,6 +167,10 @@ class ConfigService {
 				break;
 			case 'cardDetailsInModal':
 				$this->config->setUserValue($this->getUserId(), Application::APP_ID, 'cardDetailsInModal', (string)$value);
+				$result = $value;
+				break;
+			case 'cardIdBadge':
+				$this->config->setUserValue($this->getUserId(), Application::APP_ID, 'cardIdBadge', (string)$value);
 				$result = $value;
 				break;
 			case 'board':
