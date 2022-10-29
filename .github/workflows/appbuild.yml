@@ -24,7 +24,7 @@ jobs:
     - name: Set up npm7
       run: npm i -g npm@7
     - name: Setup PHP
-      uses: shivammathur/setup-php@2.21.2
+      uses: shivammathur/setup-php@2.22.0
       with:
         php-version: '7.4'
         tools: composer
