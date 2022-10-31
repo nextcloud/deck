@@ -138,7 +138,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 
 	public function extendData(Attachment $attachment) {
 		$userFolder = $this->rootFolder->getUserFolder($this->userId);
-		$share = $this->shareProvider->getShareById($attachment->getId());
+		$share = $this->getShareForAttachment($attachment);
 		$files = $userFolder->getById($share->getNode()->getId());
 		if (count($files) === 0) {
 			return $attachment;
@@ -161,7 +161,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		// Problem: Folders
 		/** @psalm-suppress InvalidCatch */
 		try {
-			$share = $this->shareProvider->getShareById($attachment->getId());
+			$share = $this->getShareForAttachment($attachment);
 		} catch (ShareNotFound $e) {
 			throw new NotFoundException('File not found');
 		}
@@ -241,7 +241,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	}
 
 	public function update(Attachment $attachment) {
-		$share = $this->shareProvider->getShareById($attachment->getId());
+		$share = $this->getShareForAttachment($attachment);
 		$target = $share->getNode();
 		$file = $this->getUploadedFile();
 		$fileName = $file['name'];
@@ -258,8 +258,13 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		return $attachment;
 	}
 
+	/**
+	 * @throws NoPermissionException
+	 * @throws NotFoundException
+	 * @throws ShareNotFound
+	 */
 	public function delete(Attachment $attachment) {
-		$share = $this->shareProvider->getShareById($attachment->getId());
+		$share = $this->getShareForAttachment($attachment);
 		$file = $share->getNode();
 		$attachment->setData($file->getName());
 
@@ -281,5 +286,22 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 
 	public function markAsDeleted(Attachment $attachment) {
 		throw new \Exception('Not implemented');
+	}
+
+	/**
+	 * @throws NoPermissionException
+	 */
+	private function getShareForAttachment(Attachment $attachment): IShare {
+		try {
+			$share = $this->shareProvider->getShareById($attachment->getId());
+		} catch (ShareNotFound $e) {
+			throw new NoPermissionException('No permission to access the attachment from the card');
+		}
+
+		if ((int)$share->getSharedWith() !== (int)$attachment->getCardId()) {
+			throw new NoPermissionException('No permission to access the attachment from the card');
+		}
+
+		return $share;
 	}
 }

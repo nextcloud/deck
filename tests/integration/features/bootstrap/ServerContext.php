@@ -40,6 +40,7 @@ class ServerContext implements Context {
 	}
 
 	public function getCookieJar(): CookieJar {
+		echo $this->currentUser;
 		return $this->cookieJar;
 	}
 
