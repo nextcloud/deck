@@ -46,6 +46,7 @@ use OCP\IGroupManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use \Test\TestCase;
 use OCP\IURLGenerator;
+use OCA\Deck\Validators\BoardServiceValidator;
 
 class BoardServiceTest extends TestCase {
 
@@ -84,6 +85,8 @@ class BoardServiceTest extends TestCase {
 	private $urlGenerator;
 	/** @var IDBConnection|MockObject */
 	private $connection;
+	/** @var BoardServiceValidator */
+	private $boardServiceValidator;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -104,6 +107,7 @@ class BoardServiceTest extends TestCase {
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->connection = $this->createMock(IDBConnection::class);
+		$this->boardServiceValidator = $this->createMock(BoardServiceValidator::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -123,6 +127,7 @@ class BoardServiceTest extends TestCase {
 			$this->changeHelper,
 			$this->urlGenerator,
 			$this->connection,
+			$this->boardServiceValidator,
 			$this->userId
 		);
 

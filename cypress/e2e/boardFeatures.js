@@ -13,7 +13,7 @@ describe('Board', function() {
 	})
 
 	it('Can create a board', function() {
-		const board = 'Test'
+		const board = 'TestBoard'
 
 		cy.intercept({
 			method: 'POST',
