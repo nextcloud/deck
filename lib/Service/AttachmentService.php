@@ -36,6 +36,7 @@ use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Cache\AttachmentCacheHelper;
 use OCA\Deck\StatusException;
+use OCA\Deck\Validators\AttachmentServiceValidator;
 use OCP\AppFramework\Db\IMapperException;
 use OCP\AppFramework\Http\Response;
 use OCP\IL10N;
@@ -59,7 +60,10 @@ class AttachmentService {
 	private $activityManager;
 	/** @var ChangeHelper */
 	private $changeHelper;
-	private IUserManager $userManager;
+	/** @var IUserManager */
+	private $userManager;
+	/** @var AttachmentServiceValidator */
+	private $attachmentServiceValidator;
 
 	public function __construct(AttachmentMapper $attachmentMapper,
 								CardMapper $cardMapper,
@@ -70,7 +74,8 @@ class AttachmentService {
 								AttachmentCacheHelper $attachmentCacheHelper,
 								$userId,
 								IL10N $l10n,
-								ActivityManager $activityManager) {
+								ActivityManager $activityManager,
+								AttachmentServiceValidator $attachmentServiceValidator) {
 		$this->attachmentMapper = $attachmentMapper;
 		$this->cardMapper = $cardMapper;
 		$this->permissionService = $permissionService;
@@ -81,6 +86,7 @@ class AttachmentService {
 		$this->activityManager = $activityManager;
 		$this->changeHelper = $changeHelper;
 		$this->userManager = $userManager;
+		$this->attachmentServiceValidator = $attachmentServiceValidator;
 
 		// Register shipped attachment services
 		// TODO: move this to a plugin based approach once we have different types of attachments
@@ -187,17 +193,7 @@ class AttachmentService {
 	 * @throws BadRequestException
 	 */
 	public function create($cardId, $type, $data) {
-		if (is_numeric($cardId) === false) {
-			throw new BadRequestException('card id must be a number');
-		}
-
-		if ($type === false || $type === null) {
-			throw new BadRequestException('type must be provided');
-		}
-
-		if ($data === false || $data === null) {
-			//throw new BadRequestException('data must be provided');
-		}
+		$this->attachmentServiceValidator->check(compact('cardId', 'type', 'data'));
 
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 
@@ -283,6 +279,8 @@ class AttachmentService {
 	 * @throws NoPermissionException
 	 */
 	public function update($cardId, $attachmentId, $data, $type = 'deck_file') {
+		$this->attachmentServiceValidator->check(compact('cardId', 'type', 'data'));
+
 		try {
 			$service = $this->getService($type);
 		} catch (InvalidAttachmentType $e) {
@@ -304,9 +302,6 @@ class AttachmentService {
 			}
 		}
 
-		if ($data === false || $data === null) {
-			//throw new BadRequestException('data must be provided');
-		}
 		try {
 			$attachment = $this->attachmentMapper->find($attachmentId);
 		} catch (\Exception $e) {
