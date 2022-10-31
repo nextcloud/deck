@@ -260,6 +260,7 @@ OC.L10N.register(
     "Shared with you" : "Udostępnione Tobie",
     "Deck settings" : "Ustawienia Tablicy",
     "Use bigger card view" : "Użyj większego widoku karty",
+    "Show card ID badge" : "Pokaż ID karty",
     "Show boards in calendar/tasks" : "Pokaż tablice w kalendarzu/zadaniach",
     "Limit deck usage of groups" : "Ogranicz użycie tablic dla grup",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ograniczenie Tablicy zablokuje użytkownikom z tych grup możliwość tworzenia własnych tablic. Użytkownicy nadal będą mogli pracować na tablicach, które zostały im udostępnione.",

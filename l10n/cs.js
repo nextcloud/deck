@@ -260,6 +260,7 @@ OC.L10N.register(
     "Shared with you" : "Sdíleno s vámi",
     "Deck settings" : "Nastavení pro Deck",
     "Use bigger card view" : "Použít větší zobrazení karet",
+    "Show card ID badge" : "Zobrazit odznáček s identifikátorem karty",
     "Show boards in calendar/tasks" : "Zobrazit tabule v kalendáři/úkolech",
     "Limit deck usage of groups" : "Omezit využití deck na skupiny",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Omezení nastavené pro Deck brání uživatelům, kteří nejsou součástí těchto skupin, ve vytváření vlastních tabulí. Nicméně i tak ale pořád budou moci pracovat na tabulích, které jsou jim nasdíleny.",
