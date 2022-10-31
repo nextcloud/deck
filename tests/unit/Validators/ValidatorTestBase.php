@@ -30,7 +30,8 @@ use OCA\Deck\BadRequestException;
 use OCA\Deck\Validators\BaseValidator;
 
 abstract class ValidatorTestBase extends \PHPUnit\Framework\TestCase {
-	protected BaseValidator $validator;
+	/** @var BaseValidator */
+	protected $validator;
 
 	public function setUpValidatorTest($class = null): void {
 		parent::setUp();

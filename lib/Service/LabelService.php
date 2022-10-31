@@ -42,7 +42,7 @@ class LabelService {
 	/** @var ChangeHelper */
 	private $changeHelper;
 	/** @var LabelServiceValidator */
-	private LabelServiceValidator $labelServiceValidator;
+	private $labelServiceValidator;
 
 	public function __construct(
 		LabelMapper $labelMapper,
