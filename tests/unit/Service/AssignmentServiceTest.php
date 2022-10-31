@@ -32,6 +32,7 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Notification\NotificationHelper;
+use OCA\Deck\Validators\AssignmentServiceValidator;
 use OCP\Activity\IEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -76,6 +77,11 @@ class AssignmentServiceTest extends TestCase {
 	 * @var AssignmentService
 	 */
 	private $assignmentService;
+	/**
+	 * @var  AssignmentServiceValidator
+	 */
+	private $assignmentServiceValidator;
+
 
 	public function setUp(): void {
 		parent::setUp();
@@ -87,6 +93,7 @@ class AssignmentServiceTest extends TestCase {
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
+		$this->assignmentServiceValidator = $this->createMock(AssignmentServiceValidator::class);
 		$this->assignmentService = new AssignmentService(
 			$this->permissionService,
 			$this->cardMapper,
@@ -96,6 +103,7 @@ class AssignmentServiceTest extends TestCase {
 			$this->activityManager,
 			$this->changeHelper,
 			$this->eventDispatcher,
+			$this->assignmentServiceValidator,
 			'admin'
 		);
 	}

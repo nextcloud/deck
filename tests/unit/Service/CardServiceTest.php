@@ -35,6 +35,7 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
+use OCA\Deck\Validators\CardServiceValidator;
 use OCP\Activity\IEvent;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -79,6 +80,8 @@ class CardServiceTest extends TestCase {
 
 	/** @var IURLGenerator|MockObject */
 	private $urlGenerator;
+	/** @var CardServiceValidator|MockObject */
+	private $cardServiceValidator;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -97,6 +100,8 @@ class CardServiceTest extends TestCase {
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
+		$this->cardServiceValidator = $this->createMock(CardServiceValidator::class);
+
 		$this->cardService = new CardService(
 			$this->cardMapper,
 			$this->stackMapper,
@@ -113,6 +118,7 @@ class CardServiceTest extends TestCase {
 			$this->changeHelper,
 			$this->eventDispatcher,
 			$this->urlGenerator,
+			$this->cardServiceValidator,
 			'user1'
 		);
 	}

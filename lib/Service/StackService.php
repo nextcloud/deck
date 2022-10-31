@@ -37,6 +37,7 @@ use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\StatusException;
+use OCA\Deck\Validators\StackServiceValidator;
 
 class StackService {
 	private $stackMapper;
@@ -50,6 +51,7 @@ class StackService {
 	private $attachmentService;
 	private $activityManager;
 	private $changeHelper;
+	private $stackServiceValidator;
 
 	public function __construct(
 		StackMapper $stackMapper,
@@ -62,6 +64,7 @@ class StackService {
 		AssignmentMapper $assignedUsersMapper,
 		AttachmentService $attachmentService,
 		ActivityManager $activityManager,
+		StackServiceValidator $stackServiceValidator,
 		ChangeHelper $changeHelper
 	) {
 		$this->stackMapper = $stackMapper;
@@ -75,6 +78,7 @@ class StackService {
 		$this->attachmentService = $attachmentService;
 		$this->activityManager = $activityManager;
 		$this->changeHelper = $changeHelper;
+		$this->stackServiceValidator = $stackServiceValidator;
 	}
 
 	private function enrichStackWithCards($stack, $since = -1) {
@@ -202,17 +206,7 @@ class StackService {
 	 * @throws BadRequestException
 	 */
 	public function create($title, $boardId, $order) {
-		if ($title === false || $title === null) {
-			throw new BadRequestException('title must be provided');
-		}
-
-		if (is_numeric($order) === false) {
-			throw new BadRequestException('order must be a number');
-		}
-
-		if (is_numeric($boardId) === false) {
-			throw new BadRequestException('board id must be a number');
-		}
+		$this->stackServiceValidator->check(compact('title', 'boardId', 'order'));
 
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
 		if ($this->boardService->isArchived(null, $boardId)) {
@@ -275,21 +269,7 @@ class StackService {
 	 * @throws BadRequestException
 	 */
 	public function update($id, $title, $boardId, $order, $deletedAt) {
-		if (is_numeric($id) === false) {
-			throw new BadRequestException('stack id must be a number');
-		}
-
-		if ($title === false || $title === null) {
-			throw new BadRequestException('title must be provided');
-		}
-
-		if (is_numeric($boardId) === false) {
-			throw new BadRequestException('board id must be a number');
-		}
-
-		if (is_numeric($order) === false) {
-			throw new BadRequestException('order must be a number');
-		}
+		$this->stackServiceValidator->check(compact('id', 'title', 'boardId', 'order'));
 
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_MANAGE);
@@ -325,13 +305,7 @@ class StackService {
 	 * @throws BadRequestException
 	 */
 	public function reorder($id, $order) {
-		if (is_numeric($id) === false) {
-			throw new BadRquestException('id must be a number');
-		}
-
-		if ($order === false || $order === null) {
-			throw new BadRequestException('order must be provided');
-		}
+		$this->stackServiceValidator->check(compact('id', 'order'));
 
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
 		$stackToSort = $this->stackMapper->find($id);
