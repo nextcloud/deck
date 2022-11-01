@@ -260,6 +260,7 @@ OC.L10N.register(
     "Shared with you" : "與您分享",
     "Deck settings" : "Deck 設定",
     "Use bigger card view" : "使用較大的卡片檢視",
+    "Show card ID badge" : "顯示卡片 ID 徽章",
     "Show boards in calendar/tasks" : "在日曆／工作項目中顯示佈告欄",
     "Limit deck usage of groups" : "限制群組的 Deck 使用",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "限制 Deck 將會阻止不屬於這些群組的使用者建立自己的佈告欄。使用者仍然可以在與他們分享的佈告欄上工作。",
