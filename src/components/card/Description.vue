@@ -273,7 +273,7 @@ export default {
 	}
 
 	&::v-deep input {
-		min-height: auto;
+		height: auto;
 	}
 
 	&::v-deep a {
