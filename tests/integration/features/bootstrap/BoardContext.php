@@ -16,7 +16,7 @@ class BoardContext implements Context {
 	private $stack = null;
 	/** @var array last card response */
 	private $card = null;
-	private array $storedCards = [];
+	private $storedCards = [];
 
 	/** @var ServerContext */
 	private $serverContext;

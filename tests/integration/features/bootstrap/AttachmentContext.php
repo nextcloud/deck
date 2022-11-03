@@ -15,7 +15,7 @@ class AttachmentContext implements Context {
 	private $serverContext;
 
 	protected $lastAttachment = null;
-	protected array $rememberedAttachments = [];
+	protected $rememberedAttachments = [];
 
 	/** @BeforeScenario */
 	public function gatherContexts(BeforeScenarioScope $scope) {
