@@ -298,7 +298,7 @@ export default {
 	}
 
 	&:deep(input) {
-		min-height: auto;
+		height: auto;
 	}
 
 	&:deep(a) {
