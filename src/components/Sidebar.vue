@@ -37,8 +37,8 @@ export default {
 		closeSidebar() {
 			this.$router.push({ name: 'board' })
 		},
-	  onClickOutside(e) {
-		  if (Array.from(document.querySelectorAll('.card')).some(node => node.contains(e.target))) {
+		onClickOutside(e) {
+			if (Array.from(document.querySelectorAll('.card')).some(node => node.contains(e.target))) {
 				return
 			}
 			this.closeSidebar()
