@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<router-view v-if="visible" name="sidebar" />
+	<router-view v-if="visible" v-click-outside="onClickOutside" name="sidebar" />
 </template>
 
 <script>
@@ -36,6 +36,12 @@ export default {
 	methods: {
 		closeSidebar() {
 			this.$router.push({ name: 'board' })
+		},
+	  onClickOutside(e) {
+		  if (Array.from(document.querySelectorAll('.card')).some(node => node.contains(e.target))) {
+				return
+			}
+			this.closeSidebar()
 		},
 	},
 }
