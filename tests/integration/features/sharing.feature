@@ -135,3 +135,31 @@ Feature: File sharing
     When Deleting last share
     And as "user2" the file "/Deck/user0-file2.txt" does not exist
     And as "user3" the file "/Deck/user0-file2.txt" does not exist
+
+  Scenario: Remove a share through the deck API
+	  Given acting as user "user0"
+	  When creates a board with example content
+	  And remember the last card as "user0-card"
+	  And uploads an attachment to the last used card
+	  And remember the last attachment as "user0-attachment"
+
+	  Given acting as user "user1"
+	  When creates a board with example content
+	  And remember the last card as "user1-card"
+	  And uploads an attachment to the last used card
+	  And remember the last attachment as "user1-attachment"
+
+	  Given acting as user "user0"
+	  When fetching the attachment "user1-attachment" for the card "user0-card"
+	  Then the response should have a status code 403
+	  When deleting the attachment "user1-attachment" for the card "user0-card"
+	  Then the response should have a status code 403
+
+	  When fetching the attachment "user0-attachment" for the card "user0-card"
+	  Then the response should have a status code 200
+	  When deleting the attachment "user0-attachment" for the card "user0-card"
+	  Then the response should have a status code 200
+
+	  Given acting as user "user1"
+	  When deleting the attachment "user1-attachment" for the card "user1-card"
+	  Then the response should have a status code 200

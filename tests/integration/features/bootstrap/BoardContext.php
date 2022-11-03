@@ -16,6 +16,7 @@ class BoardContext implements Context {
 	private $stack = null;
 	/** @var array last card response */
 	private $card = null;
+	private array $storedCards = [];
 
 	/** @var ServerContext */
 	private $serverContext;
@@ -29,6 +30,15 @@ class BoardContext implements Context {
 
 	public function getLastUsedCard() {
 		return $this->card;
+	}
+
+	/**
+	 * @Given /^creates a board with example content$/
+	 */
+	public function createExampleContent() {
+		$this->createsABoardNamedWithColor('Example board', 'ff0000');
+		$this->createAStackNamed('ToDo');
+		$this->createACardNamed('My example card');
 	}
 
 	/**
@@ -231,5 +241,16 @@ class BoardContext implements Context {
 		$label = array_shift($filteredLabels);
 		$this->requestContext->sendJSONrequest('POST', '/index.php/apps/deck/cards/' . $this->card['id'] .'/label/' . $label['id']);
 		$this->requestContext->getResponse()->getBody()->seek(0);
+	}
+
+	/**
+	 * @When remember the last card as :arg1
+	 */
+	public function rememberTheLastCardAs($arg1) {
+		$this->storedCards[$arg1] = $this->getLastUsedCard();
+	}
+
+	public function getRememberedCard($arg1) {
+		return $this->storedCards[$arg1] ?? null;
 	}
 }
