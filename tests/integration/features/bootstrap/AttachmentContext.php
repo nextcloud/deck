@@ -67,6 +67,7 @@ class AttachmentContext implements Context {
 	 * @Given remember the last attachment as :arg1
 	 */
 	public function rememberTheLastAttachmentAs($arg1) {
+		$this->requestContext->theResponseShouldHaveStatusCode(200);
 		$this->lastAttachment = $this->requestContext->getResponseBodyFromJson();
 		$this->rememberedAttachments[$arg1] = $this->lastAttachment;
 	}
