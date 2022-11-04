@@ -91,7 +91,7 @@ class SessionService {
 		$activeSessions = $this->sessionMapper->findAllActive($boardId);
 
 		foreach ($activeSessions as $session) {
-			$queue->push("notify_custom", [
+			$queue->push('notify_custom', [
 				'user' => $session->getUserId(),
 				'message' => $event,
 				'body' => $body
