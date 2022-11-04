@@ -134,7 +134,36 @@ class RequestContext implements Context {
 		}
 	}
 
+	public function sendPlainRequest(string $method, $uri = '', array $options = []) {
+		$client = new Client;
+		try {
+			$this->response = $client->request(
+				$method,
+				rtrim($this->serverContext->getBaseUrl(), '/') . '/' . ltrim($uri, '/'),
+				array_merge(
+					[
+						'cookies' => $this->serverContext->getCookieJar(),
+						'headers' => [
+							'requesttoken' => $this->serverContext->getReqestToken(),
+							'OCS-APIREQUEST' => 'true',
+							'Accept' => 'application/json'
+						]
+					],
+					$options,
+				)
+			);
+		} catch (ClientException $e) {
+			$this->response = $e->getResponse();
+		}
+	}
+
+
 	public function getResponse(): ResponseInterface {
 		return $this->response;
+	}
+
+	public function getResponseBodyFromJson() {
+		$this->getResponse()->getBody()->seek(0);
+		return json_decode((string)$this->getResponse()->getBody(), true);
 	}
 }
