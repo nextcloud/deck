@@ -67,7 +67,7 @@ class SessionController extends ApiController {
 	 * @NoAdminRequired
 	 * @param $boardId
 	 */
-	public function sync($boardId, $token): DataResponse {
+	public function sync(int $boardId, string $token): DataResponse {
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		try {
 			$this->sessionService->syncSession($boardId, $token);
