@@ -84,7 +84,7 @@ class SessionController extends ApiController {
 	 * @param $boardId
 	 * @return bool
 	 */
-	public function close($boardId, $token) {
+	public function close(int $boardId, string $token) {
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		$this->sessionService->closeSession((int)$boardId, $token);
 		return true;
