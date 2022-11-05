@@ -11,7 +11,7 @@ OC.L10N.register(
     "{user} has shared the board {board} with {acl}" : "{user} поділився дошкою {board} з {acl}",
     "You have removed {acl} from the board {board}" : "Ви вилучили {acl} з дошки {board}",
     "{user} has removed {acl} from the board {board}" : "{user} вилучив {acl} з дошки {board}",
-    "You have renamed the board {before} to {board}" : "Ви перейменували дошку з {before} у {board}",
+    "You have renamed the board {before} to {board}" : "Ви перейменували дошку з {before} на {board}",
     "{user} has renamed the board {before} to {board}" : "{user} змінив назву дошки {before} на {board}",
     "You have archived the board {board}" : "Ви заархівували дошку {board}",
     "{user} has archived the board {before}" : "{user} заархівував дошку {before}",
@@ -190,7 +190,7 @@ OC.L10N.register(
     "Something went wrong" : "От халепа!",
     "Maximum file size of {size} exceeded" : "Досягнуто максимальний розмір файлу {size}",
     "Error creating the share" : "Помилка створення спільного доступу",
-    "Share" : "Поділитися",
+    "Share" : "Спільний доступ",
     "This week" : "Цього тижня"
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");
