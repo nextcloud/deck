@@ -84,7 +84,7 @@ import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
 import { mapState, mapGetters } from 'vuex'
-import PaperclipIcon from 'vue-material-design-icons/Paperclip'
+import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 
 const markdownIt = new MarkdownIt({
 	linkify: true,
@@ -101,7 +101,7 @@ markdownIt.use(MarkdownItLinkAttributes, {
 export default {
 	name: 'Description',
 	components: {
-		VueEasymde: () => import('vue-easymde/dist/VueEasyMDE.common'),
+		VueEasymde: () => import('vue-easymde/dist/VueEasyMDE.common.js'),
 		NcActions,
 		NcActionButton,
 		NcModal,
