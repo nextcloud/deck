@@ -186,13 +186,13 @@ export default {
 		& > div[contenteditable] {
 			width: 100%;
 
-			&::v-deep > span > div {
+			&:deep > span > div {
 				vertical-align: middle;
 			}
 		}
 	}
 
-	.comment-form::v-deep .atwho-li {
+	.comment-form:deep(.atwho-li) {
 		height: 32px;
 	}
 

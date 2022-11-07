@@ -208,7 +208,7 @@ export default {
 		background-color: var(--color-main-background);
 		margin-bottom: $card-spacing;
 
-		&::v-deep * {
+		&:deep(*) {
 			cursor: pointer;
 		}
 

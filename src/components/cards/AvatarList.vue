@@ -154,7 +154,7 @@ export default {
 		margin-top: 5px;
 		position: relative;
 		flex-grow: 1;
-		::v-deep .popovermenu {
+		:deep(.popovermenu) {
 			margin-right: -4px;
 			img {
 				padding: 0;
@@ -174,7 +174,7 @@ export default {
 		padding-right: $avatar-offset;
 		flex-direction: row-reverse;
 		.avatardiv,
-		::v-deep .avatardiv {
+		:deep(.avatardiv) {
 			width: 36px;
 			height: 36px;
 			box-sizing: content-box !important;
@@ -189,7 +189,7 @@ export default {
 				cursor: pointer;
 			}
 		}
-		&:hover div:nth-child(n+2) ::v-deep .avatardiv {
+		&:hover div:nth-child(n+2) :deep(.avatardiv) {
 			margin-right: 1px;
 		}
 	}

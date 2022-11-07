@@ -169,7 +169,7 @@ export default {
 		float: right;
 	}
 
-	.card-selector::v-deep .modal-container {
+	.card-selector:deep(.modal-container) {
 		overflow: visible !important;
 	}
 </style>

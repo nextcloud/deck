@@ -207,7 +207,7 @@ export default {
 			margin-right: 20px;
 		}
 	}
-	h2::v-deep span {
+	h2:deep(span) {
 		background-color: var(--color-background-dark);
 		padding: 3px;
 		border-radius: var(--border-radius);
@@ -221,7 +221,7 @@ export default {
 			flex-grow: 0;
 		}
 	}
-	&::v-deep .card {
+	&:deep(.card) {
 		width: $stack-width;
 		margin-right: $stack-spacing;
 	}

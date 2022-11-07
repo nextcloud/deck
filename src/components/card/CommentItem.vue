@@ -222,7 +222,7 @@ export default {
 			padding-left: 8px;
 		}
 
-		&::v-deep .rich-text--wrapper {
+		&:deep(.rich-text--wrapper) {
 			margin-top: -3px;
 			color: var(--color-text-lighter);
 		}
@@ -241,7 +241,7 @@ export default {
 		}
 	}
 
-	.comment--content::v-deep {
+	.comment--content:deep {
 		a {
 			text-decoration: underline;
 		}

@@ -209,7 +209,7 @@ export default {
 		align-items: stretch;
 		height: 100%;
 
-		.smooth-dnd-draggable-wrapper::v-deep {
+		&:deep(.smooth-dnd-draggable-wrapper) {
 			display: flex;
 			height: auto;
 

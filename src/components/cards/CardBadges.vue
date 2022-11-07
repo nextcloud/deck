@@ -109,7 +109,7 @@ export default {
 			margin-right: 2px;
 
 			span,
-			&::v-deep span {
+			&:deep(span) {
 				padding: 10px 2px;
 			}
 		}
