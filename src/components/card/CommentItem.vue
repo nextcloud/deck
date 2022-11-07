@@ -65,7 +65,7 @@
 
 <script>
 import { NcAvatar, NcActions, NcActionButton, NcUserBubble } from '@nextcloud/vue'
-import RichText from '@juliushaertl/vue-richtext'
+import RichText from '@nextcloud/vue-richtext'
 import CommentForm from './CommentForm.vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import md5 from 'blueimp-md5'
