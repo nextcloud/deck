@@ -140,8 +140,8 @@
 <script>
 import { NcAppNavigationIconBullet, NcAppNavigationCounter, NcAppNavigationItem, NcColorPicker, NcActions, NcActionButton } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
-import ArchiveIcon from 'vue-material-design-icons/Archive'
-import CloneIcon from 'vue-material-design-icons/ContentDuplicate'
+import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
+import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
 
 export default {
 	name: 'AppNavigationBoard',
