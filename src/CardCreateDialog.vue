@@ -237,14 +237,14 @@ export default {
 		justify-content: flex-end;
 	}
 
-	.card-selector::v-deep .modal-container {
+	.card-selector:deep(.modal-container) {
 		overflow: visible !important;
 	}
 
 	.empty-content {
 		margin-top: 5vh !important;
 
-		&::v-deep h2 {
+		&:deep(h2) {
 			margin-bottom: 5vh;
 		}
 	}

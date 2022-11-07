@@ -368,11 +368,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 
-.section-wrapper::v-deep .mx-datepicker-main.mx-datepicker-popup {
+.section-wrapper:deep(.mx-datepicker-main.mx-datepicker-popup) {
 	left: 0 !important;
 }
 
-.section-wrapper::v-deep .mx-datepicker-main.mx-datepicker-popup.mx-datepicker-sidebar {
+.section-wrapper:deep(.mx-datepicker-main.mx-datepicker-popup.mx-datepicker-sidebar) {
 	padding: 0 !important;
 }
 
@@ -413,7 +413,7 @@ export default {
 	padding: 6px
 }
 
-.section-details::v-deep .multiselect__tags-wrap {
+.section-details:deep(.multiselect__tags-wrap) {
 	flex-wrap: wrap;
 }
 
@@ -430,11 +430,11 @@ export default {
 	}
 }
 
-.multiselect::v-deep .multiselect__tags-wrap {
+.multiselect:deep(.multiselect__tags-wrap) {
 	z-index: 2;
 }
 
-.multiselect.multiselect--active::v-deep .multiselect__tags-wrap {
+.multiselect.multiselect--active:deep(.multiselect__tags-wrap) {
 	z-index: 0;
 }
 

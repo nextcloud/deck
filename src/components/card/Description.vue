@@ -277,7 +277,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 
-	&::v-deep .attachment-list {
+	&:deep(.attachment-list) {
 		flex-shrink: 1;
 	}
 }
@@ -292,16 +292,16 @@ export default {
 	width: auto;
 	overflow-x: auto;
 
-	&::v-deep {
+	&:deep {
 		/* stylelint-disable-next-line no-invalid-position-at-import-rule */
 		@import './../../css/markdown';
 	}
 
-	&::v-deep input {
+	&:deep(input) {
 		min-height: auto;
 	}
 
-	&::v-deep a {
+	&:deep(a) {
 		text-decoration: underline;
 	}
 }

@@ -164,7 +164,7 @@ export default {
 		margin-top: 3px;
 	}
 
-	.duedate::v-deep {
+	.duedate:deep {
 		.due {
 			margin: 0 0 0 10px;
 			padding: 2px 4px;
