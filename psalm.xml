@@ -42,7 +42,6 @@
 				<referencedClass name="OC\*" />
 				<referencedClass name="OC" />
 				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
-				<referencedClass name="OCA\NotifyPush\Queue\IQueue" />
 			</errorLevel>
 		</UndefinedClass>
 		<UndefinedDocblockClass>
