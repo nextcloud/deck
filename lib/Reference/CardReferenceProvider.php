@@ -40,6 +40,7 @@ class CardReferenceProvider implements IReferenceProvider {
 	private IURLGenerator $urlGenerator;
 	private BoardService $boardService;
 	private StackService $stackService;
+	private ?string $userId;
 
 	public function __construct(CardService $cardService,
 								BoardService $boardService,
@@ -50,6 +51,7 @@ class CardReferenceProvider implements IReferenceProvider {
 		$this->urlGenerator = $urlGenerator;
 		$this->boardService = $boardService;
 		$this->stackService = $stackService;
+		$this->userId = $userId;
 	}
 
 	/**
