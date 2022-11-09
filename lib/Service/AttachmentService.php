@@ -194,7 +194,7 @@ class AttachmentService {
 	 * @throws BadRequestException
 	 */
 	public function create($cardId, $type, $data) {
-		$this->attachmentServiceValidator->check(compact('cardId', 'type', 'data'));
+		$this->attachmentServiceValidator->check(compact('cardId', 'type'));
 
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
 
