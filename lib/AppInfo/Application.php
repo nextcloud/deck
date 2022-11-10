@@ -33,9 +33,6 @@ use OCA\Deck\Collaboration\Resources\ResourceProvider;
 use OCA\Deck\Collaboration\Resources\ResourceProviderCard;
 use OCA\Deck\Dashboard\DeckWidget;
 use OCA\Deck\Db\Acl;
-use OCA\Deck\Db\AclMapper;
-use OCA\Deck\Db\AssignmentMapper;
-use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Event\AclCreatedEvent;
 use OCA\Deck\Event\AclDeletedEvent;
@@ -44,7 +41,7 @@ use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
-use OCA\Deck\Listeners\CircleEventListener;
+use OCA\Deck\Listeners\ParticipantCleanupListener;
 use OCA\Deck\Listeners\FullTextSearchEventListener;
 use OCA\Deck\Listeners\ResourceListener;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
@@ -65,15 +62,12 @@ use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Comments\CommentsEntityEvent;
 use OCP\Comments\ICommentsManager;
-use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IConfig;
 use OCP\IDBConnection;
-use OCP\IGroupManager;
 use OCP\IRequest;
 use OCP\Server;
-use OCP\IUserManager;
 use OCP\Notification\IManager as NotificationManager;
 use OCP\Share\IManager;
 use OCP\User\Events\UserDeletedEvent;
@@ -98,7 +92,6 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function boot(IBootContext $context): void {
-		$context->injectFn(Closure::fromCallable([$this, 'registerUserGroupHooks']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEntity']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEventHandler']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerNotifications']));
@@ -151,58 +144,13 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(AclCreatedEvent::class, ResourceListener::class);
 		$context->registerEventListener(AclDeletedEvent::class, ResourceListener::class);
 
-		$context->registerEventListener(CircleDestroyedEvent::class, CircleEventListener::class);
+		$context->registerEventListener(UserDeletedEvent::class, ParticipantCleanupListener::class);
+		$context->registerEventListener(GroupDeletedEvent::class, ParticipantCleanupListener::class);
+		$context->registerEventListener(CircleDestroyedEvent::class, ParticipantCleanupListener::class);
 	}
 
 	public function registerNotifications(NotificationManager $notificationManager): void {
 		$notificationManager->registerNotifierService(Notifier::class);
-	}
-
-	private function registerUserGroupHooks(IUserManager $userManager, IGroupManager $groupManager): void {
-		$container = $this->getContainer();
-		/** @var IEventDispatcher $eventDispatcher */
-		$eventDispatcher = $container->get(IEventDispatcher::class);
-		// Delete user/group acl entries when they get deleted
-		$eventDispatcher->addListener(UserDeletedEvent::class, static function (Event $event) use ($container): void {
-			if (!($event instanceof UserDeletedEvent)) {
-				return;
-			}
-			$user = $event->getUser();
-			// delete existing acl entries for deleted user
-			/** @var AclMapper $aclMapper */
-			$aclMapper = $container->get(AclMapper::class);
-			$acls = $aclMapper->findByParticipant(Acl::PERMISSION_TYPE_USER, $user->getUID());
-			foreach ($acls as $acl) {
-				$aclMapper->delete($acl);
-			}
-			// delete existing user assignments
-			$assignmentMapper = $container->get(AssignmentMapper::class);
-			$assignments = $assignmentMapper->findByParticipant($user->getUID());
-			foreach ($assignments as $assignment) {
-				$assignmentMapper->delete($assignment);
-			}
-
-			/** @var BoardMapper $boardMapper */
-			$boardMapper = $container->get(BoardMapper::class);
-			$boards = $boardMapper->findAllByOwner($user->getUID());
-			foreach ($boards as $board) {
-				$boardMapper->delete($board);
-			}
-		});
-
-		$eventDispatcher->addListener(GroupDeletedEvent::class, static function (Event $event) use ($container): void {
-			if (!($event instanceof GroupDeletedEvent)) {
-				return;
-			}
-			$group = $event->getGroup();
-			/** @var AclMapper $aclMapper */
-			$aclMapper = $container->get(AclMapper::class);
-			$aclMapper->findByParticipant(Acl::PERMISSION_TYPE_GROUP, $group->getGID());
-			$acls = $aclMapper->findByParticipant(Acl::PERMISSION_TYPE_GROUP, $group->getGID());
-			foreach ($acls as $acl) {
-				$aclMapper->delete($acl);
-			}
-		});
 	}
 
 	public function registerCommentsEntity(IEventDispatcher $eventDispatcher): void {
