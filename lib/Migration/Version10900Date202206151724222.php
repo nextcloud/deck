@@ -60,6 +60,7 @@ class Version10900Date202206151724222 extends SimpleMigrationStep {
 			$table->setPrimaryKey(['id']);
 			$table->addIndex(['board_id'], 'deck_session_board_id_idx');
 			$table->addIndex(['token'], 'deck_session_token_idx');
+			$table->addIndex(['last_contact'], 'deck_session_last_contact_idx');
 		}
 		return $schema;
 	}

@@ -86,6 +86,10 @@ class SessionService {
 		}
 		$this->eventDispatcher->dispatchTyped(new SessionClosedEvent($boardId, $this->userId));
 	}
+	
+	public function removeInactiveSessions(): int {
+		return $this->sessionMapper->deleteInactive();
+	}
 
 	public function notifyAllSessions(IQueue $queue, int $boardId, $event, $excludeUserId, $body) {
 		$activeSessions = $this->sessionMapper->findAllActive($boardId);
