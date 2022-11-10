@@ -1,4 +1,4 @@
-import { randHash } from '../utils'
+import { randHash } from '../utils/index.js'
 const randUser = randHash()
 
 describe('Deck dashboard', function() {
@@ -14,8 +14,8 @@ describe('Deck dashboard', function() {
 
 	it('Can show the right title on the dashboard', function() {
 		cy.get('.board-title h2')
-        	.should('have.length', 1).first()
-        	.should('have.text', 'Upcoming cards')
+			.should('have.length', 1).first()
+			.should('have.text', 'Upcoming cards')
 	})
 
 	it('Can see the default "Personal Board" created for user by default', function() {

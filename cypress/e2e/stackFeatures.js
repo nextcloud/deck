@@ -1,4 +1,4 @@
-import { randHash } from '../utils'
+import { randHash } from '../utils/index.js'
 const randUser = randHash()
 
 describe('Stack', function() {
