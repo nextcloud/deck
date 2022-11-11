@@ -37,8 +37,7 @@
 </template>
 
 <script>
-import NcAvatar from '@nextcloud/vue/dist/Components/NcAvatar'
-import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
+import { NcAvatar, Tooltip } from '@nextcloud/vue'
 
 export default {
 	name: 'SessionList',
