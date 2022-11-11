@@ -59,6 +59,12 @@ namespace OCA\Circles\Model {
 	}
 }
 
+namespace OCA\Circles\Events {
+	class CircleDestroyedEvent extends \OCP\EventDispatcher\Event {
+		public function __construct(FederatedEvent $federatedEvent, array $results) {}
+		abstract public function getCircle(): \OCA\Circles\Model\Circle {}
+	}
+}
 namespace OCA\Circles\Model\Probes {
 	class CircleProbe {
 		public function __construct() {}

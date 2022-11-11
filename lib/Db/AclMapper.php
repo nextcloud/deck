@@ -110,4 +110,12 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 			->andWhere($qb->expr()->eq('board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)));
 		$qb->executeStatement();
 	}
+
+	public function findByType(int $type): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_board_acl')
+			->where($qb->expr()->eq('type', $qb->createNamedParameter($type, IQueryBuilder::PARAM_INT)));
+		return $this->findEntities($qb);
+	}
 }
