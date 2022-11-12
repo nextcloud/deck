@@ -19,17 +19,16 @@
  */
 
 import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
+import { generateOcsUrl } from '@nextcloud/router'
 
 export class SessionApi {
 
 	url(url) {
-		url = `/apps/deck${url}`
-		return generateUrl(url)
+		return generateOcsUrl(`apps/deck/api/v1.0${url}`)
 	}
 
 	async createSession(boardId) {
-		return (await axios.put(this.url('/session/create'), { boardId })).data
+		return (await axios.put(this.url('/session/create'), { boardId })).data.ocs.data
 	}
 
 	async syncSession(boardId, token) {

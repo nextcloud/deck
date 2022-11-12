@@ -29,11 +29,11 @@ use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Db\BoardMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\ApiController;
+use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 use OCA\Deck\Db\Acl;
 
-class SessionController extends ApiController {
+class SessionController extends OCSController {
 	private SessionService $sessionService;
 	private PermissionService $permissionService;
 	private BoardMapper $boardMapper;
@@ -82,11 +82,10 @@ class SessionController extends ApiController {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @param $boardId
-	 * @return bool
 	 */
 	public function close(int $boardId, string $token) {
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		$this->sessionService->closeSession($boardId, $token);
-		return true;
+		return new DataResponse();
 	}
 }
