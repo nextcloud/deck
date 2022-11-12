@@ -49,7 +49,7 @@
 						v-focus
 						type="text"
 						required="required">
-					<input v-tooltip="t('deck', 'Add a new list')"
+					<input v-tooltip="t('deck', 'Edit list title')"
 						class="icon-confirm"
 						type="submit"
 						value="">
