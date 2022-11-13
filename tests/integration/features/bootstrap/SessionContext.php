@@ -32,7 +32,7 @@ class SessionContext implements Context {
 		$this->boardContext->fetchesTheBoardNamed($name);
 
 		$board = $this->boardContext->getLastUsedBoard();
-		$this->requestContext->sendJSONrequest('PUT', '/index.php/apps/deck/session/create', [
+		$this->requestContext->sendJSONrequest('PUT', '/ocs/v2.php/apps/deck/api/v1.0/session/create', [
 			'boardId' => $board['id'],
 		]);
 		$res = json_decode((string)$this->getResponse()->getBody(), true);
@@ -72,7 +72,7 @@ class SessionContext implements Context {
 		$user = $this->serverContext->getCurrentUser();
 		$token = $this->token[$user];
 		Assert::assertNotEmpty($token, "no token for the user found");
-		$this->requestContext->sendJSONrequest('POST', '/index.php/apps/deck/session/close', [
+		$this->requestContext->sendJSONrequest('POST', '/ocs/v2.php/apps/deck/api/v1.0/session/close', [
 			'boardId' => $board['id'],
 			'token' => $token
 		]);
