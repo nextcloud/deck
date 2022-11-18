@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.8.2
+
+### Fixed
+
+- minor style fixes [#4201](https://github.com/nextcloud/deck/pull/4201)
+- feat: add validators to check values in services [#4174](https://github.com/nextcloud/deck/pull/4174)
+- Add integration test for attachment handling on cards [#4179](https://github.com/nextcloud/deck/pull/4179)
+- Add missing userId property [#4198](https://github.com/nextcloud/deck/pull/4198)
+
 ## 1.8.1
 
 ### Fixed
