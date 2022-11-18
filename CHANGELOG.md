@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.6.5
+
+### Fixed
+
+- minor style fixes [#4203](https://github.com/nextcloud/deck/pull/4203)
+- Add integration test for attachment handling on cards [#4177](https://github.com/nextcloud/deck/pull/4177)
+- feat: add validators to check values in services @juliushaertl [#4175](https://github.com/nextcloud/deck/pull/4175)
+- disables autocomplete on card creation @juliushaertl [#4183](https://github.com/nextcloud/deck/pull/4183)
+
 ## 1.6.4
 
 ### Fixed
