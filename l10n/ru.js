@@ -256,6 +256,7 @@ OC.L10N.register(
     "All boards" : "Все доски",
     "Archived boards" : "Архив досок",
     "Shared with you" : "Предоставленные вам",
+    "Deck settings" : "Параметры карточек",
     "Use bigger card view" : "Режим просмотра с увеличенными карточками",
     "Show boards in calendar/tasks" : "Показывать карточки в календаре и задачах",
     "Limit deck usage of groups" : "Разрешить использовать приложение Карточки только участникам заданных групп",
