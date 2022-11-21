@@ -26,5 +26,17 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Event;
 
+use OCA\Deck\Db\Card;
+
 class CardUpdatedEvent extends ACardEvent {
+	private $cardBefore;
+
+	public function __construct(Card $card, Card $before = null) {
+		parent::__construct($card);
+		$this->cardBefore = $before;
+	}
+
+	public function getCardBefore() {
+		return $this->cardBefore;
+	}
 }

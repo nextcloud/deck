@@ -154,6 +154,12 @@ class Application extends App implements IBootstrap {
 		// Event listening for realtime updates via notify_push
 		$context->registerEventListener(SessionCreatedEvent::class, LiveUpdateListener::class);
 		$context->registerEventListener(SessionClosedEvent::class, LiveUpdateListener::class);
+		$context->registerEventListener(CardCreatedEvent::class, LiveUpdateListener::class);
+		$context->registerEventListener(CardUpdatedEvent::class, LiveUpdateListener::class);
+		$context->registerEventListener(CardDeletedEvent::class, LiveUpdateListener::class);
+		$context->registerEventListener(AclCreatedEvent::class, LiveUpdateListener::class);
+		$context->registerEventListener(AclUpdatedEvent::class, LiveUpdateListener::class);
+		$context->registerEventListener(AclDeletedEvent::class, LiveUpdateListener::class);
 
 		$context->registerNotifierService(Notifier::class);
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, ResourceAdditionalScriptsListener::class);

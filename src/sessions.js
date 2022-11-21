@@ -52,6 +52,18 @@ hasPush = listen('deck_board_update', (name, body) => {
 	store.dispatch('refreshBoard', currentBoardId)
 })
 
+listen('deck_card_update', (name, body) => {
+
+	// ignore update events which we have triggered ourselves
+	if (isOurSessionToken(body._causingSessionToken)) return
+
+	// only handle update events for the currently open board
+	const currentBoardId = store.state.currentBoard?.id
+	if (body.boardId !== currentBoardId) return
+
+	store.dispatch('loadStacks', currentBoardId)
+})
+
 /**
  * is the notify_push app active and can
  * provide us with real time updates?

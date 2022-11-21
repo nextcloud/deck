@@ -333,10 +333,15 @@ export default new Vuex.Store({
 			commit('setAssignableUsers', board.users)
 		},
 
-		async refreshBoard({ commit }, boardId) {
+		async refreshBoard({ commit, dispatch }, boardId) {
 			const board = await apiClient.loadById(boardId)
+			const etagHasChanged = board.ETag !== this.state.currentBoard.ETag
 			commit('setCurrentBoard', board)
 			commit('setAssignableUsers', board.users)
+
+			if (etagHasChanged) {
+				dispatch('loadStacks', boardId)
+			}
 		},
 
 		toggleShowArchived({ commit }) {

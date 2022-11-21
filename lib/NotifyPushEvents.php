@@ -26,4 +26,5 @@ namespace OCA\Deck;
 
 class NotifyPushEvents {
 	public const DeckBoardUpdate = 'deck_board_update';
+	public const DeckCardUpdate = 'deck_card_update';
 }
