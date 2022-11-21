@@ -125,7 +125,7 @@ OC.L10N.register(
     "Upload new files" : "Додати файл",
     "Share from Files" : "Відкрити Файли",
     "Add this attachment" : "Долучити вкладення",
-    "Download" : "Завантажити",
+    "Download" : "Звантажити",
     "Delete Attachment" : "Забрати вкладення",
     "Restore Attachment" : "Відновити вкладення",
     "File to share" : "Виберіть файл для надання доступу",
