@@ -33,25 +33,30 @@ use OCA\Deck\Service\SessionService;
 use OCA\NotifyPush\Queue\IQueue;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
+use OCP\IRequest;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
 class LiveUpdateListener implements IEventListener {
-	private string $userId;
 	private LoggerInterface $logger;
 	private SessionService $sessionService;
+	private IRequest $request;
 	private $queue;
 	
-	public function __construct(ContainerInterface $container, SessionService $sessionService, $userId) {
+	public function __construct(
+		ContainerInterface $container,
+		IRequest $request,
+		SessionService $sessionService
+	) {
 		try {
 			$this->queue = $container->get(IQueue::class);
 		} catch (\Exception $e) {
 			// most likely notify_push is not installed.
 			return;
 		}
-		$this->userId = $userId;
 		$this->logger = $container->get(LoggerInterface::class);
 		$this->sessionService = $sessionService;
+		$this->request = $request;
 	}
 
 	public function handle(Event $event): void {
@@ -61,10 +66,17 @@ class LiveUpdateListener implements IEventListener {
 		}
 
 		try {
-			if ($event instanceof SessionCreatedEvent || $event instanceof SessionClosedEvent) {
-				$this->sessionService->notifyAllSessions($this->queue, $event->getBoardId(), NotifyPushEvents::DeckBoardUpdate, $event->getUserId(), [
+			// the web frontend is adding the Session-ID as a header on every request
+			// TODO: verify the token! this currently allows to spoof a token from someone
+			// else, preventing this person from getting any live updates
+			$causingSessionToken = $this->request->getHeader('x-nc-deck-session');
+			if (
+				$event instanceof SessionCreatedEvent ||
+				$event instanceof SessionClosedEvent
+			) {
+				$this->sessionService->notifyAllSessions($this->queue, $event->getBoardId(), NotifyPushEvents::DeckBoardUpdate, [
 					'id' => $event->getBoardId()
-				]);
+				], $causingSessionToken);
 			}
 		} catch (\Exception $e) {
 			$this->logger->error('Error when handling live update event', ['exception' => $e]);

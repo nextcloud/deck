@@ -57,11 +57,11 @@ class SessionService {
 		$this->eventDispatcher = $eventDispatcher;
 	}
 
-	public function initSession($boardId): Session {
+	public function initSession(int $boardId): Session {
 		$session = new Session();
 		$session->setBoardId($boardId);
 		$session->setUserId($this->userId);
-		$session->setToken($this->secureRandom->generate(64));
+		$session->setToken($this->secureRandom->generate(32));
 		$session->setLastContact($this->timeFactory->getTime());
 
 		$session = $this->sessionMapper->insert($session);
@@ -91,12 +91,34 @@ class SessionService {
 		return $this->sessionMapper->deleteInactive();
 	}
 
-	public function notifyAllSessions(IQueue $queue, int $boardId, $event, $excludeUserId, $body) {
+	public function notifyAllSessions(IQueue $queue, int $boardId, $event, $body, $causingSessionToken = null) {
 		$activeSessions = $this->sessionMapper->findAllActive($boardId);
-
+		$userIds = [];
 		foreach ($activeSessions as $session) {
+			if ($causingSessionToken && $session->getToken() === $causingSessionToken) {
+				// Limitation:
+				// If the same user has a second session active, the session $causingSessionToken
+				// still gets notified due to the current fact, that notify_push only supports
+				// to specify users, not individual sessions
+				// https://github.com/nextcloud/notify_push/issues/195
+				continue;
+			}
+
+			// don't notify the same user multiple times
+			if (!in_array($session->getUserId(), $userIds)) {
+				$userIds[] = $session->getUserId();
+			}
+		}
+
+		if ($causingSessionToken) {
+			// we only send a slice of the session token to everyone
+			// since knowledge of the full token allows everyone
+			// to close the session maliciously
+			$body['_causingSessionToken'] = substr($causingSessionToken, 0, 12);
+		}
+		foreach ($userIds as $userId) {
 			$queue->push('notify_custom', [
-				'user' => $session->getUserId(),
+				'user' => $userId,
 				'message' => $event,
 				'body' => $body
 			]);

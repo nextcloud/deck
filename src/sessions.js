@@ -21,13 +21,36 @@
 import { listen } from '@nextcloud/notify_push'
 import { sessionApi } from './services/SessionApi.js'
 import store from './store/main.js'
+import axios from '@nextcloud/axios'
 
 const SESSION_INTERVAL = 90 // in seconds
 
 let hasPush = false
 
+/**
+ * used to verify, whether an event is originated by ourselves
+ *
+ * @param token
+ */
+function isOurSessionToken(token) {
+	if (axios.defaults.headers['x-nc-deck-session']
+		&& axios.defaults.headers['x-nc-deck-session'].startsWith(token)) {
+		return true
+	} else {
+		return false
+	}
+}
+
 hasPush = listen('deck_board_update', (name, body) => {
-	triggerDeckReload(body.id)
+		// ignore update events which we have triggered ourselves
+	if (isOurSessionToken(body._causingSessionToken)) return
+
+	// only handle update events for the currently open board
+	const currentBoardId = store.state.currentBoard?.id
+	if (body.id !== currentBoardId) return
+
+	store.dispatch('refreshBoard', currentBoardId)
+})
 })
 
 /**
@@ -36,21 +59,6 @@ hasPush = listen('deck_board_update', (name, body) => {
  */
 export function isNotifyPushEnabled() {
 	return hasPush
-}
-
-/**
- * Triggers a reload of the deck, if the provided id
- * matches the current open deck
- *
- * @param triggeredBoardId
- */
-export function triggerDeckReload(triggeredBoardId) {
-	const currentBoardId = store.state.currentBoard?.id
-
-	// only handle update events for the currently open board
-	if (triggeredBoardId !== currentBoardId) return
-
-	store.dispatch('refreshBoard', currentBoardId)
 }
 
 /**
@@ -74,6 +82,7 @@ export function createSession(boardId) {
 		tokenPromise = sessionApi.createSession(boardId).then(res => res.token)
 		tokenPromise.then((t) => {
 			token = t
+			axios.defaults.headers['x-nc-deck-session'] = t
 		})
 	}
 	create()
@@ -95,12 +104,13 @@ export function createSession(boardId) {
 	// periodically notify the server that we are still here
 	let interval = setInterval(ensureSession, SESSION_INTERVAL * 1000)
 
-	// close session when
+	// close session when tab gets hidden/inactive
 	const visibilitychangeListener = () => {
 		if (document.visibilityState === 'hidden') {
 			sessionApi.closeSessionViaBeacon(boardId, token)
 			tokenPromise = null
 			token = null
+			delete axios.defaults.headers['x-nc-deck-session']
 
 			// stop session refresh interval
 			clearInterval(interval)
@@ -110,7 +120,7 @@ export function createSession(boardId) {
 
 			// we must assume that the websocket connection was
 			// paused and we have missed updates in the meantime.
-			triggerDeckReload()
+			store.dispatch('refreshBoard', store.state.currentBoard?.id)
 
 			// restart session refresh interval
 			interval = setInterval(ensureSession, SESSION_INTERVAL * 1000)
