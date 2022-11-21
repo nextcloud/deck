@@ -42,7 +42,7 @@ function isOurSessionToken(token) {
 }
 
 hasPush = listen('deck_board_update', (name, body) => {
-		// ignore update events which we have triggered ourselves
+	// ignore update events which we have triggered ourselves
 	if (isOurSessionToken(body._causingSessionToken)) return
 
 	// only handle update events for the currently open board
@@ -50,7 +50,6 @@ hasPush = listen('deck_board_update', (name, body) => {
 	if (body.id !== currentBoardId) return
 
 	store.dispatch('refreshBoard', currentBoardId)
-})
 })
 
 /**
