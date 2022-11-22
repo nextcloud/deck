@@ -56,6 +56,7 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCP\IUserManager;
 use OCA\Deck\BadRequestException;
+use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\Validators\BoardServiceValidator;
 use OCP\IURLGenerator;
 use OCP\Server;
@@ -379,6 +380,7 @@ class BoardService {
 		$this->boardMapper->mapOwner($board);
 		$this->activityManager->triggerUpdateEvents(ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_BOARD_UPDATE);
 		$this->changeHelper->boardChanged($board->getId());
+		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($board->getId()));
 
 		return $board;
 	}

@@ -30,6 +30,7 @@ use OCA\Deck\Db\StackMapper;
 use OCA\Deck\NotifyPushEvents;
 use OCA\Deck\Event\AAclEvent;
 use OCA\Deck\Event\ACardEvent;
+use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\Event\SessionClosedEvent;
 use OCA\Deck\Event\SessionCreatedEvent;
@@ -82,6 +83,7 @@ class LiveUpdateListener implements IEventListener {
 			if (
 				$event instanceof SessionCreatedEvent ||
 				$event instanceof SessionClosedEvent ||
+				$event instanceof BoardUpdatedEvent ||
 				$event instanceof AAclEvent
 			) {
 				$this->sessionService->notifyAllSessions($this->queue, $event->getBoardId(), NotifyPushEvents::DeckBoardUpdate, [
