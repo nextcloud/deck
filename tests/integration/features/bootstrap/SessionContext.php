@@ -32,15 +32,15 @@ class SessionContext implements Context {
 		$this->boardContext->fetchesTheBoardNamed($name);
 
 		$board = $this->boardContext->getLastUsedBoard();
-		$this->requestContext->sendJSONrequest('PUT', '/ocs/v2.php/apps/deck/api/v1.0/session/create', [
+		$this->requestContext->sendOCSRequest('PUT', '/apps/deck/api/v1.0/session/create', [
 			'boardId' => $board['id'],
 		]);
 		$res = json_decode((string)$this->getResponse()->getBody(), true);
-		Assert::assertArrayHasKey('token', $res, "session creation did not respond with a token");
+		Assert::assertArrayHasKey('token', $res['ocs']['data'], "session creation did not respond with a token");
 
 		// store token
 		$user = $this->serverContext->getCurrentUser();
-		$this->token[$user] = $res['token'];
+		$this->token[$user] = $res['ocs']['data']['token'];
 	}
 
 	/**
@@ -72,7 +72,7 @@ class SessionContext implements Context {
 		$user = $this->serverContext->getCurrentUser();
 		$token = $this->token[$user];
 		Assert::assertNotEmpty($token, "no token for the user found");
-		$this->requestContext->sendJSONrequest('POST', '/ocs/v2.php/apps/deck/api/v1.0/session/close', [
+		$this->requestContext->sendOCSRequest('POST', '/apps/deck/api/v1.0/session/close', [
 			'boardId' => $board['id'],
 			'token' => $token
 		]);
