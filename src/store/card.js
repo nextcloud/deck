@@ -273,6 +273,17 @@ export default {
 		addNewCard(state, card) {
 			state.cards.push(card)
 		},
+		setCards(state, cards) {
+			const deletedCards = state.cards.filter(_card => {
+				return cards.findIndex(c => _card.id === c.id) === -1
+			})
+			for (const card of deletedCards) {
+				this.commit('deleteCard', card)
+			}
+			for (const card of cards) {
+				this.commit('addCard', card)
+			}
+		},
 	},
 	actions: {
 		async addCard({ commit }, card) {

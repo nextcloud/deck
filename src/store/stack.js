@@ -84,14 +84,16 @@ export default {
 				call = 'loadArchivedStacks'
 			}
 			const stacks = await apiClient[call](boardId)
+			const cards = []
 			for (const i in stacks) {
 				const stack = stacks[i]
 				for (const j in stack.cards) {
-					commit('addCard', stack.cards[j])
+					cards.push(stack.cards[j])
 				}
 				delete stack.cards
 				commit('addStack', stack)
 			}
+			commit('setCards', cards)
 		},
 		createStack({ commit }, stack) {
 			stack.boardId = this.state.currentBoard.id
