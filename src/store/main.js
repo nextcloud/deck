@@ -273,7 +273,6 @@ export default new Vuex.Store({
 			labelToUpdate.color = newLabel.color
 		},
 		addLabelToCurrentBoard(state, newLabel) {
-
 			state.currentBoard.labels.push(newLabel)
 		},
 
@@ -464,6 +463,16 @@ export default new Vuex.Store({
 				.then((newLabel) => {
 					commit('addLabelToCurrentBoard', newLabel)
 				})
+		},
+		async addLabelToCurrentBoardAndCard({ dispatch, commit }, { newLabel, card }) {
+			newLabel.boardId = this.state.currentBoard.id
+			const label = await apiClient.createLabel(newLabel)
+			commit('addLabelToCurrentBoard', label)
+			dispatch('addLabel', {
+				card,
+				labelId: label.id,
+			})
+			return label
 		},
 
 		// acl actions
