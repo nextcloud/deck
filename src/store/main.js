@@ -465,6 +465,18 @@ export default new Vuex.Store({
 					commit('addLabelToCurrentBoard', newLabel)
 				})
 		},
+		addLabelToCurrentBoardAndCard({ dispatch, commit }, { newLabel, card }) {
+			newLabel.boardId = this.state.currentBoard.id
+			apiClient.createLabel(newLabel)
+				.then((newLabel) => {
+					commit('addLabelToCurrentBoard', newLabel)
+					dispatch('addLabel', {
+						card,
+						labelId: newLabel.id,
+					})
+					card.labels.push(newLabel)
+				})
+		},
 
 		// acl actions
 		async addAclToCurrentBoard({ dispatch, commit }, newAcl) {

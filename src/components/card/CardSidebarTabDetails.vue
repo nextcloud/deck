@@ -36,7 +36,8 @@
 					label="title"
 					track-by="id"
 					@select="addLabelToCard"
-					@remove="removeLabelFromCard">
+					@remove="removeLabelFromCard"
+					@tag="addLabelToBoardAndCard">
 					<template #option="scope">
 						<div :style="{ backgroundColor: '#' + scope.option.color, color: textColor(scope.option.color)}" class="tag">
 							{{ scope.option.title }}
@@ -340,6 +341,17 @@ export default {
 				labelId: newLabel.id,
 			}
 			this.$store.dispatch('addLabel', data)
+		},
+
+		addLabelToBoardAndCard(name) {
+			const newLabel = {
+				title: name,
+				color: this.randomColor(),
+			}
+			this.$store.dispatch('addLabelToCurrentBoardAndCard', {
+				card: this.copiedCard,
+				newLabel,
+			})
 		},
 
 		removeLabelFromCard(removedLabel) {
