@@ -37,6 +37,7 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has reached its due date." : "Kortet \"%s\" på \"%s\" har nået sin forfaldsdato.",
     "%s has mentioned you in a comment on \"%s\"." : " %s har nævnt dig i en kommentar på \"%s\".",
     "The board \"%s\" has been shared with you by %s." : "Tavlen \"%s\" er blevet delt med dig af %s.",
+    "%s on %s" : "%s på %s",
     "No data was provided to create an attachment." : "Ingen data blev givet som kunne vedhæftes",
     "Finished" : "Færdiggjort",
     "To review" : "Til gennemgang",
