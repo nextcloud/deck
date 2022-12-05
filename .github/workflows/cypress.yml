@@ -84,7 +84,7 @@ jobs:
           curl -v http://localhost:8081/index.php/login
 
       - name: Cypress run
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v5
         with:
           record: true
           parallel: false
