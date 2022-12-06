@@ -42,10 +42,11 @@ class LiveUpdateListener implements IEventListener {
 	private SessionService $sessionService;
 	private IRequest $request;
 	private $queue;
-	
+
 	public function __construct(
 		ContainerInterface $container,
 		IRequest $request,
+		LoggerInterface $logger,
 		SessionService $sessionService
 	) {
 		try {
@@ -54,7 +55,7 @@ class LiveUpdateListener implements IEventListener {
 			// most likely notify_push is not installed.
 			return;
 		}
-		$this->logger = $container->get(LoggerInterface::class);
+		$this->logger = $logger;
 		$this->sessionService = $sessionService;
 		$this->request = $request;
 	}
