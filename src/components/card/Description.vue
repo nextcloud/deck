@@ -30,8 +30,7 @@
 				<AttachmentUploadProgress :attachment="attachment" />
 			</span>
 
-			<a
-				v-tooltip="t('deck', 'Formatting help')"
+			<a v-tooltip="t('deck', 'Formatting help')"
 				href="https://deck.readthedocs.io/en/latest/Markdown/"
 				target="_blank"
 				class="icon icon-info" />
@@ -53,16 +52,14 @@
 			</NcActions>
 		</h5>
 
-		<div
-			v-if="!descriptionEditing && hasDescription"
+		<div v-if="!descriptionEditing && hasDescription"
 			id="description-preview"
 			@click="clickedPreview"
 			v-html="renderedDescription" />
 		<p v-else-if="!descriptionEditing" class="placeholder" @click="showEditor()">
 			{{ t('deck', 'Write a description …') }}
 		</p>
-		<VueEasymde
-			v-else
+		<VueEasymde v-else
 			:key="card.id"
 			ref="markdownEditor"
 			v-model="description"
@@ -74,8 +71,7 @@
 		<NcModal v-if="modalShow" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
 			<div class="modal__content">
 				<h3>{{ t('deck', 'Choose attachment') }}</h3>
-				<AttachmentList
-					:card-id="card.id"
+				<AttachmentList :card-id="card.id"
 					:selectable="true"
 					@select-attachment="addAttachment" />
 			</div>
@@ -88,12 +84,12 @@ import MarkdownIt from 'markdown-it'
 import MarkdownItTaskCheckbox from 'markdown-it-task-checkbox'
 import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
 import AttachmentList from './AttachmentList.vue'
-import AttachmentUploadProgress from './AttachmentUploadProgress'
+import AttachmentUploadProgress from './AttachmentUploadProgress.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
 import { mapState, mapGetters } from 'vuex'
-import attachmentUpload from '../../mixins/attachmentUpload'
+import attachmentUpload from '../../mixins/attachmentUpload.js'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 
 const markdownIt = new MarkdownIt({

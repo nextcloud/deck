@@ -30,8 +30,7 @@
 				{{ t('deck', 'Share from Files') }}
 			</button>
 		</div>
-		<input
-			ref="filesAttachment"
+		<input ref="filesAttachment"
 			type="file"
 			style="display: none;"
 			multiple
@@ -40,13 +39,11 @@
 			<li v-for="attachment in uploadQueue" :key="attachment.name" class="attachment">
 				<AttachmentUploadProgress :attachment="attachment" />
 			</li>
-			<li
-				v-for="attachment in attachments"
+			<li v-for="attachment in attachments"
 				:key="attachment.id"
 				class="attachment"
 				:class="{ 'attachment--deleted': attachment.deletedAt > 0 }">
-				<a
-					class="fileicon"
+				<a class="fileicon"
 					:href="internalLink(attachment)"
 					:style="mimetypeForAttachment(attachment)"
 					@click.prevent="showViewer(attachment)" />
@@ -108,7 +105,7 @@ import { mapState, mapActions } from 'vuex'
 import { loadState } from '@nextcloud/initial-state'
 import attachmentUpload from '../../mixins/attachmentUpload.js'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
-import AttachmentUploadProgress from './AttachmentUploadProgress'
+import AttachmentUploadProgress from './AttachmentUploadProgress.vue'
 const maxUploadSizeState = loadState('deck', 'maxUploadSize')
 
 const picker = getFilePickerBuilder(t('deck', 'File to share'))
