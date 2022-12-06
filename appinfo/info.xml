@@ -41,6 +41,11 @@
         <job>OCA\Deck\Cron\ScheduledNotifications</job>
         <job>OCA\Deck\Cron\CardDescriptionActivity</job>
     </background-jobs>
+    <repair-steps>
+        <live-migration>
+            <step>OCA\Deck\Migration\DeletedCircleCleanup</step>
+        </live-migration>
+    </repair-steps>
     <commands>
         <command>OCA\Deck\Command\UserExport</command>
         <command>OCA\Deck\Command\BoardImport</command>

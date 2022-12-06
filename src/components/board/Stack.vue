@@ -25,7 +25,7 @@
 	<div class="stack">
 		<div v-click-outside="stopCardCreation"
 			class="stack__header"
-			:class="{'stack__header--add': showAddCard }"
+			:class="{'stack__header--add': showAddCard}"
 			tabindex="0"
 			:aria-label="stack.title">
 			<transition name="fade" mode="out-in">
@@ -41,7 +41,10 @@
 					@keydown.enter="startEditing(stack)">
 					{{ stack.title }}
 				</h3>
-				<form v-else @submit.prevent="finishedEdit(stack)">
+				<form v-else-if="editing"
+					v-click-outside="cancelEdit"
+					@submit.prevent="finishedEdit(stack)"
+					@keyup.esc="cancelEdit">
 					<input v-model="copiedStack.title"
 						v-focus
 						type="text"
@@ -53,11 +56,17 @@
 				</form>
 			</transition>
 			<NcActions v-if="canManage && !isArchived" :force-menu="true">
-				<NcActionButton @click="modalArchivAllCardsShow=true">
+				<NcActionButton v-if="!showArchived" icon="icon-archive" @click="modalArchivAllCardsShow=true">
 					<template #icon>
 						<ArchiveIcon decorative />
 					</template>
 					{{ t('deck', 'Archive all cards') }}
+				</NcActionButton>
+				<NcActionButton v-if="showArchived" @click="modalArchivAllCardsShow=true">
+					<template #icon>
+						<ArchiveIcon decorative />
+					</template>
+					{{ t('deck', 'Unarchive all cards') }}
 				</NcActionButton>
 				<NcActionButton icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete list') }}
@@ -72,10 +81,19 @@
 
 		<NcModal v-if="modalArchivAllCardsShow" @close="modalArchivAllCardsShow=false">
 			<div class="modal__content">
-				<h3>{{ t('deck', 'Archive all cards in this list') }}</h3>
+				<h3 v-if="!showArchived">
+					{{ t('deck', 'Archive all cards in this list') }}
+				</h3>
+				<h3 v-else>
+					{{ t('deck', 'Unarchive all cards in this list') }}
+				</h3>
+
 				<progress :value="stackTransfer.current" :max="stackTransfer.total" />
-				<button class="primary" @click="archiveAllCardsFromStack(stack)">
+				<button v-if="!showArchived" class="primary" @click="setArchivedToAllCardsFromStack(stack, !showArchived)">
 					{{ t('deck', 'Archive all cards') }}
+				</button>
+				<button v-else class="primary" @click="setArchivedToAllCardsFromStack(stack, !showArchived)">
+					{{ t('deck', 'Unarchive all cards') }}
 				</button>
 				<button @click="modalArchivAllCardsShow=false">
 					{{ t('deck', 'Cancel') }}
@@ -127,7 +145,7 @@
 </template>
 
 <script>
-
+import ClickOutside from 'vue-click-outside'
 import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
 
@@ -149,8 +167,14 @@ export default {
 		NcModal,
 		ArchiveIcon,
 	},
-
+	directives: {
+		ClickOutside,
+	},
 	props: {
+		dragging: {
+			type: Boolean,
+			default: false,
+		},
 		stack: {
 			type: Object,
 			default: undefined,
@@ -240,16 +264,20 @@ export default {
 			this.$store.dispatch('deleteStack', stack)
 			showUndo(t('deck', 'List deleted'), () => this.$store.dispatch('stackUndoDelete', stack))
 		},
-		archiveAllCardsFromStack(stack) {
+		setArchivedToAllCardsFromStack(stack, isArchived) {
 
 			this.stackTransfer.total = this.cardsByStack.length
 			this.cardsByStack.forEach((card, index) => {
 				this.stackTransfer.current = index
-				this.$store.dispatch('archiveUnarchiveCard', { ...card, archived: true })
+				this.$store.dispatch('archiveUnarchiveCard', { ...card, archived: isArchived })
 			})
 			this.modalArchivAllCardsShow = false
 		},
 		startEditing(stack) {
+			if (this.dragging) {
+			  return
+			}
+
 			this.copiedStack = Object.assign({}, stack)
 			this.editing = true
 		},
@@ -257,6 +285,9 @@ export default {
 			if (this.copiedStack.title !== stack.title) {
 				this.$store.dispatch('updateStack', this.copiedStack)
 			}
+			this.editing = false
+		},
+		cancelEdit() {
 			this.editing = false
 		},
 		async clickAddCard() {
@@ -359,7 +390,7 @@ export default {
 			margin: 6px;
 			padding: 4px 4px;
 
-			&:focus {
+			&:focus-visible {
 				outline: 2px solid var(--color-border-dark);
 				border-radius: 3px;
 			}

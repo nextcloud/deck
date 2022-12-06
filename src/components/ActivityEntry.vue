@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import RichText from '@juliushaertl/vue-richtext'
+import { RichText } from '@nextcloud/vue-richtext'
 import { NcUserBubble } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import DOMPurify from 'dompurify'

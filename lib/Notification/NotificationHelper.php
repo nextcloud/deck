@@ -129,7 +129,7 @@ class NotificationHelper {
 					->setSubject('card-overdue', [
 						$card->getTitle(), $board->getTitle()
 					])
-					->setDateTime(new DateTime($card->getDuedate()));
+					->setDateTime($card->getDuedate());
 				$this->notificationManager->notify($notification);
 			}
 		}
@@ -242,7 +242,7 @@ class NotificationHelper {
 		}
 		return $this->boards[$boardId];
 	}
-	
+
 	private function generateBoardShared(Board $board, string $userId): INotification {
 		$notification = $this->notificationManager->createNotification();
 		$notification

@@ -35,6 +35,7 @@ use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Notification\NotificationHelper;
+use OCA\Deck\Validators\AssignmentServiceValidator;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
@@ -76,6 +77,11 @@ class AssignmentService {
 	private $eventDispatcher;
 	/** @var string|null */
 	private $currentUser;
+	/**
+	 * @var AssignmentServiceValidator
+	 */
+	private $assignmentServiceValidator;
+
 
 	public function __construct(
 		PermissionService $permissionService,
@@ -86,8 +92,10 @@ class AssignmentService {
 		ActivityManager $activityManager,
 		ChangeHelper $changeHelper,
 		IEventDispatcher $eventDispatcher,
+		AssignmentServiceValidator $assignmentServiceValidator,
 		$userId
 	) {
+		$this->assignmentServiceValidator = $assignmentServiceValidator;
 		$this->permissionService = $permissionService;
 		$this->cardMapper = $cardMapper;
 		$this->assignedUsersMapper = $assignedUsersMapper;
@@ -96,6 +104,8 @@ class AssignmentService {
 		$this->changeHelper = $changeHelper;
 		$this->activityManager = $activityManager;
 		$this->eventDispatcher = $eventDispatcher;
+
+		$this->assignmentServiceValidator->check(compact('userId'));
 		$this->currentUser = $userId;
 	}
 
@@ -109,13 +119,7 @@ class AssignmentService {
 	 * @throws DoesNotExistException
 	 */
 	public function assignUser($cardId, $userId, int $type = Assignment::TYPE_USER) {
-		if (is_numeric($cardId) === false) {
-			throw new BadRequestException('card id must be a number');
-		}
-
-		if ($userId === false || $userId === null) {
-			throw new BadRequestException('user id must be provided');
-		}
+		$this->assignmentServiceValidator->check(compact('cardId', 'userId'));
 
 		if ($type !== Assignment::TYPE_USER && $type !== Assignment::TYPE_GROUP) {
 			throw new BadRequestException('Invalid type provided for assignemnt');
@@ -168,15 +172,8 @@ class AssignmentService {
 	 * @throws MultipleObjectsReturnedException
 	 */
 	public function unassignUser($cardId, $userId, $type = 0) {
+		$this->assignmentServiceValidator->check(compact('cardId', 'userId'));
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_EDIT);
-
-		if (is_numeric($cardId) === false) {
-			throw new BadRequestException('card id must be a number');
-		}
-
-		if ($userId === false || $userId === null) {
-			throw new BadRequestException('user must be provided');
-		}
 
 		$assignments = $this->assignedUsersMapper->findAll($cardId);
 		foreach ($assignments as $assignment) {

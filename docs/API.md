@@ -1,7 +1,7 @@
 
 The REST API provides access for authenticated users to their data inside the Deck app. To get a better understanding of Decks data models and their relations, please have a look at the  [data structure](structure.md) documentation.
 
-# Prequisited
+# Prerequisites
 
 - All requests require a `OCS-APIRequest` HTTP header to be set to `true` and a `Content-Type` of `application/json`.
 - The API is located at https://nextcloud.local/index.php/apps/deck/api/v1.0
@@ -9,7 +9,7 @@ The REST API provides access for authenticated users to their data inside the De
 
 ## Naming
 
-- Board is the the project like grouping of tasks that can be shared to different users and groups
+- Board is the project like grouping of tasks that can be shared to different users and groups
 
 - Stack is the grouping of cards which is rendered in vertical columns in the UI
 
@@ -1066,6 +1066,7 @@ Deck stores user and app configuration values globally and per board. The GET en
 | --- | --- |
 | calendar | Determines if the calendar/tasks integration through the CalDAV backend is enabled for the user (boolean) | 
 | cardDetailsInModal | Determines if the bigger view is used (boolean) | 
+| cardIdBadge | Determines if the ID badges are displayed on cards (boolean) | 
 | groupLimit | Determines if creating new boards is limited to certain groups of the instance. The resulting output is an array of group objects with the id and the displayname (Admin only)|  
 
 ```
@@ -1079,6 +1080,7 @@ Deck stores user and app configuration values globally and per board. The GET en
     "data": {
       "calendar": true,
       "cardDetailsInModal": true,
+      "cardIdBadge": true,
       "groupLimit": [
         {
           "id": "admin",
@@ -1109,6 +1111,7 @@ Deck stores user and app configuration values globally and per board. The GET en
 | notify-due | `off`, `assigned` or `all` |
 | calendar | Boolean |
 | cardDetailsInModal | Boolean |
+| cardIdBadge | Boolean |
  
 #### Example request
 

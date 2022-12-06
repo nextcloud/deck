@@ -55,6 +55,7 @@
 					<input v-model="copiedCard.title"
 						v-focus
 						type="text"
+						autocomplete="off"
 						required
 						pattern=".*\S+.*">
 					<input type="submit" value="" class="icon-confirm">
@@ -73,6 +74,7 @@
 					<span @click.stop="applyLabelFilter(label)">{{ label.title }}</span>
 				</li>
 			</transition-group>
+
 			<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
 				<CardBadges :card="card" />
 			</div>
@@ -206,7 +208,7 @@ export default {
 		background-color: var(--color-main-background);
 		margin-bottom: $card-spacing;
 
-		&::v-deep * {
+		&:deep(*) {
 			cursor: pointer;
 		}
 

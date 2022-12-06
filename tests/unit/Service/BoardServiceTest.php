@@ -35,6 +35,8 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Event\AclCreatedEvent;
+use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -46,6 +48,7 @@ use OCP\IGroupManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use \Test\TestCase;
 use OCP\IURLGenerator;
+use OCA\Deck\Validators\BoardServiceValidator;
 
 class BoardServiceTest extends TestCase {
 
@@ -84,6 +87,8 @@ class BoardServiceTest extends TestCase {
 	private $urlGenerator;
 	/** @var IDBConnection|MockObject */
 	private $connection;
+	/** @var BoardServiceValidator */
+	private $boardServiceValidator;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -104,6 +109,7 @@ class BoardServiceTest extends TestCase {
 		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->connection = $this->createMock(IDBConnection::class);
+		$this->boardServiceValidator = $this->createMock(BoardServiceValidator::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -123,6 +129,7 @@ class BoardServiceTest extends TestCase {
 			$this->changeHelper,
 			$this->urlGenerator,
 			$this->connection,
+			$this->boardServiceValidator,
 			$this->userId
 		);
 
@@ -370,6 +377,9 @@ class BoardServiceTest extends TestCase {
 			->method('insert')
 			->with($acl)
 			->willReturn($acl);
+		$this->eventDispatcher->expects(self::once())
+			->method('dispatchTyped')
+			->with(new AclCreatedEvent($acl));
 		$this->assertEquals($expected, $this->service->addAcl(
 			123, 'user', 'admin', $providedAcl[0], $providedAcl[1], $providedAcl[2]
 		));
@@ -427,6 +437,9 @@ class BoardServiceTest extends TestCase {
 			->method('delete')
 			->with($acl)
 			->willReturn($acl);
+		$this->eventDispatcher->expects(self::once())
+			->method('dispatchTyped')
+			->with(new AclDeletedEvent($acl));
 		$this->assertEquals($acl, $this->service->deleteAcl(123));
 	}
 }

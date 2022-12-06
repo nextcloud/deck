@@ -97,7 +97,7 @@ export default {
 			list.sort((a, b) => {
 				return (new Date(a.duedate)).getTime() - (new Date(b.duedate)).getTime()
 			})
-			return list.slice(0, 6)
+			return list.slice(0, 5)
 		},
 		cardLink() {
 			return (card) => {
@@ -129,7 +129,7 @@ export default {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-top: 8px;
+		margin-top: 10px;
 	}
 
 	#deck-widget-empty-content {
@@ -140,9 +140,8 @@ export default {
 	.card {
 		display: block;
 		border-radius: var(--border-radius-large);
-		padding: 8px;
-		height: 60px;
-
+		padding: 5px 8px;
+		height: 70px;
 		&:hover {
 			background-color: var(--color-background-hover);
 		}
@@ -155,14 +154,17 @@ export default {
 			text-overflow: ellipsis;
 			white-space: nowrap;
 			display: block;
+			position: relative;
+			top: 3px;
 		}
 	}
 
 	.labels {
 		margin-left: 0;
+		margin-top: 3px;
 	}
 
-	.duedate::v-deep {
+	.duedate:deep {
 		.due {
 			margin: 0 0 0 10px;
 			padding: 2px 4px;

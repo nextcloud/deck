@@ -121,6 +121,7 @@ class DeckProvider implements IProvider {
 				'link' => $this->deckUrl('/board/' . $event->getObjectId()),
 			];
 			$params['board'] = $board;
+			$event->setLink($this->deckUrl('/board/' . $event->getObjectId()));
 		}
 
 		if (isset($subjectParams['card']) && $event->getObjectType() === ActivityManager::DECK_OBJECT_CARD) {
@@ -134,8 +135,8 @@ class DeckProvider implements IProvider {
 			];
 
 			if (array_key_exists('board', $subjectParams)) {
-				$archivedParam = $subjectParams['card']['archived'] ? 'archived/' : '';
 				$card['link'] = $this->cardService->getRedirectUrlForCard($event->getObjectId());
+				$event->setLink($card['link']);
 			}
 			$params['card'] = $card;
 		}
@@ -311,12 +312,19 @@ class DeckProvider implements IProvider {
 			$userLanguage = $this->config->getUserValue($event->getAuthor(), 'core', 'lang', $this->l10nFactory->findLanguage());
 			$userLocale = $this->config->getUserValue($event->getAuthor(), 'core', 'locale', $this->l10nFactory->findLocale());
 			$l10n = $this->l10nFactory->get('deck', $userLanguage, $userLocale);
-			$date = new \DateTime($subjectParams['after']);
-			$date->setTimezone(new \DateTimeZone(\date_default_timezone_get()));
+			if (is_array($subjectParams['after'])) {
+				// Unluckily there was a time when we stored jsonSerialized date objects in the database
+				// Broken in 1.8.0 and fixed again in 1.8.1
+				$date = new \DateTime($subjectParams['after']['date']);
+				$date->setTimezone(new \DateTimeZone(\date_default_timezone_get()));
+			} else {
+				$date = new \DateTime($subjectParams['after']);
+				$date->setTimezone(new \DateTimeZone(\date_default_timezone_get()));
+			}
 			$params['after'] = [
 				'type' => 'highlight',
 				'id' => 'dt:' . $subjectParams['after'],
-				'name' => $l10n->l('datetime', $date)
+				'name' => $l10n->l('datetime', $date),
 			];
 		}
 		return $params;

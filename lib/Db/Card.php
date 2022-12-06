@@ -108,7 +108,7 @@ class Card extends RelationalEntity {
 		$this->addType('archived', 'boolean');
 		$this->addType('notified', 'boolean');
 		$this->addType('deletedAt', 'integer');
-		$this->addType('duedate', 'string');
+		$this->addType('duedate', 'datetime');
 		$this->addRelation('labels');
 		$this->addRelation('assignedUsers');
 		$this->addRelation('attachments');
@@ -126,20 +126,6 @@ class Card extends RelationalEntity {
 		$this->databaseType = $type;
 	}
 
-	public function getDueDateTime(): ?DateTime {
-		return $this->duedate ? new DateTime($this->duedate) : null;
-	}
-
-	public function getDuedate($isoFormat = false): ?string {
-		$dt = $this->getDueDateTime();
-		$format = 'c';
-		if (!$isoFormat && $this->databaseType === 'mysql') {
-			$format = 'Y-m-d H:i:s';
-		}
-
-		return $dt ? $dt->format($format) : null;
-	}
-
 	public function getCalendarObject(): VCalendar {
 		$calendar = new VCalendar();
 		$event = $calendar->createComponent('VTODO');
@@ -148,7 +134,7 @@ class Card extends RelationalEntity {
 			$creationDate = new DateTime();
 			$creationDate->setTimestamp($this->createdAt);
 			$event->DTSTAMP = $creationDate;
-			$event->DUE = new DateTime($this->getDuedate(true), new DateTimeZone('UTC'));
+			$event->DUE = new DateTime($this->getDuedate()->format('c'), new DateTimeZone('UTC'));
 		}
 		$event->add('RELATED-TO', 'deck-stack-' . $this->getStackId());
 

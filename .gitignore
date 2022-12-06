@@ -9,3 +9,4 @@ tests/.phpunit.result.cache
 vendor/
 .php_cs.cache
 \.idea/
+settings.json

@@ -170,7 +170,7 @@ export default {
 			}
 		},
 		attachmentPreview() {
-			return (attachment) => (attachment.extendedData.fileid ? generateUrl(`/core/preview?fileId=${attachment.extendedData.fileid}&x=64&y=64&a=true`) : null)
+			return (attachment) => (attachment.extendedData.fileid ? generateUrl(`/core/preview?fileId=${attachment.extendedData.fileid}&x=64&y=64`) : null)
 		},
 		attachmentUrl() {
 			return (attachment) => generateUrl(`/apps/deck/cards/${attachment.cardId}/attachment/${attachment.id}`)

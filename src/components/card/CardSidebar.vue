@@ -208,53 +208,54 @@ export default {
 
 <style lang="scss" scoped>
 
-	section.app-sidebar__tab--active {
-		min-height: auto;
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-	}
+section.app-sidebar__tab--active {
+	min-height: auto;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
 
-	// FIXME: Obivously we should at some point not randomly reuse the sidebar component
-	// since this is not oficially supported
-	.modal__card .app-sidebar {
-		$modal-padding: 14px;
-		border: 0;
-		min-width: calc(100% - #{$modal-padding * 2});
-		position: relative;
-		top: 0;
-		left: 0;
-		right: 0;
-		max-width: calc(100% - #{$modal-padding * 2});
-		padding: 0 14px;
-		max-height: 100%;
-		overflow: initial;
-		user-select: text;
-		-webkit-user-select: text;
+// FIXME: Obivously we should at some point not randomly reuse the sidebar component
+// since this is not oficially supported
+.modal__card .app-sidebar {
+	$modal-padding: 14px;
+	border: 0;
+	min-width: calc(100% - #{$modal-padding * 2});
+	position: relative;
+	top: 0;
+	left: 0;
+	right: 0;
+	max-width: calc(100% - #{$modal-padding * 2});
+	padding: 0 14px;
+	max-height: 100%;
+	overflow: initial;
+	user-select: text;
+	-webkit-user-select: text;
 
-		&::v-deep {
-			.app-sidebar-header {
-				position: sticky;
-				top: 0;
-				z-index: 100;
-				background-color: var(--color-main-background);
-			}
-			.app-sidebar-tabs__nav {
-				position: sticky;
-				top: 87px;
-				margin: 0;
-				z-index: 100;
-				background-color: var(--color-main-background);
-			}
+	// FIXME: test
+	&:deep {
+		.app-sidebar-header {
+			position: sticky;
+			top: 0;
+			z-index: 100;
+			background-color: var(--color-main-background);
+		}
+		.app-sidebar-tabs__nav {
+			position: sticky;
+			top: 87px;
+			margin: 0;
+			z-index: 100;
+			background-color: var(--color-main-background);
+		}
 
-			.app-sidebar__tab {
-				overflow: initial;
-			}
+		.app-sidebar__tab {
+			overflow: initial;
+		}
 
-			#emptycontent, .emptycontent {
-				margin-top: 88px;
-			}
+		#emptycontent, .emptycontent {
+			margin-top: 88px;
 		}
 	}
+}
 
 </style>

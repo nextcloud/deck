@@ -189,7 +189,7 @@ export default {
 		}
 
 		.color-picker-wrapper {
-			&, &::v-deep > .trigger {
+			&, &:deep > .trigger {
 				width: $clickable-area;
 				padding: 3px;
 				display: flex;

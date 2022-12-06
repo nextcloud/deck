@@ -367,7 +367,15 @@ class ActivityManager {
 			case self::SUBJECT_CARD_USER_ASSIGN:
 			case self::SUBJECT_CARD_USER_UNASSIGN:
 				$subjectParams = $this->findDetailsForCard($entity->getId(), $subject);
-				break;
+
+				if (isset($additionalParams['after']) && $additionalParams['after'] instanceof \DateTimeInterface) {
+					$additionalParams['after'] = $additionalParams['after']->format('c');
+				}
+				if (isset($additionalParams['before']) && $additionalParams['before'] instanceof \DateTimeInterface) {
+					$additionalParams['before'] = $additionalParams['before']->format('c');
+				}
+
+			break;
 			case self::SUBJECT_ATTACHMENT_CREATE:
 			case self::SUBJECT_ATTACHMENT_UPDATE:
 			case self::SUBJECT_ATTACHMENT_DELETE:

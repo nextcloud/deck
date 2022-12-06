@@ -65,12 +65,12 @@
 
 <script>
 import { NcAvatar, NcActions, NcActionButton, NcUserBubble } from '@nextcloud/vue'
-import RichText from '@juliushaertl/vue-richtext'
+import { RichText } from '@nextcloud/vue-richtext'
 import CommentForm from './CommentForm.vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import md5 from 'blueimp-md5'
 import relativeDate from '../../mixins/relativeDate.js'
-import ReplyIcon from 'vue-material-design-icons/Reply'
+import ReplyIcon from 'vue-material-design-icons/Reply.vue'
 
 const AtMention = {
 	name: 'AtMention',
@@ -222,7 +222,7 @@ export default {
 			padding-left: 8px;
 		}
 
-		&::v-deep .rich-text--wrapper {
+		&:deep(.rich-text--wrapper) {
 			margin-top: -3px;
 			color: var(--color-text-lighter);
 		}
@@ -241,7 +241,7 @@ export default {
 		}
 	}
 
-	.comment--content::v-deep {
+	.comment--content:deep {
 		a {
 			text-decoration: underline;
 		}

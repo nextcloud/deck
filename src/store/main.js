@@ -384,11 +384,13 @@ export default new Vuex.Store({
 			const storedBoard = await apiClient.updateBoard(board)
 			commit('addBoard', storedBoard)
 		},
-		createBoard({ commit }, boardData) {
-			apiClient.createBoard(boardData)
-				.then((board) => {
-					commit('addBoard', board)
-				})
+		async createBoard({ commit }, boardData) {
+			try {
+				const board = await apiClient.createBoard(boardData)
+				commit('addBoard', board)
+			} catch (err) {
+				return err
+			}
 		},
 		async cloneBoard({ commit }, boardData) {
 			try {

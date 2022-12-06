@@ -53,9 +53,11 @@
 				<Container lock-axix="y"
 					orientation="horizontal"
 					:drag-handle-selector="dragHandleSelector"
+					@drag-start="draggingStack = true"
+					@drag-end="draggingStack = false"
 					@drop="onDropStack">
 					<Draggable v-for="stack in stacksByBoard" :key="stack.id">
-						<Stack :stack="stack" />
+						<Stack :stack="stack" :dragging="draggingStack" />
 					</Draggable>
 				</Container>
 			</div>
@@ -100,6 +102,7 @@ export default {
 	},
 	data() {
 		return {
+			draggingStack: false,
 			loading: true,
 			newStackTitle: '',
 		}
@@ -117,7 +120,7 @@ export default {
 			return this.$store.getters.stacksByBoard(this.board.id)
 		},
 		dragHandleSelector() {
-			return this.canEdit ? null : '.no-drag'
+			return this.canEdit ? '.stack__title' : '.no-drag'
 		},
 		isEmpty() {
 			return this.stacksByBoard.length === 0
@@ -206,7 +209,7 @@ export default {
 		align-items: stretch;
 		height: 100%;
 
-		.smooth-dnd-draggable-wrapper::v-deep {
+		&:deep(.smooth-dnd-draggable-wrapper) {
 			display: flex;
 			height: auto;
 

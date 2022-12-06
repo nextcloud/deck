@@ -66,14 +66,14 @@ jobs:
         run: npm i -g npm@"${{ steps.versions.outputs.npmVersion }}"
 
       - name: Set up php ${{ env.PHP_VERSION }}
-        uses: shivammathur/setup-php@2.21.2
+        uses: shivammathur/setup-php@2.22.0
         with:
           php-version: ${{ env.PHP_VERSION }}
           coverage: none
 
       - name: Check composer.json
         id: check_composer
-        uses: andstor/file-existence-action@v1
+        uses: andstor/file-existence-action@v2
         with:
           files: "${{ env.APP_NAME }}/composer.json"
 

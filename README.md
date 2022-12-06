@@ -20,6 +20,7 @@ Deck is a kanban style organization tool aimed at personal planning and project 
 ### Mobile apps
 
 - [Nextcloud Deck app for Android](https://github.com/stefan-niedermann/nextcloud-deck) - It is available in [F-Droid](https://f-droid.org/de/packages/it.niedermann.nextcloud.deck/) and the [Google Play Store](https://play.google.com/store/apps/details?id=it.niedermann.nextcloud.deck.play)
+- [deck NG for Android and iOS](https://github.com/meltzow/deck-ng) - It is available in [Google Play Store](https://play.google.com/store/apps/details?id=net.meltzow.deckng) and [Apple App Store](https://apps.apple.com/us/app/deck-ng/id6443334702)
 
 ### 3rd-Party Integrations
 
@@ -65,13 +66,18 @@ Improvements on Nextcloud server and Deck itself will improve the situation.
 
 ## Developing
 
+### Nextcloud environment
+
+You need to setup a [development environment](https://docs.nextcloud.com/server/latest/developer_manual//getting_started/devenv.html) of the current nextcloud version. You can also alternatively install & run the [nextcloud docker container](https://github.com/juliushaertl/nextcloud-docker-dev).
+After the finished installation, you can clone the deck project directly in the `/[nextcloud-docker-dev-dir]/workspace/server/apps/` folder. 
+
 ### PHP
 
 Nothing to prepare, just dig into the code.
 
 ### JavaScript
 
-This requires at least Node 14 and npm 7 to be installed.
+This requires at least Node 16 and npm 7 to be installed.
 
 Deck requires running a `make build-js` to install npm dependencies and build the JavaScript code using webpack. While developing you can also use `make watch` to rebuild everytime the code changes.
 

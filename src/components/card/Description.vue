@@ -67,6 +67,7 @@
 			ref="markdownEditor"
 			v-model="description"
 			:configs="mdeConfig"
+			@initialized="addKeyListeners"
 			@update:modelValue="updateDescription"
 			@blur="saveDescription" />
 
@@ -93,7 +94,7 @@ import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
 import { mapState, mapGetters } from 'vuex'
 import attachmentUpload from '../../mixins/attachmentUpload'
-import PaperclipIcon from 'vue-material-design-icons/Paperclip'
+import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 
 const markdownIt = new MarkdownIt({
 	linkify: true,
@@ -110,7 +111,7 @@ markdownIt.use(MarkdownItLinkAttributes, {
 export default {
 	name: 'Description',
 	components: {
-		VueEasymde: () => import('vue-easymde/dist/VueEasyMDE.common'),
+		VueEasymde: () => import('vue-easymde/dist/VueEasyMDE.common.js'),
 		NcActions,
 		NcActionButton,
 		NcModal,
@@ -128,6 +129,7 @@ export default {
 	},
 	data() {
 		return {
+			keyExitState: 0,
 			description: '',
 			markdownIt: null,
 			descriptionEditing: false,
@@ -190,14 +192,37 @@ export default {
 		},
 	},
 	methods: {
+		addKeyListeners() {
+			this.$refs.markdownEditor.easymde.codemirror.on('keydown', (a, b) => {
+
+				if (this.keyExitState === 0 && (b.key === 'Meta' || b.key === 'Alt')) {
+					this.keyExitState = 1
+				}
+				if (this.keyExitState === 1 && b.key === 'Enter') {
+					this.keyExitState = 0
+					this.$refs.markdownEditor.easymde.codemirror.off('keydown', undefined)
+					this.$refs.markdownEditor.easymde.codemirror.off('keyup', undefined)
+					this.hideEditor()
+				}
+			})
+			this.$refs.markdownEditor.easymde.codemirror.on('keyup', (a, b) => {
+				if (b.key === 'Meta' || b.key === 'Control') {
+					this.keyExitState = 0
+				}
+
+			})
+		},
 		showEditor() {
 			if (!this.canEdit) {
 				return
 			}
 			this.descriptionEditing = true
 			this.description = this.card.description
+
 		},
 		hideEditor() {
+			this.$refs.markdownEditor.easymde.codemirror.off('keydown', undefined)
+			this.$refs.markdownEditor.easymde.codemirror.off('keyup', undefined)
 			this.descriptionEditing = false
 		},
 		showAttachmentModal() {
@@ -319,7 +344,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 
-	&::v-deep .attachment-list {
+	&:deep(.attachment-list) {
 		flex-shrink: 1;
 	}
 }
@@ -334,16 +359,16 @@ export default {
 	width: auto;
 	overflow-x: auto;
 
-	&::v-deep {
+	&:deep {
 		/* stylelint-disable-next-line no-invalid-position-at-import-rule */
 		@import './../../css/markdown';
 	}
 
-	&::v-deep input {
-		min-height: auto;
+	&:deep(input) {
+		height: auto;
 	}
 
-	&::v-deep a {
+	&:deep(a) {
 		text-decoration: underline;
 	}
 }

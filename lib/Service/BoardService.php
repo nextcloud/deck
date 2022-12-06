@@ -54,6 +54,7 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCP\IUserManager;
 use OCA\Deck\BadRequestException;
+use OCA\Deck\Validators\BoardServiceValidator;
 use OCP\IURLGenerator;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
@@ -79,6 +80,7 @@ class BoardService {
 	private ?array $boardsCache = null;
 	private IURLGenerator $urlGenerator;
 	private IDBConnection $connection;
+	private BoardServiceValidator $boardServiceValidator;
 
 	public function __construct(
 		BoardMapper $boardMapper,
@@ -98,6 +100,7 @@ class BoardService {
 		ChangeHelper $changeHelper,
 		IURLGenerator $urlGenerator,
 		IDBConnection $connection,
+		BoardServiceValidator $boardServiceValidator,
 		?string $userId
 	) {
 		$this->boardMapper = $boardMapper;
@@ -118,6 +121,7 @@ class BoardService {
 		$this->urlGenerator = $urlGenerator;
 		$this->cardMapper = $cardMapper;
 		$this->connection = $connection;
+		$this->boardServiceValidator = $boardServiceValidator;
 	}
 
 	/**
@@ -182,6 +186,7 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function find($boardId) {
+		$this->boardServiceValidator->check(compact('boardId'));
 		if ($this->boardsCache && isset($this->boardsCache[$boardId])) {
 			return $this->boardsCache[$boardId];
 		}
@@ -236,9 +241,7 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function isArchived($mapper, $id) {
-		if (is_numeric($id) === false) {
-			throw new BadRequestException('id must be a number');
-		}
+		$this->boardServiceValidator->check(compact('id'));
 
 		try {
 			$boardId = $id;
@@ -265,13 +268,7 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function isDeleted($mapper, $id) {
-		if ($mapper === false || $mapper === null) {
-			throw new BadRequestException('mapper must be provided');
-		}
-
-		if (is_numeric($id) === false) {
-			throw new BadRequestException('id must be a number');
-		}
+		$this->boardServiceValidator->check(compact('mapper', 'id'));
 
 		try {
 			$boardId = $id;
@@ -297,17 +294,7 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function create($title, $userId, $color) {
-		if ($title === false || $title === null) {
-			throw new BadRequestException('title must be provided');
-		}
-
-		if ($userId === false || $userId === null) {
-			throw new BadRequestException('userId must be provided');
-		}
-
-		if ($color === false || $color === null) {
-			throw new BadRequestException('color must be provided');
-		}
+		$this->boardServiceValidator->check(compact('title', 'userId', 'color'));
 
 		if (!$this->permissionService->canCreate()) {
 			throw new NoPermissionException('Creating boards has been disabled for your account.');
@@ -358,9 +345,7 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function delete($id) {
-		if (is_numeric($id) === false) {
-			throw new BadRequestException('board id must be a number');
-		}
+		$this->boardServiceValidator->check(compact('id'));
 
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
@@ -383,9 +368,7 @@ class BoardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function deleteUndo($id) {
-		if (is_numeric($id) === false) {
-			throw new BadRequestException('board id must be a number');
-		}
+		$this->boardServiceValidator->check(compact('id'));
 
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
@@ -406,9 +389,7 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function deleteForce($id) {
-		if (is_numeric($id) === false) {
-			throw new BadRequestException('id must be a number');
-		}
+		$this->boardServiceValidator->check(compact('id'));
 
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
@@ -429,21 +410,7 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function update($id, $title, $color, $archived) {
-		if (is_numeric($id) === false) {
-			throw new BadRequestException('board id must be a number');
-		}
-
-		if ($title === false || $title === null) {
-			throw new BadRequestException('title must be provided');
-		}
-
-		if ($color === false || $color === null) {
-			throw new BadRequestException('color must be provided');
-		}
-
-		if (is_bool($archived) === false) {
-			throw new BadRequestException('archived must be a boolean');
-		}
+		$this->boardServiceValidator->check(compact('id', 'title', 'color', 'archived'));
 
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
 		$board = $this->find($id);
@@ -493,29 +460,7 @@ class BoardService {
 	 * @throws \OCA\Deck\NoPermissionException
 	 */
 	public function addAcl($boardId, $type, $participant, $edit, $share, $manage) {
-		if (is_numeric($boardId) === false) {
-			throw new BadRequestException('board id must be a number');
-		}
-
-		if ($type === false || $type === null) {
-			throw new BadRequestException('type must be provided');
-		}
-
-		if ($participant === false || $participant === null) {
-			throw new BadRequestException('participant must be provided');
-		}
-
-		if ($edit === null) {
-			throw new BadRequestException('edit must be provided');
-		}
-
-		if ($share === null) {
-			throw new BadRequestException('share must be provided');
-		}
-
-		if ($manage === null) {
-			throw new BadRequestException('manage must be provided');
-		}
+		$this->boardServiceValidator->check(compact('boardId', 'type', 'participant', 'edit', 'share', 'manage'));
 
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_SHARE);
 		[$edit, $share, $manage] = $this->applyPermissions($boardId, $edit, $share, $manage);
@@ -561,21 +506,7 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function updateAcl($id, $edit, $share, $manage) {
-		if (is_numeric($id) === false) {
-			throw new BadRequestException('id must be a number');
-		}
-
-		if ($edit === null) {
-			throw new BadRequestException('edit must be provided');
-		}
-
-		if ($share === null) {
-			throw new BadRequestException('share must be provided');
-		}
-
-		if ($manage === null) {
-			throw new BadRequestException('manage must be provided');
-		}
+		$this->boardServiceValidator->check(compact('id', 'edit', 'share', 'manage'));
 
 		$this->permissionService->checkPermission($this->aclMapper, $id, Acl::PERMISSION_SHARE);
 
@@ -643,9 +574,7 @@ class BoardService {
 	 * @throws BadRequestException
 	 */
 	public function clone($id, $userId) {
-		if (is_numeric($id) === false) {
-			throw new BadRequestException('board id must be a number');
-		}
+		$this->boardServiceValidator->check(compact('id', 'userId'));
 
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 

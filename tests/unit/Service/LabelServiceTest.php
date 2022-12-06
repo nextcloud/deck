@@ -26,6 +26,7 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
+use OCA\Deck\Validators\LabelServiceValidator;
 use Test\TestCase;
 
 class LabelServiceTest extends TestCase {
@@ -40,6 +41,8 @@ class LabelServiceTest extends TestCase {
 	private $boardService;
 	/** @var ChangeHelper|\PHPUnit\Framework\MockObject\MockObject */
 	private $changeHelper;
+	/** @var  LabelServiceValidator\MockObject */
+	private $labelServiceValidator;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -49,11 +52,14 @@ class LabelServiceTest extends TestCase {
 			->disableOriginalConstructor()->getMock();
 		$this->boardService = $this->createMock(BoardService::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
+		$this->labelServiceValidator = $this->createMock(LabelServiceValidator::class);
+
 		$this->labelService = new LabelService(
 			$this->labelMapper,
 			$this->permissionService,
 			$this->boardService,
-			$this->changeHelper
+			$this->changeHelper,
+			$this->labelServiceValidator,
 		);
 	}
 
