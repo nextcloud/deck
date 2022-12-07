@@ -21,11 +21,15 @@
   -->
 
 <template>
-	<div>
+	<div @paste="onPaste">
 		<h5>
 			{{ t('deck', 'Description') }}
 			<span v-if="descriptionLastEdit && !descriptionSaving">{{ t('deck', '(Unsaved)') }}</span>
 			<span v-if="descriptionSaving">{{ t('deck', '(Saving…)') }}</span>
+			<span v-for="attachment in uploadQueue" v-bind:key="attachment.name">
+				<AttachmentUploadProgress :attachment="attachment" />
+			</span>
+
 			<a v-tooltip="t('deck', 'Formatting help')"
 				href="https://deck.readthedocs.io/en/latest/Markdown/"
 				target="_blank"
@@ -80,10 +84,12 @@ import MarkdownIt from 'markdown-it'
 import MarkdownItTaskCheckbox from 'markdown-it-task-checkbox'
 import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
 import AttachmentList from './AttachmentList.vue'
+import AttachmentUploadProgress from './AttachmentUploadProgress.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
 import { mapState, mapGetters } from 'vuex'
+import attachmentUpload from '../../mixins/attachmentUpload.js'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 
 const markdownIt = new MarkdownIt({
@@ -107,7 +113,10 @@ export default {
 		NcModal,
 		AttachmentList,
 		PaperclipIcon,
+		AttachmentUploadProgress,
 	},
+	mixins: [attachmentUpload],
+
 	props: {
 		card: {
 			type: Object,
@@ -174,6 +183,9 @@ export default {
 		hasDescription() {
 			return this.card?.description?.trim?.() !== ''
 		},
+		cardId() {
+			return this.card.id
+		},
 	},
 	methods: {
 		addKeyListeners() {
@@ -212,18 +224,35 @@ export default {
 		showAttachmentModal() {
 			this.modalShow = true
 		},
-		addAttachment(attachment) {
-			const descString = this.$refs.markdownEditor.easymde.value()
+		async addAttachment(attachment) {
 			let embed = ''
 			if ((attachment.type === 'file' && attachment.extendedData.hasPreview) || attachment.extendedData.mimetype.includes('image')) {
 				embed = '!'
 			}
 			const attachmentString = embed + '[📎 ' + attachment.data + '](' + this.attachmentPreview(attachment) + ')'
-			const newContent = descString + '\n' + attachmentString
+			const cursor = this.$refs.markdownEditor.easymde.codemirror.getCursor()
+			const descStringLines = this.$refs.markdownEditor.easymde.value().split('\n')
+			let lineUpatedLength = 0
+
+			for (let i = 0; i < descStringLines.length; i++) {
+				if (i === cursor.line) {
+					descStringLines[i] = descStringLines[i].substring(0, cursor.ch) + attachmentString + descStringLines[i].substring(cursor.ch)
+					lineUpatedLength = descStringLines[i].length
+					break
+				}
+			}
+
+			const newContent = descStringLines.join('\n')
 			this.$refs.markdownEditor.easymde.value(newContent)
 			this.description = newContent
 			this.modalShow = false
 			this.updateDescription()
+
+			if (lineUpatedLength > 0) {
+				await this.$nextTick()
+				this.$refs.markdownEditor.easymde.codemirror.focus()
+				this.$refs.markdownEditor.easymde.codemirror.setCursor({ line: cursor.line, ch: lineUpatedLength })
+			}
 		},
 		clickedPreview(e) {
 			if (e.target.getAttribute('type') === 'checkbox') {
@@ -262,6 +291,40 @@ export default {
 			this.descriptionSaveTimeout = setTimeout(async () => {
 				await this.saveDescription()
 			}, 2500)
+		},
+		async addLastAttachmmentOnCursor() {
+			const attachementLength = this.$store.getters.attachmentsByCard(this.card.id).length
+			if (attachementLength === 0) {
+				return
+			}
+			this.addAttachment(this.$store.getters.attachmentsByCard(this.card.id)[attachementLength - 1])
+		},
+		onPaste() {
+			if (!this.descriptionEditing) {
+				return
+			}
+
+			const clipboardData = event.clipboardData
+			let files = []
+			if (clipboardData.files && clipboardData.files.length > 0) {
+				files = clipboardData.files
+			} else if (clipboardData.items && clipboardData.items.length > 0) {
+				for (let i = 0; i < clipboardData.items.length; i++) {
+					if (clipboardData.items[i].kind === 'file') {
+						files.push(clipboardData.items[i].getAsFile())
+					}
+				}
+			}
+
+			if (files.length === 0) {
+				return
+			}
+
+			this.loading = true
+			event.preventDefault()
+			for (const file of files) {
+				this.onLocalAttachmentSelected(file, 'file').then(this.addLastAttachmmentOnCursor)
+			}
 		},
 	},
 }

@@ -37,15 +37,7 @@
 			@change="handleUploadFile">
 		<ul class="attachment-list">
 			<li v-for="attachment in uploadQueue" :key="attachment.name" class="attachment">
-				<a class="fileicon" :style="mimetypeForAttachment()" />
-				<div class="details">
-					<a>
-						<div class="filename">
-							<span class="basename">{{ attachment.name }}</span>
-						</div>
-						<progress :value="attachment.progress" max="100" />
-					</a>
-				</div>
+				<AttachmentUploadProgress :attachment="attachment" />
 			</li>
 			<li v-for="attachment in attachments"
 				:key="attachment.id"
@@ -113,6 +105,7 @@ import { mapState, mapActions } from 'vuex'
 import { loadState } from '@nextcloud/initial-state'
 import attachmentUpload from '../../mixins/attachmentUpload.js'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
+import AttachmentUploadProgress from './AttachmentUploadProgress.vue'
 const maxUploadSizeState = loadState('deck', 'maxUploadSize')
 
 const picker = getFilePickerBuilder(t('deck', 'File to share'))
@@ -129,6 +122,7 @@ export default {
 		NcActionButton,
 		NcActionLink,
 		AttachmentDragAndDrop,
+		AttachmentUploadProgress,
 	},
 	mixins: [relativeDate, attachmentUpload],
 
