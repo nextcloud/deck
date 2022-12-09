@@ -234,12 +234,10 @@ export default {
 			const descStringLines = this.$refs.markdownEditor.easymde.value().split('\n')
 			let lineUpatedLength = 0
 
-			for (let i = 0; i < descStringLines.length; i++) {
-				if (i === cursor.line) {
-					descStringLines[i] = descStringLines[i].substring(0, cursor.ch) + attachmentString + descStringLines[i].substring(cursor.ch)
-					lineUpatedLength = descStringLines[i].length
-					break
-				}
+			if (descStringLines[cursor.line]) {
+				const line = descStringLines[cursor.line]
+				descStringLines[cursor.line] = line.substring(0, cursor.ch) + attachmentString + line.substring(cursor.ch)
+				lineUpatedLength = descStringLines[cursor.line].length
 			}
 
 			const newContent = descStringLines.join('\n')
