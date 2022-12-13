@@ -18,6 +18,7 @@ OC.L10N.register(
     "Details" : "Üksikasjad",
     "Sharing" : "Jagamine",
     "Tags" : "Sildid",
+    "Undo" : "Tühista",
     "Can edit" : "Võib redigeerida",
     "Can share" : "Can share",
     "Owner" : "Omanik",
@@ -42,6 +43,7 @@ OC.L10N.register(
     "Shared with you" : "Sinuga jagatud",
     "No notifications" : "Märguandeid pole",
     "An error occurred" : "Tekkis tõrge",
-    "Share" : "Jaga"
+    "Share" : "Jaga",
+    "This week" : "Käesolev nädal"
 },
 "nplurals=2; plural=(n != 1);");
