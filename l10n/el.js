@@ -245,7 +245,7 @@ OC.L10N.register(
     "Archive card" : "Αρχειοθέτηση καρτέλας",
     "Delete card" : "Διαγραφή καρτέλας",
     "Move card to another board" : "Μετακίνηση καρτέλας σε άλλο πίνακα",
-    "List is empty" : "Η λίστα είναι άδεια.",
+    "List is empty" : "Η λίστα είναι κενή",
     "Card deleted" : "Η καρτέλα διαγράφηκε",
     "seconds ago" : " δευτερόλεπτα πριν ",
     "All boards" : "Όλοι οι πίνακες",
