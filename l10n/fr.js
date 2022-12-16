@@ -131,7 +131,7 @@ OC.L10N.register(
     "Overwrite file" : "Remplacer le fichier",
     "Keep existing file" : "Conserver le fichier existant",
     "This board is read only" : "Ce tableau est en lecture seule",
-    "Drop your files to upload" : "Glissez vos fichiers pour les envoyer",
+    "Drop your files to upload" : "Glissez vos fichiers pour les téléverser",
     "Add card" : "Ajouter une carte",
     "Archived cards" : "Cartes archivées",
     "Add list" : "Ajouter une liste",
