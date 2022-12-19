@@ -45,15 +45,15 @@
 					{{ t('deck', 'Can edit') }}
 				</NcActionCheckbox>
 				<NcActions v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0)" :force-menu="true">
-					<ActionCheckbox v-if="canManage || canShare" :checked="acl.permissionShare" @change="clickShareAcl(acl)">
+					<NcActionCheckbox v-if="canManage || canShare" :checked="acl.permissionShare" @change="clickShareAcl(acl)">
 						{{ t('deck', 'Can share') }}
-					</ActionCheckbox>
-					<ActionCheckbox v-if="canManage" :checked="acl.permissionManage" @change="clickManageAcl(acl)">
+					</NcActionCheckbox>
+					<NcActionCheckbox v-if="canManage" :checked="acl.permissionManage" @change="clickManageAcl(acl)">
 						{{ t('deck', 'Can manage') }}
-					</ActionCheckbox>
-					<ActionCheckbox v-if="acl.type === 0 && isCurrentUser(board.owner.uid)" :checked="acl.owner" @change="clickTransferOwner(acl.participant.uid)">
+					</NcActionCheckbox>
+					<NcActionCheckbox v-if="acl.type === 0 && isCurrentUser(board.owner.uid)" :checked="acl.owner" @change="clickTransferOwner(acl.participant.uid)">
 						{{ t('deck', 'Owner') }}
-					</ActionCheckbox>
+					</NcActionCheckbox>
 					<NcActionButton v-if="canManage" icon="icon-delete" @click="clickDeleteAcl(acl)">
 						{{ t('deck', 'Delete') }}
 					</NcActionButton>
