@@ -53,7 +53,8 @@ class Capabilities implements ICapability {
 				'canCreateBoards' => $this->permissionService->canCreate(),
 				'apiVersions' => [
 					'1.0',
-					'1.1'
+					'1.1',
+					'1.2'
 				]
 			]
 		];
