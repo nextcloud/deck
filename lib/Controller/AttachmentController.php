@@ -26,31 +26,22 @@ namespace OCA\Deck\Controller;
 use OCA\Deck\Service\AttachmentService;
 use OCP\AppFramework\Controller;
 use OCP\IRequest;
-use OCA\Deck\Db\AttachmentMapper;
 
 class AttachmentController extends Controller {
 
 	/** @var AttachmentService */
 	private $attachmentService;
-	private $attachmentMapper;
 
-	public function __construct($appName, IRequest $request, AttachmentService $attachmentService, AttachmentMapper $attachmentMapper) {
+	public function __construct($appName, IRequest $request, AttachmentService $attachmentService) {
 		parent::__construct($appName, $request);
 		$this->attachmentService = $attachmentService;
-		$this->attachmentMapper = $attachmentMapper;
 	}
 
 	/**
 	 * @NoAdminRequired
 	 */
 	public function getAll($cardId) {
-		$attachments = $this->attachmentService->findAll($cardId, true);
-
-		foreach ($attachments as &$attachment) {
-			$this->attachmentMapper->mapOwner($attachment);
-		}
-
-		return $attachments;
+		return $this->attachmentService->findAll($cardId, true);
 	}
 
 	/**

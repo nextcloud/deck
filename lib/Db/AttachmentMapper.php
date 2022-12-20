@@ -156,14 +156,4 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 		}
 		return $this->cardMapper->findBoardId($attachment->getCardId());
 	}
-
-	public function mapOwner(Attachment &$attachment) {
-		$attachment->resolveRelation('createdBy', function ($userId) {
-			$user = $this->userManager->get($userId);
-			if ($user !== null) {
-				return new User($user);
-			}
-			return $user;
-		});
-	}
 }

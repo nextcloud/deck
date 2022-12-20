@@ -60,6 +60,7 @@ class AttachmentService {
 	private $activityManager;
 	/** @var ChangeHelper */
 	private $changeHelper;
+	/** @var IUserManager */
 	private IUserManager $userManager;
 	/** @var AttachmentServiceValidator */
 	private AttachmentServiceValidator $attachmentServiceValidator;
@@ -71,6 +72,7 @@ class AttachmentService {
 		ChangeHelper $changeHelper,
 		PermissionService $permissionService,
 		Application $application,
+		ICacheFactory $cacheFactory,
 		AttachmentCacheHelper $attachmentCacheHelper,
 		$userId,
 		IL10N $l10n,

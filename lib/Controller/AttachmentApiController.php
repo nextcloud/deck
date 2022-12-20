@@ -27,16 +27,13 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use OCA\Deck\Service\AttachmentService;
-use OCA\Deck\Db\AttachmentMapper;
 
 class AttachmentApiController extends ApiController {
 	private $attachmentService;
-	private $attachmentMapper;
 
-	public function __construct($appName, IRequest $request, AttachmentService $attachmentService, AttachmentMapper $attachmentMapper) {
+	public function __construct($appName, IRequest $request, AttachmentService $attachmentService) {
 		parent::__construct($appName, $request);
 		$this->attachmentService = $attachmentService;
-		$this->attachmentMapper = $attachmentMapper;
 	}
 
 	/**
@@ -52,13 +49,6 @@ class AttachmentApiController extends ApiController {
 				return $attachment->getType() === 'deck_file';
 			});
 		}
-
-		if ($apiVersion === '1.2') {
-			foreach ($attachment as &$attachment) {
-				$this->attachmentMapper->mapOwner($attachment);
-			}
-		}
-
 		return new DataResponse($attachment, HTTP::STATUS_OK);
 	}
 
