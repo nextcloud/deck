@@ -29,7 +29,6 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "No reminder" : "Dim nodyn atgoffa",
     "An error occurred" : "Digwyddodd gwall",
-    "Share" : "Rhannu",
-    "This week" : "Wythnos yma"
+    "Share" : "Rhannu"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

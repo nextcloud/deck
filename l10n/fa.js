@@ -255,7 +255,6 @@ OC.L10N.register(
     "An error occurred" : "خطایی روی داد",
     "No results found" : "هیچ نتیجه ای یافت نشد",
     "Error creating the share" : "خطایی در ایجاد اشتراک",
-    "Share" : "هم‌رسانی",
-    "This week" : "این هفته"
+    "Share" : "هم‌رسانی"
 },
 "nplurals=2; plural=(n > 1);");

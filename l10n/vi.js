@@ -122,7 +122,6 @@ OC.L10N.register(
     "An error occurred" : "Có lỗi đã xảy ra",
     "{stack} in {board}" : "{stack} trong {board}",
     "Maximum file size of {size} exceeded" : "Đã vượt quá kích thước {size} tối đa tập tin",
-    "Share" : "Chia sẻ",
-    "This week" : "Tuần này"
+    "Share" : "Chia sẻ"
 },
 "nplurals=1; plural=0;");

@@ -38,7 +38,6 @@ OC.L10N.register(
     "seconds ago" : "хоёрдахь өмнө",
     "Shared with you" : "тантай хуваалцсан",
     "No notifications" : "Мэдэгдэл байхгүй",
-    "Share" : "Түгээх",
-    "This week" : "7 хоног"
+    "Share" : "Түгээх"
 },
 "nplurals=2; plural=(n != 1);");

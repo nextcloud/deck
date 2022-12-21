@@ -60,7 +60,6 @@ OC.L10N.register(
     "Archive board" : "Archivar tablero",
     "No notifications" : "No hay notificaciones",
     "Delete board" : "Borrar tableros",
-    "Share" : "Compartir",
-    "This week" : "Esta semana"
+    "Share" : "Compartir"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

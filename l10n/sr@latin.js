@@ -34,7 +34,6 @@ OC.L10N.register(
     "Archive board" : "Arhiviraj tablu",
     "No notifications" : "Nema obaveštenja",
     "Delete board" : "Izbriši tablu",
-    "Share" : "Podeli",
-    "This week" : "Ove sedmice"
+    "Share" : "Podeli"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

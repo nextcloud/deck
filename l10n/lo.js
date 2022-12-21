@@ -22,7 +22,6 @@ OC.L10N.register(
     "seconds ago" : "ວິນາທີຜ່ານມາ",
     "Shared with you" : "ແບ່ງປັບກັບທ່ານ",
     "No notifications" : "ບໍ່ມີການແຈ້ງເຕືອນ",
-    "Share" : "ແບ່ງປັນ",
-    "This week" : "ທິດນີ້"
+    "Share" : "ແບ່ງປັນ"
 },
 "nplurals=1; plural=0;");

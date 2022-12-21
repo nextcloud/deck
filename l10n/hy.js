@@ -20,7 +20,6 @@ OC.L10N.register(
     "Description" : "Նկարագրություն",
     "seconds ago" : "վրկ. առաջ",
     "Shared with you" : "Shared with you",
-    "Share" : "Կիսվել",
-    "This week" : "այս շաբաթ"
+    "Share" : "Կիսվել"
 },
 "nplurals=2; plural=(n != 1);");
