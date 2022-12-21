@@ -41,7 +41,6 @@ OC.L10N.register(
     "seconds ago" : "วินาที ก่อนหน้านี้",
     "Shared with you" : "Shared with you",
     "An error occurred" : "เกิดข้อผิดพลาด",
-    "Share" : "แชร์",
-    "This week" : "สัปดาห์นี้"
+    "Share" : "แชร์"
 },
 "nplurals=1; plural=0;");

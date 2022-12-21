@@ -15,6 +15,7 @@ OC.L10N.register(
     "Owner" : "Owner",
     "Delete" : "நீக்குக",
     "Edit" : "தொகுக்க",
+    "Show in Files" : "கோப்புகளில் காட்டவும்",
     "Download" : "பதிவிறக்குக",
     "Modified" : "மாற்றப்பட்டது",
     "Today" : "இன்று",

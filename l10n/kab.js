@@ -19,7 +19,6 @@ OC.L10N.register(
     "Today" : "Ass-a",
     "Save" : "Sekles",
     "No notifications" : "Ulac tisezmal",
-    "Share" : "Bḍu",
-    "This week" : "Dduṛt agi"
+    "Share" : "Bḍu"
 },
 "nplurals=2; plural=(n != 1);");

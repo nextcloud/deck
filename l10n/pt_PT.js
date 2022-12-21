@@ -158,7 +158,6 @@ OC.L10N.register(
     "Delete board" : "Eliminar quadro",
     "No reminder" : "Nenhum lembrete",
     "An error occurred" : "Ocorreu um erro",
-    "Share" : "Partilhar",
-    "This week" : "Esta semana"
+    "Share" : "Partilhar"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

@@ -57,7 +57,6 @@ OC.L10N.register(
     "Archive board" : "დაფის არქივირება",
     "No notifications" : "შეტყობინებები არაა",
     "Delete board" : "დაფის გაუქმება",
-    "Share" : "გაზიარება",
-    "This week" : "ამ კვირაში"
+    "Share" : "გაზიარება"
 },
 "nplurals=2; plural=(n!=1);");

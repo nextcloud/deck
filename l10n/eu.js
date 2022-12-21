@@ -303,12 +303,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Partekatu Deck txartel baten bidez",
     "Share {file} with a Deck card" : "Partekatu {file} Deck txartel baten bidez",
     "Share" : "Partekatu",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck aplikazioa plangintza pertsonalera eta proiektuen antolaketara zuzenduta dagoen Nextcloudekin integratutako kanban moduko tresna bat da.\n\n\n- 📥 Gehitu atazak txarteletan eta ordenatu\n- 📄 Idatzi ohar gehigarriak markdown erabiliz\n- 🔖 Esleitu etiketak antolaketa are gehiago hobetzeko\n- 👥 Partekatu zure talde, lagun edo familiarekin\n- 📎 Erantsi fitxategiak eta kapsulatu zure markdown deskribapenean\n- 💬 Eztabaidatu zure taldearekin iruzkinak erabiliz\n- ⚡ Egin aldaketen jarraipena jarduera jarioa erabiliz\n- 🚀 Antolatu zure proiektua",
-    "Are you sure you want to transfer the board {title} for {user} ?" : "Ziur {title} transferitu nahi duzula {user}-en panela ?",
+    "Are you sure you want to transfer the board {title} for {user}?" : "Ziur {title} taula transferitu nahi duzula {user}?",
     "Transfer the board for {user} successfully" : "Transferitu {user}-ren panela behar bezala",
     "Failed to transfer the board for {user}" : "Ezin izan da transferitu {user}-ren panela",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Ziur zaude «{title}» taula ezabatu nahi duzula? Honek taula honen datu guztiak ezabatuko ditu.",
-    "This week" : "Aste honetan",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Ziur {title} taula transferitu nahi duzula {user}?"
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Ziur zaude «{title}» taula ezabatu nahi duzula? Honek taula honen datu guztiak ezabatuko ditu."
 },
 "nplurals=2; plural=(n != 1);");

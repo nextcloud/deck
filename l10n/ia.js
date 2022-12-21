@@ -36,7 +36,6 @@ OC.L10N.register(
     "seconds ago" : "secundas passate",
     "Shared with you" : "Compartite con te",
     "No notifications" : "Nulle notificationes",
-    "Share" : "Compartir",
-    "This week" : "Iste septimana"
+    "Share" : "Compartir"
 },
 "nplurals=2; plural=(n != 1);");

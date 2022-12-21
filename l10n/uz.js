@@ -19,7 +19,6 @@ OC.L10N.register(
     "Save" : "Save",
     "Update" : "Update",
     "seconds ago" : "seconds ago",
-    "Shared with you" : "Shared with you",
-    "This week" : "This week"
+    "Shared with you" : "Shared with you"
 },
 "nplurals=1; plural=0;");

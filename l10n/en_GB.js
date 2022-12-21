@@ -306,12 +306,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Share with a Deck card",
     "Share {file} with a Deck card" : "Share {file} with a Deck card",
     "Share" : "Share",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
-    "Are you sure you want to transfer the board {title} for {user} ?" : "Are you sure you want to transfer the board {title} for {user} ?",
+    "Are you sure you want to transfer the board {title} for {user}?" : "Are you sure you want to transfer the board {title} for {user}?",
     "Transfer the board for {user} successfully" : "Transfer the board for {user} successfully",
     "Failed to transfer the board for {user}" : "Failed to transfer the board for {user}",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Are you sure you want to delete the board {title}? This will delete all the data of this board.",
-    "This week" : "This week",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Are you sure you want to transfer the board {title} for {user}?"
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Are you sure you want to delete the board {title}? This will delete all the data of this board."
 },
 "nplurals=2; plural=(n != 1);");
