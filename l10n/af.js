@@ -39,7 +39,6 @@ OC.L10N.register(
     "Shared with you" : "Met u gedeel",
     "No notifications" : "Geen kennisgewings",
     "An error occurred" : "'n Fout het voorgekom",
-    "Share" : "Deel",
-    "This week" : "Vandeesweek"
+    "Share" : "Deel"
 },
 "nplurals=2; plural=(n != 1);");

@@ -306,12 +306,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Compartir con una tarjeta de Deck",
     "Share {file} with a Deck card" : "Compartir {file} con una tarjeta de Deck",
     "Share" : "Compartir",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck es una herramienta de organización de estilo kanban dirigida a la planificación personal y la organización de proyectos para equipos integrados con Nextcloud.\n\n\n- 📥 Agrega tus tareas a las tarjetas y ordénalas.\n- 📄 Escriba notas adicionales\n- 🔖 Asignar etiquetas para una organización mejor\n- 👥 Comparte con tu equipo, amigos o familia.\n- 📎 Adjuntar archivos e incrustarlos en su descripción\n- 💬 Discuta con su equipo usando comentarios.\n- ⚡ Mantenga un registro de los cambios en el flujo de actividad\n- 🚀 Organiza tu proyecto",
-    "Are you sure you want to transfer the board {title} for {user} ?" : "¿Estás seguro de que quieres transferir el tablero {título} a {usuario}?",
+    "Are you sure you want to transfer the board {title} for {user}?" : "¿Estás seguro de que quieres transferir el tablero {título} a {usuario}?",
     "Transfer the board for {user} successfully" : "Transferir el tablero para {usuario} con éxito",
     "Failed to transfer the board for {user}" : "No se ha podido transferir el tablero para {usuario}",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "¿Estas seguro de que quieres eliminar el tablero {title}? Esto eliminará todos los datos del tablero.",
-    "This week" : "Esta semana",
-    "Are you sure you want to transfer the board {title} for {user}?" : "¿Estás seguro de que quieres transferir el tablero {título} a {usuario}?"
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "¿Estas seguro de que quieres eliminar el tablero {title}? Esto eliminará todos los datos del tablero."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

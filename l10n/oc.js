@@ -54,7 +54,6 @@ OC.L10N.register(
     "An error occurred" : "Una error s’es producha",
     "{stack} in {board}" : "{stack} dins {board}",
     "Create a card" : "Crear una carta",
-    "Share" : "Partejar",
-    "This week" : "Aquesta setmana"
+    "Share" : "Partejar"
 },
 "nplurals=2; plural=(n > 1);");

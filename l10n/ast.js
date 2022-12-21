@@ -45,7 +45,6 @@ OC.L10N.register(
     "seconds ago" : "hai segundos",
     "Shared with you" : "Shared with you",
     "No notifications" : "Ensin avisos",
-    "Share" : "Share",
-    "This week" : "Esta selmana"
+    "Share" : "Share"
 },
 "nplurals=2; plural=(n != 1);");

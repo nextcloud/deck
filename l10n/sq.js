@@ -61,7 +61,6 @@ OC.L10N.register(
     "Archive board" : "Arkivo bordin",
     "No notifications" : "Asnjë njofim",
     "Delete board" : "Fshij bordin",
-    "Share" : "Shpërndaje",
-    "This week" : "Këtë javë"
+    "Share" : "Shpërndaje"
 },
 "nplurals=2; plural=(n != 1);");

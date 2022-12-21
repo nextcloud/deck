@@ -43,7 +43,6 @@ OC.L10N.register(
     "Shared with you" : "Sinuga jagatud",
     "No notifications" : "Märguandeid pole",
     "An error occurred" : "Tekkis tõrge",
-    "Share" : "Jaga",
-    "This week" : "Käesolev nädal"
+    "Share" : "Jaga"
 },
 "nplurals=2; plural=(n != 1);");

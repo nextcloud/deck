@@ -24,7 +24,6 @@ OC.L10N.register(
     "Save" : "Sàbhail",
     "seconds ago" : "diog air ais",
     "No notifications" : "Gun bhrath",
-    "Share" : "Co-roinn",
-    "This week" : "An t-seachdain seo"
+    "Share" : "Co-roinn"
 },
 "nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;");
