@@ -96,6 +96,7 @@ OC.L10N.register(
     "Next week" : "다음주",
     "Next month" : "다음달",
     "Save" : "저장",
+    "Cancel reply" : "응답 취소",
     "Reply" : "답장",
     "Update" : "업데이트",
     "Description" : "설명",
