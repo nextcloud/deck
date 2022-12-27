@@ -38,7 +38,7 @@ export class BoardApi {
 	 * Updates a board.
 	 *
 	 * @param {Board} board the board object to update
-	 * @returns {Promise}
+	 * @return {Promise}
 	 */
 	updateBoard(board) {
 		return axios.put(this.url(`/boards/${board.id}`), board)
@@ -63,7 +63,7 @@ export class BoardApi {
 	 * @property {string} color
 	 * @param {BoardCreateObject} boardData The board data to send.
 	 *        color the hexadecimal color value formated /[0-9A-F]{6}/i
-	 * @returns {Promise}
+	 * @return {Promise}
 	 */
 	createBoard(boardData) {
 		return axios.post(this.url('/boards'), boardData)

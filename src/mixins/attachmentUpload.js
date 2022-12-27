@@ -48,7 +48,7 @@ export default {
 			bodyFormData.append('cardId', this.cardId)
 			bodyFormData.append('type', type)
 			bodyFormData.append('file', file)
-			await queue.add(async() => {
+			await queue.add(async () => {
 				try {
 					await this.$store.dispatch('createAttachment', {
 						cardId: this.cardId,

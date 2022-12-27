@@ -178,7 +178,6 @@ class BoardController extends ApiController {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function export($boardId) {
-
 		return $this->boardService->export($boardId);
 	}
 }
