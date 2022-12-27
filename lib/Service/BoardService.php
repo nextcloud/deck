@@ -660,7 +660,7 @@ class BoardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function export($id) {
+	public function export($id) : Board {
 		if (is_numeric($id) === false) {
 			throw new BadRequestException('board id must be a number');
 		}
@@ -720,8 +720,8 @@ class BoardService {
 		unset($this->boardsCache[$boardId]);
 	}
 
-	private function enrichWithCards($board, $since = -1) {
-		$stacks = $this->stackMapper->findAll($board->getId(), null, null, $since);
+	private function enrichWithCards($board) {
+		$stacks = $this->stackMapper->findAll($board->getId());
 		foreach ($stacks as $stack) {
 			$cards = $this->cardMapper->findAllByStack($stack->getId());
 			$fullCards = [];
