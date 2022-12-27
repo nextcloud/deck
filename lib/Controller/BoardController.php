@@ -173,7 +173,7 @@ class BoardController extends ApiController {
 	/**
 	 * @NoAdminRequired
 	 * @param $boardId
-	 * @return \OCA\Deck\DB\Board
+	 * @return Board
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
