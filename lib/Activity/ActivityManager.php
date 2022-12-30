@@ -325,7 +325,6 @@ class ActivityManager {
 		 */
 		$eventType = 'deck';
 		$subjectParams = [];
-		$message = null;
 		switch ($subject) {
 			// No need to enhance parameters since entity already contains the required data
 			case self::SUBJECT_BOARD_CREATE:
@@ -433,10 +432,6 @@ class ActivityManager {
 			->setObject($objectType, (int)$object->getId(), $object->getTitle())
 			->setSubject($subject, $subjectParams)
 			->setTimestamp(time());
-
-		if ($message !== null) {
-			$event->setMessage($message);
-		}
 
 		// FIXME: We currently require activities for comments even if they are disabled though settings
 		// Get rid of this once the frontend fetches comments/activity individually

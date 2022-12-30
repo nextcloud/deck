@@ -12,6 +12,7 @@ use OCP\EventDispatcher\IEventListener;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\User\Events\UserDeletedEvent;
 
+/** @template-implements IEventListener<Event|UserDeletedEvent|GroupDeletedEvent|CircleDestroyedEvent> */
 class ParticipantCleanupListener implements IEventListener {
 	private AclMapper $aclMapper;
 	private AssignmentMapper $assignmentMapper;

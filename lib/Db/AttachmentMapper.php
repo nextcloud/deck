@@ -31,6 +31,7 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IUserManager;
 
+/** @template-extends DeckMapper<Attachment> */
 class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	private $cardMapper;
 	private $userManager;

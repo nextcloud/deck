@@ -35,6 +35,7 @@ use OCP\IGroupManager;
 use OCP\IUserManager;
 use PDO;
 
+/** @template-extends QBMapper<Assignment> */
 class AssignmentMapper extends QBMapper implements IPermissionMapper {
 
 	/** @var CardMapper */

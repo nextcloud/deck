@@ -29,6 +29,7 @@ use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
+/** @template-extends DeckMapper<Stack> */
 class StackMapper extends DeckMapper implements IPermissionMapper {
 	private $cardMapper;
 
@@ -112,11 +113,6 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	/**
-	 * @param Entity $entity
-	 * @return Entity
-	 * @throws \OCP\DB\Exception
-	 */
 	public function delete(Entity $entity): Entity {
 		// delete cards on stack
 		$this->cardMapper->deleteByStack($entity->getId());
