@@ -169,4 +169,15 @@ class BoardController extends ApiController {
 
 		return new DataResponse([], HTTP::STATUS_UNAUTHORIZED);
 	}
+
+	/**
+	 * @NoAdminRequired
+	 * @param $boardId
+	 * @return Board
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
+	public function export($boardId) {
+		return $this->boardService->export($boardId);
+	}
 }

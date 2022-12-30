@@ -114,6 +114,7 @@ class BoardServiceTest extends TestCase {
 		$this->service = new BoardService(
 			$this->boardMapper,
 			$this->stackMapper,
+			$this->cardMapper,
 			$this->config,
 			$this->l10n,
 			$this->labelMapper,
@@ -121,7 +122,6 @@ class BoardServiceTest extends TestCase {
 			$this->permissionService,
 			$this->notificationHelper,
 			$this->assignedUsersMapper,
-			$this->cardMapper,
 			$this->userManager,
 			$this->groupManager,
 			$this->activityManager,
