@@ -1,5 +1,5 @@
-import { randHash } from '../utils/index.js'
-const randUser = randHash()
+import { randUser } from '../utils/index.js'
+const user = randUser()
 
 const boardTitle = 'TestBoard'
 const testBoardData = {
@@ -11,20 +11,20 @@ const testBoardData = {
 }
 
 describe('Stack', function() {
-	const password = 'pass123'
 
 	before(function() {
-		cy.nextcloudCreateUser(randUser, password)
+		cy.createUser(user)
+		cy.login(user)
 		cy.createExampleBoard({
-			user: randUser,
-			password,
+			user: user.userId,
+			password: user.password,
 			board: testBoardData,
 		})
 	})
 
 	beforeEach(function() {
-		cy.logout()
-		cy.login(randUser, password)
+		cy.login(user)
+		cy.visit('/apps/deck')
 
 		cy.openLeftSidebar()
 		cy.getNavigationEntry(boardTitle)
@@ -40,13 +40,13 @@ describe('Stack', function() {
 	})
 
 	it('Can edit a stack title', function() {
+		cy.contains('Existing Stack1')
 		cy.get('[data-cy-stack="Existing Stack1"]').within(() => {
 			cy.contains('Existing Stack1').click()
-			cy.focused().type(' with a new title')
+			cy.focused().type(' renamed')
 			cy.get('[data-cy="editStackTitleForm"] input[type="submit"]').click()
-
-			cy.contains('Existing Stack1 with a new title').should('be.visible')
 		})
+		cy.contains('Existing Stack1 renamed').should('be.visible')
 	})
 
 	it('Can abort a stack title edit via esc', function() {
