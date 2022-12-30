@@ -29,6 +29,7 @@ use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
+/** @template-extends DeckMapper<Label> */
 class LabelMapper extends DeckMapper implements IPermissionMapper {
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'deck_labels', Label::class);
@@ -51,11 +52,6 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	/**
-	 * @param Entity $entity
-	 * @return Entity
-	 * @throws \OCP\DB\Exception
-	 */
 	public function delete(Entity $entity): Entity {
 		// delete assigned labels
 		$this->deleteLabelAssignments($entity->getId());
@@ -105,23 +101,12 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	/**
-	 * @param Entity $entity
-	 * @return Entity
-	 * @throws \OCP\DB\Exception
-	 */
 	public function insert(Entity $entity): Entity {
 		$entity->setLastModified(time());
 		return parent::insert($entity);
 	}
 
-	/**
-	 * @param Entity $entity
-	 * @param bool $updateModified
-	 * @return Entity
-	 * @throws \OCP\DB\Exception
-	 */
-	public function update(Entity $entity, $updateModified = true): Entity {
+	public function update(Entity $entity, bool $updateModified = true): Entity {
 		if ($updateModified) {
 			$entity->setLastModified(time());
 		}

@@ -28,6 +28,7 @@ use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
+/** @template-extends DeckMapper<Acl> */
 class AclMapper extends DeckMapper implements IPermissionMapper {
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'deck_board_acl', Acl::class);

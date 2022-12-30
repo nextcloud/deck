@@ -11,6 +11,7 @@ use OCP\Collaboration\Resources\ResourceException;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 
+/** @template-implements IEventListener<Event|AclDeletedEvent|AclCreatedEvent> */
 class ResourceListener implements IEventListener {
 
 	/** @var IManager */

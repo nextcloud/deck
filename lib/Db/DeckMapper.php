@@ -23,15 +23,15 @@
 
 namespace OCA\Deck\Db;
 
+use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 
 /**
- * Class DeckMapper
- *
- * @package OCA\Deck\Db
+ * @template T of Entity
+ * @template-extends QBMapper<T>
  */
-class DeckMapper extends QBMapper {
+abstract class DeckMapper extends QBMapper {
 
 	/**
 	 * @param $id

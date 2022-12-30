@@ -42,8 +42,9 @@ use OCP\FullTextSearch\Model\IIndex;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
+/** @template-implements IEventListener<Event|ACardEvent|AAclEvent> */
 class FullTextSearchEventListener implements IEventListener {
-	
+
 	/** @var string|null */
 	private $userId;
 	/** @var IFullTextSearchManager|null */
@@ -52,7 +53,7 @@ class FullTextSearchEventListener implements IEventListener {
 	private $service;
 	/** @var LoggerInterface */
 	private $logger;
-	
+
 	public function __construct(ContainerInterface $container, $userId) {
 		$this->userId = $userId;
 		$this->logger = $container->get(LoggerInterface::class);
@@ -68,7 +69,7 @@ class FullTextSearchEventListener implements IEventListener {
 		if (!$event instanceof ACardEvent && !$event instanceof AAclEvent) {
 			return;
 		}
-		
+
 		try {
 			if ($event instanceof CardCreatedEvent) {
 				$this->manager->createIndex(

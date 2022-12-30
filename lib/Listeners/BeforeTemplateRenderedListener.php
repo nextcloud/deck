@@ -32,6 +32,7 @@ use OCP\EventDispatcher\IEventListener;
 use OCP\IRequest;
 use OCP\Util;
 
+/** @template-implements IEventListener<Event|BeforeTemplateRenderedEvent> */
 class BeforeTemplateRenderedListener implements IEventListener {
 	private $request;
 

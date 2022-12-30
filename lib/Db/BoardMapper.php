@@ -33,6 +33,7 @@ use OCP\IUserManager;
 use OCP\IGroupManager;
 use Psr\Log\LoggerInterface;
 
+/** @template-extends QBMapper<Board> */
 class BoardMapper extends QBMapper implements IPermissionMapper {
 	private $labelMapper;
 	private $aclMapper;

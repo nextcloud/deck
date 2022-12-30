@@ -38,6 +38,7 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Notification\IManager;
 
+/** @template-extends QBMapper<Card> */
 class CardMapper extends QBMapper implements IPermissionMapper {
 
 	/** @var LabelMapper */
