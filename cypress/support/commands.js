@@ -20,60 +20,12 @@
  *
  */
 
+import { addCommands } from '@nextcloud/cypress'
+
+addCommands()
+
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
-
-Cypress.Commands.add('login', (user, password, route = '/apps/deck/') => {
-	const session = `${user}-${Date.now()}`
-	cy.session(session, function() {
-		cy.visit(route)
-		cy.get('input[name=user]').type(user)
-		cy.get('input[name=password]').type(password)
-		cy.get('form[name=login] [type=submit]').click()
-		cy.url().should('include', route)
-	})
-	cy.visit(route)
-})
-
-Cypress.Commands.add('logout', (route = '/') => {
-	cy.session('_guest', function() {})
-})
-
-Cypress.Commands.add('nextcloudCreateUser', (user, password) => {
-	cy.clearCookies()
-	cy.request({
-		method: 'POST',
-		url: `${Cypress.env('baseUrl')}/ocs/v1.php/cloud/users?format=json`,
-		form: true,
-		body: {
-			userid: user,
-			password,
-		},
-		auth: { user: 'admin', pass: 'admin' },
-		headers: {
-			'OCS-ApiRequest': 'true',
-			'Content-Type': 'application/x-www-form-urlencoded',
-		},
-	}).then((response) => {
-		cy.log(`Created user ${user}`, response.status)
-	})
-})
-
-Cypress.Commands.add('nextcloudUpdateUser', (user, password, key, value) => {
-	cy.request({
-		method: 'PUT',
-		url: `${Cypress.env('baseUrl')}/ocs/v2.php/cloud/users/${user}`,
-		form: true,
-		body: { key, value },
-		auth: { user, pass: password },
-		headers: {
-			'OCS-ApiRequest': 'true',
-			'Content-Type': 'application/x-www-form-urlencoded',
-		},
-	}).then((response) => {
-		cy.log(`Updated user ${user} ${key} to ${value}`, response.status)
-	})
-})
 
 Cypress.Commands.add('openLeftSidebar', () => {
 	cy.get('.app-navigation button.app-navigation-toggle').click()

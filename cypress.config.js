@@ -11,7 +11,6 @@ module.exports = defineConfig({
 			return require('./cypress/plugins/index.js')(on, config)
 		},
 		baseUrl: 'http://nextcloud.local/index.php',
-		experimentalSessionAndOrigin: true,
 		specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
 	},
 })

@@ -22,7 +22,7 @@
   -->
 
 <template>
-	<div class="stack">
+	<div class="stack" :data-cy-stack="stack.title">
 		<div v-click-outside="stopCardCreation"
 			class="stack__header"
 			:class="{'stack__header--add': showAddCard}"
@@ -43,13 +43,14 @@
 				</h3>
 				<form v-else-if="editing"
 					v-click-outside="cancelEdit"
+					data-cy="editStackTitleForm"
 					@submit.prevent="finishedEdit(stack)"
 					@keyup.esc="cancelEdit">
 					<input v-model="copiedStack.title"
 						v-focus
 						type="text"
 						required="required">
-					<input v-tooltip="t('deck', 'Add a new list')"
+					<input v-tooltip="t('deck', 'Edit list title')"
 						class="icon-confirm"
 						type="submit"
 						value="">

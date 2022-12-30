@@ -1,15 +1,15 @@
-import { randHash } from '../utils'
-const randUser = randHash()
+import { randUser } from '../utils/index.js'
+const user = randUser()
 
 describe('Board', function() {
-	const password = 'pass123'
 
 	before(function() {
-		cy.nextcloudCreateUser(randUser, password)
+		cy.createUser(user)
 	})
 
 	beforeEach(function() {
-		cy.login(randUser, password)
+		cy.login(user)
+		cy.visit('/apps/deck')
 	})
 
 	it('Can create a board', function() {

@@ -1,21 +1,20 @@
-import { randHash } from '../utils'
-const randUser = randHash()
+import { randUser } from '../utils/index.js'
+const user = randUser()
 
 describe('Deck dashboard', function() {
-	const password = 'pass123'
-
 	before(function() {
-		cy.nextcloudCreateUser(randUser, password)
+		cy.createUser(user)
 	})
 
 	beforeEach(function() {
-		cy.login(randUser, password)
+		cy.login(user)
+		cy.visit('/apps/deck')
 	})
 
 	it('Can show the right title on the dashboard', function() {
 		cy.get('.board-title h2')
-        	.should('have.length', 1).first()
-        	.should('have.text', 'Upcoming cards')
+			.should('have.length', 1).first()
+			.should('have.text', 'Upcoming cards')
 	})
 
 	it('Can see the default "Personal Board" created for user by default', function() {

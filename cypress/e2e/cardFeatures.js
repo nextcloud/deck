@@ -1,5 +1,5 @@
-import { randHash } from '../utils'
-const randUser = randHash()
+import { randUser } from '../utils/index.js'
+const user = randUser()
 
 const testBoardData = {
 	title: 'MyBoardTest',
@@ -18,16 +18,18 @@ const testBoardData = {
 
 describe('Card', function() {
 	before(function() {
-		cy.nextcloudCreateUser(randUser, randUser)
+		cy.createUser(user)
+		cy.login(user)
 		cy.createExampleBoard({
-			user: randUser,
-			password: randUser,
+			user: user.userId,
+			password: user.password,
 			board: testBoardData,
 		})
 	})
 
 	beforeEach(function() {
-		cy.login(randUser, randUser)
+		cy.login(user)
+		cy.visit('/apps/deck')
 	})
 
 	it('Can show card details modal', function() {
