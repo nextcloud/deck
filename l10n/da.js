@@ -127,7 +127,6 @@ OC.L10N.register(
     "Delete" : "Slet",
     "Failed to create share with {displayName}" : "Oprettelse af delt drev med {displayName} fejlede",
     "Transfer" : "Overførsel",
-    "Add a new list" : "Tilføj en ny kolonne",
     "Archive all cards" : "Arkivér alle kort",
     "Delete list" : "Slet liste",
     "Archive all cards in this list" : "Arkivér alle kort i denne kolonne",
@@ -231,6 +230,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Del med et Deck kort",
     "Share {file} with a Deck card" : "Del {file} med et Deck kort",
     "Share" : "Del",
+    "Add a new list" : "Tilføj en ny kolonne",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Er du sikker på du vil slette tavlen {title}? Dette vil slette alt data på tavlen."
 },
 "nplurals=2; plural=(n != 1);");

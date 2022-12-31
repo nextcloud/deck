@@ -181,7 +181,6 @@ OC.L10N.register(
     "Transfer" : "Передача",
     "The board has been transferred to {user}" : "Доска была передана пользователю {user}",
     "Failed to transfer the board to {user}" : "Не удалось передать доску пользователю {user}",
-    "Add a new list" : "Создать список",
     "Archive all cards" : "Переместить все карточки в архив",
     "Unarchive all cards" : "Восстановить все карточки из архива",
     "Delete list" : "Удалить список",
@@ -307,6 +306,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user}?" : "Вы уверены, что хотите передать доску {title} для {user}?",
     "Transfer the board for {user} successfully" : "Передача доски для {user} выполнена успешно",
     "Failed to transfer the board for {user}" : "Не удалось передать доску для {user}",
+    "Add a new list" : "Создать список",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Подтвердите удаление доски «{title}»; это действие приведёт к удалению также все данных, принадлежащих этой доске."
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

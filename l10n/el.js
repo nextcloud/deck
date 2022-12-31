@@ -176,7 +176,6 @@ OC.L10N.register(
     "Delete" : "Διαγραφή",
     "Failed to create share with {displayName}" : "Αποτυχία δημιουργίας κοινής χρήσης με το {displayName}",
     "Transfer" : "Μεταφορά",
-    "Add a new list" : "Προσθήκη νέας λίστας",
     "Archive all cards" : "Αρχειοθέτηση όλων των καρτελών.",
     "Delete list" : "Διαγραφή λίστας",
     "Archive all cards in this list" : "Αρχειοθέτηση όλων των καρτελών σε αυτή τη λίστα.",
@@ -291,6 +290,7 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Μοιραστείτε το {file} με μια καρτέλα Deck",
     "Share" : "Μοιραστείτε",
     "Are you sure you want to transfer the board {title} for {user}?" : "Είστε σίγουροι ότι θέλετε να μεταφέρετε τον πίνακα  {title} για {user}?  ",
+    "Add a new list" : "Προσθήκη νέας λίστας",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Είστε βέβαιοι ότι θέλετε να διαγράψετε τον πίνακα {title}; Θα διαγραφούν όλα τα δεδομένα."
 },
 "nplurals=2; plural=(n != 1);");

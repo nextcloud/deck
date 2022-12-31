@@ -176,7 +176,6 @@ OC.L10N.register(
     "Delete" : "Verwijderen",
     "Failed to create share with {displayName}" : "Delen met {displayName} mislukt",
     "Transfer" : "Overdracht",
-    "Add a new list" : "Voeg een nieuwe lijst toe",
     "Archive all cards" : "Alle kaarten archiveren",
     "Delete list" : "Lijst verwijderen",
     "Archive all cards in this list" : "Alle kaarten in deze lijst archiveren",
@@ -290,6 +289,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Delen met een Deck kaart",
     "Share {file} with a Deck card" : "Delen {file} met een Deck kaart",
     "Share" : "Delen",
+    "Add a new list" : "Voeg een nieuwe lijst toe",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Weet je zeker dat je bord {title} met wilt verwijderen? Dit verwijderd alle informatie van dit bord."
 },
 "nplurals=2; plural=(n != 1);");

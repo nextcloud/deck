@@ -181,7 +181,6 @@ OC.L10N.register(
     "Transfer" : "Transferir",
     "The board has been transferred to {user}" : "A painel foi transferida para {user}",
     "Failed to transfer the board to {user}" : "Não foi possível transferir o painel para {user}",
-    "Add a new list" : "Adicionar nova lista",
     "Archive all cards" : "Arquivar todos os cartões",
     "Unarchive all cards" : "Desarquivar todos os cartões",
     "Delete list" : "Excluir lista",
@@ -309,6 +308,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user}?" : "Deseja realmente transferir o painel {title} para {user}?",
     "Transfer the board for {user} successfully" : "O painel foi transferido para {user} com sucesso",
     "Failed to transfer the board for {user}" : "Não foi possível transferir o painel para {user}",
+    "Add a new list" : "Adicionar nova lista",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Deseja realmente excluir o painel {title}? Isto excluirá todos os dados deste painel."
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

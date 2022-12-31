@@ -181,7 +181,6 @@ OC.L10N.register(
     "Transfer" : "Transfer",
     "The board has been transferred to {user}" : "The board has been transferred to {user}",
     "Failed to transfer the board to {user}" : "Failed to transfer the board to {user}",
-    "Add a new list" : "Add a new list",
     "Archive all cards" : "Archive all cards",
     "Unarchive all cards" : "Unarchive all cards",
     "Delete list" : "Delete list",
@@ -309,6 +308,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user}?" : "Are you sure you want to transfer the board {title} for {user}?",
     "Transfer the board for {user} successfully" : "Transfer the board for {user} successfully",
     "Failed to transfer the board for {user}" : "Failed to transfer the board for {user}",
+    "Add a new list" : "Add a new list",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Are you sure you want to delete the board {title}? This will delete all the data of this board."
 },
 "nplurals=2; plural=(n != 1);");

@@ -149,7 +149,6 @@ OC.L10N.register(
     "Owner" : "Owner",
     "Delete" : "Hapus",
     "Transfer" : "Transfer",
-    "Add a new list" : "Tambah daftar baru",
     "Delete list" : "Hapus daftar",
     "Add a new card" : "Tambah kartu baru",
     "Edit" : "Sunting",
@@ -219,6 +218,7 @@ OC.L10N.register(
     "Something went wrong" : "Ada yang salah",
     "Maximum file size of {size} exceeded" : "Melampaui batas ukuran maksimal {size}",
     "Share" : "Bagikan",
+    "Add a new list" : "Tambah daftar baru",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Apakah Anda yakin ingin menghapus papan {title}? Aksi ini akan menghapus seluruh data pada papan ini."
 },
 "nplurals=1; plural=0;");

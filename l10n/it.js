@@ -176,7 +176,6 @@ OC.L10N.register(
     "Delete" : "Elimina",
     "Failed to create share with {displayName}" : "Creazione della condivisione con {displayName} non riuscita",
     "Transfer" : "Trasferisci",
-    "Add a new list" : "Aggiungi un nuovo elenco",
     "Archive all cards" : "Archivia tutte le schede",
     "Delete list" : "Elimina elenco",
     "Archive all cards in this list" : "Archivia tutte le schede in questo elenco",
@@ -290,6 +289,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Condividi con una scheda di Deck",
     "Share {file} with a Deck card" : "Condividi {file} con una scheda di Deck",
     "Share" : "Condividi",
+    "Add a new list" : "Aggiungi un nuovo elenco",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Sei sicuro di voler eliminare la lavagna {title}? Questo eliminerà tutti i dati di questa lavagna?"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

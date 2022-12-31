@@ -181,7 +181,6 @@ OC.L10N.register(
     "Transfer" : "Transferència",
     "The board has been transferred to {user}" : "El tauler s'ha transferit a {user}",
     "Failed to transfer the board to {user}" : "No s'ha pogut transferir el tauler a {user}",
-    "Add a new list" : "Afegeix una llista nova",
     "Archive all cards" : "Arxiva totes les targetes",
     "Unarchive all cards" : "Desarxivar totes les targetes",
     "Delete list" : "Suprimeix la llista",
@@ -309,6 +308,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user}?" : "Esteu segur que voleu transferir el tauler {title} per a {user}?",
     "Transfer the board for {user} successfully" : "Transfereix el tauler per a {user} correctament",
     "Failed to transfer the board for {user}" : "No s'ha pogut transferir el tauler per a {user}",
+    "Add a new list" : "Afegeix una llista nova",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Esteu segur que voleu suprimir el tauler {title}? Això eliminarà totes les dades d'aquest tauler."
 },
 "nplurals=2; plural=(n != 1);");
