@@ -165,7 +165,6 @@ OC.L10N.register(
     "Delete" : "Избриши",
     "Failed to create share with {displayName}" : "Неможе да се сподели со {displayName}",
     "Transfer" : "Трансфер",
-    "Add a new list" : "Додади нова листа",
     "Archive all cards" : "Архивирај ги сите картици",
     "Delete list" : "Избриши листа",
     "Archive all cards in this list" : "Архивирај ги сите картици во листата",
@@ -272,6 +271,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Споделено со Deck картица",
     "Share {file} with a Deck card" : "Сподели {file} со Deck картица",
     "Share" : "Сподели",
+    "Add a new list" : "Додади нова листа",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Дали сте сигурени дека сакате да ја избришете оваа табла {title}? Ова ќе ги избрише и сите податоци на таблата."
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

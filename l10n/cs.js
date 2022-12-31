@@ -181,7 +181,6 @@ OC.L10N.register(
     "Transfer" : "Předat vlastnictví",
     "The board has been transferred to {user}" : "Vlastnictví tabule bylo předáno uživateli {user}",
     "Failed to transfer the board to {user}" : "Nepodařilo se předat vlastnictví tabule uživateli {user}",
-    "Add a new list" : "Přidat nový sloupec",
     "Archive all cards" : "Archivovat všechny karty",
     "Unarchive all cards" : "Zrušit archivaci všech karet",
     "Delete list" : "Smazat seznam",
@@ -309,6 +308,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user}?" : "Opravdu chcete předat vlastnictví tabule {title} uživateli {user}?",
     "Transfer the board for {user} successfully" : "Předání vlastnictví tabule uživateli {user} úspěšné",
     "Failed to transfer the board for {user}" : "Nepodařilo se předat vlastnictví tabule uživateli {user}",
+    "Add a new list" : "Přidat nový sloupec",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Opravdu chcete tabuly {title} smazat? Toto smaže veškerá data této tabule."
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

@@ -163,7 +163,6 @@ OC.L10N.register(
     "Delete" : "מחיקה",
     "Failed to create share with {displayName}" : "יצירת השיתוף עם {displayName} נכשלה",
     "Transfer" : "העברה",
-    "Add a new list" : "הוסף רשימה חדשה",
     "Archive all cards" : "ארכיב את כל הכרטיסים",
     "Delete list" : "מחיקת רשימה",
     "Archive all cards in this list" : "ארכיב את כל הכרטיסים ברשימה זו",
@@ -268,6 +267,7 @@ OC.L10N.register(
     "Share with a Deck card" : "שיתוף עם כרטיס חפיסה",
     "Share {file} with a Deck card" : "שיתוף {file} עם כרטיס חפיסה",
     "Share" : "שיתוף",
+    "Add a new list" : "הוסף רשימה חדשה",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "למחוק את הלוח {title}? פעולה זו תמחק את כל הנתונים של הלוח הזה."
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

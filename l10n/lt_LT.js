@@ -166,7 +166,6 @@ OC.L10N.register(
     "Delete" : "Ištrinti",
     "Failed to create share with {displayName}" : "Nepavyko sukurti viešinio su {displayName}",
     "Transfer" : "Persiųsti",
-    "Add a new list" : "Pridėti naują sąrašą",
     "Archive all cards" : "Archyvuoti visas korteles",
     "Delete list" : "Ištrinti sąrašą",
     "Archive all cards in this list" : "Archyvuoti visas korteles šiame sąraše",
@@ -266,6 +265,7 @@ OC.L10N.register(
     "Maximum file size of {size} exceeded" : "Viršytas maksimalus {size} failo dydis",
     "Error creating the share" : "Klaida kuriant viešinį",
     "Share" : "Bendrinti",
+    "Add a new list" : "Pridėti naują sąrašą",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Ar tikrai norite ištrinti lentą, pavadinimu {title}? Tai ištrins visus šios lentos duomenis."
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");

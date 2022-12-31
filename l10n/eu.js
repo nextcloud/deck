@@ -181,7 +181,6 @@ OC.L10N.register(
     "Transfer" : "Transferitu",
     "The board has been transferred to {user}" : "Arbela {user}-(a)ri transferitu zaio",
     "Failed to transfer the board to {user}" : "Ezin izan zaio transferitu arbela {use}-(a)ri",
-    "Add a new list" : "Gehitu zerrenda berria",
     "Archive all cards" : "Artxibatu txartel guztiak",
     "Unarchive all cards" : "Berreskuratu txartel guztiak artxibotik",
     "Delete list" : "Zerrenda ezabatu",
@@ -309,6 +308,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user}?" : "Ziur {title} taula transferitu nahi duzula {user}?",
     "Transfer the board for {user} successfully" : "Transferitu {user}-ren panela behar bezala",
     "Failed to transfer the board for {user}" : "Ezin izan da transferitu {user}-ren panela",
+    "Add a new list" : "Gehitu zerrenda berria",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Ziur zaude «{title}» taula ezabatu nahi duzula? Honek taula honen datu guztiak ezabatuko ditu."
 },
 "nplurals=2; plural=(n != 1);");

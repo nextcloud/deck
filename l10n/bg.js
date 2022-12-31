@@ -181,7 +181,6 @@ OC.L10N.register(
     "Transfer" : "Прехвърляне",
     "The board has been transferred to {user}" : "Таблото беше прехвърлено на {user}",
     "Failed to transfer the board to {user}" : "Неуспешно прехвърляне на таблото на {user}",
-    "Add a new list" : "Добавяне на нов списък",
     "Archive all cards" : "Архивира всички карти",
     "Unarchive all cards" : "Разархивиране на всички карти",
     "Delete list" : "Изтрива списък",
@@ -309,6 +308,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user}?" : "Сигурни ли сте че искате да прехвърлите таблото {title} на {user}?",
     "Transfer the board for {user} successfully" : "Успешно прехвърляне на таблото към {user} ",
     "Failed to transfer the board for {user}" : "Неуспешно прехвърляне на таблото към {user}",
+    "Add a new list" : "Добавяне на нов списък",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Сигурни ли сте, че искате да изтриете таблото {title}? Това ще изтрие всички данни на това табло."
 },
 "nplurals=2; plural=(n != 1);");

@@ -181,7 +181,6 @@ OC.L10N.register(
     "Transfer" : "Transferir",
     "The board has been transferred to {user}" : "El tablero ha sido transferido a {usuario}",
     "Failed to transfer the board to {user}" : "Failed to transfer the board to {user}",
-    "Add a new list" : "Añadir una lista nueva",
     "Archive all cards" : "Archivar todas las tarjetas",
     "Unarchive all cards" : "Desarchivar todas las tarjetas",
     "Delete list" : "Eliminar lista",
@@ -309,6 +308,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user}?" : "¿Estás seguro de que quieres transferir el tablero {título} a {usuario}?",
     "Transfer the board for {user} successfully" : "Transferir el tablero para {usuario} con éxito",
     "Failed to transfer the board for {user}" : "No se ha podido transferir el tablero para {usuario}",
+    "Add a new list" : "Añadir una lista nueva",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "¿Estas seguro de que quieres eliminar el tablero {title}? Esto eliminará todos los datos del tablero."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

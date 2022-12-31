@@ -153,7 +153,6 @@ OC.L10N.register(
     "Owner" : "Omistaja",
     "Delete" : "Poista",
     "Transfer" : "Siirrä",
-    "Add a new list" : "Lisää uusi lista",
     "Archive all cards" : "Arkistoi kaikki kortit",
     "Delete list" : "Poista lista",
     "Archive all cards in this list" : "Arkistoi kaikki kortit tässä listassa",
@@ -245,6 +244,7 @@ OC.L10N.register(
     "Failed to upload {name}" : "Ei voitu lähettää {name}",
     "Maximum file size of {size} exceeded" : "Tiedoston enimmäiskoko {size} ylitetty",
     "Error creating the share" : "Virhe jakoa luotaessa",
-    "Share" : "Jaa"
+    "Share" : "Jaa",
+    "Add a new list" : "Lisää uusi lista"
 },
 "nplurals=2; plural=(n != 1);");

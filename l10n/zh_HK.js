@@ -181,7 +181,6 @@ OC.L10N.register(
     "Transfer" : "轉移",
     "The board has been transferred to {user}" : "面板已轉讓給 {user}",
     "Failed to transfer the board to {user}" : "未能將面板轉移給 {user}",
-    "Add a new list" : "添加一張新清單",
     "Archive all cards" : "封存所有卡片",
     "Unarchive all cards" : "解除封存所有卡片",
     "Delete list" : "刪除清單",
@@ -309,6 +308,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user}?" : "您想要轉移 {user} 的面板 {title} 嗎？",
     "Transfer the board for {user} successfully" : "轉移 {user} 的面板成功",
     "Failed to transfer the board for {user}" : "轉移 {user} 的面板失敗",
+    "Add a new list" : "添加一張新清單",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "你確定你要刪除 {title} 面板嗎？面板內所有數據都將因此被刪除。"
 },
 "nplurals=1; plural=0;");

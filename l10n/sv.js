@@ -181,7 +181,6 @@ OC.L10N.register(
     "Transfer" : "Överför",
     "The board has been transferred to {user}" : "Tavlan har överförts till {user}",
     "Failed to transfer the board to {user}" : "Kunde inte överföra tavlan till {user}",
-    "Add a new list" : "Lägg till en ny lista",
     "Archive all cards" : "Arkivera alla kort",
     "Unarchive all cards" : "Ta ut alla kort ur arkivet",
     "Delete list" : "Ta bort lista",
@@ -309,6 +308,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user}?" : "Är du säker på att du vill överföra brädet {title} för {user}?",
     "Transfer the board for {user} successfully" : "Överförde brädet för {user}",
     "Failed to transfer the board for {user}" : "Misslyckades med att överföra brädet för {user}",
+    "Add a new list" : "Lägg till en ny lista",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Är du säker på att du vill radera tavla {title}? Detta kommer att radera all information från denna tavla."
 },
 "nplurals=2; plural=(n != 1);");

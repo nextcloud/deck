@@ -181,7 +181,6 @@ OC.L10N.register(
     "Transfer" : "Aktar",
     "The board has been transferred to {user}" : "Pano {user} kullanıcısına aktarıldı",
     "Failed to transfer the board to {user}" : "Pano {user} kullanıcısına aktarılamadı",
-    "Add a new list" : "Yeni liste ekle",
     "Archive all cards" : "Tüm kartları arşivle",
     "Unarchive all cards" : "Tüm kartları arşivden çıkar",
     "Delete list" : "Listeyi sil",
@@ -309,6 +308,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user}?" : "{title} panosunu {user} kullanıcısına aktarmak istediğinize emin misiniz?",
     "Transfer the board for {user} successfully" : "Pano {user} kullanıcısına aktarıldı",
     "Failed to transfer the board for {user}" : "Pano {user} kullanıcısına aktarılamadı",
+    "Add a new list" : "Yeni liste ekle",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "{title} panosunu silmek istediğinize emin misiniz? Bu işlem, bu panodaki tüm verileri silecek."
 },
 "nplurals=2; plural=(n > 1);");

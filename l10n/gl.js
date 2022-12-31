@@ -168,7 +168,6 @@ OC.L10N.register(
     "Delete" : "Eliminar",
     "Failed to create share with {displayName}" : "Produciuse un fallo ao crear o uso compartido con {displayName}",
     "Transfer" : "Transferencia",
-    "Add a new list" : "Engadir unha lista nova",
     "Archive all cards" : "Arquivar todas as tarxetas",
     "Delete list" : "Eliminar lista",
     "Archive all cards in this list" : "Arquivar todas as tarxetas desta lista",
@@ -277,6 +276,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Compartir cunha tarxeta Deck",
     "Share {file} with a Deck card" : "Compartir {file} cunha tarxeta Deck",
     "Share" : "Compartir",
+    "Add a new list" : "Engadir unha lista nova",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Confirma que quere eliminar o taboleiro {title}? Isto eliminará todos os datos deste taboleiro."
 },
 "nplurals=2; plural=(n != 1);");
