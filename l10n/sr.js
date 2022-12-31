@@ -162,7 +162,6 @@ OC.L10N.register(
     "Delete" : "Избриши",
     "Failed to create share with {displayName}" : "Грешка у прављењу дељења са {displayName}",
     "Transfer" : "Пренеси",
-    "Add a new list" : "Додај нови списак",
     "Archive all cards" : "Архивирај све картице",
     "Delete list" : "Обриши списак",
     "Archive all cards in this list" : "Архивирај све картице са овог списка",
@@ -250,6 +249,7 @@ OC.L10N.register(
     "Maximum file size of {size} exceeded" : "Премашена максимална величина фајла од {size}",
     "Error creating the share" : "Грешка при прављењу дељења",
     "Share" : "Подели",
+    "Add a new list" : "Додај нови списак",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Да ли стварно желите да обришете таблу {title}? Овим ћете обрисати све податке са табле."
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

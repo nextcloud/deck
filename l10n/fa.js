@@ -168,7 +168,6 @@ OC.L10N.register(
     "Delete" : "حذف",
     "Failed to create share with {displayName}" : "اشتراک‌گذاری با {displayName} ایجاد نشد",
     "Transfer" : "انتقال",
-    "Add a new list" : "فهرست جدید بیفزایید!",
     "Archive all cards" : "همهٔ برگه‌ها را بایگانی کنید!",
     "Delete list" : "حذف فهرست",
     "Archive all cards in this list" : "تمام برگه‌های موجود در این فهرست را بایگانی کنید",
@@ -255,6 +254,7 @@ OC.L10N.register(
     "An error occurred" : "خطایی روی داد",
     "No results found" : "هیچ نتیجه ای یافت نشد",
     "Error creating the share" : "خطایی در ایجاد اشتراک",
-    "Share" : "هم‌رسانی"
+    "Share" : "هم‌رسانی",
+    "Add a new list" : "فهرست جدید بیفزایید!"
 },
 "nplurals=2; plural=(n > 1);");

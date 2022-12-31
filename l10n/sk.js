@@ -181,7 +181,6 @@ OC.L10N.register(
     "Transfer" : "Prenos",
     "The board has been transferred to {user}" : "Nástenka bola presunutá na {user}",
     "Failed to transfer the board to {user}" : "Chyba pri presune nástenky na {user}",
-    "Add a new list" : "Pridať nový zoznam",
     "Archive all cards" : "Archivovať všetky karty",
     "Unarchive all cards" : "Zrušiť archiváciu všetkých kariet",
     "Delete list" : "Vymazať zoznam",
@@ -309,6 +308,7 @@ OC.L10N.register(
     "Are you sure you want to transfer the board {title} for {user}?" : "Naozaj chcete preniesť nástenku {title} na užívateľa {user}?",
     "Transfer the board for {user} successfully" : "Presun nástenky na  {user} bolo úspešné",
     "Failed to transfer the board for {user}" : "Chyba pri presune nástenky na {user}",
+    "Add a new list" : "Pridať nový zoznam",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Naozaj chcete chcete vymazať nástenku {title}? Toto zmaže všetky údaje o tejto nástenke."
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

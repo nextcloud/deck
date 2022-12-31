@@ -174,7 +174,6 @@ OC.L10N.register(
     "Delete" : "Izbriši",
     "Failed to create share with {displayName}" : "Souporaba z uporabnikom {displayName} je spodletela",
     "Transfer" : "Prenos",
-    "Add a new list" : "Dodaj nov seznam",
     "Archive all cards" : "Arhiviraj vse kartice",
     "Delete list" : "Izbriši seznam",
     "Archive all cards in this list" : "Arhiviraj vse kartice tega seznama",
@@ -287,6 +286,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Poveži z nalogo Deck",
     "Share {file} with a Deck card" : "Poveži datoteko {file} z nalogo Deck",
     "Share" : "Souporaba",
+    "Add a new list" : "Dodaj nov seznam",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Ali ste prepričani, da želite izbrisati zbirko »{title}«? S tem boste izbrisali tudi vse podatke zbirke."
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");
