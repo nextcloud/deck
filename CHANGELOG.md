@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.8.3
+
+### Fixed
+
+- Fix component renaming so that acl works on shares again [#4328](https://github.com/nextcloud/deck/pull/4328)
+- Permanently delete deck cards marked as deleted after 5 min in a cron job [#4301](https://github.com/nextcloud/deck/pull/4301)
+- Dependency updates
+
+
 ## 1.8.2
 
 ### Fixed
