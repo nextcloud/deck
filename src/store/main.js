@@ -60,7 +60,7 @@ export default new Vuex.Store({
 	state: {
 		config: loadState('deck', 'config', {}),
 		showArchived: false,
-		navShown: localStorage.getItem('deck.navShown') === 'true',
+		navShown: localStorage.getItem('deck.navShown') === null || localStorage.getItem('deck.navShown') === 'true',
 		compactMode: localStorage.getItem('deck.compactMode') === 'true',
 		sidebarShown: false,
 		currentBoard: null,
