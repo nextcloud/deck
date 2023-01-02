@@ -63,14 +63,15 @@ Cypress.Commands.add('deckCreateList', ({ user, password }, title) => {
 	cy.get('#stack-add form input[type=submit]').first().click()
 })
 
-Cypress.Commands.add('createExampleBoard', ({ user, password, board }) => {
+Cypress.Commands.add('createExampleBoard', ({ user, board }) => {
+	const auth = {
+		user: user.userId,
+		password: user.password,
+	}
 	cy.request({
 		method: 'POST',
 		url: `${Cypress.env('baseUrl')}/index.php/apps/deck/api/v1.0/boards`,
-		auth: {
-			user,
-			password,
-		},
+		auth,
 		body: { title: board.title, color: board.color ?? 'ff0000' },
 	}).then((boardResponse) => {
 		expect(boardResponse.status).to.eq(200)
@@ -80,10 +81,7 @@ Cypress.Commands.add('createExampleBoard', ({ user, password, board }) => {
 			cy.request({
 				method: 'POST',
 				url: `${Cypress.env('baseUrl')}/index.php/apps/deck/api/v1.0/boards/${boardData.id}/stacks`,
-				auth: {
-					user,
-					password,
-				},
+				auth,
 				body: { title: stack.title, order: 0 },
 			}).then((stackResponse) => {
 				const stackData = stackResponse.body
@@ -92,15 +90,13 @@ Cypress.Commands.add('createExampleBoard', ({ user, password, board }) => {
 					cy.request({
 						method: 'POST',
 						url: `${Cypress.env('baseUrl')}/index.php/apps/deck/api/v1.0/boards/${boardData.id}/stacks/${stackData.id}/cards`,
-						auth: {
-							user,
-							password,
-						},
+						auth,
 						body: { title: card.title },
 					})
 				}
 			})
 		}
+		cy.wrap(boardData)
 	})
 })
 
@@ -108,4 +104,14 @@ Cypress.Commands.add('getNavigationEntry', (boardTitle) => {
 	return cy.get('.app-navigation-entry-wrapper[icon=icon-deck]')
 		.find('ul.app-navigation-entry__children .app-navigation-entry:contains(' + boardTitle + ')')
 		.find('a.app-navigation-entry-link')
+})
+
+Cypress.Commands.add('shareBoardWithUi', (userId) => {
+	cy.get('[aria-label="Open details"]').click()
+	cy.get('.app-sidebar').should('be.visible')
+	cy.get('.multiselect__input').type(`${userId}`)
+	cy.get('.multiselect__content .multiselect__element').first().contains(userId)
+	cy.get('.multiselect__input').type('{enter}')
+
+	cy.get('.shareWithList').contains(userId)
 })

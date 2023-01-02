@@ -16,8 +16,7 @@ describe('Stack', function() {
 		cy.createUser(user)
 		cy.login(user)
 		cy.createExampleBoard({
-			user: user.userId,
-			password: user.password,
+			user,
 			board: testBoardData,
 		})
 	})

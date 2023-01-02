@@ -74,7 +74,7 @@
 				</NcActionButton>
 			</NcActions>
 			<NcActions v-if="canEdit && !showArchived && !isArchived">
-				<NcActionButton icon="icon-add" @click.stop="showAddCard=true">
+				<NcActionButton icon="icon-add" data-cy="action:add-card" @click.stop="showAddCard=true">
 					{{ t('deck', 'Add card') }}
 				</NcActionButton>
 			</NcActions>
@@ -128,6 +128,7 @@
 
 		<Container :get-child-payload="payloadForCard(stack.id)"
 			group-name="stack"
+			data-click-closes-sidebar="true"
 			non-drag-area-selector=".dragDisabled"
 			:drag-handle-selector="dragHandleSelector"
 			@should-accept-drop="canEdit"

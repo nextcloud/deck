@@ -53,11 +53,12 @@
 				<Container lock-axix="y"
 					orientation="horizontal"
 					:drag-handle-selector="dragHandleSelector"
+					data-click-closes-sidebar="true"
 					@drag-start="draggingStack = true"
 					@drag-end="draggingStack = false"
 					@drop="onDropStack">
-					<Draggable v-for="stack in stacksByBoard" :key="stack.id">
-						<Stack :stack="stack" :dragging="draggingStack" />
+					<Draggable v-for="stack in stacksByBoard" :key="stack.id" data-click-closes-sidebar="true">
+						<Stack :stack="stack" :dragging="draggingStack" data-click-closes-sidebar="true" />
 					</Draggable>
 				</Container>
 			</div>

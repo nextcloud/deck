@@ -20,7 +20,6 @@ describe('Deck dashboard', function() {
 	it('Can see the default "Personal Board" created for user by default', function() {
 		const defaultBoard = 'Personal'
 
-		cy.openLeftSidebar()
 		cy.get('.app-navigation-entry-wrapper[icon=icon-deck]')
 			.find('ul.app-navigation-entry__children .app-navigation-entry:contains(' + defaultBoard + ')')
 			.first()

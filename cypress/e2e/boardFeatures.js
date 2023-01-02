@@ -1,10 +1,12 @@
 import { randUser } from '../utils/index.js'
 const user = randUser()
+const recipient = randUser()
 
 describe('Board', function() {
 
 	before(function() {
 		cy.createUser(user)
+		cy.createUser(recipient)
 	})
 
 	beforeEach(function() {
@@ -21,7 +23,6 @@ describe('Board', function() {
 		}).as('createBoardRequest')
 
 		// Click "Add board"
-		cy.openLeftSidebar()
 		cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
 			.eq(3).find('a').first().click({ force: true })
 
@@ -37,5 +38,19 @@ describe('Board', function() {
 
 		cy.get('.app-navigation__list .app-navigation-entry__children .app-navigation-entry')
 			.contains(board).should('be.visible')
+	})
+
+	it('Shows and hides the navigation', () => {
+		cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
+			.contains('Upcoming cards')
+			.should('be.visible')
+		cy.openLeftSidebar()
+		cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
+			.contains('Upcoming cards')
+			.should('not.be.visible')
+		cy.openLeftSidebar()
+		cy.get('#app-navigation-vue .app-navigation__list .app-navigation-entry')
+			.contains('Upcoming cards')
+			.should('be.visible')
 	})
 })
