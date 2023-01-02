@@ -38,10 +38,9 @@ export default {
 			this.$router.push({ name: 'board' })
 		},
 		onClickOutside(e) {
-			if (Array.from(document.querySelectorAll('.card')).some(node => node.contains(e.target))) {
-				return
+			if (e.target?.dataset?.clickClosesSidebar) {
+				this.closeSidebar()
 			}
-			this.closeSidebar()
 		},
 	},
 }

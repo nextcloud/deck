@@ -128,6 +128,7 @@
 
 		<Container :get-child-payload="payloadForCard(stack.id)"
 			group-name="stack"
+			data-click-closes-sidebar="true"
 			non-drag-area-selector=".dragDisabled"
 			:drag-handle-selector="dragHandleSelector"
 			@should-accept-drop="canEdit"
