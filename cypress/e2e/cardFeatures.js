@@ -1,40 +1,29 @@
 import { randUser } from '../utils/index.js'
-const user = randUser()
+import { sampleBoard } from '../utils/sampleBoard'
 
-const testBoardData = {
-	title: 'MyBoardTest',
-	color: '00ff00',
-	stacks: [
-		{
-			title: 'TestList',
-			cards: [
-				{
-					title: 'Hello world',
-				},
-			],
-		},
-	],
-}
+const user = randUser()
+const boardData = sampleBoard()
 
 describe('Card', function() {
+	let boardId
 	before(function() {
 		cy.createUser(user)
 		cy.login(user)
 		cy.createExampleBoard({
-			user: user.userId,
-			password: user.password,
-			board: testBoardData,
+			user,
+			board: boardData,
+		}).then((board) => {
+			boardId = board.id
 		})
 	})
 
 	beforeEach(function() {
 		cy.login(user)
-		cy.visit('/apps/deck')
+		cy.visit(`/apps/deck/#/board/${boardId}`)
 	})
 
 	it('Can show card details modal', function() {
-		cy.openLeftSidebar()
-		cy.getNavigationEntry(testBoardData.title)
+		cy.getNavigationEntry(boardData.title)
 			.first().click({ force: true })
 
 		cy.get('.board .stack').eq(0).within(() => {
@@ -48,8 +37,7 @@ describe('Card', function() {
 	it('Can add a card', function() {
 		const newCardTitle = 'Write some cypress tests'
 
-		cy.openLeftSidebar()
-		cy.getNavigationEntry(testBoardData.title)
+		cy.getNavigationEntry(boardData.title)
 			.first().click({ force: true })
 
 		cy.get('.board .stack').eq(0).within(() => {

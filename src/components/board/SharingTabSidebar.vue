@@ -31,7 +31,7 @@
 					</span>
 				</span>
 			</li>
-			<li v-for="acl in board.acl" :key="acl.id">
+			<li v-for="acl in board.acl" :key="acl.id" :data-cy="'acl-participant:' + acl.participant.uid">
 				<NcAvatar v-if="acl.type===0" :user="acl.participant.uid" />
 				<div v-if="acl.type===1" class="avatardiv icon icon-group" />
 				<div v-if="acl.type===7" class="avatardiv icon icon-circles" />
@@ -41,20 +41,35 @@
 					<span v-if="acl.type===7">{{ t('deck', '(Circle)') }}</span>
 				</span>
 
-				<NcActionCheckbox v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0) && (canManage || (canEdit && canShare))" :checked="acl.permissionEdit" @change="clickEditAcl(acl)">
+				<NcActionCheckbox v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0) && (canManage || (canEdit && canShare))"
+					:checked="acl.permissionEdit"
+					data-cy="action:permission-edit"
+					@change="clickEditAcl(acl)">
 					{{ t('deck', 'Can edit') }}
 				</NcActionCheckbox>
 				<NcActions v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0)" :force-menu="true">
-					<NcActionCheckbox v-if="canManage || canShare" :checked="acl.permissionShare" @change="clickShareAcl(acl)">
+					<NcActionCheckbox v-if="canManage || canShare"
+						:checked="acl.permissionShare"
+						data-cy="action:permission-share"
+						@change="clickShareAcl(acl)">
 						{{ t('deck', 'Can share') }}
 					</NcActionCheckbox>
-					<NcActionCheckbox v-if="canManage" :checked="acl.permissionManage" @change="clickManageAcl(acl)">
+					<NcActionCheckbox v-if="canManage"
+						:checked="acl.permissionManage"
+						data-cy="action:permission-manage"
+						@change="clickManageAcl(acl)">
 						{{ t('deck', 'Can manage') }}
 					</NcActionCheckbox>
-					<NcActionCheckbox v-if="acl.type === 0 && isCurrentUser(board.owner.uid)" :checked="acl.owner" @change="clickTransferOwner(acl.participant.uid)">
+					<NcActionCheckbox v-if="acl.type === 0 && isCurrentUser(board.owner.uid)"
+						:checked="acl.owner"
+						data-cy="action:permission-owner"
+						@change="clickTransferOwner(acl.participant.uid)">
 						{{ t('deck', 'Owner') }}
 					</NcActionCheckbox>
-					<NcActionButton v-if="canManage" icon="icon-delete" @click="clickDeleteAcl(acl)">
+					<NcActionButton v-if="canManage"
+						icon="icon-delete"
+						data-cy="action:acl-delete"
+						@click="clickDeleteAcl(acl)">
 						{{ t('deck', 'Delete') }}
 					</NcActionButton>
 				</NcActions>
