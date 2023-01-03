@@ -37,6 +37,7 @@ use OCP\IRequest;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
+/** @template-implements IEventListener<Event|SessionCreatedEvent|SessionClosedEvent> */
 class LiveUpdateListener implements IEventListener {
 	private LoggerInterface $logger;
 	private SessionService $sessionService;
