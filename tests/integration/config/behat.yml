@@ -11,3 +11,4 @@ default:
         - CommentContext
         - AttachmentContext
         - SearchContext
+        - SessionContext

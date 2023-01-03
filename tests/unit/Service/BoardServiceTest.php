@@ -34,6 +34,8 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
+use OCA\Deck\Db\Session;
+use OCA\Deck\Db\SessionMapper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Event\AclCreatedEvent;
 use OCA\Deck\Event\AclDeletedEvent;
@@ -89,6 +91,8 @@ class BoardServiceTest extends TestCase {
 	private $connection;
 	/** @var BoardServiceValidator */
 	private $boardServiceValidator;
+	/** @var SessionMapper */
+	private $sessionMapper;
 
 	public function setUp(): void {
 		parent::setUp();
@@ -110,6 +114,7 @@ class BoardServiceTest extends TestCase {
 		$this->urlGenerator = $this->createMock(IURLGenerator::class);
 		$this->connection = $this->createMock(IDBConnection::class);
 		$this->boardServiceValidator = $this->createMock(BoardServiceValidator::class);
+		$this->sessionMapper = $this->createMock(SessionMapper::class);
 
 		$this->service = new BoardService(
 			$this->boardMapper,
@@ -130,6 +135,7 @@ class BoardServiceTest extends TestCase {
 			$this->urlGenerator,
 			$this->connection,
 			$this->boardServiceValidator,
+			$this->sessionMapper,
 			$this->userId
 		);
 
@@ -172,6 +178,11 @@ class BoardServiceTest extends TestCase {
 			->willReturn([
 				'admin' => 'admin',
 			]);
+		$session = $this->createMock(Session::class);
+		$this->sessionMapper->expects($this->once())
+			->method('findAllActive')
+			->with(1)
+			->willReturn([$session]);
 		$this->assertEquals($b1, $this->service->find(1));
 	}
 
@@ -224,6 +235,9 @@ class BoardServiceTest extends TestCase {
 			->willReturn([
 				'admin' => 'admin',
 			]);
+		$this->sessionMapper->expects($this->once())
+			->method('findAllActive')
+			->willReturn([]);
 		$b = $this->service->update(123, 'MyNewNameBoard', 'ffffff', false);
 
 		$this->assertEquals($b->getTitle(), 'MyNewNameBoard');
@@ -244,6 +258,10 @@ class BoardServiceTest extends TestCase {
 			->willReturn([
 				'admin' => 'admin',
 			]);
+		$this->sessionMapper->expects($this->once())
+			->method('findAllActive')
+			->with(null)
+			->willReturn([]);
 		$boardDeleted = clone $board;
 		$boardDeleted->setDeletedAt(1);
 		$this->boardMapper->expects($this->once())

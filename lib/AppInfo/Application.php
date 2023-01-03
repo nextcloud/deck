@@ -40,10 +40,13 @@ use OCA\Deck\Event\AclUpdatedEvent;
 use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
+use OCA\Deck\Event\SessionClosedEvent;
+use OCA\Deck\Event\SessionCreatedEvent;
 use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
 use OCA\Deck\Listeners\ParticipantCleanupListener;
 use OCA\Deck\Listeners\FullTextSearchEventListener;
 use OCA\Deck\Listeners\ResourceListener;
+use OCA\Deck\Listeners\LiveUpdateListener;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
@@ -147,6 +150,10 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(UserDeletedEvent::class, ParticipantCleanupListener::class);
 		$context->registerEventListener(GroupDeletedEvent::class, ParticipantCleanupListener::class);
 		$context->registerEventListener(CircleDestroyedEvent::class, ParticipantCleanupListener::class);
+
+		// Event listening for realtime updates via notify_push
+		$context->registerEventListener(SessionCreatedEvent::class, LiveUpdateListener::class);
+		$context->registerEventListener(SessionClosedEvent::class, LiveUpdateListener::class);
 	}
 
 	public function registerNotifications(NotificationManager $notificationManager): void {

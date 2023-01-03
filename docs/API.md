@@ -1394,3 +1394,110 @@ A bad request response is returned if invalid input values are provided. The res
 A not found response might be returned if:
 - The card for the given cardId could not be found
 - The comment could not be found
+
+
+## Sessions
+
+### PUT /session/create - creates a new session
+
+#### Request parameters
+
+| Parameter | Type    | Description                                          |
+| --------- | ------- | ---------------------------------------------------- |
+| boardId   | Integer | The id of the opened board |
+
+```
+curl -X PUT 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session/create' \
+    -H 'Accept: application/json' -H 'OCS-APIRequest: true' \
+    -H 'Content-Type: application/json;charset=utf-8' \
+    --data '{"boardId":1}'
+```
+
+#### Response
+
+##### 200 Success
+
+```json
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": {
+      "token": "+zcJHf4rC6dobVSbuNa3delkCSfTW8OvYWTyLFvSpIv80FjtgLIj0ARlxspsazNQ"
+    }
+  }
+}
+```
+
+
+### POST /session/sync - notifies the server, that the session is still open
+
+#### Request body
+
+| Parameter | Type    | Description                                          |
+| --------- | ------- | ---------------------------------------------------- |
+| boardId   | Integer | The id of the opened board |
+| token     | String  | The session token from the /sessions/create response |
+
+
+```
+curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session/create' \
+    -H 'Accept: application/json' -H 'OCS-APIRequest: true' \
+    -H 'Content-Type: application/json;charset=utf-8' \
+    --data '{"boardId":1, "token":"X3DyyoFslArF0t0NBZXzZXzcy8feoX/OEytSNXZtPg9TpUgO5wrkJ38IW3T/FfpV"}'
+```
+
+#### Response
+
+##### 200 Success
+```json
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": []
+  }
+}
+```
+
+##### 404 Not Found
+the provided token is invalid or expired
+
+
+### POST /session/close - closes the session
+
+#### Request body
+
+| Parameter | Type    | Description                                          |
+| --------- | ------- | ---------------------------------------------------- |
+| boardId   | Integer | The id of the opened board                           |
+| token     | String  | The session token from the /sessions/create response |
+
+```
+curl -X POST 'https://admin:admin@nextcloud/ocs/v2.php/apps/deck/api/v1.0/session/close' \
+    -H 'Accept: application/json' -H 'OCS-APIRequest: true' \
+    -H 'Content-Type: application/json;charset=utf-8' \
+    --data '{"boardId":1, "token":"X3DyyoFslArF0t0NBZXzZXzcy8feoX/OEytSNXZtPg9TpUgO5wrkJ38IW3T/FfpV"}'
+```
+
+#### Response
+
+##### 200 Success
+```json
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 200,
+      "message": "OK"
+    },
+    "data": []
+  }
+}
+```

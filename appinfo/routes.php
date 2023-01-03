@@ -150,5 +150,10 @@ return [
 		['name' => 'overview_api#upcomingCards', 'url' => '/api/v{apiVersion}/overview/upcoming', 'verb' => 'GET'],
 
 		['name' => 'search#search', 'url' => '/api/v{apiVersion}/search', 'verb' => 'GET'],
+
+		// sessions
+		['name' => 'Session#create', 'url' => '/api/v{apiVersion}/session/create', 'verb' => 'PUT'],
+		['name' => 'Session#sync', 'url' => '/api/v{apiVersion}/session/sync', 'verb' => 'POST'],
+		['name' => 'Session#close', 'url' => '/api/v{apiVersion}/session/close', 'verb' => 'POST'],
 	]
 ];

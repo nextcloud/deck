@@ -40,6 +40,7 @@
         <job>OCA\Deck\Cron\DeleteCron</job>
         <job>OCA\Deck\Cron\ScheduledNotifications</job>
         <job>OCA\Deck\Cron\CardDescriptionActivity</job>
+        <job>OCA\Deck\Cron\SessionsCleanup</job>
     </background-jobs>
     <repair-steps>
         <live-migration>

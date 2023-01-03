@@ -71,7 +71,7 @@ Feature: acl
 
 	Scenario: Reshare a board
 		Given Logging in using web as "user0"
-		And creates a board named "Reshared board" with color "ff0000"
+		And creates a board named "Shared board" with color "ff0000"
 		And shares the board with user "user1"
 			| permissionEdit   | 0 |
 			| permissionShare  | 1 |

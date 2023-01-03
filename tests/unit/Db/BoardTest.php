@@ -32,6 +32,7 @@ class BoardTest extends TestCase {
 			'archived' => false,
 			'users' => ['user1', 'user2'],
 			'settings' => [],
+			'activeSessions' => [],
 			'ETag' => $board->getETag(),
 		], $board->jsonSerialize());
 	}
@@ -55,6 +56,7 @@ class BoardTest extends TestCase {
 			'archived' => false,
 			'users' => ['user1', 'user2'],
 			'settings' => [],
+			'activeSessions' => [],
 			'ETag' => $board->getETag(),
 		], $board->jsonSerialize());
 	}
@@ -76,6 +78,7 @@ class BoardTest extends TestCase {
 			'archived' => false,
 			'users' => [],
 			'settings' => [],
+			'activeSessions' => [],
 			'ETag' => $board->getETag(),
 		], $board->jsonSerialize());
 	}
@@ -105,6 +108,7 @@ class BoardTest extends TestCase {
 			'shared' => 1,
 			'users' => [],
 			'settings' => [],
+			'activeSessions' => [],
 			'ETag' => $board->getETag(),
 		], $board->jsonSerialize());
 	}

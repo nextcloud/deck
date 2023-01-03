@@ -81,6 +81,7 @@ import Stack from './Stack.vue'
 import { NcEmptyContent } from '@nextcloud/vue'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 import { showError } from '../../helpers/errors.js'
+import { createSession } from '../../sessions.js'
 
 export default {
 	name: 'Board',
@@ -128,13 +129,25 @@ export default {
 		},
 	},
 	watch: {
-		id: 'fetchData',
+		id(newValue, oldValue) {
+			if (this.session) {
+				// close old session
+				this.session.close()
+			}
+			this.session = createSession(newValue)
+
+			this.fetchData()
+		},
 		showArchived() {
 			this.fetchData()
 		},
 	},
 	created() {
+		this.session = createSession(this.id)
 		this.fetchData()
+	},
+	beforeDestroy() {
+		this.session.close()
 	},
 	methods: {
 		async fetchData() {
