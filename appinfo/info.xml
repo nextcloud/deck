@@ -19,6 +19,10 @@
     <version>1.9.0-beta.1</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
+    <documentation>
+        <user>https://deck.readthedocs.io/en/latest/User_documentation_en/</user>
+        <developer>https://deck.readthedocs.io/en/latest/API/</developer>
+    </documentation>
     <namespace>Deck</namespace>
     <types>
         <dav/>
