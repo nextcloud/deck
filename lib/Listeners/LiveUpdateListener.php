@@ -42,7 +42,7 @@ use OCP\IRequest;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
-/** @template-implements IEventListener<Event|SessionCreatedEvent|SessionClosedEvent> */
+/** @template-implements IEventListener<Event|SessionCreatedEvent|SessionClosedEvent|AAclEvent|ACardEvent|CardUpdatedEvent|BoardUpdatedEvent> */
 class LiveUpdateListener implements IEventListener {
 	private LoggerInterface $logger;
 	private SessionService $sessionService;
