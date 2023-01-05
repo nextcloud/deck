@@ -219,6 +219,7 @@ class BoardServiceTest extends TestCase {
 
 	public function testUpdate() {
 		$board = new Board();
+		$board->setId(123);
 		$board->setTitle('MyBoard');
 		$board->setOwner('admin');
 		$board->setColor('00ff00');

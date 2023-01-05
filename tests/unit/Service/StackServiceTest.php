@@ -34,6 +34,7 @@ use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Validators\StackServiceValidator;
+use OCP\EventDispatcher\IEventDispatcher;
 use Psr\Log\LoggerInterface;
 use \Test\TestCase;
 
@@ -71,6 +72,8 @@ class StackServiceTest extends TestCase {
 	private $changeHelper;
 	/** @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
 	private $logger;
+	/** @var IEventDispatcher|\PHPUnit\Framework\MockObject\MockObject */
+	private $eventDispatcher;
 	/** @var StackServiceValidator|\PHPUnit\Framework\MockObject\MockObject */
 	private $stackServiceValidator;
 
@@ -88,6 +91,7 @@ class StackServiceTest extends TestCase {
 		$this->activityManager = $this->createMock(ActivityManager::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
 		$this->logger = $this->createMock(LoggerInterface::class);
+		$this->eventDispatcher = $this->createMock(IEventDispatcher::class);
 		$this->stackServiceValidator = $this->createMock(StackServiceValidator::class);
 
 		$this->stackService = new StackService(
@@ -103,6 +107,7 @@ class StackServiceTest extends TestCase {
 			$this->activityManager,
 			$this->changeHelper,
 			$this->logger,
+			$this->eventDispatcher,
 			$this->stackServiceValidator
 		);
 	}
@@ -198,6 +203,7 @@ class StackServiceTest extends TestCase {
 		$this->permissionService->expects($this->once())->method('checkPermission');
 		$stackToBeDeleted = new Stack();
 		$stackToBeDeleted->setId(1);
+		$stackToBeDeleted->setBoardId(1);
 		$this->stackMapper->expects($this->once())->method('find')->willReturn($stackToBeDeleted);
 		$this->stackMapper->expects($this->once())->method('update')->willReturn($stackToBeDeleted);
 		$this->cardMapper->expects($this->once())->method('findAll')->willReturn([]);
@@ -246,6 +252,7 @@ class StackServiceTest extends TestCase {
 	private function createStack($id, $order) {
 		$stack = new Stack();
 		$stack->setId($id);
+		$stack->setBoardId(1);
 		$stack->setOrder($order);
 		return $stack;
 	}
