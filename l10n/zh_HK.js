@@ -153,6 +153,7 @@ OC.L10N.register(
     "Toggle compact mode" : "切換簡潔模式",
     "Open details" : "開啟細節",
     "Details" : "詳情",
+    "Currently present people" : "目前在場人仕",
     "Loading board" : "正在加載面板",
     "No lists available" : "無清單可用",
     "Create a new list to add cards to this board" : "創建一張新清單來添加卡片到這個看板",

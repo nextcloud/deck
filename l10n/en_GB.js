@@ -153,6 +153,7 @@ OC.L10N.register(
     "Toggle compact mode" : "Toggle compact mode",
     "Open details" : "Open details",
     "Details" : "Details",
+    "Currently present people" : "Currently present people",
     "Loading board" : "Loading board",
     "No lists available" : "No lists available",
     "Create a new list to add cards to this board" : "Create a new list to add cards to this board",
