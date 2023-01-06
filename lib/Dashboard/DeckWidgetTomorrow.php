@@ -32,7 +32,7 @@ use OCP\IL10N;
 class DeckWidgetTomorrow implements IWidget {
 
 	/**
-	 *  
+	 *
 	 * @var IL10N
 	 */
 	private $l10n;
@@ -52,7 +52,7 @@ class DeckWidgetTomorrow implements IWidget {
 	 * @inheritDoc
 	 */
 	public function getTitle(): string {
-		return $this->l10n->t('Upcoming cards tomorrow');
+		return $this->l10n->t('Cards due tomorrow');
 	}
 
 	/**
