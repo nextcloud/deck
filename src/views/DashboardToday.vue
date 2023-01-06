@@ -30,21 +30,7 @@
 		@hide="() => {}"
 		@markDone="() => {}">
 		<template #default="{ item }">
-			<a :key="item.id"
-				:href="cardLink(item)"
-				target="_blank"
-				class="card">
-				<div class="card--header">
-					<DueDate class="right" :card="item" />
-					<span class="title">{{ item.title }}</span>
-				</div>
-				<ul v-if="item.labels && item.labels.length"
-					class="labels">
-					<li v-for="label in item.labels" :key="label.id" :style="labelStyle(label)">
-						<span>{{ label.title }}</span>
-					</li>
-				</ul>
-			</a>
+			<Card :card="item" />
 		</template>
 	</DashboardWidget>
 </template>
@@ -52,17 +38,15 @@
 <script>
 import { DashboardWidget } from '@nextcloud/vue-dashboard'
 import { mapGetters } from 'vuex'
-import labelStyle from './../mixins/labelStyle.js'
-import DueDate from '../components/cards/badges/DueDate.vue'
+import Card from '../components/dashboard/Card.vue'
 import { generateUrl } from '@nextcloud/router'
 
 export default {
 	name: 'DashboardToday',
 	components: {
-		DueDate,
 		DashboardWidget,
+		Card,
 	},
-	mixins: [labelStyle],
 	data() {
 		return {
 			loading: false,
@@ -86,11 +70,6 @@ export default {
 			})
 			return list
 		},
-		cardLink() {
-			return (card) => {
-				return generateUrl('/apps/deck') + `#/board/${card.boardId}/card/${card.id}`
-			}
-		},
 		showMoreUrl() {
 			return this.cards.length > 7 ? generateUrl('/apps/deck') : null
 		},
@@ -105,47 +84,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import './../css/labels';
-
 	#deck-widget-empty-content {
 		text-align: center;
 		margin-top: 5vh;
-	}
-
-	.card {
-		display: block;
-		border-radius: var(--border-radius-large);
-		padding: 8px;
-		height: 60px;
-
-		&:hover {
-			background-color: var(--color-background-hover);
-		}
-	}
-
-	.card--header {
-		overflow: hidden;
-		.title {
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-			display: block;
-		}
-	}
-
-	.labels {
-		margin-left: 0;
-	}
-
-	.duedate::v-deep {
-		.due {
-			margin: 0 0 0 10px;
-			padding: 2px 4px;
-			font-size: 90%;
-		}
-	}
-
-	.right {
-		float: right;
 	}
 </style>
