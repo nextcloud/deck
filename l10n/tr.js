@@ -153,6 +153,7 @@ OC.L10N.register(
     "Toggle compact mode" : "Sıkışık kipi değiştir",
     "Open details" : "Ayrıntıları aç",
     "Details" : "Ayrıntılar",
+    "Currently present people" : "Şu anda var olan kişiler",
     "Loading board" : "Pano yükleniyor",
     "No lists available" : "Kullanılabilecek bir liste yok",
     "Create a new list to add cards to this board" : "Bu panoya kartlar eklemek için yeni bir liste ekleyin",
