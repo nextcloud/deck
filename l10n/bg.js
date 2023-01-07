@@ -153,6 +153,7 @@ OC.L10N.register(
     "Toggle compact mode" : "Превключване на компактен режим",
     "Open details" : "Отваряне на подробности",
     "Details" : "Подробности",
+    "Currently present people" : "Хора присъстващи в момента",
     "Loading board" : "Зареждане на табло",
     "No lists available" : "Няма налична списъци.",
     "Create a new list to add cards to this board" : "Създайте нов списък, за да добавите карти към това табло",

@@ -153,6 +153,7 @@ OC.L10N.register(
     "Toggle compact mode" : "Activer/Désactiver l'affichage compact",
     "Open details" : "Ouvrir les détails",
     "Details" : "Détails",
+    "Currently present people" : "Personnes actuellement présentes",
     "Loading board" : "Chargement du tableau…",
     "No lists available" : "Aucune liste disponible",
     "Create a new list to add cards to this board" : "Créer une nouvelle liste pour ajouter des cartes à ce tableau",
