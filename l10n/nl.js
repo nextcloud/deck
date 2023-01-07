@@ -119,7 +119,7 @@ OC.L10N.register(
     "Cancel" : "Annuleren",
     "Creating the new card …" : "Aanmaken nieuwe kaart...",
     "Card \"{card}\" was added to \"{board}\"" : "Kaart \"{card}\" is toegevoegd aan \"{board}\"",
-    "Open card" : "Open kaard",
+    "Open card" : "Open kaart",
     "Close" : "Sluiten",
     "Create card" : "Aanmaken kaart",
     "Select a card" : "Selecteer een kaart",
