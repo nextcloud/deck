@@ -153,6 +153,7 @@ OC.L10N.register(
     "Toggle compact mode" : "Växla kompakt läge",
     "Open details" : "Öppna detaljer",
     "Details" : "Detaljer",
+    "Currently present people" : "Närvarande personer",
     "Loading board" : "Läser in tavla",
     "No lists available" : "Inga listor tillgängliga",
     "Create a new list to add cards to this board" : "Skapa en ny lista för att lägga till kort på denna tavla",
