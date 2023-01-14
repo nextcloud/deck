@@ -153,6 +153,7 @@ OC.L10N.register(
     "Toggle compact mode" : "Vyp/zap. kompaktní režim",
     "Open details" : "Otevřít podorobnosti",
     "Details" : "Podrobnosti",
+    "Currently present people" : "Nyní přítomní lidé",
     "Loading board" : "Načítání tabule",
     "No lists available" : "Nejsou k dispozici žádné seznamy",
     "Create a new list to add cards to this board" : "Pro přidání karet na tuto tabuli vytvořte nový seznam",
