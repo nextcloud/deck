@@ -12,6 +12,7 @@ on:
       - 'composer.lock'
   push:
     branches:
+      - main
       - master
       - stable*
 

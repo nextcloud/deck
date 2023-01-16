@@ -44,14 +44,14 @@ jobs:
         git config --local user.name "GitHub Action"
         git tag -f nightly
     - name: Push tag
-      uses: juliushaertl/github-push-action@master
+      uses: juliushaertl/github-push-action@main
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         tags: true
         force: true
     - name: Create Release
       id: create_release
-      uses: juliushaertl/action-release@master
+      uses: juliushaertl/action-release@main
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         tag: nightly
