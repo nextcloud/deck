@@ -28,7 +28,7 @@
 			"composer/package-versions-deprecated": true
 		},
 		"platform": {
-			"php": "7.4"
+			"php": "8.0"
 		}
 	},
 	"scripts": {
@@ -42,8 +42,8 @@
 			"@test:unit",
 			"@test:integration"
 		],
-		"test:unit": "phpunit -c tests/phpunit.xml",
-		"test:integration": "phpunit -c tests/phpunit.integration.xml && cd tests/integration && ./run.sh"
+		"test:unit": "vendor/bin/phpunit -c tests/phpunit.xml",
+		"test:integration": "vendor/bin/phpunit -c tests/phpunit.integration.xml && cd tests/integration && ./run.sh"
 	},
 	"autoload-dev": {
 		"psr-4": {
