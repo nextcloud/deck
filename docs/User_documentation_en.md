@@ -90,7 +90,7 @@ Steps:
 * Create the configuration file
 * Execute the import informing the import file path, data file and source as `Trello JSON`
 
-Create the configuration file respecting the [JSON Schema](https://github.com/nextcloud/deck/blob/master/lib/Service/Importer/fixtures/config-trelloJson-schema.json) for import `Trello JSON`
+Create the configuration file respecting the [JSON Schema](https://github.com/nextcloud/deck/blob/main/lib/Service/Importer/fixtures/config-trelloJson-schema.json) for import `Trello JSON`
 
 Example configuration file:
 ```json
@@ -120,7 +120,7 @@ https://api.trello.com/1/members/me/boards?key={yourKey}&token={yourToken}&field
   This ID you will use in the configuration file in the `board` property
 * Create the configuration file
 
-Create the configuration file respecting the [JSON Schema](https://github.com/nextcloud/deck/blob/master/lib/Service/Importer/fixtures/config-trelloApi-schema.json) for import `Trello JSON`
+Create the configuration file respecting the [JSON Schema](https://github.com/nextcloud/deck/blob/main/lib/Service/Importer/fixtures/config-trelloApi-schema.json) for import `Trello JSON`
 
 Example configuration file:
 ```json
