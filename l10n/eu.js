@@ -124,7 +124,7 @@ OC.L10N.register(
     "Create card" : "Sortu txartela",
     "Select a card" : "Hautatu txartel bat",
     "Select the card to link to a project" : "Hautatu proiektu bati estekatzeko txartela",
-    "Link to card" : "Estekatu txartelera",
+    "Link to card" : "Lotu txartelera",
     "File already exists" : "Badago izen bereko fitxategi bat",
     "A file with the name {filename} already exists." : "{filename} izeneko fitxategia existitzen da dagoeneko.",
     "Do you want to overwrite it?" : "Gainidatzi nahi duzu?",
