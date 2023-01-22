@@ -1,6 +1,7 @@
 { "translations": {
     "Personal" : "Udmawan",
     "Finished" : "Immed",
+    "Done" : "Immed",
     "The file was uploaded" : "Ulac afaylu yettwaznen",
     "The file was only partially uploaded" : "Afaylu, cwiṭ kan i yettwaznen segs",
     "No file was uploaded" : "Ulac afaylu i d-yettwasulin",
@@ -10,12 +11,17 @@
     "Details" : "Talqayt",
     "Sharing" : "Beṭṭu",
     "Tags" : "Tibzimin",
+    "Owner" : "Bab",
     "Delete" : "Kkes",
     "Edit" : "Ẓreg",
     "Download" : "Sider",
+    "Attachments" : "Ticeqqufin",
+    "Comments" : "Commentaires",
     "Modified" : "Yettwabeddel",
     "Today" : "Ass-a",
     "Save" : "Sekles",
+    "Cancel reply" : "Semmet tiririt.",
+    "Reply" : "Err",
     "No notifications" : "Ulac tisezmal",
     "Share" : "Bḍu"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
