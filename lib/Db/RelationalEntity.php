@@ -53,7 +53,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 	 * @param string $attribute the name of the attribute
 	 * @since 7.0.0
 	 */
-	protected function markFieldUpdated($attribute) {
+	protected function markFieldUpdated(string $attribute): void {
 		if (!in_array($attribute, $this->_relations, true)) {
 			parent::markFieldUpdated($attribute);
 		}
