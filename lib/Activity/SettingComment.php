@@ -29,7 +29,7 @@ class SettingComment extends Setting {
 	 * @return string Lowercase a-z and underscore only identifier
 	 * @since 11.0.0
 	 */
-	public function getIdentifier() {
+	public function getIdentifier(): string {
 		return 'deck_comment';
 	}
 
@@ -37,7 +37,7 @@ class SettingComment extends Setting {
 	 * @return string A translated string
 	 * @since 11.0.0
 	 */
-	public function getName() {
+	public function getName(): string {
 		return $this->l->t('A <strong>comment</strong> was created on a card');
 	}
 
@@ -45,7 +45,7 @@ class SettingComment extends Setting {
 	 * @return bool True when the option can be changed for the stream
 	 * @since 11.0.0
 	 */
-	public function canChangeStream() {
+	public function canChangeStream(): bool {
 		return false;
 	}
 }
