@@ -95,6 +95,11 @@
       <code>$labelId</code>
     </ParamNameMismatch>
   </file>
+  <file src="lib/Db/RelationalEntity.php">
+    <MethodSignatureMismatch occurrences="1">
+      <code>$attribute</code>
+    </MethodSignatureMismatch>
+  </file>
   <file src="lib/Db/Stack.php">
     <UndefinedClass occurrences="2">
       <code>VCalendar</code>

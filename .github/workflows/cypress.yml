@@ -21,7 +21,7 @@ jobs:
       matrix:
         node-version: [14.x]
         # containers: [1, 2, 3]
-        php-versions: [ '7.4' ]
+        php-versions: [ '8.0' ]
         databases: [ 'sqlite' ]
         server-versions: [ 'master' ]
 
