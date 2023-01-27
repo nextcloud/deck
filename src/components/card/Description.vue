@@ -26,11 +26,12 @@
 			{{ t('deck', 'Description') }}
 			<span v-if="descriptionLastEdit && !descriptionSaving">{{ t('deck', '(Unsaved)') }}</span>
 			<span v-if="descriptionSaving">{{ t('deck', '(Saving…)') }}</span>
-			<a v-tooltip="t('deck', 'Formatting help')"
+			<a v-if="!textAppAvailable"
+				v-tooltip="t('deck', 'Formatting help')"
 				href="https://deck.readthedocs.io/en/latest/Markdown/"
 				target="_blank"
 				class="icon icon-info" />
-			<NcActions v-if="canEdit">
+			<NcActions v-if="!textAppAvailable && canEdit">
 				<NcActionButton v-if="!descriptionEditing" icon="icon-rename" @click="showEditor()">
 					{{ t('deck', 'Edit description') }}
 				</NcActionButton>
@@ -48,21 +49,26 @@
 			</NcActions>
 		</h5>
 
-		<div v-if="!descriptionEditing && hasDescription"
-			id="description-preview"
-			@click="clickedPreview"
-			v-html="renderedDescription" />
-		<p v-else-if="!descriptionEditing" class="placeholder" @click="showEditor()">
-			{{ t('deck', 'Write a description …') }}
-		</p>
-		<VueEasymde v-else
-			:key="card.id"
-			ref="markdownEditor"
-			v-model="description"
-			:configs="mdeConfig"
-			@initialized="addKeyListeners"
-			@update:modelValue="updateDescription"
-			@blur="saveDescription" />
+		<template v-if="textAppAvailable">
+			<div ref="editor" />
+		</template>
+		<template v-else>
+			<div v-if="!descriptionEditing && hasDescription"
+				id="description-preview"
+				@click="clickedPreview"
+				v-html="renderedDescription" />
+			<p v-else-if="!descriptionEditing" class="placeholder" @click="showEditor()">
+				{{ t('deck', 'Write a description …') }}
+			</p>
+			<VueEasymde v-else
+				:key="card.id"
+				ref="markdownEditor"
+				v-model="description"
+				:configs="mdeConfig"
+				@initialized="addKeyListeners"
+				@update:modelValue="updateDescription"
+				@blur="saveDescription" />
+		</template>
 
 		<NcModal v-if="modalShow" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
 			<div class="modal__content">
@@ -116,6 +122,8 @@ export default {
 	},
 	data() {
 		return {
+			textAppAvailable: !!window.OCA?.Text?.createEditor,
+			editor: null,
 			keyExitState: 0,
 			description: '',
 			markdownIt: null,
@@ -175,7 +183,29 @@ export default {
 			return this.card?.description?.trim?.() !== ''
 		},
 	},
+	mounted() {
+		this.setupEditor()
+	},
+	beforeDestroy() {
+		this?.editor?.destroy()
+	},
 	methods: {
+		setupEditor() {
+			this?.editor?.vm?.$destroy()
+			this.$refs.editor.innerHTML = ''
+			const element = document.createElement('div')
+			this.$refs.editor.appendChild(element)
+			this.editor = window.OCA.Text.createEditor({
+				el: element,
+				content: this.card.description,
+				readOnly: !this.canEdit,
+				onUpdate: ({ markdown }) => {
+					this.description = markdown
+					this.updateDescription()
+				},
+			})
+
+		},
 		addKeyListeners() {
 			this.$refs.markdownEditor.easymde.codemirror.on('keydown', (a, b) => {
 
