@@ -20,6 +20,7 @@ OC.L10N.register(
     "Attachments" : "Ticeqqufin",
     "Comments" : "Commentaires",
     "Modified" : "Yettwabeddel",
+    "Created" : "Yettwarna.",
     "Today" : "Ass-a",
     "Save" : "Sekles",
     "Cancel reply" : "Semmet tiririt.",
