@@ -44,7 +44,7 @@ jobs:
           expression: "//info//dependencies//nextcloud/@min-version"
 
       - name: Read package.json node and npm engines version
-        uses: skjnldsv/read-package-engines-version-actions@1bdcee71fa343c46b18dc6aceffb4cd1e35209c6 # v1.2
+        uses: skjnldsv/read-package-engines-version-actions@9bc020752ccc3352de3382e10a1d6cd1bd0ace5a # v2.0
         id: versions
         # Continue if no package.json
         continue-on-error: true
