@@ -284,7 +284,7 @@ OC.L10N.register(
     "Only assigned cards" : "Uniquement les cartes assignées",
     "No reminder" : "Aucun rappel",
     "An error occurred" : "Une erreur est survenue",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Êtes-vous sûr de vouloir supprimer le tableau {titre} ? Cela supprimera toutes les données de ce tableau, y compris les cartes archivées.",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Êtes-vous sûr de vouloir supprimer le tableau {title} ? Cela supprimera toutes les données de ce tableau, y compris les cartes archivées.",
     "Delete the board?" : "Supprimer le tableau ?",
     "Loading filtered view" : "Chargement de la vue filtrée",
     "No due" : "Sans échéance",
