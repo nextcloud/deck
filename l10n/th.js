@@ -2,6 +2,7 @@ OC.L10N.register(
     "deck",
     {
     "Personal" : "ส่วนตัว",
+    "Finished" : "เสร็จสิ้น",
     "copy" : "คัดลอก",
     "Done" : "เสร็จสิ้น",
     "The file was uploaded" : "ไฟล์อัปโหลดแล้ว",
