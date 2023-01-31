@@ -30,28 +30,70 @@ use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\StackService;
+use OCP\Collaboration\Reference\ADiscoverableReferenceProvider;
 use OCP\Collaboration\Reference\IReference;
-use OCP\Collaboration\Reference\IReferenceProvider;
+use OCP\Collaboration\Reference\ISearchableReferenceProvider;
 use OCP\Collaboration\Reference\Reference;
+use OCP\IL10N;
 use OCP\IURLGenerator;
 
-class CardReferenceProvider implements IReferenceProvider {
+class CardReferenceProvider extends ADiscoverableReferenceProvider implements ISearchableReferenceProvider {
 	private CardService $cardService;
 	private IURLGenerator $urlGenerator;
 	private BoardService $boardService;
 	private StackService $stackService;
 	private ?string $userId;
+	private IL10N $l10n;
 
 	public function __construct(CardService $cardService,
 								BoardService $boardService,
 								StackService $stackService,
 								IURLGenerator $urlGenerator,
+								IL10N $l10n,
 								?string $userId) {
 		$this->cardService = $cardService;
 		$this->urlGenerator = $urlGenerator;
 		$this->boardService = $boardService;
 		$this->stackService = $stackService;
 		$this->userId = $userId;
+		$this->l10n = $l10n;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getId(): string {
+		return Application::APP_ID . '-ref-cards';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getTitle(): string {
+		return $this->l10n->t('Deck cards');
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getOrder(): int {
+		return 10;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getIconUrl(): string {
+		return $this->urlGenerator->getAbsoluteURL(
+			$this->urlGenerator->imagePath(Application::APP_ID, 'deck-dark.svg')
+		);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getSupportedSearchProviderIds(): array {
+		return ['deck'];
 	}
 
 	/**
