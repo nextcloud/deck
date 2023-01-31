@@ -70,7 +70,7 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 	 * @inheritDoc
 	 */
 	public function getTitle(): string {
-		return $this->l10n->t('Deck cards');
+		return $this->l10n->t('Deck boards, cards and comments');
 	}
 
 	/**
@@ -93,7 +93,10 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 	 * @inheritDoc
 	 */
 	public function getSupportedSearchProviderIds(): array {
-		return ['deck'];
+		return [
+			'search-deck-card-board',
+			'search-deck-comment',
+		];
 	}
 
 	/**

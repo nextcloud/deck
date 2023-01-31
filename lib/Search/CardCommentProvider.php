@@ -49,7 +49,7 @@ class CardCommentProvider implements IProvider {
 	}
 
 	public function getId(): string {
-		return 'deck-comment';
+		return 'search-deck-comment';
 	}
 
 	public function getName(): string {
@@ -65,7 +65,7 @@ class CardCommentProvider implements IProvider {
 				$results
 			);
 		}
-		
+
 		return SearchResult::paginated(
 			$this->l10n->t('Card comments'),
 			$results,
