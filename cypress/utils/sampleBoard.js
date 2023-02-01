@@ -29,6 +29,7 @@ export const sampleBoard = (title = 'MyTestBoard') => {
 				cards: [
 					{
 						title: 'Hello world',
+						description: '# Hello world',
 					},
 				],
 			},

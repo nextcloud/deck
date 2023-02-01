@@ -91,7 +91,7 @@ Cypress.Commands.add('createExampleBoard', ({ user, board }) => {
 						method: 'POST',
 						url: `${Cypress.env('baseUrl')}/index.php/apps/deck/api/v1.0/boards/${boardData.id}/stacks/${stackData.id}/cards`,
 						auth,
-						body: { title: card.title },
+						body: { title: card.title, description: card.description ?? '' },
 					})
 				}
 			})

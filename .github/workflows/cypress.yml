@@ -33,6 +33,11 @@ jobs:
       - name: Set up npm7
         run: npm i -g npm@7
 
+      - name: Register text Git reference
+        run: |
+          text_app_ref="$(if [ "${{ matrix.server-versions }}" = "master" ]; then echo -n "main"; else echo -n "${{ matrix.server-versions }}"; fi)"
+          echo "text_app_ref=$text_app_ref" >> $GITHUB_ENV
+
       - name: Checkout server
         uses: actions/checkout@v3
         with:
@@ -50,6 +55,13 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: apps/${{ env.APP_NAME }}
+
+      - name: Checkout text
+        uses: actions/checkout@v3
+        with:
+          repository: nextcloud/text
+          ref: ${{ env.text_app_ref }}
+          path: apps/text
 
       - name: Set up php ${{ matrix.php-versions }}
         uses: shivammathur/setup-php@2.24.0
