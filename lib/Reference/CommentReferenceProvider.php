@@ -23,21 +23,17 @@
 namespace OCA\Deck\Reference;
 
 use OCA\Deck\AppInfo\Application;
-use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Model\CardDetails;
-use OCA\Deck\NotFoundException;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\CommentService;
-use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Service\StackService;
 use OCP\Collaboration\Reference\IReference;
 use OCP\Collaboration\Reference\IReferenceProvider;
 use OCP\Collaboration\Reference\Reference;
-use OCP\Comments\ICommentsManager;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 

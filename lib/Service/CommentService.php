@@ -86,7 +86,7 @@ class CommentService {
 	private function get(int $cardId, int $commentId): IComment {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		try {
-			$comment = $this->commentsManager->get($commentId);
+			$comment = $this->commentsManager->get((string) $commentId);
 			if ($comment->getObjectType() !== Application::COMMENT_ENTITY_TYPE || (int) $comment->getObjectId() !== $cardId) {
 				throw new CommentNotFoundException();
 			}

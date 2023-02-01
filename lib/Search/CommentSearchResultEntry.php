@@ -26,7 +26,6 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Search;
 
-use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Db\Card;
 use OCP\IL10N;
 use OCP\IURLGenerator;

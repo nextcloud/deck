@@ -22,7 +22,7 @@
 <template>
 	<div class="deck-comment-reference">
 		<div class="line">
-			<DeckIcon :size="20" class="title-icon" />
+			<CardBulletedOutlineIcon :size="20" class="title-icon" />
 			<strong>
 				<a :href="cardLink"
 					:title="cardTooltip"
@@ -41,6 +41,7 @@
 			</span>
 		</div>
 		<div class="line">
+			<DeckIcon :size="20" class="title-icon" />
 			<a v-tooltip.top="{ content: stackTooltip }"
 				:href="boardLink"
 				target="_blank"
@@ -95,6 +96,7 @@
 <script>
 import CalendarBlankIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import TextIcon from 'vue-material-design-icons/Text.vue'
+import CardBulletedOutlineIcon from 'vue-material-design-icons/CardBulletedOutline.vue'
 import CommentProcessingOutlineIcon from 'vue-material-design-icons/CommentProcessingOutline.vue'
 
 import DeckIcon from '../components/icons/DeckIcon.vue'
@@ -113,6 +115,7 @@ export default {
 		DeckIcon,
 		CalendarBlankIcon,
 		TextIcon,
+		CardBulletedOutlineIcon,
 		RichText,
 		CommentProcessingOutlineIcon,
 	},
