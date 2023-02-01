@@ -50,7 +50,9 @@ use OCA\Deck\Listeners\LiveUpdateListener;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
 use OCA\Deck\Middleware\ExceptionMiddleware;
 use OCA\Deck\Notification\Notifier;
+use OCA\Deck\Reference\BoardReferenceProvider;
 use OCA\Deck\Reference\CardReferenceProvider;
+use OCA\Deck\Reference\CommentReferenceProvider;
 use OCA\Deck\Search\CardCommentProvider;
 use OCA\Deck\Search\DeckProvider;
 use OCA\Deck\Service\PermissionService;
@@ -131,7 +133,8 @@ class Application extends App implements IBootstrap {
 
 		// reference widget
 		$context->registerReferenceProvider(CardReferenceProvider::class);
-		// $context->registerEventListener(RenderReferenceEvent::class, CardReferenceListener::class);
+		$context->registerReferenceProvider(BoardReferenceProvider::class);
+		$context->registerReferenceProvider(CommentReferenceProvider::class);
 
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
 
