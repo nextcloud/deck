@@ -23,6 +23,8 @@ import { registerWidget } from '@nextcloud/vue-richtext'
 import { Tooltip } from '@nextcloud/vue'
 import Vue from 'vue'
 import CardReferenceWidget from './views/CardReferenceWidget.vue'
+import BoardReferenceWidget from './views/BoardReferenceWidget.vue'
+import CommentReferenceWidget from './views/CommentReferenceWidget.vue'
 
 import { translate, translatePlural } from '@nextcloud/l10n'
 
@@ -40,6 +42,36 @@ registerWidget('deck-card', (el, { richObjectType, richObject, accessible }) => 
 	el.parentNode.style['margin-right'] = '0'
 
 	const Widget = Vue.extend(CardReferenceWidget)
+	new Widget({
+		propsData: {
+			richObjectType,
+			richObject,
+			accessible,
+		},
+	}).$mount(el)
+})
+
+registerWidget('deck-board', (el, { richObjectType, richObject, accessible }) => {
+	el.parentNode.style['max-width'] = '400px'
+	el.parentNode.style['margin-left'] = '0'
+	el.parentNode.style['margin-right'] = '0'
+
+	const Widget = Vue.extend(BoardReferenceWidget)
+	new Widget({
+		propsData: {
+			richObjectType,
+			richObject,
+			accessible,
+		},
+	}).$mount(el)
+})
+
+registerWidget('deck-comment', (el, { richObjectType, richObject, accessible }) => {
+	el.parentNode.style['max-width'] = '400px'
+	el.parentNode.style['margin-left'] = '0'
+	el.parentNode.style['margin-right'] = '0'
+
+	const Widget = Vue.extend(CommentReferenceWidget)
 	new Widget({
 		propsData: {
 			richObjectType,

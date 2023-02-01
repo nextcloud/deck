@@ -12,7 +12,7 @@ webpackConfig.entry = {
 	dashboard: path.join(__dirname, 'src', 'init-dashboard.js'),
 	calendar: path.join(__dirname, 'src', 'init-calendar.js'),
 	talk: path.join(__dirname, 'src', 'init-talk.js'),
-	'card-reference': path.join(__dirname, 'src', 'init-card-reference.js'),
+	reference: path.join(__dirname, 'src', 'init-reference.js'),
 }
 
 webpackConfig.stats = {

@@ -92,7 +92,7 @@ class Application extends App implements IBootstrap {
 		$container = $this->getContainer();
 		$eventDispatcher = $container->get(IEventDispatcher::class);
 		$eventDispatcher->addListener(RenderReferenceEvent::class, function () {
-			Util::addScript(self::APP_ID, self::APP_ID . '-card-reference');
+			Util::addScript(self::APP_ID, self::APP_ID . '-reference');
 		});
 	}
 
