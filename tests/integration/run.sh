@@ -33,7 +33,7 @@ echo $PHPPID
 
 export TEST_SERVER_URL="http://localhost:$PORT/ocs/"
 
-vendor/bin/behat $SCENARIO_TO_RUN
+vendor/bin/behat --colors -f junit -f pretty $SCENARIO_TO_RUN
 RESULT=$?
 
 kill $PHPPID

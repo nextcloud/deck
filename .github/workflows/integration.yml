@@ -99,3 +99,7 @@ jobs:
       - name: Run behat
         working-directory: apps/${{ env.APP_NAME }}/tests/integration
         run: ./run.sh
+
+      - name: Dump Nextcloud log
+        if: failure()
+        run: cat data/nextcloud.log
