@@ -26,11 +26,12 @@
 			{{ t('deck', 'Description') }}
 			<span v-if="descriptionLastEdit && !descriptionSaving">{{ t('deck', '(Unsaved)') }}</span>
 			<span v-if="descriptionSaving">{{ t('deck', '(Saving…)') }}</span>
-			<a v-tooltip="t('deck', 'Formatting help')"
+			<a v-if="!textAppAvailable"
+				v-tooltip="t('deck', 'Formatting help')"
 				href="https://deck.readthedocs.io/en/latest/Markdown/"
 				target="_blank"
 				class="icon icon-info" />
-			<NcActions v-if="canEdit">
+			<NcActions v-if="!textAppAvailable && canEdit">
 				<NcActionButton v-if="!descriptionEditing" icon="icon-rename" @click="showEditor()">
 					{{ t('deck', 'Edit description') }}
 				</NcActionButton>
@@ -48,21 +49,26 @@
 			</NcActions>
 		</h5>
 
-		<div v-if="!descriptionEditing && hasDescription"
-			id="description-preview"
-			@click="clickedPreview"
-			v-html="renderedDescription" />
-		<p v-else-if="!descriptionEditing" class="placeholder" @click="showEditor()">
-			{{ t('deck', 'Write a description …') }}
-		</p>
-		<VueEasymde v-else
-			:key="card.id"
-			ref="markdownEditor"
-			v-model="description"
-			:configs="mdeConfig"
-			@initialized="addKeyListeners"
-			@update:modelValue="updateDescription"
-			@blur="saveDescription" />
+		<div v-if="textAppAvailable" class="description__text">
+			<div ref="editor" />
+		</div>
+		<template v-else>
+			<div v-if="!descriptionEditing && hasDescription"
+				id="description-preview"
+				@click="clickedPreview"
+				v-html="renderedDescription" />
+			<p v-else-if="!descriptionEditing" class="placeholder" @click="showEditor()">
+				{{ t('deck', 'Write a description …') }}
+			</p>
+			<VueEasymde v-else
+				:key="card.id"
+				ref="markdownEditor"
+				v-model="description"
+				:configs="mdeConfig"
+				@initialized="addKeyListeners"
+				@update:modelValue="updateDescription"
+				@blur="saveDescription" />
+		</template>
 
 		<NcModal v-if="modalShow" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
 			<div class="modal__content">
@@ -116,6 +122,8 @@ export default {
 	},
 	data() {
 		return {
+			textAppAvailable: !!window.OCA?.Text?.createEditor,
+			editor: null,
 			keyExitState: 0,
 			description: '',
 			markdownIt: null,
@@ -175,10 +183,31 @@ export default {
 			return this.card?.description?.trim?.() !== ''
 		},
 	},
+	mounted() {
+		this.setupEditor()
+	},
+	beforeDestroy() {
+		this?.editor?.destroy()
+	},
 	methods: {
+		async setupEditor() {
+			this?.editor?.destroy()
+			this.editor = await window.OCA.Text.createEditor({
+				el: this.$refs.editor,
+				content: this.card.description,
+				readOnly: !this.canEdit,
+				onUpdate: ({ markdown }) => {
+					this.description = markdown
+					this.updateDescription()
+				},
+				onFileInsert: () => {
+					this.showAttachmentModal()
+				},
+			})
+
+		},
 		addKeyListeners() {
 			this.$refs.markdownEditor.easymde.codemirror.on('keydown', (a, b) => {
-
 				if (this.keyExitState === 0 && (b.key === 'Meta' || b.key === 'Alt')) {
 					this.keyExitState = 1
 				}
@@ -213,17 +242,23 @@ export default {
 			this.modalShow = true
 		},
 		addAttachment(attachment) {
-			const descString = this.$refs.markdownEditor.easymde.value()
-			let embed = ''
-			if ((attachment.type === 'file' && attachment.extendedData.hasPreview) || attachment.extendedData.mimetype.includes('image')) {
-				embed = '!'
+			const asImage = (attachment.type === 'file' && attachment.extendedData.hasPreview) || attachment.extendedData.mimetype.includes('image')
+			if (this.editor) {
+				this.editor.insertAtCursor(
+					asImage
+						? `<a href="${this.attachmentPreview(attachment)}"><img src="${this.attachmentPreview(attachment)}" alt="${attachment.data}" /></a>`
+						: `<a href="${this.attachmentPreview(attachment)}">${attachment.data}</a>`
+				)
+				return
+			} else {
+				const attachmentString = (asImage ? '!' : '') + '[📎 ' + attachment.data + '](' + this.attachmentPreview(attachment) + ')'
+				const descString = this.$refs.markdownEditor.easymde.value()
+				const newContent = descString + '\n' + attachmentString
+				this.$refs.markdownEditor.easymde.value(newContent)
+				this.description = newContent
 			}
-			const attachmentString = embed + '[📎 ' + attachment.data + '](' + this.attachmentPreview(attachment) + ')'
-			const newContent = descString + '\n' + attachmentString
-			this.$refs.markdownEditor.easymde.value(newContent)
-			this.description = newContent
-			this.modalShow = false
 			this.updateDescription()
+			this.modalShow = false
 		},
 		clickedPreview(e) {
 			if (e.target.getAttribute('type') === 'checkbox') {
@@ -378,5 +413,13 @@ h5 {
 .vue-easymde .cm-s-easymde .cm-formatting.cm-url,
 .vue-easymde .cm-s-easymde .cm-formatting.cm-image {
 	color: var(--color-text-maxcontrast);
+}
+
+.app-sidebar__tab .description__text .text-menubar {
+	top: -10px !important;
+}
+
+.modal__card .description__text .text-menubar {
+	top: 142px !important;
 }
 </style>
