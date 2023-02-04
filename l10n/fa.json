@@ -98,7 +98,6 @@
     "Invalid date, date format must be YYYY-MM-DD" : "تاریخ نامعتبر است، قالب تاریخ باید YYYY-MM-DD باشد",
     "Personal planning and team project organization" : "برنامه‌ریزی شخصی و سازمان‌دهی کار گروهی",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "برگه‌دان یک ابزار سازمان‌دهی سبک کانبان است که هدف آن برنامه‌ریزی شخصی و سازمان‌دهی پروژه برای گروه‌های مرتبط با Nextcloud است.\n\n\n- 📥 وظایف خود را به برگه‌ها اضافه کنید و آن‌ها را مرتب کنید\n- 📄 یادداشت‌های اضافی را در Markdown یادداشت کنید\n- 🔖 برچسب‌هایی را برای سازمان‌دهی بهتر اختصاص دهید\n- 👥 با گروه، دوستان یا خانوادهٔ خود به اشتراک بگذارید\n- 📎 فایل‌ها را ضمیمه کنید و آنها را در توضیحات Markdown خود قرار دهید\n- 💬 با استفاده از نظرات با تیم خود بحث کنید\n- ⚡ تغییرات در جریان فعالیت را پیگیری کنید\n- 🚀 پروژه خود را سازمان‌دهی کنید",
-    "Card details" : "جزئیات برگه",
     "Add board" : "افزودن تخته",
     "Select the board to link to a project" : "تخته‌ای را برای ایجاد پیوند با یک پروژه انتخاب کنید",
     "Search by board title" : "جستجو بر اساس عنوان تخته",
@@ -230,6 +229,7 @@
     "Assign to me" : "به من اختصاص دهید",
     "Unassign myself" : "واگذاری به خودم را لغو می‌کنم",
     "Move card" : "انتقال برگه",
+    "Card details" : "جزئیات برگه",
     "Unarchive card" : "برگه را از بایگانی خارج کنید",
     "Archive card" : "بایگانی برگه",
     "Delete card" : "حذف برگه",
