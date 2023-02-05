@@ -66,7 +66,7 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "Una <strong>descripción de tarjeta</strong> dentro de la app Deck ha cambiado",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Cambios en la <strong>app Deck</strong>",
-    "A <strong>comment</strong> was created on a card" : "Un <strong>comment</strong> ha sido creado en una tarjeta",
+    "A <strong>comment</strong> was created on a card" : "Un <strong>comentario</strong> ha sido creado en una tarjeta",
     "Upcoming cards" : "Próximas tarjetas",
     "Load more" : "Cargar más",
     "Personal" : "Personal",
