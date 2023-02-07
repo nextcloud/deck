@@ -76,6 +76,7 @@ OC.L10N.register(
     "Modified" : "Modificado",
     "Created" : "Creado",
     "Due date" : "Fecha de vencimiento",
+    "Remove due date" : "Eliminar fecha de vencimiento",
     "Select Date" : "Seleccionar fecha",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana",
