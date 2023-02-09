@@ -25,7 +25,6 @@ namespace OCA\Deck\AppInfo;
 
 use Closure;
 use Exception;
-use OC\EventDispatcher\SymfonyAdapter;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Capabilities;
@@ -45,6 +44,7 @@ use OCA\Deck\Event\SessionCreatedEvent;
 use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
 use OCA\Deck\Listeners\ParticipantCleanupListener;
 use OCA\Deck\Listeners\FullTextSearchEventListener;
+use OCA\Deck\Listeners\ResourceAdditionalScriptsListener;
 use OCA\Deck\Listeners\ResourceListener;
 use OCA\Deck\Listeners\LiveUpdateListener;
 use OCA\Deck\Middleware\DefaultBoardMiddleware;
@@ -63,15 +63,13 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Collaboration\Resources\IProviderManager;
+use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
 use OCP\Comments\CommentsEntityEvent;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IConfig;
 use OCP\IDBConnection;
-use OCP\IRequest;
-use OCP\Server;
-use OCP\Notification\IManager as NotificationManager;
 use OCP\Share\IManager;
 use OCP\User\Events\UserDeletedEvent;
 use OCP\Util;
@@ -97,7 +95,6 @@ class Application extends App implements IBootstrap {
 	public function boot(IBootContext $context): void {
 		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEntity']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEventHandler']));
-		$context->injectFn(Closure::fromCallable([$this, 'registerNotifications']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
 
 		$context->injectFn(function (IManager $shareManager) {
@@ -154,10 +151,9 @@ class Application extends App implements IBootstrap {
 		// Event listening for realtime updates via notify_push
 		$context->registerEventListener(SessionCreatedEvent::class, LiveUpdateListener::class);
 		$context->registerEventListener(SessionClosedEvent::class, LiveUpdateListener::class);
-	}
 
-	public function registerNotifications(NotificationManager $notificationManager): void {
-		$notificationManager->registerNotifierService(Notifier::class);
+		$context->registerNotifierService(Notifier::class);
+		$context->registerEventListener(LoadAdditionalScriptsEvent::class, ResourceAdditionalScriptsListener::class);
 	}
 
 	public function registerCommentsEntity(IEventDispatcher $eventDispatcher): void {
@@ -183,16 +179,8 @@ class Application extends App implements IBootstrap {
 		});
 	}
 
-	protected function registerCollaborationResources(IProviderManager $resourceManager, SymfonyAdapter $symfonyAdapter): void {
+	protected function registerCollaborationResources(IProviderManager $resourceManager): void {
 		$resourceManager->registerResourceProvider(ResourceProvider::class);
 		$resourceManager->registerResourceProvider(ResourceProviderCard::class);
-
-		$symfonyAdapter->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
-			if (strpos(Server::get(IRequest::class)->getPathInfo(), '/call/') === 0) {
-				// Talk integration has its own entrypoint which already includes collections handling
-				return;
-			}
-			Util::addScript('deck', 'deck-collections');
-		});
 	}
 }
