@@ -20,37 +20,32 @@
  *
  */
 
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-import overview from './store/overview.js'
-
 import './css/dashboard.scss'
 
-import Dashboard from './views/Dashboard.vue'
-
-Vue.use(Vuex)
-
 const debug = process.env.NODE_ENV !== 'production'
-
-const store = new Vuex.Store({
-	modules: {
-		overview,
-	},
-	strict: debug,
-})
 
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken);
 // eslint-disable-next-line
 __webpack_public_path__ = OC.linkTo('deck', 'js/');
 
-Vue.prototype.t = t
-Vue.prototype.n = n
-Vue.prototype.OC = OC
-
 document.addEventListener('DOMContentLoaded', () => {
-	OCA.Dashboard.register('deck', (el) => {
+	OCA.Dashboard.register('deck', async (el) => {
+		const { default: Vue } = await import('vue')
+		const { default: Vuex } = await import('vuex')
+		const { default: overview } = await import('./store/overview.js')
+		const { default: Dashboard } = await import('./views/Dashboard.vue')
+		Vue.prototype.t = t
+		Vue.prototype.n = n
+		Vue.prototype.OC = OC
+		Vue.use(Vuex)
+
+		const store = new Vuex.Store({
+			modules: {
+				overview,
+			},
+			strict: debug,
+		})
 		const View = Vue.extend(Dashboard)
 		const vm = new View({
 			propsData: {},
