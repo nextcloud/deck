@@ -21,7 +21,7 @@ class SearchContext implements Context {
 
 		$this->boardContext = $environment->getContext('BoardContext');
 	}
-	
+
 	/**
 	 * @When /^searching for "([^"]*)"$/
 	 * @param string $term
@@ -39,7 +39,7 @@ class SearchContext implements Context {
 	 * https://cloud.nextcloud.com/ocs/v2.php/search/providers/talk-conversations/search?term=an&from=%2Fapps%2Fdashboard%2F
 	 */
 	public function searchingForComments(string $term) {
-		$this->requestContext->sendOCSRequest('GET', '/search/providers/deck-comment/search?term=' . urlencode($term), []);
+		$this->requestContext->sendOCSRequest('GET', '/search/providers/search-deck-comment/search?term=' . urlencode($term), []);
 		$this->requestContext->getResponse()->getBody()->seek(0);
 		$data = (string)$this->getResponse()->getBody();
 		$this->unifiedSearchResult = json_decode($data, true);

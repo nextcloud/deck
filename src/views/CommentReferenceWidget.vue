@@ -1,7 +1,7 @@
 <!--
-  - @copyright Copyright (c) 2022 Julien Veyssier <julien-nc@posteo.net>
+  - @copyright Copyright (c) 2023 Julien Veyssier <julien-nc@posteo.net>
   -
-  - @author 2022 Julien Veyssier <julien-nc@posteo.net>
+  - @author 2023 Julien Veyssier <julien-nc@posteo.net>
   -
   - @license GNU AGPL version 3 or any later version
   -
@@ -20,7 +20,7 @@
   -->
 
 <template>
-	<div class="deck-card-reference">
+	<div class="deck-comment-reference">
 		<div class="line">
 			<CardBulletedOutlineIcon :size="20" class="title-icon" />
 			<strong>
@@ -78,6 +78,18 @@
 				:users="card.assignedUsers"
 				class="card-assignees" />
 		</div>
+		<div v-if="comment" class="line comment-wrapper">
+			<CommentProcessingOutlineIcon :size="20" class="icon" />
+			<div :class="{
+				'comment': true,
+				'short-comment': shortComment,
+			}">
+				<RichText v-tooltip.top="{ content: shortComment ? t('deck', 'Click to expand comment') : undefined }"
+					:text="commentMessageText"
+					:use-markdown="false"
+					@click.native="shortComment = !shortComment" />
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -85,6 +97,7 @@
 import CalendarBlankIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import TextIcon from 'vue-material-design-icons/Text.vue'
 import CardBulletedOutlineIcon from 'vue-material-design-icons/CardBulletedOutline.vue'
+import CommentProcessingOutlineIcon from 'vue-material-design-icons/CommentProcessingOutline.vue'
 
 import DeckIcon from '../components/icons/DeckIcon.vue'
 import AvatarList from '../components/cards/AvatarList.vue'
@@ -95,15 +108,16 @@ import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 
 export default {
-	name: 'CardReferenceWidget',
+	name: 'CommentReferenceWidget',
 
 	components: {
 	  AvatarList,
 		DeckIcon,
 		CalendarBlankIcon,
-		CardBulletedOutlineIcon,
 		TextIcon,
+		CardBulletedOutlineIcon,
 		RichText,
+		CommentProcessingOutlineIcon,
 	},
 
 	mixins: [labelStyle],
@@ -126,11 +140,12 @@ export default {
 	data() {
 		return {
 			shortDescription: true,
+			shortComment: true,
 		}
 	},
 
 	computed: {
-	  card() {
+		card() {
 			return this.richObject.card
 		},
 		board() {
@@ -138,6 +153,14 @@ export default {
 		},
 		stack() {
 			return this.richObject.stack
+		},
+		comment() {
+			return this.richObject.comment
+		},
+		commentMessageText() {
+			const e = document.createElement('div')
+			e.innerHTML = this.comment.message
+			return e.textContent
 		},
 		cardLink() {
 			return generateUrl('/apps/deck/#/board/{boardId}/card/{cardId}', { boardId: this.board.id, cardId: this.card.id })
@@ -180,7 +203,7 @@ export default {
 /* stylelint-disable-next-line no-invalid-position-at-import-rule */
 @import '../css/labels';
 
-.deck-card-reference {
+.deck-comment-reference {
 	width: 100%;
 	// needed for the specific case of Text
 	.editor__content & {
@@ -215,6 +238,7 @@ export default {
 		margin: 8px 0;
 	}
 
+	.comment-wrapper,
 	.description-assignees {
 		width: 100%;
 		display: flex;
@@ -225,11 +249,13 @@ export default {
 			margin-top: 8px;
 		}
 
+		.comment,
 		.description {
 			margin-right: 8px;
 			padding-top: 6px;
 			max-height: 250px;
 			overflow: scroll;
+			&.short-comment,
 			&.short-description {
 				max-height: 25px;
 				overflow: hidden;

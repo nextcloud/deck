@@ -29,25 +29,27 @@ use OCA\Deck\Db\Label;
 use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
+use OCA\Deck\Service\CommentService;
 use OCA\Deck\Service\StackService;
-use OCP\Collaboration\Reference\ADiscoverableReferenceProvider;
 use OCP\Collaboration\Reference\IReference;
-use OCP\Collaboration\Reference\ISearchableReferenceProvider;
+use OCP\Collaboration\Reference\IReferenceProvider;
 use OCP\Collaboration\Reference\Reference;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 
-class CardReferenceProvider extends ADiscoverableReferenceProvider implements ISearchableReferenceProvider {
+class CommentReferenceProvider implements IReferenceProvider {
 	private CardService $cardService;
 	private IURLGenerator $urlGenerator;
 	private BoardService $boardService;
 	private StackService $stackService;
 	private ?string $userId;
 	private IL10N $l10n;
+	private CommentService $commentService;
 
 	public function __construct(CardService $cardService,
 								BoardService $boardService,
 								StackService $stackService,
+								CommentService $commentService,
 								IURLGenerator $urlGenerator,
 								IL10N $l10n,
 								?string $userId) {
@@ -57,46 +59,7 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 		$this->stackService = $stackService;
 		$this->userId = $userId;
 		$this->l10n = $l10n;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getId(): string {
-		return Application::APP_ID . '-ref-cards';
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getTitle(): string {
-		return $this->l10n->t('Deck boards, cards and comments');
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getOrder(): int {
-		return 10;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getIconUrl(): string {
-		return $this->urlGenerator->getAbsoluteURL(
-			$this->urlGenerator->imagePath(Application::APP_ID, 'deck-dark.svg')
-		);
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	public function getSupportedSearchProviderIds(): array {
-		return [
-			'search-deck-card-board',
-			'search-deck-comment',
-		];
+		$this->commentService = $commentService;
 	}
 
 	/**
@@ -106,9 +69,9 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 		$start = $this->urlGenerator->getAbsoluteURL('/apps/' . Application::APP_ID);
 		$startIndex = $this->urlGenerator->getAbsoluteURL('/index.php/apps/' . Application::APP_ID);
 
-		// link example: https://nextcloud.local/index.php/apps/deck/#/board/2/card/11
-		$noIndexMatch = preg_match('/^' . preg_quote($start, '/') . '\/#\/board\/[0-9]+\/card\/[0-9]+$/', $referenceText) === 1;
-		$indexMatch = preg_match('/^' . preg_quote($startIndex, '/') . '\/#\/board\/[0-9]+\/card\/[0-9]+$/', $referenceText) === 1;
+		// link example: https://nextcloud.local/index.php/apps/deck/#/board/2/card/11/comments/501
+		$noIndexMatch = preg_match('/^' . preg_quote($start, '/') . '\/#\/board\/[0-9]+\/card\/[0-9]+\/comments\/\d+$/', $referenceText) === 1;
+		$indexMatch = preg_match('/^' . preg_quote($startIndex, '/') . '\/#\/board\/[0-9]+\/card\/[0-9]+\/comments\/\d+$/', $referenceText) === 1;
 
 		return $noIndexMatch || $indexMatch;
 	}
@@ -118,23 +81,41 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 	 */
 	public function resolveReference(string $referenceText): ?IReference {
 		if ($this->matchReference($referenceText)) {
-			$ids = $this->getBoardCardId($referenceText);
+			$ids = $this->getIds($referenceText);
 			if ($ids !== null) {
-				[$boardId, $cardId] = $ids;
-				$card = $this->cardService->find((int) $cardId)->jsonSerialize();
-				$board = $this->boardService->find((int) $boardId)->jsonSerialize();
-				$stack = $this->stackService->find((int) $card['stackId'])->jsonSerialize();
+				[$boardId, $cardId, $commentId] = $ids;
 
+				$card = $this->cardService->find($cardId)->jsonSerialize();
+				$board = $this->boardService->find($boardId)->jsonSerialize();
+				$stack = $this->stackService->find((int) $card['stackId'])->jsonSerialize();
 				$card = $this->sanitizeSerializedCard($card);
 				$board = $this->sanitizeSerializedBoard($board);
 				$stack = $this->sanitizeSerializedStack($stack);
+
+				$comment = $this->commentService->getFormatted($cardId, $commentId);
+
 				/** @var IReference $reference */
 				$reference = new Reference($referenceText);
-				$reference->setRichObject(Application::APP_ID . '-card', [
-					'id' => $boardId . '/' . $cardId,
-					'card' => $card,
+				$reference->setTitle($comment['message']);
+				$boardOwnerDisplayName = $board['owner']['displayname'] ?? $board['owner']['uid'] ?? '???';
+				$reference->setDescription(
+					$this->l10n->t('From %1$s, in %2$s/%3$s, owned by %4$s', [
+						$comment['actorDisplayName'],
+						$board['title'],
+						$stack['title'],
+						$boardOwnerDisplayName
+					])
+				);
+				$imageUrl = $this->urlGenerator->getAbsoluteURL(
+					$this->urlGenerator->imagePath('core', 'actions/comment.svg')
+				);
+				$reference->setImageUrl($imageUrl);
+				$reference->setRichObject(Application::APP_ID . '-comment', [
+					'id' => $ids,
 					'board' => $board,
+					'card' => $card,
 					'stack' => $stack,
+					'comment' => $comment,
 				]);
 				return $reference;
 			}
@@ -181,30 +162,26 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 		return $card;
 	}
 
-	private function getBoardCardId(string $url): ?array {
+	private function getIds(string $url): ?array {
 		$start = $this->urlGenerator->getAbsoluteURL('/apps/' . Application::APP_ID);
 		$startIndex = $this->urlGenerator->getAbsoluteURL('/index.php/apps/' . Application::APP_ID);
 
-		preg_match('/^' . preg_quote($start, '/') . '\/#\/board\/([0-9]+)\/card\/([0-9]+)$/', $url, $matches);
-		if ($matches && count($matches) > 2) {
-			return [$matches[1], $matches[2]];
+		preg_match('/^' . preg_quote($start, '/') . '\/#\/board\/([0-9]+)\/card\/([0-9]+)\/comments\/(\d+)$/', $url, $matches);
+		if (!$matches) {
+			preg_match('/^' . preg_quote($startIndex, '/') . '\/#\/board\/([0-9]+)\/card\/([0-9]+)\/comments\/(\d+)$/', $url, $matches);
 		}
-
-		preg_match('/^' . preg_quote($startIndex, '/') . '\/#\/board\/([0-9]+)\/card\/([0-9]+)$/', $url, $matches2);
-		if ($matches2 && count($matches2) > 2) {
-			return [$matches2[1], $matches2[2]];
+		if ($matches && count($matches) > 3) {
+			return [
+				(int) $matches[1],
+				(int) $matches[2],
+				(int) $matches[3],
+			];
 		}
 
 		return null;
 	}
 
 	public function getCachePrefix(string $referenceId): string {
-		$ids = $this->getBoardCardId($referenceId);
-		if ($ids !== null) {
-			[$boardId, $cardId] = $ids;
-			return $boardId . '/' . $cardId;
-		}
-
 		return $referenceId;
 	}
 

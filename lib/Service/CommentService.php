@@ -77,6 +77,42 @@ class CommentService {
 	}
 
 	/**
+	 * @param int $cardId
+	 * @param int $commentId
+	 * @return IComment
+	 * @throws NoPermissionException
+	 * @throws NotFoundException
+	 */
+	private function get(int $cardId, int $commentId): IComment {
+		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
+		try {
+			$comment = $this->commentsManager->get((string) $commentId);
+			if ($comment->getObjectType() !== Application::COMMENT_ENTITY_TYPE || (int) $comment->getObjectId() !== $cardId) {
+				throw new CommentNotFoundException();
+			}
+		} catch (CommentNotFoundException $e) {
+			throw new NotFoundException('No comment found.');
+		}
+		if ($comment->getParentId() !== '0') {
+			$this->permissionService->checkPermission($this->cardMapper, $comment->getParentId(), Acl::PERMISSION_READ);
+		}
+
+		return $comment;
+	}
+
+	/**
+	 * @param int $cardId
+	 * @param int $commentId
+	 * @return array
+	 * @throws NoPermissionException
+	 * @throws NotFoundException
+	 */
+	public function getFormatted(int $cardId, int $commentId): array {
+		$comment = $this->get($cardId, $commentId);
+		return $this->formatComment($comment);
+	}
+
+	/**
 	 * @param string $cardId
 	 * @param string $message
 	 * @param string $replyTo
@@ -126,20 +162,9 @@ class CommentService {
 		if (!is_numeric($commentId)) {
 			throw new BadRequestException('A valid comment id must be provided');
 		}
-		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
-		try {
-			$comment = $this->commentsManager->get($commentId);
-			if ($comment->getObjectType() !== Application::COMMENT_ENTITY_TYPE || $comment->getObjectId() !== $cardId) {
-				throw new CommentNotFoundException();
-			}
-		} catch (CommentNotFoundException $e) {
-			throw new NotFoundException('No comment found.');
-		}
+		$comment = $this->get((int) $cardId, (int) $commentId);
 		if ($comment->getActorType() !== 'users' || $comment->getActorId() !== $this->userId) {
 			throw new NoPermissionException('Only authors are allowed to edit their comment.');
-		}
-		if ($comment->getParentId() !== '0') {
-			$this->permissionService->checkPermission($this->cardMapper, $comment->getParentId(), Acl::PERMISSION_READ);
 		}
 
 		$comment->setMessage($message);

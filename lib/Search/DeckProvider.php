@@ -29,6 +29,7 @@ namespace OCA\Deck\Search;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Service\SearchService;
+use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\Search\IProvider;
@@ -36,30 +37,26 @@ use OCP\Search\ISearchQuery;
 use OCP\Search\SearchResult;
 
 class DeckProvider implements IProvider {
-
-	/**
-	 * @var SearchService
-	 */
-	private $searchService;
-	/**
-	 * @var IURLGenerator
-	 */
-	private $urlGenerator;
+	private IL10N $l10n;
+	private SearchService $searchService;
+	private IURLGenerator $urlGenerator;
 
 	public function __construct(
 		SearchService $searchService,
-		IURLGenerator $urlGenerator
+		IURLGenerator $urlGenerator,
+		IL10N $l10n
 	) {
+		$this->l10n = $l10n;
 		$this->searchService = $searchService;
 		$this->urlGenerator = $urlGenerator;
 	}
 
 	public function getId(): string {
-		return 'deck';
+		return 'search-deck-card-board';
 	}
 
 	public function getName(): string {
-		return 'Deck';
+		return $this->l10n->t('Deck boards and cards');
 	}
 
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
@@ -99,14 +96,14 @@ class DeckProvider implements IProvider {
 		// if both cards and boards results are less then the limit, we know we won't get more
 		if (count($resultEntries) < $query->getLimit()) {
 			return SearchResult::complete(
-				'Deck',
+				$this->getName(),
 				$resultEntries
 			);
 		}
 
 		$newCursor = $this->getNewCursor($boardObjects, $cardObjects);
 		return SearchResult::paginated(
-			'Deck',
+			$this->getName(),
 			$resultEntries,
 			$newCursor
 		);
