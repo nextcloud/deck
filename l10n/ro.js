@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Upcoming cards" : "Carduri viitoare",
     "Personal" : "Personal",
+    "Deck board" : "Panou Deck",
     "%s on %s" : "%s pe %s",
     "Finished" : "Finalizat",
     "Later" : "Mai târziu",

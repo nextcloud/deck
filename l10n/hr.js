@@ -78,6 +78,7 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "{user} vas je spomenuo u komentaru na {deck-card}.",
     "The board \"%s\" has been shared with you by %s." : "Ploču „%s” je s vama podijelio %s.",
     "{user} has shared {deck-board} with you." : "{user} s vama dijeli {deck-board}.",
+    "Deck board" : "Deck ploča",
     "Card comments" : "Komentari o kartici",
     "%s on %s" : "%s na %s",
     "No data was provided to create an attachment." : "Nema podataka za izradu privitka.",

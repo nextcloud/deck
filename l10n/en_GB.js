@@ -294,6 +294,7 @@ OC.L10N.register(
     "Click to expand description" : "Click to expand description",
     "* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments" : "* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments",
     "{nbCards} cards" : "{nbCards} cards",
+    "Click to expand comment" : "Click to expand comment",
     "No upcoming cards" : "No upcoming cards",
     "upcoming cards" : "upcoming cards",
     "Due on {date}" : "Due on {date}",

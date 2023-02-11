@@ -78,6 +78,7 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "Вы были упомянуты пользователем {user} в комментарии {deck-card}.",
     "The board \"%s\" has been shared with you by %s." : "Вам предоставлен доступ к рабочей доске «%s» пользователем %s.",
     "{user} has shared {deck-board} with you." : "{user} предоставил(а) вам доступ к {deck-board}.",
+    "Deck board" : "Доска",
     "Card comments" : "Комментарии карточки",
     "%s on %s" : "%s на %s",
     "No data was provided to create an attachment." : "Отсутствуют данные для создания вложения.",
