@@ -78,6 +78,7 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "{user} t'at mentovadu in unu cummentu in {deck-card}.",
     "The board \"%s\" has been shared with you by %s." : "Sa lavagna \"%s\" est istada cumpartzida cun tegus dae %s.",
     "{user} has shared {deck-board} with you." : "{user} at cumpartzidu {deck-board} cun tegus.",
+    "Deck board" : "Tabella in Deck",
     "Card comments" : "Cummentos de is ischedas",
     "%s on %s" : "%s in %s",
     "No data was provided to create an attachment." : "Perunu datu frunidu pro creare un'alligongiadu",

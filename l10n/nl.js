@@ -78,6 +78,7 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "{user} vermeldde je in een reactie op {deck-card}.",
     "The board \"%s\" has been shared with you by %s." : "Het bord \"%s\" is door %s met je gedeeld.",
     "{user} has shared {deck-board} with you." : "{user} heeft het bord {deck-board} met je gedeeld.",
+    "Deck board" : "Deck board",
     "Card comments" : "Kaart opmerkingen",
     "%s on %s" : "%s op %s",
     "No data was provided to create an attachment." : "Geen gegevens opgegeven voor het maken van een bijlage.",

@@ -74,6 +74,7 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has reached its due date." : "Картици „%s“ на табли „%s“ је истекао рок.",
     "%s has mentioned you in a comment on \"%s\"." : "%s Вас је поменуо у коментару на „%s“.",
     "The board \"%s\" has been shared with you by %s." : "Корисник „%s“ је поделио са Вама таблу „%s“.",
+    "Deck board" : "Табла Шпила",
     "%s on %s" : "%s на %s",
     "No data was provided to create an attachment." : "Нису дати подаци за креирање прилога.",
     "Finished" : "Завршено",

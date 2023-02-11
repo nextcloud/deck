@@ -294,6 +294,7 @@ OC.L10N.register(
     "Click to expand description" : "Klicken, um die Beschreibung zu erweitern",
     "* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments" : "* Erstellt am {created}\n* Zuletzt geändert am {lastMod}\n* {nbAttachments} Anhänge\n* {nbComments} Kommentare",
     "{nbCards} cards" : "{nbCards} Karten",
+    "Click to expand comment" : "Klicken, um den Kommentar zu erweitern",
     "No upcoming cards" : "Keine anstehenden Karten",
     "upcoming cards" : "Anstehende Karten",
     "Due on {date}" : "Fällig am {date}",

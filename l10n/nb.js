@@ -78,6 +78,7 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "{user} har nevnt deg i en kommentar på {deck-card}.",
     "The board \"%s\" has been shared with you by %s." : "Brettet \"%s\" har blitt delt med deg av %s.",
     "{user} has shared {deck-board} with you." : "{user} har delt brettet {deck-board} med deg.",
+    "Deck board" : "Deck tavle",
     "Card comments" : "Kommentarer på kortet",
     "%s on %s" : "%s på %s",
     "No data was provided to create an attachment." : "Ingen data for å opprette vedlegg.",

@@ -78,6 +78,7 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "{user} 在 {deck-card} 的一条评论中提到了你",
     "The board \"%s\" has been shared with you by %s." : "面板 \"%s\" 已由 %s 共享给您。",
     "{user} has shared {deck-board} with you." : "{user} 与你分享了 {deck-board}",
+    "Deck board" : "Deck 看板",
     "Card comments" : "卡片评论",
     "%s on %s" : "%s 于 %s",
     "No data was provided to create an attachment." : "未能提供数据以创建附件",
