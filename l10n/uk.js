@@ -36,6 +36,7 @@ OC.L10N.register(
     "Changes in the <strong>Deck app</strong>" : "Зміни у застосунку <strong>Колода</strong>",
     "Load more" : "Більше",
     "Personal" : "Особисте",
+    "Deck board" : "Дошка Deck",
     "%s on %s" : "%s на %s",
     "Finished" : "Завершено",
     "To review" : "На перегляд",

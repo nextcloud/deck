@@ -78,6 +78,7 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "{user} ti ha menzionato in un commento su {deck-card}.",
     "The board \"%s\" has been shared with you by %s." : "La lavagna \"%s\" è stata condivisa con te da %s.",
     "{user} has shared {deck-board} with you." : "{user} ha condiviso {deck-board} con te.",
+    "Deck board" : "Lavagna di Deck",
     "Card comments" : "Commenti",
     "%s on %s" : "%s su %s",
     "No data was provided to create an attachment." : "Non è  stato fornito alcun dato per creare un allegato.",

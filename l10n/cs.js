@@ -294,6 +294,7 @@ OC.L10N.register(
     "Click to expand description" : "Popis rozbalíte kliknutím",
     "* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments" : "* Vytvořeno {created}\n* Naposledy upraveno {lastMod}\n* {nbAttachments} příloh\n* {nbComments} komentářů",
     "{nbCards} cards" : "{nbCards} karet",
+    "Click to expand comment" : "Komentář rozbalíte kliknutím",
     "No upcoming cards" : "Žádné nadcházející karty",
     "upcoming cards" : "nadcházející karty",
     "Due on {date}" : "Termín {date}",

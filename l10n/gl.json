@@ -72,6 +72,7 @@
     "The card \"%s\" on \"%s\" has reached its due date." : "A tarxeta «%s» en «%s» chegou á súa data de caducidade.",
     "%s has mentioned you in a comment on \"%s\"." : "%s mencionouno a vostede nun comentario en «%s».",
     "The board \"%s\" has been shared with you by %s." : "O taboleiro «%s» foi compartido con vostede por %s.",
+    "Deck board" : "Taboleiro do Deck",
     "Card comments" : "Comentarios da tarxeta",
     "%s on %s" : "%s en %s",
     "No data was provided to create an attachment." : "Non se forneceu ningún dato para crear un anexo.",

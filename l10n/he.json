@@ -72,6 +72,7 @@
     "The card \"%s\" on \"%s\" has reached its due date." : "הכרטיס „%s” שתחת „%s” הגיע למועד התפוגה שלו.",
     "%s has mentioned you in a comment on \"%s\"." : "אוזכרת על ידי %s בתגובה על „%s”.",
     "The board \"%s\" has been shared with you by %s." : "הלוח „%s” שותף אתך על ידי %s.",
+    "Deck board" : "לוח חסיפה",
     "No data was provided to create an attachment." : "לא סופקו נתונים ליצירת קובץ מצורף",
     "Finished" : "הסתיים",
     "To review" : "לסקירה",

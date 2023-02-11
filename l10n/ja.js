@@ -78,6 +78,7 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "{user} さんが 「{deck-card}」のコメント内であなたについて言及しました。",
     "The board \"%s\" has been shared with you by %s." : "\"%s\" ボードは、%s からあなたに共有されています。",
     "{user} has shared {deck-board} with you." : "{user} さんが、あなたと {deck-board} を共有しました。",
+    "Deck board" : "Deckボード",
     "Card comments" : "カードコメント",
     "%s on %s" : "%s が %s で",
     "No data was provided to create an attachment." : "添付ファイルを作成するためのデータは提供されていません。",

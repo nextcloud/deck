@@ -24,6 +24,7 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Tác vụ \"%s\" trong \"%s\" đã được phân công cho bạn bởi  %s.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Tác vụ \"%s\" trong \"%s\" đã đến ngày hạn chót.",
     "The board \"%s\" has been shared with you by %s." : "Dự án \"%s\" đã được chia sẽ với bạn bởi %s .",
+    "Deck board" : "Dự án Deck",
     "%s on %s" : "%s trên %s",
     "No data was provided to create an attachment." : "Không có dữ liệu từ nhà cung cấp để tạo một đính kèm",
     "Finished" : "Đã hoàn tất",
