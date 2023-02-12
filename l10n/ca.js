@@ -78,6 +78,7 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "{user} us ha mencionat en un comentari a {deck-card}.",
     "The board \"%s\" has been shared with you by %s." : "El tauler \"%s\" se us ha compartit per %s.",
     "{user} has shared {deck-board} with you." : "{user} us ha compartit {board}.",
+    "Deck board" : "Tauler de Deck",
     "Card comments" : "Comentaris de la targeta",
     "%s on %s" : "%s a %s",
     "No data was provided to create an attachment." : "No s’ha proporcionat cap dada per crear un fitxer adjunt.",
