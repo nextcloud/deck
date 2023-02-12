@@ -77,6 +77,7 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "{user} أشار إليك في تعليق على {deck-card}",
     "The board \"%s\" has been shared with you by %s." : "تمت مشاركة اللوح \"%s\" معك من قبل %s.",
     "{user} has shared {deck-board} with you." : "{user} قام بمشاركة {deck-board} معك.",
+    "Deck board" : "لوح Deck",
     "Card comments" : "تعليقات البطاقة ",
     "%s on %s" : "%s على %s",
     "No data was provided to create an attachment." : "لا بيانات تم تقديمها لانشاء مرفق",
