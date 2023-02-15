@@ -41,4 +41,8 @@ abstract class AAclEvent extends Event {
 	public function getAcl(): Acl {
 		return $this->acl;
 	}
+
+	public function getBoardId(): int {
+		return $this->acl->getBoardId();
+	}
 }
