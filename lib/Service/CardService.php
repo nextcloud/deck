@@ -148,8 +148,8 @@ class CardService {
 			$cardLabels = array_filter($assignedLabels, function (Label $label) use ($card) {
 				return $label->getCardId() === $card->getId();
 			});
-			$cardAssignedUsers = array_filter($assignedUsers, function (Assignment $label) use ($card) {
-				return $label->getCardId() === $card->getId();
+			$cardAssignedUsers = array_filter($assignedUsers, function (Assignment $assignment) use ($card) {
+				return $assignment->getCardId() === $card->getId();
 			});
 			$card->setLabels($cardLabels);
 			$card->setAssignedUsers($cardAssignedUsers);
@@ -175,16 +175,17 @@ class CardService {
 	public function find(int $cardId) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		$card = $this->cardMapper->find($cardId);
-		$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
+		$this->enrichCards([$card]);
+
+		// Attachments are only enriched on individual card fetching
 		$attachments = $this->attachmentService->findAll($cardId, true);
 		if ($this->request->getParam('apiVersion') === '1.0') {
 			$attachments = array_filter($attachments, function ($attachment) {
 				return $attachment->getType() === 'deck_file';
 			});
 		}
-		$card->setAssignedUsers($assignedUsers);
 		$card->setAttachments($attachments);
-		$this->enrichCards([$card]);
+
 		return $card;
 	}
 

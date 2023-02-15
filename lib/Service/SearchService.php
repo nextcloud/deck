@@ -82,7 +82,6 @@ class SearchService {
 		}, $boards);
 		$matchedCards = $this->cardMapper->search($boardIds, $this->filterStringParser->parse($term), $limit, $cursor);
 
-		$self = $this;
 		return $this->cardService->enrichCards($matchedCards);
 	}
 
