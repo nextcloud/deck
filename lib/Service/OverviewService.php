@@ -28,14 +28,12 @@ declare(strict_types=1);
 namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\AssignmentMapper;
-use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Model\CardDetails;
 use OCP\Comments\ICommentsManager;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
 use OCP\IUserManager;
-use OCP\IUserSession;
 
 class OverviewService {
 	private CardService $cardService;

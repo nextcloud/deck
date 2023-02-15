@@ -31,7 +31,7 @@ use OCP\EventDispatcher\Event;
 
 abstract class AAclEvent extends Event {
 	private $acl;
-	
+
 	public function __construct(Acl $acl) {
 		parent::__construct();
 

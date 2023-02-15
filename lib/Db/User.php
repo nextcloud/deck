@@ -23,11 +23,9 @@
 
 namespace OCA\Deck\Db;
 
-use OCP\IUser;
 use OCP\IUserManager;
 
 class User extends RelationalObject {
-
 	private IUserManager $userManager;
 	public function __construct($uid, IUserManager $userManager) {
 		$this->userManager = $userManager;
