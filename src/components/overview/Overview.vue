@@ -31,44 +31,44 @@
 		</div>
 
 		<div v-else-if="isValidFilter" class="overview">
-			<div v-if="this.assignedCardsDashboard.length > 0" class="dashboard-column">
+			<div v-if="assignedCardsDashboard.length > 0" class="dashboard-column">
 				<h3>{{ t('deck', 'Overdue') }}</h3>
-				<div v-for="card in this.assignedCardsDashboard.overdue" :key="card.id">
+				<div v-for="card in assignedCardsDashboard.overdue" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h3>{{ t('deck', 'Today') }}</h3>
-				<div v-for="card in this.assignedCardsDashboard.today" :key="card.id">
+				<div v-for="card in assignedCardsDashboard.today" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h3>{{ t('deck', 'Tomorrow') }}</h3>
-				<div v-for="card in this.assignedCardsDashboard.tomorrow" :key="card.id">
+				<div v-for="card in assignedCardsDashboard.tomorrow" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h3>{{ t('deck', 'Next 7 days') }}</h3>
-				<div v-for="card in this.assignedCardsDashboard.nextSevenDays" :key="card.id">
+				<div v-for="card in assignedCardsDashboard.nextSevenDays" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h3>{{ t('deck', 'Later') }}</h3>
-				<div v-for="card in this.assignedCardsDashboard.later" :key="card.id">
+				<div v-for="card in assignedCardsDashboard.later" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h3>{{ t('deck', 'No due') }}</h3>
-				<div v-for="card in this.assignedCardsDashboard.nodue" :key="card.id">
+				<div v-for="card in assignedCardsDashboard.nodue" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
