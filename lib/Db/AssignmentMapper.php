@@ -144,8 +144,8 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 
 	private function getOrigin(Assignment $assignment) {
 		if ($assignment->getType() === Assignment::TYPE_USER) {
-			$origin = $this->userManager->get($assignment->getParticipant());
-			return $origin ? new User($origin) : null;
+			$origin = $this->userManager->userExists($assignment->getParticipant());
+			return $origin ? new User($assignment->getParticipant(), $this->userManager) : null;
 		}
 		if ($assignment->getType() === Assignment::TYPE_GROUP) {
 			$origin = $this->groupManager->get($assignment->getParticipant());

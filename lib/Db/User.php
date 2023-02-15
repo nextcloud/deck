@@ -24,26 +24,31 @@
 namespace OCA\Deck\Db;
 
 use OCP\IUser;
+use OCP\IUserManager;
 
 class User extends RelationalObject {
-	public function __construct(IUser $user) {
-		$primaryKey = $user->getUID();
-		parent::__construct($primaryKey, $user);
+
+	private IUserManager $userManager;
+	public function __construct($uid, IUserManager $userManager) {
+		$this->userManager = $userManager;
+		parent::__construct($uid, function ($object) {
+			return $this->userManager->get($object->getPrimaryKey());
+		});
 	}
 
 	public function getObjectSerialization() {
 		return [
-			'uid' => $this->object->getUID(),
-			'displayname' => $this->object->getDisplayName(),
-			'type' => 0
+			'uid' => $this->getObject()->getUID(),
+			'displayname' => $this->getObject()->getDisplayName(),
+			'type' => Acl::PERMISSION_TYPE_USER
 		];
 	}
 
 	public function getUID() {
-		return $this->object->getUID();
+		return $this->getPrimaryKey();
 	}
 
 	public function getDisplayName() {
-		return $this->object->getDisplayName();
+		return $this->userManager->getDisplayName($this->getPrimaryKey());
 	}
 }

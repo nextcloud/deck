@@ -607,9 +607,8 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	public function mapOwner(Card &$card) {
 		$userManager = $this->userManager;
 		$card->resolveRelation('owner', function ($owner) use (&$userManager) {
-			$user = $userManager->get($owner);
-			if ($user !== null) {
-				return new User($user);
+			if ($userManager->userExists($owner)) {
+				return new User($owner, $this->userManager);
 			}
 			return null;
 		});

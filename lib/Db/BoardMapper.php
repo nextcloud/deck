@@ -455,13 +455,11 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	public function mapAcl(Acl &$acl) {
-		$userManager = $this->userManager;
 		$groupManager = $this->groupManager;
 		$acl->resolveRelation('participant', function ($participant) use (&$acl, &$userManager, &$groupManager) {
 			if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
-				$user = $userManager->get($participant);
-				if ($user !== null) {
-					return new User($user);
+				if ($this->userManager->userExists($acl->getParticipant())) {
+					return new User($acl->getParticipant(), $this->userManager);
 				}
 				$this->logger->debug('User ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
 				return null;
@@ -499,9 +497,8 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	public function mapOwner(Board &$board) {
 		$userManager = $this->userManager;
 		$board->resolveRelation('owner', function ($owner) use (&$userManager) {
-			$user = $userManager->get($owner);
-			if ($user !== null) {
-				return new User($user);
+			if ($this->userManager->userExists($owner)) {
+				return new User($owner, $userManager);
 			}
 			return null;
 		});
