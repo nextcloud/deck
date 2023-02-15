@@ -83,10 +83,6 @@ class DefaultBoardServiceTest extends TestCase {
 			->method('getUserValue')
 			->willReturn('yes');
 
-		$this->boardMapper->expects($this->once())
-			->method('findAllByUser')
-			->willReturn($userBoards);
-
 		$this->config->expects($this->once())
 			->method('setUserValue');
 
@@ -106,10 +102,6 @@ class DefaultBoardServiceTest extends TestCase {
 		$this->config->expects($this->once())
 			->method('getUserValue')
 			->willReturn('no');
-
-		$this->boardMapper->expects($this->once())
-			->method('findAllByUser')
-			->willReturn($userBoards);
 
 		$result = $this->service->checkFirstRun($this->userId);
 		$this->assertEquals($result, false);

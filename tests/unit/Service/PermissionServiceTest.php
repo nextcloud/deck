@@ -340,7 +340,7 @@ class PermissionServiceTest extends \Test\TestCase {
 		$aclGroup->setParticipant('group1');
 
 		$board = $this->createMock(Board::class);
-		$board->expects($this->once())
+		$board->expects($this->any())
 			->method('__call')
 			->with('getOwner', [])
 			->willReturn('user1');
@@ -352,8 +352,8 @@ class PermissionServiceTest extends \Test\TestCase {
 			->method('find')
 			->with(123)
 			->willReturn($board);
-		$this->userManager->expects($this->exactly(2))
-			->method('get')
+		$this->userManager->expects($this->any())
+			->method('userExists')
 			->withConsecutive(['user1'], ['user2'])
 			->willReturnOnConsecutiveCalls($user1, $user2);
 
@@ -367,9 +367,9 @@ class PermissionServiceTest extends \Test\TestCase {
 			->willReturn($group);
 		$users = $this->service->findUsers(123);
 		$this->assertEquals([
-			'user1' => new User($user1),
-			'user2' => new User($user2),
-			'user3' => new User($user3),
+			'user1' => new User($user1->getUID(), $this->userManager),
+			'user2' => new User($user2->getUID(), $this->userManager),
+			'user3' => new User($user3->getUID(), $this->userManager),
 		], $users);
 	}
 }
