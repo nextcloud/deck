@@ -77,6 +77,7 @@
     "The board \"%s\" has been shared with you by %s." : "El tablero \"%s\" ha sido compartido contigo por %s.",
     "{user} has shared {deck-board} with you." : "{user} ha compartido {deck-board} contigo.",
     "Deck board" : "Tablero Deck",
+    "Owned by %1$s" : "Apropiado por %1$s",
     "Card comments" : "Comentarios en tarjetas",
     "%s on %s" : "%s en %s",
     "No data was provided to create an attachment." : "No se proporcionaron datos para crear un adjunto",
