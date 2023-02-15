@@ -83,10 +83,7 @@ class SearchService {
 		$matchedCards = $this->cardMapper->search($boardIds, $this->filterStringParser->parse($term), $limit, $cursor);
 
 		$self = $this;
-		return array_map(function (Card $card) use ($self) {
-			$self->cardService->enrich($card);
-			return $card;
-		}, $matchedCards);
+		return $this->cardService->enrichCards($matchedCards);
 	}
 
 	public function searchBoards(string $term, ?int $limit, ?int $cursor): array {
@@ -117,7 +114,8 @@ class SearchService {
 			$comment = $this->commentsManager->get($cardRow['comment_id']);
 			unset($cardRow['comment_id']);
 			$card = Card::fromRow($cardRow);
-			$self->cardService->enrich($card);
+			// TODO: Only perform one enrich call here
+			$self->cardService->enrichCards([$card]);
 			$user = $this->userManager->get($comment->getActorId());
 			$displayName = $user ? $user->getDisplayName() : '';
 			return new CommentSearchResultEntry($comment->getId(), $comment->getMessage(), $displayName, $card, $this->urlGenerator, $this->l10n);
