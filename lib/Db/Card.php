@@ -158,6 +158,20 @@ class Card extends RelationalEntity {
 		return $calendar;
 	}
 
+	public function getDaysUntilDue(): ?int {
+		$today = new DateTime();
+		$match_date = $this->getDuedate();
+		if ($match_date === null) {
+			return null;
+		}
+
+		$today->setTime(0, 0);
+		$match_date->setTime(0, 0);
+
+		$diff = $today->diff($match_date);
+		return (int) $diff->format('%R%a'); // Extract days count in interval
+	}
+
 	public function getCalendarPrefix(): string {
 		return 'card';
 	}

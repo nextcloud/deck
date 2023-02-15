@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.4.0@62db5d4f6a7ae0a20f7cc5a4952d730272fc0863">
+<files psalm-version="5.6.0@e784128902dfe01d489c4123d69918a9f3c1eac5">
   <file src="lib/Activity/Filter.php">
-    <MethodSignatureMismatch occurrences="1">
+    <MethodSignatureMismatch>
       <code>$types</code>
     </MethodSignatureMismatch>
   </file>
   <file src="lib/Command/UserExport.php">
-    <ImplementedReturnTypeMismatch occurrences="1">
+    <ImplementedReturnTypeMismatch>
       <code>void</code>
     </ImplementedReturnTypeMismatch>
-    <UndefinedThisPropertyAssignment occurrences="2">
+    <UndefinedThisPropertyAssignment>
       <code>$this-&gt;boardMapper</code>
       <code>$this-&gt;stackMapper</code>
     </UndefinedThisPropertyAssignment>
-    <UndefinedThisPropertyFetch occurrences="2">
+    <UndefinedThisPropertyFetch>
       <code>$this-&gt;boardMapper</code>
       <code>$this-&gt;stackMapper</code>
     </UndefinedThisPropertyFetch>
   </file>
   <file src="lib/Controller/BoardApiController.php">
-    <TypeDoesNotContainNull occurrences="2">
+    <TypeDoesNotContainNull>
       <code>$modified === null</code>
       <code>$modified === null</code>
     </TypeDoesNotContainNull>
-    <UndefinedClass occurrences="1">
+    <UndefinedClass>
       <code>Util</code>
     </UndefinedClass>
-    <UndefinedThisPropertyAssignment occurrences="1">
+    <UndefinedThisPropertyAssignment>
       <code>$this-&gt;userId</code>
     </UndefinedThisPropertyAssignment>
-    <UndefinedThisPropertyFetch occurrences="1">
+    <UndefinedThisPropertyFetch>
       <code>$this-&gt;userId</code>
     </UndefinedThisPropertyFetch>
   </file>
   <file src="lib/Controller/CommentsApiController.php">
-    <InvalidScalarArgument occurrences="6">
+    <InvalidScalarArgument>
       <code>$cardId</code>
       <code>$cardId</code>
       <code>$cardId</code>
@@ -44,95 +44,108 @@
     </InvalidScalarArgument>
   </file>
   <file src="lib/Controller/PageController.php">
-    <UndefinedClass occurrences="1">
+    <UndefinedClass>
       <code>LoadSidebar</code>
     </UndefinedClass>
   </file>
   <file src="lib/Controller/StackApiController.php">
-    <RedundantCondition occurrences="1">
+    <RedundantCondition>
       <code>$modified !== null</code>
     </RedundantCondition>
-    <UndefinedClass occurrences="1">
+    <UndefinedClass>
       <code>Util</code>
     </UndefinedClass>
   </file>
   <file src="lib/DAV/Calendar.php">
-    <UndefinedClass occurrences="1">
+    <UndefinedClass>
       <code>ExternalCalendar</code>
     </UndefinedClass>
   </file>
   <file src="lib/DAV/CalendarObject.php">
-    <UndefinedClass occurrences="1">
+    <UndefinedClass>
       <code>ICalendarObject</code>
     </UndefinedClass>
   </file>
   <file src="lib/DAV/CalendarPlugin.php">
-    <UndefinedClass occurrences="1">
+    <UndefinedClass>
       <code>ICalendarProvider</code>
     </UndefinedClass>
   </file>
   <file src="lib/DAV/DeckCalendarBackend.php">
-    <UndefinedClass occurrences="1">
+    <UndefinedClass>
       <code>NotFound</code>
     </UndefinedClass>
   </file>
   <file src="lib/Db/Card.php">
-    <UndefinedClass occurrences="2">
+    <UndefinedClass>
       <code>VCalendar</code>
       <code>VCalendar</code>
     </UndefinedClass>
   </file>
   <file src="lib/Db/CardMapper.php">
-    <InvalidScalarArgument occurrences="1">
+    <InvalidScalarArgument>
       <code>$entity-&gt;getId()</code>
     </InvalidScalarArgument>
-    <UndefinedInterfaceMethod occurrences="1">
+    <UndefinedInterfaceMethod>
       <code>getUserIdGroups</code>
     </UndefinedInterfaceMethod>
   </file>
   <file src="lib/Db/LabelMapper.php">
-    <ParamNameMismatch occurrences="1">
+    <ParamNameMismatch>
       <code>$labelId</code>
     </ParamNameMismatch>
   </file>
-  <file src="lib/Db/RelationalEntity.php">
-    <MethodSignatureMismatch occurrences="1">
-      <code>$attribute</code>
-    </MethodSignatureMismatch>
-  </file>
   <file src="lib/Db/Stack.php">
-    <UndefinedClass occurrences="2">
+    <UndefinedClass>
       <code>VCalendar</code>
       <code>VCalendar</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Model/BoardSummary.php">
+    <ConstructorSignatureMismatch>
+      <code>public function __construct(Board $board) {</code>
+      <code>public function __construct(Board $board) {</code>
+    </ConstructorSignatureMismatch>
+  </file>
+  <file src="lib/Model/CardDetails.php">
+    <ConstructorSignatureMismatch>
+      <code>public function __construct(Card $card, ?Board $board = null) {</code>
+      <code>public function __construct(Card $card, ?Board $board = null) {</code>
+    </ConstructorSignatureMismatch>
+  </file>
   <file src="lib/Service/AttachmentService.php">
-    <InvalidCatch occurrences="1"/>
+    <InvalidCatch>
+      <code>try {
+				$attachment = $this-&gt;attachmentMapper-&gt;find($attachmentId);
+			} catch (IMapperException $e) {
+				throw new NoPermissionException('Permission denied');
+			}</code>
+    </InvalidCatch>
   </file>
   <file src="lib/Service/BoardService.php">
-    <TooManyArguments occurrences="2">
+    <TooManyArguments>
       <code>findAll</code>
       <code>findAll</code>
     </TooManyArguments>
   </file>
   <file src="lib/Service/CirclesService.php">
-    <RedundantCondition occurrences="1">
+    <RedundantCondition>
       <code>$member !== null</code>
     </RedundantCondition>
   </file>
   <file src="lib/Service/FileService.php">
-    <RedundantCondition occurrences="2">
+    <RedundantCondition>
       <code>is_resource($content)</code>
       <code>is_resource($content)</code>
     </RedundantCondition>
   </file>
   <file src="lib/Sharing/DeckShareProvider.php">
-    <InvalidReturnType occurrences="1">
+    <InvalidReturnType>
       <code>getShareByToken</code>
     </InvalidReturnType>
   </file>
   <file src="lib/Sharing/Listener.php">
-    <InvalidArgument occurrences="1">
+    <InvalidArgument>
       <code>[self::class, 'listenPreShare']</code>
     </InvalidArgument>
   </file>

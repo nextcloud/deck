@@ -39,6 +39,10 @@ class BoardSummary extends Board {
 		];
 	}
 
+	protected function getter(string $name): mixed {
+		return $this->board->getter($name);
+	}
+
 	public function __call($name, $arguments) {
 		return $this->board->__call($name, $arguments);
 	}
