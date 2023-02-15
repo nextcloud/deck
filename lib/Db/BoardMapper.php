@@ -160,6 +160,20 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			$groupBoards = $this->findAllByGroups($userId, $groups, null, null, $since, $includeArchived, $before, $term);
 			$circleBoards = $this->findAllByCircles($userId, null, null, $since, $includeArchived, $before, $term);
 			$allBoards = array_unique(array_merge($userBoards, $groupBoards, $circleBoards));
+
+			// Could be moved outside
+			$acls = $this->aclMapper->findIn(array_map(function ($board) {
+				return $board->getId();
+			}, $allBoards));
+
+			/* @var Board $entry */
+			foreach ($allBoards as $entry) {
+				$boardAcls = array_filter($acls, function ($acl) use ($entry) {
+					return $acl->getBoardId() === $entry->getId();
+				});
+				$entry->setAcl($boardAcls);
+			}
+
 			foreach ($allBoards as $board) {
 				$this->boardCache[$board->getId()] = $board;
 			}
@@ -259,11 +273,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			$entry->setShared(1);
 		}
 		$entries = array_merge($entries, $sharedEntries);
-		/* @var Board $entry */
-		foreach ($entries as $entry) {
-			$acl = $this->aclMapper->findAll($entry->id);
-			$entry->setAcl($acl);
-		}
+
 		return $entries;
 	}
 
@@ -336,11 +346,6 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		foreach ($entries as $entry) {
 			$entry->setShared(2);
 		}
-		/* @var Board $entry */
-		foreach ($entries as $entry) {
-			$acl = $this->aclMapper->findAll($entry->id);
-			$entry->setAcl($acl);
-		}
 		return $entries;
 	}
 
@@ -396,11 +401,6 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		$entries = $this->findEntities($qb);
 		foreach ($entries as $entry) {
 			$entry->setShared(2);
-		}
-		/* @var Board $entry */
-		foreach ($entries as $entry) {
-			$acl = $this->aclMapper->findAll($entry->id);
-			$entry->setAcl($acl);
 		}
 		return $entries;
 	}

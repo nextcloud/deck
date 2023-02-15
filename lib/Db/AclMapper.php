@@ -52,6 +52,17 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
+	public function findIn(array $boardIds, ?int $limit = null, ?int $offset = null): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('id', 'board_id', 'type', 'participant', 'permission_edit', 'permission_share', 'permission_manage')
+			->from('deck_board_acl')
+			->where($qb->expr()->in('board_id', $qb->createNamedParameter($boardIds, IQueryBuilder::PARAM_INT_ARRAY)))
+			->setMaxResults($limit)
+			->setFirstResult($offset);
+
+		return $this->findEntities($qb);
+	}
+
 	/**
 	 * @param numeric $userId
 	 * @param numeric $id
