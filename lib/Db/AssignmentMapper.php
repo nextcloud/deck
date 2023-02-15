@@ -60,7 +60,19 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_assigned_users')
-			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, PDO::PARAM_INT)));
+			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)));
+		$users = $this->findEntities($qb);
+		foreach ($users as $user) {
+			$this->mapParticipant($user);
+		}
+		return $users;
+	}
+
+	public function findIn(array $cardIds): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from('deck_assigned_users')
+			->where($qb->expr()->in('card_id', $qb->createNamedParameter($cardIds, IQueryBuilder::PARAM_INT_ARRAY)));
 		$users = $this->findEntities($qb);
 		foreach ($users as $user) {
 			$this->mapParticipant($user);
