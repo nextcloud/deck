@@ -81,10 +81,11 @@ class CardDetails extends Card {
 		$array['board'] = (new BoardSummary($this->board))->jsonSerialize();
 	}
 
-	protected function getter($name) {
+	protected function getter(string $name): mixed {
 		return $this->card->getter($name);
 	}
-	public function __call($name, $arguments) {
-		return $this->card->__call($name, $arguments);
+
+	public function __call(string $methodName, array $args) {
+		return $this->card->__call($methodName, $args);
 	}
 }

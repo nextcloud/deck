@@ -127,7 +127,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 		}
 	}
 
-	public function __call($methodName, $args) {
+	public function __call(string $methodName, array $args) {
 		$attr = lcfirst(substr($methodName, 7));
 		if (array_key_exists($attr, $this->_resolvedProperties) && strpos($methodName, 'resolve') === 0) {
 			if ($this->_resolvedProperties[$attr] !== null) {
