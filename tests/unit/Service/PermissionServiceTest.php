@@ -236,6 +236,11 @@ class PermissionServiceTest extends \Test\TestCase {
 		$board->setAcl($this->getAcls($boardId));
 		$this->boardMapper->expects($this->any())->method('find')->willReturn($board);
 
+		$this->aclMapper->expects($this->any())
+			->method('findAll')
+			->with($boardId)
+			->willReturn($this->getAcls($boardId));
+
 		$this->shareManager->expects($this->any())
 			->method('sharingDisabledForUser')
 			->willReturn(false);
@@ -262,12 +267,17 @@ class PermissionServiceTest extends \Test\TestCase {
 			$this->boardMapper->expects($this->any())->method('find')->willReturn($board);
 		}
 
+		$this->aclMapper->expects($this->any())
+			->method('findAll')
+			->with($boardId)
+			->willReturn($this->getAcls($boardId));
+
 		if ($result) {
-			$actual = $this->service->checkPermission($mapper, 1234, $permission);
+			$actual = $this->service->checkPermission($mapper, $boardId, $permission);
 			$this->assertTrue($actual);
 		} else {
 			$this->expectException(NoPermissionException::class);
-			$this->service->checkPermission($mapper, 1234, $permission);
+			$this->service->checkPermission($mapper, $boardId, $permission);
 		}
 	}
 
