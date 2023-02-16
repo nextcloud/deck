@@ -160,7 +160,7 @@ class BoardService {
 		}
 
 		$complete = $this->getUserBoards($since, $includeArchived);
-		return $this->enrichBoards($complete, $fullDetails !== null);
+		return $this->enrichBoards($complete, $fullDetails);
 	}
 
 	/**
@@ -675,7 +675,6 @@ class BoardService {
 			} else {
 				$this->boardsCachePartial[$board->getId()] = $board;
 			}
-
 		}
 
 		return $boards;
@@ -703,7 +702,7 @@ class BoardService {
 
 	private function enrichWithUsers($board, $since = -1) {
 		$boardUsers = $this->permissionService->findUsers($board->getId());
-		if (\count($boardUsers) === 0) {
+		if ($boardUsers === null || \count($boardUsers) === 0) {
 			return;
 		}
 		$board->setUsers(array_values($boardUsers));

@@ -175,7 +175,7 @@ class CardService {
 	public function find(int $cardId) {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		$card = $this->cardMapper->find($cardId);
-		$this->enrichCards([$card]);
+		[$card] = $this->enrichCards([$card]);
 
 		// Attachments are only enriched on individual card fetching
 		$attachments = $this->attachmentService->findAll($cardId, true);

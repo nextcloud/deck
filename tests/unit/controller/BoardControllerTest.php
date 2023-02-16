@@ -24,6 +24,7 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\Board;
 use OCP\IUser;
 
 class BoardControllerTest extends \Test\TestCase {
@@ -88,11 +89,12 @@ class BoardControllerTest extends \Test\TestCase {
 	}
 
 	public function testRead() {
+		$board = new Board();
 		$this->boardService->expects($this->once())
 			->method('find')
 			->with(123)
-			->willReturn(1);
-		$this->assertEquals(1, $this->controller->read(123));
+			->willReturn($board);
+		$this->assertEquals($board, $this->controller->read(123));
 	}
 
 	public function testCreate() {

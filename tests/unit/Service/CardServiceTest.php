@@ -156,7 +156,8 @@ class CardServiceTest extends TestCase {
 			->method('getNumberOfCommentsForObject')
 			->willReturn(0);
 		$boardMock = $this->createMock(Board::class);
-		$stackMock = $this->createMock(Stack::class);
+		$stackMock = new Stack();
+		$stackMock->setBoardId(1234);
 		$this->stackMapper->expects($this->any())
 			->method('find')
 			->willReturn($stackMock);
