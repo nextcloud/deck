@@ -78,6 +78,7 @@ OC.L10N.register(
     "{user} has mentioned you in a comment on {deck-card}." : "Ο/Η {user} σας ανέφερε σε ένα σχόλιο στο {deck-card}.",
     "The board \"%s\" has been shared with you by %s." : "Ο πίνακας \"%s\" είναι σε κοινή χρήση μαζί σας από %s.",
     "{user} has shared {deck-board} with you." : "Ο/Η διαμοιράστηκε μαζί σας το {deck-board}",
+    "Deck board" : "Πίνακας του Deck",
     "Card comments" : "Σχόλια καρτέλας",
     "%s on %s" : "%s στο %s",
     "No data was provided to create an attachment." : "Δεν δόθηκαν στοιχεία για δημιουργία συνημμένου.",
