@@ -79,7 +79,8 @@ class BoardService {
 	private IEventDispatcher $eventDispatcher;
 	private ChangeHelper $changeHelper;
 	private CardMapper $cardMapper;
-	private ?array $boardsCache = null;
+	private ?array $boardsCacheFull = null;
+	private ?array $boardsCachePartial = null;
 	private IURLGenerator $urlGenerator;
 	private IDBConnection $connection;
 	private BoardServiceValidator $boardServiceValidator;
@@ -147,39 +148,42 @@ class BoardService {
 	}
 
 	/**
-	 * @return array
+	 * @return Board[]
 	 */
-	public function findAll($since = -1, $details = null, $includeArchived = true) {
-		if ($this->boardsCache) {
-			return $this->boardsCache;
+	public function findAll(int $since = -1, bool $fullDetails = false, bool $includeArchived = true): array {
+		if ($this->boardsCacheFull && $fullDetails) {
+			return $this->boardsCacheFull;
 		}
+
+		if ($this->boardsCachePartial && !$fullDetails) {
+			return $this->boardsCachePartial;
+		}
+
 		$complete = $this->getUserBoards($since, $includeArchived);
-		$result = $this->enrichBoards($complete, $details !== null);
-		$this->boardsCache = $result;
-		return array_values($result);
+		return $this->enrichBoards($complete, $fullDetails !== null);
 	}
 
 	/**
-	 * @param $boardId
-	 * @return Board
 	 * @throws DoesNotExistException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function find($boardId, $fullDetails = true) {
+	public function find(int $boardId, bool $fullDetails = true): Board {
 		$this->boardServiceValidator->check(compact('boardId'));
-		if ($this->boardsCache && isset($this->boardsCache[$boardId])) {
-			return $this->boardsCache[$boardId];
+
+		if (isset($this->boardsCacheFull[$boardId]) && $fullDetails) {
+			return $this->boardsCacheFull[$boardId];
+		}
+
+		if (isset($this->boardsCachePartial[$boardId]) && !$fullDetails) {
+			return $this->boardsCachePartial[$boardId];
 		}
 
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		/** @var Board $board */
 		$board = $this->boardMapper->find($boardId, true, true);
-		[$board] = array_values($this->enrichBoards([$board], $fullDetails));
-		if ($fullDetails) {
-			$this->boardsCache[$boardId] = $board;
-		}
+		[$board] = $this->enrichBoards([$board], $fullDetails);
 		return $board;
 	}
 
@@ -665,9 +669,16 @@ class BoardService {
 				$this->enrichWithActiveSessions($board);
 			}
 
-			$result[$board->getId()] = $board;
+			// Cache for further usage
+			if ($fullDetails) {
+				$this->boardsCacheFull[$board->getId()] = $board;
+			} else {
+				$this->boardsCachePartial[$board->getId()] = $board;
+			}
+
 		}
-		return $result;
+
+		return $boards;
 	}
 
 	private function enrichWithStacks($board, $since = -1) {
@@ -710,7 +721,8 @@ class BoardService {
 		$boardOwnerId = $board->getOwner();
 
 		$this->boardMapper->flushCache($boardId, $boardOwnerId);
-		unset($this->boardsCache[$boardId]);
+		unset($this->boardsCacheFull[$boardId]);
+		unset($this->boardsCachePartial[$boardId]);
 	}
 
 	private function enrichWithCards($board) {
