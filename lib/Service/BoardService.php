@@ -177,21 +177,10 @@ class BoardService {
 		/** @var Board $board */
 		$board = $this->boardMapper->find($boardId, true, true);
 		[$board] = array_values($this->enrichBoards([$board], $fullDetails));
-		$this->boardsCache[$boardId] = $board;
+		if ($fullDetails) {
+			$this->boardsCache[$boardId] = $board;
+		}
 		return $board;
-	}
-
-	/**
-	 * @return array
-	 */
-	private function getBoardPrerequisites() {
-		$groups = $this->groupManager->getUserGroupIds(
-			$this->userManager->get($this->userId)
-		);
-		return [
-			'user' => $this->userId,
-			'groups' => $groups
-		];
 	}
 
 	/**
@@ -711,10 +700,6 @@ class BoardService {
 
 	public function getBoardUrl($endpoint) {
 		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . '#' . $endpoint;
-	}
-
-	private function clearBoardsCache() {
-		$this->boardsCache = null;
 	}
 
 	/**

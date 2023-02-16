@@ -90,9 +90,6 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			$this->boardCache[$id] = $this->findEntity($qb);
 		}
 
-		// FIXME is this necessary? it was NOT done with the old mapper
-		// $this->mapOwner($board);
-
 		// Add labels
 		if ($withLabels && $this->boardCache[$id]->getLabels() === null) {
 			$labels = $this->labelMapper->findAll($id);
