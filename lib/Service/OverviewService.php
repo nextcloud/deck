@@ -28,6 +28,7 @@ declare(strict_types=1);
 namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\AssignmentMapper;
+use OCA\Deck\Db\Board;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Model\CardDetails;
 use OCP\Comments\ICommentsManager;
@@ -65,34 +66,25 @@ class OverviewService {
 		$this->attachmentService = $attachmentService;
 	}
 
-	public function findAllWithDue(string $userId): array {
-		$userBoards = $this->boardMapper->findAllForUser($userId);
-		$allDueCards = [];
-		foreach ($userBoards as $userBoard) {
-			$allDueCards[] = array_map(function ($card) use ($userBoard, $userId) {
-				return (new CardDetails($card, $userBoard))->jsonSerialize();
-			}, $this->cardMapper->findAllWithDue($userBoard->getId()));
-		}
-		return $this->cardService->enrichCards(array_merge(...$allDueCards));
-	}
-
 	public function findUpcomingCards(string $userId): array {
 		$userBoards = $this->boardMapper->findAllForUser($userId);
-		$overview = [];
-		foreach ($userBoards as $userBoard) {
-			if (count($userBoard->getAcl()) === 0) {
-				// private board: get cards with due date
-				$cards = $this->cardMapper->findAllWithDue($userBoard->getId());
-			} else {
-				// shared board: get all my assigned or unassigned cards
-				$cards = $this->cardMapper->findToMeOrNotAssignedCards($userBoard->getId(), $userId);
-			}
 
-			$foundCards[] = $cards;
-		}
+		$boardOwnerIds = array_filter(array_map(function (Board $board) {
+			return count($board->getAcl()) === 0 ? $board->getId() : null;
+		}, $userBoards));
+		$boardSharedIds = array_filter(array_map(function (Board $board) {
+			return count($board->getAcl()) > 0 ? $board->getId() : null;
+		}, $userBoards));
 
-		$foundCards = array_merge(...$foundCards);
+		$foundCards = array_merge(
+			// private board: get cards with due date
+			$this->cardMapper->findAllWithDue($boardOwnerIds),
+			// shared board: get all my assigned or unassigned cards
+			$this->cardMapper->findToMeOrNotAssignedCards($boardSharedIds, $userId)
+		);
+
 		$this->cardService->enrichCards($foundCards);
+		$overview = [];
 		foreach ($foundCards as $card) {
 			$diffDays = $card->getDaysUntilDue();
 
@@ -109,7 +101,7 @@ class OverviewService {
 				$key = 'nextSevenDays';
 			}
 
-			$card = (new CardDetails($card, $userBoard));
+			$card = (new CardDetails($card, $card->getRelatedBoard()));
 			$overview[$key][] = $card->jsonSerialize();
 		}
 		return $overview;

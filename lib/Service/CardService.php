@@ -145,12 +145,12 @@ class CardService {
 		$assignedUsers = $this->assignedUsersMapper->findIn($cardIds);
 
 		foreach ($cards as $card) {
-			$cardLabels = array_filter($assignedLabels, function (Label $label) use ($card) {
+			$cardLabels = array_values(array_filter($assignedLabels, function (Label $label) use ($card) {
 				return $label->getCardId() === $card->getId();
-			});
-			$cardAssignedUsers = array_filter($assignedUsers, function (Assignment $assignment) use ($card) {
+			}));
+			$cardAssignedUsers = array_values(array_filter($assignedUsers, function (Assignment $assignment) use ($card) {
 				return $assignment->getCardId() === $card->getId();
-			});
+			}));
 			$card->setLabels($cardLabels);
 			$card->setAssignedUsers($cardAssignedUsers);
 		}
