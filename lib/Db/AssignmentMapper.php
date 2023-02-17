@@ -28,15 +28,13 @@ namespace OCA\Deck\Db;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Service\CirclesService;
 use OCP\AppFramework\Db\Entity;
-use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
-use PDO;
 
-/** @template-extends QBMapper<Assignment> */
-class AssignmentMapper extends QBMapper implements IPermissionMapper {
+/** @template-extends DeckMapper<Assignment> */
+class AssignmentMapper extends DeckMapper implements IPermissionMapper {
 
 	/** @var CardMapper */
 	private $cardMapper;
@@ -72,8 +70,13 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_assigned_users')
-			->where($qb->expr()->in('card_id', $qb->createNamedParameter($cardIds, IQueryBuilder::PARAM_INT_ARRAY)));
-		$users = $this->findEntities($qb);
+			->where($qb->expr()->in('card_id', $qb->createParameter('cardIds')));
+
+		$users = iterator_to_array($this->chunkQuery($cardIds, function (array $ids) use ($qb) {
+			$qb->setParameter('cardIds', $ids, IQueryBuilder::PARAM_INT_ARRAY);
+			return $this->findEntities($qb);
+		}));
+
 		foreach ($users as $user) {
 			$this->mapParticipant($user);
 		}
@@ -84,8 +87,8 @@ class AssignmentMapper extends QBMapper implements IPermissionMapper {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_assigned_users')
-			->where($qb->expr()->eq('participant', $qb->createNamedParameter($participant, PDO::PARAM_STR)))
-			->andWhere($qb->expr()->eq('type', $qb->createNamedParameter($type, PDO::PARAM_INT)));
+			->where($qb->expr()->eq('participant', $qb->createNamedParameter($participant, IQueryBuilder::PARAM_STR)))
+			->andWhere($qb->expr()->eq('type', $qb->createNamedParameter($type, IQueryBuilder::PARAM_INT)));
 		return $this->findEntities($qb);
 	}
 

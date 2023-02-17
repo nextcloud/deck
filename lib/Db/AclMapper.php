@@ -56,11 +56,14 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('id', 'board_id', 'type', 'participant', 'permission_edit', 'permission_share', 'permission_manage')
 			->from('deck_board_acl')
-			->where($qb->expr()->in('board_id', $qb->createNamedParameter($boardIds, IQueryBuilder::PARAM_INT_ARRAY)))
+			->where($qb->expr()->in('board_id', $qb->createParameter('boardIds')))
 			->setMaxResults($limit)
 			->setFirstResult($offset);
 
-		return $this->findEntities($qb);
+		return iterator_to_array($this->chunkQuery($boardIds, function (array $ids) use ($qb) {
+			$qb->setParameter('boardIds', $ids, IQueryBuilder::PARAM_INT_ARRAY);
+			return $this->findEntities($qb);
+		}));
 	}
 
 	/**

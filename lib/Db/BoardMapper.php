@@ -165,9 +165,9 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 
 			/* @var Board $entry */
 			foreach ($allBoards as $entry) {
-				$boardAcls = array_filter($acls, function ($acl) use ($entry) {
+				$boardAcls = array_values(array_filter($acls, function ($acl) use ($entry) {
 					return $acl->getBoardId() === $entry->getId();
-				});
+				}));
 				$entry->setAcl($boardAcls);
 			}
 
