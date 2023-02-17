@@ -30,6 +30,8 @@ OC.L10N.register(
     "Created" : "Үүсгэсэн",
     "Today" : "өнөөдөр",
     "Tomorrow" : "маргааш",
+    "Next week" : "Дараа 7 хоног",
+    "Next month" : "Дараа сар",
     "Save" : "Хадгалах",
     "Reply" : "хариулт",
     "Update" : "Шинэчлэх",
