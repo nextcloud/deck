@@ -79,6 +79,7 @@
     "Deck board" : "Tableau",
     "Owned by %1$s" : "Assignée à %1$s",
     "Deck boards, cards and comments" : "Tableaux, cartes et commentaires",
+    "From %1$s, in %2$s/%3$s, owned by %4$s" : "De %1$s, dans %2$s / %3$s, appartenant à %4$s",
     "Card comments" : "Commentaires de la carte",
     "%s on %s" : "%s sur %s",
     "Deck boards and cards" : "Tableaux et cartes",
