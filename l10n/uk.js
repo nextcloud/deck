@@ -185,6 +185,7 @@ OC.L10N.register(
     "An error occurred" : "Виникла помилка",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Ви впевнені, що хочете вилучити дошку {title}? Це призведе до видалення всіх даних цієї дошки, включаючи архівні картки.",
     "Delete the board?" : "Вилучити дошку?",
+    "Due on {date}" : "До {date}",
     "Link to a board" : "Прив'язати до дошки",
     "Link to a card" : "Прив'язати до картки",
     "Message from {author} in {conversationName}" : "Повідомлення від {author} у {conversationName}",
