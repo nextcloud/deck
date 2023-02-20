@@ -90,9 +90,6 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			$this->boardCache[$id] = $this->findEntity($qb);
 		}
 
-		// FIXME is this necessary? it was NOT done with the old mapper
-		// $this->mapOwner($board);
-
 		// Add labels
 		if ($withLabels && $this->boardCache[$id]->getLabels() === null) {
 			$labels = $this->labelMapper->findAll($id);
@@ -160,6 +157,20 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			$groupBoards = $this->findAllByGroups($userId, $groups, null, null, $since, $includeArchived, $before, $term);
 			$circleBoards = $this->findAllByCircles($userId, null, null, $since, $includeArchived, $before, $term);
 			$allBoards = array_unique(array_merge($userBoards, $groupBoards, $circleBoards));
+
+			// Could be moved outside
+			$acls = $this->aclMapper->findIn(array_map(function ($board) {
+				return $board->getId();
+			}, $allBoards));
+
+			/* @var Board $entry */
+			foreach ($allBoards as $entry) {
+				$boardAcls = array_values(array_filter($acls, function ($acl) use ($entry) {
+					return $acl->getBoardId() === $entry->getId();
+				}));
+				$entry->setAcl($boardAcls);
+			}
+
 			foreach ($allBoards as $board) {
 				$this->boardCache[$board->getId()] = $board;
 			}
@@ -259,11 +270,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			$entry->setShared(1);
 		}
 		$entries = array_merge($entries, $sharedEntries);
-		/* @var Board $entry */
-		foreach ($entries as $entry) {
-			$acl = $this->aclMapper->findAll($entry->id);
-			$entry->setAcl($acl);
-		}
+
 		return $entries;
 	}
 
@@ -336,11 +343,6 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		foreach ($entries as $entry) {
 			$entry->setShared(2);
 		}
-		/* @var Board $entry */
-		foreach ($entries as $entry) {
-			$acl = $this->aclMapper->findAll($entry->id);
-			$entry->setAcl($acl);
-		}
 		return $entries;
 	}
 
@@ -397,11 +399,6 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		foreach ($entries as $entry) {
 			$entry->setShared(2);
 		}
-		/* @var Board $entry */
-		foreach ($entries as $entry) {
-			$acl = $this->aclMapper->findAll($entry->id);
-			$entry->setAcl($acl);
-		}
 		return $entries;
 	}
 
@@ -455,13 +452,11 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	public function mapAcl(Acl &$acl) {
-		$userManager = $this->userManager;
 		$groupManager = $this->groupManager;
 		$acl->resolveRelation('participant', function ($participant) use (&$acl, &$userManager, &$groupManager) {
 			if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
-				$user = $userManager->get($participant);
-				if ($user !== null) {
-					return new User($user);
+				if ($this->userManager->userExists($acl->getParticipant())) {
+					return new User($acl->getParticipant(), $this->userManager);
 				}
 				$this->logger->debug('User ' . $acl->getId() . ' not found when mapping acl ' . $acl->getParticipant());
 				return null;
@@ -499,9 +494,8 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	public function mapOwner(Board &$board) {
 		$userManager = $this->userManager;
 		$board->resolveRelation('owner', function ($owner) use (&$userManager) {
-			$user = $userManager->get($owner);
-			if ($user !== null) {
-				return new User($user);
+			if ($this->userManager->userExists($owner)) {
+				return new User($owner, $userManager);
 			}
 			return null;
 		});

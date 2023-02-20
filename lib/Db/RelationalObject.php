@@ -33,7 +33,7 @@ class RelationalObject implements JsonSerializable {
 	 * RelationalObject constructor.
 	 *
 	 * @param $primaryKey string
-	 * @param $object
+	 * @param callable|mixed $object
 	 */
 	public function __construct($primaryKey, $object) {
 		$this->primaryKey = $primaryKey;
@@ -47,16 +47,24 @@ class RelationalObject implements JsonSerializable {
 		);
 	}
 
+	public function getObject() {
+		if (is_callable($this->object)) {
+			$this->object = call_user_func($this->object, $this);
+		}
+
+		return $this->object;
+	}
+
 	/**
 	 * This method should be overwritten if object doesn't implement \JsonSerializable
 	 *
 	 * @throws \Exception
 	 */
 	public function getObjectSerialization() {
-		if ($this->object instanceof JsonSerializable) {
-			return $this->object->jsonSerialize();
+		if ($this->getObject() instanceof JsonSerializable) {
+			return $this->getObject()->jsonSerialize();
 		} else {
-			throw new \Exception('jsonSerialize is not implemented on ' . get_class($this));
+			throw new \Exception('jsonSerialize is not implemented on ' . get_class($this->getObject()));
 		}
 	}
 

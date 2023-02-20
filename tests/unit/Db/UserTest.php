@@ -24,6 +24,7 @@
 namespace OCA\Deck\Db;
 
 use OCP\IUser;
+use OCP\IUserManager;
 
 class UserTest extends \Test\TestCase {
 	public function testGroupObjectSerialize() {
@@ -35,7 +36,11 @@ class UserTest extends \Test\TestCase {
 		$user->expects($this->any())
 			->method('getDisplayName')
 			->willReturn('myuser displayname');
-		$userRelationalObject = new User($user);
+		$userManager = $this->createMock(IUserManager::class);
+		$userManager->expects($this->any())
+			->method('get')
+			->willReturn($user);
+		$userRelationalObject = new User('myuser', $userManager);
 		$expected = [
 			'uid' => 'myuser',
 			'displayname' => 'myuser displayname',
@@ -53,7 +58,11 @@ class UserTest extends \Test\TestCase {
 		$user->expects($this->any())
 			->method('getDisplayName')
 			->willReturn('myuser displayname');
-		$userRelationalObject = new User($user);
+		$userManager = $this->createMock(IUserManager::class);
+		$userManager->expects($this->any())
+			->method('get')
+			->willReturn($user);
+		$userRelationalObject = new User('myuser', $userManager);
 		$expected = [
 			'uid' => 'myuser',
 			'displayname' => 'myuser displayname',

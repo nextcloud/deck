@@ -31,7 +31,7 @@ use OCP\EventDispatcher\Event;
 
 abstract class AAclEvent extends Event {
 	private $acl;
-	
+
 	public function __construct(Acl $acl) {
 		parent::__construct();
 
@@ -40,5 +40,9 @@ abstract class AAclEvent extends Event {
 
 	public function getAcl(): Acl {
 		return $this->acl;
+	}
+
+	public function getBoardId(): int {
+		return $this->acl->getBoardId();
 	}
 }

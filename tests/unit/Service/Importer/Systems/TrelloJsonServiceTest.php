@@ -30,6 +30,9 @@ use OCP\IUserManager;
 use OCP\Server;
 use PHPUnit\Framework\MockObject\MockObject;
 
+/**
+ * @group DB
+ */
 class TrelloJsonServiceTest extends \Test\TestCase {
 	private TrelloJsonService $service;
 	/** @var IURLGenerator|MockObject */
@@ -57,7 +60,7 @@ class TrelloJsonServiceTest extends \Test\TestCase {
 	}
 
 	public function testValidateUsersWithInvalidUser() {
-		$this->expectErrorMessage('Trello user trello_user not found in property "members" of json data');
+		$this->expectExceptionMessage('Trello user trello_user not found in property "members" of json data');
 		$importService = $this->createMock(BoardImportService::class);
 		$importService
 			->method('getConfig')

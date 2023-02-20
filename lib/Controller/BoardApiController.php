@@ -65,7 +65,7 @@ class BoardApiController extends ApiController {
 	public function index($details = null) {
 		$modified = $this->request->getHeader('If-Modified-Since');
 		if ($modified === null || $modified === '') {
-			$boards = $this->boardService->findAll(0, $details);
+			$boards = $this->boardService->findAll(0, $details === true);
 		} else {
 			$date = Util::parseHTTPDate($modified);
 			if (!$date) {

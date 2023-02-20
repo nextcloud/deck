@@ -94,9 +94,9 @@ class StackService {
 			return;
 		}
 
+		$this->cardService->enrichCards($cards);
 		$cards = array_map(
 			function (Card $card): CardDetails {
-				$this->cardService->enrich($card);
 				return new CardDetails($card);
 			},
 			$cards

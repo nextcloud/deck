@@ -24,6 +24,7 @@
 namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
+use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
@@ -155,7 +156,8 @@ class CardServiceTest extends TestCase {
 			->method('getNumberOfCommentsForObject')
 			->willReturn(0);
 		$boardMock = $this->createMock(Board::class);
-		$stackMock = $this->createMock(Stack::class);
+		$stackMock = new Stack();
+		$stackMock->setBoardId(1234);
 		$this->stackMapper->expects($this->any())
 			->method('find')
 			->willReturn($stackMock);
@@ -168,13 +170,21 @@ class CardServiceTest extends TestCase {
 			->method('find')
 			->with(123)
 			->willReturn($card);
+		$a1 = new Assignment();
+		$a1->setCardId(1337);
+		$a1->setType(0);
+		$a1->setParticipant('user1');
+		$a2 = new Assignment();
+		$a2->setCardId(1337);
+		$a2->setType(0);
+		$a2->setParticipant('user2');
 		$this->assignedUsersMapper->expects($this->any())
-			->method('findAll')
-			->with(1337)
-			->willReturn(['user1', 'user2']);
+			->method('findIn')
+			->with([1337])
+			->willReturn([$a1, $a2]);
 		$cardExpected = new Card();
 		$cardExpected->setId(1337);
-		$cardExpected->setAssignedUsers(['user1', 'user2']);
+		$cardExpected->setAssignedUsers([$a1, $a2]);
 		$cardExpected->setRelatedBoard($boardMock);
 		$cardExpected->setRelatedStack($stackMock);
 		$cardExpected->setLabels([]);

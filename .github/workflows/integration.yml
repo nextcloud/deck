@@ -74,11 +74,12 @@ jobs:
         uses: shivammathur/setup-php@2.24.0
         with:
           php-version: ${{ matrix.php-versions }}
-          tools: phpunit
-          extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, mysql, pdo_mysql, pgsql, pdo_pgsql,
+          extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, mysql, pdo_mysql, pgsql, pdo_pgsql, apcu
+          ini-values:
+            apc.enable_cli=on
           coverage: none
 
-      - name: Set up PHPUnit
+      - name: Set up dependencies
         working-directory: apps/${{ env.APP_NAME }}
         run: composer i --no-dev
 
@@ -91,11 +92,63 @@ jobs:
           fi
           mkdir data
           ./occ maintenance:install --verbose --database=${{ matrix.databases }} --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
+          ./occ config:system:set hashing_default_password --value=true --type=boolean
+          ./occ config:system:set memcache.local --value="\\OC\\Memcache\\APCu"
+          ./occ config:system:set memcache.distributed --value="\\OC\\Memcache\\APCu"
           cat config/config.php
           ./occ user:list
           ./occ app:enable --force ${{ env.APP_NAME }}
+          ./occ config:system:set query_log_file --value '/home/runner/work/${{ env.APP_NAME }}/${{ env.APP_NAME }}/query.log'
           php -S localhost:8080 &
 
       - name: Run behat
         working-directory: apps/${{ env.APP_NAME }}/tests/integration
         run: ./run.sh
+
+      - name: Query count
+        if: ${{ matrix.databases == 'mysql' }}
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            let myOutput = ''
+            let myError = ''
+
+            const options = {}
+            options.listeners = {
+              stdout: (data) => {
+                myOutput += data.toString()
+              },
+              stderr: (data) => {
+                myError += data.toString()
+              }
+            }
+            await exec.exec(`/bin/bash -c "cat /home/runner/work/${{ env.APP_NAME }}/${{ env.APP_NAME }}/query.log | wc -l"`, [], options)
+            msg = myOutput
+            const queryCount = parseInt(myOutput, 10)
+
+            myOutput = ''
+            await exec.exec('cat', ['/home/runner/work/${{ env.APP_NAME }}/${{ env.APP_NAME }}/apps/${{ env.APP_NAME }}/tests/integration/base-query-count.txt'], options)
+            const baseCount = parseInt(myOutput, 10)
+
+            const absoluteIncrease = queryCount - baseCount
+            const relativeIncrease = baseCount <= 0 ? 100 : (parseInt((absoluteIncrease / baseCount * 10000), 10) / 100)
+
+            if (absoluteIncrease >= 100 || relativeIncrease > 5) {
+              const comment = `🐢 Performance warning.\nIt looks like the query count of the integration tests increased with this PR.\nDatabase query count is now ` + queryCount + ' was ' + baseCount + ' (+' + relativeIncrease + '%)\nPlease check your code again. If you added a new test this can be expected and the base value in tests/integration/base-query-count.txt can be increased.'
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              })
+            }
+            if (queryCount < 100) {
+              const comment = `🐈 Performance messuring seems broken. Failed to get query count.`
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              })
+            }

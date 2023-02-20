@@ -143,7 +143,7 @@ class PermissionService {
 	 * @return bool
 	 * @throws NoPermissionException
 	 */
-	public function checkPermission($mapper, $id, $permission, $userId = null) {
+	public function checkPermission($mapper, $id, $permission, $userId = null): bool {
 		$boardId = $id;
 		if ($mapper instanceof IPermissionMapper && !($mapper instanceof BoardMapper)) {
 			$boardId = $mapper->findBoardId($id);
@@ -153,21 +153,9 @@ class PermissionService {
 			throw new NoPermissionException('Permission denied');
 		}
 
-		if ($permission === Acl::PERMISSION_SHARE && $this->shareManager->sharingDisabledForUser($this->userId)) {
-			throw new NoPermissionException('Permission denied');
-		}
-
-		if ($this->userIsBoardOwner($boardId, $userId)) {
+		$permissions = $this->getPermissions($boardId);
+		if ($permissions[$permission] === true) {
 			return true;
-		}
-
-		try {
-			$acls = $this->getBoard($boardId)->getAcl() ?? [];
-			$result = $this->userCan($acls, $permission, $userId);
-			if ($result) {
-				return true;
-			}
-		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 		}
 
 		// Throw NoPermission to not leak information about existing entries
@@ -260,22 +248,20 @@ class PermissionService {
 		}
 
 		$users = [];
-		$owner = $this->userManager->get($board->getOwner());
-		if ($owner === null) {
+		if (!$this->userManager->userExists($board->getOwner())) {
 			$this->logger->info('No owner found for board ' . $board->getId());
 		} else {
-			$users[$owner->getUID()] = new User($owner);
+			$users[$board->getOwner()] = new User($board->getOwner(), $this->userManager);
 		}
 		$acls = $this->aclMapper->findAll($boardId);
 		/** @var Acl $acl */
 		foreach ($acls as $acl) {
 			if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
-				$user = $this->userManager->get($acl->getParticipant());
-				if ($user === null) {
+				if (!$this->userManager->userExists($acl->getParticipant())) {
 					$this->logger->info('No user found for acl rule ' . $acl->getId());
 					continue;
 				}
-				$users[$user->getUID()] = new User($user);
+				$users[$acl->getParticipant()] = new User($acl->getParticipant(), $this->userManager);
 			}
 			if ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
 				$group = $this->groupManager->get($acl->getParticipant());
@@ -284,7 +270,7 @@ class PermissionService {
 					continue;
 				}
 				foreach ($group->getUsers() as $user) {
-					$users[$user->getUID()] = new User($user);
+					$users[$user->getUID()] = new User($user->getUID(), $this->userManager);
 				}
 			}
 
@@ -305,7 +291,7 @@ class PermissionService {
 						if ($user === null) {
 							$this->logger->info('No user found for circle member ' . $member->getUserId());
 						} else {
-							$users[$member->getUserId()] = new User($user);
+							$users[$member->getUserId()] = new User($member->getUserId(), $this->userManager);
 						}
 					}
 				} catch (\Exception $e) {

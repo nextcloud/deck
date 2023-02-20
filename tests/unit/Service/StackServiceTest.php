@@ -110,10 +110,12 @@ class StackServiceTest extends TestCase {
 	public function testFindAll() {
 		$this->permissionService->expects($this->once())->method('checkPermission');
 		$this->stackMapper->expects($this->once())->method('findAll')->willReturn($this->getStacks());
-		$this->cardService->expects($this->atLeastOnce())->method('enrich')->will(
+		$this->cardService->expects($this->atLeastOnce())->method('enrichCards')->will(
 					$this->returnCallback(
-						function ($card) {
-							$card->setLabels($this->getLabels()[$card->getId()]);
+						function ($cards) {
+							foreach ($cards as $card) {
+								$card->setLabels($this->getLabels()[$card->getId()]);
+							}
 						}
 					)
 				);

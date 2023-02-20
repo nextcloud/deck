@@ -236,6 +236,11 @@ class PermissionServiceTest extends \Test\TestCase {
 		$board->setAcl($this->getAcls($boardId));
 		$this->boardMapper->expects($this->any())->method('find')->willReturn($board);
 
+		$this->aclMapper->expects($this->any())
+			->method('findAll')
+			->with($boardId)
+			->willReturn($this->getAcls($boardId));
+
 		$this->shareManager->expects($this->any())
 			->method('sharingDisabledForUser')
 			->willReturn(false);
@@ -262,12 +267,17 @@ class PermissionServiceTest extends \Test\TestCase {
 			$this->boardMapper->expects($this->any())->method('find')->willReturn($board);
 		}
 
+		$this->aclMapper->expects($this->any())
+			->method('findAll')
+			->with($boardId)
+			->willReturn($this->getAcls($boardId));
+
 		if ($result) {
-			$actual = $this->service->checkPermission($mapper, 1234, $permission);
+			$actual = $this->service->checkPermission($mapper, $boardId, $permission);
 			$this->assertTrue($actual);
 		} else {
 			$this->expectException(NoPermissionException::class);
-			$this->service->checkPermission($mapper, 1234, $permission);
+			$this->service->checkPermission($mapper, $boardId, $permission);
 		}
 	}
 
@@ -340,7 +350,7 @@ class PermissionServiceTest extends \Test\TestCase {
 		$aclGroup->setParticipant('group1');
 
 		$board = $this->createMock(Board::class);
-		$board->expects($this->once())
+		$board->expects($this->any())
 			->method('__call')
 			->with('getOwner', [])
 			->willReturn('user1');
@@ -352,8 +362,8 @@ class PermissionServiceTest extends \Test\TestCase {
 			->method('find')
 			->with(123)
 			->willReturn($board);
-		$this->userManager->expects($this->exactly(2))
-			->method('get')
+		$this->userManager->expects($this->any())
+			->method('userExists')
 			->withConsecutive(['user1'], ['user2'])
 			->willReturnOnConsecutiveCalls($user1, $user2);
 
@@ -367,9 +377,9 @@ class PermissionServiceTest extends \Test\TestCase {
 			->willReturn($group);
 		$users = $this->service->findUsers(123);
 		$this->assertEquals([
-			'user1' => new User($user1),
-			'user2' => new User($user2),
-			'user3' => new User($user3),
+			'user1' => new User($user1->getUID(), $this->userManager),
+			'user2' => new User($user2->getUID(), $this->userManager),
+			'user3' => new User($user3->getUID(), $this->userManager),
 		], $users);
 	}
 }

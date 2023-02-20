@@ -79,6 +79,19 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
+	public function findAssignedLabelsForCards($cardIds, $limit = null, $offset = null): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('l.*', 'card_id')
+			->from($this->getTableName(), 'l')
+			->innerJoin('l', 'deck_assigned_labels', 'al', 'l.id = al.label_id')
+			->where($qb->expr()->in('card_id', $qb->createNamedParameter($cardIds, IQueryBuilder::PARAM_INT_ARRAY)))
+			->orderBy('l.id')
+			->setMaxResults($limit)
+			->setFirstResult($offset);
+
+		return $this->findEntities($qb);
+	}
+
 	/**
 	 * @param numeric $boardId
 	 * @param int|null $limit

@@ -28,7 +28,7 @@ declare(strict_types=1);
 namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\AssignmentMapper;
-use OCA\Deck\Db\Card;
+use OCA\Deck\Db\Board;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Model\CardDetails;
 use OCP\Comments\ICommentsManager;
@@ -37,6 +37,7 @@ use OCA\Deck\Db\LabelMapper;
 use OCP\IUserManager;
 
 class OverviewService {
+	private CardService $cardService;
 	private BoardMapper $boardMapper;
 	private LabelMapper $labelMapper;
 	private CardMapper $cardMapper;
@@ -46,6 +47,7 @@ class OverviewService {
 	private AttachmentService $attachmentService;
 
 	public function __construct(
+		CardService $cardService,
 		BoardMapper $boardMapper,
 		LabelMapper $labelMapper,
 		CardMapper $cardMapper,
@@ -54,6 +56,7 @@ class OverviewService {
 		ICommentsManager $commentsManager,
 		AttachmentService $attachmentService
 	) {
+		$this->cardService = $cardService;
 		$this->boardMapper = $boardMapper;
 		$this->labelMapper = $labelMapper;
 		$this->cardMapper = $cardMapper;
@@ -63,66 +66,43 @@ class OverviewService {
 		$this->attachmentService = $attachmentService;
 	}
 
-	public function enrich(Card $card, string $userId): void {
-		$cardId = $card->getId();
-
-		$this->cardMapper->mapOwner($card);
-		$card->setAssignedUsers($this->assignedUsersMapper->findAll($cardId));
-		$card->setLabels($this->labelMapper->findAssignedLabelsForCard($cardId));
-		$card->setAttachmentCount($this->attachmentService->count($cardId));
-
-		$user = $this->userManager->get($userId);
-		if ($user !== null) {
-			$lastRead = $this->commentsManager->getReadMark('deckCard', (string)$card->getId(), $user);
-			$count = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId(), $lastRead);
-			$card->setCommentsUnread($count);
-		}
-	}
-
-	public function findAllWithDue(string $userId): array {
-		$userBoards = $this->boardMapper->findAllForUser($userId);
-		$allDueCards = [];
-		foreach ($userBoards as $userBoard) {
-			$allDueCards[] = array_map(function ($card) use ($userBoard, $userId) {
-				$this->enrich($card, $userId);
-				return (new CardDetails($card, $userBoard))->jsonSerialize();
-			}, $this->cardMapper->findAllWithDue($userBoard->getId()));
-		}
-		return array_merge(...$allDueCards);
-	}
-
 	public function findUpcomingCards(string $userId): array {
 		$userBoards = $this->boardMapper->findAllForUser($userId);
+
+		$boardOwnerIds = array_filter(array_map(function (Board $board) {
+			return count($board->getAcl()) === 0 ? $board->getId() : null;
+		}, $userBoards));
+		$boardSharedIds = array_filter(array_map(function (Board $board) {
+			return count($board->getAcl()) > 0 ? $board->getId() : null;
+		}, $userBoards));
+
+		$foundCards = array_merge(
+			// private board: get cards with due date
+			$this->cardMapper->findAllWithDue($boardOwnerIds),
+			// shared board: get all my assigned or unassigned cards
+			$this->cardMapper->findToMeOrNotAssignedCards($boardSharedIds, $userId)
+		);
+
+		$this->cardService->enrichCards($foundCards);
 		$overview = [];
-		foreach ($userBoards as $userBoard) {
-			if (count($userBoard->getAcl()) === 0) {
-				// private board: get cards with due date
-				$cards = $this->cardMapper->findAllWithDue($userBoard->getId());
-			} else {
-				// shared board: get all my assigned or unassigned cards
-				$cards = $this->cardMapper->findToMeOrNotAssignedCards($userBoard->getId(), $userId);
+		foreach ($foundCards as $card) {
+			$diffDays = $card->getDaysUntilDue();
+
+			$key = 'later';
+			if ($diffDays === null) {
+				$key = 'nodue';
+			} elseif ($diffDays < 0) {
+				$key = 'overdue';
+			} elseif ($diffDays === 0) {
+				$key = 'today';
+			} elseif ($diffDays === 1) {
+				$key = 'tomorrow';
+			} elseif ($diffDays <= 7) {
+				$key = 'nextSevenDays';
 			}
 
-			foreach ($cards as $card) {
-				$this->enrich($card, $userId);
-				$diffDays = $card->getDaysUntilDue();
-
-				$key = 'later';
-				if ($diffDays === null) {
-					$key = 'nodue';
-				} elseif ($diffDays < 0) {
-					$key = 'overdue';
-				} elseif ($diffDays === 0) {
-					$key = 'today';
-				} elseif ($diffDays === 1) {
-					$key = 'tomorrow';
-				} elseif ($diffDays <= 7) {
-					$key = 'nextSevenDays';
-				}
-
-				$card = (new CardDetails($card, $userBoard));
-				$overview[$key][] = $card->jsonSerialize();
-			}
+			$card = (new CardDetails($card, $card->getRelatedBoard()));
+			$overview[$key][] = $card->jsonSerialize();
 		}
 		return $overview;
 	}

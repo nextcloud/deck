@@ -37,6 +37,7 @@ use OCP\IConfig;
 use OCP\IGroup;
 use OCP\IGroupManager;
 use OCP\IUser;
+use OCP\IUserManager;
 use OCP\Notification\IManager;
 use OCP\Notification\INotification;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -219,8 +220,9 @@ class NotificationHelperTest extends \Test\TestCase {
 			'title' => 'MyCardTitle',
 			'duedate' => '2020-12-24'
 		]);
+		$userManager = $this->createMock(IUserManager::class);
 		$card->setAssignedUsers([
-			new User($users[0])
+			new User($users[0]->getUID(), $userManager)
 		]);
 		$this->cardMapper->expects($this->once())
 			->method('findBoardId')
@@ -308,8 +310,9 @@ class NotificationHelperTest extends \Test\TestCase {
 			'title' => 'MyCardTitle',
 			'duedate' => '2020-12-24'
 		]);
+		$userManager = $this->createMock(IUserManager::class);
 		$card->setAssignedUsers([
-			new User($users[0])
+			new User($users[0]->getUID(), $userManager)
 		]);
 		$this->cardMapper->expects($this->once())
 			->method('findBoardId')

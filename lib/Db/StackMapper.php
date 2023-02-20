@@ -26,16 +26,19 @@ namespace OCA\Deck\Db;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\Cache\CappedMemoryCache;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 /** @template-extends DeckMapper<Stack> */
 class StackMapper extends DeckMapper implements IPermissionMapper {
-	private $cardMapper;
+	private CappedMemoryCache $stackCache;
+	private CardMapper $cardMapper;
 
 	public function __construct(IDBConnection $db, CardMapper $cardMapper) {
 		parent::__construct($db, 'deck_stacks', Stack::class);
 		$this->cardMapper = $cardMapper;
+		$this->stackCache = new CappedMemoryCache();
 	}
 
 
@@ -47,12 +50,17 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	 * @throws \OCP\DB\Exception
 	 */
 	public function find($id): Stack {
+		if (isset($this->stackCache[(string)$id])) {
+			return $this->stackCache[(string)$id];
+		}
+
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->getTableName())
 			->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
-		return $this->findEntity($qb);
+		$this->stackCache[(string)$id] = $this->findEntity($qb);
+		return $this->stackCache[(string)$id];
 	}
 
 	/**
@@ -113,9 +121,16 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
+	public function update(Entity $entity): Entity {
+		$result = parent::update($entity);
+		$this->stackCache[(string)$entity->getId()] = $result;
+		return $result;
+	}
+
 	public function delete(Entity $entity): Entity {
 		// delete cards on stack
 		$this->cardMapper->deleteByStack($entity->getId());
+		unset($this->stackCache[(string)$entity->getId()]);
 		return parent::delete($entity);
 	}
 

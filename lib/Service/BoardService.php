@@ -79,7 +79,8 @@ class BoardService {
 	private IEventDispatcher $eventDispatcher;
 	private ChangeHelper $changeHelper;
 	private CardMapper $cardMapper;
-	private ?array $boardsCache = null;
+	private ?array $boardsCacheFull = null;
+	private ?array $boardsCachePartial = null;
 	private IURLGenerator $urlGenerator;
 	private IDBConnection $connection;
 	private BoardServiceValidator $boardServiceValidator;
@@ -147,94 +148,43 @@ class BoardService {
 	}
 
 	/**
-	 * @return array
+	 * @return Board[]
 	 */
-	public function findAll($since = -1, $details = null, $includeArchived = true) {
-		if ($this->boardsCache) {
-			return $this->boardsCache;
+	public function findAll(int $since = -1, bool $fullDetails = false, bool $includeArchived = true): array {
+		if ($this->boardsCacheFull && $fullDetails) {
+			return $this->boardsCacheFull;
 		}
+
+		if ($this->boardsCachePartial && !$fullDetails) {
+			return $this->boardsCachePartial;
+		}
+
 		$complete = $this->getUserBoards($since, $includeArchived);
-		$result = [];
-		/** @var Board $item */
-		foreach ($complete as &$item) {
-			$this->boardMapper->mapOwner($item);
-			if ($item->getAcl() !== null) {
-				foreach ($item->getAcl() as &$acl) {
-					$this->boardMapper->mapAcl($acl);
-				}
-			}
-			if ($details !== null) {
-				$this->enrichWithStacks($item);
-				$this->enrichWithLabels($item);
-				$this->enrichWithUsers($item);
-			}
-			$permissions = $this->permissionService->matchPermissions($item);
-			$item->setPermissions([
-				'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
-				'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
-				'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
-				'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
-			]);
-			$this->enrichWithBoardSettings($item);
-			$result[$item->getId()] = $item;
-		}
-		$this->boardsCache = $result;
-		return array_values($result);
+		return $this->enrichBoards($complete, $fullDetails);
 	}
 
 	/**
-	 * @param $boardId
-	 * @return Board
 	 * @throws DoesNotExistException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function find($boardId) {
+	public function find(int $boardId, bool $fullDetails = true): Board {
 		$this->boardServiceValidator->check(compact('boardId'));
-		if ($this->boardsCache && isset($this->boardsCache[$boardId])) {
-			return $this->boardsCache[$boardId];
+
+		if (isset($this->boardsCacheFull[$boardId]) && $fullDetails) {
+			return $this->boardsCacheFull[$boardId];
 		}
-		if (is_numeric($boardId) === false) {
-			throw new BadRequestException('board id must be a number');
+
+		if (isset($this->boardsCachePartial[$boardId]) && !$fullDetails) {
+			return $this->boardsCachePartial[$boardId];
 		}
 
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		/** @var Board $board */
 		$board = $this->boardMapper->find($boardId, true, true);
-		$this->boardMapper->mapOwner($board);
-		if ($board->getAcl() !== null) {
-			foreach ($board->getAcl() as $acl) {
-				if ($acl !== null) {
-					$this->boardMapper->mapAcl($acl);
-				}
-			}
-		}
-		$permissions = $this->permissionService->matchPermissions($board);
-		$board->setPermissions([
-			'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
-			'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
-			'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
-			'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
-		]);
-		$this->enrichWithUsers($board);
-		$this->enrichWithBoardSettings($board);
-		$this->enrichWithActiveSessions($board);
-		$this->boardsCache[$board->getId()] = $board;
+		[$board] = $this->enrichBoards([$board], $fullDetails);
 		return $board;
-	}
-
-	/**
-	 * @return array
-	 */
-	private function getBoardPrerequisites() {
-		$groups = $this->groupManager->getUserGroupIds(
-			$this->userManager->get($this->userId)
-		);
-		return [
-			'user' => $this->userId,
-			'groups' => $groups
-		];
 	}
 
 	/**
@@ -456,7 +406,7 @@ class BoardService {
 
 	public function enrichWithActiveSessions(Board $board) {
 		$sessions = $this->sessionMapper->findAllActive($board->getId());
-		
+
 		$board->setActiveSessions(array_values(
 			array_unique(
 				array_map(function (Session $session) {
@@ -691,6 +641,45 @@ class BoardService {
 		return $board;
 	}
 
+	/** @param Board[] $boards */
+	private function enrichBoards(array $boards, bool $fullDetails = true): array {
+		$result = [];
+		foreach ($boards as $board) {
+			// FIXME The enrichment in here could make use of combined queries
+			$this->boardMapper->mapOwner($board);
+			if ($board->getAcl() !== null) {
+				foreach ($board->getAcl() as &$acl) {
+					$this->boardMapper->mapAcl($acl);
+				}
+			}
+
+			$permissions = $this->permissionService->matchPermissions($board);
+			$board->setPermissions([
+				'PERMISSION_READ' => $permissions[Acl::PERMISSION_READ] ?? false,
+				'PERMISSION_EDIT' => $permissions[Acl::PERMISSION_EDIT] ?? false,
+				'PERMISSION_MANAGE' => $permissions[Acl::PERMISSION_MANAGE] ?? false,
+				'PERMISSION_SHARE' => $permissions[Acl::PERMISSION_SHARE] ?? false
+			]);
+
+			if ($fullDetails) {
+				$this->enrichWithStacks($board);
+				$this->enrichWithLabels($board);
+				$this->enrichWithUsers($board);
+				$this->enrichWithBoardSettings($board);
+				$this->enrichWithActiveSessions($board);
+			}
+
+			// Cache for further usage
+			if ($fullDetails) {
+				$this->boardsCacheFull[$board->getId()] = $board;
+			} else {
+				$this->boardsCachePartial[$board->getId()] = $board;
+			}
+		}
+
+		return $boards;
+	}
+
 	private function enrichWithStacks($board, $since = -1) {
 		$stacks = $this->stackMapper->findAll($board->getId(), null, null, $since);
 
@@ -713,7 +702,7 @@ class BoardService {
 
 	private function enrichWithUsers($board, $since = -1) {
 		$boardUsers = $this->permissionService->findUsers($board->getId());
-		if (\count($boardUsers) === 0) {
+		if ($boardUsers === null || \count($boardUsers) === 0) {
 			return;
 		}
 		$board->setUsers(array_values($boardUsers));
@@ -721,10 +710,6 @@ class BoardService {
 
 	public function getBoardUrl($endpoint) {
 		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . '#' . $endpoint;
-	}
-
-	private function clearBoardsCache() {
-		$this->boardsCache = null;
 	}
 
 	/**
@@ -735,7 +720,8 @@ class BoardService {
 		$boardOwnerId = $board->getOwner();
 
 		$this->boardMapper->flushCache($boardId, $boardOwnerId);
-		unset($this->boardsCache[$boardId]);
+		unset($this->boardsCacheFull[$boardId]);
+		unset($this->boardsCachePartial[$boardId]);
 	}
 
 	private function enrichWithCards($board) {

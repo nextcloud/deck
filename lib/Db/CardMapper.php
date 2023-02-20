@@ -254,13 +254,13 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findAllWithDue($boardId) {
+	public function findAllWithDue(array $boardIds) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('c.*')
 			->from('deck_cards', 'c')
 			->innerJoin('c', 'deck_stacks', 's', 's.id = c.stack_id')
 			->innerJoin('s', 'deck_boards', 'b', 'b.id = s.board_id')
-			->where($qb->expr()->eq('s.board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->where($qb->expr()->in('s.board_id', $qb->createNamedParameter($boardIds, IQueryBuilder::PARAM_INT_ARRAY)))
 			->andWhere($qb->expr()->isNotNull('c.duedate'))
 			->andWhere($qb->expr()->eq('c.archived', $qb->createNamedParameter(false, IQueryBuilder::PARAM_BOOL)))
 			->andWhere($qb->expr()->eq('c.deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
@@ -270,14 +270,14 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findToMeOrNotAssignedCards($boardId, $username) {
+	public function findToMeOrNotAssignedCards(array $boardIds, string $username) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('c.*')
 			->from('deck_cards', 'c')
 			->innerJoin('c', 'deck_stacks', 's', 's.id = c.stack_id')
 			->innerJoin('s', 'deck_boards', 'b', 'b.id = s.board_id')
 			->leftJoin('c', 'deck_assigned_users', 'u', 'c.id = u.card_id')
-			->where($qb->expr()->eq('s.board_id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->where($qb->expr()->in('s.board_id', $qb->createNamedParameter($boardIds, IQueryBuilder::PARAM_INT_ARRAY)))
 			->andWhere($qb->expr()->orX(
 				$qb->expr()->eq('u.participant', $qb->createNamedParameter($username, IQueryBuilder::PARAM_STR)),
 				$qb->expr()->isNull('u.participant'))
@@ -607,9 +607,8 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	public function mapOwner(Card &$card) {
 		$userManager = $this->userManager;
 		$card->resolveRelation('owner', function ($owner) use (&$userManager) {
-			$user = $userManager->get($owner);
-			if ($user !== null) {
-				return new User($user);
+			if ($userManager->userExists($owner)) {
+				return new User($owner, $this->userManager);
 			}
 			return null;
 		});

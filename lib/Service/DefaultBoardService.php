@@ -62,9 +62,8 @@ class DefaultBoardService {
 	 */
 	public function checkFirstRun($userId): bool {
 		$firstRun = $this->config->getUserValue($userId, Application::APP_ID, 'firstRun', 'yes');
-		$userBoards = $this->boardMapper->findAllByUser($userId);
 
-		if ($firstRun === 'yes' && count($userBoards) === 0) {
+		if ($firstRun === 'yes') {
 			try {
 				$this->config->setUserValue($userId, Application::APP_ID, 'firstRun', 'no');
 			} catch (PreConditionNotMetException $e) {

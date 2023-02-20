@@ -27,16 +27,16 @@ if [ -z "$EXECUTOR_NUMBER" ]; then
 fi
 PORT=$((9090 + $EXECUTOR_NUMBER))
 echo $PORT
-php -S localhost:$PORT -t $OC_PATH &
+php -q -S localhost:$PORT -t $OC_PATH &
 PHPPID=$!
 echo $PHPPID
 
 export TEST_SERVER_URL="http://localhost:$PORT/ocs/"
 
-vendor/bin/behat $SCENARIO_TO_RUN
+vendor/bin/behat --colors $SCENARIO_TO_RUN
 RESULT=$?
 
-kill $PHPPID
+kill -9 $PHPPID
 
 echo "runsh: Exit code: $RESULT"
 exit $RESULT
