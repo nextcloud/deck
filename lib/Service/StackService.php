@@ -36,10 +36,12 @@ use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\Model\CardDetails;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\StatusException;
 use OCA\Deck\Validators\StackServiceValidator;
+use OCP\EventDispatcher\IEventDispatcher;
 use Psr\Log\LoggerInterface;
 
 class StackService {
@@ -55,6 +57,7 @@ class StackService {
 	private ActivityManager $activityManager;
 	private ChangeHelper $changeHelper;
 	private LoggerInterface $logger;
+	private IEventDispatcher $eventDispatcher;
 	private StackServiceValidator $stackServiceValidator;
 
 	public function __construct(
@@ -70,6 +73,7 @@ class StackService {
 		ActivityManager $activityManager,
 		ChangeHelper $changeHelper,
 		LoggerInterface $logger,
+		IEventDispatcher $eventDispatcher,
 		StackServiceValidator $stackServiceValidator
 	) {
 		$this->stackMapper = $stackMapper;
@@ -84,6 +88,7 @@ class StackService {
 		$this->activityManager = $activityManager;
 		$this->changeHelper = $changeHelper;
 		$this->logger = $logger;
+		$this->eventDispatcher = $eventDispatcher;
 		$this->stackServiceValidator = $stackServiceValidator;
 	}
 
@@ -237,6 +242,7 @@ class StackService {
 			ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_CREATE
 		);
 		$this->changeHelper->boardChanged($boardId);
+		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($boardId));
 
 		return $stack;
 	}
@@ -265,6 +271,7 @@ class StackService {
 			ActivityManager::DECK_OBJECT_BOARD, $stack, ActivityManager::SUBJECT_STACK_DELETE
 		);
 		$this->changeHelper->boardChanged($stack->getBoardId());
+		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($stack->getBoardId()));
 		$this->enrichStackWithCards($stack);
 
 		return $stack;
@@ -306,6 +313,7 @@ class StackService {
 			ActivityManager::DECK_OBJECT_BOARD, $changes, ActivityManager::SUBJECT_STACK_UPDATE
 		);
 		$this->changeHelper->boardChanged($stack->getBoardId());
+		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($stack->getBoardId()));
 
 		return $stack;
 	}
@@ -345,6 +353,7 @@ class StackService {
 			$result[$stack->getOrder()] = $stack;
 		}
 		$this->changeHelper->boardChanged($stackToSort->getBoardId());
+		$this->eventDispatcher->dispatchTyped(new BoardUpdatedEvent($stackToSort->getBoardId()));
 
 		return $result;
 	}

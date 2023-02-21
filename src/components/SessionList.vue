@@ -95,8 +95,7 @@ export default {
 .avatar-wrapper {
 	background-color: #b9b9b9;
 	border-radius: 50%;
-	border-width: 2px;
-	border-style: solid;
+	border: 1px solid var(--color-border-dark);
 	width: var(--size);
 	height: var(--size);
 	text-align: center;

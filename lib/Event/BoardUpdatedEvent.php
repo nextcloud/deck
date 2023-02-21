@@ -1,9 +1,8 @@
 <?php
-
-declare(strict_types=1);
-
-/**
- * @copyright Copyright (c) 2022, chandi Langecker (git@chandi.it)
+/*
+ * @copyright Copyright (c) 2022 chandi Langecker <git@chandi.it>
+ *
+ * @author chandi Langecker <git@chandi.it>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -14,17 +13,31 @@ declare(strict_types=1);
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-namespace OCA\Deck;
+declare(strict_types=1);
 
-class NotifyPushEvents {
-	public const DeckBoardUpdate = 'deck_board_update';
-	public const DeckCardUpdate = 'deck_card_update';
+
+namespace OCA\Deck\Event;
+
+use OCP\EventDispatcher\Event;
+
+class BoardUpdatedEvent extends Event {
+	private $boardId;
+	
+	public function __construct(int $boardId) {
+		parent::__construct();
+
+		$this->boardId = $boardId;
+	}
+
+	public function getBoardId(): int {
+		return $this->boardId;
+	}
 }

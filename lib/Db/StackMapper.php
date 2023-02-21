@@ -29,16 +29,24 @@ use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Cache\CappedMemoryCache;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\ICache;
+use OCP\ICacheFactory;
 
 /** @template-extends DeckMapper<Stack> */
 class StackMapper extends DeckMapper implements IPermissionMapper {
 	private CappedMemoryCache $stackCache;
 	private CardMapper $cardMapper;
+	private ICache $cache;
 
-	public function __construct(IDBConnection $db, CardMapper $cardMapper) {
+	public function __construct(
+		IDBConnection $db,
+		CardMapper $cardMapper,
+		ICacheFactory $cacheFactory
+	) {
 		parent::__construct($db, 'deck_stacks', Stack::class);
 		$this->cardMapper = $cardMapper;
 		$this->stackCache = new CappedMemoryCache();
+		$this->cache = $cacheFactory->createDistributed('deck-stackMapper');
 	}
 
 
@@ -157,12 +165,19 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	 * @throws \OCP\DB\Exception
 	 */
 	public function findBoardId($id): ?int {
+		$result = $this->cache->get('findBoardId:' . $id);
+		if ($result !== null) {
+			return $result !== false ? $result : null;
+		}
 		try {
 			$entity = $this->find($id);
-			return $entity->getBoardId();
+			$result = $entity->getBoardId();
 		} catch (DoesNotExistException $e) {
+			$result = false;
 		} catch (MultipleObjectsReturnedException $e) {
 		}
-		return null;
+		$this->cache->set('findBoardId:' . $id, $result);
+
+		return $result !== false ? $result : null;
 	}
 }

@@ -353,7 +353,7 @@ class CardService {
 		}
 		$this->changeHelper->cardChanged($card->getId(), true);
 
-		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
 		return $card;
 	}
@@ -443,6 +443,8 @@ class CardService {
 			$result[$card->getOrder()] = $card;
 		}
 		$this->changeHelper->cardChanged($id, false);
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+
 		return array_values($result);
 	}
 
