@@ -1,6 +1,35 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+## 1.9.0-beta.1
+
+### Added
+
+- Export Board @david-loe [#3065](https://github.com/nextcloud/deck/pull/3065)
+- basic notify_push usage with session handling @alangecker [#3876](https://github.com/nextcloud/deck/pull/3876)
+- feat(Description): Use text as editor if available @juliushaertl [#4399](https://github.com/nextcloud/deck/pull/4399)
+- Improve reference provider and add reference widgets @julien-nc [#4422](https://github.com/nextcloud/deck/pull/4422)
+- live updates 🎉  @alangecker [#4273](https://github.com/nextcloud/deck/pull/4273)
+- Tag creation from card view @juliushaertl [#4344](https://github.com/nextcloud/deck/pull/4344)
+
+### Fixed
+
+- Fix component renaming so that acl works on shares again @small1 [#4315](https://github.com/nextcloud/deck/pull/4315)
+- fix(Sidebar): Only close sidebar on v-click-outside for specific targets @juliushaertl [#4350](https://github.com/nextcloud/deck/pull/4350)
+- add basic e2e tests for stack title @shoetten [#4206](https://github.com/nextcloud/deck/pull/4206)
+- App metadata: add links to user and developer documentation @p-bo [#4356](https://github.com/nextcloud/deck/pull/4356)
+- Update signature of Entity::markFieldUpdated @nickvergessen [#4398](https://github.com/nextcloud/deck/pull/4398)
+- Remove updated nightly information @xf- [#4419](https://github.com/nextcloud/deck/pull/4419)
+- perf: Register notifier and resource listener lazy @juliushaertl [#4439](https://github.com/nextcloud/deck/pull/4439)
+- perf: Lazy load dashboard components @juliushaertl [#4440](https://github.com/nextcloud/deck/pull/4440)
+- Optimise upcomming overview creation @Raudius [#3793](https://github.com/nextcloud/deck/pull/3793)
+- Performance boost @juliushaertl [#4452](https://github.com/nextcloud/deck/pull/4452)
+
+### Other
+- Dependency updates
+
+
 ## 1.8.0-beta.1
 ### Enhancements
 
