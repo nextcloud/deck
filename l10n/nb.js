@@ -288,7 +288,7 @@ OC.L10N.register(
     "Board {0} deleted" : "Tavle {0} slettet",
     "Only assigned cards" : "Kun tildelte kort",
     "No reminder" : "Ingen varsel",
-    "An error occurred" : "En feil oppstod",
+    "An error occurred" : "En feil oppsto",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Are du sikker på sletting av tavlen {title}? Handlingen vil slette all data i denne tavlen, inkludert arkiverte kort.",
     "Delete the board?" : "Slett tavlen?",
     "Loading filtered view" : "Laster filtrert visning",
