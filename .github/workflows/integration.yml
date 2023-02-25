@@ -107,7 +107,7 @@ jobs:
 
       - name: Query count
         if: ${{ matrix.databases == 'mysql' }}
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
