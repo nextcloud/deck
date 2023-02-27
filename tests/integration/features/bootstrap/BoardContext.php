@@ -220,6 +220,17 @@ class BoardContext implements Context {
 	}
 
 	/**
+	 * @Given /^get the card details$/
+	 */
+	public function getCard() {
+		$this->requestContext->sendJSONrequest('GET', '/index.php/apps/deck/cards/' . $this->card['id'], array_merge(
+			$this->card
+		));
+		$this->requestContext->getResponse()->getBody()->seek(0);
+		$this->card = json_decode((string)$this->getResponse()->getBody(), true);
+	}
+
+	/**
 	 * @Given /^set the card duedate to "([^"]*)"$/
 	 */
 	public function setTheCardDuedateTo($arg1) {
