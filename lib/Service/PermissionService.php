@@ -97,21 +97,26 @@ class PermissionService {
 	 * @param $boardId
 	 * @return bool|array
 	 */
-	public function getPermissions($boardId) {
-		if ($cached = $this->permissionCache->get($boardId)) {
+	public function getPermissions($boardId, ?string $userId = null) {
+		if ($userId === null) {
+			$userId = $this->userId;
+		}
+
+		$cacheKey = $boardId . '-' . $userId;
+		if ($cached = $this->permissionCache->get($cacheKey)) {
 			return $cached;
 		}
 
-		$owner = $this->userIsBoardOwner($boardId);
+		$owner = $this->userIsBoardOwner($boardId, $userId);
 		$acls = $this->aclMapper->findAll($boardId);
 		$permissions = [
-			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
-			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
-			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE),
-			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE))
-				&& (!$this->shareManager->sharingDisabledForUser($this->userId))
+			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ, $userId),
+			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT, $userId),
+			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE, $userId),
+			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE, $userId))
+				&& (!$this->shareManager->sharingDisabledForUser($userId))
 		];
-		$this->permissionCache->set($boardId, $permissions);
+		$this->permissionCache->set($cacheKey, $permissions);
 		return $permissions;
 	}
 
@@ -153,7 +158,7 @@ class PermissionService {
 			throw new NoPermissionException('Permission denied');
 		}
 
-		$permissions = $this->getPermissions($boardId);
+		$permissions = $this->getPermissions($boardId, $userId);
 		if ($permissions[$permission] === true) {
 			return true;
 		}
