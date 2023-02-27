@@ -150,13 +150,13 @@
 import ClickOutside from 'vue-click-outside'
 import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
-
+import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { showError, showUndo } from '@nextcloud/dialogs'
+
 import CardItem from '../cards/CardItem.vue'
 
-import '@nextcloud/dialogs/styles/toast.scss'
-import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
+import '@nextcloud/dialogs/dist/index.css'
 
 export default {
 	name: 'Stack',

@@ -89,13 +89,14 @@
 <script>
 import { NcModal, NcActions, NcActionButton, NcMultiselect } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
+import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
+import CardBulletedIcon from 'vue-material-design-icons/CardBulleted.vue'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showUndo } from '@nextcloud/dialogs'
-import '@nextcloud/dialogs/styles/toast.scss'
-import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
-import CardBulletedIcon from 'vue-material-design-icons/CardBulleted.vue'
+
+import '@nextcloud/dialogs/dist/index.css'
 
 export default {
 	name: 'CardMenu',
