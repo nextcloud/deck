@@ -39,6 +39,7 @@ use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
+use OCA\Deck\Model\CardDetails;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Db\BoardMapper;
@@ -155,7 +156,12 @@ class CardService {
 			$card->setAssignedUsers($cardAssignedUsers);
 		}
 
-		return $cards;
+		return array_map(
+			function (Card $card): CardDetails {
+				return new CardDetails($card);
+			},
+			$cards
+		);
 	}
 	public function fetchDeleted($boardId) {
 		$this->cardServiceValidator->check(compact('boardId'));

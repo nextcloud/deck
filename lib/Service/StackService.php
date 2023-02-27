@@ -99,15 +99,7 @@ class StackService {
 			return;
 		}
 
-		$this->cardService->enrichCards($cards);
-		$cards = array_map(
-			function (Card $card): CardDetails {
-				return new CardDetails($card);
-			},
-			$cards
-		);
-
-		$stack->setCards($cards);
+		$stack->setCards($this->cardService->enrichCards($cards));
 	}
 
 	private function enrichStacksWithCards($stacks, $since = -1) {

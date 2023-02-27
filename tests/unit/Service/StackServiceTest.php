@@ -33,6 +33,7 @@ use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Validators\StackServiceValidator;
 use OCP\EventDispatcher\IEventDispatcher;
 use Psr\Log\LoggerInterface;
@@ -121,6 +122,9 @@ class StackServiceTest extends TestCase {
 							foreach ($cards as $card) {
 								$card->setLabels($this->getLabels()[$card->getId()]);
 							}
+							return array_map(function ($card) {
+								return new CardDetails($card);
+							}, $cards);
 						}
 					)
 				);
