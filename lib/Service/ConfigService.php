@@ -193,7 +193,7 @@ class ConfigService {
 	}
 
 	public function getAttachmentFolder(string $userId = null): string {
-		if ($this->getUserId() === null) {
+		if ($userId === null && $this->getUserId() === null) {
 			throw new NoPermissionException('Must be logged in get the attachment folder');
 		}
 
