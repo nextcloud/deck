@@ -103,21 +103,23 @@ class PermissionService {
 			$userId = $this->userId;
 		}
 
-		if ($cached = $this->permissionCache->get($boardId)) {
+		$cacheKey = $boardId . '-' . $userId;
+		if ($cached = $this->permissionCache->get($cacheKey)) {
 			return $cached;
 		}
+
 
 		$board = $this->getBoard($boardId);
 		$owner = $this->userIsBoardOwner($boardId, $userId);
 		$acls = $board->getDeletedAt() === 0 ? $this->aclMapper->findAll($boardId) : [];
 		$permissions = [
-			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
-			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
-			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE),
-			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE))
-				&& (!$this->shareManager->sharingDisabledForUser($this->userId))
+			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ, $userId),
+			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT, $userId),
+			Acl::PERMISSION_MANAGE => $owner || $this->userCan($acls, Acl::PERMISSION_MANAGE, $userId),
+			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE, $userId))
+				&& (!$this->shareManager->sharingDisabledForUser($userId))
 		];
-		$this->permissionCache->set((string)$boardId, $permissions);
+		$this->permissionCache->set($cacheKey, $permissions);
 		return $permissions;
 	}
 
