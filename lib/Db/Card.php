@@ -159,16 +159,17 @@ class Card extends RelationalEntity {
 	}
 
 	public function getDaysUntilDue(): ?int {
-		$today = new DateTime();
-		$match_date = $this->getDuedate();
-		if ($match_date === null) {
+		if ($this->getDuedate() === null) {
 			return null;
 		}
 
+		$today = new DateTime();
 		$today->setTime(0, 0);
-		$match_date->setTime(0, 0);
 
-		$diff = $today->diff($match_date);
+		$matchDate = DateTime::createFromInterface($this->getDuedate());
+		$matchDate->setTime(0, 0);
+
+		$diff = $today->diff($matchDate);
 		return (int) $diff->format('%R%a'); // Extract days count in interval
 	}
 
