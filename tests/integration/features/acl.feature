@@ -90,3 +90,19 @@ Feature: acl
 		And the current user should not have "edit" permissions on the board
 		And the current user should have "share" permissions on the board
 		And the current user should not have "manage" permissions on the board
+
+		Scenario: Share a board multiple times
+		Given Logging in using web as "user0"
+		And creates a board named "Double shared board" with color "ff0000"
+		And shares the board with user "user1"
+		And shares the board with group "group1"
+		And creates a board named "Single shared board" with color "00ff00"
+		And shares the board with user "user1"
+		When Logging in using web as "user1"
+		And fetching the board list
+		Then the response should have a status code "200"
+		And the response should be a list of objects
+		And the response should contain an element with the properties
+			| property | value |
+			| title | Double shared board |
+
