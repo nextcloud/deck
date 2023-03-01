@@ -417,6 +417,7 @@ h5 {
 
 .app-sidebar__tab .description__text .text-menubar {
 	top: -10px !important;
+	z-index: 100;
 }
 
 .modal__card .description__text .text-menubar {
