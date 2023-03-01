@@ -117,7 +117,7 @@ class DeckWidget implements IAPIWidget, IButtonWidget, IIconWidget {
 		$nowTimestamp = (new Datetime())->getTimestamp();
 		$sinceTimestamp = $since !== null ? (new Datetime($since))->getTimestamp() : null;
 		$upcomingCards = array_filter($upcomingCards, static function (array $card) use ($nowTimestamp, $sinceTimestamp) {
-			if ($card['duedate']) {
+			if (isset($card['duedate'])) {
 				$ts = (new Datetime($card['duedate']))->getTimestamp();
 				return $ts > $nowTimestamp && ($sinceTimestamp === null || $ts > $sinceTimestamp);
 			}
