@@ -156,7 +156,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 			$userBoards = $this->findAllByUser($userId, null, null, $since, $includeArchived, $before, $term);
 			$groupBoards = $this->findAllByGroups($userId, $groups, null, null, $since, $includeArchived, $before, $term);
 			$circleBoards = $this->findAllByCircles($userId, null, null, $since, $includeArchived, $before, $term);
-			$allBoards = array_unique(array_merge($userBoards, $groupBoards, $circleBoards));
+			$allBoards = array_values(array_unique(array_merge($userBoards, $groupBoards, $circleBoards)));
 
 			// Could be moved outside
 			$acls = $this->aclMapper->findIn(array_map(function ($board) {
