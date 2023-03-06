@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.9.0-beta.2
+
+### Fixed
+
+- fix: Avoid mutating the due date when calculating days @juliushaertl [#4488](https://github.com/nextcloud/deck/pull/4488)
+- fix: Pass user id along to properly check permissions in background jobs @juliushaertl [#4485](https://github.com/nextcloud/deck/pull/4485)
+- fix: Use passed userid when getting attachment folder @juliushaertl [#4487](https://github.com/nextcloud/deck/pull/4487)
+- fix: Use proper z-index for text menubar @juliushaertl [#4490](https://github.com/nextcloud/deck/pull/4490)
+- fix(dashboard): Fix undefined array index @marcelklehr [#4492](https://github.com/nextcloud/deck/pull/4492)
+- fix: Always return sorted index array to make sure a json array is the result @juliushaertl [#4493](https://github.com/nextcloud/deck/pull/4493)
+- chore(CI): Adjust testing matrix for Nextcloud 26 on stable26 @nickvergessen [#4498](https://github.com/nextcloud/deck/pull/4498)
+
 
 ## 1.9.0-beta.1
 
