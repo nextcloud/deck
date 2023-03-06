@@ -23,6 +23,7 @@
 namespace OCA\Deck\Reference;
 
 use OCA\Deck\AppInfo\Application;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\BoardService;
 use OCP\Collaboration\Reference\IReference;
 use OCP\Collaboration\Reference\IReferenceProvider;
@@ -67,7 +68,12 @@ class BoardReferenceProvider implements IReferenceProvider {
 		if ($this->matchReference($referenceText)) {
 			$boardId = $this->getBoardId($referenceText);
 			if ($boardId !== null) {
-				$board = $this->boardService->find($boardId)->jsonSerialize();
+				try {
+					$board = $this->boardService->find($boardId)->jsonSerialize();
+				} catch (NoPermissionException $e) {
+					// Skip throwing if user has no permissions
+					return null;
+				}
 				$board = $this->sanitizeSerializedBoard($board);
 				/** @var IReference $reference */
 				$reference = new Reference($referenceText);
