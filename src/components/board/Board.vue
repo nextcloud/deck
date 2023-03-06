@@ -57,7 +57,10 @@
 					@drag-start="draggingStack = true"
 					@drag-end="draggingStack = false"
 					@drop="onDropStack">
-					<Draggable v-for="stack in stacksByBoard" :key="stack.id" data-click-closes-sidebar="true">
+					<Draggable v-for="stack in stacksByBoard"
+						:key="stack.id"
+						data-click-closes-sidebar="true"
+						class="stack-draggable-wrapper">
 						<Stack :stack="stack" :dragging="draggingStack" data-click-closes-sidebar="true" />
 					</Draggable>
 				</Container>
@@ -223,7 +226,7 @@ export default {
 		align-items: stretch;
 		height: 100%;
 
-		&:deep(.smooth-dnd-draggable-wrapper) {
+		&:deep(.stack-draggable-wrapper.smooth-dnd-draggable-wrapper) {
 			display: flex;
 			height: auto;
 
