@@ -27,6 +27,7 @@ use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Model\CardDetails;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\StackService;
@@ -121,9 +122,15 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 			$ids = $this->getBoardCardId($referenceText);
 			if ($ids !== null) {
 				[$boardId, $cardId] = $ids;
-				$card = $this->cardService->find((int) $cardId)->jsonSerialize();
-				$board = $this->boardService->find((int) $boardId)->jsonSerialize();
-				$stack = $this->stackService->find((int) $card['stackId'])->jsonSerialize();
+				try {
+					$card = $this->cardService->find((int) $cardId)->jsonSerialize();
+					$board = $this->boardService->find((int) $boardId)->jsonSerialize();
+					$stack = $this->stackService->find((int) $card['stackId'])->jsonSerialize();
+				} catch (NoPermissionException $e) {
+					// Skip throwing if user has no permissions
+					return null;
+				}
+
 
 				$card = $this->sanitizeSerializedCard($card);
 				$board = $this->sanitizeSerializedBoard($board);

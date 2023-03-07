@@ -27,6 +27,7 @@ use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Model\CardDetails;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\CommentService;
@@ -85,9 +86,14 @@ class CommentReferenceProvider implements IReferenceProvider {
 			if ($ids !== null) {
 				[$boardId, $cardId, $commentId] = $ids;
 
-				$card = $this->cardService->find($cardId)->jsonSerialize();
-				$board = $this->boardService->find($boardId)->jsonSerialize();
-				$stack = $this->stackService->find((int) $card['stackId'])->jsonSerialize();
+				try {
+					$card = $this->cardService->find($cardId)->jsonSerialize();
+					$board = $this->boardService->find($boardId)->jsonSerialize();
+					$stack = $this->stackService->find((int) $card['stackId'])->jsonSerialize();
+				} catch (NoPermissionException $e) {
+					// Skip throwing if user has no permissions
+					return null;
+				}
 				$card = $this->sanitizeSerializedCard($card);
 				$board = $this->sanitizeSerializedBoard($board);
 				$stack = $this->sanitizeSerializedStack($stack);
