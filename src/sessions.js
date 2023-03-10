@@ -143,7 +143,12 @@ export function createSession(boardId) {
 		async close() {
 			clearInterval(interval)
 			document.removeEventListener('visibilitychange', visibilitychangeListener)
-			await sessionApi.closeSession(boardId, await tokenPromise)
+			if (token) {
+				await sessionApi.closeSession(boardId, token)
+				tokenPromise = null
+				token = null
+				delete axios.defaults.headers['x-nc-deck-session']
+			}
 		},
 	}
 }
