@@ -76,7 +76,7 @@
     "{user} has mentioned you in a comment on {deck-card}." : "{user} 在 {deck-card} 的留言中提及您。",
     "The board \"%s\" has been shared with you by %s." : "佈告欄「%s」已由 %s 分享給您。",
     "{user} has shared {deck-board} with you." : "{user} 已與您分享 {deck-board}。",
-    "Deck board" : "看板佈告欄",
+    "Deck board" : "Deck 佈告欄",
     "Owned by %1$s" : "由 %1$s 擁有",
     "Deck boards, cards and comments" : "Deck 看板、卡片與評論",
     "From %1$s, in %2$s/%3$s, owned by %4$s" : "來自 %1$s，在 %2$s/%3$s，由 %4$s 擁有",
