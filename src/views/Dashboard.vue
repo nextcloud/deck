@@ -156,8 +156,9 @@ export default {
 	.duedate::v-deep {
 		.due {
 			margin: 0 0 0 10px;
-			padding: 2px 4px;
+			padding: 0px 4px;
 			font-size: 90%;
+			margin-bottom: 7px;
 		}
 	}
 
