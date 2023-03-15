@@ -1,32 +1,31 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.9.0-beta.2
+## 1.9.0
+
+### Added
+
+- Live updates on board collaboration using notify_push  @alangecker [#4273](https://github.com/nextcloud/deck/pull/4273)
+- Basic notify_push usage with session handling @alangecker [#3876](https://github.com/nextcloud/deck/pull/3876)
+- Use text as editor if available [#4399](https://github.com/nextcloud/deck/pull/4399)
+- Improve reference provider and add reference widgets @julien-nc [#4422](https://github.com/nextcloud/deck/pull/4422)
+- Tag creation from card view @juliushaertl [#4344](https://github.com/nextcloud/deck/pull/4344)
+- Optimize query performance with larger board or card count @[#4452](https://github.com/nextcloud/deck/pull/4452)
+- Export Board as CSV @david-loe [#3065](https://github.com/nextcloud/deck/pull/3065)
+
 
 ### Fixed
 
+- fix(cards): Fix card sizing by limiting too wide style rules [#4521](https://github.com/nextcloud/deck/pull/4521)
+- fix(references): Mute NoPermissionException as it is expected to happen for references [#4516](https://github.com/nextcloud/deck/pull/4516)
+- fix(API): Fix board API details parameter to work as expected [#4519](https://github.com/nextcloud/deck/pull/4519)
+- fix(sessions): Do not send close request without token [#4525](https://github.com/nextcloud/deck/pull/4525)
 - fix: Avoid mutating the due date when calculating days @juliushaertl [#4488](https://github.com/nextcloud/deck/pull/4488)
 - fix: Pass user id along to properly check permissions in background jobs @juliushaertl [#4485](https://github.com/nextcloud/deck/pull/4485)
 - fix: Use passed userid when getting attachment folder @juliushaertl [#4487](https://github.com/nextcloud/deck/pull/4487)
 - fix: Use proper z-index for text menubar @juliushaertl [#4490](https://github.com/nextcloud/deck/pull/4490)
 - fix(dashboard): Fix undefined array index @marcelklehr [#4492](https://github.com/nextcloud/deck/pull/4492)
 - fix: Always return sorted index array to make sure a json array is the result @juliushaertl [#4493](https://github.com/nextcloud/deck/pull/4493)
-- chore(CI): Adjust testing matrix for Nextcloud 26 on stable26 @nickvergessen [#4498](https://github.com/nextcloud/deck/pull/4498)
-
-
-## 1.9.0-beta.1
-
-### Added
-
-- Export Board @david-loe [#3065](https://github.com/nextcloud/deck/pull/3065)
-- basic notify_push usage with session handling @alangecker [#3876](https://github.com/nextcloud/deck/pull/3876)
-- feat(Description): Use text as editor if available @juliushaertl [#4399](https://github.com/nextcloud/deck/pull/4399)
-- Improve reference provider and add reference widgets @julien-nc [#4422](https://github.com/nextcloud/deck/pull/4422)
-- live updates 🎉  @alangecker [#4273](https://github.com/nextcloud/deck/pull/4273)
-- Tag creation from card view @juliushaertl [#4344](https://github.com/nextcloud/deck/pull/4344)
-
-### Fixed
-
 - Fix component renaming so that acl works on shares again @small1 [#4315](https://github.com/nextcloud/deck/pull/4315)
 - fix(Sidebar): Only close sidebar on v-click-outside for specific targets @juliushaertl [#4350](https://github.com/nextcloud/deck/pull/4350)
 - add basic e2e tests for stack title @shoetten [#4206](https://github.com/nextcloud/deck/pull/4206)
@@ -36,10 +35,6 @@ All notable changes to this project will be documented in this file.
 - perf: Register notifier and resource listener lazy @juliushaertl [#4439](https://github.com/nextcloud/deck/pull/4439)
 - perf: Lazy load dashboard components @juliushaertl [#4440](https://github.com/nextcloud/deck/pull/4440)
 - Optimise upcomming overview creation @Raudius [#3793](https://github.com/nextcloud/deck/pull/3793)
-- Performance boost @juliushaertl [#4452](https://github.com/nextcloud/deck/pull/4452)
-
-### Other
-- Dependency updates
 
 
 ## 1.8.0-beta.1
