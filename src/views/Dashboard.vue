@@ -52,7 +52,7 @@
 				<template #icon>
 					<PlusIcon :size="20" />
 				</template>
-				{{ t('deck', 'Add card') }}
+				{{ t('deck', 'New card') }}
 			</NcButton>
 			<CardCreateDialog v-if="showAddCardModal" @close="toggleAddCardModel" />
 		</div>
