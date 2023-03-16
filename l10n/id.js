@@ -212,7 +212,7 @@ OC.L10N.register(
     "Clone board" : "Pengklonaan papan",
     "Unarchive board" : "Memulihkan papan",
     "Archive board" : "Mengarsipkan papan",
-    "No notifications" : "Tidak ada notifikasi.",
+    "No notifications" : "Tidak ada notifikasi",
     "Delete board" : "Hapus papan",
     "Board {0} deleted" : "{0} papan terhapus",
     "An error occurred" : "Terjadi kesalahan",
