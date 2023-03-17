@@ -303,6 +303,7 @@ OC.L10N.register(
     "Click to expand comment" : "Click to expand comment",
     "No upcoming cards" : "No upcoming cards",
     "upcoming cards" : "upcoming cards",
+    "New card" : "New card",
     "Due on {date}" : "Due on {date}",
     "Link to a board" : "Link to a board",
     "Link to a card" : "Link to a card",

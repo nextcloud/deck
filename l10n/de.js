@@ -303,6 +303,7 @@ OC.L10N.register(
     "Click to expand comment" : "Klicken, um den Kommentar zu erweitern",
     "No upcoming cards" : "Keine anstehenden Karten",
     "upcoming cards" : "Anstehende Karten",
+    "New card" : "Neue Karte",
     "Due on {date}" : "Fällig am {date}",
     "Link to a board" : "Mit einem Board verknüpfen",
     "Link to a card" : "Mit einer Karte verknüpfen",
