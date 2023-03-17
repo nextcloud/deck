@@ -303,6 +303,7 @@ OC.L10N.register(
     "Click to expand comment" : "點擊展開評論",
     "No upcoming cards" : "沒有快將到期的卡片",
     "upcoming cards" : "快將到期的卡片",
+    "New card" : "新卡片",
     "Due on {date}" : "於 {date} 到期",
     "Link to a board" : "連結到面板",
     "Link to a card" : "連結到卡片",

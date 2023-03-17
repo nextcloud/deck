@@ -303,6 +303,7 @@ OC.L10N.register(
     "Click to expand comment" : "Кликните да проширите коментар",
     "No upcoming cards" : "Нема предстојећих картица",
     "upcoming cards" : "предстојеће картице",
+    "New card" : "Нова картица",
     "Due on {date}" : "Рок је {date}",
     "Link to a board" : "Веза ка табли",
     "Link to a card" : "Веза ка картици",
