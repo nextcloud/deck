@@ -303,6 +303,7 @@ OC.L10N.register(
     "Click to expand comment" : "Komentář rozbalíte kliknutím",
     "No upcoming cards" : "Žádné nadcházející karty",
     "upcoming cards" : "nadcházející karty",
+    "New card" : "Nová karta",
     "Due on {date}" : "Termín {date}",
     "Link to a board" : "Propojit s tabulí",
     "Link to a card" : "Propojit s kartou",
