@@ -303,6 +303,7 @@ OC.L10N.register(
     "Click to expand comment" : "Yorumu genişletmek için tıklayın",
     "No upcoming cards" : "Yaklaşan bir kart yok",
     "upcoming cards" : "yaklaşan kartlar",
+    "New card" : "Kart ekle",
     "Due on {date}" : "{date} tarihinde bitecek",
     "Link to a board" : "Bir pano ile ilişkilendir",
     "Link to a card" : "Bir kart ile ilişkilendir",
