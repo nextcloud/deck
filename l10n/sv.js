@@ -303,6 +303,7 @@ OC.L10N.register(
     "Click to expand comment" : "Klicka för att utöka kommentaren",
     "No upcoming cards" : "Inga kommande kort",
     "upcoming cards" : "kommande kort",
+    "New card" : "Nytt kort",
     "Due on {date}" : "Går ut {date}",
     "Link to a board" : "Länka till en tavla",
     "Link to a card" : "Länka till ett kort",

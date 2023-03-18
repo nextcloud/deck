@@ -220,7 +220,7 @@ OC.L10N.register(
     "Formatting help" : "Axuda de formatado",
     "Edit description" : "Editar a descrición",
     "View description" : "Ver a descrición",
-    "Add Attachment" : "Engadir o anexo",
+    "Add Attachment" : "Engadir un anexo",
     "Write a description …" : "Escriba unha descrición…",
     "Choose attachment" : "Escoller o anexo",
     "(group)" : "(grupo)",
