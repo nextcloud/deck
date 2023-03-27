@@ -71,12 +71,22 @@
 				</div>
 			</div>
 			<div v-else id="modal-inner">
-				<NcEmptyContent v-if="creating" icon="icon-loading">
-					{{ t('deck', 'Creating the new card …') }}
+				<NcEmptyContent v-if="creating">
+					<template #icon>
+						<NcLoadingIcon />
+					</template>
+					<template #title>
+						{{ t('deck', 'Creating the new card …') }}
+					</template>
 				</NcEmptyContent>
-				<NcEmptyContent v-else-if="created" icon="icon-checkmark">
-					{{ t('deck', 'Card "{card}" was added to "{board}"', { card: pendingTitle, board: selectedBoard.title }) }}
-					<template #desc>
+				<NcEmptyContent v-else-if="created">
+					<template #icon>
+						<CardPlusOutline />
+					</template>
+					<template #title>
+						{{ t('deck', 'Card "{card}" was added to "{board}"', { card: pendingTitle, board: selectedBoard.title }) }}
+					</template>
+					<template #action>
 						<button class="primary" @click="openNewCard">
 							{{ t('deck', 'Open card') }}
 						</button>
@@ -92,7 +102,8 @@
 
 <script>
 import { generateUrl } from '@nextcloud/router'
-import { NcModal, NcMultiselect, NcEmptyContent } from '@nextcloud/vue'
+import { NcModal, NcMultiselect, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import CardPlusOutline from 'vue-material-design-icons/CardPlusOutline.vue'
 import axios from '@nextcloud/axios'
 import { CardApi } from './services/CardApi.js'
 
@@ -104,6 +115,8 @@ export default {
 		NcEmptyContent,
 		NcModal,
 		NcMultiselect,
+		NcLoadingIcon,
+		CardPlusOutline,
 	},
 	props: {
 		title: {
@@ -203,6 +216,7 @@ export default {
 		max-width: 400px;
 		padding: 10px;
 		min-height: 200px;
+		margin: auto;
 	}
 
 	.multiselect-board, .multiselect-list, input, textarea {
