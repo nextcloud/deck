@@ -30,9 +30,14 @@
 				<h2>{{ t('deck', 'Loading board') }}</h2>
 				<p />
 			</div>
-			<NcEmptyContent v-else-if="isEmpty" key="empty" icon="icon-deck">
-				{{ t('deck', 'No lists available') }}
-				<template v-if="canManage" #desc>
+			<NcEmptyContent v-else-if="isEmpty" key="empty">
+				<template #icon>
+					<DeckIcon />
+				</template>
+				<template #title>
+					{{ t('deck', 'No lists available') }}
+				</template>
+				<template v-if="canManage" #action>
 					{{ t('deck', 'Create a new list to add cards to this board') }}
 					<form @submit.prevent="addNewStack()">
 						<input id="new-stack-input-main"
@@ -74,6 +79,7 @@
 import { Container, Draggable } from 'vue-smooth-dnd'
 import { mapState, mapGetters } from 'vuex'
 import Controls from '../Controls.vue'
+import DeckIcon from '../icons/DeckIcon.vue'
 import Stack from './Stack.vue'
 import { NcEmptyContent } from '@nextcloud/vue'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
@@ -85,6 +91,7 @@ export default {
 		GlobalSearchResults,
 		Controls,
 		Container,
+		DeckIcon,
 		Draggable,
 		Stack,
 		NcEmptyContent,
