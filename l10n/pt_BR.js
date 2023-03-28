@@ -303,6 +303,7 @@ OC.L10N.register(
     "Click to expand comment" : "Clique para expandir o comentário",
     "No upcoming cards" : "Não há mais cartões",
     "upcoming cards" : "próximos cartões",
+    "New card" : "New card",
     "Due on {date}" : "Vencimento em {date}",
     "Link to a board" : "Vincular a um painel",
     "Link to a card" : "Vincular a um cartão",
