@@ -30,8 +30,10 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\PermissionService;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\Files\NotFoundException;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\Share\IShare;
@@ -53,7 +55,11 @@ class ShareAPIHelper {
 
 	public function formatShare(IShare $share): array {
 		$result = [];
-		$card = $this->cardMapper->find($share->getSharedWith());
+		try {
+			$card = $this->cardMapper->find($share->getSharedWith());
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException($e->getMessage());
+		}
 		$boardId = $this->cardMapper->findBoardId($card->getId());
 		$result['share_with'] = $share->getSharedWith();
 		$result['share_with_displayname'] = $card->getTitle();
