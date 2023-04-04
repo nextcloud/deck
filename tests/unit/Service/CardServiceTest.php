@@ -34,6 +34,7 @@ use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\LabelMapper;
+use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
 use OCA\Deck\Validators\CardServiceValidator;
@@ -188,7 +189,10 @@ class CardServiceTest extends TestCase {
 		$cardExpected->setRelatedBoard($boardMock);
 		$cardExpected->setRelatedStack($stackMock);
 		$cardExpected->setLabels([]);
-		$this->assertEquals($cardExpected, $this->cardService->find(123));
+		$expected = new CardDetails($cardExpected);
+
+		$actual = $this->cardService->find(123);
+		$this->assertEquals($expected->jsonSerialize(), $actual->jsonSerialize());
 	}
 
 	public function testCreate() {

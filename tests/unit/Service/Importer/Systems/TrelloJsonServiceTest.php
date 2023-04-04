@@ -76,7 +76,7 @@ class TrelloJsonServiceTest extends \Test\TestCase {
 	}
 
 	public function testValidateUsersWithNotStringNextcloud() {
-		$this->expectErrorMessage('User on setting uidRelation is invalid');
+		$this->expectExceptionMessage('User on setting uidRelation is invalid');
 		$importService = $this->createMock(BoardImportService::class);
 		$importService
 			->method('getConfig')
@@ -92,7 +92,7 @@ class TrelloJsonServiceTest extends \Test\TestCase {
 	}
 
 	public function testValidateUsersWithNotFoundUser() {
-		$this->expectErrorMessage('User on setting uidRelation not found: nextcloud_user');
+		$this->expectExceptionMessage('User on setting uidRelation not found: nextcloud_user');
 		$importService = $this->createMock(BoardImportService::class);
 		$importService
 			->method('getConfig')
@@ -124,7 +124,7 @@ class TrelloJsonServiceTest extends \Test\TestCase {
 	}
 
 	public function testGetBoardWithNoName() {
-		$this->expectErrorMessage('Invalid name of board');
+		$this->expectExceptionMessage('Invalid name of board');
 		$importService = $this->createMock(BoardImportService::class);
 		$this->service->setImportService($importService);
 		$this->service->getBoard();
