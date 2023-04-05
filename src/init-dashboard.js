@@ -33,7 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	OCA.Dashboard.register('deck', async (el) => {
 		const { default: Vue } = await import('vue')
 		const { default: Vuex } = await import('vuex')
-		const { default: overview } = await import('./store/overview.js')
+		const { default: dashboard } = await import('./store/dashboard.js')
+
 		const { default: Dashboard } = await import('./views/Dashboard.vue')
 		Vue.prototype.t = t
 		Vue.prototype.n = n
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		const store = new Vuex.Store({
 			modules: {
-				overview,
+				dashboard,
 			},
 			strict: debug,
 		})
