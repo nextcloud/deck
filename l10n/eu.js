@@ -303,6 +303,7 @@ OC.L10N.register(
     "Click to expand comment" : "Egin klik iruzkina handitzeko",
     "No upcoming cards" : "Ez dago hurrengo txartelik",
     "upcoming cards" : "hurrengo txartelak",
+    "New card" : "Txartel berria",
     "Due on {date}" : "Iraungitze-data {date}",
     "Link to a board" : "Estekatu taula batera",
     "Link to a card" : "Estekatu txartel batera",
