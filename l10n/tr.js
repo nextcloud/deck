@@ -293,7 +293,7 @@ OC.L10N.register(
     "Delete the board?" : "Pano silinsin mi?",
     "Loading filtered view" : "Süzülmüş görünüm yükleniyor",
     "No due" : "Bitiş yok",
-    "Search for {searchQuery} in all boards" : "Tüm panolarda {searchQuery} için sonuçlar",
+    "Search for {searchQuery} in all boards" : "Tüm panolarda {searchQuery} araması için sonuçlar",
     "No results found" : "Herhangi bir sonuç bulunamadı",
     "Deck board {name}\n* Last modified on {lastMod}" : "{name} tahta panosu\n* Son değişiklik: {lastMod}",
     "{stack} in {board}" : "{stack} {board} panosunda",
