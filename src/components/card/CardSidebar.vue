@@ -147,10 +147,10 @@ export default {
 			return this.$store.getters.cardById(this.id)
 		},
 		subtitle() {
-			return t('deck', 'Modified') + ': ' + this.relativeDate(this.currentCard.lastModified * 1000) + ' ' + t('deck', 'Created') + ': ' + this.relativeDate(this.currentCard.createdAt * 1000)
+			return '<strong>' + t('deck', 'Created') + ' :</strong> ' + this.relativeDate(this.currentCard.createdAt * 1000) + '<br><strong>' + t('deck', 'Modified') + ' :</strong> ' + this.relativeDate(this.currentCard.lastModified * 1000)
 		},
 		subtitleTooltip() {
-			return t('deck', 'Modified') + ': ' + this.formatDate(this.currentCard.lastModified) + '\n' + t('deck', 'Created') + ': ' + this.formatDate(this.currentCard.createdAt)
+			return t('deck', 'Created') + ' : ' + this.formatDate(this.currentCard.createdAt) + '\n' + t('deck', 'Modified') + ' : ' + this.formatDate(this.currentCard.lastModified)
 		},
 		cardRichObject() {
 			return {
