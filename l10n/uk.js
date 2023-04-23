@@ -153,7 +153,7 @@ OC.L10N.register(
     "Description" : "Опис",
     "(Unsaved)" : "(Не збережено)",
     "(Saving…)" : "(Зберігання...)",
-    "Formatting help" : "Форматування довідки",
+    "Formatting help" : "Допомога",
     "Edit description" : "Редагувати опис",
     "View description" : "Переглянути опис",
     "Add Attachment" : "Долучити вкладення",
