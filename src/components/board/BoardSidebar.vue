@@ -27,31 +27,39 @@
 		@close="closeSidebar">
 		<NcAppSidebarTab id="sharing"
 			:order="0"
-			:name="t('deck', 'Sharing')"
-			icon="icon-shared">
+			:name="t('deck', 'Sharing')">
+			<template #icon>
+				<SharingIcon :size="20" />
+			</template>
 			<SharingTabSidebar :board="board" />
 		</NcAppSidebarTab>
 
 		<NcAppSidebarTab id="tags"
 			:order="1"
-			:name="t('deck', 'Tags')"
-			icon="icon-tag">
+			:name="t('deck', 'Tags')">
+			<template #icon>
+				<TagsIcon :size="20" />
+			</template>
 			<TagsTabSidebar :board="board" />
 		</NcAppSidebarTab>
 
 		<NcAppSidebarTab v-if="canEdit"
 			id="deleted"
 			:order="2"
-			:name="t('deck', 'Deleted items')"
-			icon="icon-delete">
+			:name="t('deck', 'Deleted items')">
+			<template #icon>
+				<TrashIcon :size="20" />
+			</template>
 			<DeletedTabSidebar :board="board" />
 		</NcAppSidebarTab>
 
 		<NcAppSidebarTab v-if="hasActivity"
 			id="activity"
 			:order="3"
-			:name="t('deck', 'Timeline')"
-			icon="icon-activity">
+			:name="t('deck', 'Timeline')">
+			<template #icon>
+				<ActivityIcon :size="20" />
+			</template>
 			<TimelineTabSidebar :board="board" />
 		</NcAppSidebarTab>
 	</NcAppSidebar>
@@ -64,7 +72,10 @@ import TagsTabSidebar from './TagsTabSidebar.vue'
 import DeletedTabSidebar from './DeletedTabSidebar.vue'
 import TimelineTabSidebar from './TimelineTabSidebar.vue'
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
-
+import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
+import SharingIcon from 'vue-material-design-icons/ShareVariant.vue'
+import TagsIcon from 'vue-material-design-icons/TagMultiple.vue'
+import TrashIcon from 'vue-material-design-icons/Delete.vue'
 const capabilities = window.OC.getCapabilities()
 
 export default {
@@ -76,6 +87,10 @@ export default {
 		TagsTabSidebar,
 		DeletedTabSidebar,
 		TimelineTabSidebar,
+		ActivityIcon,
+		SharingIcon,
+		TagsIcon,
+		TrashIcon,
 	},
 	props: {
 		id: {

@@ -50,32 +50,38 @@
 
 		<NcAppSidebarTab id="details"
 			:order="0"
-			:name="t('deck', 'Details')"
-			icon="icon-home">
+			:name="t('deck', 'Details')">
 			<CardSidebarTabDetails :card="currentCard" />
+			<template #icon>
+				<HomeIcon :size="20" />
+			</template>
 		</NcAppSidebarTab>
 
 		<NcAppSidebarTab id="attachments"
 			:order="1"
 			:name="t('deck', 'Attachments')">
 			<template #icon>
-				<AttachmentIcon :size="20" decorative />
+				<AttachmentIcon :size="20" />
 			</template>
 			<CardSidebarTabAttachments :card="currentCard" />
 		</NcAppSidebarTab>
 
 		<NcAppSidebarTab id="comments"
 			:order="2"
-			:name="t('deck', 'Comments')"
-			icon="icon-comment">
+			:name="t('deck', 'Comments')">
+			<template #icon>
+				<CommentIcon :size="20" />
+			</template>
 			<CardSidebarTabComments :card="currentCard" :tab-query="tabQuery" />
 		</NcAppSidebarTab>
 
 		<NcAppSidebarTab v-if="hasActivity"
 			id="timeline"
 			:order="3"
-			:name="t('deck', 'Timeline')"
-			icon="icon-activity">
+			:name="t('deck', 'Timeline')">
+			<template #icon>
+				<ActivityIcon :size="20" />
+			</template>
 			<CardSidebarTabActivity :card="currentCard" />
 		</NcAppSidebarTab>
 	</NcAppSidebar>
@@ -92,6 +98,9 @@ import CardSidebarTabActivity from './CardSidebarTabActivity.vue'
 import relativeDate from '../../mixins/relativeDate.js'
 import moment from '@nextcloud/moment'
 import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
+import HomeIcon from 'vue-material-design-icons/Home.vue'
+import CommentIcon from 'vue-material-design-icons/Comment.vue'
+import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 
 import { showError } from '@nextcloud/dialogs'
 import { getLocale } from '@nextcloud/l10n'
@@ -108,7 +117,10 @@ export default {
 		CardSidebarTabComments,
 		CardSidebarTabActivity,
 		CardSidebarTabDetails,
+		ActivityIcon,
 		AttachmentIcon,
+		CommentIcon,
+		HomeIcon,
 	},
 	mixins: [relativeDate],
 	props: {
