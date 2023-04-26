@@ -19,7 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { registerWidget } from '@nextcloud/vue-richtext'
+import { registerWidget } from '@nextcloud/vue/dist/Components/NcRichText.js'
 import { Tooltip } from '@nextcloud/vue'
 import Vue from 'vue'
 import CardReferenceWidget from './views/CardReferenceWidget.vue'

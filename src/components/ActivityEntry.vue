@@ -24,7 +24,7 @@
 	<div v-if="activity" class="activity">
 		<div class="activity--header">
 			<img :src="activity.icon" class="activity--icon">
-			<RichText class="activity--subject" :text="message.subject" :arguments="message.parameters" />
+			<NcRichText class="activity--subject" :text="message.subject" :arguments="message.parameters" />
 			<div class="activity--timestamp">
 				{{ relativeDate(activity.datetime) }}
 			</div>
@@ -35,8 +35,7 @@
 </template>
 
 <script>
-import { RichText } from '@nextcloud/vue-richtext'
-import { NcUserBubble } from '@nextcloud/vue'
+import { NcRichText, NcUserBubble } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import DOMPurify from 'dompurify'
 import relativeDate from '../mixins/relativeDate.js'
@@ -61,7 +60,7 @@ const InternalLink = {
 export default {
 	name: 'ActivityEntry',
 	components: {
-		RichText,
+		NcRichText,
 	},
 	mixins: [relativeDate],
 	props: {
