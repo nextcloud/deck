@@ -12,7 +12,7 @@
 					</NcActionButton>
 				</NcActions>
 			</div>
-			<RichText class="comment--content"
+			<NcRichText class="comment--content"
 				:text="richText(comment)"
 				:arguments="richArgs(comment)"
 				:autolink="true" />
@@ -54,7 +54,7 @@
 		</div>
 		<CommentItem v-if="comment.replyTo" :reply="true" :comment="comment.replyTo" />
 		<div v-show="!edit" ref="richTextElement">
-			<RichText class="comment--content"
+			<NcRichText class="comment--content"
 				:text="richText(comment)"
 				:arguments="richArgs(comment)"
 				:autolink="true" />
@@ -64,8 +64,7 @@
 </template>
 
 <script>
-import { NcAvatar, NcActions, NcActionButton, NcUserBubble } from '@nextcloud/vue'
-import { RichText } from '@nextcloud/vue-richtext'
+import { NcAvatar, NcActions, NcActionButton, NcRichText, NcUserBubble } from '@nextcloud/vue'
 import CommentForm from './CommentForm.vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import md5 from 'blueimp-md5'
@@ -93,7 +92,7 @@ export default {
 		NcActions,
 		NcActionButton,
 		CommentForm,
-		RichText,
+		NcRichText,
 		ReplyIcon,
 	},
 	mixins: [relativeDate],

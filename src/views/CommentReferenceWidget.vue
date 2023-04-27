@@ -67,7 +67,7 @@
 					'description': true,
 					'short-description': shortDescription,
 				}">
-				<RichText v-tooltip.top="{ content: shortDescription ? t('deck', 'Click to expand description') : undefined }"
+				<NcRichText v-tooltip.top="{ content: shortDescription ? t('deck', 'Click to expand description') : undefined }"
 					:text="card.description"
 					:use-markdown="true"
 					@click.native="shortDescription = !shortDescription" />
@@ -84,7 +84,7 @@
 				'comment': true,
 				'short-comment': shortComment,
 			}">
-				<RichText v-tooltip.top="{ content: shortComment ? t('deck', 'Click to expand comment') : undefined }"
+				<NcRichText v-tooltip.top="{ content: shortComment ? t('deck', 'Click to expand comment') : undefined }"
 					:text="commentMessageText"
 					:use-markdown="false"
 					@click.native="shortComment = !shortComment" />
@@ -103,7 +103,7 @@ import DeckIcon from '../components/icons/DeckIcon.vue'
 import AvatarList from '../components/cards/AvatarList.vue'
 import labelStyle from '../mixins/labelStyle.js'
 
-import { RichText } from '@nextcloud/vue-richtext'
+import { NcRichText } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 
@@ -116,7 +116,7 @@ export default {
 		CalendarBlankIcon,
 		TextIcon,
 		CardBulletedOutlineIcon,
-		RichText,
+		NcRichText,
 		CommentProcessingOutlineIcon,
 	},
 
