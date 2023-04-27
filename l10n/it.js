@@ -175,6 +175,7 @@ OC.L10N.register(
     "Owner" : "Proprietario",
     "Delete" : "Elimina",
     "Failed to create share with {displayName}" : "Creazione della condivisione con {displayName} non riuscita",
+    "Transfer the board." : "Trasferisci la bacheca.",
     "Transfer" : "Trasferisci",
     "Archive all cards" : "Archivia tutte le schede",
     "Delete list" : "Elimina elenco",
@@ -290,6 +291,8 @@ OC.L10N.register(
     "Share with a Deck card" : "Condividi con una scheda di Deck",
     "Share {file} with a Deck card" : "Condividi {file} con una scheda di Deck",
     "Share" : "Condividi",
+    "Transfer the board for {user} successfully" : "Trasferimento della bacheca per {user} avvenuta con successo.",
+    "Failed to transfer the board for {user}" : "Trasferimento della bacheca per {user} fallito",
     "Add a new list" : "Aggiungi un nuovo elenco",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Sei sicuro di voler eliminare la lavagna {title}? Questo eliminerà tutti i dati di questa lavagna?"
 },
