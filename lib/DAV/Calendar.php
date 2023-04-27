@@ -59,20 +59,21 @@ class Calendar extends ExternalCalendar {
 	}
 
 	public function getACL() {
+		// the calendar should always have the read and the write-properties permissions
+		// write-properties is needed to allow the user to toggle the visibility of shared deck calendars
 		$acl = [
 			[
 				'privilege' => '{DAV:}read',
 				'principal' => $this->getOwner(),
 				'protected' => true,
-			]
-		];
-		if ($this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_MANAGE)) {
-			$acl[] = [
+			],
+			[
 				'privilege' => '{DAV:}write-properties',
 				'principal' => $this->getOwner(),
 				'protected' => true,
-			];
-		}
+			]
+		];
+
 		return $acl;
 	}
 
@@ -187,12 +188,18 @@ class Calendar extends ExternalCalendar {
 			foreach ($properties as $key => $value) {
 				switch ($key) {
 					case '{DAV:}displayname':
+						if (!$this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_MANAGE)) {
+							throw new Forbidden('no permission to change the displayname');
+						}
 						if (mb_strpos($value, 'Deck: ') === 0) {
 							$value = mb_substr($value, strlen('Deck: '));
 						}
 						$this->board->setTitle($value);
 						break;
 					case '{http://apple.com/ns/ical/}calendar-color':
+						if (!$this->backend->checkBoardPermission($this->board->getId(), Acl::PERMISSION_MANAGE)) {
+							throw new Forbidden('no permission to change the calendar color');
+						}
 						$color = substr($value, 1, 6);
 						if (!preg_match('/[a-f0-9]{6}/i', $color)) {
 							throw new InvalidDataException('No valid color provided');
