@@ -102,6 +102,7 @@
 					:formatter="format"
 					:disabled="saving || !canEdit"
 					:shortcuts="shortcuts"
+					:append-to-body="true"
 					confirm />
 				<NcActions v-if="canEdit">
 					<NcActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">
