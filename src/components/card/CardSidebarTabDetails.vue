@@ -102,6 +102,7 @@
 					:formatter="format"
 					:disabled="saving || !canEdit"
 					:shortcuts="shortcuts"
+					:append-to-body="true"
 					confirm />
 				<NcActions v-if="canEdit">
 					<NcActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">
@@ -437,5 +438,10 @@ export default {
 .multiselect.multiselect--active::v-deep .multiselect__tags-wrap {
 	z-index: 0;
 }
-
+</style>
+<style>
+.mx-datepicker-main.mx-datepicker-popup {
+	/* above the modal */
+	z-index: 9999;
+}
 </style>
