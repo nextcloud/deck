@@ -186,28 +186,28 @@ class DeckProvider implements IProvider {
 
 	private function getIcon(IEvent $event) {
 		$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('deck', 'deck-dark.svg')));
-		if (strpos($event->getSubject(), '_update') !== false) {
+		if (str_contains($event->getSubject(), '_update')) {
 			$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('files', 'change.svg')));
 		}
-		if (strpos($event->getSubject(), '_create') !== false) {
+		if (str_contains($event->getSubject(), '_create')) {
 			$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('files', 'add-color.svg')));
 		}
-		if (strpos($event->getSubject(), '_delete') !== false) {
+		if (str_contains($event->getSubject(), '_delete')) {
 			$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('files', 'delete-color.svg')));
 		}
-		if (strpos($event->getSubject(), 'archive') !== false) {
+		if (str_contains($event->getSubject(), 'archive')) {
 			$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('deck', 'archive.svg')));
 		}
-		if (strpos($event->getSubject(), '_restore') !== false) {
+		if (str_contains($event->getSubject(), '_restore')) {
 			$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('core', 'actions/history.svg')));
 		}
-		if (strpos($event->getSubject(), 'attachment_') !== false) {
+		if (str_contains($event->getSubject(), 'attachment_')) {
 			$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('core', 'places/files.svg')));
 		}
-		if (strpos($event->getSubject(), 'comment_') !== false) {
+		if (str_contains($event->getSubject(), 'comment_')) {
 			$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('core', 'actions/comment.svg')));
 		}
-		if (strpos($event->getSubject(), 'label_') !== false) {
+		if (str_contains($event->getSubject(), 'label_')) {
 			$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('core', 'actions/tag.svg')));
 		}
 		return $event;
