@@ -21,7 +21,7 @@ class ResourceAdditionalScriptsListener implements IEventListener {
 			return;
 		}
 
-		if (strpos($this->request->getPathInfo(), '/call/') === 0) {
+		if (str_starts_with($this->request->getPathInfo(), '/call/')) {
 			// Talk integration has its own entrypoint which already includes collections handling
 			return;
 		}

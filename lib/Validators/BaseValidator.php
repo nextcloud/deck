@@ -55,7 +55,7 @@ abstract class BaseValidator {
 					// The format for specifying validation rules and parameters follows an
 					// easy {rule}:{parameters} formatting convention. For instance the
 					// rule "Max:3" states that the value may only be three letters.
-					if (strpos($rule, ':') !== false) {
+					if (str_contains($rule, ':')) {
 						[$rule, $parameter] = explode(':', $rule, 2);
 						if (!$this->{$rule}($value, $parameter)) {
 							throw new BadRequestException(

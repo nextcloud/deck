@@ -109,7 +109,7 @@ class ExceptionMiddleware extends Middleware {
 			], $exception->getStatus());
 		}
 
-		if (strpos(get_class($controller), 'OCA\\Deck\\Controller\\') === 0) {
+		if (str_starts_with(get_class($controller), 'OCA\\Deck\\Controller\\')) {
 			$response = [
 				'status' => 500,
 				'message' => $exceptionMessage,
