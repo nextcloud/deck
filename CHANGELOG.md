@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.8.4
+
+### Fixed
+
+- fix: Use passed userid when getting attachment folder [#4540](https://github.com/nextcloud/deck/pull/4540)
+- fix: Adapt NcEmptyContent usages to new slots [#4563](https://github.com/nextcloud/deck/pull/4563)
+- Gracefully handle not found card for a share [#4568](https://github.com/nextcloud/deck/pull/4568)
+- allow user to toggle visibility of the calendar for a deck board [#4626](https://github.com/nextcloud/deck/pull/4626)
+- fix: Append datetime picker to body to avoid cut off [#4645](https://github.com/nextcloud/deck/pull/4645)
+- Fix : Overlapping expiry dates on tags [#4536](https://github.com/nextcloud/deck/pull/4536)
+- Better display of card dates (creation and change dates) [#4620](https://github.com/nextcloud/deck/pull/4620)
+- Dependency updates
+
 ## 1.8.3
 
 ### Fixed
