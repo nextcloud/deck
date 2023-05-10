@@ -442,6 +442,6 @@ export default {
 <style>
 .mx-datepicker-main.mx-datepicker-popup {
 	/* above the modal */
-	z-index: 9999;
+	z-index: 9999 !important;
 }
 </style>
