@@ -1,6 +1,34 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.10.0-beta.1
+
+### Added
+
+- Compatibility with Nextcloud 27
+
+### Fixed
+
+- fix(references): Mute NoPermissionException as it is expected to happen for references @juliushaertl [#4514](https://github.com/nextcloud/deck/pull/4514)
+- fix(cards): Fix card sizing by limiting too wide style rules @juliushaertl [#4512](https://github.com/nextcloud/deck/pull/4512)
+- fix: Adapt NcEmptyContent usages to new slots @juliushaertl [#4561](https://github.com/nextcloud/deck/pull/4561)
+- Gracefully handle not found card for a share @mejo- [#4566](https://github.com/nextcloud/deck/pull/4566)
+- Prevent tag itself being edit button if user lacks permissions @joshtrichards [#4574](https://github.com/nextcloud/deck/pull/4574)
+- chore: Remove unused @nextcloud/vue-dashboard @juliushaertl [#4586](https://github.com/nextcloud/deck/pull/4586)
+- Update Description.vue: Fixes the issue of hidden text by menu bar @pschopen [#4617](https://github.com/nextcloud/deck/pull/4617)
+- allow user to toggle visibility of the calendar for a deck board @schiessle [#4622](https://github.com/nextcloud/deck/pull/4622)
+- fix: Append datetime picker to body to avoid cut off @juliushaertl [#4643](https://github.com/nextcloud/deck/pull/4643)
+- fix: Bring back overdue column by removing faulty condition @juliushaertl [#4660](https://github.com/nextcloud/deck/pull/4660)
+- fix(sessions): Do not send close request without token @juliushaertl [#4510](https://github.com/nextcloud/deck/pull/4510)
+- tests(integration): Add test for multiple board shares to the same user @juliushaertl [#4494](https://github.com/nextcloud/deck/pull/4494)
+- fix(API): Fix board API details parameter to work as expected @nickvergessen [#4518](https://github.com/nextcloud/deck/pull/4518)
+- Fix : Overlapping expiry dates on tags @Jerome-Herbinet [#4535](https://github.com/nextcloud/deck/pull/4535)
+- Fix consistency of a "Create card" wording with its equivalent for Notes ("New card") @Jerome-Herbinet [#4534](https://github.com/nextcloud/deck/pull/4534)
+- tests(integration): Add integration tests for due dates @juliushaertl [#4489](https://github.com/nextcloud/deck/pull/4489)
+- Better display of card dates (creation and change dates) @Jerome-Herbinet [#4604](https://github.com/nextcloud/deck/pull/4604)
+- Refactors lib\Activity\DeckProvider.php to improve code readability. @fsamapoor [#4648](https://github.com/nextcloud/deck/pull/4648)
+- Converts 'strpos()' calls to improve code readability. @fsamapoor [#4657](https://github.com/nextcloud/deck/pull/4657)
+
 
 ## 1.9.0-beta.1
 
