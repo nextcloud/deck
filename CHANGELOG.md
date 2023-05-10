@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.9.1
+
+### Fixed
+
+- Gracefully handle not found card for a share [#4567](https://github.com/nextcloud/deck/pull/4567)
+- fix: Adapt NcEmptyContent usages to new slots [#4562](https://github.com/nextcloud/deck/pull/4562)
+- allow user to toggle visibility of the calendar for a deck board [#4625](https://github.com/nextcloud/deck/pull/4625)
+- fix: Append datetime picker to body to avoid cut off [#4644](https://github.com/nextcloud/deck/pull/4644)
+- chore: Remove unused @nextcloud/vue-dashboard @juliushaertl [#4650](https://github.com/nextcloud/deck/pull/4650)
+- fix: Bring back overdue column by removing faulty condition [#4662](https://github.com/nextcloud/deck/pull/4662)
+- Fix : Overlapping expiry dates on tags [#4537](https://github.com/nextcloud/deck/pull/4537)
+- Better display of card dates (creation and change dates) [#4619](https://github.com/nextcloud/deck/pull/4619)
+- Update dependencies
+
 ## 1.9.0
 
 ### Added
