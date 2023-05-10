@@ -53,7 +53,7 @@ class AttachmentController extends Controller {
 	 * @throws \OCA\Deck\NotFoundException
 	 */
 	public function display($cardId, $attachmentId) {
-		if (strpos($attachmentId, ':') === false) {
+		if (!str_contains($attachmentId, ':')) {
 			$type = 'deck_file';
 		} else {
 			[$type, $attachmentId] = explode(':', $attachmentId);
@@ -76,7 +76,7 @@ class AttachmentController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function update($cardId, $attachmentId) {
-		if (strpos($attachmentId, ':') === false) {
+		if (!str_contains($attachmentId, ':')) {
 			$type = 'deck_file';
 		} else {
 			[$type, $attachmentId] = explode(':', $attachmentId);
@@ -88,7 +88,7 @@ class AttachmentController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function delete($cardId, $attachmentId) {
-		if (strpos($attachmentId, ':') === false) {
+		if (!str_contains($attachmentId, ':')) {
 			$type = 'deck_file';
 		} else {
 			[$type, $attachmentId] = explode(':', $attachmentId);
@@ -100,7 +100,7 @@ class AttachmentController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function restore($cardId, $attachmentId) {
-		if (strpos($attachmentId, ':') === false) {
+		if (!str_contains($attachmentId, ':')) {
 			$type = 'deck_file';
 		} else {
 			[$type, $attachmentId] = explode(':', $attachmentId);

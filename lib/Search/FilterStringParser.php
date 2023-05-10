@@ -41,7 +41,7 @@ class FilterStringParser {
 	public function __construct(IL10N $l10n) {
 		$this->l10n = $l10n;
 	}
-	
+
 	public function parse(?string $filter): SearchQuery {
 		$query = new SearchQuery();
 		if (empty($filter)) {
@@ -71,7 +71,7 @@ class FilterStringParser {
 	}
 
 	private function parseFilterToken(SearchQuery $query, string $token): bool {
-		if (strpos($token, ':') === false) {
+		if (!str_contains($token, ':')) {
 			return false;
 		}
 

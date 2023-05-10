@@ -68,7 +68,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 		$reflection = new \ReflectionClass($this);
 		$json = [];
 		foreach ($properties as $property => $value) {
-			if (strpos($property, '_') !== 0 && $reflection->hasProperty($property)) {
+			if (!str_starts_with($property, '_') && $reflection->hasProperty($property)) {
 				$propertyReflection = $reflection->getProperty($property);
 				if (!$propertyReflection->isPrivate() && !in_array($property, $this->_resolvedProperties, true)) {
 					$json[$property] = $this->getter($property);
@@ -129,7 +129,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 
 	public function __call(string $methodName, array $args) {
 		$attr = lcfirst(substr($methodName, 7));
-		if (array_key_exists($attr, $this->_resolvedProperties) && strpos($methodName, 'resolve') === 0) {
+		if (array_key_exists($attr, $this->_resolvedProperties) && str_starts_with($methodName, 'resolve')) {
 			if ($this->_resolvedProperties[$attr] !== null) {
 				return $this->_resolvedProperties[$attr];
 			}
@@ -137,7 +137,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 		}
 
 		$attr = lcfirst(substr($methodName, 3));
-		if (array_key_exists($attr, $this->_resolvedProperties) && strpos($methodName, 'set') === 0) {
+		if (array_key_exists($attr, $this->_resolvedProperties) && str_starts_with($methodName, 'set')) {
 			if (!is_scalar($args[0])) {
 				$args[0] = $args[0]['primaryKey'];
 			}

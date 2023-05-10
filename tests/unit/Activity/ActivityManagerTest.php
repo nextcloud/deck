@@ -98,7 +98,7 @@ class ActivityManagerTest extends TestCase {
 			->willReturn($this->l10n);
 
 		foreach ($managerClass->getConstants() as $constant => $value) {
-			if (strpos($constant, 'SUBJECT') === 0) {
+			if (str_starts_with($constant, 'SUBJECT')) {
 				$format = $this->activityManager->getActivityFormat('cz', $value, [], false);
 				if ($format !== '') {
 					$this->assertStringContainsString('{user}', $format);
