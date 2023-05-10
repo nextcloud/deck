@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.7.4
+
+### Fixed
+
+- Gracefully handle not found card for a share [#4569](https://github.com/nextcloud/deck/pull/4569)
+- fix: Use passed userid when getting attachment folder [#4541](https://github.com/nextcloud/deck/pull/4541)
+- fix: Append datetime picker to body to avoid cut off [#4646](https://github.com/nextcloud/deck/pull/4646)
+- Permanently delete deck cards marked as deleted after 5 min in a cron job [#4302](https://github.com/nextcloud/deck/pull/4302)
+- Fix : Overlapping expiry dates on tags [#4538](https://github.com/nextcloud/deck/pull/4538)
+- Update dependencies
+
 ## 1.7.3
 
 ### Fixed
