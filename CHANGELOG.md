@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.9.2
+
+### Fixed
+
+- fix: Properly overwrite z-index of datepicker above modal [#4665](https://github.com/nextcloud/deck/pull/4665)
+
+
 ## 1.9.1
 
 ### Fixed
