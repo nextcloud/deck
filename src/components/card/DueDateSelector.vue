@@ -4,19 +4,34 @@
 			<Calendar :size="20" />
 		</div>
 		<div class="duedate-selector">
-			<NcDatetimePicker v-model="duedate"
+			<NcDateTimePickerNative v-if="duedate"
+				id="card-duedate-picker"
+				v-model="duedate"
 				:placeholder="t('deck', 'Set a due date')"
-				type="datetime"
-				:minute-step="5"
-				:show-second="false"
-				:lang="lang"
-				:formatter="format"
-				:disabled="!canEdit"
-				:shortcuts="shortcuts"
-				:append-to-body="true"
-				confirm />
-			<NcActions v-if="canEdit">
-				<NcActionButton v-if="duedate" icon="icon-delete" @click="removeDue()">
+				:hide-label="true"
+				type="datetime-local" />
+			<NcActions v-if="canEdit" :menu-title="!duedate ? t('deck', 'Add due date') : null" type="tertiary">
+				<template v-if="!duedate" #icon>
+					<Plus :size="20" />
+				</template>
+				<NcActionButton v-for="shortcut in reminderOptions"
+					:key="shortcut.key"
+					close-after-click
+					@click="() => selectShortcut(shortcut)">
+					{{ shortcut.label }}
+				</NcActionButton>
+				<NcActionSeparator />
+
+				<NcActionButton v-if="!duedate" close-after-click @click="initDate">
+					<template #icon>
+						<Plus :size="20" />
+					</template>
+					{{ t('deck', 'Choose a date') }}
+				</NcActionButton>
+				<NcActionButton v-else
+					icon="icon-delete"
+					close-after-click
+					@click="removeDue">
 					{{ t('deck', 'Remove due date') }}
 				</NcActionButton>
 			</NcActions>
@@ -26,17 +41,21 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { NcActionButton, NcActions, NcDatetimePicker } from '@nextcloud/vue'
+import { NcActionButton, NcActions, NcActionSeparator, NcDateTimePickerNative } from '@nextcloud/vue'
 import { getDayNamesMin, getFirstDay, getMonthNamesShort } from '@nextcloud/l10n'
+import Plus from 'vue-material-design-icons/Plus.vue'
 import Calendar from 'vue-material-design-icons/Calendar.vue'
+import moment from '@nextcloud/moment'
 
 export default defineComponent({
 	name: 'DueDateSelector',
 	components: {
+		Plus,
 		Calendar,
 		NcActions,
 		NcActionButton,
-		NcDatetimePicker,
+		NcActionSeparator,
+		NcDateTimePickerNative,
 	},
 	props: {
 		card: {
@@ -64,63 +83,80 @@ export default defineComponent({
 				stringify: this.stringify,
 				parse: this.parse,
 			},
-			shortcuts: [
-				{
-					text: t('deck', 'Today'),
-					onClick() {
-						const date = new Date()
-						date.setDate(date.getDate())
-						date.setHours(23)
-						date.setMinutes(59)
-						return date
-					},
-				},
-				{
-					text: t('deck', 'Tomorrow'),
-					onClick() {
-						const date = new Date()
-						date.setDate(date.getDate() + 1)
-						date.setHours(23)
-						date.setMinutes(59)
-						return date
-					},
-				},
-				{
-					text: t('deck', 'Next week'),
-					onClick() {
-						const date = new Date()
-						date.setDate(date.getDate() + 7)
-						date.setHours(23)
-						date.setMinutes(59)
-						return date
-					},
-				},
-				{
-					text: t('deck', 'Next month'),
-					onClick() {
-						const date = new Date()
-						date.setDate(date.getDate() + 30)
-						date.setHours(23)
-						date.setMinutes(59)
-						return date
-					},
-				},
-			],
 		}
 	},
 	computed: {
 		duedate: {
 			get() {
-				return this.card.duedate ? new Date(this.card.duedate) : null
+				return this.card?.duedate ? new Date(this.card.duedate) : null
 			},
 			set(val) {
-				this.$emit('change', val)
+				this.$emit('change', val ? new Date(val) : null)
 			},
+		},
+
+		reminderOptions() {
+			const currentDateTime = moment()
+			// Same day 18:00 PM (or hidden)
+			const laterTodayTime = (currentDateTime.hour() < 18)
+				? moment().hour(18)
+				: null
+			// Tomorrow 08:00 AM
+			const tomorrowTime = moment().add(1, 'days').hour(8)
+			// Saturday 08:00 AM (or hidden)
+			const thisWeekendTime = (currentDateTime.day() !== 6 && currentDateTime.day() !== 0)
+				? moment().day(6).hour(8)
+				: null
+			// Next Monday 08:00 AM
+			const nextWeekTime = moment().add(1, 'weeks').day(1).hour(8)
+			return [
+				{
+					key: 'laterToday',
+					timestamp: this.getTimestamp(laterTodayTime),
+					label: t('deck', 'Later today – {timeLocale}', { timeLocale: laterTodayTime?.format('LT') }),
+					ariaLabel: t('deck', 'Set due date for later today'),
+				},
+				{
+					key: 'tomorrow',
+					timestamp: this.getTimestamp(tomorrowTime),
+					label: t('deck', 'Tomorrow – {timeLocale}', { timeLocale: tomorrowTime?.format('ddd LT') }),
+					ariaLabel: t('deck', 'Set due date for tomorrow'),
+				},
+				{
+					key: 'thisWeekend',
+					timestamp: this.getTimestamp(thisWeekendTime),
+					label: t('deck', 'This weekend – {timeLocale}', { timeLocale: thisWeekendTime?.format('ddd LT') }),
+					ariaLabel: t('deck', 'Set due date for this weekend'),
+				},
+				{
+					key: 'nextWeek',
+					timestamp: this.getTimestamp(nextWeekTime),
+					label: t('deck', 'Next week – {timeLocale}', { timeLocale: nextWeekTime?.format('ddd LT') }),
+					ariaLabel: t('deck', 'Set due date for next week'),
+				},
+			].filter(option => option.timestamp !== null)
 		},
 	},
 	methods: {
+		initDate() {
+			if (this.duedate === null) {
+				// We initialize empty dates with a time once clicked to make picking a day easier
+				const now = new Date()
+				now.setDate(now.getDate() + 1)
+				now.setHours(8)
+				now.setMinutes(0)
+				now.setMilliseconds(0)
+				this.duedate = now
+			}
+		},
 		removeDue() {
 			this.duedate = null
+		},
+		selectShortcut(shortcut) {
+			this.duedate = shortcut.timestamp
+		},
+		getTimestamp(momentObject) {
+			return momentObject?.minute(0).second(0).millisecond(0).toDate() || null
 		},
 	},
 })
