@@ -110,7 +110,7 @@ export default {
 	}
 
 	li.selected {
-		border: 1px solid var(--color-primary);
+		border: 1px solid var(--color-primary-element);
 	}
 
 	.board-bullet {
