@@ -30,24 +30,7 @@ Deck is a kanban style organization tool aimed at personal planning and project 
 
 ## Installation/Update
 
-This app is supposed to work on the two latest Nextcloud versions.
-
-### Install latest release
-
-You can download and install the latest release from the [Nextcloud app store](https://apps.nextcloud.com/apps/deck)
-
-### Install from git
-
-If you want to run the latest development version from git source, you need to clone the repo to your apps folder:
-
-```
-git clone https://github.com/nextcloud/deck.git
-cd deck
-make install-deps
-make build
-```
-
-Please make sure you have installed the following dependencies: `make, which, tar, npm, curl, composer`
+The app can be installed through the app store within Nextcloud. You can also download the latest release from the [release page](https://github.com/nextcloud-releases/deck/releases).
 
 ## Performance limitations
 
@@ -62,41 +45,46 @@ Improvements on Nextcloud server and Deck itself will improve the situation.
 
 ## Developing
 
-### Nextcloud environment
+There are multiple ways to develop on Deck. As you will need a Nextcloud server running, the individual options are described below.
 
-You need to setup a [development environment](https://docs.nextcloud.com/server/latest/developer_manual//getting_started/devenv.html) of the current nextcloud version. You can also alternatively install & run the [nextcloud docker container](https://github.com/juliushaertl/nextcloud-docker-dev).
+### General build instructions
+
+General build instructions for the app itself are the same for all options.
+
+To build you will need to have [Node.js](https://nodejs.org/en/) and [Composer](https://getcomposer.org/) installed.
+
+- Install PHP dependencies: `composer install --no-dev`
+- Install JS dependencies: `npm ci`
+- Build JavaScript for the frontend
+    - Development build `npm run dev`
+    - Watch for changes `npm run watch`
+    - Production build `npm run build`
+
+### GitHub Codespaces / VS Code devcontainer
+
+- Open code spaces or the repository in VS Code to start the dev container
+- The container will automatically install all dependencies and build the app
+- Nextcloud will be installed from the master development branch and be available on a port exposed by the container
+
+### Docker: Simple app development container
+
+- Fork the app 
+- Clone the repository: `git clone https://github.com/nextcloud/deck.git`
+- Go into deck directory: `cd deck`
+- Build the app as described in the general build instructions
+- Run Nextcloud development container and mount the apps source code into it
+
+```
+docker run --rm \
+    -p 8080:80 \
+    -v ~/path/to/app:/var/www/html/apps-extra/app \
+    ghcr.io/juliushaertl/nextcloud-dev-php80:latest
+```
+
+### Full Nextcloud development environment
+
+You need to setup a [development environment](https://docs.nextcloud.com/server/latest/developer_manual//getting_started/devenv.html) of the current Nextcloud version. You can also alternatively install & run the [nextcloud docker container](https://github.com/juliushaertl/nextcloud-docker-dev).
 After the finished installation, you can clone the deck project directly in the `/[nextcloud-docker-dev-dir]/workspace/server/apps/` folder. 
-
-### PHP
-
-Nothing to prepare, just dig into the code.
-
-### JavaScript
-
-This requires at least Node 16 and npm 7 to be installed.
-
-Deck requires running a `make build-js` to install npm dependencies and build the JavaScript code using webpack. While developing you can also use `make watch` to rebuild everytime the code changes.
-
-#### Hot reloading
-
-Enable debug mode in your config.php `'debug' => true,`
-
-Without SSL:
-```
-npx webpack-dev-server --config webpack.hot.js \
-    --public localhost:3000 \
-    --output-public-path 'http://localhost:3000/js/'
-```
-
-With SSL:
-```
-npx webpack-dev-server --config webpack.dev.js --https \
-	--cert ~/repos/nextcloud/nc-dev/data/ssl/nextcloud.local.crt \
-    --key ~/repos/nextcloud/nc-dev/data/ssl/nextcloud.local.key \
-    --public nextcloud.local:3000 \
-    --output-public-path 'https://nextcloud.local:3000/js/'
-```
-
 
 ### Running tests
 You can use the provided Makefile to run all tests by using:
