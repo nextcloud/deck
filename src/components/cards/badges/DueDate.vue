@@ -90,7 +90,7 @@ export default {
 
 		&.overdue {
 			background-color: var(--color-error);
-			color: var(--color-primary-text);
+			color: var(--color-primary-element-text);
 			opacity: .7;
 			padding: 3px 4px;
 		}

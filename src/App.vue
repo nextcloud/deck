@@ -167,7 +167,7 @@ export default {
 	}
 
 	.avatardiv.circles {
-		background: var(--color-primary);
+		background: var(--color-primary-element);
 	}
 
 	.icon-circles {

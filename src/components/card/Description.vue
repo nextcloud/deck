@@ -392,7 +392,7 @@ h5 {
 .CodeMirror-selected,
 .CodeMirror-line::selection, .CodeMirror-line>span::selection, .CodeMirror-line>span>span::selection {
 	background: var(--color-primary-element) !important;
-	color: var(--color-primary-text) !important;
+	color: var(--color-primary-element-text) !important;
 }
 
 .editor-preview,

@@ -136,7 +136,7 @@ export default {
 
 	.dragover {
 		position: absolute;
-		background: var(--color-primary-light);
+		background: var(--color-primary-element-light);
 		z-index: 11;
 		display: flex;
 		border-radius: var(--border-radius);
