@@ -5,6 +5,7 @@ const StyleLintPlugin = require('stylelint-webpack-plugin')
 
 const buildMode = process.env.NODE_ENV
 const isDev = buildMode === 'development'
+const isDevServer = process.env.WEBPACK_DEV_SERVER;
 
 webpackConfig.entry = {
 	...webpackConfig.entry,
@@ -15,12 +16,16 @@ webpackConfig.entry = {
 	'card-reference': path.join(__dirname, 'src', 'init-card-reference.js'),
 }
 
-webpackConfig.stats = {
-	context: path.resolve(__dirname, 'src'),
-	assets: true,
-	entrypoints: true,
-	chunks: true,
-	modules: true,
+if (isDevServer) {
+	webpackConfig.output.publicPath = 'http://127.0.0.1:3000/'
+} else {
+	webpackConfig.stats = {
+		context: path.resolve(__dirname, 'src'),
+		assets: true,
+		entrypoints: true,
+		chunks: true,
+		modules: true,
+	}
 }
 
 webpackConfig.plugins.push(
