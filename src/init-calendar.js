@@ -23,6 +23,8 @@
 import { subscribe } from '@nextcloud/event-bus'
 import { generateUrl } from '@nextcloud/router'
 
+import './shared-init.js'
+
 subscribe('calendar:handle-todo-click', ({ calendarId, taskId }) => {
 	const deckAppPrefix = 'app-generated--deck--board-'
 	if (calendarId.startsWith(deckAppPrefix)) {
