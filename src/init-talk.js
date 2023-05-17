@@ -27,10 +27,7 @@ import CardCreateDialog from './CardCreateDialog.vue'
 import { buildSelector } from './helpers/selector.js'
 import './init-collections.js'
 
-// eslint-disable-next-line
-__webpack_nonce__ = btoa(OC.requestToken);
-// eslint-disable-next-line
-__webpack_public_path__ = OC.linkTo('deck', 'js/');
+import './shared-init.js'
 
 Vue.prototype.t = t
 Vue.prototype.n = n

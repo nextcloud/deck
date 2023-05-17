@@ -1,9 +1,9 @@
 const webpackConfig = require('@nextcloud/webpack-vue-config')
+const webpack = require('webpack')
 const path = require('path')
 
 const buildMode = process.env.NODE_ENV
-const isDev = buildMode === 'development'
-const isDevServer = process.env.WEBPACK_DEV_SERVER;
+const isDevServer = process.env.WEBPACK_SERVE
 
 webpackConfig.entry = {
 	...webpackConfig.entry,
@@ -16,6 +16,11 @@ webpackConfig.entry = {
 
 if (isDevServer) {
 	webpackConfig.output.publicPath = 'http://127.0.0.1:3000/'
+	webpackConfig.plugins.push(
+		new webpack.DefinePlugin({
+			'process.env.WEBPACK_SERVE': true,
+		})
+	)
 } else {
 	webpackConfig.stats = {
 		context: path.resolve(__dirname, 'src'),
