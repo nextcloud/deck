@@ -28,6 +28,8 @@ import CommentReferenceWidget from './views/CommentReferenceWidget.vue'
 
 import { translate, translatePlural } from '@nextcloud/l10n'
 
+import './shared-init.js'
+
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
 Vue.prototype.OC = window.OC

@@ -22,12 +22,9 @@
 
 import './css/dashboard.scss'
 
-const debug = process.env.NODE_ENV !== 'production'
+import './shared-init.js'
 
-// eslint-disable-next-line
-__webpack_nonce__ = btoa(OC.requestToken);
-// eslint-disable-next-line
-__webpack_public_path__ = OC.linkTo('deck', 'js/');
+const debug = process.env.NODE_ENV !== 'production'
 
 document.addEventListener('DOMContentLoaded', () => {
 	OCA.Dashboard.register('deck', async (el) => {

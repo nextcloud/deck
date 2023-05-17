@@ -26,10 +26,7 @@ import './../css/collections.css'
 import FileSharingPicker from './views/FileSharingPicker.js'
 import { buildSelector } from './helpers/selector.js'
 
-// eslint-disable-next-line
-__webpack_nonce__ = btoa(OC.requestToken);
-// eslint-disable-next-line
-__webpack_public_path__ = OC.linkTo('deck', 'js/');
+import './shared-init.js'
 
 Vue.prototype.t = t
 Vue.prototype.n = n
