@@ -60,6 +60,14 @@ To build you will need to have [Node.js](https://nodejs.org/en/) and [Composer](
     - Watch for changes `npm run watch`
     - Production build `npm run build`
 
+### Faster frontend developing with HMR
+
+You can enable HMR (Hot module replacement) to avoid page reloads when working on the frontend:
+
+1. ☑️ Install and enable [`hmr_enabler` app](https://github.com/nextcloud/hmr_enabler)
+2. 🏁 Run `npm run serve`
+3. 🌍 Open the normal Nextcloud server URL (not the URL given by above command)
+
 ### GitHub Codespaces / VS Code devcontainer
 
 - Open code spaces or the repository in VS Code to start the dev container

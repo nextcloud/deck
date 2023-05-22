@@ -25,23 +25,17 @@ import router from './router.js'
 import store from './store/main.js'
 import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
-import { generateFilePath } from '@nextcloud/router'
 import { showError } from '@nextcloud/dialogs'
 import { subscribe } from '@nextcloud/event-bus'
 import { Tooltip } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
+import './shared-init.js'
 import './models/index.js'
 import './sessions.js'
 
 // the server snap.js conflicts with vertical scrolling so we disable it
 document.body.setAttribute('data-snap-ignore', 'true')
 
-// eslint-disable-next-line
-__webpack_nonce__ = btoa(OC.requestToken)
-if (!process.env.HOT) {
-	// eslint-disable-next-line
-	__webpack_public_path__ = generateFilePath('deck', '', 'js/')
-}
 sync(store, router)
 
 Vue.prototype.t = translate
