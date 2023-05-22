@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.10.0-beta.2
+
+### Fixed
+
+- fix: Properly overwrite z-index of datepicker above modal @juliushaertl [#4664](https://github.com/nextcloud/deck/pull/4664)
+- Use the color-primary-element* variables @szaimen [#4673](https://github.com/nextcloud/deck/pull/4673)
+- Dependency updates
+
+### Other
+
+- feat: Add devcontainer and update dev docs @juliushaertl [#4683](https://github.com/nextcloud/deck/pull/4683)
+- chore(CI): Adjust testing matrix for Nextcloud 27 on stable27 @nickvergessen [#4691](https://github.com/nextcloud/deck/pull/4691)
+
 ## 1.10.0-beta.1
 
 ### Added
