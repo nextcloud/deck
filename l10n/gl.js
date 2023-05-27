@@ -277,7 +277,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Compartir cunha tarxeta Deck",
     "Share {file} with a Deck card" : "Compartir {file} cunha tarxeta Deck",
     "Share" : "Compartir",
-    "Add a new list" : "Engadir unha lista nova",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Confirma que quere eliminar o taboleiro {title}? Isto eliminará todos os datos deste taboleiro."
+    "Add a new list" : "Engadir unha lista nova"
 },
 "nplurals=2; plural=(n != 1);");

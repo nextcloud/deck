@@ -173,7 +173,7 @@ OC.L10N.register(
     "Can manage" : "可以管理",
     "Owner" : "所有者",
     "Delete" : "删除",
-    "Failed to create share with {displayName}" : "用 {displayName} 创建分享失败",
+    "Failed to create share with {displayName}" : "用{displayName}创建分享失败",
     "Transfer" : "传输",
     "Archive all cards" : "归档所有卡片",
     "Delete list" : "删除列表",
@@ -285,13 +285,12 @@ OC.L10N.register(
     "Create a card" : "创建一张卡片",
     "Message from {author} in {conversationName}" : "{conversationName} 会话中来自 {author} 的消息",
     "Something went wrong" : "发生了错误",
-    "Failed to upload {name}" : "未能上传 {name}",
+    "Failed to upload {name}" : "未能上传{name}",
     "Maximum file size of {size} exceeded" : "文件容量已超过 {size} 的上限",
     "Error creating the share" : "创建分享出错",
     "Share with a Deck card" : "分享给一张看板卡片",
     "Share {file} with a Deck card" : "将{file}分享给一张看板卡片",
     "Share" : "分享",
-    "Add a new list" : "添加新列表",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "你确定你要删除 {title}面板吗？面板内所有数据都将因此被删除。"
+    "Add a new list" : "添加新列表"
 },
 "nplurals=1; plural=0;");

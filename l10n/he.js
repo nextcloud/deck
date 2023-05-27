@@ -268,7 +268,6 @@ OC.L10N.register(
     "Share with a Deck card" : "שיתוף עם כרטיס חפיסה",
     "Share {file} with a Deck card" : "שיתוף {file} עם כרטיס חפיסה",
     "Share" : "שיתוף",
-    "Add a new list" : "הוסף רשימה חדשה",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "למחוק את הלוח {title}? פעולה זו תמחק את כל הנתונים של הלוח הזה."
+    "Add a new list" : "הוסף רשימה חדשה"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");
