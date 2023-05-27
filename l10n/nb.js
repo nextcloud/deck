@@ -315,10 +315,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Del med et Stokk-kort",
     "Share {file} with a Deck card" : "Del {file} med et Stokk-kort",
     "Share" : "Del",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Er du sikker på at du vil overføre tavlen {title} for {user}?",
-    "Transfer the board for {user} successfully" : "Tavlen ble overført for {user}",
-    "Failed to transfer the board for {user}" : "Klarte ikke overføre tavlen for {user}",
-    "Add a new list" : "Legg til en ny stabel",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Er du sikker på sletting av tavlen {title}? Dette vil slette alt innholdet på denne tavlen."
+    "Add a new list" : "Legg til en ny stabel"
 },
 "nplurals=2; plural=(n != 1);");

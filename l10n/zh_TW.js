@@ -316,10 +316,6 @@ OC.L10N.register(
     "Share with a Deck card" : "與 Deck 卡片分享",
     "Share {file} with a Deck card" : "與 Deck 卡片分享 {file}",
     "Share" : "分享",
-    "Are you sure you want to transfer the board {title} for {user}?" : "您想要轉移 {user} 的看板 {title} 嗎？",
-    "Transfer the board for {user} successfully" : "轉移 {user} 的看板成功",
-    "Failed to transfer the board for {user}" : "轉移 {user} 的看板失敗",
-    "Add a new list" : "新增列表",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "您確定要刪除佈告欄 {title} 嗎？這將會刪除所有此佈告欄的資料。"
+    "Add a new list" : "新增列表"
 },
 "nplurals=1; plural=0;");

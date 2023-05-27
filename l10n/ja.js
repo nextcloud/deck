@@ -295,10 +295,6 @@ OC.L10N.register(
     "Share with a Deck card" : "デッキのカードで共有する",
     "Share {file} with a Deck card" : "{file}をデッキのカードで共有する",
     "Share" : "共有",
-    "Are you sure you want to transfer the board {title} for {user}?" : "本当に、 {user} のボード {title} を転送してもよろしいですか？",
-    "Transfer the board for {user} successfully" : "{user} のボードの転送に成功しました",
-    "Failed to transfer the board for {user}" : "{user} のボードの転送に失敗しました",
-    "Add a new list" : "新しいリストを追加",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "このボード{title}を削除してもよろしいですか？この操作はこのボードのデータすべてを削除します。"
+    "Add a new list" : "新しいリストを追加"
 },
 "nplurals=1; plural=0;");
