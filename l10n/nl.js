@@ -309,9 +309,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Delen met een Deck kaart",
     "Share {file} with a Deck card" : "Delen {file} met een Deck kaart",
     "Share" : "Delen",
-    "Transfer the board for {user} successfully" : "Overdracht van het bord voor {user} is gelukt",
-    "Failed to transfer the board for {user}" : "Niet gelukt om het bord over te dragen voor {user}",
-    "Add a new list" : "Voeg een nieuwe lijst toe",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Weet je zeker dat je bord {title} met wilt verwijderen? Dit verwijderd alle informatie van dit bord."
+    "Add a new list" : "Voeg een nieuwe lijst toe"
 },
 "nplurals=2; plural=(n != 1);");

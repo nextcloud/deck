@@ -282,7 +282,6 @@
     "Share with a Deck card" : "مشاركة مع بطاقة Deck",
     "Share {file} with a Deck card" : "مشاركة الملف {file} مع بطاقة Deck",
     "Share" : "مشاركة ",
-    "Add a new list" : "اضف قائمة جديدة",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "هل انت متأكد تريد مسح اللوح {title}؟ هذا سوف يمسح جميع بيانات هذا اللوح."
+    "Add a new list" : "اضف قائمة جديدة"
 },"pluralForm" :"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;"
 }

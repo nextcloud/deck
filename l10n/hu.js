@@ -316,10 +316,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Megosztás kártyával",
     "Share {file} with a Deck card" : "A(z) {file} megosztása egy kártyával",
     "Share" : "Megosztás",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Biztos, hogy átadja a(z) {board} tábla tulajdonjogát {user} számára?",
-    "Transfer the board for {user} successfully" : "A tábla átadása {user} számára sikeres",
-    "Failed to transfer the board for {user}" : "A tábla átadása {user} számára sikertelen",
-    "Add a new list" : "Új lista hozzáadása",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Biztos, hogy törli a(z) {title} táblát? Ez törölni fogja a tábla összes adatát."
+    "Add a new list" : "Új lista hozzáadása"
 },
 "nplurals=2; plural=(n != 1);");

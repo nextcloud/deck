@@ -124,7 +124,6 @@ OC.L10N.register(
     "Delete the board?" : "보드를 삭제합니까?",
     "No results found" : "결과 없음",
     "Something went wrong" : "잘못된 접근",
-    "Share" : "공유",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "정말로 보드 {title}을 지우시겠습니까? 보드의 모든 데이터가 삭제됩니다."
+    "Share" : "공유"
 },
 "nplurals=1; plural=0;");

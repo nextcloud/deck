@@ -316,10 +316,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Compartilhar com um cartão Deck",
     "Share {file} with a Deck card" : "Compartilhar {file} com um cartão Deck",
     "Share" : "Compartilhar",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Deseja realmente transferir o painel {title} para {user}?",
-    "Transfer the board for {user} successfully" : "O painel foi transferido para {user} com sucesso",
-    "Failed to transfer the board for {user}" : "Não foi possível transferir o painel para {user}",
-    "Add a new list" : "Adicionar nova lista",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Deseja realmente excluir o painel {title}? Isto excluirá todos os dados deste painel."
+    "Add a new list" : "Adicionar nova lista"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

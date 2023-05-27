@@ -316,10 +316,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Sdílet s kartou aplikace Deck",
     "Share {file} with a Deck card" : "Sdílet {file} s kartou aplikace Deck",
     "Share" : "Sdílet",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Opravdu chcete předat vlastnictví tabule {title} uživateli {user}?",
-    "Transfer the board for {user} successfully" : "Předání vlastnictví tabule uživateli {user} úspěšné",
-    "Failed to transfer the board for {user}" : "Nepodařilo se předat vlastnictví tabule uživateli {user}",
-    "Add a new list" : "Přidat nový sloupec",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Opravdu chcete tabuly {title} smazat? Toto smaže veškerá data této tabule."
+    "Add a new list" : "Přidat nový sloupec"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

@@ -291,7 +291,6 @@ OC.L10N.register(
     "Share with a Deck card" : "分享给一张看板卡片",
     "Share {file} with a Deck card" : "将{file}分享给一张看板卡片",
     "Share" : "分享",
-    "Add a new list" : "添加新列表",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "你确定你要删除 {title}面板吗？面板内所有数据都将因此被删除。"
+    "Add a new list" : "添加新列表"
 },
 "nplurals=1; plural=0;");

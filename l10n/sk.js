@@ -307,10 +307,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Zdieľať s kartou Deck",
     "Share {file} with a Deck card" : "Zdieľať {file} s kartou Deck",
     "Share" : "Zdieľať",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Naozaj chcete preniesť nástenku {title} na užívateľa {user}?",
-    "Transfer the board for {user} successfully" : "Presun nástenky na  {user} bolo úspešné",
-    "Failed to transfer the board for {user}" : "Chyba pri presune nástenky na {user}",
-    "Add a new list" : "Pridať nový zoznam",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Naozaj chcete chcete vymazať nástenku {title}? Toto zmaže všetky údaje o tejto nástenke."
+    "Add a new list" : "Pridať nový zoznam"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

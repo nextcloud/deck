@@ -314,10 +314,6 @@
     "Share with a Deck card" : "Опубликовать в приложении Карточки",
     "Share {file} with a Deck card" : "Опубликовать «{file}» в приложении Карточки",
     "Share" : "Опубликовать",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Вы уверены, что хотите передать доску {title} для {user}?",
-    "Transfer the board for {user} successfully" : "Передача доски для {user} выполнена успешно",
-    "Failed to transfer the board for {user}" : "Не удалось передать доску для {user}",
-    "Add a new list" : "Создать список",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Подтвердите удаление доски «{title}»; это действие приведёт к удалению также все данных, принадлежащих этой доске."
+    "Add a new list" : "Создать список"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }
