@@ -230,7 +230,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Del med et Deck kort",
     "Share {file} with a Deck card" : "Del {file} med et Deck kort",
     "Share" : "Del",
-    "Add a new list" : "Tilføj en ny kolonne",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Er du sikker på du vil slette tavlen {title}? Dette vil slette alt data på tavlen."
+    "Add a new list" : "Tilføj en ny kolonne"
 },
 "nplurals=2; plural=(n != 1);");

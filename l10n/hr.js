@@ -286,7 +286,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Dijeli s Deck karticom",
     "Share {file} with a Deck card" : "Dijeli {file} s Deck karticom",
     "Share" : "Dijeli",
-    "Add a new list" : "Dodaj novi popis",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Jeste li sigurni da želite izbrisati ploču {title}? Time ćete izbrisati sve podatke ploče."
+    "Add a new list" : "Dodaj novi popis"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

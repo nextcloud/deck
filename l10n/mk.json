@@ -269,7 +269,6 @@
     "Share with a Deck card" : "Споделено со Deck картица",
     "Share {file} with a Deck card" : "Сподели {file} со Deck картица",
     "Share" : "Сподели",
-    "Add a new list" : "Додади нова листа",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Дали сте сигурени дека сакате да ја избришете оваа табла {title}? Ова ќе ги избрише и сите податоци на таблата."
+    "Add a new list" : "Додади нова листа"
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"
 }

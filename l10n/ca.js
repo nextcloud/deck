@@ -316,10 +316,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Compartir amb una targeta de Deck",
     "Share {file} with a Deck card" : "Compartir {file} amb una targeta de Deck",
     "Share" : "Compartir",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Esteu segur que voleu transferir el tauler {title} per a {user}?",
-    "Transfer the board for {user} successfully" : "Transfereix el tauler per a {user} correctament",
-    "Failed to transfer the board for {user}" : "No s'ha pogut transferir el tauler per a {user}",
-    "Add a new list" : "Afegeix una llista nova",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Esteu segur que voleu suprimir el tauler {title}? Això eliminarà totes les dades d'aquest tauler."
+    "Add a new list" : "Afegeix una llista nova"
 },
 "nplurals=2; plural=(n != 1);");

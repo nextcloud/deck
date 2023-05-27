@@ -316,10 +316,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Споделяне с Deck карта",
     "Share {file} with a Deck card" : "Споделяне {file} с Deck карта",
     "Share" : "Споделяне",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Сигурни ли сте че искате да прехвърлите таблото {title} на {user}?",
-    "Transfer the board for {user} successfully" : "Успешно прехвърляне на таблото към {user} ",
-    "Failed to transfer the board for {user}" : "Неуспешно прехвърляне на таблото към {user}",
-    "Add a new list" : "Добавяне на нов списък",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Сигурни ли сте, че искате да изтриете таблото {title}? Това ще изтрие всички данни на това табло."
+    "Add a new list" : "Добавяне на нов списък"
 },
 "nplurals=2; plural=(n != 1);");

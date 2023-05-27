@@ -285,7 +285,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Cumpartzi cun un'ischeda deck",
     "Share {file} with a Deck card" : "Cumpartzi {file} cun un'ischeda de deck",
     "Share" : "Cumpartzi",
-    "Add a new list" : "Agiunghe un'elencu nou",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Ses seguru chi cheres cantzellare sa lavagna {title}? Custa operatzione at a cantzellare totu is datos de custa lavagna."
+    "Add a new list" : "Agiunghe un'elencu nou"
 },
 "nplurals=2; plural=(n != 1);");

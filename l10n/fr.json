@@ -314,10 +314,6 @@
     "Share with a Deck card" : "Partager avec Deck en tant que carte",
     "Share {file} with a Deck card" : "Partager {file} avec Deck en tant que carte",
     "Share" : "Partager",
-    "Are you sure you want to transfer the board {title} for {user}?" : "Êtes-vous sûr de vouloir transférer le tableau {title} pour {user} ?",
-    "Transfer the board for {user} successfully" : "Transfert du tableau pour {user} avec succès",
-    "Failed to transfer the board for {user}" : "Échec du transfert du tableau pour {user}",
-    "Add a new list" : "Ajouter une nouvelle liste",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board." : "Êtes-vous certain de vouloir supprimer le tableau {title} ? Cela supprimera l'ensemble des données de ce tableau."
+    "Add a new list" : "Ajouter une nouvelle liste"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
