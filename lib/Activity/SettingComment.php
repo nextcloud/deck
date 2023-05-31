@@ -38,7 +38,7 @@ class SettingComment extends Setting {
 	 * @since 11.0.0
 	 */
 	public function getName(): string {
-		return $this->l->t('A <strong>comment</strong> was created on a card');
+		return $this->l->t('A <strong>comment</strong> was created on a Deck card');
 	}
 
 	/**
