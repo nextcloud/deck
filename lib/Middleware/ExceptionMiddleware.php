@@ -24,16 +24,16 @@
 namespace OCA\Deck\Middleware;
 
 use OCA\Deck\Controller\PageController;
-use OCA\Deck\StatusException;
 use OCA\Deck\Exceptions\ConflictException;
+use OCA\Deck\StatusException;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Middleware;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Middleware;
 use OCP\AppFramework\OCS\OCSException;
 use OCP\AppFramework\OCSController;
+use OCP\IConfig;
 use OCP\ILogger;
 use OCP\IRequest;
-use OCP\IConfig;
 
 class ExceptionMiddleware extends Middleware {
 

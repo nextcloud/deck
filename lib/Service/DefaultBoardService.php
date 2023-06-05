@@ -24,10 +24,10 @@
 namespace OCA\Deck\Service;
 
 use OCA\Deck\AppInfo\Application;
+use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\BoardMapper;
 use OCP\IConfig;
 use OCP\IL10N;
-use OCA\Deck\BadRequestException;
 use OCP\PreConditionNotMetException;
 
 class DefaultBoardService {
@@ -39,13 +39,13 @@ class DefaultBoardService {
 	private $l10n;
 
 	public function __construct(
-			IL10N $l10n,
-			BoardMapper $boardMapper,
-			BoardService $boardService,
-			StackService $stackService,
-			CardService $cardService,
-			IConfig $config
-			) {
+		IL10N $l10n,
+		BoardMapper $boardMapper,
+		BoardService $boardService,
+		StackService $stackService,
+		CardService $cardService,
+		IConfig $config
+	) {
 		$this->boardService = $boardService;
 		$this->stackService = $stackService;
 		$this->cardService = $cardService;

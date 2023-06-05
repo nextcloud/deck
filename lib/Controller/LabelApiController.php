@@ -23,11 +23,11 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Service\LabelService;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
-use OCA\Deck\Service\LabelService;
 
 /**
  * Class BoardApiController

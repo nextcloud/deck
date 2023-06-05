@@ -39,8 +39,8 @@ use OCP\Activity\IManager;
 use OCP\IL10N;
 use OCP\IUser;
 use OCP\L10N\IFactory;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ActivityManagerTest extends TestCase {
 

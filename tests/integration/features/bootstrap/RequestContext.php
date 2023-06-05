@@ -1,11 +1,11 @@
 <?php
 
+use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use PHPUnit\Framework\Assert;
-use Behat\Behat\Context\Context;
 use Psr\Http\Message\ResponseInterface;
 
 require_once __DIR__ . '/../../vendor/autoload.php';

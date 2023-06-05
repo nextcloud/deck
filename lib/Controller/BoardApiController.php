@@ -25,13 +25,13 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Board;
+use OCA\Deck\Service\BoardService;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\IRequest;
 
-use OCA\Deck\Service\BoardService;
+use OCP\IRequest;
 use Sabre\HTTP\Util;
 
 /**

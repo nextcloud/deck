@@ -22,13 +22,13 @@
  */
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\Card;
 use OCA\Deck\Service\AssignmentService;
+use OCA\Deck\Service\CardService;
 use OCP\AppFramework\Http;
+
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
-
-use OCA\Deck\Db\Card;
-use OCA\Deck\Service\CardService;
 
 class CardApiControllerTest extends \Test\TestCase {
 	private $controller;

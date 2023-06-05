@@ -23,8 +23,8 @@
 
 namespace OCA\Deck\Db;
 
-use OCP\ICacheFactory;
 use OCP\ICache;
+use OCP\ICacheFactory;
 use OCP\IDBConnection;
 use OCP\IRequest;
 

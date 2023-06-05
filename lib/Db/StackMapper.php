@@ -28,9 +28,9 @@ use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Cache\CappedMemoryCache;
 use OCP\DB\QueryBuilder\IQueryBuilder;
-use OCP\IDBConnection;
 use OCP\ICache;
 use OCP\ICacheFactory;
+use OCP\IDBConnection;
 
 /** @template-extends DeckMapper<Stack> */
 class StackMapper extends DeckMapper implements IPermissionMapper {

@@ -29,8 +29,8 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use OCP\IUserManager;
 use OCP\IGroupManager;
+use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
 
 /** @template-extends QBMapper<Board> */
@@ -126,9 +126,9 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		$groupIds = $this->groupManager->getUserGroupIds($this->userManager->get($userId));
 		if (count($groupIds) !== 0) {
 			$qb->orWhere($qb->expr()->andX(
-					$qb->expr()->in('acl.participant', $qb->createNamedParameter($groupIds, IQueryBuilder::PARAM_STR_ARRAY)),
-					$qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_GROUP, IQueryBuilder::PARAM_INT)),
-				));
+				$qb->expr()->in('acl.participant', $qb->createNamedParameter($groupIds, IQueryBuilder::PARAM_STR_ARRAY)),
+				$qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_GROUP, IQueryBuilder::PARAM_INT)),
+			));
 		}
 
 		// Shared to circles of the user
@@ -147,7 +147,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	public function findAllForUser(string $userId, ?int $since = null, bool $includeArchived = true, ?int $before = null,
-								   ?string $term = null): array {
+		?string $term = null): array {
 		$useCache = ($since === -1 && $includeArchived === true && $before === null && $term === null);
 		if (!isset($this->userBoardCache[$userId]) || !$useCache) {
 			$groups = $this->groupManager->getUserGroupIds(
@@ -186,7 +186,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	 * Find all boards for a given user
 	 */
 	public function findAllByUser(string $userId, ?int $limit = null, ?int $offset = null, ?int $since = null,
-								  bool $includeArchived = true, ?int $before = null, ?string $term = null): array {
+		bool $includeArchived = true, ?int $before = null, ?string $term = null): array {
 		// FIXME this used to be a UNION to get boards owned by $userId and the user shares in one single query
 		// Is it possible with the query builder?
 		$qb = $this->db->getQueryBuilder();
@@ -293,7 +293,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	 * Find all boards for a given user
 	 */
 	public function findAllByGroups(string $userId, array $groups, ?int $limit = null, ?int $offset = null, ?int $since = null,
-									bool $includeArchived = true, ?int $before = null, ?string $term = null): array {
+		bool $includeArchived = true, ?int $before = null, ?string $term = null): array {
 		if (count($groups) <= 0) {
 			return [];
 		}
@@ -347,7 +347,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	public function findAllByCircles(string $userId, ?int $limit = null, ?int $offset = null, ?int $since = null,
-									 bool $includeArchived = true, ?int $before = null, ?string $term = null) {
+		bool $includeArchived = true, ?int $before = null, ?string $term = null) {
 		$circles = $this->circlesService->getUserCircles($userId);
 		if (count($circles) === 0) {
 			return [];
