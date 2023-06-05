@@ -28,13 +28,16 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
+use OCA\Deck\BadRequestException;
+use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
-use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Label;
+use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\Event\CardDeletedEvent;
@@ -42,16 +45,13 @@ use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\Model\CardDetails;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
-use OCA\Deck\Db\BoardMapper;
-use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\StatusException;
-use OCA\Deck\BadRequestException;
 use OCA\Deck\Validators\CardServiceValidator;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
-use OCP\IUserManager;
 use OCP\IURLGenerator;
+use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
 
 class CardService {

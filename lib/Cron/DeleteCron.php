@@ -24,14 +24,14 @@
 
 namespace OCA\Deck\Cron;
 
-use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\BackgroundJob\TimedJob;
 use OCA\Deck\Db\AttachmentMapper;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\InvalidAttachmentType;
 use OCA\Deck\Service\AttachmentService;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\IJob;
+use OCP\BackgroundJob\TimedJob;
 
 class DeleteCron extends TimedJob {
 

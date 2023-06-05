@@ -26,6 +26,7 @@
 namespace OCA\Deck\Activity;
 
 use OCA\Deck\Db\Acl;
+use OCA\Deck\Service\CardService;
 use OCP\Activity\IEvent;
 use OCP\Activity\IProvider;
 use OCP\Comments\IComment;
@@ -35,7 +36,6 @@ use OCP\IConfig;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
-use OCA\Deck\Service\CardService;
 
 class DeckProvider implements IProvider {
 

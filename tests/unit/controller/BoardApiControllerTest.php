@@ -22,12 +22,12 @@
  */
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\Board;
+use OCA\Deck\Service\BoardService;
 use OCP\AppFramework\Http;
+
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
-
-use OCA\Deck\Service\BoardService;
-use OCA\Deck\Db\Board;
 
 class BoardApiControllerTest extends \Test\TestCase {
 	private $appName = 'deck';

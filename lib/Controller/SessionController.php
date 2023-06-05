@@ -24,14 +24,14 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Controller;
 
-use OCA\Deck\Service\SessionService;
-use OCA\Deck\Service\PermissionService;
+use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Service\PermissionService;
+use OCA\Deck\Service\SessionService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
-use OCA\Deck\Db\Acl;
 
 class SessionController extends OCSController {
 	private SessionService $sessionService;

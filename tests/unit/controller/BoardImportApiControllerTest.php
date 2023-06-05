@@ -23,10 +23,10 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Db\Board;
+use OCA\Deck\Service\Importer\BoardImportService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
-use OCA\Deck\Service\Importer\BoardImportService;
 
 class BoardImportApiControllerTest extends \Test\TestCase {
 	private $appName = 'deck';

@@ -23,20 +23,20 @@
  *
  */
 
- namespace OCA\Deck\Controller;
+namespace OCA\Deck\Controller;
 
- use OCA\Deck\Service\AssignmentService;
- use OCP\AppFramework\ApiController;
- use OCP\AppFramework\Http;
- use OCP\AppFramework\Http\DataResponse;
- use OCP\IRequest;
- use OCA\Deck\Service\CardService;
+use OCA\Deck\Service\AssignmentService;
+use OCA\Deck\Service\CardService;
+use OCP\AppFramework\ApiController;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\DataResponse;
+use OCP\IRequest;
 
- /**
-  * Class BoardApiController
-  *
-  * @package OCA\Deck\Controller
-  */
+/**
+ * Class BoardApiController
+ *
+ * @package OCA\Deck\Controller
+ */
 class CardApiController extends ApiController {
 	private $cardService;
 	private $userId;

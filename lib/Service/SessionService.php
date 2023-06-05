@@ -26,12 +26,12 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\Session;
 use OCA\Deck\Db\SessionMapper;
-use OCA\Deck\Event\SessionCreatedEvent;
 use OCA\Deck\Event\SessionClosedEvent;
+use OCA\Deck\Event\SessionCreatedEvent;
+use OCA\NotifyPush\Queue\IQueue;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\EventDispatcher\IEventDispatcher;
-use OCA\NotifyPush\Queue\IQueue;
 use OCP\Security\ISecureRandom;
 
 class SessionService {

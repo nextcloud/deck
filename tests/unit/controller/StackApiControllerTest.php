@@ -22,13 +22,13 @@
  */
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Db\Stack;
+use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\StackService;
+
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
-
-use OCA\Deck\Service\BoardService;
-use OCA\Deck\Service\StackService;
-use OCA\Deck\Db\Stack;
 
 class StackApiControllerTest extends \Test\TestCase {
 	private $appName = 'deck';

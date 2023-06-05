@@ -39,8 +39,8 @@ class SessionsCleanup extends TimedJob {
 
 
 	public function __construct(ITimeFactory $time,
-								SessionService $sessionService,
-								ILogger $logger) {
+		SessionService $sessionService,
+		ILogger $logger) {
 		parent::__construct($time);
 		$this->sessionService = $sessionService;
 		$this->logger = $logger;

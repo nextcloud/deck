@@ -47,11 +47,11 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 	private IL10N $l10n;
 
 	public function __construct(CardService $cardService,
-								BoardService $boardService,
-								StackService $stackService,
-								IURLGenerator $urlGenerator,
-								IL10N $l10n,
-								?string $userId) {
+		BoardService $boardService,
+		StackService $stackService,
+		IURLGenerator $urlGenerator,
+		IL10N $l10n,
+		?string $userId) {
 		$this->cardService = $cardService;
 		$this->urlGenerator = $urlGenerator;
 		$this->boardService = $boardService;

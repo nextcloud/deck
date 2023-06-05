@@ -46,12 +46,12 @@ class UserExport extends Command {
 	private $assignedUsersMapper;
 
 	public function __construct(BoardMapper $boardMapper,
-								BoardService $boardService,
-								StackMapper $stackMapper,
-								CardMapper $cardMapper,
-								AssignmentMapper $assignedUsersMapper,
-								IUserManager $userManager,
-								IGroupManager $groupManager) {
+		BoardService $boardService,
+		StackMapper $stackMapper,
+		CardMapper $cardMapper,
+		AssignmentMapper $assignedUsersMapper,
+		IUserManager $userManager,
+		IGroupManager $groupManager) {
 		parent::__construct();
 
 		$this->cardMapper = $cardMapper;

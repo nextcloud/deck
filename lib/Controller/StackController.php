@@ -25,9 +25,9 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Service\StackService;
 
-use OCP\IRequest;
-
 use OCP\AppFramework\Controller;
+
+use OCP\IRequest;
 
 class StackController extends Controller {
 	private $userId;

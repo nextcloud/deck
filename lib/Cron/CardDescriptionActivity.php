@@ -24,10 +24,10 @@
 
 namespace OCA\Deck\Cron;
 
-use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\BackgroundJob\Job;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\CardMapper;
+use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\Job;
 
 class CardDescriptionActivity extends Job {
 
