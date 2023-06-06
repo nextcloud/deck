@@ -601,7 +601,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			}
 			$this->cache->set('findBoardId:' . $id, $result);
 		}
-		return $result !== false ? $result : null;
+		return $result !== false ? (int) $result : null;
 	}
 
 	public function mapOwner(Card &$card) {
