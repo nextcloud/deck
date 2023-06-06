@@ -25,9 +25,13 @@
 					</form>
 				</template>
 				<template v-else>
-					<div class="label-title" @click="clickEdit(label)">
+					<div v-if="canManage && !isArchived" class="label-title" @click="clickEdit(label)">
 						<span :style="{ backgroundColor: `#${label.color}`, color: textColor(label.color) }">{{ label.title }}</span>
 					</div>
+					<div v-else class="label-title">
+						<span :style="{ backgroundColor: `#${label.color}`, color: textColor(label.color) }">{{ label.title }}</span>
+					</div>
+
 					<NcActions v-if="canManage && !isArchived">
 						<NcActionButton icon="icon-rename" @click="clickEdit(label)">
 							{{ t('deck', 'Edit') }}
