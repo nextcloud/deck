@@ -23,7 +23,6 @@
 	},
 	"config": {
 		"optimize-autoloader": true,
-		"classmap-authoritative": true,
 		"allow-plugins": {
 			"composer/package-versions-deprecated": true
 		},
