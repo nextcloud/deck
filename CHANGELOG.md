@@ -1,20 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.10.0-beta.2
-
-### Fixed
-
-- fix: Properly overwrite z-index of datepicker above modal @juliushaertl [#4664](https://github.com/nextcloud/deck/pull/4664)
-- Use the color-primary-element* variables @szaimen [#4673](https://github.com/nextcloud/deck/pull/4673)
-- Dependency updates
-
-### Other
-
-- feat: Add devcontainer and update dev docs @juliushaertl [#4683](https://github.com/nextcloud/deck/pull/4683)
-- chore(CI): Adjust testing matrix for Nextcloud 27 on stable27 @nickvergessen [#4691](https://github.com/nextcloud/deck/pull/4691)
-
-## 1.10.0-beta.1
+## 1.10.0
 
 ### Added
 
@@ -22,6 +9,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- fix: Properly overwrite z-index of datepicker above modal @juliushaertl [#4664](https://github.com/nextcloud/deck/pull/4664)
+- Use the color-primary-element* variables @szaimen [#4673](https://github.com/nextcloud/deck/pull/4673)
 - fix(references): Mute NoPermissionException as it is expected to happen for references @juliushaertl [#4514](https://github.com/nextcloud/deck/pull/4514)
 - fix(cards): Fix card sizing by limiting too wide style rules @juliushaertl [#4512](https://github.com/nextcloud/deck/pull/4512)
 - fix: Adapt NcEmptyContent usages to new slots @juliushaertl [#4561](https://github.com/nextcloud/deck/pull/4561)
@@ -41,7 +30,12 @@ All notable changes to this project will be documented in this file.
 - Better display of card dates (creation and change dates) @Jerome-Herbinet [#4604](https://github.com/nextcloud/deck/pull/4604)
 - Refactors lib\Activity\DeckProvider.php to improve code readability. @fsamapoor [#4648](https://github.com/nextcloud/deck/pull/4648)
 - Converts 'strpos()' calls to improve code readability. @fsamapoor [#4657](https://github.com/nextcloud/deck/pull/4657)
+- Dependency updates
 
+### Other
+
+- feat: Add devcontainer and update dev docs @juliushaertl [#4683](https://github.com/nextcloud/deck/pull/4683)
+- chore(CI): Adjust testing matrix for Nextcloud 27 on stable27 @nickvergessen [#4691](https://github.com/nextcloud/deck/pull/4691)
 
 ## 1.9.0-beta.1
 
