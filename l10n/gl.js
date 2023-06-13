@@ -81,7 +81,7 @@ OC.L10N.register(
     "Finished" : "Rematado",
     "To review" : "Para revisar",
     "Action needed" : "Necesita unha acción",
-    "Later" : "Despois",
+    "Later" : "Após",
     "copy" : "copiar",
     "To do" : "Para facer",
     "Doing" : "Facendo",
