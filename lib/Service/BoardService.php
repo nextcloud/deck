@@ -128,6 +128,7 @@ class BoardService {
 	 */
 	public function setUserId(string $userId): void {
 		$this->userId = $userId;
+		$this->permissionService->setUserId($userId);
 	}
 
 	/**
