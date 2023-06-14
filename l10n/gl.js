@@ -83,7 +83,7 @@ OC.L10N.register(
     "Action needed" : "Necesita unha acción",
     "Later" : "Após",
     "copy" : "copiar",
-    "To do" : "Para facer",
+    "To do" : "Tarefa pendente",
     "Doing" : "Facendo",
     "Done" : "Feito",
     "Example Task 3" : "Tarefa de exemplo 3",
