@@ -79,12 +79,12 @@ class UserExport extends Command {
 	/**
 	 * @param InputInterface $input
 	 * @param OutputInterface $output
-	 * @return void
+	 * @return int
 	 * @throws DoesNotExistException
 	 * @throws MultipleObjectsReturnedException
 	 * @throws \ReflectionException
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$userId = $input->getArgument('user-id');
 
 		$this->boardService->setUserId($userId);
@@ -109,5 +109,6 @@ class UserExport extends Command {
 			}
 		}
 		$output->writeln(json_encode($data, JSON_PRETTY_PRINT));
+		return 0;
 	}
 }
