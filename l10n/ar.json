@@ -66,6 +66,7 @@
     "Changes in the <strong>Deck app</strong>" : "تغييرات في <strong>تطبيق Deck</strong> ",
     "A <strong>comment</strong> was created on a card" : "<strong>تعليق</strong> تم إنشاؤه على بطاقة",
     "Upcoming cards" : "البطاقات القادمة",
+    "Load more" : "حمّل أكثر",
     "Personal" : "شخصي",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "البطاقة \"%s\" على \"%s\" كُلفت بها من قبل %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} قام بتكليف البطاقة {deck-board} على {deck-board} لك",
@@ -76,8 +77,12 @@
     "The board \"%s\" has been shared with you by %s." : "تمت مشاركة اللوح \"%s\" معك من قبل %s.",
     "{user} has shared {deck-board} with you." : "{user} قام بمشاركة {deck-board} معك.",
     "Deck board" : "لوح Deck",
+    "Owned by %1$s" : "يملكها %1$s",
+    "Deck boards, cards and comments" : "الرُّقع و البطاقات و الملاحظات",
+    "From %1$s, in %2$s/%3$s, owned by %4$s" : " من %1$s، في %2$s/%3$s، يملكها %4$s",
     "Card comments" : "تعليقات البطاقة ",
     "%s on %s" : "%s على %s",
+    "Deck boards and cards" : "الرُّقع و البطاقات",
     "No data was provided to create an attachment." : "لا بيانات تم تقديمها لانشاء مرفق",
     "Finished" : "اكتمل",
     "To review" : "لإعادة المراجعة",
@@ -99,10 +104,12 @@
     "Could not write file to disk" : "لم يستطع كتابة ملف للقرص",
     "A PHP extension stopped the file upload" : "إضافة البي اچ بي PHP أوقفت رفع الملف",
     "No file uploaded or file size exceeds maximum of %s" : "لم يتم تحميل أي ملف أو أن يتجاوز حجم الملف الحد الأقصى %s",
+    "This comment has more than %s characters.\nAdded as an attachment to the card with name %s.\nAccessible on URL: %s." : " هذه الملاحظات فيها أكثر من %s حرفاً.\n تمّت إضافتها كمُرفق إلى البطاقة التي اسمها%s.\n الموجودة على الرابط %s.",
     "Card not found" : "لم يتم العثور على البطاقة ",
     "Path is already shared with this card" : "تم مشاركة المسار بالفعل مع هذه البطاقة ",
     "Invalid date, date format must be YYYY-MM-DD" : "تاريخ غير صحيح, يجب أن يكون تنسيق التاريخ YYYY-MM-DD",
     "Personal planning and team project organization" : "التخطيط الشخصي و تنظيم مشروع الفريق",
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "التطبيق Deck \"الرُّقعة\" هو أداة لتنظيم المهام الشخصية و الجماعية في نكست كلاود على نمط \"خطوط التصنيع أو التجميع في المصانع\" و المعروف بـ kanban.\n\n\n- 📥 أكتب مهمتك او مهمة فريقك على بطاقة و ضع البطاقة في الرُّقعة على كدسة البطاقات من ذات التصنيف أو المرحلة من الإنجاز\n- 📄 دوّن ملاحظاتك الإضافية على البطاقة بصيغة ماركداون markdown\n- 🔖 و يمكنك أيضاً إسناد البطاقة أي المهمة إلى شخص أو أشخاص في فريقك\n- 👥 شارك البطاقة مع من ترغب من أعضاء فريقك أو عائلتك أو أصدقائك\n- 📎 إرفاق ملفات و تضمينها بصيغة ماركداون في البطاقة\n- 💬ناقش البطاقة مع زملائك في خانة الملاحظات\n- ⚡ تابع ما يُستجد من عمليات و تطوّرات على البطاقة أو المهمة\n- 🚀 حافظ على مشروعك مُنسّقاً باستمرار.",
     "Add board" : "إضافة لوح",
     "Select the board to link to a project" : "تحديد اللوح لربطه بمشروع",
     "Search by board title" : "بحث بواسطة عنوان اللوح",
@@ -131,6 +138,7 @@
     "Archived cards" : "البطاقات المؤرشفة",
     "Add list" : "إضافة قائمة",
     "List name" : "قامة اسماء",
+    "Active filters" : "فلاتر نشطة",
     "Apply filter" : "تطبيق التصفية",
     "Filter by tag" : "تصفية بواسطة الوسم",
     "Filter by assigned user" : "تصفية بواسطة المستخدم الموكل اليه",
@@ -147,6 +155,7 @@
     "Toggle compact mode" : "تبديل النمط المضغوط",
     "Open details" : "افتح التفاصيل",
     "Details" : "التفاصيل",
+    "Currently present people" : "أشخاص معروضون حاليّاً",
     "Loading board" : "جارِ تحميل اللوح..",
     "No lists available" : "لا يوجد قائمة متاحه ",
     "Create a new list to add cards to this board" : "إنشاء قائمة جديدة لإضافة البطاقات على هذا اللوح",
@@ -170,10 +179,17 @@
     "Owner" : "المالك",
     "Delete" : "حذف ",
     "Failed to create share with {displayName}" : "فشل في إنشاء المشاركة مع {displayName}",
+    "Are you sure you want to transfer the board {title} to {user}?" : "هل أنت متأكد أنك تريد نقل الرُّقعة {title} إلى {user} ؟",
+    "Transfer the board." : "نقل الرُّقعة.",
     "Transfer" : "نقل",
+    "The board has been transferred to {user}" : "تمّ نقل الرُّقعة إلى {user}",
+    "Failed to transfer the board to {user}" : "إخفاق في نقل الرُّقعة إلى {user}",
+    "Edit list title" : "عدّل اسم القائمة",
     "Archive all cards" : "أرشفة جميع البطاقات ",
+    "Unarchive all cards" : "تراجع عن أرشفة كل البطاقات",
     "Delete list" : "حذف القائمة",
     "Archive all cards in this list" : "أرشفة جميع البطاقات في القائمة ",
+    "Unarchive all cards in this list" : "تراجع عن أرشفة كل البطاقات في هذه القائمة",
     "Add a new card" : "إضافة بطاقة جديدة",
     "Card name" : "اسم البطاقة ",
     "List deleted" : "القائمة حٌذفت ",
@@ -184,9 +200,11 @@
     "Members" : "الاعضاء",
     "Upload new files" : "رفع ملفات جديدة",
     "Share from Files" : "مشاركة من الملفات",
+    "Pending share" : "مشاركة مُعلّقة",
     "Add this attachment" : "إضافة هذا المرفق",
     "Show in Files" : "عرض في الملفات ",
     "Download" : "تنزيل",
+    "Remove attachment" : "حذف المُرفق",
     "Delete Attachment" : "مسح المرفق",
     "Restore Attachment" : "إستعادة المرفق",
     "File to share" : "ملف للمشاركة",
@@ -229,7 +247,9 @@
     "Write a description …" : "كتابة وصف...",
     "Choose attachment" : "اختيار مرفق",
     "(group)" : "(مجموعة)",
+    "Todo items" : "قائمة المهام",
     "{count} comments, {unread} unread" : "{عدد} التعليقات، {غير مقروءة} غير مقروءة",
+    "Edit card title" : "تعديل اسم القائمة",
     "Assign to me" : "ينسب لي",
     "Unassign myself" : "إلغاء تعييني ",
     "Move card" : "حرك البطاقة",
@@ -238,12 +258,15 @@
     "Archive card" : "أرشفة البطاقة",
     "Delete card" : "حذف البطاقة",
     "Move card to another board" : "حرك البطاقة الى لوح اخر",
+    "List is empty" : "القائمة فارغة",
     "Card deleted" : "البطاقة حٌذفت ",
     "seconds ago" : "ثوانٍ مضت",
     "All boards" : "جميع الالواح",
     "Archived boards" : "الالواح المؤرشفة",
     "Shared with you" : "تم مشاركتها معك",
+    "Deck settings" : "إعدادات الرُّقعة",
     "Use bigger card view" : "استخدام بطاقة عرض أكبر ",
+    "Show card ID badge" : "أعرض شارة رقم البطاقة",
     "Show boards in calendar/tasks" : "إظهار اللوح في التقويم/المهام",
     "Limit deck usage of groups" : "تقييد استخدام Deck  للمجموعات",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "سيؤدي تقييد Deck إلى منع المستخدمين الذين ليسوا جزءًا من تلك المجموعات من إنشاء لوحاتهم الخاصة. سيظل المستخدمون قادرين على العمل على اللوحات التي تمت مشاركتها معهم.",
@@ -252,6 +275,7 @@
     "Clone board" : "استنسخ اللوح",
     "Unarchive board" : "إلغاء أرشفة اللوح",
     "Archive board" : "أرشفة اللوح ",
+    "Export board" : "صدّر الرُّقعة",
     "Turn on due date reminders" : "تفعيل التذكيرات للموعد المحدد ",
     "Turn off due date reminders" : "إيقاف تشغيل التذكيرات للموعد المحددد",
     "Due date reminders" : "تذكيرات الموعد المحدد ",
@@ -263,14 +287,22 @@
     "Only assigned cards" : "البطاقات المخصصة فقط",
     "No reminder" : "لا يوجد تذكير ",
     "An error occurred" : "حدث خطأ",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "هل أنت متأكد من حذف الرقعة {title}؟ هذا سيؤدي إلى حذف كل بيانات هذه الرُّقعة بما في ذلك البطاقات المؤرشفة.",
     "Delete the board?" : "مسح اللوح؟",
     "Loading filtered view" : "جارِ تحميل التصفية ",
     "No due" : "غير محدد",
     "Search for {searchQuery} in all boards" : "البحث عن {searchQuery} في جميع اللوح",
     "No results found" : "لا يتم العثور على أي نتائج ",
+    "Deck board {name}\n* Last modified on {lastMod}" : "اسم الرُّقعة {name} \n* آخر تعديل لها في {lastMod}",
     "{stack} in {board}" : "{stack} في  {board}",
+    "Click to expand description" : "إضعط للتوسّع في الوصف",
+    "* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments" : "* أُنشأت في {created}\n* آخر تعديل لها في {lastMod}\n* {nbAttachments} مُرفقات\n* {nbComments} مُلاحظات",
+    "{nbCards} cards" : "{nbCards} بطاقات",
+    "Click to expand comment" : "إضغط للتوسع في الملاحظات",
     "No upcoming cards" : "لا يوجد بطاقات قادمة ",
     "upcoming cards" : "البطاقات القادمة",
+    "New card" : "بطاقة جديدة",
+    "Due on {date}" : "مطلوب في {date}",
     "Link to a board" : "ربط بلوح",
     "Link to a card" : "ربط ببطاقة",
     "Create a card" : "أنشى بطاقة ",
