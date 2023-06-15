@@ -23,6 +23,7 @@ OC.L10N.register(
     "Cancel" : "Anulează",
     "Close" : "Închide",
     "File already exists" : "Fișierul există deja",
+    "Add card" : "Adaugă card",
     "Archived cards" : "Carduri arhivate",
     "Add list" : "Adaugă listă ",
     "Filter by tag" : "Filtrare după etichetă",
