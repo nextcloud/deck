@@ -234,7 +234,7 @@ OC.L10N.register(
     "Move card to another board" : "Mover a tarxeta a outro taboleiro",
     "List is empty" : "A lista está baleira",
     "Card deleted" : "Tarxeta eliminada",
-    "seconds ago" : "hai uns segundos",
+    "seconds ago" : "segundos atrás",
     "All boards" : "Todos os taboleiros",
     "Archived boards" : "Taboleiros arquivados",
     "Shared with you" : "Compartido con vostede",
