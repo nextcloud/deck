@@ -37,7 +37,7 @@
 			</div>
 		</NcModal>
 
-		<router-view name="sidebar" :visible="!cardDetailsInModal || !$route.params.cardId" />
+		<router-view v-if="!cardDetailsInModal" name="sidebar" />
 	</NcContent>
 </template>
 
