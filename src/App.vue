@@ -27,17 +27,19 @@
 			<router-view />
 		</NcAppContent>
 
-		<NcModal v-if="cardDetailsInModal && $route.params.cardId"
-			:clear-view-delay="0"
-			:close-button-contained="true"
-			size="large"
-			@close="hideModal()">
-			<div class="modal__content modal__card">
-				<router-view name="sidebar" />
-			</div>
-		</NcModal>
+		<div v-if="$route.params.id || $route.params.cardId">
+			<NcModal v-if="cardDetailsInModal && $route.params.cardId"
+				:clear-view-delay="0"
+				:close-button-contained="true"
+				size="large"
+				@close="hideModal()">
+				<div class="modal__content modal__card">
+					<router-view name="sidebar" />
+				</div>
+			</NcModal>
 
-		<router-view v-if="!cardDetailsInModal" name="sidebar" />
+			<router-view name="sidebar" :visible="!cardDetailsInModal || !$route.params.cardId" />
+		</div>
 	</NcContent>
 </template>
 
