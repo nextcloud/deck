@@ -143,11 +143,13 @@ class BoardImportService {
 	}
 
 	/**
-	 * @param mixed $system
+	 * @param ?string $system
 	 * @return self
 	 */
 	public function setSystem($system): self {
-		$this->system = $system;
+		if ($system) {
+			$this->system = $system;
+		}
 		return $this;
 	}
 
