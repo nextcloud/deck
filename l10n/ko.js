@@ -28,6 +28,7 @@ OC.L10N.register(
     "Missing a temporary folder" : "임시 폴더 없음",
     "Could not write file to disk" : "디스크에 파일을 쓸 수 없음",
     "A PHP extension stopped the file upload" : "PHP 확장 기능에서 파일 업로드를 차단함",
+    "No file uploaded or file size exceeds maximum of %s" : "파일이 업로드 되지 않았거나, 크기가 %s를 초과합니다.",
     "Card not found" : "카드 없음",
     "Invalid date, date format must be YYYY-MM-DD" : "잘못된 날짜, YYYY-MM-DD 형식이어야 합니다",
     "Add board" : "보드 추가",
@@ -124,6 +125,7 @@ OC.L10N.register(
     "Delete the board?" : "보드를 삭제합니까?",
     "No results found" : "결과 없음",
     "Something went wrong" : "잘못된 접근",
+    "Error creating the share" : "공유를 만드는 중 오류 발생",
     "Share" : "공유"
 },
 "nplurals=1; plural=0;");
