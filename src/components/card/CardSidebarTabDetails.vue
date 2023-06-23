@@ -102,7 +102,7 @@
 					:formatter="format"
 					:disabled="saving || !canEdit"
 					:shortcuts="shortcuts"
-					:append-to-body="true"
+					:append-to-body="false"
 					confirm />
 				<Actions v-if="canEdit">
 					<ActionButton v-if="copiedCard.duedate" icon="icon-delete" @click="removeDue()">
