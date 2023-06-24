@@ -71,8 +71,6 @@
 					</template>
 					{{ t('deck', 'Archive board') }}
 				</NcActionButton>
-
-				<NcActionButton v-if="!board.archived && board.acl.length === 0" :icon="board.settings['notify-due'] === 'off' ? 'icon-sound' : 'icon-sound-off'" @click="board.settings['notify-due'] === 'off' ? updateSetting('notify-due', 'all') : updateSetting('notify-due', 'off')" />
 				<NcActionButton v-if="canManage && !board.archived"
 					icon="icon-download"
 					:close-after-click="true"
