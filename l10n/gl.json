@@ -70,7 +70,7 @@
     "Personal" : "Persoal",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "A tarxeta «%s» en «%s» foi asignada a vostede por %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} asignoulle a tarxeta {deck-card} en {deck-board} a vostede.",
-    "The card \"%s\" on \"%s\" has reached its due date." : "A tarxeta «%s» en «%s» chegou á súa data de caducidade.",
+    "The card \"%s\" on \"%s\" has reached its due date." : "A tarxeta «%s» en «%s» acadou a súa data de caducidade.",
     "The card {deck-card} on {deck-board} has reached its due date." : "A tarxeta {deck-card} en {deck-board} chegou á súa data de caducidade.",
     "%s has mentioned you in a comment on \"%s\"." : "%s mencionouno a vostede nun comentario en «%s».",
     "{user} has mentioned you in a comment on {deck-card}." : "{user} mencionouno a vostede nun comentario en {deck-card}.",
