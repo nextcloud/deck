@@ -14,6 +14,7 @@ OC.L10N.register(
     "Missing a temporary folder" : "Ajutine kausta on puudu",
     "Could not write file to disk" : "Faili kirjutamine kettale ebaõnnestus",
     "A PHP extension stopped the file upload" : "PHP laiendus peatas faili üleslaadimise",
+    "No file uploaded or file size exceeds maximum of %s" : "Faili ei laaditud üles või selle suurus ületab maksimaalse %s",
     "Invalid date, date format must be YYYY-MM-DD" : "Vigane kuupäev, formaat peab olema YYYY-MM-DD",
     "Cancel" : "Loobu",
     "Close" : "Sulge",
