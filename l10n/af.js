@@ -2,6 +2,7 @@ OC.L10N.register(
     "deck",
     {
     "Personal" : "Persoonlik",
+    "Later" : "Later",
     "copy" : "kopie",
     "Done" : "Gereed",
     "The file was uploaded" : "Die lêer is opgelaai",
