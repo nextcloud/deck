@@ -295,7 +295,7 @@ OC.L10N.register(
     "No due" : "Sen caducidade",
     "Search for {searchQuery} in all boards" : "Resultados de busca para {searchQuery} en todos os taboleiros",
     "No results found" : "Non se atoparon resultados",
-    "Deck board {name}\n* Last modified on {lastMod}" : "Taboleiro do Tarxeteiro {nome}\n* Última modificación en {lastMod}",
+    "Deck board {name}\n* Last modified on {lastMod}" : "Taboleiro do Tarxeteiro {name}\n* Última modificación en {lastMod}",
     "{stack} in {board}" : "{stack} en {board}",
     "Click to expand description" : "Prema para ampliar a descrición",
     "* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments" : "* Creado o {created}\n* Última modificación o {lastMod}\n* {nbAttachments} anexos\n* {nbComments} comentarios",
