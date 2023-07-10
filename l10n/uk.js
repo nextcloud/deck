@@ -98,6 +98,7 @@ OC.L10N.register(
     "Hide archived cards" : "Приховати архівні картки",
     "Show archived cards" : "Показати архівні картки",
     "Toggle compact mode" : "Перемкнути компактний вигляд",
+    "Open details" : "Показати деталі",
     "Details" : "Деталі",
     "Loading board" : "Завантаження дошки",
     "Create a new list to add cards to this board" : "Створіть список щоб додати картки на цю дошку",
