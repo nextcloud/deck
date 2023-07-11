@@ -197,8 +197,7 @@ class CommentService {
 	}
 
 	private function formatComment(IComment $comment, $addReplyTo = false): array {
-		$user = $this->userManager->get($comment->getActorId());
-		$actorDisplayName = $user !== null ? $user->getDisplayName() : $comment->getActorId();
+		$actorDisplayName = $this->userManager->getDisplayName($comment->getActorId()) ?? $comment->getActorId();
 
 		$formattedComment = [
 			'id' => (int)$comment->getId(),

@@ -37,7 +37,7 @@ class User extends RelationalObject {
 	public function getObjectSerialization() {
 		return [
 			'uid' => $this->getObject()->getUID(),
-			'displayname' => $this->getObject()->getDisplayName(),
+			'displayname' => $this->getDisplayName(),
 			'type' => Acl::PERMISSION_TYPE_USER
 		];
 	}

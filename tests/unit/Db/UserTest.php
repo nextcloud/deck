@@ -33,13 +33,13 @@ class UserTest extends \Test\TestCase {
 		$user->expects($this->any())
 			->method('getUID')
 			->willReturn('myuser');
-		$user->expects($this->any())
-			->method('getDisplayName')
-			->willReturn('myuser displayname');
 		$userManager = $this->createMock(IUserManager::class);
 		$userManager->expects($this->any())
 			->method('get')
 			->willReturn($user);
+		$userManager->expects($this->any())
+			->method('getDisplayName')
+			->willReturn('myuser displayname');
 		$userRelationalObject = new User('myuser', $userManager);
 		$expected = [
 			'uid' => 'myuser',
@@ -55,13 +55,13 @@ class UserTest extends \Test\TestCase {
 		$user->expects($this->any())
 			->method('getUID')
 			->willReturn('myuser');
-		$user->expects($this->any())
-			->method('getDisplayName')
-			->willReturn('myuser displayname');
 		$userManager = $this->createMock(IUserManager::class);
 		$userManager->expects($this->any())
 			->method('get')
 			->willReturn($user);
+		$userManager->expects($this->any())
+			->method('getDisplayName')
+			->willReturn('myuser displayname');
 		$userRelationalObject = new User('myuser', $userManager);
 		$expected = [
 			'uid' => 'myuser',

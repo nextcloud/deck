@@ -115,8 +115,7 @@ class SearchService {
 			$card = Card::fromRow($cardRow);
 			// TODO: Only perform one enrich call here
 			$self->cardService->enrichCards([$card]);
-			$user = $this->userManager->get($comment->getActorId());
-			$displayName = $user ? $user->getDisplayName() : '';
+			$displayName = $this->userManager->getDisplayName($comment->getActorId()) ?? '';
 			return new CommentSearchResultEntry($comment->getId(), $comment->getMessage(), $displayName, $card, $this->urlGenerator, $this->l10n);
 		}, $matchedComments);
 	}
