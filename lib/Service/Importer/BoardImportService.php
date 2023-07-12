@@ -42,6 +42,7 @@ use OCA\Deck\NotFoundException;
 use OCA\Deck\Service\FileService;
 use OCA\Deck\Service\Importer\Systems\TrelloApiService;
 use OCA\Deck\Service\Importer\Systems\TrelloJsonService;
+use OCA\Deck\Service\Importer\Systems\DeckJsonService;
 use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
 use OCP\Comments\NotFoundException as CommentNotFoundException;
@@ -173,6 +174,11 @@ class BoardImportService {
 				'name' => TrelloJsonService::$name,
 				'class' => TrelloJsonService::class,
 				'internalName' => 'TrelloJson'
+			]);
+			$this->addAllowedImportSystem([
+				'name' => DeckJsonService::$name,
+				'class' => DeckJsonService::class,
+				'internalName' => 'DeckJson'
 			]);
 		}
 		$this->eventDispatcher->dispatchTyped(new BoardImportGetAllowedEvent($this));

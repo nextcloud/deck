@@ -95,7 +95,7 @@ class BoardImportCommandService extends BoardImportService {
 			$helper = $this->getCommand()->getHelper('question');
 			$question = new Question(
 				"<info>You can get more info on https://deck.readthedocs.io/en/latest/User_documentation_en/#6-import-boards</info>\n" .
-				'Please inform a valid config json file: ',
+				'Please provide a valid config json file: ',
 				'config.json'
 			);
 			$question->setValidator(function (string $answer) {
@@ -130,7 +130,7 @@ class BoardImportCommandService extends BoardImportService {
 		$allowedSystems = $this->getAllowedImportSystems();
 		$names = array_column($allowedSystems, 'name');
 		$question = new ChoiceQuestion(
-			'Please inform a source system',
+			'Please select a source system',
 			$names,
 			0
 		);
