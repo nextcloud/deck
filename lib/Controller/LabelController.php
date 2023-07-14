@@ -28,11 +28,12 @@ use OCP\AppFramework\Controller;
 use OCP\IRequest;
 
 class LabelController extends Controller {
-	private $labelService;
-
-	public function __construct($appName, IRequest $request, LabelService $labelService) {
+	public function __construct(
+		$appName,
+		IRequest $request,
+		private LabelService $labelService,
+	) {
 		parent::__construct($appName, $request);
-		$this->labelService = $labelService;
 	}
 
 	/**

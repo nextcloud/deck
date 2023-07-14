@@ -32,17 +32,13 @@ use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
 class OverviewApiController extends OCSController {
-
-	/** @var OverviewService */
-	private $dashboardService;
-
-	/** @var string */
-	private $userId;
-
-	public function __construct($appName, IRequest $request, OverviewService $dashboardService, $userId) {
+	public function __construct(
+		$appName,
+		IRequest $request,
+		private OverviewService $dashboardService,
+		private $userId,
+	) {
 		parent::__construct($appName, $request);
-		$this->dashboardService = $dashboardService;
-		$this->userId = $userId;
 	}
 
 	/**

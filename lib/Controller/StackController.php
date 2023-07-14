@@ -30,12 +30,13 @@ use OCP\AppFramework\Controller;
 use OCP\IRequest;
 
 class StackController extends Controller {
-	private $userId;
-	private $stackService;
-	public function __construct($appName, IRequest $request, StackService $stackService, $userId) {
+	public function __construct(
+		string $appName,
+		IRequest $request,
+		private StackService $stackService,
+		private $userId,
+	) {
 		parent::__construct($appName, $request);
-		$this->userId = $userId;
-		$this->stackService = $stackService;
 	}
 
 	/**

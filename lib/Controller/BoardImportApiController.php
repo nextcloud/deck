@@ -30,20 +30,13 @@ use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
 class BoardImportApiController extends OCSController {
-	/** @var BoardImportService */
-	private $boardImportService;
-	/** @var string */
-	private $userId;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		BoardImportService $boardImportService,
-		string $userId
+		private BoardImportService $boardImportService,
+		private string $userId,
 	) {
 		parent::__construct($appName, $request);
-		$this->boardImportService = $boardImportService;
-		$this->userId = $userId;
 	}
 
 	/**

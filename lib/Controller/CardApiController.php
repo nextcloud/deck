@@ -38,21 +38,22 @@ use OCP\IRequest;
  * @package OCA\Deck\Controller
  */
 class CardApiController extends ApiController {
-	private $cardService;
-	private $userId;
-	private $assignmentService;
 
 	/**
 	 * @param string $appName
 	 * @param IRequest $request
 	 * @param CardService $cardService
+	 * @param AssignmentService $assignmentService
 	 * @param $userId
 	 */
-	public function __construct($appName, IRequest $request, CardService $cardService, AssignmentService $assignmentService, $userId) {
+	public function __construct(
+		string $appName,
+		IRequest $request,
+		private CardService $cardService,
+		private AssignmentService $assignmentService,
+		private $userId,
+	) {
 		parent::__construct($appName, $request);
-		$this->cardService = $cardService;
-		$this->userId = $userId;
-		$this->assignmentService = $assignmentService;
 	}
 
 	/**

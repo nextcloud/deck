@@ -30,16 +30,12 @@ use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
 class ConfigController extends OCSController {
-	private $configService;
-
 	public function __construct(
 		$AppName,
 		IRequest $request,
-		ConfigService $configService
+		private ConfigService $configService,
 	) {
 		parent::__construct($AppName, $request);
-
-		$this->configService = $configService;
 	}
 
 	/**

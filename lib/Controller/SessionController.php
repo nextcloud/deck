@@ -34,20 +34,13 @@ use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
 class SessionController extends OCSController {
-	private SessionService $sessionService;
-	private PermissionService $permissionService;
-	private BoardMapper $boardMapper;
-
 	public function __construct($appName,
 		IRequest $request,
-		SessionService $sessionService,
-		PermissionService $permissionService,
-		BoardMapper $boardMapper
+		private SessionService $sessionService,
+		private PermissionService $permissionService,
+		private BoardMapper $boardMapper,
 	) {
 		parent::__construct($appName, $request);
-		$this->sessionService = $sessionService;
-		$this->permissionService = $permissionService;
-		$this->boardMapper = $boardMapper;
 	}
 
 	/**

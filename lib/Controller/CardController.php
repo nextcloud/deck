@@ -29,15 +29,14 @@ use OCP\AppFramework\Controller;
 use OCP\IRequest;
 
 class CardController extends Controller {
-	private $userId;
-	private $cardService;
-	private $assignmentService;
-
-	public function __construct($appName, IRequest $request, CardService $cardService, AssignmentService $assignmentService, $userId) {
+	public function __construct(
+		$appName,
+		IRequest $request,
+		private CardService $cardService,
+		private AssignmentService $assignmentService,
+		private $userId,
+	) {
 		parent::__construct($appName, $request);
-		$this->userId = $userId;
-		$this->cardService = $cardService;
-		$this->assignmentService = $assignmentService;
 	}
 
 	/**

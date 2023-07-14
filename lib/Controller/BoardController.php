@@ -33,15 +33,14 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
 class BoardController extends ApiController {
-	private $userId;
-	private $boardService;
-	private $permissionService;
-
-	public function __construct($appName, IRequest $request, BoardService $boardService, PermissionService $permissionService, $userId) {
+	public function __construct(
+		$appName,
+		IRequest $request,
+		private BoardService $boardService,
+		private PermissionService $permissionService,
+		private $userId,
+	) {
 		parent::__construct($appName, $request);
-		$this->userId = $userId;
-		$this->boardService = $boardService;
-		$this->permissionService = $permissionService;
 	}
 
 	/**
@@ -144,7 +143,7 @@ class BoardController extends ApiController {
 	/**
 	 * @NoAdminRequired
 	 * @param $aclId
-	 * @return \OCP\AppFramework\Db\Entity
+	 * @return \OCP\AppFramework\Db\Entity|null
 	 */
 	public function deleteAcl($aclId) {
 		return $this->boardService->deleteAcl($aclId);
