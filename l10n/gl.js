@@ -202,7 +202,7 @@ OC.L10N.register(
     "Members" : "Membros",
     "Upload new files" : "Enviar novos ficheiros",
     "Share from Files" : "Compartir dende «Ficheiros»",
-    "Pending share" : "Recurso compartido pendente",
+    "Pending share" : "Compartición pendente",
     "Add this attachment" : "Engadir este anexo",
     "Show in Files" : "Amosar en Ficheiros",
     "Download" : "Descargar",
