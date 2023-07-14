@@ -34,6 +34,7 @@
 				<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
 				{{ board.title }} » {{ stack.title }}
 			</div>
+			<CardCover v-if="showCardCover" :card-id="card.id" />
 			<div class="card-upper">
 				<h3 v-if="inlineEditingBlocked">
 					{{ card.title }}
@@ -92,10 +93,11 @@ import labelStyle from '../../mixins/labelStyle.js'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
 import CardMenu from './CardMenu.vue'
 import DueDate from './badges/DueDate.vue'
+import CardCover from './CardCover.vue'
 
 export default {
 	name: 'CardItem',
-	components: { CardBadges, AttachmentDragAndDrop, CardMenu, DueDate },
+	components: { CardBadges, AttachmentDragAndDrop, CardMenu, DueDate, CardCover },
 	directives: {
 		ClickOutside,
 	},
@@ -129,6 +131,7 @@ export default {
 			compactMode: state => state.compactMode,
 			showArchived: state => state.showArchived,
 			currentBoard: state => state.currentBoard,
+			showCardCover: state => state.showCardCover,
 		}),
 		...mapGetters([
 			'isArchived',
