@@ -44,37 +44,23 @@ use OCP\IRequest;
 use OCP\IURLGenerator;
 
 class PageController extends Controller {
-	private PermissionService $permissionService;
 	private IInitialStateService $initialState;
-	private ConfigService $configService;
-	private IEventDispatcher $eventDispatcher;
-	private CardMapper $cardMapper;
-	private IURLGenerator $urlGenerator;
-	private CardService $cardService;
-	private IConfig $config;
 
 	public function __construct(
 		string $AppName,
 		IRequest $request,
-		PermissionService $permissionService,
+		private PermissionService $permissionService,
 		IInitialStateService $initialStateService,
-		ConfigService $configService,
-		IEventDispatcher $eventDispatcher,
-		CardMapper $cardMapper,
-		IURLGenerator $urlGenerator,
-		CardService $cardService,
-		IConfig $config
+		private ConfigService $configService,
+		private IEventDispatcher $eventDispatcher,
+		private CardMapper $cardMapper,
+		private IURLGenerator $urlGenerator,
+		private CardService $cardService,
+		private IConfig $config,
 	) {
 		parent::__construct($AppName, $request);
 
-		$this->permissionService = $permissionService;
 		$this->initialState = $initialStateService;
-		$this->configService = $configService;
-		$this->eventDispatcher = $eventDispatcher;
-		$this->cardMapper = $cardMapper;
-		$this->urlGenerator = $urlGenerator;
-		$this->cardService = $cardService;
-		$this->config = $config;
 	}
 
 	/**

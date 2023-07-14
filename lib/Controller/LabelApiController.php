@@ -35,21 +35,18 @@ use OCP\IRequest;
  * @package OCA\Deck\Controller
  */
 class LabelApiController extends ApiController {
-	private $labelService;
-	private $userId;
-
 	/**
 	 * @param string $appName
-	 * @param IRequest $request
-	 * @param LabelService $labelService
-	 * @param $userId
 	 */
-	public function __construct($appName, IRequest $request, LabelService $labelService, $userId) {
+	public function __construct(
+		$appName,
+		IRequest $request,
+		private LabelService $labelService,
+		private $userId,
+	) {
 		parent::__construct($appName, $request);
-		$this->labelService = $labelService;
-		$this->userId = $userId;
 	}
-	
+
 	/**
 	 * @NoAdminRequired
 	 * @CORS

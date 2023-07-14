@@ -31,18 +31,15 @@ use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
 class CommentsApiController extends OCSController {
-
-	/** @var CommentService */
-	private $commentService;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		CommentService $commentService,
-		string $corsMethods = 'PUT, POST, GET, DELETE, PATCH', string $corsAllowedHeaders = 'Authorization, Content-Type, Accept', int $corsMaxAge = 1728000
+		private CommentService $commentService,
+		string $corsMethods = 'PUT, POST, GET, DELETE, PATCH',
+		string $corsAllowedHeaders = 'Authorization, Content-Type, Accept',
+		int $corsMaxAge = 1728000,
 	) {
 		parent::__construct($appName, $request, $corsMethods, $corsAllowedHeaders, $corsMaxAge);
-		$this->commentService = $commentService;
 	}
 
 	/**

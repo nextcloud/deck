@@ -28,13 +28,12 @@ use OCP\AppFramework\Controller;
 use OCP\IRequest;
 
 class AttachmentController extends Controller {
-
-	/** @var AttachmentService */
-	private $attachmentService;
-
-	public function __construct($appName, IRequest $request, AttachmentService $attachmentService) {
+	public function __construct(
+		$appName,
+		IRequest $request,
+		private AttachmentService $attachmentService,
+	) {
 		parent::__construct($appName, $request);
-		$this->attachmentService = $attachmentService;
 	}
 
 	/**

@@ -34,15 +34,12 @@ use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
 class SearchController extends OCSController {
-
-	/**
-	 * @var SearchService
-	 */
-	private $searchService;
-
-	public function __construct(string $appName, IRequest $request, SearchService $searchService) {
+	public function __construct(
+		string $appName,
+		IRequest $request,
+		private SearchService $searchService,
+	) {
 		parent::__construct($appName, $request);
-		$this->searchService = $searchService;
 	}
 
 	/**

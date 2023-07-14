@@ -40,18 +40,16 @@ use Sabre\HTTP\Util;
  * @package OCA\Deck\Controller
  */
 class BoardApiController extends ApiController {
-	private $boardService;
-
 	/**
 	 * @param string $appName
-	 * @param IRequest $request
-	 * @param BoardService $service
-	 * @param $userId
 	 */
-	public function __construct($appName, IRequest $request, BoardService $service, $userId) {
+	public function __construct(
+		$appName,
+		IRequest $request,
+		private BoardService $boardService,
+		private $userId,
+	) {
 		parent::__construct($appName, $request);
-		$this->boardService = $service;
-		$this->userId = $userId;
 	}
 
 	/**
