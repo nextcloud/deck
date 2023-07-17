@@ -61,6 +61,10 @@ abstract class ABoardImportService {
 	 */
 	abstract public function bootstrap(): void;
 
+	public function getBoards(): array {
+		return [$this->getImportService()->getData()];
+	}
+
 	abstract public function getBoard(): ?Board;
 
 	/**
@@ -132,5 +136,14 @@ abstract class ABoardImportService {
 
 	public function needValidateData(): bool {
 		return $this->needValidateData;
+	}
+
+	public function reset(): void {
+		// FIXME: Would be cleaner if we could just get a new instance per board
+		// but currently https://github.com/nextcloud/deck/blob/7d820aa3f9fc69ada8188549b9a2fbb9093ffb95/lib/Service/Importer/BoardImportService.php#L194 returns a singleton
+		$this->labels = [];
+		$this->stacks = [];
+		$this->acls = [];
+		$this->cards = [];
 	}
 }

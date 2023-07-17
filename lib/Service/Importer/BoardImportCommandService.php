@@ -179,21 +179,28 @@ class BoardImportCommandService extends BoardImportService {
 	public function import(): void {
 		$this->getOutput()->writeln('Starting import...');
 		$this->bootstrap();
-		$this->getOutput()->writeln('Importing board...');
-		$this->importBoard();
-		$this->getOutput()->writeln('Assign users to board...');
-		$this->importAcl();
-		$this->getOutput()->writeln('Importing labels...');
-		$this->importLabels();
-		$this->getOutput()->writeln('Importing stacks...');
-		$this->importStacks();
-		$this->getOutput()->writeln('Importing cards...');
-		$this->importCards();
-		$this->getOutput()->writeln('Assign cards to labels...');
-		$this->assignCardsToLabels();
-		$this->getOutput()->writeln('Importing comments...');
-		$this->importComments();
-		$this->getOutput()->writeln('Importing participants...');
-		$this->importCardAssignments();
+		$boards = $this->getImportSystem()->getBoards();
+
+		foreach ($boards as $board) {
+			$this->reset();
+			$this->setData($board);
+			$this->getOutput()->writeln('Importing board...');
+			$this->importBoard();
+			$this->getOutput()->writeln('Assign users to board...');
+			$this->importAcl();
+			$this->getOutput()->writeln('Importing labels...');
+			$this->importLabels();
+			$this->getOutput()->writeln('Importing stacks...');
+			$this->importStacks();
+			$this->getOutput()->writeln('Importing cards...');
+			$this->importCards();
+			$this->getOutput()->writeln('Assign cards to labels...');
+			$this->assignCardsToLabels();
+			$this->getOutput()->writeln('Importing comments...');
+			$this->importComments();
+			$this->getOutput()->writeln('Importing participants...');
+			$this->importCardAssignments();
+			$this->getOutput()->writeln('<info>Finished board import of "' . $this->getBoard()->getTitle() . '"</info>');
+		}
 	}
 }

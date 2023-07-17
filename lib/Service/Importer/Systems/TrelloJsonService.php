@@ -397,4 +397,12 @@ class TrelloJsonService extends ABoardImportService {
 			$trelloCard->desc .= "| [{$name}]({$attachment->url}) | {$attachment->date} |\n";
 		}
 	}
+
+	public function getBoards(): array {
+		if ($this->getImportService()->getData()->boards) {
+			return $this->getImportService()->getData()->boards;
+		}
+
+		return [$this->getImportService()->getData()];
+	}
 }
