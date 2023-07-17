@@ -23,43 +23,30 @@
 
 namespace OCA\Deck\Service\Importer\Systems;
 
-use OC\Comments\Comment;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Assignment;
-use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Service\Importer\ABoardImportService;
-use OCP\Comments\IComment;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 
 class DeckJsonService extends ABoardImportService {
-	/** @var string */
 	public static $name = 'Deck JSON';
-	/** @var IUserManager */
-	private $userManager;
-	/** @var IURLGenerator */
-	private $urlGenerator;
-	/** @var IL10N */
-	private $l10n;
 	/** @var IUser[] */
-	private $members = [];
+	private array $members = [];
 	private array $tmpCards = [];
 
 	public function __construct(
-		IUserManager $userManager,
-		IURLGenerator $urlGenerator,
-		IL10N $l10n
+		private IUserManager $userManager,
+		private IURLGenerator $urlGenerator,
+		private IL10N $l10n
 	) {
-		$this->userManager = $userManager;
-		$this->urlGenerator = $urlGenerator;
-		$this->l10n = $l10n;
 	}
 
 	public function bootstrap(): void {
@@ -76,7 +63,7 @@ class DeckJsonService extends ABoardImportService {
 	}
 
 	public function validateUsers(): void {
-		if (empty($this->getImportService()->getConfig('uidRelation'))) {
+		if (empty($this->getImportService()->getConfig('uidRelation')) || !isset($this->getImportService()->getData()->members)) {
 			return;
 		}
 		foreach ($this->getImportService()->getConfig('uidRelation') as $exportUid => $nextcloudUid) {
@@ -169,7 +156,7 @@ class DeckJsonService extends ABoardImportService {
 				$return[$source->id] = $stack;
 			}
 
-			if ($source->cards) {
+			if (isset($source->cards)) {
 				foreach ($source->cards as $card) {
 					$card->stackId = $index;
 					$this->tmpCards[] = $card;
@@ -231,7 +218,9 @@ class DeckJsonService extends ABoardImportService {
 	}
 
 	public function getBoards(): array {
-		return get_object_vars($this->getImportService()->getData());
+		// Old format has just the raw board data, new one a key boards
+		$data = $this->getImportService()->getData();
+		return array_values((array)($data->boards ?? $data));
 	}
 
 	public function reset(): void {

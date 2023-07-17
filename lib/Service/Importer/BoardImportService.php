@@ -40,9 +40,9 @@ use OCA\Deck\Event\BoardImportGetAllowedEvent;
 use OCA\Deck\Exceptions\ConflictException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Service\FileService;
+use OCA\Deck\Service\Importer\Systems\DeckJsonService;
 use OCA\Deck\Service\Importer\Systems\TrelloApiService;
 use OCA\Deck\Service\Importer\Systems\TrelloJsonService;
-use OCA\Deck\Service\Importer\Systems\DeckJsonService;
 use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
 use OCP\Comments\NotFoundException as CommentNotFoundException;
@@ -51,16 +51,6 @@ use OCP\IUserManager;
 use OCP\Server;
 
 class BoardImportService {
-	private IUserManager $userManager;
-	private BoardMapper $boardMapper;
-	private AclMapper $aclMapper;
-	private LabelMapper $labelMapper;
-	private StackMapper $stackMapper;
-	private CardMapper $cardMapper;
-	private AssignmentMapper $assignmentMapper;
-	private AttachmentMapper $attachmentMapper;
-	private ICommentsManager $commentsManager;
-	private IEventDispatcher $eventDispatcher;
 	private string $system = '';
 	private ?ABoardImportService $systemInstance = null;
 	private array $allowedSystems = [];
@@ -81,27 +71,17 @@ class BoardImportService {
 	private Board $board;
 
 	public function __construct(
-		IUserManager $userManager,
-		BoardMapper $boardMapper,
-		AclMapper $aclMapper,
-		LabelMapper $labelMapper,
-		StackMapper $stackMapper,
-		AssignmentMapper $assignmentMapper,
-		AttachmentMapper $attachmentMapper,
-		CardMapper $cardMapper,
-		ICommentsManager $commentsManager,
-		IEventDispatcher $eventDispatcher
+		private IUserManager $userManager,
+		private BoardMapper $boardMapper,
+		private AclMapper $aclMapper,
+		private LabelMapper $labelMapper,
+		private StackMapper $stackMapper,
+		private AssignmentMapper $assignmentMapper,
+		private AttachmentMapper $attachmentMapper,
+		private CardMapper $cardMapper,
+		private ICommentsManager $commentsManager,
+		private IEventDispatcher $eventDispatcher
 	) {
-		$this->userManager = $userManager;
-		$this->boardMapper = $boardMapper;
-		$this->aclMapper = $aclMapper;
-		$this->labelMapper = $labelMapper;
-		$this->stackMapper = $stackMapper;
-		$this->cardMapper = $cardMapper;
-		$this->assignmentMapper = $assignmentMapper;
-		$this->attachmentMapper = $attachmentMapper;
-		$this->commentsManager = $commentsManager;
-		$this->eventDispatcher = $eventDispatcher;
 		$this->board = new Board();
 		$this->disableCommentsEvents();
 	}
@@ -121,17 +101,23 @@ class BoardImportService {
 
 	public function import(): void {
 		$this->bootstrap();
-		try {
-			$this->importBoard();
-			$this->importAcl();
-			$this->importLabels();
-			$this->importStacks();
-			$this->importCards();
-			$this->assignCardsToLabels();
-			$this->importComments();
-			$this->importCardAssignments();
-		} catch (\Throwable $th) {
-			throw new BadRequestException($th->getMessage());
+		$boards = $this->getImportSystem()->getBoards();
+		foreach ($boards as $board) {
+			try {
+				$this->reset();
+				$this->setData($board);
+				$this->importBoard();
+				$this->importAcl();
+				$this->importLabels();
+				$this->importStacks();
+				$this->importCards();
+				$this->assignCardsToLabels();
+				$this->importComments();
+				$this->importCardAssignments();
+			} catch (\Throwable $th) {
+				throw $th;
+				throw new BadRequestException($th->getMessage());
+			}
 		}
 	}
 
@@ -139,7 +125,7 @@ class BoardImportService {
 		$allowedSystems = $this->getAllowedImportSystems();
 		$allowedSystems = array_column($allowedSystems, 'internalName');
 		if (!in_array($this->getSystem(), $allowedSystems)) {
-			throw new NotFoundException('Invalid system');
+			throw new NotFoundException('Invalid system: ' . $this->getSystem());
 		}
 	}
 
@@ -199,6 +185,11 @@ class BoardImportService {
 
 	public function setImportSystem(ABoardImportService $instance): void {
 		$this->systemInstance = $instance;
+	}
+
+	public function reset(): void {
+		$this->board = new Board();
+		$this->getImportSystem()->reset();
 	}
 
 	public function importBoard(): void {
