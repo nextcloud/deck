@@ -61,7 +61,7 @@ class BoardImportService {
 	private ICommentsManager $commentsManager;
 	private IEventDispatcher $eventDispatcher;
 	private string $system = '';
-	private ?ABoardImportService $systemInstance;
+	private ?ABoardImportService $systemInstance = null;
 	private array $allowedSystems = [];
 	/**
 	 * Data object created from config JSON
