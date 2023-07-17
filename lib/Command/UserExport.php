@@ -29,39 +29,23 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Service\BoardService;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\MultipleObjectsReturnedException;
-use OCP\IGroupManager;
-use OCP\IUserManager;
+use OCP\App\IAppManager;
+use OCP\DB\Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class UserExport extends Command {
-	protected $boardService;
-	protected $cardMapper;
-	private $userManager;
-	private $groupManager;
-	private $assignedUsersMapper;
-
-	public function __construct(BoardMapper $boardMapper,
-								BoardService $boardService,
-								StackMapper $stackMapper,
-								CardMapper $cardMapper,
-								AssignmentMapper $assignedUsersMapper,
-								IUserManager $userManager,
-								IGroupManager $groupManager) {
+	public function __construct(
+		private IAppManager $appManager,
+		private BoardMapper $boardMapper,
+		private BoardService $boardService,
+		private StackMapper $stackMapper,
+		private CardMapper $cardMapper,
+		private AssignmentMapper $assignedUsersMapper,
+	) {
 		parent::__construct();
-
-		$this->cardMapper = $cardMapper;
-		$this->boardService = $boardService;
-		$this->stackMapper = $stackMapper;
-		$this->assignedUsersMapper = $assignedUsersMapper;
-		$this->boardMapper = $boardMapper;
-
-		$this->userManager = $userManager;
-		$this->groupManager = $groupManager;
 	}
 
 	protected function configure() {
@@ -73,19 +57,16 @@ class UserExport extends Command {
 				InputArgument::REQUIRED,
 				'User ID of the user'
 			)
+			->addOption('legacy-format', 'l')
 		;
 	}
 
 	/**
-	 * @param InputInterface $input
-	 * @param OutputInterface $output
-	 * @return int
-	 * @throws DoesNotExistException
-	 * @throws MultipleObjectsReturnedException
-	 * @throws \ReflectionException
+	 * @throws Exception
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$userId = $input->getArgument('user-id');
+		$legacyFormat = $input->getOption('legacy-format');
 
 		$this->boardService->setUserId($userId);
 		$boards = $this->boardService->findAll();
@@ -93,10 +74,10 @@ class UserExport extends Command {
 		$data = [];
 		foreach ($boards as $board) {
 			$fullBoard = $this->boardMapper->find($board->getId(), true, true);
-			$data[$board->getId()] = (array)$fullBoard->jsonSerialize();
+			$data[$board->getId()] = $fullBoard->jsonSerialize();
 			$stacks = $this->stackMapper->findAll($board->getId());
 			foreach ($stacks as $stack) {
-				$data[$board->getId()]['stacks'][$stack->getId()] = (array)$stack->jsonSerialize();
+				$data[$board->getId()]['stacks'][$stack->getId()] = $stack->jsonSerialize();
 				$cards = $this->cardMapper->findAllByStack($stack->getId());
 				foreach ($cards as $card) {
 					$fullCard = $this->cardMapper->find($card->getId());
@@ -108,7 +89,12 @@ class UserExport extends Command {
 				}
 			}
 		}
-		$output->writeln(json_encode($data, JSON_PRETTY_PRINT));
+		$output->writeln(json_encode(
+			$legacyFormat ? $data : [
+				'version' => $this->appManager->getAppVersion('deck'),
+				'boards' => $data
+			],
+			JSON_PRETTY_PRINT));
 		return 0;
 	}
 }
