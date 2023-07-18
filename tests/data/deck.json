@@ -1,0 +1,748 @@
+{
+    "version": "1.11.0-dev",
+    "boards": {
+        "188": {
+            "id": 188,
+            "title": "My test board",
+            "owner": {
+                "primaryKey": "admin",
+                "uid": "admin",
+                "displayname": "admin",
+                "type": 0
+            },
+            "color": "e0ed31",
+            "archived": false,
+            "labels": [
+                {
+                    "id": 239,
+                    "title": "L2",
+                    "color": "31CC7C",
+                    "boardId": 188,
+                    "cardId": null,
+                    "lastModified": 1689667435,
+                    "ETag": "63b77251cca5a56fe74a97e4baeab59c"
+                },
+                {
+                    "id": 240,
+                    "title": "L4",
+                    "color": "317CCC",
+                    "boardId": 188,
+                    "cardId": null,
+                    "lastModified": 1689667442,
+                    "ETag": "15dcabeb47583ce5398faaeb65f7a4b6"
+                },
+                {
+                    "id": 241,
+                    "title": "L1",
+                    "color": "FF7A66",
+                    "boardId": 188,
+                    "cardId": null,
+                    "lastModified": 1689667432,
+                    "ETag": "7d58be91f19ebc4f94b352db8c76c056"
+                },
+                {
+                    "id": 242,
+                    "title": "L3",
+                    "color": "F1DB50",
+                    "boardId": 188,
+                    "cardId": null,
+                    "lastModified": 1689667440,
+                    "ETag": "160253b9d33ae0a7a3af90e7d418ba60"
+                }
+            ],
+            "acl": [],
+            "permissions": {
+                "PERMISSION_READ": true,
+                "PERMISSION_EDIT": true,
+                "PERMISSION_MANAGE": true,
+                "PERMISSION_SHARE": true
+            },
+            "users": [],
+            "shared": 0,
+            "stacks": {
+                "64": {
+                    "id": 64,
+                    "title": "A",
+                    "boardId": 188,
+                    "deletedAt": 0,
+                    "lastModified": 1689667779,
+                    "order": 999,
+                    "ETag": "ddfd0c27e53d8db94ac5e9aaa021746e",
+                    "cards": [
+                        {
+                            "id": 114,
+                            "title": "1",
+                            "description": "",
+                            "stackId": 64,
+                            "type": "plain",
+                            "lastModified": 1689667779,
+                            "lastEditor": null,
+                            "createdAt": 1689667569,
+                            "labels": [
+                                {
+                                    "id": 239,
+                                    "title": "L2",
+                                    "color": "31CC7C",
+                                    "boardId": 188,
+                                    "cardId": 114,
+                                    "lastModified": 1689667435,
+                                    "ETag": "63b77251cca5a56fe74a97e4baeab59c"
+                                }
+                            ],
+                            "assignedUsers": [],
+                            "attachments": null,
+                            "attachmentCount": null,
+                            "owner": {
+                                "primaryKey": "admin",
+                                "uid": "admin",
+                                "displayname": "admin",
+                                "type": 0
+                            },
+                            "order": 999,
+                            "archived": false,
+                            "duedate": "2050-07-24T22:00:00+00:00",
+                            "deletedAt": 0,
+                            "commentsUnread": 0,
+                            "commentsCount": 0,
+                            "ETag": "ddfd0c27e53d8db94ac5e9aaa021746e",
+                            "overdue": 0,
+                            "boardId": 188,
+                            "board": {
+                                "id": 188,
+                                "title": "My test board"
+                            }
+                        },
+                        {
+                            "id": 115,
+                            "title": "2",
+                            "description": "",
+                            "stackId": 64,
+                            "type": "plain",
+                            "lastModified": 1689667752,
+                            "lastEditor": null,
+                            "createdAt": 1689667572,
+                            "labels": [],
+                            "assignedUsers": [],
+                            "attachments": null,
+                            "attachmentCount": null,
+                            "owner": {
+                                "primaryKey": "admin",
+                                "uid": "admin",
+                                "displayname": "admin",
+                                "type": 0
+                            },
+                            "order": 999,
+                            "archived": false,
+                            "duedate": "2023-07-17T02:00:00+00:00",
+                            "deletedAt": 0,
+                            "commentsUnread": 0,
+                            "commentsCount": 0,
+                            "ETag": "9a8ed495f7d83f8310ae6291d6dc4624",
+                            "overdue": 3,
+                            "boardId": 188,
+                            "board": {
+                                "id": 188,
+                                "title": "My test board"
+                            }
+                        },
+                        {
+                            "id": 116,
+                            "title": "3",
+                            "description": "",
+                            "stackId": 64,
+                            "type": "plain",
+                            "lastModified": 1689667760,
+                            "lastEditor": "admin",
+                            "createdAt": 1689667576,
+                            "labels": [],
+                            "assignedUsers": [
+                                {
+                                    "id": 5,
+                                    "participant": {
+                                        "primaryKey": "admin",
+                                        "uid": "admin",
+                                        "displayname": "admin",
+                                        "type": 0
+                                    },
+                                    "cardId": 116,
+                                    "type": 0
+                                }
+                            ],
+                            "attachments": null,
+                            "attachmentCount": null,
+                            "owner": {
+                                "primaryKey": "admin",
+                                "uid": "admin",
+                                "displayname": "admin",
+                                "type": 0
+                            },
+                            "order": 999,
+                            "archived": false,
+                            "duedate": null,
+                            "deletedAt": 0,
+                            "commentsUnread": 0,
+                            "commentsCount": 0,
+                            "ETag": "f908c4359e9ca0703f50da2bbe967594",
+                            "overdue": 0,
+                            "boardId": 188,
+                            "board": {
+                                "id": 188,
+                                "title": "My test board"
+                            }
+                        }
+                    ]
+                },
+                "65": {
+                    "id": 65,
+                    "title": "B",
+                    "boardId": 188,
+                    "deletedAt": 0,
+                    "lastModified": 1689667796,
+                    "order": 999,
+                    "ETag": "b97a2b19e1cafc8f95e3f4db71097214",
+                    "cards": [
+                        {
+                            "id": 117,
+                            "title": "4",
+                            "description": "",
+                            "stackId": 65,
+                            "type": "plain",
+                            "lastModified": 1689667767,
+                            "lastEditor": "admin",
+                            "createdAt": 1689667578,
+                            "labels": [
+                                {
+                                    "id": 239,
+                                    "title": "L2",
+                                    "color": "31CC7C",
+                                    "boardId": 188,
+                                    "cardId": 117,
+                                    "lastModified": 1689667435,
+                                    "ETag": "63b77251cca5a56fe74a97e4baeab59c"
+                                },
+                                {
+                                    "id": 240,
+                                    "title": "L4",
+                                    "color": "317CCC",
+                                    "boardId": 188,
+                                    "cardId": 117,
+                                    "lastModified": 1689667442,
+                                    "ETag": "15dcabeb47583ce5398faaeb65f7a4b6"
+                                },
+                                {
+                                    "id": 241,
+                                    "title": "L1",
+                                    "color": "FF7A66",
+                                    "boardId": 188,
+                                    "cardId": 117,
+                                    "lastModified": 1689667432,
+                                    "ETag": "7d58be91f19ebc4f94b352db8c76c056"
+                                }
+                            ],
+                            "assignedUsers": [],
+                            "attachments": null,
+                            "attachmentCount": null,
+                            "owner": {
+                                "primaryKey": "admin",
+                                "uid": "admin",
+                                "displayname": "admin",
+                                "type": 0
+                            },
+                            "order": 999,
+                            "archived": false,
+                            "duedate": null,
+                            "deletedAt": 0,
+                            "commentsUnread": 0,
+                            "commentsCount": 0,
+                            "ETag": "6b20cc46fa5d2e5f65251526b50cc130",
+                            "overdue": 0,
+                            "boardId": 188,
+                            "board": {
+                                "id": 188,
+                                "title": "My test board"
+                            }
+                        },
+                        {
+                            "id": 118,
+                            "title": "5",
+                            "description": "",
+                            "stackId": 65,
+                            "type": "plain",
+                            "lastModified": 1689667773,
+                            "lastEditor": "admin",
+                            "createdAt": 1689667581,
+                            "labels": [
+                                {
+                                    "id": 239,
+                                    "title": "L2",
+                                    "color": "31CC7C",
+                                    "boardId": 188,
+                                    "cardId": 118,
+                                    "lastModified": 1689667435,
+                                    "ETag": "63b77251cca5a56fe74a97e4baeab59c"
+                                }
+                            ],
+                            "assignedUsers": [],
+                            "attachments": null,
+                            "attachmentCount": null,
+                            "owner": {
+                                "primaryKey": "admin",
+                                "uid": "admin",
+                                "displayname": "admin",
+                                "type": 0
+                            },
+                            "order": 999,
+                            "archived": false,
+                            "duedate": null,
+                            "deletedAt": 0,
+                            "commentsUnread": 0,
+                            "commentsCount": 0,
+                            "ETag": "488145982535a91d9ab47db647ecf539",
+                            "overdue": 0,
+                            "boardId": 188,
+                            "board": {
+                                "id": 188,
+                                "title": "My test board"
+                            }
+                        },
+                        {
+                            "id": 119,
+                            "title": "6",
+                            "description": "# Test description\n\nHello world",
+                            "stackId": 65,
+                            "type": "plain",
+                            "lastModified": 1689667796,
+                            "lastEditor": null,
+                            "createdAt": 1689667583,
+                            "labels": [],
+                            "assignedUsers": [
+                                {
+                                    "id": 6,
+                                    "participant": {
+                                        "primaryKey": "admin",
+                                        "uid": "admin",
+                                        "displayname": "admin",
+                                        "type": 0
+                                    },
+                                    "cardId": 119,
+                                    "type": 0
+                                }
+                            ],
+                            "attachments": null,
+                            "attachmentCount": null,
+                            "owner": {
+                                "primaryKey": "admin",
+                                "uid": "admin",
+                                "displayname": "admin",
+                                "type": 0
+                            },
+                            "order": 999,
+                            "archived": false,
+                            "duedate": null,
+                            "deletedAt": 0,
+                            "commentsUnread": 0,
+                            "commentsCount": 0,
+                            "ETag": "b97a2b19e1cafc8f95e3f4db71097214",
+                            "overdue": 0,
+                            "boardId": 188,
+                            "board": {
+                                "id": 188,
+                                "title": "My test board"
+                            }
+                        }
+                    ]
+                },
+                "66": {
+                    "id": 66,
+                    "title": "C",
+                    "boardId": 188,
+                    "deletedAt": 0,
+                    "lastModified": 0,
+                    "order": 999,
+                    "ETag": "cfcd208495d565ef66e7dff9f98764da"
+                }
+            },
+            "activeSessions": [],
+            "deletedAt": 0,
+            "lastModified": 1689667796,
+            "settings": [],
+            "ETag": "b97a2b19e1cafc8f95e3f4db71097214"
+        },
+        "189": {
+            "id": 189,
+            "title": "Shared board",
+            "owner": {
+                "primaryKey": "admin",
+                "uid": "admin",
+                "displayname": "admin",
+                "type": 0
+            },
+            "color": "30b6d8",
+            "archived": false,
+            "labels": [
+                {
+                    "id": 243,
+                    "title": "Finished",
+                    "color": "31CC7C",
+                    "boardId": 189,
+                    "cardId": null,
+                    "lastModified": 1689667413,
+                    "ETag": "aa71367f6a9a2fc2d47fc46163a30208"
+                },
+                {
+                    "id": 244,
+                    "title": "To review",
+                    "color": "317CCC",
+                    "boardId": 189,
+                    "cardId": null,
+                    "lastModified": 1689667413,
+                    "ETag": "aa71367f6a9a2fc2d47fc46163a30208"
+                },
+                {
+                    "id": 245,
+                    "title": "Action needed",
+                    "color": "FF7A66",
+                    "boardId": 189,
+                    "cardId": null,
+                    "lastModified": 1689667413,
+                    "ETag": "aa71367f6a9a2fc2d47fc46163a30208"
+                },
+                {
+                    "id": 246,
+                    "title": "Later",
+                    "color": "F1DB50",
+                    "boardId": 189,
+                    "cardId": null,
+                    "lastModified": 1689667413,
+                    "ETag": "aa71367f6a9a2fc2d47fc46163a30208"
+                }
+            ],
+            "acl": [
+                {
+                    "id": 4,
+                    "participant": {
+                        "primaryKey": "alice",
+                        "uid": "alice",
+                        "displayname": "alice",
+                        "type": 0
+                    },
+                    "type": 0,
+                    "boardId": 189,
+                    "permissionEdit": true,
+                    "permissionShare": false,
+                    "permissionManage": false,
+                    "owner": false
+                },
+                {
+                    "id": 5,
+                    "participant": {
+                        "primaryKey": "jane",
+                        "uid": "jane",
+                        "displayname": "jane",
+                        "type": 0
+                    },
+                    "type": 0,
+                    "boardId": 189,
+                    "permissionEdit": false,
+                    "permissionShare": true,
+                    "permissionManage": false,
+                    "owner": false
+                },
+                {
+                    "id": 6,
+                    "participant": {
+                        "primaryKey": "admin",
+                        "uid": "admin",
+                        "displayname": "admin",
+                        "type": 1
+                    },
+                    "type": 1,
+                    "boardId": 189,
+                    "permissionEdit": false,
+                    "permissionShare": false,
+                    "permissionManage": true,
+                    "owner": false
+                }
+            ],
+            "permissions": {
+                "PERMISSION_READ": true,
+                "PERMISSION_EDIT": true,
+                "PERMISSION_MANAGE": true,
+                "PERMISSION_SHARE": true
+            },
+            "users": [],
+            "shared": 0,
+            "stacks": {
+                "61": {
+                    "id": 61,
+                    "title": "ToDo",
+                    "boardId": 189,
+                    "deletedAt": 0,
+                    "lastModified": 1689667537,
+                    "order": 999,
+                    "ETag": "6c315c83f146485e6b2b6fdc24ffa617",
+                    "cards": [
+                        {
+                            "id": 107,
+                            "title": "Write tests",
+                            "description": "",
+                            "stackId": 61,
+                            "type": "plain",
+                            "lastModified": 1689667521,
+                            "lastEditor": null,
+                            "createdAt": 1689667483,
+                            "labels": [],
+                            "assignedUsers": [],
+                            "attachments": null,
+                            "attachmentCount": null,
+                            "owner": {
+                                "primaryKey": "admin",
+                                "uid": "admin",
+                                "displayname": "admin",
+                                "type": 0
+                            },
+                            "order": 0,
+                            "archived": false,
+                            "duedate": null,
+                            "deletedAt": 0,
+                            "commentsUnread": 0,
+                            "commentsCount": 0,
+                            "ETag": "f0450d41827f55580554c993304c8073",
+                            "overdue": 0,
+                            "boardId": 189,
+                            "board": {
+                                "id": 189,
+                                "title": "Shared board"
+                            }
+                        },
+                        {
+                            "id": 111,
+                            "title": "Write blog post",
+                            "description": "",
+                            "stackId": 61,
+                            "type": "plain",
+                            "lastModified": 1689667521,
+                            "lastEditor": null,
+                            "createdAt": 1689667518,
+                            "labels": [],
+                            "assignedUsers": [],
+                            "attachments": null,
+                            "attachmentCount": null,
+                            "owner": {
+                                "primaryKey": "admin",
+                                "uid": "admin",
+                                "displayname": "admin",
+                                "type": 0
+                            },
+                            "order": 1,
+                            "archived": false,
+                            "duedate": null,
+                            "deletedAt": 0,
+                            "commentsUnread": 0,
+                            "commentsCount": 0,
+                            "ETag": "f0450d41827f55580554c993304c8073",
+                            "overdue": 0,
+                            "boardId": 189,
+                            "board": {
+                                "id": 189,
+                                "title": "Shared board"
+                            }
+                        },
+                        {
+                            "id": 112,
+                            "title": "Announce feature",
+                            "description": "",
+                            "stackId": 61,
+                            "type": "plain",
+                            "lastModified": 1689667527,
+                            "lastEditor": null,
+                            "createdAt": 1689667527,
+                            "labels": [],
+                            "assignedUsers": [],
+                            "attachments": null,
+                            "attachmentCount": null,
+                            "owner": {
+                                "primaryKey": "admin",
+                                "uid": "admin",
+                                "displayname": "admin",
+                                "type": 0
+                            },
+                            "order": 999,
+                            "archived": false,
+                            "duedate": null,
+                            "deletedAt": 0,
+                            "commentsUnread": 0,
+                            "commentsCount": 0,
+                            "ETag": "1956848c45be91fefc967ee8831ea4cf",
+                            "overdue": 0,
+                            "boardId": 189,
+                            "board": {
+                                "id": 189,
+                                "title": "Shared board"
+                            }
+                        },
+                        {
+                            "id": 113,
+                            "title": "\ud83c\udf89 Party",
+                            "description": "",
+                            "stackId": 61,
+                            "type": "plain",
+                            "lastModified": 1689667537,
+                            "lastEditor": null,
+                            "createdAt": 1689667537,
+                            "labels": [],
+                            "assignedUsers": [],
+                            "attachments": null,
+                            "attachmentCount": null,
+                            "owner": {
+                                "primaryKey": "admin",
+                                "uid": "admin",
+                                "displayname": "admin",
+                                "type": 0
+                            },
+                            "order": 999,
+                            "archived": false,
+                            "duedate": null,
+                            "deletedAt": 0,
+                            "commentsUnread": 0,
+                            "commentsCount": 0,
+                            "ETag": "6c315c83f146485e6b2b6fdc24ffa617",
+                            "overdue": 0,
+                            "boardId": 189,
+                            "board": {
+                                "id": 189,
+                                "title": "Shared board"
+                            }
+                        }
+                    ]
+                },
+                "62": {
+                    "id": 62,
+                    "title": "In progress",
+                    "boardId": 189,
+                    "deletedAt": 0,
+                    "lastModified": 1689667502,
+                    "order": 999,
+                    "ETag": "1498939b8816e6041da80050dacc3ed3",
+                    "cards": [
+                        {
+                            "id": 108,
+                            "title": "Write feature",
+                            "description": "",
+                            "stackId": 62,
+                            "type": "plain",
+                            "lastModified": 1689667488,
+                            "lastEditor": null,
+                            "createdAt": 1689667488,
+                            "labels": [],
+                            "assignedUsers": [],
+                            "attachments": null,
+                            "attachmentCount": null,
+                            "owner": {
+                                "primaryKey": "admin",
+                                "uid": "admin",
+                                "displayname": "admin",
+                                "type": 0
+                            },
+                            "order": 999,
+                            "archived": false,
+                            "duedate": null,
+                            "deletedAt": 0,
+                            "commentsUnread": 0,
+                            "commentsCount": 0,
+                            "ETag": "d2a8b634cdd96ab5ef48910bbbd715b1",
+                            "overdue": 0,
+                            "boardId": 189,
+                            "board": {
+                                "id": 189,
+                                "title": "Shared board"
+                            }
+                        }
+                    ]
+                },
+                "63": {
+                    "id": 63,
+                    "title": "Done",
+                    "boardId": 189,
+                    "deletedAt": 0,
+                    "lastModified": 1689667518,
+                    "order": 999,
+                    "ETag": "09ba5a39921de760db53bcd56457eea5",
+                    "cards": [
+                        {
+                            "id": 109,
+                            "title": "Plan feature",
+                            "description": "",
+                            "stackId": 63,
+                            "type": "plain",
+                            "lastModified": 1689667506,
+                            "lastEditor": null,
+                            "createdAt": 1689667493,
+                            "labels": [],
+                            "assignedUsers": [],
+                            "attachments": null,
+                            "attachmentCount": null,
+                            "owner": {
+                                "primaryKey": "admin",
+                                "uid": "admin",
+                                "displayname": "admin",
+                                "type": 0
+                            },
+                            "order": 0,
+                            "archived": false,
+                            "duedate": null,
+                            "deletedAt": 0,
+                            "commentsUnread": 0,
+                            "commentsCount": 0,
+                            "ETag": "193163d8a8acedbfaba196b1f0d65bc8",
+                            "overdue": 0,
+                            "boardId": 189,
+                            "board": {
+                                "id": 189,
+                                "title": "Shared board"
+                            }
+                        },
+                        {
+                            "id": 110,
+                            "title": "Design feature",
+                            "description": "",
+                            "stackId": 63,
+                            "type": "plain",
+                            "lastModified": 1689667506,
+                            "lastEditor": null,
+                            "createdAt": 1689667502,
+                            "labels": [],
+                            "assignedUsers": [],
+                            "attachments": null,
+                            "attachmentCount": null,
+                            "owner": {
+                                "primaryKey": "admin",
+                                "uid": "admin",
+                                "displayname": "admin",
+                                "type": 0
+                            },
+                            "order": 1,
+                            "archived": false,
+                            "duedate": null,
+                            "deletedAt": 0,
+                            "commentsUnread": 0,
+                            "commentsCount": 0,
+                            "ETag": "193163d8a8acedbfaba196b1f0d65bc8",
+                            "overdue": 0,
+                            "boardId": 189,
+                            "board": {
+                                "id": 189,
+                                "title": "Shared board"
+                            }
+                        }
+                    ]
+                }
+            },
+            "activeSessions": [],
+            "deletedAt": 0,
+            "lastModified": 1689667537,
+            "settings": [],
+            "ETag": "6c315c83f146485e6b2b6fdc24ffa617"
+        }
+    }
+}
