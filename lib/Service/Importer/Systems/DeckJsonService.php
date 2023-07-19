@@ -216,6 +216,8 @@ class DeckJsonService extends ABoardImportService {
 			$acl->setPermissionEdit(false);
 			$acl->setPermissionShare(false);
 			$acl->setPermissionManage(false);
+			// FIXME: Figure out a way to collect and aggregate warnings about users
+			// FIXME: Maybe have a dry run?
 			$return[] = $acl;
 		}
 		return $return;
