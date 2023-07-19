@@ -31,8 +31,6 @@ use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Service\Importer\ABoardImportService;
-use OCP\IL10N;
-use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 
@@ -44,8 +42,6 @@ class DeckJsonService extends ABoardImportService {
 
 	public function __construct(
 		private IUserManager $userManager,
-		private IURLGenerator $urlGenerator,
-		private IL10N $l10n
 	) {
 	}
 
@@ -84,6 +80,20 @@ class DeckJsonService extends ABoardImportService {
 			$user = current($user);
 			$this->members[$user->id] = $this->getImportService()->getConfig('uidRelation')->$exportUid;
 		}
+	}
+
+	public function mapMember($uid): ?string {
+
+		$uidCandidate = $this->members[$uid]?->getUID() ?? null;
+		if ($uidCandidate) {
+			return $uidCandidate;
+		}
+
+		if ($this->userManager->userExists($uid)) {
+			return $uid;
+		}
+
+		return null;
 	}
 
 	public function getCardAssignments(): array {
@@ -176,6 +186,7 @@ class DeckJsonService extends ABoardImportService {
 			$card = new Card();
 			$card->setTitle($cardSource->title);
 			$card->setLastModified($cardSource->lastModified);
+			$card->setCreatedAt($cardSource->createdAt);
 			$card->setArchived($cardSource->archived);
 			$card->setDescription($cardSource->description);
 			$card->setStackId($this->stacks[$cardSource->stackId]->getId());

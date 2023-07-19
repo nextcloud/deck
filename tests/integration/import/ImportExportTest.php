@@ -26,6 +26,7 @@ namespace OCA\Deck\Db;
 use OCA\Deck\Command\BoardImport;
 use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\Importer\Systems\DeckJsonService;
+use OCP\AppFramework\Db\Entity;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
@@ -117,10 +118,98 @@ class ImportExportTest extends \Test\TestCase {
 
 	public function assertDatabase() {
 		$boardMapper = \OCP\Server::get(BoardMapper::class);
+		$stackMapper = \OCP\Server::get(StackMapper::class);
+		$cardMapper = \OCP\Server::get(CardMapper::class);
+
 		$boards = $boardMapper->findAllByOwner('admin');
-		self::assertEquals('My test board', $boards[0]->getTitle());
-		self::assertEquals('Shared board', $boards[1]->getTitle());
 		self::assertEquals(2, count($boards));
+
+		$board = $boards[0];
+		self::assertEntity(Board::fromRow([
+			'title' => 'My test board',
+			'color' => 'e0ed31',
+			'owner' => 'admin',
+		]), $board);
+
+		$stacks = $stackMapper->findAll($board->getId());
+		self::assertCount(3, $stacks);
+		self::assertEntity(Stack::fromRow([
+			'title' => 'A',
+			'order' => 999,
+			'boardId' => $boards[0]->getId(),
+		]), $stacks[0]);
+		self::assertEntity(Stack::fromRow([
+			'title' => 'B',
+			'order' => 999,
+			'boardId' => $boards[0]->getId(),
+		]), $stacks[1]);
+		self::assertEntity(Stack::fromRow([
+			'title' => 'C',
+			'order' => 999,
+			'boardId' => $boards[0]->getId(),
+		]), $stacks[2]);
+
+		$cards = $cardMapper->findAll($stacks[0]->getId());
+		self::assertEntity(Card::fromRow([
+			'title' => '1',
+			'description' => '',
+			'type' => 'plain',
+			'lastModified' => 1689667779,
+			'createdAt' => 1689667569,
+			'owner' => 'admin',
+			'duedate' => new \DateTime('2050-07-24T22:00:00.000000+0000'),
+			'order' => 999,
+			'stackId' => $stacks[0]->getId(),
+		]), $cards[0]);
+		self::assertEntity(Card::fromRow([
+			'title' => '2',
+			'duedate' => new \DateTime('2050-07-24T22:00:00.000000+0000'),
+		]), $cards[1], true);
+		self::assertEntity(Card::fromParams([
+			'title' => '3',
+			'duedate' => null,
+		]), $cards[2], true);
+
+		$cards = $cardMapper->findAll($stacks[1]->getId());
+		self::assertEntity(Card::fromParams([
+			'title' => '6',
+			'duedate' => null,
+			'description' => "# Test description\n\nHello world",
+		]), $cards[2], true);
+
+		// Shared board
+		$sharedBoard = $boards[1];
+		self::assertEntity(Board::fromRow([
+			'title' => 'Shared board',
+			'color' => '30b6d8',
+			'owner' => 'admin',
+		]), $sharedBoard);
+
+		$stacks = $stackMapper->findAll($sharedBoard->getId());
+		self::assertCount(3, $stacks);
+	}
+
+	public static function assertEntity(Entity $expected, Entity $actual, bool $checkProperties = false) {
+		if ($checkProperties === true) {
+			$e = clone $expected;
+			$a = clone $actual;
+			foreach ($e->getUpdatedFields() as $property => $updated) {
+				$expectedValue = call_user_func([$e, 'get' . ucfirst($property)]);
+				$actualValue = call_user_func([$a, 'get' . ucfirst($property)]);
+				self::assertEquals(
+					$expectedValue,
+					$actualValue
+				);
+			}
+		} else {
+			$e = clone $expected;
+			$e->setId(null);
+			$a = clone $actual;
+			$a->setId(null);
+			$e->resetUpdatedFields();
+			$a->resetUpdatedFields();
+			self::assertEquals($e, $a);
+		}
 	}
 
 	public function tearDown(): void {

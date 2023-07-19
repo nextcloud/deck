@@ -25,6 +25,7 @@ namespace OCA\Deck\Service\Importer;
 
 use OCA\Deck\Exceptions\ConflictException;
 use OCA\Deck\NotFoundException;
+use OCA\Deck\Service\Importer\Systems\DeckJsonService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -76,6 +77,10 @@ class BoardImportCommandService extends BoardImportService {
 	}
 
 	protected function validateConfig(): void {
+		// FIXME: Make config optional for deck plain importer (but use a call on the importer insterad)
+		if ($this->getImportSystem() instanceof DeckJsonService) {
+			return;
+		}
 		try {
 			$config = $this->getInput()->getOption('config');
 			if (is_string($config)) {
@@ -145,6 +150,18 @@ class BoardImportCommandService extends BoardImportService {
 		if (!$this->getImportSystem()->needValidateData()) {
 			return;
 		}
+		$data = $this->getInput()->getArgument('file');
+		if (is_string($data)) {
+			if (!file_exists($data)) {
+				throw new \OCP\Files\NotFoundException('Could not find file ' . $data);
+			}
+			$data = json_decode(file_get_contents($data));
+			if ($data instanceof \stdClass) {
+				$this->setData($data);
+				return;
+			}
+		}
+
 		$data = $this->getInput()->getOption('data');
 		if (is_string($data)) {
 			$data = json_decode(file_get_contents($data));

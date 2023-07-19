@@ -84,6 +84,8 @@ class BoardImportService {
 	) {
 		$this->board = new Board();
 		$this->disableCommentsEvents();
+
+		$this->config = new \stdClass();
 	}
 
 	private function disableCommentsEvents(): void {
@@ -152,6 +154,11 @@ class BoardImportService {
 	public function getAllowedImportSystems(): array {
 		if (!$this->allowedSystems) {
 			$this->addAllowedImportSystem([
+				'name' => DeckJsonService::$name,
+				'class' => DeckJsonService::class,
+				'internalName' => 'DeckJson'
+			]);
+			$this->addAllowedImportSystem([
 				'name' => TrelloApiService::$name,
 				'class' => TrelloApiService::class,
 				'internalName' => 'TrelloApi'
@@ -160,11 +167,6 @@ class BoardImportService {
 				'name' => TrelloJsonService::$name,
 				'class' => TrelloJsonService::class,
 				'internalName' => 'TrelloJson'
-			]);
-			$this->addAllowedImportSystem([
-				'name' => DeckJsonService::$name,
-				'class' => DeckJsonService::class,
-				'internalName' => 'DeckJson'
 			]);
 		}
 		$this->eventDispatcher->dispatchTyped(new BoardImportGetAllowedEvent($this));
