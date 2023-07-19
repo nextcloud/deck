@@ -117,7 +117,6 @@ class BoardImportService {
 				$this->importComments();
 				$this->importCardAssignments();
 			} catch (\Throwable $th) {
-				throw $th;
 				throw new BadRequestException($th->getMessage());
 			}
 		}
