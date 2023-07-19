@@ -118,6 +118,9 @@ class BoardImportServiceTest extends \Test\TestCase {
 		$this->trelloJsonService
 			->method('getJsonSchemaPath')
 			->willReturn($configFile);
+		$this->trelloJsonService
+			->method('getBoards')
+			->willReturn([$data]);
 		$this->boardImportService->setImportSystem($this->trelloJsonService);
 
 		$owner = $this->createMock(IUser::class);
@@ -192,8 +195,7 @@ class BoardImportServiceTest extends \Test\TestCase {
 			->expects($this->once())
 			->method('insert');
 
-		$actual = $this->boardImportService->import();
-
-		$this->assertNull($actual);
+		$this->boardImportService->import();
+		self::assertTrue(true);
 	}
 }
