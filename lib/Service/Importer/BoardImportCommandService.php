@@ -184,7 +184,7 @@ class BoardImportCommandService extends BoardImportService {
 		foreach ($boards as $board) {
 			$this->reset();
 			$this->setData($board);
-			$this->getOutput()->writeln('Importing board...');
+			$this->getOutput()->writeln('Importing board "' . $this->getBoard()->getTitle() . '".');
 			$this->importBoard();
 			$this->getOutput()->writeln('Assign users to board...');
 			$this->importAcl();
