@@ -4,7 +4,7 @@
 		resolveFromConfigFile="true"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xmlns="https://getpsalm.org/schema/config"
-		xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+		xsi:schemaLocation="https://getpsalm.org/schema/config"
 		errorBaseline="tests/psalm-baseline.xml"
 >
 	<stubs>
@@ -18,10 +18,6 @@
 	</projectFiles>
 	<extraFiles>
 		<directory name="vendor" />
-		<ignoreFiles>
-			<directory name="vendor/phpunit/php-code-coverage" />
-			<directory name="vendor/vimeo" />
-		</ignoreFiles>
 	</extraFiles>
 	<issueHandlers>
 		<UndefinedMagicMethod>
@@ -41,6 +37,10 @@
 				<referencedClass name="OC\*" />
 				<referencedClass name="OC" />
 				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
+				<referencedClass name="Symfony\Component\Console\Command\Command" />
+				<referencedClass name="Symfony\Component\Console\Question\ChoiceQuestion" />
+				<referencedClass name="Symfony\Component\Console\Question\Question" />
+				<referencedClass name="Symfony\Component\EventDispatcher\GenericEvent" />
 			</errorLevel>
 		</UndefinedClass>
 		<UndefinedDocblockClass>
@@ -51,6 +51,7 @@
 				<referencedClass name="Doctrine\DBAL\Driver\Statement" />
 				<referencedClass name="Doctrine\DBAL\Schema\Table" />
 				<referencedClass name="OC\Security\CSP\ContentSecurityPolicyNonceManager" />
+				<referencedClass name="Symfony\Component\Console\Command\Command" />
 			</errorLevel>
 		</UndefinedDocblockClass>
 	</issueHandlers>
