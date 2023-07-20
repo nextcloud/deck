@@ -43,7 +43,7 @@ class Capabilities implements ICapability {
 	/**
 	 * Function an app uses to return the capabilities
 	 *
-	 * @return array Array containing the apps capabilities
+	 * @return array{deck: array{version: string, canCreateBoards: bool, apiVersions: array<string>}}
 	 * @since 8.2.0
 	 */
 	public function getCapabilities() {
