@@ -132,9 +132,13 @@ class DeckJsonService extends ABoardImportService {
 		if (empty($this->getImportService()->getData()->title)) {
 			throw new BadRequestException('Invalid name of board');
 		}
-		$board->setTitle($this->getImportService()->getData()->title);
-		$board->setOwner($this->getImportService()->getData()->owner->uid);
-		$board->setColor($this->getImportService()->getData()->color);
+		$importBoard = $this->getImportService()->getData();
+		$board->setTitle($importBoard->title);
+		$board->setOwner($importBoard->owner->uid);
+		$board->setColor($importBoard->color);
+		$board->setArchived($importBoard->archived);
+		$board->setDeletedAt($importBoard->deletedAt);
+		$board->setLastModified($importBoard->lastModified);
 		return $board;
 	}
 
@@ -147,6 +151,7 @@ class DeckJsonService extends ABoardImportService {
 			$newLabel->setTitle($label->title);
 			$newLabel->setColor($label->color);
 			$newLabel->setBoardId($this->getImportService()->getBoard()->getId());
+			$newLabel->setLastModified($label->lastModified);
 			$this->labels[$label->id] = $newLabel;
 		}
 		return $this->labels;
@@ -203,21 +208,17 @@ class DeckJsonService extends ABoardImportService {
 	 * @return Acl[]
 	 */
 	public function getAclList(): array {
-		// FIXME: To implement
+		$board = $this->getImportService()->getData();
 		$return = [];
-		foreach ($this->members as $member) {
-			if ($member->getUID() === $this->getImportService()->getConfig('owner')->getUID()) {
-				continue;
-			}
+		foreach ($board->acl as $aclData) {
+			// FIXME: Figure out mapping
 			$acl = new Acl();
 			$acl->setBoardId($this->getImportService()->getBoard()->getId());
-			$acl->setType(Acl::PERMISSION_TYPE_USER);
-			$acl->setParticipant($member->getUID());
-			$acl->setPermissionEdit(false);
-			$acl->setPermissionShare(false);
-			$acl->setPermissionManage(false);
-			// FIXME: Figure out a way to collect and aggregate warnings about users
-			// FIXME: Maybe have a dry run?
+			$acl->setType($aclData->type);
+			$acl->setParticipant($aclData->participant?->primaryKey ?? $aclData->participant);
+			$acl->setPermissionEdit($aclData->permissionEdit);
+			$acl->setPermissionShare($aclData->permissionShare);
+			$acl->setPermissionManage($aclData->permissionManage);
 			$return[] = $acl;
 		}
 		return $return;

@@ -24,15 +24,21 @@
 namespace OCA\Deck\Db;
 
 use OCA\Deck\Command\BoardImport;
+use OCA\Deck\Command\UserExport;
+use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\Importer\Systems\DeckJsonService;
+use OCA\Deck\Service\PermissionService;
+use OCA\Deck\Service\StackService;
 use OCP\AppFramework\Db\Entity;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IUserManager;
 use OCP\Server;
+use PHPUnit\Framework\ExpectationFailedException;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -102,6 +108,73 @@ class ImportExportTest extends \Test\TestCase {
 		$this->assertDatabase();
 	}
 
+	/**
+	 * This test runs an import, export and another import to assert that multiple attempts result in the same data structure
+	 */
+	public function testReimportOcc() {
+		// initial import from test fixture json
+		$input = $this->createMock(InputInterface::class);
+		$input->expects($this->any())
+			->method('getOption')
+			->willReturnCallback(function ($arg) {
+				return match ($arg) {
+					'system' => 'DeckJson',
+					'data' => __DIR__ . '/../../data/deck.json',
+					'config' => __DIR__ . '/../../data/config-trelloJson.json',
+				};
+			});
+		$output = $this->createMock(OutputInterface::class);
+		$importer = \OCP\Server::get(BoardImport::class);
+		$application = new Application();
+		$importer->setApplication($application);
+		$importer->run($input, $output);
+
+		$this->assertDatabase();
+
+		self::overwriteService(BoardService::class, self::getFreshService(BoardService::class));
+		// export to a temporary file
+		$input = $this->createMock(InputInterface::class);
+		$input->expects($this->any())
+			->method('getArgument')
+			->with('user-id')
+			->willReturn('admin');
+		$output = new BufferedOutput();
+		$exporter = \OCP\Server::get(UserExport::class);
+		$exporter->setApplication($application);
+		$exporter->run($input, $output);
+		$jsonOutput = $output->fetch();
+		json_decode($jsonOutput);
+		self::assertTrue(json_last_error() === JSON_ERROR_NONE);
+		$tmpExportFile = tempnam('/tmp', 'export');
+		file_put_contents($tmpExportFile, $jsonOutput);
+
+		// self::assertEquals(file_get_contents(__DIR__ . '/../../data/deck.json'), $jsonOutput);
+
+		// cleanup test database
+		$this->connection->rollBack();
+		$this->connection->beginTransaction();
+
+		self::overwriteService(BoardService::class, self::getFreshService(BoardService::class));
+		// Re-import from temporary file
+		$input = $this->createMock(InputInterface::class);
+		$input->expects($this->any())
+			->method('getOption')
+			->willReturnCallback(function ($arg) use ($tmpExportFile) {
+				return match ($arg) {
+					'system' => 'DeckJson',
+					'data' => $tmpExportFile,
+					'config' => __DIR__ . '/../../data/config-trelloJson.json',
+				};
+			});
+		$output = $this->createMock(OutputInterface::class);
+		$importer = \OCP\Server::get(BoardImport::class);
+		$application = new Application();
+		$importer->setApplication($application);
+		$importer->run($input, $output);
+
+		$this->assertDatabase();
+	}
+
 	public function testImport() {
 		$importer = \OCP\Server::get(BoardImportService::class);
 		$deckJsonService = \OCP\Server::get(DeckJsonService::class);
@@ -116,12 +189,24 @@ class ImportExportTest extends \Test\TestCase {
 		$this->assertDatabase();
 	}
 
+	/**
+	 * @template T
+	 * @param class-string<T>|string $className
+	 * @return T
+	 */
+	private function getFreshService(string $className): mixed {
+		return \OC::$server->getRegisteredAppContainer('deck')->resolve($className);
+	}
+
 	public function assertDatabase() {
+		$permissionService = \OCP\Server::get(PermissionService::class);
+		$permissionService->setUserId('admin');
 		$boardMapper = \OCP\Server::get(BoardMapper::class);
 		$stackMapper = \OCP\Server::get(StackMapper::class);
 		$cardMapper = \OCP\Server::get(CardMapper::class);
 
 		$boards = $boardMapper->findAllByOwner('admin');
+		$boardNames = array_map(fn ($board) => $board->getTitle(), $boards);
 		self::assertEquals(2, count($boards));
 
 		$board = $boards[0];
@@ -129,7 +214,15 @@ class ImportExportTest extends \Test\TestCase {
 			'title' => 'My test board',
 			'color' => 'e0ed31',
 			'owner' => 'admin',
+			'lastModified' => 1689667796,
 		]), $board);
+		$boardService = $this->getFreshService(BoardService::class);
+		$fullBoard = $boardService->find($board->getId(), true);
+		self::assertEntityInArray(Label::fromParams([
+			'title' => 'L2',
+			'color' => '31CC7C',
+		]), $fullBoard->getLabels(), true);
+
 
 		$stacks = $stackMapper->findAll($board->getId());
 		self::assertCount(3, $stacks);
@@ -183,13 +276,41 @@ class ImportExportTest extends \Test\TestCase {
 			'title' => 'Shared board',
 			'color' => '30b6d8',
 			'owner' => 'admin',
-		]), $sharedBoard);
+		]), $sharedBoard, true);
+
+		$stackService = \OCP\Server::get(StackService::class);
+		$stacks = $stackService->findAll($board->getId());
+		self::assertEntityInArray(Label::fromParams([
+			'title' => 'L2',
+			'color' => '31CC7C',
+		]), $stacks[0]->getCards()[0]->getLabels(), true);
+		self::assertEntity(Label::fromParams([
+			'title' => 'L2',
+			'color' => '31CC7C',
+		]), $stacks[0]->getCards()[0]->getLabels()[0], true);
 
 		$stacks = $stackMapper->findAll($sharedBoard->getId());
 		self::assertCount(3, $stacks);
 	}
 
-	public static function assertEntity(Entity $expected, Entity $actual, bool $checkProperties = false) {
+	public static function assertEntityInArray(Entity $expected, array $array, bool $checkProperties): void {
+		$exists = null;
+		foreach ($array as $entity) {
+			try {
+				self::assertEntity($expected, $entity, $checkProperties);
+				$exists = $entity;
+			} catch (ExpectationFailedException $e) {
+			}
+		}
+		if ($exists) {
+			self::assertEntity($expected, $exists, $checkProperties);
+		} else {
+			// THis is hard to debug if it fails as the actual diff is not returned but hidden in the above exception
+			self::assertEquals($expected, $exists);
+		}
+	}
+
+	public static function assertEntity(Entity $expected, Entity $actual, bool $checkProperties = false): void {
 		if ($checkProperties === true) {
 			$e = clone $expected;
 			$a = clone $actual;
