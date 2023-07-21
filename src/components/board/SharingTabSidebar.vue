@@ -79,7 +79,7 @@ import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { loadState } from '@nextcloud/initial-state'
-import debounce from 'lodash/debounce'
+import debounce from 'lodash/debounce.js'
 
 export default {
 	name: 'SharingTabSidebar',

@@ -70,7 +70,7 @@ import CommentForm from './CommentForm.vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import md5 from 'blueimp-md5'
 import relativeDate from '../../mixins/relativeDate.js'
-import ReplyIcon from 'vue-material-design-icons/Reply'
+import ReplyIcon from 'vue-material-design-icons/Reply.vue'
 
 const AtMention = {
 	name: 'AtMention',

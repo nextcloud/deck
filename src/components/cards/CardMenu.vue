@@ -94,8 +94,8 @@ import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showUndo } from '@nextcloud/dialogs'
 import '@nextcloud/dialogs/styles/toast.scss'
-import ArchiveIcon from 'vue-material-design-icons/Archive'
-import CardBulletedIcon from 'vue-material-design-icons/CardBulleted'
+import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
+import CardBulletedIcon from 'vue-material-design-icons/CardBulleted.vue'
 
 export default {
 	name: 'CardMenu',
