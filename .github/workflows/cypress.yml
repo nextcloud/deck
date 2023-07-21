@@ -67,7 +67,7 @@ jobs:
         uses: shivammathur/setup-php@2.25.4
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, sqlite, pdo_sqlite
+          extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, sqlite, pdo_sqlite, apcu
           ini-values:
             apc.enable_cli=on
           coverage: none
