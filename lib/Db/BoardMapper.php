@@ -106,44 +106,54 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	public function findBoardIds(string $userId): array {
+		// Owned by the user
 		$qb = $this->db->getQueryBuilder();
 		$qb->selectDistinct('b.id')
 			->from($this->getTableName(), 'b')
-			->leftJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'));
+			->where($qb->expr()->andX(
+				$qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)),
+			));
+		$result = $qb->executeQuery();
+		$ownerBoards = array_map(function (string $id) {
+			return (int)$id;
+		}, $result->fetchAll(\PDO::FETCH_COLUMN));
+		$result->closeCursor();
 
-		// Owned by the user
-		$qb->where($qb->expr()->andX(
-			$qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)),
-		));
+		$qb = $this->db->getQueryBuilder();
+		$qb->selectDistinct('b.id')
+			->from($this->getTableName(), 'b')
+			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'));
 
 		// Shared to the user
-		$qb->orWhere($qb->expr()->andX(
-			$qb->expr()->eq('acl.participant', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)),
+		$qb->where($qb->expr()->andX(
 			$qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_USER, IQueryBuilder::PARAM_INT)),
+			$qb->expr()->eq('acl.participant', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)),
 		));
 
 		// Shared to user groups of the user
 		$groupIds = $this->groupManager->getUserGroupIds($this->userManager->get($userId));
 		if (count($groupIds) !== 0) {
 			$qb->orWhere($qb->expr()->andX(
-					$qb->expr()->in('acl.participant', $qb->createNamedParameter($groupIds, IQueryBuilder::PARAM_STR_ARRAY)),
-					$qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_GROUP, IQueryBuilder::PARAM_INT)),
-				));
+				$qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_GROUP, IQueryBuilder::PARAM_INT)),
+				$qb->expr()->in('acl.participant', $qb->createNamedParameter($groupIds, IQueryBuilder::PARAM_STR_ARRAY)),
+			));
 		}
 
 		// Shared to circles of the user
 		$circles = $this->circlesService->getUserCircles($userId);
 		if (count($circles) !== 0) {
 			$qb->orWhere($qb->expr()->andX(
-				$qb->expr()->in('acl.participant', $qb->createNamedParameter($circles, IQueryBuilder::PARAM_STR_ARRAY)),
 				$qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_CIRCLE, IQueryBuilder::PARAM_INT)),
+				$qb->expr()->in('acl.participant', $qb->createNamedParameter($circles, IQueryBuilder::PARAM_STR_ARRAY)),
 			));
 		}
 
 		$result = $qb->executeQuery();
-		return array_map(function (string $id) {
+		$sharedBoards = array_map(function (string $id) {
 			return (int)$id;
 		}, $result->fetchAll(\PDO::FETCH_COLUMN));
+		$result->closeCursor();
+		return array_unique(array_merge($ownerBoards, $sharedBoards));
 	}
 
 	public function findAllForUser(string $userId, ?int $since = null, bool $includeArchived = true, ?int $before = null,
