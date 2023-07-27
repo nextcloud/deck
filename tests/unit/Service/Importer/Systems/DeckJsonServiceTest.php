@@ -65,13 +65,13 @@ class DeckJsonServiceTest extends \Test\TestCase {
 		$data = json_decode(file_get_contents(__DIR__ . '/../../../../data/deck.json'));
 		$importService->setData($data);
 
-		$configInstance = json_decode(file_get_contents(__DIR__ . '/../../../../data/config-trelloJson.json'));
+		$configInstance = json_decode(file_get_contents(__DIR__ . '/../../../../data/config-deckJson.json'));
 		$importService->setConfigInstance($configInstance);
 
 		$owner = $this->createMock(IUser::class);
 		$owner
 			->method('getUID')
-			->willReturn('owner');
+			->willReturn('admin');
 		$importService->setConfig('owner', $owner);
 
 		$this->service->setImportService($importService);
