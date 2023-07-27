@@ -59,16 +59,11 @@ class DeckJsonService extends ABoardImportService {
 	}
 
 	public function validateUsers(): void {
-		if (empty($this->getImportService()->getConfig('uidRelation')) || !isset($this->getImportService()->getData()->members)) {
+		$relation = $this->getImportService()->getConfig('uidRelation');
+		if (empty($relation)) {
 			return;
 		}
-		foreach ($this->getImportService()->getConfig('uidRelation') as $exportUid => $nextcloudUid) {
-			$user = array_filter($this->getImportService()->getData()->members, function (\stdClass $u) use ($exportUid) {
-				return $u->username === $exportUid;
-			});
-			if (!$user) {
-				throw new \LogicException('Trello user ' . $exportUid . ' not found in property "members" of json data');
-			}
+		foreach ($relation as $exportUid => $nextcloudUid) {
 			if (!is_string($nextcloudUid) && !is_numeric($nextcloudUid)) {
 				throw new \LogicException('User on setting uidRelation is invalid');
 			}
@@ -77,14 +72,12 @@ class DeckJsonService extends ABoardImportService {
 			if (!$this->getImportService()->getConfig('uidRelation')->$exportUid) {
 				throw new \LogicException('User on setting uidRelation not found: ' . $nextcloudUid);
 			}
-			$user = current($user);
-			$this->members[$user->id] = $this->getImportService()->getConfig('uidRelation')->$exportUid;
+			$this->members[$exportUid] = $this->getImportService()->getConfig('uidRelation')->$exportUid;
 		}
 	}
 
 	public function mapMember($uid): ?string {
-
-		$uidCandidate = $this->members[$uid]?->getUID() ?? null;
+		$uidCandidate = isset($this->members[$uid]) ? $this->members[$uid]?->getUID() ?? null : null;
 		if ($uidCandidate) {
 			return $uidCandidate;
 		}
@@ -94,6 +87,15 @@ class DeckJsonService extends ABoardImportService {
 		}
 
 		return null;
+	}
+
+	public function mapOwner(string $uid): string {
+		$configOwner = $this->getImportService()->getConfig('owner');
+		if ($configOwner) {
+			return $configOwner->getUID();
+		}
+
+		return $uid;
 	}
 
 	public function getCardAssignments(): array {
@@ -134,7 +136,7 @@ class DeckJsonService extends ABoardImportService {
 		}
 		$importBoard = $this->getImportService()->getData();
 		$board->setTitle($importBoard->title);
-		$board->setOwner($importBoard->owner?->uid ?? $importBoard->owner);
+		$board->setOwner($this->mapOwner($importBoard->owner?->uid ?? $importBoard->owner));
 		$board->setColor($importBoard->color);
 		$board->setArchived($importBoard->archived);
 		$board->setDeletedAt($importBoard->deletedAt);
@@ -168,6 +170,7 @@ class DeckJsonService extends ABoardImportService {
 				$stack->setTitle($source->title);
 				$stack->setBoardId($this->getImportService()->getBoard()->getId());
 				$stack->setOrder($source->order);
+				$stack->setLastModified($source->lastModified);
 				$return[$source->id] = $stack;
 			}
 
@@ -191,13 +194,15 @@ class DeckJsonService extends ABoardImportService {
 			$card = new Card();
 			$card->setTitle($cardSource->title);
 			$card->setLastModified($cardSource->lastModified);
+			$card->setLastEditor($cardSource->lastEditor);
 			$card->setCreatedAt($cardSource->createdAt);
 			$card->setArchived($cardSource->archived);
 			$card->setDescription($cardSource->description);
 			$card->setStackId($this->stacks[$cardSource->stackId]->getId());
 			$card->setType('plain');
 			$card->setOrder($cardSource->order);
-			$card->setOwner($this->getBoard()->getOwner());
+			$boardOwner = $this->getBoard()->getOwner();
+			$card->setOwner($this->mapOwner(is_string($boardOwner) ? $boardOwner : $boardOwner->getUID()));
 			$card->setDuedate($cardSource->duedate);
 			$cards[$cardSource->id] = $card;
 		}
@@ -215,11 +220,18 @@ class DeckJsonService extends ABoardImportService {
 			$acl = new Acl();
 			$acl->setBoardId($this->getImportService()->getBoard()->getId());
 			$acl->setType($aclData->type);
-			$acl->setParticipant($aclData->participant?->primaryKey ?? $aclData->participant);
+			$participant = $aclData->participant?->primaryKey ?? $aclData->participant;
+			if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
+				$participant = $this->mapMember($participant);
+			}
+			$acl->setParticipant($participant);
 			$acl->setPermissionEdit($aclData->permissionEdit);
 			$acl->setPermissionShare($aclData->permissionShare);
 			$acl->setPermissionManage($aclData->permissionManage);
-			$return[] = $acl;
+			if ($participant) {
+				$return[] = $acl;
+			}
+			// TODO: Once we have error collection we should catch non-existing users
 		}
 		return $return;
 	}
