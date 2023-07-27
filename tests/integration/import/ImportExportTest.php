@@ -26,10 +26,12 @@ namespace OCA\Deck\Db;
 use OCA\Deck\Command\BoardImport;
 use OCA\Deck\Command\UserExport;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\Importer\Systems\DeckJsonService;
 use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Service\StackService;
+use OCP\App\IAppManager;
 use OCP\AppFramework\Db\Entity;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
@@ -59,6 +61,9 @@ class ImportExportTest extends \Test\TestCase {
 		$backend = new \Test\Util\User\Dummy();
 		\OC_User::useBackend($backend);
 		Server::get(IUserManager::class)->registerBackend($backend);
+		$backend->createUser('alice', 'alice');
+		$backend->createUser('jane', 'jane');
+		$backend->createUser('johndoe', 'johndoe');
 		$backend->createUser(self::TEST_USER1, self::TEST_USER1);
 		$backend->createUser(self::TEST_USER2, self::TEST_USER2);
 		$backend->createUser(self::TEST_USER3, self::TEST_USER3);
@@ -78,68 +83,118 @@ class ImportExportTest extends \Test\TestCase {
 		$groupBackend->addToGroup(self::TEST_USER4, 'group3');
 		$groupBackend->addToGroup(self::TEST_USER2, self::TEST_GROUP1);
 		Server::get(IGroupManager::class)->addBackend($groupBackend);
+
+		Server::get(PermissionService::class)->setUserId('admin');
 	}
 
 	public function setUp(): void {
 		parent::setUp();
 
 		$this->connection = \OCP\Server::get(IDBConnection::class);
-		$this->connection->beginTransaction();
-
+		$this->cleanDb();
+		$this->cleanDb(self::TEST_USER1);
 	}
 
 	public function testImportOcc() {
-		$input = $this->createMock(InputInterface::class);
-		$input->expects($this->any())
-			->method('getOption')
-			->willReturnCallback(function ($arg) {
-				return match ($arg) {
-					'system' => 'DeckJson',
-					'data' => __DIR__ . '/../../data/deck.json',
-					'config' => __DIR__ . '/../../data/config-trelloJson.json',
-				};
-			});
-		$output = $this->createMock(OutputInterface::class);
-		$importer = \OCP\Server::get(BoardImport::class);
-		$application = new Application();
-		$importer->setApplication($application);
-		$importer->run($input, $output);
-
+		$this->importFromFile(__DIR__ . '/../../data/deck.json');
 		$this->assertDatabase();
 	}
 
 	/**
-	 * This test runs an import, export and another import to assert that multiple attempts result in the same data structure
+	 * This test runs an import, export and another import and
+	 * assert that multiple attempts result in the same data structure
+	 *
+	 * In addition, it asserts that multiple import/export runs result in the same JSON
 	 */
 	public function testReimportOcc() {
-		// initial import from test fixture json
+		$this->importFromFile(__DIR__ . '/../../data/deck.json');
+		$this->assertDatabase();
+
+		$tmpExportFile = $this->exportToTemp();
+
+		// Useful for double checking differences as there is no easy way to compare equal with skipping certain id keys, etag
+		// self::assertEquals(file_get_contents(__DIR__ . '/../../data/deck.json'), $jsonOutput);
+		self::assertEquals(
+			self::writeArrayStructure(array: json_decode(file_get_contents(__DIR__ . '/../../data/deck.json'), true)),
+			self::writeArrayStructure(array: json_decode(file_get_contents($tmpExportFile), true))
+		);
+
+		// cleanup test database
+		$this->cleanDb();
+
+		// Re-import from temporary file
+		$this->importFromFile($tmpExportFile);
+		$this->assertDatabase();
+
+		$tmpExportFile2 = $this->exportToTemp();
+		self::assertEquals(
+			self::writeArrayStructure(array: json_decode(file_get_contents($tmpExportFile), true)),
+			self::writeArrayStructure(array: json_decode(file_get_contents($tmpExportFile2), true))
+		);
+	}
+
+	public static function writeArrayStructure(string $prefix = '', array $array = [], array $skipKeyList = ['id', 'boardId', 'cardId', 'stackId', 'ETag', 'permissions', 'shared']): string {
+		$output = '';
+		$arrayIsList = array_keys($array) === range(0, count($array) - 1);
+		foreach ($array as $key => $value) {
+			$tmpPrefix = $prefix;
+			if (in_array($key, $skipKeyList)) {
+				continue;
+			}
+			if (is_array($value)) {
+				if ($key === 'participant' || $key === 'owner') {
+					$output .= $tmpPrefix . $key . ' => ' . $value['primaryKey'] . PHP_EOL;
+					continue;
+				}
+				$tmpPrefix .= (!$arrayIsList && !is_numeric($key) ? $key : '!!!') . ' => ';
+				$output .= self::writeArrayStructure($tmpPrefix, $value, $skipKeyList);
+			} else {
+				$output .= $tmpPrefix . $key . ' => ' . $value . PHP_EOL;
+			}
+		}
+		return $output;
+	}
+
+	public function cleanDb(string $owner = 'admin'): void {
+		$this->connection->executeQuery('DELETE from oc_deck_boards;');
+	}
+
+	private function importFromFile(string $filePath): void {
 		$input = $this->createMock(InputInterface::class);
 		$input->expects($this->any())
 			->method('getOption')
-			->willReturnCallback(function ($arg) {
+			->willReturnCallback(function ($arg) use ($filePath) {
 				return match ($arg) {
 					'system' => 'DeckJson',
-					'data' => __DIR__ . '/../../data/deck.json',
+					'data' => $filePath,
 					'config' => __DIR__ . '/../../data/config-trelloJson.json',
 				};
 			});
 		$output = $this->createMock(OutputInterface::class);
-		$importer = \OCP\Server::get(BoardImport::class);
+		$importer = self::getFreshService(BoardImport::class);
 		$application = new Application();
 		$importer->setApplication($application);
 		$importer->run($input, $output);
+	}
 
-		$this->assertDatabase();
-
-		self::overwriteService(BoardService::class, self::getFreshService(BoardService::class));
-		// export to a temporary file
+	/** Returns the path of a deck export json */
+	private function exportToTemp(): string {
+		\OCP\Server::get(BoardMapper::class)->flushCache();
+		$application = new Application();
 		$input = $this->createMock(InputInterface::class);
 		$input->expects($this->any())
 			->method('getArgument')
 			->with('user-id')
 			->willReturn('admin');
 		$output = new BufferedOutput();
-		$exporter = \OCP\Server::get(UserExport::class);
+		$exporter = new UserExport(
+			\OCP\Server::get(IAppManager::class),
+			self::getFreshService(BoardMapper::class),
+			self::getFreshService(BoardService::class),
+			self::getFreshService(StackMapper::class),
+			self::getFreshService(CardMapper::class),
+			self::getFreshService(AssignmentMapper::class),
+		);
 		$exporter->setApplication($application);
 		$exporter->run($input, $output);
 		$jsonOutput = $output->fetch();
@@ -147,37 +202,12 @@ class ImportExportTest extends \Test\TestCase {
 		self::assertTrue(json_last_error() === JSON_ERROR_NONE);
 		$tmpExportFile = tempnam('/tmp', 'export');
 		file_put_contents($tmpExportFile, $jsonOutput);
-
-		// self::assertEquals(file_get_contents(__DIR__ . '/../../data/deck.json'), $jsonOutput);
-
-		// cleanup test database
-		$this->connection->rollBack();
-		$this->connection->beginTransaction();
-
-		self::overwriteService(BoardService::class, self::getFreshService(BoardService::class));
-		// Re-import from temporary file
-		$input = $this->createMock(InputInterface::class);
-		$input->expects($this->any())
-			->method('getOption')
-			->willReturnCallback(function ($arg) use ($tmpExportFile) {
-				return match ($arg) {
-					'system' => 'DeckJson',
-					'data' => $tmpExportFile,
-					'config' => __DIR__ . '/../../data/config-trelloJson.json',
-				};
-			});
-		$output = $this->createMock(OutputInterface::class);
-		$importer = \OCP\Server::get(BoardImport::class);
-		$application = new Application();
-		$importer->setApplication($application);
-		$importer->run($input, $output);
-
-		$this->assertDatabase();
+		return $tmpExportFile;
 	}
 
 	public function testImport() {
-		$importer = \OCP\Server::get(BoardImportService::class);
-		$deckJsonService = \OCP\Server::get(DeckJsonService::class);
+		$importer = self::getFreshService(BoardImportService::class);
+		$deckJsonService = self::getFreshService(DeckJsonService::class);
 		$deckJsonService->setImportService($importer);
 
 		$importer->setSystem('DeckJson');
@@ -189,23 +219,65 @@ class ImportExportTest extends \Test\TestCase {
 		$this->assertDatabase();
 	}
 
+	public function testImportAsOtherUser() {
+		$importer = self::getFreshService(BoardImportService::class);
+		$deckJsonService = self::getFreshService(DeckJsonService::class);
+		$deckJsonService->setImportService($importer);
+
+		$importer->setSystem('DeckJson');
+		$importer->setImportSystem($deckJsonService);
+		$importer->setConfigInstance((object)[
+			'owner' => self::TEST_USER1
+		]);
+		$importer->setData(json_decode(file_get_contents(__DIR__ . '/../../data/deck.json')));
+		$importer->import();
+
+		$this->assertDatabase(self::TEST_USER1);
+	}
+
+	public function testImportWithRemap() {
+		$importer = self::getFreshService(BoardImportService::class);
+		$deckJsonService = self::getFreshService(DeckJsonService::class);
+		$deckJsonService->setImportService($importer);
+
+		$importer->setSystem('DeckJson');
+		$importer->setImportSystem($deckJsonService);
+		$importer->setConfigInstance((object)[
+			'owner' => self::TEST_USER1,
+			'uidRelation' => (object)[
+				'alice' => self::TEST_USER2,
+				'jane' => self::TEST_USER3,
+			],
+		]);
+		$importer->setData(json_decode(file_get_contents(__DIR__ . '/../../data/deck.json')));
+		$importer->import();
+
+		$this->assertDatabase(self::TEST_USER1);
+		$otherUserboards = self::getFreshService(BoardMapper::class)->findAllByUser(self::TEST_USER2);
+		self::assertCount(1, $otherUserboards);
+	}
+
 	/**
 	 * @template T
 	 * @param class-string<T>|string $className
 	 * @return T
 	 */
 	private function getFreshService(string $className): mixed {
-		return \OC::$server->getRegisteredAppContainer('deck')->resolve($className);
+		$fresh = \OC::$server->getRegisteredAppContainer('deck')->resolve($className);
+		self::overwriteService($className, $fresh);
+		return $fresh;
 	}
 
-	public function assertDatabase() {
-		$permissionService = \OCP\Server::get(PermissionService::class);
-		$permissionService->setUserId('admin');
-		$boardMapper = \OCP\Server::get(BoardMapper::class);
-		$stackMapper = \OCP\Server::get(StackMapper::class);
-		$cardMapper = \OCP\Server::get(CardMapper::class);
+	public function assertDatabase(string $owner = 'admin') {
+		$permissionService = self::getFreshService(PermissionService::class);
+		$permissionService->setUserId($owner);
+		self::getFreshService(BoardService::class);
+		self::getFreshService(CardService::class);
+		$boardMapper = self::getFreshService(BoardMapper::class);
+		$stackMapper = self::getFreshService(StackMapper::class);
+		$cardMapper = self::getFreshService(CardMapper::class);
 
-		$boards = $boardMapper->findAllByOwner('admin');
+		$boards = $boardMapper->findAllByOwner($owner);
 		$boardNames = array_map(fn ($board) => $board->getTitle(), $boards);
 		self::assertEquals(2, count($boards));
 
@@ -213,7 +285,7 @@ class ImportExportTest extends \Test\TestCase {
 		self::assertEntity(Board::fromRow([
 			'title' => 'My test board',
 			'color' => 'e0ed31',
-			'owner' => 'admin',
+			'owner' => $owner,
 			'lastModified' => 1689667796,
 		]), $board);
 		$boardService = $this->getFreshService(BoardService::class);
@@ -230,16 +302,19 @@ class ImportExportTest extends \Test\TestCase {
 			'title' => 'A',
 			'order' => 999,
 			'boardId' => $boards[0]->getId(),
+			'lastModified' => 1689667779,
 		]), $stacks[0]);
 		self::assertEntity(Stack::fromRow([
 			'title' => 'B',
 			'order' => 999,
 			'boardId' => $boards[0]->getId(),
+			'lastModified' => 1689667796,
 		]), $stacks[1]);
 		self::assertEntity(Stack::fromRow([
 			'title' => 'C',
 			'order' => 999,
 			'boardId' => $boards[0]->getId(),
+			'lastModified' => 0,
 		]), $stacks[2]);
 
 		$cards = $cardMapper->findAll($stacks[0]->getId());
@@ -249,7 +324,7 @@ class ImportExportTest extends \Test\TestCase {
 			'type' => 'plain',
 			'lastModified' => 1689667779,
 			'createdAt' => 1689667569,
-			'owner' => 'admin',
+			'owner' => $owner,
 			'duedate' => new \DateTime('2050-07-24T22:00:00.000000+0000'),
 			'order' => 999,
 			'stackId' => $stacks[0]->getId(),
@@ -275,10 +350,10 @@ class ImportExportTest extends \Test\TestCase {
 		self::assertEntity(Board::fromRow([
 			'title' => 'Shared board',
 			'color' => '30b6d8',
-			'owner' => 'admin',
+			'owner' => $owner,
 		]), $sharedBoard, true);
 
-		$stackService = \OCP\Server::get(StackService::class);
+		$stackService = self::getFreshService(StackService::class);
 		$stacks = $stackService->findAll($board->getId());
 		self::assertEntityInArray(Label::fromParams([
 			'title' => 'L2',
@@ -334,9 +409,8 @@ class ImportExportTest extends \Test\TestCase {
 	}
 
 	public function tearDown(): void {
-		if ($this->connection->inTransaction()) {
-			$this->connection->rollBack();
-		}
+		$this->cleanDb();
+		$this->cleanDb(self::TEST_USER1);
 		parent::tearDown();
 	}
 }

@@ -532,12 +532,12 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		if ($boardId) {
 			unset($this->boardCache[$boardId]);
 		} else {
-			$this->boardCache = null;
+			$this->boardCache = new CappedMemoryCache();
 		}
 		if ($userId) {
 			unset($this->userBoardCache[$userId]);
 		} else {
-			$this->userBoardCache = null;
+			$this->userBoardCache = new CappedMemoryCache();
 		}
 	}
 }
