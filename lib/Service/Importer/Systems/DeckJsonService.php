@@ -134,7 +134,7 @@ class DeckJsonService extends ABoardImportService {
 		}
 		$importBoard = $this->getImportService()->getData();
 		$board->setTitle($importBoard->title);
-		$board->setOwner($importBoard->owner->uid);
+		$board->setOwner($importBoard->owner?->uid ?? $importBoard->owner);
 		$board->setColor($importBoard->color);
 		$board->setArchived($importBoard->archived);
 		$board->setDeletedAt($importBoard->deletedAt);
