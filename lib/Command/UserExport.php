@@ -69,7 +69,7 @@ class UserExport extends Command {
 		$legacyFormat = $input->getOption('legacy-format');
 
 		$this->boardService->setUserId($userId);
-		$boards = $this->boardService->findAll(fullDetails: true);
+		$boards = $this->boardService->findAll(fullDetails: false);
 
 		$data = [];
 		foreach ($boards as $board) {
