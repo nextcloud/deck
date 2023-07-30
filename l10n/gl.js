@@ -310,7 +310,7 @@ OC.L10N.register(
     "Create a card" : "Crear unha tarxeta",
     "Message from {author} in {conversationName}" : "Mensaxe de {author} en {conversationName}",
     "Something went wrong" : "Algo foi mal",
-    "Failed to upload {name}" : "Produciuse un fallo ao actualizar {name}",
+    "Failed to upload {name}" : "Produciuse un fallo ao enviar {name}",
     "Maximum file size of {size} exceeded" : "Excedeuse o tamaño máximo de ficheiro de {size}",
     "Error creating the share" : "Produciuse un erro ao crear a compartición",
     "Share with a Deck card" : "Compartir cunha tarxeta de Tarxeteiro",
