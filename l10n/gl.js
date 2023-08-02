@@ -266,7 +266,7 @@ OC.L10N.register(
     "All boards" : "Todos os taboleiros",
     "Archived boards" : "Taboleiros arquivados",
     "Shared with you" : "Compartido con Vde.",
-    "Deck settings" : "Axustes do Tarxeteiro",
+    "Deck settings" : "Axustes de Tarxeteiro",
     "Use bigger card view" : "Usa a vista de tarxeta máis grande",
     "Show card ID badge" : "Amosar o distintivo de identificación da tarxeta",
     "Show boards in calendar/tasks" : "Amosar taboleiros no calendario/tarefas",
