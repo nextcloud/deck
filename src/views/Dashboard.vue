@@ -54,26 +54,29 @@
 				</template>
 				{{ t('deck', 'New card') }}
 			</NcButton>
-			<CardCreateDialog v-if="showAddCardModal" @close="toggleAddCardModel" />
+			<NcModal v-if="showAddCardModal" class="card-selector" @close="toggleAddCardModel">
+				<CreateNewCardCustomPicker show-created-notice @cancel="toggleAddCardModel" />
+			</NcModal>
 		</div>
 	</div>
 </template>
 
 <script>
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import { NcButton, NcDashboardWidget } from '@nextcloud/vue'
+import { NcButton, NcDashboardWidget, NcModal } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import labelStyle from './../mixins/labelStyle.js'
 import DueDate from '../components/cards/badges/DueDate.vue'
 import { generateUrl } from '@nextcloud/router'
-import CardCreateDialog from '../CardCreateDialog.vue'
+import CreateNewCardCustomPicker from './CreateNewCardCustomPicker.vue'
 
 export default {
 	name: 'Dashboard',
 	components: {
+		CreateNewCardCustomPicker,
+		NcModal,
 		DueDate,
 		NcDashboardWidget,
-		CardCreateDialog,
 		NcButton,
 		PlusIcon,
 	},
