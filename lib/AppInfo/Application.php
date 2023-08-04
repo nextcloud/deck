@@ -54,6 +54,7 @@ use OCA\Deck\Notification\Notifier;
 use OCA\Deck\Reference\BoardReferenceProvider;
 use OCA\Deck\Reference\CardReferenceProvider;
 use OCA\Deck\Reference\CommentReferenceProvider;
+use OCA\Deck\Reference\CreateCardReferenceProvider;
 use OCA\Deck\Search\CardCommentProvider;
 use OCA\Deck\Search\DeckProvider;
 use OCA\Deck\Service\PermissionService;
@@ -128,6 +129,8 @@ class Application extends App implements IBootstrap {
 		$context->registerSearchProvider(DeckProvider::class);
 		$context->registerSearchProvider(CardCommentProvider::class);
 		$context->registerDashboardWidget(DeckWidget::class);
+
+		$context->registerReferenceProvider(CreateCardReferenceProvider::class);
 
 		// reference widget
 		$context->registerReferenceProvider(CardReferenceProvider::class);

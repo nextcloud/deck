@@ -39,7 +39,7 @@
 					{{ t('deck', 'View description') }}
 				</NcActionButton>
 			</NcActions>
-			<NcActions v-if="canEdit">
+			<NcActions v-if="canEdit && !!card.id">
 				<NcActionButton v-if="descriptionEditing" @click="showAttachmentModal()">
 					<template #icon>
 						<PaperclipIcon :size="24" decorative />
@@ -70,7 +70,7 @@
 				@blur="saveDescription" />
 		</template>
 
-		<NcModal v-if="modalShow" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
+		<NcModal v-if="modalShow && !!card.id" :title="t('deck', 'Choose attachment')" @close="modalShow=false">
 			<div class="modal__content">
 				<h3>{{ t('deck', 'Choose attachment') }}</h3>
 				<AttachmentList :card-id="card.id"
@@ -89,7 +89,6 @@ import AttachmentList from './AttachmentList.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { formatFileSize } from '@nextcloud/files'
 import { generateUrl } from '@nextcloud/router'
-import { mapState, mapGetters } from 'vuex'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 
 const markdownIt = new MarkdownIt({
@@ -119,6 +118,14 @@ export default {
 			type: Object,
 			default: null,
 		},
+		canEdit: {
+			type: Boolean,
+			default: true,
+		},
+		showAttachments: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data() {
 		return {
@@ -144,13 +151,6 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			currentBoard: state => state.currentBoard,
-		}),
-		...mapGetters(['canEdit']),
-		attachments() {
-			return [...this.$store.getters.attachmentsByCard(this.id)].sort((a, b) => b.id - a.id)
-		},
 		mimetypeForAttachment() {
 			return (mimetype) => {
 				const url = OC.MimeType.getIconUrl(mimetype)
@@ -278,7 +278,7 @@ export default {
 					}
 					return match
 				})
-				this.$store.dispatch('updateCardDesc', { ...this.card, description: updatedDescription })
+				this.$emit('change', updatedDescription)
 			}
 		},
 		async saveDescription() {
@@ -286,10 +286,9 @@ export default {
 				return
 			}
 			this.descriptionSaving = true
-			await this.$store.dispatch('updateCardDesc', { ...this.card, description: this.description })
+			this.$emit('change', this.description)
 			this.descriptionLastEdit = 0
 			this.descriptionSaving = false
-			this.$emit('change', this.description)
 		},
 		updateDescription() {
 			this.descriptionLastEdit = Date.now()
@@ -366,6 +365,10 @@ h5 {
 		float: right;
 		margin-top: -14px;
 	}
+}
+
+.description__text :deep(.ProseMirror) {
+	padding-bottom: 44px;
 }
 
 </style>
