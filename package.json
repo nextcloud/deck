@@ -53,7 +53,7 @@
     "nextcloud-vue-collections": "^0.11.1",
     "p-queue": "^7.3.4",
     "url-search-params-polyfill": "^8.2.4",
-    "vue": "^2.7.14",
+    "vue": "^3.3.4",
     "vue-at": "^2.5.1",
     "vue-click-outside": "^1.1.0",
     "vue-easymde": "^2.0.0",
