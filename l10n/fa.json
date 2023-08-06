@@ -252,6 +252,7 @@
     "Delete board" : "حذف تهته",
     "An error occurred" : "خطایی روی داد",
     "No results found" : "هیچ نتیجه ای یافت نشد",
+    "Message from {author} in {conversationName}" : "پیام از {author} در {conversationName}",
     "Error creating the share" : "خطایی در ایجاد اشتراک",
     "Share" : "هم‌رسانی",
     "Add a new list" : "فهرست جدید بیفزایید!"
