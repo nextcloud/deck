@@ -204,7 +204,7 @@ OC.L10N.register(
     "Share from Files" : "Partekatu Fitxategiak-etik",
     "Pending share" : "Partekatzeko zain",
     "Add this attachment" : "Gehitu eranskin hau",
-    "Show in Files" : "Erakutsi fitxategietan",
+    "Show in Files" : "Erakutsi Fitxategiak aplikazioan",
     "Download" : "Deskargatu",
     "Remove attachment" : "Kendu eranskina",
     "Delete Attachment" : "Ezabatu eranskina",
