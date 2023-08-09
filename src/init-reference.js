@@ -19,7 +19,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { registerWidget } from '@nextcloud/vue/dist/Components/NcRichText.js'
+import { registerWidget, registerCustomPickerElement, NcCustomPickerRenderResult } from '@nextcloud/vue/dist/Components/NcRichText.js'
 import { Tooltip } from '@nextcloud/vue'
 import Vue from 'vue'
 import CardReferenceWidget from './views/CardReferenceWidget.vue'
@@ -35,6 +35,11 @@ Vue.prototype.n = translatePlural
 Vue.prototype.OC = window.OC
 Vue.prototype.OCA = window.OCA
 Vue.directive('tooltip', Tooltip)
+Vue.directive('focus', {
+	inserted(el) {
+		el.focus()
+	},
+})
 
 registerWidget('deck-card', (el, { richObjectType, richObject, accessible }) => {
 	// trick to change the wrapper element size, otherwise it always is 100%
@@ -82,3 +87,19 @@ registerWidget('deck-comment', (el, { richObjectType, richObject, accessible }) 
 		},
 	}).$mount(el)
 })
+
+registerCustomPickerElement('create-new-deck-card', async (el, { providerId, accessible }) => {
+	const { default: Vue } = await import(/* webpackChunkName: "reference-picker-lazy" */'vue')
+	Vue.mixin({ methods: { t, n } })
+	const { default: CreateNewCardCustomPicker } = await import(/* webpackChunkName: "reference-picker-lazy" */'./views/CreateNewCardCustomPicker.vue')
+	const Element = Vue.extend(CreateNewCardCustomPicker)
+	const vueElement = new Element({
+		propsData: {
+			providerId,
+			accessible,
+		},
+	}).$mount(el)
+	return new NcCustomPickerRenderResult(vueElement.$el, vueElement)
+}, (el, renderResult) => {
+	renderResult.object.$destroy()
+}, 'normal')

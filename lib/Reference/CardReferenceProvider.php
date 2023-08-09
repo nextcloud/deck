@@ -111,6 +111,10 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 		$noIndexMatch = preg_match('/^' . preg_quote($start, '/') . '\/#\/board\/[0-9]+\/card\/[0-9]+$/', $referenceText) === 1;
 		$indexMatch = preg_match('/^' . preg_quote($startIndex, '/') . '\/#\/board\/[0-9]+\/card\/[0-9]+$/', $referenceText) === 1;
 
+		// link example: https://nextcloud.local/index.php/apps/deck/card/11
+		$noIndexMatch = preg_match('/^' . preg_quote($start, '/') . '\/card\/[0-9]+$/', $referenceText) === 1;
+		$indexMatch = preg_match('/^' . preg_quote($startIndex, '/') . '\/card\/[0-9]+$/', $referenceText) === 1;
+
 		return $noIndexMatch || $indexMatch;
 	}
 
@@ -124,8 +128,8 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 				[$boardId, $cardId] = $ids;
 				try {
 					$card = $this->cardService->find((int) $cardId)->jsonSerialize();
-					$board = $this->boardService->find((int) $boardId)->jsonSerialize();
 					$stack = $this->stackService->find((int) $card['stackId'])->jsonSerialize();
+					$board = $this->boardService->find((int)($boardId ?? $stack['boardId']))->jsonSerialize();
 				} catch (NoPermissionException $e) {
 					// Skip throwing if user has no permissions
 					return null;
@@ -200,6 +204,16 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 		preg_match('/^' . preg_quote($startIndex, '/') . '\/#\/board\/([0-9]+)\/card\/([0-9]+)$/', $url, $matches2);
 		if ($matches2 && count($matches2) > 2) {
 			return [$matches2[1], $matches2[2]];
+		}
+
+		preg_match('/^' . preg_quote($start, '/') . '\/card\/([0-9]+)$/', $url, $matches);
+		if ($matches && count($matches) > 1) {
+			return [null, $matches[1]];
+		}
+
+		preg_match('/^' . preg_quote($startIndex, '/') . '\/card\/([0-9]+)$/', $url, $matches2);
+		if ($matches2 && count($matches2) > 1) {
+			return [null, $matches2[1]];
 		}
 
 		return null;

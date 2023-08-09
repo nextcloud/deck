@@ -674,3 +674,7 @@ namespace OCA\NotifyPush\Queue {
 		public function push(string $channel, $message);
 	}
 }
+
+namespace OCA\Text\Event {
+	class LoadEditor extends \OCP\EventDispatcher\Event {}
+}
