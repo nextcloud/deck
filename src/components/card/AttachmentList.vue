@@ -113,7 +113,7 @@ import { mapState, mapActions } from 'vuex'
 import { loadState } from '@nextcloud/initial-state'
 import attachmentUpload from '../../mixins/attachmentUpload.js'
 import { getFilePickerBuilder } from '@nextcloud/dialogs'
-const maxUploadSizeState = loadState('deck', 'maxUploadSize')
+const maxUploadSizeState = loadState('deck', 'maxUploadSize', -1)
 
 const picker = getFilePickerBuilder(t('deck', 'File to share'))
 	.setMultiSelect(false)

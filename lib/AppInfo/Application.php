@@ -54,11 +54,13 @@ use OCA\Deck\Notification\Notifier;
 use OCA\Deck\Reference\BoardReferenceProvider;
 use OCA\Deck\Reference\CardReferenceProvider;
 use OCA\Deck\Reference\CommentReferenceProvider;
+use OCA\Deck\Reference\CreateCardReferenceProvider;
 use OCA\Deck\Search\CardCommentProvider;
 use OCA\Deck\Search\DeckProvider;
 use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\Sharing\Listener;
+use OCA\Text\Event\LoadEditor;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -83,6 +85,8 @@ class Application extends App implements IBootstrap {
 
 	public const COMMENT_ENTITY_TYPE = 'deckCard';
 
+	private $referenceLoaded = false;
+
 	public function __construct(array $urlParams = []) {
 		parent::__construct(self::APP_ID, $urlParams);
 
@@ -90,8 +94,12 @@ class Application extends App implements IBootstrap {
 		// (and use a listener class)
 		$container = $this->getContainer();
 		$eventDispatcher = $container->get(IEventDispatcher::class);
-		$eventDispatcher->addListener(RenderReferenceEvent::class, function () {
+		$eventDispatcher->addListener(RenderReferenceEvent::class, function (RenderReferenceEvent $e) use ($eventDispatcher) {
 			Util::addScript(self::APP_ID, self::APP_ID . '-reference');
+			if (!$this->referenceLoaded && class_exists(LoadEditor::class)) {
+				$this->referenceLoaded = true;
+				$eventDispatcher->dispatchTyped(new LoadEditor());
+			}
 		});
 	}
 
@@ -128,6 +136,8 @@ class Application extends App implements IBootstrap {
 		$context->registerSearchProvider(DeckProvider::class);
 		$context->registerSearchProvider(CardCommentProvider::class);
 		$context->registerDashboardWidget(DeckWidget::class);
+
+		$context->registerReferenceProvider(CreateCardReferenceProvider::class);
 
 		// reference widget
 		$context->registerReferenceProvider(CardReferenceProvider::class);

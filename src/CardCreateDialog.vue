@@ -22,101 +22,23 @@
 
 <template>
 	<NcModal class="card-selector" @close="close">
-		<div class="modal-scroller">
-			<div v-if="!creating && !created" id="modal-inner" :class="{ 'icon-loading': loading }">
-				<h3>{{ t('deck', 'Create a new card') }}</h3>
-				<NcMultiselect v-model="selectedBoard"
-					:placeholder="t('deck', 'Select a board')"
-					:options="boards"
-					:disabled="loading"
-					label="title"
-					class="multiselect-board"
-					@select="fetchCardsFromBoard">
-					<template slot="singleLabel" slot-scope="props">
-						<span>
-							<span :style="{ 'backgroundColor': '#' + props.option.color }" class="board-bullet" />
-							<span>{{ props.option.title }}</span>
-						</span>
-					</template>
-					<template slot="option" slot-scope="props">
-						<span>
-							<span :style="{ 'backgroundColor': '#' + props.option.color }" class="board-bullet" />
-							<span>{{ props.option.title }}</span>
-						</span>
-					</template>
-				</NcMultiselect>
-
-				<NcMultiselect v-model="selectedStack"
-					:placeholder="t('deck', 'Select a list')"
-					:options="stacksFromBoard"
-					:max-height="100"
-					:disabled="loading || !selectedBoard"
-					class="multiselect-list"
-					label="title" />
-
-				<input v-model="pendingTitle"
-					type="text"
-					:placeholder="t('deck', 'Card title')"
-					:disabled="loading || !selectedStack">
-				<textarea v-model="pendingDescription" :disabled="loading || !selectedStack" />
-				<div class="modal-buttons">
-					<button @click="close">
-						{{ t('deck', 'Cancel') }}
-					</button>
-					<button :disabled="loading || !isBoardAndStackChoosen"
-						class="primary"
-						@click="select">
-						{{ action }}
-					</button>
-				</div>
-			</div>
-			<div v-else id="modal-inner">
-				<NcEmptyContent v-if="creating">
-					<template #icon>
-						<NcLoadingIcon />
-					</template>
-					<template #title>
-						{{ t('deck', 'Creating the new card …') }}
-					</template>
-				</NcEmptyContent>
-				<NcEmptyContent v-else-if="created">
-					<template #icon>
-						<CardPlusOutline />
-					</template>
-					<template #title>
-						{{ t('deck', 'Card "{card}" was added to "{board}"', { card: pendingTitle, board: selectedBoard.title }) }}
-					</template>
-					<template #action>
-						<button class="primary" @click="openNewCard">
-							{{ t('deck', 'Open card') }}
-						</button>
-						<button @click="close">
-							{{ t('deck', 'Close') }}
-						</button>
-					</template>
-				</NcEmptyContent>
-			</div>
-		</div>
+		<CreateNewCardCustomPicker :title="title"
+			:description="description"
+			show-created-notice
+			@cancel="close"
+			@close="close" />
 	</NcModal>
 </template>
 
 <script>
-import { generateUrl } from '@nextcloud/router'
-import { NcModal, NcMultiselect, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
-import CardPlusOutline from 'vue-material-design-icons/CardPlusOutline.vue'
-import axios from '@nextcloud/axios'
-import { CardApi } from './services/CardApi.js'
-
-const cardApi = new CardApi()
+import { NcModal } from '@nextcloud/vue'
+import CreateNewCardCustomPicker from './views/CreateNewCardCustomPicker.vue'
 
 export default {
 	name: 'CardCreateDialog',
 	components: {
-		NcEmptyContent,
 		NcModal,
-		NcMultiselect,
-		NcLoadingIcon,
-		CardPlusOutline,
+		CreateNewCardCustomPicker,
 	},
 	props: {
 		title: {
@@ -127,139 +49,6 @@ export default {
 			type: String,
 			default: '',
 		},
-		action: {
-			type: String,
-			default: t('deck', 'Create card'),
-		},
 	},
-	data() {
-		return {
-			boards: [],
-			stacksFromBoard: [],
-			loading: true,
-			pendingTitle: '',
-			pendingDescription: '',
-			selectedStack: '',
-			selectedBoard: '',
-			creating: false,
-			created: false,
-			newCard: null,
-		}
-	},
-	computed: {
-		isBoardAndStackChoosen() {
-			return !(this.selectedBoard === '' || this.selectedStack === '')
-		},
-	},
-	beforeMount() {
-		this.fetchBoards()
-	},
-	mounted() {
-		this.pendingTitle = this.title
-		this.pendingDescription = this.description
-	},
-	methods: {
-		fetchBoards() {
-			axios.get(generateUrl('/apps/deck/boards')).then((response) => {
-				this.boards = response.data
-				this.loading = false
-			})
-		},
-		async fetchCardsFromBoard(board) {
-			try {
-				this.cardsFromBoard = []
-				const url = generateUrl('/apps/deck/stacks/' + board.id)
-				const response = await axios.get(url)
-				response.data.forEach(stack => {
-					this.stacksFromBoard.push(stack)
-				})
-			} catch (err) {
-				return err
-			}
-
-		},
-		close() {
-			this.$emit('close')
-			this.$root.$emit('close')
-		},
-		async select() {
-			this.creating = true
-			const response = await cardApi.addCard({
-				boardId: this.selectedBoard.id,
-				stackId: this.selectedStack.id,
-				title: this.pendingTitle,
-				description: this.pendingDescription,
-			})
-			this.newCard = response
-			this.creating = false
-			this.created = true
-			// We do not emit here since we want to give feedback to the user that the card was created
-			// this.$root.$emit('select', createdCard)
-		},
-		openNewCard() {
-			window.location = generateUrl('/apps/deck') + `#/board/${this.selectedBoard.id}/card/${this.newCard.id}`
-		},
-	},
-
 }
 </script>
-
-<style lang="scss" scoped>
-	.modal-scroller {
-		overflow: scroll;
-		max-height: calc(80vh - 40px);
-		margin: 10px;
-	}
-
-	#modal-inner {
-		width: 90vw;
-		max-width: 400px;
-		padding: 10px;
-		min-height: 200px;
-		margin: auto;
-	}
-
-	.multiselect-board, .multiselect-list, input, textarea {
-		width: 100%;
-		margin-bottom: 10px !important;
-	}
-
-	ul {
-		min-height: 100px;
-	}
-
-	li {
-		padding: 6px;
-		border: 1px solid transparent;
-	}
-
-	li:hover, li:focus {
-		background-color: var(--color-background-dark);
-	}
-
-	.board-bullet {
-		display: inline-block;
-		width: 12px;
-		height: 12px;
-		border: none;
-		border-radius: 50%;
-		cursor: pointer;
-	}
-
-	.modal-buttons {
-		display: flex;
-		justify-content: flex-end;
-	}
-
-	.card-selector:deep(.modal-container) {
-		overflow: visible !important;
-	}
-
-	.empty-content {
-		margin-top: 5vh !important;
-
-		&:deep(h2) {
-			margin-bottom: 5vh;
-		}
-	}
-</style>

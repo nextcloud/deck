@@ -30,7 +30,9 @@
 					{{ t('deck', 'Add card') }}
 				</NcActionButton>
 			</NcActions>
-			<CardCreateDialog v-if="showAddCardModal" @close="clickHideAddCardModel" />
+			<NcModal v-if="showAddCardModal" class="card-selector" @close="clickHideAddCardModel">
+				<CreateNewCardCustomPicker show-created-notice @cancel="clickHideAddCardModel" />
+			</NcModal>
 		</div>
 		<div v-else-if="board" class="board-title">
 			<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
@@ -218,9 +220,8 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { NcActions, NcActionButton, NcAvatar, NcButton, NcPopover } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcAvatar, NcButton, NcPopover, NcModal } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle.js'
-import CardCreateDialog from '../CardCreateDialog.vue'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import FilterIcon from 'vue-material-design-icons/Filter.vue'
 import FilterOffIcon from 'vue-material-design-icons/FilterOff.vue'
@@ -228,16 +229,18 @@ import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVe
 import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertical.vue'
 import SessionList from './SessionList.vue'
 import { isNotifyPushEnabled } from '../sessions.js'
+import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
 
 export default {
 	name: 'Controls',
 	components: {
+		CreateNewCardCustomPicker,
+		NcModal,
 		NcActions,
 		NcActionButton,
 		NcButton,
 		NcPopover,
 		NcAvatar,
-		CardCreateDialog,
 		ArchiveIcon,
 		FilterIcon,
 		FilterOffIcon,

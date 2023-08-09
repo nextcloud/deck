@@ -78,8 +78,18 @@ class CardController extends Controller {
 	 * @param int $order
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function create($title, $stackId, $type = 'plain', $order = 999, string $description = '') {
-		return $this->cardService->create($title, $stackId, $type, $order, $this->userId, $description);
+	public function create($title, $stackId, $type = 'plain', $order = 999, string $description = '', $duedate = null, $labels = [], $users = []) {
+		$card = $this->cardService->create($title, $stackId, $type, $order, $this->userId, $description, $duedate);
+
+		foreach ($labels as $label) {
+			$this->assignLabel($card->id, $label);
+		}
+
+		foreach ($users as $user) {
+			$this->assignmentService->assignUser($card->id, $user['id'], $user['type']);
+		}
+
+		return $card;
 	}
 
 	/**
