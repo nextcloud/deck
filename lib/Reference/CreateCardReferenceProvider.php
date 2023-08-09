@@ -10,7 +10,6 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 
 class CreateCardReferenceProvider extends ADiscoverableReferenceProvider {
-
 	public function __construct(
 		private IL10N $l10n,
 		private IURLGenerator $urlGenerator,
