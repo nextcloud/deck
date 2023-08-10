@@ -16,7 +16,6 @@
     "Missing a temporary folder" : "Mungon një dosje e përkohshme",
     "Invalid date, date format must be YYYY-MM-DD" : "Datë e pavlefshme, formati i datës duhet të jetë VVVV-MM-DD",
     "Cancel" : "Anullo",
-    "Close" : "Mbylleni",
     "File already exists" : "Skedari ekziston tashmë",
     "Do you want to overwrite it?" : "Doni ta rishkruani atë?",
     "Add card" : "Shto kartë",
@@ -38,16 +37,15 @@
     "Comments" : "Komentet",
     "Modified" : "Modifikuar ",
     "Created" : "U krijua",
-    "Due date" : "Data e vendosur",
-    "Remove due date" : "Hiq datën e mbarimit",
-    "Select Date" : "Zgjidhni Datën",
-    "Today" : "Sot",
-    "Tomorrow" : "Nesër",
     "Save" : "Ruaj",
     "Reply" : "Përgjigju",
     "Update" : "Përditëso",
     "Description" : "Përshkrim",
     "Formatting help" : "Ndihmë formatimi",
+    "Remove due date" : "Hiq datën e mbarimit",
+    "Select Date" : "Zgjidhni Datën",
+    "Today" : "Sot",
+    "Tomorrow" : "Nesër",
     "(group)" : "(grup)",
     "List is empty" : "Lista është bosh",
     "seconds ago" : "sekonda më parë",
@@ -59,6 +57,8 @@
     "Archive board" : "Arkivo bordin",
     "No notifications" : "Asnjë njofim",
     "Delete board" : "Fshij bordin",
-    "Share" : "Shpërndaje"
+    "Close" : "Mbylleni",
+    "Share" : "Shpërndaje",
+    "Due date" : "Data e vendosur"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

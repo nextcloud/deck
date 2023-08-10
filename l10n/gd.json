@@ -9,7 +9,6 @@
     "Could not write file to disk" : "Cha b’ urrainn dhuinn am faidhle a sgrìobhadh dhan diosg",
     "A PHP extension stopped the file upload" : "Chur leudachan PHP stad air luchdadh suas an fhaidhle",
     "Cancel" : "Sguir dheth",
-    "Close" : "Dùin",
     "Details" : "Mion-fhiosrachadh",
     "Sharing" : "Co-roinneadh",
     "Tags" : "Tagaichean",
@@ -18,10 +17,11 @@
     "Transfer" : "Tar-chuir",
     "Edit" : "Deasaich",
     "Download" : "Luchdaich a-nuas",
-    "Today" : "An-diugh",
     "Save" : "Sàbhail",
+    "Today" : "An-diugh",
     "seconds ago" : "diog air ais",
     "No notifications" : "Gun bhrath",
+    "Close" : "Dùin",
     "Share" : "Co-roinn"
 },"pluralForm" :"nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;"
 }

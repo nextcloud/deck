@@ -5,7 +5,6 @@ OC.L10N.register(
     "copy" : "ចម្លង",
     "Done" : "Done",
     "Cancel" : "បោះបង់",
-    "Close" : "បិទ",
     "Details" : "ព័ត៌មាន​លម្អិត",
     "Sharing" : "ការ​ចែក​រំលែក",
     "Tags" : "ស្លាក",
@@ -16,13 +15,14 @@ OC.L10N.register(
     "Edit" : "កែប្រែ",
     "Download" : "ទាញយក",
     "Modified" : "បាន​កែ​ប្រែ",
-    "Today" : "ថ្ងៃ​នេះ",
     "Save" : "រក្សាទុក",
     "Reply" : "ឆ្លើយតប",
     "Update" : "ធ្វើ​បច្ចុប្បន្នភាព",
     "Description" : "ការ​អធិប្បាយ",
+    "Today" : "ថ្ងៃ​នេះ",
     "seconds ago" : "វិនាទី​មុន",
     "Shared with you" : "Shared with you",
+    "Close" : "បិទ",
     "Share" : "ចែក​រំលែក"
 },
 "nplurals=1; plural=0;");

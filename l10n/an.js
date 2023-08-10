@@ -11,13 +11,13 @@ OC.L10N.register(
     "Could not write file to disk" : "No se podió escribir o fichero en o disco",
     "A PHP extension stopped the file upload" : "Una estensión de PHP aturó a carga de fichers",
     "Cancel" : "Canzelar",
-    "Close" : "Zarrar",
     "Details" : "Detalles",
     "Tags" : "Etiquetas",
     "Delete" : "Borrar",
     "Download" : "Escargar",
     "Modified" : "Modificau",
     "Today" : "Hue",
+    "Close" : "Zarrar",
     "Share" : "Compartir"
 },
 "nplurals=2; plural=(n != 1);");

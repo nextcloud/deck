@@ -15,7 +15,6 @@
     "Missing a temporary folder" : "დროებითი დირექტორია არ არსებობს",
     "Invalid date, date format must be YYYY-MM-DD" : "არასწორი თარიღი, თარიღის ფორმატი უნდა იყოს წწწწ-თთ-დდ",
     "Cancel" : "უარყოფა",
-    "Close" : "დახურვა",
     "File already exists" : "ფაილი უკვე არსებობს",
     "Do you want to overwrite it?" : "გსურთ მისი გადაწერა?",
     "Add card" : "ბარათის დამატება",
@@ -36,15 +35,14 @@
     "Comments" : "კომენტარები",
     "Modified" : "შეიცვალა",
     "Created" : "შექმნილია",
-    "Due date" : "დროისთვის",
-    "Remove due date" : "მოაშორეთ დანიშნულების დრო",
-    "Today" : "დღეს",
-    "Tomorrow" : "ხვალ",
     "Save" : "შენახვა",
     "Reply" : "პასუხი",
     "Update" : "განახლება",
     "Description" : "აღწერა",
     "Formatting help" : "დახმარება ფორმატირებაზე",
+    "Remove due date" : "მოაშორეთ დანიშნულების დრო",
+    "Today" : "დღეს",
+    "Tomorrow" : "ხვალ",
     "(group)" : "(ჯგუფი)",
     "seconds ago" : "წამის წინ",
     "Archived boards" : "არქივირებული დაფები",
@@ -55,6 +53,8 @@
     "Archive board" : "დაფის არქივირება",
     "No notifications" : "შეტყობინებები არაა",
     "Delete board" : "დაფის გაუქმება",
-    "Share" : "გაზიარება"
+    "Close" : "დახურვა",
+    "Share" : "გაზიარება",
+    "Due date" : "დროისთვის"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }

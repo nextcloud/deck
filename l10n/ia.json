@@ -9,7 +9,6 @@
     "No file was uploaded" : "Nulle file esseva incargate",
     "Missing a temporary folder" : "Il manca un dossier temporari",
     "Cancel" : "Cancellar",
-    "Close" : "Clauder",
     "Details" : "Detalios",
     "Sharing" : "Compartente",
     "Tags" : "Etiquettas",
@@ -24,16 +23,17 @@
     "Attachments" : "Attachamentos",
     "Comments" : "Commentarios",
     "Modified" : "Modificate",
-    "Today" : "Hodie",
-    "Tomorrow" : "Deman",
     "Save" : "Salveguardar",
     "Reply" : "Responder",
     "Update" : "Actualisation",
     "Description" : "Description",
+    "Today" : "Hodie",
+    "Tomorrow" : "Deman",
     "(group)" : "(gruppo)",
     "seconds ago" : "secundas passate",
     "Shared with you" : "Compartite con te",
     "No notifications" : "Nulle notificationes",
+    "Close" : "Clauder",
     "Share" : "Compartir"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

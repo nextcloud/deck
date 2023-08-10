@@ -16,7 +16,6 @@ OC.L10N.register(
     "Card not found" : "ไม่พบการ์ด",
     "Invalid date, date format must be YYYY-MM-DD" : "วันที่ไม่ถูกต้อง รูปแบบวันที่จะต้องเป็น ปปปป-ดด-วว",
     "Cancel" : "ยกเลิก",
-    "Close" : "ปิด",
     "File already exists" : "ไฟล์นี้มีอยู่แล้ว",
     "Add list" : "เพิ่มรายการ",
     "Overdue" : "เกินกำหนด",
@@ -36,13 +35,12 @@ OC.L10N.register(
     "Attachments" : "ไฟล์แนบ",
     "Comments" : "ความคิดเห็น",
     "Modified" : "แก้ไขเมื่อ",
-    "Due date" : "วันที่ครบกำหนด",
-    "Today" : "วันนี้",
-    "Tomorrow" : "พรุ่งนี้",
     "Save" : "บันทึก",
     "Reply" : "ตอบกลับ",
     "Update" : "อัปเดต",
     "Description" : "รายละเอียด",
+    "Today" : "วันนี้",
+    "Tomorrow" : "พรุ่งนี้",
     "(group)" : "(กลุ่ม)",
     "seconds ago" : "วินาทีที่ผ่านมา",
     "Shared with you" : "แชร์กับคุณ",
@@ -50,6 +48,8 @@ OC.L10N.register(
     "No notifications" : "ไม่มีการแจ้งเตือน",
     "Delete board" : "ลบกระดาน",
     "An error occurred" : "เกิดข้อผิดพลาด",
-    "Share" : "แชร์"
+    "Close" : "ปิด",
+    "Share" : "แชร์",
+    "Due date" : "วันที่ครบกำหนด"
 },
 "nplurals=1; plural=0;");
