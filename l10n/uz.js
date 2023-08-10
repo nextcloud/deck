@@ -5,7 +5,6 @@ OC.L10N.register(
     "copy" : "copy",
     "Done" : "Done",
     "Cancel" : "Cancel",
-    "Close" : "Close",
     "Details" : "Details",
     "Sharing" : "Ulashish",
     "Tags" : "Tags",
@@ -15,10 +14,11 @@ OC.L10N.register(
     "Download" : "Download",
     "Comments" : "Comments",
     "Modified" : "Modified",
-    "Today" : "Today",
     "Save" : "Save",
     "Update" : "Update",
+    "Today" : "Today",
     "seconds ago" : "seconds ago",
-    "Shared with you" : "Shared with you"
+    "Shared with you" : "Shared with you",
+    "Close" : "Close"
 },
 "nplurals=1; plural=0;");

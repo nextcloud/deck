@@ -12,10 +12,10 @@ OC.L10N.register(
     "Delete" : "Desaniciar",
     "Members" : "Miembros",
     "Download" : "Baxar",
-    "Today" : "Güei",
-    "Tomorrow" : "Mañana",
     "Description" : "Descripción",
     "(Saving…)" : "(Guardando…)",
+    "Today" : "Güei",
+    "Tomorrow" : "Mañana",
     "All cards" : "Toles tarxetes",
     "An error occurred" : "Prodúxose un error"
 },

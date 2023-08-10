@@ -6,7 +6,6 @@ OC.L10N.register(
     "No file was uploaded" : "ھېچقانداق ھۆججەت يۈكلەنمىدى",
     "Missing a temporary folder" : "ۋاقىتلىق قىسقۇچ كەم.",
     "Cancel" : "ۋاز كەچ",
-    "Close" : "ياپ",
     "Sharing" : "ھەمبەھىر",
     "Tags" : "بەلگەلەر",
     "Can edit" : "Can edit",
@@ -16,12 +15,13 @@ OC.L10N.register(
     "Edit" : "تەھرىر",
     "Download" : "چۈشۈر",
     "Modified" : "ئۆزگەرتكەن",
-    "Today" : "بۈگۈن",
     "Save" : "ساقلا",
     "Reply" : "جاۋاب قايتۇر",
     "Update" : "يېڭىلا",
     "Description" : "چۈشەندۈرۈش",
+    "Today" : "بۈگۈن",
     "Shared with you" : "Shared with you",
+    "Close" : "ياپ",
     "Share" : "ھەمبەھىر"
 },
 "nplurals=2; plural=(n != 1);");

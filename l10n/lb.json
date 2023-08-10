@@ -5,7 +5,6 @@
     "No file was uploaded" : "Et ass kee Fichier ropgeluede ginn",
     "Missing a temporary folder" : "Et feelt en temporären Dossier",
     "Cancel" : "Ofbriechen",
-    "Close" : "Zoumaachen",
     "Details" : "Detailer",
     "Sharing" : "Gedeelt",
     "Tags" : "Tags",
@@ -17,14 +16,15 @@
     "Download" : "Eroflueden",
     "Comments" : "Kommentarer",
     "Modified" : "Geännert",
-    "Today" : "Haut",
-    "Tomorrow" : "Muer",
     "Save" : "Späicheren",
     "Reply" : "Äntwerten",
     "Update" : "Update",
     "Description" : "Beschreiwung",
+    "Today" : "Haut",
+    "Tomorrow" : "Muer",
     "seconds ago" : "Sekonnen hier",
     "Shared with you" : "Mat dir gedeelt",
+    "Close" : "Zoumaachen",
     "Share" : "Deelen"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

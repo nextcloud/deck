@@ -5,7 +5,6 @@
     "No file was uploaded" : "Tiada fail dimuatnaik",
     "Missing a temporary folder" : "Direktori sementara hilang",
     "Cancel" : "Batal",
-    "Close" : "Tutup",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Owner" : "Owner",
@@ -13,11 +12,12 @@
     "Edit" : "Sunting",
     "Download" : "Muat turun",
     "Modified" : "Dimodifikasi",
-    "Today" : "Hari ini",
     "Save" : "Simpan",
     "Update" : "Kemaskini",
     "Description" : "Keterangan",
+    "Today" : "Hari ini",
     "Shared with you" : "Shared with you",
+    "Close" : "Tutup",
     "Share" : "Kongsi"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

@@ -7,7 +7,6 @@
     "No file was uploaded" : "Ulac afaylu i d-yettwasulin",
     "Missing a temporary folder" : "Ixuṣ ukaram akudan",
     "Cancel" : "Sefsex",
-    "Close" : "Mdel",
     "Details" : "Talqayt",
     "Sharing" : "Beṭṭu",
     "Tags" : "Tibzimin",
@@ -19,11 +18,12 @@
     "Comments" : "Commentaires",
     "Modified" : "Yettwabeddel",
     "Created" : "Yettwarna.",
-    "Today" : "Ass-a",
     "Save" : "Sekles",
     "Cancel reply" : "Semmet tiririt.",
     "Reply" : "Err",
+    "Today" : "Ass-a",
     "No notifications" : "Ulac tisezmal",
+    "Close" : "Mdel",
     "Share" : "Bḍu"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

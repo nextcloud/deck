@@ -7,7 +7,6 @@ OC.L10N.register(
     "No file was uploaded" : "Tiada fail dimuatnaik",
     "Missing a temporary folder" : "Direktori sementara hilang",
     "Cancel" : "Batal",
-    "Close" : "Tutup",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Owner" : "Owner",
@@ -15,11 +14,12 @@ OC.L10N.register(
     "Edit" : "Sunting",
     "Download" : "Muat turun",
     "Modified" : "Dimodifikasi",
-    "Today" : "Hari ini",
     "Save" : "Simpan",
     "Update" : "Kemaskini",
     "Description" : "Keterangan",
+    "Today" : "Hari ini",
     "Shared with you" : "Shared with you",
+    "Close" : "Tutup",
     "Share" : "Kongsi"
 },
 "nplurals=1; plural=0;");

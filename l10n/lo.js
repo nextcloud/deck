@@ -5,7 +5,6 @@ OC.L10N.register(
     "Finished" : "ສຳເລັດ",
     "Done" : "ສໍາເລັດ",
     "Cancel" : "ຍົກເລີກ",
-    "Close" : "ປິດ",
     "Details" : "ລາຍລະອຽດ",
     "Sharing" : "ການແບ່ງປັນ",
     "Tags" : "ປ້າຍກຳກັບ",
@@ -17,11 +16,12 @@ OC.L10N.register(
     "Download" : "ດາວໂຫລດ",
     "Comments" : "ຄໍາເຫັນ",
     "Modified" : "\"{name}\" ແມ່ນຊື່ໄຟລ໌ທີ່ບໍ່ຖືກຕ້ອງ.",
-    "Today" : "ມື້ນີ້",
     "Save" : "ບັນທຶກ",
+    "Today" : "ມື້ນີ້",
     "seconds ago" : "ວິນາທີຜ່ານມາ",
     "Shared with you" : "ແບ່ງປັບກັບທ່ານ",
     "No notifications" : "ບໍ່ມີການແຈ້ງເຕືອນ",
+    "Close" : "ປິດ",
     "Share" : "ແບ່ງປັນ"
 },
 "nplurals=1; plural=0;");

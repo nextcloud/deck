@@ -7,7 +7,6 @@ OC.L10N.register(
     "No file was uploaded" : "எந்த கோப்பும் பதிவேற்றப்படவில்லை",
     "Missing a temporary folder" : "ஒரு தற்காலிகமான கோப்புறையை காணவில்லை",
     "Cancel" : "இரத்து செய்க",
-    "Close" : "மூடுக",
     "Details" : "விவரங்கள்",
     "Tags" : "சீட்டுகள்",
     "Can edit" : "Can edit",
@@ -18,12 +17,13 @@ OC.L10N.register(
     "Show in Files" : "கோப்புகளில் காட்டவும்",
     "Download" : "பதிவிறக்குக",
     "Modified" : "மாற்றப்பட்டது",
-    "Today" : "இன்று",
     "Save" : "சேமிக்க ",
     "Update" : "இற்றைப்படுத்தல்",
     "Description" : "விவரிப்பு",
+    "Today" : "இன்று",
     "seconds ago" : "செக்கன்களுக்கு முன்",
     "Shared with you" : "Shared with you",
+    "Close" : "மூடுக",
     "Share" : "பகிர்வு"
 },
 "nplurals=2; plural=(n != 1);");
