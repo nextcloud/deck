@@ -20,7 +20,6 @@
     "A PHP extension stopped the file upload" : "Una extensión de PHP detuvo la carga del archivo",
     "Invalid date, date format must be YYYY-MM-DD" : "La fecha es inválida, por favor sigue el formato AAAA-MM-DD",
     "Cancel" : "Cancelar",
-    "Close" : "Cerrar",
     "File already exists" : "El archivo ya existe",
     "Do you want to overwrite it?" : "¿Deseas sobre escribirlo?",
     "Add card" : "Agregar tarjeta",
@@ -47,15 +46,14 @@
     "Comments" : "Comentarios",
     "Modified" : "Modificado",
     "Created" : "Creado",
-    "Due date" : "Fecha de vencimiento",
-    "Remove due date" : "Eliminar fecha de expiración",
-    "Today" : "Hoy",
-    "Tomorrow" : "Mañana",
     "Save" : "Guardar",
     "Reply" : "Responder",
     "Update" : "Actualizar",
     "Description" : "Descripción",
     "Formatting help" : "Ayuda de formato",
+    "Remove due date" : "Eliminar fecha de expiración",
+    "Today" : "Hoy",
+    "Tomorrow" : "Mañana",
     "(group)" : "(grupo)",
     "seconds ago" : "hace segundos",
     "Archived boards" : "Tableros archivados",
@@ -67,6 +65,8 @@
     "No notifications" : "No hay notificaciones",
     "Delete board" : "Borrar tableros",
     "An error occurred" : "Ha ocurrido un error",
-    "Share" : "Compartir"
+    "Close" : "Cerrar",
+    "Share" : "Compartir",
+    "Due date" : "Fecha de vencimiento"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

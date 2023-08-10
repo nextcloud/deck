@@ -5,7 +5,6 @@
     "No file was uploaded" : "Nijedna datoteka nije učitana.",
     "Missing a temporary folder" : "Nedostaje privremeni direktorij.",
     "Cancel" : "Otkaži",
-    "Close" : "Zatvori",
     "Sharing" : "Dijeljenje",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
@@ -16,12 +15,13 @@
     "Download" : "Preuzmi",
     "Comments" : "Komentari",
     "Modified" : "Izmijenjeno",
-    "Today" : "Danas",
-    "Tomorrow" : "Sutra",
     "Save" : "Spremi",
     "Update" : "Ažuriraj",
     "Description" : "Opis",
+    "Today" : "Danas",
+    "Tomorrow" : "Sutra",
     "Shared with you" : "Shared with you",
+    "Close" : "Zatvori",
     "Maximum file size of {size} exceeded" : "Maksimalna veličina datoteke prekoračena",
     "Share" : "Podjeli"
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
