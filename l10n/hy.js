@@ -12,7 +12,6 @@ OC.L10N.register(
     "Could not write file to disk" : "Չհաջողվեց գրառել նիշքը սկավառակի վրա",
     "A PHP extension stopped the file upload" : "PHP֊ի ընդլայնումն կանգնեցրեց նիշքի վերբեռնումը",
     "Cancel" : "ընդհատել",
-    "Close" : "Փակել",
     "Details" : "Մանրամասներ",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
@@ -22,12 +21,13 @@ OC.L10N.register(
     "Download" : "Ներբեռնել",
     "Comments" : "Կարծիքներ",
     "Modified" : "Փոփոխված",
-    "Today" : "այսօր",
     "Save" : "Պահպանել",
     "Update" : "Թարմացնել",
     "Description" : "Նկարագրություն",
+    "Today" : "այսօր",
     "seconds ago" : "վրկ. առաջ",
     "Shared with you" : "Shared with you",
+    "Close" : "Փակել",
     "Share" : "Կիսվել"
 },
 "nplurals=2; plural=(n != 1);");

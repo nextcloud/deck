@@ -9,7 +9,6 @@ OC.L10N.register(
     "No file was uploaded" : "Ulac afaylu i d-yettwasulin",
     "Missing a temporary folder" : "Ixuṣ ukaram akudan",
     "Cancel" : "Sefsex",
-    "Close" : "Mdel",
     "Details" : "Talqayt",
     "Sharing" : "Beṭṭu",
     "Tags" : "Tibzimin",
@@ -21,11 +20,12 @@ OC.L10N.register(
     "Comments" : "Commentaires",
     "Modified" : "Yettwabeddel",
     "Created" : "Yettwarna.",
-    "Today" : "Ass-a",
     "Save" : "Sekles",
     "Cancel reply" : "Semmet tiririt.",
     "Reply" : "Err",
+    "Today" : "Ass-a",
     "No notifications" : "Ulac tisezmal",
+    "Close" : "Mdel",
     "Share" : "Bḍu"
 },
 "nplurals=2; plural=(n != 1);");

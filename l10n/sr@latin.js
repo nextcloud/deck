@@ -6,7 +6,6 @@ OC.L10N.register(
     "Done" : "Done",
     "Add board" : "Dodaj tablu",
     "Cancel" : "Otkaži",
-    "Close" : "Zatvori",
     "Add card" : "Dodaj karticu",
     "Details" : "Detalji",
     "Sharing" : "Deljenje",
@@ -19,12 +18,11 @@ OC.L10N.register(
     "Edit" : "Uredi",
     "Download" : "Preuzmi",
     "Attachments" : "Prilozi",
-    "Due date" : "Rok",
-    "Today" : "Danas",
     "Save" : "Sačuvaj",
     "Reply" : "Odgovori",
     "Update" : "Ažuriraj",
     "Description" : "Opis",
+    "Today" : "Danas",
     "Move card" : "Premesti karticu",
     "Archive card" : "Arhiviraj karticu",
     "Delete card" : "Obriši karticu",
@@ -34,6 +32,8 @@ OC.L10N.register(
     "Archive board" : "Arhiviraj tablu",
     "No notifications" : "Nema obaveštenja",
     "Delete board" : "Izbriši tablu",
-    "Share" : "Podeli"
+    "Close" : "Zatvori",
+    "Share" : "Podeli",
+    "Due date" : "Rok"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

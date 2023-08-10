@@ -3,7 +3,6 @@
     "copy" : "copy",
     "Done" : "Done",
     "Cancel" : "Cancel",
-    "Close" : "Close",
     "Details" : "Details",
     "Sharing" : "Ulashish",
     "Tags" : "Tags",
@@ -13,10 +12,11 @@
     "Download" : "Download",
     "Comments" : "Comments",
     "Modified" : "Modified",
-    "Today" : "Today",
     "Save" : "Save",
     "Update" : "Update",
+    "Today" : "Today",
     "seconds ago" : "seconds ago",
-    "Shared with you" : "Shared with you"
+    "Shared with you" : "Shared with you",
+    "Close" : "Close"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
