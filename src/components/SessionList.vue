@@ -77,7 +77,6 @@ export default {
 .avatar-list {
 	min-height: 44px;
 	align-items: center;
-	padding-left: 0.5em;
 	padding-right: 0.5em;
 	border: none;
 	background-color: var(--color-main-background);
