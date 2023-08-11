@@ -76,7 +76,6 @@ class BoardImportCommandService extends BoardImportService {
 	}
 
 	protected function validateConfig(): void {
-		// FIXME: Make config optional for deck plain importer (but use a call on the importer insterad)
 		try {
 			$config = $this->getInput()->getOption('config');
 			if (!$config) {
