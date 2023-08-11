@@ -43,6 +43,7 @@ use OCP\IDBConnection;
 use OCP\IUser;
 use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 
 class BoardImportServiceTest extends \Test\TestCase {
 	/** @var IDBConnection|MockObject */
@@ -92,7 +93,8 @@ class BoardImportServiceTest extends \Test\TestCase {
 			$this->attachmentMapper,
 			$this->cardMapper,
 			$this->commentsManager,
-			$this->eventDispatcher
+			$this->eventDispatcher,
+			$this->createMock(LoggerInterface::class),
 		);
 
 		$this->boardImportService->setSystem('trelloJson');
@@ -145,6 +147,9 @@ class BoardImportServiceTest extends \Test\TestCase {
 	}
 
 	public function testImportSuccess() {
+		$this->userManager->method('userExists')
+			->willReturn(true);
+
 		$this->boardMapper
 			->expects($this->once())
 			->method('insert');
