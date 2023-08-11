@@ -184,7 +184,6 @@ class DeckJsonService extends ABoardImportService {
 					$card->stackId = $index;
 					$this->tmpCards[] = $card;
 				}
-				// TODO: check older exports as currently there is a bug that adds lists to it with different index
 			}
 		}
 		return $return;
@@ -221,7 +220,6 @@ class DeckJsonService extends ABoardImportService {
 		$board = $this->getImportService()->getData();
 		$return = [];
 		foreach ($board->acl as $aclData) {
-			// FIXME: Figure out mapping
 			$acl = new Acl();
 			$acl->setBoardId($this->getImportService()->getBoard()->getId());
 			$acl->setType($aclData->type);
@@ -236,7 +234,6 @@ class DeckJsonService extends ABoardImportService {
 			if ($participant) {
 				$return[] = $acl;
 			}
-			// TODO: Once we have error collection we should catch non-existing users
 		}
 		return $return;
 	}
