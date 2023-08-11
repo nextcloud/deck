@@ -47,7 +47,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @group DB
  */
 class ImportExportTest extends \Test\TestCase {
-
 	private IDBConnection $connection;
 	private const TEST_USER1 = 'test-export-user1';
 	private const TEST_USER3 = 'test-export-user3';
