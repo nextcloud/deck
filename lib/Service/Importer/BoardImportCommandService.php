@@ -25,7 +25,6 @@ namespace OCA\Deck\Service\Importer;
 
 use OCA\Deck\Exceptions\ConflictException;
 use OCA\Deck\NotFoundException;
-use OCA\Deck\Service\Importer\Systems\DeckJsonService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -78,11 +77,12 @@ class BoardImportCommandService extends BoardImportService {
 
 	protected function validateConfig(): void {
 		// FIXME: Make config optional for deck plain importer (but use a call on the importer insterad)
-		if ($this->getImportSystem() instanceof DeckJsonService) {
-			return;
-		}
 		try {
 			$config = $this->getInput()->getOption('config');
+			if (!$config) {
+				return;
+			}
+
 			if (is_string($config)) {
 				if (!is_file($config)) {
 					throw new NotFoundException('It\'s not a valid config file.');
@@ -191,33 +191,56 @@ class BoardImportCommandService extends BoardImportService {
 	public function bootstrap(): void {
 		$this->setSystem($this->getInput()->getOption('system'));
 		parent::bootstrap();
+
+		$this->registerErrorCollector(function ($error, $exception) {
+			$message = $error;
+			if ($exception instanceof \Throwable) {
+				$message .= ': ' . $exception->getMessage();
+			}
+			$this->getOutput()->writeln('<error>' . $message . '</error>');
+			if ($exception instanceof \Throwable && $this->getOutput()->isVeryVerbose()) {
+				$this->getOutput()->writeln($exception->getTraceAsString());
+			}
+		});
+
+		$this->registerOutputCollector(function ($info) {
+			if ($this->getOutput()->isVerbose()) {
+				$this->getOutput()->writeln('<info>' . $info . '</info>', );
+			}
+		});
 	}
 
 	public function import(): void {
 		$this->getOutput()->writeln('Starting import...');
 		$this->bootstrap();
+		$this->validateSystem();
+		$this->validateConfig();
 		$boards = $this->getImportSystem()->getBoards();
 
 		foreach ($boards as $board) {
-			$this->reset();
-			$this->setData($board);
-			$this->getOutput()->writeln('Importing board "' . $this->getBoard()->getTitle() . '".');
-			$this->importBoard();
-			$this->getOutput()->writeln('Assign users to board...');
-			$this->importAcl();
-			$this->getOutput()->writeln('Importing labels...');
-			$this->importLabels();
-			$this->getOutput()->writeln('Importing stacks...');
-			$this->importStacks();
-			$this->getOutput()->writeln('Importing cards...');
-			$this->importCards();
-			$this->getOutput()->writeln('Assign cards to labels...');
-			$this->assignCardsToLabels();
-			$this->getOutput()->writeln('Importing comments...');
-			$this->importComments();
-			$this->getOutput()->writeln('Importing participants...');
-			$this->importCardAssignments();
-			$this->getOutput()->writeln('<info>Finished board import of "' . $this->getBoard()->getTitle() . '"</info>');
+			try {
+				$this->reset();
+				$this->setData($board);
+				$this->getOutput()->writeln('Importing board "' . $board->title . '".');
+				$this->importBoard();
+				$this->getOutput()->writeln('Assign users to board...');
+				$this->importAcl();
+				$this->getOutput()->writeln('Importing labels...');
+				$this->importLabels();
+				$this->getOutput()->writeln('Importing stacks...');
+				$this->importStacks();
+				$this->getOutput()->writeln('Importing cards...');
+				$this->importCards();
+				$this->getOutput()->writeln('Assign cards to labels...');
+				$this->assignCardsToLabels();
+				$this->getOutput()->writeln('Importing comments...');
+				$this->importComments();
+				$this->getOutput()->writeln('Importing participants...');
+				$this->importCardAssignments();
+				$this->getOutput()->writeln('<info>Finished board import of "' . $this->getBoard()->getTitle() . '"</info>');
+			} catch (\Exception $e) {
+				$this->output->writeln('<error>Import failed for board ' . $board->title . ': ' . $e->getMessage() . '</error>');
+			}
 		}
 	}
 }
