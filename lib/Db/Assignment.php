@@ -41,4 +41,17 @@ class Assignment extends RelationalEntity implements JsonSerializable {
 		$this->addType('type', 'integer');
 		$this->addResolvable('participant');
 	}
+
+	public function getTypeString(): string {
+		switch ($this->getType()) {
+			case self::TYPE_USER:
+				return 'user';
+			case self::TYPE_GROUP:
+				return 'group';
+			case self::TYPE_CIRCLE:
+				return 'circle';
+		}
+
+		return 'unknown';
+	}
 }
