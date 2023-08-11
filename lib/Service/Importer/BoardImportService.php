@@ -250,7 +250,6 @@ class BoardImportService {
 				$this->getImportSystem()->updateAcl($code, $acl);
 			} catch (\Exception $e) {
 				$this->addError('Failed to import acl rule for ' . $acl->getParticipant(), $e);
-
 			}
 		}
 		$this->getBoard()->setAcl($aclList);
