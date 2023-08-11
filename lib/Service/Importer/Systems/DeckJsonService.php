@@ -77,6 +77,11 @@ class DeckJsonService extends ABoardImportService {
 	}
 
 	public function mapMember($uid): ?string {
+		$ownerMap = $this->mapOwner($uid);
+		if ($ownerMap !== $uid) {
+			return $ownerMap;
+		}
+
 		$uidCandidate = isset($this->members[$uid]) ? $this->members[$uid]?->getUID() ?? null : null;
 		if ($uidCandidate) {
 			return $uidCandidate;
@@ -104,7 +109,7 @@ class DeckJsonService extends ABoardImportService {
 			foreach ($sourceCard->assignedUsers as $idMember) {
 				$assignment = new Assignment();
 				$assignment->setCardId($this->cards[$sourceCard->id]->getId());
-				$assignment->setParticipant($idMember->participant->uid);
+				$assignment->setParticipant($this->mapMember($idMember->participant->uid ?? $idMember->participant));
 				$assignment->setType($idMember->participant->type);
 				$assignments[$sourceCard->id][] = $assignment;
 			}
