@@ -49,11 +49,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ImportExportTest extends \Test\TestCase {
 
 	private IDBConnection $connection;
-	private const TEST_USER1 = 'test-share-user1';
-	private const TEST_USER3 = 'test-share-user3';
-	private const TEST_USER2 = 'test-share-user2';
-	private const TEST_USER4 = 'test-share-user4';
-	private const TEST_GROUP1 = 'test-share-group1';
+	private const TEST_USER1 = 'test-export-user1';
+	private const TEST_USER3 = 'test-export-user3';
+	private const TEST_USER2 = 'test-export-user2';
+	private const TEST_USER4 = 'test-export-user4';
+	private const TEST_GROUP1 = 'test-export-group1';
 
 	public static function setUpBeforeClass(): void {
 		parent::setUpBeforeClass();
