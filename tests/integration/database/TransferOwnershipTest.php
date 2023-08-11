@@ -277,7 +277,7 @@ class TransferOwnershipTest extends \Test\TestCase {
 		// Arrange separate board next to the one being transferred
 		$board = $this->boardService->create('Test 2', self::TEST_USER_1, '000000');
 		$id = $board->getId();
-		$this->boardService->addAcl($id, Acl::PERMISSION_TYPE_USER, self::TEST_USER_1, true, true, true);
+		// $this->boardService->addAcl($id, Acl::PERMISSION_TYPE_USER, self::TEST_USER_1, true, true, true);
 		$this->boardService->addAcl($id, Acl::PERMISSION_TYPE_GROUP, self::TEST_GROUP, true, true, true);
 		$this->boardService->addAcl($id, Acl::PERMISSION_TYPE_USER, self::TEST_USER_3, false, true, false);
 		$stacks[] = $this->stackService->create('Stack A', $id, 1);
