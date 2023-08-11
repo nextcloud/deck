@@ -31,12 +31,14 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Service\BoardService;
+use OCP\App\IAppManager;
 use OCP\IGroupManager;
 use OCP\IUserManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class UserExportTest extends \Test\TestCase {
+	protected $appManager;
 	protected $boardMapper;
 	protected $boardService;
 	protected $stackMapper;
@@ -45,10 +47,11 @@ class UserExportTest extends \Test\TestCase {
 	protected $userManager;
 	protected $groupManager;
 
-	private $userExport;
+	private UserExport $userExport;
 
 	public function setUp(): void {
 		parent::setUp();
+		$this->appManager = $this->createMock(IAppManager::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->boardService = $this->createMock(BoardService::class);
 		$this->stackMapper = $this->createMock(StackMapper::class);
@@ -56,7 +59,7 @@ class UserExportTest extends \Test\TestCase {
 		$this->assignedUserMapper = $this->createMock(AssignmentMapper::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
-		$this->userExport = new UserExport($this->boardMapper, $this->boardService, $this->stackMapper, $this->cardMapper, $this->assignedUserMapper, $this->userManager, $this->groupManager);
+		$this->userExport = new UserExport($this->appManager, $this->boardMapper, $this->boardService, $this->stackMapper, $this->cardMapper, $this->assignedUserMapper, $this->userManager, $this->groupManager);
 	}
 
 	public function getBoard($id) {
@@ -114,5 +117,6 @@ class UserExportTest extends \Test\TestCase {
 			->method('findAll')
 			->willReturn([]);
 		$result = $this->invokePrivate($this->userExport, 'execute', [$input, $output]);
+		self::assertEquals(0, $result);
 	}
 }

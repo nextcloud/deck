@@ -12,5 +12,8 @@
     <testsuite name="integration-app">
       <directory>./integration/app</directory>
     </testsuite>
+	  <testsuite name="integration-import">
+		  <directory>./integration/import</directory>
+	  </testsuite>
   </testsuites>
 </phpunit>

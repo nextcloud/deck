@@ -78,6 +78,10 @@ class BoardImportCommandService extends BoardImportService {
 	protected function validateConfig(): void {
 		try {
 			$config = $this->getInput()->getOption('config');
+			if (!$config) {
+				return;
+			}
+
 			if (is_string($config)) {
 				if (!is_file($config)) {
 					throw new NotFoundException('It\'s not a valid config file.');
@@ -95,7 +99,7 @@ class BoardImportCommandService extends BoardImportService {
 			$helper = $this->getCommand()->getHelper('question');
 			$question = new Question(
 				"<info>You can get more info on https://deck.readthedocs.io/en/latest/User_documentation_en/#6-import-boards</info>\n" .
-				'Please inform a valid config json file: ',
+				'Please provide a valid config json file: ',
 				'config.json'
 			);
 			$question->setValidator(function (string $answer) {
@@ -130,7 +134,7 @@ class BoardImportCommandService extends BoardImportService {
 		$allowedSystems = $this->getAllowedImportSystems();
 		$names = array_column($allowedSystems, 'name');
 		$question = new ChoiceQuestion(
-			'Please inform a source system',
+			'Please select a source system',
 			$names,
 			0
 		);
@@ -145,6 +149,18 @@ class BoardImportCommandService extends BoardImportService {
 		if (!$this->getImportSystem()->needValidateData()) {
 			return;
 		}
+		$data = $this->getInput()->getArgument('file');
+		if (is_string($data)) {
+			if (!file_exists($data)) {
+				throw new \OCP\Files\NotFoundException('Could not find file ' . $data);
+			}
+			$data = json_decode(file_get_contents($data));
+			if ($data instanceof \stdClass) {
+				$this->setData($data);
+				return;
+			}
+		}
+
 		$data = $this->getInput()->getOption('data');
 		if (is_string($data)) {
 			$data = json_decode(file_get_contents($data));
@@ -174,26 +190,56 @@ class BoardImportCommandService extends BoardImportService {
 	public function bootstrap(): void {
 		$this->setSystem($this->getInput()->getOption('system'));
 		parent::bootstrap();
+
+		$this->registerErrorCollector(function ($error, $exception) {
+			$message = $error;
+			if ($exception instanceof \Throwable) {
+				$message .= ': ' . $exception->getMessage();
+			}
+			$this->getOutput()->writeln('<error>' . $message . '</error>');
+			if ($exception instanceof \Throwable && $this->getOutput()->isVeryVerbose()) {
+				$this->getOutput()->writeln($exception->getTraceAsString());
+			}
+		});
+
+		$this->registerOutputCollector(function ($info) {
+			if ($this->getOutput()->isVerbose()) {
+				$this->getOutput()->writeln('<info>' . $info . '</info>', );
+			}
+		});
 	}
 
 	public function import(): void {
 		$this->getOutput()->writeln('Starting import...');
 		$this->bootstrap();
-		$this->getOutput()->writeln('Importing board...');
-		$this->importBoard();
-		$this->getOutput()->writeln('Assign users to board...');
-		$this->importAcl();
-		$this->getOutput()->writeln('Importing labels...');
-		$this->importLabels();
-		$this->getOutput()->writeln('Importing stacks...');
-		$this->importStacks();
-		$this->getOutput()->writeln('Importing cards...');
-		$this->importCards();
-		$this->getOutput()->writeln('Assign cards to labels...');
-		$this->assignCardsToLabels();
-		$this->getOutput()->writeln('Importing comments...');
-		$this->importComments();
-		$this->getOutput()->writeln('Importing participants...');
-		$this->importCardAssignments();
+		$this->validateSystem();
+		$this->validateConfig();
+		$boards = $this->getImportSystem()->getBoards();
+
+		foreach ($boards as $board) {
+			try {
+				$this->reset();
+				$this->setData($board);
+				$this->getOutput()->writeln('Importing board "' . $board->title . '".');
+				$this->importBoard();
+				$this->getOutput()->writeln('Assign users to board...');
+				$this->importAcl();
+				$this->getOutput()->writeln('Importing labels...');
+				$this->importLabels();
+				$this->getOutput()->writeln('Importing stacks...');
+				$this->importStacks();
+				$this->getOutput()->writeln('Importing cards...');
+				$this->importCards();
+				$this->getOutput()->writeln('Assign cards to labels...');
+				$this->assignCardsToLabels();
+				$this->getOutput()->writeln('Importing comments...');
+				$this->importComments();
+				$this->getOutput()->writeln('Importing participants...');
+				$this->importCardAssignments();
+				$this->getOutput()->writeln('<info>Finished board import of "' . $this->getBoard()->getTitle() . '"</info>');
+			} catch (\Exception $e) {
+				$this->output->writeln('<error>Import failed for board ' . $board->title . ': ' . $e->getMessage() . '</error>');
+			}
+		}
 	}
 }

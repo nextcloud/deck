@@ -40,6 +40,7 @@ use OCA\Deck\Event\BoardImportGetAllowedEvent;
 use OCA\Deck\Exceptions\ConflictException;
 use OCA\Deck\NotFoundException;
 use OCA\Deck\Service\FileService;
+use OCA\Deck\Service\Importer\Systems\DeckJsonService;
 use OCA\Deck\Service\Importer\Systems\TrelloApiService;
 use OCA\Deck\Service\Importer\Systems\TrelloJsonService;
 use OCP\Comments\IComment;
@@ -48,20 +49,11 @@ use OCP\Comments\NotFoundException as CommentNotFoundException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IUserManager;
 use OCP\Server;
+use Psr\Log\LoggerInterface;
 
 class BoardImportService {
-	private IUserManager $userManager;
-	private BoardMapper $boardMapper;
-	private AclMapper $aclMapper;
-	private LabelMapper $labelMapper;
-	private StackMapper $stackMapper;
-	private CardMapper $cardMapper;
-	private AssignmentMapper $assignmentMapper;
-	private AttachmentMapper $attachmentMapper;
-	private ICommentsManager $commentsManager;
-	private IEventDispatcher $eventDispatcher;
 	private string $system = '';
-	private ?ABoardImportService $systemInstance;
+	private ?ABoardImportService $systemInstance = null;
 	private array $allowedSystems = [];
 	/**
 	 * Data object created from config JSON
@@ -79,30 +71,50 @@ class BoardImportService {
 	private $data;
 	private Board $board;
 
+	/** @var callable[] */
+	private array $errorCollectors = [];
+	/** @var callable[] */
+	private array $outputCollectors = [];
+
 	public function __construct(
-		IUserManager $userManager,
-		BoardMapper $boardMapper,
-		AclMapper $aclMapper,
-		LabelMapper $labelMapper,
-		StackMapper $stackMapper,
-		AssignmentMapper $assignmentMapper,
-		AttachmentMapper $attachmentMapper,
-		CardMapper $cardMapper,
-		ICommentsManager $commentsManager,
-		IEventDispatcher $eventDispatcher
+		private IUserManager $userManager,
+		private BoardMapper $boardMapper,
+		private AclMapper $aclMapper,
+		private LabelMapper $labelMapper,
+		private StackMapper $stackMapper,
+		private AssignmentMapper $assignmentMapper,
+		private AttachmentMapper $attachmentMapper,
+		private CardMapper $cardMapper,
+		private ICommentsManager $commentsManager,
+		private IEventDispatcher $eventDispatcher,
+		private LoggerInterface $logger
 	) {
-		$this->userManager = $userManager;
-		$this->boardMapper = $boardMapper;
-		$this->aclMapper = $aclMapper;
-		$this->labelMapper = $labelMapper;
-		$this->stackMapper = $stackMapper;
-		$this->cardMapper = $cardMapper;
-		$this->assignmentMapper = $assignmentMapper;
-		$this->attachmentMapper = $attachmentMapper;
-		$this->commentsManager = $commentsManager;
-		$this->eventDispatcher = $eventDispatcher;
 		$this->board = new Board();
 		$this->disableCommentsEvents();
+
+		$this->config = new \stdClass();
+	}
+
+	public function registerErrorCollector(callable $errorCollector): void {
+		$this->errorCollectors[] = $errorCollector;
+	}
+
+	public function registerOutputCollector(callable $outputCollector): void {
+		$this->outputCollectors[] = $outputCollector;
+	}
+
+	private function addError(string $message, $exception): void {
+		$message .= ' (on board ' . $this->getBoard()->getTitle() . ')';
+		foreach ($this->errorCollectors as $errorCollector) {
+			$errorCollector($message, $exception);
+		}
+		$this->logger->error($message, ['exception' => $exception]);
+	}
+
+	private function addOutput(string $message): void {
+		foreach ($this->outputCollectors as $outputCollector) {
+			$outputCollector($message);
+		}
 	}
 
 	private function disableCommentsEvents(): void {
@@ -120,17 +132,23 @@ class BoardImportService {
 
 	public function import(): void {
 		$this->bootstrap();
-		try {
-			$this->importBoard();
-			$this->importAcl();
-			$this->importLabels();
-			$this->importStacks();
-			$this->importCards();
-			$this->assignCardsToLabels();
-			$this->importComments();
-			$this->importCardAssignments();
-		} catch (\Throwable $th) {
-			throw new BadRequestException($th->getMessage());
+		$boards = $this->getImportSystem()->getBoards();
+		foreach ($boards as $board) {
+			try {
+				$this->reset();
+				$this->setData($board);
+				$this->importBoard();
+				$this->importAcl();
+				$this->importLabels();
+				$this->importStacks();
+				$this->importCards();
+				$this->assignCardsToLabels();
+				$this->importComments();
+				$this->importCardAssignments();
+			} catch (\Throwable $th) {
+				$this->logger->error('Failed to import board', ['exception' => $th]);
+				throw new BadRequestException($th->getMessage());
+			}
 		}
 	}
 
@@ -138,7 +156,7 @@ class BoardImportService {
 		$allowedSystems = $this->getAllowedImportSystems();
 		$allowedSystems = array_column($allowedSystems, 'internalName');
 		if (!in_array($this->getSystem(), $allowedSystems)) {
-			throw new NotFoundException('Invalid system');
+			throw new NotFoundException('Invalid system: ' . $this->getSystem());
 		}
 	}
 
@@ -164,6 +182,11 @@ class BoardImportService {
 
 	public function getAllowedImportSystems(): array {
 		if (!$this->allowedSystems) {
+			$this->addAllowedImportSystem([
+				'name' => DeckJsonService::$name,
+				'class' => DeckJsonService::class,
+				'internalName' => 'DeckJson'
+			]);
 			$this->addAllowedImportSystem([
 				'name' => TrelloApiService::$name,
 				'class' => TrelloApiService::class,
@@ -195,8 +218,17 @@ class BoardImportService {
 		$this->systemInstance = $instance;
 	}
 
+	public function reset(): void {
+		$this->board = new Board();
+		$this->getImportSystem()->reset();
+	}
+
 	public function importBoard(): void {
 		$board = $this->getImportSystem()->getBoard();
+		if (!$this->userManager->userExists($board->getOwner())) {
+			throw new \Exception('Target owner ' . $board->getOwner() . ' not found. Please provide a mapping through the import config.');
+		}
+
 		if ($board) {
 			$this->boardMapper->insert($board);
 			$this->board = $board;
@@ -213,8 +245,13 @@ class BoardImportService {
 	public function importAcl(): void {
 		$aclList = $this->getImportSystem()->getAclList();
 		foreach ($aclList as $code => $acl) {
-			$this->aclMapper->insert($acl);
-			$this->getImportSystem()->updateAcl($code, $acl);
+			try {
+				$this->aclMapper->insert($acl);
+				$this->getImportSystem()->updateAcl($code, $acl);
+			} catch (\Exception $e) {
+				$this->addError('Failed to import acl rule for ' . $acl->getParticipant(), $e);
+
+			}
 		}
 		$this->getBoard()->setAcl($aclList);
 	}
@@ -222,8 +259,12 @@ class BoardImportService {
 	public function importLabels(): void {
 		$labels = $this->getImportSystem()->getLabels();
 		foreach ($labels as $code => $label) {
-			$this->labelMapper->insert($label);
-			$this->getImportSystem()->updateLabel($code, $label);
+			try {
+				$this->labelMapper->insert($label);
+				$this->getImportSystem()->updateLabel($code, $label);
+			} catch (\Exception $e) {
+				$this->addError('Failed to import label ' . $label->getTitle(), $e);
+			}
 		}
 		$this->getBoard()->setLabels($labels);
 	}
@@ -231,8 +272,12 @@ class BoardImportService {
 	public function importStacks(): void {
 		$stacks = $this->getImportSystem()->getStacks();
 		foreach ($stacks as $code => $stack) {
-			$this->stackMapper->insert($stack);
-			$this->getImportSystem()->updateStack($code, $stack);
+			try {
+				$this->stackMapper->insert($stack);
+				$this->getImportSystem()->updateStack($code, $stack);
+			} catch (\Exception $e) {
+				$this->addError('Failed to import list ' . $stack->getTitle(), $e);
+			}
 		}
 		$this->getBoard()->setStacks(array_values($stacks));
 	}
@@ -240,22 +285,26 @@ class BoardImportService {
 	public function importCards(): void {
 		$cards = $this->getImportSystem()->getCards();
 		foreach ($cards as $code => $card) {
-			$createdAt = $card->getCreatedAt();
-			$lastModified = $card->getLastModified();
-			$this->cardMapper->insert($card);
-			$updateDate = false;
-			if ($createdAt && $createdAt !== $card->getCreatedAt()) {
-				$card->setCreatedAt($createdAt);
-				$updateDate = true;
+			try {
+				$createdAt = $card->getCreatedAt();
+				$lastModified = $card->getLastModified();
+				$this->cardMapper->insert($card);
+				$updateDate = false;
+				if ($createdAt && $createdAt !== $card->getCreatedAt()) {
+					$card->setCreatedAt($createdAt);
+					$updateDate = true;
+				}
+				if ($lastModified && $lastModified !== $card->getLastModified()) {
+					$card->setLastModified($lastModified);
+					$updateDate = true;
+				}
+				if ($updateDate) {
+					$this->cardMapper->update($card, false);
+				}
+				$this->getImportSystem()->updateCard($code, $card);
+			} catch (\Exception $e) {
+				$this->addError('Failed to import card ' . $card->getTitle(), $e);
 			}
-			if ($lastModified && $lastModified !== $card->getLastModified()) {
-				$card->setLastModified($lastModified);
-				$updateDate = true;
-			}
-			if ($updateDate) {
-				$this->cardMapper->update($card, false);
-			}
-			$this->getImportSystem()->updateCard($code, $card);
 		}
 	}
 
@@ -276,11 +325,15 @@ class BoardImportService {
 		$data = $this->getImportSystem()->getCardLabelAssignment();
 		foreach ($data as $cardId => $assignemnt) {
 			foreach ($assignemnt as $assignmentId => $labelId) {
-				$this->assignCardToLabel(
-					$cardId,
-					$labelId
-				);
-				$this->getImportSystem()->updateCardLabelsAssignment($cardId, $assignmentId, $labelId);
+				try {
+					$this->assignCardToLabel(
+						$cardId,
+						$labelId
+					);
+					$this->getImportSystem()->updateCardLabelsAssignment($cardId, $assignmentId, $labelId);
+				} catch (\Exception $e) {
+					$this->addError('Failed to assign label ' . $labelId . ' to ' . $cardId, $e);
+				}
 			}
 		}
 	}
@@ -322,9 +375,14 @@ class BoardImportService {
 	public function importCardAssignments(): void {
 		$allAssignments = $this->getImportSystem()->getCardAssignments();
 		foreach ($allAssignments as $cardId => $assignments) {
-			foreach ($assignments as $assignmentId => $assignment) {
-				$this->assignmentMapper->insert($assignment);
-				$this->getImportSystem()->updateCardAssignment($cardId, $assignmentId, $assignment);
+			foreach ($assignments as $assignment) {
+				try {
+					$assignment = $this->assignmentMapper->insert($assignment);
+					$this->getImportSystem()->updateCardAssignment($cardId, (string)$assignment->getId(), $assignment);
+					$this->addOutput('Assignment ' . $assignment->getParticipant() . ' added');
+				} catch (NotFoundException $e) {
+					$this->addError('No origin or mapping found for card "' . $cardId . '" and ' . $assignment->getTypeString() .' assignment "' . $assignment->getParticipant(), $e);
+				}
 			}
 		}
 	}
