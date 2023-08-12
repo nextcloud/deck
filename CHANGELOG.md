@@ -1,6 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.11.0-beta.1
+
+### Added
+
+- Import deck json files through occ @juliushaertl [#5003](https://github.com/nextcloud/deck/pull/5003)
+- Create new card via smart picker [#5000](https://github.com/nextcloud/deck/pull/5000)
+
+### Fixed
+
+- Fix(occ): set user id for permission sevice from board service [#4813](https://github.com/nextcloud/deck/pull/4813)
+- fix: Allow dynamic autoloading for classes added during upgrade [#4804](https://github.com/nextcloud/deck/pull/4804)
+- fix(notification): Prevent null in parameters [#4909](https://github.com/nextcloud/deck/pull/4909)
+- fix: Split query to fetch board ids to avoid slow query join @juliushaertl [#4949](https://github.com/nextcloud/deck/pull/4949)
+- fix: execute return int for export command [#4811](https://github.com/nextcloud/deck/pull/4811)
+- fix: crash when leaving out system parameter [#4831](https://github.com/nextcloud/deck/pull/4831)
+
 ## 1.10.0
 
 ### Added
