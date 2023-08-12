@@ -78,7 +78,9 @@ class DeckJsonService extends ABoardImportService {
 
 	public function mapMember($uid): ?string {
 		$ownerMap = $this->mapOwner($uid);
-		if ($uid === $this->getImportService()->getData()->owner && $ownerMap !== $this->getImportService()->getData()->owner) {
+		$sourceId = ($this->getImportService()->getData()->owner->primaryKey ?? $this->getImportService()->getData()->owner);
+
+		if ($uid === $sourceId && $ownerMap !== $sourceId) {
 			return $ownerMap;
 		}
 
