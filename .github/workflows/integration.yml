@@ -71,7 +71,7 @@ jobs:
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@2.24.0
+        uses: shivammathur/setup-php@2.25.5
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, mysql, pdo_mysql, pgsql, pdo_pgsql, apcu
@@ -98,7 +98,7 @@ jobs:
           cat config/config.php
           ./occ user:list
           ./occ app:enable --force ${{ env.APP_NAME }}
-          ./occ config:system:set query_log_file --value '/home/runner/work/${{ env.APP_NAME }}/${{ env.APP_NAME }}/query.log'
+          ./occ config:system:set query_log_file --value "$PWD/query.log"
           php -S localhost:8080 &
 
       - name: Run behat
@@ -123,12 +123,12 @@ jobs:
                 myError += data.toString()
               }
             }
-            await exec.exec(`/bin/bash -c "cat /home/runner/work/${{ env.APP_NAME }}/${{ env.APP_NAME }}/query.log | wc -l"`, [], options)
+            await exec.exec(`/bin/bash -c "cat query.log | wc -l"`, [], options)
             msg = myOutput
             const queryCount = parseInt(myOutput, 10)
 
             myOutput = ''
-            await exec.exec('cat', ['/home/runner/work/${{ env.APP_NAME }}/${{ env.APP_NAME }}/apps/${{ env.APP_NAME }}/tests/integration/base-query-count.txt'], options)
+            await exec.exec('cat', ['apps/${{ env.APP_NAME }}/tests/integration/base-query-count.txt'], options)
             const baseCount = parseInt(myOutput, 10)
 
             const absoluteIncrease = queryCount - baseCount
