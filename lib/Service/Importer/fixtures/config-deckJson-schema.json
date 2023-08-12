@@ -1,0 +1,17 @@
+{
+    "type": "object",
+    "properties": {
+        "uidRelation": {
+            "type": "object",
+            "comment": "Relationship between Trello and Nextcloud usernames",
+            "example": {
+                "johndoe": "admin"
+            }
+        },
+        "owner": {
+            "type": "string",
+            "required": true,
+            "comment": "Nextcloud owner username"
+        }
+    }
+}
