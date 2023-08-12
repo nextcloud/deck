@@ -193,6 +193,8 @@ namespace Symfony\Component\Console\Output {
 	class OutputInterface {
 		public const VERBOSITY_VERBOSE = 1;
 		public function writeln($text, int $flat = 0) {}
+		public function isVerbose(): bool {}
+		public function isVeryVerbose(): bool {}
 	}
 }
 

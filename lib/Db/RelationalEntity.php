@@ -138,7 +138,7 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 
 		$attr = lcfirst(substr($methodName, 3));
 		if (array_key_exists($attr, $this->_resolvedProperties) && strpos($methodName, 'set') === 0) {
-			if (!is_scalar($args[0])) {
+			if ($args[0] !== null && !is_scalar($args[0])) {
 				$args[0] = $args[0]['primaryKey'];
 			}
 			parent::setter($attr, $args);
