@@ -58,6 +58,31 @@ describe('Card', function() {
 		})
 	})
 
+	it('Create card from overview', function() {
+		cy.visit(`/apps/deck/#/`)
+		const newCardTitle = 'Test create from overview'
+		cy.intercept({ method: 'POST', url: '**/apps/deck/cards' }).as('save')
+		cy.intercept({ method: 'GET', url: '**/apps/deck/boards/*' }).as('getBoard')
+
+		cy.get('.button-vue[aria-label*="Add card"]')
+			.first().click()
+		cy.get('.modal-mask.card-selector .card-title').should('be.visible').click().type(newCardTitle)
+		cy.get('.modal-mask.card-selector .multiselect-board').should('be.visible').click()
+		cy.get('.modal-mask.card-selector .multiselect-board li:contains("' + boardData.title + '")').should('be.visible').click()
+		cy.wait('@getBoard', { timeout: 7000 })
+
+		cy.get('.modal-mask.card-selector .multiselect-list').should('be.visible').click()
+		cy.get('.modal-mask.card-selector .multiselect-list li').eq(0).should('be.visible').click()
+		cy.get('.modal-mask.card-selector button.button-vue--vue-primary').should('be.visible').click()
+		cy.wait('@save', { timeout: 7000 })
+
+		cy.visit(`/apps/deck/#/board/${boardId}`)
+		cy.reload()
+		cy.get('.board .stack').eq(0).within(() => {
+			cy.get(`.card:contains("${newCardTitle}")`).should('be.visible')
+		})
+	})
+
 	describe('Modal', () => {
 		beforeEach(function() {
 			cy.login(user)
@@ -108,6 +133,36 @@ describe('Card', function() {
 			cy.get('.modal__card .ProseMirror li').eq(0).contains('List item').should('be.visible')
 			cy.get('.modal__card .ProseMirror li').eq(1).contains('with entries').should('be.visible')
 			cy.get('.modal__card .ProseMirror p').contains('Paragraph').should('be.visible')
+		})
+
+		it('Smart picker', () => {
+			const newCardTitle = 'Test smart picker'
+			cy.intercept({ method: 'POST', url: '**/apps/deck/cards' }).as('save')
+			cy.intercept({ method: 'GET', url: '**/apps/deck/boards/*' }).as('getBoard')
+			cy.get('.card:contains("Hello world")').should('be.visible').click()
+			cy.get('.modal__card').should('be.visible')
+			cy.get('.modal__card .ProseMirror h1')
+				.click()
+				.type('{enter}/create')
+			cy.get('.suggestion-list__item.is-selected').should('be.visible').contains('Create a new deck card')
+			cy.get('.suggestion-list__item.is-selected .link-picker__item').click()
+			cy.get('.reference-picker-modal--content .reference-picker').should('be.visible')
+			cy.get('.reference-picker-modal--content .reference-picker').contains('Create a new card')
+			cy.get('.reference-picker-modal--content .reference-picker .card-title').should('be.visible').click().type(newCardTitle)
+			cy.get('.reference-picker-modal--content .reference-picker .multiselect-board').should('be.visible').click()
+			cy.get('.reference-picker-modal--content .reference-picker .multiselect-board li:contains("' + boardData.title + '")').should('be.visible').click()
+			cy.wait('@getBoard', { timeout: 7000 })
+			cy.get('.reference-picker-modal--content .reference-picker .multiselect-list').should('be.visible').click()
+			cy.get('.reference-picker-modal--content .reference-picker .multiselect-list li').eq(0).should('be.visible').click()
+			cy.get('.reference-picker-modal--content .reference-picker button.button-vue--vue-primary').should('be.visible').click()
+			cy.wait('@save', { timeout: 7000 })
+			cy.get('.modal__card .ProseMirror').contains('/index.php/apps/deck/card/').should('be.visible')
+
+			cy.visit(`/apps/deck/#/board/${boardId}`)
+			cy.reload()
+			cy.get('.board .stack').eq(0).within(() => {
+				cy.get(`.card:contains("${newCardTitle}")`).should('be.visible')
+			})
 		})
 	})
 
