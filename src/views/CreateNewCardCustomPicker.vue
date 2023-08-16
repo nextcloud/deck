@@ -128,6 +128,7 @@ import Description from '../components/card/Description.vue'
 import CardPlusOutline from 'vue-material-design-icons/CardPlusOutline.vue'
 import FormatColumnsIcon from 'vue-material-design-icons/FormatColumns.vue'
 import DeckIcon from '../components/icons/DeckIcon.vue'
+import { showError } from '../helpers/errors.js'
 
 const cardApi = new CardApi()
 const apiClient = new BoardApi()
@@ -216,7 +217,7 @@ export default {
 		fetchBoards() {
 			axios.get(generateUrl('/apps/deck/boards')).then((response) => {
 				this.boards = response.data.filter((board) => {
-					return board?.permissions?.PERMISSION_EDIT
+					return board?.permissions?.PERMISSION_EDIT && !board?.archived && !board?.deletedAt
 				})
 				this.loading = false
 			})
@@ -239,19 +240,30 @@ export default {
 		},
 		async createCard() {
 			this.creating = true
-			const response = await cardApi.addCard({
-				boardId: this.selectedBoard.id,
-				stackId: this.selectedStack.id,
-				title: this.card.title,
-				description: this.card.description,
-				duedate: this.card.duedate,
-				labels: this.card.labels.map(label => label.id),
-				users: this.card.assignedUsers.map(user => { return { id: user.uid, type: user.type } }),
-			})
-			this.newCard = response
-			this.creating = false
-			this.created = true
-			this.$emit('submit', window.location.protocol + '//' + window.location.host + generateUrl('/apps/deck') + `/card/${this.newCard.id}`)
+
+			try {
+				const response = await cardApi.addCard({
+					boardId: this.selectedBoard.id,
+					stackId: this.selectedStack.id,
+					title: this.card.title,
+					description: this.card.description,
+					duedate: this.card.duedate,
+					labels: this.card.labels.map(label => label.id),
+					users: this.card.assignedUsers.map(user => {
+						return {
+							id: user.uid,
+							type: user.type,
+						}
+					}),
+				})
+				this.newCard = response
+				this.creating = false
+				this.created = true
+				this.$emit('submit', window.location.protocol + '//' + window.location.host + generateUrl('/apps/deck') + `/card/${this.newCard.id}`)
+			} catch (e) {
+				this.creating = false
+				showError(e)
+			}
 		},
 		onSelectLabel(label) {
 			this.card.labels.push(label)
