@@ -4,6 +4,8 @@ OC.L10N.register(
     "Personal" : "ສ່ວນບຸກຄົນ",
     "Finished" : "ສຳເລັດ",
     "Done" : "ສໍາເລັດ",
+    "The file was uploaded" : "ຟາຍຖຶກອັບໂຫລດສຳເລັດ",
+    "No file was uploaded" : "ບໍ່ມີການອັບໂຫລດຟາຍ",
     "Cancel" : "ຍົກເລີກ",
     "Details" : "ລາຍລະອຽດ",
     "Sharing" : "ການແບ່ງປັນ",
