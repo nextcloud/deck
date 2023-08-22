@@ -27,7 +27,10 @@
 		:undo="deleted"
 		:menu-placement="'auto'"
 		@undo="unDelete">
-		<NcAppNavigationIconBullet slot="icon" :color="board.color" />
+		<template #icon>
+			<NcAppNavigationIconBullet :color="board.color" />
+			<BoardCloneModal v-if="cloneModalOpen" :board-title="board.title" @close="onCloseCloneModal" />
+		</template>
 
 		<NcAppNavigationCounter v-if="board.acl.length"
 			slot="counter"
@@ -81,20 +84,6 @@
 					{{ board.settings['notify-due'] === 'off' ? t('deck', 'Turn on due date reminders') : t('deck', 'Turn off due date reminders') }}
 				</NcActionButton>
 			</template>
-		</AppNavigationItem>
-		<div v-else-if="editing" class="board-edit">
-			<ColorPicker class="app-navigation-entry-bullet-wrapper" :value="`#${board.color}`" @input="updateColor">
-				<div :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
-			</ColorPicker>
-			<form @submit.prevent.stop="applyEdit">
-				<input v-model="editTitle"
-					v-focus
-					type="text"
-					required>
-				<input type="submit" value="" class="icon-confirm">
-				<Actions><ActionButton icon="icon-close" @click.stop.prevent="cancelEdit" /></Actions>
-			</form>
-		</div>
 
 			<!-- Due date reminder settings -->
 			<template v-if="isDueSubmenuActive">
@@ -153,7 +142,6 @@
 			<input type="submit" value="" class="icon-confirm">
 			<NcActions><NcActionButton icon="icon-close" @click.stop.prevent="cancelEdit" /></NcActions>
 		</form>
-		<BoardCloneModal v-if="cloneModalOpen" :board-title="board.title" @close="onCloseCloneModal" />
 	</div>
 </template>
 
@@ -162,7 +150,7 @@ import { NcAppNavigationIconBullet, NcAppNavigationCounter, NcAppNavigationItem,
 import ClickOutside from 'vue-click-outside'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
-import BoardCloneModal from './BoardCloneModal'
+import BoardCloneModal from './BoardCloneModal.vue'
 
 export default {
 	name: 'AppNavigationBoard',
@@ -265,6 +253,26 @@ export default {
 			this.editColor = '#' + this.board.color
 			this.editing = true
 		},
+		showCloneModal() {
+			this.cloneModalOpen = true
+		},
+		async onCloseCloneModal(data) {
+			this.cloneModalOpen = false
+			if (data) {
+				this.loading = true
+				try {
+					const newBoard = await this.$store.dispatch('cloneBoard', {
+						boardData: this.board,
+						settings: data,
+					})
+					this.loading = false
+					await this.$router.push({ name: 'board', params: { id: newBoard.id } })
+				} catch (e) {
+					OC.Notification.showTemporary(t('deck', 'An error occurred'))
+					console.error(e)
+				}
+			}
+		},
 		actionArchive() {
 			this.loading = true
 			this.$store.dispatch('archiveBoard', this.board)
@@ -328,26 +336,6 @@ export default {
 		},
 		actionExport() {
 			this.boardApi.exportBoard(this.board)
-		},
-		showCloneModal() {
-			this.cloneModalOpen = true
-		},
-		async onCloseCloneModal(data) {
-			this.cloneModalOpen = false
-			if (data) {
-				this.loading = true
-				try {
-					const newBoard = await this.$store.dispatch('cloneBoard', {
-						boardData: this.board,
-						settings: data,
-					})
-					this.loading = false
-					this.$router.push({ name: 'board', params: { id: newBoard.id } })
-				} catch (e) {
-					OC.Notification.showTemporary(t('deck', 'An error occurred'))
-					console.error(e)
-				}
-			}
 		},
 	},
 }

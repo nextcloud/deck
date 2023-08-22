@@ -20,23 +20,23 @@
   -
   -->
 <template>
-	<Modal size="small" @close="close(false)">
+	<NcModal size="small" :show="true" @close="close(false)">
 		<div class="modal__content">
 			<h2 class="modal__title">
 				{{ t('deck', 'Clone {boardTitle}', {boardTitle: boardTitle}) }}
 			</h2>
-			<CheckboxRadioSwitch :checked.sync="withCards">
+			<NcCheckboxRadioSwitch :checked.sync="withCards">
 				{{ t('deck', 'Clone cards') }}
-			</CheckboxRadioSwitch>
-			<CheckboxRadioSwitch v-if="withCards" :checked.sync="withAssignments">
+			</NcCheckboxRadioSwitch>
+			<NcCheckboxRadioSwitch v-if="withCards" :checked.sync="withAssignments">
 				{{ t('deck', 'Clone assignments') }}
-			</CheckboxRadioSwitch>
-			<CheckboxRadioSwitch v-if="withCards" :checked.sync="withLabels">
+			</NcCheckboxRadioSwitch>
+			<NcCheckboxRadioSwitch v-if="withCards" :checked.sync="withLabels">
 				{{ t('deck', 'Clone labels') }}
-			</CheckboxRadioSwitch>
-			<CheckboxRadioSwitch v-if="withCards" :checked.sync="withDueDate">
+			</NcCheckboxRadioSwitch>
+			<NcCheckboxRadioSwitch v-if="withCards" :checked.sync="withDueDate">
 				{{ t('deck', 'Clone due dates') }}
-			</CheckboxRadioSwitch>
+			</NcCheckboxRadioSwitch>
 			<div v-if="withCards" class="accordion" :class="{ 'is-open': accordionOpen }">
 				<div class="accordion__toggle" @click="accordionOpen = !accordionOpen">
 					<span class="accordion__toggle__icon">
@@ -45,35 +45,35 @@
 					{{ t('deck', 'Advanced options') }}
 				</div>
 				<div v-if="accordionOpen" class="accordion__content">
-					<CheckboxRadioSwitch v-if="withCards" :checked.sync="moveCardsToLeftStack">
+					<NcCheckboxRadioSwitch v-if="withCards" :checked.sync="moveCardsToLeftStack">
 						{{ t('deck', 'Move all cards to the first list') }}
-					</CheckboxRadioSwitch>
-					<CheckboxRadioSwitch v-if="withCards" :checked.sync="restoreArchivedCards">
+					</NcCheckboxRadioSwitch>
+					<NcCheckboxRadioSwitch v-if="withCards" :checked.sync="restoreArchivedCards">
 						{{ t('deck', 'Restore archived cards') }}
-					</CheckboxRadioSwitch>
+					</NcCheckboxRadioSwitch>
 				</div>
 			</div>
 			<div class="modal__buttons">
-				<button @click="cancel">
+				<NcButton @click="cancel">
 					{{ t('deck', 'Cancel') }}
-				</button>
-				<button class="primary" @click="save">
+				</NcButton>
+				<NcButton class="primary" @click="save">
 					{{ t('deck', 'Clone') }}
-				</button>
+				</NcButton>
 			</div>
 		</div>
-	</Modal>
+	</NcModal>
 </template>
 
 <script>
-import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch'
-import Modal from '@nextcloud/vue/dist/Components/Modal'
+import { NcButton, NcCheckboxRadioSwitch, NcModal } from '@nextcloud/vue'
 
 export default {
 	name: 'BoardCloneModal',
 	components: {
-		Modal,
-		CheckboxRadioSwitch,
+		NcModal,
+		NcCheckboxRadioSwitch,
+		NcButton,
 	},
 	props: {
 		boardTitle: {

@@ -151,21 +151,11 @@ class BoardController extends ApiController {
 
 	/**
 	 * @NoAdminRequired
-	 * @param $boardId
-	 * @param bool $withCards
-	 * @param bool $withAssignments
-	 * @param bool $withLabels
-	 * @param bool $withDueDate
-	 * @param bool $moveCardsToLeftStack
-	 * @param bool $restoreArchivedCards
-	 * @return \OCA\Deck\Db\Board
-	 * @throws \OCA\Deck\BadRequestException
-	 * @throws \OCA\Deck\NoPermissionException
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
-	public function clone($boardId, $withCards = false, $withAssignments = false, $withLabels = false, $withDueDate = false, $moveCardsToLeftStack = false, $restoreArchivedCards = false) {
-		return $this->boardService->clone($boardId, $this->userId, $withCards, $withAssignments, $withLabels, $withDueDate, $moveCardsToLeftStack, $restoreArchivedCards);
+	public function clone(int $boardId, bool $withCards = false, bool $withAssignments = false, bool $withLabels = false, bool $withDueDate = false, bool $moveCardsToLeftStack = false, bool $restoreArchivedCards = false): DataResponse {
+		return new DataResponse(
+			$this->boardService->clone($boardId, $this->userId, $withCards, $withAssignments, $withLabels, $withDueDate, $moveCardsToLeftStack, $restoreArchivedCards)
+		);
 	}
 
 	/**

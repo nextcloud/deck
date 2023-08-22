@@ -114,11 +114,6 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function findLabelByTitle($boardId, $title, $limit = null, $offset = null) {
-		$sql = 'SELECT * FROM `*PREFIX*deck_labels` WHERE `board_id` = ? AND title = ? ORDER BY `id`';
-		return $this->findEntity($sql, [$boardId, $title], $limit, $offset);
-	}
-
 	public function insert(Entity $entity): Entity {
 		if (!in_array('lastModified', $entity->getUpdatedFields())) {
 			$entity->setLastModified(time());
