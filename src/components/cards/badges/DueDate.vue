@@ -75,12 +75,10 @@ export default {
 		border-radius: 3px;
 		margin-top: 9px;
 		margin-bottom: 9px;
-		padding: 3px 4px;
-		padding-right: 0;
+		padding: 3px 0 3px 4px;
 		font-size: 90%;
 		display: flex;
 		align-items: center;
-		opacity: .5;
 		flex-shrink: 1;
 		z-index: 2;
 
@@ -89,19 +87,15 @@ export default {
 		}
 
 		&.overdue {
-			background-color: var(--color-error);
-			color: var(--color-primary-element-text);
-			opacity: .7;
+			color: var(--color-error-text);
 			padding: 3px 4px;
 		}
 		&.now {
-			background-color: var(--color-warning);
-			opacity: .7;
+			color: var(--color-warning-text);
 			padding: 3px 4px;
 		}
 		&.next {
 			background-color: var(--color-background-dark);
-			opacity: .7;
 			padding: 3px 4px;
 		}
 
