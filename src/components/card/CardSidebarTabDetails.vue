@@ -129,6 +129,8 @@ export default {
 			}
 
 			this.copiedCard = JSON.parse(JSON.stringify(this.card))
+			localStorage.setItem('deck.selectedBoardId', this.currentBoard.id)
+			localStorage.setItem('deck.selectedStackId', this.card.stackId)
 		},
 
 		async updateCardDue(val) {
