@@ -23,9 +23,10 @@
 
 namespace OCA\Deck\Activity;
 
+use OCP\Activity\ActivitySettings;
 use OCP\IL10N;
 
-class Setting implements \OCP\Activity\ISetting {
+abstract class SettingBase extends ActivitySettings {
 
 	/** @var IL10N */
 	protected $l;
@@ -35,6 +36,14 @@ class Setting implements \OCP\Activity\ISetting {
 	 */
 	public function __construct(IL10N $l) {
 		$this->l = $l;
+	}
+
+	public function getGroupIdentifier() {
+		return 'deck';
+	}
+
+	public function getGroupName() {
+		return $this->l->t('Deck');
 	}
 
 	/**
