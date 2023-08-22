@@ -5,7 +5,10 @@
 				<!-- Edit Tag -->
 				<template v-if="editingLabelId === label.id">
 					<form class="label-form" @submit.prevent="updateLabel(label)">
-						<NcColorPicker class="color-picker-wrapper" :value="'#' + editingLabel.color" @input="updateColor">
+						<NcColorPicker class="color-picker-wrapper"
+							:value="'#' + editingLabel.color"
+							:advanced-fields="true"
+							@input="updateColor">
 							<div :style="{ backgroundColor: '#' + editingLabel.color }" class="color0 icon-colorpicker" />
 						</NcColorPicker>
 						<input v-model="editingLabel.title" type="text">
@@ -48,7 +51,10 @@
 			<li v-if="addLabel" class="editing">
 				<!-- New Tag -->
 				<form class="label-form" @submit.prevent="clickAddLabel">
-					<NcColorPicker class="color-picker-wrapper" :value="'#' + addLabelObj.color" @input="updateColor">
+					<NcColorPicker class="color-picker-wrapper"
+						:value="'#' + addLabelObj.color"
+						:advanced-fields="true"
+						@input="updateColor">
 						<div :style="{ backgroundColor: '#' + addLabelObj.color }" class="color0 icon-colorpicker" />
 					</NcColorPicker>
 					<input v-model="addLabelObj.title" type="text">
