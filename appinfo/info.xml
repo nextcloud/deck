@@ -58,9 +58,9 @@
     </commands>
     <activity>
         <settings>
-            <setting>OCA\Deck\Activity\Setting</setting>
+            <setting>OCA\Deck\Activity\SettingChanges</setting>
+            <setting>OCA\Deck\Activity\SettingDescription</setting>
             <setting>OCA\Deck\Activity\SettingComment</setting>
-            <setting>OCA\Deck\Activity\DescriptionSetting</setting>
         </settings>
         <filters>
             <filter>OCA\Deck\Activity\Filter</filter>

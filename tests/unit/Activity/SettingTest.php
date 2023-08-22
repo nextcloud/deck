@@ -30,7 +30,7 @@ class SettingTest extends TestCase {
 
 	/** @var IL10N */
 	private $l10n;
-	/** @var Setting */
+	/** @var SettingBase */
 	private $setting;
 
 	public function setUp(): void {
@@ -38,7 +38,7 @@ class SettingTest extends TestCase {
 		$this->l10n->expects($this->any())->method('t')->will($this->returnCallback(function ($s) {
 			return $s;
 		}));
-		$this->setting = new Setting($this->l10n);
+		$this->setting = new SettingChanges($this->l10n);
 	}
 
 	public function testGetIdentifier() {
@@ -46,7 +46,7 @@ class SettingTest extends TestCase {
 	}
 
 	public function testGetName() {
-		$this->assertEquals('Changes in the <strong>Deck app</strong>', $this->setting->getName());
+		$this->assertEquals('A <strong>board, list or card</strong> was changed', $this->setting->getName());
 	}
 
 	public function testGetPriority() {

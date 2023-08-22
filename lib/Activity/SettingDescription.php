@@ -23,7 +23,7 @@
 
 namespace OCA\Deck\Activity;
 
-class DescriptionSetting extends Setting {
+class SettingDescription extends SettingBase {
 
 	/**
 	 * @return string Lowercase a-z and underscore only identifier
@@ -38,6 +38,6 @@ class DescriptionSetting extends Setting {
 	 * @since 11.0.0
 	 */
 	public function getName(): string {
-		return $this->l->t('A <strong>card description</strong> inside the Deck app has been changed');
+		return $this->l->t('A <strong>card description</strong> has been changed');
 	}
 }
