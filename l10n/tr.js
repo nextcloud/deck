@@ -63,7 +63,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user}, {card} kartındaki {attachment} dosyasını geri yükledi",
     "You have commented on card {card}" : "{card} kartı hakkında yorum yaptınız",
     "{user} has commented on card {card}" : "{user}, {card} kartı hakkında yorum yaptı",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Tahta uygulamasında bir <strong>kart açıklaması</strong> değiştirildiğinde",
     "Deck" : "Tahta",
     "Changes in the <strong>Deck app</strong>" : "<strong>Tahta uygulamasında</strong> değişiklik yapıldığında",
     "A <strong>comment</strong> was created on a card" : "Bir kart için bir <strong>yorum</strong> yapıldığında",
@@ -316,6 +315,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Bir tahta kartı ile paylaş",
     "Share {file} with a Deck card" : "{file} dosyasını bir tahta kartı ile paylaş",
     "Share" : "Paylaş",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "Tahta uygulamasında bir <strong>kart açıklaması</strong> değiştirildiğinde",
     "Add a new list" : "Yeni liste ekle",
     "Assign to users" : "Kullanıcılara ata",
     "Due date" : "Bitiş tarihi"

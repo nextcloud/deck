@@ -61,7 +61,6 @@
     "{user} has restored the attachment {attachment} to card {card}" : "{user} obnovi prilogo {attachment} naloge {card}",
     "You have commented on card {card}" : "Vpišete opombo k nalogi {card}",
     "{user} has commented on card {card}" : "{user} vpiše opombo k nalogi {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "V programu Deck je spremenjen <strong>opis ene izmed nalog</strong>",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Spremembe v programu <strong>Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "Nalogi je dodana nova <strong>opomba</strong>",
@@ -284,6 +283,7 @@
     "Share with a Deck card" : "Poveži z nalogo Deck",
     "Share {file} with a Deck card" : "Poveži datoteko {file} z nalogo Deck",
     "Share" : "Souporaba",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "V programu Deck je spremenjen <strong>opis ene izmed nalog</strong>",
     "Add a new list" : "Dodaj nov seznam",
     "Assign to users" : "Dodeli uporabnikom",
     "Due date" : "Datum preteka"

@@ -63,7 +63,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} herstelde bijlage {attachment} bij kaart {card}",
     "You have commented on card {card}" : "Je hebt gereageerd op kaart {card}",
     "{user} has commented on card {card}" : "{user} reageerde op kaart {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Een <strong>kaart beschrijving</strong> binnen de Deck app is gewijzigd",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Wijzigingen in de <strong>Deck app</strong>",
     "A <strong>comment</strong> was created on a card" : "Er is <strong>commentaar </strong> gegeven op een card",
@@ -307,6 +306,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Delen met een Deck kaart",
     "Share {file} with a Deck card" : "Delen {file} met een Deck kaart",
     "Share" : "Delen",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "Een <strong>kaart beschrijving</strong> binnen de Deck app is gewijzigd",
     "Add a new list" : "Voeg een nieuwe lijst toe",
     "Assign to users" : "Toewijzen aan gebruikers",
     "Due date" : "Vervaldatum"

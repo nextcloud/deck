@@ -61,7 +61,6 @@
     "{user} has restored the attachment {attachment} to card {card}" : "{user} at ripristinadu s'alligongiadu {attachment} in s'ischeda {card}",
     "You have commented on card {card}" : "As cummentadu in s'ischeda {card}",
     "{user} has commented on card {card}" : "{user} at cummentadu in s'ischeda {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Sa <strong>descritzione de un'ischeda</strong> in intro de s'aplicatzione Deck app est istada cambiada",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Càmbios in <strong> s'aplicatzione Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "Unu <strong>cummentu</strong> est istadu creadu in s'ischeda",
@@ -281,6 +280,7 @@
     "Share with a Deck card" : "Cumpartzi cun un'ischeda deck",
     "Share {file} with a Deck card" : "Cumpartzi {file} cun un'ischeda de deck",
     "Share" : "Cumpartzi",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "Sa <strong>descritzione de un'ischeda</strong> in intro de s'aplicatzione Deck app est istada cambiada",
     "Add a new list" : "Agiunghe un'elencu nou",
     "Assign to users" : "Assigna a utentes",
     "Due date" : "Iscadèntzia"

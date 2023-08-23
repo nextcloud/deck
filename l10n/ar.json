@@ -61,7 +61,6 @@
     "{user} has restored the attachment {attachment} to card {card}" : "{user} قام باسترجاع المرفق {attachment} إلى البطاقة {card}",
     "You have commented on card {card}" : "لقد علقت على البطاقة {بطاقة}",
     "{user} has commented on card {card}" : "{مستخدم} علق على بطاقة {بطاقة}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>وصف البطاقة</strong>داخل تطبيق Deck قد تغيرت.",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "تغييرات في <strong>تطبيق Deck</strong> ",
     "A <strong>comment</strong> was created on a card" : "<strong>تعليق</strong> تم إنشاؤه على بطاقة",
@@ -314,6 +313,7 @@
     "Share with a Deck card" : "مشاركة مع بطاقة Deck",
     "Share {file} with a Deck card" : "مشاركة الملف {file} مع بطاقة Deck",
     "Share" : "مشاركة ",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>وصف البطاقة</strong>داخل تطبيق Deck قد تغيرت.",
     "Add a new list" : "اضف قائمة جديدة",
     "Assign to users" : "انسب الى المتسخدمين",
     "Due date" : "تاريخ الانجاز"

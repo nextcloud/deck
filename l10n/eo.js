@@ -39,7 +39,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} restaŭris la dosieron {attachment} al karto {card}",
     "You have commented on card {card}" : "Vi komentis la karton {card}",
     "{user} has commented on card {card}" : "{user} komentis la karton {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Karta priskribo</strong> ene de la aplikaĵo Kartaro ŝanĝiĝis",
     "Deck" : "Kartaro",
     "Changes in the <strong>Deck app</strong>" : "Ŝanĝoj en la <strong>aplikaĵo Kartaro</strong>",
     "A <strong>comment</strong> was created on a card" : "<strong>Komento</strong> kreiĝis sur karton",
@@ -128,6 +127,7 @@ OC.L10N.register(
     "Maximum file size of {size} exceeded" : "Maksimuma dosiergrando {size} transpasita",
     "Error creating the share" : "Eraro dum kreo de la kunhavigo",
     "Share" : "Kunhavigi",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Karta priskribo</strong> ene de la aplikaĵo Kartaro ŝanĝiĝis",
     "Due date" : "Limdato"
 },
 "nplurals=2; plural=(n != 1);");

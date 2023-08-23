@@ -63,7 +63,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} przywrócił załącznik {attachment} do karty {card}",
     "You have commented on card {card}" : "Skomentowałeś kartę {card}",
     "{user} has commented on card {card}" : "{user} skomentował kartę {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Opis karty</strong> w aplikacji Tablica został zmieniony",
     "Deck" : "Tablica",
     "Changes in the <strong>Deck app</strong>" : "Zmiany w <strong>aplikacji Tablica</strong>",
     "A <strong>comment</strong> was created on a card" : "Na karcie utworzono <strong>komentarz</strong>",
@@ -314,6 +313,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Udostępnij za pomocą karty Tablicy",
     "Share {file} with a Deck card" : "Udostępnij {file} za pomocą karty Tablicy",
     "Share" : "Udostępnianie",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Opis karty</strong> w aplikacji Tablica został zmieniony",
     "Add a new list" : "Dodaj nową listę",
     "Assign to users" : "Przypisz do użytkowników",
     "Due date" : "Data realizacji"

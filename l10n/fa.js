@@ -63,7 +63,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} پیوست {attachment} را به برگه {card} بازیابی کرده است",
     "You have commented on card {card}" : "شما در مورد برگه {card} نظر داده اید",
     "{user} has commented on card {card}" : "{user} روی برگه {card} نظر داده است",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "شرح برگه در برگه‌دان تغییر کرده است",
     "Deck" : "برگه‌دان",
     "Changes in the <strong>Deck app</strong>" : "تغییرات در برگه‌دان",
     "A <strong>comment</strong> was created on a card" : "یک نظر روی یک برگه ایجاد شد",
@@ -316,6 +315,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Share with a Deck card",
     "Share {file} with a Deck card" : "Share {file} with a Deck card",
     "Share" : "هم‌رسانی",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "شرح برگه در برگه‌دان تغییر کرده است",
     "Add a new list" : "فهرست جدید بیفزایید!",
     "Assign to users" : "به کاربران اختصاص دهید",
     "Due date" : "موعد مقرر"
