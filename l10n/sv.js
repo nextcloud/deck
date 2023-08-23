@@ -63,7 +63,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} har återställt bilagan {attachment} till kortet {card}",
     "You have commented on card {card}" : "Du har kommenterat på kortet {card}",
     "{user} has commented on card {card}" : "{user} har kommenterat på kortet {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "En <strong>kortbeskrivning</strong> i Deck-appen har ändrats",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Ändringar i <strong>Deck-appen</strong>",
     "A <strong>comment</strong> was created on a card" : "En <strong>kommentar</strong> skapades på ett kort",
@@ -316,6 +315,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Dela med ett Deck-kort",
     "Share {file} with a Deck card" : "Dela {file} med ett Deck-kort",
     "Share" : "Dela",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "En <strong>kortbeskrivning</strong> i Deck-appen har ändrats",
     "Add a new list" : "Lägg till en ny lista",
     "Assign to users" : "Tilldela till användare",
     "Due date" : "Slutdatum"

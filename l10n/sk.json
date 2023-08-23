@@ -61,7 +61,6 @@
     "{user} has restored the attachment {attachment} to card {card}" : "Používateľ {user} obnovil prílohu {attachment} na karte {card}",
     "You have commented on card {card}" : "Komentovali ste kartu {card}",
     "{user} has commented on card {card}" : "{user} komentoval(a) kartu {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "V apke Nástenka sa zmenil <strong>Popis karty</strong>",
     "Deck" : "Nástenka",
     "Changes in the <strong>Deck app</strong>" : "Zmeny v apke <strong>Nástenka</strong>",
     "A <strong>comment</strong> was created on a card" : "Na karte bol vytvorený <strong>komentár</strong>. ",
@@ -303,6 +302,7 @@
     "Share with a Deck card" : "Zdieľať s kartou Deck",
     "Share {file} with a Deck card" : "Zdieľať {file} s kartou Deck",
     "Share" : "Zdieľať",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "V apke Nástenka sa zmenil <strong>Popis karty</strong>",
     "Add a new list" : "Pridať nový zoznam",
     "Assign to users" : "Priradiť používateľom",
     "Due date" : "Termín dokončenia"

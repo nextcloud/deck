@@ -63,7 +63,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} restaurou o anexo {attachment} do cartão {card}",
     "You have commented on card {card}" : "Você comentou no cartão {card}",
     "{user} has commented on card {card}" : "{user} comentou no cartão {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Uma <strong>descrição do cartão</strong> dentro da aplicação Quadro foi alterada",
     "Deck" : "Quadro",
     "Changes in the <strong>Deck app</strong>" : "Alterações na aplicação Quadro",
     "A <strong>comment</strong> was created on a card" : "Um <strong>comentário</strong> foi criado num cartão",
@@ -158,6 +157,7 @@ OC.L10N.register(
     "Create card" : "Criar cartão",
     "Close" : "Fechar",
     "Share" : "Partilhar",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "Uma <strong>descrição do cartão</strong> dentro da aplicação Quadro foi alterada",
     "Due date" : "Data limite"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

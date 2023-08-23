@@ -61,7 +61,6 @@
     "{user} has restored the attachment {attachment} to card {card}" : "{user} has restored the attachment {attachment} to card {card}",
     "You have commented on card {card}" : "You have commented on card {card}",
     "{user} has commented on card {card}" : "{user} has commented on card {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "A <strong>card description</strong> inside the Deck app has been changed",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Changes in the <strong>Deck app</strong>",
     "A <strong>comment</strong> was created on a card" : "A <strong>comment</strong> was created on a card",
@@ -314,6 +313,7 @@
     "Share with a Deck card" : "Share with a Deck card",
     "Share {file} with a Deck card" : "Share {file} with a Deck card",
     "Share" : "Share",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "A <strong>card description</strong> inside the Deck app has been changed",
     "Add a new list" : "Add a new list",
     "Assign to users" : "Assign to users",
     "Due date" : "Due date"

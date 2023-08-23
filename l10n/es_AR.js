@@ -21,7 +21,6 @@ OC.L10N.register(
     "{user} has created a new list {stack} on board {board}" : "{user} ha creado una nueva lista {stack} del tablero {board}",
     "You have renamed list {before} to {stack} on board {board}" : "Has renombrado la lista {before} a {stack} del tablero {board}",
     "{user} has renamed list {before} to {stack} on board {board}" : "{user} ha renombrado la lista {before} a {stack} del tablero {board}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Una <strong>descripción de tarjeta</strong> dentro de la app Deck ha cambiado",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Cambios en la <strong>app Deck</strong>",
     "Personal" : "Personal",
@@ -104,6 +103,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Compartir con una tarjeta del Tablero",
     "Share {file} with a Deck card" : "Compartir {file} con una tarjeta del Tablero",
     "Share" : "Compartir",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "Una <strong>descripción de tarjeta</strong> dentro de la app Deck ha cambiado",
     "Due date" : "Fecha de vencimiento"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

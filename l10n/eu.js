@@ -63,7 +63,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} erabiltzaileak {card} txartelaren {attachment} eranskina leheneratu du",
     "You have commented on card {card}" : "{card} txartela iruzkindu duzu",
     "{user} has commented on card {card}" : "{user} erabiltzaileak {card} txartela iruzkindu du",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Txartel baten deskribapena</strong> aldatu da Deck aplikazioaren barruan",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "<strong>Deck</strong> aplikazioan aldaketak",
     "A <strong>comment</strong> was created on a card" : "<strong>Iruzkin bat</strong> sortu da txartel batean",
@@ -314,6 +313,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Partekatu Deck txartel baten bidez",
     "Share {file} with a Deck card" : "Partekatu {file} Deck txartel baten bidez",
     "Share" : "Partekatu",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Txartel baten deskribapena</strong> aldatu da Deck aplikazioaren barruan",
     "Add a new list" : "Gehitu zerrenda berria",
     "Assign to users" : "Esleitu erabiltzaileei",
     "Due date" : "Epe-muga"

@@ -63,7 +63,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} 恢復了卡片 {card} 中的附件 {attachment}",
     "You have commented on card {card}" : "您意見了卡片 {card}",
     "{user} has commented on card {card}" : "{user} 意見了卡片 {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Deck 應用程式中的 <strong>卡片描述</strong> 已改變",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "<strong>Deck 應用程式</strong>中的改變",
     "A <strong>comment</strong> was created on a card" : "卡片上創建了一個 <strong>意見</strong>",
@@ -316,6 +315,7 @@ OC.L10N.register(
     "Share with a Deck card" : "用一張 Deck 卡片進行分享 ",
     "Share {file} with a Deck card" : "用一張 Deck 卡片分享 {file}",
     "Share" : "分享",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "Deck 應用程式中的 <strong>卡片描述</strong> 已改變",
     "Add a new list" : "添加一張新清單",
     "Assign to users" : "指派給用戶",
     "Due date" : "到期日"

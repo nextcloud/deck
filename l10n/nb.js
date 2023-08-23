@@ -63,7 +63,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} har gjennopprettet vedlegget {attachment} på kortet {card}",
     "You have commented on card {card}" : "Du har kommetnert på kort {card}",
     "{user} has commented on card {card}" : "{user} har kommetnert på kort {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "En <strong>kort beskrivelse</strong>i Stokk-appen er endret",
     "Deck" : "Stokk",
     "Changes in the <strong>Deck app</strong>" : "Endringer i <strong>Stokk-appen</strong>",
     "A <strong>comment</strong> was created on a card" : "En <strong>kommentar</strong> ble skrevet på kortet",
@@ -314,6 +313,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Del med et Stokk-kort",
     "Share {file} with a Deck card" : "Del {file} med et Stokk-kort",
     "Share" : "Del",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "En <strong>kort beskrivelse</strong>i Stokk-appen er endret",
     "Add a new list" : "Legg til en ny stabel",
     "Assign to users" : "Tildel brukere",
     "Due date" : "Forfallsdato"
