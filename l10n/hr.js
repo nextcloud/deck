@@ -63,7 +63,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} je vratio privitak {attachment} na karticu {card}",
     "You have commented on card {card}" : "Komentirali ste karticu {card}",
     "{user} has commented on card {card}" : "{user} je komentirao karticu {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Promijenjen je <strong>opis kartice</strong> u aplikaciji Deck",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Promjene u <strong>aplikaciji Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "Na kartici je stvoren <strong>komentar</strong>",
@@ -284,6 +283,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Dijeli s Deck karticom",
     "Share {file} with a Deck card" : "Dijeli {file} s Deck karticom",
     "Share" : "Dijeli",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "Promijenjen je <strong>opis kartice</strong> u aplikaciji Deck",
     "Add a new list" : "Dodaj novi popis",
     "Assign to users" : "Dodijeli korisnicima",
     "Due date" : "Datum dospijeća"

@@ -61,7 +61,6 @@
     "{user} has restored the attachment {attachment} to card {card}" : "{user} obnovil(a) přílohu {attachment} ke kartě {card}",
     "You have commented on card {card}" : "Přidali jste komentář na kartě {card}",
     "{user} has commented on card {card}" : "{user} přidal(a) komentář na kartě {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Popis karty</strong> v aplikaci Deck byl změněn",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Změny v <strong>aplikaci Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "Na kartě byl vytvořen <strong>komentář</strong>",
@@ -314,6 +313,7 @@
     "Share with a Deck card" : "Sdílet s kartou aplikace Deck",
     "Share {file} with a Deck card" : "Sdílet {file} s kartou aplikace Deck",
     "Share" : "Sdílet",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Popis karty</strong> v aplikaci Deck byl změněn",
     "Add a new list" : "Přidat nový sloupec",
     "Assign to users" : "Přiřadit k uživatelům",
     "Due date" : "Termín"

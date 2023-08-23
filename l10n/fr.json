@@ -61,7 +61,6 @@
     "{user} has restored the attachment {attachment} to card {card}" : "{user} a restauré la pièce jointe {attachment} de la carte {card}",
     "You have commented on card {card}" : "Vous avez commenté la carte {card}",
     "{user} has commented on card {card}" : "{user} a commenté la carte {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "La <strong>description de la carte</strong> présente dans l'application Deck a été modifiée",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Modifications dans <strong>Deck app</strong>",
     "A <strong>comment</strong> was created on a card" : "Un  <strong>commentaire</strong> a été créé sur une carte",
@@ -312,6 +311,7 @@
     "Share with a Deck card" : "Partager avec Deck en tant que carte",
     "Share {file} with a Deck card" : "Partager {file} avec Deck en tant que carte",
     "Share" : "Partager",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "La <strong>description de la carte</strong> présente dans l'application Deck a été modifiée",
     "Add a new list" : "Ajouter une nouvelle liste",
     "Assign to users" : "Attribuer aux utilisateurs",
     "Due date" : "Date d'échéance"

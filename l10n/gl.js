@@ -63,7 +63,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} restaurou o anexo {attachment} da tarxeta {card}",
     "You have commented on card {card}" : "Vde. comentou na tarxeta {card}",
     "{user} has commented on card {card}" : "{user} comentou na tarxeta {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Cambiouse a <strong>descripción da tarxeta</strong> dentro da aplicación Tarxeteiro",
     "Deck" : "Tarxeteiro",
     "Changes in the <strong>Deck app</strong>" : "Cambios na <strong>aplicación Tarxeteiro</strong>",
     "A <strong>comment</strong> was created on a card" : "Creouse un <strong>comentario</strong> nunha tarxeta",
@@ -316,6 +315,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Compartir cunha tarxeta de Tarxeteiro",
     "Share {file} with a Deck card" : "Compartir {file} cunha tarxeta de Tarxeteiro",
     "Share" : "Compartir",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "Cambiouse a <strong>descripción da tarxeta</strong> dentro da aplicación Tarxeteiro",
     "Add a new list" : "Engadir unha lista nova",
     "Assign to users" : "Asignar a usuarios",
     "Due date" : "Data de caducidade"

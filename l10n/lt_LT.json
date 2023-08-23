@@ -59,7 +59,6 @@
     "{user} has restored the attachment {attachment} to card {card}" : "{user} atkūrė priedą {attachment} į kortelę {card}",
     "You have commented on card {card}" : "Jūs pakomentavote kortelėje {card}",
     "{user} has commented on card {card}" : "{user} pakomentavo kortelėje {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Darbų programėlėje pakeistas <strong>kortelės aprašas</strong> ",
     "Deck" : "Darbai",
     "Changes in the <strong>Deck app</strong>" : "Pakeitimai <strong>Darbų programėlėje</strong>",
     "A <strong>comment</strong> was created on a card" : "Kortelėje buvo sukurtas <strong>komentaras</strong>",
@@ -261,6 +260,7 @@
     "Maximum file size of {size} exceeded" : "Viršytas maksimalus {size} failo dydis",
     "Error creating the share" : "Klaida kuriant viešinį",
     "Share" : "Bendrinti",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "Darbų programėlėje pakeistas <strong>kortelės aprašas</strong> ",
     "Add a new list" : "Pridėti naują sąrašą",
     "Assign to users" : "Priskirti naudotojams",
     "Due date" : "Galutinio termino data"

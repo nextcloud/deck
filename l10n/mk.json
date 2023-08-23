@@ -61,7 +61,6 @@
     "{user} has restored the attachment {attachment} to card {card}" : "{user} го врати прилогот {attachment} на картицата {card}",
     "You have commented on card {card}" : "Коментиравте на картицата {card}",
     "{user} has commented on card {card}" : "{user} коментирање на картицата {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Описот на картицата</strong> во апликацијата Deck е изменет",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Промени во <strong>апликацијата Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "<strong>Коментар</strong> е креиран на картица",
@@ -267,6 +266,7 @@
     "Share with a Deck card" : "Споделено со Deck картица",
     "Share {file} with a Deck card" : "Сподели {file} со Deck картица",
     "Share" : "Сподели",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Описот на картицата</strong> во апликацијата Deck е изменет",
     "Add a new list" : "Додади нова листа",
     "Assign to users" : "Додели на корисници",
     "Due date" : "До датум"

@@ -49,7 +49,6 @@
     "{user} has restored the attachment {attachment} to card {card}" : "{user} palautti liitteen {attachment} kortille {card}",
     "You have commented on card {card}" : "Kommentoit korttia {card}",
     "{user} has commented on card {card}" : "{user} kommentoi korttia {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Kortin kuvaus</strong> Pakka-sovelluksessa on vaihtunut",
     "Deck" : "Pakka",
     "Changes in the <strong>Deck app</strong>" : "Muutokset <strong>Pakka-sovelluksessa</strong>",
     "A <strong>comment</strong> was created on a card" : "<strong>Kommentti</strong> luotiin kortille",
@@ -244,6 +243,7 @@
     "Maximum file size of {size} exceeded" : "Tiedoston enimmäiskoko {size} ylitetty",
     "Error creating the share" : "Virhe jakoa luotaessa",
     "Share" : "Jaa",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Kortin kuvaus</strong> Pakka-sovelluksessa on vaihtunut",
     "Add a new list" : "Lisää uusi lista",
     "Due date" : "Eräpäivä"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

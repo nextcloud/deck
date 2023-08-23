@@ -39,7 +39,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} endurheimti viðhengið {attachment} á spjaldinu {card}",
     "You have commented on card {card}" : "Þú settir inn athugasemd við spjaldið {card}",
     "{user} has commented on card {card}" : "{user} setti inn athugasemd við spjaldið {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Lýsingu á spjaldi</strong> inni í Deck-spjaldaforritinu hefur verið breytt",
     "Deck" : "Dekk",
     "Changes in the <strong>Deck app</strong>" : "Breytingar í <strong>Deck spjaldaforritinu</strong>",
     "A <strong>comment</strong> was created on a card" : "<strong>Athugasemd</strong> var gerð á spjaldi",
@@ -178,6 +177,7 @@ OC.L10N.register(
     "Something went wrong" : "Eitthvað fór úrskeiðis",
     "Maximum file size of {size} exceeded" : "Fór yfir hámarks skráarstærð {size}",
     "Share" : "Deila",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Lýsingu á spjaldi</strong> inni í Deck-spjaldaforritinu hefur verið breytt",
     "Assign to users" : "Úthluta á notendur",
     "Due date" : "Skiladagur"
 },

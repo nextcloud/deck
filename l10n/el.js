@@ -63,7 +63,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "Ο/η {user} επανέφερε το συνημμένο {attachment} στην καρτέλα {card}",
     "You have commented on card {card}" : "Σχολιάσατε την καρτέλα {card}",
     "{user} has commented on card {card}" : "Ο/η {user} σχολίασε την καρτέλα {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Η <strong>περιγραφή καρτέλας </strong>στην εφαρμογή Deck άλλαξε",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Αλλαγές στην <strong>εφαρμογή Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "Ένα <strong>σχόλιο</strong> δημιουργήθηκε σε μια καρτέλα",
@@ -311,6 +310,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Μοιραστείτε με μια καρτέλα Deck",
     "Share {file} with a Deck card" : "Μοιραστείτε το {file} με μια καρτέλα Deck",
     "Share" : "Μοιραστείτε",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "Η <strong>περιγραφή καρτέλας </strong>στην εφαρμογή Deck άλλαξε",
     "Add a new list" : "Προσθήκη νέας λίστας",
     "Assign to users" : "Ανάθεση σε χρήστες",
     "Due date" : "Ημερομηνία λήξης"

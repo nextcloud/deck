@@ -63,7 +63,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} възстанови прикачения файл {attachment} към карта {card}",
     "You have commented on card {card}" : "Коментирали сте карта {card}",
     "{user} has commented on card {card}" : "{user}  коментира карта {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Описанието на картата</strong> в приложението Deck/набор/ е променено",
     "Deck" : "Набор",
     "Changes in the <strong>Deck app</strong>" : "Промени в <strong>приложението Deck</strong>",
     "A <strong>comment</strong> was created on a card" : "На картата е създаден <strong>коментар</strong>",
@@ -314,6 +313,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Споделяне с Deck карта",
     "Share {file} with a Deck card" : "Споделяне {file} с Deck карта",
     "Share" : "Споделяне",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Описанието на картата</strong> в приложението Deck/набор/ е променено",
     "Add a new list" : "Добавяне на нов списък",
     "Assign to users" : "Зачисляване към потребители",
     "Due date" : "Крайна дата"

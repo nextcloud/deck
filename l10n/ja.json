@@ -61,7 +61,6 @@
     "{user} has restored the attachment {attachment} to card {card}" : "{user}が添付ファイル{attachment}をカード{card}に復元しました",
     "You have commented on card {card}" : "カード{card}にコメントしました",
     "{user} has commented on card {card}" : "{user}がカード{card}にコメントしました",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "デッキアプリ内の<strong>カードの説明</strong>が変更されたとき",
     "Deck" : "デッキ",
     "Changes in the <strong>Deck app</strong>" : "<strong>デッキアプリ</strong>に変更があったとき",
     "A <strong>comment</strong> was created on a card" : "カードに<strong>コメント</strong>が作成されたとき",
@@ -291,6 +290,7 @@
     "Share with a Deck card" : "デッキのカードで共有する",
     "Share {file} with a Deck card" : "{file}をデッキのカードで共有する",
     "Share" : "共有",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "デッキアプリ内の<strong>カードの説明</strong>が変更されたとき",
     "Add a new list" : "新しいリストを追加",
     "Assign to users" : "ユーザーに割り当てる",
     "Due date" : "期限"
