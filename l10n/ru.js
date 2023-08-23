@@ -63,7 +63,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} восстановил(а) из корзины файл «{attachment}» в карточке «{card}»",
     "You have commented on card {card}" : "Вы добавили комментарий к карточке «{card}»",
     "{user} has commented on card {card}" : "{user} добавил(а) комментарий к карточке «{card}»",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "В приложении Карточки изменено <strong>описание карточки</strong> ",
     "Deck" : "Карточки",
     "Changes in the <strong>Deck app</strong>" : "Изменения в <strong>приложении Карточки</strong>",
     "A <strong>comment</strong> was created on a card" : "Добавлен <strong>комментарий</strong> к карточке",
@@ -314,6 +313,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Опубликовать в приложении Карточки",
     "Share {file} with a Deck card" : "Опубликовать «{file}» в приложении Карточки",
     "Share" : "Опубликовать",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "В приложении Карточки изменено <strong>описание карточки</strong> ",
     "Add a new list" : "Создать список",
     "Assign to users" : "Назначить пользователям",
     "Due date" : "Срок исполнения"

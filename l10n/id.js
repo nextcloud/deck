@@ -63,7 +63,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} telah memulihkan lampiran {attachment} ke kartu {card}",
     "You have commented on card {card}" : "Anda telah berkomentar pada kartu {card}",
     "{user} has commented on card {card}" : "{user} telah berkomentar pada kartu {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Deskripsi kartu</strong> didalam aplikasi Longgok telah diubah",
     "Deck" : "Longgok",
     "Changes in the <strong>Deck app</strong>" : "Perubahan pada <strong>aplikasi Longgok</strong>",
     "A <strong>comment</strong> was created on a card" : "<strong>Komentar</strong> telah dibuat pada suatu kartu",
@@ -223,6 +222,7 @@ OC.L10N.register(
     "Something went wrong" : "Ada yang salah",
     "Maximum file size of {size} exceeded" : "Melampaui batas ukuran maksimal {size}",
     "Share" : "Bagikan",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Deskripsi kartu</strong> didalam aplikasi Longgok telah diubah",
     "Add a new list" : "Tambah daftar baru",
     "Assign to users" : "Penugasan kepada pengguna",
     "Due date" : "Tenggat"

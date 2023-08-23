@@ -61,7 +61,6 @@
     "{user} has restored the attachment {attachment} to card {card}" : "{user} שיחזר את הקובץ המצורף {attachment} לכרטיס {card}",
     "You have commented on card {card}" : "הגבת על הכרטיס {cart}",
     "{user} has commented on card {card}" : "נוספה תגובה מאת {user} על הכרטיס {card}",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>תיאור של כרטיס</strong> בתוך יישומון החבילה נערך",
     "Deck" : "חפיסה",
     "Changes in the <strong>Deck app</strong>" : "שינויים ל<strong>יישומון החבילה</strong>",
     "A <strong>comment</strong> was created on a card" : "נוצרה <strong>הערה</strong> על כרטיס",
@@ -264,6 +263,7 @@
     "Share with a Deck card" : "שיתוף עם כרטיס חפיסה",
     "Share {file} with a Deck card" : "שיתוף {file} עם כרטיס חפיסה",
     "Share" : "שיתוף",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>תיאור של כרטיס</strong> בתוך יישומון החבילה נערך",
     "Add a new list" : "הוסף רשימה חדשה",
     "Assign to users" : "הקצאה למשתמשים",
     "Due date" : "מועד יעד"

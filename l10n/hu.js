@@ -63,7 +63,6 @@ OC.L10N.register(
     "{user} has restored the attachment {attachment} to card {card}" : "{user} visszaállította a(z) {attachment} mellékletet a(z) {card} kártyánál",
     "You have commented on card {card}" : "Hozzászólt a(z) {card} kártyához",
     "{user} has commented on card {card}" : "{user} hozzászólt a(z) {card} kártyához",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "A <strong>kártyaleírás</strong> megváltozott a Kártyák alkalmazásban",
     "Deck" : "Kártyák",
     "Changes in the <strong>Deck app</strong>" : "Változások a <strong>Kártyák alkalmazásban</strong>",
     "A <strong>comment</strong> was created on a card" : "Egy <strong>hozzászólás</strong> lett létrehozva egy kártyán",
@@ -314,6 +313,7 @@ OC.L10N.register(
     "Share with a Deck card" : "Megosztás kártyával",
     "Share {file} with a Deck card" : "A(z) {file} megosztása egy kártyával",
     "Share" : "Megosztás",
+    "A <strong>card description</strong> inside the Deck app has been changed" : "A <strong>kártyaleírás</strong> megváltozott a Kártyák alkalmazásban",
     "Add a new list" : "Új lista hozzáadása",
     "Assign to users" : "Felhasználókhoz rendelés",
     "Due date" : "Határidő"
