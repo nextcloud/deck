@@ -21,7 +21,7 @@
 						:disabled="loading"
 						label="title"
 						class="selector-wrapper--selector multiselect-board"
-						@select="fetchBoardDetails">
+						@select="onSelectBoard">
 						<template slot="singleLabel" slot-scope="props">
 							<span>
 								<span :style="{ 'backgroundColor': '#' + props.option.color }" class="board-bullet" />
@@ -47,7 +47,8 @@
 						:max-height="100"
 						:disabled="loading || !selectedBoard"
 						class="selector-wrapper--selector multiselect-list"
-						label="title" />
+						label="title"
+						@select="onSelectStack" />
 				</div>
 			</div>
 
@@ -220,6 +221,7 @@ export default {
 					return board?.permissions?.PERMISSION_EDIT && !board?.archived && !board?.deletedAt
 				})
 				this.loading = false
+				this.preSelectBoard()
 			})
 		},
 		async fetchBoardDetails(board) {
@@ -230,6 +232,7 @@ export default {
 				this.labels = response.data.labels
 				this.boardUsers = response.data.users
 				this.boardAcl = response.data.acl
+				this.preSelectStack()
 			} catch (err) {
 				return err
 			}
@@ -294,6 +297,31 @@ export default {
 		},
 		openNewCard() {
 			window.location = generateUrl('/apps/deck') + `#/board/${this.selectedBoard.id}/card/${this.newCard.id}`
+		},
+		preSelectBoard() {
+			const selectedBoardId = Number(localStorage.getItem('deck.selectedBoardId'))
+			const preSelectedBoard = this.boards.find(item => item.id === selectedBoardId)
+
+			if (preSelectedBoard) {
+				this.selectedBoard = preSelectedBoard
+				this.onSelectBoard(preSelectedBoard)
+			}
+		},
+		preSelectStack() {
+			const selectedStackId = Number(localStorage.getItem('deck.selectedStackId'))
+			const preSelectedStack = this.stacksFromBoard.find(item => item.id === selectedStackId)
+
+			if (preSelectedStack) {
+				this.selectedStack = preSelectedStack
+			}
+		},
+		async onSelectBoard(board) {
+			localStorage.setItem('deck.selectedBoardId', board.id)
+			this.selectedStack = ''
+			await this.fetchBoardDetails(board)
+		},
+		onSelectStack(stack) {
+			localStorage.setItem('deck.selectedStackId', stack.id)
 		},
 	},
 
