@@ -40,7 +40,7 @@ class CardSearchResultEntry extends SearchResultEntry {
 			),
 			$card->getTitle(),
 			$board->getTitle() . ' » ' . $stack->getTitle(),
-			$urlGenerator->linkToRouteAbsolute('deck.page.index') . '#/board/' . $board->getId() . '/card/' . $card->getId(),
+			$urlGenerator->linkToRouteAbsolute('deck.page.redirectToCard', ['cardId' => $card->getId()]),
 			'icon-deck'
 		);
 	}
