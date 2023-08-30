@@ -104,8 +104,8 @@ class CardApiController extends ApiController {
 	 *
 	 * Update a card
 	 */
-	public function update($title, $type, $owner, $description = '', $order = 0, $duedate = null, $archived = null) {
-		$card = $this->cardService->update($this->request->getParam('cardId'), $title, $this->request->getParam('stackId'), $type, $owner, $description, $order, $duedate, 0, $archived);
+	public function update($title, $type, $owner, $description = '', $order = 0, $duedate = null, $archived = null, ?bool $done = null) {
+		$card = $this->cardService->update($this->request->getParam('cardId'), $title, $this->request->getParam('stackId'), $type, $owner, $description, $order, $duedate, 0, $archived, $done);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 

@@ -64,7 +64,8 @@
 					<input type="submit" value="" class="icon-confirm">
 				</form>
 
-				<DueDate v-if="!editing" :card="card" />
+				<DueDate v-if="!editing && !card.done" :card="card" />
+				<Done v-else-if="!editing && card.done" :card="card" />
 
 				<CardMenu v-if="!editing && compactMode" :card="card" class="right" />
 			</div>
@@ -94,12 +95,13 @@ import Color from '../../mixins/color.js'
 import labelStyle from '../../mixins/labelStyle.js'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
 import CardMenu from './CardMenu.vue'
+import Done from './badges/Done.vue'
 import DueDate from './badges/DueDate.vue'
 import CardCover from './CardCover.vue'
 
 export default {
 	name: 'CardItem',
-	components: { CardBadges, AttachmentDragAndDrop, CardMenu, DueDate, CardCover },
+	components: { CardBadges, AttachmentDragAndDrop, CardMenu, DueDate, CardCover, Done },
 	directives: {
 		ClickOutside,
 	},

@@ -284,6 +284,9 @@ class CardService {
 	 * @param $description
 	 * @param $order
 	 * @param $duedate
+	 * @param $deletedAt
+	 * @param $archived
+	 * @param $done
 	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws StatusException
 	 * @throws \OCA\Deck\NoPermissionException
@@ -291,7 +294,7 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function update($id, $title, $stackId, $type, $owner, $description = '', $order = 0, $duedate = null, $deletedAt = null, $archived = null) {
+	public function update($id, $title, $stackId, $type, $owner, $description = '', $order = 0, $duedate = null, $deletedAt = null, $archived = null, ?bool $done = null) {
 		$this->cardServiceValidator->check(compact('id', 'title', 'stackId', 'type', 'owner', 'order'));
 
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
@@ -340,6 +343,9 @@ class CardService {
 		}
 		if ($archived !== null) {
 			$card->setArchived($archived);
+		}
+		if ($done !== null) {
+			$card->setDone($done);
 		}
 
 
@@ -504,6 +510,57 @@ class CardService {
 		$card->setArchived(false);
 		$newCard = $this->cardMapper->update($card);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_UNARCHIVE);
+		$this->changeHelper->cardChanged($id, false);
+
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+
+		return $newCard;
+	}
+
+	/**
+	 * @param $id
+	 * @return \OCA\Deck\Db\Card
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
+	public function done(int $id): Card {
+		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
+		if ($this->boardService->isArchived($this->cardMapper, $id)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
+		$card = $this->cardMapper->find($id);
+		$card->setDone(true);
+		$newCard = $this->cardMapper->update($card);
+		$this->notificationHelper->markDuedateAsRead($card);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_DONE);
+		$this->changeHelper->cardChanged($id, false);
+
+		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
+
+		return $newCard;
+	}
+
+	/**
+	 * @param $id
+	 * @return \OCA\Deck\Db\Card
+	 * @throws StatusException
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws BadRequestException
+	 */
+	public function undone(int $id): Card {
+		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
+		if ($this->boardService->isArchived($this->cardMapper, $id)) {
+			throw new StatusException('Operation not allowed. This board is archived.');
+		}
+		$card = $this->cardMapper->find($id);
+		$card->setDone(false);
+		$newCard = $this->cardMapper->update($card);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $newCard, ActivityManager::SUBJECT_CARD_UPDATE_UNDONE);
 		$this->changeHelper->cardChanged($id, false);
 
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));

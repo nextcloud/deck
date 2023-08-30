@@ -22,6 +22,31 @@
 
 <template>
 	<div v-if="copiedCard">
+		<div class="section-wrapper">
+			<div class="section-details">
+				<div class="button-group">
+					<NcButton v-if="!card.done" type="secondary" @click="changeCardDoneStatus()">
+						<template #icon>
+							<CheckIcon :size="20" />
+						</template>
+						{{ t('deck', 'Mark as Done') }}
+					</NcButton>
+					<NcButton v-if="card.done" type="tertiary" @click="changeCardDoneStatus()">
+						<template #icon>
+							<ClearIcon :size="20" />
+						</template>
+						{{ t('deck', 'Mark as not Done') }}
+					</NcButton>
+					<NcButton type="tertiary" @click="archiveUnarchiveCard()">
+						<template #icon>
+							<ArchiveIcon :size="20" />
+						</template>
+						{{ card.archived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
+					</NcButton>
+				</div>
+			</div>
+		</div>
+
 		<TagSelector :card="card"
 			:labels="currentBoard.labels"
 			:disabled="!canEdit"
@@ -35,7 +60,21 @@
 			@select="assignUserToCard"
 			@remove="removeUserFromCard" />
 
-		<DueDateSelector :card="card" :can-edit="canEdit" @change="updateCardDue" />
+		<div v-if="card.done">
+			<div class="done">
+				<div v-if="!card.duedate && card.done" class="no-due">
+					{{ t('deck', 'No due date') }}
+				</div>
+				<div v-if="card.done" class="done-label">
+					{{ t('deck', 'Done') }}
+				</div>
+			</div>
+		</div>
+
+		<DueDateSelector v-else
+			:card="card"
+			:can-edit="canEdit && !saving"
+			@change="updateCardDue" />
 
 		<div v-if="projectsEnabled" class="section-wrapper">
 			<CollectionList v-if="card.id"
@@ -55,6 +94,10 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
+import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import ClearIcon from 'vue-material-design-icons/Close.vue'
+import { NcButton } from '@nextcloud/vue'
 import { loadState } from '@nextcloud/initial-state'
 
 import { CollectionList } from 'nextcloud-vue-collections'
@@ -75,6 +118,10 @@ export default {
 		TagSelector,
 		Description,
 		CollectionList,
+		NcButton,
+		ArchiveIcon,
+		CheckIcon,
+		ClearIcon,
 	},
 	mixins: [Color],
 	props: {
@@ -120,6 +167,12 @@ export default {
 		descriptionChanged(newDesc) {
 			this.$store.dispatch('updateCardDesc', { ...this.card, description: newDesc })
 			this.copiedCard.description = newDesc
+		},
+		changeCardDoneStatus() {
+			this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })
+		},
+		archiveUnarchiveCard() {
+			this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
 		},
 		async initialize() {
 			if (!this.card) {
@@ -218,10 +271,58 @@ export default {
 		display: flex;
 		flex-wrap: wrap;
 
-		button.action-item--single {
-			margin-top: -3px;
+		.remove-due-button{
+			margin-top: -2px;
+			margin-left: 6px;
 		}
 	}
+}
+
+.button-group {
+	width: 100%;
+	display: flex;
+
+	button {
+		width: 100%;
+	}
+}
+
+.done{
+	display: flex;
+	margin-left: 40px;
+
+	.no-due, .done-label{
+		line-height: 30px;
+		align-items: baseline;
+		flex-shrink: 1;
+		z-index: 2;
+		margin: 13px 5px 5px;
+		font-size: 100%;
+	}
+
+	.no-due{
+		padding: 3px;
+		color: var(--color-main-text);
+	}
+
+	.done-label {
+		font-size: 90%;
+		padding: 3px 20px;
+
+		color: var(--color-primary-text);
+		background-color: var(--color-success);
+		border-radius: 15px;
+	}
+}
+
+.tag {
+	flex-grow: 0;
+	flex-shrink: 1;
+	overflow: hidden;
+	padding: 0px 5px;
+	border-radius: 15px;
+	font-size: 85%;
+	margin-right: 3px;
 }
 
 .avatarLabel {
