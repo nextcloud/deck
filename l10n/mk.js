@@ -132,6 +132,7 @@ OC.L10N.register(
     "Hide archived cards" : "Сокриј ги архивираните картици",
     "Show archived cards" : "Прикажи ги архивираните картици",
     "Toggle compact mode" : "Вклучи компактен мод",
+    "Open details" : "Отвори детали",
     "Details" : "Детали",
     "Loading board" : "Вчирување на табла",
     "No lists available" : "Нема достапни листи",
