@@ -37,8 +37,6 @@ import { mapState } from 'vuex'
 import moment from '@nextcloud/moment'
 import Clock from 'vue-material-design-icons/Clock.vue'
 import ClockOutline from 'vue-material-design-icons/ClockOutline.vue'
-import CalendarAlert from 'vue-material-design-icons/CalendarAlert.vue'
-import CalendarBlank from 'vue-material-design-icons/CalendarBlank.vue'
 
 const DueState = {
 	Future: 'Future',
@@ -48,17 +46,15 @@ const DueState = {
 }
 export default {
 	name: 'DueDate',
+	components: {
+		Clock,
+		ClockOutline,
+	},
 	props: {
 		card: {
 			type: Object,
 			default: null,
 		},
-	},
-	components: {
-		Clock,
-		ClockOutline,
-		CalendarAlert,
-		CalendarBlank,
 	},
 	computed: {
 		...mapState({
@@ -73,13 +69,13 @@ export default {
 				return DueState.Now
 			}
 			if (days === 1) {
-				return DueState.Overdue
+				return DueState.Next
 			}
 
 			return DueState.Future
 		},
 		overdue() {
-			this.dueState === DueState.Overdue
+			return this.dueState === DueState.Overdue
 		},
 		relativeDate() {
 			const diff = moment(this.$root.time).diff(this.card.duedate, 'seconds')
@@ -108,11 +104,11 @@ export default {
 		flex-shrink: 1;
 		z-index: 2;
 
-		[data-due-state="Overdue"] & {
+		[data-due-state='Overdue'] & {
 			color: var(--color-main-background);
 			background-color: var(--color-error-text);
 		}
-		[data-due-state="Now"] & {
+		[data-due-state='Now'] & {
 			color: var(--color-main-background);
 			background-color: var(--color-warning);
 		}
