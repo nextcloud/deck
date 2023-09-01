@@ -251,6 +251,7 @@ OC.L10N.register(
     "Loading filtered view" : "Вчитување на филтриран поглед",
     "No due" : "Не истекува",
     "No results found" : "Нема пронајдено резултати",
+    "{stack} in {board}" : "{stack} во {board}",
     "Create a new card" : "Креирајте нова картица",
     "Card title" : "Наслов на картицата",
     "Create card" : "Креирајте картица",
