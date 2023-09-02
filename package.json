@@ -51,7 +51,7 @@
     "markdown-it-task-checkbox": "^1.0.6",
     "moment": "^2.29.4",
     "nextcloud-vue-collections": "^0.11.1",
-    "p-queue": "^7.3.4",
+    "p-queue": "^7.4.0",
     "url-search-params-polyfill": "^8.2.4",
     "vue": "^2.7.14",
     "vue-at": "^2.5.1",
