@@ -44,6 +44,7 @@
     "@nextcloud/router": "^2.1.2",
     "@nextcloud/vue": "^7.12.4",
     "blueimp-md5": "^2.19.0",
+    "chroma-js": "^2.4.2",
     "dompurify": "^3.0.5",
     "lodash": "^4.17.21",
     "markdown-it": "^13.0.1",

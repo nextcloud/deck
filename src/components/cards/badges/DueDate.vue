@@ -21,20 +21,35 @@
   -->
 
 <template>
-	<div v-if="card" class="duedate">
+	<div v-if="card" class="duedate" :data-due-state="dueState">
 		<transition name="zoom">
-			<div v-if="card.duedate" :class="dueIcon" :title="absoluteDate">
-				<span>{{ relativeDate }}</span>
+			<div v-if="card.duedate" class="due" :title="absoluteDate">
+				<Clock v-if="overdue" :size="16" />
+				<ClockOutline v-else :size="16" />
+				<span v-if="!compactMode" class="due--label">{{ relativeDate }}</span>
 			</div>
 		</transition>
 	</div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import moment from '@nextcloud/moment'
+import Clock from 'vue-material-design-icons/Clock.vue'
+import ClockOutline from 'vue-material-design-icons/ClockOutline.vue'
 
+const DueState = {
+	Future: 'Future',
+	Next: 'Next',
+	Now: 'Now',
+	Overdue: 'Overdue',
+}
 export default {
 	name: 'DueDate',
+	components: {
+		Clock,
+		ClockOutline,
+	},
 	props: {
 		card: {
 			type: Object,
@@ -42,18 +57,25 @@ export default {
 		},
 	},
 	computed: {
-		dueIcon() {
+		...mapState({
+			compactMode: state => state.compactMode,
+		}),
+		dueState() {
 			const days = Math.floor(moment(this.card.duedate).diff(this.$root.time, 'seconds') / 60 / 60 / 24)
 			if (days < 0) {
-				return 'icon-calendar due icon overdue'
+				return DueState.Overdue
 			}
 			if (days === 0) {
-				return 'icon-calendar-dark due icon now'
+				return DueState.Now
 			}
 			if (days === 1) {
-				return 'icon-calendar-dark due icon next'
+				return DueState.Next
 			}
-			return 'icon-calendar-dark due icon'
+
+			return DueState.Future
+		},
+		overdue() {
+			return this.dueState === DueState.Overdue
 		},
 		relativeDate() {
 			const diff = moment(this.$root.time).diff(this.card.duedate, 'seconds')
@@ -63,54 +85,42 @@ export default {
 			return moment(this.card.duedate).fromNow()
 		},
 		absoluteDate() {
-			return moment(this.card.duedate).format('L')
+			return moment(this.card.duedate).format('LLLL')
 		},
 	},
 }
 </script>
 
 <style lang="scss" scoped>
-	.icon.due {
+	.due {
 		background-position: 4px center;
-		border-radius: 3px;
+		border-radius: var(--border-radius-large);
 		margin-top: 9px;
 		margin-bottom: 9px;
-		padding: 3px 4px;
-		padding-right: 0;
+		padding: 2px 8px;
 		font-size: 90%;
 		display: flex;
 		align-items: center;
-		opacity: .5;
 		flex-shrink: 1;
 		z-index: 2;
 
-		.icon {
-			background-size: contain;
+		[data-due-state='Overdue'] & {
+			color: var(--color-main-background);
+			background-color: var(--color-error-text);
 		}
-
-		&.overdue {
-			background-color: var(--color-error);
-			color: var(--color-primary-element-text);
-			opacity: .7;
-			padding: 3px 4px;
-		}
-		&.now {
+		[data-due-state='Now'] & {
+			color: var(--color-main-background);
 			background-color: var(--color-warning);
-			opacity: .7;
-			padding: 3px 4px;
-		}
-		&.next {
-			background-color: var(--color-background-dark);
-			opacity: .7;
-			padding: 3px 4px;
 		}
 
-		&::before,
 		span {
-			margin-left: 20px;
 			white-space: nowrap;
 			text-overflow: ellipsis;
 			overflow: hidden;
+		}
+
+		.due--label {
+			margin-left: 4px;
 		}
 	}
 

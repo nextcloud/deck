@@ -20,76 +20,19 @@
  *
  */
 
+import chroma from 'chroma-js'
+
 export default {
 	methods: {
-		hexToRgb(hex) {
-			const result = /^#?([A-Fa-f\d]{2})([A-Fa-f\d]{2})([A-Fa-f\d]{2})$/i.exec(hex)
-			if (result) {
-				return {
-					r: parseInt(result[1], 16),
-					g: parseInt(result[2], 16),
-					b: parseInt(result[3], 16),
-				}
-			}
-			return null
-		},
-		rgb2hls(rgb) {
-			// RGB2HLS by Garry Tan
-			// http://axonflux.com/handy-rgb-to-hsl-and-rgb-to-hsv-color-model-c
-			const r = rgb.r / 255
-			const g = rgb.g / 255
-			const b = rgb.b / 255
-			const max = Math.max(r, g, b)
-			const min = Math.min(r, g, b)
-			let h
-			let s
-			const l = (max + min) / 2
-
-			if (max === min) {
-				h = s = 0 // achromatic
-			} else {
-				const d = max - min
-				s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
-				switch (max) {
-				case r:
-					h = (g - b) / d + (g < b ? 6 : 0)
-					break
-				case g:
-					h = (b - r) / d + 2
-					break
-				case b:
-					h = (r - g) / d + 4
-					break
-				}
-				h /= 6
-			}
-			return {
-				h, l, s,
-			}
-		},
 		textColor(hex) {
-
-			const rgb = this.hexToRgb(hex)
-			if (rgb === null) {
-				return '#000000'
-			}
-			const { l } = this.rgb2hls(rgb)
-
-			if (l < 0.5) {
-				return '#ffffff'
-			} else {
-				return '#000000'
-			}
-
+			return chroma(hex).get('lab.l') > 50 ? '#000000' : '#ffffff'
 		},
 		colorIsValid(hex) {
-
 			const re = /[A-Fa-f0-9]{6}/
 			if (re.test(hex)) {
 				return true
 			}
 			return false
-
 		},
 		randomColor() {
 			return Math.floor(Math.random() * (0xffffff + 1)).toString(16).padStart(6, '0')

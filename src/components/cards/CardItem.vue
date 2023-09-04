@@ -65,6 +65,7 @@
 
 				<CardMenu v-if="!editing && compactMode" :card="card" class="right" />
 			</div>
+
 			<transition-group v-if="card.labels && card.labels.length"
 				name="zoom"
 				tag="ul"
@@ -200,27 +201,28 @@ export default {
 	@import './../../css/animations';
 	@import './../../css/variables';
 
+	@mixin dark-card {
+		border: 2px solid var(--color-border-dark);
+		box-shadow: none;
+	}
+
 	.card {
-		transition: box-shadow 0.1s ease-in-out;
-		box-shadow: 0 0 2px 0 var(--color-box-shadow);
+		transition: border 0.1s ease-in-out;
 		border-radius: var(--border-radius-large);
 		font-size: 100%;
 		background-color: var(--color-main-background);
 		margin-bottom: $card-spacing;
+		border: 2px solid var(--color-border);
 
 		&:deep(*) {
 			cursor: pointer;
 		}
 
-		body.dark &, body.theme--dark & {
-			border: 2px solid var(--color-border);
-		}
-
 		&:hover {
-			box-shadow: 0 0 5px 0 var(--color-box-shadow);
+			border: 2px solid var(--color-border-dark);
 		}
 		&.current-card {
-			box-shadow: 0 0 5px 1px var(--color-box-shadow);
+			border: 2px solid var(--color-primary-element);
 		}
 
 		.card-upper {
@@ -325,5 +327,12 @@ export default {
 			font-size: 0;
 			color: transparent;
 		}
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.card {
+			@include dark-card;
+		}
+
 	}
 </style>
