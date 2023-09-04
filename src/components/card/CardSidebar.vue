@@ -145,18 +145,17 @@ export default {
 			titleEditing: '',
 			hasActivity: capabilities && capabilities.activity,
 			locale: getLocale(),
+			currentCard: null,
 		}
 	},
 	computed: {
 		...mapState({
 			currentBoard: state => state.currentBoard,
+			cards: state => state.card.cards,
 		}),
-		...mapGetters(['canEdit', 'assignables', 'cardActions', 'stackById']),
+		...mapGetters(['canEdit', 'assignables', 'cardActions', 'stackById', 'cardById']),
 		title() {
 			return this.titleEditable ? this.titleEditing : this.currentCard.title
-		},
-		currentCard() {
-			return this.$store.getters.cardById(this.id)
 		},
 		subtitle() {
 			return t('deck', 'Modified') + ': ' + this.relativeDate(this.currentCard.lastModified * 1000) + ' ⸱ ' + t('deck', 'Created') + ': ' + this.relativeDate(this.currentCard.createdAt * 1000)
@@ -181,6 +180,19 @@ export default {
 				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
 			},
 		},
+	},
+	watch: {
+		cards() {
+			if (!this.currentCard) {
+				this.currentCard = this.cardById(this.id)
+			}
+		},
+		id() {
+			this.currentCard = this.cardById(this.id)
+		},
+	},
+	mounted() {
+		this.currentCard = this.cardById(this.id)
 	},
 	methods: {
 		handleUpdateTitleEditable(value) {
