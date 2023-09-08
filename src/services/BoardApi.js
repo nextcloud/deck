@@ -163,7 +163,7 @@ export class BoardApi {
 					let CSV = row + '\r\n'
 
 					response.data.stacks.forEach(stack => {
-						stack.cards.forEach(card => {
+						stack?.cards?.forEach(card => {
 							row = ''
 							Object.keys(fields).forEach(field => {
 								if (field === 'createdAt' || field === 'lastModified') {
