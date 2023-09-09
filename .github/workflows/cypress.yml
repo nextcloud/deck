@@ -39,7 +39,7 @@ jobs:
           echo "text_app_ref=$text_app_ref" >> $GITHUB_ENV
 
       - name: Checkout server
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: nextcloud/server
           ref: ${{ matrix.server-versions }}
@@ -52,12 +52,12 @@ jobs:
           git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
       - name: Checkout ${{ env.APP_NAME }}
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: apps/${{ env.APP_NAME }}
 
       - name: Checkout text
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: nextcloud/text
           ref: ${{ env.text_app_ref }}
