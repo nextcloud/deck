@@ -10,19 +10,26 @@
 				:placeholder="t('deck', 'Set a due date')"
 				:hide-label="true"
 				type="datetime-local" />
-			<NcActions v-if="canEdit" :menu-title="!duedate ? t('deck', 'Add due date') : null" type="tertiary">
+			<NcActions v-if="canEdit"
+				:menu-title="!duedate ? t('deck', 'Add due date') : null"
+				type="tertiary"
+				data-cy-due-date-actions>
 				<template v-if="!duedate" #icon>
 					<Plus :size="20" />
 				</template>
 				<NcActionButton v-for="shortcut in reminderOptions"
 					:key="shortcut.key"
 					close-after-click
+					:data-cy-due-date-shortcut="shortcut.key"
 					@click="() => selectShortcut(shortcut)">
 					{{ shortcut.label }}
 				</NcActionButton>
 				<NcActionSeparator />
 
-				<NcActionButton v-if="!duedate" close-after-click @click="initDate">
+				<NcActionButton v-if="!duedate"
+					close-after-click
+					data-cy-due-date-pick
+					@click="initDate">
 					<template #icon>
 						<Plus :size="20" />
 					</template>
@@ -31,6 +38,7 @@
 				<NcActionButton v-else
 					icon="icon-delete"
 					close-after-click
+					data-cy-due-date-remove
 					@click="removeDue">
 					{{ t('deck', 'Remove due date') }}
 				</NcActionButton>
