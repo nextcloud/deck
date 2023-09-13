@@ -1,6 +1,29 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.9.3
+
+### Added
+
+- Import of deck JSON data through occ @juliushaertl [#5004](https://github.com/nextcloud/deck/pull/5004)
+
+### Fixed
+
+- Prevent tag itself being edit button if user lacks permissions [#4766](https://github.com/nextcloud/deck/pull/4766)
+- fix: Allow dynamic autoloading for classes added during upgrade [#4805](https://github.com/nextcloud/deck/pull/4805)
+- Fix(occ): set user id for permission sevice from board service [#4814](https://github.com/nextcloud/deck/pull/4814)
+- fix(notification): Prevent null in parameters [#4910](https://github.com/nextcloud/deck/pull/4910)
+- fix: Split query to fetch board ids to avoid slow query join @juliushaertl [#4950](https://github.com/nextcloud/deck/pull/4950)
+- fix: export doesn't handle lists with no cards [#5117](https://github.com/nextcloud/deck/pull/5117)
+- Ensure `$boardId` is an integer [#4774](https://github.com/nextcloud/deck/pull/4774)
+- fix: execute return int for export command [#4812](https://github.com/nextcloud/deck/pull/4812)
+- fix: crash when leaving out system parameter [#4832](https://github.com/nextcloud/deck/pull/4832)
+- Remove duplicate button [#5044](https://github.com/nextcloud/deck/pull/5044)
+
+### Other
+
+- Dependency updates
+
 ## 1.9.2
 
 ### Fixed
@@ -519,7 +542,7 @@ Android app team for helping to improve our REST API:
 - Fix comment activities on Nextcloud 15
 - Fix issues with Edge
 - API: Fix numeric types that were returned as strings
-- API: Fix If-Modified-Since header parsing  
+- API: Fix If-Modified-Since header parsing
 
 
 ## 0.5.1 - 2018-12-05
@@ -646,7 +669,7 @@ Android app team for helping to improve our REST API:
 ### Fixed
 - Various frontend fixes
 - Fix sidebar drag issues
-- Improvements for IE11 
+- Improvements for IE11
 - Fix bug when draging a card to an empty stack
 
 ## 0.2.1 - 2017-07-04
@@ -720,7 +743,7 @@ Android app team for helping to improve our REST API:
 
 ### Fixed
 - Various styling improvements
-- Fix problems with MySQL and PostgreSQL 
+- Fix problems with MySQL and PostgreSQL
 - Select first color by default when creating boards
 - Fix error when changing board permissions
 
@@ -728,9 +751,9 @@ Android app team for helping to improve our REST API:
 
 ### Added
 - Sharing boards with other users
-- Create and manage boards 
+- Create and manage boards
 - Sort cards on stacks by drag-and-drop
 - Assign labels
 - Markdown notes for each card
-- Archive cards 
+- Archive cards
 
