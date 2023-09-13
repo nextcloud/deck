@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.8.6
+
+### Fixed
+
+- Prevent tag itself being edit button if user lacks permissions [#4767](https://github.com/nextcloud/deck/pull/4767)
+- Fix(occ): set user id for permission sevice from board service [#4815](https://github.com/nextcloud/deck/pull/4815)
+- fix(notification): Prevent null in parameters [#4911](https://github.com/nextcloud/deck/pull/4911)
+- fix: Allow dynamic autoloading for classes added during upgrade [#4806](https://github.com/nextcloud/deck/pull/4806)
+- Ensure `$boardId` is an integer [#4775](https://github.com/nextcloud/deck/pull/4775)
+- fix: crash when leaving out system parameter [#4833](https://github.com/nextcloud/deck/pull/4833)
+- Fix CI @juliushaertl [#4912](https://github.com/nextcloud/deck/pull/4912)
+- fix: Split query to fetch board ids to avoid slow query join @juliushaertl [#4963](https://github.com/nextcloud/deck/pull/4963)
+- Dependency updates
+
 ## 1.8.5
 
 ### Fixed
