@@ -1,6 +1,32 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.11.0
+
+### Added
+
+- feat: Import of deck JSON data through occ [#5003](https://github.com/nextcloud/deck/pull/5003)
+- feat: create new card from smart picker [#5000](https://github.com/nextcloud/deck/pull/5000)
+- feat: update smart picker links [#5072](https://github.com/nextcloud/deck/pull/5072)
+- feat: remember last board, list for new card dialog [#5049](https://github.com/nextcloud/deck/pull/5049)
+
+### Fixed
+
+- Fix(occ): set user id for permission sevice from board service [#4813](https://github.com/nextcloud/deck/pull/4813)
+- fix: Allow dynamic autoloading for classes added during upgrade [#4804](https://github.com/nextcloud/deck/pull/4804)
+- fix(notification): Prevent null in parameters [#4909](https://github.com/nextcloud/deck/pull/4909)
+- fix: Split query to fetch board ids to avoid slow query join @juliushaertl [#4949](https://github.com/nextcloud/deck/pull/4949)
+- fix: export doesn't handle lists with no cards [#5118](https://github.com/nextcloud/deck/pull/5118)
+- fix: execute return int for export command [#4811](https://github.com/nextcloud/deck/pull/4811)
+- fix: crash when leaving out system parameter [#4831](https://github.com/nextcloud/deck/pull/4831)
+- test: add cypress tests for create new deck card [#5026](https://github.com/nextcloud/deck/pull/5026)
+- feat: error msg on CreateNewCardCustomPicker & only show available bo… [#5030](https://github.com/nextcloud/deck/pull/5030)
+- Remove duplicate button [#5043](https://github.com/nextcloud/deck/pull/5043)
+
+### Other
+
+- Dependency updates
+
 ## 1.11.0-beta.1
 
 ### Added
@@ -542,7 +568,7 @@ Android app team for helping to improve our REST API:
 - Fix comment activities on Nextcloud 15
 - Fix issues with Edge
 - API: Fix numeric types that were returned as strings
-- API: Fix If-Modified-Since header parsing  
+- API: Fix If-Modified-Since header parsing
 
 
 ## 0.5.1 - 2018-12-05
@@ -669,7 +695,7 @@ Android app team for helping to improve our REST API:
 ### Fixed
 - Various frontend fixes
 - Fix sidebar drag issues
-- Improvements for IE11 
+- Improvements for IE11
 - Fix bug when draging a card to an empty stack
 
 ## 0.2.1 - 2017-07-04
@@ -743,7 +769,7 @@ Android app team for helping to improve our REST API:
 
 ### Fixed
 - Various styling improvements
-- Fix problems with MySQL and PostgreSQL 
+- Fix problems with MySQL and PostgreSQL
 - Select first color by default when creating boards
 - Fix error when changing board permissions
 
@@ -751,9 +777,9 @@ Android app team for helping to improve our REST API:
 
 ### Added
 - Sharing boards with other users
-- Create and manage boards 
+- Create and manage boards
 - Sort cards on stacks by drag-and-drop
 - Assign labels
 - Markdown notes for each card
-- Archive cards 
+- Archive cards
 
