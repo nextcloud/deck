@@ -78,7 +78,7 @@
 		<NcAppSidebarTab v-if="hasActivity"
 			id="timeline"
 			:order="3"
-			:name="t('deck', 'Timeline')">
+			:name="t('deck', 'Activity')">
 			<template #icon>
 				<ActivityIcon :size="20" />
 			</template>
