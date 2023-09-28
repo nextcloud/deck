@@ -234,7 +234,7 @@ OC.L10N.register(
     "Choose attachment" : "Choisir une pièce jointe",
     "Assign a due date to this card…" : "Attribuez une date d'échéance à cette carte...",
     "Set a due date" : "Définir une date d'échéance",
-    "Remove due date" : "Supprimer la date d'échéance",
+    "Remove due date" : "Retirer la date d'échéance",
     "Select Date" : "Sélectionnez une date",
     "Today" : "Aujourd'hui",
     "Tomorrow" : "Demain",
