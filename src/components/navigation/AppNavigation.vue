@@ -99,12 +99,12 @@
 						:options="groups"
 						:multiple="true"
 						:disabled="groupLimitDisabled"
-						:placeholder="t('deck', 'Limit deck usage of groups')"
+						:placeholder="t('deck', 'Limit board creation to some groups')"
 						label="displayname"
 						track-by="id"
 						@input="updateConfig" />
 					<p v-if="isAdmin">
-						{{ t('deck', 'Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them.') }}
+						{{ t('deck', 'Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them.') }}
 					</p>
 				</div>
 			</NcAppNavigationSettings>
