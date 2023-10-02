@@ -149,7 +149,7 @@ OC.L10N.register(
     "Hide archived cards" : "Skrýt archivované karty",
     "Show archived cards" : "Zobrazit archivované karty",
     "Toggle compact mode" : "Vyp/zap. kompaktní režim",
-    "Open details" : "Otevřít podorobnosti",
+    "Open details" : "Otevřít podrobnosti",
     "Details" : "Podrobnosti",
     "Currently present people" : "Nyní přítomní lidé",
     "Loading board" : "Načítání tabule",
