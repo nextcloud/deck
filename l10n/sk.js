@@ -198,7 +198,7 @@ OC.L10N.register(
     "Restore Attachment" : "Obnoviť prílohu",
     "File to share" : "Súbor na zdieľanie",
     "Invalid path selected" : "Bola vybraná neplatná cesta",
-    "Open in sidebar view" : "Otvoriť v zobrazení v bočnom paneli",
+    "Open in sidebar view" : "Otvoriť v bočnom paneli",
     "Open in bigger view" : "Otvoriť vo väčšom zobrazení",
     "Attachments" : "Prílohy",
     "Comments" : "Komentáre",
