@@ -60,6 +60,7 @@ OC.L10N.register(
     "Can share" : "Puede compartir",
     "Owner" : "Dueño",
     "Delete" : "Eliminar",
+    "Transfer" : "Transferir",
     "Edit" : "Editar",
     "Members" : "Miembros",
     "Download" : "Descargar",
