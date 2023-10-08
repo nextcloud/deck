@@ -189,7 +189,7 @@ OC.L10N.register(
     "Assign a user to this card…" : "Priradiť používateľa k tejto karte…",
     "Upload new files" : "Nahrať nové súbory",
     "Share from Files" : "Zdieľať zo Súborov",
-    "Pending share" : "Čakajúce zdeľanie",
+    "Pending share" : "Čakajúce zdieľanie",
     "Add this attachment" : "Pridať túto prílohu",
     "Show in Files" : "Zobraziť v Súboroch",
     "Download" : "Sťahovanie",
