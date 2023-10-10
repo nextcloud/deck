@@ -258,8 +258,6 @@
     "Use bigger card view" : "Gebruik een grotere kaartweergave",
     "Show card ID badge" : "Toon je kaart IP badge",
     "Show boards in calendar/tasks" : "Toon borden in agenda/taken",
-    "Limit deck usage of groups" : "Beperk gebruik decks van groepen",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Het beperken van Deck verhindert dat gebruikers die niet lid zijn van die groepen hun eigen borden kunnen maken. gebruikers kunnen nog wel werken met de borden die met deze gebruikers zijn gedeeld.",
     "Board details" : "Bord details",
     "Edit board" : "Bewerk  bord",
     "Clone board" : "Dupliceer bord",
@@ -307,6 +305,8 @@
     "A <strong>card description</strong> inside the Deck app has been changed" : "Een <strong>kaart beschrijving</strong> binnen de Deck app is gewijzigd",
     "Add a new list" : "Voeg een nieuwe lijst toe",
     "Assign to users" : "Toewijzen aan gebruikers",
-    "Due date" : "Vervaldatum"
+    "Due date" : "Vervaldatum",
+    "Limit deck usage of groups" : "Beperk gebruik decks van groepen",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Het beperken van Deck verhindert dat gebruikers die niet lid zijn van die groepen hun eigen borden kunnen maken. gebruikers kunnen nog wel werken met de borden die met deze gebruikers zijn gedeeld."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -264,8 +264,6 @@ OC.L10N.register(
     "Use bigger card view" : "Použít větší zobrazení karet",
     "Show card ID badge" : "Zobrazit odznáček s identifikátorem karty",
     "Show boards in calendar/tasks" : "Zobrazit tabule v kalendáři/úkolech",
-    "Limit deck usage of groups" : "Omezit využití deck na skupiny",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Omezení nastavené pro Deck brání uživatelům, kteří nejsou součástí těchto skupin, ve vytváření vlastních tabulí. Nicméně i tak ale pořád budou moci pracovat na tabulích, které jsou jim nasdíleny.",
     "Board details" : "Podrobnosti o tabuli",
     "Edit board" : "Upravit tabuli",
     "Clone board" : "Klonovat tabuli",
@@ -320,6 +318,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Popis karty</strong> v aplikaci Deck byl změněn",
     "Add a new list" : "Přidat nový sloupec",
     "Assign to users" : "Přiřadit k uživatelům",
-    "Due date" : "Termín"
+    "Due date" : "Termín",
+    "Limit deck usage of groups" : "Omezit využití deck na skupiny",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Omezení nastavené pro Deck brání uživatelům, kteří nejsou součástí těchto skupin, ve vytváření vlastních tabulí. Nicméně i tak ale pořád budou moci pracovat na tabulích, které jsou jim nasdíleny."
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

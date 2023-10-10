@@ -264,8 +264,6 @@ OC.L10N.register(
     "Use bigger card view" : "Użyj większego widoku karty",
     "Show card ID badge" : "Pokaż ID karty",
     "Show boards in calendar/tasks" : "Pokaż tablice w kalendarzu/zadaniach",
-    "Limit deck usage of groups" : "Ogranicz użycie tablic dla grup",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ograniczenie Tablicy zablokuje użytkownikom z tych grup możliwość tworzenia własnych tablic. Użytkownicy nadal będą mogli pracować na tablicach, które zostały im udostępnione.",
     "Board details" : "Szczegóły tablicy",
     "Edit board" : "Edytuj tablicę",
     "Clone board" : "Klonuj tablicę",
@@ -320,6 +318,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Opis karty</strong> w aplikacji Tablica został zmieniony",
     "Add a new list" : "Dodaj nową listę",
     "Assign to users" : "Przypisz do użytkowników",
-    "Due date" : "Data realizacji"
+    "Due date" : "Data realizacji",
+    "Limit deck usage of groups" : "Ogranicz użycie tablic dla grup",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ograniczenie Tablicy zablokuje użytkownikom z tych grup możliwość tworzenia własnych tablic. Użytkownicy nadal będą mogli pracować na tablicach, które zostały im udostępnione."
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

@@ -238,8 +238,6 @@ OC.L10N.register(
     "Shared with you" : "Cumpartzidu cun tegus",
     "Use bigger card view" : "Imprea bista cun ischedas prus mannas",
     "Show boards in calendar/tasks" : "Mustra lavagnas in calendàriu/fainas",
-    "Limit deck usage of groups" : "Mìnima s'impreu de deck de is grupos",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Su de minimare su deck at a impedire a is utentes chi non faghent parte de cuddos grupos de si creare lavagnas pròpias. Is utentes ant a èssere ancora capassos de traballare in is lavagnas chi fiant istadas cumpartzidas cun issos etotu,",
     "Board details" : "Detàllios lavagna",
     "Edit board" : "Modìfica lavagna",
     "Clone board" : "Clona lavagna",
@@ -285,6 +283,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "Sa <strong>descritzione de un'ischeda</strong> in intro de s'aplicatzione Deck app est istada cambiada",
     "Add a new list" : "Agiunghe un'elencu nou",
     "Assign to users" : "Assigna a utentes",
-    "Due date" : "Iscadèntzia"
+    "Due date" : "Iscadèntzia",
+    "Limit deck usage of groups" : "Mìnima s'impreu de deck de is grupos",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Su de minimare su deck at a impedire a is utentes chi non faghent parte de cuddos grupos de si creare lavagnas pròpias. Is utentes ant a èssere ancora capassos de traballare in is lavagnas chi fiant istadas cumpartzidas cun issos etotu,"
 },
 "nplurals=2; plural=(n != 1);");

@@ -262,8 +262,6 @@
     "Use bigger card view" : "Use uma exibição de cartão maior",
     "Show card ID badge" : "Exibir o distintivo de identificação do cartão",
     "Show boards in calendar/tasks" : "Exibir os painéis em calendários/tarefas",
-    "Limit deck usage of groups" : "Limitar o uso de grupos no deck",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitar o Deck impedirá que usuários que não fazem parte desses grupos criem seus próprios painéis. Os usuários ainda poderão trabalhar em pastas que foram compartilhadas com eles.",
     "Board details" : "Detalhes do painel",
     "Edit board" : "Editar painel",
     "Clone board" : "Clonar painel",
@@ -318,6 +316,8 @@
     "A <strong>card description</strong> inside the Deck app has been changed" : "Uma <strong>descrição do cartão</strong> dentro do aplicativo Deck foi alterada",
     "Add a new list" : "Adicionar nova lista",
     "Assign to users" : "Atribuir a usuários",
-    "Due date" : "Data de vencimento"
+    "Due date" : "Data de vencimento",
+    "Limit deck usage of groups" : "Limitar o uso de grupos no deck",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitar o Deck impedirá que usuários que não fazem parte desses grupos criem seus próprios painéis. Os usuários ainda poderão trabalhar em pastas que foram compartilhadas com eles."
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
