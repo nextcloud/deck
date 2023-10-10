@@ -258,8 +258,6 @@
     "Use bigger card view" : "Nagyobb kártyanézet használata",
     "Show card ID badge" : "Kártyaazonosító jelvény megjelenítése",
     "Show boards in calendar/tasks" : "Táblák megjelenítése a naptárak/teendők között",
-    "Limit deck usage of groups" : "A kártyák használatának csoportokra korlátozása",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "A Kártyák korlátozása blokkolja a saját táblák létrehozását azoknál a felhasználóknál, akik nem tagjai a megadott csoportoknak. A felhasználók továbbra is tudnak dolgozni a velük megosztott táblákon.",
     "Board details" : "Tábla részletei",
     "Edit board" : "Tábla szerkesztése",
     "Clone board" : "Tábla klónozása",
@@ -314,6 +312,8 @@
     "A <strong>card description</strong> inside the Deck app has been changed" : "A <strong>kártyaleírás</strong> megváltozott a Kártyák alkalmazásban",
     "Add a new list" : "Új lista hozzáadása",
     "Assign to users" : "Felhasználókhoz rendelés",
-    "Due date" : "Határidő"
+    "Due date" : "Határidő",
+    "Limit deck usage of groups" : "A kártyák használatának csoportokra korlátozása",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "A Kártyák korlátozása blokkolja a saját táblák létrehozását azoknál a felhasználóknál, akik nem tagjai a megadott csoportoknak. A felhasználók továbbra is tudnak dolgozni a velük megosztott táblákon."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

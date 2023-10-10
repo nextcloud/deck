@@ -248,8 +248,6 @@ OC.L10N.register(
     "Shared with you" : "あなたと共有済み",
     "Use bigger card view" : "大きなカードビューを使用する",
     "Show boards in calendar/tasks" : "カレンダー/タスクでボードを表示する",
-    "Limit deck usage of groups" : "デッキの使用をグループに制限",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "デッキ作成制限は、設定したグループに非所属のユーザーがボードを作成できないようにします。非所属ユーザーは共有されているボードでのみ作業できます。",
     "Board details" : "ボードの詳細",
     "Edit board" : "ボードを編集",
     "Clone board" : "ボードを複製",
@@ -295,6 +293,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "デッキアプリ内の<strong>カードの説明</strong>が変更されたとき",
     "Add a new list" : "新しいリストを追加",
     "Assign to users" : "ユーザーに割り当てる",
-    "Due date" : "期限"
+    "Due date" : "期限",
+    "Limit deck usage of groups" : "デッキの使用をグループに制限",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "デッキ作成制限は、設定したグループに非所属のユーザーがボードを作成できないようにします。非所属ユーザーは共有されているボードでのみ作業できます。"
 },
 "nplurals=1; plural=0;");

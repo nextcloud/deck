@@ -179,8 +179,6 @@ OC.L10N.register(
     "Deck settings" : "Налаштування колоди",
     "Use bigger card view" : "Режим перегляду зі збільшеними картками",
     "Show boards in calendar/tasks" : "Показувати дошки в календарі та завданнях",
-    "Limit deck usage of groups" : "Обмежити доступ до колоди для груп",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Створення власних робочих дощок користувачам, які не входять у задані групи, буде заблоковано. Проте, такі користувачі зможуть продовжити працювати зі спільними дошками, до яких у них є доступ.",
     "Board details" : "Деталі дошки",
     "Edit board" : "Редагувати дошку",
     "Clone board" : "Копіювати дошку",
@@ -212,6 +210,8 @@ OC.L10N.register(
     "Share" : "Спільний доступ",
     "Add a new list" : "Додати новий список",
     "Assign to users" : "Призначити користувачам",
-    "Due date" : "Протягом"
+    "Due date" : "Протягом",
+    "Limit deck usage of groups" : "Обмежити доступ до колоди для груп",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Створення власних робочих дощок користувачам, які не входять у задані групи, буде заблоковано. Проте, такі користувачі зможуть продовжити працювати зі спільними дошками, до яких у них є доступ."
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");

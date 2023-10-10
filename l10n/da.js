@@ -193,8 +193,6 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Use bigger card view" : "Brug større kort visning",
     "Show boards in calendar/tasks" : "Vis tavler i kalender/opgaver",
-    "Limit deck usage of groups" : "Begræns Deck brug til grupper",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begrænsning af Deck vil blokere brugere som ikke er en del af de valgte grupper fra at oprette deres egne tavler. Brugere vil stadig kunne arbejde på tavler der er blevet delt med dem. ",
     "Board details" : "Liste detaljer",
     "Edit board" : "Rediger liste",
     "Clone board" : "Klon tavle",
@@ -230,6 +228,8 @@ OC.L10N.register(
     "Share" : "Del",
     "Add a new list" : "Tilføj en ny kolonne",
     "Assign to users" : "Tildel til brugere",
-    "Due date" : "Forfaldsdato"
+    "Due date" : "Forfaldsdato",
+    "Limit deck usage of groups" : "Begræns Deck brug til grupper",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begrænsning af Deck vil blokere brugere som ikke er en del af de valgte grupper fra at oprette deres egne tavler. Brugere vil stadig kunne arbejde på tavler der er blevet delt med dem. "
 },
 "nplurals=2; plural=(n != 1);");
