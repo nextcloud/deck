@@ -264,8 +264,6 @@ OC.L10N.register(
     "Use bigger card view" : "使用较大的卡片视图",
     "Show card ID badge" : "显示卡片ID序号",
     "Show boards in calendar/tasks" : "在日历/任务中显示看板",
-    "Limit deck usage of groups" : "按群组限制看板的使用权",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "限制看板的使用权后，不在指定群组中的用户将不能新建面板，但仍可使用已共享给他们的面板。",
     "Board details" : "面板详情",
     "Edit board" : "编辑面板",
     "Clone board" : "克隆面板",
@@ -320,6 +318,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "看板应用中的 <strong>卡片描述</strong> 已改变",
     "Add a new list" : "添加新列表",
     "Assign to users" : "指派给用户",
-    "Due date" : "截止日期"
+    "Due date" : "截止日期",
+    "Limit deck usage of groups" : "按群组限制看板的使用权",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "限制看板的使用权后，不在指定群组中的用户将不能新建面板，但仍可使用已共享给他们的面板。"
 },
 "nplurals=1; plural=0;");

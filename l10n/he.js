@@ -233,8 +233,6 @@ OC.L10N.register(
     "Shared with you" : "משותף אתך",
     "Use bigger card view" : "להשתמש בתצוגת כרטיסים גדולה יותר",
     "Show boards in calendar/tasks" : "הצג הלוחות בלוח השנה/המשימות",
-    "Limit deck usage of groups" : "הגבלת השימוש בחבילה לקבוצות",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "הגבלת חבילה תחסום משתמשים שאינם חלק מקבוצות אלו מיצירת לוחות משלהם. משתמשים עדיין יוכלו לעבור על לוחות ששותפו אתם.",
     "Board details" : "פרטי לוח",
     "Edit board" : "עריכת לוח",
     "Clone board" : "שכפל את הלוח",
@@ -271,6 +269,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>תיאור של כרטיס</strong> בתוך יישומון החבילה נערך",
     "Add a new list" : "הוסף רשימה חדשה",
     "Assign to users" : "הקצאה למשתמשים",
-    "Due date" : "מועד יעד"
+    "Due date" : "מועד יעד",
+    "Limit deck usage of groups" : "הגבלת השימוש בחבילה לקבוצות",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "הגבלת חבילה תחסום משתמשים שאינם חלק מקבוצות אלו מיצירת לוחות משלהם. משתמשים עדיין יוכלו לעבור על לוחות ששותפו אתם."
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

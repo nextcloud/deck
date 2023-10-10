@@ -262,8 +262,6 @@ OC.L10N.register(
     "Use bigger card view" : "Utilitza la visualització de targetes més gran",
     "Show card ID badge" : "Mostra el distintiu d’ID de la targeta",
     "Show boards in calendar/tasks" : "Mostra els taulers al calendari/tasques",
-    "Limit deck usage of groups" : "Limitar l'ús del tauler de grups",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitant el Tauler bloquejarà la creació de taulers als usuaris que no són part d'aquests grups. Els usuaris podran seguir treballant en els taulers que hagin estat compartits amb ells.",
     "Board details" : "Detalls del tauler",
     "Edit board" : "Edita el tauler",
     "Clone board" : "Clonar tauler",
@@ -318,6 +316,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "S'ha canviat una <strong>descripció de targeta</strong> a l'aplicació Tauler",
     "Add a new list" : "Afegeix una llista nova",
     "Assign to users" : "Assignació als usuaris",
-    "Due date" : "Data de caducitat"
+    "Due date" : "Data de caducitat",
+    "Limit deck usage of groups" : "Limitar l'ús del tauler de grups",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitant el Tauler bloquejarà la creació de taulers als usuaris que no són part d'aquests grups. Els usuaris podran seguir treballant en els taulers que hagin estat compartits amb ells."
 },
 "nplurals=2; plural=(n != 1);");

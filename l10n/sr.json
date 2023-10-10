@@ -262,8 +262,6 @@
     "Use bigger card view" : "Користи већи приказ картице",
     "Show card ID badge" : "Прикажи беџ ID картице",
     "Show boards in calendar/tasks" : "Прикажи табле у календару/задацима",
-    "Limit deck usage of groups" : "Ограничи употребу шпила на групе",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ограничавање Deck апликације ће блокирати кориснике који нису део одабраних група да креирају своје табле. Корисници ће и даље моћи да раде на таблама које су подељене са њима.",
     "Board details" : "Детаљи табле",
     "Edit board" : "Измени таблу",
     "Clone board" : "Клонирај таблу",
@@ -318,6 +316,8 @@
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Опис картице</strong> унутар Deck апликације је промењен",
     "Add a new list" : "Додај нови списак",
     "Assign to users" : "Додели корисницима",
-    "Due date" : "Рок"
+    "Due date" : "Рок",
+    "Limit deck usage of groups" : "Ограничи употребу шпила на групе",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ограничавање Deck апликације ће блокирати кориснике који нису део одабраних група да креирају своје табле. Корисници ће и даље моћи да раде на таблама које су подељене са њима."
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
 }

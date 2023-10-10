@@ -258,8 +258,6 @@ OC.L10N.register(
     "Deck settings" : "Ρυθμίσεις Deck",
     "Use bigger card view" : "Χρησιμοποιήστε μεγαλύτερη προβολή καρτέλας",
     "Show boards in calendar/tasks" : "Εμφάνιση πινάκων στο ημερολόγιο / εργασίες",
-    "Limit deck usage of groups" : "Περιορίστε τη χρήση της εφαρμογής deck σε ομάδες",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ο περιορισμός του Deck θα εμποδίσει τους χρήστες που δεν είναι μέρος αυτών των ομάδων να δημιουργούν δικούς τους πίνακες. Οι χρήστες θα εξακολουθήσουν να εργάζονται σε πίνακες που έχουν διαμοιραστεί μαζί τους.",
     "Board details" : "Λεπτομέριες πίνακα",
     "Edit board" : "Επεξεργασία πίνακα",
     "Clone board" : "Κλώνος πίνακα",
@@ -313,6 +311,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "Η <strong>περιγραφή καρτέλας </strong>στην εφαρμογή Deck άλλαξε",
     "Add a new list" : "Προσθήκη νέας λίστας",
     "Assign to users" : "Ανάθεση σε χρήστες",
-    "Due date" : "Ημερομηνία λήξης"
+    "Due date" : "Ημερομηνία λήξης",
+    "Limit deck usage of groups" : "Περιορίστε τη χρήση της εφαρμογής deck σε ομάδες",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ο περιορισμός του Deck θα εμποδίσει τους χρήστες που δεν είναι μέρος αυτών των ομάδων να δημιουργούν δικούς τους πίνακες. Οι χρήστες θα εξακολουθήσουν να εργάζονται σε πίνακες που έχουν διαμοιραστεί μαζί τους."
 },
 "nplurals=2; plural=(n != 1);");

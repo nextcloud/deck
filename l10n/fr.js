@@ -156,7 +156,7 @@ OC.L10N.register(
     "No lists available" : "Aucune liste disponible",
     "Create a new list to add cards to this board" : "Créer une nouvelle liste pour ajouter des cartes à ce tableau",
     "Board not found" : "Tableau non trouvé",
-    "Sharing" : "Partagé",
+    "Sharing" : "Partage",
     "Tags" : "Étiquettes",
     "Deleted items" : "Éléments supprimés",
     "Timeline" : "Chronologie",
@@ -259,13 +259,11 @@ OC.L10N.register(
     "seconds ago" : "à l'instant",
     "All boards" : "Tous les tableaux",
     "Archived boards" : "Tableaux archivés",
-    "Shared with you" : "Partagés avec vous",
+    "Shared with you" : "Partagé avec vous",
     "Deck settings" : "Paramètres de Deck",
     "Use bigger card view" : "Utiliser la vue large des cartes",
     "Show card ID badge" : "Afficher l'ID de la carte",
     "Show boards in calendar/tasks" : "Afficher les tableaux dans les agendas/tâches",
-    "Limit deck usage of groups" : "Limiter l'utilisation du tableau aux groupes",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limiter Deck empêchera les utilisateurs ne faisant pas partie de ces groupes de créer leurs propres tableaux. Ces utilisateurs pourront toujours travailler sur les tableaux qui ont été partagés avec eux.",
     "Board details" : "Détails du tableau",
     "Edit board" : "Renommer le tableau",
     "Clone board" : "Dupliquer le tableau",
@@ -320,6 +318,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "La <strong>description de la carte</strong> présente dans l'application Deck a été modifiée",
     "Add a new list" : "Ajouter une nouvelle liste",
     "Assign to users" : "Attribuer aux utilisateurs",
-    "Due date" : "Date d'échéance"
+    "Due date" : "Date d'échéance",
+    "Limit deck usage of groups" : "Limiter l'utilisation du tableau aux groupes",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limiter Deck empêchera les utilisateurs ne faisant pas partie de ces groupes de créer leurs propres tableaux. Ces utilisateurs pourront toujours travailler sur les tableaux qui ont été partagés avec eux."
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

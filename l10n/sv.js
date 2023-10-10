@@ -264,8 +264,6 @@ OC.L10N.register(
     "Use bigger card view" : "Visa större kort",
     "Show card ID badge" : "Visa kortets ID-märke",
     "Show boards in calendar/tasks" : "Visa tavlor i kalender / uppgifter",
-    "Limit deck usage of groups" : "Begränsa användningen av grupper",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begränsning av Deck blockerar användare som inte ingår i dessa grupper från att skapa egna tavlor. Användare kan dock fortfarande integrera med tavlor som har delats med dem.",
     "Board details" : "Taveldetaljer",
     "Edit board" : "Ändra tavla",
     "Clone board" : "Kopiera tavla",
@@ -320,6 +318,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "En <strong>kortbeskrivning</strong> i Deck-appen har ändrats",
     "Add a new list" : "Lägg till en ny lista",
     "Assign to users" : "Tilldela till användare",
-    "Due date" : "Slutdatum"
+    "Due date" : "Slutdatum",
+    "Limit deck usage of groups" : "Begränsa användningen av grupper",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begränsning av Deck blockerar användare som inte ingår i dessa grupper från att skapa egna tavlor. Användare kan dock fortfarande integrera med tavlor som har delats med dem."
 },
 "nplurals=2; plural=(n != 1);");

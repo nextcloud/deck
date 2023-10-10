@@ -254,8 +254,6 @@ OC.L10N.register(
     "Use bigger card view" : "Použiť väčšie zobrazenie karty",
     "Show card ID badge" : "Ukázať ID karty",
     "Show boards in calendar/tasks" : "Zobrazovať nástenky v kalendári/úlohách",
-    "Limit deck usage of groups" : "Obmedziť použitie Deck na skupiny",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Obmedzenie Násteniek bráni používateľom, ktorí nie sú súčasťou týchto skupín, aby si vytvárali vlastné nástenky. Môžu však stále pracovať na nástenkách, ktoré im niekto sprístupní.",
     "Board details" : "Podrobnosti o nástenke",
     "Edit board" : "Upraviť nástenku",
     "Clone board" : "Duplikovať nástenku",
@@ -307,6 +305,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "V apke Nástenka sa zmenil <strong>Popis karty</strong>",
     "Add a new list" : "Pridať nový zoznam",
     "Assign to users" : "Priradiť používateľom",
-    "Due date" : "Termín dokončenia"
+    "Due date" : "Termín dokončenia",
+    "Limit deck usage of groups" : "Obmedziť použitie Deck na skupiny",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Obmedzenie Násteniek bráni používateľom, ktorí nie sú súčasťou týchto skupín, aby si vytvárali vlastné nástenky. Môžu však stále pracovať na nástenkách, ktoré im niekto sprístupní."
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

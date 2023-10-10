@@ -264,8 +264,6 @@ OC.L10N.register(
     "Use bigger card view" : "Bruk større visning på kort",
     "Show card ID badge" : "Vis ID-merke til kort",
     "Show boards in calendar/tasks" : "Vis tavler i kalender/oppgaver",
-    "Limit deck usage of groups" : "Begrens stokk-bruk til grupper",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begrensning av tavler vil hindre tilgang til de brukere som ikke er medlem av en gruppe fra å lage egne tavler. Bruker kan arbeide på de tavler som er delt med dem.",
     "Board details" : "Forumseksjonsdetaljer",
     "Edit board" : "Rediger tavle",
     "Clone board" : "Klon tavle",
@@ -320,6 +318,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "En <strong>kort beskrivelse</strong>i Stokk-appen er endret",
     "Add a new list" : "Legg til en ny stabel",
     "Assign to users" : "Tildel brukere",
-    "Due date" : "Forfallsdato"
+    "Due date" : "Forfallsdato",
+    "Limit deck usage of groups" : "Begrens stokk-bruk til grupper",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begrensning av tavler vil hindre tilgang til de brukere som ikke er medlem av en gruppe fra å lage egne tavler. Bruker kan arbeide på de tavler som er delt med dem."
 },
 "nplurals=2; plural=(n != 1);");

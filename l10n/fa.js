@@ -262,8 +262,6 @@ OC.L10N.register(
     "Use bigger card view" : "از نمای برگهٔ بزرگتر استفاده کنید",
     "Show card ID badge" : "Show card ID badge",
     "Show boards in calendar/tasks" : "نمایش تابلوها در تقویم/ وظایف",
-    "Limit deck usage of groups" : "استفاده از برگه‌دان گروه‌ها را محدود کنید",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "محدودکردن برگه‌دان  باعث می‌شود تا کاربرانی که جزو آن گروه‌ها نیستند، تابلوهای خود را ایجاد کنند. کاربران همچنان می‌توانند روی تابلوهایی کار کنند که با آنها به اشتراک گذاشته شده است.",
     "Board details" : "Board details",
     "Edit board" : "ویرایش تخته",
     "Clone board" : "تخته شبیه‌سازی",
@@ -318,6 +316,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "شرح برگه در برگه‌دان تغییر کرده است",
     "Add a new list" : "فهرست جدید بیفزایید!",
     "Assign to users" : "به کاربران اختصاص دهید",
-    "Due date" : "موعد مقرر"
+    "Due date" : "موعد مقرر",
+    "Limit deck usage of groups" : "استفاده از برگه‌دان گروه‌ها را محدود کنید",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "محدودکردن برگه‌دان  باعث می‌شود تا کاربرانی که جزو آن گروه‌ها نیستند، تابلوهای خود را ایجاد کنند. کاربران همچنان می‌توانند روی تابلوهایی کار کنند که با آنها به اشتراک گذاشته شده است."
 },
 "nplurals=2; plural=(n > 1);");

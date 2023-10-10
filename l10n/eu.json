@@ -258,8 +258,6 @@
     "Use bigger card view" : "Erabili txartel ikuspegi handiagoa",
     "Show card ID badge" : "Erakutsi txartelaren ID plaka",
     "Show boards in calendar/tasks" : "Erakutsi taulak egutegi/zereginetan",
-    "Limit deck usage of groups" : "Mugatu taldeek Deck erabiltzeko aukera",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Deck mugatzeak taldeetako kide ez diren erabiltzaileei beren taula propioak sortzea eragotziko die. Erabiltzaileek beraiekin partekatu diren tauletan lan egin ahalko dute.",
     "Board details" : "Taularen xehetasunak",
     "Edit board" : "Editatu mahaia",
     "Clone board" : "Klonatu taula",
@@ -314,6 +312,8 @@
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Txartel baten deskribapena</strong> aldatu da Deck aplikazioaren barruan",
     "Add a new list" : "Gehitu zerrenda berria",
     "Assign to users" : "Esleitu erabiltzaileei",
-    "Due date" : "Epe-muga"
+    "Due date" : "Epe-muga",
+    "Limit deck usage of groups" : "Mugatu taldeek Deck erabiltzeko aukera",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Deck mugatzeak taldeetako kide ez diren erabiltzaileei beren taula propioak sortzea eragotziko die. Erabiltzaileek beraiekin partekatu diren tauletan lan egin ahalko dute."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

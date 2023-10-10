@@ -212,7 +212,6 @@ OC.L10N.register(
     "All boards" : "Kaikki taulut",
     "Archived boards" : "Arkistoidut taulut",
     "Shared with you" : "Jaettu kanssasi",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Pakan käytön rajoittaminen estää merkittyjen ryhmien jäseniä luomasta omia taulujaan, mutta käyttäjät pystyvät silti käyttämään heidän kanssaan jaettuja tauluja.",
     "Board details" : "Taulun tiedot",
     "Edit board" : "Muokkaa taulua",
     "Clone board" : "Monista taulu",
@@ -247,6 +246,7 @@ OC.L10N.register(
     "Share" : "Jaa",
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Kortin kuvaus</strong> Pakka-sovelluksessa on vaihtunut",
     "Add a new list" : "Lisää uusi lista",
-    "Due date" : "Eräpäivä"
+    "Due date" : "Eräpäivä",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Pakan käytön rajoittaminen estää merkittyjen ryhmien jäseniä luomasta omia taulujaan, mutta käyttäjät pystyvät silti käyttämään heidän kanssaan jaettuja tauluja."
 },
 "nplurals=2; plural=(n != 1);");
