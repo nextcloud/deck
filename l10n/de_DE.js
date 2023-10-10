@@ -264,8 +264,6 @@ OC.L10N.register(
     "Use bigger card view" : "Größere Kartenansicht verwenden",
     "Show card ID badge" : "Abzeichen mit Karten-ID zeigen",
     "Show boards in calendar/tasks" : "Board in Kalender/Aufgaben anzeigen",
-    "Limit deck usage of groups" : "Nutzung auf Gruppen einschränken",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Wenn Sie Deck einschränken, können Benutzer, die nicht zu diesen Gruppen gehören, keine eigenen Boards erstellen. Die Benutzer können weiterhin an Boards arbeiten, die für sie freigegeben wurden.",
     "Board details" : "Board-Details",
     "Edit board" : "Board bearbeiten",
     "Clone board" : "Board klonen",
@@ -320,6 +318,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "Eine <strong>Kartenbeschreibung</strong> wurde innerhalb der Deck-App geändert",
     "Add a new list" : "Eine neue Liste hinzufügen",
     "Assign to users" : "Benutzern zuweisen",
-    "Due date" : "Fälligkeitsdatum"
+    "Due date" : "Fälligkeitsdatum",
+    "Limit deck usage of groups" : "Nutzung auf Gruppen einschränken",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Wenn Sie Deck einschränken, können Benutzer, die nicht zu diesen Gruppen gehören, keine eigenen Boards erstellen. Die Benutzer können weiterhin an Boards arbeiten, die für sie freigegeben wurden."
 },
 "nplurals=2; plural=(n != 1);");

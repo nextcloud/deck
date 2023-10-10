@@ -229,8 +229,6 @@ OC.L10N.register(
     "Shared with you" : "Споделено со тебе",
     "Use bigger card view" : "Користи поголем преглед на картици",
     "Show boards in calendar/tasks" : "Прикажи ги таблите во календарнот",
-    "Limit deck usage of groups" : "Ограничи ја апликацијата на групи",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ограничувањето на апликацијата ќе ги блокира корисниците кој не се дел од овие групи. Корсниците ќе можат да работат на апликацијата само доколку биде споделена табла со нив.",
     "Board details" : "Детали за таблата",
     "Edit board" : "Измени табла",
     "Clone board" : "Клонирај табла",
@@ -273,6 +271,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Описот на картицата</strong> во апликацијата Deck е изменет",
     "Add a new list" : "Додади нова листа",
     "Assign to users" : "Додели на корисници",
-    "Due date" : "До датум"
+    "Due date" : "До датум",
+    "Limit deck usage of groups" : "Ограничи ја апликацијата на групи",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ограничувањето на апликацијата ќе ги блокира корисниците кој не се дел од овие групи. Корсниците ќе можат да работат на апликацијата само доколку биде споделена табла со нив."
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

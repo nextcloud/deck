@@ -201,8 +201,6 @@ OC.L10N.register(
     "All boards" : "Semua papan",
     "Archived boards" : "Papan terarsip",
     "Shared with you" : "Shared with you",
-    "Limit deck usage of groups" : "Batasi grup pengguna longgok ",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Membatasi Longgok akan mencegah pengguna bukan bagian dari grup, untuk membuat papan mereka sendiri. Pengguna tetap menggunakan papan yang telah dibagikan kepadanya.",
     "Board details" : "Detail papan",
     "Edit board" : "Edit papan",
     "Clone board" : "Pengklonaan papan",
@@ -225,6 +223,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Deskripsi kartu</strong> didalam aplikasi Longgok telah diubah",
     "Add a new list" : "Tambah daftar baru",
     "Assign to users" : "Penugasan kepada pengguna",
-    "Due date" : "Tenggat"
+    "Due date" : "Tenggat",
+    "Limit deck usage of groups" : "Batasi grup pengguna longgok ",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Membatasi Longgok akan mencegah pengguna bukan bagian dari grup, untuk membuat papan mereka sendiri. Pengguna tetap menggunakan papan yang telah dibagikan kepadanya."
 },
 "nplurals=1; plural=0;");

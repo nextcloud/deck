@@ -264,8 +264,6 @@ OC.L10N.register(
     "Use bigger card view" : "Usa a vista de tarxeta máis grande",
     "Show card ID badge" : "Amosar o distintivo de identificación da tarxeta",
     "Show boards in calendar/tasks" : "Amosar taboleiros no calendario/tarefas",
-    "Limit deck usage of groups" : "Limitar o uso da plataforma a grupos",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitando a Gabeta bloqueará os usuarios que non formen parte destes grupos, para crear os seus propios taboleiros. Os usuarios aínda así poderán traballar en taboleiros compartidos con eles.",
     "Board details" : "Detalles do taboleiro",
     "Edit board" : "Editar taboleiro",
     "Clone board" : "Clonar taboleiro",
@@ -320,6 +318,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "Cambiouse a <strong>descripción da tarxeta</strong> dentro da aplicación Gabeta",
     "Add a new list" : "Engadir unha lista nova",
     "Assign to users" : "Asignar a usuarios",
-    "Due date" : "Data de caducidade"
+    "Due date" : "Data de caducidade",
+    "Limit deck usage of groups" : "Limitar o uso da plataforma a grupos",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitando a Gabeta bloqueará os usuarios que non formen parte destes grupos, para crear os seus propios taboleiros. Os usuarios aínda así poderán traballar en taboleiros compartidos con eles."
 },
 "nplurals=2; plural=(n != 1);");

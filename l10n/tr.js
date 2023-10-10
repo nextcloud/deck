@@ -264,8 +264,6 @@ OC.L10N.register(
     "Use bigger card view" : "Daha büyük kart görünümü kullanılsın",
     "Show card ID badge" : "Kart kodu etiketi görüntülensin",
     "Show boards in calendar/tasks" : "Takvimler ve görevlerde panolar görüntülensin",
-    "Limit deck usage of groups" : "Tahtayı şu gruplar kullanabilsin",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Tahta kullanımı gruplar ile sınırlandığında belirtilen grupların üyesi olmayan kişiler kendi tahtalarını oluşturamaz. Bu kullanıcılar ancak kendileri ile paylaşılan tahtalar üzerinde çalışabilir.",
     "Board details" : "Pano ayrıntıları",
     "Edit board" : "Panoyu sil",
     "Clone board" : "Panoyu kopyala",
@@ -320,6 +318,8 @@ OC.L10N.register(
     "A <strong>card description</strong> inside the Deck app has been changed" : "Tahta uygulamasında bir <strong>kart açıklaması</strong> değiştirildiğinde",
     "Add a new list" : "Yeni liste ekle",
     "Assign to users" : "Kullanıcılara ata",
-    "Due date" : "Bitiş tarihi"
+    "Due date" : "Bitiş tarihi",
+    "Limit deck usage of groups" : "Tahtayı şu gruplar kullanabilsin",
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Tahta kullanımı gruplar ile sınırlandığında belirtilen grupların üyesi olmayan kişiler kendi tahtalarını oluşturamaz. Bu kullanıcılar ancak kendileri ile paylaşılan tahtalar üzerinde çalışabilir."
 },
 "nplurals=2; plural=(n > 1);");
