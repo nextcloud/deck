@@ -25,6 +25,7 @@ OC.L10N.register(
     "Details" : "Detalles",
     "Sharing" : "Compartiendo",
     "Tags" : "Etiquetas",
+    "Activity" : "Actividad",
     "Undo" : "Deshacer",
     "Can edit" : "Puede editar",
     "Can share" : "Puede compartir",

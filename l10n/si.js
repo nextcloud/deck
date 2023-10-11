@@ -13,6 +13,7 @@ OC.L10N.register(
     "File already exists" : "ගොනුව දැනටමත් පවතී",
     "Add list" : "ලැයිස්තුව එකතු කරන්න",
     "Details" : "විස්තර",
+    "Activity" : "ක්‍රියාකාරකම",
     "Undo" : "පෙරසේ",
     "(Group)" : "(සමූහය)",
     "Owner" : "හිමිකරු",

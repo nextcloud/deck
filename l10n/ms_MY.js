@@ -7,6 +7,7 @@ OC.L10N.register(
     "No file was uploaded" : "Tiada fail dimuatnaik",
     "Missing a temporary folder" : "Direktori sementara hilang",
     "Cancel" : "Batal",
+    "Activity" : "Aktiviti",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Owner" : "Owner",

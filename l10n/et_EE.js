@@ -21,6 +21,7 @@ OC.L10N.register(
     "Details" : "Üksikasjad",
     "Sharing" : "Jagamine",
     "Tags" : "Sildid",
+    "Activity" : "Tegevus",
     "Undo" : "Tühista",
     "Can edit" : "Võib redigeerida",
     "Can share" : "Can share",

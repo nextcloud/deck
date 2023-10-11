@@ -15,6 +15,7 @@ OC.L10N.register(
     "Details" : "Дэлгэрэнгүй",
     "Sharing" : "Түгээх",
     "Tags" : "Tag-үүд",
+    "Activity" : "Үйлдлүүд",
     "Undo" : "буцах",
     "Can edit" : "Can edit",
     "Can share" : "Can share",

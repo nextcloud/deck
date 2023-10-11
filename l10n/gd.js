@@ -14,6 +14,7 @@ OC.L10N.register(
     "Details" : "Mion-fhiosrachadh",
     "Sharing" : "Co-roinneadh",
     "Tags" : "Tagaichean",
+    "Activity" : "Gnìomhachd",
     "Undo" : "Neo-dhèan",
     "Delete" : "Sguab às",
     "Transfer" : "Tar-chuir",

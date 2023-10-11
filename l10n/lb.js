@@ -10,6 +10,7 @@ OC.L10N.register(
     "Details" : "Detailer",
     "Sharing" : "Gedeelt",
     "Tags" : "Tags",
+    "Activity" : "Aktivitéit",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Owner" : "Owner",
