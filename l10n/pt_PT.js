@@ -115,7 +115,7 @@ OC.L10N.register(
     "Details" : "Detalhes",
     "Sharing" : "Partilha",
     "Tags" : "Etiquetas",
-    "Timeline" : "Linha do tempo",
+    "Activity" : "Atividade",
     "Undo" : "Desfazer",
     "(Group)" : "(Grupo)",
     "Can edit" : "Can edit",
@@ -158,6 +158,7 @@ OC.L10N.register(
     "Close" : "Fechar",
     "Share" : "Partilhar",
     "A <strong>card description</strong> inside the Deck app has been changed" : "Uma <strong>descrição do cartão</strong> dentro da aplicação Quadro foi alterada",
+    "Timeline" : "Linha do tempo",
     "Due date" : "Data limite"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

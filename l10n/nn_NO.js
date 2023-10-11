@@ -10,6 +10,7 @@ OC.L10N.register(
     "Details" : "Detaljar",
     "Sharing" : "Deling",
     "Tags" : "Emneord",
+    "Activity" : "Aktivitet",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Owner" : "Owner",

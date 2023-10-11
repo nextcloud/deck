@@ -19,6 +19,7 @@ OC.L10N.register(
     "Details" : "Detaļas",
     "Sharing" : "Koplietošana",
     "Tags" : "Birkas",
+    "Activity" : "Darbības",
     "Undo" : "Atsaukt",
     "(Group)" : "(Grupa)",
     "Can edit" : "Var rediģēt",

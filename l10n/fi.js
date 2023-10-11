@@ -129,7 +129,7 @@ OC.L10N.register(
     "Sharing" : "Jakaminen",
     "Tags" : "Tunnisteet",
     "Deleted items" : "Poistetut tietueet",
-    "Timeline" : "Aikajana",
+    "Activity" : "Tapahtumat",
     "Deleted lists" : "Poistetut listat",
     "Undo" : "Kumoa",
     "Deleted cards" : "Poistetut kortit",
@@ -245,6 +245,7 @@ OC.L10N.register(
     "Error creating the share" : "Virhe jakoa luotaessa",
     "Share" : "Jaa",
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Kortin kuvaus</strong> Pakka-sovelluksessa on vaihtunut",
+    "Timeline" : "Aikajana",
     "Add a new list" : "Lisää uusi lista",
     "Due date" : "Eräpäivä",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Pakan käytön rajoittaminen estää merkittyjen ryhmien jäseniä luomasta omia taulujaan, mutta käyttäjät pystyvät silti käyttämään heidän kanssaan jaettuja tauluja."
