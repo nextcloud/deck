@@ -22,6 +22,7 @@ OC.L10N.register(
     "Details" : "รายละเอียด",
     "Sharing" : "การแชร์",
     "Tags" : "แท็ก",
+    "Activity" : "กิจกรรม",
     "Undo" : "เลิกทำ",
     "Can edit" : "สามารถแก้ไข",
     "Can share" : "สามารถแชร์",

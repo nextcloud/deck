@@ -68,7 +68,7 @@ OC.L10N.register(
     "Sharing" : "공유",
     "Tags" : "태그",
     "Deleted items" : "삭제된 항목",
-    "Timeline" : "타임라인",
+    "Activity" : "활동",
     "Undo" : "실행 취소",
     "No participants found" : "참가자를 찾을 수 없음",
     "(Group)" : "(그룹)",
@@ -129,6 +129,7 @@ OC.L10N.register(
     "Something went wrong" : "잘못된 접근",
     "Error creating the share" : "공유를 만드는 중 오류 발생",
     "Share" : "공유",
+    "Timeline" : "타임라인",
     "Due date" : "만료 날짜"
 },
 "nplurals=1; plural=0;");

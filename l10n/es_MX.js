@@ -31,6 +31,7 @@ OC.L10N.register(
     "Details" : "Detalles",
     "Sharing" : "Compartiendo",
     "Tags" : "Etiquetas",
+    "Activity" : "Actividad",
     "Undo" : "Deshacer",
     "No participants found" : "No se encontraron participantes",
     "Can edit" : "Puede editar",

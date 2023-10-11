@@ -8,6 +8,7 @@ OC.L10N.register(
     "Details" : "ព័ត៌មាន​លម្អិត",
     "Sharing" : "ការ​ចែក​រំលែក",
     "Tags" : "ស្លាក",
+    "Activity" : "សកម្មភាព",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Owner" : "Owner",

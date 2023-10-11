@@ -36,6 +36,7 @@ OC.L10N.register(
     "Details" : "Detalii",
     "Sharing" : "Partajare",
     "Tags" : "Etichete",
+    "Activity" : "Activitate",
     "Undo" : "Anulează ultima acțiune",
     "Can edit" : "Poate edita",
     "Can share" : "Can share",

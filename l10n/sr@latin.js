@@ -10,6 +10,7 @@ OC.L10N.register(
     "Details" : "Detalji",
     "Sharing" : "Deljenje",
     "Tags" : "Oznake",
+    "Activity" : "Aktivnost",
     "Undo" : "Opozovi",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
