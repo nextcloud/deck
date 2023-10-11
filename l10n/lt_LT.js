@@ -139,7 +139,7 @@ OC.L10N.register(
     "Sharing" : "Bendrinimas",
     "Tags" : "Žymės",
     "Deleted items" : "Ištrinti elementai",
-    "Timeline" : "Laiko juosta",
+    "Activity" : "Veikla",
     "Deleted lists" : "Ištrinti sąrašai",
     "Undo" : "Atšaukti",
     "Deleted cards" : "Ištrintos kortelės",
@@ -263,6 +263,7 @@ OC.L10N.register(
     "Error creating the share" : "Klaida kuriant viešinį",
     "Share" : "Bendrinti",
     "A <strong>card description</strong> inside the Deck app has been changed" : "Darbų programėlėje pakeistas <strong>kortelės aprašas</strong> ",
+    "Timeline" : "Laiko juosta",
     "Add a new list" : "Pridėti naują sąrašą",
     "Assign to users" : "Priskirti naudotojams",
     "Due date" : "Galutinio termino data"

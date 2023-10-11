@@ -12,6 +12,7 @@ OC.L10N.register(
     "Details" : "Talqayt",
     "Sharing" : "Beṭṭu",
     "Tags" : "Tibzimin",
+    "Activity" : "Armud",
     "Owner" : "Bab",
     "Delete" : "Kkes",
     "Edit" : "Ẓreg",

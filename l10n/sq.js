@@ -27,6 +27,7 @@ OC.L10N.register(
     "Details" : "Detajet",
     "Sharing" : "Ndarje",
     "Tags" : "Etiketa",
+    "Activity" : "Aktiviteti",
     "Undo" : "Ktheje pas",
     "Can edit" : "Can edit",
     "Can share" : "Mund të ndaj",

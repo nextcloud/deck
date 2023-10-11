@@ -10,6 +10,7 @@ OC.L10N.register(
     "Details" : "ລາຍລະອຽດ",
     "Sharing" : "ການແບ່ງປັນ",
     "Tags" : "ປ້າຍກຳກັບ",
+    "Activity" : "ກິດຈະກໍາ",
     "Can edit" : "ແກ້ໄຂໄດ້",
     "Can share" : "ແບ່ງປັນໄດ້",
     "Owner" : "ເຈົ້າຂອງ",

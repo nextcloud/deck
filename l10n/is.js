@@ -105,7 +105,7 @@ OC.L10N.register(
     "Sharing" : "Deiling",
     "Tags" : "Merki",
     "Deleted items" : "Eydd atriði",
-    "Timeline" : "Tímalína",
+    "Activity" : "Virkni",
     "Undo" : "Afturkalla",
     "Deleted cards" : "Eydd spjöld",
     "Share board with a user, group or circle …" : "Deila borði með notanda, hóp eða hring …",
@@ -177,6 +177,7 @@ OC.L10N.register(
     "Maximum file size of {size} exceeded" : "Fór yfir hámarks skráarstærð {size}",
     "Share" : "Deila",
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Lýsingu á spjaldi</strong> inni í Deck-spjaldaforritinu hefur verið breytt",
+    "Timeline" : "Tímalína",
     "Assign to users" : "Úthluta á notendur",
     "Due date" : "Skiladagur",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Takmörkun í  Deck spjaldaforritinu mun loka notendur sem tilheyra ekki þessum hópum frá því að útbúa sín eigin borð. Notendurnir munu samt geta áfram unnið með borð sem hefur verið deilt til þeirra."

@@ -20,6 +20,7 @@ OC.L10N.register(
     "Sharing" : "Partiment",
     "Tags" : "Etiquetas",
     "Deleted items" : "Elements suprimits",
+    "Activity" : "Activitat",
     "Deleted lists" : "Listas suprimidas",
     "Undo" : "Desfar",
     "(Group)" : "(Grop)",

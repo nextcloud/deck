@@ -13,6 +13,7 @@ OC.L10N.register(
     "A PHP extension stopped the file upload" : "PHP֊ի ընդլայնումն կանգնեցրեց նիշքի վերբեռնումը",
     "Cancel" : "ընդհատել",
     "Details" : "Մանրամասներ",
+    "Activity" : "Գործունեություն",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Owner" : "Owner",
