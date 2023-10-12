@@ -13,6 +13,7 @@ OC.L10N.register(
     "Cancel" : "Canzelar",
     "Details" : "Detalles",
     "Tags" : "Etiquetas",
+    "Activity" : "Actividat",
     "Delete" : "Borrar",
     "Download" : "Escargar",
     "Modified" : "Modificau",
