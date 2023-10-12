@@ -262,6 +262,8 @@
     "Use bigger card view" : "Daha büyük kart görünümü kullanılsın",
     "Show card ID badge" : "Kart kodu etiketi görüntülensin",
     "Show boards in calendar/tasks" : "Takvimler ve görevlerde panolar görüntülensin",
+    "Limit board creation to some groups" : "Pano oluşturma seçilmiş gruplarla kısıtlansın",
+    "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Bu gruplar dışında kalan kullanıcılar kendi panolarını oluşturamaz ancak kendileriyle paylaşılan panolar üzerinde çalışmayı sürdürebilir.",
     "Board details" : "Pano ayrıntıları",
     "Edit board" : "Panoyu sil",
     "Clone board" : "Panoyu kopyala",

@@ -159,6 +159,7 @@ OC.L10N.register(
     "Sharing" : "المشاركة",
     "Tags" : "الوسوم",
     "Deleted items" : "العناصر الممسوحة",
+    "Activity" : "النشاط",
     "Deleted lists" : "القوائم المحذوفة",
     "Undo" : "تراجع",
     "Deleted cards" : "البطاقات المحذوفة",
