@@ -262,6 +262,8 @@
     "Use bigger card view" : "Visa större kort",
     "Show card ID badge" : "Visa kortets ID-märke",
     "Show boards in calendar/tasks" : "Visa tavlor i kalender / uppgifter",
+    "Limit board creation to some groups" : "Begränsa skapandet av tavlor till vissa grupper",
+    "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Användare utanför dessa grupper kommer inte att kunna skapa sina egna tavlor, men kommer fortfarande att kunna arbeta på tavlor som har delats med dem.",
     "Board details" : "Taveldetaljer",
     "Edit board" : "Ändra tavla",
     "Clone board" : "Kopiera tavla",
