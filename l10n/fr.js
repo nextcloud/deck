@@ -259,7 +259,7 @@ OC.L10N.register(
     "seconds ago" : "à l'instant",
     "All boards" : "Tous les tableaux",
     "Archived boards" : "Tableaux archivés",
-    "Shared with you" : "Partagé avec vous",
+    "Shared with you" : "Partagés avec vous",
     "Deck settings" : "Paramètres de Deck",
     "Use bigger card view" : "Utiliser la vue large des cartes",
     "Show card ID badge" : "Afficher l'ID de la carte",

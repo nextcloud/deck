@@ -9,6 +9,7 @@ OC.L10N.register(
     "Details" : "Detalles",
     "Sharing" : "Comparticiñon",
     "Tags" : "Etiquetes",
+    "Activity" : "Actividá",
     "Delete" : "Desaniciar",
     "Members" : "Miembros",
     "Download" : "Baxar",

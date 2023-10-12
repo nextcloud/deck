@@ -264,6 +264,8 @@ OC.L10N.register(
     "Use bigger card view" : "使用較大的卡片檢視",
     "Show card ID badge" : "顯示卡片 ID 徽章",
     "Show boards in calendar/tasks" : "在日曆／工作項目中顯示佈告欄",
+    "Limit board creation to some groups" : "限制僅某些群組可建立看板",
+    "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "這些群組以外的使用者將無法建立自己的看板，但仍然可以在與他們分享的看板上工作。",
     "Board details" : "佈告欄詳細資訊",
     "Edit board" : "編輯佈告欄",
     "Clone board" : "再製佈告欄",
