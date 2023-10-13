@@ -262,6 +262,8 @@
     "Use bigger card view" : "Použít větší zobrazení karet",
     "Show card ID badge" : "Zobrazit odznáček s identifikátorem karty",
     "Show boards in calendar/tasks" : "Zobrazit tabule v kalendáři/úkolech",
+    "Limit board creation to some groups" : "Umožnit vytváření tabulí pouze vybraným skupinám",
+    "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Uživatelé, kteří nejsou členy těchto skupin nebudou moci vytvářet své vlastní tabule, ale pořád budou moci pracovat na tabulích, které jim byly nasdíleny.",
     "Board details" : "Podrobnosti o tabuli",
     "Edit board" : "Upravit tabuli",
     "Clone board" : "Klonovat tabuli",
