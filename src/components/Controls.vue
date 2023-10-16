@@ -190,8 +190,7 @@
 					</NcPopover>
 				</div>
 
-				<NcActions
-					:aria-label="t('deck', 'View Modes')"
+				<NcActions :aria-label="t('deck', 'View Modes')"
 					:title="t('deck', 'Toggle View Modes')">
 					<NcActionButton @click="toggleShowArchived">
 						<template #icon>
