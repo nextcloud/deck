@@ -78,6 +78,8 @@
 					<NcPopover container=".board-action-buttons__filter"
 						:placement="'bottom-end'"
 						:aria-label="t('deck', 'Active filters')"
+						:title="t('deck', 'Active filters')"
+						:tooltip="t('deck', 'Active filters')"
 						@show="filterVisible=true"
 						@hide="filterVisible=false">
 						<!-- We cannot use NcActions here are the popover trigger does not update on reactive icons -->
@@ -188,7 +190,8 @@
 					</NcPopover>
 				</div>
 
-				<NcActions>
+				<NcActions :aria-label="t('deck', 'View Modes')"
+					:title="t('deck', 'Toggle View Modes')">
 					<NcActionButton @click="toggleShowArchived">
 						<template #icon>
 							<ArchiveIcon :size="20" decorative />
