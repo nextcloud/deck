@@ -111,7 +111,7 @@ describe('Card', function() {
 			cy.get('button.icon-folder').should('be.visible')
 				.click()
 			cy.get('.file-picker__main').should('be.visible')
-			cy.get('.file-picker__main .file-picker__file-name[title="welcome"]').should('be.visible')
+			cy.get('.file-picker__main [data-filename="welcome.txt"]').should('be.visible')
 				.click()
 			cy.get('.dialog__actions button.button-vue--vue-primary').click()
 			cy.get('.attachment-list .basename').contains('welcome.txt')
