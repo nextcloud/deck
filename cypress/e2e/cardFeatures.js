@@ -85,9 +85,10 @@ describe('Card', function() {
 			cy.get('button.icon-upload').should('be.visible')
 			cy.get('button.icon-folder').should('be.visible')
 				.click()
-			cy.get('.oc-dialog #picker-filestable tr[data-entryname="welcome.txt"] td.filename').should('be.visible')
+			cy.get('.file-picker__main').should('be.visible')
+			cy.get('.file-picker__main [data-filename="welcome.txt"]').should('be.visible')
 				.click()
-			cy.get('.oc-dialog button.primary').click()
+			cy.get('.dialog__actions button.button-vue--vue-primary').click()
 			cy.get('.attachment-list .basename').contains('welcome.txt')
 		})
 
