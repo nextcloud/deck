@@ -35,9 +35,9 @@ export class OverviewApi {
 		})
 			.then(
 				(response) => Promise.resolve(response.data.ocs.data),
-				(err) => Promise.reject(err)
+				(err) => Promise.reject(err),
 			)
-			.catch((err) => Promise.reject(err)
+			.catch((err) => Promise.reject(err),
 			)
 	}
 

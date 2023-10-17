@@ -247,7 +247,7 @@ export default {
 						}
 					}
 				},
-				true
+				true,
 			)
 		},
 	},
