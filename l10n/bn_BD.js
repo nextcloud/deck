@@ -10,6 +10,7 @@ OC.L10N.register(
     "Details" : "বিসতারিত",
     "Sharing" : "ভাগাভাগিরত",
     "Tags" : "ট্যাগ",
+    "Activity" : "সক্রিয়তা",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Owner" : "Owner",
