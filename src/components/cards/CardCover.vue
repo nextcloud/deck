@@ -65,7 +65,9 @@ export default {
 		cardId: {
 			immediate: true,
 			handler() {
-				this.fetchAttachments(this.cardId)
+				if (this.$store.getters.cardById(this.cardId)?.attachmentCount > 0) {
+					this.fetchAttachments(this.cardId)
+				}
 			},
 		},
 	},
