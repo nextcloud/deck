@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [14.x]
+        node-version: [20.x]
         # containers: [1, 2, 3]
         php-versions: [ '8.0' ]
         databases: [ 'sqlite' ]
@@ -30,8 +30,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Set up npm7
-        run: npm i -g npm@7
 
       - name: Register text Git reference
         run: |
@@ -98,7 +96,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          record: true
+          record: false
           parallel: false
           wait-on: '${{ env.CYPRESS_baseUrl }}'
           working-directory: 'apps/${{ env.APP_NAME }}'
