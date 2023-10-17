@@ -8,6 +8,7 @@ OC.L10N.register(
     "Missing a temporary folder" : "Nedostaje privremeni direktorij.",
     "Cancel" : "Otkaži",
     "Sharing" : "Dijeljenje",
+    "Activity" : "Aktivnost",
     "Can edit" : "Can edit",
     "Can share" : "Can share",
     "Owner" : "Vlasnik",

@@ -157,6 +157,7 @@ OC.L10N.register(
     "Sharing" : "Compartició",
     "Tags" : "Etiquetes",
     "Deleted items" : "Elements suprimits",
+    "Activity" : "Activitat",
     "Deleted lists" : "Llistes suprimides",
     "Undo" : "Desfés",
     "Deleted cards" : "Targetes suprimides",

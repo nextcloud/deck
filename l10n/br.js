@@ -11,6 +11,7 @@ OC.L10N.register(
     "Details" : "Munudoù",
     "Sharing" : "Rannan",
     "Tags" : "Klavioù",
+    "Activity" : "Obererezh",
     "Can edit" : "Posuple eo embann",
     "Can share" : "Galout a ra rannañ",
     "Owner" : "Perc'henner",

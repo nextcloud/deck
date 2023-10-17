@@ -159,7 +159,7 @@ OC.L10N.register(
     "Sharing" : "Teilen",
     "Tags" : "Schlagworte",
     "Deleted items" : "Gelöschte Objekte",
-    "Activity" : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
+    "Activity" : "Aktivität",
     "Deleted lists" : "Gelöschte Listen",
     "Undo" : "Rückgängig",
     "Deleted cards" : "Gelöschte Karten",
