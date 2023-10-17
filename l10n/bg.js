@@ -156,6 +156,7 @@ OC.L10N.register(
     "Sharing" : "Споделяне",
     "Tags" : "Етикети",
     "Deleted items" : "Изтрити елементи",
+    "Activity" : "Активност",
     "Deleted lists" : "Изтрити списъци",
     "Undo" : "Отмяна",
     "Deleted cards" : "Изтрити карти",
