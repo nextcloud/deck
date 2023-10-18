@@ -146,6 +146,8 @@ OC.L10N.register(
     "Next 30 days" : "Die nächsten 30 Tage",
     "No due date" : "Kein Fälligkeitsdatum",
     "Clear filter" : "Filter zurücksetzen",
+    "View Modes" : "Ansichtsmodi",
+    "Toggle View Modes" : "Ansichtsmodi wechseln",
     "Hide archived cards" : "Archivierte Karten ausblenden",
     "Show archived cards" : "Archivierte Karten anzeigen",
     "Toggle compact mode" : "Kompaktmodus umschalten",
