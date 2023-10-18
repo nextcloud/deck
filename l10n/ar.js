@@ -146,6 +146,8 @@ OC.L10N.register(
     "Next 30 days" : "ال 30 يوم القادمة",
     "No due date" : "لا تاريخ إنجاز",
     "Clear filter" : "ازل التصفية",
+    "View Modes" : "وضعيات العرض",
+    "Toggle View Modes" : "التبديل بين وضعيات العرض",
     "Hide archived cards" : "إخفاء البطاقات المؤرشفة ",
     "Show archived cards" : "اظهر البطاقات المؤرشفة",
     "Toggle compact mode" : "تبديل النمط المضغوط",

@@ -146,6 +146,8 @@ OC.L10N.register(
     "Next 30 days" : "接下來30天",
     "No due date" : "無到期日",
     "Clear filter" : "清除過濾條件",
+    "View Modes" : "檢視模式",
+    "Toggle View Modes" : "切換檢視模式",
     "Hide archived cards" : "隱藏已封存的卡片",
     "Show archived cards" : "顯示已封存的卡片",
     "Toggle compact mode" : "切換簡潔模式",
