@@ -29,6 +29,7 @@ const apiClient = new OverviewApi()
 export default {
 	state: {
 		assignedCards: [],
+		loading: false,
 	},
 	getters: {
 		assignedCardsDashboard: state => {
@@ -39,18 +40,27 @@ export default {
 		setAssignedCards(state, assignedCards) {
 			state.assignedCards = assignedCards
 		},
+		setLoading(state, promise) {
+			state.loading = promise
+		},
 	},
 	actions: {
-		async loadUpcoming({ commit }) {
-			commit('setCurrentBoard', null)
-			const upcommingCards = await apiClient.get('upcoming')
-
-			for (const dueStatus in upcommingCards) {
-				for (const idx in upcommingCards[dueStatus]) {
-					commit('addCard', upcommingCards[dueStatus][idx])
-				}
+		async loadUpcoming({ state, commit }) {
+			if (state.loading) {
+				return state.loading
 			}
-			commit('setAssignedCards', upcommingCards)
+			const promise = (async () => {
+				commit('setCurrentBoard', null)
+				const assignedCards = await apiClient.get('upcoming')
+				const assignedCardsFlat = assignedCards.flat()
+				for (const i in assignedCardsFlat) {
+					commit('addCard', assignedCardsFlat[i])
+				}
+				commit('setAssignedCards', assignedCardsFlat)
+				commit('setLoading', false)
+			})()
+			commit('setLoading', promise)
+			return promise
 		},
 	},
 }

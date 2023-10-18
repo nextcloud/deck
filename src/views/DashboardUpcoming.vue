@@ -30,21 +30,7 @@
 			@hide="() => {}"
 			@markDone="() => {}">
 			<template #default="{ item }">
-				<a :key="item.id"
-					:href="cardLink(item)"
-					target="_blank"
-					class="card">
-					<div class="card--header">
-						<DueDate class="right" :card="item" />
-						<span class="title">{{ item.title }}</span>
-					</div>
-					<ul v-if="item.labels && item.labels.length"
-						class="labels">
-						<li v-for="label in item.labels" :key="label.id" :style="labelStyle(label)">
-							<span>{{ label.title }}</span>
-						</li>
-					</ul>
-				</a>
+				<Card :card="item" />
 			</template>
 		</NcDashboardWidget>
 		<div class="center-button">
@@ -65,22 +51,20 @@
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import { NcButton, NcDashboardWidget, NcModal } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
-import labelStyle from './../mixins/labelStyle.js'
-import DueDate from '../components/cards/badges/DueDate.vue'
+import Card from '../components/dashboard/Card.vue'
 import { generateUrl } from '@nextcloud/router'
 import CreateNewCardCustomPicker from './CreateNewCardCustomPicker.vue'
 
 export default {
-	name: 'Dashboard',
+	name: 'DashboardUpcoming',
 	components: {
 		CreateNewCardCustomPicker,
 		NcModal,
-		DueDate,
 		NcDashboardWidget,
 		NcButton,
 		PlusIcon,
+		Card,
 	},
-	mixins: [labelStyle],
 	data() {
 		return {
 			loading: false,
@@ -102,11 +86,6 @@ export default {
 			})
 			return list.slice(0, 5)
 		},
-		cardLink() {
-			return (card) => {
-				return generateUrl('/apps/deck') + `#/board/${card.boardId}/card/${card.id}`
-			}
-		},
 		showMoreUrl() {
 			return this.cards.length > 7 ? generateUrl('/apps/deck') : null
 		},
@@ -126,8 +105,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import './../css/labels';
-
 	.center-button {
 		display: flex;
 		align-items: center;

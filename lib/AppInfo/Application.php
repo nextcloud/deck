@@ -30,7 +30,9 @@ use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Capabilities;
 use OCA\Deck\Collaboration\Resources\ResourceProvider;
 use OCA\Deck\Collaboration\Resources\ResourceProviderCard;
-use OCA\Deck\Dashboard\DeckWidget;
+use OCA\Deck\Dashboard\DeckWidgetToday;
+use OCA\Deck\Dashboard\DeckWidgetTomorrow;
+use OCA\Deck\Dashboard\DeckWidgetUpcoming;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Event\AclCreatedEvent;
@@ -135,7 +137,9 @@ class Application extends App implements IBootstrap {
 
 		$context->registerSearchProvider(DeckProvider::class);
 		$context->registerSearchProvider(CardCommentProvider::class);
-		$context->registerDashboardWidget(DeckWidget::class);
+		$context->registerDashboardWidget(DeckWidgetUpcoming::class);
+		$context->registerDashboardWidget(DeckWidgetToday::class);
+		$context->registerDashboardWidget(DeckWidgetTomorrow::class);
 
 		$context->registerReferenceProvider(CreateCardReferenceProvider::class);
 
