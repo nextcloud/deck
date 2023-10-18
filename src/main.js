@@ -90,10 +90,6 @@ new Vue({
 			this.$store.commit('setSearchQuery', '')
 		})
 
-		// FIXME remove this once Nextcloud 20 is minimum required version
-		// eslint-disable-next-line
-		new OCA.Search(this.filter, this.cleanSearch)
-
 		this.interval = setInterval(() => {
 			this.time = Date.now()
 		}, 1000)

@@ -1,5 +1,6 @@
 import { randUser } from '../utils/index.js'
 import { sampleBoard } from '../utils/sampleBoard'
+import moment from '@nextcloud/moment'
 
 const user = randUser()
 const boardData = sampleBoard()
@@ -177,6 +178,46 @@ describe('Card', function() {
 			cy.get('#app-sidebar-vue')
 				.find('.ProseMirror h1').contains('Hello world writing more text').should('be.visible')
 		})
+
+		it('Set a due date', function() {
+			const newCardTitle = 'Card with a due date'
+
+			cy.get('.button-vue[aria-label*="Add card"]')
+				.first().click()
+			cy.get('.stack__card-add form input#new-stack-input-main')
+				.type(newCardTitle)
+			cy.get('.stack__card-add form input[type=submit]')
+				.first().click()
+			cy.get(`.card:contains("${newCardTitle}")`).should('be.visible')
+
+			cy.get('.card:contains("Card with a due date")').should('be.visible').click()
+
+			cy.get('#app-sidebar-vue [data-cy-due-date-actions]').should('be.visible').click()
+
+			// Set a due date through shortcut
+			cy.get('[data-cy-due-date-shortcut="tomorrow"] button').should('be.visible').click()
+
+			const tomorrow = moment().add(1, 'days').hour(8).minutes(0).seconds(0)
+			cy.get('#card-duedate-picker').should('have.value', tomorrow.format('YYYY-MM-DDTHH:mm'))
+
+			const now = moment().hour(11).minutes(0).seconds(0).toDate()
+			cy.clock(now)
+			cy.log(now)
+			cy.tick(60_000)
+
+			cy.get(`.card:contains("${newCardTitle}")`).find('[data-due-state="Now"]').should('be.visible').should('contain', '21 hours')
+
+
+			// Remove the due date again
+			cy.get('#app-sidebar-vue [data-cy-due-date-actions]').should('be.visible').click()
+			// tick needed to show the popover menu
+			cy.tick(1_000)
+			cy.get('[data-cy-due-date-remove] button').should('be.visible').click()
+
+			cy.get(`.card:contains("${newCardTitle}")`).find('[data-due-state]').should('not.be.visible')
+
+		})
+
 	})
 
 })

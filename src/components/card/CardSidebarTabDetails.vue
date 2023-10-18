@@ -35,7 +35,7 @@
 			@select="assignUserToCard"
 			@remove="removeUserFromCard" />
 
-		<DueDateSelector :card="card" :can-edit="canEdit && !saving" @change="updateCardDue" />
+		<DueDateSelector :card="card" :can-edit="canEdit" @change="updateCardDue" />
 
 		<div v-if="projectsEnabled" class="section-wrapper">
 			<CollectionList v-if="card.id"
@@ -85,7 +85,6 @@ export default {
 	},
 	data() {
 		return {
-			saving: false,
 			addedLabelToCard: null,
 			copiedCard: null,
 			locale: getLocale(),
@@ -105,7 +104,6 @@ export default {
 				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
 			},
 		},
-
 		labelsSorted() {
 			return [...this.currentBoard.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
@@ -133,15 +131,6 @@ export default {
 			localStorage.setItem('deck.selectedStackId', this.card.stackId)
 		},
 
-		async updateCardDue(val) {
-			this.saving = true
-			await this.$store.dispatch('updateCardDue', {
-				...this.copiedCard,
-				duedate: val ? (new Date(val)).toISOString() : null,
-			})
-			this.saving = false
-		},
-
 		assignUserToCard(user) {
 			this.$store.dispatch('assignCardToUser', {
 				card: this.copiedCard,
@@ -159,6 +148,13 @@ export default {
 					userId: user.uid,
 					type: user.type,
 				},
+			})
+		},
+
+		updateCardDue(val) {
+			this.$store.dispatch('updateCardDue', {
+				...this.copiedCard,
+				duedate: val ? (new Date(val)).toISOString() : null,
 			})
 		},
 
@@ -205,15 +201,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
-.section-wrapper:deep(.mx-datepicker-main.mx-datepicker-popup) {
-	left: 0 !important;
-}
-
-.section-wrapper:deep(.mx-datepicker-main.mx-datepicker-popup.mx-datepicker-sidebar) {
-	padding: 0 !important;
-}
-
 .section-wrapper {
 	display: flex;
 	max-width: 100%;
@@ -264,11 +251,5 @@ export default {
 
 .multiselect.multiselect--active:deep(.multiselect__tags-wrap) {
 	z-index: 0;
-}
-</style>
-<style>
-.mx-datepicker-main.mx-datepicker-popup {
-	/* above the modal */
-	z-index: 9999 !important;
 }
 </style>
