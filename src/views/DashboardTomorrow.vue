@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<DashboardWidget :items="cards"
+	<NcDashboardWidget :items="cards"
 		empty-content-icon="icon-deck"
 		:empty-content-message="t('deck', 'No upcoming cards')"
 		:show-more-text="t('deck', 'upcoming cards tomorrow')"
@@ -32,11 +32,11 @@
 		<template #default="{ item }">
 			<Card :card="item" />
 		</template>
-	</DashboardWidget>
+	</NcDashboardWidget>
 </template>
 
 <script>
-import { DashboardWidget } from '@nextcloud/vue-dashboard'
+import { NcDashboardWidget } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import Card from '../components/dashboard/Card.vue'
 import { generateUrl } from '@nextcloud/router'
@@ -44,7 +44,7 @@ import { generateUrl } from '@nextcloud/router'
 export default {
 	name: 'DashboardTomorrow',
 	components: {
-		DashboardWidget,
+		NcDashboardWidget,
 		Card,
 	},
 	data() {
