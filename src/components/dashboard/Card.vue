@@ -40,7 +40,7 @@ export default {
 </script>
 
 <style  lang="scss" scoped>
-	@import '../../css/labels.scss';
+	@import '../../css/labels';
 
 	.card {
 		display: block;
@@ -48,9 +48,9 @@ export default {
 		padding: 8px;
 		height: 60px;
 
-	&:hover {
-		 background-color: var(--color-background-hover);
-	 }
+		&:hover {
+			background-color: var(--color-background-hover);
+		}
 	}
 
 	.card--header {
@@ -67,12 +67,10 @@ export default {
 		margin-left: 0;
 	}
 
-	.duedate::v-deep {
-		.due {
-			margin: 0 0 0 10px;
-			padding: 2px 4px;
-			font-size: 90%;
-		}
+	.duedate:deep(.due) {
+		margin: 0 0 0 10px;
+		padding: 2px 4px;
+		font-size: 90%;
 	}
 
 	.right {
