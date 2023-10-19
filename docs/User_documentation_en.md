@@ -25,7 +25,7 @@ In this example, we're going to create a board and share it with an other nextcl
 
 
 ### 2. Create stacks and cards
-Stacks are simply columns with list of cards. It can represent a category of tasks or an y step in your projects for example.   
+Stacks are simply columns with list of cards. It can represent a category of tasks or any step in your projects for example.   
 **Check this out :**
 
 ![Gif for creating columns](resources/gifs/EN_create_columns.gif)
