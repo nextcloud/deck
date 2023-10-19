@@ -26,10 +26,10 @@ OC.L10N.register(
     "Reply" : "Svare",
     "Update" : "Oppdater",
     "Description" : "Skildring",
-    "Today" : "I dag",
     "seconds ago" : "sekund sidan",
     "Shared with you" : "Shared with you",
     "An error occurred" : "Det oppstod ein feil.",
+    "Today" : "I dag",
     "Close" : "Lukk",
     "Share" : "Del"
 },

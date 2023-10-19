@@ -22,11 +22,11 @@ OC.L10N.register(
     "Reply" : "Cavab",
     "Update" : "Yenilənmə",
     "Description" : "Açıqlanma",
-    "Today" : "Bu gün",
-    "Tomorrow" : "Sabah",
     "(group)" : "(qrup)",
     "seconds ago" : "saniyələr öncə",
     "Shared with you" : "Shared with you",
+    "Today" : "Bu gün",
+    "Tomorrow" : "Sabah",
     "Close" : "Bağla",
     "Share" : "Paylaş"
 },

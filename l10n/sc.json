@@ -212,10 +212,6 @@
     "Set a due date" : "Imposta iscadèntzia",
     "Remove due date" : "Boga s'iscadèntzia",
     "Select Date" : "Seletziona data",
-    "Today" : "Oe",
-    "Tomorrow" : "Cras",
-    "Next week" : "Sa chida chi benit",
-    "Next month" : "Su mese chi benit",
     "Assign a tag to this card…" : "Assigna un'eticheta a cust'ischeda...",
     "(group)" : "(grupu)",
     "{count} comments, {unread} unread" : "{count} cummentos, {unread} non lèghidos",
@@ -254,6 +250,8 @@
     "An error occurred" : "B'at àpidu un'errore",
     "Delete the board?" : "Cheres cantzellare sa lavagna?",
     "Loading filtered view" : "Carrigamentu de sa bista cun su filtru",
+    "Today" : "Oe",
+    "Tomorrow" : "Cras",
     "No due" : "Peruna iscadèntzia",
     "Search for {searchQuery} in all boards" : "Chirca {searchQuery} in totu is lavagnas",
     "No results found" : "Perunu resurtadu agatadu",
@@ -283,6 +281,8 @@
     "Add a new list" : "Agiunghe un'elencu nou",
     "Assign to users" : "Assigna a utentes",
     "Due date" : "Iscadèntzia",
+    "Next week" : "Sa chida chi benit",
+    "Next month" : "Su mese chi benit",
     "Limit deck usage of groups" : "Mìnima s'impreu de deck de is grupos",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Su de minimare su deck at a impedire a is utentes chi non faghent parte de cuddos grupos de si creare lavagnas pròpias. Is utentes ant a èssere ancora capassos de traballare in is lavagnas chi fiant istadas cumpartzidas cun issos etotu,"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

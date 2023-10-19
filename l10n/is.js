@@ -143,10 +143,6 @@ OC.L10N.register(
     "Set a due date" : "Setja lokadag",
     "Remove due date" : "Fjarlægja skiladag",
     "Select Date" : "Veldu dag",
-    "Today" : "Í dag",
-    "Tomorrow" : "Á morgun",
-    "Next week" : "Næsta viku",
-    "Next month" : "Næsti mánuður",
     "Assign a tag to this card…" : "Úthluta merki á þetta spjald",
     "(group)" : "(hópur)",
     "Assign to me" : "Úthluta mér",
@@ -168,6 +164,8 @@ OC.L10N.register(
     "Delete board" : "Eyða borði",
     "No reminder" : "Engin áminning",
     "An error occurred" : "Villa kom upp",
+    "Today" : "Í dag",
+    "Tomorrow" : "Á morgun",
     "No results found" : "Engar niðurstöður fundust",
     "Create card" : "Búa til spjald",
     "Close" : "Loka",
@@ -180,6 +178,8 @@ OC.L10N.register(
     "Timeline" : "Tímalína",
     "Assign to users" : "Úthluta á notendur",
     "Due date" : "Skiladagur",
+    "Next week" : "Næsta viku",
+    "Next month" : "Næsti mánuður",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Takmörkun í  Deck spjaldaforritinu mun loka notendur sem tilheyra ekki þessum hópum frá því að útbúa sín eigin borð. Notendurnir munu samt geta áfram unnið með borð sem hefur verið deilt til þeirra."
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

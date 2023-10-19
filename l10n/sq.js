@@ -47,8 +47,6 @@ OC.L10N.register(
     "Formatting help" : "Ndihmë formatimi",
     "Remove due date" : "Hiq datën e mbarimit",
     "Select Date" : "Zgjidhni Datën",
-    "Today" : "Sot",
-    "Tomorrow" : "Nesër",
     "(group)" : "(grup)",
     "List is empty" : "Lista është bosh",
     "seconds ago" : "sekonda më parë",
@@ -60,6 +58,8 @@ OC.L10N.register(
     "Archive board" : "Arkivo bordin",
     "No notifications" : "Asnjë njofim",
     "Delete board" : "Fshij bordin",
+    "Today" : "Sot",
+    "Tomorrow" : "Nesër",
     "Close" : "Mbylleni",
     "Share" : "Shpërndaje",
     "Due date" : "Data e vendosur"

@@ -25,9 +25,9 @@ OC.L10N.register(
     "Save" : "Պահպանել",
     "Update" : "Թարմացնել",
     "Description" : "Նկարագրություն",
-    "Today" : "այսօր",
     "seconds ago" : "վրկ. առաջ",
     "Shared with you" : "Shared with you",
+    "Today" : "այսօր",
     "Close" : "Փակել",
     "Share" : "Կիսվել"
 },

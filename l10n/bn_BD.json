@@ -20,11 +20,11 @@
     "Reply" : "জবাব",
     "Update" : "পরিবর্ধন",
     "Description" : "বিবরণ",
-    "Today" : "আজ",
-    "Tomorrow" : "আগামীকাল",
     "(group)" : "(গোষ্ঠি)",
     "seconds ago" : "সেকেন্ড পূর্বে",
     "Shared with you" : "Shared with you",
+    "Today" : "আজ",
+    "Tomorrow" : "আগামীকাল",
     "Close" : "বন্ধ",
     "Share" : "ভাগাভাগি কর"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

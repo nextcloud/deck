@@ -26,12 +26,12 @@ OC.L10N.register(
     "Update" : "යාවත්කාල",
     "Description" : "විස්තරය",
     "Select Date" : "දිනය තෝරන්න",
+    "seconds ago" : "තත්පර කිහිපයකට පෙර",
     "Today" : "අද",
     "Tomorrow" : "හෙට",
-    "Next week" : "ඊළඟ සතිය",
-    "Next month" : "ඊළඟ මාසය",
-    "seconds ago" : "තත්පර කිහිපයකට පෙර",
     "Close" : "වසන්න",
-    "Share" : "බෙදාගන්න"
+    "Share" : "බෙදාගන්න",
+    "Next week" : "ඊළඟ සතිය",
+    "Next month" : "ඊළඟ මාසය"
 },
 "nplurals=2; plural=(n != 1);");
