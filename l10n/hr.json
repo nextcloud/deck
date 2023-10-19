@@ -213,10 +213,6 @@
     "Set a due date" : "Postavi datum dospijeća",
     "Remove due date" : "Ukloni datum dospijeća",
     "Select Date" : "Odaberi datum",
-    "Today" : "Danas",
-    "Tomorrow" : "Sutra",
-    "Next week" : "Sljedeći tjedan",
-    "Next month" : "Sljedeći mjesec",
     "Assign a tag to this card…" : "Dodijeli oznaku ovoj kartici...",
     "(group)" : "(grupa)",
     "{count} comments, {unread} unread" : "{count} komentara, {unread} nepročitanih",
@@ -255,6 +251,8 @@
     "An error occurred" : "Došlo je do pogreške",
     "Delete the board?" : "Želite li izbrisati ploču?",
     "Loading filtered view" : "Učitavanje filtriranog prikaza",
+    "Today" : "Danas",
+    "Tomorrow" : "Sutra",
     "No due" : "Nema nezavršenih",
     "Search for {searchQuery} in all boards" : "Traži {searchQuery} na svim pločama",
     "No results found" : "Nema rezultata",
@@ -284,6 +282,8 @@
     "Add a new list" : "Dodaj novi popis",
     "Assign to users" : "Dodijeli korisnicima",
     "Due date" : "Datum dospijeća",
+    "Next week" : "Sljedeći tjedan",
+    "Next month" : "Sljedeći mjesec",
     "Limit deck usage of groups" : "Ograniči uporabu decka grupama",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ograničenjem Decka možete spriječiti korisnike koji ne sudjeluju u tim grupama da stvaraju vlastite ploče. Korisnici će i dalje moći raditi na pločama koje su dijeljene s njima."
 },"pluralForm" :"nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;"

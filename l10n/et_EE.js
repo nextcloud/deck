@@ -36,18 +36,18 @@ OC.L10N.register(
     "Reply" : "Vasta",
     "Update" : "Uuenda",
     "Description" : "Kirjeldus",
-    "Today" : "Täna",
-    "Tomorrow" : "Homme",
-    "Next week" : "Järgmine nädal",
-    "Next month" : "Järgmine kuu",
     "(group)" : "(grupp)",
     "Delete card" : "Kustuta kaart",
     "seconds ago" : "sekundit tagasi",
     "Shared with you" : "Sinuga jagatud",
     "No notifications" : "Märguandeid pole",
     "An error occurred" : "Tekkis tõrge",
+    "Today" : "Täna",
+    "Tomorrow" : "Homme",
     "Close" : "Sulge",
     "Share" : "Jaga",
-    "Due date" : "Tähtaeg"
+    "Due date" : "Tähtaeg",
+    "Next week" : "Järgmine nädal",
+    "Next month" : "Järgmine kuu"
 },
 "nplurals=2; plural=(n != 1);");

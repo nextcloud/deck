@@ -15,9 +15,9 @@ OC.L10N.register(
     "Download" : "Baxar",
     "Description" : "Descripción",
     "(Saving…)" : "(Guardando…)",
-    "Today" : "Güei",
-    "Tomorrow" : "Mañana",
     "All cards" : "Toles tarxetes",
-    "An error occurred" : "Prodúxose un error"
+    "An error occurred" : "Prodúxose un error",
+    "Today" : "Güei",
+    "Tomorrow" : "Mañana"
 },
 "nplurals=2; plural=(n != 1);");

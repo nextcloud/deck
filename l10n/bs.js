@@ -21,9 +21,9 @@ OC.L10N.register(
     "Save" : "Spremi",
     "Update" : "Ažuriraj",
     "Description" : "Opis",
+    "Shared with you" : "Shared with you",
     "Today" : "Danas",
     "Tomorrow" : "Sutra",
-    "Shared with you" : "Shared with you",
     "Close" : "Zatvori",
     "Maximum file size of {size} exceeded" : "Maksimalna veličina datoteke prekoračena",
     "Share" : "Podjeli"

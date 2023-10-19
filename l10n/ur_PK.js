@@ -13,9 +13,9 @@ OC.L10N.register(
     "Save" : "حفظ",
     "Reply" : "جواب",
     "Description" : "تصریح",
-    "Today" : "آج",
     "seconds ago" : "سیکنڈز پہلے",
     "Shared with you" : "Shared with you",
+    "Today" : "آج",
     "Close" : "بند ",
     "Share" : "تقسیم"
 },
