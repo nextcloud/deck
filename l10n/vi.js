@@ -98,10 +98,6 @@ OC.L10N.register(
     "Edit description" : "Chỉnh sửa mô tả",
     "Remove due date" : "Xóa thời hạn",
     "Select Date" : "Chọn ngày",
-    "Today" : "Hôm nay",
-    "Tomorrow" : "Ngày mai",
-    "Next week" : "Tuần sau",
-    "Next month" : "Tháng sau",
     "(group)" : "(nhóm)",
     "Assign to me" : "Phân công cho tôi",
     "Move card" : "Di chuyển thẻ",
@@ -120,10 +116,14 @@ OC.L10N.register(
     "Delete board" : "Xóa dự án",
     "No reminder" : "Không có nhắc hẹn",
     "An error occurred" : "Có lỗi đã xảy ra",
+    "Today" : "Hôm nay",
+    "Tomorrow" : "Ngày mai",
     "{stack} in {board}" : "{stack} trong {board}",
     "Close" : "Đóng",
     "Maximum file size of {size} exceeded" : "Đã vượt quá kích thước {size} tối đa tập tin",
     "Share" : "Chia sẻ",
-    "Due date" : "Thời hạn"
+    "Due date" : "Thời hạn",
+    "Next week" : "Tuần sau",
+    "Next month" : "Tháng sau"
 },
 "nplurals=1; plural=0;");

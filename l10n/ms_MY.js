@@ -18,8 +18,8 @@ OC.L10N.register(
     "Save" : "Simpan",
     "Update" : "Kemaskini",
     "Description" : "Keterangan",
-    "Today" : "Hari ini",
     "Shared with you" : "Shared with you",
+    "Today" : "Hari ini",
     "Close" : "Tutup",
     "Share" : "Kongsi"
 },

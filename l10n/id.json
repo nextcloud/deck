@@ -181,10 +181,6 @@
     "Choose attachment" : "Pilih lampiran",
     "Set a due date" : "Tentukan tenggat",
     "Remove due date" : "Hapus tenggat",
-    "Today" : "Hari ini",
-    "Tomorrow" : "Besok",
-    "Next week" : "Minggu setelah",
-    "Next month" : "Bulan setelah",
     "Assign a tag to this card…" : "Berikan tag pada kartu ini...",
     "(group)" : "(grup)",
     "Assign to me" : "Tugaskan saya",
@@ -209,6 +205,8 @@
     "Board {0} deleted" : "{0} papan terhapus",
     "An error occurred" : "Terjadi kesalahan",
     "Delete the board?" : "Hapus papan?",
+    "Today" : "Hari ini",
+    "Tomorrow" : "Besok",
     "Click to expand comment" : "Klik untuk membuka komentar",
     "Close" : "Tutup",
     "No upcoming cards" : "Tidak ada kartu berikut",
@@ -223,6 +221,8 @@
     "Add a new list" : "Tambah daftar baru",
     "Assign to users" : "Penugasan kepada pengguna",
     "Due date" : "Tenggat",
+    "Next week" : "Minggu setelah",
+    "Next month" : "Bulan setelah",
     "Limit deck usage of groups" : "Batasi grup pengguna longgok ",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Membatasi Longgok akan mencegah pengguna bukan bagian dari grup, untuk membuat papan mereka sendiri. Pengguna tetap menggunakan papan yang telah dibagikan kepadanya."
 },"pluralForm" :"nplurals=1; plural=0;"

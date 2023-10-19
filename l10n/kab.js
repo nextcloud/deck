@@ -24,8 +24,8 @@ OC.L10N.register(
     "Save" : "Sekles",
     "Cancel reply" : "Semmet tiririt.",
     "Reply" : "Err",
-    "Today" : "Ass-a",
     "No notifications" : "Ulac tisezmal",
+    "Today" : "Ass-a",
     "Close" : "Mdel",
     "Share" : "Bḍu"
 },

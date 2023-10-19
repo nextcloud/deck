@@ -19,8 +19,8 @@ OC.L10N.register(
     "Reply" : "جاۋاب قايتۇر",
     "Update" : "يېڭىلا",
     "Description" : "چۈشەندۈرۈش",
-    "Today" : "بۈگۈن",
     "Shared with you" : "Shared with you",
+    "Today" : "بۈگۈن",
     "Close" : "ياپ",
     "Share" : "ھەمبەھىر"
 },

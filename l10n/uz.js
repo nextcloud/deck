@@ -16,9 +16,9 @@ OC.L10N.register(
     "Modified" : "Modified",
     "Save" : "Save",
     "Update" : "Update",
-    "Today" : "Today",
     "seconds ago" : "seconds ago",
     "Shared with you" : "Shared with you",
+    "Today" : "Today",
     "Close" : "Close"
 },
 "nplurals=1; plural=0;");

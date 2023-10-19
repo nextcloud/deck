@@ -74,10 +74,6 @@
     "Formatting help" : "Ayuda de formato",
     "Remove due date" : "Eliminar fecha de vencimiento",
     "Select Date" : "Seleccionar fecha",
-    "Today" : "Hoy",
-    "Tomorrow" : "Mañana",
-    "Next week" : "Proxima semana",
-    "Next month" : "Proximo mes",
     "(group)" : "(grupo)",
     "Card details" : "Detalles de la tarjeta",
     "Select a list" : "Seleccionar una lista",
@@ -91,6 +87,8 @@
     "No notifications" : "No hay notificaciones",
     "Delete board" : "Eliminar Tablero",
     "An error occurred" : "Ocurrió un error",
+    "Today" : "Hoy",
+    "Tomorrow" : "Mañana",
     "No due" : "Sin finalizar",
     "Create a new card" : "Crear una nueva tarjeta",
     "Card title" : "Título de la tarjeta",
@@ -103,6 +101,8 @@
     "Share" : "Compartir",
     "A <strong>card description</strong> inside the Deck app has been changed" : "Una <strong>descripción de tarjeta</strong> dentro de la app Deck ha cambiado",
     "Due date" : "Fecha de vencimiento",
+    "Next week" : "Proxima semana",
+    "Next month" : "Proximo mes",
     "Limit deck usage of groups" : "Limitar el uso del Tablero a grupos",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitar Tableros impedirá que usuarios que no formen parte de esos grupos creen sus propios tableros. Los usuarios todavía podrán trabajar en tableros que hayan sido compartidos con ellos."
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"

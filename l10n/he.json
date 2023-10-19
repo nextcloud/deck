@@ -208,10 +208,6 @@
     "Set a due date" : "הגדרת תאריך יעד",
     "Remove due date" : "הסרת מועד התפוגה",
     "Select Date" : "בחירת תאריך",
-    "Today" : "היום",
-    "Tomorrow" : "מחר",
-    "Next week" : "השבוע הבא",
-    "Next month" : "החודש הבא",
     "Assign a tag to this card…" : "הקצאת תגית לכרטיס זה…",
     "(group)" : "(קבוצה)",
     "Assign to me" : "הקצאה אלי",
@@ -249,6 +245,8 @@
     "An error occurred" : "אירעה שגיאה",
     "Delete the board?" : "למחוק את הלוח הזה?",
     "Loading filtered view" : "טוען תצוגה מסוננת",
+    "Today" : "היום",
+    "Tomorrow" : "מחר",
     "No due" : "אין תאריך יעד",
     "No results found" : "לא נמצאו תוצאות",
     "Create card" : "יצירת כרטיס",
@@ -269,6 +267,8 @@
     "Add a new list" : "הוסף רשימה חדשה",
     "Assign to users" : "הקצאה למשתמשים",
     "Due date" : "מועד יעד",
+    "Next week" : "השבוע הבא",
+    "Next month" : "החודש הבא",
     "Limit deck usage of groups" : "הגבלת השימוש בחבילה לקבוצות",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "הגבלת חבילה תחסום משתמשים שאינם חלק מקבוצות אלו מיצירת לוחות משלהם. משתמשים עדיין יוכלו לעבור על לוחות ששותפו אתם."
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;"

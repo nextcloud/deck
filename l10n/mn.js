@@ -32,15 +32,15 @@ OC.L10N.register(
     "Reply" : "хариулт",
     "Update" : "Шинэчлэх",
     "Description" : "Тайлбар",
-    "Today" : "өнөөдөр",
-    "Tomorrow" : "маргааш",
-    "Next week" : "Дараа 7 хоног",
-    "Next month" : "Дараа сар",
     "(group)" : "(бүлэг)",
     "seconds ago" : "хоёрдахь өмнө",
     "Shared with you" : "тантай хуваалцсан",
     "No notifications" : "Мэдэгдэл байхгүй",
+    "Today" : "өнөөдөр",
+    "Tomorrow" : "маргааш",
     "Close" : "Хаах",
-    "Share" : "Түгээх"
+    "Share" : "Түгээх",
+    "Next week" : "Дараа 7 хоног",
+    "Next month" : "Дараа сар"
 },
 "nplurals=2; plural=(n != 1);");
