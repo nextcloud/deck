@@ -28,12 +28,12 @@
     "Reply" : "Responder",
     "Update" : "Actualisation",
     "Description" : "Description",
-    "Today" : "Hodie",
-    "Tomorrow" : "Deman",
     "(group)" : "(gruppo)",
     "seconds ago" : "secundas passate",
     "Shared with you" : "Compartite con te",
     "No notifications" : "Nulle notificationes",
+    "Today" : "Hodie",
+    "Tomorrow" : "Deman",
     "Close" : "Clauder",
     "Share" : "Compartir"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

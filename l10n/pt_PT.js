@@ -135,10 +135,6 @@ OC.L10N.register(
     "Update" : "Atualizar",
     "Description" : "Descrição",
     "Select Date" : "Escolha a data",
-    "Today" : "Hoje",
-    "Tomorrow" : "Amanhã",
-    "Next week" : "Próxima semana",
-    "Next month" : "Próximo mês",
     "(group)" : "(grupo)",
     "Card details" : "Detalhes do cartão",
     "Archive card" : "Arquivar cartão",
@@ -154,11 +150,15 @@ OC.L10N.register(
     "Delete board" : "Eliminar quadro",
     "No reminder" : "Nenhum lembrete",
     "An error occurred" : "Ocorreu um erro",
+    "Today" : "Hoje",
+    "Tomorrow" : "Amanhã",
     "Create card" : "Criar cartão",
     "Close" : "Fechar",
     "Share" : "Partilhar",
     "A <strong>card description</strong> inside the Deck app has been changed" : "Uma <strong>descrição do cartão</strong> dentro da aplicação Quadro foi alterada",
     "Timeline" : "Linha do tempo",
-    "Due date" : "Data limite"
+    "Due date" : "Data limite",
+    "Next week" : "Próxima semana",
+    "Next month" : "Próximo mês"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

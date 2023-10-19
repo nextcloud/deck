@@ -23,7 +23,6 @@ OC.L10N.register(
     "Reply" : "Odgovori",
     "Update" : "Ažuriraj",
     "Description" : "Opis",
-    "Today" : "Danas",
     "Move card" : "Premesti karticu",
     "Archive card" : "Arhiviraj karticu",
     "Delete card" : "Obriši karticu",
@@ -33,6 +32,7 @@ OC.L10N.register(
     "Archive board" : "Arhiviraj tablu",
     "No notifications" : "Nema obaveštenja",
     "Delete board" : "Izbriši tablu",
+    "Today" : "Danas",
     "Close" : "Zatvori",
     "Share" : "Podeli",
     "Due date" : "Rok"

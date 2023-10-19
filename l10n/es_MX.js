@@ -55,8 +55,6 @@ OC.L10N.register(
     "Description" : "Descripción",
     "Formatting help" : "Ayuda de formato",
     "Remove due date" : "Eliminar fecha de expiración",
-    "Today" : "Hoy",
-    "Tomorrow" : "Mañana",
     "(group)" : "(grupo)",
     "seconds ago" : "hace segundos",
     "Archived boards" : "Tableros archivados",
@@ -68,6 +66,8 @@ OC.L10N.register(
     "No notifications" : "No hay notificaciones",
     "Delete board" : "Borrar tableros",
     "An error occurred" : "Ha ocurrido un error",
+    "Today" : "Hoy",
+    "Tomorrow" : "Mañana",
     "Close" : "Cerrar",
     "Share" : "Compartir",
     "Due date" : "Fecha de vencimiento"

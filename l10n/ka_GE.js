@@ -44,8 +44,6 @@ OC.L10N.register(
     "Description" : "აღწერა",
     "Formatting help" : "დახმარება ფორმატირებაზე",
     "Remove due date" : "მოაშორეთ დანიშნულების დრო",
-    "Today" : "დღეს",
-    "Tomorrow" : "ხვალ",
     "(group)" : "(ჯგუფი)",
     "seconds ago" : "წამის წინ",
     "Archived boards" : "არქივირებული დაფები",
@@ -56,6 +54,8 @@ OC.L10N.register(
     "Archive board" : "დაფის არქივირება",
     "No notifications" : "შეტყობინებები არაა",
     "Delete board" : "დაფის გაუქმება",
+    "Today" : "დღეს",
+    "Tomorrow" : "ხვალ",
     "Close" : "დახურვა",
     "Share" : "გაზიარება",
     "Due date" : "დროისთვის"

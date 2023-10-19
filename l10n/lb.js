@@ -23,10 +23,10 @@ OC.L10N.register(
     "Reply" : "Äntwerten",
     "Update" : "Update",
     "Description" : "Beschreiwung",
-    "Today" : "Haut",
-    "Tomorrow" : "Muer",
     "seconds ago" : "Sekonnen hier",
     "Shared with you" : "Mat dir gedeelt",
+    "Today" : "Haut",
+    "Tomorrow" : "Muer",
     "Close" : "Zoumaachen",
     "Share" : "Deelen"
 },

@@ -229,10 +229,6 @@
     "Set a due date" : "Καθορίστε ημερομηνίας λήξης",
     "Remove due date" : "Αφαίρεση ημερομηνίας λήξης",
     "Select Date" : "Επιλέξτε ημερομηνία",
-    "Today" : "Σήμερα",
-    "Tomorrow" : "Αύριο",
-    "Next week" : "Επόμενη εβδομάδα",
-    "Next month" : "Επόμενος μήνας",
     "Assign a tag to this card…" : "Ορίστε μια ετικέτα σε αυτήν την καρτέλα...",
     "(group)" : "(ομάδα)",
     "Todo items" : "Στοιχεία todo",
@@ -276,6 +272,8 @@
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Είστε βέβαιοι ότι θέλετε να διαγράψετε τον πίνακα {title}; Αυτό θα διαγράψει όλα τα δεδομένα του πίνακα συμπεριλαμβανομένων και των αρχειοθετημένων καρτών.",
     "Delete the board?" : "Διαγραφή του πίνακα;",
     "Loading filtered view" : "Φόρτωση εμφάνισης με βάση το φίλτρο",
+    "Today" : "Σήμερα",
+    "Tomorrow" : "Αύριο",
     "No due" : "Χωρίς λήξη",
     "Search for {searchQuery} in all boards" : "Αναζήτηση για {searchQuery} σε όλους τους πίνακες",
     "No results found" : "Δεν βρέθηκαν αποτελέσματα",
@@ -311,6 +309,8 @@
     "Add a new list" : "Προσθήκη νέας λίστας",
     "Assign to users" : "Ανάθεση σε χρήστες",
     "Due date" : "Ημερομηνία λήξης",
+    "Next week" : "Επόμενη εβδομάδα",
+    "Next month" : "Επόμενος μήνας",
     "Limit deck usage of groups" : "Περιορίστε τη χρήση της εφαρμογής deck σε ομάδες",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ο περιορισμός του Deck θα εμποδίσει τους χρήστες που δεν είναι μέρος αυτών των ομάδων να δημιουργούν δικούς τους πίνακες. Οι χρήστες θα εξακολουθήσουν να εργάζονται σε πίνακες που έχουν διαμοιραστεί μαζί τους."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

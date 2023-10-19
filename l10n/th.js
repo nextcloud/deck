@@ -40,8 +40,6 @@ OC.L10N.register(
     "Reply" : "ตอบกลับ",
     "Update" : "อัปเดต",
     "Description" : "รายละเอียด",
-    "Today" : "วันนี้",
-    "Tomorrow" : "พรุ่งนี้",
     "(group)" : "(กลุ่ม)",
     "seconds ago" : "วินาทีที่ผ่านมา",
     "Shared with you" : "แชร์กับคุณ",
@@ -49,6 +47,8 @@ OC.L10N.register(
     "No notifications" : "ไม่มีการแจ้งเตือน",
     "Delete board" : "ลบกระดาน",
     "An error occurred" : "เกิดข้อผิดพลาด",
+    "Today" : "วันนี้",
+    "Tomorrow" : "พรุ่งนี้",
     "Close" : "ปิด",
     "Share" : "แชร์",
     "Due date" : "วันที่ครบกำหนด"
