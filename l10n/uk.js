@@ -154,6 +154,7 @@ OC.L10N.register(
     "Write a description …" : "Додайте опис ...",
     "Choose attachment" : "Вибрати вкладення",
     "Set a due date" : "Встановити дату завершення",
+    "Choose a date" : "Виберіть дату",
     "Remove due date" : "Вилучити до",
     "Select Date" : "Вкажіть дату",
     "Assign a tag to this card…" : "Додати мітку до цієї картки",
