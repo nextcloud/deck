@@ -228,6 +228,7 @@ OC.L10N.register(
     "Select Date" : "Vybrať dátum",
     "Assign a tag to this card…" : "Tejto karte priradiť štítok…",
     "(group)" : "(skupina)",
+    "Next week – {timeLocale}" : "Budúci týždeň – {timeLocale}",
     "Todo items" : "Položky úloh",
     "{count} comments, {unread} unread" : "{count} komentárov, {unread} neprečítaných",
     "Edit card title" : "Upraviť názov karty",
