@@ -224,6 +224,7 @@ OC.L10N.register(
     "Write a description …" : "Napíšte popis...",
     "Choose attachment" : "Vybrať prílohu",
     "Set a due date" : "Nastaviť termín",
+    "Choose a date" : "Vyberte dátum",
     "Remove due date" : "Odstrániť termín dokončenia",
     "Select Date" : "Vybrať dátum",
     "Assign a tag to this card…" : "Tejto karte priradiť štítok…",
