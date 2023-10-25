@@ -67,6 +67,7 @@ OC.L10N.register(
     "Hide archived cards" : "Ẩn tác vụ đã lưu trữ",
     "Show archived cards" : "Hiện tác vụ đã lưu trữ",
     "Toggle compact mode" : "Chuyển đổi chế độ thu gọn",
+    "Open details" : "Mở chi tiết",
     "Details" : "Thông tin",
     "Sharing" : "Đang chia sẽ",
     "Tags" : "Thẻ",
