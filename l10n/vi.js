@@ -122,6 +122,7 @@ OC.L10N.register(
     "{stack} in {board}" : "{stack} trong {board}",
     "Close" : "Đóng",
     "Maximum file size of {size} exceeded" : "Đã vượt quá kích thước {size} tối đa tập tin",
+    "Error creating the share" : "Lỗi khi tạo chia sẻ",
     "Share" : "Chia sẻ",
     "Due date" : "Thời hạn",
     "Next week" : "Tuần sau",
