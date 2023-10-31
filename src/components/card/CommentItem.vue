@@ -48,7 +48,9 @@
 				<NcActionButton icon="icon-close" @click="hideUpdateForm" />
 			</NcActions>
 			<div class="spacer" />
-			<div class="timestamp">
+			<div class="timestamp"
+				:aria-label="formattedTimestamp"
+				:title="formattedTimestamp">
 				{{ relativeDate(comment.creationDateTime) }}
 			</div>
 		</div>
@@ -70,6 +72,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import md5 from 'blueimp-md5'
 import relativeDate from '../../mixins/relativeDate.js'
 import ReplyIcon from 'vue-material-design-icons/Reply.vue'
+import moment from 'moment'
 
 const AtMention = {
 	name: 'AtMention',
@@ -157,6 +160,9 @@ export default {
 				div.innerHTML = message
 				return (div.textContent || div.innerText || '')
 			}
+		},
+		formattedTimestamp() {
+			return t('deck', 'Created:') + ' ' + moment(this.comment.creationDateTime).format('LLLL')
 		},
 	},
 
