@@ -254,7 +254,7 @@ OC.L10N.register(
     "Todo items" : "À faire",
     "{count} comments, {unread} unread" : "{count} commentaires, {unread} non lus",
     "Edit card title" : "Modifier le titre de la carte",
-    "Assign to me" : "Me l'assigner",
+    "Assign to me" : "Me l'attribuer",
     "Unassign myself" : "Me désassigner",
     "Move card" : "Déplacer la carte",
     "Card details" : "Détails de la carte",
