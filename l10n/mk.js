@@ -194,6 +194,7 @@ OC.L10N.register(
     "In reply to" : "Како одговор на",
     "Reply" : "Одговор",
     "Update" : "Ажурирај",
+    "Created:" : "Создадено:",
     "Description" : "Опис",
     "(Unsaved)" : "(Незачувано)",
     "(Saving…)" : "(Снимање…)",

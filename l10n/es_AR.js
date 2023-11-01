@@ -72,6 +72,7 @@ OC.L10N.register(
     "Save" : "Guardar",
     "Reply" : "Responder",
     "Update" : "Actualizar",
+    "Created:" : "Creado:",
     "Description" : "Descripción",
     "Formatting help" : "Ayuda de formato",
     "Remove due date" : "Eliminar fecha de vencimiento",

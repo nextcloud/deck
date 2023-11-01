@@ -138,6 +138,7 @@ OC.L10N.register(
     "The comment cannot be longer than 1000 characters." : "Athugasemdin má ekki vera lengri en 1000 stafir.",
     "Reply" : "Svara",
     "Update" : "Uppfæra",
+    "Created:" : "Búið til:",
     "Description" : "Lýsing",
     "Formatting help" : "Hjálp við að sníða",
     "Set a due date" : "Setja lokadag",

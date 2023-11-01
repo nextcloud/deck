@@ -173,6 +173,7 @@ OC.L10N.register(
     "In reply to" : "Membalas kepada",
     "Reply" : "Balas",
     "Update" : "Perbarui",
+    "Created:" : "Dibuat:",
     "Description" : "Deskrisi",
     "(Unsaved)" : "(Tidak tersimpan)",
     "(Saving…)" : "(Menyimpan…)",

@@ -41,6 +41,7 @@ OC.L10N.register(
     "Cancel reply" : "Anullar la responsa",
     "Reply" : "Respondre",
     "Update" : "Metre a jorn",
+    "Created:" : "Creat lo :",
     "Description" : "Descripcion",
     "seconds ago" : "fa qualques segondas",
     "Shared with you" : "Shared with you",

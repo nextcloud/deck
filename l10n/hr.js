@@ -203,6 +203,7 @@ OC.L10N.register(
     "Cancel reply" : "Prekini odgovor",
     "Reply" : "Odgovori",
     "Update" : "Ažuriraj",
+    "Created:" : "Stvoreno:",
     "Description" : "Opis",
     "(Unsaved)" : "(Nije spremljeno)",
     "(Saving…)" : "(Spremanje…)",

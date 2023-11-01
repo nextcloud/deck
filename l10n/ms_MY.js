@@ -17,6 +17,7 @@ OC.L10N.register(
     "Modified" : "Dimodifikasi",
     "Save" : "Simpan",
     "Update" : "Kemaskini",
+    "Created:" : "Telah dibina:",
     "Description" : "Keterangan",
     "Shared with you" : "Shared with you",
     "Today" : "Hari ini",

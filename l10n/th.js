@@ -39,6 +39,7 @@ OC.L10N.register(
     "Save" : "บันทึก",
     "Reply" : "ตอบกลับ",
     "Update" : "อัปเดต",
+    "Created:" : "สร้างเมื่อ:",
     "Description" : "รายละเอียด",
     "(group)" : "(กลุ่ม)",
     "seconds ago" : "วินาทีที่ผ่านมา",

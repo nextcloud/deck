@@ -228,6 +228,7 @@ OC.L10N.register(
     "Cancel reply" : "Antwort abbrechen",
     "Reply" : "Antworten",
     "Update" : "Aktualisieren",
+    "Created:" : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
     "Description" : "Beschreibung",
     "(Unsaved)" : "(nicht gespeichert)",
     "(Saving…)" : "(Speichere …)",
