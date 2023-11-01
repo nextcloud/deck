@@ -94,6 +94,7 @@ OC.L10N.register(
     "Save" : "Lưu",
     "Reply" : "Trả l",
     "Update" : "Cập nhật",
+    "Created:" : "Đã tạo:",
     "Description" : "Mô tả",
     "Formatting help" : "Định dạng trợ giúp",
     "Edit description" : "Chỉnh sửa mô tả",

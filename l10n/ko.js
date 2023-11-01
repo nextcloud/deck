@@ -93,6 +93,7 @@ OC.L10N.register(
     "Cancel reply" : "응답 취소",
     "Reply" : "답장",
     "Update" : "업데이트",
+    "Created:" : "생성한 날짜:",
     "Description" : "설명",
     "Formatting help" : "서식 도움말",
     "Edit description" : "설명 편집",

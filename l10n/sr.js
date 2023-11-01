@@ -229,6 +229,7 @@ OC.L10N.register(
     "Cancel reply" : "Откажи одговор",
     "Reply" : "Одговори",
     "Update" : "Ажурирај",
+    "Created:" : "Направљен:",
     "Description" : "Опис",
     "(Unsaved)" : "(несачуван)",
     "(Saving…)" : "(чувам…)",

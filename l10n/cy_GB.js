@@ -21,6 +21,7 @@ OC.L10N.register(
     "Modified" : "Addaswyd",
     "Save" : "Cadw",
     "Update" : "Diweddaru",
+    "Created:" : "Crewyd:",
     "Description" : "Disgrifiad",
     "Select Date" : "Dewis Dyddiad",
     "seconds ago" : "eiliad yn ôl",

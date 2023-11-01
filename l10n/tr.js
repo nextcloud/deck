@@ -229,6 +229,7 @@ OC.L10N.register(
     "Cancel reply" : "Yanıtı iptal et",
     "Reply" : "Yanıtla",
     "Update" : "Güncelle",
+    "Created:" : "Oluşturulma:",
     "Description" : "Açıklama",
     "(Unsaved)" : "(Kaydedilmemiş)",
     "(Saving…)" : "(Kaydediliyor…)",

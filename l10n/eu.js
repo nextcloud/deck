@@ -223,6 +223,7 @@ OC.L10N.register(
     "Cancel reply" : "Utzi erantzuna bertan behera",
     "Reply" : "Erantzun",
     "Update" : "Eguneratu",
+    "Created:" : "Sortua:",
     "Description" : "Deskribapena",
     "(Unsaved)" : "(Gorde gabe)",
     "(Saving…)" : "(Gordetzen...)",
