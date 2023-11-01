@@ -133,6 +133,7 @@ OC.L10N.register(
     "Save" : "Guardar",
     "Reply" : "Resposta",
     "Update" : "Atualizar",
+    "Created:" : "Criado:",
     "Description" : "Descrição",
     "Select Date" : "Escolha a data",
     "(group)" : "(grupo)",

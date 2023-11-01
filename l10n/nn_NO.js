@@ -25,6 +25,7 @@ OC.L10N.register(
     "Cancel reply" : "Avbryt svar",
     "Reply" : "Svare",
     "Update" : "Oppdater",
+    "Created:" : "Oppretta:",
     "Description" : "Skildring",
     "seconds ago" : "sekund sidan",
     "Shared with you" : "Shared with you",

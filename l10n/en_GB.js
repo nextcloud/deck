@@ -229,6 +229,7 @@ OC.L10N.register(
     "Cancel reply" : "Cancel reply",
     "Reply" : "Reply",
     "Update" : "Update",
+    "Created:" : "Created:",
     "Description" : "Description",
     "(Unsaved)" : "(Unsaved)",
     "(Saving…)" : "(Saving…)",

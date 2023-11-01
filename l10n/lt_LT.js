@@ -193,6 +193,7 @@ OC.L10N.register(
     "The comment cannot be longer than 1000 characters." : "Komentaras negali būti ilgesnis nei 1000 simbolių.",
     "Reply" : "Atsakyti",
     "Update" : "Atnaujinti",
+    "Created:" : "Sukurta:",
     "Description" : "Aprašas",
     "(Unsaved)" : "(Neįrašyta)",
     "(Saving…)" : "(Įrašoma…)",

@@ -229,6 +229,7 @@ OC.L10N.register(
     "Cancel reply" : "Válasz elvetése",
     "Reply" : "Válasz",
     "Update" : "Frissítés",
+    "Created:" : "Létrehozva:",
     "Description" : "Leírás",
     "(Unsaved)" : "(Nem mentett)",
     "(Saving…)" : "(Mentés…)",

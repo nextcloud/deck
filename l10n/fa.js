@@ -221,6 +221,7 @@ OC.L10N.register(
     "Cancel reply" : "لغو پاسخ",
     "Reply" : "پاسخ",
     "Update" : "به‌روزرسانی",
+    "Created:" : "ایجاد شده توسط:",
     "Description" : "توضیحات",
     "(Unsaved)" : "(ذخیره نشده)",
     "(Saving…)" : "(در حال ذخیره...)",

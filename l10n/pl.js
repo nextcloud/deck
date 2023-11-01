@@ -223,6 +223,7 @@ OC.L10N.register(
     "Cancel reply" : "Anuluj odpowiedź",
     "Reply" : "Odpowiedz",
     "Update" : "Aktualizuj",
+    "Created:" : "Utworzono:",
     "Description" : "Opis",
     "(Unsaved)" : "(Niezapisane)",
     "(Saving…)" : "(Zapisywanie…)",

@@ -18,6 +18,7 @@ OC.L10N.register(
     "Save" : "ساقلا",
     "Reply" : "جاۋاب قايتۇر",
     "Update" : "يېڭىلا",
+    "Created:" : "قۇرۇلغان ۋاقتى:",
     "Description" : "چۈشەندۈرۈش",
     "Shared with you" : "Shared with you",
     "Today" : "بۈگۈن",

@@ -223,6 +223,7 @@ OC.L10N.register(
     "Cancel reply" : "Avbryt svar",
     "Reply" : "Svar",
     "Update" : "Oppdater",
+    "Created:" : "Opprettet:",
     "Description" : "Beskrivelse",
     "(Unsaved)" : "(Ikke lagret)",
     "(Saving…)" : "(Lagrer...)",

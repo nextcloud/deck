@@ -214,6 +214,7 @@ OC.L10N.register(
     "Cancel reply" : "Zrušiť odpoveď",
     "Reply" : "Odpoveď",
     "Update" : "Aktualizovať",
+    "Created:" : "Vytvorené:",
     "Description" : "Popis",
     "(Unsaved)" : "(Neuložené)",
     "(Saving…)" : "(Ukladanie…)",

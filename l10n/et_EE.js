@@ -35,6 +35,7 @@ OC.L10N.register(
     "Save" : "Salvesta",
     "Reply" : "Vasta",
     "Update" : "Uuenda",
+    "Created:" : "Loodud:",
     "Description" : "Kirjeldus",
     "(group)" : "(grupp)",
     "Delete card" : "Kustuta kaart",

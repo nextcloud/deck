@@ -24,6 +24,7 @@ OC.L10N.register(
     "Modified" : "Փոփոխված",
     "Save" : "Պահպանել",
     "Update" : "Թարմացնել",
+    "Created:" : "Ստեղծված.",
     "Description" : "Նկարագրություն",
     "seconds ago" : "վրկ. առաջ",
     "Shared with you" : "Shared with you",

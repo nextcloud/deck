@@ -41,6 +41,7 @@ OC.L10N.register(
     "Save" : "შენახვა",
     "Reply" : "პასუხი",
     "Update" : "განახლება",
+    "Created:" : "შექმნილია:",
     "Description" : "აღწერა",
     "Formatting help" : "დახმარება ფორმატირებაზე",
     "Remove due date" : "მოაშორეთ დანიშნულების დრო",

@@ -37,6 +37,7 @@ OC.L10N.register(
     "Save" : "Saglabāt",
     "Reply" : "Atbildēt",
     "Update" : "Atjaunināt",
+    "Created:" : "Izveidots:",
     "Description" : "Apraksts",
     "Select Date" : "Izvēlieties datumu",
     "(group)" : "(grupa)",

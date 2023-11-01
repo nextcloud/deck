@@ -22,6 +22,7 @@ OC.L10N.register(
     "Save" : "Späicheren",
     "Reply" : "Äntwerten",
     "Update" : "Update",
+    "Created:" : "Erstallt:",
     "Description" : "Beschreiwung",
     "seconds ago" : "Sekonnen hier",
     "Shared with you" : "Mat dir gedeelt",

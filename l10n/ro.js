@@ -53,6 +53,7 @@ OC.L10N.register(
     "Save" : "Salvează",
     "Reply" : "Răspunde",
     "Update" : "Actualizare",
+    "Created:" : "Creat:",
     "Description" : "Descriere",
     "Edit description" : "Editează descriere",
     "(group)" : "(grup)",

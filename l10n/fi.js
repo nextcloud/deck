@@ -178,6 +178,7 @@ OC.L10N.register(
     "Cancel reply" : "Peru vastaus",
     "Reply" : "Vastaa",
     "Update" : "Päivitä",
+    "Created:" : "Luotu:",
     "Description" : "Kuvaus",
     "(Unsaved)" : "(Tallentamaton)",
     "(Saving…)" : "(Tallennetaan…)",

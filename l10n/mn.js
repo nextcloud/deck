@@ -31,6 +31,7 @@ OC.L10N.register(
     "Save" : "Хадгалах",
     "Reply" : "хариулт",
     "Update" : "Шинэчлэх",
+    "Created:" : "Үүсгэсэн:",
     "Description" : "Тайлбар",
     "(group)" : "(бүлэг)",
     "seconds ago" : "хоёрдахь өмнө",
