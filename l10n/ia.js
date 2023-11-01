@@ -29,6 +29,7 @@ OC.L10N.register(
     "Save" : "Salveguardar",
     "Reply" : "Responder",
     "Update" : "Actualisation",
+    "Created:" : "Create:",
     "Description" : "Description",
     "(group)" : "(gruppo)",
     "seconds ago" : "secundas passate",

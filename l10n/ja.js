@@ -212,6 +212,7 @@ OC.L10N.register(
     "Cancel reply" : "返信をキャンセル",
     "Reply" : "返信",
     "Update" : "更新",
+    "Created:" : "作成:",
     "Description" : "説明",
     "(Unsaved)" : "(未保存)",
     "(Saving…)" : "(保存中…)",

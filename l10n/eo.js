@@ -102,6 +102,7 @@ OC.L10N.register(
     "Save" : "Konservi",
     "Reply" : "Respondi",
     "Update" : "Ĝisdatigi",
+    "Created:" : "Kreita:",
     "Description" : "Priskribo",
     "Formatting help" : "Helpo pri tekstaranĝo",
     "Remove due date" : "Viŝi limdaton",

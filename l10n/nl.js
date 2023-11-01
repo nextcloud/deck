@@ -220,6 +220,7 @@ OC.L10N.register(
     "Cancel reply" : "Antwoord annuleren",
     "Reply" : "Antwoord",
     "Update" : "Bijwerken",
+    "Created:" : "Aangemaakt:",
     "Description" : "Beschrijving",
     "(Unsaved)" : "(Niet opgeslagen)",
     "(Saving…)" : "(Opslaan…)",

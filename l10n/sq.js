@@ -43,6 +43,7 @@ OC.L10N.register(
     "Save" : "Ruaj",
     "Reply" : "Përgjigju",
     "Update" : "Përditëso",
+    "Created:" : "Krijuar:",
     "Description" : "Përshkrim",
     "Formatting help" : "Ndihmë formatimi",
     "Remove due date" : "Hiq datën e mbarimit",

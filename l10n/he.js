@@ -198,6 +198,7 @@ OC.L10N.register(
     "In reply to" : "בתגובה אל",
     "Reply" : "תגובה",
     "Update" : "עדכון",
+    "Created:" : "מועד היצירה:",
     "Description" : "תיאור",
     "(Unsaved)" : "(לא נשמר)",
     "(Saving…)" : "(מתבצעת שמירה…)",

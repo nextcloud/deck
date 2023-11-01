@@ -19,6 +19,7 @@ OC.L10N.register(
     "Save" : "រក្សាទុក",
     "Reply" : "ឆ្លើយតប",
     "Update" : "ធ្វើ​បច្ចុប្បន្នភាព",
+    "Created:" : "បាន​បង្កើត៖",
     "Description" : "ការ​អធិប្បាយ",
     "seconds ago" : "វិនាទី​មុន",
     "Shared with you" : "Shared with you",

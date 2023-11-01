@@ -144,6 +144,7 @@ OC.L10N.register(
     "Cancel reply" : "Скасувати відповідь",
     "Reply" : "Відповісти",
     "Update" : "Оновлення",
+    "Created:" : "Створено:",
     "Description" : "Опис",
     "(Unsaved)" : "(Не збережено)",
     "(Saving…)" : "(Зберігання...)",

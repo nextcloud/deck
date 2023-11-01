@@ -223,6 +223,7 @@ OC.L10N.register(
     "Cancel reply" : "取消回复",
     "Reply" : "回复",
     "Update" : "更新",
+    "Created:" : "创建于：",
     "Description" : "描述",
     "(Unsaved)" : "（未保存的）",
     "(Saving…)" : "（正在保存...）",
