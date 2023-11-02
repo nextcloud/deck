@@ -21,6 +21,7 @@ OC.L10N.register(
     "Save" : "Saxla",
     "Reply" : "Cavab",
     "Update" : "Yenilənmə",
+    "Created:" : "Yaradıldı:",
     "Description" : "Açıqlanma",
     "(group)" : "(qrup)",
     "seconds ago" : "saniyələr öncə",
