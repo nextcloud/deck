@@ -17,6 +17,7 @@ OC.L10N.register(
     "Members" : "Miembros",
     "Download" : "Baxar",
     "Save" : "Guardar",
+    "Created:" : "Creóse'l",
     "Description" : "Descripción",
     "(Saving…)" : "(Guardando…)",
     "All cards" : "Toles tarxetes",

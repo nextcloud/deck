@@ -30,6 +30,7 @@ OC.L10N.register(
     "Save" : "Stoor",
     "Reply" : "Antwoord",
     "Update" : "Werk by",
+    "Created:" : "Geskep:",
     "Description" : "Beskrywing",
     "Select Date" : "Kies Datum",
     "seconds ago" : "sekondes gelede",
