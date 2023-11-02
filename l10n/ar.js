@@ -229,6 +229,7 @@ OC.L10N.register(
     "Cancel reply" : "إلغاء الرد",
     "Reply" : "رد",
     "Update" : "تحديث",
+    "Created:" : "تاريخ الإنشاء :",
     "Description" : "الوصف",
     "(Unsaved)" : "(غير محفوظ)",
     "(Saving…)" : "(يُحفظ..)",
