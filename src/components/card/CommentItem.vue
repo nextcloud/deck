@@ -13,6 +13,7 @@
 				</NcActions>
 			</div>
 			<NcRichText class="comment--content"
+				dir="auto"
 				:text="richText(comment)"
 				:arguments="richArgs(comment)"
 				:autolink="true" />
@@ -57,11 +58,15 @@
 		<CommentItem v-if="comment.replyTo" :reply="true" :comment="comment.replyTo" />
 		<div v-show="!edit" ref="richTextElement">
 			<NcRichText class="comment--content"
+				dir="auto"
 				:text="richText(comment)"
 				:arguments="richArgs(comment)"
 				:autolink="true" />
 		</div>
-		<CommentForm v-if="edit" v-model="commentMsg" @submit="updateComment" />
+		<CommentForm v-if="edit"
+			v-model="commentMsg"
+			dir="auto"
+			@submit="updateComment" />
 	</li>
 </template>
 

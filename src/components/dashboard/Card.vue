@@ -5,12 +5,12 @@
 		class="card">
 		<div class="card--header">
 			<DueDate class="right" :card="card" />
-			<span class="title">{{ card.title }}</span>
+			<span class="title" dir="auto">{{ card.title }}</span>
 		</div>
 		<ul v-if="card.labels && card.labels.length"
 			class="labels">
 			<li v-for="label in card.labels" :key="label.id" :style="labelStyle(label)">
-				<span>{{ label.title }}</span>
+				<span dir="auto">{{ label.title }}</span>
 			</li>
 		</ul>
 	</a>
