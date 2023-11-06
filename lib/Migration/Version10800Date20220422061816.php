@@ -66,7 +66,7 @@ class Version10800Date20220422061816 extends SimpleMigrationStep {
 		$indexAdded = $this->addIndex($schema,
 			'deck_cards',
 			'idx_last_editor', [
-				'last_editor', 'description_prev'
+				'last_editor' /*, 'description_prev' */
 			], [],
 			// Adding a partial index on the description_prev as it is only used for a NULL check
 			['lengths' => [null, 1]]
