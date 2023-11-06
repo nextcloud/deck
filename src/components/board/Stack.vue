@@ -34,6 +34,7 @@
 				</h3>
 				<h3 v-else-if="!editing"
 					v-tooltip="stack.title"
+					dir="auto"
 					tabindex="0"
 					:aria-label="stack.title"
 					class="stack__title"
@@ -48,6 +49,7 @@
 					@keyup.esc="cancelEdit">
 					<input v-model="copiedStack.title"
 						v-focus
+						dir="auto"
 						type="text"
 						required="required">
 					<input v-tooltip="t('deck', 'Edit list title')"

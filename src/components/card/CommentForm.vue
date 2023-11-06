@@ -41,6 +41,7 @@
 					</span>
 				</template>
 				<div ref="contentEditable"
+					dir="auto"
 					class="comment-form__contenteditable"
 					contenteditable
 					@keydown.enter="handleKeydown"

@@ -4,7 +4,7 @@
 		<ul>
 			<li v-for="deletedStack in deletedStacks" :key="deletedStack.id">
 				<span class="icon icon-deck" />
-				<div class="title">
+				<div class="title" dir="auto">
 					<span>{{ deletedStack.title }}</span>
 					<span class="timestamp">{{ relativeDate(deletedStack.deletedAt*1000) }}</span>
 				</div>
@@ -18,7 +18,7 @@
 		<ul>
 			<li v-for="deletedCard in deletedCards" :key="deletedCard.id">
 				<div class="icon icon-deck" />
-				<div class="title">
+				<div class="title" dir="auto">
 					<span>{{ deletedCard.title }}</span>
 					<span class="timestamp">{{ relativeDate(deletedCard.deletedAt*1000) }}</span>
 				</div>

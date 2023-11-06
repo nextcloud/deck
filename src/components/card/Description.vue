@@ -55,6 +55,7 @@
 		<template v-else>
 			<div v-if="!descriptionEditing && hasDescription"
 				id="description-preview"
+				dir="auto"
 				@click="clickedPreview"
 				v-html="renderedDescription" />
 			<p v-else-if="!descriptionEditing" class="placeholder" @click="showEditor()">

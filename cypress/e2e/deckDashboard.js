@@ -14,7 +14,7 @@ describe('Deck dashboard', function() {
 	it('Can show the right title on the dashboard', function() {
 		cy.get('.board-title h2')
 			.should('have.length', 1).first()
-			.should('have.text', 'Upcoming cards')
+			.should($el => expect($el.text().trim()).to.equal('Upcoming cards'))
 	})
 
 	it('Can see the default "Personal Board" created for user by default', function() {

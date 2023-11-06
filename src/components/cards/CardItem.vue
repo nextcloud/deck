@@ -31,15 +31,16 @@
 			class="card"
 			@click="openCard">
 			<div v-if="standalone" class="card-related">
-				<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
+				<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" dir="auto" />
 				{{ board.title }} » {{ stack.title }}
 			</div>
 			<CardCover v-if="showCardCover" :card-id="card.id" />
 			<div class="card-upper">
-				<h3 v-if="inlineEditingBlocked">
+				<h3 v-if="inlineEditingBlocked" dir="auto">
 					{{ card.title }}
 				</h3>
 				<h3 v-else-if="!editing"
+					dir="auto"
 					tabindex="0"
 					class="editable"
 					:aria-label="t('deck', 'Edit card title')"
@@ -55,6 +56,7 @@
 					@submit.prevent="finishedEdit(card)">
 					<input v-model="copiedCard.title"
 						v-focus
+						dir="auto"
 						type="text"
 						autocomplete="off"
 						required

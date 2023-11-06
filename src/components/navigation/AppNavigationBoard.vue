@@ -134,6 +134,7 @@
 		<form @submit.prevent.stop="applyEdit">
 			<input v-model="editTitle"
 				v-focus
+				dir="auto"
 				type="text"
 				required>
 			<input type="submit" value="" class="icon-confirm">

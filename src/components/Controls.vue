@@ -24,7 +24,9 @@
 	<div class="controls">
 		<div v-if="overviewName" class="board-title">
 			<div class="board-bullet icon-calendar-dark" />
-			<h2>{{ overviewName }}</h2>
+			<h2 dir="auto">
+				{{ overviewName }}
+			</h2>
 			<NcActions>
 				<NcActionButton icon="icon-add" @click="clickShowAddCardModel">
 					{{ t('deck', 'Add card') }}
@@ -36,7 +38,9 @@
 		</div>
 		<div v-else-if="board" class="board-title">
 			<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
-			<h2>{{ board.title }}</h2>
+			<h2 dir="auto">
+				{{ board.title }}
+			</h2>
 			<p v-if="showArchived">
 				({{ t('deck', 'Archived cards') }})
 			</p>
