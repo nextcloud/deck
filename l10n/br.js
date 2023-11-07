@@ -28,6 +28,7 @@ OC.L10N.register(
     "Save" : "Enrollañ",
     "Reply" : "Respont",
     "Update" : "Adnevesaat",
+    "Created:" : "Krouet :",
     "Description" : "Diskrivadur",
     "(group)" : "(strollad)",
     "seconds ago" : "eilenn zo",

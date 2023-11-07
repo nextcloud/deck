@@ -21,6 +21,7 @@ OC.L10N.register(
     "Save" : "সংরক্ষণ",
     "Reply" : "জবাব",
     "Update" : "পরিবর্ধন",
+    "Created:" : "তৈরীর নির্ঘন্টঃ",
     "Description" : "বিবরণ",
     "(group)" : "(গোষ্ঠি)",
     "seconds ago" : "সেকেন্ড পূর্বে",
