@@ -108,14 +108,14 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 		$startIndex = $this->urlGenerator->getAbsoluteURL('/index.php/apps/' . Application::APP_ID);
 
 		// link example: https://nextcloud.local/index.php/apps/deck/#/board/2/card/11
-		$noIndexMatch = preg_match('/^' . preg_quote($start, '/') . '\/#\/board\/[0-9]+\/card\/[0-9]+$/', $referenceText) === 1;
-		$indexMatch = preg_match('/^' . preg_quote($startIndex, '/') . '\/#\/board\/[0-9]+\/card\/[0-9]+$/', $referenceText) === 1;
+		$noIndexMatchFull = preg_match('/^' . preg_quote($start, '/') . '\/#\/board\/[0-9]+\/card\/[0-9]+$/', $referenceText) === 1;
+		$indexMatchFull = preg_match('/^' . preg_quote($startIndex, '/') . '\/#\/board\/[0-9]+\/card\/[0-9]+$/', $referenceText) === 1;
 
 		// link example: https://nextcloud.local/index.php/apps/deck/card/11
 		$noIndexMatch = preg_match('/^' . preg_quote($start, '/') . '\/card\/[0-9]+$/', $referenceText) === 1;
 		$indexMatch = preg_match('/^' . preg_quote($startIndex, '/') . '\/card\/[0-9]+$/', $referenceText) === 1;
 
-		return $noIndexMatch || $indexMatch;
+		return $noIndexMatchFull || $indexMatchFull || $noIndexMatch || $indexMatch;
 	}
 
 	/**
