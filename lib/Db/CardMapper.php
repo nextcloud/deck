@@ -306,8 +306,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('id', 'title', 'duedate', 'notified', 'description_prev', 'last_editor', 'description')
 			->from('deck_cards')
-			->where($qb->expr()->isNotNull('last_editor'))
-			->andWhere($qb->expr()->isNotNull('description_prev'));
+			->where($qb->expr()->isNotNull('last_editor'));
 		return $this->findEntities($qb);
 	}
 
