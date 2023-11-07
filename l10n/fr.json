@@ -69,7 +69,7 @@
     "Cards due today" : "Cartes pour aujourd'hui",
     "Cards due tomorrow" : "Cartes pour demain",
     "Upcoming cards" : "Prochaines cartes",
-    "Load more" : "Charger d'avantage",
+    "Load more" : "Charger davantage",
     "Personal" : "Personnel",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "La carte \"%s\" de \"%s\" vous a été assignée par %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} vous a attribué la carte {deck-card} du tableau {deck-board}.",
