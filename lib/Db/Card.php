@@ -83,7 +83,7 @@ class Card extends RelationalEntity {
 	protected $owner;
 	protected $order;
 	protected $archived = false;
-	protected $done = false;
+	protected $done = null;
 	protected $duedate;
 	protected $notified = false;
 	protected $deletedAt = 0;
@@ -107,7 +107,7 @@ class Card extends RelationalEntity {
 		$this->addType('lastModified', 'integer');
 		$this->addType('createdAt', 'integer');
 		$this->addType('archived', 'boolean');
-		$this->addType('done', 'boolean');
+		$this->addType('done', 'datetime');
 		$this->addType('notified', 'boolean');
 		$this->addType('deletedAt', 'integer');
 		$this->addType('duedate', 'datetime');

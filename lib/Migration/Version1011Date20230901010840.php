@@ -28,6 +28,7 @@ namespace OCA\Deck\Migration;
 
 use Closure;
 use OCP\DB\ISchemaWrapper;
+use OCP\DB\Types;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
@@ -47,9 +48,9 @@ class Version1011Date20230901010840 extends SimpleMigrationStep {
 
 		$table = $schema->getTable('deck_cards');
 		if (!$table->hasColumn('done')) {
-			$table->addColumn('done', 'boolean', [
-				'default' => false,
-				'notnull' => true,
+			$table->addColumn('done', Types::DATETIME, [
+				'default' => null,
+				'notnull' => false,
 			]);
 
 			return $schema;

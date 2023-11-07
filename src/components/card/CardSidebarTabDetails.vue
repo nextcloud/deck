@@ -29,13 +29,13 @@
 						<template #icon>
 							<CheckIcon :size="20" />
 						</template>
-						{{ t('deck', 'Mark as Done') }}
+						{{ t('deck', 'Mark as done') }}
 					</NcButton>
 					<NcButton v-if="card.done" type="tertiary" @click="changeCardDoneStatus()">
 						<template #icon>
 							<ClearIcon :size="20" />
 						</template>
-						{{ t('deck', 'Mark as not Done') }}
+						{{ t('deck', 'Mark as not done') }}
 					</NcButton>
 					<NcButton type="tertiary" @click="archiveUnarchiveCard()">
 						<template #icon>
@@ -62,11 +62,9 @@
 
 		<div v-if="card.done">
 			<div class="done">
-				<div v-if="!card.duedate && card.done" class="no-due">
-					{{ t('deck', 'No due date') }}
-				</div>
+				<CheckIcon :size="20" /> {{ t('deck', 'Done') }}
 				<div v-if="card.done" class="done-label">
-					{{ t('deck', 'Done') }}
+					{{ stringify(card.done) }}
 				</div>
 			</div>
 		</div>
@@ -287,32 +285,8 @@ export default {
 	}
 }
 
-.done{
+.done {
 	display: flex;
-	margin-left: 40px;
-
-	.no-due, .done-label{
-		line-height: 30px;
-		align-items: baseline;
-		flex-shrink: 1;
-		z-index: 2;
-		margin: 13px 5px 5px;
-		font-size: 100%;
-	}
-
-	.no-due{
-		padding: 3px;
-		color: var(--color-main-text);
-	}
-
-	.done-label {
-		font-size: 90%;
-		padding: 3px 20px;
-
-		color: var(--color-primary-text);
-		background-color: var(--color-success);
-		border-radius: 15px;
-	}
 }
 
 .tag {
