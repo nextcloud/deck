@@ -220,6 +220,7 @@ OC.L10N.register(
     "Cancel reply" : "Отказ на отговор",
     "Reply" : "Отговори",
     "Update" : "Обновяване",
+    "Created:" : "Създадено:",
     "Description" : "Описание",
     "(Unsaved)" : " (Незаписан)",
     "(Saving…)" : "(Записване...)",
