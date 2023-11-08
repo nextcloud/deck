@@ -25,6 +25,7 @@
 
 namespace OCA\Deck\Controller;
 
+use OCA\Deck\Model\OptionalNullableValue;
 use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\CardService;
 use OCP\AppFramework\ApiController;
@@ -105,7 +106,8 @@ class CardApiController extends ApiController {
 	 * Update a card
 	 */
 	public function update($title, $type, $owner, $description = '', $order = 0, $duedate = null, $archived = null) {
-		$card = $this->cardService->update($this->request->getParam('cardId'), $title, $this->request->getParam('stackId'), $type, $owner, $description, $order, $duedate, 0, $archived);
+		$done = array_key_exists('done', $this->request->getParams()) ? new OptionalNullableValue($this->request->getParam('done', null)) : null;
+		$card = $this->cardService->update($this->request->getParam('cardId'), $title, $this->request->getParam('stackId'), $type, $owner, $description, $order, $duedate, 0, $archived, $done);
 		return new DataResponse($card, HTTP::STATUS_OK);
 	}
 

@@ -36,6 +36,9 @@
 					@click="unassignCardFromMe()">
 					{{ t('deck', 'Unassign myself') }}
 				</NcActionButton>
+				<NcActionButton icon="icon-checkmark" :close-after-click="true" @click="changeCardDoneStatus()">
+					{{ card.done ? t('deck', 'Mark as not done') : t('deck', 'Mark as done') }}
+				</NcActionButton>
 				<NcActionButton icon="icon-external" :close-after-click="true" @click="modalShow=true">
 					{{ t('deck', 'Move card') }}
 				</NcActionButton>
@@ -156,6 +159,9 @@ export default {
 		deleteCard() {
 			this.$store.dispatch('deleteCard', this.card)
 			showUndo(t('deck', 'Card deleted'), () => this.$store.dispatch('cardUndoDelete', this.card))
+		},
+		changeCardDoneStatus() {
+			this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })
 		},
 		archiveUnarchiveCard() {
 			this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })

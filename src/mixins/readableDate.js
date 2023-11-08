@@ -1,5 +1,5 @@
-/*!
- * @copyright Copyright (c) 2023 Julius Härtl <jus@bitgrid.net>
+/*
+ * @copyright Copyright (c) 2020 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
  *
@@ -17,25 +17,17 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-.selector-wrapper {
-	display: flex;
-	max-width: 100%;
-	margin-top: 10px;
+import moment from '@nextcloud/moment'
 
-	&--icon {
-		width: 38px;
-		padding-top: 12px;
-		flex-shrink: 0;
-	}
-
-	&--selector {
-		width: 100%;
-	}
-
-	&--content {
-		display: flex;
-		flex-grow: 1;
-	}
+export default {
+	computed: {
+		formatReadableDate() {
+			return (timestamp) => {
+				return moment(timestamp).format('lll')
+			}
+		},
+	},
 }

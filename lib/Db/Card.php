@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -37,6 +40,8 @@ use Sabre\VObject\Component\VCalendar;
  * @method int getCreatedAt()
  * @method bool getArchived()
  * @method bool getNotified()
+ * @method ?DateTime getDone()
+ * @method void setDone(?DateTime $done)
  *
  * @method void setLabels(Label[] $labels)
  * @method null|Label[] getLabels()
@@ -83,6 +88,7 @@ class Card extends RelationalEntity {
 	protected $owner;
 	protected $order;
 	protected $archived = false;
+	protected $done = null;
 	protected $duedate;
 	protected $notified = false;
 	protected $deletedAt = 0;
@@ -106,6 +112,7 @@ class Card extends RelationalEntity {
 		$this->addType('lastModified', 'integer');
 		$this->addType('createdAt', 'integer');
 		$this->addType('archived', 'boolean');
+		$this->addType('done', 'datetime');
 		$this->addType('notified', 'boolean');
 		$this->addType('deletedAt', 'integer');
 		$this->addType('duedate', 'datetime');
@@ -139,18 +146,21 @@ class Card extends RelationalEntity {
 		$event->add('RELATED-TO', 'deck-stack-' . $this->getStackId());
 
 		// FIXME: For write support: CANCELLED / IN-PROCESS handling
-		$event->STATUS = $this->getArchived() ? "COMPLETED" : "NEEDS-ACTION";
-		if ($this->getArchived()) {
+		if ($this->getDone() || $this->getArchived()) {
 			$date = new DateTime();
 			$date->setTimestamp($this->getLastModified());
-			$event->COMPLETED = $date;
-			//$event->add('PERCENT-COMPLETE', 100);
+			$event->STATUS = 'COMPLETED';
+			$event->COMPLETED = $this->getDone() ? $this->$this->getDone() : $this->getArchived();
+		} else {
+			$event->STATUS = 'NEEDS-ACTION';
 		}
-		if (count($this->getLabels()) > 0) {
-			$event->CATEGORIES = array_map(function ($label) {
-				return $label->getTitle();
-			}, $this->getLabels());
-		}
+
+		// $event->add('PERCENT-COMPLETE', 100);
+
+		$labels = $this->getLabels() ?? [];
+		$event->CATEGORIES = array_map(function ($label): string {
+			return $label->getTitle();
+		}, $labels);
 
 		$event->SUMMARY = $this->getTitle();
 		$event->DESCRIPTION = $this->getDescription();
@@ -177,7 +187,7 @@ class Card extends RelationalEntity {
 		return 'card';
 	}
 
-	public function getETag() {
+	public function getETag(): string {
 		return md5((string)$this->getLastModified());
 	}
 }

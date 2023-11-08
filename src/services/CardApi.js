@@ -165,6 +165,36 @@ export class CardApi {
 			})
 	}
 
+	markCardAsDone(card) {
+		return axios.put(this.url(`/cards/${card.id}/done`))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	markCardAsUndone(card) {
+		return axios.put(this.url(`/cards/${card.id}/undone`))
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 	assignLabelToCard(data) {
 		return axios.post(this.url(`/cards/${data.card.id}/label/${data.labelId}`))
 			.then(

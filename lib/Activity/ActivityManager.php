@@ -91,6 +91,8 @@ class ActivityManager {
 	public const SUBJECT_CARD_UPDATE_DUEDATE = 'card_update_duedate';
 	public const SUBJECT_CARD_UPDATE_ARCHIVE = 'card_update_archive';
 	public const SUBJECT_CARD_UPDATE_UNARCHIVE = 'card_update_unarchive';
+	public const SUBJECT_CARD_UPDATE_DONE = 'card_update_done';
+	public const SUBJECT_CARD_UPDATE_UNDONE = 'card_update_undone';
 	public const SUBJECT_CARD_UPDATE_STACKID = 'card_update_stackId';
 	public const SUBJECT_CARD_USER_ASSIGN = 'card_user_assign';
 	public const SUBJECT_CARD_USER_UNASSIGN = 'card_user_unassign';
@@ -197,6 +199,12 @@ class ActivityManager {
 				break;
 			case self::SUBJECT_CARD_UPDATE_UNARCHIVE:
 				$subject = $ownActivity ? $l->t('You have unarchived card {card} in list {stack} on board {board}') : $l->t('{user} has unarchived card {card} in list {stack} on board {board}');
+				break;
+			case self::SUBJECT_CARD_UPDATE_DONE:
+				$subject = $ownActivity ? $l->t('You have marked the card {card} as done in list {stack} on board {board}') : $l->t('{user} has marked card {card} as done in list {stack} on board {board}');
+				break;
+			case self::SUBJECT_CARD_UPDATE_UNDONE:
+				$subject = $ownActivity ? $l->t('You have marked the card {card} as undone in list {stack} on board {board}') : $l->t('{user} has marked the card {card} as undone in list {stack} on board {board}');
 				break;
 			case self::SUBJECT_CARD_UPDATE_DUEDATE:
 				if (!isset($subjectParams['after'])) {
@@ -357,6 +365,8 @@ class ActivityManager {
 			case self::SUBJECT_CARD_DELETE:
 			case self::SUBJECT_CARD_UPDATE_ARCHIVE:
 			case self::SUBJECT_CARD_UPDATE_UNARCHIVE:
+			case self::SUBJECT_CARD_UPDATE_DONE:
+			case self::SUBJECT_CARD_UPDATE_UNDONE:
 			case self::SUBJECT_CARD_UPDATE_TITLE:
 			case self::SUBJECT_CARD_UPDATE_DESCRIPTION:
 			case self::SUBJECT_CARD_UPDATE_DUEDATE:

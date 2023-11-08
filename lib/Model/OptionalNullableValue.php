@@ -1,4 +1,5 @@
-/*!
+<?php
+/**
  * @copyright Copyright (c) 2023 Julius Härtl <jus@bitgrid.net>
  *
  * @author Julius Härtl <jus@bitgrid.net>
@@ -19,23 +20,32 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-.selector-wrapper {
-	display: flex;
-	max-width: 100%;
-	margin-top: 10px;
+namespace OCA\Deck\Model;
 
-	&--icon {
-		width: 38px;
-		padding-top: 12px;
-		flex-shrink: 0;
+/**
+ * This is a helper abstraction to allow usage of optional parameters
+ * which hold a nullable value. The actual null value of the parameter
+ * is used to indicate if it has been set or not. The containing value
+ * will then still allow having null as a value
+ *
+ * Example use case: Have a nullable database column,
+ * but only update it if it is passed
+ *
+ * @template T
+ */
+class OptionalNullableValue {
+
+	/** @var ?T */
+	private mixed $value;
+
+	/** @param ?T $value */
+	public function __construct(mixed $value) {
+		$this->value = $value;
 	}
 
-	&--selector {
-		width: 100%;
+	/** @return ?T */
+	public function getValue(): mixed {
+		return $this->value;
 	}
 
-	&--content {
-		display: flex;
-		flex-grow: 1;
-	}
 }

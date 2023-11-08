@@ -80,7 +80,7 @@ An ETag header is returned in order to determine if further child elements have 
 - Fetch a single card of a board `GET /api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}`
 - Fetch attachments of a card `GET /api/v1.0/boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments`
 
-If a `If-None-Match` header is provided and the requested element has not changed a `304` Not Modified response will be returned. 
+If a `If-None-Match` header is provided and the requested element has not changed a `304` Not Modified response will be returned.
 
 Changes of child elements will propagate to their parents and also cause an update of the ETag which will be useful for determining if a sync is necessary on any client integration side. As an example, if a label is added to a card, the ETag of all related entities (the card, stack and board) will change.
 
@@ -117,6 +117,7 @@ This API version has become available with **Deck 1.3.0**.
   - [GET /boards/import/getSystems - Import a board](#get-boardsimportgetsystems-import-a-board)
   - [GET /boards/import/config/system/{schema} - Import a board](#get-boardsimportconfigsystemschema-import-a-board)
   - [POST /boards/import - Import a board](#post-boardsimport-import-a-board)
+- The `done` property was added to cards
 
 # Endpoints
 
@@ -587,7 +588,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 #### Response
 
 ```json
-{  
+{
    "title":"Test",
    "description":null,
    "stackId":6,
@@ -601,6 +602,7 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
    "owner":"admin",
    "order":999,
    "archived":false,
+   "done":null,
    "duedate": "2019-12-24T19:29:30+00:00",
    "deletedAt":0,
    "commentsUnread":0,
@@ -623,22 +625,28 @@ The board list endpoint supports setting an `If-Modified-Since` header to limit 
 
 #### Request data
 
-| Parameter   | Type      | Description                                          |
-|-------------|-----------|------------------------------------------------------|
-| title     | String | The title of the card, maximum length is limited to 255 characters |
-| description | String    | The markdown description of the card                 |
-| type        | String    | Type of the card (for later use) use 'plain' for now |
-| order       | Integer   | Order for sorting the stacks                         |
-| duedate     | timestamp | The ISO-8601 formatted duedate of the card or null   |
+| Parameter   | Type            | Description                                                                                         |
+|-------------|-----------------|-----------------------------------------------------------------------------------------------------|
+| title       | String          | The title of the card, maximum length is limited to 255 characters                                  |
+| description | String          | The markdown description of the card                                                                |
+| type        | String          | Type of the card (for later use) use 'plain' for now                                                |
+| owner       | String          | The user that owns the card                                                                         |
+| order       | Integer         | Order for sorting the stacks                                                                        |
+| duedate     | timestamp       | The ISO-8601 formatted duedate of the card or null                                                  |
+| archived    | bool            | Whether the card is archived or not                                                                 |
+| done        | timestamp\|null | The ISO-8601 formatted date when the card is marked as done (optional, null indicates undone state) |
 
 
 ```
-{  
+{
    "title": "Test card",
    "description": "A card description",
    "type": "plain",
+   "owner": "admin",
    "order": 999,
    "duedate": "2019-12-24T19:29:30+00:00",
+   "archived": false,
+   "done": null,
 }
 ```
 
@@ -977,7 +985,7 @@ For now only `deck_file` is supported as an attachment type.
 
 ### DELETE /boards/{boardId}/stacks/{stackId}/cards/{cardId}/attachments/{attachmentId} - Delete an attachment
 
-    
+
 #### Request parameters
 
 | Parameter    | Type    | Description                                   |
@@ -1051,12 +1059,12 @@ Make a request to see the json schema of system
 
 # OCS API
 
-The following endpoints are available through the Nextcloud OCS endpoint, which is available at `/ocs/v2.php/apps/deck/api/v1.0/`. 
+The following endpoints are available through the Nextcloud OCS endpoint, which is available at `/ocs/v2.php/apps/deck/api/v1.0/`.
 This has the benefit that both the web UI as well as external integrations can use the same API.
 
 ## Config
 
-Deck stores user and app configuration values globally and per board. The GET endpoint allows to fetch the current global configuration while board settings will be exposed through the board element on the regular API endpoints. 
+Deck stores user and app configuration values globally and per board. The GET endpoint allows to fetch the current global configuration while board settings will be exposed through the board element on the regular API endpoints.
 
 ### GET /api/v1.0/config - Fetch app configuration values
 
@@ -1064,10 +1072,10 @@ Deck stores user and app configuration values globally and per board. The GET en
 
 | Config key | Description |
 | --- | --- |
-| calendar | Determines if the calendar/tasks integration through the CalDAV backend is enabled for the user (boolean) | 
-| cardDetailsInModal | Determines if the bigger view is used (boolean) | 
-| cardIdBadge | Determines if the ID badges are displayed on cards (boolean) | 
-| groupLimit | Determines if creating new boards is limited to certain groups of the instance. The resulting output is an array of group objects with the id and the displayname (Admin only)|  
+| calendar | Determines if the calendar/tasks integration through the CalDAV backend is enabled for the user (boolean) |
+| cardDetailsInModal | Determines if the bigger view is used (boolean) |
+| cardIdBadge | Determines if the ID badges are displayed on cards (boolean) |
+| groupLimit | Determines if creating new boards is limited to certain groups of the instance. The resulting output is an array of group objects with the id and the displayname (Admin only)|
 
 ```
 {
@@ -1112,7 +1120,7 @@ Deck stores user and app configuration values globally and per board. The GET en
 | calendar | Boolean |
 | cardDetailsInModal | Boolean |
 | cardIdBadge | Boolean |
- 
+
 #### Example request
 
 ```
@@ -1186,7 +1194,7 @@ A list of comments will be provided under the `ocs.data` key. If no or no more c
 }
 ```
 
-In case a comment is marked as a reply to another comment object, the parent comment will be added as `replyTo` entry to the response. Only the next parent node is added, nested replies are not exposed directly. 
+In case a comment is marked as a reply to another comment object, the parent comment will be added as `replyTo` entry to the response. Only the next parent node is added, nested replies are not exposed directly.
 
 ```json
 [

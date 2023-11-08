@@ -1,9 +1,8 @@
 <template>
-	<div class="selector-wrapper" :aria-label="t('deck', 'Assign a due date to this card…')">
-		<div class="selector-wrapper--icon">
-			<Calendar :size="20" />
-		</div>
-		<div class="duedate-selector">
+	<CardDetailEntry :label="t('deck', 'Assign a due date to this card…')">
+		<Calendar v-if="!card.done" slot="icon" :size="20" />
+		<CalendarCheck v-else slot="icon" :size="20" />
+		<template v-if="!card.done && !card.archived">
 			<NcDateTimePickerNative v-if="duedate"
 				id="card-duedate-picker"
 				v-model="duedate"
@@ -43,28 +42,86 @@
 					{{ t('deck', 'Remove due date') }}
 				</NcActionButton>
 			</NcActions>
-		</div>
-	</div>
+
+			<NcButton v-if="!card.done"
+				type="secondary"
+				class="completed-button"
+				@click="changeCardDoneStatus()">
+				<template #icon>
+					<CheckIcon :size="20" />
+				</template>
+				{{ t('deck', 'Completed') }}
+			</NcButton>
+		</template>
+		<template v-else>
+			<div class="done-info">
+				<span v-if="card.done" class="done-info--done">
+					{{ formatReadableDate(card.done) }}
+				</span>
+				<span v-if="duedate" class="done-info--duedate" :class="{ 'dimmed': card.done }">
+					{{ t('deck', 'Due at:') }}
+					{{ formatReadableDate(duedate) }}
+				</span>
+			</div>
+			<div class="due-actions">
+				<NcButton v-if="!card.archived"
+					type="tertiary"
+					:title="t('deck', 'Not completed')"
+					@click="changeCardDoneStatus()">
+					<template #icon>
+						<ClearIcon :size="20" />
+					</template>
+				</NcButton>
+				<NcButton type="secondary" @click="archiveUnarchiveCard()">
+					<template #icon>
+						<ArchiveIcon :size="20" />
+					</template>
+					{{ card.archived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
+				</NcButton>
+			</div>
+		</template>
+	</CardDetailEntry>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
-import { NcActionButton, NcActions, NcActionSeparator, NcDateTimePickerNative } from '@nextcloud/vue'
+import {
+	NcActionButton,
+	NcActions,
+	NcActionSeparator,
+	NcButton,
+	NcDateTimePickerNative,
+} from '@nextcloud/vue'
+import readableDate from '../../mixins/readableDate.js'
 import { getDayNamesMin, getFirstDay, getMonthNamesShort } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
+import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import Plus from 'vue-material-design-icons/Plus.vue'
 import Calendar from 'vue-material-design-icons/Calendar.vue'
-import moment from '@nextcloud/moment'
+import CalendarCheck from 'vue-material-design-icons/CalendarCheck.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import ClearIcon from 'vue-material-design-icons/Close.vue'
+import CardDetailEntry from './CardDetailEntry.vue'
 
 export default defineComponent({
 	name: 'DueDateSelector',
 	components: {
+		NcButton,
+		ArchiveIcon,
+		ClearIcon,
+		CardDetailEntry,
 		Plus,
 		Calendar,
+		CalendarCheck,
+		CheckIcon,
 		NcActions,
 		NcActionButton,
 		NcActionSeparator,
 		NcDateTimePickerNative,
 	},
+	mixins: [
+		readableDate,
+	],
 	props: {
 		card: {
 			type: Object,
@@ -166,13 +223,35 @@ export default defineComponent({
 		getTimestamp(momentObject) {
 			return momentObject?.minute(0).second(0).millisecond(0).toDate() || null
 		},
+		changeCardDoneStatus() {
+			this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })
+		},
+		archiveUnarchiveCard() {
+			this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
+		},
 	},
 })
 </script>
-<style lang="scss">
-@import '../../css/selector';
+<style scoped lang="scss">
+.done-info {
+	flex-grow: 1;
+}
 
-.duedate-selector {
+.done-info--duedate,
+.done-info--done {
 	display: flex;
+	padding-top: 10px;
+	&.dimmed {
+		color: var(--color-text-maxcontrast);
+	}
+}
+
+.completed-button {
+	margin-left: auto;
+}
+
+.due-actions {
+	display: flex;
+	align-items: flex-start;
 }
 </style>

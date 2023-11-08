@@ -41,6 +41,7 @@ class CardTest extends TestCase {
 		$card->setOwner("admin");
 		$card->setOrder(12);
 		$card->setArchived(false);
+		$card->setDone(null);
 		// TODO: relation shared labels acl
 		return $card;
 	}
@@ -87,6 +88,7 @@ class CardTest extends TestCase {
 			'commentsCount' => 0,
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
+			'done' => null,
 		], (new CardDetails($card))->jsonSerialize());
 	}
 	public function testJsonSerializeLabels() {
@@ -114,6 +116,7 @@ class CardTest extends TestCase {
 			'commentsCount' => 0,
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
+			'done' => false,
 		], (new CardDetails($card))->jsonSerialize());
 	}
 
@@ -143,6 +146,7 @@ class CardTest extends TestCase {
 			'commentsCount' => 0,
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
+			'done' => false,
 		], (new CardDetails($card))->jsonSerialize());
 	}
 }

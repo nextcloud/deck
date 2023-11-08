@@ -146,6 +146,24 @@ class CardController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 * @param $cardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
+	public function done(int $cardId) {
+		return $this->cardService->done($cardId);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @param $cardId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
+	public function undone(int $cardId) {
+		return $this->cardService->undone($cardId);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @param $cardId
 	 * @param $labelId
 	 */
 	public function assignLabel($cardId, $labelId) {

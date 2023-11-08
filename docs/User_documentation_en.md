@@ -12,11 +12,12 @@ Overall, Deck is easy to use. You can create boards, add users, share the Deck, 
 1. [Create my first board](#1-create-my-first-board)
 2. [Create stacks and cards](#2-create-stacks-and-cards)
 3. [Handle cards options](#3-handle-cards-options)
-4. [Archive old tasks](#4-archive-old-tasks)
-5. [Manage your board](#5-manage-your-board)
-6. [Import boards](#6-import-boards)
-7. [Search](#7-search)
-8. [New owner for the deck entities](#8-new-owner-for-the-deck-entities)
+4. [Mark task as done](#4-mark-as-done)
+5. [Archive old tasks](#5-archive-old-tasks)
+6. [Manage your board](#6-manage-your-board)
+7. [Import boards](#7-import-boards)
+8. [Search](#8-search)
+9. [New owner for the deck entities](#9-new-owner-for-the-deck-entities)
 
 ### 1. Create my first board
 In this example, we're going to create a board and share it with an other nextcloud user.
@@ -53,12 +54,18 @@ And even :
 
 ![Gif for puting infos on tasks 2](resources/gifs/EN_put_infos_2.gif)
 
-### 4. Archive old tasks
-Once finished or obsolete, a task could be archived. The tasks is not deleted, it's just archived, and you can retrieve it later
+### 4. Mark as done
+Once a task has been completed, you can mark it as done. This will prevent it from becoming overdue and hide it from the upcoming cards.
+You can mark it as not done at any time.
 
-![Gif for puting infos on tasks 2](resources/gifs/EN_archive.gif)
+![Gif for marking a card as done](resources/gifs/EN_done.gif)
 
-### 5. Manage your board
+### 5. Archive old tasks
+Once obsolete, a task could be archived. The task is not deleted, it's just archived, and you can retrieve it later
+
+![Gif for archiving a task](resources/gifs/EN_archive.gif)
+
+### 6. Manage your board
 You can manage the settings of your Deck once you are inside it, by clicking on the small wheel at the top right.
 Once in this menu, you have access to several things:
 
@@ -72,7 +79,7 @@ The **sharing tab** allows you to add users or even groups to your boards.
 **Deleted objects** allows you to return previously deleted stacks or cards.  
 The **Timeline** allows you to see everything that happened in your boards. Everything!
 
-### 6. Import boards
+### 7. Import boards
 
 Importing can be done using the API or the `occ` `deck:import` command.
 
@@ -138,7 +145,7 @@ Example configuration file:
 }
 ```
 
-### 7. Search
+### 8. Search
 
 Deck provides a global search either through the unified search in the Nextcloud header or with the inline search next to the board controls.
 This search allows advanced filtering of cards across all board of the logged in user.
@@ -161,7 +168,7 @@ Other text tokens will be used to perform a case-insensitive search on the card 
 
 In addition, quotes can be used to pass a query with spaces, e.g. `"Exact match with spaces"` or `title:"My card"`.
 
-### 8. New owner for the deck entities
+### 9. New owner for the deck entities
 You can transfer ownership of boards, cards, etc to a new user, using `occ` command `deck:transfer-ownership`
 
 ```bash

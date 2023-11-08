@@ -35,7 +35,9 @@
 			@select="assignUserToCard"
 			@remove="removeUserFromCard" />
 
-		<DueDateSelector :card="card" :can-edit="canEdit" @change="updateCardDue" />
+		<DueDateSelector :card="card"
+			:can-edit="canEdit"
+			@change="updateCardDue" />
 
 		<div v-if="projectsEnabled" class="section-wrapper">
 			<CollectionList v-if="card.id"
@@ -218,10 +220,34 @@ export default {
 		display: flex;
 		flex-wrap: wrap;
 
-		button.action-item--single {
-			margin-top: -3px;
+		.remove-due-button{
+			margin-top: -2px;
+			margin-left: 6px;
 		}
 	}
+}
+
+.button-group {
+	width: 100%;
+	display: flex;
+
+	button {
+		width: 100%;
+	}
+}
+
+.done {
+	display: flex;
+}
+
+.tag {
+	flex-grow: 0;
+	flex-shrink: 1;
+	overflow: hidden;
+	padding: 0px 5px;
+	border-radius: 15px;
+	font-size: 85%;
+	margin-right: 3px;
 }
 
 .avatarLabel {
