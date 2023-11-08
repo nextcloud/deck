@@ -43,6 +43,7 @@ use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\Event\CardDeletedEvent;
 use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\Model\CardDetails;
+use OCA\Deck\Model\OptionalNullableValue;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
@@ -294,7 +295,7 @@ class CardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function update($id, $title, $stackId, $type, $owner, $description = '', $order = 0, $duedate = null, $deletedAt = null, $archived = null, $done = null) {
+	public function update($id, $title, $stackId, $type, $owner, $description = '', $order = 0, $duedate = null, $deletedAt = null, $archived = null, ?OptionalNullableValue $done = null) {
 		$this->cardServiceValidator->check(compact('id', 'title', 'stackId', 'type', 'owner', 'order'));
 
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
@@ -345,7 +346,7 @@ class CardService {
 			$card->setArchived($archived);
 		}
 		if ($done !== null) {
-			$card->setDone($done);
+			$card->setDone($done->getValue());
 		}
 
 
