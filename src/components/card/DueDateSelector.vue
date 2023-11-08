@@ -29,6 +29,7 @@ import { defineComponent } from 'vue'
 import { NcActionButton, NcActions, NcDatetimePicker } from '@nextcloud/vue'
 import { getDayNamesMin, getFirstDay, getMonthNamesShort } from '@nextcloud/l10n'
 import Calendar from 'vue-material-design-icons/Calendar.vue'
+import readableDate from '../../mixins/readableDate.js'
 
 export default defineComponent({
 	name: 'DueDateSelector',
@@ -38,6 +39,9 @@ export default defineComponent({
 		NcActionButton,
 		NcDatetimePicker,
 	},
+	mixins: [
+		readableDate,
+	],
 	props: {
 		card: {
 			type: Object,
