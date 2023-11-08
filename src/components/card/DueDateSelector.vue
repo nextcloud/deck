@@ -92,6 +92,7 @@ import {
 	NcButton,
 	NcDateTimePickerNative,
 } from '@nextcloud/vue'
+import readableDate from '../../mixins/readableDate.js'
 import { getDayNamesMin, getFirstDay, getMonthNamesShort } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
@@ -118,6 +119,9 @@ export default defineComponent({
 		NcActionSeparator,
 		NcDateTimePickerNative,
 	},
+	mixins: [
+		readableDate,
+	],
 	props: {
 		card: {
 			type: Object,
@@ -224,9 +228,6 @@ export default defineComponent({
 		},
 		archiveUnarchiveCard() {
 			this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
-		},
-		formatReadableDate(date) {
-			return moment(date).format('lll')
 		},
 	},
 })

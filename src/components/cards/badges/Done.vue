@@ -24,7 +24,7 @@
 	<div v-if="card" class="done">
 		<transition name="zoom">
 			<div class="icon-check-circle">
-				<CheckCircle :size="20" />
+				<CheckCircle :size="20" :title="formatReadableDate(card.done)" />
 			</div>
 		</transition>
 	</div>
@@ -32,12 +32,16 @@
 
 <script>
 import CheckCircle from 'vue-material-design-icons/CheckCircle.vue'
+import readableDate from '../../../mixins/readableDate.js'
 
 export default {
 	name: 'Done',
 	components: {
 		CheckCircle,
 	},
+	mixins: [
+		readableDate,
+	],
 	props: {
 		card: {
 			type: Object,

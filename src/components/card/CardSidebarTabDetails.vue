@@ -36,7 +36,7 @@
 			@remove="removeUserFromCard" />
 
 		<DueDateSelector :card="card"
-			:can-edit="canEdit && !saving"
+			:can-edit="canEdit"
 			@change="updateCardDue" />
 
 		<div v-if="projectsEnabled" class="section-wrapper">
