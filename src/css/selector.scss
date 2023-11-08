@@ -33,4 +33,9 @@
 	&--selector {
 		width: 100%;
 	}
+
+	&--content {
+		display: flex;
+		flex-grow: 1;
+	}
 }

@@ -22,31 +22,6 @@
 
 <template>
 	<div v-if="copiedCard">
-		<div class="section-wrapper">
-			<div class="section-details">
-				<div class="button-group">
-					<NcButton v-if="!card.done" type="secondary" @click="changeCardDoneStatus()">
-						<template #icon>
-							<CheckIcon :size="20" />
-						</template>
-						{{ t('deck', 'Mark as done') }}
-					</NcButton>
-					<NcButton v-if="card.done" type="tertiary" @click="changeCardDoneStatus()">
-						<template #icon>
-							<ClearIcon :size="20" />
-						</template>
-						{{ t('deck', 'Mark as not done') }}
-					</NcButton>
-					<NcButton type="tertiary" @click="archiveUnarchiveCard()">
-						<template #icon>
-							<ArchiveIcon :size="20" />
-						</template>
-						{{ card.archived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
-					</NcButton>
-				</div>
-			</div>
-		</div>
-
 		<TagSelector :card="card"
 			:labels="currentBoard.labels"
 			:disabled="!canEdit"
@@ -60,17 +35,7 @@
 			@select="assignUserToCard"
 			@remove="removeUserFromCard" />
 
-		<div v-if="card.done">
-			<div class="done">
-				<CheckIcon :size="20" /> {{ t('deck', 'Done') }}
-				<div v-if="card.done" class="done-label">
-					{{ stringify(card.done) }}
-				</div>
-			</div>
-		</div>
-
-		<DueDateSelector v-else
-			:card="card"
+		<DueDateSelector :card="card"
 			:can-edit="canEdit && !saving"
 			@change="updateCardDue" />
 
@@ -92,10 +57,6 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
-import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
-import CheckIcon from 'vue-material-design-icons/Check.vue'
-import ClearIcon from 'vue-material-design-icons/Close.vue'
-import { NcButton } from '@nextcloud/vue'
 import { loadState } from '@nextcloud/initial-state'
 
 import { CollectionList } from 'nextcloud-vue-collections'
@@ -116,10 +77,6 @@ export default {
 		TagSelector,
 		Description,
 		CollectionList,
-		NcButton,
-		ArchiveIcon,
-		CheckIcon,
-		ClearIcon,
 	},
 	mixins: [Color],
 	props: {
@@ -165,12 +122,6 @@ export default {
 		descriptionChanged(newDesc) {
 			this.$store.dispatch('updateCardDesc', { ...this.card, description: newDesc })
 			this.copiedCard.description = newDesc
-		},
-		changeCardDoneStatus() {
-			this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })
-		},
-		archiveUnarchiveCard() {
-			this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
 		},
 		async initialize() {
 			if (!this.card) {
