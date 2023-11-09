@@ -220,6 +220,7 @@ export default {
 		background-color: var(--color-main-background);
 		margin-bottom: $card-spacing;
 		border: 2px solid var(--color-border);
+		width: 100%;
 
 		&:deep(*) {
 			cursor: pointer;
@@ -229,6 +230,11 @@ export default {
 			border: 2px solid var(--color-border-dark);
 		}
 		&.current-card {
+			border: 2px solid var(--color-primary-element);
+		}
+
+		&:focus, &:focus-visible, &:focus-within, &:hover {
+			outline: none;
 			border: 2px solid var(--color-primary-element);
 		}
 

@@ -26,10 +26,9 @@
 		<div v-click-outside="stopCardCreation"
 			class="stack__header"
 			:class="{'stack__header--add': showAddCard}"
-			tabindex="0"
 			:aria-label="stack.title">
 			<transition name="fade" mode="out-in">
-				<h3 v-if="!canManage || isArchived">
+				<h3 v-if="!canManage || isArchived" tabindex="0">
 					{{ stack.title }}
 				</h3>
 				<h3 v-else-if="!editing"
@@ -330,8 +329,6 @@ export default {
 
 	.stack {
 		width: $stack-width + $stack-spacing * 3;
-		margin-left: math.div($stack-spacing, 2);
-		margin-right: math.div($stack-spacing, 2);
 	}
 
 	.stack__header {
@@ -340,6 +337,7 @@ export default {
 		top: 0;
 		z-index: 100;
 		padding-left: $card-spacing;
+		padding-right: $card-spacing;
 		cursor: grab;
 		min-height: 44px;
 
@@ -351,7 +349,7 @@ export default {
 			width: 100%;
 			height: 20px;
 			top: 30px;
-			right: 10px;
+			left: 0px;
 			z-index: 99;
 			transition: top var(--animation-slow);
 
