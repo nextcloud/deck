@@ -1,6 +1,37 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.12.0-beta.1
+
+### Added
+
+- Added ability to mark a card as done @TehThanos [#4137](https://github.com/nextcloud/deck/pull/4137)
+- Card Cover Images @jszeibert [#5035](https://github.com/nextcloud/deck/pull/5035)
+- Upcoming/Today/Tomorrow dashboard widgets @BKapelari [#2658](https://github.com/nextcloud/deck/pull/2658)
+- Enabled advanced fields option on tag color picker @faab007nl [#4362](https://github.com/nextcloud/deck/pull/4362)
+- Remember last board, list for new card dialog @luka-nextcloud [#5046](https://github.com/nextcloud/deck/pull/5046)
+- Add support for bidirectional text @jamazi [#5258](https://github.com/nextcloud/deck/pull/5258)
+
+### Fixed
+
+- Deck card comment notification label improvement @Jerome-Herbinet [#4748](https://github.com/nextcloud/deck/pull/4748)
+- update smart picker links @luka-nextcloud [#5047](https://github.com/nextcloud/deck/pull/5047)
+- feat: Enhance dark mode @juliushaertl [#5045](https://github.com/nextcloud/deck/pull/5045)
+- fix: export doesn't handle lists with no cards @magikmw [#5096](https://github.com/nextcloud/deck/pull/5096)
+- add attributes aria-label= and title= to Filters & View Modes buttons @privatemaker [#5133](https://github.com/nextcloud/deck/pull/5133)
+- fix: Check both card reference url patterns @juliushaertl [#5262](https://github.com/nextcloud/deck/pull/5262)
+- fix: Avoid too large index on postgres as indexing just the last_editor column is enough @juliushaertl [#5260](https://github.com/nextcloud/deck/pull/5260)
+- feat: error msg on CreateNewCardCustomPicker & only show available bo… @luka-nextcloud [#5029](https://github.com/nextcloud/deck/pull/5029)
+- test: add cypress tests for create new deck card @luka-nextcloud [#5025](https://github.com/nextcloud/deck/pull/5025)
+- Remove duplicate button @solracsf [#4850](https://github.com/nextcloud/deck/pull/4850)
+- [stable27] fix cypress for new file picker [#5088](https://github.com/nextcloud/deck/pull/5088)
+- Replace "Timeline" wording with "Activity" in order to be consistent with equivalent contexts throughout Nextcloud @Jerome-Herbinet [#5164](https://github.com/nextcloud/deck/pull/5164)
+- Board creation limitation : More understandable wordings @Jerome-Herbinet [#5168](https://github.com/nextcloud/deck/pull/5168)
+- ci(cypress): Fix file picker selector @juliushaertl [#5212](https://github.com/nextcloud/deck/pull/5212)
+- Switch to native date picker @juliushaertl [#4668](https://github.com/nextcloud/deck/pull/4668)
+- fixes minor spelling error @FundreasFrohsinn [#5216](https://github.com/nextcloud/deck/pull/5216)
+- feat(card): tooltip for comment timestamp @fitrahfm [#5253](https://github.com/nextcloud/deck/pull/5253)
+
 ## 1.10.0-beta.1
 
 ### Added
@@ -519,7 +550,7 @@ Android app team for helping to improve our REST API:
 - Fix comment activities on Nextcloud 15
 - Fix issues with Edge
 - API: Fix numeric types that were returned as strings
-- API: Fix If-Modified-Since header parsing  
+- API: Fix If-Modified-Since header parsing
 
 
 ## 0.5.1 - 2018-12-05
@@ -646,7 +677,7 @@ Android app team for helping to improve our REST API:
 ### Fixed
 - Various frontend fixes
 - Fix sidebar drag issues
-- Improvements for IE11 
+- Improvements for IE11
 - Fix bug when draging a card to an empty stack
 
 ## 0.2.1 - 2017-07-04
@@ -720,7 +751,7 @@ Android app team for helping to improve our REST API:
 
 ### Fixed
 - Various styling improvements
-- Fix problems with MySQL and PostgreSQL 
+- Fix problems with MySQL and PostgreSQL
 - Select first color by default when creating boards
 - Fix error when changing board permissions
 
@@ -728,9 +759,9 @@ Android app team for helping to improve our REST API:
 
 ### Added
 - Sharing boards with other users
-- Create and manage boards 
+- Create and manage boards
 - Sort cards on stacks by drag-and-drop
 - Assign labels
 - Markdown notes for each card
-- Archive cards 
+- Archive cards
 
