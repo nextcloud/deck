@@ -26,6 +26,7 @@ OC.L10N.register(
     "Update" : "Թարմացնել",
     "Created:" : "Ստեղծված.",
     "Description" : "Նկարագրություն",
+    "Completed" : "Ավարտվեց",
     "seconds ago" : "վրկ. առաջ",
     "Shared with you" : "Shared with you",
     "Today" : "այսօր",

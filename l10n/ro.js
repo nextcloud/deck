@@ -56,6 +56,7 @@ OC.L10N.register(
     "Created:" : "Creat:",
     "Description" : "Descriere",
     "Edit description" : "Editează descriere",
+    "Completed" : "Terminat",
     "Archive card" : "Arhivează card",
     "(group)" : "(grup)",
     "Move card" : "Mută card",

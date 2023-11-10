@@ -23,6 +23,7 @@ OC.L10N.register(
     "Update" : "Yenilənmə",
     "Created:" : "Yaradıldı:",
     "Description" : "Açıqlanma",
+    "Completed" : "Bitmişdir",
     "(group)" : "(qrup)",
     "seconds ago" : "saniyələr öncə",
     "Shared with you" : "Shared with you",

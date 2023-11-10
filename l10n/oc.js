@@ -43,6 +43,7 @@ OC.L10N.register(
     "Update" : "Metre a jorn",
     "Created:" : "Creat lo :",
     "Description" : "Descripcion",
+    "Completed" : "Acabat",
     "seconds ago" : "fa qualques segondas",
     "Shared with you" : "Shared with you",
     "No notifications" : "Cap de notificacion",

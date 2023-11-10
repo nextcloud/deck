@@ -21,6 +21,7 @@ OC.L10N.register(
     "Edit" : "Deasaich",
     "Download" : "Luchdaich a-nuas",
     "Save" : "Sàbhail",
+    "Completed" : "Coileanta",
     "seconds ago" : "diog air ais",
     "No notifications" : "Gun bhrath",
     "Today" : "An-diugh",

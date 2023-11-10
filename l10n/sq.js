@@ -47,6 +47,7 @@ OC.L10N.register(
     "Description" : "Përshkrim",
     "Formatting help" : "Ndihmë formatimi",
     "Remove due date" : "Hiq datën e mbarimit",
+    "Completed" : "Të plotësuara",
     "Select Date" : "Zgjidhni Datën",
     "(group)" : "(grup)",
     "List is empty" : "Lista është bosh",

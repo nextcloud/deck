@@ -20,6 +20,7 @@ OC.L10N.register(
     "Comments" : "ຄໍາເຫັນ",
     "Modified" : "\"{name}\" ແມ່ນຊື່ໄຟລ໌ທີ່ບໍ່ຖືກຕ້ອງ.",
     "Save" : "ບັນທຶກ",
+    "Completed" : "ສຳເລັດ",
     "seconds ago" : "ວິນາທີຜ່ານມາ",
     "Shared with you" : "ແບ່ງປັບກັບທ່ານ",
     "No notifications" : "ບໍ່ມີການແຈ້ງເຕືອນ",

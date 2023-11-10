@@ -98,6 +98,8 @@ OC.L10N.register(
     "Formatting help" : "서식 도움말",
     "Edit description" : "설명 편집",
     "Remove due date" : "만료 날짜 삭제",
+    "Completed" : "완료됨",
+    "Not completed" : "완성되지 않았다",
     "Archive card" : "보관 카드",
     "Select Date" : "날짜 선택",
     "(group)" : "(그룹)",

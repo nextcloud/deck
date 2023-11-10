@@ -24,6 +24,7 @@ OC.L10N.register(
     "Save" : "Sekles",
     "Cancel reply" : "Semmet tiririt.",
     "Reply" : "Err",
+    "Completed" : "Yemmed",
     "No notifications" : "Ulac tisezmal",
     "Today" : "Ass-a",
     "Close" : "Mdel",

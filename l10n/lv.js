@@ -39,6 +39,7 @@ OC.L10N.register(
     "Update" : "Atjaunināt",
     "Created:" : "Izveidots:",
     "Description" : "Apraksts",
+    "Completed" : "Pabeigts",
     "Select Date" : "Izvēlieties datumu",
     "(group)" : "(grupa)",
     "seconds ago" : "sekundēm",
