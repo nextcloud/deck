@@ -249,7 +249,6 @@ export default {
 					padding: $stack-spacing;
 					overflow-x: hidden;
 					overflow-y: auto;
-					scrollbar-gutter: stable;
 					padding-top: 15px;
 					margin-top: -10px;
 					scrollbar-gutter: stable;

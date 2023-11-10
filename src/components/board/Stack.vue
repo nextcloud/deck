@@ -346,7 +346,7 @@ export default {
 			content: ' ';
 			display: block;
 			position: absolute;
-			width: 100%;
+			width: calc(100% - 16px);
 			height: 20px;
 			top: 30px;
 			left: 0px;

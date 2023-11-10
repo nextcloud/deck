@@ -85,6 +85,10 @@ export default {
 .card-cover {
 	height: 100px;
 	display: flex;
+	margin-top: -8px;
+	margin-left: -8px;
+	margin-right: -8px;
+
 	.image-wrapper {
 		flex: 1;
 		position: relative;

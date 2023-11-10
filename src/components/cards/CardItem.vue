@@ -64,24 +64,29 @@
 					<input type="submit" value="" class="icon-confirm">
 				</form>
 
-				<DueDate v-if="!editing && !card.done" :card="card" />
-				<Done v-else-if="!editing && card.done" :card="card" />
-
-				<CardMenu v-if="!editing && compactMode" :card="card" class="right" />
+				<CardMenu v-if="showMenuAtTitle" :card="card" class="right card-menu" />
 			</div>
 
-			<transition-group v-if="card.labels && card.labels.length"
-				name="zoom"
-				tag="ul"
-				class="labels"
-				@click.stop="openCard">
-				<li v-for="label in labelsSorted" :key="label.id" :style="labelStyle(label)">
-					<span @click.stop="applyLabelFilter(label)">{{ label.title }}</span>
-				</li>
-			</transition-group>
+			<div v-if="hasLabels" class="card-labels">
+				<transition-group v-if="card.labels && card.labels.length"
+					name="zoom"
+					tag="ul"
+					class="labels"
+					@click.stop="openCard">
+					<li v-for="label in labelsSorted" :key="label.id" :style="labelStyle(label)">
+						<span @click.stop="applyLabelFilter(label)">{{ label.title }}</span>
+					</li>
+				</transition-group>
+				<CardMenu v-if="showMenuAtLabels" :card="card" class="right" />
+			</div>
 
-			<div v-show="!compactMode" class="card-controls compact-item" @click="openCard">
-				<CardBadges :card="card" />
+			<div v-if="hasBadges"
+				v-show="!compactMode"
+				class="card-controls compact-item"
+				@click="openCard">
+				<CardBadges :card="card">
+					<CardMenu v-if="showMenuAtBadges" :card="card" class="right" />
+				</CardBadges>
 			</div>
 		</div>
 	</AttachmentDragAndDrop>
@@ -95,13 +100,11 @@ import Color from '../../mixins/color.js'
 import labelStyle from '../../mixins/labelStyle.js'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
 import CardMenu from './CardMenu.vue'
-import Done from './badges/Done.vue'
-import DueDate from './badges/DueDate.vue'
 import CardCover from './CardCover.vue'
 
 export default {
 	name: 'CardItem',
-	components: { CardBadges, AttachmentDragAndDrop, CardMenu, DueDate, CardCover, Done },
+	components: { CardBadges, AttachmentDragAndDrop, CardMenu, CardCover },
 	directives: {
 		ClickOutside,
 	},
@@ -165,6 +168,39 @@ export default {
 		labelsSorted() {
 			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
+		hasLabels() {
+			return this.card.labels.length > 0
+		},
+		hasBadges() {
+			return this.card.done
+				|| this.card.duedate
+				|| this.idBadge
+				|| this.card.commentsCount > 0
+				|| this.card.description
+				|| this.card.attachmentCount > 0
+				|| this.card.assignedUsers.length > 0
+		},
+		idBadge() {
+			return this.$store.getters.config('cardIdBadge')
+		},
+		showMenuAtTitle() {
+			if (this.editing) {
+				return false
+			}
+			return this.compactMode || (!this.compactMode && !this.hasBadges && !this.hasLabels)
+		},
+		showMenuAtLabels() {
+			if (this.compactMode) {
+				return false
+			}
+			return !this.hasBadges && this.hasLabels
+		},
+		showMenuAtBadges() {
+			if (this.compactMode) {
+				return false
+			}
+			return this.hasBadges
+		},
 	},
 	watch: {
 		currentCard(newValue) {
@@ -219,8 +255,12 @@ export default {
 		font-size: 100%;
 		background-color: var(--color-main-background);
 		margin-bottom: $card-spacing;
+		padding: var(--default-grid-baseline) $card-padding;
 		border: 2px solid var(--color-border);
 		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
 
 		&:deep(*) {
 			cursor: pointer;
@@ -240,7 +280,6 @@ export default {
 
 		.card-upper {
 			display: flex;
-			min-height: 44px;
 			form {
 				display: flex;
 				padding: 3px 5px;
@@ -251,13 +290,14 @@ export default {
 
 			}
 			h3 {
-				margin: 5px $card-padding;
+				margin: 0;
 				padding: 6px;
 				flex-grow: 1;
 				font-size: 100%;
 				overflow: hidden;
 				word-wrap: break-word;
 				padding-left: 4px;
+				align-self: center;
 				&.editable {
 					cursor: text;
 
@@ -270,6 +310,10 @@ export default {
 			input[type=text] {
 				font-size: 100%;
 			}
+			.card-menu {
+				height: 44px;
+				align-self: end;
+			}
 		}
 
 		/* stylelint-disable-next-line no-invalid-position-at-import-rule */
@@ -277,13 +321,6 @@ export default {
 
 		.card-controls {
 			display: flex;
-			margin-left: $card-padding;
-			margin-right: $card-padding;
-
-			& > div {
-				display: flex;
-				max-height: 44px;
-			}
 		}
 		&.card__editable .card-controls {
 			margin-right: 0;
@@ -291,10 +328,16 @@ export default {
 		&.card__archived {
 			background-color: var(--color-background-dark);
 		}
-	}
+		.card-labels {
+			display: flex;
+			align-items: end;
+			margin-bottom: var(--default-grid-baseline);
 
-	.duedate {
-		margin-right: 9px;
+			.labels {
+				flex-wrap: wrap;
+				align-self: flex-start;
+			}
+		}
 	}
 
 	.right {
@@ -346,6 +389,11 @@ export default {
 		.card {
 			@include dark-card;
 		}
+	}
 
+	@media print {
+		.card-menu {
+			display: none;
+		}
 	}
 </style>
