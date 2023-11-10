@@ -24,6 +24,7 @@ OC.L10N.register(
     "Update" : "Update",
     "Created:" : "Erstallt:",
     "Description" : "Beschreiwung",
+    "Completed" : "Erfëllt",
     "seconds ago" : "Sekonnen hier",
     "Shared with you" : "Mat dir gedeelt",
     "Today" : "Haut",

@@ -143,6 +143,7 @@ OC.L10N.register(
     "Formatting help" : "Hjálp við að sníða",
     "Set a due date" : "Setja lokadag",
     "Remove due date" : "Fjarlægja skiladag",
+    "Completed" : "Lokið",
     "Unarchive card" : "Taka spjald úr geymslu",
     "Archive card" : "Setja spjald í geymslu",
     "Select Date" : "Veldu dag",

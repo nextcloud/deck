@@ -20,6 +20,7 @@ OC.L10N.register(
     "Created:" : "Creóse'l",
     "Description" : "Descripción",
     "(Saving…)" : "(Guardando…)",
+    "Completed" : "Completáu",
     "All cards" : "Toles tarxetes",
     "An error occurred" : "Prodúxose un error",
     "Today" : "Güei",

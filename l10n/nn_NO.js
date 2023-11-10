@@ -27,6 +27,7 @@ OC.L10N.register(
     "Update" : "Oppdater",
     "Created:" : "Oppretta:",
     "Description" : "Skildring",
+    "Completed" : "Fullført",
     "seconds ago" : "sekund sidan",
     "Shared with you" : "Shared with you",
     "An error occurred" : "Det oppstod ein feil.",

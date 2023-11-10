@@ -37,6 +37,7 @@ OC.L10N.register(
     "Update" : "Uuenda",
     "Created:" : "Loodud:",
     "Description" : "Kirjeldus",
+    "Completed" : "Lõpetatud",
     "(group)" : "(grupp)",
     "Delete card" : "Kustuta kaart",
     "seconds ago" : "sekundit tagasi",

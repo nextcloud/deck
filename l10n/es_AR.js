@@ -76,6 +76,7 @@ OC.L10N.register(
     "Description" : "Descripción",
     "Formatting help" : "Ayuda de formato",
     "Remove due date" : "Eliminar fecha de vencimiento",
+    "Completed" : "Completado",
     "Select Date" : "Seleccionar fecha",
     "(group)" : "(grupo)",
     "Card details" : "Detalles de la tarjeta",

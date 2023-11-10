@@ -45,6 +45,7 @@ OC.L10N.register(
     "Description" : "აღწერა",
     "Formatting help" : "დახმარება ფორმატირებაზე",
     "Remove due date" : "მოაშორეთ დანიშნულების დრო",
+    "Completed" : "დასრულებული",
     "(group)" : "(ჯგუფი)",
     "seconds ago" : "წამის წინ",
     "Archived boards" : "არქივირებული დაფები",
