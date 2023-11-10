@@ -23,6 +23,7 @@ OC.L10N.register(
     "Update" : "পরিবর্ধন",
     "Created:" : "তৈরীর নির্ঘন্টঃ",
     "Description" : "বিবরণ",
+    "Completed" : "সুসম্পন্ন",
     "(group)" : "(গোষ্ঠি)",
     "seconds ago" : "সেকেন্ড পূর্বে",
     "Shared with you" : "Shared with you",

@@ -25,6 +25,7 @@ OC.L10N.register(
     "Reply" : "පිළිතුර",
     "Update" : "යාවත්කාල",
     "Description" : "විස්තරය",
+    "Completed" : "සම්පුර්ණයි",
     "Select Date" : "දිනය තෝරන්න",
     "seconds ago" : "තත්පර කිහිපයකට පෙර",
     "Today" : "අද",

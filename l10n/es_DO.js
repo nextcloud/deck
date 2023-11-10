@@ -48,6 +48,7 @@ OC.L10N.register(
     "Description" : "Descripción",
     "Formatting help" : "Ayuda de formato",
     "Remove due date" : "Eliminar fecha de expiración",
+    "Completed" : "Completado",
     "(group)" : "(grupo)",
     "seconds ago" : "hace segundos",
     "Archived boards" : "Tableros archivados",

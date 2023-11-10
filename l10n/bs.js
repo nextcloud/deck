@@ -21,6 +21,7 @@ OC.L10N.register(
     "Save" : "Spremi",
     "Update" : "Ažuriraj",
     "Description" : "Opis",
+    "Completed" : "Zavrženo",
     "Shared with you" : "Shared with you",
     "Today" : "Danas",
     "Tomorrow" : "Sutra",

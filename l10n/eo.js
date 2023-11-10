@@ -106,6 +106,7 @@ OC.L10N.register(
     "Description" : "Priskribo",
     "Formatting help" : "Helpo pri tekstaranĝo",
     "Remove due date" : "Viŝi limdaton",
+    "Completed" : "Plenumita",
     "Unarchive card" : "Malarĥivigi karton",
     "Archive card" : "Arĥivigi karton",
     "Select Date" : "Elekti daton",

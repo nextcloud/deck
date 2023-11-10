@@ -33,6 +33,7 @@ OC.L10N.register(
     "Update" : "Шинэчлэх",
     "Created:" : "Үүсгэсэн:",
     "Description" : "Тайлбар",
+    "Completed" : "Гүйцэтгэгдсэн",
     "(group)" : "(бүлэг)",
     "seconds ago" : "хоёрдахь өмнө",
     "Shared with you" : "тантай хуваалцсан",

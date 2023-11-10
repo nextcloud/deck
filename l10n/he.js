@@ -210,6 +210,7 @@ OC.L10N.register(
     "Choose attachment" : "בחירת קובץ מצורף",
     "Set a due date" : "הגדרת תאריך יעד",
     "Remove due date" : "הסרת מועד התפוגה",
+    "Completed" : "הושלם",
     "Unarchive card" : "הוצאת הכרטיס מהארכיון",
     "Archive card" : "העברת כרטיס לארכיון",
     "Select Date" : "בחירת תאריך",

@@ -23,6 +23,7 @@ OC.L10N.register(
     "Reply" : "Odgovori",
     "Update" : "Ažuriraj",
     "Description" : "Opis",
+    "Completed" : "Završeno",
     "Archive card" : "Arhiviraj karticu",
     "Move card" : "Premesti karticu",
     "Delete card" : "Obriši karticu",
