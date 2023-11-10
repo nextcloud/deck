@@ -41,6 +41,7 @@ OC.L10N.register(
     "Update" : "อัปเดต",
     "Created:" : "สร้างเมื่อ:",
     "Description" : "รายละเอียด",
+    "Completed" : "เสร็จแล้ว",
     "(group)" : "(กลุ่ม)",
     "seconds ago" : "วินาทีที่ผ่านมา",
     "Shared with you" : "แชร์กับคุณ",

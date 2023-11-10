@@ -31,6 +31,7 @@ OC.L10N.register(
     "Update" : "Actualisation",
     "Created:" : "Create:",
     "Description" : "Description",
+    "Completed" : "Completate",
     "(group)" : "(gruppo)",
     "seconds ago" : "secundas passate",
     "Shared with you" : "Compartite con te",

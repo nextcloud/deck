@@ -32,6 +32,7 @@ OC.L10N.register(
     "Update" : "Werk by",
     "Created:" : "Geskep:",
     "Description" : "Beskrywing",
+    "Completed" : "Voltooid",
     "Select Date" : "Kies Datum",
     "seconds ago" : "sekondes gelede",
     "Shared with you" : "Met u gedeel",

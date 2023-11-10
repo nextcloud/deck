@@ -236,6 +236,8 @@ OC.L10N.register(
     "Assign a due date to this card…" : "Tildel en dato på dette kortet...",
     "Set a due date" : "Set forfallsdato",
     "Remove due date" : "Fjern forfallsdato",
+    "Completed" : "Ferdig",
+    "Not completed" : "Ikke ferdigstilt",
     "Unarchive card" : "Hent kort fra arkiv",
     "Archive card" : "Arkiver kort",
     "Select Date" : "Velg dato",

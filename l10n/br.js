@@ -30,6 +30,7 @@ OC.L10N.register(
     "Update" : "Adnevesaat",
     "Created:" : "Krouet :",
     "Description" : "Diskrivadur",
+    "Completed" : "Achuet",
     "(group)" : "(strollad)",
     "seconds ago" : "eilenn zo",
     "Shared with you" : "Rannet ganeoc'h",

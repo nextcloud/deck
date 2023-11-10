@@ -135,6 +135,7 @@ OC.L10N.register(
     "Update" : "Atualizar",
     "Created:" : "Criado:",
     "Description" : "Descrição",
+    "Completed" : "Concluída",
     "Archive card" : "Arquivar cartão",
     "Select Date" : "Escolha a data",
     "(group)" : "(grupo)",
