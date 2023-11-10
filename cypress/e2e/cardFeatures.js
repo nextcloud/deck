@@ -214,8 +214,7 @@ describe('Card', function() {
 			cy.tick(1_000)
 			cy.get('[data-cy-due-date-remove] button').should('be.visible').click()
 
-			cy.get(`.card:contains("${newCardTitle}")`).find('[data-due-state]').should('not.be.visible')
-
+			cy.get(`.card:contains("${newCardTitle}")`).find('[data-due-state]').should('not.exist')
 		})
 
 	})
