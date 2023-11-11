@@ -26,22 +26,28 @@
 			<CardBulletedIcon slot="icon" :size="20" decorative />
 			{{ t('deck', 'Card details') }}
 		</NcActionButton>
-		<NcActionButton v-if="showArchived === false && !isCurrentUserAssigned"
+		<NcActionButton v-if="canEdit && !isCurrentUserAssigned"
 			icon="icon-user"
 			:close-after-click="true"
 			@click="assignCardToMe()">
 			{{ t('deck', 'Assign to me') }}
 		</NcActionButton>
-		<NcActionButton v-if="showArchived === false && isCurrentUserAssigned"
+		<NcActionButton v-if="canEdit && isCurrentUserAssigned"
 			icon="icon-user"
 			:close-after-click="true"
 			@click="unassignCardFromMe()">
 			{{ t('deck', 'Unassign myself') }}
 		</NcActionButton>
-		<NcActionButton icon="icon-checkmark" :close-after-click="true" @click="changeCardDoneStatus()">
+		<NcActionButton v-if="canEdit"
+			icon="icon-checkmark"
+			:close-after-click="true"
+			@click="changeCardDoneStatus()">
 			{{ card.done ? t('deck', 'Mark as not done') : t('deck', 'Mark as done') }}
 		</NcActionButton>
-		<NcActionButton icon="icon-external" :close-after-click="true" @click="modalShow=true">
+		<NcActionButton v-if="canEdit"
+			icon="icon-external"
+			:close-after-click="true"
+			@click="modalShow=true">
 			{{ t('deck', 'Move card') }}
 		</NcActionButton>
 		<NcActionButton v-for="action in cardActions"
@@ -51,13 +57,13 @@
 			@click="action.callback(cardRichObject)">
 			{{ action.label }}
 		</NcActionButton>
-		<NcActionButton :close-after-click="true" @click="archiveUnarchiveCard()">
+		<NcActionButton v-if="canEditBoard" :close-after-click="true" @click="archiveUnarchiveCard()">
 			<template #icon>
 				<ArchiveIcon :size="20" decorative />
 			</template>
 			{{ card.archived ? t('deck', 'Unarchive card') : t('deck', 'Archive card') }}
 		</NcActionButton>
-		<NcActionButton v-if="showArchived === false"
+		<NcActionButton v-if="canEdit"
 			icon="icon-delete"
 			:close-after-click="true"
 			@click="deleteCard()">
@@ -136,6 +142,9 @@ export default {
 			currentBoard: state => state.currentBoard,
 		}),
 		canEdit() {
+			return !this.card.archived
+		},
+		canEditBoard() {
 			if (this.currentBoard) {
 				return this.$store.getters.canEdit
 			}
