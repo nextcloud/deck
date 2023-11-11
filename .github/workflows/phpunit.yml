@@ -70,7 +70,7 @@ jobs:
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@2.27.0
+        uses: shivammathur/setup-php@2.27.1
         with:
           php-version: ${{ matrix.php-versions }}
           tools: phpunit
