@@ -84,7 +84,20 @@ export default {
 			params.append('object_id', '' + this.objectId)
 			params.append('limit', ACTIVITY_FETCH_LIMIT)
 
-			const response = await axios.get(generateOcsUrl(`apps/activity/api/v2/activity/${this.filter}`) + '?' + params)
+			const response = await axios.get(
+				generateOcsUrl(`apps/activity/api/v2/activity/${this.filter}`) + '?' + params,
+				{
+					validateStatus: (status) => {
+						return (status >= 200 && status < 300) || status === 304
+					},
+				},
+			)
+
+			if (response.status === 304) {
+				this.endReached = true
+				return []
+			}
+
 			let activities = response.data.ocs.data
 			if (this.filter === 'deck') {
 				// We need to manually filter activities here, since currently we use two different types and there is no way
@@ -95,7 +108,7 @@ export default {
 				})
 			}
 			this.activities.push(...activities)
-			if (response.data.ocs.meta.statuscode === 304 || activities.length === 0) {
+			if (activities.length === 0) {
 				this.endReached = true
 				return []
 			}
