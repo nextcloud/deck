@@ -34,6 +34,7 @@ import Overview from './components/overview/Overview.vue'
 Vue.use(Router)
 
 export default new Router({
+	mode: 'history',
 	base: generateUrl('/apps/deck/'),
 	linkActiveClass: 'active',
 	routes: [

@@ -23,6 +23,8 @@
 
 namespace OCA\Deck\Controller;
 
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use \OCP\AppFramework\Http\RedirectResponse;
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\Db\Acl;
@@ -97,6 +99,30 @@ class PageController extends Controller {
 		}
 
 		return $response;
+	}
+
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function indexList(): TemplateResponse {
+		return $this->index();
+	}
+
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function indexBoard(int $boardId): TemplateResponse {
+		return $this->index($boardId);
+	}
+
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function indexBoardDetails(int $boardId): TemplateResponse {
+		return $this->index($boardId);
+	}
+
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function indexCard(int $cardId): TemplateResponse {
+		return $this->index(cardId: $cardId);
 	}
 
 	/**
