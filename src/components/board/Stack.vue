@@ -409,7 +409,7 @@ export default {
 		z-index: 100;
 		display: flex;
 		margin-top: 5px;
-		margin-bottom: 20px;
+		margin-bottom: 8px;
 		background-color: var(--color-main-background);
 
 		form {
@@ -417,7 +417,7 @@ export default {
 			margin-left: 12px;
 			margin-right: 12px;
 			width: 100%;
-			box-shadow: 0 0 3px var(--color-box-shadow);
+			border: 2px solid var(--color-border);
 			border-radius: var(--border-radius-large);
 			overflow: hidden;
 			padding: 2px;
