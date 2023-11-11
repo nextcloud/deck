@@ -33,7 +33,7 @@ import Overview from './components/overview/Overview.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
 	mode: 'history',
 	base: generateUrl('/apps/deck/'),
 	linkActiveClass: 'active',
@@ -158,3 +158,15 @@ export default new Router({
 		},
 	],
 })
+
+router.beforeEach((to, from, next) => {
+	// Redirect if fullPath begins with a hash (ignore hashes later in path)
+	if (to.fullPath.substring(0, 2) === '/#') {
+		const path = to.fullPath.substring(2)
+		next(path)
+		return
+	}
+	next()
+})
+
+export default router
