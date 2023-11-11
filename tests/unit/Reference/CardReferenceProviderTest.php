@@ -22,6 +22,9 @@
 
 namespace Reference;
 
+use OCA\Deck\Db\Board;
+use OCA\Deck\Db\Card;
+use OCA\Deck\Db\Stack;
 use OCA\Deck\Reference\CardReferenceProvider;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
@@ -51,16 +54,55 @@ class CardReferenceProviderTest extends TestCase {
 		);
 	}
 
-	public function testUrl() {
+	public static function dataUrl(): array {
+		return [
+			['https://nextcloud.com', null],
+			['https://localhost/apps/deck/#!/board/2/card/11', 11],
+			['https://localhost/index.php/apps/deck/#!/board/2/card/11', 11],
+			['https://localhost/apps/deck/#/board/2/card/11', 11],
+			['https://localhost/index.php/apps/deck/#/board/2/card/11', 11],
+			['https://localhost/apps/deck/board/2/card/11', 11],
+			['https://localhost/index.php/apps/deck/board/2/card/11', 11],
+			['https://localhost/apps/deck/card/11', 11],
+			['https://localhost/index.php/apps/deck/card/11', 11],
+		];
+	}
+
+	/**
+	 * @dataProvider dataUrl
+	 */
+	public function testUrl($url, $id) {
 		$this->urlGenerator->expects($this->any())
 			->method('getAbsoluteURL')
 			->willReturnCallback(function ($path) {
 				return 'https://localhost/' . ltrim($path, '/');
 			});
-		self::assertFalse($this->provider->matchReference('https://nextcloud.com'));
-		self::assertTrue($this->provider->matchReference('https://localhost/apps/deck/#/board/2/card/11'));
-		self::assertTrue($this->provider->matchReference('https://localhost/index.php/apps/deck/#/board/2/card/11'));
-		self::assertTrue($this->provider->matchReference('https://localhost/apps/deck/card/11'));
-		self::assertTrue($this->provider->matchReference('https://localhost/index.php/apps/deck/card/11'));
+		$matchExpect = $id !== null;
+		self::assertEquals($matchExpect, $this->provider->matchReference($url));
+
+		$card = Card::fromRow([
+			'id' => $id,
+			'stackId' => 1234,
+		]);
+		$stack = Stack::fromRow([
+			'boardId' => 9876,
+		]);
+		$board = Board::fromRow([
+			'id' => 9876,
+		]);
+
+		$this->cardService->method('find')->with($id)->willReturn($card);
+		$this->stackService->method('find')->with(1234)->willReturn($stack);
+		$this->boardService->method('find')->with(9876)->willReturn($board);
+
+		$reference = $this->provider->resolveReference($url);
+
+		if ($id !== null) {
+			self::assertEquals($id, $reference->jsonSerialize()['richObject']['card']['id']);
+			self::assertEquals(9876, $reference->jsonSerialize()['richObject']['board']['id']);
+
+		} else {
+			self::assertNull($reference);
+		}
 	}
 }
