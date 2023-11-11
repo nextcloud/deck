@@ -42,6 +42,13 @@
 				<NcActionButton icon="icon-external" :close-after-click="true" @click="modalShow=true">
 					{{ t('deck', 'Move card') }}
 				</NcActionButton>
+				<NcActionButton v-for="action in cardActions"
+					:key="action.label"
+					:close-after-click="true"
+					:icon="action.icon"
+					@click="action.callback(cardRichObject)">
+					{{ action.label }}
+				</NcActionButton>
 				<NcActionButton icon="icon-settings-dark" :close-after-click="true" @click="openCard">
 					<CardBulletedIcon slot="icon" :size="20" decorative />
 					{{ t('deck', 'Card details') }}
@@ -122,6 +129,7 @@ export default {
 		...mapGetters([
 			'isArchived',
 			'boards',
+			'cardActions',
 		]),
 		...mapState({
 			showArchived: state => state.showArchived,
