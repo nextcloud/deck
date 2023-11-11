@@ -49,6 +49,7 @@ import AppNavigation from './components/navigation/AppNavigation.vue'
 import { NcModal, NcContent, NcAppContent } from '@nextcloud/vue'
 import { BoardApi } from './services/BoardApi.js'
 import { emit, subscribe } from '@nextcloud/event-bus'
+import { loadState } from '@nextcloud/initial-state'
 
 const boardApi = new BoardApi()
 
@@ -108,7 +109,10 @@ export default {
 		},
 	},
 	created() {
-		this.$store.dispatch('loadBoards')
+		const initialState = loadState('deck', 'initialBoards', null)
+		if (initialState !== null) {
+			this.$store.dispatch('loadBoards')
+		}
 		this.$store.dispatch('loadSharees')
 	},
 	mounted() {

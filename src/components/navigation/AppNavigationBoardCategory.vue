@@ -89,5 +89,8 @@ export default {
 			}
 		},
 	},
+	mounted() {
+		this.opened = this.boards.length > 0
+	},
 }
 </script>
