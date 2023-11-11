@@ -39,13 +39,7 @@
 				{{ t('deck', 'Open in bigger view') }}
 			</NcActionButton>
 
-			<NcActionButton v-for="action in cardActions"
-				:key="action.label"
-				:close-after-click="true"
-				:icon="action.icon"
-				@click="action.callback(cardRichObject)">
-				{{ action.label }}
-			</NcActionButton>
+			<CardMenuEntries :card="currentCard" :hide-details-entry="true" />
 		</template>
 
 		<NcAppSidebarTab id="details"
@@ -104,6 +98,7 @@ import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 
 import { showError } from '@nextcloud/dialogs'
 import { getLocale } from '@nextcloud/l10n'
+import CardMenuEntries from '../cards/CardMenuEntries.vue'
 
 const capabilities = window.OC.getCapabilities()
 
@@ -121,6 +116,7 @@ export default {
 		AttachmentIcon,
 		CommentIcon,
 		HomeIcon,
+		CardMenuEntries,
 	},
 	mixins: [relativeDate],
 	props: {
