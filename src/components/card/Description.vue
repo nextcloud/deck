@@ -187,17 +187,26 @@ export default {
 	mounted() {
 		this.setupEditor()
 	},
-	beforeDestroy() {
-		this?.editor?.destroy()
+	async beforeDestroy() {
+		await this.destroyEditor()
 	},
 	methods: {
 		async setupEditor() {
-			this?.editor?.destroy()
+			await this.destroyEditor()
+			this.descriptionLastEdit = 0
+			this.description = this.card.description
 			this.editor = await window.OCA.Text.createEditor({
 				el: this.$refs.editor,
 				content: this.card.description,
 				readOnly: !this.canEdit,
+				onLoaded: () => {
+					this.descriptionLastEdit = 0
+				},
 				onUpdate: ({ markdown }) => {
+					if (this.description === markdown) {
+						this.descriptionLastEdit = 0
+						return
+					}
 					this.description = markdown
 					this.updateDescription()
 				},
@@ -206,6 +215,10 @@ export default {
 				},
 			})
 
+		},
+		async destroyEditor() {
+			await this.saveDescription()
+			this?.editor?.destroy()
 		},
 		addKeyListeners() {
 			this.$refs.markdownEditor.easymde.codemirror.on('keydown', (a, b) => {
@@ -287,6 +300,7 @@ export default {
 				return
 			}
 			this.descriptionSaving = true
+			await this.$store.dispatch('updateCardDesc', { ...this.card, description: this.description })
 			this.$emit('change', this.description)
 			this.descriptionLastEdit = 0
 			this.descriptionSaving = false
