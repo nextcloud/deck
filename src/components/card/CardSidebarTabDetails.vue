@@ -119,8 +119,10 @@ export default {
 		this.initialize()
 	},
 	methods: {
-		descriptionChanged(newDesc) {
-			this.$store.dispatch('updateCardDesc', { ...this.card, description: newDesc })
+		async descriptionChanged(newDesc) {
+			if (newDesc === this.copiedCard.description) {
+				return
+			}
 			this.copiedCard.description = newDesc
 		},
 		async initialize() {
