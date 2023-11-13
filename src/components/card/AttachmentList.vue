@@ -23,12 +23,12 @@
 <template>
 	<AttachmentDragAndDrop :card-id="cardId" class="drop-upload--sidebar">
 		<div v-if="!isReadOnly" class="button-group">
-			<button class="icon-upload" @click="uploadNewFile()">
+			<NcButton class="icon-upload" @click="uploadNewFile()">
 				{{ t('deck', 'Upload new files') }}
-			</button>
-			<button class="icon-folder" @click="shareFromFiles()">
+			</NcButton>
+			<NcButton class="icon-folder" @click="shareFromFiles()">
 				{{ t('deck', 'Share from Files') }}
-			</button>
+			</NcButton>
 		</div>
 		<input ref="filesAttachment"
 			type="file"
@@ -103,7 +103,7 @@
 
 <script>
 import axios from '@nextcloud/axios'
-import { NcActions, NcActionButton, NcActionLink } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcActionLink, NcButton } from '@nextcloud/vue'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
 import relativeDate from '../../mixins/relativeDate.js'
 import { formatFileSize } from '@nextcloud/files'
@@ -128,6 +128,7 @@ export default {
 		NcActions,
 		NcActionButton,
 		NcActionLink,
+		NcButton,
 		AttachmentDragAndDrop,
 	},
 	mixins: [relativeDate, attachmentUpload],
@@ -267,6 +268,7 @@ export default {
 
 	.button-group {
 		display: flex;
+		gap: calc(var(--default-grid-baseline) * 3);
 
 		.icon-upload, .icon-folder {
 			padding-left: 44px;

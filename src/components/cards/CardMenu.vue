@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div v-if="card">
+	<div v-if="card" class="card-menu">
 		<div @click.stop.prevent>
 			<NcActions>
 				<NcActionButton v-if="showArchived === false && !isCurrentUserAssigned"

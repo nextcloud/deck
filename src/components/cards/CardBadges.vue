@@ -22,46 +22,66 @@
 
 <template>
 	<div v-if="card" class="badges">
-		<CardId v-if="idBadge" class="icon-badge" :card="card" />
-		<div v-if="card.commentsCount > 0"
-			v-tooltip="commentsHint"
-			class="icon-badge"
-			@click.stop="openComments">
-			<CommentUnreadIcon v-if="card.commentsUnread > 0" :size="16" />
-			<CommentIcon v-else :size="16" />
-			<span>{{ card.commentsCount }}</span>
+		<div class="badge-left">
+			<DueDate v-if="card.duedate || card.done" :card="card" />
+
+			<div class="inline-badges">
+				<CardId v-if="idBadge" class="icon-badge" :card="card" />
+
+				<div v-if="card.commentsCount > 0"
+					v-tooltip="commentsHint"
+					class="icon-badge"
+					@click.stop="openComments">
+					<CommentUnreadIcon v-if="card.commentsUnread > 0" :size="16" />
+					<CommentIcon v-else :size="16" />
+					<span>{{ card.commentsCount }}</span>
+				</div>
+
+				<div v-if="card.description && checkListCount > 0" class="icon-badge">
+					<CheckmarkIcon :size="16" :title="t('deck', 'Todo items')" />
+					<span>{{ checkListCheckedCount }}/{{ checkListCount }}</span>
+				</div>
+
+				<div v-else-if="card.description && card.description.trim() && checkListCount == 0" class="icon-badge">
+					<TextIcon :size="16" decorative />
+				</div>
+
+				<div v-if="card.attachmentCount > 0" class="icon-badge">
+					<AttachmentIcon :size="16" />
+					<span>{{ card.attachmentCount }}</span>
+				</div>
+			</div>
 		</div>
 
-		<div v-if="card.description && checkListCount > 0" class="icon-badge">
-			<CheckmarkIcon :size="16" :title="t('deck', 'Todo items')" />
-			<span>{{ checkListCheckedCount }}/{{ checkListCount }}</span>
+		<div class="badge-right">
+			<NcAvatarList :users="card.assignedUsers" :size="32" />
+
+			<slot />
 		</div>
-
-		<TextIcon v-else-if="card.description && card.description.trim() && checkListCount == 0" :size="16" decorative />
-
-		<div v-if="card.attachmentCount > 0" class="icon-badge">
-			<AttachmentIcon :size="16" />
-			<span>{{ card.attachmentCount }}</span>
-		</div>
-
-		<NcAvatarList :users="card.assignedUsers" />
-
-		<CardMenu class="card-menu" :card="card" />
 	</div>
 </template>
 <script>
 import NcAvatarList from './AvatarList.vue'
 import CardId from './badges/CardId.vue'
-import CardMenu from './CardMenu.vue'
 import TextIcon from 'vue-material-design-icons/Text.vue'
 import AttachmentIcon from 'vue-material-design-icons/Paperclip.vue'
 import CheckmarkIcon from 'vue-material-design-icons/CheckboxMarked.vue'
 import CommentIcon from 'vue-material-design-icons/Comment.vue'
 import CommentUnreadIcon from 'vue-material-design-icons/CommentAccount.vue'
+import DueDate from './badges/DueDate.vue'
 
 export default {
 	name: 'CardBadges',
-	components: { NcAvatarList, CardMenu, TextIcon, AttachmentIcon, CheckmarkIcon, CommentIcon, CommentUnreadIcon, CardId },
+	components: {
+		DueDate,
+		NcAvatarList,
+		TextIcon,
+		AttachmentIcon,
+		CheckmarkIcon,
+		CommentIcon,
+		CommentUnreadIcon,
+		CardId,
+	},
 	props: {
 		card: {
 			type: Object,
@@ -102,26 +122,33 @@ export default {
 		display: flex;
 		width: 100%;
 		flex-grow: 1;
+		flex-direction: row;
+		gap: 3px;
 
 		.icon-badge {
-			opacity: .7;
+			color: var(--color-text-maxcontrast);
 			display: flex;
 			margin-right: 2px;
 
 			span,
 			&:deep(span) {
-				padding: 10px 2px;
+				padding: 2px;
 			}
 		}
 	}
 
+	.inline-badges {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: 3px;
+	}
+
 	.badges .icon.due {
 		background-position: 4px center;
-		border-radius: 3px;
-		margin-top: 10px;
-		margin-bottom: 10px;
+		border-radius: var(--border-radius);
 		padding: 4px;
-		font-size: 90%;
+		font-size: 13px;
 		display: flex;
 		align-items: center;
 		opacity: .5;
@@ -153,6 +180,31 @@ export default {
 		}
 	}
 
+	.badge-left, .badge-right {
+		display: flex;
+	}
+
+	.badge-left {
+		align-self: end;
+		margin-bottom: 8px;
+		flex-basis: auto;
+		flex-grow: 1;
+		flex-shrink: 1;
+		flex-wrap: wrap;
+		align-content: flex-end;
+		gap: 3px;
+	}
+
+	.badge-right {
+		align-items: center;
+		align-self: flex-end;
+		display: flex;
+		justify-items: center;
+		max-width: 165px;
+		flex-grow: 0;
+		flex-shrink: 0;
+	}
+
 	.fade-enter-active, .fade-leave-active {
 		transition: opacity .125s;
 	}
@@ -165,10 +217,6 @@ export default {
 		.badges {
 			align-items: flex-start;
 			max-height: none !important;
-		}
-
-		.card-menu {
-			display: none;
 		}
 	}
 </style>

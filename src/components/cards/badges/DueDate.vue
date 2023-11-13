@@ -23,8 +23,9 @@
 <template>
 	<div v-if="card" class="duedate" :data-due-state="dueState">
 		<transition name="zoom">
-			<div v-if="card.duedate" class="due" :title="absoluteDate">
-				<Clock v-if="overdue" :size="16" />
+			<div v-if="card.duedate || card.done" class="due" :title="absoluteDate">
+				<CheckCircle v-if="card.done" :size="16" />
+				<Clock v-else-if="overdue" :size="16" />
 				<ClockOutline v-else :size="16" />
 				<span v-if="!compactMode" class="due--label">{{ relativeDate }}</span>
 			</div>
@@ -37,8 +38,10 @@ import { mapState } from 'vuex'
 import moment from '@nextcloud/moment'
 import Clock from 'vue-material-design-icons/Clock.vue'
 import ClockOutline from 'vue-material-design-icons/ClockOutline.vue'
+import CheckCircle from 'vue-material-design-icons/CheckCircle.vue'
 
 const DueState = {
+	Done: 'Done',
 	Future: 'Future',
 	Next: 'Next',
 	Now: 'Now',
@@ -47,6 +50,7 @@ const DueState = {
 export default {
 	name: 'DueDate',
 	components: {
+		CheckCircle,
 		Clock,
 		ClockOutline,
 	},
@@ -61,6 +65,9 @@ export default {
 			compactMode: state => state.compactMode,
 		}),
 		dueState() {
+			if (this.card.done) {
+				return DueState.Done
+			}
 			const days = Math.floor(moment(this.card.duedate).diff(this.$root.time, 'seconds') / 60 / 60 / 24)
 			if (days < 0) {
 				return DueState.Overdue
@@ -78,14 +85,16 @@ export default {
 			return this.dueState === DueState.Overdue
 		},
 		relativeDate() {
-			const diff = moment(this.$root.time).diff(this.card.duedate, 'seconds')
+			const date = this.card.done ? this.card.done : this.card.duedate
+			const diff = moment(this.$root.time).diff(date, 'seconds')
 			if (diff >= 0 && diff < 45) {
 				return t('core', 'seconds ago')
 			}
-			return moment(this.card.duedate).fromNow()
+			return moment(date).fromNow()
 		},
 		absoluteDate() {
-			return moment(this.card.duedate).format('LLLL')
+			const date = this.card.done ? this.card.done : this.card.duedate
+			return moment(date).format('LLLL')
 		},
 	},
 }
@@ -94,10 +103,8 @@ export default {
 <style lang="scss" scoped>
 	.due {
 		background-position: 4px center;
-		border-radius: var(--border-radius-large);
-		margin-top: 9px;
-		margin-bottom: 9px;
-		padding: 2px 8px;
+		border-radius: var(--border-radius-pill);
+		padding: 1px 8px;
 		font-size: 90%;
 		display: flex;
 		align-items: center;
@@ -105,22 +112,24 @@ export default {
 		z-index: 2;
 
 		[data-due-state='Overdue'] & {
-			color: var(--color-main-background);
-			background-color: var(--color-error-text);
+			color: var(--color-error-text);
+			background-color: rgba(var(--color-error-rgb), .1);
 		}
 		[data-due-state='Now'] & {
-			color: var(--color-main-background);
-			background-color: var(--color-warning);
+			color: var(--color-warning-text);
+			background-color: rgba(var(--color-warning-rgb), .1);
 		}
-
-		span {
-			white-space: nowrap;
-			text-overflow: ellipsis;
-			overflow: hidden;
+		[data-due-state='Done'] & {
+			color: var(--color-success-text);
+			background-color: rgba(var(--color-success-rgb), .1);
 		}
 
 		.due--label {
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
 			margin-left: 4px;
+			font-size: 13px;
 		}
 	}
 

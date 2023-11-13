@@ -26,10 +26,9 @@
 		<div v-click-outside="stopCardCreation"
 			class="stack__header"
 			:class="{'stack__header--add': showAddCard}"
-			tabindex="0"
 			:aria-label="stack.title">
 			<transition name="fade" mode="out-in">
-				<h3 v-if="!canManage || isArchived">
+				<h3 v-if="!canManage || isArchived" tabindex="0">
 					{{ stack.title }}
 				</h3>
 				<h3 v-else-if="!editing"
@@ -330,8 +329,6 @@ export default {
 
 	.stack {
 		width: $stack-width + $stack-spacing * 3;
-		margin-left: math.div($stack-spacing, 2);
-		margin-right: math.div($stack-spacing, 2);
 	}
 
 	.stack__header {
@@ -340,6 +337,7 @@ export default {
 		top: 0;
 		z-index: 100;
 		padding-left: $card-spacing;
+		padding-right: $card-spacing;
 		cursor: grab;
 		min-height: 44px;
 
@@ -348,10 +346,10 @@ export default {
 			content: ' ';
 			display: block;
 			position: absolute;
-			width: 100%;
+			width: calc(100% - 16px);
 			height: 20px;
 			top: 30px;
-			right: 10px;
+			left: 0px;
 			z-index: 99;
 			transition: top var(--animation-slow);
 
@@ -411,7 +409,7 @@ export default {
 		z-index: 100;
 		display: flex;
 		margin-top: 5px;
-		margin-bottom: 20px;
+		margin-bottom: 8px;
 		background-color: var(--color-main-background);
 
 		form {
@@ -419,7 +417,7 @@ export default {
 			margin-left: 12px;
 			margin-right: 12px;
 			width: 100%;
-			box-shadow: 0 0 3px var(--color-box-shadow);
+			border: 2px solid var(--color-border);
 			border-radius: var(--border-radius-large);
 			overflow: hidden;
 			padding: 2px;

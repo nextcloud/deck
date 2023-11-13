@@ -24,7 +24,7 @@
 	<div class="avatars">
 		<div class="avatar-list" @click.stop="togglePopover">
 			<div v-if="popover.length > 0">
-				<div class="avatardiv icon-more" />
+				<AccountMultiple class="avatardiv more-avatars" :size="24" />
 			</div>
 			<div v-for="user in firstUsers" :key="user.id">
 				<NcAvatar v-if="user.type === 0"
@@ -72,12 +72,14 @@
 <script>
 import { NcAvatar, NcPopoverMenu, Tooltip } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
+import AccountMultiple from 'vue-material-design-icons/AccountMultiple.vue'
 
 export default {
 	name: 'AvatarList',
 	components: {
 		NcAvatar,
 		NcPopoverMenu,
+		AccountMultiple,
 	},
 	directives: {
 		tooltip: Tooltip,
@@ -151,7 +153,6 @@ export default {
 
 <style scoped lang="scss">
 	.avatars {
-		margin-top: 5px;
 		position: relative;
 		flex-grow: 1;
 		:deep(.popovermenu) {
@@ -173,25 +174,29 @@ export default {
 		display: inline-flex;
 		padding-right: $avatar-offset;
 		flex-direction: row-reverse;
+
+		& > div {
+			height: 32px;
+		}
+
 		.avatardiv,
 		:deep(.avatardiv) {
-			width: 36px;
-			height: 36px;
+			width: 32px;
+			height: 32px;
 			box-sizing: content-box !important;
 			margin-right: -$avatar-offset;
 			transition: margin-right 0.2s ease-in-out;
+			border: 2px solid var(--color-main-background);
+		}
 
-			&.icon-more {
-				width: 32px;
-				height: 32px;
-				opacity: .5;
-				background-color: var(--color-background-dark) !important;
-				cursor: pointer;
-			}
+		.more-avatars {
+			width: 32px;
+			height: 32px;
+			background-color: var(--color-background-dark) !important;
+			cursor: pointer;
+			color: var(--color-text-maxcontrast);
 		}
-		&:hover div:nth-child(n+2) :deep(.avatardiv) {
-			margin-right: 1px;
-		}
+
 	}
 
 	.popovermenu {
