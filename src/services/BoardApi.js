@@ -48,7 +48,7 @@ export class BoardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -73,7 +73,7 @@ export class BoardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -88,7 +88,7 @@ export class BoardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -103,7 +103,7 @@ export class BoardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -118,7 +118,7 @@ export class BoardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -133,7 +133,7 @@ export class BoardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -207,7 +207,7 @@ export class BoardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -223,7 +223,7 @@ export class BoardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -238,7 +238,7 @@ export class BoardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -253,7 +253,7 @@ export class BoardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -270,7 +270,7 @@ export class BoardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -285,7 +285,7 @@ export class BoardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -300,7 +300,7 @@ export class BoardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)

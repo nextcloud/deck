@@ -39,7 +39,7 @@ export class StackApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -54,7 +54,7 @@ export class StackApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -69,7 +69,7 @@ export class StackApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -88,7 +88,7 @@ export class StackApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -103,7 +103,7 @@ export class StackApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -118,7 +118,7 @@ export class StackApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -133,7 +133,7 @@ export class StackApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)

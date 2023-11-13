@@ -79,7 +79,7 @@ const AtMention = {
 		return createElement(
 			'span',
 			{ attrs: { 'data-at-embedded': true, contenteditable: false } },
-			[createElement(NcUserBubble, { props: { user, displayName }, attrs: { 'data-mention-id': user } })]
+			[createElement(NcUserBubble, { props: { user, displayName }, attrs: { 'data-mention-id': user } })],
 		)
 	},
 }

@@ -260,7 +260,7 @@ export default {
 				this.editor.insertAtCursor(
 					asImage
 						? `<a href="${this.attachmentPreview(attachment)}"><img src="${this.attachmentPreview(attachment)}" alt="${attachment.data}" /></a>`
-						: `<a href="${this.attachmentPreview(attachment)}">${attachment.data}</a>`
+						: `<a href="${this.attachmentPreview(attachment)}">${attachment.data}</a>`,
 				)
 				return
 			} else {

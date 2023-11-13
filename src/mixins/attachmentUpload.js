@@ -37,7 +37,7 @@ export default {
 			if (this.maxUploadSize > 0 && file.size > this.maxUploadSize) {
 				showError(
 					t('deck', 'Failed to upload {name}', { name: file.name }) + ' - '
-						+ t('deck', 'Maximum file size of {size} exceeded', { size: formatFileSize(this.maxUploadSize) })
+						+ t('deck', 'Maximum file size of {size} exceeded', { size: formatFileSize(this.maxUploadSize) }),
 				)
 				event.target.value = ''
 				return
