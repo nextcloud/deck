@@ -44,9 +44,8 @@
 					tabindex="0"
 					class="editable"
 					:aria-label="t('deck', 'Edit card title')"
-					@click.stop="startEditing(card)"
 					@keydown.enter.stop.prevent="startEditing(card)">
-					{{ card.title }}
+					<span @click.stop="startEditing(card)">{{ card.title }}</span>
 				</h3>
 				<form v-else-if="editing"
 					v-click-outside="cancelEdit"
@@ -299,7 +298,9 @@ export default {
 				padding-left: 4px;
 				align-self: center;
 				&.editable {
-					cursor: text;
+					span {
+						cursor: text;
+					}
 
 					&:focus {
 						outline: 2px solid var(--color-border-dark);
