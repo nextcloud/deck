@@ -39,6 +39,8 @@ OC.L10N.register(
     "{user} has unarchived card {card} in list {stack} on board {board}" : "{user} zrušil(a) archivaci karty {card} ve sloupci {stack} na tabuli {board}",
     "You have marked the card {card} as done in list {stack} on board {board}" : "Označili jste kartu {card} jako splněnou v seznamu {stack} na tabuli {board}",
     "{user} has marked card {card} as done in list {stack} on board {board}" : "{user} označil(a) {card} jako splněnou {stack} na tabuli {board}",
+    "You have marked the card {card} as undone in list {stack} on board {board}" : "Zrušili jste označení karty {card} jako splněné v seznamu {stack} na tabuli {board}",
+    "{user} has marked the card {card} as undone in list {stack} on board {board}" : "{user} zrušil(a) označení {card} jako splněné {stack} na tabuli {board}",
     "You have removed the due date of card {card}" : "Odebrali jste termín u karty {card}",
     "{user} has removed the due date of card {card}" : "{user} odebral(a) termín u karty {card}",
     "You have set the due date of card {card} to {after}" : "Nastavili jste termín u karty {card} na {after}",
