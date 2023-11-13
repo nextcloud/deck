@@ -12,12 +12,18 @@
 			:taggable="true"
 			label="title"
 			track-by="id"
+			tag-position="bottom"
 			@select="onSelect"
 			@remove="onRemove"
 			@tag="onNewTag">
 			<template #option="scope">
-				<div :style="{ backgroundColor: '#' + scope.option.color, color: textColor(scope.option.color)}" class="tag">
+				<div v-if="!scope.option?.isTag" :style="{ backgroundColor: '#' + scope.option.color, color: textColor(scope.option.color)}" class="tag">
 					{{ scope.option.title }}
+				</div>
+				<div v-else>
+					{{ t('deck', 'Create a new tag:') }} <div class="tag">
+						{{ scope.option.label }}
+					</div>
 				</div>
 			</template>
 			<template #tag="scope">
@@ -52,32 +58,15 @@ export default {
 			default: false,
 		},
 	},
-	data() {
-		return {
-			assignedLabels: null,
-		}
-	},
 	computed: {
 		labelsSorted() {
 			return [...this.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
-	},
-	watch: {
-		card() {
-			this.initialize()
+		assignedLabels() {
+			return [...this.card.labels].local((a, b) => (a.title < b.title) ? -1 : 1)
 		},
-	},
-	mounted() {
-		this.initialize()
 	},
 	methods: {
-		async initialize() {
-			if (!this.card) {
-				return
-			}
-
-			this.assignedLabels = [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
-		},
 		onSelect(newLabel) {
 			this.$emit('select', newLabel)
 		},
