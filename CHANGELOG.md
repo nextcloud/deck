@@ -1,6 +1,38 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.12.0-beta.2
+
+### Added
+
+- Card layout polishing @juliushaertl [#5264](https://github.com/nextcloud/deck/pull/5264)
+
+### Fixed
+
+- fix: Properly handle adding new tags through multiselect @juliushaertl [#5285](https://github.com/nextcloud/deck/pull/5285)
+- fix: Avoid throwing errors if no token provided on close @juliushaertl [#5284](https://github.com/nextcloud/deck/pull/5284)
+- fix: Expose card actions in the card menu (fix #3180) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Use full card menu everywhere (fix #3993) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Detect end of the activity responses (fix #3395) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Add title with absolute date time to activity (fix #4508, fix #2122) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Disable dragging archived cards (fix #3271) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Hide unavailable card menu entries for archived card view  [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Use localCompare to sort labels (fix #2736) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: More fitting click target for title editing [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Always load proper dashboard js (fixes a log error) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Set fixed height for card modal (fix #4296) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Make sure to always update card description when navigating away (fix #5254 #2705) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- perf: Already pass board list as initial state @juliushaertl [#5281](https://github.com/nextcloud/deck/pull/5281)
+
+### Dependencies
+
+- Fix npm audit @nextcloud-command [#5277](https://github.com/nextcloud/deck/pull/5277)
+- Update nextcloud/ocp dependency @nextcloud-command [#5275](https://github.com/nextcloud/deck/pull/5275)
+- Chore(deps): Bump @nextcloud/dialogs from 4.2.1 to 4.2.2 @dependabot[bot] [#5266](https://github.com/nextcloud/deck/pull/5266)
+- Chore(deps-dev): Bump cypress from 13.4.0 to 13.5.0 @dependabot[bot] [#5267](https://github.com/nextcloud/deck/pull/5267)
+- Chore(deps): Bump shivammathur/setup-php from 2.27.0 to 2.27.1 @dependabot[bot] [#5268](https://github.com/nextcloud/deck/pull/5268)
+
+
 ## 1.12.0-beta.1
 
 ### Added
