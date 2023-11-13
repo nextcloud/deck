@@ -25,7 +25,7 @@ import chroma from 'chroma-js'
 export default {
 	methods: {
 		textColor(hex) {
-			return chroma(hex).get('lab.l') > 50 ? '#000000' : '#ffffff'
+			return chroma(hex ?? 'ffffff').get('lab.l') > 50 ? '#000000' : '#ffffff'
 		},
 		colorIsValid(hex) {
 			const re = /[A-Fa-f0-9]{6}/

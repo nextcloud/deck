@@ -172,13 +172,14 @@ export default {
 		},
 
 		async addLabelToBoardAndCard(name) {
-			await this.$store.dispatch('addLabelToCurrentBoardAndCard', {
+			const newLabel = await this.$store.dispatch('addLabelToCurrentBoardAndCard', {
 				card: this.copiedCard,
 				newLabel: {
 					title: name,
 					color: this.randomColor(),
 				},
 			})
+			this.copiedCard.labels.push(newLabel)
 		},
 
 		removeLabelFromCard(removedLabel) {
