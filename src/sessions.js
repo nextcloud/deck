@@ -117,7 +117,7 @@ export function createSession(boardId) {
 
 	// close session when tab gets hidden/inactive
 	const visibilitychangeListener = () => {
-		if (document.visibilityState === 'hidden') {
+		if (document.visibilityState === 'hidden' && token) {
 			sessionApi.closeSessionViaBeacon(boardId, token)
 			tokenPromise = null
 			token = null

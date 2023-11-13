@@ -29,6 +29,8 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Service\SessionService;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
@@ -43,9 +45,7 @@ class SessionController extends OCSController {
 		parent::__construct($appName, $request);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function create(int $boardId): DataResponse {
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 
@@ -55,11 +55,7 @@ class SessionController extends OCSController {
 		]);
 	}
 
-	/**
-	 * notifies the server that the session is still active
-	 * @NoAdminRequired
-	 * @param $boardId
-	 */
+	#[NoAdminRequired]
 	public function sync(int $boardId, string $token): DataResponse {
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		try {
@@ -70,13 +66,12 @@ class SessionController extends OCSController {
 		}
 	}
 
-	/**
-	 * delete a session if existing
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @param $boardId
-	 */
-	public function close(int $boardId, string $token) {
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function close(int $boardId, string $token = null): DataResponse {
+		if ($token === null) {
+			return new DataResponse();
+		}
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		$this->sessionService->closeSession($boardId, $token);
 		return new DataResponse();
