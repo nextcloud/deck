@@ -25,6 +25,11 @@
 return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
+		['name' => 'page#indexList', 'url' => '/board', 'verb' => 'GET'],
+		['name' => 'page#indexBoard', 'url' => '/board/{boardId}', 'verb' => 'GET'],
+		['name' => 'page#indexBoardDetails', 'url' => '/board/{boardId}/details', 'verb' => 'GET'],
+		['name' => 'page#indexCard', 'url' => '/board/{boardId}/card/{cardId}', 'verb' => 'GET'],
+
 		['name' => 'page#redirectToCard', 'url' => '/card/{cardId}', 'verb' => 'GET'],
 
 		// boards

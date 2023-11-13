@@ -55,8 +55,8 @@ class BoardReferenceProvider implements IReferenceProvider {
 		$startIndex = $this->urlGenerator->getAbsoluteURL('/index.php/apps/' . Application::APP_ID);
 
 		// link example: https://nextcloud.local/index.php/apps/deck/#/board/2
-		$noIndexMatch = preg_match('/^' . preg_quote($start, '/') . '\/#\/board\/[0-9]+$/', $referenceText) === 1;
-		$indexMatch = preg_match('/^' . preg_quote($startIndex, '/') . '\/#\/board\/[0-9]+$/', $referenceText) === 1;
+		$noIndexMatch = preg_match('/^' . preg_quote($start, '/') . '(?:\/#!?)?\/board\/[0-9]+$/', $referenceText) === 1;
+		$indexMatch = preg_match('/^' . preg_quote($startIndex, '/') . '(?:\/#!?)?\/board\/[0-9]+$/', $referenceText) === 1;
 
 		return $noIndexMatch || $indexMatch;
 	}
@@ -108,9 +108,9 @@ class BoardReferenceProvider implements IReferenceProvider {
 		$start = $this->urlGenerator->getAbsoluteURL('/apps/' . Application::APP_ID);
 		$startIndex = $this->urlGenerator->getAbsoluteURL('/index.php/apps/' . Application::APP_ID);
 
-		preg_match('/^' . preg_quote($start, '/') . '\/#\/board\/([0-9]+)$/', $url, $matches);
+		preg_match('/^' . preg_quote($start, '/') . '(?:\/#!?)?\/board\/([0-9]+)$/', $url, $matches);
 		if (!$matches) {
-			preg_match('/^' . preg_quote($startIndex, '/') . '\/#\/board\/([0-9]+)$/', $url, $matches);
+			preg_match('/^' . preg_quote($startIndex, '/') . '(?:\/#!?)?\/board\/([0-9]+)$/', $url, $matches);
 		}
 		if ($matches && count($matches) > 1) {
 			return (int) $matches[1];

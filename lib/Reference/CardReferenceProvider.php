@@ -108,8 +108,8 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 		$startIndex = $this->urlGenerator->getAbsoluteURL('/index.php/apps/' . Application::APP_ID);
 
 		// link example: https://nextcloud.local/index.php/apps/deck/#/board/2/card/11
-		$noIndexMatchFull = preg_match('/^' . preg_quote($start, '/') . '\/#\/board\/[0-9]+\/card\/[0-9]+$/', $referenceText) === 1;
-		$indexMatchFull = preg_match('/^' . preg_quote($startIndex, '/') . '\/#\/board\/[0-9]+\/card\/[0-9]+$/', $referenceText) === 1;
+		$noIndexMatchFull = preg_match('/^' . preg_quote($start, '/') . '(?:\/#!?)?\/board\/[0-9]+\/card\/[0-9]+$/', $referenceText) === 1;
+		$indexMatchFull = preg_match('/^' . preg_quote($startIndex, '/') . '(?:\/#!?)?\/board\/[0-9]+\/card\/[0-9]+$/', $referenceText) === 1;
 
 		// link example: https://nextcloud.local/index.php/apps/deck/card/11
 		$noIndexMatch = preg_match('/^' . preg_quote($start, '/') . '\/card\/[0-9]+$/', $referenceText) === 1;
@@ -125,16 +125,17 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 		if ($this->matchReference($referenceText)) {
 			$ids = $this->getBoardCardId($referenceText);
 			if ($ids !== null) {
-				[$boardId, $cardId] = $ids;
+				[, $cardId] = $ids;
 				try {
 					$card = $this->cardService->find((int) $cardId)->jsonSerialize();
 					$stack = $this->stackService->find((int) $card['stackId'])->jsonSerialize();
-					$board = $this->boardService->find((int)($boardId ?? $stack['boardId']))->jsonSerialize();
+					$board = $this->boardService->find((int) $stack['boardId'])->jsonSerialize();
 				} catch (NoPermissionException $e) {
 					// Skip throwing if user has no permissions
 					return null;
 				}
 
+				$boardId = $board['id'];
 
 				$card = $this->sanitizeSerializedCard($card);
 				$board = $this->sanitizeSerializedBoard($board);
@@ -159,14 +160,14 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 			$result = $cardDetails->jsonSerialize();
 			unset($result['assignedUsers']);
 			return $result;
-		}, $stack['cards']);
+		}, $stack['cards'] ?? []);
 
 		return $stack;
 	}
 
 	private function sanitizeSerializedBoard(array $board): array {
 		unset($board['labels']);
-		$board['owner'] = $board['owner']->jsonSerialize();
+		$board['owner'] = $board['owner']?->jsonSerialize();
 		unset($board['acl']);
 		unset($board['users']);
 
@@ -176,18 +177,18 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 	private function sanitizeSerializedCard(array $card): array {
 		$card['labels'] = array_map(function (Label $label) {
 			return $label->jsonSerialize();
-		}, $card['labels']);
+		}, $card['labels'] ?? []);
 		$card['assignedUsers'] = array_map(function (Assignment $assignment) {
 			$result = $assignment->jsonSerialize();
 			$result['participant'] = $result['participant']->jsonSerialize();
 			return $result;
-		}, $card['assignedUsers']);
-		$card['owner'] = $card['owner']->jsonSerialize();
+		}, $card['assignedUsers'] ?? []);
+		$card['owner'] = $card['owner']?->jsonSerialize() ?? $card['owner'];
 		unset($card['relatedStack']);
 		unset($card['relatedBoard']);
 		$card['attachments'] = array_map(function (Attachment $attachment) {
 			return $attachment->jsonSerialize();
-		}, $card['attachments']);
+		}, $card['attachments'] ?? []);
 
 		return $card;
 	}
@@ -196,12 +197,12 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 		$start = $this->urlGenerator->getAbsoluteURL('/apps/' . Application::APP_ID);
 		$startIndex = $this->urlGenerator->getAbsoluteURL('/index.php/apps/' . Application::APP_ID);
 
-		preg_match('/^' . preg_quote($start, '/') . '\/#\/board\/([0-9]+)\/card\/([0-9]+)$/', $url, $matches);
+		preg_match('/^' . preg_quote($start, '/') . '(?:\/#!?)?\/board\/([0-9]+)\/card\/([0-9]+)$/', $url, $matches);
 		if ($matches && count($matches) > 2) {
 			return [$matches[1], $matches[2]];
 		}
 
-		preg_match('/^' . preg_quote($startIndex, '/') . '\/#\/board\/([0-9]+)\/card\/([0-9]+)$/', $url, $matches2);
+		preg_match('/^' . preg_quote($startIndex, '/') . '(?:\/#!?)?\/board\/([0-9]+)\/card\/([0-9]+)$/', $url, $matches2);
 		if ($matches2 && count($matches2) > 2) {
 			return [$matches2[1], $matches2[2]];
 		}

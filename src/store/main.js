@@ -66,7 +66,7 @@ export default new Vuex.Store({
 		sidebarShown: false,
 		currentBoard: null,
 		currentCard: null,
-		boards: [],
+		boards: loadState('deck', 'initialBoards', []),
 		sharees: [],
 		assignableUsers: [],
 		boardFilter: BOARD_FILTERS.ALL,
