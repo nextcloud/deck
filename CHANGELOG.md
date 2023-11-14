@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.12.0-beta.3
+
+### Added
+
+- feat: Move to contenteditable for inline title editing @juliushaertl [#5282](https://github.com/nextcloud/deck/pull/5282)
+
+### Fixed
+
+- fix: Properly get done state for dav @juliushaertl [#5287](https://github.com/nextcloud/deck/pull/5287)
+- Fix upcoming cards and label input @juliushaertl [#5290](https://github.com/nextcloud/deck/pull/5290)
+
 ## 1.12.0-beta.2
 
 ### Added
