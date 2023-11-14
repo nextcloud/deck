@@ -1,5 +1,5 @@
 <template>
-	<div class="selector-wrapper" :aria-label="t('deck', 'Assign to users/groups/circles')">
+	<div class="selector-wrapper" :aria-label="t('deck', 'Assign to users/groups/circles')" data-test="assignment-selector">
 		<div class="selector-wrapper--icon">
 			<AccountMultiple :size="20" />
 		</div>
