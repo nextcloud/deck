@@ -26,7 +26,7 @@
 
 <template>
 	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
-		<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'is-editing': editing, 'card__editable': canEdit, 'card__archived': card.archived }"
+		<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'card__editable': canEdit, 'card__archived': card.archived }"
 			tag="div"
 			class="card"
 			@click="openCard">
@@ -39,29 +39,19 @@
 				<h3 v-if="inlineEditingBlocked" dir="auto">
 					{{ card.title }}
 				</h3>
-				<h3 v-else-if="!editing"
+				<h3 v-else
 					dir="auto"
-					tabindex="0"
 					class="editable"
-					:aria-label="t('deck', 'Edit card title')"
-					@keydown.enter.stop.prevent="startEditing(card)">
-					<span @click.stop="startEditing(card)">{{ card.title }}</span>
+					:aria-label="t('deck', 'Edit card title')">
+					<span ref="titleContentEditable"
+						tabindex="0"
+						contenteditable="true"
+						role="textbox"
+						@blur="blurTitle"
+						@click.stop
+						@keyup.esc="cancelEdit"
+						@keyup.stop>{{ card.title }}</span>
 				</h3>
-				<form v-else-if="editing"
-					v-click-outside="cancelEdit"
-					class="dragDisabled"
-					@click.stop
-					@keyup.esc="cancelEdit"
-					@submit.prevent="finishedEdit(card)">
-					<input v-model="copiedCard.title"
-						v-focus
-						dir="auto"
-						type="text"
-						autocomplete="off"
-						required
-						pattern=".*\S+.*">
-					<input type="submit" value="" class="icon-confirm">
-				</form>
 
 				<CardMenu v-if="showMenuAtTitle" :card="card" class="right card-menu" />
 			</div>
@@ -126,12 +116,6 @@ export default {
 			default: false,
 		},
 	},
-	data() {
-		return {
-			editing: false,
-			copiedCard: null,
-		}
-	},
 	computed: {
 		...mapState({
 			compactMode: state => state.compactMode,
@@ -183,9 +167,6 @@ export default {
 			return this.$store.getters.config('cardIdBadge')
 		},
 		showMenuAtTitle() {
-			if (this.editing) {
-				return false
-			}
 			return this.compactMode || (!this.compactMode && !this.hasBadges && !this.hasLabels)
 		},
 		showMenuAtLabels() {
@@ -207,6 +188,12 @@ export default {
 				this.$nextTick(() => this.$el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }))
 			}
 		},
+		'card.title'(value) {
+			if (document.activeElement === this.$refs.titleContentEditable || this.$refs.titleContentEditable.textContent === value) {
+				return
+			}
+			this.$refs.titleContentEditable.textContent = value
+		},
 	},
 	methods: {
 		openCard() {
@@ -216,18 +203,17 @@ export default {
 			const boardId = this.card && this.card.boardId ? this.card.boardId : this.$route.params.id
 			this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id } }).catch(() => {})
 		},
-		startEditing(card) {
-			this.copiedCard = Object.assign({}, card)
-			this.editing = true
-		},
-		finishedEdit(card) {
-			if (this.copiedCard.title !== card.title) {
-				this.$store.dispatch('updateCardTitle', this.copiedCard)
+		blurTitle(e) {
+			// TODO Handle empty title
+			if (e.target.innerText !== this.card.title) {
+				this.$store.dispatch('updateCardTitle', {
+					...this.card,
+					title: e.target.innerText,
+				})
 			}
-			this.editing = false
 		},
 		cancelEdit() {
-			this.editing = false
+			this.$refs.titleContentEditable.textContent = this.card.title
 		},
 		applyLabelFilter(label) {
 			if (this.dragging) {
@@ -272,22 +258,13 @@ export default {
 			border: 2px solid var(--color-primary-element);
 		}
 
-		&:focus, &:focus-visible, &:focus-within, &:hover {
+		&:focus, &:focus-visible, &:focus-within {
 			outline: none;
 			border: 2px solid var(--color-primary-element);
 		}
 
 		.card-upper {
 			display: flex;
-			form {
-				display: flex;
-				padding: 3px 5px;
-				width: 100%;
-				input[type=text] {
-					flex-grow: 1;
-				}
-
-			}
 			h3 {
 				margin: 0;
 				padding: 6px;
@@ -300,16 +277,20 @@ export default {
 				&.editable {
 					span {
 						cursor: text;
+						padding-right: 8px;
+						padding-top: 3px;
+						padding-bottom: 3px;
+
+						&:focus, &:focus-visible {
+							outline: none;
+						}
 					}
 
-					&:focus {
+					&:focus-within {
 						outline: 2px solid var(--color-border-dark);
 						border-radius: 3px;
 					}
 				}
-			}
-			input[type=text] {
-				font-size: 100%;
 			}
 			.card-menu {
 				height: 44px;
