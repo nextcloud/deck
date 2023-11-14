@@ -150,7 +150,7 @@ class Card extends RelationalEntity {
 			$date = new DateTime();
 			$date->setTimestamp($this->getLastModified());
 			$event->STATUS = 'COMPLETED';
-			$event->COMPLETED = $this->getDone() ? $this->$this->getDone() : $this->getArchived();
+			$event->COMPLETED = $this->getDone() ? $this->getDone() : $this->getArchived();
 		} else {
 			$event->STATUS = 'NEEDS-ACTION';
 		}
