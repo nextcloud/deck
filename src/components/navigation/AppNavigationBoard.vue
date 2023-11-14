@@ -289,7 +289,7 @@ export default {
 							})
 					}
 				},
-				true
+				true,
 			)
 		},
 		actionDetails() {

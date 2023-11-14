@@ -25,7 +25,7 @@
 		<div class="activity--header">
 			<img :src="activity.icon" class="activity--icon">
 			<NcRichText class="activity--subject" :text="message.subject" :arguments="message.parameters" />
-			<div class="activity--timestamp">
+			<div class="activity--timestamp" :title="formatReadableDate(activity.datetime)">
 				{{ relativeDate(activity.datetime) }}
 			</div>
 		</div>
@@ -39,6 +39,7 @@ import { NcRichText, NcUserBubble } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import DOMPurify from 'dompurify'
 import relativeDate from '../mixins/relativeDate.js'
+import formatReadableDate from '../mixins/readableDate.js'
 
 const InternalLink = {
 	name: 'InternalLink',
@@ -62,7 +63,7 @@ export default {
 	components: {
 		NcRichText,
 	},
-	mixins: [relativeDate],
+	mixins: [relativeDate, formatReadableDate],
 	props: {
 		activity: {
 			type: Object,

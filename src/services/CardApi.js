@@ -38,7 +38,7 @@ export class CardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -53,7 +53,7 @@ export class CardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -68,7 +68,7 @@ export class CardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -83,7 +83,7 @@ export class CardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -98,7 +98,7 @@ export class CardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -113,7 +113,7 @@ export class CardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -128,7 +128,7 @@ export class CardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -143,7 +143,7 @@ export class CardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -158,7 +158,7 @@ export class CardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -173,7 +173,7 @@ export class CardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)
@@ -188,7 +188,7 @@ export class CardApi {
 				},
 				(err) => {
 					return Promise.reject(err)
-				}
+				},
 			)
 			.catch((err) => {
 				return Promise.reject(err)

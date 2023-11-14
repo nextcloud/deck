@@ -216,7 +216,7 @@ export default {
 			})
 		},
 		dragHandleSelector() {
-			return this.canEdit ? null : '.no-drag'
+			return this.canEdit && !this.showArchived ? null : '.no-drag'
 		},
 		cardDetailsInModal: {
 			get() {

@@ -124,7 +124,7 @@ export default {
 			return true
 		},
 		labelsSorted() {
-			return [...this.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+			return [...this.labels].sort((a, b) => a.title.localeCompare(b.title))
 		},
 
 	},
