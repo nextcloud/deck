@@ -68,6 +68,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		defaultOpen: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	data() {
 		return {
@@ -90,7 +94,7 @@ export default {
 		},
 	},
 	mounted() {
-		this.opened = this.boards.length > 0
+		this.opened = this.defaultOpen
 	},
 }
 </script>

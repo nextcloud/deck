@@ -174,7 +174,7 @@ export default {
 	.dashboard-column {
 		display: flex;
 		flex-direction: column;
-		min-width: $stack-width;
+		width: $stack-width;
 		margin-left: $stack-spacing;
 		margin-right: $stack-spacing;
 
