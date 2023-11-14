@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div>
+	<div data-test="description">
 		<h5>
 			{{ t('deck', 'Description') }}
 			<span v-if="descriptionLastEdit && !descriptionSaving">{{ t('deck', '(Unsaved)') }}</span>

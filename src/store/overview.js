@@ -52,11 +52,11 @@ export default {
 			const promise = (async () => {
 				commit('setCurrentBoard', null)
 				const assignedCards = await apiClient.get('upcoming')
-				const assignedCardsFlat = assignedCards.flat()
+				const assignedCardsFlat = Object.values(assignedCards).flat()
 				for (const i in assignedCardsFlat) {
 					commit('addCard', assignedCardsFlat[i])
 				}
-				commit('setAssignedCards', assignedCardsFlat)
+				commit('setAssignedCards', assignedCards)
 				commit('setLoading', false)
 			})()
 			commit('setLoading', promise)

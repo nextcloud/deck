@@ -1,9 +1,9 @@
 <template>
-	<div class="selector-wrapper" :aria-label="t('deck', 'Assign a tag to this card…')">
+	<div class="selector-wrapper" :aria-label="t('deck', 'Assign a tag to this card…')" data-test="tag-selector">
 		<div class="selector-wrapper--icon">
 			<TagMultiple :size="20" />
 		</div>
-		<NcMultiselect v-model="assignedLabels"
+		<NcMultiselect :value="assignedLabels"
 			class="selector-wrapper--selector"
 			:multiple="true"
 			:disabled="disabled"
@@ -63,7 +63,7 @@ export default {
 			return [...this.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 		assignedLabels() {
-			return [...this.card.labels].local((a, b) => (a.title < b.title) ? -1 : 1)
+			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 	},
 	methods: {

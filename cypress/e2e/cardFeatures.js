@@ -217,6 +217,39 @@ describe('Card', function() {
 			cy.get(`.card:contains("${newCardTitle}")`).find('[data-due-state]').should('not.exist')
 		})
 
+		it('Add a label', function() {
+			const newCardTitle = 'Card with labels'
+
+			cy.get('.button-vue[aria-label*="Add card"]')
+				.first().click()
+			cy.get('.stack__card-add form input#new-stack-input-main')
+				.type(newCardTitle)
+			cy.get('.stack__card-add form input[type=submit]')
+				.first().click()
+			cy.get(`.card:contains("${newCardTitle}")`).should('be.visible').click()
+
+			cy.get('#app-sidebar-vue [data-test="tag-selector"]').should('be.visible').click()
+			cy.get('.multiselect__option:contains("Action needed")').should('be.visible').click()
+
+			cy.get('[data-test="tag-selector"] .selector-wrapper--icon').click()
+			cy.get('.multiselect__option:contains("Action needed")').should('not.be.visible')
+
+			cy.get('[data-test="tag-selector"] .multiselect__tags .tag:contains("Action needed")')
+				.should('be.visible')
+
+			cy.get(`.card:contains("${newCardTitle}")`).find('.labels li:contains("Action needed")')
+				.should('be.visible')
+
+			cy.get('#app-sidebar-vue [data-test="tag-selector"]').should('be.visible').click()
+			cy.get('.multiselect__option:contains("Later")').should('be.visible').click()
+			cy.get('.multiselect__option:contains("Action needed")').should('be.visible').click()
+
+			cy.get(`.card:contains("${newCardTitle}")`).find('.labels li:contains("Later")')
+				.should('be.visible')
+			cy.get(`.card:contains("${newCardTitle}")`).find('.labels li:contains("Action needed")')
+				.should('not.exist')
+		})
+
 	})
 
 })
