@@ -63,7 +63,7 @@ export default {
 			return [...this.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 		assignedLabels() {
-			return [...this.card.labels].local((a, b) => (a.title < b.title) ? -1 : 1)
+			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 	},
 	methods: {
