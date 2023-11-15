@@ -259,6 +259,7 @@ OC.L10N.register(
     "Set due date for this weekend" : "Bitiş tarihini bu hafta sonu olarak ayarla",
     "Set due date for next week" : "Bitiş tarihini sonraki hafta olarak ayarla",
     "Assign a tag to this card…" : "Bu karta bir etiket ata…",
+    "Create a new tag:" : "Yeni etiket ekle:",
     "(group)" : "(grup)",
     "Next week – {timeLocale}" : "Sonraki hafta – {timeLocale}",
     "Todo items" : "Yapılacak iş ögeleri",

@@ -259,6 +259,7 @@ OC.L10N.register(
     "Set due date for this weekend" : "Fälligkeitsdatum auf kommendes Wochenende setzen",
     "Set due date for next week" : "Fälligkeitsdatum auf nächste Woche setzen",
     "Assign a tag to this card…" : "Dieser Karte ein Schlagwort zuweisen…",
+    "Create a new tag:" : "Neues Schlagwort erstellen:",
     "(group)" : "(Gruppe)",
     "Next week – {timeLocale}" : "Nächste Woche – {timeLocale}",
     "Todo items" : "Aufgaben-Elemente",
