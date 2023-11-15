@@ -1,6 +1,29 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.11.1
+
+### Added
+
+- feat: remember last board, list for new card dialog [#5049](https://github.com/nextcloud/deck/pull/5049)
+- feat: update smart picker links [#5072](https://github.com/nextcloud/deck/pull/5072)
+
+### Fixed
+
+- fix: export doesn't handle lists with no cards [#5118](https://github.com/nextcloud/deck/pull/5118)
+- fix: Check both card reference url patterns [#5263](https://github.com/nextcloud/deck/pull/5263)
+- Issue triage fix collection @juliushaertl [#5286](https://github.com/nextcloud/deck/pull/5286)
+- fix: open card in modal on main route [#5288](https://github.com/nextcloud/deck/pull/5288)
+- fix: Avoid too large index on postgres as indexing just the last_editor column is enough [#5291](https://github.com/nextcloud/deck/pull/5291)
+- fix: error msg on CreateNewCardCustomPicker & only show available bo… [#5030](https://github.com/nextcloud/deck/pull/5030)
+- Remove duplicate button [#5043](https://github.com/nextcloud/deck/pull/5043)
+
+### Other
+
+- fix cypress for new file picker @juliushaertl [#5027](https://github.com/nextcloud/deck/pull/5027)
+- test: add cypress tests for create new deck card [#5026](https://github.com/nextcloud/deck/pull/5026)
+- Update dependencies
+
 ## 1.11.0
 
 ### Added
