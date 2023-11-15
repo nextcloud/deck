@@ -259,6 +259,7 @@ OC.L10N.register(
     "Set due date for this weekend" : "عيِّن نهاية هذا الأسبوع كموعدٍ لاستحقاق البطاقة",
     "Set due date for next week" : "عيِّن الأسبوع المُقبل كموعدٍ لاستحقاق البطاقة",
     "Assign a tag to this card…" : "انسب وسم الى هذه البطاقة..",
+    "Create a new tag:" : "إنشاء سِمَةٍ tag جديدة:",
     "(group)" : "(مجموعة)",
     "Next week – {timeLocale}" : "الأسبوع القادم – {timeLocale}",
     "Todo items" : "قائمة المهام",
