@@ -259,6 +259,7 @@ OC.L10N.register(
     "Set due date for this weekend" : "Nastavit termín na tento týden",
     "Set due date for next week" : "Nastavit termín na příští týden",
     "Assign a tag to this card…" : "Přiřadit této kartě štítek…",
+    "Create a new tag:" : "Vytvořit nový štítek:",
     "(group)" : "(skupina)",
     "Next week – {timeLocale}" : "Příští týden – {timeLocale}",
     "Todo items" : "Položky k udělání",

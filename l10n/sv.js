@@ -259,6 +259,7 @@ OC.L10N.register(
     "Set due date for this weekend" : "Ställ in förfallodatum för denna helg",
     "Set due date for next week" : "Ställ in förfallodatum för nästa vecka",
     "Assign a tag to this card…" : "Tilldela en tagg till det här kortet ...",
+    "Create a new tag:" : "Skapa en ny tagg:",
     "(group)" : " (grupp)",
     "Next week – {timeLocale}" : "Nästa vecka – {timeLocale}",
     "Todo items" : "Att göra saker",
