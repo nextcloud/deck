@@ -259,6 +259,7 @@ OC.L10N.register(
     "Set due date for this weekend" : "Постави датум доспећа на овај викенд",
     "Set due date for next week" : "Постави датум доспећа на наредну седмицу",
     "Assign a tag to this card…" : "Додели ознаку овој картици…",
+    "Create a new tag:" : "Креирај нову ознаку:",
     "(group)" : "(група)",
     "Next week – {timeLocale}" : "Наредне недеље – {timeLocale}",
     "Todo items" : "Ставке обавеза",

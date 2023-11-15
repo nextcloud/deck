@@ -257,6 +257,7 @@
     "Set due date for this weekend" : "設定本週末的到期日",
     "Set due date for next week" : "設定下週的到期日",
     "Assign a tag to this card…" : "分配標籤到此卡片……",
+    "Create a new tag:" : "建立新標籤：",
     "(group)" : "（群組）",
     "Next week – {timeLocale}" : "下週 – {timeLocale}",
     "Todo items" : "待辦事項",
