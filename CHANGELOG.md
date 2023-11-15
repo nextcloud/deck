@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.9.4
+
+### Fixed
+
+- fix: open card in modal on main route [#5289](https://github.com/nextcloud/deck/pull/5289)
+
 ## 1.9.3
 
 ### Added
