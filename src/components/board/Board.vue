@@ -54,7 +54,11 @@
 					</form>
 				</template>
 			</NcEmptyContent>
-			<div v-else-if="!isEmpty && !loading" key="board" class="board">
+			<div v-else-if="!isEmpty && !loading"
+				key="board"
+				ref="board"
+				class="board"
+				@mousedown="onMouseDown">
 				<Container lock-axix="y"
 					orientation="horizontal"
 					:drag-handle-selector="dragHandleSelector"
@@ -65,6 +69,7 @@
 					<Draggable v-for="stack in stacksByBoard"
 						:key="stack.id"
 						data-click-closes-sidebar="true"
+						data-dragscroll-enabled
 						class="stack-draggable-wrapper">
 						<Stack :stack="stack" :dragging="draggingStack" data-click-closes-sidebar="true" />
 					</Draggable>
@@ -117,6 +122,8 @@ export default {
 			draggingStack: false,
 			loading: true,
 			newStackTitle: '',
+			currentScrollPosX: null,
+			currentMousePosX: null,
 		}
 	},
 	computed: {
@@ -184,12 +191,40 @@ export default {
 			this.$store.dispatch('createStack', newStack)
 			this.newStackTitle = ''
 		},
+
+		onMouseDown(event) {
+			this.startMouseDrag(event)
+		},
+
+		startMouseDrag(event) {
+			if (!('dragscrollEnabled' in event.target.dataset)) {
+				return
+			}
+
+			event.preventDefault()
+			this.currentMousePosX = event.clientX
+			this.currentScrollPosX = this.$refs.board.scrollLeft
+			window.addEventListener('mousemove', this.handleMouseDrag)
+			window.addEventListener('mouseup', this.stopMouseDrag)
+			window.addEventListener('mouseleave', this.stopMouseDrag)
+		},
+
+		handleMouseDrag(event) {
+			event.preventDefault()
+			const deltaX = event.clientX - this.currentMousePosX
+			this.$refs.board.scrollLeft = this.currentScrollPosX - deltaX
+		},
+
+		stopMouseDrag(event) {
+			window.removeEventListener('mousemove', this.handleMouseDrag)
+			window.removeEventListener('mouseup', this.stopMouseDrag)
+			window.removeEventListener('mouseleave', this.stopMouseDrag)
+		},
 	},
 }
 </script>
 
 <style lang="scss" scoped>
-
 	@import '../../css/animations';
 	@import '../../css/variables';
 
