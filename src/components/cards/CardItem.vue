@@ -53,6 +53,7 @@
 						@keyup.stop>{{ card.title }}</span>
 				</h3>
 
+				<DueDate v-if="compactMode && card.duedate" :card="card" />
 				<CardMenu v-if="showMenuAtTitle" :card="card" class="right card-menu" />
 			</div>
 
@@ -90,10 +91,11 @@ import labelStyle from '../../mixins/labelStyle.js'
 import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
 import CardMenu from './CardMenu.vue'
 import CardCover from './CardCover.vue'
+import DueDate from './badges/DueDate.vue'
 
 export default {
 	name: 'CardItem',
-	components: { CardBadges, AttachmentDragAndDrop, CardMenu, CardCover },
+	components: { CardBadges, AttachmentDragAndDrop, CardMenu, CardCover, DueDate },
 	directives: {
 		ClickOutside,
 	},
@@ -140,7 +142,7 @@ export default {
 			return board ? !board.archived && board.permissions.PERMISSION_EDIT : false
 		},
 		inlineEditingBlocked() {
-			return this.compactMode || this.isArchived || this.showArchived || !this.canEdit || this.standalone
+			return this.isArchived || this.showArchived || !this.canEdit || this.standalone
 		},
 		card() {
 			return this.item ? this.item : this.$store.getters.cardById(this.id)
@@ -350,6 +352,10 @@ export default {
 
 		.duedate {
 			margin-right: 0;
+			display: flex;
+			height: 32px;
+			width: 32px;
+			margin-top: 6px;
 		}
 		&.has-labels {
 			padding-bottom: $card-padding;
@@ -364,6 +370,9 @@ export default {
 			height: 6px;
 			font-size: 0;
 			color: transparent;
+		}
+		.card-menu {
+			align-self: start !important;
 		}
 	}
 
