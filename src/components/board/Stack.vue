@@ -132,6 +132,7 @@
 			data-click-closes-sidebar="true"
 			non-drag-area-selector=".dragDisabled"
 			:drag-handle-selector="dragHandleSelector"
+			data-dragscroll-enabled
 			@should-accept-drop="canEdit"
 			@drag-start="draggingCard = true"
 			@drag-end="draggingCard = false"
