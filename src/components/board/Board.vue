@@ -30,6 +30,11 @@
 				<h2>{{ t('deck', 'Loading board') }}</h2>
 				<p />
 			</div>
+			<div v-else-if="!board" key="notfound" class="emptycontent">
+				<div class="icon icon-deck" />
+				<h2>{{ t('deck', 'Board not found') }}</h2>
+				<p />
+			</div>
 			<NcEmptyContent v-else-if="isEmpty" key="empty">
 				<template #icon>
 					<DeckIcon />
@@ -74,11 +79,6 @@
 						<Stack :stack="stack" :dragging="draggingStack" data-click-closes-sidebar="true" />
 					</Draggable>
 				</Container>
-			</div>
-			<div v-else key="notfound" class="emptycontent">
-				<div class="icon icon-deck" />
-				<h2>{{ t('deck', 'Board not found') }}</h2>
-				<p />
 			</div>
 		</transition>
 		<GlobalSearchResults />
@@ -147,12 +147,6 @@ export default {
 	},
 	watch: {
 		id(newValue, oldValue) {
-			if (this.session) {
-				// close old session
-				this.session.close()
-			}
-			this.session = createSession(newValue)
-
 			this.fetchData()
 		},
 		showArchived() {
@@ -172,11 +166,16 @@ export default {
 			try {
 				await this.$store.dispatch('loadBoardById', this.id)
 				await this.$store.dispatch('loadStacks', this.id)
+
+				this.session?.close()
+				this.session = createSession(this.id)
 			} catch (e) {
+				this.loading = false
 				console.error(e)
 				showError(e)
+			} finally {
+				this.loading = false
 			}
-			this.loading = false
 		},
 
 		onDropStack({ removedIndex, addedIndex }) {
