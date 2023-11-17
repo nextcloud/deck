@@ -79,12 +79,14 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws DoesNotExistException
 	 */
-	public function find($id, $withLabels = false, $withAcl = false): Board {
+	public function find(int $id, bool $withLabels = false, bool $withAcl = false, bool $allowDeleted = false): Board {
 		if (!isset($this->boardCache[$id])) {
 			$qb = $this->db->getQueryBuilder();
+			$deletedWhere = $allowDeleted ? $qb->expr()->gte('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)) : $qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT));
 			$qb->select('*')
 				->from('deck_boards')
 				->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
+				->andWhere($deletedWhere)
 				->orderBy('id');
 			$this->boardCache[$id] = $this->findEntity($qb);
 		}
