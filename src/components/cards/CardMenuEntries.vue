@@ -175,7 +175,8 @@ export default {
 		},
 		deleteCard() {
 			this.$store.dispatch('deleteCard', this.card)
-			showUndo(t('deck', 'Card deleted'), () => this.$store.dispatch('cardUndoDelete', this.card))
+			const undoCard = { ...this.card, deletedAt: 0 }
+			showUndo(t('deck', 'Card deleted'), () => this.$store.dispatch('cardUndoDelete', undoCard))
 		},
 		changeCardDoneStatus() {
 			this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })
