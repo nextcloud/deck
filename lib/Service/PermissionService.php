@@ -194,11 +194,11 @@ class PermissionService {
 	 * @throws MultipleObjectsReturnedException
 	 * @throws DoesNotExistException
 	 */
-	private function getBoard($boardId): Board {
-		if (!isset($this->boardCache[$boardId])) {
-			$this->boardCache[$boardId] = $this->boardMapper->find($boardId, false, true);
+	private function getBoard(int $boardId): Board {
+		if (!isset($this->boardCache[(string)$boardId])) {
+			$this->boardCache[(string)$boardId] = $this->boardMapper->find($boardId, false, true);
 		}
-		return $this->boardCache[$boardId];
+		return $this->boardCache[(string)$boardId];
 	}
 
 	/**
