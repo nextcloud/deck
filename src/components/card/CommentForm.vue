@@ -114,8 +114,13 @@ export default {
 		submit() {
 			const content = this.validate(true)
 			if (content) {
-				this.$emit('input', content)
-				this.$emit('submit', content)
+				// We need the plain text representation for the input event as otherwise it will propagate back to the contenteditable
+				// The input event is only used for change detection to make sure that the input is reset after posting the comment
+				const temp = document.createElement('div')
+				temp.innerHTML = content
+				const text = temp.textContent || temp.innerText || ''
+				this.$emit('input', text)
+				this.$emit('submit', text)
 			}
 		},
 		/* All credits for this go to the talk app
