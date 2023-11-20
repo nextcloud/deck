@@ -131,6 +131,7 @@ class ActivityManagerTest extends TestCase {
 
 	public function testCreateEvent() {
 		$board = new Board();
+		$board->setId(123);
 		$board->setTitle('');
 		$this->boardMapper->expects(self::once())
 			->method('find')
@@ -148,6 +149,7 @@ class ActivityManagerTest extends TestCase {
 
 	public function testCreateEventDescription() {
 		$board = new Board();
+		$board->setId(123);
 		$board->setTitle('');
 		$this->boardMapper->expects(self::once())
 			->method('find')
@@ -162,7 +164,9 @@ class ActivityManagerTest extends TestCase {
 			->method('find')
 			->willReturn($card);
 
-		$stack = Stack::fromRow([]);
+		$stack = Stack::fromRow([
+			'boardId' => 123,
+		]);
 		$this->stackMapper->expects(self::any())
 			->method('find')
 			->willReturn($stack);
@@ -192,6 +196,7 @@ class ActivityManagerTest extends TestCase {
 
 	public function testCreateEventLongDescription() {
 		$board = new Board();
+		$board->setId(123);
 		$board->setTitle('');
 		$this->boardMapper->expects(self::once())
 			->method('find')
@@ -205,7 +210,9 @@ class ActivityManagerTest extends TestCase {
 			->method('find')
 			->willReturn($card);
 
-		$stack = new Stack();
+		$stack = Stack::fromRow([
+			'boardId' => 123,
+		]);
 		$this->stackMapper->expects(self::any())
 			->method('find')
 			->willReturn($stack);
@@ -235,6 +242,7 @@ class ActivityManagerTest extends TestCase {
 
 	public function testCreateEventLabel() {
 		$board = Board::fromRow([
+			'id' => 123,
 			'title' => 'My board'
 		]);
 		$this->boardMapper->expects(self::once())
@@ -249,7 +257,9 @@ class ActivityManagerTest extends TestCase {
 			->method('find')
 			->willReturn($card);
 
-		$stack = Stack::fromParams([]);
+		$stack = Stack::fromRow([
+			'boardId' => 123,
+		]);
 		$this->stackMapper->expects(self::any())
 			->method('find')
 			->willReturn($stack);
