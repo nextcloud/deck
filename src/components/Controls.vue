@@ -90,7 +90,7 @@
 						<NcButton slot="trigger"
 							:title="t('deck', 'Apply filter')"
 							class="filter-button"
-							type="tertiary-no-background">
+							:type="isFilterActive ? 'primary' : 'tertiary'">
 							<template #icon>
 								<FilterIcon v-if="isFilterActive" :size="20" decorative />
 								<FilterOffIcon v-else :size="20" decorative />
@@ -509,8 +509,11 @@ export default {
 		width: 44px;
 		height: 44px;
 
-		&:hover, &:focus {
-			background-color: rgba(127,127,127,0.25) !important;
+		&[data-popper-shown] {
+			background-color: var(--color-background-hover);
+			&.button-vue--vue-primary {
+				background-color: var(--color-primary-element);
+			}
 		}
 	}
 </style>
