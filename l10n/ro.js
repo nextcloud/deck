@@ -34,6 +34,7 @@ OC.L10N.register(
     "Next 7 days" : "Următorele 7 zile",
     "Next 30 days" : "Următorele 30 zile",
     "No due date" : "Fără dată limită",
+    "Clear filter" : "Șterge filtrul",
     "Open details" : "Deschide detaliile",
     "Details" : "Detalii",
     "Sharing" : "Partajare",
