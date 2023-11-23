@@ -15,7 +15,7 @@
 		"roave/security-advisories": "dev-master",
 		"phpunit/phpunit": "^9",
 		"nextcloud/coding-standard": "^1.1",
-		"nextcloud/ocp": "dev-master",
+		"nextcloud/ocp": "dev-stable28",
 		"psalm/phar": "^5.13"
 	},
 	"config": {
