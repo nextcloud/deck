@@ -13,7 +13,7 @@ updates:
   - juliushaertl
 
 - package-ecosystem: npm
-  target-branch: stable27
+  target-branch: stable28
   versioning-strategy: lockfile-only
   directory: "/"
   schedule:
@@ -30,7 +30,7 @@ updates:
   - dependencies
 
 - package-ecosystem: npm
-  target-branch: stable26
+  target-branch: stable27
   versioning-strategy: lockfile-only
   directory: "/"
   schedule:
