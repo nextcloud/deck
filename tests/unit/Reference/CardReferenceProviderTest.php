@@ -34,6 +34,14 @@ use OCP\IURLGenerator;
 use Test\TestCase;
 
 class CardReferenceProviderTest extends TestCase {
+	private $cardService;
+	private $boardService;
+	private $stackService;
+	private $urlGenerator;
+	private $l10n;
+	private $userId;
+	private $provider;
+	
 	public function setUp() : void {
 		parent::setUp();
 

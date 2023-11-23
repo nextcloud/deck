@@ -41,6 +41,7 @@ class ExceptionMiddlewareTest extends \Test\TestCase {
 	private $logger;
 	/** @var IConfig */
 	private $config;
+	private $request;
 	private $controller;
 	private $exceptionMiddleware;
 

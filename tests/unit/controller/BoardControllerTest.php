@@ -28,6 +28,7 @@ use OCA\Deck\Db\Board;
 use OCP\IUser;
 
 class BoardControllerTest extends \Test\TestCase {
+	private $l10n;
 	private $controller;
 	private $request;
 	private $userManager;

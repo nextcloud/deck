@@ -41,9 +41,11 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class DeckProviderTest extends TestCase {
-
 	/** @var DeckProvider */
 	private $provider;
+
+	/** @var IL10N */
+	private $l10n;
 
 	/** @var IURLGenerator|MockObject */
 	private $urlGenerator;
@@ -56,6 +58,9 @@ class DeckProviderTest extends TestCase {
 
 	/** @var ICommentsManager|MockObject */
 	private $commentsManager;
+
+	private $l10nFactory;
+	private $config;
 
 	/** @var CardService|MockObject */
 	private $cardService;
@@ -70,7 +75,6 @@ class DeckProviderTest extends TestCase {
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->commentsManager = $this->createMock(ICommentsManager::class);
 		$this->l10nFactory = $this->createMock(IFactory::class);
-		$this->config = $this->createMock(IConfig::class);
 		$this->config = $this->createMock(IConfig::class);
 		$this->cardService = $this->createMock(CardService::class);
 		$this->provider = new DeckProvider($this->urlGenerator, $this->activityManager, $this->userManager, $this->commentsManager, $this->l10nFactory, $this->config, $this->userId, $this->cardService);
