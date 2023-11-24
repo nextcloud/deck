@@ -46,7 +46,29 @@ class LabelApiController extends ApiController {
 	) {
 		parent::__construct($appName, $request);
 	}
-
+	
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * Return all of the labels in the specified board.
+	 */
+	public function index() {
+		$since = 0;
+		$modified = $this->request->getHeader('If-Modified-Since');
+		if ($modified !== null && $modified !== '') {
+			$date = Util::parseHTTPDate($modified);
+			if (!$date) {
+				throw new StatusException('Invalid If-Modified-Since header provided.');
+			}
+			$since = $date->getTimestamp();
+		}
+		$label = $this->labelService->findAll($this->request->getParam('boardId'), $since);
+		return new DataResponse($label, HTTP::STATUS_OK);
+	}
+	
+	
 	/**
 	 * @NoAdminRequired
 	 * @CORS
