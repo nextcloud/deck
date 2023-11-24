@@ -346,7 +346,6 @@ OC.L10N.register(
     "Share" : "Freigeben",
     "A <strong>card description</strong> inside the Deck app has been changed" : "Eine <strong>Kartenbeschreibung</strong> wurde innerhalb der Deck-App geändert",
     "Timeline" : "Zeitachse",
-    "Add a new list" : "Eine neue Liste hinzufügen",
     "Assign to users" : "Benutzern zuweisen",
     "Due date" : "Fälligkeitsdatum",
     "Next week" : "Nächste Woche",

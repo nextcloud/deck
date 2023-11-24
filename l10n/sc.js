@@ -283,7 +283,6 @@ OC.L10N.register(
     "Share" : "Cumpartzi",
     "A <strong>card description</strong> inside the Deck app has been changed" : "Sa <strong>descritzione de un'ischeda</strong> in intro de s'aplicatzione Deck app est istada cambiada",
     "Timeline" : "Fusu oràriu",
-    "Add a new list" : "Agiunghe un'elencu nou",
     "Assign to users" : "Assigna a utentes",
     "Due date" : "Iscadèntzia",
     "Next week" : "Sa chida chi benit",

@@ -273,7 +273,6 @@ OC.L10N.register(
     "Share" : "Сподели",
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Описот на картицата</strong> во апликацијата Deck е изменет",
     "Timeline" : "Времеплов",
-    "Add a new list" : "Додади нова листа",
     "Assign to users" : "Додели на корисници",
     "Due date" : "До датум",
     "Next week" : "Следна недела",

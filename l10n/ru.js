@@ -323,7 +323,6 @@ OC.L10N.register(
     "Share" : "Опубликовать",
     "A <strong>card description</strong> inside the Deck app has been changed" : "В приложении Карточки изменено <strong>описание карточки</strong> ",
     "Timeline" : "История",
-    "Add a new list" : "Создать список",
     "Assign to users" : "Назначить пользователям",
     "Due date" : "Срок исполнения",
     "Next week" : "Следующая неделя",

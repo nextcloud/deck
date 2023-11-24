@@ -311,7 +311,6 @@ OC.L10N.register(
     "Share" : "Μοιραστείτε",
     "A <strong>card description</strong> inside the Deck app has been changed" : "Η <strong>περιγραφή καρτέλας </strong>στην εφαρμογή Deck άλλαξε",
     "Timeline" : "Χρονολόγιο",
-    "Add a new list" : "Προσθήκη νέας λίστας",
     "Assign to users" : "Ανάθεση σε χρήστες",
     "Due date" : "Ημερομηνία λήξης",
     "Next week" : "Επόμενη εβδομάδα",

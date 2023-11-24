@@ -315,7 +315,6 @@ OC.L10N.register(
     "Share" : "Споделяне",
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Описанието на картата</strong> в приложението Deck/набор/ е променено",
     "Timeline" : "Времева линия",
-    "Add a new list" : "Добавяне на нов списък",
     "Assign to users" : "Зачисляване към потребители",
     "Due date" : "Крайна дата",
     "Next week" : "Следваща седмица",
