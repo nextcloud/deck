@@ -321,7 +321,6 @@ OC.L10N.register(
     "Share" : "هم‌رسانی",
     "A <strong>card description</strong> inside the Deck app has been changed" : "شرح برگه در برگه‌دان تغییر کرده است",
     "Timeline" : "خط زمانی",
-    "Add a new list" : "فهرست جدید بیفزایید!",
     "Assign to users" : "به کاربران اختصاص دهید",
     "Due date" : "موعد مقرر",
     "Next week" : "هفتهٔ بعد",

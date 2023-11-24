@@ -268,7 +268,6 @@ OC.L10N.register(
     "Share" : "שיתוף",
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>תיאור של כרטיס</strong> בתוך יישומון החבילה נערך",
     "Timeline" : "ציר זמן",
-    "Add a new list" : "הוסף רשימה חדשה",
     "Assign to users" : "הקצאה למשתמשים",
     "Due date" : "מועד יעד",
     "Next week" : "השבוע הבא",

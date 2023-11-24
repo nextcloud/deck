@@ -223,7 +223,6 @@ OC.L10N.register(
     "Share" : "Bagikan",
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Deskripsi kartu</strong> didalam aplikasi Longgok telah diubah",
     "Timeline" : "Linimasa",
-    "Add a new list" : "Tambah daftar baru",
     "Assign to users" : "Penugasan kepada pengguna",
     "Due date" : "Tenggat",
     "Next week" : "Minggu setelah",

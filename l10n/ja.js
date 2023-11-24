@@ -293,7 +293,6 @@ OC.L10N.register(
     "Share" : "共有",
     "A <strong>card description</strong> inside the Deck app has been changed" : "デッキアプリ内の<strong>カードの説明</strong>が変更されたとき",
     "Timeline" : "タイムライン",
-    "Add a new list" : "新しいリストを追加",
     "Assign to users" : "ユーザーに割り当てる",
     "Due date" : "期限",
     "Next week" : "来週",

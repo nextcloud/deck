@@ -325,7 +325,6 @@ OC.L10N.register(
     "Share" : "Partekatu",
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Txartel baten deskribapena</strong> aldatu da Deck aplikazioaren barruan",
     "Timeline" : "Denbora-lerroa",
-    "Add a new list" : "Gehitu zerrenda berria",
     "Assign to users" : "Esleitu erabiltzaileei",
     "Due date" : "Epe-muga",
     "Next week" : "Hurrengo astea",
