@@ -252,7 +252,6 @@ OC.L10N.register(
     "Share" : "Jaa",
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Kortin kuvaus</strong> Pakka-sovelluksessa on vaihtunut",
     "Timeline" : "Aikajana",
-    "Add a new list" : "Lisää uusi lista",
     "Due date" : "Eräpäivä",
     "Next week" : "Seuraava viikko",
     "Next month" : "Seuraava kuukausi",

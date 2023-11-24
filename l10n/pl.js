@@ -346,7 +346,6 @@ OC.L10N.register(
     "Share" : "Udostępnianie",
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Opis karty</strong> w aplikacji Tablica został zmieniony",
     "Timeline" : "Oś czasu",
-    "Add a new list" : "Dodaj nową listę",
     "Assign to users" : "Przypisz do użytkowników",
     "Due date" : "Data realizacji",
     "Next week" : "Następny tydzień",

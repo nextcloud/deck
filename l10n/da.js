@@ -229,7 +229,6 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Del {file} med et Deck kort",
     "Share" : "Del",
     "Timeline" : "Tidslinje",
-    "Add a new list" : "Tilføj en ny kolonne",
     "Assign to users" : "Tildel til brugere",
     "Due date" : "Forfaldsdato",
     "Next week" : "Næste uge",

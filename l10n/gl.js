@@ -346,7 +346,6 @@ OC.L10N.register(
     "Share" : "Compartir",
     "A <strong>card description</strong> inside the Deck app has been changed" : "Cambiouse a <strong>descripción da tarxeta</strong> dentro da aplicación Gabeta",
     "Timeline" : "Cronoloxía",
-    "Add a new list" : "Engadir unha lista nova",
     "Assign to users" : "Asignar a usuarios",
     "Due date" : "Data de caducidade",
     "Next week" : "Semana seguinte",

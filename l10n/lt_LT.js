@@ -268,7 +268,6 @@ OC.L10N.register(
     "Share" : "Bendrinti",
     "A <strong>card description</strong> inside the Deck app has been changed" : "Darbų programėlėje pakeistas <strong>kortelės aprašas</strong> ",
     "Timeline" : "Laiko juosta",
-    "Add a new list" : "Pridėti naują sąrašą",
     "Assign to users" : "Priskirti naudotojams",
     "Due date" : "Galutinio termino data",
     "Next week" : "Kita savaitė",

@@ -346,7 +346,6 @@ OC.L10N.register(
     "Share" : "مشاركة ",
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>وصف البطاقة</strong>داخل تطبيق Deck قد تغيرت.",
     "Timeline" : "الجدول الزمني",
-    "Add a new list" : "اضف قائمة جديدة",
     "Assign to users" : "انسب الى المتسخدمين",
     "Due date" : "تاريخ الانجاز",
     "Next week" : "الاسبوع القادم",

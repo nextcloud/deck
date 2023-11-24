@@ -346,7 +346,6 @@ OC.L10N.register(
     "Share" : "Sdílet",
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Popis karty</strong> v aplikaci Deck byl změněn",
     "Timeline" : "Časová osa",
-    "Add a new list" : "Přidat nový sloupec",
     "Assign to users" : "Přiřadit k uživatelům",
     "Due date" : "Termín",
     "Next week" : "Příští týden",

@@ -318,7 +318,6 @@ OC.L10N.register(
     "Share" : "Del",
     "A <strong>card description</strong> inside the Deck app has been changed" : "En <strong>kort beskrivelse</strong>i Stokk-appen er endret",
     "Timeline" : "Tidslinje",
-    "Add a new list" : "Legg til en ny stabel",
     "Assign to users" : "Tildel brukere",
     "Due date" : "Forfallsdato",
     "Next week" : "Neste uke",

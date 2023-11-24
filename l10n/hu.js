@@ -338,7 +338,6 @@ OC.L10N.register(
     "Share" : "Megosztás",
     "A <strong>card description</strong> inside the Deck app has been changed" : "A <strong>kártyaleírás</strong> megváltozott a Kártyák alkalmazásban",
     "Timeline" : "Idővonal",
-    "Add a new list" : "Új lista hozzáadása",
     "Assign to users" : "Felhasználókhoz rendelés",
     "Due date" : "Határidő",
     "Next week" : "Következő hét",
