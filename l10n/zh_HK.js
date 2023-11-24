@@ -339,7 +339,6 @@ OC.L10N.register(
     "Share" : "分享",
     "A <strong>card description</strong> inside the Deck app has been changed" : "Deck 應用程式中的 <strong>卡片描述</strong> 已改變",
     "Timeline" : "時間線",
-    "Add a new list" : "添加一張新清單",
     "Assign to users" : "指派給用戶",
     "Due date" : "到期日",
     "Next week" : "下星期",

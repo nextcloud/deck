@@ -346,7 +346,6 @@ OC.L10N.register(
     "Share" : "Paylaş",
     "A <strong>card description</strong> inside the Deck app has been changed" : "Tahta uygulamasında bir <strong>kart açıklaması</strong> değiştirildiğinde",
     "Timeline" : "Zaman tüneli",
-    "Add a new list" : "Yeni liste ekle",
     "Assign to users" : "Kullanıcılara ata",
     "Due date" : "Bitiş tarihi",
     "Next week" : "Sonraki hafta",

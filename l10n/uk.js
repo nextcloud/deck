@@ -212,7 +212,6 @@ OC.L10N.register(
     "Error creating the share" : "Помилка створення спільного доступу",
     "Share" : "Спільний доступ",
     "Timeline" : "Дії",
-    "Add a new list" : "Додати новий список",
     "Assign to users" : "Призначити користувачам",
     "Due date" : "Протягом",
     "Next week" : "Наступний тиждень",

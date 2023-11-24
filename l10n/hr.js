@@ -284,7 +284,6 @@ OC.L10N.register(
     "Share" : "Dijeli",
     "A <strong>card description</strong> inside the Deck app has been changed" : "Promijenjen je <strong>opis kartice</strong> u aplikaciji Deck",
     "Timeline" : "Vremenska crta",
-    "Add a new list" : "Dodaj novi popis",
     "Assign to users" : "Dodijeli korisnicima",
     "Due date" : "Datum dospijeća",
     "Next week" : "Sljedeći tjedan",
