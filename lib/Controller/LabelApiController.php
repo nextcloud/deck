@@ -28,6 +28,7 @@ use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
+use Sabre\HTTP\Util;
 
 /**
  * Class BoardApiController
