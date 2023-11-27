@@ -187,6 +187,7 @@ OC.L10N.register(
     "Create a card" : "Búa til spjald",
     "Something went wrong" : "Eitthvað fór úrskeiðis",
     "Maximum file size of {size} exceeded" : "Fór yfir hámarks skráarstærð {size}",
+    "Error creating the share" : "Villa við að búa til sameignina",
     "Share" : "Deila",
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Lýsingu á spjaldi</strong> inni í Deck-spjaldaforritinu hefur verið breytt",
     "Timeline" : "Tímalína",
