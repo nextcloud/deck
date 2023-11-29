@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.11.2
+
+### Fixed
+
+- fix: Use text content as result for comments [#5297](https://github.com/nextcloud/deck/pull/5297)
+
 ## 1.11.1
 
 ### Added
