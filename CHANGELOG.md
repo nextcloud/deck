@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.12.0-beta.4
+
+### Added
+
+- scroll board by dragging @shoetten [#5293](https://github.com/nextcloud/deck/pull/5293)
+
+### Fixed
+
+- fix: Use text content as result for comments @juliushaertl [#5294](https://github.com/nextcloud/deck/pull/5294)
+- fix: Bring back due date indicator to compact mode @juliushaertl [#5292](https://github.com/nextcloud/deck/pull/5292)
+- Fix small issues around delete/undo @juliushaertl [#5296](https://github.com/nextcloud/deck/pull/5296)
+- fix(controls): use primary when filter is active @fitrahfm [#5299](https://github.com/nextcloud/deck/pull/5299)
+
 ## 1.12.0-beta.3
 
 ### Added
