@@ -9,13 +9,9 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 class SessionContext implements Context {
 	use RequestTrait;
 
-	/** @var ServerContext */
-	private $serverContext;
-
-	/** @var BoardContext */
-	private $boardContext;
-
-	private $tokens = [];
+	private ServerContext $serverContext;
+	private BoardContext $boardContext;
+	private array $tokens = [];
 
 	/** @BeforeScenario */
 	public function gatherContexts(BeforeScenarioScope $scope) {
@@ -40,7 +36,7 @@ class SessionContext implements Context {
 
 		// store token
 		$user = $this->serverContext->getCurrentUser();
-		$this->token[$user] = $res['ocs']['data']['token'];
+		$this->tokens[$user] = $res['ocs']['data']['token'];
 	}
 
 	/**
@@ -70,7 +66,7 @@ class SessionContext implements Context {
 		}
 
 		$user = $this->serverContext->getCurrentUser();
-		$token = $this->token[$user];
+		$token = $this->tokens[$user];
 		Assert::assertNotEmpty($token, "no token for the user found");
 		$this->requestContext->sendOCSRequest('POST', '/apps/deck/api/v1.0/session/close', [
 			'boardId' => $board['id'],
