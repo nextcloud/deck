@@ -252,4 +252,52 @@ describe('Card', function() {
 
 	})
 
+	describe('Card actions', () => {
+		beforeEach(function() {
+			cy.login(user)
+			useModal(false).then(() => {
+				cy.visit(`/apps/deck/#/board/${boardId}`)
+			})
+		})
+
+		it('Custom card actions', () => {
+			const myAction = {
+				label: 'Test action',
+				icon: 'icon-user',
+				callback(card) {
+					console.log('Called callback', card)
+				},
+			}
+			cy.spy(myAction, 'callback').as('myAction.callback')
+
+			cy.window().then(win => {
+				win.OCA.Deck.registerCardAction(myAction)
+			})
+
+			cy.get('.card:contains("Hello world")').should('be.visible').click()
+			cy.get('#app-sidebar-vue')
+				.find('.ProseMirror h1').contains('Hello world').should('be.visible')
+
+			cy.get('.app-sidebar-header .action-item__menutoggle').click()
+			cy.get('.v-popper__popper button:contains("Test action")').click()
+
+			cy.get('@myAction.callback')
+				.should('be.called')
+				.its('firstCall.args.0')
+				.as('args')
+
+			cy.url().then(url => {
+				const cardId = url.split('/').pop()
+				cy.get('@args').should('have.property', 'name', 'Hello world')
+				cy.get('@args').should('have.property', 'stackname', 'TestList')
+				cy.get('@args').should('have.property', 'boardname', 'MyTestBoard')
+				cy.get('@args').its('link').then((url) => {
+					expect(url.split('/').pop() === cardId).to.be.true
+					cy.visit(url)
+					cy.get('#app-sidebar-vue')
+						.find('.ProseMirror h1').contains('Hello world').should('be.visible')
+				})
+			})
+		})
+	})
 })
