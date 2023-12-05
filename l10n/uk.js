@@ -8,7 +8,7 @@ OC.L10N.register(
     "You have restored the board {board}" : "Ви відновили дошку {board}",
     "{user} has restored the board {board}" : "{user} відновив дошку {board}",
     "You have shared the board {board} with {acl}" : "Ви поділилися дошкою {board} з {acl}",
-    "{user} has shared the board {board} with {acl}" : "{user} поділився дошкою {board} з {acl}",
+    "{user} has shared the board {board} with {acl}" : "{user} поділив(-ла-)ся дошкою {board} з {acl}",
     "You have removed {acl} from the board {board}" : "Ви вилучили {acl} з дошки {board}",
     "{user} has removed {acl} from the board {board}" : "{user} вилучив {acl} з дошки {board}",
     "You have renamed the board {before} to {board}" : "Ви перейменували дошку з {before} на {board}",
