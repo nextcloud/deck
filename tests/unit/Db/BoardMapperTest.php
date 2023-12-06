@@ -38,6 +38,7 @@ class BoardMapperTest extends TestCase {
 
 	/** @var IDBConnection */
 	private $dbConnection;
+	private $labelMapper;
 	/** @var AclMapper|\PHPUnit\Framework\MockObject\MockObject */
 	private $aclMapper;
 	/** @var BoardMapper */

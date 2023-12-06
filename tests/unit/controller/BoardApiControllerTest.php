@@ -31,6 +31,7 @@ use OCP\IRequest;
 
 class BoardApiControllerTest extends \Test\TestCase {
 	private $appName = 'deck';
+	private $request;
 	private $userId = 'admin';
 	private $controller;
 	private $boardService;

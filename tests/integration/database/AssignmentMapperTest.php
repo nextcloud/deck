@@ -55,6 +55,13 @@ class AssignmentMapperTest extends \Test\TestCase {
 	/** @var AssignmentService */
 	private $assignmentService;
 
+	/** @var Board */
+	private $board;
+	/** @var Card[] */
+	private $cards;
+	/** @var Stack[] */
+	private $stacks;
+
 	public static function setUpBeforeClass(): void {
 		parent::setUpBeforeClass();
 

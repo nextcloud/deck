@@ -23,10 +23,10 @@
 
 namespace OCA\Deck\Db;
 
-use OC\Cache\CappedMemoryCache;
 use OCA\Deck\Service\CirclesService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
+use OCP\Cache\CappedMemoryCache;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
@@ -35,37 +35,22 @@ use Psr\Log\LoggerInterface;
 
 /** @template-extends QBMapper<Board> */
 class BoardMapper extends QBMapper implements IPermissionMapper {
-	private $labelMapper;
-	private $aclMapper;
-	private $stackMapper;
-	private $userManager;
-	private $groupManager;
-	private $circlesService;
-	private $logger;
-
 	/** @var CappedMemoryCache<Board[]> */
-	private $userBoardCache;
+	private CappedMemoryCache $userBoardCache;
 	/** @var CappedMemoryCache<Board> */
-	private $boardCache;
+	private CappedMemoryCache $boardCache;
 
 	public function __construct(
 		IDBConnection $db,
-		LabelMapper $labelMapper,
-		AclMapper $aclMapper,
-		StackMapper $stackMapper,
-		IUserManager $userManager,
-		IGroupManager $groupManager,
-		CirclesService $circlesService,
-		LoggerInterface $logger
+		private LabelMapper $labelMapper,
+		private AclMapper $aclMapper,
+		private StackMapper $stackMapper,
+		private IUserManager $userManager,
+		private IGroupManager $groupManager,
+		private CirclesService $circlesService,
+		private LoggerInterface $logger
 	) {
 		parent::__construct($db, 'deck_boards', Board::class);
-		$this->labelMapper = $labelMapper;
-		$this->aclMapper = $aclMapper;
-		$this->stackMapper = $stackMapper;
-		$this->userManager = $userManager;
-		$this->groupManager = $groupManager;
-		$this->circlesService = $circlesService;
-		$this->logger = $logger;
 
 		$this->userBoardCache = new CappedMemoryCache();
 		$this->boardCache = new CappedMemoryCache();
@@ -81,7 +66,8 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	 * @throws DoesNotExistException
 	 */
 	public function find(int $id, bool $withLabels = false, bool $withAcl = false, bool $allowDeleted = false): Board {
-		if (!isset($this->boardCache[$id])) {
+		$cacheKey = (string)$id;
+		if (!isset($this->boardCache[$cacheKey])) {
 			$qb = $this->db->getQueryBuilder();
 			$deletedWhere = $allowDeleted ? $qb->expr()->gte('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)) : $qb->expr()->eq('deleted_at', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT));
 			$qb->select('*')
@@ -89,22 +75,22 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 				->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
 				->andWhere($deletedWhere)
 				->orderBy('id');
-			$this->boardCache[$id] = $this->findEntity($qb);
+			$this->boardCache[(string)$id] = $this->findEntity($qb);
 		}
 
 		// Add labels
-		if ($withLabels && $this->boardCache[$id]->getLabels() === null) {
+		if ($withLabels && $this->boardCache[$cacheKey]->getLabels() === null) {
 			$labels = $this->labelMapper->findAll($id);
-			$this->boardCache[$id]->setLabels($labels);
+			$this->boardCache[$cacheKey]->setLabels($labels);
 		}
 
 		// Add acl
-		if ($withAcl && $this->boardCache[$id]->getAcl() === null) {
+		if ($withAcl && $this->boardCache[$cacheKey]->getAcl() === null) {
 			$acl = $this->aclMapper->findAll($id);
-			$this->boardCache[$id]->setAcl($acl);
+			$this->boardCache[$cacheKey]->setAcl($acl);
 		}
 
-		return $this->boardCache[$id];
+		return $this->boardCache[$cacheKey];
 	}
 
 	public function findBoardIds(string $userId): array {
@@ -464,8 +450,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	public function mapAcl(Acl &$acl) {
-		$groupManager = $this->groupManager;
-		$acl->resolveRelation('participant', function ($participant) use (&$acl, &$userManager, &$groupManager) {
+		$acl->resolveRelation('participant', function ($participant) use (&$acl) {
 			if ($acl->getType() === Acl::PERMISSION_TYPE_USER) {
 				if ($this->userManager->userExists($acl->getParticipant())) {
 					return new User($acl->getParticipant(), $this->userManager);
@@ -474,7 +459,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 				return null;
 			}
 			if ($acl->getType() === Acl::PERMISSION_TYPE_GROUP) {
-				$group = $groupManager->get($participant);
+				$group = $this->groupManager->get($participant);
 				if ($group !== null) {
 					return new Group($group);
 				}

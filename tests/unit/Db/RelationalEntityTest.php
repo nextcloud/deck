@@ -23,18 +23,22 @@
 
 namespace OCA\Deck\Db;
 
+class MyRelationalEntity extends RelationalEntity {
+	protected $foo;
+}
+
 class RelationalEntityTest extends \Test\TestCase {
 	public function testRelation() {
-		$entity = new RelationalEntity();
-		$entity->foo = null;
+		$entity = new MyRelationalEntity();
+		$entity->setFoo(null);
 		$entity->addRelation('foo');
 		$entity->setFoo('test');
 		$this->assertEquals([], $entity->getUpdatedFields());
 	}
 	
 	public function testWithoutRelation() {
-		$entity = new RelationalEntity();
-		$entity->foo = null;
+		$entity = new MyRelationalEntity();
+		$entity->setFoo(null);
 		$entity->setFoo('test');
 		$this->assertEquals(['foo' => true], $entity->getUpdatedFields());
 	}

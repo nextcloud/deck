@@ -56,6 +56,8 @@ class BoardServiceTest extends TestCase {
 
 	/** @var BoardService */
 	private $service;
+	/** @var IConfig */
+	private $config;
 	/** @var L10N */
 	private $l10n;
 	/** @var LabelMapper */
