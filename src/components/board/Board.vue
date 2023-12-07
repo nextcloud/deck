@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="board-wrapper">
+	<div class="board-wrapper" :tabindex="-1">
 		<Controls :board="board" />
 
 		<transition name="fade" mode="out-in">
@@ -86,7 +86,6 @@
 </template>
 
 <script>
-
 import { Container, Draggable } from 'vue-smooth-dnd'
 import { mapState, mapGetters } from 'vuex'
 import Controls from '../Controls.vue'

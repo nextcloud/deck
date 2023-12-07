@@ -40,12 +40,14 @@
 
 			<router-view name="sidebar" :visible="!cardDetailsInModal || !$route.params.cardId" />
 		</div>
+		<KeyboardShortcuts />
 	</NcContent>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import AppNavigation from './components/navigation/AppNavigation.vue'
+import KeyboardShortcuts from './components/KeyboardShortcuts.vue'
 import { NcModal, NcContent, NcAppContent } from '@nextcloud/vue'
 import { BoardApi } from './services/BoardApi.js'
 import { emit, subscribe } from '@nextcloud/event-bus'
@@ -60,6 +62,7 @@ export default {
 		NcModal,
 		NcContent,
 		NcAppContent,
+		KeyboardShortcuts,
 	},
 	provide() {
 		return {

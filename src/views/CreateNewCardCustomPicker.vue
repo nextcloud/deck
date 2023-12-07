@@ -371,7 +371,7 @@ h2 {
 }
 
 .multiselect {
-	min-width: auto;
+	min-width: auto !important;
 }
 
 .empty-content {

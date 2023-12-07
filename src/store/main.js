@@ -74,6 +74,7 @@ export default new Vuex.Store({
 		activity: [],
 		activityLoadMore: true,
 		filter: { tags: [], users: [], due: '' },
+		shortcutLock: false,
 	},
 	getters: {
 		config: state => (key) => {
@@ -307,7 +308,9 @@ export default new Vuex.Store({
 				Vue.delete(state.currentBoard.acl, removeIndex)
 			}
 		},
-
+		TOGGLE_SHORTCUT_LOCK(state, lock) {
+			state.shortcutLock = lock
+		},
 	},
 	actions: {
 		async setConfig({ commit }, config) {
@@ -514,6 +517,9 @@ export default new Vuex.Store({
 			await axios.put(generateUrl(`apps/deck/boards/${boardId}/transferOwner`), {
 				newOwner,
 			})
+		},
+		toggleShortcutLock({ commit }, lock) {
+			commit('TOGGLE_SHORTCUT_LOCK', lock)
 		},
 	},
 })
