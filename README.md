@@ -77,7 +77,7 @@ You can enable HMR (Hot module replacement) to avoid page reloads when working o
 
 ### Docker: Simple app development container
 
-- Fork the app 
+- Fork the app
 - Clone the repository: `git clone https://github.com/nextcloud/deck.git`
 - Go into deck directory: `cd deck`
 - Build the app as described in the general build instructions
@@ -93,7 +93,7 @@ docker run --rm \
 ### Full Nextcloud development environment
 
 You need to setup a [development environment](https://docs.nextcloud.com/server/latest/developer_manual//getting_started/devenv.html) of the current Nextcloud version. You can also alternatively install & run the [nextcloud docker container](https://github.com/juliushaertl/nextcloud-docker-dev).
-After the finished installation, you can clone the deck project directly in the `/[nextcloud-docker-dev-dir]/workspace/server/apps/` folder. 
+After the finished installation, you can clone the deck project directly in the `/[nextcloud-docker-dev-dir]/workspace/server/apps/` folder.
 
 ### Running tests
 You can use the provided Makefile to run all tests by using:
