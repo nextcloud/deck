@@ -98,7 +98,6 @@ import CardMenu from './CardMenu.vue'
 import CardCover from './CardCover.vue'
 import DueDate from './badges/DueDate.vue'
 import { getCurrentUser } from '@nextcloud/auth'
-import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'CardItem',
@@ -242,11 +241,6 @@ export default {
 				return
 			}
 
-			const cardEventData = {
-				card: this.card,
-				element: this.$el,
-			}
-
 			switch (key.code) {
 			case 'KeyE':
 				this.$refs.titleContentEditable?.focus()
@@ -266,15 +260,6 @@ export default {
 				break
 			case 'KeyS':
 				this.toggleSelfAsignment()
-				break
-			case 'KeyU':
-				emit('deck:card:show-assignment-selector', cardEventData)
-				break
-			case 'KeyD':
-				emit('deck:card:show-due-date-selector', cardEventData)
-				break
-			case 'KeyL':
-				emit('deck:card:show-label-selector', cardEventData)
 				break
 			}
 		},
