@@ -22,6 +22,8 @@ OC.L10N.register(
     "Created:" : "உருவாக்கப்பட்டது:",
     "Description" : "விவரிப்பு",
     "seconds ago" : "செக்கன்களுக்கு முன்",
+    "Keyboard shortcuts" : "விசைப்பலகை குறுக்குவழிகள்",
+    "Search" : "தேடுதல்",
     "Shared with you" : "Shared with you",
     "Today" : "இன்று",
     "Close" : "மூடுக",

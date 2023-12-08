@@ -256,6 +256,8 @@ OC.L10N.register(
     "List is empty" : "La llista és buida",
     "Card deleted" : "Targeta suprimida",
     "seconds ago" : "fa uns segons",
+    "Ctrl" : "Ctrl",
+    "Enter" : "Retorn",
     "All boards" : "Tots els taulers",
     "Archived boards" : "Taulers arxivats",
     "Shared with you" : "Us han compartit",

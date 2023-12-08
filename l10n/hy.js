@@ -28,6 +28,7 @@ OC.L10N.register(
     "Description" : "Նկարագրություն",
     "Completed" : "Ավարտվեց",
     "seconds ago" : "վրկ. առաջ",
+    "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Today" : "այսօր",
     "Close" : "Փակել",

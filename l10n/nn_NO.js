@@ -29,6 +29,8 @@ OC.L10N.register(
     "Description" : "Skildring",
     "Completed" : "Fullført",
     "seconds ago" : "sekund sidan",
+    "Keyboard shortcuts" : "Tastatursnarvegar",
+    "Search" : "Søk",
     "Shared with you" : "Shared with you",
     "An error occurred" : "Det oppstod ein feil.",
     "Today" : "I dag",

@@ -28,6 +28,7 @@ OC.L10N.register(
     "Move card" : "Premesti karticu",
     "Delete card" : "Obriši karticu",
     "seconds ago" : "pre nekoliko sekundi",
+    "Search" : "Traži",
     "Shared with you" : "Shared with you",
     "Edit board" : "Izmeni tablu",
     "Archive board" : "Arhiviraj tablu",
