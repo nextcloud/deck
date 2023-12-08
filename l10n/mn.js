@@ -36,6 +36,8 @@ OC.L10N.register(
     "Completed" : "Гүйцэтгэгдсэн",
     "(group)" : "(бүлэг)",
     "seconds ago" : "хоёрдахь өмнө",
+    "Keyboard shortcut" : "Keyboard товчлуур",
+    "Search" : "Хайх",
     "Shared with you" : "тантай хуваалцсан",
     "No notifications" : "Мэдэгдэл байхгүй",
     "Today" : "өнөөдөр",

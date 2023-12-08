@@ -20,6 +20,7 @@ OC.L10N.register(
     "Update" : "يېڭىلا",
     "Created:" : "قۇرۇلغان ۋاقتى:",
     "Description" : "چۈشەندۈرۈش",
+    "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Today" : "بۈگۈن",
     "Close" : "ياپ",

@@ -22,6 +22,7 @@ OC.L10N.register(
     "Save" : "ບັນທຶກ",
     "Completed" : "ສຳເລັດ",
     "seconds ago" : "ວິນາທີຜ່ານມາ",
+    "Search" : "ຄົ້ນຫາ",
     "Shared with you" : "ແບ່ງປັບກັບທ່ານ",
     "No notifications" : "ບໍ່ມີການແຈ້ງເຕືອນ",
     "Today" : "ມື້ນີ້",

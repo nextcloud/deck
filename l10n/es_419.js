@@ -48,6 +48,7 @@ OC.L10N.register(
     "Completed" : "Completado",
     "(group)" : "(grupo)",
     "seconds ago" : "hace segundos",
+    "Action" : "Acción",
     "Archived boards" : "Tableros archivados",
     "Shared with you" : "Compartido con usted",
     "Board details" : "Detalles del tablero",

@@ -22,6 +22,7 @@ OC.L10N.register(
     "Created:" : "បាន​បង្កើត៖",
     "Description" : "ការ​អធិប្បាយ",
     "seconds ago" : "វិនាទី​មុន",
+    "Search" : "ស្វែងរក",
     "Shared with you" : "Shared with you",
     "Today" : "ថ្ងៃ​នេះ",
     "Close" : "បិទ",
