@@ -28,6 +28,7 @@ OC.L10N.register(
     "Completed" : "සම්පුර්ණයි",
     "Select Date" : "දිනය තෝරන්න",
     "seconds ago" : "තත්පර කිහිපයකට පෙර",
+    "Search" : "සොයන්න",
     "Today" : "අද",
     "Tomorrow" : "හෙට",
     "Close" : "වසන්න",
