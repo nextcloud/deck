@@ -1,6 +1,23 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.12.0-beta.5
+
+### Added
+
+- Keyboard shortcuts [#5358](https://github.com/nextcloud/deck/pull/5358)
+
+### Fixed
+
+- fix: allow null label colors in trello json importer [#5355](https://github.com/nextcloud/deck/pull/5355)
+- fix: Get proper rich object for card actions [#5352](https://github.com/nextcloud/deck/pull/5352)
+
+### Dependencies
+
+- Update nextcloud/ocp dependency @nextcloud-command [#5343](https://github.com/nextcloud/deck/pull/5343)
+- Chore(deps): Bump @babel/runtime from 7.23.4 to 7.23.5 @dependabot[bot] [#5338](https://github.com/nextcloud/deck/pull/5338)
+
+
 ## 1.12.0-beta.4
 
 ### Added
