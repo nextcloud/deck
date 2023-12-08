@@ -113,7 +113,7 @@
 							<kbd>S</kbd>
 						</td>
 						<td>
-							{{ t('deck', 'Assign yorself to the current card') }}
+							{{ t('deck', 'Assign yourself to the current card') }}
 						</td>
 					</tr>
 					<tr>
