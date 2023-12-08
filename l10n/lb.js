@@ -26,6 +26,7 @@ OC.L10N.register(
     "Description" : "Beschreiwung",
     "Completed" : "Erfëllt",
     "seconds ago" : "Sekonnen hier",
+    "Search" : "Search",
     "Shared with you" : "Mat dir gedeelt",
     "Today" : "Haut",
     "Tomorrow" : "Muer",

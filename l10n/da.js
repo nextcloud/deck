@@ -188,6 +188,8 @@ OC.L10N.register(
     "Select a list" : "Vælg en kolonne",
     "Card deleted" : "Kort slettet",
     "seconds ago" : "få sekunder siden",
+    "Action" : "Handling",
+    "Ctrl" : "Ctrl",
     "All boards" : "Alle tavler",
     "Archived boards" : "Arkiverede lister",
     "Shared with you" : "Shared with you",

@@ -82,6 +82,7 @@ OC.L10N.register(
     "Card details" : "Detalles de la tarjeta",
     "Select a list" : "Seleccionar una lista",
     "seconds ago" : "segundos",
+    "Action" : "Acción",
     "All boards" : "Todos los Tableros",
     "Shared with you" : "Compartido con usted",
     "Deck settings" : "Configuración del Tablero",

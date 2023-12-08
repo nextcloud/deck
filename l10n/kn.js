@@ -15,6 +15,7 @@ OC.L10N.register(
     "Download" : "ಪ್ರತಿಯನ್ನು ಸ್ಥಳೀಯವಾಗಿ ಉಳಿಸಿಕೊಳ್ಳಿ",
     "Modified" : "﻿ಬದಲಾಯಿಸಿದ",
     "Save" : "﻿ಉಳಿಸಿ",
+    "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Today" : "Today",
     "Close" : "ಮುಚ್ಚು",
