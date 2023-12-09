@@ -17,6 +17,7 @@ OC.L10N.register(
     "Delete" : "Borrar",
     "Download" : "Escargar",
     "Modified" : "Modificau",
+    "Search" : "Buscar",
     "Today" : "Hue",
     "Close" : "Zarrar",
     "Share" : "Compartir"

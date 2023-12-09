@@ -22,6 +22,8 @@ OC.L10N.register(
     "Update" : "Ažuriraj",
     "Description" : "Opis",
     "Completed" : "Zavrženo",
+    "Keyboard shortcuts" : "Tipkovni prečaci",
+    "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Today" : "Danas",
     "Tomorrow" : "Sutra",

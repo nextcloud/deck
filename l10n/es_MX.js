@@ -61,6 +61,7 @@ OC.L10N.register(
     "Mark as done" : "Marcar como hecho",
     "seconds ago" : "hace segundos",
     "Keyboard shortcuts" : "Atajos del teclado",
+    "Keyboard shortcut" : "Atajo del teclado",
     "Action" : "Acción",
     "Search" : "Buscar",
     "Space" : "Espacio",
