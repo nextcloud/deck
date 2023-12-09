@@ -48,6 +48,7 @@ OC.L10N.register(
     "(group)" : "(grupo)",
     "seconds ago" : "hace segundos",
     "Keyboard shortcuts" : "Atajos del teclado",
+    "Keyboard shortcut" : "Atajo del teclado",
     "Action" : "Acción",
     "Search" : "Buscar",
     "Archived boards" : "Tableros archivados",

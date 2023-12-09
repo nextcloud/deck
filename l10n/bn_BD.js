@@ -26,6 +26,8 @@ OC.L10N.register(
     "Completed" : "সুসম্পন্ন",
     "(group)" : "(গোষ্ঠি)",
     "seconds ago" : "সেকেন্ড পূর্বে",
+    "Keyboard shortcuts" : "কী-বোর্ড শর্টকাট",
+    "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Today" : "আজ",
     "Tomorrow" : "আগামীকাল",
