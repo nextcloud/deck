@@ -33,6 +33,7 @@ OC.L10N.register(
     "Completed" : "Achuet",
     "(group)" : "(strollad)",
     "seconds ago" : "eilenn zo",
+    "Search" : "Klask",
     "Shared with you" : "Rannet ganeoc'h",
     "No notifications" : "Kemenaden ebet",
     "Today" : "Hiziv",
