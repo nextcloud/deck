@@ -113,6 +113,8 @@ OC.L10N.register(
     "(group)" : "(grupo)",
     "Delete card" : "Forigi karton",
     "seconds ago" : "antaŭ kelkaj sekundoj",
+    "Keyboard shortcuts" : "Fulmoklavoj",
+    "Search" : "Serĉi",
     "Archived boards" : "Arĥivigitaj tabuloj",
     "Shared with you" : "Kunhavata kun vi",
     "Edit board" : "Modifi tabulon",

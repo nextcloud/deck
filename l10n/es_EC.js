@@ -254,6 +254,7 @@ OC.L10N.register(
     "Card deleted" : "Tarjeta eliminada",
     "seconds ago" : "hace segundos",
     "Keyboard shortcuts" : "Atajos del teclado",
+    "Keyboard shortcut" : "Atajo del teclado",
     "Action" : "Acción",
     "Shift" : "Shift",
     "Ctrl" : "Ctrl",
