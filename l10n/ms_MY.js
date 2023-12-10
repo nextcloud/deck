@@ -19,6 +19,7 @@ OC.L10N.register(
     "Update" : "Kemaskini",
     "Created:" : "Telah dibina:",
     "Description" : "Keterangan",
+    "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Today" : "Hari ini",
     "Close" : "Tutup",

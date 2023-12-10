@@ -171,7 +171,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 
 	public function queryCardsByBoards(array $boardIds): IQueryBuilder {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('c.*')
+		$qb->selectDistinct('c.*')
 			->from('deck_cards', 'c')
 			->innerJoin('c', 'deck_stacks', 's', $qb->expr()->eq('s.id', 'c.stack_id'))
 			->andWhere($qb->expr()->in('s.board_id', $qb->createNamedParameter($boardIds, IQueryBuilder::PARAM_INT_ARRAY)));
@@ -339,7 +339,6 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			);
 		}
 
-		$qb->groupBy('c.id');
 		$qb->orderBy('c.last_modified', 'DESC');
 		if ($limit !== null) {
 			$qb->setMaxResults($limit);
@@ -383,7 +382,6 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			$tokenMatching
 		);
 
-		$qb->groupBy('comments.id', 'c.id');
 		$qb->orderBy('comments.id', 'DESC');
 		if ($limit !== null) {
 			$qb->setMaxResults($limit);

@@ -83,7 +83,6 @@
 
 <script>
 import { NcActionButton, NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
-import { generateUrl } from '@nextcloud/router'
 import { mapState, mapGetters } from 'vuex'
 import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
 import CardSidebarTabAttachments from './CardSidebarTabAttachments.vue'
@@ -159,15 +158,6 @@ export default {
 		},
 		subtitleTooltip() {
 			return t('deck', 'Modified') + ': ' + this.formatDate(this.currentCard.lastModified) + '\n' + t('deck', 'Created') + ': ' + this.formatDate(this.currentCard.createdAt)
-		},
-		cardRichObject() {
-			return {
-				id: '' + this.currentCard.id,
-				name: this.currentCard.title,
-				boardname: this.currentBoard.title,
-				stackname: this.stackById(this.currentCard.stackId)?.title,
-				link: window.location.protocol + '//' + window.location.host + generateUrl('/apps/deck/') + `#/board/${this.currentBoard.id}/card/${this.currentCard.id}`,
-			}
 		},
 		cardDetailsInModal: {
 			get() {

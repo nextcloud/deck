@@ -42,6 +42,9 @@ use OCP\Share\IManager;
 
 class PermissionServiceTest extends \Test\TestCase {
 
+	/** @var IRequest */
+	private $request;
+	private $circlesService;
 	/** @var PermissionService*/
 	private $service;
 	/** @var ILogger */

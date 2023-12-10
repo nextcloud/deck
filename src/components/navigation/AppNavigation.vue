@@ -62,6 +62,10 @@
 		</template>
 		<template #footer>
 			<NcAppNavigationSettings :title="t('deck', 'Deck settings')">
+				<NcButton @click="showHelp = true">
+					{{ t('deck', 'Keyboard shortcuts') }}
+				</NcButton>
+				<HelpModal v-if="showHelp" @close="showHelp=false" />
 				<div>
 					<div>
 						<input id="toggle-modal"
@@ -117,7 +121,7 @@
 import axios from '@nextcloud/axios'
 import { mapGetters } from 'vuex'
 import ClickOutside from 'vue-click-outside'
-import { NcAppNavigation, NcAppNavigationItem, NcAppNavigationSettings, NcMultiselect } from '@nextcloud/vue'
+import { NcAppNavigation, NcAppNavigationItem, NcAppNavigationSettings, NcMultiselect, NcButton } from '@nextcloud/vue'
 import AppNavigationAddBoard from './AppNavigationAddBoard.vue'
 import AppNavigationBoardCategory from './AppNavigationBoardCategory.vue'
 import { loadState } from '@nextcloud/initial-state'
@@ -127,6 +131,8 @@ import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import CalendarIcon from 'vue-material-design-icons/Calendar.vue'
 import DeckIcon from './../icons/DeckIcon.vue'
 import ShareVariantIcon from 'vue-material-design-icons/Share.vue'
+import HelpModal from './../modals/HelpModal.vue'
+import { subscribe } from '@nextcloud/event-bus'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -135,6 +141,7 @@ export default {
 	components: {
 		NcAppNavigation,
 		NcAppNavigationSettings,
+		NcButton,
 		AppNavigationAddBoard,
 		AppNavigationBoardCategory,
 		NcMultiselect,
@@ -143,6 +150,7 @@ export default {
 		CalendarIcon,
 		DeckIcon,
 		ShareVariantIcon,
+		HelpModal,
 	},
 	directives: {
 		ClickOutside,
@@ -160,6 +168,7 @@ export default {
 			groupLimit: [],
 			groupLimitDisabled: true,
 			canCreate: canCreateState,
+			showHelp: false,
 		}
 	},
 	computed: {
@@ -195,6 +204,11 @@ export default {
 				this.$store.dispatch('setConfig', { calendar: newValue })
 			},
 		},
+	},
+	mounted() {
+		subscribe('deck:global:toggle-help-dialog', () => {
+			this.showHelp = !this.showHelp
+		})
 	},
 	beforeMount() {
 		if (this.isAdmin) {

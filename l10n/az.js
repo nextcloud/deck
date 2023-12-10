@@ -26,6 +26,7 @@ OC.L10N.register(
     "Completed" : "Bitmişdir",
     "(group)" : "(qrup)",
     "seconds ago" : "saniyələr öncə",
+    "Search" : "Axtarış",
     "Shared with you" : "Shared with you",
     "Today" : "Bu gün",
     "Tomorrow" : "Sabah",

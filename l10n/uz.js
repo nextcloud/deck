@@ -17,6 +17,7 @@ OC.L10N.register(
     "Save" : "Save",
     "Update" : "Update",
     "seconds ago" : "seconds ago",
+    "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Today" : "Today",
     "Close" : "Close"

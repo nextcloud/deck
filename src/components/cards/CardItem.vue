@@ -26,10 +26,14 @@
 
 <template>
 	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
-		<div :class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'card__editable': canEdit, 'card__archived': card.archived }"
+		<div :ref="`card${card.id}`"
+			:class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'card__editable': canEdit, 'card__archived': card.archived }"
 			tag="div"
+			:tabindex="0"
 			class="card"
-			@click="openCard">
+			@click="openCard"
+			@keyup.self="handleCardKeyboardShortcut"
+			@mouseenter="focus(card.id)">
 			<div v-if="standalone" class="card-related">
 				<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" dir="auto" />
 				{{ board.title }} » {{ stack.title }}
@@ -47,7 +51,8 @@
 						tabindex="0"
 						contenteditable="true"
 						role="textbox"
-						@blur="blurTitle"
+						@focus="onTitleFocus"
+						@blur="onTitleBlur"
 						@click.stop
 						@keyup.esc="cancelEdit"
 						@keyup.stop>{{ card.title }}</span>
@@ -92,6 +97,7 @@ import AttachmentDragAndDrop from '../AttachmentDragAndDrop.vue'
 import CardMenu from './CardMenu.vue'
 import CardCover from './CardCover.vue'
 import DueDate from './badges/DueDate.vue'
+import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
 	name: 'CardItem',
@@ -198,6 +204,10 @@ export default {
 		},
 	},
 	methods: {
+		focus(card) {
+			card = this.$refs[`card${card}`]
+			card.focus()
+		},
 		openCard() {
 			if (this.dragging) {
 			  return
@@ -205,7 +215,7 @@ export default {
 			const boardId = this.card && this.card.boardId ? this.card.boardId : this.$route.params.id
 			this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id } }).catch(() => {})
 		},
-		blurTitle(e) {
+		onTitleBlur(e) {
 			// TODO Handle empty title
 			if (e.target.innerText !== this.card.title) {
 				this.$store.dispatch('updateCardTitle', {
@@ -213,15 +223,63 @@ export default {
 					title: e.target.innerText,
 				})
 			}
+			this.$store.dispatch('toggleShortcutLock', false)
+		},
+		onTitleFocus() {
+			this.$store.dispatch('toggleShortcutLock', true)
 		},
 		cancelEdit() {
 			this.$refs.titleContentEditable.textContent = this.card.title
+			this.$store.dispatch('toggleShortcutLock', false)
+		},
+		handleCardKeyboardShortcut(key) {
+			if (OCP.Accessibility.disableKeyboardShortcuts()) {
+				return
+			}
+
+			if (!this.canEdit || this.$store.state.shortcutLock || key.shiftKey || key.ctrlKey || key.altKey || key.metaKey) {
+				return
+			}
+
+			switch (key.code) {
+			case 'KeyE':
+				this.$refs.titleContentEditable?.focus()
+				break
+			case 'KeyA':
+				this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
+				break
+			case 'KeyO':
+				this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })
+				break
+			case 'KeyM':
+				this.$el.querySelector('button.action-item__menutoggle')?.click()
+				break
+			case 'Enter':
+			case 'Space':
+				this.openCard().then(() => document.getElementById('app-sidebar-vue')?.focus())
+				break
+			case 'KeyS':
+				this.toggleSelfAsignment()
+				break
+			}
 		},
 		applyLabelFilter(label) {
 			if (this.dragging) {
 				return
 			}
 			this.$nextTick(() => this.$store.dispatch('toggleFilter', { tags: [label.id] }))
+		},
+		toggleSelfAsignment() {
+			const isAssigned = this.card.assignedUsers.find(
+				(item) => item.type === 0 && item.participant.uid === getCurrentUser()?.uid,
+			)
+			this.$store.dispatch(isAssigned ? 'removeUserFromCard' : 'assignCardToUser', {
+				card: this.card,
+				assignee: {
+					userId: getCurrentUser()?.uid,
+					type: 0,
+				},
+			})
 		},
 	},
 }
@@ -253,16 +311,16 @@ export default {
 			cursor: pointer;
 		}
 
-		&:hover {
-			border: 2px solid var(--color-border-dark);
-		}
 		&.current-card {
 			border: 2px solid var(--color-primary-element);
 		}
 
 		&:focus, &:focus-visible, &:focus-within {
 			outline: none;
-			border: 2px solid var(--color-primary-element);
+			border: 2px solid var(--color-border-maxcontrast);
+			&.current-card {
+				border: 2px solid var(--color-primary-element);
+			}
 		}
 
 		.card-upper {

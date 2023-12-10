@@ -22,10 +22,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4 # v3.5.2
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Set up php
-        uses: shivammathur/setup-php@2.27.1 # v2
+        uses: shivammathur/setup-php@2.28.0 # v2
         with:
           php-version: 8.1
           coverage: none

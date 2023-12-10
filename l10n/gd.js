@@ -23,6 +23,7 @@ OC.L10N.register(
     "Save" : "Sàbhail",
     "Completed" : "Coileanta",
     "seconds ago" : "diog air ais",
+    "Search" : "Lorg",
     "No notifications" : "Gun bhrath",
     "Today" : "An-diugh",
     "Close" : "Dùin",

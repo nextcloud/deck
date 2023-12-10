@@ -22,6 +22,9 @@
 
 <template>
 	<div class="controls">
+		<NcModal v-if="showAddCardModal" class="card-selector" @close="clickHideAddCardModel">
+			<CreateNewCardCustomPicker show-created-notice @cancel="clickHideAddCardModel" />
+		</NcModal>
 		<div v-if="overviewName" class="board-title">
 			<div class="board-bullet icon-calendar-dark" />
 			<h2 dir="auto">
@@ -32,9 +35,6 @@
 					{{ t('deck', 'Add card') }}
 				</NcActionButton>
 			</NcActions>
-			<NcModal v-if="showAddCardModal" class="card-selector" @close="clickHideAddCardModel">
-				<CreateNewCardCustomPicker show-created-notice @cancel="clickHideAddCardModel" />
-			</NcModal>
 		</div>
 		<div v-else-if="board" class="board-title">
 			<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
@@ -49,9 +49,14 @@
 			<SessionList v-if="isNotifyPushEnabled && presentUsers.length"
 				:sessions="presentUsers" />
 			<div v-if="searchQuery || true" class="deck-search">
-				<input type="search"
+				<input id="deck-search-input"
+					ref="search"
+					:tabindex="0"
+					type="search"
 					class="icon-search"
 					:value="searchQuery"
+					@focus="$store.dispatch('toggleShortcutLock', true)"
+					@blur="$store.dispatch('toggleShortcutLock', false)"
 					@input="$store.commit('setSearchQuery', $event.target.value)">
 			</div>
 			<div v-if="board && canManage && !showArchived && !board.archived"
@@ -70,7 +75,9 @@
 						type="text"
 						class="no-close"
 						:placeholder="t('deck', 'List name')"
-						required>
+						required
+						@focus="$store.dispatch('toggleShortcutLock', true)"
+						@blur="$store.dispatch('toggleShortcutLock', false)">
 					<input v-tooltip="t('deck', 'Add list')"
 						class="icon-confirm"
 						type="submit"
@@ -88,6 +95,7 @@
 						@hide="filterVisible=false">
 						<!-- We cannot use NcActions here are the popover trigger does not update on reactive icons -->
 						<NcButton slot="trigger"
+							ref="filterPopover"
 							:title="t('deck', 'Apply filter')"
 							class="filter-button"
 							:type="isFilterActive ? 'primary' : 'tertiary'">
@@ -233,6 +241,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { NcActions, NcActionButton, NcAvatar, NcButton, NcPopover, NcModal } from '@nextcloud/vue'
 import labelStyle from '../mixins/labelStyle.js'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
@@ -244,6 +253,7 @@ import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertic
 import SessionList from './SessionList.vue'
 import { isNotifyPushEnabled } from '../sessions.js'
 import CreateNewCardCustomPicker from '../views/CreateNewCardCustomPicker.vue'
+import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
 	name: 'Controls',
@@ -327,7 +337,18 @@ export default {
 			}
 		},
 	},
+	beforeMount() {
+		subscribe('deck:board:show-new-card', this.clickShowAddCardModel)
+		subscribe('deck:board:toggle-filter-popover', this.triggerOpenFilters)
+		subscribe('deck:board:clear-filter', this.triggerClearFilter)
+		subscribe('deck:board:toggle-filter-by-me', this.triggerFilterByMe)
+
+	},
 	beforeDestroy() {
+		unsubscribe('deck:board:show-new-card', this.clickShowAddCardModel)
+		unsubscribe('deck:board:toggle-filter-popover', this.triggerOpenFilters)
+		unsubscribe('deck:board:clear-filter', this.triggerClearFilter)
+		unsubscribe('deck:board:toggle-filter-by-me', this.triggerFilterByMe)
 		this.setPageTitle('')
 	},
 	methods: {
@@ -405,6 +426,23 @@ export default {
 				newTitle = `${title} - ${newTitle}`
 			}
 			window.document.title = newTitle
+		},
+		triggerOpenFilters() {
+			this.$refs.filterPopover.$el.click()
+		},
+		triggerOpenSearch() {
+			this.$refs.search.focus()
+		},
+		triggerClearFilter() {
+			this.clearFilter()
+		},
+		triggerFilterByMe() {
+			if (this.isFilterActive) {
+				this.clearFilter()
+			} else {
+				this.filter.users = [getCurrentUser().uid]
+				this.setFilter()
+			}
 		},
 	},
 }

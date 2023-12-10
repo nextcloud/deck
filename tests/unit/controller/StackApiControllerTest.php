@@ -32,6 +32,7 @@ use OCP\IRequest;
 
 class StackApiControllerTest extends \Test\TestCase {
 	private $appName = 'deck';
+	private $request;
 	private $userId = 'admin';
 	private $controller;
 	private $boardService;

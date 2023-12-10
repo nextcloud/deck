@@ -30,6 +30,7 @@ use OCP\IRequest;
 
 class BoardImportApiControllerTest extends \Test\TestCase {
 	private $appName = 'deck';
+	private $request;
 	private $userId = 'admin';
 	/** @var BoardImportApiController */
 	private $controller;

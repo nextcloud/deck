@@ -39,6 +39,8 @@ class CommentEventHandlerTest extends TestCase {
 	private $activityManager;
 	/** @var NotificationHelper */
 	private $notificationHelper;
+	/** @var ChangeHelper */
+	private $changeHelper;
 	/** @var CardMapper */
 	private $cardMapper;
 
