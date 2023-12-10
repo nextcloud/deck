@@ -58,7 +58,7 @@ class LabelApiController extends ApiController {
 	public function index() {
 		$since = 0;
 		$modified = $this->request->getHeader('If-Modified-Since');
-		if ($modified !== null && $modified !== '') {
+		if (!empty($modified)) {
 			$date = Util::parseHTTPDate($modified);
 			if (!$date) {
 				throw new StatusException('Invalid If-Modified-Since header provided.');
