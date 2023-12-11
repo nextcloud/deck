@@ -299,6 +299,7 @@ OC.L10N.register(
     "Space" : "Leerzeichen",
     "Open card details" : "Kartendetails öffnen",
     "Edit the card title" : "Kartentitel bearbeiten",
+    "Assign yourself to the current card" : "Aktuelle Karte dir zuweisen",
     "Archive/unarchive the current card" : "Aktuelle Karte archivieren/dearchivieren",
     "Mark card as completed/not completed" : "Karte als abgeschlossen/nicht abgeschlossen markieren",
     "Open card menu" : "Kartenmenü öffnen",
