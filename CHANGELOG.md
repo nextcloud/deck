@@ -1,6 +1,63 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.12.0
+
+### Added
+
+- Added ability to mark a card as done @TehThanos [#4137](https://github.com/nextcloud/deck/pull/4137)
+- Card Cover Images @jszeibert [#5035](https://github.com/nextcloud/deck/pull/5035)
+- Upcoming/Today/Tomorrow dashboard widgets @BKapelari [#2658](https://github.com/nextcloud/deck/pull/2658)
+- Enabled advanced fields option on tag color picker @faab007nl [#4362](https://github.com/nextcloud/deck/pull/4362)
+- Remember last board, list for new card dialog @luka-nextcloud [#5046](https://github.com/nextcloud/deck/pull/5046)
+- Add support for bidirectional text @jamazi [#5258](https://github.com/nextcloud/deck/pull/5258)
+- Card layout polishing @juliushaertl [#5264](https://github.com/nextcloud/deck/pull/5264)
+- feat: Move to contenteditable for inline title editing @juliushaertl [#5282](https://github.com/nextcloud/deck/pull/5282)
+- scroll board by dragging @shoetten [#5293](https://github.com/nextcloud/deck/pull/5293)
+- Keyboard shortcuts [#5358](https://github.com/nextcloud/deck/pull/5358)
+
+### Fixed
+
+- fix: allow null label colors in trello json importer [#5355](https://github.com/nextcloud/deck/pull/5355)
+- fix: Get proper rich object for card actions [#5352](https://github.com/nextcloud/deck/pull/5352)
+- fix: Use text content as result for comments @juliushaertl [#5294](https://github.com/nextcloud/deck/pull/5294)
+- fix: Bring back due date indicator to compact mode @juliushaertl [#5292](https://github.com/nextcloud/deck/pull/5292)
+- Fix small issues around delete/undo @juliushaertl [#5296](https://github.com/nextcloud/deck/pull/5296)
+- fix(controls): use primary when filter is active @fitrahfm [#5299](https://github.com/nextcloud/deck/pull/5299)
+- fix: Properly get done state for dav @juliushaertl [#5287](https://github.com/nextcloud/deck/pull/5287)
+- Fix upcoming cards and label input @juliushaertl [#5290](https://github.com/nextcloud/deck/pull/5290)
+- fix: Properly handle adding new tags through multiselect @juliushaertl [#5285](https://github.com/nextcloud/deck/pull/5285)
+- fix: Avoid throwing errors if no token provided on close @juliushaertl [#5284](https://github.com/nextcloud/deck/pull/5284)
+- fix: Expose card actions in the card menu (fix #3180) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Use full card menu everywhere (fix #3993) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Detect end of the activity responses (fix #3395) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Add title with absolute date time to activity (fix #4508, fix #2122) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Disable dragging archived cards (fix #3271) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Hide unavailable card menu entries for archived card view  [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Use localCompare to sort labels (fix #2736) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: More fitting click target for title editing [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Always load proper dashboard js (fixes a log error) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Set fixed height for card modal (fix #4296) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- fix: Make sure to always update card description when navigating away (fix #5254 #2705) [#5280](https://github.com/nextcloud/deck/pull/5280)
+- perf: Already pass board list as initial state @juliushaertl [#5281](https://github.com/nextcloud/deck/pull/5281)
+- Deck card comment notification label improvement @Jerome-Herbinet [#4748](https://github.com/nextcloud/deck/pull/4748)
+- update smart picker links @luka-nextcloud [#5047](https://github.com/nextcloud/deck/pull/5047)
+- feat: Enhance dark mode @juliushaertl [#5045](https://github.com/nextcloud/deck/pull/5045)
+- fix: export doesn't handle lists with no cards @magikmw [#5096](https://github.com/nextcloud/deck/pull/5096)
+- add attributes aria-label= and title= to Filters & View Modes buttons @privatemaker [#5133](https://github.com/nextcloud/deck/pull/5133)
+- fix: Check both card reference url patterns @juliushaertl [#5262](https://github.com/nextcloud/deck/pull/5262)
+- fix: Avoid too large index on postgres as indexing just the last_editor column is enough @juliushaertl [#5260](https://github.com/nextcloud/deck/pull/5260)
+- feat: error msg on CreateNewCardCustomPicker & only show available bo… @luka-nextcloud [#5029](https://github.com/nextcloud/deck/pull/5029)
+- test: add cypress tests for create new deck card @luka-nextcloud [#5025](https://github.com/nextcloud/deck/pull/5025)
+- Remove duplicate button @solracsf [#4850](https://github.com/nextcloud/deck/pull/4850)
+- [stable27] fix cypress for new file picker [#5088](https://github.com/nextcloud/deck/pull/5088)
+- Replace "Timeline" wording with "Activity" in order to be consistent with equivalent contexts throughout Nextcloud @Jerome-Herbinet [#5164](https://github.com/nextcloud/deck/pull/5164)
+- Board creation limitation : More understandable wordings @Jerome-Herbinet [#5168](https://github.com/nextcloud/deck/pull/5168)
+- ci(cypress): Fix file picker selector @juliushaertl [#5212](https://github.com/nextcloud/deck/pull/5212)
+- Switch to native date picker @juliushaertl [#4668](https://github.com/nextcloud/deck/pull/4668)
+- fixes minor spelling error @FundreasFrohsinn [#5216](https://github.com/nextcloud/deck/pull/5216)
+- feat(card): tooltip for comment timestamp @fitrahfm [#5253](https://github.com/nextcloud/deck/pull/5253)
+
 ## 1.12.0-beta.5
 
 ### Added
