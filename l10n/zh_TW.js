@@ -299,6 +299,7 @@ OC.L10N.register(
     "Space" : "空間",
     "Open card details" : "開啟卡片詳細資訊",
     "Edit the card title" : "編輯卡片標題",
+    "Assign yourself to the current card" : "將自己指派給目前的卡片",
     "Archive/unarchive the current card" : "封存/解除封存目前卡片",
     "Mark card as completed/not completed" : "將卡片標記為完成/未完成",
     "Open card menu" : "開啟卡片選單",
