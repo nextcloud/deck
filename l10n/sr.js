@@ -299,6 +299,7 @@ OC.L10N.register(
     "Space" : "Размак",
     "Open card details" : "Отвори детаље картице",
     "Edit the card title" : "Уреди наслов картице",
+    "Assign yourself to the current card" : "Доделите себе текућој картици",
     "Archive/unarchive the current card" : "Архивирај/уклони из архиве текућу картицу",
     "Mark card as completed/not completed" : "Означи картицу као завршену/незавршену",
     "Open card menu" : "Отвори мени картице",
