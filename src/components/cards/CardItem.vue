@@ -434,6 +434,12 @@ export default {
 		}
 	}
 
+	/* Add horizontal scrollbar for tables in card descriptions */
+	.description-container table {
+    	width: 100%;
+    	overflow-x: auto;
+  	}
+
 	@media (prefers-color-scheme: dark) {
 		.card {
 			@include dark-card;

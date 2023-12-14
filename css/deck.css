@@ -7,3 +7,9 @@
 	background-image: url(../img/deck.svg);
 	filter: var(--background-invert-if-dark);
 }
+
+/* Add horizontal scrollbar for tables in card descriptions */
+.card-description table {
+	width: 100%; /* Ensure the table takes 100% width of the container */
+	overflow-x: auto; /* Enable horizontal scrolling */
+}
