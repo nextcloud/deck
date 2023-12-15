@@ -36,7 +36,7 @@ jobs:
           fallbackNpm: '^9'
 
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
-        uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d # v3
+        uses: actions/setup-node@5ef044f9d09786428e6e895be6be17937becee3a # v3
         with:
           node-version: ${{ steps.versions.outputs.nodeVersion }}
 
