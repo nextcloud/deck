@@ -9,15 +9,13 @@
 		}
 	],
 	"require": {
-		"cogpowered/finediff": "0.3.*",
 		"justinrainbow/json-schema": "^5.2"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
 		"phpunit/phpunit": "^9",
-		"nextcloud/coding-standard": "^1.0.0",
-		"symfony/event-dispatcher": "^4.0",
-		"vimeo/psalm": "^5.4",
+		"nextcloud/coding-standard": "^1.1",
+		"psalm/phar": "^5.13",
 		"php-parallel-lint/php-parallel-lint": "^1.2",
 		"nextcloud/ocp": "dev-stable27"
 	},
@@ -34,9 +32,9 @@
 		"lint": "find . -name \\*.php -not -path './vendor/*' -print0 | xargs -0 -n1 php -l",
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"cs:fix": "php-cs-fixer fix",
-		"psalm": "psalm",
-		"psalm:update-baseline": "psalm --update-baseline",
-		"psalm:fix": "psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType",
+		"psalm": "psalm.phar",
+		"psalm:update-baseline": "psalm.phar --update-baseline",
+		"psalm:fix": "psalm.phar --alter --issues=InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType",
 		"test": [
 			"@test:unit",
 			"@test:integration"
