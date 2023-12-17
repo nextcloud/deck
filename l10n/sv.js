@@ -296,6 +296,7 @@ OC.L10N.register(
     "Card actions" : "Kortåtgärder",
     "The following actions can be triggered on the currently highlighted card" : "Följande åtgärder kan utlösas på det markerade kortet",
     "Enter" : "Ange",
+    "Space" : "Utrymme",
     "Open card details" : "Öppna kortdetaljer",
     "Edit the card title" : "Ändra kortets titel",
     "Assign yourself to the current card" : "Tilldela dig själv till det aktuella kortet",
