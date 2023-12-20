@@ -24,6 +24,7 @@ OC.L10N.register(
     "Keyboard shortcuts" : "Atayos del tecláu",
     "Action" : "Aición",
     "Search" : "Guetar",
+    "Shared with you" : "Compartióse contigo",
     "All cards" : "Toles tarxetes",
     "An error occurred" : "Prodúxose un error",
     "Today" : "Güei",
