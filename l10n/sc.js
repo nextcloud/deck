@@ -139,6 +139,7 @@ OC.L10N.register(
     "Hide archived cards" : "Cua is ischedas archiviadas",
     "Show archived cards" : "Mustra ischedas archiviadas",
     "Toggle compact mode" : "Càmbia a modalidade cumpata",
+    "Open details" : "Aberi is detàllios",
     "Details" : "Detàllios",
     "Loading board" : "Carrighende lavagna",
     "Board not found" : "Lavagna no agatada",
