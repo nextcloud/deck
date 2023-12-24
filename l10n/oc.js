@@ -57,6 +57,7 @@ OC.L10N.register(
     "Create a new card" : "Crear una carta novèla",
     "Create card" : "Crear una carta",
     "Close" : "Tampar",
+    "Tomorrow – {timeLocale}" : "Deman – {timeLocale}",
     "Create a card" : "Crear una carta",
     "Share" : "Partejar",
     "Next week" : "Setmana seguenta",
