@@ -5,13 +5,7 @@
 
 name: PHPUnit sqlite
 
-on:
-  pull_request:
-  push:
-    branches:
-      - main
-      - master
-      - stable*
+on: pull_request
 
 permissions:
   contents: read
@@ -53,7 +47,7 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: ['8.0']
+        php-versions: ['8.2']
         server-versions: ['master']
 
     steps:
@@ -75,7 +69,7 @@ jobs:
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@e8cd65f444039503a75cf4057d55442fc4316f78 # v2
+        uses: shivammathur/setup-php@e6f75134d35752277f093989e72e140eaa222f35 # v2
         with:
           php-version: ${{ matrix.php-versions }}
           # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
