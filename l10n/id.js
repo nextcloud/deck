@@ -72,6 +72,7 @@ OC.L10N.register(
     "The card \"%s\" on \"%s\" has reached its due date." : "Kartu \"%s\" pada \"%s\" telah melampaui tenggat.",
     "%s has mentioned you in a comment on \"%s\"." : "%s telah menyebut Anda didalam suatu komentar pada \"%s\".",
     "The board \"%s\" has been shared with you by %s." : "Papan \"%s\" telah dibagikan kepada Anda oleh %s.",
+    "Deck board" : "Papan Longgok",
     "No data was provided to create an attachment." : "Tidak ada data untuk membuat lampiran.",
     "Finished" : "Selesai",
     "To review" : "Perlu ditinjau",
