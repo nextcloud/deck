@@ -106,3 +106,37 @@ Feature: acl
 			| property | value |
 			| title | Double shared board |
 
+
+	Scenario: Deleted board is inaccessible to share recipients
+		Given acting as user "user0"
+		When creates a board with example content
+		And remember the last card as "user0-card"
+		When post a comment with content "hello comment" on the card
+		And uploads an attachment to the last used card
+		And remember the last attachment as "user0-attachment"
+		And shares the board with user "user1"
+		Then the HTTP status code should be "200"
+		And delete the board
+
+		Given acting as user "user1"
+		When fetching the attachments for the card "user0-card"
+		Then the response should have a status code 403
+
+		When get the comments on the card
+		Then the response should have a status code 403
+
+		When update a comment with content "hello deleted" on the card
+		Then the response should have a status code 403
+
+		When delete the comment on the card
+		Then the response should have a status code 403
+		# 644
+		When post a comment with content "hello deleted" on the card
+		Then the response should have a status code 403
+
+		When get the card details
+		Then the response should have a status code 403
+		When fetching the attachment "user0-attachment" for the card "user0-card"
+		Then the response should have a status code 403
+		When deleting the attachment "user0-attachment" for the card "user0-card"
+		Then the response should have a status code 403
