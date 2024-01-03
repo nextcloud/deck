@@ -102,8 +102,9 @@ class PermissionService {
 			return $cached;
 		}
 
-		$owner = $this->userIsBoardOwner($boardId);
-		$acls = $this->aclMapper->findAll($boardId);
+		$board = $this->getBoard($boardId);
+		$owner = $this->userIsBoardOwner($boardId, $userId);
+		$acls = $board->getDeletedAt() === 0 ? $this->aclMapper->findAll($boardId) : [];
 		$permissions = [
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
