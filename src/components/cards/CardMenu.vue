@@ -163,7 +163,8 @@ export default {
 		},
 		deleteCard() {
 			this.$store.dispatch('deleteCard', this.card)
-			showUndo(t('deck', 'Card deleted'), () => this.$store.dispatch('cardUndoDelete', this.card))
+			const undoCard = { ...this.card, deletedAt: 0 }
+			showUndo(t('deck', 'Card deleted'), () => this.$store.dispatch('cardUndoDelete', undoCard))
 		},
 		archiveUnarchiveCard() {
 			this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
