@@ -186,7 +186,9 @@ class BoardContext implements Context {
 			['description' => $description]
 		));
 		$this->requestContext->getResponse()->getBody()->seek(0);
-		$this->card = json_decode((string)$this->getResponse()->getBody(), true);
+		if ($this->requestContext->getResponse()->getStatusCode() === 200) {
+			$this->card = json_decode((string)$this->getResponse()->getBody(), true);
+		}
 	}
 
 	/**
@@ -198,7 +200,22 @@ class BoardContext implements Context {
 			[$attribute => $value]
 		));
 		$this->requestContext->getResponse()->getBody()->seek(0);
-		$this->card = json_decode((string)$this->getResponse()->getBody(), true);
+		if ($this->requestContext->getResponse()->getStatusCode() === 200) {
+			$this->card = json_decode((string)$this->getResponse()->getBody(), true);
+		}
+	}
+
+	/**
+	 * @Given /^get the card details$/
+	 */
+	public function getCard() {
+		$this->requestContext->sendJSONrequest('GET', '/index.php/apps/deck/cards/' . $this->card['id'], array_merge(
+			$this->card
+		));
+		$this->requestContext->getResponse()->getBody()->seek(0);
+		if ($this->requestContext->getResponse()->getStatusCode() === 200) {
+			$this->card = json_decode((string)$this->getResponse()->getBody(), true);
+		}
 	}
 
 	/**
@@ -252,5 +269,19 @@ class BoardContext implements Context {
 
 	public function getRememberedCard($arg1) {
 		return $this->storedCards[$arg1] ?? null;
+	}
+
+	/**
+	 * @Given /^delete the card$/
+	 */
+	public function deleteTheCard() {
+		$this->requestContext->sendJSONrequest('DELETE', '/index.php/apps/deck/cards/' . $this->card['id']);
+	}
+
+	/**
+	 * @Given /^delete the board/
+	 */
+	public function deleteTheBoard() {
+		$this->requestContext->sendJSONrequest('DELETE', '/index.php/apps/deck/boards/' . $this->board['id']);
 	}
 }
