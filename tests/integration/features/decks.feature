@@ -100,7 +100,7 @@ Feature: decks
 		# We currently still expect to be able to update the card as this is used to undo deletion
 		When set the description to "Update some text"
 		Then the response should have a status code 403
-		#When set the card attribute "deletedAt" to "0"
-		#Then the response should have a status code 200
-		#When set the description to "Update some text"
-		#Then the response should have a status code 200
+		When set the card attribute "deletedAt" to "0"
+		Then the response should have a status code 200
+		When set the description to "Update some text"
+		Then the response should have a status code 200
