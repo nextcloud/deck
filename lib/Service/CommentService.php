@@ -90,17 +90,14 @@ class CommentService {
 	 * @throws BadRequestException
 	 * @throws NotFoundException|NoPermissionException
 	 */
-	public function create(string $cardId, string $message, string $replyTo = '0'): DataResponse {
-		if (!is_numeric($cardId)) {
-			throw new BadRequestException('A valid card id must be provided');
-		}
+	public function create(int $cardId, string $message, string $replyTo = '0'): DataResponse {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 
 		// Check if parent is a comment on the same card
 		if ($replyTo !== '0') {
 			try {
 				$comment = $this->commentsManager->get($replyTo);
-				if ($comment->getObjectType() !== Application::COMMENT_ENTITY_TYPE || $comment->getObjectId() !== $cardId) {
+				if ($comment->getObjectType() !== Application::COMMENT_ENTITY_TYPE || (int)$comment->getObjectId() !== $cardId) {
 					throw new CommentNotFoundException();
 				}
 			} catch (CommentNotFoundException $e) {
@@ -109,7 +106,7 @@ class CommentService {
 		}
 
 		try {
-			$comment = $this->commentsManager->create('users', $this->userId, Application::COMMENT_ENTITY_TYPE, $cardId);
+			$comment = $this->commentsManager->create('users', $this->userId, Application::COMMENT_ENTITY_TYPE, (string)$cardId);
 			$comment->setMessage($message);
 			$comment->setVerb('comment');
 			$comment->setParentId($replyTo);
