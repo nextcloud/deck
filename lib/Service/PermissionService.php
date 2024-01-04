@@ -29,6 +29,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
@@ -138,13 +139,10 @@ class PermissionService {
 	/**
 	 * check permissions for replacing dark magic middleware
 	 *
-	 * @param $mapper IPermissionMapper|null null if $id is a boardId
-	 * @param $id int unique identifier of the Entity
-	 * @param $permission int
-	 * @return bool
+	 * @param numeric $id
 	 * @throws NoPermissionException
 	 */
-	public function checkPermission($mapper, $id, $permission, $userId = null) {
+	public function checkPermission($mapper, $id, $permission, $userId = null, bool $allowDeletedCard = false) {
 		$boardId = $id;
 		if ($mapper instanceof IPermissionMapper && !($mapper instanceof BoardMapper)) {
 			$boardId = $mapper->findBoardId($id);
@@ -158,7 +156,16 @@ class PermissionService {
 			throw new NoPermissionException('Permission denied');
 		}
 
-		if ($this->userIsBoardOwner($boardId, $userId)) {
+		$permissions = $this->getPermissions($boardId, $userId);
+		if ($permissions[$permission] === true) {
+
+			if (!$allowDeletedCard && $mapper instanceof CardMapper) {
+				$card = $mapper->find($id);
+				if ($card->getDeletedAt() > 0) {
+					throw new NoPermissionException('Card is deleted');
+				}
+			}
+
 			return true;
 		}
 
