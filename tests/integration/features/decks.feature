@@ -103,7 +103,12 @@ Feature: decks
 		And uploads an attachment to the last used card
 		And remember the last attachment as "my-attachment"
 		And post a comment with content "My first comment" on the card
+		When get the activities for the last card
+		Then the fetched activities should have 3 entries
 		And delete the card
+
+		When get the activities for the last card
+		Then the fetched activities should have 0 entries
 
 		When fetching the attachment "my-attachment" for the card "deletedCard"
 		Then the response should have a status code 403
