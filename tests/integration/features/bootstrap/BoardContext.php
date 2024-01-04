@@ -294,6 +294,7 @@ class BoardContext implements Context {
 	 */
 	public function deleteTheCard() {
 		$this->requestContext->sendJSONrequest('DELETE', '/index.php/apps/deck/cards/' . $this->card['id']);
+		$this->card['deletedAt'] = time();
 	}
 
 	/**
