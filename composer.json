@@ -38,7 +38,8 @@
 			"@test:integration"
 		],
 		"test:unit": "phpunit -c tests/phpunit.xml",
-		"test:integration": "phpunit -c tests/phpunit.integration.xml && cd tests/integration && ./run.sh"
+		"test:integration": "phpunit -c tests/phpunit.integration.xml",
+		"test:api": "cd tests/integration && ./run.sh"
 	},
 	"autoload-dev": {
 		"psr-4": {
