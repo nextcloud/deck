@@ -40,7 +40,8 @@
 			"@test:integration"
 		],
 		"test:unit": "vendor/bin/phpunit -c tests/phpunit.xml",
-		"test:integration": "vendor/bin/phpunit -c tests/phpunit.integration.xml && cd tests/integration && ./run.sh"
+		"test:integration": "vendor/bin/phpunit -c tests/phpunit.integration.xml",
+		"test:api": "cd tests/integration && ./run.sh"
 	},
 	"autoload-dev": {
 		"psr-4": {
