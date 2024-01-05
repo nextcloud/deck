@@ -377,7 +377,6 @@ OC.L10N.register(
     "Next week" : "下週",
     "Next month" : "下個月",
     "Limit deck usage of groups" : "限制群組的 Deck 使用",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "限制 Deck 將會阻止不屬於這些群組的使用者建立自己的佈告欄。使用者仍然可以在與他們分享的佈告欄上工作。",
-    "Assign yorself to the current card" : "將自己指派給目前卡片"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "限制 Deck 將會阻止不屬於這些群組的使用者建立自己的佈告欄。使用者仍然可以在與他們分享的佈告欄上工作。"
 },
 "nplurals=1; plural=0;");
