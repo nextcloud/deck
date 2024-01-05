@@ -377,7 +377,6 @@ OC.L10N.register(
     "Next week" : "Setmana següent",
     "Next month" : "Mes següent",
     "Limit deck usage of groups" : "Limitar l'ús del tauler de grups",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitant el Tauler bloquejarà la creació de taulers als usuaris que no són part d'aquests grups. Els usuaris podran seguir treballant en els taulers que hagin estat compartits amb ells.",
-    "Assign yorself to the current card" : "Assigneu-vos a la targeta actual"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitant el Tauler bloquejarà la creació de taulers als usuaris que no són part d'aquests grups. Els usuaris podran seguir treballant en els taulers que hagin estat compartits amb ells."
 },
 "nplurals=2; plural=(n != 1);");

@@ -377,7 +377,6 @@ OC.L10N.register(
     "Next week" : "Sonraki hafta",
     "Next month" : "Sonraki ay",
     "Limit deck usage of groups" : "Tahtayı şu gruplar kullanabilsin",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Tahta kullanımı gruplar ile sınırlandığında belirtilen grupların üyesi olmayan kişiler kendi tahtalarını oluşturamaz. Bu kullanıcılar ancak kendileri ile paylaşılan tahtalar üzerinde çalışabilir.",
-    "Assign yorself to the current card" : "Geçerli karta kendini ata"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Tahta kullanımı gruplar ile sınırlandığında belirtilen grupların üyesi olmayan kişiler kendi tahtalarını oluşturamaz. Bu kullanıcılar ancak kendileri ile paylaşılan tahtalar üzerinde çalışabilir."
 },
 "nplurals=2; plural=(n > 1);");
