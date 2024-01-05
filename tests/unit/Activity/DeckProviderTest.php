@@ -78,6 +78,9 @@ class DeckProviderTest extends TestCase {
 		$this->config = $this->createMock(IConfig::class);
 		$this->cardService = $this->createMock(CardService::class);
 		$this->provider = new DeckProvider($this->urlGenerator, $this->activityManager, $this->userManager, $this->commentsManager, $this->l10nFactory, $this->config, $this->userId, $this->cardService);
+
+		$this->activityManager->method('canSeeCardActivity')->willReturn(true);
+		$this->activityManager->method('canSeeBoardActivity')->willReturn(true);
 	}
 
 	private function mockEvent($objectType, $objectId, $objectName, $subject, $subjectParameters = []) {
