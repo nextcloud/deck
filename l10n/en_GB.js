@@ -377,7 +377,6 @@ OC.L10N.register(
     "Next week" : "Next week",
     "Next month" : "Next month",
     "Limit deck usage of groups" : "Limit deck usage of groups",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them.",
-    "Assign yorself to the current card" : "Assign yorself to the current card"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them."
 },
 "nplurals=2; plural=(n != 1);");

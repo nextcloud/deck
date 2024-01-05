@@ -377,7 +377,6 @@ OC.L10N.register(
     "Next week" : "Nästa vecka",
     "Next month" : "Nästa månad",
     "Limit deck usage of groups" : "Begränsa användningen av grupper",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begränsning av Deck blockerar användare som inte ingår i dessa grupper från att skapa egna tavlor. Användare kan dock fortfarande integrera med tavlor som har delats med dem.",
-    "Assign yorself to the current card" : "Tilldela dig själv till det aktuella kortet"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begränsning av Deck blockerar användare som inte ingår i dessa grupper från att skapa egna tavlor. Användare kan dock fortfarande integrera med tavlor som har delats med dem."
 },
 "nplurals=2; plural=(n != 1);");
