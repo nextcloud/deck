@@ -70,11 +70,12 @@ jobs:
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@2.21.2
+        uses: shivammathur/setup-php@2.24.0
         with:
           php-version: ${{ matrix.php-versions }}
           tools: phpunit
           extensions: zip, gd, mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, mysql, pdo_mysql, pgsql, pdo_pgsql
+          ini-file: development
           coverage: none
 
       - name: Set up PHPUnit
