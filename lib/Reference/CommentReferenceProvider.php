@@ -48,12 +48,12 @@ class CommentReferenceProvider implements IReferenceProvider {
 	private CommentService $commentService;
 
 	public function __construct(CardService $cardService,
-								BoardService $boardService,
-								StackService $stackService,
-								CommentService $commentService,
-								IURLGenerator $urlGenerator,
-								IL10N $l10n,
-								?string $userId) {
+		BoardService $boardService,
+		StackService $stackService,
+		CommentService $commentService,
+		IURLGenerator $urlGenerator,
+		IL10N $l10n,
+		?string $userId) {
 		$this->cardService = $cardService;
 		$this->urlGenerator = $urlGenerator;
 		$this->boardService = $boardService;

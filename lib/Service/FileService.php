@@ -25,8 +25,8 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\Db\Attachment;
 use OCA\Deck\Db\AttachmentMapper;
-use OCA\Deck\StatusException;
 use OCA\Deck\Exceptions\ConflictException;
+use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\StreamResponse;
 use OCP\Files\IAppData;
 use OCP\Files\IMimeTypeDetector;

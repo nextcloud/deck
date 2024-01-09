@@ -23,11 +23,12 @@
 
 namespace OCA\Deck\Service;
 
+use \Test\TestCase;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\AssignmentMapper;
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
-use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
@@ -37,7 +38,6 @@ use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Validators\StackServiceValidator;
 use OCP\EventDispatcher\IEventDispatcher;
 use Psr\Log\LoggerInterface;
-use \Test\TestCase;
 
 /**
  * Class StackServiceTest
@@ -117,17 +117,17 @@ class StackServiceTest extends TestCase {
 		$this->permissionService->expects($this->once())->method('checkPermission');
 		$this->stackMapper->expects($this->once())->method('findAll')->willReturn($this->getStacks());
 		$this->cardService->expects($this->atLeastOnce())->method('enrichCards')->will(
-					$this->returnCallback(
-						function ($cards) {
-							foreach ($cards as $card) {
-								$card->setLabels($this->getLabels()[$card->getId()]);
-							}
-							return array_map(function ($card) {
-								return new CardDetails($card);
-							}, $cards);
-						}
-					)
-				);
+			$this->returnCallback(
+				function ($cards) {
+					foreach ($cards as $card) {
+						$card->setLabels($this->getLabels()[$card->getId()]);
+					}
+					return array_map(function ($card) {
+						return new CardDetails($card);
+					}, $cards);
+				}
+			)
+		);
 		$this->cardMapper->expects($this->any())->method('findAll')->willReturn($this->getCards(222));
 
 

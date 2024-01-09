@@ -27,13 +27,17 @@ namespace OCA\Deck\Service;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Activity\ChangeSet;
 use OCA\Deck\AppInfo\Application;
+use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignmentMapper;
+use OCA\Deck\Db\Board;
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\Label;
+use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Session;
 use OCA\Deck\Db\SessionMapper;
 use OCA\Deck\Db\Stack;
@@ -41,24 +45,20 @@ use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Event\AclCreatedEvent;
 use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\Event\AclUpdatedEvent;
+use OCA\Deck\Event\BoardUpdatedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
+use OCA\Deck\Validators\BoardServiceValidator;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\DB\Exception as DbException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IGroupManager;
 use OCP\IL10N;
-use OCP\DB\Exception as DbException;
-use OCA\Deck\Db\Board;
-use OCA\Deck\Db\BoardMapper;
-use OCA\Deck\Db\LabelMapper;
-use OCP\IUserManager;
-use OCA\Deck\BadRequestException;
-use OCA\Deck\Event\BoardUpdatedEvent;
-use OCA\Deck\Validators\BoardServiceValidator;
 use OCP\IURLGenerator;
+use OCP\IUserManager;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -145,7 +145,7 @@ class BoardService {
 	 * Get all boards that are shared with a user, their groups or circles
 	 */
 	public function getUserBoards(?int $since = null, bool $includeArchived = true, ?int $before = null,
-								  ?string $term = null): array {
+		?string $term = null): array {
 		return $this->boardMapper->findAllForUser($this->userId, $since, $includeArchived, $before, $term);
 	}
 

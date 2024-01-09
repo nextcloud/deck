@@ -20,8 +20,6 @@
 		<directory name="vendor" />
 		<ignoreFiles>
 			<directory name="vendor/phpunit/php-code-coverage" />
-			<directory name="vendor/vimeo" />
-			<directory name="vendor/friendsofphp" />
 		</ignoreFiles>
 	</extraFiles>
 	<issueHandlers>

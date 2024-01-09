@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Service;
 
+use \Test\TestCase;
 use OC\L10N\L10N;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\Acl;
@@ -41,16 +42,15 @@ use OCA\Deck\Event\AclCreatedEvent;
 use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
+use OCA\Deck\Validators\BoardServiceValidator;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IDBConnection;
+use OCP\IGroupManager;
+use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
-use OCP\IGroupManager;
 use PHPUnit\Framework\MockObject\MockObject;
-use \Test\TestCase;
-use OCP\IURLGenerator;
-use OCA\Deck\Validators\BoardServiceValidator;
 
 class BoardServiceTest extends TestCase {
 

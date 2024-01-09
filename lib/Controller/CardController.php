@@ -25,8 +25,8 @@ namespace OCA\Deck\Controller;
 
 use OCA\Deck\Service\AssignmentService;
 use OCA\Deck\Service\CardService;
-use OCP\IRequest;
 use OCP\AppFramework\Controller;
+use OCP\IRequest;
 
 class CardController extends Controller {
 	private $userId;

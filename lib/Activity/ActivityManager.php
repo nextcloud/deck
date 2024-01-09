@@ -45,8 +45,8 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Comments\IComment;
 use OCP\IUser;
-use OCP\Server;
 use OCP\L10N\IFactory;
+use OCP\Server;
 use Psr\Log\LoggerInterface;
 
 class ActivityManager {
@@ -332,8 +332,8 @@ class ActivityManager {
 			case self::SUBJECT_BOARD_UPDATE_ARCHIVED:
 			case self::SUBJECT_BOARD_DELETE:
 			case self::SUBJECT_BOARD_RESTORE:
-			// Not defined as there is no activity for
-			// case self::SUBJECT_BOARD_UPDATE_COLOR
+				// Not defined as there is no activity for
+				// case self::SUBJECT_BOARD_UPDATE_COLOR
 				break;
 			case self::SUBJECT_CARD_COMMENT_CREATE:
 				$eventType = 'deck_comment';
@@ -374,7 +374,7 @@ class ActivityManager {
 					$additionalParams['before'] = $additionalParams['before']->format('c');
 				}
 
-			break;
+				break;
 			case self::SUBJECT_ATTACHMENT_CREATE:
 			case self::SUBJECT_ATTACHMENT_UPDATE:
 			case self::SUBJECT_ATTACHMENT_DELETE:

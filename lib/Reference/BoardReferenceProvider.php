@@ -38,9 +38,9 @@ class BoardReferenceProvider implements IReferenceProvider {
 	private IL10N $l10n;
 
 	public function __construct(BoardService $boardService,
-								IURLGenerator $urlGenerator,
-								IL10N $l10n,
-								?string $userId) {
+		IURLGenerator $urlGenerator,
+		IL10N $l10n,
+		?string $userId) {
 		$this->urlGenerator = $urlGenerator;
 		$this->boardService = $boardService;
 		$this->userId = $userId;
