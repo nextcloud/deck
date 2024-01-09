@@ -1,4 +1,4 @@
-lib/Service/CardService.php<?php
+<?php
 /**
  * @copyright Copyright (c) 2016 Julius Härtl <jus@bitgrid.net>
  *
@@ -264,7 +264,7 @@ class CardService {
 	public function update($id, $title, $stackId, $type, $owner, $description = '', $order = 0, $duedate = null, $deletedAt = null, $archived = null) {
 		$this->cardServiceValidator->check(compact('id', 'title', 'stackId', 'type', 'owner', 'order'));
 
-		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT, allowDeletedCard: true);
+		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT, null, true);
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
 
 		if ($this->boardService->isArchived($this->cardMapper, $id)) {
