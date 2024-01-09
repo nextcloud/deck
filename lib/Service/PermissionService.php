@@ -159,7 +159,6 @@ class PermissionService {
 
 		$permissions = $this->getPermissions($boardId, $userId);
 		if ($permissions[$permission] === true) {
-
 			if (!$allowDeletedCard && $mapper instanceof CardMapper) {
 				$card = $mapper->find($id);
 				if ($card->getDeletedAt() > 0) {

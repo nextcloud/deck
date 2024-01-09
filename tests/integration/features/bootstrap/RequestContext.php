@@ -166,4 +166,29 @@ class RequestContext implements Context {
 		$this->getResponse()->getBody()->seek(0);
 		return json_decode((string)$this->getResponse()->getBody(), true);
 	}
+
+	/**
+	 * @Given /^the response should be a list of objects$/
+	 */
+	public function theResponseShouldBeAListOfObjects() {
+		$jsonResponse = $this->getResponseBodyFromJson();
+		Assert::assertEquals(array_keys($jsonResponse), range(0, count($jsonResponse) - 1));
+	}
+
+	/**
+	 * @When /^the response should contain an element with the properties$/
+	 */
+	public function responseContainsElement(TableNode $element) {
+		$json = $this->getResponseBodyFromJson();
+		$found = array_filter($json, function ($board) use ($element) {
+			foreach ($element as $row) {
+				if ($row['value'] !== $board[$row['property']]) {
+					return false;
+				}
+			}
+
+			return true;
+		});
+		Assert::assertEquals(1, count($found));
+	}
 }
