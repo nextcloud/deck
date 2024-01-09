@@ -23,25 +23,25 @@
 
 namespace OCA\Deck\Controller;
 
+use \OCP\AppFramework\Http\RedirectResponse;
 use OCA\Deck\AppInfo\Application;
+use OCA\Deck\Db\Acl;
+use OCA\Deck\Db\CardMapper;
+use OCA\Deck\Service\CardService;
 use OCA\Deck\Service\ConfigService;
 use OCA\Deck\Service\PermissionService;
 use OCA\Files\Event\LoadSidebar;
 use OCA\Text\Event\LoadEditor;
 use OCA\Viewer\Event\LoadViewer;
+use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\ContentSecurityPolicy;
+use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent as CollaborationResourcesEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IInitialStateService;
 use OCP\IRequest;
-use OCP\AppFramework\Http\TemplateResponse;
-use OCP\AppFramework\Controller;
-use OCA\Deck\Db\CardMapper;
 use OCP\IURLGenerator;
-use \OCP\AppFramework\Http\RedirectResponse;
-use OCA\Deck\Db\Acl;
-use OCA\Deck\Service\CardService;
 
 class PageController extends Controller {
 	private PermissionService $permissionService;
@@ -64,7 +64,7 @@ class PageController extends Controller {
 		IURLGenerator $urlGenerator,
 		CardService $cardService,
 		IConfig $config
-		) {
+	) {
 		parent::__construct($AppName, $request);
 
 		$this->permissionService = $permissionService;

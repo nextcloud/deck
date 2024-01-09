@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Service;
 
-use OCP\Cache\CappedMemoryCache;
 use OCA\Circles\Model\Member;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
@@ -34,6 +33,7 @@ use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\Cache\CappedMemoryCache;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\ILogger;

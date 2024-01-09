@@ -24,8 +24,8 @@
 namespace OCA\Deck\Controller;
 
 use OCA\Deck\Service\LabelService;
-use OCP\IRequest;
 use OCP\AppFramework\Controller;
+use OCP\IRequest;
 
 class LabelController extends Controller {
 	private $labelService;

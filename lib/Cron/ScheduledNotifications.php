@@ -23,12 +23,12 @@
 
 namespace OCA\Deck\Cron;
 
-use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\BackgroundJob\Job;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\Job;
 use OCP\ILogger;
 
 class ScheduledNotifications extends Job {

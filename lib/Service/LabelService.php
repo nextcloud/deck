@@ -23,12 +23,12 @@
 
 namespace OCA\Deck\Service;
 
+use OCA\Deck\BadRequestException;
+use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\Label;
-use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\StatusException;
-use OCA\Deck\BadRequestException;
 use OCA\Deck\Validators\LabelServiceValidator;
 
 class LabelService {
@@ -50,7 +50,7 @@ class LabelService {
 		BoardService $boardService,
 		ChangeHelper $changeHelper,
 		LabelServiceValidator $labelServiceValidator
-		) {
+	) {
 		$this->labelMapper = $labelMapper;
 		$this->permissionService = $permissionService;
 		$this->boardService = $boardService;

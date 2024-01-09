@@ -27,13 +27,13 @@ use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\Assignment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
+use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
+use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
-use OCA\Deck\Db\BoardMapper;
-use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
@@ -42,13 +42,13 @@ use OCP\Activity\IEvent;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
+use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Test\TestCase;
-use OCP\IURLGenerator;
 
 class CardServiceTest extends TestCase {
 

@@ -332,7 +332,7 @@ class TrelloJsonService extends ABoardImportService {
 		return $return;
 	}
 
-	private function translateColor(string $color): string {
+	private function translateColor(?string $color): string {
 		switch ($color) {
 			case 'red':
 				return 'ff0000';

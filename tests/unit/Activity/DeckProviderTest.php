@@ -26,6 +26,7 @@ namespace OCA\Deck\Activity;
 use OC\Activity\Event;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Card;
+use OCA\Deck\Service\CardService;
 use OCP\Activity\IEvent;
 use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
@@ -38,7 +39,6 @@ use OCP\L10N\IFactory;
 use OCP\RichObjectStrings\IValidator;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use OCA\Deck\Service\CardService;
 
 class DeckProviderTest extends TestCase {
 

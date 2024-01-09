@@ -31,8 +31,8 @@ use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
-use OCP\ILogger;
 use OCP\IConfig;
+use OCP\ILogger;
 use OCP\IRequest;
 
 class ExceptionMiddlewareTest extends \Test\TestCase {

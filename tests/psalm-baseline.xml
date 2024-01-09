@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.6.0@e784128902dfe01d489c4123d69918a9f3c1eac5">
+<files psalm-version="5.18.0@b113f3ed0259fd6e212d87c3df80eec95a6abf19">
   <file src="lib/Activity/Filter.php">
     <MethodSignatureMismatch>
       <code>$types</code>
     </MethodSignatureMismatch>
   </file>
+  <file src="lib/Command/BoardImport.php">
+    <UndefinedClass>
+      <code>Command</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Command/TransferOwnership.php">
+    <UndefinedClass>
+      <code>Command</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Command/UserExport.php">
-    <ImplementedReturnTypeMismatch>
-      <code>void</code>
-    </ImplementedReturnTypeMismatch>
-    <UndefinedThisPropertyAssignment>
-      <code>$this-&gt;boardMapper</code>
-      <code>$this-&gt;stackMapper</code>
-    </UndefinedThisPropertyAssignment>
-    <UndefinedThisPropertyFetch>
-      <code>$this-&gt;boardMapper</code>
-      <code>$this-&gt;stackMapper</code>
-    </UndefinedThisPropertyFetch>
+    <UndefinedClass>
+      <code>Command</code>
+    </UndefinedClass>
   </file>
   <file src="lib/Controller/BoardApiController.php">
     <TypeDoesNotContainNull>
@@ -27,10 +29,10 @@
       <code>Util</code>
     </UndefinedClass>
     <UndefinedThisPropertyAssignment>
-      <code>$this-&gt;userId</code>
+      <code><![CDATA[$this->userId]]></code>
     </UndefinedThisPropertyAssignment>
     <UndefinedThisPropertyFetch>
-      <code>$this-&gt;userId</code>
+      <code><![CDATA[$this->userId]]></code>
     </UndefinedThisPropertyFetch>
   </file>
   <file src="lib/Controller/CommentsApiController.php">
@@ -76,6 +78,11 @@
       <code>NotFound</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Db/BoardMapper.php">
+    <UndefinedVariable>
+      <code>$userManager</code>
+    </UndefinedVariable>
+  </file>
   <file src="lib/Db/Card.php">
     <UndefinedClass>
       <code>VCalendar</code>
@@ -84,7 +91,7 @@
   </file>
   <file src="lib/Db/CardMapper.php">
     <InvalidScalarArgument>
-      <code>$entity-&gt;getId()</code>
+      <code><![CDATA[$entity->getId()]]></code>
     </InvalidScalarArgument>
     <UndefinedInterfaceMethod>
       <code>getUserIdGroups</code>
@@ -113,15 +120,6 @@
       <code>public function __construct(Card $card, ?Board $board = null) {</code>
     </ConstructorSignatureMismatch>
   </file>
-  <file src="lib/Service/AttachmentService.php">
-    <InvalidCatch>
-      <code>try {
-				$attachment = $this-&gt;attachmentMapper-&gt;find($attachmentId);
-			} catch (IMapperException $e) {
-				throw new NoPermissionException('Permission denied');
-			}</code>
-    </InvalidCatch>
-  </file>
   <file src="lib/Service/BoardService.php">
     <TooManyArguments>
       <code>findAll</code>
@@ -139,6 +137,21 @@
       <code>is_resource($content)</code>
     </RedundantCondition>
   </file>
+  <file src="lib/Service/Importer/BoardImportCommandService.php">
+    <UndefinedClass>
+      <code><![CDATA[$this->getCommand()]]></code>
+      <code><![CDATA[$this->getCommand()]]></code>
+      <code><![CDATA[$this->getCommand()]]></code>
+      <code>ChoiceQuestion</code>
+      <code>Command</code>
+      <code>Command</code>
+      <code>Question</code>
+      <code>Question</code>
+    </UndefinedClass>
+    <UndefinedDocblockClass>
+      <code>Command</code>
+    </UndefinedDocblockClass>
+  </file>
   <file src="lib/Sharing/DeckShareProvider.php">
     <InvalidReturnType>
       <code>getShareByToken</code>
@@ -148,5 +161,9 @@
     <InvalidArgument>
       <code>[self::class, 'listenPreShare']</code>
     </InvalidArgument>
+    <UndefinedClass>
+      <code>GenericEvent</code>
+      <code>GenericEvent</code>
+    </UndefinedClass>
   </file>
 </files>

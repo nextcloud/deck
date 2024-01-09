@@ -23,12 +23,12 @@
 
 namespace OCA\Deck\Activity;
 
+use \OCP\Comments\ICommentsEventHandler;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\Comments\CommentsEvent;
 use OCP\Comments\IComment;
-use \OCP\Comments\ICommentsEventHandler;
 
 class CommentEventHandler implements ICommentsEventHandler {
 

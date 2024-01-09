@@ -22,12 +22,12 @@
  */
 namespace OCA\Deck\Controller;
 
-use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\DataResponse;
-use OCP\IRequest;
-
 use OCA\Deck\Db\Label;
 use OCA\Deck\Service\LabelService;
+use OCP\AppFramework\Http;
+
+use OCP\AppFramework\Http\DataResponse;
+use OCP\IRequest;
 
 class LabelApiControllerTest extends \Test\TestCase {
 	private $controller;
