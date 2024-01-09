@@ -274,6 +274,14 @@ class CardService {
 		if ($archived !== null && $card->getArchived() && $archived === true) {
 			throw new StatusException('Operation not allowed. This card is archived.');
 		}
+
+		if ($card->getDeletedAt() !== 0) {
+			if ($deletedAt === null) {
+				// Only allow operations when restoring the card
+				throw new StatusException('Operation not allowed. This card was deleted.');
+			}
+		}
+
 		$changes = new ChangeSet($card);
 		if ($card->getLastEditor() !== $this->currentUser && $card->getLastEditor() !== null) {
 			$this->activityManager->triggerEvent(

@@ -108,7 +108,7 @@ class ResourceProvider implements IProvider {
 
 	private function getBoard(IResource $resource) {
 		try {
-			return $this->boardMapper->find($resource->getId(), false, true);
+			return $this->boardMapper->find((int)$resource->getId(), false, true);
 		} catch (DoesNotExistException $e) {
 		} catch (MultipleObjectsReturnedException $e) {
 			return null;

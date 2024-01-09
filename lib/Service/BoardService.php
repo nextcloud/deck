@@ -181,7 +181,7 @@ class BoardService {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function find($boardId) {
+	public function find($boardId, bool $allowDeleted = false) {
 		$this->boardServiceValidator->check(compact('boardId'));
 		if ($this->boardsCache && isset($this->boardsCache[$boardId])) {
 			return $this->boardsCache[$boardId];
@@ -192,7 +192,7 @@ class BoardService {
 
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
 		/** @var Board $board */
-		$board = $this->boardMapper->find($boardId, true, true);
+		$board = $this->boardMapper->find((int)$boardId, true, true, $allowDeleted);
 		$this->boardMapper->mapOwner($board);
 		if ($board->getAcl() !== null) {
 			foreach ($board->getAcl() as $acl) {
@@ -367,7 +367,7 @@ class BoardService {
 		$this->boardServiceValidator->check(compact('id'));
 
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
-		$board = $this->find($id);
+		$board = $this->find($id, true);
 		$board->setDeletedAt(0);
 		$board = $this->boardMapper->update($board);
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $board, ActivityManager::SUBJECT_BOARD_RESTORE);
@@ -388,7 +388,7 @@ class BoardService {
 		$this->boardServiceValidator->check(compact('id'));
 
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
-		$board = $this->find($id);
+		$board = $this->find($id, true);
 		$delete = $this->boardMapper->delete($board);
 
 		return $delete;
