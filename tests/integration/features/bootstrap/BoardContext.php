@@ -19,7 +19,7 @@ class BoardContext implements Context {
 	private $storedCards = [];
 	private $activities = null;
 
-	private ServerContext $serverContext;
+	private $serverContext;
 
 	/** @BeforeScenario */
 	public function gatherContexts(BeforeScenarioScope $scope) {

@@ -10,9 +10,9 @@ class ServerContext implements Context {
 		WebDav::__construct as private __tConstruct;
 	}
 
-	private string $rawBaseUrl;
-	private string $mappedUserId;
-	private array $lastInsertIds = [];
+	private $rawBaseUrl;
+	private $mappedUserId;
+	private $lastInsertIds = [];
 
 	public function __construct($baseUrl) {
 		$this->rawBaseUrl = $baseUrl;
