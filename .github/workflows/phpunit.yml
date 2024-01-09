@@ -13,7 +13,7 @@ env:
 
 jobs:
   integration:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
@@ -44,7 +44,7 @@ jobs:
 
     steps:
       - name: Checkout server
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           repository: nextcloud/server
           ref: ${{ matrix.server-versions }}
@@ -57,12 +57,12 @@ jobs:
           git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
       - name: Checkout app
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@2.15.0
+        uses: shivammathur/setup-php@2.18.0
         with:
           php-version: ${{ matrix.php-versions }}
           tools: phpunit
