@@ -58,5 +58,4 @@ class CommentContext implements Context {
 		$card = $this->boardContext->getLastUsedCard();
 		$this->requestContext->sendOCSRequest('DELETE', '/apps/deck/api/v1.0/cards/' . $card['id'] . '/comments/'. $this->lastComment['id']);
 	}
-
 }
