@@ -302,6 +302,4 @@ class BoardContext implements Context {
 	public function theFetchedActivitiesShouldHaveEntries($count) {
 		Assert::assertEquals($count, count($this->activities ?? []));
 	}
-
-
 }
