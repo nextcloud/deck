@@ -77,10 +77,6 @@ class CommentService {
 	}
 
 	/**
-	 * @param string $cardId
-	 * @param string $message
-	 * @param string $replyTo
-	 * @return DataResponse
 	 * @throws BadRequestException
 	 * @throws NotFoundException|NoPermissionException
 	 */
@@ -136,7 +132,7 @@ class CommentService {
 			throw new NoPermissionException('Only authors are allowed to edit their comment.');
 		}
 		if ($comment->getParentId() !== '0') {
-			$this->permissionService->checkPermission($this->cardMapper, $comment->getParentId(), Acl::PERMISSION_READ);
+			$this->permissionService->checkPermission($this->cardMapper, (int)$comment->getParentId(), Acl::PERMISSION_READ);
 		}
 
 		$comment->setMessage($message);

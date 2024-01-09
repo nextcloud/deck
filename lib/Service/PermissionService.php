@@ -98,7 +98,11 @@ class PermissionService {
 	 * @param $boardId
 	 * @return bool|array
 	 */
-	public function getPermissions($boardId) {
+	public function getPermissions($boardId, ?string $userId = null) {
+		if ($userId === null) {
+			$userId = $this->userId;
+		}
+
 		if ($cached = $this->permissionCache->get($boardId)) {
 			return $cached;
 		}
@@ -113,7 +117,7 @@ class PermissionService {
 			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE))
 				&& (!$this->shareManager->sharingDisabledForUser($this->userId))
 		];
-		$this->permissionCache->set($boardId, $permissions);
+		$this->permissionCache->set((string)$boardId, $permissions);
 		return $permissions;
 	}
 
@@ -169,7 +173,7 @@ class PermissionService {
 		}
 
 		try {
-			$acls = $this->getBoard($boardId)->getAcl() ?? [];
+			$acls = $this->getBoard((int)$boardId)->getAcl() ?? [];
 			$result = $this->userCan($acls, $permission, $userId);
 			if ($result) {
 				return true;
