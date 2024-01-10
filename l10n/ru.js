@@ -159,7 +159,7 @@ OC.L10N.register(
     "Sharing" : "Общий доступ",
     "Tags" : "Метки",
     "Deleted items" : "Корзина",
-    "Activity" : "Нагрузка",
+    "Activity" : "Активность",
     "Deleted lists" : "Удалённые списки",
     "Undo" : "Отменить",
     "Deleted cards" : "Карточки в корзине",
