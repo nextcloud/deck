@@ -70,6 +70,13 @@ jobs:
         with:
           path: apps/${{ env.APP_NAME }}
 
+      -   name: Checkout activity
+          uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+          with:
+              repository: nextcloud/activity
+              ref: ${{ matrix.server-versions }}
+              path: apps/activity
+
       - name: Set up php ${{ matrix.php-versions }}
         uses: shivammathur/setup-php@2.27.1
         with:
