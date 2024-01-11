@@ -58,7 +58,7 @@
 						@keyup.stop>{{ card.title }}</span>
 				</h3>
 
-				<DueDate v-if="compactMode && card.duedate" :card="card" />
+				<DueDate v-if="compactMode" :card="card" />
 				<CardMenu v-if="showMenuAtTitle" :card="card" class="right card-menu" />
 			</div>
 
