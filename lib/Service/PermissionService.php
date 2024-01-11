@@ -160,19 +160,19 @@ class PermissionService {
 			throw new NoPermissionException('Permission denied');
 		}
 
-		$permissions = $this->getPermissions($boardId, $userId);
-		if ($permissions[$permission] === true) {
-			if (!$allowDeletedCard && $mapper instanceof CardMapper) {
-				$card = $mapper->find($id);
-				if ($card->getDeletedAt() > 0) {
-					throw new NoPermissionException('Card is deleted');
+		try {
+			$permissions = $this->getPermissions($boardId, $userId);
+			if ($permissions[$permission] === true) {
+				if (!$allowDeletedCard && $mapper instanceof CardMapper) {
+					$card = $mapper->find($id);
+					if ($card->getDeletedAt() > 0) {
+						throw new NoPermissionException('Card is deleted');
+					}
 				}
+
+				return true;
 			}
 
-			return true;
-		}
-
-		try {
 			$acls = $this->getBoard((int)$boardId)->getAcl() ?? [];
 			$result = $this->userCan($acls, $permission, $userId);
 			if ($result) {
