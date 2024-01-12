@@ -471,7 +471,7 @@ class BoardService {
 		$newAcl = $this->aclMapper->insert($acl);
 
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_BOARD, $newAcl, ActivityManager::SUBJECT_BOARD_SHARE, [], $this->userId);
-		$this->notificationHelper->sendBoardShared((int)$boardId, $acl);
+		$this->notificationHelper->sendBoardShared($boardId, $acl);
 		$this->boardMapper->mapAcl($newAcl);
 		$this->changeHelper->boardChanged($boardId);
 

@@ -29,6 +29,7 @@ use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\IPermissionMapper;
 use OCA\Deck\Db\User;
 use OCA\Deck\NoPermissionException;
@@ -97,13 +98,18 @@ class PermissionService {
 	 * @param $boardId
 	 * @return bool|array
 	 */
-	public function getPermissions($boardId) {
+	public function getPermissions($boardId, ?string $userId = null) {
+		if ($userId === null) {
+			$userId = $this->userId;
+		}
+
 		if ($cached = $this->permissionCache->get($boardId)) {
 			return $cached;
 		}
 
-		$owner = $this->userIsBoardOwner($boardId);
-		$acls = $this->aclMapper->findAll($boardId);
+		$board = $this->getBoard($boardId);
+		$owner = $this->userIsBoardOwner($boardId, $userId);
+		$acls = $board->getDeletedAt() === 0 ? $this->aclMapper->findAll($boardId) : [];
 		$permissions = [
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT),
@@ -111,7 +117,7 @@ class PermissionService {
 			Acl::PERMISSION_SHARE => ($owner || $this->userCan($acls, Acl::PERMISSION_SHARE))
 				&& (!$this->shareManager->sharingDisabledForUser($this->userId))
 		];
-		$this->permissionCache->set($boardId, $permissions);
+		$this->permissionCache->set((string)$boardId, $permissions);
 		return $permissions;
 	}
 
@@ -137,13 +143,10 @@ class PermissionService {
 	/**
 	 * check permissions for replacing dark magic middleware
 	 *
-	 * @param $mapper IPermissionMapper|null null if $id is a boardId
-	 * @param $id int unique identifier of the Entity
-	 * @param $permission int
-	 * @return bool
+	 * @param numeric $id
 	 * @throws NoPermissionException
 	 */
-	public function checkPermission($mapper, $id, $permission, $userId = null) {
+	public function checkPermission($mapper, $id, $permission, $userId = null, bool $allowDeletedCard = false) {
 		$boardId = $id;
 		if ($mapper instanceof IPermissionMapper && !($mapper instanceof BoardMapper)) {
 			$boardId = $mapper->findBoardId($id);
@@ -157,12 +160,20 @@ class PermissionService {
 			throw new NoPermissionException('Permission denied');
 		}
 
-		if ($this->userIsBoardOwner($boardId, $userId)) {
-			return true;
-		}
-
 		try {
-			$acls = $this->getBoard($boardId)->getAcl() ?? [];
+			$permissions = $this->getPermissions($boardId, $userId);
+			if ($permissions[$permission] === true) {
+				if (!$allowDeletedCard && $mapper instanceof CardMapper) {
+					$card = $mapper->find($id);
+					if ($card->getDeletedAt() > 0) {
+						throw new NoPermissionException('Card is deleted');
+					}
+				}
+
+				return true;
+			}
+
+			$acls = $this->getBoard((int)$boardId)->getAcl() ?? [];
 			$result = $this->userCan($acls, $permission, $userId);
 			if ($result) {
 				return true;

@@ -10,15 +10,15 @@ class ServerContext implements Context {
 		WebDav::__construct as private __tConstruct;
 	}
 
+	private $rawBaseUrl;
+	private $mappedUserId;
+	private $lastInsertIds = [];
+
 	public function __construct($baseUrl) {
 		$this->rawBaseUrl = $baseUrl;
 		$this->__tConstruct($baseUrl . '/index.php/ocs/', ['admin', 'admin'], '123456');
 	}
 
-	/** @var string */
-	private $mappedUserId;
-
-	private $lastInsertIds = [];
 
 	/**
 	 * @BeforeSuite

@@ -90,3 +90,53 @@ Feature: acl
 		And the current user should not have "edit" permissions on the board
 		And the current user should have "share" permissions on the board
 		And the current user should not have "manage" permissions on the board
+
+	Scenario: Share a board multiple times
+		Given Logging in using web as "user0"
+		And creates a board named "Double shared board" with color "ff0000"
+		And shares the board with user "user1"
+		And shares the board with group "group1"
+		And creates a board named "Single shared board" with color "00ff00"
+		And shares the board with user "user1"
+		When Logging in using web as "user1"
+		And fetching the board list
+		Then the response should have a status code "200"
+		And the response should be a list of objects
+		And the response should contain an element with the properties
+			| property | value |
+			| title | Double shared board |
+
+
+	Scenario: Deleted board is inaccessible to share recipients
+		Given acting as user "user0"
+		When creates a board with example content
+		And remember the last card as "user0-card"
+		When post a comment with content "hello comment" on the card
+		And uploads an attachment to the last used card
+		And remember the last attachment as "user0-attachment"
+		And shares the board with user "user1"
+		Then the HTTP status code should be "200"
+		And delete the board
+
+		Given acting as user "user1"
+		When fetching the attachments for the card "user0-card"
+		Then the response should have a status code 403
+
+		When get the comments on the card
+		Then the response should have a status code 403
+
+		When update a comment with content "hello deleted" on the card
+		Then the response should have a status code 403
+
+		When delete the comment on the card
+		Then the response should have a status code 403
+		# 644
+		When post a comment with content "hello deleted" on the card
+		Then the response should have a status code 403
+
+		When get the card details
+		Then the response should have a status code 403
+		When fetching the attachment "user0-attachment" for the card "user0-card"
+		Then the response should have a status code 403
+		When deleting the attachment "user0-attachment" for the card "user0-card"
+		Then the response should have a status code 403

@@ -240,6 +240,8 @@ class PermissionServiceTest extends \Test\TestCase {
 			->method('sharingDisabledForUser')
 			->willReturn(false);
 
+		$this->aclMapper->method('findAll')->willReturn([]);
+
 		if ($result) {
 			$actual = $this->service->checkPermission($mapper, 1234, $permission);
 			$this->assertTrue($actual);
@@ -261,6 +263,8 @@ class PermissionServiceTest extends \Test\TestCase {
 		} else {
 			$this->boardMapper->expects($this->any())->method('find')->willReturn($board);
 		}
+
+		$this->aclMapper->method('findAll')->willReturn([]);
 
 		if ($result) {
 			$actual = $this->service->checkPermission($mapper, 1234, $permission);
