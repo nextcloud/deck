@@ -115,7 +115,7 @@ class ShareAPIHelper {
 	 */
 	public function canAccessShare(IShare $share, string $user): bool {
 		try {
-			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_READ, $user);
+			$this->permissionService->checkPermission($this->cardMapper, (int)$share->getSharedWith(), Acl::PERMISSION_READ, $user);
 		} catch (NoPermissionException $e) {
 			return false;
 		}
