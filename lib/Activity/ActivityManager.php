@@ -38,6 +38,7 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Label;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\NoPermissionException;
 use OCA\Deck\Service\PermissionService;
 use OCP\Activity\IEvent;
 use OCP\Activity\IManager;
@@ -553,5 +554,25 @@ class ActivityManager {
 			'acl' => $acl,
 			'board' => $board
 		];
+	}
+
+	public function canSeeCardActivity(int $cardId): bool {
+		try {
+			$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
+			$card = $this->cardMapper->find($cardId);
+			return $card->getDeletedAt() === 0;
+		} catch (NoPermissionException $e) {
+			return false;
+		}
+	}
+
+	public function canSeeBoardActivity(int $boardId): bool {
+		try {
+			$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
+			$board = $this->boardMapper->find($boardId);
+			return $board->getDeletedAt() === 0;
+		} catch (NoPermissionException $e) {
+			return false;
+		}
 	}
 }
