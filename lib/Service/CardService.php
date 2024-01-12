@@ -264,7 +264,7 @@ class CardService {
 	public function update($id, $title, $stackId, $type, $owner, $description = '', $order = 0, $duedate = null, $deletedAt = null, $archived = null) {
 		$this->cardServiceValidator->check(compact('id', 'title', 'stackId', 'type', 'owner', 'order'));
 
-		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
+		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT, null, true);
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
 
 		if ($this->boardService->isArchived($this->cardMapper, $id)) {
@@ -276,9 +276,9 @@ class CardService {
 		}
 
 		if ($card->getDeletedAt() !== 0) {
-			if ($deletedAt === null) {
+			if ($deletedAt === null || $deletedAt > 0) {
 				// Only allow operations when restoring the card
-				throw new StatusException('Operation not allowed. This card was deleted.');
+				throw new NoPermissionException('Operation not allowed. This card was deleted.');
 			}
 		}
 

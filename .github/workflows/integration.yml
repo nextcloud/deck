@@ -61,17 +61,25 @@ jobs:
         with:
           path: apps/${{ env.APP_NAME }}
 
+      -   name: Checkout activity
+          uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+          with:
+              repository: nextcloud/activity
+              ref: ${{ matrix.server-versions }}
+              path: apps/activity
+
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@2.18.0
+        uses: shivammathur/setup-php@2.25.4
         with:
           php-version: ${{ matrix.php-versions }}
-          tools: phpunit
-          extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, mysql, pdo_mysql, pgsql, pdo_pgsql,
+          extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, sqlite, pdo_sqlite, mysql, pdo_mysql, pgsql, pdo_pgsql, apcu
+          ini-values:
+            apc.enable_cli=on
           coverage: none
 
-      - name: Set up PHPUnit
+      - name: Set up dependencies
         working-directory: apps/${{ env.APP_NAME }}
-        run: composer i
+        run: composer i --no-dev
 
       - name: Set up Nextcloud
         run: |

@@ -87,4 +87,14 @@ class AttachmentContext implements Context {
 
 		$this->requestContext->sendPlainRequest('GET', '/index.php/apps/deck/cards/' . $cardId . '/attachment/file:' . $attachmentId);
 	}
+
+	/**
+	 * @When fetching the attachments for the card :cardReference
+	 */
+	public function fetchingTheAttachmentsForTheCard($cardReference) {
+		$cardId = $this->boardContext->getRememberedCard($cardReference)['id'] ?? null;
+		Assert::assertNotNull($cardId, 'Card needs to be available');
+
+		$this->requestContext->sendPlainRequest('GET', '/index.php/apps/deck/cards/' . $cardId . '/attachments');
+	}
 }
