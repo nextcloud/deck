@@ -111,6 +111,9 @@ class DeckProvider implements IProvider {
 			$event->setAuthor($author);
 		}
 		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_BOARD) {
+			if (!$this->activityManager->canSeeBoardActivity($event->getObjectId())) {
+				throw new \InvalidArgumentException();
+			}
 			if (isset($subjectParams['board']) && $event->getObjectName() === '') {
 				$event->setObject($event->getObjectType(), $event->getObjectId(), $subjectParams['board']['title']);
 			}
@@ -125,6 +128,9 @@ class DeckProvider implements IProvider {
 		}
 
 		if (isset($subjectParams['card']) && $event->getObjectType() === ActivityManager::DECK_OBJECT_CARD) {
+			if (!$this->activityManager->canSeeCardActivity($event->getObjectId())) {
+				throw new \InvalidArgumentException();
+			}
 			if ($event->getObjectName() === '') {
 				$event->setObject($event->getObjectType(), $event->getObjectId(), $subjectParams['card']['title']);
 			}

@@ -36,6 +36,8 @@ use Sabre\VObject\Component\VCalendar;
  * @method int getLastModified()
  * @method int getCreatedAt()
  * @method bool getArchived()
+ * @method int getDeletedAt()
+ * @method void setDeletedAt(int $deletedAt)
  * @method bool getNotified()
  *
  * @method void setLabels(Label[] $labels)
