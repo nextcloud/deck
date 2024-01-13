@@ -180,6 +180,7 @@ OC.L10N.register(
     "Select Date" : "Вкажіть дату",
     "Assign a tag to this card…" : "Додати мітку до цієї картки",
     "(group)" : "(група)",
+    "Next week – {timeLocale}" : "Наступного тижня - {timeLocale}",
     "Todo items" : "Пункти завдань",
     "Edit card title" : "Редагувати заголовок картки",
     "Card details" : "Деталі картки",
