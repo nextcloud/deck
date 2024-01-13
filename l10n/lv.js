@@ -49,6 +49,7 @@ OC.L10N.register(
     "Search" : "Meklēt",
     "Shared with you" : "Koplietots ar tevi",
     "No notifications" : "Nav paziņojumu",
+    "No reminder" : "Nav atgādinājuma",
     "An error occurred" : "Gadījās kļūda",
     "Today" : "Šodien",
     "Tomorrow" : "Rīt",
