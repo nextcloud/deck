@@ -222,6 +222,7 @@ OC.L10N.register(
     "Today" : "Сьогодні",
     "Tomorrow" : "Завтра",
     "No due" : "Без призначеної дати",
+    "This weekend – {timeLocale}" : "На цих вихідних - {timeLocale}",
     "Create a new card" : "Створити нову картку",
     "Card title" : "Заголовок картки",
     "Close" : "закрити",
