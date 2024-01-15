@@ -64,7 +64,10 @@
 				@select="onSelectUser"
 				@remove="onRemoveUser" />
 
-			<DueDateSelector :card="card" :can-edit="!loading && !!selectedBoard" @change="updateCardDue" />
+			<DueDateSelector :card="card"
+				:can-edit="!loading && !!selectedBoard"
+				@change="updateCardDue"
+				@input="updateCardDue" />
 
 			<Description :key="card.id"
 				:card="card"
