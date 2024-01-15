@@ -37,7 +37,8 @@
 
 		<DueDateSelector :card="card"
 			:can-edit="canEdit"
-			@change="updateCardDue" />
+			@change="updateCardDue"
+			@input="debouncedUpdateCardDue" />
 
 		<div v-if="projectsEnabled" class="section-wrapper">
 			<CollectionList v-if="card.id"
@@ -68,6 +69,7 @@ import Description from './Description.vue'
 import TagSelector from './TagSelector.vue'
 import AssignmentSelector from './AssignmentSelector.vue'
 import DueDateSelector from './DueDateSelector.vue'
+import { debounce } from 'lodash'
 
 export default {
 	name: 'CardSidebarTabDetails',
@@ -161,6 +163,10 @@ export default {
 				duedate: val ? (new Date(val)).toISOString() : null,
 			})
 		},
+
+		debouncedUpdateCardDue: debounce(function(val) {
+			this.updateCardDue(val)
+		}, 500),
 
 		addLabelToCard(newLabel) {
 			this.copiedCard.labels.push(newLabel)

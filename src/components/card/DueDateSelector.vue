@@ -156,7 +156,7 @@ export default defineComponent({
 				return this.card?.duedate ? new Date(this.card.duedate) : null
 			},
 			set(val) {
-				this.$emit('change', val ? new Date(val) : null)
+				this.$emit('input', val ? new Date(val) : null)
 			},
 		},
 
@@ -216,9 +216,12 @@ export default defineComponent({
 		},
 		removeDue() {
 			this.duedate = null
+			this.$emit('change', null)
+
 		},
 		selectShortcut(shortcut) {
 			this.duedate = shortcut.timestamp
+			this.$emit('change', shortcut.timestamp)
 		},
 		getTimestamp(momentObject) {
 			return momentObject?.minute(0).second(0).millisecond(0).toDate() || null
