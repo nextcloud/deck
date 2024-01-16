@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.7.5
+
+### Fixed
+
+- Fix(occ): set user id for permission sevice from board service [#5074](https://github.com/nextcloud/deck/pull/5074)
+- Fix small issues around delete/undo @juliushaertl [#5446](https://github.com/nextcloud/deck/pull/5446)
+- Fix deleted card/board issues @juliushaertl [#5449](https://github.com/nextcloud/deck/pull/5449)
+
 ## 1.7.4
 
 ### Fixed
