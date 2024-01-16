@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.6.6
+
+### Fixed
+
+- Gracefully handle not found card for a share [#4570](https://github.com/nextcloud/deck/pull/4570)
+- Fix(occ): set user id for permission sevice from board service [#5073](https://github.com/nextcloud/deck/pull/5073)
+- Fix deleted card/board issues @juliushaertl [#5450](https://github.com/nextcloud/deck/pull/5450)
+- Fix small issues around delete/undo @juliushaertl [#5447](https://github.com/nextcloud/deck/pull/5447)
+
 ## 1.6.5
 
 ### Fixed

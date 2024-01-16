@@ -1,100 +1,100 @@
 {
-	"name": "deck",
-	"description": "",
-	"version": "1.6.5",
-	"authors": [
-		{
-			"name": "Julius Härtl",
-			"email": "jus@bitgrid.net",
-			"role": "Developer"
-		},
-		{
-			"name": "Michael Weimann",
-			"email": "mail@michael-weimann.eu",
-			"role": "Developer"
-		}
-	],
-	"license": "agpl",
-	"private": true,
-	"scripts": {
-		"build": "NODE_ENV=production webpack --progress --config webpack.js",
-		"dev": "NODE_ENV=development webpack --progress --config webpack.js",
-		"watch": "NODE_ENV=development webpack --progress --watch --config webpack.js",
-		"lint": "eslint --ext .js,.vue src",
-		"lint:fix": "eslint --ext .js,.vue src --fix",
-		"stylelint": "stylelint src",
-		"stylelint:fix": "stylelint src --fix",
-		"test": "jest",
-		"test:coverage": "jest --coverage"
-	},
-	"dependencies": {
-		"@babel/polyfill": "^7.12.1",
-		"@babel/runtime": "^7.16.0",
-		"@juliushaertl/vue-richtext": "^1.0.1",
-		"@nextcloud/auth": "^1.3.0",
-		"@nextcloud/axios": "^1.7.0",
-		"@nextcloud/dialogs": "^3.1.2",
-		"@nextcloud/event-bus": "^2.1.1",
-		"@nextcloud/files": "^2.1.0",
-		"@nextcloud/initial-state": "^1.2.1",
-		"@nextcloud/l10n": "^1.4.1",
-		"@nextcloud/moment": "^1.1.1",
-		"@nextcloud/router": "^2.0.0",
-		"@nextcloud/vue": "^4.2.0",
-		"@nextcloud/vue-dashboard": "^2.0.1",
-		"blueimp-md5": "^2.19.0",
-		"dompurify": "^2.3.3",
-		"lodash": "^4.17.21",
-		"markdown-it": "^12.2.0",
-		"markdown-it-link-attributes": "^3.0.0",
-		"markdown-it-task-checkbox": "^1.0.6",
-		"moment": "^2.29.1",
-		"nextcloud-vue-collections": "^0.9.0",
-		"p-queue": "^6.6.2",
-		"url-search-params-polyfill": "^8.1.1",
-		"vue": "^2.6.14",
-		"vue-at": "^2.5.0-beta.2",
-		"vue-click-outside": "^1.1.0",
-		"vue-easymde": "^2.0.0",
-		"vue-infinite-loading": "^2.4.5",
-		"vue-router": "^3.5.3",
-		"vue-smooth-dnd": "^0.8.1",
-		"vuex": "^3.6.2",
-		"vuex-router-sync": "^5.0.0"
-	},
-	"browserslist": [
-		"extends @nextcloud/browserslist-config"
-	],
-	"engines": {
-		"node": "^14.0.0",
-		"npm": "^7.0.0"
-	},
-	"devDependencies": {
-		"@nextcloud/babel-config": "^1.0.0",
-		"@nextcloud/browserslist-config": "^2.2.0",
-		"@nextcloud/eslint-config": "^6.1.0",
-		"@nextcloud/stylelint-config": "^1.0.0-beta.0",
-		"@nextcloud/webpack-vue-config": "^4.1.2",
-		"@relative-ci/agent": "^3.0.0",
-		"@vue/test-utils": "^1.2.2",
-		"jest": "^27.3.1",
-		"jest-serializer-vue": "^2.0.2",
-		"vue-jest": "^3.0.7"
-	},
-	"jest": {
-		"moduleFileExtensions": [
-			"js",
-			"vue"
-		],
-		"moduleNameMapper": {
-			"^@/(.*)$": "<rootDir>/src/$1"
-		},
-		"transform": {
-			"^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-			".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
-		},
-		"snapshotSerializers": [
-			"<rootDir>/node_modules/jest-serializer-vue"
-		]
-	}
+  "name": "deck",
+  "description": "",
+  "version": "1.6.6",
+  "authors": [
+    {
+      "name": "Julius Härtl",
+      "email": "jus@bitgrid.net",
+      "role": "Developer"
+    },
+    {
+      "name": "Michael Weimann",
+      "email": "mail@michael-weimann.eu",
+      "role": "Developer"
+    }
+  ],
+  "license": "agpl",
+  "private": true,
+  "scripts": {
+    "build": "NODE_ENV=production webpack --progress --config webpack.js",
+    "dev": "NODE_ENV=development webpack --progress --config webpack.js",
+    "watch": "NODE_ENV=development webpack --progress --watch --config webpack.js",
+    "lint": "eslint --ext .js,.vue src",
+    "lint:fix": "eslint --ext .js,.vue src --fix",
+    "stylelint": "stylelint src",
+    "stylelint:fix": "stylelint src --fix",
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "@babel/runtime": "^7.16.0",
+    "@juliushaertl/vue-richtext": "^1.0.1",
+    "@nextcloud/auth": "^1.3.0",
+    "@nextcloud/axios": "^1.7.0",
+    "@nextcloud/dialogs": "^3.1.2",
+    "@nextcloud/event-bus": "^2.1.1",
+    "@nextcloud/files": "^2.1.0",
+    "@nextcloud/initial-state": "^1.2.1",
+    "@nextcloud/l10n": "^1.4.1",
+    "@nextcloud/moment": "^1.1.1",
+    "@nextcloud/router": "^2.0.0",
+    "@nextcloud/vue": "^4.2.0",
+    "@nextcloud/vue-dashboard": "^2.0.1",
+    "blueimp-md5": "^2.19.0",
+    "dompurify": "^2.3.3",
+    "lodash": "^4.17.21",
+    "markdown-it": "^12.2.0",
+    "markdown-it-link-attributes": "^3.0.0",
+    "markdown-it-task-checkbox": "^1.0.6",
+    "moment": "^2.29.1",
+    "nextcloud-vue-collections": "^0.9.0",
+    "p-queue": "^6.6.2",
+    "url-search-params-polyfill": "^8.1.1",
+    "vue": "^2.6.14",
+    "vue-at": "^2.5.0-beta.2",
+    "vue-click-outside": "^1.1.0",
+    "vue-easymde": "^2.0.0",
+    "vue-infinite-loading": "^2.4.5",
+    "vue-router": "^3.5.3",
+    "vue-smooth-dnd": "^0.8.1",
+    "vuex": "^3.6.2",
+    "vuex-router-sync": "^5.0.0"
+  },
+  "browserslist": [
+    "extends @nextcloud/browserslist-config"
+  ],
+  "engines": {
+    "node": "^14.0.0",
+    "npm": "^7.0.0"
+  },
+  "devDependencies": {
+    "@nextcloud/babel-config": "^1.0.0",
+    "@nextcloud/browserslist-config": "^2.2.0",
+    "@nextcloud/eslint-config": "^6.1.0",
+    "@nextcloud/stylelint-config": "^1.0.0-beta.0",
+    "@nextcloud/webpack-vue-config": "^4.1.2",
+    "@relative-ci/agent": "^3.0.0",
+    "@vue/test-utils": "^1.2.2",
+    "jest": "^27.3.1",
+    "jest-serializer-vue": "^2.0.2",
+    "vue-jest": "^3.0.7"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "vue"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
+    },
+    "snapshotSerializers": [
+      "<rootDir>/node_modules/jest-serializer-vue"
+    ]
+  }
 }
