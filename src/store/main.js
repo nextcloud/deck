@@ -74,7 +74,7 @@ export default new Vuex.Store({
 		searchQuery: '',
 		activity: [],
 		activityLoadMore: true,
-		filter: { tags: [], users: [], due: '' },
+		filter: { tags: [], users: [], due: '', open:false},
 		shortcutLock: false,
 	},
 	getters: {

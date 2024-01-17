@@ -183,6 +183,17 @@
 									@click="beforeSetFilter">
 								<label for="dueMonth">{{ t('deck', 'Next 30 days') }}</label>
 							</div>
+							
+							<div class="filter--item">
+								<input id="open"
+									v-model="filter.open"
+									type="radio"
+									class="radio"
+									:value="true"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="open">{{ t('deck', 'open') }}</label>
+							</div>
 
 							<div class="filter--item">
 								<input id="noDue"
@@ -293,7 +304,7 @@ export default {
 			filterVisible: false,
 			showArchived: false,
 			isAddStackVisible: false,
-			filter: { tags: [], users: [], due: '', unassigned: false },
+			filter: { tags: [], users: [], due: '', unassigned: false, open: false},
 			showAddCardModal: false,
 			defaultPageTitle: false,
 			isNotifyPushEnabled: isNotifyPushEnabled(),
@@ -317,7 +328,7 @@ export default {
 			}
 		},
 		isFilterActive() {
-			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== ''
+			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '' || this.filter.open;
 		},
 		labelsSorted() {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
@@ -361,6 +372,10 @@ export default {
 			if (e.target.value === 'unassigned') {
 				this.filter.users = []
 			}
+			if (e.target.id === 'open') {
+				this.filter.open = !this.filter.open
+				this.$store.dispatch('setFilter', { ...this.filter })
+			}
 		},
 		setFilter() {
 			if (this.filter.users.length > 0) {
@@ -402,7 +417,7 @@ export default {
 			}
 		},
 		clearFilter() {
-			const filterReset = { tags: [], users: [], due: '' }
+			const filterReset = { tags: [], users: [], due: '' ,open: false}
 			this.$store.dispatch('setFilter', { ...filterReset })
 			this.filter = filterReset
 		},
