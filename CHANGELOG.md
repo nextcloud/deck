@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.12.1
+
+### Fixed
+
+- Fix deleted card/board issues @juliushaertl [#5441](https://github.com/nextcloud/deck/pull/5441)
+- Fixing #5451 [#5457](https://github.com/nextcloud/deck/pull/5457)
+- fix: Add debounce to update due date [#5483](https://github.com/nextcloud/deck/pull/5483)
+- fix(i18n): Fixed typo [#5424](https://github.com/nextcloud/deck/pull/5424)
+
 ## 1.12.0
 
 ### Added
