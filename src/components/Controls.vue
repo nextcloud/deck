@@ -138,8 +138,7 @@
 								<label :for="user.uid"><NcAvatar :user="user.uid" :size="24" :disable-menu="true" /> {{ user.displayname }}</label>
 							</div>
 
-							<h3>{{ t('deck', 'Filter by due date') }}</h3>
-
+							<h3>{{ t('deck', 'Filter by done') }}</h3>
 							<div class="filter--item">
 								<input id="open"
 									v-model="filter.open"
@@ -162,6 +161,7 @@
 								<label for="done">{{ t('deck', 'done') }}</label>
 							</div>
 
+							<h3>{{ t('deck', 'Filter by due date') }}</h3>
 							<div class="filter--item">
 								<input id="overdue"
 									v-model="filter.due"
