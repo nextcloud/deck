@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.11.3
+
+### Fixed
+
+- fix: allow null label colors in trello json importer @juliushaertl [#5438](https://github.com/nextcloud/deck/pull/5438)
+- Fix deleted card/board issues @juliushaertl [#5442](https://github.com/nextcloud/deck/pull/5442)
+
+### Other
+
+- Fix small issues around delete/undo @juliushaertl [#5420](https://github.com/nextcloud/deck/pull/5420)
+
 ## 1.11.2
 
 ### Fixed
