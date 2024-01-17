@@ -141,6 +141,28 @@
 							<h3>{{ t('deck', 'Filter by due date') }}</h3>
 
 							<div class="filter--item">
+								<input id="open"
+									v-model="filter.open"
+									type="radio"
+									class="radio"
+									:value="true"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="open">{{ t('deck', 'open') }}</label>
+							</div>
+
+							<div class="filter--item">
+								<input id="done"
+									v-model="filter.done"
+									type="radio"
+									class="radio"
+									:value="true"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="done">{{ t('deck', 'done') }}</label>
+							</div>
+
+							<div class="filter--item">
 								<input id="overdue"
 									v-model="filter.due"
 									type="radio"
@@ -182,17 +204,6 @@
 									@change="setFilter"
 									@click="beforeSetFilter">
 								<label for="dueMonth">{{ t('deck', 'Next 30 days') }}</label>
-							</div>
-							
-							<div class="filter--item">
-								<input id="open"
-									v-model="filter.open"
-									type="radio"
-									class="radio"
-									:value="true"
-									@change="setFilter"
-									@click="beforeSetFilter">
-								<label for="open">{{ t('deck', 'open') }}</label>
 							</div>
 
 							<div class="filter--item">
@@ -304,7 +315,7 @@ export default {
 			filterVisible: false,
 			showArchived: false,
 			isAddStackVisible: false,
-			filter: { tags: [], users: [], due: '', unassigned: false, open: false},
+			filter: { tags: [], users: [], due: '', unassigned: false, open: false, done: false},
 			showAddCardModal: false,
 			defaultPageTitle: false,
 			isNotifyPushEnabled: isNotifyPushEnabled(),
@@ -328,7 +339,7 @@ export default {
 			}
 		},
 		isFilterActive() {
-			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '' || this.filter.open;
+			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '' || this.filter.open || this.filter.done;
 		},
 		labelsSorted() {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
@@ -376,6 +387,11 @@ export default {
 				this.filter.open = !this.filter.open
 				this.$store.dispatch('setFilter', { ...this.filter })
 			}
+
+			if (e.target.id === 'done') {
+				this.filter.done = !this.filter.done
+				this.$store.dispatch('setFilter', { ...this.filter })
+			}
 		},
 		setFilter() {
 			if (this.filter.users.length > 0) {
@@ -417,7 +433,7 @@ export default {
 			}
 		},
 		clearFilter() {
-			const filterReset = { tags: [], users: [], due: '' ,open: false}
+			const filterReset = { tags: [], users: [], due: '' ,open: false, done:false}
 			this.$store.dispatch('setFilter', { ...filterReset })
 			this.filter = filterReset
 		},

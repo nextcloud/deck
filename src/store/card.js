@@ -33,9 +33,12 @@ export default {
 	getters: {
 		cardsByStack: (state, getters, rootState) => (id) => {
 			return state.cards.filter((card) => {
-				const { tags, users, due, unassigned,open } = rootState.filter
+				const { tags, users, due, unassigned,open, done } = rootState.filter
 
-				if (open && card.done !== null) return false;
+				if (open && card.done !== null)
+					return false;
+				if (done && card.done == null)
+					return false;
 				let allTagsMatch = true
 				let allUsersMatch = true
 
