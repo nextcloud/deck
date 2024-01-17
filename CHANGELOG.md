@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.8.7
+
+### Fixed
+
+- Fix small issues around delete/undo @juliushaertl [#5440](https://github.com/nextcloud/deck/pull/5440)
+- Fix deleted card/board issues @juliushaertl [#5444](https://github.com/nextcloud/deck/pull/5444)
+
 ## 1.8.6
 
 ### Fixed
