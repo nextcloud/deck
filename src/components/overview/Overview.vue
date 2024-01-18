@@ -33,35 +33,35 @@
 		<div v-else-if="isValidFilter" class="overview">
 			<div class="dashboard-column">
 				<h3>{{ t('deck', 'Overdue') }}</h3>
-				<div v-for="card in assignedCardsDashboard.overdue" :key="card.id">
+				<div v-for="card in sortCards('overdue')" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h3>{{ t('deck', 'Today') }}</h3>
-				<div v-for="card in assignedCardsDashboard.today" :key="card.id">
+				<div v-for="card in sortCards('today')" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h3>{{ t('deck', 'Tomorrow') }}</h3>
-				<div v-for="card in assignedCardsDashboard.tomorrow" :key="card.id">
+				<div v-for="card in sortCards('tomorrow')" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h3>{{ t('deck', 'Next 7 days') }}</h3>
-				<div v-for="card in assignedCardsDashboard.nextSevenDays" :key="card.id">
+				<div v-for="card in sortCards('nextSevenDays')" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
 
 			<div class="dashboard-column">
 				<h3>{{ t('deck', 'Later') }}</h3>
-				<div v-for="card in assignedCardsDashboard.later" :key="card.id">
+				<div v-for="card in sortCards('later')" :key="card.id">
 					<CardItem :id="card.id" />
 				</div>
 			</div>
@@ -79,7 +79,6 @@
 </template>
 
 <script>
-
 import Controls from '../Controls.vue'
 import CardItem from '../cards/CardItem.vue'
 import { mapGetters } from 'vuex'
@@ -121,9 +120,7 @@ export default {
 				return ''
 			}
 		},
-		...mapGetters([
-			'assignedCardsDashboard',
-		]),
+		...mapGetters(['assignedCardsDashboard']),
 	},
 	watch: {
 		'$route.params.filter'() {
@@ -144,6 +141,18 @@ export default {
 				console.error(e)
 			}
 			this.loading = false
+		},
+		sortCards(when) {
+			const cards = this.assignedCardsDashboard[when]
+
+			if (!cards) return null
+
+			return cards.toSorted((current, next) => {
+				const currentDueDate = new Date(current.duedate)
+				const nextDueDate = new Date(next.duedate)
+
+				return currentDueDate - nextDueDate
+			})
 		},
 	},
 
