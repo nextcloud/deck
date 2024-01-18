@@ -315,7 +315,7 @@ export default {
 			filterVisible: false,
 			showArchived: false,
 			isAddStackVisible: false,
-			filter: { tags: [], users: [], due: '', unassigned: false, open: false, done: false},
+			filter: { tags: [], users: [], due: '', unassigned: false, open: false, done: false },
 			showAddCardModal: false,
 			defaultPageTitle: false,
 			isNotifyPushEnabled: isNotifyPushEnabled(),
@@ -339,7 +339,7 @@ export default {
 			}
 		},
 		isFilterActive() {
-			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '' || this.filter.open || this.filter.done;
+			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '' || this.filter.open || this.filter.done
 		},
 		labelsSorted() {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
@@ -433,7 +433,7 @@ export default {
 			}
 		},
 		clearFilter() {
-			const filterReset = { tags: [], users: [], due: '' ,open: false, done:false}
+			const filterReset = { tags: [], users: [], due: '', open: false, done: false }
 			this.$store.dispatch('setFilter', { ...filterReset })
 			this.filter = filterReset
 		},
