@@ -355,6 +355,8 @@ class CardService {
 		}
 		if ($done !== null) {
 			$card->setDone($done->getValue());
+		} else {
+			$card->setDone(null);
 		}
 
 
