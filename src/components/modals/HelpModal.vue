@@ -5,7 +5,7 @@
 		@close="$emit('close')">
 		<div class="help-modal">
 			<h2>{{ t('deck', 'Keyboard shortcuts') }}</h2>
-			<p>{{ t('deck', 'Speed up using Deck with simple shortcuts.') }}</p>
+			<p>{{ t('deck', 'Boost your productivity using Deck with keyboard shortcuts.') }}</p>
 
 			<h3>{{ t('deck', 'Board actions') }}</h3>
 			<table>
