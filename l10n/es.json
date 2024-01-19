@@ -67,7 +67,7 @@
     "{user} has commented on card {card}" : "{user} ha comentado en {card}",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Cambios en la <strong>app Deck</strong>",
-    "A <strong>board, list or card</strong> was changed" : "Un <strong>tablero, lista o tarjeta</strong> fue cambiada",
+    "A <strong>board, list or card</strong> was changed" : "Un <strong>tablero, lista o tarjeta</strong> fue cambiado/a",
     "A <strong>comment</strong> was created on a card" : "Un <strong>comentario</strong> ha sido creado en una tarjeta",
     "A <strong>card description</strong> has been changed" : "Una <strong>descripción de tarjeta</strong> ha sido cambiada",
     "Cards due today" : "Tarjetas que vencen hoy",
