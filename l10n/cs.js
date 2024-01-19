@@ -291,6 +291,7 @@ OC.L10N.register(
     "Clear card filters" : "Vyčistit filtry karty",
     "Show help dialog" : "Zobrazit dialog nápovědy",
     "Card actions" : "Akce ohledně karty",
+    "The following actions can be triggered on the currently highlighted card" : "Na právě zvýrazněné kartě je možné spustit následující akce",
     "Enter" : "Konec řádku",
     "Space" : "Mezera",
     "Open card details" : "Otevřít podrobnosti o kartě",
