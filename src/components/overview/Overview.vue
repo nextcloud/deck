@@ -145,14 +145,16 @@ export default {
 		sortCards(when) {
 			const cards = this.assignedCardsDashboard[when]
 
-			if (!cards) return null
+			if (!cards) {
+				return null
+			} else {
+				return cards.toSorted((current, next) => {
+					const currentDueDate = new Date(current.duedate)
+					const nextDueDate = new Date(next.duedate)
 
-			return cards.toSorted((current, next) => {
-				const currentDueDate = new Date(current.duedate)
-				const nextDueDate = new Date(next.duedate)
-
-				return currentDueDate - nextDueDate
-			})
+					return currentDueDate - nextDueDate
+				})
+			}
 		},
 	},
 
