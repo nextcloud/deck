@@ -278,7 +278,6 @@ OC.L10N.register(
     "Card deleted" : "Thẻ đã bị xóa",
     "seconds ago" : "vài giây trước",
     "Keyboard shortcuts" : "Phím tắt",
-    "Speed up using Deck with simple shortcuts." : "Tăng tốc bằng cách sử dụng Kế Hoạch với các phím tắt đơn giản.",
     "Board actions" : "Hành động cho Bảng",
     "Keyboard shortcut" : "Phím tắt bàn phím",
     "Action" : "Hành động",

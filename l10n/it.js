@@ -278,7 +278,6 @@ OC.L10N.register(
     "Card deleted" : "Scheda eliminata",
     "seconds ago" : "secondi fa",
     "Keyboard shortcuts" : "Scorciatoie da tastiera",
-    "Speed up using Deck with simple shortcuts." : "Velocizza l'uso di Deck con semplici scorciatoie.",
     "Board actions" : "Azioni della lavagna",
     "Keyboard shortcut" : "Scorciatoia da tastiera",
     "Action" : "Azione",

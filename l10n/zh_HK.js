@@ -278,7 +278,6 @@ OC.L10N.register(
     "Card deleted" : "卡片被刪除",
     "seconds ago" : "幾秒前",
     "Keyboard shortcuts" : "鍵盤快捷鍵",
-    "Speed up using Deck with simple shortcuts." : "使用簡單的快捷鍵加速使用 Deck。",
     "Board actions" : "面板操作",
     "Keyboard shortcut" : "鍵盤快捷鍵",
     "Action" : "操作",

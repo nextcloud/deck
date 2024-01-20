@@ -278,7 +278,6 @@ OC.L10N.register(
     "Card deleted" : "Targeta suprimida",
     "seconds ago" : "fa uns segons",
     "Keyboard shortcuts" : "Dreceres de teclat",
-    "Speed up using Deck with simple shortcuts." : "Accelera l'ús de Targetes amb dreceres senzilles.",
     "Board actions" : "Accions de Tauler",
     "Keyboard shortcut" : "Drecera de teclat",
     "Action" : "Acció",
