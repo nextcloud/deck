@@ -278,7 +278,6 @@ OC.L10N.register(
     "Card deleted" : "Txartela ezabatuta",
     "seconds ago" : "segundo lehenago",
     "Keyboard shortcuts" : "Teklatuaren lasterbideak",
-    "Speed up using Deck with simple shortcuts." : "Taulekiko ekintzak",
     "Keyboard shortcut" : "Teklatuko lasterbidea",
     "Action" : "Ekintza",
     "Shift" : "Shift",
