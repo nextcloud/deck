@@ -278,7 +278,6 @@ OC.L10N.register(
     "Card deleted" : "Kart silindi",
     "seconds ago" : "saniye önce",
     "Keyboard shortcuts" : "Kısayol tuşları",
-    "Speed up using Deck with simple shortcuts." : "Basit kısayol tuşları ile Tahtayı daha hızlı kullanabilirsiniz.",
     "Board actions" : "Pano işlemleri",
     "Keyboard shortcut" : "Kısayol tuşu",
     "Action" : "İşlem",

@@ -278,7 +278,6 @@ OC.L10N.register(
     "Card deleted" : "Tarxeta eliminada",
     "seconds ago" : "segundos atrás",
     "Keyboard shortcuts" : "Atallos de teclado",
-    "Speed up using Deck with simple shortcuts." : "Acelera o uso de Gabeta con atallos sinxelos.",
     "Board actions" : "Accións de taboleiro",
     "Keyboard shortcut" : "Atallo de teclado",
     "Action" : "Acción",

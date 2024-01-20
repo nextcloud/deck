@@ -278,7 +278,6 @@ OC.L10N.register(
     "Card deleted" : "Karta smazána",
     "seconds ago" : "před několika sekundami",
     "Keyboard shortcuts" : "Klávesové zkratky",
-    "Speed up using Deck with simple shortcuts." : "Zrychlete si používání Deck snadnými zkratkami.",
     "Board actions" : "Akce ohledně tabule",
     "Keyboard shortcut" : "Klávesová zkratka",
     "Action" : "Akce",
