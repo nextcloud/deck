@@ -278,6 +278,7 @@ OC.L10N.register(
     "Card deleted" : "Kortet har raderats",
     "seconds ago" : "sekunder sedan",
     "Keyboard shortcuts" : "Tangentbordsgenvägar",
+    "Boost your productivity using Deck with keyboard shortcuts." : "Öka din produktivitet genom att använda Deck med tangentbordsgenvägar.",
     "Board actions" : "Tavelåtgärder",
     "Keyboard shortcut" : "Tangentbordsgenvägar",
     "Action" : "Ågärd",
