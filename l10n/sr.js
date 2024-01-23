@@ -278,6 +278,7 @@ OC.L10N.register(
     "Card deleted" : "Картица обрисана",
     "seconds ago" : "пре неколико секунди",
     "Keyboard shortcuts" : "Пречице на тастатури",
+    "Boost your productivity using Deck with keyboard shortcuts." : "Унапредите своју продуктивност користећи Шпил са пречицама на тастатури.",
     "Board actions" : "Акције табле",
     "Keyboard shortcut" : "Пречица тастатуре",
     "Action" : "Радња",

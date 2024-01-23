@@ -278,6 +278,7 @@ OC.L10N.register(
     "Card deleted" : "Karte gelöscht",
     "seconds ago" : "Gerade eben",
     "Keyboard shortcuts" : "Tastaturkürzel",
+    "Boost your productivity using Deck with keyboard shortcuts." : "Erhöhe mit Tastaturkürzeln deine Produktivität in Deck.",
     "Board actions" : "Boardaktionen",
     "Keyboard shortcut" : "Tastaturkürzel",
     "Action" : "Aktion",
