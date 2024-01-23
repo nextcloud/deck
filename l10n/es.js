@@ -246,7 +246,7 @@ OC.L10N.register(
     "Assign a due date to this card…" : "Asignar una fecha de caducidad a esta tarjeta…",
     "Set a due date" : "Fijar una fecha límite",
     "Add due date" : "Añadir fecha de vencimiento",
-    "Choose a date" : "Elige una fecha",
+    "Choose a date" : "Elija una fecha",
     "Remove due date" : "Eliminar fecha límite",
     "Completed" : "Completado",
     "Due at:" : "Vence el:",
