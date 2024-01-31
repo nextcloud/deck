@@ -47,7 +47,7 @@
 		<NcActionButton v-if="canEdit"
 			icon="icon-external"
 			:close-after-click="true"
-			@click="modalShow=true">
+			@click="openCardMoveDialog">
 			{{ t('deck', 'Move card') }}
 		</NcActionButton>
 		<NcActionButton v-for="action in cardActions"
@@ -69,50 +69,23 @@
 			@click="deleteCard()">
 			{{ t('deck', 'Delete card') }}
 		</NcActionButton>
-		<NcModal v-if="modalShow" :title="t('deck', 'Move card to another board')" @close="modalShow=false">
-			<div class="modal__content">
-				<h3>{{ t('deck', 'Move card to another board') }}</h3>
-				<NcMultiselect v-model="selectedBoard"
-					:placeholder="t('deck', 'Select a board')"
-					:options="activeBoards"
-					:max-height="100"
-					label="title"
-					@select="loadStacksFromBoard" />
-				<NcMultiselect v-model="selectedStack"
-					:placeholder="t('deck', 'Select a list')"
-					:options="stacksFromBoard"
-					:max-height="100"
-					label="title">
-					<span slot="noOptions">
-						{{ t('deck', 'List is empty') }}
-					</span>
-				</NcMultiselect>
-
-				<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">
-					{{ t('deck', 'Move card') }}
-				</button>
-				<button @click="modalShow=false">
-					{{ t('deck', 'Cancel') }}
-				</button>
-			</div>
-		</NcModal>
 	</div>
 </template>
 <script>
-import { NcModal, NcActionButton, NcMultiselect } from '@nextcloud/vue'
+import { NcActionButton } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import CardBulletedIcon from 'vue-material-design-icons/CardBulleted.vue'
-import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showUndo } from '@nextcloud/dialogs'
 
 import '@nextcloud/dialogs/dist/index.css'
+import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'CardMenuEntries',
-	components: { NcActionButton, NcModal, NcMultiselect, ArchiveIcon, CardBulletedIcon },
+	components: { NcActionButton, ArchiveIcon, CardBulletedIcon },
 	props: {
 		card: {
 			type: Object,
@@ -153,23 +126,12 @@ export default {
 			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
 			return !!board?.permissions?.PERMISSION_EDIT
 		},
-		isBoardAndStackChoosen() {
-			if (this.selectedBoard === '' || this.selectedStack === '') {
-				return false
-			}
-			return true
-		},
 		isCurrentUserAssigned() {
 			return this.card.assignedUsers.find((item) => item.type === 0 && item.participant.uid === getCurrentUser()?.uid)
 		},
-		activeBoards() {
-			return this.$store.getters.boards.filter((item) => item.deletedAt === 0 && item.archived === false)
-		},
-
 		boardId() {
 			return this.card?.boardId ? this.card.boardId : Number(this.$route.params.id)
 		},
-
 		cardRichObject() {
 			return {
 				id: '' + this.card.id,
@@ -214,43 +176,9 @@ export default {
 				},
 			})
 		},
-		async moveCard() {
-			this.copiedCard = Object.assign({}, this.card)
-			this.copiedCard.stackId = this.selectedStack.id
-			this.$store.dispatch('moveCard', this.copiedCard)
-			if (parseInt(this.boardId) === parseInt(this.selectedStack.boardId)) {
-				await this.$store.commit('addNewCard', { ...this.copiedCard })
-			}
-			this.modalShow = false
-		},
-		async loadStacksFromBoard(board) {
-			try {
-				const url = generateUrl('/apps/deck/stacks/' + board.id)
-				const response = await axios.get(url)
-				this.stacksFromBoard = response.data
-			} catch (err) {
-				return err
-			}
+		openCardMoveDialog() {
+			emit('deck:card:show-move-dialog', this.card)
 		},
 	},
 }
 </script>
-
-<style lang="scss" scoped>
-	.modal__content {
-		width: 25vw;
-		min-width: 250px;
-		min-height: 120px;
-		text-align: center;
-		margin: 20px 20px 100px 20px;
-
-		.multiselect {
-			margin-bottom: 10px;
-		}
-	}
-
-	.modal__content button {
-		float: right;
-		margin-top: 50px;
-	}
-</style>
