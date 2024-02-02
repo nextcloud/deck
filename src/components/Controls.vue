@@ -228,7 +228,7 @@
 					</NcActionButton>
 				</NcActions>
 				<!-- FIXME: NcActionRouter currently doesn't work as an inline action -->
-				<NcActions>
+				<NcActions v-if="isFullApp">
 					<NcActionButton icon="icon-menu-sidebar"
 						:aria-label="t('deck', 'Open details')"
 						:name="t('deck', 'Details')"
@@ -306,6 +306,7 @@ export default {
 			'canManage',
 		]),
 		...mapState({
+			isFullApp: state => state.isFullApp,
 			compactMode: state => state.compactMode,
 			showCardCover: state => state.showCardCover,
 			searchQuery: state => state.searchQuery,
@@ -412,6 +413,9 @@ export default {
 			this.showAddCardModal = false
 		},
 		setPageTitle(title) {
+			if (!this.isFullApp) {
+				return
+			}
 			if (this.defaultPageTitle === false) {
 				this.defaultPageTitle = window.document.title
 				if (this.defaultPageTitle.indexOf(' - Deck - ') !== -1) {

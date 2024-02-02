@@ -20,7 +20,10 @@
   -->
 
 <template>
-	<div class="deck-board-reference">
+	<div v-if="interactive" class="deck-board-reference-interactive">
+		<Board :id="board.id" />
+	</div>
+	<div v-else class="deck-board-reference">
 		<div class="line">
 			<DeckIcon :size="20" class="title-icon" />
 			<strong>
@@ -41,19 +44,33 @@
 </template>
 
 <script>
+import Board from '../components/board/Board.vue'
 import DeckIcon from '../components/icons/DeckIcon.vue'
+import { BoardApi } from './../services/BoardApi.js'
+import store from './../store/main.js'
 
 import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
 
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 
+const boardApi = new BoardApi()
+
 export default {
 	name: 'BoardReferenceWidget',
+
+	store,
 
 	components: {
 		DeckIcon,
 		NcUserBubble,
+		Board,
+	},
+
+	provide() {
+		return {
+			boardApi,
+		}
 	},
 
 	props: {
@@ -68,6 +85,10 @@ export default {
 		accessible: {
 			type: Boolean,
 			default: true,
+		},
+		interactive: {
+			type: Boolean,
+			default: false,
 		},
 	},
 
@@ -92,8 +113,10 @@ export default {
 		},
 	},
 
-	methods: {
+	created() {
+		this.$store.commit('setFullApp', false)
 	},
+
 }
 </script>
 
@@ -123,6 +146,22 @@ export default {
 			margin-right: 8px;
 		}
 	}
+}
 
+.deck-board-reference-interactive {
+	width: 100%;
+	height: 100%;
+	min-height: min(200px, 100vh);
+	&:deep(.controls) {
+		padding-left: 12px;
+	}
+	&:deep(.board) {
+		padding-left: 0;
+	}
+	&:deep(*) {
+		-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+		-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+		box-sizing: border-box;         /* Opera/IE 8+ */
+	}
 }
 </style>

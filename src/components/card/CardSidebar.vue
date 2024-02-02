@@ -32,10 +32,10 @@
 		@submit-title="handleSubmitTitle"
 		@close="closeSidebar">
 		<template #secondary-actions>
-			<NcActionButton v-if="cardDetailsInModal" icon="icon-menu-sidebar" @click.stop="closeModal()">
+			<NcActionButton v-if="cardDetailsInModal && isFullApp" icon="icon-menu-sidebar" @click.stop="closeModal()">
 				{{ t('deck', 'Open in sidebar view') }}
 			</NcActionButton>
-			<NcActionButton v-else icon="icon-external" @click.stop="showModal()">
+			<NcActionButton v-else-if="isFullApp" icon="icon-external" @click.stop="showModal()">
 				{{ t('deck', 'Open in bigger view') }}
 			</NcActionButton>
 
@@ -144,6 +144,7 @@ export default {
 	},
 	computed: {
 		...mapState({
+			isFullApp: state => state.isFullApp,
 			currentBoard: state => state.currentBoard,
 		}),
 		...mapGetters(['canEdit', 'assignables', 'cardActions', 'stackById']),
@@ -188,7 +189,8 @@ export default {
 		},
 
 		closeSidebar() {
-			this.$router.push({ name: 'board' })
+			this.$router?.push({ name: 'board' })
+			this.$emit('close')
 		},
 
 		showModal() {
