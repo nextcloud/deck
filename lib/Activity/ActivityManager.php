@@ -556,9 +556,9 @@ class ActivityManager {
 		];
 	}
 
-	public function canSeeCardActivity(int $cardId): bool {
+	public function canSeeCardActivity(int $cardId, string $userId): bool {
 		try {
-			$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
+			$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ, $userId);
 			$card = $this->cardMapper->find($cardId);
 			return $card->getDeletedAt() === 0;
 		} catch (NoPermissionException $e) {
@@ -566,9 +566,9 @@ class ActivityManager {
 		}
 	}
 
-	public function canSeeBoardActivity(int $boardId): bool {
+	public function canSeeBoardActivity(int $boardId, string $userId): bool {
 		try {
-			$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
+			$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ, $userId);
 			$board = $this->boardMapper->find($boardId);
 			return $board->getDeletedAt() === 0;
 		} catch (NoPermissionException $e) {
