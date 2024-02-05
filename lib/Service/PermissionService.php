@@ -108,9 +108,15 @@ class PermissionService {
 			return $cached;
 		}
 
-		$board = $this->getBoard($boardId);
-		$owner = $this->userIsBoardOwner($boardId, $userId);
-		$acls = $board->getDeletedAt() === 0 ? $this->aclMapper->findAll($boardId) : [];
+		try {
+			$board = $this->getBoard($boardId);
+			$owner = $this->userIsBoardOwner($boardId, $userId);
+			$acls = $board->getDeletedAt() === 0 ? $this->aclMapper->findAll($boardId) : [];
+		} catch (MultipleObjectsReturnedException|DoesNotExistException $e) {
+			$owner = false;
+			$acls = [];
+		}
+		
 		$permissions = [
 			Acl::PERMISSION_READ => $owner || $this->userCan($acls, Acl::PERMISSION_READ, $userId),
 			Acl::PERMISSION_EDIT => $owner || $this->userCan($acls, Acl::PERMISSION_EDIT, $userId),
