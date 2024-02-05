@@ -77,7 +77,7 @@ class DeckProvider implements IProvider {
 	 * @throws \InvalidArgumentException Should be thrown if your provider does not know this event
 	 * @since 11.0.0
 	 */
-	public function parse($language, IEvent $event, IEvent $previousEvent = null): IEvent {
+	public function parse($language, IEvent $event, ?IEvent $previousEvent = null): IEvent {
 		if ($event->getApp() !== 'deck') {
 			throw new \InvalidArgumentException();
 		}

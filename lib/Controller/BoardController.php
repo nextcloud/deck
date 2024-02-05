@@ -55,7 +55,7 @@ class BoardController extends ApiController {
 	 * @param $boardId
 	 * @return \OCP\AppFramework\Db\Entity
 	 */
-	public function read($boardId) {
+	public function read(int $boardId) {
 		return $this->boardService->find($boardId);
 	}
 

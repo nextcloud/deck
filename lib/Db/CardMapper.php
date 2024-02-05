@@ -313,7 +313,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function search(array $boardIds, SearchQuery $query, int $limit = null, int $offset = null): array {
+	public function search(array $boardIds, SearchQuery $query, ?int $limit = null, ?int $offset = null): array {
 		$qb = $this->queryCardsByBoards($boardIds);
 		$this->extendQueryByFilter($qb, $query);
 
@@ -356,7 +356,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return $entities;
 	}
 
-	public function searchComments(array $boardIds, SearchQuery $query, int $limit = null, int $offset = null): array {
+	public function searchComments(array $boardIds, SearchQuery $query, ?int $limit = null, ?int $offset = null): array {
 		if (count($query->getTextTokens()) === 0) {
 			return [];
 		}
@@ -614,7 +614,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		});
 	}
 
-	public function transferOwnership(string $ownerId, string $newOwnerId, int $boardId = null): void {
+	public function transferOwnership(string $ownerId, string $newOwnerId, ?int $boardId = null): void {
 		$params = [
 			'owner' => $ownerId,
 			'newOwner' => $newOwnerId

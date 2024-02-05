@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Service;
 
-use \Test\TestCase;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\BoardMapper;
@@ -38,6 +37,7 @@ use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Validators\StackServiceValidator;
 use OCP\EventDispatcher\IEventDispatcher;
 use Psr\Log\LoggerInterface;
+use Test\TestCase;
 
 /**
  * Class StackServiceTest

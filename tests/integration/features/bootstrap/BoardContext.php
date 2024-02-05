@@ -83,7 +83,7 @@ class BoardContext implements Context {
 	/**
 	 * @When shares the board with user :user
 	 */
-	public function sharesTheBoardWithUser($user, TableNode $permissions = null) {
+	public function sharesTheBoardWithUser($user, ?TableNode $permissions = null) {
 		$defaults = [
 			'permissionEdit' => '0',
 			'permissionShare' => '0',
@@ -103,7 +103,7 @@ class BoardContext implements Context {
 	/**
 	 * @When shares the board with group :group
 	 */
-	public function sharesTheBoardWithGroup($group, TableNode $permissions = null) {
+	public function sharesTheBoardWithGroup($group, ?TableNode $permissions = null) {
 		$defaults = [
 			'permissionEdit' => '0',
 			'permissionShare' => '0',

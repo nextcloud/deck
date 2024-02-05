@@ -31,7 +31,7 @@ use OCA\Deck\Db\Card;
 class CardUpdatedEvent extends ACardEvent {
 	private $cardBefore;
 
-	public function __construct(Card $card, Card $before = null) {
+	public function __construct(Card $card, ?Card $before = null) {
 		parent::__construct($card);
 		$this->cardBefore = $before;
 	}

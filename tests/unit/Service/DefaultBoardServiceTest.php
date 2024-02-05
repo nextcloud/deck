@@ -23,13 +23,13 @@
 
 namespace OCA\Deck\Service;
 
-use \Test\TestCase;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\Stack;
 use OCP\IConfig;
 use OCP\IL10N;
+use Test\TestCase;
 
 class DefaultBoardServiceTest extends TestCase {
 
