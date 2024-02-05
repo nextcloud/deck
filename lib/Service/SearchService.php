@@ -75,7 +75,7 @@ class SearchService {
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	public function searchCards(string $term, int $limit = null, ?int $cursor = null): array {
+	public function searchCards(string $term, ?int $limit = null, ?int $cursor = null): array {
 		$boards = $this->boardService->getUserBoards();
 		$boardIds = array_map(static function (Board $board) {
 			return $board->getId();

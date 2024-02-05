@@ -23,7 +23,6 @@
 
 namespace OCA\Deck\Service;
 
-use \Test\TestCase;
 use OC\L10N\L10N;
 use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\Acl;
@@ -51,6 +50,7 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Test\TestCase;
 
 class BoardServiceTest extends TestCase {
 

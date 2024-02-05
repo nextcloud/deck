@@ -68,7 +68,7 @@ class SessionController extends OCSController {
 
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function close(int $boardId, string $token = null): DataResponse {
+	public function close(int $boardId, ?string $token = null): DataResponse {
 		if ($token === null) {
 			return new DataResponse();
 		}

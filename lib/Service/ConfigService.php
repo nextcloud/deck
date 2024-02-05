@@ -110,7 +110,7 @@ class ConfigService {
 		return false;
 	}
 
-	public function isCalendarEnabled(int $boardId = null): bool {
+	public function isCalendarEnabled(?int $boardId = null): bool {
 		if ($this->getUserId() === null) {
 			return false;
 		}
@@ -124,7 +124,7 @@ class ConfigService {
 		return (bool)$this->config->getUserValue($this->getUserId(), Application::APP_ID, 'board:' . $boardId . ':calendar', $defaultState);
 	}
 
-	public function isCardDetailsInModal(int $boardId = null): bool {
+	public function isCardDetailsInModal(?int $boardId = null): bool {
 		if ($this->getUserId() === null) {
 			return false;
 		}
@@ -223,7 +223,7 @@ class ConfigService {
 		return array_filter($groups);
 	}
 
-	public function getAttachmentFolder(string $userId = null): string {
+	public function getAttachmentFolder(?string $userId = null): string {
 		if ($userId === null && $this->getUserId() === null) {
 			throw new NoPermissionException('Must be logged in get the attachment folder');
 		}
