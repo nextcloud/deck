@@ -23,7 +23,7 @@
 <template>
 	<NcAppSidebar v-if="board != null"
 		:actions="[]"
-		:title="board.title"
+		:name="board.title"
 		@close="closeSidebar">
 		<NcAppSidebarTab id="sharing"
 			:order="0"

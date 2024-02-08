@@ -38,7 +38,10 @@ describe('Board', function() {
 			cy.get('.board-title').contains(board.title)
 
 			cy.shareBoardWithUi(recipient.userId)
+
+			cy.intercept({ method: 'PUT', url: '**/apps/deck/boards/*/acl/*' }).as('setAcl')
 			cy.get(`[data-cy="acl-participant:${recipient.userId}"]`).find('[data-cy="action:permission-edit"]').click()
+			cy.wait('@setAcl')
 
 			cy.login(recipient)
 			cy.visit(`/apps/deck/#/board/${boardId}`)

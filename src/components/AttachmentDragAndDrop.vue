@@ -41,7 +41,7 @@
 			</div>
 		</transition>
 
-		<NcModal v-if="modalShow" :title="t('deck', 'File already exists')" @close="modalShow=false">
+		<NcModal v-if="modalShow" :name="t('deck', 'File already exists')" @close="modalShow=false">
 			<div class="modal__content">
 				<h2>{{ t('deck', 'File already exists') }}</h2>
 				<p>

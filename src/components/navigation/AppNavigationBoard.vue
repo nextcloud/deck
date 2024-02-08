@@ -21,7 +21,7 @@
   -->
 <template>
 	<NcAppNavigationItem v-if="!editing"
-		:title="!deleted ? board.title : undoText"
+		:name="!deleted ? board.title : undoText"
 		:loading="loading"
 		:to="routeTo"
 		:undo="deleted"
@@ -29,10 +29,9 @@
 		@undo="unDelete">
 		<NcAppNavigationIconBullet slot="icon" :color="board.color" />
 
-		<NcAppNavigationCounter v-if="board.acl.length"
-			slot="counter"
-			class="icon-shared"
-			style="opacity: 0.5" />
+		<template #counter>
+			<AccountIcon v-if="board.acl.length > 0" />
+		</template>
 
 		<template v-if="!deleted" slot="actions">
 			<template v-if="!isDueSubmenuActive">
@@ -113,7 +112,7 @@
 				</NcActionButton>
 			</template>
 			<NcActionButton v-else-if="!board.archived && board.acl.length > 0"
-				:title="t('deck', 'Due date reminders')"
+				:name="t('deck', 'Due date reminders')"
 				:icon="dueDateReminderIcon"
 				@click="isDueSubmenuActive=true">
 				{{ dueDateReminderText }}
@@ -144,23 +143,21 @@
 </template>
 
 <script>
-import { NcAppNavigationIconBullet, NcAppNavigationCounter, NcAppNavigationItem, NcColorPicker, NcActions, NcActionButton } from '@nextcloud/vue'
+import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcActions, NcActionButton } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
-import { loadState } from '@nextcloud/initial-state'
-
-const canCreateState = loadState('deck', 'canCreate')
+import AccountIcon from 'vue-material-design-icons/Account.vue'
 
 export default {
 	name: 'AppNavigationBoard',
 	components: {
 		NcAppNavigationIconBullet,
-		NcAppNavigationCounter,
 		NcAppNavigationItem,
 		NcColorPicker,
 		NcActions,
 		NcActionButton,
+		AccountIcon,
 		ArchiveIcon,
 		CloneIcon,
 	},

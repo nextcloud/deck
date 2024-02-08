@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<NcMultiselect v-if="canShare"
+		<NcSelect v-if="canShare"
 			v-model="addAcl"
-			:placeholder="t('deck', 'Share board with a user, group or circle …')"
+			:input-label="t('deck', 'Share board with a user, group or team …')"
 			:options="formatedSharees"
 			:user-select="true"
 			label="displayName"
@@ -11,14 +11,14 @@
 			track-by="multiselectKey"
 			:internal-search="false"
 			@input="clickAddAcl"
-			@search-change="asyncFind">
+			@search="(search, loading) => asyncFind(search, loading)">
 			<template #noOptions>
 				{{ isSearching ? t('deck', 'Searching for users, groups and circles …') : t('deck', 'No participants found') }}
 			</template>
 			<template #noResult>
 				{{ isSearching ? t('deck', 'Searching for users, groups and circles …') : t('deck', 'No participants found') }}
 			</template>
-		</NcMultiselect>
+		</NcSelect>
 
 		<ul id="shareWithList"
 			class="shareWithList">
@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { NcAvatar, NcMultiselect, NcActions, NcActionButton, NcActionCheckbox, NcRelatedResourcesPanel } from '@nextcloud/vue'
+import { NcAvatar, NcSelect, NcActions, NcActionButton, NcActionCheckbox, NcRelatedResourcesPanel } from '@nextcloud/vue'
 import { CollectionList } from 'nextcloud-vue-collections'
 import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -103,7 +103,7 @@ export default {
 		NcActions,
 		NcActionButton,
 		NcActionCheckbox,
-		NcMultiselect,
+		NcSelect,
 		CollectionList,
 		NcRelatedResourcesPanel,
 	},
@@ -170,7 +170,7 @@ export default {
 		},
 	},
 	mounted() {
-		this.asyncFind('')
+		this.asyncFind('', () => {})
 	},
 	methods: {
 		debouncedFind: debounce(async function(query) {
@@ -178,8 +178,10 @@ export default {
 			await this.$store.dispatch('loadSharees', query)
 			this.isSearching = false
 		}, 300),
-		async asyncFind(query) {
+		async asyncFind(query, loading) {
+			loading(true)
 			await this.debouncedFind(query)
+			loading(false)
 		},
 		async clickAddAcl() {
 			this.addAclForAPI = {

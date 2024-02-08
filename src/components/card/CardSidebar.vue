@@ -23,7 +23,7 @@
 <template>
 	<NcAppSidebar v-if="currentBoard && currentCard"
 		:active="tabId"
-		:title="title"
+		:name="title"
 		:subtitle="subtitle"
 		:subtitle-tooltip="subtitleTooltip"
 		:title-editable="titleEditable"
