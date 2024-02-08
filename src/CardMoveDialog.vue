@@ -2,21 +2,20 @@
 	<NcModal v-if="modalShow" :title="t('deck', 'Move card to another board')" @close="modalShow=false">
 		<div class="modal__content">
 			<h3>{{ t('deck', 'Move card to another board') }}</h3>
-			<NcMultiselect v-model="selectedBoard"
+			<NcSelect v-model="selectedBoard"
+				:input-label="t('deck', 'Select a board')"
 				:placeholder="t('deck', 'Select a board')"
 				:options="activeBoards"
 				:max-height="100"
 				label="title"
-				@select="loadStacksFromBoard" />
-			<NcMultiselect v-model="selectedStack"
-				:placeholder="t('deck', 'Select a list')"
+				@option:selected="loadStacksFromBoard" />
+			<NcSelect v-model="selectedStack"
+				:disabled="stacksFromBoard.length === 0"
+				:placeholder="stacksFromBoard.length === 0 ? t('deck', 'No lists available') : t('deck', 'Select a list')"
+				:input-label="t('deck', 'Select a list')"
 				:options="stacksFromBoard"
 				:max-height="100"
-				label="title">
-				<span slot="noOptions">
-					{{ t('deck', 'List is empty') }}
-				</span>
-			</NcMultiselect>
+				label="title" />
 
 			<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">
 				{{ t('deck', 'Move card') }}
@@ -29,14 +28,14 @@
 </template>
 
 <script>
-import { NcModal, NcMultiselect } from '@nextcloud/vue'
+import { NcModal, NcSelect } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 export default {
 	name: 'CardMoveDialog',
-	components: { NcModal, NcMultiselect },
+	components: { NcModal, NcSelect },
 	data() {
 		return {
 			card: null,
@@ -92,11 +91,15 @@ export default {
 	width: 25vw;
 	min-width: 250px;
 	min-height: 120px;
-	text-align: center;
 	margin: 20px 20px 100px 20px;
 
-	.multiselect {
-		margin-bottom: 10px;
+	h3 {
+		font-weight: bold;
+		text-align: center;
+	}
+
+	.select {
+		margin-bottom: 12px;
 	}
 }
 

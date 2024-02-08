@@ -3,19 +3,19 @@
 		<div class="selector-wrapper--icon">
 			<AccountMultiple :size="20" />
 		</div>
-		<NcMultiselect v-if="canEdit"
+		<NcSelect v-if="canEdit"
 			v-model="assignedUsers"
 			class="selector-wrapper--selector"
 			:disabled="assignables.length === 0"
 			:multiple="true"
 			:options="formatedAssignables"
 			:user-select="true"
-			:auto-limit="false"
-			:placeholder="t('deck', 'Assign a user to this card…')"
+			:aria-label-combobox="t('deck', 'Assign a user to this card…')"
+			:placeholder="t('deck', 'Select a user to assign to this card…')"
 			label="displayname"
 			track-by="multiselectKey"
-			@select="onSelect"
-			@remove="onRemove">
+			@option:selected="onSelect"
+			@option:deselected="onRemove">
 			<template #tag="scope">
 				<div class="avatarlist--inline">
 					<NcAvatar :user="scope.option.uid"
@@ -25,7 +25,7 @@
 						:disable-menu="true" />
 				</div>
 			</template>
-		</NcMultiselect>
+		</NcSelect>
 		<div v-else class="avatar-list--readonly">
 			<NcAvatar v-for="option in assignedUsers"
 				:key="option.primaryKey"
@@ -39,14 +39,14 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { NcAvatar, NcMultiselect } from '@nextcloud/vue'
+import { NcAvatar, NcSelect } from '@nextcloud/vue'
 import AccountMultiple from 'vue-material-design-icons/AccountMultiple.vue'
 
 export default defineComponent({
 	name: 'AssignmentSelector',
 	components: {
 		AccountMultiple,
-		NcMultiselect,
+		NcSelect,
 		NcAvatar,
 	},
 	props: {
@@ -117,11 +117,12 @@ export default defineComponent({
 				this.assignedUsers = []
 			}
 		},
-		onSelect(user) {
-			this.$emit('select', user)
+		onSelect(options) {
+			const addition = options.filter((item) => !this.card.assignedUsers.find((user) => user.participant.primaryKey === item.primaryKey))
+			this.$emit('select', addition[0])
 		},
-		onRemove(user) {
-			this.$emit('remove', user)
+		onRemove(removed) {
+			this.$emit('remove', removed)
 		},
 	},
 })
