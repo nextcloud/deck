@@ -250,6 +250,7 @@ OC.L10N.register(
     "Card details" : "Kort-detaljer",
     "Assign to me" : "Tildel meg",
     "Unassign myself" : "Fjern meg fra tildeling",
+    "Mark as done" : "Marker som fullført",
     "Move card" : "Flytt kort",
     "Delete card" : "Slett kort",
     "Move card to another board" : "Flytt kort til annen tavle",
