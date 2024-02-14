@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.12.2
+
+### Fixed
+
+- fix(done): Mark card as undone when updating card [#5492](https://github.com/nextcloud/deck/pull/5492)
+- fix(activity): Fix permission checks when rendering activities in bac… @backportbot[bot] [#5543](https://github.com/nextcloud/deck/pull/5543)
+- fix(PermissionService#getPermissions): Catch exceptions from getBoard method @backportbot[bot] [#5546](https://github.com/nextcloud/deck/pull/5546)
+- fix: Safeguard sync requests to hopefully not spam then server @backportbot[bot] [#5593](https://github.com/nextcloud/deck/pull/5593)
+- fix: card move dialog auto close @backportbot[bot] [#5596](https://github.com/nextcloud/deck/pull/5596)
+
+### Other
+
+- fix(i18n): Improved wording [#5497](https://github.com/nextcloud/deck/pull/5497)
+
 ## 1.12.1
 
 ### Fixed
