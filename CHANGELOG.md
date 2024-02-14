@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.11.4
+
+### Fixed
+
+- fix(PermissionService#getPermissions): Catch exceptions from getBoard method @backportbot[bot] [#5547](https://github.com/nextcloud/deck/pull/5547)
+- fix(activity): Fix permission checks when rendering activities in bac… @backportbot[bot] [#5544](https://github.com/nextcloud/deck/pull/5544)
+
 ## 1.11.3
 
 ### Fixed
