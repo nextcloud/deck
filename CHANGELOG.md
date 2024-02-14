@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.8.8
+
+### Fixed
+
+- fix: Pass user id along to properly check permissions in background jobs @backportbot[bot] [#5595](https://github.com/nextcloud/deck/pull/5595)
+
 ## 1.8.7
 
 ### Fixed
