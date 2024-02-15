@@ -20,6 +20,7 @@ OC.L10N.register(
     "Members" : "Miembros",
     "Download" : "Baxar",
     "Comments" : "Comentarios",
+    "Modified" : "Modificóse",
     "Save" : "Guardar",
     "Update" : "Anovar",
     "Created:" : "Creóse'l",
