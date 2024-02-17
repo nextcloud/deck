@@ -27,6 +27,8 @@ const SESSION_INTERVAL = 90 // in seconds
 
 let hasPush = false
 
+let syncRunning = false
+
 /**
  * used to verify, whether an event is originated by ourselves
  *
@@ -103,12 +105,24 @@ export function createSession(boardId) {
 			create()
 			return
 		}
+
+		if (syncRunning) {
+			return
+		}
+
 		try {
+			syncRunning = true
 			await sessionApi.syncSession(boardId, await tokenPromise)
 		} catch (err) {
-			// session probably expired, let's
-			// create a fresh session
-			create()
+			if (err.response.status === 404) {
+				// session probably expired, let's
+				// create a fresh session
+				create()
+			} else {
+				console.error('Failed to sync deck session', err)
+			}
+		} finally {
+			syncRunning = false
 		}
 	}
 
@@ -134,6 +148,7 @@ export function createSession(boardId) {
 			store.dispatch('refreshBoard', store.state.currentBoard?.id)
 
 			// restart session refresh interval
+			clearInterval(interval)
 			interval = setInterval(ensureSession, SESSION_INTERVAL * 1000)
 		}
 	}
