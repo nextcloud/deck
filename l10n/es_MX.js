@@ -29,6 +29,7 @@ OC.L10N.register(
     "Filter by tag" : "Filtrar por etiqueta",
     "Hide archived cards" : "Ocultar tarjetas archivadas",
     "Show archived cards" : "Mostrar tarjetas archivadas",
+    "Open details" : "Abrir detalles",
     "Details" : "Detalles",
     "Sharing" : "Compartiendo",
     "Tags" : "Etiquetas",
