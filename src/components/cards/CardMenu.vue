@@ -127,6 +127,7 @@ export default {
 			'isArchived',
 			'boards',
 			'cardActions',
+			'stackById',
 		]),
 		...mapState({
 			showArchived: state => state.showArchived,
@@ -154,6 +155,18 @@ export default {
 
 		boardId() {
 			return this.card?.boardId ? this.card.boardId : this.$route.params.id
+		},
+		currentCard() {
+			return this.$store.getters.cardById(this.card.id)
+		},
+		cardRichObject() {
+			return {
+				id: '' + this.currentCard.id,
+				name: this.currentCard.title,
+				boardname: this.currentBoard.title,
+				stackname: this.stackById(this.currentCard.stackId)?.title,
+				link: window.location.protocol + '//' + window.location.host + generateUrl('/apps/deck/') + `#/board/${this.currentBoard.id}/card/${this.currentCard.id}`,
+			}
 		},
 	},
 	methods: {
