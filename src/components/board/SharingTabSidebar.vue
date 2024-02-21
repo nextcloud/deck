@@ -2,7 +2,7 @@
 	<div>
 		<NcMultiselect v-if="canShare"
 			v-model="addAcl"
-			:placeholder="t('deck', 'Share board with a user, group or circle …')"
+			:placeholder="t('deck', 'Share board with a user, group or team …')"
 			:options="formatedSharees"
 			:user-select="true"
 			label="displayName"
@@ -13,10 +13,10 @@
 			@input="clickAddAcl"
 			@search-change="asyncFind">
 			<template #noOptions>
-				{{ isSearching ? t('deck', 'Searching for users, groups and circles …') : t('deck', 'No participants found') }}
+				{{ isSearching ? t('deck', 'Searching for users, groups and teams …') : t('deck', 'No participants found') }}
 			</template>
 			<template #noResult>
-				{{ isSearching ? t('deck', 'Searching for users, groups and circles …') : t('deck', 'No participants found') }}
+				{{ isSearching ? t('deck', 'Searching for users, groups and teams …') : t('deck', 'No participants found') }}
 			</template>
 		</NcMultiselect>
 
@@ -38,7 +38,7 @@
 				<span class="has-tooltip username">
 					{{ acl.participant.displayname }}
 					<span v-if="acl.type===1">{{ t('deck', '(Group)') }}</span>
-					<span v-if="acl.type===7">{{ t('deck', '(Circle)') }}</span>
+					<span v-if="acl.type===7">{{ t('deck', '(Team)') }}</span>
 				</span>
 
 				<NcActionCheckbox v-if="!(isCurrentUser(acl.participant.uid) && acl.type === 0) && (canManage || (canEdit && canShare))"
