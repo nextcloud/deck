@@ -43,7 +43,7 @@
 				<NcAvatar v-if="user.type === 7"
 					:user="user.participant.uid"
 					:display-name="user.participant.displayname"
-					:tooltip-message="user.participant.displayname + ' ' + t('deck', '(Circle)')"
+					:tooltip-message="user.participant.displayname + ' ' + t('deck', '(Team)')"
 					:is-no-user="true"
 					:disable-="true"
 					:size="32" />
