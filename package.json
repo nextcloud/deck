@@ -34,7 +34,7 @@
     "@babel/runtime": "^7.23.9",
     "@nextcloud/auth": "^2.2.1",
     "@nextcloud/axios": "^2.4.0",
-    "@nextcloud/dialogs": "^4.2.5",
+    "@nextcloud/dialogs": "^4.2.6",
     "@nextcloud/event-bus": "^3.1.0",
     "@nextcloud/files": "^3.1.0",
     "@nextcloud/initial-state": "^2.1.0",
