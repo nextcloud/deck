@@ -2,6 +2,7 @@ OC.L10N.register(
     "deck",
     {
     "Load more" : "Cargar más",
+    "copy" : "copia",
     "The file was uploaded" : "Xubióse'l ficheru",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "El ficheru xubíu supera la direutiva «upload_max_filesize» del ficheru php.ini",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "El ficheru xubíu supera la direutiva «MAX_FILE_SIZE» que s'especificó nel formulariu HTML",
@@ -37,6 +38,7 @@ OC.L10N.register(
     "No notifications" : "Nun hai nengún avisu",
     "An error occurred" : "Prodúxose un error",
     "Today" : "Güei",
-    "Tomorrow" : "Mañana"
+    "Tomorrow" : "Mañana",
+    "Close" : "Zarrar"
 },
 "nplurals=2; plural=(n != 1);");
