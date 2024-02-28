@@ -208,6 +208,7 @@ OC.L10N.register(
     "title and color value must be provided" : "Le titre et la couleur doivent être renseignés",
     "Board name" : "Nom du tableau",
     "Members" : "Membres",
+    "Assign to users/groups/team" : "Attribuer à des utilisateurs / groupes / équipes",
     "Assign a user to this card…" : "Affecter cette carte à un utilisateur…",
     "Upload new files" : "Téléverser de nouveaux fichiers",
     "Share from Files" : "Choisir depuis Fichiers",

@@ -12,15 +12,18 @@ OC.L10N.register(
     "A PHP extension stopped the file upload" : "Una estensión PHP paró la xuba de ficheros",
     "Cancel" : "Encaboxar",
     "File already exists" : "El ficheru yá esiste",
+    "Open details" : "Abrir los detalles",
     "Details" : "Detalles",
     "Sharing" : "Comparticiñon",
     "Tags" : "Etiquetes",
     "Activity" : "Actividá",
     "Undo" : "Desfacer",
     "Delete" : "Desaniciar",
+    "Transfer" : "Tresferir",
     "Edit" : "Editar",
     "Members" : "Miembros",
     "Download" : "Baxar",
+    "Invalid path selected" : "Seleicionóse un camín inválidu",
     "Comments" : "Comentarios",
     "Modified" : "Modificóse",
     "Save" : "Guardar",
@@ -39,6 +42,7 @@ OC.L10N.register(
     "An error occurred" : "Prodúxose un error",
     "Today" : "Güei",
     "Tomorrow" : "Mañana",
-    "Close" : "Zarrar"
+    "Close" : "Zarrar",
+    "Share" : "Compartir"
 },
 "nplurals=2; plural=(n != 1);");
