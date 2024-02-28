@@ -23,6 +23,9 @@
 
 namespace OCA\Deck\Db;
 
+/**
+ * @method getTitle(): string
+ */
 class Label extends RelationalEntity {
 	protected $title;
 	protected $color;

@@ -104,8 +104,6 @@ class AssignmentService {
 		$this->changeHelper = $changeHelper;
 		$this->activityManager = $activityManager;
 		$this->eventDispatcher = $eventDispatcher;
-
-		$this->assignmentServiceValidator->check(compact('userId'));
 		$this->currentUser = $userId;
 	}
 
