@@ -68,7 +68,7 @@
 					tag="ul"
 					class="labels"
 					@click.stop="openCard">
-					<li v-for="label in labelsSorted" :key="label.id" :style="labelStyle(label)">
+					<li v-for="label in labelsSorted" :key="label?.id ?? label?.title" :style="labelStyle(label)">
 						<span @click.stop="applyLabelFilter(label)">{{ label.title }}</span>
 					</li>
 				</transition-group>

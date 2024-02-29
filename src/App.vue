@@ -200,11 +200,13 @@ export default {
 		background-image: url('../img/color_picker.svg');
 	}
 
-	.multiselect {
+	.v-select {
 		width: 100%;
 	}
 
 	.modal__card {
+		width: 100%;
+		min-width: 100%;
 		height: 100vh;
 		max-height: calc(100vh - 120px);
 		overflow: auto;

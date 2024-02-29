@@ -21,7 +21,7 @@
   -->
 <template>
 	<NcAppNavigationItem v-if="boards.length > 0"
-		:title="text"
+		:name="text"
 		:to="to"
 		:exact="true"
 		:allow-collapse="collapsible"
