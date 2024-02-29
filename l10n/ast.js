@@ -1,6 +1,7 @@
 OC.L10N.register(
     "deck",
     {
+    "Deck" : "Tarxeteru",
     "Load more" : "Cargar más",
     "copy" : "copia",
     "The file was uploaded" : "Xubióse'l ficheru",
@@ -18,6 +19,7 @@ OC.L10N.register(
     "Tags" : "Etiquetes",
     "Activity" : "Actividá",
     "Undo" : "Desfacer",
+    "Owner" : "Propietariu",
     "Delete" : "Desaniciar",
     "Transfer" : "Tresferir",
     "Edit" : "Editar",
