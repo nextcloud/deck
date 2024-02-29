@@ -15,40 +15,40 @@
 					<div class="selector-wrapper--icon">
 						<DeckIcon :size="20" />
 					</div>
-					<NcMultiselect v-model="selectedBoard"
+					<NcSelect v-model="selectedBoard"
 						:placeholder="t('deck', 'Select a board')"
 						:options="boards"
 						:disabled="loading"
 						label="title"
 						class="selector-wrapper--selector multiselect-board"
-						@select="onSelectBoard">
-						<template slot="singleLabel" slot-scope="props">
+						@option:selected="onSelectBoard">
+						<template #selected-option="option">
 							<span>
-								<span :style="{ 'backgroundColor': '#' + props.option.color }" class="board-bullet" />
-								<span>{{ props.option.title }}</span>
+								<span :style="{ 'backgroundColor': '#' + option.color }" class="board-bullet" />
+								<span data-cy="board-select-title">{{ option.title }}</span>
 							</span>
 						</template>
-						<template slot="option" slot-scope="props">
+						<template #option="option">
 							<span>
-								<span :style="{ 'backgroundColor': '#' + props.option.color }" class="board-bullet" />
-								<span>{{ props.option.title }}</span>
+								<span :style="{ 'backgroundColor': '#' + option.color }" class="board-bullet" />
+								<span data-cy="board-select-title">{{ option.title }}</span>
 							</span>
 						</template>
-					</NcMultiselect>
+					</NcSelect>
 				</div>
 
 				<div class="col selector-wrapper">
 					<div class="selector-wrapper--icon">
 						<FormatColumnsIcon :size="20" />
 					</div>
-					<NcMultiselect v-model="selectedStack"
+					<NcSelect v-model="selectedStack"
 						:placeholder="t('deck', 'Select a list')"
 						:options="stacksFromBoard"
 						:max-height="100"
 						:disabled="loading || !selectedBoard"
 						class="selector-wrapper--selector multiselect-list"
 						label="title"
-						@select="onSelectStack" />
+						@option:selected="onSelectStack" />
 				</div>
 			</div>
 
@@ -117,7 +117,7 @@
 import { generateUrl } from '@nextcloud/router'
 import {
 	NcButton,
-	NcMultiselect,
+	NcSelect,
 	NcEmptyContent,
 	NcLoadingIcon,
 } from '@nextcloud/vue'
@@ -148,7 +148,7 @@ export default {
 		TagSelector,
 		AssignmentSelector,
 		NcButton,
-		NcMultiselect,
+		NcSelect,
 		NcEmptyContent,
 		NcLoadingIcon,
 	},
@@ -373,7 +373,7 @@ h2 {
 	gap: 12px;
 }
 
-.multiselect {
+.v-select {
 	min-width: auto !important;
 }
 

@@ -22,37 +22,52 @@
 
 <template>
 	<div class="avatars">
-		<div class="avatar-list" @click.stop="togglePopover">
-			<div v-if="popover.length > 0">
-				<AccountMultiple class="avatardiv more-avatars" :size="24" />
-			</div>
-			<div v-for="user in firstUsers" :key="user.id">
-				<NcAvatar v-if="user.type === 0"
-					:user="user.participant.uid"
-					:display-name="user.participant.displayname"
-					:disable-menu="true"
-					:show-user-status="false"
-					:size="32" />
-				<NcAvatar v-if="user.type === 1"
-					:user="user.participant.uid"
-					:display-name="user.participant.displayname"
-					:tooltip-message="user.participant.displayname + ' ' + t('deck', '(Group)')"
-					:is-no-user="true"
-					:disable-="true"
-					:size="32" />
-				<NcAvatar v-if="user.type === 7"
-					:user="user.participant.uid"
-					:display-name="user.participant.displayname"
-					:tooltip-message="user.participant.displayname + ' ' + t('deck', '(Circle)')"
-					:is-no-user="true"
-					:disable-="true"
-					:size="32" />
-			</div>
-		</div>
-
-		<div v-show="popoverVisible" class="popovermenu menu-right">
-			<NcPopoverMenu :menu="popover" />
-			<slot />
+		<div>
+			<NcPopover>
+				<template #trigger="{ attrs }">
+					<button class="avatar-list" v-bind="attrs" @click.stop>
+						<div v-if="popover.length > 0">
+							<AccountMultiple class="avatardiv more-avatars" :size="24" />
+						</div>
+						<div v-for="user in firstUsers" :key="user.id">
+							<NcAvatar v-if="user.type === 0"
+								:user="user.participant.uid"
+								:display-name="user.participant.displayname"
+								:disable-menu="true"
+								:show-user-status="false"
+								:size="32" />
+							<NcAvatar v-if="user.type === 1"
+								:user="user.participant.uid"
+								:display-name="user.participant.displayname"
+								:tooltip-message="user.participant.displayname + ' ' + t('deck', '(Group)')"
+								:is-no-user="true"
+								:disable-="true"
+								:size="32" />
+							<NcAvatar v-if="user.type === 7"
+								:user="user.participant.uid"
+								:display-name="user.participant.displayname"
+								:tooltip-message="user.participant.displayname + ' ' + t('deck', '(Team)')"
+								:is-no-user="true"
+								:disable-="true"
+								:size="32" />
+						</div>
+					</button>
+				</template>
+				<div>
+					<div v-for="user in users"
+						:key="user.id"
+						class="avatar-list-entry">
+						<NcAvatar :user="user.participant.uid"
+							:display-name="user.participant.displayname"
+							:disable-menu="true"
+							:is-no-user="user.type !== 0"
+							:size="32" />
+						<div class="avatar-list-entry__label">
+							{{ user.participant.displayname }}
+						</div>
+					</div>
+				</div>
+			</NcPopover>
 		</div>
 
 		<div class="avatar-print-list">
@@ -70,7 +85,7 @@
 </template>
 
 <script>
-import { NcAvatar, NcPopoverMenu, Tooltip } from '@nextcloud/vue'
+import { NcAvatar, NcPopover, Tooltip } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
 import AccountMultiple from 'vue-material-design-icons/AccountMultiple.vue'
 
@@ -78,7 +93,7 @@ export default {
 	name: 'AvatarList',
 	components: {
 		NcAvatar,
-		NcPopoverMenu,
+		NcPopover,
 		AccountMultiple,
 	},
 	directives: {
@@ -172,8 +187,12 @@ export default {
 	.avatar-list {
 		float: right;
 		display: inline-flex;
-		padding-right: $avatar-offset;
 		flex-direction: row-reverse;
+		padding: 0;
+		padding-right: $avatar-offset;
+		margin: 0;
+		border: 0;
+		background: transparent;
 
 		& > div {
 			height: 32px;
@@ -197,6 +216,15 @@ export default {
 			color: var(--color-text-maxcontrast);
 		}
 
+	}
+
+	.avatar-list-entry {
+		display: flex;
+		padding: 6px 12px;
+
+		&__label {
+			padding: 4px 12px;
+		}
 	}
 
 	.popovermenu {

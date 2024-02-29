@@ -23,7 +23,7 @@
 <template>
 	<NcAppNavigation :class="{'icon-loading': loading}">
 		<template #list>
-			<NcAppNavigationItem :title="t('deck', 'Upcoming cards')"
+			<NcAppNavigationItem :name="t('deck', 'Upcoming cards')"
 				:exact="true"
 				to="/">
 				<template #icon>
@@ -61,7 +61,7 @@
 			<AppNavigationAddBoard v-if="canCreate" />
 		</template>
 		<template #footer>
-			<NcAppNavigationSettings :title="t('deck', 'Deck settings')">
+			<NcAppNavigationSettings :name="t('deck', 'Deck settings')">
 				<NcButton @click="showHelp = true">
 					{{ t('deck', 'Keyboard shortcuts') }}
 				</NcButton>
@@ -97,14 +97,14 @@
 						</label>
 					</div>
 
-					<NcMultiselect v-if="isAdmin"
+					<NcSelect v-if="isAdmin"
 						v-model="groupLimit"
 						:class="{'icon-loading-small': groupLimitDisabled}"
 						open-direction="bottom"
 						:options="groups"
 						:multiple="true"
 						:disabled="groupLimitDisabled"
-						:placeholder="t('deck', 'Limit board creation to some groups')"
+						:input-label="t('deck', 'Limit board creation to some groups')"
 						label="displayname"
 						track-by="id"
 						@input="updateConfig" />
@@ -121,7 +121,7 @@
 import axios from '@nextcloud/axios'
 import { mapGetters } from 'vuex'
 import ClickOutside from 'vue-click-outside'
-import { NcAppNavigation, NcAppNavigationItem, NcAppNavigationSettings, NcMultiselect, NcButton } from '@nextcloud/vue'
+import { NcAppNavigation, NcAppNavigationItem, NcAppNavigationSettings, NcSelect, NcButton } from '@nextcloud/vue'
 import AppNavigationAddBoard from './AppNavigationAddBoard.vue'
 import AppNavigationBoardCategory from './AppNavigationBoardCategory.vue'
 import { loadState } from '@nextcloud/initial-state'
@@ -144,7 +144,7 @@ export default {
 		NcButton,
 		AppNavigationAddBoard,
 		AppNavigationBoardCategory,
-		NcMultiselect,
+		NcSelect,
 		NcAppNavigationItem,
 		ArchiveIcon,
 		CalendarIcon,

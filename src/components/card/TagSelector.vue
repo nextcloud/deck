@@ -3,46 +3,48 @@
 		<div class="selector-wrapper--icon">
 			<TagMultiple :size="20" />
 		</div>
-		<NcMultiselect :value="assignedLabels"
+		<NcSelect :value="assignedLabels"
 			class="selector-wrapper--selector"
 			:multiple="true"
 			:disabled="disabled"
 			:options="labelsSorted"
-			:placeholder="t('deck', 'Assign a tag to this card…')"
+			:aria-label-combobox="t('deck', 'Assign a tag to this card…')"
+			:placeholder="t('deck', 'Select or create a tag…')"
 			:taggable="true"
+			:close-on-select="false"
 			label="title"
 			track-by="id"
 			tag-position="bottom"
-			@select="onSelect"
-			@remove="onRemove"
-			@tag="onNewTag">
+			@option:selected="onSelect"
+			@option:deselected="onRemove"
+			@option:created="onNewTag">
 			<template #option="scope">
-				<div v-if="!scope.option?.isTag" :style="{ backgroundColor: '#' + scope.option.color, color: textColor(scope.option.color)}" class="tag">
-					{{ scope.option.title }}
+				<div v-if="!scope?.isTag" :style="{ backgroundColor: '#' + scope.color, color: textColor(scope.color)}" class="tag">
+					{{ scope.title }}
 				</div>
 				<div v-else>
 					{{ t('deck', 'Create a new tag:') }} <div class="tag">
-						{{ scope.option.label }}
+						{{ scope.label }}
 					</div>
 				</div>
 			</template>
-			<template #tag="scope">
-				<div :style="{ backgroundColor: '#' + scope.option.color, color: textColor(scope.option.color)}" class="tag">
-					{{ scope.option.title }}
+			<template #selected-option="scope">
+				<div :style="{ backgroundColor: '#' + scope.color, color: textColor(scope.color)}" class="tag">
+					{{ scope.title }}
 				</div>
 			</template>
-		</NcMultiselect>
+		</NcSelect>
 	</div>
 </template>
 
 <script>
-import { NcMultiselect } from '@nextcloud/vue'
+import { NcSelect } from '@nextcloud/vue'
 import Color from '../../mixins/color.js'
 import TagMultiple from 'vue-material-design-icons/TagMultiple.vue'
 
 export default {
 	name: 'TagSelector',
-	components: { TagMultiple, NcMultiselect },
+	components: { TagMultiple, NcSelect },
 	mixins: [Color],
 	props: {
 		card: {
@@ -61,20 +63,22 @@ export default {
 	computed: {
 		labelsSorted() {
 			return [...this.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
+				.filter(label => this.card.labels.findIndex((l) => l.id === label.id) === -1)
 		},
 		assignedLabels() {
 			return [...this.card.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
 		},
 	},
 	methods: {
-		onSelect(newLabel) {
-			this.$emit('select', newLabel)
+		onSelect(options) {
+			const addedLabel = options.filter(option => !this.card.labels.includes(option))
+			this.$emit('select', addedLabel[0])
 		},
 		onRemove(removedLabel) {
 			this.$emit('remove', removedLabel)
 		},
-		async onNewTag(name) {
-			this.$emit('newtag', name)
+		async onNewTag(option) {
+			this.$emit('newtag', option.title)
 		},
 	},
 }
@@ -83,17 +87,17 @@ export default {
 <style lang="scss" scoped>
 @import '../../css/selector';
 
-.multiselect--active {
-	z-index: 10022;
+.v-select:deep(.vs__selected) {
+	padding-left: 0 !important;
 }
 
 .tag {
 	flex-grow: 0;
 	flex-shrink: 1;
 	overflow: hidden;
-	padding: 0px 5px;
-	border-radius: 15px;
-	font-size: 85%;
+	padding: 3px 12px;
+	display: inline-block;
+	border-radius: var(--border-radius-pill);
 	margin-right: 3px;
 }
 </style>

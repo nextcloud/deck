@@ -21,7 +21,7 @@
   -->
 <template>
 	<NcAppNavigationItem v-if="!editing"
-		:title="t('deck', 'Add board')"
+		:name="t('deck', 'Add board')"
 		icon="icon-add"
 		@click.prevent.stop="startCreateBoard" />
 	<div v-else class="board-create">

@@ -35,7 +35,6 @@ OC.L10N.register(
     "Tags" : "Etiquetas",
     "Activity" : "Actividad",
     "Undo" : "Deshacer",
-    "Searching for users, groups and circles …" : "Buscando usuarios, grupos y círculos …",
     "No participants found" : "No se encontraron participantes",
     "Can edit" : "Puede editar",
     "Can share" : "Puede compartir",
@@ -84,6 +83,7 @@ OC.L10N.register(
     "Tomorrow" : "Mañana",
     "Close" : "Cerrar",
     "Share" : "Compartir",
+    "Searching for users, groups and circles …" : "Buscando usuarios, grupos y círculos …",
     "Due date" : "Fecha de vencimiento"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

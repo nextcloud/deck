@@ -66,7 +66,7 @@
 			<div class="due-actions">
 				<NcButton v-if="!card.archived"
 					type="tertiary"
-					:title="t('deck', 'Not completed')"
+					:name="t('deck', 'Not completed')"
 					@click="changeCardDoneStatus()">
 					<template #icon>
 						<ClearIcon :size="20" />

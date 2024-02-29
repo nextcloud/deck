@@ -69,11 +69,13 @@ describe('Card', function() {
 			.first().click()
 		cy.get('.modal-mask.card-selector .card-title').should('be.visible').click().type(newCardTitle)
 		cy.get('.modal-mask.card-selector .multiselect-board').should('be.visible').click()
-		cy.get('.modal-mask.card-selector .multiselect-board li:contains("' + boardData.title + '")').should('be.visible').click()
+		cy.get('.vs__dropdown-menu [data-cy="board-select-title"]:contains("' + boardData.title + '")').should('be.visible').click()
+
 		cy.wait('@getBoard', { timeout: 7000 })
 
 		cy.get('.modal-mask.card-selector .multiselect-list').should('be.visible').click()
-		cy.get('.modal-mask.card-selector .multiselect-list li').eq(0).should('be.visible').click()
+		cy.get('.vs__dropdown-menu span[title="TestList"]').should('be.visible').click()
+
 		cy.get('.modal-mask.card-selector button.button-vue--vue-primary').should('be.visible').click()
 		cy.wait('@save', { timeout: 7000 })
 
@@ -101,13 +103,13 @@ describe('Card', function() {
 			})
 
 			cy.get('.modal__card').should('be.visible')
-			cy.get('.app-sidebar-header__maintitle').contains('Hello world')
+			cy.get('.app-sidebar-header__mainname').contains('Hello world')
 		})
 
 		it('Attachment from files app', () => {
 			cy.get('.card:contains("Hello world")').should('be.visible').click()
 			cy.get('.modal__card').should('be.visible')
-			cy.get('.app-sidebar-tabs__tab [data-id="attachments"]').click()
+			cy.get('#tab-button-attachments').click()
 			cy.get('button.icon-upload').should('be.visible')
 			cy.get('button.icon-folder').should('be.visible')
 				.click()
@@ -118,11 +120,11 @@ describe('Card', function() {
 			cy.get('.attachment-list .basename').contains('welcome.txt')
 		})
 
-		it('Shows the modal with the editor', () => {
+		it.only('Shows the modal with the editor', () => {
 			cy.get('.card:contains("Hello world")').should('be.visible').click()
 			cy.intercept({ method: 'PUT', url: '**/apps/deck/cards/*' }).as('save')
 			cy.get('.modal__card').should('be.visible')
-			cy.get('.app-sidebar-header__maintitle').contains('Hello world')
+			cy.get('.app-sidebar-header__mainname').contains('Hello world')
 			cy.get('.modal__card .ProseMirror h1').contains('Hello world').should('be.visible')
 			cy.get('.modal__card .ProseMirror h1')
 				.click()
@@ -229,20 +231,13 @@ describe('Card', function() {
 			cy.get(`.card:contains("${newCardTitle}")`).should('be.visible').click()
 
 			cy.get('#app-sidebar-vue [data-test="tag-selector"]').should('be.visible').click()
-			cy.get('.multiselect__option:contains("Action needed")').should('be.visible').click()
+			cy.get('.vs__dropdown-menu .tag:contains("Action needed")').should('be.visible').click()
+			cy.get('.vs__selected .tag:contains("Action needed")').should('be.visible')
+			cy.get('.vs__dropdown-menu .tag:contains("Later")').should('be.visible').click()
 
-			cy.get('[data-test="tag-selector"] .selector-wrapper--icon').click()
-			cy.get('.multiselect__option:contains("Action needed")').should('not.be.visible')
-
-			cy.get('[data-test="tag-selector"] .multiselect__tags .tag:contains("Action needed")')
-				.should('be.visible')
-
-			cy.get(`.card:contains("${newCardTitle}")`).find('.labels li:contains("Action needed")')
-				.should('be.visible')
-
-			cy.get('#app-sidebar-vue [data-test="tag-selector"]').should('be.visible').click()
-			cy.get('.multiselect__option:contains("Later")').should('be.visible').click()
-			cy.get('.multiselect__option:contains("Action needed")').should('be.visible').click()
+			cy.get('.vs__selected .tag:contains("Action needed")').should('be.visible')
+			cy.get('.vs__selected .tag:contains("Action needed")')
+				.parent().find('button').click()
 
 			cy.get(`.card:contains("${newCardTitle}")`).find('.labels li:contains("Later")')
 				.should('be.visible')

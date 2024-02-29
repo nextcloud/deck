@@ -19,29 +19,28 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { registerWidget, registerCustomPickerElement, NcCustomPickerRenderResult } from '@nextcloud/vue/dist/Components/NcRichText.js'
-import { Tooltip } from '@nextcloud/vue'
-import Vue from 'vue'
-import CardReferenceWidget from './views/CardReferenceWidget.vue'
-import BoardReferenceWidget from './views/BoardReferenceWidget.vue'
-import CommentReferenceWidget from './views/CommentReferenceWidget.vue'
+import { registerWidget, registerCustomPickerElement, NcCustomPickerRenderResult } from '@nextcloud/vue/dist/Functions/registerReference.js'
 
 import { translate, translatePlural } from '@nextcloud/l10n'
 
 import './shared-init.js'
 
-Vue.prototype.t = translate
-Vue.prototype.n = translatePlural
-Vue.prototype.OC = window.OC
-Vue.prototype.OCA = window.OCA
-Vue.directive('tooltip', Tooltip)
-Vue.directive('focus', {
-	inserted(el) {
-		el.focus()
-	},
-})
+const prepareVue = (Vue) => {
+	Vue.prototype.t = translate
+	Vue.prototype.n = translatePlural
+	Vue.prototype.OC = window.OC
+	Vue.prototype.OCA = window.OCA
+	Vue.directive('focus', {
+		inserted(el) {
+			el.focus()
+		},
+	})
+}
 
-registerWidget('deck-card', (el, { richObjectType, richObject, accessible }) => {
+registerWidget('deck-card', async (el, { richObjectType, richObject, accessible }) => {
+	const { default: Vue } = await import('vue')
+	prepareVue(Vue)
+	const { default: CardReferenceWidget } = await import('./views/CardReferenceWidget.vue')
 	// trick to change the wrapper element size, otherwise it always is 100%
 	// which is not very nice with a simple card
 	el.parentNode.style['max-width'] = '400px'
@@ -58,7 +57,10 @@ registerWidget('deck-card', (el, { richObjectType, richObject, accessible }) => 
 	}).$mount(el)
 })
 
-registerWidget('deck-board', (el, { richObjectType, richObject, accessible }) => {
+registerWidget('deck-board', async (el, { richObjectType, richObject, accessible }) => {
+	const { default: Vue } = await import('vue')
+	prepareVue(Vue)
+	const { default: BoardReferenceWidget } = await import('./views/BoardReferenceWidget.vue')
 	el.parentNode.style['max-width'] = '400px'
 	el.parentNode.style['margin-left'] = '0'
 	el.parentNode.style['margin-right'] = '0'
@@ -73,7 +75,11 @@ registerWidget('deck-board', (el, { richObjectType, richObject, accessible }) =>
 	}).$mount(el)
 })
 
-registerWidget('deck-comment', (el, { richObjectType, richObject, accessible }) => {
+registerWidget('deck-comment', async (el, { richObjectType, richObject, accessible }) => {
+	const { default: Vue } = await import('vue')
+	prepareVue(Vue)
+	const { default: CommentReferenceWidget } = await import('./views/CommentReferenceWidget.vue')
+
 	el.parentNode.style['max-width'] = '400px'
 	el.parentNode.style['margin-left'] = '0'
 	el.parentNode.style['margin-right'] = '0'
@@ -89,9 +95,9 @@ registerWidget('deck-comment', (el, { richObjectType, richObject, accessible }) 
 })
 
 registerCustomPickerElement('create-new-deck-card', async (el, { providerId, accessible }) => {
-	const { default: Vue } = await import(/* webpackChunkName: "reference-picker-lazy" */'vue')
+	const { default: Vue } = await import('vue')
 	Vue.mixin({ methods: { t, n } })
-	const { default: CreateNewCardCustomPicker } = await import(/* webpackChunkName: "reference-picker-lazy" */'./views/CreateNewCardCustomPicker.vue')
+	const { default: CreateNewCardCustomPicker } = await import('./views/CreateNewCardCustomPicker.vue')
 	const Element = Vue.extend(CreateNewCardCustomPicker)
 	const vueElement = new Element({
 		propsData: {

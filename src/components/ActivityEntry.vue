@@ -25,7 +25,7 @@
 		<div class="activity--header">
 			<img :src="activity.icon" class="activity--icon">
 			<NcRichText class="activity--subject" :text="message.subject" :arguments="message.parameters" />
-			<div class="activity--timestamp" :title="formatReadableDate(activity.datetime)">
+			<div class="activity--timestamp" :name="formatReadableDate(activity.datetime)">
 				{{ relativeDate(activity.datetime) }}
 			</div>
 		</div>
