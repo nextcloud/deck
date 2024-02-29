@@ -33,16 +33,19 @@ use OCP\Migration\SimpleMigrationStep;
 class Version11000Date20240222115515 extends SimpleMigrationStep {
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		$schema = $schemaClosure();
+		$returnValue = NULL;
 
-		$assigned_users_table = $schema->getTable('deck_assigned_users');
-		if($assigned_users_table->hasIndex('deck_assigned_users_idx_c')) {
-			$assigned_users_table->dropIndex('deck_assigned_users_idx_c');
+		$assignedUsersTable = $schema->getTable('deck_assigned_users');
+		if($assignedUsersTable->hasIndex('deck_assigned_users_idx_c')) {
+			$assignedUsersTable->dropIndex('deck_assigned_users_idx_c');
+			$returnValue = $schema;
 		}
 
-		$board_acl_table = $schema->getTable('deck_board_acl');
-		if($board_acl_table->hasIndex('deck_board_acl_idx_i')) {
-			$board_acl_table->dropIndex('deck_board_acl_idx_i');
+		$boardAclTable = $schema->getTable('deck_board_acl');
+		if($boardAclTable->hasIndex('deck_board_acl_idx_i')) {
+			$boardAclTable->dropIndex('deck_board_acl_idx_i');
+			$returnValue = $schema;
 		}
-		return $schema;
+		return $returnValue;
 	}
 }
