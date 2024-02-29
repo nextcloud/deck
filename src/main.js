@@ -27,7 +27,6 @@ import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
 import { subscribe } from '@nextcloud/event-bus'
-import { Tooltip } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
 import './shared-init.js'
 import './models/index.js'
@@ -41,7 +40,6 @@ sync(store, router)
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
 
-Vue.directive('tooltip', Tooltip)
 Vue.directive('click-outside', ClickOutside)
 
 Vue.directive('focus', {

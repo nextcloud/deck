@@ -49,7 +49,7 @@
 					@blur="error = null"
 					@input="validate()" />
 			</At>
-			<input v-tooltip="t('deck', 'Save')"
+			<input :title="t('deck', 'Save')"
 				class="icon-confirm"
 				type="submit"
 				value=""

@@ -22,7 +22,7 @@
 	<li v-else class="comment">
 		<div class="comment--header">
 			<NcAvatar :user="comment.actorId" />
-			<span class="has-tooltip username">
+			<span class="username">
 				{{ comment.actorDisplayName }}
 			</span>
 			<NcActions v-show="!edit" :force-menu="true">

@@ -2,7 +2,7 @@
 	<div>
 		<div class="comment--header">
 			<NcAvatar :user="currentUser.uid" />
-			<span class="has-tooltip username">
+			<span class="username">
 				{{ currentUser.displayName }}
 			</span>
 		</div>

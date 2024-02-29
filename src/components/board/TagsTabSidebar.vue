@@ -12,20 +12,21 @@
 							<div :style="{ backgroundColor: '#' + editingLabel.color }" class="color0 icon-colorpicker" />
 						</NcColorPicker>
 						<input v-model="editingLabel.title" type="text">
-						<input v-tooltip="{content: missingDataLabel, show: !editLabelObjValidated, trigger: 'manual' }"
-							:disabled="!editLabelObjValidated"
+						<input :disabled="!editLabelObjValidated"
 							type="submit"
 							value=""
 							class="icon-confirm">
 						<NcActions>
-							<NcActionButton v-tooltip="{content: missingDataLabel, show: !editLabelObjValidated, trigger: 'manual' }"
-								:disabled="!editLabelObjValidated"
+							<NcActionButton :disabled="!editLabelObjValidated"
 								icon="icon-close"
 								@click="editingLabelId = null">
 								{{ t('deck', 'Cancel') }}
 							</NcActionButton>
 						</NcActions>
 					</form>
+					<p v-if="!editLabelObjValidated">
+						{{ missingDataLabel }}
+					</p>
 				</template>
 				<template v-else>
 					<div v-if="canManage && !isArchived" class="label-title" @click="clickEdit(label)">
@@ -58,8 +59,7 @@
 						<div :style="{ backgroundColor: '#' + addLabelObj.color }" class="color0 icon-colorpicker" />
 					</NcColorPicker>
 					<input v-model="addLabelObj.title" type="text">
-					<input v-tooltip="{content: missingDataLabel, show: !addLabelObjValidated, trigger: 'manual' }"
-						:disabled="!addLabelObjValidated"
+					<input :disabled="!addLabelObjValidated"
 						type="submit"
 						value=""
 						class="icon-confirm">
@@ -69,6 +69,9 @@
 						</NcActionButton>
 					</NcActions>
 				</form>
+				<p v-if="!addLabelObjValidated">
+					{{ missingDataLabel }}
+				</p>
 			</li>
 			<button v-if="canManage && !isArchived" @click="clickShowAddLabel()">
 				<span class="icon-add" />{{ t('deck', 'Add a new tag') }}

@@ -24,7 +24,7 @@
 			class="shareWithList">
 			<li>
 				<NcAvatar :user="board.owner.uid" />
-				<span class="has-tooltip username">
+				<span class="username">
 					{{ board.owner.displayname }}
 					<span v-if="!isCurrentUser(board.owner.uid)" class="board-owner-label">
 						{{ t('deck', 'Board owner') }}
@@ -35,7 +35,7 @@
 				<NcAvatar v-if="acl.type===0" :user="acl.participant.uid" />
 				<div v-if="acl.type===1" class="avatardiv icon icon-group" />
 				<div v-if="acl.type===7" class="avatardiv icon icon-circles" />
-				<span class="has-tooltip username">
+				<span class="username">
 					{{ acl.participant.displayname }}
 					<span v-if="acl.type===1">{{ t('deck', '(Group)') }}</span>
 					<span v-if="acl.type===7">{{ t('deck', '(Team)') }}</span>

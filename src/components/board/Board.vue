@@ -52,7 +52,7 @@
 							class="no-close"
 							:placeholder="t('deck', 'List name')"
 							required>
-						<input v-tooltip="t('deck', 'Add list')"
+						<input title="t('deck', 'Add list')"
 							class="icon-confirm"
 							type="submit"
 							value="">

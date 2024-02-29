@@ -78,7 +78,7 @@
 						required
 						@focus="$store.dispatch('toggleShortcutLock', true)"
 						@blur="$store.dispatch('toggleShortcutLock', false)">
-					<input v-tooltip="t('deck', 'Add list')"
+					<input :title="t('deck', 'Add list')"
 						class="icon-confirm"
 						type="submit"
 						value="">
@@ -86,24 +86,24 @@
 			</div>
 			<div v-if="board" class="board-action-buttons">
 				<div class="board-action-buttons__filter">
-					<NcPopover container=".board-action-buttons__filter"
-						:placement="'bottom-end'"
+					<NcPopover :placement="'bottom-end'"
 						:aria-label="t('deck', 'Active filters')"
 						:name="t('deck', 'Active filters')"
-						:tooltip="t('deck', 'Active filters')"
 						@show="filterVisible=true"
 						@hide="filterVisible=false">
 						<!-- We cannot use NcActions here are the popover trigger does not update on reactive icons -->
-						<NcButton slot="trigger"
-							ref="filterPopover"
-							:name="t('deck', 'Apply filter')"
-							class="filter-button"
-							:type="isFilterActive ? 'primary' : 'tertiary'">
-							<template #icon>
-								<FilterIcon v-if="isFilterActive" :size="20" decorative />
-								<FilterOffIcon v-else :size="20" decorative />
-							</template>
-						</NcButton>
+						<template #trigger>
+							<NcButton ref="filterPopover"
+								:title="t('deck', 'Apply filter')"
+								:aria-label="t('deck', 'Apply filter')"
+								class="filter-button"
+								:type="isFilterActive ? 'primary' : 'tertiary'">
+								<template #icon>
+									<FilterIcon v-if="isFilterActive" :size="20" decorative />
+									<FilterOffIcon v-else :size="20" decorative />
+								</template>
+							</NcButton>
+						</template>
 
 						<div v-if="filterVisible" class="filter">
 							<h3>{{ t('deck', 'Filter by tag') }}</h3>
@@ -562,9 +562,5 @@ export default {
 <style lang="scss">
 	.popover:focus {
 		outline: 2px solid var(--color-main-text);
-	}
-
-	.tooltip-inner.popover-inner {
-		text-align: left;
 	}
 </style>
