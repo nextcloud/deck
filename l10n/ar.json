@@ -124,8 +124,8 @@
     "Select board" : "حدد لوح",
     "Move card to another board" : "حرك البطاقة الى لوح اخر",
     "Select a board" : "حدد لوح",
+    "No lists available" : "لا يوجد قائمة متاحه ",
     "Select a list" : "اختر قائمة ",
-    "List is empty" : "القائمة فارغة",
     "Move card" : "حرك البطاقة",
     "Cancel" : "إلغاء",
     "Select a card" : "حدد بطاقة",
@@ -166,7 +166,6 @@
     "Currently present people" : "أشخاص معروضون حاليّاً",
     "Loading board" : "جارِ تحميل اللوح..",
     "Board not found" : "اللوح غير موجود",
-    "No lists available" : "لا يوجد قائمة متاحه ",
     "Create a new list to add cards to this board" : "إنشاء قائمة جديدة لإضافة البطاقات على هذا اللوح",
     "Sharing" : "المشاركة",
     "Tags" : "الوسوم",
@@ -378,6 +377,7 @@
     "Due date" : "تاريخ الانجاز",
     "Next week" : "الاسبوع القادم",
     "Next month" : "الشهر القادم",
+    "List is empty" : "القائمة فارغة",
     "Limit deck usage of groups" : "تقييد استخدام Deck  للمجموعات",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "سيؤدي تقييد Deck إلى منع المستخدمين الذين ليسوا جزءًا من تلك المجموعات من إنشاء لوحاتهم الخاصة. سيظل المستخدمون قادرين على العمل على اللوحات التي تمت مشاركتها معهم."
 },"pluralForm" :"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;"

@@ -124,8 +124,8 @@
     "Select board" : "Veldu borð",
     "Move card to another board" : "Færa spjald á annað borð",
     "Select a board" : "Veldu borð",
+    "No lists available" : "Engir listar tiltækir",
     "Select a list" : "Veldu lista",
-    "List is empty" : "Listi er tómur",
     "Move card" : "Færa spjald",
     "Cancel" : "Hætta við",
     "Select a card" : "Veldu spjald",
@@ -166,7 +166,6 @@
     "Currently present people" : "Viðstatt fólk",
     "Loading board" : "Hleð inn borði",
     "Board not found" : "Borð fannst ekki",
-    "No lists available" : "Engir listar tiltækir",
     "Create a new list to add cards to this board" : "Búðu til nýjan lista til að bæta spjöldum á þetta borð",
     "Sharing" : "Deiling",
     "Tags" : "Merki",
@@ -355,6 +354,7 @@
     "Due date" : "Skiladagur",
     "Next week" : "Næsta viku",
     "Next month" : "Næsti mánuður",
+    "List is empty" : "Listi er tómur",
     "Limit deck usage of groups" : "Takmarka notkun hópa á spjaldaforritinu",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Takmörkun í  Deck spjaldaforritinu mun loka notendur sem tilheyra ekki þessum hópum frá því að útbúa sín eigin borð. Notendurnir munu samt geta áfram unnið með borð sem hefur verið deilt til þeirra."
 },"pluralForm" :"nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);"

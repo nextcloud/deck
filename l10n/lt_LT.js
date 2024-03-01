@@ -104,8 +104,8 @@ OC.L10N.register(
     "Select board" : "Pasirinkti lentą",
     "Move card to another board" : "Perkelti kortelę į kitą lentą",
     "Select a board" : "Pasirinkite lentą",
+    "No lists available" : "Nėra sąrašų",
     "Select a list" : "Pasirinkite sąrašą",
-    "List is empty" : "Sąrašas tuščias",
     "Move card" : "Perkelti kortelę",
     "Cancel" : "Atsisakyti",
     "Select a card" : "Pasirinkti kortelę",
@@ -138,7 +138,6 @@ OC.L10N.register(
     "Details" : "Išsamiau",
     "Loading board" : "Įkeliama lenta",
     "Board not found" : "Lenta nerasta",
-    "No lists available" : "Nėra sąrašų",
     "Create a new list to add cards to this board" : "Norėdami pridėti korteles į šią lentą, sukurkite naują sąrašą",
     "Sharing" : "Bendrinimas",
     "Tags" : "Žymės",
@@ -277,6 +276,7 @@ OC.L10N.register(
     "Assign to users/groups/circles" : "Priskirti naudotojams/grupėms/ratams",
     "Due date" : "Galutinio termino data",
     "Next week" : "Kita savaitė",
-    "Next month" : "Kitas mėnuo"
+    "Next month" : "Kitas mėnuo",
+    "List is empty" : "Sąrašas tuščias"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");
