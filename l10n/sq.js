@@ -17,7 +17,6 @@ OC.L10N.register(
     "No file was uploaded" : "S’u ngarkua kartelë",
     "Missing a temporary folder" : "Mungon një dosje e përkohshme",
     "Invalid date, date format must be YYYY-MM-DD" : "Datë e pavlefshme, formati i datës duhet të jetë VVVV-MM-DD",
-    "List is empty" : "Lista është bosh",
     "Cancel" : "Anullo",
     "File already exists" : "Skedari ekziston tashmë",
     "Do you want to overwrite it?" : "Doni ta rishkruani atë?",
@@ -68,6 +67,7 @@ OC.L10N.register(
     "Tomorrow" : "Nesër",
     "Close" : "Mbylleni",
     "Share" : "Shpërndaje",
-    "Due date" : "Data e vendosur"
+    "Due date" : "Data e vendosur",
+    "List is empty" : "Lista është bosh"
 },
 "nplurals=2; plural=(n != 1);");

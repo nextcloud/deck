@@ -124,8 +124,8 @@
     "Select board" : "Одаберите таблу",
     "Move card to another board" : "Помери картицу на другу таблу",
     "Select a board" : "Изаберите таблу",
+    "No lists available" : "Нема доступних спискова",
     "Select a list" : "Одабери списак",
-    "List is empty" : "Списак је празан",
     "Move card" : "Премести картицу",
     "Cancel" : "Одустани",
     "Select a card" : "Изаберите картицу",
@@ -166,7 +166,6 @@
     "Currently present people" : "Тренутно присутне особе",
     "Loading board" : "Учитавам таблу",
     "Board not found" : "Табла није нађена",
-    "No lists available" : "Нема доступних спискова",
     "Create a new list to add cards to this board" : "Направите нови списак да додате картице на ову таблу",
     "Sharing" : "Дељење",
     "Tags" : "Ознаке",
@@ -378,6 +377,7 @@
     "Due date" : "Рок",
     "Next week" : "Наредне недеље",
     "Next month" : "Наредног месеца",
+    "List is empty" : "Списак је празан",
     "Limit deck usage of groups" : "Ограничи употребу шпила на групе",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ограничавање Deck апликације ће блокирати кориснике који нису део одабраних група да креирају своје табле. Корисници ће и даље моћи да раде на таблама које су подељене са њима."
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"

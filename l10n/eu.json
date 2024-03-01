@@ -124,8 +124,8 @@
     "Select board" : "Hautatu taula",
     "Move card to another board" : "Mugitu txartela beste taula batera",
     "Select a board" : "Hautatu taula bat",
+    "No lists available" : "Ez dago zerrendarik eskuragarri",
     "Select a list" : "Hautatu zerrenda bat",
-    "List is empty" : "Zerrenda hutsik dago",
     "Move card" : "Mugitu txartela",
     "Cancel" : "Utzi",
     "Select a card" : "Hautatu txartel bat",
@@ -166,7 +166,6 @@
     "Currently present people" : "Unean dauden pertsonak",
     "Loading board" : "Taula kargatzen",
     "Board not found" : "Ez da taula aurkitu",
-    "No lists available" : "Ez dago zerrendarik eskuragarri",
     "Create a new list to add cards to this board" : "Sortu zerrenda berria, taula honetan txartelak gehitzeko",
     "Sharing" : "Partekatzea",
     "Tags" : "Etiketak",
@@ -353,6 +352,7 @@
     "Due date" : "Epe-muga",
     "Next week" : "Hurrengo astea",
     "Next month" : "Hurrengo hilabetea",
+    "List is empty" : "Zerrenda hutsik dago",
     "Limit deck usage of groups" : "Mugatu taldeek Deck erabiltzeko aukera",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Deck mugatzeak taldeetako kide ez diren erabiltzaileei beren taula propioak sortzea eragotziko die. Erabiltzaileek beraiekin partekatu diren tauletan lan egin ahalko dute."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

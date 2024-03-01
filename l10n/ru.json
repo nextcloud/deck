@@ -118,8 +118,8 @@
     "Select board" : "Выбор рабочей доски",
     "Move card to another board" : "Переместить карточку на другую доску",
     "Select a board" : "Выберите доску",
+    "No lists available" : "Нет ни одного списка",
     "Select a list" : "Выберите список",
-    "List is empty" : "Список не содержит записей",
     "Move card" : "Переместить карточку",
     "Cancel" : "Отменить",
     "Select a card" : "Выберите карточку",
@@ -156,7 +156,6 @@
     "Currently present people" : "Присутствующие в настоящее время люди",
     "Loading board" : "Загрузка доски",
     "Board not found" : "Доска не найдена",
-    "No lists available" : "Нет ни одного списка",
     "Create a new list to add cards to this board" : "Создайте список чтобы добавить карточки на эту доску",
     "Sharing" : "Общий доступ",
     "Tags" : "Метки",
@@ -332,6 +331,7 @@
     "Due date" : "Срок исполнения",
     "Next week" : "Следующая неделя",
     "Next month" : "Следующий месяц",
+    "List is empty" : "Список не содержит записей",
     "Limit deck usage of groups" : "Разрешить использовать приложение Карточки только участникам заданных групп",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Создание собственных рабочих досок пользователям, не входящим в заданные группы, будет заблокировано. Тем не менее, такие пользователи смогут продолжить работать с общими досками, к которым у них есть доступ.  "
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"

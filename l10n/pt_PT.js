@@ -107,7 +107,6 @@ OC.L10N.register(
     "Personal planning and team project organization" : "Planeamento pessoal e organização de projetos em equipa",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Quadro é uma ferramenta de organização ao estilo kanban voltada para o planeamento pessoal e organização de projetos para equipas integradas no Nextcloud.\n\n\n- 📥Adicione as suas tarefas aos cartões e coloque-as em ordem\n- 📄 Escreva notas adicionais em Markdown\n- 🔖 Atribua etiquetas para uma organização ainda melhor\n- 👥 Compartilhe com a sua equipa, amigos ou família\n- 📎 Anexe ficheiros e incorpore-os à descrição em Markdown\n- 💬 Debata com a sua equipa usando comentários\n- ⚡ Acompanhe as mudanças no fluxo de atividades \n- 🚀 Organize o seu projeto",
     "Add board" : "Adicionar quadro",
-    "List is empty" : "A lista está vazia",
     "Cancel" : "Cancelar",
     "File already exists" : "O ficheiro já existe",
     "Add card" : "Adicionar um cartão",
@@ -166,6 +165,7 @@ OC.L10N.register(
     "Timeline" : "Linha do tempo",
     "Due date" : "Data limite",
     "Next week" : "Próxima semana",
-    "Next month" : "Próximo mês"
+    "Next month" : "Próximo mês",
+    "List is empty" : "A lista está vazia"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

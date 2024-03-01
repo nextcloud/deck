@@ -109,8 +109,8 @@
     "Select board" : "Seletziona lavagna",
     "Move card to another board" : "Tràmuda s'ischeda a un'àtera lavagna",
     "Select a board" : "Seletziona una lavagna",
+    "No lists available" : "Perunu elencu a disponimentu",
     "Select a list" : "Seletziona un'elencu",
-    "List is empty" : "Sa lista est bòida",
     "Move card" : "Tràmuda ischeda",
     "Cancel" : "Annulla",
     "Select a card" : "Seletziona un'ischeda",
@@ -145,7 +145,6 @@
     "Details" : "Detàllios",
     "Loading board" : "Carrighende lavagna",
     "Board not found" : "Lavagna no agatada",
-    "No lists available" : "Perunu elencu a disponimentu",
     "Create a new list to add cards to this board" : "Crea un'elencu nou de agiùnghere ischedas a custa lavagna",
     "Sharing" : "Cumpartzidura",
     "Tags" : "Etichetas",
@@ -290,6 +289,7 @@
     "Due date" : "Iscadèntzia",
     "Next week" : "Sa chida chi benit",
     "Next month" : "Su mese chi benit",
+    "List is empty" : "Sa lista est bòida",
     "Limit deck usage of groups" : "Mìnima s'impreu de deck de is grupos",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Su de minimare su deck at a impedire a is utentes chi non faghent parte de cuddos grupos de si creare lavagnas pròpias. Is utentes ant a èssere ancora capassos de traballare in is lavagnas chi fiant istadas cumpartzidas cun issos etotu,"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
