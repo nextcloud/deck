@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Deck" : "Tarxeteru",
     "Load more" : "Cargar más",
+    "Personal" : "Personal",
     "copy" : "copia",
     "The file was uploaded" : "Xubióse'l ficheru",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "El ficheru xubíu supera la direutiva «upload_max_filesize» del ficheru php.ini",
@@ -45,6 +46,7 @@ OC.L10N.register(
     "Today" : "Güei",
     "Tomorrow" : "Mañana",
     "Close" : "Zarrar",
-    "Share" : "Compartir"
+    "Share" : "Compartir",
+    "Timeline" : "Llinia de tiempu"
 },
 "nplurals=2; plural=(n != 1);");

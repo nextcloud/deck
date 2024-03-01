@@ -108,8 +108,8 @@ OC.L10N.register(
     "Select board" : "בחירת לוח",
     "Move card to another board" : "העברת כרטיס ללוח אחר",
     "Select a board" : "נא לבחור לוח",
+    "No lists available" : "אין רשימות זמינות",
     "Select a list" : "בחר רשימה",
-    "List is empty" : "הרשימה ריקה",
     "Move card" : "העברת כרטיס",
     "Cancel" : "ביטול",
     "Select a card" : "נא לבחור כרטיס",
@@ -144,7 +144,6 @@ OC.L10N.register(
     "Details" : "פרטים",
     "Loading board" : "הלוח נטען",
     "Board not found" : "הלוח לא נמצא",
-    "No lists available" : "אין רשימות זמינות",
     "Create a new list to add cards to this board" : "צור רשימה חדשה כדי להוסיף כרטיסים ללוח זה",
     "Sharing" : "שיתוף",
     "Tags" : "תגיות",
@@ -277,7 +276,8 @@ OC.L10N.register(
     "Due date" : "מועד יעד",
     "Next week" : "השבוע הבא",
     "Next month" : "החודש הבא",
+    "List is empty" : "הרשימה ריקה",
     "Limit deck usage of groups" : "הגבלת השימוש בחבילה לקבוצות",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "הגבלת חבילה תחסום משתמשים שאינם חלק מקבוצות אלו מיצירת לוחות משלהם. משתמשים עדיין יוכלו לעבור על לוחות ששותפו אתם."
 },
-"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");
+"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

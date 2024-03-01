@@ -124,8 +124,8 @@
     "Select board" : "選擇面板",
     "Move card to another board" : "將卡片移到其他面板",
     "Select a board" : "選擇一個面板",
+    "No lists available" : "無清單可用",
     "Select a list" : "選擇一個列表",
-    "List is empty" : "列表是空的",
     "Move card" : "移動卡片",
     "Cancel" : "取消",
     "Select a card" : "選擇卡片",
@@ -166,7 +166,6 @@
     "Currently present people" : "目前在場人仕",
     "Loading board" : "正在加載面板",
     "Board not found" : "未找到面板",
-    "No lists available" : "無清單可用",
     "Create a new list to add cards to this board" : "創建一張新清單來添加卡片到這個看板",
     "Sharing" : "正在分享",
     "Tags" : "標籤",
@@ -378,6 +377,7 @@
     "Due date" : "到期日",
     "Next week" : "下星期",
     "Next month" : "下個月",
+    "List is empty" : "列表是空的",
     "Limit deck usage of groups" : "限制群組使用 Deck",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "限制 Deck 將阻止不屬於這些群組的用戶創建自己的面板。用戶仍然可以在與他們的面板上工作。"
 },"pluralForm" :"nplurals=1; plural=0;"

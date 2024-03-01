@@ -111,8 +111,8 @@
     "Select board" : "ボードを選択",
     "Move card to another board" : "カードを他のボードに移動",
     "Select a board" : "ボードを選択",
+    "No lists available" : "利用可能なリストはありません",
     "Select a list" : "リストを選択",
-    "List is empty" : "リストが空です",
     "Move card" : "カードの移動",
     "Cancel" : "キャンセル",
     "Select a card" : "カードを選択",
@@ -148,7 +148,6 @@
     "Details" : "詳細",
     "Loading board" : "ボードを読み込み中",
     "Board not found" : "ボードが見つかりません",
-    "No lists available" : "利用可能なリストはありません",
     "Create a new list to add cards to this board" : "このボードにカードを追加するための新しいリストを作成します",
     "Sharing" : "共有中",
     "Tags" : "タグ",
@@ -306,6 +305,7 @@
     "Due date" : "期限",
     "Next week" : "来週",
     "Next month" : "来月",
+    "List is empty" : "リストが空です",
     "Limit deck usage of groups" : "デッキの使用をグループに制限",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "デッキ作成制限は、設定したグループに非所属のユーザーがボードを作成できないようにします。非所属ユーザーは共有されているボードでのみ作業できます。"
 },"pluralForm" :"nplurals=1; plural=0;"
