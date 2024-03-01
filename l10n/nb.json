@@ -124,8 +124,8 @@
     "Select board" : "Velg tavle",
     "Move card to another board" : "Flytt kort til annen tavle",
     "Select a board" : "Velg en tavle",
+    "No lists available" : "Ingen stabler tilgjengelig",
     "Select a list" : "Velg en stabel",
-    "List is empty" : "Stabel er tom",
     "Move card" : "Flytt kort",
     "Cancel" : "Avbryt",
     "Select a card" : "Velg et kort",
@@ -166,7 +166,6 @@
     "Currently present people" : "Tilstedeværende personer for øyeblikket",
     "Loading board" : "Laster tavle",
     "Board not found" : "Tavle ikke funnet",
-    "No lists available" : "Ingen stabler tilgjengelig",
     "Create a new list to add cards to this board" : "Lag en ny stabel for å legge til kort til denne tavlen",
     "Sharing" : "Deling",
     "Tags" : "Merkelapper",
@@ -378,6 +377,7 @@
     "Due date" : "Forfallsdato",
     "Next week" : "Neste uke",
     "Next month" : "Neste måned",
+    "List is empty" : "Stabel er tom",
     "Limit deck usage of groups" : "Begrens stokk-bruk til grupper",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begrensning av tavler vil hindre tilgang til de brukere som ikke er medlem av en gruppe fra å lage egne tavler. Bruker kan arbeide på de tavler som er delt med dem."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
