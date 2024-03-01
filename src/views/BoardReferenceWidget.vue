@@ -150,8 +150,8 @@ export default {
 
 .deck-board-reference-interactive {
 	width: 100%;
-	height: 100%;
-	min-height: min(200px, 100vh);
+	min-height: min(50vh, calc(100vh - 100px));
+	max-height: calc(100vh - 120px);
 	&:deep(.controls) {
 		padding-left: 12px;
 	}
