@@ -214,7 +214,7 @@ OC.L10N.register(
     "Board {0} deleted" : "Дошку {0} вилучено",
     "No reminder" : "Відсутні нагадування",
     "An error occurred" : "Виникла помилка",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Ви впевнені, що хочете вилучити дошку {title}? Це призведе до видалення всіх даних цієї дошки, включаючи архівні картки.",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Ви впевнені, що хочете вилучити дошку {title}? Це призведе до видалення всіх даних цієї дошки, включно архівні картки.",
     "Delete the board?" : "Вилучити дошку?",
     "Today" : "Сьогодні",
     "Tomorrow" : "Завтра",
