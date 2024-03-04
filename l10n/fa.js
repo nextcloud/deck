@@ -278,7 +278,7 @@ OC.L10N.register(
     "All cards" : "All cards",
     "Assigned cards" : "Assigned cards",
     "No notifications" : "بدون اعلان",
-    "Delete board" : "حذف تهته",
+    "Delete board" : "حذف تخته",
     "Board {0} deleted" : "Board {0} deleted",
     "Only assigned cards" : "Only assigned cards",
     "No reminder" : "No reminder",
