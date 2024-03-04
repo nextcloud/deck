@@ -37,6 +37,7 @@ OC.L10N.register(
     "Description" : "Descripción",
     "(Saving…)" : "(Guardando…)",
     "Completed" : "Completáu",
+    "Not completed" : "Nun se completó",
     "seconds ago" : "hai segundos",
     "Keyboard shortcuts" : "Atayos del tecláu",
     "Action" : "Aición",
