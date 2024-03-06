@@ -62,6 +62,7 @@ use OCA\Deck\Search\DeckProvider;
 use OCA\Deck\Service\PermissionService;
 use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\Sharing\Listener;
+use OCA\Deck\Teams\DeckTeamResourceProvider;
 use OCA\Text\Event\LoadEditor;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -179,6 +180,8 @@ class Application extends App implements IBootstrap {
 
 		$context->registerNotifierService(Notifier::class);
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, ResourceAdditionalScriptsListener::class);
+
+		$context->registerTeamResourceProvider(DeckTeamResourceProvider::class);
 	}
 
 	public function registerCommentsEntity(IEventDispatcher $eventDispatcher): void {
