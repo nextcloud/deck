@@ -27,7 +27,7 @@
 			<span v-if="descriptionLastEdit && !descriptionSaving">{{ t('deck', '(Unsaved)') }}</span>
 			<span v-if="descriptionSaving">{{ t('deck', '(Saving…)') }}</span>
 			<a v-if="!textAppAvailable"
-				v-tooltip="t('deck', 'Formatting help')"
+				:title="t('deck', 'Formatting help')"
 				href="https://deck.readthedocs.io/en/latest/Markdown/"
 				target="_blank"
 				class="icon icon-info" />

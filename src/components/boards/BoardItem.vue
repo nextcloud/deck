@@ -39,7 +39,7 @@
 				:user="user.participant.uid"
 				:display-name="user.participant.displayname"
 				class="board-list-avatar" />
-			<div v-if="board.acl.length > 5" v-tooltip="otherAcl" class="avatardiv popovermenu-wrapper board-list-avatar icon-more" />
+			<div v-if="board.acl.length > 5" :title="otherAcl" class="avatardiv popovermenu-wrapper board-list-avatar icon-more" />
 		</div>
 		<div class="board-list-actions-cell" />
 	</router-link>

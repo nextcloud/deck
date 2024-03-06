@@ -52,7 +52,7 @@
 							class="no-close"
 							:placeholder="t('deck', 'List name')"
 							required>
-						<input v-tooltip="t('deck', 'Add list')"
+						<input title="t('deck', 'Add list')"
 							class="icon-confirm"
 							type="submit"
 							value="">
@@ -81,7 +81,16 @@
 				</Container>
 			</div>
 		</transition>
-		<GlobalSearchResults />
+		<GlobalSearchResults v-if="isFullApp" />
+		<NcModal v-if="localModal"
+			:clear-view-delay="0"
+			:close-button-contained="true"
+			size="large"
+			@close="localModal = null">
+			<div class="modal__content modal__card">
+				<CardSidebar :id="localModal" @close="localModal = null" />
+			</div>
+		</NcModal>
 	</div>
 </template>
 
@@ -91,11 +100,11 @@ import { mapState, mapGetters } from 'vuex'
 import Controls from '../Controls.vue'
 import DeckIcon from '../icons/DeckIcon.vue'
 import Stack from './Stack.vue'
-import { NcEmptyContent } from '@nextcloud/vue'
+import { NcEmptyContent, NcModal } from '@nextcloud/vue'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 import { showError } from '../../helpers/errors.js'
 import { createSession } from '../../sessions.js'
-
+import CardSidebar from '../card/CardSidebar.vue'
 export default {
 	name: 'Board',
 	components: {
@@ -106,6 +115,8 @@ export default {
 		Draggable,
 		Stack,
 		NcEmptyContent,
+		NcModal,
+		CardSidebar,
 	},
 	inject: [
 		'boardApi',
@@ -123,10 +134,12 @@ export default {
 			newStackTitle: '',
 			currentScrollPosX: null,
 			currentMousePosX: null,
+			localModal: null,
 		}
 	},
 	computed: {
 		...mapState({
+			isFullApp: state => state.isFullApp,
 			board: state => state.currentBoard,
 			showArchived: state => state.showArchived,
 		}),
@@ -155,6 +168,9 @@ export default {
 	created() {
 		this.session = createSession(this.id)
 		this.fetchData()
+		this.$root.$on('open-card', (cardId) => {
+			this.localModal = cardId
+		})
 	},
 	beforeDestroy() {
 		this.session.close()

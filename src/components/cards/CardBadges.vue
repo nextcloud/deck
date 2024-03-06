@@ -29,7 +29,7 @@
 				<CardId v-if="idBadge" class="icon-badge" :card="card" />
 
 				<div v-if="card.commentsCount > 0"
-					v-tooltip="commentsHint"
+					:title="commentsHint"
 					class="icon-badge"
 					@click.stop="openComments">
 					<CommentUnreadIcon v-if="card.commentsUnread > 0" :size="16" />

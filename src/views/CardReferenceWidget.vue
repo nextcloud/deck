@@ -33,7 +33,7 @@
 			</strong>
 			<div v-if="dueDate" class="spacer" />
 			<span v-if="dueDate"
-				v-tooltip.top="{ content: formattedDueDate }"
+				:title="t('Due date') + ': ' + formattedDueDate"
 				class="due-date">
 				<CalendarBlankIcon :size="20"
 					class="icon" />
@@ -42,7 +42,7 @@
 		</div>
 		<div class="line">
 			<DeckIcon :size="20" class="title-icon" />
-			<a v-tooltip.top="{ content: stackTooltip }"
+			<a :title="stackTooltip"
 				:href="boardLink"
 				target="_blank"
 				class="link">
@@ -67,7 +67,7 @@
 					'description': true,
 					'short-description': shortDescription,
 				}">
-				<NcRichText v-tooltip.top="{ content: shortDescription ? t('deck', 'Click to expand description') : undefined }"
+				<NcRichText :title="shortDescription ? t('deck', 'Click to expand description') : undefined"
 					:text="card.description"
 					:use-markdown="true"
 					@click.native="shortDescription = !shortDescription" />
