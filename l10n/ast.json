@@ -11,6 +11,7 @@
     "Missing a temporary folder" : "Falta una carpeta temporal",
     "Could not write file to disk" : "Nun se pudo escribir el ficheru nel discu",
     "A PHP extension stopped the file upload" : "Una estensión PHP paró la xuba de ficheros",
+    "Invalid date, date format must be YYYY-MM-DD" : "La data ye inválida, el so formatu ha ser AAAA-MM-DD",
     "Cancel" : "Encaboxar",
     "File already exists" : "El ficheru yá esiste",
     "Open details" : "Abrir los detalles",
@@ -29,6 +30,7 @@
     "Invalid path selected" : "Seleicionóse un camín inválidu",
     "Comments" : "Comentarios",
     "Modified" : "Modificóse",
+    "Failed to load comments" : "Nun se puen cargar los comentarios",
     "Save" : "Guardar",
     "Update" : "Anovar",
     "Created:" : "Creóse'l",
@@ -39,6 +41,7 @@
     "seconds ago" : "hai segundos",
     "Keyboard shortcuts" : "Atayos del tecláu",
     "Action" : "Aición",
+    "Ctrl" : "Ctrl",
     "Search" : "Guetar",
     "Shared with you" : "Compartióse contigo",
     "All cards" : "Toles tarxetes",
@@ -47,6 +50,7 @@
     "Today" : "Güei",
     "Tomorrow" : "Mañana",
     "Close" : "Zarrar",
+    "Error creating the share" : "Hebo un error al crear la compartición",
     "Share" : "Compartir",
     "Timeline" : "Llinia de tiempu"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
