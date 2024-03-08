@@ -1,6 +1,31 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.13.0-beta.1
+
+### Added
+
+- feat: Rename to teams @juliushaertl [#5611](https://github.com/nextcloud/deck/pull/5611)
+- feat: Implement a team resource provider @juliushaertl [#5625](https://github.com/nextcloud/deck/pull/5625)
+- Interactive board widget @juliushaertl [#5630](https://github.com/nextcloud/deck/pull/5630)
+
+### Fixed
+
+- Fix deleted card/board issues @juliushaertl [#5423](https://github.com/nextcloud/deck/pull/5423)
+- Fixing #5451 @mintsoft [#5455](https://github.com/nextcloud/deck/pull/5455)
+- fix: Add debounce to update due date @juliushaertl [#5458](https://github.com/nextcloud/deck/pull/5458)
+- fix(done): Mark card as undone when updating card @stefan-niedermann [#5491](https://github.com/nextcloud/deck/pull/5491)
+- fixed sorting for upcoming cards @elzody [#5493](https://github.com/nextcloud/deck/pull/5493)
+- fix(PermissionService#getPermissions): Catch exceptions from getBoard method @marcelklehr [#5542](https://github.com/nextcloud/deck/pull/5542)
+- fix(activity): Fix permission checks when rendering activities in bac… @nickvergessen [#5533](https://github.com/nextcloud/deck/pull/5533)
+- fix: Safeguard sync requests to hopefully not spam then server @juliushaertl [#5590](https://github.com/nextcloud/deck/pull/5590)
+- fix: card move dialog auto close @luka-nextcloud [#5537](https://github.com/nextcloud/deck/pull/5537)
+- also filter by storage when getting shares in folder @icewind1991 [#5452](https://github.com/nextcloud/deck/pull/5452)
+
+### Other
+
+- fix(i18n): Improved wording @rakekniven [#5496](https://github.com/nextcloud/deck/pull/5496)
+
 ## 1.12.0-beta.3
 
 ### Added
