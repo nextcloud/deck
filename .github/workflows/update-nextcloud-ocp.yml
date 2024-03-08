@@ -57,7 +57,7 @@ jobs:
         run: composer require --dev nextcloud/ocp:dev-${{ matrix.branches }}
 
       - name: Raise on issue on failure
-        uses: dacbd/create-issue-action@ba4d1c45cccf9c483f2720cefb40e437f0ee6f7d # v1.2.1
+        uses: dacbd/create-issue-action@cdb57ab6ff8862aa09fee2be6ba77a59581921c2 # v2.0.0
         if: ${{ steps.checkout.outcome == 'success' && failure() && steps.update_branch.conclusion == 'failure' }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -70,7 +70,7 @@ jobs:
         run: composer require --dev nextcloud/ocp:dev-master
 
       - name: Raise on issue on failure
-        uses: dacbd/create-issue-action@ba4d1c45cccf9c483f2720cefb40e437f0ee6f7d # v1.2.1
+        uses: dacbd/create-issue-action@cdb57ab6ff8862aa09fee2be6ba77a59581921c2 # v2.0.0
         if: ${{ steps.checkout.outcome == 'success' && failure() && steps.update_main.conclusion == 'failure' }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
