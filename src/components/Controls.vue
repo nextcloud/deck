@@ -141,23 +141,23 @@
 							<h3>{{ t('deck', 'Filter by completed') }}</h3>
 							<div class="filter--item">
 								<input id="filter-option-both"
-									v-model="filter.completedOrOpen"
+									v-model="filter.completed"
 									type="radio"
 									class="radio"
-									:value="true"
+									value="both"
 									@change="setFilter"
 									@click="beforeSetFilter">
-								<label for="filter-option-both">{{ t('deck', 'both') }}</label>
+								<label for="filter-option-both">{{ t('deck', 'Open and completed') }}</label>
 							</div>
 							<div class="filter--item">
 								<input id="filter-option-open"
-									v-model="filter.open"
+									v-model="filter.completed"
 									type="radio"
 									class="radio"
-									:value="true"
+									value="open"
 									@change="setFilter"
 									@click="beforeSetFilter">
-								<label for="filter-option-open">{{ t('deck', 'open') }}</label>
+								<label for="filter-option-open">{{ t('deck', 'Open') }}</label>
 							</div>
 
 							<div class="filter--item">
@@ -165,10 +165,10 @@
 									v-model="filter.completed"
 									type="radio"
 									class="radio"
-									:value="true"
+									value="completed"
 									@change="setFilter"
 									@click="beforeSetFilter">
-								<label for="filter-option-completed">{{ t('deck', 'completed') }}</label>
+								<label for="filter-option-completed">{{ t('deck', 'Completed') }}</label>
 							</div>
 
 							<h3>{{ t('deck', 'Filter by due date') }}</h3>
@@ -325,7 +325,7 @@ export default {
 			filterVisible: false,
 			showArchived: false,
 			isAddStackVisible: false,
-			filter: { tags: [], users: [], due: '', unassigned: false, open: false, completed: false, completedOrOpen: true },
+			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 			showAddCardModal: false,
 			defaultPageTitle: false,
 			isNotifyPushEnabled: isNotifyPushEnabled(),
@@ -349,7 +349,7 @@ export default {
 			}
 		},
 		isFilterActive() {
-			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '' || this.filter.open || this.filter.completed || !this.filter.completedOrOpen
+			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '' || this.filter.completed !== 'both'
 		},
 		labelsSorted() {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
@@ -393,22 +393,8 @@ export default {
 			if (e.target.value === 'unassigned') {
 				this.filter.users = []
 				this.$store.dispatch('setFilter', { ...this.filter })
-			}
-			if (e.target.id === 'filter-option-open') {
-				this.filter.open = !this.filter.open
-				this.$store.dispatch('setFilter', { ...this.filter })
-			}
-			if (e.target.id === 'filter-option-completed') {
-				this.filter.completed = !this.filter.completed
-				this.$store.dispatch('setFilter', { ...this.filter })
-			}
-			if (e.target.id !== 'filter-option-both') {
-				this.filter.completedOrOpen = !(this.filter.open || this.filter.completed)
-				this.$store.dispatch('setFilter', { ...this.filter })
 			} else {
-				this.filter.completedOrOpen = true
-				this.filter.open = false
-				this.filter.completed = false
+				this.filter.completed = 'both'
 				this.$store.dispatch('setFilter', { ...this.filter })
 			}
 			this.$store.dispatch('setFilter', { ...this.filter })
@@ -453,7 +439,7 @@ export default {
 			}
 		},
 		clearFilter() {
-			const filterReset = { tags: [], users: [], due: '', open: false, completed: false, completedOrOpen: true }
+			const filterReset = { tags: [], users: [], due: '', completed: 'both' }
 			this.$store.dispatch('setFilter', { ...filterReset })
 			this.filter = filterReset
 		},
@@ -570,7 +556,6 @@ export default {
 		input + label {
 			display: block;
 			padding: 6px 0;
-			vertical-align: middle;
 			.avatardiv {
 				vertical-align: middle;
 				margin-bottom: 2px;
