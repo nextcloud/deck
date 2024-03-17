@@ -5,6 +5,8 @@ OC.L10N.register(
     "Finished" : "Achuet",
     "copy" : "eil",
     "Done" : "Graet",
+    "The file was uploaded" : "Kaset eo bet ar restr",
+    "No file was uploaded" : "N'eus restr ebet a zo bet kaset",
     "Invalid date, date format must be YYYY-MM-DD" : "Deizat fall, stumm an deizat a zo ret bezhañ BBBB-MM-DD",
     "Cancel" : "Arrest",
     "Drop your files to upload" : "Laoskit ho restroù evit pellkas",

@@ -32,7 +32,7 @@
 					{{ stack.title }}
 				</h3>
 				<h3 v-else-if="!editing"
-					v-tooltip="stack.title"
+					title="stack.title"
 					dir="auto"
 					tabindex="0"
 					:aria-label="stack.title"
@@ -51,7 +51,7 @@
 						dir="auto"
 						type="text"
 						required="required">
-					<input v-tooltip="t('deck', 'Edit list title')"
+					<input title="t('deck', 'Edit list title')"
 						class="icon-confirm"
 						type="submit"
 						value="">

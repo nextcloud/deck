@@ -124,8 +124,8 @@
     "Select board" : "Select board",
     "Move card to another board" : "Move card to another board",
     "Select a board" : "Select a board",
+    "No lists available" : "No lists available",
     "Select a list" : "Select a list",
-    "List is empty" : "List is empty",
     "Move card" : "Move card",
     "Cancel" : "Cancel",
     "Select a card" : "Select a card",
@@ -166,7 +166,6 @@
     "Currently present people" : "Currently present people",
     "Loading board" : "Loading board",
     "Board not found" : "Board not found",
-    "No lists available" : "No lists available",
     "Create a new list to add cards to this board" : "Create a new list to add cards to this board",
     "Sharing" : "Sharing",
     "Tags" : "Tags",
@@ -373,6 +372,7 @@
     "Due date" : "Due date",
     "Next week" : "Next week",
     "Next month" : "Next month",
+    "List is empty" : "List is empty",
     "Limit deck usage of groups" : "Limit deck usage of groups",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them."
 },"pluralForm" :"nplurals=2; plural=(n!=1);"

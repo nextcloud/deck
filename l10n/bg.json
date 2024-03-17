@@ -115,8 +115,8 @@
     "Select board" : "Избор на табло",
     "Move card to another board" : "Преместване на картата на друго табло",
     "Select a board" : "Избор на табло",
+    "No lists available" : "Няма налична списъци.",
     "Select a list" : "Избор на списък",
-    "List is empty" : "Списъкът е празен",
     "Move card" : "Преместване на карта",
     "Cancel" : "Отказ",
     "Select a card" : "Избор на карта",
@@ -153,7 +153,6 @@
     "Currently present people" : "Хора присъстващи в момента",
     "Loading board" : "Зареждане на табло",
     "Board not found" : "Таблото не е намерено",
-    "No lists available" : "Няма налична списъци.",
     "Create a new list to add cards to this board" : "Създайте нов списък, за да добавите карти към това табло",
     "Sharing" : "Споделяне",
     "Tags" : "Етикети",
@@ -325,6 +324,7 @@
     "Due date" : "Крайна дата",
     "Next week" : "Следваща седмица",
     "Next month" : "Следващия месец",
+    "List is empty" : "Списъкът е празен",
     "Limit deck usage of groups" : "Ограничава използването на набора от групи",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ограничаването на приложението Deck/набор/ ще блокира потребителите, които не са част от тези групи, да създават свои собствени табла. Потребителите все още ще могат да работят на таблата, които са споделени с тях."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

@@ -109,8 +109,8 @@
     "Select board" : "Odaberi ploču",
     "Move card to another board" : "Premjesti karticu na drugu ploču",
     "Select a board" : "Odaberite ploču",
+    "No lists available" : "Nema dostupnih popisa",
     "Select a list" : "Odaberi popis",
-    "List is empty" : "Popis je prazan",
     "Move card" : "Premjesti karticu",
     "Cancel" : "Odustani",
     "Select a card" : "Odaberite karticu",
@@ -145,7 +145,6 @@
     "Details" : "Pojedinosti",
     "Loading board" : "Učitavanje ploče",
     "Board not found" : "Ploča nije pronađena",
-    "No lists available" : "Nema dostupnih popisa",
     "Create a new list to add cards to this board" : "Stvorite novi popis kako biste dodali kartice na ovu ploču",
     "Sharing" : "Dijeljenje",
     "Tags" : "Oznake",
@@ -291,6 +290,7 @@
     "Due date" : "Datum dospijeća",
     "Next week" : "Sljedeći tjedan",
     "Next month" : "Sljedeći mjesec",
+    "List is empty" : "Popis je prazan",
     "Limit deck usage of groups" : "Ograniči uporabu decka grupama",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ograničenjem Decka možete spriječiti korisnike koji ne sudjeluju u tim grupama da stvaraju vlastite ploče. Korisnici će i dalje moći raditi na pločama koje su dijeljene s njima."
 },"pluralForm" :"nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;"

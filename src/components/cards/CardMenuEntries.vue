@@ -144,8 +144,14 @@ export default {
 	},
 	methods: {
 		openCard() {
-			const boardId = this.card?.boardId ? this.card.boardId : this.$route.params.id
-			this.$router.push({ name: 'card', params: { id: boardId, cardId: this.card.id } }).catch(() => {})
+			const boardId = this.card?.boardId ? this.card.boardId : this.$route?.params.id ?? this.currentBoard.id
+
+			if (this.$router) {
+				this.$router?.push({ name: 'card', params: { id: boardId, cardId: this.card.id } }).catch(() => {})
+				return
+			}
+
+			this.$root.$emit('open-card', this.card.id)
 		},
 		deleteCard() {
 			this.$store.dispatch('deleteCard', this.card)

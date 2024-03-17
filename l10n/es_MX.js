@@ -36,6 +36,7 @@ OC.L10N.register(
     "Activity" : "Actividad",
     "Undo" : "Deshacer",
     "No participants found" : "No se encontraron participantes",
+    "(Group)" : "(Grupo)",
     "Can edit" : "Puede editar",
     "Can share" : "Puede compartir",
     "Can manage" : "Puede gestionar",

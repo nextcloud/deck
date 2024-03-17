@@ -32,10 +32,10 @@
 		@submit-title="handleSubmitTitle"
 		@close="closeSidebar">
 		<template #secondary-actions>
-			<NcActionButton v-if="cardDetailsInModal" icon="icon-menu-sidebar" @click.stop="closeModal()">
+			<NcActionButton v-if="cardDetailsInModal && isFullApp" icon="icon-menu-sidebar" @click.stop="closeModal()">
 				{{ t('deck', 'Open in sidebar view') }}
 			</NcActionButton>
-			<NcActionButton v-else icon="icon-external" @click.stop="showModal()">
+			<NcActionButton v-else-if="isFullApp" icon="icon-external" @click.stop="showModal()">
 				{{ t('deck', 'Open in bigger view') }}
 			</NcActionButton>
 
@@ -83,6 +83,7 @@
 
 <script>
 import { NcActionButton, NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
+import { getCapabilities } from '@nextcloud/capabilities'
 import { mapState, mapGetters } from 'vuex'
 import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
 import CardSidebarTabAttachments from './CardSidebarTabAttachments.vue'
@@ -99,7 +100,7 @@ import { showError } from '@nextcloud/dialogs'
 import { getLocale } from '@nextcloud/l10n'
 import CardMenuEntries from '../cards/CardMenuEntries.vue'
 
-const capabilities = window.OC.getCapabilities()
+const capabilities = getCapabilities()
 
 export default {
 	name: 'CardSidebar',
@@ -144,6 +145,7 @@ export default {
 	},
 	computed: {
 		...mapState({
+			isFullApp: state => state.isFullApp,
 			currentBoard: state => state.currentBoard,
 		}),
 		...mapGetters(['canEdit', 'assignables', 'cardActions', 'stackById']),
@@ -188,7 +190,8 @@ export default {
 		},
 
 		closeSidebar() {
-			this.$router.push({ name: 'board' })
+			this.$router?.push({ name: 'board' })
+			this.$emit('close')
 		},
 
 		showModal() {

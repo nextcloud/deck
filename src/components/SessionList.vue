@@ -20,7 +20,7 @@
  * -->
 
 <template>
-	<div v-tooltip.bottom="t('text', 'Currently present people')"
+	<div :title="t('text', 'Currently present people')"
 		class="avatar-list">
 		<div v-for="session in sessionsVisible"
 			:key="session.uid"
@@ -37,15 +37,12 @@
 </template>
 
 <script>
-import { NcAvatar, Tooltip } from '@nextcloud/vue'
+import { NcAvatar } from '@nextcloud/vue'
 
 export default {
 	name: 'SessionList',
 	components: {
 		NcAvatar,
-	},
-	directives: {
-		tooltip: Tooltip,
 	},
 	props: {
 		sessions: {

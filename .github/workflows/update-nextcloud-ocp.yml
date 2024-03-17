@@ -31,7 +31,7 @@ jobs:
 
       - name: Set up php8.2
         if: steps.checkout.outcome == 'success'
-        uses: shivammathur/setup-php@6d7209f44a25a59e904b1ee9f3b0c33ab2cd888d # v2
+        uses: shivammathur/setup-php@a4e22b60bbb9c1021113f2860347b0759f66fe5d # v2
         with:
           php-version: 8.2
           # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
@@ -57,7 +57,7 @@ jobs:
         run: composer require --dev nextcloud/ocp:dev-${{ matrix.branches }}
 
       - name: Raise on issue on failure
-        uses: dacbd/create-issue-action@ba4d1c45cccf9c483f2720cefb40e437f0ee6f7d # v1.2.1
+        uses: dacbd/create-issue-action@cdb57ab6ff8862aa09fee2be6ba77a59581921c2 # v2.0.0
         if: ${{ steps.checkout.outcome == 'success' && failure() && steps.update_branch.conclusion == 'failure' }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -70,7 +70,7 @@ jobs:
         run: composer require --dev nextcloud/ocp:dev-master
 
       - name: Raise on issue on failure
-        uses: dacbd/create-issue-action@ba4d1c45cccf9c483f2720cefb40e437f0ee6f7d # v1.2.1
+        uses: dacbd/create-issue-action@cdb57ab6ff8862aa09fee2be6ba77a59581921c2 # v2.0.0
         if: ${{ steps.checkout.outcome == 'success' && failure() && steps.update_main.conclusion == 'failure' }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -100,7 +100,7 @@ jobs:
 
       - name: Create Pull Request
         if: steps.checkout.outcome == 'success'
-        uses: peter-evans/create-pull-request@b1ddad2c994a25fbc81a28b3ec0e368bb2021c50 # v3
+        uses: peter-evans/create-pull-request@70a41aba780001da0a30141984ae2a0c95d8704e # v3
         with:
           token: ${{ secrets.COMMAND_BOT_PAT }}
           commit-message: "chore(dev-deps): Bump nextcloud/ocp package"

@@ -111,8 +111,8 @@
     "Select board" : "Vybrať nástenku",
     "Move card to another board" : "Presunúť kartu na inú nástenku",
     "Select a board" : "Vyberte nástenku",
+    "No lists available" : "Nie sú k dispozícii žiadne zoznamy",
     "Select a list" : "Vybrať zoznam",
-    "List is empty" : "Zoznam je prázdny",
     "Move card" : "Presunúť kartu",
     "Cancel" : "Zrušiť",
     "Select a card" : "Vyberte kartu",
@@ -148,7 +148,6 @@
     "Details" : "Podrobnosti",
     "Loading board" : "Načítanie nástenky",
     "Board not found" : "Nástenka nebola nájdená",
-    "No lists available" : "Nie sú k dispozícii žiadne zoznamy",
     "Create a new list to add cards to this board" : "Pre pridanie kariet na túto tabuľu vytvorte nový zoznam",
     "Sharing" : "Sprístupnenie",
     "Tags" : "Štítky",
@@ -320,6 +319,7 @@
     "Due date" : "Termín dokončenia",
     "Next week" : "Nasledujúci týždeň",
     "Next month" : "Nasledujúci mesiac",
+    "List is empty" : "Zoznam je prázdny",
     "Limit deck usage of groups" : "Obmedziť použitie Deck na skupiny",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Obmedzenie Násteniek bráni používateľom, ktorí nie sú súčasťou týchto skupín, aby si vytvárali vlastné nástenky. Môžu však stále pracovať na nástenkách, ktoré im niekto sprístupní."
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);"

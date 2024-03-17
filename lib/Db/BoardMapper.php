@@ -400,6 +400,51 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		return $entries;
 	}
 
+	public function findAllByTeam(string $teamId): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
+			->from('deck_boards', 'b')
+			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
+			->where($qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_CIRCLE, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('acl.participant', $qb->createNamedParameter($teamId, IQueryBuilder::PARAM_STR)));
+		$entries = $this->findEntities($qb);
+		foreach ($entries as $entry) {
+			$entry->setShared(2);
+		}
+		return $entries;
+	}
+
+	public function findTeamsForBoard(int $boardId): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('acl.participant')
+			->from('deck_boards', 'b')
+			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
+			->where($qb->expr()->eq('b.id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_CIRCLE, IQueryBuilder::PARAM_INT)));
+
+		$result = $qb->executeQuery();
+		return array_map(function ($entry) {
+			return $entry['participant'];
+		}, $result->fetchAll());
+	}
+
+	public function isSharedWithTeam(int $boardId, string $teamId): bool {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
+			->from('deck_boards', 'b')
+			->innerJoin('b', 'deck_board_acl', 'acl', $qb->expr()->eq('b.id', 'acl.board_id'))
+			->where($qb->expr()->eq('b.id', $qb->createNamedParameter($boardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('acl.type', $qb->createNamedParameter(Acl::PERMISSION_TYPE_CIRCLE, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('acl.participant', $qb->createNamedParameter($teamId, IQueryBuilder::PARAM_STR)));
+		try {
+			$this->findEntity($qb);
+			return true;
+		} catch (DoesNotExistException $e) {
+			// Expected return falue
+		}
+		return false;
+	}
+
 	public function findAll(): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('id')

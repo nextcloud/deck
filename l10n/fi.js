@@ -92,8 +92,8 @@ OC.L10N.register(
     "Select board" : "Valitse taulu",
     "Move card to another board" : "Siirrä kortti toiselle taululle",
     "Select a board" : "Valitse taulu",
+    "No lists available" : "Ei listoja saatavilla",
     "Select a list" : "Valitse lista ",
-    "List is empty" : "Lista on tyhjä",
     "Move card" : "Siirrä kortti",
     "Cancel" : "Peruuta",
     "Select a card" : "Valitse kortti",
@@ -128,7 +128,6 @@ OC.L10N.register(
     "Details" : "Tiedot",
     "Loading board" : "Ladataan taulua",
     "Board not found" : "Taulua ei löydy",
-    "No lists available" : "Ei listoja saatavilla",
     "Create a new list to add cards to this board" : "Lisää uusi lista lisätäksesi kortteja tälle taululle",
     "Sharing" : "Jakaminen",
     "Tags" : "Tunnisteet",
@@ -260,6 +259,7 @@ OC.L10N.register(
     "Due date" : "Eräpäivä",
     "Next week" : "Seuraava viikko",
     "Next month" : "Seuraava kuukausi",
+    "List is empty" : "Lista on tyhjä",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Pakan käytön rajoittaminen estää merkittyjen ryhmien jäseniä luomasta omia taulujaan, mutta käyttäjät pystyvät silti käyttämään heidän kanssaan jaettuja tauluja."
 },
 "nplurals=2; plural=(n != 1);");

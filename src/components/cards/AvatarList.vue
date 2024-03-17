@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { NcAvatar, NcPopover, Tooltip } from '@nextcloud/vue'
+import { NcAvatar, NcPopover } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
 import AccountMultiple from 'vue-material-design-icons/AccountMultiple.vue'
 
@@ -95,9 +95,6 @@ export default {
 		NcAvatar,
 		NcPopover,
 		AccountMultiple,
-	},
-	directives: {
-		tooltip: Tooltip,
 	},
 	props: {
 		users: {

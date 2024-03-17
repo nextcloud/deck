@@ -58,6 +58,7 @@ export default new Vuex.Store({
 	},
 	strict: debug,
 	state: {
+		isFullApp: true,
 		config: loadState('deck', 'config', {}),
 		showArchived: false,
 		navShown: localStorage.getItem('deck.navShown') === null || localStorage.getItem('deck.navShown') === 'true',
@@ -78,6 +79,10 @@ export default new Vuex.Store({
 	},
 	getters: {
 		config: state => (key) => {
+			if (!state.isFullApp && key === 'cardDetailsInModal') {
+				return true
+			}
+
 			return state.config[key]
 		},
 		getSearchQuery: state => {
@@ -140,6 +145,9 @@ export default new Vuex.Store({
 		},
 	},
 	mutations: {
+		setFullApp(state, isFullApp) {
+			Vue.set(state, 'isFullApp', isFullApp)
+		},
 		SET_CONFIG(state, { key, value }) {
 			const [scope, id, configKey] = key.split(':', 3)
 			let indexExisting = -1
@@ -313,6 +321,9 @@ export default new Vuex.Store({
 		},
 	},
 	actions: {
+		setFullApp({ commit }, isFullApp) {
+			commit('setFullApp', isFullApp)
+		},
 		async setConfig({ commit }, config) {
 			for (const key in config) {
 				try {

@@ -36,7 +36,6 @@ OC.L10N.register(
     "Search by board title" : "보드 제목으로 검색",
     "Select board" : "보드 선택",
     "Select a board" : "보드 선택",
-    "List is empty" : "목록이 비어 있음",
     "Move card" : "카드 이동",
     "Cancel" : "취소",
     "Select a card" : "카드 선택",
@@ -142,6 +141,7 @@ OC.L10N.register(
     "Timeline" : "타임라인",
     "Due date" : "만료 날짜",
     "Next week" : "다음주",
-    "Next month" : "다음달"
+    "Next month" : "다음달",
+    "List is empty" : "목록이 비어 있음"
 },
 "nplurals=1; plural=0;");

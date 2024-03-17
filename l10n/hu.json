@@ -120,8 +120,8 @@
     "Select board" : "Válasszon táblát",
     "Move card to another board" : "Kártya áthelyezése egy másik táblára",
     "Select a board" : "Válasszon egy táblát",
+    "No lists available" : "Nincs elérhető lista",
     "Select a list" : "Válasszon listát",
-    "List is empty" : "A lista üres",
     "Move card" : "Kártya áthelyezése",
     "Cancel" : "Mégse",
     "Select a card" : "Válasszon egy kártyát",
@@ -162,7 +162,6 @@
     "Currently present people" : "Jelenleg jelenlévő emberek",
     "Loading board" : "Tábla betöltése",
     "Board not found" : "A tábla nem található",
-    "No lists available" : "Nincs elérhető lista",
     "Create a new list to add cards to this board" : "Hozzon létre egy új listát a kártyák ehhez a táblához való hozzáadásához",
     "Sharing" : "Megosztás",
     "Tags" : "Címkék",
@@ -348,6 +347,7 @@
     "Due date" : "Határidő",
     "Next week" : "Következő hét",
     "Next month" : "Következő hónap",
+    "List is empty" : "A lista üres",
     "Limit deck usage of groups" : "A kártyák használatának csoportokra korlátozása",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "A Kártyák korlátozása blokkolja a saját táblák létrehozását azoknál a felhasználóknál, akik nem tagjai a megadott csoportoknak. A felhasználók továbbra is tudnak dolgozni a velük megosztott táblákon."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

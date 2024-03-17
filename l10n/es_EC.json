@@ -115,8 +115,8 @@
     "Select board" : "Seleccionar tablero",
     "Move card to another board" : "Mover tarjeta a otro tablero",
     "Select a board" : "Seleccionar un tablero",
+    "No lists available" : "No hay listas disponibles",
     "Select a list" : "Seleccionar una lista",
-    "List is empty" : "La lista está vacía",
     "Move card" : "Mover tarjeta",
     "Cancel" : "Cancelar",
     "Select a card" : "Seleccionar una tarjeta",
@@ -153,7 +153,6 @@
     "Currently present people" : "Personas actualmente presentes",
     "Loading board" : "Cargando tablero",
     "Board not found" : "No se encontró el tablero",
-    "No lists available" : "No hay listas disponibles",
     "Create a new list to add cards to this board" : "Crea una nueva lista para añadir tarjetas a este tablero",
     "Sharing" : "Compartiendo",
     "Tags" : "Etiquetas",
@@ -325,6 +324,7 @@
     "Due date" : "Fecha de vencimiento",
     "Next week" : "Semana siguiente",
     "Next month" : "Mes siguiente",
+    "List is empty" : "La lista está vacía",
     "Limit deck usage of groups" : "Limitar uso de Deck a grupos",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitar Deck bloqueará a los usuarios que no formen parte de esos grupos para que no puedan crear sus propios tableros. Los usuarios aún podrán trabajar en tableros que se hayan compartido con ellos."
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
