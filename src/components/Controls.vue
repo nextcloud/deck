@@ -138,8 +138,40 @@
 								<label :for="user.uid"><NcAvatar :user="user.uid" :size="24" :disable-menu="true" /> {{ user.displayname }}</label>
 							</div>
 
-							<h3>{{ t('deck', 'Filter by due date') }}</h3>
+							<h3>{{ t('deck', 'Filter by completed') }}</h3>
+							<div class="filter--item">
+								<input id="filter-option-both"
+									v-model="filter.completed"
+									type="radio"
+									class="radio"
+									value="both"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="filter-option-both">{{ t('deck', 'Open and completed') }}</label>
+							</div>
+							<div class="filter--item">
+								<input id="filter-option-open"
+									v-model="filter.completed"
+									type="radio"
+									class="radio"
+									value="open"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="filter-option-open">{{ t('deck', 'Open') }}</label>
+							</div>
 
+							<div class="filter--item">
+								<input id="filter-option-completed"
+									v-model="filter.completed"
+									type="radio"
+									class="radio"
+									value="completed"
+									@change="setFilter"
+									@click="beforeSetFilter">
+								<label for="filter-option-completed">{{ t('deck', 'Completed') }}</label>
+							</div>
+
+							<h3>{{ t('deck', 'Filter by due date') }}</h3>
 							<div class="filter--item">
 								<input id="overdue"
 									v-model="filter.due"
@@ -293,7 +325,7 @@ export default {
 			filterVisible: false,
 			showArchived: false,
 			isAddStackVisible: false,
-			filter: { tags: [], users: [], due: '', unassigned: false },
+			filter: { tags: [], users: [], due: '', unassigned: false, completed: 'both' },
 			showAddCardModal: false,
 			defaultPageTitle: false,
 			isNotifyPushEnabled: isNotifyPushEnabled(),
@@ -317,7 +349,7 @@ export default {
 			}
 		},
 		isFilterActive() {
-			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== ''
+			return this.filter.tags.length !== 0 || this.filter.users.length !== 0 || this.filter.due !== '' || this.filter.completed !== 'both'
 		},
 		labelsSorted() {
 			return [...this.board.labels].sort((a, b) => (a.title < b.title) ? -1 : 1)
@@ -360,7 +392,12 @@ export default {
 			}
 			if (e.target.value === 'unassigned') {
 				this.filter.users = []
+				this.$store.dispatch('setFilter', { ...this.filter })
+			} else {
+				this.filter.completed = 'both'
+				this.$store.dispatch('setFilter', { ...this.filter })
 			}
+			this.$store.dispatch('setFilter', { ...this.filter })
 		},
 		setFilter() {
 			if (this.filter.users.length > 0) {
@@ -402,7 +439,7 @@ export default {
 			}
 		},
 		clearFilter() {
-			const filterReset = { tags: [], users: [], due: '' }
+			const filterReset = { tags: [], users: [], due: '', completed: 'both' }
 			this.$store.dispatch('setFilter', { ...filterReset })
 			this.filter = filterReset
 		},
@@ -519,7 +556,6 @@ export default {
 		input + label {
 			display: block;
 			padding: 6px 0;
-			vertical-align: middle;
 			.avatardiv {
 				vertical-align: middle;
 				margin-bottom: 2px;
