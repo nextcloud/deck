@@ -74,7 +74,7 @@ OC.L10N.register(
     "Undo" : "실행 취소",
     "No participants found" : "참가자를 찾을 수 없음",
     "(Group)" : "(그룹)",
-    "Can edit" : "편집할 수 있음",
+    "Can edit" : "수정할 수 있음",
     "Can share" : "공유할 수 있음",
     "Owner" : "소유자",
     "Delete" : "삭제",
