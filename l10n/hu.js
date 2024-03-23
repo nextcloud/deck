@@ -145,6 +145,7 @@ OC.L10N.register(
     "Filter by tag" : "Szűrés címke szerint",
     "Filter by assigned user" : "Szűrés hozzárendelt felhasználó szerint",
     "Unassigned" : "Nem hozzárendelt",
+    "Open" : "Megnyitás",
     "Completed" : "Teljesített",
     "Filter by due date" : "Szűrés határidő szerint",
     "Overdue" : "Lejárt",

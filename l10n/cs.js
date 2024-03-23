@@ -149,6 +149,7 @@ OC.L10N.register(
     "Filter by tag" : "Filtrovat podle štítku",
     "Filter by assigned user" : "Filtrovat podle uživatele, který je úkolem pověřen",
     "Unassigned" : "Nepřiřazeno",
+    "Open" : "Otevřít",
     "Completed" : "Dokončeno",
     "Filter by due date" : "Filtrovat podle termínu",
     "Overdue" : "Po termínu",

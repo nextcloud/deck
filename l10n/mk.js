@@ -126,6 +126,7 @@ OC.L10N.register(
     "Filter by tag" : "Филтрирај по ознака",
     "Filter by assigned user" : "Филтрирај по назначени корисници",
     "Unassigned" : "Неназначени",
+    "Open" : "Отвори",
     "Completed" : "Завршено",
     "Filter by due date" : "Филтрирај по краен рок",
     "Overdue" : "Заостанати",

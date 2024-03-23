@@ -133,6 +133,7 @@ OC.L10N.register(
     "Filter by tag" : "Filtriraj po oznaki",
     "Filter by assigned user" : "Filtriraj po dodeljenem uporabniku",
     "Unassigned" : "Nedodeljeno",
+    "Open" : "Odpri",
     "Completed" : "Končano",
     "Filter by due date" : "Filtriraj po datumu preteka",
     "Overdue" : "Preteklo",

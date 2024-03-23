@@ -139,6 +139,7 @@ OC.L10N.register(
     "Filter by tag" : "Φίλτρο ανά ετικέτα",
     "Filter by assigned user" : "Φίλτρο ανά χρήστη",
     "Unassigned" : "Χωρίς ανάθεση",
+    "Open" : "Ανοιχτός",
     "Completed" : "Ολοκληρωμένες",
     "Filter by due date" : "Φίλτρο ανά ημερομηνία λήξης",
     "Overdue" : "Εκπρόθεσμες",

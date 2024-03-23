@@ -136,6 +136,7 @@ OC.L10N.register(
     "Filter by tag" : "Filtrovať podľa štítkov",
     "Filter by assigned user" : "Filtrovať podľa priradeného používateľa",
     "Unassigned" : "Nepriradený",
+    "Open" : "Otvoriť",
     "Completed" : "Dokončené",
     "Filter by due date" : "Filtrovať podľa termínu",
     "Overdue" : "Po termíne",

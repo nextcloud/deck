@@ -5,6 +5,7 @@ OC.L10N.register(
     "copy" : "copy",
     "Done" : "Done",
     "Cancel" : "Cancel",
+    "Open" : "Open",
     "Details" : "Details",
     "Sharing" : "Ulashish",
     "Tags" : "Tags",

@@ -9,6 +9,7 @@ OC.L10N.register(
     "No file was uploaded" : "Ulac afaylu i d-yettwasulin",
     "Missing a temporary folder" : "Ixuṣ ukaram akudan",
     "Cancel" : "Sefsex",
+    "Open" : "Ldi",
     "Completed" : "Yemmed",
     "Details" : "Talqayt",
     "Sharing" : "Beṭṭu",
