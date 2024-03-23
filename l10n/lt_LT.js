@@ -125,6 +125,7 @@ OC.L10N.register(
     "Apply filter" : "Taikyti filtrą",
     "Filter by tag" : "Filtruoti pagal žymę",
     "Filter by assigned user" : "Filtruoti pagal priskirtą naudotoją",
+    "Open" : "Atverti",
     "Completed" : "Užbaigta",
     "Filter by due date" : "Filtruoti pagal galutinio termino datą",
     "Overdue" : "Praėjęs galutinis terminas",

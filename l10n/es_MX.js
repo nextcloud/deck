@@ -27,6 +27,7 @@ OC.L10N.register(
     "Drop your files to upload" : "Arrastre sus archivos para cargar",
     "Add card" : "Agregar tarjeta",
     "Filter by tag" : "Filtrar por etiqueta",
+    "Open" : "Abrir",
     "Completed" : "Completado",
     "Hide archived cards" : "Ocultar tarjetas archivadas",
     "Show archived cards" : "Mostrar tarjetas archivadas",

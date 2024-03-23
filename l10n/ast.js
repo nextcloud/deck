@@ -16,6 +16,7 @@ OC.L10N.register(
     "Invalid date, date format must be YYYY-MM-DD" : "La data ye inválida, el so formatu ha ser AAAA-MM-DD",
     "Cancel" : "Encaboxar",
     "File already exists" : "El ficheru yá esiste",
+    "Open" : "Abrir",
     "Completed" : "Completáu",
     "Open details" : "Abrir los detalles",
     "Details" : "Detalles",

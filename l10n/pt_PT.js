@@ -110,6 +110,7 @@ OC.L10N.register(
     "Cancel" : "Cancelar",
     "File already exists" : "O ficheiro já existe",
     "Add card" : "Adicionar um cartão",
+    "Open" : "Abrir",
     "Completed" : "Concluída",
     "Hide archived cards" : "Esconder cartões arquivados",
     "Show archived cards" : "Mostrar cartões arquivados",

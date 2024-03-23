@@ -16,6 +16,7 @@ OC.L10N.register(
     "Cancel" : "Anullar",
     "File already exists" : "Lo fichièr existís ja",
     "Drop your files to upload" : "Depausatz los fichièrs d’enviar",
+    "Open" : "Dobrir",
     "Completed" : "Acabat",
     "Details" : "Detalhs",
     "Sharing" : "Partiment",

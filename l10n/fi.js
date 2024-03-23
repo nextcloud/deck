@@ -114,6 +114,7 @@ OC.L10N.register(
     "Filter by tag" : "Suodata tunnisteen perusteella",
     "Filter by assigned user" : "Suodata määritetyn käyttäjän mukaan",
     "Unassigned" : "Määrittämätön",
+    "Open" : "Avaa",
     "Completed" : "Valmistui",
     "Filter by due date" : "Suodata määräpäivän mukaan",
     "Overdue" : "Myöhässä",

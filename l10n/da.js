@@ -91,6 +91,7 @@ OC.L10N.register(
     "Filter by tag" : "Filtrer vha. mærkat",
     "Filter by assigned user" : "Filtrer vha. tildelt bruger",
     "Unassigned" : "Ikke tildelt",
+    "Open" : "Åbn",
     "Completed" : "Fuldført",
     "Filter by due date" : "Filtrer vha. forfaldsdato",
     "Overdue" : "Overskredet",

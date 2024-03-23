@@ -149,6 +149,7 @@ OC.L10N.register(
     "Filter by tag" : "Filtrar por etiqueta",
     "Filter by assigned user" : "Filtrar por usuario asignado",
     "Unassigned" : "No asignado",
+    "Open" : "Abrir",
     "Completed" : "Completado",
     "Filter by due date" : "Filtrar por fecha de finalización",
     "Overdue" : "Demorado",

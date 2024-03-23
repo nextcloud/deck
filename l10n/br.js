@@ -10,6 +10,7 @@ OC.L10N.register(
     "Invalid date, date format must be YYYY-MM-DD" : "Deizat fall, stumm an deizat a zo ret bezhañ BBBB-MM-DD",
     "Cancel" : "Arrest",
     "Drop your files to upload" : "Laoskit ho restroù evit pellkas",
+    "Open" : "Digeriñ",
     "Completed" : "Achuet",
     "Details" : "Munudoù",
     "Sharing" : "Rannan",
