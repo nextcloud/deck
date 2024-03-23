@@ -149,6 +149,7 @@ OC.L10N.register(
     "Filter by tag" : "Filtrer på knagg",
     "Filter by assigned user" : "Filtrer på tildelt bruker",
     "Unassigned" : "Ikke tildelt",
+    "Open" : "Åpne",
     "Completed" : "Ferdig",
     "Filter by due date" : "Filtrer på forfallsdato",
     "Overdue" : "Utløpt",

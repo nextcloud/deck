@@ -104,6 +104,7 @@ OC.L10N.register(
     "Filter by tag" : "Відібрати за мітками",
     "Filter by assigned user" : "Відібрати за призначеним користувачем",
     "Unassigned" : "Скасовано призначення",
+    "Open" : "Відкрити",
     "Completed" : "Виконано",
     "Filter by due date" : "Відібрати за датою завершення",
     "Overdue" : "Протерміновано",

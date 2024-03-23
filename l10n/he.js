@@ -130,6 +130,7 @@ OC.L10N.register(
     "Filter by tag" : "סינון לפי תגית",
     "Filter by assigned user" : "סינון לפי משתמש מוקצה",
     "Unassigned" : "לא הוקצה",
+    "Open" : "פתוח",
     "Completed" : "הושלם",
     "Filter by due date" : "סינון לפי תאריך יעד",
     "Overdue" : "באיחור",

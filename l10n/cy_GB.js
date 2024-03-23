@@ -8,6 +8,7 @@ OC.L10N.register(
     "No file was uploaded" : "Ni lwythwyd ffeil i fyny",
     "Missing a temporary folder" : "Plygell dros dro yn eisiau",
     "Cancel" : "Diddymu",
+    "Open" : "Ar Agor",
     "Details" : "Manylion",
     "Tags" : "Tagiau",
     "Activity" : "Gweithred",

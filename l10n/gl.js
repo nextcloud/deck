@@ -149,6 +149,7 @@ OC.L10N.register(
     "Filter by tag" : "Filtrar pola etiqueta",
     "Filter by assigned user" : "Filtrar polo usuario asignado",
     "Unassigned" : "Sen asignar",
+    "Open" : "Abrir",
     "Completed" : "Completado",
     "Filter by due date" : "Filtrar pola data de caducidade",
     "Overdue" : "Caducado",

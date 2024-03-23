@@ -149,6 +149,7 @@ OC.L10N.register(
     "Filter by tag" : "Nach Schlagwort filtern",
     "Filter by assigned user" : "Nach zugewiesenem Benutzer filtern",
     "Unassigned" : "Nicht zugewiesen",
+    "Open" : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE)",
     "Completed" : "Fertiggestellt",
     "Filter by due date" : "Nach Fälligkeitsdatum filtern",
     "Overdue" : "Überfällig",

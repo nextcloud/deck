@@ -143,6 +143,7 @@ OC.L10N.register(
     "Filter by tag" : "Фильтр по меткам:",
     "Filter by assigned user" : "Фильтр по назначению:",
     "Unassigned" : "не назначен",
+    "Open" : "Открыть",
     "Completed" : "Выполнено",
     "Filter by due date" : "Фильтр по сроку исполнения:",
     "Overdue" : "Просроченные",

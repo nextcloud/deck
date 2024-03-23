@@ -133,6 +133,7 @@ OC.L10N.register(
     "Filter by tag" : "Filtra pro etichetas",
     "Filter by assigned user" : "Filtra pro utente assignadu",
     "Unassigned" : "No assignadu",
+    "Open" : "Aberi",
     "Completed" : "Cumpletadu",
     "Filter by due date" : "Filtra pro data de iscadèntzia",
     "Overdue" : "Iscadèntzia",

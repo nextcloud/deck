@@ -145,6 +145,7 @@ OC.L10N.register(
     "Filter by tag" : "按标签筛选",
     "Filter by assigned user" : "按指派的用户筛选",
     "Unassigned" : "未指派",
+    "Open" : "打开",
     "Completed" : "已完成",
     "Filter by due date" : "按截止日期筛选",
     "Overdue" : "逾期",

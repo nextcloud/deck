@@ -149,6 +149,7 @@ OC.L10N.register(
     "Filter by tag" : "Sía eftir merki",
     "Filter by assigned user" : "Sía eftir úthlutuðum notanda",
     "Unassigned" : "Ekki úthlutað",
+    "Open" : "Opna",
     "Completed" : "Lokið",
     "Filter by due date" : "Sía eftir lokadagsetningu",
     "Overdue" : "Fram yfir tímamörk",
