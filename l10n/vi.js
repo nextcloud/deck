@@ -149,6 +149,7 @@ OC.L10N.register(
     "Filter by tag" : "Lọc theo nhãn",
     "Filter by assigned user" : "Lọc theo người dùng được phân công",
     "Unassigned" : "Chưa được phân công",
+    "Open" : "Mở",
     "Completed" : "Hoàn thành",
     "Filter by due date" : "Lọc theo thời hạn",
     "Overdue" : "Quá hạn",

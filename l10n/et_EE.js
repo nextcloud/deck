@@ -18,6 +18,7 @@ OC.L10N.register(
     "Invalid date, date format must be YYYY-MM-DD" : "Vigane kuupäev, formaat peab olema YYYY-MM-DD",
     "Cancel" : "Loobu",
     "File already exists" : "Fail on juba olemas",
+    "Open" : "Ava",
     "Completed" : "Lõpetatud",
     "Details" : "Üksikasjad",
     "Sharing" : "Jagamine",

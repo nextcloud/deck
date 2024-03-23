@@ -21,6 +21,7 @@ OC.L10N.register(
     "File already exists" : "El archivo ya existe",
     "Do you want to overwrite it?" : "¿Deseas sobre escribirlo?",
     "Add card" : "Agregar tarjeta",
+    "Open" : "Abrir",
     "Completed" : "Completado",
     "Hide archived cards" : "Ocultar tarjetas archivadas",
     "Show archived cards" : "Mostrar tarjetas archivadas",

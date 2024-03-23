@@ -55,6 +55,7 @@ OC.L10N.register(
     "Filter by tag" : "태그로 필터링",
     "Filter by assigned user" : "지정된 사용자로 필터링",
     "Unassigned" : "할당되지 않음",
+    "Open" : "열기",
     "Completed" : "완료됨",
     "Filter by due date" : "기한으로 필터링",
     "Overdue" : "기한 넘김",

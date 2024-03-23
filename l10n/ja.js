@@ -136,6 +136,7 @@ OC.L10N.register(
     "Filter by tag" : "タグによるフィルター",
     "Filter by assigned user" : "割当ユーザーでフィルター",
     "Unassigned" : "未割り当て",
+    "Open" : "開く",
     "Completed" : "完了",
     "Filter by due date" : "期限でフィルター",
     "Overdue" : "期限超過",

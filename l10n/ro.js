@@ -148,6 +148,7 @@ OC.L10N.register(
     "Filter by tag" : "Filtrare după etichetă",
     "Filter by assigned user" : "Filtrează după utilizatorul atribuit",
     "Unassigned" : "Nealocat",
+    "Open" : "Deschide",
     "Completed" : "Terminat",
     "Filter by due date" : "Filtrează după data scadentă",
     "Overdue" : "Termen depășit",

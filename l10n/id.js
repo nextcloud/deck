@@ -124,6 +124,7 @@ OC.L10N.register(
     "Filter by tag" : "Filter dengan tag",
     "Filter by assigned user" : "Filter dengan pengguna",
     "Unassigned" : "Belum ditugaskan",
+    "Open" : "Buka",
     "Completed" : "Selesai",
     "Filter by due date" : "Filter dengan tenggat",
     "Overdue" : "Lewat tenggat",
