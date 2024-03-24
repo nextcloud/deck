@@ -149,6 +149,8 @@ OC.L10N.register(
     "Filter by tag" : "تصفية بواسطة الوسم",
     "Filter by assigned user" : "تصفية بواسطة المستخدم الموكل اليه",
     "Unassigned" : "غير معيين ",
+    "Filter by completed" : "فلترة بحسب الإنجاز",
+    "Open and completed" : "مفتوحة و منجزة",
     "Open" : "إفتح",
     "Completed" : "مُكتمل",
     "Filter by due date" : "تصفية بواسطة تاريخ الإنجاز",
