@@ -99,5 +99,7 @@ export default {
 	display: inline-block;
 	border-radius: var(--border-radius-pill);
 	margin-right: 3px;
+	white-space: nowrap;
+  	text-overflow: ellipsis;
 }
 </style>
