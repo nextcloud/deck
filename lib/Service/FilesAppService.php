@@ -186,7 +186,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		$userFolder = $this->rootFolder->getUserFolder($this->userId);
 		try {
 			$folder = $userFolder->get($this->configService->getAttachmentFolder());
-		} catch (NotFoundException) {
+		} catch (NotFoundException $e) {
 			$folder = $userFolder->newFolder($this->configService->getAttachmentFolder());
 		}
 
