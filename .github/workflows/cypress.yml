@@ -23,7 +23,7 @@ jobs:
         # containers: [1, 2, 3]
         php-versions: [ '8.0' ]
         databases: [ 'sqlite' ]
-        server-versions: [ 'master' ]
+        server-versions: [ 'stable29' ]
 
     steps:
       - name: Use Node.js ${{ matrix.node-version }}
