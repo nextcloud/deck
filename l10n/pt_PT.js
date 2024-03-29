@@ -164,7 +164,6 @@ OC.L10N.register(
     "Share" : "Partilhar",
     "A <strong>card description</strong> inside the Deck app has been changed" : "Uma <strong>descrição do cartão</strong> dentro da aplicação Quadro foi alterada",
     "Timeline" : "Linha do tempo",
-    "Due date" : "Data limite",
     "Next week" : "Próxima semana",
     "Next month" : "Próximo mês",
     "List is empty" : "A lista está vazia"

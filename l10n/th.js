@@ -56,7 +56,6 @@ OC.L10N.register(
     "Today" : "วันนี้",
     "Tomorrow" : "พรุ่งนี้",
     "Close" : "ปิด",
-    "Share" : "แชร์",
-    "Due date" : "วันที่ครบกำหนด"
+    "Share" : "แชร์"
 },
 "nplurals=1; plural=0;");

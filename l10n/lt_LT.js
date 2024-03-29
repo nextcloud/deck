@@ -273,9 +273,7 @@ OC.L10N.register(
     "Share board with a user, group or circle …" : "Bendrinti lentą su naudotoju, grupe ar ratu…",
     "Searching for users, groups and circles …" : "Ieškoma naudotojų, grupių ir ratų…",
     "(Circle)" : "(Ratas)",
-    "Assign to users" : "Priskirti naudotojams",
     "Assign to users/groups/circles" : "Priskirti naudotojams/grupėms/ratams",
-    "Due date" : "Galutinio termino data",
     "Next week" : "Kita savaitė",
     "Next month" : "Kitas mėnuo",
     "List is empty" : "Sąrašas tuščias"

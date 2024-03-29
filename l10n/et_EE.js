@@ -53,7 +53,6 @@ OC.L10N.register(
     "Close" : "Sulge",
     "Share" : "Jaga",
     "Timeline" : "Ajajoon",
-    "Due date" : "Tähtaeg",
     "Next week" : "Järgmine nädal",
     "Next month" : "Järgmine kuu"
 },

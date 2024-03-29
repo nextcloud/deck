@@ -64,7 +64,6 @@ OC.L10N.register(
     "Today" : "Hoy",
     "Tomorrow" : "Mañana",
     "Close" : "Cerrar",
-    "Share" : "Compartir",
-    "Due date" : "Fecha de vencimiento"
+    "Share" : "Compartir"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
