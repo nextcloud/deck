@@ -100,6 +100,6 @@ export default {
 	border-radius: var(--border-radius-pill);
 	margin-right: 3px;
 	white-space: nowrap;
-  	text-overflow: ellipsis;
+	text-overflow: ellipsis;
 }
 </style>
