@@ -257,7 +257,6 @@ OC.L10N.register(
     "Timeline" : "Aikajana",
     "Share board with a user, group or circle …" : "Jaa taulu käyttäjän, ryhmän tai piirin ... kanssa",
     "(Circle)" : "(Piiri)",
-    "Due date" : "Eräpäivä",
     "Next week" : "Seuraava viikko",
     "Next month" : "Seuraava kuukausi",
     "List is empty" : "Lista on tyhjä",

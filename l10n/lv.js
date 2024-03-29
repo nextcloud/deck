@@ -56,7 +56,6 @@ OC.L10N.register(
     "Tomorrow" : "Rīt",
     "Close" : "Aizvērt",
     "Share" : "Koplietot",
-    "Due date" : "Izpildes datums",
     "Next week" : "Nākamā nedēļa",
     "Next month" : "Nākamais mēnesis"
 },

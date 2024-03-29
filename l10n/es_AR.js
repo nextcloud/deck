@@ -109,7 +109,6 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Compartir {file} con una tarjeta del Tablero",
     "Share" : "Compartir",
     "A <strong>card description</strong> inside the Deck app has been changed" : "Una <strong>descripción de tarjeta</strong> dentro de la app Deck ha cambiado",
-    "Due date" : "Fecha de vencimiento",
     "Next week" : "Proxima semana",
     "Next month" : "Proximo mes",
     "Limit deck usage of groups" : "Limitar el uso del Tablero a grupos",
