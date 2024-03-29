@@ -85,7 +85,6 @@ OC.L10N.register(
     "Tomorrow" : "Mañana",
     "Close" : "Cerrar",
     "Share" : "Compartir",
-    "Searching for users, groups and circles …" : "Buscando usuarios, grupos y círculos …",
-    "Due date" : "Fecha de vencimiento"
+    "Searching for users, groups and circles …" : "Buscando usuarios, grupos y círculos …"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
