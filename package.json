@@ -80,7 +80,7 @@
     "@nextcloud/eslint-config": "^8.3.0",
     "@nextcloud/stylelint-config": "^2.4.0",
     "@nextcloud/webpack-vue-config": "^6.0.0",
-    "@relative-ci/agent": "^4.2.5",
+    "@relative-ci/agent": "^4.2.6",
     "@vue/test-utils": "^2.4.5",
     "@vue/vue2-jest": "^29.2.6",
     "cypress": "^13.7.1",
