@@ -63,7 +63,6 @@ OC.L10N.register(
     "Today" : "დღეს",
     "Tomorrow" : "ხვალ",
     "Close" : "დახურვა",
-    "Share" : "გაზიარება",
-    "Due date" : "დროისთვის"
+    "Share" : "გაზიარება"
 },
 "nplurals=2; plural=(n!=1);");

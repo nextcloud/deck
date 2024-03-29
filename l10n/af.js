@@ -45,7 +45,6 @@ OC.L10N.register(
     "Today" : "Vandag",
     "Tomorrow" : "Môre",
     "Close" : "Sluit",
-    "Share" : "Deel",
-    "Due date" : "Sperdatum"
+    "Share" : "Deel"
 },
 "nplurals=2; plural=(n != 1);");

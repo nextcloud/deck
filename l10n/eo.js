@@ -133,7 +133,6 @@ OC.L10N.register(
     "Share" : "Kunhavigi",
     "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Karta priskribo</strong> ene de la aplikaĵo Kartaro ŝanĝiĝis",
     "Timeline" : "Kronologio",
-    "Due date" : "Limdato",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limigo de Kartaro („Deck“) baros uzantojn, kiuj ne estas en tiuj grupoj, krei iliajn proprajn tabulojn. Uzantoj tamen eblos labori kun tabuloj kunhavigitaj kun ili."
 },
 "nplurals=2; plural=(n != 1);");

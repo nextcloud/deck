@@ -140,7 +140,6 @@ OC.L10N.register(
     "Error creating the share" : "공유를 만드는 중 오류 발생",
     "Share" : "공유",
     "Timeline" : "타임라인",
-    "Due date" : "만료 날짜",
     "Next week" : "다음주",
     "Next month" : "다음달",
     "List is empty" : "목록이 비어 있음"
