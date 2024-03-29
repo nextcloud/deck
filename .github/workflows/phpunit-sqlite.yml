@@ -69,7 +69,7 @@ jobs:
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@a4e22b60bbb9c1021113f2860347b0759f66fe5d # v2
+        uses: shivammathur/setup-php@73963f5001e335723c998e4a0125ce060083985c # v2
         with:
           php-version: ${{ matrix.php-versions }}
           # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
