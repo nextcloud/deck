@@ -2,6 +2,7 @@ OC.L10N.register(
     "deck",
     {
     "Deck" : "Tarxeteru",
+    "Upcoming cards" : "Tarxetes próximes",
     "Load more" : "Cargar más",
     "Personal" : "Personal",
     "copy" : "copia",
@@ -14,8 +15,11 @@ OC.L10N.register(
     "Could not write file to disk" : "Nun se pudo escribir el ficheru nel discu",
     "A PHP extension stopped the file upload" : "Una estensión PHP paró la xuba de ficheros",
     "Invalid date, date format must be YYYY-MM-DD" : "La data ye inválida, el so formatu ha ser AAAA-MM-DD",
+    "Move card" : "Mover la tarxeta",
     "Cancel" : "Encaboxar",
     "File already exists" : "El ficheru yá esiste",
+    "Add card" : "Amestar una tarxeta",
+    "Add list" : "Amestar una llista",
     "Open" : "Abrir",
     "Completed" : "Completáu",
     "Open details" : "Abrir los detalles",
@@ -28,6 +32,7 @@ OC.L10N.register(
     "Owner" : "Propietariu",
     "Delete" : "Desaniciar",
     "Transfer" : "Tresferir",
+    "Delete list" : "Desaniciar la llista",
     "Edit" : "Editar",
     "Members" : "Miembros",
     "Show in Files" : "Amosar en Ficheros",
@@ -42,7 +47,10 @@ OC.L10N.register(
     "Created:" : "Creóse'l",
     "Description" : "Descripción",
     "(Saving…)" : "(Guardando…)",
+    "Edit description" : "Editar la descripción",
     "Not completed" : "Nun se completó",
+    "Archive card" : "Archivar la tarxeta",
+    "Delete card" : "Desaniciar la tarxeta",
     "seconds ago" : "hai segundos",
     "Keyboard shortcuts" : "Atayos del tecláu",
     "Action" : "Aición",
@@ -59,6 +67,7 @@ OC.L10N.register(
     "Tomorrow – {timeLocale}" : "Mañana – {timeLocale}",
     "Error creating the share" : "Hebo un error al crear la compartición",
     "Share" : "Compartir",
-    "Timeline" : "Llinia de tiempu"
+    "Timeline" : "Llinia de tiempu",
+    "Next week" : "La selmana que vien"
 },
 "nplurals=2; plural=(n != 1);");
