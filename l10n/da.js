@@ -109,7 +109,7 @@ OC.L10N.register(
     "Board not found" : "Tavle ikke fundet.",
     "Create a new list to add cards to this board" : "Opret en ny kolonne for at tilføje kort til denne tavle ",
     "Sharing" : "Deling",
-    "Tags" : "Mærkat",
+    "Tags" : "Tags",
     "Deleted items" : "Slettede objekter",
     "Activity" : "Aktivitet",
     "Deleted lists" : "Slettede kolonner",
