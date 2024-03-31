@@ -3,6 +3,7 @@
     "Personal" : "Personal",
     "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
     "The board \"%s\" has been shared with you by %s." : "El tablero \"%s\" ha sido compartido contigo por %s.",
+    "Deck board" : "Tablero de Deck",
     "%s on %s" : "%s en %s",
     "Finished" : "Terminado",
     "To review" : "Para revisar",
