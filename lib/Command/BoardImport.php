@@ -43,7 +43,7 @@ class BoardImport extends Command {
 				null,
 				InputOption::VALUE_REQUIRED,
 				'Configuration json file.',
-				'config.json'
+				null
 			)
 			->addOption(
 				'data',
