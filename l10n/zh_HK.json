@@ -338,7 +338,7 @@
     "Tomorrow" : "明日",
     "No due" : "沒有到期的",
     "Search for {searchQuery} in all boards" : "在所有面板中搜索 {searchQuery}",
-    "No results found" : "沒有結果",
+    "No results found" : "未找到結果",
     "This weekend – {timeLocale}" : "本週末 – {timeLocale}",
     "Deck board {name}\n* Last modified on {lastMod}" : "Deck 面板 {name}\n* 最後修改於  {lastMod}",
     "{stack} in {board}" : "{board} 中的 {stack}",
