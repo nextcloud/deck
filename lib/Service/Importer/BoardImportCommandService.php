@@ -84,7 +84,7 @@ class BoardImportCommandService extends BoardImportService {
 
 			if (is_string($config)) {
 				if (!is_file($config)) {
-					throw new NotFoundException('It\'s not a valid config file.');
+					throw new NotFoundException('Config file not found.');
 				}
 				$config = json_decode(file_get_contents($config));
 				if (!$config instanceof \stdClass) {
