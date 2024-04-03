@@ -85,6 +85,7 @@ OC.L10N.register(
     "Today" : "Hoy",
     "Tomorrow" : "Mañana",
     "Close" : "Cerrar",
+    "Error creating the share" : "Error creando el recurso compartido",
     "Share" : "Compartir",
     "Searching for users, groups and circles …" : "Buscando usuarios, grupos y círculos …"
 },
