@@ -24,12 +24,12 @@
 	<NcAppSidebar v-if="currentBoard && currentCard"
 		:active="tabId"
 		:name="title"
-		:subtitle="subtitle"
-		:subtitle-tooltip="subtitleTooltip"
-		:title-editable="titleEditable"
-		@update:titleEditable="handleUpdateTitleEditable"
-		@update:title="handleUpdateTitle"
-		@submit-title="handleSubmitTitle"
+		:subname="subtitle"
+		:subtitle="subtitleTooltip"
+		:name-editable="titleEditable"
+		@update:nameEditable="handleUpdateTitleEditable"
+		@update:name="handleUpdateTitle"
+		@submit-name="handleSubmitTitle"
 		@close="closeSidebar">
 		<template #secondary-actions>
 			<NcActionButton v-if="cardDetailsInModal && isFullApp" icon="icon-menu-sidebar" @click.stop="closeModal()">
