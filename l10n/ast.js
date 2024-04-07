@@ -49,6 +49,7 @@ OC.L10N.register(
     "Created:" : "Creóse'l",
     "Description" : "Descripción",
     "(Saving…)" : "(Guardando…)",
+    "Formatting help" : "Ayuda del formatu",
     "Edit description" : "Editar la descripción",
     "Not completed" : "Nun se completó",
     "Archive card" : "Archivar la tarxeta",
