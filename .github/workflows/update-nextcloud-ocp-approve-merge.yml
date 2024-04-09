@@ -43,7 +43,7 @@ jobs:
 
       # Enable GitHub auto merge
       - name: Auto merge
-        uses: alexwilson/enable-github-automerge-action@d8d24b8699d9749aca9279609909abca856457c8 # main
+        uses: alexwilson/enable-github-automerge-action@f16dda8dd0d50ba5be8f0628a7d6120359a7135f # main
         if: startsWith(steps.branchname.outputs.branch, 'automated/noid/') && endsWith(steps.branchname.outputs.branch, 'update-nextcloud-ocp')
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
