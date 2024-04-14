@@ -6,6 +6,7 @@ OC.L10N.register(
     "Load more" : "Cargar más",
     "Personal" : "Personal",
     "%s on %s" : "%s n %s",
+    "Action needed" : "Aición necesaria",
     "copy" : "copia",
     "Done" : "Fecho",
     "The file was uploaded" : "Xubióse'l ficheru",
