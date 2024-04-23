@@ -100,7 +100,7 @@ jobs:
 
       - name: Create Pull Request
         if: steps.checkout.outcome == 'success'
-        uses: peter-evans/create-pull-request@70a41aba780001da0a30141984ae2a0c95d8704e # v3
+        uses: peter-evans/create-pull-request@9153d834b60caba6d51c9b9510b087acf9f33f83 # v3
         with:
           token: ${{ secrets.COMMAND_BOT_PAT }}
           commit-message: "chore(dev-deps): Bump nextcloud/ocp package"
