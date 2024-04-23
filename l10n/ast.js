@@ -67,6 +67,7 @@ OC.L10N.register(
     "Shared with you" : "Compartióse contigo",
     "All cards" : "Toles tarxetes",
     "No notifications" : "Nun hai nengún avisu",
+    "No reminder" : "Nun hai nengún recordatoriu",
     "An error occurred" : "Prodúxose un error",
     "Today" : "Güei",
     "Tomorrow" : "Mañana",
@@ -78,6 +79,7 @@ OC.L10N.register(
     "Error creating the share" : "Hebo un error al crear la compartición",
     "Share" : "Compartir",
     "Timeline" : "Llinia de tiempu",
-    "Next week" : "La selmana que vien"
+    "Next week" : "La selmana que vien",
+    "Next month" : "Mes siguiente"
 },
 "nplurals=2; plural=(n != 1);");
