@@ -52,7 +52,7 @@ jobs:
 
     steps:
       - name: Checkout server
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.3
         with:
           repository: nextcloud/server
           ref: ${{ matrix.server-versions }}
@@ -66,12 +66,12 @@ jobs:
           cd build/integration && composer require --dev phpunit/phpunit:~9
 
       - name: Checkout app
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.3
         with:
           path: apps/${{ env.APP_NAME }}
 
       -   name: Checkout activity
-          uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+          uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4.1.3
           with:
               repository: nextcloud/activity
               ref: ${{ matrix.server-versions }}
