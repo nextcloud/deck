@@ -1,6 +1,31 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.13.0
+
+### Added
+
+- feat: Rename to teams @juliushaertl [#5611](https://github.com/nextcloud/deck/pull/5611)
+- feat: Implement a team resource provider @juliushaertl [#5625](https://github.com/nextcloud/deck/pull/5625)
+- Interactive board widget @juliushaertl [#5630](https://github.com/nextcloud/deck/pull/5630)
+- introduce done and open filters @grnd-alt [#5488](https://github.com/nextcloud/deck/pull/5488)
+
+### Fixed
+
+- fixed sorting for upcoming cards @elzody [#5493](https://github.com/nextcloud/deck/pull/5493)
+- fix(PermissionService#getPermissions): Catch exceptions from getBoard method @marcelklehr [#5542](https://github.com/nextcloud/deck/pull/5542)
+- fix(activity): Fix permission checks when rendering activities in bac… @nickvergessen [#5533](https://github.com/nextcloud/deck/pull/5533)
+- fix: Safeguard sync requests to hopefully not spam then server @juliushaertl [#5590](https://github.com/nextcloud/deck/pull/5590)
+- fix: card move dialog auto close @luka-nextcloud [#5537](https://github.com/nextcloud/deck/pull/5537)
+- fix: Avoid conflicts on deck attachments folder name @juliushaertl [#5703](https://github.com/nextcloud/deck/pull/5703)
+- fix: Adapt NcAppSidebar props to new version @backportbot[bot] [#5768](https://github.com/nextcloud/deck/pull/5768)
+- Fix tags' display when they are numerous @backportbot[bot] [#5727](https://github.com/nextcloud/deck/pull/5727)
+- Clarify config file not found exception message @backportbot[bot] [#5724](https://github.com/nextcloud/deck/pull/5724)
+
+### Other
+
+- chore(CI): Adjust testing matrix for Nextcloud 29 on stable29 @nickvergessen [#5711](https://github.com/nextcloud/deck/pull/5711)
+
 ## 1.13.0-beta.1
 
 ### Added
