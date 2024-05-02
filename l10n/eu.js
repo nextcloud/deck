@@ -280,6 +280,7 @@ OC.L10N.register(
     "Ctrl" : "Ctrl",
     "Search" : "Bilatu",
     "Enter" : "Sartu",
+    "Space" : "Espazioa",
     "All boards" : "Taula guztiak",
     "Archived boards" : "Artxibatutako taulak",
     "Shared with you" : "Zurekin partekatua",
