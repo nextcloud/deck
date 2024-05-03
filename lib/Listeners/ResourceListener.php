@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 namespace OCA\Deck\Listeners;
 
 use OCA\Deck\Collaboration\Resources\ResourceProvider;

@@ -1,4 +1,7 @@
-
+<!--
+  - SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 The REST API provides access for authenticated users to their data inside the Deck app. To get a better understanding of Decks data models and their relations, please have a look at the  [data structure](structure.md) documentation.
 
 # Prerequisites

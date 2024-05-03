@@ -1,3 +1,7 @@
+<!--
+  - SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <template>
 	<div class="selector-wrapper" :aria-label="t('deck', 'Assign a tag to this card…')" data-test="tag-selector">
 		<div class="selector-wrapper--icon">

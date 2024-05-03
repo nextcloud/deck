@@ -1,3 +1,7 @@
+<!--
+  - SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <template>
 	<div class="selector-wrapper" :aria-label="t('deck', 'Assign to users/groups/team')" data-test="assignment-selector">
 		<div class="selector-wrapper--icon">

@@ -1,3 +1,7 @@
+<!--
+  - SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 # Deck
 
 [![Build Status](https://travis-ci.org/nextcloud/deck.svg?branch=main)](https://travis-ci.org/nextcloud/deck) [![CodeCov](https://codecov.io/github/nextcloud/deck/coverage.svg?branch=main)](https://codecov.io/github/nextcloud/deck) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e403f723f42a4abd93b2cfe36cbd7eee)](https://www.codacy.com/app/juliushaertl/deck?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=nextcloud/deck&amp;utm_campaign=Badge_Grade) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nextcloud/deck/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/nextcloud/deck/?branch=main) [![#nextcloud-deck](https://img.shields.io/badge/IRC-%23nextcloud--deck%20on%20freenode-blue.svg)](https://webchat.freenode.net/?channels=nextcloud-deck)

@@ -1,3 +1,7 @@
+<!--
+  - SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 ## Export
 
 Deck currently supports exporting all boards a user owns in a single JSON file. The format is based on the database schema that deck uses. It can be used to re-import boards on the same or other instances.

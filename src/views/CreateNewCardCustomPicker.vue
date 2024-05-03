@@ -1,3 +1,7 @@
+<!--
+  - SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <template>
 	<div class="modal-scroller">
 		<div v-if="!creating && !created" id="modal-inner" :class="{ 'icon-loading': loading }">

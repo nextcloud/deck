@@ -1,3 +1,7 @@
+<!--
+  - SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <template>
 	<div v-if="reply" class="reply" :class="{ 'reply--preview': preview }">
 		<div class="reply--wrapper">

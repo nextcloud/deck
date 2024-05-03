@@ -1,3 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 .activitymessage .visualdiff ins {
 	background-color: rgba(70, 186, 97, 0.2);
 	text-decoration: none;

@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
 app_name=$(notdir $(CURDIR))
 build_tools_directory=$(CURDIR)/build/tools
 build_dir=$(CURDIR)/build/artifacts
