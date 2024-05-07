@@ -111,7 +111,7 @@ OC.L10N.register(
     "The file was only partially uploaded" : "檔案僅部分上傳",
     "No file was uploaded" : "沒有檔案被上傳",
     "Missing a temporary folder" : "找不到暫存資料夾",
-    "Could not write file to disk" : "寫入硬碟失敗",
+    "Could not write file to disk" : "無法將檔案寫入磁碟",
     "A PHP extension stopped the file upload" : "某個 PHP 擴充功能終止檔案的上傳",
     "No file uploaded or file size exceeds maximum of %s" : "沒有上傳檔案或檔案大小超過 %s 的最大值",
     "This comment has more than %s characters.\nAdded as an attachment to the card with name %s.\nAccessible on URL: %s." : "此評論超過%s個字符。\n作為附件添加到名稱為 %s 的卡片上。\n可於此 URL  存取：%s。",
