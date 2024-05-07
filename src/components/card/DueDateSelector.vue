@@ -1,3 +1,7 @@
+<!--
+  - SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <template>
 	<CardDetailEntry :label="t('deck', 'Assign a due date to this card…')" data-test="due-date-selector">
 		<Calendar v-if="!card.done" slot="icon" :size="20" />

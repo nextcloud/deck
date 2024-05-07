@@ -1,3 +1,7 @@
+<!--
+  - SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 Releasing a new version works quite easy with [krankerl](https://github.com/ChristophWurst/krankerl) and [github-release](https://github.com/aktau/github-release) installed:
 
 1. Run krankerl to build the package

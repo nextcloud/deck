@@ -1,4 +1,9 @@
+<!--
+  - SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 ## Introduction
+
 ### What about Deck ?
 You may know Kanban website like Trello? Deck is about the same thing but secured and respectful of your privacy!  
 Integrated in Nextcloud, you can easily manage your projects while having your data secured.

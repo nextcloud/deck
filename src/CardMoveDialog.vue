@@ -1,3 +1,7 @@
+<!--
+  - SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <template>
 	<NcModal v-if="modalShow" :title="t('deck', 'Move card to another board')" @close="modalShow=false">
 		<div class="modal__content">
