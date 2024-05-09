@@ -14,7 +14,7 @@ env:
 jobs:
   cypress:
 
-    runs-on: ubuntu-latest
+    runs-on: ['ubuntu-latest', 'self-hosted']
 
     strategy:
       fail-fast: false
@@ -83,7 +83,7 @@ jobs:
       - name: Set up Nextcloud
         env:
           DB_PORT: 4444
-          PHP_CLI_SERVER_WORKERS: 10
+          PHP_CLI_SERVER_WORKERS: 5
         run: |
           mkdir data
           echo '<?php $CONFIG=["memcache.local"=>"\OC\Memcache\APCu","hashing_default_password"=>true];' > config/config.php
