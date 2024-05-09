@@ -24,6 +24,10 @@ jobs:
         php-versions: [ '8.2' ]
         server-versions: [ 'master' ]
 
+    env:
+      extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, zip, gd, apcu
+      key: cache-v1
+
     services:
       postgres:
         image: ghcr.io/nextcloud/continuous-integration-postgres-14:latest
@@ -71,11 +75,26 @@ jobs:
           ref: ${{ env.text_app_ref }}
           path: apps/text
 
+      - name: Setup cache environment
+        id: extcache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: ${{ env.extensions }}
+          key: ${{ env.key }}
+
+      - name: Cache extensions
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.extcache.outputs.dir }}
+          key: ${{ steps.extcache.outputs.key }}
+          restore-keys: ${{ steps.extcache.outputs.key }}
+
       - name: Set up php ${{ matrix.php-versions }}
         uses: shivammathur/setup-php@2.30.4
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, zip, gd, apcu
+          extensions: ${{ env.extensions }}
           ini-values:
             apc.enable_cli=on
           coverage: none
