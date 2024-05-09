@@ -33,7 +33,7 @@
     "@babel/polyfill": "^7.12.1",
     "@babel/runtime": "^7.24.4",
     "@nextcloud/auth": "^2.2.1",
-    "@nextcloud/axios": "^2.4.0",
+    "@nextcloud/axios": "^2.5.0",
     "@nextcloud/capabilities": "^1.2.0",
     "@nextcloud/dialogs": "^5.3.1",
     "@nextcloud/event-bus": "^3.1.0",
