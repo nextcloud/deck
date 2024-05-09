@@ -54,7 +54,7 @@
 				<template #icon>
 					<CheckIcon :size="20" />
 				</template>
-				{{ t('deck', 'Completed') }}
+				{{ t('deck', 'Mark as done') }}
 			</NcButton>
 		</template>
 		<template v-else>
@@ -70,7 +70,7 @@
 			<div class="due-actions">
 				<NcButton v-if="!card.archived"
 					type="tertiary"
-					:name="t('deck', 'Not completed')"
+					:name="t('deck', 'Not done')"
 					@click="changeCardDoneStatus()">
 					<template #icon>
 						<ClearIcon :size="20" />
