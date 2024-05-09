@@ -74,7 +74,7 @@
     "npm": "^9.0.0"
   },
   "devDependencies": {
-    "@nextcloud/babel-config": "^1.0.0",
+    "@nextcloud/babel-config": "^1.1.1",
     "@nextcloud/browserslist-config": "^3.0.1",
     "@nextcloud/cypress": "^1.0.0-beta.8",
     "@nextcloud/eslint-config": "^8.3.0",
