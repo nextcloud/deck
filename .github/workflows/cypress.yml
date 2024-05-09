@@ -21,7 +21,7 @@ jobs:
       matrix:
         node-version: [20.x]
         # containers: [1, 2, 3]
-        php-versions: [ '8.1' ]
+        php-versions: [ '8.2' ]
         server-versions: [ 'master' ]
 
     services:
@@ -83,8 +83,13 @@ jobs:
       - name: Set up Nextcloud
         env:
           DB_PORT: 4444
-          PHP_CLI_SERVER_WORKERS: 5
+          PHP_CLI_SERVER_WORKERS: 20
         run: |
+          cd apps/deck
+          composer install --no-dev
+          npm ci
+          npm run dev
+          cd ../..
           mkdir data
           echo '<?php $CONFIG=["memcache.local"=>"\OC\Memcache\APCu","hashing_default_password"=>true];' > config/config.php
           php occ maintenance:install --verbose --database=pgsql --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
@@ -96,23 +101,20 @@ jobs:
           php occ user:add --password-from-env user2
           php occ app:enable deck
           php occ app:list
-          cd apps/deck
-          composer install --no-dev
-          npm ci
-          npm run build
           curl -v http://localhost:8081/index.php/login
 
-      - name: Run E2E cypress tests
-        run: |
-            cd 'apps/${{ env.APP_NAME }}'
-            npx wait-on $CYPRESS_baseUrl
-            npx cypress run --record false --config defaultCommandTimeout=10000,video=false
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          record: false
+          parallel: false
+          browser: chrome
+          wait-on: '${{ env.CYPRESS_baseUrl }}'
+          working-directory: 'apps/${{ env.APP_NAME }}'
+          config: defaultCommandTimeout=10000,video=false
         env:
-            # https://github.com/cypress-io/github-action/issues/124
-            COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
-            COMMIT_INFO_SHA: ${{ github.event.pull_request.head.sha }}
-            CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-            npm_package_name: ${{ env.APP_NAME }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          npm_package_name: ${{ env.APP_NAME }}
 
       - name: Upload test failure screenshots
         uses: actions/upload-artifact@v4
