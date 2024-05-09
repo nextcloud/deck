@@ -81,7 +81,7 @@
     "@nextcloud/stylelint-config": "^2.4.0",
     "@nextcloud/webpack-vue-config": "^6.0.0",
     "@relative-ci/agent": "^4.2.6",
-    "@vue/test-utils": "^2.4.5",
+    "@vue/test-utils": "^2.4.6",
     "@vue/vue2-jest": "^29.2.6",
     "cypress": "^13.9.0",
     "eslint-plugin-cypress": "^2.15.1",
