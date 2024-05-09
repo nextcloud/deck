@@ -80,16 +80,16 @@ jobs:
             apc.enable_cli=on
           coverage: none
 
+      - name: Install composer dependencies
+        working-directory: apps/${{ env.APP_NAME }}
+        run: |
+          composer install --no-dev
+
       - name: Set up Nextcloud
         env:
           DB_PORT: 4444
           PHP_CLI_SERVER_WORKERS: 20
         run: |
-          cd apps/deck
-          composer install --no-dev
-          npm ci
-          npm run dev
-          cd ../..
           mkdir data
           echo '<?php $CONFIG=["memcache.local"=>"\OC\Memcache\APCu","hashing_default_password"=>true];' > config/config.php
           php occ maintenance:install --verbose --database=pgsql --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
@@ -106,6 +106,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
+          build: npm run dev
           record: false
           parallel: false
           browser: chrome
