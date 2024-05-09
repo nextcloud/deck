@@ -14,15 +14,19 @@ env:
 jobs:
   cypress:
 
-    runs-on: ubuntu-latest
+    runs-on: 'ubuntu-latest'
 
     strategy:
       fail-fast: false
       matrix:
         node-version: [20.x]
         # containers: [1, 2, 3]
-        php-versions: [ '8.1' ]
+        php-versions: [ '8.2' ]
         server-versions: [ 'master' ]
+
+    env:
+      extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, zip, gd, apcu
+      key: cache-v1
 
     services:
       postgres:
@@ -71,19 +75,39 @@ jobs:
           ref: ${{ env.text_app_ref }}
           path: apps/text
 
+      - name: Setup cache environment
+        id: extcache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: ${{ env.extensions }}
+          key: ${{ env.key }}
+
+      - name: Cache extensions
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.extcache.outputs.dir }}
+          key: ${{ steps.extcache.outputs.key }}
+          restore-keys: ${{ steps.extcache.outputs.key }}
+
       - name: Set up php ${{ matrix.php-versions }}
         uses: shivammathur/setup-php@2.30.4
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, zip, gd, apcu
+          extensions: ${{ env.extensions }}
           ini-values:
             apc.enable_cli=on
           coverage: none
 
+      - name: Install composer dependencies
+        working-directory: apps/${{ env.APP_NAME }}
+        run: |
+          composer install --no-dev
+
       - name: Set up Nextcloud
         env:
           DB_PORT: 4444
-          PHP_CLI_SERVER_WORKERS: 10
+          PHP_CLI_SERVER_WORKERS: 20
         run: |
           mkdir data
           echo '<?php $CONFIG=["memcache.local"=>"\OC\Memcache\APCu","hashing_default_password"=>true];' > config/config.php
@@ -96,23 +120,21 @@ jobs:
           php occ user:add --password-from-env user2
           php occ app:enable deck
           php occ app:list
-          cd apps/deck
-          composer install --no-dev
-          npm ci
-          npm run build
           curl -v http://localhost:8081/index.php/login
 
-      - name: Run E2E cypress tests
-        run: |
-            cd 'apps/${{ env.APP_NAME }}'
-            npx wait-on $CYPRESS_baseUrl
-            npx cypress run --record false --config defaultCommandTimeout=10000,video=false
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          build: npm run dev
+          record: false
+          parallel: false
+          browser: chrome
+          wait-on: '${{ env.CYPRESS_baseUrl }}'
+          working-directory: 'apps/${{ env.APP_NAME }}'
+          config: defaultCommandTimeout=10000,video=false
         env:
-            # https://github.com/cypress-io/github-action/issues/124
-            COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
-            COMMIT_INFO_SHA: ${{ github.event.pull_request.head.sha }}
-            CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-            npm_package_name: ${{ env.APP_NAME }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          npm_package_name: ${{ env.APP_NAME }}
 
       - name: Upload test failure screenshots
         uses: actions/upload-artifact@v4
