@@ -247,8 +247,8 @@
     "Add due date" : "Voeg vervaldatum toe",
     "Choose a date" : "Kies een datum",
     "Remove due date" : "Verwijder vervaldatum",
+    "Mark as done" : "Markeer als voltooid",
     "Due at:" : "Verloopt op:",
-    "Not completed" : "Niet compleet",
     "Unarchive card" : "Terughalen kaart uit archief",
     "Archive card" : "Archiveer kaart",
     "Select Date" : "Selecteer datum",
@@ -267,7 +267,6 @@
     "Assign to me" : "Aan mij toewijzen",
     "Unassign myself" : "Eigen toewijzing opheffen",
     "Mark as not done" : "Markeren als niet gedaan",
-    "Mark as done" : "Markeer als voltooid",
     "Delete card" : "Verwijderen kaart",
     "Card deleted" : "Kaart verwijderd",
     "seconds ago" : "seconden geleden",
@@ -354,6 +353,7 @@
     "Next month" : "Volgende maand",
     "List is empty" : "Lijst is leeg",
     "Limit deck usage of groups" : "Beperk gebruik decks van groepen",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Het beperken van Deck verhindert dat gebruikers die niet lid zijn van die groepen hun eigen borden kunnen maken. gebruikers kunnen nog wel werken met de borden die met deze gebruikers zijn gedeeld."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Het beperken van Deck verhindert dat gebruikers die niet lid zijn van die groepen hun eigen borden kunnen maken. gebruikers kunnen nog wel werken met de borden die met deze gebruikers zijn gedeeld.",
+    "Not completed" : "Niet compleet"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

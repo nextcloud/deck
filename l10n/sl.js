@@ -217,7 +217,7 @@ OC.L10N.register(
     "Choose attachment" : "Izbor priloge",
     "Set a due date" : "Nastavi datum preteka",
     "Remove due date" : "Odstrani datum preteka",
-    "Not completed" : "Ni končano",
+    "Mark as done" : "Označi kot končano",
     "Unarchive card" : "Povrni nalogo",
     "Archive card" : "Arhiviraj nalogo",
     "Select Date" : "Izbor datuma",
@@ -228,7 +228,6 @@ OC.L10N.register(
     "Card details" : "Podrobnosti naloge",
     "Assign to me" : "Nalogo dodeli meni",
     "Unassign myself" : "Odstrani me z naloge",
-    "Mark as done" : "Označi kot končano",
     "Delete card" : "Izbriši nalogo",
     "Card deleted" : "Naloga je izbrisana",
     "seconds ago" : "pred nekaj sekundami",
@@ -302,6 +301,7 @@ OC.L10N.register(
     "Next month" : "Naslednji mesec",
     "List is empty" : "Seznam je prazen",
     "Limit deck usage of groups" : "Omeji uporabo zbirk na skupine",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Omejevanje programa prepreči uporabnikom, ki niso del teh skupin, ustvarjanje novih zbirk. Uporabniki bodo še vedno lahko spreminjali zbirke, ki so jih dobili v souporabo."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Omejevanje programa prepreči uporabnikom, ki niso del teh skupin, ustvarjanje novih zbirk. Uporabniki bodo še vedno lahko spreminjali zbirke, ki so jih dobili v souporabo.",
+    "Not completed" : "Ni končano"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");
