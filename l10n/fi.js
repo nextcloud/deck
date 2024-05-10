@@ -193,7 +193,7 @@ OC.L10N.register(
     "Choose attachment" : "Valitse liite",
     "Set a due date" : "Aseta eräpäivä",
     "Remove due date" : "Poista eräpäivä",
-    "Not completed" : "Ei valmis",
+    "Mark as done" : "Merkitse valmiiksi",
     "Unarchive card" : "Poista kortti arkistosta",
     "Archive card" : "Arkistoi kortti",
     "Select Date" : "Valitse päivä",
@@ -204,7 +204,6 @@ OC.L10N.register(
     "Card details" : "Näytä kortin sisältö",
     "Assign to me" : "Määritä minulle",
     "Unassign myself" : "Poista määritys minulta",
-    "Mark as done" : "Merkitse valmiiksi",
     "Delete card" : "Poista kortti",
     "Card deleted" : "Kortti poistettu",
     "seconds ago" : "sekuntia sitten",
@@ -260,6 +259,7 @@ OC.L10N.register(
     "Next week" : "Seuraava viikko",
     "Next month" : "Seuraava kuukausi",
     "List is empty" : "Lista on tyhjä",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Pakan käytön rajoittaminen estää merkittyjen ryhmien jäseniä luomasta omia taulujaan, mutta käyttäjät pystyvät silti käyttämään heidän kanssaan jaettuja tauluja."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Pakan käytön rajoittaminen estää merkittyjen ryhmien jäseniä luomasta omia taulujaan, mutta käyttäjät pystyvät silti käyttämään heidän kanssaan jaettuja tauluja.",
+    "Not completed" : "Ei valmis"
 },
 "nplurals=2; plural=(n != 1);");

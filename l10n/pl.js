@@ -249,8 +249,8 @@ OC.L10N.register(
     "Add due date" : "Dodaj termin",
     "Choose a date" : "Wybierz datę",
     "Remove due date" : "Usuń datę realizacji",
+    "Mark as done" : "Oznacz jako wykonane",
     "Due at:" : "Termin:",
-    "Not completed" : "Nie zakończone",
     "Unarchive card" : "Nie archiwizuj karty",
     "Archive card" : "Zarchiwizuj kartę",
     "Select Date" : "Wybierz datę",
@@ -269,7 +269,6 @@ OC.L10N.register(
     "Assign to me" : "Przydziel do mnie",
     "Unassign myself" : "Cofnij moje przypisanie",
     "Mark as not done" : "Oznacz jako niewykonane",
-    "Mark as done" : "Oznacz jako wykonane",
     "Delete card" : "Usuń kartę",
     "Card deleted" : "Karta usunięta",
     "seconds ago" : "przed chwilą",
@@ -357,6 +356,7 @@ OC.L10N.register(
     "Next month" : "Następny miesiąc",
     "List is empty" : "Lista jest pusta",
     "Limit deck usage of groups" : "Ogranicz użycie tablic dla grup",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ograniczenie Tablicy zablokuje użytkownikom z tych grup możliwość tworzenia własnych tablic. Użytkownicy nadal będą mogli pracować na tablicach, które zostały im udostępnione."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ograniczenie Tablicy zablokuje użytkownikom z tych grup możliwość tworzenia własnych tablic. Użytkownicy nadal będą mogli pracować na tablicach, które zostały im udostępnione.",
+    "Not completed" : "Nie zakończone"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

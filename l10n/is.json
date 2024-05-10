@@ -247,8 +247,8 @@
     "Add due date" : "Bæta við skiladegi",
     "Choose a date" : "Veldu dagsetningu",
     "Remove due date" : "Fjarlægja skiladag",
+    "Mark as done" : "Merkja sem lokið",
     "Due at:" : "Á að ljúka klukkan:",
-    "Not completed" : "Er ekki lokið",
     "Unarchive card" : "Taka spjald úr geymslu",
     "Archive card" : "Setja spjald í geymslu",
     "Select Date" : "Veldu dag",
@@ -267,7 +267,6 @@
     "Assign to me" : "Úthluta mér",
     "Unassign myself" : "Aftengja úthlutun sjálfs mín",
     "Mark as not done" : "Merkja sem ólokið",
-    "Mark as done" : "Merkja sem lokið",
     "Delete card" : "Eyða spjaldi",
     "Card deleted" : "Spjaldi eytt",
     "seconds ago" : "sekúndum síðan",
@@ -355,6 +354,7 @@
     "Next month" : "Næsti mánuður",
     "List is empty" : "Listi er tómur",
     "Limit deck usage of groups" : "Takmarka notkun hópa á spjaldaforritinu",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Takmörkun í  Deck spjaldaforritinu mun loka notendur sem tilheyra ekki þessum hópum frá því að útbúa sín eigin borð. Notendurnir munu samt geta áfram unnið með borð sem hefur verið deilt til þeirra."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Takmörkun í  Deck spjaldaforritinu mun loka notendur sem tilheyra ekki þessum hópum frá því að útbúa sín eigin borð. Notendurnir munu samt geta áfram unnið með borð sem hefur verið deilt til þeirra.",
+    "Not completed" : "Er ekki lokið"
 },"pluralForm" :"nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);"
 }

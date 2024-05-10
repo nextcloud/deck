@@ -256,8 +256,8 @@ OC.L10N.register(
     "Add due date" : "أضِف تاريخ الاستحقاق",
     "Choose a date" : "إختَر تاريخاً",
     "Remove due date" : "ازالة تاريخ الانجاز",
+    "Mark as done" : "تمييز كمُنجَز",
     "Due at:" : "تاريخ الاستحقاق:",
-    "Not completed" : "غير مكتمل",
     "Unarchive card" : "إلغاء أرشفة البطاقة ",
     "Archive card" : "أرشفة البطاقة",
     "Select Date" : "اختر التاريخ ",
@@ -277,7 +277,6 @@ OC.L10N.register(
     "Assign to me" : "ينسب لي",
     "Unassign myself" : "إلغاء تعييني ",
     "Mark as not done" : "تمييز كـ \"غير منتهٍ\"",
-    "Mark as done" : "تمييز كمُنجَز",
     "Delete card" : "حذف البطاقة",
     "Card deleted" : "البطاقة حٌذفت ",
     "seconds ago" : "ثوانٍ مضت",
@@ -384,6 +383,7 @@ OC.L10N.register(
     "Next month" : "الشهر القادم",
     "List is empty" : "القائمة فارغة",
     "Limit deck usage of groups" : "تقييد استخدام Deck  للمجموعات",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "سيؤدي تقييد Deck إلى منع المستخدمين الذين ليسوا جزءًا من تلك المجموعات من إنشاء لوحاتهم الخاصة. سيظل المستخدمون قادرين على العمل على اللوحات التي تمت مشاركتها معهم."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "سيؤدي تقييد Deck إلى منع المستخدمين الذين ليسوا جزءًا من تلك المجموعات من إنشاء لوحاتهم الخاصة. سيظل المستخدمون قادرين على العمل على اللوحات التي تمت مشاركتها معهم.",
+    "Not completed" : "غير مكتمل"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");
