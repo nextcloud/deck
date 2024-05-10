@@ -249,8 +249,8 @@ OC.L10N.register(
     "Add due date" : "Aggiungi data di scadenza",
     "Choose a date" : "Scegli una data",
     "Remove due date" : "Rimuovi data di scadenza",
+    "Mark as done" : "Marca come completato",
     "Due at:" : "Scadenza:",
-    "Not completed" : "Non completato",
     "Unarchive card" : "Recupera lavagna dall'archivio",
     "Archive card" : "Archivia scheda",
     "Select Date" : "Seleziona data",
@@ -269,7 +269,6 @@ OC.L10N.register(
     "Assign to me" : "Assegna a me",
     "Unassign myself" : "Rimuovi assegnazione da me",
     "Mark as not done" : "Segna come non fatto",
-    "Mark as done" : "Marca come completato",
     "Delete card" : "Elimina scheda",
     "Card deleted" : "Scheda eliminata",
     "seconds ago" : "secondi fa",
@@ -375,6 +374,7 @@ OC.L10N.register(
     "Next month" : "Mese successivo",
     "List is empty" : "L'elenco è vuoto",
     "Limit deck usage of groups" : "Limita utilizzo di Deck dei gruppi",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "La limitazione di Deck impedirà agli utenti che non fanno parte di tali gruppi di creare le proprie lavagne. Gli utenti saranno ancora in grado di lavorare sulle lavagne che sono state condivise con loro,"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "La limitazione di Deck impedirà agli utenti che non fanno parte di tali gruppi di creare le proprie lavagne. Gli utenti saranno ancora in grado di lavorare sulle lavagne che sono state condivise con loro,",
+    "Not completed" : "Non completato"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

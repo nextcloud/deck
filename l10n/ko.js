@@ -102,7 +102,6 @@ OC.L10N.register(
     "Formatting help" : "서식 도움말",
     "Edit description" : "설명 편집",
     "Remove due date" : "만료 날짜 삭제",
-    "Not completed" : "완성되지 않았다",
     "Archive card" : "보관 카드",
     "Select Date" : "날짜 선택",
     "(group)" : "(그룹)",
@@ -142,6 +141,7 @@ OC.L10N.register(
     "Timeline" : "타임라인",
     "Next week" : "다음주",
     "Next month" : "다음달",
-    "List is empty" : "목록이 비어 있음"
+    "List is empty" : "목록이 비어 있음",
+    "Not completed" : "완성되지 않았다"
 },
 "nplurals=1; plural=0;");

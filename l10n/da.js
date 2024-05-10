@@ -172,7 +172,7 @@ OC.L10N.register(
     "Choose attachment" : "Vælg en vedhæftning",
     "Set a due date" : "Sæt en forfaldsdato",
     "Remove due date" : "Fjern forfaldsdato",
-    "Not completed" : "Ikke afsluttet",
+    "Mark as done" : "Marker som færdig",
     "Unarchive card" : "Gen-aktivér kort",
     "Archive card" : "Arkivér kort",
     "Select Date" : "Vælg dato",
@@ -181,7 +181,6 @@ OC.L10N.register(
     "Card details" : "Kort detaljer",
     "Assign to me" : "Tildel til mig",
     "Unassign myself" : "Fjern mig selv",
-    "Mark as done" : "Marker som færdig",
     "Delete card" : "Slet kort",
     "Card deleted" : "Kort slettet",
     "seconds ago" : "få sekunder siden",
@@ -239,6 +238,7 @@ OC.L10N.register(
     "Next week" : "Næste uge",
     "Next month" : "Næste måned",
     "Limit deck usage of groups" : "Begræns Deck brug til grupper",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begrænsning af Deck vil blokere brugere som ikke er en del af de valgte grupper fra at oprette deres egne tavler. Brugere vil stadig kunne arbejde på tavler der er blevet delt med dem. "
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begrænsning af Deck vil blokere brugere som ikke er en del af de valgte grupper fra at oprette deres egne tavler. Brugere vil stadig kunne arbejde på tavler der er blevet delt med dem. ",
+    "Not completed" : "Ikke afsluttet"
 },
 "nplurals=2; plural=(n != 1);");

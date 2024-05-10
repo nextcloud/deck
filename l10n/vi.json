@@ -247,8 +247,8 @@
     "Add due date" : "Thêm ngày đáo hạn",
     "Choose a date" : "Chọn một ngày",
     "Remove due date" : "Xóa thời hạn",
+    "Mark as done" : "Đánh dấu là đã hoàn thành",
     "Due at:" : "Đến lúc:",
-    "Not completed" : "Chưa hoàn thành",
     "Unarchive card" : "Thẻ chưa lưu trữ",
     "Archive card" : "Lưu trữ thẻ",
     "Select Date" : "Chọn ngày",
@@ -267,7 +267,6 @@
     "Assign to me" : "Phân công cho tôi",
     "Unassign myself" : "Hủy bỏ phân công cho tôi",
     "Mark as not done" : "Đánh dấu là chưa hoàn thành",
-    "Mark as done" : "Đánh dấu là đã hoàn thành",
     "Delete card" : "Xoá thẻ",
     "Card deleted" : "Thẻ đã bị xóa",
     "seconds ago" : "vài giây trước",
@@ -373,6 +372,7 @@
     "Next month" : "Tháng sau",
     "List is empty" : "Danh sách trống",
     "Limit deck usage of groups" : "Giới hạn việc sử dụng Kế Hoạch của các nhóm",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Giới hạn của Kế Hoạch sẽ chặn người dùng không thuộc nhóm đó khỏi việc tạo bảng của riêng họ. Người dùng vẫn có thể làm việc trên các bảng đã được chia sẻ với họ."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Giới hạn của Kế Hoạch sẽ chặn người dùng không thuộc nhóm đó khỏi việc tạo bảng của riêng họ. Người dùng vẫn có thể làm việc trên các bảng đã được chia sẻ với họ.",
+    "Not completed" : "Chưa hoàn thành"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
