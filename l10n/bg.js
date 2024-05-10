@@ -233,7 +233,7 @@ OC.L10N.register(
     "Choose attachment" : "Избор на прикачен файл",
     "Set a due date" : "Задаване на крайна дата",
     "Remove due date" : "Премахни крайната дата",
-    "Not completed" : "Незавършен",
+    "Mark as done" : "Маркирай като готово",
     "Unarchive card" : "Разархивиране на карта",
     "Archive card" : "Архивиране на  карта",
     "Select Date" : "Изберете дата",
@@ -245,7 +245,6 @@ OC.L10N.register(
     "Card details" : "Подробности за картата",
     "Assign to me" : "Зачисляване към мен",
     "Unassign myself" : "Отмяна на зачисляването към мен",
-    "Mark as done" : "Маркирай като готово",
     "Delete card" : "Изтриване на карта",
     "Card deleted" : "Картата е изтрита",
     "seconds ago" : "преди секунди",
@@ -327,6 +326,7 @@ OC.L10N.register(
     "Next month" : "Следващия месец",
     "List is empty" : "Списъкът е празен",
     "Limit deck usage of groups" : "Ограничава използването на набора от групи",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ограничаването на приложението Deck/набор/ ще блокира потребителите, които не са част от тези групи, да създават свои собствени табла. Потребителите все още ще могат да работят на таблата, които са споделени с тях."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ограничаването на приложението Deck/набор/ ще блокира потребителите, които не са част от тези групи, да създават свои собствени табла. Потребителите все още ще могат да работят на таблата, които са споделени с тях.",
+    "Not completed" : "Незавършен"
 },
 "nplurals=2; plural=(n != 1);");

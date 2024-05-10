@@ -245,7 +245,7 @@ OC.L10N.register(
     "Add due date" : "Határidő hozzáadása",
     "Choose a date" : "Válasszon dátumot",
     "Remove due date" : "Határidő eltávolítása",
-    "Not completed" : "Nincs kész",
+    "Mark as done" : "Megjelölés készként",
     "Unarchive card" : "Kártya archiválásának visszavonása",
     "Archive card" : "Kártya archiválása",
     "Select Date" : "Dátum kiválasztása",
@@ -262,7 +262,6 @@ OC.L10N.register(
     "Card details" : "Kártya részletei",
     "Assign to me" : "Hozzám rendelés",
     "Unassign myself" : "Saját magam hozzárendelésének eltávolítása",
-    "Mark as done" : "Megjelölés készként",
     "Delete card" : "Kártya törlése",
     "Card deleted" : "Kártya törölve",
     "seconds ago" : "másodperce",
@@ -350,6 +349,7 @@ OC.L10N.register(
     "Next month" : "Következő hónap",
     "List is empty" : "A lista üres",
     "Limit deck usage of groups" : "A kártyák használatának csoportokra korlátozása",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "A Kártyák korlátozása blokkolja a saját táblák létrehozását azoknál a felhasználóknál, akik nem tagjai a megadott csoportoknak. A felhasználók továbbra is tudnak dolgozni a velük megosztott táblákon."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "A Kártyák korlátozása blokkolja a saját táblák létrehozását azoknál a felhasználóknál, akik nem tagjai a megadott csoportoknak. A felhasználók továbbra is tudnak dolgozni a velük megosztott táblákon.",
+    "Not completed" : "Nincs kész"
 },
 "nplurals=2; plural=(n != 1);");

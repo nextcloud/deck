@@ -81,11 +81,10 @@
     "Formatting help" : "Ayuda del formatu",
     "Edit description" : "Editar la descripción",
     "View description" : "Ver la descripción",
-    "Not completed" : "Nun se completó",
+    "Mark as done" : "Marcar como fecha",
     "Archive card" : "Archivar la tarxeta",
     "(group)" : "(grupu)",
     "Next week – {timeLocale}" : "La próxima selmana – {timeLocale}",
-    "Mark as done" : "Marcar como fecha",
     "Delete card" : "Desaniciar la tarxeta",
     "seconds ago" : "hai segundos",
     "Keyboard shortcuts" : "Atayos del tecláu",
@@ -109,6 +108,7 @@
     "Share" : "Compartir",
     "Timeline" : "Llinia de tiempu",
     "Next week" : "La selmana que vien",
-    "Next month" : "Mes siguiente"
+    "Next month" : "Mes siguiente",
+    "Not completed" : "Nun se completó"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

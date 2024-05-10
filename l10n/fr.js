@@ -256,8 +256,8 @@ OC.L10N.register(
     "Add due date" : "Ajouter une date d'échéance",
     "Choose a date" : "Sélectionner une date",
     "Remove due date" : "Retirer la date d'échéance",
+    "Mark as done" : "Marquer comme fait",
     "Due at:" : "Dû au :",
-    "Not completed" : "Non terminé",
     "Unarchive card" : "Sortir la carte des archives",
     "Archive card" : "Archiver la carte",
     "Select Date" : "Sélectionnez une date",
@@ -277,7 +277,6 @@ OC.L10N.register(
     "Assign to me" : "Me l'affecter",
     "Unassign myself" : "Me désaffecter",
     "Mark as not done" : "Marquer comme non terminée",
-    "Mark as done" : "Marquer comme fait",
     "Delete card" : "Supprimer la carte",
     "Card deleted" : "Carte supprimée",
     "seconds ago" : "à l'instant",
@@ -384,6 +383,7 @@ OC.L10N.register(
     "Next month" : "Mois suivant",
     "List is empty" : "La liste est vide",
     "Limit deck usage of groups" : "Limiter l'utilisation de Deck aux groupes",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limiter Deck empêchera les utilisateurs ne faisant pas partie de ces groupes de créer leurs propres tableaux. Ces utilisateurs pourront toujours travailler sur les tableaux qui ont été partagés avec eux."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limiter Deck empêchera les utilisateurs ne faisant pas partie de ces groupes de créer leurs propres tableaux. Ces utilisateurs pourront toujours travailler sur les tableaux qui ont été partagés avec eux.",
+    "Not completed" : "Non terminé"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

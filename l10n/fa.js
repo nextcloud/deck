@@ -235,7 +235,7 @@ OC.L10N.register(
     "Assign a due date to this card…" : "Assign a due date to this card…",
     "Set a due date" : "تاریخ سررسید را تعیین کنید",
     "Remove due date" : "تاریخ سررسید را حذف کنید",
-    "Not completed" : "Not completed",
+    "Mark as done" : "علامت گذاری به عنوان انجام شده",
     "Unarchive card" : "برگه را از بایگانی خارج کنید",
     "Archive card" : "بایگانی برگه",
     "Select Date" : "تاریخ را انتخاب کنید",
@@ -248,7 +248,6 @@ OC.L10N.register(
     "Card details" : "جزئیات برگه",
     "Assign to me" : "به من اختصاص دهید",
     "Unassign myself" : "واگذاری به خودم را لغو می‌کنم",
-    "Mark as done" : "علامت گذاری به عنوان انجام شده",
     "Delete card" : "حذف برگه",
     "Card deleted" : "برگه پاک شد",
     "seconds ago" : "ثانیه‌هایی پیش",
@@ -333,6 +332,7 @@ OC.L10N.register(
     "Next month" : "ماه بعد",
     "List is empty" : "فهرست خالی است",
     "Limit deck usage of groups" : "استفاده از برگه‌دان گروه‌ها را محدود کنید",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "محدودکردن برگه‌دان  باعث می‌شود تا کاربرانی که جزو آن گروه‌ها نیستند، تابلوهای خود را ایجاد کنند. کاربران همچنان می‌توانند روی تابلوهایی کار کنند که با آنها به اشتراک گذاشته شده است."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "محدودکردن برگه‌دان  باعث می‌شود تا کاربرانی که جزو آن گروه‌ها نیستند، تابلوهای خود را ایجاد کنند. کاربران همچنان می‌توانند روی تابلوهایی کار کنند که با آنها به اشتراک گذاشته شده است.",
+    "Not completed" : "Not completed"
 },
 "nplurals=2; plural=(n > 1);");

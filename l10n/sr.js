@@ -256,8 +256,8 @@ OC.L10N.register(
     "Add due date" : "Додај датум доспећа",
     "Choose a date" : "Изаберите датум",
     "Remove due date" : "Уклони рок",
+    "Mark as done" : "Означи као завршен",
     "Due at:" : "Рок завршетка:",
-    "Not completed" : "Није довршено",
     "Unarchive card" : "Врати картицу из архиве",
     "Archive card" : "Архивирај картицу",
     "Select Date" : "Одаберите датум",
@@ -277,7 +277,6 @@ OC.L10N.register(
     "Assign to me" : "Додели мени",
     "Unassign myself" : "Склони са мене",
     "Mark as not done" : "Означи да није завршена",
-    "Mark as done" : "Означи као завршен",
     "Delete card" : "Обриши картицу",
     "Card deleted" : "Картица обрисана",
     "seconds ago" : "пре неколико секунди",
@@ -384,6 +383,7 @@ OC.L10N.register(
     "Next month" : "Наредног месеца",
     "List is empty" : "Списак је празан",
     "Limit deck usage of groups" : "Ограничи употребу шпила на групе",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ограничавање Deck апликације ће блокирати кориснике који нису део одабраних група да креирају своје табле. Корисници ће и даље моћи да раде на таблама које су подељене са њима."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ограничавање Deck апликације ће блокирати кориснике који нису део одабраних група да креирају своје табле. Корисници ће и даље моћи да раде на таблама које су подељене са њима.",
+    "Not completed" : "Није довршено"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

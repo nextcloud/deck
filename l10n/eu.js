@@ -249,8 +249,8 @@ OC.L10N.register(
     "Add due date" : "Gehitu epemuga",
     "Choose a date" : "Aukeratu data",
     "Remove due date" : "Ezabatu epe-muga",
+    "Mark as done" : "Markatu egindako gisa",
     "Due at:" : "Epemuga:",
-    "Not completed" : "Osatu gabe",
     "Unarchive card" : "Berreskuratu txartela artxibotik",
     "Archive card" : "Artxibatu txartela",
     "Select Date" : "Hautatu data",
@@ -269,7 +269,6 @@ OC.L10N.register(
     "Assign to me" : "Esleitu niri",
     "Unassign myself" : "Niri esleitzeari utzi",
     "Mark as not done" : "Markatu ez egindako gisa",
-    "Mark as done" : "Markatu egindako gisa",
     "Delete card" : "Ezabatu txartela",
     "Card deleted" : "Txartela ezabatuta",
     "seconds ago" : "segundo lehenago",
@@ -356,6 +355,7 @@ OC.L10N.register(
     "Next month" : "Hurrengo hilabetea",
     "List is empty" : "Zerrenda hutsik dago",
     "Limit deck usage of groups" : "Mugatu taldeek Deck erabiltzeko aukera",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Deck mugatzeak taldeetako kide ez diren erabiltzaileei beren taula propioak sortzea eragotziko die. Erabiltzaileek beraiekin partekatu diren tauletan lan egin ahalko dute."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Deck mugatzeak taldeetako kide ez diren erabiltzaileei beren taula propioak sortzea eragotziko die. Erabiltzaileek beraiekin partekatu diren tauletan lan egin ahalko dute.",
+    "Not completed" : "Osatu gabe"
 },
 "nplurals=2; plural=(n != 1);");
