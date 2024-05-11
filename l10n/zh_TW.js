@@ -258,6 +258,7 @@ OC.L10N.register(
     "Remove due date" : "移除到期日",
     "Mark as done" : "標記為完成",
     "Due at:" : "到期於：",
+    "Not done" : "未完成",
     "Unarchive card" : "解除封存卡片",
     "Archive card" : "封存卡片",
     "Select Date" : "選擇日期",
