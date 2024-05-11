@@ -258,6 +258,7 @@ OC.L10N.register(
     "Remove due date" : "Уклони рок",
     "Mark as done" : "Означи као завршен",
     "Due at:" : "Рок завршетка:",
+    "Not done" : "Није завршено",
     "Unarchive card" : "Врати картицу из архиве",
     "Archive card" : "Архивирај картицу",
     "Select Date" : "Одаберите датум",

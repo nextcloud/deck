@@ -258,6 +258,7 @@ OC.L10N.register(
     "Remove due date" : "ازالة تاريخ الانجاز",
     "Mark as done" : "تمييز كمُنجَز",
     "Due at:" : "تاريخ الاستحقاق:",
+    "Not done" : "غير مُنجَزة",
     "Unarchive card" : "إلغاء أرشفة البطاقة ",
     "Archive card" : "أرشفة البطاقة",
     "Select Date" : "اختر التاريخ ",
