@@ -258,6 +258,7 @@ OC.L10N.register(
     "Remove due date" : "Fälligkeitsdatum löschen",
     "Mark as done" : "Als erledigt markieren",
     "Due at:" : "Fallig am:",
+    "Not done" : "Nicht erledigt",
     "Unarchive card" : "Karte dearchivieren",
     "Archive card" : "Karte archivieren",
     "Select Date" : "Datum auswählen",
