@@ -258,6 +258,7 @@ OC.L10N.register(
     "Remove due date" : "Remove due date",
     "Mark as done" : "Mark as done",
     "Due at:" : "Due at:",
+    "Not done" : "Not done",
     "Unarchive card" : "Unarchive card",
     "Archive card" : "Archive card",
     "Select Date" : "Select Date",
