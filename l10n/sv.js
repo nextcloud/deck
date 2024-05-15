@@ -258,6 +258,7 @@ OC.L10N.register(
     "Remove due date" : "Ta bort slutdatum",
     "Mark as done" : "Markera som klar",
     "Due at:" : "Förfaller:",
+    "Not done" : "Inte klar",
     "Unarchive card" : "Avarkivera kort",
     "Archive card" : "Arkivera kort",
     "Select Date" : "Välj datum",
