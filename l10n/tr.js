@@ -258,6 +258,7 @@ OC.L10N.register(
     "Remove due date" : "Bitiş tarihini kaldır",
     "Mark as done" : "Tamamlanmış olarak işaretle",
     "Due at:" : "Bitiş tarihi:",
+    "Not done" : "Tamamlanmamış",
     "Unarchive card" : "Kartı arşivden çıkar",
     "Archive card" : "Kartı arşivle",
     "Select Date" : "Tarih Seçin",
