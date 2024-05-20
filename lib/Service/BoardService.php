@@ -547,6 +547,10 @@ class BoardService {
 	public function clone($id, $userId) {
 		$this->boardServiceValidator->check(compact('id', 'userId'));
 
+		if (!$this->permissionService->canCreate()) {
+			throw new NoPermissionException('Creating boards has been disabled for your account.');
+		}
+
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 
 		$board = $this->boardMapper->find($id);
