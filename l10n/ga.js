@@ -1,6 +1,8 @@
 OC.L10N.register(
     "deck",
     {
+    "Deck" : "Deic",
+    "Personal" : "Pearsanta",
     "The file was uploaded" : "Uaslódáladh an comhad",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Sáraíonn an comhad uaslódáilte an treoir upload_max_filesize i php.ini",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Sáraíonn an comhad uaslódáilte an treoir MAX_FILE_SIZE a sonraíodh san fhoirm HTML",
