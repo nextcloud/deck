@@ -15,6 +15,7 @@ OC.L10N.register(
     "File already exists" : "Tá an comhad ann cheana féin",
     "Open" : "Oscail",
     "Completed" : "Críochnaithe",
+    "Sharing" : "Roinnt",
     "Activity" : "Gníomhaíocht",
     "Delete" : "Scrios",
     "Edit" : "Cuir in eagar",
