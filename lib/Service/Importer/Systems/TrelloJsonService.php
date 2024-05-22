@@ -344,7 +344,7 @@ class TrelloJsonService extends ABoardImportService {
 
 	private function replaceUsernames(string $text): string {
 		foreach ($this->getImportService()->getConfig('uidRelation') as $trello => $nextcloud) {
-			$text = str_replace($trello, $nextcloud, $text); 
+			$text = str_replace($trello, $nextcloud, $text);
 		}
 		return $text;
 	}
