@@ -173,7 +173,7 @@
     "Set a due date" : "Встановити дату завершення",
     "Choose a date" : "Виберіть дату",
     "Remove due date" : "Вилучити до",
-    "Not completed" : "Не завершено",
+    "Mark as done" : "Позначити як виконане",
     "Unarchive card" : "Розархівувати картку",
     "Archive card" : "Архівувати картку",
     "Select Date" : "Вкажіть дату",
@@ -184,7 +184,6 @@
     "Edit card title" : "Редагувати заголовок картки",
     "Card details" : "Деталі картки",
     "Assign to me" : "Призначити мені",
-    "Mark as done" : "Позначити як виконане",
     "Delete card" : "Вилучити картку",
     "seconds ago" : "секунд тому",
     "Keyboard shortcuts" : "Скорочення",
@@ -239,6 +238,7 @@
     "Next week" : "Наступний тиждень",
     "Next month" : "Наступний місяць",
     "Limit deck usage of groups" : "Обмежити доступ до колоди для груп",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Створення власних робочих дощок користувачам, які не входять у задані групи, буде заблоковано. Проте, такі користувачі зможуть продовжити працювати зі спільними дошками, до яких у них є доступ."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Створення власних робочих дощок користувачам, які не входять у задані групи, буде заблоковано. Проте, такі користувачі зможуть продовжити працювати зі спільними дошками, до яких у них є доступ.",
+    "Not completed" : "Не завершено"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);"
 }

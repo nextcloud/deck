@@ -244,8 +244,8 @@ OC.L10N.register(
     "Add due date" : "Προσθήκη ημερομηνίας λήξης",
     "Choose a date" : "Επιλέξτε ημερομηνίας",
     "Remove due date" : "Αφαίρεση ημερομηνίας λήξης",
+    "Mark as done" : "Σήμανση ως ολοκληρωμένου",
     "Due at:" : "Λήγει στις:",
-    "Not completed" : "Μη ολοκληρωμένο",
     "Unarchive card" : "Αναίρεση αρχειοθέτησης καρτέλας",
     "Archive card" : "Αρχειοθέτηση καρτέλας",
     "Select Date" : "Επιλέξτε ημερομηνία",
@@ -265,7 +265,6 @@ OC.L10N.register(
     "Assign to me" : "Ανάθεση σε εμένα",
     "Unassign myself" : "Αποδέσμευσή μου",
     "Mark as not done" : "Σήμανση ως ολοκληρωμένου",
-    "Mark as done" : "Σήμανση ως ολοκληρωμένου",
     "Delete card" : "Διαγραφή καρτέλας",
     "Card deleted" : "Η καρτέλα διαγράφηκε",
     "seconds ago" : " δευτερόλεπτα πριν ",
@@ -371,6 +370,7 @@ OC.L10N.register(
     "Next month" : "Επόμενος μήνας",
     "List is empty" : "Η λίστα είναι κενή",
     "Limit deck usage of groups" : "Περιορίστε τη χρήση της εφαρμογής deck σε ομάδες",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ο περιορισμός του Deck θα εμποδίσει τους χρήστες που δεν είναι μέρος αυτών των ομάδων να δημιουργούν δικούς τους πίνακες. Οι χρήστες θα εξακολουθήσουν να εργάζονται σε πίνακες που έχουν διαμοιραστεί μαζί τους."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ο περιορισμός του Deck θα εμποδίσει τους χρήστες που δεν είναι μέρος αυτών των ομάδων να δημιουργούν δικούς τους πίνακες. Οι χρήστες θα εξακολουθήσουν να εργάζονται σε πίνακες που έχουν διαμοιραστεί μαζί τους.",
+    "Not completed" : "Μη ολοκληρωμένο"
 },
 "nplurals=2; plural=(n != 1);");

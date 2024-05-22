@@ -249,8 +249,8 @@ OC.L10N.register(
     "Add due date" : "Afegeix una data de caducitat",
     "Choose a date" : "Trieu una data",
     "Remove due date" : "Suprimeix la data de caducitat",
+    "Mark as done" : "Marcat com a fet",
     "Due at:" : "Venciment a:",
-    "Not completed" : "No completat",
     "Unarchive card" : "Desarxiva targeta",
     "Archive card" : "Arxiva la targeta",
     "Select Date" : "Selecciona la data",
@@ -269,7 +269,6 @@ OC.L10N.register(
     "Assign to me" : "Assigna'm a mi",
     "Unassign myself" : "Desasignar a mi mateix",
     "Mark as not done" : "Marca com no fet",
-    "Mark as done" : "Marcat com a fet",
     "Delete card" : "Suprimeix targeta",
     "Card deleted" : "Targeta suprimida",
     "seconds ago" : "fa uns segons",
@@ -375,6 +374,7 @@ OC.L10N.register(
     "Next month" : "Mes següent",
     "List is empty" : "La llista és buida",
     "Limit deck usage of groups" : "Limitar l'ús del tauler de grups",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitant el Tauler bloquejarà la creació de taulers als usuaris que no són part d'aquests grups. Els usuaris podran seguir treballant en els taulers que hagin estat compartits amb ells."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitant el Tauler bloquejarà la creació de taulers als usuaris que no són part d'aquests grups. Els usuaris podran seguir treballant en els taulers que hagin estat compartits amb ells.",
+    "Not completed" : "No completat"
 },
 "nplurals=2; plural=(n != 1);");

@@ -256,8 +256,9 @@ OC.L10N.register(
     "Add due date" : "Bitiş tarihi ekle",
     "Choose a date" : "Bir tarih seçin",
     "Remove due date" : "Bitiş tarihini kaldır",
+    "Mark as done" : "Tamamlanmış olarak işaretle",
     "Due at:" : "Bitiş tarihi:",
-    "Not completed" : "Tamamlanmamış",
+    "Not done" : "Tamamlanmamış",
     "Unarchive card" : "Kartı arşivden çıkar",
     "Archive card" : "Kartı arşivle",
     "Select Date" : "Tarih Seçin",
@@ -277,7 +278,6 @@ OC.L10N.register(
     "Assign to me" : "Bana ata",
     "Unassign myself" : "Kendi atamamı kaldır",
     "Mark as not done" : "Tamamlanmamış olarak işaretle",
-    "Mark as done" : "Tamamlanmış olarak işaretle",
     "Delete card" : "Kartı sil",
     "Card deleted" : "Kart silindi",
     "seconds ago" : "saniye önce",
@@ -384,6 +384,7 @@ OC.L10N.register(
     "Next month" : "Sonraki ay",
     "List is empty" : "Liste boş",
     "Limit deck usage of groups" : "Tahtayı şu gruplar kullanabilsin",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Tahta kullanımı gruplar ile sınırlandığında belirtilen grupların üyesi olmayan kişiler kendi tahtalarını oluşturamaz. Bu kullanıcılar ancak kendileri ile paylaşılan tahtalar üzerinde çalışabilir."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Tahta kullanımı gruplar ile sınırlandığında belirtilen grupların üyesi olmayan kişiler kendi tahtalarını oluşturamaz. Bu kullanıcılar ancak kendileri ile paylaşılan tahtalar üzerinde çalışabilir.",
+    "Not completed" : "Tamamlanmamış"
 },
 "nplurals=2; plural=(n > 1);");

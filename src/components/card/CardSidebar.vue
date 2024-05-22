@@ -5,6 +5,7 @@
 
 <template>
 	<NcAppSidebar v-if="currentBoard && currentCard"
+		ref="cardSidebar"
 		:active="tabId"
 		:name="title"
 		:subname="subtitle"
@@ -13,6 +14,7 @@
 		@update:nameEditable="handleUpdateTitleEditable"
 		@update:name="handleUpdateTitle"
 		@submit-name="handleSubmitTitle"
+		@opened="focusHeader"
 		@close="closeSidebar">
 		<template #secondary-actions>
 			<NcActionButton v-if="cardDetailsInModal && isFullApp" icon="icon-menu-sidebar" @click.stop="closeModal()">
@@ -153,7 +155,15 @@ export default {
 			},
 		},
 	},
+	watch: {
+		currentCard() {
+			this.focusHeader()
+		},
+	},
 	methods: {
+		focusHeader() {
+			this.$refs.cardSidebar.$el.querySelector('.app-sidebar-header__mainname').focus()
+		},
 		handleUpdateTitleEditable(value) {
 			this.titleEditable = value
 			if (value) {

@@ -256,8 +256,8 @@ OC.L10N.register(
     "Add due date" : "Pridať termín",
     "Choose a date" : "Vyberte dátum",
     "Remove due date" : "Odstrániť termín dokončenia",
+    "Mark as done" : "Označiť ako dokončené",
     "Due at:" : "Termín dokončenia:",
-    "Not completed" : "Nedokončené",
     "Unarchive card" : "Zrušiť archiváciu karty",
     "Archive card" : "Archivovať kartu",
     "Select Date" : "Vybrať dátum",
@@ -277,7 +277,6 @@ OC.L10N.register(
     "Assign to me" : "Priradiť mne",
     "Unassign myself" : "Zrušiť priradenie mne",
     "Mark as not done" : "Označiť ako nedokončené",
-    "Mark as done" : "Označiť ako dokončené",
     "Delete card" : "Zmazať kartu",
     "Card deleted" : "Karta bola vymazaná",
     "seconds ago" : "pred niekoľkými sekundami",
@@ -384,6 +383,7 @@ OC.L10N.register(
     "Next month" : "Nasledujúci mesiac",
     "List is empty" : "Zoznam je prázdny",
     "Limit deck usage of groups" : "Obmedziť použitie Deck na skupiny",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Obmedzenie Násteniek bráni používateľom, ktorí nie sú súčasťou týchto skupín, aby si vytvárali vlastné nástenky. Môžu však stále pracovať na nástenkách, ktoré im niekto sprístupní."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Obmedzenie Násteniek bráni používateľom, ktorí nie sú súčasťou týchto skupín, aby si vytvárali vlastné nástenky. Môžu však stále pracovať na nástenkách, ktoré im niekto sprístupní.",
+    "Not completed" : "Nedokončené"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

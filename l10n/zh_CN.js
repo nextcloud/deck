@@ -245,8 +245,8 @@ OC.L10N.register(
     "Add due date" : "添加截止日期",
     "Choose a date" : "选择日期",
     "Remove due date" : "移除截止日期",
+    "Mark as done" : "标记为已完成",
     "Due at:" : "到期日：",
-    "Not completed" : "没完成",
     "Unarchive card" : "撤销对卡片的归档",
     "Archive card" : "归档卡片",
     "Select Date" : "选择日期",
@@ -263,7 +263,6 @@ OC.L10N.register(
     "Assign to me" : "指派给我",
     "Unassign myself" : "不再指派给我",
     "Mark as not done" : "标记为未完成",
-    "Mark as done" : "标记为已完成",
     "Delete card" : "删除卡片",
     "Card deleted" : "卡片被删除",
     "seconds ago" : "几秒前",
@@ -362,6 +361,7 @@ OC.L10N.register(
     "Next month" : "下月",
     "List is empty" : "列表为空",
     "Limit deck usage of groups" : "按群组限制看板的使用权",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "限制看板的使用权后，不在指定群组中的用户将不能新建面板，但仍可使用已共享给他们的面板。"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "限制看板的使用权后，不在指定群组中的用户将不能新建面板，但仍可使用已共享给他们的面板。",
+    "Not completed" : "没完成"
 },
 "nplurals=1; plural=0;");

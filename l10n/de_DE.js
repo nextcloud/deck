@@ -256,8 +256,9 @@ OC.L10N.register(
     "Add due date" : "Fälligkeitsdatum hinzufügen",
     "Choose a date" : "Datum auswählen",
     "Remove due date" : "Fälligkeitsdatum löschen",
+    "Mark as done" : "Als erledigt markieren",
     "Due at:" : "Fallig am:",
-    "Not completed" : "Nicht fertiggestellt",
+    "Not done" : "Nicht erledigt",
     "Unarchive card" : "Karte dearchivieren",
     "Archive card" : "Karte archivieren",
     "Select Date" : "Datum auswählen",
@@ -277,7 +278,6 @@ OC.L10N.register(
     "Assign to me" : "Mir zuweisen",
     "Unassign myself" : "Nicht mehr mir zuweisen",
     "Mark as not done" : "Als unerledigt markieren",
-    "Mark as done" : "Als erledigt markieren",
     "Delete card" : "Karte löschen",
     "Card deleted" : "Karte gelöscht",
     "seconds ago" : "Gerade eben",
@@ -384,6 +384,7 @@ OC.L10N.register(
     "Next month" : "Nächsten Monat",
     "List is empty" : "Liste ist leer",
     "Limit deck usage of groups" : "Nutzung auf Gruppen einschränken",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Wenn Sie Deck einschränken, können Benutzer, die nicht zu diesen Gruppen gehören, keine eigenen Boards erstellen. Die Benutzer können weiterhin an Boards arbeiten, die für sie freigegeben wurden."
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Wenn Sie Deck einschränken, können Benutzer, die nicht zu diesen Gruppen gehören, keine eigenen Boards erstellen. Die Benutzer können weiterhin an Boards arbeiten, die für sie freigegeben wurden.",
+    "Not completed" : "Nicht fertiggestellt"
 },
 "nplurals=2; plural=(n != 1);");
