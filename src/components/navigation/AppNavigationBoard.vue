@@ -270,7 +270,7 @@ export default {
 					this.loading = false
 					await this.$router.push({ name: 'board', params: { id: newBoard.id } })
 				} catch (e) {
-					OC.Notification.showTemporary(t('deck', 'An error occurred'))
+					OC.Notification.showTemporary(t('deck', `Failed to clone board ${this.board.title}`))
 					console.error(e)
 				}
 			}

@@ -479,6 +479,12 @@ class BoardService {
 	/**
 	 * @param $id
 	 * @param $userId
+	 * @param $withCards
+	 * @param $withAssignments
+	 * @param $withLabels
+	 * @param $withDueDate
+	 * @param $moveCardsToLeftStack
+	 * @param $restoreArchivedCards
 	 * @return Board
 	 * @throws DoesNotExistException
 	 * @throws \OCA\Deck\NoPermissionException
@@ -492,9 +498,9 @@ class BoardService {
 			throw new NoPermissionException('Creating boards has been disabled for your account.');
 		}
 
-		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
+		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
 
-		$board = $this->boardMapper->find($boardId);
+		$board = $this->boardMapper->find($id);
 		$newBoard = new Board();
 		$newBoard->setTitle($board->getTitle() . ' (' . $this->l10n->t('copy') . ')');
 		$newBoard->setOwner($userId);
@@ -518,7 +524,7 @@ class BoardService {
 		}
 
 
-		$labels = $this->labelMapper->findAll($boardId);
+		$labels = $this->labelMapper->findAll($id);
 		foreach ($labels as $label) {
 			$newLabel = new Label();
 			$newLabel->setTitle($label->getTitle());
@@ -527,7 +533,7 @@ class BoardService {
 			$this->labelMapper->insert($newLabel);
 		}
 
-		$stacks = $this->stackMapper->findAll($boardId);
+		$stacks = $this->stackMapper->findAll($id);
 		foreach ($stacks as $stack) {
 			$newStack = new Stack();
 			$newStack->setTitle($stack->getTitle());
@@ -654,7 +660,7 @@ class BoardService {
 		});
 
 		$newStacks = $this->stackMapper->findAll($newBoard->getId());
-		usort($stacks, function (Stack $a, Stack $b) {
+		usort($newStacks, function (Stack $a, Stack $b) {
 			return $a->getOrder() - $b->getOrder();
 		});
 
@@ -670,6 +676,7 @@ class BoardService {
 				$targetStackId = $moveCardsToLeftStack ? $newStacks[0]->getId() : $newStacks[$i]->getId();
 
 				// Create a cloned card.
+				// Done with setters as only fields set via setters get written to db
 				$newCard = new Card();
 				$newCard->setTitle($card->getTitle());
 				$newCard->setDescription($card->getDescription());
