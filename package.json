@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
-    "@babel/runtime": "^7.24.5",
+    "@babel/runtime": "^7.24.6",
     "@nextcloud/auth": "^2.2.1",
     "@nextcloud/axios": "^2.5.0",
     "@nextcloud/capabilities": "^1.2.0",
