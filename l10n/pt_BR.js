@@ -258,6 +258,7 @@ OC.L10N.register(
     "Remove due date" : "Remover data de vencimento",
     "Mark as done" : "Marcar como concluído",
     "Due at:" : "Vencimento em:",
+    "Not done" : "Não realizado",
     "Unarchive card" : "Desarquivar cartão",
     "Archive card" : "Arquivar cartão",
     "Select Date" : "Selecionar Data",
