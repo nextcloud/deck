@@ -37,6 +37,7 @@ OC.L10N.register(
     "Tags" : "Clibeanna",
     "Activity" : "Gníomhaíocht",
     "Undo" : "Cealaigh",
+    "Can edit" : "Is féidir eagarthóireacht a dhéanamh",
     "Owner" : "Úinéir",
     "Delete" : "Scrios",
     "Transfer" : "Aistriú",
