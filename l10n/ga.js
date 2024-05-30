@@ -5,6 +5,7 @@ OC.L10N.register(
     "Upcoming cards" : "Cártaí atá le teacht",
     "Personal" : "Pearsanta",
     "Deck board" : "Bord deic",
+    "%s on %s" : "%s ar %s",
     "Finished" : "Críochnaithe",
     "Later" : "Níos déanaí",
     "Done" : "Déanta",
