@@ -151,7 +151,7 @@ OC.L10N.register(
     "Unassigned" : "Nicht zugewiesen",
     "Filter by completed" : "Nach fertiggestellt filtern",
     "Open and completed" : "Offene und fertiggestellte",
-    "Open" : "Öffnen",
+    "Open" : "Offen",
     "Completed" : "Fertiggestellt",
     "Filter by due date" : "Nach Fälligkeitsdatum filtern",
     "Overdue" : "Überfällig",
