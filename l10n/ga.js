@@ -20,6 +20,7 @@ OC.L10N.register(
     "A PHP extension stopped the file upload" : "Chuir síneadh PHP stop le huaslódáil an chomhaid",
     "No file uploaded or file size exceeds maximum of %s" : "Níl aon chomhad uaslódáilte nó méid comhaid níos mó ná uasmhéid%s",
     "Card not found" : "Cárta gan aimsiú",
+    "Invalid date, date format must be YYYY-MM-DD" : "Dáta neamhbhailí, caithfidh formáid an dáta a bheith BBBB-MM-DD",
     "Add board" : "Cuir bord leis",
     "Move card" : "Bog cárta",
     "Cancel" : "Cealaigh",
@@ -80,6 +81,7 @@ OC.L10N.register(
     "Today" : "Inniu",
     "Tomorrow" : "Amárach",
     "Close" : "Dún",
+    "Error creating the share" : "Earráid agus an sciar á cruthú",
     "Share" : "Comhroinn"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");
