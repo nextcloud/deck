@@ -36,7 +36,7 @@
     "@nextcloud/axios": "^2.5.0",
     "@nextcloud/capabilities": "^1.2.0",
     "@nextcloud/dialogs": "^5.3.1",
-    "@nextcloud/event-bus": "^3.3.0",
+    "@nextcloud/event-bus": "^3.3.1",
     "@nextcloud/files": "^3.3.1",
     "@nextcloud/initial-state": "^2.2.0",
     "@nextcloud/l10n": "^3.1.0",
