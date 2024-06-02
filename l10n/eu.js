@@ -251,6 +251,7 @@ OC.L10N.register(
     "Remove due date" : "Ezabatu epe-muga",
     "Mark as done" : "Markatu egindako gisa",
     "Due at:" : "Epemuga:",
+    "Not done" : "Egin gabe",
     "Unarchive card" : "Berreskuratu txartela artxibotik",
     "Archive card" : "Artxibatu txartela",
     "Select Date" : "Hautatu data",

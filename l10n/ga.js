@@ -78,6 +78,7 @@ OC.L10N.register(
     "Archive board" : "Bord cartlainne",
     "No notifications" : "Gan fógraí",
     "Delete board" : "Scrios an bord",
+    "An error occurred" : "Tharla earráid",
     "Today" : "Inniu",
     "Tomorrow" : "Amárach",
     "Close" : "Dún",
