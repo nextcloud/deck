@@ -78,11 +78,14 @@ OC.L10N.register(
     "Archive board" : "Bord cartlainne",
     "No notifications" : "Gan fógraí",
     "Delete board" : "Scrios an bord",
+    "No reminder" : "Gan meabhrúchán",
     "An error occurred" : "Tharla earráid",
     "Today" : "Inniu",
     "Tomorrow" : "Amárach",
     "Close" : "Dún",
     "Error creating the share" : "Earráid agus an sciar á cruthú",
-    "Share" : "Comhroinn"
+    "Share" : "Comhroinn",
+    "Next week" : "An tseachtain seo chugainn",
+    "Next month" : "An mhí seo chugainn"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");
