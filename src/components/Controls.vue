@@ -121,7 +121,7 @@
 								<label :for="user.uid"><NcAvatar :user="user.uid" :size="24" :disable-menu="true" /> {{ user.displayname }}</label>
 							</div>
 
-							<h3>{{ t('deck', 'Filter by completed') }}</h3>
+							<h3>{{ t('deck', 'Filter by status') }}</h3>
 							<div class="filter--item">
 								<input id="filter-option-both"
 									v-model="filter.completed"
