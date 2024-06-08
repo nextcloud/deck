@@ -147,7 +147,6 @@
     "Filter by tag" : "Scag le clib",
     "Filter by assigned user" : "Scag de réir úsáideora sannta",
     "Unassigned" : "Neamhshannta",
-    "Filter by completed" : "Scag de réir críochnaithe",
     "Open and completed" : "Oscailte agus críochnaithe",
     "Open" : "Oscail",
     "Completed" : "Críochnaithe",
@@ -383,6 +382,7 @@
     "List is empty" : "Tá an liosta folamh",
     "Limit deck usage of groups" : "Teorainn a chur le húsáid deic na ngrúpaí",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Cuirfidh Teorainneacha Deic bac ar úsáideoirí nach bhfuil ina gcuid de na grúpaí sin a gcuid boird féin a chruthú. Beidh úsáideoirí fós in ann oibriú ar chláir a roinntear leo.",
-    "Not completed" : "Gan chríochnú"
+    "Not completed" : "Gan chríochnú",
+    "Filter by completed" : "Scag de réir críochnaithe"
 },"pluralForm" :"nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);"
 }
