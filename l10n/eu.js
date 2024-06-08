@@ -149,7 +149,6 @@ OC.L10N.register(
     "Filter by tag" : "Iragazi etiketaz",
     "Filter by assigned user" : "Iragazi esleitutako erabiltzailez",
     "Unassigned" : "Esleitu gabea",
-    "Filter by completed" : "Iragazi osatutakoen arabera",
     "Open and completed" : "Ireki eta osatutakoak",
     "Open" : "Ireki",
     "Completed" : "Osatua",
@@ -385,6 +384,7 @@ OC.L10N.register(
     "List is empty" : "Zerrenda hutsik dago",
     "Limit deck usage of groups" : "Mugatu taldeek Deck erabiltzeko aukera",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Deck mugatzeak taldeetako kide ez diren erabiltzaileei beren taula propioak sortzea eragotziko die. Erabiltzaileek beraiekin partekatu diren tauletan lan egin ahalko dute.",
-    "Not completed" : "Osatu gabe"
+    "Not completed" : "Osatu gabe",
+    "Filter by completed" : "Iragazi osatutakoen arabera"
 },
 "nplurals=2; plural=(n != 1);");
