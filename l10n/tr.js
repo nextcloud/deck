@@ -149,7 +149,6 @@ OC.L10N.register(
     "Filter by tag" : "Etikete göre süz",
     "Filter by assigned user" : "Atanmış kullanıcıya göre süz",
     "Unassigned" : "Atanmamış",
-    "Filter by completed" : "Tamamlanmaya göre sırala",
     "Open and completed" : "Aç ve tamamla",
     "Open" : "Aç",
     "Completed" : "Tamamlanmış",
@@ -385,6 +384,7 @@ OC.L10N.register(
     "List is empty" : "Liste boş",
     "Limit deck usage of groups" : "Tahtayı şu gruplar kullanabilsin",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Tahta kullanımı gruplar ile sınırlandığında belirtilen grupların üyesi olmayan kişiler kendi tahtalarını oluşturamaz. Bu kullanıcılar ancak kendileri ile paylaşılan tahtalar üzerinde çalışabilir.",
-    "Not completed" : "Tamamlanmamış"
+    "Not completed" : "Tamamlanmamış",
+    "Filter by completed" : "Tamamlanmaya göre sırala"
 },
 "nplurals=2; plural=(n > 1);");

@@ -145,7 +145,6 @@ OC.L10N.register(
     "Filter by tag" : "タグによるフィルター",
     "Filter by assigned user" : "割当ユーザーでフィルター",
     "Unassigned" : "未割り当て",
-    "Filter by completed" : "完成したものをフィルターする",
     "Open and completed" : "開いて完成",
     "Open" : "開く",
     "Completed" : "完了",
@@ -378,6 +377,7 @@ OC.L10N.register(
     "List is empty" : "リストが空です",
     "Limit deck usage of groups" : "デッキの使用をグループに制限",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "デッキ作成制限は、設定したグループに非所属のユーザーがボードを作成できないようにします。非所属ユーザーは共有されているボードでのみ作業できます。",
-    "Not completed" : "完成してないです"
+    "Not completed" : "完成してないです",
+    "Filter by completed" : "完成したものをフィルターする"
 },
 "nplurals=1; plural=0;");

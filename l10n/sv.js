@@ -149,7 +149,6 @@ OC.L10N.register(
     "Filter by tag" : "Filtrera efter tagg",
     "Filter by assigned user" : "Filtrera efter tilldelad användare",
     "Unassigned" : "Ej tilldelad",
-    "Filter by completed" : "Filtrera efter slutfört",
     "Open and completed" : "Öppen och klar",
     "Open" : "Öppna",
     "Completed" : "Slutförd",
@@ -385,6 +384,7 @@ OC.L10N.register(
     "List is empty" : "Listan är tom",
     "Limit deck usage of groups" : "Begränsa användningen av grupper",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begränsning av Deck blockerar användare som inte ingår i dessa grupper från att skapa egna tavlor. Användare kan dock fortfarande integrera med tavlor som har delats med dem.",
-    "Not completed" : "Ej slutförd"
+    "Not completed" : "Ej slutförd",
+    "Filter by completed" : "Filtrera efter slutfört"
 },
 "nplurals=2; plural=(n != 1);");

@@ -149,7 +149,6 @@ OC.L10N.register(
     "Filter by tag" : "Filtrar por etiqueta",
     "Filter by assigned user" : "Filtrar por usuário atribuído",
     "Unassigned" : "Não atribuído",
-    "Filter by completed" : "Filtrar por concluído",
     "Open and completed" : "Aberto e concluído",
     "Open" : "Aberto",
     "Completed" : "Finalizado",
@@ -385,6 +384,7 @@ OC.L10N.register(
     "List is empty" : "A lista está vazia",
     "Limit deck usage of groups" : "Limitar o uso de grupos no deck",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitar o Deck impedirá que usuários que não fazem parte desses grupos criem seus próprios painéis. Os usuários ainda poderão trabalhar em pastas que foram compartilhadas com eles.",
-    "Not completed" : "Não concluída"
+    "Not completed" : "Não concluída",
+    "Filter by completed" : "Filtrar por concluído"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
