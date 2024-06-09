@@ -149,6 +149,7 @@ OC.L10N.register(
     "Filter by tag" : "Filtrera efter tagg",
     "Filter by assigned user" : "Filtrera efter tilldelad användare",
     "Unassigned" : "Ej tilldelad",
+    "Filter by status" : "Filtrera efter status",
     "Open and completed" : "Öppen och klar",
     "Open" : "Öppna",
     "Completed" : "Slutförd",
