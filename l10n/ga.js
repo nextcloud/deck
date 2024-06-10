@@ -149,6 +149,7 @@ OC.L10N.register(
     "Filter by tag" : "Scag le clib",
     "Filter by assigned user" : "Scag de réir úsáideora sannta",
     "Unassigned" : "Neamhshannta",
+    "Filter by status" : "Scag de réir stádais",
     "Open and completed" : "Oscailte agus críochnaithe",
     "Open" : "Oscail",
     "Completed" : "Críochnaithe",
