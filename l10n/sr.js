@@ -149,6 +149,7 @@ OC.L10N.register(
     "Filter by tag" : "Филтрирај по ознаци",
     "Filter by assigned user" : "Филтрирај по додељеном кориснику",
     "Unassigned" : "Недодељен",
+    "Filter by status" : "Филтрирај по статусу",
     "Open and completed" : "Оторени и завршени",
     "Open" : "Отвори",
     "Completed" : "Завршено",
