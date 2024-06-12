@@ -149,6 +149,7 @@ OC.L10N.register(
     "Filter by tag" : "以標籤過濾",
     "Filter by assigned user" : "以指派用戶過濾",
     "Unassigned" : "未指派",
+    "Filter by status" : "以狀態過濾",
     "Open and completed" : "開啟並完成",
     "Open" : "開啟",
     "Completed" : "已完成",
