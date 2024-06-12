@@ -149,6 +149,7 @@ OC.L10N.register(
     "Filter by tag" : "Etikete göre süz",
     "Filter by assigned user" : "Atanmış kullanıcıya göre süz",
     "Unassigned" : "Atanmamış",
+    "Filter by status" : "Duruma göre süz",
     "Open and completed" : "Aç ve tamamla",
     "Open" : "Aç",
     "Completed" : "Tamamlanmış",
