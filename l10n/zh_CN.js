@@ -278,6 +278,7 @@ OC.L10N.register(
     "Show help dialog" : "显示帮助对话框",
     "Card actions" : "卡片操作",
     "The following actions can be triggered on the currently highlighted card" : "可以在当前突出显示的卡上触发以下操作",
+    "Enter" : "输入",
     "Open card details" : "打开卡片详细信息",
     "Edit the card title" : "编辑卡片标题",
     "Assign yourself to the current card" : "将自己分配给当前卡片",
