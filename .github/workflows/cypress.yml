@@ -91,7 +91,7 @@ jobs:
           restore-keys: ${{ steps.extcache.outputs.key }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@2.30.4
+        uses: shivammathur/setup-php@2.30.5
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: ${{ env.extensions }}
