@@ -32,7 +32,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@babel/runtime": "^7.24.7",
-    "@nextcloud/auth": "^2.2.1",
+    "@nextcloud/auth": "^2.3.0",
     "@nextcloud/axios": "^2.5.0",
     "@nextcloud/capabilities": "^1.2.0",
     "@nextcloud/dialogs": "^5.3.2",
@@ -71,7 +71,7 @@
   ],
   "engines": {
     "node": "^20.0.0",
-    "npm": "^9.0.0"
+    "npm": "^10.0.0"
   },
   "devDependencies": {
     "@nextcloud/babel-config": "^1.2.0",
