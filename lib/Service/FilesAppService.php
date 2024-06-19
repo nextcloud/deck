@@ -31,6 +31,7 @@ use OCA\Deck\Sharing\DeckShareProvider;
 use OCA\Deck\StatusException;
 use OCP\AppFramework\Http\StreamResponse;
 use OCP\Constants;
+use OCP\Files\Folder;
 use OCP\Files\IMimeTypeDetector;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
@@ -188,6 +189,16 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 			$folder = $userFolder->get($this->configService->getAttachmentFolder());
 		} catch (NotFoundException $e) {
 			$folder = $userFolder->newFolder($this->configService->getAttachmentFolder());
+		}
+
+		if ($folder->isShared()) {
+			$folderName = $userFolder->getNonExistingName($this->configService->getAttachmentFolder());
+			$folder = $userFolder->newFolder($folderName);
+			$this->configService->setAttachmentFolder($this->userId, $folderName);
+		}
+
+		if (!$folder instanceof Folder || $folder->isShared()) {
+			throw new NotFoundException('No target folder found');
 		}
 
 		$fileName = $folder->getNonExistingName($fileName);
