@@ -34,39 +34,28 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IConfig;
 use OCP\IGroup;
 use OCP\IGroupManager;
-use OCP\ILogger;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\Share\IManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 
 class PermissionServiceTest extends \Test\TestCase {
-
-	/** @var IRequest */
-	private $request;
-	private $circlesService;
-	/** @var PermissionService*/
-	private $service;
-	/** @var ILogger */
-	private $logger;
-	/** @var AclMapper */
-	private $aclMapper;
-	/** @var BoardMapper */
-	private $boardMapper;
-	/** @var IUserManager */
-	private $userManager;
-	/** @var IGroupManager */
-	private $groupManager;
-	/** @var IManager */
-	private $shareManager;
-	/** @var IConfig */
-	private $config;
-	/** @var string */
-	private $userId = 'admin';
+	private IRequest|MockObject $request;
+	private CirclesService|MockObject $circlesService;
+	private PermissionService $service;
+	private LoggerInterface|MockObject $logger;
+	private AclMapper|MockObject $aclMapper;
+	private BoardMapper|MockObject $boardMapper;
+	private IUserManager $userManager;
+	private IGroupManager|MockObject $groupManager;
+	private MockObject|IManager $shareManager;
+	private IConfig|MockObject $config;
 
 	public function setUp(): void {
 		parent::setUp();
-		$this->logger = $this->createMock(ILogger::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->request = $this->createMock(IRequest::class);
 		$this->circlesService = $this->createMock(CirclesService::class);
 		$this->aclMapper = $this->createMock(AclMapper::class);
