@@ -119,7 +119,7 @@ class PermissionService {
 		if ($permissions[$permission] === true) {
 
 			if (!$allowDeletedCard && $mapper instanceof CardMapper) {
-				$card = $mapper->find((int)$id);
+				$card = $mapper->find((int)$id, false);
 				if ($card->getDeletedAt() > 0) {
 					throw new NoPermissionException('Card is deleted');
 				}
