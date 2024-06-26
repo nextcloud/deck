@@ -113,7 +113,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		return parent::update($cardUpdate);
 	}
 
-	public function find($id): Card {
+	public function find($id, bool $enhance = true): Card {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from('deck_cards')
@@ -122,9 +122,11 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			->addOrderBy('id');
 		/** @var Card $card */
 		$card = $this->findEntity($qb);
-		$labels = $this->labelMapper->findAssignedLabelsForCard($card->getId());
-		$card->setLabels($labels);
-		$this->mapOwner($card);
+		if ($enhance) {
+			$labels = $this->labelMapper->findAssignedLabelsForCard($card->getId());
+			$card->setLabels($labels);
+			$this->mapOwner($card);
+		}
 		return $card;
 	}
 
