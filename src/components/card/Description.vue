@@ -187,7 +187,6 @@ export default {
 				},
 				onUpdate: ({ markdown }) => {
 					if (this.description === markdown) {
-						this.descriptionLastEdit = 0
 						return
 					}
 					this.description = markdown
@@ -283,7 +282,9 @@ export default {
 				return
 			}
 			this.descriptionSaving = true
-			await this.$store.dispatch('updateCardDesc', { ...this.card, description: this.description })
+			if (this.card.id !== undefined) {
+				await this.$store.dispatch('updateCardDesc', { ...this.card, description: this.description })
+			}
 			this.$emit('change', this.description)
 			this.descriptionLastEdit = 0
 			this.descriptionSaving = false
