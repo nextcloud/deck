@@ -117,7 +117,6 @@ const maxUploadSizeState = loadState('deck', 'maxUploadSize', -1)
 
 const picker = getFilePickerBuilder(t('deck', 'File to share'))
 	.setMultiSelect(false)
-	.setModal(true)
 	.setType(1)
 	.allowDirectories()
 	.build()

@@ -158,7 +158,7 @@ import { showError, showUndo } from '@nextcloud/dialogs'
 
 import CardItem from '../cards/CardItem.vue'
 
-import '@nextcloud/dialogs/dist/index.css'
+import '@nextcloud/dialogs/style.css'
 
 export default {
 	name: 'Stack',

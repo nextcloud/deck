@@ -80,7 +80,7 @@ import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showUndo } from '@nextcloud/dialogs'
 
-import '@nextcloud/dialogs/dist/index.css'
+import '@nextcloud/dialogs/style.css'
 import { emit } from '@nextcloud/event-bus'
 
 export default {
