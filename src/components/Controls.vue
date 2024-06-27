@@ -31,17 +31,6 @@
 		<div class="board-actions">
 			<SessionList v-if="isNotifyPushEnabled && presentUsers.length"
 				:sessions="presentUsers" />
-			<div v-if="searchQuery || true" class="deck-search">
-				<input id="deck-search-input"
-					ref="search"
-					:tabindex="0"
-					type="search"
-					class="icon-search"
-					:value="searchQuery"
-					@focus="$store.dispatch('toggleShortcutLock', true)"
-					@blur="$store.dispatch('toggleShortcutLock', false)"
-					@input="$store.commit('setSearchQuery', $event.target.value)">
-			</div>
 			<div v-if="board && canManage && !showArchived && !board.archived"
 				id="stack-add"
 				v-click-outside="hideAddStack">
@@ -324,7 +313,6 @@ export default {
 			isFullApp: state => state.isFullApp,
 			compactMode: state => state.compactMode,
 			showCardCover: state => state.showCardCover,
-			searchQuery: state => state.searchQuery,
 		}),
 		detailsRoute() {
 			return {
@@ -454,9 +442,6 @@ export default {
 		triggerOpenFilters() {
 			this.$refs.filterPopover.$el.click()
 		},
-		triggerOpenSearch() {
-			this.$refs.search.focus()
-		},
 		triggerClearFilter() {
 			this.clearFilter()
 		},
@@ -523,16 +508,6 @@ export default {
 
 	.board-action-buttons {
 		display: flex;
-	}
-
-	.deck-search {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		input[type=search] {
-			background-position: 5px;
-			padding-left: 24px !important;
-		}
 	}
 
 	.filter--item {

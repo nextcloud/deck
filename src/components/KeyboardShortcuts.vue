@@ -67,17 +67,6 @@ export default {
 				return
 			}
 
-			// Global shortcuts (not board specific)
-			if ((key.metaKey || key.ctrlKey) && key.code === 'KeyF') {
-				const searchInput = document.getElementById('deck-search-input')
-				if (searchInput === document.activeElement) {
-					return false
-				}
-
-				document.getElementById('deck-search-input').focus()
-				key.preventDefault()
-				return true
-			}
 			if (key.code === 'Minus') {
 				emit('deck:global:toggle-help-dialog')
 				return
