@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.12.3
+- don't reset update time when no update was written to db #6035
+- Clarify config file not found exception message #5725
+- fix: permission check for cloning board #5854
+- fix: Avoid conflicts on deck attachments folder name #5704
+- Update dependencies
+
 ## 1.12.2
 
 ### Fixed
