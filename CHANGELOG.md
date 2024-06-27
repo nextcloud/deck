@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.13.1
+### Fixed
+ - fix: Adjust dependencies to fix filepicker #6038
+ - Fix npm audit #6028
+ - Fix npm audit #6001
+ - fix: Avoid optional before required parameter #5820
+ - fix: permission check for cloning board #5853
+
 ## 1.13.0
 
 ### Added
