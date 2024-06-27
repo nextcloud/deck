@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.11.5
+
+### Fixed 
+- don't reset update time when no update was written to db #6036
+- fix: Avoid conflicts on deck attachments folder name #5709
+- fix: permission check for cloning board #5856
+- fix(CardMenu): introduce cardRichObject in CardMenu #5610
+- Clarify config file not found exception message #5726
+
 ## 1.11.4
 
 ### Fixed
