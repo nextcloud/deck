@@ -5,6 +5,53 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.14.0
+02f63d99 Merge pull request #6010 from nextcloud/perf/permission-skip-enhance
+206a735c Merge pull request #6033 from nextcloud/fix/symlink
+4b2c191e Merge pull request #6005 from nextcloud/fix/5628-deck-card-descriptions-not-saved
+ea4655b2 Merge pull request #6011 from nextcloud/chore/property-promition
+efd9c0e1 Merge pull request #6027 from nextcloud/automated/noid/main-update-nextcloud-ocp
+09b34fb2 Merge pull request #5964 from nextcloud/fix/dialogs
+f88d8920 Merge pull request #5998 from nextcloud/automated/noid/main-update-nextcloud-ocp
+5e34b7e9 Merge pull request #6000 from nextcloud/automated/noid/main-fix-npm-audit
+29487a18 Merge pull request #5986 from nextcloud/automated/noid/main-update-nextcloud-ocp
+0d52bd58 Merge pull request #5957 from nextcloud/rakekniven-patch-1
+e59e2720 Merge pull request #5966 from nextcloud/feat/workflow-auto-update-lint-eslint.yml
+57b8f852 Merge pull request #5961 from nextcloud/feat/workflow-auto-update-pr-feedback.yml
+96bd27e3 Merge pull request #5958 from nextcloud/automated/noid/main-update-nextcloud-ocp
+3bbd0876 Merge pull request #5937 from nextcloud/automated/noid/main-update-nextcloud-ocp
+3af0f729 Merge pull request #5907 from nextcloud/automated/noid/main-update-nextcloud-ocp
+0bd3d5ff Merge pull request #5886 from StCyr/main
+daf120df Merge pull request #5882 from nextcloud/automated/noid/main-update-nextcloud-ocp
+e9d1e93f Merge pull request #5722 from JimMadge/config_default
+136b3bfd Merge pull request #5858 from nextcloud/bugfix/card-details-focus-issue-with-screen-reader
+1f205545 Merge pull request #5612 from mintsoft/index_cleanup
+69cf220c Merge pull request #5860 from nextcloud/debug/cypress2
+6c932ee2 Merge pull request #5850 from nextcloud/Jerome-Herbinet-completed-card-button-wording-change
+b5543875 Merge pull request #5796 from nextcloud/feat/workflow-auto-update-pr-feedback.yml
+53642186 Merge pull request #5797 from nextcloud/feat/workflow-auto-update-appstore-build-publish.yml
+2de47760 Merge pull request #5825 from nextcloud/chore/noid/spdxHeader
+e2386a8a Merge pull request #5848 from nextcloud/automated/noid/main-update-nextcloud-ocp
+c28be974 Merge pull request #5745 from nextcloud/bugfix/clone-board-permission
+feca6947 Merge pull request #5818 from nextcloud/automated/noid/main-update-nextcloud-ocp
+dae9748c Merge pull request #5794 from nextcloud/fix/5793
+c8e183b1 Merge pull request #5790 from nextcloud/automated/noid/main-update-nextcloud-ocp
+7c756f56 Merge pull request #5729 from nextcloud/fix/card-details-edit-title
+3a868daf Merge pull request #5761 from nextcloud/automated/noid/main-update-nextcloud-ocp
+cf9ec222 Merge pull request #5764 from nextcloud/automated/noid/main-fix-npm-audit
+c6e16573 Merge pull request #5742 from nextcloud/automated/noid/main-update-nextcloud-ocp
+66b226c5 Merge pull request #5702 from nextcloud/Jerome-Herbinet-tags-display-fix-when-numerous
+f0a1ff3d Merge pull request #5723 from JimMadge/import_config_not_found
+877c52f8 Merge pull request #5720 from nextcloud/automated/noid/main-update-nextcloud-ocp
+62a1098a Merge pull request #5712 from nextcloud/update-main-version
+a9cd79ff Merge pull request #5664 from nextcloud/feat/workflow-auto-update-phpunit-mysql.yml
+0c084ad3 Merge pull request #5703 from nextcloud/fix/attachment-folder-conflict
+7abba384 Merge pull request #5700 from nextcloud/automated/noid/main-update-nextcloud-ocp
+2c6f81a8 Merge pull request #5488 from grnd-alt/enhancement/introduce-done-open-filters
+70b4e216 Merge pull request #5677 from nextcloud/automated/noid/main-update-nextcloud-ocp
+51c82c4d Merge pull request #5659 from nextcloud/automated/noid/main-fix-npm-audit
+03d5b7e1 Merge pull request #5656 from nextcloud/automated/noid/main-update-nextcloud-ocp
+
 ## 1.13.0-beta.1
 
 ### Added
