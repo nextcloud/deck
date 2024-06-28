@@ -231,7 +231,7 @@ class ConfigService {
 		return $this->config->getUserValue($userId ?? $this->getUserId(), 'deck', 'attachment_folder', '/Deck');
 	}
 
-	public function setAttachmentFolder(?string $userId = null, string $path): void {
+	public function setAttachmentFolder(?string $userId, string $path): void {
 		if ($userId === null && $this->getUserId() === null) {
 			throw new NoPermissionException('Must be logged in get the attachment folder');
 		}
