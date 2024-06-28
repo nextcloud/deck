@@ -21,8 +21,9 @@
  *
  */
 
-namespace OCA\Deck\Activity;
+namespace OCA\Deck\Listeners;
 
+use OCA\Deck\Activity\ActivityManager;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
@@ -31,9 +32,9 @@ use OCP\Comments\CommentsEvent;
 use OCP\Comments\IComment;
 use PHPUnit\Framework\TestCase;
 
-class CommentEventHandlerTest extends TestCase {
+class CommentEventListenerTest extends TestCase {
 
-	/** @var CommentEventHandler */
+	/** @var CommentEventListener */
 	private $commentEventHandler;
 	/** @var ActivityManager */
 	private $activityManager;
@@ -49,7 +50,7 @@ class CommentEventHandlerTest extends TestCase {
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
 		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->changeHelper = $this->createMock(ChangeHelper::class);
-		$this->commentEventHandler = new CommentEventHandler(
+		$this->commentEventHandler = new CommentEventListener(
 			$this->activityManager,
 			$this->notificationHelper,
 			$this->cardMapper,

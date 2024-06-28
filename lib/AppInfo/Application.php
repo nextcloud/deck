@@ -9,7 +9,6 @@ namespace OCA\Deck\AppInfo;
 use Closure;
 use Exception;
 use OCA\Circles\Events\CircleDestroyedEvent;
-use OCA\Deck\Activity\CommentEventHandler;
 use OCA\Deck\Capabilities;
 use OCA\Deck\Collaboration\Resources\ResourceProvider;
 use OCA\Deck\Collaboration\Resources\ResourceProviderCard;
@@ -28,6 +27,7 @@ use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\Event\SessionClosedEvent;
 use OCA\Deck\Event\SessionCreatedEvent;
 use OCA\Deck\Listeners\BeforeTemplateRenderedListener;
+use OCA\Deck\Listeners\CommentEventListener;
 use OCA\Deck\Listeners\FullTextSearchEventListener;
 use OCA\Deck\Listeners\LiveUpdateListener;
 use OCA\Deck\Listeners\ParticipantCleanupListener;
@@ -56,7 +56,7 @@ use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
 use OCP\Comments\CommentsEntityEvent;
-use OCP\Comments\ICommentsManager;
+use OCP\Comments\CommentsEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IConfig;
@@ -91,7 +91,6 @@ class Application extends App implements IBootstrap {
 
 	public function boot(IBootContext $context): void {
 		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEntity']));
-		$context->injectFn(Closure::fromCallable([$this, 'registerCommentsEventHandler']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
 
 		$context->injectFn(function (IManager $shareManager) {
@@ -141,6 +140,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(AclCreatedEvent::class, FullTextSearchEventListener::class);
 		$context->registerEventListener(AclUpdatedEvent::class, FullTextSearchEventListener::class);
 		$context->registerEventListener(AclDeletedEvent::class, FullTextSearchEventListener::class);
+		$context->registerEventListener(CommentsEvent::class, CommentEventListener::class);
 
 		// Handling cache invalidation for collections
 		$context->registerEventListener(AclCreatedEvent::class, ResourceListener::class);
@@ -181,12 +181,6 @@ class Application extends App implements IBootstrap {
 					return false;
 				}
 			});
-		});
-	}
-
-	protected function registerCommentsEventHandler(ICommentsManager $commentsManager): void {
-		$commentsManager->registerEventHandler(function () {
-			return $this->getContainer()->query(CommentEventHandler::class);
 		});
 	}
 
