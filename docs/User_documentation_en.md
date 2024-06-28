@@ -20,9 +20,11 @@ Overall, Deck is easy to use. You can create boards, add users, share the Deck, 
 4. [Mark task as done](#4-mark-as-done)
 5. [Archive old tasks](#5-archive-old-tasks)
 6. [Manage your board](#6-manage-your-board)
-7. [Import boards](#7-import-boards)
-8. [Search](#8-search)
-9. [New owner for the deck entities](#9-new-owner-for-the-deck-entities)
+7. [Sharing boards](#7-sharing-boards)
+8. [Import boards](#8-import-boards)
+9. [Trello interoperability](#9-trello-interoperability)
+10. [Search](#10-search)
+11. [New owner for the deck entities](#11-new-owner-for-the-deck-entities)
 
 ### 1. Create my first board
 In this example, we're going to create a board and share it with an other nextcloud user.
@@ -84,13 +86,22 @@ The **sharing tab** allows you to add users or even groups to your boards.
 **Deleted objects** allows you to return previously deleted stacks or cards.  
 The **Timeline** allows you to see everything that happened in your boards. Everything!
 
-### 7. Import boards
+### 7. Sharing boards
+You can share boards with a user, a group, or, if you are using the [Circles](https://apps.nextcloud.com/apps/circles) app, with a circle.
+
+If a user is member of one or several group(s) or circle(s) a board is shared with, the following rules apply:
+1. If a user is namely specified in a board's acl, (s)he gets the permission assigned to her/him;
+2. Else, if a user is member of one or several circle(s) or group(s), (s)he gets the permission when at least one circle/group (s)he is member of has the permission.
+
+### 8. Import boards
 
 Importing can be done using the API or the `occ` `deck:import` command.
 
 Comments with more than 1000 characters are placed as attached files to the card.
 
 It is possible to import from the following sources:
+
+### 9. Trello interoperability
 
 #### Trello JSON
 
@@ -150,7 +161,7 @@ Example configuration file:
 }
 ```
 
-### 8. Search
+### 10. Search
 
 Deck provides a global search either through the unified search in the Nextcloud header or with the inline search next to the board controls.
 This search allows advanced filtering of cards across all board of the logged in user.
@@ -173,7 +184,7 @@ Other text tokens will be used to perform a case-insensitive search on the card 
 
 In addition, quotes can be used to pass a query with spaces, e.g. `"Exact match with spaces"` or `title:"My card"`.
 
-### 9. New owner for the deck entities
+### 11. New owner for the deck entities
 You can transfer ownership of boards, cards, etc to a new user, using `occ` command `deck:transfer-ownership`
 
 ```bash
