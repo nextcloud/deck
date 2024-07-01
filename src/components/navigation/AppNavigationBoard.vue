@@ -10,7 +10,10 @@
 		:undo="deleted"
 		:menu-placement="'auto'"
 		@undo="unDelete">
-		<NcAppNavigationIconBullet slot="icon" :color="board.color" />
+		<template #icon>
+			<NcAppNavigationIconBullet :color="board.color" />
+			<BoardCloneModal v-if="cloneModalOpen" :board-title="board.title" @close="onCloseCloneModal" />
+		</template>
 
 		<template #counter>
 			<AccountIcon v-if="board.acl.length > 0" />
@@ -31,7 +34,7 @@
 				</NcActionButton>
 				<NcActionButton v-if="canCreate && !board.archived"
 					:close-after-click="true"
-					@click="actionClone">
+					@click="showCloneModal">
 					<template #icon>
 						<CloneIcon :size="20" decorative />
 					</template>
@@ -132,6 +135,7 @@ import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
 import AccountIcon from 'vue-material-design-icons/Account.vue'
 import { loadState } from '@nextcloud/initial-state'
+import BoardCloneModal from './BoardCloneModal.vue'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -146,6 +150,7 @@ export default {
 		AccountIcon,
 		ArchiveIcon,
 		CloneIcon,
+		BoardCloneModal,
 	},
 	directives: {
 		ClickOutside,
@@ -172,6 +177,7 @@ export default {
 			isDueSubmenuActive: false,
 			updateDueSetting: null,
 			canCreate: canCreateState,
+			cloneModalOpen: false,
 		}
 	},
 	computed: {
@@ -247,6 +253,26 @@ export default {
 			} catch (e) {
 				OC.Notification.showTemporary(t('deck', 'An error occurred'))
 				console.error(e)
+			}
+		},
+		showCloneModal() {
+			this.cloneModalOpen = true
+		},
+		async onCloseCloneModal(data) {
+			this.cloneModalOpen = false
+			if (data) {
+				this.loading = true
+				try {
+					const newBoard = await this.$store.dispatch('cloneBoard', {
+						boardData: this.board,
+						settings: data,
+					})
+					this.loading = false
+					await this.$router.push({ name: 'board', params: { id: newBoard.id } })
+				} catch (e) {
+					OC.Notification.showTemporary(t('deck', `Failed to clone board ${this.board.title}`))
+					console.error(e)
+				}
 			}
 		},
 		actionArchive() {

@@ -15,6 +15,7 @@ use OCA\Deck\Db\AclMapper;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
+use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
 use OCA\Deck\Db\IPermissionMapper;
@@ -28,6 +29,7 @@ use OCA\Deck\Event\AclCreatedEvent;
 use OCA\Deck\Event\AclDeletedEvent;
 use OCA\Deck\Event\AclUpdatedEvent;
 use OCA\Deck\Event\BoardUpdatedEvent;
+use OCA\Deck\Event\CardCreatedEvent;
 use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\Validators\BoardServiceValidator;
@@ -37,80 +39,37 @@ use OCP\DB\Exception as DbException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IConfig;
 use OCP\IDBConnection;
-use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\IURLGenerator;
-use OCP\IUserManager;
 use OCP\Server;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 class BoardService {
-	private BoardMapper $boardMapper;
-	private StackMapper $stackMapper;
-	private LabelMapper $labelMapper;
-	private AclMapper $aclMapper;
-	private IConfig $config;
-	private IL10N $l10n;
-	private PermissionService $permissionService;
-	private NotificationHelper $notificationHelper;
-	private AssignmentMapper $assignedUsersMapper;
-	private IUserManager $userManager;
-	private IGroupManager $groupManager;
-	private ?string $userId;
-	private ActivityManager $activityManager;
-	private IEventDispatcher $eventDispatcher;
-	private ChangeHelper $changeHelper;
-	private CardMapper $cardMapper;
 	private ?array $boardsCacheFull = null;
 	private ?array $boardsCachePartial = null;
-	private IURLGenerator $urlGenerator;
-	private IDBConnection $connection;
-	private BoardServiceValidator $boardServiceValidator;
-	private SessionMapper $sessionMapper;
 
 	public function __construct(
-		BoardMapper $boardMapper,
-		StackMapper $stackMapper,
-		CardMapper $cardMapper,
-		IConfig $config,
-		IL10N $l10n,
-		LabelMapper $labelMapper,
-		AclMapper $aclMapper,
-		PermissionService $permissionService,
-		NotificationHelper $notificationHelper,
-		AssignmentMapper $assignedUsersMapper,
-		IUserManager $userManager,
-		IGroupManager $groupManager,
-		ActivityManager $activityManager,
-		IEventDispatcher $eventDispatcher,
-		ChangeHelper $changeHelper,
-		IURLGenerator $urlGenerator,
-		IDBConnection $connection,
-		BoardServiceValidator $boardServiceValidator,
-		SessionMapper $sessionMapper,
-		?string $userId
+		private BoardMapper $boardMapper,
+		private StackMapper $stackMapper,
+		private CardMapper $cardMapper,
+		private IConfig $config,
+		private IL10N $l10n,
+		private LabelMapper $labelMapper,
+		private AclMapper $aclMapper,
+		private PermissionService $permissionService,
+		private AssignmentService $assignmentService,
+		private NotificationHelper $notificationHelper,
+		private AssignmentMapper $assignedUsersMapper,
+		private ActivityManager $activityManager,
+		private IEventDispatcher $eventDispatcher,
+		private ChangeHelper $changeHelper,
+		private IURLGenerator $urlGenerator,
+		private IDBConnection $connection,
+		private BoardServiceValidator $boardServiceValidator,
+		private SessionMapper $sessionMapper,
+		private ?string $userId
 	) {
-		$this->boardMapper = $boardMapper;
-		$this->stackMapper = $stackMapper;
-		$this->cardMapper = $cardMapper;
-		$this->labelMapper = $labelMapper;
-		$this->config = $config;
-		$this->aclMapper = $aclMapper;
-		$this->l10n = $l10n;
-		$this->permissionService = $permissionService;
-		$this->notificationHelper = $notificationHelper;
-		$this->assignedUsersMapper = $assignedUsersMapper;
-		$this->userManager = $userManager;
-		$this->groupManager = $groupManager;
-		$this->activityManager = $activityManager;
-		$this->eventDispatcher = $eventDispatcher;
-		$this->changeHelper = $changeHelper;
-		$this->userId = $userId;
-		$this->urlGenerator = $urlGenerator;
-		$this->connection = $connection;
-		$this->boardServiceValidator = $boardServiceValidator;
-		$this->sessionMapper = $sessionMapper;
 	}
 
 	/**
@@ -520,13 +479,19 @@ class BoardService {
 	/**
 	 * @param $id
 	 * @param $userId
+	 * @param $withCards
+	 * @param $withAssignments
+	 * @param $withLabels
+	 * @param $withDueDate
+	 * @param $moveCardsToLeftStack
+	 * @param $restoreArchivedCards
 	 * @return Board
 	 * @throws DoesNotExistException
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @throws BadRequestException
 	 */
-	public function clone($id, $userId) {
+	public function clone($id, $userId, $withCards = false, $withAssignments = false, $withLabels = false, $withDueDate = false, $moveCardsToLeftStack = false, $restoreArchivedCards = false) {
 		$this->boardServiceValidator->check(compact('id', 'userId'));
 
 		if (!$this->permissionService->canCreate()) {
@@ -549,6 +514,16 @@ class BoardService {
 		]);
 		$this->boardMapper->insert($newBoard);
 
+		foreach ($this->aclMapper->findAll($board->getId()) as $acl) {
+			$this->addAcl($newBoard->getId(),
+				$acl->getType(),
+				$acl->getParticipant(),
+				$acl->getPermissionEdit(),
+				$acl->getPermissionShare(),
+				$acl->getPermissionManage());
+		}
+
+
 		$labels = $this->labelMapper->findAll($id);
 		foreach ($labels as $label) {
 			$newLabel = new Label();
@@ -564,6 +539,10 @@ class BoardService {
 			$newStack->setTitle($stack->getTitle());
 			$newStack->setBoardId($newBoard->getId());
 			$this->stackMapper->insert($newStack);
+		}
+
+		if ($withCards) {
+			$this->cloneCards($board, $newBoard, $withAssignments, $withLabels, $withDueDate, $moveCardsToLeftStack, $restoreArchivedCards);
 		}
 
 		return $this->find($newBoard->getId());
@@ -667,6 +646,88 @@ class BoardService {
 		}
 
 		return $boards;
+	}
+
+	private function cloneCards(Board $board, Board $newBoard, bool $withAssignments = false, bool $withLabels = false, bool $withDueDate = false, bool $moveCardsToLeftStack = false, bool $restoreArchivedCards = false): void {
+		// TODO: Undelete cards
+		// TODO: Copy attachments (or not?)
+		// TODO: Copy comments (or not?)
+		// TODO: Move to specific column
+
+		$stacks = $this->stackMapper->findAll($board->getId());
+		usort($stacks, function (Stack $a, Stack $b) {
+			return $a->getOrder() - $b->getOrder();
+		});
+
+		$newStacks = $this->stackMapper->findAll($newBoard->getId());
+		usort($newStacks, function (Stack $a, Stack $b) {
+			return $a->getOrder() - $b->getOrder();
+		});
+
+		$i = 0;
+		foreach ($stacks as $stack) {
+			$cards = $this->cardMapper->findAll($stack->getId());
+			$archivedCards = $this->cardMapper->findAllArchived($stack->getId());
+
+			/** @var Card[] $cards */
+			$cards = array_merge($cards, $archivedCards);
+
+			foreach ($cards as $card) {
+				$targetStackId = $moveCardsToLeftStack ? $newStacks[0]->getId() : $newStacks[$i]->getId();
+
+				// Create a cloned card.
+				// Done with setters as only fields set via setters get written to db
+				$newCard = new Card();
+				$newCard->setTitle($card->getTitle());
+				$newCard->setDescription($card->getDescription());
+				$newCard->setStackId($targetStackId);
+				$newCard->setType($card->getType());
+				$newCard->setOwner($card->getOwner());
+				$newCard->setOrder($card->getOrder());
+				$newCard->setDuedate($withDueDate ? $card->getDuedate() : null);
+				$newCard->setArchived($restoreArchivedCards ? false : $card->getArchived());
+				$newCard->setStackId($targetStackId);
+
+				// Persist the cloned card.
+				$newCard = $this->cardMapper->insert($newCard);
+
+
+				// Copy labels.
+				if ($withLabels) {
+					$labels = $this->labelMapper->findAssignedLabelsForCard($card->getId());
+					$newLabels = $this->labelMapper->findAll($newBoard->getId());
+					$newLabelTitles = [];
+					foreach ($newLabels as $label) {
+						$newLabelTitles[$label->getTitle()] = $label;
+					}
+
+					foreach ($labels as $label) {
+						$newLabelId = $newLabelTitles[$label->getTitle()]?->getId() ?? null;
+						if ($newLabelId) {
+							$this->cardMapper->assignLabel($newCard->getId(), $newLabelId);
+						}
+					}
+				}
+
+
+				// Copy assignments.
+				if ($withAssignments) {
+					$assignments = $this->assignedUsersMapper->findAll($card->getId());
+
+					foreach ($assignments as $assignment) {
+						$this->assignmentService->assignUser($newCard->getId(), $assignment->getParticipant(), $assignment->getType());
+					}
+				}
+
+
+				// Copied from CardService because CardService cannot be injected due to cyclic dependencies.
+				$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE);
+				$this->changeHelper->cardChanged($card->getId(), false);
+				$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($card));
+			}
+
+			$i++;
+		}
 	}
 
 	private function enrichWithStacks($board, $since = -1) {
