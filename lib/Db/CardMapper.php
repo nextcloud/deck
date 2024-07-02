@@ -562,12 +562,15 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 	}
 
 	public function isOwner($userId, $id): bool {
-		$sql = 'SELECT owner FROM `*PREFIX*deck_boards` WHERE `id` IN (SELECT board_id FROM `*PREFIX*deck_stacks` WHERE id IN (SELECT stack_id FROM `*PREFIX*deck_cards` WHERE id = ?))';
-		$stmt = $this->db->prepare($sql);
-		$stmt->bindParam(1, $id, \PDO::PARAM_INT, 0);
-		$stmt->execute();
-		$row = $stmt->fetch();
-		return ($row['owner'] === $userId);
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('c.id')
+			->from($this->getTableName(), 'c')
+			->innerJoin('c', 'deck_stacks', 's', 'c.stack_id = s.id')
+			->innerJoin('s', 'deck_boards', 'b', 'b.id = s.board_id')
+			->where($qb->expr()->eq('c.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('b.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+
+		return count($qb->executeQuery()->fetchAll()) > 0;
 	}
 
 	public function findBoardId($id): ?int {
