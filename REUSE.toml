@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+version = 1
+SPDX-PackageName = "deck"
+SPDX-PackageSupplier = "Nextcloud <info@nextcloud.com>"
+SPDX-PackageDownloadLocation = "https://github.com/nextcloud/deck"
+
+[[annotations]]
+path = [".gitattributes", ".github/**", ".editorconfig", "babel.config.js", ".php-cs-fixer.dist.php", "package-lock.json", "package.json", "composer.json", "composer.lock", "webpack.js", "stylelint.config.js", ".eslintrc.js", ".gitignore", ".jshintrc", ".l10nignore", "action/.gitignore", "action/package.json", "action/package-lock.json", "action/dist/index.js", "tests/**", "psalm.xml", "cypress/.env", "cypress/.eslintrc.js", "cypress/docker-compose.yml", "cypress/plugins/index.js", "cypress/tsconfig.json", "cypress.config.ts", "vendor-bin/**/composer.json", "stylelint.config.cjs", "vendor-bin/**/composer.lock", ".tx/config", "webpack.config.js", "tsconfig.json", "vite.config.ts", "js/vendor.LICENSE.txt", "krankerl.toml", ".npmignore", "cypress/fixtures/**", "postcss.config.js", "cypress/dockerNode.ts", "jest.config.js", "cypress.config.js", "relativeci.config.js", ".nextcloudignore", ".devcontainer/devcontainer.json"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "none"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = ["l10n/**.js", "l10n/**.json", "js/**.js.map", "js/**.js", "js/**.mjs", "js/**.mjs.map", "js/templates/**.handlebars", "lib/Service/Importer/fixtures/config-deckJson-schema.json", "lib/Service/Importer/fixtures/config-trelloApi-schema.json", "lib/Service/Importer/fixtures/config-trelloJson-schema.json", "screenshots/screenshot1.png", "src/assets/file-placeholder.svg", "img/favicon.ico", "img/favicon.png", "img/favicon.svg", "img/activity.svg", "img/activity-dark.svg", "img/deck.svg", "img/deck-current.svg", "img/deck-dark.svg", "img/details-white.svg", "img/card.svg"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2019 Nextcloud GmbH and Nextcloud contributors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["img/attach.svg", "img/description.svg", "img/details.svg", "img/toggle-view-expand.svg", "img/toggle-view-collapse.svg", "img/filter.svg", "img/filter_set.svg", "img/circles-dark.svg", "img/circles.svg", "img/color_picker.svg", "img/color_picker-dark.svg", "img/notifications-dark.svg", "img/archive.svg", "img/add-white.svg", "img/calendar-dark.svg", "img/calendar-white.svg"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2018-2024 Google LLC"
+SPDX-License-Identifier = "Apache-2.0"
