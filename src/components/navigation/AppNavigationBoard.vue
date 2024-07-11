@@ -144,10 +144,13 @@
 
 <script>
 import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcActions, NcActionButton } from '@nextcloud/vue'
+import { loadState } from '@nextcloud/initial-state'
 import ClickOutside from 'vue-click-outside'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
 import AccountIcon from 'vue-material-design-icons/Account.vue'
+
+const canCreateState = loadState('deck', 'canCreate')
 
 export default {
 	name: 'AppNavigationBoard',
