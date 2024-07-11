@@ -204,7 +204,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 section.app-sidebar__tab--active {
 	min-height: auto;
