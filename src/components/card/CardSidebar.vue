@@ -23,7 +23,7 @@
 <template>
 	<NcAppSidebar v-if="currentBoard && currentCard"
 		:active="tabId"
-		:title="title"
+		:name="title"
 		:subtitle="subtitle"
 		:subtitle-tooltip="subtitleTooltip"
 		:title-editable="titleEditable"
@@ -204,7 +204,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 section.app-sidebar__tab--active {
 	min-height: auto;

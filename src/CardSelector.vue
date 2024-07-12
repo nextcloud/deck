@@ -24,12 +24,12 @@
 	<NcModal class="card-selector" @close="close">
 		<div id="modal-inner" :class="{ 'icon-loading': loading }">
 			<h3>{{ title }}</h3>
-			<NcMultiselect v-model="selectedBoard"
+			<NcSelect v-model="selectedBoard"
 				:placeholder="t('deck', 'Select a board')"
 				:options="boards"
 				:disabled="loading"
 				label="title"
-				@select="fetchCardsFromBoard">
+				@option:selected="fetchCardsFromBoard">
 				<template slot="singleLabel" slot-scope="props">
 					<span>
 						<span :style="{ 'backgroundColor': '#' + props.option.color }" class="board-bullet" />
@@ -42,9 +42,9 @@
 						<span>{{ props.option.title }}</span>
 					</span>
 				</template>
-			</NcMultiselect>
+			</NcSelect>
 
-			<NcMultiselect v-model="selectedCard"
+			<NcSelect v-model="selectedCard"
 				:placeholder="t('deck', 'Select a card')"
 				:options="cardsFromBoard"
 				:disabled="loading || selectedBoard === ''"
@@ -62,14 +62,14 @@
 
 <script>
 import { generateUrl } from '@nextcloud/router'
-import { NcModal, NcMultiselect } from '@nextcloud/vue'
+import { NcModal, NcSelect } from '@nextcloud/vue'
 import axios from '@nextcloud/axios'
 
 export default {
 	name: 'CardSelector',
 	components: {
 		NcModal,
-		NcMultiselect,
+		NcSelect,
 	},
 	props: {
 		title: {

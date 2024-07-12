@@ -89,14 +89,14 @@
 					<NcPopover container=".board-action-buttons__filter"
 						:placement="'bottom-end'"
 						:aria-label="t('deck', 'Active filters')"
-						:title="t('deck', 'Active filters')"
+						:name="t('deck', 'Active filters')"
 						:tooltip="t('deck', 'Active filters')"
 						@show="filterVisible=true"
 						@hide="filterVisible=false">
 						<!-- We cannot use NcActions here are the popover trigger does not update on reactive icons -->
 						<NcButton slot="trigger"
 							ref="filterPopover"
-							:title="t('deck', 'Apply filter')"
+							:name="t('deck', 'Apply filter')"
 							class="filter-button"
 							:type="isFilterActive ? 'primary' : 'tertiary'">
 							<template #icon>
@@ -203,7 +203,7 @@
 				</div>
 
 				<NcActions :aria-label="t('deck', 'View Modes')"
-					:title="t('deck', 'Toggle View Modes')">
+					:name="t('deck', 'Toggle View Modes')">
 					<NcActionButton @click="toggleShowArchived">
 						<template #icon>
 							<ArchiveIcon :size="20" decorative />
@@ -231,7 +231,7 @@
 				<NcActions>
 					<NcActionButton icon="icon-menu-sidebar"
 						:aria-label="t('deck', 'Open details')"
-						:title="t('deck', 'Details')"
+						:name="t('deck', 'Details')"
 						@click="toggleDetailsView" />
 				</NcActions>
 			</div>

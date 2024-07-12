@@ -23,7 +23,7 @@
 <template>
 	<div v-if="card" class="duedate" :data-due-state="dueState">
 		<transition name="zoom">
-			<div v-if="card.duedate || card.done" class="due" :title="absoluteDate">
+			<div v-if="card.duedate || card.done" class="due" :name="absoluteDate">
 				<CheckCircle v-if="card.done" :size="16" />
 				<Clock v-else-if="overdue" :size="16" />
 				<ClockOutline v-else :size="16" />
