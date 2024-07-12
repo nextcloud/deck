@@ -423,6 +423,6 @@ h5 {
 }
 
 .modal__card .description__text .text-menubar {
-	top: 142px !important;
+	top: 0;
 }
 </style>
