@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.12.4
+
+### Fixed
+
+- fix: Avoid optional before required parameter [#6045](https://github.com/nextcloud/deck/pull/6045)
+- Only check path for being accessible when the storage is a object home [#6063](https://github.com/nextcloud/deck/pull/6063)
+- Fix attaching files to a card @elzody [#6092](https://github.com/nextcloud/deck/pull/6092)
+
 ## 1.12.3
 - don't reset update time when no update was written to db #6035
 - Clarify config file not found exception message #5725
