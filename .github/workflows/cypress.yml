@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [14.x]
+        node-version: [16.x]
         # containers: [1, 2, 3]
         php-versions: [ '7.4' ]
         databases: [ 'sqlite' ]
