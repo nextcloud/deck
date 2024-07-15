@@ -387,7 +387,7 @@ h5 {
 }
 
 .description__text :deep(.ProseMirror) {
-	padding-bottom: 44px;
+	padding-bottom: var(--default-clickable-area);
 }
 
 </style>

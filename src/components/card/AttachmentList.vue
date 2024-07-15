@@ -280,10 +280,10 @@ export default {
 		gap: calc(var(--default-grid-baseline) * 3);
 
 		.icon-upload, .icon-folder {
-			padding-left: 44px;
+			padding-left: var(--default-clickable-area);
 			background-position: 16px center;
 			flex-grow: 1;
-			height: 44px;
+			height: var(--default-clickable-area);
 			margin-bottom: 12px;
 			text-align: left;
 		}
@@ -318,7 +318,7 @@ export default {
 		li.attachment {
 			display: flex;
 			padding: 3px;
-			min-height: 44px;
+			min-height: var(--default-clickable-area);
 
 			&.deleted {
 				opacity: .5;
@@ -366,7 +366,7 @@ export default {
 				}
 			}
 			button.icon-history {
-				width: 44px;
+				width: var(--default-clickable-area);
 			}
 			progress {
 				margin-top: 3px;

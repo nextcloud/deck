@@ -5,7 +5,7 @@
 
 	.editor__content:deep {
 		flex-grow: 1;
-		margin-left: 44px;
+		margin-left: var(--default-clickable-area);
 
 		.ProseMirror {
 			width: 100%;
@@ -13,8 +13,8 @@
 	}
 
 	input[type='submit'] {
-		width: 44px;
-		height: 44px;
+		width: var(--default-clickable-area);
+		height: var(--default-clickable-area);
 		margin: 0;
 		padding: 13px;
 		background-color: transparent;
@@ -47,6 +47,6 @@
 }
 
 .comment--content {
-	margin-left: 44px;
+	margin-left: var(--default-clickable-area);
 	word-break: break-word;
 }

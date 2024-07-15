@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h3>{{ t('deck', 'Deleted lists') }}</h3>
+		<h5>{{ t('deck', 'Deleted lists') }}</h5>
 		<ul>
 			<li v-for="deletedStack in deletedStacks" :key="deletedStack.id">
 				<span class="icon icon-deck" />
@@ -14,7 +14,7 @@
 			</li>
 		</ul>
 
-		<h3>{{ t('deck', 'Deleted cards') }}</h3>
+		<h5>{{ t('deck', 'Deleted cards') }}</h5>
 		<ul>
 			<li v-for="deletedCard in deletedCards" :key="deletedCard.id">
 				<div class="icon icon-deck" />
@@ -98,7 +98,7 @@ export default {
 		}
 
 		* {
-			flex-basis: 44px;
+			flex-basis: var(--default-clickable-area);
 		}
 
 		.title {

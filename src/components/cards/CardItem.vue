@@ -363,7 +363,7 @@ export default {
 				}
 			}
 			.card-menu {
-				height: 44px;
+				height: var(--default-clickable-area);
 				align-self: end;
 			}
 		}
@@ -416,7 +416,7 @@ export default {
 	}
 
 	.compact {
-		min-height: 44px;
+		min-height: var(--default-clickable-area);
 
 		.duedate {
 			margin-right: 0;

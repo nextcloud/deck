@@ -229,7 +229,7 @@ section.app-sidebar__tab--active {
 	right: 0;
 	max-width: calc(100% - #{$modal-padding * 2});
 	padding: 0 14px;
-	height: 100%;
+	height: 97%;
 	overflow: initial;
 	user-select: text;
 	-webkit-user-select: text;
