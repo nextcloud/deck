@@ -19,6 +19,7 @@ use OCA\Deck\NoPermissionException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Cache\CappedMemoryCache;
+use OCP\Constants;
 use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\IUserManager;
@@ -130,6 +131,20 @@ class PermissionService {
 
 		// Throw NoPermission to not leak information about existing entries
 		throw new NoPermissionException('Permission denied');
+	}
+
+	public function boardToFilePermission(array $permissions): int {
+		$result = 0;
+		foreach ($permissions as $key => $value) {
+			$result |= $value ? match ($key) {
+				Acl::PERMISSION_READ => Constants::PERMISSION_READ,
+				Acl::PERMISSION_EDIT => Constants::PERMISSION_UPDATE | Constants::PERMISSION_DELETE | Constants::PERMISSION_CREATE | Constants::PERMISSION_DELETE,
+				Acl::PERMISSION_SHARE => Constants::PERMISSION_SHARE,
+				default => 0,
+			} : 0;
+		}
+
+		return $result;
 	}
 
 	/**
