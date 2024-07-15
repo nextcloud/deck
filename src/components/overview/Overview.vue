@@ -158,7 +158,7 @@ export default {
 
 .overview {
 	position: relative;
-	height: calc(100% - 44px);
+	height: calc(100% - var(--default-clickable-area));
 	overflow-x: scroll;
 	display: flex;
 	align-items: stretch;

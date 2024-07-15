@@ -1,6 +1,6 @@
 <!--
-  - SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
-  - SPDX-License-Identifier: AGPL-3.0-or-later
+	- SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
+	- SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <template>
@@ -261,7 +261,7 @@ export default {
 		},
 		startEditing(stack) {
 			if (this.dragging) {
-			  return
+				return
 			}
 
 			this.copiedStack = Object.assign({}, stack)
@@ -322,7 +322,7 @@ export default {
 		padding-left: $card-spacing;
 		padding-right: $card-spacing;
 		cursor: grab;
-		min-height: 44px;
+		min-height: var(--default-clickable-area);
 
 		// Smooth fade out of the cards at the top
 		&:before {
@@ -374,6 +374,7 @@ export default {
 			border-radius: 3px;
 			margin: 6px;
 			padding: 4px 4px;
+			font-size: 120%;
 
 			&:focus-visible {
 				outline: 2px solid var(--color-border-dark);
@@ -384,10 +385,17 @@ export default {
 		form {
 			margin: 2px 0;
 		}
+
+		:deep {
+			.action-item,
+			.v-popper--theme-dropdown {
+				display: flex;
+			}
+		}
 	}
 
 	.stack__card-add {
-		height: 44px;
+		height: var(--default-clickable-area);
 		flex-shrink: 0;
 		z-index: 100;
 		display: flex;

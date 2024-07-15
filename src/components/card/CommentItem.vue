@@ -213,7 +213,7 @@ export default {
 	@import '../../css/comments';
 
 	.reply {
-		margin: 0 0 0 44px;
+		margin: 0 0 0 var(--default-clickable-area);
 
 		&.reply--preview {
 			margin: 4px 0;

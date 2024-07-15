@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: 2019 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
 const xmlToJson = (xml) => {
 	let obj = {}
 	if (xml.nodeType === 1) {
