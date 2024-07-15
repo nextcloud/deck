@@ -43,36 +43,40 @@ class LabelMapper extends DeckMapper implements IPermissionMapper {
 	}
 
 	/**
-	 * @param numeric $cardId
-	 * @param int|null $limit
-	 * @param int|null $offset
 	 * @return Label[]
 	 * @throws \OCP\DB\Exception
 	 */
-	public function findAssignedLabelsForCard($cardId, $limit = null, $offset = null): array {
+	public function findAssignedLabelsForCard(int $cardId): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('l.*', 'card_id')
 			->from($this->getTableName(), 'l')
 			->innerJoin('l', 'deck_assigned_labels', 'al', 'l.id = al.label_id')
 			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
-			->orderBy('l.id')
-			->setMaxResults($limit)
-			->setFirstResult($offset);
+			->orderBy('l.id');
 
 		return $this->findEntities($qb);
 	}
 
-	public function findAssignedLabelsForCards($cardIds, $limit = null, $offset = null): array {
+	public function findAssignedLabelsForCards(array $cardIds, ?int $limit = null, ?int $offset = null): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('l.*', 'card_id')
 			->from($this->getTableName(), 'l')
 			->innerJoin('l', 'deck_assigned_labels', 'al', 'l.id = al.label_id')
-			->where($qb->expr()->in('card_id', $qb->createNamedParameter($cardIds, IQueryBuilder::PARAM_INT_ARRAY)))
+			->where($qb->expr()->in('card_id', $qb->createParameter('ids')))
 			->orderBy('l.id')
 			->setMaxResults($limit)
 			->setFirstResult($offset);
 
-		return $this->findEntities($qb);
+		$results = [];
+		foreach (array_chunk($cardIds, 1000) as $chunk) {
+			$qb->setParameter('ids', $chunk, IQueryBuilder::PARAM_STR_ARRAY);
+
+			foreach ($this->findEntities($qb) as $result) {
+				$results[] = $result;
+			}
+		}
+
+		return $results;
 	}
 
 	/**
