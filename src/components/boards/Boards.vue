@@ -62,7 +62,7 @@ export default {
 
 <style lang="scss">
 	.board-list {
-		margin-top: -44px;
+		margin-top: - var(--default-clickable-area); //@TODO
 
 		.board-list-row {
 			align-items: center;
@@ -77,7 +77,7 @@ export default {
 
 		.board-list-header-row {
 			color: var(--color-text-lighter);
-			height: 44px;
+			height: var(--default-clickable-area);
 		}
 
 		.board-list-bullet-cell,

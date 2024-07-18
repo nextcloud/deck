@@ -59,7 +59,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../css/variables';
-$clickable-area: 44px;
+$clickable-area: var(--default-clickable-area);
 
 .card--placeholder {
 	width: $stack-width;

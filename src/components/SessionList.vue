@@ -56,7 +56,7 @@ export default {
 <style scoped lang="scss">
 
 .avatar-list {
-	min-height: 44px;
+	min-height: var(--default-clickable-area);
 	align-items: center;
 	padding-right: 0.5em;
 	border: none;
