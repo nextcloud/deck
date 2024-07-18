@@ -18,8 +18,6 @@ Vue.prototype.OC = OC
 window.addEventListener('DOMContentLoaded', () => {
 	if (OCA.Sharing && OCA.Sharing.ShareSearch) {
 		OCA.Sharing.ShareSearch.addNewResult(FileSharingPicker)
-	} else {
-		console.error('OCA.Sharing.ShareSearch not ready')
 	}
 
 	window.OCP.Collaboration.registerType('deck', {
