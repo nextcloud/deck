@@ -91,8 +91,8 @@ You can enable HMR (Hot module replacement) to avoid page reloads when working o
 ```
 docker run --rm \
     -p 8080:80 \
-    -v ~/path/to/app:/var/www/html/apps-extra/app \
-    ghcr.io/juliushaertl/nextcloud-dev-php80:latest
+    -v $PWD:/var/www/html/apps-extra/deck \
+    ghcr.io/juliushaertl/nextcloud-dev-php81:latest
 ```
 
 ### Full Nextcloud development environment
