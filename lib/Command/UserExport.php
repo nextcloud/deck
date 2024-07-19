@@ -12,6 +12,7 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\CommentService;
 use OCP\App\IAppManager;
 use OCP\DB\Exception;
 use Symfony\Component\Console\Command\Command;
@@ -27,6 +28,7 @@ class UserExport extends Command {
 		private StackMapper $stackMapper,
 		private CardMapper $cardMapper,
 		private AssignmentMapper $assignedUsersMapper,
+		private CommentService $commentService,
 	) {
 		parent::__construct();
 	}
@@ -56,6 +58,9 @@ class UserExport extends Command {
 
 		$data = [];
 		foreach ($boards as $board) {
+			if ($board->getDeletedAt() > 0) {
+				continue;
+			}
 			$fullBoard = $this->boardMapper->find($board->getId(), true, true);
 			$data[$board->getId()] = $fullBoard->jsonSerialize();
 			$stacks = $this->stackMapper->findAll($board->getId());
@@ -68,7 +73,13 @@ class UserExport extends Command {
 					$fullCard->setAssignedUsers($assignedUsers);
 
 					$cardDetails = new CardDetails($fullCard, $fullBoard);
-					$data[$board->getId()]['stacks'][$stack->getId()]['cards'][] = $cardDetails->jsonSerialize();
+					$comments = $this->commentService->list($card->getId());
+
+					$cardDetails->setCommentsCount(count($comments->getData()));
+
+					$cardJson = $cardDetails->jsonSerialize();
+					$cardJson['comments'] = $comments->getData();
+					$data[$board->getId()]['stacks'][$stack->getId()]['cards'][] = $cardJson;
 				}
 			}
 		}

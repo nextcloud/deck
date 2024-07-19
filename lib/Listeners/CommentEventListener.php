@@ -58,7 +58,7 @@ class CommentEventListener implements IEventListener {
 	private function activityHandler(CommentsEvent $event): void {
 		$comment = $event->getComment();
 		$card = $this->cardMapper->find($comment->getObjectId());
-		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_COMMENT_CREATE, ['comment' => $comment]);
+		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_COMMENT_CREATE, ['comment' => $comment], $comment->getActorId());
 	}
 
 	private function notificationHandler(CommentsEvent $event): void {
