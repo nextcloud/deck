@@ -38,7 +38,7 @@ OC.L10N.register(
     "seconds ago" : "eilenn zo",
     "Search" : "Klask",
     "Shared with you" : "Rannet ganeoc'h",
-    "No notifications" : "Kemenaden ebet",
+    "No notifications" : "Kemennadenn ebet",
     "Today" : "Hiziv",
     "Tomorrow" : "Warc'hoaz",
     "Close" : "Seriñ",
