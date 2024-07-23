@@ -174,6 +174,7 @@ OC.L10N.register(
     "Deleted lists" : "Törölt listák",
     "Undo" : "Visszavonás",
     "Deleted cards" : "Törölt kártyák",
+    "Searching for users, groups and teams …" : "Felhasználók, csoportok és csapatok keresése…",
     "No participants found" : "Nem találhatók résztvevők",
     "Board owner" : "Tábla tulajdonosa",
     "(Group)" : "(Csoport)",
