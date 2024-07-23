@@ -29,6 +29,7 @@ OC.L10N.register(
     "Invalid path selected" : "An hent dibabet n'eus ket anezhañ",
     "Comments" : "Displegadennoù",
     "Modified" : "Cheñchet",
+    "Created" : "Krouet",
     "Save" : "Enrollañ",
     "Reply" : "Respont",
     "Update" : "Adnevesaat",
