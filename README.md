@@ -105,6 +105,12 @@ You can use the provided Makefile to run all tests by using:
 
     make test
 
+#### Running behat integration tests
+
+Within `tests/integration/` run `composer install` and then choose one of the two options:
+- Run tests with a local php server: `bash run.sh`
+- Run against an existing Nextcloud installation: `BEHAT_SERVER_URL=http://nextcloud.local ./vendor/bin/behat --colors features/decks.feature`
+
 ### Documentation
 
 The documentation for our REST API can be found at https://deck.readthedocs.io/en/latest/API/

@@ -16,7 +16,13 @@ class ServerContext implements Context {
 
 	public function __construct($baseUrl) {
 		$this->rawBaseUrl = $baseUrl;
-		$this->__tConstruct($baseUrl . '/index.php/ocs/', ['admin', 'admin'], '123456');
+
+		$testServerUrl = getenv('BEHAT_SERVER_URL');
+		if ($testServerUrl !== false) {
+			$this->rawBaseUrl = rtrim($testServerUrl, '/');
+		}
+
+		$this->__tConstruct($this->rawBaseUrl . '/ocs/', ['admin', 'admin'], '123456');
 	}
 
 
