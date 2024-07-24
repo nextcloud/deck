@@ -150,7 +150,7 @@ OC.L10N.register(
     "Filter by assigned user" : "Отбор по назначению:",
     "Unassigned" : "Без назначения",
     "Filter by status" : "Отбор по состоянию:",
-    "Open and completed" : "Открытые и завершённые",
+    "Open and completed" : "Открытые или завершённые",
     "Open" : "Открытые",
     "Completed" : "Завершённые",
     "Filter by due date" : "Отбор по сроку исполнения:",
