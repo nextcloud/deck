@@ -251,6 +251,7 @@ OC.L10N.register(
     "Remove due date" : "Suprimeix la data de caducitat",
     "Mark as done" : "Marcat com a fet",
     "Due at:" : "Venciment a:",
+    "Not done" : "No s'ha fet",
     "Unarchive card" : "Desarxiva targeta",
     "Archive card" : "Arxiva la targeta",
     "Select Date" : "Selecciona la data",
