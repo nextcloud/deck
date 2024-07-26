@@ -5,6 +5,32 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.14.0-beta.1
+
+### Fixed
+
+- fix: card details focus issue with screen reader @luka-nextcloud [#5858](https://github.com/nextcloud/deck/pull/5858)
+- Cleaning up unused indicies @mintsoft [#5612](https://github.com/nextcloud/deck/pull/5612)
+- Change import command's config default argument @JimMadge [#5722](https://github.com/nextcloud/deck/pull/5722)
+- don't reset update time when no update was written to db @grnd-alt [#6005](https://github.com/nextcloud/deck/pull/6005)
+- docs: Fix symlink to readme @juliushaertl [#6033](https://github.com/nextcloud/deck/pull/6033)
+- perf: Avoid fetching labels and owner details on permission check @juliushaertl [#6010](https://github.com/nextcloud/deck/pull/6010)
+- Only check path for being accessible when the storage is a object home @mejo- [#6062](https://github.com/nextcloud/deck/pull/6062)
+- Fix: incorrect height of editing windows and edit bar @pschopen [#6088](https://github.com/nextcloud/deck/pull/6088)
+- fix: design review issues @luka-nextcloud [#6113](https://github.com/nextcloud/deck/pull/6113)
+- fix: remove redundant log @luka-nextcloud [#6115](https://github.com/nextcloud/deck/pull/6115)
+- fix: Adjust dependencies to fix filepicker @susnux [#5964](https://github.com/nextcloud/deck/pull/5964)
+- fix: Remove bindParam usage with simpler query @juliushaertl [#6065](https://github.com/nextcloud/deck/pull/6065)
+
+### Other
+
+- Adds link to Nextcloud Deck for iOS in README.md file @StCyr [#5886](https://github.com/nextcloud/deck/pull/5886)
+- choir(i18n): Change filter title @rakekniven [#5957](https://github.com/nextcloud/deck/pull/5957)
+- chore: Clean up permission service @juliushaertl [#6011](https://github.com/nextcloud/deck/pull/6011)
+- Update User_documentation_en.md @StCyr [#6029](https://github.com/nextcloud/deck/pull/6029)
+- chore: Move comments event handler to use proper event dispatcher @juliushaertl [#6008](https://github.com/nextcloud/deck/pull/6008)
+- Migrate REUSE to TOML format @AndyScherzinger [#6084](https://github.com/nextcloud/deck/pull/6084)
+
 ## 1.13.0-beta.1
 
 ### Added
