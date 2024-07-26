@@ -130,6 +130,7 @@ export default {
 			showArchived: state => state.showArchived,
 			currentBoard: state => state.currentBoard,
 			showCardCover: state => state.showCardCover,
+			shortcutLock: state => state.shortcutLock,
 		}),
 		...mapGetters([
 			'isArchived',
@@ -205,6 +206,9 @@ export default {
 	},
 	methods: {
 		focus(card) {
+			if (this.shortcutLock) {
+				return
+			}
 			card = this.$refs[`card${card}`]
 			card.focus()
 		},

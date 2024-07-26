@@ -118,6 +118,7 @@
 						:placeholder="t('deck', 'Card name')"
 						required
 						pattern=".*\S+.*"
+						@focus="onCreateCardFocus"
 						@keydown.esc="stopCardCreation">
 					<input v-show="!stateCardCreating"
 						class="icon-confirm"
@@ -229,6 +230,13 @@ export default {
 			},
 		},
 	},
+	watch: {
+		showAddCard(newValue) {
+			if (!newValue) {
+				this.$store.dispatch('toggleShortcutLock', false)
+			}
+		},
+	},
 
 	methods: {
 		stopCardCreation(e) {
@@ -317,6 +325,9 @@ export default {
 			} finally {
 				this.stateCardCreating = false
 			}
+		},
+		onCreateCardFocus() {
+			this.$store.dispatch('toggleShortcutLock', true)
 		},
 	},
 }
