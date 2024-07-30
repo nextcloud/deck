@@ -110,6 +110,7 @@ OC.L10N.register(
     "Archived cards" : "Arkistoidut kortit",
     "Add list" : "Lisää lista",
     "List name" : "Listan nimi",
+    "Active filters" : "Aktiiviset suodattimet",
     "Apply filter" : "Toteuta suodatus",
     "Filter by tag" : "Suodata tunnisteen perusteella",
     "Filter by assigned user" : "Suodata määritetyn käyttäjän mukaan",
