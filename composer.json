@@ -9,7 +9,7 @@
 		}
 	],
 	"require": {
-		"justinrainbow/json-schema": "^5.2"
+		"justinrainbow/json-schema": "^6.0"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
