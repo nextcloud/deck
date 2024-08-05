@@ -6,6 +6,7 @@
 
 namespace OCA\Deck\Service\Importer\Systems;
 
+use OC\Comments\Comment;
 use OCA\Deck\BadRequestException;
 use OCA\Deck\Db\Acl;
 use OCA\Deck\Db\Assignment;
@@ -103,8 +104,20 @@ class DeckJsonService extends ABoardImportService {
 	}
 
 	public function getComments(): array {
-		// Comments are not implemented in export
-		return [];
+		$comments = [];
+		foreach ($this->tmpCards as $sourceCard) {
+			if (!property_exists($sourceCard, "comments")) {
+				continue;
+			}
+			$commentsOriginal = $sourceCard->comments;
+			foreach ($commentsOriginal as $commentOriginal) {
+				$comment = new Comment();
+				$comment->setActor($commentOriginal->actorType, $commentOriginal->actorId)
+					->setMessage($commentOriginal->message)->setCreationDateTime(\DateTime::createFromFormat('Y-m-d\TH:i:sP', $commentOriginal->creationDateTime));
+				$comments[$this->cards[$sourceCard->id]->getId()][$commentOriginal->id] = $comment;
+			}
+		}
+		return $comments;
 	}
 
 	public function getCardLabelAssignment(): array {

@@ -23,6 +23,7 @@
 
 namespace OCA\Deck\Command;
 
+use OC\Comments\Comment;
 use OCA\Deck\Db\AssignmentMapper;
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
@@ -31,7 +32,9 @@ use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
 use OCA\Deck\Service\BoardService;
+use OCA\Deck\Service\CommentService;
 use OCP\App\IAppManager;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\IGroupManager;
 use OCP\IUserManager;
 use Symfony\Component\Console\Input\InputInterface;
@@ -46,6 +49,7 @@ class UserExportTest extends \Test\TestCase {
 	protected $assignedUserMapper;
 	protected $userManager;
 	protected $groupManager;
+	protected $commentService;
 
 	private UserExport $userExport;
 
@@ -59,7 +63,8 @@ class UserExportTest extends \Test\TestCase {
 		$this->assignedUserMapper = $this->createMock(AssignmentMapper::class);
 		$this->userManager = $this->createMock(IUserManager::class);
 		$this->groupManager = $this->createMock(IGroupManager::class);
-		$this->userExport = new UserExport($this->appManager, $this->boardMapper, $this->boardService, $this->stackMapper, $this->cardMapper, $this->assignedUserMapper, $this->userManager, $this->groupManager);
+		$this->commentService = $this->createMock(CommentService::class);
+		$this->userExport = new UserExport($this->appManager, $this->boardMapper, $this->boardService, $this->stackMapper, $this->cardMapper, $this->assignedUserMapper, $this->commentService);
 	}
 
 	public function getBoard($id) {
@@ -79,6 +84,13 @@ class UserExportTest extends \Test\TestCase {
 		$card->setId($id);
 		$card->setTitle('Card ' . $id);
 		return $card;
+	}
+
+	public function getComment($id) {
+		$comment = new Comment();
+		$comment->setActor("users", "admin");
+		$comment->setMessage("fake comment" . $id);
+		return $comment;
 	}
 	public function testExecute() {
 		$input = $this->createMock(InputInterface::class);
@@ -107,6 +119,13 @@ class UserExportTest extends \Test\TestCase {
 			$this->getCard(2),
 			$this->getCard(3),
 		];
+
+		$comments = [
+			$this->getComment(1),
+			$this->getComment(2),
+			$this->getComment(3),
+		];
+		$this->commentService->expects($this->exactly(count($cards) * count($stacks) * count($boards)))->method('list')->willReturn(new DataResponse($comments));
 		$this->cardMapper->expects($this->exactly(count($boards) * count($stacks)))
 			->method('findAllByStack')
 			->willReturn($cards);

@@ -27,6 +27,7 @@ use OCA\Deck\Command\BoardImport;
 use OCA\Deck\Command\UserExport;
 use OCA\Deck\Service\BoardService;
 use OCA\Deck\Service\CardService;
+use OCA\Deck\Service\CommentService;
 use OCA\Deck\Service\Importer\BoardImportService;
 use OCA\Deck\Service\Importer\Systems\DeckJsonService;
 use OCA\Deck\Service\PermissionService;
@@ -194,6 +195,7 @@ class ImportExportTest extends \Test\TestCase {
 			self::getFreshService(StackMapper::class),
 			self::getFreshService(CardMapper::class),
 			self::getFreshService(AssignmentMapper::class),
+			self::getFreshService(CommentService::class)
 		);
 		$exporter->setApplication($application);
 		$exporter->run($input, $output);
