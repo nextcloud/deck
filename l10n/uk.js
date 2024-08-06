@@ -100,6 +100,7 @@ OC.L10N.register(
     "Archived cards" : "Архівні картки",
     "Add list" : "Додати список",
     "List name" : "Назва списку",
+    "Active filters" : "Активні фільтри",
     "Apply filter" : "Відфільтрувати",
     "Filter by tag" : "Відібрати за мітками",
     "Filter by assigned user" : "Відібрати за призначеним користувачем",
