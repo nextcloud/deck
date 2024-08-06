@@ -2,6 +2,9 @@
 #
 # https://github.com/nextcloud/.github
 # https://docs.github.com/en/actions/learn-github-actions/sharing-workflows-with-your-organization
+#
+# SPDX-FileCopyrightText: 2021-2024 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: MIT
 
 name: Block fixup and squash commits
 
@@ -24,7 +27,7 @@ jobs:
       pull-requests: write
     name: Block fixup and squash commits
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-low
 
     steps:
       - name: Run check

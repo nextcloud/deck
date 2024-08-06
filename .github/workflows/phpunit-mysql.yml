@@ -2,6 +2,9 @@
 #
 # https://github.com/nextcloud/.github
 # https://docs.github.com/en/actions/learn-github-actions/sharing-workflows-with-your-organization
+#
+# SPDX-FileCopyrightText: 2022-2024 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: MIT
 
 name: PHPUnit MySQL
 
@@ -27,10 +30,13 @@ jobs:
         id: versions
         uses: icewind1991/nextcloud-version-matrix@58becf3b4bb6dc6cef677b15e2fd8e7d48c0908f # v1.3.1
         with:
-          matrix: '{"mysql-versions": ["8.1"]}'
+          matrix: '{"mysql-versions": ["8.4"]}'
 
   changes:
     runs-on: ubuntu-latest-low
+    permissions:
+      contents: read
+      pull-requests: read
 
     outputs:
       src: ${{ steps.changes.outputs.src}}
@@ -92,7 +98,7 @@ jobs:
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231 # v2
+        uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231 # v2.31.1
         with:
           php-version: ${{ matrix.php-versions }}
           # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
@@ -105,7 +111,7 @@ jobs:
       - name: Enable ONLY_FULL_GROUP_BY MySQL option
         run: |
           echo "SET GLOBAL sql_mode=(SELECT CONCAT(@@sql_mode,',ONLY_FULL_GROUP_BY'));" | mysql -h 127.0.0.1 -P 4444 -u root -prootpassword
-          echo "SELECT @@sql_mode;" | mysql -h 127.0.0.1 -P 4444 -u root -prootpassword
+          echo 'SELECT @@sql_mode;' | mysql -h 127.0.0.1 -P 4444 -u root -prootpassword
 
       - name: Check composer file existence
         id: check_composer
@@ -132,7 +138,7 @@ jobs:
         continue-on-error: true
         working-directory: apps/${{ env.APP_NAME }}
         run: |
-          composer run --list | grep "^  test:unit " | wc -l | grep 1
+          composer run --list | grep '^  test:unit ' | wc -l | grep 1
 
       - name: PHPUnit
         # Only run if phpunit config file exists
@@ -145,7 +151,7 @@ jobs:
         continue-on-error: true
         working-directory: apps/${{ env.APP_NAME }}
         run: |
-          composer run --list | grep "^  test:integration " | wc -l | grep 1
+          composer run --list | grep '^  test:integration ' | wc -l | grep 1
 
       - name: Run Nextcloud
         # Only run if phpunit integration config file exists
