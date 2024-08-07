@@ -356,7 +356,6 @@ OC.L10N.register(
     "Next month" : "Næsti mánuður",
     "List is empty" : "Listi er tómur",
     "Limit deck usage of groups" : "Takmarka notkun hópa á spjaldaforritinu",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Takmörkun í  Deck spjaldaforritinu mun loka notendur sem tilheyra ekki þessum hópum frá því að útbúa sín eigin borð. Notendurnir munu samt geta áfram unnið með borð sem hefur verið deilt til þeirra.",
-    "Not completed" : "Er ekki lokið"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Takmörkun í  Deck spjaldaforritinu mun loka notendur sem tilheyra ekki þessum hópum frá því að útbúa sín eigin borð. Notendurnir munu samt geta áfram unnið með borð sem hefur verið deilt til þeirra."
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

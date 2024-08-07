@@ -385,7 +385,6 @@ OC.L10N.register(
     "List is empty" : "Danh sách trống",
     "Limit deck usage of groups" : "Giới hạn việc sử dụng Kế Hoạch của các nhóm",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Giới hạn của Kế Hoạch sẽ chặn người dùng không thuộc nhóm đó khỏi việc tạo bảng của riêng họ. Người dùng vẫn có thể làm việc trên các bảng đã được chia sẻ với họ.",
-    "Not completed" : "Chưa hoàn thành",
     "Filter by completed" : "Lọc theo đã việc đã hoàn thành"
 },
 "nplurals=1; plural=0;");

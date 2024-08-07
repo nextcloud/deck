@@ -238,7 +238,6 @@ OC.L10N.register(
     "Next week" : "Næste uge",
     "Next month" : "Næste måned",
     "Limit deck usage of groups" : "Begræns Deck brug til grupper",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begrænsning af Deck vil blokere brugere som ikke er en del af de valgte grupper fra at oprette deres egne tavler. Brugere vil stadig kunne arbejde på tavler der er blevet delt med dem. ",
-    "Not completed" : "Ikke afsluttet"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begrænsning af Deck vil blokere brugere som ikke er en del af de valgte grupper fra at oprette deres egne tavler. Brugere vil stadig kunne arbejde på tavler der er blevet delt med dem. "
 },
 "nplurals=2; plural=(n != 1);");
