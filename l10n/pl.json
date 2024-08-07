@@ -354,7 +354,6 @@
     "Next month" : "Następny miesiąc",
     "List is empty" : "Lista jest pusta",
     "Limit deck usage of groups" : "Ogranicz użycie tablic dla grup",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ograniczenie Tablicy zablokuje użytkownikom z tych grup możliwość tworzenia własnych tablic. Użytkownicy nadal będą mogli pracować na tablicach, które zostały im udostępnione.",
-    "Not completed" : "Nie zakończone"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ograniczenie Tablicy zablokuje użytkownikom z tych grup możliwość tworzenia własnych tablic. Użytkownicy nadal będą mogli pracować na tablicach, które zostały im udostępnione."
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }

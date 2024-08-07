@@ -326,7 +326,6 @@ OC.L10N.register(
     "Next month" : "Mes siguiente",
     "List is empty" : "La lista está vacía",
     "Limit deck usage of groups" : "Limitar uso de Deck a grupos",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitar Deck bloqueará a los usuarios que no formen parte de esos grupos para que no puedan crear sus propios tableros. Los usuarios aún podrán trabajar en tableros que se hayan compartido con ellos.",
-    "Not completed" : "No completado"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitar Deck bloqueará a los usuarios que no formen parte de esos grupos para que no puedan crear sus propios tableros. Los usuarios aún podrán trabajar en tableros que se hayan compartido con ellos."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

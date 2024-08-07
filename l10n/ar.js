@@ -385,7 +385,6 @@ OC.L10N.register(
     "List is empty" : "القائمة فارغة",
     "Limit deck usage of groups" : "تقييد استخدام Deck  للمجموعات",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "سيؤدي تقييد Deck إلى منع المستخدمين الذين ليسوا جزءًا من تلك المجموعات من إنشاء لوحاتهم الخاصة. سيظل المستخدمون قادرين على العمل على اللوحات التي تمت مشاركتها معهم.",
-    "Not completed" : "غير مكتمل",
     "Filter by completed" : "فلترة بحسب الإنجاز"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

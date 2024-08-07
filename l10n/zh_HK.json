@@ -383,7 +383,6 @@
     "List is empty" : "列表是空的",
     "Limit deck usage of groups" : "限制群組使用 Deck",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "限制 Deck 將阻止不屬於這些群組的用戶創建自己的面板。用戶仍然可以在與他們的面板上工作。",
-    "Not completed" : "未完成",
     "Filter by completed" : "按已完成篩選"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

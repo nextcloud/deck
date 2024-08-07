@@ -385,7 +385,6 @@ OC.L10N.register(
     "List is empty" : "Список не содержит записей",
     "Limit deck usage of groups" : "Разрешить использовать приложение Карточки только участникам заданных групп",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Создание собственных рабочих досок пользователям, не входящим в заданные группы, будет заблокировано. Тем не менее, такие пользователи смогут продолжить работать с общими досками, к которым у них есть доступ.  ",
-    "Not completed" : "Не завершено",
     "Filter by completed" : "Отбор по состоянию завершения"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

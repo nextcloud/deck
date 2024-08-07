@@ -348,7 +348,6 @@
     "Next month" : "Következő hónap",
     "List is empty" : "A lista üres",
     "Limit deck usage of groups" : "A kártyák használatának csoportokra korlátozása",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "A Kártyák korlátozása blokkolja a saját táblák létrehozását azoknál a felhasználóknál, akik nem tagjai a megadott csoportoknak. A felhasználók továbbra is tudnak dolgozni a velük megosztott táblákon.",
-    "Not completed" : "Nincs kész"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "A Kártyák korlátozása blokkolja a saját táblák létrehozását azoknál a felhasználóknál, akik nem tagjai a megadott csoportoknak. A felhasználók továbbra is tudnak dolgozni a velük megosztott táblákon."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

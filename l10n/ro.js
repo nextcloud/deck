@@ -351,7 +351,6 @@ OC.L10N.register(
     "Next month" : "Luna următoare",
     "List is empty" : "Lista este goală",
     "Limit deck usage of groups" : "Permite utilizarea Deck doar pentru unele grupuri",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitând Deck, utilizatorii care nu fac parte din acele grupuri nu vor putea crea propriile panouri. Utilizatorii vor putea accesa totuși panourile partajate cu ei.",
-    "Not completed" : "Necompletat"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitând Deck, utilizatorii care nu fac parte din acele grupuri nu vor putea crea propriile panouri. Utilizatorii vor putea accesa totuși panourile partajate cu ei."
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");
