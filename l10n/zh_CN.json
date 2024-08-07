@@ -360,7 +360,6 @@
     "Next month" : "下月",
     "List is empty" : "列表为空",
     "Limit deck usage of groups" : "按群组限制看板的使用权",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "限制看板的使用权后，不在指定群组中的用户将不能新建面板，但仍可使用已共享给他们的面板。",
-    "Not completed" : "没完成"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "限制看板的使用权后，不在指定群组中的用户将不能新建面板，但仍可使用已共享给他们的面板。"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

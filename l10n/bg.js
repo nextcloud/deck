@@ -326,7 +326,6 @@ OC.L10N.register(
     "Next month" : "Следващия месец",
     "List is empty" : "Списъкът е празен",
     "Limit deck usage of groups" : "Ограничава използването на набора от групи",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ограничаването на приложението Deck/набор/ ще блокира потребителите, които не са част от тези групи, да създават свои собствени табла. Потребителите все още ще могат да работят на таблата, които са споделени с тях.",
-    "Not completed" : "Незавършен"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ограничаването на приложението Deck/набор/ ще блокира потребителите, които не са част от тези групи, да създават свои собствени табла. Потребителите все още ще могат да работят на таблата, които са споделени с тях."
 },
 "nplurals=2; plural=(n != 1);");

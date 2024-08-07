@@ -260,7 +260,6 @@ OC.L10N.register(
     "Next week" : "Seuraava viikko",
     "Next month" : "Seuraava kuukausi",
     "List is empty" : "Lista on tyhjä",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Pakan käytön rajoittaminen estää merkittyjen ryhmien jäseniä luomasta omia taulujaan, mutta käyttäjät pystyvät silti käyttämään heidän kanssaan jaettuja tauluja.",
-    "Not completed" : "Ei valmis"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Pakan käytön rajoittaminen estää merkittyjen ryhmien jäseniä luomasta omia taulujaan, mutta käyttäjät pystyvät silti käyttämään heidän kanssaan jaettuja tauluja."
 },
 "nplurals=2; plural=(n != 1);");
