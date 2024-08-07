@@ -110,7 +110,6 @@ OC.L10N.register(
     "Share" : "Compartir",
     "Timeline" : "Llinia de tiempu",
     "Next week" : "La selmana que vien",
-    "Next month" : "Mes siguiente",
-    "Not completed" : "Nun se completó"
+    "Next month" : "Mes siguiente"
 },
 "nplurals=2; plural=(n != 1);");

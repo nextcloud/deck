@@ -355,7 +355,6 @@ OC.L10N.register(
     "Next month" : "Volgende maand",
     "List is empty" : "Lijst is leeg",
     "Limit deck usage of groups" : "Beperk gebruik decks van groepen",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Het beperken van Deck verhindert dat gebruikers die niet lid zijn van die groepen hun eigen borden kunnen maken. gebruikers kunnen nog wel werken met de borden die met deze gebruikers zijn gedeeld.",
-    "Not completed" : "Niet compleet"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Het beperken van Deck verhindert dat gebruikers die niet lid zijn van die groepen hun eigen borden kunnen maken. gebruikers kunnen nog wel werken met de borden die met deze gebruikers zijn gedeeld."
 },
 "nplurals=2; plural=(n != 1);");

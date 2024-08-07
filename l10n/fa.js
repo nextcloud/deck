@@ -332,7 +332,6 @@ OC.L10N.register(
     "Next month" : "ماه بعد",
     "List is empty" : "فهرست خالی است",
     "Limit deck usage of groups" : "استفاده از برگه‌دان گروه‌ها را محدود کنید",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "محدودکردن برگه‌دان  باعث می‌شود تا کاربرانی که جزو آن گروه‌ها نیستند، تابلوهای خود را ایجاد کنند. کاربران همچنان می‌توانند روی تابلوهایی کار کنند که با آنها به اشتراک گذاشته شده است.",
-    "Not completed" : "Not completed"
+    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "محدودکردن برگه‌دان  باعث می‌شود تا کاربرانی که جزو آن گروه‌ها نیستند، تابلوهای خود را ایجاد کنند. کاربران همچنان می‌توانند روی تابلوهایی کار کنند که با آنها به اشتراک گذاشته شده است."
 },
 "nplurals=2; plural=(n > 1);");

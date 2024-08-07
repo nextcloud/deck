@@ -385,7 +385,6 @@ OC.L10N.register(
     "List is empty" : "A lista está baleira",
     "Limit deck usage of groups" : "Limitar o uso da plataforma a grupos",
     "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitando a Gabeta bloqueará os usuarios que non formen parte destes grupos, para crear os seus propios taboleiros. Os usuarios aínda así poderán traballar en taboleiros compartidos con eles.",
-    "Not completed" : "Sen completar",
     "Filter by completed" : "Filtrar por completado"
 },
 "nplurals=2; plural=(n != 1);");
