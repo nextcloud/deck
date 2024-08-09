@@ -119,6 +119,32 @@ class CardApiControllerTest extends \Test\TestCase {
 		$this->assertEquals($expected, $actual);
 	}
 
+	public function testArchive() {
+		$card = new Card();
+		$card->setId($this->cardExample['id']);
+
+		$this->cardService->expects($this->once())
+			->method('archive')
+			->willReturn($card);
+
+		$expected = new DataResponse($card, HTTP::STATUS_OK);
+		$actual = $this->controller->archive($this->cardExample['id']);
+		$this->assertEquals($expected, $actual);
+	}
+
+	public function testUnArchive() {
+		$card = new Card();
+		$card->setId($this->cardExample['id']);
+
+		$this->cardService->expects($this->once())
+			->method('unarchive')
+			->willReturn($card);
+
+		$expected = new DataResponse($card, HTTP::STATUS_OK);
+		$actual = $this->controller->unarchive($this->cardExample['id']);
+		$this->assertEquals($expected, $actual);
+	}
+
 	public function testDelete() {
 		$card = new Card();
 		$card->setId($this->cardExample['id']);
