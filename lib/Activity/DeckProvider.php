@@ -86,10 +86,18 @@ class DeckProvider implements IProvider {
 				'user' => [
 					'type' => 'user',
 					'id' => $author,
-					'name' => $user !== null ? $user->getDisplayName() : $author
+					'name' => $user->getDisplayName()
 				],
 			];
 			$event->setAuthor($author);
+		} else {
+			$params = [
+				'user' => [
+					'type' => 'user',
+					'id' => 'deleted_users',
+					'name' => 'deleted_users',
+				]
+			];
 		}
 		if ($event->getObjectType() === ActivityManager::DECK_OBJECT_BOARD) {
 			if (!$this->activityManager->canSeeBoardActivity($event->getObjectId(), $event->getAffectedUser())) {
