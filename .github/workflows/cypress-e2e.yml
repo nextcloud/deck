@@ -22,7 +22,7 @@ jobs:
         node-version: [20.x]
         # containers: [1, 2, 3]
         php-versions: [ '8.2' ]
-        server-versions: [ 'master' ]
+        server-versions: [ 'stable30' ]
 
     env:
       extensions: mbstring, iconv, fileinfo, intl, sqlite, pdo_sqlite, zip, gd, apcu
