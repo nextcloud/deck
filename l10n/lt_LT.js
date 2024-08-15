@@ -268,14 +268,8 @@ OC.L10N.register(
     "Maximum file size of {size} exceeded" : "Viršytas maksimalus {size} failo dydis",
     "Error creating the share" : "Klaida kuriant viešinį",
     "Share" : "Bendrinti",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Darbų programėlėje pakeistas <strong>kortelės aprašas</strong> ",
-    "Timeline" : "Laiko juosta",
-    "Share board with a user, group or circle …" : "Bendrinti lentą su naudotoju, grupe ar ratu…",
     "Searching for users, groups and circles …" : "Ieškoma naudotojų, grupių ir ratų…",
     "(Circle)" : "(Ratas)",
-    "Assign to users/groups/circles" : "Priskirti naudotojams/grupėms/ratams",
-    "Next week" : "Kita savaitė",
-    "Next month" : "Kitas mėnuo",
-    "List is empty" : "Sąrašas tuščias"
+    "Assign to users/groups/circles" : "Priskirti naudotojams/grupėms/ratams"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");

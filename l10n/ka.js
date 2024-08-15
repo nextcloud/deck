@@ -364,16 +364,8 @@ OC.L10N.register(
     "Share with a Deck card" : "Share with a Deck card",
     "Share {file} with a Deck card" : "Share {file} with a Deck card",
     "Share" : "Share",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "A <strong>card description</strong> inside the Deck app has been changed",
-    "Timeline" : "Timeline",
-    "Share board with a user, group or circle …" : "Share board with a user, group or circle …",
     "Searching for users, groups and circles …" : "Searching for users, groups and circles …",
     "(Circle)" : "(Circle)",
-    "Assign to users/groups/circles" : "Assign to users/groups/circles",
-    "Next week" : "Next week",
-    "Next month" : "Next month",
-    "List is empty" : "List is empty",
-    "Limit deck usage of groups" : "Limit deck usage of groups",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them."
+    "Assign to users/groups/circles" : "Assign to users/groups/circles"
 },
 "nplurals=2; plural=(n!=1);");

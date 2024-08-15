@@ -374,17 +374,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Deck 카드와 공유",
     "Share {file} with a Deck card" : "Deck 카드와 함께 {file} 공유",
     "Share" : "공유",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Deck 앱 내 <strong>카드 설명</strong>이 변경되었습니다.",
-    "Timeline" : "타임라인",
-    "Share board with a user, group or circle …" : "사용자, 그룹 또는 서클과 보드 공유…",
     "Searching for users, groups and circles …" : "사용자, 그룹, 서클 검색 중…",
     "(Circle)" : "(서클)",
     "Assign to users/groups/circles" : "사용자/그룹/서클에 할당",
-    "Next week" : "다음주",
-    "Next month" : "다음달",
-    "List is empty" : "목록이 비어 있음",
-    "Limit deck usage of groups" : "그룹의 덱 사용 제한",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limiting Deck은 해당 그룹에 속하지 않은 사용자가 자신의 보드를 만드는 것을 차단합니다. 사용자는 공유된 보드에서 계속 작업할 수 있습니다.",
     "Filter by completed" : "완료 기준으로 필터링"
 },
 "nplurals=1; plural=0;");

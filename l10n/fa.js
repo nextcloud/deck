@@ -322,16 +322,8 @@ OC.L10N.register(
     "Share with a Deck card" : "Share with a Deck card",
     "Share {file} with a Deck card" : "Share {file} with a Deck card",
     "Share" : "هم‌رسانی",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "شرح برگه در برگه‌دان تغییر کرده است",
-    "Timeline" : "خط زمانی",
-    "Share board with a user, group or circle …" : "هم‌رسانی تخته با کاربر، گروه یا حلقه...",
     "Searching for users, groups and circles …" : "جستجوی کاربران، گروه‌ها و حلقه‌ها…",
     "(Circle)" : "(حلقه)",
-    "Assign to users/groups/circles" : "به کاربران/ گروه‌ها/ حلقه‌ها اختصاص دهید",
-    "Next week" : "هفتهٔ بعد",
-    "Next month" : "ماه بعد",
-    "List is empty" : "فهرست خالی است",
-    "Limit deck usage of groups" : "استفاده از برگه‌دان گروه‌ها را محدود کنید",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "محدودکردن برگه‌دان  باعث می‌شود تا کاربرانی که جزو آن گروه‌ها نیستند، تابلوهای خود را ایجاد کنند. کاربران همچنان می‌توانند روی تابلوهایی کار کنند که با آنها به اشتراک گذاشته شده است."
+    "Assign to users/groups/circles" : "به کاربران/ گروه‌ها/ حلقه‌ها اختصاص دهید"
 },
 "nplurals=2; plural=(n > 1);");

@@ -107,9 +107,6 @@ OC.L10N.register(
     "Tomorrow – {timeLocale}" : "Mañana – {timeLocale}",
     "Message from {author} in {conversationName}" : "Mensaxe de {author} en {conversationName}",
     "Error creating the share" : "Hebo un error al crear la compartición",
-    "Share" : "Compartir",
-    "Timeline" : "Llinia de tiempu",
-    "Next week" : "La selmana que vien",
-    "Next month" : "Mes siguiente"
+    "Share" : "Compartir"
 },
 "nplurals=2; plural=(n != 1);");

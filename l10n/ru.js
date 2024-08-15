@@ -374,17 +374,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Опубликовать в приложении Карточки",
     "Share {file} with a Deck card" : "Опубликовать «{file}» в приложении Карточки",
     "Share" : "Опубликовать",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "В приложении Карточки изменено <strong>описание карточки</strong> ",
-    "Timeline" : "История",
-    "Share board with a user, group or circle …" : "Поделиться с пользователями, группами или кругами…",
     "Searching for users, groups and circles …" : "Поиск пользователей, групп или кругов...",
     "(Circle)" : "(Круг)",
     "Assign to users/groups/circles" : "Назначить пользователям / группам / кругам",
-    "Next week" : "Следующая неделя",
-    "Next month" : "Следующий месяц",
-    "List is empty" : "Список не содержит записей",
-    "Limit deck usage of groups" : "Разрешить использовать приложение Карточки только участникам заданных групп",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Создание собственных рабочих досок пользователям, не входящим в заданные группы, будет заблокировано. Тем не менее, такие пользователи смогут продолжить работать с общими досками, к которым у них есть доступ.  ",
     "Filter by completed" : "Отбор по состоянию завершения"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

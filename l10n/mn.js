@@ -44,8 +44,6 @@ OC.L10N.register(
     "Today" : "өнөөдөр",
     "Tomorrow" : "маргааш",
     "Close" : "Хаах",
-    "Share" : "Түгээх",
-    "Next week" : "Дараа 7 хоног",
-    "Next month" : "Дараа сар"
+    "Share" : "Түгээх"
 },
 "nplurals=2; plural=(n != 1);");

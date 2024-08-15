@@ -372,17 +372,9 @@
     "Share with a Deck card" : "Chia sẻ với một thẻ Kế Hoạch",
     "Share {file} with a Deck card" : "Chia sẻ {file} với một thẻ Kế Hoạch",
     "Share" : "Chia sẻ",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Một <strong>mô tả thẻ</strong> bên trong ứng dụng Kế Hoạch đã được thay đổi.",
-    "Timeline" : "Dòng thời gian",
-    "Share board with a user, group or circle …" : "Chia sẻ bảng với một người dùng, nhóm hoặc vòng kết nối ...",
     "Searching for users, groups and circles …" : "Tìm kiếm người dùng, nhóm và vòng kết nối ...",
     "(Circle)" : "(Vòng Kết Nối)",
     "Assign to users/groups/circles" : "Gán cho người dùng/nhóm/vòng kết nối",
-    "Next week" : "Tuần sau",
-    "Next month" : "Tháng sau",
-    "List is empty" : "Danh sách trống",
-    "Limit deck usage of groups" : "Giới hạn việc sử dụng Kế Hoạch của các nhóm",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Giới hạn của Kế Hoạch sẽ chặn người dùng không thuộc nhóm đó khỏi việc tạo bảng của riêng họ. Người dùng vẫn có thể làm việc trên các bảng đã được chia sẻ với họ.",
     "Filter by completed" : "Lọc theo đã việc đã hoàn thành"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

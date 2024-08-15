@@ -62,8 +62,6 @@ OC.L10N.register(
     "Today" : "Šodien",
     "Tomorrow" : "Rīt",
     "Close" : "Aizvērt",
-    "Share" : "Koplietot",
-    "Next week" : "Nākamā nedēļa",
-    "Next month" : "Nākamais mēnesis"
+    "Share" : "Koplietot"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");
