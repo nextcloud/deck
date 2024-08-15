@@ -373,17 +373,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Μοιραστείτε με μια καρτέλα Deck",
     "Share {file} with a Deck card" : "Μοιραστείτε το {file} με μια καρτέλα Deck",
     "Share" : "Μοιραστείτε",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Η <strong>περιγραφή καρτέλας </strong>στην εφαρμογή Deck άλλαξε",
-    "Timeline" : "Χρονολόγιο",
-    "Share board with a user, group or circle …" : "Διαμοιράστε τον πίνακα με χρήστη, ομάδα ή κύκλο ...",
     "Searching for users, groups and circles …" : "Αναζήτηση χρηστών, ομάδων και κύκλων…",
     "(Circle)" : "(Κύκλος)",
     "Assign to users/groups/circles" : "Ανάθεση σε χρήστες/ομάδες/κύκλους",
-    "Next week" : "Επόμενη εβδομάδα",
-    "Next month" : "Επόμενος μήνας",
-    "List is empty" : "Η λίστα είναι κενή",
-    "Limit deck usage of groups" : "Περιορίστε τη χρήση της εφαρμογής deck σε ομάδες",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ο περιορισμός του Deck θα εμποδίσει τους χρήστες που δεν είναι μέρος αυτών των ομάδων να δημιουργούν δικούς τους πίνακες. Οι χρήστες θα εξακολουθήσουν να εργάζονται σε πίνακες που έχουν διαμοιραστεί μαζί τους.",
     "Filter by completed" : "Φίλτρο ανά ολοκλήρωση"
 },
 "nplurals=2; plural=(n != 1);");

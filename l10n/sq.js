@@ -66,7 +66,6 @@ OC.L10N.register(
     "Today" : "Sot",
     "Tomorrow" : "Nesër",
     "Close" : "Mbylleni",
-    "Share" : "Shpërndaje",
-    "List is empty" : "Lista është bosh"
+    "Share" : "Shpërndaje"
 },
 "nplurals=2; plural=(n != 1);");

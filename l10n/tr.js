@@ -374,17 +374,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Bir tahta kartı ile paylaş",
     "Share {file} with a Deck card" : "{file} dosyasını bir tahta kartı ile paylaş",
     "Share" : "Paylaş",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Tahta uygulamasında bir <strong>kart açıklaması</strong> değiştirildiğinde",
-    "Timeline" : "Zaman tüneli",
-    "Share board with a user, group or circle …" : "Panoyu kullanıcılar, gruplar ve takımlarla paylaş…",
     "Searching for users, groups and circles …" : "Kullanıcılar, gruplar ve takımlar aranıyor…",
     "(Circle)" : "(Takım)",
     "Assign to users/groups/circles" : "Kullanıcı/grup/takım ata",
-    "Next week" : "Sonraki hafta",
-    "Next month" : "Sonraki ay",
-    "List is empty" : "Liste boş",
-    "Limit deck usage of groups" : "Tahtayı şu gruplar kullanabilsin",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Tahta kullanımı gruplar ile sınırlandığında belirtilen grupların üyesi olmayan kişiler kendi tahtalarını oluşturamaz. Bu kullanıcılar ancak kendileri ile paylaşılan tahtalar üzerinde çalışabilir.",
     "Filter by completed" : "Tamamlanmaya göre sırala"
 },
 "nplurals=2; plural=(n > 1);");

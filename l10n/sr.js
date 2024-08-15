@@ -374,17 +374,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Дели са Шпил картицом",
     "Share {file} with a Deck card" : "Дели {file} са Шпил картицом",
     "Share" : "Подели",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Опис картице</strong> унутар Deck апликације је промењен",
-    "Timeline" : "Временска оса",
-    "Share board with a user, group or circle …" : "Подели таблу са корисником, групом или кругом…",
     "Searching for users, groups and circles …" : "Претрага корисника, група и кругова ...",
     "(Circle)" : "(Круг)",
     "Assign to users/groups/circles" : "Додели корисницима/групама/круговима",
-    "Next week" : "Наредне недеље",
-    "Next month" : "Наредног месеца",
-    "List is empty" : "Списак је празан",
-    "Limit deck usage of groups" : "Ограничи употребу шпила на групе",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ограничавање Deck апликације ће блокирати кориснике који нису део одабраних група да креирају своје табле. Корисници ће и даље моћи да раде на таблама које су подељене са њима.",
     "Filter by completed" : "Филтрирај по завршеном"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

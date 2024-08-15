@@ -87,6 +87,7 @@ OC.L10N.register(
     "Archived cards" : "Arkiverede kort",
     "Add list" : "Tilføj kolonne",
     "List name" : "Kolonne navn",
+    "Active filters" : "Aktive filtre",
     "Apply filter" : "Aktivér filter",
     "Filter by tag" : "Filtrer vha. mærkat",
     "Filter by assigned user" : "Filtrer vha. tildelt bruger",
@@ -230,14 +231,8 @@ OC.L10N.register(
     "Share with a Deck card" : "Del med et Deck kort",
     "Share {file} with a Deck card" : "Del {file} med et Deck kort",
     "Share" : "Del",
-    "Timeline" : "Tidslinje",
-    "Share board with a user, group or circle …" : "Del tavle med en bruger, gruppe eller cirkel ...",
     "Searching for users, groups and circles …" : "Leder efter brugere, grupper og cirkler ...",
     "(Circle)" : "(Cirkel)",
-    "Assign to users/groups/circles" : "Tildel til brugere/grupper/cirkler",
-    "Next week" : "Næste uge",
-    "Next month" : "Næste måned",
-    "Limit deck usage of groups" : "Begræns Deck brug til grupper",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begrænsning af Deck vil blokere brugere som ikke er en del af de valgte grupper fra at oprette deres egne tavler. Brugere vil stadig kunne arbejde på tavler der er blevet delt med dem. "
+    "Assign to users/groups/circles" : "Tildel til brugere/grupper/cirkler"
 },
 "nplurals=2; plural=(n != 1);");

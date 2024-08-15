@@ -374,17 +374,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Comhroinn le cárta Deic",
     "Share {file} with a Deck card" : "Roinn {file} le cárta Deic",
     "Share" : "Comhroinn",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Athraíodh <strong>cur síos chárta</strong> aobh istigh den aip Deck",
-    "Timeline" : "Timeline",
-    "Share board with a user, group or circle …" : "Roinn an clár le húsáideoir, grúpa nó ciorcal…",
     "Searching for users, groups and circles …" : "Ag cuardach úsáideoirí, grúpaí agus ciorcail…",
     "(Circle)" : "(Ciorcal)",
     "Assign to users/groups/circles" : "Sann d'úsáideoirí/grúpaí/ciorcail",
-    "Next week" : "An tseachtain seo chugainn",
-    "Next month" : "An mhí seo chugainn",
-    "List is empty" : "Tá an liosta folamh",
-    "Limit deck usage of groups" : "Teorainn a chur le húsáid deic na ngrúpaí",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Cuirfidh Teorainneacha Deic bac ar úsáideoirí nach bhfuil ina gcuid de na grúpaí sin a gcuid boird féin a chruthú. Beidh úsáideoirí fós in ann oibriú ar chláir a roinntear leo.",
     "Filter by completed" : "Scag de réir críochnaithe"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");

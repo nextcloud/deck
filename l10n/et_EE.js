@@ -51,9 +51,6 @@ OC.L10N.register(
     "Today" : "Täna",
     "Tomorrow" : "Homme",
     "Close" : "Sulge",
-    "Share" : "Jaga",
-    "Timeline" : "Ajajoon",
-    "Next week" : "Järgmine nädal",
-    "Next month" : "Järgmine kuu"
+    "Share" : "Jaga"
 },
 "nplurals=2; plural=(n != 1);");

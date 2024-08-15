@@ -253,13 +253,6 @@ OC.L10N.register(
     "Maximum file size of {size} exceeded" : "Tiedoston enimmäiskoko {size} ylitetty",
     "Error creating the share" : "Virhe jakoa luotaessa",
     "Share" : "Jaa",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Kortin kuvaus</strong> Pakka-sovelluksessa on vaihtunut",
-    "Timeline" : "Aikajana",
-    "Share board with a user, group or circle …" : "Jaa taulu käyttäjän, ryhmän tai piirin ... kanssa",
-    "(Circle)" : "(Piiri)",
-    "Next week" : "Seuraava viikko",
-    "Next month" : "Seuraava kuukausi",
-    "List is empty" : "Lista on tyhjä",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Pakan käytön rajoittaminen estää merkittyjen ryhmien jäseniä luomasta omia taulujaan, mutta käyttäjät pystyvät silti käyttämään heidän kanssaan jaettuja tauluja."
+    "(Circle)" : "(Piiri)"
 },
 "nplurals=2; plural=(n != 1);");

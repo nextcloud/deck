@@ -283,16 +283,8 @@ OC.L10N.register(
     "Share with a Deck card" : "Dijeli s Deck karticom",
     "Share {file} with a Deck card" : "Dijeli {file} s Deck karticom",
     "Share" : "Dijeli",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Promijenjen je <strong>opis kartice</strong> u aplikaciji Deck",
-    "Timeline" : "Vremenska crta",
-    "Share board with a user, group or circle …" : "Dijelite ploču s korisnikom, grupom ili krugom...",
     "Searching for users, groups and circles …" : "Traženje korisnika, grupa i krugova...",
     "(Circle)" : "(Krug)",
-    "Assign to users/groups/circles" : "Dodijeli korisnicima/grupama/krugovima",
-    "Next week" : "Sljedeći tjedan",
-    "Next month" : "Sljedeći mjesec",
-    "List is empty" : "Popis je prazan",
-    "Limit deck usage of groups" : "Ograniči uporabu decka grupama",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ograničenjem Decka možete spriječiti korisnike koji ne sudjeluju u tim grupama da stvaraju vlastite ploče. Korisnici će i dalje moći raditi na pločama koje su dijeljene s njima."
+    "Assign to users/groups/circles" : "Dodijeli korisnicima/grupama/krugovima"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");
