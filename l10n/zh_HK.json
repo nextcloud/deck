@@ -372,17 +372,9 @@
     "Share with a Deck card" : "用一張 Deck 卡片進行分享 ",
     "Share {file} with a Deck card" : "用一張 Deck 卡片分享 {file}",
     "Share" : "分享",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Deck 應用程式中的 <strong>卡片描述</strong> 已改變",
-    "Timeline" : "時間線",
-    "Share board with a user, group or circle …" : "與一個用戶、群組或圈子分享面板...",
     "Searching for users, groups and circles …" : "正在搜尋用戶、群組和圈子 ......",
     "(Circle)" : "（圈子）",
     "Assign to users/groups/circles" : "指派給用戶/群組/圈子",
-    "Next week" : "下星期",
-    "Next month" : "下個月",
-    "List is empty" : "列表是空的",
-    "Limit deck usage of groups" : "限制群組使用 Deck",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "限制 Deck 將阻止不屬於這些群組的用戶創建自己的面板。用戶仍然可以在與他們的面板上工作。",
     "Filter by completed" : "按已完成篩選"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

@@ -373,17 +373,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Partager avec Deck en tant que carte",
     "Share {file} with a Deck card" : "Partager {file} avec Deck en tant que carte",
     "Share" : "Partager",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "La <strong>description de la carte</strong> présente dans l'application Deck a été modifiée",
-    "Timeline" : "Journal",
-    "Share board with a user, group or circle …" : "Partager le tableau avec un utilisateur, un groupe ou un cercle…",
     "Searching for users, groups and circles …" : "Recherche d'utilisateurs, de groupes et de cercles ...",
     "(Circle)" : "(Cercle)",
     "Assign to users/groups/circles" : "Attribuer à des utilisateurs / groupes / cercles",
-    "Next week" : "Semaine suivante",
-    "Next month" : "Mois suivant",
-    "List is empty" : "La liste est vide",
-    "Limit deck usage of groups" : "Limiter l'utilisation de Deck aux groupes",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limiter Deck empêchera les utilisateurs ne faisant pas partie de ces groupes de créer leurs propres tableaux. Ces utilisateurs pourront toujours travailler sur les tableaux qui ont été partagés avec eux.",
     "Filter by completed" : "Filtrer par terminé"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

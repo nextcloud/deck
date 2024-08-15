@@ -371,17 +371,9 @@
     "Share with a Deck card" : "Partekatu Deck txartel baten bidez",
     "Share {file} with a Deck card" : "Partekatu {file} Deck txartel baten bidez",
     "Share" : "Partekatu",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Txartel baten deskribapena</strong> aldatu da Deck aplikazioaren barruan",
-    "Timeline" : "Denbora-lerroa",
-    "Share board with a user, group or circle …" : "Partekatu taula erabiltzaile, talde edo zirkulu batekin...",
     "Searching for users, groups and circles …" : "Erabiltzaileak, taldeak, zirkuluak... bilatzen",
     "(Circle)" : "(Zirkulua)",
     "Assign to users/groups/circles" : "Esleitu erabiltzaile/talde/zirkuluei",
-    "Next week" : "Hurrengo astea",
-    "Next month" : "Hurrengo hilabetea",
-    "List is empty" : "Zerrenda hutsik dago",
-    "Limit deck usage of groups" : "Mugatu taldeek Deck erabiltzeko aukera",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Deck mugatzeak taldeetako kide ez diren erabiltzaileei beren taula propioak sortzea eragotziko die. Erabiltzaileek beraiekin partekatu diren tauletan lan egin ahalko dute.",
     "Filter by completed" : "Iragazi osatutakoen arabera"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

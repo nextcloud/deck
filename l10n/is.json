@@ -344,16 +344,8 @@
     "Share with a Deck card" : "Deila með Deck-spjaldi",
     "Share {file} with a Deck card" : "Deila {file} með Deck-spjaldi",
     "Share" : "Deila",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Lýsingu á spjaldi</strong> inni í Deck-spjaldaforritinu hefur verið breytt",
-    "Timeline" : "Tímalína",
-    "Share board with a user, group or circle …" : "Deila borði með notanda, hóp eða hring …",
     "Searching for users, groups and circles …" : "Leita að notendum, hópum og hringjum …",
     "(Circle)" : "(hringur)",
-    "Assign to users/groups/circles" : "Úthluta á notendur/hópa/hringi",
-    "Next week" : "Næsta viku",
-    "Next month" : "Næsti mánuður",
-    "List is empty" : "Listi er tómur",
-    "Limit deck usage of groups" : "Takmarka notkun hópa á spjaldaforritinu",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Takmörkun í  Deck spjaldaforritinu mun loka notendur sem tilheyra ekki þessum hópum frá því að útbúa sín eigin borð. Notendurnir munu samt geta áfram unnið með borð sem hefur verið deilt til þeirra."
+    "Assign to users/groups/circles" : "Úthluta á notendur/hópa/hringi"
 },"pluralForm" :"nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);"
 }

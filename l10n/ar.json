@@ -372,17 +372,9 @@
     "Share with a Deck card" : "مشاركة مع بطاقة Deck",
     "Share {file} with a Deck card" : "مشاركة الملف {file} مع بطاقة Deck",
     "Share" : "مشاركة ",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>وصف البطاقة</strong>داخل تطبيق Deck قد تغيرت.",
-    "Timeline" : "الجدول الزمني",
-    "Share board with a user, group or circle …" : "مشاركة اللوح مع مستخدم،مجموعة أو دائرة ..",
     "Searching for users, groups and circles …" : "ابحث عن أعضاء، مجموعات أو حلقات ...",
     "(Circle)" : "(دائرة)",
     "Assign to users/groups/circles" : "انسب الى المستخدمين،المجموعات،الدوائر",
-    "Next week" : "الاسبوع القادم",
-    "Next month" : "الشهر القادم",
-    "List is empty" : "القائمة فارغة",
-    "Limit deck usage of groups" : "تقييد استخدام Deck  للمجموعات",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "سيؤدي تقييد Deck إلى منع المستخدمين الذين ليسوا جزءًا من تلك المجموعات من إنشاء لوحاتهم الخاصة. سيظل المستخدمون قادرين على العمل على اللوحات التي تمت مشاركتها معهم.",
     "Filter by completed" : "فلترة بحسب الإنجاز"
 },"pluralForm" :"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;"
 }

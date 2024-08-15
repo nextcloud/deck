@@ -223,14 +223,7 @@ OC.L10N.register(
     "Something went wrong" : "Ada yang salah",
     "Maximum file size of {size} exceeded" : "Melampaui batas ukuran maksimal {size}",
     "Share" : "Bagikan",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Deskripsi kartu</strong> didalam aplikasi Longgok telah diubah",
-    "Timeline" : "Linimasa",
-    "Share board with a user, group or circle …" : "Bagikan papan kepada pengguna, grup, atau kelompok",
     "(Circle)" : "(Kelompok)",
-    "Assign to users/groups/circles" : "Penugasan kepada pengguna/grup/lingkaran",
-    "Next week" : "Minggu setelah",
-    "Next month" : "Bulan setelah",
-    "Limit deck usage of groups" : "Batasi grup pengguna longgok ",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Membatasi Longgok akan mencegah pengguna bukan bagian dari grup, untuk membuat papan mereka sendiri. Pengguna tetap menggunakan papan yang telah dibagikan kepadanya."
+    "Assign to users/groups/circles" : "Penugasan kepada pengguna/grup/lingkaran"
 },
 "nplurals=1; plural=0;");

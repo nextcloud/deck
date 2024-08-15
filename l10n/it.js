@@ -364,16 +364,8 @@ OC.L10N.register(
     "Share with a Deck card" : "Condividi con una scheda di Deck",
     "Share {file} with a Deck card" : "Condividi {file} con una scheda di Deck",
     "Share" : "Condividi",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "La <strong>descrizione di una scheda</strong> nell'applicazione Deck è stata modificata",
-    "Timeline" : "Linea temporale",
-    "Share board with a user, group or circle …" : "Condividi lavagna con un utente, gruppo o cerchia…",
     "Searching for users, groups and circles …" : "Ricerca di utenti, gruppi e cerchie…",
     "(Circle)" : "(Cerchia)",
-    "Assign to users/groups/circles" : "Assegna a utenti/gruppi/cerchie",
-    "Next week" : "Settimana successiva",
-    "Next month" : "Mese successivo",
-    "List is empty" : "L'elenco è vuoto",
-    "Limit deck usage of groups" : "Limita utilizzo di Deck dei gruppi",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "La limitazione di Deck impedirà agli utenti che non fanno parte di tali gruppi di creare le proprie lavagne. Gli utenti saranno ancora in grado di lavorare sulle lavagne che sono state condivise con loro,"
+    "Assign to users/groups/circles" : "Assegna a utenti/gruppi/cerchie"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

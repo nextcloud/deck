@@ -340,16 +340,8 @@ OC.L10N.register(
     "Share with a Deck card" : "Megosztás kártyával",
     "Share {file} with a Deck card" : "A(z) {file} megosztása egy kártyával",
     "Share" : "Megosztás",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "A <strong>kártyaleírás</strong> megváltozott a Kártyák alkalmazásban",
-    "Timeline" : "Idővonal",
-    "Share board with a user, group or circle …" : "Tábla megosztása felhasználóval, csoporttal vagy körrel…",
     "Searching for users, groups and circles …" : "Felhasználók, csoportok és körök keresése…",
     "(Circle)" : "(Kör)",
-    "Assign to users/groups/circles" : "Felhasználókhoz/csoportokhoz/körökhöz rendelés",
-    "Next week" : "Következő hét",
-    "Next month" : "Következő hónap",
-    "List is empty" : "A lista üres",
-    "Limit deck usage of groups" : "A kártyák használatának csoportokra korlátozása",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "A Kártyák korlátozása blokkolja a saját táblák létrehozását azoknál a felhasználóknál, akik nem tagjai a megadott csoportoknak. A felhasználók továbbra is tudnak dolgozni a velük megosztott táblákon."
+    "Assign to users/groups/circles" : "Felhasználókhoz/csoportokhoz/körökhöz rendelés"
 },
 "nplurals=2; plural=(n != 1);");

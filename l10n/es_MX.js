@@ -184,8 +184,6 @@ OC.L10N.register(
     "Close" : "Cerrar",
     "Error creating the share" : "Error creando el recurso compartido",
     "Share" : "Compartir",
-    "Searching for users, groups and circles …" : "Buscando usuarios, grupos y círculos …",
-    "Next week" : "Semana siguiente",
-    "Next month" : "Próximo mes"
+    "Searching for users, groups and circles …" : "Buscando usuarios, grupos y círculos …"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

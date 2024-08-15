@@ -365,16 +365,8 @@ OC.L10N.register(
     "Share with a Deck card" : "Compartir amb una targeta de Deck",
     "Share {file} with a Deck card" : "Compartir {file} amb una targeta de Deck",
     "Share" : "Compartir",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "S'ha canviat una <strong>descripció de targeta</strong> a l'aplicació Tauler",
-    "Timeline" : "Línia de temps",
-    "Share board with a user, group or circle …" : "Compartir tauler amb un usuari, grup o cercle …",
     "Searching for users, groups and circles …" : "Buscant usuaris, grups i cercles …",
     "(Circle)" : "(Cercle)",
-    "Assign to users/groups/circles" : "Assignació a usuaris/grups/cercles",
-    "Next week" : "Setmana següent",
-    "Next month" : "Mes següent",
-    "List is empty" : "La llista és buida",
-    "Limit deck usage of groups" : "Limitar l'ús del tauler de grups",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitant el Tauler bloquejarà la creació de taulers als usuaris que no són part d'aquests grups. Els usuaris podran seguir treballant en els taulers que hagin estat compartits amb ells."
+    "Assign to users/groups/circles" : "Assignació a usuaris/grups/cercles"
 },
 "nplurals=2; plural=(n != 1);");
