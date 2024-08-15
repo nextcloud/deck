@@ -346,16 +346,8 @@ OC.L10N.register(
     "Share with a Deck card" : "Udostępnij za pomocą karty Tablicy",
     "Share {file} with a Deck card" : "Udostępnij {file} za pomocą karty Tablicy",
     "Share" : "Udostępnianie",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Opis karty</strong> w aplikacji Tablica został zmieniony",
-    "Timeline" : "Oś czasu",
-    "Share board with a user, group or circle …" : "Udostępnij tablicę użytkownikowi, grupie lub kręgowi…",
     "Searching for users, groups and circles …" : "Szukam użytkowników, grup i kręgów…",
     "(Circle)" : "(Krąg)",
-    "Assign to users/groups/circles" : "Przypisz do użytkowników/grup/kręgów",
-    "Next week" : "Następny tydzień",
-    "Next month" : "Następny miesiąc",
-    "List is empty" : "Lista jest pusta",
-    "Limit deck usage of groups" : "Ogranicz użycie tablic dla grup",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ograniczenie Tablicy zablokuje użytkownikom z tych grup możliwość tworzenia własnych tablic. Użytkownicy nadal będą mogli pracować na tablicach, które zostały im udostępnione."
+    "Assign to users/groups/circles" : "Przypisz do użytkowników/grup/kręgów"
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

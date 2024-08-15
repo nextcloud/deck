@@ -352,16 +352,8 @@ OC.L10N.register(
     "Share with a Deck card" : "分享给一张看板卡片",
     "Share {file} with a Deck card" : "将{file}分享给一张看板卡片",
     "Share" : "分享",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "看板应用中的 <strong>卡片描述</strong> 已改变",
-    "Timeline" : "时间线",
-    "Share board with a user, group or circle …" : "与一个用户，群组或圈子共享面板...",
     "Searching for users, groups and circles …" : "正在搜索用户、群组和圈子 ......",
     "(Circle)" : "（圈子）",
-    "Assign to users/groups/circles" : "指派给用户/群组/圈子",
-    "Next week" : "下周",
-    "Next month" : "下月",
-    "List is empty" : "列表为空",
-    "Limit deck usage of groups" : "按群组限制看板的使用权",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "限制看板的使用权后，不在指定群组中的用户将不能新建面板，但仍可使用已共享给他们的面板。"
+    "Assign to users/groups/circles" : "指派给用户/群组/圈子"
 },
 "nplurals=1; plural=0;");

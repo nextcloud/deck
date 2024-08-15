@@ -374,17 +374,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Dela med ett Deck-kort",
     "Share {file} with a Deck card" : "Dela {file} med ett Deck-kort",
     "Share" : "Dela",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "En <strong>kortbeskrivning</strong> i Deck-appen har ändrats",
-    "Timeline" : "Tidslinje",
-    "Share board with a user, group or circle …" : "Dela en tavla med en användare, grupp eller cirkel ...",
     "Searching for users, groups and circles …" : "Söker efter användare, grupper och cirklar …",
     "(Circle)" : "(Cirkel)",
     "Assign to users/groups/circles" : "Tilldela till användare/grupper/cirklar",
-    "Next week" : "Nästa vecka",
-    "Next month" : "Nästa månad",
-    "List is empty" : "Listan är tom",
-    "Limit deck usage of groups" : "Begränsa användningen av grupper",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Begränsning av Deck blockerar användare som inte ingår i dessa grupper från att skapa egna tavlor. Användare kan dock fortfarande integrera med tavlor som har delats med dem.",
     "Filter by completed" : "Filtrera efter slutfört"
 },
 "nplurals=2; plural=(n != 1);");

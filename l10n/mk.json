@@ -271,16 +271,8 @@
     "Share with a Deck card" : "Споделено со Deck картица",
     "Share {file} with a Deck card" : "Сподели {file} со Deck картица",
     "Share" : "Сподели",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>Описот на картицата</strong> во апликацијата Deck е изменет",
-    "Timeline" : "Времеплов",
-    "Share board with a user, group or circle …" : "Сподели табла со корисник, група или круг ...",
     "Searching for users, groups and circles …" : "Пребарување на корисници, групи или кругови ...",
     "(Circle)" : "(Круг)",
-    "Assign to users/groups/circles" : "Додели на корисници/групи/кругови",
-    "Next week" : "Следна недела",
-    "Next month" : "Следен месец",
-    "List is empty" : "Листата е празна",
-    "Limit deck usage of groups" : "Ограничи ја апликацијата на групи",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Ограничувањето на апликацијата ќе ги блокира корисниците кој не се дел од овие групи. Корсниците ќе можат да работат на апликацијата само доколку биде споделена табла со нив."
+    "Assign to users/groups/circles" : "Додели на корисници/групи/кругови"
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"
 }

@@ -372,17 +372,9 @@
     "Share with a Deck card" : "Mit einer Deck-Karte teilen",
     "Share {file} with a Deck card" : "{file} mit einer Deck-Karte teilen",
     "Share" : "Freigeben",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Eine <strong>Kartenbeschreibung</strong> wurde innerhalb der Deck-App geändert",
-    "Timeline" : "Zeitachse",
-    "Share board with a user, group or circle …" : "Board mit Benutzer, Gruppe oder Kreis teilen…",
     "Searching for users, groups and circles …" : "Suche nach Benutzern, Gruppen und Kreisen …",
     "(Circle)" : "(Kreis)",
     "Assign to users/groups/circles" : "An Benutzer, Gruppen oder Kreise zuweisen",
-    "Next week" : "Nächste Woche",
-    "Next month" : "Nächsten Monat",
-    "List is empty" : "Liste ist leer",
-    "Limit deck usage of groups" : "Nutzung auf Gruppen einschränken",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Wenn Sie Deck einschränken, können Benutzer, die nicht zu diesen Gruppen gehören, keine eigenen Boards erstellen. Die Benutzer können weiterhin an Boards arbeiten, die für sie freigegeben wurden.",
     "Filter by completed" : "Nach Status filtern"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

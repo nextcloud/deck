@@ -60,8 +60,6 @@ OC.L10N.register(
     "Close" : "Tampar",
     "Tomorrow – {timeLocale}" : "Deman – {timeLocale}",
     "Create a card" : "Crear una carta",
-    "Share" : "Partejar",
-    "Next week" : "Setmana seguenta",
-    "Next month" : "Mes seguent"
+    "Share" : "Partejar"
 },
 "nplurals=2; plural=(n > 1);");

@@ -232,13 +232,7 @@
     "Maximum file size of {size} exceeded" : "Досягнуто максимальний розмір файлу {size}",
     "Error creating the share" : "Помилка створення спільного доступу",
     "Share" : "Спільний доступ",
-    "Timeline" : "Дії",
-    "Share board with a user, group or circle …" : "Поділитися дошкою з користувачем, групою або колом...",
     "(Circle)" : "(Коло)",
-    "Assign to users/groups/circles" : "Призначити користувачам/групам/колам",
-    "Next week" : "Наступний тиждень",
-    "Next month" : "Наступний місяць",
-    "Limit deck usage of groups" : "Обмежити доступ до колоди для груп",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Створення власних робочих дощок користувачам, які не входять у задані групи, буде заблоковано. Проте, такі користувачі зможуть продовжити працювати зі спільними дошками, до яких у них є доступ."
+    "Assign to users/groups/circles" : "Призначити користувачам/групам/колам"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);"
 }

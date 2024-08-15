@@ -42,8 +42,6 @@
     "Today" : "өнөөдөр",
     "Tomorrow" : "маргааш",
     "Close" : "Хаах",
-    "Share" : "Түгээх",
-    "Next week" : "Дараа 7 хоног",
-    "Next month" : "Дараа сар"
+    "Share" : "Түгээх"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

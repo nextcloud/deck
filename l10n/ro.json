@@ -339,16 +339,8 @@
     "Share with a Deck card" : "Partajează cu un card Deck",
     "Share {file} with a Deck card" : "Partajează {file} cu un card Deck",
     "Share" : "Partajează",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "A fost modificată o <strong>descriere de card</strong> în aplicația Deck",
-    "Timeline" : "Cronologie",
-    "Share board with a user, group or circle …" : "Partajează panoul cu un utilizator, grup sau cerc ...",
     "Searching for users, groups and circles …" : "Căutare utilizatori, grupuri sau cercuri ...",
     "(Circle)" : "(Cerc)",
-    "Assign to users/groups/circles" : "Repartizează la utilizatori/grupuri/cercuri",
-    "Next week" : "Saptămâna următoare",
-    "Next month" : "Luna următoare",
-    "List is empty" : "Lista este goală",
-    "Limit deck usage of groups" : "Permite utilizarea Deck doar pentru unele grupuri",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitând Deck, utilizatorii care nu fac parte din acele grupuri nu vor putea crea propriile panouri. Utilizatorii vor putea accesa totuși panourile partajate cu ei."
+    "Assign to users/groups/circles" : "Repartizează la utilizatori/grupuri/cercuri"
 },"pluralForm" :"nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));"
 }

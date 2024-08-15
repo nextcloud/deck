@@ -267,16 +267,8 @@ OC.L10N.register(
     "Share with a Deck card" : "שיתוף עם כרטיס חפיסה",
     "Share {file} with a Deck card" : "שיתוף {file} עם כרטיס חפיסה",
     "Share" : "שיתוף",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "<strong>תיאור של כרטיס</strong> בתוך יישומון החבילה נערך",
-    "Timeline" : "ציר זמן",
-    "Share board with a user, group or circle …" : "שיתוף לוח עם משתמש, קבוצה או מעגל…",
     "Searching for users, groups and circles …" : "מחפש משתמשים, קבוצות, ומעגלים ...",
     "(Circle)" : "(מעגל)",
-    "Assign to users/groups/circles" : "הקצאה למשתמשים/קבוצות/מעגלים",
-    "Next week" : "השבוע הבא",
-    "Next month" : "החודש הבא",
-    "List is empty" : "הרשימה ריקה",
-    "Limit deck usage of groups" : "הגבלת השימוש בחבילה לקבוצות",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "הגבלת חבילה תחסום משתמשים שאינם חלק מקבוצות אלו מיצירת לוחות משלהם. משתמשים עדיין יוכלו לעבור על לוחות ששותפו אתם."
+    "Assign to users/groups/circles" : "הקצאה למשתמשים/קבוצות/מעגלים"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

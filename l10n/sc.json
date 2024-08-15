@@ -280,16 +280,8 @@
     "Share with a Deck card" : "Cumpartzi cun un'ischeda deck",
     "Share {file} with a Deck card" : "Cumpartzi {file} cun un'ischeda de deck",
     "Share" : "Cumpartzi",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Sa <strong>descritzione de un'ischeda</strong> in intro de s'aplicatzione Deck app est istada cambiada",
-    "Timeline" : "Fusu oràriu",
-    "Share board with a user, group or circle …" : "Cumpartzi lavagna cun un'utente, grupu o tropa...",
     "Searching for users, groups and circles …" : "Chirchende utentes, grupos e tropas ...",
     "(Circle)" : "(Giru)",
-    "Assign to users/groups/circles" : "Assigna a utentes/grupos/tropas",
-    "Next week" : "Sa chida chi benit",
-    "Next month" : "Su mese chi benit",
-    "List is empty" : "Sa lista est bòida",
-    "Limit deck usage of groups" : "Mìnima s'impreu de deck de is grupos",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Su de minimare su deck at a impedire a is utentes chi non faghent parte de cuddos grupos de si creare lavagnas pròpias. Is utentes ant a èssere ancora capassos de traballare in is lavagnas chi fiant istadas cumpartzidas cun issos etotu,"
+    "Assign to users/groups/circles" : "Assigna a utentes/grupos/tropas"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

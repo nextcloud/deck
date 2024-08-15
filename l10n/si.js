@@ -33,8 +33,6 @@ OC.L10N.register(
     "Today" : "අද",
     "Tomorrow" : "හෙට",
     "Close" : "වසන්න",
-    "Share" : "බෙදාගන්න",
-    "Next week" : "ඊළඟ සතිය",
-    "Next month" : "ඊළඟ මාසය"
+    "Share" : "බෙදාගන්න"
 },
 "nplurals=2; plural=(n != 1);");

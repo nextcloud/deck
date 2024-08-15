@@ -372,17 +372,9 @@ OC.L10N.register(
     "Share with a Deck card" : "Zdieľať s kartou Deck",
     "Share {file} with a Deck card" : "Zdieľať {file} s kartou Deck",
     "Share" : "Zdieľať",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "V apke Nástenka sa zmenil <strong>Popis karty</strong>",
-    "Timeline" : "Časová os",
-    "Share board with a user, group or circle …" : "Zdieľanie nástenky s používateľom, skupinou alebo kruhom…",
     "Searching for users, groups and circles …" : "Vyhľadávanie v používateľoch, skupinách a kruhoch...",
     "(Circle)" : "(Kruh)",
     "Assign to users/groups/circles" : "Priradiť používateľom/skupinám/kruhom",
-    "Next week" : "Nasledujúci týždeň",
-    "Next month" : "Nasledujúci mesiac",
-    "List is empty" : "Zoznam je prázdny",
-    "Limit deck usage of groups" : "Obmedziť použitie Deck na skupiny",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Obmedzenie Násteniek bráni používateľom, ktorí nie sú súčasťou týchto skupín, aby si vytvárali vlastné nástenky. Môžu však stále pracovať na nástenkách, ktoré im niekto sprístupní.",
     "Filter by completed" : "Filtrovať podľa dokončených"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

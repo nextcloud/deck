@@ -105,11 +105,6 @@
     "Close" : "Cerrar",
     "Share with a Deck card" : "Compartir con una tarjeta del Tablero",
     "Share {file} with a Deck card" : "Compartir {file} con una tarjeta del Tablero",
-    "Share" : "Compartir",
-    "A <strong>card description</strong> inside the Deck app has been changed" : "Una <strong>descripción de tarjeta</strong> dentro de la app Deck ha cambiado",
-    "Next week" : "Proxima semana",
-    "Next month" : "Proximo mes",
-    "Limit deck usage of groups" : "Limitar el uso del Tablero a grupos",
-    "Limiting Deck will block users not part of those groups from creating their own boards. Users will still be able to work on boards that have been shared with them." : "Limitar Tableros impedirá que usuarios que no formen parte de esos grupos creen sus propios tableros. Los usuarios todavía podrán trabajar en tableros que hayan sido compartidos con ellos."
+    "Share" : "Compartir"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
