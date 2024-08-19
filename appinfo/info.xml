@@ -23,14 +23,14 @@
     <version>2.0.0-dev.0</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
-    <documentation>
-        <user>https://deck.readthedocs.io/en/latest/User_documentation_en/</user>
-        <developer>https://deck.readthedocs.io/en/latest/API/</developer>
-    </documentation>
     <namespace>Deck</namespace>
     <types>
         <dav/>
     </types>
+    <documentation>
+        <user>https://deck.readthedocs.io/en/latest/User_documentation_en/</user>
+        <developer>https://deck.readthedocs.io/en/latest/API/</developer>
+    </documentation>
     <category>organization</category>
     <category>office</category>
     <website>https://github.com/nextcloud/deck</website>
