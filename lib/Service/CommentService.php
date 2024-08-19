@@ -17,26 +17,22 @@ use OCP\Comments\IComment;
 use OCP\Comments\ICommentsManager;
 use OCP\Comments\MessageTooLongException;
 use OCP\Comments\NotFoundException as CommentNotFoundException;
-use OCP\ILogger;
 use OCP\IUserManager;
 use OutOfBoundsException;
+use Psr\Log\LoggerInterface;
+
 use function is_numeric;
 
 class CommentService {
-	private ICommentsManager $commentsManager;
-	private IUserManager $userManager;
-	private CardMapper $cardMapper;
-	private PermissionService $permissionService;
-	private ILogger $logger;
-	private ?string $userId;
 
-	public function __construct(ICommentsManager $commentsManager, PermissionService $permissionService, CardMapper $cardMapper, IUserManager $userManager, ILogger $logger, ?string $userId) {
-		$this->commentsManager = $commentsManager;
-		$this->permissionService = $permissionService;
-		$this->cardMapper = $cardMapper;
-		$this->userManager = $userManager;
-		$this->logger = $logger;
-		$this->userId = $userId;
+	public function __construct(
+		private ICommentsManager $commentsManager,
+		private PermissionService $permissionService,
+		private CardMapper $cardMapper,
+		private IUserManager $userManager,
+		private LoggerInterface $logger,
+		private ?string $userId,
+	) {
 	}
 
 	public function list(string $cardId, int $limit = 20, int $offset = 0): DataResponse {
@@ -187,8 +183,8 @@ class CommentService {
 				try {
 					$displayName = $this->commentsManager->resolveDisplayName($mention['type'], $mention['id']);
 				} catch (OutOfBoundsException $e) {
-					$this->logger->logException($e);
-					// No displayname, upon client's discretion what to display.
+					$this->logger->warning('Mention type not registered, can not resolve display name.', ['exception' => $e, 'mention_type' => $mention['type']]);
+					// No display name, upon client's discretion what to display.
 					$displayName = '';
 				}
 

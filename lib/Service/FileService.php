@@ -20,37 +20,21 @@ use OCP\Files\SimpleFS\ISimpleFile;
 use OCP\Files\SimpleFS\ISimpleFolder;
 use OCP\IConfig;
 use OCP\IL10N;
-use OCP\ILogger;
 use OCP\IRequest;
+use Psr\Log\LoggerInterface;
 
 class FileService implements IAttachmentService {
-	private $l10n;
-	private $appData;
-	private $request;
-	private $logger;
-	private $rootFolder;
-	private $config;
-	private $attachmentMapper;
-	private $mimeTypeDetector;
 
 	public function __construct(
-		IL10N $l10n,
-		IAppData $appData,
-		IRequest $request,
-		ILogger $logger,
-		IRootFolder $rootFolder,
-		IConfig $config,
-		AttachmentMapper $attachmentMapper,
-		IMimeTypeDetector $mimeTypeDetector
+		private IL10N $l10n,
+		private IAppData $appData,
+		private IRequest $request,
+		private LoggerInterface $logger,
+		private IRootFolder $rootFolder,
+		private IConfig $config,
+		private AttachmentMapper $attachmentMapper,
+		private IMimeTypeDetector $mimeTypeDetector
 	) {
-		$this->l10n = $l10n;
-		$this->appData = $appData;
-		$this->request = $request;
-		$this->logger = $logger;
-		$this->rootFolder = $rootFolder;
-		$this->config = $config;
-		$this->attachmentMapper = $attachmentMapper;
-		$this->mimeTypeDetector = $mimeTypeDetector;
 	}
 
 	/**
@@ -193,6 +177,7 @@ class FileService implements IAttachmentService {
 	/**
 	 * Workaround until ISimpleFile can be fetched as a resource
 	 *
+	 * @return \OCP\Files\File
 	 * @throws \Exception
 	 */
 	private function getFileFromRootFolder(Attachment $attachment) {

@@ -10,27 +10,17 @@ use OCA\Deck\Service\DefaultBoardService;
 use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\Middleware;
 use OCP\IL10N;
-use OCP\ILogger;
+use Psr\Log\LoggerInterface;
 
 class DefaultBoardMiddleware extends Middleware {
 
-	/** @var ILogger */
-	private $logger;
-	/** @var IL10N */
-	private $l10n;
-	/** @var DefaultBoardService */
-	private $defaultBoardService;
-	/** @var PermissionService */
-	private $permissionService;
-	/** @var string|null */
-	private $userId;
-
-	public function __construct(ILogger $logger, IL10N $l10n, DefaultBoardService $defaultBoardService, PermissionService $permissionService, $userId) {
-		$this->logger = $logger;
-		$this->l10n = $l10n;
-		$this->defaultBoardService = $defaultBoardService;
-		$this->permissionService = $permissionService;
-		$this->userId = $userId;
+	public function __construct(
+		private LoggerInterface $logger,
+		private IL10N $l10n,
+		private DefaultBoardService $defaultBoardService,
+		private PermissionService $permissionService,
+		private ?string $userId,
+	) {
 	}
 
 	public function beforeController($controller, $methodName) {
@@ -39,7 +29,7 @@ class DefaultBoardMiddleware extends Middleware {
 				$this->defaultBoardService->createDefaultBoard($this->l10n->t('Personal'), $this->userId, '0087C5');
 			}
 		} catch (\Throwable $e) {
-			$this->logger->logException($e);
+			$this->logger->error('Could not create default board', ['exception' => $e]);
 		}
 	}
 }

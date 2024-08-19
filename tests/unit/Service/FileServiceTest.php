@@ -34,38 +34,29 @@ use OCP\Files\SimpleFS\ISimpleFile;
 use OCP\Files\SimpleFS\ISimpleFolder;
 use OCP\IConfig;
 use OCP\IL10N;
-use OCP\ILogger;
 use OCP\IRequest;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class FileServiceTest extends TestCase {
 
-	/** @var IL10N|MockObject */
-	private $l10n;
-	/** @var IAppData|MockObject */
-	private $appData;
-	/** @var IRequest|MockObject */
-	private $request;
-	/** @var ILogger|MockObject */
-	private $logger;
-	/** @var FileService */
-	private $fileService;
-	/** @var IRootFolder */
-	private $rootFolder;
-	/** @var IConfig */
-	private $config;
-	/** @var AttachmentMapper|MockObject */
-	private $attachmentMapper;
-	/** @var IMimeTypeDetector|MockObject */
-	private $mimeTypeDetector;
-
+	private IL10N&MockObject $l10n;
+	private IAppData&MockObject $appData;
+	private IRequest&MockObject $request;
+	private LoggerInterface&MockObject $logger;
+	private IRootFolder&MockObject $rootFolder;
+	private IConfig&MockObject $config;
+	private AttachmentMapper&MockObject $attachmentMapper;
+	private IMimeTypeDetector&MockObject $mimeTypeDetector;
+	private FileService $fileService;
+	
 	public function setUp(): void {
 		parent::setUp();
 		$this->request = $this->createMock(IRequest::class);
 		$this->appData = $this->createMock(IAppData::class);
 		$this->l10n = $this->createMock(IL10N::class);
-		$this->logger = $this->createMock(ILogger::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->rootFolder = $this->createMock(IRootFolder::class);
 		$this->config = $this->createMock(IConfig::class);
 		$this->attachmentMapper = $this->createMock(AttachmentMapper::class);

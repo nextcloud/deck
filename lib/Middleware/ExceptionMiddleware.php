@@ -15,28 +15,19 @@ use OCP\AppFramework\Middleware;
 use OCP\AppFramework\OCS\OCSException;
 use OCP\AppFramework\OCSController;
 use OCP\IConfig;
-use OCP\ILogger;
 use OCP\IRequest;
+use Psr\Log\LoggerInterface;
 
 class ExceptionMiddleware extends Middleware {
 
-	/** @var ILogger */
-	private $logger;
-	/** @var IConfig */
-	private $config;
-	/** @var IRequest */
-	private $request;
-
 	/**
 	 * SharingMiddleware constructor.
-	 *
-	 * @param ILogger $logger
-	 * @param IConfig $config
 	 */
-	public function __construct(ILogger $logger, IConfig $config, IRequest $request) {
-		$this->logger = $logger;
-		$this->config = $config;
-		$this->request = $request;
+	public function __construct(
+		private LoggerInterface $logger,
+		private IConfig $config,
+		private IRequest $request,
+	) {
 	}
 
 	/**
@@ -69,9 +60,7 @@ class ExceptionMiddleware extends Middleware {
 		}
 
 		if ($exception instanceof StatusException) {
-			if ($this->config->getSystemValue('loglevel', ILogger::WARN) === ILogger::DEBUG) {
-				$this->logger->logException($exception);
-			}
+			$this->logger->debug($exception->getMessage(), ['exception' => $exception]);
 
 			if ($exception instanceof ConflictException) {
 				return new JSONResponse([
@@ -98,7 +87,7 @@ class ExceptionMiddleware extends Middleware {
 				'message' => $exceptionMessage,
 				'requestId' => $this->request->getId(),
 			];
-			$this->logger->logException($exception);
+			$this->logger->error($exception->getMessage(), ['exception' => $exception]);
 			if ($debugMode === true) {
 				$response['exception'] = (array) $exception;
 			}
