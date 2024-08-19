@@ -27,29 +27,24 @@ use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\ILogger;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use Test\TestCase;
 
 class ScheduledNoificationsTest extends TestCase {
 
-	/** @var ITimeFactory|MockObject */
-	protected $timeFactory;
-	/** @var CardMapper|MockObject */
-	protected $cardMapper;
-	/** @var NotificationHelper|MockObject */
-	protected $notificationHelper;
-	/** @var ILogger|MockObject */
-	protected $logger;
-	/** @var ScheduledNotifications */
-	protected $scheduledNotifications;
+	protected ITimeFactory&MockObject $timeFactory;
+	protected CardMapper&MockObject $cardMapper;
+	protected NotificationHelper&MockObject $notificationHelper;
+	protected LoggerInterface&MockObject $logger;
+	protected ScheduledNotifications $scheduledNotifications;
 
 	public function setUp(): void {
 		parent::setUp();
 		$this->timeFactory = $this->createMock(ITimeFactory::class);
 		$this->cardMapper = $this->createMock(CardMapper::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
-		$this->logger = $this->createMock(ILogger::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->scheduledNotifications = new ScheduledNotifications($this->timeFactory, $this->cardMapper, $this->notificationHelper, $this->logger);
 	}
 

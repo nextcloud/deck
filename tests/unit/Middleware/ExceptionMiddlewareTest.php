@@ -32,21 +32,20 @@ use OCA\Deck\Service\PermissionService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IConfig;
-use OCP\ILogger;
 use OCP\IRequest;
+use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 
 class ExceptionMiddlewareTest extends \Test\TestCase {
 
-	/** @var ILogger */
-	private $logger;
-	/** @var IConfig */
-	private $config;
-	private $request;
-	private $controller;
+	private LoggerInterface&MockObject $logger;
+	private IConfig&MockObject $config;
+	private IRequest&MockObject $request;
+	private Controller&MockObject $controller;
 	private $exceptionMiddleware;
 
 	public function setUp(): void {
-		$this->logger = $this->createMock(ILogger::class);
+		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->config = $this->createMock(IConfig::class);
 		$this->request = $this->createMock(IRequest::class);
 		$this->controller = $this->createMock(Controller::class);

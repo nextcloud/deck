@@ -12,27 +12,17 @@ use OCA\Deck\Notification\NotificationHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\Job;
-use OCP\ILogger;
+use Psr\Log\LoggerInterface;
 
 class ScheduledNotifications extends Job {
 
-	/** @var CardMapper */
-	protected $cardMapper;
-	/** @var NotificationHelper */
-	protected $notificationHelper;
-	/** @var ILogger */
-	protected $logger;
-
 	public function __construct(
 		ITimeFactory $time,
-		CardMapper $cardMapper,
-		NotificationHelper $notificationHelper,
-		ILogger $logger
+		protected CardMapper $cardMapper,
+		protected NotificationHelper $notificationHelper,
+		protected LoggerInterface $logger
 	) {
 		parent::__construct($time);
-		$this->cardMapper = $cardMapper;
-		$this->notificationHelper = $notificationHelper;
-		$this->logger = $logger;
 	}
 
 	/**

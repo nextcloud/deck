@@ -14,21 +14,19 @@ namespace OCA\Deck\Cron;
 use OCA\Deck\Service\SessionService;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
-use OCP\ILogger;
+use Psr\Log\LoggerInterface;
 
 class SessionsCleanup extends TimedJob {
-	private $sessionService;
 	private $documentService;
-	private $logger;
 	private $imageService;
 
 
-	public function __construct(ITimeFactory $time,
-		SessionService $sessionService,
-		ILogger $logger) {
+	public function __construct(
+		ITimeFactory $time,
+		private SessionService $sessionService,
+		private LoggerInterface $logger,
+	) {
 		parent::__construct($time);
-		$this->sessionService = $sessionService;
-		$this->logger = $logger;
 		$this->setInterval(SessionService::SESSION_VALID_TIME);
 	}
 
