@@ -129,8 +129,10 @@ class DeckJsonService extends ABoardImportService {
 		foreach ($this->tmpCards as $sourceCard) {
 			foreach ($sourceCard->labels as $label) {
 				$cardId = $this->cards[$sourceCard->id]->getId();
-				$labelId = $this->labels[$label->id]->getId();
-				$cardsLabels[$cardId][] = $labelId;
+				if ($this->getImportService()->getData()->id === $label->boardId) {
+					$labelId = $this->labels[$label->id]->getId();
+					$cardsLabels[$cardId][] = $labelId;
+				}
 			}
 		}
 		return $cardsLabels;
