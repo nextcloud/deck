@@ -350,4 +350,10 @@ export default {
 	.forced-active {
 		box-shadow: inset 4px 0 var(--color-primary-element);
 	}
+
+	:deep(.active) {
+		.material-design-icon svg {
+			fill: var(--color-primary-element-text);
+		}
+	}
 </style>
