@@ -92,7 +92,6 @@ export default {
 
 <style lang="scss" scoped>
 .modal__content {
-	width: 25vw;
 	min-width: 250px;
 	min-height: 120px;
 	margin: 20px 20px 100px 20px;
