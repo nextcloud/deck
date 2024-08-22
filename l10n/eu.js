@@ -149,6 +149,7 @@ OC.L10N.register(
     "Filter by tag" : "Iragazi etiketaz",
     "Filter by assigned user" : "Iragazi esleitutako erabiltzailez",
     "Unassigned" : "Esleitu gabea",
+    "Filter by status" : "Iragazi egoeraren arabera",
     "Open and completed" : "Ireki eta osatutakoak",
     "Open" : "Ireki",
     "Completed" : "Osatua",
