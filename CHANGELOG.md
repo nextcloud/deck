@@ -1,9 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.11.6
+
+### Fixed
+
+- fix: Avoid optional before required parameter [#6094](https://github.com/nextcloud/deck/pull/6094)
+- use deleted_users for users that do not exist [#6202](https://github.com/nextcloud/deck/pull/6202)
+
 ## 1.11.5
 
-### Fixed 
+### Fixed
 - don't reset update time when no update was written to db #6036
 - fix: Avoid conflicts on deck attachments folder name #5709
 - fix: permission check for cloning board #5856
