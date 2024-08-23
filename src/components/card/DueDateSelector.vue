@@ -247,7 +247,6 @@ export default defineComponent({
 .done-info--duedate,
 .done-info--done {
 	display: flex;
-	padding-top: 10px;
 	&.dimmed {
 		color: var(--color-text-maxcontrast);
 	}
