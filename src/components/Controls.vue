@@ -31,7 +31,8 @@
 		<div class="board-actions">
 			<SessionList v-if="isNotifyPushEnabled && presentUsers.length"
 				:sessions="presentUsers" />
-			<div v-if="searchQuery || true" class="deck-search">
+			<!-- Hide but not remove for now as search might change in the future -->
+			<div v-if="false" class="deck-search">
 				<input id="deck-search-input"
 					ref="search"
 					:tabindex="0"
