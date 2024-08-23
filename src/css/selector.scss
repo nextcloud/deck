@@ -9,9 +9,13 @@
 	margin-top: 10px;
 
 	&--icon {
-		width: 38px;
-		padding-top: 12px;
+		width: var(--default-clickable-area);
+		height: var(--default-clickable-area);
 		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		align-content: center;
+		justify-content: center;
 	}
 
 	&--selector {
@@ -21,5 +25,6 @@
 	&--content {
 		display: flex;
 		flex-grow: 1;
+		align-items: center;
 	}
 }
