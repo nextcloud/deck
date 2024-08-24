@@ -45,7 +45,7 @@ abstract class BaseValidator {
 					} else {
 						if (!$this->{$rule}($value)) {
 							throw new BadRequestException(
-								$field . ' must be provided and must be '. str_replace("_", " ", $rule));
+								$field . ' must be provided and must be '. str_replace('_', ' ', $rule));
 						}
 					}
 				}
@@ -111,7 +111,7 @@ abstract class BaseValidator {
 	 */
 	private function max($value, $limit): bool {
 		if (!$limit || !is_numeric($limit)) {
-			throw new Exception("Validation rule max requires at least 1 parameter. " . json_encode($limit));
+			throw new Exception('Validation rule max requires at least 1 parameter. ' . json_encode($limit));
 		}
 		return $this->getSize($value) <= $limit;
 	}
@@ -121,7 +121,7 @@ abstract class BaseValidator {
 	 */
 	private function min($value, $limit): bool {
 		if (!$limit || !is_numeric($limit)) {
-			throw new Exception("Validation rule max requires at least 1 parameter.");
+			throw new Exception('Validation rule max requires at least 1 parameter.');
 		}
 		return $this->getSize($value) >= $limit;
 	}
@@ -129,7 +129,7 @@ abstract class BaseValidator {
 	/**
 	 * Get the size of an attribute.
 	 *
-	 * @param  mixed  $value
+	 * @param mixed $value
 	 * @return int
 	 */
 	protected function getSize($value): int {
@@ -158,6 +158,6 @@ abstract class BaseValidator {
 			: $field . ' must be at least '. $parameter . ' characters long ';
 		}
 
-		return $field . ' must be provided and must be '. str_replace("_", " ", $rule);
+		return $field . ' must be provided and must be '. str_replace('_', ' ', $rule);
 	}
 }

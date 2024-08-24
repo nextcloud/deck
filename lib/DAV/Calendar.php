@@ -25,7 +25,7 @@ class Calendar extends ExternalCalendar {
 	private $children;
 	/** @var DeckCalendarBackend */
 	private $backend;
-	/**  @var Board */
+	/** @var Board */
 	private $board;
 
 	public function __construct(string $principalUri, string $calendarUri, Board $board, DeckCalendarBackend $backend) {

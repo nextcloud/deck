@@ -111,9 +111,9 @@ class CardReferenceProvider extends ADiscoverableReferenceProvider implements IS
 			if ($ids !== null) {
 				[, $cardId] = $ids;
 				try {
-					$card = $this->cardService->find((int) $cardId)->jsonSerialize();
-					$stack = $this->stackService->find((int) $card['stackId'])->jsonSerialize();
-					$board = $this->boardService->find((int) $stack['boardId'])->jsonSerialize();
+					$card = $this->cardService->find((int)$cardId)->jsonSerialize();
+					$stack = $this->stackService->find((int)$card['stackId'])->jsonSerialize();
+					$board = $this->boardService->find((int)$stack['boardId'])->jsonSerialize();
 				} catch (NoPermissionException $e) {
 					// Skip throwing if user has no permissions
 					return null;

@@ -212,8 +212,8 @@ class StackServiceTest extends TestCase {
 		$this->stackMapper->expects($this->once())->method('update')->willReturn($stackToBeDeleted);
 		$this->cardMapper->expects($this->once())->method('findAll')->willReturn([]);
 		$this->stackService->delete(123);
-		$this->assertTrue($stackToBeDeleted->getDeletedAt() <= time(), "deletedAt is in the past");
-		$this->assertTrue($stackToBeDeleted->getDeletedAt() > 0, "deletedAt is set");
+		$this->assertTrue($stackToBeDeleted->getDeletedAt() <= time(), 'deletedAt is in the past');
+		$this->assertTrue($stackToBeDeleted->getDeletedAt() > 0, 'deletedAt is set');
 	}
 
 	public function testUpdate() {

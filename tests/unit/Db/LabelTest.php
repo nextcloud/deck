@@ -29,8 +29,8 @@ class LabelTest extends TestCase {
 	private function createLabel() {
 		$label = new Label();
 		$label->setId(1);
-		$label->setTitle("My Label");
-		$label->setColor("000000");
+		$label->setTitle('My Label');
+		$label->setColor('000000');
 		return $label;
 	}
 	public function testJsonSerializeBoard() {

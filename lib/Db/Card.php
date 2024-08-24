@@ -165,7 +165,7 @@ class Card extends RelationalEntity {
 		$matchDate->setTime(0, 0);
 
 		$diff = $today->diff($matchDate);
-		return (int) $diff->format('%R%a'); // Extract days count in interval
+		return (int)$diff->format('%R%a'); // Extract days count in interval
 	}
 
 	public function getCalendarPrefix(): string {

@@ -65,8 +65,8 @@ class CommentService {
 	private function get(int $cardId, int $commentId): IComment {
 		$this->permissionService->checkPermission($this->cardMapper, $cardId, Acl::PERMISSION_READ);
 		try {
-			$comment = $this->commentsManager->get((string) $commentId);
-			if ($comment->getObjectType() !== Application::COMMENT_ENTITY_TYPE || (int) $comment->getObjectId() !== $cardId) {
+			$comment = $this->commentsManager->get((string)$commentId);
+			if ($comment->getObjectType() !== Application::COMMENT_ENTITY_TYPE || (int)$comment->getObjectId() !== $cardId) {
 				throw new CommentNotFoundException();
 			}
 		} catch (CommentNotFoundException $e) {
@@ -134,7 +134,7 @@ class CommentService {
 		if (!is_numeric($commentId)) {
 			throw new BadRequestException('A valid comment id must be provided');
 		}
-		$comment = $this->get((int) $cardId, (int) $commentId);
+		$comment = $this->get((int)$cardId, (int)$commentId);
 		if ($comment->getActorType() !== 'users' || $comment->getActorId() !== $this->userId) {
 			throw new NoPermissionException('Only authors are allowed to edit their comment.');
 		}

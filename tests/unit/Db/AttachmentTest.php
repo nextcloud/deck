@@ -28,7 +28,7 @@ class AttachmentTest extends \Test\TestCase {
 		$attachment = new Attachment();
 		$attachment->setId(1);
 		$attachment->setCardId(123);
-		$attachment->setData("blob");
+		$attachment->setData('blob');
 		$attachment->setCreatedBy('admin');
 		$attachment->setType('deck_file');
 		return $attachment;

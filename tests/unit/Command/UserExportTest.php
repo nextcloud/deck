@@ -88,8 +88,8 @@ class UserExportTest extends \Test\TestCase {
 
 	public function getComment($id) {
 		$comment = new Comment();
-		$comment->setActor("users", "admin");
-		$comment->setMessage("fake comment" . $id);
+		$comment->setActor('users', 'admin');
+		$comment->setMessage('fake comment' . $id);
 		return $comment;
 	}
 	public function testExecute() {

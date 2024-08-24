@@ -61,9 +61,9 @@ class AttachmentMapper extends DeckMapper implements IPermissionMapper {
 	public function findByData($cardId, $data) {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
-				->from($this->getTableName())
-				->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
-				->andWhere($qb->expr()->eq('data', $qb->createNamedParameter($data, IQueryBuilder::PARAM_STR)));
+			->from($this->getTableName())
+			->where($qb->expr()->eq('card_id', $qb->createNamedParameter($cardId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('data', $qb->createNamedParameter($data, IQueryBuilder::PARAM_STR)));
 
 		return $this->findEntity($qb);
 	}

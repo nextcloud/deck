@@ -32,13 +32,13 @@ class CardTest extends TestCase {
 	private function createCard() {
 		$card = new Card();
 		$card->setId(1);
-		$card->setTitle("My Card");
-		$card->setDescription("a long description");
+		$card->setTitle('My Card');
+		$card->setDescription('a long description');
 		$card->setStackId(1);
 		$card->setType('text');
 		$card->setLastModified(234);
 		$card->setCreatedAt(123);
-		$card->setOwner("admin");
+		$card->setOwner('admin');
 		$card->setOrder(12);
 		$card->setArchived(false);
 		$card->setDone(null);
@@ -68,8 +68,8 @@ class CardTest extends TestCase {
 		$card = $this->createCard();
 		$this->assertEquals([
 			'id' => 1,
-			'title' => "My Card",
-			'description' => "a long description",
+			'title' => 'My Card',
+			'description' => 'a long description',
 			'type' => 'text',
 			'lastModified' => 234,
 			'createdAt' => 123,
@@ -96,8 +96,8 @@ class CardTest extends TestCase {
 		$card->setLabels([]);
 		$this->assertEquals([
 			'id' => 1,
-			'title' => "My Card",
-			'description' => "a long description",
+			'title' => 'My Card',
+			'description' => 'a long description',
 			'type' => 'text',
 			'lastModified' => 234,
 			'createdAt' => 123,
@@ -126,8 +126,8 @@ class CardTest extends TestCase {
 		$card->setLabels([]);
 		$this->assertEquals([
 			'id' => 1,
-			'title' => "My Card",
-			'description' => "a long description",
+			'title' => 'My Card',
+			'description' => 'a long description',
 			'type' => 'text',
 			'lastModified' => 234,
 			'createdAt' => 123,

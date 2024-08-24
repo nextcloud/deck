@@ -97,7 +97,7 @@ class BoardReferenceProvider implements IReferenceProvider {
 			preg_match('/^' . preg_quote($startIndex, '/') . '(?:\/#!?)?\/board\/([0-9]+)$/', $url, $matches);
 		}
 		if ($matches && count($matches) > 1) {
-			return (int) $matches[1];
+			return (int)$matches[1];
 		}
 
 		return null;
@@ -106,7 +106,7 @@ class BoardReferenceProvider implements IReferenceProvider {
 	public function getCachePrefix(string $referenceId): string {
 		$boardId = $this->getBoardId($referenceId);
 		if ($boardId !== null) {
-			return (string) $boardId;
+			return (string)$boardId;
 		}
 
 		return $referenceId;

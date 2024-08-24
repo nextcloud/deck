@@ -36,7 +36,7 @@ class SearchContext implements Context {
 	/**
 	 * @When /^searching for "([^"]*)" in comments in unified search$/
 	 * @param string $term
-	 * https://cloud.nextcloud.com/ocs/v2.php/search/providers/talk-conversations/search?term=an&from=%2Fapps%2Fdashboard%2F
+	 *                     https://cloud.nextcloud.com/ocs/v2.php/search/providers/talk-conversations/search?term=an&from=%2Fapps%2Fdashboard%2F
 	 */
 	public function searchingForComments(string $term) {
 		$this->requestContext->sendOCSRequest('GET', '/search/providers/search-deck-comment/search?term=' . urlencode($term), []);

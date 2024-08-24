@@ -89,7 +89,7 @@ class ExceptionMiddleware extends Middleware {
 			];
 			$this->logger->error($exception->getMessage(), ['exception' => $exception]);
 			if ($debugMode === true) {
-				$response['exception'] = (array) $exception;
+				$response['exception'] = (array)$exception;
 			}
 			return new JSONResponse($response, 500);
 		}

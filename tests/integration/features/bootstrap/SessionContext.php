@@ -32,7 +32,7 @@ class SessionContext implements Context {
 			'boardId' => $board['id'],
 		]);
 		$res = json_decode((string)$this->getResponse()->getBody(), true);
-		Assert::assertArrayHasKey('token', $res['ocs']['data'], "session creation did not respond with a token");
+		Assert::assertArrayHasKey('token', $res['ocs']['data'], 'session creation did not respond with a token');
 
 		// store token
 		$user = $this->serverContext->getCurrentUser();
@@ -44,7 +44,7 @@ class SessionContext implements Context {
 	 */
 	public function theResponseShouldHaveActiveSessions($length) {
 		$board = $this->boardContext->getLastUsedBoard();
-		Assert::assertEquals($length, count($board['activeSessions']), "unexpected count of active sessions");
+		Assert::assertEquals($length, count($board['activeSessions']), 'unexpected count of active sessions');
 	}
 
 	/**
@@ -52,7 +52,7 @@ class SessionContext implements Context {
 	 */
 	public function theUserShouldBeInTheListOfActiveSessions($user) {
 		$board = $this->boardContext->getLastUsedBoard();
-		Assert::assertContains($user, $board['activeSessions'], "user is not found in the list of active sessions");
+		Assert::assertContains($user, $board['activeSessions'], 'user is not found in the list of active sessions');
 	}
 
 	/**
@@ -67,7 +67,7 @@ class SessionContext implements Context {
 
 		$user = $this->serverContext->getCurrentUser();
 		$token = $this->tokens[$user];
-		Assert::assertNotEmpty($token, "no token for the user found");
+		Assert::assertNotEmpty($token, 'no token for the user found');
 		$this->requestContext->sendOCSRequest('POST', '/apps/deck/api/v1.0/session/close', [
 			'boardId' => $board['id'],
 			'token' => $token
