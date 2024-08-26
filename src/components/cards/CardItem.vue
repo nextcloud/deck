@@ -19,10 +19,10 @@
 			</div>
 			<CardCover v-if="showCardCover" :card-id="card.id" />
 			<div class="card-upper">
-				<h3 v-if="inlineEditingBlocked" dir="auto">
+				<h4 v-if="inlineEditingBlocked" dir="auto">
 					{{ card.title }}
-				</h3>
-				<h3 v-else
+				</h4>
+				<h4 v-else
 					dir="auto"
 					class="editable"
 					:aria-label="t('deck', 'Edit card title')">
@@ -35,7 +35,7 @@
 						@click.stop
 						@keyup.esc="cancelEdit"
 						@keyup.stop>{{ card.title }}</span>
-				</h3>
+				</h4>
 
 				<DueDate v-if="compactMode" :card="card" />
 				<CardMenu v-if="showMenuAtTitle" :card="card" class="right card-menu" />
@@ -294,7 +294,7 @@ export default {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
-		gap: 6px;
+		gap: var(--default-grid-baseline);
 
 		&:deep(*) {
 			cursor: pointer;
@@ -314,7 +314,8 @@ export default {
 
 		.card-upper {
 			display: flex;
-			h3 {
+			h4 {
+				font-weight: normal;
 				margin: 0;
 				padding: 6px;
 				flex-grow: 1;

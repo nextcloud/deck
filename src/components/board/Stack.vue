@@ -57,8 +57,11 @@
 				</NcActionButton>
 			</NcActions>
 			<NcActions v-if="canEdit && !showArchived && !isArchived">
-				<NcActionButton icon="icon-add" data-cy="action:add-card" @click.stop="showAddCard=true">
+				<NcActionButton data-cy="action:add-card" @click.stop="showAddCard=true">
 					{{ t('deck', 'Add card') }}
+					<template #icon>
+						<CardPlusOutline :size="20" />
+					</template>
 				</NcActionButton>
 			</NcActions>
 		</div>
@@ -136,6 +139,7 @@ import ClickOutside from 'vue-click-outside'
 import { mapGetters, mapState } from 'vuex'
 import { Container, Draggable } from 'vue-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
+import CardPlusOutline from 'vue-material-design-icons/CardPlusOutline.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
 import { showError, showUndo } from '@nextcloud/dialogs'
 
@@ -153,6 +157,7 @@ export default {
 		Draggable,
 		NcModal,
 		ArchiveIcon,
+		CardPlusOutline,
 	},
 	directives: {
 		ClickOutside,
@@ -332,8 +337,9 @@ export default {
 		z-index: 100;
 		padding-left: $card-spacing;
 		padding-right: $card-spacing;
+		margin: 6px;
 		cursor: grab;
-		min-height: var(--default-clickable-area);
+		background-color: var(--color-main-background);
 
 		// Smooth fade out of the cards at the top
 		&:before {
@@ -354,7 +360,7 @@ export default {
 		}
 
 		&--add:before {
-			height: 80px;
+			height: 78px;
 			background-image: linear-gradient(180deg, var(--color-main-background) 68px, rgba(255, 255, 255, 0) 100%);
 			body.theme--dark & {
 				background-image: linear-gradient(180deg, var(--color-main-background) 68px, rgba(0, 0, 0, 0) 100%);
@@ -383,9 +389,8 @@ export default {
 			text-overflow: ellipsis;
 			max-width: calc($stack-width - 60px);
 			border-radius: 3px;
-			margin: 6px;
 			padding: 4px 4px;
-			font-size: 120%;
+			font-size: var(--default-font-size);
 
 			&:focus-visible {
 				outline: 2px solid var(--color-border-dark);
@@ -394,7 +399,15 @@ export default {
 		}
 
 		form {
-			margin: 2px 0;
+			margin: -4px;
+			input {
+				font-weight: bold;
+				padding: 0 6px;
+			}
+			input[type="submit"] {
+				border-style: solid;
+				border-left-style: none;
+			}
 		}
 
 		:deep {
@@ -406,20 +419,18 @@ export default {
 	}
 
 	.stack__card-add {
-		height: var(--default-clickable-area);
 		flex-shrink: 0;
 		z-index: 100;
 		display: flex;
 		margin-top: 5px;
-		margin-bottom: 8px;
 		background-color: var(--color-main-background);
 
 		form {
 			display: flex;
-			margin-left: 12px;
-			margin-right: 12px;
+			margin-left: $stack-spacing;
+			margin-right: $card-spacing + $stack-spacing + 4px;
 			width: 100%;
-			border: 2px solid var(--color-border);
+			border: 2px solid var(--color-border-maxcontrast);
 			border-radius: var(--border-radius-large);
 			overflow: hidden;
 			padding: 2px;
@@ -436,6 +447,8 @@ export default {
 
 		input {
 			border: none;
+			margin: 0;
+			padding: 4px;
 		}
 	}
 

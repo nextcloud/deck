@@ -31,7 +31,8 @@
 		<div class="board-actions">
 			<SessionList v-if="isNotifyPushEnabled && presentUsers.length"
 				:sessions="presentUsers" />
-			<div v-if="searchQuery || true" class="deck-search">
+			<!-- Hide but not remove for now as search might change in the future -->
+			<div v-if="false" class="deck-search">
 				<input id="deck-search-input"
 					ref="search"
 					:tabindex="0"
@@ -46,8 +47,11 @@
 				id="stack-add"
 				v-click-outside="hideAddStack">
 				<NcActions v-if="!isAddStackVisible">
-					<NcActionButton icon="icon-add" @click.stop="showAddStack">
+					<NcActionButton @click.stop="showAddStack">
 						{{ t('deck', 'Add list') }}
+						<template #icon>
+							<TableColumnPlusAfter :size="20" />
+						</template>
 					</NcActionButton>
 				</NcActions>
 				<form v-else @submit.prevent="addNewStack()">
@@ -263,6 +267,7 @@ import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import ImageIcon from 'vue-material-design-icons/ImageMultiple.vue'
 import FilterIcon from 'vue-material-design-icons/Filter.vue'
 import FilterOffIcon from 'vue-material-design-icons/FilterOff.vue'
+import TableColumnPlusAfter from 'vue-material-design-icons/TableColumnPlusAfter.vue'
 import ArrowCollapseVerticalIcon from 'vue-material-design-icons/ArrowCollapseVertical.vue'
 import ArrowExpandVerticalIcon from 'vue-material-design-icons/ArrowExpandVertical.vue'
 import SessionList from './SessionList.vue'
@@ -286,6 +291,7 @@ export default {
 		FilterOffIcon,
 		ArrowCollapseVerticalIcon,
 		ArrowExpandVerticalIcon,
+		TableColumnPlusAfter,
 		SessionList,
 	},
 	mixins: [labelStyle],
@@ -475,7 +481,7 @@ export default {
 <style lang="scss" scoped>
 	.controls {
 		display: flex;
-		margin: 5px;
+		margin: calc(var(--default-grid-baseline) * 2);
 		height: var(--default-clickable-area);
 		padding-left: var(--default-clickable-area);
 
@@ -486,17 +492,17 @@ export default {
 			h2 {
 				margin: 0;
 				margin-right: 10px;
+				font-size: 18px;
 			}
 
 			.board-bullet {
 				display: inline-block;
-				width: 20px;
-				height: 20px;
+				width: 16px;
+				height: 16px;
 				border: none;
 				border-radius: 50%;
 				background-color: transparent;
-				margin: 12px;
-				margin-left: -4px;
+				margin: var(--default-grid-baseline);
 			}
 		}
 
