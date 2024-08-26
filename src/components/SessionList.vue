@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div :title="t('text', 'Currently present people')"
+	<div :title="t('deck', 'Currently present people')"
 		class="avatar-list">
 		<div v-for="session in sessionsVisible"
 			:key="session.uid"
