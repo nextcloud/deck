@@ -13,7 +13,7 @@ The Deck application plugin uses the [markdown-it](https://github.com/markdown-i
 
 ## Supported Markdown
 
-Markdown comes in may flavors. The best way to learn markdown and understand how to use it, is simply to [try it](https://markdown-it.github.io) on the original script official playground.
+Markdown comes in many flavors. The best way to learn markdown and understand how to use it, is simply to [try it](https://markdown-it.github.io) on the original script official playground.
 That same link offers also a comprehensive list of what is supported, and what is not - rendering it unnecessary to duplicate that content in here.  
 
 [CommonMark Markdown Reference](http://commonmark.org/help/)
