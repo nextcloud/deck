@@ -71,7 +71,7 @@ class TrelloJsonService extends ABoardImportService {
 			if (!is_string($nextcloudUid) && !is_numeric($nextcloudUid)) {
 				throw new \LogicException('User on setting uidRelation is invalid');
 			}
-			$nextcloudUid = (string) $nextcloudUid;
+			$nextcloudUid = (string)$nextcloudUid;
 			$this->getImportService()->getConfig('uidRelation')->$trelloUid = $this->userManager->get($nextcloudUid);
 			if (!$this->getImportService()->getConfig('uidRelation')->$trelloUid) {
 				throw new \LogicException('User on setting uidRelation not found: ' . $nextcloudUid);
@@ -141,7 +141,7 @@ class TrelloJsonService extends ABoardImportService {
 					$message = $this->l10n->t(
 						"This comment has more than %s characters.\n" .
 						"Added as an attachment to the card with name %s.\n" .
-						"Accessible on URL: %s.",
+						'Accessible on URL: %s.',
 						[
 							IComment::MAX_MESSAGE_LENGTH,
 							'comment_' . $commentId . '.md',

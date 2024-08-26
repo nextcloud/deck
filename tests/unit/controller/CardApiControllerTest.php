@@ -111,8 +111,8 @@ class CardApiControllerTest extends \Test\TestCase {
 				$this->stackExample['id']);
 
 		$this->cardService->expects($this->once())
-				->method('update')
-				->willReturn($card);
+			->method('update')
+			->willReturn($card);
 
 		$expected = new DataResponse($card, HTTP::STATUS_OK);
 		$actual = $this->controller->update('title', 'plain', 0, 'description', $this->userId, null);

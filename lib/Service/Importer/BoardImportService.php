@@ -404,7 +404,7 @@ class BoardImportService {
 	 * @return void
 	 */
 	public function setConfig(string $configName, $value): void {
-		if (empty((array) $this->config)) {
+		if (empty((array)$this->config)) {
 			$this->setConfigInstance(new \stdClass);
 		}
 		$this->config->$configName = $value;

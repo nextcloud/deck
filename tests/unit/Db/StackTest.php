@@ -27,7 +27,7 @@ class StackTest extends \Test\TestCase {
 	private function createStack() {
 		$board = new Stack();
 		$board->setId(1);
-		$board->setTitle("My Stack");
+		$board->setTitle('My Stack');
 		$board->setBoardId(1);
 		$board->setOrder(1);
 		return $board;
@@ -36,7 +36,7 @@ class StackTest extends \Test\TestCase {
 		$stack = $this->createStack();
 		$this->assertEquals([
 			'id' => 1,
-			'title' => "My Stack",
+			'title' => 'My Stack',
 			'order' => 1,
 			'boardId' => 1,
 			'deletedAt' => 0,
@@ -45,15 +45,15 @@ class StackTest extends \Test\TestCase {
 		], $stack->jsonSerialize());
 	}
 	public function testJsonSerializeWithCards() {
-		$cards = ["foo", "bar"];
+		$cards = ['foo', 'bar'];
 		$stack = $this->createStack();
 		$stack->setCards($cards);
 		$this->assertEquals([
 			'id' => 1,
-			'title' => "My Stack",
+			'title' => 'My Stack',
 			'order' => 1,
 			'boardId' => 1,
-			'cards' => ["foo", "bar"],
+			'cards' => ['foo', 'bar'],
 			'deletedAt' => 0,
 			'lastModified' => 0,
 			'ETag' => $stack->getETag(),

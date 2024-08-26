@@ -78,7 +78,7 @@ class AssignmentServiceTest extends TestCase {
 	 */
 	private $assignmentService;
 	/**
-	 * @var  AssignmentServiceValidator
+	 * @var AssignmentServiceValidator
 	 */
 	private $assignmentServiceValidator;
 

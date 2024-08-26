@@ -410,7 +410,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		foreach ($query->getDuedate() as $duedate) {
 			$dueDateColumn = $this->databaseType === 'sqlite3' ? $qb->createFunction('DATETIME(`c`.`duedate`)') : 'c.duedate';
 			$date = $duedate->getValue();
-			if ($date === "") {
+			if ($date === '') {
 				$qb->andWhere($qb->expr()->isNotNull('c.duedate'));
 				continue;
 			}
@@ -461,7 +461,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			foreach ($query->getAssigned() as $index => $assignment) {
 				$qb->innerJoin('c', 'deck_assigned_users', 'au' . $index, $qb->expr()->eq('c.id', 'au' . $index . '.card_id'));
 				$assignedQueryValue = $assignment->getValue();
-				if ($assignedQueryValue === "") {
+				if ($assignedQueryValue === '') {
 					$qb->andWhere($qb->expr()->isNotNull('au' . $index . '.participant'));
 					continue;
 				}
@@ -589,7 +589,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 			}
 			$this->cache->set('findBoardId:' . $id, $result);
 		}
-		return $result !== false ? (int) $result : null;
+		return $result !== false ? (int)$result : null;
 	}
 
 	public function mapOwner(Card &$card) {

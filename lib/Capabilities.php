@@ -14,7 +14,7 @@ class Capabilities implements ICapability {
 
 	/** @var IAppManager */
 	private $appManager;
-	/**  @var PermissionService */
+	/** @var PermissionService */
 	private $permissionService;
 
 

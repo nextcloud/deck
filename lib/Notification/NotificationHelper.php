@@ -142,11 +142,11 @@ class NotificationHelper {
 			->setUser($userId)
 			->setDateTime(new DateTime())
 			->setObject('card', (string)$card->getId())
-				->setSubject('card-assigned', [
-					$card->getTitle(),
-					$board->getTitle(),
-					$this->currentUser
-				]);
+			->setSubject('card-assigned', [
+				$card->getTitle(),
+				$board->getTitle(),
+				$this->currentUser
+			]);
 		$this->notificationManager->notify($notification);
 	}
 
@@ -206,9 +206,9 @@ class NotificationHelper {
 			$notification = $this->notificationManager->createNotification();
 			$notification
 				->setApp('deck')
-				->setUser((string) $mention['id'])
+				->setUser((string)$mention['id'])
 				->setDateTime(new DateTime())
-				->setObject('card', (string) $card->getId())
+				->setObject('card', (string)$card->getId())
 				->setSubject('card-comment-mentioned', [$card->getTitle(), $boardId, $this->currentUser])
 				->setMessage('{message}', ['message' => $comment->getMessage()]);
 			$this->notificationManager->notify($notification);

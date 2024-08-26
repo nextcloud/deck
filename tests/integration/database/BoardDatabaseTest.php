@@ -31,11 +31,11 @@ use OCP\Server;
  * @group DB
  */
 class BoardDatabaseTest extends \Test\TestCase {
-	public const TEST_USER1 = "test-share-user1";
-	public const TEST_USER2 = "test-share-user2";
-	public const TEST_USER3 = "test-share-user3";
-	public const TEST_USER4 = "test-share-user4";
-	public const TEST_GROUP1 = "test-share-group1";
+	public const TEST_USER1 = 'test-share-user1';
+	public const TEST_USER2 = 'test-share-user2';
+	public const TEST_USER3 = 'test-share-user3';
+	public const TEST_USER4 = 'test-share-user4';
+	public const TEST_GROUP1 = 'test-share-group1';
 
 	/** @var BoardService */
 	private $boardService;

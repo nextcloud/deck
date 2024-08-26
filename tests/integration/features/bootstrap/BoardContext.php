@@ -71,7 +71,7 @@ class BoardContext implements Context {
 					break;
 				}
 			}
-			Assert::assertNotNull($id, "Could not find board named ".$boardName);
+			Assert::assertNotNull($id, 'Could not find board named '.$boardName);
 		} else {
 			$id = $this->board['id'];
 		}

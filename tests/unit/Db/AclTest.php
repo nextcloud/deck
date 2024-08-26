@@ -27,7 +27,7 @@ class AclTest extends \Test\TestCase {
 	private function createAclUser() {
 		$acl = new Acl();
 		$acl->setId(1);
-		$acl->setParticipant("admin");
+		$acl->setParticipant('admin');
 		$acl->setType(Acl::PERMISSION_TYPE_USER);
 		$acl->setBoardId(1);
 		$acl->setPermissionEdit(true);
@@ -39,7 +39,7 @@ class AclTest extends \Test\TestCase {
 	private function createAclGroup() {
 		$acl = new Acl();
 		$acl->setId(1);
-		$acl->setParticipant("administrators");
+		$acl->setParticipant('administrators');
 		$acl->setType(Acl::PERMISSION_TYPE_GROUP);
 		$acl->setBoardId(1);
 		$acl->setPermissionEdit(true);

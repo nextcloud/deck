@@ -75,7 +75,7 @@ class AclMapper extends DeckMapper implements IPermissionMapper {
 		try {
 			$entity = $this->find($id);
 			return $entity->getBoardId();
-		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
+		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
 		}
 		return null;
 	}

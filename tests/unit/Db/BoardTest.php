@@ -8,9 +8,9 @@ class BoardTest extends TestCase {
 	private function createBoard() {
 		$board = new Board();
 		$board->setId(1);
-		$board->setTitle("My Board");
-		$board->setOwner("admin");
-		$board->setColor("000000");
+		$board->setTitle('My Board');
+		$board->setOwner('admin');
+		$board->setColor('000000');
 		$board->setArchived(false);
 		// TODO: relation shared labels acl
 		return $board;
@@ -20,9 +20,9 @@ class BoardTest extends TestCase {
 		$board->setUsers(['user1', 'user2']);
 		$this->assertEquals([
 			'id' => 1,
-			'title' => "My Board",
-			'owner' => "admin",
-			'color' => "000000",
+			'title' => 'My Board',
+			'owner' => 'admin',
+			'color' => '000000',
 			'labels' => [],
 			'permissions' => [],
 			'stacks' => [],
@@ -44,9 +44,9 @@ class BoardTest extends TestCase {
 		self::assertNull($board->getLabels());
 		$this->assertEquals([
 			'id' => 1,
-			'title' => "My Board",
-			'owner' => "admin",
-			'color' => "000000",
+			'title' => 'My Board',
+			'owner' => 'admin',
+			'color' => '000000',
 			'labels' => [],
 			'permissions' => [],
 			'stacks' => [],
@@ -63,13 +63,13 @@ class BoardTest extends TestCase {
 
 	public function testSetLabels() {
 		$board = $this->createBoard();
-		$board->setLabels(["foo", "bar"]);
+		$board->setLabels(['foo', 'bar']);
 		$this->assertEquals([
 			'id' => 1,
-			'title' => "My Board",
-			'owner' => "admin",
-			'color' => "000000",
-			'labels' => ["foo", "bar"],
+			'title' => 'My Board',
+			'owner' => 'admin',
+			'color' => '000000',
+			'labels' => ['foo', 'bar'],
 			'permissions' => [],
 			'stacks' => [],
 			'deletedAt' => 0,
@@ -95,9 +95,9 @@ class BoardTest extends TestCase {
 		$board->setShared(1);
 		$this->assertEquals([
 			'id' => 1,
-			'title' => "My Board",
-			'owner' => "admin",
-			'color' => "000000",
+			'title' => 'My Board',
+			'owner' => 'admin',
+			'color' => '000000',
 			'labels' => [],
 			'permissions' => [],
 			'stacks' => [],

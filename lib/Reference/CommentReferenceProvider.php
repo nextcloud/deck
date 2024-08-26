@@ -73,7 +73,7 @@ class CommentReferenceProvider implements IReferenceProvider {
 				try {
 					$card = $this->cardService->find($cardId)->jsonSerialize();
 					$board = $this->boardService->find($boardId)->jsonSerialize();
-					$stack = $this->stackService->find((int) $card['stackId'])->jsonSerialize();
+					$stack = $this->stackService->find((int)$card['stackId'])->jsonSerialize();
 				} catch (NoPermissionException $e) {
 					// Skip throwing if user has no permissions
 					return null;
@@ -162,9 +162,9 @@ class CommentReferenceProvider implements IReferenceProvider {
 		}
 		if ($matches && count($matches) > 3) {
 			return [
-				(int) $matches[1],
-				(int) $matches[2],
-				(int) $matches[3],
+				(int)$matches[1],
+				(int)$matches[2],
+				(int)$matches[3],
 			];
 		}
 

@@ -176,7 +176,7 @@ class Application extends App implements IBootstrap {
 				$permissionService = $this->getContainer()->get(PermissionService::class);
 
 				try {
-					return $permissionService->checkPermission($cardMapper, (int) $name, Acl::PERMISSION_READ);
+					return $permissionService->checkPermission($cardMapper, (int)$name, Acl::PERMISSION_READ);
 				} catch (\Exception $e) {
 					return false;
 				}

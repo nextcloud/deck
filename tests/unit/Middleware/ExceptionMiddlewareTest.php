@@ -69,8 +69,8 @@ class ExceptionMiddlewareTest extends \Test\TestCase {
 	public function testAfterException($exception, $status, $message) {
 		$result = $this->exceptionMiddleware->afterException($this->controller, 'bar', $exception);
 		$expected = new JSONResponse([
-			"status" => $status,
-			"message" => $message
+			'status' => $status,
+			'message' => $message
 		], $status);
 		$this->assertEquals($expected, $result);
 	}

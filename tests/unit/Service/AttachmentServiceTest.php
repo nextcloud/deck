@@ -70,7 +70,7 @@ class AttachmentServiceTest extends TestCase {
 	private $cardMapper;
 	/** @var PermissionService|MockObject */
 	private $permissionService;
-	/** @var string  */
+	/** @var string */
 	private $userId = 'admin';
 	/** @var Application|MockObject */
 	private $application;
@@ -79,7 +79,7 @@ class AttachmentServiceTest extends TestCase {
 	private $attachmentService;
 	/** @var MockObject */
 	private $attachmentServiceImpl;
-	/** @var ActivityManager  */
+	/** @var ActivityManager */
 	private $activityManager;
 	private $appContainer;
 	/** @var IL10N */
@@ -91,7 +91,7 @@ class AttachmentServiceTest extends TestCase {
 	 */
 	private $filesAppServiceImpl;
 	/**
-	 * @var  AttachmentServiceValidator
+	 * @var AttachmentServiceValidator
 	 */
 	private $attachmentServiceValidator;
 

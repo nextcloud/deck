@@ -60,7 +60,7 @@ class NotificationHelperTest extends \Test\TestCase {
 	protected $cardMapper;
 	/** @var BoardMapper|MockObject */
 	protected $boardMapper;
-	/** @var AssignmentMapper|MockObject  */
+	/** @var AssignmentMapper|MockObject */
 	protected $assignedUsersMapper;
 	/** @var PermissionService|MockObject */
 	protected $permissionService;
