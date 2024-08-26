@@ -168,13 +168,13 @@ export default {
 	}
 
 	.badge-left {
-		align-self: end;
-		margin-bottom: 8px;
 		flex-basis: auto;
 		flex-grow: 1;
 		flex-shrink: 1;
 		flex-wrap: wrap;
 		align-content: flex-end;
+		align-items: center;
+		align-self: center;
 		gap: 3px;
 	}
 
@@ -194,6 +194,10 @@ export default {
 
 	.fade-enter, .fade-leave-to {
 		opacity: 0;
+	}
+
+	.avatars:deep(button) {
+		margin: 0;
 	}
 
 	@media print {
