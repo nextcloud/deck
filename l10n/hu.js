@@ -247,6 +247,7 @@ OC.L10N.register(
     "Choose a date" : "Válasszon dátumot",
     "Remove due date" : "Határidő eltávolítása",
     "Mark as done" : "Megjelölés készként",
+    "Not done" : "Nincs kész",
     "Unarchive card" : "Kártya archiválásának visszavonása",
     "Archive card" : "Kártya archiválása",
     "Select Date" : "Dátum kiválasztása",
