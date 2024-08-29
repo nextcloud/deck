@@ -68,6 +68,8 @@ class CardServiceTest extends TestCase {
 	private $boardService;
 	/** @var LabelMapper|MockObject */
 	private $labelMapper;
+	/** @var LabelService|MockObject */
+	private $labelService;
 	private $boardMapper;
 	/** @var AttachmentService|MockObject */
 	private $attachmentService;
@@ -96,6 +98,7 @@ class CardServiceTest extends TestCase {
 		$this->stackMapper = $this->createMock(StackMapper::class);
 		$this->boardMapper = $this->createMock(BoardMapper::class);
 		$this->labelMapper = $this->createMock(LabelMapper::class);
+		$this->labelService = $this->createMock(LabelService::class);
 		$this->permissionService = $this->createMock(PermissionService::class);
 		$this->boardService = $this->createMock(BoardService::class);
 		$this->notificationHelper = $this->createMock(NotificationHelper::class);
@@ -118,6 +121,7 @@ class CardServiceTest extends TestCase {
 			$this->stackMapper,
 			$this->boardMapper,
 			$this->labelMapper,
+			$this->labelService,
 			$this->permissionService,
 			$this->boardService,
 			$this->notificationHelper,
