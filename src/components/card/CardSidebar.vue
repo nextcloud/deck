@@ -238,6 +238,11 @@ section.app-sidebar__tab--active {
 		max-height: 90%;
 	}
 
+	.app-sidebar__tab {
+		min-height: calc(100% - 20px);
+		max-height: calc(100% - 20px);
+	}
+
 	// FIXME: test
 	&:deep {
 		.app-sidebar-header {
