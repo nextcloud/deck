@@ -190,9 +190,8 @@ export default {
 	.modal__card {
 		width: 100%;
 		min-width: 100%;
-		height: 100vh;
-		max-height: calc(100vh - 120px);
-		overflow: auto;
+		height: calc(100% - 20px);
+		overflow: hidden;
 	}
 
 </style>
