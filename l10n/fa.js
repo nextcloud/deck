@@ -257,6 +257,7 @@ OC.L10N.register(
     "Shift" : "تغییر مکان",
     "Ctrl" : "Ctrl",
     "Search" : "جستجو",
+    "Show help dialog" : "نمایش پنجرهٔ راهنما",
     "Enter" : "Enter",
     "Space" : "Space",
     "All boards" : "همه تخته‌ها",
