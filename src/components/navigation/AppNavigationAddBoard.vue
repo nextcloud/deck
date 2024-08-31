@@ -8,19 +8,41 @@
 		icon="icon-add"
 		@click.prevent.stop="startCreateBoard" />
 	<div v-else class="board-create">
-		<NcColorPicker v-model="color" class="app-navigation-entry-bullet-wrapper">
+		<NcColorPicker v-model="color" class="app-navigation-entry-bullet-wrapper" :disabled="loading">
 			<div :style="{ backgroundColor: color }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
 		</NcColorPicker>
 		<form @submit.prevent.stop="createBoard">
-			<input :placeholder="t('deck', 'Board name')" type="text" required>
-			<input type="submit" value="" class="icon-confirm">
-			<NcActions><NcActionButton icon="icon-close" @click.stop.prevent="cancelEdit" /></NcActions>
+			<NcTextField ref="inputField"
+				:disable="loading"
+				:value.sync="value"
+				:placeholder="t('deck', 'Board name')"
+				type="text"
+				required />
+			<NcButton type="tertiary"
+				:disabled="loading"
+				:title="t('deck', 'Cancel edit')"
+				@click.stop.prevent="cancelEdit">
+				<template #icon>
+					<CloseIcon :size="20" />
+				</template>
+			</NcButton>
+			<NcButton type="tertiary"
+				native-type="submit"
+				:disabled="loading"
+				:title="t('deck', 'Save board')">
+				<template #icon>
+					<CheckIcon v-if="!loading" :size="20" />
+					<NcLoadingIcon v-else :size="20" />
+				</template>
+			</NcButton>
 		</form>
 	</div>
 </template>
 
 <script>
-import { NcColorPicker, NcActionButton, NcActions, NcAppNavigationItem } from '@nextcloud/vue'
+import { NcButton, NcColorPicker, NcAppNavigationItem, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import CloseIcon from 'vue-material-design-icons/Close.vue'
 
 /**
  *
@@ -35,30 +57,33 @@ function randomColor() {
 
 export default {
 	name: 'AppNavigationAddBoard',
-	components: { NcColorPicker, NcAppNavigationItem, NcActionButton, NcActions },
+	components: { NcButton, NcColorPicker, NcAppNavigationItem, NcLoadingIcon, NcTextField, CheckIcon, CloseIcon },
 	directives: {},
 	props: {},
 	data() {
 		return {
+			value: '',
 			classes: [],
 			editing: false,
 			loading: false,
 			color: randomColor(),
 		}
 	},
-	computed: {},
-	watch: {},
-	mounted() {},
+	mounted() {
+		this.$refs.inputField.focus()
+	},
 	methods: {
 		startCreateBoard(e) {
 			this.editing = true
 		},
 		async createBoard(e) {
-			const title = e.currentTarget.childNodes[0].value
+			this.loading = true
+			const title = this.value.trim()
 			await this.$store.dispatch('createBoard', {
 				title,
 				color: this.color.substring(1),
 			})
+			this.loading = false
 			this.editing = false
 			this.color = randomColor()
 		},
@@ -89,10 +114,9 @@ export default {
 		width: var(--default-clickable-area);
 		height: var(--default-clickable-area);
 		.color0 {
-			width: 30px !important;
-			margin: 5px;
-			margin-left: 7px;
-			height: 30px;
+			width: 24px !important;
+			margin: var(--default-grid-baseline);
+			height: 24px;
 			border-radius: 50%;
 			background-size: 14px;
 		}
