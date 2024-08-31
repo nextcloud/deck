@@ -285,7 +285,9 @@ export default {
 					flex-grow: 1;
 					display: flex;
 					flex-direction: column;
-					padding: $stack-spacing;
+					// Margin left instead of padidng to avoid jumps on dropping a card
+					margin-left: $stack-spacing;
+					padding-right: $stack-spacing;
 					overflow-x: hidden;
 					overflow-y: auto;
 					padding-top: 15px;

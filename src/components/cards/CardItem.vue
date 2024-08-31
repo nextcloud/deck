@@ -290,11 +290,10 @@ export default {
 		background-color: var(--color-main-background);
 		margin-bottom: $card-spacing;
 		padding: var(--default-grid-baseline) $card-padding;
-		border: 2px solid var(--color-border);
+		border: 2px solid var(--color-border-dark);
 		width: 100%;
 		display: flex;
 		flex-direction: column;
-		gap: var(--default-grid-baseline);
 
 		&:deep(*) {
 			cursor: pointer;
@@ -317,7 +316,7 @@ export default {
 			h4 {
 				font-weight: normal;
 				margin: 0;
-				padding: 6px;
+				padding: var(--default-grid-baseline);
 				flex-grow: 1;
 				font-size: 100%;
 				overflow: hidden;
@@ -363,7 +362,8 @@ export default {
 		.card-labels {
 			display: flex;
 			align-items: end;
-			margin-bottom: var(--default-grid-baseline);
+			padding-left: var(--default-grid-baseline);
+			padding-top: var(--default-grid-baseline);
 
 			.labels {
 				flex-wrap: wrap;
@@ -403,7 +403,6 @@ export default {
 			display: flex;
 			height: 32px;
 			width: 32px;
-			margin-top: 6px;
 		}
 		&.has-labels {
 			padding-bottom: $card-padding;
