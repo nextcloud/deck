@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div class="board-wrapper" :tabindex="-1">
+	<div class="board-wrapper" :tabindex="-1" @touchend="fixActionRestriction">
 		<Controls :board="board" />
 
 		<transition name="fade" mode="out-in">
@@ -216,6 +216,13 @@ export default {
 			window.removeEventListener('mousemove', this.handleMouseDrag)
 			window.removeEventListener('mouseup', this.stopMouseDrag)
 			window.removeEventListener('mouseleave', this.stopMouseDrag)
+		},
+
+		fixActionRestriction() {
+			document.body.classList.remove(
+				'smooth-dnd-no-user-select',
+				'smooth-dnd-disable-touch-action',
+			)
 		},
 	},
 }
