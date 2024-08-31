@@ -68,9 +68,9 @@ export default {
 .card-cover {
 	height: 100px;
 	display: flex;
-	margin-top: -8px;
-	margin-left: -8px;
-	margin-right: -8px;
+	margin-top: -6px;
+	margin-left: -6px;
+	margin-right: -6px;
 
 	.image-wrapper {
 		flex: 1;
@@ -79,10 +79,10 @@ export default {
 		background-repeat: no-repeat;
 		background-position: center center;
 		&.rounded-left {
-			border-top-left-radius: 10px;
+			border-top-left-radius: var(--border-radius-large);
 		}
 		&.rounded-right {
-			border-top-right-radius: 10px;
+			border-top-right-radius: var(--border-radius-large);
 		}
 	}
 }
