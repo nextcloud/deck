@@ -114,23 +114,43 @@
 			<div :style="{ backgroundColor: getColor }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
 		</NcColorPicker>
 		<form @submit.prevent.stop="applyEdit">
-			<input v-model="editTitle"
-				v-focus
-				dir="auto"
+			<NcTextField ref="inputField"
+				:disable="loading"
+				:value.sync="editTitle"
+				:placeholder="t('deck', 'Board name')"
 				type="text"
-				required>
-			<input type="submit" value="" class="icon-confirm">
-			<NcActions><NcActionButton icon="icon-close" @click.stop.prevent="cancelEdit" /></NcActions>
+				required />
+			<NcButton type="tertiary"
+				:disabled="loading"
+				native-type="submit"
+				:title="t('deck', 'Cancel edit')"
+				@click.stop.prevent="cancelEdit">
+				<template #icon>
+					<CloseIcon :size="20" />
+				</template>
+			</NcButton>
+			<NcButton type="tertiary"
+				native-type="submit"
+				:disabled="loading"
+				:title="t('deck', 'Save board')">
+				<template #icon>
+					<CheckIcon v-if="!loading" :size="20" />
+					<NcLoadingIcon v-else :size="20" />
+				</template>
+			</NcButton>
 		</form>
 	</div>
 </template>
 
 <script>
-import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcActions, NcActionButton } from '@nextcloud/vue'
+import { NcAppNavigationIconBullet, NcAppNavigationItem, NcColorPicker, NcButton, NcTextField, NcActionButton } from '@nextcloud/vue'
 import ClickOutside from 'vue-click-outside'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import CloneIcon from 'vue-material-design-icons/ContentDuplicate.vue'
 import AccountIcon from 'vue-material-design-icons/Account.vue'
+import CloseIcon from 'vue-material-design-icons/Close.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+
 import { loadState } from '@nextcloud/initial-state'
 
 const canCreateState = loadState('deck', 'canCreate')
@@ -141,11 +161,14 @@ export default {
 		NcAppNavigationIconBullet,
 		NcAppNavigationItem,
 		NcColorPicker,
-		NcActions,
+		NcButton,
+		NcTextField,
 		NcActionButton,
 		AccountIcon,
 		ArchiveIcon,
 		CloneIcon,
+		CloseIcon,
+		CheckIcon,
 	},
 	directives: {
 		ClickOutside,
@@ -319,7 +342,7 @@ export default {
 
 <style lang="scss" scoped>
 	.board-edit {
-		margin-left: var(--default-clickable-area);
+		margin-left: calc(var(--default-clickable-area) / 2);
 		order: 1;
 		display: flex;
 		height: var(--default-clickable-area);
@@ -338,10 +361,9 @@ export default {
 		width: var(--default-clickable-area);
 		height: var(--default-clickable-area);
 		.color0 {
-			width: 30px !important;
-			margin: 5px;
-			margin-left: 7px;
-			height: 30px;
+			width: 24px !important;
+			margin: var(--default-grid-baseline);
+			height: 24px;
 			border-radius: 50%;
 			background-size: 14px;
 		}
