@@ -66,11 +66,11 @@ export default {
 @import '../../css/variables';
 
 .card-cover {
-	height: 100px;
+	height: 90px;
 	display: flex;
-	margin-top: -6px;
-	margin-left: -6px;
-	margin-right: -6px;
+	margin-top: -4px;
+	margin-left: -4px;
+	margin-right: -4px;
 
 	.image-wrapper {
 		flex: 1;
@@ -79,10 +79,10 @@ export default {
 		background-repeat: no-repeat;
 		background-position: center center;
 		&.rounded-left {
-			border-top-left-radius: var(--border-radius-large);
+			border-top-left-radius: calc(var(--border-radius-large) - 1px);
 		}
 		&.rounded-right {
-			border-top-right-radius: var(--border-radius-large);
+			border-top-right-radius: calc(var(--border-radius-large) - 1px);
 		}
 	}
 }

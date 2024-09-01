@@ -158,7 +158,7 @@ export default {
 		},
 		isEmpty(newValue) {
 			newValue && this.$nextTick(() => {
-				this.$refs?.newStackInput.focus()
+				this.$refs?.newStackInput?.focus()
 			})
 		},
 	},
