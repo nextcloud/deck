@@ -20,7 +20,7 @@
 			<CardCover v-if="showCardCover" :card-id="card.id" />
 			<div class="card-upper">
 				<h4 v-if="inlineEditingBlocked" dir="auto">
-					{{ card.title }}
+					{{ displayTitle }}
 				</h4>
 				<h4 v-else
 					dir="auto"
@@ -133,10 +133,14 @@ export default {
 			return board ? !board.archived && board.permissions.PERMISSION_EDIT : false
 		},
 		inlineEditingBlocked() {
-			return this.isArchived || this.showArchived || !this.canEdit || this.standalone
+			return this.card.referenceData || this.isArchived || this.showArchived || !this.canEdit || this.standalone
 		},
 		card() {
 			return this.item ? this.item : this.$store.getters.cardById(this.id)
+		},
+		displayTitle() {
+			const reference = this.card.referenceData
+			return reference ? reference.richObject.name : this.card.title
 		},
 		currentCard() {
 			return this.card && this.$route && this.$route.params.cardId === this.card.id
