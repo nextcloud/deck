@@ -248,6 +248,10 @@ export default {
 
 <style lang="scss" scoped>
 
+	.drop-upload--sidebar {
+		min-height: 100%;
+	}
+
 	.button-group {
 		display: flex;
 		gap: calc(var(--default-grid-baseline) * 3);
