@@ -22,23 +22,27 @@
 				<template #icon>
 					<DeckIcon />
 				</template>
-				<template #title>
+				<template #name>
 					{{ t('deck', 'No lists available') }}
 				</template>
 				<template v-if="canManage" #action>
 					{{ t('deck', 'Create a new list to add cards to this board') }}
 					<form @submit.prevent="addNewStack()">
-						<input id="new-stack-input-main"
-							v-model="newStackTitle"
-							v-focus
-							type="text"
-							class="no-close"
+						<NcTextField ref="newStackInput"
+							:disable="loading"
+							:value.sync="newStackTitle"
 							:placeholder="t('deck', 'List name')"
-							required>
-						<input title="t('deck', 'Add list')"
-							class="icon-confirm"
-							type="submit"
-							value="">
+							type="text" />
+						<NcButton type="secondary"
+							native-type="submit"
+							:disabled="loading"
+							:title="t('deck', 'Add list')">
+							<template #icon>
+								<CheckIcon v-if="!loading" :size="20" />
+								<NcLoadingIcon v-else :size="20" />
+							</template>
+							{{ t('deck', 'Add list') }}
+						</NcButton>
 					</form>
 				</template>
 			</NcEmptyContent>
@@ -82,8 +86,9 @@ import { Container, Draggable } from 'vue-smooth-dnd'
 import { mapState, mapGetters } from 'vuex'
 import Controls from '../Controls.vue'
 import DeckIcon from '../icons/DeckIcon.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
 import Stack from './Stack.vue'
-import { NcEmptyContent, NcModal } from '@nextcloud/vue'
+import { NcEmptyContent, NcModal, NcButton, NcTextField, NcLoadingIcon } from '@nextcloud/vue'
 import GlobalSearchResults from '../search/GlobalSearchResults.vue'
 import { showError } from '../../helpers/errors.js'
 import { createSession } from '../../sessions.js'
@@ -99,6 +104,10 @@ export default {
 		Stack,
 		NcEmptyContent,
 		NcModal,
+		NcTextField,
+		NcButton,
+		NcLoadingIcon,
+		CheckIcon,
 		CardSidebar,
 	},
 	inject: [
@@ -131,7 +140,7 @@ export default {
 			'canManage',
 		]),
 		stacksByBoard() {
-			return this.$store.getters.stacksByBoard(this.board.id)
+			return this.board?.id ? this.$store.getters.stacksByBoard(this.board.id) : []
 		},
 		dragHandleSelector() {
 			return this.canEdit ? '.stack__title' : '.no-drag'
@@ -146,6 +155,11 @@ export default {
 		},
 		showArchived() {
 			this.fetchData()
+		},
+		isEmpty(newValue) {
+			newValue && this.$nextTick(() => {
+				this.$refs?.newStackInput.focus()
+			})
 		},
 	},
 	created() {
@@ -236,12 +250,15 @@ export default {
 		text-align: center;
 		display: flex;
 		width: 100%;
-		max-width: 200px;
 		margin: auto;
-		margin-top: 20px;
+		margin-top: calc(var(--default-grid-baseline) * 4);
+		gap: var(--default-grid-baseline);
 
-		input[type=text] {
+		input[type="text"] {
 			flex-grow: 1;
+		}
+		button[type="submit"] {
+			flex-shrink: 0;
 		}
 	}
 
