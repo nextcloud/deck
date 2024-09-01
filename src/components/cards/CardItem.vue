@@ -6,7 +6,7 @@
 <template>
 	<AttachmentDragAndDrop v-if="card" :card-id="card.id" class="drop-upload--card">
 		<div :ref="`card${card.id}`"
-			:class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'card__editable': canEdit, 'card__archived': card.archived }"
+			:class="{'compact': compactMode, 'current-card': currentCard, 'has-labels': card.labels && card.labels.length > 0, 'card__editable': canEdit, 'card__archived': card.archived, 'card__highlight': highlight}"
 			tag="div"
 			:tabindex="0"
 			class="card"
@@ -102,6 +102,11 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+	},
+	data() {
+		return {
+			highlight: false,
+		}
 	},
 	computed: {
 		...mapState({
@@ -270,6 +275,14 @@ export default {
 				},
 			})
 		},
+		scrollIntoView() {
+			this.$el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' })
+			this.focus()
+			this.highlight = true
+			setTimeout(() => {
+				this.highlight = false
+			}, 2000)
+		},
 	},
 }
 </script>
@@ -358,6 +371,23 @@ export default {
 		}
 		&.card__archived {
 			background-color: var(--color-background-dark);
+		}
+		@keyframes highlight {
+			0% {
+				border-color: var(--color-border-dark);
+			}
+			20% {
+				border-color: var(--color-primary-element);
+			}
+			70% {
+				border-color: var(--color-primary-element);
+			}
+			100% {
+				border-color: var(--color-border-dark);
+			}
+		}
+		&.card__highlight {
+			animation: highlight 2s;
 		}
 		.card-labels {
 			display: flex;
