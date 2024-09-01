@@ -89,6 +89,7 @@ class CardTest extends TestCase {
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
 			'done' => null,
+			'referenceData' => null,
 		], (new CardDetails($card))->jsonSerialize());
 	}
 	public function testJsonSerializeLabels() {
@@ -117,6 +118,7 @@ class CardTest extends TestCase {
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
 			'done' => false,
+			'referenceData' => null,
 		], (new CardDetails($card))->jsonSerialize());
 	}
 
@@ -147,6 +149,7 @@ class CardTest extends TestCase {
 			'lastEditor' => null,
 			'ETag' => $card->getETag(),
 			'done' => false,
+			'referenceData' => null,
 		], (new CardDetails($card))->jsonSerialize());
 	}
 }
