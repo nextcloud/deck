@@ -94,6 +94,26 @@ describe('Card', function () {
 		})
 	})
 
+	it('Card with link reference', () => {
+		cy.visit(`/apps/deck/#/board/${boardId}`)
+		const absoluteUrl = `https://example.com`
+		cy.get('.board .stack').eq(0).within(() => {
+			cy.get('.button-vue[aria-label*="Add card"]')
+				.first().click()
+
+			cy.get('.stack__card-add form input#new-stack-input-main')
+				.type(absoluteUrl)
+			cy.get('.stack__card-add form input[type=submit]')
+				.first().click()
+			cy.get('.card:contains("Example Domain")')
+				.should('be.visible')
+				.click()
+
+			cy.get('#app-sidebar-vue')
+				.find('h2').contains('Example Domain').should('be.visible')
+		})
+	})
+
 	describe('Modal', () => {
 		beforeEach(function () {
 			cy.login(user)
