@@ -41,6 +41,7 @@ use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
 use OCA\Deck\Validators\CardServiceValidator;
 use OCP\Activity\IEvent;
+use OCP\Collaboration\Reference\IReferenceManager;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
@@ -93,6 +94,8 @@ class CardServiceTest extends TestCase {
 	private $logger;
 	/** @var CardServiceValidator|MockObject */
 	private $cardServiceValidator;
+	/** @var IReferenceManager|MockObject */
+	private $referenceManager;
 
 	/** @var AssignmentService|MockObject */
 	private $assignmentService;
@@ -119,6 +122,7 @@ class CardServiceTest extends TestCase {
 		$this->request = $this->createMock(IRequest::class);
 		$this->cardServiceValidator = $this->createMock(CardServiceValidator::class);
 		$this->assignmentService = $this->createMock(AssignmentService::class);
+		$this->referenceManager = $this->createMock(IReferenceManager::class);
 
 		$this->logger->expects($this->any())->method('error');
 
@@ -143,6 +147,7 @@ class CardServiceTest extends TestCase {
 			$this->request,
 			$this->cardServiceValidator,
 			$this->assignmentService,
+			$this->referenceManager,
 			'user1'
 		);
 	}
@@ -207,15 +212,24 @@ class CardServiceTest extends TestCase {
 	}
 
 	public function testCreate() {
-		$card = new Card();
-		$card->setTitle('Card title');
-		$card->setOwner('admin');
-		$card->setStackId(123);
-		$card->setOrder(999);
-		$card->setType('text');
+		$card = Card::fromParams([
+			'title' => 'Card title',
+			'owner' => 'admin',
+			'stackId' => 123,
+			'order' => 999,
+			'type' => 'text',
+		]);
+		$stack = Stack::fromParams([
+			'id' => 123,
+			'boardId' => 1337,
+		]);
 		$this->cardMapper->expects($this->once())
 			->method('insert')
 			->willReturn($card);
+		$this->stackMapper->expects($this->once())
+			->method('find')
+			->with(123)
+			->willReturn($stack);
 		$b = $this->cardService->create('Card title', 123, 'text', 999, 'admin');
 
 		$this->assertEquals($b->getTitle(), 'Card title');
@@ -270,7 +284,7 @@ class CardServiceTest extends TestCase {
 
 		$stackMock = new Stack();
 		$stackMock->setBoardId(1234);
-		$this->stackMapper->expects($this->once())
+		$this->stackMapper->expects($this->any())
 			->method('find')
 			->willReturn($stackMock);
 		$b = $this->cardService->create('Card title', 123, 'text', 999, 'admin');
@@ -293,13 +307,23 @@ class CardServiceTest extends TestCase {
 	}
 
 	public function testUpdate() {
-		$card = new Card();
-		$card->setTitle('title');
-		$card->setArchived(false);
+		$card = Card::fromParams([
+			'title' => 'Card title',
+			'archived' => 'false',
+			'stackId' => 234,
+		]);
+		$stack = Stack::fromParams([
+			'id' => 234,
+			'boardId' => 1337,
+		]);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
 		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
 			return $c;
 		});
+		$this->stackMapper->expects($this->once())
+			->method('find')
+			->with(234)
+			->willReturn($stack);
 		$actual = $this->cardService->update(123, 'newtitle', 234, 'text', 'admin', 'foo', 999, '2017-01-01 00:00:00', null);
 		$this->assertEquals('newtitle', $actual->getTitle());
 		$this->assertEquals(234, $actual->getStackId());
