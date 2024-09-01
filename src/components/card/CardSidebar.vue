@@ -7,7 +7,7 @@
 	<NcAppSidebar v-if="currentBoard && currentCard"
 		ref="cardSidebar"
 		:active="tabId"
-		:name="title"
+		:name="displayTitle"
 		:subname="subtitle"
 		:subtitle="subtitleTooltip"
 		:name-editable="titleEditable"
@@ -25,6 +25,12 @@
 			</NcActionButton>
 
 			<CardMenuEntries :card="currentCard" :hide-details-entry="true" />
+		</template>
+		<template #description>
+			<NcReferenceList v-if="currentCard.referenceData"
+				:text="currentCard.title"
+				:reference-data="[currentCard.referenceData]"
+				:interactive="false" />
 		</template>
 
 		<NcAppSidebarTab id="details"
@@ -68,6 +74,7 @@
 
 <script>
 import { NcActionButton, NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
+import { NcReferenceList } from '@nextcloud/vue/dist/Components/NcRichText.js'
 import { getCapabilities } from '@nextcloud/capabilities'
 import { mapState, mapGetters } from 'vuex'
 import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
@@ -93,6 +100,7 @@ export default {
 		NcAppSidebar,
 		NcAppSidebarTab,
 		NcActionButton,
+		NcReferenceList,
 		CardSidebarTabAttachments,
 		CardSidebarTabComments,
 		CardSidebarTabActivity,
@@ -153,6 +161,10 @@ export default {
 			set(newValue) {
 				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
 			},
+		},
+		displayTitle() {
+			const reference = this.currentCard.referenceData
+			return reference ? reference.richObject.name : this.currentCard.title
 		},
 	},
 	watch: {
