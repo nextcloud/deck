@@ -88,15 +88,33 @@
 			</div>
 		</NcModal>
 
-		<transition name="slide-top" appear>
-			<div v-if="showAddCard" class="stack__card-add">
+		<Container :get-child-payload="payloadForCard(stack.id)"
+			group-name="stack"
+			data-click-closes-sidebar="true"
+			non-drag-area-selector=".dragDisabled"
+			:drag-handle-selector="dragHandleSelector"
+			data-dragscroll-enabled
+			@should-accept-drop="canEdit"
+			@drag-start="draggingCard = true"
+			@drag-end="draggingCard = false"
+			@drop="($event) => onDropCard(stack.id, $event)">
+			<Draggable v-for="card in cardsByStack" :key="card.id">
+				<transition :appear="animate && !card.animated && (card.animated=true)"
+					:appear-class="'zoom-appear-class'"
+					:appear-active-class="'zoom-appear-active-class'">
+					<CardItem :id="card.id" ref="card" :dragging="draggingCard" />
+				</transition>
+			</Draggable>
+		</Container>
+
+		<transition name="slide-bottom" appear>
+			<div v-show="showAddCard" class="stack__card-add">
 				<form :class="{ 'icon-loading-small': stateCardCreating }"
 					@submit.prevent.stop="clickAddCard()">
 					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
 					<input id="new-stack-input-main"
 						ref="newCardInput"
 						v-model="newCardTitle"
-						v-focus
 						type="text"
 						class="no-close"
 						:disabled="stateCardCreating"
@@ -112,25 +130,6 @@
 				</form>
 			</div>
 		</transition>
-
-		<Container :get-child-payload="payloadForCard(stack.id)"
-			group-name="stack"
-			data-click-closes-sidebar="true"
-			non-drag-area-selector=".dragDisabled"
-			:drag-handle-selector="dragHandleSelector"
-			data-dragscroll-enabled
-			@should-accept-drop="canEdit"
-			@drag-start="draggingCard = true"
-			@drag-end="draggingCard = false"
-			@drop="($event) => onDropCard(stack.id, $event)">
-			<Draggable v-for="card in cardsByStack" :key="card.id">
-				<transition :appear="animate && !card.animated && (card.animated=true)"
-					:appear-class="'zoom-appear-class'"
-					:appear-active-class="'zoom-appear-active-class'">
-					<CardItem :id="card.id" :dragging="draggingCard" />
-				</transition>
-			</Draggable>
-		</Container>
 	</div>
 </template>
 
@@ -221,6 +220,10 @@ export default {
 		showAddCard(newValue) {
 			if (!newValue) {
 				this.$store.dispatch('toggleShortcutLock', false)
+			} else {
+				this.$nextTick(() => {
+					this.$refs.newCardInput.focus()
+				})
 			}
 		},
 	},
@@ -303,6 +306,7 @@ export default {
 				this.$nextTick(() => {
 					this.$refs.newCardInput.focus()
 					this.animate = false
+					this.$refs.card[(this.$refs.card.length - 1)].scrollIntoView()
 				})
 				if (!this.cardDetailsInModal) {
 					this.$router.push({ name: 'card', params: { cardId: newCard.id } })
@@ -338,6 +342,7 @@ export default {
 		padding-left: $card-spacing;
 		padding-right: $card-spacing;
 		margin: 6px;
+		margin-top: 0;
 		cursor: grab;
 		background-color: var(--color-main-background);
 
@@ -356,14 +361,6 @@ export default {
 			background-image: linear-gradient(180deg, var(--color-main-background) 3px, rgba(255, 255, 255, 0) 100%);
 			body.theme--dark & {
 				background-image: linear-gradient(180deg, var(--color-main-background) 3px, rgba(0, 0, 0, 0) 100%);
-			}
-		}
-
-		&--add:before {
-			height: 78px;
-			background-image: linear-gradient(180deg, var(--color-main-background) 68px, rgba(255, 255, 255, 0) 100%);
-			body.theme--dark & {
-				background-image: linear-gradient(180deg, var(--color-main-background) 68px, rgba(0, 0, 0, 0) 100%);
 			}
 		}
 
@@ -422,13 +419,14 @@ export default {
 		flex-shrink: 0;
 		z-index: 100;
 		display: flex;
-		margin-top: 5px;
+		margin-bottom: 5px;
+		padding-top: var(--default-grid-baseline);
 		background-color: var(--color-main-background);
 
 		form {
 			display: flex;
 			margin-left: $stack-spacing;
-			margin-right: $card-spacing + $stack-spacing + 4px;
+			margin-right: $stack-spacing;
 			width: 100%;
 			border: 2px solid var(--color-border-maxcontrast);
 			border-radius: var(--border-radius-large);
@@ -464,7 +462,16 @@ export default {
 	.slide-top-enter, .slide-top-leave-to {
 		transform: translateY(-10px);
 		opacity: 0;
-		height: 0px;
+	}
+
+	.slide-bottom-enter-active,
+	.slide-bottom-leave-active {
+		transition: all 100ms ease;
+	}
+
+	.slide-bottom-enter, .slide-bottom-leave-to {
+		transform: translateY(20px);
+		opacity: 0;
 	}
 
 	.modal__content {
