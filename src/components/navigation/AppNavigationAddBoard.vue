@@ -69,12 +69,12 @@ export default {
 			color: randomColor(),
 		}
 	},
-	mounted() {
-		this.$refs.inputField.focus()
-	},
 	methods: {
 		startCreateBoard(e) {
 			this.editing = true
+			this.$nextTick(() => {
+				this.$refs?.inputField.focus()
+			})
 		},
 		async createBoard(e) {
 			this.loading = true

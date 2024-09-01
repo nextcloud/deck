@@ -93,7 +93,7 @@
 				<template #icon>
 					<NcLoadingIcon />
 				</template>
-				<template #title>
+				<template #name>
 					{{ t('deck', 'Creating the new card …') }}
 				</template>
 			</NcEmptyContent>
@@ -101,7 +101,7 @@
 				<template #icon>
 					<CardPlusOutline />
 				</template>
-				<template #title>
+				<template #name>
 					{{ t('deck', 'Card "{card}" was added to "{board}"', { card: card.title, board: selectedBoard.title }) }}
 				</template>
 				<template #action>
