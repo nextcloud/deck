@@ -33,7 +33,7 @@
 import { mapState } from 'vuex'
 import AppNavigation from './components/navigation/AppNavigation.vue'
 import KeyboardShortcuts from './components/KeyboardShortcuts.vue'
-import { NcModal, NcContent, NcAppContent } from '@nextcloud/vue'
+import { NcModal, NcContent, NcAppContent, isMobile } from '@nextcloud/vue'
 import { BoardApi } from './services/BoardApi.js'
 import { emit, subscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
@@ -51,6 +51,7 @@ export default {
 		NcAppContent,
 		KeyboardShortcuts,
 	},
+	mixins: [isMobile],
 	provide() {
 		return {
 			boardApi,
@@ -107,7 +108,7 @@ export default {
 	},
 	mounted() {
 		// Set navigation to initial state and update in case it gets toggled
-		emit('toggle-navigation', { open: this.navShown, _initial: true })
+		emit('toggle-navigation', { open: !this.isMobile && this.navShown, _initial: true })
 		this.$nextTick(() => {
 			subscribe('navigation-toggled', (navState) => {
 				this.$store.dispatch('toggleNav', navState.open)
