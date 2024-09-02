@@ -228,6 +228,10 @@ export default {
 		},
 	},
 
+	mounted() {
+		this.setupAutoscrollOnDrag()
+	},
+
 	methods: {
 		stopCardCreation(e) {
 			// For some reason the submit event triggers a MouseEvent that is bubbling to the outside
@@ -319,6 +323,36 @@ export default {
 		},
 		onCreateCardFocus() {
 			this.$store.dispatch('toggleShortcutLock', true)
+		},
+		setupAutoscrollOnDrag() {
+			let timer
+			const autoscroll = (event) => {
+				const viewportX = event.clientX
+				const boardElement = document.querySelector('.board')
+				const viewportWidth = boardElement.clientWidth
+				const offset = viewportWidth - viewportX
+				const scrollMultiplier = 10
+				const scrollBoundary = window.innerWidth * 0.15
+
+				if (offset < 100) {
+					const scrollToX = boardElement.scrollLeft + scrollMultiplier * (1 - offset / scrollBoundary)
+					boardElement.scrollTo(scrollToX, boardElement.scrollTop)
+				}
+
+				if (boardElement.scrollLeft > 0 && viewportX < scrollBoundary) {
+					const scrollToX = boardElement.scrollLeft - scrollMultiplier * (1 - viewportX / scrollBoundary)
+					boardElement.scrollTo(scrollToX, boardElement.scrollTop)
+				}
+			}
+			window.addEventListener('mousemove', (e) => {
+				if (!this.draggingCard) {
+					timer && clearInterval(timer)
+					return
+				}
+
+				clearInterval(timer)
+				timer = window.setInterval(() => autoscroll(e), 25)
+			})
 		},
 	},
 }
