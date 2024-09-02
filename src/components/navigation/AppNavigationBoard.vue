@@ -9,6 +9,8 @@
 		:to="routeTo"
 		:undo="deleted"
 		:menu-placement="'auto'"
+		:force-display-actions="isTouchDevice"
+		@click="onNavigate"
 		@undo="unDelete">
 		<NcAppNavigationIconBullet slot="icon" :color="board.color" />
 
@@ -152,6 +154,9 @@ import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 
 import { loadState } from '@nextcloud/initial-state'
+import { emit } from '@nextcloud/event-bus'
+
+import isTouchDevice from '../../mixins/isTouchDevice.js'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -173,6 +178,7 @@ export default {
 	directives: {
 		ClickOutside,
 	},
+	mixins: [isTouchDevice],
 	inject: [
 		'boardApi',
 	],
@@ -335,6 +341,13 @@ export default {
 		},
 		actionExport() {
 			this.boardApi.exportBoard(this.board)
+		},
+		onNavigate() {
+			if (this.isTouchDevice) {
+				emit('toggle-navigation', {
+					open: false,
+				})
+			}
 		},
 	},
 }
