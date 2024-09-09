@@ -168,11 +168,13 @@ export default {
 	.dashboard-column {
 		display: flex;
 		flex-direction: column;
+		min-width: $stack-width;
 		width: $stack-width;
 		margin-left: $stack-spacing;
 		margin-right: $stack-spacing;
 
 		h3 {
+			font-size: var(--default-font-size);
 			margin: -6px;
 			margin-bottom: 12px;
 			padding: 6px 13px;

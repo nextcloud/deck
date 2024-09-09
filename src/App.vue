@@ -6,12 +6,13 @@
 <template>
 	<NcContent app-name="deck" :class="{ 'nav-hidden': !navShown, 'sidebar-hidden': !sidebarRouterView }">
 		<AppNavigation />
-		<NcAppContent>
+		<NcAppContent :allow-swipe-navigation="false">
 			<router-view />
 		</NcAppContent>
 
 		<div v-if="$route.params.id || $route.params.cardId">
 			<NcModal v-if="cardDetailsInModal && $route.params.cardId"
+				:name="t('deck', 'Card details')"
 				:clear-view-delay="0"
 				:close-button-contained="true"
 				size="large"
@@ -32,7 +33,7 @@
 import { mapState } from 'vuex'
 import AppNavigation from './components/navigation/AppNavigation.vue'
 import KeyboardShortcuts from './components/KeyboardShortcuts.vue'
-import { NcModal, NcContent, NcAppContent } from '@nextcloud/vue'
+import { NcModal, NcContent, NcAppContent, isMobile } from '@nextcloud/vue'
 import { BoardApi } from './services/BoardApi.js'
 import { emit, subscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
@@ -50,6 +51,7 @@ export default {
 		NcAppContent,
 		KeyboardShortcuts,
 	},
+	mixins: [isMobile],
 	provide() {
 		return {
 			boardApi,
@@ -106,7 +108,7 @@ export default {
 	},
 	mounted() {
 		// Set navigation to initial state and update in case it gets toggled
-		emit('toggle-navigation', { open: this.navShown, _initial: true })
+		emit('toggle-navigation', { open: !this.isMobile && this.navShown, _initial: true })
 		this.$nextTick(() => {
 			subscribe('navigation-toggled', (navState) => {
 				this.$store.dispatch('toggleNav', navState.open)

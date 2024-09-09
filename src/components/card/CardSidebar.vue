@@ -162,7 +162,9 @@ export default {
 	},
 	methods: {
 		focusHeader() {
-			this.$refs.cardSidebar.$el.querySelector('.app-sidebar-header__mainname').focus()
+			this.$nextTick(() => {
+				this.$refs?.cardSidebar.$el.querySelector('.app-sidebar-header__mainname')?.focus()
+			})
 		},
 		handleUpdateTitleEditable(value) {
 			this.titleEditable = value
@@ -224,6 +226,7 @@ section.app-sidebar__tab--active {
 	left: 0;
 	right: 0;
 	max-width: calc(100% - #{$modal-padding * 2});
+	min-height: calc(100vh - var(--header-height) * 4);
 	padding: 0 14px;
 	height: 97%;
 	overflow: hidden !important;

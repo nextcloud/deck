@@ -13,16 +13,16 @@
 				:disabled="loading"
 				label="title"
 				@option:selected="fetchCardsFromBoard">
-				<template slot="singleLabel" slot-scope="props">
+				<template #selected-option="props">
 					<span>
-						<span :style="{ 'backgroundColor': '#' + props.option.color }" class="board-bullet" />
-						<span>{{ props.option.title }}</span>
+						<span :style="{ 'backgroundColor': '#' + props.color }" class="board-bullet" />
+						<span>{{ props.title }}</span>
 					</span>
 				</template>
-				<template slot="option" slot-scope="props">
+				<template #option="props">
 					<span>
-						<span :style="{ 'backgroundColor': '#' + props.option.color }" class="board-bullet" />
-						<span>{{ props.option.title }}</span>
+						<span :style="{ 'backgroundColor': '#' + props.color }" class="board-bullet" />
+						<span>{{ props.title }}</span>
 					</span>
 				</template>
 			</NcSelect>
