@@ -35,7 +35,7 @@ describe('Board', function() {
 			.type(board, { force: true })
 
 		// Submit
-		cy.get('.board-create form input[type=submit]')
+		cy.get('.board-create form button[type=submit]')
 			.first().click({ force: true })
 
 		cy.wait('@createBoardRequest').its('response.statusCode').should('equal', 200)

@@ -544,7 +544,7 @@ export default {
 	.filter--item {
 		input + label {
 			display: block;
-			padding: 6px 0;
+			padding: var(--default-grid-baseline) 0;
 			.avatardiv {
 				vertical-align: middle;
 				margin-bottom: 2px;
