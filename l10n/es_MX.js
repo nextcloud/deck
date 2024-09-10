@@ -170,6 +170,7 @@ OC.L10N.register(
     "Space" : "Espacio",
     "Archived boards" : "Tableros archivados",
     "Shared with you" : "Compartido con usted",
+    "Cancel edit" : "Cancelar edición",
     "Board details" : "Detalles del tablero",
     "Edit board" : "Editar el tablero",
     "Clone board" : "Clonar pizarra",
