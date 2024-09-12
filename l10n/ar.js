@@ -317,6 +317,7 @@ OC.L10N.register(
     "Limit board creation to some groups" : "قَصْرُ حَقِّ إنشاء الألواح على بعض المجموعات ",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "المستخدِمون من خارج تلك المجموعات لن يمكنكم إنشاء لوحاتهم الخاصة؛ لكن يمكنهم العمل على اللوحات التي تتمّ مشاركتها معهم.",
     "Cancel edit" : "إلغاء التعديل",
+    "Save board" : "حفظ اللوح",
     "Board details" : "تفاصيل لوح",
     "Edit board" : "تعديل اللوح",
     "Clone board" : "استنسخ اللوح",
