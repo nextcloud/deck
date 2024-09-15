@@ -315,6 +315,7 @@
     "Limit board creation to some groups" : "Teorainn a chur le cruthú cláir do roinnt grúpaí",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Ní bheidh úsáideoirí taobh amuigh de na grúpaí sin in ann a gcuid boird féin a chruthú, ach beidh siad fós in ann oibriú ar bhoird atá roinnte leo.",
     "Cancel edit" : "Cealaigh eagarthóireacht",
+    "Save board" : "Sábháil bord",
     "Board details" : "Sonraí an Bhoird",
     "Edit board" : "Cuir bord in eagar",
     "Clone board" : "Clár clón",
