@@ -5,10 +5,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.14.0-beta.1
+## 1.14.0
+
+### Added
+
+- export json data of commments @grnd-alt [#6119](https://github.com/nextcloud/deck/pull/6119)
 
 ### Fixed
 
+- fix: losing focus while editing title field @luka-nextcloud [#6140](https://github.com/nextcloud/deck/pull/6140)
+- Fix UI with the new compact design [#6258](https://github.com/nextcloud/deck/pull/6258)
+- Translation call fix [#6261](https://github.com/nextcloud/deck/pull/6261)
+- fix: 30 design issues [#6265](https://github.com/nextcloud/deck/pull/6265)
+- copy labels when moving cards between boards [#6289](https://github.com/nextcloud/deck/pull/6289)
+- Bug fix collection [#6307](https://github.com/nextcloud/deck/pull/6307)
 - fix: card details focus issue with screen reader @luka-nextcloud [#5858](https://github.com/nextcloud/deck/pull/5858)
 - Cleaning up unused indicies @mintsoft [#5612](https://github.com/nextcloud/deck/pull/5612)
 - Change import command's config default argument @JimMadge [#5722](https://github.com/nextcloud/deck/pull/5722)
@@ -21,12 +31,17 @@ All notable changes to this project will be documented in this file.
 - fix: remove redundant log @luka-nextcloud [#6115](https://github.com/nextcloud/deck/pull/6115)
 - fix: Adjust dependencies to fix filepicker @susnux [#5964](https://github.com/nextcloud/deck/pull/5964)
 - fix: Remove bindParam usage with simpler query @juliushaertl [#6065](https://github.com/nextcloud/deck/pull/6065)
+- add Order when cloning board @grnd-alt [#6117](https://github.com/nextcloud/deck/pull/6117)
+- use deleted_users for users that do not exist @grnd-alt [#6201](https://github.com/nextcloud/deck/pull/6201)
+- chore: Clean up permission service @juliushaertl [#6011](https://github.com/nextcloud/deck/pull/6011)
 
 ### Other
 
+- fix(files): fix appstore-build-publish.yml @JuliaKirschenheuter [#6142](https://github.com/nextcloud/deck/pull/6142)
+- tests: Add environment variable and document commands to run behat tests locally @juliushaertl [#6137](https://github.com/nextcloud/deck/pull/6137)
+- chore(CI): Adjust testing matrix for Nextcloud 30 on stable30 @nickvergessen [#6205](https://github.com/nextcloud/deck/pull/6205)
 - Adds link to Nextcloud Deck for iOS in README.md file @StCyr [#5886](https://github.com/nextcloud/deck/pull/5886)
 - choir(i18n): Change filter title @rakekniven [#5957](https://github.com/nextcloud/deck/pull/5957)
-- chore: Clean up permission service @juliushaertl [#6011](https://github.com/nextcloud/deck/pull/6011)
 - Update User_documentation_en.md @StCyr [#6029](https://github.com/nextcloud/deck/pull/6029)
 - chore: Move comments event handler to use proper event dispatcher @juliushaertl [#6008](https://github.com/nextcloud/deck/pull/6008)
 - Migrate REUSE to TOML format @AndyScherzinger [#6084](https://github.com/nextcloud/deck/pull/6084)
