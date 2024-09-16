@@ -317,6 +317,7 @@ OC.L10N.register(
     "Limit board creation to some groups" : "Limitar a criação de quadros a alguns grupos",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Os usuários fora desses grupos não poderão criar seus próprios painéis, mas ainda poderão trabalhar nos painéis que foram compartilhados com eles.",
     "Cancel edit" : "Cancelar edição",
+    "Save board" : "Salvar quadro",
     "Board details" : "Detalhes do painel",
     "Edit board" : "Editar painel",
     "Clone board" : "Clonar painel",
