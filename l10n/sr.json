@@ -315,6 +315,7 @@
     "Limit board creation to some groups" : "Ограничи креирање табле на одређене групе",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Корисници који не припадају овим групама неће моћи да креирају своје табле, али ће и даље моћи да раде на таблама које су подељене са њима.",
     "Cancel edit" : "Поништи измену",
+    "Save board" : "Сачувај таблу",
     "Board details" : "Детаљи табле",
     "Edit board" : "Измени таблу",
     "Clone board" : "Клонирај таблу",
