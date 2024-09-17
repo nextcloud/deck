@@ -189,8 +189,8 @@ export default new Vuex.Store({
 				}
 			})
 		},
-		toggleShowArchived(state) {
-			state.showArchived = !state.showArchived
+		toggleShowArchived(state, newState = undefined) {
+			state.showArchived = newState !== undefined ? newState : !state.showArchived
 		},
 		/*
 		 * Adds or replaces a board in the store.
