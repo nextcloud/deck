@@ -5,13 +5,16 @@
 
 <template>
 	<div v-if="card" class="card-menu" @click.stop.prevent>
-		<NcButton v-if="card.referenceData" type="tertiary" @click="openLink">
+		<NcButton v-if="card.referenceData"
+			type="tertiary"
+			:title="t('deck','Open link')"
+			@click="openLink">
 			<template #icon>
 				<LinkIcon :size="20" />
 			</template>
 		</NcButton>
 		<NcActions>
-			<CardMenuEntries :card="card" />
+			<CardMenuEntries :card="card" @edit-title="editTitle" />
 		</NcActions>
 	</div>
 </template>
@@ -29,10 +32,14 @@ export default {
 			default: null,
 		},
 	},
+	emits: ['edit-title'],
 	methods: {
 		openLink() {
 			window.open(this.card?.referenceData?.openGraphObject?.link)
 			return false
+		},
+		editTitle(id) {
+			this.$emit('edit-title', id)
 		},
 	},
 }
