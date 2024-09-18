@@ -19,10 +19,11 @@
 			</div>
 			<CardCover v-if="showCardCover" :card-id="card.id" />
 			<div class="card-upper">
-				<h4 v-if="!editingTitle" dir="auto">
-					<span v-auto-link class="dragDisabled">{{ displayTitle }}</span>
+				<h4 v-if="editingTitle === 0" key="title-view" dir="auto">
+					<span class="dragDisabled" contenteditable="false">{{ displayTitle }}</span>
 				</h4>
-				<h4 v-else
+				<h4 v-if="editingTitle >= 1"
+					key="title-edit"
 					dir="auto"
 					class="editable dragDisabled"
 					:aria-label="t('deck', 'Edit card title')">
@@ -33,7 +34,8 @@
 						@focus="onTitleFocus"
 						@blur="onTitleBlur"
 						@click.stop
-						@keyup.esc="cancelEdit"
+						@keyup.esc="onTitleBlur"
+						@keyup.enter="onTitleBlur"
 						@keyup.stop>{{ card.title }}</span>
 				</h4>
 
@@ -152,7 +154,7 @@ export default {
 			return this.item ? this.item : this.$store.getters.cardById(this.id)
 		},
 		displayTitle() {
-			const reference = this.card.referenceData
+			const reference = this.card?.referenceData
 			return reference ? reference.openGraphObject.name : this.card.title
 		},
 		currentCard() {
@@ -198,12 +200,6 @@ export default {
 				this.$nextTick(() => this.$el.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }))
 			}
 		},
-		'card.title'(value) {
-			if (document.activeElement === this.$refs.titleContentEditable || this.$refs.titleContentEditable.textContent === value) {
-				return
-			}
-			this.$refs.titleContentEditable.textContent = value
-		},
 	},
 	methods: {
 		hasSelection() {
@@ -217,7 +213,10 @@ export default {
 			card = this.$refs[`card${card}`]
 			card.focus()
 		},
-		openCard() {
+		openCard(event) {
+			if (event.target.tagName.toLowerCase() === 'a') {
+				return
+			}
 			if (this.dragging || this.hasSelection()) {
 			  return
 			}
@@ -234,29 +233,28 @@ export default {
 			this.editingTitle = TITLE_EDITING_STATE.PENDING
 			this.$store.dispatch('toggleShortcutLock', true)
 			setTimeout(() => {
-				this.$refs.titleContentEditable.focus()
+				const sel = window.getSelection()
+				sel.selectAllChildren(this.$refs.titleContentEditable)
+				sel.collapseToEnd()
 				this.editingTitle = TITLE_EDITING_STATE.ON
 			}, 0)
 		},
 		onTitleBlur(e) {
-			if (this.editingTitle !== TITLE_EDITING_STATE.ON || e.target.innerText === '') {
+			const value = e.target.innerText.trim().replace(/\n$/, '')
+			if (this.editingTitle !== TITLE_EDITING_STATE.ON || value === '') {
 				return
 			}
 			this.editingTitle = TITLE_EDITING_STATE.OFF
-			if (e.target.innerText !== this.card.title) {
+			if (value !== this.card.title) {
 				this.$store.dispatch('updateCardTitle', {
 					...this.card,
-					title: e.target.innerText,
+					title: value,
 				})
 			}
 			this.$store.dispatch('toggleShortcutLock', false)
 		},
 		onTitleFocus() {
 			this.$store.dispatch('toggleShortcutLock', true)
-		},
-		cancelEdit() {
-			this.$refs.titleContentEditable.textContent = this.card.title
-			this.$store.dispatch('toggleShortcutLock', false)
 		},
 		handleCardKeyboardShortcut(key) {
 			if (OCP.Accessibility.disableKeyboardShortcuts()) {
@@ -269,7 +267,7 @@ export default {
 
 			switch (key.code) {
 			case 'KeyE':
-				this.$refs.titleContentEditable?.focus()
+				this.triggerEditTitle()
 				break
 			case 'KeyA':
 				this.$store.dispatch('archiveUnarchiveCard', { ...this.card, archived: !this.card.archived })
@@ -368,6 +366,11 @@ export default {
 				word-wrap: break-word;
 				padding-left: 4px;
 				align-self: center;
+
+				:deep(a) {
+					text-decoration: underline;
+				}
+
 				&.editable {
 					span {
 						cursor: text;
