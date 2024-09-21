@@ -657,6 +657,7 @@ class BoardService {
 
 			if ($fullDetails) {
 				$this->enrichWithStacks($board);
+				$this->enrichWithCards($board);
 				$this->enrichWithLabels($board);
 				$this->enrichWithUsers($board);
 				$this->enrichWithBoardSettings($board);
