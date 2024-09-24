@@ -1,6 +1,28 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.12.5
+
+### Fixed
+
+- fix: Load archived card if URL is opened directly #6324
+- use deleted_users for users that do not exist #6203
+- fix: losing focus while editing title field #6163
+- copy labels when moving cards between boards #6287
+
+### Maintenance
+
+- Fix npm audit #6305
+- Fix npm audit #6255
+- Fix npm audit #6199
+- Fix npm audit #6178
+- Update nextcloud/ocp dependency #6302
+- Update nextcloud/ocp dependency #6111
+
+### Other
+
+- Completed card button wording change #6183
+
 ## 1.12.4
 
 ### Fixed
