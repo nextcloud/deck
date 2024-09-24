@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.11.7
+
+### Fixed
+ - fix: Load archived card if URL is opened directly #6323
+
 ## 1.11.6
 
 ### Fixed
