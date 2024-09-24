@@ -1,6 +1,31 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.13.2
+### Fixed
+ - fix: Load archived card if URL is opened directly #6325
+ - copy labels when moving cards between boards #6288
+ - Translation call fix #6262
+ - use deleted_users for users that do not exist #6204
+ - fix: losing focus while editing title field #6161
+ - fix: remove redundant log #6116
+ - Fix: incorrect height of editing windows and edit bar #6093
+ - Update nextcloud/ocp dependency #6301
+ - Only check path for being accessible when the storage is a object home #6064
+
+### Maintenance
+ - Fix npm audit #6306
+ - Fix npm audit #6254
+ - Fix npm audit #6226
+ - Fix npm audit #6177
+ - Update nextcloud/ocp dependency #6197
+ - Update nextcloud/ocp dependency #6130
+ - Update nextcloud/ocp dependency #6109
+ - Update nextcloud/ocp dependency #6060
+
+### Other
+ - Completed card button wording change #6182
+
 ## 1.13.1
 ### Fixed
  - fix: Adjust dependencies to fix filepicker #6038
