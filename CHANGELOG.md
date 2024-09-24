@@ -6,6 +6,11 @@
 All notable changes to this project will be documented in this file.
 
 ## 1.14.0
+### Fixed
+ - fix: Load archived card if URL is opened directly #6326
+ - Update nextcloud/ocp dependency #6322
+
+## 1.14.0
 
 ### Added
 
