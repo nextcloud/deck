@@ -36,6 +36,7 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
+use OCP\RichObjectStrings\IRichTextFormatter;
 use OCP\RichObjectStrings\IValidator;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -185,7 +186,8 @@ class DeckProviderTest extends TestCase {
 			->willReturn($user);
 
 		$richValidator = $this->createMock(IValidator::class);
-		$event = new Event($richValidator);
+		$richTextFormater = $this->createMock(IRichTextFormatter::class);
+		$event = new Event($richValidator, $richTextFormater);
 
 		$event->setApp('deck');
 		$event->setSubject(ActivityManager::SUBJECT_BOARD_CREATE);
@@ -226,7 +228,8 @@ class DeckProviderTest extends TestCase {
 			->willReturn($user);
 
 		$richValidator = $this->createMock(IValidator::class);
-		$event = new Event($richValidator);
+		$richTextFormater = $this->createMock(IRichTextFormatter::class);
+		$event = new Event($richValidator, $richTextFormater);
 
 		$event->setApp('deck');
 		$event->setSubject(ActivityManager::SUBJECT_CARD_CREATE, ['card' => new Card()]);
@@ -269,7 +272,8 @@ class DeckProviderTest extends TestCase {
 			->willReturn($user);
 
 		$richValidator = $this->createMock(IValidator::class);
-		$event = new Event($richValidator);
+		$richTextFormater = $this->createMock(IRichTextFormatter::class);
+		$event = new Event($richValidator, $richTextFormater);
 
 		$event->setApp('deck');
 		$event->setSubject(ActivityManager::SUBJECT_CARD_UPDATE_DESCRIPTION, [
