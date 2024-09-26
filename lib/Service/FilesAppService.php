@@ -55,7 +55,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		CardMapper  $cardMapper,
 		LoggerInterface $logger,
 		IDBConnection $connection,
-		?string $userId
+		?string $userId,
 	) {
 		$this->request = $request;
 		$this->l10n = $l10n;

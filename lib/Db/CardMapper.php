@@ -45,7 +45,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		IManager $notificationManager,
 		ICacheFactory $cacheFactory,
 		$databaseType = 'sqlite3',
-		$database4ByteSupport = true
+		$database4ByteSupport = true,
 	) {
 		parent::__construct($db, 'deck_cards', Card::class);
 		$this->labelMapper = $labelMapper;
@@ -402,7 +402,7 @@ class CardMapper extends QBMapper implements IPermissionMapper {
 		if (count($query->getTag())) {
 			foreach ($query->getTag() as $index => $tag) {
 				$qb->innerJoin('c', 'deck_assigned_labels', 'al' . $index, $qb->expr()->eq('c.id', 'al' . $index . '.card_id'));
-				$qb->innerJoin('al'. $index, 'deck_labels', 'l' . $index, $qb->expr()->eq('al' . $index . '.label_id', 'l' . $index . '.id'));
+				$qb->innerJoin('al' . $index, 'deck_labels', 'l' . $index, $qb->expr()->eq('al' . $index . '.label_id', 'l' . $index . '.id'));
 				$qb->andWhere($qb->expr()->iLike('l' . $index . '.title', $qb->createNamedParameter('%' . $this->db->escapeLikeParameter($tag->getValue()) . '%', IQueryBuilder::PARAM_STR)));
 			}
 		}

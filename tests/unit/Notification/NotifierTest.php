@@ -220,7 +220,7 @@ class NotifierTest extends \Test\TestCase {
 			->with('otheruser')
 			->willReturn($user);
 
-		$expectedMessage = 'The card "Card title" on "Board title" has been assigned to you by '.$dn.'.';
+		$expectedMessage = 'The card "Card title" on "Board title" has been assigned to you by ' . $dn . '.';
 		$notification->expects($this->once())
 			->method('setParsedSubject')
 			->with($expectedMessage);
@@ -304,7 +304,7 @@ class NotifierTest extends \Test\TestCase {
 			->with('otheruser')
 			->willReturn($user);
 
-		$expectedMessage = 'The board "Board title" has been shared with you by '.$dn.'.';
+		$expectedMessage = 'The board "Board title" has been shared with you by ' . $dn . '.';
 		$notification->expects($this->once())
 			->method('setParsedSubject')
 			->with($expectedMessage);

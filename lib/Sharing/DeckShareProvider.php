@@ -69,7 +69,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		IL10N $l,
 		ITimeFactory $timeFactory,
 		IMimeTypeLoader $mimeTypeLoader,
-		?string $userId
+		?string $userId,
 	) {
 		$this->dbConnection = $connection;
 		$this->shareManager = $shareManager;
@@ -174,7 +174,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		string $target,
 		int $permissions,
 		string $token,
-		?\DateTime $expirationDate
+		?\DateTime $expirationDate,
 	): int {
 		$qb = $this->dbConnection->getQueryBuilder();
 		$qb->insert('share')

@@ -32,7 +32,7 @@ class DeckCalendarBackend {
 
 	public function __construct(
 		BoardService $boardService, StackService $stackService, CardService $cardService, PermissionService $permissionService,
-		BoardMapper $boardMapper
+		BoardMapper $boardMapper,
 	) {
 		$this->boardService = $boardService;
 		$this->stackService = $stackService;

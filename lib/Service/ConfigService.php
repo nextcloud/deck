@@ -29,7 +29,7 @@ class ConfigService {
 
 	public function __construct(
 		IConfig $config,
-		IGroupManager $groupManager
+		IGroupManager $groupManager,
 	) {
 		$this->groupManager = $groupManager;
 		$this->config = $config;

@@ -71,7 +71,7 @@ class BoardContext implements Context {
 					break;
 				}
 			}
-			Assert::assertNotNull($id, 'Could not find board named '.$boardName);
+			Assert::assertNotNull($id, 'Could not find board named ' . $boardName);
 		} else {
 			$id = $this->board['id'];
 		}
@@ -259,7 +259,7 @@ class BoardContext implements Context {
 	}
 
 	private function assignToCard($participant, $type) {
-		$this->requestContext->sendJSONrequest('POST', '/index.php/apps/deck/cards/' . $this->card['id'] .'/assign', [
+		$this->requestContext->sendJSONrequest('POST', '/index.php/apps/deck/cards/' . $this->card['id'] . '/assign', [
 			'userId' => $participant,
 			'type' => $type
 		]);
@@ -274,7 +274,7 @@ class BoardContext implements Context {
 			return $label['title'] === $tag;
 		});
 		$label = array_shift($filteredLabels);
-		$this->requestContext->sendJSONrequest('POST', '/index.php/apps/deck/cards/' . $this->card['id'] .'/label/' . $label['id']);
+		$this->requestContext->sendJSONrequest('POST', '/index.php/apps/deck/cards/' . $this->card['id'] . '/label/' . $label['id']);
 		$this->requestContext->getResponse()->getBody()->seek(0);
 	}
 
