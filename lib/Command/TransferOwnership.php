@@ -82,7 +82,7 @@ final class TransferOwnership extends Command {
 		}
 
 		if ($boardId) {
-			$output->writeln('Transfer board ' . $board->getTitle() . ' from '. $board->getOwner() ." to $newOwner");
+			$output->writeln('Transfer board ' . $board->getTitle() . ' from ' . $board->getOwner() . " to $newOwner");
 		} else {
 			$output->writeln("Transfer all boards from $owner to $newOwner");
 		}
@@ -94,7 +94,7 @@ final class TransferOwnership extends Command {
 
 		if ($boardId) {
 			$this->boardService->transferBoardOwnership($boardId, $newOwner, $remapAssignment);
-			$output->writeln('<info>Board ' . $board->getTitle() . ' from '. $board->getOwner() ." transferred to $newOwner completed</info>");
+			$output->writeln('<info>Board ' . $board->getTitle() . ' from ' . $board->getOwner() . " transferred to $newOwner completed</info>");
 			return 0;
 		}
 

@@ -32,7 +32,7 @@ class LabelService {
 		PermissionService $permissionService,
 		BoardService $boardService,
 		ChangeHelper $changeHelper,
-		LabelServiceValidator $labelServiceValidator
+		LabelServiceValidator $labelServiceValidator,
 	) {
 		$this->labelMapper = $labelMapper;
 		$this->permissionService = $permissionService;

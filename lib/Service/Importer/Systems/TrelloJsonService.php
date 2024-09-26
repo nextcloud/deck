@@ -37,7 +37,7 @@ class TrelloJsonService extends ABoardImportService {
 	public function __construct(
 		IUserManager $userManager,
 		IURLGenerator $urlGenerator,
-		IL10N $l10n
+		IL10N $l10n,
 	) {
 		$this->userManager = $userManager;
 		$this->urlGenerator = $urlGenerator;

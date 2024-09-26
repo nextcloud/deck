@@ -89,7 +89,7 @@ class BoardService {
 		IDBConnection $connection,
 		BoardServiceValidator $boardServiceValidator,
 		SessionMapper $sessionMapper,
-		?string $userId
+		?string $userId,
 	) {
 		$this->boardMapper = $boardMapper;
 		$this->stackMapper = $stackMapper;

@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BoardImport extends Command {
 	public function __construct(
-		private BoardImportCommandService $boardImportCommandService
+		private BoardImportCommandService $boardImportCommandService,
 	) {
 		parent::__construct();
 	}

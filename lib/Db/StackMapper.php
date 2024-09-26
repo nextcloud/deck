@@ -24,7 +24,7 @@ class StackMapper extends DeckMapper implements IPermissionMapper {
 	public function __construct(
 		IDBConnection $db,
 		CardMapper $cardMapper,
-		ICacheFactory $cacheFactory
+		ICacheFactory $cacheFactory,
 	) {
 		parent::__construct($db, 'deck_stacks', Stack::class);
 		$this->cardMapper = $cardMapper;

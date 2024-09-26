@@ -56,7 +56,7 @@ class StackService {
 		ChangeHelper $changeHelper,
 		LoggerInterface $logger,
 		IEventDispatcher $eventDispatcher,
-		StackServiceValidator $stackServiceValidator
+		StackServiceValidator $stackServiceValidator,
 	) {
 		$this->stackMapper = $stackMapper;
 		$this->boardMapper = $boardMapper;

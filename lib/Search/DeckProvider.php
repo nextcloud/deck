@@ -27,7 +27,7 @@ class DeckProvider implements IProvider {
 	public function __construct(
 		SearchService $searchService,
 		IURLGenerator $urlGenerator,
-		IL10N $l10n
+		IL10N $l10n,
 	) {
 		$this->l10n = $l10n;
 		$this->searchService = $searchService;

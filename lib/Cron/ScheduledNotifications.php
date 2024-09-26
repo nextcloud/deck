@@ -20,7 +20,7 @@ class ScheduledNotifications extends Job {
 		ITimeFactory $time,
 		protected CardMapper $cardMapper,
 		protected NotificationHelper $notificationHelper,
-		protected LoggerInterface $logger
+		protected LoggerInterface $logger,
 	) {
 		parent::__construct($time);
 	}

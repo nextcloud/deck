@@ -31,7 +31,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		private IUserManager $userManager,
 		private IGroupManager $groupManager,
 		private CirclesService $circlesService,
-		private LoggerInterface $logger
+		private LoggerInterface $logger,
 	) {
 		parent::__construct($db, 'deck_boards', Board::class);
 

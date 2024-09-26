@@ -77,7 +77,7 @@ class CardService {
 		LoggerInterface $logger,
 		IRequest $request,
 		CardServiceValidator $cardServiceValidator,
-		?string $userId
+		?string $userId,
 	) {
 		$this->cardMapper = $cardMapper;
 		$this->stackMapper = $stackMapper;
@@ -356,11 +356,11 @@ class CardService {
 		$card = $this->cardMapper->update($card);
 		$oldBoardId = $this->stackMapper->findBoardId($changes->getBefore()->getStackId());
 		$boardId = $this->cardMapper->findBoardId($card->getId());
-		if($boardId !== $oldBoardId) {
+		if ($boardId !== $oldBoardId) {
 			$stack = $this->stackMapper->find($card->getStackId());
 			$board = $this->boardService->find($this->cardMapper->findBoardId($card->getId()));
 			$boardLabels = $board->getLabels() ?? [];
-			foreach($card->getLabels() as $cardLabel) {
+			foreach ($card->getLabels() as $cardLabel) {
 				$this->removeLabel($card->getId(), $cardLabel->getId());
 				$label = $this->labelMapper->find($cardLabel->getId());
 				$filteredLabels = array_values(array_filter($boardLabels, fn ($item) => $item->getTitle() === $label->getTitle()));

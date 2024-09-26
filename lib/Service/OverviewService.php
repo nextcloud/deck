@@ -36,7 +36,7 @@ class OverviewService {
 		AssignmentMapper $assignedUsersMapper,
 		IUserManager $userManager,
 		ICommentsManager $commentsManager,
-		AttachmentService $attachmentService
+		AttachmentService $attachmentService,
 	) {
 		$this->cardService = $cardService;
 		$this->boardMapper = $boardMapper;

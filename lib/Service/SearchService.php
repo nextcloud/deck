@@ -46,7 +46,7 @@ class SearchService {
 		FilterStringParser $filterStringParser,
 		IUserManager $userManager,
 		IL10N $l10n,
-		IURLGenerator $urlGenerator
+		IURLGenerator $urlGenerator,
 	) {
 		$this->boardService = $boardService;
 		$this->cardMapper = $cardMapper;
