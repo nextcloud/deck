@@ -175,6 +175,7 @@ OC.L10N.register(
     "Set a due date" : "Sæt en forfaldsdato",
     "Remove due date" : "Fjern forfaldsdato",
     "Mark as done" : "Marker som færdig",
+    "Not done" : "Ikke færdig",
     "Unarchive card" : "Gen-aktivér kort",
     "Archive card" : "Arkivér kort",
     "Select Date" : "Vælg dato",
