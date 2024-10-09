@@ -261,6 +261,7 @@ OC.L10N.register(
     "Close" : "Užverti",
     "Due on {date}" : "Galutinis terminas {date}",
     "This weekend – {timeLocale}" : "Šį savaitgalį – {timeLocale}",
+    "Tomorrow – {timeLocale}" : "Rytoj – {timeLocale}",
     "Later today – {timeLocale}" : "Šiandien vėliau – {timeLocale}",
     "Link to a board" : "Susieti su lenta",
     "Link to a card" : "Susieti su kortele",
