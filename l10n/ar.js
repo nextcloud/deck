@@ -198,7 +198,7 @@ OC.L10N.register(
     "Transfer" : "نقل",
     "The board has been transferred to {user}" : "تمّ نقل اللوحة إلى {user}",
     "Failed to transfer the board to {user}" : "تعذّر نقل اللوحة إلى {user}",
-    "Edit list title" : "عدّل اسم القائمة",
+    "Edit list title" : "تعديل اسم القائمة",
     "Archive all cards" : "أرشفة جميع البطاقات ",
     "Unarchive all cards" : "تراجع عن أرشفة كل البطاقات",
     "Delete list" : "حذف القائمة",
