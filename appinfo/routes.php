@@ -102,6 +102,8 @@ return [
 		['name' => 'card_api#assignUser', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/assignUser', 'verb' => 'PUT'],
 		['name' => 'card_api#unassignUser', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/unassignUser', 'verb' => 'PUT'],
 		['name' => 'card_api#reorder', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/reorder', 'verb' => 'PUT'],
+		['name' => 'card_api#archive', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive', 'verb' => 'PUT'],
+		['name' => 'card_api#unarchive', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}/unarchive', 'verb' => 'PUT'],
 		['name' => 'card_api#delete', 'url' => '/api/v{apiVersion}/boards/{boardId}/stacks/{stackId}/cards/{cardId}', 'verb' => 'DELETE'],
 
 		['name' => 'card_api#findAllWithDue', 'url' => '/api/v{apiVersion}/dashboard/due', 'verb' => 'GET'],
