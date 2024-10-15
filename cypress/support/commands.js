@@ -110,6 +110,7 @@ Cypress.Commands.add('shareBoardWithUi', (userId) => {
 	cy.intercept({ method: 'GET', url: `**/ocs/v2.php/apps/files_sharing/api/v1/sharees?search=${userId}*` }).as('fetchRecipients')
 	cy.get('[aria-label="Open details"]').click()
 	cy.get('.app-sidebar').should('be.visible')
+	cy.get('.select input').click()
 	cy.get('.select input').type(`${userId}`)
 	cy.wait('@fetchRecipients', { timeout: 7000 })
 
