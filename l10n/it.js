@@ -317,6 +317,7 @@ OC.L10N.register(
     "Limit board creation to some groups" : "Limita la creazione di lavagne ad alcuni gruppi",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Gli utenti che non fanno parte di tali gruppi non potranno creare le proprie lavagne, ma saranno ancora in grado di lavorare su quelle che sono state condivise con loro.",
     "Cancel edit" : "Annulla modifica",
+    "Save board" : "Salva bacheca",
     "Board details" : "Dettagli lavagna",
     "Edit board" : "Modifica lavagna",
     "Clone board" : "Clona lavagna",
