@@ -167,7 +167,10 @@ export default {
 
 	.comment-form__contenteditable {
 		word-break: break-word;
-		border-radius: var(--border-radius-large)
+		border-radius: var(--border-radius-large);
+		padding: var(--default-grid-baseline);
+		max-height: 200px;
+		overflow: auto;
 	}
 
 	.atwho-wrap {

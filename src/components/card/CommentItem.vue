@@ -18,6 +18,7 @@
 			</div>
 			<NcRichText class="comment--content"
 				dir="auto"
+				use-markdown
 				:text="richText(comment)"
 				:arguments="richArgs(comment)"
 				:autolink="true" />
@@ -63,6 +64,7 @@
 		<div v-show="!edit" ref="richTextElement">
 			<NcRichText class="comment--content"
 				dir="auto"
+				use-markdown
 				:text="richText(comment)"
 				:arguments="richArgs(comment)"
 				:autolink="true" />

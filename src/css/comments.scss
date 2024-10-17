@@ -23,10 +23,13 @@
 		padding: 13px;
 		background-color: transparent;
 		border: none;
-		opacity: .3;
 		position: absolute;
-		bottom: 0;
-		right: 0;
+		bottom: var(--default-grid-baseline);
+		right: var(--default-grid-baseline);
+
+		&:disabled {
+			opacity: .7;
+		}
 	}
 }
 
