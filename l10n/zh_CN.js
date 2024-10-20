@@ -176,7 +176,7 @@ OC.L10N.register(
     "Undo" : "撤消",
     "Deleted cards" : "已删除的卡片",
     "No participants found" : "未找到参与者",
-    "Board owner" : "面板拥有者",
+    "Board owner" : "面板所有者",
     "(Group)" : "（群组）",
     "Can edit" : "可以编辑",
     "Can share" : "可以共享",
