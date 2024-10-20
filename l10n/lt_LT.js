@@ -123,6 +123,7 @@ OC.L10N.register(
     "Archived cards" : "Archyvuotos kortelės",
     "Add list" : "Pridėti sąrašą",
     "List name" : "Sąrašo pavadinimas",
+    "Active filters" : "Aktyvūs filtrai",
     "Apply filter" : "Taikyti filtrą",
     "Filter by tag" : "Filtruoti pagal žymę",
     "Filter by assigned user" : "Filtruoti pagal priskirtą naudotoją",
