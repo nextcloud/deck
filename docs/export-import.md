@@ -12,8 +12,9 @@ The export currently has some kown limitations in terms of specific data not inc
 - Comments
 -
 ```
-occ deck:export > my-file.json
+occ deck:export userid > userid-deck-export.json
 ```
+(userid = username you see in admin useraccounts page)
 
 ## Import boards
 
@@ -23,22 +24,42 @@ It is possible to import from the following sources:
 
 ### Deck JSON
 
-A json file that has been obtained from the above described `occ deck:export [userid]` command can be imported.
+A json file that has been obtained from the above described `occ deck:export [userid]  > userid-deck-export.json` command can be imported.
 
 ```
-occ deck:import my-file.json
+occ deck:import userid-deck-export.json
 ```
 
-In case you are importing from a different instance you may use an additional config file to provide custom user id mapping in case users have different identifiers.
+You will be asked to provide a path to a config file.
 
+To know what to put in there:
+- Have a look at your userid-deck-export.json
+ - fairly at the top you will see "uid" with a username.
+  - search for some more "uid" till you find all the usernames involved and note them.
+ - search for "acl"
+  - in there there are "uid" of groups note them too
+    
+In case you are importing from a different instance you must provide custom user id mapping in case users have different identifiers.
+
+create a config file e.g `deck-import-config-file-userid.json` and ajust the content of this example as descibed above.
+Userids on new instance can be seen in the admin useraccounts page.
 ```
 {
-    "owner": "admin",
+    "owner": "useridofnewownderofallboards",
     "uidRelation": {
-        "johndoe": "test-user-1"
+        "userid1onoldinstance": "userid1onnewinstance",
+	"userid2onoldinstance": "userid2onnewinstance",
+	"groupid1onoldinstance": "groupid1onnewinstance"
+
     }
 }
 ```
+after you hit enter everything will be imported.
+
+
+Additional info:
+- If you export a users boards, all boards that the user has access to will be exported. (also the onws shared to that user)
+
 
 #### Trello JSON
 
