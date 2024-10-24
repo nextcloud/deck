@@ -252,6 +252,7 @@ OC.L10N.register(
     "Remove due date" : "Usuń datę realizacji",
     "Mark as done" : "Oznacz jako wykonane",
     "Due at:" : "Termin:",
+    "Not done" : "Nie zrobione",
     "Unarchive card" : "Nie archiwizuj karty",
     "Archive card" : "Zarchiwizuj kartę",
     "Select Date" : "Wybierz datę",
