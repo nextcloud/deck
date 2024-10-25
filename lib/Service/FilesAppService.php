@@ -52,7 +52,7 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 		IPreview $preview,
 		IMimeTypeDetector $mimeTypeDetector,
 		PermissionService $permissionService,
-		CardMapper  $cardMapper,
+		CardMapper $cardMapper,
 		LoggerInterface $logger,
 		IDBConnection $connection,
 		?string $userId,
