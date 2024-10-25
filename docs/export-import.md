@@ -4,19 +4,19 @@
 -->
 ## Export
 
-Deck currently supports exporting all boards a user owns in a single JSON file. The format is based on the database schema that deck uses. It can be used to re-import boards on the same or other instances.
+Deck currently supports exporting all boards a user owns in a single JSON file. The format is based on the database schema that Deck uses. It can be used to re-import boards on the same or other instances.
 
-The export currently has some kown limitations in terms of specific data not included:
+The export currently has some known limitations in terms of specific data not included:
 - Activity information
-- File attachments to deck cards
+- File attachments to Deck cards
 - Comments
--
+
 ```
 occ deck:export userid > userid-deck-export.json
 ```
-(userid = username you see in admin useraccounts page)
+*(`userid` = username as seen in the admin user accounts page)*
 
-## Import boards
+## Import Boards
 
 Importing can be done using the API or the `occ` `deck:import` command.
 
@@ -24,7 +24,7 @@ It is possible to import from the following sources:
 
 ### Deck JSON
 
-A json file that has been obtained from the above described `occ deck:export [userid]  > userid-deck-export.json` command can be imported.
+A JSON file that has been obtained from the above-described `occ deck:export [userid] > userid-deck-export.json` command can be imported.
 
 ```
 occ deck:import userid-deck-export.json
@@ -33,50 +33,48 @@ occ deck:import userid-deck-export.json
 You will be asked to provide a path to a config file.
 
 To know what to put in there:
-- Have a look at your userid-deck-export.json
- - fairly at the top you will see "uid" with a username.
-  - search for some more "uid" till you find all the usernames involved and note them.
- - search for "acl"
-  - in there there are "uid" of groups note them too
+- Have a look at your `userid-deck-export.json`
+  - Near the top, you will see `"uid"` with a username.
+  - Search for additional `"uid"` entries to find all the usernames involved and note them.
+  - Search for `"acl"`, where `"uid"`s of groups are also present; note them too.
     
-In case you are importing from a different instance you must provide custom user id mapping in case users have different identifiers.
+If you are importing from a different instance, you must provide custom user ID mapping in case users have different identifiers.
 
-create a config file e.g `deck-import-config-file-userid.json` and ajust the content of this example as descibed above.
-Userids on new instance can be seen in the admin useraccounts page.
-```
+Create a config file, e.g., `deck-import-config-file-userid.json`, and adjust the content of this example as described above. User IDs on the new instance can be seen in the admin user accounts page.
+
+```json
 {
-    "owner": "useridofnewownderofallboards",
+    "owner": "useridofnewownerofallboards",
     "uidRelation": {
         "userid1onoldinstance": "userid1onnewinstance",
-	"userid2onoldinstance": "userid2onnewinstance",
-	"groupid1onoldinstance": "groupid1onnewinstance"
-
+        "userid2onoldinstance": "userid2onnewinstance",
+        "groupid1onoldinstance": "groupid1onnewinstance"
     }
 }
 ```
-after you hit enter everything will be imported.
 
+After pressing enter, everything will be imported.
 
 Additional info:
-- If you export a users boards, all boards that the user has access to will be exported. (also the onws shared to that user)
-
+- If you export a user’s boards, all boards that the user has access to will be exported (including those shared with that user).
 
 #### Trello JSON
 
-Limitations:
+**Limitations:**
 * Comments with more than 1000 characters are placed as attached files to the card.
 
-Steps:
-* Create the data file
-	* Access Trello
-	* go to the board you want to export
-	* Follow the steps in [Trello documentation](https://help.trello.com/article/747-exporting-data-from-trello-1) and export as JSON
-* Create the configuration file
-* Execute the import informing the import file path, data file and source as `Trello JSON`
+**Steps:**
+1. Create the data file:
+   * Access Trello.
+   * Go to the board you want to export.
+   * Follow the steps in [Trello documentation](https://help.trello.com/article/747-exporting-data-from-trello-1) and export as JSON.
+2. Create the configuration file.
+3. Execute the import, specifying the import file path, data file, and source as `Trello JSON`.
 
-Create the configuration file respecting the [JSON Schema](https://github.com/nextcloud/deck/blob/main/lib/Service/Importer/fixtures/config-trelloJson-schema.json) for import `Trello JSON`
+Create the configuration file respecting the [JSON Schema](https://github.com/nextcloud/deck/blob/main/lib/Service/Importer/fixtures/config-trelloJson-schema.json) for importing `Trello JSON`.
 
 Example configuration file:
+
 ```json
 {
     "owner": "admin",
@@ -87,26 +85,22 @@ Example configuration file:
 }
 ```
 
-**Limitations**:
-
-Importing from a JSON file imports up to 1000 actions. To find out how many actions the board to be imported has, identify how many actions the JSON has.
+**Additional Limitations**:
+* Importing from a JSON file imports up to 1000 actions. To find out how many actions the board to be imported has, check the number of actions in the JSON.
 
 #### Trello API
 
-Import using API is recommended for boards with more than 1000 actions.
+Importing via API is recommended for boards with more than 1000 actions. Trello allows attaching links to a card, but Deck does not support this feature. Attachment links are instead added in a markdown table at the end of the description for each imported card.
 
-Trello makes it possible to attach links to a card. Deck does not have this feature. Attachments and attachment links are added in a markdown table at the end of the description for every imported card that has attachments in Trello.
-
-* Get the API Key and API Token [here](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/#authentication-and-authorization)
-* Get the ID of the board you want to import by making a request to:
-  https://api.trello.com/1/members/me/boards?key={yourKey}&token={yourToken}&fields=id,name
-
-  This ID you will use in the configuration file in the `board` property
-* Create the configuration file
-
-Create the configuration file respecting the [JSON Schema](https://github.com/nextcloud/deck/blob/main/lib/Service/Importer/fixtures/config-trelloApi-schema.json) for import `Trello JSON`
+1. Get the API Key and Token [here](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/#authentication-and-authorization).
+2. Obtain the ID of the board you want to import by making a request to:
+   ```
+   https://api.trello.com/1/members/me/boards?key={yourKey}&token={yourToken}&fields=id,name
+   ```
+3. Create the configuration file, ensuring it follows the [JSON Schema](https://github.com/nextcloud/deck/blob/main/lib/Service/Importer/fixtures/config-trelloApi-schema.json) for `Trello JSON`.
 
 Example configuration file:
+
 ```json
 {
     "owner": "admin",
