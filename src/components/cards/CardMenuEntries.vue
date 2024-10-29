@@ -33,6 +33,12 @@
 			@click="openCardMoveDialog">
 			{{ t('deck', 'Move card') }}
 		</NcActionButton>
+		<NcActionButton v-if="canEdit"
+			icon="icon-external"
+			:close-after-click="true"
+			@click="openCardCloneDialog">
+			{{ t('deck', 'Clone card') }}
+		</NcActionButton>
 		<NcActionButton v-for="action in cardActions"
 			:key="action.label"
 			:close-after-click="true"
@@ -167,6 +173,9 @@ export default {
 		},
 		openCardMoveDialog() {
 			emit('deck:card:show-move-dialog', this.card)
+		},
+		openCardCloneDialog() {
+			emit('deck:card:show-clone-dialog', this.card)
 		},
 	},
 }
