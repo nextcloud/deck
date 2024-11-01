@@ -77,8 +77,6 @@ registerWidget('deck-board', async (el, { richObjectType, richObject, accessible
 }, (el) => {
 	boardWidgets[el].$destroy()
 	delete boardWidgets[el]
-}, {
-	fullWidth: true,
 })
 
 registerWidget('deck-comment', async (el, { richObjectType, richObject, accessible }) => {
