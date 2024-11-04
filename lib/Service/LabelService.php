@@ -93,6 +93,18 @@ class LabelService {
 		return $this->labelMapper->insert($label);
 	}
 
+	public function cloneLabelIfNotExists(int $labelId, int $targetBoardId): Label {
+		$this->permissionService->checkPermission(null, $targetBoardId, Acl::PERMISSION_MANAGE);
+		$boardLabels = $this->boardService->find($targetBoardId)->getLabels();
+		$originLabel = $this->find($labelId);
+		$filteredValues = array_values(array_filter($boardLabels, fn ($item) => $item->getTitle() === $originLabel->getTitle()));
+		if (empty($filteredValues)) {
+			$label = $this->create($originLabel->getTitle(), $originLabel->getColor(), $targetBoardId);
+			return $label;
+		}
+		return $originLabel;
+	}
+
 	/**
 	 * @param $id
 	 * @return \OCP\AppFramework\Db\Entity

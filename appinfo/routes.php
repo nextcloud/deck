@@ -43,6 +43,7 @@ return [
 		['name' => 'card#read', 'url' => '/cards/{cardId}', 'verb' => 'GET'],
 		['name' => 'card#create', 'url' => '/cards', 'verb' => 'POST'],
 		['name' => 'card#update', 'url' => '/cards/{cardId}', 'verb' => 'PUT'],
+		['name' => 'card#clone', 'url' => '/cards/{cardId}/clone', 'verb' => 'POST'],
 		['name' => 'card#delete', 'url' => '/cards/{cardId}', 'verb' => 'DELETE'],
 		['name' => 'card#deleted', 'url' => '/{boardId}/cards/deleted', 'verb' => 'GET'],
 		['name' => 'card#rename', 'url' => '/cards/{cardId}/rename', 'verb' => 'PUT'],

@@ -78,6 +78,7 @@ class CardService {
 		LoggerInterface $logger,
 		IRequest $request,
 		CardServiceValidator $cardServiceValidator,
+		private AssignmentService $assignmentService,
 		?string $userId,
 	) {
 		$this->cardMapper = $cardMapper;
@@ -389,6 +390,29 @@ class CardService {
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
 		return $card;
+	}
+
+	public function cloneCard(int $id, ?int $targetStackId = null):Card {
+		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_READ);
+		$originCard = $this->cardMapper->find($id);
+		if ($targetStackId == null) {
+			$targetStackId = $originCard->getStackId();
+		}
+		$this->permissionService->checkPermission($this->stackMapper, $targetStackId, Acl::PERMISSION_EDIT);
+		$newCard = $this->create($originCard->getTitle(), $targetStackId, $originCard->getType(), $originCard->getOrder(), $originCard->getOwner());
+		$boardId = $this->stackMapper->findBoardId($targetStackId);
+		foreach ($this->labelMapper->findAssignedLabelsForCard($id) as $label) {
+			if ($boardId != $this->stackMapper->findBoardId($originCard->getStackId())) {
+				$label = $this->labelService->cloneLabelIfNotExists($label->getId(), $boardId);
+			}
+			$this->assignLabel($newCard->getId(), $label->getId());
+		}
+		foreach ($this->assignedUsersMapper->findAll($id) as $assignement) {
+			$this->assignmentService->assignUser($newCard->getId(), $assignement->getParticipant());
+		}
+		$newCard->setDescription($originCard->getDescription());
+		$card = $this->enrichCards([$this->cardMapper->update($newCard)]);
+		return $card[0];
 	}
 
 	/**
