@@ -141,9 +141,13 @@ export default {
 		},
 		formatedSharees() {
 			return this.unallocatedSharees.map(item => {
+				const subname = item.label === item.shareWithDisplayNameUnique
+					? ''
+					: item.shareWithDisplayNameUnique
 				const sharee = {
 					user: item.value.shareWith,
 					displayName: item.label,
+					subname,
 					icon: 'icon-user',
 					multiselectKey: item.shareType + ':' + item.primaryKey,
 				}
