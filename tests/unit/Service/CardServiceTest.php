@@ -92,6 +92,9 @@ class CardServiceTest extends TestCase {
 	/** @var CardServiceValidator|MockObject */
 	private $cardServiceValidator;
 
+	/** @var AssignmentService|MockObject */
+	private $assignmentService;
+
 	public function setUp(): void {
 		parent::setUp();
 		$this->cardMapper = $this->createMock(CardMapper::class);
@@ -113,6 +116,7 @@ class CardServiceTest extends TestCase {
 		$this->logger = $this->createMock(LoggerInterface::class);
 		$this->request = $this->createMock(IRequest::class);
 		$this->cardServiceValidator = $this->createMock(CardServiceValidator::class);
+		$this->assignmentService = $this->createMock(AssignmentService::class);
 
 		$this->logger->expects($this->any())->method('error');
 
@@ -136,6 +140,7 @@ class CardServiceTest extends TestCase {
 			$this->logger,
 			$this->request,
 			$this->cardServiceValidator,
+			$this->assignmentService,
 			'user1'
 		);
 	}

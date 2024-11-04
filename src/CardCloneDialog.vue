@@ -21,7 +21,7 @@
 				:max-height="100"
 				label="title" />
 
-			<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">
+			<button :disabled="!isBoardAndStackChoosen" class="primary" @click="cloneCard">
 				{{ t('deck', 'Clone card') }}
 			</button>
 			<button @click="modalShow = false">
@@ -89,9 +89,8 @@ export default {
 				return err
 			}
 		},
-		async moveCard() {
-			this.copiedCard = Object.assign({}, this.card)
-			this.copiedCard.stackId = this.selectedStack.id
+		async cloneCard() {
+			this.$store.dispatch('cloneCard', { cardId: this.card.id, targetStackId: this.selectedStack.id })
 			this.$store.dispatch('addCard', this.copiedCard)
 			this.modalShow = false
 		},

@@ -272,6 +272,11 @@ export default {
 		},
 	},
 	actions: {
+		async cloneCard({ commit }, { cardId, targetStackId }) {
+			const createdCard = await apiClient.cloneCard(cardId, targetStackId)
+			commit('addCard', createdCard)
+			return createdCard
+		},
 		async addCard({ commit }, card) {
 			const createdCard = await apiClient.addCard(card)
 			commit('addCard', createdCard)
