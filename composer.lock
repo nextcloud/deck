@@ -444,12 +444,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextcloud-deps/ocp.git",
-                "reference": "bb3336c59895050f406749977be8bae877dae104"
+                "reference": "2b439efc6c7b3684c3e2ea64a46122d9e6f8e797"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/bb3336c59895050f406749977be8bae877dae104",
-                "reference": "bb3336c59895050f406749977be8bae877dae104",
+                "url": "https://api.github.com/repos/nextcloud-deps/ocp/zipball/2b439efc6c7b3684c3e2ea64a46122d9e6f8e797",
+                "reference": "2b439efc6c7b3684c3e2ea64a46122d9e6f8e797",
                 "shasum": ""
             },
             "require": {
@@ -480,7 +480,7 @@
                 "issues": "https://github.com/nextcloud-deps/ocp/issues",
                 "source": "https://github.com/nextcloud-deps/ocp/tree/stable30"
             },
-            "time": "2024-10-11T18:45:44+00:00"
+            "time": "2024-10-19T00:42:39+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -3092,15 +3092,15 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "roave/security-advisories": 20,
-        "nextcloud/ocp": 20
+        "nextcloud/ocp": 20,
+        "roave/security-advisories": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
+    "platform": {},
+    "platform-dev": {},
     "platform-overrides": {
         "php": "8.0"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
