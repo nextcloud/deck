@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.12.6
+
+### Fixed
+
+- Fix: incorrect height of editing windows and edit bar #6418
+- Avoid sql error on ONLY_FULL_GROUP_BY #6391
+
+### Maintenance
+
+- Fix npm audit #6374
+- Update nextcloud/ocp dependency #6385
+- Update nextcloud/ocp dependency #6350
+
 ## 1.12.5
 
 ### Fixed
