@@ -5,6 +5,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+### Fixed
+
+ - fix: board bubble preview widget [#6477](https://github.com/nextcloud/deck/pull/6477)
+
+### Dependencies
+
+ - Update nextcloud/ocp dependency @nextcloud-command [#6470](https://github.com/nextcloud/deck/pull/6470)
+ - Fix npm audit @nextcloud-command [#6450](https://github.com/nextcloud/deck/pull/6450)
+
 ## 1.14.1
 ### Fixed
  - fix: Load archived card if URL is opened directly #6326
