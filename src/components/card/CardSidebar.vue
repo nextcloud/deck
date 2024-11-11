@@ -220,12 +220,12 @@ section.app-sidebar__tab--active {
 .modal__card .app-sidebar {
 	$modal-padding: 14px;
 	border: 0;
-	min-width: calc(100% - #{$modal-padding * 2});
+	min-width: 100%;
 	position: relative;
 	top: 0;
 	left: 0;
 	right: 0;
-	max-width: calc(100% - #{$modal-padding * 2});
+	max-width: 100%;
 	min-height: calc(100vh - var(--header-height) * 4);
 	padding: 0 14px;
 	height: 97%;
