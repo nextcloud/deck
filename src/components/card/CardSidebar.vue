@@ -219,6 +219,7 @@ section.app-sidebar__tab--active {
 // FIXME: Obivously we should at some point not randomly reuse the sidebar component
 // since this is not oficially supported
 .modal__card .app-sidebar {
+	box-sizing: unset;
 	$modal-padding: 14px;
 	border: 0;
 	min-width: calc(100% - #{$modal-padding * 2});
