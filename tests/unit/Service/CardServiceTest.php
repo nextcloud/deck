@@ -32,6 +32,7 @@ use OCA\Deck\Db\BoardMapper;
 use OCA\Deck\Db\Card;
 use OCA\Deck\Db\CardMapper;
 use OCA\Deck\Db\ChangeHelper;
+use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
@@ -222,6 +223,61 @@ class CardServiceTest extends TestCase {
 		$this->assertEquals($b->getType(), 'text');
 		$this->assertEquals($b->getOrder(), 999);
 		$this->assertEquals($b->getStackId(), 123);
+	}
+
+	public function testClone() {
+		$card = new Card();
+		$card->setId(1);
+		$card->setTitle('Card title');
+		$card->setOwner('admin');
+		$card->setStackId(12345);
+		$clonedCard = clone $card;
+		$clonedCard->setId(2);
+		$clonedCard->setStackId(1234);
+		$this->cardMapper->expects($this->exactly(2))
+			->method('insert')
+			->willReturn($card, $clonedCard);
+
+		$this->cardMapper->expects($this->once())
+			->method('update')->willReturn($clonedCard);
+		$this->cardMapper->expects($this->exactly(2))
+			->method('find')
+			->willReturn($card, $clonedCard);
+
+		// check if users are assigned
+		$this->assignmentService->expects($this->once())
+			->method('assignUser')
+			->with(2, 'admin');
+		$a1 = new Assignment();
+		$a1->setCardId(2);
+		$a1->setType(0);
+		$a1->setParticipant('admin');
+		$this->assignedUsersMapper->expects($this->once())
+			->method('findAll')
+			->with(1)
+			->willReturn([$a1]);
+
+		// check if labels get cloned
+		$label = new Label();
+		$label->setId(1);
+		$this->labelMapper->expects($this->once())
+			->method('findAssignedLabelsForCard')
+			->willReturn([$label]);
+		$this->cardMapper->expects($this->once())
+			->method('assignLabel')
+			->with($clonedCard->getId(), $label->getId())
+			->willReturn($label);
+
+		$stackMock = new Stack();
+		$stackMock->setBoardId(1234);
+		$this->stackMapper->expects($this->once())
+			->method('find')
+			->willReturn($stackMock);
+		$b = $this->cardService->create('Card title', 123, 'text', 999, 'admin');
+		$c = $this->cardService->cloneCard($b->getId(), 1234);
+		$this->assertEquals($b->getTitle(), $c->getTitle());
+		$this->assertEquals($b->getOwner(), $c->getOwner());
+		$this->assertNotEquals($b->getStackId(), $c->getStackId());
 	}
 
 	public function testDelete() {
