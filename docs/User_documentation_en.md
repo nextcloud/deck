@@ -105,17 +105,21 @@ It is possible to import from the following sources:
 
 #### Trello JSON
 
-Steps:
-* Create the data file
-  * Access Trello
-  * go to the board you want to export
-  * Follow the steps in [Trello documentation](https://help.trello.com/article/747-exporting-data-from-trello-1) and export as JSON
-* Create the configuration file
-* Execute the import informing the import file path, data file and source as `Trello JSON`
+**Limitations:**
+* Comments with more than 1000 characters are placed as attached files to the card.
 
-Create the configuration file respecting the [JSON Schema](https://github.com/nextcloud/deck/blob/main/lib/Service/Importer/fixtures/config-trelloJson-schema.json) for import `Trello JSON`
+**Steps:**
+1. Create the data file:
+   * Access Trello.
+   * Go to the board you want to export.
+   * Follow the steps in [Trello documentation](https://help.trello.com/article/747-exporting-data-from-trello-1) and export as JSON.
+2. Create the configuration file.
+3. Execute the import, specifying the import file path, data file, and source as `Trello JSON`.
+
+Create the configuration file respecting the [JSON Schema](https://github.com/nextcloud/deck/blob/main/lib/Service/Importer/fixtures/config-trelloJson-schema.json) for importing `Trello JSON`.
 
 Example configuration file:
+
 ```json
 {
     "owner": "admin",
@@ -126,26 +130,22 @@ Example configuration file:
 }
 ```
 
-**Limitations**:
-
-Importing from a JSON file imports up to 1000 actions. To find out how many actions the board to be imported has, identify how many actions the JSON has.
+**Additional Limitations**:
+* Importing from a JSON file imports up to 1000 actions. To find out how many actions the board to be imported has, check the number of actions in the JSON.
 
 #### Trello API
 
-Import using API is recommended for boards with more than 1000 actions.
+Importing via API is recommended for boards with more than 1000 actions. Trello allows attaching links to a card, but Deck does not support this feature. Attachment links are instead added in a markdown table at the end of the description for each imported card.
 
-Trello makes it possible to attach links to a card. Deck does not have this feature. Attachments and attachment links are added in a markdown table at the end of the description for every imported card that has attachments in Trello.
-
-* Get the API Key and API Token [here](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/#authentication-and-authorization)
-* Get the ID of the board you want to import by making a request to:
-https://api.trello.com/1/members/me/boards?key={yourKey}&token={yourToken}&fields=id,name
-
-  This ID you will use in the configuration file in the `board` property
-* Create the configuration file
-
-Create the configuration file respecting the [JSON Schema](https://github.com/nextcloud/deck/blob/main/lib/Service/Importer/fixtures/config-trelloApi-schema.json) for import `Trello JSON`
+1. Get the API Key and Token [here](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/#authentication-and-authorization).
+2. Obtain the ID of the board you want to import by making a request to:
+   ```
+   https://api.trello.com/1/members/me/boards?key={yourKey}&token={yourToken}&fields=id,name
+   ```
+3. Create the configuration file, ensuring it follows the [JSON Schema](https://github.com/nextcloud/deck/blob/main/lib/Service/Importer/fixtures/config-trelloApi-schema.json) for `Trello JSON`.
 
 Example configuration file:
+
 ```json
 {
     "owner": "admin",
