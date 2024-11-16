@@ -22,7 +22,8 @@
 		<div v-else-if="board" class="board-title">
 			<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
 			<h2 dir="auto">
-				{{ board.title }}
+				<span class="board__title-text">{{ board.title }}</span>
+				<span class="board__title-counter">{{ cardsCount }}</span>
 			</h2>
 			<p v-if="showArchived">
 				({{ t('deck', 'Archived cards') }})
@@ -348,6 +349,12 @@ export default {
 			// get user object including displayname from the list of all users with acces
 			return this.board.users.filter((user) => this.board.activeSessions.includes(user.uid))
 		},
+		stacksByBoard() {
+			return this.$store.getters.stacksByBoard(this.board?.id) || []
+		},
+		cardsCount() {
+			return this.stacksByBoard.reduce((count, stack) => count + (this.$store.getters.cardsByStack(stack.id)?.length || 0), 0)
+		},
 	},
 	watch: {
 		board(current, previous) {
@@ -357,6 +364,13 @@ export default {
 			if (current) {
 				this.setPageTitle(current.title)
 			}
+		},
+		stacksByBoard: {
+			handler(newStacks) {
+				this.updateCardsCount(newStacks)
+			},
+			immediate: true,
+			deep: true,
 		},
 	},
 	beforeMount() {
@@ -474,6 +488,9 @@ export default {
 				this.setFilter()
 			}
 		},
+		updateCardsCount(stacks) {
+			this.cardsCount = stacks.reduce((count, stack) => count + (stack.cards?.length || 0), 0)
+		},
 	},
 }
 </script>
@@ -503,6 +520,20 @@ export default {
 				border-radius: 50%;
 				background-color: transparent;
 				margin: var(--default-grid-baseline);
+			}
+
+			.board__title-text {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				flex-grow: 1; /* Ocupa el máximo espacio disponible */
+			}
+
+			.board__title-counter {
+				flex-shrink: 0;
+				margin-left: 8px;
+				color: var(--color-info-text);
+				font-size: 0.9em;
 			}
 		}
 
