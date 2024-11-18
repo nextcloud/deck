@@ -6,6 +6,7 @@ OC.L10N.register(
     "Load more" : "Ielādēt vairāk",
     "Personal" : "Personīgs",
     "Finished" : "Pabeigts",
+    "Action needed" : "Nepieciešama darbība",
     "Later" : "Vēlāk",
     "copy" : "kopēt",
     "Done" : "Pabeigts",
