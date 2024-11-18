@@ -28,7 +28,7 @@ jobs:
       matrix:
         php-versions: ['8.1']
         databases: ['sqlite', 'mysql', 'pgsql']
-        server-versions: ['master']
+        server-versions: ['3rdparty/justinrainbow/json-schema']
 
     name: php${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.server-versions }}
 
@@ -74,7 +74,7 @@ jobs:
           uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
           with:
               repository: nextcloud/activity
-              ref: ${{ matrix.server-versions }}
+              ref: master
               path: apps/activity
 
       - name: Set up php ${{ matrix.php-versions }}
