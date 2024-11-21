@@ -106,7 +106,7 @@
     "The file was uploaded" : "Plik został wysłany",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Wgrany plik przekracza wartość upload_max_filesize zdefiniowaną w php.ini",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Wysłany plik przekracza wielkość dyrektywy MAX_FILE_SIZE określonej w formularzu HTML",
-    "The file was only partially uploaded" : "Załadowany plik został wysłany tylko częściowo.",
+    "The file was only partially uploaded" : "Plik został wysłany tylko częściowo.",
     "No file was uploaded" : "Nie wysłano żadnego pliku",
     "Missing a temporary folder" : "Brak katalogu tymczasowego",
     "Could not write file to disk" : "Nie można zapisać pliku na dysk",
