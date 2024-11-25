@@ -25,9 +25,9 @@ const useModal = (useModal) => {
 	})
 }
 
-describe('Card', function() {
+describe('Card', function () {
 	let boardId
-	before(function() {
+	before(function () {
 		cy.createUser(user)
 		cy.login(user)
 		cy.createExampleBoard({
@@ -38,11 +38,11 @@ describe('Card', function() {
 		})
 	})
 
-	beforeEach(function() {
+	beforeEach(function () {
 		cy.login(user)
 	})
 
-	it('Can add a card', function() {
+	it('Can add a card', function () {
 		cy.visit(`/apps/deck/#/board/${boardId}`)
 		const newCardTitle = 'Write some cypress tests'
 
@@ -63,7 +63,7 @@ describe('Card', function() {
 		})
 	})
 
-	it('Create card from overview', function() {
+	it('Create card from overview', function () {
 		cy.visit(`/apps/deck/#/`)
 		const newCardTitle = 'Test create from overview'
 		cy.intercept({ method: 'POST', url: '**/apps/deck/cards' }).as('save')
@@ -91,14 +91,14 @@ describe('Card', function() {
 	})
 
 	describe('Modal', () => {
-		beforeEach(function() {
+		beforeEach(function () {
 			cy.login(user)
 			useModal(true).then(() => {
 				cy.visit(`/apps/deck/#/board/${boardId}`)
 			})
 		})
 
-		it('Can show card details modal', function() {
+		it('Can show card details modal', function () {
 			cy.getNavigationEntry(boardData.title)
 				.first().click({ force: true })
 
@@ -118,13 +118,13 @@ describe('Card', function() {
 			cy.get('button.icon-folder').should('be.visible')
 				.click()
 			cy.get('.file-picker__main').should('be.visible')
-			cy.get('.file-picker__main [data-filename="welcome.txt"]', { timeout: 30000 }).should('be.visible')
+			cy.get('.file-picker__main [data-filename="Nextcloud_Server_Administration_Manual.pdf"]', { timeout: 30000 }).should('be.visible')
 				.click()
 			cy.get('.dialog__actions button.button-vue--vue-primary').click()
-			cy.get('.attachment-list .basename').contains('welcome.txt')
+			cy.get('.attachment-list .basename').contains('Nextcloud_Server_Administration_Manual.pdf')
 		})
 
-		it.only('Shows the modal with the editor', () => {
+		it('Shows the modal with the editor', () => {
 			cy.get('.card:contains("Hello world")').should('be.visible').click()
 			cy.intercept({ method: 'PUT', url: '**/apps/deck/cards/*' }).as('save')
 			cy.get('.modal__card').should('be.visible')
@@ -161,9 +161,9 @@ describe('Card', function() {
 			cy.get('.reference-picker-modal--content .reference-picker .multiselect-list').should('be.visible').contains(boardData.stacks[0].title)
 			cy.get('.reference-picker-modal--content .reference-picker button.button-vue--vue-primary').should('be.visible').click()
 			cy.wait('@save', { timeout: 7000 })
-			cy.get('.modal__card .ProseMirror').contains('/index.php/apps/deck/card/').should('be.visible')
+			cy.get('.modal__card .ProseMirror').contains('/index.php/apps/deck/card/').should('have.length', 1)
 
-			cy.visit(`/apps/deck/#/board/${boardId}`)
+			cy.visit(`/apps/deck/board/${boardId}`)
 			cy.reload()
 			cy.get('.board .stack').eq(0).within(() => {
 				cy.get(`.card:contains("${newCardTitle}")`).should('be.visible')
@@ -172,7 +172,7 @@ describe('Card', function() {
 	})
 
 	describe('Sidebar', () => {
-		beforeEach(function() {
+		beforeEach(function () {
 			cy.login(user)
 			useModal(false).then(() => {
 				cy.visit(`/apps/deck/#/board/${boardId}`)
@@ -185,7 +185,7 @@ describe('Card', function() {
 				.find('.ProseMirror h1').contains('Hello world writing more text').should('be.visible')
 		})
 
-		it('Set a due date', function() {
+		it('Set a due date', function () {
 			const newCardTitle = 'Card with a due date'
 
 			cy.get('.button-vue[aria-label*="Add card"]')
@@ -223,7 +223,7 @@ describe('Card', function() {
 			cy.get(`.card:contains("${newCardTitle}")`).find('[data-due-state]').should('not.exist')
 		})
 
-		it('Add a label', function() {
+		it('Add a label', function () {
 			const newCardTitle = 'Card with labels'
 
 			cy.get('.button-vue[aria-label*="Add card"]')
@@ -252,7 +252,7 @@ describe('Card', function() {
 	})
 
 	describe('Card actions', () => {
-		beforeEach(function() {
+		beforeEach(function () {
 			cy.login(user)
 			useModal(false).then(() => {
 				cy.visit(`/apps/deck/#/board/${boardId}`)
@@ -297,6 +297,19 @@ describe('Card', function() {
 						.find('.ProseMirror h1').contains('Hello world').should('be.visible')
 				})
 			})
+		})
+
+		it('clone card', () => {
+			cy.intercept({ method: 'POST', url: '**/apps/deck/cards/*/clone' }).as('clone')
+			cy.get('.card:contains("Hello world")').should('be.visible').click()
+			cy.get('#app-sidebar-vue')
+				.find('.ProseMirror h1').contains('Hello world').should('be.visible')
+
+			cy.get('.app-sidebar-header .action-item__menutoggle').click()
+			cy.get('.v-popper__popper button:contains("Clone card")').click()
+			cy.get('.modal__content button:contains("Clone card")').click()
+			cy.wait('@clone', { timeout: 7000 })
+			cy.get('.card:contains("Hello world")').should('have.length', 2)
 		})
 	})
 })
