@@ -21,11 +21,20 @@
  */
 
 import { addCommands } from '@nextcloud/cypress'
+import axios from '@nextcloud/axios'
 
 addCommands()
 
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
+
+// prepare main cypress window so we can use axios there
+// and it will successfully fetch csrf tokens when needed.
+window.OC = {
+	config: { modRewriteWorking: false },
+}
+// Prevent @nextcloud/router from reading window.location
+window._oc_webroot = url
 
 Cypress.Commands.add('openLeftSidebar', () => {
 	cy.get('.app-navigation button.app-navigation-toggle').click()
@@ -106,15 +115,23 @@ Cypress.Commands.add('getNavigationEntry', (boardTitle) => {
 		.find('a.app-navigation-entry-link')
 })
 
-Cypress.Commands.add('shareBoardWithUi', (userId) => {
-	cy.intercept({ method: 'GET', url: `**/ocs/v2.php/apps/files_sharing/api/v1/sharees?search=${userId}*` }).as('fetchRecipients')
+Cypress.Commands.add('shareBoardWithUi', (query, userId=query) => {
+	cy.intercept({ method: 'GET', url: `**/ocs/v2.php/apps/files_sharing/api/v1/sharees?search=${query}*` }).as('fetchRecipients')
 	cy.get('[aria-label="Open details"]').click()
 	cy.get('.app-sidebar').should('be.visible')
-	cy.get('.select input').type(`${userId}`)
+	cy.get('.select input').type(`${query}`)
 	cy.wait('@fetchRecipients', { timeout: 7000 })
 
-	cy.get('.vs__dropdown-menu .option').first().contains(userId)
+	cy.get('.vs__dropdown-menu .option').first().contains(query)
 	cy.get('.select input').type('{enter}')
 
 	cy.get('.shareWithList').contains(userId)
+})
+
+Cypress.Commands.add('setUserEmail', (user, value) => {
+	Cypress.log()
+	return axios.put(
+		`${url}/ocs/v2.php/cloud/users/${user.userId}`,
+		{ key: 'email', value },
+	)
 })
