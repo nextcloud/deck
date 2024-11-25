@@ -139,6 +139,7 @@ OC.L10N.register(
     "Hide archived cards" : "Slėpti archyvuotas korteles",
     "Show archived cards" : "Rodyti archyvuotas korteles",
     "Toggle compact mode" : "Perjungti kompaktišką veikseną",
+    "Open details" : "Atverti išsamesnę informaciją",
     "Details" : "Išsamiau",
     "Loading board" : "Įkeliama lenta",
     "Board not found" : "Lenta nerasta",
