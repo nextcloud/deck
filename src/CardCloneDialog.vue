@@ -91,7 +91,6 @@ export default {
 		},
 		async cloneCard() {
 			this.$store.dispatch('cloneCard', { cardId: this.card.id, targetStackId: this.selectedStack.id })
-			this.$store.dispatch('addCard', this.copiedCard)
 			this.modalShow = false
 		},
 	},
