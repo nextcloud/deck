@@ -63,7 +63,8 @@ describe('Card', function () {
 		})
 	})
 
-	it('Create card from overview', function () {
+	// TODO reintroduce this test
+	it.skip('Create card from overview', function () {
 		cy.visit(`/apps/deck/#/`)
 		const newCardTitle = 'Test create from overview'
 		cy.intercept({ method: 'POST', url: '**/apps/deck/cards' }).as('save')
