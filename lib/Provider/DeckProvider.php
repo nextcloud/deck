@@ -47,7 +47,7 @@ class DeckProvider implements IFullTextSearchProvider {
 	 * @param FullTextSearchService $fullTextSearchService
 	 */
 	public function __construct(
-		IL10N $l10n, IUrlGenerator $urlGenerator, FullTextSearchService $fullTextSearchService
+		IL10N $l10n, IUrlGenerator $urlGenerator, FullTextSearchService $fullTextSearchService,
 	) {
 		$this->l10n = $l10n;
 		$this->urlGenerator = $urlGenerator;

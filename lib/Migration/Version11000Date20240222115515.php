@@ -20,13 +20,13 @@ class Version11000Date20240222115515 extends SimpleMigrationStep {
 		$returnValue = null;
 
 		$assignedUsersTable = $schema->getTable('deck_assigned_users');
-		if($assignedUsersTable->hasIndex('deck_assigned_users_idx_c')) {
+		if ($assignedUsersTable->hasIndex('deck_assigned_users_idx_c')) {
 			$assignedUsersTable->dropIndex('deck_assigned_users_idx_c');
 			$returnValue = $schema;
 		}
 
 		$boardAclTable = $schema->getTable('deck_board_acl');
-		if($boardAclTable->hasIndex('deck_board_acl_idx_i')) {
+		if ($boardAclTable->hasIndex('deck_board_acl_idx_i')) {
 			$boardAclTable->dropIndex('deck_board_acl_idx_i');
 			$returnValue = $schema;
 		}

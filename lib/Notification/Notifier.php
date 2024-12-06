@@ -36,7 +36,7 @@ class Notifier implements INotifier {
 		IUserManager $userManager,
 		CardMapper $cardMapper,
 		StackMapper $stackMapper,
-		BoardMapper $boardMapper
+		BoardMapper $boardMapper,
 	) {
 		$this->l10nFactory = $l10nFactory;
 		$this->url = $url;

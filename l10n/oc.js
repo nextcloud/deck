@@ -50,6 +50,7 @@ OC.L10N.register(
     "Keyboard shortcut" : "Acorchis de clavièr",
     "Search" : "Recercar",
     "Shared with you" : "Shared with you",
+    "Cancel edit" : "Anullar la modificacion",
     "No notifications" : "Cap de notificacion",
     "An error occurred" : "Una error s’es producha",
     "Today" : "Uèi",

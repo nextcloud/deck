@@ -58,7 +58,7 @@ class AttachmentService {
 		$userId,
 		IL10N $l10n,
 		ActivityManager $activityManager,
-		AttachmentServiceValidator $attachmentServiceValidator
+		AttachmentServiceValidator $attachmentServiceValidator,
 	) {
 		$this->attachmentMapper = $attachmentMapper;
 		$this->cardMapper = $cardMapper;

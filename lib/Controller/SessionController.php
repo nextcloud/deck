@@ -21,7 +21,8 @@ use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
 class SessionController extends OCSController {
-	public function __construct($appName,
+	public function __construct(
+		$appName,
 		IRequest $request,
 		private SessionService $sessionService,
 		private PermissionService $permissionService,

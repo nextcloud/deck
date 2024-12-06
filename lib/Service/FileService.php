@@ -33,7 +33,7 @@ class FileService implements IAttachmentService {
 		private IRootFolder $rootFolder,
 		private IConfig $config,
 		private AttachmentMapper $attachmentMapper,
-		private IMimeTypeDetector $mimeTypeDetector
+		private IMimeTypeDetector $mimeTypeDetector,
 	) {
 	}
 

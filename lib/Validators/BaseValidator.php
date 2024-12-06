@@ -45,7 +45,7 @@ abstract class BaseValidator {
 					} else {
 						if (!$this->{$rule}($value)) {
 							throw new BadRequestException(
-								$field . ' must be provided and must be '. str_replace('_', ' ', $rule));
+								$field . ' must be provided and must be ' . str_replace('_', ' ', $rule));
 						}
 					}
 				}
@@ -154,10 +154,10 @@ abstract class BaseValidator {
 	protected function getErrorMessage($rule, $field, $parameter = null): string {
 		if (in_array($rule, ['max', 'min'])) {
 			return $rule === 'max'
-			? $field . ' cannot be longer than '. $parameter . ' characters '
-			: $field . ' must be at least '. $parameter . ' characters long ';
+			? $field . ' cannot be longer than ' . $parameter . ' characters '
+			: $field . ' must be at least ' . $parameter . ' characters long ';
 		}
 
-		return $field . ' must be provided and must be '. str_replace('_', ' ', $rule);
+		return $field . ' must be provided and must be ' . str_replace('_', ' ', $rule);
 	}
 }

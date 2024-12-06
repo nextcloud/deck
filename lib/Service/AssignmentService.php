@@ -76,7 +76,7 @@ class AssignmentService {
 		ChangeHelper $changeHelper,
 		IEventDispatcher $eventDispatcher,
 		AssignmentServiceValidator $assignmentServiceValidator,
-		$userId
+		$userId,
 	) {
 		$this->assignmentServiceValidator = $assignmentServiceValidator;
 		$this->permissionService = $permissionService;

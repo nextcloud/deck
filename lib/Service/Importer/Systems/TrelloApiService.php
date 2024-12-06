@@ -31,7 +31,7 @@ class TrelloApiService extends TrelloJsonService {
 		IURLGenerator $urlGenerator,
 		IL10N $l10n,
 		LoggerInterface $logger,
-		IClientService $httpClientService
+		IClientService $httpClientService,
 	) {
 		parent::__construct($userManager, $urlGenerator, $l10n);
 		$this->logger = $logger;

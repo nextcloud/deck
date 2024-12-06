@@ -46,6 +46,7 @@ OC.L10N.register(
     "Keyboard shortcut" : "Klaviatuuri otsetee",
     "Search" : "Otsi",
     "Shared with you" : "Sinuga jagatud",
+    "Cancel edit" : "Loobu muutmisest",
     "No notifications" : "Märguandeid pole",
     "An error occurred" : "Tekkis tõrge",
     "Today" : "Täna",

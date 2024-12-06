@@ -24,7 +24,7 @@ class ChangeHelper {
 		IDBConnection $db,
 		ICacheFactory $cacheFactory,
 		IRequest $request,
-		?string $userId
+		?string $userId,
 	) {
 		$this->db = $db;
 		$this->cache = $cacheFactory->createDistributed('deck_changes');
@@ -43,7 +43,7 @@ class ChangeHelper {
 	public function cardChanged($cardId, $updateCard = true) {
 		$time = time();
 		$etag = md5($time . microtime());
-		$this->cache->set(self::TYPE_CARD . '-' .$cardId, $etag);
+		$this->cache->set(self::TYPE_CARD . '-' . $cardId, $etag);
 		if ($updateCard) {
 			$sql = 'UPDATE `*PREFIX*deck_cards` SET `last_modified` = ?, `last_editor` = ? WHERE `id` = ?';
 			$this->db->executeUpdate($sql, [time(), $this->userId, $cardId]);
@@ -60,7 +60,7 @@ class ChangeHelper {
 	public function stackChanged($stackId, $updateBoard = true) {
 		$time = time();
 		$etag = md5($time . microtime());
-		$this->cache->set(self::TYPE_CARD . '-' .$stackId, $etag);
+		$this->cache->set(self::TYPE_CARD . '-' . $stackId, $etag);
 		if ($updateBoard) {
 			$sql = 'UPDATE `*PREFIX*deck_stacks` SET `last_modified` = ? WHERE `id` = ?';
 			$this->db->executeUpdate($sql, [time(), $stackId]);
@@ -76,7 +76,7 @@ class ChangeHelper {
 	}
 
 	public function getEtag($type, $id) {
-		$entry = $this->cache->get($type . '-' .$id);
+		$entry = $this->cache->get($type . '-' . $id);
 		if ($entry === 'null') {
 			return '';
 		}

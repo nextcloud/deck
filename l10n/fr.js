@@ -120,6 +120,7 @@ OC.L10N.register(
     "Invalid date, date format must be YYYY-MM-DD" : "Date non valable, le format de la date doit être AAAA-MM-JJ",
     "Personal planning and team project organization" : "Agenda personnel et organisation projet",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "Deck est un outil d'organisation de style kanban destiné à la planification personnelle et à l'organisation de projets pour les équipes intégrées à Nextcloud.\n\n\n- 📥 Ajoutez vos tâches à des cartes et organisez-les\n- 📄 Écrivez des notes supplémentaires en Markdown\n- 🔖 Affectez des étiquettes pour une organisation encore meilleure\n- 👥 Partagez avec votre équipe, vos amis ou votre famille\n- 📎 Joignez des fichiers et utilisez-les dans vos descriptions en Markdown\n- 💬 Échangez avec votre équipe grâce aux commentaires\n- ⚡ Gardez un œil sur les modifications dans le flux d'activité\n- 🚀 Organisez vos projets",
+    "Card details" : "Détails de la carte",
     "Add board" : "Ajouter un tableau",
     "Select the board to link to a project" : "Sélection le tableau pour faire le lien avec un projet.",
     "Search by board title" : "Rechercher par titre du tableau",
@@ -274,7 +275,6 @@ OC.L10N.register(
     "Todo items" : "À faire",
     "{count} comments, {unread} unread" : "{count} commentaires, {unread} non lus",
     "Edit card title" : "Modifier le titre de la carte",
-    "Card details" : "Détails de la carte",
     "Assign to me" : "Me l'affecter",
     "Unassign myself" : "Me désaffecter",
     "Mark as not done" : "Marquer comme non fait",
@@ -316,6 +316,8 @@ OC.L10N.register(
     "Show boards in calendar/tasks" : "Afficher les tableaux dans les agendas/tâches",
     "Limit board creation to some groups" : "Limiter la création de tableaux à certains groupes",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Les utilisateurs qui ne font pas partie de ces groupes ne pourront pas créer leurs propres tableaux, mais pourront toujours travailler sur les tableaux qui ont été partagés avec eux.",
+    "Cancel edit" : "Annuler les modifications",
+    "Save board" : "Sauvegarder le tableau",
     "Board details" : "Détails du tableau",
     "Edit board" : "Renommer le tableau",
     "Clone board" : "Dupliquer le tableau",
@@ -341,7 +343,6 @@ OC.L10N.register(
     "No due" : "Sans échéance",
     "Search for {searchQuery} in all boards" : "Recherche de {searchQuery} dans tous les tableaux",
     "No results found" : "Aucun résultat",
-    "This weekend – {timeLocale}" : "Ce week-end – {timeLocale}",
     "Deck board {name}\n* Last modified on {lastMod}" : "Tableau {name}\n* Dernière modification le {lastMod}",
     "{stack} in {board}" : "{stack} dans {board}",
     "Click to expand description" : "Cliquer pour visualiser la description",
@@ -361,6 +362,7 @@ OC.L10N.register(
     "upcoming cards" : "prochaines cartes",
     "New card" : "Nouvelle carte",
     "Due on {date}" : "Échéance le {date}",
+    "This weekend – {timeLocale}" : "Ce week-end – {timeLocale}",
     "Tomorrow – {timeLocale}" : "Demain – {timeLocale}",
     "Later today – {timeLocale}" : "Plus tard aujourd'hui – {timeLocale}",
     "Link to a board" : "Relier à un tableau",
@@ -377,6 +379,6 @@ OC.L10N.register(
     "Searching for users, groups and circles …" : "Recherche d'utilisateurs, de groupes et de cercles ...",
     "(Circle)" : "(Cercle)",
     "Assign to users/groups/circles" : "Attribuer à des utilisateurs / groupes / cercles",
-    "Filter by completed" : "Filtrer par terminé"
+    "Filter by completed" : "Filtrer par état"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

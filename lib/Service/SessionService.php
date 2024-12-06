@@ -33,7 +33,7 @@ class SessionService {
 		ISecureRandom $secureRandom,
 		ITimeFactory $timeFactory,
 		$userId,
-		IEventDispatcher $eventDispatcher
+		IEventDispatcher $eventDispatcher,
 	) {
 		$this->sessionMapper = $sessionMapper;
 		$this->secureRandom = $secureRandom;

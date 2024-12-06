@@ -27,7 +27,7 @@ class DefaultBoardService {
 		BoardService $boardService,
 		StackService $stackService,
 		CardService $cardService,
-		IConfig $config
+		IConfig $config,
 	) {
 		$this->boardService = $boardService;
 		$this->stackService = $stackService;

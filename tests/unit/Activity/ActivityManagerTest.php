@@ -103,13 +103,13 @@ class ActivityManagerTest extends TestCase {
 				if ($format !== '') {
 					$this->assertStringContainsString('{user}', $format);
 				} else {
-					self::addWarning('No activity string found for '. $constant);
+					self::addWarning('No activity string found for ' . $constant);
 				}
 				$format = $this->activityManager->getActivityFormat('cz', $value, [], true);
 				if ($format !== '') {
 					$this->assertStringStartsWith('You', $format);
 				} else {
-					self::addWarning('No own activity string found for '. $constant);
+					self::addWarning('No own activity string found for ' . $constant);
 				}
 			}
 		}

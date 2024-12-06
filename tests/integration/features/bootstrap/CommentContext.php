@@ -45,7 +45,7 @@ class CommentContext implements Context {
 	 */
 	public function updateACommentWithContentOnTheCard($content) {
 		$card = $this->boardContext->getLastUsedCard();
-		$this->requestContext->sendOCSRequest('PUT', '/apps/deck/api/v1.0/cards/' . $card['id'] . '/comments/'. $this->lastComment['id'], [
+		$this->requestContext->sendOCSRequest('PUT', '/apps/deck/api/v1.0/cards/' . $card['id'] . '/comments/' . $this->lastComment['id'], [
 			'message' => $content,
 			'parentId' => null
 		]);
@@ -56,7 +56,7 @@ class CommentContext implements Context {
 	 */
 	public function deleteTheCommentOnTheCard() {
 		$card = $this->boardContext->getLastUsedCard();
-		$this->requestContext->sendOCSRequest('DELETE', '/apps/deck/api/v1.0/cards/' . $card['id'] . '/comments/'. $this->lastComment['id']);
+		$this->requestContext->sendOCSRequest('DELETE', '/apps/deck/api/v1.0/cards/' . $card['id'] . '/comments/' . $this->lastComment['id']);
 	}
 
 }

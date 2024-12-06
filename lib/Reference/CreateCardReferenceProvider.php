@@ -17,7 +17,8 @@ class CreateCardReferenceProvider extends ADiscoverableReferenceProvider {
 	public function __construct(
 		private IL10N $l10n,
 		private IURLGenerator $urlGenerator,
-		private ?string $userId) {
+		private ?string $userId,
+	) {
 	}
 
 	/**

@@ -25,7 +25,7 @@ class CardCommentProvider implements IProvider {
 
 	public function __construct(
 		SearchService $searchService,
-		IL10N $l10n
+		IL10N $l10n,
 	) {
 		$this->searchService = $searchService;
 		$this->l10n = $l10n;

@@ -39,7 +39,7 @@ class FullTextSearchService {
 	private $cardMapper;
 
 	public function __construct(
-		BoardMapper $boardMapper, StackMapper $stackMapper, CardMapper $cardMapper
+		BoardMapper $boardMapper, StackMapper $stackMapper, CardMapper $cardMapper,
 	) {
 		$this->boardMapper = $boardMapper;
 		$this->stackMapper = $stackMapper;

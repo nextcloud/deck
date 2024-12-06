@@ -59,6 +59,6 @@ class DeckTeamResourceProvider implements \OCP\Teams\ITeamResourceProvider {
 	}
 
 	public function getBoardBulletIcon(Board $board): string {
-		return '<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" version="1.1" viewBox="0 0 16 16"><g fill="#' . $board->getColor(). '"><rect ry="15" height="14" width="14" y="1" x="1"/></g></svg>';
+		return '<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" version="1.1" viewBox="0 0 16 16"><g fill="#' . $board->getColor() . '"><rect ry="15" height="14" width="14" y="1" x="1"/></g></svg>';
 	}
 }

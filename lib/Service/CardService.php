@@ -28,6 +28,7 @@ use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
 use OCA\Deck\Validators\CardServiceValidator;
+use OCP\Collaboration\Reference\IReferenceManager;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
@@ -77,7 +78,8 @@ class CardService {
 		LoggerInterface $logger,
 		IRequest $request,
 		CardServiceValidator $cardServiceValidator,
-		?string $userId
+		private IReferenceManager $referenceManager,
+		?string $userId,
 	) {
 		$this->cardMapper = $cardMapper;
 		$this->stackMapper = $stackMapper;
@@ -99,6 +101,10 @@ class CardService {
 		$this->logger = $logger;
 		$this->request = $request;
 		$this->cardServiceValidator = $cardServiceValidator;
+	}
+
+	public function enrichCard($card) {
+		return $this->enrichCards([$card])[0];
 	}
 
 	public function enrichCards($cards) {
@@ -142,10 +148,20 @@ class CardService {
 
 		return array_map(
 			function (Card $card): CardDetails {
-				return new CardDetails($card);
+				$referenceData = $this->referenceManager->resolveReference($card->getTitle());
+				$cardDetails = new CardDetails($card);
+				if ($referenceData) {
+					$cardDetails->setReferenceData($referenceData);
+				}
+				return $cardDetails;
 			},
 			$cards
 		);
+	}
+
+	private function applyReferenceData(CardDetails $cardDetails) {
+
+
 	}
 	public function fetchDeleted($boardId) {
 		$this->cardServiceValidator->check(compact('boardId'));
@@ -226,7 +242,7 @@ class CardService {
 		$this->changeHelper->cardChanged($card->getId(), false);
 		$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($card));
 
-		return $card;
+		return $this->enrichCard($card);
 	}
 
 	/**
@@ -356,11 +372,11 @@ class CardService {
 		$card = $this->cardMapper->update($card);
 		$oldBoardId = $this->stackMapper->findBoardId($changes->getBefore()->getStackId());
 		$boardId = $this->cardMapper->findBoardId($card->getId());
-		if($boardId !== $oldBoardId) {
+		if ($boardId !== $oldBoardId) {
 			$stack = $this->stackMapper->find($card->getStackId());
 			$board = $this->boardService->find($this->cardMapper->findBoardId($card->getId()));
 			$boardLabels = $board->getLabels() ?? [];
-			foreach($card->getLabels() as $cardLabel) {
+			foreach ($card->getLabels() as $cardLabel) {
 				$this->removeLabel($card->getId(), $cardLabel->getId());
 				$label = $this->labelMapper->find($cardLabel->getId());
 				$filteredLabels = array_values(array_filter($boardLabels, fn ($item) => $item->getTitle() === $label->getTitle()));

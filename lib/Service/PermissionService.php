@@ -40,7 +40,7 @@ class PermissionService {
 		private IGroupManager $groupManager,
 		private IManager $shareManager,
 		private IConfig $config,
-		private ?string $userId
+		private ?string $userId,
 	) {
 		$this->boardCache = new CappedMemoryCache();
 		$this->permissionCache = new CappedMemoryCache();

@@ -58,7 +58,7 @@ class NotificationHelper {
 		IConfig $config,
 		IManager $notificationManager,
 		IGroupManager $groupManager,
-		$userId
+		$userId,
 	) {
 		$this->cardMapper = $cardMapper;
 		$this->boardMapper = $boardMapper;

@@ -70,7 +70,7 @@ class BoardImportService {
 		private CardMapper $cardMapper,
 		private ICommentsManager $commentsManager,
 		private IEventDispatcher $eventDispatcher,
-		private LoggerInterface $logger
+		private LoggerInterface $logger,
 	) {
 		$this->board = new Board();
 		$this->disableCommentsEvents();
@@ -364,7 +364,7 @@ class BoardImportService {
 					$this->getImportSystem()->updateCardAssignment($cardId, (string)$assignment->getId(), $assignment);
 					$this->addOutput('Assignment ' . $assignment->getParticipant() . ' added');
 				} catch (NotFoundException $e) {
-					$this->addError('No origin or mapping found for card "' . $cardId . '" and ' . $assignment->getTypeString() .' assignment "' . $assignment->getParticipant(), $e);
+					$this->addError('No origin or mapping found for card "' . $cardId . '" and ' . $assignment->getTypeString() . ' assignment "' . $assignment->getParticipant(), $e);
 				}
 			}
 		}

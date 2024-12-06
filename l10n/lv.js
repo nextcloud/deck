@@ -1,9 +1,12 @@
 OC.L10N.register(
     "deck",
     {
+    "You have added a description to card {card} in list {stack} on board {board}" : "Tu pievienoji kartītes {card} aprakstu dēļa {board} sarakstā {stack}",
+    "{user} has added a description to card {card} in list {stack} on board {board}" : "{user} pievienoja kartītes {card} aprakstu dēļa {board} sarakstā {stack}",
     "Load more" : "Ielādēt vairāk",
     "Personal" : "Personīgs",
     "Finished" : "Pabeigts",
+    "Action needed" : "Nepieciešama darbība",
     "Later" : "Vēlāk",
     "copy" : "kopēt",
     "Done" : "Pabeigts",
@@ -21,6 +24,7 @@ OC.L10N.register(
     "Do you want to overwrite it?" : "Vai tu gribi pārrakstīt to?",
     "Open" : "Atvērt",
     "Completed" : "Pabeigts",
+    "Clear filter" : "Notīrīt atlasi",
     "Hide archived cards" : "Slēpt arhivētās kartes",
     "Show archived cards" : "Rādīt arhivētās kartes",
     "Open details" : "Atvērt detaļas",

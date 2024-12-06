@@ -38,7 +38,7 @@ class LiveUpdateListener implements IEventListener {
 		IRequest $request,
 		LoggerInterface $logger,
 		SessionService $sessionService,
-		StackMapper $stackMapper
+		StackMapper $stackMapper,
 	) {
 		try {
 			$this->queue = $container->get(IQueue::class);

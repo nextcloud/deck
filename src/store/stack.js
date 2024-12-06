@@ -78,6 +78,21 @@ export default {
 			}
 			commit('setCards', cards)
 		},
+		async loadArchivedStacks({ commit, getters }, boardId) {
+			const archivedStacks = await apiClient.loadArchivedStacks(boardId)
+			const cards = []
+			for (const i in archivedStacks) {
+				const stack = archivedStacks[i]
+				for (const j in stack.cards) {
+					cards.push(stack.cards[j])
+				}
+				delete stack.cards
+				if (!getters.stackById(stack.id)) {
+					commit('addStack', stack)
+				}
+			}
+			commit('setCards', cards)
+		},
 		createStack({ commit }, stack) {
 			stack.boardId = this.state.currentBoard.id
 			apiClient.createStack(stack)
