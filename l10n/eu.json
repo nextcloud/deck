@@ -315,6 +315,7 @@
     "Limit board creation to some groups" : "Mugatu taulak sortzea talde batzuei",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "Talde horietatik kanpo dauden erabiltzaileek ezingo dituzte haien taulak sortu, baina partekatu zaizkien tauletan lan egiten jarraitu ahal izango dute.",
     "Cancel edit" : "Utzi editatzeari",
+    "Save board" : "Gorde mahaia",
     "Board details" : "Taularen xehetasunak",
     "Edit board" : "Editatu taula",
     "Clone board" : "Klonatu taula",
