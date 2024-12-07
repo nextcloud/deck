@@ -19,12 +19,12 @@
 			</div>
 			<CardCover v-if="showCardCover" :card-id="card.id" />
 			<div class="card-upper">
-				<h4 v-if="inlineEditingBlocked" dir="auto">
-					{{ card.title }}
+				<h4 v-if="!editingTitle" dir="auto">
+					<span v-auto-link class="dragDisabled">{{ card.title }}</span>
 				</h4>
 				<h4 v-else
 					dir="auto"
-					class="editable"
+					class="editable dragDisabled"
 					:aria-label="t('deck', 'Edit card title')">
 					<span ref="titleContentEditable"
 						tabindex="0"
@@ -38,7 +38,10 @@
 				</h4>
 
 				<DueDate v-if="compactMode" :card="card" />
-				<CardMenu v-if="showMenuAtTitle" :card="card" class="right card-menu" />
+				<CardMenu v-if="showMenuAtTitle"
+					:card="card"
+					class="right card-menu"
+					@edit-title="triggerEditTitle" />
 			</div>
 
 			<div v-if="hasLabels" class="card-labels">
@@ -51,7 +54,10 @@
 						<span @click.stop="applyLabelFilter(label)">{{ label.title }}</span>
 					</li>
 				</transition-group>
-				<CardMenu v-if="showMenuAtLabels" :card="card" class="right" />
+				<CardMenu v-if="showMenuAtLabels"
+					:card="card"
+					class="right"
+					@edit-title="triggerEditTitle" />
 			</div>
 
 			<div v-if="hasBadges"
@@ -83,6 +89,14 @@ export default {
 	components: { CardBadges, AttachmentDragAndDrop, CardMenu, CardCover, DueDate },
 	directives: {
 		ClickOutside,
+		'auto-link': {
+			inserted(el) {
+				el.innerHTML = el.innerHTML.replace(
+					/(\s|\n|^)((https?:\/\/)([-A-Z0-9+_.]+(?::[0-9]+)?(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*))(\s|\n|$)/gi,
+					'$1<a href="$2" target="_blank">$2</a>$5',
+				)
+			},
+		},
 	},
 	mixins: [Color, labelStyle],
 	props: {
@@ -106,6 +120,7 @@ export default {
 	data() {
 		return {
 			highlight: false,
+			editingTitle: false,
 		}
 	},
 	computed: {
@@ -189,15 +204,22 @@ export default {
 		},
 	},
 	methods: {
+		hasSelection() {
+			const selection = window.getSelection()
+			return selection.toString() !== ''
+		},
 		focus(card) {
-			if (this.shortcutLock) {
+			if (this.shortcutLock || this.hasSelection()) {
 				return
 			}
 			card = this.$refs[`card${card}`]
 			card.focus()
 		},
-		openCard() {
-			if (this.dragging) {
+		openCard(event) {
+			if (event.target.tagName.toLowerCase() === 'a') {
+				return
+			}
+			if (this.dragging || this.hasSelection()) {
 			  return
 			}
 			const boardId = this.card && this.card.boardId ? this.card.boardId : (this.$route?.params.id ?? this.currentBoard.id)
@@ -209,7 +231,11 @@ export default {
 
 			this.$root.$emit('open-card', this.card.id)
 		},
+		triggerEditTitle() {
+			this.editingTitle = true
+		},
 		onTitleBlur(e) {
+			this.editingTitle = false
 			// TODO Handle empty title
 			if (e.target.innerText !== this.card.title) {
 				this.$store.dispatch('updateCardTitle', {
@@ -336,6 +362,11 @@ export default {
 				word-wrap: break-word;
 				padding-left: 4px;
 				align-self: center;
+
+				:deep(a) {
+					text-decoration: underline;
+				}
+
 				&.editable {
 					span {
 						cursor: text;
