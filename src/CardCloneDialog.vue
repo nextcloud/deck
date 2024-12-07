@@ -3,9 +3,9 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<NcModal v-if="modalShow" :title="t('deck', 'Move card to another board')" @close="modalShow = false">
+	<NcModal v-if="modalShow" :title="t('deck', 'Clone card')" @close="modalShow = false">
 		<div class="modal__content">
-			<h3>{{ t('deck', 'Move card to another board') }}</h3>
+			<h3>{{ t('deck', 'Clone card to another board') }}</h3>
 			<NcSelect v-model="selectedBoard"
 				:input-label="t('deck', 'Select a board')"
 				:placeholder="t('deck', 'Select a board')"
@@ -21,8 +21,8 @@
 				:max-height="100"
 				label="title" />
 
-			<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">
-				{{ t('deck', 'Move card') }}
+			<button :disabled="!isBoardAndStackChoosen" class="primary" @click="cloneCard">
+				{{ t('deck', 'Clone card') }}
 			</button>
 			<button @click="modalShow = false">
 				{{ t('deck', 'Cancel') }}
@@ -36,9 +36,10 @@ import { NcModal, NcSelect } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
-	name: 'CardMoveDialog',
+	name: 'CardCloneDialog',
 	components: { NcModal, NcSelect },
 	data() {
 		return {
@@ -50,6 +51,14 @@ export default {
 		}
 	},
 	computed: {
+		...mapGetters([
+			'boards',
+			'stackById',
+			'boardById',
+		]),
+		...mapState({
+			currentBoard: state => state.currentBoard,
+		}),
 		activeBoards() {
 			return this.$store.getters.boards.filter((item) => item.deletedAt === 0 && item.archived === false)
 		},
@@ -58,14 +67,17 @@ export default {
 		},
 	},
 	mounted() {
-		subscribe('deck:card:show-move-dialog', this.openModal)
+		subscribe('deck:card:show-clone-dialog', this.openModal)
 	},
 	destroyed() {
-		unsubscribe('deck:card:show-move-dialog', this.openModal)
+		unsubscribe('deck:card:show-clone-dialog', this.openModal)
 	},
 	methods: {
 		openModal(card) {
 			this.card = card
+			this.selectedStack = this.stackById(this.card.stackId)
+			this.selectedBoard = this.boardById(this.selectedStack.boardId)
+			this.loadStacksFromBoard(this.selectedBoard)
 			this.modalShow = true
 		},
 		async loadStacksFromBoard(board) {
@@ -77,13 +89,8 @@ export default {
 				return err
 			}
 		},
-		async moveCard() {
-			this.copiedCard = Object.assign({}, this.card)
-			this.copiedCard.stackId = this.selectedStack.id
-			this.$store.dispatch('moveCard', this.copiedCard)
-			if (parseInt(this.selectedBoard.id) === parseInt(this.selectedStack.boardId)) {
-				await this.$store.commit('addNewCard', { ...this.copiedCard })
-			}
+		async cloneCard() {
+			this.$store.dispatch('cloneCard', { cardId: this.card.id, targetStackId: this.selectedStack.id })
 			this.modalShow = false
 		},
 	},

@@ -28,6 +28,23 @@ export class CardApi {
 			})
 	}
 
+	cloneCard(cardId, targetStackId) {
+		return axios.post(this.url(`/cards/${cardId}/clone`), {
+			targetStackId,
+		})
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
 	deleteCard(cardId) {
 		return axios.delete(this.url(`/cards/${cardId}`))
 			.then(

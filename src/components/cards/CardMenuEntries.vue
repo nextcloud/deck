@@ -33,6 +33,14 @@
 			@click="openCardMoveDialog">
 			{{ t('deck', 'Move card') }}
 		</NcActionButton>
+		<NcActionButton v-if="canEdit"
+			:close-after-click="true"
+			@click="openCardCloneDialog">
+			<template #icon>
+				<CloneIcon :size="20" decorative />
+			</template>
+			{{ t('deck', 'Clone card') }}
+		</NcActionButton>
 		<NcActionButton v-for="action in cardActions"
 			:key="action.label"
 			:close-after-click="true"
@@ -58,6 +66,7 @@
 import { NcActionButton } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
+import CloneIcon from 'vue-material-design-icons/ContentCopy.vue'
 import CardBulletedIcon from 'vue-material-design-icons/CardBulleted.vue'
 import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
@@ -68,7 +77,7 @@ import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'CardMenuEntries',
-	components: { NcActionButton, ArchiveIcon, CardBulletedIcon },
+	components: { CloneIcon, NcActionButton, ArchiveIcon, CardBulletedIcon },
 	props: {
 		card: {
 			type: Object,
@@ -167,6 +176,9 @@ export default {
 		},
 		openCardMoveDialog() {
 			emit('deck:card:show-move-dialog', this.card)
+		},
+		openCardCloneDialog() {
+			emit('deck:card:show-clone-dialog', this.card)
 		},
 	},
 }
