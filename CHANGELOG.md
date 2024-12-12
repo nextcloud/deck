@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.6.7
+
+### Fixed
+
+ - fix: Detect end of the activity responses (fix #3395) #6518
+ - fix: Avoid conflicts on deck attachments folder name #5705
+
 ## 1.6.6
 
 ### Fixed
