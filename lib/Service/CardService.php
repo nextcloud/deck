@@ -152,7 +152,6 @@ class CardService {
 			$cards
 		);
 	}
-
 	public function fetchDeleted($boardId) {
 		$this->cardServiceValidator->check(compact('boardId'));
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
@@ -231,8 +230,6 @@ class CardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE);
 		$this->changeHelper->cardChanged($card->getId(), false);
 		$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($card));
-
-		[$card] = $this->enrichCards([$card]);
 
 		return $card;
 	}
@@ -387,8 +384,6 @@ class CardService {
 			$this->boardMapper->update($board);
 			$this->changeHelper->boardChanged($board->getId());
 		}
-
-		[$card] = $this->enrichCards([$card]);
 
 		if ($resetDuedateNotification) {
 			$this->notificationHelper->markDuedateAsRead($card);
