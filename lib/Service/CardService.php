@@ -37,37 +37,74 @@ use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
 
 class CardService {
-	public function __construct(
-		private CardMapper $cardMapper,
-		private StackMapper $stackMapper,
-		private BoardMapper $boardMapper,
-		private LabelMapper $labelMapper,
-		private LabelService $labelService,
-		private PermissionService $permissionService,
-		private BoardService $boardService,
-		private NotificationHelper $notificationHelper,
-		private AssignmentMapper $assignedUsersMapper,
-		private AttachmentService $attachmentService,
-		private ActivityManager $activityManager,
-		private ICommentsManager $commentsManager,
-		private IUserManager $userManager,
-		private ChangeHelper $changeHelper,
-		private IEventDispatcher $eventDispatcher,
-		private IURLGenerator $urlGenerator,
-		private LoggerInterface $logger,
-		private IRequest $request,
-		private CardServiceValidator $cardServiceValidator,
-		private IReferenceManager $referenceManager,
-		private ?string $userId,
-	) {
-	}
+	private CardMapper $cardMapper;
+	private StackMapper $stackMapper;
+	private BoardMapper $boardMapper;
+	private LabelMapper $labelMapper;
+	private LabelService $labelService;
+	private PermissionService $permissionService;
+	private BoardService $boardService;
+	private NotificationHelper $notificationHelper;
+	private AssignmentMapper $assignedUsersMapper;
+	private AttachmentService $attachmentService;
+	private ?string $currentUser;
+	private ActivityManager $activityManager;
+	private ICommentsManager $commentsManager;
+	private ChangeHelper $changeHelper;
+	private IEventDispatcher $eventDispatcher;
+	private IUserManager $userManager;
+	private IURLGenerator $urlGenerator;
+	private LoggerInterface $logger;
+	private IRequest $request;
+	private CardServiceValidator $cardServiceValidator;
 
-	public function enrichCard($card) {
-		return $this->enrichCards([$card])[0];
+	public function __construct(
+		CardMapper $cardMapper,
+		StackMapper $stackMapper,
+		BoardMapper $boardMapper,
+		LabelMapper $labelMapper,
+		LabelService $labelService,
+		PermissionService $permissionService,
+		BoardService $boardService,
+		NotificationHelper $notificationHelper,
+		AssignmentMapper $assignedUsersMapper,
+		AttachmentService $attachmentService,
+		ActivityManager $activityManager,
+		ICommentsManager $commentsManager,
+		IUserManager $userManager,
+		ChangeHelper $changeHelper,
+		IEventDispatcher $eventDispatcher,
+		IURLGenerator $urlGenerator,
+		LoggerInterface $logger,
+		IRequest $request,
+		CardServiceValidator $cardServiceValidator,
+		private IReferenceManager $referenceManager,
+		?string $userId,
+	) {
+		$this->cardMapper = $cardMapper;
+		$this->stackMapper = $stackMapper;
+		$this->boardMapper = $boardMapper;
+		$this->labelMapper = $labelMapper;
+		$this->labelService = $labelService;
+		$this->permissionService = $permissionService;
+		$this->boardService = $boardService;
+		$this->notificationHelper = $notificationHelper;
+		$this->assignedUsersMapper = $assignedUsersMapper;
+		$this->attachmentService = $attachmentService;
+		$this->activityManager = $activityManager;
+		$this->commentsManager = $commentsManager;
+		$this->userManager = $userManager;
+		$this->changeHelper = $changeHelper;
+		$this->eventDispatcher = $eventDispatcher;
+		$this->currentUser = $userId;
+		$this->urlGenerator = $urlGenerator;
+		$this->logger = $logger;
+		$this->request = $request;
+		$this->cardServiceValidator = $cardServiceValidator;
 	}
 
 	public function enrichCards($cards) {
-		$user = $this->userManager->get($this->userId);
+		$user = $this->userManager->get($this->currentUser);
 
 		$cardIds = array_map(function (Card $card) use ($user) {
 			// Everything done in here might be heavy as it is executed for every card
@@ -114,11 +151,6 @@ class CardService {
 			},
 			$cards
 		);
-	}
-
-	private function applyReferenceData(CardDetails $cardDetails) {
-
-
 	}
 	public function fetchDeleted($boardId) {
 		$this->cardServiceValidator->check(compact('boardId'));
@@ -199,7 +231,7 @@ class CardService {
 		$this->changeHelper->cardChanged($card->getId(), false);
 		$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($card));
 
-		return $this->enrichCard($card);
+		return $card;
 	}
 
 	/**
@@ -273,7 +305,7 @@ class CardService {
 		}
 
 		$changes = new ChangeSet($card);
-		if ($card->getLastEditor() !== $this->userId && $card->getLastEditor() !== null) {
+		if ($card->getLastEditor() !== $this->currentUser && $card->getLastEditor() !== null) {
 			$this->activityManager->triggerEvent(
 				ActivityManager::DECK_OBJECT_CARD,
 				$card,
@@ -286,7 +318,7 @@ class CardService {
 			);
 
 			$card->setDescriptionPrev($card->getDescription());
-			$card->setLastEditor($this->userId);
+			$card->setLastEditor($this->currentUser);
 		}
 		$card->setTitle($title);
 		$card->setStackId($stackId);
@@ -352,8 +384,6 @@ class CardService {
 			$this->boardMapper->update($board);
 			$this->changeHelper->boardChanged($board->getId());
 		}
-
-		[$card] = $this->enrichCards([$card]);
 
 		if ($resetDuedateNotification) {
 			$this->notificationHelper->markDuedateAsRead($card);
