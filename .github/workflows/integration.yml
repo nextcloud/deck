@@ -110,7 +110,7 @@ jobs:
       - name: Run behat
         working-directory: apps/${{ env.APP_NAME }}/tests/integration
         run: |
-          php -S localhost:8080 &
+          php -q -S localhost:8080 -t ../../../../ &
           ./run.sh
 
       - name: Print logs
