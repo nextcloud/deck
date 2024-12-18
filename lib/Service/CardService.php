@@ -393,8 +393,6 @@ class CardService {
 			$this->changeHelper->boardChanged($board->getId());
 		}
 
-		$card = $this->enrichCard($card);
-
 		if ($resetDuedateNotification) {
 			$this->notificationHelper->markDuedateAsRead($card);
 		}
