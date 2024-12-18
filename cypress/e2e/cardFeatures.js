@@ -63,8 +63,7 @@ describe('Card', function () {
 		})
 	})
 
-	// TODO reintroduce this test
-	it.skip('Create card from overview', function () {
+	it('Create card from overview', function () {
 		cy.visit(`/apps/deck/#/`)
 		const newCardTitle = 'Test create from overview'
 		cy.intercept({ method: 'POST', url: '**/apps/deck/cards' }).as('save')
@@ -72,6 +71,10 @@ describe('Card', function () {
 
 		cy.get('.button-vue[aria-label*="Add card"]')
 			.first().click()
+
+		// Somehow this avoids the electron crash
+		cy.wait(2000)
+
 		cy.get('.modal-mask.card-selector .card-title').should('be.visible').click().type(newCardTitle)
 		cy.get('.modal-mask.card-selector .multiselect-board').should('be.visible').click()
 		cy.get('.vs__dropdown-menu [data-cy="board-select-title"]:contains("' + boardData.title + '")').should('be.visible').click()
