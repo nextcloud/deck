@@ -103,6 +103,11 @@ class CardService {
 		$this->cardServiceValidator = $cardServiceValidator;
 	}
 
+	public function enrichCard(Card $card): Card {
+		$cards = $this->enrichCards([$card]);
+		return reset($cards);
+	}
+
 	public function enrichCards($cards) {
 		$user = $this->userManager->get($this->currentUser);
 
@@ -232,7 +237,7 @@ class CardService {
 		$this->changeHelper->cardChanged($card->getId(), false);
 		$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($card));
 
-		[$card] = $this->enrichCards([$card]);
+		$card = $this->enrichCard($card);
 
 		return $card;
 	}
@@ -388,7 +393,7 @@ class CardService {
 			$this->changeHelper->boardChanged($board->getId());
 		}
 
-		[$card] = $this->enrichCards([$card]);
+		$card = $this->enrichCard($card);
 
 		if ($resetDuedateNotification) {
 			$this->notificationHelper->markDuedateAsRead($card);
