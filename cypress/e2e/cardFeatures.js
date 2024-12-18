@@ -122,10 +122,10 @@ describe('Card', function () {
 			cy.get('button.icon-folder').should('be.visible')
 				.click()
 			cy.get('.file-picker__main').should('be.visible')
-			cy.get('.file-picker__main [data-filename="Nextcloud_Server_Administration_Manual.pdf"]', { timeout: 30000 }).should('be.visible')
+			cy.get('.file-picker__main [data-filename="welcome.txt"]', { timeout: 30000 }).should('be.visible')
 				.click()
 			cy.get('.dialog__actions button.button-vue--vue-primary').click()
-			cy.get('.attachment-list .basename').contains('Nextcloud_Server_Administration_Manual.pdf')
+			cy.get('.attachment-list .basename').contains('welcome.txt')
 		})
 
 		it('Shows the modal with the editor', () => {
