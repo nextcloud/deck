@@ -237,6 +237,8 @@ class CardService {
 		$this->changeHelper->cardChanged($card->getId(), false);
 		$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($card));
 
+		$card = $this->enrichCard($card);
+
 		return $card;
 	}
 
