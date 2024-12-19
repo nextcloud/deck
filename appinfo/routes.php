@@ -137,6 +137,8 @@ return [
 		['name' => 'comments_api#update', 'url' => '/api/v{apiVersion}/cards/{cardId}/comments/{commentId}', 'verb' => 'PUT'],
 		['name' => 'comments_api#delete', 'url' => '/api/v{apiVersion}/cards/{cardId}/comments/{commentId}', 'verb' => 'DELETE'],
 
+		['name' => 'card#clone', 'url' => '/api/v{apiVersion}/cards/{cardId}/clone', 'verb' => 'POST'],
+
 		['name' => 'overview_api#upcomingCards', 'url' => '/api/v{apiVersion}/overview/upcoming', 'verb' => 'GET'],
 
 		['name' => 'search#search', 'url' => '/api/v{apiVersion}/search', 'verb' => 'GET'],
