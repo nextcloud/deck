@@ -29,6 +29,7 @@ use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
 use OCA\Deck\Validators\CardServiceValidator;
+use OCP\Collaboration\Reference\IReferenceManager;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
@@ -78,6 +79,7 @@ class CardService {
 		LoggerInterface $logger,
 		IRequest $request,
 		CardServiceValidator $cardServiceValidator,
+		private IReferenceManager $referenceManager,
 		?string $userId,
 	) {
 		$this->cardMapper = $cardMapper;
@@ -100,6 +102,11 @@ class CardService {
 		$this->logger = $logger;
 		$this->request = $request;
 		$this->cardServiceValidator = $cardServiceValidator;
+	}
+
+	public function enrichCard(Card $card): Card {
+		$cards = $this->enrichCards([$card]);
+		return reset($cards);
 	}
 
 	public function enrichCards($cards) {
@@ -143,11 +150,15 @@ class CardService {
 
 		return array_map(
 			function (Card $card): CardDetails {
-				return new CardDetails($card);
+				$referenceData = $this->referenceManager->resolveReference($card->getTitle());
+				$cardDetails = new CardDetails($card);
+				$cardDetails->setReferenceData($referenceData);
+				return $cardDetails;
 			},
 			$cards
 		);
 	}
+
 	public function fetchDeleted($boardId) {
 		$this->cardServiceValidator->check(compact('boardId'));
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
@@ -226,6 +237,8 @@ class CardService {
 		$this->activityManager->triggerEvent(ActivityManager::DECK_OBJECT_CARD, $card, ActivityManager::SUBJECT_CARD_CREATE);
 		$this->changeHelper->cardChanged($card->getId(), false);
 		$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($card));
+
+		$this->enrichCard($card);
 
 		return $card;
 	}
