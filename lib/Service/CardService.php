@@ -67,8 +67,8 @@ class CardService {
 	public function enrichCards($cards) {
 		$user = $this->userManager->get($this->userId);
 
-		return $cards;
 		$cardIds = array_map(function (Card $card) use ($user) {
+			return $card->getId();
 			// Everything done in here might be heavy as it is executed for every card
 			$cardId = $card->getId();
 			$this->cardMapper->mapOwner($card);
