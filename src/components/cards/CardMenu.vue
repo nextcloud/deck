@@ -6,7 +6,7 @@
 <template>
 	<div v-if="card" class="card-menu" @click.stop.prevent>
 		<NcActions>
-			<CardMenuEntries :card="card" />
+			<CardMenuEntries :card="card" @edit-title="(id) => $emit('edit-title', id)" />
 		</NcActions>
 	</div>
 </template>
@@ -23,5 +23,6 @@ export default {
 			default: null,
 		},
 	},
+	emits: ['edit-title'],
 }
 </script>
