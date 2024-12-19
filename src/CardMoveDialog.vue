@@ -3,9 +3,8 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <template>
-	<NcModal v-if="modalShow" :title="t('deck', 'Move card to another board')" @close="modalShow = false">
+	<NcDialog :open.sync="modalShow" :name="t('deck', 'Move/copy card')">
 		<div class="modal__content">
-			<h3>{{ t('deck', 'Move/copy card to another board') }}</h3>
 			<NcSelect v-model="selectedBoard"
 				:input-label="t('deck', 'Select a board')"
 				:placeholder="t('deck', 'Select a board')"
@@ -20,22 +19,20 @@
 				:options="stacksFromBoard"
 				:max-height="100"
 				label="title" />
-
-			<NcButton :disabled="!isBoardAndStackChoosen" type="primary" @click="moveCard">
+		</div>
+		<template #actions>
+			<NcButton :disabled="!isBoardAndStackChoosen" type="secondary" @click="moveCard">
 				{{ t('deck', 'Move card') }}
 			</NcButton>
 			<NcButton :disabled="!isBoardAndStackChoosen" type="primary" @click="cloneCard">
 				{{ t('deck', 'Copy card') }}
 			</NcButton>
-			<NcButton @click="modalShow = false">
-				{{ t('deck', 'Cancel') }}
-			</NcButton>
-		</div>
-	</NcModal>
+		</template>
+	</NcDialog>
 </template>
 
 <script>
-import { NcModal, NcSelect, NcButton } from '@nextcloud/vue'
+import { NcDialog, NcSelect, NcButton } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -43,7 +40,7 @@ import { mapGetters } from 'vuex'
 
 export default {
 	name: 'CardMoveDialog',
-	components: { NcModal, NcSelect, NcButton },
+	components: { NcDialog, NcSelect, NcButton },
 	data() {
 		return {
 			card: null,
@@ -104,26 +101,8 @@ export default {
 
 <style lang="scss" scoped>
 .modal__content {
-	min-width: 250px;
-	min-height: 120px;
-	margin: 20px 20px 100px 20px;
-
-	h3 {
-		font-weight: bold;
-		text-align: center;
-	}
-
 	.select {
 		margin-bottom: 12px;
 	}
-}
-
-button{
-	margin-left: 6px;
-}
-
-.modal__content button {
-	float: right;
-	margin-top: 50px;
 }
 </style>

@@ -303,7 +303,7 @@ describe('Card', function () {
 			})
 		})
 
-		it.only('clone card', () => {
+		it('clone card', () => {
 			cy.intercept({ method: 'POST', url: '**/apps/deck/**/cards/*/clone' }).as('clone')
 			cy.get('.card:contains("Hello world")').should('be.visible').click()
 			cy.get('#app-sidebar-vue')
@@ -311,7 +311,7 @@ describe('Card', function () {
 
 			cy.get('.app-sidebar-header .action-item__menutoggle').click()
 			cy.get('.v-popper__popper button:contains("Move/copy card")').click()
-			cy.get('.modal__content button:contains("Copy card")').click()
+			cy.get('.modal-container button:contains("Copy card")').click()
 			cy.wait('@clone', { timeout: 7000 })
 			cy.get('.card:contains("Hello world")').should('have.length', 2)
 		})
