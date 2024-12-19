@@ -358,6 +358,8 @@ class CardService {
 
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
+		[$card] = $this->enrichCards([$card]);
+
 		return $card;
 	}
 
