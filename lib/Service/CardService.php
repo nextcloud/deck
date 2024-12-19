@@ -68,12 +68,12 @@ class CardService {
 		$user = $this->userManager->get($this->userId);
 
 		$cardIds = array_map(function (Card $card) use ($user) {
-			return $card->getId();
 			// Everything done in here might be heavy as it is executed for every card
 			$cardId = $card->getId();
 			$this->cardMapper->mapOwner($card);
 
 			$card->setAttachmentCount($this->attachmentService->count($cardId));
+			return $card->getId();
 
 			// TODO We should find a better way just to get the comment count so we can save 1-3 queries per card here
 			$countComments = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId());
