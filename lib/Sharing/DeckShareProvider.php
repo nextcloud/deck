@@ -268,13 +268,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 		return $share;
 	}
 
-	private function applyBoardPermission($share, $permissions, $userId, ?array $shareToPermissionMap = null): void {
-		$cardId = (int)$share->getSharedWith();
-		if ($shareToPermissionMap !== null && isset($shareToPermissionMap[$cardId])) {
-			$share->setPermissions($permissions & $this->permissionService->boardToFilePermission($shareToPermissionMap[$cardId]));
-			return;
-		}
-
+	private function applyBoardPermission($share, $permissions, $userId) {
 		try {
 			$this->permissionService->checkPermission($this->cardMapper, $share->getSharedWith(), Acl::PERMISSION_EDIT, $userId);
 		} catch (NoPermissionException $e) {
@@ -619,7 +613,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	 * @param string $userId
 	 * @return IShare[]
 	 */
-	private function resolveSharesForRecipient(array $shares, string $userId, ?array $cardPermissionMap = null): array {
+	private function resolveSharesForRecipient(array $shares, string $userId): array {
 		$result = [];
 
 		$start = 0;
@@ -656,7 +650,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 			$stmt = $query->execute();
 
 			while ($data = $stmt->fetch()) {
-				$this->applyBoardPermission($shareMap[$data['parent']], (int)$data['permissions'], $userId, $cardPermissionMap);
+				$this->applyBoardPermission($shareMap[$data['parent']], (int)$data['permissions'], $userId);
 				$shareMap[$data['parent']]->setTarget($data['file_target']);
 			}
 
@@ -705,18 +699,14 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 	 * @return IShare[]
 	 */
 	public function getSharedWith($userId, $shareType, $node, $limit, $offset): array {
-		// We query all boards fully as we can reuse that to match permissions later on
-		$allBoards = $this->boardMapper->findAllForUser($userId);
-		$cardToBoardMapping = [];
+		$allBoards = $this->boardMapper->findBoardIds($userId);
+
 		/** @var IShare[] $shares */
 		$shares = [];
 
 		$start = 0;
 		while (true) {
 			$boards = array_slice($allBoards, $start, 1000);
-			$boardIds = array_map(function ($board) {
-				return $board->getId();
-			}, $boards);
 			$start += 1000;
 
 			if ($boards === []) {
@@ -730,16 +720,13 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 				'f.encrypted', 'f.unencrypted_size', 'f.etag', 'f.checksum'
 			)
 				->selectAlias('st.id', 'storage_string_id')
-				->selectAlias('db.id', 'board_id')
 				->from('share', 's')
 				->orderBy('s.id')
 				->leftJoin('s', 'filecache', 'f', $qb->expr()->eq('s.file_source', 'f.fileid'))
 				->leftJoin('f', 'storages', 'st', $qb->expr()->eq('f.storage', 'st.numeric_id'))
 				->leftJoin('s', 'deck_cards', 'dc', $qb->expr()->eq($qb->expr()->castColumn('dc.id', IQueryBuilder::PARAM_STR), 's.share_with'))
 				->leftJoin('dc', 'deck_stacks', 'ds', $qb->expr()->eq('dc.stack_id', 'ds.id'))
-				->leftJoin('ds', 'deck_boards', 'db', $qb->expr()->eq('ds.board_id', 'db.id'))
-				->where($qb->expr()->eq('dc.deleted_at', $qb->createNamedParameter(0)))
-				->andWhere($qb->expr()->eq('db.deleted_at', $qb->createNamedParameter(0)));
+				->leftJoin('ds', 'deck_boards', 'db', $qb->expr()->eq('ds.board_id', 'db.id'));
 
 			if ($limit !== -1) {
 				$qb->setMaxResults($limit);
@@ -752,7 +739,7 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 
 			$qb->andWhere($qb->expr()->eq('s.share_type', $qb->createNamedParameter(IShare::TYPE_DECK)))
 				->andWhere($qb->expr()->in('db.id', $qb->createNamedParameter(
-					$boardIds,
+					$boards,
 					IQueryBuilder::PARAM_STR_ARRAY
 				)))
 				->andWhere($qb->expr()->orX(
@@ -771,23 +758,11 @@ class DeckShareProvider implements \OCP\Share\IShareProvider {
 					continue;
 				}
 				$shares[] = $this->createShareObject($data);
-				$cardToBoardMapping[(int)$data['share_with']] = $data['board_id'];
 			}
 			$cursor->closeCursor();
 		}
 
-		$boardPermissions = [];
-		foreach ($allBoards as $board) {
-			$permissions = $this->permissionService->matchPermissions($board);
-			$boardPermissions[$board->getId()] = $permissions;
-		}
-
-		$cardPermissionMap = [];
-		foreach ($cardToBoardMapping as $cardId => $boardId) {
-			$cardPermissionMap[$cardId] = $boardPermissions[$boardId] ?? false;
-		}
-
-		$shares = $this->resolveSharesForRecipient($shares, $userId, $cardPermissionMap);
+		$shares = $this->resolveSharesForRecipient($shares, $userId);
 
 		return $shares;
 	}
