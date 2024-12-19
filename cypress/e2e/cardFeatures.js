@@ -310,8 +310,8 @@ describe('Card', function () {
 				.find('.ProseMirror h1').contains('Hello world').should('be.visible')
 
 			cy.get('.app-sidebar-header .action-item__menutoggle').click()
-			cy.get('.v-popper__popper button:contains("Clone card")').click()
-			cy.get('.modal__content button:contains("Clone card")').click()
+			cy.get('.v-popper__popper button:contains("Move/copy card")').click()
+			cy.get('.modal__content button:contains("Copy card")').click()
 			cy.wait('@clone', { timeout: 7000 })
 			cy.get('.card:contains("Hello world")').should('have.length', 2)
 		})

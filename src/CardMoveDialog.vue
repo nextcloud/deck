@@ -5,7 +5,7 @@
 <template>
 	<NcModal v-if="modalShow" :title="t('deck', 'Move card to another board')" @close="modalShow = false">
 		<div class="modal__content">
-			<h3>{{ t('deck', 'Move card to another board') }}</h3>
+			<h3>{{ t('deck', 'Move/copy card to another board') }}</h3>
 			<NcSelect v-model="selectedBoard"
 				:input-label="t('deck', 'Select a board')"
 				:placeholder="t('deck', 'Select a board')"
@@ -21,25 +21,29 @@
 				:max-height="100"
 				label="title" />
 
-			<button :disabled="!isBoardAndStackChoosen" class="primary" @click="moveCard">
+			<NcButton :disabled="!isBoardAndStackChoosen" type="primary" @click="moveCard">
 				{{ t('deck', 'Move card') }}
-			</button>
-			<button @click="modalShow = false">
+			</NcButton>
+			<NcButton :disabled="!isBoardAndStackChoosen" type="primary" @click="cloneCard">
+				{{ t('deck', 'Copy card') }}
+			</NcButton>
+			<NcButton @click="modalShow = false">
 				{{ t('deck', 'Cancel') }}
-			</button>
+			</NcButton>
 		</div>
 	</NcModal>
 </template>
 
 <script>
-import { NcModal, NcSelect } from '@nextcloud/vue'
+import { NcModal, NcSelect, NcButton } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
 import axios from '@nextcloud/axios'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'CardMoveDialog',
-	components: { NcModal, NcSelect },
+	components: { NcModal, NcSelect, NcButton },
 	data() {
 		return {
 			card: null,
@@ -50,6 +54,7 @@ export default {
 		}
 	},
 	computed: {
+		...mapGetters(['stackById', 'boardById']),
 		activeBoards() {
 			return this.$store.getters.boards.filter((item) => item.deletedAt === 0 && item.archived === false)
 		},
@@ -66,6 +71,9 @@ export default {
 	methods: {
 		openModal(card) {
 			this.card = card
+			this.selectedStack = this.stackById(this.card.stackId)
+			this.selectedBoard = this.boardById(this.selectedStack.boardId)
+			this.loadStacksFromBoard(this.selectedBoard)
 			this.modalShow = true
 		},
 		async loadStacksFromBoard(board) {
@@ -86,6 +94,10 @@ export default {
 			}
 			this.modalShow = false
 		},
+		async cloneCard() {
+			this.$store.dispatch('cloneCard', { cardId: this.card.id, targetStackId: this.selectedStack.id })
+			this.modalShow = false
+		},
 	},
 }
 </script>
@@ -104,6 +116,10 @@ export default {
 	.select {
 		margin-bottom: 12px;
 	}
+}
+
+button{
+	margin-left: 6px;
 }
 
 .modal__content button {

@@ -26,7 +26,6 @@
 		</div>
 		<KeyboardShortcuts />
 		<CardMoveDialog />
-		<CardCloneDialog />
 	</NcContent>
 </template>
 
@@ -39,7 +38,6 @@ import { BoardApi } from './services/BoardApi.js'
 import { emit, subscribe } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
 import CardMoveDialog from './CardMoveDialog.vue'
-import CardCloneDialog from './CardCloneDialog.vue'
 
 const boardApi = new BoardApi()
 
@@ -47,7 +45,6 @@ export default {
 	name: 'App',
 	components: {
 		CardMoveDialog,
-		CardCloneDialog,
 		AppNavigation,
 		NcModal,
 		NcContent,
