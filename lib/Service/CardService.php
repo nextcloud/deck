@@ -29,6 +29,7 @@ use OCA\Deck\NoPermissionException;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
 use OCA\Deck\Validators\CardServiceValidator;
+use OCP\Collaboration\Reference\IReferenceManager;
 use OCP\Comments\ICommentsManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
@@ -37,9 +38,6 @@ use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
 
 class CardService {
-
-	private string $currentUser;
-
 	public function __construct(
 		private CardMapper $cardMapper,
 		private StackMapper $stackMapper,
@@ -61,13 +59,13 @@ class CardService {
 		private IRequest $request,
 		private CardServiceValidator $cardServiceValidator,
 		private AssignmentService $assignmentService,
-		?string $userId,
+		private IReferenceManager $referenceManager,
+		private ?string $userId,
 	) {
-		$this->currentUser = $userId;
 	}
 
 	public function enrichCards($cards) {
-		$user = $this->userManager->get($this->currentUser);
+		$user = $this->userManager->get($this->userId);
 
 		$cardIds = array_map(function (Card $card) use ($user) {
 			// Everything done in here might be heavy as it is executed for every card
@@ -75,6 +73,7 @@ class CardService {
 			$this->cardMapper->mapOwner($card);
 
 			$card->setAttachmentCount($this->attachmentService->count($cardId));
+			return $card->getId();
 
 			// TODO We should find a better way just to get the comment count so we can save 1-3 queries per card here
 			$countComments = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId());
@@ -107,10 +106,18 @@ class CardService {
 
 		return array_map(
 			function (Card $card): CardDetails {
-				return new CardDetails($card);
+				$referenceData = $this->referenceManager->resolveReference($card->getTitle());
+				$cardDetails = new CardDetails($card);
+				$cardDetails->setReferenceData($referenceData);
+				return $cardDetails;
 			},
 			$cards
 		);
+	}
+
+	private function applyReferenceData(CardDetails $cardDetails) {
+
+
 	}
 	public function fetchDeleted($boardId) {
 		$this->cardServiceValidator->check(compact('boardId'));
@@ -191,6 +198,8 @@ class CardService {
 		$this->changeHelper->cardChanged($card->getId(), false);
 		$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($card));
 
+		$this->enrichCards([$card]);
+
 		return $card;
 	}
 
@@ -265,7 +274,7 @@ class CardService {
 		}
 
 		$changes = new ChangeSet($card);
-		if ($card->getLastEditor() !== $this->currentUser && $card->getLastEditor() !== null) {
+		if ($card->getLastEditor() !== $this->userId && $card->getLastEditor() !== null) {
 			$this->activityManager->triggerEvent(
 				ActivityManager::DECK_OBJECT_CARD,
 				$card,
@@ -278,7 +287,7 @@ class CardService {
 			);
 
 			$card->setDescriptionPrev($card->getDescription());
-			$card->setLastEditor($this->currentUser);
+			$card->setLastEditor($this->userId);
 		}
 		$card->setTitle($title);
 		$card->setStackId($stackId);
@@ -351,6 +360,8 @@ class CardService {
 		$this->changeHelper->cardChanged($card->getId(), true);
 
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
+
+		[$card] = $this->enrichCards([$card]);
 
 		return $card;
 	}

@@ -137,11 +137,11 @@ class BoardService {
 	 */
 	public function findAll(int $since = -1, bool $fullDetails = false, bool $includeArchived = true): array {
 		if ($this->boardsCacheFull && $fullDetails) {
-			return $this->boardsCacheFull;
+			return array_values($this->boardsCacheFull);
 		}
 
 		if ($this->boardsCachePartial && !$fullDetails) {
-			return $this->boardsCachePartial;
+			return array_values($this->boardsCachePartial);
 		}
 
 		$complete = $this->getUserBoards($since, $includeArchived);
