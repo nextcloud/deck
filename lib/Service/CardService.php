@@ -197,7 +197,7 @@ class CardService {
 		$this->changeHelper->cardChanged($card->getId(), false);
 		$this->eventDispatcher->dispatchTyped(new CardCreatedEvent($card));
 
-		return $this->enrichCard($card);
+		return $card;
 	}
 
 	/**
@@ -350,8 +350,6 @@ class CardService {
 			$this->boardMapper->update($board);
 			$this->changeHelper->boardChanged($board->getId());
 		}
-
-		[$card] = $this->enrichCards([$card]);
 
 		if ($resetDuedateNotification) {
 			$this->notificationHelper->markDuedateAsRead($card);
