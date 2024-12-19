@@ -43,7 +43,6 @@ return [
 		['name' => 'card#read', 'url' => '/cards/{cardId}', 'verb' => 'GET'],
 		['name' => 'card#create', 'url' => '/cards', 'verb' => 'POST'],
 		['name' => 'card#update', 'url' => '/cards/{cardId}', 'verb' => 'PUT'],
-		['name' => 'card#clone', 'url' => '/cards/{cardId}/clone', 'verb' => 'POST'],
 		['name' => 'card#delete', 'url' => '/cards/{cardId}', 'verb' => 'DELETE'],
 		['name' => 'card#deleted', 'url' => '/{boardId}/cards/deleted', 'verb' => 'GET'],
 		['name' => 'card#rename', 'url' => '/cards/{cardId}/rename', 'verb' => 'PUT'],
@@ -137,6 +136,8 @@ return [
 		['name' => 'comments_api#create', 'url' => '/api/v{apiVersion}/cards/{cardId}/comments', 'verb' => 'POST'],
 		['name' => 'comments_api#update', 'url' => '/api/v{apiVersion}/cards/{cardId}/comments/{commentId}', 'verb' => 'PUT'],
 		['name' => 'comments_api#delete', 'url' => '/api/v{apiVersion}/cards/{cardId}/comments/{commentId}', 'verb' => 'DELETE'],
+
+		['name' => 'card#clone', 'url' => '/api/v{apiVersion}/cards/{cardId}/clone', 'verb' => 'POST'],
 
 		['name' => 'overview_api#upcomingCards', 'url' => '/api/v{apiVersion}/overview/upcoming', 'verb' => 'GET'],
 

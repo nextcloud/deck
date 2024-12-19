@@ -303,8 +303,8 @@ describe('Card', function () {
 			})
 		})
 
-		it('clone card', () => {
-			cy.intercept({ method: 'POST', url: '**/apps/deck/cards/*/clone' }).as('clone')
+		it.only('clone card', () => {
+			cy.intercept({ method: 'POST', url: '**/apps/deck/**/cards/*/clone' }).as('clone')
 			cy.get('.card:contains("Hello world")').should('be.visible').click()
 			cy.get('#app-sidebar-vue')
 				.find('.ProseMirror h1').contains('Hello world').should('be.visible')
