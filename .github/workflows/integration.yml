@@ -112,6 +112,11 @@ jobs:
         working-directory: apps/${{ env.APP_NAME }}/tests/integration
         run: ./run.sh
 
+      - name: Print query log
+        run: |
+          cat query.log | wc -l
+          cat query.log
+
       - name: Query count
         if: ${{ matrix.databases == 'mysql' }}
         uses: actions/github-script@v7
