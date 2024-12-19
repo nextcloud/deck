@@ -88,6 +88,7 @@ class CardService {
 
 			return $card->getId();
 		}, $cards);
+		return $cards;
 
 		$assignedLabels = $this->labelMapper->findAssignedLabelsForCards($cardIds);
 		$assignedUsers = $this->assignedUsersMapper->findIn($cardIds);
