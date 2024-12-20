@@ -158,7 +158,7 @@ class BoardService {
 		$this->boardServiceValidator->check(compact('boardId'));
 
 		if (isset($this->boardsCacheFull[$boardId]) && $fullDetails) {
-			return $this->boardsCacheFull[$boardId];
+			// return $this->boardsCacheFull[$boardId];
 		}
 
 		if (isset($this->boardsCachePartial[$boardId]) && !$fullDetails) {
