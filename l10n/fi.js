@@ -94,13 +94,12 @@ OC.L10N.register(
     "Select the board to link to a project" : "Valitse projektiin linkitettävä taulu",
     "Search by board title" : "Hae taulun otsikon mukaan",
     "Select board" : "Valitse taulu",
-    "Move card to another board" : "Siirrä kortti toiselle taululle",
     "Select a board" : "Valitse taulu",
     "No lists available" : "Ei listoja saatavilla",
     "Select a list" : "Valitse lista ",
     "Move card" : "Siirrä kortti",
-    "Cancel" : "Peruuta",
     "Select a card" : "Valitse kortti",
+    "Cancel" : "Peruuta",
     "Select the card to link to a project" : "Valitse projektiin linkitettävä kortti",
     "Link to card" : "Linkitä korttiin",
     "File already exists" : "Tiedosto on jo olemassa",
@@ -278,6 +277,7 @@ OC.L10N.register(
     "Maximum file size of {size} exceeded" : "Tiedoston enimmäiskoko {size} ylitetty",
     "Error creating the share" : "Virhe jakoa luotaessa",
     "Share" : "Jaa",
+    "Move card to another board" : "Siirrä kortti toiselle taululle",
     "(Circle)" : "(Piiri)"
 },
 "nplurals=2; plural=(n != 1);");
