@@ -82,16 +82,14 @@ class CardService {
 			$card->setCommentsCount($countComments);
 
 			// ok
-
 			$stack = $this->stackMapper->find($card->getStackId());
+			$card->setRelatedStack($stack);
 
+			// ok
+			$board = $this->boardService->find($stack->getBoardId(), false);
+			$card->setRelatedBoard($board);
 			return $card->getId();
 
-			$board = $this->boardService->find($stack->getBoardId(), false);
-
-
-			$card->setRelatedStack($stack);
-			$card->setRelatedBoard($board);
 
 			return $card->getId();
 		}, $cards);
