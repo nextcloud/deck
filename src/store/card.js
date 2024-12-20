@@ -285,6 +285,7 @@ export default {
 		async updateCardTitle({ commit }, card) {
 			const updatedCard = await apiClient.updateCard(card)
 			commit('updateCardProperty', { property: 'title', card: updatedCard })
+			commit('updateCardProperty', { property: 'referenceData', card: updatedCard })
 		},
 		async moveCard({ commit }, card) {
 			const updatedCard = await apiClient.updateCard(card)

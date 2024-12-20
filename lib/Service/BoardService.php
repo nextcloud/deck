@@ -137,11 +137,11 @@ class BoardService {
 	 */
 	public function findAll(int $since = -1, bool $fullDetails = false, bool $includeArchived = true): array {
 		if ($this->boardsCacheFull && $fullDetails) {
-			return $this->boardsCacheFull;
+			return array_values($this->boardsCacheFull);
 		}
 
 		if ($this->boardsCachePartial && !$fullDetails) {
-			return $this->boardsCachePartial;
+			return array_values($this->boardsCachePartial);
 		}
 
 		$complete = $this->getUserBoards($since, $includeArchived);
@@ -158,11 +158,11 @@ class BoardService {
 		$this->boardServiceValidator->check(compact('boardId'));
 
 		if (isset($this->boardsCacheFull[$boardId]) && $fullDetails) {
-			return $this->boardsCacheFull[$boardId];
+			// return $this->boardsCacheFull[$boardId];
 		}
 
 		if (isset($this->boardsCachePartial[$boardId]) && !$fullDetails) {
-			return $this->boardsCachePartial[$boardId];
+			// return $this->boardsCachePartial[$boardId];
 		}
 
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
