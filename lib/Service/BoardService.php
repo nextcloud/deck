@@ -162,7 +162,7 @@ class BoardService {
 		}
 
 		if (isset($this->boardsCachePartial[$boardId]) && !$fullDetails) {
-			return $this->boardsCachePartial[$boardId];
+			// return $this->boardsCachePartial[$boardId];
 		}
 
 		$this->permissionService->checkPermission($this->boardMapper, $boardId, Acl::PERMISSION_READ);
