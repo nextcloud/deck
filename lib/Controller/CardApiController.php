@@ -158,6 +158,30 @@ class CardApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 *
+	 * Archive card
+	 */
+	public function archive($cardId) {
+		$card = $this->cardService->archive($cardId);
+		return new DataResponse($card, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
+	 * Unarchive card
+	 */
+	public function unarchive($cardId) {
+		$card = $this->cardService->unarchive($cardId);
+		return new DataResponse($card, HTTP::STATUS_OK);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 *
 	 * Reorder cards
 	 */
 	public function reorder($stackId, $order) {
