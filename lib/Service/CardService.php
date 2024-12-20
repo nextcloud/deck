@@ -84,9 +84,11 @@ class CardService {
 			// ok
 
 			$stack = $this->stackMapper->find($card->getStackId());
-			$board = $this->boardService->find($stack->getBoardId(), false);
 
 			return $card->getId();
+
+			$board = $this->boardService->find($stack->getBoardId(), false);
+
 
 			$card->setRelatedStack($stack);
 			$card->setRelatedBoard($board);
