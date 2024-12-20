@@ -73,7 +73,6 @@ class CardService {
 			$this->cardMapper->mapOwner($card);
 
 			$card->setAttachmentCount($this->attachmentService->count($cardId));
-			// ok
 
 			// TODO We should find a better way just to get the comment count so we can save 1-3 queries per card here
 			$countComments = $this->commentsManager->getNumberOfCommentsForObject('deckCard', (string)$card->getId());
@@ -82,10 +81,13 @@ class CardService {
 			$card->setCommentsUnread($countUnreadComments);
 			$card->setCommentsCount($countComments);
 
-			return $card->getId();
+			// ok
 
 			$stack = $this->stackMapper->find($card->getStackId());
 			$board = $this->boardService->find($stack->getBoardId(), false);
+
+			return $card->getId();
+
 			$card->setRelatedStack($stack);
 			$card->setRelatedBoard($board);
 
