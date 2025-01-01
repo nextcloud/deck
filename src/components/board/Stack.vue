@@ -365,34 +365,32 @@ export default {
 	@import './../../css/variables';
 
 	.stack {
-		width: $stack-width + $stack-spacing * 3;
+		width: 100%;
 	}
 
 	.stack__header {
 		display: flex;
 		position: sticky;
 		top: 0;
+		height: var(--default-clickable-area);
 		z-index: 100;
-		padding-left: $card-spacing;
-		padding-right: $card-spacing;
-		margin: 6px;
 		margin-top: 0;
 		cursor: grab;
 		background-color: var(--color-main-background);
 
 		// Smooth fade out of the cards at the top
 		&:before {
-			content: ' ';
+			content: '';
 			display: block;
 			position: absolute;
-			width: calc(100% - 16px);
+			width: 100%;
 			height: 20px;
 			top: 30px;
 			left: 0px;
 			z-index: 99;
 			transition: top var(--animation-slow);
-
 			background-image: linear-gradient(180deg, var(--color-main-background) 3px, rgba(255, 255, 255, 0) 100%);
+
 			body.theme--dark & {
 				background-image: linear-gradient(180deg, var(--color-main-background) 3px, rgba(0, 0, 0, 0) 100%);
 			}
@@ -404,8 +402,10 @@ export default {
 		}
 
 		h3, form {
-			flex-grow: 1;
+			flex: 1 1 auto;
+			min-width: 0;
 			display: flex;
+			align-items: center;
 			cursor: inherit;
 			margin: 0;
 
@@ -418,9 +418,8 @@ export default {
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
-			max-width: calc($stack-width - 60px);
 			border-radius: 3px;
-			padding: 4px 4px;
+			padding: $card-padding;
 			font-size: var(--default-font-size);
 
 			&:focus-visible {
@@ -430,7 +429,6 @@ export default {
 		}
 
 		form {
-			margin: -4px;
 			input {
 				font-weight: bold;
 				padding: 0 6px;
@@ -459,8 +457,6 @@ export default {
 
 		form {
 			display: flex;
-			margin-left: $stack-spacing;
-			margin-right: $stack-spacing;
 			width: 100%;
 			border: 2px solid var(--color-border-maxcontrast);
 			border-radius: var(--border-radius-large);
@@ -481,7 +477,6 @@ export default {
 		input {
 			border: none;
 			margin: 0;
-			padding: 4px;
 		}
 	}
 
