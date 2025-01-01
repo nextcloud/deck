@@ -77,9 +77,7 @@ export default {
 .card-cover {
 	height: 90px;
 	display: flex;
-	margin-top: -4px;
-	margin-left: -4px;
-	margin-right: -4px;
+	margin: $card-image-margin $card-image-margin 0;
 
 	.image-wrapper {
 		flex: 1;
