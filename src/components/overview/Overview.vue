@@ -16,7 +16,10 @@
 		<div v-else-if="isValidFilter" class="overview">
 			<div v-for="columnProps in columnPropsList" class="dashboard-column" :key="columnProps.title">
 				<div class="dashboard-column__header">
-					<h3 class="dashboard-column__header-title">{{ t('deck', columnProps.title) }}</h3>
+					<h3 class="dashboard-column__header-title"
+						:title="columnProps.title"
+						:aria-label="columnProps.title"
+					>{{ t('deck', columnProps.title) }}</h3>
 				</div>
 				<div class="dashboard-column__list">
 					<template v-if="columnProps.sort === false">
