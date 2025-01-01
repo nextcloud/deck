@@ -14,10 +14,10 @@
 					{{ stack.title }}
 				</h3>
 				<h3 v-else-if="!editing"
-					title="stack.title"
 					dir="auto"
 					tabindex="0"
 					:aria-label="stack.title"
+					:title="stack.title"
 					class="stack__title"
 					@click="startEditing(stack)"
 					@keydown.enter="startEditing(stack)">
