@@ -8,7 +8,7 @@
 		<header class="search-header">
 			<h2>
 				<NcRichText
-					:text="t('deck', 'Search for {searchQuery} in all boards')"
+					:text="$route.params.id ? t('deck', 'Search for {searchQuery} in other boards') : t('deck', 'Search for {searchQuery} in all boards')"
 					:arguments="queryStringArgs" />
 				<span v-if="loading" class="icon-loading-small" />
 			</h2>
