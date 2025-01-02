@@ -347,6 +347,34 @@ A 403 response might be returned if the users ability to create new boards has b
 
 ##### 200 Success
 
+### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/archive - Archive a card
+
+#### Request parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| boardId   | Integer | The id of the board the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
+| cardId    | Integer | The id of the card                      |
+
+#### Response
+
+##### 200 Success
+
+### PUT /boards/{boardId}/stacks/{stackId}/cards/{cardId}/unarchive - Unarchive a card
+
+#### Request parameters
+
+| Parameter | Type    | Description                             |
+| --------- | ------- | --------------------------------------- |
+| boardId   | Integer | The id of the board the card belongs to |
+| stackId   | Integer | The id of the stack the card belongs to |
+| cardId    | Integer | The id of the card                      |
+
+#### Response
+
+##### 200 Success
+
 ### DELETE /boards/{boardId} - Delete a board
 
 #### Request parameters
