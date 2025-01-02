@@ -108,10 +108,11 @@ describe('Card', function () {
 			cy.get('.card:contains("Example Domain")')
 				.should('be.visible')
 				.click()
-
-			cy.get('#app-sidebar-vue')
-				.find('h2').contains('Example Domain').should('be.visible')
 		})
+
+		cy.get('.app-sidebar-header', { timeout: 10000 })
+			.should('be.visible')
+			.find('h2').contains('Example Domain').should('be.visible')
 	})
 
 	describe('Modal', () => {
