@@ -38,7 +38,7 @@ use Psr\Log\LoggerInterface;
 
 class CardService {
 
-	private string $currentUser;
+	private ?string $currentUser;
 
 	public function __construct(
 		private CardMapper $cardMapper,
