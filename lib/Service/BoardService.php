@@ -95,14 +95,6 @@ class BoardService {
 	 * @return Board[]
 	 */
 	public function findAll(int $since = -1, bool $fullDetails = false, bool $includeArchived = true): array {
-		if ($this->boardsCacheFull && $fullDetails) {
-			return $this->boardsCacheFull;
-		}
-
-		if ($this->boardsCachePartial && !$fullDetails) {
-			return $this->boardsCachePartial;
-		}
-
 		$complete = $this->getUserBoards($since, $includeArchived);
 		return $this->enrichBoards($complete, $fullDetails);
 	}
