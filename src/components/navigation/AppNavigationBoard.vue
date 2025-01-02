@@ -12,7 +12,10 @@
 		:force-display-actions="isTouchDevice"
 		@click="onNavigate"
 		@undo="unDelete">
-		<NcAppNavigationIconBullet slot="icon" :color="board.color" />
+		<template #icon>
+			<NcAppNavigationIconBullet :color="board.color" />
+			<BoardCloneModal v-if="cloneModalOpen" :board-title="board.title" @close="onCloseCloneModal" />
+		</template>
 
 		<template #counter>
 			<AccountIcon v-if="board.acl.length > 0" />
@@ -33,7 +36,7 @@
 				</NcActionButton>
 				<NcActionButton v-if="canCreate && !board.archived"
 					:close-after-click="true"
-					@click="actionClone">
+					@click="showCloneModal">
 					<template #icon>
 						<CloneIcon :size="20" decorative />
 					</template>
@@ -157,6 +160,7 @@ import { loadState } from '@nextcloud/initial-state'
 import { emit } from '@nextcloud/event-bus'
 
 import isTouchDevice from '../../mixins/isTouchDevice.js'
+import BoardCloneModal from './BoardCloneModal.vue'
 
 const canCreateState = loadState('deck', 'canCreate')
 
@@ -174,6 +178,7 @@ export default {
 		CloneIcon,
 		CloseIcon,
 		CheckIcon,
+		BoardCloneModal,
 	},
 	directives: {
 		ClickOutside,
@@ -201,6 +206,7 @@ export default {
 			isDueSubmenuActive: false,
 			updateDueSetting: null,
 			canCreate: canCreateState,
+			cloneModalOpen: false,
 		}
 	},
 	computed: {
@@ -347,6 +353,26 @@ export default {
 				emit('toggle-navigation', {
 					open: false,
 				})
+			}
+		},
+		showCloneModal() {
+			this.cloneModalOpen = true
+		},
+		async onCloseCloneModal(data) {
+			this.cloneModalOpen = false
+			if (data) {
+				this.loading = true
+				try {
+					const newBoard = await this.$store.dispatch('cloneBoard', {
+						boardData: this.board,
+						settings: data,
+					})
+					this.loading = false
+					this.$router.push({ name: 'board', params: { id: newBoard.id } })
+				} catch (e) {
+					OC.Notification.showTemporary(t('deck', 'An error occurred'))
+					console.error(e)
+				}
 			}
 		},
 	},
