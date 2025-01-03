@@ -19,12 +19,12 @@
 			</div>
 			<CardCover v-if="showCardCover" :card-id="card.id" />
 			<div class="card-upper">
-				<h4 v-if="inlineEditingBlocked" dir="auto">
-					{{ displayTitle }}
+				<h4 v-if="!editingTitle" dir="auto">
+					<span v-auto-link class="dragDisabled">{{ displayTitle }}</span>
 				</h4>
 				<h4 v-else
 					dir="auto"
-					class="editable"
+					class="editable dragDisabled"
 					:aria-label="t('deck', 'Edit card title')">
 					<span ref="titleContentEditable"
 						tabindex="0"
@@ -38,7 +38,10 @@
 				</h4>
 
 				<DueDate v-if="compactMode" :card="card" />
-				<CardMenu v-if="showMenuAtTitle" :card="card" class="right card-menu" />
+				<CardMenu v-if="showMenuAtTitle"
+					:card="card"
+					class="right card-menu"
+					@edit-title="triggerEditTitle" />
 			</div>
 
 			<div v-if="hasLabels" class="card-labels">
@@ -51,7 +54,10 @@
 						<span @click.stop="applyLabelFilter(label)">{{ label.title }}</span>
 					</li>
 				</transition-group>
-				<CardMenu v-if="showMenuAtLabels" :card="card" class="right" />
+				<CardMenu v-if="showMenuAtLabels"
+					:card="card"
+					class="right"
+					@edit-title="triggerEditTitle" />
 			</div>
 
 			<div v-if="hasBadges"
@@ -59,7 +65,10 @@
 				class="card-controls compact-item"
 				@click="openCard">
 				<CardBadges :card="card">
-					<CardMenu v-if="showMenuAtBadges" :card="card" class="right" />
+					<CardMenu v-if="showMenuAtBadges"
+						:card="card"
+						class="right"
+						@edit-title="triggerEditTitle" />
 				</CardBadges>
 			</div>
 		</div>
@@ -78,11 +87,25 @@ import CardCover from './CardCover.vue'
 import DueDate from './badges/DueDate.vue'
 import { getCurrentUser } from '@nextcloud/auth'
 
+const TITLE_EDITING_STATE = {
+	OFF: 0,
+	PENDING: 1,
+	ON: 2,
+}
+
 export default {
 	name: 'CardItem',
 	components: { CardBadges, AttachmentDragAndDrop, CardMenu, CardCover, DueDate },
 	directives: {
 		ClickOutside,
+		'auto-link': {
+			inserted(el) {
+				el.innerHTML = el.innerHTML.replace(
+					/(\s|\n|^)((https?:\/\/)([-A-Z0-9+_.]+(?::[0-9]+)?(?:\/[-A-Z0-9+&@#%?=~_|!:,.;()]*)*))(\s|\n|$)/gi,
+					'$1<a href="$2" target="_blank">$2</a>$5',
+				)
+			},
+		},
 	},
 	mixins: [Color, labelStyle],
 	props: {
@@ -106,6 +129,7 @@ export default {
 	data() {
 		return {
 			highlight: false,
+			editingTitle: TITLE_EDITING_STATE.OFF,
 		}
 	},
 	computed: {
@@ -131,9 +155,6 @@ export default {
 			}
 			const board = this.$store.getters.boards.find((item) => item.id === this.card.boardId)
 			return board ? !board.archived && board.permissions.PERMISSION_EDIT : false
-		},
-		inlineEditingBlocked() {
-			return this.card.referenceData || this.isArchived || this.showArchived || !this.canEdit || this.standalone
 		},
 		card() {
 			return this.item ? this.item : this.$store.getters.cardById(this.id)
@@ -193,15 +214,22 @@ export default {
 		},
 	},
 	methods: {
+		hasSelection() {
+			const selection = window.getSelection()
+			return selection.toString() !== ''
+		},
 		focus(card) {
-			if (this.shortcutLock) {
+			if (this.shortcutLock || this.hasSelection()) {
 				return
 			}
 			card = this.$refs[`card${card}`]
 			card.focus()
 		},
-		openCard() {
-			if (this.dragging) {
+		openCard(event) {
+			if (event.target.tagName.toLowerCase() === 'a') {
+				return
+			}
+			if (this.dragging || this.hasSelection()) {
 			  return
 			}
 			const boardId = this.card && this.card.boardId ? this.card.boardId : (this.$route?.params.id ?? this.currentBoard.id)
@@ -213,8 +241,18 @@ export default {
 
 			this.$root.$emit('open-card', this.card.id)
 		},
+		triggerEditTitle() {
+			this.editingTitle = TITLE_EDITING_STATE.PENDING
+			this.$nextTick(() => {
+				this.$refs.titleContentEditable.focus()
+				this.editingTitle = TITLE_EDITING_STATE.ON
+			})
+		},
 		onTitleBlur(e) {
-			// TODO Handle empty title
+			if (this.editingTitle !== TITLE_EDITING_STATE.ON || e.target.innerText === '') {
+				return
+			}
+			this.editingTitle = TITLE_EDITING_STATE.OFF
 			if (e.target.innerText !== this.card.title) {
 				this.$store.dispatch('updateCardTitle', {
 					...this.card,
@@ -340,6 +378,11 @@ export default {
 				word-wrap: break-word;
 				padding-left: 4px;
 				align-self: center;
+
+				:deep(a) {
+					text-decoration: underline;
+				}
+
 				&.editable {
 					span {
 						cursor: text;
