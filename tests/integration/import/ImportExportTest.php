@@ -135,7 +135,7 @@ class ImportExportTest extends \Test\TestCase {
 		);
 	}
 
-	public static function writeArrayStructure(string $prefix = '', array $array = [], array $skipKeyList = ['id', 'boardId', 'cardId', 'stackId', 'ETag', 'permissions', 'shared', 'version', 'done']): string {
+	public static function writeArrayStructure(string $prefix = '', array $array = [], array $skipKeyList = ['id', 'boardId', 'cardId', 'stackId', 'ETag', 'permissions', 'shared', 'version', 'done', 'referenceData']): string {
 		$output = '';
 		$arrayIsList = array_keys($array) === range(0, count($array) - 1);
 		foreach ($array as $key => $value) {

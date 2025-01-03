@@ -112,6 +112,10 @@ jobs:
         working-directory: apps/${{ env.APP_NAME }}/tests/integration
         run: ./run.sh
 
+      - name: Print log
+        if: always()
+        run: cat data/nextcloud.log
+
       - name: Query count
         if: ${{ matrix.databases == 'mysql' }}
         uses: actions/github-script@v7

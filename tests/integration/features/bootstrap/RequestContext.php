@@ -172,7 +172,7 @@ class RequestContext implements Context {
 	 */
 	public function theResponseShouldBeAListOfObjects() {
 		$jsonResponse = $this->getResponseBodyFromJson();
-		Assert::assertEquals(array_keys($jsonResponse), range(0, count($jsonResponse) - 1));
+		Assert::assertEquals(range(0, count($jsonResponse) - 1), array_keys($jsonResponse));
 	}
 
 	/**
