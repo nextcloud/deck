@@ -212,7 +212,6 @@ export default {
 		gap: $stack-gap;
 
 		& > .drop-upload--card {
-			flex-grow: 0;
 			flex: 0 1 $card-max-width;
 			min-width: $card-min-width;
 		}
