@@ -49,6 +49,7 @@ OC.L10N.register(
     "Cancel edit" : "Loobu muutmisest",
     "No notifications" : "Märguandeid pole",
     "An error occurred" : "Tekkis tõrge",
+    "Advanced options" : "Täpsemad valikud",
     "Today" : "Täna",
     "Tomorrow" : "Homme",
     "Close" : "Sulge",

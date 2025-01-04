@@ -325,6 +325,7 @@ OC.L10N.register(
     "An error occurred" : "An error occurred",
     "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards.",
     "Delete the board?" : "Delete the board?",
+    "Advanced options" : "Advanced options",
     "Loading filtered view" : "Loading filtered view",
     "Today" : "Today",
     "Tomorrow" : "Tomorrow",
