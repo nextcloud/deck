@@ -101,6 +101,7 @@ OC.L10N.register(
     "No notifications" : "No hay notificaciones",
     "Delete board" : "Eliminar Tablero",
     "An error occurred" : "Ocurrió un error",
+    "Advanced options" : "Opciones avanzadas",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana",
     "No due" : "Sin finalizar",

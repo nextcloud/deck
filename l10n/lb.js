@@ -28,6 +28,7 @@ OC.L10N.register(
     "seconds ago" : "Sekonnen hier",
     "Search" : "Search",
     "Shared with you" : "Mat dir gedeelt",
+    "Advanced options" : "Erweidert Astellungen",
     "Today" : "Haut",
     "Tomorrow" : "Muer",
     "Close" : "Zoumaachen",

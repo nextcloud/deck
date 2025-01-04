@@ -63,6 +63,7 @@ OC.L10N.register(
     "Archive board" : "Arkivo bordin",
     "No notifications" : "Asnjë njofim",
     "Delete board" : "Fshij bordin",
+    "Advanced options" : "Opsione të avancuara",
     "Today" : "Sot",
     "Tomorrow" : "Nesër",
     "Close" : "Mbylleni",
