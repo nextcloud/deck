@@ -282,7 +282,7 @@ export default {
 
 	.board {
 		position: relative;
-		overflow: auto;
+		overflow-x: auto;
 		flex-grow: 1;
 		scrollbar-gutter: stable;
 	}
@@ -296,6 +296,7 @@ export default {
 		align-items: stretch;
 		gap: $board-gap;
 		padding: 0 $board-gap;
+		height: 100%;
 
 		&:deep(.stack-draggable-wrapper.smooth-dnd-draggable-wrapper) {
 			display: flex;
@@ -312,7 +313,9 @@ export default {
 					display: flex;
 					flex-direction: column;
 					gap: $stack-gap;
-					padding: 5px 0 $stack-gap;
+					padding: 5px calc(#{$stack-gap / 2}) $stack-gap;
+					margin: 0 calc(#{$stack-gap / -2});
+					overflow-y: auto;
 					scrollbar-gutter: stable;
 				}
 
