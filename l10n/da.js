@@ -214,6 +214,7 @@ OC.L10N.register(
     "No reminder" : "Ingen påmindelse",
     "An error occurred" : "Der var en fejl",
     "Delete the board?" : "Slet tavlen?",
+    "Advanced options" : "Avancerede indstillinger",
     "Loading filtered view" : "Indlæser filtreret visning",
     "Today" : "I dag",
     "Tomorrow" : "I morgen",

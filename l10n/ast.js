@@ -100,6 +100,8 @@ OC.L10N.register(
     "No notifications" : "Nun hai nengún avisu",
     "No reminder" : "Nun hai nengún recordatoriu",
     "An error occurred" : "Prodúxose un error",
+    "Clone cards" : "Clonar les tarxetes",
+    "Advanced options" : "Opciones avanzaes",
     "Today" : "Güei",
     "Tomorrow" : "Mañana",
     "No results found" : "Nun s'atopó nengún resultáu",

@@ -41,6 +41,7 @@ OC.L10N.register(
     "Search" : "Хайх",
     "Shared with you" : "тантай хуваалцсан",
     "No notifications" : "Мэдэгдэл байхгүй",
+    "Advanced options" : "Бусад сонголтууд",
     "Today" : "өнөөдөр",
     "Tomorrow" : "маргааш",
     "Close" : "Хаах",
