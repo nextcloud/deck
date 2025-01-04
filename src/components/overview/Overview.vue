@@ -162,7 +162,7 @@ export default {
 
 .overview {
 	position: relative;
-	overflow: auto;
+	overflow-x: auto;
 	flex-grow: 1;
 	scrollbar-gutter: stable;
 	display: flex;
@@ -212,7 +212,7 @@ export default {
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
-			padding: 4px;
+			padding: $card-padding;
 			font-size: var(--default-font-size);
 		}
 
@@ -220,7 +220,10 @@ export default {
 			display: flex;
 			flex-direction: column;
 			gap: $stack-gap;
-			padding: 5px 0 $stack-gap;
+			padding: 5px calc(#{$stack-gap / 2}) $stack-gap;
+			margin: 0 calc(#{$stack-gap / -2});
+			overflow-y: auto;
+			scrollbar-gutter: stable;
 		}
 	}
 }
