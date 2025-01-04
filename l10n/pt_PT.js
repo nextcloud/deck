@@ -160,6 +160,7 @@ OC.L10N.register(
     "Delete board" : "Eliminar quadro",
     "No reminder" : "Nenhum lembrete",
     "An error occurred" : "Ocorreu um erro",
+    "Advanced options" : "Opções avançadas",
     "Today" : "Hoje",
     "Tomorrow" : "Amanhã",
     "Create card" : "Criar cartão",

@@ -124,6 +124,7 @@ OC.L10N.register(
     "No notifications" : "Neniu sciigo",
     "Delete board" : "Forigi tabulon",
     "An error occurred" : "Eraro okazis",
+    "Advanced options" : "Detalaj agordoj",
     "Today" : "Hodiaŭ",
     "Tomorrow" : "Morgaŭ",
     "Close" : "Malfermi",

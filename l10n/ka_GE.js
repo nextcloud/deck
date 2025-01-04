@@ -60,6 +60,7 @@ OC.L10N.register(
     "Archive board" : "დაფის არქივირება",
     "No notifications" : "შეტყობინებები არაა",
     "Delete board" : "დაფის გაუქმება",
+    "Advanced options" : "დამატებითი ოპციონები",
     "Today" : "დღეს",
     "Tomorrow" : "ხვალ",
     "Close" : "დახურვა",

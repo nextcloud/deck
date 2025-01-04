@@ -64,6 +64,7 @@ OC.L10N.register(
     "Archive board" : "Archivar tablero",
     "No notifications" : "No hay notificaciones",
     "Delete board" : "Borrar tableros",
+    "Advanced options" : "Opciones avanzadas",
     "Today" : "Hoy",
     "Tomorrow" : "Mañana",
     "Close" : "Cerrar",
