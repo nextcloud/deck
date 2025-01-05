@@ -108,7 +108,7 @@
 		</Container>
 
 		<transition name="slide-bottom" appear>
-			<div v-show="showAddCard" class="stack__card-add">
+			<div v-if="showAddCard" class="stack__card-add">
 				<form :class="{ 'icon-loading-small': stateCardCreating }"
 					@submit.prevent.stop="clickAddCard()">
 					<label for="new-stack-input-main" class="hidden-visually">{{ t('deck', 'Add a new card') }}</label>
@@ -384,16 +384,12 @@ export default {
 			display: block;
 			position: absolute;
 			width: 100%;
-			height: 20px;
-			top: 30px;
-			left: 0px;
+			height: $stack-gap;
+			bottom: 0;
 			z-index: 99;
 			transition: top var(--animation-slow);
-			background-image: linear-gradient(180deg, var(--color-main-background) 3px, rgba(255, 255, 255, 0) 100%);
-
-			body.theme--dark & {
-				background-image: linear-gradient(180deg, var(--color-main-background) 3px, rgba(0, 0, 0, 0) 100%);
-			}
+			background-image: linear-gradient(180deg, var(--color-main-background) 0%, transparent 100%);
+			transform: translateY(100%);
 		}
 
 		& > * {
@@ -451,9 +447,22 @@ export default {
 		flex-shrink: 0;
 		z-index: 100;
 		display: flex;
-		margin-bottom: 5px;
-		padding-top: var(--default-grid-baseline);
+		padding-bottom: $stack-gap;
 		background-color: var(--color-main-background);
+		position: relative;
+
+		// Smooth fade out of the cards at the top
+		&:before {
+			content: '';
+			display: block;
+			position: absolute;
+			width: 100%;
+			height: $stack-gap;
+			z-index: 99;
+			transition: bottom var(--animation-slow);
+			background-image: linear-gradient(0deg, var(--color-main-background) 0%, transparent 100%);
+			transform: translateY(-100%);
+		}
 
 		form {
 			display: flex;
