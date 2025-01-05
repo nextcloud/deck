@@ -337,6 +337,7 @@ export default {
 		display: flex;
 		flex-direction: column;
 		gap: $card-gap;
+		overflow: hidden;
 
 		&:deep(*) {
 			cursor: pointer;
