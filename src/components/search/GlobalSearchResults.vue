@@ -7,8 +7,7 @@
 	<section v-if="searchQuery!==''" class="global-search">
 		<header class="search-header">
 			<h2>
-				<NcRichText
-					:text="$route.params.id ? t('deck', 'Search for {searchQuery} in other boards') : t('deck', 'Search for {searchQuery} in all boards')"
+				<NcRichText :text="$route.params.id ? t('deck', 'Search for {searchQuery} in other boards') : t('deck', 'Search for {searchQuery} in all boards')"
 					:arguments="queryStringArgs" />
 				<span v-if="loading" class="icon-loading-small" />
 			</h2>
@@ -18,7 +17,10 @@
 		</header>
 		<div class="search-wrapper">
 			<template v-if="loading || filteredResults.length > 0">
-				<CardItem v-for="card in filteredResults" :id="card.id" :key="card.id" :standalone="true" />
+				<CardItem v-for="card in filteredResults"
+					:id="card.id"
+					:key="card.id"
+					:standalone="true" />
 				<Placeholder v-if="loading" />
 				<InfiniteLoading :identifier="searchQuery" @infinite="infiniteHandler">
 					<div slot="spinner" />

@@ -14,19 +14,23 @@
 		</div>
 
 		<div v-else-if="isValidFilter" class="overview">
-			<div v-for="columnProps in columnPropsList" class="dashboard-column" :key="columnProps.title">
+			<div v-for="columnProps in columnPropsList" :key="columnProps.title" class="dashboard-column">
 				<div class="dashboard-column__header">
 					<h3 class="dashboard-column__header-title"
 						:title="columnProps.title"
-						:aria-label="columnProps.title"
-					>{{ t('deck', columnProps.title) }}</h3>
+						:aria-label="columnProps.title">
+						{{ t('deck', columnProps.title) }}
+					</h3>
 				</div>
 				<div class="dashboard-column__list">
 					<template v-if="columnProps.sort === false">
-						<CardItem :id="card.id" v-for="card in filterCards(columnProps.filter)" :key="card.id" />
+						<CardItem v-for="card in filterCards(columnProps.filter)"
+							:id="card.id"
+							:key="card.id" />
 					</template>
 					<template v-else>
-						<CardItem :id="card.id" v-for="card in sortCards(filterCards(columnProps.filter))"
+						<CardItem v-for="card in sortCards(filterCards(columnProps.filter))"
+							:id="card.id"
 							:key="card.id" />
 					</template>
 				</div>
@@ -131,7 +135,7 @@ export default {
 			this.loading = false
 		},
 		filterCards(when) {
-			return this.assignedCardsDashboard[when];
+			return this.assignedCardsDashboard[when]
 		},
 		sortCards(cards) {
 			if (!cards) {
@@ -217,11 +221,12 @@ export default {
 		}
 
 		.dashboard-column__list {
+			$margin-x: calc($stack-gap * -1);
 			display: flex;
 			flex-direction: column;
 			gap: $stack-gap;
-			padding: 5px calc(#{$stack-gap / 2}) $stack-gap;
-			margin: 0 calc(#{$stack-gap / -2});
+			padding: $stack-gap;
+			margin: 0 $margin-x;
 			overflow-y: auto;
 			scrollbar-gutter: stable;
 		}
