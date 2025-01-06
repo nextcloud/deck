@@ -340,7 +340,7 @@ OC.L10N.register(
     "Delete the board?" : "Das Board löschen?",
     "Clone {boardTitle}" : "{boardTitle} klonen",
     "Clone cards" : "Karten klonen",
-    "Clone assignments" : "Aufgaben klonen",
+    "Clone assignments" : "Zuordnungen klonen",
     "Clone labels" : "Etiketten klonen",
     "Clone due dates" : "Fälligkeitsdaten klonen",
     "Advanced options" : "Erweiterte Optionen",
