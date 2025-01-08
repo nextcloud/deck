@@ -85,9 +85,9 @@ class Notifier implements INotifier {
 
 		switch ($notification->getSubject()) {
 			case 'card-assigned':
-				$cardId = $notification->getObjectId();
+				$cardId = (int)$notification->getObjectId();
 				$stack = $this->stackMapper->findStackFromCardId($cardId);
-				$boardId = $stack ? $stack->getBoardId() : null;
+				$boardId = $stack ? (int)$stack->getBoardId() : null;
 				if (!$boardId) {
 					throw new AlreadyProcessedException();
 				}
@@ -110,13 +110,13 @@ class Notifier implements INotifier {
 							'name' => $params[0],
 							'boardname' => $params[1],
 							'stackname' => $stack->getTitle(),
-							'link' => $this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $cardId . '',
+							'link' => $this->getCardUrl($boardId, $cardId),
 						],
 						'deck-board' => [
 							'type' => 'deck-board',
 							'id' => $boardId,
 							'name' => $params[1],
-							'link' => $this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId,
+							'link' => $this->getBoardUrl($boardId),
 						],
 						'user' => [
 							'type' => 'user',
@@ -125,12 +125,12 @@ class Notifier implements INotifier {
 						]
 					]
 				);
-				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $cardId . '');
+				$notification->setLink($this->getCardUrl($boardId, $cardId));
 				break;
 			case 'card-overdue':
-				$cardId = $notification->getObjectId();
+				$cardId = (int)$notification->getObjectId();
 				$stack = $this->stackMapper->findStackFromCardId($cardId);
-				$boardId = $stack ? $stack->getBoardId() : null;
+				$boardId = $stack ? (int)$stack->getBoardId() : null;
 				if (!$boardId) {
 					throw new AlreadyProcessedException();
 				}
@@ -147,22 +147,22 @@ class Notifier implements INotifier {
 							'name' => $params[0],
 							'boardname' => $params[1],
 							'stackname' => $stack->getTitle(),
-							'link' => $this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $cardId . '',
+							'link' => $this->getCardUrl($boardId, $cardId),
 						],
 						'deck-board' => [
 							'type' => 'deck-board',
 							'id' => $boardId,
 							'name' => $params[1],
-							'link' => $this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId,
+							'link' => $this->getBoardUrl($boardId),
 						],
 					]
 				);
-				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $cardId . '');
+				$notification->setLink($this->getCardUrl($boardId, $cardId));
 				break;
 			case 'card-comment-mentioned':
-				$cardId = $notification->getObjectId();
+				$cardId = (int)$notification->getObjectId();
 				$stack = $this->stackMapper->findStackFromCardId($cardId);
-				$boardId = $stack ? $stack->getBoardId() : null;
+				$boardId = $stack ? (int)$stack->getBoardId() : null;
 				if (!$boardId) {
 					throw new AlreadyProcessedException();
 				}
@@ -185,7 +185,7 @@ class Notifier implements INotifier {
 							'name' => $params[0],
 							'boardname' => $params[1],
 							'stackname' => $stack->getTitle(),
-							'link' => $this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $cardId . '',
+							'link' => $this->getCardUrl($boardId, $cardId),
 						],
 						'user' => [
 							'type' => 'user',
@@ -197,10 +197,10 @@ class Notifier implements INotifier {
 				if ($notification->getMessage() === '{message}') {
 					$notification->setParsedMessage($notification->getMessageParameters()['message']);
 				}
-				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $cardId . '');
+				$notification->setLink($this->getCardUrl($boardId, $cardId));
 				break;
 			case 'board-shared':
-				$boardId = $notification->getObjectId();
+				$boardId = (int)$notification->getObjectId();
 				if (!$boardId) {
 					throw new AlreadyProcessedException();
 				}
@@ -220,7 +220,7 @@ class Notifier implements INotifier {
 							'type' => 'deck-board',
 							'id' => $boardId,
 							'name' => $params[0],
-							'link' => $this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId,
+							'link' => $this->getBoardUrl($boardId),
 						],
 						'user' => [
 							'type' => 'user',
@@ -229,9 +229,17 @@ class Notifier implements INotifier {
 						]
 					]
 				);
-				$notification->setLink($this->url->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/');
+				$notification->setLink($this->getBoardUrl($boardId));
 				break;
 		}
 		return $notification;
+	}
+
+	private function getBoardUrl(int $boardId): string {
+		return $this->url->linkToRouteAbsolute('deck.page.indexBoard', ['boardId' => $boardId]);
+	}
+
+	private function getCardUrl(int $boardId, int $cardId): string {
+		return $this->url->linkToRouteAbsolute('deck.page.indexCard', ['boardId' => $boardId, 'cardId' => $cardId]);
 	}
 }
