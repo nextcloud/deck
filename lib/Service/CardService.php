@@ -655,13 +655,13 @@ class CardService {
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card));
 	}
 
-	public function getCardUrl($cardId) {
+	public function getCardUrl(int $cardId): string {
 		$boardId = $this->cardMapper->findBoardId($cardId);
 
-		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . "#/board/$boardId/card/$cardId";
+		return $this->urlGenerator->linkToRouteAbsolute('deck.page.indexCard', ['boardId' => $boardId, 'cardId' => $cardId]);
 	}
 
-	public function getRedirectUrlForCard($cardId) {
-		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . "card/$cardId";
+	public function getRedirectUrlForCard(int $cardId): string {
+		return $this->urlGenerator->linkToRouteAbsolute('deck.page.redirectToCard', ['cardId' => $cardId]);
 	}
 }
