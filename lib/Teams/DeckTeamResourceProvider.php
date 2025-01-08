@@ -43,7 +43,7 @@ class DeckTeamResourceProvider implements \OCP\Teams\ITeamResourceProvider {
 				$this,
 				(string)$board->getId(),
 				$board->getTitle(),
-				$this->urlGenerator->linkToRouteAbsolute('deck.page.index') . '#/board/' . $board->getId(),
+				$this->urlGenerator->linkToRouteAbsolute('deck.page.indexBoard', ['boardId' => $board->getId()]),
 				$this->getBoardBulletIcon($board),
 				$this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('deck', 'deck-current.svg')),
 			);

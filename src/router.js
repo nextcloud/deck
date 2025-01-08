@@ -144,8 +144,8 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
 	// Redirect if fullPath begins with a hash (ignore hashes later in path)
-	if (to.fullPath.substring(0, 2) === '/#') {
-		const path = to.fullPath.substring(2)
+	if (to.hash.substring(0, 2) === '#/') {
+		const path = to.fullPath.replace('/apps/deck/#/', '/apps/deck/')
 		next(path)
 		return
 	}

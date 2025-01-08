@@ -57,7 +57,7 @@ class ResourceProvider implements IProvider {
 	 */
 	public function getResourceRichObject(IResource $resource): array {
 		$board = $this->getBoard($resource);
-		$link = $this->urlGenerator->linkToRoute('deck.page.index') . '#/board/' . $resource->getId();
+		$link = $this->urlGenerator->linkToRoute('deck.page.indexBoard', ['boardId' => $resource->getId()]);
 
 		return [
 			'type' => self::RESOURCE_TYPE,

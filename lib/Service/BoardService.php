@@ -746,10 +746,6 @@ class BoardService {
 		$board->setUsers(array_values($boardUsers));
 	}
 
-	public function getBoardUrl($endpoint) {
-		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . '#' . $endpoint;
-	}
-
 	/**
 	 * Clean a given board data from the Cache
 	 */
