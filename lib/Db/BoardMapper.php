@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -210,7 +211,7 @@ class BoardMapper extends QBMapper implements IPermissionMapper {
 		}
 
 		// shared with user
-		$qb->resetQueryParts();
+		$qb = $this->db->getQueryBuilder();
 		$qb->select('b.id', 'title', 'owner', 'color', 'archived', 'deleted_at', 'last_modified')
 			//->selectAlias('1', 'shared')
 			->from('deck_boards', 'b')

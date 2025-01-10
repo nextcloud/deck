@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2017 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -15,6 +16,7 @@ use OCP\L10N\IFactory;
 use OCP\Notification\AlreadyProcessedException;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
+use OCP\Notification\UnknownNotificationException;
 
 class Notifier implements INotifier {
 	/** @var IFactory */
@@ -76,7 +78,7 @@ class Notifier implements INotifier {
 	public function prepare(INotification $notification, string $languageCode): INotification {
 		$l = $this->l10nFactory->get('deck', $languageCode);
 		if ($notification->getApp() !== 'deck') {
-			throw new \InvalidArgumentException();
+			throw new UnknownNotificationException();
 		}
 		$notification->setIcon($this->url->getAbsoluteURL($this->url->imagePath('deck', 'deck-dark.svg')));
 		$params = $notification->getSubjectParameters();

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -88,6 +89,15 @@ class CardController extends Controller {
 	 */
 	public function update($id, $title, $stackId, $type, $order, $description, $duedate, $deletedAt) {
 		return $this->cardService->update($id, $title, $stackId, $type, $this->userId, $description, $order, $duedate, $deletedAt);
+	}
+	/**
+	 * @NoAdminRequired
+	 * @param $cardId
+	 * @param $targetStackId
+	 * @return \OCP\AppFramework\Db\Entity
+	 */
+	public function clone(int $cardId, ?int $targetStackId = null) {
+		return $this->cardService->cloneCard($cardId, $targetStackId);
 	}
 
 	/**

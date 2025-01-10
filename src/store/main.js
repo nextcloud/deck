@@ -398,9 +398,11 @@ export default new Vuex.Store({
 				return err
 			}
 		},
-		async cloneBoard({ commit }, boardData) {
+		async cloneBoard({ commit }, { boardData, settings }) {
+			const { withCards, withAssignments, withLabels, withDueDate, moveCardsToLeftStack, restoreArchivedCards } = settings
+
 			try {
-				const newBoard = await apiClient.cloneBoard(boardData)
+				const newBoard = await apiClient.cloneBoard(boardData, withCards, withAssignments, withLabels, withDueDate, moveCardsToLeftStack, restoreArchivedCards)
 				commit('cloneBoard', newBoard)
 				return newBoard
 			} catch (err) {

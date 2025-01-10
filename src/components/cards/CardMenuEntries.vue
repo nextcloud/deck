@@ -31,7 +31,7 @@
 			icon="icon-external"
 			:close-after-click="true"
 			@click="openCardMoveDialog">
-			{{ t('deck', 'Move card') }}
+			{{ t('deck', 'Move/copy card') }}
 		</NcActionButton>
 		<NcActionButton v-for="action in cardActions"
 			:key="action.label"
@@ -140,6 +140,9 @@ export default {
 			this.$store.dispatch('deleteCard', this.card)
 			const undoCard = { ...this.card, deletedAt: 0 }
 			showUndo(t('deck', 'Card deleted'), () => this.$store.dispatch('cardUndoDelete', undoCard))
+			if (this.$router.currentRoute.name === 'card') {
+				this.$router.push({ name: 'board' })
+			}
 		},
 		changeCardDoneStatus() {
 			this.$store.dispatch('changeCardDoneStatus', { ...this.card, done: !this.card.done })

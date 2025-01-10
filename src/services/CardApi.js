@@ -4,7 +4,7 @@
  */
 
 import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
+import { generateOcsUrl, generateUrl } from '@nextcloud/router'
 
 export class CardApi {
 
@@ -15,6 +15,23 @@ export class CardApi {
 
 	addCard(card) {
 		return axios.post(this.url('/cards'), card)
+			.then(
+				(response) => {
+					return Promise.resolve(response.data)
+				},
+				(err) => {
+					return Promise.reject(err)
+				},
+			)
+			.catch((err) => {
+				return Promise.reject(err)
+			})
+	}
+
+	cloneCard(cardId, targetStackId) {
+		return axios.post(generateOcsUrl(`apps/deck/api/v1.0/cards/${cardId}/clone`), {
+			targetStackId,
+		})
 			.then(
 				(response) => {
 					return Promise.resolve(response.data)

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -116,7 +117,7 @@ class TrelloJsonService extends ABoardImportService {
 				$cardId = $this->cards[$trelloCard->id]->getId();
 				$comment = new Comment();
 				if (!empty($this->getImportService()->getConfig('uidRelation')->{$trelloComment->memberCreator->username})) {
-					$actor = $this->getImportService()->getConfig('uidRelation')->{$trelloComment->memberCreator->username}->getUID();
+					$actor = $this->getImportService()->getConfig('uidRelation')->{$trelloComment->memberCreator->username};
 				} else {
 					$actor = $this->getImportService()->getConfig('owner')->getUID();
 				}
@@ -344,7 +345,7 @@ class TrelloJsonService extends ABoardImportService {
 
 	private function replaceUsernames(string $text): string {
 		foreach ($this->getImportService()->getConfig('uidRelation') as $trello => $nextcloud) {
-			$text = str_replace($trello, $nextcloud->getUID(), $text);
+			$text = str_replace($trello, $nextcloud, $text);
 		}
 		return $text;
 	}

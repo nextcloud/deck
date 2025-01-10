@@ -42,6 +42,7 @@ OC.L10N.register(
     "Shared with you" : "Met u gedeel",
     "No notifications" : "Geen kennisgewings",
     "An error occurred" : "'n Fout het voorgekom",
+    "Advanced options" : "Gevorderde opsies",
     "Today" : "Vandag",
     "Tomorrow" : "Môre",
     "Close" : "Sluit",

@@ -53,6 +53,7 @@ OC.L10N.register(
     "No notifications" : "ไม่มีการแจ้งเตือน",
     "Delete board" : "ลบกระดาน",
     "An error occurred" : "เกิดข้อผิดพลาด",
+    "Advanced options" : "ตัวเลือกขั้นสูง",
     "Today" : "วันนี้",
     "Tomorrow" : "พรุ่งนี้",
     "Close" : "ปิด",

@@ -39,6 +39,7 @@ OC.L10N.register(
     "Search" : "Cercar",
     "Shared with you" : "Compartite con te",
     "No notifications" : "Nulle notificationes",
+    "Advanced options" : "Optiones avantiate",
     "Today" : "Hodie",
     "Tomorrow" : "Deman",
     "Close" : "Clauder",

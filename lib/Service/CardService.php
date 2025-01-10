@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SPDX-FileCopyrightText: 2016 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -36,69 +37,33 @@ use OCP\IUserManager;
 use Psr\Log\LoggerInterface;
 
 class CardService {
-	private CardMapper $cardMapper;
-	private StackMapper $stackMapper;
-	private BoardMapper $boardMapper;
-	private LabelMapper $labelMapper;
-	private LabelService $labelService;
-	private PermissionService $permissionService;
-	private BoardService $boardService;
-	private NotificationHelper $notificationHelper;
-	private AssignmentMapper $assignedUsersMapper;
-	private AttachmentService $attachmentService;
+
 	private ?string $currentUser;
-	private ActivityManager $activityManager;
-	private ICommentsManager $commentsManager;
-	private ChangeHelper $changeHelper;
-	private IEventDispatcher $eventDispatcher;
-	private IUserManager $userManager;
-	private IURLGenerator $urlGenerator;
-	private LoggerInterface $logger;
-	private IRequest $request;
-	private CardServiceValidator $cardServiceValidator;
 
 	public function __construct(
-		CardMapper $cardMapper,
-		StackMapper $stackMapper,
-		BoardMapper $boardMapper,
-		LabelMapper $labelMapper,
-		LabelService $labelService,
-		PermissionService $permissionService,
-		BoardService $boardService,
-		NotificationHelper $notificationHelper,
-		AssignmentMapper $assignedUsersMapper,
-		AttachmentService $attachmentService,
-		ActivityManager $activityManager,
-		ICommentsManager $commentsManager,
-		IUserManager $userManager,
-		ChangeHelper $changeHelper,
-		IEventDispatcher $eventDispatcher,
-		IURLGenerator $urlGenerator,
-		LoggerInterface $logger,
-		IRequest $request,
-		CardServiceValidator $cardServiceValidator,
+		private CardMapper $cardMapper,
+		private StackMapper $stackMapper,
+		private BoardMapper $boardMapper,
+		private LabelMapper $labelMapper,
+		private LabelService $labelService,
+		private PermissionService $permissionService,
+		private BoardService $boardService,
+		private NotificationHelper $notificationHelper,
+		private AssignmentMapper $assignedUsersMapper,
+		private AttachmentService $attachmentService,
+		private ActivityManager $activityManager,
+		private ICommentsManager $commentsManager,
+		private IUserManager $userManager,
+		private ChangeHelper $changeHelper,
+		private IEventDispatcher $eventDispatcher,
+		private IURLGenerator $urlGenerator,
+		private LoggerInterface $logger,
+		private IRequest $request,
+		private CardServiceValidator $cardServiceValidator,
+		private AssignmentService $assignmentService,
 		?string $userId,
 	) {
-		$this->cardMapper = $cardMapper;
-		$this->stackMapper = $stackMapper;
-		$this->boardMapper = $boardMapper;
-		$this->labelMapper = $labelMapper;
-		$this->labelService = $labelService;
-		$this->permissionService = $permissionService;
-		$this->boardService = $boardService;
-		$this->notificationHelper = $notificationHelper;
-		$this->assignedUsersMapper = $assignedUsersMapper;
-		$this->attachmentService = $attachmentService;
-		$this->activityManager = $activityManager;
-		$this->commentsManager = $commentsManager;
-		$this->userManager = $userManager;
-		$this->changeHelper = $changeHelper;
-		$this->eventDispatcher = $eventDispatcher;
 		$this->currentUser = $userId;
-		$this->urlGenerator = $urlGenerator;
-		$this->logger = $logger;
-		$this->request = $request;
-		$this->cardServiceValidator = $cardServiceValidator;
 	}
 
 	public function enrichCards($cards) {
@@ -388,6 +353,38 @@ class CardService {
 		$this->eventDispatcher->dispatchTyped(new CardUpdatedEvent($card, $changes->getBefore()));
 
 		return $card;
+	}
+
+	public function cloneCard(int $id, ?int $targetStackId = null):Card {
+		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_READ);
+		$originCard = $this->cardMapper->find($id);
+		if ($targetStackId === null) {
+			$targetStackId = $originCard->getStackId();
+		}
+		$this->permissionService->checkPermission($this->stackMapper, $targetStackId, Acl::PERMISSION_EDIT);
+		$newCard = $this->create($originCard->getTitle(), $targetStackId, $originCard->getType(), $originCard->getOrder(), $originCard->getOwner());
+		$boardId = $this->stackMapper->findBoardId($targetStackId);
+		foreach ($this->labelMapper->findAssignedLabelsForCard($id) as $label) {
+			if ($boardId != $this->stackMapper->findBoardId($originCard->getStackId())) {
+				try {
+					$label = $this->labelService->cloneLabelIfNotExists($label->getId(), $boardId);
+				} catch (NoPermissionException $e) {
+					break;
+				}
+			}
+			$this->assignLabel($newCard->getId(), $label->getId());
+		}
+		foreach ($this->assignedUsersMapper->findAll($id) as $assignement) {
+			try {
+				$this->permissionService->checkPermission($this->cardMapper, $newCard->getId(), Acl::PERMISSION_READ, $assignement->getParticipant());
+			} catch (NoPermissionException $e) {
+				continue;
+			}
+			$this->assignmentService->assignUser($newCard->getId(), $assignement->getParticipant());
+		}
+		$newCard->setDescription($originCard->getDescription());
+		$card = $this->enrichCards([$this->cardMapper->update($newCard)]);
+		return $card[0];
 	}
 
 	/**
