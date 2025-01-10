@@ -1,5 +1,5 @@
 {
-    "image": "ghcr.io/juliushaertl/nextcloud-dev-php81:latest",
+    "image": "ghcr.io/juliusknorr/nextcloud-dev-php81:latest",
     "forwardPorts": [80],
     "containerEnv": {
         "NEXTCLOUD_AUTOINSTALL_APPS": "deck",
