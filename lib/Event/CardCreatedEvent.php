@@ -10,5 +10,10 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Event;
 
-class CardCreatedEvent extends ACardEvent {
+use OCP\EventDispatcher\IWebhookCompatibleEvent;
+
+class CardCreatedEvent extends ACardEvent implements IWebhookCompatibleEvent {
+	public function getWebhookSerializable(): array {
+		return $this->getCard()->toEventData()->jsonSerialize();
+	}
 }

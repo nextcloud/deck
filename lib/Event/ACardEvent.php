@@ -12,9 +12,8 @@ namespace OCA\Deck\Event;
 
 use OCA\Deck\Db\Card;
 use OCP\EventDispatcher\Event;
-use OCP\EventDispatcher\IWebhookCompatibleEvent;
 
-abstract class ACardEvent extends Event implements IWebhookCompatibleEvent {
+abstract class ACardEvent extends Event {
 	private $card;
 	
 	public function __construct(Card $card) {
@@ -25,9 +24,5 @@ abstract class ACardEvent extends Event implements IWebhookCompatibleEvent {
 
 	public function getCard(): Card {
 		return $this->card;
-	}
-
-	public function getWebhookSerializable(): array {
-		return $this->getCard()->jsonSerialize();
 	}
 }

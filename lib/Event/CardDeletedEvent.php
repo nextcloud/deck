@@ -10,5 +10,11 @@ declare(strict_types=1);
 
 namespace OCA\Deck\Event;
 
-class CardDeletedEvent extends ACardEvent {
+use OCP\EventDispatcher\IWebhookCompatibleEvent;
+
+class CardDeletedEvent extends ACardEvent implements IWebhookCompatibleEvent {
+
+	public function getWebhookSerializable(): array {
+		return $this->getCard()->toEventData()->jsonSerialize();
+	}
 }
