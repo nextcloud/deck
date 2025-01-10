@@ -5,6 +5,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.15.0-beta.1
+### Fixed
+- fix: Catch not found card @juliusknorr [#6646](https://github.com/nextcloud/deck/pull/6646)
+- fix: Avoid failing on public dav URLs @juliusknorr [#6642](https://github.com/nextcloud/deck/pull/6642)
+- fix: Proper rich object formats @juliusknorr [#6641](https://github.com/nextcloud/deck/pull/6641)
+- fix(notifications): Notifier::prepare() threw \InvalidArgumentExcepti… @nickvergessen [#6623](https://github.com/nextcloud/deck/pull/6623)
+- fix: close modal after deleting card @ludij [#6617](https://github.com/nextcloud/deck/pull/6617)
+- fix: Use new query builder @juliusknorr [#6611](https://github.com/nextcloud/deck/pull/6611)
+- fix: new card input spacing @luka-nextcloud [#6574](https://github.com/nextcloud/deck/pull/6574)
+
 ## 1.14.0-beta.1
 
 ### Fixed
