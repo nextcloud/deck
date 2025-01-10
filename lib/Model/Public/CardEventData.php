@@ -12,7 +12,7 @@ use JsonSerializable;
 /**
  * A data transfer object representation of the card data to be used as a
  * public-facing event payload.
- * 
+ *
  * @since 2.0.0
  */
 final class CardEventData implements JsonSerializable {
@@ -24,8 +24,8 @@ final class CardEventData implements JsonSerializable {
 	 * @param int $stackId
 	 * @param \DateTime $lastModified
 	 * @param \DateTime $createdAt
-	 * @param array<int,string> $labels
-	 * @param array<int,string> $assignedUsers
+	 * @param array<array{ id: int, title: string }> $labels
+	 * @param string[] $assignedUsers
 	 * @param int $order
 	 * @param bool $archived
 	 * @param int $commentsUnread
@@ -85,10 +85,10 @@ final class CardEventData implements JsonSerializable {
 	 *     description: string,
 	 *     boardId: int,
 	 *     stackId: int,
-	 *     lastModified: int,
-	 *     createdAt: int,
-	 *     labels: array<int,string>,
-	 *     assignedUsers: array<int,string>,
+	 *     lastModified: string,
+	 *     createdAt: string,
+	 *     labels: array<array{id: int, title: string}>,
+	 *     assignedUsers: string[],
 	 *     order: int,
 	 *     archived: bool,
 	 *     commentsUnread: int,
@@ -97,11 +97,10 @@ final class CardEventData implements JsonSerializable {
 	 *     lastEditor: ?string,
 	 *     duedate: ?string,
 	 *     doneAt: ?string,
-	 *     deletedAt: ?int,
+	 *     deletedAt: ?string,
 	 * }
 	 */
-	public function jsonSerialize(): array
-	{
+	public function jsonSerialize(): array {
 		return [
 			'title' => $this->title,
 			'description' => $this->description,

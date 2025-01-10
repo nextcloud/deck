@@ -27,7 +27,6 @@ namespace OCA\Deck\Db;
 use DateInterval;
 use DateTime;
 use OCA\Deck\Model\CardDetails;
-use OCA\Deck\Db\Board;
 use Test\TestCase;
 
 class CardTest extends TestCase {

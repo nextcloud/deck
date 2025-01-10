@@ -11,8 +11,8 @@ namespace OCA\Deck\Db;
 
 use DateTime;
 use DateTimeZone;
-use Sabre\VObject\Component\VCalendar;
 use OCA\Deck\Model\Public\CardEventData;
+use Sabre\VObject\Component\VCalendar;
 
 /**
  * @method string getTitle()
@@ -177,7 +177,7 @@ class Card extends RelationalEntity {
 		return md5((string)$this->getLastModified());
 	}
 
-	public function toEventData(?array $previousValues = null): CardEventData {
+	public function toEventData(): CardEventData {
 		return new CardEventData(
 			title: $this->getTitle(),
 			description: $this->getDescription(),
@@ -185,11 +185,11 @@ class Card extends RelationalEntity {
 			stackId: $this->getStackId(),
 			lastModified: new DateTime('@' . $this->getLastModified()),
 			createdAt: new DateTime('@' . $this->getCreatedAt()),
-			labels: array_map(fn($label) => [
+			labels: array_map(fn ($label) => [
 				'id' => $label->getId(),
 				'title' => $label->getTitle()
 			], $this->getLabels() ?? []),
-			assignedUsers: $this->getAssignedUsers() ?: [],
+			assignedUsers: $this->getAssignedUsers() ? array_map(fn ($user) => $user->getUID(), $this->getAssignedUsers()) : [],
 			order: $this->getOrder(),
 			archived: $this->getArchived(),
 			commentsUnread: $this->getCommentsUnread(),
