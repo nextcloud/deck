@@ -22,8 +22,8 @@
 		<div v-else-if="board" class="board-title">
 			<div :style="{backgroundColor: '#' + board.color}" class="board-bullet" />
 			<h2 dir="auto">
-				<span class="board__title-text">{{ board.title }}</span>
-				<span class="board__title-counter">{{ cardsCount }}</span>
+				<span aria-label="Board title" class="board__title-text">{{ board.title }}</span>
+				<span aria-label="Number of cards" class="board__title-counter">{{ cardsCount }}</span>
 			</h2>
 			<p v-if="showArchived">
 				({{ t('deck', 'Archived cards') }})
