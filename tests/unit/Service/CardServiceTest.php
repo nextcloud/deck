@@ -36,6 +36,9 @@ use OCA\Deck\Db\Label;
 use OCA\Deck\Db\LabelMapper;
 use OCA\Deck\Db\Stack;
 use OCA\Deck\Db\StackMapper;
+use OCA\Deck\Event\CardCreatedEvent;
+use OCA\Deck\Event\CardDeletedEvent;
+use OCA\Deck\Event\CardUpdatedEvent;
 use OCA\Deck\Model\CardDetails;
 use OCA\Deck\Notification\NotificationHelper;
 use OCA\Deck\StatusException;
@@ -216,6 +219,15 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->once())
 			->method('insert')
 			->willReturn($card);
+		$this->eventDispatcher
+			->expects($this->once())
+			->method('dispatchTyped')
+			->with($this->callback(function ($event) use ($card) {
+				$this->assertInstanceOf(CardCreatedEvent::class, $event);
+				$this->assertEquals($card->getTitle(), $event->getCard()->getTitle());
+				return true;
+			}));
+
 		$b = $this->cardService->create('Card title', 123, 'text', 999, 'admin');
 
 		$this->assertEquals($b->getTitle(), 'Card title');
@@ -288,7 +300,15 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->once())
 			->method('update')
 			->willReturn($cardToBeDeleted);
+		$this->eventDispatcher
+			->expects($this->once())
+			->method('dispatchTyped')
+			->with($this->callback(function ($event) {
+				return $event instanceof CardDeletedEvent;
+			}));
+
 		$this->cardService->delete(123);
+
 		$this->assertTrue($cardToBeDeleted->getDeletedAt() <= time(), 'deletedAt is in the past');
 	}
 
@@ -300,7 +320,15 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
 			return $c;
 		});
+		$this->eventDispatcher
+			->expects($this->once())
+			->method('dispatchTyped')
+			->with($this->callback(function ($event) {
+				return $event instanceof CardUpdatedEvent;
+			}));
+
 		$actual = $this->cardService->update(123, 'newtitle', 234, 'text', 'admin', 'foo', 999, '2017-01-01 00:00:00', null);
+		
 		$this->assertEquals('newtitle', $actual->getTitle());
 		$this->assertEquals(234, $actual->getStackId());
 		$this->assertEquals('text', $actual->getType());
@@ -327,7 +355,17 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
 			return $c;
 		});
+		$this->eventDispatcher
+			->expects($this->once())
+			->method('dispatchTyped')
+			->with($this->callback(function ($event) {
+				return ($event instanceof CardUpdatedEvent)
+					&& ($event->getCard()->getTitle() == '')
+					&& ($event->getCardBefore()->getTitle() == 'title');
+			}));
+
 		$actual = $this->cardService->rename(123, 'newtitle');
+
 		$this->assertEquals('newtitle', $actual->getTitle());
 	}
 
@@ -356,7 +394,15 @@ class CardServiceTest extends TestCase {
 		$card = new Card();
 		$card->setStackId(123);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
+		$this->eventDispatcher
+			->expects($this->once())
+			->method('dispatchTyped')
+			->with($this->callback(function ($event) {
+				return $event instanceof CardUpdatedEvent;
+			}));
+
 		$result = $this->cardService->reorder($cardId, 123, $newPosition);
+
 		foreach ($result as $card) {
 			$actual[$card->getOrder()] = $card->getId();
 		}
@@ -393,6 +439,12 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
 			return $c;
 		});
+		$this->eventDispatcher
+			->expects($this->once())
+			->method('dispatchTyped')
+			->with($this->callback(function ($event) {
+				return $event instanceof CardUpdatedEvent;
+			}));
 		$this->assertTrue($this->cardService->archive(123)->getArchived());
 	}
 	public function testUnarchive() {
@@ -403,6 +455,12 @@ class CardServiceTest extends TestCase {
 		$this->cardMapper->expects($this->once())->method('update')->willReturnCallback(function ($c) {
 			return $c;
 		});
+		$this->eventDispatcher
+			->expects($this->once())
+			->method('dispatchTyped')
+			->with($this->callback(function ($event) {
+				return $event instanceof CardUpdatedEvent;
+			}));
 		$this->assertFalse($this->cardService->unarchive(123)->getArchived());
 	}
 
@@ -411,6 +469,12 @@ class CardServiceTest extends TestCase {
 		$card->setArchived(false);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
 		$this->cardMapper->expects($this->once())->method('assignLabel');
+		$this->eventDispatcher
+			->expects($this->once())
+			->method('dispatchTyped')
+			->with($this->callback(function ($event) {
+				return $event instanceof CardUpdatedEvent;
+			}));
 		$this->cardService->assignLabel(123, 999);
 	}
 
@@ -428,6 +492,12 @@ class CardServiceTest extends TestCase {
 		$card->setArchived(false);
 		$this->cardMapper->expects($this->once())->method('find')->willReturn($card);
 		$this->cardMapper->expects($this->once())->method('removeLabel');
+		$this->eventDispatcher
+			->expects($this->once())
+			->method('dispatchTyped')
+			->with($this->callback(function ($event) {
+				return $event instanceof CardUpdatedEvent;
+			}));
 		$this->cardService->removeLabel(123, 999);
 	}
 

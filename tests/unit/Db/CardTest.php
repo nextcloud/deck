@@ -47,6 +47,14 @@ class CardTest extends TestCase {
 		return $card;
 	}
 
+	private function createLabel() {
+		$label = new Label();
+		$label->setId(1);
+		$label->setTitle('Label 1');
+		$label->setColor('000000');
+		return $label;
+	}
+
 	public function dataDuedate() {
 		return [
 			[(new DateTime()), Card::DUEDATE_NOW],
@@ -149,5 +157,86 @@ class CardTest extends TestCase {
 			'ETag' => $card->getETag(),
 			'done' => false,
 		], (new CardDetails($card))->jsonSerialize());
+	}
+
+	public function testToEventDataSerializationSimple() {
+		$card = $this->createCard();
+		$board = new Board();
+		$board->setId(1);
+		$card->setRelatedBoard($board);
+
+		$lastmodified = new DateTime('2024-01-01 00:00:00');
+		$card->setLastModified($lastmodified->getTimestamp());
+		$created = new DateTime('2024-01-02 00:00:00');
+		$card->setCreatedAt($created->getTimestamp());
+
+		$this->assertEquals([
+			'title' => 'My Card',
+			'description' => 'a long description',
+			'boardId' => 1,
+			'stackId' => 1,
+			'lastModified' => $lastmodified->format(DATE_ATOM),
+			'createdAt' => $created->format(DATE_ATOM),
+			'labels' => [],
+			'assignedUsers' => [],
+			'order' => 12,
+			'archived' => false,
+			'commentsUnread' => 0,
+			'commentsCount' => 0,
+			'owner' => 'admin',
+			'lastEditor' => null,
+			'duedate' => null,
+			'doneAt' => null,
+			'deletedAt' => null,
+		], $card->toEventData()->jsonSerialize());
+	}
+
+	public function testToEventDataSerializationFull() {
+		$card = $this->createCard();
+
+		$board = new Board();
+		$board->setId(1);
+		$card->setRelatedBoard($board);
+
+		$card->setAssignedUsers([ 'user1' ]);
+		$card->setLabels([$this->createLabel()]);
+		$card->setLastEditor('someuser');
+		$card->setArchived(true);
+
+		$lastModified = new DateTime('2024-01-01 00:00:00');
+		$card->setLastModified($lastModified->getTimestamp());
+		$createdAt = new DateTime('2024-01-02 00:00:00');
+		$card->setCreatedAt($createdAt->getTimestamp());
+		$doneAt = new DateTime('2024-01-03 00:00:00');
+		$card->setDone($doneAt);
+		$duedate = new DateTime('2024-01-05 00:00:00');
+		$card->setDuedate($duedate);
+		$deletedAt = new DateTime('2024-01-05 00:00:00');
+		$card->setDeletedAt($deletedAt->getTimestamp());
+
+		$this->assertEquals([
+			'title' => 'My Card',
+			'description' => 'a long description',
+			'boardId' => 1,
+			'stackId' => 1,
+			'lastModified' => $lastModified->format(DATE_ATOM),
+			'createdAt' => $createdAt->format(DATE_ATOM),
+			'labels' => [
+				[
+					'id' => 1,
+					'title' => 'Label 1'
+				]
+			],
+			'assignedUsers' => ['user1'],
+			'order' => 12,
+			'archived' => true,
+			'commentsUnread' => 0,
+			'commentsCount' => 0,
+			'doneAt' => $doneAt->format(DATE_ATOM),
+			'owner' => 'admin',
+			'lastEditor' => 'someuser',
+			'duedate' => $duedate->format(DATE_ATOM),
+			'deletedAt' => $deletedAt->format(DATE_ATOM),
+		], $card->toEventData()->jsonSerialize());
 	}
 }

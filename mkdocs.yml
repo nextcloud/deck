@@ -11,6 +11,7 @@ pages:
     - API documentation:
         - REST API: API.md
         - Nextcloud API: API-Nextcloud.md
+    - Events: events.md
     - Developer documentation:
         - Data structure: structure.md
         - Import documentation:
