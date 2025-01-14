@@ -5,6 +5,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.14.3
+### Fixed
+ - fix: two close buttons on card modal @app/backportbot [#6659](https://github.com/nextcloud/deck/pull/6659)
+ - fix: Catch not found card @app/backportbot [#6652](https://github.com/nextcloud/deck/pull/6652)
+ - fix: close modal after deleting card @app/backportbot [#6619](https://github.com/nextcloud/deck/pull/6619)
+ - fix: Use new query builder @app/backportbot [#6612](https://github.com/nextcloud/deck/pull/6612)
+ - fix: new card input spacing @app/backportbot [#6576](https://github.com/nextcloud/deck/pull/6576)
+ - fix(sharing): list accounts with matches in email @app/backportbot [#6524](https://github.com/nextcloud/deck/pull/6524)
+
+## 1.14.2
 ### Fixed
 
  - fix: board bubble preview widget [#6477](https://github.com/nextcloud/deck/pull/6477)
@@ -891,4 +901,3 @@ Android app team for helping to improve our REST API:
 - Assign labels
 - Markdown notes for each card
 - Archive cards
-
