@@ -58,7 +58,7 @@ use Sabre\VObject\Component\VCalendar;
 class Card extends RelationalEntity {
 	public const TITLE_MAX_LENGTH = 255;
 
-	protected $title;
+	protected string $title = '';
 	protected $description;
 	protected $descriptionPrev;
 	protected $stackId;

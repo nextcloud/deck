@@ -7,12 +7,12 @@
 	<NcAppSidebar v-if="currentBoard && currentCard"
 		ref="cardSidebar"
 		:active="tabId"
-		:name="title"
+		:name="displayTitle"
 		:subname="subtitle"
 		:subtitle="subtitleTooltip"
-		:name-editable="titleEditable"
-		@update:nameEditable="handleUpdateTitleEditable"
-		@update:name="handleUpdateTitle"
+		:name-editable.sync="isEditingTitle"
+		@update:name="(value) => titleEditing = value"
+		@dismiss-editing="titleEditing = currentCard.title"
 		@submit-name="handleSubmitTitle"
 		@opened="focusHeader"
 		@close="closeSidebar">
@@ -25,6 +25,11 @@
 			</NcActionButton>
 
 			<CardMenuEntries :card="currentCard" :hide-details-entry="true" />
+		</template>
+		<template #description>
+			<NcReferenceList v-if="currentCard.referenceData"
+				:text="currentCard.title"
+				:interactive="false" />
 		</template>
 
 		<NcAppSidebarTab id="details"
@@ -68,6 +73,7 @@
 
 <script>
 import { NcActionButton, NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
+import { NcReferenceList } from '@nextcloud/vue/dist/Components/NcRichText.js'
 import { getCapabilities } from '@nextcloud/capabilities'
 import { mapState, mapGetters } from 'vuex'
 import CardSidebarTabDetails from './CardSidebarTabDetails.vue'
@@ -93,6 +99,7 @@ export default {
 		NcAppSidebar,
 		NcAppSidebarTab,
 		NcActionButton,
+		NcReferenceList,
 		CardSidebarTabAttachments,
 		CardSidebarTabComments,
 		CardSidebarTabActivity,
@@ -122,7 +129,7 @@ export default {
 	},
 	data() {
 		return {
-			titleEditable: false,
+			isEditingTitle: false,
 			titleEditing: '',
 			hasActivity: capabilities && capabilities.activity,
 			locale: getLocale(),
@@ -130,13 +137,10 @@ export default {
 	},
 	computed: {
 		...mapState({
-			isFullApp: state => state.isFullApp,
-			currentBoard: state => state.currentBoard,
+			isFullApp: (state) => state.isFullApp,
+			currentBoard: (state) => state.currentBoard,
 		}),
 		...mapGetters(['canEdit', 'assignables', 'cardActions', 'stackById']),
-		title() {
-			return this.titleEditable ? this.titleEditing : this.currentCard.title
-		},
 		currentCard() {
 			return this.$store.getters.cardById(this.id)
 		},
@@ -154,10 +158,25 @@ export default {
 				this.$store.dispatch('setConfig', { cardDetailsInModal: newValue })
 			},
 		},
+		displayTitle: {
+			get() {
+				if (this.isEditingTitle) {
+					return this.titleEditing
+				}
+				const reference = this.currentCard.referenceData
+				return reference ? reference.openGraphObject.name : this.currentCard.title
+			},
+		},
 	},
 	watch: {
 		currentCard() {
 			this.focusHeader()
+		},
+		'currentCard.title': {
+			immediate: true,
+			handler(newTitle) {
+				this.titleEditing = newTitle
+			},
 		},
 	},
 	methods: {
@@ -166,22 +185,16 @@ export default {
 				this.$refs?.cardSidebar.$el.querySelector('.app-sidebar-header__mainname')?.focus()
 			})
 		},
-		handleUpdateTitleEditable(value) {
-			this.titleEditable = value
-			if (value) {
-				this.titleEditing = this.currentCard.title
-			}
-		},
-		handleUpdateTitle(value) {
-			this.titleEditing = value
-		},
-		handleSubmitTitle(value) {
-			if (value.trim === '') {
+		handleSubmitTitle() {
+			if (this.titleEditing.trim() === '') {
 				showError(t('deck', 'The title cannot be empty.'))
 				return
 			}
-			this.titleEditable = false
-			this.$store.dispatch('updateCardTitle', { ...this.currentCard, title: this.titleEditing })
+			this.isEditingTitle = false
+			this.$store.dispatch('updateCardTitle', {
+				...this.currentCard,
+				title: this.titleEditing,
+			})
 		},
 
 		closeSidebar() {

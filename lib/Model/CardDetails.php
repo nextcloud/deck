@@ -8,10 +8,12 @@ namespace OCA\Deck\Model;
 
 use OCA\Deck\Db\Board;
 use OCA\Deck\Db\Card;
+use OCP\Collaboration\Reference\Reference;
 
 class CardDetails extends Card {
 	private Card $card;
 	private ?Board $board;
+	private ?Reference $referenceData = null;
 
 	public function __construct(Card $card, ?Board $board = null) {
 		parent::__construct();
@@ -21,6 +23,10 @@ class CardDetails extends Card {
 
 	public function setBoard(?Board $board): void {
 		$this->board = $board;
+	}
+
+	public function setReferenceData(?Reference $data): void {
+		$this->referenceData = $data;
 	}
 
 	public function jsonSerialize(array $extras = []): array {
@@ -37,6 +43,8 @@ class CardDetails extends Card {
 
 		$array['overdue'] = $this->getDueStatus();
 		$this->appendBoardDetails($array);
+
+		$array['referenceData'] = $this->referenceData?->jsonSerialize();
 
 		return $array;
 	}

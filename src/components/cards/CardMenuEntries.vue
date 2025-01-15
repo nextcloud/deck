@@ -9,6 +9,12 @@
 			<CardBulletedIcon slot="icon" :size="20" decorative />
 			{{ t('deck', 'Card details') }}
 		</NcActionButton>
+		<NcActionButton v-if="canEdit" :close-after-click="true" @click="editTitle">
+			<template #icon>
+				<PencilIcon :size="20" decorative />
+			</template>
+			{{ t('deck', 'Edit title') }}
+		</NcActionButton>
 		<NcActionButton v-if="canEdit && !isCurrentUserAssigned"
 			icon="icon-user"
 			:close-after-click="true"
@@ -59,6 +65,7 @@ import { NcActionButton } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import CardBulletedIcon from 'vue-material-design-icons/CardBulleted.vue'
+import PencilIcon from 'vue-material-design-icons/Pencil.vue'
 import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showUndo } from '@nextcloud/dialogs'
@@ -68,7 +75,7 @@ import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'CardMenuEntries',
-	components: { NcActionButton, ArchiveIcon, CardBulletedIcon },
+	components: { NcActionButton, ArchiveIcon, CardBulletedIcon, PencilIcon },
 	props: {
 		card: {
 			type: Object,
@@ -79,6 +86,7 @@ export default {
 			default: false,
 		},
 	},
+	emits: ['edit-title'],
 	data() {
 		return {
 			modalShow: false,
@@ -135,6 +143,9 @@ export default {
 			}
 
 			this.$root.$emit('open-card', this.card.id)
+		},
+		editTitle() {
+			this.$emit('edit-title', this.card.id)
 		},
 		deleteCard() {
 			this.$store.dispatch('deleteCard', this.card)

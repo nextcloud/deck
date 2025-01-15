@@ -94,6 +94,68 @@ describe('Card', function () {
 		})
 	})
 
+	it('Card with link reference', () => {
+		cy.visit(`/apps/deck/#/board/${boardId}`)
+		const absoluteUrl = `https://example.com`
+		cy.get('.board .stack').eq(0).within(() => {
+			cy.get('.button-vue[aria-label*="Add card"]')
+				.first().click()
+
+			cy.get('.stack__card-add form input#new-stack-input-main')
+				.type(absoluteUrl)
+			cy.get('.stack__card-add form input[type=submit]')
+				.first().click()
+			cy.get('.card:contains("Example Domain")')
+				.should('be.visible')
+				.click()
+		})
+
+		cy.get('.app-sidebar-header', { timeout: 10000 })
+			.should('be.visible')
+			.find('h2').contains('Example Domain').should('be.visible')
+	})
+
+	it('Rename card with link', () => {
+		cy.visit(`/apps/deck/#/board/${boardId}`)
+		const absoluteUrl = `https://example.com`
+		const plainTitle = 'New title'
+		cy.get('.board .stack').eq(0).within(() => {
+			cy.get('.button-vue[aria-label*="Add card"]')
+				.first().click()
+
+			cy.get('.stack__card-add form input#new-stack-input-main')
+				.type(absoluteUrl)
+			cy.get('.stack__card-add form input[type=submit]')
+				.first().click()
+			cy.get('.card:contains("Example Domain")')
+				.should('be.visible')
+		})
+
+		// Rename link to plain title
+		cy.get('.card:contains("Example Domain")')
+			.find('.action-item__menutoggle')
+			.click()
+		cy.get('.v-popper__popper button:contains("Edit title")')
+			.click()
+		cy.get(`h4:contains("${absoluteUrl}") span[contenteditable="true"]`)
+			.type(`{selectAll}${plainTitle}{enter}`)
+		cy.get(`.card:contains("${plainTitle}")`)
+			.should('be.visible')
+
+		// Rename plain title to link
+		cy.get('.card:contains("New title")')
+			.find('.action-item__menutoggle')
+			.click()
+		cy.get('.v-popper__popper button:contains("Edit title")')
+			.click()
+		cy.get('h4:contains("New title") span[contenteditable="true"]')
+			.type(`{selectAll}${absoluteUrl}{enter}`)
+		cy.get('.board').click()
+		cy.get('.card:contains("Example Domain")')
+			.should('be.visible')
+
+	})
+
 	describe('Modal', () => {
 		beforeEach(function () {
 			cy.login(user)
