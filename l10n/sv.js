@@ -276,6 +276,8 @@ OC.L10N.register(
     "Todo items" : "Att göra saker",
     "{count} comments, {unread} unread" : "{count} kommentarer, {unread} olästa",
     "Edit card title" : "Ändra korttitel",
+    "Open link" : "Öppna länken",
+    "Edit title" : "Redigera titel",
     "Assign to me" : "Tilldela till mig",
     "Unassign myself" : "Ta bort från mig själv",
     "Mark as not done" : "Markera som ej klar",

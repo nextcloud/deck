@@ -242,6 +242,7 @@ OC.L10N.register(
     "Todo items" : "Елементи на задача за изпълнение",
     "{count} comments, {unread} unread" : "{count} коментари, {unread} непрочетени",
     "Edit card title" : "Редактиране на заглавието на карта",
+    "Edit title" : "Редактиране на заглавието",
     "Assign to me" : "Зачисляване към мен",
     "Unassign myself" : "Отмяна на зачисляването към мен",
     "Delete card" : "Изтриване на карта",

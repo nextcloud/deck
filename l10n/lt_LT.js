@@ -217,6 +217,8 @@ OC.L10N.register(
     "(group)" : "(grupė)",
     "Next week – {timeLocale}" : "Kitą savaitę – {timeLocale}",
     "{count} comments, {unread} unread" : "Komentarų: {count}, neskaityta: {unread}",
+    "Open link" : "Atverti nuorodą",
+    "Edit title" : "Taisyti pavadinimą",
     "Assign to me" : "Priskirti sau",
     "Delete card" : "Ištrinti kortelę",
     "Card deleted" : "Kortelė ištrinta",

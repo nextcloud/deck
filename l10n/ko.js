@@ -274,6 +274,7 @@ OC.L10N.register(
     "Todo items" : "작업 항목",
     "{count} comments, {unread} unread" : "댓글 {count}개, 읽지 않음 {unread}개",
     "Edit card title" : "카드 제목 수정",
+    "Edit title" : "제목 수정",
     "Assign to me" : "나에게 할당",
     "Unassign myself" : "스스로를 할당 해제",
     "Mark as not done" : "완료되지 않은 것으로 표시",

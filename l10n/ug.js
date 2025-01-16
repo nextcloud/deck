@@ -274,6 +274,8 @@ OC.L10N.register(
     "Todo items" : "تودو تۈرلىرى",
     "{count} comments, {unread} unread" : "{count} باھا ، {unread} ئوقۇمىغان",
     "Edit card title" : "كارتا نامىنى تەھرىرلەش",
+    "Open link" : "ئۇلانمىنى ئېچىڭ",
+    "Edit title" : "ماۋزۇنى تەھرىرلەش",
     "Assign to me" : "ماڭا تاپشۇرۇڭ",
     "Unassign myself" : "ئۆزۈمنى بەلگىلىمەڭ",
     "Mark as not done" : "ئىشلەنمىگەن دەپ بەلگە قويۇڭ",

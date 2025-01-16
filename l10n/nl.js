@@ -265,6 +265,7 @@ OC.L10N.register(
     "Todo items" : "Te doen onderwerpen",
     "{count} comments, {unread} unread" : "{count} reacties, {unread} ongelezen",
     "Edit card title" : "Wijzig de titel van de kaart",
+    "Edit title" : "Titel bewerken",
     "Assign to me" : "Aan mij toewijzen",
     "Unassign myself" : "Eigen toewijzing opheffen",
     "Mark as not done" : "Markeren als niet gedaan",

@@ -217,6 +217,7 @@ OC.L10N.register(
     "Next week – {timeLocale}" : "Ensi viikko – {timeLocale}",
     "{count} comments, {unread} unread" : "{count} kommenttia, {unread} lukematonta",
     "Edit card title" : "Muokkaa kortin otsikkoa",
+    "Edit title" : "Muokkaa otsikkoa",
     "Assign to me" : "Määritä minulle",
     "Unassign myself" : "Poista määritys minulta",
     "Delete card" : "Poista kortti",

@@ -185,6 +185,8 @@ OC.L10N.register(
     "Next week – {timeLocale}" : "Наступного тижня - {timeLocale}",
     "Todo items" : "Пункти завдань",
     "Edit card title" : "Редагувати заголовок картки",
+    "Open link" : "Відкрити посилання",
+    "Edit title" : "Редагувати",
     "Assign to me" : "Призначити мені",
     "Delete card" : "Вилучити картку",
     "seconds ago" : "секунд тому",

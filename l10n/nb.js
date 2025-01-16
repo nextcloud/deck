@@ -274,6 +274,8 @@ OC.L10N.register(
     "Todo items" : "Gjøremålspunkter",
     "{count} comments, {unread} unread" : "{count} kommentarer, {unread} ulest",
     "Edit card title" : "Rediger korttittel",
+    "Open link" : "Åpne kobling",
+    "Edit title" : "Rediger tittel",
     "Assign to me" : "Tildel meg",
     "Unassign myself" : "Fjern meg fra tildeling",
     "Mark as not done" : "Marker som ikke ferdig",

@@ -192,6 +192,7 @@ OC.L10N.register(
     "Archive card" : "Mengarsipkan kartu",
     "Assign a tag to this card…" : "Berikan tag pada kartu ini...",
     "(group)" : "(grup)",
+    "Edit title" : "Edit judul",
     "Assign to me" : "Tugaskan saya",
     "Delete card" : "Hapus kartu",
     "seconds ago" : "beberapa detik yang lalu",
