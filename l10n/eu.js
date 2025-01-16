@@ -274,6 +274,7 @@ OC.L10N.register(
     "Todo items" : "Elementuak egiteke",
     "{count} comments, {unread} unread" : "{count} iruzkin, {unread} irakurri gabe",
     "Edit card title" : "Editatu txartelaren izenburua",
+    "Edit title" : "Editatu izenburua",
     "Assign to me" : "Esleitu niri",
     "Unassign myself" : "Niri esleitzeari utzi",
     "Mark as not done" : "Markatu ez egindako gisa",

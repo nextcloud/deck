@@ -261,6 +261,7 @@ OC.L10N.register(
     "Todo items" : "Teendő elemek",
     "{count} comments, {unread} unread" : "{count} hozzászólás, {unread} olvasatlan",
     "Edit card title" : "Kártyacím szerkesztése",
+    "Edit title" : "Cím szerkesztése",
     "Assign to me" : "Hozzám rendelés",
     "Unassign myself" : "Saját magam hozzárendelésének eltávolítása",
     "Delete card" : "Kártya törlése",

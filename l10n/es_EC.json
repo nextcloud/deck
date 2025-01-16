@@ -240,6 +240,7 @@
     "Todo items" : "Elementos pendientes",
     "{count} comments, {unread} unread" : "{count} comentarios, {unread} sin leer",
     "Edit card title" : "Editar título de la tarjeta",
+    "Edit title" : "Editar título",
     "Assign to me" : "Asignarme la tarjeta",
     "Unassign myself" : "Desasignarme la tarjeta",
     "Delete card" : "Eliminar tarjeta",

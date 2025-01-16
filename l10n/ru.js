@@ -274,6 +274,7 @@ OC.L10N.register(
     "Todo items" : "Элементы списка задач",
     "{count} comments, {unread} unread" : "{count} комментариев, {unread} непрочитано",
     "Edit card title" : "Изменить заголовок карточки",
+    "Edit title" : "Редактировать заголовок",
     "Assign to me" : "Назначить себе",
     "Unassign myself" : "Отказаться от назначения",
     "Mark as not done" : "Отметить как невыполненную",

@@ -276,6 +276,8 @@ OC.L10N.register(
     "Todo items" : "À faire",
     "{count} comments, {unread} unread" : "{count} commentaires, {unread} non lus",
     "Edit card title" : "Modifier le titre de la carte",
+    "Open link" : "Ouvrir le lien",
+    "Edit title" : "Modifier le titre",
     "Assign to me" : "Me l'affecter",
     "Unassign myself" : "Me désaffecter",
     "Mark as not done" : "Marquer comme non fait",

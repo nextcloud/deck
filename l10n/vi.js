@@ -274,6 +274,7 @@ OC.L10N.register(
     "Todo items" : "Các mục công việc cần làm",
     "{count} comments, {unread} unread" : "{count} bình luận, {unread} chưa đọc",
     "Edit card title" : "Chỉnh sửa tiêu đề thẻ",
+    "Edit title" : "Chỉnh sửa tiêu đề",
     "Assign to me" : "Phân công cho tôi",
     "Unassign myself" : "Hủy bỏ phân công cho tôi",
     "Mark as not done" : "Đánh dấu là chưa hoàn thành",

@@ -216,6 +216,7 @@ OC.L10N.register(
     "Select Date" : "בחירת תאריך",
     "Assign a tag to this card…" : "הקצאת תגית לכרטיס זה…",
     "(group)" : "(קבוצה)",
+    "Edit title" : "עריכת כותרת",
     "Assign to me" : "הקצאה אלי",
     "Unassign myself" : "לבטל את הקצאת עצמי",
     "Delete card" : "מחיקת כרטיס לארכיון",

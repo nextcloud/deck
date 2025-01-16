@@ -276,6 +276,8 @@ OC.L10N.register(
     "Todo items" : "Ставке обавеза",
     "{count} comments, {unread} unread" : "{count} коментара, {unread} није прочитано",
     "Edit card title" : "Уреди наслов картице",
+    "Open link" : "Отвори линк",
+    "Edit title" : "Измени наслов",
     "Assign to me" : "Додели мени",
     "Unassign myself" : "Склони са мене",
     "Mark as not done" : "Означи да није завршена",

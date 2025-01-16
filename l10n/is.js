@@ -265,6 +265,7 @@ OC.L10N.register(
     "Todo items" : "Atriði á verkefnalista",
     "{count} comments, {unread} unread" : "{count} athugasemdir, {unread} ólesnar",
     "Edit card title" : "Breyta titli spjalds",
+    "Edit title" : "Breyta titli",
     "Assign to me" : "Úthluta mér",
     "Unassign myself" : "Aftengja úthlutun sjálfs mín",
     "Mark as not done" : "Merkja sem ólokið",

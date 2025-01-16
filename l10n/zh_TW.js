@@ -276,6 +276,8 @@ OC.L10N.register(
     "Todo items" : "待辦事項",
     "{count} comments, {unread} unread" : "{count} 則留言，{unread} 則未讀",
     "Edit card title" : "編輯卡片標題",
+    "Open link" : "開啟連結",
+    "Edit title" : "編輯標題",
     "Assign to me" : "分配給我",
     "Unassign myself" : "取消分配給我",
     "Mark as not done" : "標記為未完成",
