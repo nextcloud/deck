@@ -24,7 +24,7 @@
 			@input="debouncedUpdateCardDue" />
 
 		<div v-if="projectsEnabled" class="section-wrapper">
-			<CollectionList v-if="card.id"
+			<NcCollectionList v-if="card.id"
 				:id="`${card.id}`"
 				:name="card.title"
 				type="deck-card" />
@@ -43,7 +43,7 @@ import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
 import { loadState } from '@nextcloud/initial-state'
 
-import { CollectionList } from 'nextcloud-vue-collections'
+import { NcCollectionList } from '@nextcloud/vue'
 import Color from '../../mixins/color.js'
 import {
 	getLocale,
@@ -61,7 +61,7 @@ export default {
 		AssignmentSelector,
 		TagSelector,
 		Description,
-		CollectionList,
+		NcCollectionList,
 	},
 	mixins: [Color],
 	props: {

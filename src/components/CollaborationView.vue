@@ -5,7 +5,7 @@
 
 <template>
 	<div>
-		<CollectionList v-if="boardId"
+		<NcCollectionList v-if="boardId"
 			:id="boardId"
 			:name="boardTitle"
 			type="deck" />
@@ -13,12 +13,12 @@
 </template>
 
 <script>
-import { CollectionList } from 'nextcloud-vue-collections'
+import { NcCollectionList } from '@nextcloud/vue'
 
 export default {
 	name: 'CollaborationView',
 	components: {
-		CollectionList,
+		NcCollectionList,
 	},
 	computed: {
 		boardId() {
