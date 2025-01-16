@@ -276,6 +276,8 @@ OC.L10N.register(
     "Todo items" : "Yapılacak iş ögeleri",
     "{count} comments, {unread} unread" : "{count} yorum, {unread} okunmamış",
     "Edit card title" : "Kart başlığını düzenle",
+    "Open link" : "Bağlantıyı aç",
+    "Edit title" : "Başlığı düzenle",
     "Assign to me" : "Bana ata",
     "Unassign myself" : "Kendi atamamı kaldır",
     "Mark as not done" : "Tamamlanmamış olarak işaretle",

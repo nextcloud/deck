@@ -266,6 +266,7 @@ OC.L10N.register(
     "Todo items" : "Do zrobienia",
     "{count} comments, {unread} unread" : "Komentarze: {count}, nieprzeczytane: {unread}",
     "Edit card title" : "Edytuj nazwę karty",
+    "Edit title" : "Edytuj tytuł",
     "Assign to me" : "Przydziel do mnie",
     "Unassign myself" : "Cofnij moje przypisanie",
     "Mark as not done" : "Oznacz jako niewykonane",

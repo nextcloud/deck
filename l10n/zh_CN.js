@@ -259,6 +259,7 @@ OC.L10N.register(
     "Todo items" : "待办事项",
     "{count} comments, {unread} unread" : "{count} 条评论，{unread} 未读",
     "Edit card title" : "编辑卡片标题",
+    "Edit title" : "编辑标题",
     "Assign to me" : "指派给我",
     "Unassign myself" : "不再指派给我",
     "Mark as not done" : "标记为未完成",

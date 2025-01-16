@@ -180,6 +180,7 @@ OC.L10N.register(
     "Select Date" : "Vælg dato",
     "Assign a tag to this card…" : "Tilføj et mærkat til dette kort ...",
     "(group)" : "(gruppe)",
+    "Edit title" : "Redigér titel",
     "Assign to me" : "Tildel til mig",
     "Unassign myself" : "Fjern mig selv",
     "Delete card" : "Slet kort",

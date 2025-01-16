@@ -265,6 +265,7 @@ OC.L10N.register(
     "Todo items" : "Todo items",
     "{count} comments, {unread} unread" : "{count} comments, {unread} unread",
     "Edit card title" : "Edit card title",
+    "Edit title" : "Edit title",
     "Assign to me" : "Assign to me",
     "Unassign myself" : "Unassign myself",
     "Mark as not done" : "Mark as not done",

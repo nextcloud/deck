@@ -45,6 +45,7 @@ OC.L10N.register(
     "Update" : "Metre a jorn",
     "Created:" : "Creat lo :",
     "Description" : "Descripcion",
+    "Edit title" : "Modificar lo títol",
     "seconds ago" : "fa qualques segondas",
     "Keyboard shortcuts" : "Acorchis de clavièr",
     "Keyboard shortcut" : "Acorchis de clavièr",

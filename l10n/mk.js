@@ -213,6 +213,7 @@ OC.L10N.register(
     "Select Date" : "Избери датум",
     "Assign a tag to this card…" : "Додади ознака на оваа картица...",
     "(group)" : "(group)",
+    "Edit title" : "Удери наслов",
     "Assign to me" : "Доделени мене",
     "Unassign myself" : "Откажи се",
     "Delete card" : "Избриши картица",
