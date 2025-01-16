@@ -223,6 +223,7 @@ OC.L10N.register(
     "Assign a tag to this card…" : "Dodijeli oznaku ovoj kartici...",
     "(group)" : "(grupa)",
     "{count} comments, {unread} unread" : "{count} komentara, {unread} nepročitanih",
+    "Edit title" : "Uredi naslov",
     "Assign to me" : "Dodijeli meni",
     "Unassign myself" : "Ukloni sebe",
     "Delete card" : "Izbriši karticu",

@@ -274,6 +274,8 @@
     "Todo items" : "待辦事項",
     "{count} comments, {unread} unread" : "{count} 條評論，{unread} 條未讀",
     "Edit card title" : "編輯卡片標題",
+    "Open link" : "打開連結",
+    "Edit title" : "編輯標題",
     "Assign to me" : "指派給我",
     "Unassign myself" : "自己解除指派",
     "Mark as not done" : "標記為未完成",

@@ -273,6 +273,7 @@ OC.L10N.register(
     "Todo items" : "Ítems pendientes",
     "{count} comments, {unread} unread" : "{count} comentarios, {unread} sin leer",
     "Edit card title" : "Editar el título de la tarjeta",
+    "Edit title" : "Editar título",
     "Assign to me" : "Asignarme a mí",
     "Unassign myself" : "Desasignarme a mí mismo",
     "Mark as not done" : "Marcar como no completado",

@@ -264,6 +264,7 @@ OC.L10N.register(
     "Todo items" : "Elemente de executat",
     "{count} comments, {unread} unread" : "{count} comentarii, {unread} necitite",
     "Edit card title" : "Editează titlul cardului",
+    "Edit title" : "Editează titlul",
     "Assign to me" : "Atribuie-mi mie",
     "Unassign myself" : "Dezasociază-mi-l",
     "Mark as not done" : "Marchează ca realizat",

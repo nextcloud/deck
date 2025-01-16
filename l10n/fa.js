@@ -245,6 +245,7 @@ OC.L10N.register(
     "Todo items" : "Todo items",
     "{count} comments, {unread} unread" : "{count} نظر، { خوانده نشده} خوانده نشده",
     "Edit card title" : "Edit card title",
+    "Edit title" : "ویرایش عنوان",
     "Assign to me" : "به من اختصاص دهید",
     "Unassign myself" : "واگذاری به خودم را لغو می‌کنم",
     "Delete card" : "حذف برگه",
