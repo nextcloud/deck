@@ -5,7 +5,7 @@
 
 import Vue from 'vue'
 import Router from 'vue-router'
-import { generateUrl } from '@nextcloud/router'
+import { generateUrl, getRootUrl } from '@nextcloud/router'
 import { BOARD_FILTERS } from './store/main.js'
 import Boards from './components/boards/Boards.vue'
 import Board from './components/board/Board.vue'
@@ -16,9 +16,15 @@ import Overview from './components/overview/Overview.vue'
 
 Vue.use(Router)
 
+// We apply a dynamic base URL depending on the URL used in the browser
+const baseUrl = generateUrl('/apps/deck/')
+const webRootWithIndexPHP = getRootUrl() + '/index.php'
+const doesURLContainIndexPHP = window.location.pathname.startsWith(webRootWithIndexPHP)
+const currentBaseUrl = doesURLContainIndexPHP ? baseUrl : baseUrl.replace('/index.php/', '/')
+
 const router = new Router({
 	mode: 'history',
-	base: generateUrl('/apps/deck/'),
+	base: currentBaseUrl,
 	linkActiveClass: 'active',
 	routes: [
 		{
@@ -145,7 +151,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
 	// Redirect if fullPath begins with a hash (ignore hashes later in path)
 	if (to.hash.substring(0, 2) === '#/') {
-		const path = to.fullPath.replace('/apps/deck/#/', '/apps/deck/')
+		const path = to.fullPath.replace('/#/', '/').trimEnd('/')
 		next(path)
 		return
 	}
