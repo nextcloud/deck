@@ -87,6 +87,7 @@ OC.L10N.register(
     "Archive card" : "Archivar la tarxeta",
     "(group)" : "(grupu)",
     "Next week – {timeLocale}" : "La próxima selmana – {timeLocale}",
+    "Edit title" : "Editar el títulu",
     "Delete card" : "Desaniciar la tarxeta",
     "seconds ago" : "hai segundos",
     "Keyboard shortcuts" : "Atayos del tecláu",
