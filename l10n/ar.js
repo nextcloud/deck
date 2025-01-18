@@ -277,6 +277,7 @@ OC.L10N.register(
     "{count} comments, {unread} unread" : "{عدد} التعليقات، {غير مقروءة} غير مقروءة",
     "Edit card title" : "تعديل اسم القائمة",
     "Open link" : "إفتَح الرابط",
+    "Edit title" : "تحرير عنوان",
     "Assign to me" : "ينسب لي",
     "Unassign myself" : "إلغاء تعييني ",
     "Mark as not done" : "تمييز كـ \"غير منتهٍ\"",
