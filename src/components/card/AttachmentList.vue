@@ -41,7 +41,8 @@
 				<div class="details">
 					<a>
 						<div class="filename">
-							<span class="basename">{{ attachment.name }}</span>
+							<span>{{ attachmentBasename(attachment) }}</span>
+							<span class="extension">.{{ attachmentExtension(attachment) }}</span>
 						</div>
 						<progress :value="attachment.progress" max="100" />
 					</a>
@@ -58,7 +59,8 @@
 				<div class="details">
 					<a :href="internalLink(attachment)" @click.prevent="showViewer(attachment)">
 						<div class="filename">
-							<span class="basename">{{ attachment.data }}</span>
+							<span>{{ attachmentBasename(attachment) }}</span>
+							<span class="extension">.{{ attachmentExtension(attachment) }}</span>
 						</div>
 						<div v-if="attachment.deletedAt === 0">
 							<span class="filesize">{{ formattedFileSize(attachment.extendedData.filesize) }}</span>
@@ -199,6 +201,14 @@ export default {
 			} else {
 				return t('deck', 'Drop your files to upload')
 			}
+		},
+		attachmentBasename() {
+			return (attachment) => attachment?.extendedData?.info.filename
+				?? (attachment?.name ?? attachment.data).replace(/\.[^/.]+$/, '')
+		},
+		attachmentExtension() {
+			return (attachment) => attachment?.extendedData?.info?.extension
+				?? (attachment?.name ?? attachment.data).split('.').pop()
 		},
 	},
 	watch: {
