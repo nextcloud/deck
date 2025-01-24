@@ -227,8 +227,6 @@ OC.L10N.register(
     "Something went wrong" : "Ada yang salah",
     "Maximum file size of {size} exceeded" : "Melampaui batas ukuran maksimal {size}",
     "Share" : "Bagikan",
-    "Move card to another board" : "Pindahkan kartu ke papan lain",
-    "(Circle)" : "(Kelompok)",
-    "Assign to users/groups/circles" : "Penugasan kepada pengguna/grup/lingkaran"
+    "Move card to another board" : "Pindahkan kartu ke papan lain"
 },
 "nplurals=1; plural=0;");

@@ -389,9 +389,6 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "{file} mit einer Deck-Karte teilen",
     "Share" : "Freigeben",
     "Move card to another board" : "Karte auf ein anderes Board verschieben",
-    "Searching for users, groups and circles …" : "Suche nach Benutzern, Gruppen und Kreisen …",
-    "(Circle)" : "(Kreis)",
-    "Assign to users/groups/circles" : "An Benutzer, Gruppen oder Kreise zuweisen",
     "Filter by completed" : "Nach Status filtern"
 },
 "nplurals=2; plural=(n != 1);");

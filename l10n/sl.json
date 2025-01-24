@@ -326,9 +326,6 @@
     "Share with a Deck card" : "Poveži z nalogo Deck",
     "Share {file} with a Deck card" : "Poveži datoteko {file} z nalogo Deck",
     "Share" : "Souporaba",
-    "Move card to another board" : "Premakni nalogo v drugo zbirko",
-    "Searching for users, groups and circles …" : "Iskanje uporabnikov, skupin in krogov ...",
-    "(Circle)" : "(Krog)",
-    "Assign to users/groups/circles" : "Dodeli uporabnikom/skupinam/krogom"
+    "Move card to another board" : "Premakni nalogo v drugo zbirko"
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }

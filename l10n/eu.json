@@ -378,9 +378,6 @@
     "Share {file} with a Deck card" : "Partekatu {file} Deck txartel baten bidez",
     "Share" : "Partekatu",
     "Move card to another board" : "Mugitu txartela beste taula batera",
-    "Searching for users, groups and circles …" : "Erabiltzaileak, taldeak, zirkuluak... bilatzen",
-    "(Circle)" : "(Zirkulua)",
-    "Assign to users/groups/circles" : "Esleitu erabiltzaile/talde/zirkuluei",
     "Filter by completed" : "Iragazi osatutakoen arabera"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

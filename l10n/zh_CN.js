@@ -356,9 +356,6 @@ OC.L10N.register(
     "Share with a Deck card" : "分享给一张看板卡片",
     "Share {file} with a Deck card" : "将{file}分享给一张看板卡片",
     "Share" : "分享",
-    "Move card to another board" : "将卡片移到其他面板",
-    "Searching for users, groups and circles …" : "正在搜索用户、群组和圈子 ......",
-    "(Circle)" : "（圈子）",
-    "Assign to users/groups/circles" : "指派给用户/群组/圈子"
+    "Move card to another board" : "将卡片移到其他面板"
 },
 "nplurals=1; plural=0;");
