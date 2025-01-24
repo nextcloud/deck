@@ -267,9 +267,6 @@
     "Share with a Deck card" : "שיתוף עם כרטיס חפיסה",
     "Share {file} with a Deck card" : "שיתוף {file} עם כרטיס חפיסה",
     "Share" : "שיתוף",
-    "Move card to another board" : "העברת כרטיס ללוח אחר",
-    "Searching for users, groups and circles …" : "מחפש משתמשים, קבוצות, ומעגלים ...",
-    "(Circle)" : "(מעגל)",
-    "Assign to users/groups/circles" : "הקצאה למשתמשים/קבוצות/מעגלים"
+    "Move card to another board" : "העברת כרטיס ללוח אחר"
 },"pluralForm" :"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;"
 }

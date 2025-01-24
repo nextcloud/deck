@@ -387,9 +387,6 @@
     "Share {file} with a Deck card" : "Dela {file} med ett Deck-kort",
     "Share" : "Dela",
     "Move card to another board" : "Flytta kort till en annan tavla",
-    "Searching for users, groups and circles …" : "Söker efter användare, grupper och cirklar …",
-    "(Circle)" : "(Cirkel)",
-    "Assign to users/groups/circles" : "Tilldela till användare/grupper/cirklar",
     "Filter by completed" : "Filtrera efter slutfört"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

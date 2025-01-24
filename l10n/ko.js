@@ -379,9 +379,6 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Deck 카드와 함께 {file} 공유",
     "Share" : "공유",
     "Move card to another board" : "카드를 다른 보드로 이동",
-    "Searching for users, groups and circles …" : "사용자, 그룹, 서클 검색 중…",
-    "(Circle)" : "(서클)",
-    "Assign to users/groups/circles" : "사용자/그룹/서클에 할당",
     "Filter by completed" : "완료 기준으로 필터링"
 },
 "nplurals=1; plural=0;");

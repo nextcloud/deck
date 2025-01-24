@@ -345,9 +345,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Megosztás kártyával",
     "Share {file} with a Deck card" : "A(z) {file} megosztása egy kártyával",
     "Share" : "Megosztás",
-    "Move card to another board" : "Kártya áthelyezése egy másik táblára",
-    "Searching for users, groups and circles …" : "Felhasználók, csoportok és körök keresése…",
-    "(Circle)" : "(Kör)",
-    "Assign to users/groups/circles" : "Felhasználókhoz/csoportokhoz/körökhöz rendelés"
+    "Move card to another board" : "Kártya áthelyezése egy másik táblára"
 },
 "nplurals=2; plural=(n != 1);");

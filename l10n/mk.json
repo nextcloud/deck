@@ -275,9 +275,6 @@
     "Share with a Deck card" : "Споделено со Deck картица",
     "Share {file} with a Deck card" : "Сподели {file} со Deck картица",
     "Share" : "Сподели",
-    "Move card to another board" : "Премести ја картицата на друга табла",
-    "Searching for users, groups and circles …" : "Пребарување на корисници, групи или кругови ...",
-    "(Circle)" : "(Круг)",
-    "Assign to users/groups/circles" : "Додели на корисници/групи/кругови"
+    "Move card to another board" : "Премести ја картицата на друга табла"
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"
 }

@@ -349,9 +349,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Delen met een Deck kaart",
     "Share {file} with a Deck card" : "Delen {file} met een Deck kaart",
     "Share" : "Delen",
-    "Move card to another board" : "Verplaats kaart naar een ander bord",
-    "Searching for users, groups and circles …" : "Bezig met zoeken naar gebruikers, groepen en kringen ...",
-    "(Circle)" : "(Kring)",
-    "Assign to users/groups/circles" : "Toewijzen aan gebruikers/groepen/kringen"
+    "Move card to another board" : "Verplaats kaart naar een ander bord"
 },
 "nplurals=2; plural=(n != 1);");

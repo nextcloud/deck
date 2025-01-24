@@ -379,9 +379,6 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Chia sẻ {file} với một thẻ Kế Hoạch",
     "Share" : "Chia sẻ",
     "Move card to another board" : "Di chuyển thẻ sang bảng khác",
-    "Searching for users, groups and circles …" : "Tìm kiếm người dùng, nhóm và vòng kết nối ...",
-    "(Circle)" : "(Vòng Kết Nối)",
-    "Assign to users/groups/circles" : "Gán cho người dùng/nhóm/vòng kết nối",
     "Filter by completed" : "Lọc theo đã việc đã hoàn thành"
 },
 "nplurals=1; plural=0;");

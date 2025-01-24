@@ -389,9 +389,6 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Compartir {file} cunha tarxeta da Gabeta",
     "Share" : "Compartir",
     "Move card to another board" : "Mover a tarxeta a outro taboleiro",
-    "Searching for users, groups and circles …" : "Buscando por usuarios, grupos e círculos…",
-    "(Circle)" : "(Círculo)",
-    "Assign to users/groups/circles" : "Asignar a usuarios/grupos/círculos",
     "Filter by completed" : "Filtrar por completado"
 },
 "nplurals=2; plural=(n != 1);");

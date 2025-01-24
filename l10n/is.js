@@ -350,9 +350,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Deila með Deck-spjaldi",
     "Share {file} with a Deck card" : "Deila {file} með Deck-spjaldi",
     "Share" : "Deila",
-    "Move card to another board" : "Færa spjald á annað borð",
-    "Searching for users, groups and circles …" : "Leita að notendum, hópum og hringjum …",
-    "(Circle)" : "(hringur)",
-    "Assign to users/groups/circles" : "Úthluta á notendur/hópa/hringi"
+    "Move card to another board" : "Færa spjald á annað borð"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

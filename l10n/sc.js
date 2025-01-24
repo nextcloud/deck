@@ -289,9 +289,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Cumpartzi cun un'ischeda deck",
     "Share {file} with a Deck card" : "Cumpartzi {file} cun un'ischeda de deck",
     "Share" : "Cumpartzi",
-    "Move card to another board" : "Tràmuda s'ischeda a un'àtera lavagna",
-    "Searching for users, groups and circles …" : "Chirchende utentes, grupos e tropas ...",
-    "(Circle)" : "(Giru)",
-    "Assign to users/groups/circles" : "Assigna a utentes/grupos/tropas"
+    "Move card to another board" : "Tràmuda s'ischeda a un'àtera lavagna"
 },
 "nplurals=2; plural=(n != 1);");

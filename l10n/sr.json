@@ -387,9 +387,6 @@
     "Share {file} with a Deck card" : "Дели {file} са Шпил картицом",
     "Share" : "Подели",
     "Move card to another board" : "Помери картицу на другу таблу",
-    "Searching for users, groups and circles …" : "Претрага корисника, група и кругова ...",
-    "(Circle)" : "(Круг)",
-    "Assign to users/groups/circles" : "Додели корисницима/групама/круговима",
     "Filter by completed" : "Филтрирај по завршеном"
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
 }

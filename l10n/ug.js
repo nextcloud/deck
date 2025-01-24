@@ -381,9 +381,6 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "{file} نى پالۋان كارتىسى بىلەن ھەمبەھىرلەڭ",
     "Share" : "ھەمبەھىر",
     "Move card to another board" : "كارتىنى باشقا تاختىغا يۆتكەڭ",
-    "Searching for users, groups and circles …" : "ئىشلەتكۈچى ، گۇرۇپپا ۋە چەمبىرەكلەرنى ئىزدەش…",
-    "(Circle)" : "(Circle)",
-    "Assign to users/groups/circles" : "ئىشلەتكۈچى / گۇرۇپپا / چەمبىرەككە تەقسىم قىلىڭ",
     "Filter by completed" : "تاماملانغان سۈزگۈچ"
 },
 "nplurals=2; plural=(n != 1);");
