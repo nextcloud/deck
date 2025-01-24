@@ -345,9 +345,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Partajează cu un card Deck",
     "Share {file} with a Deck card" : "Partajează {file} cu un card Deck",
     "Share" : "Partajează",
-    "Move card to another board" : "Mută cardul în alt panou",
-    "Searching for users, groups and circles …" : "Căutare utilizatori, grupuri sau cercuri ...",
-    "(Circle)" : "(Cerc)",
-    "Assign to users/groups/circles" : "Repartizează la utilizatori/grupuri/cercuri"
+    "Move card to another board" : "Mută cardul în alt panou"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

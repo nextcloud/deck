@@ -320,9 +320,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Compartir con una tarjeta de Deck",
     "Share {file} with a Deck card" : "Compartir {file} con una tarjeta de Deck",
     "Share" : "Compartir",
-    "Move card to another board" : "Mover tarjeta a otro tablero",
-    "Searching for users, groups and circles …" : "Buscando usuarios, grupos y círculos …",
-    "(Circle)" : "(Círculo)",
-    "Assign to users/groups/circles" : "Asignar a usuarios/grupos/círculos"
+    "Move card to another board" : "Mover tarjeta a otro tablero"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

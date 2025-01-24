@@ -387,9 +387,6 @@
     "Share {file} with a Deck card" : "用一張 Deck 卡片分享 {file}",
     "Share" : "分享",
     "Move card to another board" : "將卡片移到其他面板",
-    "Searching for users, groups and circles …" : "正在搜尋用戶、群組和圈子 ......",
-    "(Circle)" : "（圈子）",
-    "Assign to users/groups/circles" : "指派給用戶/群組/圈子",
     "Filter by completed" : "按已完成篩選"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

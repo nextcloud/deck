@@ -389,9 +389,6 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Zdieľať {file} s kartou Deck",
     "Share" : "Zdieľať",
     "Move card to another board" : "Presunúť kartu na inú nástenku",
-    "Searching for users, groups and circles …" : "Vyhľadávanie v používateľoch, skupinách a kruhoch...",
-    "(Circle)" : "(Kruh)",
-    "Assign to users/groups/circles" : "Priradiť používateľom/skupinám/kruhom",
     "Filter by completed" : "Filtrovať podľa dokončených"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

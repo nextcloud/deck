@@ -237,8 +237,6 @@
     "Maximum file size of {size} exceeded" : "Досягнуто максимальний розмір файлу {size}",
     "Error creating the share" : "Помилка створення спільного доступу",
     "Share" : "Спільний доступ",
-    "Move card to another board" : "Перемістити картку до іншої дошки",
-    "(Circle)" : "(Коло)",
-    "Assign to users/groups/circles" : "Призначити користувачам/групам/колам"
+    "Move card to another board" : "Перемістити картку до іншої дошки"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);"
 }

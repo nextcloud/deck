@@ -378,9 +378,6 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Μοιραστείτε το {file} με μια καρτέλα Deck",
     "Share" : "Μοιραστείτε",
     "Move card to another board" : "Μετακίνηση καρτέλας σε άλλο πίνακα",
-    "Searching for users, groups and circles …" : "Αναζήτηση χρηστών, ομάδων και κύκλων…",
-    "(Circle)" : "(Κύκλος)",
-    "Assign to users/groups/circles" : "Ανάθεση σε χρήστες/ομάδες/κύκλους",
     "Filter by completed" : "Φίλτρο ανά ολοκλήρωση"
 },
 "nplurals=2; plural=(n != 1);");

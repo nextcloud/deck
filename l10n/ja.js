@@ -379,9 +379,6 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "{file}をデッキのカードで共有する",
     "Share" : "共有",
     "Move card to another board" : "カードを他のボードに移動",
-    "Searching for users, groups and circles …" : "ユーザー、グループ、サークルを検索しています…",
-    "(Circle)" : "(サークル)",
-    "Assign to users/groups/circles" : "ユーザー/グループ/サークルに割り当てる",
     "Filter by completed" : "完成したものをフィルターする"
 },
 "nplurals=1; plural=0;");

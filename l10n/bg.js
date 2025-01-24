@@ -320,9 +320,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Споделяне с Deck карта",
     "Share {file} with a Deck card" : "Споделяне {file} с Deck карта",
     "Share" : "Споделяне",
-    "Move card to another board" : "Преместване на картата на друго табло",
-    "Searching for users, groups and circles …" : "Търсене за потребители, групи и кръгове ...",
-    "(Circle)" : "(Кръг)",
-    "Assign to users/groups/circles" : "Зачисляване към потребители/групи/кръгове"
+    "Move card to another board" : "Преместване на картата на друго табло"
 },
 "nplurals=2; plural=(n != 1);");
