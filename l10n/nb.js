@@ -380,9 +380,6 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Del {file} med et Stokk-kort",
     "Share" : "Del",
     "Move card to another board" : "Flytt kort til annen tavle",
-    "Searching for users, groups and circles …" : "Søker etter brukere, grupper og sirkler ...",
-    "(Circle)" : "(Sirkel)",
-    "Assign to users/groups/circles" : "Tildel brukere/grupper/sirkler",
     "Filter by completed" : "Filtrer etter fullført"
 },
 "nplurals=2; plural=(n != 1);");

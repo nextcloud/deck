@@ -389,9 +389,6 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Roinn {file} le cárta Deic",
     "Share" : "Comhroinn",
     "Move card to another board" : "Bog cárta go bord eile",
-    "Searching for users, groups and circles …" : "Ag cuardach úsáideoirí, grúpaí agus ciorcail…",
-    "(Circle)" : "(Ciorcal)",
-    "Assign to users/groups/circles" : "Sann d'úsáideoirí/grúpaí/ciorcail",
     "Filter by completed" : "Scag de réir críochnaithe"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");

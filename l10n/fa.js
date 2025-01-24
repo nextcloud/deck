@@ -327,9 +327,6 @@ OC.L10N.register(
     "Share with a Deck card" : "Share with a Deck card",
     "Share {file} with a Deck card" : "Share {file} with a Deck card",
     "Share" : "هم‌رسانی",
-    "Move card to another board" : "انتقال برگه به تخته‌ای دیگر",
-    "Searching for users, groups and circles …" : "جستجوی کاربران، گروه‌ها و حلقه‌ها…",
-    "(Circle)" : "(حلقه)",
-    "Assign to users/groups/circles" : "به کاربران/ گروه‌ها/ حلقه‌ها اختصاص دهید"
+    "Move card to another board" : "انتقال برگه به تخته‌ای دیگر"
 },
 "nplurals=2; plural=(n > 1);");

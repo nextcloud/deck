@@ -384,9 +384,6 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "Condividi {file} con una scheda di Deck",
     "Share" : "Condividi",
     "Move card to another board" : "Sposta scheda in un'altra lavagna",
-    "Searching for users, groups and circles …" : "Ricerca di utenti, gruppi e cerchie…",
-    "(Circle)" : "(Cerchia)",
-    "Assign to users/groups/circles" : "Assegna a utenti/gruppi/cerchie",
     "Filter by completed" : "Filtra per completate"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

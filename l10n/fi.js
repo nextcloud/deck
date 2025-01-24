@@ -281,7 +281,6 @@ OC.L10N.register(
     "Maximum file size of {size} exceeded" : "Tiedoston enimmäiskoko {size} ylitetty",
     "Error creating the share" : "Virhe jakoa luotaessa",
     "Share" : "Jaa",
-    "Move card to another board" : "Siirrä kortti toiselle taululle",
-    "(Circle)" : "(Piiri)"
+    "Move card to another board" : "Siirrä kortti toiselle taululle"
 },
 "nplurals=2; plural=(n != 1);");

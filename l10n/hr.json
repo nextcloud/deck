@@ -285,9 +285,6 @@
     "Share with a Deck card" : "Dijeli s Deck karticom",
     "Share {file} with a Deck card" : "Dijeli {file} s Deck karticom",
     "Share" : "Dijeli",
-    "Move card to another board" : "Premjesti karticu na drugu ploču",
-    "Searching for users, groups and circles …" : "Traženje korisnika, grupa i krugova...",
-    "(Circle)" : "(Krug)",
-    "Assign to users/groups/circles" : "Dodijeli korisnicima/grupama/krugovima"
+    "Move card to another board" : "Premjesti karticu na drugu ploču"
 },"pluralForm" :"nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;"
 }

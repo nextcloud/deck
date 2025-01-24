@@ -389,9 +389,6 @@ OC.L10N.register(
     "Share {file} with a Deck card" : "{file} dosyasını bir tahta kartı ile paylaş",
     "Share" : "Paylaş",
     "Move card to another board" : "Kartı başka bir panoya taşı",
-    "Searching for users, groups and circles …" : "Kullanıcılar, gruplar ve takımlar aranıyor…",
-    "(Circle)" : "(Takım)",
-    "Assign to users/groups/circles" : "Kullanıcı/grup/takım ata",
     "Filter by completed" : "Tamamlanmaya göre sırala"
 },
 "nplurals=2; plural=(n > 1);");
