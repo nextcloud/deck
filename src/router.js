@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { generateUrl } from '@nextcloud/router'
 import { BOARD_FILTERS } from './store/main.js'
 import Boards from './components/boards/Boards.vue'
@@ -14,11 +13,9 @@ import BoardSidebar from './components/board/BoardSidebar.vue'
 import CardSidebar from './components/card/CardSidebar.vue'
 import Overview from './components/overview/Overview.vue'
 
-Vue.use(Router)
 
-const router = new Router({
-	mode: 'history',
-	base: generateUrl('/apps/deck/'),
+const router = createRouter({
+	history: createWebHistory(generateUrl('/apps/deck/')),
 	linkActiveClass: 'active',
 	routes: [
 		{
