@@ -31,6 +31,6 @@ if (isDevServer) {
 	}
 }
 // Workaround for https://github.com/nextcloud/webpack-vue-config/pull/432 causing problems with nextcloud-vue-collections
-webpackConfig.resolve.alias = {}
+webpackConfig.resolve.alias = { vue: '@vue/compat' }
 
 module.exports = webpackConfig
