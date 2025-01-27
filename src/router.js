@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { generateUrl, getRootUrl } from '@nextcloud/router'
 import { BOARD_FILTERS } from './store/main.js'
 import Boards from './components/boards/Boards.vue'
@@ -14,7 +13,6 @@ import BoardSidebar from './components/board/BoardSidebar.vue'
 import CardSidebar from './components/card/CardSidebar.vue'
 import Overview from './components/overview/Overview.vue'
 
-Vue.use(Router)
 
 // We apply a dynamic base URL depending on the URL used in the browser
 const baseUrl = generateUrl('/apps/deck/')
@@ -22,9 +20,8 @@ const webRootWithIndexPHP = getRootUrl() + '/index.php'
 const doesURLContainIndexPHP = window.location.pathname.startsWith(webRootWithIndexPHP)
 const currentBaseUrl = doesURLContainIndexPHP ? baseUrl : baseUrl.replace('/index.php/', '/')
 
-const router = new Router({
-	mode: 'history',
-	base: currentBaseUrl,
+const router = createRouter({
+	history: createWebHistory(currentBaseUrl),
 	linkActiveClass: 'active',
 	routes: [
 		{
