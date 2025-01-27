@@ -274,6 +274,7 @@ OC.L10N.register(
     "Todo items" : "Elementi da fare",
     "{count} comments, {unread} unread" : "{count} commenti, {unread} non letti",
     "Edit card title" : "Modifica titolo scheda",
+    "Open link" : "Apri link",
     "Edit title" : "Modifica titolo",
     "Assign to me" : "Assegna a me",
     "Unassign myself" : "Rimuovi assegnazione da me",
