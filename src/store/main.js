@@ -28,7 +28,6 @@ export const BOARD_FILTERS = {
 	SHARED: 'shared',
 }
 
-
 const store = createStore({
 	modules: {
 		actions,

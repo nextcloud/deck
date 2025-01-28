@@ -72,8 +72,7 @@
 </template>
 
 <script>
-import { NcActionButton, NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
-import { NcReferenceList } from '@nextcloud/vue/dist/Components/NcRichText.js'
+import { NcActionButton, NcAppSidebar, NcAppSidebarTab, NcReferenceList } from '@nextcloud/vue'
 import { getCapabilities } from '@nextcloud/capabilities'
 import { mapState, mapGetters } from 'vuex'
 import CardSidebarTabDetails from './CardSidebarTabDetails.vue'

@@ -13,7 +13,6 @@ import BoardSidebar from './components/board/BoardSidebar.vue'
 import CardSidebar from './components/card/CardSidebar.vue'
 import Overview from './components/overview/Overview.vue'
 
-
 // We apply a dynamic base URL depending on the URL used in the browser
 const baseUrl = generateUrl('/apps/deck/')
 const webRootWithIndexPHP = getRootUrl() + '/index.php'

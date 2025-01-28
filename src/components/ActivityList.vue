@@ -21,7 +21,7 @@
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 import ActivityEntry from './ActivityEntry.vue'
-import InfiniteLoading from 'vue-infinite-loading'
+// import InfiniteLoading from 'v3-infinite-loading'
 
 const ACTIVITY_FETCH_LIMIT = 50
 
@@ -29,7 +29,6 @@ export default {
 	name: 'ActivityList',
 	components: {
 		ActivityEntry,
-		InfiniteLoading,
 	},
 	props: {
 		filter: {
