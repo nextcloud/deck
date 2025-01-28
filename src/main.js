@@ -6,7 +6,6 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router.js'
 import store from './store/main.js'
-import { sync } from 'vuex-router-sync'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
 import { subscribe } from '@nextcloud/event-bus'
@@ -14,11 +13,12 @@ import ClickOutside from 'vue-click-outside'
 import './shared-init.js'
 import './models/index.js'
 import './sessions.js'
+import { configureCompat } from '@vue/compat'
+
+configureCompat({ MODE: 3, INSTANCE_SCOPED_SLOTS: false, ATTR_ENUMERATED_COERCION: true, INSTANCE_EVENT_EMITTER: true, OPTIONS_BEFORE_DESTROY: true, CUSTOM_DIR: true, OPTIONS_DESTROYED: true, INSTANCE_LISTENERS: true, GLOBAL_SET: true })
 
 // the server snap.js conflicts with vertical scrolling so we disable it
 document.body.setAttribute('data-snap-ignore', 'true')
-
-sync(store, router)
 
 const app = createApp(App)
 
