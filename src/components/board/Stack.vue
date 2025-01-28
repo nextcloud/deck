@@ -136,7 +136,7 @@
 <script>
 import ClickOutside from 'vue-click-outside'
 import { mapGetters, mapState } from 'vuex'
-import { Container, Draggable } from 'vue-smooth-dnd'
+import { Container, Draggable } from 'vue3-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import CardPlusOutline from 'vue-material-design-icons/CardPlusOutline.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'

@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { Container, Draggable } from 'vue-smooth-dnd'
+import { Container, Draggable } from 'vue3-smooth-dnd'
 import { mapState, mapGetters } from 'vuex'
 import Controls from '../Controls.vue'
 import DeckIcon from '../icons/DeckIcon.vue'
