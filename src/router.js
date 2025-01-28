@@ -13,7 +13,6 @@ import BoardSidebar from './components/board/BoardSidebar.vue'
 import CardSidebar from './components/card/CardSidebar.vue'
 import Overview from './components/overview/Overview.vue'
 
-
 const router = createRouter({
 	history: createWebHistory(generateUrl('/apps/deck/')),
 	linkActiveClass: 'active',

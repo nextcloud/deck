@@ -136,7 +136,7 @@
 <script>
 import ClickOutside from 'vue-click-outside'
 import { mapGetters, mapState } from 'vuex'
-import { Container, Draggable } from 'vue-smooth-dnd'
+import { Container, Draggable } from 'vue3-smooth-dnd'
 import ArchiveIcon from 'vue-material-design-icons/Archive.vue'
 import CardPlusOutline from 'vue-material-design-icons/CardPlusOutline.vue'
 import { NcActions, NcActionButton, NcModal } from '@nextcloud/vue'
@@ -362,10 +362,10 @@ export default {
 
 	@use 'sass:math';
 
-	@import './../../css/variables';
+	@use './../../css/variables';
 
 	.stack {
-		width: $stack-width + $stack-spacing * 3;
+		width: variables.$stack-width + variables.$stack-spacing * 3;
 	}
 
 	.stack__header {
@@ -373,8 +373,8 @@ export default {
 		position: sticky;
 		top: 0;
 		z-index: 100;
-		padding-left: $card-spacing;
-		padding-right: $card-spacing;
+		padding-left: variables.$card-spacing;
+		padding-right: variables.$card-spacing;
 		margin: 6px;
 		margin-top: 0;
 		cursor: grab;
@@ -418,7 +418,7 @@ export default {
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
-			max-width: calc($stack-width - 60px);
+			max-width: calc(variables.$stack-width - 60px);
 			border-radius: 3px;
 			padding: 4px 4px;
 			font-size: var(--default-font-size);
@@ -459,8 +459,8 @@ export default {
 
 		form {
 			display: flex;
-			margin-left: $stack-spacing;
-			margin-right: $stack-spacing;
+			margin-left: variables.$stack-spacing;
+			margin-right: variables.$stack-spacing;
 			width: 100%;
 			border: 2px solid var(--color-border-maxcontrast);
 			border-radius: var(--border-radius-large);
