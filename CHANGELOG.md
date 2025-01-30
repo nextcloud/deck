@@ -5,6 +5,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.15.0-beta.2
+
+### Added
+
+- feat: Implement reference resolving for cards that have a link in the title @juliusknorr [#6286](https://github.com/nextcloud/deck/pull/6286)
+
+### Other
+
+- Remove old project from README @edent [#6658](https://github.com/nextcloud/deck/pull/6658)
+- devcontainer(image): Fix package path @niclasheinz [#6653](https://github.com/nextcloud/deck/pull/6653)
+- remove deprecated nextcloud-vue-collections @grnd-alt [#6664](https://github.com/nextcloud/deck/pull/6664)
+- fix: set cypress ci server version to stable31 @grnd-alt [#6705](https://github.com/nextcloud/deck/pull/6705)
+
 ## 1.15.0-beta.1
 ### Fixed
 - fix: Catch not found card @juliusknorr [#6646](https://github.com/nextcloud/deck/pull/6646)
