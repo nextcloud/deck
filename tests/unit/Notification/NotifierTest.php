@@ -76,6 +76,15 @@ class NotifierTest extends \Test\TestCase {
 		$this->l10nFactory->expects($this->once())
 			->method('get')
 			->willReturn($this->l10n);
+
+		$this->url->expects($this->any())
+			->method('linkToRouteAbsolute')
+			->willReturnCallback(function ($route) {
+				return match ($route) {
+					'deck.page.indexBoard' => '/board/123',
+					'deck.page.indexCard' => '/board/123/card/234',
+				};
+			});
 	}
 
 	public function testPrepareWrongApp() {
@@ -178,7 +187,7 @@ class NotifierTest extends \Test\TestCase {
 		$this->assertEquals($notification, $actualNotification);
 	}
 
-	public function dataPrepareCardAssigned() {
+	public static function dataPrepareCardAssigned() {
 		return [
 			[true], [false]
 		];
@@ -239,13 +248,13 @@ class NotifierTest extends \Test\TestCase {
 					'name' => 'Card title',
 					'boardname' => 'Board title',
 					'stackname' => null,
-					'link' => '#/board/123/card/123',
+					'link' => '/board/123/card/234',
 				],
 				'deck-board' => [
 					'type' => 'deck-board',
 					'id' => 123,
 					'name' => 'Board title',
-					'link' => '#/board/123',
+					'link' => '/board/123',
 				]
 			]);
 
@@ -266,7 +275,7 @@ class NotifierTest extends \Test\TestCase {
 		$this->assertEquals($notification, $actualNotification);
 	}
 
-	public function dataPrepareBoardShared() {
+	public static function dataPrepareBoardShared() {
 		return [
 			[true], [false]
 		];
@@ -321,7 +330,7 @@ class NotifierTest extends \Test\TestCase {
 					'type' => 'deck-board',
 					'id' => 123,
 					'name' => 'Board title',
-					'link' => '#/board/123',
+					'link' => '/board/123',
 				]
 			]);
 
@@ -347,11 +356,8 @@ class NotifierTest extends \Test\TestCase {
 	 * @return Stack|MockObject
 	 */
 	private function buildMockStack(int $boardId = 999) {
-		$mockStack = $this->getMockBuilder(Stack::class)
-			->addMethods(['getBoardId'])
-			->getMock();
-
-		$mockStack->method('getBoardId')->willReturn($boardId);
-		return $mockStack;
+		$stack = new Stack();
+		$stack->setBoardId($boardId);
+		return $stack;
 	}
 }

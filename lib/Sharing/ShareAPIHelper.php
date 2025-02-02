@@ -47,7 +47,7 @@ class ShareAPIHelper {
 		$boardId = $this->cardMapper->findBoardId($card->getId());
 		$result['share_with'] = $share->getSharedWith();
 		$result['share_with_displayname'] = $card->getTitle();
-		$result['share_with_link'] = $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . '#/board/' . $boardId . '/card/' . $card->getId();
+		$result['share_with_link'] = $this->urlGenerator->linkToRouteAbsolute('deck.page.indexCard', ['boardId' => $boardId, 'cardId' => $card->getId()]);
 		return $result;
 	}
 

@@ -219,7 +219,7 @@ class DeckProvider implements IFullTextSearchProvider {
 			try {
 				$board =
 					$this->fullTextSearchService->getBoardFromCardId((int)$document->getId());
-				$path = '#/board/' . $board->getId() . '/card/' . $document->getId();
+				$path = '/board/' . $board->getId() . '/card/' . $document->getId();
 				$document->setLink($this->urlGenerator->linkToRoute('deck.page.index') . $path);
 			} catch (DoesNotExistException $e) {
 			} catch (MultipleObjectsReturnedException $e) {

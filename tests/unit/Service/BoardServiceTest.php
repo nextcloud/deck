@@ -291,7 +291,7 @@ class BoardServiceTest extends TestCase {
 		));
 	}
 
-	public function dataAddAclExtendPermission() {
+	public static function dataAddAclExtendPermission() {
 		return [
 			[[false, false, false], [false, false, false], [false, false, false]],
 			[[false, false, false], [true, true, true], [false, false, false]],
