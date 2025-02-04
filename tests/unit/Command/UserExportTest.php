@@ -68,18 +68,26 @@ class UserExportTest extends \Test\TestCase {
 		$board->setTitle('Board ' . $id);
 		return $board;
 	}
+
 	public function getStack($id) {
 		$stack = new Stack();
 		$stack->setId($id);
 		$stack->setTitle('Stack ' . $id);
 		return $stack;
 	}
-	public function getCard($id) {
+
+	public function getCard($id, $deleted = false) {
 		$card = new Card();
 		$card->setId($id);
 		$card->setTitle('Card ' . $id);
+
+		if ($deleted) {
+			$card->setDeletedAt(time());
+		}
+
 		return $card;
 	}
+
 	public function testExecute() {
 		$input = $this->createMock(InputInterface::class);
 		$input->expects($this->once())->method('getArgument')->with('user-id')->willReturn('admin');
@@ -89,33 +97,88 @@ class UserExportTest extends \Test\TestCase {
 			$this->getBoard(1),
 			$this->getBoard(2),
 		];
-		$this->boardService->expects($this->once())
-			->method('findAll')
-			->willReturn($boards);
-		$this->boardMapper->expects($this->exactly(count($boards)))
-			->method('find')
-			->willReturn($boards[0]);
+
 		$stacks = [
 			$this->getStack(1),
 			$this->getStack(2)
 		];
-		$this->stackMapper->expects($this->exactly(count($boards)))
-			->method('findAll')
-			->willReturn($stacks);
+
 		$cards = [
 			$this->getCard(1),
 			$this->getCard(2),
 			$this->getCard(3),
 		];
+
+		$this->boardService->expects($this->once())
+			->method('findAll')
+			->willReturn($boards);
+
+		$this->boardMapper->expects($this->exactly(count($boards)))
+			->method('find')
+			->willReturn($boards[0]);
+
+		$this->stackMapper->expects($this->exactly(count($boards)))
+			->method('findAll')
+			->willReturn($stacks);
+
 		$this->cardMapper->expects($this->exactly(count($boards) * count($stacks)))
 			->method('findAllByStack')
 			->willReturn($cards);
+
 		$this->cardMapper->expects($this->exactly(count($boards) * count($stacks) * count($cards)))
 			->method('find')
 			->willReturn($cards[0]);
+
 		$this->assignedUserMapper->expects($this->exactly(count($boards) * count($stacks) * count($cards)))
 			->method('findAll')
 			->willReturn([]);
+
+		$result = $this->invokePrivate($this->userExport, 'execute', [$input, $output]);
+		self::assertEquals(0, $result);
+	}
+
+	public function testExecuteWithDeletedCard() {
+		$input = $this->createMock(InputInterface::class);
+		$input->expects($this->once())->method('getArgument')->with('user-id')->willReturn('admin');
+		$output = $this->createMock(OutputInterface::class);
+
+		$boards = [
+			$this->getBoard(1),
+		];
+
+		$stacks = [
+			$this->getStack(1),
+		];
+
+		$cards = [
+			$this->getCard(1),
+			$this->getCard(2, true),
+		];
+
+		$this->boardService->expects($this->once())
+			->method('findAll')
+			->willReturn($boards);
+
+		$this->boardMapper->expects($this->once())
+			->method('find')
+			->willReturn($boards[0]);
+
+		$this->stackMapper->expects($this->once())
+			->method('findAll')
+			->willReturn($stacks);
+
+		$this->cardMapper->expects($this->once())
+			->method('findAllByStack')
+			->willReturn($cards);
+
+		$this->cardMapper->expects($this->once())
+			->method('find')
+			->willReturn($cards[0]);
+
+		$this->assignedUserMapper->expects($this->once())
+			->method('findAll')
+			->willReturn([]);
+
 		$result = $this->invokePrivate($this->userExport, 'execute', [$input, $output]);
 		self::assertEquals(0, $result);
 	}

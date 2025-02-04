@@ -73,6 +73,9 @@ class UserExport extends Command {
 
 		$data = [];
 		foreach ($boards as $board) {
+			if ($board->getDeletedAt() > 0) {
+				continue;
+			}
 			$fullBoard = $this->boardMapper->find($board->getId(), true, true);
 			$data[$board->getId()] = $fullBoard->jsonSerialize();
 			$stacks = $this->stackMapper->findAll($board->getId());
@@ -80,7 +83,11 @@ class UserExport extends Command {
 				$data[$board->getId()]['stacks'][$stack->getId()] = $stack->jsonSerialize();
 				$cards = $this->cardMapper->findAllByStack($stack->getId());
 				foreach ($cards as $card) {
+					if ($card->getDeletedAt() > 0) {
+						continue;
+					}
 					$fullCard = $this->cardMapper->find($card->getId());
+
 					$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
 					$fullCard->setAssignedUsers($assignedUsers);
 
