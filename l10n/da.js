@@ -168,6 +168,7 @@ OC.L10N.register(
     "The comment cannot be empty." : "Kommentaren må ikke være tom.",
     "The comment cannot be longer than 1000 characters." : "Kommentaren må ikke være længere end 1000 tegn.",
     "In reply to" : "Som svar til",
+    "Cancel reply" : "Annuller svar",
     "Reply" : "Besvar",
     "Update" : "Opdatér",
     "Created:" : "Oprettet:",
