@@ -365,7 +365,7 @@ class CardServiceTest extends TestCase {
 		$this->cardService->rename(123, 'newtitle');
 	}
 
-	public function dataReorder() {
+	public static function dataReorder() {
 		return [
 			[0, 0, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]],
 			[0, 9, [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]],
