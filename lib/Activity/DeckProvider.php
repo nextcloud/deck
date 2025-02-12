@@ -131,7 +131,7 @@ class DeckProvider implements IProvider {
 			];
 
 			if (array_key_exists('board', $subjectParams)) {
-				$card['link'] = $this->cardService->getRedirectUrlForCard($event->getObjectId());
+				$card['link'] = $this->cardService->getCardUrl($event->getObjectId());
 				$event->setLink($card['link']);
 			}
 			$params['card'] = $card;
@@ -365,6 +365,6 @@ class DeckProvider implements IProvider {
 	}
 
 	public function deckUrl($endpoint) {
-		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . '#' . $endpoint;
+		return $this->urlGenerator->linkToRouteAbsolute('deck.page.index') . trim($endpoint, '/');
 	}
 }

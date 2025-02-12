@@ -22,7 +22,7 @@ class BoardSearchResultEntry extends SearchResultEntry {
 			),
 			$board->getTitle(),
 			'',
-			$urlGenerator->linkToRouteAbsolute('deck.page.index') . '#/board/' . $board->getId(),
+			$urlGenerator->linkToRouteAbsolute('deck.page.indexBoard', ['boardId' => $board->getId()]),
 			'icon-deck');
 	}
 }
