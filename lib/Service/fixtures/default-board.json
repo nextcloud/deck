@@ -1,0 +1,81 @@
+{
+	"color": "bf678b",
+	"addition_labels": [
+		{
+			"title": "Read more inside",
+			"color": "CC317C"
+		}
+	],
+	"stacks": [
+		{
+			"title": "Custom lists - click to rename!",
+			"order": 0,
+			"cards": [
+				{
+					"title": "1. Open to learn more about boards and cards",
+					"description": "## Welcome to Nextcloud Deck!\n\nNextcloud Deck is a kanban style project management app that integrates seamlessly with the Nextcloud ecosystem. Here, you can create and manage boards to streamline your projects and organize project tasks visually using cards. A versatile tool, Nextcloud Deck will help you stay efficient in both personal and collaborative settings!\n\n### \ud83d\udccc How to set up a new board?\n\nAdd a new board via the \u201c+\u201d button or \u201cAdd board\u201d. Name your board and add a description to clarify its purpose if you wish.\n\nAdd task lists to your board via \u201cAdd List\u201d (e.g., \"To Do\"). Add cards to these lists to represent individual tasks or items. Organize your cards visually by assigning labels or colors.\n\nManage your board list: In the board menu next to the board name, you can edit, clone, archive and export your boards.\n\n### \ud83d\uddc2\ufe0f How to create and edit task cards?\n\nAdd cards via the \u201c+\u201d button on top of the list of your choice. Name your card and add a description using the available rich text formatting instruments.\n\nSet a due date to track deadlines and add responsible team members. Label your cards with tags for better navigation. You can create and manage tags in the sidebar, which is accessible via the toolbar button.\n\n### \ud83d\udca1Useful tips for Nextcloud Deck\n\n- Integrate Nextcloud Deck with Nextcloud Calendar and track the upcoming card deadlines.\n- Use comments to keep discussions around a task within its dedicated card.\n- Enable Nextcloud Deck notifications to always stay updated on changes to your boards.",
+					"labels": [
+						"Read more inside"
+					],
+					"type": "text",
+					"order": 0
+				}
+			]
+		},
+		{
+			"title": "To Do",
+			"order": 1,
+			"cards": [
+				{
+					"title": "2. Drag cards left and right, up and down",
+					"description": "## \ud83d\udea6 Manage your boards and cards\n\nDrag your cards around the board to change position in the list or move them to other lists.\n\nArchive cards to remove them from the board without losing your content. You can always access archived cards and put them back by going to \"Show archived cards\" in the board menu.\n\nUse tags to assign types, statuses and other special attributes to your cards to aid visual navigation. Open the \"Tags\" tab in the sidebar of Nextcloud Deck to manage tags you can add to your cards.\n\n## \ud83d\udc53 Change how you view your boards\n\nTo navigate large boards easily, you can filter your cards by tags, team members, statuses and due dates. Open filter menu via Nextcloud Deck toolbar.\n\nEnable compact display mode in the Deck Board menu via the three dots menu in the toolbar. In the same menu, you can disable and enable cover images.",
+					"labels": [
+						"Read more inside"
+					],
+					"type": "text",
+					"order": 0
+				},
+				{
+					"title": "Create your first card!",
+					"description": "",
+					"labels": [
+						"Action needed"
+					],
+					"type": "text",
+					"order": 1
+				}
+			]
+		},
+		{
+			"title": "In Progress",
+			"order": 2,
+			"cards": [
+				{
+					"title": "3. Apply rich formatting and link content",
+					"description": "## \ud83c\udfa8 Make use of rich formatting in card descriptions\n\nYou can use various instruments to make your content more structured and informative. Try all the instruments yourself - use this checklist!\n\n- [ ] Apply headings of different hierarchy (H1-H6).\n- [ ] Use **bold** *italic* __underline__ and ~~strikethrough~~ text formatting.\n- [ ] Create unordered, ordered and to-do lists.\n- [ ] Highlight code and blockquotes, add various illustrated callouts.\n- [ ] Create and format tables\n- [ ] Add details\n- [ ] Add links, for example to [the Nextcloud website](https:\/\/nextcloud.com\/)\n- [ ] Insert attachments\n- [ ] Add emojis \ud83d\udd76\ufe0f \n\n## \ud83d\udd17 Attach files to cards\n\nYou can upload any files from your machine or pick from your Nextcloud Files, such as documents, presentations, images, video clips and anything else. Add files via \"Attachments\" tab.\n\n## \ud83c\udf04 Illustrate cards with images\n\nAttach images to your cards - they will automatically work as card covers.",
+					"labels": [
+						"Read more inside"
+					],
+					"type": "text",
+					"order": 0,
+					"has_example_attachment": true
+				}
+			]
+		},
+		{
+			"title": "Done",
+			"order": 3,
+			"cards": [
+				{
+					"title": "4. Share, comment and collaborate!",
+					"description": "## \ud83e\udd1d How to collaborate in your board?\n\nShare your cards and boards with others. In many Nextcloud apps, linked Nextcloud Deck items will appear as rich, interactive widgets. Once you assign someone to a card, they will receive a notification.\n\nEdit cards together, leave notes for your teammates, share task-related files by adding attachments and discuss your tasks using card comments.\n\n### ",
+					"labels": [
+						"Read more inside"
+					],
+					"type": "text",
+					"order": 0
+				}
+			]
+		}
+	]
+}
