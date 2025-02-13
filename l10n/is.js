@@ -251,6 +251,7 @@ OC.L10N.register(
     "Remove due date" : "Fjarlægja skiladag",
     "Mark as done" : "Merkja sem lokið",
     "Due at:" : "Á að ljúka klukkan:",
+    "Not done" : "Ekki lokið",
     "Unarchive card" : "Taka spjald úr geymslu",
     "Archive card" : "Setja spjald í geymslu",
     "Select Date" : "Veldu dag",
