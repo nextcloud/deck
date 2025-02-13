@@ -2,8 +2,13 @@
   - SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-
 <template>
+	<div>
+		THIS HAS AT
+	</div>
+</template>
+
+<!-- <template>
 	<div class="comment-form">
 		<form @submit.prevent="submit">
 			<At ref="at"
@@ -191,4 +196,4 @@ export default {
 	.atwho-li--avatar {
 		margin-right: 10px;
 	}
-</style>
+</style> -->
