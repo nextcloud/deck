@@ -1,7 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.12.6
+## 1.12.7
+
+### Fixed
+* fix: Use new query builder by @backportbot in https://github.com/nextcloud/deck/pull/6613
+* Update TrelloJsonService.php by @backportbot in https://github.com/nextcloud/deck/pull/6644
+* fix(sharing): list accounts with matches in email by @backportbot in https://github.com/nextcloud/deck/pull/6526
+* fix: close modal after deleting card by @backportbot in https://github.com/nextcloud/deck/pull/6621
+* fix: two close buttons on card modal by @backportbot in https://github.com/nextcloud/deck/pull/6661
+* fix: Properly show attachment extension by @backportbot in https://github.com/nextcloud/deck/pull/6675
+
+### Dependencies
+* chore(deps): bump @nextcloud/vue from 8.21.0 to 8.22.0 by @dependabot in https://github.com/nextcloud/deck/pull/6633
+
+**Full Changelog**: https://github.com/nextcloud/deck/compare/v1.12.6...v1.12.7
 
 ### Fixed
 
