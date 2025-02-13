@@ -234,6 +234,7 @@ OC.L10N.register(
     "Clone labels" : "Kloningslabels",
     "Clone due dates" : "Klon forfaldsdatoer",
     "Advanced options" : "Avancerede indstillinger",
+    "Clone" : "Klon",
     "Loading filtered view" : "Indlæser filtreret visning",
     "Today" : "I dag",
     "Tomorrow" : "I morgen",
