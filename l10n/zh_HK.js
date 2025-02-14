@@ -383,7 +383,7 @@ OC.L10N.register(
     "Message from {author} in {conversationName}" : "來自 {conversationName} 中的 {author} 之消息",
     "Something went wrong" : "發生錯誤了",
     "Failed to upload {name}" : "上傳 {name} 失敗",
-    "Maximum file size of {size} exceeded" : "文件大小 {size} 超出最大限制",
+    "Maximum file size of {size} exceeded" : "檔案大小 {size} 超出最大限制",
     "Error creating the share" : "創建分享出錯",
     "Share with a Deck card" : "用一張 Deck 卡片進行分享 ",
     "Share {file} with a Deck card" : "用一張 Deck 卡片分享 {file}",
