@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "﻿ವೈಯಕ್ತಿಕ",
     "Done" : "Done",
     "No file was uploaded" : "ವರ್ಗಾವಣೆಗೆ ﻿ಯಾವುದೇ ಕಡತಗಳು ಕಂಡುಬಂದಿಲ್ಲ",
     "Missing a temporary folder" : "ತಾತ್ಕಾಲಿಕ ಕಡತಕೋಶ ದೊರೆಕುತ್ತಿಲ್ಲ",
@@ -20,6 +19,7 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Today" : "Today",
     "Close" : "ಮುಚ್ಚು",
-    "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ"
+    "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ",
+    "Personal" : "﻿ವೈಯಕ್ತಿಕ"
 },
 "nplurals=2; plural=(n > 1);");

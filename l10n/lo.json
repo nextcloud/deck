@@ -1,5 +1,4 @@
 { "translations": {
-    "Personal" : "ສ່ວນບຸກຄົນ",
     "Finished" : "ສຳເລັດ",
     "Done" : "ສໍາເລັດ",
     "The file was uploaded" : "ຟາຍຖຶກອັບໂຫລດສຳເລັດ",
@@ -25,6 +24,7 @@
     "No notifications" : "ບໍ່ມີການແຈ້ງເຕືອນ",
     "Today" : "ມື້ນີ້",
     "Close" : "ປິດ",
-    "Share" : "ແບ່ງປັນ"
+    "Share" : "ແບ່ງປັນ",
+    "Personal" : "ສ່ວນບຸກຄົນ"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

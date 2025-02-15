@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "Udmawan",
     "Finished" : "Immed",
     "Done" : "Immed",
     "The file was uploaded" : "Ulac afaylu yettwaznen",
@@ -31,6 +30,7 @@ OC.L10N.register(
     "No notifications" : "Ulac tisezmal",
     "Today" : "Ass-a",
     "Close" : "Mdel",
-    "Share" : "Bḍu"
+    "Share" : "Bḍu",
+    "Personal" : "Udmawan"
 },
 "nplurals=2; plural=(n != 1);");

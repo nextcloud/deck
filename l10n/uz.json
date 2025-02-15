@@ -1,5 +1,4 @@
 { "translations": {
-    "Personal" : "Personal",
     "copy" : "copy",
     "Done" : "Done",
     "Cancel" : "Cancel",
@@ -19,6 +18,7 @@
     "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Today" : "Today",
-    "Close" : "Close"
+    "Close" : "Close",
+    "Personal" : "Personal"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

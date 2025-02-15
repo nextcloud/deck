@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "Personal",
     "copy" : "copy",
     "Done" : "Done",
     "Cancel" : "Cancel",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "Search" : "Search",
     "Shared with you" : "Shared with you",
     "Today" : "Today",
-    "Close" : "Close"
+    "Close" : "Close",
+    "Personal" : "Personal"
 },
 "nplurals=1; plural=0;");

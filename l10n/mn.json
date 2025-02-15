@@ -1,6 +1,5 @@
 { "translations": {
     "Deck" : "Ажлын талбар",
-    "Personal" : "Хувийн",
     "Finished" : "Дуусгасан",
     "To review" : "Дахин хянах",
     "Action needed" : "Үйлдэл шаардлагатай",
@@ -43,6 +42,7 @@
     "Today" : "өнөөдөр",
     "Tomorrow" : "маргааш",
     "Close" : "Хаах",
-    "Share" : "Түгээх"
+    "Share" : "Түгээх",
+    "Personal" : "Хувийн"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

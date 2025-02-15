@@ -74,7 +74,6 @@
     "Cards due tomorrow" : "Karty na jutro",
     "Upcoming cards" : "Nadchodzące karty",
     "Load more" : "Wczytaj więcej",
-    "Personal" : "Osobiste",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Karta \"%s\" na \"%s\" została przydzielona Tobie przez %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} przydzielił Tobie kartę {deck-card} na {deck-board}.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Karta \"%s\" na \"%s\" wygasła.",
@@ -97,12 +96,7 @@
     "Action needed" : "Wymagana akcja",
     "Later" : "Później",
     "copy" : "kopiuj",
-    "To do" : "Do zrobienia",
-    "Doing" : "W trakcie",
     "Done" : "Zrobione",
-    "Example Task 3" : "Przykład Zadanie 3",
-    "Example Task 2" : "Przykład Zadanie 2",
-    "Example Task 1" : "Przykład Zadanie 1",
     "The file was uploaded" : "Plik został wysłany",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Wgrany plik przekracza wartość upload_max_filesize zdefiniowaną w php.ini",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Wysłany plik przekracza wielkość dyrektywy MAX_FILE_SIZE określonej w formularzu HTML",
@@ -349,6 +343,12 @@
     "Share with a Deck card" : "Udostępnij za pomocą karty Tablicy",
     "Share {file} with a Deck card" : "Udostępnij {file} za pomocą karty Tablicy",
     "Share" : "Udostępnianie",
+    "Personal" : "Osobiste",
+    "To do" : "Do zrobienia",
+    "Doing" : "W trakcie",
+    "Example Task 3" : "Przykład Zadanie 3",
+    "Example Task 2" : "Przykład Zadanie 2",
+    "Example Task 1" : "Przykład Zadanie 1",
     "Move card to another board" : "Przenieś kartę na inną tablicę"
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }

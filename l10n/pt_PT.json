@@ -66,7 +66,6 @@
     "A <strong>comment</strong> was created on a card" : "Um <strong>comentário</strong> foi criado num cartão",
     "Upcoming cards" : "Próximos cartões",
     "Load more" : "Carregar mais",
-    "Personal" : "Pessoal",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "O cartão \"%s\" em \"%s\" foi-lhe vinculado por %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} atribuiu-lhe o cartão {deck-card} no {deck-board}.",
     "The card \"%s\" on \"%s\" has reached its due date." : "O cartão \"%s\" em \"%s\" atingiu a sua data limite.",
@@ -83,12 +82,7 @@
     "Action needed" : "Ação necessária",
     "Later" : "Mais tarde",
     "copy" : "copiar",
-    "To do" : "Por fazer",
-    "Doing" : "A fazer",
     "Done" : "Concluído",
-    "Example Task 3" : "Tarefa de exemplo 3",
-    "Example Task 2" : "Tarefa de exemplo 2",
-    "Example Task 1" : "Tarefa de exemplo 1",
     "The file was uploaded" : "O ficheiro foi carregado",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "O ficheiro carregado excede a diretiva upload_max_filesize no php.ini ",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "O ficheiro carregado excede a diretiva MAX_FILE_SIZE especificada no formulário HTML",
@@ -163,6 +157,12 @@
     "Tomorrow" : "Amanhã",
     "Create card" : "Criar cartão",
     "Close" : "Fechar",
-    "Share" : "Partilhar"
+    "Share" : "Partilhar",
+    "Personal" : "Pessoal",
+    "To do" : "Por fazer",
+    "Doing" : "A fazer",
+    "Example Task 3" : "Tarefa de exemplo 3",
+    "Example Task 2" : "Tarefa de exemplo 2",
+    "Example Task 1" : "Tarefa de exemplo 1"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

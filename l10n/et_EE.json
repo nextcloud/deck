@@ -1,6 +1,5 @@
 { "translations": {
     "Deck" : "Deck",
-    "Personal" : "Isiklik",
     "%s on %s" : "%s %s-l",
     "Finished" : "Lõpetatud",
     "Later" : "Hiljem",
@@ -53,6 +52,7 @@
     "Today" : "Täna",
     "Tomorrow" : "Homme",
     "Close" : "Sulge",
-    "Share" : "Jaga"
+    "Share" : "Jaga",
+    "Personal" : "Isiklik"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

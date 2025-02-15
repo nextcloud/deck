@@ -1,5 +1,4 @@
 { "translations": {
-    "Personal" : "ส่วนตัว",
     "Finished" : "เสร็จสิ้น",
     "copy" : "คัดลอก",
     "Done" : "เสร็จสิ้น",
@@ -55,6 +54,7 @@
     "Today" : "วันนี้",
     "Tomorrow" : "พรุ่งนี้",
     "Close" : "ปิด",
-    "Share" : "แชร์"
+    "Share" : "แชร์",
+    "Personal" : "ส่วนตัว"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
