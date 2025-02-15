@@ -74,7 +74,6 @@
     "Cards due tomorrow" : "Spjöld sem á að ljúka á morgun",
     "Upcoming cards" : "Spjöld á næstunni",
     "Load more" : "Hlaða inn meira",
-    "Personal" : "Einka",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Spjaldinu \"%s\" á \"%s\" hefur verið úthlutað til þín af %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} hefur úthlutað spjaldinu {deck-card} á {deck-board} til þín.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Spjaldið \"%s\" á \"%s\" er komið fram yfir lokadagsetningu.",
@@ -97,12 +96,7 @@
     "Action needed" : "Aðgerðar krafist",
     "Later" : "Seinna",
     "copy" : "afrita",
-    "To do" : "Verkefni",
-    "Doing" : "Er að gera",
     "Done" : "Lokið",
-    "Example Task 3" : "Dæmi um verkefni 3",
-    "Example Task 2" : "Dæmi um verkefni 2",
-    "Example Task 1" : "Dæmi um verkefni 1",
     "The file was uploaded" : "Skráin var send inn",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Innsend skrá er stærri en upload_max stillingin í php.ini:",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Innsenda skráin er stærri en MAX_FILE_SIZE sem skilgreint er í HTML sniðinu.",
@@ -349,6 +343,12 @@
     "Share with a Deck card" : "Deila með Deck-spjaldi",
     "Share {file} with a Deck card" : "Deila {file} með Deck-spjaldi",
     "Share" : "Deila",
+    "Personal" : "Einka",
+    "To do" : "Verkefni",
+    "Doing" : "Er að gera",
+    "Example Task 3" : "Dæmi um verkefni 3",
+    "Example Task 2" : "Dæmi um verkefni 2",
+    "Example Task 1" : "Dæmi um verkefni 1",
     "Move card to another board" : "Færa spjald á annað borð"
 },"pluralForm" :"nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);"
 }

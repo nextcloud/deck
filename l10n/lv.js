@@ -4,7 +4,6 @@ OC.L10N.register(
     "You have added a description to card {card} in list {stack} on board {board}" : "Tu pievienoji kartītes {card} aprakstu dēļa {board} sarakstā {stack}",
     "{user} has added a description to card {card} in list {stack} on board {board}" : "{user} pievienoja kartītes {card} aprakstu dēļa {board} sarakstā {stack}",
     "Load more" : "Ielādēt vairāk",
-    "Personal" : "Personīgs",
     "Finished" : "Pabeigts",
     "Action needed" : "Nepieciešama darbība",
     "Later" : "Vēlāk",
@@ -67,6 +66,7 @@ OC.L10N.register(
     "Today" : "Šodien",
     "Tomorrow" : "Rīt",
     "Close" : "Aizvērt",
-    "Share" : "Koplietot"
+    "Share" : "Koplietot",
+    "Personal" : "Personīgs"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

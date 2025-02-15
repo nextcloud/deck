@@ -70,7 +70,6 @@
     "Cards due tomorrow" : "卡片明天到期",
     "Upcoming cards" : "即将到来的卡片",
     "Load more" : "加载更多",
-    "Personal" : "个人",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "卡片  \"%s\" （在 \"%s\" 中）已由%s指派给您。",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} 已将卡片 {deck-card}， 其位于 {deck-board} ，分配给了你",
     "The card \"%s\" on \"%s\" has reached its due date." : "卡片 \"%s\" （在 \"%s\" 中）已到期.",
@@ -93,12 +92,7 @@
     "Action needed" : "需要操作",
     "Later" : "稍后",
     "copy" : "复制",
-    "To do" : "待办",
-    "Doing" : "进行中",
     "Done" : "完成",
-    "Example Task 3" : "示例任务 3",
-    "Example Task 2" : "示例任务 2",
-    "Example Task 1" : "示例任务 1",
     "The file was uploaded" : "文件已上传",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "上传文件的大小已超过 php.ini 中 upload_max_filesize 设置的值",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "上传的文件长度超出了 HTML 表单中设定的 MAX_FILE_SIZE 上限",
@@ -354,6 +348,12 @@
     "Share with a Deck card" : "分享给一张看板卡片",
     "Share {file} with a Deck card" : "将{file}分享给一张看板卡片",
     "Share" : "分享",
+    "Personal" : "个人",
+    "To do" : "待办",
+    "Doing" : "进行中",
+    "Example Task 3" : "示例任务 3",
+    "Example Task 2" : "示例任务 2",
+    "Example Task 1" : "示例任务 1",
     "Move card to another board" : "将卡片移到其他面板"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "Personal",
     "copy" : "copiar",
     "Done" : "Done",
     "The file was uploaded" : "Lo fichièr es estat enviat",
@@ -63,6 +62,7 @@ OC.L10N.register(
     "Close" : "Tampar",
     "Tomorrow – {timeLocale}" : "Deman – {timeLocale}",
     "Create a card" : "Crear una carta",
-    "Share" : "Partejar"
+    "Share" : "Partejar",
+    "Personal" : "Personal"
 },
 "nplurals=2; plural=(n > 1);");

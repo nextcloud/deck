@@ -66,7 +66,6 @@
     "A <strong>comment</strong> was created on a card" : "На картата е създаден <strong>коментар</strong>",
     "Upcoming cards" : "Предстоящи карти",
     "Load more" : "Зареждане на още",
-    "Personal" : "Лични",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Картата \"%s\" на \"%s\" Ви е била възложена от %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} е възложил картата {deck-card} на {deck-board} на Вас.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Картата \"%s\" on \"%s\" е достигнала датата на падежа си.",
@@ -88,12 +87,7 @@
     "Action needed" : "Необходимо е действие",
     "Later" : "По-късно",
     "copy" : "Копиране",
-    "To do" : "Задачи",
-    "Doing" : "Задачи в процес на изпълнение",
     "Done" : "Завършено",
-    "Example Task 3" : "Примерна задача 3",
-    "Example Task 2" : "Примерна задача 2",
-    "Example Task 1" : "Примерна задача 1",
     "The file was uploaded" : "Файлът е качен",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Размерът на каченият файл надвишава максималния размер определен от upload_max_filesize в php.ini:",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Размерът на файла надвишава максималния размер определен от MAX_FILE_SIZE в HTML формата.",
@@ -318,6 +312,12 @@
     "Share with a Deck card" : "Споделяне с Deck карта",
     "Share {file} with a Deck card" : "Споделяне {file} с Deck карта",
     "Share" : "Споделяне",
+    "Personal" : "Лични",
+    "To do" : "Задачи",
+    "Doing" : "Задачи в процес на изпълнение",
+    "Example Task 3" : "Примерна задача 3",
+    "Example Task 2" : "Примерна задача 2",
+    "Example Task 1" : "Примерна задача 1",
     "Move card to another board" : "Преместване на картата на друго табло"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

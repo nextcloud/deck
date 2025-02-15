@@ -68,7 +68,6 @@
     "A <strong>card description</strong> has been changed" : "תיאור הכרטיס שונה",
     "Upcoming cards" : "כרטיסים עתידיים",
     "Load more" : "לטעון עוד",
-    "Personal" : "אישי",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "הכרטיס \"%s\" שב־„%s” הוקצה אליך על ידי %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} has assigned the card {deck-card} on {deck-board} to you.",
     "The card \"%s\" on \"%s\" has reached its due date." : "הכרטיס „%s” שתחת „%s” הגיע למועד התפוגה שלו.",
@@ -81,12 +80,7 @@
     "Action needed" : "נדרשת פעולה",
     "Later" : "מאוחר יותר",
     "copy" : "עותק",
-    "To do" : "לעשות",
-    "Doing" : "בביצוע",
     "Done" : "הסתיים",
-    "Example Task 3" : "משימה לדוגמה 3",
-    "Example Task 2" : "משימה לדוגמה 2",
-    "Example Task 1" : "משימה לדוגמה 1",
     "The file was uploaded" : "הקובץ הועלה",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "הקובץ שהועלה חורג מההנחיה upload_max_filesize ב־php.ini",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "הקובץ שהועלה חורג מההנחיה MAX_FILE_SIZE שצוינה בטופס ה־HTML",
@@ -267,6 +261,12 @@
     "Share with a Deck card" : "שיתוף עם כרטיס חפיסה",
     "Share {file} with a Deck card" : "שיתוף {file} עם כרטיס חפיסה",
     "Share" : "שיתוף",
+    "Personal" : "אישי",
+    "To do" : "לעשות",
+    "Doing" : "בביצוע",
+    "Example Task 3" : "משימה לדוגמה 3",
+    "Example Task 2" : "משימה לדוגמה 2",
+    "Example Task 1" : "משימה לדוגמה 1",
     "Move card to another board" : "העברת כרטיס ללוח אחר"
 },"pluralForm" :"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;"
 }

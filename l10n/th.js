@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "ส่วนตัว",
     "Finished" : "เสร็จสิ้น",
     "copy" : "คัดลอก",
     "Done" : "เสร็จสิ้น",
@@ -57,6 +56,7 @@ OC.L10N.register(
     "Today" : "วันนี้",
     "Tomorrow" : "พรุ่งนี้",
     "Close" : "ปิด",
-    "Share" : "แชร์"
+    "Share" : "แชร์",
+    "Personal" : "ส่วนตัว"
 },
 "nplurals=1; plural=0;");

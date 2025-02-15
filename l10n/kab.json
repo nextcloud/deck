@@ -1,5 +1,4 @@
 { "translations": {
-    "Personal" : "Udmawan",
     "Finished" : "Immed",
     "Done" : "Immed",
     "The file was uploaded" : "Ulac afaylu yettwaznen",
@@ -29,6 +28,7 @@
     "No notifications" : "Ulac tisezmal",
     "Today" : "Ass-a",
     "Close" : "Mdel",
-    "Share" : "Bḍu"
+    "Share" : "Bḍu",
+    "Personal" : "Udmawan"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
