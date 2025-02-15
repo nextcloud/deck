@@ -66,7 +66,6 @@
     "A <strong>comment</strong> was created on a card" : "Nalogi je dodana nova <strong>opomba</strong>",
     "Upcoming cards" : "Prihajajoče naloge",
     "Load more" : "Naloži več",
-    "Personal" : "Osebno",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Nalogo »%s« na »%s« vam dodeli %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} vam dodeli nalogo »{deck-card}« na »{deck-board}«.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Naloga »%s« na »%s« je dosegla datum preteka.",
@@ -84,12 +83,7 @@
     "Action needed" : "Čaka na odziv",
     "Later" : "Kasneje",
     "copy" : "kopija",
-    "To do" : "Prihajajoče naloge",
-    "Doing" : "Naloge v teku",
     "Done" : "Končane naloge",
-    "Example Task 3" : "Primer naloge 3",
-    "Example Task 2" : "Primer naloge 2",
-    "Example Task 1" : "Primer naloge 1",
     "The file was uploaded" : "Datoteka je uspešno poslana.",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Poslana datoteka presega določilo največje dovoljene velikosti v datoteki php.ini",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Poslana datoteka presega velikost, ki je določena kot omejitev MAX_FILE_SIZE v zapisu HTML.",
@@ -326,6 +320,12 @@
     "Share with a Deck card" : "Poveži z nalogo Deck",
     "Share {file} with a Deck card" : "Poveži datoteko {file} z nalogo Deck",
     "Share" : "Souporaba",
+    "Personal" : "Osebno",
+    "To do" : "Prihajajoče naloge",
+    "Doing" : "Naloge v teku",
+    "Example Task 3" : "Primer naloge 3",
+    "Example Task 2" : "Primer naloge 2",
+    "Example Task 1" : "Primer naloge 1",
     "Move card to another board" : "Premakni nalogo v drugo zbirko"
 },"pluralForm" :"nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);"
 }

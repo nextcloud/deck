@@ -2,7 +2,6 @@ OC.L10N.register(
     "deck",
     {
     "Deck" : "Deck",
-    "Personal" : "Isiklik",
     "%s on %s" : "%s %s-l",
     "Finished" : "Lõpetatud",
     "Later" : "Hiljem",
@@ -55,6 +54,7 @@ OC.L10N.register(
     "Today" : "Täna",
     "Tomorrow" : "Homme",
     "Close" : "Sulge",
-    "Share" : "Jaga"
+    "Share" : "Jaga",
+    "Personal" : "Isiklik"
 },
 "nplurals=2; plural=(n != 1);");

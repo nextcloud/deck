@@ -1,5 +1,4 @@
 { "translations": {
-    "Personal" : "தனிப்பட்ட",
     "Done" : "Done",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "பதிவேற்றப்பட்ட கோப்பானது HTML  படிவத்தில் குறிப்பிடப்பட்டுள்ள MAX_FILE_SIZE  directive ஐ விட கூடியது",
     "No file was uploaded" : "எந்த கோப்பும் பதிவேற்றப்படவில்லை",
@@ -25,6 +24,7 @@
     "Shared with you" : "Shared with you",
     "Today" : "இன்று",
     "Close" : "மூடுக",
-    "Share" : "பகிர்வு"
+    "Share" : "பகிர்வு",
+    "Personal" : "தனிப்பட்ட"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

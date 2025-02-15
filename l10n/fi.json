@@ -55,7 +55,6 @@
     "A <strong>comment</strong> was created on a card" : "<strong>Kommentti</strong> luotiin kortille",
     "Upcoming cards" : "Tulevat kortit",
     "Load more" : "Lataa lisää",
-    "Personal" : "Henkilökohtainen",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Kortti \"%s\" taululla \"%s\" on asetettu sinulle käyttäjän %s toimesta.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Kortin \"%s\" on \"%s\" eräpäivä on tullut vastaan.",
     "%s has mentioned you in a comment on \"%s\"." : "%s mainitsi sinut kommentissa kortilla \"%s\".",
@@ -69,12 +68,7 @@
     "Action needed" : "Toimia vaaditaan",
     "Later" : "Myöhemmin",
     "copy" : "kopioi",
-    "To do" : "Odottaa",
-    "Doing" : "Tekeillä",
     "Done" : "Valmis",
-    "Example Task 3" : "Esimerkkitehtävä 3",
-    "Example Task 2" : "Esimerkkitehtävä 2",
-    "Example Task 1" : "Esimerkkitehtävä 1",
     "The file was uploaded" : "Tiedosto lähetettiin",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Lähetetty tiedosto ylittää php.ini-tiedostossa määritellyn upload_max_filesize -säännön ",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Lähetettävän tiedoston enimmäiskoko ylittää HTML-lomakkeessa määritellyn MAX_FILE_SIZE-säännön",
@@ -280,6 +274,12 @@
     "Maximum file size of {size} exceeded" : "Tiedoston enimmäiskoko {size} ylitetty",
     "Error creating the share" : "Virhe jakoa luotaessa",
     "Share" : "Jaa",
+    "Personal" : "Henkilökohtainen",
+    "To do" : "Odottaa",
+    "Doing" : "Tekeillä",
+    "Example Task 3" : "Esimerkkitehtävä 3",
+    "Example Task 2" : "Esimerkkitehtävä 2",
+    "Example Task 1" : "Esimerkkitehtävä 1",
     "Move card to another board" : "Siirrä kortti toiselle taululle"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

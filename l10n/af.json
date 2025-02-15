@@ -1,5 +1,4 @@
 { "translations": {
-    "Personal" : "Persoonlik",
     "Later" : "Later",
     "copy" : "kopie",
     "Done" : "Gereed",
@@ -44,6 +43,7 @@
     "Today" : "Vandag",
     "Tomorrow" : "Môre",
     "Close" : "Sluit",
-    "Share" : "Deel"
+    "Share" : "Deel",
+    "Personal" : "Persoonlik"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

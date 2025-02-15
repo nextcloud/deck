@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "Personal",
     "Finished" : "Finite",
     "To review" : "A revider",
     "Action needed" : "Action necessari",
@@ -43,6 +42,7 @@ OC.L10N.register(
     "Today" : "Hodie",
     "Tomorrow" : "Deman",
     "Close" : "Clauder",
-    "Share" : "Compartir"
+    "Share" : "Compartir",
+    "Personal" : "Personal"
 },
 "nplurals=2; plural=(n != 1);");

@@ -66,7 +66,6 @@
     "A <strong>comment</strong> was created on a card" : "Na kartici je stvoren <strong>komentar</strong>",
     "Upcoming cards" : "Nadolazeće kartice",
     "Load more" : "Učitaj više",
-    "Personal" : "Osobno",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Karticu „%s” na „%s” dodijelio vam je %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} vam je dodijelio karticu {deck-card} na {deck-board}.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Kartica „%s” na „%s” dosegla je datum dospijeća.",
@@ -84,12 +83,7 @@
     "Action needed" : "Potrebna radnja",
     "Later" : "Kasnije",
     "copy" : "kopiraj",
-    "To do" : "Zadatak",
-    "Doing" : "U postupku",
     "Done" : "Gotovo",
-    "Example Task 3" : "Primjer zadatka 3.",
-    "Example Task 2" : "Primjer zadatka 2.",
-    "Example Task 1" : "Primjer zadatka 1.",
     "The file was uploaded" : "Datoteka je otpremljena",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Otpremljena datoteka premašuje postavku upload_max_filesize u datoteci php.ini",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Otpremljena datoteka premašuje postavku MAX_FILE_SIZE koja je navedena u obrascu HTML-a",
@@ -285,6 +279,12 @@
     "Share with a Deck card" : "Dijeli s Deck karticom",
     "Share {file} with a Deck card" : "Dijeli {file} s Deck karticom",
     "Share" : "Dijeli",
+    "Personal" : "Osobno",
+    "To do" : "Zadatak",
+    "Doing" : "U postupku",
+    "Example Task 3" : "Primjer zadatka 3.",
+    "Example Task 2" : "Primjer zadatka 2.",
+    "Example Task 1" : "Primjer zadatka 1.",
     "Move card to another board" : "Premjesti karticu na drugu ploču"
 },"pluralForm" :"nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;"
 }

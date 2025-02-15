@@ -1,5 +1,4 @@
 { "translations": {
-    "Personal" : "Şəxsi",
     "Finished" : "Bitdi",
     "Done" : "Done",
     "The file was uploaded" : "Fayl yükləndi",
@@ -36,6 +35,7 @@
     "Today" : "Bu gün",
     "Tomorrow" : "Sabah",
     "Close" : "Bağla",
-    "Share" : "Paylaş"
+    "Share" : "Paylaş",
+    "Personal" : "Şəxsi"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
