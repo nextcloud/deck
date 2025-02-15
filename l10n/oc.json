@@ -1,5 +1,4 @@
 { "translations": {
-    "Personal" : "Personal",
     "copy" : "copiar",
     "Done" : "Done",
     "The file was uploaded" : "Lo fichièr es estat enviat",
@@ -61,6 +60,7 @@
     "Close" : "Tampar",
     "Tomorrow – {timeLocale}" : "Deman – {timeLocale}",
     "Create a card" : "Crear una carta",
-    "Share" : "Partejar"
+    "Share" : "Partejar",
+    "Personal" : "Personal"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

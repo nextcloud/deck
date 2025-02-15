@@ -21,7 +21,6 @@
     "{user} has renamed list {before} to {stack} on board {board}" : "{user} ha renombrado la lista {before} a {stack} del tablero {board}",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "Cambios en la <strong>app Deck</strong>",
-    "Personal" : "Personal",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} te ha asigando la tarjeta {deck-card} de {deck-board} a ti.",
     "The card {deck-card} on {deck-board} has reached its due date." : "La tarjeta {deck-card} en {deck-board} ha alcanzado su fecha de caducidad.",
     "{user} has mentioned you in a comment on {deck-card}." : "{user} te ha mencionado en un comentario de {deck-card}.",
@@ -111,6 +110,7 @@
     "Close" : "Cerrar",
     "Share with a Deck card" : "Compartir con una tarjeta del Tablero",
     "Share {file} with a Deck card" : "Compartir {file} con una tarjeta del Tablero",
-    "Share" : "Compartir"
+    "Share" : "Compartir",
+    "Personal" : "Personal"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

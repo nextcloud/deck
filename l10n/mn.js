@@ -2,7 +2,6 @@ OC.L10N.register(
     "deck",
     {
     "Deck" : "Ажлын талбар",
-    "Personal" : "Хувийн",
     "Finished" : "Дуусгасан",
     "To review" : "Дахин хянах",
     "Action needed" : "Үйлдэл шаардлагатай",
@@ -45,6 +44,7 @@ OC.L10N.register(
     "Today" : "өнөөдөр",
     "Tomorrow" : "маргааш",
     "Close" : "Хаах",
-    "Share" : "Түгээх"
+    "Share" : "Түгээх",
+    "Personal" : "Хувийн"
 },
 "nplurals=2; plural=(n != 1);");

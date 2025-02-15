@@ -2,7 +2,6 @@ OC.L10N.register(
     "deck",
     {
     "Deck" : "დასტა",
-    "Personal" : "პირადი",
     "The card \"%s\" on \"%s\" has reached its due date." : "ბარათმა \"%s\" \"%s\"-ზე მიაღწია დანიშნულ დროს.",
     "The board \"%s\" has been shared with you by %s." : "დაფა \"%s\" თქვენთან გაზიარდა %s-ისთვის.",
     "%s on %s" : "%s %s-ზე",
@@ -64,6 +63,7 @@ OC.L10N.register(
     "Today" : "დღეს",
     "Tomorrow" : "ხვალ",
     "Close" : "დახურვა",
-    "Share" : "გაზიარება"
+    "Share" : "გაზიარება",
+    "Personal" : "პირადი"
 },
 "nplurals=2; plural=(n!=1);");

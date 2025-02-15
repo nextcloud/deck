@@ -1,5 +1,4 @@
 { "translations": {
-    "Personal" : "ផ្ទាល់​ខ្លួន",
     "copy" : "ចម្លង",
     "Done" : "Done",
     "Cancel" : "បោះបង់",
@@ -24,6 +23,7 @@
     "Shared with you" : "Shared with you",
     "Today" : "ថ្ងៃ​នេះ",
     "Close" : "បិទ",
-    "Share" : "ចែក​រំលែក"
+    "Share" : "ចែក​រំលែក",
+    "Personal" : "ផ្ទាល់​ខ្លួន"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

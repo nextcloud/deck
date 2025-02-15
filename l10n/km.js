@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "ផ្ទាល់​ខ្លួន",
     "copy" : "ចម្លង",
     "Done" : "Done",
     "Cancel" : "បោះបង់",
@@ -26,6 +25,7 @@ OC.L10N.register(
     "Shared with you" : "Shared with you",
     "Today" : "ថ្ងៃ​នេះ",
     "Close" : "បិទ",
-    "Share" : "ចែក​រំលែក"
+    "Share" : "ចែក​រំលែក",
+    "Personal" : "ផ្ទាល់​ខ្លួន"
 },
 "nplurals=1; plural=0;");

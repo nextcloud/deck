@@ -76,7 +76,6 @@ OC.L10N.register(
     "Cards due tomorrow" : "Tarjetas para mañana",
     "Upcoming cards" : "Tarjetas próximas",
     "Load more" : "Cargar más",
-    "Personal" : "Personal",
     "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
     "The board \"%s\" has been shared with you by %s." : "El tablero \"%s\" ha sido compartido contigo por %s.",
     "Deck board" : "Tablero de Deck",
@@ -188,6 +187,7 @@ OC.L10N.register(
     "Tomorrow" : "Mañana",
     "Close" : "Cerrar",
     "Error creating the share" : "Error creando el recurso compartido",
-    "Share" : "Compartir"
+    "Share" : "Compartir",
+    "Personal" : "Personal"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

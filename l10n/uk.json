@@ -50,7 +50,6 @@
     "Changes in the <strong>Deck app</strong>" : "Зміни у застосунку <strong>Колода</strong>",
     "Upcoming cards" : "Очікують на виконання",
     "Load more" : "Більше",
-    "Personal" : "Особисте",
     "Deck board" : "Дошка Deck",
     "%s on %s" : "%s на %s",
     "Finished" : "Завершено",
@@ -58,12 +57,7 @@
     "Action needed" : "Потребує дій",
     "Later" : "Пізніше",
     "copy" : "копіювати",
-    "To do" : "Заплановано",
-    "Doing" : "Виконується",
     "Done" : "Готово",
-    "Example Task 3" : "Приклад завдання 3",
-    "Example Task 2" : "Приклад завдання 2",
-    "Example Task 1" : "Приклад завдання 1",
     "The file was uploaded" : "Файл завантажено",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Файл для завантаження перевищує параметр upload_max_filesize у php.ini",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Розмір завантаженого файлу перевищує значення MAX_FILE_SIZE, яке було зазначено у HTML формі",
@@ -237,6 +231,12 @@
     "Maximum file size of {size} exceeded" : "Досягнуто максимальний розмір файлу {size}",
     "Error creating the share" : "Помилка створення спільного доступу",
     "Share" : "Спільний доступ",
+    "Personal" : "Особисте",
+    "To do" : "Заплановано",
+    "Doing" : "Виконується",
+    "Example Task 3" : "Приклад завдання 3",
+    "Example Task 2" : "Приклад завдання 2",
+    "Example Task 1" : "Приклад завдання 1",
     "Move card to another board" : "Перемістити картку до іншої дошки"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);"
 }

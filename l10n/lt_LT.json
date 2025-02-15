@@ -64,7 +64,6 @@
     "A <strong>comment</strong> was created on a card" : "Kortelėje buvo sukurtas <strong>komentaras</strong>",
     "Upcoming cards" : "Artėjančios kortelės",
     "Load more" : "Įkelti daugiau",
-    "Personal" : "Asmeniniai",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "Kortelę \"%s\" ties \"%s\" priskyrė jums %s.",
     "The card \"%s\" on \"%s\" has reached its due date." : "Kortelė „%s“, esanti lentoje „%s“, pasiekė savo galutinį terminą.",
     "The card {deck-card} on {deck-board} has reached its due date." : "Kortelė {deck-card}, esanti lentoje {deck-board} pasiekė savo galutinio termino datą.",
@@ -77,12 +76,7 @@
     "Action needed" : "Reikalingas veiksmas",
     "Later" : "Vėliau",
     "copy" : "kopija",
-    "To do" : "Reikia atlikti",
-    "Doing" : "Atliekama",
     "Done" : "Atlikta",
-    "Example Task 3" : "Pavyzdinė užduotis 3",
-    "Example Task 2" : "Pavyzdinė užduotis 2",
-    "Example Task 1" : "Pavyzdinė užduotis 1",
     "The file was uploaded" : "Failas buvo įkeltas",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Įkeliamas failas viršija upload_max_filesize direktyvą, esančią faile php.ini",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Įkeltas failas viršija MAX_FILE_SIZE direktyvą, kuri buvo nurodyta HTML formoje",
@@ -282,6 +276,12 @@
     "Maximum file size of {size} exceeded" : "Viršytas maksimalus {size} failo dydis",
     "Error creating the share" : "Klaida kuriant viešinį",
     "Share" : "Bendrinti",
+    "Personal" : "Asmeniniai",
+    "To do" : "Reikia atlikti",
+    "Doing" : "Atliekama",
+    "Example Task 3" : "Pavyzdinė užduotis 3",
+    "Example Task 2" : "Pavyzdinė užduotis 2",
+    "Example Task 1" : "Pavyzdinė užduotis 1",
     "Move card to another board" : "Perkelti kortelę į kitą lentą"
 },"pluralForm" :"nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);"
 }

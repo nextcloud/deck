@@ -2,7 +2,6 @@ OC.L10N.register(
     "deck",
     {
     "Deck" : "Deck",
-    "Personal" : "Personal",
     "The card \"%s\" on \"%s\" has reached its due date." : "La tarjeta \"%s\" en \"%s\" ha alacanzado su fecha de entrega",
     "The board \"%s\" has been shared with you by %s." : "El tablero \"%s\" ha sido compartido contigo por %s.",
     "%s on %s" : "%s en %s",
@@ -66,6 +65,7 @@ OC.L10N.register(
     "Today" : "Hoy",
     "Tomorrow" : "Mañana",
     "Close" : "Cerrar",
-    "Share" : "Compartir"
+    "Share" : "Compartir",
+    "Personal" : "Personal"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

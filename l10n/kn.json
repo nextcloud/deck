@@ -1,5 +1,4 @@
 { "translations": {
-    "Personal" : "﻿ವೈಯಕ್ತಿಕ",
     "Done" : "Done",
     "No file was uploaded" : "ವರ್ಗಾವಣೆಗೆ ﻿ಯಾವುದೇ ಕಡತಗಳು ಕಂಡುಬಂದಿಲ್ಲ",
     "Missing a temporary folder" : "ತಾತ್ಕಾಲಿಕ ಕಡತಕೋಶ ದೊರೆಕುತ್ತಿಲ್ಲ",
@@ -18,6 +17,7 @@
     "Shared with you" : "Shared with you",
     "Today" : "Today",
     "Close" : "ಮುಚ್ಚು",
-    "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ"
+    "Share" : "﻿ಹಂಚಿಕೊಳ್ಳಿ",
+    "Personal" : "﻿ವೈಯಕ್ತಿಕ"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

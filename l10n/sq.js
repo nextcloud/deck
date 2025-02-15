@@ -2,15 +2,12 @@ OC.L10N.register(
     "deck",
     {
     "Deck" : "Shto paisjen U2F",
-    "Personal" : "Personale",
     "%s on %s" : "%s në %s",
     "Finished" : "Përfunduar",
     "To review" : "Për rishikim",
     "Action needed" : "Nevoitet veprim",
     "Later" : "Më vonë",
     "copy" : "kopjo",
-    "To do" : "Për t'u bërë",
-    "Doing" : "Duke e bërë",
     "Done" : "Përfunduar",
     "The file was uploaded" : "Skedari u ngarkua",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Kartela e ngarkuar tejkalon udhëzimin MAX_FILE_SIZE që qe përcaktuar te formulari HTML",
@@ -67,6 +64,9 @@ OC.L10N.register(
     "Today" : "Sot",
     "Tomorrow" : "Nesër",
     "Close" : "Mbylleni",
-    "Share" : "Shpërndaje"
+    "Share" : "Shpërndaje",
+    "Personal" : "Personale",
+    "To do" : "Për t'u bërë",
+    "Doing" : "Duke e bërë"
 },
 "nplurals=2; plural=(n != 1);");

@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "ສ່ວນບຸກຄົນ",
     "Finished" : "ສຳເລັດ",
     "Done" : "ສໍາເລັດ",
     "The file was uploaded" : "ຟາຍຖຶກອັບໂຫລດສຳເລັດ",
@@ -27,6 +26,7 @@ OC.L10N.register(
     "No notifications" : "ບໍ່ມີການແຈ້ງເຕືອນ",
     "Today" : "ມື້ນີ້",
     "Close" : "ປິດ",
-    "Share" : "ແບ່ງປັນ"
+    "Share" : "ແບ່ງປັນ",
+    "Personal" : "ສ່ວນບຸກຄົນ"
 },
 "nplurals=1; plural=0;");

@@ -74,7 +74,6 @@
     "Cards due tomorrow" : "Cards due tomorrow",
     "Upcoming cards" : "Upcoming cards",
     "Load more" : "Load more",
-    "Personal" : "Personal",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "The card \"%s\" on \"%s\" has been assigned to you by %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} has assigned the card {deck-card} on {deck-board} to you.",
     "The card \"%s\" on \"%s\" has reached its due date." : "The card \"%s\" on \"%s\" has reached its due date.",
@@ -97,12 +96,7 @@
     "Action needed" : "Action needed",
     "Later" : "Later",
     "copy" : "copy",
-    "To do" : "To do",
-    "Doing" : "Doing",
     "Done" : "Done",
-    "Example Task 3" : "Example Task 3",
-    "Example Task 2" : "Example Task 2",
-    "Example Task 1" : "Example Task 1",
     "The file was uploaded" : "The file was uploaded",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "The uploaded file exceeds the upload_max_filesize directive in php.ini",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form",
@@ -364,6 +358,12 @@
     "Share with a Deck card" : "Share with a Deck card",
     "Share {file} with a Deck card" : "Share {file} with a Deck card",
     "Share" : "Share",
+    "Personal" : "Personal",
+    "To do" : "To do",
+    "Doing" : "Doing",
+    "Example Task 3" : "Example Task 3",
+    "Example Task 2" : "Example Task 2",
+    "Example Task 1" : "Example Task 1",
     "Move card to another board" : "Move card to another board"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }
