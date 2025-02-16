@@ -82,6 +82,7 @@ OC.L10N.register(
     "Action needed" : "נדרשת פעולה",
     "Later" : "מאוחר יותר",
     "copy" : "עותק",
+    "To Do" : "מטלות",
     "Done" : "הסתיים",
     "The file was uploaded" : "הקובץ הועלה",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "הקובץ שהועלה חורג מההנחיה upload_max_filesize ב־php.ini",

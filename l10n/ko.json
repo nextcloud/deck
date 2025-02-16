@@ -96,6 +96,8 @@
     "Action needed" : "동작 필요",
     "Later" : "나중에",
     "copy" : "복사",
+    "To Do" : "할 일",
+    "In Progress" : "진행 중",
     "Done" : "완료",
     "The file was uploaded" : "파일을 업로드함",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "업로드한 파일의 크기가 php.ini의 upload_max_filesize를 초과함",

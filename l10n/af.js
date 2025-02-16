@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Later" : "Later",
     "copy" : "kopie",
+    "To Do" : "Moet doen",
     "Done" : "Gereed",
     "The file was uploaded" : "Die lêer is opgelaai",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Die opgelaaide lêer oorskry die upload_max_filesize riglyn in php.ini",

@@ -78,6 +78,7 @@ OC.L10N.register(
     "Action needed" : "Butuh tindakan",
     "Later" : "Nanti",
     "copy" : "salin",
+    "In Progress" : "Sedang Berlangsung",
     "Done" : "Selesai",
     "The file was uploaded" : "Berkas terunggah",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Berkas terunggah melampau parameter upload_max_filesize pada php.ini",

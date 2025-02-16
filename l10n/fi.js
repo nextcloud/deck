@@ -70,6 +70,7 @@ OC.L10N.register(
     "Action needed" : "Toimia vaaditaan",
     "Later" : "Myöhemmin",
     "copy" : "kopioi",
+    "To Do" : "Tehtävä",
     "Done" : "Valmis",
     "The file was uploaded" : "Tiedosto lähetettiin",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Lähetetty tiedosto ylittää php.ini-tiedostossa määritellyn upload_max_filesize -säännön ",

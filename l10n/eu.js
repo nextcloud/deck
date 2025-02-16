@@ -98,6 +98,8 @@ OC.L10N.register(
     "Action needed" : "Ekintza beharrezkoa",
     "Later" : "Beranduago",
     "copy" : "kopiatu",
+    "To Do" : "Egiteke",
+    "In Progress" : "Abian",
     "Done" : "Egina",
     "The file was uploaded" : "Fitxategia igo da",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Igotako fitxategiak php.ini fitxategiko upload_max_filesize direktiban zehazturikoa gainditzen du",

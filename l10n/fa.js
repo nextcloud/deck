@@ -90,6 +90,7 @@ OC.L10N.register(
     "Action needed" : "نیازمند اقدام",
     "Later" : "بعدا",
     "copy" : "کپی",
+    "To Do" : "To Do",
     "Done" : "انجام شد",
     "The file was uploaded" : "پرونده بارگذاری شد",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "حجم پرونده بارگذاری شده بیشتر از تنظیمات upload_max_filesize در پرونده php.ini است",
