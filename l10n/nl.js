@@ -98,6 +98,8 @@ OC.L10N.register(
     "Action needed" : "Actie benodigd",
     "Later" : "Later",
     "copy" : "kopiëren",
+    "To Do" : "Te doen",
+    "In Progress" : "Bezig",
     "Done" : "Klaar",
     "The file was uploaded" : "Het bestand werd geüpload",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Het geüploade bestand overschrijdt de upload_max_filesize richtlijn in php.ini:",

@@ -98,6 +98,8 @@ OC.L10N.register(
     "Action needed" : "Gníomh de dhíth",
     "Later" : "Níos déanaí",
     "copy" : "cóip",
+    "To Do" : "A dhéanamh",
+    "In Progress" : "Ar Siúl",
     "Done" : "Déanta",
     "The file was uploaded" : "Uaslódáladh an comhad",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Sáraíonn an comhad uaslódáilte an treoir upload_max_filesize i php.ini",

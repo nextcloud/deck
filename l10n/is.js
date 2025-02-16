@@ -98,6 +98,7 @@ OC.L10N.register(
     "Action needed" : "Aðgerðar krafist",
     "Later" : "Seinna",
     "copy" : "afrita",
+    "To Do" : "Verkefnalisti",
     "Done" : "Lokið",
     "The file was uploaded" : "Skráin var send inn",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Innsend skrá er stærri en upload_max stillingin í php.ini:",

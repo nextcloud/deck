@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Finished" : "Achuet",
     "copy" : "eil",
+    "In Progress" : "War ar stern",
     "Done" : "Graet",
     "The file was uploaded" : "Kaset eo bet ar restr",
     "No file was uploaded" : "N'eus restr ebet a zo bet kaset",

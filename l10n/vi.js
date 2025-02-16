@@ -98,6 +98,7 @@ OC.L10N.register(
     "Action needed" : "Cần thực hiện",
     "Later" : "Để sau",
     "copy" : "sao chép",
+    "To Do" : "Việc cần làm",
     "Done" : "Hoàn tất",
     "The file was uploaded" : "Tập tin đã được tải lên",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Tập tin tải lên đã vượt quá upload_max_filesize giới hạn trong hệ thống",

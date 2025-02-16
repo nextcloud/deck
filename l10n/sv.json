@@ -96,6 +96,8 @@
     "Action needed" : "Åtgärd behövs",
     "Later" : "Senare",
     "copy" : "kopiera",
+    "To Do" : "Att göra",
+    "In Progress" : "Pågående",
     "Done" : "Klart",
     "The file was uploaded" : "Filen laddades upp",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Den uppladdade filen överstiger direktivet upload_max_filesize i php.ini",

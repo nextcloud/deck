@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Finished" : "Završeno",
     "copy" : "kopiraj",
+    "In Progress" : "U toku",
     "Done" : "Done",
     "The file was uploaded" : "Fajl je otpremljen",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Fajl za otpremljivanje premašuje upload_max_filesize direktivu u php.ini",

@@ -85,6 +85,7 @@ OC.L10N.register(
     "Action needed" : "Čaka na odziv",
     "Later" : "Kasneje",
     "copy" : "kopija",
+    "To Do" : "Naloge",
     "Done" : "Končane naloge",
     "The file was uploaded" : "Datoteka je uspešno poslana.",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Poslana datoteka presega določilo največje dovoljene velikosti v datoteki php.ini",

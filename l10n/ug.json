@@ -96,6 +96,8 @@
     "Action needed" : "ھەرىكەت لازىم",
     "Later" : "كېيىنچە",
     "copy" : "كۆپەيتىلگەن",
+    "To Do" : "قىلىش",
+    "In Progress" : "ئىلگىرىلەۋاتىدۇ",
     "Done" : "Done",
     "The file was uploaded" : "ھۆججەت يۈكلەندى",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "يۈكلەنگەن ھۆججەت php.ini دىكى upload_max_filesize كۆرسەتمىسىدىن ئېشىپ كەتتى",

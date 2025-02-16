@@ -98,6 +98,8 @@ OC.L10N.register(
     "Action needed" : "Handling påkrevd",
     "Later" : "Senere",
     "copy" : "kopier",
+    "To Do" : "Gjøremål",
+    "In Progress" : "Pågår",
     "Done" : "Ferdig",
     "The file was uploaded" : "Filen er lastet opp",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Filen er større enn definert grense i upload_max_filesize direktiv i php.ini",
