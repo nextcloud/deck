@@ -97,6 +97,8 @@ OC.L10N.register(
     "Action needed" : "Acțiune necesară",
     "Later" : "Mai târziu",
     "copy" : "copiază",
+    "To Do" : "De Făcut",
+    "In Progress" : "În curs de desfășurare",
     "Done" : "Realizat",
     "The file was uploaded" : "Fișierul a fost încărcat",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Fișierul încărcat depășește directiva upload_max_filesize din php.ini",

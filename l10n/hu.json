@@ -92,6 +92,8 @@
     "Action needed" : "Művelet szükséges",
     "Later" : "Később",
     "copy" : "másolat",
+    "To Do" : "Teendő",
+    "In Progress" : "Folyamatban",
     "Done" : "Kész",
     "The file was uploaded" : "A fájl fel lett töltve",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "A feltöltött fájl meghaladja a php.ini-ben szereplő upload_max_filesize direktívában megadott méretet",

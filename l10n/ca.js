@@ -98,6 +98,8 @@ OC.L10N.register(
     "Action needed" : "Acció necessària",
     "Later" : "Més tard",
     "copy" : "còpia",
+    "To Do" : "Per fer",
+    "In Progress" : "En curs",
     "Done" : "Fet",
     "The file was uploaded" : "S'ha pujat el fitxer",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "El fitxer carregat excedeix la directiva upload_max_filesize dins de php.ini",

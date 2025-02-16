@@ -85,6 +85,8 @@ OC.L10N.register(
     "Action needed" : "Acción requerida",
     "Later" : "Después",
     "copy" : "copiar",
+    "To Do" : "Pendiente",
+    "In Progress" : "En proceso",
     "Done" : "Terminado",
     "The file was uploaded" : "El archivo fue cargado",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "El archivo cargado excede el valor establecido en la directiva upload_max_filesize en el archivo php.ini",

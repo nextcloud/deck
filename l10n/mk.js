@@ -78,6 +78,7 @@ OC.L10N.register(
     "Action needed" : "Потребна е акција",
     "Later" : "Покасно",
     "copy" : "копирај",
+    "To Do" : "За правење",
     "Done" : "Готово",
     "The file was uploaded" : "Датотеката е прикачена",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Подигнатата датотека ја надминува upload_max_filesize директивата во php.ini",

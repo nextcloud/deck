@@ -96,6 +96,8 @@
     "Action needed" : "Wymagana akcja",
     "Later" : "Później",
     "copy" : "kopiuj",
+    "To Do" : "Do zrobienia",
+    "In Progress" : "W trakcie",
     "Done" : "Zrobione",
     "The file was uploaded" : "Plik został wysłany",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Wgrany plik przekracza wartość upload_max_filesize zdefiniowaną w php.ini",

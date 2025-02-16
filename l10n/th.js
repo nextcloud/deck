@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Finished" : "เสร็จสิ้น",
     "copy" : "คัดลอก",
+    "In Progress" : "อยู่ระหว่างการดำเนินการ",
     "Done" : "เสร็จสิ้น",
     "The file was uploaded" : "ไฟล์อัปโหลดแล้ว",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "ขนาดไฟล์ที่อัปโหลดมีขนาดเกินค่า upload_max_filesize ที่ระบุไว้ใน php.ini",

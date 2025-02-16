@@ -98,6 +98,8 @@ OC.L10N.register(
     "Action needed" : "Potrebná akcia",
     "Later" : "Neskôr",
     "copy" : "kopírovať",
+    "To Do" : "Úlohy",
+    "In Progress" : "Prebieha",
     "Done" : "Hotové",
     "The file was uploaded" : "Súbor bol nahraný",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Nahraný súbor prekročil limit nastavený v upload_max_filesize v súbore php.ini",
