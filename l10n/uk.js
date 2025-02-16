@@ -59,6 +59,8 @@ OC.L10N.register(
     "Action needed" : "Потребує дій",
     "Later" : "Пізніше",
     "copy" : "копіювати",
+    "To Do" : "Зробити",
+    "In Progress" : "В процесі",
     "Done" : "Готово",
     "The file was uploaded" : "Файл завантажено",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Файл для завантаження перевищує параметр upload_max_filesize у php.ini",

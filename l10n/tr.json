@@ -96,6 +96,8 @@
     "Action needed" : "İşlem yapılması gerekiyor",
     "Later" : "Sonra",
     "copy" : "kopyala",
+    "To Do" : "Yapılacak iş",
+    "In Progress" : "Yapılıyor",
     "Done" : "Bitenler",
     "The file was uploaded" : "Dosya yüklendi",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Yüklenen dosya php.ini dosyasındaki yüklenebilecek dosya boyutunu belirten upload_max_filesize değişkeninin değerini aşıyor",

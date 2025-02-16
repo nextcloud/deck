@@ -98,6 +98,8 @@ OC.L10N.register(
     "Action needed" : "Требуется действие",
     "Later" : "Позже",
     "copy" : "Копировать",
+    "To Do" : "Задачи",
+    "In Progress" : "Выполянется",
     "Done" : "Выполненные",
     "The file was uploaded" : "Файл загружен",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Размер загружаемого файла превышает предел, заданный в параметре «upload_max_filesize» в файле php.ini",

@@ -97,6 +97,7 @@ OC.L10N.register(
     "Action needed" : "Απαιτείται ενέργεια",
     "Later" : "Αργότερα",
     "copy" : "Αντιγραφή",
+    "To Do" : "Προς Ενέργεια",
     "Done" : "Ολοκληρώθηκε",
     "The file was uploaded" : "Το αρχείο μεταφορτώθηκε",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Το αρχείο που εστάλη υπερβαίνει την οδηγία μέγιστου επιτρεπτού μεγέθους \"upload_max_filesize\" του php.ini",

@@ -98,6 +98,8 @@ OC.L10N.register(
     "Action needed" : "需要採取行動",
     "Later" : "稍後",
     "copy" : "複製",
+    "To Do" : "待辦",
+    "In Progress" : "進行中",
     "Done" : "完成",
     "The file was uploaded" : "檔案已上傳",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "上傳的檔案大小超過 php.ini 當中 upload_max_filesize 選項的限制",
