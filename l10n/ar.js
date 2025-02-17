@@ -69,13 +69,14 @@ OC.L10N.register(
     "{user} has commented on card {card}" : "{مستخدم} علق على بطاقة {بطاقة}",
     "Deck" : "Deck",
     "Changes in the <strong>Deck app</strong>" : "تغييرات في <strong>تطبيق Deck</strong> ",
-    "A <strong>board, list or card</strong> was changed" : "تمّ تغيير <strong>لوحة board أو قائمة list أو بطاقة card </strong>.",
+    "A <strong>board, list or card</strong> was changed" : "تمّ تغيير <strong>لوحة أو قائمة أو بطاقة </strong>.",
     "A <strong>comment</strong> was created on a card" : "<strong>تعليق</strong> تم إنشاؤه على بطاقة",
     "A <strong>card description</strong> has been changed" : "تمّ تغيير <strong>وصف بطاقة</strong>.",
     "Cards due today" : "البطاقات المستحقة اليوم",
     "Cards due tomorrow" : "البطاقات المستحقة غداً",
     "Upcoming cards" : "البطاقات القادمة",
     "Load more" : "حمّل أكثر",
+    "Welcome to Nextcloud Deck!" : "أهلا بكم في تطبيق \"الكدسات\" Deck من نكست كلاود! ",
     "The card \"%s\" on \"%s\" has been assigned to you by %s." : "البطاقة \"%s\" على \"%s\" كُلفت بها من قبل %s.",
     "{user} has assigned the card {deck-card} on {deck-board} to you." : "{user} قام بتكليف البطاقة {deck-board} على {deck-board} لك",
     "The card \"%s\" on \"%s\" has reached its due date." : "وصلت بطاقة \"%s\" على %s\" الموعد المحدد ",
@@ -88,7 +89,7 @@ OC.L10N.register(
     "Owned by %1$s" : "يملكها %1$s",
     "Deck boards, cards and comments" : "اللوحات و البطاقات و الملاحظات",
     "From %1$s, in %2$s/%3$s, owned by %4$s" : " من %1$s، في %2$s/%3$s، يملكها %4$s",
-    "Create a new deck card" : "إنشاء بطاقة جديدة",
+    "Create a new deck card" : "إنشاء كدسة جديدة للبطاقات",
     "Card comments" : "تعليقات البطاقة ",
     "%s on %s" : "%s على %s",
     "Deck boards and cards" : "اللوحات و البطاقات",
@@ -98,9 +99,16 @@ OC.L10N.register(
     "Action needed" : "يحتاج إلى إجراء",
     "Later" : "لاحقا",
     "copy" : "نسخ",
+    "Read more inside" : "إقرإ المزيد بالداخل",
+    "Custom lists - click to rename!" : "قوائم مخصصة - أنقُر لتغيير التسمية!",
     "To Do" : "مَهَامٌّ",
     "In Progress" : "قيد التجهيز",
     "Done" : "أُنجز",
+    "1. Open to learn more about boards and cards" : "1. إفتَح لتعرِف المزيد عن اللوحات والبطاقات",
+    "2. Drag cards left and right, up and down" : "2. سحب البطاقات يميناً ويساراً، لأعلي وأسفل",
+    "3. Apply rich formatting and link content" : "3. تطبيق التنسيق و ربط المحتوى",
+    "4. Share, comment and collaborate!" : "4. مشاركات، و ملاحظات، وتعاون!",
+    "Create your first card!" : "أنشِئ بطاقتك الأولى!",
     "The file was uploaded" : "تم رفع الملف",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "حجم الملف المرفوع قد تجاوز  upload_max_filesize الموجودة في ملف php.ini ",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "حجم الملف الذي تريد رفعه أعلى من الحد المسموح به في واجهة ال HTML.",
@@ -115,7 +123,7 @@ OC.L10N.register(
     "Path is already shared with this card" : "تم مشاركة المسار بالفعل مع هذه البطاقة ",
     "Invalid date, date format must be YYYY-MM-DD" : "تاريخ غير صحيح, يجب أن يكون تنسيق التاريخ YYYY-MM-DD",
     "Personal planning and team project organization" : "التخطيط الشخصي و تنظيم مشروع الفريق",
-    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "التطبيق \"رِزَم البطاقات\" Deck هو أداة لتنظيم المهام الشخصية و الجماعية في نكست كلاود على نمط \"خطوط التصنيع أو التجميع في المصانع\" و المعروف بـ kanban.\n\n\n- 📥 أكتب مهمتك او مهمة فريقك على بطاقة و ضع البطاقة على لوحة البطاقات من ذات التصنيف أو المرحلة من الإنجاز\n- 📄 دوّن ملاحظاتك الإضافية على البطاقة بصيغة ماركداون markdown\n- 🔖 و يمكنك أيضاً إسناد البطاقة أي المهمة إلى شخص أو أشخاص في فريقك\n- 👥 شارك البطاقة مع من ترغب من أعضاء فريقك أو عائلتك أو أصدقائك\n- 📎 إرفاق ملفات و تضمينها بصيغة ماركداون في البطاقة\n- 💬ناقش البطاقة مع زملائك في خانة الملاحظات\n- ⚡ تابع ما يُستجد من عمليات و تطوّرات على البطاقة أو المهمة\n- 🚀 حافظ على مشروعك مُنسّقاً باستمرار.",
+    "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "التطبيق \"كَدسَات البطاقات\" Deck هو أداة لتنظيم المهام الشخصية و الجماعية في نكست كلاود على نمط \"خطوط التصنيع أو التجميع في المصانع\" و المعروف بـ kanban.\n\n\n- 📥 أكتب مهامّك او مهامّ فريقك على بطاقة و ضع البطاقة في مكانها المناسب\n- 📄 دوّن ملاحظاتك الإضافية على البطاقة بصيغة ماركداون markdown\n- 🔖 و يمكنك أيضاً وضع لواصق labels على البطاقة لتصنيفها بشكل أفضل\n- 👥 شارك البطاقة مع من ترغب من أعضاء فريقك أو عائلتك أو أصدقائك\n- 📎 إرفاق ملفات و تضمينها بصيغة ماركداون في البطاقة\n- 💬ناقش البطاقة مع زملائك في خانة الملاحظات\n- ⚡ تابع ما يُستجد من عمليات و تطوّرات على البطاقة أو المهمة\n- 🚀 حافظ على مشروعك مُنسّقاً باستمرار.",
     "Card details" : "تفاصيل البطاقة",
     "Add board" : "إضافة لوح",
     "Select the board to link to a project" : "تحديد اللوح لربطه بمشروع",
@@ -281,7 +289,7 @@ OC.L10N.register(
     "Card deleted" : "البطاقة حٌذفت ",
     "seconds ago" : "ثوانٍ مضت",
     "Keyboard shortcuts" : "اختصارات لوحة المفاتيح",
-    "Boost your productivity using Deck with keyboard shortcuts." : "ضاعِف إنتاجيتك باستعمال \"رِزَم البطاقات\" Deck، و اختصارات لوحة المفاتيح ",
+    "Boost your productivity using Deck with keyboard shortcuts." : "ضاعِف إنتاجيتك باستعمال \"كَدسَات البطاقات\" Deck، و اختصارات لوحة المفاتيح ",
     "Board actions" : "إجراءات اللوحة",
     "Keyboard shortcut" : "إختصار لوحة المفاتيح",
     "Action" : "الإجراء",
@@ -309,20 +317,20 @@ OC.L10N.register(
     "All boards" : "جميع الالواح",
     "Archived boards" : "الالواح المؤرشفة",
     "Shared with you" : "تم مشاركتها معك",
-    "Deck settings" : "إعدادات رزم البطاقات",
+    "Deck settings" : "إعدادات \"كَدسَات البطاقات\"",
     "Use bigger card view" : "استخدام بطاقة عرض أكبر ",
     "Show card ID badge" : "أعرض شارة رقم البطاقة",
     "Show boards in calendar/tasks" : "إظهار اللوح في التقويم/المهام",
-    "Limit board creation to some groups" : "قَصْرُ حَقِّ إنشاء الألواح على بعض المجموعات ",
+    "Limit board creation to some groups" : "قَصْرُ حَقِّ إنشاء اللوحات على بعض المجموعات ",
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "المستخدِمون من خارج تلك المجموعات لن يمكنكم إنشاء لوحاتهم الخاصة؛ لكن يمكنهم العمل على اللوحات التي تتمّ مشاركتها معهم.",
     "Cancel edit" : "إلغاء التعديل",
-    "Save board" : "حفظ اللوح",
+    "Save board" : "حفظ اللوحة",
     "Board details" : "تفاصيل لوح",
     "Edit board" : "تعديل اللوح",
     "Clone board" : "استنسخ اللوح",
     "Unarchive board" : "إلغاء أرشفة اللوح",
     "Archive board" : "أرشفة اللوح ",
-    "Export board" : "تصدير اللوحة",
+    "Export board" : "تصدير لوحة",
     "Turn on due date reminders" : "تفعيل التذكيرات للموعد المحدد ",
     "Turn off due date reminders" : "إيقاف تشغيل التذكيرات للموعد المحددد",
     "Due date reminders" : "تذكيرات الموعد المحدد ",
