@@ -104,7 +104,7 @@ OC.L10N.register(
     "To Do" : "Offen",
     "In Progress" : "In Bearbeitung",
     "Done" : "Erledigt",
-    "1. Open to learn more about boards and cards" : "1. Offen, um mehr über Boards und Karten zu erfahren",
+    "1. Open to learn more about boards and cards" : "1. Öffnen, um mehr über Boards und Karten zu erfahren",
     "2. Drag cards left and right, up and down" : "2. Karten nach links und rechts, oben und unten ziehen",
     "3. Apply rich formatting and link content" : "3. Umfangreiche Formatierung und Linkinhalte",
     "4. Share, comment and collaborate!" : "4. Teilen, kommentieren und mitarbeiten!",
