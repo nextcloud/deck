@@ -62,7 +62,7 @@ OC.L10N.register(
     "No notifications" : "Nav paziņojumu",
     "No reminder" : "Nav atgādinājuma",
     "An error occurred" : "Gadījās kļūda",
-    "Advanced options" : "Papildu opcijas",
+    "Advanced options" : "Papildu iespējas",
     "Today" : "Šodien",
     "Tomorrow" : "Rīt",
     "Close" : "Aizvērt",
