@@ -5,6 +5,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.14.4
+### Fixed
+ - fix: skip exporting a deleted card #6722
+ - fix: Properly show attachment extension #6673
+
+### Maintenance
+ - Update nextcloud/ocp dependency #6769
+ - Update nextcloud/ocp dependency #6718
+ - Update nextcloud/ocp dependency #6700
+ - Update nextcloud/ocp dependency #6656
+ 
 ## 1.14.3
 ### Fixed
  - fix: two close buttons on card modal @app/backportbot [#6659](https://github.com/nextcloud/deck/pull/6659)
