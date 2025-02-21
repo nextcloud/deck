@@ -5,6 +5,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.15.0
+### Fixed
+ - Fix: Adapt URLs generated in the backend to new routes #6743
+ - Fix npm audit #6719
+ - Fix: skip exporting a deleted card #6723
+
 ## 1.15.0-beta.2
 
 ### Added
