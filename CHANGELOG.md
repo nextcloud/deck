@@ -1,6 +1,26 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.13.4
+### Fixed
+ - fix: skip exporting a deleted card #6721
+ - fix: Properly show attachment extension #6672
+ - fix: two close buttons on card modal #6660
+ - Update TrelloJsonService.php #6645
+ - fix: close modal after deleting card #6620
+ - fix: Use new query builder #6614
+ - fix(sharing): list accounts with matches in email #6525
+ - Fix npm audit #6568
+ - Fix npm audit #6491
+
+### Maintenance
+ - Update nextcloud/ocp dependency #6768
+ - Update nextcloud/ocp dependency #6737
+ - Update nextcloud/ocp dependency #6717
+ - Update nextcloud/ocp dependency #6699
+ - Update nextcloud/ocp dependency #6655
+ - Update nextcloud/ocp dependency #6586
+
 ## 1.13.3
 ### Fixed
  - fix: board bubble preview widget #6476
