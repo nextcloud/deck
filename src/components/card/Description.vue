@@ -239,15 +239,18 @@ export default {
 		},
 		addAttachment(attachment) {
 			const asImage = (attachment.type === 'file' && attachment.extendedData.hasPreview) || attachment.extendedData.mimetype.includes('image')
+			// We need to strip those as text does not support rtl yet, so we cannot insert them separately
+			const stripRTLO = (text) => text.replaceAll('\u202e', '')
+			const fileName = stripRTLO(attachment.extendedData.info.filename) + '.' + stripRTLO(attachment.extendedData.info.extension)
 			if (this.editor) {
 				this.editor.insertAtCursor(
 					asImage
 						? `<a href="${this.attachmentPreview(attachment)}"><img src="${this.attachmentPreview(attachment)}" alt="${attachment.data}" /></a>`
-						: `<a href="${this.attachmentPreview(attachment)}">${attachment.data}</a>`,
+						: `<a href="${this.attachmentPreview(attachment)}">${fileName}</a>`,
 				)
 				return
 			} else {
-				const attachmentString = (asImage ? '!' : '') + '[📎 ' + attachment.data + '](' + this.attachmentPreview(attachment) + ')'
+				const attachmentString = (asImage ? '!' : '') + '[📎 ' + fileName + '](' + this.attachmentPreview(attachment) + ')'
 				const descString = this.$refs.markdownEditor.easymde.value()
 				const newContent = descString + '\n' + attachmentString
 				this.$refs.markdownEditor.easymde.value(newContent)

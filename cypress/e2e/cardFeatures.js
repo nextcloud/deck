@@ -187,7 +187,8 @@ describe('Card', function () {
 			cy.get('.file-picker__main [data-filename="welcome.txt"]', { timeout: 30000 }).should('be.visible')
 				.click()
 			cy.get('.dialog__actions button.button-vue--vue-primary').click()
-			cy.get('.attachment-list .basename').contains('welcome.txt')
+			cy.get('.attachment-list .filename').contains('welcome')
+			cy.get('.attachment-list .filename .extension').contains('txt')
 		})
 
 		it('Shows the modal with the editor', () => {
