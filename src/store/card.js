@@ -189,7 +189,7 @@ export default {
 			card.assignedUsers = card.assignedUsers || []
 			const existingIndex = state.cards.findIndex(_card => _card.id === card.id)
 			if (existingIndex !== -1) {
-				const existingCard = state.cards.find(_card => _card.id === card.id)
+				const existingCard = state.cards[existingIndex]
 				Vue.set(state.cards, existingIndex, Object.assign({}, existingCard, card))
 			} else {
 				state.cards.push(card)
