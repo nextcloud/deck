@@ -124,8 +124,8 @@ OC.L10N.register(
     "Invalid date, date format must be YYYY-MM-DD" : "تاريخ غير صحيح, يجب أن يكون تنسيق التاريخ YYYY-MM-DD",
     "Personal planning and team project organization" : "التخطيط الشخصي و تنظيم مشروع الفريق",
     "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized" : "التطبيق \"كَدسَات البطاقات\" Deck هو أداة لتنظيم المهام الشخصية و الجماعية في نكست كلاود على نمط \"خطوط التصنيع أو التجميع في المصانع\" و المعروف بـ kanban.\n\n\n- 📥 أكتب مهامّك او مهامّ فريقك على بطاقة و ضع البطاقة في مكانها المناسب\n- 📄 دوّن ملاحظاتك الإضافية على البطاقة بصيغة ماركداون markdown\n- 🔖 و يمكنك أيضاً وضع لواصق labels على البطاقة لتصنيفها بشكل أفضل\n- 👥 شارك البطاقة مع من ترغب من أعضاء فريقك أو عائلتك أو أصدقائك\n- 📎 إرفاق ملفات و تضمينها بصيغة ماركداون في البطاقة\n- 💬ناقش البطاقة مع زملائك في خانة الملاحظات\n- ⚡ تابع ما يُستجد من عمليات و تطوّرات على البطاقة أو المهمة\n- 🚀 حافظ على مشروعك مُنسّقاً باستمرار.",
-    "Card details" : "تفاصيل البطاقة",
     "Add board" : "إضافة لوح",
+    "Card details" : "تفاصيل البطاقة",
     "Select the board to link to a project" : "تحديد اللوح لربطه بمشروع",
     "Search by board title" : "بحث بواسطة عنوان اللوح",
     "Select board" : "حدد لوح",
@@ -135,17 +135,17 @@ OC.L10N.register(
     "Select a list" : "اختر قائمة ",
     "Move card" : "حرك البطاقة",
     "Copy card" : "نسخ بطاقة",
-    "Select a card" : "حدد بطاقة",
-    "Cancel" : "إلغاء",
     "Select the card to link to a project" : "حدد البطاقة لربطها بمشروع",
     "Link to card" : "اربط بطاقة",
+    "Select a card" : "حدد بطاقة",
+    "Cancel" : "إلغاء",
+    "This board is read only" : "هذا اللوح بوضع القراءة فقط",
+    "Drop your files to upload" : "افلت الملفات لرفعها",
     "File already exists" : "الملف موجود مسبقاً",
     "A file with the name {filename} already exists." : "ملف باسم {اسم الملف} موجود مسبقًا ",
     "Do you want to overwrite it?" : "هل تريد تجاوزه؟",
     "Overwrite file" : "تجاوز ملف",
     "Keep existing file" : "ابقي الملف الموجود",
-    "This board is read only" : "هذا اللوح بوضع القراءة فقط",
-    "Drop your files to upload" : "افلت الملفات لرفعها",
     "Add card" : "إضافة بطاقة",
     "Archived cards" : "البطاقات المؤرشفة",
     "Add list" : "إضافة قائمة",
@@ -186,6 +186,12 @@ OC.L10N.register(
     "Deleted lists" : "القوائم المحذوفة",
     "Undo" : "تراجع",
     "Deleted cards" : "البطاقات المحذوفة",
+    "Failed to create share with {displayName}" : "فشل في إنشاء المشاركة مع {displayName}",
+    "Are you sure you want to transfer the board {title} to {user}?" : "هل أنت متأكد أنك تريد نقل اللوحة {title} إلى {user} ؟",
+    "Transfer the board." : "نقل اللوحة.",
+    "Transfer" : "نقل",
+    "The board has been transferred to {user}" : "تمّ نقل اللوحة إلى {user}",
+    "Failed to transfer the board to {user}" : "تعذّر نقل اللوحة إلى {user}",
     "Share board with a user, group or team …" : "مشاركة اللوحة مع مستخدِم او مجموعة أو فريق ...",
     "Searching for users, groups and teams …" : "البحث عن مستخدِمين، أو مجموعات، أو فرق",
     "No participants found" : "لم يتم العثور على مشاركين",
@@ -197,12 +203,7 @@ OC.L10N.register(
     "Can manage" : "يمكن إدارته",
     "Owner" : "المالك",
     "Delete" : "حذف ",
-    "Failed to create share with {displayName}" : "فشل في إنشاء المشاركة مع {displayName}",
-    "Are you sure you want to transfer the board {title} to {user}?" : "هل أنت متأكد أنك تريد نقل اللوحة {title} إلى {user} ؟",
-    "Transfer the board." : "نقل اللوحة.",
-    "Transfer" : "نقل",
-    "The board has been transferred to {user}" : "تمّ نقل اللوحة إلى {user}",
-    "Failed to transfer the board to {user}" : "تعذّر نقل اللوحة إلى {user}",
+    "List deleted" : "القائمة حٌذفت ",
     "Edit list title" : "تعديل اسم القائمة",
     "Archive all cards" : "أرشفة جميع البطاقات ",
     "Unarchive all cards" : "تراجع عن أرشفة كل البطاقات",
@@ -211,15 +212,16 @@ OC.L10N.register(
     "Unarchive all cards in this list" : "تراجع عن أرشفة كل البطاقات في هذه القائمة",
     "Add a new card" : "إضافة بطاقة جديدة",
     "Card name" : "اسم البطاقة ",
-    "List deleted" : "القائمة حٌذفت ",
+    "title and color value must be provided" : "العنوان و قيمة اللون يجب تقديمها ",
     "Edit" : "تعديل",
     "Add a new tag" : "إضافة وسم جديد",
-    "title and color value must be provided" : "العنوان و قيمة اللون يجب تقديمها ",
     "Board name" : "اسم اللوح",
     "Members" : "الاعضاء",
     "Assign to users/groups/team" : "إسناد إلى مستخدمين/مجموعات/فرق",
     "Assign a user to this card…" : "انسب مستخدم الى هذه البطاقة..",
     "Select a user to assign to this card…" : "حدِّد مستخدِماً ليتم إسناد هذه البطاقة له...",
+    "File to share" : "ملف للمشاركة",
+    "Invalid path selected" : "تم تحديد مسار غير صحيح",
     "Upload new files" : "رفع ملفات جديدة",
     "Share from Files" : "مشاركة من الملفات",
     "Pending share" : "مشاركة مُعلّقة",
@@ -229,25 +231,24 @@ OC.L10N.register(
     "Remove attachment" : "حذف المُرفق",
     "Delete Attachment" : "مسح المرفق",
     "Restore Attachment" : "إستعادة المرفق",
-    "File to share" : "ملف للمشاركة",
-    "Invalid path selected" : "تم تحديد مسار غير صحيح",
+    "Modified" : "عُدل",
+    "Created" : "أُنشئ",
+    "The title cannot be empty." : "لا يمكن ترك العنوان فارغًا.",
     "Open in sidebar view" : "فتح في الشريط الجانبي ",
     "Open in bigger view" : "فتح في نافذة أكبر ",
     "Attachments" : "المرفقات",
     "Comments" : "تعليقات",
-    "Modified" : "عُدل",
-    "Created" : "أُنشئ",
-    "The title cannot be empty." : "لا يمكن ترك العنوان فارغًا.",
-    "No comments yet. Begin the discussion!" : "لا يوجد تعليقات بعد, ابدأ النقاش الآن!",
     "Failed to load comments" : "فشل في تحميل التعليقات ",
-    "Save" : "حفظ",
+    "No comments yet. Begin the discussion!" : "لا يوجد تعليقات بعد, ابدأ النقاش الآن!",
     "The comment cannot be empty." : "التعليق لايمكن ان يكون فارغا.",
     "The comment cannot be longer than 1000 characters." : "التعليق لا يمكن ان يكون اطول من 1000 حرف.",
+    "Save" : "حفظ",
+    "Created:" : "تاريخ الإنشاء :",
     "In reply to" : "يقوم بالرد على",
     "Cancel reply" : "إلغاء الرد",
     "Reply" : "رد",
     "Update" : "تحديث",
-    "Created:" : "تاريخ الإنشاء :",
+    "Write a description …" : "كتابة وصف...",
     "Description" : "الوصف",
     "(Unsaved)" : "(غير محفوظ)",
     "(Saving…)" : "(يُحفظ..)",
@@ -255,8 +256,16 @@ OC.L10N.register(
     "Edit description" : "تعديل الوصف",
     "View description" : "إظهار الوصف",
     "Add Attachment" : "أضف ملحق",
-    "Write a description …" : "كتابة وصف...",
     "Choose attachment" : "اختيار مرفق",
+    "Select Date" : "اختر التاريخ ",
+    "Later today – {timeLocale}" : "في وقت لاحقٍ اليوم – {timeLocale}",
+    "Set due date for later today" : "تعيين آخِرَ هذا اليوم كموعدٍ لاستحقاق البطاقة",
+    "Tomorrow – {timeLocale}" : "غداً – {timeLocale}",
+    "Set due date for tomorrow" : "تعيين يوم الغد كموعدٍ لاستحقاق البطاقة",
+    "This weekend – {timeLocale}" : "نهاية هذا الأسبوع – {timeLocale}",
+    "Set due date for this weekend" : "تعيين نهاية هذا الأسبوع كموعدٍ لاستحقاق البطاقة",
+    "Next week – {timeLocale}" : "الأسبوع القادم – {timeLocale}",
+    "Set due date for next week" : "تعيين الأسبوع المُقبل كموعدٍ لاستحقاق البطاقة",
     "Assign a due date to this card…" : "تعيين تاريخ استحقاق لهذه البطاقة...",
     "Set a due date" : "تعيين تاريخ الانجاز",
     "Add due date" : "إضافة تاريخ الاستحقاق",
@@ -267,26 +276,20 @@ OC.L10N.register(
     "Not done" : "غير مُنجَزة",
     "Unarchive card" : "إلغاء أرشفة البطاقة ",
     "Archive card" : "أرشفة البطاقة",
-    "Select Date" : "اختر التاريخ ",
-    "Set due date for later today" : "تعيين آخِرَ هذا اليوم كموعدٍ لاستحقاق البطاقة",
-    "Set due date for tomorrow" : "تعيين يوم الغد كموعدٍ لاستحقاق البطاقة",
-    "Set due date for this weekend" : "تعيين نهاية هذا الأسبوع كموعدٍ لاستحقاق البطاقة",
-    "Set due date for next week" : "تعيين الأسبوع المُقبل كموعدٍ لاستحقاق البطاقة",
     "Assign a tag to this card…" : "انسب وسم الى هذه البطاقة..",
     "Select or create a tag…" : "اختيار أو إنشاء وسم جديد...",
     "Create a new tag:" : "إنشاء وسم جديد:",
     "(group)" : "(مجموعة)",
-    "Next week – {timeLocale}" : "الأسبوع القادم – {timeLocale}",
-    "Todo items" : "قائمة المهام",
     "{count} comments, {unread} unread" : "{عدد} التعليقات، {غير مقروءة} غير مقروءة",
+    "Todo items" : "قائمة المهام",
     "Edit card title" : "تعديل اسم القائمة",
     "Open link" : "إفتَح الرابط",
+    "Card deleted" : "البطاقة حٌذفت ",
     "Edit title" : "تحرير عنوان",
     "Assign to me" : "ينسب لي",
     "Unassign myself" : "إلغاء تعييني ",
     "Mark as not done" : "تمييز كـ \"غير منتهٍ\"",
     "Delete card" : "حذف البطاقة",
-    "Card deleted" : "البطاقة حٌذفت ",
     "seconds ago" : "ثوانٍ مضت",
     "Keyboard shortcuts" : "اختصارات لوحة المفاتيح",
     "Boost your productivity using Deck with keyboard shortcuts." : "ضاعِف إنتاجيتك باستعمال \"كَدسَات البطاقات\" Deck، و اختصارات لوحة المفاتيح ",
@@ -325,6 +328,13 @@ OC.L10N.register(
     "Users outside of those groups will not be able to create their own boards, but will still be able to work on boards that have been shared with them." : "المستخدِمون من خارج تلك المجموعات لن يمكنكم إنشاء لوحاتهم الخاصة؛ لكن يمكنهم العمل على اللوحات التي تتمّ مشاركتها معهم.",
     "Cancel edit" : "إلغاء التعديل",
     "Save board" : "حفظ اللوحة",
+    "Board {0} deleted" : "اللوح {0} تم مسحه",
+    "All cards" : "جميع البطاقات ",
+    "Only assigned cards" : "البطاقات المخصصة فقط",
+    "No reminder" : "لا يوجد تذكير ",
+    "An error occurred" : "حدث خطأ",
+    "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "هل أنت متأكد من حذف اللوحة {title}؟ هذا سيؤدي إلى حذف كل بيانات هذه اللوحة بما في ذلك البطاقات المؤرشفة.",
+    "Delete the board?" : "مسح اللوح؟",
     "Board details" : "تفاصيل لوح",
     "Edit board" : "تعديل اللوح",
     "Clone board" : "استنسخ اللوح",
@@ -334,16 +344,9 @@ OC.L10N.register(
     "Turn on due date reminders" : "تفعيل التذكيرات للموعد المحدد ",
     "Turn off due date reminders" : "إيقاف تشغيل التذكيرات للموعد المحددد",
     "Due date reminders" : "تذكيرات الموعد المحدد ",
-    "All cards" : "جميع البطاقات ",
     "Assigned cards" : "البطاقات المخصصة",
     "No notifications" : "لا توجد إشعارات",
     "Delete board" : "مسح اللوح",
-    "Board {0} deleted" : "اللوح {0} تم مسحه",
-    "Only assigned cards" : "البطاقات المخصصة فقط",
-    "No reminder" : "لا يوجد تذكير ",
-    "An error occurred" : "حدث خطأ",
-    "Are you sure you want to delete the board {title}? This will delete all the data of this board including archived cards." : "هل أنت متأكد من حذف اللوحة {title}؟ هذا سيؤدي إلى حذف كل بيانات هذه اللوحة بما في ذلك البطاقات المؤرشفة.",
-    "Delete the board?" : "مسح اللوح؟",
     "Clone {boardTitle}" : "استنساخ {boardTitle}",
     "Clone cards" : "استنسخ البطاقة ",
     "Clone assignments" : "استنساخ مهام",
@@ -360,14 +363,15 @@ OC.L10N.register(
     "Search for {searchQuery} in all boards" : "البحث عن {searchQuery} في جميع اللوح",
     "No results found" : "لا يتم العثور على أي نتائج ",
     "Deck board {name}\n* Last modified on {lastMod}" : "اسم اللوحة {name} \n* آخر تعديل لها في {lastMod}",
-    "{stack} in {board}" : "{stack} في  {board}",
-    "Click to expand description" : "إضعط للتوسّع في الوصف",
     "* Created on {created}\n* Last modified on {lastMod}\n* {nbAttachments} attachments\n* {nbComments} comments" : "* أُنشأت في {created}\n* آخر تعديل لها في {lastMod}\n* {nbAttachments} مُرفقات\n* {nbComments} مُلاحظات",
     "{nbCards} cards" : "{nbCards} بطاقات",
+    "Due on {date}" : "مطلوب في {date}",
+    "{stack} in {board}" : "{stack} في  {board}",
+    "Click to expand description" : "إضعط للتوسّع في الوصف",
     "Click to expand comment" : "إضغط للتوسع في الملاحظات",
+    "Create card" : "أنشى بطاقة ",
     "Create a new card" : "أنشى بطاقة جديدة ",
     "Card title" : "عنوان البطاقة ",
-    "Create card" : "أنشى بطاقة ",
     "Creating the new card …" : "أنشى البطاقة الجديدة ",
     "Card \"{card}\" was added to \"{board}\"" : "\"{بطاقة}\" تمت إضافتها في \"{اللوح}\"",
     "Open card" : "فتح البطاقة ",
@@ -377,10 +381,6 @@ OC.L10N.register(
     "upcoming cards tomorrow" : "البطاقات القادمة غداً",
     "upcoming cards" : "البطاقات القادمة",
     "New card" : "بطاقة جديدة",
-    "Due on {date}" : "مطلوب في {date}",
-    "This weekend – {timeLocale}" : "نهاية هذا الأسبوع – {timeLocale}",
-    "Tomorrow – {timeLocale}" : "غداً – {timeLocale}",
-    "Later today – {timeLocale}" : "في وقت لاحقٍ اليوم – {timeLocale}",
     "Link to a board" : "ربط بلوح",
     "Link to a card" : "ربط ببطاقة",
     "Create a card" : "أنشى بطاقة ",
