@@ -143,7 +143,7 @@ export class BoardApi {
 		return axios.get(this.url(`/boards/${board.id}/export`))
 			.then(
 				(response) => {
-					const fields = { title: t('deck', 'Card title'), description: t('deck', 'Description'), stackId: t('deck', 'List name'), labels: t('deck', 'Tags'), duedate: t('deck', 'Due date'), createdAt: t('deck', 'Created'), lastModified: t('deck', 'Modified') }
+					const fields = { title: t('deck', 'Card title'), description: t('deck', 'Description'), stackId: t('deck', 'List name'), labels: t('deck', 'Tags'), assignedUsers: t('deck', 'Assigned users'), duedate: t('deck', 'Due date'), createdAt: t('deck', 'Created'), lastModified: t('deck', 'Modified') }
 					let row = ''
 					Object.keys(fields).forEach(field => {
 						row += '"' + fields[field] + '"' + '\t'
@@ -160,16 +160,27 @@ export class BoardApi {
 									const date = new Date(Number(card[field]) * 1000)
 									row += '"' + date.toLocaleDateString() + '"' + '\t'
 								} else if (field === 'stackId') {
-									row += '"' + stack.title + '"' + '\t'
+									row += '"' + stack.title.replaceAll('"', '""') + '"' + '\t'
 								} else if (field === 'labels') {
 									row += '"'
 									card[field].forEach(label => {
-										row += label.title + ', '
+										row += label.title.replaceAll('"', '""') + ', '
 									})
 									if (card[field].length > 0) {
 										row = row.slice(0, -1)
 									}
 									row += '"' + '\t'
+								} else if (field === 'assignedUsers') {
+									row += '"'
+									card[field].forEach(assignedUsers => {
+										row += assignedUsers.participant.displayname.replaceAll('"', '""') + ', '
+									})
+									if (card[field].length > 0) {
+										row = row.slice(0, -1)
+									}
+									row += '"' + '\t'
+								} else if (field === 'description' || field === 'title') {
+									row += '"' + card[field].replaceAll('"', '""') + '"' + '\t'
 								} else {
 									row += '"' + card[field] + '"' + '\t'
 								}
