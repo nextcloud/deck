@@ -4,16 +4,19 @@
 -->
 
 <template>
-	<div v-if="searchQuery!==''" class="global-search">
-		<h2>
-			<NcRichText :text="t('deck', 'Search for {searchQuery} in all boards')" :arguments="queryStringArgs" />
-			<div v-if="loading" class="icon-loading-small" />
-		</h2>
-		<NcActions>
-			<NcActionButton icon="icon-close" @click="$store.commit('setSearchQuery', '')" />
-		</NcActions>
+	<section v-if="searchQuery!==''" class="global-search">
+		<header class="search-header">
+			<h2>
+				<NcRichText :text="$route.params.id ? t('deck', 'Search for {searchQuery} in other boards') : t('deck', 'Search for {searchQuery} in all boards')"
+					:arguments="queryStringArgs" />
+				<span v-if="loading" class="icon-loading-small" />
+			</h2>
+			<NcActions>
+				<NcActionButton icon="icon-close" @click="$store.commit('setSearchQuery', '')" />
+			</NcActions>
+		</header>
 		<div class="search-wrapper">
-			<div v-if="loading || filteredResults.length > 0" class="search-results">
+			<template v-if="loading || filteredResults.length > 0">
 				<CardItem v-for="card in filteredResults"
 					:id="card.id"
 					:key="card.id"
@@ -26,12 +29,12 @@
 						{{ t('deck', 'No results found') }}
 					</div>
 				</InfiniteLoading>
-			</div>
-			<div v-else>
+			</template>
+			<template v-else>
 				<p>{{ t('deck', 'No results found') }}</p>
-			</div>
+			</template>
 		</div>
-	</div>
+	</section>
 </template>
 
 <script>
@@ -159,7 +162,7 @@ export default {
 
 .global-search {
 	width: 100%;
-	padding: $board-spacing + $stack-spacing;
+	padding: $board-gap;
 	padding-bottom: 0;
 	overflow: hidden;
 	min-height: 35vh;
@@ -169,17 +172,24 @@ export default {
 	border-top: 1px solid var(--color-border);
 	z-index: 1010;
 	position: relative;
+	display: flex;
+	flex-direction: column;
 
 	.action-item.icon-close {
 		position: absolute;
 		top: 10px;
 		right: 10px;
 	}
-	.search-wrapper {
-		overflow: scroll;
-		height: 100%;
-		position: relative;
-		padding: 10px;
+
+	.search-header {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+	}
+
+	h2 {
+		margin: 0;
+		padding: var(--default-grid-baseline) var(--default-grid-baseline) $board-gap;
 	}
 
 	h2 > div {
@@ -189,23 +199,24 @@ export default {
 			margin-right: 20px;
 		}
 	}
+
 	h2:deep(span) {
 		background-color: var(--color-background-dark);
 		padding: 3px;
 		border-radius: var(--border-radius);
 	}
 
-	.search-results {
+	.search-wrapper {
+		overflow: auto;
+		height: 100%;
+		position: relative;
 		display: flex;
-		flex-wrap: wrap;
+		gap: $stack-gap;
 
-		& > div {
-			flex-grow: 0;
+		& > .drop-upload--card {
+			flex: 0 1 $card-max-width;
+			min-width: $card-min-width;
 		}
-	}
-	&:deep(.card) {
-		width: $stack-width;
-		margin-right: $stack-spacing;
 	}
 }
 </style>
