@@ -253,8 +253,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import '../../css/animations';
-	@import '../../css/variables';
+	@use '../../css/animations';
+	@use '../../css/variables';
 
 	form {
 		text-align: center;
@@ -282,7 +282,7 @@ export default {
 	}
 
 	.board {
-		padding-left: $board-spacing;
+		padding-left: variables.$board-spacing;
 		position: relative;
 		max-height: calc(100% - var(--default-clickable-area));
 		overflow: hidden;
@@ -313,8 +313,8 @@ export default {
 					display: flex;
 					flex-direction: column;
 					// Margin left instead of padidng to avoid jumps on dropping a card
-					margin-left: $stack-spacing;
-					padding-right: $stack-spacing;
+					margin-left: variables.$stack-spacing;
+					padding-right: variables.$stack-spacing;
 					overflow-x: hidden;
 					overflow-y: auto;
 					padding-top: 15px;
