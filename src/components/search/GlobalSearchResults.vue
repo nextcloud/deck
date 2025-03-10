@@ -162,11 +162,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/variables';
+@use '../../css/variables';
 
 .global-search {
 	width: 100%;
-	padding: $board-spacing + $stack-spacing;
+	padding: variables.$board-spacing + variables.$stack-spacing;
 	padding-bottom: 0;
 	overflow: hidden;
 	min-height: 35vh;
@@ -214,8 +214,8 @@ export default {
 	}
 
 	&:deep(.card) {
-		width: $stack-width;
-		margin-right: $stack-spacing;
+		width: variables.$stack-width;
+		margin-right: variables.$stack-spacing;
 	}
 }
 </style>
