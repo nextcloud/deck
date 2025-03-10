@@ -6,7 +6,9 @@
 <template>
 	<div>
 		<NcActionButton v-if="!hideDetailsEntry" :close-after-click="true" @click="openCard">
-			<CardBulletedIcon slot="icon" :size="20" decorative />
+			<template #icon>
+				<CardBulletedIcon icon :size="20" decorative />
+			</template>
 			{{ t('deck', 'Card details') }}
 		</NcActionButton>
 		<NcActionButton v-if="canEdit" :close-after-click="true" @click="editTitle">
