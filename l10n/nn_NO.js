@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "Personleg",
     "Done" : "Ferdig",
     "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Den opplasta fila er større enn variabelen MAX_FILE_SIZE i HTML-skjemaet",
     "No file was uploaded" : "Ingen filer vart lasta opp",
@@ -19,14 +18,14 @@ OC.L10N.register(
     "Edit" : "Endra",
     "Download" : "Last ned",
     "Remove attachment" : "Fjern vedlegg",
-    "Comments" : "Kommentarar",
     "Modified" : "Endra",
     "Created" : "Lagd",
+    "Comments" : "Kommentarar",
     "Save" : "Lagre",
+    "Created:" : "Oppretta:",
     "Cancel reply" : "Avbryt svar",
     "Reply" : "Svare",
     "Update" : "Oppdater",
-    "Created:" : "Oppretta:",
     "Description" : "Skildring",
     "seconds ago" : "sekund sidan",
     "Keyboard shortcuts" : "Tastatursnarvegar",
@@ -35,6 +34,7 @@ OC.L10N.register(
     "An error occurred" : "Det oppstod ein feil.",
     "Today" : "I dag",
     "Close" : "Lukk",
-    "Share" : "Del"
+    "Share" : "Del",
+    "Personal" : "Personleg"
 },
 "nplurals=2; plural=(n != 1);");

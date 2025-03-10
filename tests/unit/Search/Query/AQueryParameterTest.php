@@ -29,7 +29,7 @@ namespace OCA\Deck\Search\Query;
 use PHPUnit\Framework\TestCase;
 
 class AQueryParameterTest extends TestCase {
-	public function dataValue() {
+	public static function dataValue() {
 		return [
 			['foo', 'foo'],
 			['spätial character', 'spätial character'],

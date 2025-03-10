@@ -1,7 +1,6 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "Şəxsi",
     "Finished" : "Bitdi",
     "Done" : "Done",
     "The file was uploaded" : "Fayl yükləndi",
@@ -24,12 +23,12 @@ OC.L10N.register(
     "Delete" : "Sil",
     "Edit" : "Dəyişiklik et",
     "Download" : "Yüklə",
-    "Comments" : "Şərhlər",
     "Modified" : "Dəyişdirildi",
+    "Comments" : "Şərhlər",
     "Save" : "Saxla",
+    "Created:" : "Yaradıldı:",
     "Reply" : "Cavab",
     "Update" : "Yenilənmə",
-    "Created:" : "Yaradıldı:",
     "Description" : "Açıqlanma",
     "(group)" : "(qrup)",
     "seconds ago" : "saniyələr öncə",
@@ -38,6 +37,7 @@ OC.L10N.register(
     "Today" : "Bu gün",
     "Tomorrow" : "Sabah",
     "Close" : "Bağla",
-    "Share" : "Paylaş"
+    "Share" : "Paylaş",
+    "Personal" : "Şəxsi"
 },
 "nplurals=2; plural=(n != 1);");

@@ -1,7 +1,8 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "Isiklik",
+    "Deck" : "Deck",
+    "%s on %s" : "%s %s-l",
     "Finished" : "Lõpetatud",
     "Later" : "Hiljem",
     "copy" : "koopia",
@@ -31,13 +32,13 @@ OC.L10N.register(
     "Delete" : "Kustuta",
     "Edit" : "Redigeeri",
     "Download" : "Lae alla",
-    "Comments" : "Kommentaarid",
     "Modified" : "Muudetud",
     "Created" : "Loodud",
+    "Comments" : "Kommentaarid",
     "Save" : "Salvesta",
+    "Created:" : "Loodud:",
     "Reply" : "Vasta",
     "Update" : "Uuenda",
-    "Created:" : "Loodud:",
     "Description" : "Kirjeldus",
     "(group)" : "(grupp)",
     "Delete card" : "Kustuta kaart",
@@ -47,12 +48,13 @@ OC.L10N.register(
     "Search" : "Otsi",
     "Shared with you" : "Sinuga jagatud",
     "Cancel edit" : "Loobu muutmisest",
-    "No notifications" : "Märguandeid pole",
     "An error occurred" : "Tekkis tõrge",
+    "No notifications" : "Märguandeid pole",
     "Advanced options" : "Täpsemad valikud",
     "Today" : "Täna",
     "Tomorrow" : "Homme",
     "Close" : "Sulge",
-    "Share" : "Jaga"
+    "Share" : "Jaga",
+    "Personal" : "Isiklik"
 },
 "nplurals=2; plural=(n != 1);");

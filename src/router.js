@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { createRouter, createWebHistory } from 'vue-router'
-import { generateUrl } from '@nextcloud/router'
+import Router, { createRouter, createWebHistory } from 'vue-router'
+import Vue from 'vue'
+import { generateUrl, getRootUrl } from '@nextcloud/router'
 import { BOARD_FILTERS } from './store/main.js'
 import Boards from './components/boards/Boards.vue'
 import Board from './components/board/Board.vue'
@@ -13,8 +14,17 @@ import BoardSidebar from './components/board/BoardSidebar.vue'
 import CardSidebar from './components/card/CardSidebar.vue'
 import Overview from './components/overview/Overview.vue'
 
+Vue.use(Router)
+
+// We apply a dynamic base URL depending on the URL used in the browser
+const baseUrl = generateUrl('/apps/deck/')
+const webRootWithIndexPHP = getRootUrl() + '/index.php'
+const doesURLContainIndexPHP = window.location.pathname.startsWith(webRootWithIndexPHP)
+const currentBaseUrl = doesURLContainIndexPHP ? baseUrl : baseUrl.replace('/index.php/', '/')
+
 const router = createRouter({
 	history: createWebHistory(generateUrl('/apps/deck/')),
+	base: currentBaseUrl,
 	linkActiveClass: 'active',
 	routes: [
 		{
@@ -140,8 +150,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
 	// Redirect if fullPath begins with a hash (ignore hashes later in path)
-	if (to.fullPath.substring(0, 2) === '/#') {
-		const path = to.fullPath.substring(2)
+	if (to.hash.substring(0, 2) === '#/') {
+		const path = to.fullPath.replace('/#/', '/').trimEnd('/')
 		next(path)
 		return
 	}

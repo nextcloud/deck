@@ -9,6 +9,7 @@ namespace OCA\Deck\Service;
 
 use OCA\Deck\AppInfo\Application;
 use OCA\Deck\BadRequestException;
+use OCA\Deck\Db\Board;
 use OCA\Deck\Db\BoardMapper;
 use OCP\IConfig;
 use OCP\IL10N;
@@ -21,6 +22,8 @@ class DefaultBoardService {
 	private $cardService;
 	private $config;
 	private $l10n;
+	private LabelService $labelService;
+	private AttachmentService $attachmentService;
 
 	public function __construct(
 		IL10N $l10n,
@@ -29,6 +32,8 @@ class DefaultBoardService {
 		StackService $stackService,
 		CardService $cardService,
 		IConfig $config,
+		LabelService $labelService,
+		AttachmentService $attachmentService,
 	) {
 		$this->boardService = $boardService;
 		$this->stackService = $stackService;
@@ -36,6 +41,8 @@ class DefaultBoardService {
 		$this->config = $config;
 		$this->boardMapper = $boardMapper;
 		$this->l10n = $l10n;
+		$this->labelService = $labelService;
+		$this->attachmentService = $attachmentService;
 	}
 
 	/**
@@ -59,10 +66,13 @@ class DefaultBoardService {
 		return false;
 	}
 
+	private function getDefaultBoardData(): array {
+		$defaultBoardDataJson = file_get_contents(__DIR__ . '/fixtures/default-board.json');
+		return json_decode($defaultBoardDataJson, true);
+	}
+
 	/**
-	 * @param $title
 	 * @param $userId
-	 * @param $color
 	 * @return \OCP\AppFramework\Db\Entity
 	 * @throws \OCA\Deck\NoPermissionException
 	 * @throws \OCA\Deck\StatusException
@@ -71,19 +81,71 @@ class DefaultBoardService {
 	 * @throws BadRequestException
 	 */
 	public function createDefaultBoard(string $title, string $userId, string $color) {
-		$defaultBoard = $this->boardService->create($title, $userId, $color);
-		$defaultStacks = [];
-		$defaultCards = [];
+		$boardData = $this->getDefaultBoardData();
 
+		/** @var Board $defaultBoard */
+		$defaultBoard = $this->boardService->create(
+			$boardData['title'] ?? $title,
+			$userId,
+			$boardData['color'] ?? $color,
+		);
 		$boardId = $defaultBoard->getId();
+		$additionLabels = [];
+		$translatedLabelTitles = [
+			'Read more inside' => $this->l10n->t('Read more inside'),
+		];
+		$translatedStackTitles = [
+			'Custom lists - click to rename!' => $this->l10n->t('Custom lists - click to rename!'),
+			'To Do' => $this->l10n->t('To Do'),
+			'In Progress' => $this->l10n->t('In Progress'),
+			'Done' => $this->l10n->t('Done'),
+		];
+		$translatedCardTitles = [
+			'1. Open to learn more about boards and cards' => $this->l10n->t('1. Open to learn more about boards and cards'),
+			'2. Drag cards left and right, up and down' => $this->l10n->t('2. Drag cards left and right, up and down'),
+			'3. Apply rich formatting and link content' => $this->l10n->t('3. Apply rich formatting and link content'),
+			'4. Share, comment and collaborate!' => $this->l10n->t('4. Share, comment and collaborate!'),
+			'Create your first card!' => $this->l10n->t('Create your first card!'),
+		];
 
-		$defaultStacks[] = $this->stackService->create($this->l10n->t('To do'), $boardId, 1);
-		$defaultStacks[] = $this->stackService->create($this->l10n->t('Doing'), $boardId, 1);
-		$defaultStacks[] = $this->stackService->create($this->l10n->t('Done'), $boardId, 1);
+		foreach ($boardData['addition_labels'] as $labelData) {
+			$additionLabels[] = $this->labelService->create(
+				$translatedLabelTitles[$labelData['title']] ?? $labelData['title'],
+				$labelData['color'],
+				$boardId
+			);
+		}
 
-		$defaultCards[] = $this->cardService->create($this->l10n->t('Example Task 3'), $defaultStacks[0]->getId(), 'text', 0, $userId);
-		$defaultCards[] = $this->cardService->create($this->l10n->t('Example Task 2'), $defaultStacks[1]->getId(), 'text', 0, $userId);
-		$defaultCards[] = $this->cardService->create($this->l10n->t('Example Task 1'), $defaultStacks[2]->getId(), 'text', 0, $userId);
+		$defaultLabels = array_merge($defaultBoard->getLabels() ?? [], $additionLabels);
+
+		foreach ($boardData['stacks'] as $stackData) {
+			$stack = $this->stackService->create(
+				$translatedStackTitles[$stackData['title']] ?? $stackData['title'],
+				$boardId,
+				$stackData['order']
+			);
+
+			foreach ($stackData['cards'] as $cardData) {
+				$card = $this->cardService->create(
+					$translatedCardTitles[$cardData['title']] ?? $cardData['title'],
+					$stack->getId(),
+					$cardData['type'],
+					$cardData['order'],
+					$userId,
+					$cardData['description'],
+				);
+
+				foreach ($defaultLabels as $defaultLabel) {
+					if ($defaultLabel && in_array($defaultLabel->getTitle(), $cardData['labels'])) {
+						$this->cardService->assignLabel($card->getId(), $defaultLabel->getId());
+					}
+				}
+
+				if (!empty($cardData['has_example_attachment'])) {
+					$this->attachmentService->create($card->getId(), 'file', 'DEFAULT_SAMPLE_FILE');
+				}
+			}
+		}
 
 		return $defaultBoard;
 	}

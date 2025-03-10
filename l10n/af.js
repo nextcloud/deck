@@ -1,9 +1,9 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "Persoonlik",
     "Later" : "Later",
     "copy" : "kopie",
+    "To Do" : "Moet doen",
     "Done" : "Gereed",
     "The file was uploaded" : "Die lêer is opgelaai",
     "The uploaded file exceeds the upload_max_filesize directive in php.ini" : "Die opgelaaide lêer oorskry die upload_max_filesize riglyn in php.ini",
@@ -26,13 +26,13 @@ OC.L10N.register(
     "Delete" : "Skrap",
     "Edit" : "Wysig",
     "Download" : "Laai af",
-    "Comments" : "Kommentare",
     "Modified" : "Gewysig",
     "Created" : "Geskep",
+    "Comments" : "Kommentare",
     "Save" : "Stoor",
+    "Created:" : "Geskep:",
     "Reply" : "Antwoord",
     "Update" : "Werk by",
-    "Created:" : "Geskep:",
     "Description" : "Beskrywing",
     "Select Date" : "Kies Datum",
     "seconds ago" : "sekondes gelede",
@@ -40,12 +40,13 @@ OC.L10N.register(
     "Keyboard shortcut" : "Snelsleutel",
     "Search" : "Soek",
     "Shared with you" : "Met u gedeel",
-    "No notifications" : "Geen kennisgewings",
     "An error occurred" : "'n Fout het voorgekom",
+    "No notifications" : "Geen kennisgewings",
     "Advanced options" : "Gevorderde opsies",
     "Today" : "Vandag",
     "Tomorrow" : "Môre",
     "Close" : "Sluit",
-    "Share" : "Deel"
+    "Share" : "Deel",
+    "Personal" : "Persoonlik"
 },
 "nplurals=2; plural=(n != 1);");

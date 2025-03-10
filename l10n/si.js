@@ -1,12 +1,8 @@
 OC.L10N.register(
     "deck",
     {
-    "Personal" : "පුද්ගලික",
     "Later" : "පසුව",
     "copy" : "පිටපත්",
-    "Example Task 3" : "උදාහරණ කාර්යය 3",
-    "Example Task 2" : "උදාහරණ කාර්යය 2",
-    "Example Task 1" : "උදාහරණ කාර්යය 1",
     "No file was uploaded" : "කිසිදු ගොනුවක් උඩුගත කර නොමැත",
     "Missing a temporary folder" : "තාවකාලික බහාලුමක් අස්ථානගත වී ඇත",
     "Cancel" : "අවලංගු කරන්න",
@@ -33,6 +29,10 @@ OC.L10N.register(
     "Today" : "අද",
     "Tomorrow" : "හෙට",
     "Close" : "වසන්න",
-    "Share" : "බෙදාගන්න"
+    "Share" : "බෙදාගන්න",
+    "Personal" : "පුද්ගලික",
+    "Example Task 3" : "උදාහරණ කාර්යය 3",
+    "Example Task 2" : "උදාහරණ කාර්යය 2",
+    "Example Task 1" : "උදාහරණ කාර්යය 1"
 },
 "nplurals=2; plural=(n != 1);");

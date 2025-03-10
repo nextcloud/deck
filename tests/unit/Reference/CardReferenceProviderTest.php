@@ -42,7 +42,7 @@ class CardReferenceProviderTest extends TestCase {
 	private $l10n;
 	private $userId;
 	private $provider;
-	
+
 	public function setUp() : void {
 		parent::setUp();
 

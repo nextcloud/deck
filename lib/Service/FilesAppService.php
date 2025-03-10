@@ -162,7 +162,15 @@ class FilesAppService implements IAttachmentService, ICustomAttachmentService {
 	}
 
 	public function create(Attachment $attachment) {
-		$file = $this->getUploadedFile();
+		if ($attachment->getData() === 'DEFAULT_SAMPLE_FILE' && !$this->request->getUploadedFile('file')) {
+			$file = [
+				'name' => 'Nextcloud sample image - add your image here!.jpg',
+				'tmp_name' => __DIR__ . '/../../img/sample-image.jpg',
+			];
+		} else {
+			$file = $this->getUploadedFile();
+		}
+
 		$fileName = $file['name'];
 
 		// get shares for current card

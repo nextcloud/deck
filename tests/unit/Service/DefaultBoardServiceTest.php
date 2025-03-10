@@ -46,6 +46,12 @@ class DefaultBoardServiceTest extends TestCase {
 	/** @var CardService */
 	private $cardService;
 
+	/** @var LabelService */
+	private $labelService;
+
+	/** @var AttachmentService */
+	private $attachmentService;
+
 	/** @var BoardMapper */
 	private $boardMapper;
 
@@ -62,6 +68,8 @@ class DefaultBoardServiceTest extends TestCase {
 		$this->boardService = $this->createMock(BoardService::class);
 		$this->stackService = $this->createMock(StackService::class);
 		$this->cardService = $this->createMock(CardService::class);
+		$this->labelService = $this->createMock(LabelService::class);
+		$this->attachmentService = $this->createMock(AttachmentService::class);
 		$this->config = $this->createMock(IConfig::class);
 		$this->l10n = $this->createMock(IL10N::class);
 		$this->userId = 'admin';
@@ -72,7 +80,9 @@ class DefaultBoardServiceTest extends TestCase {
 			$this->boardService,
 			$this->stackService,
 			$this->cardService,
-			$this->config
+			$this->config,
+			$this->labelService,
+			$this->attachmentService,
 		);
 	}
 
@@ -109,8 +119,8 @@ class DefaultBoardServiceTest extends TestCase {
 	}
 
 	public function testCreateDefaultBoard() {
-		$title = 'Personal';
-		$color = '317CCC';
+		$title = 'Welcome to Nextcloud Deck!';
+		$color = 'bf678b';
 		$boardId = 5;
 
 		$board = new Board();
@@ -128,34 +138,70 @@ class DefaultBoardServiceTest extends TestCase {
 				return $text;
 			});
 
+		$stackCustomId = '122';
+		$stackCustom = $this->assembleTestStack('Custom lists - click to rename!', $stackCustomId, $boardId);
+
 		$stackToDoId = '123';
-		$stackToDo = $this->assembleTestStack('To do', $stackToDoId, $boardId);
+		$stackToDo = $this->assembleTestStack('To Do', $stackToDoId, $boardId);
 
 		$stackDoingId = '124';
-		$stackDoing = $this->assembleTestStack('Doing', $stackDoingId, $boardId);
+		$stackDoing = $this->assembleTestStack('In Progress', $stackDoingId, $boardId);
 
 		$stackDoneId = '125';
 		$stackDone = $this->assembleTestStack('Done', $stackDoneId, $boardId);
-		$this->stackService->expects($this->exactly(3))
-			->method('create')
-			->withConsecutive(
-				[$this->l10n->t('To do'), $boardId, 1],
-				[$this->l10n->t('Doing'), $boardId, 1],
-				[$this->l10n->t('Done'),  $boardId, 1]
-			)
-			->willReturnOnConsecutiveCalls($stackToDo, $stackDoing, $stackDone);
 
-		$cardExampleTask3 = $this->assembleTestCard('Example Task 3', $stackToDoId, $this->userId);
-		$cardExampleTask2 = $this->assembleTestCard('Example Task 2', $stackDoingId, $this->userId);
-		$cardExampleTask1 = $this->assembleTestCard('Example Task 1', $stackDoneId, $this->userId);
-		$this->cardService->expects($this->exactly(3))
+		$this->stackService->expects($this->exactly(4))
 			->method('create')
 			->withConsecutive(
-				['Example Task 3', $stackToDoId, 'text', 0, $this->userId],
-				['Example Task 2', $stackDoingId, 'text', 0, $this->userId],
-				['Example Task 1', $stackDoneId, 'text', 0, $this->userId]
+				[$this->l10n->t('Custom lists - click to rename!'),  $boardId, 0],
+				[$this->l10n->t('To Do'), $boardId, 1],
+				[$this->l10n->t('In Progress'), $boardId, 2],
+				[$this->l10n->t('Done'),  $boardId, 3]
 			)
-			->willReturnonConsecutiveCalls($cardExampleTask3, $cardExampleTask2, $cardExampleTask1);
+			->willReturnOnConsecutiveCalls($stackCustom, $stackToDo, $stackDoing, $stackDone);
+
+		$cardExampleTask1 = $this->assembleTestCard(
+			'1. Open to learn more about boards and cards',
+			$stackCustomId,
+			$this->userId
+		);
+		$cardExampleTask2 = $this->assembleTestCard(
+			'2. Drag cards left and right, up and down',
+			$stackToDoId,
+			$this->userId
+		);
+		$cardExampleTask3 = $this->assembleTestCard(
+			'Create your first card!',
+			$stackToDoId,
+			$this->userId
+		);
+		$cardExampleTask4 = $this->assembleTestCard(
+			'3. Apply rich formatting and link content',
+			$stackDoingId,
+			$this->userId
+		);
+		$cardExampleTask5 = $this->assembleTestCard(
+			'4. Share, comment and collaborate!',
+			$stackDoneId,
+			$this->userId
+		);
+
+		$this->cardService->expects($this->exactly(5))
+			->method('create')
+			->withConsecutive(
+				['1. Open to learn more about boards and cards', $stackCustomId, 'text', 0, $this->userId],
+				['2. Drag cards left and right, up and down', $stackToDoId, 'text', 0, $this->userId],
+				['Create your first card!', $stackToDoId, 'text', 1, $this->userId],
+				['3. Apply rich formatting and link content', $stackDoingId, 'text', 0, $this->userId],
+				['4. Share, comment and collaborate!', $stackDoneId, 'text', 0, $this->userId]
+			)
+			->willReturnonConsecutiveCalls(
+				$cardExampleTask1,
+				$cardExampleTask2,
+				$cardExampleTask3,
+				$cardExampleTask4,
+				$cardExampleTask5
+			);
 
 		$result = $this->service->createDefaultBoard($title, $this->userId, $color);
 

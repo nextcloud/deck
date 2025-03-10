@@ -1,6 +1,5 @@
 { "translations": {
     "Deck" : "Ажлын талбар",
-    "Personal" : "Хувийн",
     "Finished" : "Дуусгасан",
     "To review" : "Дахин хянах",
     "Action needed" : "Үйлдэл шаардлагатай",
@@ -24,14 +23,14 @@
     "Edit" : "Засварлах",
     "Members" : "Гишүүд",
     "Download" : "Татах",
-    "Attachments" : "Хавсралт",
-    "Comments" : "Сэтгэгдлүүд",
     "Modified" : "Өөрчлөгдсөн",
     "Created" : "Үүсгэсэн",
+    "Attachments" : "Хавсралт",
+    "Comments" : "Сэтгэгдлүүд",
     "Save" : "Хадгалах",
+    "Created:" : "Үүсгэсэн:",
     "Reply" : "хариулт",
     "Update" : "Шинэчлэх",
-    "Created:" : "Үүсгэсэн:",
     "Description" : "Тайлбар",
     "(group)" : "(бүлэг)",
     "seconds ago" : "хоёрдахь өмнө",
@@ -43,6 +42,7 @@
     "Today" : "өнөөдөр",
     "Tomorrow" : "маргааш",
     "Close" : "Хаах",
-    "Share" : "Түгээх"
+    "Share" : "Түгээх",
+    "Personal" : "Хувийн"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

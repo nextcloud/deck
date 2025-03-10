@@ -66,7 +66,10 @@ class ResourceProviderCard implements IProvider {
 			throw new ResourceException('No unique card found for resource, this should never happen');
 		}
 
-		$link = $this->urlGenerator->linkToRoute('deck.page.index') . '#/board/' . $board->getId() . '/card/' . $resource->getId();
+		$link = $this->urlGenerator->linkToRoute('deck.page.indexCard', [
+			'boardId' => $board->getId(),
+			'cardId' => $card->getId()
+		]);
 
 		return [
 			'type' => self::RESOURCE_TYPE,
