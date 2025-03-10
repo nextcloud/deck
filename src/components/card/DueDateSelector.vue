@@ -4,8 +4,12 @@
 -->
 <template>
 	<CardDetailEntry :label="t('deck', 'Assign a due date to this card…')" data-test="due-date-selector">
-		<Calendar v-if="!card.done" slot="icon" :size="20" />
-		<CalendarCheck v-else slot="icon" :size="20" />
+		<template v-if="!card.done" #icon>
+			<Calendar :size="20" />
+		</template>
+		<template v-else #icon>
+			<CalendarCheck :size="20" />
+		</template>
 		<template v-if="!card.done && !card.archived">
 			<NcDateTimePickerNative v-if="duedate"
 				id="card-duedate-picker"

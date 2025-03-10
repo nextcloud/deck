@@ -25,7 +25,7 @@
 			<AccountIcon v-if="board.acl.length > 0" />
 		</template>
 
-		<template v-if="!deleted" slot="actions">
+		<template v-if="!deleted" #actions>
 			<template v-if="!isDueSubmenuActive">
 				<NcActionButton icon="icon-info"
 					:close-after-click="true"
