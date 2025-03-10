@@ -231,12 +231,16 @@
 					</NcActionButton>
 					<NcActionButton v-if="compactMode"
 						@click="toggleCompactMode">
-						<ArrowExpandVerticalIcon slot="icon" :size="20" decorative />
+						<template #icon>
+							<ArrowExpandVerticalIcon :size="20" decorative />
+						</template>
 						{{ t('deck', 'Toggle compact mode') }}
 					</NcActionButton>
 					<NcActionButton v-else
 						@click="toggleCompactMode">
-						<ArrowCollapseVerticalIcon slot="icon" :size="20" decorative />
+						<template #icon>
+							<ArrowCollapseVerticalIcon :size="20" decorative />
+						</template>
 						{{ t('deck', 'Toggle compact mode') }}
 					</NcActionButton>
 					<NcActionButton @click="toggleShowCardCover">
