@@ -765,6 +765,8 @@ class BoardService {
 			$fullCards = [];
 			foreach ($cards as $card) {
 				$fullCard = $this->cardMapper->find($card->getId());
+				$assignedUsers = $this->assignedUsersMapper->findAll($card->getId());
+				$fullCard->setAssignedUsers($assignedUsers);
 				array_push($fullCards, $fullCard);
 			}
 			$stack->setCards($fullCards);
