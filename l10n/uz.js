@@ -38,6 +38,7 @@ OC.L10N.register(
     "Today" : "Today",
     "No results found" : "Hech qanday natija topilmadi",
     "Close" : "Close",
+    "Share" : "Ulashish",
     "Personal" : "Personal"
 },
 "nplurals=1; plural=0;");
