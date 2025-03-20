@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import Router, { createRouter, createWebHistory } from 'vue-router'
 import Vue from 'vue'
-import Router from 'vue-router'
 import { generateUrl, getRootUrl } from '@nextcloud/router'
 import { BOARD_FILTERS } from './store/main.js'
 import Boards from './components/boards/Boards.vue'
@@ -22,8 +22,8 @@ const webRootWithIndexPHP = getRootUrl() + '/index.php'
 const doesURLContainIndexPHP = window.location.pathname.startsWith(webRootWithIndexPHP)
 const currentBaseUrl = doesURLContainIndexPHP ? baseUrl : baseUrl.replace('/index.php/', '/')
 
-const router = new Router({
-	mode: 'history',
+const router = createRouter({
+	history: createWebHistory(generateUrl('/apps/deck/')),
 	base: currentBaseUrl,
 	linkActiveClass: 'active',
 	routes: [

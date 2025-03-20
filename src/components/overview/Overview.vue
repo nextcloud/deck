@@ -145,7 +145,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import './../../css/variables';
+@use './../../css/variables';
 
 .overview-wrapper {
 	position: relative;
@@ -162,16 +162,16 @@ export default {
 	overflow-x: scroll;
 	display: flex;
 	align-items: stretch;
-	padding-left: $board-spacing;
-	padding-right: $board-spacing;
+	padding-left: variables.$board-spacing;
+	padding-right: variables.$board-spacing;
 
 	.dashboard-column {
 		display: flex;
 		flex-direction: column;
-		min-width: $stack-width;
-		width: $stack-width;
-		margin-left: $stack-spacing;
-		margin-right: $stack-spacing;
+		min-width: variables.$stack-width;
+		width: variables.$stack-width;
+		margin-left: variables.$stack-spacing;
+		margin-right: variables.$stack-spacing;
 
 		h3 {
 			font-size: var(--default-font-size);

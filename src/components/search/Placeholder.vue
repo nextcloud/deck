@@ -58,18 +58,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/variables';
+@use '../../css/variables';
 $clickable-area: var(--default-clickable-area);
 
 .card--placeholder {
-	width: $stack-width;
-	margin-right: $stack-spacing;
-	padding: $card-padding;
+	width: variables.$stack-width;
+	margin-right: variables.$stack-spacing;
+	padding: variables.$card-padding;
 	transition: box-shadow 0.1s ease-in-out;
 	box-shadow: 0 0 2px 0 var(--color-box-shadow);
 	border-radius: var(--border-radius-large);
 	font-size: 100%;
-	margin-bottom: $card-spacing;
+	margin-bottom: variables.$card-spacing;
 	height: 100px;
 }
 
