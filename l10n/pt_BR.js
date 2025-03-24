@@ -343,6 +343,7 @@ OC.L10N.register(
     "Clone cards" : "Clonar cartões",
     "Clone assignments" : "Clonar atribuições",
     "Clone labels" : "Clonar rótulos",
+    "Clone due dates" : "Clonar datas de vencimento",
     "Advanced options" : "Opções avançadas",
     "Clone" : "Clonar",
     "Loading filtered view" : "Carregando exibição filtrada",
