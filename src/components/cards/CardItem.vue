@@ -318,8 +318,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	@import './../../css/animations';
-	@import './../../css/variables';
+	@use './../../css/animations';
+	@use './../../css/variables';
 
 	@mixin dark-card {
 		border: 2px solid var(--color-border-dark);
@@ -331,8 +331,8 @@ export default {
 		border-radius: var(--border-radius-large);
 		font-size: 100%;
 		background-color: var(--color-main-background);
-		margin-bottom: $card-spacing;
-		padding: var(--default-grid-baseline) $card-padding;
+		margin-bottom: variables.$card-spacing;
+		padding: var(--default-grid-baseline) variables.$card-padding;
 		border: 2px solid var(--color-border-dark);
 		width: 100%;
 		display: flex;
@@ -470,7 +470,7 @@ export default {
 			width: 32px;
 		}
 		&.has-labels {
-			padding-bottom: $card-padding;
+			padding-bottom: variables.$card-padding;
 		}
 		.labels {
 			height: 6px;
