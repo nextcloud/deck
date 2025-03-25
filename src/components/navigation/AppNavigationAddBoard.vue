@@ -13,8 +13,8 @@
 		</NcColorPicker>
 		<form @submit.prevent.stop="createBoard">
 			<NcTextField ref="inputField"
+				v-model="value"
 				:disable="loading"
-				:value.sync="value"
 				:placeholder="t('deck', 'Board name')"
 				type="text"
 				required />
